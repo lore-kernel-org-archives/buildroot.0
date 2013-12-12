@@ -1,74 +1,66 @@
-From: Matt Weber <mlweber1@rockwellcollins.com>
-Date: Thu, 12 Dec 2013 12:14:19 -0600
-Subject: [Buildroot] [PATCH 1/1] smcroute: new package
-Message-ID: <1386872059-28046-1-git-send-email-mlweber1@rockwellcollins.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 12 Dec 2013 19:18:39 +0100
+Subject: [Buildroot] [pull request v4] Pull request for branch
+	yem/host-packages
+Message-ID: <cover.1386872011.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
-Signed-off-by: Sean Gerhardt <sagerhar@rockwellcollins.com>
----
- package/Config.in            |    1 +
- package/smcroute/Config.in   |   11 +++++++++++
- package/smcroute/smcroute.mk |   15 +++++++++++++++
- 3 files changed, 27 insertions(+), 0 deletions(-)
- create mode 100755 package/smcroute/Config.in
- create mode 100755 package/smcroute/smcroute.mk
+Hello All!
 
-diff --git a/package/Config.in b/package/Config.in
-index 40c9e31..fd04224 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -880,6 +880,7 @@ source "package/rtptools/Config.in"
- source "package/samba/Config.in"
- source "package/sconeserver/Config.in"
- source "package/ser2net/Config.in"
-+source "package/smcroute/Config.in"
- source "package/socat/Config.in"
- source "package/socketcand/Config.in"
- source "package/spawn-fcgi/Config.in"
-diff --git a/package/smcroute/Config.in b/package/smcroute/Config.in
-new file mode 100755
-index 0000000..a66cb94
---- /dev/null
-+++ b/package/smcroute/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_SMCROUTE
-+	bool "smcroute"
-+	help
-+	  SMCRoute is a command line tool to manipulate the multicast
-+	  routes of a UNI kernel. It supports both IPv4 and IPv6 multicast
-+	  routing.  SMCRoute can be  used as an alternative to dynamic
-+	  multicast routers like mrouted or pimd in setups where static
-+	  multicast routes should be maintained and/or no proper IGMP or
-+	  MLD signaling exists.
-+
-+	  https://github.com/troglobit/smcroute
-diff --git a/package/smcroute/smcroute.mk b/package/smcroute/smcroute.mk
-new file mode 100755
-index 0000000..82efa81
---- /dev/null
-+++ b/package/smcroute/smcroute.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# smcroute
-+#
-+################################################################################
-+SMCROUTE_VERSION =  1.99.2
-+SMCROUTE_SITE = $(call github,troglobit,smcroute,$(SMCROUTE_VERSION))
-+SMCROUTE_SOURCE = troglobit-smcroute-$(SMCROUTE_VERSION)-0-g58388f6.tar.gz
-+SMCROUTE_LICENSE = GPLv2+
-+SMCROUTE_LICENSE_FILES = COPYING
-+
-+SMCROUTE_CONF_OPT = ac_cv_func_setpgrp_void=yes
-+#BUG:The package Makefile uses CC?= even though the package is autotools based
-+SMCROUTE_MAKE_ENV = $(TARGET_CONFIGURE_OPTS)
-+
-+$(eval $(autotools-package))
+This series adds parted as a host package.
+This will allow (eg.) post-image scripts to use parted.
+
+Changes v3 -> v4:
+  - fix double double-slash in parted's ./configure options
+
+Changes v2 -> v3:  (Jerzy)
+  - Fix bad copy-paste in commit log
+
+Changes v1 -> v2:  (Thomas)
+  - don't depend on host-lvm2
+  - so don't add host-lvm2
+  - relax dependencies on lvm2/readline for target package
+  - fix typoes in commit log
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 08db3236c4508b2329d3b0ed61d3db54f59fd49c:
+
+  wavpack: bump to version 4.70.0 (2013-12-12 16:26:10 +0100)
+
+are available in the git repository at:
+
+  git://gitorious.org/buildroot/buildroot.git yem/host-packages
+
+for you to fetch changes up to a931d8bd70bf29846273c3d20ad65678e1ef2838:
+
+  package/parted: add a host variant (2013-12-12 19:10:50 +0100)
+
+----------------------------------------------------------------
+Yann E. MORIN (3):
+      package/parted: relax dependency on lvm2
+      package/parted: relax dependency on readline
+      package/parted: add a host variant
+
+ package/Config.in.host        |  1 +
+ package/parted/Config.in      |  4 ----
+ package/parted/Config.in.host |  6 ++++++
+ package/parted/parted.mk      | 22 +++++++++++++++++++++-
+ 4 files changed, 28 insertions(+), 5 deletions(-)
+ create mode 100644 package/parted/Config.in.host
+
 -- 
-1.7.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
