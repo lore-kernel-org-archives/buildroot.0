@@ -1,65 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 12 Dec 2013 23:58:27 +0100
-Subject: [Buildroot] [git commit] package/parted: relax dependency on
-	readline
-Message-ID: <20131212230221.951E29BFEB@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 13 Dec 2013 00:08:46 +0100
+Subject: [Buildroot] [PATCH] package/libgles: postpone the check for a
+ missing GLES provider
+In-Reply-To: <20131212231338.33eae486@skate>
+References: <52A730B0.3020104@orange.com>	<1386702439-10093-2-git-send-email-yann.morin.1998@free.fr>	<52A842A3.3010302@mind.be>	<201312111325.49600.yann.morin.1998@free.fr>	<52A862B4.50103@orange.com>	<52A8710F.7040406@orange.com>	<52AA31F2.8070900@mind.be>
+ <20131212231338.33eae486@skate>
+Message-ID: <52AA41FE.6060705@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2079f07a926ec0b489ab30befe0cb2bcaebc40f6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 12/12/13 23:13, Thomas Petazzoni wrote:
+>> >   I also feel that the way the opengl stuff is handled now is a bit
+>> >hacky, but I don't have any better ideas.
+> Huh? Can you be more specific in what you find hacky? The way the
+> OpenGL stuff is handled today is kind of becoming the norm to handle
+> virtual packages, so it'd be good to understand what you think is hacky
+> in this implementation.
 
-parted can be configured without support for readline (ie. can be
-not interactive), so we can relax the dependency on readline, and
-make it an optional feature.
+  It's hacky because you have double binding between opengl/libgles and 
+the gles suppliers: opengl/libgles/libgles.mk enumerates all possible 
+suppliers, and the suppliers select BR2_PACKAGE_HAS_OPENGL_ES.
 
-(Based on a code-snippet from Thomas.)
 
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/parted/Config.in |    1 -
- package/parted/parted.mk |    9 ++++++++-
- 2 files changed, 8 insertions(+), 2 deletions(-)
+  Regards,
+  Arnout
 
-diff --git a/package/parted/Config.in b/package/parted/Config.in
-index 321fdf7..45170aa 100644
---- a/package/parted/Config.in
-+++ b/package/parted/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_PARTED
- 	bool "parted"
- 	depends on BR2_LARGEFILE
- 	depends on BR2_USE_WCHAR
--	select BR2_PACKAGE_READLINE
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
- 	help
-diff --git a/package/parted/parted.mk b/package/parted/parted.mk
-index 231ab35..afb8287 100644
---- a/package/parted/parted.mk
-+++ b/package/parted/parted.mk
-@@ -7,11 +7,18 @@
- PARTED_VERSION = 3.1
- PARTED_SOURCE = parted-$(PARTED_VERSION).tar.xz
- PARTED_SITE = $(BR2_GNU_MIRROR)/parted
--PARTED_DEPENDENCIES = readline util-linux
-+PARTED_DEPENDENCIES = util-linux
- PARTED_INSTALL_STAGING = YES
- PARTED_LICENSE = GPLv3+
- PARTED_LICENSE_FILES = COPYING
- 
-+ifeq ($(BR2_PACKAGE_READLINE),y)
-+PARTED_DEPENDENCIES += readline
-+PARTED_CONF_OPT += --with-readline
-+else
-+PARTED_CONF_OPT += --without-readline
-+endif
-+
- ifeq ($(BR2_PACKAGE_LVM2),y)
- PARTED_DEPENDENCIES += lvm2
- PARTED_CONF_OPT += --enable-device-mapper
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
