@@ -1,68 +1,58 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 12 Dec 2013 22:48:11 +0100
-Subject: [Buildroot] [RFC PATCH] Add a time zones repository
-In-Reply-To: <1386605561-7244-1-git-send-email-alexandre.belloni@free-electrons.com>
-References: <1386605561-7244-1-git-send-email-alexandre.belloni@free-electrons.com>
-Message-ID: <52AA2F1B.3020606@mind.be>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 12 Dec 2013 22:58:56 +0100
+Subject: [Buildroot] [PATCH] xl2tp: bump to version 1.3.2 and add
+	licensing info
+In-Reply-To: <1386811147.8675.2.camel@phoenix> (Axel Lin's message of "Thu, 12
+ Dec 2013 09:19:07 +0800")
+References: <1386811147.8675.2.camel@phoenix>
+Message-ID: <87ob4l20kf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/12/13 17:12, Alexandre Belloni wrote:
-> This adds a time zones repository as /etc/TZ so that uclibc users can
-> have an easy way to select their timezone. This is based on the current
-> list from openwrt which seems up to date.
->
-> Signed-off-by: Alexandre Belloni<alexandre.belloni@free-electrons.com>
+>>>>> "Axel" == Axel Lin <axel.lin@ingics.com> writes:
 
-  Maybe I don't understand the purpose of this patch, but why do you 
-install a pretty large file in the target which only contains a single 
-relevant line? If you want to make use of it, you have to copy it to the 
-rootfs-overlay where you can edit it - so there is no longer a need to 
-enable BR2_TIMEZONE.
+ > Signed-off-by: Axel Lin <axel.lin@ingics.com>
 
-  I would be more inclined to add a string config option that allows the 
-user to specify the time zone, where the help text e.g. refers to a 
-website that lists all the timezones. This config option would generate 
-the TZ file for uClibc, and the timezone file or whatever else is needed 
-for glibc.
+Thanks, but it seems to have gained a dependency on openssl:
 
-  Regards,
-  Arnout
+aaa.h:18:25: fatal error: openssl/md5.h: No such file or directory
 
-> ---
->   system/Config.in |   9 +
->   system/TZ        | 793 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
->   system/system.mk |   8 +
->   3 files changed, 810 insertions(+)
->   create mode 100644 system/TZ
->
-> diff --git a/system/Config.in b/system/Config.in
-> index 54c196c69e9d..9421c36e651b 100644
-> --- a/system/Config.in
-> +++ b/system/Config.in
-> @@ -332,4 +332,13 @@ config BR2_ROOTFS_POST_SCRIPT_ARGS
->   	  directory / images directory. The arguments in this option will be
->   	  passed*after*  those.
->
-> +config BR2_TIMEZONE
-> +	bool "Install timezones"
-> +	depends on !BR2_TOOLCHAIN_USES_GLIBC
-> +	help
-> +	  Install a repository of known timezones in /etc/TZ.
-> +
-> +	  Note this only includes current timezones, we don't support past
-> +	  timezones.
-> +
->   endmenu
+compilation terminated.
+make[1]: *** [xl2tpd.o] Error 1
+make[1]: *** [avp.o] Error 1
+make[1]: Leaving directory `/home/peko/source/buildroot/output/build/xl2tp-v1.3.2'
+make: *** [/home/peko/source/buildroot/output/build/xl2tp-v1.3.2/.stamp_built] Error 2
+
+ > ---
+ >  package/xl2tp/xl2tp.mk | 4 +++-
+ >  1 file changed, 3 insertions(+), 1 deletion(-)
+
+ > diff --git a/package/xl2tp/xl2tp.mk b/package/xl2tp/xl2tp.mk
+ > index cf496fe..1df245f 100644
+ > --- a/package/xl2tp/xl2tp.mk
+ > +++ b/package/xl2tp/xl2tp.mk
+ > @@ -4,9 +4,11 @@
+ >  #
+ >  ################################################################################
+ 
+ > -XL2TP_VERSION = v1.3.1
+ > +XL2TP_VERSION = v1.3.2
+ >  XL2TP_SITE = $(call github,xelerance,xl2tpd,$(XL2TP_VERSION))
+ >  XL2TP_DEPENDENCIES = libpcap
+ > +XL2TP_LICENSE = GPLv2+
+ > +XL2TP_LICENSE_FILES = LICENSE
+ 
+ >  define XL2TP_BUILD_CMDS
+ >  	$(SED) 's/ -O2 //' $(@D)/Makefile
+ > -- 
+ > 1.8.1.2
+
+
+
 
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Bye, Peter Korsgaard
