@@ -1,62 +1,30 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Thu, 12 Dec 2013 10:09:47 -0500
-Subject: [Buildroot] [PATCH v2] erlang: add option to enable SMP support
-Message-ID: <1386860987-2721-1-git-send-email-fhunleth@troodon-software.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 12 Dec 2013 16:25:53 +0100
+Subject: [Buildroot] [PATCH] uclibc: do not enable DODEBUG
+In-Reply-To: <1386798981-17924-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Wed, 11 Dec 2013 22:56:21 +0100")
+References: <1386798981-17924-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87wqja1472.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Erlang builds two emulators depending on whether SMP is supported or
-not. If it is known that the target does not support SMP, turning off
-the SMP emulator saves compile time and reduces the size of the
-installation.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
----
-Changes v1 -> v2:
-  - added sign-off
+ > The DODEBUG configuration option in uClibc is broken, even for widely
+ > used architectures like ARM. Therefore, any Buildroot configuration
+ > that has BR2_ENABLE_DEBUG enabled and uses uClibc with the internal
+ > toolchain backend will fail, with an error like:
 
- package/erlang/Config.in | 10 ++++++++++
- package/erlang/erlang.mk |  4 ++++
- 2 files changed, 14 insertions(+)
+ >   http://autobuild.buildroot.net/results/d34/d34238c209cf2ef63371a598ab9218165c90f864/build-end.log
 
-diff --git a/package/erlang/Config.in b/package/erlang/Config.in
-index 27206f3..9edb90b 100644
---- a/package/erlang/Config.in
-+++ b/package/erlang/Config.in
-@@ -10,6 +10,16 @@ config BR2_PACKAGE_ERLANG
- 
- 	  http://www.erlang.org
- 
-+config BR2_PACKAGE_ERLANG_SMP
-+	bool "enable SMP support"
-+	depends on BR2_PACKAGE_ERLANG
-+	help
-+	  Erlang provides both a UP and an SMP emulator. The UP emulator
-+	  is always built, and this option enables compilation of the SMP
-+	  emulator. The choice of which emulator to use is made at runtime.
-+	  If you do not need SMP support, turning this option off reduces
-+	  compile time and the size of the Erlang installation.
-+
- config BR2_PACKAGE_ERLANG_MEGACO
- 	bool "install megaco application"
- 	depends on BR2_PACKAGE_ERLANG
-diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
-index 32d18e4..67010a2 100644
---- a/package/erlang/erlang.mk
-+++ b/package/erlang/erlang.mk
-@@ -43,6 +43,10 @@ ERLANG_CONF_OPT += --enable-shared-zlib
- ERLANG_DEPENDENCIES += zlib
- endif
- 
-+ifneq ($(BR2_PACKAGE_ERLANG_SMP),y)
-+ERLANG_CONF_OPT += --disable-smp-support
-+endif
-+
- # Remove source, example, gs and wx files from the target
- ERLANG_REMOVE_PACKAGES = gs wx
- 
+ > This error was also reported recently by a Buildroot user.
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Committed, thanks.
+
 -- 
-1.8.3.2
+Bye, Peter Korsgaard
