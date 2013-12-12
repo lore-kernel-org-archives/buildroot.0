@@ -1,43 +1,40 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 12 Dec 2013 23:25:59 +0100
-Subject: [Buildroot] [PATCH 1/2] pkg-generick.mk: support for multiple
- patch dirs
-In-Reply-To: <1386838290-10978-1-git-send-email-rjbarnet@rockwellcollins.com>
-References: <1386838290-10978-1-git-send-email-rjbarnet@rockwellcollins.com>
-Message-ID: <52AA37F7.9000908@mind.be>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 12 Dec 2013 19:26:33 -0300
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3. {4, 10,
+	12}.x stable versions
+Message-ID: <1386887194-26365-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  Hi Ryan,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-  Oops, looks like I replied to an old version of this patch - but my 
-comment still stands.
-
-  Your title "pkg-generick.mk" sounds a bit special :-)
-
-  When you post updated versions of a patch (series), could you add v2 to 
-it (recent git allows you to do that with the '-v2' argument to 
-send-email or format-patch, older versions need '--subject-prefix='PATCH 
-v2' ).
-
-  Regards,
-  Arnout
-
-On 12/12/13 09:51, Ryan Barnett wrote:
-> Adding support for specifying multiple directories in
-> BR2_GLOBAL_PATCH_DIR. This will allow for a layered approach for the
-> patching of a package.
->
-> Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
-[snip]
-
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index d928897..2b040cd 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -83,14 +83,14 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+ 	default "3.2.53"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.73"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.74"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
+ 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
+ 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
+ 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
+ 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
+-	default "3.10.23"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.24"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+-	default "3.12.4"	if BR2_KERNEL_HEADERS_3_12
++	default "3.12.5"	if BR2_KERNEL_HEADERS_3_12
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.8.3.2
