@@ -1,51 +1,75 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 12 Dec 2013 08:38:34 +0100
-Subject: [Buildroot] [RFC 0/2] uboot: add u-boot.pbl support
-In-Reply-To: <1382628266-22635-1-git-send-email-rjbarnet@rockwellcollins.com>
-References: <1382628266-22635-1-git-send-email-rjbarnet@rockwellcollins.com>
-Message-ID: <20131212083834.3a7b05e7@skate>
+From: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Date: Thu, 12 Dec 2013 02:51:29 -0600
+Subject: [Buildroot] [PATCH 1/2] pkg-generick.mk: support for multiple patch
+	dirs
+Message-ID: <1386838290-10978-1-git-send-email-rjbarnet@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+Adding support for specifying multiple directories in
+BR2_GLOBAL_PATCH_DIR. This will allow for a layered approach for the
+patching of a package.
 
-On Thu, 24 Oct 2013 10:24:24 -0500, Ryan Barnett wrote:
-> This patchset introduces support for generating a u-boot.pbl image
-> format in u-boot. The u-boot.pbl image format is used by the Freescale?s
-> QorIQ series of processors for in a non-NOR flash based boot
-> configuration. It also adds support to u-boot to generate a Reset
-> Configuration Word (RCW) binary file ? RCW.bin. Customization of the
-> RCW can be one of two methods ? using Freescale?s QorIQ Configuration
-> Suite (QCS) or by .cfg format specified by docs/README.pblimage in the
-> U-Boot source.
+Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+---
+ Config.in              |   20 ++++++++++++--------
+ package/pkg-generic.mk |    5 ++++-
+ 2 files changed, 16 insertions(+), 9 deletions(-)
 
-[...]
-
-FWIW, I've looked at this code and discussed it with Ryan. The first
-thing is that it adds too much stuff in uboot/uboot.mk and
-uboot/Config.in, so I've created a patch that moves platform-specific
-stuff into other .mk and Config.in files within boot/uboot/, on top of
-which I've changed Ryan's patch. It makes things more reasonable I
-believe.
-
-See:
-
-   http://git.free-electrons.com/users/thomas-petazzoni/buildroot/log/?h=uboot-arch-spec
-
-However, I've asked Ryan to take some significant portions of his cover
-letter, and use that to extend the Config.in help text to explain how
-this thing can/should be used, and under what conditions.
-
-I guess Ryan will resubmit the set of 3 patches when he is done with
-this Config.in help text writing.
-
-Best regards,
-
-Thomas
+diff --git a/Config.in b/Config.in
+index 2b401cb..d55e57c 100644
+--- a/Config.in
++++ b/Config.in
+@@ -461,18 +461,22 @@ config BR2_PACKAGE_OVERRIDE_FILE
+ 	  Buildroot documentation for more details on this feature.
+ 
+ config BR2_GLOBAL_PATCH_DIR
+-	string "global patch directory"
++	string "global patch directories"
+ 	help
+-	  You may specify a directory containing global package patches.
+-	  For a specific version <packageversion> of a specific package
+-	  <packagename>, patches are applied as follows.
++	  You may specify a space separated list of one or more directories
++	  containing global package patches. For a specific version
++	  <packageversion> of a specific package <packagename>, patches are
++	  applied as follows:
+ 
+-	  First, the default Buildroot patch set for the package is applied.
++	  First, the default Buildroot patch set for the package is applied
++	  from the package's directory in Buildroot.
+ 
+-	  If the directory $(BR2_GLOBAL_PATCH_DIR)/<packagename>/<packageversion>
+-	  exists, then all *.patch files in the directory will be applied.
++	  Then for every directory - <global-patch-dir> - that exists in
++	  BR2_GLOBAL_PATCH_DIR, if the directory
++	  <global-patch-dir>/<packagename>/<packageversion>/ exists, then all
++	  *.patch files in this directory will be applied.
+ 
+-	  Otherwise, if the directory $(BR2_GLOBAL_PATCH_DIR)/<packagename> exists,
++	  Otherwise, if the directory <global-patch-dir>/<packagename> exists,
+ 	  then all *.patch files in the directory will be applied.
+ 
+ endmenu
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 1fce71b..53d96c9 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -134,8 +134,11 @@ endif
+ # The RAWNAME variable is the lowercased package name, which allows to
+ # find the package directory (typically package/<pkgname>) and the
+ # prefix of the patches
++#
++# For BR2_GLOBAL_PATCH_DIR, only generate if it is defined
+ $(BUILD_DIR)/%/.stamp_patched: NAMEVER = $(RAWNAME)-$($(PKG)_VERSION)
+-$(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS = $($(PKG)_DIR_PREFIX)/$(RAWNAME) $(call qstrip,$(BR2_GLOBAL_PATCH_DIR))/$(RAWNAME)
++$(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS =  $($(PKG)_DIR_PREFIX)/$(RAWNAME)
++$(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS += $(if $(BR2_GLOBAL_PATCH_DIR),$(foreach pdir,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR)),$(pdir)/$(RAWNAME)))
+ $(BUILD_DIR)/%/.stamp_patched:
+ 	@$(call step_start,patch)
+ 	@$(call MESSAGE,"Patching")
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.9.5
