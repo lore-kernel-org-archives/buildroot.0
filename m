@@ -1,141 +1,68 @@
-From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Thu, 12 Dec 2013 02:51:30 -0600
-Subject: [Buildroot] [PATCH 2/2] manual: update for multiple global patch
-	dirs
-In-Reply-To: <1386838290-10978-1-git-send-email-rjbarnet@rockwellcollins.com>
-References: <1386838290-10978-1-git-send-email-rjbarnet@rockwellcollins.com>
-Message-ID: <1386838290-10978-2-git-send-email-rjbarnet@rockwellcollins.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 12 Dec 2013 12:07:52 +0000
+Subject: [Buildroot] [PATCH v2] knock: Fix build failure due to missing
+	README file.
+Message-ID: <1386850072-18797-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Updating the documentation to reflect that multiple directories can
-now be specified for BR2_GLOBAL_PATCH_DIR. Along with giving an
-example use case of how to use multiple global patch directories.
+Apply upstream patch: 306a696c0882f28a5cd2e41d392c3a6ed14d45f4
 
-Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+The build process fails because Makefile.am includes README as part of
+the documentation files, but actually it doesn't exist:
+
+make[2]: *** No rule to make target `README', needed by `all-am'. Stop.
+
+The right file is README.md, so making that replacement to Makefile.am
+fixes the problem.
+
+Reviewed-by: Markos Chandras <Markos.Chandras@imgtec.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- docs/manual/customize-packages.txt |   70 +++++++++++++++++++++++++++++++-----
- docs/manual/patch-policy.txt       |   13 ++++---
- 2 files changed, 70 insertions(+), 13 deletions(-)
+ .../knock/knock-001-Fix-missing-README-file.patch  |   32 ++++++++++++++++++++
+ 1 files changed, 32 insertions(+), 0 deletions(-)
+ create mode 100644 package/knock/knock-001-Fix-missing-README-file.patch
 
-diff --git a/docs/manual/customize-packages.txt b/docs/manual/customize-packages.txt
-index 1820c54..8955756 100644
---- a/docs/manual/customize-packages.txt
-+++ b/docs/manual/customize-packages.txt
-@@ -8,16 +8,68 @@ It is sometimes useful to apply 'extra' patches to packages - over and
- above those provided in Buildroot. This might be used to support custom
- features in a project, for example, or when working on a new architecture.
- 
--The +BR2_GLOBAL_PATCH_DIR+ configuration file option can be
--used to specify a directory containing global package patches.
-+The +BR2_GLOBAL_PATCH_DIR+ configuration option can be used to specify
-+a space separated list of one or more directories containing global
-+package patches. By specifying multiple global patch directories, a
-+user could implement a layered approach to patches. This could be
-+useful when a user has multiple boards that share a common processor
-+architecture. It is often the case that a subset of patches for a
-+package need to be shared between the different boards a user has.
-+However, each board may require specific patches for the package
-+that build on top of the common subset of patches.
- 
--For a specific version <packageversion> of a specific package <packagename>,
--patches are applied as follows.
-+For a specific version +<packageversion>+ of a specific package
-++<packagename>+, patches are applied as follows:
- 
--First, the default Buildroot patch set for the package is applied.
-+. First, the default Buildroot patch set for the package is applied.
- 
--If the directory +$(BR2_GLOBAL_PATCH_DIR)/<packagename>/<packageversion>+
--exists, then all +*.patch+ files in the directory will be applied.
-+. Then for every directory - +<global-patch-dir>+ - that exists in
-+  +BR2_GLOBAL_PATCH_DIR+, the following will be done:
-++
-+* If the directory
-+  +<global-patch-dir>/<packagename>/<packageversion>/+ exists, then
-+  all *.patch files in this directory will be applied.
-++
-+* Otherwise, if the directory +<global-patch-dir>/<packagename>+ exists,
-+  then all *.patch files in the directory will be applied.
- 
--Otherwise, if the directory +$(BR2_GLOBAL_PATCH_DIR)/<packagename>+
--exists, then all +*.patch+ files in the directory will be applied.
-+The +BR2_GLOBAL_PATCH_DIR+ option is the preferred method for
-+specifying a custom patch directory for packages. It can be used to
-+specify a patch directory for any package in buildroot. It should also
-+be used in place of the custom patch directory options for Linux,
-+U-Boot, and other packages that already haved custom patch directory
-+options available to them. By doing this, it will allow a user to
-+manage their patches from one top-level directory.
+diff --git a/package/knock/knock-001-Fix-missing-README-file.patch b/package/knock/knock-001-Fix-missing-README-file.patch
+new file mode 100644
+index 0000000..ea0a779
+--- /dev/null
++++ b/package/knock/knock-001-Fix-missing-README-file.patch
+@@ -0,0 +1,32 @@
++From 306a696c0882f28a5cd2e41d392c3a6ed14d45f4 Mon Sep 17 00:00:00 2001
++From: vriera <Vincent.Riera@imgtec.com>
++Date: Tue, 10 Dec 2013 12:40:13 +0000
++Subject: [PATCH] Update Makefile.am
 +
-+An example directory structure for where a user has multiple
-+directories specified for +BR2_GLOBAL_PATCH_DIR+ may look like this:
++Fix build failure due to missing README file.
 +
-+-----
-+board/
-++-- common-fooarch
-+|   +-- patches
-+|       +-- linux
-+|       |   +-- linux-patch1.patch
-+|       |   +-- linux-patch2.patch
-+|       +-- u-boot
-+|       +-- foopkg
-++-- fooarch-board
-+    +-- patches
-+        +-- linux
-+        |   +-- linux-patch3.patch
-+        +-- u-boot
-+        +-- foopkg
-+-----
++The build process fails because Makefile.am includes README as part of the documentation files, but actually it doesn't exist:
 +
-+If the user has the +BR2_GLOBAL_PATCH_DIR+ configuration option set as
-+follows:
++make[2]: *** No rule to make target `README', needed by `all-am'. Stop.
 +
-+-----
-+BR2_GLOBAL_PATCH_DIR="board/common-fooarch board/fooarch-board"
-+-----
++The right file is README.md, so making that replacement to Makefile.am fixes the problem.
++---
++ Makefile.am | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+Then the patches would applied as follows for the Linux kernel:
++diff --git a/Makefile.am b/Makefile.am
++index b46e8c4..1a95e90 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -10,7 +10,7 @@ man_MANS += doc/knockd.1
++ sysconf_DATA = knockd.conf
++ endif
++ 
++-dist_doc_DATA = README TODO ChangeLog COPYING
+++dist_doc_DATA = README.md TODO ChangeLog COPYING
++ 
++ knock_SOURCES = src/knock.c
++ knockd_SOURCES = src/knockd.c src/list.c src/list.h
++-- 
++1.8.5.1
 +
-+. board/common-fooarch/patches/linux/linux-patch1.patch
-+. board/common-fooarch/patches/linux/linux-patch2.patch
-+. board/fooarch-board/patches/linux/linux-patch1.patch
-diff --git a/docs/manual/patch-policy.txt b/docs/manual/patch-policy.txt
-index d9bc8ca..26586ad 100644
---- a/docs/manual/patch-policy.txt
-+++ b/docs/manual/patch-policy.txt
-@@ -50,8 +50,9 @@ Global patch directory
- ^^^^^^^^^^^^^^^^^^^^^^
- 
- The +BR2_GLOBAL_PATCH_DIR+ configuration file option can be
--used to specify a directory containing global package patches. See
--xref:packages-custom[] for details.
-+used to specify a space separated list of one or more directories
-+containing global package patches. See xref:packages-custom[] for
-+details.
- 
- 
- How patches are applied
-@@ -72,11 +73,15 @@ How patches are applied
- +
- * Otherwise, patch files matching +<packagename>-*.patch+
-   are applied in alphabetical order.
--  So, to ensure they are applied in the right order, it is hightly
--  recommended to named the patch files like this:
-+  So, to ensure they are applied in the right order, it is highly
-+  recommended to name the patch files like this:
-   +<packagename>-<number>-<description>.patch+, where +<number>+
-   refers to the 'apply order'.
- 
-+. If +BR2_GLOABL_PATCH_DIR+ is defined, the directories will be
-+  enumerated in the order they are specified for patches. The patches
-+  are applied as described in the previous step.
-+
- . Run the +<packagename>_POST_PATCH_HOOKS+ commands if defined.
- 
- If something goes wrong in the steps _3_ or _4_, then the build fails.
 -- 
-1.7.9.5
+1.7.1
