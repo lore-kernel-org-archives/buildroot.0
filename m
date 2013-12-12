@@ -1,32 +1,71 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 12 Dec 2013 15:06:27 +0100
-Subject: [Buildroot] [git commit] file: bump to version 5.16
-Message-ID: <20131212142809.264EC9BFE7@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 12 Dec 2013 16:45:19 +0200
+Subject: [Buildroot] [PATCH] erlang: add option to enable SMP support
+In-Reply-To: <1386856902-23162-1-git-send-email-fhunleth@troodon-software.com>
+References: <1386856902-23162-1-git-send-email-fhunleth@troodon-software.com>
+Message-ID: <20131212144519.GM1217@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=127e86b6ef3dc084f3632566722f2623a25e7d72
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Frank,
 
-Signed-off-by: Axel Lin <axel.lin@ingics.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/file/file.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Thu, Dec 12, 2013 at 09:01:42AM -0500, Frank Hunleth wrote:
+> Erlang builds two emulators depending on whether SMP is supported or
+> not. If it is known that the target does not support SMP, turning off
+> the SMP emulator saves compile time and reduces the size of the
+> installation.
 
-diff --git a/package/file/file.mk b/package/file/file.mk
-index 6436802..dc7c206 100644
---- a/package/file/file.mk
-+++ b/package/file/file.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FILE_VERSION = 5.15
-+FILE_VERSION = 5.16
- FILE_SITE = ftp://ftp.astron.com/pub/file
- FILE_DEPENDENCIES = host-file zlib
- FILE_INSTALL_STAGING = YES
+Missing sign-off.
+
+Is there an option on only build (or at least install) the SMP version?
+
+baruch
+
+> ---
+>  package/erlang/Config.in | 10 ++++++++++
+>  package/erlang/erlang.mk |  4 ++++
+>  2 files changed, 14 insertions(+)
+> 
+> diff --git a/package/erlang/Config.in b/package/erlang/Config.in
+> index 27206f3..9edb90b 100644
+> --- a/package/erlang/Config.in
+> +++ b/package/erlang/Config.in
+> @@ -10,6 +10,16 @@ config BR2_PACKAGE_ERLANG
+>  
+>  	  http://www.erlang.org
+>  
+> +config BR2_PACKAGE_ERLANG_SMP
+> +	bool "enable SMP support"
+> +	depends on BR2_PACKAGE_ERLANG
+> +	help
+> +	  Erlang provides both a UP and an SMP emulator. The UP emulator
+> +	  is always built, and this option enables compilation of the SMP
+> +	  emulator. The choice of which emulator to use is made at runtime.
+> +	  If you do not need SMP support, turning this option off reduces
+> +	  compile time and the size of the Erlang installation.
+> +
+>  config BR2_PACKAGE_ERLANG_MEGACO
+>  	bool "install megaco application"
+>  	depends on BR2_PACKAGE_ERLANG
+> diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
+> index 32d18e4..67010a2 100644
+> --- a/package/erlang/erlang.mk
+> +++ b/package/erlang/erlang.mk
+> @@ -43,6 +43,10 @@ ERLANG_CONF_OPT += --enable-shared-zlib
+>  ERLANG_DEPENDENCIES += zlib
+>  endif
+>  
+> +ifneq ($(BR2_PACKAGE_ERLANG_SMP),y)
+> +ERLANG_CONF_OPT += --disable-smp-support
+> +endif
+> +
+>  # Remove source, example, gs and wx files from the target
+>  ERLANG_REMOVE_PACKAGES = gs wx
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
