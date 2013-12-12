@@ -1,136 +1,100 @@
 From: Clayton Shotwell <clshotwe@rockwellcollins.com>
-Date: Thu, 12 Dec 2013 12:27:15 -0600
-Subject: [Buildroot] [ PATCH v4 15/20] shadow: new package
+Date: Thu, 12 Dec 2013 12:27:17 -0600
+Subject: [Buildroot] [ PATCH v4 17/20] busybox: add option to enable SELinux
+	support
 In-Reply-To: <1386872840-22051-1-git-send-email-clshotwe@rockwellcollins.com>
 References: <1386872840-22051-1-git-send-email-clshotwe@rockwellcollins.com>
-Message-ID: <1386872840-22051-16-git-send-email-clshotwe@rockwellcollins.com>
+Message-ID: <1386872840-22051-18-git-send-email-clshotwe@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
----
-Changes v3 -> v4:
-  - Added back in the Python bindings configure option (suggested by
-    Thomas).
-  - Moved the linux-pam shadow configuration changes inside the
-    linux-pam if block (suggested by Ryan).
-Changes v2 -> v3:
-  - Corrected spelling error.
-Changes v1 -> v2:
-  - General cleanup to the mk file to conform to the standard format.
----
- package/Config.in          |    3 ++
- package/setools/setools.mk |    2 +-
- package/shadow/Config.in   |   13 +++++++++++
- package/shadow/shadow.mk   |   50 ++++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 67 insertions(+), 1 deletions(-)
- create mode 100644 package/shadow/Config.in
- create mode 100644 package/shadow/shadow.mk
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-diff --git a/package/Config.in b/package/Config.in
-index 343927d..d4442db 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -961,6 +961,9 @@ source "package/lockfile-progs/Config.in"
- source "package/logrotate/Config.in"
- source "package/logsurfer/Config.in"
- source "package/screen/Config.in"
-+if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-+source "package/shadow/Config.in"
-+endif
- source "package/sudo/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/time/Config.in"
-diff --git a/package/setools/setools.mk b/package/setools/setools.mk
-index eb3f4cc..c99cdeb 100644
---- a/package/setools/setools.mk
-+++ b/package/setools/setools.mk
-@@ -63,7 +63,7 @@ HOST_SETOOLS_CONF_OPT = \
- 	--with-sepol-devel="$(HOST_DIR)/usr" \
- 	--with-selinux-devel="$(HOST_DIR)/usr" \
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
+---
+ ...ags-strip-non-l-arguments-returned-by-pkg.patch |   28 ++++++++++++++++++++
+ package/busybox/Config.in                          |    3 ++
+ package/busybox/busybox.mk                         |    8 +++++
+ 3 files changed, 39 insertions(+), 0 deletions(-)
+ create mode 100644 package/busybox/1.21.1/0004-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch
+
+diff --git a/package/busybox/1.21.1/0004-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch b/package/busybox/1.21.1/0004-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch
+new file mode 100644
+index 0000000..105626c
+--- /dev/null
++++ b/package/busybox/1.21.1/0004-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch
+@@ -0,0 +1,28 @@
++From 67eb23d2be8aba3c474dac81a15b0fa11e5847b7 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Mon, 25 Nov 2013 22:51:53 +0100
++Subject: [PATCH] Makefile.flags: strip non -l arguments returned by pkg-config
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ Makefile.flags | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/Makefile.flags b/Makefile.flags
++index 307afa7..885e323 100644
++--- a/Makefile.flags
+++++ b/Makefile.flags
++@@ -141,7 +141,9 @@ ifeq ($(CONFIG_SELINUX),y)
++ SELINUX_PC_MODULES = libselinux libsepol
++ $(eval $(call pkg_check_modules,SELINUX,$(SELINUX_PC_MODULES)))
++ CPPFLAGS += $(SELINUX_CFLAGS)
++-LDLIBS += $(if $(SELINUX_LIBS),$(SELINUX_LIBS:-l%=%),$(SELINUX_PC_MODULES:lib%=%))
+++LDLIBS += $(if $(SELINUX_LIBS),\
+++       $(patsubst -l%,%,$(filter -l%,$(SELINUX_LIBS))),\
+++       $(SELINUX_PC_MODULES:lib%=%))
++ endif
++ 
++ ifeq ($(CONFIG_EFENCE),y)
++-- 
++1.8.1.2
++
+diff --git a/package/busybox/Config.in b/package/busybox/Config.in
+index 7f00fb8..9e64ec0 100644
+--- a/package/busybox/Config.in
++++ b/package/busybox/Config.in
+@@ -58,6 +58,9 @@ config BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ config BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES
+ 	bool "Individual binaries"
  
--ifeq ($(BR2_PACKAGE_PYTHON),y)
-+ifeq ($(BR2_PACKAGE_SETOOLS_PYTHON_BINDINGS),y)
- 	HOST_SETOOLS_DEPENDENCIES += host-python host-swig 
- 	HOST_SETOOLS_CONF_ENV += \
- 		am_cv_pathless_PYTHON=python \
-diff --git a/package/shadow/Config.in b/package/shadow/Config.in
-new file mode 100644
-index 0000000..5692ac6
---- /dev/null
-+++ b/package/shadow/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_SHADOW
-+	bool "shadow"
-+	help
-+	  The shadow-utils package includes the necessary programs for
-+	  converting UNIX password files to the shadow password format, plus
-+	  programs for managing user and group accounts. The pwconv command
-+	  converts passwords to the shadow password format. The pwunconv command
-+	  unconverts shadow passwords and generates an npasswd file (a standard
-+	  UNIX password file). The pwck command checks the integrity of password
-+	  and shadow files. The lastlog command prints out the last login times
-+	  for all users. The useradd, userdel, and usermod commands are used for
-+	  managing user accounts. The groupadd, groupdel, and groupmod commands
-+	  are used for managing group accounts.
-diff --git a/package/shadow/shadow.mk b/package/shadow/shadow.mk
-new file mode 100644
-index 0000000..774162b
---- /dev/null
-+++ b/package/shadow/shadow.mk
-@@ -0,0 +1,50 @@
-+################################################################################
-+#
-+# shadow
-+#
-+################################################################################
++config BR2_PACKAGE_BUSYBOX_SELINUX
++	bool "Enable SELinux support"
 +
-+SHADOW_VERSION = 4.1.5.1
-+SHADOW_SOURCE = shadow-$(SHADOW_VERSION).tar.bz2
-+SHADOW_SITE = http://pkg-shadow.alioth.debian.org/releases/
-+SHADOW_LICENSE = BSD
-+SHADOW_LICENSE_FILES = COPYING
-+SHADOW_DEPENDENCIES = acl attr busybox
-+
-+SHADOW_INSTALL_STAGING = NO
-+
-+SHADOW_CONF_OPT = --disable-nls
-+
-+# Shadow configuration to support audit
-+ifeq ($(BR2_PACKAGE_AUDIT),y)
-+SHADOW_DEPENDENCIES += audit
-+SHADOW_CONF_OPT += --with-audit=yes
-+endif
-+
-+# Shadow with linux-pam support
-+ifeq ($(BR2_PACKAGE_LINUX_PAM),y) 
-+SHADOW_DEPENDENCIES += linux-pam
-+SHADOW_CONF_OPT += --with-libpam=yes
-+
-+# Comment out all config entries that conflict with using PAM
-+define SHADOW_LOGIN_CONFIGURATION
-+        for FUNCTION in FAIL_DELAY FAILLOG_ENAB LASTLOG_ENAB MAIL_CHECK_ENAB \
-+                OBSCURE_CHECKS_ENAB PORTTIME_CHECKS_ENAB QUOTAS_ENAB CONSOLE MOTD_FILE \
-+                FTMP_FILE NOLOGINS_FILE ENV_HZ PASS_MIN_LEN SU_WHEEL_ONLY CRACKLIB_DICTPATH \
-+                PASS_CHANGE_TRIES PASS_ALWAYS_WARN CHFN_AUTH ENCRYPT_METHOD ENVIRON_FILE ; \
-+        do \
-+                sed -i "s/^$${FUNCTION}/# &/" $(TARGET_DIR)/etc/login.defs ; \
-+        done
+ config BR2_PACKAGE_BUSYBOX_WATCHDOG
+ 	bool "Install the watchdog daemon startup script"
+ 	help
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 13de7ed..24f0695 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -174,6 +174,13 @@ define BUSYBOX_INSTALL_INDIVIDUAL_BINARIES
+ endef
+ endif
+ 
++ifeq ($(BR2_PACKAGE_BUSYBOX_SELINUX),y)
++BUSYBOX_DEPENDENCIES += host-pkgconf libselinux libsepol
++define BUSYBOX_SET_SELINUX
++	$(call KCONFIG_ENABLE_OPT,CONFIG_SELINUX,$(BUSYBOX_BUILD_CONFIG))
 +endef
-+
-+SHADOW_POST_INSTALL_TARGET_HOOKS += SHADOW_LOGIN_CONFIGURATION
-+
 +endif
 +
-+# Shadow with selinux support
-+ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+SHADOW_DEPENDENCIES += libselinux libsemanage
-+SHADOW_CONF_OPT += --with-selinux=yes
-+endif
-+
-+$(eval $(autotools-package))
+ define BUSYBOX_INSTALL_LOGGING_SCRIPT
+ 	if grep -q CONFIG_SYSLOGD=y $(@D)/.config; then \
+ 		[ -f $(TARGET_DIR)/etc/init.d/S01logging ] || \
+@@ -210,6 +217,7 @@ define BUSYBOX_CONFIGURE_CMDS
+ 	$(BUSYBOX_SET_INIT)
+ 	$(BUSYBOX_SET_WATCHDOG)
+ 	$(BUSYBOX_CONFIGURE_INDIVIDUAL_BINARIES)
++	$(BUSYBOX_SET_SELINUX)
+ 	@yes "" | $(MAKE) ARCH=$(KERNEL_ARCH) CROSS_COMPILE="$(TARGET_CROSS)" \
+ 		-C $(@D) oldconfig
+ endef
 -- 
 1.7.1
