@@ -1,37 +1,74 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 12 Dec 2013 19:08:36 +0100
-Subject: [Buildroot] [PATCH] package/rpi-firmware: bump
-Message-ID: <1386871716-13900-1-git-send-email-yann.morin.1998@free.fr>
+From: Matt Weber <mlweber1@rockwellcollins.com>
+Date: Thu, 12 Dec 2013 12:14:19 -0600
+Subject: [Buildroot] [PATCH 1/1] smcroute: new package
+Message-ID: <1386872059-28046-1-git-send-email-mlweber1@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-This bumps gets us:
-  - support for the v4l2 driver
-  - fix latencies in vdec3 (h264 decoder)
-  - fix incorrect frame presentation in de-interlacing filter
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
+Signed-off-by: Sean Gerhardt <sagerhar@rockwellcollins.com>
 ---
- package/rpi-firmware/rpi-firmware.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/Config.in            |    1 +
+ package/smcroute/Config.in   |   11 +++++++++++
+ package/smcroute/smcroute.mk |   15 +++++++++++++++
+ 3 files changed, 27 insertions(+), 0 deletions(-)
+ create mode 100755 package/smcroute/Config.in
+ create mode 100755 package/smcroute/smcroute.mk
 
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index 838952b..664f6ad 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RPI_FIRMWARE_VERSION = f7e9bcd25c9b01521fdf88aac2740b6cfc887dfb
-+RPI_FIRMWARE_VERSION = e618d4ff2dc20051bc726834b22487fe2e236fe5
- RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
- RPI_FIRMWARE_LICENSE = BSD-3c
- RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
+diff --git a/package/Config.in b/package/Config.in
+index 40c9e31..fd04224 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -880,6 +880,7 @@ source "package/rtptools/Config.in"
+ source "package/samba/Config.in"
+ source "package/sconeserver/Config.in"
+ source "package/ser2net/Config.in"
++source "package/smcroute/Config.in"
+ source "package/socat/Config.in"
+ source "package/socketcand/Config.in"
+ source "package/spawn-fcgi/Config.in"
+diff --git a/package/smcroute/Config.in b/package/smcroute/Config.in
+new file mode 100755
+index 0000000..a66cb94
+--- /dev/null
++++ b/package/smcroute/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_SMCROUTE
++	bool "smcroute"
++	help
++	  SMCRoute is a command line tool to manipulate the multicast
++	  routes of a UNI kernel. It supports both IPv4 and IPv6 multicast
++	  routing.  SMCRoute can be  used as an alternative to dynamic
++	  multicast routers like mrouted or pimd in setups where static
++	  multicast routes should be maintained and/or no proper IGMP or
++	  MLD signaling exists.
++
++	  https://github.com/troglobit/smcroute
+diff --git a/package/smcroute/smcroute.mk b/package/smcroute/smcroute.mk
+new file mode 100755
+index 0000000..82efa81
+--- /dev/null
++++ b/package/smcroute/smcroute.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# smcroute
++#
++################################################################################
++SMCROUTE_VERSION =  1.99.2
++SMCROUTE_SITE = $(call github,troglobit,smcroute,$(SMCROUTE_VERSION))
++SMCROUTE_SOURCE = troglobit-smcroute-$(SMCROUTE_VERSION)-0-g58388f6.tar.gz
++SMCROUTE_LICENSE = GPLv2+
++SMCROUTE_LICENSE_FILES = COPYING
++
++SMCROUTE_CONF_OPT = ac_cv_func_setpgrp_void=yes
++#BUG:The package Makefile uses CC?= even though the package is autotools based
++SMCROUTE_MAKE_ENV = $(TARGET_CONFIGURE_OPTS)
++
++$(eval $(autotools-package))
 -- 
-1.8.1.2
+1.7.1
