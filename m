@@ -1,37 +1,67 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Thu, 12 Dec 2013 10:32:53 -0500
-Subject: [Buildroot] [PATCH] erlang: add option to enable SMP support
-In-Reply-To: <20131212144519.GM1217@tarshish>
-References: <1386856902-23162-1-git-send-email-fhunleth@troodon-software.com>
- <20131212144519.GM1217@tarshish>
-Message-ID: <CA+-urNSMeTNszXRYU8PAszAzjQrwnOTFMh5SajToiEOV=08AqQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 12 Dec 2013 18:52:07 +0100
+Subject: [Buildroot] [PATCH] Makefile: include BR2_EXTERNAL before other
+	packages
+Message-ID: <1386870727-25575-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-On Thu, Dec 12, 2013 at 9:45 AM, Baruch Siach <baruch@tkos.co.il> wrote:
-> Hi Frank,
->
-> On Thu, Dec 12, 2013 at 09:01:42AM -0500, Frank Hunleth wrote:
->> Erlang builds two emulators depending on whether SMP is supported or
->> not. If it is known that the target does not support SMP, turning off
->> the SMP emulator saves compile time and reduces the size of the
->> installation.
->
-> Missing sign-off.
+BR2_EXTERNAL may contain packages that are "providers" of generic
+functionalities, such as EGL/GLES/...
 
-Thanks for catching. Fixed in v2.
+So, BR2_EXTERNAL must be included before our built-in packages,
+otherwise the dependencies and rules for our built-in packages
+are evaluated too early.
 
-> Is there an option on only build (or at least install) the SMP version?
+David has reported that doing so fixes his use-case, but we should
+still consider this as a stop-gap until we can come up with a proper
+fix.
 
-It doesn't appear that there's an option to only build the SMP
-version. It looks like if you manually delete the UP version, Erlang
-still works fine on an SMP system. I must admit, though, that I don't
-know if this will always work and I'm a little uneasy about doing it
-without more testing.
+Remove a superfluous extra empty line at the same time.
 
-Frank
+Reported-by: David Corvoysier <david.corvoysier@orange.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: David Corvoysier <david.corvoysier@orange.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Makefile | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index d52182e..22b7c99 100644
+--- a/Makefile
++++ b/Makefile
+@@ -121,7 +121,6 @@ else
+   $(shell echo BR2_EXTERNAL ?= $(BR2_EXTERNAL) > $(BR2_EXTERNAL_FILE))
+ endif
+ 
+-
+ BUILD_DIR:=$(BASE_DIR)/build
+ STAMP_DIR:=$(BASE_DIR)/stamps
+ BINARIES_DIR:=$(BASE_DIR)/images
+@@ -358,14 +357,16 @@ ifneq ($(PACKAGE_OVERRIDE_FILE),)
+ -include $(PACKAGE_OVERRIDE_FILE)
+ endif
+ 
++# Include BR2_EXTERNAL before other packages, as BR2_EXTERNAL
++# may contain packages that are "providers" for eg. EGL/GLES/...
++include $(BR2_EXTERNAL)/external.mk
++
+ include $(sort $(wildcard package/*/*.mk))
+ 
+ include boot/common.mk
+ include linux/linux.mk
+ include system/system.mk
+ 
+-include $(BR2_EXTERNAL)/external.mk
+-
+ TARGETS+=target-finalize
+ 
+ ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
+-- 
+1.8.1.2
