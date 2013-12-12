@@ -1,9 +1,9 @@
 From: Clayton Shotwell <clshotwe@rockwellcollins.com>
-Date: Thu, 12 Dec 2013 12:27:13 -0600
-Subject: [Buildroot] [ PATCH v4 13/20] python-pyxml: new package
+Date: Thu, 12 Dec 2013 12:27:07 -0600
+Subject: [Buildroot] [ PATCH v4 07/20] sepolgen: new package
 In-Reply-To: <1386872840-22051-1-git-send-email-clshotwe@rockwellcollins.com>
 References: <1386872840-22051-1-git-send-email-clshotwe@rockwellcollins.com>
-Message-ID: <1386872840-22051-14-git-send-email-clshotwe@rockwellcollins.com>
+Message-ID: <1386872840-22051-8-git-send-email-clshotwe@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,109 +12,93 @@ To: buildroot@busybox.net
 
 Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
 ---
-
-This package will also have to change with the new Python
-infrastructure proposed by Thomas P.
-
 Changes v3 -> v4:
-  - Correcting the download path (suggested by Thomas).
-  - Removed the clean commands.
+  - Cleaned up configure comments (suggested by Thomas).
+  - Removed the clean command.
 Changes v2 -> v3:
   - No changes.
 Changes v1 -> v2:
   - General cleanup to the mk file to conform to the standard format.
+  - Changed package dependencies into selects in the config.
 ---
- package/Config.in                  |    1 +
- package/python-pyxml/Config.in     |   11 ++++++++
- package/python-pyxml/python-xml.mk |   50 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 62 insertions(+), 0 deletions(-)
- create mode 100644 package/python-pyxml/Config.in
- create mode 100644 package/python-pyxml/python-xml.mk
+ package/Config.in            |    4 ++++
+ package/sepolgen/Config.in   |   14 ++++++++++++++
+ package/sepolgen/sepolgen.mk |   31 +++++++++++++++++++++++++++++++
+ 3 files changed, 49 insertions(+), 0 deletions(-)
+ create mode 100644 package/sepolgen/Config.in
+ create mode 100644 package/sepolgen/sepolgen.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index d69d106..8adf9ec 100644
+index 8f2d3c1..fb336eb 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -399,6 +399,7 @@ source "package/python-protobuf/Config.in"
- source "package/python-pygame/Config.in"
- source "package/python-pyparsing/Config.in"
- source "package/python-pyro/Config.in"
-+source "package/python-pyxml/Config.in"
- source "package/python-pyzmq/Config.in"
- source "package/python-serial/Config.in"
- source "package/python-setuptools/Config.in"
-diff --git a/package/python-pyxml/Config.in b/package/python-pyxml/Config.in
+@@ -937,6 +937,10 @@ source "package/rtai/Config.in"
+ source "package/xenomai/Config.in"
+ endmenu
+ 
++menu "Security"
++source "package/sepolgen/Config.in"
++endmenu
++
+ menu "Shell and utilities"
+ source "package/at/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+diff --git a/package/sepolgen/Config.in b/package/sepolgen/Config.in
 new file mode 100644
-index 0000000..420f3ad
+index 0000000..d7d0d37
 --- /dev/null
-+++ b/package/python-pyxml/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_PYTHON_PYXML
-+	bool "python-pyxml"
-+	depends on BR2_PACKAGE_PYTHON
++++ b/package/sepolgen/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_SEPOLGEN
++	bool "sepolgen"
++	select BR2_PACKAGE_PYTHON
++	depends on BR2_USE_WCHAR # python
++	depends on BR2_USE_MMU # python
 +	help
-+	  This is the Python XML package.  The distribution contains a
-+	  validating XML parser, an implementation of the SAX and DOM
-+	  programming interfaces, an interface to the Expat parser (and the
-+	  Expat parser itself), and a C helper module that can speed up
-+	  xmllib.py by a factor of 5.  There's even documentation!
++	  sepolgen is a python module/library that forms the core
++	  of the modern audit2allow (a rewrite).
 +
-+	  http://pyxml.sourceforge.net/topics/index.html
-diff --git a/package/python-pyxml/python-xml.mk b/package/python-pyxml/python-xml.mk
++	  http://selinuxproject.org/page/Main_Page
++
++comment "sepolgen needs a toolchain w/ wchar"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR
+diff --git a/package/sepolgen/sepolgen.mk b/package/sepolgen/sepolgen.mk
 new file mode 100644
-index 0000000..bdf6a71
+index 0000000..099c9d0
 --- /dev/null
-+++ b/package/python-pyxml/python-xml.mk
-@@ -0,0 +1,50 @@
++++ b/package/sepolgen/sepolgen.mk
+@@ -0,0 +1,31 @@
 +################################################################################
 +#
-+# python-pyxml
++# sepolgen
 +#
 +################################################################################
 +
-+PYTHON_PYXML_VERSION = 0.8.4
-+PYTHON_PYXML_SOURCE  = PyXML-$(PYTHON_PYXML_VERSION).tar.gz
-+PYTHON_PYXML_SITE    = http://downloads.sourceforge.net/project/pyxml/pyxml/0.8.4/
-+PYTHON_PYXML_LICENSE = BSD-3c
-+PYTHON_PYXML_LICENSE_FILES = LICENSE
++SEPOLGEN_VERSION = 1.1.9
++SEPOLGEN_SITE = http://userspace.selinuxproject.org/releases/20130423/
++SEPOLGEN_LICENSE = GPLv2
++SEPOLGEN_LICENSE_FILES = COPYING
 +
-+PYTHON_PYXML_DEPENDENCIES = host-python python expat
++SEPOLGEN_DEPENDENCIES = python
 +
-+PYTHON_PYXML_INSTALL_STAGING = NO
++SEPOLGEN_INSTALL_STAGING = YES
 +
-+define PYTHON_PYXML_BUILD_CMDS
-+	(cd $(@D); \
-+		CC="$(TARGET_CC)" \
-+		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" \
-+		LDSHARED="$(TARGET_CC) -shared" \
-+		LDFLAGS="$(TARGET_LDFLAGS) -L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib" \
-+		$(HOST_DIR)/usr/bin/python setup.py build_ext \
-+		--include-dirs=$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR) \
-+		--with-libexpat=$(STAGING_DIR)/usr \
-+	)
-+	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
++SEPOLGEN_MAKE_CMDS = $(TARGET_CONFIGURE_OPTS) \
++	PYTHONLIBDIR=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
++
++define SEPOLGEN_BUILD_CMDS
++	$(MAKE) -C $(@D) $(SEPOLGEN_MAKE_CMDS) DESTDIR=$(STAGING_DIR)
 +endef
 +
-+define PYTHON_PYXML_INSTALL_STAGING_CMDS
-+	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(STAGING_DIR)/usr)
++define SEPOLGEN_INSTALL_STAGING_CMDS
++	$(MAKE) -C $(@D) install $(SEPOLGEN_MAKE_CMDS) DESTDIR=$(STAGING_DIR)
 +endef
 +
-+define PYTHON_PYXML_INSTALL_TARGET_CMDS
-+	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
-+endef
-+
-+HOST_PYTHON_PYXML_DEPENDENCIES = host-python
-+
-+define HOST_PYTHON_PYXML_BUILD_CMDS
-+	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build_ext --with-libexpat=$(HOST_DIR)/usr)
-+	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
-+endef
-+
-+define HOST_PYTHON_PYXML_INSTALL_CMDS
-+	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(HOST_DIR)/usr)
++define SEPOLGEN_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D) install $(SEPOLGEN_MAKE_CMDS) DESTDIR=$(TARGET_DIR)
 +endef
 +
 +$(eval $(generic-package))
-+$(eval $(host-generic-package))
 -- 
 1.7.1
