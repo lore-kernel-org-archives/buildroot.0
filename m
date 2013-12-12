@@ -1,70 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 12 Dec 2013 23:58:39 +0100
-Subject: [Buildroot] [git commit] package/parted: add a host variant
-Message-ID: <20131212230221.A480B9BFED@busybox.osuosl.org>
+Date: Thu, 12 Dec 2013 23:58:27 +0100
+Subject: [Buildroot] [git commit] package/parted: relax dependency on
+	readline
+Message-ID: <20131212230221.951E29BFEB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=749b2589ea63cbdcf180d019441a05dcaef4ebe9
+commit: http://git.buildroot.net/buildroot/commit/?id=2079f07a926ec0b489ab30befe0cb2bcaebc40f6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Useful for for-build scripts to call parted, eg. to generate
-partition tables and such automatically.
+parted can be configured without support for readline (ie. can be
+not interactive), so we can relax the dependency on readline, and
+make it an optional feature.
 
-Since the primary goal is to use parted within scripts, we
-do not need readline, so it is forcibly disabled.
+(Based on a code-snippet from Thomas.)
 
-Also, it does look unlikely that we need to manipulate LVM
-volumes, so we forcibly disable support for the device-mapper.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in.host        |    1 +
- package/parted/Config.in.host |    6 ++++++
- package/parted/parted.mk      |    6 ++++++
- 3 files changed, 13 insertions(+), 0 deletions(-)
+ package/parted/Config.in |    1 -
+ package/parted/parted.mk |    9 ++++++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 5fd2570..34e84bf 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -10,6 +10,7 @@ source "package/lpc3250loader/Config.in.host"
- source "package/mtools/Config.in.host"
- source "package/omap-u-boot-utils/Config.in.host"
- source "package/openocd/Config.in.host"
-+source "package/parted/Config.in.host"
- source "package/sam-ba/Config.in.host"
- source "package/sunxi-tools/Config.in.host"
- source "package/uboot-tools/Config.in.host"
-diff --git a/package/parted/Config.in.host b/package/parted/Config.in.host
-new file mode 100644
-index 0000000..f5d7acc
---- /dev/null
-+++ b/package/parted/Config.in.host
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_HOST_PARTED
-+	bool "host parted"
-+	help
-+	  parted, the GNU partition resizing program
-+
-+	  http://www.gnu.org/software/parted/
+diff --git a/package/parted/Config.in b/package/parted/Config.in
+index 321fdf7..45170aa 100644
+--- a/package/parted/Config.in
++++ b/package/parted/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_PARTED
+ 	bool "parted"
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_USE_WCHAR
+-	select BR2_PACKAGE_READLINE
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	help
 diff --git a/package/parted/parted.mk b/package/parted/parted.mk
-index afb8287..15e37a8 100644
+index 231ab35..afb8287 100644
 --- a/package/parted/parted.mk
 +++ b/package/parted/parted.mk
-@@ -26,4 +26,10 @@ else
- PARTED_CONF_OPT += --disable-device-mapper
- endif
+@@ -7,11 +7,18 @@
+ PARTED_VERSION = 3.1
+ PARTED_SOURCE = parted-$(PARTED_VERSION).tar.xz
+ PARTED_SITE = $(BR2_GNU_MIRROR)/parted
+-PARTED_DEPENDENCIES = readline util-linux
++PARTED_DEPENDENCIES = util-linux
+ PARTED_INSTALL_STAGING = YES
+ PARTED_LICENSE = GPLv3+
+ PARTED_LICENSE_FILES = COPYING
  
-+HOST_PARTED_DEPENDENCIES = host-util-linux
-+HOST_PARTED_CONF_OPT += \
-+	--without-readline \
-+	--disable-device-mapper \
++ifeq ($(BR2_PACKAGE_READLINE),y)
++PARTED_DEPENDENCIES += readline
++PARTED_CONF_OPT += --with-readline
++else
++PARTED_CONF_OPT += --without-readline
++endif
 +
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+ ifeq ($(BR2_PACKAGE_LVM2),y)
+ PARTED_DEPENDENCIES += lvm2
+ PARTED_CONF_OPT += --enable-device-mapper
