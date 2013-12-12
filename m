@@ -1,42 +1,70 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 12 Dec 2013 23:51:44 +0100
-Subject: [Buildroot] [git commit] linux-headers: bump 3. {4, 10,
-	12}.x stable versions
-Message-ID: <20131212230221.649E69BFEB@busybox.osuosl.org>
+Date: Thu, 12 Dec 2013 23:52:46 +0100
+Subject: [Buildroot] [git commit] package/parted: relax dependency on lvm2
+Message-ID: <20131212230221.882159BFEC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1b11fd4099475066a5b6ece4a0aeb68f32946f54
+commit: http://git.buildroot.net/buildroot/commit/?id=b1f2cbb40950a73741dfa578f43f2a5e88cdd953
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+parted can be configured without support for LVM volumes, so
+we can relax the dependency on lvm2, and make it an optional
+feature.
+
+Remove now no-longer needed dependency on MMU because of lvm2.
+
+(Based on a code-snippet from Thomas.)
+
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ package/parted/Config.in |    3 ---
+ package/parted/parted.mk |    9 ++++++++-
+ 2 files changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index d928897..2b040cd 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -83,14 +83,14 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
- 	default "3.2.53"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
--	default "3.4.73"	if BR2_KERNEL_HEADERS_3_4
-+	default "3.4.74"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
- 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
- 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
- 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
- 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
--	default "3.10.23"	if BR2_KERNEL_HEADERS_3_10
-+	default "3.10.24"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
--	default "3.12.4"	if BR2_KERNEL_HEADERS_3_12
-+	default "3.12.5"	if BR2_KERNEL_HEADERS_3_12
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/parted/Config.in b/package/parted/Config.in
+index 8af2693..321fdf7 100644
+--- a/package/parted/Config.in
++++ b/package/parted/Config.in
+@@ -2,8 +2,6 @@ config BR2_PACKAGE_PARTED
+ 	bool "parted"
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_USE_WCHAR
+-	depends on BR2_USE_MMU # lvm2
+-	select BR2_PACKAGE_LVM2
+ 	select BR2_PACKAGE_READLINE
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+@@ -13,5 +11,4 @@ config BR2_PACKAGE_PARTED
+ 	  http://www.gnu.org/software/parted/
+ 
+ comment "parted needs a toolchain w/ largefile, wchar"
+-	depends on BR2_USE_MMU
+ 	depends on !(BR2_LARGEFILE && BR2_USE_WCHAR)
+diff --git a/package/parted/parted.mk b/package/parted/parted.mk
+index 773e332..231ab35 100644
+--- a/package/parted/parted.mk
++++ b/package/parted/parted.mk
+@@ -7,9 +7,16 @@
+ PARTED_VERSION = 3.1
+ PARTED_SOURCE = parted-$(PARTED_VERSION).tar.xz
+ PARTED_SITE = $(BR2_GNU_MIRROR)/parted
+-PARTED_DEPENDENCIES = readline util-linux lvm2
++PARTED_DEPENDENCIES = readline util-linux
+ PARTED_INSTALL_STAGING = YES
+ PARTED_LICENSE = GPLv3+
+ PARTED_LICENSE_FILES = COPYING
+ 
++ifeq ($(BR2_PACKAGE_LVM2),y)
++PARTED_DEPENDENCIES += lvm2
++PARTED_CONF_OPT += --enable-device-mapper
++else
++PARTED_CONF_OPT += --disable-device-mapper
++endif
++
+ $(eval $(autotools-package))
