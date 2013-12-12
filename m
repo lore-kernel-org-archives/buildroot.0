@@ -1,62 +1,48 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 12 Dec 2013 23:11:17 +0100
-Subject: [Buildroot] [PATCH 1/2] pkg-generick.mk: support for multiple
- patch dirs
-In-Reply-To: <1386784684-6546-1-git-send-email-rjbarnet@rockwellcollins.com>
-References: <1386784684-6546-1-git-send-email-rjbarnet@rockwellcollins.com>
-Message-ID: <52AA3485.2050604@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 12 Dec 2013 23:13:38 +0100
+Subject: [Buildroot] [PATCH] package/libgles: postpone the check for a
+ missing GLES provider
+In-Reply-To: <52AA31F2.8070900@mind.be>
+References: <52A730B0.3020104@orange.com>
+ <1386702439-10093-2-git-send-email-yann.morin.1998@free.fr>
+ <52A842A3.3010302@mind.be>
+ <201312111325.49600.yann.morin.1998@free.fr>
+ <52A862B4.50103@orange.com> <52A8710F.7040406@orange.com>
+ <52AA31F2.8070900@mind.be>
+Message-ID: <20131212231338.33eae486@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/12/13 18:58, Ryan Barnett wrote:
-> Adding support for specifying multiple directories in
-> BR2_GLOBAL_PATCH_DIR. This will allow for a layered approach for the
-> patching of a package.
+Dear Arnout Vandecappelle,
 
-[snip]
+On Thu, 12 Dec 2013 23:00:18 +0100, Arnout Vandecappelle wrote:
 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 1fce71b..53d96c9 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -134,8 +134,11 @@ endif
->   # The RAWNAME variable is the lowercased package name, which allows to
->   # find the package directory (typically package/<pkgname>) and the
->   # prefix of the patches
-> +#
-> +# For BR2_GLOBAL_PATCH_DIR, only generate if it is defined
->   $(BUILD_DIR)/%/.stamp_patched: NAMEVER = $(RAWNAME)-$($(PKG)_VERSION)
-> -$(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS = $($(PKG)_DIR_PREFIX)/$(RAWNAME) $(call qstrip,$(BR2_GLOBAL_PATCH_DIR))/$(RAWNAME)
-> +$(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS =  $($(PKG)_DIR_PREFIX)/$(RAWNAME)
-> +$(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS += $(if $(BR2_GLOBAL_PATCH_DIR),$(foreach pdir,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR)),$(pdir)/$(RAWNAME)))
+>   Thomas, do you remember what was the reason to include external.mk 
+> after package/*/*.mk rather than before? If there is no specific reason 
+> for it, we could move it.
 
-  I guess you meant to avoid the "overhead" of the foreach when 
-BR2_GLOBAL_PATCH_DIR is empty? Unfortunately, the condition will always 
-be true because it is "" when empty, and "" is non-empty... So you'd have 
-to qstrip it first. But anyway, the overhead of foreach is nothing, so I 
-think it's both more efficient and easier to read if the condition is 
-removed.
+No, I don't see a particular reason. It was merely based on the idea
+that BR2_EXTERNAL "adds" more packages to the set of packages provided
+by Buildroot, so it felt logical to include the BR2_EXTERNAL stuff
+*after* the BR packages. But I don't see anything that prevents the
+BR2_EXTERNAL stuff from being moved before the Buildroot packages
+inclusions. And Yann has already submitted a patch that does this.
 
-  Minor detail: I would have used
-$(addsuffix /$(RAWNAME),$(BR2_GLOBAL_PATCH_DIR))
-but I guess that's a matter of taste.
+>   I also feel that the way the opengl stuff is handled now is a bit 
+> hacky, but I don't have any better ideas.
 
-  Regards,
-  Arnout
+Huh? Can you be more specific in what you find hacky? The way the
+OpenGL stuff is handled today is kind of becoming the norm to handle
+virtual packages, so it'd be good to understand what you think is hacky
+in this implementation.
 
->   $(BUILD_DIR)/%/.stamp_patched:
->   	@$(call step_start,patch)
->   	@$(call MESSAGE,"Patching")
->
+Thanks!
 
-
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
