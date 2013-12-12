@@ -1,61 +1,55 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 12 Dec 2013 23:00:18 +0100
-Subject: [Buildroot] [PATCH] package/libgles: postpone the check for a
- missing GLES provider
-In-Reply-To: <52A8710F.7040406@orange.com>
-References: <52A730B0.3020104@orange.com>
- <1386702439-10093-2-git-send-email-yann.morin.1998@free.fr>
- <52A842A3.3010302@mind.be> <201312111325.49600.yann.morin.1998@free.fr>
- <52A862B4.50103@orange.com> <52A8710F.7040406@orange.com>
-Message-ID: <52AA31F2.8070900@mind.be>
+Date: Thu, 12 Dec 2013 23:11:17 +0100
+Subject: [Buildroot] [PATCH 1/2] pkg-generick.mk: support for multiple
+ patch dirs
+In-Reply-To: <1386784684-6546-1-git-send-email-rjbarnet@rockwellcollins.com>
+References: <1386784684-6546-1-git-send-email-rjbarnet@rockwellcollins.com>
+Message-ID: <52AA3485.2050604@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/12/13 15:05, David Corvoysier wrote:
-> Sorry, I did another try from a clean environment and the second solution
-> didn't work either: LIBGLES_DEPENDENCIES has the right (modified) value
-> when it the LIBGLES_CONFIGURE_CMDS is evaluated, but not when the
-> dependencies themselves are evaluated (I think it happens in
-> pkg-generic.mk).
+On 11/12/13 18:58, Ryan Barnett wrote:
+> Adding support for specifying multiple directories in
+> BR2_GLOBAL_PATCH_DIR. This will allow for a layered approach for the
+> patching of a package.
 
-  Yes that's right. In this case, there's no workaround AFAICS...
+[snip]
 
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 1fce71b..53d96c9 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -134,8 +134,11 @@ endif
+>   # The RAWNAME variable is the lowercased package name, which allows to
+>   # find the package directory (typically package/<pkgname>) and the
+>   # prefix of the patches
+> +#
+> +# For BR2_GLOBAL_PATCH_DIR, only generate if it is defined
+>   $(BUILD_DIR)/%/.stamp_patched: NAMEVER = $(RAWNAME)-$($(PKG)_VERSION)
+> -$(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS = $($(PKG)_DIR_PREFIX)/$(RAWNAME) $(call qstrip,$(BR2_GLOBAL_PATCH_DIR))/$(RAWNAME)
+> +$(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS =  $($(PKG)_DIR_PREFIX)/$(RAWNAME)
+> +$(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS += $(if $(BR2_GLOBAL_PATCH_DIR),$(foreach pdir,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR)),$(pdir)/$(RAWNAME)))
 
-  Thomas, do you remember what was the reason to include external.mk 
-after package/*/*.mk rather than before? If there is no specific reason 
-for it, we could move it.
+  I guess you meant to avoid the "overhead" of the foreach when 
+BR2_GLOBAL_PATCH_DIR is empty? Unfortunately, the condition will always 
+be true because it is "" when empty, and "" is non-empty... So you'd have 
+to qstrip it first. But anyway, the overhead of foreach is nothing, so I 
+think it's both more efficient and easier to read if the condition is 
+removed.
 
-  I also feel that the way the opengl stuff is handled now is a bit 
-hacky, but I don't have any better ideas.
-
+  Minor detail: I would have used
+$(addsuffix /$(RAWNAME),$(BR2_GLOBAL_PATCH_DIR))
+but I guess that's a matter of taste.
 
   Regards,
   Arnout
 
-
-> So, the build doesn't fail on the LIBGLES_CONFIGURE_CMDS test, but if the
-> xx_userland package has not been installed beforehand, it is not
-> installed automatically when libgles is built.
->
-> David
->
-> Le 11/12/2013 14:03, David Corvoysier a ?crit :
->> Guys,
->>
->> The first solution did not work (as yann pointed out, the variable is
->> not exported), but the second does.
->> Who's in for a patch (me ?)
->>
->> David
->>
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+>   $(BUILD_DIR)/%/.stamp_patched:
+>   	@$(call step_start,patch)
+>   	@$(call MESSAGE,"Patching")
 >
 
 
