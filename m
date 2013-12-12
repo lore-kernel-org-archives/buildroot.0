@@ -1,186 +1,153 @@
 From: Clayton Shotwell <clshotwe@rockwellcollins.com>
-Date: Thu, 12 Dec 2013 12:27:02 -0600
-Subject: [Buildroot] [ PATCH v4 02/20] libselinux: new package
-In-Reply-To: <1386872840-22051-1-git-send-email-clshotwe@rockwellcollins.com>
-References: <1386872840-22051-1-git-send-email-clshotwe@rockwellcollins.com>
-Message-ID: <1386872840-22051-3-git-send-email-clshotwe@rockwellcollins.com>
+Date: Thu, 12 Dec 2013 12:27:00 -0600
+Subject: [Buildroot] [ PATCH v4 00/20] SELinux Buildroot Additions
+Message-ID: <1386872840-22051-1-git-send-email-clshotwe@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
----
-Changes v3 -> v4:
-  - Re-added the Python bindings configure option (suggested
-    by Thomas).
-  - Added the creation of the selinux mount point to the
-    install step (suggested by Thomas).
-  - Cleaned up configure comments (suggested by Thomas).
-  - Removed the package clean command.
-Changes v2 -> v3:
-  - Added dependencies on BR2_TOOLCHAIN_HAS_THREADS and
-    BR2_LARGEFILE (suggested by Thomas).
-  - Corrected a minor issue in the mk file found during testing.
-Changes v1 -> v2:
-  - Move Config.in entry into the libraries section since this is a
-    library.
-  - General cleanup to the mk file to conform to the standard format.
-  - Removed a dependency on the Linux kernel.
-  - Changed the original Python select in the Config.in to be a check
-    in the libselinux.mk file.
-  - Added a select for libsepol and pcre in the menuconfig instead of
-    just having package dependencies.
-  - Removed building the python bindings in the host configuration.
----
- package/Config.in                |    1 +
- package/libselinux/Config.in     |   29 ++++++++++++
- package/libselinux/libselinux.mk |   88 ++++++++++++++++++++++++++++++++++++++
- 3 files changed, 118 insertions(+), 0 deletions(-)
+This is round 4 for the SELinux package additions.
+General changes for this round include:
+  - Incorporating many changes from Thomas Petazzoni (Thank again!).
+  - Removal of clean make options.
+  - Cleanup of the refpolicy build to rename the generated policy
+    and limit the number of package policies that get built. More
+    can be added in later.
+  - Changed the audit startup script to launch before the logging
+    script.
+  - Cleaned up the dependencies on several packages.
+  - Added busybox SELinux configuration options to enable SELinux
+    support and also make all of the busybox applications stand-
+    alone binaries rather than symlinks (work done by Thomas).
+  - Added a basic x86 configuration that has SELinux enabled.
+
+This round of change enables SELinux to be built by enabling
+the BR2_PACKAGE_REFPOLICY and enabling the following kernel config
+options. 
+	CONFIG_AUDIT
+	CONFIG_SECURITY
+	CONFIG_SECURITY_NETWORK
+	CONFIG_SECURITY_SELINUX
+	CONFIG_SECURITY_SELINUX_BOOTPARAM
+	CONFIG_EXT2_FS_XATTR
+	CONFIG_EXT2_FS_SECURITY
+
+I have tested this version of the patches using a buildroot glibc
+toolchain. The SELinux policy does not currently support most of
+Buildroot system but it is definitely a start. There will need to
+be more customization work done in the future to get packages fully
+supported.
+
+Clayton Shotwell (17):
+  pcre: Add host build support
+  libselinux: new package
+  ustr: new package
+  bzip2: Add host build shared library installation
+  libsemanage: new package
+  checkpolicy: new package
+  sepolgen: new package
+  sqlite: Add host build support
+  setools: new package
+  python-pyparsing: Add host build option
+  audit: new package
+  policycoreutils: new package
+  python-pyxml: new package
+  refpolicy: new package
+  shadow: new package
+  refpolicy: Add busybox selections
+  configs: Add SELinux x86 qemu config
+
+Thomas Petazzoni (3):
+  busybox: add option to install individual binaries
+  busybox: add option to enable SELinux support
+  busybox: ensure it finds pkg-config by setting PATH
+
+ board/qemu/x86/linux-3.12-selinux.config           |   72 +
+ configs/qemu_x86_selinux_defconfig                 |   27 +
+ package/Config.in                                  |   15 +
+ package/Config.in.host                             |    1 +
+ package/audit/Config.in                            |   24 +
+ package/audit/S01auditd                            |  172 +++
+ ...it-0001-cross-compile-header-creation-fix.patch | 1424 ++++++++++++++++++++
+ package/audit/audit-0002-remove-zos-plugin.patch   |   35 +
+ package/audit/audit.mk                             |   61 +
+ ...ags-strip-non-l-arguments-returned-by-pkg.patch |   28 +
+ package/busybox/Config.in                          |    6 +
+ package/busybox/busybox.mk                         |   33 +
+ package/bzip2/bzip2.mk                             |    2 +
+ package/checkpolicy/Config.in.host                 |   10 +
+ package/checkpolicy/checkpolicy.mk                 |   26 +
+ package/libselinux/Config.in                       |   29 +
+ package/libselinux/libselinux.mk                   |   88 ++
+ package/libsemanage/Config.in                      |   30 +
+ .../libsemanage-0001-execption-lib-path-fix.patch  |   14 +
+ package/libsemanage/libsemanage.mk                 |   72 +
+ package/pcre/pcre.mk                               |    1 +
+ package/policycoreutils/Config.in                  |   88 ++
+ package/policycoreutils/S15restorecond             |   85 ++
+ .../policycoreutils-0001-cross-compile-fixes.patch |  332 +++++
+ package/policycoreutils/policycoreutils.mk         |  231 ++++
+ package/python-pyparsing/python-pyparsing.mk       |   47 +-
+ package/python-pyxml/Config.in                     |   11 +
+ package/python-pyxml/python-xml.mk                 |   50 +
+ package/refpolicy/Config.in                        |   74 +
+ package/refpolicy/S12selinux                       |  137 ++
+ package/refpolicy/config                           |    8 +
+ package/refpolicy/modules.conf                     |  406 ++++++
+ .../refpolicy-0001-gentoo-hardened-fixes.patch     | 1250 +++++++++++++++++
+ package/refpolicy/refpolicy-0002-awk-fix.patch     |   37 +
+ package/refpolicy/refpolicy.mk                     |   82 ++
+ package/sepolgen/Config.in                         |   14 +
+ package/sepolgen/sepolgen.mk                       |   31 +
+ package/setools/Config.in                          |   33 +
+ .../setools/setools-0001-cross-compile-fixes.patch |  121 ++
+ .../setools-0002-swig-typedef-python-fixes.patch   | 1014 ++++++++++++++
+ package/setools/setools.mk                         |   85 ++
+ package/shadow/Config.in                           |   13 +
+ package/shadow/shadow.mk                           |   50 +
+ package/sqlite/sqlite.mk                           |    1 +
+ package/ustr/Config.in                             |   11 +
+ .../ustr-0001-cross-compile-modifications.patch    |  144 ++
+ package/ustr/ustr.mk                               |   47 +
+ 47 files changed, 6559 insertions(+), 13 deletions(-)
+ create mode 100644 board/qemu/x86/linux-3.12-selinux.config
+ create mode 100644 configs/qemu_x86_selinux_defconfig
+ create mode 100644 package/audit/Config.in
+ create mode 100755 package/audit/S01auditd
+ create mode 100644 package/audit/audit-0001-cross-compile-header-creation-fix.patch
+ create mode 100644 package/audit/audit-0002-remove-zos-plugin.patch
+ create mode 100644 package/audit/audit.mk
+ create mode 100644 package/busybox/1.21.1/0004-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch
+ create mode 100644 package/checkpolicy/Config.in.host
+ create mode 100644 package/checkpolicy/checkpolicy.mk
  create mode 100644 package/libselinux/Config.in
  create mode 100644 package/libselinux/libselinux.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index eb96aeb..bc4a0d4 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -725,6 +725,7 @@ source "package/tzdata/Config.in"
- endmenu
- 
- menu "Security"
-+source "package/libselinux/Config.in"
- source "package/libsepol/Config.in"
- endmenu
- 
-diff --git a/package/libselinux/Config.in b/package/libselinux/Config.in
-new file mode 100644
-index 0000000..14182c3
---- /dev/null
-+++ b/package/libselinux/Config.in
-@@ -0,0 +1,29 @@
-+config BR2_PACKAGE_LIBSELINUX
-+	bool "libselinux"
-+	select BR2_PACKAGE_LIBSEPOL
-+	select BR2_PACKAGE_PCRE
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_LARGEFILE
-+	help
-+	  libselinux is the runtime SELinux library that provides
-+	  interfaces (e.g. library functions for the SELinux kernel
-+	  APIs like getcon(), other support functions like
-+	  getseuserbyname()) to SELinux-aware applications. libselinux
-+	  may use the shared libsepol to manipulate the binary policy
-+	  if necessary (e.g. to downgrade the policy format to an
-+	  older version supported by the kernel) when loading policy.
-+
-+	  http://selinuxproject.org/page/Main_Page
-+
-+comment "libselinux needs a toolchain w/ largefile, threads"
-+        depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE
-+
-+if BR2_PACKAGE_LIBSELINUX
-+
-+config BR2_PACKAGE_LIBSELINUX_PYTHON_BINDINGS
-+	select BR2_PACKAGE_PYTHON
-+	bool "python bindings"
-+	help
-+	  enable building python bindings
-+
-+endif
-diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
-new file mode 100644
-index 0000000..035d721
---- /dev/null
-+++ b/package/libselinux/libselinux.mk
-@@ -0,0 +1,88 @@
-+################################################################################
-+#
-+# libselinux
-+#
-+################################################################################
-+
-+LIBSELINUX_VERSION = 2.1.13
-+LIBSELINUX_SITE = http://userspace.selinuxproject.org/releases/20130423/
-+LIBSELINUX_LICENSE = PublicDomain
-+LIBSELINUX_LICENSE_FILES = LICENSE
-+
-+LIBSELINUX_DEPENDENCIES = libsepol pcre
-+
-+LIBSELINUX_INSTALL_STAGING = YES
-+
-+LIBSELINUX_MAKE_OPTS = \
-+	$(TARGET_CONFIGURE_OPTS) \
-+	LDFLAGS="$(TARGET_LDFLAGS) -lpcre -lpthread"
-+
-+ifeq ($(BR2_PACKAGE_LIBSELINUX_PYTHON_BINDINGS),y)
-+
-+LIBSELINUX_DEPENDENCIES += python host-swig host-python
-+LIBSELINUX_MAKE_OPTS += \
-+	PYINC="-I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)/" \
-+	PYTHONLIBDIR="-L$(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/" \
-+	PYLIBVER="python$(PYTHON_VERSION_MAJOR)" \
-+	SWIG_LIB="$(HOST_DIR)/usr/share/swig/$(SWIG_VERSION)/"
-+
-+define LIBSELINUX_PYTHON_BUILD_CMDS
-+	# DESTDIR is needed during the compile to compute library and 
-+	# header paths.
-+	$(MAKE) -C $(@D) $(LIBSELINUX_MAKE_OPTS) DESTDIR=$(STAGING_DIR) swigify pywrap
-+endef
-+
-+define LIBSELINUX_PYTHON_INSTALL_STAGING_CMDS
-+	$(MAKE) -C $(@D) install-pywrap $(LIBSELINUX_MAKE_OPTS) DESTDIR=$(STAGING_DIR)
-+endef
-+
-+define LIBSELINUX_PYTHON_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) install-pywrap $(LIBSELINUX_MAKE_OPTS) DESTDIR=$(TARGET_DIR)
-+endef
-+
-+endif
-+
-+define LIBSELINUX_BUILD_CMDS
-+	# DESTDIR is needed during the compile to compute library and 
-+	# header paths.
-+	$(MAKE) -C $(@D) $(LIBSELINUX_MAKE_OPTS) DESTDIR=$(STAGING_DIR) all
-+	$(LIBSELINUX_PYTHON_BUILD_CMDS)
-+endef
-+
-+define LIBSELINUX_INSTALL_STAGING_CMDS
-+	$(MAKE) -C $(@D) install $(LIBSELINUX_MAKE_OPTS) DESTDIR=$(STAGING_DIR)
-+	$(LIBSELINUX_PYTHON_INSTALL_STAGING_CMDS)
-+endef
-+
-+define LIBSELINUX_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) install $(LIBSELINUX_MAKE_OPTS) DESTDIR=$(TARGET_DIR)
-+	$(LIBSELINUX_PYTHON_INSTALL_TARGET_CMDS)
-+	# Create the selinuxfs mount point
-+	mkdir $(TARGET_DIR)/selinux
-+endef
-+
-+HOST_LIBSELINUX_DEPENDENCIES = host-libsepol host-pcre
-+
-+HOST_LIBSELINUX_MAKE_OPTS = $(HOST_CONFIGURE_OPTS) \
-+	LDFLAGS="$(HOST_LDFLAGS) -lpcre -lpthread"
-+
-+define HOST_LIBSELINUX_BUILD_CMDS
-+	# DESTDIR is needed during the compile to compute library and 
-+	# header paths.
-+	$(MAKE) -C $(@D) $(HOST_LIBSELINUX_MAKE_OPTS) DESTDIR=$(HOST_DIR) all
-+endef
-+
-+define HOST_LIBSELINUX_INSTALL_CMDS
-+	$(MAKE) -C $(@D) install $(HOST_LIBSELINUX_MAKE_OPTS) DESTDIR=$(HOST_DIR)
-+	mv $(HOST_DIR)/lib/libselinux.so.1 $(HOST_DIR)/usr/lib
-+	(cd $(HOST_DIR)/usr/lib; rm -f libselinux.so; \
-+		ln -s libselinux.so.1 libselinux.so)
-+	-rmdir $(HOST_DIR)/lib
-+	(if [ -f $(HOST_DIR)/sbin/matchpathcon ]; then \
-+		mv $(HOST_DIR)/sbin/matchpathcon $(HOST_DIR)/usr/sbin/; \
-+		-rmdir $(HOST_DIR)/sbin; \
-+	fi)
-+endef
-+
-+$(eval $(generic-package))
-+$(eval $(host-generic-package))
--- 
-1.7.1
+ create mode 100644 package/libsemanage/Config.in
+ create mode 100644 package/libsemanage/libsemanage-0001-execption-lib-path-fix.patch
+ create mode 100644 package/libsemanage/libsemanage.mk
+ create mode 100644 package/policycoreutils/Config.in
+ create mode 100755 package/policycoreutils/S15restorecond
+ create mode 100644 package/policycoreutils/policycoreutils-0001-cross-compile-fixes.patch
+ create mode 100644 package/policycoreutils/policycoreutils.mk
+ create mode 100644 package/python-pyxml/Config.in
+ create mode 100644 package/python-pyxml/python-xml.mk
+ create mode 100644 package/refpolicy/Config.in
+ create mode 100644 package/refpolicy/S12selinux
+ create mode 100755 package/refpolicy/config
+ create mode 100644 package/refpolicy/modules.conf
+ create mode 100644 package/refpolicy/refpolicy-0001-gentoo-hardened-fixes.patch
+ create mode 100644 package/refpolicy/refpolicy-0002-awk-fix.patch
+ create mode 100644 package/refpolicy/refpolicy.mk
+ create mode 100644 package/sepolgen/Config.in
+ create mode 100644 package/sepolgen/sepolgen.mk
+ create mode 100644 package/setools/Config.in
+ create mode 100644 package/setools/setools-0001-cross-compile-fixes.patch
+ create mode 100644 package/setools/setools-0002-swig-typedef-python-fixes.patch
+ create mode 100644 package/setools/setools.mk
+ create mode 100644 package/shadow/Config.in
+ create mode 100644 package/shadow/shadow.mk
+ create mode 100644 package/ustr/Config.in
+ create mode 100644 package/ustr/ustr-0001-cross-compile-modifications.patch
+ create mode 100644 package/ustr/ustr.mk
