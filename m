@@ -1,29 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 12 Dec 2013 23:50:58 +0100
-Subject: [Buildroot] [PATCH v3] knock: Fix build failure due to missing
-	README file.
-In-Reply-To: <52AA38BC.2020407@mind.be> (Arnout Vandecappelle's message of
- "Thu, 12 Dec 2013 23:29:16 +0100")
-References: <1386851218-19360-1-git-send-email-Vincent.Riera@imgtec.com>
- <871u1i2lhm.fsf@dell.be.48ers.dk> <52AA38BC.2020407@mind.be>
-Message-ID: <87bo0l1y5p.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 12 Dec 2013 23:24:13 +0100
+Subject: [Buildroot] [git commit] spice-protocol: bump to version 0.12.6
+Message-ID: <20131212225115.EBA8A9BFEA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=2a3311dbe86138ca711966a502f25bc34de28c3b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- >  Hi Vicente,
- > On 12/12/13 15:27, Peter Korsgaard wrote:
- >> With that fixed the patch is not needed (as the README -> README.md
- >> rename only happeneded after 7666f2):
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/spice-protocol/spice-protocol.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- >  But of course, your patch is still relevant to send upstream!
-
-It afaik is already included upstream, which is why the patch no longer
-applied.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/spice-protocol/spice-protocol.mk b/package/spice-protocol/spice-protocol.mk
+index 62a028d..fda87b6 100644
+--- a/package/spice-protocol/spice-protocol.mk
++++ b/package/spice-protocol/spice-protocol.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SPICE_PROTOCOL_VERSION         = 0.12.2
++SPICE_PROTOCOL_VERSION         = 0.12.6
+ SPICE_PROTOCOL_SOURCE          = spice-protocol-$(SPICE_PROTOCOL_VERSION).tar.bz2
+ SPICE_PROTOCOL_SITE            = http://www.spice-space.org/download/releases/
+ SPICE_PROTOCOL_LICENSE         = BSD-3c
