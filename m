@@ -1,56 +1,70 @@
-From: Thomas Pedersen <thomas@cozybit.com>
-Date: Thu, 12 Dec 2013 11:16:32 -0800
-Subject: [Buildroot] generating backports releases
-In-Reply-To: <fbb8d2fd-f6e7-439c-82a2-c74a6c6225be@email.android.com>
-References: <CAG6hwVOL5Ya2q_hEQGZdDP0uXvjvxKhQaJRbgy1-4PFw=FB3uA@mail.gmail.com>
- <fbb8d2fd-f6e7-439c-82a2-c74a6c6225be@email.android.com>
-Message-ID: <CAG6hwVM+r=Kis_tVkkJRJNrOQDjCkLp=+wQoCk64XS__X9Vikg@mail.gmail.com>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Thu, 12 Dec 2013 21:11:42 +0100
+Subject: [Buildroot] [pull request v4] Pull request for branch
+	yem/host-packages
+In-Reply-To: <cover.1386872011.git.yann.morin.1998@free.fr>
+References: <cover.1386872011.git.yann.morin.1998@free.fr>
+Message-ID: <52AA187E.8060509@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Dec 12, 2013 at 10:55 AM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> Thomas Pedersen <thomas@cozybit.com> wrote:
->>Hi list,
->>
->>I managed to cobble together a working backports package for
->>buildroot, but it would also be convenient if buildroot could generate
->>a backports release on the fly given the right source tree and base
->>tag.
->>
->>Does anyone else agree or does this seems out of scope for the
->>buildroot project?
+
+Hi Yann,
+
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 >
-> Some more context would be nice... what is 'backports' ?
+> Hello All!
+>
+> This series adds parted as a host package.
+> This will allow (eg.) post-image scripts to use parted.
+>
+> Changes v3 -> v4:
+>    - fix double double-slash in parted's ./configure options
 
-It is a package which provides a compatibility layer (compat.ko)
-between certain newer kernel modules and older kernels. Useful if eg.
-you want 3.12 wifi drivers on your 3.8 kernel. Typically the user
-would use a backports "release" which already includes all the new
-driver / subsystem / compatibility code, which is then cross-compiled
-to the target architecture.
+slash or dash ?
 
-You can also generate your own backports release however, which is
-useful if you'd like say 3.12 + your patches on your 3.8 kernel. The
-process for generating a release then looks like:
+Regards,
+Jerzy
 
-<kernel_src> + backports.git == backports_release
-
-where <kernel_src> is 3.12 + patches.
-
-I was thinking of teaching buildroot how to generate a backports
-release, so you could point it to your kernel source tree, and the
-release generation / compilation / install happens automagically.
-
-This is mainly due to the (pandaboard) linux kernel being regularly
-fscked (MMC currently) and we don't want this to stop development of
-other subsystems. The idea is then to keep one reliably booting kernel
-(BR2_LINUX_KERNEL_VERSION), and another kernel tree
-(BR2_BACKPORTS_KERNEL_SRC) for developing (say) wifi drivers on the
-latest supported -next tag.
-
--- 
-Thomas
+>
+> Changes v2 -> v3:  (Jerzy)
+>    - Fix bad copy-paste in commit log
+>
+> Changes v1 -> v2:  (Thomas)
+>    - don't depend on host-lvm2
+>    - so don't add host-lvm2
+>    - relax dependencies on lvm2/readline for target package
+>    - fix typoes in commit log
+>
+> Regards,
+> Yann E. MORIN.
+>
+>
+> The following changes since commit 08db3236c4508b2329d3b0ed61d3db54f59fd49c:
+>
+>    wavpack: bump to version 4.70.0 (2013-12-12 16:26:10 +0100)
+>
+> are available in the git repository at:
+>
+>    git://gitorious.org/buildroot/buildroot.git yem/host-packages
+>
+> for you to fetch changes up to a931d8bd70bf29846273c3d20ad65678e1ef2838:
+>
+>    package/parted: add a host variant (2013-12-12 19:10:50 +0100)
+>
+> ----------------------------------------------------------------
+> Yann E. MORIN (3):
+>        package/parted: relax dependency on lvm2
+>        package/parted: relax dependency on readline
+>        package/parted: add a host variant
+>
+>   package/Config.in.host        |  1 +
+>   package/parted/Config.in      |  4 ----
+>   package/parted/Config.in.host |  6 ++++++
+>   package/parted/parted.mk      | 22 +++++++++++++++++++++-
+>   4 files changed, 28 insertions(+), 5 deletions(-)
+>   create mode 100644 package/parted/Config.in.host
+>
