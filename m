@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 12 Dec 2013 19:18:41 +0100
-Subject: [Buildroot] [PATCH 2/3] package/parted: relax dependency on readline
+Date: Thu, 12 Dec 2013 19:18:42 +0100
+Subject: [Buildroot] [PATCH 3/3] package/parted: add a host variant
 In-Reply-To: <cover.1386872011.git.yann.morin.1998@free.fr>
 References: <cover.1386872011.git.yann.morin.1998@free.fr>
-Message-ID: <ab93917feabdbf457cb730af6ff4ea9fd52e44ac.1386872011.git.yann.morin.1998@free.fr>
+Message-ID: <a931d8bd70bf29846273c3d20ad65678e1ef2838.1386872011.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,55 +12,62 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-parted can be configured without support for readline (ie. can be
-not interactive), so we can relax the dependency on readline, and
-make it an optional feature.
+Useful for for-build scripts to call parted, eg. to generate
+partition tables and such automatically.
 
-(Based on a code-snippet from Thomas.)
+Since the primary goal is to use parted within scripts, we
+do not need readline, so it is forcibly disabled.
 
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Also, it does look unlikely that we need to manipulate LVM
+volumes, so we forcibly disable support for the device-mapper.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/parted/Config.in | 1 -
- package/parted/parted.mk | 9 ++++++++-
- 2 files changed, 8 insertions(+), 2 deletions(-)
+ package/Config.in.host        | 1 +
+ package/parted/Config.in.host | 6 ++++++
+ package/parted/parted.mk      | 6 ++++++
+ 3 files changed, 13 insertions(+)
+ create mode 100644 package/parted/Config.in.host
 
-diff --git a/package/parted/Config.in b/package/parted/Config.in
-index 321fdf7..45170aa 100644
---- a/package/parted/Config.in
-+++ b/package/parted/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_PARTED
- 	bool "parted"
- 	depends on BR2_LARGEFILE
- 	depends on BR2_USE_WCHAR
--	select BR2_PACKAGE_READLINE
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
- 	help
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 5fd2570..34e84bf 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -10,6 +10,7 @@ source "package/lpc3250loader/Config.in.host"
+ source "package/mtools/Config.in.host"
+ source "package/omap-u-boot-utils/Config.in.host"
+ source "package/openocd/Config.in.host"
++source "package/parted/Config.in.host"
+ source "package/sam-ba/Config.in.host"
+ source "package/sunxi-tools/Config.in.host"
+ source "package/uboot-tools/Config.in.host"
+diff --git a/package/parted/Config.in.host b/package/parted/Config.in.host
+new file mode 100644
+index 0000000..f5d7acc
+--- /dev/null
++++ b/package/parted/Config.in.host
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_HOST_PARTED
++	bool "host parted"
++	help
++	  parted, the GNU partition resizing program
++
++	  http://www.gnu.org/software/parted/
 diff --git a/package/parted/parted.mk b/package/parted/parted.mk
-index 231ab35..afb8287 100644
+index afb8287..15e37a8 100644
 --- a/package/parted/parted.mk
 +++ b/package/parted/parted.mk
-@@ -7,11 +7,18 @@
- PARTED_VERSION = 3.1
- PARTED_SOURCE = parted-$(PARTED_VERSION).tar.xz
- PARTED_SITE = $(BR2_GNU_MIRROR)/parted
--PARTED_DEPENDENCIES = readline util-linux
-+PARTED_DEPENDENCIES = util-linux
- PARTED_INSTALL_STAGING = YES
- PARTED_LICENSE = GPLv3+
- PARTED_LICENSE_FILES = COPYING
+@@ -26,4 +26,10 @@ else
+ PARTED_CONF_OPT += --disable-device-mapper
+ endif
  
-+ifeq ($(BR2_PACKAGE_READLINE),y)
-+PARTED_DEPENDENCIES += readline
-+PARTED_CONF_OPT += --with-readline
-+else
-+PARTED_CONF_OPT += --without-readline
-+endif
++HOST_PARTED_DEPENDENCIES = host-util-linux
++HOST_PARTED_CONF_OPT += \
++	--without-readline \
++	--disable-device-mapper \
 +
- ifeq ($(BR2_PACKAGE_LVM2),y)
- PARTED_DEPENDENCIES += lvm2
- PARTED_CONF_OPT += --enable-device-mapper
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
 1.8.1.2
