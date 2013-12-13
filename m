@@ -1,53 +1,70 @@
-From: arnaud aujon <arnaud.aujon@gmail.com>
-Date: Fri, 13 Dec 2013 12:07:05 +0100
-Subject: [Buildroot] libsvgtiny/NetSurf status
-In-Reply-To: <87d2l1yq30.fsf@dell.be.48ers.dk>
-References: <CACjG4BLSNd+qguuT2Pb08z=5rQPS2AGKQaefqcKKVCbDK4xT+g@mail.gmail.com>
- <87d2l1yq30.fsf@dell.be.48ers.dk>
-Message-ID: <CACjG4BKOP=zK5=CdPRmOucbEtY_AR5mZQ5KcB8mZVzhY6HB6Zw@mail.gmail.com>
+From: Jeronimo Munoz <jeronimo.munoz@mirada.tv>
+Date: Fri, 13 Dec 2013 13:25:51 +0100
+Subject: [Buildroot] Gdbserver buildroot 2013.11
+Message-ID: <CABFW0b2ypG8i+=1W2fBGz08wj=toHwUUEDeOiQX=vHL8oEv65A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2013/12/13 Peter Korsgaard <jacmet@uclibc.org>
+Hello,
 
->
-> And these are not part of the release tarball?
->
+I'm trying to enable gdbserver in buildroot 2013.11 but the option "Build
+gdb server for the target" is not present in menuconfig. How can I enable
+this option?
 
-No that's the problem.
+Thanks.
 
- > The buildsystem (basically only contains Makefiles) should be
->  > packaged as a host package right ?
->
-> It's not really for the host, so perhaps it would make more sense to
-> have it as a target package (which only installs it under staging).
->
-> Yes, you're right.
+-- 
+*Jer?nimo Mu?oz Espinosa*
+*Software Engineer*
 
+Direct: +34 917 616 440
+Fax:+34 917 616 444
+email: jeronimo.munoz at mirada.tv
+Avda. General Fanjul, 2B 3? 7
+Madrid 28044 (Spain)
 
->  > What about the dependency on the project libraries ? Should I create
->  > a package for every dependency even if they are going to be used only
->  > for this library ?  Or is it possible to create a "bundle" ?
->
-> I think the cleanest would be seperate packages, but I don't really know
-> much about netsurf and its libraries.
->
->
->  > Moreover, netsurf browser is pretend to be a small and fast web
->  > browser and can work with a frambuffer, does anyone already try it ?
->  > I guess, if the work to bump libsvgtiny is done, we could add NetSurf
->  > easily.
->
-> Yes, sounds good. I added libsvgtiny some time ago as I had a look at it
-> for a project, but I never ended up using it in the end, so no problem
-> from me to bump the version.
->
+*For more info click on:*
+<http://www.mirada.tv/>
+<http://www.linkedin.com/company/mirada-plc><https://twitter.com/miradatv><http://www.scoop.it/t/audiovisual-interaction><http://vimeo.com/miradatv>
 
-Ok, so I will try to have a look later, but if someone interested in
-netsurf/libsvgtiny just go for it.
+********************************************************************
+This email and any attachments are confidential and meant only for the
+addressees,
+and may be protected by law. If this email has been sent to you in error,
+please notify the sender immediately and delete this e-mail from your computer.
+emails are not secure and we will not accept liability if this e-mail
+is accessed
+by anyone or modified or amended following dispatch.  Any views or
+opinions in this
+email are those of the author and do not represent those of Mirada
+unless otherwise
+specifically stated.  Although we have taken every reasonable
+precaution to ensure that
+any attachment to this e-mail has been checked for viruses, we do not accept
+liability for any damages.
+
+Mirada is a public limited company,
+Registered Number: 03609752
+Registered Office: New City Cloisters, 196 Old Street, London. EC1V 9FR
+
+********************************************************************
+This email and any attachments are confidential and meant only for the addressees,
+and may be protected by law. If this email has been sent to you in error,
+please notify the sender immediately and delete this e-mail from your computer.
+emails are not secure and we will not accept liability if this e-mail is accessed 
+by anyone or modified or amended following dispatch.  Any views or opinions in this 
+email are those of the author and do not represent those of Mirada unless otherwise 
+specifically stated.  Although we have taken every reasonable precaution to ensure that 
+any attachment to this e-mail has been checked for viruses, we do not accept
+liability for any damages. 
+  
+Mirada is a public limited company,
+Registered Number: 03609752
+Registered Office: New City Cloisters, 196 Old Street, London. EC1V 9FR
+
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131213/3d527bb9/attachment-0001.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131213/9ee6ed4e/attachment.html>
