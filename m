@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 13 Dec 2013 09:29:46 +0100
-Subject: [Buildroot] [PATCH v2 1/2] xl2tp: add licensing info
-In-Reply-To: <1386896468.9372.1.camel@phoenix> (Axel Lin's message of "Fri, 13
- Dec 2013 09:01:08 +0800")
-References: <1386896468.9372.1.camel@phoenix>
-Message-ID: <87ppp1ywzp.fsf@dell.be.48ers.dk>
+Date: Fri, 13 Dec 2013 09:34:55 +0100
+Subject: [Buildroot] [PATCH v2 2/2] xl2tp: bump to version 1.3.2
+In-Reply-To: <1386896545.9372.2.camel@phoenix> (Axel Lin's message of "Fri, 13
+ Dec 2013 09:02:25 +0800")
+References: <1386896468.9372.1.camel@phoenix> <1386896545.9372.2.camel@phoenix>
+Message-ID: <87lhzpywr4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,28 +15,9 @@ To: buildroot@busybox.net
 
  > Signed-off-by: Axel Lin <axel.lin@ingics.com>
  > ---
- > v2: no change, just make version consistent in this serial
- > I separate "xl2tp: bump to version 1.3.2 and add licensing info" to 2 patches.
- > This one adds licensing info, next patch for bump version.
- >  package/xl2tp/xl2tp.mk | 2 ++
- >  1 file changed, 2 insertions(+)
+ > v2: select BR2_PACKAGE_OPENSSL to fix build error.
 
- > diff --git a/package/xl2tp/xl2tp.mk b/package/xl2tp/xl2tp.mk
- > index cf496fe..07634a0 100644
- > --- a/package/xl2tp/xl2tp.mk
- > +++ b/package/xl2tp/xl2tp.mk
- > @@ -7,6 +7,8 @@
- >  XL2TP_VERSION = v1.3.1
- >  XL2TP_SITE = $(call github,xelerance,xl2tpd,$(XL2TP_VERSION))
- >  XL2TP_DEPENDENCIES = libpcap
- > +XL2TP_LICENSE = GPLv2+
- > +XL2TP_LICENSE_FILES = LICENSE
-
-The only hit for 'any later' is in the Makefile and it seems to contain
-headers from the Linux kernel. The spec files list 'GPLv2' so I think
-it's safer to call it GPLv2 only.
-
-Committed with that fixed, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
