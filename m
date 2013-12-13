@@ -1,23 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 13 Dec 2013 09:34:55 +0100
-Subject: [Buildroot] [PATCH v2 2/2] xl2tp: bump to version 1.3.2
-In-Reply-To: <1386896545.9372.2.camel@phoenix> (Axel Lin's message of "Fri, 13
- Dec 2013 09:02:25 +0800")
-References: <1386896468.9372.1.camel@phoenix> <1386896545.9372.2.camel@phoenix>
-Message-ID: <87lhzpywr4.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 13 Dec 2013 09:30:14 +0100
+Subject: [Buildroot] [git commit] xl2tp: add licensing info
+Message-ID: <20131213083508.C76B99C004@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Axel" == Axel Lin <axel.lin@ingics.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=884ba34b572dbcbe0746cdb5d0754ae6979dfeeb
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Axel Lin <axel.lin@ingics.com>
- > ---
- > v2: select BR2_PACKAGE_OPENSSL to fix build error.
+[Peter: make license GPLv2 only]
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/xl2tp/xl2tp.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/xl2tp/xl2tp.mk b/package/xl2tp/xl2tp.mk
+index cf496fe..56b1150 100644
+--- a/package/xl2tp/xl2tp.mk
++++ b/package/xl2tp/xl2tp.mk
+@@ -7,6 +7,8 @@
+ XL2TP_VERSION = v1.3.1
+ XL2TP_SITE = $(call github,xelerance,xl2tpd,$(XL2TP_VERSION))
+ XL2TP_DEPENDENCIES = libpcap
++XL2TP_LICENSE = GPLv2
++XL2TP_LICENSE_FILES = LICENSE
+ 
+ define XL2TP_BUILD_CMDS
+ 	$(SED) 's/ -O2 //' $(@D)/Makefile
