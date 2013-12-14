@@ -1,81 +1,118 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sat, 14 Dec 2013 12:47:11 +0100
+Date: Sat, 14 Dec 2013 12:52:22 +0100
 Subject: [Buildroot] Patchwork oldest patches cleanup #3 (deadline
 	December 20)
-In-Reply-To: <52AA2D7A.8070804@gmail.com>
+In-Reply-To: <CAAXf6LXUx3dERdYxq5d4mY8apxXk+Ltj_CNPm+RTM+52nKRUNA@mail.gmail.com>
 References: <CAAXf6LXUx3dERdYxq5d4mY8apxXk+Ltj_CNPm+RTM+52nKRUNA@mail.gmail.com>
- <CAAXf6LXjTtbN96pWCvmXVEWHXM5Fcb53weJWXaqjZYx1Qb73mw@mail.gmail.com>
- <52AA2D7A.8070804@gmail.com>
-Message-ID: <CAAXf6LULojRcVcJOmbOLg0yYe7vVOLY6=SqkkE8Wif6eu6ghvQ@mail.gmail.com>
+Message-ID: <CAAXf6LXDALKC9CKcOSqS3BkPaDeK34ao1D+u8NkJKLgTKe5Npg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Valentine,
+All,
 
-On Thu, Dec 12, 2013 at 10:41 PM, vaxon <gvaxon@gmail.com> wrote:
-> On 12/12/2013 05:08 PM, Thomas De Schampheleire wrote:
->>
->> Hi Valentine,
->>
->> On Fri, Dec 6, 2013 at 10:02 PM, Thomas De Schampheleire
->> <patrickdepinguin@gmail.com> wrote:
->>
->>> [1/2] Makefile: Fix target-purgelocales
->>> Valentine Barshak <gvaxon@gmail.com>
->>> http://patchwork.ozlabs.org/patch/188623
->>>
->>> [2/2] Makefile: Add /usr/lib/locale to target-purgelocales
->>> Valentine Barshak <gvaxon@gmail.com>
->>> http://patchwork.ozlabs.org/patch/188624
->>
->>
->> At first sight these patches are still relevant. Could you confirm this?
+Current status:
+
+On Fri, Dec 6, 2013 at 10:02 PM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+> All,
 >
+> Here is the session 3 of the patchwork cleanup. For those who haven't
+> followed previous sessions, here is a quick recap: every session we'll
+> be posting the list of the 10 oldest patches, with the original patch
+> contributors in copy. During two weeks, we have the opportunity to
+> discuss the patch, whether it is still necessary or not, how it should
+> be changed to be merged.
 >
-> Yes, I think they still are.
+> In particular, I'm interested in knowing if the original contributor is
+> still interested by the patch, or if someone else is interested in
+> adopting the patch and sending an updated version, or if the patch no
+> longer makes sense due to other changes made in Buildroot.
+>
+> All patches that have not received any comment or attention before the
+> deadline will be removed from patchwork. This is aggressive, but we have
+> many 'dead' patches sitting in patchwork, and this cannot work.
+>
+> Deadline for this session is December 20.
+>
+> Below are the 10 oldest patches (obtained with a slightly modified
+> version of pwclient):
+> [ pwclient list -s New -n 10 ]
+>
+> iucode-tool: new package
+> Richard Braun <rbraun@sceen.net>
+> http://patchwork.ozlabs.org/patch/185420
+
+No feedback yet.
+
+>
+> [3/3] mplayer: Fix DVD support
+> Valentine Barshak <gvaxon@gmail.com>
+> http://patchwork.ozlabs.org/patch/187437
 >
 
-I tested your two patches now.
-On the first one, that regenerates locale.dir, I have some questions:
+No feedback yet.
 
-1. in the original locale.dir, the format is
-<locale database file>  <full locale name>
-Both words are separated with whitespace. However, in your patch a
-colon (:) is used.
+> pkg-infra: produce legal info for proprietary packages
+> Richard Braun <rbraun@sceen.net>
+> http://patchwork.ozlabs.org/patch/187775
 
-2. your patch expects that the locale filename is the same as the full
-locale name. However, in the original locale.dir, I see many entries
-where this assumption does not hold. For example:
-iso8859-1/XLC_LOCALE                    de_BE.ISO8859-1
-iso8859-15/XLC_LOCALE                   de_BE.ISO8859-15
-iso8859-1/XLC_LOCALE                    de_CH.ISO8859-1
-iso8859-15/XLC_LOCALE                   de_CH.ISO8859-15
-iso8859-1/XLC_LOCALE                    de_DE.ISO8859-1
-iso8859-15/XLC_LOCALE                   de_DE.ISO8859-15
-iso8859-1/XLC_LOCALE                    en_US.ISO8859-1
-iso8859-15/XLC_LOCALE                   en_US.ISO8859-15
+I will try to look into this. I brought up this issue before, too.
 
-The default set of whitelisted locales in buildroot is: C en_US de fr
-If I try this default with your patch, the resulting locale.dir only contains:
-C/XLC_LOCALE: C
-and there is no de/fr/en_US support anymore.
-It seems that the file locale.alias provides the translation between
-the short names 'en_US', 'de', 'fr' and the locale names specified in
-locale.dir.
+>
+> intel-microcode: new package
+> Richard Braun <rbraun@sceen.net>
+> http://patchwork.ozlabs.org/patch/187776
 
-Looking at the original behavior of target-purgelocales, it seems
-broken too. Also there, only 'C' remains and the aliases are not taken
-into account.
+No feedback yet.
 
-Either this should be fixed at once, or we consider this as an
-improvement unrelated to your changes.
+>
+> [1/2] Makefile: Fix target-purgelocales
+> Valentine Barshak <gvaxon@gmail.com>
+> http://patchwork.ozlabs.org/patch/188623
+>
+> [2/2] Makefile: Add /usr/lib/locale to target-purgelocales
+> Valentine Barshak <gvaxon@gmail.com>
+> http://patchwork.ozlabs.org/patch/188624
 
-What is your opinion? Do you have any time / interest in looking
-further into this?
-Are others interested in fixing this locale whitelist handling?
+I tested these patches and provided some comments to Valentine. It
+seems there is already something broken in buildroot locale support,
+partially fixed by these patches, but not entirely.
+
+>
+> rpm5
+> Alexander Khryukin <alexander@mezon.ru>
+> http://patchwork.ozlabs.org/patch/190962
+
+No feedback yet.
+
+>
+> putty: UNIX port of the famous Telnet and SSH GUI client
+> Stefan Fr?berg <stefan.froberg@petroprogram.com>
+> http://patchwork.ozlabs.org/patch/191204
+
+No feedback yet.
+
+>
+> new pkg tor
+> dev0 <matzeton@googlemail.com>
+> http://patchwork.ozlabs.org/patch/193560
+
+I received private feedback from 'dev0' saying that he is no longer
+interested in this patch, so I will mark this as Rejected. However,
+don't hesitate to adopt this patch if it is useful to you...
+
+>
+> [PATCHv3] QtSerialPort: new package
+> Thiago Correa <thiago.correa@gmail.com>
+> http://patchwork.ozlabs.org/patch/195057
+
+No feedback yet.
+
+Any further feedback on these patches (even saying that you no longer
+care) is greatly appreciated...
 
 Thanks,
 Thomas
