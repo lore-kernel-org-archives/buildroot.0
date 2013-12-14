@@ -1,191 +1,115 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 13 Dec 2013 18:19:54 +0100
-Subject: [Buildroot] [PATCH v3 2/2] manual: update for multiple global
- patch dirs
-In-Reply-To: <1386929361-21376-2-git-send-email-rjbarnet@rockwellcollins.com>
-References: <1386929361-21376-1-git-send-email-rjbarnet@rockwellcollins.com>
- <1386929361-21376-2-git-send-email-rjbarnet@rockwellcollins.com>
-Message-ID: <52AB41BA.3070200@mind.be>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sat, 14 Dec 2013 10:11:59 +0100
+Subject: [Buildroot] [PATCH] Add feature removal schedule for deprecated
+	features
+In-Reply-To: <5eaf52702905558552aa.1386709471@argentina>
+References: <5eaf52702905558552aa.1386709471@argentina>
+Message-ID: <CAAXf6LWC-U0C9Qm1OAPWvyOJE6MFyees95mAs7yBY8iOQePU3A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 13/12/13 11:09, Ryan Barnett wrote:
-> Updating the documentation to reflect that multiple directories can
-> now be specified for BR2_GLOBAL_PATCH_DIR. Along with giving an
-> example use case of how to use multiple global patch directories.
+On Tue, Dec 10, 2013 at 10:04 PM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+> This patch adds a new file feature-removal-schedule.txt that lists the
+> deprecated features in buildroot, and from when they can be removed.
 >
-> Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+> The guideline used is that a deprecated feature will remain available for
+> four buildroot releases before it can be removed. For example if a feature
+> is deprecated in the context of 2013.05, it is still available in 2013.05,
+> 2013.08, 2013.11 and 2014.02. It can then be removed from 2014.05 onwards.
+>
+> When additional config options are deprecated (for example kernel headers,
+> packages, ...) they should be added to the list. When deprecated items are
+> removed, they should be removed from the list.
+>
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 >
 > ---
-> Changes v2 -> v3:
->    - None
+>  docs/manual/appendix.txt     |   6 +++-
+>  feature-removal-schedule.txt |  52 ++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 57 insertions(+), 1 deletions(-)
 >
-> Changes v1 -> v2:
->    - Fixed minor spelling mistakes and wording (suggested by Thomas D)
-> ---
->   docs/manual/customize-packages.txt |   70 +++++++++++++++++++++++++++++++-----
->   docs/manual/patch-policy.txt       |   13 ++++---
->   2 files changed, 70 insertions(+), 13 deletions(-)
 >
-> diff --git a/docs/manual/customize-packages.txt b/docs/manual/customize-packages.txt
-> index 1820c54..8955756 100644
-> --- a/docs/manual/customize-packages.txt
-> +++ b/docs/manual/customize-packages.txt
-> @@ -8,16 +8,68 @@ It is sometimes useful to apply 'extra' patches to packages - over and
->   above those provided in Buildroot. This might be used to support custom
->   features in a project, for example, or when working on a new architecture.
+> This guideline, and the initial list of deprecated features with the date
+> they were deprecated, was taken from Arnout Vandecappelle's input in [1]
+> (thanks!). The list was updated with the deprecated mips architectures.
 >
-> -The +BR2_GLOBAL_PATCH_DIR+ configuration file option can be
-> -used to specify a directory containing global package patches.
-> +The +BR2_GLOBAL_PATCH_DIR+ configuration option can be used to specify
-> +a space separated list of one or more directories containing global
-> +package patches. By specifying multiple global patch directories, a
-
-  I think "global package patches" sounds strange. It's the directory 
-that is global, not the patches or the packages. So I'd just sai "package 
-patches".
-
-> +user could implement a layered approach to patches. This could be
-> +useful when a user has multiple boards that share a common processor
-> +architecture. It is often the case that a subset of patches for a
-> +package need to be shared between the different boards a user has.
-> +However, each board may require specific patches for the package
-> +that build on top of the common subset of patches.
+> [1] http://lists.busybox.net/pipermail/buildroot/2013-November/083024.html
 >
-> -For a specific version <packageversion> of a specific package <packagename>,
-> -patches are applied as follows.
-> +For a specific version +<packageversion>+ of a specific package
-> ++<packagename>+, patches are applied as follows:
+> diff --git a/docs/manual/appendix.txt b/docs/manual/appendix.txt
+> --- a/docs/manual/appendix.txt
+> +++ b/docs/manual/appendix.txt
+> @@ -29,6 +29,10 @@ Deprecated features
+>  -------------------
 >
-> -First, the default Buildroot patch set for the package is applied.
-> +. First, the default Buildroot patch set for the package is applied.
+>  The following features are marked as _deprecated_ in Buildroot due to
+> -their status either too old or unmaintained.
+> +them being either too old or unmaintained. They will be removed at
+> +some point (no earlier than a year after deprecation) so you should
+> +stop using them. Refer to file +feature-removal-schedule.txt+
+> +in the Buildroot sources for an indication of when these features can
+> +be removed.
 >
-> -If the directory +$(BR2_GLOBAL_PATCH_DIR)/<packagename>/<packageversion>+
-> -exists, then all +*.patch+ files in the directory will be applied.
-> +. Then for every directory - +<global-patch-dir>+ - that exists in
-> +  +BR2_GLOBAL_PATCH_DIR+, the following will be done:
-> ++
-> +* If the directory
-> +  +<global-patch-dir>/<packagename>/<packageversion>/+ exists, then
-> +  all *.patch files in this directory will be applied.
-> ++
-> +* Otherwise, if the directory +<global-patch-dir>/<packagename>+ exists,
-> +  then all *.patch files in the directory will be applied.
-
-  I would repeat here the explanation about the order in which patches 
-are applied, and the recommendation to number them.
-
-The patches in each directory are applied in alphabetical order. So, to 
-ensure they are applied in the right order, it is highly recommended to 
-name the patch files like this:
-+<packagename>-<number>-<description>.patch+, where +<number>+ refers to 
-the 'apply order'.
-
-
->
-> -Otherwise, if the directory +$(BR2_GLOBAL_PATCH_DIR)/<packagename>+
-> -exists, then all +*.patch+ files in the directory will be applied.
-> +The +BR2_GLOBAL_PATCH_DIR+ option is the preferred method for
-> +specifying a custom patch directory for packages. It can be used to
-> +specify a patch directory for any package in buildroot. It should also
-> +be used in place of the custom patch directory options for Linux,
-> +U-Boot, and other packages that already haved custom patch directory
-> +options available to them. By doing this, it will allow a user to
-> +manage their patches from one top-level directory.
-
-  Actually, BR2_LINUX_KERNEL_PATCH also supports downloading the patch, 
-which is not possible with BR2_GLOBAL_PATCH_DIR. As to the others, I 
-think these options should just be removed (not deprecated, but really 
-removed, with a clear explanation in Config.in.legacy). And in that case 
-this paragraph becomes redundant.
-
+>  include::deprecated-list.txt[]
+> diff --git a/feature-removal-schedule.txt b/feature-removal-schedule.txt
+> new file mode 100644
+> --- /dev/null
+> +++ b/feature-removal-schedule.txt
+> @@ -0,0 +1,52 @@
+> +This file contains a list of deprecated features/packages in buildroot, and when
+> +they were deprecated. In general, deprecated features will remain available for
+> +at least four buildroot releases (one year). After this time, no guarantees are
+> +made.
 > +
-> +An example directory structure for where a user has multiple
-> +directories specified for +BR2_GLOBAL_PATCH_DIR+ may look like this:
+> +Note that several features/packages have been deprecated for a long time and
+> +should have been removed right now. Expect this to be corrected soon.
 > +
-> +-----
-> +board/
-> ++-- common-fooarch
-> +|   +-- patches
-> +|       +-- linux
-> +|       |   +-- linux-patch1.patch
-> +|       |   +-- linux-patch2.patch
-> +|       +-- u-boot
-> +|       +-- foopkg
-> ++-- fooarch-board
-> +    +-- patches
-> +        +-- linux
-> +        |   +-- linux-patch3.patch
-> +        +-- u-boot
-> +        +-- foopkg
-> +-----
 > +
-> +If the user has the +BR2_GLOBAL_PATCH_DIR+ configuration option set as
-> +follows:
+> +To be removed in 2011.05:
+> +BR2_PACKAGE_SQUASHFS3
+> +BR2_TARGET_ROOTFS_SQUASHFS3
 > +
-> +-----
-> +BR2_GLOBAL_PATCH_DIR="board/common-fooarch board/fooarch-board"
-> +-----
+> +To be removed in 2011.11:
+> +BR2_PACKAGE_LZMA
 > +
-> +Then the patches would applied as follows for the Linux kernel:
+> +To be removed in 2013.05:
+> +BR2_PACKAGE_TTCP
 > +
-> +. board/common-fooarch/patches/linux/linux-patch1.patch
-> +. board/common-fooarch/patches/linux/linux-patch2.patch
-> +. board/fooarch-board/patches/linux/linux-patch1.patch
-
-  It's actually patch3 in the example above...
-
-> diff --git a/docs/manual/patch-policy.txt b/docs/manual/patch-policy.txt
-> index d9bc8ca..26586ad 100644
-> --- a/docs/manual/patch-policy.txt
-> +++ b/docs/manual/patch-policy.txt
-> @@ -50,8 +50,9 @@ Global patch directory
->   ^^^^^^^^^^^^^^^^^^^^^^
->
->   The +BR2_GLOBAL_PATCH_DIR+ configuration file option can be
-> -used to specify a directory containing global package patches. See
-> -xref:packages-custom[] for details.
-> +used to specify a space separated list of one or more directories
-> +containing global package patches. See xref:packages-custom[] for
-> +details.
->
->
->   How patches are applied
-> @@ -72,11 +73,15 @@ How patches are applied
->   +
->   * Otherwise, patch files matching +<packagename>-*.patch+
->     are applied in alphabetical order.
-> -  So, to ensure they are applied in the right order, it is hightly
-> -  recommended to named the patch files like this:
-> +  So, to ensure they are applied in the right order, it is highly
-> +  recommended to name the patch files like this:
->     +<packagename>-<number>-<description>.patch+, where +<number>+
->     refers to the 'apply order'.
->
-> +. If +BR2_GLOABL_PATCH_DIR+ is defined, the directories will be
-> +  enumerated in the order they are specified for patches. The patches
-
-  I think the "for patches" here is meaningless.
-
-
-  Regards,
-  Arnout
-
-> +  are applied as described in the previous step.
+> +To be removed in 2013.11:
+> +BR2_HAVE_DOCUMENTATION
+> +BR2_PACKAGE_PKG_CONFIG
+> +BR2_PACKAGE_NETKITBASE
+> +BR2_PACKAGE_NETKITTELNET
+> +BR2_PACKAGE_AUTOCONF
+> +BR2_PACKAGE_AUTOMAKE
 > +
->   . Run the +<packagename>_POST_PATCH_HOOKS+ commands if defined.
->
->   If something goes wrong in the steps _3_ or _4_, then the build fails.
->
+> +To be removed in 2014.02:
+> +BR2_KERNEL_HEADERS_3_1
+> +BR2_KERNEL_HEADERS_3_3
+> +BR2_KERNEL_HEADERS_3_5
+> +BR2_PACKAGE_CCACHE
+> +BR2_PACKAGE_XSTROKE
+> +BR2_GDB_VERSION_7_2
+> +BR2_GDB_VERSION_7_3
+> +
+> +To be removed in 2014.05:
+> +BR2_KERNEL_HEADERS_3_6
+> +BR2_KERNEL_HEADERS_3_7
+> +BR2_PACKAGE_VALA
+> +
+> +To be removed in 2014.08:
+> +BR2_KERNEL_HEADERS_3_8
+> +
+> +To be removed in 2014.11:
+> +BR2_KERNEL_HEADERS_3_9
+> +BR2_INSTALL_FORTRAN
+> +BR2_INSTALL_OBJC
+> +BR2_mips_1
+> +BR2_mips_2
+> +BR2_mips_3
+> +BR2_mips_4
 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+ping?
