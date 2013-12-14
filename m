@@ -1,118 +1,65 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sat, 14 Dec 2013 12:52:22 +0100
-Subject: [Buildroot] Patchwork oldest patches cleanup #3 (deadline
-	December 20)
-In-Reply-To: <CAAXf6LXUx3dERdYxq5d4mY8apxXk+Ltj_CNPm+RTM+52nKRUNA@mail.gmail.com>
-References: <CAAXf6LXUx3dERdYxq5d4mY8apxXk+Ltj_CNPm+RTM+52nKRUNA@mail.gmail.com>
-Message-ID: <CAAXf6LXDALKC9CKcOSqS3BkPaDeK34ao1D+u8NkJKLgTKe5Npg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 14 Dec 2013 18:32:32 +0100
+Subject: [Buildroot] [PATCH] Rename netkitbase and netkittelnet
+In-Reply-To: <CACjG4B+HvDwZ-SQ8QE0oSH2zd7tZF73=T=4ayYHqg-GW4GMDKg@mail.gmail.com>
+References: <1382604917-7742-1-git-send-email-arnaud.aujon@gmail.com>
+ <20131024153442.56a9157d@skate>
+ <CACjG4BKEx1pGoWhDhYhV3ib+gz27rUZpMUwO8VhkOYh0+weROw@mail.gmail.com>
+ <CACjG4BK7us2HXea_yR4wHy=CHTB8uaUro9MKjXY_0dw7DkfMUQ@mail.gmail.com>
+ <20131203100121.1c785df4@skate>
+ <CACjG4B+HvDwZ-SQ8QE0oSH2zd7tZF73=T=4ayYHqg-GW4GMDKg@mail.gmail.com>
+Message-ID: <20131214183232.04cea60b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Dear arnaud aujon,
 
-Current status:
+On Fri, 13 Dec 2013 18:51:45 +0100, arnaud aujon wrote:
+> Ok, so netkitbase provides 2 binaries : inetd which can be replaced by
+> xinetd and ping that is provided by busybox (is there another package
+> providing it ?)
 
-On Fri, Dec 6, 2013 at 10:02 PM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> All,
->
-> Here is the session 3 of the patchwork cleanup. For those who haven't
-> followed previous sessions, here is a quick recap: every session we'll
-> be posting the list of the 10 oldest patches, with the original patch
-> contributors in copy. During two weeks, we have the opportunity to
-> discuss the patch, whether it is still necessary or not, how it should
-> be changed to be merged.
->
-> In particular, I'm interested in knowing if the original contributor is
-> still interested by the patch, or if someone else is interested in
-> adopting the patch and sending an updated version, or if the patch no
-> longer makes sense due to other changes made in Buildroot.
->
-> All patches that have not received any comment or attention before the
-> deadline will be removed from patchwork. This is aggressive, but we have
-> many 'dead' patches sitting in patchwork, and this cannot work.
->
-> Deadline for this session is December 20.
->
-> Below are the 10 oldest patches (obtained with a slightly modified
-> version of pwclient):
-> [ pwclient list -s New -n 10 ]
->
-> iucode-tool: new package
-> Richard Braun <rbraun@sceen.net>
-> http://patchwork.ozlabs.org/patch/185420
+There is iputils, but we don't have a package for it in Buildroot (I
+have one in a private branch, just haven't had the time to clean it up
+to upstream it). It provides, amongst others, the full-featured ping
+implementation.
 
-No feedback yet.
+> For netkittelnet, again busybox provides a telnet client.
+> So Config.in.legacy should be updated by something like that :
+> 
+> config BR2_PACKAGE_NETKITBASE
+>     bool "netkitbase has been removed"
+>     select BR2_LEGACY
+>     help
+>       The 'netkitbase' package has been removed, since it
+>       has been deprecated since 2012.11. This package provided  'inetd'
+> which
+>       is replaced by 'xinet' and 'ping' which is replaced by 'busybox' or
+> 'fping'.
+> 
+> config BR2_PACKAGE_NETKITTELNET
+>     bool "netkittelnet has been removed"
+>     select BR2_LEGACY
+>     help
+>       The 'netkittelnet' package has been removed, since it
+>       has been deprecated since 2012.11. 'busybox' provides a telnet client
+> and
+>       should be used instead.
+> 
+> But should we automatically select a replacement or let the user decide
+> what to do ?
 
->
-> [3/3] mplayer: Fix DVD support
-> Valentine Barshak <gvaxon@gmail.com>
-> http://patchwork.ozlabs.org/patch/187437
->
+Normally, we select things automatically, when there is a direct match.
+In this case, I believe there isn't really a direct complete match, so
+I would personally suggest to not select something automatically.
 
-No feedback yet.
+Best regards,
 
-> pkg-infra: produce legal info for proprietary packages
-> Richard Braun <rbraun@sceen.net>
-> http://patchwork.ozlabs.org/patch/187775
-
-I will try to look into this. I brought up this issue before, too.
-
->
-> intel-microcode: new package
-> Richard Braun <rbraun@sceen.net>
-> http://patchwork.ozlabs.org/patch/187776
-
-No feedback yet.
-
->
-> [1/2] Makefile: Fix target-purgelocales
-> Valentine Barshak <gvaxon@gmail.com>
-> http://patchwork.ozlabs.org/patch/188623
->
-> [2/2] Makefile: Add /usr/lib/locale to target-purgelocales
-> Valentine Barshak <gvaxon@gmail.com>
-> http://patchwork.ozlabs.org/patch/188624
-
-I tested these patches and provided some comments to Valentine. It
-seems there is already something broken in buildroot locale support,
-partially fixed by these patches, but not entirely.
-
->
-> rpm5
-> Alexander Khryukin <alexander@mezon.ru>
-> http://patchwork.ozlabs.org/patch/190962
-
-No feedback yet.
-
->
-> putty: UNIX port of the famous Telnet and SSH GUI client
-> Stefan Fr?berg <stefan.froberg@petroprogram.com>
-> http://patchwork.ozlabs.org/patch/191204
-
-No feedback yet.
-
->
-> new pkg tor
-> dev0 <matzeton@googlemail.com>
-> http://patchwork.ozlabs.org/patch/193560
-
-I received private feedback from 'dev0' saying that he is no longer
-interested in this patch, so I will mark this as Rejected. However,
-don't hesitate to adopt this patch if it is useful to you...
-
->
-> [PATCHv3] QtSerialPort: new package
-> Thiago Correa <thiago.correa@gmail.com>
-> http://patchwork.ozlabs.org/patch/195057
-
-No feedback yet.
-
-Any further feedback on these patches (even saying that you no longer
-care) is greatly appreciated...
-
-Thanks,
 Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
