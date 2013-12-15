@@ -1,54 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Dec 2013 13:36:24 +0100
-Subject: [Buildroot] [git commit] python-crc16: convert to the Python
+Date: Sun, 15 Dec 2013 13:37:06 +0100
+Subject: [Buildroot] [git commit] python-m2crypto: convert to the Python
 	package infrastructure
-Message-ID: <20131215130825.AB1E99C025@busybox.osuosl.org>
+Message-ID: <20131215130825.C813C9C025@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a1cc00e1725e2c6b0b88e46d2f7a264ca65ae9f7
+commit: http://git.buildroot.net/buildroot/commit/?id=dcd90b00ed7c37b1380a2e12a3f9761c75f19a9f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-crc16/python-crc16.mk |   25 ++-----------------------
- 1 files changed, 2 insertions(+), 23 deletions(-)
+ package/python-m2crypto/python-m2crypto.mk |   20 ++++++++------------
+ 1 files changed, 8 insertions(+), 12 deletions(-)
 
-diff --git a/package/python-crc16/python-crc16.mk b/package/python-crc16/python-crc16.mk
-index adfdcc6..9dd09ae 100644
---- a/package/python-crc16/python-crc16.mk
-+++ b/package/python-crc16/python-crc16.mk
-@@ -9,27 +9,6 @@ PYTHON_CRC16_SOURCE = crc16-$(PYTHON_CRC16_VERSION).tar.gz
- PYTHON_CRC16_SITE = http://pycrc16.googlecode.com/files/
- PYTHON_CRC16_LICENSE = LGPLv3+
- PYTHON_CRC16_LICENSE_FILES = COPYING.txt
--PYTHON_CRC16_DEPENDENCIES = python host-python
-+PYTHON_CRC16_SETUP_TYPE = distutils
+diff --git a/package/python-m2crypto/python-m2crypto.mk b/package/python-m2crypto/python-m2crypto.mk
+index 1c0efbd..dd0f77e 100644
+--- a/package/python-m2crypto/python-m2crypto.mk
++++ b/package/python-m2crypto/python-m2crypto.mk
+@@ -7,20 +7,16 @@
+ PYTHON_M2CRYPTO_VERSION = 0.21.1
+ PYTHON_M2CRYPTO_SITE = http://pypi.python.org/packages/source/M/M2Crypto
+ PYTHON_M2CRYPTO_SOURCE = M2Crypto-$(PYTHON_M2CRYPTO_VERSION).tar.gz
+-HOST_PYTHON_M2CRYPTO_DEPENDENCIES = host-openssl host-python host-python-setuptools host-swig
++PYTHON_M2CRYPTO_SETUP_TYPE = setuptools
++HOST_PYTHON_M2CRYPTO_DEPENDENCIES = host-openssl host-swig
  
--PYTHON_CRC16_PARAMS = CC="$(TARGET_CC)" \
--		CFLAGS="$(TARGET_CFLAGS)" \
--		LDSHARED="$(TARGET_CC) -shared" \
--		LDFLAGS="$(TARGET_LDFLAGS) -L$(STAGING_DIR)/usr/lib" \
--		CROSS_COMPILING=yes \
--		_python_sysroot=$(STAGING_DIR) \
--		_python_srcdir=$(PYTHON_DIR) \
--		_python_prefix=/usr \
--		_python_exec_prefix=/usr
--
--define PYTHON_CRC16_BUILD_CMDS
--	(cd $(@D); $(PYTHON_CRC16_PARAMS) \
--		$(HOST_DIR)/usr/bin/python setup.py build)
++# We need to override the build commands to be able to use build_ext,
++# which accepts the --openssl option.
+ define HOST_PYTHON_M2CRYPTO_BUILD_CMDS
+ 	(cd $(@D); \
+-	$(HOST_CONFIGURE_OPTS) \
+-	PYTHONXCPREFIX="$(HOST_DIR)/usr/" \
+-	LDFLAGS="-L$(HOST_DIR)/lib -L$(HOST_DIR)/usr/lib" \
+-	$(HOST_DIR)/usr/bin/python setup.py build_ext --openssl=$(HOST_DIR)/usr)
++		$(HOST_PKG_PYTHON_SETUPTOOLS_ENV) \
++		$(HOST_DIR)/usr/bin/python setup.py build_ext \
++			--openssl=$(HOST_DIR)/usr)
+ endef
+ 
+-define HOST_PYTHON_M2CRYPTO_INSTALL_CMDS
+-	(cd $(@D); \
+-	PYTHONPATH=$(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
+-	$(HOST_DIR)/usr/bin/python setup.py install --prefix=$(HOST_DIR)/usr)
 -endef
 -
--define PYTHON_CRC16_INSTALL_TARGET_CMDS
--	(cd $(@D); $(PYTHON_CRC16_PARAMS) \
--		$(HOST_DIR)/usr/bin/python setup.py install \
--		--prefix=$(TARGET_DIR)/usr)
--endef
--
--$(eval $(generic-package))
-+$(eval $(python-package))
+-$(eval $(host-generic-package))
++$(eval $(host-python-package))
