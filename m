@@ -1,61 +1,69 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Dec 2013 09:28:28 +0100
-Subject: [Buildroot] [git commit] dvb-apps: fix avr32 build failure
-Message-ID: <20131215090215.D71A09C016@busybox.osuosl.org>
+Date: Sun, 15 Dec 2013 09:47:37 +0100
+Subject: [Buildroot] [git commit] erlang: add option to enable SMP support
+Message-ID: <20131215090215.E81069C021@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a52d9ef80a2c5decc3b80f8813f1f656b3ab6694
+commit: http://git.buildroot.net/buildroot/commit/?id=c1781787f8425d7baea3e399667dac97e8850665
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When building for avr32, the build fails as follows.
+Erlang builds two emulators depending on whether SMP is supported or
+not. If it is known that the target does not support SMP, turning off
+the SMP emulator saves compile time and reduces the size of the
+installation.
 
-  cc1: error: unrecognized command line option "-Wno-packed-bitfield-compat"
-
-An example of an autobuild failure arising from this is the following.
-
-  http://autobuild.buildroot.net/results/92e/92e472004812a3616f62d766a9ea07a997a66e89/
-
-Clearly, not all toolchains provide a gcc that understands
-the -Wno-packed-bitfield-compat flag; remove usage of this flag.
-
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../dvb-apps-0002-Fix-compiler-warning-flags.patch |   25 ++++++++++++++++++++
- 1 files changed, 25 insertions(+), 0 deletions(-)
+ package/erlang/Config.in |   14 +++++++++++++-
+ package/erlang/erlang.mk |    4 ++++
+ 2 files changed, 17 insertions(+), 1 deletions(-)
 
-diff --git a/package/dvb-apps/dvb-apps-0002-Fix-compiler-warning-flags.patch b/package/dvb-apps/dvb-apps-0002-Fix-compiler-warning-flags.patch
-new file mode 100644
-index 0000000..9da0408
---- /dev/null
-+++ b/package/dvb-apps/dvb-apps-0002-Fix-compiler-warning-flags.patch
-@@ -0,0 +1,25 @@
-+When building for avr32, the build fails as follows.
+diff --git a/package/erlang/Config.in b/package/erlang/Config.in
+index 27206f3..2ee8515 100644
+--- a/package/erlang/Config.in
++++ b/package/erlang/Config.in
+@@ -10,11 +10,23 @@ config BR2_PACKAGE_ERLANG
+ 
+ 	  http://www.erlang.org
+ 
++if BR2_PACKAGE_ERLANG
 +
-+  cc1: error: unrecognized command line option "-Wno-packed-bitfield-compat"
++config BR2_PACKAGE_ERLANG_SMP
++	bool "enable SMP support"
++	help
++	  Erlang provides both a UP and an SMP emulator. The UP emulator
++	  is always built, and this option enables compilation of the SMP
++	  emulator. The choice of which emulator to use is made at runtime.
++	  If you do not need SMP support, turning this option off reduces
++	  compile time and the size of the Erlang installation.
 +
-+An example of an autobuild failure arising from this is the following.
+ config BR2_PACKAGE_ERLANG_MEGACO
+ 	bool "install megaco application"
+-	depends on BR2_PACKAGE_ERLANG
+ 	help
+ 	  The Megaco application is a framework for building applications
+ 	  on top of the Megaco/H.248 protocol. It is approximately 14MB in
+ 	  size so if you do not need it then it is recommended not to
+ 	  enable it.
 +
-+  http://autobuild.buildroot.net/results/92e/92e472004812a3616f62d766a9ea07a997a66e89/
++endif # BR2_PACKAGE_ERLANG
+diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
+index 4a94af0..34d027b 100644
+--- a/package/erlang/erlang.mk
++++ b/package/erlang/erlang.mk
+@@ -43,6 +43,10 @@ ERLANG_CONF_OPT += --enable-shared-zlib
+ ERLANG_DEPENDENCIES += zlib
+ endif
+ 
++ifeq ($(BR2_PACKAGE_ERLANG_SMP),)
++ERLANG_CONF_OPT += --disable-smp-support
++endif
 +
-+Clearly, not all toolchains provide a gcc that understands
-+the -Wno-packed-bitfield-compat flag; remove usage of this flag.
-+
-+Signed-off-by: Simon Dawson <spdawson@gmail.com>
-+
-+diff -Nurp a/util/scan/Makefile b/util/scan/Makefile
-+--- a/util/scan/Makefile	2013-11-24 17:04:10.000000000 +0000
-++++ b/util/scan/Makefile	2013-12-13 09:37:11.967975173 +0000
-+@@ -14,7 +14,7 @@ inst_bin = $(binaries)
-+ 
-+ removing = atsc_psip_section.c atsc_psip_section.h
-+ 
-+-CPPFLAGS += -Wno-packed-bitfield-compat -D__KERNEL_STRICT_NAMES
-++CPPFLAGS += -D__KERNEL_STRICT_NAMES
-+ 
-+ .PHONY: all
-+ 
+ # Remove source, example, gs and wx files from the target
+ ERLANG_REMOVE_PACKAGES = gs wx
+ 
