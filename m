@@ -1,48 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Dec 2013 13:37:39 +0100
-Subject: [Buildroot] [git commit] python-protobuf: convert to the Python
+Date: Sun, 15 Dec 2013 13:38:57 +0100
+Subject: [Buildroot] [git commit] python-serial: convert to the Python
 	package infrastructure
-Message-ID: <20131215130826.1834C9BC97@busybox.osuosl.org>
+Message-ID: <20131215130826.3FAAE9BC97@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=033e218c34398afc1c52c7d30216e13bf5242582
+commit: http://git.buildroot.net/buildroot/commit/?id=5da217204c5d499541237aa54056d32ab0ed5c95
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-protobuf/python-protobuf.mk |   20 ++++----------------
- 1 files changed, 4 insertions(+), 16 deletions(-)
+ package/python-serial/python-serial.mk |   13 ++-----------
+ 1 files changed, 2 insertions(+), 11 deletions(-)
 
-diff --git a/package/python-protobuf/python-protobuf.mk b/package/python-protobuf/python-protobuf.mk
-index dcf67c2..36ab644 100644
---- a/package/python-protobuf/python-protobuf.mk
-+++ b/package/python-protobuf/python-protobuf.mk
-@@ -9,20 +9,8 @@ PYTHON_PROTOBUF_SOURCE  = $(PROTOBUF_SOURCE)
- PYTHON_PROTOBUF_SITE    = $(PROTOBUF_SITE)
- PYTHON_PROTOBUF_LICENSE = BSD-3c
- PYTHON_PROTOBUF_LICENSE_FILES = COPYING.txt
-+PYTHON_PROTOBUF_DEPENDENCIES = host-protobuf
-+PYTHON_PROTOBUF_SETUP_TYPE = setuptools
-+PYTHON_PROTOBUF_SUBDIR = python
+diff --git a/package/python-serial/python-serial.mk b/package/python-serial/python-serial.mk
+index e00577b..a44d799 100644
+--- a/package/python-serial/python-serial.mk
++++ b/package/python-serial/python-serial.mk
+@@ -7,15 +7,6 @@
+ PYTHON_SERIAL_VERSION = 2.6
+ PYTHON_SERIAL_SOURCE  = pyserial-$(PYTHON_SERIAL_VERSION).tar.gz
+ PYTHON_SERIAL_SITE    = http://pypi.python.org/packages/source/p/pyserial
++PYTHON_SERIAL_SETUP_TYPE = distutils
  
--PYTHON_PROTOBUF_DEPENDENCIES = python host-python-setuptools \
--        host-python-distutilscross host-protobuf
+-PYTHON_SERIAL_DEPENDENCIES = python
 -
--define PYTHON_PROTOBUF_BUILD_CMDS
--	(cd $(@D)/python; \
--		PYTHONXCPREFIX="$(STAGING_DIR)/usr/" \
--		PATH=$(HOST_PATH) \
--	$(HOST_DIR)/usr/bin/python setup.py build -x)
+-define PYTHON_SERIAL_BUILD_CMDS
+-	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build --executable=/usr/bin/python)
 -endef
 -
--define PYTHON_PROTOBUF_INSTALL_TARGET_CMDS
--	(cd $(@D)/python; PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
--	$(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
+-define PYTHON_SERIAL_INSTALL_TARGET_CMDS
+-	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
 -endef
 -
 -$(eval $(generic-package))
