@@ -1,57 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Dec 2013 13:39:31 +0100
-Subject: [Buildroot] [git commit] python-setuptools: convert to the Python
+Date: Sun, 15 Dec 2013 13:41:22 +0100
+Subject: [Buildroot] [git commit] python-netifaces: convert to the Python
 	package infrastructure
-Message-ID: <20131215130826.484A29BC97@busybox.osuosl.org>
+Message-ID: <20131215130826.55DA69BC97@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3fcb28e7a15eb6dd3e768528fac5c9293b11e0a4
+commit: http://git.buildroot.net/buildroot/commit/?id=8fd5a94562b771b56e1b06d6b3ea9b9a19e1a52a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Also, remove the "select BR2_PACKAGE_PYTHON_SETUPTOOLS", since
+setuptools is a host dependency (needed to built the package), not a
+target dependency.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-setuptools/python-setuptools.mk |   28 ++---------------------
- 1 files changed, 3 insertions(+), 25 deletions(-)
+ package/python-netifaces/Config.in           |    1 -
+ package/python-netifaces/python-netifaces.mk |   19 ++-----------------
+ 2 files changed, 2 insertions(+), 18 deletions(-)
 
-diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
-index 73c819f..13df448 100644
---- a/package/python-setuptools/python-setuptools.mk
-+++ b/package/python-setuptools/python-setuptools.mk
-@@ -12,29 +12,7 @@
- PYTHON_SETUPTOOLS_VERSION = 0.6.36
- PYTHON_SETUPTOOLS_SOURCE  = distribute-$(PYTHON_SETUPTOOLS_VERSION).tar.gz
- PYTHON_SETUPTOOLS_SITE    = http://pypi.python.org/packages/source/d/distribute
--PYTHON_SETUPTOOLS_DEPENDENCIES = python
-+PYTHON_SETUPTOOLS_SETUP_TYPE = setuptools
+diff --git a/package/python-netifaces/Config.in b/package/python-netifaces/Config.in
+index b9d66d8..29f9fc3 100644
+--- a/package/python-netifaces/Config.in
++++ b/package/python-netifaces/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_PYTHON_NETIFACES
+ 	bool "python-netifaces"
+ 	depends on BR2_PACKAGE_PYTHON
+-	select BR2_PACKAGE_PYTHON_SETUPTOOLS
+ 	help
+ 	  Portable access to network interfaces from Python.
  
--define HOST_PYTHON_SETUPTOOLS_BUILD_CMDS
--	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
+diff --git a/package/python-netifaces/python-netifaces.mk b/package/python-netifaces/python-netifaces.mk
+index 1570fd1..faa39bd 100644
+--- a/package/python-netifaces/python-netifaces.mk
++++ b/package/python-netifaces/python-netifaces.mk
+@@ -7,21 +7,6 @@
+ PYTHON_NETIFACES_VERSION = 0.7
+ PYTHON_NETIFACES_SOURCE  = netifaces-$(PYTHON_NETIFACES_VERSION).tar.gz
+ PYTHON_NETIFACES_SITE    = http://alastairs-place.net/projects/netifaces
++PYTHON_NETIFACES_SETUP_TYPE = setuptools
+ 
+-PYTHON_NETIFACES_DEPENDENCIES = python host-python-setuptools host-python-distutilscross
+-
+-define PYTHON_NETIFACES_BUILD_CMDS
+-	(cd $(@D); \
+-		PYTHONXCPREFIX="$(STAGING_DIR)/usr/" \
+-		LDFLAGS="-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib" \
+-	$(HOST_DIR)/usr/bin/python setup.py build -x)
 -endef
 -
--define PYTHON_SETUPTOOLS_BUILD_CMDS
+-define PYTHON_NETIFACES_INSTALL_TARGET_CMDS
 -	(cd $(@D); \
--	PYTHONPATH="$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
--	$(HOST_DIR)/usr/bin/python setup.py build)
--endef
--
--define HOST_PYTHON_SETUPTOOLS_INSTALL_CMDS
--	(cd $(@D); \
--	$(HOST_DIR)/usr/bin/python setup.py install --prefix=$(HOST_DIR)/usr)
--endef
--
--define PYTHON_SETUPTOOLS_INSTALL_TARGET_CMDS
--	(cd $(@D); \
--	PYTHONPATH="$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
--	$(HOST_DIR)/usr/bin/python setup.py install --executable=/usr/bin/python \
+-	PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
+-	$(HOST_DIR)/usr/bin/python setup.py install \
 -	--single-version-externally-managed --root=/ --prefix=$(TARGET_DIR)/usr)
 -endef
 -
 -$(eval $(generic-package))
--$(eval $(host-generic-package))
 +$(eval $(python-package))
-+$(eval $(host-python-package))
