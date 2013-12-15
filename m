@@ -1,77 +1,61 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Dec 2013 22:11:21 +0100
-Subject: [Buildroot] [git commit] apf27: update configuration
-Message-ID: <20131215211458.195A09BD0A@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 15 Dec 2013 22:50:01 +0100
+Subject: [Buildroot] [PATCH 1/1] Do not use an initrd in iso image when
+ using initramfs
+In-Reply-To: <1387140644-22545-1-git-send-email-thierry.bultel@wanadoo.fr>
+References: <1387140644-22545-1-git-send-email-thierry.bultel@wanadoo.fr>
+Message-ID: <20131215215001.GA3463@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8163d3d0851efe7a7cc96c782329f491de92fa84
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thierry, All,
 
-- move kernel 3.8.3 to 3.12.5
-- enable pwm_imx in the kernel configuration
-- add u-boot
+On 2013-12-15 21:50 +0100, Thierry Bultel spake thusly:
+> When using initramfs, it is useless to put an initrd in the iso image.
+> This patch makes the image to only contain the kernel image, and
+> also removes the initrd line from menu.lst
+> 
+> Signed-off-by: Thierry Bultel <thierry.bultel@wanadoo.fr>
+> ---
+>  fs/iso9660/iso9660.mk |    4 ++++
+>  1 files changed, 4 insertions(+), 0 deletions(-)
+> 
+> diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+> index 979a0b2..1f9c62e 100644
+> --- a/fs/iso9660/iso9660.mk
+> +++ b/fs/iso9660/iso9660.mk
+> @@ -17,7 +17,11 @@ $(BINARIES_DIR)/rootfs.iso9660: host-cdrkit host-fakeroot linux rootfs-cpio grub
+>  	cp $(GRUB_DIR)/stage2/stage2_eltorito $(ISO9660_TARGET_DIR)/boot/grub/
+>  	cp $(ISO9660_BOOT_MENU) $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
+>  	cp $(LINUX_IMAGE_PATH) $(ISO9660_TARGET_DIR)/kernel
+> +ifneq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
 
-Acked-by: Eric Jarrige <eric.jarrige@armadeus.org>
-Acked-by: Julien Boibessot <julien.boibessot@armadeus.com>
-Signed-off-by: Philippe Reynes <tremyfr@yahoo.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../apf27/{linux-3.8.config => linux-3.12.config}  |    3 ++-
- configs/armadeus_apf27_defconfig                   |   12 ++++++++----
- 2 files changed, 10 insertions(+), 5 deletions(-)
+We prefer positive logic, ie.:
 
-diff --git a/board/armadeus/apf27/linux-3.8.config b/board/armadeus/apf27/linux-3.12.config
-similarity index 99%
-rename from board/armadeus/apf27/linux-3.8.config
-rename to board/armadeus/apf27/linux-3.12.config
-index cff947b..d2955cf 100644
---- a/board/armadeus/apf27/linux-3.8.config
-+++ b/board/armadeus/apf27/linux-3.12.config
-@@ -1,4 +1,3 @@
--CONFIG_EXPERIMENTAL=y
- # CONFIG_SWAP is not set
- CONFIG_SYSVIPC=y
- CONFIG_POSIX_MQUEUE=y
-@@ -200,6 +199,8 @@ CONFIG_IMX_SDMA=y
- CONFIG_IMX_DMA=y
- # CONFIG_IOMMU_SUPPORT is not set
- CONFIG_IIO=m
-+CONFIG_PWM=y
-+CONFIG_PWM_IMX=y
- CONFIG_EXT2_FS=y
- CONFIG_EXT3_FS=y
- CONFIG_EXT3_FS_POSIX_ACL=y
-diff --git a/configs/armadeus_apf27_defconfig b/configs/armadeus_apf27_defconfig
-index 09d491c..409476f 100644
---- a/configs/armadeus_apf27_defconfig
-+++ b/configs/armadeus_apf27_defconfig
-@@ -4,7 +4,7 @@ BR2_arm926t=y
- 
- # Lock down headers to avoid breaking with new defaults
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.8.4"
-+BR2_DEFAULT_KERNEL_VERSION="3.12.5"
- 
- # System
- BR2_TARGET_GENERIC_HOSTNAME="apf27"
-@@ -20,9 +20,13 @@ BR2_TARGET_ROOTFS_UBI=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.8.4"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.5"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/armadeus/apf27/linux-3.8.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/armadeus/apf27/linux-3.12.config"
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0xA0008000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx27-apf27"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx27-apf27dev"
-+
-+# U-boot
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="apf27"
+ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
+    sed blabla
+else
+    cp rootfs.cpio blabla
+endif
+
+>  	cp $(BINARIES_DIR)/rootfs.cpio$(ROOTFS_CPIO_COMPRESS_EXT) $(ISO9660_TARGET_DIR)/initrd
+> +else
+> +	sed -i -e '/initrd/d'  $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
+> +endif
+>  	# Use fakeroot to pretend all target binaries are owned by root
+>  	rm -f $(FAKEROOT_SCRIPT)
+>  	echo "chown -R 0:0 $(ISO9660_TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
