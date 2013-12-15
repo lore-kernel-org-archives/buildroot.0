@@ -1,37 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 15 Dec 2013 09:38:59 +0100
-Subject: [Buildroot] [PATCH] erlang: bump to version R16B03
-In-Reply-To: <1386823184-607-1-git-send-email-fhunleth@troodon-software.com>
- (Frank Hunleth's message of "Wed, 11 Dec 2013 23:39:44 -0500")
-References: <1386823184-607-1-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <87ppoywlss.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 15 Dec 2013 09:27:30 +0100
+Subject: [Buildroot] [git commit] pcsc-lite: bump to version 1.8.10
+Message-ID: <20131215090215.CEF2A9BFAC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Frank" == Frank Hunleth <fhunleth@troodon-software.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=82b41f0c7742d4b282aa9b6e4946247adfb29ef9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
- > ---
- >  package/erlang/erlang.mk | 2 +-
- >  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/pcsc-lite/pcsc-lite.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
- > diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
- > index 4a94af0..32d18e4 100644
- > --- a/package/erlang/erlang.mk
- > +++ b/package/erlang/erlang.mk
- > @@ -4,7 +4,7 @@
- >  #
- >  ################################################################################
+diff --git a/package/pcsc-lite/pcsc-lite.mk b/package/pcsc-lite/pcsc-lite.mk
+index 4cc628f..afbe822 100644
+--- a/package/pcsc-lite/pcsc-lite.mk
++++ b/package/pcsc-lite/pcsc-lite.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- > -ERLANG_VERSION = R16B01
- > +ERLANG_VERSION = R16B03
-
-I was just about to commit this, but erlang.org is apparently down :/
-I'll wait until it is back online to not break the autobuilders / people
-using git.
-
--- 
-Bye, Peter Korsgaard
+-PCSC_LITE_VERSION = 1.8.8
++PCSC_LITE_VERSION = 1.8.10
+ PCSC_LITE_SOURCE = pcsc-lite-$(PCSC_LITE_VERSION).tar.bz2
+-PCSC_LITE_SITE = http://alioth.debian.org/frs/download.php/file/3862
++PCSC_LITE_SITE = http://alioth.debian.org/frs/download.php/file/3963
+ PCSC_LITE_INSTALL_STAGING = YES
+ PCSC_LITE_DEPENDENCIES = host-pkgconf
+ PCSC_LITE_LICENSE = BSD-3c
