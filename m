@@ -1,501 +1,528 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Dec 2013 21:04:05 +0100
-Subject: [Buildroot] [git commit] Remove deprecated package netkitbase and
-	netkittelnet
-Message-ID: <20131215200518.878579C036@busybox.osuosl.org>
+From: Philippe Reynes <tremyfr@yahoo.fr>
+Date: Sun, 15 Dec 2013 21:06:48 +0100
+Subject: [Buildroot] [PATCH] apf27: update configuration
+Message-ID: <1387138008-7830-1-git-send-email-tremyfr@yahoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=560fe85bf7fb81956e80848c8bb28d7a6d00a2a2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+- move kernel 3.8.3 to 3.12.5
+- enable pwm_imx in the kernel configuration
+- add u-boot
 
-[Peter: fixup Config.in.legacy indentation]
-Signed-off-by: Arnaud Aujon <arnaud.aujon@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Acked-by: Eric Jarrige <eric.jarrige@armadeus.org>
+Acked-by: Julien Boibessot <julien.boibessot@armadeus.com>
+Signed-off-by: Philippe Reynes <tremyfr@yahoo.fr>
 ---
- Config.in.legacy                                 |   20 +++
- package/Config.in                                |    2 -
- package/netkitbase/Config.in                     |   13 --
- package/netkitbase/netkitbase-gcc4.patch         |   12 --
- package/netkitbase/netkitbase-remove-bcopy.patch |   31 ----
- package/netkitbase/netkitbase.mk                 |   35 ----
- package/netkittelnet/Config.in                   |   13 --
- package/netkittelnet/netkittelnet-bcopy.patch    |   57 -------
- package/netkittelnet/netkittelnet.mk             |   36 -----
- package/netkittelnet/netkittelnet.patch          |  182 ----------------------
- 10 files changed, 20 insertions(+), 381 deletions(-)
+ board/armadeus/apf27/linux-3.12.config |  230 ++++++++++++++++++++++++++++++++
+ board/armadeus/apf27/linux-3.8.config  |  229 -------------------------------
+ configs/armadeus_apf27_defconfig       |   12 +-
+ 3 files changed, 238 insertions(+), 233 deletions(-)
+ create mode 100644 board/armadeus/apf27/linux-3.12.config
+ delete mode 100644 board/armadeus/apf27/linux-3.8.config
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 09935f1..c75e25e 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -99,6 +99,26 @@ comment "----------------------------------------------------"
- endif
+diff --git a/board/armadeus/apf27/linux-3.12.config b/board/armadeus/apf27/linux-3.12.config
+new file mode 100644
+index 0000000..d2955cf
+--- /dev/null
++++ b/board/armadeus/apf27/linux-3.12.config
+@@ -0,0 +1,230 @@
++# CONFIG_SWAP is not set
++CONFIG_SYSVIPC=y
++CONFIG_POSIX_MQUEUE=y
++CONFIG_NO_HZ=y
++CONFIG_HIGH_RES_TIMERS=y
++CONFIG_LOG_BUF_SHIFT=14
++CONFIG_CGROUPS=y
++CONFIG_EMBEDDED=y
++# CONFIG_COMPAT_BRK is not set
++CONFIG_SLAB=y
++CONFIG_PROFILING=y
++CONFIG_OPROFILE=m
++CONFIG_MODULES=y
++CONFIG_MODULE_UNLOAD=y
++# CONFIG_BLK_DEV_BSG is not set
++# CONFIG_IOSCHED_DEADLINE is not set
++# CONFIG_IOSCHED_CFQ is not set
++# CONFIG_ARCH_MULTI_V7 is not set
++CONFIG_ARCH_MXC=y
++CONFIG_MXC_IRQ_PRIOR=y
++CONFIG_MACH_IMX27_DT=y
++CONFIG_PREEMPT=y
++CONFIG_AEABI=y
++CONFIG_ZBOOT_ROM_TEXT=0x0
++CONFIG_ZBOOT_ROM_BSS=0x0
++CONFIG_FPE_NWFPE=y
++CONFIG_FPE_NWFPE_XP=y
++CONFIG_PM_DEBUG=y
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_UNIX=y
++CONFIG_INET=y
++CONFIG_IP_MULTICAST=y
++CONFIG_IP_PNP=y
++CONFIG_IP_PNP_DHCP=y
++# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
++# CONFIG_INET_XFRM_MODE_TUNNEL is not set
++# CONFIG_INET_XFRM_MODE_BEET is not set
++# CONFIG_INET_LRO is not set
++# CONFIG_INET_DIAG is not set
++CONFIG_IPV6=y
++CONFIG_CAN=m
++CONFIG_CAN_RAW=m
++CONFIG_CAN_BCM=m
++CONFIG_CAN_VCAN=m
++CONFIG_CAN_MCP251X=m
++CONFIG_BT=m
++CONFIG_BT_RFCOMM=m
++CONFIG_BT_RFCOMM_TTY=y
++CONFIG_BT_BNEP=m
++CONFIG_BT_HIDP=m
++CONFIG_BT_HCIBTUSB=m
++CONFIG_BT_HCIUART=m
++CONFIG_BT_HCIUART_H4=y
++CONFIG_BT_HCIUART_BCSP=y
++CONFIG_CFG80211=m
++CONFIG_MAC80211=m
++CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
++CONFIG_DEVTMPFS=y
++CONFIG_DEVTMPFS_MOUNT=y
++CONFIG_MTD=y
++CONFIG_MTD_CMDLINE_PARTS=y
++CONFIG_MTD_CHAR=y
++CONFIG_MTD_BLOCK=y
++CONFIG_MTD_CFI=y
++CONFIG_MTD_CFI_ADV_OPTIONS=y
++CONFIG_MTD_CFI_GEOMETRY=y
++# CONFIG_MTD_MAP_BANK_WIDTH_1 is not set
++# CONFIG_MTD_CFI_I2 is not set
++CONFIG_MTD_CFI_INTELEXT=y
++CONFIG_MTD_PHYSMAP=y
++CONFIG_MTD_NAND=y
++CONFIG_MTD_NAND_MXC=y
++CONFIG_MTD_UBI=y
++CONFIG_PROC_DEVICETREE=y
++CONFIG_EEPROM_AT24=y
++CONFIG_EEPROM_AT25=y
++CONFIG_SCSI=y
++CONFIG_BLK_DEV_SD=y
++CONFIG_NETDEVICES=y
++CONFIG_MII=y
++# CONFIG_NET_VENDOR_BROADCOM is not set
++# CONFIG_NET_VENDOR_CIRRUS is not set
++# CONFIG_NET_VENDOR_FARADAY is not set
++# CONFIG_NET_VENDOR_INTEL is not set
++# CONFIG_NET_VENDOR_MARVELL is not set
++# CONFIG_NET_VENDOR_MICREL is not set
++# CONFIG_NET_VENDOR_MICROCHIP is not set
++# CONFIG_NET_VENDOR_NATSEMI is not set
++# CONFIG_NET_VENDOR_SEEQ is not set
++# CONFIG_NET_VENDOR_SMSC is not set
++# CONFIG_NET_VENDOR_STMICRO is not set
++# CONFIG_NET_VENDOR_WIZNET is not set
++CONFIG_SMSC_PHY=y
++CONFIG_RTL8187=m
++CONFIG_LIBERTAS=m
++CONFIG_LIBERTAS_SDIO=m
++CONFIG_RT2X00=m
++CONFIG_RT2500USB=m
++CONFIG_RT73USB=m
++CONFIG_RT2800USB=m
++CONFIG_RTL8192CU=m
++CONFIG_ZD1211RW=m
++CONFIG_INPUT_JOYDEV=y
++CONFIG_INPUT_EVDEV=y
++CONFIG_KEYBOARD_GPIO=y
++CONFIG_KEYBOARD_IMX=m
++# CONFIG_INPUT_MOUSE is not set
++CONFIG_INPUT_JOYSTICK=y
++CONFIG_INPUT_TOUCHSCREEN=y
++# CONFIG_LEGACY_PTYS is not set
++CONFIG_SERIAL_IMX=y
++CONFIG_SERIAL_IMX_CONSOLE=y
++# CONFIG_HW_RANDOM is not set
++CONFIG_I2C=y
++CONFIG_I2C_CHARDEV=y
++CONFIG_I2C_IMX=y
++CONFIG_SPI=y
++CONFIG_SPI_IMX=y
++CONFIG_SPI_SPIDEV=m
++CONFIG_GPIO_SYSFS=y
++CONFIG_W1=y
++CONFIG_W1_MASTER_MXC=y
++CONFIG_W1_SLAVE_THERM=y
++CONFIG_WATCHDOG=y
++CONFIG_IMX2_WDT=y
++CONFIG_REGULATOR=y
++CONFIG_REGULATOR_FIXED_VOLTAGE=y
++CONFIG_MEDIA_SUPPORT=m
++CONFIG_MEDIA_CAMERA_SUPPORT=y
++CONFIG_MEDIA_USB_SUPPORT=y
++CONFIG_USB_VIDEO_CLASS=m
++CONFIG_USB_PWC=m
++CONFIG_V4L_PLATFORM_DRIVERS=y
++CONFIG_SOC_CAMERA=m
++CONFIG_VIDEO_MX2=m
++# CONFIG_MEDIA_SUBDRV_AUTOSELECT is not set
++# CONFIG_DVB_AU8522_V4L is not set
++# CONFIG_DVB_TUNER_DIB0070 is not set
++# CONFIG_DVB_TUNER_DIB0090 is not set
++CONFIG_FB=y
++# CONFIG_FB_MX3 is not set
++CONFIG_BACKLIGHT_LCD_SUPPORT=y
++# CONFIG_LCD_CLASS_DEVICE is not set
++CONFIG_BACKLIGHT_CLASS_DEVICE=y
++CONFIG_FRAMEBUFFER_CONSOLE=y
++CONFIG_FONTS=y
++CONFIG_FONT_8x8=y
++CONFIG_LOGO=y
++# CONFIG_LOGO_LINUX_MONO is not set
++# CONFIG_LOGO_LINUX_VGA16 is not set
++CONFIG_SOUND=m
++CONFIG_SND=m
++CONFIG_SND_MIXER_OSS=m
++CONFIG_SND_PCM_OSS=m
++# CONFIG_SND_DRIVERS is not set
++# CONFIG_SND_ARM is not set
++# CONFIG_SND_SPI is not set
++# CONFIG_SND_USB is not set
++CONFIG_SND_SOC=m
++CONFIG_SND_IMX_SOC=m
++CONFIG_USB=y
++CONFIG_USB_EHCI_HCD=y
++CONFIG_USB_EHCI_MXC=y
++CONFIG_USB_CHIPIDEA=y
++CONFIG_USB_CHIPIDEA_HOST=y
++CONFIG_USB_CHIPIDEA_DEBUG=y
++CONFIG_USB_ACM=y
++CONFIG_USB_PRINTER=y
++CONFIG_USB_STORAGE=y
++CONFIG_USB_SERIAL=y
++CONFIG_USB_SERIAL_FTDI_SIO=y
++CONFIG_USB_SERIAL_PL2303=y
++CONFIG_USB_GADGET=y
++CONFIG_USB_ETH=m
++CONFIG_USB_GADGETFS=m
++CONFIG_USB_MASS_STORAGE=m
++CONFIG_USB_G_HID=m
++CONFIG_USB_ULPI=y
++CONFIG_MMC=y
++CONFIG_MMC_MXC=y
++CONFIG_NEW_LEDS=y
++CONFIG_LEDS_CLASS=y
++CONFIG_LEDS_GPIO=y
++CONFIG_LEDS_TRIGGERS=y
++CONFIG_LEDS_TRIGGER_TIMER=y
++CONFIG_LEDS_TRIGGER_ONESHOT=y
++CONFIG_LEDS_TRIGGER_HEARTBEAT=y
++CONFIG_LEDS_TRIGGER_BACKLIGHT=y
++CONFIG_LEDS_TRIGGER_CPU=y
++CONFIG_LEDS_TRIGGER_GPIO=y
++CONFIG_LEDS_TRIGGER_DEFAULT_ON=y
++CONFIG_LEDS_TRIGGER_TRANSIENT=y
++CONFIG_RTC_CLASS=y
++CONFIG_RTC_DRV_DS1374=y
++CONFIG_RTC_DRV_MXC=m
++CONFIG_DMADEVICES=y
++CONFIG_IMX_SDMA=y
++CONFIG_IMX_DMA=y
++# CONFIG_IOMMU_SUPPORT is not set
++CONFIG_IIO=m
++CONFIG_PWM=y
++CONFIG_PWM_IMX=y
++CONFIG_EXT2_FS=y
++CONFIG_EXT3_FS=y
++CONFIG_EXT3_FS_POSIX_ACL=y
++CONFIG_EXT3_FS_SECURITY=y
++# CONFIG_DNOTIFY is not set
++CONFIG_MSDOS_FS=y
++CONFIG_VFAT_FS=y
++# CONFIG_PROC_PAGE_MONITOR is not set
++CONFIG_TMPFS=y
++CONFIG_JFFS2_FS=y
++CONFIG_UBIFS_FS=y
++CONFIG_NFS_FS=y
++CONFIG_NFS_V4=y
++CONFIG_ROOT_NFS=y
++CONFIG_NLS_CODEPAGE_437=y
++CONFIG_NLS_CODEPAGE_850=y
++CONFIG_NLS_ISO8859_1=y
++CONFIG_NLS_ISO8859_15=m
++CONFIG_PRINTK_TIME=y
++CONFIG_DEBUG_FS=y
++# CONFIG_SCHED_DEBUG is not set
++# CONFIG_DEBUG_PREEMPT is not set
++CONFIG_DEBUG_INFO=y
++# CONFIG_FTRACE is not set
++CONFIG_DEBUG_LL=y
++CONFIG_EARLY_PRINTK=y
++# CONFIG_CRYPTO_ANSI_CPRNG is not set
+diff --git a/board/armadeus/apf27/linux-3.8.config b/board/armadeus/apf27/linux-3.8.config
+deleted file mode 100644
+index cff947b..0000000
+--- a/board/armadeus/apf27/linux-3.8.config
++++ /dev/null
+@@ -1,229 +0,0 @@
+-CONFIG_EXPERIMENTAL=y
+-# CONFIG_SWAP is not set
+-CONFIG_SYSVIPC=y
+-CONFIG_POSIX_MQUEUE=y
+-CONFIG_NO_HZ=y
+-CONFIG_HIGH_RES_TIMERS=y
+-CONFIG_LOG_BUF_SHIFT=14
+-CONFIG_CGROUPS=y
+-CONFIG_EMBEDDED=y
+-# CONFIG_COMPAT_BRK is not set
+-CONFIG_SLAB=y
+-CONFIG_PROFILING=y
+-CONFIG_OPROFILE=m
+-CONFIG_MODULES=y
+-CONFIG_MODULE_UNLOAD=y
+-# CONFIG_BLK_DEV_BSG is not set
+-# CONFIG_IOSCHED_DEADLINE is not set
+-# CONFIG_IOSCHED_CFQ is not set
+-# CONFIG_ARCH_MULTI_V7 is not set
+-CONFIG_ARCH_MXC=y
+-CONFIG_MXC_IRQ_PRIOR=y
+-CONFIG_MACH_IMX27_DT=y
+-CONFIG_PREEMPT=y
+-CONFIG_AEABI=y
+-CONFIG_ZBOOT_ROM_TEXT=0x0
+-CONFIG_ZBOOT_ROM_BSS=0x0
+-CONFIG_FPE_NWFPE=y
+-CONFIG_FPE_NWFPE_XP=y
+-CONFIG_PM_DEBUG=y
+-CONFIG_NET=y
+-CONFIG_PACKET=y
+-CONFIG_UNIX=y
+-CONFIG_INET=y
+-CONFIG_IP_MULTICAST=y
+-CONFIG_IP_PNP=y
+-CONFIG_IP_PNP_DHCP=y
+-# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
+-# CONFIG_INET_XFRM_MODE_TUNNEL is not set
+-# CONFIG_INET_XFRM_MODE_BEET is not set
+-# CONFIG_INET_LRO is not set
+-# CONFIG_INET_DIAG is not set
+-CONFIG_IPV6=y
+-CONFIG_CAN=m
+-CONFIG_CAN_RAW=m
+-CONFIG_CAN_BCM=m
+-CONFIG_CAN_VCAN=m
+-CONFIG_CAN_MCP251X=m
+-CONFIG_BT=m
+-CONFIG_BT_RFCOMM=m
+-CONFIG_BT_RFCOMM_TTY=y
+-CONFIG_BT_BNEP=m
+-CONFIG_BT_HIDP=m
+-CONFIG_BT_HCIBTUSB=m
+-CONFIG_BT_HCIUART=m
+-CONFIG_BT_HCIUART_H4=y
+-CONFIG_BT_HCIUART_BCSP=y
+-CONFIG_CFG80211=m
+-CONFIG_MAC80211=m
+-CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
+-CONFIG_DEVTMPFS=y
+-CONFIG_DEVTMPFS_MOUNT=y
+-CONFIG_MTD=y
+-CONFIG_MTD_CMDLINE_PARTS=y
+-CONFIG_MTD_CHAR=y
+-CONFIG_MTD_BLOCK=y
+-CONFIG_MTD_CFI=y
+-CONFIG_MTD_CFI_ADV_OPTIONS=y
+-CONFIG_MTD_CFI_GEOMETRY=y
+-# CONFIG_MTD_MAP_BANK_WIDTH_1 is not set
+-# CONFIG_MTD_CFI_I2 is not set
+-CONFIG_MTD_CFI_INTELEXT=y
+-CONFIG_MTD_PHYSMAP=y
+-CONFIG_MTD_NAND=y
+-CONFIG_MTD_NAND_MXC=y
+-CONFIG_MTD_UBI=y
+-CONFIG_PROC_DEVICETREE=y
+-CONFIG_EEPROM_AT24=y
+-CONFIG_EEPROM_AT25=y
+-CONFIG_SCSI=y
+-CONFIG_BLK_DEV_SD=y
+-CONFIG_NETDEVICES=y
+-CONFIG_MII=y
+-# CONFIG_NET_VENDOR_BROADCOM is not set
+-# CONFIG_NET_VENDOR_CIRRUS is not set
+-# CONFIG_NET_VENDOR_FARADAY is not set
+-# CONFIG_NET_VENDOR_INTEL is not set
+-# CONFIG_NET_VENDOR_MARVELL is not set
+-# CONFIG_NET_VENDOR_MICREL is not set
+-# CONFIG_NET_VENDOR_MICROCHIP is not set
+-# CONFIG_NET_VENDOR_NATSEMI is not set
+-# CONFIG_NET_VENDOR_SEEQ is not set
+-# CONFIG_NET_VENDOR_SMSC is not set
+-# CONFIG_NET_VENDOR_STMICRO is not set
+-# CONFIG_NET_VENDOR_WIZNET is not set
+-CONFIG_SMSC_PHY=y
+-CONFIG_RTL8187=m
+-CONFIG_LIBERTAS=m
+-CONFIG_LIBERTAS_SDIO=m
+-CONFIG_RT2X00=m
+-CONFIG_RT2500USB=m
+-CONFIG_RT73USB=m
+-CONFIG_RT2800USB=m
+-CONFIG_RTL8192CU=m
+-CONFIG_ZD1211RW=m
+-CONFIG_INPUT_JOYDEV=y
+-CONFIG_INPUT_EVDEV=y
+-CONFIG_KEYBOARD_GPIO=y
+-CONFIG_KEYBOARD_IMX=m
+-# CONFIG_INPUT_MOUSE is not set
+-CONFIG_INPUT_JOYSTICK=y
+-CONFIG_INPUT_TOUCHSCREEN=y
+-# CONFIG_LEGACY_PTYS is not set
+-CONFIG_SERIAL_IMX=y
+-CONFIG_SERIAL_IMX_CONSOLE=y
+-# CONFIG_HW_RANDOM is not set
+-CONFIG_I2C=y
+-CONFIG_I2C_CHARDEV=y
+-CONFIG_I2C_IMX=y
+-CONFIG_SPI=y
+-CONFIG_SPI_IMX=y
+-CONFIG_SPI_SPIDEV=m
+-CONFIG_GPIO_SYSFS=y
+-CONFIG_W1=y
+-CONFIG_W1_MASTER_MXC=y
+-CONFIG_W1_SLAVE_THERM=y
+-CONFIG_WATCHDOG=y
+-CONFIG_IMX2_WDT=y
+-CONFIG_REGULATOR=y
+-CONFIG_REGULATOR_FIXED_VOLTAGE=y
+-CONFIG_MEDIA_SUPPORT=m
+-CONFIG_MEDIA_CAMERA_SUPPORT=y
+-CONFIG_MEDIA_USB_SUPPORT=y
+-CONFIG_USB_VIDEO_CLASS=m
+-CONFIG_USB_PWC=m
+-CONFIG_V4L_PLATFORM_DRIVERS=y
+-CONFIG_SOC_CAMERA=m
+-CONFIG_VIDEO_MX2=m
+-# CONFIG_MEDIA_SUBDRV_AUTOSELECT is not set
+-# CONFIG_DVB_AU8522_V4L is not set
+-# CONFIG_DVB_TUNER_DIB0070 is not set
+-# CONFIG_DVB_TUNER_DIB0090 is not set
+-CONFIG_FB=y
+-# CONFIG_FB_MX3 is not set
+-CONFIG_BACKLIGHT_LCD_SUPPORT=y
+-# CONFIG_LCD_CLASS_DEVICE is not set
+-CONFIG_BACKLIGHT_CLASS_DEVICE=y
+-CONFIG_FRAMEBUFFER_CONSOLE=y
+-CONFIG_FONTS=y
+-CONFIG_FONT_8x8=y
+-CONFIG_LOGO=y
+-# CONFIG_LOGO_LINUX_MONO is not set
+-# CONFIG_LOGO_LINUX_VGA16 is not set
+-CONFIG_SOUND=m
+-CONFIG_SND=m
+-CONFIG_SND_MIXER_OSS=m
+-CONFIG_SND_PCM_OSS=m
+-# CONFIG_SND_DRIVERS is not set
+-# CONFIG_SND_ARM is not set
+-# CONFIG_SND_SPI is not set
+-# CONFIG_SND_USB is not set
+-CONFIG_SND_SOC=m
+-CONFIG_SND_IMX_SOC=m
+-CONFIG_USB=y
+-CONFIG_USB_EHCI_HCD=y
+-CONFIG_USB_EHCI_MXC=y
+-CONFIG_USB_CHIPIDEA=y
+-CONFIG_USB_CHIPIDEA_HOST=y
+-CONFIG_USB_CHIPIDEA_DEBUG=y
+-CONFIG_USB_ACM=y
+-CONFIG_USB_PRINTER=y
+-CONFIG_USB_STORAGE=y
+-CONFIG_USB_SERIAL=y
+-CONFIG_USB_SERIAL_FTDI_SIO=y
+-CONFIG_USB_SERIAL_PL2303=y
+-CONFIG_USB_GADGET=y
+-CONFIG_USB_ETH=m
+-CONFIG_USB_GADGETFS=m
+-CONFIG_USB_MASS_STORAGE=m
+-CONFIG_USB_G_HID=m
+-CONFIG_USB_ULPI=y
+-CONFIG_MMC=y
+-CONFIG_MMC_MXC=y
+-CONFIG_NEW_LEDS=y
+-CONFIG_LEDS_CLASS=y
+-CONFIG_LEDS_GPIO=y
+-CONFIG_LEDS_TRIGGERS=y
+-CONFIG_LEDS_TRIGGER_TIMER=y
+-CONFIG_LEDS_TRIGGER_ONESHOT=y
+-CONFIG_LEDS_TRIGGER_HEARTBEAT=y
+-CONFIG_LEDS_TRIGGER_BACKLIGHT=y
+-CONFIG_LEDS_TRIGGER_CPU=y
+-CONFIG_LEDS_TRIGGER_GPIO=y
+-CONFIG_LEDS_TRIGGER_DEFAULT_ON=y
+-CONFIG_LEDS_TRIGGER_TRANSIENT=y
+-CONFIG_RTC_CLASS=y
+-CONFIG_RTC_DRV_DS1374=y
+-CONFIG_RTC_DRV_MXC=m
+-CONFIG_DMADEVICES=y
+-CONFIG_IMX_SDMA=y
+-CONFIG_IMX_DMA=y
+-# CONFIG_IOMMU_SUPPORT is not set
+-CONFIG_IIO=m
+-CONFIG_EXT2_FS=y
+-CONFIG_EXT3_FS=y
+-CONFIG_EXT3_FS_POSIX_ACL=y
+-CONFIG_EXT3_FS_SECURITY=y
+-# CONFIG_DNOTIFY is not set
+-CONFIG_MSDOS_FS=y
+-CONFIG_VFAT_FS=y
+-# CONFIG_PROC_PAGE_MONITOR is not set
+-CONFIG_TMPFS=y
+-CONFIG_JFFS2_FS=y
+-CONFIG_UBIFS_FS=y
+-CONFIG_NFS_FS=y
+-CONFIG_NFS_V4=y
+-CONFIG_ROOT_NFS=y
+-CONFIG_NLS_CODEPAGE_437=y
+-CONFIG_NLS_CODEPAGE_850=y
+-CONFIG_NLS_ISO8859_1=y
+-CONFIG_NLS_ISO8859_15=m
+-CONFIG_PRINTK_TIME=y
+-CONFIG_DEBUG_FS=y
+-# CONFIG_SCHED_DEBUG is not set
+-# CONFIG_DEBUG_PREEMPT is not set
+-CONFIG_DEBUG_INFO=y
+-# CONFIG_FTRACE is not set
+-CONFIG_DEBUG_LL=y
+-CONFIG_EARLY_PRINTK=y
+-# CONFIG_CRYPTO_ANSI_CPRNG is not set
+diff --git a/configs/armadeus_apf27_defconfig b/configs/armadeus_apf27_defconfig
+index 09d491c..409476f 100644
+--- a/configs/armadeus_apf27_defconfig
++++ b/configs/armadeus_apf27_defconfig
+@@ -4,7 +4,7 @@ BR2_arm926t=y
  
- ###############################################################################
-+comment "Legacy options removed in 2014.02"
-+
-+config BR2_PACKAGE_NETKITBASE
-+	bool "netkitbase has been removed"
-+	select BR2_LEGACY
-+	help
-+	  The 'netkitbase' package has been removed since it has been
-+	  deprecated since 2012.11. This package provided 'inetd'
-+	  which is replaced by 'xinet' and 'ping' which is replaced by
-+	  'busybox' or 'fping'.
-+
-+config BR2_PACKAGE_NETKITTELNET
-+	bool "netkittelnet has been removed"
-+	select BR2_LEGACY
-+	help
-+	  The 'netkittelnet' package has been removed since it has
-+	  been deprecated since 2012.11. 'busybox' provides a telnet
-+	  client and should be used instead.
-+
-+###############################################################################
- comment "Legacy options removed in 2013.11"
+ # Lock down headers to avoid breaking with new defaults
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.8.4"
++BR2_DEFAULT_KERNEL_VERSION="3.12.5"
  
- config BR2_PACKAGE_LVM2_DMSETUP_ONLY
-diff --git a/package/Config.in b/package/Config.in
-index 63ea528..be16714 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -851,8 +851,6 @@ source "package/ndisc6/Config.in"
- source "package/netatalk/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/netcat/Config.in"
--source "package/netkitbase/Config.in"
--source "package/netkittelnet/Config.in"
- endif
- source "package/netplug/Config.in"
- source "package/netsnmp/Config.in"
-diff --git a/package/netkitbase/Config.in b/package/netkitbase/Config.in
-deleted file mode 100644
-index 49d3b2e..0000000
---- a/package/netkitbase/Config.in
-+++ /dev/null
-@@ -1,13 +0,0 @@
--config BR2_PACKAGE_NETKITBASE
--	bool "netkitbase"
--	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
--	depends on BR2_USE_MMU # fork()
--	depends on BR2_DEPRECATED
--	help
--	  Old-style inetd.
--
--	  ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/
--
--comment "netkitbase needs a toolchain w/ RPC"
--	depends on BR2_USE_MMU && BR2_DEPRECATED
--	depends on !BR2_TOOLCHAIN_HAS_NATIVE_RPC
-diff --git a/package/netkitbase/netkitbase-gcc4.patch b/package/netkitbase/netkitbase-gcc4.patch
-deleted file mode 100644
-index 41fbce9..0000000
---- a/package/netkitbase/netkitbase-gcc4.patch
-+++ /dev/null
-@@ -1,12 +0,0 @@
--diff -ur netkit-base-0.17/inetd/servtab.c netkit-base-0.17-patched/inetd/servtab.c
----- netkit-base-0.17/inetd/servtab.c	2000-07-22 15:20:50.000000000 -0500
--+++ netkit-base-0.17-patched/inetd/servtab.c	2005-04-30 21:23:52.649630720 -0500
--@@ -771,7 +771,7 @@
-- 			return;
-- 		}
-- 		
---#define SWAP(type, a, b) {type c=(type)a; (type)a=(type)b; (type)b=(type)c;}
--+#define SWAP(type, a, b) {type c=(type)a; a=(type)b; b=(type)c;}
-- 
-- 		/*
-- 		 * sep->se_wait may be holding the pid of a daemon
-diff --git a/package/netkitbase/netkitbase-remove-bcopy.patch b/package/netkitbase/netkitbase-remove-bcopy.patch
-deleted file mode 100644
-index b74b85b..0000000
---- a/package/netkitbase/netkitbase-remove-bcopy.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--diff -ur netkit-base-0.17/inetd/builtins.c netkit-base-0.17-patched/inetd/builtins.c
----- netkit-base-0.17/inetd/builtins.c	2000-07-22 15:13:07.000000000 -0500
--+++ netkit-base-0.17-patched/inetd/builtins.c	2006-12-02 00:50:05.801209342 -0600
--@@ -140,10 +140,10 @@
-- 	text[LINESIZ + 1] = '\n';
-- 	for (rs = ring;;) {
-- 		if ((len = endring - rs) >= LINESIZ)
---			bcopy(rs, text, LINESIZ);
--+			memcpy(text, rs, LINESIZ);
-- 		else {
---			bcopy(rs, text, len);
---			bcopy(ring, text + len, LINESIZ - len);
--+			memcpy(text, rs, len);
--+			memcpy(text + len, ring, LINESIZ - len);
-- 		}
-- 		if (++rs == endring)
-- 			rs = ring;
--@@ -183,10 +183,10 @@
-- 		return;
-- 
-- 	if ((len = endring - rs) >= LINESIZ)
---		bcopy(rs, text, LINESIZ);
--+		memcpy(text, rs, LINESIZ);
-- 	else {
---		bcopy(rs, text, len);
---		bcopy(ring, text + len, LINESIZ - len);
--+		memcpy(text, rs, len);
--+		memcpy(text + len, ring, LINESIZ - len);
-- 	}
-- 	if (++rs == endring)
-- 		rs = ring;
-diff --git a/package/netkitbase/netkitbase.mk b/package/netkitbase/netkitbase.mk
-deleted file mode 100644
-index b17ee99..0000000
---- a/package/netkitbase/netkitbase.mk
-+++ /dev/null
-@@ -1,35 +0,0 @@
--################################################################################
--#
--# netkitbase
--#
--################################################################################
--
--NETKITBASE_VERSION = 0.17
--NETKITBASE_SOURCE  = netkit-base-$(NETKITBASE_VERSION).tar.gz
--NETKITBASE_SITE    = ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/
--NETKITBASE_LICENSE = BSD-4c
--
--define NETKITBASE_CONFIGURE_CMDS
--	# use ANSI syntax
--	$(SED) "s/main()/main(void)/;" $(NETKITBASE_DIR)/configure
--	# don't try to run cross compiled binaries while configuring things
--	$(SED) "s~./__conftest~#./__conftest~;" $(NETKITBASE_DIR)/configure
--	(cd $(@D); \
--		$(TARGET_CONFIGURE_OPTS) \
--		./configure \
--		--installroot=$(TARGET_DIR))
--endef
--
--define NETKITBASE_BUILD_CMDS
--	$(MAKE) -C $(@D)
--endef
--
--define NETKITBASE_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 0755 $(@D)/inetd/inetd $(TARGET_DIR)/usr/sbin/inetd
--	if [ ! -f $(TARGET_DIR)/etc/inetd.conf ]; then \
--		$(INSTALL) -D -m 0644 $(@D)/etc.sample/inetd.conf $(TARGET_DIR)/etc/inetd.conf; \
--		$(SED) "s/^\([a-z]\)/#\1/;" $(TARGET_DIR)/etc/inetd.conf; \
--	fi
--endef
--
--$(eval $(generic-package))
-diff --git a/package/netkittelnet/Config.in b/package/netkittelnet/Config.in
-deleted file mode 100644
-index da1b245..0000000
---- a/package/netkittelnet/Config.in
-+++ /dev/null
-@@ -1,13 +0,0 @@
--config BR2_PACKAGE_NETKITTELNET
--	bool "netkittelnet"
--	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
--	depends on BR2_DEPRECATED
--	select BR2_PACKAGE_NETKITBASE
--	help
--	  Standard Linux telnet client and server.
--
--	  ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/
--
--comment "netkittelnet needs a toolchain w/ RPC"
--	depends on BR2_DEPRECATED
--	depends on !BR2_TOOLCHAIN_HAS_NATIVE_RPC
-diff --git a/package/netkittelnet/netkittelnet-bcopy.patch b/package/netkittelnet/netkittelnet-bcopy.patch
-deleted file mode 100644
-index 0b40e9e..0000000
---- a/package/netkittelnet/netkittelnet-bcopy.patch
-+++ /dev/null
-@@ -1,57 +0,0 @@
--diff -ur netkit-telnet-0.17/telnetd/authenc.c netkit-telnet-0.17-patched/telnetd/authenc.c
----- netkit-telnet-0.17/telnetd/authenc.c	1999-12-12 08:59:44.000000000 -0600
--+++ netkit-telnet-0.17-patched/telnetd/authenc.c	2008-01-23 21:31:45.546793060 -0600
--@@ -35,7 +35,7 @@
--     int len;
-- {
--     if (nfrontp + len < netobuf + BUFSIZ) {
---	bcopy((void *)str, (void *)nfrontp, len);
--+	memcpy((void *)nfrontp, (void *)str, len);
-- 	nfrontp += len;
-- 	return(len);
--     }
--diff -ur netkit-telnet-0.17/telnetd/slc.c netkit-telnet-0.17-patched/telnetd/slc.c
----- netkit-telnet-0.17/telnetd/slc.c	1999-12-12 08:59:44.000000000 -0600
--+++ netkit-telnet-0.17-patched/telnetd/slc.c	2008-01-23 21:32:07.859024619 -0600
--@@ -432,7 +432,7 @@
-- 	    def_slclen = len;
-- 	    def_slcbuf = malloc((unsigned)len);
-- 	    if (def_slcbuf == NULL) return;  /* too bad */
---	    bcopy(ptr, def_slcbuf, len);
--+	    memcpy(def_slcbuf, ptr, len);
-- 	}
--     }
-- }
--diff -ur netkit-telnet-0.17/telnetd/sys_term.c netkit-telnet-0.17-patched/telnetd/sys_term.c
----- netkit-telnet-0.17/telnetd/sys_term.c	1999-12-17 08:28:47.000000000 -0600
--+++ netkit-telnet-0.17-patched/telnetd/sys_term.c	2008-01-23 21:32:27.583229320 -0600
--@@ -84,7 +84,7 @@
--  */
-- void copy_termbuf(char *cp, int len) {
--     if (len > sizeof(termbuf)) len = sizeof(termbuf);
---    bcopy(cp, (char *)&termbuf, len);
--+    memcpy((char *)&termbuf, cp, len);
--     termbuf2 = termbuf;
-- }
-- #endif /* defined(LINEMODE) && defined(TIOCPKT_IOCTL) */
--diff -ur netkit-telnet-0.17/telnetd/utility.c netkit-telnet-0.17-patched/telnetd/utility.c
----- netkit-telnet-0.17/telnetd/utility.c	1999-12-12 08:59:45.000000000 -0600
--+++ netkit-telnet-0.17-patched/telnetd/utility.c	2008-01-23 21:33:02.087587426 -0600
--@@ -248,7 +248,7 @@
-- 		next = nextitem(next);
-- 	    } while (wewant(next) && (nfrontp > next));
-- 	    length = next-thisitem;
---	    bcopy(thisitem, good, length);
--+	    memcpy(good, thisitem, length);
-- 	    good += length;
-- 	    thisitem = next;
-- 	} else {
--@@ -351,7 +351,7 @@
-- 		netflush();
-- 	}
-- 
---	bcopy(ptr, nfrontp, len);
--+	memcpy(nfrontp, ptr, len);
-- 	nfrontp += len;
-- 
-- }  /* end of writenet */
-diff --git a/package/netkittelnet/netkittelnet.mk b/package/netkittelnet/netkittelnet.mk
-deleted file mode 100644
-index ca3b930..0000000
---- a/package/netkittelnet/netkittelnet.mk
-+++ /dev/null
-@@ -1,36 +0,0 @@
--################################################################################
--#
--# netkittelnet
--#
--################################################################################
--
--NETKITTELNET_VERSION = 0.17
--NETKITTELNET_SOURCE  = netkit-telnet-$(NETKITTELNET_VERSION).tar.gz
--NETKITTELNET_SITE    = ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/
--NETKITTELNET_LICENSE = BSD-4c
--NETKITTELNET_DEPENDENCIES = netkitbase
--
--define NETKITTELNET_CONFIGURE_CMDS
--	# use ANSI syntax
--	$(SED) "s/main()/main(void)/;" $(@D)/configure
--	# Disable termcap support
--	$(SED) "s~\(.*termcap\.h.*\)~/* \1 */~;" $(@D)/telnetd/telnetd.c
--	# C++ support not needed for telnetd
--	$(SED) 's/CXX/CC/g' -e 's/conftest.cc/conftest.c/g' $(@D)/configure
--	(cd $(@D); \
--		$(TARGET_CONFIGURE_OPTS) \
--		./configure \
--		--installroot=$(TARGET_DIR))
--endef
--
--define NETKITTELNET_BUILD_CMDS
--	$(MAKE) SUB=telnetd -C $(@D)
--endef
--
--define NETKITTELNET_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 0755 $(@D)/telnetd/telnetd $(TARGET_DIR)/usr/sbin/telnetd
--	# Enable telnet in inetd
--	$(SED) "s~^#telnet.*~telnet\tstream\ttcp\tnowait\troot\t/usr/sbin/telnetd\t/usr/sbin/telnetd~;" $(TARGET_DIR)/etc/inetd.conf
--endef
--
--$(eval $(generic-package))
-diff --git a/package/netkittelnet/netkittelnet.patch b/package/netkittelnet/netkittelnet.patch
-deleted file mode 100644
-index ee4f37e..0000000
---- a/package/netkittelnet/netkittelnet.patch
-+++ /dev/null
-@@ -1,182 +0,0 @@
----- netkit-telnet-0.17/configure	Thu Apr 11 10:40:58 2002
--+++ FIXEDnetkittelnet/configure	Thu Apr 11 10:39:59 2002
--@@ -78,7 +78,6 @@
--     for TRY in egcs gcc g++ CC c++ cc; do
--        (
--            $TRY __conftest.c -o __conftest || exit 1;
---           ./__conftest || exit 1;
--        ) >/dev/null 2>&1 || continue;
--        CC=$TRY
--        break;
--@@ -94,7 +93,6 @@
--     echo -n 'Checking if C compiler works... '
--     if (
--           $CC __conftest.c -o __conftest || exit 1
---          ./__conftest || exit 1
--        ) >/dev/null 2>&1; then
--          echo 'yes'
--      else
--@@ -125,7 +123,6 @@
--     for TRY in egcs gcc g++ CC c++ cc; do
--        (
--            $TRY __conftest.cc -o __conftest || exit 1;
---           ./__conftest || exit 1;
--        ) >/dev/null 2>&1 || continue;
--        CXX=$TRY
--        break;
--@@ -138,18 +135,5 @@
--     fi
--     echo "$CXX"
---else
---    echo -n 'Checking if C++ compiler works... '
---    if (
---          $CXX __conftest.cc -o __conftest || exit 1
---          ./__conftest || exit 1
---       ) >/dev/null 2>&1; then
---         echo 'yes'
---     else
---         echo 'no'
---         echo 'Compiler '"$CXX"' does not exist or cannot compile C++; try another.'
---         rm -f __conftest*
---         exit
---     fi
-- fi
-- 
-- echo -n "Checking if $CXX accepts gcc warnings... "
--@@ -278,13 +274,11 @@
-- EOF
-- if (
--       $CXX $CXXFLAGS  __conftest.cc  -o __conftest || exit 1
---      ./__conftest || exit 1
--    ) >/dev/null 2>&1; then
--     echo 'yes'
-- else
--     if (
--           $CXX $CXXFLAGS -D__USE_BSD_SIGNAL __conftest.cc  -o __conftest || exit 1
---          ./__conftest || exit 1
--        ) >/dev/null 2>&1; then
--         echo '-D__USE_BSD_SIGNAL'
--         CFLAGS="$CFLAGS -D__USE_BSD_SIGNAL"
--@@ -292,6 +286,7 @@
--     else
--         echo 'no'
--         echo 'This package needs BSD signal semantics to run.'
--+		echo "$CXX $CXXFLAGS  -D__USE_BSD_SIGNAL __conftest.cc  -o __conftest failed"
--         rm -f __conftest*
--         exit
--     fi
--@@ -330,31 +325,6 @@
--         echo 'no'
--     fi
-- fi
---
---if [ x$NCURSES != x ]; then
---    LIBTERMCAP=-lncurses
---else
---    echo -n 'Checking for traditional termcap... '
---cat <<EOF >__conftest.cc
---#include <stdio.h>
---#include <termcap.h>
---int main() {
---    tgetent(NULL, NULL); return 0;
---}
---
---EOF
---    if (
---          $CXX $CXXFLAGS  __conftest.cc -ltermcap -o __conftest || exit 1
---       ) >/dev/null 2>&1; then
---        echo '-ltermcap'
---        LIBTERMCAP=-ltermcap
---    else
---        echo 'not found'
---        echo 'This package needs termcap to run.'
---        rm -f __conftest*
---        exit
---    fi
---fi
-- rm -f __conftest*
-- 
-- ##################################################
--@@ -468,7 +438,6 @@
-- else
--     if (
--           $CXX $CXXFLAGS -D_GNU_SOURCE __conftest.cc  -o __conftest || exit 1
---          ./__conftest || exit 1
--        ) >/dev/null 2>&1; then
--         echo '-D_GNU_SOURCE'
--         CFLAGS="$CFLAGS -D_GNU_SOURCE"
--@@ -501,20 +470,17 @@
-- EOF
-- if (
--       $CXX $CXXFLAGS  __conftest.cc $LIBBSD -o __conftest || exit 1
---      ./__conftest || exit 1
--    ) >/dev/null 2>&1; then
--     echo 'ok'
-- else
--     if (
--           $CXX $CXXFLAGS  __conftest.cc -lsnprintf $LIBBSD -o __conftest || exit 1
---          ./__conftest || exit 1
--        ) >/dev/null 2>&1; then
--         echo '-lsnprintf'
--         LIBS="$LIBS -lsnprintf"
--     else
--         if (
--               $CXX $CXXFLAGS  __conftest.cc -ldb $LIBBSD -o __conftest || exit 1
---              ./__conftest || exit 1
--            ) >/dev/null 2>&1; then
--             echo '-ldb'
--             LIBS="$LIBS -ldb"
--diff -urN netkit-telnet-0.17/telnetd/state.c netkit-telnet-0.17-dm/telnetd/state.c
----- netkit-telnet-0.17/telnetd/state.c	1999-12-12 11:41:44.000000000 -0800
--+++ netkit-telnet-0.17-dm/telnetd/state.c	2003-07-23 19:20:38.000000000 -0700
--@@ -43,10 +43,10 @@
-- 
-- static int envvarok(char *varp);
-- 
---static unsigned char doopt[] = { IAC, DO, '%', 'c', 0 };
---static unsigned char dont[] = { IAC, DONT, '%', 'c', 0 };
---unsigned char	will[] = { IAC, WILL, '%', 'c', 0 };
---unsigned char	wont[] = { IAC, WONT, '%', 'c', 0 };
--+//static unsigned char doopt[] = { IAC, DO, '%', 'c', 0 };
--+//static unsigned char dont[] = { IAC, DONT, '%', 'c', 0 };
--+//unsigned char	will[] = { IAC, WILL, '%', 'c', 0 };
--+//unsigned char	wont[] = { IAC, WONT, '%', 'c', 0 };
-- 
-- /*
--  * Buffer for sub-options, and macros
--@@ -422,7 +422,7 @@
-- 	    set_his_want_state_will(option);
-- 	do_dont_resp[option]++;
--     }
---    netoprintf((char *)doopt, option);
--+    netoprintf( "%c%c%c", IAC, DO, option );
--     
--     DIAG(TD_OPTIONS, printoption("td: send do", option));
-- }
--@@ -632,7 +632,7 @@
-- 	set_his_want_state_wont(option);
-- 	do_dont_resp[option]++;
--     }
---    netoprintf((char *) dont, option);
--+    netoprintf ( "%c%c%c", IAC, DONT, option );
-- 
--     DIAG(TD_OPTIONS, printoption("td: send dont", option));
-- }
--@@ -769,7 +769,7 @@
-- 	set_my_want_state_will(option);
-- 	will_wont_resp[option]++;
--     }
---    netoprintf((char *) will, option);
--+    netoprintf( "%c%c%c", IAC, WILL, option);
-- 
--     DIAG(TD_OPTIONS, printoption("td: send will", option));
-- }
--@@ -917,7 +917,7 @@
-- 	set_my_want_state_wont(option);
-- 	will_wont_resp[option]++;
--     }
---    netoprintf((char *)wont, option);
--+    netoprintf( "%c%c%c", IAC, WONT, option);
--     
--     DIAG(TD_OPTIONS, printoption("td: send wont", option));
-- }
+ # System
+ BR2_TARGET_GENERIC_HOSTNAME="apf27"
+@@ -20,9 +20,13 @@ BR2_TARGET_ROOTFS_UBI=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.8.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.5"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/armadeus/apf27/linux-3.8.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/armadeus/apf27/linux-3.12.config"
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0xA0008000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx27-apf27"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx27-apf27dev"
++
++# U-boot
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="apf27"
+-- 
+1.7.4.4
