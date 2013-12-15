@@ -1,79 +1,80 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Dec 2013 14:01:00 +0100
-Subject: [Buildroot] [git commit] python-pyasn: new package
-Message-ID: <20131215130826.B66D89BC97@busybox.osuosl.org>
+Date: Sun, 15 Dec 2013 13:41:30 +0100
+Subject: [Buildroot] [git commit] python-msgpack: new package
+Message-ID: <20131215130826.855FE9C025@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fe6e7a4f136ca92bda7e43c2a2191f484d220f19
+commit: http://git.buildroot.net/buildroot/commit/?id=c8e76a2d49d278d53e9d21e4df02ca079b3357a1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: license is LGPLv3+ / GPLv2+]
-Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+[Thomas: convert to the Python package infrastructure, added missing
+dependency on C++, inherited from msgpack.]
+
+Signed-off-by: Wojciech M. Zabolotny <wzab01@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in                    |    1 +
- package/python-pyasn/Config.in       |   13 +++++++++++++
- package/python-pyasn/python-pyasn.mk |   19 +++++++++++++++++++
- 3 files changed, 33 insertions(+), 0 deletions(-)
+ package/Config.in                        |    1 +
+ package/python-msgpack/Config.in         |   16 ++++++++++++++++
+ package/python-msgpack/python-msgpack.mk |   15 +++++++++++++++
+ 3 files changed, 32 insertions(+), 0 deletions(-)
 
 diff --git a/package/Config.in b/package/Config.in
-index 66b3591..2276b41 100644
+index 85bf106..a884de1 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -400,6 +400,7 @@ source "package/python-msgpack/Config.in"
+@@ -393,6 +393,7 @@ source "package/python-id3/Config.in"
+ source "package/python-ipy/Config.in"
+ source "package/python-mad/Config.in"
+ source "package/python-meld3/Config.in"
++source "package/python-msgpack/Config.in"
  source "package/python-netifaces/Config.in"
  source "package/python-nfc/Config.in"
  source "package/python-protobuf/Config.in"
-+source "package/python-pyasn/Config.in"
- source "package/python-pygame/Config.in"
- source "package/python-pyparsing/Config.in"
- source "package/python-pyro/Config.in"
-diff --git a/package/python-pyasn/Config.in b/package/python-pyasn/Config.in
+diff --git a/package/python-msgpack/Config.in b/package/python-msgpack/Config.in
 new file mode 100644
-index 0000000..a9f0014
+index 0000000..2075ee6
 --- /dev/null
-+++ b/package/python-pyasn/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_PYTHON_PYASN
-+	bool "python-pyasn"
++++ b/package/python-msgpack/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_PYTHON_MSGPACK
++	bool "python-msgpack"
 +	depends on BR2_PACKAGE_PYTHON
-+	depends on BR2_INSTALL_LIBSTDCPP
++	select BR2_PACKAGE_MSGPACK
++	depends on BR2_INSTALL_LIBSTDCPP # msgpack
 +	help
-+	  PyASN is a Python extension module that enables you to
-+	  perform very fast IP address to Autonomous System Number
-+	  lookups.
++	  MessagePack (http://msgpack.org/) is a fast, compact binary
++	  serialization format, suitable for similar data to JSON.
++	  This package provides CPython bindings for reading and
++	  writing MessagePack data.
 +
-+	  https://code.google.com/p/pyasn/
++	  https://pypi.python.org/pypi/msgpack-python/
 +
-+comment "python-pyasn needs a toolchain w/ C++"
-+        depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/python-pyasn/python-pyasn.mk b/package/python-pyasn/python-pyasn.mk
++comment "python-msgpack needs a toolchain w/ C++"
++	depends on BR2_PACKAGE_PYTHON
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/python-msgpack/python-msgpack.mk b/package/python-msgpack/python-msgpack.mk
 new file mode 100644
-index 0000000..b007222
+index 0000000..2a7c384
 --- /dev/null
-+++ b/package/python-pyasn/python-pyasn.mk
-@@ -0,0 +1,19 @@
++++ b/package/python-msgpack/python-msgpack.mk
+@@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# python-pyasn
++# python-msgpack
 +#
 +################################################################################
 +
-+PYTHON_PYASN_VERSION = 1.2
-+PYTHON_PYASN_SOURCE = PyASN-$(PYTHON_PYASN_VERSION).zip
-+PYTHON_PYASN_SITE = https://pyasn.googlecode.com/files
-+PYTHON_PYASN_LICENSE = LGPLv3+ (pyasn.cpp), GPLv2+ (libgds)
-+PYTHON_PYASN_SETUP_TYPE = distutils
-+
-+define PYTHON_PYASN_EXTRACT_CMDS
-+	unzip -d $(@D) $(DL_DIR)/$(PYTHON_PYASN_SOURCE)
-+	mv $(@D)/PyASN-$(PYTHON_PYASN_VERSION)/* $(@D)
-+	$(RM) -r $(@D)/PyASN-$(PYTHON_PYASN_VERSION)
-+endef
++PYTHON_MSGPACK_VERSION = 0.4.0
++PYTHON_MSGPACK_SOURCE = msgpack-python-$(PYTHON_MSGPACK_VERSION).tar.gz
++PYTHON_MSGPACK_SITE = https://pypi.python.org/packages/source/m/msgpack-python/
++PYTHON_MSGPACK_LICENSE = Apache License, Version 2.0
++PYTHON_MSGPACK_LICENSE_FILES = COPYING
++PYTHON_MSGPACK_SETUP_TYPE = setuptools
++PYTHON_MSGPACK_DEPENDENCIES = msgpack
 +
 +$(eval $(python-package))
