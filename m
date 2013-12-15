@@ -1,283 +1,83 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 15 Dec 2013 10:11:53 -0300
-Subject: [Buildroot] [PATCH] configs/qemu: bump relevant kernel/headers
-	versions
-Message-ID: <1387113113-29410-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 15 Dec 2013 14:14:51 +0100
+Subject: [Buildroot] [PATCH 2 of 2] infra: remove usage of pkgparentdir
+ in favor of pkgdir
+In-Reply-To: <CAAXf6LU6gjv-nH9r+az0gA1Ai=2BhEs1wf27f0-s63Sx403GAg@mail.gmail.com>
+References: <patchbomb.1384170790@argentina>
+ <8953db252a5816d2e988.1384170792@argentina>
+ <52816529.9010704@mind.be>
+ <CAAXf6LVMJ-EQemvYkvujm+zypQO_cufQq5=z7zz_tto2hug=Aw@mail.gmail.com>
+ <20131112120904.4e65d13f@skate>
+ <CAAXf6LX+_CGzfYwsAsLMQbUCYoO6Khvh7dcxkDRRt1BespkPGw@mail.gmail.com>
+ <5282302C.7000005@mind.be>
+ <CAAXf6LU6gjv-nH9r+az0gA1Ai=2BhEs1wf27f0-s63Sx403GAg@mail.gmail.com>
+Message-ID: <CAAXf6LVMXekNupYD7=0xRDcoA+Qc1cs=qj6juOADKpYazPOKMA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- configs/qemu_arm_nuri_defconfig         | 4 ++--
- configs/qemu_arm_vexpress_defconfig     | 4 ++--
- configs/qemu_microblazebe_mmu_defconfig | 2 +-
- configs/qemu_microblazeel_mmu_defconfig | 2 +-
- configs/qemu_mips64_malta_defconfig     | 4 ++--
- configs/qemu_mips64el_malta_defconfig   | 4 ++--
- configs/qemu_mips_malta_defconfig       | 4 ++--
- configs/qemu_mipsel_malta_defconfig     | 4 ++--
- configs/qemu_ppc_g3beige_defconfig      | 4 ++--
- configs/qemu_ppc_mpc8544ds_defconfig    | 4 ++--
- configs/qemu_ppc_virtex_ml507_defconfig | 4 ++--
- configs/qemu_sparc_ss10_defconfig       | 4 ++--
- configs/qemu_x86_64_defconfig           | 4 ++--
- configs/qemu_x86_defconfig              | 4 ++--
- 14 files changed, 26 insertions(+), 26 deletions(-)
+All,
 
-diff --git a/configs/qemu_arm_nuri_defconfig b/configs/qemu_arm_nuri_defconfig
-index 8cb1153..bddec64 100644
---- a/configs/qemu_arm_nuri_defconfig
-+++ b/configs/qemu_arm_nuri_defconfig
-@@ -15,11 +15,11 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
- 
- # Lock to 3.10 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.10.21"
-+BR2_DEFAULT_KERNEL_VERSION="3.10.24"
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.10.21"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.10.24"
- BR2_LINUX_KERNEL_DEFCONFIG="exynos4"
- BR2_LINUX_KERNEL_ZIMAGE=y
-diff --git a/configs/qemu_arm_vexpress_defconfig b/configs/qemu_arm_vexpress_defconfig
-index 4a4db1b..6f163c8 100644
---- a/configs/qemu_arm_vexpress_defconfig
-+++ b/configs/qemu_arm_vexpress_defconfig
-@@ -15,11 +15,11 @@ BR2_TARGET_ROOTFS_EXT2=y
- 
- # Lock to 3.12 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.12.2"
-+BR2_DEFAULT_KERNEL_VERSION="3.12.5"
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.2"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.5"
- BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
- BR2_LINUX_KERNEL_ZIMAGE=y
-diff --git a/configs/qemu_microblazebe_mmu_defconfig b/configs/qemu_microblazebe_mmu_defconfig
-index f22243f..d5f780b 100644
---- a/configs/qemu_microblazebe_mmu_defconfig
-+++ b/configs/qemu_microblazebe_mmu_defconfig
-@@ -12,7 +12,7 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.2"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.5"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazebe-mmu/linux-3.12.config"
- BR2_LINUX_KERNEL_LINUX_BIN=y
-diff --git a/configs/qemu_microblazeel_mmu_defconfig b/configs/qemu_microblazeel_mmu_defconfig
-index 3d6daa2..54d5834 100644
---- a/configs/qemu_microblazeel_mmu_defconfig
-+++ b/configs/qemu_microblazeel_mmu_defconfig
-@@ -12,7 +12,7 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.2"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.5"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazeel-mmu/linux-3.12.config"
- BR2_LINUX_KERNEL_LINUX_BIN=y
-diff --git a/configs/qemu_mips64_malta_defconfig b/configs/qemu_mips64_malta_defconfig
-index 2461325..19423c2 100644
---- a/configs/qemu_mips64_malta_defconfig
-+++ b/configs/qemu_mips64_malta_defconfig
-@@ -8,12 +8,12 @@ BR2_TARGET_ROOTFS_EXT2=y
- 
- # Lock to 3.12 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.12.2"
-+BR2_DEFAULT_KERNEL_VERSION="3.12.5"
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.2"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.5"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64-malta/linux-3.12.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_mips64el_malta_defconfig b/configs/qemu_mips64el_malta_defconfig
-index 0d780f4..2f7405f 100644
---- a/configs/qemu_mips64el_malta_defconfig
-+++ b/configs/qemu_mips64el_malta_defconfig
-@@ -11,12 +11,12 @@ BR2_TARGET_ROOTFS_EXT2=y
- 
- # Lock to 3.12 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.12.2"
-+BR2_DEFAULT_KERNEL_VERSION="3.12.5"
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.2"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.5"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64el-malta/linux-3.12.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_mips_malta_defconfig b/configs/qemu_mips_malta_defconfig
-index bc1edd6..dc28087 100644
---- a/configs/qemu_mips_malta_defconfig
-+++ b/configs/qemu_mips_malta_defconfig
-@@ -8,12 +8,12 @@ BR2_TARGET_ROOTFS_EXT2=y
- 
- # Lock to 3.12 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.12.2"
-+BR2_DEFAULT_KERNEL_VERSION="3.12.5"
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.2"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.5"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips-malta/linux-3.12.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_mipsel_malta_defconfig b/configs/qemu_mipsel_malta_defconfig
-index c654351..6a73e4c 100644
---- a/configs/qemu_mipsel_malta_defconfig
-+++ b/configs/qemu_mipsel_malta_defconfig
-@@ -8,12 +8,12 @@ BR2_TARGET_ROOTFS_EXT2=y
- 
- # Lock to 3.12 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.12.2"
-+BR2_DEFAULT_KERNEL_VERSION="3.12.5"
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.2"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.5"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mipsel-malta/linux-3.12.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_ppc_g3beige_defconfig b/configs/qemu_ppc_g3beige_defconfig
-index a6ced5e..f6603a0 100644
---- a/configs/qemu_ppc_g3beige_defconfig
-+++ b/configs/qemu_ppc_g3beige_defconfig
-@@ -8,12 +8,12 @@ BR2_TARGET_ROOTFS_EXT2=y
- 
- # Lock to 3.12 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.12.2"
-+BR2_DEFAULT_KERNEL_VERSION="3.12.5"
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.2"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.5"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/powerpc-g3beige/linux-3.12.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_ppc_mpc8544ds_defconfig b/configs/qemu_ppc_mpc8544ds_defconfig
-index 745a3ca..cc90657 100644
---- a/configs/qemu_ppc_mpc8544ds_defconfig
-+++ b/configs/qemu_ppc_mpc8544ds_defconfig
-@@ -8,12 +8,12 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
- 
- # Lock to 3.12 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.12.2"
-+BR2_DEFAULT_KERNEL_VERSION="3.12.5"
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.2"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.5"
- BR2_LINUX_KERNEL_DEFCONFIG="mpc85xx"
- BR2_LINUX_KERNEL_VMLINUX=y
- 
-diff --git a/configs/qemu_ppc_virtex_ml507_defconfig b/configs/qemu_ppc_virtex_ml507_defconfig
-index f79feb5..99f8967 100644
---- a/configs/qemu_ppc_virtex_ml507_defconfig
-+++ b/configs/qemu_ppc_virtex_ml507_defconfig
-@@ -8,7 +8,7 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
- 
- # Lock to 3.12 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.12.2"
-+BR2_DEFAULT_KERNEL_VERSION="3.12.5"
- 
- # Use soft float
- BR2_SOFT_FLOAT=y
-@@ -16,7 +16,7 @@ BR2_SOFT_FLOAT=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.2"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.5"
- BR2_LINUX_KERNEL_DEFCONFIG="44x/virtex5"
- BR2_LINUX_KERNEL_VMLINUX=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-diff --git a/configs/qemu_sparc_ss10_defconfig b/configs/qemu_sparc_ss10_defconfig
-index 82f5485..95803e7 100644
---- a/configs/qemu_sparc_ss10_defconfig
-+++ b/configs/qemu_sparc_ss10_defconfig
-@@ -8,11 +8,11 @@ BR2_TARGET_ROOTFS_EXT2=y
- 
- # Lock to 3.12 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.12.2"
-+BR2_DEFAULT_KERNEL_VERSION="3.12.5"
- 
- # Linux kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.2"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.5"
- BR2_LINUX_KERNEL_DEFCONFIG="sparc32"
- BR2_LINUX_KERNEL_ZIMAGE=y
-diff --git a/configs/qemu_x86_64_defconfig b/configs/qemu_x86_64_defconfig
-index 811f968..67fc685 100644
---- a/configs/qemu_x86_64_defconfig
-+++ b/configs/qemu_x86_64_defconfig
-@@ -11,11 +11,11 @@ BR2_TARGET_ROOTFS_EXT2=y
- 
- # Lock to 3.12 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.12.2"
-+BR2_DEFAULT_KERNEL_VERSION="3.12.5"
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.2"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.5"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux-3.12.config"
-diff --git a/configs/qemu_x86_defconfig b/configs/qemu_x86_defconfig
-index d642c45..9b45ce8 100644
---- a/configs/qemu_x86_defconfig
-+++ b/configs/qemu_x86_defconfig
-@@ -12,11 +12,11 @@ BR2_TARGET_ROOTFS_EXT2=y
- 
- # Lock to 3.12 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.12.2"
-+BR2_DEFAULT_KERNEL_VERSION="3.12.5"
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.2"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.5"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-3.12.config"
--- 
-1.8.3.2
+On Thu, Dec 5, 2013 at 3:53 PM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+> Thomas,
+>
+> On Tue, Nov 12, 2013 at 2:42 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> [..]
+>>>
+>>>>
+>>>>   <foo>_BUILDDIR => points to the package build directory in $(BUILD_DIR)
+>>>>
+>>>>   <foo>_SRCDIR => points to the package source directory (currently
+>>>>                   identical to <foo>_BUILDDIR, would change when we
+>>>>                   introduce OOT build for packages). Actually, more than
+>>>>                   half of the patch set I have to introduce OOT is about
+>>>>                   using <foo>_SRCDIR vs <foo>_BUILDDIR in the right
+>>>>                   places.
+>>>>
+>>>>   <foo>_DL_DIR => same as before.
+>>>
+>>>
+>>> In general, I think the new variable names make sense.
+>>
+>>
+>>  +1.
+>>
+>>  ThomasP, perhaps you can resubmit the patches for <foo>_SRCDIR vs
+>> <foo>_BUILDDIR, since they can be applied independently of OOT.
+>>
+>
+> Thomas, could you resubmit or point me to these patches? Is it work in
+> progress or pretty much ready?
+>
+> I'm going to take up this patch series during this release cycle...
+
+Looking again to this, there already is a FOO_SRCDIR and FOO_BUILDDIR:
+
+$(2)_DL_DIR     =  $$(DL_DIR)/$$($(2)_BASE_NAME)
+$(2)_DIR        =  $$(BUILD_DIR)/$$($(2)_BASE_NAME)
+$(2)_SRCDIR     = $$($(2)_DIR)/$$($(2)_SUBDIR)
+$(2)_BUILDDIR   ?= $$($(2)_SRCDIR)
+
+There may be some overlay between FOO_DIR and FOO_SRCDIR, which is
+identical for many packages (those that do not have FOO_SUBDIR set).
+
+Additionally, the naming policy is not uniform now (underscores). We
+could either keep it as it is, or rename SRCDIR to SRC_DIR and
+BUILDDIR to BUILD_DIR. There are only very few occurrences of these
+variables, so it is certainly doable. However, there is also
+FOO_OVERRIDE_SRCDIR which is something visible externally and may be
+more difficult to change (from a usability perspective).
+Inputs?
+
+However, to meet the comments on this particular patch, I think we can simply:
+- introduce $(2)_PKGDIR (or $(2)_PKG_DIR, depending on the above discussion)
+- remove the fourth parameter to inner-generic package ($(pkgdir)), as
+suggested by Arnout
+
+What do you think?
+
+Best regards,
+Thomas
