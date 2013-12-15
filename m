@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 15 Dec 2013 09:37:59 +0100
-Subject: [Buildroot] [PATCH v3] erlang: add option to enable SMP support
-In-Reply-To: <1386946571-12276-1-git-send-email-fhunleth@troodon-software.com>
- (Frank Hunleth's message of "Fri, 13 Dec 2013 09:56:11 -0500")
-References: <1386946571-12276-1-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <87txeawlug.fsf@dell.be.48ers.dk>
+Date: Sun, 15 Dec 2013 09:38:59 +0100
+Subject: [Buildroot] [PATCH] erlang: bump to version R16B03
+In-Reply-To: <1386823184-607-1-git-send-email-fhunleth@troodon-software.com>
+ (Frank Hunleth's message of "Wed, 11 Dec 2013 23:39:44 -0500")
+References: <1386823184-607-1-git-send-email-fhunleth@troodon-software.com>
+Message-ID: <87ppoywlss.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +13,25 @@ To: buildroot@busybox.net
 
 >>>>> "Frank" == Frank Hunleth <fhunleth@troodon-software.com> writes:
 
- > Erlang builds two emulators depending on whether SMP is supported or
- > not. If it is known that the target does not support SMP, turning off
- > the SMP emulator saves compile time and reduces the size of the
- > installation.
-
  > Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
  > ---
- > Changes v2 -> v3: (Arnout's comments)
- >   - Replaced 'depends on' with 'if...endif'
- >   - Switched check to positive logic
- > Changes v1 -> v2: (Baruch's comments)
- >   - added sign-off
+ >  package/erlang/erlang.mk | 2 +-
+ >  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed, thanks.
+ > diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
+ > index 4a94af0..32d18e4 100644
+ > --- a/package/erlang/erlang.mk
+ > +++ b/package/erlang/erlang.mk
+ > @@ -4,7 +4,7 @@
+ >  #
+ >  ################################################################################
+ 
+ > -ERLANG_VERSION = R16B01
+ > +ERLANG_VERSION = R16B03
+
+I was just about to commit this, but erlang.org is apparently down :/
+I'll wait until it is back online to not break the autobuilders / people
+using git.
 
 -- 
 Bye, Peter Korsgaard
