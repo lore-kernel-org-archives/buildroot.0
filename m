@@ -1,38 +1,41 @@
-From: Thierry Bultel <thierry.bultel@wanadoo.fr>
-Date: Sun, 15 Dec 2013 21:50:44 +0100
-Subject: [Buildroot] [PATCH 1/1] Do not use an initrd in iso image when
-	using initramfs
-Message-ID: <1387140644-22545-1-git-send-email-thierry.bultel@wanadoo.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 15 Dec 2013 22:14:45 +0100
+Subject: [Buildroot] [PATCH] apf27: update configuration
+In-Reply-To: <1387138008-7830-1-git-send-email-tremyfr@yahoo.fr> (Philippe
+ Reynes's message of "Sun, 15 Dec 2013 21:06:48 +0100")
+References: <1387138008-7830-1-git-send-email-tremyfr@yahoo.fr>
+Message-ID: <87y53lu88q.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When using initramfs, it is useless to put an initrd in the iso image.
-This patch makes the image to only contain the kernel image, and
-also removes the initrd line from menu.lst
+>>>>> "Philippe" == Philippe Reynes <tremyfr@yahoo.fr> writes:
 
-Signed-off-by: Thierry Bultel <thierry.bultel@wanadoo.fr>
----
- fs/iso9660/iso9660.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ > - move kernel 3.8.3 to 3.12.5
+ > - enable pwm_imx in the kernel configuration
+ > - add u-boot
 
-diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
-index 979a0b2..1f9c62e 100644
---- a/fs/iso9660/iso9660.mk
-+++ b/fs/iso9660/iso9660.mk
-@@ -17,7 +17,11 @@ $(BINARIES_DIR)/rootfs.iso9660: host-cdrkit host-fakeroot linux rootfs-cpio grub
- 	cp $(GRUB_DIR)/stage2/stage2_eltorito $(ISO9660_TARGET_DIR)/boot/grub/
- 	cp $(ISO9660_BOOT_MENU) $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
- 	cp $(LINUX_IMAGE_PATH) $(ISO9660_TARGET_DIR)/kernel
-+ifneq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
- 	cp $(BINARIES_DIR)/rootfs.cpio$(ROOTFS_CPIO_COMPRESS_EXT) $(ISO9660_TARGET_DIR)/initrd
-+else
-+	sed -i -e '/initrd/d'  $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
-+endif
- 	# Use fakeroot to pretend all target binaries are owned by root
- 	rm -f $(FAKEROOT_SCRIPT)
- 	echo "chown -R 0:0 $(ISO9660_TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
+ > Acked-by: Eric Jarrige <eric.jarrige@armadeus.org>
+ > Acked-by: Julien Boibessot <julien.boibessot@armadeus.com>
+ > Signed-off-by: Philippe Reynes <tremyfr@yahoo.fr>
+ > ---
+ >  board/armadeus/apf27/linux-3.12.config |  230 ++++++++++++++++++++++++++++++++
+ >  board/armadeus/apf27/linux-3.8.config  |  229 -------------------------------
+ >  configs/armadeus_apf27_defconfig       |   12 +-
+ >  3 files changed, 238 insertions(+), 233 deletions(-)
+ >  create mode 100644 board/armadeus/apf27/linux-3.12.config
+ >  delete mode 100644 board/armadeus/apf27/linux-3.8.config
+
+Committed, thanks.
+
+Please enable rename detection in git for future patches, that would
+have made this patch a lot smaller (E.G. easier to review).
+
+You can do something like this to enable it globally:
+
+git config --global diff.renames copy
+
 -- 
-1.7.1
+Bye, Peter Korsgaard
