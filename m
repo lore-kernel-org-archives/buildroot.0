@@ -1,69 +1,84 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Dec 2013 21:05:44 +0100
-Subject: [Buildroot] [git commit] xconsole: add new package
-Message-ID: <20131215201538.3E36E9C036@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 15 Dec 2013 21:34:15 +0100
+Subject: [Buildroot] [PATCH 1/1] smcroute: new package
+In-Reply-To: <1386872059-28046-1-git-send-email-mlweber1@rockwellcollins.com>
+References: <1386872059-28046-1-git-send-email-mlweber1@rockwellcollins.com>
+Message-ID: <3a2395ee-73bc-4723-a368-61194e9c0a08@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5d23c700e2d9a4bcf73e303bbcb9554117ff9275
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Matt Weber <mlweber1@rockwellcollins.com> wrote:
+>
+>Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
+>Signed-off-by: Sean Gerhardt <sagerhar@rockwellcollins.com>
+>---
+> package/Config.in            |    1 +
+> package/smcroute/Config.in   |   11 +++++++++++
+> package/smcroute/smcroute.mk |   15 +++++++++++++++
+> 3 files changed, 27 insertions(+), 0 deletions(-)
+> create mode 100755 package/smcroute/Config.in
+> create mode 100755 package/smcroute/smcroute.mk
+>
+>diff --git a/package/Config.in b/package/Config.in
+>index 40c9e31..fd04224 100644
+>--- a/package/Config.in
+>+++ b/package/Config.in
+>@@ -880,6 +880,7 @@ source "package/rtptools/Config.in"
+> source "package/samba/Config.in"
+> source "package/sconeserver/Config.in"
+> source "package/ser2net/Config.in"
+>+source "package/smcroute/Config.in"
+> source "package/socat/Config.in"
+> source "package/socketcand/Config.in"
+> source "package/spawn-fcgi/Config.in"
+>diff --git a/package/smcroute/Config.in b/package/smcroute/Config.in
+>new file mode 100755
+>index 0000000..a66cb94
+>--- /dev/null
+>+++ b/package/smcroute/Config.in
+>@@ -0,0 +1,11 @@
+>+config BR2_PACKAGE_SMCROUTE
+>+	bool "smcroute"
+>+	help
+>+	  SMCRoute is a command line tool to manipulate the multicast
+>+	  routes of a UNI kernel. It supports both IPv4 and IPv6 multicast
+>+	  routing.  SMCRoute can be  used as an alternative to dynamic
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/x11r7/Config.in                      |    1 +
- package/x11r7/xapp_xconsole/Config.in        |    9 +++++++++
- package/x11r7/xapp_xconsole/xapp_xconsole.mk |   15 +++++++++++++++
- 3 files changed, 25 insertions(+), 0 deletions(-)
+Twice double space on this line.
 
-diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index 15e2f8b..fe0674c 100644
---- a/package/x11r7/Config.in
-+++ b/package/x11r7/Config.in
-@@ -88,6 +88,7 @@ if BR2_PACKAGE_XORG7
- 		source package/x11r7/xapp_xclipboard/Config.in
- 		source package/x11r7/xapp_xclock/Config.in
- 		source package/x11r7/xapp_xcmsdb/Config.in
-+		source package/x11r7/xapp_xconsole/Config.in
- 		source package/x11r7/xapp_xcursorgen/Config.in
- 		source package/x11r7/xapp_xdbedizzy/Config.in
- 		source package/x11r7/xapp_xditview/Config.in
-diff --git a/package/x11r7/xapp_xconsole/Config.in b/package/x11r7/xapp_xconsole/Config.in
-new file mode 100644
-index 0000000..7863afd
---- /dev/null
-+++ b/package/x11r7/xapp_xconsole/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_XAPP_XCONSOLE
-+	bool "xconsole"
-+	select BR2_PACKAGE_XLIB_LIBX11
-+	select BR2_PACKAGE_XLIB_LIBXAW
-+	select BR2_PACKAGE_XLIB_LIBXT
-+	select BR2_PACKAGE_XPROTO_XPROTO
-+	select BR2_PACKAGE_XLIB_LIBXMU
-+	help
-+	  xconsole - monitor system console messages with X
-diff --git a/package/x11r7/xapp_xconsole/xapp_xconsole.mk b/package/x11r7/xapp_xconsole/xapp_xconsole.mk
-new file mode 100644
-index 0000000..b04b737
---- /dev/null
-+++ b/package/x11r7/xapp_xconsole/xapp_xconsole.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# xapp_xconsole
-+#
-+################################################################################
-+
-+XAPP_XCONSOLE_VERSION = 1.0.6
-+XAPP_XCONSOLE_SOURCE = xconsole-$(XAPP_XCONSOLE_VERSION).tar.bz2
-+XAPP_XCONSOLE_SITE = http://xorg.freedesktop.org/releases/individual/app
-+XAPP_XCONSOLE_LICENSE = MIT
-+XAPP_XCONSOLE_LICENSE_FILES = COPYING
-+XAPP_XCONSOLE_DEPENDENCIES = xlib_libX11 xlib_libXaw xlib_libXt xproto_xproto \
-+			     xlib_libXmu
-+
-+$(eval $(autotools-package))
+>+	  multicast routers like mrouted or pimd in setups where static
+>+	  multicast routes should be maintained and/or no proper IGMP or
+>+	  MLD signaling exists.
+>+
+>+	  https://github.com/troglobit/smcroute
+>diff --git a/package/smcroute/smcroute.mk b/package/smcroute/smcroute.mk
+>new file mode 100755
+>index 0000000..82efa81
+>--- /dev/null
+>+++ b/package/smcroute/smcroute.mk
+>@@ -0,0 +1,16 @@
+>+################################################################################
+>+#
+>+# smcroute
+>+#
+>+################################################################################
+>+SMCROUTE_VERSION =  1.99.2
+
+Double space
+
+>+SMCROUTE_SITE = $(call github,troglobit,smcroute,$(SMCROUTE_VERSION))
+>+SMCROUTE_SOURCE = troglobit-smcroute-$(SMCROUTE_VERSION)-0-g58388f6.tar.gz
+
+Why is it needed to specify _SOURCE here? It shouldn't be .. 
+
+>+SMCROUTE_LICENSE = GPLv2+
+>+SMCROUTE_LICENSE_FILES = COPYING
+>+
+>+SMCROUTE_CONF_OPT = ac_cv_func_setpgrp_void=yes
+>+#BUG:The package Makefile uses CC?= even though the package is autotools based
+>+SMCROUTE_MAKE_ENV = $(TARGET_CONFIGURE_OPTS)
+>+
+>+$(eval $(autotools-package))
