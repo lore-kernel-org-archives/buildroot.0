@@ -1,109 +1,44 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 15 Dec 2013 09:28:34 -0300
-Subject: [Buildroot] [PATCHv2] php: bump to version 5.5.7
-Message-ID: <1387110514-28144-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 15 Dec 2013 13:50:52 +0100
+Subject: [Buildroot] [PATCHv2 01/36] package: introduce Python package
+	infrastructure
+In-Reply-To: <20131212083535.3dcca6c2@skate> (Thomas Petazzoni's message of
+ "Thu, 12 Dec 2013 08:35:35 +0100")
+References: <1386793631-14026-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1386793631-14026-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ <CAHXCMMLA1U-mQ76ve14MswJHiL947uhw8FiewHX_jqezzs+vsA@mail.gmail.com>
+ <20131212083535.3dcca6c2@skate>
+Message-ID: <87iouqwa4z.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-v2:
-Add !IPv6 comment for sockets support.
-This is now a security bump for CVE-2013-4073 & CVE-2013-6420.
+ > Dear Samuel Martin,
+ > (Would be good to trim down a little bit the e-mails you are replying
+ > to, to keep only the relevant parts. Thanks! :-))
 
- package/php/Config.ext | 17 ++++++-----------
- package/php/php.mk     | 14 ++------------
- 2 files changed, 8 insertions(+), 23 deletions(-)
+ > On Wed, 11 Dec 2013 23:51:10 +0100, Samuel Martin wrote:
 
-diff --git a/package/php/Config.ext b/package/php/Config.ext
-index 23d2306..2ffa2c2 100644
---- a/package/php/Config.ext
-+++ b/package/php/Config.ext
-@@ -91,17 +91,6 @@ config BR2_PACKAGE_PHP_EXT_DBA_INI
- 
- endif
- 
--config BR2_PACKAGE_PHP_EXT_SQLITE
--	bool "SQLite"
--	help
--	  Legacy SQLite2 support
--
--config BR2_PACKAGE_PHP_EXT_SQLITE_UTF8
--	bool "sqlite UTF8 support"
--	depends on BR2_PACKAGE_PHP_EXT_SQLITE
--	help
--	  UTF8 support for sqlite
--
- config BR2_PACKAGE_PHP_EXT_MYSQL
- 	bool "Mysql"
- 	depends on BR2_INSTALL_LIBSTDCPP
-@@ -227,6 +216,7 @@ config BR2_PACKAGE_PHP_EXT_FTP
- 
- config BR2_PACKAGE_PHP_EXT_SNMP
- 	bool "SNMP"
-+	depends on BR2_USE_MMU # netsnmp fork()
- 	select BR2_PACKAGE_NETSNMP
- 	select BR2_PACKAGE_NETSNMP_ENABLE_MIBS
- 	help
-@@ -234,13 +224,18 @@ config BR2_PACKAGE_PHP_EXT_SNMP
- 
- config BR2_PACKAGE_PHP_EXT_SOCKETS
- 	bool "sockets"
-+	depends on BR2_INET_IPV6
- 	help
- 	  Sockets support
- 
-+comment "sockets support needs a toolchain w/ IPv6"
-+	depends on !BR2_INET_IPV6
-+
- comment "Process Control"
- 
- config BR2_PACKAGE_PHP_EXT_PCNTL
- 	bool "PCNTL"
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  Process control support
- 
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 3e284f2..8b4a727 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,12 +4,13 @@
- #
- ################################################################################
- 
--PHP_VERSION = 5.3.27
-+PHP_VERSION = 5.5.6
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_SITE = http://www.php.net/distributions
- PHP_INSTALL_STAGING = YES
- PHP_INSTALL_STAGING_OPT = INSTALL_ROOT=$(STAGING_DIR) install
- PHP_INSTALL_TARGET_OPT = INSTALL_ROOT=$(TARGET_DIR) install
-+PHP_DEPENDENCIES = host-pkgconf
- PHP_LICENSE = PHP
- PHP_LICENSE_FILES = LICENSE
- PHP_CONF_OPT =  --mandir=/usr/share/man \
-@@ -125,17 +126,6 @@ ifeq ($(BR2_PACKAGE_PHP_EXT_READLINE),y)
- 	PHP_DEPENDENCIES += readline
- endif
- 
--### Legacy sqlite2 support
--ifeq ($(BR2_PACKAGE_PHP_EXT_SQLITE),y)
--	PHP_CONF_OPT += --with-sqlite
--ifneq ($(BR2_LARGEFILE),y)
--	PHP_CFLAGS += -DSQLITE_DISABLE_LFS
--endif
--ifeq ($(BR2_PACKAGE_PHP_EXT_SQLITE_UTF8),y)
--	PHP_CONF_OPT += --enable-sqlite-utf8
--endif
--endif
--
- ### Native MySQL extensions
- ifeq ($(BR2_PACKAGE_PHP_EXT_MYSQL),y)
- 	PHP_CONF_OPT += --with-mysql=$(STAGING_DIR)/usr
+ >> > +One variable specific to the Python infrastructure is mandatory:
+ >> > +
+ >> > +* +PYTHON_FOO_BUILD_TYPE+, to define which Python build system is used
+ >> >
+ >> s/PYTHON_FOO_BUILD_TYPE/PYTHON_FOO_SETUP_TYPE/
+
+ > Aah, yes, indeed. I named it _BUILD_TYPE originally, but then changed
+ > my mind and renamed it _SETUP_TYPE, but forgot to adjust my
+ > documentation.
+
+ > I will wait for some other comments to show up. If any, I will address
+ > this one in v3. If no further comments are made, hopefully Peter can
+ > fix that typo when applying the patch (which would avoid the need for
+ > me to respam the list with another set of 37 patches).
+
+Sure, committed with that fixed, thanks.
+
 -- 
-1.8.3.2
+Bye, Peter Korsgaard
