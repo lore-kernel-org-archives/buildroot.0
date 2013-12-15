@@ -1,72 +1,71 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Dec 2013 13:41:31 +0100
-Subject: [Buildroot] [git commit] python-configobj: new package
-Message-ID: <20131215130826.8C4BB9C035@busybox.osuosl.org>
+Date: Sun, 15 Dec 2013 14:00:43 +0100
+Subject: [Buildroot] [git commit] python-json-schema-validator: new package
+Message-ID: <20131215130826.A90D09C025@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=494c8eb54b051d45b43d833a3e41f5735cd8075e
+commit: http://git.buildroot.net/buildroot/commit/?id=50872e2dbef90a1326430ae8702ca25baf35de8c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Thomas: convert to the Python package infrastructure.]
-
-Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+[Thomas: convert to the Python package infrastructure, fix license
+informations.]
+[Peter: there is no LICENSE.txt]
+Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in                            |    1 +
- package/python-configobj/Config.in           |   10 ++++++++++
- package/python-configobj/python-configobj.mk |   14 ++++++++++++++
- 3 files changed, 25 insertions(+), 0 deletions(-)
+ package/Config.in                                  |    1 +
+ package/python-json-schema-validator/Config.in     |    8 ++++++++
+ .../python-json-schema-validator.mk                |   14 ++++++++++++++
+ 3 files changed, 23 insertions(+), 0 deletions(-)
 
 diff --git a/package/Config.in b/package/Config.in
-index a884de1..3316d0f 100644
+index 097ae79..4d5ae7a 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -386,6 +386,7 @@ source "package/python/Config.in"
- if BR2_PACKAGE_PYTHON
- menu "external python modules"
- source "package/python-bottle/Config.in"
-+source "package/python-configobj/Config.in"
- source "package/python-crc16/Config.in"
- source "package/python-dialog/Config.in"
+@@ -392,6 +392,7 @@ source "package/python-dialog/Config.in"
  source "package/python-dpkt/Config.in"
-diff --git a/package/python-configobj/Config.in b/package/python-configobj/Config.in
+ source "package/python-id3/Config.in"
+ source "package/python-ipy/Config.in"
++source "package/python-json-schema-validator/Config.in"
+ source "package/python-keyring/Config.in"
+ source "package/python-mad/Config.in"
+ source "package/python-meld3/Config.in"
+diff --git a/package/python-json-schema-validator/Config.in b/package/python-json-schema-validator/Config.in
 new file mode 100644
-index 0000000..fc57e26
+index 0000000..6ae1eb1
 --- /dev/null
-+++ b/package/python-configobj/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_PYTHON_CONFIGOBJ
-+	bool "python-configobj"
++++ b/package/python-json-schema-validator/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_JSON_SCHEMA_VALIDATOR
++	bool "python-json-schema-validator"
 +	depends on BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON_VERSIONTOOLS
 +	help
-+	  ConfigObj is a simple but powerful config file reader and
-+	  writer: an ini file round tripper. Its main feature is that
-+	  it is very easy to use, with a straightforward programmer's
-+	  interface and a simple syntax for config files.
++	  JSON Schema Validator
 +
-+	  http://www.voidspace.org.uk/python/configobj.html
-diff --git a/package/python-configobj/python-configobj.mk b/package/python-configobj/python-configobj.mk
++	  https://pypi.python.org/pypi/json-schema-validator
+diff --git a/package/python-json-schema-validator/python-json-schema-validator.mk b/package/python-json-schema-validator/python-json-schema-validator.mk
 new file mode 100644
-index 0000000..5211b1d
+index 0000000..472b1c0
 --- /dev/null
-+++ b/package/python-configobj/python-configobj.mk
++++ b/package/python-json-schema-validator/python-json-schema-validator.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-configobj
++# python-json-schema-validator
 +#
 +################################################################################
 +
-+PYTHON_CONFIGOBJ_VERSION = 4.7.2
-+PYTHON_CONFIGOBJ_SOURCE = configobj-$(PYTHON_CONFIGOBJ_VERSION).tar.gz
-+PYTHON_CONFIGOBJ_SITE = http://pypi.python.org/packages/source/c/configobj
-+PYTHON_CONFIGOBJ_LICENSE = BSD-3c
-+# License only mentioned in the source
-+PYTHON_CONFIGOBJ_SETUP_TYPE = distutils
++PYTHON_JSON_SCHEMA_VALIDATOR_VERSION = 2.3
++PYTHON_JSON_SCHEMA_VALIDATOR_SOURCE = json-schema-validator-$(PYTHON_JSON_SCHEMA_VALIDATOR_VERSION).tar.gz
++PYTHON_JSON_SCHEMA_VALIDATOR_SITE = http://pypi.python.org/packages/source/j/json-schema-validator/
++PYTHON_JSON_SCHEMA_VALIDATOR_LICENSE = LGPLv3
++PYTHON_JSON_SCHEMA_VALIDATOR_SETUP_TYPE = setuptools
++PYTHON_JSON_SCHEMA_VALIDATOR_DEPENDENCIES = python-versiontools
 +
 +$(eval $(python-package))
