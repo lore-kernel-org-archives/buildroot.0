@@ -1,56 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Dec 2013 13:37:19 +0100
-Subject: [Buildroot] [git commit] python-mad: convert to the Python package
+Date: Sun, 15 Dec 2013 13:39:39 +0100
+Subject: [Buildroot] [git commit] scons: convert to the Python package
 	infrastructure
-Message-ID: <20131215130825.D3BE79BC97@busybox.osuosl.org>
+Message-ID: <20131215130826.4ECB99BC97@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f085d1f425681ae3742dc3f2d99a77ce5b874758
+commit: http://git.buildroot.net/buildroot/commit/?id=a69b2d3926826d72374800ac8eda6646aa0aa078
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-mad/python-mad.mk |   20 +++-----------------
- 1 files changed, 3 insertions(+), 17 deletions(-)
+ package/scons/scons.mk |   13 ++++---------
+ 1 files changed, 4 insertions(+), 9 deletions(-)
 
-diff --git a/package/python-mad/python-mad.mk b/package/python-mad/python-mad.mk
-index eaa1fae..1b3cb75 100644
---- a/package/python-mad/python-mad.mk
-+++ b/package/python-mad/python-mad.mk
-@@ -7,8 +7,9 @@
- PYTHON_MAD_VERSION = 0.6
- PYTHON_MAD_SOURCE  = pymad-$(PYTHON_MAD_VERSION).tar.gz
- PYTHON_MAD_SITE    = http://spacepants.org/src/pymad/download/
-+PYTHON_MAD_SETUP_TYPE = distutils
+diff --git a/package/scons/scons.mk b/package/scons/scons.mk
+index a7747d5..e3fad1b 100644
+--- a/package/scons/scons.mk
++++ b/package/scons/scons.mk
+@@ -8,17 +8,12 @@ SCONS_VERSION = 2.3.0
+ SCONS_SITE = http://downloads.sourceforge.net/project/scons/scons/$(SCONS_VERSION)
+ SCONS_LICENSE = MIT
+ SCONS_LICENSE_FILES = LICENSE.txt
++SCONS_SETUP_TYPE = distutils
  
--PYTHON_MAD_DEPENDENCIES = python libmad
-+PYTHON_MAD_DEPENDENCIES = libmad
+-define HOST_SCONS_BUILD_CMDS
+-	(cd $(@D); python setup.py build)
+-endef
++HOST_SCONS_INSTALL_OPT = \
++	--install-lib=$(HOST_DIR)/usr/lib/scons-$(SCONS_VERSION)
  
- ifeq ($(BR2_ENDIAN),"LITTLE")
- PYTHON_MAD_ENDIAN=little
-@@ -23,19 +24,4 @@ define PYTHON_MAD_CONFIGURE_CMDS
- 	echo "mad_include_dir = $(STAGING_DIR)/usr/include" >> $(@D)/Setup
- endef
- 
--define PYTHON_MAD_BUILD_CMDS
--	(cd $(@D); \
--		CC="$(TARGET_CC)"		\
--		CFLAGS="$(TARGET_CFLAGS)" 	\
--		LDSHARED="$(TARGET_CC) -shared" \
--		LDFLAGS="$(TARGET_LDFLAGS)" 	\
--	$(HOST_DIR)/usr/bin/python setup.py build_ext \
--	--include-dirs=$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR))
--	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
+-define HOST_SCONS_INSTALL_CMDS
+-	(cd $(@D); python setup.py install --prefix=$(HOST_DIR)/usr \
+-		--install-lib=$(HOST_DIR)/usr/lib/scons-$(SCONS_VERSION))
 -endef
 -
--define PYTHON_MAD_INSTALL_TARGET_CMDS
--	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
--endef
--
--$(eval $(generic-package))
-+$(eval $(python-package))
+-$(eval $(host-generic-package))
++$(eval $(host-python-package))
+ 
+ # variables used by other packages
+ SCONS = $(HOST_DIR)/usr/bin/scons
