@@ -1,41 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Dec 2013 13:37:33 +0100
-Subject: [Buildroot] [git commit] python-nfc: convert to the Python package
+Date: Sun, 15 Dec 2013 13:36:55 +0100
+Subject: [Buildroot] [git commit] python-id3: convert to the Python package
 	infrastructure
-Message-ID: <20131215130826.0EED29BC97@busybox.osuosl.org>
+Message-ID: <20131215130825.BA7229C025@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=527302e73f0ab19b85c2ddf3ff2fd407dd32957b
+commit: http://git.buildroot.net/buildroot/commit/?id=d26c5bc2e9945f4b2b0b8d130ada6dfa1a7957b9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-nfc/python-nfc.mk |   13 +++----------
- 1 files changed, 3 insertions(+), 10 deletions(-)
+ package/python-id3/python-id3.mk |   13 ++-----------
+ 1 files changed, 2 insertions(+), 11 deletions(-)
 
-diff --git a/package/python-nfc/python-nfc.mk b/package/python-nfc/python-nfc.mk
-index f406e2a..5f486d9 100644
---- a/package/python-nfc/python-nfc.mk
-+++ b/package/python-nfc/python-nfc.mk
-@@ -7,14 +7,7 @@
- PYTHON_NFC_VERSION = 142
- PYTHON_NFC_SITE = https://launchpad.net/nfcpy
- PYTHON_NFC_SITE_METHOD = bzr
--PYTHON_NFC_DEPENDENCIES = python libusb libusb-compat
-+PYTHON_NFC_DEPENDENCIES = libusb libusb-compat
-+PYTHON_NFC_SETUP_TYPE = distutils
+diff --git a/package/python-id3/python-id3.mk b/package/python-id3/python-id3.mk
+index 9328a0f..5957f64 100644
+--- a/package/python-id3/python-id3.mk
++++ b/package/python-id3/python-id3.mk
+@@ -7,15 +7,6 @@
+ PYTHON_ID3_VERSION = 1.2
+ PYTHON_ID3_SOURCE = id3-py_$(PYTHON_ID3_VERSION).tar.gz
+ PYTHON_ID3_SITE = http://downloads.sourceforge.net/project/id3-py/id3-py/$(PYTHON_ID3_VERSION)
++PYTHON_ID3_SETUP_TYPE = distutils
  
--define PYTHON_NFC_BUILD_CMDS
--	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
+-PYTHON_ID3_DEPENDENCIES = python
+-
+-define PYTHON_ID3_BUILD_CMDS
+-    (cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
 -endef
 -
--define PYTHON_NFC_INSTALL_TARGET_CMDS
--	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
+-define PYTHON_ID3_INSTALL_TARGET_CMDS
+-    (cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
 -endef
 -
 -$(eval $(generic-package))
