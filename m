@@ -1,80 +1,283 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Dec 2013 13:41:30 +0100
-Subject: [Buildroot] [git commit] python-msgpack: new package
-Message-ID: <20131215130826.855FE9C025@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 15 Dec 2013 10:11:53 -0300
+Subject: [Buildroot] [PATCH] configs/qemu: bump relevant kernel/headers
+	versions
+Message-ID: <1387113113-29410-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c8e76a2d49d278d53e9d21e4df02ca079b3357a1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-[Thomas: convert to the Python package infrastructure, added missing
-dependency on C++, inherited from msgpack.]
-
-Signed-off-by: Wojciech M. Zabolotny <wzab01@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Config.in                        |    1 +
- package/python-msgpack/Config.in         |   16 ++++++++++++++++
- package/python-msgpack/python-msgpack.mk |   15 +++++++++++++++
- 3 files changed, 32 insertions(+), 0 deletions(-)
+ configs/qemu_arm_nuri_defconfig         | 4 ++--
+ configs/qemu_arm_vexpress_defconfig     | 4 ++--
+ configs/qemu_microblazebe_mmu_defconfig | 2 +-
+ configs/qemu_microblazeel_mmu_defconfig | 2 +-
+ configs/qemu_mips64_malta_defconfig     | 4 ++--
+ configs/qemu_mips64el_malta_defconfig   | 4 ++--
+ configs/qemu_mips_malta_defconfig       | 4 ++--
+ configs/qemu_mipsel_malta_defconfig     | 4 ++--
+ configs/qemu_ppc_g3beige_defconfig      | 4 ++--
+ configs/qemu_ppc_mpc8544ds_defconfig    | 4 ++--
+ configs/qemu_ppc_virtex_ml507_defconfig | 4 ++--
+ configs/qemu_sparc_ss10_defconfig       | 4 ++--
+ configs/qemu_x86_64_defconfig           | 4 ++--
+ configs/qemu_x86_defconfig              | 4 ++--
+ 14 files changed, 26 insertions(+), 26 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 85bf106..a884de1 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -393,6 +393,7 @@ source "package/python-id3/Config.in"
- source "package/python-ipy/Config.in"
- source "package/python-mad/Config.in"
- source "package/python-meld3/Config.in"
-+source "package/python-msgpack/Config.in"
- source "package/python-netifaces/Config.in"
- source "package/python-nfc/Config.in"
- source "package/python-protobuf/Config.in"
-diff --git a/package/python-msgpack/Config.in b/package/python-msgpack/Config.in
-new file mode 100644
-index 0000000..2075ee6
---- /dev/null
-+++ b/package/python-msgpack/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_PYTHON_MSGPACK
-+	bool "python-msgpack"
-+	depends on BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_MSGPACK
-+	depends on BR2_INSTALL_LIBSTDCPP # msgpack
-+	help
-+	  MessagePack (http://msgpack.org/) is a fast, compact binary
-+	  serialization format, suitable for similar data to JSON.
-+	  This package provides CPython bindings for reading and
-+	  writing MessagePack data.
-+
-+	  https://pypi.python.org/pypi/msgpack-python/
-+
-+comment "python-msgpack needs a toolchain w/ C++"
-+	depends on BR2_PACKAGE_PYTHON
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/python-msgpack/python-msgpack.mk b/package/python-msgpack/python-msgpack.mk
-new file mode 100644
-index 0000000..2a7c384
---- /dev/null
-+++ b/package/python-msgpack/python-msgpack.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-msgpack
-+#
-+################################################################################
-+
-+PYTHON_MSGPACK_VERSION = 0.4.0
-+PYTHON_MSGPACK_SOURCE = msgpack-python-$(PYTHON_MSGPACK_VERSION).tar.gz
-+PYTHON_MSGPACK_SITE = https://pypi.python.org/packages/source/m/msgpack-python/
-+PYTHON_MSGPACK_LICENSE = Apache License, Version 2.0
-+PYTHON_MSGPACK_LICENSE_FILES = COPYING
-+PYTHON_MSGPACK_SETUP_TYPE = setuptools
-+PYTHON_MSGPACK_DEPENDENCIES = msgpack
-+
-+$(eval $(python-package))
+diff --git a/configs/qemu_arm_nuri_defconfig b/configs/qemu_arm_nuri_defconfig
+index 8cb1153..bddec64 100644
+--- a/configs/qemu_arm_nuri_defconfig
++++ b/configs/qemu_arm_nuri_defconfig
+@@ -15,11 +15,11 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
+ 
+ # Lock to 3.10 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.10.21"
++BR2_DEFAULT_KERNEL_VERSION="3.10.24"
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.10.21"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.10.24"
+ BR2_LINUX_KERNEL_DEFCONFIG="exynos4"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+diff --git a/configs/qemu_arm_vexpress_defconfig b/configs/qemu_arm_vexpress_defconfig
+index 4a4db1b..6f163c8 100644
+--- a/configs/qemu_arm_vexpress_defconfig
++++ b/configs/qemu_arm_vexpress_defconfig
+@@ -15,11 +15,11 @@ BR2_TARGET_ROOTFS_EXT2=y
+ 
+ # Lock to 3.12 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.12.2"
++BR2_DEFAULT_KERNEL_VERSION="3.12.5"
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.2"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.5"
+ BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+diff --git a/configs/qemu_microblazebe_mmu_defconfig b/configs/qemu_microblazebe_mmu_defconfig
+index f22243f..d5f780b 100644
+--- a/configs/qemu_microblazebe_mmu_defconfig
++++ b/configs/qemu_microblazebe_mmu_defconfig
+@@ -12,7 +12,7 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.2"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.5"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazebe-mmu/linux-3.12.config"
+ BR2_LINUX_KERNEL_LINUX_BIN=y
+diff --git a/configs/qemu_microblazeel_mmu_defconfig b/configs/qemu_microblazeel_mmu_defconfig
+index 3d6daa2..54d5834 100644
+--- a/configs/qemu_microblazeel_mmu_defconfig
++++ b/configs/qemu_microblazeel_mmu_defconfig
+@@ -12,7 +12,7 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.2"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.5"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazeel-mmu/linux-3.12.config"
+ BR2_LINUX_KERNEL_LINUX_BIN=y
+diff --git a/configs/qemu_mips64_malta_defconfig b/configs/qemu_mips64_malta_defconfig
+index 2461325..19423c2 100644
+--- a/configs/qemu_mips64_malta_defconfig
++++ b/configs/qemu_mips64_malta_defconfig
+@@ -8,12 +8,12 @@ BR2_TARGET_ROOTFS_EXT2=y
+ 
+ # Lock to 3.12 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.12.2"
++BR2_DEFAULT_KERNEL_VERSION="3.12.5"
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.2"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.5"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64-malta/linux-3.12.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/qemu_mips64el_malta_defconfig b/configs/qemu_mips64el_malta_defconfig
+index 0d780f4..2f7405f 100644
+--- a/configs/qemu_mips64el_malta_defconfig
++++ b/configs/qemu_mips64el_malta_defconfig
+@@ -11,12 +11,12 @@ BR2_TARGET_ROOTFS_EXT2=y
+ 
+ # Lock to 3.12 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.12.2"
++BR2_DEFAULT_KERNEL_VERSION="3.12.5"
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.2"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.5"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64el-malta/linux-3.12.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/qemu_mips_malta_defconfig b/configs/qemu_mips_malta_defconfig
+index bc1edd6..dc28087 100644
+--- a/configs/qemu_mips_malta_defconfig
++++ b/configs/qemu_mips_malta_defconfig
+@@ -8,12 +8,12 @@ BR2_TARGET_ROOTFS_EXT2=y
+ 
+ # Lock to 3.12 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.12.2"
++BR2_DEFAULT_KERNEL_VERSION="3.12.5"
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.2"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.5"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips-malta/linux-3.12.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/qemu_mipsel_malta_defconfig b/configs/qemu_mipsel_malta_defconfig
+index c654351..6a73e4c 100644
+--- a/configs/qemu_mipsel_malta_defconfig
++++ b/configs/qemu_mipsel_malta_defconfig
+@@ -8,12 +8,12 @@ BR2_TARGET_ROOTFS_EXT2=y
+ 
+ # Lock to 3.12 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.12.2"
++BR2_DEFAULT_KERNEL_VERSION="3.12.5"
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.2"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.5"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mipsel-malta/linux-3.12.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/qemu_ppc_g3beige_defconfig b/configs/qemu_ppc_g3beige_defconfig
+index a6ced5e..f6603a0 100644
+--- a/configs/qemu_ppc_g3beige_defconfig
++++ b/configs/qemu_ppc_g3beige_defconfig
+@@ -8,12 +8,12 @@ BR2_TARGET_ROOTFS_EXT2=y
+ 
+ # Lock to 3.12 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.12.2"
++BR2_DEFAULT_KERNEL_VERSION="3.12.5"
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.2"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.5"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/powerpc-g3beige/linux-3.12.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/qemu_ppc_mpc8544ds_defconfig b/configs/qemu_ppc_mpc8544ds_defconfig
+index 745a3ca..cc90657 100644
+--- a/configs/qemu_ppc_mpc8544ds_defconfig
++++ b/configs/qemu_ppc_mpc8544ds_defconfig
+@@ -8,12 +8,12 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
+ 
+ # Lock to 3.12 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.12.2"
++BR2_DEFAULT_KERNEL_VERSION="3.12.5"
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.2"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.5"
+ BR2_LINUX_KERNEL_DEFCONFIG="mpc85xx"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ 
+diff --git a/configs/qemu_ppc_virtex_ml507_defconfig b/configs/qemu_ppc_virtex_ml507_defconfig
+index f79feb5..99f8967 100644
+--- a/configs/qemu_ppc_virtex_ml507_defconfig
++++ b/configs/qemu_ppc_virtex_ml507_defconfig
+@@ -8,7 +8,7 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
+ 
+ # Lock to 3.12 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.12.2"
++BR2_DEFAULT_KERNEL_VERSION="3.12.5"
+ 
+ # Use soft float
+ BR2_SOFT_FLOAT=y
+@@ -16,7 +16,7 @@ BR2_SOFT_FLOAT=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.2"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.5"
+ BR2_LINUX_KERNEL_DEFCONFIG="44x/virtex5"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+diff --git a/configs/qemu_sparc_ss10_defconfig b/configs/qemu_sparc_ss10_defconfig
+index 82f5485..95803e7 100644
+--- a/configs/qemu_sparc_ss10_defconfig
++++ b/configs/qemu_sparc_ss10_defconfig
+@@ -8,11 +8,11 @@ BR2_TARGET_ROOTFS_EXT2=y
+ 
+ # Lock to 3.12 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.12.2"
++BR2_DEFAULT_KERNEL_VERSION="3.12.5"
+ 
+ # Linux kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.2"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.5"
+ BR2_LINUX_KERNEL_DEFCONFIG="sparc32"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+diff --git a/configs/qemu_x86_64_defconfig b/configs/qemu_x86_64_defconfig
+index 811f968..67fc685 100644
+--- a/configs/qemu_x86_64_defconfig
++++ b/configs/qemu_x86_64_defconfig
+@@ -11,11 +11,11 @@ BR2_TARGET_ROOTFS_EXT2=y
+ 
+ # Lock to 3.12 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.12.2"
++BR2_DEFAULT_KERNEL_VERSION="3.12.5"
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.2"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.5"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux-3.12.config"
+diff --git a/configs/qemu_x86_defconfig b/configs/qemu_x86_defconfig
+index d642c45..9b45ce8 100644
+--- a/configs/qemu_x86_defconfig
++++ b/configs/qemu_x86_defconfig
+@@ -12,11 +12,11 @@ BR2_TARGET_ROOTFS_EXT2=y
+ 
+ # Lock to 3.12 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.12.2"
++BR2_DEFAULT_KERNEL_VERSION="3.12.5"
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.2"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.5"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-3.12.config"
+-- 
+1.8.3.2
