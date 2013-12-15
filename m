@@ -1,53 +1,78 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 15 Dec 2013 22:50:01 +0100
-Subject: [Buildroot] [PATCH 1/1] Do not use an initrd in iso image when
- using initramfs
-In-Reply-To: <1387140644-22545-1-git-send-email-thierry.bultel@wanadoo.fr>
-References: <1387140644-22545-1-git-send-email-thierry.bultel@wanadoo.fr>
-Message-ID: <20131215215001.GA3463@free.fr>
+Date: Sun, 15 Dec 2013 23:25:21 +0100
+Subject: [Buildroot] [PATCH] manual: add section about dealing
+ efficiently with big image files
+In-Reply-To: <87k3f5vqio.fsf@dell.be.48ers.dk>
+References: <1387133792-32363-1-git-send-email-yann.morin.1998@free.fr>
+ <87k3f5vqio.fsf@dell.be.48ers.dk>
+Message-ID: <20131215222521.GB3463@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thierry, All,
+Peter, All,
 
-On 2013-12-15 21:50 +0100, Thierry Bultel spake thusly:
-> When using initramfs, it is useless to put an initrd in the iso image.
-> This patch makes the image to only contain the kernel image, and
-> also removes the initrd line from menu.lst
+On 2013-12-15 20:54 +0100, Peter Korsgaard spake thusly:
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 > 
-> Signed-off-by: Thierry Bultel <thierry.bultel@wanadoo.fr>
-> ---
->  fs/iso9660/iso9660.mk |    4 ++++
->  1 files changed, 4 insertions(+), 0 deletions(-)
+>  > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>  > As reported by Ryan, it is not well-known that most tools can deal
+>  > efficiently with big sparse files.
 > 
-> diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
-> index 979a0b2..1f9c62e 100644
-> --- a/fs/iso9660/iso9660.mk
-> +++ b/fs/iso9660/iso9660.mk
-> @@ -17,7 +17,11 @@ $(BINARIES_DIR)/rootfs.iso9660: host-cdrkit host-fakeroot linux rootfs-cpio grub
->  	cp $(GRUB_DIR)/stage2/stage2_eltorito $(ISO9660_TARGET_DIR)/boot/grub/
->  	cp $(ISO9660_BOOT_MENU) $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
->  	cp $(LINUX_IMAGE_PATH) $(ISO9660_TARGET_DIR)/kernel
-> +ifneq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
+>  > Add a section in the manual about this, with three tools as examples,
+>  > and a hint to the man pages for the others.
+> 
+> ...
+> 
+>  > +* +tar+ accepts the +-S+ option to tell it to only store non-zero blocks
+>  > +  of sparse files:
+>  > +** +tar cf archive.tar -S [files...]+ will efficiently store sparse files
+>  > +   in a tarball
+>  > +** +tar xf archive.tar -S+ will efficiently store sparse files extracted
+>  > +   from a tarball
+>  > +
+>  > +* +cp+ accepts the +--sparse=WHEN+ option (+WHEN+ is one of +auto+,
+>  > +  +never+ or +always+):
+>  > +** +cp --sparse=always source.file dest.file+ will make +dest.file+ a
+>  > +   sparse file if +source.file+ has long runs of zeroes
+>  > +
+>  > +* +dd+ accepts the +sparse+ value in a +conv+ list (specifying the
+>  > +  block-size is recommended):
+> 
+> We should probably note that these things are only supported by (recent
+> versions of ) the big GNU versions of the tools, not the busybox variant
+> (which people are likely to be using).
 
-We prefer positive logic, ie.:
+As said on IRC: this is about handling those files at build time, not
+on the target.
 
-ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
-    sed blabla
-else
-    cp rootfs.cpio blabla
-endif
+>  > +** +dd if=image.file of=/dev/device bs=131072 conv=sparse+ will only
+>  > +   write to +/dev/device+ the blocks of +image.file+ that are not made
+>  > +   only of zeroes
+> 
+> Is that safe advise when writing to devices? If the image file contains
+> 128K of spaces in the used part of the filesystem (E.G. as part of a
+> file or in the block bitmap or wherever), then that data will not be
+> written and you will instead read back whatever was at that location in
+> the device before.
 
->  	cp $(BINARIES_DIR)/rootfs.cpio$(ROOTFS_CPIO_COMPRESS_EXT) $(ISO9660_TARGET_DIR)/initrd
-> +else
-> +	sed -i -e '/initrd/d'  $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
-> +endif
->  	# Use fakeroot to pretend all target binaries are owned by root
->  	rm -f $(FAKEROOT_SCRIPT)
->  	echo "chown -R 0:0 $(ISO9660_TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
+Yes, that's true. But those are just example on how to handle big sparse
+files, an in no way the recommended way of flashing a device.
+
+I'll remove it before re-submitting. After all, we hint to the man pages
+of other tools, so it's thoroughly documented. And if anyone if foolish
+enough to try that, then we can say 'we never wrote that!' :-)
+
+> I think that you should be using bigger block sizes, tools that
+> understand the filesystem layout or resize afterwards (E.G. resize2fs)
+> instead.
+
+Not sure I follow you on that one. What if the user enters a large
+number of blocks for his ext2 filesystem? Those will be empty
+(zero-filled), but the image file will not be made sparse. So there is
+no 'fs resize' or such in the process.
 
 Regards,
 Yann E. MORIN.
