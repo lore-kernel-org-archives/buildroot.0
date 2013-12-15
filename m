@@ -1,39 +1,48 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 15 Dec 2013 13:52:42 +0100
-Subject: [Buildroot] [PATCHv2 32/36] python-pyasn: new package
-In-Reply-To: <1386793631-14026-33-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Wed, 11 Dec 2013 21:27:07 +0100")
-References: <1386793631-14026-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1386793631-14026-33-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87a9g2wa1x.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 15 Dec 2013 16:21:19 +0100
+Subject: [Buildroot] [git commit] pkg-python: improve error handling
+Message-ID: <20131215152212.05E889C028@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=27bc8868f245e0ff358804f68a8c3de7e9224fbd
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: Ryan Barnett <ryanbarnett3@gmail.com>
- > Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- > ---
- > +################################################################################
- > +#
- > +# python-pyasn
- > +#
- > +################################################################################
- > +
- > +PYTHON_PYASN_VERSION = 1.2
- > +PYTHON_PYASN_SOURCE = PyASN-$(PYTHON_PYASN_VERSION).zip
- > +PYTHON_PYASN_SITE = https://pyasn.googlecode.com/files
- > +PYTHON_PYASN_LICENSE = LGPL
+Make the python packing a bit easier to use by providing a detailed error
+message if <pkg>_SETUP_TYPE isn't set to a valid value.
 
-Version?
+At the same time adjust the error message used when <pkg>_SETUP_TIME isn't
+set to list the exact variable name that should be set, and don't talk about
+'Unknown' as it isn't printed when the variable isn't set (or is set to the
+empty string).
 
-Looking closer, there's no license files included, but the file header
-of pyasn.cpp states LGPLv3+ and the stuff under libgds states GPLv2+, so
-I've changed it to that and committed, thanks.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/pkg-python.mk |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+index e436f22..5f137d5 100644
+--- a/package/pkg-python.mk
++++ b/package/pkg-python.mk
+@@ -94,7 +94,7 @@ ifndef $(2)_SETUP_TYPE
+  ifdef $(3)_SETUP_TYPE
+   $(2)_SETUP_TYPE = $($(3)_SETUP_TYPE)
+  else
+-  $$(error "$(1): Unknown or undefined <pkg>_SETUP_TYPE")
++  $$(error "$(2)_SETUP_TYPE must be set")
+  endif
+ endif
+ 
+@@ -124,6 +124,8 @@ $(2)_BASE_BUILD_TGT   = build
+ $(2)_BASE_BUILD_OPT   =
+ $(2)_BASE_INSTALL_OPT = $$(HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPT)
+ endif
++else
++$$(error "Invalid $(2)_SETUP_TYPE. Valid options are 'distutils' or 'setuptools'")
+ endif
+ 
+ # The below statement intends to calculate the dependencies of host
