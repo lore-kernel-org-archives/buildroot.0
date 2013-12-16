@@ -1,47 +1,41 @@
-From: Ron Eggler <reggler@semios.com>
-Date: Mon, 16 Dec 2013 01:52:44 +0000
-Subject: [Buildroot] build uboot for AT91SAM9G20
-Message-ID: <3487466.tnqfWxcGWT@regdesktophome>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 16 Dec 2013 06:59:08 +0200
+Subject: [Buildroot] [PATCH] poco: disable on avr32
+Message-ID: <e86b4785a2d4bde4a11300526d017f4b5602459e.1387169948.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Fixes
+http://autobuild.buildroot.net/results/8695f8d4412c78d9d58518d73d55ab490f2a6dc7/
 
-I'm relatively new to buildroot, thus please excuse my beginner question.
-I have configured buildroot to build an image for my AT91SAM9G20 system. I believe it has 
-built just fine but I'm running into an issue when it comes to uboot, I'm getting this:
-...
-make[1]: Entering directory `/etc/E10-buildroot/br2013.11/output/build/uboot-2013.10'
-make: *** No rule to make target `e10_config'.  Stop.
-make[1]: *** [e10_config] Error 1
-make[1]: Leaving directory `/etc/E10-buildroot/br2013.11/output/build/uboot-2013.10'
-make: *** [/etc/E10-buildroot/br2013.11/output/build/uboot-2013.10/.stamp_configured] 
-Error 2
-# 
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/poco/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-how can I get buildroot to properly compile uboot for my AT91SAM9G20?
-
-Thanks,
-Ron
+diff --git a/package/poco/Config.in b/package/poco/Config.in
+index 11f70e5..342fd6c 100644
+--- a/package/poco/Config.in
++++ b/package/poco/Config.in
+@@ -3,7 +3,8 @@ config BR2_PACKAGE_POCO
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on !(BR2_arc || BR2_bfin || BR2_microblaze || BR2_mipsel || BR2_xtensa)
++	depends on !(BR2_arc || BR2_bfin || BR2_microblaze || BR2_mipsel \
++		|| BR2_xtensa || BR2_avr32)
+ 	select BR2_PACKAGE_ZLIB
+ 	select BR2_PACKAGE_PCRE
+ 	help
+@@ -62,4 +63,5 @@ endif # BR2_PACKAGE_POCO
+ comment "poco needs a toolchain w/ wchar, threads, C++"
+ 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP \
+ 		|| !BR2_TOOLCHAIN_HAS_THREADS
+-	depends on !(BR2_arc || BR2_bfin || BR2_microblaze || BR2_mipsel || BR2_xtensa)
++	depends on !(BR2_arc || BR2_bfin || BR2_microblaze || BR2_mipsel \
++		|| BR2_xtensa || BR2_avr32)
 -- 
-*ron eggler | semios | senior software engineer*
-320 - 887 Great Northern Way | Vancouver, BC | V5T 4T5
-T | 604 229 2044 ext 105[1]
-C | 778 230 9442[2]
-E | reggler at semios.com[3]
-smart farming[4]
-twitter[5] linkedin[6]
-
---------
-[1] tel:604%20229%202044%20ext%20105
-[2] tel:778%20230%209442
-[3] mailto:reggler at semios.com
-[4] http://www.semios.com
-[5] https://twitter.com/semios
-[6] http://www.linkedin.com/company/semiosbio-technologies-inc?goback=%2Enmp_*1_*1_*1_*1_*1_*1_*1_*1_*1_*1&trk=company_logo
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131216/f22bd984/attachment.html>
+1.8.5.1
