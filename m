@@ -1,30 +1,42 @@
-From: Christophe Vu-Brugier <cvubrugier@yahoo.fr>
-Date: Mon, 16 Dec 2013 11:30:25 +0100
-Subject: [Buildroot] [PATCH] mdadm: bump to version 3.3
-Message-ID: <1387189825-18630-1-git-send-email-cvubrugier@yahoo.fr>
+From: Anders Darander <anders@chargestorm.se>
+Date: Mon, 16 Dec 2013 11:53:20 +0100
+Subject: [Buildroot] [PATCH 1/1] linux.mk: enable options for ktap
+Message-ID: <1387191200-20387-1-git-send-email-anders@chargestorm.se>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Christophe Vu-Brugier <cvubrugier@yahoo.fr>
----
- package/mdadm/mdadm.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Certain tracing related options are required to be able to build ktapvm.ko, enable those.
 
-diff --git a/package/mdadm/mdadm.mk b/package/mdadm/mdadm.mk
-index e678591..4418986 100644
---- a/package/mdadm/mdadm.mk
-+++ b/package/mdadm/mdadm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MDADM_VERSION = 3.2.6
-+MDADM_VERSION = 3.3
- MDADM_SOURCE = mdadm-$(MDADM_VERSION).tar.xz
- MDADM_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/raid/mdadm
- MDADM_LICENSE = GPLv2+
+Enable CONFIG_FUNTCTION_TRACER as otherwise, CONFIG_EVENT_TRACING won't stick. (Some
+tracer needs to be enabled for this).
+
+Signed-off-by: Anders Darander <anders@chargestorm.se>
+---
+
+ This is a followup to the introduction of the ktap package, as was discussed in
+ http://permalink.gmane.org/gmane.comp.lib.uclibc.buildroot/72000.
+
+ linux/linux.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 33931e5..5af167d 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -184,6 +184,11 @@ define LINUX_CONFIGURE_CMDS
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(@D)/.config))
+ 	$(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),
+ 		$(call KCONFIG_SET_OPT,CONFIG_UEVENT_HELPER_PATH,\"/sbin/mdev\",$(@D)/.config))
++	$(if $(BR2_PACKAGE_KTAP),
++		$(call KCONFIG_ENABLE_OPT,CONFIG_DEBUG_FS,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_EVENT_TRACING,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_PERF_EVENTS,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_FUNCTION_TRACER,$(@D)/.config))
+ 	$(if $(BR2_PACKAGE_SYSTEMD),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUPS,$(@D)/.config))
+ 	$(if $(BR2_LINUX_KERNEL_APPENDED_DTB),
 -- 
 1.8.5.1
