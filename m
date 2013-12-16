@@ -1,20 +1,19 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 16 Dec 2013 12:27:32 +0100
-Subject: [Buildroot] [PATCH] zyre: bump git snapshot
-In-Reply-To: <1387183111-23508-1-git-send-email-spdawson@gmail.com>
- (spdawson@gmail.com's message of "Mon, 16 Dec 2013 08:38:31 +0000")
-References: <1387183111-23508-1-git-send-email-spdawson@gmail.com>
-Message-ID: <87sittrq6z.fsf@dell.be.48ers.dk>
+Date: Mon, 16 Dec 2013 12:29:16 +0100
+Subject: [Buildroot] [PATCH] mdadm: bump to version 3.3
+In-Reply-To: <1387189825-18630-1-git-send-email-cvubrugier@yahoo.fr>
+ (Christophe Vu-Brugier's message of "Mon, 16 Dec 2013 11:30:25 +0100")
+References: <1387189825-18630-1-git-send-email-cvubrugier@yahoo.fr>
+Message-ID: <87ob4hrq43.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
+>>>>> "Christophe" == Christophe Vu-Brugier <cvubrugier@yahoo.fr> writes:
 
- > From: Simon Dawson <spdawson@gmail.com>
- > Signed-off-by: Simon Dawson <spdawson@gmail.com>
+ > Signed-off-by: Christophe Vu-Brugier <cvubrugier@yahoo.fr>
 
 Committed, thanks.
 
