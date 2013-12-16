@@ -1,41 +1,41 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 16 Dec 2013 06:59:08 +0200
-Subject: [Buildroot] [PATCH] poco: disable on avr32
-Message-ID: <e86b4785a2d4bde4a11300526d017f4b5602459e.1387169948.git.baruch@tkos.co.il>
+From: Anton Blanchard <anton@samba.org>
+Date: Mon, 16 Dec 2013 16:13:14 +1100
+Subject: [Buildroot] [PATCH] Add hypervisor consoles (hvc)
+Message-ID: <20131216161314.3b13c9e4@kryten>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/8695f8d4412c78d9d58518d73d55ab490f2a6dc7/
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Add /dev/hvc* devices, and add them to securetty. These
+are required for ppc64 virtual consoles.
+
+Signed-off-by: Anton Blanchard <anton@samba.org>
 ---
- package/poco/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/poco/Config.in b/package/poco/Config.in
-index 11f70e5..342fd6c 100644
---- a/package/poco/Config.in
-+++ b/package/poco/Config.in
-@@ -3,7 +3,8 @@ config BR2_PACKAGE_POCO
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on !(BR2_arc || BR2_bfin || BR2_microblaze || BR2_mipsel || BR2_xtensa)
-+	depends on !(BR2_arc || BR2_bfin || BR2_microblaze || BR2_mipsel \
-+		|| BR2_xtensa || BR2_avr32)
- 	select BR2_PACKAGE_ZLIB
- 	select BR2_PACKAGE_PCRE
- 	help
-@@ -62,4 +63,5 @@ endif # BR2_PACKAGE_POCO
- comment "poco needs a toolchain w/ wchar, threads, C++"
- 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS
--	depends on !(BR2_arc || BR2_bfin || BR2_microblaze || BR2_mipsel || BR2_xtensa)
-+	depends on !(BR2_arc || BR2_bfin || BR2_microblaze || BR2_mipsel \
-+		|| BR2_xtensa || BR2_avr32)
--- 
-1.8.5.1
+diff --git a/system/device_table_dev.txt b/system/device_table_dev.txt
+index 9507939..91ed769 100644
+--- a/system/device_table_dev.txt
++++ b/system/device_table_dev.txt
+@@ -36,6 +36,7 @@
+ /dev/ttyPSC	c	666	0	0	204	148	0	1	4
+ /dev/ttyUL	c	666	0	0	204	187	0	1	4
+ /dev/ttymxc	c	666	0	0	207	16	0	1	4
++/dev/hvc	c	640	0	0	229	0	0	1	4
+ 
+ # Input stuff
+ /dev/input		d	755	0	0	-	-	-	-	-
+diff --git a/system/skeleton/etc/securetty b/system/skeleton/etc/securetty
+index 5a3d0c6..0722677 100644
+--- a/system/skeleton/etc/securetty
++++ b/system/skeleton/etc/securetty
+@@ -51,3 +51,7 @@ ttySC5
+ ttySC6
+ ttySC7
+ ttyGS0
++hvc0
++hvc1
++hvc2
++hvc3
