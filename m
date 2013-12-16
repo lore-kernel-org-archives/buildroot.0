@@ -1,20 +1,20 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 16 Dec 2013 12:16:01 +0100
-Subject: [Buildroot] [PATCH] poco: disable on avr32
-In-Reply-To: <e86b4785a2d4bde4a11300526d017f4b5602459e.1387169948.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Mon, 16 Dec 2013 06:59:08 +0200")
-References: <e86b4785a2d4bde4a11300526d017f4b5602459e.1387169948.git.baruch@tkos.co.il>
-Message-ID: <87a9g1t5am.fsf@dell.be.48ers.dk>
+Date: Mon, 16 Dec 2013 12:19:22 +0100
+Subject: [Buildroot] [PATCH] libtpl: bump git snapshot
+In-Reply-To: <1387182880-22757-1-git-send-email-spdawson@gmail.com>
+ (spdawson@gmail.com's message of "Mon, 16 Dec 2013 08:34:40 +0000")
+References: <1387182880-22757-1-git-send-email-spdawson@gmail.com>
+Message-ID: <8761qpt551.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
 
- > Fixes
- > http://autobuild.buildroot.net/results/8695f8d4412c78d9d58518d73d55ab490f2a6dc7/
+ > From: Simon Dawson <spdawson@gmail.com>
+ > Signed-off-by: Simon Dawson <spdawson@gmail.com>
 
 Committed, thanks.
 
