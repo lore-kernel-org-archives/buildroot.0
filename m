@@ -1,47 +1,22 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 16 Dec 2013 12:11:59 +0100
-Subject: [Buildroot] [PATCH 1/1] linux.mk: enable options for ktap
-In-Reply-To: <1387191200-20387-1-git-send-email-anders@chargestorm.se>
-References: <1387191200-20387-1-git-send-email-anders@chargestorm.se>
-Message-ID: <CAAXf6LVOssD-uJP6E3oFRg3DOca7N8sR+PzrBtLZDd=1PVTjVw@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 16 Dec 2013 12:16:01 +0100
+Subject: [Buildroot] [PATCH] poco: disable on avr32
+In-Reply-To: <e86b4785a2d4bde4a11300526d017f4b5602459e.1387169948.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Mon, 16 Dec 2013 06:59:08 +0200")
+References: <e86b4785a2d4bde4a11300526d017f4b5602459e.1387169948.git.baruch@tkos.co.il>
+Message-ID: <87a9g1t5am.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Dec 16, 2013 at 11:53 AM, Anders Darander <anders@chargestorm.se> wrote:
-> Certain tracing related options are required to be able to build ktapvm.ko, enable those.
->
-> Enable CONFIG_FUNTCTION_TRACER as otherwise, CONFIG_EVENT_TRACING won't stick. (Some
-> tracer needs to be enabled for this).
->
-> Signed-off-by: Anders Darander <anders@chargestorm.se>
-> ---
->
->  This is a followup to the introduction of the ktap package, as was discussed in
->  http://permalink.gmane.org/gmane.comp.lib.uclibc.buildroot/72000.
->
->  linux/linux.mk | 5 +++++
->  1 file changed, 5 insertions(+)
->
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index 33931e5..5af167d 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -184,6 +184,11 @@ define LINUX_CONFIGURE_CMDS
->                 $(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(@D)/.config))
->         $(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),
->                 $(call KCONFIG_SET_OPT,CONFIG_UEVENT_HELPER_PATH,\"/sbin/mdev\",$(@D)/.config))
-> +       $(if $(BR2_PACKAGE_KTAP),
-> +               $(call KCONFIG_ENABLE_OPT,CONFIG_DEBUG_FS,$(@D)/.config)
-> +               $(call KCONFIG_ENABLE_OPT,CONFIG_EVENT_TRACING,$(@D)/.config)
-> +               $(call KCONFIG_ENABLE_OPT,CONFIG_PERF_EVENTS,$(@D)/.config)
-> +               $(call KCONFIG_ENABLE_OPT,CONFIG_FUNCTION_TRACER,$(@D)/.config))
->         $(if $(BR2_PACKAGE_SYSTEMD),
->                 $(call KCONFIG_ENABLE_OPT,CONFIG_CGROUPS,$(@D)/.config))
->         $(if $(BR2_LINUX_KERNEL_APPENDED_DTB),
-> --
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Should we update the help text in ktap to indicate that the mentioned
-configs are enabled automatically if the kernel is built by buildroot?
+ > Fixes
+ > http://autobuild.buildroot.net/results/8695f8d4412c78d9d58518d73d55ab490f2a6dc7/
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
