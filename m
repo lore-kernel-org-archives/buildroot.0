@@ -1,46 +1,68 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 16 Dec 2013 14:39:32 +0000
-Subject: [Buildroot] [PATCH v3] knock: Fix build failure due to missing
-	README file.
-In-Reply-To: <87haadyswh.fsf@dell.be.48ers.dk>
-References: <1386851218-19360-1-git-send-email-Vincent.Riera@imgtec.com>
- <871u1i2lhm.fsf@dell.be.48ers.dk> <52AA38BC.2020407@mind.be>
- <87bo0l1y5p.fsf@dell.be.48ers.dk> <52AAD485.5040306@imgtec.com>
- <87haadyswh.fsf@dell.be.48ers.dk>
-Message-ID: <52AF10A4.6050609@imgtec.com>
+From: Anders Darander <anders@chargestorm.se>
+Date: Mon, 16 Dec 2013 15:45:32 +0100
+Subject: [Buildroot] [PATCH 1/1] linux.mk: enable options for ktap
+In-Reply-To: <CAAXf6LVOssD-uJP6E3oFRg3DOca7N8sR+PzrBtLZDd=1PVTjVw@mail.gmail.com>
+References: <1387191200-20387-1-git-send-email-anders@chargestorm.se>
+ <CAAXf6LVOssD-uJP6E3oFRg3DOca7N8sR+PzrBtLZDd=1PVTjVw@mail.gmail.com>
+Message-ID: <20131216144447.GB5876@ad.chargestorm.se>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/13/2013 09:58 AM, Peter Korsgaard wrote:
->>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
->
-> Hi,
->
->   >> >  But of course, your patch is still relevant to send upstream!
->   >>
->   >> It afaik is already included upstream, which is why the patch no longer
->   >> applied.
->   >>
->
->   > Yes, I sent a pull request upstream and they merged it. If you have
->   > updated the knock.mk to use the latest git, then we don't need any
->   > patch because it's already applied upstream :-)
->
-> True, but the same applies with the current version we're using as that
-> is from before the README -> README.md rename.
+* Thomas De Schampheleire <patrickdepinguin@gmail.com> [131216 12:12]:
+> On Mon, Dec 16, 2013 at 11:53 AM, Anders Darander <anders@chargestorm.se> wrote:
+> > Certain tracing related options are required to be able to build ktapvm.ko, enable those.
+> >
+> > Enable CONFIG_FUNTCTION_TRACER as otherwise, CONFIG_EVENT_TRACING won't stick. (Some
+> > tracer needs to be enabled for this).
+> >
+> > Signed-off-by: Anders Darander <anders@chargestorm.se>
+> > ---
+> >
+> >  This is a followup to the introduction of the ktap package, as was discussed in
+> >  http://permalink.gmane.org/gmane.comp.lib.uclibc.buildroot/72000.
+> >
+> >  linux/linux.mk | 5 +++++
+> >  1 file changed, 5 insertions(+)
+> >
+> > diff --git a/linux/linux.mk b/linux/linux.mk
+> > index 33931e5..5af167d 100644
+> > --- a/linux/linux.mk
+> > +++ b/linux/linux.mk
+> > @@ -184,6 +184,11 @@ define LINUX_CONFIGURE_CMDS
+> >                 $(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(@D)/.config))
+> >         $(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),
+> >                 $(call KCONFIG_SET_OPT,CONFIG_UEVENT_HELPER_PATH,\"/sbin/mdev\",$(@D)/.config))
+> > +       $(if $(BR2_PACKAGE_KTAP),
+> > +               $(call KCONFIG_ENABLE_OPT,CONFIG_DEBUG_FS,$(@D)/.config)
+> > +               $(call KCONFIG_ENABLE_OPT,CONFIG_EVENT_TRACING,$(@D)/.config)
+> > +               $(call KCONFIG_ENABLE_OPT,CONFIG_PERF_EVENTS,$(@D)/.config)
+> > +               $(call KCONFIG_ENABLE_OPT,CONFIG_FUNCTION_TRACER,$(@D)/.config))
+> >         $(if $(BR2_PACKAGE_SYSTEMD),
+> >                 $(call KCONFIG_ENABLE_OPT,CONFIG_CGROUPS,$(@D)/.config))
+> >         $(if $(BR2_LINUX_KERNEL_APPENDED_DTB),
+> > --
+> 
+> Should we update the help text in ktap to indicate that the mentioned
+> configs are enabled automatically if the kernel is built by buildroot?
 
-Oh, I understand now... You changed the git version of this package to 
-downgrade it just to the point before the README -> README.md was made.
+What does everyone else think?
 
-> If you have tested the latest git then you are welcome to send a patch
-> bumping the version.
->
+We've got three options: 
 
-Yes, I have tested it, but it's easier for you to just change the 
-version to the last git commit number.
+1) Let it be as it is today
+2) Change the text to state that those options are automatically enabled
+3) Do as e.g. systemd does, which enables cgroups without mentioning in
+Config.in. I.e. remove the discussion of those options from
+ktap/Config.in.
+
+I'm indifferent to either of these solutions.
+
+Cheers,
+Anders
 
 -- 
-Vincent
+Anders Darander
+ChargeStorm AB / eStorm AB
