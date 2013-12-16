@@ -1,46 +1,104 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Dec 2013 12:36:49 +0100
-Subject: [Buildroot] [git commit] oprofile: fix install for avr32
-Message-ID: <20131216114040.13E289C004@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 16 Dec 2013 09:28:07 -0300
+Subject: [Buildroot] [PATCHv2] php: bump to version 5.5.7
+Message-ID: <1387196887-30432-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0e2d0ad03d638a92b3349ea8cbbf847e6b7ce518
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-There is no perf_events support in the kernel for avr32. The oprofile
-package makefile hard codes the list of binaries to install. Unfortunately,
-this hard-coded list contains pe_profiling/operf, which is only built when
-perf_events support is available.
-
-Fixes autobuild failures such as the following.
-
-  http://autobuild.buildroot.net/results/492/492659bc252395a62e62e6005ed0e86e582dcada/
-
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/oprofile/oprofile.mk |    7 ++++++-
- 1 files changed, 6 insertions(+), 1 deletions(-)
+ package/php/Config.ext | 17 ++++++-----------
+ package/php/php.mk     | 14 ++------------
+ 2 files changed, 8 insertions(+), 23 deletions(-)
 
-diff --git a/package/oprofile/oprofile.mk b/package/oprofile/oprofile.mk
-index 186e30c..07a8ec9 100644
---- a/package/oprofile/oprofile.mk
-+++ b/package/oprofile/oprofile.mk
-@@ -16,7 +16,12 @@ OPROFILE_CONF_OPT = \
- OPROFILE_AUTORECONF = YES
- OPROFILE_BINARIES = utils/ophelp pp/opannotate pp/oparchive pp/opgprof
- OPROFILE_BINARIES += pp/opreport opjitconv/opjitconv daemon/oprofiled
--OPROFILE_BINARIES += utils/op-check-perfevents pe_profiling/operf libabi/opimport
-+OPROFILE_BINARIES += utils/op-check-perfevents libabi/opimport
-+
-+# No perf_events support in kernel for avr32
-+ifneq ($(BR2_avr32),y)
-+OPROFILE_BINARIES += pe_profiling/operf
-+endif
+diff --git a/package/php/Config.ext b/package/php/Config.ext
+index 23d2306..2ffa2c2 100644
+--- a/package/php/Config.ext
++++ b/package/php/Config.ext
+@@ -91,17 +91,6 @@ config BR2_PACKAGE_PHP_EXT_DBA_INI
  
- ifeq ($(BR2_i386),y)
- OPROFILE_ARCH = i386
+ endif
+ 
+-config BR2_PACKAGE_PHP_EXT_SQLITE
+-	bool "SQLite"
+-	help
+-	  Legacy SQLite2 support
+-
+-config BR2_PACKAGE_PHP_EXT_SQLITE_UTF8
+-	bool "sqlite UTF8 support"
+-	depends on BR2_PACKAGE_PHP_EXT_SQLITE
+-	help
+-	  UTF8 support for sqlite
+-
+ config BR2_PACKAGE_PHP_EXT_MYSQL
+ 	bool "Mysql"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+@@ -227,6 +216,7 @@ config BR2_PACKAGE_PHP_EXT_FTP
+ 
+ config BR2_PACKAGE_PHP_EXT_SNMP
+ 	bool "SNMP"
++	depends on BR2_USE_MMU # netsnmp fork()
+ 	select BR2_PACKAGE_NETSNMP
+ 	select BR2_PACKAGE_NETSNMP_ENABLE_MIBS
+ 	help
+@@ -234,13 +224,18 @@ config BR2_PACKAGE_PHP_EXT_SNMP
+ 
+ config BR2_PACKAGE_PHP_EXT_SOCKETS
+ 	bool "sockets"
++	depends on BR2_INET_IPV6
+ 	help
+ 	  Sockets support
+ 
++comment "sockets support needs a toolchain w/ IPv6"
++	depends on !BR2_INET_IPV6
++
+ comment "Process Control"
+ 
+ config BR2_PACKAGE_PHP_EXT_PCNTL
+ 	bool "PCNTL"
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  Process control support
+ 
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 3e284f2..10c314f 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,12 +4,13 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 5.3.27
++PHP_VERSION = 5.5.7
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_SITE = http://www.php.net/distributions
+ PHP_INSTALL_STAGING = YES
+ PHP_INSTALL_STAGING_OPT = INSTALL_ROOT=$(STAGING_DIR) install
+ PHP_INSTALL_TARGET_OPT = INSTALL_ROOT=$(TARGET_DIR) install
++PHP_DEPENDENCIES = host-pkgconf
+ PHP_LICENSE = PHP
+ PHP_LICENSE_FILES = LICENSE
+ PHP_CONF_OPT =  --mandir=/usr/share/man \
+@@ -125,17 +126,6 @@ ifeq ($(BR2_PACKAGE_PHP_EXT_READLINE),y)
+ 	PHP_DEPENDENCIES += readline
+ endif
+ 
+-### Legacy sqlite2 support
+-ifeq ($(BR2_PACKAGE_PHP_EXT_SQLITE),y)
+-	PHP_CONF_OPT += --with-sqlite
+-ifneq ($(BR2_LARGEFILE),y)
+-	PHP_CFLAGS += -DSQLITE_DISABLE_LFS
+-endif
+-ifeq ($(BR2_PACKAGE_PHP_EXT_SQLITE_UTF8),y)
+-	PHP_CONF_OPT += --enable-sqlite-utf8
+-endif
+-endif
+-
+ ### Native MySQL extensions
+ ifeq ($(BR2_PACKAGE_PHP_EXT_MYSQL),y)
+ 	PHP_CONF_OPT += --with-mysql=$(STAGING_DIR)/usr
+-- 
+1.8.3.2
