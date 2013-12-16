@@ -1,88 +1,67 @@
-From: Clayton Shotwell <clshotwe@rockwellcollins.com>
-Date: Mon, 16 Dec 2013 09:44:11 -0600
-Subject: [Buildroot] [ PATCH v4 16/20] busybox: add option to install
- individual binaries
-In-Reply-To: <52AA4069.3000707@mind.be>
-References: <1386872840-22051-1-git-send-email-clshotwe@rockwellcollins.com>
- <1386872840-22051-17-git-send-email-clshotwe@rockwellcollins.com>
- <52AA4069.3000707@mind.be>
-Message-ID: <OFD1F6F732.D4FFDADA-ON86257C43.004FD9D8-86257C43.00566C17@rockwellcollins.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 16 Dec 2013 15:46:25 +0000
+Subject: [Buildroot] [PATCH v3] knock: Fix build failure due to missing
+	README file.
+In-Reply-To: <87bo0gsu9g.fsf@dell.be.48ers.dk>
+References: <1386851218-19360-1-git-send-email-Vincent.Riera@imgtec.com>
+ <871u1i2lhm.fsf@dell.be.48ers.dk> <52AA38BC.2020407@mind.be>
+ <87bo0l1y5p.fsf@dell.be.48ers.dk> <52AAD485.5040306@imgtec.com>
+ <87haadyswh.fsf@dell.be.48ers.dk> <52AF10A4.6050609@imgtec.com>
+ <87bo0gsu9g.fsf@dell.be.48ers.dk>
+Message-ID: <52AF2051.7080806@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+On 12/16/2013 03:14 PM, Peter Korsgaard wrote:
+>>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+>
+> Hi,
+>
+>   >> > Yes, I sent a pull request upstream and they merged it. If you have
+>   >> > updated the knock.mk to use the latest git, then we don't need any
+>   >> > patch because it's already applied upstream :-)
+>   >>
+>   >> True, but the same applies with the current version we're using as that
+>   >> is from before the README -> README.md rename.
+>
+>   > Oh, I understand now... You changed the git version of this package to
+>   > downgrade it just to the point before the README -> README.md was
+>   > made.
+>
+> Well, that's one way of seeing it - I fixed it to use the version
+> specified (7666f2e86e18d4), which was presumably what was the submitter
+> had desired. Before that fix it used the current head (first time the
+> package was built, afterwards the local tarball in dl/ is used).
+>
+>
+>   >> If you have tested the latest git then you are welcome to send a patch
+>   >> bumping the version.
+>
+>   > Yes, I have tested it, but it's easier for you to just change the
+>   > version to the last git commit number.
+>
+> Do you mind sending a patch changing KNOCK_VERSION so you can sign off
+> on it? Thanks.
+>
 
-Arnout Vandecappelle <arnout@mind.be> wrote on 12/12/2013 05:02:01 PM:
+But you need to mirror it first. The version we have right know works 
+because you have this tarball in the buildroot mirrors:
+http://sources.buildroot.net//knock-7666f2e86e18d482eaad5fe1fea46d87d80b0555.tar.gz
 
->   That last sentence makes me think that we're missing a depends on 
-> !BR2_PREFER_STATIC here.
+If you try to get that file from git, it fails with:
+ >>> knock 7666f2e86e18d482eaad5fe1fea46d87d80b0555 Downloading
+--2013-12-16 15:40:52-- 
+https://github.com/jvinet/7666f2e86e18d482eaad5fe1fea46d87d80b0555/tarball/knock-7666f2e86e18d482eaad5fe1fea46d87d80b0555.tar.gz
+Resolving github.com... 192.30.252.130
+Connecting to github.com|192.30.252.130|:443... connected.
+HTTP request sent, awaiting response... 404 Not Found
+2013-12-16 15:40:53 ERROR 404: Not Found.
 
-Agreed. I'll add that in.
+So, in order to bump the version you need to put the new tarball in the 
+mirrors first.
 
-> > +
-> >   config BR2_PACKAGE_BUSYBOX_WATCHDOG
-> >      bool "Install the watchdog daemon startup script"
-> >      help
-> > diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-> > index f6f542e..13de7ed 100644
-> > --- a/package/busybox/busybox.mk
-> > +++ b/package/busybox/busybox.mk
-> > @@ -50,10 +50,16 @@ ifndef BUSYBOX_CONFIG_FILE
-> >      BUSYBOX_CONFIG_FILE = $(call 
-qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG))
-> >   endif
-> >
-> > +ifeq ($(BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES),y)
-> > +define BUSYBOX_PERMISSIONS
-> > +/usr/share/udhcpc/default.script f 755  0 0 - - - - -
-> 
->   Isn't setuid root needed anymore for /bin/login? Same for passwd, su, 
-> probably others...
-
-Good point. I'll look into adding support for that.
-
-> > +endef
-> > +else
-> >   define BUSYBOX_PERMISSIONS
-> >   /bin/busybox          f 4755   0 0 - - - - -
-> >   /usr/share/udhcpc/default.script f 755  0 0 - - - - -
-> >   endef
-> > +endif
-> >
-> >   # If mdev will be used for device creation enable it and copy 
-> S10mdev to /etc/init.d
-> >   ifeq ($(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),y)
-> > @@ -152,6 +158,22 @@ define BUSYBOX_SET_INIT
-> >   endef
-> >   endif
-> >
-> > +ifeq ($(BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES),y)
-> > +define BUSYBOX_CONFIGURE_INDIVIDUAL_BINARIES
-> > +   $(call KCONFIG_ENABLE_OPT,CONFIG_BUILD_LIBBUSYBOX,$
-> (BUSYBOX_BUILD_CONFIG))
-> > +   $(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_INDIVIDUAL,$
-> (BUSYBOX_BUILD_CONFIG))
-> > +endef
-> > +
-> > +define BUSYBOX_INSTALL_INDIVIDUAL_BINARIES
-> > +   for i in `find -L $(TARGET_DIR) -xtype l -samefile $
-> (TARGET_DIR)/bin/busybox` ; do \
-> > +      $(INSTALL) -D -m 0755 $(@D)/0_lib/`basename $$i` $$i ; \
-> > +   done
-> 
->   Icky, perhaps it's better to make an upstreamable patch that fixes the 
-
-> Makefile so it properly installs the binaries if INDIVIDUAL_BINARIES is 
-
-I'll see what I can do.
-
-Thanks,
-Clayton
-
-Clayton Shotwell
-Software Engineer
-clshotwe at rockwellcollins.com
-www.rockwellcollins.com 
+-- 
+Vincent
