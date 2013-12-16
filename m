@@ -1,68 +1,69 @@
-From: Anders Darander <anders@chargestorm.se>
-Date: Mon, 16 Dec 2013 15:45:32 +0100
-Subject: [Buildroot] [PATCH 1/1] linux.mk: enable options for ktap
-In-Reply-To: <CAAXf6LVOssD-uJP6E3oFRg3DOca7N8sR+PzrBtLZDd=1PVTjVw@mail.gmail.com>
-References: <1387191200-20387-1-git-send-email-anders@chargestorm.se>
- <CAAXf6LVOssD-uJP6E3oFRg3DOca7N8sR+PzrBtLZDd=1PVTjVw@mail.gmail.com>
-Message-ID: <20131216144447.GB5876@ad.chargestorm.se>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 16 Dec 2013 16:03:03 +0100
+Subject: [Buildroot] [git commit] libpcap: add upstream patch to fix runtime
+	issue when TPACKET_V3 isn't supported
+Message-ID: <20131216150821.105EF9C0AE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-* Thomas De Schampheleire <patrickdepinguin@gmail.com> [131216 12:12]:
-> On Mon, Dec 16, 2013 at 11:53 AM, Anders Darander <anders@chargestorm.se> wrote:
-> > Certain tracing related options are required to be able to build ktapvm.ko, enable those.
-> >
-> > Enable CONFIG_FUNTCTION_TRACER as otherwise, CONFIG_EVENT_TRACING won't stick. (Some
-> > tracer needs to be enabled for this).
-> >
-> > Signed-off-by: Anders Darander <anders@chargestorm.se>
-> > ---
-> >
-> >  This is a followup to the introduction of the ktap package, as was discussed in
-> >  http://permalink.gmane.org/gmane.comp.lib.uclibc.buildroot/72000.
-> >
-> >  linux/linux.mk | 5 +++++
-> >  1 file changed, 5 insertions(+)
-> >
-> > diff --git a/linux/linux.mk b/linux/linux.mk
-> > index 33931e5..5af167d 100644
-> > --- a/linux/linux.mk
-> > +++ b/linux/linux.mk
-> > @@ -184,6 +184,11 @@ define LINUX_CONFIGURE_CMDS
-> >                 $(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(@D)/.config))
-> >         $(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),
-> >                 $(call KCONFIG_SET_OPT,CONFIG_UEVENT_HELPER_PATH,\"/sbin/mdev\",$(@D)/.config))
-> > +       $(if $(BR2_PACKAGE_KTAP),
-> > +               $(call KCONFIG_ENABLE_OPT,CONFIG_DEBUG_FS,$(@D)/.config)
-> > +               $(call KCONFIG_ENABLE_OPT,CONFIG_EVENT_TRACING,$(@D)/.config)
-> > +               $(call KCONFIG_ENABLE_OPT,CONFIG_PERF_EVENTS,$(@D)/.config)
-> > +               $(call KCONFIG_ENABLE_OPT,CONFIG_FUNCTION_TRACER,$(@D)/.config))
-> >         $(if $(BR2_PACKAGE_SYSTEMD),
-> >                 $(call KCONFIG_ENABLE_OPT,CONFIG_CGROUPS,$(@D)/.config))
-> >         $(if $(BR2_LINUX_KERNEL_APPENDED_DTB),
-> > --
-> 
-> Should we update the help text in ktap to indicate that the mentioned
-> configs are enabled automatically if the kernel is built by buildroot?
+commit: http://git.buildroot.net/buildroot/commit/?id=7f05f73e44d8be72aacb53d279585281b639058f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-What does everyone else think?
+libpcap would fail to initialize on Linux when compiled against kernel
+headers with TPACKET_V3 support but running on kernel without:
 
-We've got three options: 
+"can't get TPACKET_V3 header len on packet socket: Invalid argument"
 
-1) Let it be as it is today
-2) Change the text to state that those options are automatically enabled
-3) Do as e.g. systemd does, which enables cgroups without mentioning in
-Config.in. I.e. remove the discussion of those options from
-ktap/Config.in.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...> libpcap-0001-remove-libnl-include-path.patch} |    0
+ ...0002-fix-TPACKET_V3-initialization-GH-329.patch |   34 ++++++++++++++++++++
+ 2 files changed, 34 insertions(+), 0 deletions(-)
 
-I'm indifferent to either of these solutions.
-
-Cheers,
-Anders
-
--- 
-Anders Darander
-ChargeStorm AB / eStorm AB
+diff --git a/package/libpcap/libpcap-remove-libnl-include-path.patch b/package/libpcap/libpcap-0001-remove-libnl-include-path.patch
+similarity index 100%
+rename from package/libpcap/libpcap-remove-libnl-include-path.patch
+rename to package/libpcap/libpcap-0001-remove-libnl-include-path.patch
+diff --git a/package/libpcap/libpcap-0002-fix-TPACKET_V3-initialization-GH-329.patch b/package/libpcap/libpcap-0002-fix-TPACKET_V3-initialization-GH-329.patch
+new file mode 100644
+index 0000000..9d16098
+--- /dev/null
++++ b/package/libpcap/libpcap-0002-fix-TPACKET_V3-initialization-GH-329.patch
+@@ -0,0 +1,34 @@
++From cd84bc9743d7595dee1ea4bc40bd236a619d6539 Mon Sep 17 00:00:00 2001
++From: Gabor Tatarka <gabor.tatarka@ericsson.com>
++Date: Mon, 2 Dec 2013 22:05:57 +0400
++Subject: [PATCH] fix TPACKET_V3 initialization (GH #329)
++
++libpcap would fail to initialize on Linux when compiled against kernel
++headers with TPACKET_V3 support but running on kernel without:
++
++"can't get TPACKET_V3 header len on packet socket: Invalid argument"
++
++Fix init_tpacket() to respect EINVAL because that is what the kernel
++returns for unsupported TPACKET versions.
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ pcap-linux.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/pcap-linux.c b/pcap-linux.c
++index 6c0723a..8800c96 100644
++--- a/pcap-linux.c
+++++ b/pcap-linux.c
++@@ -3471,7 +3471,7 @@ init_tpacket(pcap_t *handle, int version, const char *version_str)
++ 
++ 	/* Probe whether kernel supports the specified TPACKET version */
++ 	if (getsockopt(handle->fd, SOL_PACKET, PACKET_HDRLEN, &val, &len) < 0) {
++-		if (errno == ENOPROTOOPT)
+++		if (errno == ENOPROTOOPT || errno == EINVAL)
++ 			return 1;	/* no */
++ 
++ 		/* Failed to even find out; this is a fatal error. */
++-- 
++1.8.5.1
++
