@@ -1,41 +1,46 @@
-From: Thierry Bultel <thierry.bultel@wanadoo.fr>
-Date: Mon, 16 Dec 2013 15:30:37 +0100
-Subject: [Buildroot] [PATCH 1/1 v2] Do not use an initrd in iso image when
-	using initramfs
-Message-ID: <1387204237-4347-1-git-send-email-thierry.bultel@wanadoo.fr>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 16 Dec 2013 14:39:32 +0000
+Subject: [Buildroot] [PATCH v3] knock: Fix build failure due to missing
+	README file.
+In-Reply-To: <87haadyswh.fsf@dell.be.48ers.dk>
+References: <1386851218-19360-1-git-send-email-Vincent.Riera@imgtec.com>
+ <871u1i2lhm.fsf@dell.be.48ers.dk> <52AA38BC.2020407@mind.be>
+ <87bo0l1y5p.fsf@dell.be.48ers.dk> <52AAD485.5040306@imgtec.com>
+ <87haadyswh.fsf@dell.be.48ers.dk>
+Message-ID: <52AF10A4.6050609@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thierry Bultel <tbultel@basystemes.fr>
+On 12/13/2013 09:58 AM, Peter Korsgaard wrote:
+>>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+>
+> Hi,
+>
+>   >> >  But of course, your patch is still relevant to send upstream!
+>   >>
+>   >> It afaik is already included upstream, which is why the patch no longer
+>   >> applied.
+>   >>
+>
+>   > Yes, I sent a pull request upstream and they merged it. If you have
+>   > updated the knock.mk to use the latest git, then we don't need any
+>   > patch because it's already applied upstream :-)
+>
+> True, but the same applies with the current version we're using as that
+> is from before the README -> README.md rename.
 
-When using initramfs, it is useless to put an initrd in the iso image.
-This patch makes the image to only contain the kernel image, and
-also removes the initrd line from menu.lst
+Oh, I understand now... You changed the git version of this package to 
+downgrade it just to the point before the README -> README.md was made.
 
-Signed-off-by: Thierry Bultel <tbultel@basystemes.fr>
----
- v2: Followed Yann E. Morin's advise to use positive logic
- fs/iso9660/iso9660.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+> If you have tested the latest git then you are welcome to send a patch
+> bumping the version.
+>
 
-diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
-index 979a0b2..4237d23 100644
---- a/fs/iso9660/iso9660.mk
-+++ b/fs/iso9660/iso9660.mk
-@@ -17,7 +17,11 @@ $(BINARIES_DIR)/rootfs.iso9660: host-cdrkit host-fakeroot linux rootfs-cpio grub
- 	cp $(GRUB_DIR)/stage2/stage2_eltorito $(ISO9660_TARGET_DIR)/boot/grub/
- 	cp $(ISO9660_BOOT_MENU) $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
- 	cp $(LINUX_IMAGE_PATH) $(ISO9660_TARGET_DIR)/kernel
-+ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
-+	sed -i -e '/initrd/d'  $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
-+else
- 	cp $(BINARIES_DIR)/rootfs.cpio$(ROOTFS_CPIO_COMPRESS_EXT) $(ISO9660_TARGET_DIR)/initrd
-+endif
- 	# Use fakeroot to pretend all target binaries are owned by root
- 	rm -f $(FAKEROOT_SCRIPT)
- 	echo "chown -R 0:0 $(ISO9660_TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
+Yes, I have tested it, but it's easier for you to just change the 
+version to the last git commit number.
+
 -- 
-1.7.0.4
+Vincent
