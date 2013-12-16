@@ -1,50 +1,84 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 16 Dec 2013 16:55:01 +0100
-Subject: [Buildroot] [PATCH v3] knock: Fix build failure due to missing
-	README file.
-In-Reply-To: <52AF2051.7080806@imgtec.com> (Vicente Olivert Riera's message of
- "Mon, 16 Dec 2013 15:46:25 +0000")
-References: <1386851218-19360-1-git-send-email-Vincent.Riera@imgtec.com>
- <871u1i2lhm.fsf@dell.be.48ers.dk> <52AA38BC.2020407@mind.be>
- <87bo0l1y5p.fsf@dell.be.48ers.dk> <52AAD485.5040306@imgtec.com>
- <87haadyswh.fsf@dell.be.48ers.dk> <52AF10A4.6050609@imgtec.com>
- <87bo0gsu9g.fsf@dell.be.48ers.dk> <52AF2051.7080806@imgtec.com>
-Message-ID: <871u1cssdm.fsf@dell.be.48ers.dk>
+From: Matt Weber <mlweber1@rockwellcollins.com>
+Date: Mon, 16 Dec 2013 09:58:21 -0600
+Subject: [Buildroot] [PATCH v2] smcroute: new package
+Message-ID: <1387209501-15147-1-git-send-email-mlweber1@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
+Signed-off-by: Sean Gerhardt <sagerhar@rockwellcollins.com>
+---
 
-Hi,
+Changes v1 -> v2
+	- Fixed double spaces in both files (Suggested by Thomas)
+	- Removed source archive definition (Suggested by Thomas)
+	- Fixed spelling in Config.in (Suggested by Peter)
+	- Added dependency on IPV6 (Suggested by Peter)
+	- Tested for uclibc compatibility
+---
+ package/Config.in            |    1 +
+ package/smcroute/Config.in   |   15 +++++++++++++++
+ package/smcroute/smcroute.mk |   15 +++++++++++++++
+ 3 files changed, 31 insertions(+), 0 deletions(-)
+ create mode 100755 package/smcroute/Config.in
+ create mode 100755 package/smcroute/smcroute.mk
 
- > But you need to mirror it first. The version we have right know works
- > because you have this tarball in the buildroot mirrors:
- > http://sources.buildroot.net//knock-7666f2e86e18d482eaad5fe1fea46d87d80b0555.tar.gz
-
- > If you try to get that file from git, it fails with:
- >>>> knock 7666f2e86e18d482eaad5fe1fea46d87d80b0555 Downloading
- > --2013-12-16 15:40:52-- 
- > https://github.com/jvinet/7666f2e86e18d482eaad5fe1fea46d87d80b0555/tarball/knock-7666f2e86e18d482eaad5fe1fea46d87d80b0555.tar.gz
- > Resolving github.com... 192.30.252.130
- > Connecting to github.com|192.30.252.130|:443... connected.
- > HTTP request sent, awaiting response... 404 Not Found
- > 2013-12-16 15:40:53 ERROR 404: Not Found.
-
- > So, in order to bump the version you need to put the new tarball in
- > the mirrors first.
-
-Ahh, I somehow dropped the project name ('knock') from the github macro
-when I fixed the revision.
-
-Sorry about that, fixed in git.
-
- > -- 
- > Vincent
-
-
-
+diff --git a/package/Config.in b/package/Config.in
+index be16714..78a9e16 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -891,6 +891,7 @@ source "package/rtptools/Config.in"
+ source "package/samba/Config.in"
+ source "package/sconeserver/Config.in"
+ source "package/ser2net/Config.in"
++source "package/smcroute/Config.in"
+ source "package/socat/Config.in"
+ source "package/socketcand/Config.in"
+ source "package/spawn-fcgi/Config.in"
+diff --git a/package/smcroute/Config.in b/package/smcroute/Config.in
+new file mode 100755
+index 0000000..df42db3
+--- /dev/null
++++ b/package/smcroute/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_SMCROUTE
++	bool "smcroute"
++	depends on BR2_INET_IPV6
++	help
++	  SMCRoute is a command line tool to manipulate the multicast
++	  routes of a UNIX kernel. It supports both IPv4 and IPv6 multicast
++	  routing.  SMCRoute can be used as an alternative to dynamic
++	  multicast routers like mrouted or pimd in setups where static
++	  multicast routes should be maintained and/or no proper IGMP or
++	  MLD signaling exists.
++
++	  https://github.com/troglobit/smcroute
++
++comment "smcroute needs a toolchain w/ IPv6"
++	depends on !BR2_INET_IPV6
+diff --git a/package/smcroute/smcroute.mk b/package/smcroute/smcroute.mk
+new file mode 100755
+index 0000000..896db8c
+--- /dev/null
++++ b/package/smcroute/smcroute.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# smcroute
++#
++################################################################################
++SMCROUTE_VERSION = 1.99.2
++SMCROUTE_SITE = $(call github,troglobit,smcroute,$(SMCROUTE_VERSION))
++SMCROUTE_LICENSE = GPLv2+
++SMCROUTE_LICENSE_FILES = COPYING
++
++SMCROUTE_CONF_OPT = ac_cv_func_setpgrp_void=yes
++#BUG:The package Makefile uses CC?= even though the package is autotools based
++SMCROUTE_MAKE_ENV = $(TARGET_CONFIGURE_OPTS)
++
++$(eval $(autotools-package))
 -- 
-Bye, Peter Korsgaard
+1.7.1
