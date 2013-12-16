@@ -1,17 +1,24 @@
-From: Sergey Alyoshin <alyoshin.s@gmail.com>
-Date: Tue, 17 Dec 2013 01:31:28 +0400
-Subject: [Buildroot] [PATCH v2] arm: mx5: Add fuse supply enable in
-	fsl_iim
-In-Reply-To: <87bo0gqz4j.fsf@dell.be.48ers.dk>
-References: <1387211106-28975-1-git-send-email-alyoshin.s@gmail.com>
- <87bo0gqz4j.fsf@dell.be.48ers.dk>
-Message-ID: <CAOxVtSS7q1UwmXVC6Fpj_2Ae+0q5cAQasLC2iwt0kpzySvT=mw@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 16 Dec 2013 22:39:38 +0100
+Subject: [Buildroot] [PATCH] Add hypervisor consoles (hvc)
+In-Reply-To: <20131216161314.3b13c9e4@kryten> (Anton Blanchard's message of
+ "Mon, 16 Dec 2013 16:13:14 +1100")
+References: <20131216161314.3b13c9e4@kryten>
+Message-ID: <877gb4qxut.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Ehh, did you mean to send this to the ARM kernel list instead?
+>>>>> "Anton" == Anton Blanchard <anton@samba.org> writes:
 
-Yes, sorry.
+ > Add /dev/hvc* devices, and add them to securetty. These
+ > are required for ppc64 virtual consoles.
+
+ > Signed-off-by: Anton Blanchard <anton@samba.org>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
