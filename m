@@ -1,98 +1,48 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 16 Dec 2013 08:32:08 +0100
-Subject: [Buildroot] [PATCH] manual: add section about dealing
- efficiently with big image files
-In-Reply-To: <1387148700-25694-1-git-send-email-yann.morin.1998@free.fr>
-References: <1387148700-25694-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <CAAXf6LU=6o+=SxJc_z1SG24JDwWy8U9zo_jfgrz49peyDZQtMA@mail.gmail.com>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Mon, 16 Dec 2013 08:25:18 +0000
+Subject: [Buildroot] [PATCH] oprofile: fix install for avr32
+Message-ID: <1387182318-21445-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+From: Simon Dawson <spdawson@gmail.com>
 
-On Mon, Dec 16, 2013 at 12:05 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
->
-> As reported by Ryan, it is not well-known that most tools can deal
-> efficiently with big sparse files.
->
-> Add a section in the manual about this, with tar and cp used as
-> examples, and a hinting to the man pages for the others.
->
-> Reported-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Ryan Barnett <rjbarnet@rockwellcollins.com>
-> Cc: Peter Korsgaard <jacmet@uclibc.org>
->
-> ---
-> changes v1 -> v2:
->   - remove 'dd' since it can be dangerous  (Peter)
->   - add a sentence that sparse files are to be used only on the build
->     machine, not while transferring to the target device  (Peter)
-> ---
->  docs/manual/common-usage.txt | 38 ++++++++++++++++++++++++++++++++++++++
->  1 file changed, 38 insertions(+)
->
-> diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
-> index 1290dfc..736ff57 100644
-> --- a/docs/manual/common-usage.txt
-> +++ b/docs/manual/common-usage.txt
-> @@ -100,3 +100,41 @@ or +g+++ for building helper-binaries on your host, then do
->  --------------------
->   $ make HOSTCXX=g++-4.3-HEAD HOSTCC=gcc-4.3-HEAD
->  --------------------
-> +
-> +Dealing efficiently with filesystem images
-> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> +
-> +Filesystem images can get pretty big, depending on the filesystem you choose,
-> +the number of packages, whether you provisionned free space... Yet, some
+There is no perf_events support in the kernel for avr32. The oprofile
+package makefile hard codes the list of binaries to install. Unfortunately,
+this hard-coded list contains pe_profiling/operf, which is only built when
+perf_events support is available.
 
-provisioned
+Fixes autobuild failures such as the following.
 
-> +locations in the filesystems images may just be _empty_ (eg. a long run of
-> +'zeroes'); such a file is called a _sparse_ file.
-> +
-> +Most tools can handle sparse files efficiently, and will only store or write
-> +those parts of a sparse file that are not empty.
-> +
-> +For example:
-> +
-> +* +tar+ accepts the +-S+ option to tell it to only store non-zero blocks
-> +  of sparse files:
-> +** +tar cf archive.tar -S [files...]+ will efficiently store sparse files
-> +   in a tarball
-> +** +tar xf archive.tar -S+ will efficiently store sparse files extracted
-> +   from a tarball
-> +
-> +* +cp+ accepts the +--sparse=WHEN+ option (+WHEN+ is one of +auto+,
-> +  +never+ or +always+):
-> +** +cp --sparse=always source.file dest.file+ will make +dest.file+ a
-> +   sparse file if +source.file+ has long runs of zeroes
-> +
-> +Other tools may have similar options. Please consult their own man pages.
+  http://autobuild.buildroot.net/results/492/492659bc252395a62e62e6005ed0e86e582dcada/
 
-I find the usage of 'own' strange here. Suggestions:
-Please consult their man pages.
-Please consult their respective man pages.
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ package/oprofile/oprofile.mk | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-
-> +
-> +You can use sparse files if you need to store the filesystem images (eg.
-> +to transfer from one machine to another), of if you need to send them (eg.
-> +to the Q&A team).
-> +
-> +Note however that flashing a filesystem image to a device while using the
-> +sparse mode of +dd+ may result in a broken filesystem (eg. the block bitmap
-> +of an ext2 filesystem may be corrupted; or, if you have sparse files in
-> +your filesystem, those parts may not be all-zeroes when read back). You
-> +should only use sparse files when handling files on the build machine, not
-> +when transferring them to an actual device that will be used on the target.
-> --
-
-
-Best regards,
-Thomas
+diff --git a/package/oprofile/oprofile.mk b/package/oprofile/oprofile.mk
+index 186e30c..ee94d19 100644
+--- a/package/oprofile/oprofile.mk
++++ b/package/oprofile/oprofile.mk
+@@ -16,7 +16,14 @@ OPROFILE_CONF_OPT = \
+ OPROFILE_AUTORECONF = YES
+ OPROFILE_BINARIES = utils/ophelp pp/opannotate pp/oparchive pp/opgprof
+ OPROFILE_BINARIES += pp/opreport opjitconv/opjitconv daemon/oprofiled
+-OPROFILE_BINARIES += utils/op-check-perfevents pe_profiling/operf libabi/opimport
++OPROFILE_BINARIES += utils/op-check-perfevents libabi/opimport
++
++# No perf_events support in kernel for avr32
++ifneq ($(BR2_avr32),y)
++OPROFILE_BINARIES += pe_profiling/operf
++endif
++
++OPROFILE_MAKE = $(MAKE1)
+ 
+ ifeq ($(BR2_i386),y)
+ OPROFILE_ARCH = i386
+-- 
+1.8.3.2
