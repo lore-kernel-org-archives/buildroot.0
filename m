@@ -1,74 +1,56 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 16 Dec 2013 16:28:14 +0100
-Subject: [Buildroot] [PATCH 1/1] linux.mk: enable options for ktap
-In-Reply-To: <20131216144447.GB5876@ad.chargestorm.se>
-References: <1387191200-20387-1-git-send-email-anders@chargestorm.se>
- <CAAXf6LVOssD-uJP6E3oFRg3DOca7N8sR+PzrBtLZDd=1PVTjVw@mail.gmail.com>
- <20131216144447.GB5876@ad.chargestorm.se>
-Message-ID: <CAAXf6LX8WnxbJp=st28-15_xY54YC2DdhROCsHRq0nAaMj3qUw@mail.gmail.com>
+From: mlweber1 at rockwellcollins.com <mlweber1@rockwellcollins.com>
+Date: Mon, 16 Dec 2013 09:35:10 -0600
+Subject: [Buildroot] [PATCH 1/1] smcroute: new package
+In-Reply-To: <CAAXf6LU8=fxMQKZQZfAOW-jX3b_466XnToBxFANkck6dNyx-Vw@mail.gmail.com>
+References: <1386872059-28046-1-git-send-email-mlweber1@rockwellcollins.com>	<3a2395ee-73bc-4723-a368-61194e9c0a08@email.android.com>
+ <OF808C467A.175074BD-ON86257C43.004D34F3-86257C43.004D9D54@rockwellcollins.com>
+ <CAAXf6LU8=fxMQKZQZfAOW-jX3b_466XnToBxFANkck6dNyx-Vw@mail.gmail.com>
+Message-ID: <OF05AD536D.26A24F69-ON86257C43.0055836E-86257C43.00559E19@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Dec 16, 2013 at 3:45 PM, Anders Darander <anders@chargestorm.se> wrote:
-> * Thomas De Schampheleire <patrickdepinguin@gmail.com> [131216 12:12]:
->> On Mon, Dec 16, 2013 at 11:53 AM, Anders Darander <anders@chargestorm.se> wrote:
->> > Certain tracing related options are required to be able to build ktapvm.ko, enable those.
->> >
->> > Enable CONFIG_FUNTCTION_TRACER as otherwise, CONFIG_EVENT_TRACING won't stick. (Some
->> > tracer needs to be enabled for this).
->> >
->> > Signed-off-by: Anders Darander <anders@chargestorm.se>
->> > ---
->> >
->> >  This is a followup to the introduction of the ktap package, as was discussed in
->> >  http://permalink.gmane.org/gmane.comp.lib.uclibc.buildroot/72000.
->> >
->> >  linux/linux.mk | 5 +++++
->> >  1 file changed, 5 insertions(+)
->> >
->> > diff --git a/linux/linux.mk b/linux/linux.mk
->> > index 33931e5..5af167d 100644
->> > --- a/linux/linux.mk
->> > +++ b/linux/linux.mk
->> > @@ -184,6 +184,11 @@ define LINUX_CONFIGURE_CMDS
->> >                 $(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(@D)/.config))
->> >         $(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),
->> >                 $(call KCONFIG_SET_OPT,CONFIG_UEVENT_HELPER_PATH,\"/sbin/mdev\",$(@D)/.config))
->> > +       $(if $(BR2_PACKAGE_KTAP),
->> > +               $(call KCONFIG_ENABLE_OPT,CONFIG_DEBUG_FS,$(@D)/.config)
->> > +               $(call KCONFIG_ENABLE_OPT,CONFIG_EVENT_TRACING,$(@D)/.config)
->> > +               $(call KCONFIG_ENABLE_OPT,CONFIG_PERF_EVENTS,$(@D)/.config)
->> > +               $(call KCONFIG_ENABLE_OPT,CONFIG_FUNCTION_TRACER,$(@D)/.config))
->> >         $(if $(BR2_PACKAGE_SYSTEMD),
->> >                 $(call KCONFIG_ENABLE_OPT,CONFIG_CGROUPS,$(@D)/.config))
->> >         $(if $(BR2_LINUX_KERNEL_APPENDED_DTB),
->> > --
->>
->> Should we update the help text in ktap to indicate that the mentioned
->> configs are enabled automatically if the kernel is built by buildroot?
->
-> What does everyone else think?
->
-> We've got three options:
->
-> 1) Let it be as it is today
-> 2) Change the text to state that those options are automatically enabled
-> 3) Do as e.g. systemd does, which enables cgroups without mentioning in
-> Config.in. I.e. remove the discussion of those options from
-> ktap/Config.in.
->
-> I'm indifferent to either of these solutions.
+Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote on 12/16/2013 
+09:25:41 AM:
 
-Let's indeed see what others think, but my opinion:
-- it's good that ktap/Config.in mentions the options, so that users
-with an external toolchain are notified
-- it would be good to reassure users that do have a buildroot-built
-kernel that everything is fine for them.
+> From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> To: mlweber1 at rockwellcollins.com
+> Cc: buildroot <buildroot@busybox.net>, Sean Gerhardt 
+> <sagerhar@rockwellcollins.com>
+> Date: 12/16/2013 09:25 AM
+> Subject: Re: [Buildroot] [PATCH 1/1] smcroute: new package
+> 
+> Hi Matt,
+> 
+> On Mon, Dec 16, 2013 at 3:07 PM,  <mlweber1@rockwellcollins.com> wrote:
+> 
+> >> >+SMCROUTE_SITE = $(call 
+github,troglobit,smcroute,$(SMCROUTE_VERSION))
+> >> >+SMCROUTE_SOURCE =
+> > troglobit-smcroute-$(SMCROUTE_VERSION)-0-g58388f6.tar.gz
+> >>
+> >> Why is it needed to specify _SOURCE here? It shouldn't be ..
+> > It seems like the releases are labeled in a way that requires this.
+> > Without
+> > specifying the source archive name, the archive that's requested to be
+> > downloaded
+> > "smcroute-$(SMCROUTE_VERSION).tar.gz" ends up as the file we noted as 
+the
+> > SOURCE.
+> 
+> I'm not sure I understand what you mean.
+> When I remove the _SOURCE line, I can still download and extract the
+> package normally. The name of the tar file is indeed different, but
+> this does not matter. The package infrastructure still correctly
+> handles it.
+> 
+> If you still think this _SOURCE is needed, could you explain in more 
+detail?
+I'll retest, I couldn't get the package infrastructure to handle the 
+change of package name after download.  Good to know that it should
+as that's much cleaner then my approach.
 
-So I prefer option 2.
-
-Best regards,
-Thomas
+Thanks,
+Matt
