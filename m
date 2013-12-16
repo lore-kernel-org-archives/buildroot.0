@@ -1,64 +1,28 @@
-From: =?UTF-8?Q?Mathias_De_Mar=C3=A9?= <mathias.demare@gmail.com>
-Date: Mon, 16 Dec 2013 13:46:14 +0100
-Subject: [Buildroot] [PATCH 1/1] package: make package download from
- Mercurial repositories more robust
-In-Reply-To: <CAAXf6LVBGJj_=Tns7O-9XF05OJ8NU0DCAfpPtFRQdMV7NJMNeA@mail.gmail.com>
-References: <1386700290-4813-1-git-send-email-mathias.demare@gmail.com>
- <CAAXf6LVU9OJtS2-Pbr0ect35RRvFd3fY4643ZhsDf-dSGj-RYg@mail.gmail.com>
- <CAAXf6LVBGJj_=Tns7O-9XF05OJ8NU0DCAfpPtFRQdMV7NJMNeA@mail.gmail.com>
-Message-ID: <CADzL+YgR+rDbYfoZctB=ARnT-YAApDhW8zqS=63uvXW-2w6k9Q@mail.gmail.com>
+From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
+Date: Mon, 16 Dec 2013 10:55:40 -0200
+Subject: [Buildroot] Patchwork oldest patches cleanup #3 (deadline
+	December 20)
+In-Reply-To: <CAAXf6LXDALKC9CKcOSqS3BkPaDeK34ao1D+u8NkJKLgTKe5Npg@mail.gmail.com>
+References: <CAAXf6LXUx3dERdYxq5d4mY8apxXk+Ltj_CNPm+RTM+52nKRUNA@mail.gmail.com>
+ <CAAXf6LXDALKC9CKcOSqS3BkPaDeK34ao1D+u8NkJKLgTKe5Npg@mail.gmail.com>
+Message-ID: <CAExDhvYZTKMaCvrFULU1EkV+RV+BKsvqP7hKJj4_WRwYnUYqwA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-should I do anything extra to get this patch into buildroot?
-
-Greetings,
-Mathias
-
-
-On Wed, Dec 11, 2013 at 7:12 PM, Thomas De Schampheleire <
-patrickdepinguin@gmail.com> wrote:
-
-> On Tue, Dec 10, 2013 at 9:10 PM, Thomas De Schampheleire
-> <patrickdepinguin@gmail.com> wrote:
-> > On Tue, Dec 10, 2013 at 7:31 PM, Mathias De Mar?
-> > <mathias.demare@gmail.com> wrote:
-> >> Previously, when cloning a Mercurial repository,
-> >> aborting the clone could (in some cases) leave behind an empty
-> directory.
-> >> As a result, a later clone would fail.
-> >>
-> >> Signed-off-by: Mathias De Mar? <mathias.demare@gmail.com>
-> >> ---
-> >>  package/pkg-download.mk | 1 +
-> >>  1 file changed, 1 insertion(+)
-> >>
-> >> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-> >> index 758b211..c00689b 100644
-> >> --- a/package/pkg-download.mk
-> >> +++ b/package/pkg-download.mk
-> >> @@ -178,6 +178,7 @@ endef
-> >>  define DOWNLOAD_HG
-> >>         test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
-> >>         (pushd $(DL_DIR) > /dev/null && \
-> >> +       rm -rf $($(PKG)_BASE_NAME) && \
-> >>         $(HG) clone --noupdate --rev $($(PKG)_DL_VERSION)
-> $($(PKG)_SITE) $($(PKG)_BASE_NAME) && \
-> >>         $(HG) archive --repository $($(PKG)_BASE_NAME) --type tgz
-> --prefix $($(PKG)_BASE_NAME)/ \
-> >>                       --rev $($(PKG)_DL_VERSION)
-> $(DL_DIR)/$($(PKG)_SOURCE) && \
-> >
-> > Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+On Sat, Dec 14, 2013 at 9:52 AM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+>>
+>> [PATCHv3] QtSerialPort: new package
+>> Thiago Correa <thiago.correa@gmail.com>
+>> http://patchwork.ozlabs.org/patch/195057
 >
-> It seems that patchwork did not pick up this ack, nor the reply
-> itself... Is this a known issue?
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131216/879c8805/attachment.html>
+
+I'm currently using this. Since then Qt5 has been integrated into
+buildroot and it includes this module. The difference (other than git
+hash) is that this patch compiles it for Qt4. We could drop assume
+code using QSerialPort will all be Qt5 or be ported to Qt5 eventually.
