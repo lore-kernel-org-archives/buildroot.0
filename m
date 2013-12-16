@@ -1,120 +1,74 @@
-From: Sergey Alyoshin <alyoshin.s@gmail.com>
-Date: Mon, 16 Dec 2013 20:25:06 +0400
-Subject: [Buildroot] [PATCH v2] arm: mx5: Add fuse supply enable in fsl_iim
-Message-ID: <1387211106-28975-1-git-send-email-alyoshin.s@gmail.com>
+From: mlweber1 at rockwellcollins.com <mlweber1@rockwellcollins.com>
+Date: Mon, 16 Dec 2013 10:33:10 -0600
+Subject: [Buildroot] [PATCH 1/1] smcroute: new package
+In-Reply-To: <CAAXf6LU8=fxMQKZQZfAOW-jX3b_466XnToBxFANkck6dNyx-Vw@mail.gmail.com>
+References: <1386872059-28046-1-git-send-email-mlweber1@rockwellcollins.com>	<3a2395ee-73bc-4723-a368-61194e9c0a08@email.android.com>
+ <OF808C467A.175074BD-ON86257C43.004D34F3-86257C43.004D9D54@rockwellcollins.com>
+ <CAAXf6LU8=fxMQKZQZfAOW-jX3b_466XnToBxFANkck6dNyx-Vw@mail.gmail.com>
+Message-ID: <OFDFF4011F.539E6A02-ON86257C43.0059E8A8-86257C43.005AED4B@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Enable fuse supply before fuse programming and disable after.
+Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote on 12/16/2013 
+09:25:41 AM:
 
-Signed-off-by: Sergey Alyoshin <alyoshin.s@gmail.com>
-Tested-by: Sergey Alyoshin <alyoshin.s@gmail.com>
+> From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> To: mlweber1 at rockwellcollins.com
+> Cc: buildroot <buildroot@busybox.net>, Sean Gerhardt 
+> <sagerhar@rockwellcollins.com>
+> Date: 12/16/2013 09:25 AM
+> Subject: Re: [Buildroot] [PATCH 1/1] smcroute: new package
+> 
+> Hi Matt,
+> 
+> On Mon, Dec 16, 2013 at 3:07 PM,  <mlweber1@rockwellcollins.com> wrote:
+> 
+> >> >+SMCROUTE_SITE = $(call 
+github,troglobit,smcroute,$(SMCROUTE_VERSION))
+> >> >+SMCROUTE_SOURCE =
+> > troglobit-smcroute-$(SMCROUTE_VERSION)-0-g58388f6.tar.gz
+> >>
+> >> Why is it needed to specify _SOURCE here? It shouldn't be ..
+> > It seems like the releases are labeled in a way that requires this.
+> > Without
+> > specifying the source archive name, the archive that's requested to be
+> > downloaded
+> > "smcroute-$(SMCROUTE_VERSION).tar.gz" ends up as the file we noted as 
+the
+> > SOURCE.
+> 
+> I'm not sure I understand what you mean.
+> When I remove the _SOURCE line, I can still download and extract the
+> package normally. The name of the tar file is indeed different, but
+> this does not matter. The package infrastructure still correctly
+> handles it.
+> 
+> If you still think this _SOURCE is needed, could you explain in more 
+detail?
 
-Tested on i.MX53 custom board by writing MAC addresses in fuse bank 1.
----
- arch/arm/cpu/armv7/mx5/clock.c           |   12 ++++++++++++
- arch/arm/include/asm/arch-mx5/clock.h    |    1 +
- arch/arm/include/asm/arch-mx5/crm_regs.h |    3 +++
- drivers/misc/fsl_iim.c                   |   17 ++++++++++++++++-
- 4 files changed, 32 insertions(+), 1 deletion(-)
+I think I figured out what's happening.  (Our office firewall makes this 
+almost impossible to test, so I'll have to confirm tonight)
+If I remove the SOURCE archive definition from the .mk, the package 
+downloads and I think the buildroot pkg scripts then use the 
+resulting filename of the archive to extract it, which results in the 
+correct smcroute folder under build.  I think the issue with not defining 
+the 
+SOURCE filename comes into play if a buildroot dl cached local archive 
+file is 
+used to build the package.  Buildroot then can't find the source archive 
+because the cached archive file has a unique filename.  This results in 
+the buildroot pkg scripts proceeding to re-download the source archive 
+again before continuing with extracting the unique filename and doing 
+proceeding with the rest of the pkg build.
 
-diff --git a/arch/arm/cpu/armv7/mx5/clock.c b/arch/arm/cpu/armv7/mx5/clock.c
-index fb3b128..2ca87e4 100644
---- a/arch/arm/cpu/armv7/mx5/clock.c
-+++ b/arch/arm/cpu/armv7/mx5/clock.c
-@@ -749,6 +749,18 @@ void enable_nfc_clk(unsigned char enable)
- 		MXC_CCM_CCGR5_EMI_ENFC(cg));
- }
- 
-+#ifdef CONFIG_FSL_IIM
-+void enable_efuse_prog_supply(bool enable)
-+{
-+	if (enable)
-+		setbits_le32(&mxc_ccm->cgpr,
-+				MXC_CCM_CGPR_EFUSE_PROG_SUPPLY_GATE);
-+	else
-+		clrbits_le32(&mxc_ccm->cgpr,
-+				MXC_CCM_CGPR_EFUSE_PROG_SUPPLY_GATE);
-+}
-+#endif
-+
- /* Config main_bus_clock for periphs */
- static int config_periph_clk(u32 ref, u32 freq)
- {
-diff --git a/arch/arm/include/asm/arch-mx5/clock.h b/arch/arm/include/asm/arch-mx5/clock.h
-index 9ee79ae..3db4112 100644
---- a/arch/arm/include/asm/arch-mx5/clock.h
-+++ b/arch/arm/include/asm/arch-mx5/clock.h
-@@ -53,5 +53,6 @@ void enable_usboh3_clk(bool enable);
- void mxc_set_sata_internal_clock(void);
- int enable_i2c_clk(unsigned char enable, unsigned i2c_num);
- void enable_nfc_clk(unsigned char enable);
-+void enable_efuse_prog_supply(bool enable);
- 
- #endif /* __ASM_ARCH_CLOCK_H */
-diff --git a/arch/arm/include/asm/arch-mx5/crm_regs.h b/arch/arm/include/asm/arch-mx5/crm_regs.h
-index 392881c..efe57e0 100644
---- a/arch/arm/include/asm/arch-mx5/crm_regs.h
-+++ b/arch/arm/include/asm/arch-mx5/crm_regs.h
-@@ -305,6 +305,9 @@ struct mxc_ccm_reg {
- /* Define the bits in register CCDR */
- #define MXC_CCM_CCDR_IPU_HS_MASK			(0x1 << 17)
- 
-+/* Define the bits in register CGPR */
-+#define MXC_CCM_CGPR_EFUSE_PROG_SUPPLY_GATE		(1 << 4)
-+
- /* Define the bits in register CCGRx */
- #define MXC_CCM_CCGR_CG_MASK				0x3
- #define MXC_CCM_CCGR_CG_OFF				0x0
-diff --git a/drivers/misc/fsl_iim.c b/drivers/misc/fsl_iim.c
-index 44ae7b1..8ac4d21 100644
---- a/drivers/misc/fsl_iim.c
-+++ b/drivers/misc/fsl_iim.c
-@@ -16,6 +16,9 @@
- #ifndef CONFIG_MPC512X
- #include <asm/arch/imx-regs.h>
- #endif
-+#if defined(CONFIG_MX51) || defined(CONFIG_MX53)
-+#include <asm/arch/clock.h>
-+#endif
- 
- /* FSL IIM-specific constants */
- #define STAT_BUSY		0x80
-@@ -93,6 +96,14 @@ struct fsl_iim {
- 	} bank[8];
- };
- 
-+#if !defined(CONFIG_MX51) && !defined(CONFIG_MX53)
-+#define enable_efuse_prog_supply(enable)
-+#endif
-+static void enable_fuse_prog(bool enable)
-+{
-+	enable_efuse_prog_supply(enable);
-+}
-+
- static int prepare_access(struct fsl_iim **regs, u32 bank, u32 word, int assert,
- 				const char *caller)
- {
-@@ -237,12 +248,16 @@ int fuse_prog(u32 bank, u32 word, u32 val)
- 	if (ret)
- 		return ret;
- 
-+	enable_fuse_prog(1);
- 	for (bit = 0; val; bit++, val >>= 1)
- 		if (val & 0x01) {
- 			ret = prog_bit(regs, bank, word, bit);
--			if (ret)
-+			if (ret) {
-+				enable_fuse_prog(0);
- 				return ret;
-+			}
- 		}
-+	enable_fuse_prog(0);
- 
- 	return 0;
- }
--- 
-1.7.10.4
+We noticed this because our builds primarily using a cached/mirrored dl
+folder of archive files.
+
+Thanks,
+Matt
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131216/087c0889/attachment-0001.html>
