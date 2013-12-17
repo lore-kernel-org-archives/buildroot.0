@@ -1,91 +1,40 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 17 Dec 2013 14:30:01 +0100
-Subject: [Buildroot] [PATCH v4 2/2] manual: update for multiple global
-	patch dirs
-In-Reply-To: <52B04F5E.1010602@mind.be>
-References: <1387270827-4379-1-git-send-email-rjbarnet@rockwellcollins.com>
- <1387270827-4379-2-git-send-email-rjbarnet@rockwellcollins.com>
- <CAAXf6LVu=ZUYZ-O-+WcCcnY2sCs8Nn-OiEwRwNkrjyqwhakE=Q@mail.gmail.com>
- <52B04F5E.1010602@mind.be>
-Message-ID: <CAAXf6LWmNBvqDv5Nw7z+5VaV0Cx3UuWt6Ybo9LyfwLVuGAOLPg@mail.gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 17 Dec 2013 13:57:29 +0000
+Subject: [Buildroot] [PATCH 1/3] qt5webkit: disable for MIPS64
+Message-ID: <1387288651-47952-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Dec 17, 2013 at 2:19 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-[..]
->>>
->>>
->>> -For a specific version <packageversion> of a specific package
->>> <packagename>,
->>> -patches are applied as follows.
->>> +For a specific version +<packageversion>+ of a specific package
->>> ++<packagename>+, patches are applied from +BR2_GLOBAL_PATCH_DIR+ as
->>> +follows:
->>>
->>> -First, the default Buildroot patch set for the package is applied.
->>> +. For every directory - +<global-patch-dir>+ - that exists in
->>> +  +BR2_GLOBAL_PATCH_DIR+, a +<package-patch-dir>+ will be determined as
->>> +  follows:
->>> ++
->>> +* If the directory
->>> +  +<global-patch-dir>/<packagename>/<packageversion>/+ exists.
->>> ++
->>> +* Otherwise, if the directory +<global-patch-dir>/<packagename>+ exists.
->>
->>
->> I find this wording strange:
->> '.... will be determined as follows: if the directory A exists.
->> Otherwise, if the directory B exists.'
->>
->> What about:
->> '.... will be determined as follows: A, if it exists. Otherwise, B, if
->> it exists.'
->
->
->  Actually for me, Ryan's formulation sounds more natural: if ... else if ...
-> else ....
+qt5webkit is not currently supported on MIPS64 platforms, so disable the
+possibility of selecting this package in that platform.
 
+In the future the following changes would be needed to fix this problem:
+A new Source/JavaScriptCore/assembler/MacroAssemblerMIPS64.h file needs
+to be created in order to add support for MIPS64 and MacroAssembler.h
+needs to be modified to include that file in case of CPU(MIPS64).
+Also Source/WTF/wtf/Platform.h and Source/WTF/wtf/dtoa/utils.h need to
+be modified to add MIPS64 support.
 
-The order of if/else are both fine for me, but I was more referring to
-something else. The intro sentence says: "The order will be determined
-as follows". When I read this, I expect to get a summary of items (the
-'order'). However, what follows is a list of conditionals ("if A")
-without 'then' statement.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/qt5/qt5webkit/Config.in |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-It's a bit like this to me:
-"On lazy days, I do only two things: if I am hungry, and if I am sleepy."
-while I expect more something like:
-"On lazy days, I do only two things: if I am hungry, I eat, and if I
-am sleepy, I sleep."
-
-[..]
-
->> I think it's a pity that there is duplication between this section and
->> the one on BR2_GLOBAL_PATCH_DIR.
->> However, it seems this was an explicit request made by Arnout.
->>
->> Arnout, would it not be better to remove the duplication, but rather
->> use hyperlinks to refer from one section to the other, with the
->> detailed explanation about patch order being in this 'How patches are
->> applied' section?
->
->
->  I meant to say that the remark about numbering the patches should be
-> duplicated, so that's just one sentence.
->
->  I do agree that it would be better to move the whole discussion about the
-> order in which patches are applied to this section (including a specific
-> comment about the linux patches), with a crossref from the global patch dir
-> section. However, Ryan didn't really change that structure (there was
-> already some amount of duplication), so I think it can safely be done in a
-> separate patch.
->
-
-Fair enough, but is Ryan prepared to make that follow-up patch, or
-should we wait until someone takes it up?
-
-Best regards,
-Thomas
+diff --git a/package/qt5/qt5webkit/Config.in b/package/qt5/qt5webkit/Config.in
+index 9eb5ef8..4a578ff 100644
+--- a/package/qt5/qt5webkit/Config.in
++++ b/package/qt5/qt5webkit/Config.in
+@@ -8,6 +8,8 @@ config BR2_PACKAGE_QT5WEBKIT
+ 	select BR2_PACKAGE_XLIB_LIBXRENDER if BR2_PACKAGE_QT5BASE_XCB
+ 	# This module does not support static linking
+ 	depends on !BR2_PREFER_STATIC_LIB
++	# This package is not supported on MIPS 64-bit architecture
++	depends on !BR2_mips64 && !BR2_mips64el
+ 	help
+ 	  Qt is a cross-platform application and UI framework for
+ 	  developers using C++.
+-- 
+1.7.1
