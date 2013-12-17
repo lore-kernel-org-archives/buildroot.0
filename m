@@ -1,55 +1,100 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 17 Dec 2013 23:07:35 +0100
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 17 Dec 2013 23:20:38 +0100
 Subject: [Buildroot] [PATCH] package/libgles: postpone the check for a
  missing GLES provider
 In-Reply-To: <20131217100414.551a3832@skate>
-References: <52A730B0.3020104@orange.com> <52AA41FE.6060705@mind.be>
- <20131217071100.04b7b3a7@skate>
- <201312170858.13393.yann.morin.1998@free.fr>
+References: <52A730B0.3020104@orange.com>	<52AA41FE.6060705@mind.be>	<20131217071100.04b7b3a7@skate>	<201312170858.13393.yann.morin.1998@free.fr>
  <20131217100414.551a3832@skate>
-Message-ID: <20131217220735.GA3352@free.fr>
+Message-ID: <52B0CE36.5000400@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
-
-On 2013-12-17 10:04 +0100, Thomas Petazzoni spake thusly:
+On 17/12/13 10:04, Thomas Petazzoni wrote:
+> Dear Yann E. MORIN,
+>
 > On Tue, 17 Dec 2013 08:58:13 +0100, Yann E. MORIN wrote:
-[--SNIP--]
-> > >  2. Or, we can take the opposite route by pushing the currently
-> > >     centralized libgles.mk logic that adds each OpenGL
-> > > implementation in LIBGLES_DEPENDENCIES down into each OpenGL
-> > > implementation .mk file. But that requires a late evaluation of
-> > > $(generic-package), so that all OpenGL implementations can be
-> > > registered in LIBGLES_DEPENDENCIES before the generic-package macro
-> > > of libgles.mk is evaluated. This would require something like
-> > > Yann's patch.
-> > 
-> > Needless to say I would highly prefer this second solution.
-> 
+>
+>>>   1. Since the .mk part is centralized in opengl/libgles, but the
+>>>      Config.in is not (spread in each OpenGL implementation doing the
+>>>      select BR2_PACKAGE_HAS_OPENGL_ES), we can centralize the
+>>> Config.in logic by removing the "select BR2_PACKAGE_HAS_OPENGL_ES"
+>>> in each OpenGL implementation, and define BR2_PACKAGE_HAS_OPENGL_EL
+>>> as something like:
+>>>
+>>> config BR2_PACKAGE_HAS_OPENGL_ES
+>>> 	bool
+>>> 	default y if BR2_PACKAGE_RPI_FIRMWARE
+>>> 	default y if BR2_PACKAGE_THIS_OTHER_OPENGL_IMPLEMENTATION
+>>> 	default y if BR2_PACKAGE_...
+>>
+>> With this first proposal, it becomes a bit more complex to
+>> implement providers in BR2_EXTERNAL.
+>
+> Ah, true.
+
+  Also it feels inconvenient to me that the virtual package should "know" 
+about all its providers.
+
+
+>
+>>>   2. Or, we can take the opposite route by pushing the currently
+>>>      centralized libgles.mk logic that adds each OpenGL
+>>> implementation in LIBGLES_DEPENDENCIES down into each OpenGL
+>>> implementation .mk file. But that requires a late evaluation of
+>>> $(generic-package), so that all OpenGL implementations can be
+>>> registered in LIBGLES_DEPENDENCIES before the generic-package macro
+>>> of libgles.mk is evaluated. This would require something like
+>>> Yann's patch.
+>>
+>> Needless to say I would highly prefer this second solution.
+>
 > Right. In principle, I have nothing against this solution. It's just
 > that I am not sure to fully grasp the consequences of the change you're
 > proposing. I'm a bit worried about "weird" consequences that we may not
 > be thinking of at this time. But maybe we should simply apply the
 > patch, and see if it causes problems for some specific use cases.
 
-OK, so we should apply it soon, since the holidays season is approaching
-pretty fast now, and it would be nive to be able to react quickly in
-case anything goes south...
+  I'm also a bit afraid of the consequences. It also makes make 
+processing, which is already difficult to understand, even more obfuscated.
 
-Peter, care to have a look at it and comment (or apply it), please? ;-)
-    http://patchwork.ozlabs.org/patch/301874/
 
-Regards,
-Yann E. MORIN.
+  Here's a wild idea...
+
+In rpi-userland/Config.in:
+
+if BR2_PACKAGE_RPI_USERLAND
+config BR2_PACKAGE_LIBEGL_PROVIDER
+	string
+	default "rpi-userland"
+endif
+
+
+In opengl/libegl/libegl.mk:
+
+LIBEGL_DEPENDENCIES = $(call qstrip,$(BR2PACKAGE_LIBEGL_PROVIDER))
+
+
+  It's still hackish of course, because:
+
+- rpi-userland/Config.in defines a symbol "belonging" to the libegl package;
+
+- only one provider can be defined, Kconfig will scream if it's defined 
+twice;
+
+- it may not work at all :-).
+
+
+  Regards,
+  Arnout
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
