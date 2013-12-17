@@ -1,42 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 17 Dec 2013 20:44:22 +0100
-Subject: [Buildroot] [PATCH v3] sawman: Link using gcc instead of ld
-In-Reply-To: <1387297332-28286-1-git-send-email-Vincent.Riera@imgtec.com>
- (Vicente Olivert Riera's message of "Tue, 17 Dec 2013 16:22:12 +0000")
-References: <1387297332-28286-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <8761qnp8ix.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 17 Dec 2013 20:33:42 +0100
+Subject: [Buildroot] [git commit] libdrm: Disable vmwgfx if specified by
+	config
+Message-ID: <20131217194430.0DF219C0C7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=ebda9ae661e5be3b5b1f6d1b022beff7db9fefaf
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Using ld may cause a link failure due to using the default emulation
- > linker which is configured when building the linker in binutils.  Using
- > gcc instead will pass the appropriate -m value because the compiler
- > knows the ABI you are using.
+Signed-Off-By: Paul Cercueil <paul@crapouillou.net>
 
- > Here is an example of the failure:
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libdrm/libdrm.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- > ld: .libs/libdirectfbwm_sawman.a.tmp/sawman_wm.o: ABI is incompatible
- > with that of the selected emulation
- > ld: failed to merge target specific data of file
- > .libs/libdirectfbwm_sawman.a.tmp/sawman_wm.o
- > ld: Attempt to do relocatable link with elf64-tradbigmips input and
- > elf32-tradbigmips output
- > ld: .libs/libdirectfbwm_sawman.a.tmp/sawman_wm.o: file class ELFCLASS64
- > incompatible with ELFCLASS32
- > ld: final link failed: File in wrong format
-
- > Fixes:
-
- >    http://autobuild.buildroot.net/results/e4b/e4b77681a44626efa2a44627604630697e785086/
-
- > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index 697cd2f..f5efaf1 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -44,7 +44,7 @@ ifeq ($(BR2_PACKAGE_LIBDRM_VMWGFX),y)
+ LIBDRM_CONF_OPT += --enable-vmwgfx
+ LIBDRM_DEPENDENCIES += xlib_libpciaccess
+ else
+-LIBDRM_CONF_OPT += --enable-vmwgfx
++LIBDRM_CONF_OPT += --disable-vmwgfx
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBDRM_OMAP),y)
