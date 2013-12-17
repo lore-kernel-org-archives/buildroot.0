@@ -1,120 +1,104 @@
-From: Paul Cercueil <paul@crapouillou.net>
-Date: Tue, 17 Dec 2013 02:12:15 +0100
-Subject: [Buildroot] [PATCH] util-linux: Add config switches for some more
-	binaries
-Message-ID: <1387242735-4670-1-git-send-email-paul@crapouillou.net>
+From: mlweber1 at rockwellcollins.com <mlweber1@rockwellcollins.com>
+Date: Mon, 16 Dec 2013 20:18:19 -0600
+Subject: [Buildroot] [PATCH 1/1] smcroute: new package
+In-Reply-To: <53f6441d-e221-4316-a6bb-ca80be307cae@email.android.com>
+References: <1386872059-28046-1-git-send-email-mlweber1@rockwellcollins.com>
+ <3a2395ee-73bc-4723-a368-61194e9c0a08@email.android.com>
+ <OF808C467A.175074BD-ON86257C43.004D34F3-86257C43.004D9D54@rockwellcollins.com>
+ <CAAXf6LU8=fxMQKZQZfAOW-jX3b_466XnToBxFANkck6dNyx-Vw@mail.gmail.com>
+ <OFDFF4011F.539E6A02-ON86257C43.0059E8A8-86257C43.005AED4B@rockwellcollins.com>
+ <53f6441d-e221-4316-a6bb-ca80be307cae@email.android.com>
+Message-ID: <OF74CD896E.A0FE9FD3-ON86257C44.000C6D71-86257C44.000CA9E5@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-Off-By: Paul Cercueil <paul@crapouillou.net>
----
- package/util-linux/Config.in     | 25 +++++++++++++++++++++++++
- package/util-linux/util-linux.mk |  7 ++++++-
- 2 files changed, 31 insertions(+), 1 deletion(-)
+Hi Thomas,
 
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index 8c8fd7a..e972f35 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -54,6 +54,11 @@ config BR2_PACKAGE_UTIL_LINUX_ARCH
- 	help
- 	  Print machine architecture
- 
-+config BR2_PACKAGE_UTIL_LINUX_CHFN_CHSH
-+	bool "chfn/chsh"
-+	help
-+	  Change login shell, real user name and information
-+
- config BR2_PACKAGE_UTIL_LINUX_CRAMFS
- 	bool "cramfs utilities"
- 	select BR2_PACKAGE_ZLIB
-@@ -86,6 +91,11 @@ config BR2_PACKAGE_UTIL_LINUX_KILL
- 	help
- 	  Send a signal to a process
- 
-+config BR2_PACKAGE_UTIL_LINUX_LAST
-+	bool "last"
-+	help
-+	  Show listing of last logged in users
-+
- config BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS
- 	bool "login utilities"
- 	depends on BR2_ENABLE_LOCALE # linux-pam
-@@ -96,6 +106,11 @@ config BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS
- comment "login utilities needs a toolchain w/ locale"
- 	depends on !BR2_ENABLE_LOCALE
- 
-+config BR2_PACKAGE_UTIL_LINUX_LOSETUP
-+	bool "losetup"
-+	help
-+	  Set up and control loop devices
-+
- config BR2_PACKAGE_UTIL_LINUX_MESG
- 	bool "mesg"
- 	help
-@@ -106,6 +121,11 @@ config BR2_PACKAGE_UTIL_LINUX_MOUNT
- 	help
- 	  Mount/unmount filesystems
- 
-+config BR2_PACKAGE_UTIL_LINUX_NEWGRP
-+	bool "newgrp"
-+	help
-+	  Log in to a new group
-+
- config BR2_PACKAGE_UTIL_LINUX_PIVOT_ROOT
- 	bool "pivot_root"
- 	help
-@@ -156,6 +176,11 @@ config BR2_PACKAGE_UTIL_LINUX_UUIDD
- 	help
- 	  UUID generation daemon
- 
-+config BR2_PACKAGE_UTIL_LINUX_VIPW
-+	bool "vipw"
-+	help
-+	  Edit the password, group, shadow-password or shadow-group file
-+
- config BR2_PACKAGE_UTIL_LINUX_WALL
- 	bool "wall"
- 	help
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index a694f3d..b05c85a 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -50,19 +50,23 @@ UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_LINUX_PAM),linux-pam)
- UTIL_LINUX_CONF_OPT += \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_AGETTY),--enable-agetty,--disable-agetty) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_ARCH),--enable-arch,--disable-arch) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_CHFN_CHSH),--enable-chfn-chsh,--disable-chfn-chsh) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_CRAMFS),--enable-cramfs,--disable-cramfs) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_DDATE),--enable-ddate,--disable-ddate) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_EJECT),--enable-eject,--disable-eject) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_FALLOCATE),--enable-fallocate,--disable-fallocate) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_FSCK),--enable-fsck,--disable-fsck) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_KILL),--enable-kill,--disable-kill) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_LAST),--enable-last,--disable-last) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBBLKID),--enable-libblkid,--disable-libblkid) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT),--enable-libmount,--disable-libmount) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBUUID),--enable-libuuid,--disable-libuuid) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS),--enable-last --enable-login --enable-su --enable-sulogin,--disable-last --disable-login --disable-su --disable-sulogin) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_LOSETUP),--enable-losetup,--disable-losetup) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_MESG),--enable-mesg,--disable-mesg) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_MOUNT),--enable-mount,--disable-mount) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_PARTX),,--disable-partx) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_NEWGRP),--enable-newgrp,--disable-newgrp) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_PARTX),--enable-partx,--disable-partx) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_PIVOT_ROOT),--enable-pivot_root,--disable-pivot_root) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_RAW),--enable-raw,--disable-raw) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_RENAME),--enable-rename,--disable-rename) \
-@@ -72,6 +76,7 @@ UTIL_LINUX_CONF_OPT += \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_UNSHARE),--enable-unshare,--disable-unshare) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_UTMPDUMP),--enable-utmpdump,--disable-utmpdump) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_UUIDD),--enable-uuidd,--disable-uuidd) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_VIPW),--enable-vipw,--disable-vipw) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_WALL),--enable-wall,--disable-wall) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_WRITE),--enable-write,--disable-write)
- 
--- 
-1.8.5.1
+Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote on 12/16/2013 
+10:39:02 AM:
+
+> From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> To: mlweber1 at rockwellcollins.com
+> Cc: buildroot <buildroot@busybox.net>, Sean Gerhardt 
+> <sagerhar@rockwellcollins.com>
+> Date: 12/16/2013 10:39 AM
+> Subject: Re: [Buildroot] [PATCH 1/1] smcroute: new package
+> 
+> mlweber1 at rockwellcollins.com wrote:
+> >Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote on 
+12/16/2013 
+> >09:25:41 AM:
+> >
+> >> From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> >> To: mlweber1 at rockwellcollins.com
+> >> Cc: buildroot <buildroot@busybox.net>, Sean Gerhardt 
+> >> <sagerhar@rockwellcollins.com>
+> >> Date: 12/16/2013 09:25 AM
+> >> Subject: Re: [Buildroot] [PATCH 1/1] smcroute: new package
+> >> 
+> >> Hi Matt,
+> >> 
+> >> On Mon, Dec 16, 2013 at 3:07 PM,  <mlweber1@rockwellcollins.com> 
+wrote:
+> >> 
+> >> >> >+SMCROUTE_SITE = $(call 
+> >github,troglobit,smcroute,$(SMCROUTE_VERSION))
+> >> >> >+SMCROUTE_SOURCE =
+> >> > troglobit-smcroute-$(SMCROUTE_VERSION)-0-g58388f6.tar.gz
+> >> >>
+> >> >> Why is it needed to specify _SOURCE here? It shouldn't be ..
+> >> > It seems like the releases are labeled in a way that requires this.
+> >> > Without
+> >> > specifying the source archive name, the archive that's requested to 
+be
+> >> > downloaded
+> >> > "smcroute-$(SMCROUTE_VERSION).tar.gz" ends up as the file we noted 
+as 
+> >the
+> >> > SOURCE.
+> >> 
+> >> I'm not sure I understand what you mean.
+> >> When I remove the _SOURCE line, I can still download and extract the
+> >> package normally. The name of the tar file is indeed different, but
+> >> this does not matter. The package infrastructure still correctly
+> >> handles it.
+> >> 
+> >> If you still think this _SOURCE is needed, could you explain in more 
+> >detail?
+> >
+> >I think I figured out what's happening.  (Our office firewall makes 
+this 
+> >almost impossible to test, so I'll have to confirm tonight)
+> >If I remove the SOURCE archive definition from the .mk, the package 
+> >downloads and I think the buildroot pkg scripts then use the 
+> >resulting filename of the archive to extract it, which results in the 
+> >correct smcroute folder under build.  I think the issue with not 
+defining 
+> >the 
+> >SOURCE filename comes into play if a buildroot dl cached local archive 
+> >file is 
+> >used to build the package.  Buildroot then can't find the source 
+archive 
+> >because the cached archive file has a unique filename.  This results in 
+
+> >the buildroot pkg scripts proceeding to re-download the source archive 
+> >again before continuing with extracting the unique filename and doing 
+> >proceeding with the rest of the pkg build.
+> >
+> >We noticed this because our builds primarily using a cached/mirrored dl
+> >folder of archive files.
+> 
+> 
+> But this should be fixed by adding the new file to your dl cache right?
+> 
+
+Tested this outside our firewall and it works as you mentioned.  It looks
+like my issues were caused by the firewalls' proxy.  So no issues
+then with the patch Peter committed today that didn't specify the archive
+name.
+
+Thanks,
+Matt
