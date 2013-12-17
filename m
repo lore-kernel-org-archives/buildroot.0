@@ -1,49 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Dec 2013 10:11:37 +0100
-Subject: [Buildroot] [PATCH] lvm2: disable statical building because it
- fails
-In-Reply-To: <1387263739-3831-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1387263739-3831-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <20131217101137.5c8845a3@skate>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 17 Dec 2013 10:32:14 +0100
+Subject: [Buildroot] [PATCH 1/1] linux.mk: enable options for ktap
+In-Reply-To: <87fvpsqz6b.fsf@dell.be.48ers.dk>
+References: <1387191200-20387-1-git-send-email-anders@chargestorm.se>
+ <CAAXf6LVOssD-uJP6E3oFRg3DOca7N8sR+PzrBtLZDd=1PVTjVw@mail.gmail.com>
+ <20131216144447.GB5876@ad.chargestorm.se>
+ <CAAXf6LX8WnxbJp=st28-15_xY54YC2DdhROCsHRq0nAaMj3qUw@mail.gmail.com>
+ <87fvpsqz6b.fsf@dell.be.48ers.dk>
+Message-ID: <CAAXf6LU2jXtmVRWSs1kOLhwqqhSHH2sHSrqUkDqmsTqCCYZ4Sw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fabio Porcedda,
+On Mon, Dec 16, 2013 at 10:11 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+>
+>  >> We've got three options:
+>  >>
+>  >> 1) Let it be as it is today
+>  >> 2) Change the text to state that those options are automatically enabled
+>  >> 3) Do as e.g. systemd does, which enables cgroups without mentioning in
+>  >> Config.in. I.e. remove the discussion of those options from
+>  >> ktap/Config.in.
+>  >>
+>  >> I'm indifferent to either of these solutions.
+>
+>  > Let's indeed see what others think, but my opinion:
+>  > - it's good that ktap/Config.in mentions the options, so that users
+>  > with an external toolchain are notified
+>
+> I guess you mean 'external kernel'? ktap depends on BR2_LINUX_KERNEL so
+> it only works when buildroot builds the kernel.
 
-On Tue, 17 Dec 2013 08:02:19 +0100, Fabio Porcedda wrote:
-> Fixes:
-> http://autobuild.buildroot.net/results/b0b/b0b386969459dda9c294f1ccb4927ca225fa6bdd/
-> 
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-> ---
->  package/lvm2/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/lvm2/Config.in b/package/lvm2/Config.in
-> index 5d6209fc1..29b80ee 100644
-> --- a/package/lvm2/Config.in
-> +++ b/package/lvm2/Config.in
-> @@ -2,6 +2,7 @@ config BR2_PACKAGE_LVM2
->  	bool "lvm2 & device mapper"
->  	depends on BR2_LARGEFILE
->  	depends on BR2_USE_MMU # needs fork()
-> +	depends on !BR2_PREFER_STATIC_LIB # It fails to build statically
->  	help
->  	  This is LVM2, the rewrite of The Linux Logical Volume Manager.
->  	  LVM supports enterprise level volume management of disk and disk
+Yes I did mean that, but forgot that ktap always required a buildroot kernel.
 
-Thanks, but you forgot to propagate this new dependency to the reverse
-dependencies of lvm2, and you forgot to add the corresponding comment.
-See
-http://buildroot.org/downloads/manual/manual.html#dependencies-target-toolchain-options.
+>
+>  > - it would be good to reassure users that do have a buildroot-built
+>  > kernel that everything is fine for them.
+>
+> Agreed, I've added a comment explaining that.
 
-Best regards,
-
+Ok, thanks.
 Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
