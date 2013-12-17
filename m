@@ -1,67 +1,87 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 17 Dec 2013 08:58:13 +0100
-Subject: [Buildroot] [PATCH] package/libgles: postpone the check for a
-	missing GLES provider
-In-Reply-To: <20131217071100.04b7b3a7@skate>
-References: <52A730B0.3020104@orange.com> <52AA41FE.6060705@mind.be>
- <20131217071100.04b7b3a7@skate>
-Message-ID: <201312170858.13393.yann.morin.1998@free.fr>
+From: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Date: Tue, 17 Dec 2013 03:00:26 -0600
+Subject: [Buildroot] [PATCH v4 1/2] Support for multiple BR2_GLOBAL_PATCH_DIR
+Message-ID: <1387270827-4379-1-git-send-email-rjbarnet@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Adding support for specifying multiple directories in
+BR2_GLOBAL_PATCH_DIR. This will allow for a layered approach for the
+patching of a package.
 
-On Tuesday 17 December 2013 07:11:00 Thomas Petazzoni wrote:
-> On Fri, 13 Dec 2013 00:08:46 +0100, Arnout Vandecappelle wrote:
-> > > Huh? Can you be more specific in what you find hacky? The way the
-> > > OpenGL stuff is handled today is kind of becoming the norm to handle
-> > > virtual packages, so it'd be good to understand what you think is
-> > > hacky in this implementation.
-> > 
-> >   It's hacky because you have double binding between opengl/libgles
-> > and the gles suppliers: opengl/libgles/libgles.mk enumerates all
-> > possible suppliers, and the suppliers select
-> > BR2_PACKAGE_HAS_OPENGL_ES.
-> 
-> Ok, I understand. Even though I don't think it's really a major issue, I
-> believe there are two possible directions to fix this:
-> 
->  1. Since the .mk part is centralized in opengl/libgles, but the
->     Config.in is not (spread in each OpenGL implementation doing the
->     select BR2_PACKAGE_HAS_OPENGL_ES), we can centralize the Config.in
->     logic by removing the "select BR2_PACKAGE_HAS_OPENGL_ES" in each
->     OpenGL implementation, and define BR2_PACKAGE_HAS_OPENGL_EL as
->     something like:
-> 
-> config BR2_PACKAGE_HAS_OPENGL_ES
-> 	bool
-> 	default y if BR2_PACKAGE_RPI_FIRMWARE
-> 	default y if BR2_PACKAGE_THIS_OTHER_OPENGL_IMPLEMENTATION
-> 	default y if BR2_PACKAGE_...
+Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 
-With this first proposal, it becomes a bit more complex to
-implement providers in BR2_EXTERNAL.
+---
+Changes v3 -> v4:
+  - None
 
->  2. Or, we can take the opposite route by pushing the currently
->     centralized libgles.mk logic that adds each OpenGL implementation
->     in LIBGLES_DEPENDENCIES down into each OpenGL implementation .mk
->     file. But that requires a late evaluation of $(generic-package), so
->     that all OpenGL implementations can be registered in
->     LIBGLES_DEPENDENCIES before the generic-package macro of libgles.mk
->     is evaluated. This would require something like Yann's patch.
+Changes v2 -> v3:
+  - changed the generation of patch directories to use 'addsuffix'
+    instead of a foreach loop. (suggested by Arnout)
 
-Needless to say I would highly prefer this second solution.
+Changes v1 -> v2:
+  - change wording in Config.in help (suggested by Thomas D)
+---
+ Config.in              |   20 ++++++++++++--------
+ package/pkg-generic.mk |    5 ++++-
+ 2 files changed, 16 insertions(+), 9 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
+diff --git a/Config.in b/Config.in
+index 2b401cb..d55e57c 100644
+--- a/Config.in
++++ b/Config.in
+@@ -461,18 +461,22 @@ config BR2_PACKAGE_OVERRIDE_FILE
+ 	  Buildroot documentation for more details on this feature.
+ 
+ config BR2_GLOBAL_PATCH_DIR
+-	string "global patch directory"
++	string "global patch directories"
+ 	help
+-	  You may specify a directory containing global package patches.
+-	  For a specific version <packageversion> of a specific package
+-	  <packagename>, patches are applied as follows.
++	  You may specify a space separated list of one or more directories
++	  containing global package patches. For a specific version
++	  <packageversion> of a specific package <packagename>, patches are
++	  applied as follows:
+ 
+-	  First, the default Buildroot patch set for the package is applied.
++	  First, the default Buildroot patch set for the package is applied
++	  from the package's directory in Buildroot.
+ 
+-	  If the directory $(BR2_GLOBAL_PATCH_DIR)/<packagename>/<packageversion>
+-	  exists, then all *.patch files in the directory will be applied.
++	  Then for every directory - <global-patch-dir> - that exists in
++	  BR2_GLOBAL_PATCH_DIR, if the directory
++	  <global-patch-dir>/<packagename>/<packageversion>/ exists, then all
++	  *.patch files in this directory will be applied.
+ 
+-	  Otherwise, if the directory $(BR2_GLOBAL_PATCH_DIR)/<packagename> exists,
++	  Otherwise, if the directory <global-patch-dir>/<packagename> exists,
+ 	  then all *.patch files in the directory will be applied.
+ 
+ endmenu
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 45b808a..66034ba 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -134,8 +134,11 @@ endif
+ # The RAWNAME variable is the lowercased package name, which allows to
+ # find the package directory (typically package/<pkgname>) and the
+ # prefix of the patches
++#
++# For BR2_GLOBAL_PATCH_DIR, only generate if it is defined
+ $(BUILD_DIR)/%/.stamp_patched: NAMEVER = $(RAWNAME)-$($(PKG)_VERSION)
+-$(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS = $($(PKG)_DIR_PREFIX)/$(RAWNAME) $(call qstrip,$(BR2_GLOBAL_PATCH_DIR))/$(RAWNAME)
++$(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS =  $($(PKG)_DIR_PREFIX)/$(RAWNAME)
++$(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS += $(addsuffix /$(RAWNAME),$(call qstrip,$(BR2_GLOBAL_PATCH_DIR)))
+ $(BUILD_DIR)/%/.stamp_patched:
+ 	@$(call step_start,patch)
+ 	@$(call MESSAGE,"Patching")
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
-| --==< O_o >==-- '------------.-------:  X  AGAINST      |  /e\  There is no  |
-| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
-'------------------------------'-------'------------------'--------------------'
+1.7.9.5
