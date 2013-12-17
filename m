@@ -1,35 +1,114 @@
-From: arnaud aujon <arnaud.aujon@gmail.com>
-Date: Tue, 17 Dec 2013 15:04:02 +0100
-Subject: [Buildroot] e2fsprogs build failure analysis
-Message-ID: <CACjG4BKgavMZX=bZxPRU4tAX3u5KiwrdcwxFeLK7JO=bAiYL3w@mail.gmail.com>
+From: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Date: Tue, 17 Dec 2013 08:24:47 -0600
+Subject: [Buildroot] [PATCH v4 2/2] manual: update for multiple global
+	patch dirs
+In-Reply-To: <52B04F5E.1010602@mind.be>
+References: <1387270827-4379-1-git-send-email-rjbarnet@rockwellcollins.com>	<1387270827-4379-2-git-send-email-rjbarnet@rockwellcollins.com>
+ <CAAXf6LVu=ZUYZ-O-+WcCcnY2sCs8Nn-OiEwRwNkrjyqwhakE=Q@mail.gmail.com>
+ <52B04F5E.1010602@mind.be>
+Message-ID: <OF15352E49.1C4D9698-ON86257C44.0049F2E1-86257C44.004F26CE@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I had a look at e2fsprog build failure (
-http://autobuild.buildroot.net/results/af4/af463591df5e7cfbf963fd489ee7561b82793c8a/
-)
+Thomas D, Arnout,
 
-The problem is there is an undefined reference to fallocate64.
-Looks like this problem (fallocate64 symbol not beeing exported on 32bits
-systems) has been fixed in glibc 2.11 (
-http://sourceware.org/ml/libc-hacker/2009-05/msg00003.html). And as the
-NIOS toolchain seems to use glibc 2.17 I don't know what's wrong with it.
-Tweaking the CONF_OPT with :
-CFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))
--D_FILE_OFFSET_BITS=32" \
-and
-CPPFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))
--D_FILE_OFFSET_BITS=32"
+Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote on 12/17/2013 
+07:30:01 AM:
 
-seems to fix the build issue but config.log still shows an "undefined
-reference to `fallocate64'", any thought about what am I doing wrong here ?
+> On Tue, Dec 17, 2013 at 2:19 PM, Arnout Vandecappelle <arnout@mind.be> 
+wrote:
+>[..]
+>>>>
+>>>>
+>>>> -For a specific version <packageversion> of a specific package
+>>>> <packagename>,
+>>>> -patches are applied as follows.
+>>>> +For a specific version +<packageversion>+ of a specific package
+>>>> ++<packagename>+, patches are applied from +BR2_GLOBAL_PATCH_DIR+ as
+>>>> +follows:
+>>>>
+>>>> -First, the default Buildroot patch set for the package is applied.
+>>>> +. For every directory - +<global-patch-dir>+ - that exists in
+>>>> +  +BR2_GLOBAL_PATCH_DIR+, a +<package-patch-dir>+ will be determined 
+as
+>>>> +  follows:
+>>>> ++
+>>>> +* If the directory
+>>>> +  +<global-patch-dir>/<packagename>/<packageversion>/+ exists.
+>>>> ++
+>>>> +* Otherwise, if the directory +<global-patch-dir>/<packagename>+ 
+exists.
+>>>
+>>>
+>>> I find this wording strange:
+>>> '.... will be determined as follows: if the directory A exists.
+>>> Otherwise, if the directory B exists.'
+>>>
+>>> What about:
+>>> '.... will be determined as follows: A, if it exists. Otherwise, B, if
+>>> it exists.'
+>>
+>>
+>>  Actually for me, Ryan's formulation sounds more natural: if ... else 
+if 
+>>  ... else ....
 
-Regards,
+> The order of if/else are both fine for me, but I was more referring to
+> something else. The intro sentence says: "The order will be determined
+> as follows". When I read this, I expect to get a summary of items (the
+> 'order'). However, what follows is a list of conditionals ("if A")
+> without 'then' statement.
+> 
+> It's a bit like this to me:
+> "On lazy days, I do only two things: if I am hungry, and if I am 
+sleepy."
+> while I expect more something like:
+> "On lazy days, I do only two things: if I am hungry, I eat, and if I
 
-Arnaud
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131217/eecc9ee7/attachment.html>
+Is alright to keep the way it is? I prefer the way this looks when the 
+html manual is generated.
+
+>
+>>> I think it's a pity that there is duplication between this section and
+>>> the one on BR2_GLOBAL_PATCH_DIR.
+>>> However, it seems this was an explicit request made by Arnout.
+>>>
+>>> Arnout, would it not be better to remove the duplication, but rather
+>>> use hyperlinks to refer from one section to the other, with the
+>>> detailed explanation about patch order being in this 'How patches are
+>>> applied' section?
+>>
+>>
+>>  I meant to say that the remark about numbering the patches should be
+>> duplicated, so that's just one sentence.
+>>
+>>  I do agree that it would be better to move the whole discussion about 
+the
+>> order in which patches are applied to this section (including a 
+specific
+>> comment about the linux patches), with a crossref from the global patch 
+dir
+>> section. However, Ryan didn't really change that structure (there was
+>> already some amount of duplication), so I think it can safely be done 
+in a
+>> separate patch.
+>>
+> 
+> Fair enough, but is Ryan prepared to make that follow-up patch, or
+> should we wait until someone takes it up?
+
+I was going to follow-up this patch with another series that removes the 
+options PATCH_DIR options for individual packages besides the kernel. When 
+I do that, I was planning on cleaning up the documentation to avoid this 
+duplication. It was easier for right now, to duplicate the section Arnout 
+requested rather than to try to figure out the best way possible for 
+avoiding duplication.
+
+Thomas D - are you ok with this patch series besides the minor spelling 
+mistake?
+
+Thanks,
+-Ryan
