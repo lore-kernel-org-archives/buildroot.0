@@ -1,46 +1,31 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 17 Dec 2013 10:32:14 +0100
-Subject: [Buildroot] [PATCH 1/1] linux.mk: enable options for ktap
-In-Reply-To: <87fvpsqz6b.fsf@dell.be.48ers.dk>
-References: <1387191200-20387-1-git-send-email-anders@chargestorm.se>
- <CAAXf6LVOssD-uJP6E3oFRg3DOca7N8sR+PzrBtLZDd=1PVTjVw@mail.gmail.com>
- <20131216144447.GB5876@ad.chargestorm.se>
- <CAAXf6LX8WnxbJp=st28-15_xY54YC2DdhROCsHRq0nAaMj3qUw@mail.gmail.com>
- <87fvpsqz6b.fsf@dell.be.48ers.dk>
-Message-ID: <CAAXf6LU2jXtmVRWSs1kOLhwqqhSHH2sHSrqUkDqmsTqCCYZ4Sw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 17 Dec 2013 10:36:32 +0100
+Subject: [Buildroot] [git commit] bustle: bump version
+Message-ID: <20131217093658.2DB079C0CB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Dec 16, 2013 at 10:11 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
->
->  >> We've got three options:
->  >>
->  >> 1) Let it be as it is today
->  >> 2) Change the text to state that those options are automatically enabled
->  >> 3) Do as e.g. systemd does, which enables cgroups without mentioning in
->  >> Config.in. I.e. remove the discussion of those options from
->  >> ktap/Config.in.
->  >>
->  >> I'm indifferent to either of these solutions.
->
->  > Let's indeed see what others think, but my opinion:
->  > - it's good that ktap/Config.in mentions the options, so that users
->  > with an external toolchain are notified
->
-> I guess you mean 'external kernel'? ktap depends on BR2_LINUX_KERNEL so
-> it only works when buildroot builds the kernel.
+commit: http://git.buildroot.net/buildroot/commit/?id=a0469f5bac47ec1434fa2e54a01c9f287a729e81
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Yes I did mean that, but forgot that ktap always required a buildroot kernel.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/bustle/bustle.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
->
->  > - it would be good to reassure users that do have a buildroot-built
->  > kernel that everything is fine for them.
->
-> Agreed, I've added a comment explaining that.
-
-Ok, thanks.
-Thomas
+diff --git a/package/bustle/bustle.mk b/package/bustle/bustle.mk
+index 68b7b24..2330c08 100644
+--- a/package/bustle/bustle.mk
++++ b/package/bustle/bustle.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BUSTLE_VERSION = 0.4.2
++BUSTLE_VERSION = 0.4.3
+ BUSTLE_SITE = http://www.willthompson.co.uk/bustle/releases/$(BUSTLE_VERSION)/
+ BUSTLE_LICENSE = LGPLv2.1+
+ BUSTLE_LICENSE_FILES = LICENSE
