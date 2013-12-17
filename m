@@ -1,22 +1,22 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 17 Dec 2013 20:33:48 +0100
-Subject: [Buildroot] [PATCH] libdrm: Disable vmwgfx if specified by
-	config
-In-Reply-To: <1387243012-5162-1-git-send-email-paul@crapouillou.net> (Paul
- Cercueil's message of "Tue, 17 Dec 2013 02:16:52 +0100")
-References: <1387243012-5162-1-git-send-email-paul@crapouillou.net>
-Message-ID: <87eh5bp90j.fsf@dell.be.48ers.dk>
+Date: Tue, 17 Dec 2013 20:39:17 +0100
+Subject: [Buildroot] [PATCH 1/2] blackbox: rename patches to add
+	sequence numbers
+In-Reply-To: <1387296884-27777-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Tue, 17 Dec 2013 16:14:43 +0000")
+References: <1387296884-27777-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <87a9fzp8rd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Paul" == Paul Cercueil <paul@crapouillou.net> writes:
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
- > Signed-Off-By: Paul Cercueil <paul@crapouillou.net>
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-Committed, thanks.
+Committed both, thanks.
 
 -- 
 Bye, Peter Korsgaard
