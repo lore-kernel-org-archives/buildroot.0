@@ -1,104 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Dec 2013 20:34:54 +0100
-Subject: [Buildroot] [git commit] blackbox: merge patch and fix linkage
-	problem
-Message-ID: <20131217194430.1E0839C0C7@busybox.osuosl.org>
+Date: Tue, 17 Dec 2013 20:44:54 +0100
+Subject: [Buildroot] [git commit] libroxml: fix staging install directory
+	path
+Message-ID: <20131217194503.CB4689C0CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=218b4ec6bcc8db72d3badf4663c00475c1ed0802
+commit: http://git.buildroot.net/buildroot/commit/?id=4cf02e6bfec9bfdb9d06081537b928e54623857c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
--Merge the current blackbox-0.70.1-configure.patch to a new one named
-blackbox-001-Fix-configure-ac.patch that will patch configure.ac instead
-and also will add -lpthreads to LIBS to fix a linkage problem.
--Force autoreconf to generate the new configure script using the new
-patched configure.ac file.
-
-Fixes:
-
-   http://autobuild.buildroot.net/results/a97/a979cc079706be2012fb4b6c72894aca636adfb6/
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/blackbox/blackbox-0.70.1-configure.patch   |   15 ---------
- .../blackbox/blackbox-001-Fix-configure-ac.patch   |   34 ++++++++++++++++++++
- package/blackbox/blackbox.mk                       |    2 +
- 3 files changed, 36 insertions(+), 15 deletions(-)
+ package/libroxml/libroxml.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/blackbox/blackbox-0.70.1-configure.patch b/package/blackbox/blackbox-0.70.1-configure.patch
-deleted file mode 100644
-index 3606f97..0000000
---- a/package/blackbox/blackbox-0.70.1-configure.patch
-+++ /dev/null
-@@ -1,15 +0,0 @@
----- a/configure	2005-11-03 03:27:16.000000000 -0500
--+++ b/configure	2008-02-02 23:25:25.000000000 -0500
--@@ -1980,12 +1980,6 @@ am__tar='${AMTAR} chof - "$$tardir"'; am
-- 
-- test "x$prefix" = "xNONE" && prefix="$ac_default_prefix"
-- 
---CPPFLAGS="$CPPFLAGS -I$prefix/include"
---LDFLAGS="$LDFLAGS -L$prefix/lib"
---if test "x$prefix" != "x/usr/local"; then
---  CPPFLAGS="$CPPFLAGS -I/usr/local/include"
---  LDFLAGS="$LDFLAGS -L/usr/local/lib"
---fi
-- 
-- ac_ext=c
-- ac_cpp='$CPP $CPPFLAGS'
-diff --git a/package/blackbox/blackbox-001-Fix-configure-ac.patch b/package/blackbox/blackbox-001-Fix-configure-ac.patch
-new file mode 100644
-index 0000000..1804473
---- /dev/null
-+++ b/package/blackbox/blackbox-001-Fix-configure-ac.patch
-@@ -0,0 +1,34 @@
-+blackbox: merge existing patch and fix lpthread
-+
-+Merge the current configure patch into this one so it will patch 
-+configure.ac instead. Also add pthread to libs to fix a linkage problem.
-+
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+--- blackbox-0.70.1/configure.ac.orig	2013-12-17 11:02:38.799055141 +0000
-++++ blackbox-0.70.1/configure.ac	2013-12-17 11:09:08.421204545 +0000
-+@@ -8,14 +8,6 @@ AC_CONFIG_SRCDIR([src/blackbox.cc])
-+ dnl Determine default prefix
-+ test "x$prefix" = "xNONE" && prefix="$ac_default_prefix"
-+ 
-+-dnl Look in the most logical places for external libraries
-+-CPPFLAGS="$CPPFLAGS -I$prefix/include"
-+-LDFLAGS="$LDFLAGS -L$prefix/lib"
-+-if test "x$prefix" != "x/usr/local"; then
-+-  CPPFLAGS="$CPPFLAGS -I/usr/local/include"
-+-  LDFLAGS="$LDFLAGS -L/usr/local/lib"
-+-fi
-+-
-+ dnl Locate required external software
-+ AC_PROG_CC
-+ 
-+@@ -128,6 +120,10 @@ int main(int, char **)
-+                   [AC_MSG_RESULT([no])]
-+                  )
-+ 
-++dnl required pthread
-++AC_CHECK_LIB([pthread],
-++	     [pthread_cancel],
-++	     [LIBS="$LIBS -lpthread"])
-+ dnl needed for some X11 libs
-+ AC_CHECK_LIB([nsl],
-+              [t_open],
-diff --git a/package/blackbox/blackbox.mk b/package/blackbox/blackbox.mk
-index 09d15f1..ce8f06e 100644
---- a/package/blackbox/blackbox.mk
-+++ b/package/blackbox/blackbox.mk
-@@ -17,4 +17,6 @@ ifneq ($(BR2_ENABLE_LOCALE),y)
- BLACKBOX_DEPENDENCIES += libiconv
- endif
+diff --git a/package/libroxml/libroxml.mk b/package/libroxml/libroxml.mk
+index 3eefd9d..ca32bf9 100644
+--- a/package/libroxml/libroxml.mk
++++ b/package/libroxml/libroxml.mk
+@@ -13,7 +13,7 @@ define LIBROXML_BUILD_CMDS
+ endef
  
-+BLACKBOX_AUTORECONF = YES
-+
- $(eval $(autotools-package))
+ define LIBROXML_INSTALL_STAGING_CMDS
+-	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(@D) install
++	$(MAKE) DESTDIR=$(STAGING_DIR)/usr/ -C $(@D) install
+ endef
+ 
+ define LIBROXML_INSTALL_TARGET_CMDS
