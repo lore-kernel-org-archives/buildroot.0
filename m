@@ -1,104 +1,65 @@
-From: mlweber1 at rockwellcollins.com <mlweber1@rockwellcollins.com>
-Date: Mon, 16 Dec 2013 20:18:19 -0600
-Subject: [Buildroot] [PATCH 1/1] smcroute: new package
-In-Reply-To: <53f6441d-e221-4316-a6bb-ca80be307cae@email.android.com>
-References: <1386872059-28046-1-git-send-email-mlweber1@rockwellcollins.com>
- <3a2395ee-73bc-4723-a368-61194e9c0a08@email.android.com>
- <OF808C467A.175074BD-ON86257C43.004D34F3-86257C43.004D9D54@rockwellcollins.com>
- <CAAXf6LU8=fxMQKZQZfAOW-jX3b_466XnToBxFANkck6dNyx-Vw@mail.gmail.com>
- <OFDFF4011F.539E6A02-ON86257C43.0059E8A8-86257C43.005AED4B@rockwellcollins.com>
- <53f6441d-e221-4316-a6bb-ca80be307cae@email.android.com>
-Message-ID: <OF74CD896E.A0FE9FD3-ON86257C44.000C6D71-86257C44.000CA9E5@rockwellcollins.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 17 Dec 2013 07:11:00 +0100
+Subject: [Buildroot] [PATCH] package/libgles: postpone the check for a
+ missing GLES provider
+In-Reply-To: <52AA41FE.6060705@mind.be>
+References: <52A730B0.3020104@orange.com>
+ <1386702439-10093-2-git-send-email-yann.morin.1998@free.fr>
+ <52A842A3.3010302@mind.be>
+ <201312111325.49600.yann.morin.1998@free.fr>
+ <52A862B4.50103@orange.com> <52A8710F.7040406@orange.com>
+ <52AA31F2.8070900@mind.be> <20131212231338.33eae486@skate>
+ <52AA41FE.6060705@mind.be>
+Message-ID: <20131217071100.04b7b3a7@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Dear Arnout Vandecappelle,
 
-Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote on 12/16/2013 
-10:39:02 AM:
+On Fri, 13 Dec 2013 00:08:46 +0100, Arnout Vandecappelle wrote:
 
-> From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-> To: mlweber1 at rockwellcollins.com
-> Cc: buildroot <buildroot@busybox.net>, Sean Gerhardt 
-> <sagerhar@rockwellcollins.com>
-> Date: 12/16/2013 10:39 AM
-> Subject: Re: [Buildroot] [PATCH 1/1] smcroute: new package
+> > Huh? Can you be more specific in what you find hacky? The way the
+> > OpenGL stuff is handled today is kind of becoming the norm to handle
+> > virtual packages, so it'd be good to understand what you think is
+> > hacky in this implementation.
 > 
-> mlweber1 at rockwellcollins.com wrote:
-> >Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote on 
-12/16/2013 
-> >09:25:41 AM:
-> >
-> >> From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-> >> To: mlweber1 at rockwellcollins.com
-> >> Cc: buildroot <buildroot@busybox.net>, Sean Gerhardt 
-> >> <sagerhar@rockwellcollins.com>
-> >> Date: 12/16/2013 09:25 AM
-> >> Subject: Re: [Buildroot] [PATCH 1/1] smcroute: new package
-> >> 
-> >> Hi Matt,
-> >> 
-> >> On Mon, Dec 16, 2013 at 3:07 PM,  <mlweber1@rockwellcollins.com> 
-wrote:
-> >> 
-> >> >> >+SMCROUTE_SITE = $(call 
-> >github,troglobit,smcroute,$(SMCROUTE_VERSION))
-> >> >> >+SMCROUTE_SOURCE =
-> >> > troglobit-smcroute-$(SMCROUTE_VERSION)-0-g58388f6.tar.gz
-> >> >>
-> >> >> Why is it needed to specify _SOURCE here? It shouldn't be ..
-> >> > It seems like the releases are labeled in a way that requires this.
-> >> > Without
-> >> > specifying the source archive name, the archive that's requested to 
-be
-> >> > downloaded
-> >> > "smcroute-$(SMCROUTE_VERSION).tar.gz" ends up as the file we noted 
-as 
-> >the
-> >> > SOURCE.
-> >> 
-> >> I'm not sure I understand what you mean.
-> >> When I remove the _SOURCE line, I can still download and extract the
-> >> package normally. The name of the tar file is indeed different, but
-> >> this does not matter. The package infrastructure still correctly
-> >> handles it.
-> >> 
-> >> If you still think this _SOURCE is needed, could you explain in more 
-> >detail?
-> >
-> >I think I figured out what's happening.  (Our office firewall makes 
-this 
-> >almost impossible to test, so I'll have to confirm tonight)
-> >If I remove the SOURCE archive definition from the .mk, the package 
-> >downloads and I think the buildroot pkg scripts then use the 
-> >resulting filename of the archive to extract it, which results in the 
-> >correct smcroute folder under build.  I think the issue with not 
-defining 
-> >the 
-> >SOURCE filename comes into play if a buildroot dl cached local archive 
-> >file is 
-> >used to build the package.  Buildroot then can't find the source 
-archive 
-> >because the cached archive file has a unique filename.  This results in 
+>   It's hacky because you have double binding between opengl/libgles
+> and the gles suppliers: opengl/libgles/libgles.mk enumerates all
+> possible suppliers, and the suppliers select
+> BR2_PACKAGE_HAS_OPENGL_ES.
 
-> >the buildroot pkg scripts proceeding to re-download the source archive 
-> >again before continuing with extracting the unique filename and doing 
-> >proceeding with the rest of the pkg build.
-> >
-> >We noticed this because our builds primarily using a cached/mirrored dl
-> >folder of archive files.
-> 
-> 
-> But this should be fixed by adding the new file to your dl cache right?
-> 
+Ok, I understand. Even though I don't think it's really a major issue, I
+believe there are two possible directions to fix this:
 
-Tested this outside our firewall and it works as you mentioned.  It looks
-like my issues were caused by the firewalls' proxy.  So no issues
-then with the patch Peter committed today that didn't specify the archive
-name.
+ 1. Since the .mk part is centralized in opengl/libgles, but the
+    Config.in is not (spread in each OpenGL implementation doing the
+    select BR2_PACKAGE_HAS_OPENGL_ES), we can centralize the Config.in
+    logic by removing the "select BR2_PACKAGE_HAS_OPENGL_ES" in each
+    OpenGL implementation, and define BR2_PACKAGE_HAS_OPENGL_EL as
+    something like:
 
-Thanks,
-Matt
+config BR2_PACKAGE_HAS_OPENGL_ES
+	bool
+	default y if BR2_PACKAGE_RPI_FIRMWARE
+	default y if BR2_PACKAGE_THIS_OTHER_OPENGL_IMPLEMENTATION
+	default y if BR2_PACKAGE_...
+
+ 2. Or, we can take the opposite route by pushing the currently
+    centralized libgles.mk logic that adds each OpenGL implementation
+    in LIBGLES_DEPENDENCIES down into each OpenGL implementation .mk
+    file. But that requires a late evaluation of $(generic-package), so
+    that all OpenGL implementations can be registered in
+    LIBGLES_DEPENDENCIES before the generic-package macro of libgles.mk
+    is evaluated. This would require something like Yann's patch.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
+ 
