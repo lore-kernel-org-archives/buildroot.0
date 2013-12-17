@@ -1,93 +1,56 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 17 Dec 2013 17:09:13 +0100
-Subject: [Buildroot] [PATCH v4 2/2] manual: update for multiple global
-	patch dirs
-In-Reply-To: <CAAXf6LWDQYotYSqBh5H1aYc1B2PJYfDbK+FaF8hYt4VTpSnMzg@mail.gmail.com>
-References: <1387270827-4379-1-git-send-email-rjbarnet@rockwellcollins.com>
- <1387270827-4379-2-git-send-email-rjbarnet@rockwellcollins.com>
- <CAAXf6LVu=ZUYZ-O-+WcCcnY2sCs8Nn-OiEwRwNkrjyqwhakE=Q@mail.gmail.com>
- <52B04F5E.1010602@mind.be>
- <OF15352E49.1C4D9698-ON86257C44.0049F2E1-86257C44.004F26CE@rockwellcollins.com>
- <CAAXf6LWDQYotYSqBh5H1aYc1B2PJYfDbK+FaF8hYt4VTpSnMzg@mail.gmail.com>
-Message-ID: <CAAXf6LX2N-m105KYXxXk2-EhgMmmN2_JJ0fpk3fqH7bBC2fdEA@mail.gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 17 Dec 2013 16:11:38 +0000
+Subject: [Buildroot] [PATCH v2] sawman: Link using gcc instead of ld
+Message-ID: <1387296698-27642-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Dec 17, 2013 at 5:07 PM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> On Tue, Dec 17, 2013 at 3:24 PM, Ryan Barnett
-> <rjbarnet@rockwellcollins.com> wrote:
->> Thomas D, Arnout,
->>
->> Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote on 12/17/2013
->> 07:30:01 AM:
->>
->>> On Tue, Dec 17, 2013 at 2:19 PM, Arnout Vandecappelle <arnout@mind.be>
->> wrote:
->>>[..]
->>>>>>
->>>>>>
->>>>>> -For a specific version <packageversion> of a specific package
->>>>>> <packagename>,
->>>>>> -patches are applied as follows.
->>>>>> +For a specific version +<packageversion>+ of a specific package
->>>>>> ++<packagename>+, patches are applied from +BR2_GLOBAL_PATCH_DIR+ as
->>>>>> +follows:
->>>>>>
->>>>>> -First, the default Buildroot patch set for the package is applied.
->>>>>> +. For every directory - +<global-patch-dir>+ - that exists in
->>>>>> +  +BR2_GLOBAL_PATCH_DIR+, a +<package-patch-dir>+ will be determined
->> as
->>>>>> +  follows:
->>>>>> ++
->>>>>> +* If the directory
->>>>>> +  +<global-patch-dir>/<packagename>/<packageversion>/+ exists.
->>>>>> ++
->>>>>> +* Otherwise, if the directory +<global-patch-dir>/<packagename>+
->> exists.
->>>>>
->>>>>
->>>>> I find this wording strange:
->>>>> '.... will be determined as follows: if the directory A exists.
->>>>> Otherwise, if the directory B exists.'
->>>>>
->>>>> What about:
->>>>> '.... will be determined as follows: A, if it exists. Otherwise, B, if
->>>>> it exists.'
->>>>
->>>>
->>>>  Actually for me, Ryan's formulation sounds more natural: if ... else
->> if
->>>>  ... else ....
->>
->>> The order of if/else are both fine for me, but I was more referring to
->>> something else. The intro sentence says: "The order will be determined
->>> as follows". When I read this, I expect to get a summary of items (the
->>> 'order'). However, what follows is a list of conditionals ("if A")
->>> without 'then' statement.
->>>
->>> It's a bit like this to me:
->>> "On lazy days, I do only two things: if I am hungry, and if I am
->> sleepy."
->>> while I expect more something like:
->>> "On lazy days, I do only two things: if I am hungry, I eat, and if I
->>
->> Is alright to keep the way it is? I prefer the way this looks when the
->> html manual is generated.
->
-> I'm not sure we fully understand each other. My comment is not really
-> about the looks of it, but rather about a missing part of the
-> sentence. I don't really care about "if A then B" or "B, if A", it was
-> just a suggestion. My main point is that there is no 'then' part on
-> the if, making the whole sentence incomplete.
->
-> Unless you can convince me that this is correct English, I think this
-> should be fixed in this patch and not in a followup.
+Using ld may cause a link failure due to using the default emulation
+linker which is configured when building the linker in binutils.  Using
+gcc instead will pass the appropriate -m value because the compiler
+knows the ABI you are using.
 
-Nevermind, I just see your v5. I will re-read it tomorrow.
+Here is an example of the failure:
 
-Thanks,
-Thomas
+ld: .libs/libdirectfbwm_sawman.a.tmp/sawman_wm.o: ABI is incompatible
+with that of the selected emulation
+ld: failed to merge target specific data of file
+.libs/libdirectfbwm_sawman.a.tmp/sawman_wm.o
+ld: Attempt to do relocatable link with elf64-tradbigmips input and
+elf32-tradbigmips output
+ld: .libs/libdirectfbwm_sawman.a.tmp/sawman_wm.o: file class ELFCLASS64
+incompatible with ELFCLASS32
+ld: final link failed: File in wrong format
+
+Fixes:
+
+   http://autobuild.buildroot.net/results/e4b/e4b77681a44626efa2a44627604630697e785086/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ .../sawman-001-link-using-gcc-instead-of-ld.patch  |   11 +++++++++++
+ 1 files changed, 11 insertions(+), 0 deletions(-)
+ create mode 100644 package/sawman/sawman-001-link-using-gcc-instead-of-ld.patch
+
+diff --git a/package/sawman/sawman-001-link-using-gcc-instead-of-ld.patch b/package/sawman/sawman-001-link-using-gcc-instead-of-ld.patch
+new file mode 100644
+index 0000000..fd1b300
+--- /dev/null
++++ b/package/sawman/sawman-001-link-using-gcc-instead-of-ld.patch
+@@ -0,0 +1,11 @@
++--- SaWMan-1.6.3/rules/libobject.make.orig	2013-12-17 15:54:22.137856874 +0000
+++++ SaWMan-1.6.3/rules/libobject.make	2013-12-17 15:54:44.233201909 +0000
++@@ -3,7 +3,7 @@
++ 	if test -d $<.tmp; then rmdir $<.tmp; fi
++ 	mkdir $<.tmp
++ 	(cd $<.tmp && $(AR) x ../../$<)
++-	$(LD) -o $@ -r $<.tmp/*.o
+++	$(CC) -nostdlib -o $@ -r $<.tmp/*.o
++ 	rm -f $<.tmp/*.o && rmdir $<.tmp
++ 
++ .PHONY: $(LTLIBRARIES:%.la=.libs/%.a)
+-- 
+1.7.1
