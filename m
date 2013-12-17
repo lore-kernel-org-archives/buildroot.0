@@ -1,31 +1,76 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Dec 2013 10:36:32 +0100
-Subject: [Buildroot] [git commit] bustle: bump version
-Message-ID: <20131217093658.2DB079C0CB@busybox.osuosl.org>
+From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+Date: Tue, 17 Dec 2013 10:40:43 +0100
+Subject: [Buildroot] [PATCH] Packages: use https to clone gitorious
+	repositories
+Message-ID: <1387273243-7509-1-git-send-email-alexandre.belloni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a0469f5bac47ec1434fa2e54a01c9f287a729e81
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+It often happen that company networks have the git port blocked. Use
+https to clone the gitorious repositories to work around that.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
 ---
- package/bustle/bustle.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ boot/xloader/xloader.mk                | 2 +-
+ package/can-utils/can-utils.mk         | 2 +-
+ package/lpc3250loader/lpc3250loader.mk | 2 +-
+ package/ti-uim/ti-uim.mk               | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/bustle/bustle.mk b/package/bustle/bustle.mk
-index 68b7b24..2330c08 100644
---- a/package/bustle/bustle.mk
-+++ b/package/bustle/bustle.mk
+diff --git a/boot/xloader/xloader.mk b/boot/xloader/xloader.mk
+index 00c63b1efb91..c52b213308f4 100644
+--- a/boot/xloader/xloader.mk
++++ b/boot/xloader/xloader.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ XLOADER_VERSION    = 6f3a26101303051e0f91b6213735b68ce804e94e
+-XLOADER_SITE       = git://gitorious.org/x-loader/x-loader.git
++XLOADER_SITE       = https://gitorious.org/x-loader/x-loader.git
+ XLOADER_BOARD_NAME = $(call qstrip,$(BR2_TARGET_XLOADER_BOARDNAME))
+ 
+ XLOADER_LICENSE = GPLv2+
+diff --git a/package/can-utils/can-utils.mk b/package/can-utils/can-utils.mk
+index 743fe7ce0b2b..ddf75d0db6e5 100644
+--- a/package/can-utils/can-utils.mk
++++ b/package/can-utils/can-utils.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ CAN_UTILS_VERSION = 16c970d40e6c19dde705bad4751bab1a3a4f3a0d
+-CAN_UTILS_SITE = git://gitorious.org/linux-can/can-utils.git
++CAN_UTILS_SITE = https://gitorious.org/linux-can/can-utils.git
+ CAN_UTILS_AUTORECONF = YES
+ 
+ $(eval $(autotools-package))
+diff --git a/package/lpc3250loader/lpc3250loader.mk b/package/lpc3250loader/lpc3250loader.mk
+index 42beb7bc84b4..bcb7c7070e32 100644
+--- a/package/lpc3250loader/lpc3250loader.mk
++++ b/package/lpc3250loader/lpc3250loader.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BUSTLE_VERSION = 0.4.2
-+BUSTLE_VERSION = 0.4.3
- BUSTLE_SITE = http://www.willthompson.co.uk/bustle/releases/$(BUSTLE_VERSION)/
- BUSTLE_LICENSE = LGPLv2.1+
- BUSTLE_LICENSE_FILES = LICENSE
+-HOST_LPC3250LOADER_SITE = git://gitorious.org/lpc3250loader/lpc3250loader.git
++HOST_LPC3250LOADER_SITE = https://gitorious.org/lpc3250loader/lpc3250loader.git
+ HOST_LPC3250LOADER_VERSION = 1.0
+ 
+ define HOST_LPC3250LOADER_INSTALL_CMDS
+diff --git a/package/ti-uim/ti-uim.mk b/package/ti-uim/ti-uim.mk
+index b49818004989..fd92497609b5 100644
+--- a/package/ti-uim/ti-uim.mk
++++ b/package/ti-uim/ti-uim.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ TI_UIM_VERSION = c73894456df5def97111cb33d2106b684b8b7959
+-TI_UIM_SITE = git://gitorious.org/uim/uim.git
++TI_UIM_SITE = https://gitorious.org/uim/uim.git
+ TI_UIM_LICENSE = GPLv2+
+ 
+ define TI_UIM_BUILD_CMDS
+-- 
+1.8.3.2
