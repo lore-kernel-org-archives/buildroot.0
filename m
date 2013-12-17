@@ -1,127 +1,63 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 17 Dec 2013 23:35:43 +0100
-Subject: [Buildroot] [PATCH] package/libgles: postpone the check for a
- missing GLES provider
-In-Reply-To: <52B0CE36.5000400@mind.be>
-References: <52A730B0.3020104@orange.com> <52AA41FE.6060705@mind.be>
- <20131217071100.04b7b3a7@skate>
- <201312170858.13393.yann.morin.1998@free.fr>
- <20131217100414.551a3832@skate> <52B0CE36.5000400@mind.be>
-Message-ID: <20131217223543.GC3352@free.fr>
+From: Ron Eggler <reggler@semios.com>
+Date: Tue, 17 Dec 2013 21:20:46 +0000
+Subject: [Buildroot] build uboot for AT91SAM9G20
+In-Reply-To: <52B0BCC6.7070508@mind.be>
+References: <3487466.tnqfWxcGWT@regdesktophome> <52B0BCC6.7070508@mind.be>
+Message-ID: <1393632.OdRZK0rNiW@regdesktophome>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Hi Arnout,
 
-On 2013-12-17 23:20 +0100, Arnout Vandecappelle spake thusly:
-> On 17/12/13 10:04, Thomas Petazzoni wrote:
-> >Dear Yann E. MORIN,
-> >
-> >On Tue, 17 Dec 2013 08:58:13 +0100, Yann E. MORIN wrote:
-> >
-> >>>  1. Since the .mk part is centralized in opengl/libgles, but the
-> >>>     Config.in is not (spread in each OpenGL implementation doing the
-> >>>     select BR2_PACKAGE_HAS_OPENGL_ES), we can centralize the
-> >>>Config.in logic by removing the "select BR2_PACKAGE_HAS_OPENGL_ES"
-> >>>in each OpenGL implementation, and define BR2_PACKAGE_HAS_OPENGL_EL
-> >>>as something like:
-> >>>
-> >>>config BR2_PACKAGE_HAS_OPENGL_ES
-> >>>	bool
-> >>>	default y if BR2_PACKAGE_RPI_FIRMWARE
-> >>>	default y if BR2_PACKAGE_THIS_OTHER_OPENGL_IMPLEMENTATION
-> >>>	default y if BR2_PACKAGE_...
-> >>
-> >>With this first proposal, it becomes a bit more complex to
-> >>implement providers in BR2_EXTERNAL.
-> >
-> >Ah, true.
+
+
+> On 16/12/13 02:52, Ron Eggler wrote:
+> > Hi,
+> > 
+> > I'm relatively new to buildroot, thus please excuse my beginner question.
+> > 
+> > I have configured buildroot to build an image for my AT91SAM9G20 system.
+> > I believe it has built just fine but I'm running into an issue when it
+> > comes to uboot, I'm getting this:
+> > 
+> > ...
+> > 
+> > make[1]: Entering directory
+> > `/etc/E10-buildroot/br2013.11/output/build/uboot-2013.10'
+> > 
+> > make: *** No rule to make target `e10_config'. Stop.
 > 
->  Also it feels inconvenient to me that the virtual package should "know"
-> about all its providers.
+>   You set BR2_TARGET_UBOOT_BOARDNAME to "e10", but there is no board with
+> that name defined in U-Boot's boards.cfg. Choose a board that appears in
+> boards.cfg, e.g. at91sam9g20ek_nandflash.
 
-Agreed.
+Yes, perfect, that seems to have helped! I set it to at91sam9g20ek_nandflash and the 
+compilation is giong afgain now.
+Great , Thanks! :)
 
-> >>>  2. Or, we can take the opposite route by pushing the currently
-> >>>     centralized libgles.mk logic that adds each OpenGL
-> >>>implementation in LIBGLES_DEPENDENCIES down into each OpenGL
-> >>>implementation .mk file. But that requires a late evaluation of
-> >>>$(generic-package), so that all OpenGL implementations can be
-> >>>registered in LIBGLES_DEPENDENCIES before the generic-package macro
-> >>>of libgles.mk is evaluated. This would require something like
-> >>>Yann's patch.
-> >>
-> >>Needless to say I would highly prefer this second solution.
-> >
-> >Right. In principle, I have nothing against this solution. It's just
-> >that I am not sure to fully grasp the consequences of the change you're
-> >proposing. I'm a bit worried about "weird" consequences that we may not
-> >be thinking of at this time. But maybe we should simply apply the
-> >patch, and see if it causes problems for some specific use cases.
-> 
->  I'm also a bit afraid of the consequences. It also makes make processing,
-> which is already difficult to understand, even more obfuscated.
-> 
-> 
->  Here's a wild idea...
-> 
-> In rpi-userland/Config.in:
-> 
-> if BR2_PACKAGE_RPI_USERLAND
-> config BR2_PACKAGE_LIBEGL_PROVIDER
-> 	string
-> 	default "rpi-userland"
-> endif
-> 
-> In opengl/libegl/libegl.mk:
-> 
-> LIBEGL_DEPENDENCIES = $(call qstrip,$(BR2PACKAGE_LIBEGL_PROVIDER))
-> 
+Ron
 
-That's about what I am experimenting right now! :-p
-
-But I've done it slightly differently:
-
-package/opengl/libegl/Config.in:
-    config BR2_LIBEGL_PROVIDER
-        string
-
-package/rpi-userland/Config.in:
-    config BR2_LIBEGL_PROVIDER
-        default "rpi-userland" if BR2_PACKAGE_RPI_USERLAND
-
-And the same .mk fragment you suggested for libegl.
-
-My solution is a little bit more compact, and since it does not use a
-package-named variable, we can say that packages do not step on
-one-another's feet. Yet, a bit hackish, I have to concede...
-
-> 
->  It's still hackish of course, because:
-> 
-> - rpi-userland/Config.in defines a symbol "belonging" to the libegl package;
-> 
-> - only one provider can be defined, Kconfig will scream if it's defined
-> twice;
-
-Is it even valid to have two providers of the same functioanlity? What
-would happen: what libEGL.so would be used? Probably the last one
-installed, ie. the one from the alphabetically-last provider.
-
-> - it may not work at all :-).
-
-I'll tell you when I'm done with my checks... ;-p
-
-Regards,
-Yann E. MORIN.
+[snip]
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+*ron eggler | semios | senior software engineer*
+320 - 887 Great Northern Way | Vancouver, BC | V5T 4T5
+T | 604 229 2044 ext 105[1]
+C | 778 230 9442[2]
+E | reggler at semios.com[3]
+smart farming[4]
+twitter[5] linkedin[6]
+
+--------
+[1] tel:604%20229%202044%20ext%20105
+[2] tel:778%20230%209442
+[3] mailto:reggler at semios.com
+[4] http://www.semios.com
+[5] https://twitter.com/semios
+[6] http://www.linkedin.com/company/semiosbio-technologies-inc?goback=%2Enmp_*1_*1_*1_*1_*1_*1_*1_*1_*1_*1&trk=company_logo
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131217/05e6e18a/attachment.html>
