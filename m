@@ -1,87 +1,55 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 17 Dec 2013 22:06:14 +0100
-Subject: [Buildroot] build uboot for AT91SAM9G20
-In-Reply-To: <3487466.tnqfWxcGWT@regdesktophome>
-References: <3487466.tnqfWxcGWT@regdesktophome>
-Message-ID: <52B0BCC6.7070508@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 17 Dec 2013 23:07:35 +0100
+Subject: [Buildroot] [PATCH] package/libgles: postpone the check for a
+ missing GLES provider
+In-Reply-To: <20131217100414.551a3832@skate>
+References: <52A730B0.3020104@orange.com> <52AA41FE.6060705@mind.be>
+ <20131217071100.04b7b3a7@skate>
+ <201312170858.13393.yann.morin.1998@free.fr>
+ <20131217100414.551a3832@skate>
+Message-ID: <20131217220735.GA3352@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16/12/13 02:52, Ron Eggler wrote:
-> Hi,
->
-> I'm relatively new to buildroot, thus please excuse my beginner question.
->
-> I have configured buildroot to build an image for my AT91SAM9G20 system.
-> I believe it has built just fine but I'm running into an issue when it
-> comes to uboot, I'm getting this:
->
-> ...
->
-> make[1]: Entering directory
-> `/etc/E10-buildroot/br2013.11/output/build/uboot-2013.10'
->
-> make: *** No rule to make target `e10_config'. Stop.
+Thomas, All,
 
-  You set BR2_TARGET_UBOOT_BOARDNAME to "e10", but there is no board with 
-that name defined in U-Boot's boards.cfg. Choose a board that appears in 
-boards.cfg, e.g. at91sam9g20ek_nandflash.
+On 2013-12-17 10:04 +0100, Thomas Petazzoni spake thusly:
+> On Tue, 17 Dec 2013 08:58:13 +0100, Yann E. MORIN wrote:
+[--SNIP--]
+> > >  2. Or, we can take the opposite route by pushing the currently
+> > >     centralized libgles.mk logic that adds each OpenGL
+> > > implementation in LIBGLES_DEPENDENCIES down into each OpenGL
+> > > implementation .mk file. But that requires a late evaluation of
+> > > $(generic-package), so that all OpenGL implementations can be
+> > > registered in LIBGLES_DEPENDENCIES before the generic-package macro
+> > > of libgles.mk is evaluated. This would require something like
+> > > Yann's patch.
+> > 
+> > Needless to say I would highly prefer this second solution.
+> 
+> Right. In principle, I have nothing against this solution. It's just
+> that I am not sure to fully grasp the consequences of the change you're
+> proposing. I'm a bit worried about "weird" consequences that we may not
+> be thinking of at this time. But maybe we should simply apply the
+> patch, and see if it causes problems for some specific use cases.
 
+OK, so we should apply it soon, since the holidays season is approaching
+pretty fast now, and it would be nive to be able to react quickly in
+case anything goes south...
 
-  Regards,
-  Arnout
+Peter, care to have a look at it and comment (or apply it), please? ;-)
+    http://patchwork.ozlabs.org/patch/301874/
 
->
-> make[1]: *** [e10_config] Error 1
->
-> make[1]: Leaving directory
-> `/etc/E10-buildroot/br2013.11/output/build/uboot-2013.10'
->
-> make: ***
-> [/etc/E10-buildroot/br2013.11/output/build/uboot-2013.10/.stamp_configured]
-> Error 2
->
-> #
->
-> how can I get buildroot to properly compile uboot for my AT91SAM9G20?
->
-> Thanks,
->
-> Ron
->
-> --
->
-> ron eggler | semios | senior software engineer
->
-> 320 - 887 Great Northern Way | Vancouver, BC | V5T 4T5
->
-> T | 604 229 2044 ext 105 <tel:604%20229%202044%20ext%20105>
->
-> C | 778 230 9442 <tel:778%20230%209442>
->
-> E |reggler at semios.com <mailto:reggler@semios.com>
->
-> smart farming <http://www.semios.com>
->
-> twitter <https://twitter.com/semios>linkedin
-> <http://www.linkedin.com/company/semiosbio-technologies-inc?goback=%2Enmp_*1_*1_*1_*1_*1_*1_*1_*1_*1_*1&trk=company_logo>
->
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
-
+Regards,
+Yann E. MORIN.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
