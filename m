@@ -1,38 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 Dec 2013 10:46:44 +0100
-Subject: [Buildroot] generate uImage file
-In-Reply-To: <1651747.2nkJEYoDym@regdesktophome>
-References: <1651747.2nkJEYoDym@regdesktophome>
-Message-ID: <20131218104644.364648bc@skate>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 18 Dec 2013 10:47:25 +0100
+Subject: [Buildroot] [PATCH v5 2/2] manual: update for multiple global
+	patch dirs
+In-Reply-To: <1387291730-6513-2-git-send-email-rjbarnet@rockwellcollins.com>
+References: <1387291730-6513-1-git-send-email-rjbarnet@rockwellcollins.com>
+ <1387291730-6513-2-git-send-email-rjbarnet@rockwellcollins.com>
+Message-ID: <CAAXf6LUygcB8Zn6Pq+0og6xCeo5_UkkLUPY6ziGXNtMKOVyR0w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ron Eggler,
+Hi Ryan,
 
-On Tue, 17 Dec 2013 21:50:50 +0000, Ron Eggler wrote:
+On Tue, Dec 17, 2013 at 3:48 PM, Ryan Barnett
+<rjbarnet@rockwellcollins.com> wrote:
+[..]
 
-> I just changed my buildroot config to generate a uImage file. I then
-> did a "make clean" followed by a make but for both I get:
-> linux/linux.mk:339: *** No kernel configuration file specified, check
-> your BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE setting.  Stop.
-> 
-> What does this mean? How do I fix this to compile again?
+> +The exception to +BR2_GLOBAL_PATCH_DIR+ being the preferred method for
+> +specifying custom patches is +BR2_LINUX_KERNEL_PATCH+.
+> ++BR2_LINUX_KERNEL_PATCH+ should be used to specify kernel patches that
+> +are available at an URL. *Note:* +BR2_LINUX_KERNEL_PATCHES+ are applied
+> +after patches available in +BR2_GLOBAL_PATCH_DIR+ as it is a patch
+> +post-hook step for the Linux package.
 
-You have selected the choice of providing a kernel configuration file
-to configure the kernel, but you did not give Buildroot the path to
-this file with the BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE configuration
-option.
+In v4 I had following comment on this sentence:
+-----
+'a patch post-hook step for the Linux package' sounds odd.
+What about:
+..., as it is done from a post-patch hook of the Linux package.
+-----
 
-If you think something is not working well, please provide your
-complete Buildroot .config file.
+Of course, you don't have to agree on this, but as I did not see any
+response on it I think it may have simply been overlooked.
 
-Thanks!
-
+Best regards,
 Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
