@@ -1,27 +1,48 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 19 Dec 2013 16:36:22 +0100
-Subject: [Buildroot] [PATCH] mdadm: pass CHECK_RUN_DIR=0 to the Makefile
-	in order to fix build failure
-In-Reply-To: <1387274990-6780-1-git-send-email-cvubrugier@yahoo.fr>
- (Christophe Vu-Brugier's message of "Tue, 17 Dec 2013 11:09:50 +0100")
-References: <1387274990-6780-1-git-send-email-cvubrugier@yahoo.fr>
-Message-ID: <8761qkont5.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 18 Dec 2013 12:07:21 +0100
+Subject: [Buildroot] [git commit] git: bump to version 1.8.5.2
+Message-ID: <20131219153646.1F6639C0F9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Christophe" == Christophe Vu-Brugier <cvubrugier@yahoo.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=69d33ae53346108a514edbf4411890d4713e3505
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > This commit should fix build failures of mdadm 3.3:
- >   http://autobuild.buildroot.net/results/b4a/b4abc317d07b073f8be870ff0e7fee8f8c65f2ff/
- >   http://autobuild.buildroot.net/results/79e/79e6c5081a5197c4f4647db497fbd1e27f29714d/
- >   http://autobuild.buildroot.net/results/224/2242f8284aa4bdbb0ab959a6a6464f20fa043e2f/
+Fixes since v1.8.5.1:
+ * "git diff -- ':(icase)makefile'" was unnecessarily rejected at the
+   command line parser.
 
- > Signed-off-by: Christophe Vu-Brugier <cvubrugier@yahoo.fr>
+ * "git cat-file --batch-check=ok" did not check the existence of
+   the named object.
 
-Committed, thanks.
+ * "git am --abort" sometimes complained about not being able to write
+   a tree with an 0{40} object in it.
 
--- 
-Bye, Peter Korsgaard
+ * Two processes creating loose objects at the same time could have
+   failed unnecessarily when the name of their new objects started
+   with the same byte value, due to a race condition.
+
+Also contains typofixes, documentation updates and trivial code clean-ups.
+
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/git/git.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/git/git.mk b/package/git/git.mk
+index cf16250..3e198a6 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GIT_VERSION         = 1.8.5.1
++GIT_VERSION         = 1.8.5.2
+ GIT_SITE            = http://git-core.googlecode.com/files/
+ GIT_LICENSE         = GPLv2 LGPLv2.1+
+ GIT_LICENSE_FILES   = COPYING LGPL-2.1
