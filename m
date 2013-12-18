@@ -1,39 +1,32 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 18 Dec 2013 10:47:25 +0100
-Subject: [Buildroot] [PATCH v5 2/2] manual: update for multiple global
-	patch dirs
-In-Reply-To: <1387291730-6513-2-git-send-email-rjbarnet@rockwellcollins.com>
-References: <1387291730-6513-1-git-send-email-rjbarnet@rockwellcollins.com>
- <1387291730-6513-2-git-send-email-rjbarnet@rockwellcollins.com>
-Message-ID: <CAAXf6LUygcB8Zn6Pq+0og6xCeo5_UkkLUPY6ziGXNtMKOVyR0w@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 18 Dec 2013 10:48:12 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2013-12-17
+In-Reply-To: <20131218073008.6219E100A64@stock.ovh.net>
+References: <20131218073008.6219E100A64@stock.ovh.net>
+Message-ID: <20131218104812.62edfd68@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Ryan,
+Hello,
 
-On Tue, Dec 17, 2013 at 3:48 PM, Ryan Barnett
-<rjbarnet@rockwellcollins.com> wrote:
-[..]
+On Wed, 18 Dec 2013 08:30:08 +0100 (CET), Thomas Petazzoni wrote:
 
-> +The exception to +BR2_GLOBAL_PATCH_DIR+ being the preferred method for
-> +specifying custom patches is +BR2_LINUX_KERNEL_PATCH+.
-> ++BR2_LINUX_KERNEL_PATCH+ should be used to specify kernel patches that
-> +are available at an URL. *Note:* +BR2_LINUX_KERNEL_PATCHES+ are applied
-> +after patches available in +BR2_GLOBAL_PATCH_DIR+ as it is a patch
-> +post-hook step for the Linux package.
+>            python-pycrypto-2.6 | 8 
+>               python-pyasn-1.2 | 6 
 
-In v4 I had following comment on this sentence:
------
-'a patch post-hook step for the Linux package' sounds odd.
-What about:
-..., as it is done from a post-patch hook of the Linux package.
------
-
-Of course, you don't have to agree on this, but as I did not see any
-response on it I think it may have simply been overlooked.
+I have worked on those issues. They are caused by incorrect header and
+library paths being passed. The pycrypto header problem is quite easy,
+the library path is a little bit trickier, but I'm working on it. I
+will be posting patches as soon as possible.
 
 Best regards,
+
 Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
