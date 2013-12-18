@@ -1,12 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 18 Dec 2013 11:25:27 +0100
-Subject: [Buildroot] [PATCH 1/2] blackbox: rename patches to add
-	sequence numbers
-In-Reply-To: <20131218104930.0983eeac@skate> (Thomas Petazzoni's message of
- "Wed, 18 Dec 2013 10:49:30 +0100")
-References: <1387296884-27777-1-git-send-email-Vincent.Riera@imgtec.com>
- <20131218104930.0983eeac@skate>
-Message-ID: <87sitqo3qg.fsf@dell.be.48ers.dk>
+Date: Wed, 18 Dec 2013 11:29:48 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2013-12-17
+In-Reply-To: <20131218104812.62edfd68@skate> (Thomas Petazzoni's message of
+ "Wed, 18 Dec 2013 10:48:12 +0100")
+References: <20131218073008.6219E100A64@stock.ovh.net>
+ <20131218104812.62edfd68@skate>
+Message-ID: <87ob4eo3j7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,24 +15,30 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > Dear Vicente Olivert Riera,
- > On Tue, 17 Dec 2013 16:14:43 +0000, Vicente Olivert Riera wrote:
- >> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- >> ---
- >> ...0.70.1-gcc43.patch => blackbox-002-gcc43.patch} |    0
- >> ... blackbox-003-gcc46-textpropertytostring.patch} |    0
- >> 2 files changed, 0 insertions(+), 0 deletions(-)
- >> rename package/blackbox/{blackbox-0.70.1-gcc43.patch => blackbox-002-gcc43.patch} (100%)
- >> rename package/blackbox/{blackbox-0.70.1-gcc46-textpropertytostring.patch => blackbox-003-gcc46-textpropertytostring.patch} (100%)
+ > Hello,
+ > On Wed, 18 Dec 2013 08:30:08 +0100 (CET), Thomas Petazzoni wrote:
 
- > It is a little bit weird that the first patch was not renamed in this
- > commit, but instead renamed in PATCH 2/2, mixed with some other changes
- > in the patch itself.
+ >> python-pycrypto-2.6 | 8 
+ >> python-pyasn-1.2 | 6 
 
- > Both patches have now be applied by Peter, so it's too late, but it
- > would have been good to get this right.
+ > I have worked on those issues. They are caused by incorrect header and
+ > library paths being passed. The pycrypto header problem is quite easy,
+ > the library path is a little bit trickier, but I'm working on it. I
+ > will be posting patches as soon as possible.
 
-Sorry, I apparently missed that.
+The other pycrypto issue (that legal-info fails) is that the one of the
+license files is called LICENSE.orig and apply-patches.sh currently
+deletes all *.orig files :/
+
+I know patch generates these if the patch doesn't apply, but do anybody
+know why we're deleting them? The patches should imho always apply
+cleanly (and if not, fixed) so it should only happen during development,
+where the .orig files might be handy.
+
+We can also pass --no-backup-if-mismatch to patch to get it to not
+create those files.
+
+Can we get rid of the rm *.orig from apply-patches.sh?
 
 -- 
 Bye, Peter Korsgaard
