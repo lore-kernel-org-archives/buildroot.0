@@ -1,29 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 Dec 2013 10:48:12 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2013-12-17
-In-Reply-To: <20131218073008.6219E100A64@stock.ovh.net>
-References: <20131218073008.6219E100A64@stock.ovh.net>
-Message-ID: <20131218104812.62edfd68@skate>
+Date: Wed, 18 Dec 2013 10:49:30 +0100
+Subject: [Buildroot] [PATCH 1/2] blackbox: rename patches to add
+ sequence numbers
+In-Reply-To: <1387296884-27777-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1387296884-27777-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20131218104930.0983eeac@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Vicente Olivert Riera,
 
-On Wed, 18 Dec 2013 08:30:08 +0100 (CET), Thomas Petazzoni wrote:
+On Tue, 17 Dec 2013 16:14:43 +0000, Vicente Olivert Riera wrote:
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  ...0.70.1-gcc43.patch => blackbox-002-gcc43.patch} |    0
+>  ... blackbox-003-gcc46-textpropertytostring.patch} |    0
+>  2 files changed, 0 insertions(+), 0 deletions(-)
+>  rename package/blackbox/{blackbox-0.70.1-gcc43.patch => blackbox-002-gcc43.patch} (100%)
+>  rename package/blackbox/{blackbox-0.70.1-gcc46-textpropertytostring.patch => blackbox-003-gcc46-textpropertytostring.patch} (100%)
 
->            python-pycrypto-2.6 | 8 
->               python-pyasn-1.2 | 6 
+It is a little bit weird that the first patch was not renamed in this
+commit, but instead renamed in PATCH 2/2, mixed with some other changes
+in the patch itself.
 
-I have worked on those issues. They are caused by incorrect header and
-library paths being passed. The pycrypto header problem is quite easy,
-the library path is a little bit trickier, but I'm working on it. I
-will be posting patches as soon as possible.
+Both patches have now be applied by Peter, so it's too late, but it
+would have been good to get this right.
 
-Best regards,
+Thanks for those contributions anyway!
 
 Thomas
 -- 
