@@ -1,83 +1,68 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Wed, 18 Dec 2013 11:36:46 +0100
-Subject: [Buildroot] [PATCH v10 7/8] package: enable jobserver for recursive
-	make
-In-Reply-To: <1387363007-19846-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1387363007-19846-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1387363007-19846-8-git-send-email-fabio.porcedda@gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 18 Dec 2013 12:01:05 +0100
+Subject: [Buildroot] [PATCH v6 2/2] manual: update for multiple global
+	patch dirs
+In-Reply-To: <1387362302-12198-2-git-send-email-rjbarnet@rockwellcollins.com>
+References: <1387362302-12198-1-git-send-email-rjbarnet@rockwellcollins.com>
+ <1387362302-12198-2-git-send-email-rjbarnet@rockwellcollins.com>
+Message-ID: <CAAXf6LVsYsv9wE-Tz0=_LBx1ZrAes=W0ksXw1WpBcn2Hk9ExLw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add '+' prefix to the $($(PKG)_BUILD_CMDS) and $($(PKG)_INSTALL*_CMDS)
-commands to enable jobserver for the sub-make.
+Hi Ryan, Peter,
 
-Without the '+' prefix GNU make does not detect the sub-make so it
-disable the jobserver for the sub-make.
+On Wed, Dec 18, 2013 at 11:25 AM, Ryan Barnett
+<rjbarnet@rockwellcollins.com> wrote:
+> Updating the documentation to reflect that multiple directories can
+> now be specified for BR2_GLOBAL_PATCH_DIR. Along with giving an
+> example use case of how to use multiple global patch directories.
+>
+> Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+>
+> ---
+> Changes v4 -> v6:
+>   - Minor wording that was missed from feedback received by
+>     Thomas D in v4.
+>
+> Changes v4 -> v5:
+>   - Fixed minor wording issue and spelling (suggested by Thomas D)
+>
+> Changes v3 -> v4:
+>   - Fixed minor spelling mistakes and wording (suggested by Arnout)
+>   - Reword section about order that patches are applied along with
+>     making it clearer about when to use BR2_GLOBAL_PATCH_DIR
+>     (suggested by Arnout)
+>
+> Changes v2 -> v3:
+>   - None
+>
+> Changes v1 -> v2:
+>   - Fixed minor spelling mistakes and wording (suggested by Thomas D)
+> ---
+>  docs/manual/customize-packages.txt |   92 ++++++++++++++++++++++++++++++++----
+>  docs/manual/patch-policy.txt       |   20 +++++---
+>  2 files changed, 96 insertions(+), 16 deletions(-)
+>
+[..]
+> +
+> +The exception to +BR2_GLOBAL_PATCH_DIR+ being the preferred method for
+> +specifying custom patches is +BR2_LINUX_KERNEL_PATCH+.
+> ++BR2_LINUX_KERNEL_PATCH+ should be used to specify kernel patches that
+> +are available at an URL. *Note:* +BR2_LINUX_KERNEL_PATCHES+ are applied
+> +after patches available in +BR2_GLOBAL_PATCH_DIR+, as it is done
+> +from a post-patch hook of the Linux package
 
-From GNU make documentation:
-Using the MAKE variable has the same effect as using a ?+? character
-at the beginning of the recipe line.  This special feature is only
-enabled if the MAKE variable appears directly in the recipe: it does
-not apply if the MAKE variable is referenced through expansion of
-another variable. In the latter case you must use the ?+? token to get
-these special effects.
+I'd add a dot here at the end of the sentence, but this is maybe
+something Peter can do while committing?
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
----
- package/pkg-generic.mk | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+Other than that, finally: ;)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index fc2e04e..95e56bc 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -170,7 +170,7 @@ $(BUILD_DIR)/%/.stamp_configured:
- $(BUILD_DIR)/%/.stamp_built::
- 	@$(call step_start,build)
- 	@$(call MESSAGE,"Building")
--	$($(PKG)_BUILD_CMDS)
-+	+$($(PKG)_BUILD_CMDS)
- 	$(foreach hook,$($(PKG)_POST_BUILD_HOOKS),$(call $(hook))$(sep))
- 	$(Q)touch $@
- 	@$(call step_end,build)
-@@ -179,7 +179,7 @@ $(BUILD_DIR)/%/.stamp_built::
- $(BUILD_DIR)/%/.stamp_host_installed:
- 	@$(call step_start,install-host)
- 	@$(call MESSAGE,"Installing to host directory")
--	$($(PKG)_INSTALL_CMDS)
-+	+$($(PKG)_INSTALL_CMDS)
- 	$(foreach hook,$($(PKG)_POST_INSTALL_HOOKS),$(call $(hook))$(sep))
- 	$(Q)touch $@
- 	@$(call step_end,install-host)
-@@ -188,7 +188,7 @@ $(BUILD_DIR)/%/.stamp_host_installed:
- $(BUILD_DIR)/%/.stamp_staging_installed:
- 	@$(call step_start,install-staging)
- 	@$(call MESSAGE,"Installing to staging directory")
--	$($(PKG)_INSTALL_STAGING_CMDS)
-+	+$($(PKG)_INSTALL_STAGING_CMDS)
- 	$(foreach hook,$($(PKG)_POST_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
- 	$(Q)if test -n "$($(PKG)_CONFIG_SCRIPTS)" ; then \
- 		$(call MESSAGE,"Fixing package configuration files") ;\
-@@ -204,7 +204,7 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
- $(BUILD_DIR)/%/.stamp_images_installed:
- 	@$(call step_start,install-image)
- 	@$(call MESSAGE,"Installing to images directory")
--	$($(PKG)_INSTALL_IMAGES_CMDS)
-+	+$($(PKG)_INSTALL_IMAGES_CMDS)
- 	$(foreach hook,$($(PKG)_POST_INSTALL_IMAGES_HOOKS),$(call $(hook))$(sep))
- 	$(Q)touch $@
- 	@$(call step_end,install-image)
-@@ -217,7 +217,7 @@ $(BUILD_DIR)/%/.stamp_target_installed:
- 		$($(PKG)_INSTALL_INIT_SYSTEMD))
- 	$(if $(BR2_INIT_SYSV)$(BR2_INIT_BUSYBOX),\
- 		$($(PKG)_INSTALL_INIT_SYSV))
--	$($(PKG)_INSTALL_TARGET_CMDS)
-+	+$($(PKG)_INSTALL_TARGET_CMDS)
- 	$(foreach hook,$($(PKG)_POST_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
- 	$(Q)if test -n "$($(PKG)_CONFIG_SCRIPTS)" ; then \
- 		$(RM) -f $(addprefix $(TARGET_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ; \
--- 
-1.8.5
+Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+
+Best regards,
+Thomas
