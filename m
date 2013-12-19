@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 20 Dec 2013 00:43:28 +0100
-Subject: [Buildroot] [PATCH 5/5] package/powervr: switch to package-defined
-	providers
+Date: Fri, 20 Dec 2013 00:43:25 +0100
+Subject: [Buildroot] [PATCH 2/5] package/opengl/libgles: switch to
+	package-defined providers
 In-Reply-To: <cover.1387495624.git.yann.morin.1998@free.fr>
 References: <cover.1387495624.git.yann.morin.1998@free.fr>
-Message-ID: <e3300b74a954f422626703e3402206636cf35043.1387495624.git.yann.morin.1998@free.fr>
+Message-ID: <6f83c37294d3a2b4d7b1425408e7148518b3584e.1387495624.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,52 +18,125 @@ For the underlying reasons, see previous patch, titled:
 
 Reported-by: David Corvoysier <david.corvoysier@orange.com>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: David Corvoysier <david.corvoysier@orange.com>
+Cc: Reported-by: David Corvoysier <david.corvoysier@orange.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Peter Korsgaard <jacmet@uclibc.org>
 ---
- package/powervr/Config.in  | 4 ++++
- package/powervr/powervr.mk | 5 +----
- package/ti-gfx/Config.in   | 3 +++
- 3 files changed, 8 insertions(+), 4 deletions(-)
+ package/freescale-imx/gpu-viv-bin-mx6q/Config.in |  3 +++
+ package/opengl/Config.in                         |  4 +---
+ package/opengl/libgles/Config.in                 |  6 ++++++
+ package/opengl/libgles/libgles.mk                | 17 +----------------
+ package/rpi-userland/Config.in                   |  3 +++
+ package/sunxi-mali/Config.in                     |  3 +++
+ package/ti-gfx/Config.in                         |  3 +++
+ 7 files changed, 20 insertions(+), 19 deletions(-)
+ create mode 100644 package/opengl/libgles/Config.in
 
-diff --git a/package/powervr/Config.in b/package/powervr/Config.in
-index d09ce74..746e15b 100644
---- a/package/powervr/Config.in
-+++ b/package/powervr/Config.in
-@@ -1,2 +1,6 @@
- config BR2_PACKAGE_HAS_POWERVR
- 	bool
+diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/Config.in b/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
+index 68380a2..e084568 100644
+--- a/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
++++ b/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
+@@ -27,6 +27,9 @@ if BR2_PACKAGE_GPU_VIV_BIN_MX6Q
+ config BR2_PACKAGE_PROVIDES_OPENGL_EGL
+ 	default "gpu-viv-bin-mx6q"
+ 
++config BR2_PACKAGE_PROVIDES_OPENGL_ES
++	default "gpu-viv-bin-mx6q"
 +
-+config BR2_PACKAGE_PROVIDES_POWERVR
-+	depends on BR2_PACKAGE_HAS_POWERVR
+ config BR2_PACKAGE_GPU_VIV_BIN_MX6Q_EXAMPLES
+ 	bool "install examples"
+ 	help
+diff --git a/package/opengl/Config.in b/package/opengl/Config.in
+index 686543b..3960082 100644
+--- a/package/opengl/Config.in
++++ b/package/opengl/Config.in
+@@ -1,7 +1,5 @@
+ source "package/opengl/libegl/Config.in"
+-
+-config BR2_PACKAGE_HAS_OPENGL_ES
+-	bool
++source "package/opengl/libgles/Config.in"
+ 
+ config BR2_PACKAGE_HAS_OPENVG
+ 	bool
+diff --git a/package/opengl/libgles/Config.in b/package/opengl/libgles/Config.in
+new file mode 100644
+index 0000000..75ccfc8
+--- /dev/null
++++ b/package/opengl/libgles/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_HAS_OPENGL_ES
++	bool
++
++config BR2_PACKAGE_PROVIDES_OPENGL_ES
++	depends on BR2_PACKAGE_HAS_OPENGL_ES
 +	string
-diff --git a/package/powervr/powervr.mk b/package/powervr/powervr.mk
-index 83392fd..d40411e 100644
---- a/package/powervr/powervr.mk
-+++ b/package/powervr/powervr.mk
-@@ -5,10 +5,7 @@
+diff --git a/package/opengl/libgles/libgles.mk b/package/opengl/libgles/libgles.mk
+index ec157ac..f59ac72 100644
+--- a/package/opengl/libgles/libgles.mk
++++ b/package/opengl/libgles/libgles.mk
+@@ -5,22 +5,7 @@
  ################################################################################
  
- POWERVR_SOURCE =
+ LIBGLES_SOURCE =
+-
+-ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
+-LIBGLES_DEPENDENCIES += rpi-userland
+-endif
 -
 -ifeq ($(BR2_PACKAGE_TI_GFX),y)
--POWERVR_DEPENDENCIES += ti-gfx
+-LIBGLES_DEPENDENCIES += ti-gfx
 -endif
-+POWERVR_DEPENDENCIES = $(BR2_PACKAGE_PROVIDES_POWERVR)
+-
+-ifeq ($(BR2_PACKAGE_SUNXI_MALI),y)
+-LIBGLES_DEPENDENCIES += sunxi-mali
+-endif
+-
+-ifeq ($(BR2_PACKAGE_GPU_VIV_BIN_MX6Q),y)
+-LIBGLES_DEPENDENCIES += gpu-viv-bin-mx6q
+-endif
++LIBGLES_DEPENDENCIES = $(BR2_PACKAGE_PROVIDES_OPENGL_ES)
  
- ifeq ($(POWERVR_DEPENDENCIES),)
- define POWERVR_CONFIGURE_CMDS
+ ifeq ($(LIBGLES_DEPENDENCIES),)
+ define LIBGLES_CONFIGURE_CMDS
+diff --git a/package/rpi-userland/Config.in b/package/rpi-userland/Config.in
+index 3c8959e..b8860d6 100644
+--- a/package/rpi-userland/Config.in
++++ b/package/rpi-userland/Config.in
+@@ -22,6 +22,9 @@ if BR2_PACKAGE_RPI_USERLAND
+ config BR2_PACKAGE_PROVIDES_OPENGL_EGL
+ 	default "rpi-userland"
+ 
++config BR2_PACKAGE_PROVIDES_OPENGL_ES
++	default "rpi-userland"
++
+ endif
+ 
+ comment "rpi-userland needs a toolchain w/ C++, largefile, threads"
+diff --git a/package/sunxi-mali/Config.in b/package/sunxi-mali/Config.in
+index 7f07647..9f188a3 100644
+--- a/package/sunxi-mali/Config.in
++++ b/package/sunxi-mali/Config.in
+@@ -21,6 +21,9 @@ if BR2_PACKAGE_SUNXI_MALI
+ config BR2_PACKAGE_PROVIDES_OPENGL_EGL
+ 	default "sunxi-mali"
+ 
++config BR2_PACKAGE_PROVIDES_OPENGL_ES
++	default "sunxi-mali"
++
+ config BR2_PACKAGE_SUNXI_MALI_DBG
+ 	bool "install malitest and maliver tools"
+ 	help
 diff --git a/package/ti-gfx/Config.in b/package/ti-gfx/Config.in
-index 929247b..f455f4c 100644
+index e89660f..929247b 100644
 --- a/package/ti-gfx/Config.in
 +++ b/package/ti-gfx/Config.in
-@@ -17,6 +17,9 @@ config BR2_PACKAGE_PROVIDES_OPENGL_EGL
- config BR2_PACKAGE_PROVIDES_OPENGL_ES
+@@ -14,6 +14,9 @@ if BR2_PACKAGE_TI_GFX
+ config BR2_PACKAGE_PROVIDES_OPENGL_EGL
  	default "ti-gfx"
  
-+config BR2_PACKAGE_PROVIDES_POWERVR
++config BR2_PACKAGE_PROVIDES_OPENGL_ES
 +	default "ti-gfx"
 +
  config BR2_PACKAGE_TI_GFX_DEBUG
