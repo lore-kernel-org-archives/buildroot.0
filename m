@@ -1,46 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Dec 2013 14:46:28 +0100
-Subject: [Buildroot] [PATCH] evemu: New package. Also adds libevdev.
-In-Reply-To: <20131218174050.GA3321@free.fr>
-References: <1387375269-25387-1-git-send-email-anaumann@ultratronik.de>
- <20131218174050.GA3321@free.fr>
-Message-ID: <20131219144628.496c6374@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 19 Dec 2013 16:35:24 +0100
+Subject: [Buildroot] [PATCH 2/3] qt5: version bump
+In-Reply-To: <1387288651-47952-2-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Tue, 17 Dec 2013 13:57:30 +0000")
+References: <1387288651-47952-1-git-send-email-Vincent.Riera@imgtec.com>
+ <1387288651-47952-2-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <87a9fwonur.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, Andreas,
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-Yann's comments are good, I'm just going to add one more below.
+ > -bump version to 5.2.0
+ > -remove unneeded patches
+ > -remove invalid configure options
 
-On Wed, 18 Dec 2013 18:40:50 +0100, Yann E. MORIN wrote:
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ > ---
+ >  package/qt5/qt5.mk                                 |    4 +-
+ >  ...-Add-egl-cflags-when-opengles2-is-enabled.patch |   32 ----
+ >  .../qt5/qt5base/qt5base-0003-uclibc-no-lfs.patch   |   36 -----
 
-> Except for those minor nitpicks, it all Looks Good To Me (TM).
+This patch is still needed.
 
-Both packages lack the <pkg>_LICENSE and <pkg>_LICENSE_FILES
-informations. See the Buildroot manual for details about these
-variables.
+ >  package/qt5/qt5base/qt5base-0008-qatomic-ppc.patch |   29 ----
 
-Also, the libevdev configure.ac script uses PKG_CHECK_MODULES, so the
-package should depend on host-pkgconf. Same thing for evemu.
+And so is this.
 
-Finally, your packages don't have any toolchain dependency. This might
-be correct, but it would be good if you could test the build of both of
-those packages with the following initial configurations:
+It also needs a new patch to build on uClibc, which I've submitted
+upstream:
 
-  http://autobuild.buildroot.org/toolchains/configs/free-electrons/br-arm-basic.config
-  http://autobuild.buildroot.org/toolchains/configs/free-electrons/br-arm-full-nothread.config
+https://bugreports.qt-project.org/browse/QTBUG-35742
 
-If it builds fine with both of those toolchain configuration, then
-you're good to go. If not, then it means that there are some missing
-toolchain dependencies.
+Committed series with those changes, thanks.
 
-Best regards,
-
-Thomas Petazzoni
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
