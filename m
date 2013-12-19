@@ -1,9 +1,9 @@
 From: Clayton Shotwell <clshotwe@rockwellcollins.com>
-Date: Thu, 19 Dec 2013 14:37:55 -0600
-Subject: [Buildroot] [PATCH v5 06/20] checkpolicy: new package
+Date: Thu, 19 Dec 2013 14:37:54 -0600
+Subject: [Buildroot] [PATCH v5 05/20] libsemanage: new package
 In-Reply-To: <1387485489-4186-1-git-send-email-clshotwe@rockwellcollins.com>
 References: <1387485489-4186-1-git-send-email-clshotwe@rockwellcollins.com>
-Message-ID: <1387485489-4186-7-git-send-email-clshotwe@rockwellcollins.com>
+Message-ID: <1387485489-4186-6-git-send-email-clshotwe@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,80 +15,180 @@ Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
 Changes v4 -> v5:
   - No changes.
 Changes v3 -> v4:
+  - Added back in the Python bindings creation configure option
+    (suggested by Thomas).
+  - Added a dependency on host-flex (suggeste by Thomas).
+  - Cleaned up configure comments (suggested by Thomas).
   - Removed the clean command.
 Changes v2 -> v3:
-  - Added checkpolicy as a host package (suggested by Arnout).
+  - Changes patch naming convention (suggested by Thomas).
+  - Added dependencies on BR2_TOOLCHAIN_HAS_THREADS and BR2_LARGEFILE
+    (suggested by Thomas).
 Changes v1 -> v2:
+  - Move Config.in entry into the libraries section since this is a
+    library.
   - General cleanup to the mk file to conform to the standard format.
-  - Removed the option to do a target build because it should never
-    be needed during normal operation.
-  - Added checkpolicy as a host package (suggested by Arnout).
+  - Fixed the patch naming to avoid using the version number.
+  - Cleaned up the patch to include a signed-off-by line.
+  - Changed package dependencies into selects in the config.
+  - Changed the original Python select in the Config.in to be a check
+    in the mk file.
+  - Removed building the python bindings in the host configuration.
 ---
- package/Config.in.host             |    1 +
- package/checkpolicy/Config.in.host |   10 ++++++++++
- package/checkpolicy/checkpolicy.mk |   26 ++++++++++++++++++++++++++
- 3 files changed, 37 insertions(+), 0 deletions(-)
- create mode 100644 package/checkpolicy/Config.in.host
- create mode 100644 package/checkpolicy/checkpolicy.mk
+ package/Config.in                                  |    1 +
+ package/libsemanage/Config.in                      |   30 ++++++++
+ .../libsemanage-0001-execption-lib-path-fix.patch  |   14 ++++
+ package/libsemanage/libsemanage.mk                 |   72 ++++++++++++++++++++
+ 4 files changed, 117 insertions(+), 0 deletions(-)
+ create mode 100644 package/libsemanage/Config.in
+ create mode 100644 package/libsemanage/libsemanage-0001-execption-lib-path-fix.patch
+ create mode 100644 package/libsemanage/libsemanage.mk
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 34e84bf..9060061 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -1,5 +1,6 @@
- menu "Host utilities"
+diff --git a/package/Config.in b/package/Config.in
+index b71b82a..1bb32f4 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -740,6 +740,7 @@ endmenu
  
-+source "package/checkpolicy/Config.in.host"
- source "package/dfu-util/Config.in.host"
- source "package/dosfstools/Config.in.host"
- source "package/e2fsprogs/Config.in.host"
-diff --git a/package/checkpolicy/Config.in.host b/package/checkpolicy/Config.in.host
+ menu "Security"
+ source "package/libselinux/Config.in"
++source "package/libsemanage/Config.in"
+ source "package/libsepol/Config.in"
+ endmenu
+ 
+diff --git a/package/libsemanage/Config.in b/package/libsemanage/Config.in
 new file mode 100644
-index 0000000..75794be
+index 0000000..e4013cd
 --- /dev/null
-+++ b/package/checkpolicy/Config.in.host
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_HOST_CHECKPOLICY
-+	bool "host checkpolicy"
++++ b/package/libsemanage/Config.in
+@@ -0,0 +1,30 @@
++config BR2_PACKAGE_LIBSEMANAGE
++	bool "libsemanage"
++	select BR2_PACKAGE_LIBSELINUX
++	select BR2_PACKAGE_USTR
++	select BR2_PACKAGE_BZIP2
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_LARGEFILE
 +	help
-+	  checkpolicy is the policy compiler. It uses libsepol to 
-+	  generate the binary policy. checkpolicy uses the static 
-+	  libsepol since it deals with low level details of the policy 
-+	  that have not been encapsulated/abstracted by a proper 
-+	  shared library interface. 
-+	  
++	  libsemanage is the policy management library. It uses
++	  libsepol for binary policy manipulation and libselinux for
++	  interacting with the SELinux system. It also exec's helper
++	  programs for loading policy and for checking whether the
++	  file_contexts configuration is valid (load_policy and
++	  setfiles from policycoreutils) presently, although this may
++	  change at least for the bootstrapping case (for rpm).
++
 +	  http://selinuxproject.org/page/Main_Page
-diff --git a/package/checkpolicy/checkpolicy.mk b/package/checkpolicy/checkpolicy.mk
++
++comment "libsemanage needs a toolchain w/ largefile, threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE
++
++if BR2_PACKAGE_LIBSEMANAGE
++
++config BR2_PACKAGE_LIBSEMANAGE_PYTHON_BINDINGS
++	select BR2_PACKAGE_PYTHON
++	bool "python bindings"
++	help
++	  enable building python bindings
++
++endif
+diff --git a/package/libsemanage/libsemanage-0001-execption-lib-path-fix.patch b/package/libsemanage/libsemanage-0001-execption-lib-path-fix.patch
 new file mode 100644
-index 0000000..0d91794
+index 0000000..cbcbea5
 --- /dev/null
-+++ b/package/checkpolicy/checkpolicy.mk
-@@ -0,0 +1,26 @@
++++ b/package/libsemanage/libsemanage-0001-execption-lib-path-fix.patch
+@@ -0,0 +1,14 @@
++Patch to correct a missing header file issue.
++
++Signed-off-by Clayton Shotwell <clshotwe@rockwellcollins.com>
++
++--- a/src/exception.sh	2011-12-21 11:46:04.000000000 -0600
+++++ b/src/exception.sh	2012-08-27 11:29:58.000000000 -0500
++@@ -9,6 +9,6 @@
++ }
++ "
++ }
++-gcc -x c -c - -aux-info temp.aux < ../include/semanage/semanage.h
+++gcc -x c -c - -aux-info temp.aux -I../include < ../include/semanage/semanage.h
++ for i in `awk '/extern int/ { print $6 }' temp.aux`; do except $i ; done
++ rm -f -- temp.aux -.o
+diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
+new file mode 100644
+index 0000000..44d8324
+--- /dev/null
++++ b/package/libsemanage/libsemanage.mk
+@@ -0,0 +1,72 @@
 +################################################################################
 +#
-+# checkpolicy
++# libsemanage
 +#
 +################################################################################
 +
-+CHECKPOLICY_VERSION = 2.1.12
-+CHECKPOLICY_SITE = http://userspace.selinuxproject.org/releases/20130423/
-+CHECKPOLICY_LICENSE = GPLv2
-+CHECKPOLICY_LICENSE_FILES = COPYING
++LIBSEMANAGE_VERSION = 2.1.10
++LIBSEMANAGE_SITE = http://userspace.selinuxproject.org/releases/20130423/
++LIBSEPOL_LICENSE = LGPLv2.1+
++LIBSEPOL_LICENSE_FILES = COPYING
 +
-+HOST_CHECKPOLICY_DEPENDENCIES = host-libselinux host-flex host-bison
++LIBSEMANAGE_DEPENDENCIES = host-bison host-flex libselinux ustr bzip2
 +
-+HOST_CHECKPOLICY_MAKE_OPTS = $(HOST_CONFIGURE_OPTS) \
-+	LEX="$(HOST_DIR)/usr/bin/flex" \
-+	YACC="$(HOST_DIR)/usr/bin/bison -y"
++LIBSEMANAGE_INSTALL_STAGING = YES
 +
-+define HOST_CHECKPOLICY_BUILD_CMDS
-+	$(MAKE) -C $(@D) $(HOST_CHECKPOLICY_MAKE_OPTS) DESTDIR=$(HOST_DIR)
++LIBSEMANAGE_MAKE_OPT = $(TARGET_CONFIGURE_OPTS)
++
++ifeq ($(BR2_PACKAGE_LIBSEMANAGE_PYTHON_BINDINGS),y)
++
++LIBSEMANAGE_DEPENDENCIES += python host-swig host-python
++LIBSEMANAGE_MAKE_OPT += \
++	PYINC="-I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)/" \
++	PYTHONLIBDIR="-L$(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/" \
++	PYLIBVER="python$(PYTHON_VERSION_MAJOR)" \
++	SWIG_LIB="$(HOST_DIR)/usr/share/swig/$(SWIG_VERSION)/"
++
++define LIBSEMANAGE_PYTHON_BUILD_CMDS
++	$(MAKE) -C $(@D) $(LIBSEMANAGE_MAKE_OPT) DESTDIR=$(STAGING_DIR) swigify pywrap
 +endef
 +
-+define HOST_CHECKPOLICY_INSTALL_CMDS
-+	$(MAKE) -C $(@D) install $(HOST_CHECKPOLICY_MAKE_OPTS) DESTDIR=$(HOST_DIR)
++define LIBSEMANAGE_PYTHON_INSTALL_STAGING_CMDS
++	$(MAKE) -C $(@D) install-pywrap $(LIBSEMANAGE_MAKE_OPT) DESTDIR=$(STAGING_DIR)
 +endef
 +
++define LIBSEMANAGE_PYTHON_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D) install-pywrap $(LIBSEMANAGE_MAKE_OPT) DESTDIR=$(TARGET_DIR)
++endef
++
++endif # End of BR2_PACKAGE_PYTHON
++
++define LIBSEMANAGE_BUILD_CMDS
++	# DESTDIR is needed during the compile to compute library and 
++	# header paths.
++	$(MAKE) -C $(@D) $(LIBSEMANAGE_MAKE_OPT) DESTDIR=$(STAGING_DIR) all
++	$(LIBSEMANAGE_PYTHON_BUILD_CMDS)
++endef
++
++define LIBSEMANAGE_INSTALL_STAGING_CMDS
++	$(MAKE) -C $(@D) install $(LIBSEMANAGE_MAKE_OPT) DESTDIR=$(STAGING_DIR)
++	$(LIBSEMANAGE_PYTHON_INSTALL_STAGING_CMDS)
++endef
++
++define LIBSEMANAGE_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D) install $(LIBSEMANAGE_MAKE_OPT) DESTDIR=$(TARGET_DIR)
++	$(LIBSEMANAGE_PYTHON_INSTALL_TARGET_CMDS)
++endef
++
++HOST_LIBSEMANAGE_DEPENDENCIES = host-bison host-libsepol \
++	host-libselinux host-ustr host-bzip2
++
++define HOST_LIBSEMANAGE_BUILD_CMDS
++	# DESTDIR is needed during the compile to compute library and 
++	# header paths.
++	$(MAKE) -C $(@D) all $(HOST_CONFIGURE_OPTS) DESTDIR=$(HOST_DIR)
++endef
++
++define HOST_LIBSEMANAGE_INSTALL_CMDS
++	$(MAKE) -C $(@D) install $(HOST_CONFIGURE_OPTS) DESTDIR=$(HOST_DIR)
++endef
++
++$(eval $(generic-package))
 +$(eval $(host-generic-package))
 -- 
 1.7.1
