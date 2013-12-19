@@ -1,245 +1,143 @@
 From: Clayton Shotwell <clshotwe@rockwellcollins.com>
-Date: Thu, 19 Dec 2013 14:38:05 -0600
-Subject: [Buildroot] [PATCH v5 16/20] busybox: add option to install
-	individual binaries
+Date: Thu, 19 Dec 2013 14:38:09 -0600
+Subject: [Buildroot] [PATCH v5 20/20] configs: Add SELinux x86 qemu config
 In-Reply-To: <1387485489-4186-1-git-send-email-clshotwe@rockwellcollins.com>
 References: <1387485489-4186-1-git-send-email-clshotwe@rockwellcollins.com>
-Message-ID: <1387485489-4186-17-git-send-email-clshotwe@rockwellcollins.com>
+Message-ID: <1387485489-4186-21-git-send-email-clshotwe@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-The individual binaries option of busybox allows for the applets
-that would usually be symlinks to be built as individual applications
-that link against a shared library.
-
-This feature is needed for SELinux to allow the applications to run
-under the correct SELinux context.
-
-The patch being added allows the individual applications to be
-installed and will be upstreamed to the busybox developers.
-
-The initial work for this change was done by Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>.
+Adding a base SELinux QEMU image for x86. This will build a base
+SELinux system that boots with SELinux in permissive mode.
 
 Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
 ---
 Changes v4 -> v5:
-  - Removed Thomas P's signed off line because the original patch
-    ahs been completely reworked.
-  - Cleaned up the installation of the individual binaries to be a
-    upstreamable patch.
-  - Added the suid bit to the applets that are declared as
-    BB_SUID_REQUIRE and BB_SUID_MAYBE.
+  - Upgraded kernel version to match Gustavo's commit.
+  - Added a entry to enable a glibc toolchain with C++ support.
 Changes v1 -> v4:
-  - Did not exist.
+  - Commit did not exist.
 ---
- ...s-Add-installation-of-individual-binaries.patch |  103 ++++++++++++++++++++
- package/busybox/Config.in                          |    7 ++
- package/busybox/busybox.mk                         |   34 +++++++
- 3 files changed, 144 insertions(+), 0 deletions(-)
- create mode 100644 package/busybox/1.21.1/0005-applets-Add-installation-of-individual-binaries.patch
+ board/qemu/x86/linux-3.12-selinux.config |   72 ++++++++++++++++++++++++++++++
+ configs/qemu_x86_selinux_defconfig       |   28 ++++++++++++
+ 2 files changed, 100 insertions(+), 0 deletions(-)
+ create mode 100644 board/qemu/x86/linux-3.12-selinux.config
+ create mode 100644 configs/qemu_x86_selinux_defconfig
 
-diff --git a/package/busybox/1.21.1/0005-applets-Add-installation-of-individual-binaries.patch b/package/busybox/1.21.1/0005-applets-Add-installation-of-individual-binaries.patch
+diff --git a/board/qemu/x86/linux-3.12-selinux.config b/board/qemu/x86/linux-3.12-selinux.config
 new file mode 100644
-index 0000000..e7b9178
+index 0000000..20aff7f
 --- /dev/null
-+++ b/package/busybox/1.21.1/0005-applets-Add-installation-of-individual-binaries.patch
-@@ -0,0 +1,103 @@
-+From 3451b55054a6fe2073a21301938802a27dec835d Mon Sep 17 00:00:00 2001
-+From: Clayton Shotwell <clshotwe@rockwellcollins.com>
-+Date: Mon, 16 Dec 2013 14:45:33 -0600
-+Subject: [PATCH 5/5] applets: Add installation of individual binaries
++++ b/board/qemu/x86/linux-3.12-selinux.config
+@@ -0,0 +1,72 @@
++CONFIG_EXPERIMENTAL=y
++# CONFIG_LOCALVERSION_AUTO is not set
++# CONFIG_SWAP is not set
++CONFIG_AUDIT=y
++# CONFIG_COMPAT_BRK is not set
++CONFIG_MODULES=y
++# CONFIG_BLK_DEV_BSG is not set
++# CONFIG_IOSCHED_DEADLINE is not set
++# CONFIG_IOSCHED_CFQ is not set
++# CONFIG_X86_EXTENDED_PLATFORM is not set
++# CONFIG_SCHED_OMIT_FRAME_POINTER is not set
++# CONFIG_MTRR_SANITIZER is not set
++# CONFIG_SECCOMP is not set
++# CONFIG_RELOCATABLE is not set
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_UNIX=y
++CONFIG_INET=y
++CONFIG_IP_PNP=y
++# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
++# CONFIG_INET_XFRM_MODE_TUNNEL is not set
++# CONFIG_INET_XFRM_MODE_BEET is not set
++# CONFIG_INET_LRO is not set
++# CONFIG_INET_DIAG is not set
++# CONFIG_IPV6 is not set
++# CONFIG_WIRELESS is not set
++CONFIG_DEVTMPFS=y
++CONFIG_DEVTMPFS_MOUNT=y
++# CONFIG_PREVENT_FIRMWARE_BUILD is not set
++# CONFIG_FIRMWARE_IN_KERNEL is not set
++# CONFIG_BLK_DEV is not set
++CONFIG_BLK_DEV_SD=y
++CONFIG_ATA=y
++CONFIG_ATA_PIIX=y
++CONFIG_NETDEVICES=y
++CONFIG_NE2K_PCI=y
++CONFIG_8139CP=y
++# CONFIG_WLAN is not set
++# CONFIG_INPUT_MOUSEDEV_PSAUX is not set
++# CONFIG_INPUT_MOUSE is not set
++# CONFIG_SERIO_SERPORT is not set
++# CONFIG_LEGACY_PTYS is not set
++# CONFIG_DEVKMEM is not set
++CONFIG_SERIAL_8250=y
++CONFIG_SERIAL_8250_CONSOLE=y
++# CONFIG_HW_RANDOM is not set
++# CONFIG_HWMON is not set
++CONFIG_SOUND=y
++CONFIG_SND=y
++CONFIG_SND_HDA_INTEL=y
++# CONFIG_USB_SUPPORT is not set
++# CONFIG_X86_PLATFORM_DEVICES is not set
++# CONFIG_DMIID is not set
++CONFIG_EXT2_FS=y
++CONFIG_EXT2_FS_XATTR=y
++CONFIG_EXT2_FS_SECURITY=y
++# CONFIG_DNOTIFY is not set
++# CONFIG_INOTIFY_USER is not set
++# CONFIG_MISC_FILESYSTEMS is not set
++CONFIG_NFS_FS=y
++CONFIG_ROOT_NFS=y
++# CONFIG_ENABLE_WARN_DEPRECATED is not set
++# CONFIG_ENABLE_MUST_CHECK is not set
++# CONFIG_UNUSED_SYMBOLS is not set
++# CONFIG_FRAME_POINTER is not set
++# CONFIG_X86_VERBOSE_BOOTUP is not set
++CONFIG_SECURITY=y
++CONFIG_SECURITY_NETWORK=y
++CONFIG_SECURITY_SELINUX=y
++CONFIG_SECURITY_SELINUX_BOOTPARAM=y
++CONFIG_CRYPTO_ANSI_CPRNG=y
++# CONFIG_VIRTUALIZATION is not set
+diff --git a/configs/qemu_x86_selinux_defconfig b/configs/qemu_x86_selinux_defconfig
+new file mode 100644
+index 0000000..3530ffd
+--- /dev/null
++++ b/configs/qemu_x86_selinux_defconfig
+@@ -0,0 +1,28 @@
++# Architecture
++BR2_i386=y
++BR2_x86_pentiumpro=y
 +
-+Adding support to install individual binaries if the option is
-+enabled. This also installs the shared libbusybox.so.* library.
++# system
++BR2_TARGET_GENERIC_GETTY=y
++BR2_TARGET_GENERIC_GETTY_PORT="tty1"
 +
-+Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
-+---
-+ Makefile.custom    |    4 ++++
-+ applets/install.sh |   26 ++++++++++++++++++++++++--
-+ 2 files changed, 28 insertions(+), 2 deletions(-)
++# toolchain
++# Lock to 3.12 headers to avoid breaking with newer kernels
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="3.12.5"
++BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
 +
-+diff --git a/Makefile.custom b/Makefile.custom
-+index 6da79e6..e4dc4dc 100644
-+--- a/Makefile.custom
-++++ b/Makefile.custom
-+@@ -23,6 +23,10 @@ ifeq ($(CONFIG_INSTALL_SH_APPLET_SCRIPT_WRAPPER),y)
-+ INSTALL_OPTS:= --scriptwrapper
-+ endif
-+ endif
-++ifeq ($(CONFIG_FEATURE_INDIVIDUAL),y)
-++INSTALL_OPTS:= --binaries
-++LIBBUSYBOX_SONAME:= 0_lib/libbusybox.so.$(BB_VER)
-++endif
-+ install: $(srctree)/applets/install.sh busybox busybox.links
-+ 	$(Q)DO_INSTALL_LIBS="$(strip $(LIBBUSYBOX_SONAME) $(DO_INSTALL_LIBS))" \
-+ 		$(SHELL) $< $(CONFIG_PREFIX) $(INSTALL_OPTS)
-+diff --git a/applets/install.sh b/applets/install.sh
-+index 95b4719..d01c98d 100755
-+--- a/applets/install.sh
-++++ b/applets/install.sh
-+@@ -5,19 +5,26 @@ export LC_CTYPE=POSIX
-+ 
-+ prefix=$1
-+ if [ -z "$prefix" ]; then
-+-	echo "usage: applets/install.sh DESTINATION [--symlinks/--hardlinks/--scriptwrapper]"
-++	echo "usage: applets/install.sh DESTINATION [--symlinks/--hardlinks/--binaries/--scriptwrapper]"
-+ 	exit 1
-+ fi
-+ 
-++# Source the configuration
-++. ./.config
-++
-+ h=`sort busybox.links | uniq`
-+ 
-++sharedlib_dir="0_lib"
-++
-+ linkopts=""
-+ scriptwrapper="n"
-++binaries="n"
-+ cleanup="0"
-+ noclobber="0"
-+ case "$2" in
-+ 	--hardlinks)     linkopts="-f";;
-+ 	--symlinks)      linkopts="-fs";;
-++	--binaries)      binaries="y";;
-+ 	--scriptwrapper) scriptwrapper="y";swrapall="y";;
-+ 	--sw-sh-hard)    scriptwrapper="y";linkopts="-f";;
-+ 	--sw-sh-sym)     scriptwrapper="y";linkopts="-fs";;
-+@@ -40,8 +47,9 @@ if [ -n "$DO_INSTALL_LIBS" ] && [ "$DO_INSTALL_LIBS" != "n" ]; then
-+ 	for i in $DO_INSTALL_LIBS; do
-+ 		rm -f "$prefix/$libdir/$i" || exit 1
-+ 		if [ -f "$i" ]; then
-++			echo "   Installing $i to the target@$prefix/$libdir/"
-+ 			cp -pPR "$i" "$prefix/$libdir/" || exit 1
-+-			chmod 0644 "$prefix/$libdir/$i" || exit 1
-++			chmod 0644 "$prefix/$libdir/`basename $i`" || exit 1
-+ 		fi
-+ 	done
-+ fi
-+@@ -68,6 +76,7 @@ install -m 755 busybox "$prefix/bin/busybox" || exit 1
-+ 
-+ for i in $h; do
-+ 	appdir=`dirname "$i"`
-++	app=`basename "$i"`
-+ 	mkdir -p "$prefix/$appdir" || exit 1
-+ 	if [ "$scriptwrapper" = "y" ]; then
-+ 		if [ "$swrapall" != "y" ] && [ "$i" = "/bin/sh" ]; then
-+@@ -78,6 +87,19 @@ for i in $h; do
-+ 			chmod +x "$prefix/$i"
-+ 		fi
-+ 		echo "	$prefix/$i"
-++	elif [ "$binaries" = "y" ]; then
-++		# Copy the binary over rather
-++		if [ -e $sharedlib_dir/$app ]; then
-++			if [ "$noclobber" = "0" ] || [ ! -e "$prefix/$i" ]; then
-++				echo "   Copying $sharedlib_dir/$app to $prefix/$i"
-++				cp -a $sharedlib_dir/$app $prefix/$i || exit 1
-++			else
-++				echo "  $prefix/$i already exists"
-++			fi
-++		else
-++			echo "Error: Could not find $sharedlib_dir/$app"
-++			exit 1
-++		fi
-+ 	else
-+ 		if [ "$2" = "--hardlinks" ]; then
-+ 			bb_path="$prefix/bin/busybox"
-+-- 
-+1.7.1
++# filesystem
++BR2_TARGET_ROOTFS_EXT2=y
++# BR2_TARGET_ROOTFS_TAR is not set
 +
-diff --git a/package/busybox/Config.in b/package/busybox/Config.in
-index 2d55aa6..8df941b 100644
---- a/package/busybox/Config.in
-+++ b/package/busybox/Config.in
-@@ -55,6 +55,13 @@ config BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	  Show packages in menuconfig that are potentially also provided
- 	  by busybox.
- 
-+config BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES
-+	bool "Individual binaries"
-+	depends on !BR2_PREFER_STATIC_LIB
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.5"
++BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-3.12-selinux.config"
 +
-+comment "Busybox individual binaries depends on dynamic libraries"
-+	depends on BR2_PREFER_STATIC_LIB
-+
- config BR2_PACKAGE_BUSYBOX_WATCHDOG
- 	bool "Install the watchdog daemon startup script"
- 	help
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index f6f542e..98ee288 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -50,10 +50,31 @@ ifndef BUSYBOX_CONFIG_FILE
- 	BUSYBOX_CONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG))
- endif
- 
-+ifeq ($(BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES),y)
-+define BUSYBOX_PERMISSIONS
-+# Applets with BB_SUID_REQUIRE
-+/usr/bin/crontab		 f 4755	0 0 - - - - -
-+/bin/login			 f 4755	0 0 - - - - -
-+/usr/bin/passwd			 f 4755	0 0 - - - - -
-+/bin/su				 f 4755	0 0 - - - - -
-+/usr/bin/vlock			 f 4755	0 0 - - - - -
-+/usr/bin/wall			 f 4755	0 0 - - - - -
-+# Applets with BB_SUID_MAYBE
-+/bin/ping			 f 4755	0 0 - - - - -
-+/bin/ping6			 f 4755	0 0 - - - - -
-+/sbin/findfs			 f 4755	0 0 - - - - -
-+/bin/mount			 f 4755	0 0 - - - - -
-+/usr/bin/traceroute		 f 4755	0 0 - - - - -
-+/usr/bin/traceroute6		 f 4755	0 0 - - - - -
-+# Other files
-+/usr/share/udhcpc/default.script f 755  0 0 - - - - -
-+endef
-+else
- define BUSYBOX_PERMISSIONS
- /bin/busybox			 f 4755	0 0 - - - - -
- /usr/share/udhcpc/default.script f 755  0 0 - - - - -
- endef
-+endif
- 
- # If mdev will be used for device creation enable it and copy S10mdev to /etc/init.d
- ifeq ($(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),y)
-@@ -152,6 +173,17 @@ define BUSYBOX_SET_INIT
- endef
- endif
- 
-+ifeq ($(BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES),y)
-+define BUSYBOX_CONFIGURE_INDIVIDUAL_BINARIES
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_BUILD_LIBBUSYBOX,$(BUSYBOX_BUILD_CONFIG))
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_INDIVIDUAL,$(BUSYBOX_BUILD_CONFIG))
-+endef
-+
-+define BUSYBOX_INSTALL_INDIVIDUAL_BINARIES
-+	rm -f $(TARGET_DIR)/bin/busybox
-+endef
-+endif
-+
- define BUSYBOX_INSTALL_LOGGING_SCRIPT
- 	if grep -q CONFIG_SYSLOGD=y $(@D)/.config; then \
- 		[ -f $(TARGET_DIR)/etc/init.d/S01logging ] || \
-@@ -187,6 +219,7 @@ define BUSYBOX_CONFIGURE_CMDS
- 	$(BUSYBOX_INTERNAL_SHADOW_PASSWORDS)
- 	$(BUSYBOX_SET_INIT)
- 	$(BUSYBOX_SET_WATCHDOG)
-+	$(BUSYBOX_CONFIGURE_INDIVIDUAL_BINARIES)
- 	@yes "" | $(MAKE) ARCH=$(KERNEL_ARCH) CROSS_COMPILE="$(TARGET_CROSS)" \
- 		-C $(@D) oldconfig
- endef
-@@ -205,6 +238,7 @@ define BUSYBOX_INSTALL_TARGET_CMDS
- 	$(BUSYBOX_INSTALL_MDEV_CONF)
- 	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
- 	$(BUSYBOX_INSTALL_WATCHDOG_SCRIPT)
-+	$(BUSYBOX_INSTALL_INDIVIDUAL_BINARIES)
- endef
- 
- $(eval $(generic-package))
++# SELinux
++BR2_PACKAGE_REFPOLICY=y
 -- 
 1.7.1
