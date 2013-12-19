@@ -1,48 +1,37 @@
-From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Thu, 19 Dec 2013 02:36:52 -0600
-Subject: [Buildroot] [autobuild.buildroot.net] Build results
-	for	2013-12-17
-In-Reply-To: <87ob4eo3j7.fsf@dell.be.48ers.dk>
-References: <20131218073008.6219E100A64@stock.ovh.net>
- <20131218104812.62edfd68@skate> <87ob4eo3j7.fsf@dell.be.48ers.dk>
-Message-ID: <OF53519EFF.5AF86C73-ON86257C46.002EE51E-86257C46.002F4CC8@rockwellcollins.com>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Thu, 19 Dec 2013 09:37:31 +0100
+Subject: [Buildroot] [PATCH 1/1] package: add <pkg>_VERSION_MAJOR
+	variable
+In-Reply-To: <CAAXf6LWu1+NmMidgx9rayT-dFJbH_fPDLEHFiQ0Oda4iYCjQAQ@mail.gmail.com>
+References: <1387390802-30247-1-git-send-email-jerzy.grzegorek@trzebnica.net>	<CAAXf6LUCm6YnYV4yWXYrEJcq7b-xkJKRzr8AbQwpwMjO9Osa8g@mail.gmail.com>	<52B2A7F3.3090105@trzebnica.net>
+ <CAAXf6LWu1+NmMidgx9rayT-dFJbH_fPDLEHFiQ0Oda4iYCjQAQ@mail.gmail.com>
+Message-ID: <52B2B04B.70409@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter Korsgaard <jacmet@uclibc.org> wrote on 12/18/2013 04:29:48 AM:
 
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 
-writes:
-> 
->  > Hello,
->  > On Wed, 18 Dec 2013 08:30:08 +0100 (CET), Thomas Petazzoni wrote:
-> 
->  >> python-pycrypto-2.6 | 8 
->  >> python-pyasn-1.2 | 6 
-> 
->  > I have worked on those issues. They are caused by incorrect header 
-and
->  > library paths being passed. The pycrypto header problem is quite 
-easy,
->  > the library path is a little bit trickier, but I'm working on it. I
->  > will be posting patches as soon as possible.
-> 
-> The other pycrypto issue (that legal-info fails) is that the one of the
-> license files is called LICENSE.orig and apply-patches.sh currently
-> deletes all *.orig files :/
+Hi  Thomas,
 
-One idea I have in regards to this (until apply-patches.sh is fixed) is to 
-copy LICENSE.orig to LICENSE.orig.save as a pre-patch hook and then copy 
-it back to LICENSE.orig as a post-patch hook. I know it is not pretty and 
-is very hackish but it could stop those autobuilder failures. 
+> Hi Jerzy,
+>
+> On Thu, Dec 19, 2013 at 9:01 AM, Jerzy Grzegorek
+> <jerzy.grzegorek@trzebnica.net> wrote:
+>>> Jerzy: how did you determine the list of files to change? Manually
+>>> opening all of them, or some more automated method?
+>>
+>> I used the automated method.
+> That sounds interesting. Could you explain in more detail how you
+> achieved this? Which command did you use?
 
-Let me know what you think and I'll submit a patch if this is something 
-you would be willing to accept.
+I wrote a short script in bash.
 
-Thanks,
--Ryan
+Regards,
+Jerzy
 
-[...]
+>
+> Thanks,
+> Thomas
+>
