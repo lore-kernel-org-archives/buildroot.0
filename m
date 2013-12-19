@@ -1,10 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 19 Dec 2013 22:32:07 +0100
-Subject: [Buildroot] [PATCH 0 of 2] gstreamer(1): factorize dependency
-In-Reply-To: <patchbomb.1387486769@argentina> (Thomas De Schampheleire's
- message of "Thu, 19 Dec 2013 21:59:29 +0100")
-References: <patchbomb.1387486769@argentina>
-Message-ID: <87y53gle7c.fsf@dell.be.48ers.dk>
+Date: Thu, 19 Dec 2013 22:32:20 +0100
+Subject: [Buildroot] [PATCH] gst-plugins-good: fix typo
+	BR2_TOOLCHAIN_HAS_THREAD
+In-Reply-To: <8ff8a1a8a7d5dfae8a57.1387486943@argentina> (Thomas De
+ Schampheleire's message of "Thu, 19 Dec 2013 22:02:23 +0100")
+References: <8ff8a1a8a7d5dfae8a57.1387486943@argentina>
+Message-ID: <87txe4le6z.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,10 +14,9 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
- > Proposed-by: Arnout Vandecappelle <arnout@mind.be>
  > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Committed series, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
