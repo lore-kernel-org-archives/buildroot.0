@@ -1,48 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 18 Dec 2013 12:07:21 +0100
-Subject: [Buildroot] [git commit] git: bump to version 1.8.5.2
-Message-ID: <20131219153646.1F6639C0F9@busybox.osuosl.org>
+Date: Thu, 19 Dec 2013 16:36:02 +0100
+Subject: [Buildroot] [git commit] mdadm: pass CHECK_RUN_DIR=0 to the
+	Makefile in order to fix build failure
+Message-ID: <20131219153646.707D99C0AE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=69d33ae53346108a514edbf4411890d4713e3505
+commit: http://git.buildroot.net/buildroot/commit/?id=cd14635258c7b31d440d0cbbe4d0905aba8dbd83
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes since v1.8.5.1:
- * "git diff -- ':(icase)makefile'" was unnecessarily rejected at the
-   command line parser.
+This commit should fix build failures of mdadm 3.3:
 
- * "git cat-file --batch-check=ok" did not check the existence of
-   the named object.
+  http://autobuild.buildroot.net/results/b4a/b4abc317d07b073f8be870ff0e7fee8f8c65f2ff/
+  http://autobuild.buildroot.net/results/79e/79e6c5081a5197c4f4647db497fbd1e27f29714d/
+  http://autobuild.buildroot.net/results/224/2242f8284aa4bdbb0ab959a6a6464f20fa043e2f/
 
- * "git am --abort" sometimes complained about not being able to write
-   a tree with an 0{40} object in it.
-
- * Two processes creating loose objects at the same time could have
-   failed unnecessarily when the name of their new objects started
-   with the same byte value, due to a race condition.
-
-Also contains typofixes, documentation updates and trivial code clean-ups.
-
-Signed-off-by: Axel Lin <axel.lin@ingics.com>
+Signed-off-by: Christophe Vu-Brugier <cvubrugier@yahoo.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/git/git.mk |    2 +-
+ package/mdadm/mdadm.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/git/git.mk b/package/git/git.mk
-index cf16250..3e198a6 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/mdadm/mdadm.mk b/package/mdadm/mdadm.mk
+index 4418986..c1491a4 100644
+--- a/package/mdadm/mdadm.mk
++++ b/package/mdadm/mdadm.mk
+@@ -11,7 +11,7 @@ MDADM_LICENSE = GPLv2+
+ MDADM_LICENSE_FILES = COPYING
  
--GIT_VERSION         = 1.8.5.1
-+GIT_VERSION         = 1.8.5.2
- GIT_SITE            = http://git-core.googlecode.com/files/
- GIT_LICENSE         = GPLv2 LGPLv2.1+
- GIT_LICENSE_FILES   = COPYING LGPL-2.1
+ MDADM_MAKE_OPT = \
+-	CFLAGS="$(TARGET_CFLAGS)" CC="$(TARGET_CC)" -C $(MDADM_DIR) mdadm
++	CFLAGS="$(TARGET_CFLAGS)" CC="$(TARGET_CC)" CHECK_RUN_DIR=0 -C $(MDADM_DIR) mdadm
+ 
+ MDADM_INSTALL_TARGET_OPT = \
+ 	DESTDIR=$(TARGET_DIR)/usr -C $(MDADM_DIR) install-mdadm
