@@ -1,28 +1,36 @@
-From: arnaud aujon <arnaud.aujon@gmail.com>
-Date: Thu, 19 Dec 2013 17:21:35 +0100
-Subject: [Buildroot] More work on a package updates checking tool
-Message-ID: <CACjG4BJuyTZ=Fbgmt=qiNs+qn1pQt0R6xV+MCw_5CKbc+XFZqg@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 19 Dec 2013 17:21:52 +0100
+Subject: [Buildroot] buildroot mailing list @buildroot.org
+In-Reply-To: <CAAXf6LWK7ddP-rCgdFxp5UNg_ZL9kcDotGPBhCx++B-HdT0KAQ@mail.gmail.com>
+ (Thomas De Schampheleire's message of "Wed, 18 Dec 2013 21:29:59
+ +0100")
+References: <CAAXf6LWdw8YROumrrbyMOhV=O+cy8u=qKGJK1PENBLRo3ZCgpQ@mail.gmail.com>
+ <CAAXf6LWK7ddP-rCgdFxp5UNg_ZL9kcDotGPBhCx++B-HdT0KAQ@mail.gmail.com>
+Message-ID: <871u18olpb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi there,
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
-I did more work on a tool to check if packages are up-to-date.
-This is still a dev script, so kind of ugly, but the output is really
-better, even if there is still some false detections.
+ >> The mailing list is currently reachable with
+ >> buildroot at busybox.net
+ >> buildroot at uclibc.org
+ >> 
+ >> However, strangely enough, buildroot at buildroot.org does not work.
+ >> 
+ >> From a technical point of view, I don't see any issue in making that
+ >> address also available, so what else is blocking this?
+ >> 
+ >> Thanks,
+ >> Thomas
 
-generated html : http://intelibre.fr/buildroot/out.html
-script : http://intelibre.fr/buildroot/check-updates.py
-everything else : http://intelibre.fr/buildroot/
+ > ping?
 
-Hope you can find some interests in it.
+Sorry, busy with getting everything done before the holidays, I'll ping
+the osuosl.org guys about it.
 
-Best,
-
-Arnaud
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131219/19132258/attachment.html>
+-- 
+Bye, Peter Korsgaard
