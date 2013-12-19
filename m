@@ -1,34 +1,23 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 19 Dec 2013 19:04:28 -0300
-Subject: [Buildroot] [PATCH 2/2] libcurl: security bump to version 7.34.0
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 19 Dec 2013 23:17:37 +0100
+Subject: [Buildroot] [PATCH 1/2] wireshark: security bump to version
+	1.10.4
 In-Reply-To: <1387490668-6554-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 19 Dec 2013 19:04:27 -0300")
 References: <1387490668-6554-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1387490668-6554-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87haa4lc3i.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2013-4545.
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libcurl/libcurl.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Fixes CVE-2013-7112, CVE-2013-7113 and CVE-2013-7114.
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index afe39d5..8b8c6c0 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCURL_VERSION = 7.33.0
-+LIBCURL_VERSION = 7.34.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
- LIBCURL_SITE = http://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+Committed both, thanks.
+
 -- 
-1.8.3.2
+Bye, Peter Korsgaard
