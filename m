@@ -1,11 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 19 Dec 2013 18:27:22 +0100
-Subject: [Buildroot] [PATCH v10 7/8] package: enable jobserver for
-	recursive make
-In-Reply-To: <1387363007-19846-8-git-send-email-fabio.porcedda@gmail.com>
+Date: Thu, 19 Dec 2013 18:33:37 +0100
+Subject: [Buildroot] [PATCH v10 0/8] Add support for top-level parallel
+	make
+In-Reply-To: <1387363007-19846-1-git-send-email-fabio.porcedda@gmail.com>
 References: <1387363007-19846-1-git-send-email-fabio.porcedda@gmail.com>
- <1387363007-19846-8-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <52B32C7A.1010008@mind.be>
+Message-ID: <52B32DF1.2010702@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,36 +12,35 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 18/12/13 11:36, Fabio Porcedda wrote:
-> Add '+' prefix to the $($(PKG)_BUILD_CMDS) and $($(PKG)_INSTALL*_CMDS)
-> commands to enable jobserver for the sub-make.
+> this is a patch set for adding support for top-level parallel make in
+> buildroot, the common problem scattered in buildroot's top-level
+> makefiles is that in the rules it relies on the order of evaluation of
+> the prerequisites, to be able to use top-level parallel make instead
+> of reling on the left to right ordering of evaluation of the
+> prerequisites we must add an explicit rule to describe the
+> dependencies.
 >
-> Without the '+' prefix GNU make does not detect the sub-make so it
-> disable the jobserver for the sub-make.
+> With this patch set the top-level parallel make seems to works fine,
+> example:
+> 	make clean
+> 	make BR2_JLEVEL= -j$((`getconf _NPROCESSORS_ONLN` + 1))
 
-  $(PKG)_BUILD_CMDS is a multiline define, and the recursive make call 
-may not be the first command. Can you check if this still works if the 
-build commands are something like:
+  Would it be possible to disable BR2_JLEVEL automatically when -j 
+appears on the command line?
 
-define FOO_BUILD_CMDS
-	echo "Hello world!"
-	$(MAKE) -C $(@D)
-endef
+>
+> Before to try it remeber to remove the ".NOTPARALLEL" line.
+>
+> On my quad core system the building time for qemu_x86_defconfig
+> is 14m versus 11m and with ccache enabled 7m vs 5m.
 
+  These are not very relevant benchmarks because there's not a lot that 
+can be done in parallel there. It would be much more interesting with an 
+allpackageyesconfig (which you'll have to modify by hand BTW to exclude 
+some packages that don't build...).
 
   Regards,
   Arnout
-
->
-> From GNU make documentation:
-> Using the MAKE variable has the same effect as using a ?+? character
-> at the beginning of the recipe line.  This special feature is only
-> enabled if the MAKE variable appears directly in the recipe: it does
-> not apply if the MAKE variable is referenced through expansion of
-> another variable. In the latter case you must use the ?+? token to get
-> these special effects.
->
-> Signed-off-by: Fabio Porcedda<fabio.porcedda@gmail.com>
-[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
