@@ -1,65 +1,46 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Thu, 19 Dec 2013 14:23:50 +0100
-Subject: [Buildroot] [PATCH] lvm2: disable statical building because it
-	fails
-In-Reply-To: <20131219114349.108e1147@skate>
-References: <1387263739-3831-1-git-send-email-fabio.porcedda@gmail.com>
- <20131217101137.5c8845a3@skate>
- <CAHkwnC9+nr6zX7n-ZYoak-=iT1ZysDL8UoNGe2H7ghuFscS8Ew@mail.gmail.com>
- <20131219114349.108e1147@skate>
-Message-ID: <CAHkwnC8bbeRtZ4BKHWtr0i0XcpKT8UvSYdU2DyxU51vr=aRq0w@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 19 Dec 2013 14:46:28 +0100
+Subject: [Buildroot] [PATCH] evemu: New package. Also adds libevdev.
+In-Reply-To: <20131218174050.GA3321@free.fr>
+References: <1387375269-25387-1-git-send-email-anaumann@ultratronik.de>
+ <20131218174050.GA3321@free.fr>
+Message-ID: <20131219144628.496c6374@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Dec 19, 2013 at 11:43 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Fabio Porcedda,
->
-> On Thu, 19 Dec 2013 11:36:51 +0100, Fabio Porcedda wrote:
->
->> > Thanks, but you forgot to propagate this new dependency to the reverse
->> > dependencies of lvm2, and you forgot to add the corresponding comment.
->> > See
->> > http://buildroot.org/downloads/manual/manual.html#dependencies-target-toolchain-options.
->>
->> Ok, thanks, i will send an updated patch.
->
-> Looking more at the problem, isn't it possible to fix the static build
-> of LVM2, rather than preventing LVM2 from being selected in this case?
+Yann, Andreas,
 
-Yes, i've found a way to fix that.
+Yann's comments are good, I'm just going to add one more below.
 
-First is a fix to buildroot adding:
-+LVM2_CONF_OPT += --enable-static_link
+On Wed, 18 Dec 2013 18:40:50 +0100, Yann E. MORIN wrote:
 
-The second one is a bug within lvm2 when using static building.
-diff --git a/home/fabiopo/tmp/Makefile.in
-b/output/build/lvm2-2.02.103/libdm/Makefile.in
-index 7b40bde..bddb0a0 100644
---- a/home/fabiopo/tmp/Makefile.in
-+++ b/output/build/lvm2-2.02.103/libdm/Makefile.in
-@@ -40,7 +40,6 @@ endif
+> Except for those minor nitpicks, it all Looks Good To Me (TM).
 
- ifeq ("@STATIC_LINK@", "yes")
- LIB_STATIC = $(interface)/libdevmapper.a
--TARGETS += libdevmapper.a
- endif
+Both packages lack the <pkg>_LICENSE and <pkg>_LICENSE_FILES
+informations. See the Buildroot manual for details about these
+variables.
 
- LIB_SHARED = $(interface)/libdevmapper.$(LIB_SUFFIX)
-@@ -65,9 +64,6 @@ device-mapper: all
- libdevmapper.$(LIB_SUFFIX) libdevmapper.$(LIB_SUFFIX).$(LIB_VERSION):
-$(LIB_SHARED)
-        $(LN_S) -f $< $@
+Also, the libevdev configure.ac script uses PKG_CHECK_MODULES, so the
+package should depend on host-pkgconf. Same thing for evemu.
 
--libdevmapper.a: $(LIB_STATIC)
--       $(LN_S) -f $< $@
--
+Finally, your packages don't have any toolchain dependency. This might
+be correct, but it would be good if you could test the build of both of
+those packages with the following initial configurations:
 
-I will prepare a patch to fix lvm2 static building.
+  http://autobuild.buildroot.org/toolchains/configs/free-electrons/br-arm-basic.config
+  http://autobuild.buildroot.org/toolchains/configs/free-electrons/br-arm-full-nothread.config
 
-Best regards
+If it builds fine with both of those toolchain configuration, then
+you're good to go. If not, then it means that there are some missing
+toolchain dependencies.
+
+Best regards,
+
+Thomas Petazzoni
 -- 
-Fabio Porcedda
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
