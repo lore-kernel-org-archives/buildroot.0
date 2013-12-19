@@ -1,89 +1,42 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 19 Dec 2013 17:58:38 +0100
-Subject: [Buildroot] [PATCH] package/libgles: postpone the check for a
- missing GLES provider
-In-Reply-To: <20131217223543.GC3352@free.fr>
-References: <52A730B0.3020104@orange.com> <52AA41FE.6060705@mind.be>
- <20131217071100.04b7b3a7@skate> <201312170858.13393.yann.morin.1998@free.fr>
- <20131217100414.551a3832@skate> <52B0CE36.5000400@mind.be>
- <20131217223543.GC3352@free.fr>
-Message-ID: <52B325BE.1030307@mind.be>
+Date: Thu, 19 Dec 2013 18:16:16 +0100
+Subject: [Buildroot] [PATCH 1/1] ktap: update to v0.4
+In-Reply-To: <1387393023-16782-1-git-send-email-anders@chargestorm.se>
+References: <1387393023-16782-1-git-send-email-anders@chargestorm.se>
+Message-ID: <52B329E0.8040507@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/12/13 23:35, Yann E. MORIN wrote:
-> Arnout, All,
+On 18/12/13 19:57, Anders Darander wrote:
+> Add a check for BR2_PACKAGE_ELFUTILS; if this is enabled, then try to link against
+> libelf from the elfutils package. This allows ktap to resolve symbols in userspace.
 >
-> On 2013-12-17 23:20 +0100, Arnout Vandecappelle spake thusly:
-[snip]
->>   Here's a wild idea...
->>
->> In rpi-userland/Config.in:
->>
->> if BR2_PACKAGE_RPI_USERLAND
->> config BR2_PACKAGE_LIBEGL_PROVIDER
->> 	string
->> 	default "rpi-userland"
->> endif
->>
->> In opengl/libegl/libegl.mk:
->>
->> LIBEGL_DEPENDENCIES = $(call qstrip,$(BR2PACKAGE_LIBEGL_PROVIDER))
->>
+> The new FFI functionality in ktap is not exposed, as it currently only supports
+> x86_64...
 >
-> That's about what I am experimenting right now! :-p
->
-> But I've done it slightly differently:
->
-> package/opengl/libegl/Config.in:
->      config BR2_LIBEGL_PROVIDER
->          string
->
-> package/rpi-userland/Config.in:
->      config BR2_LIBEGL_PROVIDER
->          default "rpi-userland" if BR2_PACKAGE_RPI_USERLAND
->
-> And the same .mk fragment you suggested for libegl.
+> Signed-off-by: Anders Darander<anders@chargestorm.se>
 
-  Nice! I'm all for it! I didn't know it was allowed in Kconfig to define 
-the same symbol twice. But indeed, we already do that in arch/
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
+> ---
+>   package/ktap/Config.in                             |  3 +++
+>   ...p-0001-interpreter-vm.c-include-uaccess.h.patch | 27 ---------------------
+>   package/ktap/ktap-0002-Set-PWD-in-Makefile.patch   | 28 ----------------------
+>   package/ktap/ktap.mk                               | 10 ++++++--
+>   4 files changed, 11 insertions(+), 57 deletions(-)
+>   delete mode 100644 package/ktap/ktap-0001-interpreter-vm.c-include-uaccess.h.patch
+>   delete mode 100644 package/ktap/ktap-0002-Set-PWD-in-Makefile.patch
 
-> My solution is a little bit more compact, and since it does not use a
-> package-named variable, we can say that packages do not step on
-> one-another's feet. Yet, a bit hackish, I have to concede...
->
->>
->>   It's still hackish of course, because:
->>
->> - rpi-userland/Config.in defines a symbol "belonging" to the libegl package;
->>
->> - only one provider can be defined, Kconfig will scream if it's defined
->> twice;
->
-> Is it even valid to have two providers of the same functioanlity? What
-> would happen: what libEGL.so would be used? Probably the last one
-> installed, ie. the one from the alphabetically-last provider.
-
-  Completely true. With your construct, if somehow two providers are 
-selected, Kconfig will probably just give you the first-sourced provider.
-
+  When patches can be removed, it's better to mention this explicitly in 
+the commit message. But that shouldn't stop this patch to be applied.
 
   Regards,
   Arnout
 
->
->> - it may not work at all :-).
->
-> I'll tell you when I'm done with my checks... ;-p
->
-> Regards,
-> Yann E. MORIN.
->
-
+[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
