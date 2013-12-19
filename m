@@ -1,72 +1,50 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 19 Dec 2013 12:22:20 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2013-12-09
-In-Reply-To: <20131211071643.GF1217@tarshish>
-References: <20131210073007.6A2C4100850@stock.ovh.net>
- <20131211043812.GA1217@tarshish>
- <ad79e2e1-bce2-4354-8b64-7b2bc5082d0e@email.android.com>
- <20131211071643.GF1217@tarshish>
-Message-ID: <20131219102220.GD4148@tarshish>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Thu, 19 Dec 2013 11:36:51 +0100
+Subject: [Buildroot] [PATCH] lvm2: disable statical building because it
+	fails
+In-Reply-To: <20131217101137.5c8845a3@skate>
+References: <1387263739-3831-1-git-send-email-fabio.porcedda@gmail.com>
+ <20131217101137.5c8845a3@skate>
+Message-ID: <CAHkwnC9+nr6zX7n-ZYoak-=iT1ZysDL8UoNGe2H7ghuFscS8Ew@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+On Tue, Dec 17, 2013 at 10:11 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Fabio Porcedda,
+>
+> On Tue, 17 Dec 2013 08:02:19 +0100, Fabio Porcedda wrote:
+>> Fixes:
+>> http://autobuild.buildroot.net/results/b0b/b0b386969459dda9c294f1ccb4927ca225fa6bdd/
+>>
+>> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+>> ---
+>>  package/lvm2/Config.in | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/package/lvm2/Config.in b/package/lvm2/Config.in
+>> index 5d6209fc1..29b80ee 100644
+>> --- a/package/lvm2/Config.in
+>> +++ b/package/lvm2/Config.in
+>> @@ -2,6 +2,7 @@ config BR2_PACKAGE_LVM2
+>>       bool "lvm2 & device mapper"
+>>       depends on BR2_LARGEFILE
+>>       depends on BR2_USE_MMU # needs fork()
+>> +     depends on !BR2_PREFER_STATIC_LIB # It fails to build statically
+>>       help
+>>         This is LVM2, the rewrite of The Linux Logical Volume Manager.
+>>         LVM supports enterprise level volume management of disk and disk
+>
+> Thanks, but you forgot to propagate this new dependency to the reverse
+> dependencies of lvm2, and you forgot to add the corresponding comment.
+> See
+> http://buildroot.org/downloads/manual/manual.html#dependencies-target-toolchain-options.
 
-On Wed, Dec 11, 2013 at 09:16:44AM +0200, Baruch Siach wrote:
-> On Wed, Dec 11, 2013 at 07:28:35AM +0100, Thomas De Schampheleire wrote:
-> > Baruch Siach <baruch@tkos.co.il> wrote:
-> > >On Tue, Dec 10, 2013 at 08:30:07AM +0100, Thomas Petazzoni wrote:
-> > >>     xtensa |                      m4-1.4.17 | NOK | http://autobuild.buildroot.net/results/0b9b3bb1791bbc9f902a23360c4540d90a0e05ca/
-> > >>     xtensa |                      m4-1.4.17 | NOK | http://autobuild.buildroot.net/results/ffda6f3f64c612da999229226f699c01ccebe4c2/
-> > >
-> > >I'm struggling with this one. The configure script test for posix_spawn build 
-> > >fails because it lacks '-lrt'. This causes m4 to use an internal 
-> > >implementation that fails at build time for some other reason (haven't found 
-> > >the reason for that yet).
-> > >
-> > >How can I add -lrt to the build test command line?
-> > 
-> > Isn't this by adding/setting the LIBS variable before
-> > calling the macro that executes the test? 
-> 
-> Thanks, I'll try that. This macro seems to be called from m4/spawn_h.m4. This 
-> failures seems to be xtensa specific. I wonder how other archs handle this.
+Ok, thanks, i will send an updated patch.
 
-Well, this check seems to come from gnulib. How can I fix it then?
-
-BTW, coreutils shows the same problem 
-(http://autobuild.buildroot.net/results/514/5147d4962bf486c91c314eda4894140f31ea1b44/).
-
-I still don't understand why the autobuilder doesn't fail on other archs. I 
-can reproduce this failure on ARM with the following defconfig:
-
-BR2_arm=y
-BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-BR2_PACKAGE_M4=y
-
-Thomas P, is there a way to see the config.log file from a successful build of 
-m4 on the autobuilder?
-
-These successes are quite hard to find, it seems. Of the latest 50 autobuilds, 
-the m4 package is selected in only 3 configs with the following results:
-
-Same failure on arc
-http://autobuild.buildroot.net/results/ebf/ebf731271dc74d8b17304df3de8eb34220ce371e/
-
-Failure for other reason on x86_64
-http://autobuild.buildroot.net/results/dbd/dbd7030f9a04d6aaf19b60ae04a2359228dda926/
-
-Success on sh4a, apparently using glibc newer than 2.16 that moved posix_spawn 
-into the main libc.so
-http://autobuild.buildroot.net/results/0a2/0a29c9c8cc268a2d2468c6d2bccf27a77caefebf/
-
-baurch
-
+Best regards
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Fabio Porcedda
