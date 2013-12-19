@@ -1,30 +1,22 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 19 Dec 2013 18:23:21 -0300
-Subject: [Buildroot] [PATCH] pcre: bump to version 8.34
-Message-ID: <1387488201-22134-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 19 Dec 2013 22:32:07 +0100
+Subject: [Buildroot] [PATCH 0 of 2] gstreamer(1): factorize dependency
+In-Reply-To: <patchbomb.1387486769@argentina> (Thomas De Schampheleire's
+ message of "Thu, 19 Dec 2013 21:59:29 +0100")
+References: <patchbomb.1387486769@argentina>
+Message-ID: <87y53gle7c.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/pcre/pcre.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
-diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
-index 2637354..14d3aa3 100644
---- a/package/pcre/pcre.mk
-+++ b/package/pcre/pcre.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PCRE_VERSION = 8.33
-+PCRE_VERSION = 8.34
- PCRE_SITE = ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre
- PCRE_LICENSE = BSD-3c
- PCRE_LICENSE_FILES = LICENCE
+ > Proposed-by: Arnout Vandecappelle <arnout@mind.be>
+ > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+
+Committed series, thanks.
+
 -- 
-1.8.3.2
+Bye, Peter Korsgaard
