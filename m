@@ -1,97 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Dec 2013 16:34:23 +0100
-Subject: [Buildroot] [git commit] qt5base: Add support for MIPS64 BigEndian
-Message-ID: <20131219153646.5453C9C0FA@busybox.osuosl.org>
+Date: Thu, 19 Dec 2013 16:51:58 +0100
+Subject: [Buildroot] [git commit] gnupg: bump version
+Message-ID: <20131219155355.928019C0F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=16e3c09442fc306fa5749c8cdd03030a86f27502
+commit: http://git.buildroot.net/buildroot/commit/?id=f7f241b5eace3c2f558626b0c9c0a7e8a1aad24b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch adds support for MIPS64 BigEndian platforms and has already
-been merged upstream:
+And drop patch now upstream.
 
-https://github.com/qtproject/qtbase/commit/cea101bd10cc158b97d5fbf45b33dad9b649c08b
+Security fix (CVE-2013-4576), see:
 
-Now we can remove the restriction on the Config.in to disable the
-selection of this packages on MIPS64 BigEndian platforms.
+http://lists.gnupg.org/pipermail/gnupg-devel/2013-December/028102.html
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/Config.in                              |    1 -
- .../qt5base-0001-Fix-build-MIPS64-bigendian.patch  |   51 ++++++++++++++++++++
- 2 files changed, 51 insertions(+), 1 deletions(-)
+ package/gnupg/gnupg-mips64-build-fix.patch |   20 --------------------
+ package/gnupg/gnupg.mk                     |    2 +-
+ 2 files changed, 1 insertions(+), 21 deletions(-)
 
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index b92d329..42724dc 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -9,7 +9,6 @@ menuconfig BR2_PACKAGE_QT5
- 	depends on BR2_INET_IPV6
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_PACKAGE_QT
--	depends on !BR2_mips64 || !BR2_MIPS_NABI64
- 	help
- 	  This option enables the Qt5 framework. Sub-options allow to
- 	  select which modules should be built.
-diff --git a/package/qt5/qt5base/qt5base-0001-Fix-build-MIPS64-bigendian.patch b/package/qt5/qt5base/qt5base-0001-Fix-build-MIPS64-bigendian.patch
-new file mode 100644
-index 0000000..00dcd48
---- /dev/null
-+++ b/package/qt5/qt5base/qt5base-0001-Fix-build-MIPS64-bigendian.patch
-@@ -0,0 +1,51 @@
-+qt5base: Fix build error on 64bit BigEndian platforms
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+
-+From cea101bd10cc158b97d5fbf45b33dad9b649c08b Mon Sep 17 00:00:00 2001
-+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+Date: Mon, 2 Dec 2013 13:59:34 +0000
-+Subject: [PATCH] qtbase: Fix build error on 64bit BigEndian platforms
-+
-+The functions fromBytesToWord() and fromWordToBytes() are called when
-+building on 64bit BigEndian platforms. It fails because those
-+functions are disabled on the source code. Enabling those functions for
-+64bit BigEndian platforms fixes the problem.
-+
-+Task-number: QTBUG-35228
-+
-+Change-Id: I5ccacd4fb5051df05f67c8da879b3a9e49953861
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+Reviewed-by: Giuseppe D'Angelo <giuseppe.dangelo@kdab.com>
-+Reviewed-by: Richard J. Moore <rich@kde.org>
-+---
-+ src/3rdparty/sha3/KeccakF-1600-opt64.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+ mode change 100755 => 100644 src/3rdparty/sha3/KeccakF-1600-opt64.c
-+
-+diff --git a/src/3rdparty/sha3/KeccakF-1600-opt64.c b/src/3rdparty/sha3/KeccakF-1600-opt64.c
-+old mode 100755
-+new mode 100644
-+index 7bd442e..a547bb5
-+--- a/src/3rdparty/sha3/KeccakF-1600-opt64.c
-++++ b/src/3rdparty/sha3/KeccakF-1600-opt64.c
-+@@ -328,7 +328,7 @@ static void KeccakPermutation(unsigned char *state)
-+     KeccakPermutationOnWords((UINT64*)state);
-+ }
-+ 
-+-#if 0 // Unused in the Qt configuration
-++#if (PLATFORM_BYTE_ORDER == IS_BIG_ENDIAN)
-+ static void fromBytesToWord(UINT64 *word, const UINT8 *bytes)
-+ {
-+     unsigned int i;
-+@@ -449,7 +449,7 @@ static void KeccakAbsorb(unsigned char *state, const unsigned char *data, unsign
-+ #endif
-+ }
-+ 
-+-#if 0 // Unused in the Qt configuration
-++#if (PLATFORM_BYTE_ORDER == IS_BIG_ENDIAN)
-+ static void fromWordToBytes(UINT8 *bytes, const UINT64 word)
-+ {
-+     unsigned int i;
-+-- 
-+1.8.5.1
-+
+diff --git a/package/gnupg/gnupg-mips64-build-fix.patch b/package/gnupg/gnupg-mips64-build-fix.patch
+deleted file mode 100644
+index 014435c..0000000
+--- a/package/gnupg/gnupg-mips64-build-fix.patch
++++ /dev/null
+@@ -1,20 +0,0 @@
+-Fix build issue on MIPS64
+-
+-On MIPS64, there is a syntax problem in the preprocessor
+-conditions. Fix that to avoid a build failure.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Index: b/mpi/longlong.h
+-===================================================================
+---- a/mpi/longlong.h
+-+++ b/mpi/longlong.h
+-@@ -752,7 +752,7 @@
+-     (w1) = _r >> 64;                                                    \
+-     (w0) = (UDItype) _r;                                                \
+-   } while (0)
+--# elif if __GNUC__ > 2 || __GNUC_MINOR__ >= 7
+-+# elif __GNUC__ > 2 || __GNUC_MINOR__ >= 7
+- #  define umul_ppmm(w1, w0, u, v)                                       \
+-      __asm__ ("dmultu %2,%3"                                            \
+-               : "=l" ((UDItype)(w0)),                                   \
+diff --git a/package/gnupg/gnupg.mk b/package/gnupg/gnupg.mk
+index 28f1f43..39a37d0 100644
+--- a/package/gnupg/gnupg.mk
++++ b/package/gnupg/gnupg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GNUPG_VERSION = 1.4.15
++GNUPG_VERSION = 1.4.16
+ GNUPG_SOURCE = gnupg-$(GNUPG_VERSION).tar.bz2
+ GNUPG_SITE = ftp://ftp.gnupg.org/gcrypt/gnupg
+ GNUPG_LICENSE = GPLv3+
