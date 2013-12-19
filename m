@@ -1,34 +1,101 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Dec 2013 23:17:25 +0100
-Subject: [Buildroot] [git commit] libcurl: security bump to version 7.34.0
-Message-ID: <20131219221748.B9C4C9A6B3@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 20 Dec 2013 00:43:23 +0100
+Subject: [Buildroot] [pull request] Pull request for branch yem/providers
+Message-ID: <cover.1387495624.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cbb6cdc69cb3f0cfb8783c1fef7e878a43da8567
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Fixes CVE-2013-4545.
+Hello All!
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libcurl/libcurl.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+This series is a third attempt at trying to fix the BR2_EXTERNAL issue,
+in that packages in BR2_EXTERNAL can't be providers of an implementation
+for a virtual package, such as libegl.
 
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index afe39d5..8b8c6c0 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCURL_VERSION = 7.33.0
-+LIBCURL_VERSION = 7.34.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
- LIBCURL_SITE = http://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+The basic idea behind this series is that Arnout found it ugly that
+virtual packages had to each be aware of all their possible providers.
+For example, libegl.mk had four conditional dependencies, one for each
+of the builtin providers (freescale's vivante, rpi, TI's gfx, or
+Allwinner's sunxi mali).
+
+This would prohibit a package in BR2_EXTERNAL to provide another
+implementation (eg. with an in-house proprietary, non-public package),
+since the virtual package's rules were evaluated even before we had
+a chance to parse BR2_EXTERNAL, and thus either requiring the new
+dependency to be added to the virtual package (hence defeating one
+of the selling-point of BR2_EXTERNAL0, or not allow external packages
+to provides implementations (hence killing that same selling-point of
+BR2_EXTERNAL as well).
+
+So, Arnout suggested (and I was already working on it) that packages
+would declare themselves as providers, all in a single Kconfig variable,
+so the virtual package would just have to depend on that single,
+Kconfig-set variable.
+
+This is what this series does for each virtual packages:
+  - moves the virtual package definition to its own Config.in
+  - introduces the string option BR2_PACKAGE_PROVIDES_xxxx
+  - changes all providers to default that variable to thier own name
+
+for each of: opengl-egl, opengl-es, openmax, openvg, and powervr.
+
+If anyone is feeling like writing a blurb in the manual, just feel free
+to go ahead and add a section about virtual packages! ;-p
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit cbb6cdc69cb3f0cfb8783c1fef7e878a43da8567:
+
+  libcurl: security bump to version 7.34.0 (2013-12-19 23:17:25 +0100)
+
+are available in the git repository at:
+
+  git://gitorious.org/buildroot/buildroot.git yem/providers
+
+for you to fetch changes up to e3300b74a954f422626703e3402206636cf35043:
+
+  package/powervr: switch to package-defined providers (2013-12-20 00:01:42 +0100)
+
+----------------------------------------------------------------
+Yann E. MORIN (5):
+      package/opengl/libegl: switch to package-defined providers
+      package/opengl/libgles: switch to package-defined providers
+      package/opengl/libopenvg: switch to package-defined providers
+      package/opengl/libopenmax: switch to package-defined providers
+      package/powervr: switch to package-defined providers
+
+ package/bellagio/Config.in                       |  7 +++++++
+ package/freescale-imx/gpu-viv-bin-mx6q/Config.in |  6 ++++++
+ package/opengl/Config.in                         | 15 ++++-----------
+ package/opengl/libegl/Config.in                  |  6 ++++++
+ package/opengl/libegl/libegl.mk                  | 17 +----------------
+ package/opengl/libgles/Config.in                 |  6 ++++++
+ package/opengl/libgles/libgles.mk                | 17 +----------------
+ package/opengl/libopenmax/Config.in              |  6 ++++++
+ package/opengl/libopenmax/libopenmax.mk          |  9 +--------
+ package/opengl/libopenvg/Config.in               |  6 ++++++
+ package/opengl/libopenvg/libopenvg.mk            |  5 +----
+ package/powervr/Config.in                        |  4 ++++
+ package/powervr/powervr.mk                       |  5 +----
+ package/rpi-userland/Config.in                   | 16 ++++++++++++++++
+ package/sunxi-mali/Config.in                     |  6 ++++++
+ package/ti-gfx/Config.in                         |  9 +++++++++
+ 16 files changed, 81 insertions(+), 59 deletions(-)
+ create mode 100644 package/opengl/libegl/Config.in
+ create mode 100644 package/opengl/libgles/Config.in
+ create mode 100644 package/opengl/libopenmax/Config.in
+ create mode 100644 package/opengl/libopenvg/Config.in
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
