@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 19 Dec 2013 21:59:30 +0100
-Subject: [Buildroot] [PATCH 1 of 2] gstreamer packages: factorize dependency
-	on gstreamer
+Date: Thu, 19 Dec 2013 21:59:31 +0100
+Subject: [Buildroot] [PATCH 2 of 2] gstreamer1 packages: factorize
+	dependency on gstreamer1
 In-Reply-To: <patchbomb.1387486769@argentina>
 References: <patchbomb.1387486769@argentina>
-Message-ID: <a72856182f5c9ca63f23.1387486770@argentina>
+Message-ID: <b4a6f3fc9b497fd7d88c.1387486771@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,173 +15,82 @@ Proposed-by: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
- package/gstreamer/Config.in                  |  3 +++
- package/gstreamer/gst-dsp/Config.in          |  2 +-
- package/gstreamer/gst-ffmpeg/Config.in       |  2 --
- package/gstreamer/gst-fsl-plugins/Config.in  |  3 +--
- package/gstreamer/gst-omapfb/Config.in       |  2 +-
- package/gstreamer/gst-plugin-x170/Config.in  |  3 +--
- package/gstreamer/gst-plugins-bad/Config.in  |  1 -
- package/gstreamer/gst-plugins-base/Config.in |  1 -
- package/gstreamer/gst-plugins-good/Config.in |  1 -
- package/gstreamer/gst-plugins-ugly/Config.in |  1 -
- package/gstreamer/gstreamer/Config.in        |  6 ++++--
- 11 files changed, 11 insertions(+), 14 deletions(-)
+ package/gstreamer1/Config.in                   |  3 +++
+ package/gstreamer1/gst-omx/Config.in           |  4 ++--
+ package/gstreamer1/gst1-plugins-bad/Config.in  |  1 -
+ package/gstreamer1/gst1-plugins-base/Config.in |  1 -
+ package/gstreamer1/gst1-plugins-good/Config.in |  1 -
+ package/gstreamer1/gst1-plugins-ugly/Config.in |  1 -
+ 6 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/gstreamer/Config.in b/package/gstreamer/Config.in
---- a/package/gstreamer/Config.in
-+++ b/package/gstreamer/Config.in
-@@ -1,5 +1,7 @@
- # Gstreamer 0.10.x & Plugins
- source "package/gstreamer/gstreamer/Config.in"
+diff --git a/package/gstreamer1/Config.in b/package/gstreamer1/Config.in
+--- a/package/gstreamer1/Config.in
++++ b/package/gstreamer1/Config.in
+@@ -1,7 +1,10 @@
+ # Gstreamer 1.x & Plugins
+ source "package/gstreamer1/gstreamer1/Config.in"
 +
-+if BR2_PACKAGE_GSTREAMER
- source "package/gstreamer/gst-plugins-base/Config.in"
- source "package/gstreamer/gst-plugins-good/Config.in"
- source "package/gstreamer/gst-plugins-bad/Config.in"
-@@ -9,3 +11,4 @@ source "package/gstreamer/gst-dsp/Config
- source "package/gstreamer/gst-fsl-plugins/Config.in"
- source "package/gstreamer/gst-omapfb/Config.in"
- source "package/gstreamer/gst-plugin-x170/Config.in"
++if BR2_PACKAGE_GSTREAMER1
+ source "package/gstreamer1/gst1-plugins-base/Config.in"
+ source "package/gstreamer1/gst1-plugins-good/Config.in"
+ source "package/gstreamer1/gst1-plugins-bad/Config.in"
+ source "package/gstreamer1/gst1-plugins-ugly/Config.in"
+ source "package/gstreamer1/gst-omx/Config.in"
 +endif
-diff --git a/package/gstreamer/gst-dsp/Config.in b/package/gstreamer/gst-dsp/Config.in
---- a/package/gstreamer/gst-dsp/Config.in
-+++ b/package/gstreamer/gst-dsp/Config.in
+diff --git a/package/gstreamer1/gst-omx/Config.in b/package/gstreamer1/gst-omx/Config.in
+--- a/package/gstreamer1/gst-omx/Config.in
++++ b/package/gstreamer1/gst-omx/Config.in
 @@ -1,6 +1,6 @@
- config BR2_PACKAGE_GST_DSP
- 	bool "gst-dsp"
--	depends on BR2_PACKAGE_GSTREAMER && BR2_cortex_a8
-+	depends on BR2_cortex_a8
- 	select BR2_PACKAGE_TIDSP_BINARIES
+ config BR2_PACKAGE_GST_OMX
+ 	bool "gst-omx"
+-	depends on BR2_PACKAGE_GSTREAMER1 && BR2_PACKAGE_HAS_OPENMAX
++	depends on BR2_PACKAGE_HAS_OPENMAX
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE
  	help
- 	  GStreamer plug-in to access TI OMAP3 DSP algorithms.
-diff --git a/package/gstreamer/gst-ffmpeg/Config.in b/package/gstreamer/gst-ffmpeg/Config.in
---- a/package/gstreamer/gst-ffmpeg/Config.in
-+++ b/package/gstreamer/gst-ffmpeg/Config.in
+ 	  GStreamer plug-in to use OpenMAX API.
+@@ -8,4 +8,4 @@ config BR2_PACKAGE_GST_OMX
+ 	  http://cgit.freedesktop.org/gstreamer/gst-omx
+ 
+ comment "gst-omx requires a OpenMAX implementation"
+-	depends on BR2_PACKAGE_GSTREAMER1 && !BR2_PACKAGE_HAS_OPENMAX
++	depends on !BR2_PACKAGE_HAS_OPENMAX
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
 @@ -1,6 +1,5 @@
- config BR2_PACKAGE_GST_FFMPEG
- 	bool "gst-ffmpeg"
--	depends on BR2_PACKAGE_GSTREAMER
- 	select BR2_PACKAGE_GST_PLUGINS_BASE
- 	select BR2_PACKAGE_FFMPEG
- 	select BR2_PACKAGE_FFMPEG_GPL
-@@ -14,5 +13,4 @@ config BR2_PACKAGE_GST_FFMPEG
- 	  http://gstreamer.freedesktop.org/
- 
- comment "gst-ffmpeg needs a toolchain w/ largefile, IPv6"
--	depends on BR2_PACKAGE_GSTREAMER
- 	depends on !(BR2_LARGEFILE && BR2_INET_IPV6)
-diff --git a/package/gstreamer/gst-fsl-plugins/Config.in b/package/gstreamer/gst-fsl-plugins/Config.in
---- a/package/gstreamer/gst-fsl-plugins/Config.in
-+++ b/package/gstreamer/gst-fsl-plugins/Config.in
-@@ -1,11 +1,10 @@
- comment "gst-fsl-plugins needs an imx-specific Linux kernel to be built"
--	depends on BR2_arm && BR2_PACKAGE_GSTREAMER && !BR2_LINUX_KERNEL
-+	depends on BR2_arm && !BR2_LINUX_KERNEL
- 
- config BR2_PACKAGE_GST_FSL_PLUGINS
- 	bool "gst-fsl-plugins"
- 	depends on BR2_LINUX_KERNEL
- 	depends on BR2_arm # Only relevant for i.MX
--	depends on BR2_PACKAGE_GSTREAMER
- 	select BR2_PACKAGE_GST_PLUGINS_BASE
- 	select BR2_PACKAGE_LIBFSLVPUWRAP
- 	select BR2_PACKAGE_IMX_LIB
-diff --git a/package/gstreamer/gst-omapfb/Config.in b/package/gstreamer/gst-omapfb/Config.in
---- a/package/gstreamer/gst-omapfb/Config.in
-+++ b/package/gstreamer/gst-omapfb/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_GST_OMAPFB
- 	bool "gst-omapfb"
--	depends on BR2_PACKAGE_GSTREAMER && BR2_cortex_a8
-+	depends on BR2_cortex_a8
- 	help
- 	  GStreamer plug-in to use OMAP framebuffer.
- 
-diff --git a/package/gstreamer/gst-plugin-x170/Config.in b/package/gstreamer/gst-plugin-x170/Config.in
---- a/package/gstreamer/gst-plugin-x170/Config.in
-+++ b/package/gstreamer/gst-plugin-x170/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_GST_PLUGIN_X170
- 	bool "gst-plugin-x170"
--	depends on BR2_PACKAGE_GSTREAMER
- 	depends on BR2_arm926t
- 	# glibc toolchain includes WCHAR and threading for libglib2
- 	depends on BR2_TOOLCHAIN_USES_GLIBC # on2-8170-libs
-@@ -12,5 +11,5 @@ config BR2_PACKAGE_GST_PLUGIN_X170
- 	  http://www.at91.com/linux4sam/bin/view/Linux4SAM/SAM9M10Gstreamer
- 
- comment "gst-plugin-x170 needs an (e)glibc toolchain"
--	depends on BR2_PACKAGE_GSTREAMER && BR2_arm926t
-+	depends on BR2_arm926t
- 	depends on !BR2_TOOLCHAIN_USES_GLIBC
-diff --git a/package/gstreamer/gst-plugins-bad/Config.in b/package/gstreamer/gst-plugins-bad/Config.in
---- a/package/gstreamer/gst-plugins-bad/Config.in
-+++ b/package/gstreamer/gst-plugins-bad/Config.in
-@@ -1,6 +1,5 @@
- menuconfig BR2_PACKAGE_GST_PLUGINS_BAD
- 	bool "gst-plugins-bad"
--	depends on BR2_PACKAGE_GSTREAMER
- 	select BR2_PACKAGE_GST_PLUGINS_BASE
+ menuconfig BR2_PACKAGE_GST1_PLUGINS_BAD
+ 	bool "gst1-plugins-bad"
+-	depends on BR2_PACKAGE_GSTREAMER1
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE
  	help
  	  A set of plug-ins for GStreamer that may be of poor quality or
-diff --git a/package/gstreamer/gst-plugins-base/Config.in b/package/gstreamer/gst-plugins-base/Config.in
---- a/package/gstreamer/gst-plugins-base/Config.in
-+++ b/package/gstreamer/gst-plugins-base/Config.in
+diff --git a/package/gstreamer1/gst1-plugins-base/Config.in b/package/gstreamer1/gst1-plugins-base/Config.in
+--- a/package/gstreamer1/gst1-plugins-base/Config.in
++++ b/package/gstreamer1/gst1-plugins-base/Config.in
 @@ -1,6 +1,5 @@
- menuconfig BR2_PACKAGE_GST_PLUGINS_BASE
- 	bool "gst-plugins-base"
--	depends on BR2_PACKAGE_GSTREAMER
+ menuconfig BR2_PACKAGE_GST1_PLUGINS_BASE
+ 	bool "gst1-plugins-base"
+-	depends on BR2_PACKAGE_GSTREAMER1
  	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
  	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
  	select BR2_PACKAGE_XLIB_LIBXV if BR2_PACKAGE_XORG7
-diff --git a/package/gstreamer/gst-plugins-good/Config.in b/package/gstreamer/gst-plugins-good/Config.in
---- a/package/gstreamer/gst-plugins-good/Config.in
-+++ b/package/gstreamer/gst-plugins-good/Config.in
+diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
+--- a/package/gstreamer1/gst1-plugins-good/Config.in
++++ b/package/gstreamer1/gst1-plugins-good/Config.in
 @@ -1,6 +1,5 @@
- menuconfig BR2_PACKAGE_GST_PLUGINS_GOOD
- 	bool "gst-plugins-good"
--	depends on BR2_PACKAGE_GSTREAMER
- 	select BR2_PACKAGE_GST_PLUGINS_BASE
+ menuconfig BR2_PACKAGE_GST1_PLUGINS_GOOD
+ 	bool "gst1-plugins-good"
+-	depends on BR2_PACKAGE_GSTREAMER1
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE
  	help
  	  A set of well-supported plug-ins for GStreamer under the preferred
-diff --git a/package/gstreamer/gst-plugins-ugly/Config.in b/package/gstreamer/gst-plugins-ugly/Config.in
---- a/package/gstreamer/gst-plugins-ugly/Config.in
-+++ b/package/gstreamer/gst-plugins-ugly/Config.in
+diff --git a/package/gstreamer1/gst1-plugins-ugly/Config.in b/package/gstreamer1/gst1-plugins-ugly/Config.in
+--- a/package/gstreamer1/gst1-plugins-ugly/Config.in
++++ b/package/gstreamer1/gst1-plugins-ugly/Config.in
 @@ -1,6 +1,5 @@
- menuconfig BR2_PACKAGE_GST_PLUGINS_UGLY
- 	bool "gst-plugins-ugly"
--	depends on BR2_PACKAGE_GSTREAMER
- 	select BR2_PACKAGE_GST_PLUGINS_BASE
+ menuconfig BR2_PACKAGE_GST1_PLUGINS_UGLY
+ 	bool "gst1-plugins-ugly"
+-	depends on BR2_PACKAGE_GSTREAMER1
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE
  	help
  	  A set of well-supported plug-ins for GStreamer, but might pose
-diff --git a/package/gstreamer/gstreamer/Config.in b/package/gstreamer/gstreamer/Config.in
---- a/package/gstreamer/gstreamer/Config.in
-+++ b/package/gstreamer/gstreamer/Config.in
-@@ -12,10 +12,11 @@ config BR2_PACKAGE_GSTREAMER
- 
- 	  http://gstreamer.freedesktop.org/
- 
-+if BR2_PACKAGE_GSTREAMER
-+
- config BR2_PACKAGE_GSTREAMER_GST_DEBUG
- 	bool "enable gst-debug trace support"
- 	default y
--	depends on BR2_PACKAGE_GSTREAMER
- 	help
- 	  Enable support for the gst-debug tracing functionality in gstreamer.
- 	  This has limited CPU overhead, but does increase the rootfs size
-@@ -24,11 +25,12 @@ config BR2_PACKAGE_GSTREAMER_GST_DEBUG
- config BR2_PACKAGE_GSTREAMER_PLUGIN_REGISTRY
- 	bool "enable plugin registry"
- 	default y
--	depends on BR2_PACKAGE_GSTREAMER
- 	help
- 	  Enable support for the GStreamer plugin registry. This may increase
- 	  the launch-time for a GStreamer application.
- 
-+endif
-+
- comment "gstreamer needs a toolchain w/ wchar, threads"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
