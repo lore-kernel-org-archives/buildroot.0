@@ -1,124 +1,108 @@
 From: Clayton Shotwell <clshotwe@rockwellcollins.com>
-Date: Thu, 19 Dec 2013 14:38:04 -0600
-Subject: [Buildroot] [PATCH v5 15/20] shadow: new package
+Date: Thu, 19 Dec 2013 14:38:06 -0600
+Subject: [Buildroot] [PATCH v5 17/20] busybox: add option to enable SELinux
+	support
 In-Reply-To: <1387485489-4186-1-git-send-email-clshotwe@rockwellcollins.com>
 References: <1387485489-4186-1-git-send-email-clshotwe@rockwellcollins.com>
-Message-ID: <1387485489-4186-16-git-send-email-clshotwe@rockwellcollins.com>
+Message-ID: <1387485489-4186-18-git-send-email-clshotwe@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Add a configure option to enable the SELinux support in the
+busybox configuration from the Buildroot menuconfig.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
 ---
 Changes v4 -> v5:
   - No changes.
-Changes v3 -> v4:
-  - Added back in the Python bindings configure option (suggested by
-    Thomas).
-  - Moved the linux-pam shadow configuration changes inside the
-    linux-pam if block (suggested by Ryan).
-Changes v2 -> v3:
-  - Corrected spelling error.
-Changes v1 -> v2:
-  - General cleanup to the mk file to conform to the standard format.
+Changes v1 -> v4
+  - Did not exist.
 ---
- package/Config.in        |    3 ++
- package/shadow/Config.in |   13 ++++++++++++
- package/shadow/shadow.mk |   50 ++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 66 insertions(+), 0 deletions(-)
- create mode 100644 package/shadow/Config.in
- create mode 100644 package/shadow/shadow.mk
+ ...ags-strip-non-l-arguments-returned-by-pkg.patch |   28 ++++++++++++++++++++
+ package/busybox/Config.in                          |    3 ++
+ package/busybox/busybox.mk                         |    8 +++++
+ 3 files changed, 39 insertions(+), 0 deletions(-)
+ create mode 100644 package/busybox/1.21.1/0004-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index 3c691dc..54d8837 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -974,6 +974,9 @@ source "package/lockfile-progs/Config.in"
- source "package/logrotate/Config.in"
- source "package/logsurfer/Config.in"
- source "package/screen/Config.in"
-+if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-+source "package/shadow/Config.in"
-+endif
- source "package/sudo/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/time/Config.in"
-diff --git a/package/shadow/Config.in b/package/shadow/Config.in
+diff --git a/package/busybox/1.21.1/0004-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch b/package/busybox/1.21.1/0004-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch
 new file mode 100644
-index 0000000..5692ac6
+index 0000000..105626c
 --- /dev/null
-+++ b/package/shadow/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_SHADOW
-+	bool "shadow"
-+	help
-+	  The shadow-utils package includes the necessary programs for
-+	  converting UNIX password files to the shadow password format, plus
-+	  programs for managing user and group accounts. The pwconv command
-+	  converts passwords to the shadow password format. The pwunconv command
-+	  unconverts shadow passwords and generates an npasswd file (a standard
-+	  UNIX password file). The pwck command checks the integrity of password
-+	  and shadow files. The lastlog command prints out the last login times
-+	  for all users. The useradd, userdel, and usermod commands are used for
-+	  managing user accounts. The groupadd, groupdel, and groupmod commands
-+	  are used for managing group accounts.
-diff --git a/package/shadow/shadow.mk b/package/shadow/shadow.mk
-new file mode 100644
-index 0000000..7ab5634
---- /dev/null
-+++ b/package/shadow/shadow.mk
-@@ -0,0 +1,50 @@
-+################################################################################
-+#
-+# shadow
-+#
-+################################################################################
++++ b/package/busybox/1.21.1/0004-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch
+@@ -0,0 +1,28 @@
++From 67eb23d2be8aba3c474dac81a15b0fa11e5847b7 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Mon, 25 Nov 2013 22:51:53 +0100
++Subject: [PATCH] Makefile.flags: strip non -l arguments returned by pkg-config
 +
-+SHADOW_VERSION = 4.1.5.1
-+SHADOW_SOURCE = shadow-$(SHADOW_VERSION).tar.bz2
-+SHADOW_SITE = http://pkg-shadow.alioth.debian.org/releases/
-+SHADOW_LICENSE = BSD
-+SHADOW_LICENSE_FILES = COPYING
-+SHADOW_DEPENDENCIES = acl attr busybox
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ Makefile.flags | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
 +
-+SHADOW_INSTALL_STAGING = NO
++diff --git a/Makefile.flags b/Makefile.flags
++index 307afa7..885e323 100644
++--- a/Makefile.flags
+++++ b/Makefile.flags
++@@ -141,7 +141,9 @@ ifeq ($(CONFIG_SELINUX),y)
++ SELINUX_PC_MODULES = libselinux libsepol
++ $(eval $(call pkg_check_modules,SELINUX,$(SELINUX_PC_MODULES)))
++ CPPFLAGS += $(SELINUX_CFLAGS)
++-LDLIBS += $(if $(SELINUX_LIBS),$(SELINUX_LIBS:-l%=%),$(SELINUX_PC_MODULES:lib%=%))
+++LDLIBS += $(if $(SELINUX_LIBS),\
+++       $(patsubst -l%,%,$(filter -l%,$(SELINUX_LIBS))),\
+++       $(SELINUX_PC_MODULES:lib%=%))
++ endif
++ 
++ ifeq ($(CONFIG_EFENCE),y)
++-- 
++1.8.1.2
 +
-+SHADOW_CONF_OPT = --disable-nls
+diff --git a/package/busybox/Config.in b/package/busybox/Config.in
+index 8df941b..733c560 100644
+--- a/package/busybox/Config.in
++++ b/package/busybox/Config.in
+@@ -62,6 +62,9 @@ config BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES
+ comment "Busybox individual binaries depends on dynamic libraries"
+ 	depends on BR2_PREFER_STATIC_LIB
+ 
++config BR2_PACKAGE_BUSYBOX_SELINUX
++	bool "Enable SELinux support"
 +
-+# Shadow configuration to support audit
-+ifeq ($(BR2_PACKAGE_AUDIT),y)
-+SHADOW_DEPENDENCIES += audit
-+SHADOW_CONF_OPT += --with-audit=yes
-+endif
-+
-+# Shadow with linux-pam support
-+ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
-+SHADOW_DEPENDENCIES += linux-pam
-+SHADOW_CONF_OPT += --with-libpam=yes
-+
-+# Comment out all config entries that conflict with using PAM
-+define SHADOW_LOGIN_CONFIGURATION
-+        for FUNCTION in FAIL_DELAY FAILLOG_ENAB LASTLOG_ENAB MAIL_CHECK_ENAB \
-+                OBSCURE_CHECKS_ENAB PORTTIME_CHECKS_ENAB QUOTAS_ENAB CONSOLE MOTD_FILE \
-+                FTMP_FILE NOLOGINS_FILE ENV_HZ PASS_MIN_LEN SU_WHEEL_ONLY CRACKLIB_DICTPATH \
-+                PASS_CHANGE_TRIES PASS_ALWAYS_WARN CHFN_AUTH ENCRYPT_METHOD ENVIRON_FILE ; \
-+        do \
-+                sed -i "s/^$${FUNCTION}/# &/" $(TARGET_DIR)/etc/login.defs ; \
-+        done
+ config BR2_PACKAGE_BUSYBOX_WATCHDOG
+ 	bool "Install the watchdog daemon startup script"
+ 	help
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 98ee288..ba07a8e 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -184,6 +184,13 @@ define BUSYBOX_INSTALL_INDIVIDUAL_BINARIES
+ endef
+ endif
+ 
++ifeq ($(BR2_PACKAGE_BUSYBOX_SELINUX),y)
++BUSYBOX_DEPENDENCIES += host-pkgconf libselinux libsepol
++define BUSYBOX_SET_SELINUX
++	$(call KCONFIG_ENABLE_OPT,CONFIG_SELINUX,$(BUSYBOX_BUILD_CONFIG))
 +endef
-+
-+SHADOW_POST_INSTALL_TARGET_HOOKS += SHADOW_LOGIN_CONFIGURATION
-+
 +endif
 +
-+# Shadow with selinux support
-+ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+SHADOW_DEPENDENCIES += libselinux libsemanage
-+SHADOW_CONF_OPT += --with-selinux=yes
-+endif
-+
-+$(eval $(autotools-package))
+ define BUSYBOX_INSTALL_LOGGING_SCRIPT
+ 	if grep -q CONFIG_SYSLOGD=y $(@D)/.config; then \
+ 		[ -f $(TARGET_DIR)/etc/init.d/S01logging ] || \
+@@ -220,6 +227,7 @@ define BUSYBOX_CONFIGURE_CMDS
+ 	$(BUSYBOX_SET_INIT)
+ 	$(BUSYBOX_SET_WATCHDOG)
+ 	$(BUSYBOX_CONFIGURE_INDIVIDUAL_BINARIES)
++	$(BUSYBOX_SET_SELINUX)
+ 	@yes "" | $(MAKE) ARCH=$(KERNEL_ARCH) CROSS_COMPILE="$(TARGET_CROSS)" \
+ 		-C $(@D) oldconfig
+ endef
 -- 
 1.7.1
