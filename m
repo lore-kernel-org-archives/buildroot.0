@@ -1,31 +1,46 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 19 Dec 2013 22:02:23 +0100
-Subject: [Buildroot] [PATCH] gst-plugins-good: fix typo
-	BR2_TOOLCHAIN_HAS_THREAD
-Message-ID: <8ff8a1a8a7d5dfae8a57.1387486943@argentina>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 19 Dec 2013 22:00:16 +0100
+Subject: [Buildroot] [git commit] cairo: Build with GLESv2 and VG backends
+	if possible
+Message-ID: <20131219210657.0CAA99C109@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+commit: http://git.buildroot.net/buildroot/commit/?id=5582d5c707b552ca9a6cf0fa26d4a81b6b9bcd4b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-Off-By: Paul Cercueil <paul@crapouillou.net>
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer/gst-plugins-good/Config.in |  2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/cairo/cairo.mk |   14 ++++++++++++++
+ 1 files changed, 14 insertions(+), 0 deletions(-)
 
-Note: I don't understand why kconfig does not check/warn on this...
-
-diff --git a/package/gstreamer/gst-plugins-good/Config.in b/package/gstreamer/gst-plugins-good/Config.in
---- a/package/gstreamer/gst-plugins-good/Config.in
-+++ b/package/gstreamer/gst-plugins-good/Config.in
-@@ -214,7 +214,7 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUG
- 	select BR2_PACKAGE_LIBSOUP
+diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
+index 347bb75..aa03a27 100644
+--- a/package/cairo/cairo.mk
++++ b/package/cairo/cairo.mk
+@@ -54,6 +54,20 @@ else
+ 	CAIRO_CONF_OPT += --disable-directfb
+ endif
  
- comment "souphttpsrc needs a toolchain w/ wchar, threads"
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREAD
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
- 
- config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_SPEEX
- 	bool "speex"
++ifeq ($(BR2_PACKAGE_HAS_OPENGL_ES),y)
++	CAIRO_CONF_OPT += --enable-glesv2
++	CAIRO_DEPENDENCIES += libgles
++else
++	CAIRO_CONF_OPT += --disable-glesv2
++endif
++
++ifeq ($(BR2_PACKAGE_HAS_OPENVG),y)
++	CAIRO_CONF_OPT += --enable-vg
++	CAIRO_DEPENDENCIES += libopenvg
++else
++	CAIRO_CONF_OPT += --disable-vg
++endif
++
+ ifeq ($(BR2_PACKAGE_XORG7),y)
+ 	CAIRO_CONF_OPT += --enable-xlib --enable-xcb --with-x
+ 	CAIRO_DEPENDENCIES += xlib_libX11 xlib_libXext
