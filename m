@@ -1,10 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 19 Dec 2013 21:35:42 +0100
-Subject: [Buildroot] [PATCH 1/1] imagemagick: bump to version 6.8.7-10
-In-Reply-To: <1387390529-16408-1-git-send-email-jerzy.grzegorek@trzebnica.net>
- (Jerzy Grzegorek's message of "Wed, 18 Dec 2013 19:15:29 +0100")
-References: <1387390529-16408-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <87k3f0mvdt.fsf@dell.be.48ers.dk>
+Date: Thu, 19 Dec 2013 21:38:07 +0100
+Subject: [Buildroot] [PATCH 1/1] package: add <pkg>_VERSION_MAJOR
+	variable
+In-Reply-To: <1387390802-30247-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+ (Jerzy Grzegorek's message of "Wed, 18 Dec 2013 19:20:02 +0100")
+References: <1387390802-30247-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <87fvpomv9s.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
