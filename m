@@ -1,41 +1,27 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 19 Dec 2013 16:35:24 +0100
-Subject: [Buildroot] [PATCH 2/3] qt5: version bump
-In-Reply-To: <1387288651-47952-2-git-send-email-Vincent.Riera@imgtec.com>
- (Vicente Olivert Riera's message of "Tue, 17 Dec 2013 13:57:30 +0000")
-References: <1387288651-47952-1-git-send-email-Vincent.Riera@imgtec.com>
- <1387288651-47952-2-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <87a9fwonur.fsf@dell.be.48ers.dk>
+Date: Thu, 19 Dec 2013 16:36:22 +0100
+Subject: [Buildroot] [PATCH] mdadm: pass CHECK_RUN_DIR=0 to the Makefile
+	in order to fix build failure
+In-Reply-To: <1387274990-6780-1-git-send-email-cvubrugier@yahoo.fr>
+ (Christophe Vu-Brugier's message of "Tue, 17 Dec 2013 11:09:50 +0100")
+References: <1387274990-6780-1-git-send-email-cvubrugier@yahoo.fr>
+Message-ID: <8761qkont5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+>>>>> "Christophe" == Christophe Vu-Brugier <cvubrugier@yahoo.fr> writes:
 
- > -bump version to 5.2.0
- > -remove unneeded patches
- > -remove invalid configure options
+ > This commit should fix build failures of mdadm 3.3:
+ >   http://autobuild.buildroot.net/results/b4a/b4abc317d07b073f8be870ff0e7fee8f8c65f2ff/
+ >   http://autobuild.buildroot.net/results/79e/79e6c5081a5197c4f4647db497fbd1e27f29714d/
+ >   http://autobuild.buildroot.net/results/224/2242f8284aa4bdbb0ab959a6a6464f20fa043e2f/
 
- > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- > ---
- >  package/qt5/qt5.mk                                 |    4 +-
- >  ...-Add-egl-cflags-when-opengles2-is-enabled.patch |   32 ----
- >  .../qt5/qt5base/qt5base-0003-uclibc-no-lfs.patch   |   36 -----
+ > Signed-off-by: Christophe Vu-Brugier <cvubrugier@yahoo.fr>
 
-This patch is still needed.
-
- >  package/qt5/qt5base/qt5base-0008-qatomic-ppc.patch |   29 ----
-
-And so is this.
-
-It also needs a new patch to build on uClibc, which I've submitted
-upstream:
-
-https://bugreports.qt-project.org/browse/QTBUG-35742
-
-Committed series with those changes, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
