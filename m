@@ -1,41 +1,47 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 19 Dec 2013 18:16:16 +0100
-Subject: [Buildroot] [PATCH 1/1] ktap: update to v0.4
-In-Reply-To: <1387393023-16782-1-git-send-email-anders@chargestorm.se>
-References: <1387393023-16782-1-git-send-email-anders@chargestorm.se>
-Message-ID: <52B329E0.8040507@mind.be>
+Date: Thu, 19 Dec 2013 18:27:22 +0100
+Subject: [Buildroot] [PATCH v10 7/8] package: enable jobserver for
+	recursive make
+In-Reply-To: <1387363007-19846-8-git-send-email-fabio.porcedda@gmail.com>
+References: <1387363007-19846-1-git-send-email-fabio.porcedda@gmail.com>
+ <1387363007-19846-8-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <52B32C7A.1010008@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18/12/13 19:57, Anders Darander wrote:
-> Add a check for BR2_PACKAGE_ELFUTILS; if this is enabled, then try to link against
-> libelf from the elfutils package. This allows ktap to resolve symbols in userspace.
+On 18/12/13 11:36, Fabio Porcedda wrote:
+> Add '+' prefix to the $($(PKG)_BUILD_CMDS) and $($(PKG)_INSTALL*_CMDS)
+> commands to enable jobserver for the sub-make.
 >
-> The new FFI functionality in ktap is not exposed, as it currently only supports
-> x86_64...
->
-> Signed-off-by: Anders Darander<anders@chargestorm.se>
+> Without the '+' prefix GNU make does not detect the sub-make so it
+> disable the jobserver for the sub-make.
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+  $(PKG)_BUILD_CMDS is a multiline define, and the recursive make call 
+may not be the first command. Can you check if this still works if the 
+build commands are something like:
 
-> ---
->   package/ktap/Config.in                             |  3 +++
->   ...p-0001-interpreter-vm.c-include-uaccess.h.patch | 27 ---------------------
->   package/ktap/ktap-0002-Set-PWD-in-Makefile.patch   | 28 ----------------------
->   package/ktap/ktap.mk                               | 10 ++++++--
->   4 files changed, 11 insertions(+), 57 deletions(-)
->   delete mode 100644 package/ktap/ktap-0001-interpreter-vm.c-include-uaccess.h.patch
->   delete mode 100644 package/ktap/ktap-0002-Set-PWD-in-Makefile.patch
+define FOO_BUILD_CMDS
+	echo "Hello world!"
+	$(MAKE) -C $(@D)
+endef
 
-  When patches can be removed, it's better to mention this explicitly in 
-the commit message. But that shouldn't stop this patch to be applied.
 
   Regards,
   Arnout
 
+>
+> From GNU make documentation:
+> Using the MAKE variable has the same effect as using a ?+? character
+> at the beginning of the recipe line.  This special feature is only
+> enabled if the MAKE variable appears directly in the recipe: it does
+> not apply if the MAKE variable is referenced through expansion of
+> another variable. In the latter case you must use the ?+? token to get
+> these special effects.
+>
+> Signed-off-by: Fabio Porcedda<fabio.porcedda@gmail.com>
 [snip]
 
 -- 
