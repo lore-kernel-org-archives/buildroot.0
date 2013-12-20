@@ -1,61 +1,63 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Fri, 20 Dec 2013 11:55:16 +0100
-Subject: [Buildroot] [PATCH] fluxbox: bump to 1.3.5
-Message-ID: <1387536916-20510-1-git-send-email-yegorslists@googlemail.com>
+From: Paul Cercueil <paul@crapouillou.net>
+Date: Fri, 20 Dec 2013 12:54:34 +0100
+Subject: [Buildroot] [PATCH] cairo: Build with GLESv2 and VG backends if
+	possible
+In-Reply-To: <878uvgklnw.fsf@dell.be.48ers.dk>
+References: <1387243053-5281-1-git-send-email-paul@crapouillou.net>
+ <878uvgklnw.fsf@dell.be.48ers.dk>
+Message-ID: <52B42FFA.2050202@crapouillou.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+On 20/12/2013 08:48, Peter Korsgaard wrote:
+>>>>>> "Paul" == Paul Cercueil <paul@crapouillou.net> writes:
+>   > Signed-Off-By: Paul Cercueil <paul@crapouillou.net>
+>   > ---
+>   >  package/cairo/cairo.mk | 14 ++++++++++++++
+>   >  1 file changed, 14 insertions(+)
+>
+>   > diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
+>   > index 347bb75..aa03a27 100644
+>   > --- a/package/cairo/cairo.mk
+>   > +++ b/package/cairo/cairo.mk
+>   > @@ -54,6 +54,20 @@ else
+>   >  	CAIRO_CONF_OPT += --disable-directfb
+>   >  endif
+>   
+>   > +ifeq ($(BR2_PACKAGE_HAS_OPENGL_ES),y)
+>   > +	CAIRO_CONF_OPT += --enable-glesv2
+>   > +	CAIRO_DEPENDENCIES += libgles
+>   > +else
+>   > +	CAIRO_CONF_OPT += --disable-glesv2
+>   > +endif
+>   > +
+>   > +ifeq ($(BR2_PACKAGE_HAS_OPENVG),y)
+>   > +	CAIRO_CONF_OPT += --enable-vg
+>   > +	CAIRO_DEPENDENCIES += libopenvg
+>   > +else
+>   > +	CAIRO_CONF_OPT += --disable-vg
+>   > +endif
+>
+> What openvg / gles providers did you test against? We seem to have a
+> number of autobuild failures with the rpi provider:
+>
+> http://autobuild.buildroot.net/results/b7f/b7f71cd412e5a7f801e81140a02c7da04694151f/build-end.log
+>
+> http://autobuild.buildroot.net/results/f70/f7012c1e09d75dd103b61da364272f6385d2dc7b/build-end.log
+>
+> http://autobuild.buildroot.net/results/ec5/ec550547f6465b52ba552ca757c9bbeac17cd1c6/build-end.log
+>
+> http://autobuild.buildroot.net/results/81a/81ae93018ca6d7a61460e0c78d5a60e6a5531dbc/build-end.log
+>
+I am testing against Mesa.
+I believe your target does not have Xorg, that would explain why 'None' 
+is reported as undefined: it's defined in <X11/X.h>.
+I can perfectly reproduce the issue if I disable Xorg. The source code 
+uses 'None' even if targeting EGL and not GLX,
+I can address that with another patch.
 
-Remove obsolete patch.
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/fluxbox/fluxbox-1.3.2-fix-configure.patch |   19 -------------------
- package/fluxbox/fluxbox.mk                        |    2 +-
- 2 files changed, 1 insertions(+), 20 deletions(-)
- delete mode 100644 package/fluxbox/fluxbox-1.3.2-fix-configure.patch
-
-diff --git a/package/fluxbox/fluxbox-1.3.2-fix-configure.patch b/package/fluxbox/fluxbox-1.3.2-fix-configure.patch
-deleted file mode 100644
-index 2cb8273..0000000
---- a/package/fluxbox/fluxbox-1.3.2-fix-configure.patch
-+++ /dev/null
-@@ -1,19 +0,0 @@
--Avoid to call the imlib2-config that may be installed on the host system
--(even when --with-imlib2-prefix or --with-imlib2-exec-prefix is passed to
--the configure script), which totally screws up the resulting linker flags.
--
--Inspired by: http://git.fluxbox.org/fluxbox.git/commit/?id=b178bed60b5bd8b2c9ed0cbc67fd729ff3820589
--
--Signed-off-by: Samuel Martin <s.martin49@gmail.com>
--
----- fluxbox-1.3.2.orig/configure.in	2012-10-21 16:11:59.445749396 +0200
--+++ fluxbox-1.3.2/configure.in	2012-10-21 16:35:27.658390856 +0200
--@@ -443,8 +443,6 @@ if test x$enable_imlib2 = "xyes"; then
--       [
--          IMLIB2=true
--          AC_DEFINE(HAVE_IMLIB2, [], [Imlib2 support])
---         IMLIB2_LIBS=`imlib2-config --libs`
---         IMLIB2_CFLAGS=`imlib2-config --cflags`
--          LIBS="$LIBS $IMLIB2_LIBS"
--          CXXFLAGS="$CXXFLAGS $IMLIB2_CFLAGS"
--        ], [ AC_MSG_RESULT(no)]
-diff --git a/package/fluxbox/fluxbox.mk b/package/fluxbox/fluxbox.mk
-index 262cb0d..2efa28c 100644
---- a/package/fluxbox/fluxbox.mk
-+++ b/package/fluxbox/fluxbox.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FLUXBOX_VERSION = 1.3.2
-+FLUXBOX_VERSION = 1.3.5
- FLUXBOX_SOURCE = fluxbox-$(FLUXBOX_VERSION).tar.bz2
- FLUXBOX_SITE = http://downloads.sourceforge.net/project/fluxbox/fluxbox/$(FLUXBOX_VERSION)
- FLUXBOX_LICENSE = MIT
--- 
-1.7.7
+The second issue with 'GLchar' is surprising, since it's defined in 
+<GLES2/gl2.h> here. I cannot even reproduce the issue.
