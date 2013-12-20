@@ -1,31 +1,46 @@
-From: Paul Cercueil <paul@crapouillou.net>
-Date: Fri, 20 Dec 2013 15:54:53 +0100
-Subject: [Buildroot] [PATCH] cairo: Build with GLESv2 and VG backends if
-	possible
-In-Reply-To: <87k3ezk20q.fsf@dell.be.48ers.dk>
-References: <1387243053-5281-1-git-send-email-paul@crapouillou.net>
- <878uvgklnw.fsf@dell.be.48ers.dk> <52B44888.4070608@crapouillou.net>
- <87k3ezk20q.fsf@dell.be.48ers.dk>
-Message-ID: <52B45A3D.9090500@crapouillou.net>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 20 Dec 2013 11:59:24 -0300
+Subject: [Buildroot] [PATCH] squid: bump to version 3.4.1
+Message-ID: <1387551564-14783-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 20/12/2013 15:52, Peter Korsgaard wrote:
->>>>>> "Paul" == Paul Cercueil <paul@crapouillou.net> writes:
-> Hi,
->
->   > The following patch addresses the first issue. I reported it upstream.
->
->
->   > [PATCH] cairo: Patch to fix OpenVG backend on X11-less platforms
->
->   > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
->
-> Your mailer had screwed up whitespace in your patch pretty badly, but
-> I've fixed it up and committed, thanks.
->
->
-Ugh, sorry about that. Thank you!
+New for 3.4 series:
+* SSL Server Certificate Validator
+* Multicast DNS
+* Transaction Annotations
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/squid/squid.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index e1b37be..1a22cbc 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-SQUID_VERSION_MAJOR = 3.3
+-SQUID_VERSION = $(SQUID_VERSION_MAJOR).11
++SQUID_VERSION_MAJOR = 3.4
++SQUID_VERSION = $(SQUID_VERSION_MAJOR).1
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
+ SQUID_LICENSE = GPLv2+
+@@ -25,7 +25,7 @@ SQUID_CONF_OPT =	--enable-async-io=8 --enable-linux-netfilter \
+ 			--enable-auth-negotiate="wrapper" \
+ 			--enable-auth-ntlm="fake" \
+ 			--disable-strict-error-checking \
+-			--enable-external-acl-helpers="ip_user"
++			--enable-external-acl-helpers="session"
+ 
+ # On uClibc librt needs libpthread
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS)$(BR2_TOOLCHAIN_USES_UCLIBC),yy)
+-- 
+1.8.3.2
