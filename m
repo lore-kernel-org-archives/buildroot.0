@@ -1,105 +1,83 @@
-From: Paul Cercueil <paul@crapouillou.net>
-Date: Fri, 20 Dec 2013 14:39:20 +0100
-Subject: [Buildroot] [PATCH] cairo: Build with GLESv2 and VG backends if
-	possible
-In-Reply-To: <878uvgklnw.fsf@dell.be.48ers.dk>
-References: <1387243053-5281-1-git-send-email-paul@crapouillou.net>
- <878uvgklnw.fsf@dell.be.48ers.dk>
-Message-ID: <52B44888.4070608@crapouillou.net>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Fri, 20 Dec 2013 14:56:40 +0100
+Subject: [Buildroot] [PATCH v10 8/8] Makefile: update comment about
+	top-level parallel Makefile
+In-Reply-To: <52B32EBD.3000202@mind.be>
+References: <1387363007-19846-1-git-send-email-fabio.porcedda@gmail.com>
+ <1387363007-19846-9-git-send-email-fabio.porcedda@gmail.com>
+ <52B32EBD.3000202@mind.be>
+Message-ID: <CAHkwnC8fQE+XVB_1EixH2ZXX=bxO=+DZ68yH4e6oLTm1NTedEA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 20/12/2013 08:48, Peter Korsgaard wrote:
->>>>>> "Paul" == Paul Cercueil <paul@crapouillou.net> writes:
->   > Signed-Off-By: Paul Cercueil <paul@crapouillou.net>
->   > ---
->   >  package/cairo/cairo.mk | 14 ++++++++++++++
->   >  1 file changed, 14 insertions(+)
->
->   > diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
->   > index 347bb75..aa03a27 100644
->   > --- a/package/cairo/cairo.mk
->   > +++ b/package/cairo/cairo.mk
->   > @@ -54,6 +54,20 @@ else
->   >  	CAIRO_CONF_OPT += --disable-directfb
->   >  endif
->   
->   > +ifeq ($(BR2_PACKAGE_HAS_OPENGL_ES),y)
->   > +	CAIRO_CONF_OPT += --enable-glesv2
->   > +	CAIRO_DEPENDENCIES += libgles
->   > +else
->   > +	CAIRO_CONF_OPT += --disable-glesv2
->   > +endif
->   > +
->   > +ifeq ($(BR2_PACKAGE_HAS_OPENVG),y)
->   > +	CAIRO_CONF_OPT += --enable-vg
->   > +	CAIRO_DEPENDENCIES += libopenvg
->   > +else
->   > +	CAIRO_CONF_OPT += --disable-vg
->   > +endif
->
-> What openvg / gles providers did you test against? We seem to have a
-> number of autobuild failures with the rpi provider:
->
-> http://autobuild.buildroot.net/results/b7f/b7f71cd412e5a7f801e81140a02c7da04694151f/build-end.log
->
-> http://autobuild.buildroot.net/results/f70/f7012c1e09d75dd103b61da364272f6385d2dc7b/build-end.log
->
-> http://autobuild.buildroot.net/results/ec5/ec550547f6465b52ba552ca757c9bbeac17cd1c6/build-end.log
->
-> http://autobuild.buildroot.net/results/81a/81ae93018ca6d7a61460e0c78d5a60e6a5531dbc/build-end.log
->
+Hi Arnout,
+thanks for reviewing.
 
-The following patch addresses the first issue. I reported it upstream.
+On Thu, Dec 19, 2013 at 6:37 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 18/12/13 11:36, Fabio Porcedda wrote:
+>>
+>> After the latest patches top-level parallel Makefile is working but
+>> there is still an issue when a package has an unspecified optional
+>> dependency so change the comment to explain that.
+>>
+>> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+>> ---
+>>   Makefile | 15 ++++++++++++++-
+>>   1 file changed, 14 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/Makefile b/Makefile
+>> index ef2582e..27a6a65 100644
+>> --- a/Makefile
+>> +++ b/Makefile
+>> @@ -42,7 +42,20 @@ export HOSTARCH := $(shell uname -m | \
+>>             -e s/macppc/powerpc/\
+>>             -e s/sh.*/sh/)
+>>
+>> -# This top-level Makefile can *not* be executed in parallel
+>> +# Parallel execution of this Makefile is disabled because it could
+>> +# change the build result if a package has an unspecified optional
+>> +# dependency.
+>
+>
+>  ... or if two packages manipulate the same file in the target directory.
 
+Ok, added.
 
-[PATCH] cairo: Patch to fix OpenVG backend on X11-less platforms
+>
+>> +# Parallel execution changes the packages building order, that can be
+>> +# a problem when a package has an unspecified optional dependency,
+>> +# because if that dependency is present when the package is built, it
+>> +# is used, otherwise it isn't (but compilation happily proceeds). This
+>
+>
+>  This is a repeat of the first sentence.
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
-  package/cairo/cairo-002-openvg-build-fix.patch | 28 
-++++++++++++++++++++++++++
-  1 file changed, 28 insertions(+)
-  create mode 100644 package/cairo/cairo-002-openvg-build-fix.patch
+So i just remove it?
 
-diff --git a/package/cairo/cairo-002-openvg-build-fix.patch 
-b/package/cairo/cairo-002-openvg-build-fix.patch
-new file mode 100644
-index 0000000..6614934
---- /dev/null
-+++ b/package/cairo/cairo-002-openvg-build-fix.patch
-@@ -0,0 +1,28 @@
-+Fix build of OpenVG backend on platforms without X11
-+
-+https://bugs.freedesktop.org/show_bug.cgi?id=72911
-+
-+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-+
-+Index: b/boilerplate/cairo-boilerplate-vg.c
-+===================================================================
-+--- a/boilerplate/cairo-boilerplate-vg.c
-++++ b/boilerplate/cairo-boilerplate-vg.c
-+@@ -215,7 +215,7 @@ _cairo_boilerplate_vg_create_surface_egl (const 
-char            *name,
-+     EGL_ALPHA_SIZE, 8,
-+     EGL_SURFACE_TYPE, EGL_PBUFFER_BIT,
-+     EGL_RENDERABLE_TYPE, EGL_OPENVG_BIT,
-+-    None
-++    EGL_NONE
-+     };
-+     int rgb_attribs[] = {
-+     EGL_RED_SIZE, 8,
-+@@ -225,7 +225,7 @@ _cairo_boilerplate_vg_create_surface_egl (const 
-char            *name,
-+     EGL_VG_ALPHA_FORMAT, EGL_VG_ALPHA_FORMAT_PRE_BIT,
-+     EGL_SURFACE_TYPE, EGL_PBUFFER_BIT,
-+     EGL_RENDERABLE_TYPE, EGL_OPENVG_BIT,
-+-    None
-++    EGL_NONE
-+     };
-+     int dummy_attribs[] = {
-+     EGL_WIDTH, 8, EGL_HEIGHT, 8,
+>
+>> +# means that the packages building order is relevant in that case, and
+>> +# the end result will differ if the order is swapped due to parallel
+>> +# building.
+>> +# Taking in account the above warning, if you still want to execute
+>
+>
+>  Taking into acount
+
+Ok fixed.
+
+>
+>> +# this top-level Makefile in parrallel comment the following line and
+>
+>
+>  parallel
+
+Ok fixed.
+
+<snip>
+
+Best regards
 -- 
+Fabio Porcedda
