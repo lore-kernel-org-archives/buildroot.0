@@ -1,39 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Dec 2013 16:53:45 +0100
-Subject: [Buildroot] [PATCH 0/2] Drop X11 dependency of libpthread-stubs
- and libdrm
-In-Reply-To: <1387553624-6780-1-git-send-email-paul@crapouillou.net>
-References: <1387553624-6780-1-git-send-email-paul@crapouillou.net>
-Message-ID: <20131220165345.7cdfe46b@skate>
+Date: Fri, 20 Dec 2013 17:00:36 +0100
+Subject: [Buildroot] [PATCH v2 1/2] libevdev: new package
+In-Reply-To: <1387551924-4824-2-git-send-email-anaumann@ultratronik.de>
+References: <1387551924-4824-1-git-send-email-anaumann@ultratronik.de>
+ <1387551924-4824-2-git-send-email-anaumann@ultratronik.de>
+Message-ID: <20131220170036.261ad453@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Paul Cercueil,
+Dear Andreas Naumann,
 
-On Fri, 20 Dec 2013 16:33:42 +0100, Paul Cercueil wrote:
-> The 'pthread-stubs' package was recently renamed to 'xlib_libpthread-stubs'.
-> This makes sense as libpthread-stubs is part of the X libraries.
-> 
-> However, this package does not have any real dependency, not even X11.
-> This is inconsistent with the current package, which can only be enabled
-> when BR2_PACKAGE_XORG7 is selected.
-> 
-> The first patch renames the 'xlib_libpthread-stubs' package into
-> 'libpthread-stubs', and moves it to 'Libraries -> Other' in the config
-> menu.
-> 
-> The second patch applies to libdrm, and removes the dependency towards X11,
-> if no X11-specific driver was selected. This permits to build the Mesa3d
-> library without X11.
+On Fri, 20 Dec 2013 16:05:23 +0100, Andreas Naumann wrote:
 
-Just wanted to mention that these patches are very similar to the ones
-sent by Spenser quite a long time ago:
+> +LIBEVDEV_LICENSE = GPLv2
 
-  http://patchwork.ozlabs.org/patch/278296/
-  http://patchwork.ozlabs.org/patch/278297/
+Are you sure? The license looks like an MIT license.
+
+> +LIBEVDEV_LICENSE_FILES = COPYING
+> +
+> +# Uses PKG_CHECK_MODULES() in configure.ac
+> +LIBEVDEV_DEPENDENCIES = host-pkgconf
+> +# the package provides a autogen.sh, but we'd rather run buildroots autoreconf
+
+That's not the correct reason. The real reason is the one you gave in
+your cover letter:
+
+# Package coming from Git, which doesn't provide the generated
+# configure and Makefile.in files
+
+> +LIBEVDEV_AUTORECONF = YES
+> +LIBEVDEV_INSTALL_STAGING = YES
+> +
+> +$(eval $(autotools-package))
 
 Thomas
 -- 
