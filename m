@@ -1,28 +1,48 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 20 Dec 2013 22:23:59 +0100
-Subject: [Buildroot] [PATCH] python-pycrypto: do not include host headers
-In-Reply-To: <1387558781-3471-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Fri, 20 Dec 2013 17:59:41 +0100")
-References: <1387558781-3471-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <877gazjjww.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 20 Dec 2013 22:12:13 +0100
+Subject: [Buildroot] [git commit] squid: bump to version 3.4.1
+Message-ID: <20131220212714.CE4029C13E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=d738fc6b441e0ba53dfd8fb76c93ca247f02ee67
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > This commit adds a patch to python-pycrypto that removes /usr/include
- > for the headers path, which is wrong when cross-compiling.
+New for 3.4 series:
+* SSL Server Certificate Validator
+* Multicast DNS
+* Transaction Annotations
 
- > Fixes:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/squid/squid.mk |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
- >   http://autobuild.buildroot.org/results/5bf/5bf5e31c485a4ee8c0b0a5721205f0fed9b5ae5d/build-end.log
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index e1b37be..1a22cbc 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-SQUID_VERSION_MAJOR = 3.3
+-SQUID_VERSION = $(SQUID_VERSION_MAJOR).11
++SQUID_VERSION_MAJOR = 3.4
++SQUID_VERSION = $(SQUID_VERSION_MAJOR).1
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
+ SQUID_LICENSE = GPLv2+
+@@ -25,7 +25,7 @@ SQUID_CONF_OPT =	--enable-async-io=8 --enable-linux-netfilter \
+ 			--enable-auth-negotiate="wrapper" \
+ 			--enable-auth-ntlm="fake" \
+ 			--disable-strict-error-checking \
+-			--enable-external-acl-helpers="ip_user"
++			--enable-external-acl-helpers="session"
+ 
+ # On uClibc librt needs libpthread
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS)$(BR2_TOOLCHAIN_USES_UCLIBC),yy)
