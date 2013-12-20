@@ -1,70 +1,26 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 20 Dec 2013 19:03:30 +0100
-Subject: [Buildroot] [pull request] Pull request for branch yem/providers
-In-Reply-To: <20131220103143.53d1434e@skate>
-References: <cover.1387495624.git.yann.morin.1998@free.fr>
- <20131220103143.53d1434e@skate>
-Message-ID: <20131220180330.GA3484@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 20 Dec 2013 22:22:07 +0100
+Subject: [Buildroot] [PATCH] squid: bump to version 3.4.1
+In-Reply-To: <1387551564-14783-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 20 Dec 2013 11:59:24 -0300")
+References: <1387551564-14783-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87bo0bjk00.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-On 2013-12-20 10:31 +0100, Thomas Petazzoni spake thusly:
-> On Fri, 20 Dec 2013 00:43:23 +0100, Yann E. MORIN wrote:
-> 
-> > This series is a third attempt at trying to fix the BR2_EXTERNAL issue,
-> > in that packages in BR2_EXTERNAL can't be providers of an implementation
-> > for a virtual package, such as libegl.
-[--SNIP--]
-> A few minor questions:
-[--SNIP--]
->  *) The jpeg virtual package should also be converted in the same way.
+ > New for 3.4 series:
+ > * SSL Server Certificate Validator
+ > * Multicast DNS
+ > * Transaction Annotations
 
-As you said, jpeg is also a virtual package. But since it is not written
-the same way the others are, the change will be more involved than the
-one done in this series.
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-So, I'd prefer this series (which is relatively simple) stays as-is, and
-that once it is applied, we take care of jpeg (and cryptodev), by turning
-them into "real virtual" packages (can't help but use that phrase of
-yours, Gustavo! :-p).
-
->  *) In PATCH 1, in package/rpi-userland/Config.in, you're adding an if
->     BR2_PACKAGE_RPI_USERLAND ... endif block, but *before* the comment
->     related to the toolchain dependencies of rpi-userland. I never
->     remember if that is the situation causing indentation problem of the
->     comment in menuconfig or not. Would be good to check this.
-
-Nope, since we're in a 'menu', not a 'menuconfig'.
-The menu layout is still correct.
-
-And even with a menuconfig, what is busted is if one option or a comment
-is in the middle of other dependent options, such as:
-
-    menuconfig FOO
-        bool "foo"
-
-    config BAR
-        bool "bar"
-        depends on FOO
-
-    comment "FOO deps busted"
-
-    config BUZ
-        bool "buz"
-        depends on FOO
-
-Regards,
-Yann E. MORIN.
+Committed, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
