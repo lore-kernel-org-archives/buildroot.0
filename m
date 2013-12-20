@@ -1,91 +1,39 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 20 Dec 2013 16:47:44 +0100
-Subject: [Buildroot] [PATCH v10 7/8] package: enable jobserver for
-	recursive make
-In-Reply-To: <CAHkwnC80BXHiGW5ywYpBHFON_7yK0x3Oyve_ymzoWh8bb1oiUw@mail.gmail.com>
-References: <1387363007-19846-1-git-send-email-fabio.porcedda@gmail.com>
- <1387363007-19846-8-git-send-email-fabio.porcedda@gmail.com>
- <52B32C7A.1010008@mind.be>
- <CAHkwnC80BXHiGW5ywYpBHFON_7yK0x3Oyve_ymzoWh8bb1oiUw@mail.gmail.com>
-Message-ID: <52B466A0.8000105@mind.be>
+Date: Fri, 20 Dec 2013 16:46:54 +0100
+Subject: [Buildroot] [PATCH v10 0/8] Add support for top-level parallel
+	make
+In-Reply-To: <20131220163423.4574d257@skate>
+References: <1387363007-19846-1-git-send-email-fabio.porcedda@gmail.com>	<52B32DF1.2010702@mind.be>	<CAHkwnC9J_4GOPSLtP2KWLD9YipFV+hVadXc_RrkjvNoYQ2oJew@mail.gmail.com>
+ <20131220163423.4574d257@skate>
+Message-ID: <52B4666E.5080207@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 20/12/13 14:24, Fabio Porcedda wrote:
-> On Thu, Dec 19, 2013 at 6:27 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->> On 18/12/13 11:36, Fabio Porcedda wrote:
->>>
->>> Add '+' prefix to the $($(PKG)_BUILD_CMDS) and $($(PKG)_INSTALL*_CMDS)
->>> commands to enable jobserver for the sub-make.
->>>
->>> Without the '+' prefix GNU make does not detect the sub-make so it
->>> disable the jobserver for the sub-make.
->>
->>
->>   $(PKG)_BUILD_CMDS is a multiline define, and the recursive make call may
->> not be the first command. Can you check if this still works if the build
->> commands are something like:
->>
->> define FOO_BUILD_CMDS
->>          echo "Hello world!"
->>          $(MAKE) -C $(@D)
->> endef
+On 20/12/13 16:34, Thomas Petazzoni wrote:
+> Dear Fabio Porcedda,
 >
-> The following test seems to work fine:
+> On Fri, 20 Dec 2013 15:36:56 +0100, Fabio Porcedda wrote:
+>
+>> The autobuild does not try to test allpackageyesconfig, does it?
+>
+> But, the autobuild is not designed for that. However, an
+> allyespackageconfig configuration is something we could add to the
+> Jenkins if you want.
 
-  OK, good!
+  If you do that, expect it to fail :-)
+
+  It will certainly fail if you include a kernel in that config: some 
+packages (Xenomai, rtnet, some modules) only work with certain kernel 
+versions and AFAIK there is no single kernel that works for all these 
+packages.
+
+  Not building a kernel excludes many packages so may give you more luck.
 
   Regards,
   Arnout
-
->
-> define test
->      echo test
->      $($(PKG)_BUILD_CMDS)
-> endef
->
-> # Build
-> $(BUILD_DIR)/%/.stamp_built::
->      @$(call step_start,build)
->      @$(call MESSAGE,"Building")
->      +$(test)
->      ...
->
-> Test output:
-> -----
-> $ make BR2_JLEVEL= -j$((`getconf _NPROCESSORS_ONLN`+1)) -s wget-build
->>>> wget 1.14 Building
-> test
-> Making all in lib
-> Making all in src
-> Making all in doc
-> Making all in po
-> Making all in tests
-> Making all in util
-> ----
->
-> If i remove the '+' charter:
-> ----
-> $ make BR2_JLEVEL= -j$((`getconf _NPROCESSORS_ONLN`+1)) -s wget-build
->>>> wget 1.14 Building
-> test
-> make[1]: warning: jobserver unavailable: using -j1.  Add `+' to parent
-> make rule.
-> Making all in lib
-> Making all in src
-> Making all in doc
-> Making all in po
-> Making all in tests
-> Making all in util
-> ----
->
-> Best regards
->
-
-
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
