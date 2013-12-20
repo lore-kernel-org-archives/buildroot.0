@@ -1,7 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 20 Dec 2013 23:27:55 +0100
-Subject: [Buildroot] [pull request v2] Pull request for branch yem/providers
-Message-ID: <cover.1387578401.git.yann.morin.1998@free.fr>
+Date: Fri, 20 Dec 2013 23:27:53 +0100
+Subject: [Buildroot] [PATCH 1/7] package/opengl/libegl: switch to
+	package-defined providers
+In-Reply-To: <cover.1387578401.git.yann.morin.1998@free.fr>
+References: <cover.1387578401.git.yann.morin.1998@free.fr>
+Message-ID: <e1b00b5be7e84d2d13dfeaca950269eae6ad73d8.1387578401.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,104 +13,146 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Hello All!
+It seems weird that the libegl package has to know all of the packages
+that may provide the EGL implementation.
 
-This series is a third attempt at trying to fix the BR2_EXTERNAL issue,
-in that packages in BR2_EXTERNAL can't be providers of an implementation
-for a virtual package, such as libegl.
+This also breaks implementation provided by packages in BR2_EXTERNAL,
+since we can't easily depend on the order of packages before we can
+derive the dependencies of libegl.
 
-The basic idea behind this series is that Arnout found it ugly that
-virtual packages had to each be aware of all their possible providers.
-For example, libegl.mk had four conditional dependencies, one for each
-of the builtin providers (freescale's vivante, rpi, TI's gfx, or
-Allwinner's sunxi mali).
+So, Arnout and I separately came up to the same conclusion: move the
+dependency selection from out of libegl, and into each of the packages
+that provides an EGL implementation. Here it is.
 
-This would prohibit a package in BR2_EXTERNAL to provide another
-implementation (eg. with an in-house proprietary, non-public package),
-since the virtual package's rules were evaluated even before we had
-a chance to parse BR2_EXTERNAL, and thus either requiring the new
-dependency to be added to the virtual package (hence defeating one
-of the selling-point of BR2_EXTERNAL0, or not allow external packages
-to provides implementations (hence killing that same selling-point of
-BR2_EXTERNAL as well).
+Since we no longer depend on the order packages are included, but on
+values set at Kconfig-time, we can now have EGL providers in BR2_EXTERNAL.
 
-So, Arnout suggested (and I was already working on it) that packages
-would declare themselves as providers, all in a single Kconfig variable,
-so the virtual package would just have to depend on that single,
-Kconfig-set variable.
-
-This is what this series does for each virtual packages:
-  - moves the virtual package definition to its own Config.in
-  - introduces the string option BR2_PACKAGE_PROVIDES_xxxx
-  - changes all providers to default that variable to thier own name
-
-for each of: opengl-egl, opengl-es, openmax, openvg, and powervr.
-
-If anyone is feeling like writing a blurb in the manual, just feel free
-to go ahead and add a section about virtual packages! ;-p
-
-
-Changes v1 -> v2:
-  - use qstrip when setting *_DEPENDENCIES  (Thomas)
-  - convert jpeg and cryptodev  (Thomas, Gustavo)
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 2746158497cdaf80a5b85584e3972857ac2e7e82:
-
-  util-linux: Add config switches for some more binaries (2013-12-20 22:45:31 +0100)
-
-are available in the git repository at:
-
-  git://gitorious.org/buildroot/buildroot.git yem/providers
-
-for you to fetch changes up to de12afe6412691eab4a049309636aa6bd627dd60:
-
-  package/cryptodev: switch to package-defined providers (2013-12-20 23:17:18 +0100)
-
-----------------------------------------------------------------
-Yann E. MORIN (7):
-      package/opengl/libegl: switch to package-defined providers
-      package/opengl/libgles: switch to package-defined providers
-      package/opengl/libopenvg: switch to package-defined providers
-      package/opengl/libopenmax: switch to package-defined providers
-      package/powervr: switch to package-defined providers
-      package/libjpeg: switch to package-defined providers
-      package/cryptodev: switch to package-defined providers
-
- package/bellagio/Config.in                       |  7 +++++++
- package/cryptodev/Config.in                      |  5 +++++
- package/cryptodev/cryptodev.mk                   |  9 +--------
- package/freescale-imx/gpu-viv-bin-mx6q/Config.in |  6 ++++++
- package/jpeg/Config.in                           |  5 +++++
- package/jpeg/jpeg.mk                             |  9 +--------
- package/opengl/Config.in                         | 15 ++++-----------
+Reported-by: David Corvoysier <david.corvoysier@orange.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+---
+ package/freescale-imx/gpu-viv-bin-mx6q/Config.in |  3 +++
+ package/opengl/Config.in                         |  3 +--
  package/opengl/libegl/Config.in                  |  6 ++++++
  package/opengl/libegl/libegl.mk                  | 17 +----------------
- package/opengl/libgles/Config.in                 |  6 ++++++
- package/opengl/libgles/libgles.mk                | 17 +----------------
- package/opengl/libopenmax/Config.in              |  6 ++++++
- package/opengl/libopenmax/libopenmax.mk          |  9 +--------
- package/opengl/libopenvg/Config.in               |  6 ++++++
- package/opengl/libopenvg/libopenvg.mk            |  5 +----
- package/powervr/Config.in                        |  4 ++++
- package/powervr/powervr.mk                       |  5 +----
- package/rpi-userland/Config.in                   | 16 ++++++++++++++++
- package/sunxi-mali/Config.in                     |  6 ++++++
- package/ti-gfx/Config.in                         |  9 +++++++++
- 20 files changed, 93 insertions(+), 75 deletions(-)
+ package/rpi-userland/Config.in                   |  7 +++++++
+ package/sunxi-mali/Config.in                     |  3 +++
+ package/ti-gfx/Config.in                         |  3 +++
+ 7 files changed, 24 insertions(+), 18 deletions(-)
  create mode 100644 package/opengl/libegl/Config.in
- create mode 100644 package/opengl/libgles/Config.in
- create mode 100644 package/opengl/libopenmax/Config.in
- create mode 100644 package/opengl/libopenvg/Config.in
 
+diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/Config.in b/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
+index 64e42ba..68380a2 100644
+--- a/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
++++ b/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
+@@ -24,6 +24,9 @@ config BR2_PACKAGE_GPU_VIV_BIN_MX6Q
+ 
+ if BR2_PACKAGE_GPU_VIV_BIN_MX6Q
+ 
++config BR2_PACKAGE_PROVIDES_OPENGL_EGL
++	default "gpu-viv-bin-mx6q"
++
+ config BR2_PACKAGE_GPU_VIV_BIN_MX6Q_EXAMPLES
+ 	bool "install examples"
+ 	help
+diff --git a/package/opengl/Config.in b/package/opengl/Config.in
+index 1636807..686543b 100644
+--- a/package/opengl/Config.in
++++ b/package/opengl/Config.in
+@@ -1,5 +1,4 @@
+-config BR2_PACKAGE_HAS_OPENGL_EGL
+-	bool
++source "package/opengl/libegl/Config.in"
+ 
+ config BR2_PACKAGE_HAS_OPENGL_ES
+ 	bool
+diff --git a/package/opengl/libegl/Config.in b/package/opengl/libegl/Config.in
+new file mode 100644
+index 0000000..2d81a20
+--- /dev/null
++++ b/package/opengl/libegl/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_HAS_OPENGL_EGL
++	bool
++
++config BR2_PACKAGE_PROVIDES_OPENGL_EGL
++	depends on BR2_PACKAGE_HAS_OPENGL_EGL
++	string
+diff --git a/package/opengl/libegl/libegl.mk b/package/opengl/libegl/libegl.mk
+index c194b02..b2b74f1 100644
+--- a/package/opengl/libegl/libegl.mk
++++ b/package/opengl/libegl/libegl.mk
+@@ -5,22 +5,7 @@
+ ################################################################################
+ 
+ LIBEGL_SOURCE =
+-
+-ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
+-LIBEGL_DEPENDENCIES += rpi-userland
+-endif
+-
+-ifeq ($(BR2_PACKAGE_TI_GFX),y)
+-LIBEGL_DEPENDENCIES += ti-gfx
+-endif
+-
+-ifeq ($(BR2_PACKAGE_SUNXI_MALI),y)
+-LIBEGL_DEPENDENCIES += sunxi-mali
+-endif
+-
+-ifeq ($(BR2_PACKAGE_GPU_VIV_BIN_MX6Q),y)
+-LIBEGL_DEPENDENCIES += gpu-viv-bin-mx6q
+-endif
++LIBEGL_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_OPENGL_EGL))
+ 
+ ifeq ($(LIBEGL_DEPENDENCIES),)
+ define LIBEGL_CONFIGURE_CMDS
+diff --git a/package/rpi-userland/Config.in b/package/rpi-userland/Config.in
+index 8910211..3c8959e 100644
+--- a/package/rpi-userland/Config.in
++++ b/package/rpi-userland/Config.in
+@@ -17,6 +17,13 @@ config BR2_PACKAGE_RPI_USERLAND
+ 
+ 	  https://github.com/raspberrypi/userland/
+ 
++if BR2_PACKAGE_RPI_USERLAND
++
++config BR2_PACKAGE_PROVIDES_OPENGL_EGL
++	default "rpi-userland"
++
++endif
++
+ comment "rpi-userland needs a toolchain w/ C++, largefile, threads"
+ 	depends on BR2_arm
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/sunxi-mali/Config.in b/package/sunxi-mali/Config.in
+index 2ca049d..7f07647 100644
+--- a/package/sunxi-mali/Config.in
++++ b/package/sunxi-mali/Config.in
+@@ -18,6 +18,9 @@ config BR2_PACKAGE_SUNXI_MALI
+ 
+ if BR2_PACKAGE_SUNXI_MALI
+ 
++config BR2_PACKAGE_PROVIDES_OPENGL_EGL
++	default "sunxi-mali"
++
+ config BR2_PACKAGE_SUNXI_MALI_DBG
+ 	bool "install malitest and maliver tools"
+ 	help
+diff --git a/package/ti-gfx/Config.in b/package/ti-gfx/Config.in
+index ec3a54c..e89660f 100644
+--- a/package/ti-gfx/Config.in
++++ b/package/ti-gfx/Config.in
+@@ -11,6 +11,9 @@ config BR2_PACKAGE_TI_GFX
+ 
+ if BR2_PACKAGE_TI_GFX
+ 
++config BR2_PACKAGE_PROVIDES_OPENGL_EGL
++	default "ti-gfx"
++
+ config BR2_PACKAGE_TI_GFX_DEBUG
+ 	bool "enable debug support"
+ 	help
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.1.2
