@@ -1,48 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 20 Dec 2013 22:12:13 +0100
-Subject: [Buildroot] [git commit] squid: bump to version 3.4.1
-Message-ID: <20131220212714.CE4029C13E@busybox.osuosl.org>
+Date: Fri, 20 Dec 2013 22:23:10 +0100
+Subject: [Buildroot] [git commit] python-pycrypto: do not include host
+	headers
+Message-ID: <20131220212714.D7AB79A49C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d738fc6b441e0ba53dfd8fb76c93ca247f02ee67
+commit: http://git.buildroot.net/buildroot/commit/?id=0fd8e8ddb404b226c9ebd27f4f36eced8827a3dc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-New for 3.4 series:
-* SSL Server Certificate Validator
-* Multicast DNS
-* Transaction Annotations
+This commit adds a patch to python-pycrypto that removes /usr/include
+for the headers path, which is wrong when cross-compiling.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Fixes:
+
+  http://autobuild.buildroot.org/results/5bf/5bf5e31c485a4ee8c0b0a5721205f0fed9b5ae5d/build-end.log
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/squid/squid.mk |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ ...ycrypto-0001-remove-incorrect-header-path.patch |   21 ++++++++++++++++++++
+ 1 files changed, 21 insertions(+), 0 deletions(-)
 
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index e1b37be..1a22cbc 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--SQUID_VERSION_MAJOR = 3.3
--SQUID_VERSION = $(SQUID_VERSION_MAJOR).11
-+SQUID_VERSION_MAJOR = 3.4
-+SQUID_VERSION = $(SQUID_VERSION_MAJOR).1
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
- SQUID_LICENSE = GPLv2+
-@@ -25,7 +25,7 @@ SQUID_CONF_OPT =	--enable-async-io=8 --enable-linux-netfilter \
- 			--enable-auth-negotiate="wrapper" \
- 			--enable-auth-ntlm="fake" \
- 			--disable-strict-error-checking \
--			--enable-external-acl-helpers="ip_user"
-+			--enable-external-acl-helpers="session"
- 
- # On uClibc librt needs libpthread
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS)$(BR2_TOOLCHAIN_USES_UCLIBC),yy)
+diff --git a/package/python-pycrypto/python-pycrypto-0001-remove-incorrect-header-path.patch b/package/python-pycrypto/python-pycrypto-0001-remove-incorrect-header-path.patch
+new file mode 100644
+index 0000000..9268d31
+--- /dev/null
++++ b/package/python-pycrypto/python-pycrypto-0001-remove-incorrect-header-path.patch
+@@ -0,0 +1,21 @@
++Do not use /usr/include for headers
++
++Using /usr/include is wrong when doing cross-compilation, so get rid
++of it, and rely on the compiler to use the appropriate default paths
++for headers.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/setup.py
++===================================================================
++--- a/setup.py
+++++ b/setup.py
++@@ -370,7 +370,7 @@
++       'ext_modules': plat_ext + [
++             # _fastmath (uses GNU mp library)
++             Extension("Crypto.PublicKey._fastmath",
++-                      include_dirs=['src/','/usr/include/'],
+++                      include_dirs=['src/'],
++                       libraries=['gmp'],
++                       sources=["src/_fastmath.c"]),
++ 
