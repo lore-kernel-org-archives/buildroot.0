@@ -1,46 +1,43 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 20 Dec 2013 11:59:24 -0300
-Subject: [Buildroot] [PATCH] squid: bump to version 3.4.1
-Message-ID: <1387551564-14783-1-git-send-email-gustavo@zacarias.com.ar>
+From: Andreas Naumann <anaumann@ultratronik.de>
+Date: Fri, 20 Dec 2013 16:05:22 +0100
+Subject: [Buildroot] [PATCH v2 0/2] Add evemu and libevdev.
+Message-ID: <1387551924-4824-1-git-send-email-anaumann@ultratronik.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-New for 3.4 series:
-* SSL Server Certificate Validator
-* Multicast DNS
-* Transaction Annotations
+Hi,
+Yann and Thomas, thanks for the input.
+I hope I have adressed all issues in this version. The AUTORECONFIG is needed because the packages come without Makefile.in and configure. They do have a autogen.sh script, which I doubt works for proper crosscompiling.
+I have also verified the packages compile without problems with arm-basic and arm-full-nothread toolchains, thus no toolchain dependency is necessary. Myself I use a linaro tc from 2012.04.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/squid/squid.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index e1b37be..1a22cbc 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--SQUID_VERSION_MAJOR = 3.3
--SQUID_VERSION = $(SQUID_VERSION_MAJOR).11
-+SQUID_VERSION_MAJOR = 3.4
-+SQUID_VERSION = $(SQUID_VERSION_MAJOR).1
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
- SQUID_LICENSE = GPLv2+
-@@ -25,7 +25,7 @@ SQUID_CONF_OPT =	--enable-async-io=8 --enable-linux-netfilter \
- 			--enable-auth-negotiate="wrapper" \
- 			--enable-auth-ntlm="fake" \
- 			--disable-strict-error-checking \
--			--enable-external-acl-helpers="ip_user"
-+			--enable-external-acl-helpers="session"
- 
- # On uClibc librt needs libpthread
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS)$(BR2_TOOLCHAIN_USES_UCLIBC),yy)
+regards,
+Andreas
+
+Changes in v2:
+- Added licence information
+- removed obsolete _SOURCE definition
+- alphabetical order in Config.in
+- remove staging for evemu
+
+
+Andreas Naumann (2):
+  libevdev: new package
+  evemu: new package
+
+ package/Config.in            |  2 ++
+ package/evemu/Config.in      |  7 +++++++
+ package/evemu/evemu.mk       | 17 +++++++++++++++++
+ package/libevdev/Config.in   |  6 ++++++
+ package/libevdev/libevdev.mk | 18 ++++++++++++++++++
+ 5 files changed, 50 insertions(+)
+ create mode 100644 package/evemu/Config.in
+ create mode 100644 package/evemu/evemu.mk
+ create mode 100644 package/libevdev/Config.in
+ create mode 100644 package/libevdev/libevdev.mk
+
 -- 
-1.8.3.2
+1.8.4.1
