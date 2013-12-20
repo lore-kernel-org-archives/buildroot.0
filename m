@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 20 Dec 2013 23:27:54 +0100
-Subject: [Buildroot] [PATCH 2/7] package/opengl/libgles: switch to
+Date: Fri, 20 Dec 2013 23:27:55 +0100
+Subject: [Buildroot] [PATCH 3/7] package/opengl/libopenvg: switch to
 	package-defined providers
 In-Reply-To: <cover.1387578401.git.yann.morin.1998@free.fr>
 References: <cover.1387578401.git.yann.morin.1998@free.fr>
-Message-ID: <7a6130507b503194c9530b909e97ae8303e1e403.1387578401.git.yann.morin.1998@free.fr>
+Message-ID: <41ec188b04e93a367ede4a84729e5df652ba896a.1387578401.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -22,124 +22,68 @@ Cc: Arnout Vandecappelle <arnout@mind.be>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Peter Korsgaard <jacmet@uclibc.org>
 ---
- package/freescale-imx/gpu-viv-bin-mx6q/Config.in |  3 +++
- package/opengl/Config.in                         |  4 +---
- package/opengl/libgles/Config.in                 |  6 ++++++
- package/opengl/libgles/libgles.mk                | 17 +----------------
- package/rpi-userland/Config.in                   |  3 +++
- package/sunxi-mali/Config.in                     |  3 +++
- package/ti-gfx/Config.in                         |  3 +++
- 7 files changed, 20 insertions(+), 19 deletions(-)
- create mode 100644 package/opengl/libgles/Config.in
+ package/opengl/Config.in              | 4 +---
+ package/opengl/libopenvg/Config.in    | 6 ++++++
+ package/opengl/libopenvg/libopenvg.mk | 5 +----
+ package/rpi-userland/Config.in        | 3 +++
+ 4 files changed, 11 insertions(+), 7 deletions(-)
+ create mode 100644 package/opengl/libopenvg/Config.in
 
-diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/Config.in b/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
-index 68380a2..e084568 100644
---- a/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
-+++ b/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
-@@ -27,6 +27,9 @@ if BR2_PACKAGE_GPU_VIV_BIN_MX6Q
- config BR2_PACKAGE_PROVIDES_OPENGL_EGL
- 	default "gpu-viv-bin-mx6q"
- 
-+config BR2_PACKAGE_PROVIDES_OPENGL_ES
-+	default "gpu-viv-bin-mx6q"
-+
- config BR2_PACKAGE_GPU_VIV_BIN_MX6Q_EXAMPLES
- 	bool "install examples"
- 	help
 diff --git a/package/opengl/Config.in b/package/opengl/Config.in
-index 686543b..3960082 100644
+index 3960082..109cde8 100644
 --- a/package/opengl/Config.in
 +++ b/package/opengl/Config.in
-@@ -1,7 +1,5 @@
+@@ -1,8 +1,6 @@
  source "package/opengl/libegl/Config.in"
+ source "package/opengl/libgles/Config.in"
 -
--config BR2_PACKAGE_HAS_OPENGL_ES
+-config BR2_PACKAGE_HAS_OPENVG
 -	bool
-+source "package/opengl/libgles/Config.in"
++source "package/opengl/libopenvg/Config.in"
  
- config BR2_PACKAGE_HAS_OPENVG
+ config BR2_PACKAGE_HAS_OPENMAX
  	bool
-diff --git a/package/opengl/libgles/Config.in b/package/opengl/libgles/Config.in
+diff --git a/package/opengl/libopenvg/Config.in b/package/opengl/libopenvg/Config.in
 new file mode 100644
-index 0000000..75ccfc8
+index 0000000..9d31525
 --- /dev/null
-+++ b/package/opengl/libgles/Config.in
++++ b/package/opengl/libopenvg/Config.in
 @@ -0,0 +1,6 @@
-+config BR2_PACKAGE_HAS_OPENGL_ES
++config BR2_PACKAGE_HAS_OPENVG
 +	bool
 +
-+config BR2_PACKAGE_PROVIDES_OPENGL_ES
-+	depends on BR2_PACKAGE_HAS_OPENGL_ES
++config BR2_PACKAGE_PROVIDES_OPENVG
++	depends on BR2_PACKAGE_HAS_OPENVG
 +	string
-diff --git a/package/opengl/libgles/libgles.mk b/package/opengl/libgles/libgles.mk
-index ec157ac..0dcbaa7 100644
---- a/package/opengl/libgles/libgles.mk
-+++ b/package/opengl/libgles/libgles.mk
-@@ -5,22 +5,7 @@
+diff --git a/package/opengl/libopenvg/libopenvg.mk b/package/opengl/libopenvg/libopenvg.mk
+index 3296f63..ffd9d68 100644
+--- a/package/opengl/libopenvg/libopenvg.mk
++++ b/package/opengl/libopenvg/libopenvg.mk
+@@ -5,10 +5,7 @@
  ################################################################################
  
- LIBGLES_SOURCE =
+ LIBOPENVG_SOURCE =
 -
 -ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
--LIBGLES_DEPENDENCIES += rpi-userland
+-LIBOPENVG_DEPENDENCIES += rpi-userland
 -endif
--
--ifeq ($(BR2_PACKAGE_TI_GFX),y)
--LIBGLES_DEPENDENCIES += ti-gfx
--endif
--
--ifeq ($(BR2_PACKAGE_SUNXI_MALI),y)
--LIBGLES_DEPENDENCIES += sunxi-mali
--endif
--
--ifeq ($(BR2_PACKAGE_GPU_VIV_BIN_MX6Q),y)
--LIBGLES_DEPENDENCIES += gpu-viv-bin-mx6q
--endif
-+LIBGLES_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_OPENGL_ES))
++LIBOPENVG_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_OPENVG))
  
- ifeq ($(LIBGLES_DEPENDENCIES),)
- define LIBGLES_CONFIGURE_CMDS
+ ifeq ($(LIBOPENVG_DEPENDENCIES),)
+ define LIBOPENVG_CONFIGURE_CMDS
 diff --git a/package/rpi-userland/Config.in b/package/rpi-userland/Config.in
-index 3c8959e..b8860d6 100644
+index b8860d6..271c71d 100644
 --- a/package/rpi-userland/Config.in
 +++ b/package/rpi-userland/Config.in
-@@ -22,6 +22,9 @@ if BR2_PACKAGE_RPI_USERLAND
- config BR2_PACKAGE_PROVIDES_OPENGL_EGL
+@@ -25,6 +25,9 @@ config BR2_PACKAGE_PROVIDES_OPENGL_EGL
+ config BR2_PACKAGE_PROVIDES_OPENGL_ES
  	default "rpi-userland"
  
-+config BR2_PACKAGE_PROVIDES_OPENGL_ES
++config BR2_PACKAGE_PROVIDES_OPENVG
 +	default "rpi-userland"
 +
  endif
  
  comment "rpi-userland needs a toolchain w/ C++, largefile, threads"
-diff --git a/package/sunxi-mali/Config.in b/package/sunxi-mali/Config.in
-index 7f07647..9f188a3 100644
---- a/package/sunxi-mali/Config.in
-+++ b/package/sunxi-mali/Config.in
-@@ -21,6 +21,9 @@ if BR2_PACKAGE_SUNXI_MALI
- config BR2_PACKAGE_PROVIDES_OPENGL_EGL
- 	default "sunxi-mali"
- 
-+config BR2_PACKAGE_PROVIDES_OPENGL_ES
-+	default "sunxi-mali"
-+
- config BR2_PACKAGE_SUNXI_MALI_DBG
- 	bool "install malitest and maliver tools"
- 	help
-diff --git a/package/ti-gfx/Config.in b/package/ti-gfx/Config.in
-index e89660f..929247b 100644
---- a/package/ti-gfx/Config.in
-+++ b/package/ti-gfx/Config.in
-@@ -14,6 +14,9 @@ if BR2_PACKAGE_TI_GFX
- config BR2_PACKAGE_PROVIDES_OPENGL_EGL
- 	default "ti-gfx"
- 
-+config BR2_PACKAGE_PROVIDES_OPENGL_ES
-+	default "ti-gfx"
-+
- config BR2_PACKAGE_TI_GFX_DEBUG
- 	bool "enable debug support"
- 	help
 -- 
 1.8.1.2
