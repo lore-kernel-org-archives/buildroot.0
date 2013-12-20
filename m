@@ -1,120 +1,113 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 20 Dec 2013 22:45:31 +0100
-Subject: [Buildroot] [git commit] util-linux: Add config switches for some
-	more binaries
-Message-ID: <20131220220716.1C9D59C13E@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 20 Dec 2013 23:27:55 +0100
+Subject: [Buildroot] [pull request v2] Pull request for branch yem/providers
+Message-ID: <cover.1387578401.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2746158497cdaf80a5b85584e3972857ac2e7e82
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Signed-Off-By: Paul Cercueil <paul@crapouillou.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/util-linux/Config.in     |   25 +++++++++++++++++++++++++
- package/util-linux/util-linux.mk |    5 +++++
- 2 files changed, 30 insertions(+), 0 deletions(-)
+Hello All!
 
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index ed19f39..ae9b669 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -54,6 +54,11 @@ config BR2_PACKAGE_UTIL_LINUX_ARCH
- 	help
- 	  Print machine architecture
- 
-+config BR2_PACKAGE_UTIL_LINUX_CHFN_CHSH
-+	bool "chfn/chsh"
-+	help
-+	  Change login shell, real user name and information
-+
- config BR2_PACKAGE_UTIL_LINUX_CRAMFS
- 	bool "cramfs utilities"
- 	select BR2_PACKAGE_ZLIB
-@@ -86,6 +91,11 @@ config BR2_PACKAGE_UTIL_LINUX_KILL
- 	help
- 	  Send a signal to a process
- 
-+config BR2_PACKAGE_UTIL_LINUX_LAST
-+	bool "last"
-+	help
-+	  Show listing of last logged in users
-+
- config BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS
- 	bool "login utilities"
- 	depends on BR2_ENABLE_LOCALE # linux-pam
-@@ -96,6 +106,11 @@ config BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS
- comment "login utilities needs a toolchain w/ locale"
- 	depends on !BR2_ENABLE_LOCALE
- 
-+config BR2_PACKAGE_UTIL_LINUX_LOSETUP
-+	bool "losetup"
-+	help
-+	  Set up and control loop devices
-+
- config BR2_PACKAGE_UTIL_LINUX_MESG
- 	bool "mesg"
- 	help
-@@ -106,6 +121,11 @@ config BR2_PACKAGE_UTIL_LINUX_MOUNT
- 	help
- 	  Mount/unmount filesystems
- 
-+config BR2_PACKAGE_UTIL_LINUX_NEWGRP
-+	bool "newgrp"
-+	help
-+	  Log in to a new group
-+
- config BR2_PACKAGE_UTIL_LINUX_NSENTER
- 	bool "nsenter"
- 	help
-@@ -161,6 +181,11 @@ config BR2_PACKAGE_UTIL_LINUX_UUIDD
- 	help
- 	  UUID generation daemon
- 
-+config BR2_PACKAGE_UTIL_LINUX_VIPW
-+	bool "vipw"
-+	help
-+	  Edit the password, group, shadow-password or shadow-group file
-+
- config BR2_PACKAGE_UTIL_LINUX_WALL
- 	bool "wall"
- 	help
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 5e689f8..db1f4f5 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -50,18 +50,22 @@ UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_LINUX_PAM),linux-pam)
- UTIL_LINUX_CONF_OPT += \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_AGETTY),--enable-agetty,--disable-agetty) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_ARCH),--enable-arch,--disable-arch) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_CHFN_CHSH),--enable-chfn-chsh,--disable-chfn-chsh) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_CRAMFS),--enable-cramfs,--disable-cramfs) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_DDATE),--enable-ddate,--disable-ddate) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_EJECT),--enable-eject,--disable-eject) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_FALLOCATE),--enable-fallocate,--disable-fallocate) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_FSCK),--enable-fsck,--disable-fsck) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_KILL),--enable-kill,--disable-kill) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_LAST),--enable-last,--disable-last) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBBLKID),--enable-libblkid,--disable-libblkid) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT),--enable-libmount,--disable-libmount) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBUUID),--enable-libuuid,--disable-libuuid) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS),--enable-last --enable-login --enable-su --enable-sulogin,--disable-last --disable-login --disable-su --disable-sulogin) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_LOSETUP),--enable-losetup,--disable-losetup) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_MESG),--enable-mesg,--disable-mesg) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_MOUNT),--enable-mount,--disable-mount) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_NEWGRP),--enable-newgrp,--disable-newgrp) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_NSENTER),--enable-nsenter,--disable-nsenter) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_PARTX),,--disable-partx) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_PIVOT_ROOT),--enable-pivot_root,--disable-pivot_root) \
-@@ -73,6 +77,7 @@ UTIL_LINUX_CONF_OPT += \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_UNSHARE),--enable-unshare,--disable-unshare) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_UTMPDUMP),--enable-utmpdump,--disable-utmpdump) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_UUIDD),--enable-uuidd,--disable-uuidd) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_VIPW),--enable-vipw,--disable-vipw) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_WALL),--enable-wall,--disable-wall) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_WRITE),--enable-write,--disable-write)
- 
+This series is a third attempt at trying to fix the BR2_EXTERNAL issue,
+in that packages in BR2_EXTERNAL can't be providers of an implementation
+for a virtual package, such as libegl.
+
+The basic idea behind this series is that Arnout found it ugly that
+virtual packages had to each be aware of all their possible providers.
+For example, libegl.mk had four conditional dependencies, one for each
+of the builtin providers (freescale's vivante, rpi, TI's gfx, or
+Allwinner's sunxi mali).
+
+This would prohibit a package in BR2_EXTERNAL to provide another
+implementation (eg. with an in-house proprietary, non-public package),
+since the virtual package's rules were evaluated even before we had
+a chance to parse BR2_EXTERNAL, and thus either requiring the new
+dependency to be added to the virtual package (hence defeating one
+of the selling-point of BR2_EXTERNAL0, or not allow external packages
+to provides implementations (hence killing that same selling-point of
+BR2_EXTERNAL as well).
+
+So, Arnout suggested (and I was already working on it) that packages
+would declare themselves as providers, all in a single Kconfig variable,
+so the virtual package would just have to depend on that single,
+Kconfig-set variable.
+
+This is what this series does for each virtual packages:
+  - moves the virtual package definition to its own Config.in
+  - introduces the string option BR2_PACKAGE_PROVIDES_xxxx
+  - changes all providers to default that variable to thier own name
+
+for each of: opengl-egl, opengl-es, openmax, openvg, and powervr.
+
+If anyone is feeling like writing a blurb in the manual, just feel free
+to go ahead and add a section about virtual packages! ;-p
+
+
+Changes v1 -> v2:
+  - use qstrip when setting *_DEPENDENCIES  (Thomas)
+  - convert jpeg and cryptodev  (Thomas, Gustavo)
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 2746158497cdaf80a5b85584e3972857ac2e7e82:
+
+  util-linux: Add config switches for some more binaries (2013-12-20 22:45:31 +0100)
+
+are available in the git repository at:
+
+  git://gitorious.org/buildroot/buildroot.git yem/providers
+
+for you to fetch changes up to de12afe6412691eab4a049309636aa6bd627dd60:
+
+  package/cryptodev: switch to package-defined providers (2013-12-20 23:17:18 +0100)
+
+----------------------------------------------------------------
+Yann E. MORIN (7):
+      package/opengl/libegl: switch to package-defined providers
+      package/opengl/libgles: switch to package-defined providers
+      package/opengl/libopenvg: switch to package-defined providers
+      package/opengl/libopenmax: switch to package-defined providers
+      package/powervr: switch to package-defined providers
+      package/libjpeg: switch to package-defined providers
+      package/cryptodev: switch to package-defined providers
+
+ package/bellagio/Config.in                       |  7 +++++++
+ package/cryptodev/Config.in                      |  5 +++++
+ package/cryptodev/cryptodev.mk                   |  9 +--------
+ package/freescale-imx/gpu-viv-bin-mx6q/Config.in |  6 ++++++
+ package/jpeg/Config.in                           |  5 +++++
+ package/jpeg/jpeg.mk                             |  9 +--------
+ package/opengl/Config.in                         | 15 ++++-----------
+ package/opengl/libegl/Config.in                  |  6 ++++++
+ package/opengl/libegl/libegl.mk                  | 17 +----------------
+ package/opengl/libgles/Config.in                 |  6 ++++++
+ package/opengl/libgles/libgles.mk                | 17 +----------------
+ package/opengl/libopenmax/Config.in              |  6 ++++++
+ package/opengl/libopenmax/libopenmax.mk          |  9 +--------
+ package/opengl/libopenvg/Config.in               |  6 ++++++
+ package/opengl/libopenvg/libopenvg.mk            |  5 +----
+ package/powervr/Config.in                        |  4 ++++
+ package/powervr/powervr.mk                       |  5 +----
+ package/rpi-userland/Config.in                   | 16 ++++++++++++++++
+ package/sunxi-mali/Config.in                     |  6 ++++++
+ package/ti-gfx/Config.in                         |  9 +++++++++
+ 20 files changed, 93 insertions(+), 75 deletions(-)
+ create mode 100644 package/opengl/libegl/Config.in
+ create mode 100644 package/opengl/libgles/Config.in
+ create mode 100644 package/opengl/libopenmax/Config.in
+ create mode 100644 package/opengl/libopenvg/Config.in
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
