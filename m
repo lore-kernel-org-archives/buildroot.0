@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 20 Dec 2013 23:27:57 +0100
-Subject: [Buildroot] [PATCH 5/7] package/powervr: switch to package-defined
+Date: Fri, 20 Dec 2013 23:27:58 +0100
+Subject: [Buildroot] [PATCH 6/7] package/libjpeg: switch to package-defined
 	providers
 In-Reply-To: <cover.1387578401.git.yann.morin.1998@free.fr>
 References: <cover.1387578401.git.yann.morin.1998@free.fr>
-Message-ID: <9ad5c0959abc44f78caa9f360442c60c14ff6e02.1387578401.git.yann.morin.1998@free.fr>
+Message-ID: <26656058e990e8a02023bc172459f26c07c47b6d.1387578401.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,57 +16,49 @@ From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 For the underlying reasons, see previous patch, titled:
     package/opengl/libegl: switch to package-defined providers
 
-Reported-by: David Corvoysier <david.corvoysier@orange.com>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Peter Korsgaard <jacmet@uclibc.org>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/powervr/Config.in  | 4 ++++
- package/powervr/powervr.mk | 5 +----
- package/ti-gfx/Config.in   | 3 +++
- 3 files changed, 8 insertions(+), 4 deletions(-)
+ package/jpeg/Config.in | 5 +++++
+ package/jpeg/jpeg.mk   | 9 +--------
+ 2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/package/powervr/Config.in b/package/powervr/Config.in
-index d09ce74..746e15b 100644
---- a/package/powervr/Config.in
-+++ b/package/powervr/Config.in
-@@ -1,2 +1,6 @@
- config BR2_PACKAGE_HAS_POWERVR
- 	bool
-+
-+config BR2_PACKAGE_PROVIDES_POWERVR
-+	depends on BR2_PACKAGE_HAS_POWERVR
+diff --git a/package/jpeg/Config.in b/package/jpeg/Config.in
+index 9508faf..b7cdfeb 100644
+--- a/package/jpeg/Config.in
++++ b/package/jpeg/Config.in
+@@ -30,4 +30,9 @@ config BR2_PACKAGE_JPEG_TURBO
+ 
+ endchoice
+ 
++config BR2_PACKAGE_PROVIDES_JPEG
 +	string
-diff --git a/package/powervr/powervr.mk b/package/powervr/powervr.mk
-index 83392fd..1f43505 100644
---- a/package/powervr/powervr.mk
-+++ b/package/powervr/powervr.mk
-@@ -5,10 +5,7 @@
++	default "libjpeg"    if BR2_PACKAGE_LIBJPEG
++	default "jpeg-turbo" if BR2_PACKAGE_JPEG_TURBO
++
+ endif
+diff --git a/package/jpeg/jpeg.mk b/package/jpeg/jpeg.mk
+index eaa2394..3695bc8 100644
+--- a/package/jpeg/jpeg.mk
++++ b/package/jpeg/jpeg.mk
+@@ -5,14 +5,7 @@
  ################################################################################
  
- POWERVR_SOURCE =
+ JPEG_SOURCE =
 -
--ifeq ($(BR2_PACKAGE_TI_GFX),y)
--POWERVR_DEPENDENCIES += ti-gfx
+-ifeq ($(BR2_PACKAGE_JPEG_TURBO),y)
+-JPEG_DEPENDENCIES += jpeg-turbo
 -endif
-+POWERVR_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_POWERVR))
+-
+-ifeq ($(BR2_PACKAGE_LIBJPEG),y)
+-JPEG_DEPENDENCIES += libjpeg
+-endif
++JPEG_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_JPEG))
  
- ifeq ($(POWERVR_DEPENDENCIES),)
- define POWERVR_CONFIGURE_CMDS
-diff --git a/package/ti-gfx/Config.in b/package/ti-gfx/Config.in
-index 929247b..f455f4c 100644
---- a/package/ti-gfx/Config.in
-+++ b/package/ti-gfx/Config.in
-@@ -17,6 +17,9 @@ config BR2_PACKAGE_PROVIDES_OPENGL_EGL
- config BR2_PACKAGE_PROVIDES_OPENGL_ES
- 	default "ti-gfx"
- 
-+config BR2_PACKAGE_PROVIDES_POWERVR
-+	default "ti-gfx"
-+
- config BR2_PACKAGE_TI_GFX_DEBUG
- 	bool "enable debug support"
- 	help
+ ifeq ($(JPEG_DEPENDENCIES),)
+ define JPEG_CONFIGURE_CMDS
 -- 
 1.8.1.2
