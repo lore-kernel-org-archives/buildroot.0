@@ -1,43 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Dec 2013 17:00:36 +0100
-Subject: [Buildroot] [PATCH v2 1/2] libevdev: new package
-In-Reply-To: <1387551924-4824-2-git-send-email-anaumann@ultratronik.de>
-References: <1387551924-4824-1-git-send-email-anaumann@ultratronik.de>
- <1387551924-4824-2-git-send-email-anaumann@ultratronik.de>
-Message-ID: <20131220170036.261ad453@skate>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Fri, 20 Dec 2013 17:01:01 +0100
+Subject: [Buildroot] [PATCH v10 0/8] Add support for top-level parallel
+	make
+In-Reply-To: <52B4666E.5080207@mind.be>
+References: <1387363007-19846-1-git-send-email-fabio.porcedda@gmail.com>
+ <52B32DF1.2010702@mind.be>
+ <CAHkwnC9J_4GOPSLtP2KWLD9YipFV+hVadXc_RrkjvNoYQ2oJew@mail.gmail.com>
+ <20131220163423.4574d257@skate> <52B4666E.5080207@mind.be>
+Message-ID: <CAHkwnC9bZSrH5Qu2f1Haxzycz_4A6RJbySx5oKONYVXHensVpQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Andreas Naumann,
+On Fri, Dec 20, 2013 at 4:46 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 20/12/13 16:34, Thomas Petazzoni wrote:
+>>
+>> Dear Fabio Porcedda,
+>>
+>> On Fri, 20 Dec 2013 15:36:56 +0100, Fabio Porcedda wrote:
+>>
+>>> The autobuild does not try to test allpackageyesconfig, does it?
+>>
+>>
+>> But, the autobuild is not designed for that. However, an
+>> allyespackageconfig configuration is something we could add to the
+>> Jenkins if you want.
 
-On Fri, 20 Dec 2013 16:05:23 +0100, Andreas Naumann wrote:
+I think It would be great.
+IMHO it's a useful test because this way we know if packages build
+fine at least with the default config.
+Building again the default config is the first test that a package
+must pass, doesn't it?
 
-> +LIBEVDEV_LICENSE = GPLv2
+>
+>  If you do that, expect it to fail :-)
+>
+>  It will certainly fail if you include a kernel in that config: some
+> packages (Xenomai, rtnet, some modules) only work with certain kernel
+> versions and AFAIK there is no single kernel that works for all these
+> packages.
+>
+>  Not building a kernel excludes many packages so may give you more luck.
 
-Are you sure? The license looks like an MIT license.
-
-> +LIBEVDEV_LICENSE_FILES = COPYING
-> +
-> +# Uses PKG_CHECK_MODULES() in configure.ac
-> +LIBEVDEV_DEPENDENCIES = host-pkgconf
-> +# the package provides a autogen.sh, but we'd rather run buildroots autoreconf
-
-That's not the correct reason. The real reason is the one you gave in
-your cover letter:
-
-# Package coming from Git, which doesn't provide the generated
-# configure and Makefile.in files
-
-> +LIBEVDEV_AUTORECONF = YES
-> +LIBEVDEV_INSTALL_STAGING = YES
-> +
-> +$(eval $(autotools-package))
-
-Thomas
+Thanks and best regards
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Fabio Porcedda
