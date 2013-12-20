@@ -1,88 +1,50 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 20 Dec 2013 23:32:57 +0100
-Subject: [Buildroot] [PATCH 4/4] fs/custom: add support for squashfs
-In-Reply-To: <cover.1387578655.git.yann.morin.1998@free.fr>
-References: <cover.1387578655.git.yann.morin.1998@free.fr>
-Message-ID: <81062cef5d4d51b6f196fb7c3d9c171c7c362555.1387578655.git.yann.morin.1998@free.fr>
+Date: Fri, 20 Dec 2013 23:45:57 +0100
+Subject: [Buildroot] [PATCH] gst-plugins-good: fix typo
+ BR2_TOOLCHAIN_HAS_THREAD
+In-Reply-To: <20131220095020.565215ee@skate>
+References: <8ff8a1a8a7d5dfae8a57.1387486943@argentina>
+ <20131220095020.565215ee@skate>
+Message-ID: <20131220224557.GB3484@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Thomas, All,
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Ryan Barnett <rjbarnet@rockwellcollins.com>
----
- docs/manual/partition-layout.txt | 11 ++++++++++-
- fs/custom/custom.mk              |  3 +++
- fs/custom/fs/squashfs            | 15 +++++++++++++++
- 3 files changed, 28 insertions(+), 1 deletion(-)
- create mode 100644 fs/custom/fs/squashfs
+On 2013-12-20 09:50 +0100, Thomas Petazzoni spake thusly:
+> On Thu, 19 Dec 2013 22:02:23 +0100, Thomas De Schampheleire wrote:
+> 
+> >  comment "souphttpsrc needs a toolchain w/ wchar, threads"
+> > -	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREAD
+> > +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+> 
+> Do you know if there is a way of making kconfig complain loudly if
+> there is a reference to an undefined symbol?
 
-diff --git a/docs/manual/partition-layout.txt b/docs/manual/partition-layout.txt
-index 553f862..7b64a45 100644
---- a/docs/manual/partition-layout.txt
-+++ b/docs/manual/partition-layout.txt
-@@ -133,7 +133,8 @@ Properties for +type=fs+
- 
- * +fs_type+ (mandatory): the type of filesystem to generate
- ** +ext+: generate an extended filesystem (ext2, ext3, ext4)
--** +vfat+: generate a VFAT filesystem (FAT16, FAT32)
-+** +squashfs+: generate a squashfs (version 4) filesystem
-+** +vfat+: generate a VFAT filesystem (FAT12, FAT16 or FAT32)
- 
- * +fs_label+ (optional): the label to assign to this filesystem, if that
-   filesystem supports a label
-@@ -177,6 +178,14 @@ Properties for +fs_type=ext+
- ** +1+ (mandatory for ext3 or ext4): generate a revision 1 extended
-    filesystem
- 
-+Properties for +fs_type=squashfs+
-+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-+
-+* +squashfs_comp+ (mandatory): the compression type to use
-+** +gzip+, +xz+, +lzo+: gzip, xz or lzo compression
-+
-+* +squashfs_block+ (optional): the size of blocks, in bytes
-+
- Properties for +fs_type=vfat+
- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- 
-diff --git a/fs/custom/custom.mk b/fs/custom/custom.mk
-index 63c1f23..158e886 100644
---- a/fs/custom/custom.mk
-+++ b/fs/custom/custom.mk
-@@ -34,5 +34,8 @@ endif
- ifeq ($(BR2_PACKAGE_HOST_PARTED),y)
- ROOTFS_CUSTOM_DEPENDENCIES += host-parted
- endif
-+ifeq ($(BR2_PACKAGE_HOST_SQUASHFS),y)
-+ROOTFS_CUSTOM_DEPENDENCIES += host-squashfs
-+endif
- 
- $(eval $(call ROOTFS_TARGET,custom))
-diff --git a/fs/custom/fs/squashfs b/fs/custom/fs/squashfs
-new file mode 100644
-index 0000000..ba3646e
---- /dev/null
-+++ b/fs/custom/fs/squashfs
-@@ -0,0 +1,15 @@
-+# Create a squashfs filesystem
-+
-+do_image() {
-+    local root_dir="${1}"
-+    local img="${2}"
-+    local -a fs_opts
-+
-+    fs_opts+=( -no-progress -noappend )
-+    [ -z "${squashfs_comp}"  ] || fs_opts+=( -comp "${squashfs_comp}" )
-+    [ -z "${squashfs_block}" ] || fs_opts+=( -b ${squahsfs_block} )
-+
-+    mksquashfs "${root_dir}" "${img}" "${fs_opts[@]}" >/dev/null
-+}
-+
-+# vim: ft=sh
+No, this is not even a warning.
+
+When Kconfig parsess a 'depends on' line, if the symbol does not exist
+yet, it is added to the list of symbols, in case it is defined later on.
+
+But then there is no way to know if a symbol was added because there was
+a corresponding 'config' (or 'menuconfig' or 'choice') entry in any of
+the Config.in files, or because it was added due to it being listed in a
+'depends on' (or a 'select').
+
+We can't even rely on the symbol having no type, since it is valid for a
+symbol to have no type (can't recall off-the-top-of-my-head what case it
+was, but it is valid in the Kconfig grammar).
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.8.1.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
