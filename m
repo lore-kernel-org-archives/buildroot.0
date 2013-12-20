@@ -1,57 +1,61 @@
-From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-Date: Fri, 20 Dec 2013 15:20:23 +0100
-Subject: [Buildroot] [PATCHv2] bluez-utils: Add GATT support
-Message-ID: <1387549223-18285-1-git-send-email-alexandre.belloni@free-electrons.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Fri, 20 Dec 2013 15:36:56 +0100
+Subject: [Buildroot] [PATCH v10 0/8] Add support for top-level parallel
+	make
+In-Reply-To: <52B32DF1.2010702@mind.be>
+References: <1387363007-19846-1-git-send-email-fabio.porcedda@gmail.com>
+ <52B32DF1.2010702@mind.be>
+Message-ID: <CAHkwnC9J_4GOPSLtP2KWLD9YipFV+hVadXc_RrkjvNoYQ2oJew@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This allows to compile gatttool which can help use Bluetooth Low Energy
-devices.
+On Thu, Dec 19, 2013 at 6:33 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 18/12/13 11:36, Fabio Porcedda wrote:
+>>
+>> this is a patch set for adding support for top-level parallel make in
+>> buildroot, the common problem scattered in buildroot's top-level
+>> makefiles is that in the rules it relies on the order of evaluation of
+>> the prerequisites, to be able to use top-level parallel make instead
+>> of reling on the left to right ordering of evaluation of the
+>> prerequisites we must add an explicit rule to describe the
+>> dependencies.
+>>
+>> With this patch set the top-level parallel make seems to works fine,
+>> example:
+>>         make clean
+>>         make BR2_JLEVEL= -j$((`getconf _NPROCESSORS_ONLN` + 1))
+>
+>
+>  Would it be possible to disable BR2_JLEVEL automatically when -j appears on
+> the command line?
 
-Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
----
- package/bluez_utils/Config.in      | 7 +++++++
- package/bluez_utils/bluez_utils.mk | 7 +++++++
- 2 files changed, 14 insertions(+)
+It would be great but i don't know i way to check if the -j options is
+being used.
 
-diff --git a/package/bluez_utils/Config.in b/package/bluez_utils/Config.in
-index e08e9be2db95..1315b9ef4166 100644
---- a/package/bluez_utils/Config.in
-+++ b/package/bluez_utils/Config.in
-@@ -36,6 +36,13 @@ config BR2_PACKAGE_BLUEZ_UTILS_USB
- 	help
- 	  USB support
- 
-+config BR2_PACKAGE_BLUEZ_UTILS_GATT
-+	bool "GATT support"
-+	select BR2_PACKAGE_READLINE
-+	help
-+	  Generic Attribute Profile (GATT) support. This provides profile
-+	  discovery and description services for Bluetooth Low Energy.
-+	  This will install the gatttool utility.
- endif
- 
- comment "bluez-utils needs a toolchain w/ wchar, threads"
-diff --git a/package/bluez_utils/bluez_utils.mk b/package/bluez_utils/bluez_utils.mk
-index 7038638a0748..4da2e6435c40 100644
---- a/package/bluez_utils/bluez_utils.mk
-+++ b/package/bluez_utils/bluez_utils.mk
-@@ -37,6 +37,13 @@ BLUEZ_UTILS_CONF_OPT +=	\
- 	--disable-audio
- endif
- 
-+ifeq ($(BR2_PACKAGE_BLUEZ_UTILS_GATT),y)
-+BLUEZ_UTILS_DEPENDENCIES += readline
-+BLUEZ_UTILS_CONF_OPT += --enable-gatt
-+else
-+BLUEZ_UTILS_CONF_OPT += --disable-gatt
-+endif
-+
- # USB support
- ifeq ($(BR2_PACKAGE_BLUEZ_UTILS_USB),y)
- BLUEZ_UTILS_DEPENDENCIES += libusb
+>
+>>
+>> Before to try it remeber to remove the ".NOTPARALLEL" line.
+>>
+>> On my quad core system the building time for qemu_x86_defconfig
+>> is 14m versus 11m and with ccache enabled 7m vs 5m.
+>
+>
+>  These are not very relevant benchmarks because there's not a lot that can
+> be done in parallel there. It would be much more interesting with an
+> allpackageyesconfig (which you'll have to modify by hand BTW to exclude some
+> packages that don't build...).
+
+You are right, i've already tried to do that but disabling all the
+falling packages takes time,
+i will try do that again.
+
+It would be best if at least in the default configuration all the
+packages build fine.
+The autobuild does not try to test allpackageyesconfig, does it?
+
+Best regards
 -- 
-1.8.3.2
+Fabio Porcedda
