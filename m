@@ -1,35 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Dec 2013 09:50:20 +0100
-Subject: [Buildroot] [PATCH] gst-plugins-good: fix typo
- BR2_TOOLCHAIN_HAS_THREAD
-In-Reply-To: <8ff8a1a8a7d5dfae8a57.1387486943@argentina>
-References: <8ff8a1a8a7d5dfae8a57.1387486943@argentina>
-Message-ID: <20131220095020.565215ee@skate>
+Date: Fri, 20 Dec 2013 10:31:43 +0100
+Subject: [Buildroot] [pull request] Pull request for branch yem/providers
+In-Reply-To: <cover.1387495624.git.yann.morin.1998@free.fr>
+References: <cover.1387495624.git.yann.morin.1998@free.fr>
+Message-ID: <20131220103143.53d1434e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+Dear Yann E. MORIN,
 
-On Thu, 19 Dec 2013 22:02:23 +0100, Thomas De Schampheleire wrote:
+On Fri, 20 Dec 2013 00:43:23 +0100, Yann E. MORIN wrote:
 
->  comment "souphttpsrc needs a toolchain w/ wchar, threads"
-> -	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREAD
-> +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+> This series is a third attempt at trying to fix the BR2_EXTERNAL issue,
+> in that packages in BR2_EXTERNAL can't be providers of an implementation
+> for a virtual package, such as libegl.
 
-Do you know if there is a way of making kconfig complain loudly if
-there is a reference to an undefined symbol?
+I must say I really like this proposal! It both makes virtual packages
+better, and solves the BR2_EXTERNAL problem without making invasive
+changes in the package infrastructure.
 
-I know of only one occurrence in Buildroot where we rely on a
-non-existing symbol: BR2_BROKEN. But we could just as well define this
-symbol to be always false.
+A few minor questions:
 
-Having such a check would help ensuring we don't make typos on symbol
-names.
+ *) Shouldn't we use 'qstrip' when doing:
 
-Thanks!
+    POWERVR_DEPENDENCIES = $(BR2_PACKAGE_PROVIDES_POWERVR)
+
+ *) The jpeg virtual package should also be converted in the same way.
+
+ *) In PATCH 1, in package/rpi-userland/Config.in, you're adding an if
+    BR2_PACKAGE_RPI_USERLAND ... endif block, but *before* the comment
+    related to the toolchain dependencies of rpi-userland. I never
+    remember if that is the situation causing indentation problem of the
+    comment in menuconfig or not. Would be good to check this.
+
+Thanks for doing this!
 
 Thomas
 -- 
