@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 20 Dec 2013 23:27:56 +0100
-Subject: [Buildroot] [PATCH 4/7] package/opengl/libopenmax: switch to
-	package-defined providers
+Date: Fri, 20 Dec 2013 23:27:57 +0100
+Subject: [Buildroot] [PATCH 5/7] package/powervr: switch to package-defined
+	providers
 In-Reply-To: <cover.1387578401.git.yann.morin.1998@free.fr>
 References: <cover.1387578401.git.yann.morin.1998@free.fr>
-Message-ID: <e21f48f43f2a629838a0357605b79f928ca78c59.1387578401.git.yann.morin.1998@free.fr>
+Message-ID: <9ad5c0959abc44f78caa9f360442c60c14ff6e02.1387578401.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -22,88 +22,51 @@ Cc: Arnout Vandecappelle <arnout@mind.be>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Peter Korsgaard <jacmet@uclibc.org>
 ---
- package/bellagio/Config.in              | 7 +++++++
- package/opengl/Config.in                | 4 +---
- package/opengl/libopenmax/Config.in     | 6 ++++++
- package/opengl/libopenmax/libopenmax.mk | 9 +--------
- package/rpi-userland/Config.in          | 3 +++
- 5 files changed, 18 insertions(+), 11 deletions(-)
- create mode 100644 package/opengl/libopenmax/Config.in
+ package/powervr/Config.in  | 4 ++++
+ package/powervr/powervr.mk | 5 +----
+ package/ti-gfx/Config.in   | 3 +++
+ 3 files changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/package/bellagio/Config.in b/package/bellagio/Config.in
-index e3da432..2beb658 100644
---- a/package/bellagio/Config.in
-+++ b/package/bellagio/Config.in
-@@ -17,5 +17,12 @@ config BR2_PACKAGE_BELLAGIO
- 
- 	  http://omxil.sourceforge.net/
- 
-+if BR2_PACKAGE_BELLAGIO
+diff --git a/package/powervr/Config.in b/package/powervr/Config.in
+index d09ce74..746e15b 100644
+--- a/package/powervr/Config.in
++++ b/package/powervr/Config.in
+@@ -1,2 +1,6 @@
+ config BR2_PACKAGE_HAS_POWERVR
+ 	bool
 +
-+config BR2_PACKAGE_PROVIDES_OPENMAX
-+	default "bellagio"
-+
-+endif
-+
- comment "bellagio needs a toolchain w/ C++, threads, dynamic library"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || BR2_PREFER_STATIC_LIB
-diff --git a/package/opengl/Config.in b/package/opengl/Config.in
-index 109cde8..ed81835 100644
---- a/package/opengl/Config.in
-+++ b/package/opengl/Config.in
-@@ -1,6 +1,4 @@
- source "package/opengl/libegl/Config.in"
- source "package/opengl/libgles/Config.in"
- source "package/opengl/libopenvg/Config.in"
--
--config BR2_PACKAGE_HAS_OPENMAX
--	bool
-+source "package/opengl/libopenmax/Config.in"
-diff --git a/package/opengl/libopenmax/Config.in b/package/opengl/libopenmax/Config.in
-new file mode 100644
-index 0000000..105c53e
---- /dev/null
-+++ b/package/opengl/libopenmax/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_HAS_OPENMAX
-+	bool
-+
-+config BR2_PACKAGE_PROVIDES_OPENMAX
-+	depends on BR2_PACKAGE_HAS_OPENMAX
++config BR2_PACKAGE_PROVIDES_POWERVR
++	depends on BR2_PACKAGE_HAS_POWERVR
 +	string
-diff --git a/package/opengl/libopenmax/libopenmax.mk b/package/opengl/libopenmax/libopenmax.mk
-index 9e6f89a..c4f1f71 100644
---- a/package/opengl/libopenmax/libopenmax.mk
-+++ b/package/opengl/libopenmax/libopenmax.mk
-@@ -5,14 +5,7 @@
+diff --git a/package/powervr/powervr.mk b/package/powervr/powervr.mk
+index 83392fd..1f43505 100644
+--- a/package/powervr/powervr.mk
++++ b/package/powervr/powervr.mk
+@@ -5,10 +5,7 @@
  ################################################################################
  
- LIBOPENMAX_SOURCE =
+ POWERVR_SOURCE =
 -
--ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
--LIBOPENMAX_DEPENDENCIES += rpi-userland
+-ifeq ($(BR2_PACKAGE_TI_GFX),y)
+-POWERVR_DEPENDENCIES += ti-gfx
 -endif
--
--ifeq ($(BR2_PACKAGE_BELLAGIO),y)
--LIBOPENMAX_DEPENDENCIES += bellagio
--endif
-+LIBOPENMAX_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_OPENMAX))
++POWERVR_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_POWERVR))
  
- ifeq ($(LIBOPENMAX_DEPENDENCIES),)
- define LIBOPENMAX_CONFIGURE_CMDS
-diff --git a/package/rpi-userland/Config.in b/package/rpi-userland/Config.in
-index 271c71d..2303942 100644
---- a/package/rpi-userland/Config.in
-+++ b/package/rpi-userland/Config.in
-@@ -28,6 +28,9 @@ config BR2_PACKAGE_PROVIDES_OPENGL_ES
- config BR2_PACKAGE_PROVIDES_OPENVG
- 	default "rpi-userland"
+ ifeq ($(POWERVR_DEPENDENCIES),)
+ define POWERVR_CONFIGURE_CMDS
+diff --git a/package/ti-gfx/Config.in b/package/ti-gfx/Config.in
+index 929247b..f455f4c 100644
+--- a/package/ti-gfx/Config.in
++++ b/package/ti-gfx/Config.in
+@@ -17,6 +17,9 @@ config BR2_PACKAGE_PROVIDES_OPENGL_EGL
+ config BR2_PACKAGE_PROVIDES_OPENGL_ES
+ 	default "ti-gfx"
  
-+config BR2_PACKAGE_PROVIDES_OPENMAX
-+	default "rpi-userland"
++config BR2_PACKAGE_PROVIDES_POWERVR
++	default "ti-gfx"
 +
- endif
- 
- comment "rpi-userland needs a toolchain w/ C++, largefile, threads"
+ config BR2_PACKAGE_TI_GFX_DEBUG
+ 	bool "enable debug support"
+ 	help
 -- 
 1.8.1.2
