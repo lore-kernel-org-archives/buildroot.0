@@ -1,58 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Dec 2013 10:54:24 +0100
-Subject: [Buildroot] [PATCH] bluez-utils: Add GATT support
-In-Reply-To: <1387481306-25377-1-git-send-email-alexandre.belloni@free-electrons.com>
-References: <1387481306-25377-1-git-send-email-alexandre.belloni@free-electrons.com>
-Message-ID: <20131220105424.19575f8a@skate>
+Date: Fri, 20 Dec 2013 10:57:15 +0100
+Subject: [Buildroot] [PATCH 2/3] qt5: version bump
+In-Reply-To: <87a9fwonur.fsf@dell.be.48ers.dk>
+References: <1387288651-47952-1-git-send-email-Vincent.Riera@imgtec.com>
+ <1387288651-47952-2-git-send-email-Vincent.Riera@imgtec.com>
+ <87a9fwonur.fsf@dell.be.48ers.dk>
+Message-ID: <20131220105715.4efa4168@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexandre Belloni,
+Dear Peter Korsgaard,
 
-On Thu, 19 Dec 2013 20:28:26 +0100, Alexandre Belloni wrote:
+On Thu, 19 Dec 2013 16:35:24 +0100, Peter Korsgaard wrote:
+> >>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+> 
+>  > -bump version to 5.2.0
+>  > -remove unneeded patches
+>  > -remove invalid configure options
+> 
+>  > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+>  > ---
+>  >  package/qt5/qt5.mk                                 |    4 +-
+>  >  ...-Add-egl-cflags-when-opengles2-is-enabled.patch |   32 ----
+>  >  .../qt5/qt5base/qt5base-0003-uclibc-no-lfs.patch   |   36 -----
+> 
+> This patch is still needed.
+> 
+>  >  package/qt5/qt5base/qt5base-0008-qatomic-ppc.patch |   29 ----
+> 
+> And so is this.
 
-> +config BR2_PACKAGE_BLUEZ_UTILS_GATT
-> +	bool "GATT support"
+IMO, this is a good reason, for package bumps, to *require* in the
+commit log some details about how patches are updated: why some patches
+are removed, some others added, and the others updated. By requiring
+this, we will really encourage people to think about the patches, and
+provide a justification as to why an existing patch is no longer needed.
 
-You need to select BR2_PACKAGE_READLINE here.
-
-> +	help
-> +	  GATT support
-
-Maybe it would be nice to say a few words about what GATT is here,
-since it's not immediately clear what it is.
-
->  endif
->  
->  comment "bluez-utils needs a toolchain w/ wchar, threads"
-> diff --git a/package/bluez_utils/bluez_utils.mk b/package/bluez_utils/bluez_utils.mk
-> index 7038638a0748..f6484ae723af 100644
-> --- a/package/bluez_utils/bluez_utils.mk
-> +++ b/package/bluez_utils/bluez_utils.mk
-> @@ -37,6 +37,13 @@ BLUEZ_UTILS_CONF_OPT +=	\
->  	--disable-audio
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_BLUEZ_UTILS_GATT),y)
-> +BLUEZ_UTILS_DEPENDENCIES +=	readline
-> +BLUEZ_UTILS_CONF_OPT +=	--enable-gatt
-> +else
-> +BLUEZ_UTILS_CONF_OPT +=	--disable-gatt
-> +endif
-
-Please use spaces after the += operator, and not tabs.
-
-feq ($(BR2_PACKAGE_BLUEZ_UTILS_GATT),y)
-BLUEZ_UTILS_DEPENDENCIES += readline
-BLUEZ_UTILS_CONF_OPT += --enable-gatt
-else
-BLUEZ_UTILS_CONF_OPT += --disable-gatt
-endif
-
-Thanks!
+Best regards,
 
 Thomas
 -- 
