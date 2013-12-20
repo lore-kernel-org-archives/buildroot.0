@@ -1,39 +1,66 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 20 Dec 2013 16:46:54 +0100
-Subject: [Buildroot] [PATCH v10 0/8] Add support for top-level parallel
-	make
-In-Reply-To: <20131220163423.4574d257@skate>
-References: <1387363007-19846-1-git-send-email-fabio.porcedda@gmail.com>	<52B32DF1.2010702@mind.be>	<CAHkwnC9J_4GOPSLtP2KWLD9YipFV+hVadXc_RrkjvNoYQ2oJew@mail.gmail.com>
- <20131220163423.4574d257@skate>
-Message-ID: <52B4666E.5080207@mind.be>
+Date: Fri, 20 Dec 2013 16:48:24 +0100
+Subject: [Buildroot] [PATCH v10 8/8] Makefile: update comment about
+ top-level parallel Makefile
+In-Reply-To: <CAHkwnC8fQE+XVB_1EixH2ZXX=bxO=+DZ68yH4e6oLTm1NTedEA@mail.gmail.com>
+References: <1387363007-19846-1-git-send-email-fabio.porcedda@gmail.com>
+ <1387363007-19846-9-git-send-email-fabio.porcedda@gmail.com>
+ <52B32EBD.3000202@mind.be>
+ <CAHkwnC8fQE+XVB_1EixH2ZXX=bxO=+DZ68yH4e6oLTm1NTedEA@mail.gmail.com>
+Message-ID: <52B466C8.2000200@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 20/12/13 16:34, Thomas Petazzoni wrote:
-> Dear Fabio Porcedda,
+On 20/12/13 14:56, Fabio Porcedda wrote:
+> On Thu, Dec 19, 2013 at 6:37 PM, Arnout Vandecappelle<arnout@mind.be>  wrote:
+>> >On 18/12/13 11:36, Fabio Porcedda wrote:
+>>> >>
+>>> >>After the latest patches top-level parallel Makefile is working but
+>>> >>there is still an issue when a package has an unspecified optional
+>>> >>dependency so change the comment to explain that.
+>>> >>
+>>> >>Signed-off-by: Fabio Porcedda<fabio.porcedda@gmail.com>
+>>> >>---
+>>> >>   Makefile | 15 ++++++++++++++-
+>>> >>   1 file changed, 14 insertions(+), 1 deletion(-)
+>>> >>
+>>> >>diff --git a/Makefile b/Makefile
+>>> >>index ef2582e..27a6a65 100644
+>>> >>--- a/Makefile
+>>> >>+++ b/Makefile
+>>> >>@@ -42,7 +42,20 @@ export HOSTARCH := $(shell uname -m | \
+>>> >>             -e s/macppc/powerpc/\
+>>> >>             -e s/sh.*/sh/)
+>>> >>
+>>> >>-# This top-level Makefile can*not*  be executed in parallel
+>>> >>+# Parallel execution of this Makefile is disabled because it could
+>>> >>+# change the build result if a package has an unspecified optional
+>>> >>+# dependency.
+>> >
+>> >
+>> >  ... or if two packages manipulate the same file in the target directory.
+> Ok, added.
 >
-> On Fri, 20 Dec 2013 15:36:56 +0100, Fabio Porcedda wrote:
+>> >
+>>> >>+# Parallel execution changes the packages building order, that can be
+>>> >>+# a problem when a package has an unspecified optional dependency,
+>>> >>+# because if that dependency is present when the package is built, it
+>>> >>+# is used, otherwise it isn't (but compilation happily proceeds). This
+>> >
+>> >
+>> >  This is a repeat of the first sentence.
+> So i just remove it?
 >
->> The autobuild does not try to test allpackageyesconfig, does it?
->
-> But, the autobuild is not designed for that. However, an
-> allyespackageconfig configuration is something we could add to the
-> Jenkins if you want.
 
-  If you do that, expect it to fail :-)
-
-  It will certainly fail if you include a kernel in that config: some 
-packages (Xenomai, rtnet, some modules) only work with certain kernel 
-versions and AFAIK there is no single kernel that works for all these 
-packages.
-
-  Not building a kernel excludes many packages so may give you more luck.
+  Probably better to remove the first sentence, the second one is more 
+descriptive.
 
   Regards,
   Arnout
+
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
