@@ -1,42 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 21 Dec 2013 14:18:39 +0100
-Subject: [Buildroot] [git commit] linux-headers: bump 3.{4, 10,
-	12}.x stable versions
-Message-ID: <20131221131903.90FB79C14E@busybox.osuosl.org>
+Date: Sat, 21 Dec 2013 14:18:50 +0100
+Subject: [Buildroot] [git commit] linux: bump to version 3.12.6
+Message-ID: <20131221131903.9A0D89C124@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ee7291d03b36243255a0e86190f18c1e929ad00c
+commit: http://git.buildroot.net/buildroot/commit/?id=a95dc1fdb9b9be93dc5f2b293995d74fac5bf65b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ linux/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 2b040cd..30f9158 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -83,14 +83,14 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
- 	default "3.2.53"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
--	default "3.4.74"	if BR2_KERNEL_HEADERS_3_4
-+	default "3.4.75"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
- 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
- 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
- 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
- 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
--	default "3.10.24"	if BR2_KERNEL_HEADERS_3_10
-+	default "3.10.25"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
--	default "3.12.5"	if BR2_KERNEL_HEADERS_3_12
-+	default "3.12.6"	if BR2_KERNEL_HEADERS_3_12
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/linux/Config.in b/linux/Config.in
+index 9e05517..cfb74d4 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -21,7 +21,7 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "3.12.5"
++	bool "3.12.6"
+ 
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -87,7 +87,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "3.12.5" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "3.12.6" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
