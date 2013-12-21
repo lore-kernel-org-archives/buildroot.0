@@ -1,41 +1,22 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 21 Dec 2013 14:18:50 +0100
-Subject: [Buildroot] [git commit] linux: bump to version 3.12.6
-Message-ID: <20131221131903.9A0D89C124@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 21 Dec 2013 14:19:07 +0100
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{4, 10,
+	12}.x stable versions
+In-Reply-To: <1387586046-29383-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 20 Dec 2013 21:34:05 -0300")
+References: <1387586046-29383-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87txe2ibp0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a95dc1fdb9b9be93dc5f2b293995d74fac5bf65b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 9e05517..cfb74d4 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.12.5"
-+	bool "3.12.6"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -87,7 +87,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.12.5" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.12.6" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+Committed both, thanks.
+
+-- 
+Bye, Peter Korsgaard
