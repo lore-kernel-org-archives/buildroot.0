@@ -1,53 +1,42 @@
-From: Wojciech Zabolotny <wzab01@gmail.com>
-Date: Sat, 21 Dec 2013 14:15:44 +0100
-Subject: [Buildroot] How to create the package from software using
-	"bootstrap" to configure?
-Message-ID: <CAMduVEcRz63T4e5Fa_4iDm-H9e9RuOWkDMNTXAHe6VtZsLXhtg@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 21 Dec 2013 14:18:39 +0100
+Subject: [Buildroot] [git commit] linux-headers: bump 3.{4, 10,
+	12}.x stable versions
+Message-ID: <20131221131903.90FB79C14E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+commit: http://git.buildroot.net/buildroot/commit/?id=ee7291d03b36243255a0e86190f18c1e929ad00c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I want to add the avrdude (extended with the linuxspi programmer) to
-the buildroot.
-The sources generally seem to be autotools-package compatible, but unfortunately
-it is necessary to run the "bootstrap" script, before the ./configure.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/linux-headers/Config.in.host |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-I tried to create the avrdude.mk file as:
-
-AVRDUDE_VERSION = eabe067c4527bc2eedc5db9288ef5cf1818ec720
-AVRDUDE_SITE = http://github.com/kcuzner/avrdude/tarball/$(AVRDUDE_VERSION)
-AVRDUDE_LICENSE = GPLv2
-AVRDUDE_INSTALL_TARGET = YES
-AVRDUDE_AURORECONF = YES
-
-
-define AVRDUDE_CONFIGURE_CMDS
-        (cd $(@D)/avrdude; \
-                ./bootstrap --prefix=$(TARGET_DIR)/usr
---parallel=$(PARALLEL_JOBS) ;\
-                ./configure --prefix=$(TARGET_DIR)/usr \
-        )
-endef
-
-define AVRDUDE_BUILD_CMDS
-        $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/avrdude
-endef
-
-define AVRDUDE_INSTALL_TARGET_CMDS
-        $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/avrdude install
-endef
-
-$(eval $(generic-package))
-
-but it leads to compilation of binaries for my host CPU, not for the target.
-What is the proper way to port such packages to  the buildroot.
-
--- 
-Wojciech M. Zabo?otny
-My GPG/PGP keys:
-standard: B191 ACF0 7909 83FA 3F9B  450C 407E 3C4B 4569 D119
-confidential: 2BF3 F90F 6EA8 7D35 59FD  5080 78ED 33DE 1312 D8F8
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 2b040cd..30f9158 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -83,14 +83,14 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+ 	default "3.2.53"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.74"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.75"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
+ 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
+ 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
+ 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
+ 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
+-	default "3.10.24"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.25"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+-	default "3.12.5"	if BR2_KERNEL_HEADERS_3_12
++	default "3.12.6"	if BR2_KERNEL_HEADERS_3_12
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
