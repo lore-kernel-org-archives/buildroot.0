@@ -1,50 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 20 Dec 2013 23:45:57 +0100
-Subject: [Buildroot] [PATCH] gst-plugins-good: fix typo
- BR2_TOOLCHAIN_HAS_THREAD
-In-Reply-To: <20131220095020.565215ee@skate>
-References: <8ff8a1a8a7d5dfae8a57.1387486943@argentina>
- <20131220095020.565215ee@skate>
-Message-ID: <20131220224557.GB3484@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 20 Dec 2013 21:34:05 -0300
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{4, 10,
+	12}.x stable versions
+Message-ID: <1387586046-29383-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-On 2013-12-20 09:50 +0100, Thomas Petazzoni spake thusly:
-> On Thu, 19 Dec 2013 22:02:23 +0100, Thomas De Schampheleire wrote:
-> 
-> >  comment "souphttpsrc needs a toolchain w/ wchar, threads"
-> > -	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREAD
-> > +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-> 
-> Do you know if there is a way of making kconfig complain loudly if
-> there is a reference to an undefined symbol?
-
-No, this is not even a warning.
-
-When Kconfig parsess a 'depends on' line, if the symbol does not exist
-yet, it is added to the list of symbols, in case it is defined later on.
-
-But then there is no way to know if a symbol was added because there was
-a corresponding 'config' (or 'menuconfig' or 'choice') entry in any of
-the Config.in files, or because it was added due to it being listed in a
-'depends on' (or a 'select').
-
-We can't even rely on the symbol having no type, since it is valid for a
-symbol to have no type (can't recall off-the-top-of-my-head what case it
-was, but it is valid in the Kconfig grammar).
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 2b040cd..30f9158 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -83,14 +83,14 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+ 	default "3.2.53"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.74"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.75"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
+ 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
+ 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
+ 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
+ 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
+-	default "3.10.24"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.25"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+-	default "3.12.5"	if BR2_KERNEL_HEADERS_3_12
++	default "3.12.6"	if BR2_KERNEL_HEADERS_3_12
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.3.2
