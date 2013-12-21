@@ -1,81 +1,48 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 21 Dec 2013 18:35:15 +0100
-Subject: [Buildroot] [pull request] Pull request for branch yem/providers
-In-Reply-To: <20131220104904.7cb29c07@skate>
-References: <cover.1387495624.git.yann.morin.1998@free.fr>
- <20131220103143.53d1434e@skate>
- <201312201043.01660.yann.morin.1998@free.fr>
- <20131220104904.7cb29c07@skate>
-Message-ID: <20131221173515.GC3481@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 21 Dec 2013 18:50:12 +0100
+Subject: [Buildroot] [PATCH 1/4] fs/custom: generate complete,
+ partition-based device images
+In-Reply-To: <8738lmgnsu.fsf@dell.be.48ers.dk>
+References: <cover.1387578655.git.yann.morin.1998@free.fr>
+ <64a7e3a995100104cdebd681621a9abb510a1820.1387578655.git.yann.morin.1998@free.fr>
+ <20131221094905.2641a84f@skate> <8738lmgnsu.fsf@dell.be.48ers.dk>
+Message-ID: <20131221185012.11155842@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Dear Peter Korsgaard,
 
-On 2013-12-20 10:49 +0100, Thomas Petazzoni spake thusly:
-> On Fri, 20 Dec 2013 10:43:01 +0100, Yann E. MORIN wrote:
-> > > I must say I really like this proposal! It both makes virtual packages
-> > > better, and solves the BR2_EXTERNAL problem without making invasive
-> > > changes in the package infrastructure.
-> > 
-> > Note that I still intend to work on the post-pone patch, as this would
-> > allow more integration of BR2_EXTERNAL.
+On Sat, 21 Dec 2013 17:40:33 +0100, Peter Korsgaard wrote:
+
+>  > The --show-depends option of genimages would, instead of doing the
+>  > normal genimages work, simply parse the .ini file, and return a
+>  > space separated list of dependencies needed by the ROOTFS_CUSTOM
+>  > stuff. Not only this would make the dependencies automatic for the
+>  > user, but also it would allow you to remove the following piece of
+>  > code from the custom.mk file:
 > 
-> Like what?
+> Sounds good to me. They won't actumatically get selected in kconfig
+> though, but that might not be such a big deal (do they still even need
+> to be visible in kconfig?)
 
-I just have to clear a case where a new external package enables a
-feature for a built-in package. So, br2-external could provide extra
-./configure options for a built-in package.
+I believe we have existing occurrences of host packages being listed in
+some <pkg>_DEPENDENCIES, but not necessarily selected at the Kconfig
+level. While we have enforced this not to happen for target packages,
+we've never enforced that for host packages.
 
-But that has deep implications, especially if Buildroot is then
-distributed as part of a compliance effort: only providing Buildroot and
-not br2-external would not be compliant.
+The rationale is that host packages should normally be completely
+transparent to the user, and therefore not visible in Kconfig. The host
+package sub-menu is here only to make it easier for the user to enable
+*some* of the host packages that are actually relevant for the user
+(and not merely build dependencies of other packages).
 
-So, in fact, I don't think we should make that easy.
+Best regards,
 
-> > > A few minor questions:
-> > > 
-> > >  *) Shouldn't we use 'qstrip' when doing:
-> > > 
-> > >     POWERVR_DEPENDENCIES = $(BR2_PACKAGE_PROVIDES_POWERVR)
-
-OK, I've fixed that now.
-
-> > >  *) The jpeg virtual package should also be converted in the same way.
-> Don't know about cryptodev,
-
-cryptodev is like jpeg: it provides a choice.
-
-> but jpeg is really a virtual package,
-
-I've now converted both of them, too.
-
-> but
-> it's true that it is handled in a different way than the OpenGL
-> packages, in that jpeg/Config.in provides a choice between the
-> different providers. Not sure what we want to do here. Maybe nothing, I
-> don't know.
-
-I think we should just convert them over to how other virtual packages
-are implemented: there is nothing to prevent, eg. rpi-userland and
-ti-gfx (both providers of EGL) to be selected at the same time.
-
-OK, those are a bit special, since they are tied to the hardware, when
-neither jpeg nor cryptodev are. But still, I think we should have a
-single way of doing virtual packages.
-
-Peter, what's your opinion?
-
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
