@@ -1,34 +1,30 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 22 Dec 2013 12:09:31 +0100
-Subject: [Buildroot] [git commit] libpng: security bump to version 1.6.8
-Message-ID: <20131222111000.F11A59C125@busybox.osuosl.org>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sun, 22 Dec 2013 12:51:52 +0100
+Subject: [Buildroot] [PATCH] cmake: bump to version 2.8.12.1
+Message-ID: <1387713112-23429-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6b5fd46de3bb4f646b32e560d491d3c84b353bc5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes CVE-2013-6954.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
- package/libpng/libpng.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/cmake/cmake.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
-index 5ce828e..f8b4d98 100644
---- a/package/libpng/libpng.mk
-+++ b/package/libpng/libpng.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index 4594101..9913a82 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBPNG_VERSION = 1.6.6
-+LIBPNG_VERSION = 1.6.8
- LIBPNG_SERIES = 16
- LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
- LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng${LIBPNG_SERIES}/$(LIBPNG_VERSION)
+ CMAKE_VERSION_MAJOR = 2.8
+-CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).10.2
++CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).12.1
+ CMAKE_SITE = http://www.cmake.org/files/v$(CMAKE_VERSION_MAJOR)/
+ CMAKE_LICENSE = BSD-3c
+ CMAKE_LICENSE_FILES = Copyright.txt
+-- 
+1.8.5.1
