@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Dec 2013 18:26:52 +0100
-Subject: [Buildroot] [pkg-luarocks infra V4 04/10] lua*: restore version
- in module paths
-In-Reply-To: <1384520859-3189-4-git-send-email-francois.perrad@gadz.org>
+Date: Sun, 22 Dec 2013 18:28:58 +0100
+Subject: [Buildroot] [pkg-luarocks infra V4 05/10] luarocks: new package
+In-Reply-To: <1384520859-3189-5-git-send-email-francois.perrad@gadz.org>
 References: <1384520859-3189-1-git-send-email-francois.perrad@gadz.org>
- <1384520859-3189-4-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20131222182652.63afbf2e@skate>
+ <1384520859-3189-5-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20131222182858.1709cbc3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,40 +13,137 @@ To: buildroot@busybox.net
 
 Dear Francois Perrad,
 
-On Fri, 15 Nov 2013 14:07:33 +0100, Francois Perrad wrote:
-> (like in upstream)
+On Fri, 15 Nov 2013 14:07:34 +0100, Francois Perrad wrote:
 > 
 > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 > ---
->  package/cgilua/cgilua.mk                         |    6 +++---
->  package/copas/copas.mk                           |    4 ++--
->  package/coxpcall/coxpcall.mk                     |    4 ++--
->  package/lbase64/lbase64.mk                       |    4 ++--
->  package/lua-ev/lua-ev.mk                         |    2 +-
->  package/lua-msgpack-native/lua-msgpack-native.mk |    4 ++--
->  package/lua/lua-01-root-path.patch               |   21 ++++-----------------
->  package/luabitop/luabitop.mk                     |    5 ++---
->  package/luacjson/luacjson.mk                     |    4 ++--
->  package/luaexpat/luaexpat.mk                     |   10 +++++-----
->  package/luaexpatutils/luaexpatutils.mk           |    4 ++--
->  package/luafilesystem/luafilesystem.mk           |    4 ++--
->  package/luajit/luajit-01-root-path.patch         |   22 ----------------------
->  package/luaposix/luaposix.mk                     |    2 +-
->  package/luasec/luasec.mk                         |   12 +++++-------
->  package/luasocket/luasocket.mk                   |   16 ++++++++--------
->  package/luasql/luasql.mk                         |    7 +++----
->  package/orbit/orbit.mk                           |    2 +-
->  package/rings/rings.mk                           |    7 +++----
->  package/wsapi/wsapi.mk                           |    6 +++---
->  package/xavante/xavante.mk                       |   10 ++++------
->  21 files changed, 57 insertions(+), 99 deletions(-)
->  delete mode 100644 package/luajit/luajit-01-root-path.patch
+>  package/luarocks/luarocks-build-minimal.patch |   17 ++++++++++
+>  package/luarocks/luarocks-unpack.patch        |   24 ++++++++++++++
 
-Is this patch really necessary, since in the next patches you remove
-all of this code when converting the Lua packages to the Lua package
-infrastructure?
+We want patches to be numbered:
 
-Thanks!
+ luarocks-001-<foo>.patch
+ luarocks-002-<bar>.patch
+
+This guarantees that they are applied in the right order.
+
+>  package/luarocks/luarocks.mk                  |   42 +++++++++++++++++++++++++
+>  3 files changed, 83 insertions(+)
+>  create mode 100644 package/luarocks/luarocks-build-minimal.patch
+>  create mode 100644 package/luarocks/luarocks-unpack.patch
+>  create mode 100644 package/luarocks/luarocks.mk
+> 
+> diff --git a/package/luarocks/luarocks-build-minimal.patch b/package/luarocks/luarocks-build-minimal.patch
+> new file mode 100644
+> index 0000000..3a4794e
+> --- /dev/null
+> +++ b/package/luarocks/luarocks-build-minimal.patch
+> @@ -0,0 +1,17 @@
+> +hack for buildroot which needs independant steps : download, unpack, build
+> +
+> +Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> +
+> +Index: b/src/luarocks/build.lua
+> +===================================================================
+> +--- a/src/luarocks/build.lua
+> ++++ b/src/luarocks/build.lua
+> +@@ -362,6 +362,8 @@
+> + 
+> +    if flags["pack-binary-rock"] then
+> +       return pack.pack_binary_rock(name, version, do_build, name, version, deps.get_deps_mode(flags))
+> ++   elseif flags["minimal"] then
+> ++      return build_rockspec(name, false, true, "none")
+> +    else
+> +       local ok, err = fs.check_command_permissions(flags)
+> +       if not ok then return nil, err end
+> diff --git a/package/luarocks/luarocks-unpack.patch b/package/luarocks/luarocks-unpack.patch
+> new file mode 100644
+> index 0000000..0f036ee
+> --- /dev/null
+> +++ b/package/luarocks/luarocks-unpack.patch
+> @@ -0,0 +1,24 @@
+> +allows unpack in existing directory
+> +
+> +Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> +
+> +Index: b/src/luarocks/unpack.lua
+> +===================================================================
+> +--- a/src/luarocks/unpack.lua
+> ++++ b/src/luarocks/unpack.lua
+> +@@ -101,11 +101,10 @@
+> +       return nil, file.." does not seem to be a valid filename."
+> +    end
+> +    
+> +-   if (fs.exists(dir_name)) then
+> +-      return nil, "Directory "..dir_name.." already exists."
+> ++   if not fs.exists(dir_name) then
+> ++      local ok, err = fs.make_dir(dir_name)
+> ++      if not ok then return nil, err end
+> +    end
+> +-   local ok, err = fs.make_dir(dir_name)
+> +-   if not ok then return nil, err end
+> +    local rollback = util.schedule_function(fs.delete, fs.absolute_name(dir_name))
+> + 
+> +    local rockspec, err
+> +
+
+Any chance these patches make it their way upstream?
+
+> diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
+> new file mode 100644
+> index 0000000..d996ccc
+> --- /dev/null
+> +++ b/package/luarocks/luarocks.mk
+> @@ -0,0 +1,42 @@
+> +################################################################################
+> +#
+> +# luarocks
+> +#
+> +################################################################################
+> +
+> +LUAROCKS_VERSION = 2.1.1
+> +LUAROCKS_SITE = http://luarocks.org/releases/
+> +LUAROCKS_LICENSE = MIT
+> +LUAROCKS_LICENSE_FILES = COPYING
+> +
+> +HOST_LUAROCKS_DEPENDENCIES = host-lua luainterpreter
+> +
+> +LUAROCKS_CONFIG_DIR  = $(HOST_DIR)/usr/etc/luarocks
+> +LUAROCKS_CONFIG_FILE = $(LUAROCKS_CONFIG_DIR)/config-5.1.lua
+> +
+> +define HOST_LUAROCKS_CONFIGURE_CMDS
+> +	cd $(@D) && ./configure \
+> +		--prefix=$(TARGET_DIR)/usr \
+> +		--sysconfdir=$(LUAROCKS_CONFIG_DIR) \
+> +		--with-lua=$(HOST_DIR)/usr \
+> +		--with-lua-include=$(STAGING_DIR)/usr/include \
+> +		--with-lua-lib=$(STAGING_DIR)/usr/lib
+> +	@echo "$(@D)/config.unix generated"
+
+This echo is probably not needed.
+
+> +endef
+> +
+> +define HOST_LUAROCKS_INSTALL_CMDS
+> +	$(MAKE1) -C $(@D) install \
+> +		PREFIX=$(HOST_DIR)/usr
+> +	echo "-- BR cross-compilation"                          >> $(LUAROCKS_CONFIG_FILE)
+> +	echo "variables = {"                                    >> $(LUAROCKS_CONFIG_FILE)
+> +	echo "   CC = [[$(TARGET_CC)]],"                        >> $(LUAROCKS_CONFIG_FILE)
+> +	echo "   LD = [[$(TARGET_CC)]],"                        >> $(LUAROCKS_CONFIG_FILE)
+> +	echo "   CFLAGS = [[$(TARGET_CFLAGS)]],"                >> $(LUAROCKS_CONFIG_FILE)
+> +	echo "   LIBFLAG = [[-shared $(TARGET_LDFLAGS)]],"      >> $(LUAROCKS_CONFIG_FILE)
+> +	echo "}"                                                >> $(LUAROCKS_CONFIG_FILE)
+> +	echo "external_deps_dirs = { [[$(STAGING_DIR)/usr]] }"  >> $(LUAROCKS_CONFIG_FILE)
+> +	echo "gcc_rpath = false"                                >> $(LUAROCKS_CONFIG_FILE)
+> +endef
+> +
+> +$(eval $(host-generic-package))
+> +
+
+Other than that, it looks ok to me.
+
+Thanks,
 
 Thomas
 -- 
