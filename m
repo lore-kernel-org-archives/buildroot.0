@@ -1,46 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Dec 2013 18:50:07 +0100
-Subject: [Buildroot] [git commit] qt5: version bump
-In-Reply-To: <20131219153646.2EE009C0F1@busybox.osuosl.org>
-References: <20131219153646.2EE009C0F1@busybox.osuosl.org>
-Message-ID: <20131222185007.590a5af4@skate>
+Date: Sun, 22 Dec 2013 19:28:51 +0100
+Subject: [Buildroot] [PATCH 3/4] package/dvb-apps: bump version
+In-Reply-To: <8ff24edea518d291706dddec42aa360cef4176ed.1385937338.git.yann.morin.1998@free.fr>
+References: <cover.1385937338.git.yann.morin.1998@free.fr>
+ <8ff24edea518d291706dddec42aa360cef4176ed.1385937338.git.yann.morin.1998@free.fr>
+Message-ID: <20131222192851.037f3123@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Vincente,
+Dear Yann E. MORIN,
 
-On Thu, 19 Dec 2013 16:33:47 +0100, Peter Korsgaard wrote:
-> commit: http://git.buildroot.net/buildroot/commit/?id=e4a839277f7d74104e25fb4fd846f9c2bf3f9c1e
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun,  1 Dec 2013 23:36:06 +0100, Yann E. MORIN wrote:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > 
-> -bump version to 5.2.0
-> -remove unneeded patches
-> -remove invalid configure options
+> Fixes for scanning DVBS, misc compiler warnings suppressed.
 > 
-> [Peter: uclibc-no-lfs + qatomic patches still needed, new patch for uClibc]
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  package/dvb-apps/dvb-apps.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-This commit broke the build of qt5jsbackend, because it no longer
-exists in Qt 5.2 apparently. See:
+I don't know if it is happening since this bump, but there are some
+dvb-apps build failure in the autobuilders:
 
-  http://autobuild.buildroot.org/results/d39/d399c08380c1713474cc9d9822af5f396b7d2ab6/build-end.log
-  http://download.qt-project.org/official_releases/qt/5.2/5.2.0/submodules/
+  http://autobuild.buildroot.org/results/7f6/7f69d253ffcdd285ab73616c5748e46a796ebfb8/build-end.log
 
-According to
-http://blog.qt.digia.com/blog/2013/09/30/qt-5-2-alpha-available/:
+Care to have a look?
 
-"""
-The QML engine has undergone some intensive work over the last 9
-months, and the first results can be seen in Qt 5.2. Qt Qml is now
-using its own built-in Javascript engine and does not depend on V8
-anymore. As such the QtJSBackend shared library has disappeared.
-"""
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
