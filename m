@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Dec 2013 22:00:58 +0100
-Subject: [Buildroot] Patchwork oldest patches cleanup #4 (deadline
- January 5)
-In-Reply-To: <CAAXf6LWFAfs_i_NjBbD3RZ=Y0RDKftzwj-_8xKuqyYA=69PNsw@mail.gmail.com>
-References: <CAAXf6LWFAfs_i_NjBbD3RZ=Y0RDKftzwj-_8xKuqyYA=69PNsw@mail.gmail.com>
-Message-ID: <20131222210058.GH27858@free.fr>
+Date: Sun, 22 Dec 2013 22:07:59 +0100
+Subject: [Buildroot] [PATCH] python-pycrypto: ignore LICENSE.orig for
+ the moment
+In-Reply-To: <1387731898-14058-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1387731898-14058-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20131222210759.GI27858@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,18 +13,13 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On 2013-12-22 21:46 +0100, Thomas De Schampheleire spake thusly:
-> Here is the session 4 of the patchwork cleanup.
-[--SNIP--]
-> lua: remove shared library feature
-> Arnout Vandecappelle <arnout@mind.be>
-> http://patchwork.ozlabs.org/patch/197028
+On 2013-12-22 18:04 +0100, Thomas Petazzoni spake thusly:
+> LICENSE.orig gets removed from the source tree by the apply-patches.sh
+> script. Until this is fixed in apply-patches.sh, remove LICENSE.orig
+> from <pkg>_LICENSE_FILES to fix the autobuilder issues.
 
-This one is being revived as part of the LuaRocks infrastrucutre by
-Francois, which we're currently working on:
-    http://lists.busybox.net/pipermail/buildroot/2013-December/085243.html
-
-So I'll mark as 'superseded'.
+Can't we have a post-extract hook that renames that file, so we can add
+it to the legal-info?
 
 Regards,
 Yann E. MORIN.
