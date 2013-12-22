@@ -1,39 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Dec 2013 19:28:51 +0100
-Subject: [Buildroot] [PATCH 3/4] package/dvb-apps: bump version
-In-Reply-To: <8ff24edea518d291706dddec42aa360cef4176ed.1385937338.git.yann.morin.1998@free.fr>
-References: <cover.1385937338.git.yann.morin.1998@free.fr>
- <8ff24edea518d291706dddec42aa360cef4176ed.1385937338.git.yann.morin.1998@free.fr>
-Message-ID: <20131222192851.037f3123@skate>
+Date: Sun, 22 Dec 2013 19:31:28 +0100
+Subject: [Buildroot] [PATCH] binutils: do not allow on NIOS2,
+	no support available
+Message-ID: <1387737088-15963-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+binutils does not have support for NIOS2 on the target, so disable the
+selection of binutils on this architecture.
 
-On Sun,  1 Dec 2013 23:36:06 +0100, Yann E. MORIN wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> Fixes for scanning DVBS, misc compiler warnings suppressed.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  package/dvb-apps/dvb-apps.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Fixes:
 
-I don't know if it is happening since this bump, but there are some
-dvb-apps build failure in the autobuilders:
+  http://autobuild.buildroot.org/results/40d/40d9cbefd03727af82610412ed0bc47674c44dbb/build-end.log
 
-  http://autobuild.buildroot.org/results/7f6/7f69d253ffcdd285ab73616c5748e46a796ebfb8/build-end.log
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/binutils/Config.in  | 2 +-
+ package/dropwatch/Config.in | 2 +-
+ package/oprofile/Config.in  | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-Care to have a look?
-
-Thanks!
-
-Thomas
+diff --git a/package/binutils/Config.in b/package/binutils/Config.in
+index 38d519a..badea2b 100644
+--- a/package/binutils/Config.in
++++ b/package/binutils/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_BINUTILS
+ 	bool "binutils"
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+-	depends on !BR2_aarch64
++	depends on !BR2_aarch64 && !BR2_nios2
+ 	help
+ 	  Install binutils on the target
+ 
+diff --git a/package/dropwatch/Config.in b/package/dropwatch/Config.in
+index ac0cc3e..0c9aca6 100644
+--- a/package/dropwatch/Config.in
++++ b/package/dropwatch/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_DROPWATCH
+ 	bool "dropwatch"
+ 	select BR2_PACKAGE_BINUTILS
+-	depends on !BR2_aarch64 # binutils
++	depends on !BR2_aarch64 && !BR2_nios2 # binutils
+ 	select BR2_PACKAGE_READLINE
+ 	select BR2_PACKAGE_LIBNL
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnl
+diff --git a/package/oprofile/Config.in b/package/oprofile/Config.in
+index dff2a8c..2f223c0 100644
+--- a/package/oprofile/Config.in
++++ b/package/oprofile/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_OPROFILE
+ 	select BR2_PACKAGE_BINUTILS
+ 	select BR2_PACKAGE_LIBPFM4 if BR2_powerpc
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on !BR2_aarch64 # binutils
++	depends on !BR2_aarch64 && !BR2_nios2 # binutils
+ 	# libpfm4 is needed on PowerPC, and requires thread support
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS || !BR2_powerpc
+ 	help
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.3.2
