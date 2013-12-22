@@ -1,30 +1,40 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun, 22 Dec 2013 12:51:52 +0100
-Subject: [Buildroot] [PATCH] cmake: bump to version 2.8.12.1
-Message-ID: <1387713112-23429-1-git-send-email-maxime.hadjinlian@gmail.com>
+From: Axel Lin <axel.lin@ingics.com>
+Date: Sun, 22 Dec 2013 22:15:37 +0800
+Subject: [Buildroot] [PATCH] redis: bump to version 2.6.17
+Message-ID: <1387721737.8692.0.camel@phoenix>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Fixes since 2.6.16:
+* [FIX] redis-cli: fix big keys search when the key no longer exist.
+* [FIX] Allow AUTH / PING when disconnected from slave with serve-stale-data on.
+* [FIX] redis-benchmark: update help for new __rand_int__ form.
+* [FIX] Fix broken rdbWriteRaw() return value check in rdb.c (harmless).
+* [FIX] Log to what master a slave is going to connect to.
+* [FIX] Only run the fast active expire cycle if master & enabled.
+* [FIX] Fixed a replication bug involving 32 bit instances and big datasets
+        hard to compress that resulted into more than 2GB of RDB file sent.
+
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
 ---
- package/cmake/cmake.mk | 2 +-
+ package/redis/redis.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-index 4594101..9913a82 100644
---- a/package/cmake/cmake.mk
-+++ b/package/cmake/cmake.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index 6974a35..c41469e 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- CMAKE_VERSION_MAJOR = 2.8
--CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).10.2
-+CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).12.1
- CMAKE_SITE = http://www.cmake.org/files/v$(CMAKE_VERSION_MAJOR)/
- CMAKE_LICENSE = BSD-3c
- CMAKE_LICENSE_FILES = Copyright.txt
+-REDIS_VERSION = 2.6.16
++REDIS_VERSION = 2.6.17
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3c (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
 -- 
-1.8.5.1
+1.8.1.2
