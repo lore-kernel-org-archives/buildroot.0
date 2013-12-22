@@ -1,134 +1,140 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 22 Dec 2013 21:27:43 +0100
-Subject: [Buildroot] Patchwork oldest patches cleanup #3 (deadline
-	December 20)
-In-Reply-To: <CAAXf6LXDALKC9CKcOSqS3BkPaDeK34ao1D+u8NkJKLgTKe5Npg@mail.gmail.com>
-References: <CAAXf6LXUx3dERdYxq5d4mY8apxXk+Ltj_CNPm+RTM+52nKRUNA@mail.gmail.com>
- <CAAXf6LXDALKC9CKcOSqS3BkPaDeK34ao1D+u8NkJKLgTKe5Npg@mail.gmail.com>
-Message-ID: <CAAXf6LV24Qt3YS7Hz6Fx=jX6JiZ3nEPBJ9oeuQG=oSnqicTpSg@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 22 Dec 2013 21:42:15 +0100
+Subject: [Buildroot] [pull request v5] Pull request for branch yem/lua-infra
+Message-ID: <cover.1387744636.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Final overview of this cleanup session:
+Hello All!
 
-On Sat, Dec 14, 2013 at 12:52 PM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> All,
->
-[..]
->>
->> iucode-tool: new package
->> Richard Braun <rbraun@sceen.net>
->> http://patchwork.ozlabs.org/patch/185420
->
-> No feedback yet.
+This is a respin of the LuaRocks infrastrucutre by Francois Perrad,
+rebased on-top of current master, and with some changes suggested by
+Thomas, plus my own.
 
-No feedback, marking as Rejected.
+Francois, care to handle the remaining comments by Thomas, that I could
+not address (since you are more qualified to reply than I am)?
 
->
->>
->> [3/3] mplayer: Fix DVD support
->> Valentine Barshak <gvaxon@gmail.com>
->> http://patchwork.ozlabs.org/patch/187437
->>
->
-> No feedback yet.
 
-It seems a variant of this patch is already in buildroot:
-http://git.buildroot.org/buildroot/commit/?id=63fbc1834f98f37cc43514f13cb75c1034dcf454
-so I'm marking this one as Superseded.
+Changes v4 -> v5:
+  - apply some of Thomas' suggestions:
+    http://lists.busybox.net/pipermail/buildroot/2013-December/085217.html
+    and following messages
+  - rebase on-top current master  (me)
+  - change luainterpreter to a package-defined provider  (me)
 
->
->> pkg-infra: produce legal info for proprietary packages
->> Richard Braun <rbraun@sceen.net>
->> http://patchwork.ozlabs.org/patch/187775
->
-> I will try to look into this. I brought up this issue before, too.
->
->>
->> intel-microcode: new package
->> Richard Braun <rbraun@sceen.net>
->> http://patchwork.ozlabs.org/patch/187776
->
-> No feedback yet.
 
-These two patches are now Delegated to me, I will try to look into
-them (but of course others are welcome to help)
-At first sight, I think that intel-microcode could be applied almost
-as-is, because in the current legal info there is support for
-proprietary packages. Probably the exact license definition should be
-reviewed. The first patch could be rejected for the same reason (but I
-need to double-check).
+Regards,
+Yann E. MORIN.
 
->
->>
->> [1/2] Makefile: Fix target-purgelocales
->> Valentine Barshak <gvaxon@gmail.com>
->> http://patchwork.ozlabs.org/patch/188623
->>
->> [2/2] Makefile: Add /usr/lib/locale to target-purgelocales
->> Valentine Barshak <gvaxon@gmail.com>
->> http://patchwork.ozlabs.org/patch/188624
->
-> I tested these patches and provided some comments to Valentine. It
-> seems there is already something broken in buildroot locale support,
-> partially fixed by these patches, but not entirely.
 
-I think the second patch can be applied as-is. The first one seems
-correct to, but I will double-check.
-There is still a problem with aliases in buildroot locale handling,
-but this may be a separate issue.
-I marked these two patches as Delegated to me, I hope to find some
-time to looking into them (help is welcome).
+The following changes since commit 6b5fd46de3bb4f646b32e560d491d3c84b353bc5:
 
->
->>
->> rpm5
->> Alexander Khryukin <alexander@mezon.ru>
->> http://patchwork.ozlabs.org/patch/190962
->
-> No feedback yet.
->
->>
->> putty: UNIX port of the famous Telnet and SSH GUI client
->> Stefan Fr?berg <stefan.froberg@petroprogram.com>
->> http://patchwork.ozlabs.org/patch/191204
->
-> No feedback yet.
+  libpng: security bump to version 1.6.8 (2013-12-22 12:09:31 +0100)
 
-Both marked as rejected.
+are available in the git repository at:
 
->
->>
->> new pkg tor
->> dev0 <matzeton@googlemail.com>
->> http://patchwork.ozlabs.org/patch/193560
->
-> I received private feedback from 'dev0' saying that he is no longer
-> interested in this patch, so I will mark this as Rejected. However,
-> don't hesitate to adopt this patch if it is useful to you...
+  git://gitorious.org/buildroot/buildroot.git yem/lua-infra
 
-As said: Rejected.
+for you to fetch changes up to 5b7cd02db21a11fd581e9c1032a091d2bf44b3df:
 
->
->>
->> [PATCHv3] QtSerialPort: new package
->> Thiago Correa <thiago.correa@gmail.com>
->> http://patchwork.ozlabs.org/patch/195057
->
-> No feedback yet.
+  manual: adding packages luarocks (2013-12-22 21:09:46 +0100)
 
-Feedback from Thiago is that there is already support for this package
-in qt5, but not for qt4.
-The proposal was to Reject the patch (and thus ignore missing qt4
-support). I'm following this proposal.
+----------------------------------------------------------------
+Francois Perrad (10):
+      luainterpreter: create virtual package
+      luajit: allow to build Lua extensions without lua
+      lua: remove a too invasive patch
+      lua*: restore version in module paths
+      luarocks: new package
+      luarocks: new infrastructure
+      lua-cjson: restore official name
+      luasql-sqlite3: renamed like with LuaRocks
+      lua*: refactor with luarocks infrastructure
+      manual: adding packages luarocks
 
-Thanks to all who provided feedback!
+ Config.in                                          |  8 ++
+ Config.in.legacy                                   | 14 ++++
+ Makefile                                           |  1 +
+ docs/manual/adding-packages-luarocks.txt           | 93 +++++++++++++++++++++
+ docs/manual/adding-packages.txt                    |  2 +
+ package/Config.in                                  |  7 +-
+ package/Makefile.in                                |  1 +
+ package/cgilua/cgilua.mk                           |  9 +-
+ package/copas/copas.mk                             | 10 +--
+ package/coxpcall/coxpcall.mk                       |  2 +-
+ package/lbase64/Config.in                          |  1 +
+ package/lbase64/lbase64.mk                         | 20 +----
+ package/{luacjson => lua-cjson}/Config.in          |  5 +-
+ package/lua-cjson/lua-cjson.mk                     | 12 +++
+ package/lua-ev/Config.in                           |  1 +
+ package/lua-ev/lua-ev.mk                           |  4 +-
+ package/lua-msgpack-native/Config.in               |  1 +
+ package/lua-msgpack-native/lua-msgpack-native.mk   |  4 +-
+ package/lua/Config.in                              |  4 +
+ package/lua/lua-01-root-path.patch                 | 21 +----
+ package/lua/lua-03-shared-libs-for-luac.patch      | 97 ----------------------
+ package/luabitop/luabitop.mk                       | 20 ++---
+ package/luacjson/luacjson.mk                       | 27 ------
+ package/luaexpat/Config.in                         |  1 +
+ package/luaexpat/luaexpat.mk                       | 27 +-----
+ package/luaexpatutils/luaexpatutils.mk             |  2 +-
+ package/luafilesystem/Config.in                    |  1 +
+ .../luafilesystem-without_large_file.patch         |  8 +-
+ package/luafilesystem/luafilesystem.mk             | 18 +---
+ package/luainterpreter/Config.in                   |  6 ++
+ package/luainterpreter/luainterpreter.mk           | 10 +++
+ package/luajit/Config.in                           |  8 ++
+ package/luajit/luajit-01-root-path.patch           | 22 -----
+ package/luajit/luajit-05-install-inc.patch         | 17 ++++
+ package/luaposix/Config.in                         |  1 +
+ package/luaposix/luaposix.mk                       |  4 +-
+ package/luarocks/luarocks-0001-build-minimal.patch | 17 ++++
+ package/luarocks/luarocks-0002-unpack.patch        | 24 ++++++
+ package/luarocks/luarocks.mk                       | 42 ++++++++++
+ package/luasec/Config.in                           |  1 +
+ package/luasec/luasec.mk                           | 25 ++----
+ package/luasocket/Config.in                        |  1 +
+ package/luasocket/luasocket.mk                     |  6 +-
+ package/luasql-sqlite3/Config.in                   |  8 ++
+ package/luasql-sqlite3/luasql-sqlite3.mk           | 13 +++
+ package/luasql/Config.in                           | 21 -----
+ package/luasql/luasql.mk                           | 35 --------
+ package/orbit/orbit-01-fix-installation.patch      | 26 ------
+ package/orbit/orbit.mk                             | 16 ++--
+ package/pkg-luarocks.mk                            | 81 ++++++++++++++++++
+ package/rings/Config.in                            |  1 +
+ package/rings/rings.mk                             | 15 +---
+ package/wsapi/wsapi.mk                             | 11 +--
+ package/xavante/xavante.mk                         | 11 +--
+ 54 files changed, 432 insertions(+), 411 deletions(-)
+ create mode 100644 docs/manual/adding-packages-luarocks.txt
+ rename package/{luacjson => lua-cjson}/Config.in (82%)
+ create mode 100644 package/lua-cjson/lua-cjson.mk
+ delete mode 100644 package/lua/lua-03-shared-libs-for-luac.patch
+ delete mode 100644 package/luacjson/luacjson.mk
+ create mode 100644 package/luainterpreter/Config.in
+ create mode 100644 package/luainterpreter/luainterpreter.mk
+ delete mode 100644 package/luajit/luajit-01-root-path.patch
+ create mode 100644 package/luajit/luajit-05-install-inc.patch
+ create mode 100644 package/luarocks/luarocks-0001-build-minimal.patch
+ create mode 100644 package/luarocks/luarocks-0002-unpack.patch
+ create mode 100644 package/luarocks/luarocks.mk
+ create mode 100644 package/luasql-sqlite3/Config.in
+ create mode 100644 package/luasql-sqlite3/luasql-sqlite3.mk
+ delete mode 100644 package/luasql/Config.in
+ delete mode 100644 package/luasql/luasql.mk
+ delete mode 100644 package/orbit/orbit-01-fix-installation.patch
+ create mode 100644 package/pkg-luarocks.mk
 
-Best regards,
-Thomas
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
