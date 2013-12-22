@@ -1,34 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Dec 2013 18:42:38 +0100
-Subject: [Buildroot] [PATCH 02/29] ARC: [eznps] support OVERRIDE_SRCDIR
- feature for uclibc
-In-Reply-To: <264C179F799EF24AB26D5319053335E80E59B737BC@ezexch.ezchip.com>
-References: <264C179F799EF24AB26D5319053335E80E59B737BC@ezexch.ezchip.com>
-Message-ID: <20131222184238.4520f165@skate>
+Date: Sun, 22 Dec 2013 18:45:38 +0100
+Subject: [Buildroot] [PATCH v3] bluez_utils: broken for static builds
+In-Reply-To: <1386266208-52779-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1386266208-52779-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20131222184538.622006fc@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Noam Camus,
+Dear Vicente Olivert Riera,
 
-On Sun, 22 Dec 2013 17:31:03 +0200, Noam Camus wrote:
-> fix 2 issues:
-> 1) need to set .config, which normally it is at post patch hook
-> 2) need to rsync *.old directories/files excluded by --cvs-exclude
+On Thu, 5 Dec 2013 17:56:48 +0000, Vicente Olivert Riera wrote:
+> The bluez_utils package requires shared library support unconditionally.
+> We can't fix it to make it build on static because, for instance,
+> "plugin.c" file uses dlfcn and it's a basic prereq for bluetoothd, so
+> add "depend on !BR2_PREFER_STATIC_LIB" to it and recursively to all
+> packages that selects BR2_PACKAGE_BLUEZ_UTILS.
 > 
-> Signed-off-by: Noam Camus <noamc@ezchip.com>
+> Fixes:
+> 
+>    http://autobuild.buildroot.net/results/d81/d81970024649c1e89c01da491c63760afdad6cb6/
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 > ---
->  package/uclibc/uclibc.mk |   11 +++++++++++
->  1 files changed, 11 insertions(+), 0 deletions(-)
+>  package/bluez_utils/Config.in   |    5 +++--
+>  package/efl/libedbus/Config.in  |    5 +++--
+>  package/openobex/Config.in      |    5 +++--
+>  package/sconeserver/Config.in   |    5 +++++
+>  package/snowball-init/Config.in |    5 +++--
+>  package/ussp-push/Config.in     |    5 +++--
+>  6 files changed, 20 insertions(+), 10 deletions(-)
 
-You sent five patches to the Buildroot mailing list, but they are part
-of a 29 patch series. We did not receive the entire patch series.
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Was this intentional?
+Peter, please apply this one, it will fix some autobuilder issues.
 
-Thanks,
+Thanks!
 
 Thomas
 -- 
