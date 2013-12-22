@@ -1,43 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Dec 2013 18:45:38 +0100
-Subject: [Buildroot] [PATCH v3] bluez_utils: broken for static builds
-In-Reply-To: <1386266208-52779-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1386266208-52779-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20131222184538.622006fc@skate>
+Date: Sun, 22 Dec 2013 18:50:07 +0100
+Subject: [Buildroot] [git commit] qt5: version bump
+In-Reply-To: <20131219153646.2EE009C0F1@busybox.osuosl.org>
+References: <20131219153646.2EE009C0F1@busybox.osuosl.org>
+Message-ID: <20131222185007.590a5af4@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Vincente,
 
-On Thu, 5 Dec 2013 17:56:48 +0000, Vicente Olivert Riera wrote:
-> The bluez_utils package requires shared library support unconditionally.
-> We can't fix it to make it build on static because, for instance,
-> "plugin.c" file uses dlfcn and it's a basic prereq for bluetoothd, so
-> add "depend on !BR2_PREFER_STATIC_LIB" to it and recursively to all
-> packages that selects BR2_PACKAGE_BLUEZ_UTILS.
+On Thu, 19 Dec 2013 16:33:47 +0100, Peter Korsgaard wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=e4a839277f7d74104e25fb4fd846f9c2bf3f9c1e
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 > 
-> Fixes:
+> -bump version to 5.2.0
+> -remove unneeded patches
+> -remove invalid configure options
 > 
->    http://autobuild.buildroot.net/results/d81/d81970024649c1e89c01da491c63760afdad6cb6/
-> 
+> [Peter: uclibc-no-lfs + qatomic patches still needed, new patch for uClibc]
 > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/bluez_utils/Config.in   |    5 +++--
->  package/efl/libedbus/Config.in  |    5 +++--
->  package/openobex/Config.in      |    5 +++--
->  package/sconeserver/Config.in   |    5 +++++
->  package/snowball-init/Config.in |    5 +++--
->  package/ussp-push/Config.in     |    5 +++--
->  6 files changed, 20 insertions(+), 10 deletions(-)
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+This commit broke the build of qt5jsbackend, because it no longer
+exists in Qt 5.2 apparently. See:
 
-Peter, please apply this one, it will fix some autobuilder issues.
+  http://autobuild.buildroot.org/results/d39/d399c08380c1713474cc9d9822af5f396b7d2ab6/build-end.log
+  http://download.qt-project.org/official_releases/qt/5.2/5.2.0/submodules/
 
-Thanks!
+According to
+http://blog.qt.digia.com/blog/2013/09/30/qt-5-2-alpha-available/:
+
+"""
+The QML engine has undergone some intensive work over the last 9
+months, and the first results can be seen in Qt 5.2. Qt Qml is now
+using its own built-in Javascript engine and does not depend on V8
+anymore. As such the QtJSBackend shared library has disappeared.
+"""
+
+Best regards,
 
 Thomas
 -- 
