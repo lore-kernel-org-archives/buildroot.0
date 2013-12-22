@@ -1,34 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 22 Dec 2013 10:59:41 +0100
-Subject: [Buildroot] [git commit] subversion: bump to version 1.7.14
-Message-ID: <20131222100014.D27719C146@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 22 Dec 2013 08:02:25 -0300
+Subject: [Buildroot] [PATCH] squid: drop session external acl helper,
+	use file_userip
+Message-ID: <1387710145-27841-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3bbaee01d627f408ba69a8d3febf6db5261e6a57
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The session external acl helper needs berkeleydb, switch to the basic
+file_userip one which was my original intention (renamed from ip_user in
+the 3.3.x series). Fixes:
+http://autobuild.buildroot.net/results/635/6359137cde3b293d46df732836b8966d30f23cbc/
 
-Upgrade to latest security-related bugfixes release.
-
-Signed-off-by: Axel Lin <axel.lin@ingics.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/subversion/subversion.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/squid/squid.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/subversion/subversion.mk b/package/subversion/subversion.mk
-index de4db7c..6eb3218 100644
---- a/package/subversion/subversion.mk
-+++ b/package/subversion/subversion.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 1a22cbc..0b303dd 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -25,7 +25,7 @@ SQUID_CONF_OPT =	--enable-async-io=8 --enable-linux-netfilter \
+ 			--enable-auth-negotiate="wrapper" \
+ 			--enable-auth-ntlm="fake" \
+ 			--disable-strict-error-checking \
+-			--enable-external-acl-helpers="session"
++			--enable-external-acl-helpers="file_userip"
  
--SUBVERSION_VERSION = 1.7.9
-+SUBVERSION_VERSION = 1.7.14
- SUBVERSION_SITE = http://archive.apache.org/dist/subversion
- SUBVERSION_LICENSE = Apache 2.0
- SUBVERSION_LICENSE_FILES = LICENSE
+ # On uClibc librt needs libpthread
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS)$(BR2_TOOLCHAIN_USES_UCLIBC),yy)
+-- 
+1.8.3.2
