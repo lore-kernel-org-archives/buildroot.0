@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Dec 2013 21:42:11 +0100
-Subject: [Buildroot] [PATCH 03/10] lua: remove a too invasive patch
+Date: Sun, 22 Dec 2013 21:42:13 +0100
+Subject: [Buildroot] [PATCH 05/10] luarocks: new package
 In-Reply-To: <cover.1387744636.git.yann.morin.1998@free.fr>
 References: <cover.1387744636.git.yann.morin.1998@free.fr>
-Message-ID: <71bd835f5a81ab09096181b145853500ad00c9ab.1387744636.git.yann.morin.1998@free.fr>
+Message-ID: <6e3b569cbd8450028d7ab74658e3067152273f16.1387744636.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,119 +12,117 @@ To: buildroot@busybox.net
 
 From: Francois Perrad <fperrad@gmail.com>
 
-the static version of luac is enough
-
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+[yann.morin.1998 at free.fr: apply Thomas' suggestions]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lua/lua-03-shared-libs-for-luac.patch | 97 ---------------------------
- 1 file changed, 97 deletions(-)
- delete mode 100644 package/lua/lua-03-shared-libs-for-luac.patch
+ package/luarocks/luarocks-0001-build-minimal.patch | 17 +++++++++
+ package/luarocks/luarocks-0002-unpack.patch        | 24 +++++++++++++
+ package/luarocks/luarocks.mk                       | 40 ++++++++++++++++++++++
+ 3 files changed, 81 insertions(+)
+ create mode 100644 package/luarocks/luarocks-0001-build-minimal.patch
+ create mode 100644 package/luarocks/luarocks-0002-unpack.patch
+ create mode 100644 package/luarocks/luarocks.mk
 
-diff --git a/package/lua/lua-03-shared-libs-for-luac.patch b/package/lua/lua-03-shared-libs-for-luac.patch
-deleted file mode 100644
-index 33f9183..0000000
---- a/package/lua/lua-03-shared-libs-for-luac.patch
-+++ /dev/null
-@@ -1,97 +0,0 @@
--Compile the luac binary with the shared library.
--Many internal functions (LUAI_FUNC) must be exported (LUA_API).
--
--Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
--
--Index: b/src/ldo.h
--===================================================================
----- a/src/ldo.h
--+++ b/src/ldo.h
--@@ -46,7 +46,7 @@
-- LUAI_FUNC int luaD_poscall (lua_State *L, StkId firstResult);
-- LUAI_FUNC void luaD_reallocCI (lua_State *L, int newsize);
-- LUAI_FUNC void luaD_reallocstack (lua_State *L, int newsize);
---LUAI_FUNC void luaD_growstack (lua_State *L, int n);
--+LUA_API void luaD_growstack (lua_State *L, int n);
-- 
-- LUAI_FUNC void luaD_throw (lua_State *L, int errcode);
-- LUAI_FUNC int luaD_rawrunprotected (lua_State *L, Pfunc f, void *ud);
--Index: b/src/lfunc.h
--===================================================================
----- a/src/lfunc.h
--+++ b/src/lfunc.h
--@@ -18,7 +18,7 @@
--                          cast(int, sizeof(TValue *)*((n)-1)))
-- 
-- 
---LUAI_FUNC Proto *luaF_newproto (lua_State *L);
--+LUA_API Proto *luaF_newproto (lua_State *L);
-- LUAI_FUNC Closure *luaF_newCclosure (lua_State *L, int nelems, Table *e);
-- LUAI_FUNC Closure *luaF_newLclosure (lua_State *L, int nelems, Table *e);
-- LUAI_FUNC UpVal *luaF_newupval (lua_State *L);
--Index: b/src/lmem.h
--===================================================================
----- a/src/lmem.h
--+++ b/src/lmem.h
--@@ -38,9 +38,9 @@
--    ((v)=cast(t *, luaM_reallocv(L, v, oldn, n, sizeof(t))))
-- 
-- 
---LUAI_FUNC void *luaM_realloc_ (lua_State *L, void *block, size_t oldsize,
--+LUA_API void *luaM_realloc_ (lua_State *L, void *block, size_t oldsize,
--                                                           size_t size);
---LUAI_FUNC void *luaM_toobig (lua_State *L);
--+LUA_API void *luaM_toobig (lua_State *L);
-- LUAI_FUNC void *luaM_growaux_ (lua_State *L, void *block, int *size,
--                                size_t size_elem, int limit,
--                                const char *errormsg);
--Index: b/src/lstring.h
--===================================================================
----- a/src/lstring.h
--+++ b/src/lstring.h
--@@ -25,7 +25,7 @@
-- 
-- LUAI_FUNC void luaS_resize (lua_State *L, int newsize);
-- LUAI_FUNC Udata *luaS_newudata (lua_State *L, size_t s, Table *e);
---LUAI_FUNC TString *luaS_newlstr (lua_State *L, const char *str, size_t l);
--+LUA_API TString *luaS_newlstr (lua_State *L, const char *str, size_t l);
-- 
-- 
-- #endif
--Index: b/src/lundump.h
--===================================================================
----- a/src/lundump.h
--+++ b/src/lundump.h
--@@ -17,7 +17,7 @@
-- LUAI_FUNC void luaU_header (char* h);
-- 
-- /* dump one chunk; from ldump.c */
---LUAI_FUNC int luaU_dump (lua_State* L, const Proto* f, lua_Writer w, void* data, int strip);
--+LUA_API int luaU_dump (lua_State* L, const Proto* f, lua_Writer w, void* data, int strip);
-- 
-- #ifdef luac_c
-- /* print one chunk; from print.c */
--Index: b/src/Makefile
--===================================================================
----- a/src/Makefile
--+++ b/src/Makefile
--@@ -34,7 +34,7 @@
-- LUA_O=	lua.o
-- 
-- LUAC_T=	luac
---LUAC_O=	luac.o print.o
--+LUAC_O=	luac.o print.o lopcodes.o
-- 
-- ALL_O= $(CORE_O) $(LIB_O) $(LUA_O) $(LUAC_O)
-- ALL_T= $(LUA_A) $(LUA_SO) $(LUA_T) $(LUAC_T)
--@@ -62,8 +62,8 @@
-- $(LUA_T): $(LUA_O) $(LUA_SO)
-- 	$(CC) -o $@ -L. -llua $(MYLDFLAGS) $(LUA_O) $(LIBS)
-- 
---$(LUAC_T): $(LUAC_O) $(LUA_A)
---	$(CC) -o $@ $(MYLDFLAGS) $(LUAC_O) $(LUA_A) $(LIBS)
--+$(LUAC_T): $(LUAC_O) $(LUA_SO)
--+	$(CC) -o $@ -L. $(MYLDFLAGS) $(LUAC_O) -llua $(LIBS)
-- 
-- clean:
-- 	$(RM) $(ALL_T) $(ALL_O)
+diff --git a/package/luarocks/luarocks-0001-build-minimal.patch b/package/luarocks/luarocks-0001-build-minimal.patch
+new file mode 100644
+index 0000000..3a4794e
+--- /dev/null
++++ b/package/luarocks/luarocks-0001-build-minimal.patch
+@@ -0,0 +1,17 @@
++hack for buildroot which needs independant steps : download, unpack, build
++
++Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++
++Index: b/src/luarocks/build.lua
++===================================================================
++--- a/src/luarocks/build.lua
+++++ b/src/luarocks/build.lua
++@@ -362,6 +362,8 @@
++ 
++    if flags["pack-binary-rock"] then
++       return pack.pack_binary_rock(name, version, do_build, name, version, deps.get_deps_mode(flags))
+++   elseif flags["minimal"] then
+++      return build_rockspec(name, false, true, "none")
++    else
++       local ok, err = fs.check_command_permissions(flags)
++       if not ok then return nil, err end
+diff --git a/package/luarocks/luarocks-0002-unpack.patch b/package/luarocks/luarocks-0002-unpack.patch
+new file mode 100644
+index 0000000..0f036ee
+--- /dev/null
++++ b/package/luarocks/luarocks-0002-unpack.patch
+@@ -0,0 +1,24 @@
++allows unpack in existing directory
++
++Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++
++Index: b/src/luarocks/unpack.lua
++===================================================================
++--- a/src/luarocks/unpack.lua
+++++ b/src/luarocks/unpack.lua
++@@ -101,11 +101,10 @@
++       return nil, file.." does not seem to be a valid filename."
++    end
++    
++-   if (fs.exists(dir_name)) then
++-      return nil, "Directory "..dir_name.." already exists."
+++   if not fs.exists(dir_name) then
+++      local ok, err = fs.make_dir(dir_name)
+++      if not ok then return nil, err end
++    end
++-   local ok, err = fs.make_dir(dir_name)
++-   if not ok then return nil, err end
++    local rollback = util.schedule_function(fs.delete, fs.absolute_name(dir_name))
++ 
++    local rockspec, err
++
+diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
+new file mode 100644
+index 0000000..1b55dc2
+--- /dev/null
++++ b/package/luarocks/luarocks.mk
+@@ -0,0 +1,40 @@
++################################################################################
++#
++# luarocks
++#
++################################################################################
++
++LUAROCKS_VERSION = 2.1.1
++LUAROCKS_SITE = http://luarocks.org/releases/
++LUAROCKS_LICENSE = MIT
++LUAROCKS_LICENSE_FILES = COPYING
++
++HOST_LUAROCKS_DEPENDENCIES = host-lua luainterpreter
++
++LUAROCKS_CONFIG_DIR  = $(HOST_DIR)/usr/etc/luarocks
++LUAROCKS_CONFIG_FILE = $(LUAROCKS_CONFIG_DIR)/config-5.1.lua
++
++define HOST_LUAROCKS_CONFIGURE_CMDS
++	cd $(@D) && ./configure \
++		--prefix=$(TARGET_DIR)/usr \
++		--sysconfdir=$(LUAROCKS_CONFIG_DIR) \
++		--with-lua=$(HOST_DIR)/usr \
++		--with-lua-include=$(STAGING_DIR)/usr/include \
++		--with-lua-lib=$(STAGING_DIR)/usr/lib
++endef
++
++define HOST_LUAROCKS_INSTALL_CMDS
++	$(MAKE1) -C $(@D) install \
++		PREFIX=$(HOST_DIR)/usr
++	echo "-- BR cross-compilation"                          >> $(LUAROCKS_CONFIG_FILE)
++	echo "variables = {"                                    >> $(LUAROCKS_CONFIG_FILE)
++	echo "   CC = [[$(TARGET_CC)]],"                        >> $(LUAROCKS_CONFIG_FILE)
++	echo "   LD = [[$(TARGET_CC)]],"                        >> $(LUAROCKS_CONFIG_FILE)
++	echo "   CFLAGS = [[$(TARGET_CFLAGS)]],"                >> $(LUAROCKS_CONFIG_FILE)
++	echo "   LIBFLAG = [[-shared $(TARGET_LDFLAGS)]],"      >> $(LUAROCKS_CONFIG_FILE)
++	echo "}"                                                >> $(LUAROCKS_CONFIG_FILE)
++	echo "external_deps_dirs = { [[$(STAGING_DIR)/usr]] }"  >> $(LUAROCKS_CONFIG_FILE)
++	echo "gcc_rpath = false"                                >> $(LUAROCKS_CONFIG_FILE)
++endef
++
++$(eval $(host-generic-package))
 -- 
 1.8.1.2
