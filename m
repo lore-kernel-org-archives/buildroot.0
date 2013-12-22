@@ -1,40 +1,43 @@
-From: Axel Lin <axel.lin@ingics.com>
-Date: Sun, 22 Dec 2013 22:15:37 +0800
-Subject: [Buildroot] [PATCH] redis: bump to version 2.6.17
-Message-ID: <1387721737.8692.0.camel@phoenix>
+From: Noam Camus <noamc@ezchip.com>
+Date: Sun, 22 Dec 2013 17:31:03 +0200
+Subject: [Buildroot] [PATCH 02/29] ARC: [eznps] support OVERRIDE_SRCDIR
+ feature for uclibc
+Message-ID: <264C179F799EF24AB26D5319053335E80E59B737BC@ezexch.ezchip.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes since 2.6.16:
-* [FIX] redis-cli: fix big keys search when the key no longer exist.
-* [FIX] Allow AUTH / PING when disconnected from slave with serve-stale-data on.
-* [FIX] redis-benchmark: update help for new __rand_int__ form.
-* [FIX] Fix broken rdbWriteRaw() return value check in rdb.c (harmless).
-* [FIX] Log to what master a slave is going to connect to.
-* [FIX] Only run the fast active expire cycle if master & enabled.
-* [FIX] Fixed a replication bug involving 32 bit instances and big datasets
-        hard to compress that resulted into more than 2GB of RDB file sent.
+fix 2 issues:
+1) need to set .config, which normally it is at post patch hook
+2) need to rsync *.old directories/files excluded by --cvs-exclude
 
-Signed-off-by: Axel Lin <axel.lin@ingics.com>
+Signed-off-by: Noam Camus <noamc@ezchip.com>
 ---
- package/redis/redis.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/uclibc/uclibc.mk |   11 +++++++++++
+ 1 files changed, 11 insertions(+), 0 deletions(-)
 
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index 6974a35..c41469e 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk index de9011f..def5388 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -457,7 +457,18 @@ define UCLIBC_SETUP_DOT_CONFIG
+ 		oldconfig
+ endef
  
--REDIS_VERSION = 2.6.16
-+REDIS_VERSION = 2.6.17
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3c (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
--- 
-1.8.1.2
++ifeq ($(UCLIBC_OVERRIDE_SRCDIR),)
+ UCLIBC_POST_PATCH_HOOKS += UCLIBC_SETUP_DOT_CONFIG
++else
++
++define UCLIBC_RSYNC_DOT_OLD_FILES
++	rsync -au --cvs-exclude --include core --include "*.old" \
++	$(UCLIBC_OVERRIDE_SRCDIR)/ $(@D)
++endef
++
++UCLIBC_PRE_CONFIGURE_HOOKS += UCLIBC_RSYNC_DOT_OLD_FILES 
++UCLIBC_PRE_CONFIGURE_HOOKS += UCLIBC_SETUP_DOT_CONFIG endif
+ 
+ define UCLIBC_CONFIGURE_CMDS
+ 	$(MAKE1) -C $(UCLIBC_DIR) \
+--
+1.7.1
