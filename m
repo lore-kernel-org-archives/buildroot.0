@@ -1,43 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Dec 2013 19:39:44 +0100
-Subject: [Buildroot] [PATCH] uclibc: add a special Xtensa version
-In-Reply-To: <20131222183218.GA4180@tarshish>
-References: <1387734039-15203-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <20131222183218.GA4180@tarshish>
-Message-ID: <20131222193944.3e1abd5c@skate>
+From: Noam Camus <noamc@ezchip.com>
+Date: Sun, 22 Dec 2013 20:53:30 +0200
+Subject: [Buildroot] [PATCH 02/29] ARC: [eznps] support
+	OVERRIDE_SRCDIR	feature for uclibc
+Message-ID: <264C179F799EF24AB26D5319053335E80E59BD78A3@ezexch.ezchip.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+Hi Thomas,
+Yes it was intentionality.
+I send only the ones that seem to me as generic.
+Noam
 
-On Sun, 22 Dec 2013 20:32:18 +0200, Baruch Siach wrote:
+On Dec 22, 2013 7:41 PM, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+Dear Noam Camus,
 
-> Thanks of looking into this. Commit 9591091f1 is quite old, however, and is 
-> missing a few important xtensa fixes like a20d9fe539 and caee562063. Since 
-> this breakage is new, It's probably related to the commits pushed to public 
-> git repo in the last few days. Specifically I suspect 2a021ae81c3 (buildsys: 
-> update unifdef), but I didn't look too deeply into it.
+On Sun, 22 Dec 2013 17:31:03 +0200, Noam Camus wrote:
+> fix 2 issues:
+> 1) need to set .config, which normally it is at post patch hook
+> 2) need to rsync *.old directories/files excluded by --cvs-exclude
+>
+> Signed-off-by: Noam Camus <noamc@ezchip.com>
+> ---
+>  package/uclibc/uclibc.mk |   11 +++++++++++
+>  1 files changed, 11 insertions(+), 0 deletions(-)
 
-Aah, I looked at http://git.uclibc.org/uClibc/log/ where the last
-commit is 9591091f1. There is (again) a cache problem, because this is
-indeed not the latest commit, as can be seen at
-http://git.uclibc.org/uClibc/log/?h=master.
+You sent five patches to the Buildroot mailing list, but they are part
+of a 29 patch series. We did not receive the entire patch series.
 
-> Can you verify that 3a3ad3dfc1 as default uClibc version for xtensa doesn't 
-> break the builds? 
+Was this intentional?
 
-I'll try that.
-
-> BTW, I'd also appreciate your response on 
-> http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/72570.
-
-Aaah, yes, I need to have a look into this one. Thanks for the reminder.
+Thanks,
 
 Thomas
--- 
+--
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
