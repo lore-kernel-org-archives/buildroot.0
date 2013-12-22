@@ -1,33 +1,28 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Dec 2013 22:07:59 +0100
-Subject: [Buildroot] [PATCH] python-pycrypto: ignore LICENSE.orig for
- the moment
-In-Reply-To: <1387731898-14058-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1387731898-14058-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20131222210759.GI27858@free.fr>
+From: Ezequiel Garcia <ezequiel.garcia@free-electrons.com>
+Date: Sun, 22 Dec 2013 20:29:36 -0300
+Subject: [Buildroot] [PATCH] binutils: do not allow on NIOS2,
+	no support available
+In-Reply-To: <1387737088-15963-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1387737088-15963-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20131222232935.GA2410@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+On Sun, Dec 22, 2013 at 07:31:28PM +0100, Thomas Petazzoni wrote:
+> binutils does not have support for NIOS2 on the target, so disable the
+> selection of binutils on this architecture.
+> 
+> Fixes:
+> 
+>   http://autobuild.buildroot.org/results/40d/40d9cbefd03727af82610412ed0bc47674c44dbb/build-end.log
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-On 2013-12-22 18:04 +0100, Thomas Petazzoni spake thusly:
-> LICENSE.orig gets removed from the source tree by the apply-patches.sh
-> script. Until this is fixed in apply-patches.sh, remove LICENSE.orig
-> from <pkg>_LICENSE_FILES to fix the autobuilder issues.
-
-Can't we have a post-extract hook that renames that file, so we can add
-it to the legal-info?
-
-Regards,
-Yann E. MORIN.
-
+Acked-by: Ezequiel Garcia <ezequiel.garcia@free-electrons.com>
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Ezequiel Garc?a, Free Electrons
+Embedded Linux, Kernel and Android Engineering
+http://free-electrons.com
