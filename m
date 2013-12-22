@@ -1,80 +1,96 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 22 Dec 2013 21:46:32 +0100
-Subject: [Buildroot] Patchwork oldest patches cleanup #4 (deadline January 5)
-Message-ID: <CAAXf6LWFAfs_i_NjBbD3RZ=Y0RDKftzwj-_8xKuqyYA=69PNsw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 22 Dec 2013 21:47:02 +0100
+Subject: [Buildroot] [pkg-luarocks infra V4 06/10] luarocks: new
+ infrastructure
+In-Reply-To: <20131222183153.4c2c90c8@skate>
+References: <1384520859-3189-1-git-send-email-francois.perrad@gadz.org>
+ <1384520859-3189-6-git-send-email-francois.perrad@gadz.org>
+ <20131222183153.4c2c90c8@skate>
+Message-ID: <20131222204702.GD27858@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Francois, All,
 
-Here is the session 4 of the patchwork cleanup. For those who haven't
-followed previous sessions, here is a quick recap: every session we'll
-be posting the list of the 10 oldest patches, with the original patch
-contributors in copy. During two weeks, we have the opportunity to
-discuss the patch, whether it is still necessary or not, how it should
-be changed to be merged.
+On 2013-12-22 18:31 +0100, Thomas Petazzoni spake thusly:
+> On Fri, 15 Nov 2013 14:07:35 +0100, Francois Perrad wrote:
+[--SNIP--]
+> > diff --git a/package/pkg-luarocks.mk b/package/pkg-luarocks.mk
+> > new file mode 100644
+> > index 0000000..2a20413
+> > --- /dev/null
+> > +++ b/package/pkg-luarocks.mk
+> > @@ -0,0 +1,71 @@
+> > +################################################################################
+> > +# LuaRocks package infrastructure
+> > +# see http://luarocks.org/
+> > +#
+> > +# This file implements an infrastructure that eases development of
+> > +# package .mk files for LuaRocks packages.
+> > +# LuaRocks supports various build.type : builtin, make, cmake.
+> > +# This luarocks infrastructure supports only the builtin mode,
+> > +# the make & cmake modes could be directly handled by generic & cmake infrastructure.
+> > +#
+> > +# See the Buildroot documentation for details on the usage of this
+> > +# infrastructure
+> > +#
+> > +# In terms of implementation, this LuaRocks infrastructure requires
+> > +# the .mk file to only specify metadata informations about the
+> > +# package: name, version, etc.
+> > +#
+> > +################################################################################
+> > +
+> > +LUAROCKS_RUN = $(HOST_DIR)/usr/bin/luarocks
+> 
+> This variable could probably be provided by
+> package/luarocks/luarocks.mk.
 
-In particular, I'm interested in knowing if the original contributor is
-still interested by the patch, or if someone else is interested in
-adopting the patch and sending an updated version, or if the patch no
-longer makes sense due to other changes made in Buildroot.
+Done.
 
-All patches that have not received any comment or attention before the
-deadline will be removed from patchwork. This is aggressive, but we have
-many 'dead' patches sitting in patchwork, and this cannot work.
+[--SNIP--]
+> > +$(2)_ROCKSPEC				?= $(1)-$($(3)_VERSION).rockspec
+> > +$(2)_SOURCE				?= $(1)-$($(3)_VERSION).src.rock
+> > +$(2)_SITE				?= $(call qstrip,$(BR2_LUAROCKS_MIRROR))
+> > +
+> > +#
+> > +# Extract step
+> > +#
+> > +$(2)_EXTRACT_CMDS ?= \
+> > +	cd $$($(2)_DIR)/.. && $(LUAROCKS_RUN) unpack $(DL_DIR)/$$($(2)_SOURCE)
+> > +
+> > +# $(2)_DEPENDENCIES are handled for configure step (too late)
+> > +$(1)-extract: host-luarocks
+> 
+> Ok, I see the problem. However I believe I'd still like to see
+> host-luarocks added to $(2)_DEPENDENCIES so that the dependency graph
+> is correct, and "make source" / "make external-deps" properly show
+> luarocks.
 
-Deadline for this session is December 20.
+Done.
+I've also rephrased the comment, and moved things around to be a bit
+more logical (in my eyes, at least).
 
-Below are the 10 oldest patches (obtained with a slightly modified
-version of pwclient):
-[ pwclient list -s New -n 14 ] (and skip Delegated patches)
+> > +#
+> > +# Build/install step.
+> > +#
+> > +$(2)_INSTALL_TARGET_CMDS ?= \
+> > +	cd $$($(2)_SRCDIR) && $(LUAROCKS_RUN) build --minimal $$($(2)_ROCKSPEC) $$($(2)_BUILD_OPT)
+> 
+> Maybe the extract and install target steps could be written using a
+> define ... endef block instead, for better readability?
 
+Done.
 
-lua: remove shared library feature
-Arnout Vandecappelle <arnout@mind.be>
-http://patchwork.ozlabs.org/patch/197028
+Regards,
+Yann E. MORIN.
 
-perl: fix build
-Francois Perrad <fperrad@gmail.com>
-http://patchwork.ozlabs.org/patch/198013
-
-libatomic_ops version update 7.3alpha2 old version 1.2 does not
-compiles with modern gcc and utils
-Alexander Khryukin <alexander@mezon.ru>
-http://patchwork.ozlabs.org/patch/198133
-
-[1/1] mesa3d: build with host library with python support
-Noel vellemans <noel.vellemans@visionbms.com>
-http://patchwork.ozlabs.org/patch/198840
-
-[07/10] libffi: make thread support optional
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-http://patchwork.ozlabs.org/patch/199883
-
-busybox: needs linux-pam dependency added if using custom busybox
-.config & busybox login applet
-Stefan Fr?berg <stefan.froberg@petroprogram.com>
-http://patchwork.ozlabs.org/patch/199891
-
-[RESEND,2/2] wpa_supplicant: rework .config file editing
-Arnout Vandecappelle <arnout@mind.be>
-http://patchwork.ozlabs.org/patch/207037
-
-[4/4] gstreamer: replace gst-ffmpeg with gst-libav
-bogdan at nimblex.org
-http://patchwork.ozlabs.org/patch/207431
-
-[1/2] dbus: bump dbus version from 1.4.24 to current 1.6.8
-Gary Coulbourne <bear@bears.org>
-http://patchwork.ozlabs.org/patch/207507
-
-[2/2] dbus: fix permissions of the installed launch helper
-Gary Coulbourne <bear@bears.org>
-http://patchwork.ozlabs.org/patch/207508
-
-
-Thanks for your input,
-Thomas
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
