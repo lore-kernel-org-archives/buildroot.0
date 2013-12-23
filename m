@@ -1,53 +1,51 @@
-From: Pierre Ficheux <pierre.ficheux@openwide.fr>
-Date: Mon, 23 Dec 2013 17:51:15 +0100 (CET)
-Subject: [Buildroot] Booting problem for Beaglebone
-In-Reply-To: <20131223174522.40f9884a@skate>
-Message-ID: <1543357072.16990017.1387817475904.JavaMail.root@openwide.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 23 Dec 2013 18:39:48 +0100
+Subject: [Buildroot] [PATCH] package/python-pycrypto: fix legal-info
+Message-ID: <1387820388-30587-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I guess :) but my question was "is there any work in progress to fix it ?" before trying by myself ! 
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-regards
+The pycrypto package contains a LICENSE.orig file, but apply-patches.sh
+removes all .orig file, so we can't list a .orig file asa license file,
+as it would have disapeared by the time 'make legal-info' sould be called.
 
------ Mail original -----
-> De: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> ?: "Pierre Ficheux" <pierre.ficheux@openwide.fr>
-> Cc: buildroot at busybox.net
-> Envoy?: Lundi 23 D?cembre 2013 17:45:22
-> Objet: Re: [Buildroot] Booting problem for Beaglebone
-> 
-> Dear Pierre Ficheux,
-> 
-> On Mon, 23 Dec 2013 16:08:18 +0100 (CET), Pierre Ficheux wrote:
-> 
-> > I still have the same problem with recent BR (2013.11 or Git) and
-> > Beaglebone Black (waiting for root device)
-> > 
-> > [    4.690564]      host=10.5.16.129, domain=daviel.openwide.fr.,
-> > nis-domain=(none)
-> > [    4.698407]      bootserver=0.0.0.0, rootserver=0.0.0.0,
-> > rootpath=
-> > [    4.704779]      nameserver0=10.5.1.1[    4.712875] Waiting for
-> > root device /dev/mmcblk0p4...
-> 
-> It generally means that the MMC driver is missing, or that the MMC
-> controller is not properly described in the Device Tree.
-> 
-> Best regards,
-> 
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-> 
+Add a post-extract hook that renames this license file, so it is renamed
+just before we apply patches and remove .orig files.
 
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Ryan Barnett <rjbarnet@rockwellcollins.com>
+---
+ package/python-pycrypto/python-pycrypto.mk | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/package/python-pycrypto/python-pycrypto.mk b/package/python-pycrypto/python-pycrypto.mk
+index eda48bd..f872ccc 100644
+--- a/package/python-pycrypto/python-pycrypto.mk
++++ b/package/python-pycrypto/python-pycrypto.mk
+@@ -11,7 +11,17 @@ PYTHON_PYCRYPTO_SETUP_TYPE = distutils
+ 
+ PYTHON_PYCRYPTO_LICENSE = Public Domain, Python 2.2 License (HMAC.py, setup.py)
+ PYTHON_PYCRYPTO_LICENSE_FILES = COPYRIGHT LEGAL/copy/LICENSE.libtom \
+-		LEGAL/copy/LICENSE.orig LEGAL/copy/LICENSE.python-2.2
++		LEGAL/copy/LICENSE.python-2.2
++
++# The pycrypto package contains a LICENSE.orig file, but our patching
++# infrastrucure removes all .orig file, so we must rename that license
++# file prior to patching, so it is still available to the legal-info
++# infrastructure
++define PYTHON_PYCRYPTO_RENAME_LICENSE
++	mv $(@D)/LEGAL/copy/LICENSE.orig $(@D)/LEGAL/copy/LICENSE.original
++endef
++PYTHON_PYCRYPTO_POST_EXTRACT_HOOKS += PYTHON_PYCRYPTO_RENAME_LICENSE
++PYTHON_PYCRYPTO_LICENSE_FILES += LEGAL/copy/LICENSE.original
+ 
+ PYTHON_PYCRYPTO_DEPENDENCIES = gmp
+ 
 -- 
-Pierre FICHEUX -/- CTO OW/OWI, France -\- pierre.ficheux at openwide.fr
-                                         http://ingenierie.openwide.fr
-                                         http://www.linuxembedded.fr
-I would love to change the world, but they won't give me the source code
+1.8.1.2
