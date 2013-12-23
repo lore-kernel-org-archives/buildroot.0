@@ -1,47 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 Dec 2013 10:57:25 +0100
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 23 Dec 2013 11:57:52 +0200
 Subject: [Buildroot] [PATCH] bluez5_utils: new package
-In-Reply-To: <20131223105059.26698156@skate>
+In-Reply-To: <52B8083F.80005@free-electrons.com>
 References: <1387791444-28056-1-git-send-email-alexandre.belloni@free-electrons.com>
- <20131223105059.26698156@skate>
-Message-ID: <20131223105725.61e07a0b@skate>
+ <20131223095040.GE11794@sapphire.tkos.co.il>
+ <52B8083F.80005@free-electrons.com>
+Message-ID: <20131223095752.GF11794@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Alexandre,
 
-On Mon, 23 Dec 2013 10:50:59 +0100, Thomas Petazzoni wrote:
-
-> On Mon, 23 Dec 2013 10:37:24 +0100, Alexandre Belloni wrote:
-> > Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-> > ---
-> >  package/Config.in                                  |   1 +
-> >  package/bluez5_utils/Config.in                     |  16 ++++
-> >  .../bluez5_utils-5.12-enable_cg2900.patch          | 106 +++++++++++++++++++++
-> >  package/bluez5_utils/bluez5_utils.mk               |  31 ++++++
-> >  package/bluez_utils/Config.in                      |   8 +-
-> >  5 files changed, 161 insertions(+), 1 deletion(-)
-> >  create mode 100644 package/bluez5_utils/Config.in
-> >  create mode 100644 package/bluez5_utils/bluez5_utils-5.12-enable_cg2900.patch
-> >  create mode 100644 package/bluez5_utils/bluez5_utils.mk
+On Mon, Dec 23, 2013 at 10:54:07AM +0100, Alexandre Belloni wrote:
+> On 23/12/2013 10:50, Baruch Siach wrote: 
+> >> diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
+> >> new file mode 100644
+> >> index 000000000000..f0a71125e2ad
+> >> --- /dev/null
+> >> +++ b/package/bluez5_utils/Config.in
+> >> @@ -0,0 +1,16 @@
+> >> +config BR2_PACKAGE_BLUEZ5_UTILS
+> >> +	bool "bluez5-utils"
+> >> +	depends on !BR2_avr32
+> >> +	depends on BR2_USE_WCHAR # libglib2
+> >> +	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, alsa-lib, libglib2
+> > Why alsa-lib?
 > 
-> When you send a new version of a patch, please change the subject
-> prefix to add "PATCH v2", and also include a changelog in your patch so
-> that we know what changed between v1 and v2.
+> Hum, right, it got copied from bluez-utils, I'll remove it
 
-My bad. The previous version of this patch was not sent by you, but by
-Marcin Bis, so your version is not really a v2.
+Also, it seems that libglib2 doesn't need threads, only wchar.
 
-Have you looked at Marcin Bis version to see if your version includes
-all of what Marcin did, if applicable?
+baruch
 
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
