@@ -1,51 +1,38 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 23 Dec 2013 11:50:40 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 23 Dec 2013 10:50:59 +0100
 Subject: [Buildroot] [PATCH] bluez5_utils: new package
 In-Reply-To: <1387791444-28056-1-git-send-email-alexandre.belloni@free-electrons.com>
 References: <1387791444-28056-1-git-send-email-alexandre.belloni@free-electrons.com>
-Message-ID: <20131223095040.GE11794@sapphire.tkos.co.il>
+Message-ID: <20131223105059.26698156@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Alexandre,
+Dear Alexandre Belloni,
 
-On Mon, Dec 23, 2013 at 10:37:24AM +0100, Alexandre Belloni wrote:
+On Mon, 23 Dec 2013 10:37:24 +0100, Alexandre Belloni wrote:
 > Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+> ---
+>  package/Config.in                                  |   1 +
+>  package/bluez5_utils/Config.in                     |  16 ++++
+>  .../bluez5_utils-5.12-enable_cg2900.patch          | 106 +++++++++++++++++++++
+>  package/bluez5_utils/bluez5_utils.mk               |  31 ++++++
+>  package/bluez_utils/Config.in                      |   8 +-
+>  5 files changed, 161 insertions(+), 1 deletion(-)
+>  create mode 100644 package/bluez5_utils/Config.in
+>  create mode 100644 package/bluez5_utils/bluez5_utils-5.12-enable_cg2900.patch
+>  create mode 100644 package/bluez5_utils/bluez5_utils.mk
 
-[...]
+When you send a new version of a patch, please change the subject
+prefix to add "PATCH v2", and also include a changelog in your patch so
+that we know what changed between v1 and v2.
 
-> diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
-> new file mode 100644
-> index 000000000000..f0a71125e2ad
-> --- /dev/null
-> +++ b/package/bluez5_utils/Config.in
-> @@ -0,0 +1,16 @@
-> +config BR2_PACKAGE_BLUEZ5_UTILS
-> +	bool "bluez5-utils"
-> +	depends on !BR2_avr32
-> +	depends on BR2_USE_WCHAR # libglib2
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, alsa-lib, libglib2
+Thanks!
 
-Why alsa-lib?
-
-baruch
-
-> +	depends on BR2_USE_MMU # dbus, libglib2
-> +	select BR2_PACKAGE_DBUS
-> +	select BR2_PACKAGE_LIBGLIB2
-> +	help
-> +	  bluez utils
-> +
-> +	  http://www.kernel.org/pub/linux/bluetooth
-> +
-> +comment "bluez5-utils needs a toolchain w/ wchar, threads"
-> +	depends on !BR2_avr32 && BR2_USE_MMU
-> +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-
+Thomas
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
