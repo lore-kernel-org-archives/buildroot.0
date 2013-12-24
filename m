@@ -1,49 +1,109 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 Dec 2013 09:22:33 +0100
-Subject: [Buildroot] [PATCH] qt5: install headers into /usr/include/qt5
-In-Reply-To: <201312241015.24272.fatih.asici@gmail.com>
-References: <1387868037-31734-1-git-send-email-fatih.asici@gmail.com>
- <20131224084720.55ea41c3@skate>
- <201312241015.24272.fatih.asici@gmail.com>
-Message-ID: <20131224092233.418c799a@skate>
+From: =?UTF-8?q?Fatih=20A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
+Date: Tue, 24 Dec 2013 15:08:30 +0200
+Subject: [Buildroot] [PATCH] qt5connectivity: new package
+Message-ID: <1387890510-2069-1-git-send-email-fatih.asici@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fatih A??c?,
+QtNfc is not installed since it is not supported on Linux.
 
-On Tue, 24 Dec 2013 10:15:24 +0200, Fatih A??c? wrote:
+Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
+---
+ package/qt5/Config.in                          |  1 +
+ package/qt5/qt5connectivity/Config.in          | 13 +++++++
+ package/qt5/qt5connectivity/qt5connectivity.mk | 49 ++++++++++++++++++++++++++
+ 3 files changed, 63 insertions(+)
+ create mode 100644 package/qt5/qt5connectivity/Config.in
+ create mode 100644 package/qt5/qt5connectivity/qt5connectivity.mk
 
-> g++ -c -pipe -O2 -fPIC -fvisibility=hidden -fvisibility-inlines-hidden -fno-exceptions -Wall -W -D_REENTRANT -DQT_NO_LIBUDEV -DQT_NO_XCB -DQT_NO_XKBCOMMON -
-> DQT_BUILD_QMLDEVTOOLS_LIB -DQT_BUILDING_QT -DQT_NO_CAST_TO_ASCII -DQT_ASCII_CAST_WARNINGS -DQT_MOC_COMPAT -DQT_USE_QSTRINGBUILDER -DQT_DEPRECATED_WARNINGS -
-> DQT_DISABLE_DEPRECATED_BEFORE=0x050000 -DQT_NO_EXCEPTIONS -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -DQT_NO_DEBUG -DQT_BOOTSTRAP_LIB -DQT_BOOTSTRAPPED -
-> DQT_LITE_UNICODE -DQT_NO_CAST_TO_ASCII -DQT_NO_CODECS -DQT_NO_DATASTREAM -DQT_NO_LIBRARY -DQT_NO_QOBJECT -DQT_NO_SYSTEMLOCALE -DQT_NO_THREAD -DQT_NO_UNICODETABLES -
-> DQT_NO_USING_NAMESPACE -DQT_NO_DEPRECATED -DQT_NO_TRANSLATION -DQT_QMAKE_LOCATION="/home/fatih/git/buildroot/output/build/qt5base-5.2.0/bin/qmake" -
-> I/home/fatih/git/buildroot/output/host/usr/mkspecs/linux-g++ -I. -I../../include -I../../include/QtQml -I../../include/QtQml/5.2.0 -I../../include/QtQml/5.2.0/QtQml 
-> -I/home/fatih/git/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/qt5
-
-This is still really ugly, as it is including target headers when doing
-a compilation for the host. If they know what they are doing and know
-that including Qt headers is fine and needed, then they should include
-them from the Qt source tree and not from the Qt installation tree.
-
-> > To me, this change seems more like work-arounding a problem in the Qt
-> > build system rather than a real fix.
-> 
-> Upstream states[1] that including qt headers from sysroot is not a problem
-> since they don't contain anything platform-specific.
-> 
-> [1] https://bugreports.qt-project.org/browse/QTBUG-35330?focusedCommentId=224486&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-224486
-
-I don't really agree, but if that's what upstream recommends, then ok
-for the patch.
-
-Thanks!
-
-Thomas
+diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+index d2b8f10..bf10075 100644
+--- a/package/qt5/Config.in
++++ b/package/qt5/Config.in
+@@ -17,6 +17,7 @@ menuconfig BR2_PACKAGE_QT5
+ 
+ if BR2_PACKAGE_QT5
+ source "package/qt5/qt5base/Config.in"
++source "package/qt5/qt5connectivity/Config.in"
+ source "package/qt5/qt5declarative/Config.in"
+ source "package/qt5/qt5graphicaleffects/Config.in"
+ source "package/qt5/qt5imageformats/Config.in"
+diff --git a/package/qt5/qt5connectivity/Config.in b/package/qt5/qt5connectivity/Config.in
+new file mode 100644
+index 0000000..be4cfba
+--- /dev/null
++++ b/package/qt5/qt5connectivity/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_QT5CONNECTIVITY
++	bool "qt5connectivity"
++	select BR2_PACKAGE_BLUEZ_UTILS
++	select BR2_PACKAGE_QT5BASE
++	select BR2_PACKAGE_QT5BASE_CONCURRENT
++	select BR2_PACKAGE_QT5BASE_DBUS
++	help
++	  Qt is a cross-platform application and UI framework for
++	  developers using C++.
++
++	  This package corresponds to the qt5connectivity module.
++
++	  http://qt-project.org
+diff --git a/package/qt5/qt5connectivity/qt5connectivity.mk b/package/qt5/qt5connectivity/qt5connectivity.mk
+new file mode 100644
+index 0000000..2be51d5
+--- /dev/null
++++ b/package/qt5/qt5connectivity/qt5connectivity.mk
+@@ -0,0 +1,49 @@
++################################################################################
++#
++# qt5connectivity
++#
++################################################################################
++
++QT5CONNECTIVITY_VERSION = $(QT5_VERSION)
++QT5CONNECTIVITY_SITE = $(QT5_SITE)
++QT5CONNECTIVITY_SOURCE = qtconnectivity-opensource-src-$(QT5CONNECTIVITY_VERSION).tar.xz
++QT5CONNECTIVITY_DEPENDENCIES = bluez_utils qt5base
++QT5CONNECTIVITY_INSTALL_STAGING = YES
++
++ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
++QT5CONNECTIVITY_LICENSE = LGPLv2.1 or GPLv3.0
++QT5CONNECTIVITY_LICENSE_FILES = LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt
++else
++QT5CONNECTIVITY_LICENSE = Commercial license
++QT5CONNECTIVITY_REDISTRIBUTE = NO
++endif
++
++ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
++QT5CONNECTIVITY_DEPENDENCIES += qt5declarative
++endif
++
++define QT5CONNECTIVITY_CONFIGURE_CMDS
++	(cd $(@D); $(HOST_DIR)/usr/bin/qmake)
++endef
++
++define QT5CONNECTIVITY_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define QT5CONNECTIVITY_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
++	$(QT5_LA_PRL_FILES_FIXUP)
++endef
++
++ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
++define QT5CONNECTIVITY_INSTALL_TARGET_QMLS
++	cp -dpfr $(STAGING_DIR)/usr/qml/QtBluetooth $(TARGET_DIR)/usr/qml/
++endef
++endif
++
++define QT5CONNECTIVITY_INSTALL_TARGET_CMDS
++	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Bluetooth.so.* $(TARGET_DIR)/usr/lib
++	$(QT5CONNECTIVITY_INSTALL_TARGET_QMLS)
++endef
++
++$(eval $(generic-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.5.1
