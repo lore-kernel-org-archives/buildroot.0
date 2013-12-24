@@ -1,49 +1,79 @@
-From: Wojciech Zabolotny <wzab01@gmail.com>
-Date: Tue, 24 Dec 2013 22:33:52 +0100
-Subject: [Buildroot] Untypical situation - python-smbus which is also a part
-	of i2c-tools.
-Message-ID: <CAMduVEehZnpUyUbdY-CY1xo=yABivLkrFdxa1atK537NYE9huA@mail.gmail.com>
+From: Wojciech M. Zabolotny <wzab01@gmail.com>
+Date: Tue, 24 Dec 2013 23:07:53 +0100
+Subject: [Buildroot] [PATCH v1 1/1] avrdude: new package
+Message-ID: <1387922873-14896-1-git-send-email-wzab01@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I needed to assure access to i2c peripherals from Python programs in
-my buildroot based embedded system.
-There is a py-smbus module, which is available as a part of i2c-tools,
-but which is not compiled during compilation of this package, and uses
-other tools for compilation.
+Signed-off-by: Wojciech M. Zabolotny <wzab01@gmail.com>
+---
+ package/Config.in          |  1 +
+ package/avrdude/Config.in  | 16 ++++++++++++++++
+ package/avrdude/avrdude.mk | 18 ++++++++++++++++++
+ 3 files changed, 35 insertions(+)
+ create mode 100644 package/avrdude/Config.in
+ create mode 100644 package/avrdude/avrdude.mk
 
-Simple addition of EXTRA="py-smbus" when executing make (as described
-in original README) doesn't help as it was discussed in a thread:
-http://lists.busybox.net/pipermail/buildroot/2013-June/074037.html
-
-After some review of some packages which use python components, I have
-got the attached mk file, which works, but is not a clean solution.
-I don't know if there is a cleaner way to achieve that?
-
-The ideal solution would be probably to allow selection of the
-python-smbus as a part of the i2c-tools package.
-How should it be done?
-
+diff --git a/package/Config.in b/package/Config.in
+index 3685807..2abffb8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -258,6 +258,7 @@ source "package/zd1211-firmware/Config.in"
+ endmenu
+ source "package/a10disp/Config.in"
+ source "package/acpid/Config.in"
++source "package/avrdude/Config.in"
+ source "package/cdrkit/Config.in"
+ source "package/cryptsetup/Config.in"
+ source "package/dbus/Config.in"
+diff --git a/package/avrdude/Config.in b/package/avrdude/Config.in
+new file mode 100644
+index 0000000..f3b075a
+--- /dev/null
++++ b/package/avrdude/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_AVRDUDE
++	bool "avrdude"
++	select BR2_PACKAGE_LIBELF
++	select BR2_PACKAGE_LIBUSB
++	select BR2_PACKAGE_LIBUSB_COMPAT
++	select BR2_PACKAGE_NCURSES
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  avrdude is a programmer for Atmel AVR microcontrollers
++	  this package provides a version with new linuxspi driver
++
++	  https://github.com/kcuzner/avrdude
++
++comment "avrdude needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
++
+diff --git a/package/avrdude/avrdude.mk b/package/avrdude/avrdude.mk
+new file mode 100644
+index 0000000..cdca10e
+--- /dev/null
++++ b/package/avrdude/avrdude.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# AVRDUDE
++#
++################################################################################
++
++AVRDUDE_VERSION = eabe067c4527bc2eedc5db9288ef5cf1818ec720
++AVRDUDE_SITE = http://github.com/kcuzner/avrdude/tarball/$(AVRDUDE_VERSION)
++AVRDUDE_LICENSE = GPLv2+
++AVRDUDR_LICENSE_FILES = avrdude/COPYING
++AVRDUDE_SUBDIR = avrdude
++# Sources are distributed with ./bootstrap file
++# it is necessary to perform autoreconfiguration 
++AVRDUDE_AUTORECONF = YES
++AVRDUDE_DEPENDENCIES = libelf libusb libusb-compat ncurses
++
++$(eval $(autotools-package))
++
 -- 
-Regards,
-Wojciech M. Zabo?otny
-My GPG/PGP keys:
-standard: B191 ACF0 7909 83FA 3F9B  450C 407E 3C4B 4569 D119
-confidential: 2BF3 F90F 6EA8 7D35 59FD  5080 78ED 33DE 1312 D8F8
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: Config.in
-Type: application/octet-stream
-Size: 229 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131224/92a8d954/attachment.obj>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: python-smbus.mk
-Type: application/octet-stream
-Size: 1944 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131224/92a8d954/attachment-0001.obj>
+1.8.5.1
