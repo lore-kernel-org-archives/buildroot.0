@@ -1,43 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 Dec 2013 14:45:19 +0100
-Subject: [Buildroot] [PATCH] qt5connectivity: new package
-In-Reply-To: <1387890510-2069-1-git-send-email-fatih.asici@gmail.com>
-References: <1387890510-2069-1-git-send-email-fatih.asici@gmail.com>
-Message-ID: <20131224144519.5a88c023@skate>
+From: Philippe Reynes <tremyfr@yahoo.fr>
+Date: Tue, 24 Dec 2013 18:07:05 +0100
+Subject: [Buildroot] [PATCH] apf27: bump kernel version to 3.12.6
+Message-ID: <1387904825-31005-1-git-send-email-tremyfr@yahoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fatih A??c?,
 
-On Tue, 24 Dec 2013 15:08:30 +0200, Fatih A??c? wrote:
-> QtNfc is not installed since it is not supported on Linux.
-> 
-> Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
-> ---
->  package/qt5/Config.in                          |  1 +
->  package/qt5/qt5connectivity/Config.in          | 13 +++++++
->  package/qt5/qt5connectivity/qt5connectivity.mk | 49 ++++++++++++++++++++++++++
->  3 files changed, 63 insertions(+)
->  create mode 100644 package/qt5/qt5connectivity/Config.in
->  create mode 100644 package/qt5/qt5connectivity/qt5connectivity.mk
+Signed-off-by: Philippe Reynes <tremyfr@yahoo.fr>
+---
+ configs/armadeus_apf27_defconfig |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks for doing this!
-
-
-> +config BR2_PACKAGE_QT5CONNECTIVITY
-> +	bool "qt5connectivity"
-> +	select BR2_PACKAGE_BLUEZ_UTILS
-
-You need to propagate the Bluez Utils dependency "depends
-on !BR2_avr32" here. And also the depends on BR2_USE_MMU.
-
-Thanks a lot,
-
-Thomas
+diff --git a/configs/armadeus_apf27_defconfig b/configs/armadeus_apf27_defconfig
+index 409476f..21af2fb 100644
+--- a/configs/armadeus_apf27_defconfig
++++ b/configs/armadeus_apf27_defconfig
+@@ -4,7 +4,7 @@ BR2_arm926t=y
+ 
+ # Lock down headers to avoid breaking with new defaults
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.12.5"
++BR2_DEFAULT_KERNEL_VERSION="3.12.6"
+ 
+ # System
+ BR2_TARGET_GENERIC_HOSTNAME="apf27"
+@@ -20,7 +20,7 @@ BR2_TARGET_ROOTFS_UBI=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.5"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.6"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/armadeus/apf27/linux-3.12.config"
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0xA0008000"
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.4.4
