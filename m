@@ -1,7 +1,7 @@
 From: Wojciech M. Zabolotny <wzab01@gmail.com>
-Date: Tue, 24 Dec 2013 23:07:53 +0100
-Subject: [Buildroot] [PATCH v1 1/1] avrdude: new package
-Message-ID: <1387922873-14896-1-git-send-email-wzab01@gmail.com>
+Date: Tue, 24 Dec 2013 23:38:00 +0100
+Subject: [Buildroot] [PATCH v2 1/1] avrdude: new package
+Message-ID: <1387924680-16737-1-git-send-email-wzab01@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -53,7 +53,7 @@ index 0000000..f3b075a
 +
 diff --git a/package/avrdude/avrdude.mk b/package/avrdude/avrdude.mk
 new file mode 100644
-index 0000000..cdca10e
+index 0000000..b04e2e0
 --- /dev/null
 +++ b/package/avrdude/avrdude.mk
 @@ -0,0 +1,18 @@
@@ -64,7 +64,7 @@ index 0000000..cdca10e
 +################################################################################
 +
 +AVRDUDE_VERSION = eabe067c4527bc2eedc5db9288ef5cf1818ec720
-+AVRDUDE_SITE = http://github.com/kcuzner/avrdude/tarball/$(AVRDUDE_VERSION)
++AVRDUDE_SITE = $(call github,kcuzner,avrdude,$(AVRDUDE_VERSION))
 +AVRDUDE_LICENSE = GPLv2+
 +AVRDUDR_LICENSE_FILES = avrdude/COPYING
 +AVRDUDE_SUBDIR = avrdude
