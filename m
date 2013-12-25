@@ -1,37 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Dec 2013 12:33:35 +0100
-Subject: [Buildroot] [PATCH] binutils: do not allow on NIOS2,
- no support available
-In-Reply-To: <1387737088-15963-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1387737088-15963-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20131225123335.36219b0b@skate>
+Date: Wed, 25 Dec 2013 12:36:39 +0100
+Subject: [Buildroot] [git commit] package: make package download from
+	Mercurial repositories more robust
+Message-ID: <20131225113704.DA2949C1C6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+commit: http://git.buildroot.net/buildroot/commit/?id=a10073b6b0a70feea944cbd77914cb51c7a558f1
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 22 Dec 2013 19:31:28 +0100, Thomas Petazzoni wrote:
-> binutils does not have support for NIOS2 on the target, so disable the
-> selection of binutils on this architecture.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.org/results/40d/40d9cbefd03727af82610412ed0bc47674c44dbb/build-end.log
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/binutils/Config.in  | 2 +-
->  package/dropwatch/Config.in | 2 +-
->  package/oprofile/Config.in  | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
+Previously, when cloning a Mercurial repository,
+aborting the clone could (in some cases) leave behind an empty directory.
+As a result, a later clone would fail.
 
-Applied, thanks.
+Signed-off-by: Mathias De Mar?? <mathias.demare@gmail.com>
+Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pkg-download.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index 758b211..c00689b 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -178,6 +178,7 @@ endef
+ define DOWNLOAD_HG
+ 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+ 	(pushd $(DL_DIR) > /dev/null && \
++	rm -rf $($(PKG)_BASE_NAME) && \
+ 	$(HG) clone --noupdate --rev $($(PKG)_DL_VERSION) $($(PKG)_SITE) $($(PKG)_BASE_NAME) && \
+ 	$(HG) archive --repository $($(PKG)_BASE_NAME) --type tgz --prefix $($(PKG)_BASE_NAME)/ \
+ 	              --rev $($(PKG)_DL_VERSION) $(DL_DIR)/$($(PKG)_SOURCE) && \
