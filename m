@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Dec 2013 12:30:26 +0100
-Subject: [Buildroot] [PATCH] python-bottle: add missing dependency on
- python
-In-Reply-To: <ea8a4bf24136f5aa4d97.1387963796@argentina>
-References: <ea8a4bf24136f5aa4d97.1387963796@argentina>
-Message-ID: <20131225123026.3afff0be@skate>
+Date: Wed, 25 Dec 2013 12:30:38 +0100
+Subject: [Buildroot] [PATCH] python-id3: correct indentation of
+ Config.in file
+In-Reply-To: <d80cea9b8e4da82cdc4a.1387965089@argentina>
+References: <d80cea9b8e4da82cdc4a.1387965089@argentina>
+Message-ID: <20131225123038.308e2662@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,12 +13,14 @@ To: buildroot@busybox.net
 
 Dear Thomas De Schampheleire,
 
-On Wed, 25 Dec 2013 10:29:56 +0100, Thomas De Schampheleire wrote:
+On Wed, 25 Dec 2013 10:51:29 +0100, Thomas De Schampheleire wrote:
+> Tab instead of four spaces.
+> 
 > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 > 
 > ---
->  package/python-bottle/Config.in |  1 +
->  1 files changed, 1 insertions(+), 0 deletions(-)
+>  package/python-id3/Config.in |  14 +++++++-------
+>  1 files changed, 7 insertions(+), 7 deletions(-)
 
 Applied, thanks.
 
