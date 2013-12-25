@@ -1,76 +1,79 @@
-From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-Date: Wed, 25 Dec 2013 17:18:59 +0100
-Subject: [Buildroot] [PATCH 2/2] packages: use gitorious helper when
-	applicable
-In-Reply-To: <1387988339-17460-1-git-send-email-alexandre.belloni@free-electrons.com>
-References: <1387988339-17460-1-git-send-email-alexandre.belloni@free-electrons.com>
-Message-ID: <1387988339-17460-3-git-send-email-alexandre.belloni@free-electrons.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 25 Dec 2013 17:31:10 +0100
+Subject: [Buildroot] [git commit] Support for multiple BR2_GLOBAL_PATCH_DIR
+Message-ID: <20131225163218.8F7729C1D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
----
- boot/xloader/xloader.mk                | 2 +-
- package/can-utils/can-utils.mk         | 2 +-
- package/lpc3250loader/lpc3250loader.mk | 2 +-
- package/ti-uim/ti-uim.mk               | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+commit: http://git.buildroot.net/buildroot/commit/?id=bc4f79d665d00d6ab5aac7fc442fbf1a67b7a82b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/boot/xloader/xloader.mk b/boot/xloader/xloader.mk
-index 00c63b1efb91..0ec11de1d6af 100644
---- a/boot/xloader/xloader.mk
-+++ b/boot/xloader/xloader.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+Adding support for specifying multiple directories in
+BR2_GLOBAL_PATCH_DIR. This will allow for a layered approach for the
+patching of a package.
+
+Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Reviewed-by: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Config.in              |   20 ++++++++++++--------
+ package/pkg-generic.mk |    5 ++++-
+ 2 files changed, 16 insertions(+), 9 deletions(-)
+
+diff --git a/Config.in b/Config.in
+index 2b401cb..d55e57c 100644
+--- a/Config.in
++++ b/Config.in
+@@ -461,18 +461,22 @@ config BR2_PACKAGE_OVERRIDE_FILE
+ 	  Buildroot documentation for more details on this feature.
  
- XLOADER_VERSION    = 6f3a26101303051e0f91b6213735b68ce804e94e
--XLOADER_SITE       = git://gitorious.org/x-loader/x-loader.git
-+$(eval $(call gitorious,x-loader,x-loader))
- XLOADER_BOARD_NAME = $(call qstrip,$(BR2_TARGET_XLOADER_BOARDNAME))
+ config BR2_GLOBAL_PATCH_DIR
+-	string "global patch directory"
++	string "global patch directories"
+ 	help
+-	  You may specify a directory containing global package patches.
+-	  For a specific version <packageversion> of a specific package
+-	  <packagename>, patches are applied as follows.
++	  You may specify a space separated list of one or more directories
++	  containing global package patches. For a specific version
++	  <packageversion> of a specific package <packagename>, patches are
++	  applied as follows:
  
- XLOADER_LICENSE = GPLv2+
-diff --git a/package/can-utils/can-utils.mk b/package/can-utils/can-utils.mk
-index 743fe7ce0b2b..d5f6673dd25f 100644
---- a/package/can-utils/can-utils.mk
-+++ b/package/can-utils/can-utils.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+-	  First, the default Buildroot patch set for the package is applied.
++	  First, the default Buildroot patch set for the package is applied
++	  from the package's directory in Buildroot.
  
- CAN_UTILS_VERSION = 16c970d40e6c19dde705bad4751bab1a3a4f3a0d
--CAN_UTILS_SITE = git://gitorious.org/linux-can/can-utils.git
-+$(eval $(call gitorious,linux-can,can-utils))
- CAN_UTILS_AUTORECONF = YES
+-	  If the directory $(BR2_GLOBAL_PATCH_DIR)/<packagename>/<packageversion>
+-	  exists, then all *.patch files in the directory will be applied.
++	  Then for every directory - <global-patch-dir> - that exists in
++	  BR2_GLOBAL_PATCH_DIR, if the directory
++	  <global-patch-dir>/<packagename>/<packageversion>/ exists, then all
++	  *.patch files in this directory will be applied.
  
- $(eval $(autotools-package))
-diff --git a/package/lpc3250loader/lpc3250loader.mk b/package/lpc3250loader/lpc3250loader.mk
-index 42beb7bc84b4..606e446c20bb 100644
---- a/package/lpc3250loader/lpc3250loader.mk
-+++ b/package/lpc3250loader/lpc3250loader.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+-	  Otherwise, if the directory $(BR2_GLOBAL_PATCH_DIR)/<packagename> exists,
++	  Otherwise, if the directory <global-patch-dir>/<packagename> exists,
+ 	  then all *.patch files in the directory will be applied.
  
--HOST_LPC3250LOADER_SITE = git://gitorious.org/lpc3250loader/lpc3250loader.git
- HOST_LPC3250LOADER_VERSION = 1.0
-+$(eval $(call host-gitorious,lpc3250loader,lpc3250loader))
- 
- define HOST_LPC3250LOADER_INSTALL_CMDS
- 	$(INSTALL) -m 0755 -D $(@D)/LPC3250loader.py \
-diff --git a/package/ti-uim/ti-uim.mk b/package/ti-uim/ti-uim.mk
-index b49818004989..034388a08d1e 100644
---- a/package/ti-uim/ti-uim.mk
-+++ b/package/ti-uim/ti-uim.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- TI_UIM_VERSION = c73894456df5def97111cb33d2106b684b8b7959
--TI_UIM_SITE = git://gitorious.org/uim/uim.git
-+$(eval $(call gitorious,uim,uim))
- TI_UIM_LICENSE = GPLv2+
- 
- define TI_UIM_BUILD_CMDS
--- 
-1.8.3.2
+ endmenu
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 45b808a..66034ba 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -134,8 +134,11 @@ endif
+ # The RAWNAME variable is the lowercased package name, which allows to
+ # find the package directory (typically package/<pkgname>) and the
+ # prefix of the patches
++#
++# For BR2_GLOBAL_PATCH_DIR, only generate if it is defined
+ $(BUILD_DIR)/%/.stamp_patched: NAMEVER = $(RAWNAME)-$($(PKG)_VERSION)
+-$(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS = $($(PKG)_DIR_PREFIX)/$(RAWNAME) $(call qstrip,$(BR2_GLOBAL_PATCH_DIR))/$(RAWNAME)
++$(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS =  $($(PKG)_DIR_PREFIX)/$(RAWNAME)
++$(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS += $(addsuffix /$(RAWNAME),$(call qstrip,$(BR2_GLOBAL_PATCH_DIR)))
+ $(BUILD_DIR)/%/.stamp_patched:
+ 	@$(call step_start,patch)
+ 	@$(call MESSAGE,"Patching")
