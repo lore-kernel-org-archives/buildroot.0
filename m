@@ -1,42 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Dec 2013 10:15:47 +0100
-Subject: [Buildroot] [PATCH 1/2] libmpd: change download URL
-In-Reply-To: <1387787808-8194-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1387787808-8194-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <20131225101547.1c2a0d67@skate>
+Date: Wed, 25 Dec 2013 10:17:27 +0100
+Subject: [Buildroot] [git commit] menu: visually split Shells from Utilities
+Message-ID: <20131225091740.35D3B9C1BA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jerzy Grzegorek,
+commit: http://git.buildroot.net/buildroot/commit/?id=91a4ce48762154cd60de807c5d273ed72afffdf9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 23 Dec 2013 09:36:47 +0100, Jerzy Grzegorek wrote:
-> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-> ---
->  package/libmpd/libmpd.mk |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/libmpd/libmpd.mk b/package/libmpd/libmpd.mk
-> index b78a36f..7df8c2a 100644
-> --- a/package/libmpd/libmpd.mk
-> +++ b/package/libmpd/libmpd.mk
-> @@ -5,7 +5,7 @@
->  ################################################################################
->  
->  LIBMPD_VERSION = 11.8.17
-> -LIBMPD_SITE = http://download.sarine.nl/Programs/gmpc/11.8.16
-> +LIBMPD_SITE = http://download.sarine.nl/Programs/gmpc/11.8
+As discussed in [1], add comments to distinghuish shells from utilities in
+the 'Shells and Utilities' menu.
 
-I had a look, and both of these URLs point to the same thing. Is this
-fixing something specific, or just done for consistency reason because
-we download the 11.8.17 version from a directory named 11.8.16 ?
+[1] http://lists.busybox.net/pipermail/buildroot/2013-December/083836.html
 
-Thanks!
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index 3685807..fe31cd2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -948,12 +948,14 @@ source "package/xenomai/Config.in"
+ endmenu
+ 
+ menu "Shell and utilities"
+-source "package/at/Config.in"
++comment "Shells"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/bash/Config.in"
+ source "package/dash/Config.in"
+ source "package/zsh/Config.in"
+ endif
++comment "Utilities"
++source "package/at/Config.in"
+ source "package/dialog/Config.in"
+ source "package/dtach/Config.in"
+ source "package/file/Config.in"
