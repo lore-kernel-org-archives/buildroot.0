@@ -1,37 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Dec 2013 17:51:58 +0100
-Subject: [Buildroot] [git commit] netsnmp: do not force --disable-static
-Message-ID: <20131225170138.CB5D59C1D6@busybox.osuosl.org>
+Date: Wed, 25 Dec 2013 18:02:42 +0100
+Subject: [Buildroot] [PATCH] Enabling static libraries build for netsnmp
+ package
+In-Reply-To: <528A2BFA.4040102@gmx.de>
+References: <528A2BFA.4040102@gmx.de>
+Message-ID: <20131225180242.30061497@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=622bd71e0a26755e8bec37e835524e0a82a50884
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear universe II,
 
-The following patch enables the generation of static libraries
-additionally to the shared ones for the netsnmp package.
+On Mon, 18 Nov 2013 16:02:18 +0100, universe II wrote:
+> As many embedded SW systems do no allow usage of shared libraries, I was 
+> wondering why the netsnmp package creates shared libraries only. The 
+> following patch enables the generation of static libraries additionally 
+> to the shared ones.
 
-[Thomas: fixed commit log.]
+Thanks, applied, after adjusting the commit log.
 
-Signed-off-by: Andreas Ehmanns <universeii@gmx.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/netsnmp/netsnmp.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
-index 6ab754e..47c6424 100644
---- a/package/netsnmp/netsnmp.mk
-+++ b/package/netsnmp/netsnmp.mk
-@@ -11,7 +11,7 @@ NETSNMP_LICENSE = Various BSD-like
- NETSNMP_LICENSE_FILES = COPYING
- NETSNMP_INSTALL_STAGING = YES
- NETSNMP_CONF_ENV = ac_cv_NETSNMP_CAN_USE_SYSCTL=yes
--NETSNMP_CONF_OPT = --with-persistent-directory=/var/lib/snmp --disable-static \
-+NETSNMP_CONF_OPT = --with-persistent-directory=/var/lib/snmp \
- 		--with-defaults --enable-mini-agent --without-rpm \
- 		--with-logfile=none --without-kmem-usage $(DISABLE_IPV6) \
- 		--enable-as-needed --without-perl-modules \
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
