@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 25 Dec 2013 21:29:04 +0100
-Subject: [Buildroot] [PATCH 2/4] package/linux-firmware: bump version
+Date: Wed, 25 Dec 2013 21:29:05 +0100
+Subject: [Buildroot] [PATCH 3/4] package/linux-firmware: add Atheros 9170
+	firmware
 In-Reply-To: <cover.1388003226.git.yann.morin.1998@free.fr>
 References: <cover.1388003226.git.yann.morin.1998@free.fr>
-Message-ID: <4fb0e8c3cc89d0436df16660ba40cb9d6e447bbb.1388003226.git.yann.morin.1998@free.fr>
+Message-ID: <581dd058da4d28ed6a253e8b8120c26da104e7d2.1388003226.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,35 +13,42 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Get a bunch of new firmwares, and some firmware bumps.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/linux-firmware/linux-firmware.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/linux-firmware/Config.in         | 5 +++++
+ package/linux-firmware/linux-firmware.mk | 4 ++++
+ 2 files changed, 9 insertions(+)
 
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index da37b12..ab7c071 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -15,6 +15,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_7010
+ 	help
+ 	  Firmware files for the Atheros 7010 module
+ 
++config BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9170
++	bool "Atheros 9170"
++	help
++	  Firmware files for the Atheros 9170 module
++
+ config BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9271
+ 	bool "Atheros 9271"
+ 	help
 diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index a88bc4c..f865c73 100644
+index f865c73..c6a3e28 100644
 --- a/package/linux-firmware/linux-firmware.mk
 +++ b/package/linux-firmware/linux-firmware.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -41,6 +41,10 @@ LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_RTL_87XX) += \
+ LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_7010) += \
+ 	LICENCE.atheros_firmware ar7010.fw ar7010_1_1.fw htc_7010.fw
  
--LINUX_FIRMWARE_VERSION = 07ea598af5b9dde3acdf279846b062fa1b2987b8
-+LINUX_FIRMWARE_VERSION = 76b366df2afdde9811fdd5fc128d1779e26e7be7
- LINUX_FIRMWARE_SITE = http://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
- LINUX_FIRMWARE_SITE_METHOD = git
- 
-@@ -27,7 +27,8 @@ LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_RTL_81XX) += \
- 	rtlwifi/rtl8192cfw.bin rtlwifi/rtl8192cfwU.bin 		\
- 	rtlwifi/rtl8192cfwU_B.bin rtlwifi/rtl8192cufw.bin	\
- 	rtlwifi/rtl8192defw.bin rtlwifi/rtl8192sefw.bin		\
--	rtlwifi/rtl8188efw.bin					\
-+	rtlwifi/rtl8188efw.bin rtlwifi/rtl8192cufw_A.bin	\
-+	rtlwifi/rtl8192cufw_B.bin rtlwifi/rtl8192cufw_TMSC.bin	\
- 	LICENCE.rtlwifi_firmware.txt
- 
- # rtl87xx
++# ar9170
++LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9170) += \
++	LICENCE.atheros_firmware ar9170-1.fw ar9170-2.fw
++
+ # ar9271
+ LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9271) += \
+ 	LICENCE.atheros_firmware ar9271.fw htc_9271.fw
 -- 
 1.8.1.2
