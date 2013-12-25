@@ -1,88 +1,127 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Dec 2013 17:34:55 +0100
-Subject: [Buildroot] [PATCH] fio: new package
-In-Reply-To: <1383146545-9594-1-git-send-email-ezequiel.garcia@free-electrons.com>
-References: <1383146545-9594-1-git-send-email-ezequiel.garcia@free-electrons.com>
-Message-ID: <20131225173455.0c413356@skate>
+Date: Wed, 25 Dec 2013 17:37:26 +0100
+Subject: [Buildroot] [git commit] lua: remove a too invasive patch
+Message-ID: <20131225163742.359279C1D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ezequiel Garcia,
+commit: http://git.buildroot.net/buildroot/commit/?id=4444a76f2bdb12fa27638b9f0eac99018cb8b130
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 30 Oct 2013 12:22:25 -0300, Ezequiel Garcia wrote:
-> Signed-off-by: Ezequiel Garcia <ezequiel.garcia@free-electrons.com>
-> ---
->  package/Config.in     |  1 +
->  package/fio/Config.in |  6 ++++++
->  package/fio/fio.mk    | 25 +++++++++++++++++++++++++
->  3 files changed, 32 insertions(+)
->  create mode 100644 package/fio/Config.in
->  create mode 100644 package/fio/fio.mk
+the static version of luac is enough
 
-Thanks, I've applied this, after making several changes.
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lua/lua-03-shared-libs-for-luac.patch |   97 -------------------------
+ 1 files changed, 0 insertions(+), 97 deletions(-)
 
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 4c4da51..7cb46aa 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -47,6 +47,7 @@ source "package/dmalloc/Config.in"
->  source "package/dropwatch/Config.in"
->  source "package/dstat/Config.in"
->  source "package/duma/Config.in"
-> +source "package/fio/Config.in"
->  source "package/gdb/Config.in"
->  source "package/iozone/Config.in"
->  source "package/kexec/Config.in"
-> diff --git a/package/fio/Config.in b/package/fio/Config.in
-> new file mode 100644
-> index 0000000..263e7f5
-> --- /dev/null
-> +++ b/package/fio/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_FIO
-> +	bool "fio"
-> +	depends on BR2_USE_MMU # fork()
-
-The package required largefile and thread support.
-
-> +	help
-> +	  fio is an I/O tool meant to be used both for benchmark
-> +	  and stress/hardware verification.
-
-I've added an upstream URL here.
-
-> diff --git a/package/fio/fio.mk b/package/fio/fio.mk
-> new file mode 100644
-> index 0000000..60cd14f
-> --- /dev/null
-> +++ b/package/fio/fio.mk
-> @@ -0,0 +1,25 @@
-> +################################################################################
-> +#
-> +# fio
-> +#
-> +################################################################################
-> +
-> +FIO_VERSION = 2.1.3
-> +FIO_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/f/fio
-> +FIO_SOURCE = fio_$(FIO_VERSION).orig.tar.gz
-
-I've switched to use the official Git repository at git.kernel.dk, and
-used the new 2.1.4 version.
-
-> +FIO_LICENSE = GPLv2
-
-I've changed that to "GPLv2 + special obligations", because the LICENSE
-file makes additional requirements to the GPLv2.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/lua/lua-03-shared-libs-for-luac.patch b/package/lua/lua-03-shared-libs-for-luac.patch
+deleted file mode 100644
+index 33f9183..0000000
+--- a/package/lua/lua-03-shared-libs-for-luac.patch
++++ /dev/null
+@@ -1,97 +0,0 @@
+-Compile the luac binary with the shared library.
+-Many internal functions (LUAI_FUNC) must be exported (LUA_API).
+-
+-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+-
+-Index: b/src/ldo.h
+-===================================================================
+---- a/src/ldo.h
+-+++ b/src/ldo.h
+-@@ -46,7 +46,7 @@
+- LUAI_FUNC int luaD_poscall (lua_State *L, StkId firstResult);
+- LUAI_FUNC void luaD_reallocCI (lua_State *L, int newsize);
+- LUAI_FUNC void luaD_reallocstack (lua_State *L, int newsize);
+--LUAI_FUNC void luaD_growstack (lua_State *L, int n);
+-+LUA_API void luaD_growstack (lua_State *L, int n);
+- 
+- LUAI_FUNC void luaD_throw (lua_State *L, int errcode);
+- LUAI_FUNC int luaD_rawrunprotected (lua_State *L, Pfunc f, void *ud);
+-Index: b/src/lfunc.h
+-===================================================================
+---- a/src/lfunc.h
+-+++ b/src/lfunc.h
+-@@ -18,7 +18,7 @@
+-                          cast(int, sizeof(TValue *)*((n)-1)))
+- 
+- 
+--LUAI_FUNC Proto *luaF_newproto (lua_State *L);
+-+LUA_API Proto *luaF_newproto (lua_State *L);
+- LUAI_FUNC Closure *luaF_newCclosure (lua_State *L, int nelems, Table *e);
+- LUAI_FUNC Closure *luaF_newLclosure (lua_State *L, int nelems, Table *e);
+- LUAI_FUNC UpVal *luaF_newupval (lua_State *L);
+-Index: b/src/lmem.h
+-===================================================================
+---- a/src/lmem.h
+-+++ b/src/lmem.h
+-@@ -38,9 +38,9 @@
+-    ((v)=cast(t *, luaM_reallocv(L, v, oldn, n, sizeof(t))))
+- 
+- 
+--LUAI_FUNC void *luaM_realloc_ (lua_State *L, void *block, size_t oldsize,
+-+LUA_API void *luaM_realloc_ (lua_State *L, void *block, size_t oldsize,
+-                                                           size_t size);
+--LUAI_FUNC void *luaM_toobig (lua_State *L);
+-+LUA_API void *luaM_toobig (lua_State *L);
+- LUAI_FUNC void *luaM_growaux_ (lua_State *L, void *block, int *size,
+-                                size_t size_elem, int limit,
+-                                const char *errormsg);
+-Index: b/src/lstring.h
+-===================================================================
+---- a/src/lstring.h
+-+++ b/src/lstring.h
+-@@ -25,7 +25,7 @@
+- 
+- LUAI_FUNC void luaS_resize (lua_State *L, int newsize);
+- LUAI_FUNC Udata *luaS_newudata (lua_State *L, size_t s, Table *e);
+--LUAI_FUNC TString *luaS_newlstr (lua_State *L, const char *str, size_t l);
+-+LUA_API TString *luaS_newlstr (lua_State *L, const char *str, size_t l);
+- 
+- 
+- #endif
+-Index: b/src/lundump.h
+-===================================================================
+---- a/src/lundump.h
+-+++ b/src/lundump.h
+-@@ -17,7 +17,7 @@
+- LUAI_FUNC void luaU_header (char* h);
+- 
+- /* dump one chunk; from ldump.c */
+--LUAI_FUNC int luaU_dump (lua_State* L, const Proto* f, lua_Writer w, void* data, int strip);
+-+LUA_API int luaU_dump (lua_State* L, const Proto* f, lua_Writer w, void* data, int strip);
+- 
+- #ifdef luac_c
+- /* print one chunk; from print.c */
+-Index: b/src/Makefile
+-===================================================================
+---- a/src/Makefile
+-+++ b/src/Makefile
+-@@ -34,7 +34,7 @@
+- LUA_O=	lua.o
+- 
+- LUAC_T=	luac
+--LUAC_O=	luac.o print.o
+-+LUAC_O=	luac.o print.o lopcodes.o
+- 
+- ALL_O= $(CORE_O) $(LIB_O) $(LUA_O) $(LUAC_O)
+- ALL_T= $(LUA_A) $(LUA_SO) $(LUA_T) $(LUAC_T)
+-@@ -62,8 +62,8 @@
+- $(LUA_T): $(LUA_O) $(LUA_SO)
+- 	$(CC) -o $@ -L. -llua $(MYLDFLAGS) $(LUA_O) $(LIBS)
+- 
+--$(LUAC_T): $(LUAC_O) $(LUA_A)
+--	$(CC) -o $@ $(MYLDFLAGS) $(LUAC_O) $(LUA_A) $(LIBS)
+-+$(LUAC_T): $(LUAC_O) $(LUA_SO)
+-+	$(CC) -o $@ -L. $(MYLDFLAGS) $(LUAC_O) -llua $(LIBS)
+- 
+- clean:
+- 	$(RM) $(ALL_T) $(ALL_O)
