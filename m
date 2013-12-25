@@ -1,40 +1,27 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 25 Dec 2013 10:13:51 +0100
-Subject: [Buildroot] [PATCH] menu: visually split Shells from Utilities
-Message-ID: <edb15c529ea743260f32.1387962831@argentina>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 25 Dec 2013 10:14:45 +0100
+Subject: [Buildroot] [PATCH] libmicrohttpd: bump to version 0.9.33
+In-Reply-To: <1387799316-31043-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1387799316-31043-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20131225101445.758e35a4@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As discussed in [1], add comments to distinghuish shells from utilities in
-the 'Shells and Utilities' menu.
+Dear Gustavo Zacarias,
 
-[1] http://lists.busybox.net/pipermail/buildroot/2013-December/083836.html
+On Mon, 23 Dec 2013 08:48:36 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/libmicrohttpd/libmicrohttpd.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Applied, thanks!
 
----
- package/Config.in |  4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
-
-diff --git a/package/Config.in b/package/Config.in
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -948,12 +948,14 @@ source "package/xenomai/Config.in"
- endmenu
- 
- menu "Shell and utilities"
--source "package/at/Config.in"
-+comment "Shells"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/bash/Config.in"
- source "package/dash/Config.in"
- source "package/zsh/Config.in"
- endif
-+comment "Utilities"
-+source "package/at/Config.in"
- source "package/dialog/Config.in"
- source "package/dtach/Config.in"
- source "package/file/Config.in"
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
