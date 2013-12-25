@@ -1,33 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Dec 2013 12:37:37 +0100
-Subject: [Buildroot] [PATCH 1/1] package: make package download from
- Mercurial repositories more robust
-In-Reply-To: <1386700290-4813-1-git-send-email-mathias.demare@gmail.com>
-References: <1386700290-4813-1-git-send-email-mathias.demare@gmail.com>
-Message-ID: <20131225123737.7fcc5c57@skate>
+Date: Wed, 25 Dec 2013 12:41:59 +0100
+Subject: [Buildroot] [git commit] e2fsprogs: rename the first patch to match
+	the naming policy
+Message-ID: <20131225114213.C0D919C1C6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Mathias De Mar?,
+commit: http://git.buildroot.net/buildroot/commit/?id=b7cac3e86e7e568410a6fefcb9cdabeb068871cd
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 10 Dec 2013 19:31:30 +0100, Mathias De Mar? wrote:
-> Previously, when cloning a Mercurial repository,
-> aborting the clone could (in some cases) leave behind an empty directory.
-> As a result, a later clone would fail.
-> 
-> Signed-off-by: Mathias De Mar? <mathias.demare@gmail.com>
-> ---
->  package/pkg-download.mk | 1 +
->  1 file changed, 1 insertion(+)
+Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...bs.patch => e2fsprogs-0001-sem-init-libs.patch} |    0
+ 1 files changed, 0 insertions(+), 0 deletions(-)
 
-Applied, thanks. I've manually added Thomas DS Acked-by, since it was
-not automatically picked up by patchwork for some reason.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/e2fsprogs/e2fsprogs-sem-init-libs.patch b/package/e2fsprogs/e2fsprogs-0001-sem-init-libs.patch
+similarity index 100%
+rename from package/e2fsprogs/e2fsprogs-sem-init-libs.patch
+rename to package/e2fsprogs/e2fsprogs-0001-sem-init-libs.patch
