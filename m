@@ -1,79 +1,182 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Dec 2013 17:31:10 +0100
-Subject: [Buildroot] [git commit] Support for multiple BR2_GLOBAL_PATCH_DIR
-Message-ID: <20131225163218.8F7729C1D5@busybox.osuosl.org>
+Date: Wed, 25 Dec 2013 17:31:55 +0100
+Subject: [Buildroot] [git commit] manual: update for multiple global patch
+	dirs
+Message-ID: <20131225163218.9A66B9BDC2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bc4f79d665d00d6ab5aac7fc442fbf1a67b7a82b
+commit: http://git.buildroot.net/buildroot/commit/?id=b3a939367fcf89bf7f05241f2402f8f660a5af04
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Adding support for specifying multiple directories in
-BR2_GLOBAL_PATCH_DIR. This will allow for a layered approach for the
-patching of a package.
+Updating the documentation to reflect that multiple directories can
+now be specified for BR2_GLOBAL_PATCH_DIR. Along with giving an
+example use case of how to use multiple global patch directories.
+
+[Thomas: fix minor typo mentionned by Thomas De Schampheleire.]
 
 Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
-Reviewed-by: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in              |   20 ++++++++++++--------
- package/pkg-generic.mk |    5 ++++-
- 2 files changed, 16 insertions(+), 9 deletions(-)
+ docs/manual/customize-packages.txt |   92 ++++++++++++++++++++++++++++++++----
+ docs/manual/patch-policy.txt       |   20 +++++---
+ 2 files changed, 96 insertions(+), 16 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index 2b401cb..d55e57c 100644
---- a/Config.in
-+++ b/Config.in
-@@ -461,18 +461,22 @@ config BR2_PACKAGE_OVERRIDE_FILE
- 	  Buildroot documentation for more details on this feature.
+diff --git a/docs/manual/customize-packages.txt b/docs/manual/customize-packages.txt
+index 1820c54..918ab03 100644
+--- a/docs/manual/customize-packages.txt
++++ b/docs/manual/customize-packages.txt
+@@ -8,16 +8,90 @@ It is sometimes useful to apply 'extra' patches to packages - over and
+ above those provided in Buildroot. This might be used to support custom
+ features in a project, for example, or when working on a new architecture.
  
- config BR2_GLOBAL_PATCH_DIR
--	string "global patch directory"
-+	string "global patch directories"
- 	help
--	  You may specify a directory containing global package patches.
--	  For a specific version <packageversion> of a specific package
--	  <packagename>, patches are applied as follows.
-+	  You may specify a space separated list of one or more directories
-+	  containing global package patches. For a specific version
-+	  <packageversion> of a specific package <packagename>, patches are
-+	  applied as follows:
+-The +BR2_GLOBAL_PATCH_DIR+ configuration file option can be
+-used to specify a directory containing global package patches.
++The +BR2_GLOBAL_PATCH_DIR+ configuration option can be used to specify
++a space separated list of one or more directories containing package
++patches. By specifying multiple global patch directories, a user could
++implement a layered approach to patches. This could be useful when a
++user has multiple boards that share a common processor architecture.
++It is often the case that a subset of patches for a package need to be
++shared between the different boards a user has. However, each board
++may require specific patches for the package that build on top of the
++common subset of patches.
  
--	  First, the default Buildroot patch set for the package is applied.
-+	  First, the default Buildroot patch set for the package is applied
-+	  from the package's directory in Buildroot.
+-For a specific version <packageversion> of a specific package <packagename>,
+-patches are applied as follows.
++For a specific version +<packageversion>+ of a specific package
+++<packagename>+, patches are applied from +BR2_GLOBAL_PATCH_DIR+ as
++follows:
  
--	  If the directory $(BR2_GLOBAL_PATCH_DIR)/<packagename>/<packageversion>
--	  exists, then all *.patch files in the directory will be applied.
-+	  Then for every directory - <global-patch-dir> - that exists in
-+	  BR2_GLOBAL_PATCH_DIR, if the directory
-+	  <global-patch-dir>/<packagename>/<packageversion>/ exists, then all
-+	  *.patch files in this directory will be applied.
+-First, the default Buildroot patch set for the package is applied.
++. For every directory - +<global-patch-dir>+ - that exists in
++  +BR2_GLOBAL_PATCH_DIR+, a +<package-patch-dir>+ will be determined as
++  follows:
+++
++* +<global-patch-dir>/<packagename>/<packageversion>/+ if the
++  directory exists.
+++
++* Otherwise, +<global-patch-dir>/<packagename>+ if the directory
++  exists.
  
--	  Otherwise, if the directory $(BR2_GLOBAL_PATCH_DIR)/<packagename> exists,
-+	  Otherwise, if the directory <global-patch-dir>/<packagename> exists,
- 	  then all *.patch files in the directory will be applied.
+-If the directory +$(BR2_GLOBAL_PATCH_DIR)/<packagename>/<packageversion>+
+-exists, then all +*.patch+ files in the directory will be applied.
++. Patches will then be applied from a +<package-patch-dir>+ as
++  follows:
+++
++* If a +series+ file exists in the package directory, then patches are
++  applied according to the +series+ file;
+++
++* Otherwise, patch files matching +<packagename>-*.patch+
++  are applied in alphabetical order.
++  So, to ensure they are applied in the right order, it is highly
++  recommended to name the patch files like this:
++  +<packagename>-<number>-<description>.patch+, where +<number>+
++  refers to the 'apply order'.
  
- endmenu
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 45b808a..66034ba 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -134,8 +134,11 @@ endif
- # The RAWNAME variable is the lowercased package name, which allows to
- # find the package directory (typically package/<pkgname>) and the
- # prefix of the patches
-+#
-+# For BR2_GLOBAL_PATCH_DIR, only generate if it is defined
- $(BUILD_DIR)/%/.stamp_patched: NAMEVER = $(RAWNAME)-$($(PKG)_VERSION)
--$(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS = $($(PKG)_DIR_PREFIX)/$(RAWNAME) $(call qstrip,$(BR2_GLOBAL_PATCH_DIR))/$(RAWNAME)
-+$(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS =  $($(PKG)_DIR_PREFIX)/$(RAWNAME)
-+$(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS += $(addsuffix /$(RAWNAME),$(call qstrip,$(BR2_GLOBAL_PATCH_DIR)))
- $(BUILD_DIR)/%/.stamp_patched:
- 	@$(call step_start,patch)
- 	@$(call MESSAGE,"Patching")
+-Otherwise, if the directory +$(BR2_GLOBAL_PATCH_DIR)/<packagename>+
+-exists, then all +*.patch+ files in the directory will be applied.
++For information about how patches are applied for a package, see
++xref:patch-apply-order[]
++
++The +BR2_GLOBAL_PATCH_DIR+ option is the preferred method for
++specifying a custom patch directory for packages. It can be used to
++specify a patch directory for any package in buildroot. It should also
++be used in place of the custom patch directory options that are
++available for packages such as U-Boot and Barebox. By doing this, it
++will allow a user to manage their patches from one top-level
++directory.
++
++The exception to +BR2_GLOBAL_PATCH_DIR+ being the preferred method for
++specifying custom patches is +BR2_LINUX_KERNEL_PATCH+.
+++BR2_LINUX_KERNEL_PATCH+ should be used to specify kernel patches that
++are available at an URL. *Note:* +BR2_LINUX_KERNEL_PATCHES+ are applied
++after patches available in +BR2_GLOBAL_PATCH_DIR+, as it is done
++from a post-patch hook of the Linux package.
++
++An example directory structure for where a user has multiple
++directories specified for +BR2_GLOBAL_PATCH_DIR+ may look like this:
++
++-----
++board/
+++-- common-fooarch
++|   +-- patches
++|       +-- linux
++|       |   +-- linux-patch1.patch
++|       |   +-- linux-patch2.patch
++|       +-- u-boot
++|       +-- foopkg
+++-- fooarch-board
++    +-- patches
++        +-- linux
++        |   +-- linux-patch3.patch
++        +-- u-boot
++        +-- foopkg
++-----
++
++If the user has the +BR2_GLOBAL_PATCH_DIR+ configuration option set as
++follows:
++
++-----
++BR2_GLOBAL_PATCH_DIR="board/common-fooarch board/fooarch-board"
++-----
++
++Then the patches would applied as follows for the Linux kernel:
++
++. board/common-fooarch/patches/linux/linux-patch1.patch
++. board/common-fooarch/patches/linux/linux-patch2.patch
++. board/fooarch-board/patches/linux/linux-patch3.patch
+diff --git a/docs/manual/patch-policy.txt b/docs/manual/patch-policy.txt
+index d9bc8ca..c67d684 100644
+--- a/docs/manual/patch-policy.txt
++++ b/docs/manual/patch-policy.txt
+@@ -50,10 +50,11 @@ Global patch directory
+ ^^^^^^^^^^^^^^^^^^^^^^
+ 
+ The +BR2_GLOBAL_PATCH_DIR+ configuration file option can be
+-used to specify a directory containing global package patches. See
+-xref:packages-custom[] for details.
+-
++used to specify a space separated list of one or more directories
++containing global package patches. See xref:packages-custom[] for
++details.
+ 
++[[patch-apply-order]]
+ How patches are applied
+ ~~~~~~~~~~~~~~~~~~~~~~~
+ 
+@@ -64,19 +65,24 @@ How patches are applied
+ . If +<packagename>_PATCH+ is defined, then patches from these
+   tarballs are applied;
+ 
+-. If there are some +*.patch+ files in the package directory or in the
+-  a package subdirectory named +<packageversion>+, then:
++. If there are some +*.patch+ files in the package's Buildroot
++  directory or in a package subdirectory named +<packageversion>+,
++  then:
+ +
+ * If a +series+ file exists in the package directory, then patches are
+   applied according to the +series+ file;
+ +
+ * Otherwise, patch files matching +<packagename>-*.patch+
+   are applied in alphabetical order.
+-  So, to ensure they are applied in the right order, it is hightly
+-  recommended to named the patch files like this:
++  So, to ensure they are applied in the right order, it is highly
++  recommended to name the patch files like this:
+   +<packagename>-<number>-<description>.patch+, where +<number>+
+   refers to the 'apply order'.
+ 
++. If +BR2_GLOBAL_PATCH_DIR+ is defined, the directories will be
++  enumerated in the order they are specified. The patches are applied
++  as described in the previous step.
++
+ . Run the +<packagename>_POST_PATCH_HOOKS+ commands if defined.
+ 
+ If something goes wrong in the steps _3_ or _4_, then the build fails.
