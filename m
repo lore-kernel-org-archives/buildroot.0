@@ -1,38 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Dec 2013 12:27:11 +0100
-Subject: [Buildroot] [PATCH] Config.in files: use if/endif instead of
- 'depends on' for main symbol
-In-Reply-To: <cb372fafc2b420aeb2cc.1387575090@argentina>
-References: <cb372fafc2b420aeb2cc.1387575090@argentina>
-Message-ID: <20131225122711.10ac6304@skate>
+Date: Wed, 25 Dec 2013 12:28:42 +0100
+Subject: [Buildroot] [PATCH v2] ffmpeg: fix build for xtensa
+In-Reply-To: <3eaba734f6632e37ccac0e80e8326761c29075ee.1387963458.git.baruch@tkos.co.il>
+References: <3eaba734f6632e37ccac0e80e8326761c29075ee.1387963458.git.baruch@tkos.co.il>
+Message-ID: <20131225122842.4d07677e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Dear Baruch Siach,
 
-On Fri, 20 Dec 2013 22:31:30 +0100, Thomas De Schampheleire wrote:
-> In the Config.in file of package foo, it often happens that there are other
-> symbols besides BR2_PACKAGE_FOO. Typically, these symbols only make sense
-> when foo itself is enabled. There are two ways to express this: with
->     depends on BR2_PACKAGE_FOO
-> in each extra symbol, or with
->     if BR2_PACKAGE_FOO
->         ...
->     endif
-> around the entire set of extra symbols.
+On Wed, 25 Dec 2013 11:24:18 +0200, Baruch Siach wrote:
+> The ffmpeg package generates libraries that are too large for the xtensa
+> default placement of literals in a dedicated section. Use
+> -mtext-section-literal to place literals in the text section.
 > 
-> The if/endif approach avoids the repetition of 'depends on' statements on
-> multiple symbols, so this is clearly preferred. But even when there is only
-> one extra symbol, if/endif is a more logical choice:
-> - it is future-proof for when extra symbols are added
-> - it allows to have just one strategy instead of two (less confusion)
+> Fixes
+> http://autobuild.buildroot.net/results/606/60670d35f16c3b8fe19debf7f8e40a046a579520/
 > 
-> This patch modifies the Config.in files accordingly.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+> v2:
+>     Use FFMPEG_CFLAGS as intermediate variable (Thomas Petazzoni)
+> ---
+>  package/ffmpeg/ffmpeg.mk | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 
 Applied, thanks.
 
