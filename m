@@ -1,115 +1,86 @@
-From: =?UTF-8?q?Fatih=20A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
-Date: Wed, 25 Dec 2013 15:36:34 +0200
-Subject: [Buildroot] [PATCH v2] qt5connectivity: new package
-Message-ID: <1387978594-16692-1-git-send-email-fatih.asici@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 25 Dec 2013 16:44:13 +0100
+Subject: [Buildroot] [git commit] fio: new package
+Message-ID: <20131225154501.472A29C1C7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-QtNfc is not installed since it is not supported on Linux.
+commit: http://git.buildroot.net/buildroot/commit/?id=43e9128600c209b669cb0eca93717d5bc4fa08bd
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
----
-Changes v1 -> v2:
-  - propagate bluez_utils dependencies !BR2_avr32 and BR2_USE_MMU
-    (Suggested by Thomas Petazzoni)
----
- package/qt5/Config.in                          |  1 +
- package/qt5/qt5connectivity/Config.in          | 15 ++++++++
- package/qt5/qt5connectivity/qt5connectivity.mk | 49 ++++++++++++++++++++++++++
- 3 files changed, 65 insertions(+)
- create mode 100644 package/qt5/qt5connectivity/Config.in
- create mode 100644 package/qt5/qt5connectivity/qt5connectivity.mk
+[Thomas: add largefile and thread dependencies, bump to version 2.1.4,
+ use upstream Git instead of Debian tarballs, adjust license
+ information]
 
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index d2b8f10..bf10075 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -17,6 +17,7 @@ menuconfig BR2_PACKAGE_QT5
- 
- if BR2_PACKAGE_QT5
- source "package/qt5/qt5base/Config.in"
-+source "package/qt5/qt5connectivity/Config.in"
- source "package/qt5/qt5declarative/Config.in"
- source "package/qt5/qt5graphicaleffects/Config.in"
- source "package/qt5/qt5imageformats/Config.in"
-diff --git a/package/qt5/qt5connectivity/Config.in b/package/qt5/qt5connectivity/Config.in
+Signed-off-by: Ezequiel Garcia <ezequiel.garcia@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in     |    1 +
+ package/fio/Config.in |   13 +++++++++++++
+ package/fio/fio.mk    |   24 ++++++++++++++++++++++++
+ 3 files changed, 38 insertions(+), 0 deletions(-)
+
+diff --git a/package/Config.in b/package/Config.in
+index fe31cd2..76f8d4f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -47,6 +47,7 @@ source "package/dmalloc/Config.in"
+ source "package/dropwatch/Config.in"
+ source "package/dstat/Config.in"
+ source "package/duma/Config.in"
++source "package/fio/Config.in"
+ source "package/gdb/Config.in"
+ source "package/iozone/Config.in"
+ source "package/kexec/Config.in"
+diff --git a/package/fio/Config.in b/package/fio/Config.in
 new file mode 100644
-index 0000000..c9f36ef
+index 0000000..deff12c
 --- /dev/null
-+++ b/package/qt5/qt5connectivity/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_QT5CONNECTIVITY
-+	bool "qt5connectivity"
-+	select BR2_PACKAGE_BLUEZ_UTILS
-+	select BR2_PACKAGE_QT5BASE
-+	select BR2_PACKAGE_QT5BASE_CONCURRENT
-+	select BR2_PACKAGE_QT5BASE_DBUS
-+	depends on !BR2_avr32 # bluez_utils
-+	depends on BR2_USE_MMU # bluez_utils
++++ b/package/fio/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_FIO
++	bool "fio"
++	depends on BR2_USE_MMU # fork()
++	depends on BR2_LARGEFILE
++	depends on BR2_TOOLCHAIN_HAS_THREADS
 +	help
-+	  Qt is a cross-platform application and UI framework for
-+	  developers using C++.
++	  fio is an I/O tool meant to be used both for benchmark
++	  and stress/hardware verification.
 +
-+	  This package corresponds to the qt5connectivity module.
++	  http://git.kernel.dk/?p=fio.git;a=summary
 +
-+	  http://qt-project.org
-diff --git a/package/qt5/qt5connectivity/qt5connectivity.mk b/package/qt5/qt5connectivity/qt5connectivity.mk
++comment "fio needs a toolchain w/ largefile, threads"
++	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/fio/fio.mk b/package/fio/fio.mk
 new file mode 100644
-index 0000000..2be51d5
+index 0000000..f9a690e
 --- /dev/null
-+++ b/package/qt5/qt5connectivity/qt5connectivity.mk
-@@ -0,0 +1,49 @@
++++ b/package/fio/fio.mk
+@@ -0,0 +1,24 @@
 +################################################################################
 +#
-+# qt5connectivity
++# fio
 +#
 +################################################################################
 +
-+QT5CONNECTIVITY_VERSION = $(QT5_VERSION)
-+QT5CONNECTIVITY_SITE = $(QT5_SITE)
-+QT5CONNECTIVITY_SOURCE = qtconnectivity-opensource-src-$(QT5CONNECTIVITY_VERSION).tar.xz
-+QT5CONNECTIVITY_DEPENDENCIES = bluez_utils qt5base
-+QT5CONNECTIVITY_INSTALL_STAGING = YES
++FIO_VERSION = fio-2.1.4
++FIO_SITE = git://git.kernel.dk/fio.git
++FIO_LICENSE = GPLv2 + special obligations
++FIO_LICENSE_FILES = LICENSE
 +
-+ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
-+QT5CONNECTIVITY_LICENSE = LGPLv2.1 or GPLv3.0
-+QT5CONNECTIVITY_LICENSE_FILES = LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt
-+else
-+QT5CONNECTIVITY_LICENSE = Commercial license
-+QT5CONNECTIVITY_REDISTRIBUTE = NO
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
-+QT5CONNECTIVITY_DEPENDENCIES += qt5declarative
-+endif
-+
-+define QT5CONNECTIVITY_CONFIGURE_CMDS
-+	(cd $(@D); $(HOST_DIR)/usr/bin/qmake)
++define FIO_CONFIGURE_CMDS
++	(cd $(@D); ./configure --cc="$(TARGET_CC)" --extra-cflags="$(TARGET_CFLAGS)")
 +endef
 +
-+define QT5CONNECTIVITY_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
++define FIO_BUILD_CMDS
++	$(MAKE) -C $(@D)
 +endef
 +
-+define QT5CONNECTIVITY_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
-+	$(QT5_LA_PRL_FILES_FIXUP)
-+endef
-+
-+ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
-+define QT5CONNECTIVITY_INSTALL_TARGET_QMLS
-+	cp -dpfr $(STAGING_DIR)/usr/qml/QtBluetooth $(TARGET_DIR)/usr/qml/
-+endef
-+endif
-+
-+define QT5CONNECTIVITY_INSTALL_TARGET_CMDS
-+	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Bluetooth.so.* $(TARGET_DIR)/usr/lib
-+	$(QT5CONNECTIVITY_INSTALL_TARGET_QMLS)
++define FIO_INSTALL_TARGET_CMDS
++	$(INSTALL) -D $(@D)/fio $(TARGET_DIR)/usr/bin/fio
 +endef
 +
 +$(eval $(generic-package))
--- 
-1.8.5.1
