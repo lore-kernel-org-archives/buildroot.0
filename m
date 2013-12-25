@@ -1,24 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Dec 2013 10:14:58 +0100
-Subject: [Buildroot] [PATCH] gnutls: bump to version 3.2.8
-In-Reply-To: <1387799350-31083-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1387799350-31083-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20131225101458.30343758@skate>
+Date: Wed, 25 Dec 2013 10:15:47 +0100
+Subject: [Buildroot] [PATCH 1/2] libmpd: change download URL
+In-Reply-To: <1387787808-8194-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+References: <1387787808-8194-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <20131225101547.1c2a0d67@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Jerzy Grzegorek,
 
-On Mon, 23 Dec 2013 08:49:10 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+On Mon, 23 Dec 2013 09:36:47 +0100, Jerzy Grzegorek wrote:
+> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 > ---
->  package/gnutls/gnutls.mk | 2 +-
+>  package/libmpd/libmpd.mk |    2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/libmpd/libmpd.mk b/package/libmpd/libmpd.mk
+> index b78a36f..7df8c2a 100644
+> --- a/package/libmpd/libmpd.mk
+> +++ b/package/libmpd/libmpd.mk
+> @@ -5,7 +5,7 @@
+>  ################################################################################
+>  
+>  LIBMPD_VERSION = 11.8.17
+> -LIBMPD_SITE = http://download.sarine.nl/Programs/gmpc/11.8.16
+> +LIBMPD_SITE = http://download.sarine.nl/Programs/gmpc/11.8
 
-Applied, thanks!
+I had a look, and both of these URLs point to the same thing. Is this
+fixing something specific, or just done for consistency reason because
+we download the 11.8.17 version from a directory named 11.8.16 ?
+
+Thanks!
 
 Thomas
 -- 
