@@ -1,32 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Dec 2013 10:25:19 +0100
-Subject: [Buildroot] [git commit] cmake: bump to version 2.8.12.1
-Message-ID: <20131225092530.71B0C9C1BA@busybox.osuosl.org>
+Date: Wed, 25 Dec 2013 10:25:56 +0100
+Subject: [Buildroot] [PATCH] cmake: bump to version 2.8.12.1
+In-Reply-To: <1387713112-23429-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1387713112-23429-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20131225102556.152282c8@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1497e1b133e480288dc173f6089b00996254ca36
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Maxime Hadjinlian,
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/cmake/cmake.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Sun, 22 Dec 2013 12:51:52 +0100, Maxime Hadjinlian wrote:
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> ---
+>  package/cmake/cmake.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-index 4594101..9913a82 100644
---- a/package/cmake/cmake.mk
-+++ b/package/cmake/cmake.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- CMAKE_VERSION_MAJOR = 2.8
--CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).10.2
-+CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).12.1
- CMAKE_SITE = http://www.cmake.org/files/v$(CMAKE_VERSION_MAJOR)/
- CMAKE_LICENSE = BSD-3c
- CMAKE_LICENSE_FILES = Copyright.txt
+Thanks, applied!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
