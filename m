@@ -1,30 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Dec 2013 17:33:31 +0100
-Subject: [Buildroot] [PATCH v6 1/2] Support for multiple
- BR2_GLOBAL_PATCH_DIR
-In-Reply-To: <1387362302-12198-1-git-send-email-rjbarnet@rockwellcollins.com>
-References: <1387362302-12198-1-git-send-email-rjbarnet@rockwellcollins.com>
-Message-ID: <20131225173331.61f2d0f0@skate>
+Date: Wed, 25 Dec 2013 17:34:55 +0100
+Subject: [Buildroot] [PATCH] fio: new package
+In-Reply-To: <1383146545-9594-1-git-send-email-ezequiel.garcia@free-electrons.com>
+References: <1383146545-9594-1-git-send-email-ezequiel.garcia@free-electrons.com>
+Message-ID: <20131225173455.0c413356@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ryan Barnett,
+Dear Ezequiel Garcia,
 
-On Wed, 18 Dec 2013 04:25:01 -0600, Ryan Barnett wrote:
-> Adding support for specifying multiple directories in
-> BR2_GLOBAL_PATCH_DIR. This will allow for a layered approach for the
-> patching of a package.
+On Wed, 30 Oct 2013 12:22:25 -0300, Ezequiel Garcia wrote:
+> Signed-off-by: Ezequiel Garcia <ezequiel.garcia@free-electrons.com>
+> ---
+>  package/Config.in     |  1 +
+>  package/fio/Config.in |  6 ++++++
+>  package/fio/fio.mk    | 25 +++++++++++++++++++++++++
+>  3 files changed, 32 insertions(+)
+>  create mode 100644 package/fio/Config.in
+>  create mode 100644 package/fio/fio.mk
+
+Thanks, I've applied this, after making several changes.
+
 > 
-> Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
-> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Reviewed-by: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> diff --git a/package/Config.in b/package/Config.in
+> index 4c4da51..7cb46aa 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -47,6 +47,7 @@ source "package/dmalloc/Config.in"
+>  source "package/dropwatch/Config.in"
+>  source "package/dstat/Config.in"
+>  source "package/duma/Config.in"
+> +source "package/fio/Config.in"
+>  source "package/gdb/Config.in"
+>  source "package/iozone/Config.in"
+>  source "package/kexec/Config.in"
+> diff --git a/package/fio/Config.in b/package/fio/Config.in
+> new file mode 100644
+> index 0000000..263e7f5
+> --- /dev/null
+> +++ b/package/fio/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_FIO
+> +	bool "fio"
+> +	depends on BR2_USE_MMU # fork()
 
-Both patches applied, thanks. On the second patch, I did the fix for
-the minor typo noticed by Thomas DS.
+The package required largefile and thread support.
+
+> +	help
+> +	  fio is an I/O tool meant to be used both for benchmark
+> +	  and stress/hardware verification.
+
+I've added an upstream URL here.
+
+> diff --git a/package/fio/fio.mk b/package/fio/fio.mk
+> new file mode 100644
+> index 0000000..60cd14f
+> --- /dev/null
+> +++ b/package/fio/fio.mk
+> @@ -0,0 +1,25 @@
+> +################################################################################
+> +#
+> +# fio
+> +#
+> +################################################################################
+> +
+> +FIO_VERSION = 2.1.3
+> +FIO_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/f/fio
+> +FIO_SOURCE = fio_$(FIO_VERSION).orig.tar.gz
+
+I've switched to use the official Git repository at git.kernel.dk, and
+used the new 2.1.4 version.
+
+> +FIO_LICENSE = GPLv2
+
+I've changed that to "GPLv2 + special obligations", because the LICENSE
+file makes additional requirements to the GPLv2.
 
 Thanks!
 
