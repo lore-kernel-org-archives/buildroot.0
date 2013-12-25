@@ -1,46 +1,32 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 25 Dec 2013 11:24:18 +0200
-Subject: [Buildroot] [PATCH v2] ffmpeg: fix build for xtensa
-Message-ID: <3eaba734f6632e37ccac0e80e8326761c29075ee.1387963458.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 25 Dec 2013 10:25:19 +0100
+Subject: [Buildroot] [git commit] cmake: bump to version 2.8.12.1
+Message-ID: <20131225092530.71B0C9C1BA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The ffmpeg package generates libraries that are too large for the xtensa
-default placement of literals in a dedicated section. Use
--mtext-section-literal to place literals in the text section.
+commit: http://git.buildroot.net/buildroot/commit/?id=1497e1b133e480288dc173f6089b00996254ca36
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes
-http://autobuild.buildroot.net/results/606/60670d35f16c3b8fe19debf7f8e40a046a579520/
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-v2:
-    Use FFMPEG_CFLAGS as intermediate variable (Thomas Petazzoni)
----
- package/ffmpeg/ffmpeg.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/cmake/cmake.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 6685110..f1fc920 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -21,6 +21,14 @@ FFMPEG_CONF_OPT = \
- 	--disable-avfilter	\
- 	$(if $(BR2_HAVE_DOCUMENTATION),,--disable-doc)
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index 4594101..9913a82 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-+FFMPEG_CFLAGS = $(TARGET_CFLAGS)
-+
-+ifeq ($(BR2_xtensa),y)
-+FFMPEG_CFLAGS += -mtext-section-literals
-+endif
-+
-+FFMPEG_CONF_ENV = CFLAGS="$(FFMPEG_CFLAGS)"
-+
- ifeq ($(BR2_PACKAGE_FFMPEG_GPL),y)
- FFMPEG_CONF_OPT += --enable-gpl
- else
--- 
-1.8.5.1
+ CMAKE_VERSION_MAJOR = 2.8
+-CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).10.2
++CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).12.1
+ CMAKE_SITE = http://www.cmake.org/files/v$(CMAKE_VERSION_MAJOR)/
+ CMAKE_LICENSE = BSD-3c
+ CMAKE_LICENSE_FILES = Copyright.txt
