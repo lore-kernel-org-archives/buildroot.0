@@ -1,45 +1,32 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 25 Dec 2013 11:12:39 +0200
-Subject: [Buildroot] [PATCH] ffmpeg: fix build for xtensa
-In-Reply-To: <20131225100715.6473dee2@skate>
-References: <dbffcc9384caa8009093e59944182ddfaafbdb5c.1387910266.git.baruch@tkos.co.il>
- <20131225100715.6473dee2@skate>
-Message-ID: <20131225091239.GR11794@sapphire.tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 25 Dec 2013 10:12:39 +0100
+Subject: [Buildroot] [git commit] libmicrohttpd: bump to version 0.9.33
+Message-ID: <20131225091301.F12F49C1BA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: http://git.buildroot.net/buildroot/commit/?id=d3d00c010e51428a45874dec880f7a956ab38380
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, Dec 25, 2013 at 10:07:15AM +0100, Thomas Petazzoni wrote:
-> On Tue, 24 Dec 2013 20:37:46 +0200, Baruch Siach wrote:
-> > +ifeq ($(BR2_xtensa),y)
-> > +FFMPEG_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -mtext-section-literals"
-> > +endif
-> 
-> Thanks, but to prevent future mistakes, could you provide a slightly
-> different version that does:
-> 
-> FFMPEG_CFLAGS = $(TARGET_CFLAGS)
-> 
-> ifeq ($(BR2_xtensa),y)
-> FFMPEG_CFLAGS += -mtext-section-literals
-> endif
-> 
-> FFMPEG_CONF_ENV = CFLAGS="$(FFMPEG_CFLAGS)"
-> 
-> This is a little bit better than your version in that we can add things
-> to CFLAGS in other places in ffmpeg.mk.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libmicrohttpd/libmicrohttpd.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Will do.
-
-Thanks for reviewing.
-
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
+index 8d5395d..965c559 100644
+--- a/package/libmicrohttpd/libmicrohttpd.mk
++++ b/package/libmicrohttpd/libmicrohttpd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBMICROHTTPD_VERSION = 0.9.31
++LIBMICROHTTPD_VERSION = 0.9.33
+ LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
+ LIBMICROHTTPD_LICENSE_FILES = COPYING
+ LIBMICROHTTPD_INSTALL_STAGING = YES
