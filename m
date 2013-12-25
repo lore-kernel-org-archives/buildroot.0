@@ -1,36 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Dec 2013 17:38:25 +0100
-Subject: [Buildroot] [PATCH 03/10] lua: remove a too invasive patch
-In-Reply-To: <71bd835f5a81ab09096181b145853500ad00c9ab.1387744636.git.yann.morin.1998@free.fr>
-References: <cover.1387744636.git.yann.morin.1998@free.fr>
- <71bd835f5a81ab09096181b145853500ad00c9ab.1387744636.git.yann.morin.1998@free.fr>
-Message-ID: <20131225173825.359218a1@skate>
+Date: Wed, 25 Dec 2013 17:51:58 +0100
+Subject: [Buildroot] [git commit] netsnmp: do not force --disable-static
+Message-ID: <20131225170138.CB5D59C1D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+commit: http://git.buildroot.net/buildroot/commit/?id=622bd71e0a26755e8bec37e835524e0a82a50884
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 22 Dec 2013 21:42:11 +0100, Yann E. MORIN wrote:
-> From: Francois Perrad <fperrad@gmail.com>
-> 
-> the static version of luac is enough
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  package/lua/lua-03-shared-libs-for-luac.patch | 97 ---------------------------
->  1 file changed, 97 deletions(-)
->  delete mode 100644 package/lua/lua-03-shared-libs-for-luac.patch
+The following patch enables the generation of static libraries
+additionally to the shared ones for the netsnmp package.
 
-Thanks, applied!
+[Thomas: fixed commit log.]
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Andreas Ehmanns <universeii@gmx.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/netsnmp/netsnmp.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
+index 6ab754e..47c6424 100644
+--- a/package/netsnmp/netsnmp.mk
++++ b/package/netsnmp/netsnmp.mk
+@@ -11,7 +11,7 @@ NETSNMP_LICENSE = Various BSD-like
+ NETSNMP_LICENSE_FILES = COPYING
+ NETSNMP_INSTALL_STAGING = YES
+ NETSNMP_CONF_ENV = ac_cv_NETSNMP_CAN_USE_SYSCTL=yes
+-NETSNMP_CONF_OPT = --with-persistent-directory=/var/lib/snmp --disable-static \
++NETSNMP_CONF_OPT = --with-persistent-directory=/var/lib/snmp \
+ 		--with-defaults --enable-mini-agent --without-rpm \
+ 		--with-logfile=none --without-kmem-usage $(DISABLE_IPV6) \
+ 		--enable-as-needed --without-perl-modules \
