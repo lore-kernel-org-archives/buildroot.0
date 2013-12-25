@@ -1,32 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Dec 2013 10:12:51 +0100
-Subject: [Buildroot] [git commit] gnutls: bump to version 3.2.8
-Message-ID: <20131225091302.0AE4D9BBF9@busybox.osuosl.org>
+From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+Date: Wed, 25 Dec 2013 10:13:21 +0100
+Subject: [Buildroot] [PATCH] Packages: use https to clone gitorious
+	repositories
+In-Reply-To: <CAAXf6LVEZ2+y44dmCOCrC0yj=CY0aVeC1h-NHTKFSZGmMtTKmQ@mail.gmail.com>
+References: <1387273243-7509-1-git-send-email-alexandre.belloni@free-electrons.com>	<CAAXf6LU7jRk0--NgCUtrFys-NdB0sZFu5QsO8PwRwGA=bV-JpA@mail.gmail.com>
+ <CAAXf6LVEZ2+y44dmCOCrC0yj=CY0aVeC1h-NHTKFSZGmMtTKmQ@mail.gmail.com>
+Message-ID: <52BAA1B1.6060302@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=da304633464c22e232d9cce47c5e811e144a4986
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gnutls/gnutls.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On 25/12/2013 09:05, Thomas De Schampheleire wrote:
+> Just checking: are you planning / do you have time to create a
+> gitorious helper as suggested?
 
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index aa68ca4..7cbfcb1 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- GNUTLS_VERSION_MAJOR = 3.2
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).6
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).8
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = GPLv3+ LGPLv2.1+
+I'll try to have a look at that today, it is on my todo list.
+
+
+-- 
+Alexandre Belloni, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
