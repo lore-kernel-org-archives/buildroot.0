@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Dec 2013 18:21:06 +0100
-Subject: [Buildroot] [git commit] package/opengl/libopenvg: switch to
+Date: Wed, 25 Dec 2013 18:20:57 +0100
+Subject: [Buildroot] [git commit] package/opengl/libgles: switch to
 	package-defined providers
-Message-ID: <20131225172209.16E2F9C14E@busybox.osuosl.org>
+Message-ID: <20131225172209.0CAF89C14E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dd1ecc339a2b67907f24beb28b299c85711093ef
+commit: http://git.buildroot.net/buildroot/commit/?id=79879de692616dfe174f3d8117dfecfa3f6b2516
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 For the underlying reasons, see previous patch, titled:
@@ -22,65 +22,121 @@ Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Peter Korsgaard <jacmet@uclibc.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/opengl/Config.in              |    4 +---
- package/opengl/libopenvg/Config.in    |    6 ++++++
- package/opengl/libopenvg/libopenvg.mk |    5 +----
- package/rpi-userland/Config.in        |    3 +++
- 4 files changed, 11 insertions(+), 7 deletions(-)
+ package/freescale-imx/gpu-viv-bin-mx6q/Config.in |    3 +++
+ package/opengl/Config.in                         |    4 +---
+ package/opengl/libgles/Config.in                 |    6 ++++++
+ package/opengl/libgles/libgles.mk                |   17 +----------------
+ package/rpi-userland/Config.in                   |    3 +++
+ package/sunxi-mali/Config.in                     |    3 +++
+ package/ti-gfx/Config.in                         |    3 +++
+ 7 files changed, 20 insertions(+), 19 deletions(-)
 
+diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/Config.in b/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
+index 68380a2..e084568 100644
+--- a/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
++++ b/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
+@@ -27,6 +27,9 @@ if BR2_PACKAGE_GPU_VIV_BIN_MX6Q
+ config BR2_PACKAGE_PROVIDES_OPENGL_EGL
+ 	default "gpu-viv-bin-mx6q"
+ 
++config BR2_PACKAGE_PROVIDES_OPENGL_ES
++	default "gpu-viv-bin-mx6q"
++
+ config BR2_PACKAGE_GPU_VIV_BIN_MX6Q_EXAMPLES
+ 	bool "install examples"
+ 	help
 diff --git a/package/opengl/Config.in b/package/opengl/Config.in
-index 3960082..109cde8 100644
+index 686543b..3960082 100644
 --- a/package/opengl/Config.in
 +++ b/package/opengl/Config.in
-@@ -1,8 +1,6 @@
+@@ -1,7 +1,5 @@
  source "package/opengl/libegl/Config.in"
- source "package/opengl/libgles/Config.in"
 -
--config BR2_PACKAGE_HAS_OPENVG
+-config BR2_PACKAGE_HAS_OPENGL_ES
 -	bool
-+source "package/opengl/libopenvg/Config.in"
++source "package/opengl/libgles/Config.in"
  
- config BR2_PACKAGE_HAS_OPENMAX
+ config BR2_PACKAGE_HAS_OPENVG
  	bool
-diff --git a/package/opengl/libopenvg/Config.in b/package/opengl/libopenvg/Config.in
+diff --git a/package/opengl/libgles/Config.in b/package/opengl/libgles/Config.in
 new file mode 100644
-index 0000000..9d31525
+index 0000000..75ccfc8
 --- /dev/null
-+++ b/package/opengl/libopenvg/Config.in
++++ b/package/opengl/libgles/Config.in
 @@ -0,0 +1,6 @@
-+config BR2_PACKAGE_HAS_OPENVG
++config BR2_PACKAGE_HAS_OPENGL_ES
 +	bool
 +
-+config BR2_PACKAGE_PROVIDES_OPENVG
-+	depends on BR2_PACKAGE_HAS_OPENVG
++config BR2_PACKAGE_PROVIDES_OPENGL_ES
++	depends on BR2_PACKAGE_HAS_OPENGL_ES
 +	string
-diff --git a/package/opengl/libopenvg/libopenvg.mk b/package/opengl/libopenvg/libopenvg.mk
-index 3296f63..ffd9d68 100644
---- a/package/opengl/libopenvg/libopenvg.mk
-+++ b/package/opengl/libopenvg/libopenvg.mk
-@@ -5,10 +5,7 @@
+diff --git a/package/opengl/libgles/libgles.mk b/package/opengl/libgles/libgles.mk
+index ec157ac..0dcbaa7 100644
+--- a/package/opengl/libgles/libgles.mk
++++ b/package/opengl/libgles/libgles.mk
+@@ -5,22 +5,7 @@
  ################################################################################
  
- LIBOPENVG_SOURCE =
+ LIBGLES_SOURCE =
 -
 -ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
--LIBOPENVG_DEPENDENCIES += rpi-userland
+-LIBGLES_DEPENDENCIES += rpi-userland
 -endif
-+LIBOPENVG_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_OPENVG))
+-
+-ifeq ($(BR2_PACKAGE_TI_GFX),y)
+-LIBGLES_DEPENDENCIES += ti-gfx
+-endif
+-
+-ifeq ($(BR2_PACKAGE_SUNXI_MALI),y)
+-LIBGLES_DEPENDENCIES += sunxi-mali
+-endif
+-
+-ifeq ($(BR2_PACKAGE_GPU_VIV_BIN_MX6Q),y)
+-LIBGLES_DEPENDENCIES += gpu-viv-bin-mx6q
+-endif
++LIBGLES_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_OPENGL_ES))
  
- ifeq ($(LIBOPENVG_DEPENDENCIES),)
- define LIBOPENVG_CONFIGURE_CMDS
+ ifeq ($(LIBGLES_DEPENDENCIES),)
+ define LIBGLES_CONFIGURE_CMDS
 diff --git a/package/rpi-userland/Config.in b/package/rpi-userland/Config.in
-index b8860d6..271c71d 100644
+index 3c8959e..b8860d6 100644
 --- a/package/rpi-userland/Config.in
 +++ b/package/rpi-userland/Config.in
-@@ -25,6 +25,9 @@ config BR2_PACKAGE_PROVIDES_OPENGL_EGL
- config BR2_PACKAGE_PROVIDES_OPENGL_ES
+@@ -22,6 +22,9 @@ if BR2_PACKAGE_RPI_USERLAND
+ config BR2_PACKAGE_PROVIDES_OPENGL_EGL
  	default "rpi-userland"
  
-+config BR2_PACKAGE_PROVIDES_OPENVG
++config BR2_PACKAGE_PROVIDES_OPENGL_ES
 +	default "rpi-userland"
 +
  endif
  
  comment "rpi-userland needs a toolchain w/ C++, largefile, threads"
+diff --git a/package/sunxi-mali/Config.in b/package/sunxi-mali/Config.in
+index 7f07647..9f188a3 100644
+--- a/package/sunxi-mali/Config.in
++++ b/package/sunxi-mali/Config.in
+@@ -21,6 +21,9 @@ if BR2_PACKAGE_SUNXI_MALI
+ config BR2_PACKAGE_PROVIDES_OPENGL_EGL
+ 	default "sunxi-mali"
+ 
++config BR2_PACKAGE_PROVIDES_OPENGL_ES
++	default "sunxi-mali"
++
+ config BR2_PACKAGE_SUNXI_MALI_DBG
+ 	bool "install malitest and maliver tools"
+ 	help
+diff --git a/package/ti-gfx/Config.in b/package/ti-gfx/Config.in
+index e89660f..929247b 100644
+--- a/package/ti-gfx/Config.in
++++ b/package/ti-gfx/Config.in
+@@ -14,6 +14,9 @@ if BR2_PACKAGE_TI_GFX
+ config BR2_PACKAGE_PROVIDES_OPENGL_EGL
+ 	default "ti-gfx"
+ 
++config BR2_PACKAGE_PROVIDES_OPENGL_ES
++	default "ti-gfx"
++
+ config BR2_PACKAGE_TI_GFX_DEBUG
+ 	bool "enable debug support"
+ 	help
