@@ -1,27 +1,40 @@
-From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-Date: Wed, 25 Dec 2013 10:13:21 +0100
-Subject: [Buildroot] [PATCH] Packages: use https to clone gitorious
-	repositories
-In-Reply-To: <CAAXf6LVEZ2+y44dmCOCrC0yj=CY0aVeC1h-NHTKFSZGmMtTKmQ@mail.gmail.com>
-References: <1387273243-7509-1-git-send-email-alexandre.belloni@free-electrons.com>	<CAAXf6LU7jRk0--NgCUtrFys-NdB0sZFu5QsO8PwRwGA=bV-JpA@mail.gmail.com>
- <CAAXf6LVEZ2+y44dmCOCrC0yj=CY0aVeC1h-NHTKFSZGmMtTKmQ@mail.gmail.com>
-Message-ID: <52BAA1B1.6060302@free-electrons.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 25 Dec 2013 10:13:51 +0100
+Subject: [Buildroot] [PATCH] menu: visually split Shells from Utilities
+Message-ID: <edb15c529ea743260f32.1387962831@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+As discussed in [1], add comments to distinghuish shells from utilities in
+the 'Shells and Utilities' menu.
 
-On 25/12/2013 09:05, Thomas De Schampheleire wrote:
-> Just checking: are you planning / do you have time to create a
-> gitorious helper as suggested?
+[1] http://lists.busybox.net/pipermail/buildroot/2013-December/083836.html
 
-I'll try to have a look at that today, it is on my todo list.
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
+---
+ package/Config.in |  4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
--- 
-Alexandre Belloni, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -948,12 +948,14 @@ source "package/xenomai/Config.in"
+ endmenu
+ 
+ menu "Shell and utilities"
+-source "package/at/Config.in"
++comment "Shells"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/bash/Config.in"
+ source "package/dash/Config.in"
+ source "package/zsh/Config.in"
+ endif
++comment "Utilities"
++source "package/at/Config.in"
+ source "package/dialog/Config.in"
+ source "package/dtach/Config.in"
+ source "package/file/Config.in"
