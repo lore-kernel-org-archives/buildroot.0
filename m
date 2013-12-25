@@ -1,51 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Dec 2013 10:08:45 +0100
-Subject: [Buildroot] [git commit] package/python-pycrypto: fix legal-info
-Message-ID: <20131225090855.17C4D9C1BA@busybox.osuosl.org>
+Date: Wed, 25 Dec 2013 10:09:18 +0100
+Subject: [Buildroot] [PATCH] package/python-pycrypto: fix legal-info
+In-Reply-To: <1387820388-30587-1-git-send-email-yann.morin.1998@free.fr>
+References: <1387820388-30587-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20131225100918.4a9b8cd0@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=441579d61391f2f395b9fc5928354f0a4418d4d4
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Yann E. MORIN,
 
-The pycrypto package contains a LICENSE.orig file, but apply-patches.sh
-removes all .orig file, so we can't list a .orig file asa license file,
-as it would have disapeared by the time 'make legal-info' sould be called.
+On Mon, 23 Dec 2013 18:39:48 +0100, Yann E. MORIN wrote:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> The pycrypto package contains a LICENSE.orig file, but apply-patches.sh
+> removes all .orig file, so we can't list a .orig file asa license file,
+> as it would have disapeared by the time 'make legal-info' sould be called.
+> 
+> Add a post-extract hook that renames this license file, so it is renamed
+> just before we apply patches and remove .orig files.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Ryan Barnett <rjbarnet@rockwellcollins.com>
+> ---
+>  package/python-pycrypto/python-pycrypto.mk | 12 +++++++++++-
+>  1 file changed, 11 insertions(+), 1 deletion(-)
 
-Add a post-extract hook that renames this license file, so it is renamed
-just before we apply patches and remove .orig files.
+Applied, thanks!
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/python-pycrypto/python-pycrypto.mk |   12 +++++++++++-
- 1 files changed, 11 insertions(+), 1 deletions(-)
-
-diff --git a/package/python-pycrypto/python-pycrypto.mk b/package/python-pycrypto/python-pycrypto.mk
-index eda48bd..f872ccc 100644
---- a/package/python-pycrypto/python-pycrypto.mk
-+++ b/package/python-pycrypto/python-pycrypto.mk
-@@ -11,7 +11,17 @@ PYTHON_PYCRYPTO_SETUP_TYPE = distutils
- 
- PYTHON_PYCRYPTO_LICENSE = Public Domain, Python 2.2 License (HMAC.py, setup.py)
- PYTHON_PYCRYPTO_LICENSE_FILES = COPYRIGHT LEGAL/copy/LICENSE.libtom \
--		LEGAL/copy/LICENSE.orig LEGAL/copy/LICENSE.python-2.2
-+		LEGAL/copy/LICENSE.python-2.2
-+
-+# The pycrypto package contains a LICENSE.orig file, but our patching
-+# infrastrucure removes all .orig file, so we must rename that license
-+# file prior to patching, so it is still available to the legal-info
-+# infrastructure
-+define PYTHON_PYCRYPTO_RENAME_LICENSE
-+	mv $(@D)/LEGAL/copy/LICENSE.orig $(@D)/LEGAL/copy/LICENSE.original
-+endef
-+PYTHON_PYCRYPTO_POST_EXTRACT_HOOKS += PYTHON_PYCRYPTO_RENAME_LICENSE
-+PYTHON_PYCRYPTO_LICENSE_FILES += LEGAL/copy/LICENSE.original
- 
- PYTHON_PYCRYPTO_DEPENDENCIES = gmp
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
