@@ -1,130 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Dec 2013 10:02:02 +0100
-Subject: [Buildroot] [git commit] Revert "util-linux: Add config switches
-	for some more binaries"
-Message-ID: <20131225090442.8F5E69C1BE@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 25 Dec 2013 10:05:20 +0100
+Subject: [Buildroot] [PATCH] external python modules: remove redundant
+ python dependency
+In-Reply-To: <20131225095620.7e4d611c@skate>
+References: <7ffd4acd582283fb083a.1387905292@argentina>
+ <20131225095620.7e4d611c@skate>
+Message-ID: <CAAXf6LX8HCcpYtC_8wAn49SU3aV+xf=Jr3RfuxH6HUQscnYnfQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=280b16f69dbfd11964218be3c2de455f6b7fa67e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
 
-This reverts commit 2746158497cdaf80a5b85584e3972857ac2e7e82. This
-commit is causing build issues when chfn/chsh are selected, due to bad
-interactions with PAM. The initial submitter of the patch has agreed
-to work on an improved version that fixes those problems, but in the
-mean time, we revert this commit to prevent the problem from occuring
-in the autobuilders.
+On Wed, Dec 25, 2013 at 9:56 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Thomas De Schampheleire,
+>
+> On Tue, 24 Dec 2013 18:14:52 +0100, Thomas De Schampheleire wrote:
+>> File package/Config.in already groups the external python modules inside a
+>> 'if BR2_PACKAGE_PYTHON ... endif' statement, so adding a
+>> 'depends on BR2_PACKAGE_PYTHON' statement to the individual Config.in files
+>> is not needed.
+>>
+>> This is in line with the way gstreamer packages are handled.
+>>
+>> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>
+> I don't agree with this change. This duplication of "depends on" is
+> going to be really useful when we enable Python packages to be compiled
+> with Python 3. When we'll do this, we will change the:
+>
+> if BR2_PACKAGE_PYTHON
+> source ...
+> source ...
+> endif
+>
+> to:
+>
+> if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+> source ...
+> source ...
+> endif
+>
+> But still we will want to be able to decide on a per-package basis
+> which package is available for Python 2.x, for Python 3.x or for both.
+>
+> Therefore, I'd like to keep these "depends on" for the moment.
 
-Fixes:
+Ok, understood.
+But in that case, I will submit another patch to make sure that all
+these python modules do indeed use the 'depends on', because for
+example python-bottle does not.
 
-  http://autobuild.buildroot.org/results/820/8204008da6944923034fa17ecbcfefcf15373ee5/build-end.log
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/util-linux/Config.in     |   25 -------------------------
- package/util-linux/util-linux.mk |    5 -----
- 2 files changed, 0 insertions(+), 30 deletions(-)
-
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index ae9b669..ed19f39 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -54,11 +54,6 @@ config BR2_PACKAGE_UTIL_LINUX_ARCH
- 	help
- 	  Print machine architecture
- 
--config BR2_PACKAGE_UTIL_LINUX_CHFN_CHSH
--	bool "chfn/chsh"
--	help
--	  Change login shell, real user name and information
--
- config BR2_PACKAGE_UTIL_LINUX_CRAMFS
- 	bool "cramfs utilities"
- 	select BR2_PACKAGE_ZLIB
-@@ -91,11 +86,6 @@ config BR2_PACKAGE_UTIL_LINUX_KILL
- 	help
- 	  Send a signal to a process
- 
--config BR2_PACKAGE_UTIL_LINUX_LAST
--	bool "last"
--	help
--	  Show listing of last logged in users
--
- config BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS
- 	bool "login utilities"
- 	depends on BR2_ENABLE_LOCALE # linux-pam
-@@ -106,11 +96,6 @@ config BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS
- comment "login utilities needs a toolchain w/ locale"
- 	depends on !BR2_ENABLE_LOCALE
- 
--config BR2_PACKAGE_UTIL_LINUX_LOSETUP
--	bool "losetup"
--	help
--	  Set up and control loop devices
--
- config BR2_PACKAGE_UTIL_LINUX_MESG
- 	bool "mesg"
- 	help
-@@ -121,11 +106,6 @@ config BR2_PACKAGE_UTIL_LINUX_MOUNT
- 	help
- 	  Mount/unmount filesystems
- 
--config BR2_PACKAGE_UTIL_LINUX_NEWGRP
--	bool "newgrp"
--	help
--	  Log in to a new group
--
- config BR2_PACKAGE_UTIL_LINUX_NSENTER
- 	bool "nsenter"
- 	help
-@@ -181,11 +161,6 @@ config BR2_PACKAGE_UTIL_LINUX_UUIDD
- 	help
- 	  UUID generation daemon
- 
--config BR2_PACKAGE_UTIL_LINUX_VIPW
--	bool "vipw"
--	help
--	  Edit the password, group, shadow-password or shadow-group file
--
- config BR2_PACKAGE_UTIL_LINUX_WALL
- 	bool "wall"
- 	help
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index db1f4f5..5e689f8 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -50,22 +50,18 @@ UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_LINUX_PAM),linux-pam)
- UTIL_LINUX_CONF_OPT += \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_AGETTY),--enable-agetty,--disable-agetty) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_ARCH),--enable-arch,--disable-arch) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_CHFN_CHSH),--enable-chfn-chsh,--disable-chfn-chsh) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_CRAMFS),--enable-cramfs,--disable-cramfs) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_DDATE),--enable-ddate,--disable-ddate) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_EJECT),--enable-eject,--disable-eject) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_FALLOCATE),--enable-fallocate,--disable-fallocate) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_FSCK),--enable-fsck,--disable-fsck) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_KILL),--enable-kill,--disable-kill) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_LAST),--enable-last,--disable-last) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBBLKID),--enable-libblkid,--disable-libblkid) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT),--enable-libmount,--disable-libmount) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBUUID),--enable-libuuid,--disable-libuuid) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS),--enable-last --enable-login --enable-su --enable-sulogin,--disable-last --disable-login --disable-su --disable-sulogin) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_LOSETUP),--enable-losetup,--disable-losetup) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_MESG),--enable-mesg,--disable-mesg) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_MOUNT),--enable-mount,--disable-mount) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_NEWGRP),--enable-newgrp,--disable-newgrp) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_NSENTER),--enable-nsenter,--disable-nsenter) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_PARTX),,--disable-partx) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_PIVOT_ROOT),--enable-pivot_root,--disable-pivot_root) \
-@@ -77,7 +73,6 @@ UTIL_LINUX_CONF_OPT += \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_UNSHARE),--enable-unshare,--disable-unshare) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_UTMPDUMP),--enable-utmpdump,--disable-utmpdump) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_UUIDD),--enable-uuidd,--disable-uuidd) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_VIPW),--enable-vipw,--disable-vipw) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_WALL),--enable-wall,--disable-wall) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_WRITE),--enable-write,--disable-write)
- 
+Best regards,
+Thomas
