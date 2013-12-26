@@ -1,47 +1,39 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Thu, 26 Dec 2013 09:52:04 +0100
-Subject: [Buildroot] [PATCH 1/2] libmpd: change download URL
-In-Reply-To: <20131225101547.1c2a0d67@skate>
-References: <1387787808-8194-1-git-send-email-jerzy.grzegorek@trzebnica.net>
- <20131225101547.1c2a0d67@skate>
-Message-ID: <52BBEE34.6050707@trzebnica.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 26 Dec 2013 10:40:37 +0100
+Subject: [Buildroot] [PATCH] fio: new package
+In-Reply-To: <20131225203252.GB7812@localhost>
+References: <1383146545-9594-1-git-send-email-ezequiel.garcia@free-electrons.com>
+ <20131225173455.0c413356@skate> <20131225201731.GA7812@localhost>
+ <20131225212829.603981b9@skate> <20131225203252.GB7812@localhost>
+Message-ID: <20131226104037.6cb81f36@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear Ezequiel Garcia,
 
-Hi Thomas,
+On Wed, 25 Dec 2013 17:32:53 -0300, Ezequiel Garcia wrote:
 
-> Dear Jerzy Grzegorek,
->
-> On Mon, 23 Dec 2013 09:36:47 +0100, Jerzy Grzegorek wrote:
->> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
->> ---
->>   package/libmpd/libmpd.mk |    2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/package/libmpd/libmpd.mk b/package/libmpd/libmpd.mk
->> index b78a36f..7df8c2a 100644
->> --- a/package/libmpd/libmpd.mk
->> +++ b/package/libmpd/libmpd.mk
->> @@ -5,7 +5,7 @@
->>   ################################################################################
->>   
->>   LIBMPD_VERSION = 11.8.17
->> -LIBMPD_SITE = http://download.sarine.nl/Programs/gmpc/11.8.16
->> +LIBMPD_SITE = http://download.sarine.nl/Programs/gmpc/11.8
-> I had a look, and both of these URLs point to the same thing. Is this
-> fixing something specific, or just done for consistency reason because
-> we download the 11.8.17 version from a directory named 11.8.16 ?
+> > But older uClibc toolchains do not work, and are causing build
+> > failures such as
+> > http://autobuild.buildroot.org/results/f7a/f7ae7ac2b5da9afc6314f1e813300597896e5ca6/build-end.log.
+> > 
+> > I believe the best solution for now is to mark this package as not
+> > available for uClibc toolchains.
+> > 
+> 
+> Right. And in parallel, we can also take care of upstreaming a patch
+> which uses HAVE_POSIX_MADVISE to handle such case.
 
-Yes, this is only for consistency reason.
+The problem is what should we use in replacement of posix_madvise()
+when it is not available.
 
-Regards,
-Jerzy
+Best regards,
 
->
-> Thanks!
->
-> Thomas
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
