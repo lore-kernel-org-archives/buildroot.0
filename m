@@ -1,74 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 26 Dec 2013 10:51:21 +0100
-Subject: [Buildroot] [PATCH] Add Armadeus systems APF51 SOM basic
- support.
-In-Reply-To: <1388051094-3666-1-git-send-email-julien.boibessot@free.fr>
-References: <1388051094-3666-1-git-send-email-julien.boibessot@free.fr>
-Message-ID: <20131226105121.4694c243@skate>
+Date: Thu, 26 Dec 2013 10:52:29 +0100
+Subject: [Buildroot] [git commit] package/linux-firmware: bump version
+Message-ID: <20131226095410.C9D9E9C1E2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Julien,
+commit: http://git.buildroot.net/buildroot/commit/?id=f285df906f3c22cda26f1257bde2113fcc4c02ee
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 26 Dec 2013 10:44:54 +0100, julien.boibessot at free.fr wrote:
-> From: Julien Boibessot <julien.boibessot@armadeus.com>
-> 
-> Buildroot uClibc toolchain, UBIFS rootfs, linux kernel (board is mainlined).
-> 
-> Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+Get a bunch of new firmwares, and some firmware bumps.
 
-Thanks! Some comments below.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/linux-firmware/linux-firmware.mk |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-> --- /dev/null
-> +++ b/board/armadeus/post-image.sh
-> @@ -0,0 +1,20 @@
-> +#!/bin/sh
-> +#
-> +# arg1: BR images dir
-> +# arg2: board name
-> +# arg3: i.MX processor type
-> +
-> +# images renaming according to board name
-> +if [ "$2" != "" ]; then
-> +	for rootfstype in ubi ubifs tar jffs2; do
-> +		if [ -f "$1/rootfs.$rootfstype" ]; then
-> +			mv -u $1/rootfs.$rootfstype $1/$2-rootfs.$rootfstype
-> +		fi
-> +	done
-> +	if [ -f "$1/uImage" ]; then
-> +		mv -u $1/uImage $1/$2-linux.bin
-> +	fi
-> +	if [ -f "$1/$3-$2dev.dtb" ]; then
-> +		mv -u $1/$3-$2dev.dtb $1/$2.dtb
-> +	fi
-> +fi
-
-Why do we want this? We don't do this for any of the boards in
-Buildroot, and I'm not sure to see why the apf51 should be different
-here.
-
-Surely, if you want to build Buildroot for several boards, you will
-create one build tree for each board, and therefore each images
-directory will contain only the images for this particular board:
-
-	make O=../apf51 apf51_defconfig
-	make O=../apf51
-
-	make O=../apf27 apf27_defconfig
-	make O=../apf27
-
-And then in ../apf27/images/, you have images for APF27, and
-in ../apf51/images/, you have images for APF51.
-
-Other than that, it looks good.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index a88bc4c..f865c73 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LINUX_FIRMWARE_VERSION = 07ea598af5b9dde3acdf279846b062fa1b2987b8
++LINUX_FIRMWARE_VERSION = 76b366df2afdde9811fdd5fc128d1779e26e7be7
+ LINUX_FIRMWARE_SITE = http://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
+ LINUX_FIRMWARE_SITE_METHOD = git
+ 
+@@ -27,7 +27,8 @@ LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_RTL_81XX) += \
+ 	rtlwifi/rtl8192cfw.bin rtlwifi/rtl8192cfwU.bin 		\
+ 	rtlwifi/rtl8192cfwU_B.bin rtlwifi/rtl8192cufw.bin	\
+ 	rtlwifi/rtl8192defw.bin rtlwifi/rtl8192sefw.bin		\
+-	rtlwifi/rtl8188efw.bin					\
++	rtlwifi/rtl8188efw.bin rtlwifi/rtl8192cufw_A.bin	\
++	rtlwifi/rtl8192cufw_B.bin rtlwifi/rtl8192cufw_TMSC.bin	\
+ 	LICENCE.rtlwifi_firmware.txt
+ 
+ # rtl87xx
