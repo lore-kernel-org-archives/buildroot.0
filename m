@@ -1,54 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 26 Dec 2013 10:44:45 +0100
-Subject: [Buildroot] [git commit] fio: prevent selection with unusable
-	uClibc versions
-Message-ID: <20131226094726.567429C1E4@busybox.osuosl.org>
+Date: Thu, 26 Dec 2013 10:51:21 +0100
+Subject: [Buildroot] [PATCH] Add Armadeus systems APF51 SOM basic
+ support.
+In-Reply-To: <1388051094-3666-1-git-send-email-julien.boibessot@free.fr>
+References: <1388051094-3666-1-git-send-email-julien.boibessot@free.fr>
+Message-ID: <20131226105121.4694c243@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b788f1ef0660b6614ddd39535fa177d24cf02579
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Julien,
 
-The fio program uses posix_madvise(). However, posix_madvise() is only
-available in the Git tree of uClibc, and in Buildroot's version of
-uClibc 0.9.33, thanks to the huge number of backported patches that we
-carry.
+On Thu, 26 Dec 2013 10:44:54 +0100, julien.boibessot at free.fr wrote:
+> From: Julien Boibessot <julien.boibessot@armadeus.com>
+> 
+> Buildroot uClibc toolchain, UBIFS rootfs, linux kernel (board is mainlined).
+> 
+> Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
 
-Therefore, trying to build fio with an external uClibc toolchain is
-most likely going to fail (as the uClibc version is most likely an
-official stable release, and no stable release of uClibc ever had the
-support for posix_madvise()). And similarly, building fio with uClibc
-0.9.31 and 0.9.32 is always going to fail. We disable those use cases
-to avoid repeated autobuilder failures.
+Thanks! Some comments below.
 
-No kconfig comment has been added, because we don't have a
-well-defined way of specifying such exceptions.
+> --- /dev/null
+> +++ b/board/armadeus/post-image.sh
+> @@ -0,0 +1,20 @@
+> +#!/bin/sh
+> +#
+> +# arg1: BR images dir
+> +# arg2: board name
+> +# arg3: i.MX processor type
+> +
+> +# images renaming according to board name
+> +if [ "$2" != "" ]; then
+> +	for rootfstype in ubi ubifs tar jffs2; do
+> +		if [ -f "$1/rootfs.$rootfstype" ]; then
+> +			mv -u $1/rootfs.$rootfstype $1/$2-rootfs.$rootfstype
+> +		fi
+> +	done
+> +	if [ -f "$1/uImage" ]; then
+> +		mv -u $1/uImage $1/$2-linux.bin
+> +	fi
+> +	if [ -f "$1/$3-$2dev.dtb" ]; then
+> +		mv -u $1/$3-$2dev.dtb $1/$2.dtb
+> +	fi
+> +fi
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/fio/Config.in |    9 +++++++++
- 1 files changed, 9 insertions(+), 0 deletions(-)
+Why do we want this? We don't do this for any of the boards in
+Buildroot, and I'm not sure to see why the apf51 should be different
+here.
 
-diff --git a/package/fio/Config.in b/package/fio/Config.in
-index deff12c..be99f25 100644
---- a/package/fio/Config.in
-+++ b/package/fio/Config.in
-@@ -3,6 +3,15 @@ config BR2_PACKAGE_FIO
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_LARGEFILE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	# fio uses posix_madvise(), which is not part of any official
-+	# release of uClibc, but is part of uClibc Git, and backported
-+	# in Buildroot patch set of uClibc 0.9.33. Therefore, we
-+	# disable the build of fio for external uClibc toolchains
-+	# (which use an unknown uClibc version) and for 0.9.31 and
-+	# 0.9.32 which don't have posix_madvise().
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_UCLIBC && \
-+		!BR2_UCLIBC_VERSION_0_9_31 && \
-+		!BR2_UCLIBC_VERSION_0_9_32
- 	help
- 	  fio is an I/O tool meant to be used both for benchmark
- 	  and stress/hardware verification.
+Surely, if you want to build Buildroot for several boards, you will
+create one build tree for each board, and therefore each images
+directory will contain only the images for this particular board:
+
+	make O=../apf51 apf51_defconfig
+	make O=../apf51
+
+	make O=../apf27 apf27_defconfig
+	make O=../apf27
+
+And then in ../apf27/images/, you have images for APF27, and
+in ../apf51/images/, you have images for APF51.
+
+Other than that, it looks good.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
