@@ -1,45 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 26 Dec 2013 23:19:04 +0100
-Subject: [Buildroot] [git commit] arch: pass cpu option instead of tune
-	option on ARM
-Message-ID: <20131226222002.C88A59C1E4@busybox.osuosl.org>
+Date: Thu, 26 Dec 2013 23:22:01 +0100
+Subject: [Buildroot] [PATCH 1/2] qt5script: Disable on non-supported
+ platforms
+In-Reply-To: <1385654237-36389-3-git-send-email-Vincent.Riera@imgtec.com>
+References: <1385654237-36389-1-git-send-email-Vincent.Riera@imgtec.com>
+ <1385654237-36389-3-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20131226232201.2ec1890a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d3539dd53bf9e37538fd4d8b89783a11fded119f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Vicente Olivert Riera,
 
-Currently, the ARM Config.in logic specifies values for
---with-arch/-march and --with-tune/-mtune, but not for
---with-cpu/-mcpu. However, this causes problems on ARMv4, because
-specifying --with-arch=armv4t isn't enough to make gcc generate ARMv4
-code: one should also pass --with-cpu=<some ARMv4 CPU>.
+On Thu, 28 Nov 2013 15:57:16 +0000, Vicente Olivert Riera wrote:
+> Is the same problem as Qt4 QtScript, it doesn't build because it uses
+> JavaScriptCore, so we re-use the existing
+> BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT option which already lists which
+> platforms are supported by JavaScriptCore.
+> 
+> This is a quick fix. A proposed fix to add support for MIPS64 has
+> already been sent to Qt:
+> 
+>    https://bugreports.qt-project.org/browse/QTBUG-35191
+> 
+> Fixes:
+> 
+>    http://autobuild.buildroot.net/results/231/231c112a3fc18e6cd7d6d10873e22144525c7280/
 
-Moreover, since Buildroot is generally designed to generate code
-specifically for the configured target, it makes sense to give our own
---with-cpu/-mcpu value instead of relying on the default value used by
-gcc, and only do small optimizations with -mtune.
+What is the status of this patch, and the "[PATCH 2/2] qt5quick1:
+Disable on non-supported platforms" patch that you sent?
 
-Reported-by: Adam Hussein <kryme76@yahoo.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- arch/Config.in.arm |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Are they still needed? If so, then it should use a QT5 specific Kconfig
+symbol.
 
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index c0fabb7..dd58744 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -341,7 +341,7 @@ config BR2_ENDIAN
- 	default "LITTLE" if BR2_arm
- 	default "BIG"	 if BR2_armeb
- 
--config BR2_GCC_TARGET_TUNE
-+config BR2_GCC_TARGET_CPU
- 	default "arm7tdmi"	if BR2_arm7tdmi
- 	default "arm7tdmi"	if BR2_arm720t
- 	default "arm7tdmi"	if BR2_arm740t
+Let me know what to do with these patches, so that I can updated their
+patchwork status.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
