@@ -1,33 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 26 Dec 2013 23:28:46 +0100
-Subject: [Buildroot] [git commit] package: fix alphabetical ordering after
-	libevdev addition
-Message-ID: <20131226222904.5BC439C1E4@busybox.osuosl.org>
+Date: Thu, 26 Dec 2013 23:29:49 +0100
+Subject: [Buildroot] [PATCH v2 1/2] libevdev: new package
+In-Reply-To: <1387551924-4824-2-git-send-email-anaumann@ultratronik.de>
+References: <1387551924-4824-1-git-send-email-anaumann@ultratronik.de>
+ <1387551924-4824-2-git-send-email-anaumann@ultratronik.de>
+Message-ID: <20131226232949.572fda54@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d9ddd28bb1247f4b9e2ee6557c27f8739cc58d14
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Andreas Naumann,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Fri, 20 Dec 2013 16:05:23 +0100, Andreas Naumann wrote:
+> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+> ---
+>  package/Config.in            |  1 +
+>  package/libevdev/Config.in   |  6 ++++++
+>  package/libevdev/libevdev.mk | 18 ++++++++++++++++++
+>  3 files changed, 25 insertions(+)
+>  create mode 100644 package/libevdev/Config.in
+>  create mode 100644 package/libevdev/libevdev.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index bcbaea1..8033b16 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -706,8 +706,8 @@ source "package/libcofi/Config.in"
- source "package/libdaemon/Config.in"
- source "package/libelf/Config.in"
- source "package/libev/Config.in"
--source "package/libevent/Config.in"
- source "package/libevdev/Config.in"
-+source "package/libevent/Config.in"
- source "package/libffi/Config.in"
- source "package/libglib2/Config.in"
- source "package/libical/Config.in"
+Thanks, applied, after fixing the license information and the
+autoreconf comment.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
