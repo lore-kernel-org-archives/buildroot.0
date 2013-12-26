@@ -1,30 +1,27 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 26 Dec 2013 14:39:46 -0300
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 26 Dec 2013 18:45:23 +0100
 Subject: [Buildroot] [PATCH] wireless-regdb: bump to 2013.11.27
-Message-ID: <1388079586-24016-1-git-send-email-gustavo@zacarias.com.ar>
+In-Reply-To: <1388079586-24016-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1388079586-24016-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20131226184523.0152841d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/wireless-regdb/wireless-regdb.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Dear Gustavo Zacarias,
 
-diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-index ac3cae8..6f4401d 100644
---- a/package/wireless-regdb/wireless-regdb.mk
-+++ b/package/wireless-regdb/wireless-regdb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIRELESS_REGDB_VERSION = 2013.10.11
-+WIRELESS_REGDB_VERSION = 2013.11.27
- WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
- WIRELESS_REGDB_SITE = http://kernel.org/pub/software/network/wireless-regdb
- WIRELESS_REGDB_LICENSE = ISC
+On Thu, 26 Dec 2013 14:39:46 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/wireless-regdb/wireless-regdb.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+
+Applied, thanks.
+
+Thomas
 -- 
-1.8.3.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
