@@ -1,32 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 26 Dec 2013 18:42:56 +0100
-Subject: [Buildroot] [git commit] wireless-regdb: bump to 2013.11.27
-Message-ID: <20131226175121.CD0119C1EA@busybox.osuosl.org>
+Date: Thu, 26 Dec 2013 18:44:47 +0100
+Subject: [Buildroot] [git commit] wireshark: bump to version 1.10.5
+Message-ID: <20131226175122.12C4B9BBF9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bbc598c5bd3c12c6e0bcc9d1c2bd5d059d6ecd3a
+commit: http://git.buildroot.net/buildroot/commit/?id=3bb18ae95e515c2edfbe990346ec9bb3319c7753
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fixes a couple of runtime regressions from the 1.10.4 security release.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/wireless-regdb/wireless-regdb.mk |    2 +-
+ package/wireshark/wireshark.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-index ac3cae8..6f4401d 100644
---- a/package/wireless-regdb/wireless-regdb.mk
-+++ b/package/wireless-regdb/wireless-regdb.mk
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index 54bd5ec..1944b08 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WIRELESS_REGDB_VERSION = 2013.10.11
-+WIRELESS_REGDB_VERSION = 2013.11.27
- WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
- WIRELESS_REGDB_SITE = http://kernel.org/pub/software/network/wireless-regdb
- WIRELESS_REGDB_LICENSE = ISC
+-WIRESHARK_VERSION = 1.10.4
++WIRESHARK_VERSION = 1.10.5
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
+ WIRESHARK_SITE = http://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
