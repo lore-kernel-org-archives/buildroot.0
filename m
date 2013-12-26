@@ -1,46 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 26 Dec 2013 18:48:31 +0100
-Subject: [Buildroot] [git commit] tzdata/zic: bump to version 2013i
-Message-ID: <20131226175122.3E8009BBF9@busybox.osuosl.org>
+Date: Thu, 26 Dec 2013 18:44:35 +0100
+Subject: [Buildroot] [git commit] inadyn: bump to version 1.99.6
+Message-ID: <20131226175122.08CFE9BBF9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a2a9613d2df2df30022c84ad985cfafe7059a6a2
+commit: http://git.buildroot.net/buildroot/commit/?id=0a671ce48cb9d16a7a334d04327339f86cd3cf3d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Axel Lin <axel.lin@ingics.com>
+Also switch to github helper and install sample configuration file mode
+600 - o+r is really bad for password-bearing configuration files.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/tzdata/tzdata.mk |    2 +-
- package/zic/zic.mk       |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/inadyn/inadyn.mk |    7 +++----
+ 1 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
-index 9109e2a..1cb5b3f 100644
---- a/package/tzdata/tzdata.mk
-+++ b/package/tzdata/tzdata.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/inadyn/inadyn.mk b/package/inadyn/inadyn.mk
+index 12f8acc..dc443f9 100644
+--- a/package/inadyn/inadyn.mk
++++ b/package/inadyn/inadyn.mk
+@@ -4,9 +4,8 @@
  #
  ################################################################################
  
--TZDATA_VERSION = 2013h
-+TZDATA_VERSION = 2013i
- TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
- TZDATA_SITE = ftp://ftp.iana.org/tz/releases
- TZDATA_DEPENDENCIES = host-zic
-diff --git a/package/zic/zic.mk b/package/zic/zic.mk
-index 780643b..c9b6c7b 100644
---- a/package/zic/zic.mk
-+++ b/package/zic/zic.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-INADYN_VERSION = 1.98.1
+-INADYN_SOURCE = inadyn-$(INADYN_VERSION).tar.bz2
+-INADYN_SITE = https://github.com/downloads/troglobit/inadyn
++INADYN_VERSION = 1.99.6
++INADYN_SITE = $(call github,troglobit,inadyn,$(INADYN_VERSION))
+ INADYN_LICENSE = GPLv2+
+ INADYN_LICENSE_FILES = COPYING LICENSE
  
--ZIC_VERSION = 2013h
-+ZIC_VERSION = 2013i
- ZIC_SOURCE = tzcode$(ZIC_VERSION).tar.gz
- ZIC_SITE = ftp://ftp.iana.org/tz/releases
- ZIC_LICENSE = Public domain
+@@ -16,7 +15,7 @@ endef
+ 
+ define INADYN_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 0755 $(@D)/src/inadyn $(TARGET_DIR)/usr/sbin/inadyn
+-	$(INSTALL) -D -m 0644 package/inadyn/inadyn.conf \
++	$(INSTALL) -D -m 0600 package/inadyn/inadyn.conf \
+ 		$(TARGET_DIR)/etc/inadyn.conf
+ 	$(INSTALL) -D -m 0755 package/inadyn/S70inadyn \
+ 		$(TARGET_DIR)/etc/init.d/S70inadyn
