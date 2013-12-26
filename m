@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 26 Dec 2013 20:13:13 -0300
-Subject: [Buildroot] [PATCH] c-ares: new package
-Message-ID: <1388099593-28102-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu, 26 Dec 2013 20:23:54 -0300
+Subject: [Buildroot] [PATCHv2] c-ares: new package
+Message-ID: <1388100234-32766-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -71,7 +71,7 @@ index 0000000..8210ed6
 +   AC_REQUIRE([AM_PROG_CC_C_O])dnl
 diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
 new file mode 100644
-index 0000000..f4c2bdb
+index 0000000..495d7aa
 --- /dev/null
 +++ b/package/c-ares/c-ares.mk
 @@ -0,0 +1,16 @@
@@ -88,7 +88,7 @@ index 0000000..f4c2bdb
 +C_ARES_AUTORECONF = YES
 +C_ARES_LICENSE = MIT
 +# No standalone, use some source file
-+C_ARES_LICENSE_FILES = $(@D)/ares_mkquery.c
++C_ARES_LICENSE_FILES = ares_mkquery.c
 +
 +$(eval $(autotools-package))
 -- 
