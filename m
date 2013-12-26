@@ -1,36 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 26 Dec 2013 18:42:22 +0100
-Subject: [Buildroot] [PATCH] aiccu: disable for uClibc 0.9.31/0.9.32
-Message-ID: <1388079742-24548-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Thu, 26 Dec 2013 18:46:03 +0100
+Subject: [Buildroot] [PATCH] inadyn: bump to version 1.99.6
+In-Reply-To: <1388060195-12033-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1388060195-12033-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20131226184603.6ebc18e6@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-aiccu uses the dn_skipname() function, which was only introduced in
-uClibc 0.9.33. Therefore, we disable this package when uClibc 0.9.31
-and 0.9.32. Most likely, only AVR32 users will be affected by this, so
-we don't add a specific kconfig comment for that.
+Dear Gustavo Zacarias,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/aiccu/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
+On Thu, 26 Dec 2013 09:16:35 -0300, Gustavo Zacarias wrote:
+> Also switch to github helper and install sample configuration file mode
+> 600 - o+r is really bad for password-bearing configuration files.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/inadyn/inadyn.mk | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/aiccu/Config.in b/package/aiccu/Config.in
-index f56ad75..17e6449 100644
---- a/package/aiccu/Config.in
-+++ b/package/aiccu/Config.in
-@@ -4,6 +4,9 @@ config BR2_PACKAGE_AICCU
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
-+	# Uses dn_skipname(), only available since 0.9.33
-+	depends on !BR2_UCLIBC_VERSION_0_9_31 && \
-+		!BR2_UCLIBC_VERSION_0_9_32
- 	select BR2_PACKAGE_GNUTLS
- 	help
- 	  SixXS Automatic IPv6 Connectivity Client Utility
+Applied, thanks.
+
+Thomas
 -- 
-1.8.3.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
