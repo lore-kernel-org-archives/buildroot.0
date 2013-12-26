@@ -1,34 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 26 Dec 2013 18:44:47 +0100
-Subject: [Buildroot] [git commit] wireshark: bump to version 1.10.5
-Message-ID: <20131226175122.12C4B9BBF9@busybox.osuosl.org>
+Date: Thu, 26 Dec 2013 18:47:39 +0100
+Subject: [Buildroot] [git commit] cramfs: add licensing info
+Message-ID: <20131226175122.3208B9BBF9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3bb18ae95e515c2edfbe990346ec9bb3319c7753
+commit: http://git.buildroot.net/buildroot/commit/?id=a413e32ef1dad972d02c617d2e3c26edbb2d5889
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes a couple of runtime regressions from the 1.10.4 security release.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/wireshark/wireshark.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/cramfs/cramfs.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 54bd5ec..1944b08 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/cramfs/cramfs.mk b/package/cramfs/cramfs.mk
+index 0f29dd0..710aaa8 100644
+--- a/package/cramfs/cramfs.mk
++++ b/package/cramfs/cramfs.mk
+@@ -6,6 +6,8 @@
  
--WIRESHARK_VERSION = 1.10.4
-+WIRESHARK_VERSION = 1.10.5
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
- WIRESHARK_SITE = http://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
+ CRAMFS_VERSION = 1.1
+ CRAMFS_SITE = http://downloads.sourceforge.net/project/cramfs/cramfs/$(CRAMFS_VERSION)
++CRAMFS_LICENSE = GPLv2+
++CRAMFS_LICENSE_FILES = COPYING
+ 
+ CRAMFS_DEPENDENCIES = zlib
+ 
