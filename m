@@ -1,359 +1,54 @@
-From: julien.boibessot at free.fr <julien.boibessot@free.fr>
-Date: Thu, 26 Dec 2013 10:44:54 +0100
-Subject: [Buildroot] [PATCH] Add Armadeus systems APF51 SOM basic support.
-Message-ID: <1388051094-3666-1-git-send-email-julien.boibessot@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 26 Dec 2013 10:44:45 +0100
+Subject: [Buildroot] [git commit] fio: prevent selection with unusable
+	uClibc versions
+Message-ID: <20131226094726.567429C1E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Julien Boibessot <julien.boibessot@armadeus.com>
+commit: http://git.buildroot.net/buildroot/commit/?id=b788f1ef0660b6614ddd39535fa177d24cf02579
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Buildroot uClibc toolchain, UBIFS rootfs, linux kernel (board is mainlined).
+The fio program uses posix_madvise(). However, posix_madvise() is only
+available in the Git tree of uClibc, and in Buildroot's version of
+uClibc 0.9.33, thanks to the huge number of backported patches that we
+carry.
 
-Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+Therefore, trying to build fio with an external uClibc toolchain is
+most likely going to fail (as the uClibc version is most likely an
+official stable release, and no stable release of uClibc ever had the
+support for posix_madvise()). And similarly, building fio with uClibc
+0.9.31 and 0.9.32 is always going to fail. We disable those use cases
+to avoid repeated autobuilder failures.
+
+No kconfig comment has been added, because we don't have a
+well-defined way of specifying such exceptions.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- board/armadeus/apf51/linux-3.12.config |  266 ++++++++++++++++++++++++++++++++
- board/armadeus/post-image.sh           |   20 +++
- configs/armadeus_apf51_defconfig       |   29 ++++
- 3 files changed, 315 insertions(+), 0 deletions(-)
- create mode 100644 board/armadeus/apf51/linux-3.12.config
- create mode 100755 board/armadeus/post-image.sh
- create mode 100644 configs/armadeus_apf51_defconfig
+ package/fio/Config.in |    9 +++++++++
+ 1 files changed, 9 insertions(+), 0 deletions(-)
 
-diff --git a/board/armadeus/apf51/linux-3.12.config b/board/armadeus/apf51/linux-3.12.config
-new file mode 100644
-index 0000000..6c461b6
---- /dev/null
-+++ b/board/armadeus/apf51/linux-3.12.config
-@@ -0,0 +1,266 @@
-+CONFIG_EXPERIMENTAL=y
-+# CONFIG_LOCALVERSION_AUTO is not set
-+# CONFIG_SWAP is not set
-+CONFIG_SYSVIPC=y
-+CONFIG_NO_HZ=y
-+CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_IKCONFIG=y
-+CONFIG_IKCONFIG_PROC=y
-+CONFIG_LOG_BUF_SHIFT=14
-+CONFIG_EMBEDDED=y
-+# CONFIG_COMPAT_BRK is not set
-+CONFIG_SLAB=y
-+CONFIG_PROFILING=y
-+CONFIG_OPROFILE=y
-+CONFIG_MODULES=y
-+CONFIG_MODULE_UNLOAD=y
-+# CONFIG_BLK_DEV_BSG is not set
-+CONFIG_PARTITION_ADVANCED=y
-+CONFIG_BSD_DISKLABEL=y
-+# CONFIG_IOSCHED_CFQ is not set
-+CONFIG_ARCH_MXC=y
-+CONFIG_MXC_IRQ_PRIOR=y
-+CONFIG_MACH_IMX51_DT=y
-+CONFIG_ARM_THUMBEE=y
-+CONFIG_PREEMPT=y
-+CONFIG_AEABI=y
-+CONFIG_ZBOOT_ROM_TEXT=0x0
-+CONFIG_ZBOOT_ROM_BSS=0x0
-+CONFIG_CPU_FREQ=y
-+CONFIG_CPU_FREQ_STAT_DETAILS=y
-+CONFIG_CPU_FREQ_DEFAULT_GOV_USERSPACE=y
-+CONFIG_CPU_FREQ_GOV_PERFORMANCE=y
-+CONFIG_CPU_FREQ_GOV_POWERSAVE=y
-+CONFIG_CPU_FREQ_GOV_ONDEMAND=y
-+CONFIG_CPU_FREQ_GOV_CONSERVATIVE=y
-+CONFIG_CPU_FREQ_IMX=y
-+CONFIG_CPU_IDLE=y
-+CONFIG_VFP=y
-+CONFIG_NEON=y
-+# CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
-+# CONFIG_SUSPEND is not set
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_UNIX=y
-+CONFIG_INET=y
-+CONFIG_IP_MULTICAST=y
-+CONFIG_IP_PNP=y
-+# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
-+# CONFIG_INET_XFRM_MODE_TUNNEL is not set
-+# CONFIG_INET_XFRM_MODE_BEET is not set
-+# CONFIG_INET_LRO is not set
-+# CONFIG_INET_DIAG is not set
-+CONFIG_IPV6=y
-+CONFIG_CAN=m
-+CONFIG_CAN_RAW=m
-+CONFIG_CAN_BCM=m
-+CONFIG_CAN_VCAN=m
-+CONFIG_CAN_MCP251X=m
-+CONFIG_BT=m
-+CONFIG_BT_L2CAP=y
-+CONFIG_BT_SCO=y
-+CONFIG_BT_RFCOMM=m
-+CONFIG_BT_RFCOMM_TTY=y
-+CONFIG_BT_BNEP=m
-+CONFIG_BT_HIDP=m
-+CONFIG_BT_HCIBTUSB=m
-+CONFIG_BT_HCIUART=m
-+CONFIG_BT_HCIUART_H4=y
-+CONFIG_BT_HCIUART_BCSP=y
-+CONFIG_CFG80211=m
-+CONFIG_MAC80211=m
-+CONFIG_MAC80211_RC_PID=y
-+CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
-+CONFIG_DEVTMPFS=y
-+CONFIG_DEVTMPFS_MOUNT=y
-+CONFIG_FW_LOADER=m
-+CONFIG_MTD=y
-+CONFIG_MTD_CMDLINE_PARTS=y
-+CONFIG_MTD_CHAR=y
-+CONFIG_MTD_BLOCK=y
-+CONFIG_MTD_NAND=y
-+CONFIG_MTD_NAND_MXC=y
-+CONFIG_MTD_UBI=y
-+CONFIG_MISC_DEVICES=y
-+CONFIG_EEPROM_AT24=y
-+CONFIG_EEPROM_AT25=y
-+CONFIG_SCSI=y
-+CONFIG_BLK_DEV_SD=y
-+CONFIG_CHR_DEV_ST=y
-+CONFIG_BLK_DEV_SR=y
-+CONFIG_CHR_DEV_SG=y
-+CONFIG_CHR_DEV_SCH=y
-+CONFIG_SCSI_MULTI_LUN=y
-+CONFIG_SCSI_LOGGING=y
-+CONFIG_SCSI_SCAN_ASYNC=y
-+CONFIG_NETDEVICES=y
-+CONFIG_MII=y
-+CONFIG_SMSC_PHY=y
-+CONFIG_NET_ETHERNET=y
-+# CONFIG_NETDEV_1000 is not set
-+# CONFIG_NETDEV_10000 is not set
-+CONFIG_RTL8187=m
-+CONFIG_LIBERTAS=m
-+CONFIG_LIBERTAS_SDIO=m
-+CONFIG_RT2X00=m
-+CONFIG_RT73USB=m
-+CONFIG_ZD1211RW=m
-+CONFIG_INPUT_JOYDEV=y
-+CONFIG_INPUT_EVDEV=y
-+CONFIG_KEYBOARD_GPIO=m
-+CONFIG_KEYBOARD_IMX=m
-+CONFIG_INPUT_TOUCHSCREEN=y
-+CONFIG_TOUCHSCREEN_WM831X=y
-+CONFIG_INPUT_MISC=y
-+CONFIG_INPUT_UINPUT=m
-+CONFIG_INPUT_WM831X_ON=y
-+# CONFIG_LEGACY_PTYS is not set
-+CONFIG_SERIAL_8250=m
-+CONFIG_SERIAL_IMX=y
-+CONFIG_SERIAL_IMX_CONSOLE=y
-+# CONFIG_HW_RANDOM is not set
-+CONFIG_I2C=y
-+CONFIG_I2C_CHARDEV=y
-+CONFIG_I2C_IMX=y
-+CONFIG_SPI=y
-+CONFIG_SPI_IMX=y
-+CONFIG_SPI_SPIDEV=m
-+CONFIG_GPIO_SYSFS=y
-+CONFIG_GPIO_WM831X=m
-+CONFIG_POWER_SUPPLY=m
-+CONFIG_WM831X_BACKUP=m
-+CONFIG_WM831X_POWER=m
-+CONFIG_HWMON=m
-+CONFIG_SENSORS_AS1531=m
-+CONFIG_SENSORS_WM831X=m
-+CONFIG_WATCHDOG=y
-+CONFIG_WATCHDOG_NOWAYOUT=y
-+CONFIG_WM831X_WATCHDOG=m
-+CONFIG_IMX2_WDT=y
-+CONFIG_MFD_WM831X_I2C=y
-+CONFIG_REGULATOR=y
-+CONFIG_REGULATOR_FIXED_VOLTAGE=y
-+CONFIG_MFD_IMX_IPU_V3=y
-+CONFIG_MEDIA_SUPPORT=m
-+CONFIG_VIDEO_DEV=m
-+# CONFIG_RC_CORE is not set
-+# CONFIG_MEDIA_TUNER_SIMPLE is not set
-+# CONFIG_MEDIA_TUNER_TDA8290 is not set
-+# CONFIG_MEDIA_TUNER_TDA827X is not set
-+# CONFIG_MEDIA_TUNER_TDA18271 is not set
-+# CONFIG_MEDIA_TUNER_TDA9887 is not set
-+# CONFIG_MEDIA_TUNER_TEA5761 is not set
-+# CONFIG_MEDIA_TUNER_TEA5767 is not set
-+# CONFIG_MEDIA_TUNER_MT20XX is not set
-+# CONFIG_MEDIA_TUNER_MT2060 is not set
-+# CONFIG_MEDIA_TUNER_MT2266 is not set
-+# CONFIG_MEDIA_TUNER_MT2131 is not set
-+# CONFIG_MEDIA_TUNER_QT1010 is not set
-+# CONFIG_MEDIA_TUNER_XC2028 is not set
-+# CONFIG_MEDIA_TUNER_XC5000 is not set
-+# CONFIG_MEDIA_TUNER_MXL5005S is not set
-+# CONFIG_MEDIA_TUNER_MXL5007T is not set
-+# CONFIG_MEDIA_TUNER_MC44S803 is not set
-+# CONFIG_MEDIA_TUNER_MAX2165 is not set
-+# CONFIG_MEDIA_TUNER_TDA18218 is not set
-+CONFIG_VIDEO_VIVI=m
-+CONFIG_USB_VIDEO_CLASS=m
-+# CONFIG_RADIO_ADAPTERS is not set
-+CONFIG_FB=y
-+CONFIG_FB_MX5=y
-+CONFIG_BACKLIGHT_LCD_SUPPORT=y
-+CONFIG_FRAMEBUFFER_CONSOLE=y
-+CONFIG_FONTS=y
-+CONFIG_FONT_8x8=y
-+CONFIG_LOGO=y
-+# CONFIG_LOGO_LINUX_MONO is not set
-+# CONFIG_LOGO_LINUX_VGA16 is not set
-+CONFIG_SOUND=m
-+# CONFIG_SOUND_OSS_CORE_PRECLAIM is not set
-+CONFIG_SND=m
-+CONFIG_SND_MIXER_OSS=m
-+CONFIG_SND_PCM_OSS=m
-+# CONFIG_SND_DRIVERS is not set
-+# CONFIG_SND_ARM is not set
-+# CONFIG_SND_SPI is not set
-+# CONFIG_SND_USB is not set
-+CONFIG_SND_SOC=m
-+CONFIG_SND_IMX_SOC=m
-+CONFIG_SND_SOC_APF51_DEV_WM8960=m
-+CONFIG_USB=y
-+CONFIG_USB_DEBUG=y
-+CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
-+CONFIG_USB_DEVICEFS=y
-+# CONFIG_USB_DEVICE_CLASS is not set
-+CONFIG_USB_SUSPEND=y
-+CONFIG_USB_OTG=y
-+# CONFIG_USB_OTG_WHITELIST is not set
-+CONFIG_USB_MON=y
-+CONFIG_USB_EHCI_HCD=y
-+CONFIG_USB_EHCI_MXC=y
-+CONFIG_USB_ACM=y
-+CONFIG_USB_PRINTER=y
-+CONFIG_USB_WDM=y
-+CONFIG_USB_STORAGE=y
-+CONFIG_USB_CHIPIDEA=y
-+CONFIG_USB_CHIPIDEA_HOST=y
-+CONFIG_USB_PHY=y
-+CONFIG_NOP_USB_XCEIV=y
-+CONFIG_USB_GPIO_VBUS=y
-+CONFIG_USB_ULPI=y
-+CONFIG_USB_GADGET=m
-+CONFIG_USB_GADGET_DEBUG_FILES=y
-+CONFIG_USB_GADGET_DEBUG_FS=y
-+CONFIG_USB_ETH=m
-+CONFIG_USB_MASS_STORAGE=m
-+CONFIG_USB_G_SERIAL=m
-+CONFIG_USB_CDC_COMPOSITE=m
-+CONFIG_USB_G_MULTI=m
-+CONFIG_USB_G_MULTI_CDC=y
-+CONFIG_USB_G_HID=m
-+CONFIG_MMC=y
-+CONFIG_MMC_SDHCI=y
-+CONFIG_MMC_SDHCI_PLTFM=y
-+CONFIG_MMC_SDHCI_ESDHC_IMX=y
-+CONFIG_MMC_SPI=m
-+CONFIG_NEW_LEDS=y
-+CONFIG_LEDS_CLASS=y
-+CONFIG_LEDS_GPIO=y
-+CONFIG_LEDS_WM831X_STATUS=m
-+CONFIG_LEDS_TRIGGERS=y
-+CONFIG_LEDS_TRIGGER_HEARTBEAT=y
-+CONFIG_RTC_CLASS=y
-+CONFIG_RTC_MXC=y
-+CONFIG_RTC_DRV_WM831X=y
-+CONFIG_STAGING=y
-+CONFIG_IIO=m
-+CONFIG_EXT2_FS=y
-+CONFIG_EXT2_FS_XATTR=y
-+CONFIG_EXT2_FS_POSIX_ACL=y
-+CONFIG_EXT2_FS_SECURITY=y
-+CONFIG_EXT2_FS_XIP=y
-+CONFIG_EXT3_FS=y
-+CONFIG_EXT3_FS_POSIX_ACL=y
-+CONFIG_EXT3_FS_SECURITY=y
-+CONFIG_AUTOFS4_FS=y
-+CONFIG_ISO9660_FS=y
-+CONFIG_JOLIET=y
-+CONFIG_ZISOFS=y
-+CONFIG_MSDOS_FS=y
-+CONFIG_VFAT_FS=y
-+CONFIG_TMPFS=y
-+CONFIG_JFFS2_FS=y
-+CONFIG_JFFS2_COMPRESSION_OPTIONS=y
-+CONFIG_JFFS2_LZO=y
-+CONFIG_JFFS2_CMODE_NONE=y
-+CONFIG_UBIFS_FS=y
-+CONFIG_NFS_FS=y
-+CONFIG_NFS_V3=y
-+CONFIG_NFS_V4=y
-+CONFIG_ROOT_NFS=y
-+CONFIG_NLS_CODEPAGE_437=y
-+CONFIG_NLS_CODEPAGE_850=y
-+CONFIG_NLS_ISO8859_1=y
-+CONFIG_DEBUG_FS=y
-+# CONFIG_CRYPTO_ANSI_CPRNG is not set
-+# CONFIG_CRYPTO_HW is not set
-diff --git a/board/armadeus/post-image.sh b/board/armadeus/post-image.sh
-new file mode 100755
-index 0000000..36ad3cf
---- /dev/null
-+++ b/board/armadeus/post-image.sh
-@@ -0,0 +1,20 @@
-+#!/bin/sh
-+#
-+# arg1: BR images dir
-+# arg2: board name
-+# arg3: i.MX processor type
-+
-+# images renaming according to board name
-+if [ "$2" != "" ]; then
-+	for rootfstype in ubi ubifs tar jffs2; do
-+		if [ -f "$1/rootfs.$rootfstype" ]; then
-+			mv -u $1/rootfs.$rootfstype $1/$2-rootfs.$rootfstype
-+		fi
-+	done
-+	if [ -f "$1/uImage" ]; then
-+		mv -u $1/uImage $1/$2-linux.bin
-+	fi
-+	if [ -f "$1/$3-$2dev.dtb" ]; then
-+		mv -u $1/$3-$2dev.dtb $1/$2.dtb
-+	fi
-+fi
-diff --git a/configs/armadeus_apf51_defconfig b/configs/armadeus_apf51_defconfig
-new file mode 100644
-index 0000000..ce0d00b
---- /dev/null
-+++ b/configs/armadeus_apf51_defconfig
-@@ -0,0 +1,29 @@
-+# Architecture
-+BR2_arm=y
-+BR2_cortex_a8=y
-+
-+# Lock down headers to avoid breaking with new defaults
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="3.12.6"
-+
-+# System
-+BR2_TARGET_GENERIC_HOSTNAME="apf51"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to Armadeus development platform !"
-+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc2"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/armadeus/post-image.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="apf51 imx51"
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.6"
-+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/armadeus/apf51/linux-3.12.config"
-+BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x90008000"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx51-apf51dev"
-+
-+# Filesystem
-+BR2_TARGET_ROOTFS_UBIFS=y
-+BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=135301
-+BR2_TARGET_ROOTFS_UBI=y
--- 
-1.7.5.4
+diff --git a/package/fio/Config.in b/package/fio/Config.in
+index deff12c..be99f25 100644
+--- a/package/fio/Config.in
++++ b/package/fio/Config.in
+@@ -3,6 +3,15 @@ config BR2_PACKAGE_FIO
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	# fio uses posix_madvise(), which is not part of any official
++	# release of uClibc, but is part of uClibc Git, and backported
++	# in Buildroot patch set of uClibc 0.9.33. Therefore, we
++	# disable the build of fio for external uClibc toolchains
++	# (which use an unknown uClibc version) and for 0.9.31 and
++	# 0.9.32 which don't have posix_madvise().
++	depends on !BR2_TOOLCHAIN_EXTERNAL_UCLIBC && \
++		!BR2_UCLIBC_VERSION_0_9_31 && \
++		!BR2_UCLIBC_VERSION_0_9_32
+ 	help
+ 	  fio is an I/O tool meant to be used both for benchmark
+ 	  and stress/hardware verification.
