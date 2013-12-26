@@ -1,36 +1,31 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 26 Dec 2013 12:43:22 -0300
-Subject: [Buildroot] [PATCH] dbus-cpp: new package
-In-Reply-To: <20131226162407.2debd602@skate>
-References: <1388070026-4256-1-git-send-email-gustavo@zacarias.com.ar>
- <20131226162407.2debd602@skate>
-Message-ID: <52BC4E9A.9050303@zacarias.com.ar>
+From: Ron Eggler <reggler@semios.com>
+Date: Thu, 26 Dec 2013 15:50:06 +0000
+Subject: [Buildroot] buildroot_defconfig Error
+Message-ID: <CAO8ZbKt9uYRyRutgkMYFS4hY=EYASWEeyEXha4-q+9C6dmDMCw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/26/2013 12:24 PM, Thomas Petazzoni wrote:
+Hi,
 
-> Dear Gustavo Zacarias,
-> 
-> On Thu, 26 Dec 2013 12:00:26 -0300, Gustavo Zacarias wrote:
->> D-Bus C++ bindings, closes bug #65.
-> 
-> Wow, impressive, you even go to improvement bugs, and fix them!
+About 30min into the compilation, I keep getting a "buildroot_defconfig"
+error that I'm not able to get resolved.
+It looks like this:
+>>> linux 3.2.52 Configuring
+cp "board/synapse/e10/linux-3.12.1-config"
+/etc/E10-buildroot/br2013.11/output/build/linux-3.2.52/arch/arm/configs/buildroot_defconfig
+cp: cannot stat ?board/synapse/e10/linux-3.12.1-config?: No such file or
+directory
+make: ***
+[/etc/E10-buildroot/br2013.11/output/build/linux-3.2.52/.stamp_configured]
+Error 1
 
-Yeah, that number was nagging me, a 2-digit when we are on 4-digit bugs :P
-Some people want to lower the patchwork patch count, i also look at bugs ;)
+How can I get this xcleaned up to complete the compilation?
 
-> I'm not a big fan when building one package requires poking into the
-> source/build tree of another package (even if it's the host variant of
-> the same package). Installing the host dbus-cpp into $(HOST_DIR) isn't
-> sufficient to build the target dbus-cpp?
-
-Me neither, the problem is patching it (bin/lib separately, ditching the
-src/.libs & other references) won't be upstreamable since the option is
-right there now and i don't think upstream will want a variation on the
-subject.
-It's doable but not upstreamable i think, what do we prefer?
-Regards.
+Thank you,
+Ron
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131226/31763e77/attachment.html>
