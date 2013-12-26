@@ -1,32 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 26 Dec 2013 18:47:39 +0100
-Subject: [Buildroot] [git commit] cramfs: add licensing info
-Message-ID: <20131226175122.3208B9BBF9@busybox.osuosl.org>
+Date: Thu, 26 Dec 2013 18:48:31 +0100
+Subject: [Buildroot] [git commit] tzdata/zic: bump to version 2013i
+Message-ID: <20131226175122.3E8009BBF9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a413e32ef1dad972d02c617d2e3c26edbb2d5889
+commit: http://git.buildroot.net/buildroot/commit/?id=a2a9613d2df2df30022c84ad985cfafe7059a6a2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Axel Lin <axel.lin@ingics.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/cramfs/cramfs.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/tzdata/tzdata.mk |    2 +-
+ package/zic/zic.mk       |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cramfs/cramfs.mk b/package/cramfs/cramfs.mk
-index 0f29dd0..710aaa8 100644
---- a/package/cramfs/cramfs.mk
-+++ b/package/cramfs/cramfs.mk
-@@ -6,6 +6,8 @@
+diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
+index 9109e2a..1cb5b3f 100644
+--- a/package/tzdata/tzdata.mk
++++ b/package/tzdata/tzdata.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- CRAMFS_VERSION = 1.1
- CRAMFS_SITE = http://downloads.sourceforge.net/project/cramfs/cramfs/$(CRAMFS_VERSION)
-+CRAMFS_LICENSE = GPLv2+
-+CRAMFS_LICENSE_FILES = COPYING
+-TZDATA_VERSION = 2013h
++TZDATA_VERSION = 2013i
+ TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
+ TZDATA_SITE = ftp://ftp.iana.org/tz/releases
+ TZDATA_DEPENDENCIES = host-zic
+diff --git a/package/zic/zic.mk b/package/zic/zic.mk
+index 780643b..c9b6c7b 100644
+--- a/package/zic/zic.mk
++++ b/package/zic/zic.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- CRAMFS_DEPENDENCIES = zlib
- 
+-ZIC_VERSION = 2013h
++ZIC_VERSION = 2013i
+ ZIC_SOURCE = tzcode$(ZIC_VERSION).tar.gz
+ ZIC_SITE = ftp://ftp.iana.org/tz/releases
+ ZIC_LICENSE = Public domain
