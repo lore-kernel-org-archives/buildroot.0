@@ -1,25 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 26 Dec 2013 18:46:03 +0100
-Subject: [Buildroot] [PATCH] inadyn: bump to version 1.99.6
-In-Reply-To: <1388060195-12033-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1388060195-12033-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20131226184603.6ebc18e6@skate>
+Date: Thu, 26 Dec 2013 18:46:21 +0100
+Subject: [Buildroot] [PATCH] board: updates APF28 SOM support to Linux
+ 3.12
+In-Reply-To: <1388062493-30220-1-git-send-email-julien.boibessot@free.fr>
+References: <1388062493-30220-1-git-send-email-julien.boibessot@free.fr>
+Message-ID: <20131226184621.4187da28@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Julien Boibessot,
 
-On Thu, 26 Dec 2013 09:16:35 -0300, Gustavo Zacarias wrote:
-> Also switch to github helper and install sample configuration file mode
-> 600 - o+r is really bad for password-bearing configuration files.
+On Thu, 26 Dec 2013 13:54:53 +0100, julien.boibessot at free.fr wrote:
+> From: Julien Boibessot <julien.boibessot@armadeus.com>
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
 > ---
->  package/inadyn/inadyn.mk | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
+>  .../apf28/{linux-3.8.config => linux-3.12.config}  |   31 +++++++++++--------
+>  configs/armadeus_apf28_defconfig                   |   21 +++++++------
+>  2 files changed, 29 insertions(+), 23 deletions(-)
+>  rename board/armadeus/apf28/{linux-3.8.config => linux-3.12.config} (89%)
 
 Applied, thanks.
 
