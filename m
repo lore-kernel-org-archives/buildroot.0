@@ -1,32 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 26 Dec 2013 18:45:43 +0100
-Subject: [Buildroot] [PATCH] gnutls: add crywrap clock_gettime patch
-In-Reply-To: <1388074436-30285-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1388074436-30285-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20131226184543.22ace1fd@skate>
+Date: Thu, 26 Dec 2013 18:42:22 +0100
+Subject: [Buildroot] [PATCH] aiccu: disable for uClibc 0.9.31/0.9.32
+Message-ID: <1388079742-24548-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+aiccu uses the dn_skipname() function, which was only introduced in
+uClibc 0.9.33. Therefore, we disable this package when uClibc 0.9.31
+and 0.9.32. Most likely, only AVR32 users will be affected by this, so
+we don't add a specific kconfig comment for that.
 
-On Thu, 26 Dec 2013 13:13:56 -0300, Gustavo Zacarias wrote:
-> Fixes:
-> http://autobuild.buildroot.net/results/1bd/1bd67b616e996d684dd584576569517f4653addd/
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/gnutls/gnutls-01-gettime.patch | 25 +++++++++++++++++++++++++
->  package/gnutls/gnutls.mk               |  2 ++
->  2 files changed, 27 insertions(+)
->  create mode 100644 package/gnutls/gnutls-01-gettime.patch
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/aiccu/Config.in | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Applied, thanks.
-
-Thomas
+diff --git a/package/aiccu/Config.in b/package/aiccu/Config.in
+index f56ad75..17e6449 100644
+--- a/package/aiccu/Config.in
++++ b/package/aiccu/Config.in
+@@ -4,6 +4,9 @@ config BR2_PACKAGE_AICCU
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
++	# Uses dn_skipname(), only available since 0.9.33
++	depends on !BR2_UCLIBC_VERSION_0_9_31 && \
++		!BR2_UCLIBC_VERSION_0_9_32
+ 	select BR2_PACKAGE_GNUTLS
+ 	help
+ 	  SixXS Automatic IPv6 Connectivity Client Utility
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.3.2
