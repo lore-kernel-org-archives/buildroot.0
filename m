@@ -1,30 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 26 Dec 2013 23:29:49 +0100
-Subject: [Buildroot] [PATCH v2 1/2] libevdev: new package
-In-Reply-To: <1387551924-4824-2-git-send-email-anaumann@ultratronik.de>
-References: <1387551924-4824-1-git-send-email-anaumann@ultratronik.de>
- <1387551924-4824-2-git-send-email-anaumann@ultratronik.de>
-Message-ID: <20131226232949.572fda54@skate>
+Date: Thu, 26 Dec 2013 23:30:09 +0100
+Subject: [Buildroot] [PATCH] freetype: bump to version 2.5.2
+In-Reply-To: <1388088138-23937-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1388088138-23937-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20131226233009.29be88bd@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Andreas Naumann,
+Dear Gustavo Zacarias,
 
-On Fri, 20 Dec 2013 16:05:23 +0100, Andreas Naumann wrote:
-> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+On Thu, 26 Dec 2013 17:02:18 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/Config.in            |  1 +
->  package/libevdev/Config.in   |  6 ++++++
->  package/libevdev/libevdev.mk | 18 ++++++++++++++++++
->  3 files changed, 25 insertions(+)
->  create mode 100644 package/libevdev/Config.in
->  create mode 100644 package/libevdev/libevdev.mk
+>  package/freetype/freetype.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks, applied, after fixing the license information and the
-autoreconf comment.
+Thanks, applied.
 
 Thomas
 -- 
