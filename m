@@ -1,45 +1,91 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 26 Dec 2013 09:16:35 -0300
-Subject: [Buildroot] [PATCH] inadyn: bump to version 1.99.6
-Message-ID: <1388060195-12033-1-git-send-email-gustavo@zacarias.com.ar>
+From: Julien Boibessot <julien.boibessot@free.fr>
+Date: Thu, 26 Dec 2013 13:40:41 +0100
+Subject: [Buildroot] [PATCH] Add Armadeus systems APF51 SOM basic
+	support.
+In-Reply-To: <20131226105121.4694c243@skate>
+References: <1388051094-3666-1-git-send-email-julien.boibessot@free.fr>
+ <20131226105121.4694c243@skate>
+Message-ID: <52BC23C9.3070308@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also switch to github helper and install sample configuration file mode
-600 - o+r is really bad for password-bearing configuration files.
+Hello Thomas,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/inadyn/inadyn.mk | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+On 12/26/2013 10:51 AM, Thomas Petazzoni wrote:
+> Julien,
+>
+> On Thu, 26 Dec 2013 10:44:54 +0100, julien.boibessot at free.fr wrote:
+>> From: Julien Boibessot <julien.boibessot@armadeus.com>
+>>
+>> Buildroot uClibc toolchain, UBIFS rootfs, linux kernel (board is mainlined).
+>>
+>> Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+> Thanks! Some comments below.
 
-diff --git a/package/inadyn/inadyn.mk b/package/inadyn/inadyn.mk
-index 12f8acc..dc443f9 100644
---- a/package/inadyn/inadyn.mk
-+++ b/package/inadyn/inadyn.mk
-@@ -4,9 +4,8 @@
- #
- ################################################################################
- 
--INADYN_VERSION = 1.98.1
--INADYN_SOURCE = inadyn-$(INADYN_VERSION).tar.bz2
--INADYN_SITE = https://github.com/downloads/troglobit/inadyn
-+INADYN_VERSION = 1.99.6
-+INADYN_SITE = $(call github,troglobit,inadyn,$(INADYN_VERSION))
- INADYN_LICENSE = GPLv2+
- INADYN_LICENSE_FILES = COPYING LICENSE
- 
-@@ -16,7 +15,7 @@ endef
- 
- define INADYN_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 0755 $(@D)/src/inadyn $(TARGET_DIR)/usr/sbin/inadyn
--	$(INSTALL) -D -m 0644 package/inadyn/inadyn.conf \
-+	$(INSTALL) -D -m 0600 package/inadyn/inadyn.conf \
- 		$(TARGET_DIR)/etc/inadyn.conf
- 	$(INSTALL) -D -m 0755 package/inadyn/S70inadyn \
- 		$(TARGET_DIR)/etc/init.d/S70inadyn
--- 
-1.8.3.2
+Thanks for the review, my answers below...
+
+>
+>> --- /dev/null
+>> +++ b/board/armadeus/post-image.sh
+>> @@ -0,0 +1,20 @@
+>> +#!/bin/sh
+>> +#
+>> +# arg1: BR images dir
+>> +# arg2: board name
+>> +# arg3: i.MX processor type
+>> +
+>> +# images renaming according to board name
+>> +if [ "$2" != "" ]; then
+>> +	for rootfstype in ubi ubifs tar jffs2; do
+>> +		if [ -f "$1/rootfs.$rootfstype" ]; then
+>> +			mv -u $1/rootfs.$rootfstype $1/$2-rootfs.$rootfstype
+>> +		fi
+>> +	done
+>> +	if [ -f "$1/uImage" ]; then
+>> +		mv -u $1/uImage $1/$2-linux.bin
+>> +	fi
+>> +	if [ -f "$1/$3-$2dev.dtb" ]; then
+>> +		mv -u $1/$3-$2dev.dtb $1/$2.dtb
+>> +	fi
+>> +fi
+> Why do we want this? We don't do this for any of the boards in
+> Buildroot, and I'm not sure to see why the apf51 should be different
+> here.
+
+Well, I was going to update all armadeus boards configs with this
+mechanism too  :-)
+
+>
+> Surely, if you want to build Buildroot for several boards, you will
+> create one build tree for each board, and therefore each images
+> directory will contain only the images for this particular board:
+>
+> 	make O=../apf51 apf51_defconfig
+> 	make O=../apf51
+>
+> 	make O=../apf27 apf27_defconfig
+> 	make O=../apf27
+>
+> And then in ../apf27/images/, you have images for APF27, and
+> in ../apf51/images/, you have images for APF51.
+
+yes but images still all have the same name and we have accustomed our
+(non expert) users to recognize their board images with their name
+prefix. Our U-Boot update scripts are common to all of our boards and
+require the images are prefixed with board name. (For example, our
+U-Boot look after /tftpboot/apf27-linux.bin instead of
+/tftpboot/apf27/uimage.)
+
+I you don't want us to rename images automatically, I can keep the
+instructions in our installation documentation and remove post-image.sh.
+Let me know and I will submit a v2 of the patch.
+
+But just one more question: what is the purpose of
+BR2_ROOTFS_POST_IMAGE_SCRIPT, if it isn't meant to move/rename images to
+fit targeted boards ?
+
+Best regards,
+Julien
