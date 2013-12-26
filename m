@@ -1,28 +1,179 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 26 Dec 2013 18:48:44 +0100
-Subject: [Buildroot] [PATCH] tzdata/zic: bump to version 2013i
-In-Reply-To: <1388026287.4254.1.camel@phoenix>
-References: <1388026287.4254.1.camel@phoenix>
-Message-ID: <20131226184844.29326b5d@skate>
+Date: Thu, 26 Dec 2013 18:44:22 +0100
+Subject: [Buildroot] [git commit] board: updates APF28 SOM support to Linux
+	3.12
+Message-ID: <20131226175121.EEF2B9C1EB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Axel Lin,
+commit: http://git.buildroot.net/buildroot/commit/?id=f9a7d1336b105933481686cdb5498b0fb983ad66
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 26 Dec 2013 10:51:27 +0800, Axel Lin wrote:
-> Signed-off-by: Axel Lin <axel.lin@ingics.com>
-> ---
->  package/tzdata/tzdata.mk | 2 +-
->  package/zic/zic.mk       | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../apf28/{linux-3.8.config => linux-3.12.config}  |   31 +++++++++++--------
+ configs/armadeus_apf28_defconfig                   |   21 +++++++------
+ 2 files changed, 29 insertions(+), 23 deletions(-)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/board/armadeus/apf28/linux-3.8.config b/board/armadeus/apf28/linux-3.12.config
+similarity index 89%
+rename from board/armadeus/apf28/linux-3.8.config
+rename to board/armadeus/apf28/linux-3.12.config
+index c9f1142..137bd12 100644
+--- a/board/armadeus/apf28/linux-3.8.config
++++ b/board/armadeus/apf28/linux-3.12.config
+@@ -1,10 +1,7 @@
+-CONFIG_EXPERIMENTAL=y
+ # CONFIG_LOCALVERSION_AUTO is not set
+ # CONFIG_SWAP is not set
+ CONFIG_SYSVIPC=y
+ CONFIG_POSIX_MQUEUE=y
+-CONFIG_NO_HZ=y
+-CONFIG_HIGH_RES_TIMERS=y
+ CONFIG_LOG_BUF_SHIFT=14
+ CONFIG_EMBEDDED=y
+ # CONFIG_COMPAT_BRK is not set
+@@ -17,8 +14,8 @@ CONFIG_MODULE_UNLOAD=y
+ CONFIG_PARTITION_ADVANCED=y
+ CONFIG_BSD_DISKLABEL=y
+ # CONFIG_IOSCHED_CFQ is not set
++# CONFIG_ARCH_MULTI_V7 is not set
+ CONFIG_ARCH_MXS=y
+-CONFIG_MACH_MXS_DT=y
+ CONFIG_PREEMPT=y
+ CONFIG_AEABI=y
+ # CONFIG_OABI_COMPAT is not set
+@@ -39,8 +36,6 @@ CONFIG_IP_PNP=y
+ # CONFIG_INET_DIAG is not set
+ CONFIG_IPV6=y
+ CONFIG_CAN=m
+-CONFIG_CAN_RAW=m
+-CONFIG_CAN_BCM=m
+ CONFIG_CAN_VCAN=m
+ CONFIG_CAN_FLEXCAN=m
+ CONFIG_BT=m
+@@ -60,8 +55,11 @@ CONFIG_DEVTMPFS_MOUNT=y
+ CONFIG_FW_LOADER=m
+ CONFIG_MTD=y
+ CONFIG_MTD_CMDLINE_PARTS=y
+-CONFIG_MTD_CHAR=y
+ CONFIG_MTD_BLOCK=y
++CONFIG_MTD_DATAFLASH=y
++CONFIG_MTD_M25P80=y
++# CONFIG_M25PXX_USE_FAST_READ is not set
++CONFIG_MTD_SST25L=y
+ CONFIG_MTD_NAND=y
+ CONFIG_MTD_NAND_GPMI_NAND=y
+ CONFIG_MTD_UBI=y
+@@ -83,14 +81,18 @@ CONFIG_RT73USB=m
+ CONFIG_ZD1211RW=m
+ CONFIG_INPUT_JOYDEV=y
+ CONFIG_INPUT_EVDEV=y
+-CONFIG_KEYBOARD_GPIO=y
+ CONFIG_INPUT_TOUCHSCREEN=y
+ CONFIG_INPUT_MISC=y
+ CONFIG_INPUT_UINPUT=m
++# CONFIG_SERIO_SERPORT is not set
++CONFIG_VT_HW_CONSOLE_BINDING=y
++CONFIG_DEVPTS_MULTIPLE_INSTANCES=y
+ # CONFIG_LEGACY_PTYS is not set
++# CONFIG_DEVKMEM is not set
+ CONFIG_SERIAL_AMBA_PL011=y
+ CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
+ CONFIG_SERIAL_MXS_AUART=y
++CONFIG_TTY_PRINTK=y
+ # CONFIG_HW_RANDOM is not set
+ CONFIG_I2C=y
+ CONFIG_I2C_CHARDEV=y
+@@ -102,11 +104,15 @@ CONFIG_SPI_SPIDEV=m
+ CONFIG_GPIO_SYSFS=y
+ CONFIG_HWMON=m
+ CONFIG_WATCHDOG=y
++CONFIG_STMP3XXX_RTC_WATCHDOG=y
++CONFIG_REGULATOR=y
++CONFIG_REGULATOR_FIXED_VOLTAGE=y
+ CONFIG_MEDIA_SUPPORT=m
+ CONFIG_MEDIA_CAMERA_SUPPORT=y
+ CONFIG_FB=y
+ CONFIG_FB_MXS=y
+ CONFIG_BACKLIGHT_LCD_SUPPORT=y
++CONFIG_LCD_CLASS_DEVICE=y
+ CONFIG_BACKLIGHT_CLASS_DEVICE=y
+ # CONFIG_BACKLIGHT_GENERIC is not set
+ CONFIG_BACKLIGHT_PWM=y
+@@ -121,17 +127,17 @@ CONFIG_USB_DEBUG=y
+ CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
+ CONFIG_USB_MON=y
+ CONFIG_USB_EHCI_HCD=y
+-CONFIG_USB_CHIPIDEA=y
+-CONFIG_USB_CHIPIDEA_HOST=y
+ CONFIG_USB_ACM=y
+ CONFIG_USB_PRINTER=y
+ CONFIG_USB_WDM=y
+ CONFIG_USB_STORAGE=y
++CONFIG_USB_CHIPIDEA=y
++CONFIG_USB_CHIPIDEA_UDC=y
++CONFIG_USB_CHIPIDEA_HOST=y
++CONFIG_USB_MXS_PHY=y
+ CONFIG_USB_GADGET=y
+ CONFIG_USB_GADGET_DEBUG_FILES=y
+ CONFIG_USB_ETH=m
+-CONFIG_USB_ULPI=y
+-CONFIG_USB_MXS_PHY=y
+ CONFIG_MMC=y
+ CONFIG_MMC_MXS=y
+ CONFIG_NEW_LEDS=y
+@@ -142,7 +148,6 @@ CONFIG_LEDS_TRIGGER_TIMER=y
+ CONFIG_LEDS_TRIGGER_ONESHOT=y
+ CONFIG_LEDS_TRIGGER_HEARTBEAT=y
+ CONFIG_LEDS_TRIGGER_BACKLIGHT=y
+-CONFIG_LEDS_TRIGGER_GPIO=y
+ CONFIG_LEDS_TRIGGER_DEFAULT_ON=y
+ CONFIG_RTC_CLASS=y
+ CONFIG_RTC_DRV_STMP=y
+diff --git a/configs/armadeus_apf28_defconfig b/configs/armadeus_apf28_defconfig
+index ae443e1..360e113 100644
+--- a/configs/armadeus_apf28_defconfig
++++ b/configs/armadeus_apf28_defconfig
+@@ -4,7 +4,7 @@ BR2_arm926t=y
+ 
+ # Lock down headers to avoid breaking with new defaults
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.8.1"
++BR2_DEFAULT_KERNEL_VERSION="3.12.6"
+ 
+ # System
+ BR2_TARGET_GENERIC_HOSTNAME="apf28"
+@@ -12,18 +12,19 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to Armadeus development platform !"
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+ 
+-# Filesystem
+-BR2_TARGET_ROOTFS_UBIFS=y
+-BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x1f000
+-BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=4227
+-BR2_TARGET_ROOTFS_UBI=y
+-BR2_TARGET_ROOTFS_UBI_SUBSIZE=0
+-
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.8.1"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.6"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/armadeus/apf28/linux-3.8.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/armadeus/apf28/linux-3.12.config"
++BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x40008000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx28-apf28dev"
++
++# Filesystem
++BR2_TARGET_ROOTFS_UBIFS=y
++BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x1f000
++BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=4227
++BR2_TARGET_ROOTFS_UBI=y
++BR2_TARGET_ROOTFS_UBI_SUBSIZE=0
