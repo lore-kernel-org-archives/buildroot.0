@@ -1,179 +1,91 @@
-From: julien.boibessot at free.fr <julien.boibessot@free.fr>
-Date: Thu, 26 Dec 2013 13:54:53 +0100
-Subject: [Buildroot] [PATCH] board: updates APF28 SOM support to Linux 3.12
-Message-ID: <1388062493-30220-1-git-send-email-julien.boibessot@free.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 26 Dec 2013 14:33:44 +0100
+Subject: [Buildroot] [PATCH] Add Armadeus systems APF51 SOM basic
+	support.
+In-Reply-To: <52BC23C9.3070308@free.fr>
+References: <1388051094-3666-1-git-send-email-julien.boibessot@free.fr>
+ <20131226105121.4694c243@skate> <52BC23C9.3070308@free.fr>
+Message-ID: <20131226133344.GA3398@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Julien Boibessot <julien.boibessot@armadeus.com>
+Julien, All,
 
-Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
----
- .../apf28/{linux-3.8.config => linux-3.12.config}  |   31 +++++++++++--------
- configs/armadeus_apf28_defconfig                   |   21 +++++++------
- 2 files changed, 29 insertions(+), 23 deletions(-)
- rename board/armadeus/apf28/{linux-3.8.config => linux-3.12.config} (89%)
+On 2013-12-26 13:40 +0100, Julien Boibessot spake thusly:
+> On 12/26/2013 10:51 AM, Thomas Petazzoni wrote:
+> > On Thu, 26 Dec 2013 10:44:54 +0100, julien.boibessot at free.fr wrote:
+> >> From: Julien Boibessot <julien.boibessot@armadeus.com>
+> >>
+> >> Buildroot uClibc toolchain, UBIFS rootfs, linux kernel (board is mainlined).
+> >>
+> >> Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+[--SNIP--]
+> >> --- /dev/null
+> >> +++ b/board/armadeus/post-image.sh
+> >> @@ -0,0 +1,20 @@
+> >> +#!/bin/sh
+> >> +#
+> >> +# arg1: BR images dir
+> >> +# arg2: board name
+> >> +# arg3: i.MX processor type
+> >> +
+> >> +# images renaming according to board name
+> >> +if [ "$2" != "" ]; then
+> >> +	for rootfstype in ubi ubifs tar jffs2; do
+> >> +		if [ -f "$1/rootfs.$rootfstype" ]; then
+> >> +			mv -u $1/rootfs.$rootfstype $1/$2-rootfs.$rootfstype
+> >> +		fi
+> >> +	done
+> >> +	if [ -f "$1/uImage" ]; then
+> >> +		mv -u $1/uImage $1/$2-linux.bin
+> >> +	fi
+> >> +	if [ -f "$1/$3-$2dev.dtb" ]; then
+> >> +		mv -u $1/$3-$2dev.dtb $1/$2.dtb
+> >> +	fi
+> >> +fi
+> > Why do we want this? We don't do this for any of the boards in
+> > Buildroot, and I'm not sure to see why the apf51 should be different
+> > here.
+[--SNIP--]
+> yes but images still all have the same name and we have accustomed our
+> (non expert) users to recognize their board images with their name
+> prefix. Our U-Boot update scripts are common to all of our boards and
+> require the images are prefixed with board name. (For example, our
+> U-Boot look after /tftpboot/apf27-linux.bin instead of
+> /tftpboot/apf27/uimage.)
+> 
+> I you don't want us to rename images automatically, I can keep the
+> instructions in our installation documentation and remove post-image.sh.
+> Let me know and I will submit a v2 of the patch.
 
-diff --git a/board/armadeus/apf28/linux-3.8.config b/board/armadeus/apf28/linux-3.12.config
-similarity index 89%
-rename from board/armadeus/apf28/linux-3.8.config
-rename to board/armadeus/apf28/linux-3.12.config
-index c9f1142..137bd12 100644
---- a/board/armadeus/apf28/linux-3.8.config
-+++ b/board/armadeus/apf28/linux-3.12.config
-@@ -1,10 +1,7 @@
--CONFIG_EXPERIMENTAL=y
- # CONFIG_LOCALVERSION_AUTO is not set
- # CONFIG_SWAP is not set
- CONFIG_SYSVIPC=y
- CONFIG_POSIX_MQUEUE=y
--CONFIG_NO_HZ=y
--CONFIG_HIGH_RES_TIMERS=y
- CONFIG_LOG_BUF_SHIFT=14
- CONFIG_EMBEDDED=y
- # CONFIG_COMPAT_BRK is not set
-@@ -17,8 +14,8 @@ CONFIG_MODULE_UNLOAD=y
- CONFIG_PARTITION_ADVANCED=y
- CONFIG_BSD_DISKLABEL=y
- # CONFIG_IOSCHED_CFQ is not set
-+# CONFIG_ARCH_MULTI_V7 is not set
- CONFIG_ARCH_MXS=y
--CONFIG_MACH_MXS_DT=y
- CONFIG_PREEMPT=y
- CONFIG_AEABI=y
- # CONFIG_OABI_COMPAT is not set
-@@ -39,8 +36,6 @@ CONFIG_IP_PNP=y
- # CONFIG_INET_DIAG is not set
- CONFIG_IPV6=y
- CONFIG_CAN=m
--CONFIG_CAN_RAW=m
--CONFIG_CAN_BCM=m
- CONFIG_CAN_VCAN=m
- CONFIG_CAN_FLEXCAN=m
- CONFIG_BT=m
-@@ -60,8 +55,11 @@ CONFIG_DEVTMPFS_MOUNT=y
- CONFIG_FW_LOADER=m
- CONFIG_MTD=y
- CONFIG_MTD_CMDLINE_PARTS=y
--CONFIG_MTD_CHAR=y
- CONFIG_MTD_BLOCK=y
-+CONFIG_MTD_DATAFLASH=y
-+CONFIG_MTD_M25P80=y
-+# CONFIG_M25PXX_USE_FAST_READ is not set
-+CONFIG_MTD_SST25L=y
- CONFIG_MTD_NAND=y
- CONFIG_MTD_NAND_GPMI_NAND=y
- CONFIG_MTD_UBI=y
-@@ -83,14 +81,18 @@ CONFIG_RT73USB=m
- CONFIG_ZD1211RW=m
- CONFIG_INPUT_JOYDEV=y
- CONFIG_INPUT_EVDEV=y
--CONFIG_KEYBOARD_GPIO=y
- CONFIG_INPUT_TOUCHSCREEN=y
- CONFIG_INPUT_MISC=y
- CONFIG_INPUT_UINPUT=m
-+# CONFIG_SERIO_SERPORT is not set
-+CONFIG_VT_HW_CONSOLE_BINDING=y
-+CONFIG_DEVPTS_MULTIPLE_INSTANCES=y
- # CONFIG_LEGACY_PTYS is not set
-+# CONFIG_DEVKMEM is not set
- CONFIG_SERIAL_AMBA_PL011=y
- CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
- CONFIG_SERIAL_MXS_AUART=y
-+CONFIG_TTY_PRINTK=y
- # CONFIG_HW_RANDOM is not set
- CONFIG_I2C=y
- CONFIG_I2C_CHARDEV=y
-@@ -102,11 +104,15 @@ CONFIG_SPI_SPIDEV=m
- CONFIG_GPIO_SYSFS=y
- CONFIG_HWMON=m
- CONFIG_WATCHDOG=y
-+CONFIG_STMP3XXX_RTC_WATCHDOG=y
-+CONFIG_REGULATOR=y
-+CONFIG_REGULATOR_FIXED_VOLTAGE=y
- CONFIG_MEDIA_SUPPORT=m
- CONFIG_MEDIA_CAMERA_SUPPORT=y
- CONFIG_FB=y
- CONFIG_FB_MXS=y
- CONFIG_BACKLIGHT_LCD_SUPPORT=y
-+CONFIG_LCD_CLASS_DEVICE=y
- CONFIG_BACKLIGHT_CLASS_DEVICE=y
- # CONFIG_BACKLIGHT_GENERIC is not set
- CONFIG_BACKLIGHT_PWM=y
-@@ -121,17 +127,17 @@ CONFIG_USB_DEBUG=y
- CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
- CONFIG_USB_MON=y
- CONFIG_USB_EHCI_HCD=y
--CONFIG_USB_CHIPIDEA=y
--CONFIG_USB_CHIPIDEA_HOST=y
- CONFIG_USB_ACM=y
- CONFIG_USB_PRINTER=y
- CONFIG_USB_WDM=y
- CONFIG_USB_STORAGE=y
-+CONFIG_USB_CHIPIDEA=y
-+CONFIG_USB_CHIPIDEA_UDC=y
-+CONFIG_USB_CHIPIDEA_HOST=y
-+CONFIG_USB_MXS_PHY=y
- CONFIG_USB_GADGET=y
- CONFIG_USB_GADGET_DEBUG_FILES=y
- CONFIG_USB_ETH=m
--CONFIG_USB_ULPI=y
--CONFIG_USB_MXS_PHY=y
- CONFIG_MMC=y
- CONFIG_MMC_MXS=y
- CONFIG_NEW_LEDS=y
-@@ -142,7 +148,6 @@ CONFIG_LEDS_TRIGGER_TIMER=y
- CONFIG_LEDS_TRIGGER_ONESHOT=y
- CONFIG_LEDS_TRIGGER_HEARTBEAT=y
- CONFIG_LEDS_TRIGGER_BACKLIGHT=y
--CONFIG_LEDS_TRIGGER_GPIO=y
- CONFIG_LEDS_TRIGGER_DEFAULT_ON=y
- CONFIG_RTC_CLASS=y
- CONFIG_RTC_DRV_STMP=y
-diff --git a/configs/armadeus_apf28_defconfig b/configs/armadeus_apf28_defconfig
-index ae443e1..360e113 100644
---- a/configs/armadeus_apf28_defconfig
-+++ b/configs/armadeus_apf28_defconfig
-@@ -4,7 +4,7 @@ BR2_arm926t=y
- 
- # Lock down headers to avoid breaking with new defaults
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.8.1"
-+BR2_DEFAULT_KERNEL_VERSION="3.12.6"
- 
- # System
- BR2_TARGET_GENERIC_HOSTNAME="apf28"
-@@ -12,18 +12,19 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to Armadeus development platform !"
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
- 
--# Filesystem
--BR2_TARGET_ROOTFS_UBIFS=y
--BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x1f000
--BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=4227
--BR2_TARGET_ROOTFS_UBI=y
--BR2_TARGET_ROOTFS_UBI_SUBSIZE=0
--
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.8.1"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.6"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/armadeus/apf28/linux-3.8.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/armadeus/apf28/linux-3.12.config"
-+BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x40008000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx28-apf28dev"
-+
-+# Filesystem
-+BR2_TARGET_ROOTFS_UBIFS=y
-+BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x1f000
-+BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=4227
-+BR2_TARGET_ROOTFS_UBI=y
-+BR2_TARGET_ROOTFS_UBI_SUBSIZE=0
+Since you describe this as a site-specific behaviour, there is no reason
+for it to be upstream Buildroot.
+
+You can however add a board/armadeus/README with a little explanations
+that all boards will be named the same.
+
+If you really need that script, you can carry it in your local tree, or
+even better yet, in your BR2_EXTERNAL tree, and have your own armadeus
+deconfigs that reference that script, as:
+BR2_ROOTFS_POST_IMAGE_SCRIPT="$(BR2_EXTERNAL)/board/armadeus/post-image.sh"
+
+> But just one more question: what is the purpose of
+> BR2_ROOTFS_POST_IMAGE_SCRIPT, if it isn't meant to move/rename images to
+> fit targeted boards ?
+
+It is mostly for site-local customisations, that can't really be
+upstreamed in Buildroot since they are not generic.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.7.5.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
