@@ -1,30 +1,28 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 26 Dec 2013 17:02:18 -0300
-Subject: [Buildroot] [PATCH] freetype: bump to version 2.5.2
-Message-ID: <1388088138-23937-1-git-send-email-gustavo@zacarias.com.ar>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 26 Dec 2013 21:41:05 +0000 (UTC)
+Subject: [Buildroot] [Bug 769] Update configuration menu for MIPS target
+In-Reply-To: <bug-769-163@https.bugs.busybox.net/>
+References: <bug-769-163@https.bugs.busybox.net/>
+Message-ID: <20131226214105.D41B59C1E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/freetype/freetype.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+https://bugs.busybox.net/show_bug.cgi?id=769
 
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index c97cc1a..31f8204 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FREETYPE_VERSION = 2.5.1
-+FREETYPE_VERSION = 2.5.2
- FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
- FREETYPE_SITE = http://downloads.sourceforge.net/project/freetype/freetype2/$(FREETYPE_VERSION)
- FREETYPE_INSTALL_STAGING = YES
+Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |WONTFIX
+
+--- Comment #3 from Gustavo Zacarias <gustavo@zacarias.com.ar> 2013-12-26 21:41:03 UTC ---
+Dead links plus revamping by mips developers over time supercedes this.
+
 -- 
-1.8.3.2
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
