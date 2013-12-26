@@ -1,51 +1,52 @@
-From: Ezequiel Garcia <ezequiel.garcia@free-electrons.com>
-Date: Thu, 26 Dec 2013 08:30:07 -0300
-Subject: [Buildroot] [PATCH] fio: new package
-In-Reply-To: <20131226104037.6cb81f36@skate>
-References: <1383146545-9594-1-git-send-email-ezequiel.garcia@free-electrons.com>
- <20131225173455.0c413356@skate> <20131225201731.GA7812@localhost>
- <20131225212829.603981b9@skate> <20131225203252.GB7812@localhost>
- <20131226104037.6cb81f36@skate>
-Message-ID: <20131226113006.GA24120@localhost>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 26 Dec 2013 08:34:42 -0300
+Subject: [Buildroot] [PATCH] ulogd: disable DB backends if no threads
+Message-ID: <1388057682-2912-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Dec 26, 2013 at 10:40:37AM +0100, Thomas Petazzoni wrote:
-> Dear Ezequiel Garcia,
-> 
-> On Wed, 25 Dec 2013 17:32:53 -0300, Ezequiel Garcia wrote:
-> 
-> > > But older uClibc toolchains do not work, and are causing build
-> > > failures such as
-> > > http://autobuild.buildroot.org/results/f7a/f7ae7ac2b5da9afc6314f1e813300597896e5ca6/build-end.log.
-> > > 
-> > > I believe the best solution for now is to mark this package as not
-> > > available for uClibc toolchains.
-> > > 
-> > 
-> > Right. And in parallel, we can also take care of upstreaming a patch
-> > which uses HAVE_POSIX_MADVISE to handle such case.
-> 
-> The problem is what should we use in replacement of posix_madvise()
-> when it is not available.
-> 
+Database backends need threads even if sqlite does not.
+The mysql client libs need them too but include them in the exclusion
+closure anyway to state it very clearly. Fixes:
+http://autobuild.buildroot.net/results/1ce/1cece0db309dfe5cecc69e88b02428615ed87316/
 
-madvise()?
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/ulogd/ulogd.mk | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-If you do:
-
-  #define posix_madvise madvise
-
-then I've managed to fix the build issues on uClibc v0.9.32.
-
-Problem is, I'm not sure there's a clean way to detect posix_madvise /
-madvise presence; it must be done by hand in the configure script.
-
-Anyway, it all sounds like too much work to fix such a small use case.
+diff --git a/package/ulogd/ulogd.mk b/package/ulogd/ulogd.mk
+index 24a5838..03958bb 100644
+--- a/package/ulogd/ulogd.mk
++++ b/package/ulogd/ulogd.mk
+@@ -11,15 +11,21 @@ ULOGD_CONF_OPT = --with-dbi=no --with-pgsql=no
+ ULOGD_AUTORECONF = YES
+ ULOGD_DEPENDENCIES = host-pkgconf \
+ 	libmnl libnetfilter_acct libnetfilter_conntrack libnetfilter_log \
+-	libnfnetlink $(if $(BR2_PACKAGE_SQLITE),sqlite)
++	libnfnetlink
+ ULOGD_LICENSE = GPLv2
+ ULOGD_LICENSE_FILES = COPYING
+ 
++# DB backends need threads
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ ifeq ($(BR2_PACKAGE_MYSQL_CLIENT),y)
+-ULOGD_CONF_OPT += --with-mysql=$(STAGING_DIR)/usr
+-ULOGD_DEPENDENCIES += mysql_client
++	ULOGD_CONF_OPT += --with-mysql=$(STAGING_DIR)/usr
++	ULOGD_DEPENDENCIES += mysql_client
++endif
++ifeq ($(BR2_PACKAGE_SQLITE),y)
++	ULOGD_DEPENDENCIES += sqlite
++endif
+ else
+-ULOGD_CONF_OPT += --with-mysql=no
++	ULOGD_CONF_OPT += --with-mysql=no --without-sqlite
+ endif
+ 
+ $(eval $(autotools-package))
 -- 
-Ezequiel Garc?a, Free Electrons
-Embedded Linux, Kernel and Android Engineering
-http://free-electrons.com
+1.8.3.2
