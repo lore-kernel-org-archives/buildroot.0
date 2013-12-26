@@ -1,47 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 26 Dec 2013 23:22:01 +0100
-Subject: [Buildroot] [PATCH 1/2] qt5script: Disable on non-supported
- platforms
-In-Reply-To: <1385654237-36389-3-git-send-email-Vincent.Riera@imgtec.com>
-References: <1385654237-36389-1-git-send-email-Vincent.Riera@imgtec.com>
- <1385654237-36389-3-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20131226232201.2ec1890a@skate>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 26 Dec 2013 23:01:19 +0100
+Subject: [Buildroot] [PATCH] aiccu: disable for uClibc 0.9.31/0.9.32
+In-Reply-To: <1388079742-24548-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1388079742-24548-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20131226220119.GD3398@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Thomas, All,
 
-On Thu, 28 Nov 2013 15:57:16 +0000, Vicente Olivert Riera wrote:
-> Is the same problem as Qt4 QtScript, it doesn't build because it uses
-> JavaScriptCore, so we re-use the existing
-> BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT option which already lists which
-> platforms are supported by JavaScriptCore.
+On 2013-12-26 18:42 +0100, Thomas Petazzoni spake thusly:
+> aiccu uses the dn_skipname() function, which was only introduced in
+> uClibc 0.9.33. Therefore, we disable this package when uClibc 0.9.31
+> and 0.9.32. Most likely, only AVR32 users will be affected by this, so
+> we don't add a specific kconfig comment for that.
 > 
-> This is a quick fix. A proposed fix to add support for MIPS64 has
-> already been sent to Qt:
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+> ---
+>  package/aiccu/Config.in | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
->    https://bugreports.qt-project.org/browse/QTBUG-35191
+> diff --git a/package/aiccu/Config.in b/package/aiccu/Config.in
+> index f56ad75..17e6449 100644
+> --- a/package/aiccu/Config.in
+> +++ b/package/aiccu/Config.in
+> @@ -4,6 +4,9 @@ config BR2_PACKAGE_AICCU
+>  	depends on BR2_USE_WCHAR
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+>  	depends on BR2_USE_MMU # fork()
+> +	# Uses dn_skipname(), only available since 0.9.33
+> +	depends on !BR2_UCLIBC_VERSION_0_9_31 && \
+> +		!BR2_UCLIBC_VERSION_0_9_32
+>  	select BR2_PACKAGE_GNUTLS
+>  	help
+>  	  SixXS Automatic IPv6 Connectivity Client Utility
+> -- 
+> 1.8.3.2
 > 
-> Fixes:
-> 
->    http://autobuild.buildroot.net/results/231/231c112a3fc18e6cd7d6d10873e22144525c7280/
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-What is the status of this patch, and the "[PATCH 2/2] qt5quick1:
-Disable on non-supported platforms" patch that you sent?
-
-Are they still needed? If so, then it should use a QT5 specific Kconfig
-symbol.
-
-Let me know what to do with these patches, so that I can updated their
-patchwork status.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
