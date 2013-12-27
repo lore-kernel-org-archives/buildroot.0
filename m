@@ -1,7 +1,7 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Fri, 27 Dec 2013 21:54:01 +0100
+Date: Fri, 27 Dec 2013 22:18:27 +0100
 Subject: [Buildroot] [PATCH] support/kconfig: fix reference to kernel
-Message-ID: <1388177641-20805-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <1388179109-23491-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
