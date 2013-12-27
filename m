@@ -1,56 +1,30 @@
 From: Axel Lin <axel.lin@ingics.com>
-Date: Fri, 27 Dec 2013 09:53:37 +0800
-Subject: [Buildroot] [PATCH] snmppp: bump to version 3.3.2
-Message-ID: <1388109217.29529.1.camel@phoenix>
+Date: Fri, 27 Dec 2013 14:57:59 +0800
+Subject: [Buildroot] [PATCH] cryptsetup: bump to version 1.6.3
+Message-ID: <1388127479.28860.0.camel@phoenix>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changes snmp++v3.3.2
-====================
-
-- Fixed: Regression through [APP-19] which lead to too long timeouts
-  on systems with clock_gettime.
-- Fixed: Restored missing files (CHANGES, READMEs) to distribution.
-- Fixed: Fixed compilation error when using poll syscall.
-- Fixed: Do not use _vscprintf as it is not portable, instead just
-  truncate the log message.
-- Fixed: Fixed test that produced an error during configure:
-  checking which _XOPEN_SOURCE macro must be defined...
-  ./configure: line 6229: test: : integer expression expected
-- Fixed: msec.cpp: timezone is a struct and not a class.
-
-Changes snmp++v3.3.1
-====================
-
-- Fixed: Replaced strcasecmp usage in consoleExamples by _stricmp
-  for WIN32 platform.
-- Improved: Debug output buffer length is now computed exactly on
-  WIN32.
-- Fixed: Compilation of IPv6Utility.h with Visual Studio 2013.
-- Fixed: Removed #define of Uint32 in eventlistholder.h.
-
 Signed-off-by: Axel Lin <axel.lin@ingics.com>
 ---
- package/snmppp/snmppp.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/cryptsetup/cryptsetup.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/snmppp/snmppp.mk b/package/snmppp/snmppp.mk
-index 8e8fceb..d5e7adf 100644
---- a/package/snmppp/snmppp.mk
-+++ b/package/snmppp/snmppp.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index a65f841..6ea3aae 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SNMPPP_VERSION = 3.3.0
--SNMPPP_SOURCE = snmp++v$(SNMPPP_VERSION).tar.gz
-+SNMPPP_VERSION = 3.3.2
-+SNMPPP_SOURCE = snmp++$(SNMPPP_VERSION).tar.gz
- SNMPPP_SITE = http://www.agentpp.com
- SNMPPP_DEPENDENCIES = openssl host-pkgconf
- SNMPPP_INSTALL_STAGING = YES
+-CRYPTSETUP_VERSION = 1.6.2
++CRYPTSETUP_VERSION = 1.6.3
+ CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.bz2
+ CRYPTSETUP_SITE = http://cryptsetup.googlecode.com/files
+ CRYPTSETUP_CONF_ENV += LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
 -- 
 1.8.1.2
