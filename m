@@ -1,34 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Dec 2013 19:56:58 +0100
-Subject: [Buildroot] Fwd: reg: buildroot build iso image
-In-Reply-To: <CABsRcuAqONAzUk-Me=mK16zu6imPvPK65KJHYdi65EYW9Ep07g@mail.gmail.com>
-References: <CABsRcuBWOc_yXJjdEsUyjEB1aEt+1SxCLiQ94=40aYaNo4G62Q@mail.gmail.com>
- <CABsRcuAqONAzUk-Me=mK16zu6imPvPK65KJHYdi65EYW9Ep07g@mail.gmail.com>
-Message-ID: <20131227195658.6e3a5326@skate>
+Date: Fri, 27 Dec 2013 19:57:12 +0100
+Subject: [Buildroot] [PATCH v2] Add Armadeus systems APF51 SOM basic
+ support.
+In-Reply-To: <1388149492-25305-1-git-send-email-julien.boibessot@free.fr>
+References: <1388149492-25305-1-git-send-email-julien.boibessot@free.fr>
+Message-ID: <20131227195712.21edbaa8@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thiyagarajan,
+Dear julien.boibessot at free.fr,
 
-On Fri, 27 Dec 2013 18:37:54 +0530, Thiyagarajan wrote:
+On Fri, 27 Dec 2013 14:04:52 +0100, julien.boibessot at free.fr wrote:
+> From: Julien Boibessot <julien.boibessot@armadeus.com>
+> 
+> Buildroot uClibc toolchain, UBIFS rootfs, Linux kernel (board is mainlined).
+> 
+> Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+> ---
+>  Changes since v1:
+>  * Took Thomas and Yann remarks into account, so I removed my too specific
+>    post-images.sh script.
 
->  I used the buidroot for building custom embedded linux. I compiled the
-> buildroot2013.12 and i am able to build the rootfs.iso9660 image file. If i
-> will try with this iso file in virtual box it take into grub prompt, and
-> it's stops there itself.
-
-Please add "iso9660" to the list of filesystems supported by Grub,
-using the BR2_TARGET_GRUB_FS_SUPPORT option.
-
-I will send some patches that make that automatic, but for the time
-being, just add "iso9660" after "ext2fs" and "fat" in this option.
-
-I've just tested this with Qemu, and it fixes the problem.
-
-Thanks,
+Applied, thanks.
 
 Thomas
 -- 
