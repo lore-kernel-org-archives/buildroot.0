@@ -1,131 +1,88 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Dec 2013 12:32:17 +0100
-Subject: [Buildroot] [PATCH 1/6] toolchain-external: add Sourcery ARM
-	2013.11, remove Sourcery ARM 2011.09
-In-Reply-To: <1388143942-1187-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1388143942-1187-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1388143942-1187-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Fri, 27 Dec 2013 12:50:20 +0100
+Subject: [Buildroot] [PATCH] package: deprecate some more development tools
+Message-ID: <1388145020-2082-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adds the support for the recently release Sourcery ARM
-2013.11 toolchain (gcc 4.8, gdb 7.6, glibc 2.18, gdb 7.6), and
-consequently removes the support for the Sourcery ARM 2011.09
-toolchain.
+Since some time, we have removed the support to build a toolchain for
+the target, and therefore the support for several development tools on
+the target.
+
+This commit deprecates a few additional development tools: m4, bison,
+flex and gob2. For flex, we retain the ability to build libfl, we only
+deprecated the ability to build the flex binary itself.
+
+The original motivation for this patch is that m4 is causing build
+issues in some configurations, but there isn't really much incentive
+to fix this package for the target, since it is not really useful for
+embedded Linux systems.
+
+Bison, Flex and Gob2 are deprecated because they are reverse
+dependencies of m4.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/Config.in             | 26 +++++++++++-----------
- toolchain/toolchain-external/toolchain-external.mk |  8 +++----
- 2 files changed, 17 insertions(+), 17 deletions(-)
+ package/bison/Config.in | 2 ++
+ package/flex/Config.in  | 2 ++
+ package/gob2/Config.in  | 2 ++
+ package/m4/Config.in    | 2 ++
+ 4 files changed, 8 insertions(+)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 22e3fb2..0607693 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -77,8 +77,8 @@ comment "Linaro toolchains available for Cortex-A + EABIhf"
- 	depends on BR2_GCC_TARGET_ARCH != "armv7-a" || !BR2_ARM_EABIHF
- 	depends on !BR2_PREFER_STATIC_LIB
- 
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305
--	bool "Sourcery CodeBench ARM 2013.05"
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201311
-+	bool "Sourcery CodeBench ARM 2013.11"
- 	depends on BR2_arm
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on BR2_ARM_EABI
-@@ -89,8 +89,8 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+diff --git a/package/bison/Config.in b/package/bison/Config.in
+index 4a50f41..cd0dbc4 100644
+--- a/package/bison/Config.in
++++ b/package/bison/Config.in
+@@ -4,6 +4,8 @@ config BR2_PACKAGE_BISON
+ 	select BR2_PACKAGE_M4
+ 	# m4 uses fork()
+ 	depends on BR2_USE_MMU
++	# development tool, useless on the target
++	depends on BR2_DEPRECATED
  	help
- 	  Sourcery CodeBench toolchain for the ARM architecture, from
--	  Mentor Graphics. It uses gcc 4.7.3, binutils 2.23.52, glibc
--	  2.17 and gdb 7.4.50, kernel headers 3.8.2. It has support
-+	  Mentor Graphics. It uses gcc 4.8.1, binutils 2.23.52, glibc
-+	  2.18 and gdb 7.6.50, kernel headers 3.11. It has support
- 	  for the following variants:
- 	    - ARMv5TE, little endian, soft-float, glibc
- 	      Select ARM926T, ARM10T, XScale or another ARMv5 core
-@@ -103,8 +103,8 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305
- 	      Select BR2_SOFT_FLOAT
- 	      Set BR2_TARGET_OPTIMIZATION to -mthumb
- 
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
--	bool "Sourcery CodeBench ARM 2012.03"
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305
-+	bool "Sourcery CodeBench ARM 2013.05"
- 	depends on BR2_arm
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on BR2_ARM_EABI
-@@ -115,8 +115,8 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+ 	  General-purpose parser generator that converts a
+ 	  grammar description for an LALR context-free grammar into a C
+diff --git a/package/flex/Config.in b/package/flex/Config.in
+index 52f7fe7..6af9951 100644
+--- a/package/flex/Config.in
++++ b/package/flex/Config.in
+@@ -15,6 +15,8 @@ config BR2_PACKAGE_FLEX_BINARY
+ 	depends on BR2_USE_MMU
+ 	# runtime dependency
+ 	select BR2_PACKAGE_M4
++	# development tool, useless on the target
++	depends on BR2_DEPRECATED
+ 	depends on BR2_USE_WCHAR # m4
  	help
- 	  Sourcery CodeBench toolchain for the ARM architecture, from
--	  Mentor Graphics. It uses gcc 4.6.3, binutils 2.21.53, glibc
--	  2.15 and gdb 7.2.50, kernel headers 3.2.10. It has support
-+	  Mentor Graphics. It uses gcc 4.7.3, binutils 2.23.52, glibc
-+	  2.17 and gdb 7.4.50, kernel headers 3.8.2. It has support
- 	  for the following variants:
- 	    - ARMv5TE, little endian, soft-float, glibc
- 	      Select ARM926T, ARM10T, XScale or another ARMv5 core
-@@ -129,8 +129,8 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
- 	      Select BR2_SOFT_FLOAT
- 	      Set BR2_TARGET_OPTIMIZATION to -mthumb
- 
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
--	bool "Sourcery CodeBench ARM 2011.09"
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
-+	bool "Sourcery CodeBench ARM 2012.03"
- 	depends on BR2_arm
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on BR2_ARM_EABI
-@@ -141,8 +141,8 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+ 	  Install the flex binary tool in the target filesystem.
+diff --git a/package/gob2/Config.in b/package/gob2/Config.in
+index 092d51b..faeb8b3 100644
+--- a/package/gob2/Config.in
++++ b/package/gob2/Config.in
+@@ -6,6 +6,8 @@ config BR2_PACKAGE_GOB2
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_FLEX
+ 	select BR2_PACKAGE_BISON
++	# development tool, useless on the target
++	depends on BR2_DEPRECATED
  	help
- 	  Sourcery CodeBench toolchain for the ARM architecture, from
--	  Mentor Graphics. It uses gcc 4.6.1, binutils 2.21.53, glibc
--	  2.13 and gdb 7.2.50, kernel headers 3.0.1. It has support
-+	  Mentor Graphics. It uses gcc 4.6.3, binutils 2.21.53, glibc
-+	  2.15 and gdb 7.2.50, kernel headers 3.2.10. It has support
- 	  for the following variants:
- 	    - ARMv5TE, little endian, soft-float, glibc
- 	      Select ARM926T, ARM10T, XScale or another ARMv5 core
-@@ -839,9 +839,9 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_09
- 	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_08
- 	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_07
--	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305
-+	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201311
- 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A_201109
- 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109
- 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_09
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index bd4f375..747d7e3 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -242,15 +242,15 @@ define TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
- 	ln -sf . $(TARGET_DIR)/usr/lib/arm-linux-gnueabihf
- endef
+ 	  GOB (GTK+ Object Builder) is a preprocessor which simplifies
+ 	  the writing of GObjects in C.
+diff --git a/package/m4/Config.in b/package/m4/Config.in
+index 4d651a2..7830b22 100644
+--- a/package/m4/Config.in
++++ b/package/m4/Config.in
+@@ -3,6 +3,8 @@ config BR2_PACKAGE_M4
+ 	depends on BR2_USE_WCHAR
+ 	# uses fork()
+ 	depends on BR2_USE_MMU
++	# development tool, useless on the target
++	depends on BR2_DEPRECATED
+ 	help
+ 	  An implementation of the traditional Unix macro processor.
  
--ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109),y)
--TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
--TOOLCHAIN_EXTERNAL_SOURCE = arm-2011.09-70-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203),y)
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
- TOOLCHAIN_EXTERNAL_SOURCE = arm-2012.03-57-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
- TOOLCHAIN_EXTERNAL_SOURCE = arm-2013.05-24-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201311),y)
-+TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
-+TOOLCHAIN_EXTERNAL_SOURCE = arm-2013.11-33-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A_201109),y)
- TOOLCHAIN_EXTERNAL_SITE = http://software-dl.ti.com/sdoemb/sdoemb_public_sw/arago_toolchain/2011_09/exports/
- TOOLCHAIN_EXTERNAL_SOURCE = arago-2011.09-armv7a-linux-gnueabi-sdk.tar.bz2
 -- 
 1.8.3.2
