@@ -1,24 +1,61 @@
-From: Fatih =?utf-8?q?A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
-Date: Fri, 27 Dec 2013 09:48:07 +0200
-Subject: [Buildroot] Qt5Webkit build failure
-In-Reply-To: <20131225181813.09384b3e@skate>
-References: <20131225181813.09384b3e@skate>
-Message-ID: <201312270948.07522.fatih.asici@gmail.com>
+From: =?UTF-8?q?Fatih=20A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
+Date: Fri, 27 Dec 2013 10:02:24 +0200
+Subject: [Buildroot] [PATCH] qt5webkit: add upstream patch to fix build on
+	ARM softfp
+Message-ID: <1388131344-16335-1-git-send-email-fatih.asici@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...kit-0002-Fix-QtWebKit-build-on-ARM-softfp.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 package/qt5/qt5webkit/qt5webkit-0002-Fix-QtWebKit-build-on-ARM-softfp.patch
 
-On Wednesday 25 December 2013 19:18:13 Thomas Petazzoni wrote:
-> Seems like it's trying to use FPU instructions on a soft-float
-> toolchain.
-
-Upstream has a patch for this issue. I am preparing a patch now.
-
-Thanks.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131227/ef056092/attachment.html>
+diff --git a/package/qt5/qt5webkit/qt5webkit-0002-Fix-QtWebKit-build-on-ARM-softfp.patch b/package/qt5/qt5webkit/qt5webkit-0002-Fix-QtWebKit-build-on-ARM-softfp.patch
+new file mode 100644
+index 0000000..edbfb90
+--- /dev/null
++++ b/package/qt5/qt5webkit/qt5webkit-0002-Fix-QtWebKit-build-on-ARM-softfp.patch
+@@ -0,0 +1,35 @@
++From 8a716a29721d900069d82878c45cf87a356adba3 Mon Sep 17 00:00:00 2001
++From: Allan Sandfeld Jensen <allan.jensen@digia.com>
++Date: Tue, 17 Dec 2013 12:26:58 +0100
++Subject: [PATCH] Fix QtWebKit build on ARM softfp
++
++The low level interpreter depends on hardfp, so we need to disable it
++when builing on ARM targets with softfp.
++
++Task-number: QTBUG-35681
++Change-Id: I8aaef546b92182a87cc7116ac452d8725de6a7db
++Reviewed-by: Jocelyn Turcotte <jocelyn.turcotte@digia.com>
++Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
++---
++ Source/WTF/wtf/Platform.h | 5 +++++
++ 1 file changed, 5 insertions(+)
++
++diff --git a/Source/WTF/wtf/Platform.h b/Source/WTF/wtf/Platform.h
++index 3a9b509..cddc210 100644
++--- a/Source/WTF/wtf/Platform.h
+++++ b/Source/WTF/wtf/Platform.h
++@@ -771,6 +771,11 @@
++ #define ENABLE_LLINT 0
++ #endif
++ 
+++/* LLINT on ARM depends on an FPU */
+++#if !defined(ENABLE_LLINT) && CPU(ARM) && !CPU(ARM_HARDFP)
+++#define ENABLE_LLINT 0
+++#endif
+++
++ /* On some of the platforms where we have a JIT, we want to also have the 
++    low-level interpreter. */
++ #if !defined(ENABLE_LLINT) \
++-- 
++1.8.5.1
++
+-- 
+1.8.5.1
