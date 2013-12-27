@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 28 Dec 2013 00:12:51 +0100
-Subject: [Buildroot] [PATCH 3/4] Makefile: expose 'graph-depends' to
-	generate a graph of the dependency tree
+Date: Sat, 28 Dec 2013 00:12:50 +0100
+Subject: [Buildroot] [PATCH 2/4] Makefile: expose target 'graph-build' to
+	generate the build-time graphs
 In-Reply-To: <cover.1388185918.git.yann.morin.1998@free.fr>
 References: <cover.1388185918.git.yann.morin.1998@free.fr>
-Message-ID: <0fad080c135d79abdbe042514e30b393c25f5a77.1388185918.git.yann.morin.1998@free.fr>
+Message-ID: <15a33a00829b298726e449f89bb255783e87e9db.1388185918.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,65 +13,60 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Generate the graph of the complete dependency tree by calling:
-    make graph-depends
+Generate the build-time graphs by calling:
+    make graph-build
 
-It's also possible to generate the graph-depends for a single package:
-    make PKG-graph-depends
+This generates the graphs in $(O)/graphs/
 
-The graphs are generated in $(O)/graphs/
+It is possible to use the alternate color-scheme by setting the variable
+GRAPH_ALT=1 on the command line:
+    make GRAPH_ALT=1 graph-build
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile               | 13 +++++++++++++
- package/pkg-generic.mk |  3 +++
- 2 files changed, 16 insertions(+)
+ Makefile | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
 diff --git a/Makefile b/Makefile
-index 9df72e9..f09f744 100644
+index 3190541..9df72e9 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -644,6 +644,18 @@ graph-build: $(O)/build/build-time.log
- 				   $(if $(GRAPH_ALT),--alternate-colors) \
- 				   <$(<)$(sep))
+@@ -631,6 +631,19 @@ legal-info: dirs legal-info-clean legal-info-prepare $(TARGETS_LEGAL_INFO) \
+ show-targets:
+ 	@echo $(TARGETS)
  
-+graph-depends:
++graph-build: $(O)/build/build-time.log
 +	@install -d $(O)/graphs
-+	@./support/scripts/graph-depends \
-+	|dot -Tpdf -o $(O)/graphs/graph-depends.pdf
-+	-o $(O)/graphs/graph-depends.pdf
-+
-+%-graph-depends:
-+	@install -d $(O)/graphs
-+	@./support/scripts/graph-depends $(@:-graph-depends=) \
-+	|dot -Tpdf \
-+	-o $(O)/graphs/$(@).pdf
++	$(foreach o,name build duration,./support/scripts/graph-build-time \
++					--type=histogram --order=$(o) \
++					--output=$(O)/graphs/build.hist-$(o).pdf \
++					$(if $(GRAPH_ALT),--alternate-colors) \
++					<$(<)$(sep))
++	$(foreach t,packages steps,./support/scripts/graph-build-time \
++				   --type=pie-$(t) \
++				   --output=$(O)/graphs/build.pie-$(t).pdf \
++				   $(if $(GRAPH_ALT),--alternate-colors) \
++				   <$(<)$(sep))
 +
  else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
  
  all: menuconfig
-@@ -857,6 +869,7 @@ endif
+@@ -843,6 +856,7 @@ endif
+ 	@echo '  manual-pdf             - build manual in PDF'
  	@echo '  manual-text            - build manual in text'
  	@echo '  manual-epub            - build manual in ePub'
- 	@echo '  graph-build            - generate graphs of the build times'
-+	@echo '  graph-depends          - generate graph of the dependency tree'
++	@echo '  graph-build            - generate graphs of the build times'
  	@echo
  	@echo 'Miscellaneous:'
  	@echo '  source                 - download all sources needed for offline-build'
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 66034ba..aa7e4ef 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -468,6 +468,9 @@ endif
- $(1)-show-depends:
- 			@echo $$($(2)_DEPENDENCIES)
- 
-+# For auto-completion, handled in top-level Makefile
-+$(1)-graph-depends:
-+
- $(1)-dirclean:		$$($(2)_TARGET_DIRCLEAN)
- 
- $(1)-clean-for-rebuild:
+@@ -852,6 +866,7 @@ endif
+ 	@echo
+ 	@echo '  make V=0|1             - 0 => quiet build (default), 1 => verbose build'
+ 	@echo '  make O=dir             - Locate all output files in "dir", including .config'
++	@echo '  make GRAPH_ALT=1       - use alternate color-scheme for build-time graphs'
+ 	@echo
+ 	@echo 'Built-in configs:'
+ 	@$(foreach b, $(sort $(notdir $(wildcard $(TOPDIR)/configs/*_defconfig))), \
 -- 
 1.8.1.2
