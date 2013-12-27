@@ -1,29 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Dec 2013 19:55:59 +0100
-Subject: [Buildroot] [PATCH] qt5base: restore posix_fallocate() patch
-In-Reply-To: <1388150843-15972-1-git-send-email-fatih.asici@gmail.com>
-References: <1388150843-15972-1-git-send-email-fatih.asici@gmail.com>
-Message-ID: <20131227195559.7429b993@skate>
+Date: Fri, 27 Dec 2013 19:56:58 +0100
+Subject: [Buildroot] Fwd: reg: buildroot build iso image
+In-Reply-To: <CABsRcuAqONAzUk-Me=mK16zu6imPvPK65KJHYdi65EYW9Ep07g@mail.gmail.com>
+References: <CABsRcuBWOc_yXJjdEsUyjEB1aEt+1SxCLiQ94=40aYaNo4G62Q@mail.gmail.com>
+ <CABsRcuAqONAzUk-Me=mK16zu6imPvPK65KJHYdi65EYW9Ep07g@mail.gmail.com>
+Message-ID: <20131227195658.6e3a5326@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fatih A??c?,
+Dear Thiyagarajan,
 
-On Fri, 27 Dec 2013 15:27:23 +0200, Fatih A??c? wrote:
-> It was removed in e4a839277f7d74104e25fb4fd846f9c2bf3f9c1e.
-> 
-> Fixes: http://autobuild.buildroot.net/results/a24/a249b0cd5b20a2c3eee34b585cd58d4a03a9338e/
-> 
-> Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
-> ---
->  ...-detect-posix_fallocate-at-configure-time.patch | 167 +++++++++++++++++++++
->  1 file changed, 167 insertions(+)
->  create mode 100644 package/qt5/qt5base/qt5base-0007-detect-posix_fallocate-at-configure-time.patch
+On Fri, 27 Dec 2013 18:37:54 +0530, Thiyagarajan wrote:
 
-Applied, thanks.
+>  I used the buidroot for building custom embedded linux. I compiled the
+> buildroot2013.12 and i am able to build the rootfs.iso9660 image file. If i
+> will try with this iso file in virtual box it take into grub prompt, and
+> it's stops there itself.
+
+Please add "iso9660" to the list of filesystems supported by Grub,
+using the BR2_TARGET_GRUB_FS_SUPPORT option.
+
+I will send some patches that make that automatic, but for the time
+being, just add "iso9660" after "ext2fs" and "fat" in this option.
+
+I've just tested this with Qemu, and it fixes the problem.
+
+Thanks,
 
 Thomas
 -- 
