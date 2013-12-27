@@ -1,196 +1,91 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Dec 2013 19:52:21 +0100
-Subject: [Buildroot] [git commit] qt5base: restore posix_fallocate() patch
-Message-ID: <20131227185310.EDECF9C20F@busybox.osuosl.org>
+Date: Fri, 27 Dec 2013 19:54:05 +0100
+Subject: [Buildroot] [git commit] package: deprecate some more development
+	tools
+Message-ID: <20131227185438.E93349C20E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1d7adcb042e1bcf6b0ba8892e17e4903b6b0ce5f
+commit: http://git.buildroot.net/buildroot/commit/?id=269da64af5ad72e1d522b54a6203970c3eb344d0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It was removed in e4a839277f7d74104e25fb4fd846f9c2bf3f9c1e.
+Since some time, we have removed the support to build a toolchain for
+the target, and therefore the support for several development tools on
+the target.
 
-Fixes: http://autobuild.buildroot.net/results/a24/a249b0cd5b20a2c3eee34b585cd58d4a03a9338e/
+This commit deprecates a few additional development tools: m4, bison,
+flex and gob2. For flex, we retain the ability to build libfl, we only
+deprecated the ability to build the flex binary itself.
 
-Signed-off-by: Fatih A????c?? <fatih.asici@gmail.com>
+The original motivation for this patch is that m4 is causing build
+issues in some configurations, but there isn't really much incentive
+to fix this package for the target, since it is not really useful for
+embedded Linux systems.
+
+Bison, Flex and Gob2 are deprecated because they are reverse
+dependencies of m4.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- ...-detect-posix_fallocate-at-configure-time.patch |  167 ++++++++++++++++++++
- 1 files changed, 167 insertions(+), 0 deletions(-)
+ package/bison/Config.in |    2 ++
+ package/flex/Config.in  |    2 ++
+ package/gob2/Config.in  |    2 ++
+ package/m4/Config.in    |    2 ++
+ 4 files changed, 8 insertions(+), 0 deletions(-)
 
-diff --git a/package/qt5/qt5base/qt5base-0007-detect-posix_fallocate-at-configure-time.patch b/package/qt5/qt5base/qt5base-0007-detect-posix_fallocate-at-configure-time.patch
-new file mode 100644
-index 0000000..b0011f6
---- /dev/null
-+++ b/package/qt5/qt5base/qt5base-0007-detect-posix_fallocate-at-configure-time.patch
-@@ -0,0 +1,167 @@
-+From 46e632e2555b6b8abe6b8d8ad7d255e27c128e25 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Fatih=20A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
-+Date: Mon, 11 Nov 2013 17:04:46 +0200
-+Subject: [PATCH] Detect posix_fallocate at configure time
-+
-+Testing feature macros is not enough for uclibc. Fixes build of the built-in
-+sqlite3 with uclibc <= 0.9.33.2. Later versions will have posix_fallocate().
-+
-+Change-Id: I918a52777ac63624635802221effc6b86fa2269c
-+Signed-off-by: Fatih A????c?? <fatih.asici@gmail.com>
-+Reported-Upstream: https://codereview.qt-project.org/70935
-+---
-+ .../unix/posix_fallocate/posix_fallocate.cpp       | 53 ++++++++++++++++++++++
-+ .../unix/posix_fallocate/posix_fallocate.pro       |  2 +
-+ configure                                          | 14 ++++++
-+ src/3rdparty/sqlite.pri                            |  1 +
-+ src/3rdparty/sqlite/sqlite3.c                      |  7 ---
-+ 5 files changed, 70 insertions(+), 7 deletions(-)
-+ create mode 100644 config.tests/unix/posix_fallocate/posix_fallocate.cpp
-+ create mode 100644 config.tests/unix/posix_fallocate/posix_fallocate.pro
-+
-+diff --git a/config.tests/unix/posix_fallocate/posix_fallocate.cpp b/config.tests/unix/posix_fallocate/posix_fallocate.cpp
-+new file mode 100644
-+index 0000000..5acd45a
-+--- /dev/null
-++++ b/config.tests/unix/posix_fallocate/posix_fallocate.cpp
-+@@ -0,0 +1,53 @@
-++/****************************************************************************
-++**
-++** Copyright (C) 2013 Digia Plc and/or its subsidiary(-ies).
-++** Contact: http://www.qt-project.org/legal
-++**
-++** This file is part of the config.tests of the Qt Toolkit.
-++**
-++** $QT_BEGIN_LICENSE:LGPL$
-++** Commercial License Usage
-++** Licensees holding valid commercial Qt licenses may use this file in
-++** accordance with the commercial license agreement provided with the
-++** Software or, alternatively, in accordance with the terms contained in
-++** a written agreement between you and Digia.  For licensing terms and
-++** conditions see http://qt.digia.com/licensing.  For further information
-++** use the contact form at http://qt.digia.com/contact-us.
-++**
-++** GNU Lesser General Public License Usage
-++** Alternatively, this file may be used under the terms of the GNU Lesser
-++** General Public License version 2.1 as published by the Free Software
-++** Foundation and appearing in the file LICENSE.LGPL included in the
-++** packaging of this file.  Please review the following information to
-++** ensure the GNU Lesser General Public License version 2.1 requirements
-++** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
-++**
-++** In addition, as a special exception, Digia gives you certain additional
-++** rights.  These rights are described in the Digia Qt LGPL Exception
-++** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
-++**
-++** GNU General Public License Usage
-++** Alternatively, this file may be used under the terms of the GNU
-++** General Public License version 3.0 as published by the Free Software
-++** Foundation and appearing in the file LICENSE.GPL included in the
-++** packaging of this file.  Please review the following information to
-++** ensure the GNU General Public License version 3.0 requirements will be
-++** met: http://www.gnu.org/copyleft/gpl.html.
-++**
-++**
-++** $QT_END_LICENSE$
-++**
-++****************************************************************************/
-++
-++#include <fcntl.h>
-++
-++int main(int, char **)
-++{
-++#if _XOPEN_SOURCE >= 600 || _POSIX_C_SOURCE >= 200112L
-++    return ::posix_fallocate(0, 0, 0);
-++#else
-++#  error posix_fallocate not available
-++    // MIPSpro doesn't understand #error, so force a compiler error
-++    force_compiler_error = true;
-++#endif
-++}
-+diff --git a/config.tests/unix/posix_fallocate/posix_fallocate.pro b/config.tests/unix/posix_fallocate/posix_fallocate.pro
-+new file mode 100644
-+index 0000000..f01b15f
-+--- /dev/null
-++++ b/config.tests/unix/posix_fallocate/posix_fallocate.pro
-+@@ -0,0 +1,2 @@
-++SOURCES = posix_fallocate.cpp
-++CONFIG -= qt dylib
-+diff --git a/configure b/configure
-+index 81e2a93..b67ed89 100755
-+--- a/configure
-++++ b/configure
-+@@ -968,6 +968,7 @@ CFG_MIPS_DSP=auto
-+ CFG_MIPS_DSPR2=auto
-+ CFG_CLOCK_GETTIME=auto
-+ CFG_CLOCK_MONOTONIC=auto
-++CFG_POSIX_FALLOCATE=auto
-+ CFG_MREMAP=auto
-+ CFG_GETADDRINFO=auto
-+ CFG_IPV6IFNAME=auto
-+@@ -5653,6 +5654,15 @@ elif [ "$CFG_CLOCK_GETTIME" = "no" ]; then
-+     CFG_CLOCK_MONOTONIC=no
-+ fi
-+ 
-++# detect posix_fallocate
-++if [ "$CFG_POSIX_FALLOCATE" = "auto" ]; then
-++    if compileTest unix/posix_fallocate "posix_fallocate"; then
-++        CFG_POSIX_FALLOCATE=yes
-++    else
-++        CFG_POSIX_FALLOCATE=no
-++    fi
-++fi
-++
-+ # detect mremap
-+ if [ "$CFG_MREMAP" = "auto" ]; then
-+     if compileTest unix/mremap "mremap"; then
-+@@ -5970,6 +5980,9 @@ fi
-+ if [ "$CFG_CLOCK_MONOTONIC" = "yes" ]; then
-+     QT_CONFIG="$QT_CONFIG clock-monotonic"
-+ fi
-++if [ "$CFG_POSIX_FALLOCATE" = "yes" ]; then
-++    QT_CONFIG="$QT_CONFIG posix_fallocate"
-++fi
-+ if [ "$CFG_MREMAP" = "yes" ]; then
-+     QT_CONFIG="$QT_CONFIG mremap"
-+ fi
-+@@ -6449,6 +6462,7 @@ QMakeVar set sql-plugins "$SQL_PLUGINS"
-+ [ "$CFG_GLIB" != "yes" ]     && QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_GLIB"
-+ [ "$CFG_QGTKSTYLE" != "yes" ] && QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_STYLE_GTK"
-+ [ "$CFG_CLOCK_MONOTONIC" = "no" ] && QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_CLOCK_MONOTONIC"
-++[ "$CFG_POSIX_FALLOCATE" = "no" ] && QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_POSIX_FALLOCATE"
-+ [ "$CFG_MREMAP" = "no" ]     && QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_MREMAP"
-+ [ "$CFG_GETADDRINFO" = "no" ]&& QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_GETADDRINFO"
-+ [ "$CFG_IPV6IFNAME" = "no" ] && QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_IPV6IFNAME"
-+diff --git a/src/3rdparty/sqlite.pri b/src/3rdparty/sqlite.pri
-+index 58d4ddd..072502c 100644
-+--- a/src/3rdparty/sqlite.pri
-++++ b/src/3rdparty/sqlite.pri
-+@@ -1,6 +1,7 @@
-+ CONFIG(release, debug|release):DEFINES *= NDEBUG
-+ DEFINES += SQLITE_OMIT_LOAD_EXTENSION SQLITE_OMIT_COMPLETE SQLITE_ENABLE_FTS3 SQLITE_ENABLE_FTS3_PARENTHESIS SQLITE_ENABLE_RTREE
-+ !contains(CONFIG, largefile):DEFINES += SQLITE_DISABLE_LFS
-++contains(QT_CONFIG, posix_fallocate):DEFINES += HAVE_POSIX_FALLOCATE=1
-+ winrt: DEFINES += SQLITE_OS_WINRT
-+ INCLUDEPATH +=  $$PWD/sqlite
-+ SOURCES +=      $$PWD/sqlite/sqlite3.c
-+diff --git a/src/3rdparty/sqlite/sqlite3.c b/src/3rdparty/sqlite/sqlite3.c
-+index 03fa649..1ae9be2 100644
-+--- a/src/3rdparty/sqlite/sqlite3.c
-++++ b/src/3rdparty/sqlite/sqlite3.c
-+@@ -22935,13 +22935,6 @@ SQLITE_PRIVATE const char *sqlite3OpcodeName(int i){
-+ */
-+ #if SQLITE_OS_UNIX              /* This file is used on unix only */
-+ 
-+-/* Use posix_fallocate() if it is available
-+-*/
-+-#if !defined(HAVE_POSIX_FALLOCATE) \
-+-      && (_XOPEN_SOURCE >= 600 || _POSIX_C_SOURCE >= 200112L)
-+-# define HAVE_POSIX_FALLOCATE 1
-+-#endif
-+-
-+ /*
-+ ** There are various methods for file locking used for concurrency
-+ ** control:
-+-- 
-+1.8.4.rc3
-+
+diff --git a/package/bison/Config.in b/package/bison/Config.in
+index 4a50f41..cd0dbc4 100644
+--- a/package/bison/Config.in
++++ b/package/bison/Config.in
+@@ -4,6 +4,8 @@ config BR2_PACKAGE_BISON
+ 	select BR2_PACKAGE_M4
+ 	# m4 uses fork()
+ 	depends on BR2_USE_MMU
++	# development tool, useless on the target
++	depends on BR2_DEPRECATED
+ 	help
+ 	  General-purpose parser generator that converts a
+ 	  grammar description for an LALR context-free grammar into a C
+diff --git a/package/flex/Config.in b/package/flex/Config.in
+index 52f7fe7..6af9951 100644
+--- a/package/flex/Config.in
++++ b/package/flex/Config.in
+@@ -15,6 +15,8 @@ config BR2_PACKAGE_FLEX_BINARY
+ 	depends on BR2_USE_MMU
+ 	# runtime dependency
+ 	select BR2_PACKAGE_M4
++	# development tool, useless on the target
++	depends on BR2_DEPRECATED
+ 	depends on BR2_USE_WCHAR # m4
+ 	help
+ 	  Install the flex binary tool in the target filesystem.
+diff --git a/package/gob2/Config.in b/package/gob2/Config.in
+index 092d51b..faeb8b3 100644
+--- a/package/gob2/Config.in
++++ b/package/gob2/Config.in
+@@ -6,6 +6,8 @@ config BR2_PACKAGE_GOB2
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_FLEX
+ 	select BR2_PACKAGE_BISON
++	# development tool, useless on the target
++	depends on BR2_DEPRECATED
+ 	help
+ 	  GOB (GTK+ Object Builder) is a preprocessor which simplifies
+ 	  the writing of GObjects in C.
+diff --git a/package/m4/Config.in b/package/m4/Config.in
+index 4d651a2..7830b22 100644
+--- a/package/m4/Config.in
++++ b/package/m4/Config.in
+@@ -3,6 +3,8 @@ config BR2_PACKAGE_M4
+ 	depends on BR2_USE_WCHAR
+ 	# uses fork()
+ 	depends on BR2_USE_MMU
++	# development tool, useless on the target
++	depends on BR2_DEPRECATED
+ 	help
+ 	  An implementation of the traditional Unix macro processor.
+ 
