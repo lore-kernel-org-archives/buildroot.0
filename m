@@ -1,35 +1,196 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Dec 2013 19:53:04 +0100
-Subject: [Buildroot] [git commit] qt5: disable on avr32
-Message-ID: <20131227185310.F18B79B967@busybox.osuosl.org>
+Date: Fri, 27 Dec 2013 19:52:21 +0100
+Subject: [Buildroot] [git commit] qt5base: restore posix_fallocate() patch
+Message-ID: <20131227185310.EDECF9C20F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a1980c2d30cd2d2a9b766793a4a170d949c80b8f
+commit: http://git.buildroot.net/buildroot/commit/?id=1d7adcb042e1bcf6b0ba8892e17e4903b6b0ce5f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+It was removed in e4a839277f7d74104e25fb4fd846f9c2bf3f9c1e.
+
+Fixes: http://autobuild.buildroot.net/results/a24/a249b0cd5b20a2c3eee34b585cd58d4a03a9338e/
 
 Signed-off-by: Fatih A????c?? <fatih.asici@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qt5/Config.in |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ ...-detect-posix_fallocate-at-configure-time.patch |  167 ++++++++++++++++++++
+ 1 files changed, 167 insertions(+), 0 deletions(-)
 
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index bf10075..0f89019 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -1,9 +1,11 @@
- comment "Qt5 needs a toolchain w/ wchar, IPv6, threads, C++"
- 	depends on !BR2_PACKAGE_QT
-+	depends on !BR2_avr32
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS
- 
- menuconfig BR2_PACKAGE_QT5
- 	bool "Qt5"
-+	depends on !BR2_avr32
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_INET_IPV6
+diff --git a/package/qt5/qt5base/qt5base-0007-detect-posix_fallocate-at-configure-time.patch b/package/qt5/qt5base/qt5base-0007-detect-posix_fallocate-at-configure-time.patch
+new file mode 100644
+index 0000000..b0011f6
+--- /dev/null
++++ b/package/qt5/qt5base/qt5base-0007-detect-posix_fallocate-at-configure-time.patch
+@@ -0,0 +1,167 @@
++From 46e632e2555b6b8abe6b8d8ad7d255e27c128e25 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Fatih=20A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
++Date: Mon, 11 Nov 2013 17:04:46 +0200
++Subject: [PATCH] Detect posix_fallocate at configure time
++
++Testing feature macros is not enough for uclibc. Fixes build of the built-in
++sqlite3 with uclibc <= 0.9.33.2. Later versions will have posix_fallocate().
++
++Change-Id: I918a52777ac63624635802221effc6b86fa2269c
++Signed-off-by: Fatih A????c?? <fatih.asici@gmail.com>
++Reported-Upstream: https://codereview.qt-project.org/70935
++---
++ .../unix/posix_fallocate/posix_fallocate.cpp       | 53 ++++++++++++++++++++++
++ .../unix/posix_fallocate/posix_fallocate.pro       |  2 +
++ configure                                          | 14 ++++++
++ src/3rdparty/sqlite.pri                            |  1 +
++ src/3rdparty/sqlite/sqlite3.c                      |  7 ---
++ 5 files changed, 70 insertions(+), 7 deletions(-)
++ create mode 100644 config.tests/unix/posix_fallocate/posix_fallocate.cpp
++ create mode 100644 config.tests/unix/posix_fallocate/posix_fallocate.pro
++
++diff --git a/config.tests/unix/posix_fallocate/posix_fallocate.cpp b/config.tests/unix/posix_fallocate/posix_fallocate.cpp
++new file mode 100644
++index 0000000..5acd45a
++--- /dev/null
+++++ b/config.tests/unix/posix_fallocate/posix_fallocate.cpp
++@@ -0,0 +1,53 @@
+++/****************************************************************************
+++**
+++** Copyright (C) 2013 Digia Plc and/or its subsidiary(-ies).
+++** Contact: http://www.qt-project.org/legal
+++**
+++** This file is part of the config.tests of the Qt Toolkit.
+++**
+++** $QT_BEGIN_LICENSE:LGPL$
+++** Commercial License Usage
+++** Licensees holding valid commercial Qt licenses may use this file in
+++** accordance with the commercial license agreement provided with the
+++** Software or, alternatively, in accordance with the terms contained in
+++** a written agreement between you and Digia.  For licensing terms and
+++** conditions see http://qt.digia.com/licensing.  For further information
+++** use the contact form at http://qt.digia.com/contact-us.
+++**
+++** GNU Lesser General Public License Usage
+++** Alternatively, this file may be used under the terms of the GNU Lesser
+++** General Public License version 2.1 as published by the Free Software
+++** Foundation and appearing in the file LICENSE.LGPL included in the
+++** packaging of this file.  Please review the following information to
+++** ensure the GNU Lesser General Public License version 2.1 requirements
+++** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+++**
+++** In addition, as a special exception, Digia gives you certain additional
+++** rights.  These rights are described in the Digia Qt LGPL Exception
+++** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+++**
+++** GNU General Public License Usage
+++** Alternatively, this file may be used under the terms of the GNU
+++** General Public License version 3.0 as published by the Free Software
+++** Foundation and appearing in the file LICENSE.GPL included in the
+++** packaging of this file.  Please review the following information to
+++** ensure the GNU General Public License version 3.0 requirements will be
+++** met: http://www.gnu.org/copyleft/gpl.html.
+++**
+++**
+++** $QT_END_LICENSE$
+++**
+++****************************************************************************/
+++
+++#include <fcntl.h>
+++
+++int main(int, char **)
+++{
+++#if _XOPEN_SOURCE >= 600 || _POSIX_C_SOURCE >= 200112L
+++    return ::posix_fallocate(0, 0, 0);
+++#else
+++#  error posix_fallocate not available
+++    // MIPSpro doesn't understand #error, so force a compiler error
+++    force_compiler_error = true;
+++#endif
+++}
++diff --git a/config.tests/unix/posix_fallocate/posix_fallocate.pro b/config.tests/unix/posix_fallocate/posix_fallocate.pro
++new file mode 100644
++index 0000000..f01b15f
++--- /dev/null
+++++ b/config.tests/unix/posix_fallocate/posix_fallocate.pro
++@@ -0,0 +1,2 @@
+++SOURCES = posix_fallocate.cpp
+++CONFIG -= qt dylib
++diff --git a/configure b/configure
++index 81e2a93..b67ed89 100755
++--- a/configure
+++++ b/configure
++@@ -968,6 +968,7 @@ CFG_MIPS_DSP=auto
++ CFG_MIPS_DSPR2=auto
++ CFG_CLOCK_GETTIME=auto
++ CFG_CLOCK_MONOTONIC=auto
+++CFG_POSIX_FALLOCATE=auto
++ CFG_MREMAP=auto
++ CFG_GETADDRINFO=auto
++ CFG_IPV6IFNAME=auto
++@@ -5653,6 +5654,15 @@ elif [ "$CFG_CLOCK_GETTIME" = "no" ]; then
++     CFG_CLOCK_MONOTONIC=no
++ fi
++ 
+++# detect posix_fallocate
+++if [ "$CFG_POSIX_FALLOCATE" = "auto" ]; then
+++    if compileTest unix/posix_fallocate "posix_fallocate"; then
+++        CFG_POSIX_FALLOCATE=yes
+++    else
+++        CFG_POSIX_FALLOCATE=no
+++    fi
+++fi
+++
++ # detect mremap
++ if [ "$CFG_MREMAP" = "auto" ]; then
++     if compileTest unix/mremap "mremap"; then
++@@ -5970,6 +5980,9 @@ fi
++ if [ "$CFG_CLOCK_MONOTONIC" = "yes" ]; then
++     QT_CONFIG="$QT_CONFIG clock-monotonic"
++ fi
+++if [ "$CFG_POSIX_FALLOCATE" = "yes" ]; then
+++    QT_CONFIG="$QT_CONFIG posix_fallocate"
+++fi
++ if [ "$CFG_MREMAP" = "yes" ]; then
++     QT_CONFIG="$QT_CONFIG mremap"
++ fi
++@@ -6449,6 +6462,7 @@ QMakeVar set sql-plugins "$SQL_PLUGINS"
++ [ "$CFG_GLIB" != "yes" ]     && QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_GLIB"
++ [ "$CFG_QGTKSTYLE" != "yes" ] && QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_STYLE_GTK"
++ [ "$CFG_CLOCK_MONOTONIC" = "no" ] && QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_CLOCK_MONOTONIC"
+++[ "$CFG_POSIX_FALLOCATE" = "no" ] && QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_POSIX_FALLOCATE"
++ [ "$CFG_MREMAP" = "no" ]     && QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_MREMAP"
++ [ "$CFG_GETADDRINFO" = "no" ]&& QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_GETADDRINFO"
++ [ "$CFG_IPV6IFNAME" = "no" ] && QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_IPV6IFNAME"
++diff --git a/src/3rdparty/sqlite.pri b/src/3rdparty/sqlite.pri
++index 58d4ddd..072502c 100644
++--- a/src/3rdparty/sqlite.pri
+++++ b/src/3rdparty/sqlite.pri
++@@ -1,6 +1,7 @@
++ CONFIG(release, debug|release):DEFINES *= NDEBUG
++ DEFINES += SQLITE_OMIT_LOAD_EXTENSION SQLITE_OMIT_COMPLETE SQLITE_ENABLE_FTS3 SQLITE_ENABLE_FTS3_PARENTHESIS SQLITE_ENABLE_RTREE
++ !contains(CONFIG, largefile):DEFINES += SQLITE_DISABLE_LFS
+++contains(QT_CONFIG, posix_fallocate):DEFINES += HAVE_POSIX_FALLOCATE=1
++ winrt: DEFINES += SQLITE_OS_WINRT
++ INCLUDEPATH +=  $$PWD/sqlite
++ SOURCES +=      $$PWD/sqlite/sqlite3.c
++diff --git a/src/3rdparty/sqlite/sqlite3.c b/src/3rdparty/sqlite/sqlite3.c
++index 03fa649..1ae9be2 100644
++--- a/src/3rdparty/sqlite/sqlite3.c
+++++ b/src/3rdparty/sqlite/sqlite3.c
++@@ -22935,13 +22935,6 @@ SQLITE_PRIVATE const char *sqlite3OpcodeName(int i){
++ */
++ #if SQLITE_OS_UNIX              /* This file is used on unix only */
++ 
++-/* Use posix_fallocate() if it is available
++-*/
++-#if !defined(HAVE_POSIX_FALLOCATE) \
++-      && (_XOPEN_SOURCE >= 600 || _POSIX_C_SOURCE >= 200112L)
++-# define HAVE_POSIX_FALLOCATE 1
++-#endif
++-
++ /*
++ ** There are various methods for file locking used for concurrency
++ ** control:
++-- 
++1.8.4.rc3
++
