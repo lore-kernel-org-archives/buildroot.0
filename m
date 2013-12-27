@@ -1,96 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Dec 2013 09:38:05 +0100
-Subject: [Buildroot] [git commit] c-ares: new package
-Message-ID: <20131227084417.42FE89C1D7@busybox.osuosl.org>
+Date: Fri, 27 Dec 2013 09:41:40 +0100
+Subject: [Buildroot] [git commit] qt5webkit: add upstream patch to fix build
+	on ARM softfp
+Message-ID: <20131227084417.7DB609C20A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=540f086b61260b8c8f2a5ae4d31f8a4238d32078
+commit: http://git.buildroot.net/buildroot/commit/?id=1aa31b65118aefbde0a4ac7ab9679353751146c2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add c-ares library from bug #6482.
-Most of the credit goes to Gennady Proskurin <gpq@mail.ru>
-
-[Thomas: fix comment explaining why we need autoreconf.]
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Fatih A????c?? <fatih.asici@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                                  |    1 +
- package/c-ares/Config.in                           |    6 ++++++
- ...-01-use_check_build_instead_of_check_user.patch |   17 +++++++++++++++++
- package/c-ares/c-ares.mk                           |   16 ++++++++++++++++
- 4 files changed, 40 insertions(+), 0 deletions(-)
+ ...kit-0002-Fix-QtWebKit-build-on-ARM-softfp.patch |   35 ++++++++++++++++++++
+ 1 files changed, 35 insertions(+), 0 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 8033b16..c4b6ec1 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -630,6 +630,7 @@ source "package/mediastreamer/Config.in"
- endmenu
- 
- menu "Networking"
-+source "package/c-ares/Config.in"
- source "package/cppzmq/Config.in"
- source "package/czmq/Config.in"
- source "package/filemq/Config.in"
-diff --git a/package/c-ares/Config.in b/package/c-ares/Config.in
+diff --git a/package/qt5/qt5webkit/qt5webkit-0002-Fix-QtWebKit-build-on-ARM-softfp.patch b/package/qt5/qt5webkit/qt5webkit-0002-Fix-QtWebKit-build-on-ARM-softfp.patch
 new file mode 100644
-index 0000000..be17b16
+index 0000000..edbfb90
 --- /dev/null
-+++ b/package/c-ares/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_C_ARES
-+	bool "c-ares"
-+	help
-+	  C library for asynchronous DNS requests.
++++ b/package/qt5/qt5webkit/qt5webkit-0002-Fix-QtWebKit-build-on-ARM-softfp.patch
+@@ -0,0 +1,35 @@
++From 8a716a29721d900069d82878c45cf87a356adba3 Mon Sep 17 00:00:00 2001
++From: Allan Sandfeld Jensen <allan.jensen@digia.com>
++Date: Tue, 17 Dec 2013 12:26:58 +0100
++Subject: [PATCH] Fix QtWebKit build on ARM softfp
 +
-+	  http://c-ares.haxx.se/
-diff --git a/package/c-ares/c-ares-01-use_check_build_instead_of_check_user.patch b/package/c-ares/c-ares-01-use_check_build_instead_of_check_user.patch
-new file mode 100644
-index 0000000..8210ed6
---- /dev/null
-+++ b/package/c-ares/c-ares-01-use_check_build_instead_of_check_user.patch
-@@ -0,0 +1,17 @@
-+Use XC_CHECK_BUILD_FLAGS instead of XC_CHECK_USER_FLAGS.
-+Otherwise it complains of CPPFLAGS in CFLAGS.
++The low level interpreter depends on hardfp, so we need to disable it
++when builing on ARM targets with softfp.
 +
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Task-number: QTBUG-35681
++Change-Id: I8aaef546b92182a87cc7116ac452d8725de6a7db
++Reviewed-by: Jocelyn Turcotte <jocelyn.turcotte@digia.com>
++Signed-off-by: Fatih A????c?? <fatih.asici@gmail.com>
++---
++ Source/WTF/wtf/Platform.h | 5 +++++
++ 1 file changed, 5 insertions(+)
 +
-+diff -Nura c-ares-1.10.0.orig/m4/xc-cc-check.m4 c-ares-1.10.0/m4/xc-cc-check.m4
-+--- c-ares-1.10.0.orig/m4/xc-cc-check.m4	2013-12-26 19:40:46.354195974 -0300
-++++ c-ares-1.10.0/m4/xc-cc-check.m4	2013-12-26 19:41:01.850718535 -0300
-+@@ -59,7 +59,7 @@
++diff --git a/Source/WTF/wtf/Platform.h b/Source/WTF/wtf/Platform.h
++index 3a9b509..cddc210 100644
++--- a/Source/WTF/wtf/Platform.h
+++++ b/Source/WTF/wtf/Platform.h
++@@ -771,6 +771,11 @@
++ #define ENABLE_LLINT 0
++ #endif
 + 
-+ AC_DEFUN([_XC_PROG_CC], [
-+   AC_REQUIRE([_XC_PROG_CC_PREAMBLE])dnl
-+-  AC_REQUIRE([XC_CHECK_USER_FLAGS])dnl
-++  AC_REQUIRE([XC_CHECK_BUILD_FLAGS])dnl
-+   AC_REQUIRE([AC_PROG_INSTALL])dnl
-+   AC_REQUIRE([AC_PROG_CC])dnl
-+   AC_REQUIRE([AM_PROG_CC_C_O])dnl
-diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
-new file mode 100644
-index 0000000..c858887
---- /dev/null
-+++ b/package/c-ares/c-ares.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# c-ares
-+#
-+################################################################################
+++/* LLINT on ARM depends on an FPU */
+++#if !defined(ENABLE_LLINT) && CPU(ARM) && !CPU(ARM_HARDFP)
+++#define ENABLE_LLINT 0
+++#endif
+++
++ /* On some of the platforms where we have a JIT, we want to also have the 
++    low-level interpreter. */
++ #if !defined(ENABLE_LLINT) \
++-- 
++1.8.5.1
 +
-+C_ARES_VERSION = 1.10.0
-+C_ARES_SITE = http://c-ares.haxx.se/download
-+C_ARES_INSTALL_STAGING = YES
-+# Rebuild configure to avoid XC_CHECK_USER_CFLAGS
-+C_ARES_AUTORECONF = YES
-+C_ARES_LICENSE = MIT
-+# No standalone, use some source file
-+C_ARES_LICENSE_FILES = ares_mkquery.c
-+
-+$(eval $(autotools-package))
