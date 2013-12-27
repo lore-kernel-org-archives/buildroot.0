@@ -1,82 +1,131 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Dec 2013 12:32:22 +0100
-Subject: [Buildroot] [PATCH 6/6] toolchain-external: add support for the
-	Blackfin 2013R1 toolchain
+Date: Fri, 27 Dec 2013 12:32:17 +0100
+Subject: [Buildroot] [PATCH 1/6] toolchain-external: add Sourcery ARM
+	2013.11, remove Sourcery ARM 2011.09
 In-Reply-To: <1388143942-1187-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1388143942-1187-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1388143942-1187-7-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1388143942-1187-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This commit adds the support for the recently release Sourcery ARM
+2013.11 toolchain (gcc 4.8, gdb 7.6, glibc 2.18, gdb 7.6), and
+consequently removes the support for the Sourcery ARM 2011.09
+toolchain.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/Config.in             | 19 +++++++++++++++++++
- toolchain/toolchain-external/toolchain-external.mk |  6 +++++-
- 2 files changed, 24 insertions(+), 1 deletion(-)
+ toolchain/toolchain-external/Config.in             | 26 +++++++++++-----------
+ toolchain/toolchain-external/toolchain-external.mk |  8 +++----
+ 2 files changed, 17 insertions(+), 17 deletions(-)
 
 diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index e9a0548..a8ec96a 100644
+index 22e3fb2..0607693 100644
 --- a/toolchain/toolchain-external/Config.in
 +++ b/toolchain/toolchain-external/Config.in
-@@ -665,6 +665,23 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
- 	  Other architecture variants (beyond Pentium-4/Xeon) are
- 	  supported as well, but glibc is not optimised for it.
+@@ -77,8 +77,8 @@ comment "Linaro toolchains available for Cortex-A + EABIhf"
+ 	depends on BR2_GCC_TARGET_ARCH != "armv7-a" || !BR2_ARM_EABIHF
+ 	depends on !BR2_PREFER_STATIC_LIB
  
-+config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1
-+	bool "Blackfin.uclinux.org 2013R1"
-+	depends on BR2_bfin
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
-+	select BR2_INSTALL_LIBSTDCPP
-+	select BR2_LARGEFILE
-+	select BR2_INET_IPV6
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	select BR2_USE_WCHAR
-+	select BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
-+	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-+	help
-+	  Toolchain for the Blackfin architecture, from
-+	  http://blackfin.uclinux.org.
-+
- config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
- 	bool "Blackfin.uclinux.org 2012R2-RC2"
- 	depends on BR2_bfin
-@@ -873,6 +890,8 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1 && BR2_BINFMT_FDPIC
- 	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 && BR2_BINFMT_FLAT
- 	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 && BR2_BINFMT_FDPIC
-+	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 && BR2_BINFMT_FLAT
-+	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 && BR2_BINFMT_FDPIC
- 	default BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX \
- 					 if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+-config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305
+-	bool "Sourcery CodeBench ARM 2013.05"
++config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201311
++	bool "Sourcery CodeBench ARM 2013.11"
+ 	depends on BR2_arm
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	depends on BR2_ARM_EABI
+@@ -89,8 +89,8 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305
+ 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+ 	help
+ 	  Sourcery CodeBench toolchain for the ARM architecture, from
+-	  Mentor Graphics. It uses gcc 4.7.3, binutils 2.23.52, glibc
+-	  2.17 and gdb 7.4.50, kernel headers 3.8.2. It has support
++	  Mentor Graphics. It uses gcc 4.8.1, binutils 2.23.52, glibc
++	  2.18 and gdb 7.6.50, kernel headers 3.11. It has support
+ 	  for the following variants:
+ 	    - ARMv5TE, little endian, soft-float, glibc
+ 	      Select ARM926T, ARM10T, XScale or another ARMv5 core
+@@ -103,8 +103,8 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305
+ 	      Select BR2_SOFT_FLOAT
+ 	      Set BR2_TARGET_OPTIMIZATION to -mthumb
  
+-config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
+-	bool "Sourcery CodeBench ARM 2012.03"
++config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305
++	bool "Sourcery CodeBench ARM 2013.05"
+ 	depends on BR2_arm
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	depends on BR2_ARM_EABI
+@@ -115,8 +115,8 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
+ 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+ 	help
+ 	  Sourcery CodeBench toolchain for the ARM architecture, from
+-	  Mentor Graphics. It uses gcc 4.6.3, binutils 2.21.53, glibc
+-	  2.15 and gdb 7.2.50, kernel headers 3.2.10. It has support
++	  Mentor Graphics. It uses gcc 4.7.3, binutils 2.23.52, glibc
++	  2.17 and gdb 7.4.50, kernel headers 3.8.2. It has support
+ 	  for the following variants:
+ 	    - ARMv5TE, little endian, soft-float, glibc
+ 	      Select ARM926T, ARM10T, XScale or another ARMv5 core
+@@ -129,8 +129,8 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
+ 	      Select BR2_SOFT_FLOAT
+ 	      Set BR2_TARGET_OPTIMIZATION to -mthumb
+ 
+-config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
+-	bool "Sourcery CodeBench ARM 2011.09"
++config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
++	bool "Sourcery CodeBench ARM 2012.03"
+ 	depends on BR2_arm
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	depends on BR2_ARM_EABI
+@@ -141,8 +141,8 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
+ 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+ 	help
+ 	  Sourcery CodeBench toolchain for the ARM architecture, from
+-	  Mentor Graphics. It uses gcc 4.6.1, binutils 2.21.53, glibc
+-	  2.13 and gdb 7.2.50, kernel headers 3.0.1. It has support
++	  Mentor Graphics. It uses gcc 4.6.3, binutils 2.21.53, glibc
++	  2.15 and gdb 7.2.50, kernel headers 3.2.10. It has support
+ 	  for the following variants:
+ 	    - ARMv5TE, little endian, soft-float, glibc
+ 	      Select ARM926T, ARM10T, XScale or another ARMv5 core
+@@ -839,9 +839,9 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_09
+ 	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_08
+ 	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_07
+-	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
+ 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
+ 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305
++	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201311
+ 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A_201109
+ 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109
+ 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_09
 diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 6a44eaf..1084ee2 100644
+index bd4f375..747d7e3 100644
 --- a/toolchain/toolchain-external/toolchain-external.mk
 +++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -327,6 +327,10 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2),y)
- TOOLCHAIN_EXTERNAL_SITE   = http://downloads.sourceforge.net/project/adi-toolchain/2012R2/2012R2-RC2/i386/
- TOOLCHAIN_EXTERNAL_SOURCE = blackfin-toolchain-2012R2-RC2.i386.tar.bz2
- TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS = blackfin-toolchain-uclibc-full-2012R2-RC2.i386.tar.bz2
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1),y)
-+TOOLCHAIN_EXTERNAL_SITE   = http://downloads.sourceforge.net/project/adi-toolchain/2013R1/2013R1-RC1/i386/
-+TOOLCHAIN_EXTERNAL_SOURCE = blackfin-toolchain-2013R1-RC1.i386.tar.bz2
-+TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS = blackfin-toolchain-uclibc-full-2013R1-RC1.i386.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_14_3),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sources.buildroot.net/
- TOOLCHAIN_EXTERNAL_SOURCE = lin32-microblazeel-unknown-linux-gnu_14.3_early.tar.xz
-@@ -364,7 +368,7 @@ endif
+@@ -242,15 +242,15 @@ define TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
+ 	ln -sf . $(TARGET_DIR)/usr/lib/arm-linux-gnueabihf
+ endef
  
- TOOLCHAIN_EXTERNAL_INSTALL_STAGING = YES
- 
--ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2),y)
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1),y)
- # Special handling for Blackfin toolchain, because of the split in two
- # tarballs, and the organization of tarball contents. The tarballs
- # contain ./opt/uClinux/{bfin-uclinux,bfin-linux-uclibc} directories,
+-ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109),y)
+-TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
+-TOOLCHAIN_EXTERNAL_SOURCE = arm-2011.09-70-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
+-else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203),y)
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
+ TOOLCHAIN_EXTERNAL_SOURCE = arm-2012.03-57-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
+ TOOLCHAIN_EXTERNAL_SOURCE = arm-2013.05-24-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201311),y)
++TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
++TOOLCHAIN_EXTERNAL_SOURCE = arm-2013.11-33-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A_201109),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://software-dl.ti.com/sdoemb/sdoemb_public_sw/arago_toolchain/2011_09/exports/
+ TOOLCHAIN_EXTERNAL_SOURCE = arago-2011.09-armv7a-linux-gnueabi-sdk.tar.bz2
 -- 
 1.8.3.2
