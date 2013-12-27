@@ -1,31 +1,28 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Fri, 27 Dec 2013 22:18:27 +0100
-Subject: [Buildroot] [PATCH] support/kconfig: fix reference to kernel
-Message-ID: <1388179109-23491-1-git-send-email-maxime.hadjinlian@gmail.com>
+Date: Fri, 27 Dec 2013 22:18:28 +0100
+Subject: [Buildroot] [PATCH 1/2] support/kconfig: Update kconfig to 3.13-rc5
+In-Reply-To: <1388179109-23491-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1388179109-23491-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <1388179109-23491-2-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There was some references to the kernel missed by
-01-kconfig-kernel-to-buildroot.patch
-
-This patch also update kconfig to the one used in 3.13-rc5.
-The changes are really minor.
+Only minor changes are registered, mainly help text.
 
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
- support/kconfig/README.buildroot                   |  2 +-
- support/kconfig/expr.h                             |  2 +-
- support/kconfig/mconf.c                            | 62 +++++++++++-----------
- support/kconfig/menu.c                             | 11 ++--
- .../patches/01-kconfig-kernel-to-buildroot.patch   | 54 +++++++++++++------
- support/kconfig/qconf.cc                           |  5 ++
- support/kconfig/qconf.h                            |  1 +
- support/kconfig/symbol.c                           |  2 +-
- support/kconfig/zconf.l                            |  1 -
- 9 files changed, 83 insertions(+), 57 deletions(-)
+ support/kconfig/README.buildroot |  2 +-
+ support/kconfig/expr.h           |  2 +-
+ support/kconfig/mconf.c          | 60 +++++++++++++++++++---------------------
+ support/kconfig/menu.c           | 11 ++++----
+ support/kconfig/qconf.cc         |  5 ++++
+ support/kconfig/qconf.h          |  1 +
+ support/kconfig/symbol.c         |  2 +-
+ support/kconfig/zconf.l          |  1 -
+ 8 files changed, 44 insertions(+), 40 deletions(-)
 
 diff --git a/support/kconfig/README.buildroot b/support/kconfig/README.buildroot
 index 6f65715..62e3a11 100644
@@ -51,7 +48,7 @@ index df198a5..ba663e1 100644
  #define SYMBOL_AUTO       0x1000  /* value from environment variable */
  #define SYMBOL_CHECKED    0x2000  /* used during dependency checking */
 diff --git a/support/kconfig/mconf.c b/support/kconfig/mconf.c
-index 35e07e0..7d6cf80 100644
+index 35e07e0..c3a4d4d 100644
 --- a/support/kconfig/mconf.c
 +++ b/support/kconfig/mconf.c
 @@ -25,7 +25,7 @@
@@ -199,15 +196,6 @@ index 35e07e0..7d6cf80 100644
  	"\n"
  	"Only relevant lines are shown.\n"
  	"\n\n"
-@@ -961,7 +959,7 @@ static int handle_exit(void)
- 	if (conf_get_changed())
- 		res = dialog_yesno(NULL,
- 				   _("Do you wish to save your new configuration?\n"
--				     "(Press <ESC><ESC> to continue kernel configuration.)"),
-+				     "(Press <ESC><ESC> to continue Buildroot configuration.)"),
- 				   6, 60);
- 	else
- 		res = -1;
 diff --git a/support/kconfig/menu.c b/support/kconfig/menu.c
 index c1d5320..db1512a 100644
 --- a/support/kconfig/menu.c
@@ -244,110 +232,8 @@ index c1d5320..db1512a 100644
   */
  static struct property *get_symbol_prop(struct symbol *sym)
  {
-diff --git a/support/kconfig/patches/01-kconfig-kernel-to-buildroot.patch b/support/kconfig/patches/01-kconfig-kernel-to-buildroot.patch
-index 25b436b..d7568c0 100644
---- a/support/kconfig/patches/01-kconfig-kernel-to-buildroot.patch
-+++ b/support/kconfig/patches/01-kconfig-kernel-to-buildroot.patch
-@@ -6,10 +6,10 @@
-  zconf.y             |    2 +-
-  5 files changed, 7 insertions(+), 7 deletions(-)
- 
--Index: b/gconf.glade
-+Index: kconfig.new/gconf.glade
- ===================================================================
----- a/gconf.glade
--+++ b/gconf.glade
-+--- kconfig.new.orig/gconf.glade	2013-12-27 21:47:12.884275756 +0100
-++++ kconfig.new/gconf.glade	2013-12-27 21:47:12.876276072 +0100
- @@ -4,7 +4,7 @@
-  
-  <widget class="GtkWindow" id="window1">
-@@ -19,11 +19,11 @@ Index: b/gconf.glade
-    <property name="type">GTK_WINDOW_TOPLEVEL</property>
-    <property name="window_position">GTK_WIN_POS_NONE</property>
-    <property name="modal">False</property>
--Index: b/mconf.c
-+Index: kconfig.new/mconf.c
- ===================================================================
----- a/mconf.c
--+++ b/mconf.c
--@@ -178,9 +178,9 @@
-+--- kconfig.new.orig/mconf.c	2013-12-27 21:47:12.884275756 +0100
-++++ kconfig.new/mconf.c	2013-12-27 21:47:12.876276072 +0100
-+@@ -176,9 +176,9 @@
-  	"Arrow keys navigate the menu.  "
-  	"<Enter> selects submenus ---> (or empty submenus ----).  "
-  	"Highlighted letters are hotkeys.  "
-@@ -35,10 +35,19 @@ Index: b/mconf.c
-  radiolist_instructions[] = N_(
-  	"Use the arrow keys to navigate this window or "
-  	"press the hotkey of the item you wish to select "
--Index: b/zconf.tab.c_shipped
-+@@ -959,7 +959,7 @@
-+ 	if (conf_get_changed())
-+ 		res = dialog_yesno(NULL,
-+ 				   _("Do you wish to save your new configuration?\n"
-+-				     "(Press <ESC><ESC> to continue kernel configuration.)"),
-++				     "(Press <ESC><ESC> to continue Buildroot configuration.)"),
-+ 				   6, 60);
-+ 	else
-+ 		res = -1;
-+Index: kconfig.new/zconf.tab.c_shipped
- ===================================================================
----- a/zconf.tab.c_shipped
--+++ b/zconf.tab.c_shipped
-+--- kconfig.new.orig/zconf.tab.c_shipped	2013-12-27 21:47:12.884275756 +0100
-++++ kconfig.new/zconf.tab.c_shipped	2013-12-27 21:47:12.880275914 +0100
- @@ -2297,7 +2297,7 @@
-  
-  	sym_init();
-@@ -48,10 +57,10 @@ Index: b/zconf.tab.c_shipped
-  
-  	if (getenv("ZCONF_DEBUG"))
-  		zconfdebug = 1;
--Index: b/zconf.y
-+Index: kconfig.new/zconf.y
- ===================================================================
----- a/zconf.y
--+++ b/zconf.y
-+--- kconfig.new.orig/zconf.y	2013-12-27 21:47:12.884275756 +0100
-++++ kconfig.new/zconf.y	2013-12-27 21:47:12.880275914 +0100
- @@ -493,7 +493,7 @@
-  
-  	sym_init();
-@@ -61,10 +70,10 @@ Index: b/zconf.y
-  
-  	if (getenv("ZCONF_DEBUG"))
-  		zconfdebug = 1;
--Index: b/confdata.c
-+Index: kconfig.new/confdata.c
- ===================================================================
----- a/confdata.c
--+++ b/confdata.c
-+--- kconfig.new.orig/confdata.c	2013-12-27 21:47:12.884275756 +0100
-++++ kconfig.new/confdata.c	2013-12-27 21:47:12.880275914 +0100
- @@ -25,7 +25,7 @@
-  static const char *conf_filename;
-  static int conf_lineno, conf_warnings, conf_unsaved;
-@@ -83,3 +92,16 @@ Index: b/confdata.c
-  
-  	return name ? name : ".config";
-  }
-+Index: kconfig.new/qconf.cc
-+===================================================================
-+--- kconfig.new.orig/qconf.cc	2013-12-27 21:47:09.004428182 +0100
-++++ kconfig.new/qconf.cc	2013-12-27 21:47:31.199553481 +0100
-+@@ -70,7 +70,7 @@
-+ }
-+ 
-+ ConfigSettings::ConfigSettings()
-+-	: QSettings("kernel.org", "qconf")
-++	: QSettings("buildroot.org", "qconf")
-+ {
-+ }
-+ 
 diff --git a/support/kconfig/qconf.cc b/support/kconfig/qconf.cc
-index 1500c38..f630567 100644
+index 1500c38..9d3b04b 100644
 --- a/support/kconfig/qconf.cc
 +++ b/support/kconfig/qconf.cc
 @@ -69,6 +69,11 @@ static inline QString qgettext(const QString& str)
@@ -355,7 +241,7 @@ index 1500c38..f630567 100644
  }
  
 +ConfigSettings::ConfigSettings()
-+	: QSettings("buildroot.org", "qconf")
++	: QSettings("kernel.org", "qconf")
 +{
 +}
 +
