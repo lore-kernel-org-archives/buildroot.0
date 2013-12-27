@@ -1,99 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Dec 2013 12:32:20 +0100
-Subject: [Buildroot] [PATCH 4/6] toolchain-external: update Linaro AArch64
-	toolchains
+Date: Fri, 27 Dec 2013 12:32:21 +0100
+Subject: [Buildroot] [PATCH 5/6] toolchain-external: mark Microblaze
+	external toolchains as deprecated
 In-Reply-To: <1388143942-1187-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1388143942-1187-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1388143942-1187-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1388143942-1187-6-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add Linaro AArch64 2013.10 and Linaro AArch64 2013.11, and remove
-Linaro AArch64 2013.07 and Linaro AArch64 2013.08.
+The Xilinx Microblaze external toolchains that we had support for are
+very old, and are causing a huge number of build issues. Thanks to
+Spenser Gilliland, we now have support for Microblaze in the internal
+toolchain backend, and the autobuilders have been using the internal
+toolchain backend since then. Therefore, it's time to deprecate those
+old and unusable external toolchains.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/Config.in             | 16 ++++++++--------
- toolchain/toolchain-external/toolchain-external.mk | 12 ++++++------
- 2 files changed, 14 insertions(+), 14 deletions(-)
+ toolchain/toolchain-external/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index e32a16e..4c3c8a4 100644
+index 4c3c8a4..e9a0548 100644
 --- a/toolchain/toolchain-external/Config.in
 +++ b/toolchain/toolchain-external/Config.in
-@@ -747,8 +747,8 @@ config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2
- 	  Toolchain for the Microblaze architecture, from
- 	  http://wiki.xilinx.com/mb-gnu-tools
- 
--config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_09
--	bool "Linaro AArch64 13.09"
-+config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_11
-+	bool "Linaro AArch64 13.11"
- 	depends on BR2_aarch64
+@@ -704,6 +704,7 @@ config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_14_3
+ 	depends on BR2_microblazeel
  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
  	depends on !BR2_PREFER_STATIC_LIB
-@@ -760,8 +760,8 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_09
- 	  Toolchain for the AArch64 architecture, from
- 	  http://www.linaro.org/engineering/armv8/
- 
--config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_08
--	bool "Linaro AArch64 13.08"
-+config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_10
-+	bool "Linaro AArch64 13.10"
- 	depends on BR2_aarch64
++	depends on BR2_DEPRECATED
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+@@ -717,6 +718,7 @@ config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2
+ 	depends on BR2_microblazeel
+ 	depends on BR2_HOSTARCH = "x86_64"
+ 	depends on !BR2_PREFER_STATIC_LIB
++	depends on BR2_DEPRECATED
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	help
+@@ -728,6 +730,7 @@ config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_14_3
+ 	depends on BR2_microblazebe
  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
  	depends on !BR2_PREFER_STATIC_LIB
-@@ -773,8 +773,8 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_08
- 	  Toolchain for the AArch64 architecture, from
- 	  http://www.linaro.org/engineering/armv8/
- 
--config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_07
--	bool "Linaro AArch64 13.07"
-+config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_09
-+	bool "Linaro AArch64 13.09"
- 	depends on BR2_aarch64
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++	depends on BR2_DEPRECATED
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+@@ -741,6 +744,7 @@ config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2
+ 	depends on BR2_microblazebe
+ 	depends on BR2_HOSTARCH = "x86_64"
  	depends on !BR2_PREFER_STATIC_LIB
-@@ -844,9 +844,9 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201311
- 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A_201109
- 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109
-+	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_11
-+	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_10
- 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_09
--	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_08
--	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_07
- 	default "microblazeel-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_14_3
- 	default "microblazeel-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2
- 	default "microblaze-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_14_3
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 0e12c76..6a44eaf 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -339,15 +339,15 @@ TOOLCHAIN_EXTERNAL_SOURCE = lin32-microblaze-unknown-linux-gnu_14.3_early.tar.xz
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sources.buildroot.net/
- TOOLCHAIN_EXTERNAL_SOURCE = microblaze-unknown-linux-gnu.tgz
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_07),y)
--TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/13.07/components/toolchain/binaries/
--TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.8-2013.07-1_linux.tar.xz
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_08),y)
--TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/13.08/components/toolchain/binaries/
--TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.8-2013.08_linux.tar.xz
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_09),y)
- TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/13.09/components/toolchain/binaries/
- TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.8-2013.09_linux.tar.xz
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_10),y)
-+TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/13.10/components/toolchain/binaries/
-+TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.8-2013.10-1_linux.tar.xz
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_11),y)
-+TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/13.11/components/toolchain/binaries/
-+TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.8-2013.11_linux.tar.xz
- else
- # Custom toolchain
- TOOLCHAIN_EXTERNAL_SITE = $(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
++	depends on BR2_DEPRECATED
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	help
 -- 
 1.8.3.2
