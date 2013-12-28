@@ -1,7 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 28 Dec 2013 18:39:10 +0100
-Subject: [Buildroot] [PATCH 0/4 v2] Add ability to generate some graphs
-Message-ID: <cover.1388252053.git.yann.morin.1998@free.fr>
+Date: Sat, 28 Dec 2013 18:39:11 +0100
+Subject: [Buildroot] [PATCH 2/4] Makefile: expose target 'graph-build' to
+	generate the build-time graphs
+In-Reply-To: <cover.1388252053.git.yann.morin.1998@free.fr>
+References: <cover.1388252053.git.yann.morin.1998@free.fr>
+Message-ID: <d352fc1e84b15b1b624f7ae4a1db5a5ad25f8da9.1388252053.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,47 +13,64 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Hello All!
+Generate the build-time graphs by calling:
+    make graph-build
 
-Here is a small series that adds some graphing abilities to Buildroot:
-  - graph build-times, originally by Thomas, revamped now that our step-hooks
-    generate $(O)/build/build-time.log for all builds
-  - expose this, graph-depends and <package>-graph-depends as make targets
-  - allow generating either PDF or PNG graphs
+This generates the graphs in $(O)/graphs/
 
-Regards,
-Yann E. MORIN.
+It is possible to use the alternate color-scheme by setting the variable
+GRAPH_ALT=1 on the command line:
+    make GRAPH_ALT=1 graph-build
 
-Changes v1 -> v2:
-  - add --input to graph-build time  (Thomas)
-  - move %-graph-depends to package/pkg-generic  (Thomas)
-  - document <package>-graph-depends  (Thomas)
-  - document GRAPH_ALT and GRAPH_OUT in manual  (Thomas)
-  - misc typoes
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Makefile                     | 12 ++++++++++++
+ docs/manual/common-usage.txt |  2 ++
+ 2 files changed, 14 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
-----------------------------------------------------------------
-Thomas Petazzoni (1):
-      graph-build-time: generate graphs based on timing data
-
-Yann E. MORIN (3):
-      Makefile: expose target 'graph-build' to generate the build-time graphs
-      Makefile: expose 'graph-depends' to generate a graph of the dependency tree
-      graphs: support generating png graphs
-
- Makefile                         |  22 +++
- docs/manual/common-usage.txt     |   4 +
- package/pkg-generic.mk           |   5 +
- support/scripts/graph-build-time | 290 +++++++++++++++++++++++++++++++++++++++
- 4 files changed, 321 insertions(+)
- create mode 100755 support/scripts/graph-build-time
-
+diff --git a/Makefile b/Makefile
+index 3190541..98ca798 100644
+--- a/Makefile
++++ b/Makefile
+@@ -631,6 +631,17 @@ legal-info: dirs legal-info-clean legal-info-prepare $(TARGETS_LEGAL_INFO) \
+ show-targets:
+ 	@echo $(TARGETS)
+ 
++graph-build: $(O)/build/build-time.log
++	@install -d $(O)/graphs
++	$(foreach o,name build duration,./support/scripts/graph-build-time \
++					--type=histogram --order=$(o) --input=$(<) \
++					--output=$(O)/graphs/build.hist-$(o).pdf \
++					$(if $(GRAPH_ALT),--alternate-colors)$(sep))
++	$(foreach t,packages steps,./support/scripts/graph-build-time \
++				   --type=pie-$(t) --input=$(<) \
++				   --output=$(O)/graphs/build.pie-$(t).pdf \
++				   $(if $(GRAPH_ALT),--alternate-colors)$(sep))
++
+ else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
+ 
+ all: menuconfig
+@@ -843,6 +854,7 @@ endif
+ 	@echo '  manual-pdf             - build manual in PDF'
+ 	@echo '  manual-text            - build manual in text'
+ 	@echo '  manual-epub            - build manual in ePub'
++	@echo '  graph-build            - generate graphs of the build times'
+ 	@echo
+ 	@echo 'Miscellaneous:'
+ 	@echo '  source                 - download all sources needed for offline-build'
+diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
+index 1290dfc..7c76942 100644
+--- a/docs/manual/common-usage.txt
++++ b/docs/manual/common-usage.txt
+@@ -86,6 +86,8 @@ to +make+ or set in the environment:
+   Note that the Buildroot download directory can also be set from the
+   configuration interface, so through the Buildroot +.config+ file; this
+   is the recommended way of setting it.
++* +GRAPH_ALT+, if set and non-empty, to use an alternate color-scheme in
++  build-time graphs
+ 
+ An example that uses config files located in the toplevel directory and
+ in your $HOME:
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.1.2
