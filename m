@@ -1,75 +1,56 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 28 Dec 2013 18:10:59 +0100
-Subject: [Buildroot] [PATCH 2/2] xenomai: enable armv5tej support
-In-Reply-To: <1388250659-10192-1-git-send-email-romain.naour@openwide.fr>
-References: <1388250659-10192-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1388250659-10192-2-git-send-email-romain.naour@openwide.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 28 Dec 2013 18:39:10 +0100
+Subject: [Buildroot] [PATCH 0/4 v2] Add ability to generate some graphs
+Message-ID: <cover.1388252053.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The br-arm-full-2013.11-rc2 toolchain is builded with arch=armv5te
-and tune=arm926ej-s, which is not recognized by xenomai.
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-fixes: http://autobuild.buildroot.net/results/e3b/e3b534dafb6dd7d788b0c3629ccc0b25702790f0/build-end.log
+Hello All!
 
-This patch has already been merged upstream:
+Here is a small series that adds some graphing abilities to Buildroot:
+  - graph build-times, originally by Thomas, revamped now that our step-hooks
+    generate $(O)/build/build-time.log for all builds
+  - expose this, graph-depends and <package>-graph-depends as make targets
+  - allow generating either PDF or PNG graphs
 
-http://git.xenomai.org/xenomai-2.6.git/commit/?id=ebc2779baa222db4a5936c3d3022803355585b8c
+Regards,
+Yann E. MORIN.
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
- .../xenomai-0001-arm-enable-armv5tej-support.patch | 40 ++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
- create mode 100644 package/xenomai/xenomai-0001-arm-enable-armv5tej-support.patch
+Changes v1 -> v2:
+  - add --input to graph-build time  (Thomas)
+  - move %-graph-depends to package/pkg-generic  (Thomas)
+  - document <package>-graph-depends  (Thomas)
+  - document GRAPH_ALT and GRAPH_OUT in manual  (Thomas)
+  - misc typoes
 
-diff --git a/package/xenomai/xenomai-0001-arm-enable-armv5tej-support.patch b/package/xenomai/xenomai-0001-arm-enable-armv5tej-support.patch
-new file mode 100644
-index 0000000..fdff0aa
---- /dev/null
-+++ b/package/xenomai/xenomai-0001-arm-enable-armv5tej-support.patch
-@@ -0,0 +1,40 @@
-+From ebc2779baa222db4a5936c3d3022803355585b8c Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@openwide.fr>
-+Date: Sat, 28 Dec 2013 13:31:14 +0100
-+Subject: [PATCH 1/1] arm: enable armv5tej support
-+
-+armv5tej are not detected in include/asm-arm/features.h
-+
-+fixes: http://autobuild.buildroot.net/results/e3b/e3b534dafb6dd7d788b0c3629ccc0b25702790f0/build-end.log
-+
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+---
-+ include/asm-arm/features.h | 9 +++++----
-+ 1 file changed, 5 insertions(+), 4 deletions(-)
-+
-+diff --git a/include/asm-arm/features.h b/include/asm-arm/features.h
-+index b83ac2c..bb3ea92 100644
-+--- a/include/asm-arm/features.h
-++++ b/include/asm-arm/features.h
-+@@ -56,13 +56,14 @@
-+ #define __LINUX_ARM_ARCH__ 4
-+ #endif /* armv4 */
-+ 
-+-#if defined(__ARM_ARCH_5__) || defined(__ARM_ARCH_5T__) \
-+-	|| defined(__ARM_ARCH_5E__) || defined(__ARM_ARCH_5TE__)
-++#if defined(__ARM_ARCH_5__) || defined(__ARM_ARCH_5T__) || \
-++	defined(__ARM_ARCH_5E__) || defined(__ARM_ARCH_5TE__) || \
-++	defined(__ARM_ARCH_5TEJ__)
-+ #define __LINUX_ARM_ARCH__ 5
-+ #endif /* armv5 */
-+ 
-+-#if defined(__ARM_ARCH_6__) || defined(__ARM_ARCH_6K__) \
-+-	|| defined(__ARM_ARCH_6Z__) || defined(__ARM_ARCH_6ZK__)
-++#if defined(__ARM_ARCH_6__) || defined(__ARM_ARCH_6K__) || \
-++	defined(__ARM_ARCH_6Z__) || defined(__ARM_ARCH_6ZK__)
-+ #define __LINUX_ARM_ARCH__ 6
-+ #endif /* armv6 */
-+ 
-+-- 
-+1.8.1.4
-+
+Regards,
+Yann E. MORIN.
+
+----------------------------------------------------------------
+Thomas Petazzoni (1):
+      graph-build-time: generate graphs based on timing data
+
+Yann E. MORIN (3):
+      Makefile: expose target 'graph-build' to generate the build-time graphs
+      Makefile: expose 'graph-depends' to generate a graph of the dependency tree
+      graphs: support generating png graphs
+
+ Makefile                         |  22 +++
+ docs/manual/common-usage.txt     |   4 +
+ package/pkg-generic.mk           |   5 +
+ support/scripts/graph-build-time | 290 +++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 321 insertions(+)
+ create mode 100755 support/scripts/graph-build-time
+
 -- 
-1.8.1.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
