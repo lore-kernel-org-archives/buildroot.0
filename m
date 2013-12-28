@@ -1,41 +1,75 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 28 Dec 2013 18:10:58 +0100
-Subject: [Buildroot] [PATCH 1/2] xenomai: bump to version 2.6.3
-Message-ID: <1388250659-10192-1-git-send-email-romain.naour@openwide.fr>
+Date: Sat, 28 Dec 2013 18:10:59 +0100
+Subject: [Buildroot] [PATCH 2/2] xenomai: enable armv5tej support
+In-Reply-To: <1388250659-10192-1-git-send-email-romain.naour@openwide.fr>
+References: <1388250659-10192-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1388250659-10192-2-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add --disable-doc-install to configure script.
+The br-arm-full-2013.11-rc2 toolchain is builded with arch=armv5te
+and tune=arm926ej-s, which is not recognized by xenomai.
+
+fixes: http://autobuild.buildroot.net/results/e3b/e3b534dafb6dd7d788b0c3629ccc0b25702790f0/build-end.log
+
+This patch has already been merged upstream:
+
+http://git.xenomai.org/xenomai-2.6.git/commit/?id=ebc2779baa222db4a5936c3d3022803355585b8c
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- package/xenomai/xenomai.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ .../xenomai-0001-arm-enable-armv5tej-support.patch | 40 ++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+ create mode 100644 package/xenomai/xenomai-0001-arm-enable-armv5tej-support.patch
 
-diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
-index 786bdfd..2dd1bf6 100644
---- a/package/xenomai/xenomai.mk
-+++ b/package/xenomai/xenomai.mk
-@@ -6,7 +6,7 @@
- 
- XENOMAI_VERSION = $(call qstrip,$(BR2_PACKAGE_XENOMAI_VERSION))
- ifeq ($(XENOMAI_VERSION),)
--XENOMAI_VERSION = 2.6.2.1
-+XENOMAI_VERSION = 2.6.3
- endif
- 
- XENOMAI_SITE = http://download.gna.org/xenomai/stable/
-@@ -19,7 +19,7 @@ XENOMAI_INSTALL_STAGING = YES
- XENOMAI_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install-user
- XENOMAI_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install-user
- 
--XENOMAI_CONF_OPT += --includedir=/usr/include/xenomai/
-+XENOMAI_CONF_OPT += --includedir=/usr/include/xenomai/ --disable-doc-install
- 
- define XENOMAI_REMOVE_DEVFILES
- 	for i in xeno-config xeno-info wrap-link.sh ; do \
+diff --git a/package/xenomai/xenomai-0001-arm-enable-armv5tej-support.patch b/package/xenomai/xenomai-0001-arm-enable-armv5tej-support.patch
+new file mode 100644
+index 0000000..fdff0aa
+--- /dev/null
++++ b/package/xenomai/xenomai-0001-arm-enable-armv5tej-support.patch
+@@ -0,0 +1,40 @@
++From ebc2779baa222db4a5936c3d3022803355585b8c Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@openwide.fr>
++Date: Sat, 28 Dec 2013 13:31:14 +0100
++Subject: [PATCH 1/1] arm: enable armv5tej support
++
++armv5tej are not detected in include/asm-arm/features.h
++
++fixes: http://autobuild.buildroot.net/results/e3b/e3b534dafb6dd7d788b0c3629ccc0b25702790f0/build-end.log
++
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++---
++ include/asm-arm/features.h | 9 +++++----
++ 1 file changed, 5 insertions(+), 4 deletions(-)
++
++diff --git a/include/asm-arm/features.h b/include/asm-arm/features.h
++index b83ac2c..bb3ea92 100644
++--- a/include/asm-arm/features.h
+++++ b/include/asm-arm/features.h
++@@ -56,13 +56,14 @@
++ #define __LINUX_ARM_ARCH__ 4
++ #endif /* armv4 */
++ 
++-#if defined(__ARM_ARCH_5__) || defined(__ARM_ARCH_5T__) \
++-	|| defined(__ARM_ARCH_5E__) || defined(__ARM_ARCH_5TE__)
+++#if defined(__ARM_ARCH_5__) || defined(__ARM_ARCH_5T__) || \
+++	defined(__ARM_ARCH_5E__) || defined(__ARM_ARCH_5TE__) || \
+++	defined(__ARM_ARCH_5TEJ__)
++ #define __LINUX_ARM_ARCH__ 5
++ #endif /* armv5 */
++ 
++-#if defined(__ARM_ARCH_6__) || defined(__ARM_ARCH_6K__) \
++-	|| defined(__ARM_ARCH_6Z__) || defined(__ARM_ARCH_6ZK__)
+++#if defined(__ARM_ARCH_6__) || defined(__ARM_ARCH_6K__) || \
+++	defined(__ARM_ARCH_6Z__) || defined(__ARM_ARCH_6ZK__)
++ #define __LINUX_ARM_ARCH__ 6
++ #endif /* armv6 */
++ 
++-- 
++1.8.1.4
++
 -- 
 1.8.1.4
