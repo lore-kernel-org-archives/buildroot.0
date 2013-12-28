@@ -1,73 +1,126 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 28 Dec 2013 22:09:20 +0100
-Subject: [Buildroot] [PATCH 8/9] fs/iso9660: add Grub splashscreen
-	support
-In-Reply-To: <1388242600-2580-9-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1388242600-2580-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1388242600-2580-9-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20131228210920.GL3373@free.fr>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Sat, 28 Dec 2013 16:13:06 -0500
+Subject: [Buildroot] host-python cflags getting into python build_ext
+	compiles
+Message-ID: <CANxTyt6zKXaM3gVyTDjct5fF7DbzmXZ5wu3nLp5_WP_Fi-Xd2w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Folks,
 
-On 2013-12-28 15:56 +0100, Thomas Petazzoni spake thusly:
-> When Grub is built with splashscreen support, copy the splashscreen
-> image to the ISO9660 filesystem. Otherwise, disable the splashscreen
-> in the grub menu.lst file.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  fs/iso9660/iso9660.mk | 5 +++++
->  fs/iso9660/menu.lst   | 5 ++++-
->  2 files changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
-> index 56e87bb..0260d41 100644
-> --- a/fs/iso9660/iso9660.mk
-> +++ b/fs/iso9660/iso9660.mk
-> @@ -16,6 +16,11 @@ $(BINARIES_DIR)/rootfs.iso9660: host-cdrkit host-fakeroot linux rootfs-cpio grub
->  	mkdir -p $(ISO9660_TARGET_DIR)/boot/grub
->  	cp $(GRUB_DIR)/stage2/stage2_eltorito $(ISO9660_TARGET_DIR)/boot/grub/
->  	cp $(ISO9660_BOOT_MENU) $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
-> +ifeq ($(BR2_TARGET_GRUB_SPLASH),)
-> +	$(SED) '/splashimage/d' $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
-> +else
-> +	cp boot/grub/splash.xpm.gz $(ISO9660_TARGET_DIR)/
-> +endif
->  	cp $(LINUX_IMAGE_PATH) $(ISO9660_TARGET_DIR)/kernel
->  ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
->  	$(SED) '/initrd/d'  $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
-> diff --git a/fs/iso9660/menu.lst b/fs/iso9660/menu.lst
-> index ed7836a..b1ba3c9 100644
-> --- a/fs/iso9660/menu.lst
-> +++ b/fs/iso9660/menu.lst
-> @@ -1,6 +1,9 @@
->  default		0
->  timeout		10
-> -color cyan/blue white/blue
-> +color 		cyan/blue white/blue
-> +splashimage	/splash.xpm.gz
-> +foreground 	000000
-> +background 	cccccc
+I've observed some strangeness when compiling python3, and thought
+that I should share with you.  I ran into a variation of this at work
+with an older buildroot, where I was getting an empty
+$TARGET_DIR/usr/lib/python3.3/lib-dynload/ due to python3 compile
+errors.  When I tried the same thing at home with the latest buildroot
+from git, I got different but equally disturbing results.  Here's the
+gist of what I see:
 
-'foreground' and 'background' do not seem to be valid grub-legacy or
-grub-2 options, at least according to their respective documentations:
-  - grub-legacy (aka grub-0.9x):
-    http://www.gnu.org/software/grub/manual/legacy/grub.html#color
-  - grub-2:
-    http://www.gnu.org/software/grub/manual/grub.html#Theme-File-Manual
+* When host-python3 is compiled, autoconfiguration learns that the
+relatively new gcc on my PC supports the -Wno-unused-result option.
 
-Regards,
-Yann E. MORIN.
+* When python3 (for the target) is compiled, autoconfiguration learns
+that my ancient externally installed CodeSourcery 2009q1-203 gcc does
+not support the -Wno-unused-result option.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+* During the python3 build stage, a lot of python3 builds fine.  But
+when the extensions destined for the lib-dynload area are built, the
+build_ext command creates a compile line with the -Wno-unused-result
+option.  The extension compiles fail, but the overall compile just
+keeps on going (very annoying).  The error looks like this:
+
+building '_struct' extension
+/home/dmocelo/buildroot-git/output.cs2009/host/usr/bin/ccache
+/home/dmocelo/buildroot-git/output.cs2009/host/usr/bin/arm-none-linux-gnueabi-gcc
+-fPIC -Wno-unused-result -DNDEBUG -g -O3 -Wall -Wstrict-prototypes -O2
+-I/home/dmocelo/buildroot-git/output.cs2009/host/usr/include
+-I/home/dmocelo/buildroot-git/output.cs2009/build/host-python3-3.3.0/Include
+-I. -I/home/dmocelo/buildroot-git/output.cs2009/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include
+-c /home/dmocelo/buildroot-git/output.cs2009/build/host-python3-3.3.0/Modules/_struct.c
+-o build/temp.linux-arm-3.3/home/dmocelo/buildroot-git/output.cs2009/build/host-python3-3.3.0/Modules/_struct.o
+cc1: error: unrecognized command line option "-Wno-unused-result"
+
+and then this gets reported:
+
+Failed to build these modules:
+_bisect            _crypt             _csv
+_ctypes            _ctypes_test       _datetime
+_decimal           _elementtree       _heapq
+_json              _lsprof            _md5
+_multibytecodec    _multiprocessing   _pickle
+_posixsubprocess   _random            _sha1
+_sha256            _sha512            _socket
+_struct            _testbuffer        _testcapi
+array              atexit             audioop
+binascii           cmath              fcntl
+grp                math               mmap
+ossaudiodev        parser             resource
+select             spwd               syslog
+termios            time               unicodedata
+
+With the 64-bit build-machine that I use at work, these errors leave
+my lib-dynload directory totally empty, which is how we noticed this
+issue.  When I tried to replicate this at home with the latest
+buildroot from git, using my home 32-bit machine, the extensions again
+get built later, like this:
+
+building '_struct' extension
+/home/dmocelo/buildroot-git/output.cs2009/host/usr/bin/ccache
+/usr/bin/gcc -pthread -Wno-unused-result -DNDEBUG -g -O3 -Wall
+-Wstrict-prototypes -O2
+-I/home/dmocelo/buildroot-git/output.cs2009/host/usr/include -fPIC
+-I/home/dmocelo/buildroot-git/output.cs2009/build/host-python3-3.3.0/Include
+-I. -I/home/dmocelo/buildroot-git/output.cs2009/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include
+-c /home/dmocelo/buildroot-git/output.cs2009/build/host-python3-3.3.0/Modules/_struct.c
+-o build/temp.linux-arm-3.3/home/dmocelo/buildroot-git/output.cs2009/build/host-python3-3.3.0/Modules/_struct.o
+
+For whatever reason, the compiler became the host gcc, and compiled
+without error - but the resuling extension libs are all unusable on
+the target.
+
+So, here's the interesting part - if I explicitly disable the use of
+the -Wno-unused-result option in the host-python3 configuration
+("ac_cv_disable_unused_result_warning=no" for *host* conf env), then
+the target extensions build without the offending option, and I get
+proper arm libs in lib-dynload.
+
+So it leaves me with the impression that the autoconf results
+determined for the host-python3 are getting into the cross-compiled
+python3 extension compiles.
+
+Knowing that there was recent work for python (2) for the python
+infrastructure, I tried that as well.  It's configure does not check
+for -Wno-unused-result - so I put the check in using the patch at
+http://hg.python.org/cpython/rev/e5dade9bf96f .  Then I saw the same
+errors during the python2 target compile.  (Stuff got into
+lib-dynload, but there are still many intermediate compile errors due
+to the unsupported option; the errors went away when I forced the
+option off in the host-python build again.)
+
+For my immediate problem, I can simply disable the check in python3,
+and be done.  (And certainly, this problem goes away if you use a
+newer toolchain, which I imagine that most buildroot users do.)  But I
+fear that there is a more fundamental problem of host-python cflags
+getting used by the target python extension builds, so this is why I
+am writing this email.
+
+FYI, my defconfig is:
+
+BR2_arm=y
+BR2_cortex_a8=y
+BR2_ARM_SOFT_FLOAT=y
+BR2_CCACHE=y
+BR2_STRIP_none=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_PATH="/opt/codesourcery/arm-2009q1"
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="arm-none-linux-gnueabi"
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_TARGET_GENERIC_GETTY_PORT="ttyO0"
+BR2_PACKAGE_PYTHON3=y
+
+Danomi -
