@@ -1,57 +1,45 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 28 Dec 2013 13:27:03 +0100
-Subject: [Buildroot] [PATCH 3/4] Makefile: expose 'graph-depends' to
- generate a graph of the dependency tree
-In-Reply-To: <20131228130647.78e56259@skate>
-References: <cover.1388185918.git.yann.morin.1998@free.fr>
- <0fad080c135d79abdbe042514e30b393c25f5a77.1388185918.git.yann.morin.1998@free.fr>
- <20131228124607.193ac484@skate> <20131228115634.GC3373@free.fr>
- <20131228130647.78e56259@skate>
-Message-ID: <20131228122703.GD3373@free.fr>
+Date: Sat, 28 Dec 2013 13:27:52 +0100
+Subject: [Buildroot] [PATCH] package/libevdev: add dependency on host-python
+Message-ID: <1388233672-16776-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2013-12-28 13:06 +0100, Thomas Petazzoni spake thusly:
-> Dear Yann E. MORIN,
-> 
-> On Sat, 28 Dec 2013 12:56:34 +0100, Yann E. MORIN wrote:
-> 
-> > > Why isn't that one done in the package infrastructure, i.e in
-> > > pkg-generic.mk ?
-> > 
-> > For two reasons:
-> >   - to have both graph-depends and %-graph-depends side-by-side, so it
-> >     is easier to update the rules,
-> 
-> Right, that's a pretty good reason.
-> 
-> >   - to limit the number of rules in the Makefile, which is already a bit
-> >     long to parse.
-> 
-> Well, you still have the rule in pkg-generic.mk, which you added to
-> make the completion work. So practically speaking, the number of rules
-> is the same.
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Doh, you're right...
+libevdev needs python to generate a header file. We can't rely on the
+1system pPython, since it may be too old (missing argparse in python
+2.6).
 
-> > I initially added that in package/pkg-generic.mk:
-> >     $(1)-graph-depends:
-> >         @install -d $(O)/graphs
-> 
-> Should be $(INSTALL) maybe?
+Fixes:
+    http://autobuild.buildroot.net/results/1f5c0689ae129ae5fa30f31a4f47ccbd7705ff00/
+    http://autobuild.buildroot.net/results/1729043d9c977a59a4fdd7ccd3d16cfc8aef7678/
+    http://autobuild.buildroot.net/results/3ab080e96576e0012fea853009811247338e665e/
 
-Yes, I'll change that.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libevdev/libevdev.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
+index 338bebd..693da24 100644
+--- a/package/libevdev/libevdev.mk
++++ b/package/libevdev/libevdev.mk
+@@ -12,6 +12,11 @@ LIBEVDEV_LICENSE_FILES = COPYING
+ # Uses PKG_CHECK_MODULES() in configure.ac
+ LIBEVDEV_DEPENDENCIES = host-pkgconf
+ 
++# Needs Python to generate a header file
++# We can't rely on the system pPython, since it may be too old
++# (missing argparse in python 2.6)
++LIBEVDEV_DEPENDENCIES += host-python
++
+ # package source code coming from git, so it doesn't have generated
+ # configure and Makefile.in
+ LIBEVDEV_AUTORECONF = YES
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.1.2
