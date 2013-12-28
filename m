@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 Dec 2013 16:32:14 +0100
-Subject: [Buildroot] [PATCH 3/4] Makefile: expose 'graph-depends' to
- generate a graph of the dependency tree
-In-Reply-To: <0fad080c135d79abdbe042514e30b393c25f5a77.1388185918.git.yann.morin.1998@free.fr>
+Date: Sat, 28 Dec 2013 16:50:51 +0100
+Subject: [Buildroot] [PATCH 4/4] graphs: support generating png graphs
+In-Reply-To: <22105197db33dde1f1cee82511ce9c6d00d86853.1388185918.git.yann.morin.1998@free.fr>
 References: <cover.1388185918.git.yann.morin.1998@free.fr>
- <0fad080c135d79abdbe042514e30b393c25f5a77.1388185918.git.yann.morin.1998@free.fr>
-Message-ID: <20131228163214.53624aab@skate>
+ <22105197db33dde1f1cee82511ce9c6d00d86853.1388185918.git.yann.morin.1998@free.fr>
+Message-ID: <20131228165051.5a8ed1e2@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,22 +13,21 @@ To: buildroot@busybox.net
 
 Dear Yann E. MORIN,
 
-On Sat, 28 Dec 2013 00:12:51 +0100, Yann E. MORIN wrote:
+On Sat, 28 Dec 2013 00:12:52 +0100, Yann E. MORIN wrote:
 
->  all: menuconfig
-> @@ -857,6 +869,7 @@ endif
->  	@echo '  manual-text            - build manual in text'
->  	@echo '  manual-epub            - build manual in ePub'
->  	@echo '  graph-build            - generate graphs of the build times'
-> +	@echo '  graph-depends          - generate graph of the dependency tree'
+>  	@echo '  make V=0|1             - 0 => quiet build (default), 1 => verbose build'
+>  	@echo '  make O=dir             - Locate all output files in "dir", including .config'
+>  	@echo '  make GRAPH_ALT=1       - use alternate color-scheme for build-time graphs'
+> +	@echo '  make GRAPH_OUT=pdf|png - generate either pdf (default) or png graphs'
 
-You could also describe:
+I'm a little bit concerned about these variables. They are specific to
+the graph-build-time thing, but still they clutter the 'make help'
+output, just for some very special functionality.
 
-	@echo '  <package>-graph-depends'
+Since it's quite specific, shouldn't we just document them in the
+manual instead, and keep only the graph-build target in make help?
 
-near the help text for <package>-rebuild and <package>-reconfigure
-
-Or at least mention it somewhere in the manual.
+Thanks!
 
 Thomas
 -- 
