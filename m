@@ -1,40 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 Dec 2013 15:58:32 +0100
-Subject: [Buildroot] [PATCH] package/libevdev: add dependency on
- host-python
-In-Reply-To: <1388233672-16776-1-git-send-email-yann.morin.1998@free.fr>
-References: <1388233672-16776-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20131228155832.2414bd0d@skate>
+Date: Sat, 28 Dec 2013 15:58:56 +0100
+Subject: [Buildroot] [git commit] logrotate: bump to version 3.8.7
+Message-ID: <20131228145904.32A889C221@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+commit: http://git.buildroot.net/buildroot/commit/?id=aa83bc88ba4c738daaf944c1b2a7d00001d05a67
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 28 Dec 2013 13:27:52 +0100, Yann E. MORIN wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> libevdev needs python to generate a header file. We can't rely on the
-> 1system pPython, since it may be too old (missing argparse in python
-> 2.6).
-> 
-> Fixes:
->     http://autobuild.buildroot.net/results/1f5c0689ae129ae5fa30f31a4f47ccbd7705ff00/
->     http://autobuild.buildroot.net/results/1729043d9c977a59a4fdd7ccd3d16cfc8aef7678/
->     http://autobuild.buildroot.net/results/3ab080e96576e0012fea853009811247338e665e/
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/libevdev/libevdev.mk | 5 +++++
->  1 file changed, 5 insertions(+)
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/logrotate/logrotate.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Thanks, applied.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/logrotate/logrotate.mk b/package/logrotate/logrotate.mk
+index 516fe8b..a41e074 100644
+--- a/package/logrotate/logrotate.mk
++++ b/package/logrotate/logrotate.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LOGROTATE_VERSION = 3.8.6
++LOGROTATE_VERSION = 3.8.7
+ LOGROTATE_SITE = https://www.fedorahosted.org/releases/l/o/logrotate/
+ LOGROTATE_LICENSE = GPLv2+
+ LOGROTATE_LICENSE_FILES = COPYING
