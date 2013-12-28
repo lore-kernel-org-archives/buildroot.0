@@ -1,100 +1,49 @@
-From: Lucas De Marchi <lucas.de.marchi@gmail.com>
-Date: Sat, 28 Dec 2013 11:00:39 -0200
-Subject: [Buildroot] [PATCH] fswebcam: Add package
-Message-ID: <1388235639-3008-1-git-send-email-lucas.de.marchi@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 28 Dec 2013 15:56:32 +0100
+Subject: [Buildroot] [PATCH 1/9] fs/iso9660: put the Buildroot boot entry
+	first in Grub menu.lst
+In-Reply-To: <1388242600-2580-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1388242600-2580-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1388242600-2580-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Lucas De Marchi <lucas.de.marchi@gmail.com>
----
- package/Config.in            |  1 +
- package/fswebcam/Config.in   | 15 +++++++++++++++
- package/fswebcam/fswebcam.mk | 40 ++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 56 insertions(+)
- create mode 100644 package/fswebcam/Config.in
- create mode 100644 package/fswebcam/fswebcam.mk
+The ISO9660-specific Grub menu.lst contains two entries: one entry to
+chainload the bootloader available in the first hard drive, and
+another entry to boot the Buildroot system.
 
-diff --git a/package/Config.in b/package/Config.in
-index c4b6ec1..d1bc654 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -167,6 +167,7 @@ comment "Graphic applications"
- source "package/gnuplot/Config.in"
- source "package/jhead/Config.in"
- source "package/rrdtool/Config.in"
-+source "package/fswebcam/Config.in"
+However, it defaults to booting the first entry, i.e chainloading
+what's on the first hard drive. For a Buildroot generated system, this
+is quite odd: we're not even booting the system built by Buildroot.
+
+So, switch the two entries, and put the Buildroot boot entry first.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ fs/iso9660/menu.lst | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/fs/iso9660/menu.lst b/fs/iso9660/menu.lst
+index d78caeb..ed7836a 100644
+--- a/fs/iso9660/menu.lst
++++ b/fs/iso9660/menu.lst
+@@ -2,10 +2,10 @@ default		0
+ timeout		10
+ color cyan/blue white/blue
  
- comment "Graphic libraries"
- source "package/cegui06/Config.in"
-diff --git a/package/fswebcam/Config.in b/package/fswebcam/Config.in
-new file mode 100644
-index 0000000..d085dd6
---- /dev/null
-+++ b/package/fswebcam/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_FSWEBCAM
-+	bool "fswebcam"
-+	select BR2_PACKAGE_GD
-+	select BR2_PACKAGE_FREETYPE
-+	select BR2_PACKAGE_JPEG
-+	select BR2_PACKAGE_LIBPNG
-+	help
-+	  fswebcam is a neat and simple webcam app. It captures images from a
-+	  V4L1/V4L2 compatible device or file, averages them to reduce noise
-+	  and draws a caption using the GD Graphics Library which also handles
-+	  compressing the image to PNG or JPEG. The resulting image is saved to
-+	  a file or sent to stdio where it can be piped to something like
-+	  ncftpput or scp.
++title		Buildroot ISO9660 image
++kernel		/kernel
++initrd		/initrd
 +
-+	  http://www.firestorm.cx/fswebcam/
-diff --git a/package/fswebcam/fswebcam.mk b/package/fswebcam/fswebcam.mk
-new file mode 100644
-index 0000000..865e915
---- /dev/null
-+++ b/package/fswebcam/fswebcam.mk
-@@ -0,0 +1,40 @@
-+################################################################################
-+#
-+# fswebcam
-+#
-+################################################################################
-+
-+FSWEBCAM_VERSION = 20110717
-+FSWEBCAM_SITE = http://www.firestorm.cx/fswebcam/files/
-+FSWEBCAM_LICENSE = GPLv2
-+FSWEBCAM_LICENSE_FILES = LICENSE
-+
-+FSWEBCAM_DEPENDENCIES += freetype \
-+			 jpeg \
-+			 libpng \
-+			 gd
-+
-+define FSWEBCAM_CONFIGURE_CMDS
-+	(cd $(@D); \
-+		./configure --prefix=/usr \
-+	)
-+endef
-+
-+define FSWEBCAM_BUILD_CMDS
-+	$(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS) -DHAVE_CONFIG_H" \
-+	LFLAGS="$(TARGET_LDFLAGS) $(FSWEBCAM_LDFLAGS)" -C $(@D)
-+endef
-+
-+define FSWEBCAM_INSTALL_TARGET_CMDS
-+	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
-+endef
-+
-+define FSWEBCAM_UNINSTALL_TARGET_CMDS
-+	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) uninstall
-+endef
-+
-+define FSWEBCAM_CLEAN_CMDS
-+	-$(MAKE) -C $(@D) clean
-+endef
-+
-+$(eval $(generic-package))
+ title		Hard Drive (first partition)
+ rootnoverify	(hd0)
+ chainloader	+1
+-
+-title		BuildRoot ISO9660 image
+-kernel		/kernel
+-initrd		/initrd
 -- 
-1.8.5.2
+1.8.3.2
