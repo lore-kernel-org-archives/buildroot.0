@@ -1,41 +1,25 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 28 Dec 2013 20:33:17 +0100
-Subject: [Buildroot] [PATCH 1/9] fs/iso9660: put the Buildroot boot
- entry first in Grub menu.lst
-In-Reply-To: <1388242600-2580-2-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1388242600-2580-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1388242600-2580-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20131228193317.GF3373@free.fr>
+From: zmau <zmau@netvision.net.il>
+Date: Sat, 28 Dec 2013 11:33:48 -0800 (PST)
+Subject: [Buildroot] Newbie question : Using crosstool-ng
+In-Reply-To: <1388051137964-58576.post@n4.nabble.com>
+References: <1388051137964-58576.post@n4.nabble.com>
+Message-ID: <1388259228809-58765.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Sorry for replying.
+The question did not came out on the mail. maybe it was a mistake.
 
-On 2013-12-28 15:56 +0100, Thomas Petazzoni spake thusly:
-> The ISO9660-specific Grub menu.lst contains two entries: one entry to
-> chainload the bootloader available in the first hard drive, and
-> another entry to boot the Buildroot system.
-> 
-> However, it defaults to booting the first entry, i.e chainloading
-> what's on the first hard drive. For a Buildroot generated system, this
-> is quite odd: we're not even booting the system built by Buildroot.
-> 
-> So, switch the two entries, and put the Buildroot boot entry first.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Is this the wrong place to ask ?
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+zmau
 
-Regards,
-Yann E. MORIN.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+
+
+--
+View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/Newbie-question-Using-crosstool-ng-tp58576p58765.html
+Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
