@@ -1,99 +1,102 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 Dec 2013 17:38:57 +0100
-Subject: [Buildroot] [PATCH 1/1] chdkptp CLI added
-In-Reply-To: <1387798250-2437-2-git-send-email-matthew.j.urry@gmail.com>
-References: <1387798250-2437-1-git-send-email-matthew.j.urry@gmail.com>
- <1387798250-2437-2-git-send-email-matthew.j.urry@gmail.com>
-Message-ID: <20131228173857.33b43f76@skate>
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+Date: Sat, 28 Dec 2013 15:06:37 -0200
+Subject: [Buildroot] [PATCH] fswebcam: Add package
+In-Reply-To: <20131228172428.0c240f8c@skate>
+References: <1388235639-3008-1-git-send-email-lucas.de.marchi@gmail.com>
+ <20131228172428.0c240f8c@skate>
+Message-ID: <CAKi4VA+X5rZsToR84jWkD4-y6VaFG0ueBrGnRh42ud0oMZ3f0g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Matthew Urry,
+Hi Thomas,
 
-Thanks for this contribution. Note that for a single patch, there is no
-real need to send a cover letter (i.e the mail title PATCH 0/1). The
-text of your cover letter could almost as is have been part of the
-commit log itself (with just "I have only enabled the command line
-interface and not the GUI." changed to something less personal like
-"The package only builds the command line interface and not the GUI").
+On Sat, Dec 28, 2013 at 2:24 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Lucas De Marchi,
+>
+> On Sat, 28 Dec 2013 11:00:39 -0200, Lucas De Marchi wrote:
+>> Signed-off-by: Lucas De Marchi <lucas.de.marchi@gmail.com>
+>> ---
+>>  package/Config.in            |  1 +
+>>  package/fswebcam/Config.in   | 15 +++++++++++++++
+>>  package/fswebcam/fswebcam.mk | 40 ++++++++++++++++++++++++++++++++++++++++
+>>  3 files changed, 56 insertions(+)
+>>  create mode 100644 package/fswebcam/Config.in
+>>  create mode 100644 package/fswebcam/fswebcam.mk
+>
+> Thanks applied. However, I've made a number of changes, see below.
+>
+>
+>> @@ -167,6 +167,7 @@ comment "Graphic applications"
+>>  source "package/gnuplot/Config.in"
+>>  source "package/jhead/Config.in"
+>>  source "package/rrdtool/Config.in"
+>> +source "package/fswebcam/Config.in"
+>
+> Packages should be sorted alphabetically.
+>
+>
+>> +       fswebcam is a neat and simple webcam app. It captures images from a
+>> +       V4L1/V4L2 compatible device or file, averages them to reduce noise
+>> +       and draws a caption using the GD Graphics Library which also handles
+>> +       compressing the image to PNG or JPEG. The resulting image is saved to
+>> +       a file or sent to stdio where it can be piped to something like
+>> +       ncftpput or scp.
+>
+> These lines were slightly too long, so I rewrap this help text.
+>
+>> +FSWEBCAM_VERSION = 20110717
+>> +FSWEBCAM_SITE = http://www.firestorm.cx/fswebcam/files/
+>> +FSWEBCAM_LICENSE = GPLv2
+>> +FSWEBCAM_LICENSE_FILES = LICENSE
+>> +
+>> +FSWEBCAM_DEPENDENCIES += freetype \
+>> +                      jpeg \
+>> +                      libpng \
+>> +                      gd
+>
+> I've used a single line.
+>
+>> +define FSWEBCAM_CONFIGURE_CMDS
+>> +     (cd $(@D); \
+>> +             ./configure --prefix=/usr \
+>> +     )
+>> +endef
+>
+> This was the major mistake of your package. Since fswebcam uses an
+> autoconf generated configure script, you should have used
+> autotools-package instead of generic-package. Here, you were calling
+> the configure script with the host compiler: on my machine, I did not
+> have the "gd" library installed in my distro, so the configure script
+> was failing. And anyway, running the configure script with the host
+> compiler and configuration is just plain wrong.
+>
+>> +define FSWEBCAM_BUILD_CMDS
+>> +     $(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS) -DHAVE_CONFIG_H" \
+>> +     LFLAGS="$(TARGET_LDFLAGS) $(FSWEBCAM_LDFLAGS)" -C $(@D)
+>> +endef
+>> +
+>> +define FSWEBCAM_INSTALL_TARGET_CMDS
+>> +     $(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
+>> +endef
+>
+> With autotools-package, both the configure, build and install target
+> steps are automatically handled by Buildroot.
+>
+>> +define FSWEBCAM_UNINSTALL_TARGET_CMDS
+>> +     $(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) uninstall
+>> +endef
+>> +
+>> +define FSWEBCAM_CLEAN_CMDS
+>> +     -$(MAKE) -C $(@D) clean
+>> +endef
+>
+> See two are no longer needed in Buildroot, we removed them from all
+> packages.
 
-Some more comments below.
+Thanks for fixing this up.
 
-On Mon, 23 Dec 2013 11:30:50 +0000, Matthew Urry wrote:
-
-> diff --git a/package/chdkptp/chdkptp-02-create_sh_script_to_launch_chdkptp.patch b/package/chdkptp/chdkptp-02-create_sh_script_to_launch_chdkptp.patch
-> new file mode 100644
-> index 0000000..aadd6c7
-> --- /dev/null
-> +++ b/package/chdkptp/chdkptp-02-create_sh_script_to_launch_chdkptp.patch
-
-There is no description for this patch. And it seems to only be
-renaming a file. Why is this needed? Why don't you do it in the
-package .mk file instead?
-
-> --- /dev/null
-> +++ b/package/chdkptp/chdkptp.mk
-> @@ -0,0 +1,27 @@
-> +################################################################################
-> +#
-> +# chdkptp
-> +#
-> +################################################################################
-> +
-> +CHDKPTP_VERSION = 461
-> +CHDKPTP_SITE = http://subversion.assembla.com/svn/chdkptp/trunk
-> +CHDKPTP_SITE_METHOD = svn
-> +CHDKPTP_DEPENDENCIES = libusb-compat lua
-
-Is 'lua' really a build dependency? Or is it only a runtime dependency?
-
-> +CHDKPTP_LICENSE = GPLv2
-
-License seems to be GPLv2+.
-
-> +define CHDKPTP_BUILD_CMDS
-> +	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) 
-
-We generally like to also pass CFLAGS and LDFLAGS here by doing:
-
-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-
-though that might require changing a bit the project Makefile to use
-constructs like:
-
-override CFLAGS += ...
-override LDFLAGS += ...
-
-Note that doing that would also allow to avoid the -lm patch altogether.
-
-> +endef
-> +
-> +define CHDKPTP_INSTALL_TARGET_CMDS
-> +        $(INSTALL) -d -m 0755 $(TARGET_DIR)/usr/share/chdkptp
-> +        $(INSTALL) -d -m 0755 $(TARGET_DIR)/usr/share/chdkptp/lua
-> +        $(INSTALL) -d -m 0755 $(TARGET_DIR)/usr/share/chdkptp/lua/extras
-
-I believe that last one is sufficient: $(INSTALL) automatically creates
-intermediate directories if needed.
-
-> +    	$(INSTALL) -m 0755 $(@D)/chdkptp $(TARGET_DIR)/usr/share/chdkptp
-> +        $(INSTALL) -m 0755 $(@D)/lua/*.lua $(TARGET_DIR)/usr/share/chdkptp/lua
-> +        $(INSTALL) -m 0755 $(@D)/lua/extras/*.lua $(TARGET_DIR)/usr/share/chdkptp/lua/extras
-> +        $(INSTALL) -m 0755 $(@D)/chdkptp.sh $(TARGET_DIR)/usr/bin/chdkptp
-
-I haven't looked, but why is usr/bin/chdkptp a shell script, and the
-real binary installed in /usr/share/chdkptp ? Adding a comment above
-the install target commands macro explaining why it is needed would be
-useful.
-
-Could you take into account these comments and submit an updated
-version? Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Lucas De Marchi
