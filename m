@@ -1,33 +1,54 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Mon, 30 Dec 2013 19:02:49 +0100
-Subject: [Buildroot] [PATCH 1/1] taglib: depend on zlib if appropriate
-Message-ID: <BLU0-SMTP5968381DB69C5BB04A3EA3D9CE0@phx.gbl>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 29 Dec 2013 18:58:26 +0100
+Subject: [Buildroot] [git commit] linux: enable initrd/initramfs support
+	when cpio rootfs is chosen
+Message-ID: <20131230230531.757E09C2A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: http://git.buildroot.net/buildroot/commit/?id=ed23c92b6267ac1ae4c118ecc6196fe019541141
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
+When one enables the generation of a cpio archive of the root
+filesystem, the most likely usage is as an initramfs for the
+kernel. This commit ensures that the kernel has initramfs support when
+the rootfs cpio image format is chosen.
+
+This will for example ensure that if the user selects the ISO9660
+filesystem format (which uses a cpio initramfs), the kernel will have
+proper support to load and use the initramfs.
+
+It is worth mentionning that when BR2_TARGET_ROOTFS_INITRAMFS is
+enabled, then BR2_TARGET_ROOTFS_CPIO is always enabled. That's why we
+move the enabling of CONFIG_BLK_DEV_INITRD from the initramfs case to
+the cpio case.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/taglib/taglib.mk |    4 ++++
- 1 file changed, 4 insertions(+)
+ linux/linux.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/taglib/taglib.mk b/package/taglib/taglib.mk
-index 75e8e67..c04c88b 100644
---- a/package/taglib/taglib.mk
-+++ b/package/taglib/taglib.mk
-@@ -10,6 +10,10 @@ TAGLIB_INSTALL_STAGING = YES
- TAGLIB_LICENSE = LGPLv2.1 MPL
- TAGLIB_LICENSE_FILES = COPYING.LGPL COPYING.MPL
- 
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+TAGLIB_DEPENDENCIES += zlib
-+endif
-+
- ifeq ($(BR2_PACKAGE_TAGLIB_ASF),y)
- TAGLIB_CONF_OPT += -DWITH_ASF=ON
- endif
--- 
-1.7.9.5
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 5af167d..fa8aa0c 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -169,13 +169,14 @@ define LINUX_CONFIGURE_CMDS
+ 	rm $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
+ 	$(if $(BR2_arm)$(BR2_armeb),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI,$(@D)/.config))
++	$(if $(BR2_TARGET_ROOTFS_CPIO),
++		$(call KCONFIG_ENABLE_OPT,CONFIG_BLK_DEV_INITRD,$(@D)/.config))
+ 	# As the kernel gets compiled before root filesystems are
+ 	# built, we create a fake cpio file. It'll be
+ 	# replaced later by the real cpio archive, and the kernel will be
+ 	# rebuilt using the linux26-rebuild-with-initramfs target.
+ 	$(if $(BR2_TARGET_ROOTFS_INITRAMFS),
+ 		touch $(BINARIES_DIR)/rootfs.cpio
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_BLK_DEV_INITRD,$(@D)/.config)
+ 		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_SOURCE,\"$(BINARIES_DIR)/rootfs.cpio\",$(@D)/.config)
+ 		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_UID,0,$(@D)/.config)
+ 		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_GID,0,$(@D)/.config))
