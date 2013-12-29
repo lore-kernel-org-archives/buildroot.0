@@ -1,32 +1,44 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 29 Dec 2013 14:26:43 +0200
-Subject: [Buildroot] Analysis of build failures, december 26th
-In-Reply-To: <20131227103511.2c218d17@skate>
-References: <20131227073009.1283F101A83@stock.ovh.net>
- <20131227103511.2c218d17@skate>
-Message-ID: <20131229122643.GG8137@sapphire.tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 29 Dec 2013 13:33:46 +0100
+Subject: [Buildroot] [PATCH] uclibc: add a special Xtensa version
+In-Reply-To: <9b77c89fe5b99a3303c667afbebe857f1f8be0b0.1388316386.git.baruch@tkos.co.il>
+References: <9b77c89fe5b99a3303c667afbebe857f1f8be0b0.1388316386.git.baruch@tkos.co.il>
+Message-ID: <20131229133346.78e4137b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Dear Baruch Siach,
 
-On Fri, Dec 27, 2013 at 10:35:11AM +0100, Thomas Petazzoni wrote:
-> >     xtensa |               gstreamer1-1.2.1 | NOK | 
-> >     http://autobuild.buildroot.net/results/1fb5bde77ea84f13fe8db7dedda5b8a29671b939/
+On Sun, 29 Dec 2013 13:26:26 +0200, Baruch Siach wrote:
+> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > 
-> checking if unaligned memory access works correctly... configure: error: in `/home/test/test/2/output/build/gstreamer1-1.2.1':
-> configure: error: cannot run test program while cross compiling
+> Currently, the Xtensa architecture uses the "snapshot" version of
+> uClibc. This means that the build is not reproducible, since it will
+> pick whatever latest version of uClibc is available at the moment of
+> the build.
 > 
-> Baruch, can you have a look into this? Thanks!
+> This commit replaces that by adding a special Xtensa version, which
+> points to a well-known Git commit. This is something we should
+> hopefully be able to remove once the uClibc people realize that doing
+> a 0.9.34 release would be useful.
+> 
+> Should probably fix:
+> 
+>   http://autobuild.buildroot.org/results/5d6/5d6072a038acf894d832704e36c1d43f0254abf5/build-end.log
+> 
+> at least I wasn't able to reproduce the build problem.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> [baruch: use a more recent uClibc version]
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-I've just posted a patch.
+Applied, thanks!
 
-baruch
-
+Thomas
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
