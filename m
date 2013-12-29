@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 29 Dec 2013 18:50:52 +0100
-Subject: [Buildroot] [PATCHv2 3/4] grub: align splashscreen handling
- with iso9660 code
-In-Reply-To: <1388338428-19833-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 29 Dec 2013 18:44:51 +0100
+Subject: [Buildroot] [PATCHv2 1/4] linux: enable initrd/initramfs
+ support when cpio rootfs is chosen
+In-Reply-To: <1388338428-19833-2-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1388338428-19833-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1388338428-19833-4-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20131229175052.GM3567@free.fr>
+ <1388338428-19833-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20131229174451.GJ3567@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,31 +15,23 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2013-12-29 18:33 +0100, Thomas Petazzoni spake thusly:
-> This commit aligns the Grub handling of the splash screen with what is
-> done in the ISO9660 code.
+> When one enables the generation of a cpio archive of the root
+> filesystem, the most likely usage is as an initramfs for the
+> kernel. This commit ensures that the kernel has initramfs support when
+> the rootfs cpio image format is chosen.
+> 
+> This will for example ensure that if the user selects the ISO9660
+> filesystem format (which uses a cpio initramfs), the kernel will have
+> proper support to load and use the initramfs.
+> 
+> It is worth mentionning that when BR2_TARGET_ROOTFS_INITRAMFS is
+> enabled, then BR2_TARGET_ROOTFS_CPIO is always enabled. That's why we
+> move the enabling of CONFIG_BLK_DEV_INITRD from the initramfs case to
+> the cpio case.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-But see below...
-
-> diff --git a/boot/grub/grub.mk b/boot/grub/grub.mk
-> index 3be4a74..d22df88 100644
-> --- a/boot/grub/grub.mk
-> +++ b/boot/grub/grub.mk
-> @@ -82,7 +82,10 @@ GRUB_CONF_OPT = \
->  ifeq ($(BR2_TARGET_GRUB_SPLASH),y)
->  define GRUB_INSTALL_SPLASH
->  	cp boot/grub/splash.xpm.gz $(TARGET_DIR)/boot/grub/
-> -	$(SED) 's/^#splashimage/splashimage/' $(TARGET_DIR)/boot/grub/menu.lst
-> +endef
-> +else
-> +define GRUB_INSTALL_SPLASH
-> +	$(SED) '/^splashimage/d' $(TARGET_DIR)/boot/grub/menu.lst
-
-Here you already use '/^splashimage/d' so it's not really at-par with
-the code in iso9660. ;-)
 
 Regards,
 Yann E. MORIN.
