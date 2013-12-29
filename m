@@ -1,37 +1,82 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Dec 2013 13:33:29 +0100
-Subject: [Buildroot] [git commit] gstreamer1: fix xtensa configure
-Message-ID: <20131229123401.777D29C211@busybox.osuosl.org>
+From: Mischa Jonker <Mischa.Jonker@synopsys.com>
+Date: Sun, 29 Dec 2013 12:58:53 +0000
+Subject: [Buildroot] Analysis of build failures, december 26th
+In-Reply-To: <20131227103511.2c218d17@skate>
+References: <20131227073009.1283F101A83@stock.ovh.net>
+ <20131227103511.2c218d17@skate>
+Message-ID: <E6BF041E97966E4DB955F0DF883AD2D685F39E91@de02wembxa.internal.synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=183b10817262121317b030e96d34d193622109c9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
 
-Disable unaligned access to avoid configure run test.
+> >        arc |               e2fsprogs-1.42.8 | NOK |
+> http://autobuild.buildroot.net/results/05493d9d27e18e1d17ae7e6feec978ec50a09e
+> 31/
+> 
+> Seems to be a uClibc issue on ARC:
+> 
+> e4defrag.c:203:12: error: conflicting types for 'posix_fadvise'
+> 
+> Mischa, can you have a look?
+> 
+OK, I will have a look. 
 
-Fixes
-http://autobuild.buildroot.net/results/1fb/1fb5bde77ea84f13fe8db7dedda5b8a29671b939/.
+> 
+> >        arc |                   iozone-3_414 | NOK |
+> http://autobuild.buildroot.net/results/f23f3fc5ece6ce19fb5a0fb0748d4d5db9975d
+> f7/
+> 
+> The package uses pthread_setaffinity_np(), which is only available in NPTL.
+> Options:
+> 
+>  */ change iozone to not use pthread_setaffinity_np()
+> 
+>  */ have an additional kconfig knob that tells whether the thread
+>     implementation is NPTL or not and disallow iozone when !NPTL
+>
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gstreamer1/gstreamer1/gstreamer1.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+I believe it has been suggested before to introduce HAS_PTHREADS_NATIVE and let it depend on this.
+http://patchwork.ozlabs.org/patch/258714/
+http://patchwork.ozlabs.org/patch/290224/
 
-diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
-index 82b15bc..40102b2 100644
---- a/package/gstreamer1/gstreamer1/gstreamer1.mk
-+++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
-@@ -14,7 +14,7 @@ GSTREAMER1_LICENSE = LGPLv2+ LGPLv2.1+
- # Checking if unaligned memory access works correctly cannot be done when cross
- # compiling. For the following architectures there is no information available
- # in the configure script.
--ifeq ($(BR2_avr32),y)
-+ifeq ($(BR2_avr32)$(BR2_xtensa),y)
- GSTREAMER1_CONF_ENV = as_cv_unaligned_access=no
- endif
- ifeq ($(BR2_aarch64),y)
+Back then you were reworking internal toolchain build infrastructure; do you want me to make a new patch that introduces this (and also adds an option for external toolchain where applicable?)
+
+> >        arc |                   libogg-1.3.0 | NOK |
+> http://autobuild.buildroot.net/results/d3a2a7c07aa1afc7e5f8582ac33199ee76d5c7
+> 9f/
+> >        arc |                   libogg-1.3.0 | NOK |
+> http://autobuild.buildroot.net/results/8f9343313f4ac9c64d2f8c1f637d3dc0525b8c
+> cb/
+> 
+> ARC compiler problem:
+> 
+> {standard input}: Assembler messages:
+> {standard input}:886: Error: operand out of range (-130 is not between -128
+> and 127)
+> 
+> Mischa, what action should we take?
+>
+> >        arc |                  ffmpeg-0.8.15 | NOK |
+> http://autobuild.buildroot.net/results/e3f7caf853d61c2f06969dbb780c2d7e5ad116
+> a5/
+> 
+> ARC gcc compiler error:
+> 
+> libavcodec/snow.c:921:1: internal compiler error: in arc_ifcvt, at
+> config/arc/arc.c:8530
+> 
+> Mischa, should I mark ffmpeg as !BR2_arc for the moment, until the compiler
+> issues are resolved?
+
+1st issue is about length of some instructions being counted incorrectly, which makes compiler select short branch instructions where they don't fit,
+2nd issue is about if-conversion trying to predicate instructions that cannot be predicated.
+
+I have been filing internal bug reports for these and I believe both issues are fixed. We just need to update git commit ID for gcc, binutils, etc.
+Let me discuss which exact release should be used and get back to you (i.e. I'll submit a patch with version bump of the tools). 
+Everyone is out for the holiday season now, so it may take another week or so.
+
+Mischa
