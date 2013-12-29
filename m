@@ -1,45 +1,64 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 29 Dec 2013 18:44:51 +0100
-Subject: [Buildroot] [PATCHv2 1/4] linux: enable initrd/initramfs
- support when cpio rootfs is chosen
-In-Reply-To: <1388338428-19833-2-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1388338428-19833-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1388338428-19833-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20131229174451.GJ3567@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 29 Dec 2013 18:53:13 +0100
+Subject: [Buildroot] [PATCH 4/6] toolchain-external: update Linaro
+ AArch64 toolchains
+In-Reply-To: <CAAXf6LX9ZMaBppPWkRG1me5h5EZ9umV-8MGKWVyN+EbAW4_hjg@mail.gmail.com>
+References: <1388143942-1187-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1388143942-1187-5-git-send-email-thomas.petazzoni@free-electrons.com>
+ <CAAXf6LX9ZMaBppPWkRG1me5h5EZ9umV-8MGKWVyN+EbAW4_hjg@mail.gmail.com>
+Message-ID: <20131229185313.43b17aaa@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Dear Thomas De Schampheleire,
 
-On 2013-12-29 18:33 +0100, Thomas Petazzoni spake thusly:
-> When one enables the generation of a cpio archive of the root
-> filesystem, the most likely usage is as an initramfs for the
-> kernel. This commit ensures that the kernel has initramfs support when
-> the rootfs cpio image format is chosen.
+On Sun, 29 Dec 2013 18:40:50 +0100, Thomas De Schampheleire wrote:
+
+> On Fri, Dec 27, 2013 at 12:32 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+> > Add Linaro AArch64 2013.10 and Linaro AArch64 2013.11, and remove
+> > Linaro AArch64 2013.07 and Linaro AArch64 2013.08.
+> >
+> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > 
-> This will for example ensure that if the user selects the ISO9660
-> filesystem format (which uses a cpio initramfs), the kernel will have
-> proper support to load and use the initramfs.
+> A while back we discussed the desirability of having so many
+> subsequent versions of the same toolchain type (in this case Linaro).
+> IIRC (but I did not cross-check with the actual discussion yet) the
+> conclusion was that it'd be good to use the gcc version as milestone,
+> and keep e.g. a 4.4, 4.6, 4.8 gcc based Linaro toolchain, but not keep
+> multiple 4.8-based versions.
 > 
-> It is worth mentionning that when BR2_TARGET_ROOTFS_INITRAMFS is
-> enabled, then BR2_TARGET_ROOTFS_CPIO is always enabled. That's why we
-> move the enabling of CONFIG_BLK_DEV_INITRD from the initramfs case to
-> the cpio case.
+> Until now this has not yet been implemented. We could do this in a
+> one-shot approach, or gradually as new toolchains are added. If we opt
+> for the second option, your current patchset could be revised to align
+> with the new strategy.
 > 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> What do you think about that?
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+I continue to think that it doesn't work, as I already expressed
+originally. Using the gcc version as a way of keeping different
+generations of toolchain is, in my opinion, broken: in the present
+update of the ARM Linaro toolchain, we continue to have only gcc 4.8
+based toolchains, but the newer ones are based on eglibc 2.18, while the
+previous ones are based on eglibc 2.17. This is a fairly significant
+difference, but if we use only the gcc version as the way of
+distinguishing generations of toolchain, then we would get rid of gcc
+4.8/eglibc 2.17 toolchains today.
 
-Regards,
-Yann E. MORIN.
+Why would we keep a very old gcc 4.7.x toolchain, but immediately get
+rid of a more recent gcc 4.8 toolchain that is based on eglibc 2.17 ?
 
+As we never managed to come up with a reasonable model to handle this,
+I believe we should in the mean time continue to update the toolchains
+as we used to do in the past.
+
+Thanks!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
