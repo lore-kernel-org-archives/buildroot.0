@@ -1,51 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 29 Dec 2013 18:43:05 +0100
-Subject: [Buildroot] [PATCH 1/1] lockdev: Fix TARGET_DIR link
-In-Reply-To: <BLU0-SMTP1038BCF760A4FE2F4B22DA2D9CF0@phx.gbl>
-References: <BLU0-SMTP1038BCF760A4FE2F4B22DA2D9CF0@phx.gbl>
-Message-ID: <20131229174305.GI3567@free.fr>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 29 Dec 2013 18:40:50 +0100
+Subject: [Buildroot] [PATCH 4/6] toolchain-external: update Linaro
+	AArch64 toolchains
+In-Reply-To: <1388143942-1187-5-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1388143942-1187-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1388143942-1187-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CAAXf6LX9ZMaBppPWkRG1me5h5EZ9umV-8MGKWVyN+EbAW4_hjg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Hi Thomas,
 
-On 2013-12-29 18:31 +0100, Bernd Kuhls spake thusly:
-> Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
+On Fri, Dec 27, 2013 at 12:32 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Add Linaro AArch64 2013.10 and Linaro AArch64 2013.11, and remove
+> Linaro AArch64 2013.07 and Linaro AArch64 2013.08.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-> ---
->  package/lockdev/lockdev.mk |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/lockdev/lockdev.mk b/package/lockdev/lockdev.mk
-> index 004b637..0c10341 100644
-> --- a/package/lockdev/lockdev.mk
-> +++ b/package/lockdev/lockdev.mk
-> @@ -34,7 +34,7 @@ endef
->  
->  define LOCKDEV_INSTALL_TARGET_CMDS
->  	$(MAKE1) basedir=$(TARGET_DIR)/usr -C $(@D) install_run
-> -	ln -sf liblockdev.$(LOCKDEV_VERSION).so $(STAGING_DIR)/usr/lib/liblockdev.so.1
-> +	ln -sf liblockdev.$(LOCKDEV_VERSION).so $(TARGET_DIR)/usr/lib/liblockdev.so.1
+A while back we discussed the desirability of having so many
+subsequent versions of the same toolchain type (in this case Linaro).
+IIRC (but I did not cross-check with the actual discussion yet) the
+conclusion was that it'd be good to use the gcc version as milestone,
+and keep e.g. a 4.4, 4.6, 4.8 gcc based Linaro toolchain, but not keep
+multiple 4.8-based versions.
 
-The .so symlink is not required at runtime, so we do not even have to
-install it in the first place. All we need is a library which filename
-is the same as its SONAME.
+Until now this has not yet been implemented. We could do this in a
+one-shot approach, or gradually as new toolchains are added. If we opt
+for the second option, your current patchset could be revised to align
+with the new strategy.
 
-So, if the SONAME is liblockdev.so.1, just rename the library to .so.1.
-If the SONAME is liblockdev.so, just rename the library to .so. If the
-library is already installed with the correct filename, no need to
-rename it.
+What do you think about that?
 
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Best regards,
+Thomas
