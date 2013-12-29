@@ -1,53 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Dec 2013 18:57:50 +0100
-Subject: [Buildroot] [PATCH 1/1] lockdev: Fix TARGET_DIR link
-In-Reply-To: <20131229174305.GI3567@free.fr>
-References: <BLU0-SMTP1038BCF760A4FE2F4B22DA2D9CF0@phx.gbl>
- <20131229174305.GI3567@free.fr>
-Message-ID: <20131229185750.074b41d9@skate>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sun, 29 Dec 2013 22:05:23 +0100
+Subject: [Buildroot] [PATCH 1/1] xenomai: fix build failure when HAVE_OPEN64
+	is undefined
+Message-ID: <1388351123-16936-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+fixes: http://autobuild.buildroot.org/results/d59/d590be34637a4043c929ce615f9db504484be435/build-end.log
 
-On Sun, 29 Dec 2013 18:43:05 +0100, Yann E. MORIN wrote:
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+ ...uild-failure-when-HAVE_OPEN64-is-undefine.patch | 30 ++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 package/xenomai/xenomai-0002-posix-fix-build-failure-when-HAVE_OPEN64-is-undefine.patch
 
-> >  define LOCKDEV_INSTALL_TARGET_CMDS
-> >  	$(MAKE1) basedir=$(TARGET_DIR)/usr -C $(@D) install_run
-> > -	ln -sf liblockdev.$(LOCKDEV_VERSION).so $(STAGING_DIR)/usr/lib/liblockdev.so.1
-> > +	ln -sf liblockdev.$(LOCKDEV_VERSION).so $(TARGET_DIR)/usr/lib/liblockdev.so.1
-> 
-> The .so symlink is not required at runtime, so we do not even have to
-> install it in the first place. All we need is a library which filename
-> is the same as its SONAME.
-> 
-> So, if the SONAME is liblockdev.so.1, just rename the library to .so.1.
-> If the SONAME is liblockdev.so, just rename the library to .so. If the
-> library is already installed with the correct filename, no need to
-> rename it.
-
-I've applied the patch, because nowhere in Buildroot we rename
-libraries so that they have as filename their SONAME. Therefore, doing
-this specifically for liblockdev would be inconsistent with what we do
-all over Buildroot.
-
-The SONAME of this library is indeed liblockdev.so.1, so this symbolic
-link is needed.
-
-Note that liblockdev.$(LOCKDEV_VERSION).so is *NOT* a symbolic link. It
-is the library itself. liblockdev is a bit non-standard: instead of
-having its real library binary named liblockdev.so.<version>, it is
-named liblockdev.<version>.so. And the liblockdev.so.1 symbolic link is
-needed to ensure that there is something matching the SONAME of the
-library, as explained above.
-
-Best regards,
-
-Thomas
+diff --git a/package/xenomai/xenomai-0002-posix-fix-build-failure-when-HAVE_OPEN64-is-undefine.patch b/package/xenomai/xenomai-0002-posix-fix-build-failure-when-HAVE_OPEN64-is-undefine.patch
+new file mode 100644
+index 0000000..ce43676
+--- /dev/null
++++ b/package/xenomai/xenomai-0002-posix-fix-build-failure-when-HAVE_OPEN64-is-undefine.patch
+@@ -0,0 +1,30 @@
++From 71345fe15f126ae3a596af309945d0af6edfbbbb Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@openwide.fr>
++Date: Sun, 29 Dec 2013 18:00:25 +0100
++Subject: [PATCH 1/1] posix: fix build failure when HAVE_OPEN64 is undefined.
++
++fixes: http://autobuild.buildroot.org/results/d59/d590be34637a4043c929ce615f9db504484be435/build-end.log
++
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++---
++ src/skins/posix/rtdm.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/src/skins/posix/rtdm.c b/src/skins/posix/rtdm.c
++index 5840c64..d6c87dc 100644
++--- a/src/skins/posix/rtdm.c
+++++ b/src/skins/posix/rtdm.c
++@@ -107,8 +107,9 @@ int __wrap_open64(const char *path, int oflag, ...)
++ 			errno = EMFILE;
++ 			ret = -1;
++ 		}
+++	}
++ #endif
++-	} else {
+++	else {
++ 		errno = -ret;
++ 		ret = -1;
++ 	}
++-- 
++1.8.1.4
++
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.1.4
