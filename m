@@ -1,64 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 29 Dec 2013 18:26:35 +0100
-Subject: [Buildroot] [PATCH 2/6] toolchain-external: add Sourcery MIPS
- 2013.11, remove Sourcery MIPS 2012.03
-In-Reply-To: <1388143942-1187-3-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1388143942-1187-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1388143942-1187-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20131229172635.GE3567@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 29 Dec 2013 18:26:54 +0100
+Subject: [Buildroot] [git commit] fs/iso9660: do not use an initrd in iso
+	image when using initramfs
+Message-ID: <20131229172704.972C39C280@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=cf63744d23044ee08ee1c65d4fef94b7e42b5a58
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2013-12-27 12:32 +0100, Thomas Petazzoni spake thusly:
-> This commit adds the support for the recently release Sourcery MIPS
-> 2013.11 toolchain (gcc 4.8, gdb 7.6, glibc 2.18, gdb 7.6), and
-> consequently removes the support for the Sourcery MIPS 2012.03
-> toolchain.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+When using initramfs built into the kernel, it is useless to put an
+initrd in the iso image.  This patch makes the image to only contain
+the kernel image, and also removes the initrd line from menu.lst
 
+Signed-off-by: Thierry Bultel <thierry.bultel@wanadoo.fr>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ fs/iso9660/iso9660.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-But see below...
-
-> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-> index 0607693..d6d1960 100644
-> --- a/toolchain/toolchain-external/Config.in
-> +++ b/toolchain/toolchain-external/Config.in
-[--SNIP--]
-> @@ -281,35 +281,35 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
->  	select BR2_HOSTARCH_NEEDS_IA32_LIBS
->  	help
->  	  Sourcery CodeBench toolchain for the MIPS architecture, from
-> -	  Mentor Graphics. It uses gcc 4.7.2, binutils 2.23.51, glibc
-> -	  2.16, uClibc 0.9.30 and gdb 7.4.50, kernel headers
-> -	  3.5.4. It has support for the following variants:
-> +	  Mentor Graphics. It uses gcc 4.7.3, binutils 2.23.52, glibc
-> +	  2.17, uClibc 0.9.30 and gdb 7.4.50, kernel headers
-> +	  3.8.2. It has support for the following variants:
->  	    - MIPS32 O32 big endian glibc
->  	      Select a MIPS generic core
->  	      Disable BR2_SOFT_FLOAT
->  	    - MIPS64 big endian glibc
-> -	      Select a MIPS generic core
-> +	      Select a MIPS64 generic core
-
-Looks like you're fixing help at the same time, too. Maybe jsut add a
-small sentence to the commit log:
-    Fix help texts about MIPS64 inconsistencies.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+index 979a0b2..56e87bb 100644
+--- a/fs/iso9660/iso9660.mk
++++ b/fs/iso9660/iso9660.mk
+@@ -17,7 +17,11 @@ $(BINARIES_DIR)/rootfs.iso9660: host-cdrkit host-fakeroot linux rootfs-cpio grub
+ 	cp $(GRUB_DIR)/stage2/stage2_eltorito $(ISO9660_TARGET_DIR)/boot/grub/
+ 	cp $(ISO9660_BOOT_MENU) $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
+ 	cp $(LINUX_IMAGE_PATH) $(ISO9660_TARGET_DIR)/kernel
++ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
++	$(SED) '/initrd/d'  $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
++else
+ 	cp $(BINARIES_DIR)/rootfs.cpio$(ROOTFS_CPIO_COMPRESS_EXT) $(ISO9660_TARGET_DIR)/initrd
++endif
+ 	# Use fakeroot to pretend all target binaries are owned by root
+ 	rm -f $(FAKEROOT_SCRIPT)
+ 	echo "chown -R 0:0 $(ISO9660_TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
