@@ -1,61 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Dec 2013 18:53:13 +0100
-Subject: [Buildroot] [PATCH 4/6] toolchain-external: update Linaro
- AArch64 toolchains
-In-Reply-To: <CAAXf6LX9ZMaBppPWkRG1me5h5EZ9umV-8MGKWVyN+EbAW4_hjg@mail.gmail.com>
-References: <1388143942-1187-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1388143942-1187-5-git-send-email-thomas.petazzoni@free-electrons.com>
- <CAAXf6LX9ZMaBppPWkRG1me5h5EZ9umV-8MGKWVyN+EbAW4_hjg@mail.gmail.com>
-Message-ID: <20131229185313.43b17aaa@skate>
+Date: Sun, 29 Dec 2013 18:57:50 +0100
+Subject: [Buildroot] [PATCH 1/1] lockdev: Fix TARGET_DIR link
+In-Reply-To: <20131229174305.GI3567@free.fr>
+References: <BLU0-SMTP1038BCF760A4FE2F4B22DA2D9CF0@phx.gbl>
+ <20131229174305.GI3567@free.fr>
+Message-ID: <20131229185750.074b41d9@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Dear Yann E. MORIN,
 
-On Sun, 29 Dec 2013 18:40:50 +0100, Thomas De Schampheleire wrote:
+On Sun, 29 Dec 2013 18:43:05 +0100, Yann E. MORIN wrote:
 
-> On Fri, Dec 27, 2013 at 12:32 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
-> > Add Linaro AArch64 2013.10 and Linaro AArch64 2013.11, and remove
-> > Linaro AArch64 2013.07 and Linaro AArch64 2013.08.
-> >
-> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> >  define LOCKDEV_INSTALL_TARGET_CMDS
+> >  	$(MAKE1) basedir=$(TARGET_DIR)/usr -C $(@D) install_run
+> > -	ln -sf liblockdev.$(LOCKDEV_VERSION).so $(STAGING_DIR)/usr/lib/liblockdev.so.1
+> > +	ln -sf liblockdev.$(LOCKDEV_VERSION).so $(TARGET_DIR)/usr/lib/liblockdev.so.1
 > 
-> A while back we discussed the desirability of having so many
-> subsequent versions of the same toolchain type (in this case Linaro).
-> IIRC (but I did not cross-check with the actual discussion yet) the
-> conclusion was that it'd be good to use the gcc version as milestone,
-> and keep e.g. a 4.4, 4.6, 4.8 gcc based Linaro toolchain, but not keep
-> multiple 4.8-based versions.
+> The .so symlink is not required at runtime, so we do not even have to
+> install it in the first place. All we need is a library which filename
+> is the same as its SONAME.
 > 
-> Until now this has not yet been implemented. We could do this in a
-> one-shot approach, or gradually as new toolchains are added. If we opt
-> for the second option, your current patchset could be revised to align
-> with the new strategy.
-> 
-> What do you think about that?
+> So, if the SONAME is liblockdev.so.1, just rename the library to .so.1.
+> If the SONAME is liblockdev.so, just rename the library to .so. If the
+> library is already installed with the correct filename, no need to
+> rename it.
 
-I continue to think that it doesn't work, as I already expressed
-originally. Using the gcc version as a way of keeping different
-generations of toolchain is, in my opinion, broken: in the present
-update of the ARM Linaro toolchain, we continue to have only gcc 4.8
-based toolchains, but the newer ones are based on eglibc 2.18, while the
-previous ones are based on eglibc 2.17. This is a fairly significant
-difference, but if we use only the gcc version as the way of
-distinguishing generations of toolchain, then we would get rid of gcc
-4.8/eglibc 2.17 toolchains today.
+I've applied the patch, because nowhere in Buildroot we rename
+libraries so that they have as filename their SONAME. Therefore, doing
+this specifically for liblockdev would be inconsistent with what we do
+all over Buildroot.
 
-Why would we keep a very old gcc 4.7.x toolchain, but immediately get
-rid of a more recent gcc 4.8 toolchain that is based on eglibc 2.17 ?
+The SONAME of this library is indeed liblockdev.so.1, so this symbolic
+link is needed.
 
-As we never managed to come up with a reasonable model to handle this,
-I believe we should in the mean time continue to update the toolchains
-as we used to do in the past.
+Note that liblockdev.$(LOCKDEV_VERSION).so is *NOT* a symbolic link. It
+is the library itself. liblockdev is a bit non-standard: instead of
+having its real library binary named liblockdev.so.<version>, it is
+named liblockdev.<version>.so. And the liblockdev.so.1 symbolic link is
+needed to ensure that there is something matching the SONAME of the
+library, as explained above.
 
-Thanks!
+Best regards,
 
 Thomas
 -- 
