@@ -1,74 +1,78 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Dec 2013 12:10:09 +0100
-Subject: [Buildroot] [git commit] xenomai: enable armv5tej support
-Message-ID: <20131229111620.741579C220@busybox.osuosl.org>
+Date: Sun, 29 Dec 2013 12:13:19 +0100
+Subject: [Buildroot] [git commit] Makefile: expose 'graph-depends' to
+	generate a graph of the dependency tree
+Message-ID: <20131229111620.90FC09C227@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d36da1b1b60aa58fb6d0413c02446ec7d1f913ad
+commit: http://git.buildroot.net/buildroot/commit/?id=0cfe3ab88c6e1410ca719801147b1ba566c86d0d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The br-arm-full-2013.11-rc2 toolchain is builded with arch=armv5te
-and tune=arm926ej-s, which is not recognized by xenomai.
+Generate the graph of the complete dependency tree by calling:
+    make graph-depends
 
-fixes: http://autobuild.buildroot.net/results/e3b/e3b534dafb6dd7d788b0c3629ccc0b25702790f0/build-end.log
+It's also possible to generate the graph-depends for a single package:
+    make PKG-graph-depends
 
-This patch has already been merged upstream:
+The graphs are generated in $(O)/graphs/
 
-http://git.xenomai.org/xenomai-2.6.git/commit/?id=ebc2779baa222db4a5936c3d3022803355585b8c
-
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../xenomai-0001-arm-enable-armv5tej-support.patch |   40 ++++++++++++++++++++
- 1 files changed, 40 insertions(+), 0 deletions(-)
+ Makefile               |    7 +++++++
+ package/pkg-generic.mk |    5 +++++
+ 2 files changed, 12 insertions(+), 0 deletions(-)
 
-diff --git a/package/xenomai/xenomai-0001-arm-enable-armv5tej-support.patch b/package/xenomai/xenomai-0001-arm-enable-armv5tej-support.patch
-new file mode 100644
-index 0000000..fdff0aa
---- /dev/null
-+++ b/package/xenomai/xenomai-0001-arm-enable-armv5tej-support.patch
-@@ -0,0 +1,40 @@
-+From ebc2779baa222db4a5936c3d3022803355585b8c Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@openwide.fr>
-+Date: Sat, 28 Dec 2013 13:31:14 +0100
-+Subject: [PATCH 1/1] arm: enable armv5tej support
+diff --git a/Makefile b/Makefile
+index 98ca798..8107865 100644
+--- a/Makefile
++++ b/Makefile
+@@ -642,6 +642,11 @@ graph-build: $(O)/build/build-time.log
+ 				   --output=$(O)/graphs/build.pie-$(t).pdf \
+ 				   $(if $(GRAPH_ALT),--alternate-colors)$(sep))
+ 
++graph-depends:
++	@$(INSTALL) -d $(O)/graphs
++	@./support/scripts/graph-depends \
++	|dot -Tpdf -o $(O)/graphs/$(@).pdf
 +
-+armv5tej are not detected in include/asm-arm/features.h
+ else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
+ 
+ all: menuconfig
+@@ -814,6 +819,7 @@ help:
+ 	@echo '  toolchain              - build toolchain'
+ 	@echo '  <package>-rebuild      - force recompile <package>'
+ 	@echo '  <package>-reconfigure  - force reconfigure <package>'
++	@echo '  <package>-graph-depends    - generate graph of the dependency tree for package'
+ 	@echo
+ 	@echo 'Configuration:'
+ 	@echo '  menuconfig             - interactive curses-based configurator'
+@@ -855,6 +861,7 @@ endif
+ 	@echo '  manual-text            - build manual in text'
+ 	@echo '  manual-epub            - build manual in ePub'
+ 	@echo '  graph-build            - generate graphs of the build times'
++	@echo '  graph-depends          - generate graph of the dependency tree'
+ 	@echo
+ 	@echo 'Miscellaneous:'
+ 	@echo '  source                 - download all sources needed for offline-build'
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 66034ba..8005ce9 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -468,6 +468,11 @@ endif
+ $(1)-show-depends:
+ 			@echo $$($(2)_DEPENDENCIES)
+ 
++$(1)-graph-depends:
++			@$(INSTALL) -d $(O)/graphs
++			@./support/scripts/graph-depends $(1) \
++			|dot -Tpdf -o $(O)/graphs/$$(@).pdf
 +
-+fixes: http://autobuild.buildroot.net/results/e3b/e3b534dafb6dd7d788b0c3629ccc0b25702790f0/build-end.log
-+
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+---
-+ include/asm-arm/features.h | 9 +++++----
-+ 1 file changed, 5 insertions(+), 4 deletions(-)
-+
-+diff --git a/include/asm-arm/features.h b/include/asm-arm/features.h
-+index b83ac2c..bb3ea92 100644
-+--- a/include/asm-arm/features.h
-++++ b/include/asm-arm/features.h
-+@@ -56,13 +56,14 @@
-+ #define __LINUX_ARM_ARCH__ 4
-+ #endif /* armv4 */
-+ 
-+-#if defined(__ARM_ARCH_5__) || defined(__ARM_ARCH_5T__) \
-+-	|| defined(__ARM_ARCH_5E__) || defined(__ARM_ARCH_5TE__)
-++#if defined(__ARM_ARCH_5__) || defined(__ARM_ARCH_5T__) || \
-++	defined(__ARM_ARCH_5E__) || defined(__ARM_ARCH_5TE__) || \
-++	defined(__ARM_ARCH_5TEJ__)
-+ #define __LINUX_ARM_ARCH__ 5
-+ #endif /* armv5 */
-+ 
-+-#if defined(__ARM_ARCH_6__) || defined(__ARM_ARCH_6K__) \
-+-	|| defined(__ARM_ARCH_6Z__) || defined(__ARM_ARCH_6ZK__)
-++#if defined(__ARM_ARCH_6__) || defined(__ARM_ARCH_6K__) || \
-++	defined(__ARM_ARCH_6Z__) || defined(__ARM_ARCH_6ZK__)
-+ #define __LINUX_ARM_ARCH__ 6
-+ #endif /* armv6 */
-+ 
-+-- 
-+1.8.1.4
-+
+ $(1)-dirclean:		$$($(2)_TARGET_DIRCLEAN)
+ 
+ $(1)-clean-for-rebuild:
