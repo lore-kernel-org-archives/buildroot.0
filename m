@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Dec 2013 13:33:46 +0100
-Subject: [Buildroot] [PATCH] uclibc: add a special Xtensa version
-In-Reply-To: <9b77c89fe5b99a3303c667afbebe857f1f8be0b0.1388316386.git.baruch@tkos.co.il>
-References: <9b77c89fe5b99a3303c667afbebe857f1f8be0b0.1388316386.git.baruch@tkos.co.il>
-Message-ID: <20131229133346.78e4137b@skate>
+Date: Sun, 29 Dec 2013 13:33:54 +0100
+Subject: [Buildroot] [PATCH] gstreamer1: fix xtensa configure
+In-Reply-To: <41082d0245c6e32e5aea85b4879057c4f2b47665.1388316655.git.baruch@tkos.co.il>
+References: <41082d0245c6e32e5aea85b4879057c4f2b47665.1388316655.git.baruch@tkos.co.il>
+Message-ID: <20131229133354.7703145f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,28 +12,16 @@ To: buildroot@busybox.net
 
 Dear Baruch Siach,
 
-On Sun, 29 Dec 2013 13:26:26 +0200, Baruch Siach wrote:
-> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+On Sun, 29 Dec 2013 13:30:55 +0200, Baruch Siach wrote:
+> Disable unaligned access to avoid configure run test.
 > 
-> Currently, the Xtensa architecture uses the "snapshot" version of
-> uClibc. This means that the build is not reproducible, since it will
-> pick whatever latest version of uClibc is available at the moment of
-> the build.
+> Fixes
+> http://autobuild.buildroot.net/results/1fb/1fb5bde77ea84f13fe8db7dedda5b8a29671b939/.
 > 
-> This commit replaces that by adding a special Xtensa version, which
-> points to a well-known Git commit. This is something we should
-> hopefully be able to remove once the uClibc people realize that doing
-> a 0.9.34 release would be useful.
-> 
-> Should probably fix:
-> 
->   http://autobuild.buildroot.org/results/5d6/5d6072a038acf894d832704e36c1d43f0254abf5/build-end.log
-> 
-> at least I wasn't able to reproduce the build problem.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> [baruch: use a more recent uClibc version]
 > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  package/gstreamer1/gstreamer1/gstreamer1.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Applied, thanks!
 
