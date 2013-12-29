@@ -1,54 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Dec 2013 18:33:45 +0100
-Subject: [Buildroot] [PATCHv2 1/4] linux: enable initrd/initramfs support
-	when cpio rootfs is chosen
+Date: Sun, 29 Dec 2013 18:33:47 +0100
+Subject: [Buildroot] [PATCHv2 3/4] grub: align splashscreen handling with
+	iso9660 code
 In-Reply-To: <1388338428-19833-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1388338428-19833-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1388338428-19833-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1388338428-19833-4-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When one enables the generation of a cpio archive of the root
-filesystem, the most likely usage is as an initramfs for the
-kernel. This commit ensures that the kernel has initramfs support when
-the rootfs cpio image format is chosen.
-
-This will for example ensure that if the user selects the ISO9660
-filesystem format (which uses a cpio initramfs), the kernel will have
-proper support to load and use the initramfs.
-
-It is worth mentionning that when BR2_TARGET_ROOTFS_INITRAMFS is
-enabled, then BR2_TARGET_ROOTFS_CPIO is always enabled. That's why we
-move the enabling of CONFIG_BLK_DEV_INITRD from the initramfs case to
-the cpio case.
+This commit aligns the Grub handling of the splash screen with what is
+done in the ISO9660 code.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/linux.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ boot/grub/grub.mk  |  5 ++++-
+ boot/grub/menu.lst | 17 +++++++++++++----
+ 2 files changed, 17 insertions(+), 5 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 5af167d..fa8aa0c 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -169,13 +169,14 @@ define LINUX_CONFIGURE_CMDS
- 	rm $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
- 	$(if $(BR2_arm)$(BR2_armeb),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI,$(@D)/.config))
-+	$(if $(BR2_TARGET_ROOTFS_CPIO),
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_BLK_DEV_INITRD,$(@D)/.config))
- 	# As the kernel gets compiled before root filesystems are
- 	# built, we create a fake cpio file. It'll be
- 	# replaced later by the real cpio archive, and the kernel will be
- 	# rebuilt using the linux26-rebuild-with-initramfs target.
- 	$(if $(BR2_TARGET_ROOTFS_INITRAMFS),
- 		touch $(BINARIES_DIR)/rootfs.cpio
--		$(call KCONFIG_ENABLE_OPT,CONFIG_BLK_DEV_INITRD,$(@D)/.config)
- 		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_SOURCE,\"$(BINARIES_DIR)/rootfs.cpio\",$(@D)/.config)
- 		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_UID,0,$(@D)/.config)
- 		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_GID,0,$(@D)/.config))
+diff --git a/boot/grub/grub.mk b/boot/grub/grub.mk
+index 3be4a74..d22df88 100644
+--- a/boot/grub/grub.mk
++++ b/boot/grub/grub.mk
+@@ -82,7 +82,10 @@ GRUB_CONF_OPT = \
+ ifeq ($(BR2_TARGET_GRUB_SPLASH),y)
+ define GRUB_INSTALL_SPLASH
+ 	cp boot/grub/splash.xpm.gz $(TARGET_DIR)/boot/grub/
+-	$(SED) 's/^#splashimage/splashimage/' $(TARGET_DIR)/boot/grub/menu.lst
++endef
++else
++define GRUB_INSTALL_SPLASH
++	$(SED) '/^splashimage/d' $(TARGET_DIR)/boot/grub/menu.lst
+ endef
+ endif
+ 
+diff --git a/boot/grub/menu.lst b/boot/grub/menu.lst
+index 7845fee..a231f7e 100644
+--- a/boot/grub/menu.lst
++++ b/boot/grub/menu.lst
+@@ -1,7 +1,16 @@
+-default=0
+-timeout=5
+-#splashimage=(hd0,0)/boot/grub/splash.xpm.gz
+-hiddenmenu
++default		0
++timeout		10
++
++# Used when no splashimage is used
++color 		cyan/blue white/blue
++
++# Gets enabled/disabled depending on Grub support for splashimage
++splashimage	(hd0,0)/boot/grub/splash.xpm.gz
++
++# Used when a splashimage is enabled
++foreground 	000000
++background 	cccccc
++
+ title Buildroot
+ 	root (hd0,0)
+ 	kernel /boot/bzImage rw root=/dev/sda1
 -- 
 1.8.3.2
