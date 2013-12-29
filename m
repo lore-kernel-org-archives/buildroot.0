@@ -1,39 +1,82 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 29 Dec 2013 18:40:50 +0100
-Subject: [Buildroot] [PATCH 4/6] toolchain-external: update Linaro
-	AArch64 toolchains
-In-Reply-To: <1388143942-1187-5-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1388143942-1187-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1388143942-1187-5-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAAXf6LX9ZMaBppPWkRG1me5h5EZ9umV-8MGKWVyN+EbAW4_hjg@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 29 Dec 2013 18:47:52 +0100
+Subject: [Buildroot] [PATCHv2 2/4] fs/iso9660: add Grub splashscreen
+ support
+In-Reply-To: <1388338428-19833-3-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1388338428-19833-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1388338428-19833-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20131229174752.GK3567@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Thomas, All,
 
-On Fri, Dec 27, 2013 at 12:32 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Add Linaro AArch64 2013.10 and Linaro AArch64 2013.11, and remove
-> Linaro AArch64 2013.07 and Linaro AArch64 2013.08.
->
+On 2013-12-29 18:33 +0100, Thomas Petazzoni spake thusly:
+> When Grub is built with splashscreen support, copy the splashscreen
+> image to the ISO9660 filesystem. Otherwise, disable the splashscreen
+> in the grub menu.lst file.
+> 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  fs/iso9660/iso9660.mk |  5 +++++
+>  fs/iso9660/menu.lst   | 11 ++++++++++-
+>  2 files changed, 15 insertions(+), 1 deletion(-)
+> 
+> diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+> index 56e87bb..0260d41 100644
+> --- a/fs/iso9660/iso9660.mk
+> +++ b/fs/iso9660/iso9660.mk
+> @@ -16,6 +16,11 @@ $(BINARIES_DIR)/rootfs.iso9660: host-cdrkit host-fakeroot linux rootfs-cpio grub
+>  	mkdir -p $(ISO9660_TARGET_DIR)/boot/grub
+>  	cp $(GRUB_DIR)/stage2/stage2_eltorito $(ISO9660_TARGET_DIR)/boot/grub/
+>  	cp $(ISO9660_BOOT_MENU) $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
+> +ifeq ($(BR2_TARGET_GRUB_SPLASH),)
+> +	$(SED) '/splashimage/d' $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
 
-A while back we discussed the desirability of having so many
-subsequent versions of the same toolchain type (in this case Linaro).
-IIRC (but I did not cross-check with the actual discussion yet) the
-conclusion was that it'd be good to use the gcc version as milestone,
-and keep e.g. a 4.4, 4.6, 4.8 gcc based Linaro toolchain, but not keep
-multiple 4.8-based versions.
+This would also get rid of the comments, but keep foreground/background
+untouched. Maybe:
+    /^splashimage/d
 
-Until now this has not yet been implemented. We could do this in a
-one-shot approach, or gradually as new toolchains are added. If we opt
-for the second option, your current patchset could be revised to align
-with the new strategy.
+> +else
+> +	cp boot/grub/splash.xpm.gz $(ISO9660_TARGET_DIR)/
+> +endif
+>  	cp $(LINUX_IMAGE_PATH) $(ISO9660_TARGET_DIR)/kernel
+>  ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
+>  	$(SED) '/initrd/d'  $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
+> diff --git a/fs/iso9660/menu.lst b/fs/iso9660/menu.lst
+> index ed7836a..c0bbff6 100644
+> --- a/fs/iso9660/menu.lst
+> +++ b/fs/iso9660/menu.lst
+> @@ -1,6 +1,15 @@
+>  default		0
+>  timeout		10
+> -color cyan/blue white/blue
+> +
+> +# Used when no splashimage is used
+> +color 		cyan/blue white/blue
+> +
+> +# Gets enabled/disabled depending on Grub support for splashimage
+> +splashimage	/splash.xpm.gz
+> +
+> +# Used when a splashimage is enabled
+> +foreground 	000000
+> +background 	cccccc
+>  
+>  title		Buildroot ISO9660 image
+>  kernel		/kernel
 
-What do you think about that?
+With that fixed: Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Best regards,
-Thomas
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
