@@ -1,54 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Dec 2013 18:58:26 +0100
-Subject: [Buildroot] [git commit] linux: enable initrd/initramfs support
-	when cpio rootfs is chosen
-Message-ID: <20131230230531.757E09C2A2@busybox.osuosl.org>
+Date: Tue, 31 Dec 2013 00:05:17 +0100
+Subject: [Buildroot] [git commit] fs/iso9660: add Grub splashscreen support
+Message-ID: <20131230230531.7E2CC9BDED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ed23c92b6267ac1ae4c118ecc6196fe019541141
+commit: http://git.buildroot.net/buildroot/commit/?id=13d7c78394eed40c5c336fa6cfe4dbe2c94719dd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When one enables the generation of a cpio archive of the root
-filesystem, the most likely usage is as an initramfs for the
-kernel. This commit ensures that the kernel has initramfs support when
-the rootfs cpio image format is chosen.
-
-This will for example ensure that if the user selects the ISO9660
-filesystem format (which uses a cpio initramfs), the kernel will have
-proper support to load and use the initramfs.
-
-It is worth mentionning that when BR2_TARGET_ROOTFS_INITRAMFS is
-enabled, then BR2_TARGET_ROOTFS_CPIO is always enabled. That's why we
-move the enabling of CONFIG_BLK_DEV_INITRD from the initramfs case to
-the cpio case.
+When Grub is built with splashscreen support, copy the splashscreen
+image to the ISO9660 filesystem. Otherwise, disable the splashscreen
+in the grub menu.lst file.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- linux/linux.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ fs/iso9660/iso9660.mk |    5 +++++
+ fs/iso9660/menu.lst   |   11 ++++++++++-
+ 2 files changed, 15 insertions(+), 1 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 5af167d..fa8aa0c 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -169,13 +169,14 @@ define LINUX_CONFIGURE_CMDS
- 	rm $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
- 	$(if $(BR2_arm)$(BR2_armeb),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI,$(@D)/.config))
-+	$(if $(BR2_TARGET_ROOTFS_CPIO),
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_BLK_DEV_INITRD,$(@D)/.config))
- 	# As the kernel gets compiled before root filesystems are
- 	# built, we create a fake cpio file. It'll be
- 	# replaced later by the real cpio archive, and the kernel will be
- 	# rebuilt using the linux26-rebuild-with-initramfs target.
- 	$(if $(BR2_TARGET_ROOTFS_INITRAMFS),
- 		touch $(BINARIES_DIR)/rootfs.cpio
--		$(call KCONFIG_ENABLE_OPT,CONFIG_BLK_DEV_INITRD,$(@D)/.config)
- 		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_SOURCE,\"$(BINARIES_DIR)/rootfs.cpio\",$(@D)/.config)
- 		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_UID,0,$(@D)/.config)
- 		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_GID,0,$(@D)/.config))
+diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+index 56e87bb..aa17904 100644
+--- a/fs/iso9660/iso9660.mk
++++ b/fs/iso9660/iso9660.mk
+@@ -16,6 +16,11 @@ $(BINARIES_DIR)/rootfs.iso9660: host-cdrkit host-fakeroot linux rootfs-cpio grub
+ 	mkdir -p $(ISO9660_TARGET_DIR)/boot/grub
+ 	cp $(GRUB_DIR)/stage2/stage2_eltorito $(ISO9660_TARGET_DIR)/boot/grub/
+ 	cp $(ISO9660_BOOT_MENU) $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
++ifeq ($(BR2_TARGET_GRUB_SPLASH),)
++	$(SED) '/^splashimage/d' $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
++else
++	cp boot/grub/splash.xpm.gz $(ISO9660_TARGET_DIR)/
++endif
+ 	cp $(LINUX_IMAGE_PATH) $(ISO9660_TARGET_DIR)/kernel
+ ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
+ 	$(SED) '/initrd/d'  $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
+diff --git a/fs/iso9660/menu.lst b/fs/iso9660/menu.lst
+index ed7836a..c0bbff6 100644
+--- a/fs/iso9660/menu.lst
++++ b/fs/iso9660/menu.lst
+@@ -1,6 +1,15 @@
+ default		0
+ timeout		10
+-color cyan/blue white/blue
++
++# Used when no splashimage is used
++color 		cyan/blue white/blue
++
++# Gets enabled/disabled depending on Grub support for splashimage
++splashimage	/splash.xpm.gz
++
++# Used when a splashimage is enabled
++foreground 	000000
++background 	cccccc
+ 
+ title		Buildroot ISO9660 image
+ kernel		/kernel
