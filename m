@@ -1,151 +1,44 @@
-From: =?UTF-8?q?Fatih=20A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
-Date: Mon, 30 Dec 2013 11:34:15 +0200
-Subject: [Buildroot] [PATCH 1/3] qt5: use a common option for JavaScriptCore
-	dependencies
-Message-ID: <1388396057-19042-1-git-send-email-fatih.asici@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 30 Dec 2013 12:00:07 +0200
+Subject: [Buildroot] [PATCH] oprofile: disable on xtensa
+Message-ID: <f0693dd3153f979256d82b2c2f427dd8bb9680df.1388397607.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This will be used by other qt packages that contain a copy of
-JavaScriptCore.
+Missing memory barrier definition. Fixes
+http://autobuild.buildroot.net/results/df7/df797a81111fa15de9337adefca05cbac156d0b2/.
 
-Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
+Also, add nios2 to the dependencies comment while at it.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/qt5/Config.in                     |  8 ++++++++
- package/qt5/qt5declarative/Config.in      | 12 ++----------
- package/qt5/qt5graphicaleffects/Config.in |  4 ++--
- package/qt5/qt5multimedia/Config.in       |  4 ++--
- package/qt5/qt5quick1/Config.in           |  4 ++--
- package/qt5/qt5quickcontrols/Config.in    |  4 ++--
- 6 files changed, 18 insertions(+), 18 deletions(-)
+ package/oprofile/Config.in | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index 0f89019..b62a810 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -1,3 +1,11 @@
-+config BR2_PACKAGE_QT5_JSCORE_AVAILABLE
-+	bool
-+	# Javascript engine is only available on certain architectures
-+	depends on BR2_arm || BR2_i386 || BR2_x86_64 || BR2_mipsel
-+	# ARM needs BLX, so v5t+
-+	depends on !(BR2_arm7tdmi || BR2_arm720t || BR2_arm920t || BR2_arm922t || BR2_fa526)
-+	default y
-+
- comment "Qt5 needs a toolchain w/ wchar, IPv6, threads, C++"
- 	depends on !BR2_PACKAGE_QT
- 	depends on !BR2_avr32
-diff --git a/package/qt5/qt5declarative/Config.in b/package/qt5/qt5declarative/Config.in
-index a1fb9a3..c5753b1 100644
---- a/package/qt5/qt5declarative/Config.in
-+++ b/package/qt5/qt5declarative/Config.in
-@@ -1,11 +1,3 @@
--config BR2_PACKAGE_QT5DECLARATIVE_AVAILABLE
--	bool
--	# Javascript engine is only available on certain architectures
--	depends on BR2_arm || BR2_i386 || BR2_x86_64 || BR2_mipsel
--	# ARM needs BLX, so v5t+
--	depends on !(BR2_arm7tdmi || BR2_arm720t || BR2_arm920t || BR2_arm922t || BR2_fa526)
--	default y
--
- config BR2_PACKAGE_QT5DECLARATIVE
- 	bool "qt5declarative"
- 	select BR2_PACKAGE_QT5XMLPATTERNS
-@@ -14,7 +6,7 @@ config BR2_PACKAGE_QT5DECLARATIVE
- 	select BR2_PACKAGE_QT5BASE_EGLFS
- 	depends on BR2_PACKAGE_HAS_OPENGL_EGL
- 	depends on BR2_PACKAGE_HAS_OPENGL_ES
--	depends on BR2_PACKAGE_QT5DECLARATIVE_AVAILABLE
-+	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+diff --git a/package/oprofile/Config.in b/package/oprofile/Config.in
+index 2f223c0..075e9ea 100644
+--- a/package/oprofile/Config.in
++++ b/package/oprofile/Config.in
+@@ -6,6 +6,7 @@ config BR2_PACKAGE_OPROFILE
+ 	select BR2_PACKAGE_LIBPFM4 if BR2_powerpc
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on !BR2_aarch64 && !BR2_nios2 # binutils
++	depends on !BR2_xtensa
+ 	# libpfm4 is needed on PowerPC, and requires thread support
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS || !BR2_powerpc
  	help
- 	  Qt is a cross-platform application and UI framework for
- 	  developers using C++.
-@@ -25,4 +17,4 @@ config BR2_PACKAGE_QT5DECLARATIVE
+@@ -25,7 +26,8 @@ config BR2_PACKAGE_OPROFILE
+ 	  libraries, and applications.
  
- comment "qt5declarative requires an OpenGL-capable backend"
- 	depends on (!BR2_PACKAGE_HAS_OPENGL_EGL || !BR2_PACKAGE_HAS_OPENGL_ES) && \
--		BR2_PACKAGE_QT5DECLARATIVE_AVAILABLE
-+		BR2_PACKAGE_QT5_JSCORE_AVAILABLE
-diff --git a/package/qt5/qt5graphicaleffects/Config.in b/package/qt5/qt5graphicaleffects/Config.in
-index 4958586..f4029e9 100644
---- a/package/qt5/qt5graphicaleffects/Config.in
-+++ b/package/qt5/qt5graphicaleffects/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_QT5GRAPHICALEFFECTS
- 	bool "qt5graphicaleffects"
- 	select BR2_PACKAGE_QT5BASE
- 	select BR2_PACKAGE_QT5DECLARATIVE
--	depends on BR2_PACKAGE_QT5DECLARATIVE_AVAILABLE
-+	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
- 	depends on BR2_PACKAGE_HAS_OPENGL_EGL
- 	depends on BR2_PACKAGE_HAS_OPENGL_ES
- 	help
-@@ -15,4 +15,4 @@ config BR2_PACKAGE_QT5GRAPHICALEFFECTS
+ comment "oprofile needs a toolchain w/ C++"
+-	depends on BR2_USE_MMU && !BR2_aarch64
++	depends on BR2_USE_MMU
++	depends on !BR2_aarch64 && !BR2_nios2 && !BR2_xtensa
+ 	depends on !BR2_INSTALL_LIBSTDCPP
  
- comment "qt5graphicaleffects requires an OpenGL-capable backend"
- 	depends on (!BR2_PACKAGE_HAS_OPENGL_EGL || !BR2_PACKAGE_HAS_OPENGL_ES) && \
--		BR2_PACKAGE_QT5DECLARATIVE_AVAILABLE
-+		BR2_PACKAGE_QT5_JSCORE_AVAILABLE
-diff --git a/package/qt5/qt5multimedia/Config.in b/package/qt5/qt5multimedia/Config.in
-index 62373e4..53b7f86 100644
---- a/package/qt5/qt5multimedia/Config.in
-+++ b/package/qt5/qt5multimedia/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_QT5MULTIMEDIA
- 	select BR2_PACKAGE_QT5DECLARATIVE
- 	depends on BR2_PACKAGE_HAS_OPENGL_EGL
- 	depends on BR2_PACKAGE_HAS_OPENGL_ES
--	depends on BR2_PACKAGE_QT5DECLARATIVE_AVAILABLE
-+	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
- 	help
- 	  Qt is a cross-platform application and UI framework for
- 	  developers using C++.
-@@ -15,4 +15,4 @@ config BR2_PACKAGE_QT5MULTIMEDIA
- 
- comment "qt5multimedia requires an OpenGL-capable backend"
- 	depends on (!BR2_PACKAGE_HAS_OPENGL_EGL || !BR2_PACKAGE_HAS_OPENGL_ES) && \
--		BR2_PACKAGE_QT5DECLARATIVE_AVAILABLE
-+		BR2_PACKAGE_QT5_JSCORE_AVAILABLE
-diff --git a/package/qt5/qt5quick1/Config.in b/package/qt5/qt5quick1/Config.in
-index d3c71e3..1a0b8bf 100644
---- a/package/qt5/qt5quick1/Config.in
-+++ b/package/qt5/qt5quick1/Config.in
-@@ -10,7 +10,7 @@ config BR2_PACKAGE_QT5QUICK1
- 	depends on !BR2_PREFER_STATIC_LIB
- 	depends on BR2_PACKAGE_HAS_OPENGL_EGL
- 	depends on BR2_PACKAGE_HAS_OPENGL_ES
--	depends on BR2_PACKAGE_QT5DECLARATIVE_AVAILABLE
-+	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
- 	help
- 	  Qt is a cross-platform application and UI framework for
- 	  developers using C++.
-@@ -20,6 +20,6 @@ config BR2_PACKAGE_QT5QUICK1
- 	  http://qt-project.org
- 
- comment "qt5quick1 needs a toolchain w/ dynamic library and an OpenGL-capable backend"
--	depends on BR2_PACKAGE_QT5DECLARATIVE_AVAILABLE
-+	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
- 	depends on !BR2_PACKAGE_HAS_OPENGL_EGL || !BR2_PACKAGE_HAS_OPENGL_ES || \
- 		BR2_PREFER_STATIC_LIB
-diff --git a/package/qt5/qt5quickcontrols/Config.in b/package/qt5/qt5quickcontrols/Config.in
-index 2651328..e72f2a4 100644
---- a/package/qt5/qt5quickcontrols/Config.in
-+++ b/package/qt5/qt5quickcontrols/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_QT5QUICKCONTROLS
- 	select BR2_PACKAGE_QT5BASE
- 	select BR2_PACKAGE_QT5BASE_NETWORK
- 	select BR2_PACKAGE_QT5DECLARATIVE
--	depends on BR2_PACKAGE_QT5DECLARATIVE_AVAILABLE
-+	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
- 	depends on BR2_PACKAGE_HAS_OPENGL_EGL
- 	depends on BR2_PACKAGE_HAS_OPENGL_ES
- 	help
-@@ -16,4 +16,4 @@ config BR2_PACKAGE_QT5QUICKCONTROLS
- 
- comment "qt5quickcontrols requires an OpenGL-capable backend"
- 	depends on (!BR2_PACKAGE_HAS_OPENGL_EGL || !BR2_PACKAGE_HAS_OPENGL_ES) && \
--		BR2_PACKAGE_QT5DECLARATIVE_AVAILABLE
-+		BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+ comment "oprofile needs a toolchain w/ threads on PPC"
 -- 
-1.8.5.1
+1.8.5.2
