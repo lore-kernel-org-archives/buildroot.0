@@ -1,34 +1,99 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Dec 2013 09:10:33 +0100
-Subject: [Buildroot] [git commit] taglib: depend on zlib if appropriate
-Message-ID: <20131231081149.D9C079C2DF@busybox.osuosl.org>
+Date: Tue, 31 Dec 2013 00:19:00 +0100
+Subject: [Buildroot] [git commit] toolchain-external: update Linaro AArch64
+	toolchains
+Message-ID: <20131231081149.C4DF59C2DE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6d13ec0afc16401551df6b7e26d28deb1b078b75
+commit: http://git.buildroot.net/buildroot/commit/?id=68b967a985ad8e4a07e773f079a99755ea5f3455
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/taglib/taglib.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+Add Linaro AArch64 2013.10 and Linaro AArch64 2013.11, and remove
+Linaro AArch64 2013.07 and Linaro AArch64 2013.08.
 
-diff --git a/package/taglib/taglib.mk b/package/taglib/taglib.mk
-index 75e8e67..c04c88b 100644
---- a/package/taglib/taglib.mk
-+++ b/package/taglib/taglib.mk
-@@ -10,6 +10,10 @@ TAGLIB_INSTALL_STAGING = YES
- TAGLIB_LICENSE = LGPLv2.1 MPL
- TAGLIB_LICENSE_FILES = COPYING.LGPL COPYING.MPL
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ toolchain/toolchain-external/Config.in             |   16 ++++++++--------
+ toolchain/toolchain-external/toolchain-external.mk |   12 ++++++------
+ 2 files changed, 14 insertions(+), 14 deletions(-)
+
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 66cdacd..3bd17f3 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -747,8 +747,8 @@ config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2
+ 	  Toolchain for the Microblaze architecture, from
+ 	  http://wiki.xilinx.com/mb-gnu-tools
  
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+TAGLIB_DEPENDENCIES += zlib
-+endif
-+
- ifeq ($(BR2_PACKAGE_TAGLIB_ASF),y)
- TAGLIB_CONF_OPT += -DWITH_ASF=ON
- endif
+-config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_09
+-	bool "Linaro AArch64 13.09"
++config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_11
++	bool "Linaro AArch64 13.11"
+ 	depends on BR2_aarch64
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	depends on !BR2_PREFER_STATIC_LIB
+@@ -760,8 +760,8 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_09
+ 	  Toolchain for the AArch64 architecture, from
+ 	  http://www.linaro.org/engineering/armv8/
+ 
+-config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_08
+-	bool "Linaro AArch64 13.08"
++config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_10
++	bool "Linaro AArch64 13.10"
+ 	depends on BR2_aarch64
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	depends on !BR2_PREFER_STATIC_LIB
+@@ -773,8 +773,8 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_08
+ 	  Toolchain for the AArch64 architecture, from
+ 	  http://www.linaro.org/engineering/armv8/
+ 
+-config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_07
+-	bool "Linaro AArch64 13.07"
++config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_09
++	bool "Linaro AArch64 13.09"
+ 	depends on BR2_aarch64
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	depends on !BR2_PREFER_STATIC_LIB
+@@ -844,9 +844,9 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201311
+ 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A_201109
+ 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109
++	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_11
++	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_10
+ 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_09
+-	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_08
+-	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_07
+ 	default "microblazeel-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_14_3
+ 	default "microblazeel-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2
+ 	default "microblaze-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_14_3
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 0e12c76..6a44eaf 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -339,15 +339,15 @@ TOOLCHAIN_EXTERNAL_SOURCE = lin32-microblaze-unknown-linux-gnu_14.3_early.tar.xz
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://sources.buildroot.net/
+ TOOLCHAIN_EXTERNAL_SOURCE = microblaze-unknown-linux-gnu.tgz
+-else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_07),y)
+-TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/13.07/components/toolchain/binaries/
+-TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.8-2013.07-1_linux.tar.xz
+-else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_08),y)
+-TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/13.08/components/toolchain/binaries/
+-TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.8-2013.08_linux.tar.xz
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_09),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/13.09/components/toolchain/binaries/
+ TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.8-2013.09_linux.tar.xz
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_10),y)
++TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/13.10/components/toolchain/binaries/
++TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.8-2013.10-1_linux.tar.xz
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_11),y)
++TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/13.11/components/toolchain/binaries/
++TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.8-2013.11_linux.tar.xz
+ else
+ # Custom toolchain
+ TOOLCHAIN_EXTERNAL_SITE = $(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
