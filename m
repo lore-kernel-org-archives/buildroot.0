@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Dec 2013 00:07:20 +0100
-Subject: [Buildroot] [PATCH] oprofile: disable on xtensa
-In-Reply-To: <f0693dd3153f979256d82b2c2f427dd8bb9680df.1388397607.git.baruch@tkos.co.il>
-References: <f0693dd3153f979256d82b2c2f427dd8bb9680df.1388397607.git.baruch@tkos.co.il>
-Message-ID: <20131231000720.78a0e904@skate>
+Date: Tue, 31 Dec 2013 00:07:30 +0100
+Subject: [Buildroot] [PATCH] gstreamer: fix xtensa configure
+In-Reply-To: <c86637e25b88581c012c8032b8a9b54cf78881c3.1388398832.git.baruch@tkos.co.il>
+References: <c86637e25b88581c012c8032b8a9b54cf78881c3.1388398832.git.baruch@tkos.co.il>
+Message-ID: <20131231000730.1e6a2182@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +12,18 @@ To: buildroot@busybox.net
 
 Dear Baruch Siach,
 
-On Mon, 30 Dec 2013 12:00:07 +0200, Baruch Siach wrote:
-> Missing memory barrier definition. Fixes
-> http://autobuild.buildroot.net/results/df7/df797a81111fa15de9337adefca05cbac156d0b2/.
+On Mon, 30 Dec 2013 12:20:32 +0200, Baruch Siach wrote:
+> Disable unaligned access to avoid configure run test.
 > 
-> Also, add nios2 to the dependencies comment while at it.
+> Fixes
+> http://autobuild.buildroot.net/results/a0c/a0cca019b0b2f33b6c2be17e5a44a807bbb4dac1/.
 > 
 > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
->  package/oprofile/Config.in | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>  package/gstreamer/gstreamer/gstreamer.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied, thanks.
+Applied, thanks!
 
 Thomas
 -- 
