@@ -1,99 +1,136 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Dec 2013 00:19:00 +0100
-Subject: [Buildroot] [git commit] toolchain-external: update Linaro AArch64
+Date: Tue, 31 Dec 2013 00:18:54 +0100
+Subject: [Buildroot] [git commit] toolchain-external: update Linaro ARM
 	toolchains
-Message-ID: <20131231081149.C4DF59C2DE@busybox.osuosl.org>
+Message-ID: <20131231081149.971349C2DD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=68b967a985ad8e4a07e773f079a99755ea5f3455
+commit: http://git.buildroot.net/buildroot/commit/?id=34562eec83ecf3f5b98399a528baed96c012ef72
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add Linaro AArch64 2013.10 and Linaro AArch64 2013.11, and remove
-Linaro AArch64 2013.07 and Linaro AArch64 2013.08.
+Add Linaro ARM 2013.10 and Linaro ARM 2013.11, and remove Linaro ARM
+2013.07 and Linaro ARM 2013.08.
+
+The main change for those versions is the switch to eglibc 2.18.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- toolchain/toolchain-external/Config.in             |   16 ++++++++--------
- toolchain/toolchain-external/toolchain-external.mk |   12 ++++++------
- 2 files changed, 14 insertions(+), 14 deletions(-)
+ toolchain/toolchain-external/Config.in             |   26 ++++++++++----------
+ toolchain/toolchain-external/toolchain-external.mk |   16 ++++++------
+ 2 files changed, 21 insertions(+), 21 deletions(-)
 
 diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 66cdacd..3bd17f3 100644
+index 59a6cc2..66cdacd 100644
 --- a/toolchain/toolchain-external/Config.in
 +++ b/toolchain/toolchain-external/Config.in
-@@ -747,8 +747,8 @@ config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2
- 	  Toolchain for the Microblaze architecture, from
- 	  http://wiki.xilinx.com/mb-gnu-tools
+@@ -6,8 +6,8 @@ choice
+ comment "(e)glibc toolchains only available with shared lib support"
+ 	depends on BR2_PREFER_STATIC_LIB
  
--config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_09
--	bool "Linaro AArch64 13.09"
-+config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_11
-+	bool "Linaro AArch64 13.11"
- 	depends on BR2_aarch64
+-config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_09
+-	bool "Linaro 2013.09"
++config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_11
++	bool "Linaro 2013.11"
+ 	depends on BR2_arm
+ 	depends on BR2_GCC_TARGET_ARCH = "armv7-a"
  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on !BR2_PREFER_STATIC_LIB
-@@ -760,8 +760,8 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_09
- 	  Toolchain for the AArch64 architecture, from
- 	  http://www.linaro.org/engineering/armv8/
+@@ -19,8 +19,8 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_09
+ 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+ 	help
+ 	  Linaro toolchain for the ARM architecture. It uses Linaro
+-	  GCC 2013.09 (based on gcc 4.8), Linaro GDB 2013.05 (based on
+-	  GDB 7.6), eglibc 2.17, Binutils 2013.06 (based on 2.23). It
++	  GCC 2013.11 (based on gcc 4.8), Linaro GDB 2013.10 (based on
++	  GDB 7.6), eglibc 2.18, Binutils 2013.10 (based on 2.23). It
+ 	  generates code that runs on all Cortex-A profile devices,
+ 	  but tuned for the Cortex-A9. The code generated is Thumb 2,
+ 	  with the hard floating point calling convention, and uses
+@@ -28,8 +28,8 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_09
  
--config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_08
--	bool "Linaro AArch64 13.08"
-+config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_10
-+	bool "Linaro AArch64 13.10"
- 	depends on BR2_aarch64
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on !BR2_PREFER_STATIC_LIB
-@@ -773,8 +773,8 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_08
- 	  Toolchain for the AArch64 architecture, from
- 	  http://www.linaro.org/engineering/armv8/
+ 	  To use this toolchain, you must disable soft float usage.
  
--config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_07
--	bool "Linaro AArch64 13.07"
-+config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_09
-+	bool "Linaro AArch64 13.09"
- 	depends on BR2_aarch64
+-config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_08
+-	bool "Linaro 2013.08"
++config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_10
++	bool "Linaro 2013.10"
+ 	depends on BR2_arm
+ 	depends on BR2_GCC_TARGET_ARCH = "armv7-a"
  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on !BR2_PREFER_STATIC_LIB
-@@ -844,9 +844,9 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+@@ -41,8 +41,8 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_08
+ 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+ 	help
+ 	  Linaro toolchain for the ARM architecture. It uses Linaro
+-	  GCC 2013.08 (based on gcc 4.8), Linaro GDB 2013.05 (based on
+-	  GDB 7.6), eglibc 2.17, Binutils 2013.06 (based on 2.23). It
++	  GCC 2013.10 (based on gcc 4.8), Linaro GDB 2013.10 (based on
++	  GDB 7.6), eglibc 2.18, Binutils 2013.10 (based on 2.23). It
+ 	  generates code that runs on all Cortex-A profile devices,
+ 	  but tuned for the Cortex-A9. The code generated is Thumb 2,
+ 	  with the hard floating point calling convention, and uses
+@@ -50,8 +50,8 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_08
+ 
+ 	  To use this toolchain, you must disable soft float usage.
+ 
+-config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_07
+-	bool "Linaro 2013.07"
++config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_09
++	bool "Linaro 2013.09"
+ 	depends on BR2_arm
+ 	depends on BR2_GCC_TARGET_ARCH = "armv7-a"
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+@@ -63,7 +63,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_07
+ 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+ 	help
+ 	  Linaro toolchain for the ARM architecture. It uses Linaro
+-	  GCC 2013.07 (based on gcc 4.8), Linaro GDB 2013.05 (based on
++	  GCC 2013.09 (based on gcc 4.8), Linaro GDB 2013.05 (based on
+ 	  GDB 7.6), eglibc 2.17, Binutils 2013.06 (based on 2.23). It
+ 	  generates code that runs on all Cortex-A profile devices,
+ 	  but tuned for the Cortex-A9. The code generated is Thumb 2,
+@@ -836,9 +836,9 @@ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	string
++	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_11
++	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_10
+ 	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_09
+-	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_08
+-	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_07
+ 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
+ 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305
  	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201311
- 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A_201109
- 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109
-+	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_11
-+	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_10
- 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_09
--	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_08
--	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_07
- 	default "microblazeel-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_14_3
- 	default "microblazeel-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2
- 	default "microblaze-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_14_3
 diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 0e12c76..6a44eaf 100644
+index 64c4d0b..0e12c76 100644
 --- a/toolchain/toolchain-external/toolchain-external.mk
 +++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -339,15 +339,15 @@ TOOLCHAIN_EXTERNAL_SOURCE = lin32-microblaze-unknown-linux-gnu_14.3_early.tar.xz
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sources.buildroot.net/
- TOOLCHAIN_EXTERNAL_SOURCE = microblaze-unknown-linux-gnu.tgz
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_07),y)
+@@ -265,18 +265,18 @@ define TOOLCHAIN_EXTERNAL_FIXUP_CMDS
+ 	mv $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/arago-2011.09/armv5te/* $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/
+ 	rm -rf $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/arago-2011.09/
+ endef
+-else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_07),y)
 -TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/13.07/components/toolchain/binaries/
--TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.8-2013.07-1_linux.tar.xz
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_08),y)
+-TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.8-2013.07-1_linux.tar.xz
+-TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
+-else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_08),y)
 -TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/13.08/components/toolchain/binaries/
--TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.8-2013.08_linux.tar.xz
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_09),y)
+-TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.8-2013.08_linux.tar.xz
+-TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_09),y)
  TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/13.09/components/toolchain/binaries/
- TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.8-2013.09_linux.tar.xz
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_10),y)
+ TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.8-2013.09_linux.tar.xz
+ TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_10),y)
 +TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/13.10/components/toolchain/binaries/
-+TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.8-2013.10-1_linux.tar.xz
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_11),y)
++TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.8-2013.10_linux.tar.xz
++TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_11),y)
 +TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/13.11/components/toolchain/binaries/
-+TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.8-2013.11_linux.tar.xz
- else
- # Custom toolchain
- TOOLCHAIN_EXTERNAL_SITE = $(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
++TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.8-2013.11_linux.tar.xz
++TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
+ TOOLCHAIN_EXTERNAL_SOURCE = mips-2012.09-99-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
