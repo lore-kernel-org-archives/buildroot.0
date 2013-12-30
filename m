@@ -1,32 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Dec 2013 00:07:30 +0100
-Subject: [Buildroot] [PATCH] gstreamer: fix xtensa configure
-In-Reply-To: <c86637e25b88581c012c8032b8a9b54cf78881c3.1388398832.git.baruch@tkos.co.il>
-References: <c86637e25b88581c012c8032b8a9b54cf78881c3.1388398832.git.baruch@tkos.co.il>
-Message-ID: <20131231000730.1e6a2182@skate>
+Date: Tue, 31 Dec 2013 00:08:33 +0100
+Subject: [Buildroot] [git commit] xenomai: fix build failure when
+	HAVE_OPEN64 is undefined
+Message-ID: <20131230230841.1E8A99C2A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+commit: http://git.buildroot.net/buildroot/commit/?id=5d24fd03aec2acd2594238f62e31e684e76fa5b9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 30 Dec 2013 12:20:32 +0200, Baruch Siach wrote:
-> Disable unaligned access to avoid configure run test.
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/a0c/a0cca019b0b2f33b6c2be17e5a44a807bbb4dac1/.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/gstreamer/gstreamer/gstreamer.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+fixes: http://autobuild.buildroot.org/results/d59/d590be34637a4043c929ce615f9db504484be435/build-end.log
 
-Applied, thanks!
+Upstream patch:
+http://git.xenomai.org/xenomai-2.6.git/commit/?id=71345fe15f126ae3a596af309945d0af6edfbbbb
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...uild-failure-when-HAVE_OPEN64-is-undefine.patch |   30 ++++++++++++++++++++
+ 1 files changed, 30 insertions(+), 0 deletions(-)
+
+diff --git a/package/xenomai/xenomai-0002-posix-fix-build-failure-when-HAVE_OPEN64-is-undefine.patch b/package/xenomai/xenomai-0002-posix-fix-build-failure-when-HAVE_OPEN64-is-undefine.patch
+new file mode 100644
+index 0000000..ce43676
+--- /dev/null
++++ b/package/xenomai/xenomai-0002-posix-fix-build-failure-when-HAVE_OPEN64-is-undefine.patch
+@@ -0,0 +1,30 @@
++From 71345fe15f126ae3a596af309945d0af6edfbbbb Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@openwide.fr>
++Date: Sun, 29 Dec 2013 18:00:25 +0100
++Subject: [PATCH 1/1] posix: fix build failure when HAVE_OPEN64 is undefined.
++
++fixes: http://autobuild.buildroot.org/results/d59/d590be34637a4043c929ce615f9db504484be435/build-end.log
++
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++---
++ src/skins/posix/rtdm.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/src/skins/posix/rtdm.c b/src/skins/posix/rtdm.c
++index 5840c64..d6c87dc 100644
++--- a/src/skins/posix/rtdm.c
+++++ b/src/skins/posix/rtdm.c
++@@ -107,8 +107,9 @@ int __wrap_open64(const char *path, int oflag, ...)
++ 			errno = EMFILE;
++ 			ret = -1;
++ 		}
+++	}
++ #endif
++-	} else {
+++	else {
++ 		errno = -ret;
++ 		ret = -1;
++ 	}
++-- 
++1.8.1.4
++
