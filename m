@@ -1,9 +1,7 @@
 From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Mon, 30 Dec 2013 18:57:54 +0100
-Subject: [Buildroot] [PATCH 3/3] lame: depend on libiconv if appropriate
-In-Reply-To: <1388426274-17641-1-git-send-email-berndkuhls@hotmail.com>
-References: <1388426274-17641-1-git-send-email-berndkuhls@hotmail.com>
-Message-ID: <BLU0-SMTP21319D14FC37C46519B7F62D9CE0@phx.gbl>
+Date: Mon, 30 Dec 2013 19:02:49 +0100
+Subject: [Buildroot] [PATCH 1/1] taglib: depend on zlib if appropriate
+Message-ID: <BLU0-SMTP5968381DB69C5BB04A3EA3D9CE0@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +11,23 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
 ---
- package/lame/lame.mk |    2 ++
- 1 file changed, 2 insertions(+)
+ package/taglib/taglib.mk |    4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/lame/lame.mk b/package/lame/lame.mk
-index 38a39a3..36aed70 100644
---- a/package/lame/lame.mk
-+++ b/package/lame/lame.mk
-@@ -15,6 +15,8 @@ LAME_CONF_OPT = --enable-dynamic-frontends
- LAME_LICENSE = LGPLv2+
- LAME_LICENSE_FILES = COPYING
+diff --git a/package/taglib/taglib.mk b/package/taglib/taglib.mk
+index 75e8e67..c04c88b 100644
+--- a/package/taglib/taglib.mk
++++ b/package/taglib/taglib.mk
+@@ -10,6 +10,10 @@ TAGLIB_INSTALL_STAGING = YES
+ TAGLIB_LICENSE = LGPLv2.1 MPL
+ TAGLIB_LICENSE_FILES = COPYING.LGPL COPYING.MPL
  
-+LAME_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBICONV),libiconv)
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++TAGLIB_DEPENDENCIES += zlib
++endif
 +
- ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
- LAME_DEPENDENCIES += libsndfile
- LAME_CONF_OPT += --with-fileio=sndfile
+ ifeq ($(BR2_PACKAGE_TAGLIB_ASF),y)
+ TAGLIB_CONF_OPT += -DWITH_ASF=ON
+ endif
 -- 
 1.7.9.5
