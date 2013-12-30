@@ -1,49 +1,37 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Tue, 31 Dec 2013 00:11:24 +0100
-Subject: [Buildroot] [PATCH 1/2] Remove some absolute paths
-In-Reply-To: <1388421102-29198-1-git-send-email-bjorn.forsman@gmail.com>
-References: <1388421102-29198-1-git-send-email-bjorn.forsman@gmail.com>
-Message-ID: <52C1FD9C.9060401@lucaceresoli.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 31 Dec 2013 00:10:58 +0100
+Subject: [Buildroot] [git commit] grub: add web reference that documents how
+	to generate a splashimage
+Message-ID: <20131230231250.3F47F9C1F4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Il 30/12/2013 17:31, Bj?rn Forsman ha scritto:
-> Buildroot fails to run on NixOS because it has no /bin/echo or
-> /bin/grep. Instead of relying on absolute paths, rely on tools to be
-> available in PATH. This should work for all systems.
->
-> Signed-off-by: Bj?rn Forsman <bjorn.forsman@gmail.com>
-> ---
->   support/dependencies/dependencies.sh | 96 ++++++++++++++++++------------------
->   1 file changed, 48 insertions(+), 48 deletions(-)
->
-> diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-> index 32b8fea..d1ce918 100755
-> --- a/support/dependencies/dependencies.sh
-> +++ b/support/dependencies/dependencies.sh
-> @@ -7,20 +7,20 @@ export LC_ALL=C
->   # Verify that grep works
->   echo "WORKS" | grep "WORKS" >/dev/null 2>&1
->   if test $? != 0 ; then
-> -	/bin/echo -e "\ngrep doesn't work\n"
-> +	echo -e "\ngrep doesn't work\n"
+commit: http://git.buildroot.net/buildroot/commit/?id=765dad1eab610318f63a66a13bcd29c50ba76a8c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I'm ok with the change, but while we're touching these basig commands,
-why not replacing them with an ECHO and a GREP constant? Such as:
-   ECHO := $(shell which grep)
-or, more simply:
-   ECHO := echo
-and wherever it's used:
-  -	/bin/echo -e "\ngrep doesn't work\n"
-  +	$(ECHO) -e "\ngrep doesn't work\n"
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ boot/grub/Config.in |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
 
-This is what we do i.e. for sed. See package/Makefile.in.
-
-This allows successive changes to the command definition without
-the need for a massive search and replace.
-
--- 
-Luca
+diff --git a/boot/grub/Config.in b/boot/grub/Config.in
+index 3ae8448..4db8642 100644
+--- a/boot/grub/Config.in
++++ b/boot/grub/Config.in
+@@ -42,8 +42,10 @@ config BR2_TARGET_GRUB_SPLASH
+ 	help
+ 	  Add support for splashimage.
+ 
+-	  A splashimage is a 14-color indexed .xpm picture which
+-	  is displayed as background for the grub menu.
++	  A splashimage is a 14-color indexed .xpm picture which is
++	  displayed as background for the grub menu. See
++	  http://www.katspace.org/computers/Grub_Splash/ for details
++	  on how to generate a splashimage.
+ 
+ config BR2_TARGET_GRUB_DISKLESS
+ 	bool "diskless support"
