@@ -1,44 +1,35 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 30 Dec 2013 12:00:07 +0200
-Subject: [Buildroot] [PATCH] oprofile: disable on xtensa
-Message-ID: <f0693dd3153f979256d82b2c2f427dd8bb9680df.1388397607.git.baruch@tkos.co.il>
+Date: Mon, 30 Dec 2013 12:20:32 +0200
+Subject: [Buildroot] [PATCH] gstreamer: fix xtensa configure
+Message-ID: <c86637e25b88581c012c8032b8a9b54cf78881c3.1388398832.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Missing memory barrier definition. Fixes
-http://autobuild.buildroot.net/results/df7/df797a81111fa15de9337adefca05cbac156d0b2/.
+Disable unaligned access to avoid configure run test.
 
-Also, add nios2 to the dependencies comment while at it.
+Fixes
+http://autobuild.buildroot.net/results/a0c/a0cca019b0b2f33b6c2be17e5a44a807bbb4dac1/.
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/oprofile/Config.in | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/gstreamer/gstreamer/gstreamer.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/oprofile/Config.in b/package/oprofile/Config.in
-index 2f223c0..075e9ea 100644
---- a/package/oprofile/Config.in
-+++ b/package/oprofile/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_OPROFILE
- 	select BR2_PACKAGE_LIBPFM4 if BR2_powerpc
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_aarch64 && !BR2_nios2 # binutils
-+	depends on !BR2_xtensa
- 	# libpfm4 is needed on PowerPC, and requires thread support
- 	depends on BR2_TOOLCHAIN_HAS_THREADS || !BR2_powerpc
- 	help
-@@ -25,7 +26,8 @@ config BR2_PACKAGE_OPROFILE
- 	  libraries, and applications.
- 
- comment "oprofile needs a toolchain w/ C++"
--	depends on BR2_USE_MMU && !BR2_aarch64
-+	depends on BR2_USE_MMU
-+	depends on !BR2_aarch64 && !BR2_nios2 && !BR2_xtensa
- 	depends on !BR2_INSTALL_LIBSTDCPP
- 
- comment "oprofile needs a toolchain w/ threads on PPC"
+diff --git a/package/gstreamer/gstreamer/gstreamer.mk b/package/gstreamer/gstreamer/gstreamer.mk
+index f7919ea..0667e38 100644
+--- a/package/gstreamer/gstreamer/gstreamer.mk
++++ b/package/gstreamer/gstreamer/gstreamer.mk
+@@ -12,7 +12,7 @@ GSTREAMER_INSTALL_STAGING = YES
+ # Checking if unaligned memory access works correctly cannot be done when cross
+ # compiling. For the following architectures there is no information available
+ # in the configure script.
+-ifeq ($(BR2_avr32),y)
++ifeq ($(BR2_avr32)$(BR2_xtensa),y)
+ GSTREAMER_CONF_ENV = as_cv_unaligned_access=no
+ endif
+ ifeq ($(BR2_aarch64),y)
 -- 
 1.8.5.2
