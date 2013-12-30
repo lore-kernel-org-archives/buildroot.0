@@ -1,136 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Dec 2013 00:18:54 +0100
-Subject: [Buildroot] [git commit] toolchain-external: update Linaro ARM
-	toolchains
-Message-ID: <20131231081149.971349C2DD@busybox.osuosl.org>
+Date: Tue, 31 Dec 2013 00:19:13 +0100
+Subject: [Buildroot] [git commit] toolchain-external: add support for the
+	Blackfin 2013R1 toolchain
+Message-ID: <20131231081149.CC1679C2DC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=34562eec83ecf3f5b98399a528baed96c012ef72
+commit: http://git.buildroot.net/buildroot/commit/?id=951fc4c63f3e14f160ae0d2e306b0a5f0e7b3f6d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Add Linaro ARM 2013.10 and Linaro ARM 2013.11, and remove Linaro ARM
-2013.07 and Linaro ARM 2013.08.
-
-The main change for those versions is the switch to eglibc 2.18.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/Config.in             |   26 ++++++++++----------
- toolchain/toolchain-external/toolchain-external.mk |   16 ++++++------
- 2 files changed, 21 insertions(+), 21 deletions(-)
+ toolchain/toolchain-external/Config.in             |   19 +++++++++++++++++++
+ toolchain/toolchain-external/toolchain-external.mk |    6 +++++-
+ 2 files changed, 24 insertions(+), 1 deletions(-)
 
 diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 59a6cc2..66cdacd 100644
+index e559902..0f25db3 100644
 --- a/toolchain/toolchain-external/Config.in
 +++ b/toolchain/toolchain-external/Config.in
-@@ -6,8 +6,8 @@ choice
- comment "(e)glibc toolchains only available with shared lib support"
- 	depends on BR2_PREFER_STATIC_LIB
+@@ -665,6 +665,23 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
+ 	  Other architecture variants (beyond Pentium-4/Xeon) are
+ 	  supported as well, but glibc is not optimised for it.
  
--config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_09
--	bool "Linaro 2013.09"
-+config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_11
-+	bool "Linaro 2013.11"
- 	depends on BR2_arm
- 	depends on BR2_GCC_TARGET_ARCH = "armv7-a"
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-@@ -19,8 +19,8 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_09
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
- 	help
- 	  Linaro toolchain for the ARM architecture. It uses Linaro
--	  GCC 2013.09 (based on gcc 4.8), Linaro GDB 2013.05 (based on
--	  GDB 7.6), eglibc 2.17, Binutils 2013.06 (based on 2.23). It
-+	  GCC 2013.11 (based on gcc 4.8), Linaro GDB 2013.10 (based on
-+	  GDB 7.6), eglibc 2.18, Binutils 2013.10 (based on 2.23). It
- 	  generates code that runs on all Cortex-A profile devices,
- 	  but tuned for the Cortex-A9. The code generated is Thumb 2,
- 	  with the hard floating point calling convention, and uses
-@@ -28,8 +28,8 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_09
++config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1
++	bool "Blackfin.uclinux.org 2013R1"
++	depends on BR2_bfin
++	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
++	select BR2_INSTALL_LIBSTDCPP
++	select BR2_LARGEFILE
++	select BR2_INET_IPV6
++	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	select BR2_USE_WCHAR
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
++	select BR2_HOSTARCH_NEEDS_IA32_LIBS
++	help
++	  Toolchain for the Blackfin architecture, from
++	  http://blackfin.uclinux.org.
++
+ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
+ 	bool "Blackfin.uclinux.org 2012R2-RC2"
+ 	depends on BR2_bfin
+@@ -873,6 +890,8 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1 && BR2_BINFMT_FDPIC
+ 	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 && BR2_BINFMT_FLAT
+ 	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 && BR2_BINFMT_FDPIC
++	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 && BR2_BINFMT_FLAT
++	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 && BR2_BINFMT_FDPIC
+ 	default BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX \
+ 					 if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
  
- 	  To use this toolchain, you must disable soft float usage.
- 
--config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_08
--	bool "Linaro 2013.08"
-+config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_10
-+	bool "Linaro 2013.10"
- 	depends on BR2_arm
- 	depends on BR2_GCC_TARGET_ARCH = "armv7-a"
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-@@ -41,8 +41,8 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_08
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
- 	help
- 	  Linaro toolchain for the ARM architecture. It uses Linaro
--	  GCC 2013.08 (based on gcc 4.8), Linaro GDB 2013.05 (based on
--	  GDB 7.6), eglibc 2.17, Binutils 2013.06 (based on 2.23). It
-+	  GCC 2013.10 (based on gcc 4.8), Linaro GDB 2013.10 (based on
-+	  GDB 7.6), eglibc 2.18, Binutils 2013.10 (based on 2.23). It
- 	  generates code that runs on all Cortex-A profile devices,
- 	  but tuned for the Cortex-A9. The code generated is Thumb 2,
- 	  with the hard floating point calling convention, and uses
-@@ -50,8 +50,8 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_08
- 
- 	  To use this toolchain, you must disable soft float usage.
- 
--config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_07
--	bool "Linaro 2013.07"
-+config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_09
-+	bool "Linaro 2013.09"
- 	depends on BR2_arm
- 	depends on BR2_GCC_TARGET_ARCH = "armv7-a"
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-@@ -63,7 +63,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_07
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
- 	help
- 	  Linaro toolchain for the ARM architecture. It uses Linaro
--	  GCC 2013.07 (based on gcc 4.8), Linaro GDB 2013.05 (based on
-+	  GCC 2013.09 (based on gcc 4.8), Linaro GDB 2013.05 (based on
- 	  GDB 7.6), eglibc 2.17, Binutils 2013.06 (based on 2.23). It
- 	  generates code that runs on all Cortex-A profile devices,
- 	  but tuned for the Cortex-A9. The code generated is Thumb 2,
-@@ -836,9 +836,9 @@ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX
- 
- config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	string
-+	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_11
-+	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_10
- 	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_09
--	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_08
--	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_07
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201311
 diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 64c4d0b..0e12c76 100644
+index 6a44eaf..1084ee2 100644
 --- a/toolchain/toolchain-external/toolchain-external.mk
 +++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -265,18 +265,18 @@ define TOOLCHAIN_EXTERNAL_FIXUP_CMDS
- 	mv $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/arago-2011.09/armv5te/* $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/
- 	rm -rf $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/arago-2011.09/
- endef
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_07),y)
--TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/13.07/components/toolchain/binaries/
--TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.8-2013.07-1_linux.tar.xz
--TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_08),y)
--TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/13.08/components/toolchain/binaries/
--TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.8-2013.08_linux.tar.xz
--TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_09),y)
- TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/13.09/components/toolchain/binaries/
- TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.8-2013.09_linux.tar.xz
- TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_10),y)
-+TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/13.10/components/toolchain/binaries/
-+TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.8-2013.10_linux.tar.xz
-+TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_11),y)
-+TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/13.11/components/toolchain/binaries/
-+TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.8-2013.11_linux.tar.xz
-+TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
- TOOLCHAIN_EXTERNAL_SOURCE = mips-2012.09-99-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
+@@ -327,6 +327,10 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2),y)
+ TOOLCHAIN_EXTERNAL_SITE   = http://downloads.sourceforge.net/project/adi-toolchain/2012R2/2012R2-RC2/i386/
+ TOOLCHAIN_EXTERNAL_SOURCE = blackfin-toolchain-2012R2-RC2.i386.tar.bz2
+ TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS = blackfin-toolchain-uclibc-full-2012R2-RC2.i386.tar.bz2
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1),y)
++TOOLCHAIN_EXTERNAL_SITE   = http://downloads.sourceforge.net/project/adi-toolchain/2013R1/2013R1-RC1/i386/
++TOOLCHAIN_EXTERNAL_SOURCE = blackfin-toolchain-2013R1-RC1.i386.tar.bz2
++TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS = blackfin-toolchain-uclibc-full-2013R1-RC1.i386.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_14_3),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://sources.buildroot.net/
+ TOOLCHAIN_EXTERNAL_SOURCE = lin32-microblazeel-unknown-linux-gnu_14.3_early.tar.xz
+@@ -364,7 +368,7 @@ endif
+ 
+ TOOLCHAIN_EXTERNAL_INSTALL_STAGING = YES
+ 
+-ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2),y)
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1),y)
+ # Special handling for Blackfin toolchain, because of the split in two
+ # tarballs, and the organization of tarball contents. The tarballs
+ # contain ./opt/uClinux/{bfin-uclinux,bfin-linux-uclibc} directories,
