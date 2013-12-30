@@ -1,36 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Dec 2013 00:10:27 +0100
-Subject: [Buildroot] [PATCH 1/3] qt5: use a common option for
- JavaScriptCore dependencies
-In-Reply-To: <1388396057-19042-1-git-send-email-fatih.asici@gmail.com>
-References: <1388396057-19042-1-git-send-email-fatih.asici@gmail.com>
-Message-ID: <20131231001027.23f39004@skate>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Tue, 31 Dec 2013 00:11:24 +0100
+Subject: [Buildroot] [PATCH 1/2] Remove some absolute paths
+In-Reply-To: <1388421102-29198-1-git-send-email-bjorn.forsman@gmail.com>
+References: <1388421102-29198-1-git-send-email-bjorn.forsman@gmail.com>
+Message-ID: <52C1FD9C.9060401@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fatih A??c?,
-
-On Mon, 30 Dec 2013 11:34:15 +0200, Fatih A??c? wrote:
-> This will be used by other qt packages that contain a copy of
-> JavaScriptCore.
-> 
-> Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
+Il 30/12/2013 17:31, Bj?rn Forsman ha scritto:
+> Buildroot fails to run on NixOS because it has no /bin/echo or
+> /bin/grep. Instead of relying on absolute paths, rely on tools to be
+> available in PATH. This should work for all systems.
+>
+> Signed-off-by: Bj?rn Forsman <bjorn.forsman@gmail.com>
 > ---
->  package/qt5/Config.in                     |  8 ++++++++
->  package/qt5/qt5declarative/Config.in      | 12 ++----------
->  package/qt5/qt5graphicaleffects/Config.in |  4 ++--
->  package/qt5/qt5multimedia/Config.in       |  4 ++--
->  package/qt5/qt5quick1/Config.in           |  4 ++--
->  package/qt5/qt5quickcontrols/Config.in    |  4 ++--
->  6 files changed, 18 insertions(+), 18 deletions(-)
+>   support/dependencies/dependencies.sh | 96 ++++++++++++++++++------------------
+>   1 file changed, 48 insertions(+), 48 deletions(-)
+>
+> diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+> index 32b8fea..d1ce918 100755
+> --- a/support/dependencies/dependencies.sh
+> +++ b/support/dependencies/dependencies.sh
+> @@ -7,20 +7,20 @@ export LC_ALL=C
+>   # Verify that grep works
+>   echo "WORKS" | grep "WORKS" >/dev/null 2>&1
+>   if test $? != 0 ; then
+> -	/bin/echo -e "\ngrep doesn't work\n"
+> +	echo -e "\ngrep doesn't work\n"
 
-All three patches applied, thanks!
+I'm ok with the change, but while we're touching these basig commands,
+why not replacing them with an ECHO and a GREP constant? Such as:
+   ECHO := $(shell which grep)
+or, more simply:
+   ECHO := echo
+and wherever it's used:
+  -	/bin/echo -e "\ngrep doesn't work\n"
+  +	$(ECHO) -e "\ngrep doesn't work\n"
 
-Thomas
+This is what we do i.e. for sed. See package/Makefile.in.
+
+This allows successive changes to the command definition without
+the need for a massive search and replace.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Luca
