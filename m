@@ -1,35 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Dec 2013 00:08:49 +0100
-Subject: [Buildroot] [v2 1/1] xenomai: fix build failure when
- HAVE_OPEN64 is undefined
-In-Reply-To: <1388354779-17875-1-git-send-email-romain.naour@openwide.fr>
-References: <1388354779-17875-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20131231000849.47b52d94@skate>
+Date: Tue, 31 Dec 2013 00:09:40 +0100
+Subject: [Buildroot] [git commit] qt5webkit: depend on
+	BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+Message-ID: <20131230230946.76D4E9C29F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+commit: http://git.buildroot.net/buildroot/commit/?id=e962b2a2f3b0ad16740b0b6d85323f5e3456e66f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 29 Dec 2013 23:06:19 +0100, Romain Naour wrote:
-> fixes: http://autobuild.buildroot.org/results/d59/d590be34637a4043c929ce615f9db504484be435/build-end.log
-> 
-> Upstream patch:
-> http://git.xenomai.org/xenomai-2.6.git/commit/?id=71345fe15f126ae3a596af309945d0af6edfbbbb
-> 
-> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> ---
->  ...uild-failure-when-HAVE_OPEN64-is-undefine.patch | 30 ++++++++++++++++++++++
->  1 file changed, 30 insertions(+)
->  create mode 100644 package/xenomai/xenomai-0002-posix-fix-build-failure-when-HAVE_OPEN64-is-undefine.patch
+Signed-off-by: Fatih A????c?? <fatih.asici@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/qt5/qt5webkit/Config.in |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
 
-Applied, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/qt5/qt5webkit/Config.in b/package/qt5/qt5webkit/Config.in
+index 4a578ff..3a58566 100644
+--- a/package/qt5/qt5webkit/Config.in
++++ b/package/qt5/qt5webkit/Config.in
+@@ -8,8 +8,7 @@ config BR2_PACKAGE_QT5WEBKIT
+ 	select BR2_PACKAGE_XLIB_LIBXRENDER if BR2_PACKAGE_QT5BASE_XCB
+ 	# This module does not support static linking
+ 	depends on !BR2_PREFER_STATIC_LIB
+-	# This package is not supported on MIPS 64-bit architecture
+-	depends on !BR2_mips64 && !BR2_mips64el
++	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+ 	help
+ 	  Qt is a cross-platform application and UI framework for
+ 	  developers using C++.
