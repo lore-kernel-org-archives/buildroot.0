@@ -1,72 +1,200 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Dec 2013 00:12:55 +0100
-Subject: [Buildroot] [git commit] cmake: add patch to fix Qt mkspecs
-	detection
-Message-ID: <20131230231307.4BB959C2A0@busybox.osuosl.org>
+Date: Tue, 31 Dec 2013 00:17:06 +0100
+Subject: [Buildroot] [git commit] toolchain-external: add Sourcery MIPS
+	2013.11, remove Sourcery MIPS 2012.03
+Message-ID: <20131230231743.2C8059C2A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ef2c1970e4bff3be3992014070392b0e6bc28bd2
+commit: http://git.buildroot.net/buildroot/commit/?id=245686ffb3211a97eb77f3e0f8506dc5ff5b5265
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The FindQt4 macros that search the mkspecs directory had a bug that
-prevented the mkspecs directory from being found, causing build
-failures of the qjson and grantlee.
+This commit adds the support for the recently release Sourcery MIPS
+2013.11 toolchain (gcc 4.8, gdb 7.6, glibc 2.18), and consequently
+removes the support for the Sourcery MIPS 2012.03 toolchain.
 
-Fixes:
-
-  http://autobuild.buildroot.org/results/75b/75b45da597c12034baad50492c0c8150dc1bf0aa/build-end.log
-  http://autobuild.buildroot.org/results/3b9/3b9d022b02c4497efed178f35c069ea99a7d3eef/build-end.log
+While we're at it, also fix the incorrect help text related to the
+MIPS64 multilib selection.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- ...not-prepend-CMake-root-path-when-searchin.patch |   38 ++++++++++++++++++++
- 1 files changed, 38 insertions(+), 0 deletions(-)
+ toolchain/toolchain-external/Config.in             |   50 ++++++++++----------
+ toolchain/toolchain-external/toolchain-external.mk |    6 +-
+ 2 files changed, 28 insertions(+), 28 deletions(-)
 
-diff --git a/package/cmake/cmake-0001-FindQt4-do-not-prepend-CMake-root-path-when-searchin.patch b/package/cmake/cmake-0001-FindQt4-do-not-prepend-CMake-root-path-when-searchin.patch
-new file mode 100644
-index 0000000..8ab5a23
---- /dev/null
-+++ b/package/cmake/cmake-0001-FindQt4-do-not-prepend-CMake-root-path-when-searchin.patch
-@@ -0,0 +1,38 @@
-+From 02a18089402de70188f2cf7b33fcb6edf7506871 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sun, 29 Dec 2013 13:35:18 +0100
-+Subject: [PATCH] FindQt4: do not prepend CMake root path when searching the
-+ mkspecs directory
-+
-+When searching for the mkspecs directory, FindQT4 uses the find_path()
-+function, but it doesn't pass the NO_CMAKE_FIND_ROOT_PATH, which means
-+that all paths are interpreted relatively to the CMAKE_FIND_ROOT_PATH.
-+
-+However, both the ${qt_mkspecs_dirs} and ${qt_cross_paths} variable
-+that are passed as hints are already absolute paths, and do not need
-+to be prepended by the CMAKE_FIND_ROOT_PATH.
-+
-+Due to this problem, FindQT4 was unable to find qconfig.pri, and
-+QT_MKSPECS_DIR was left defined to "NOTFOUND".
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ Modules/FindQt4.cmake | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Modules/FindQt4.cmake b/Modules/FindQt4.cmake
-+index 28b8454..0b8ce92 100644
-+--- a/Modules/FindQt4.cmake
-++++ b/Modules/FindQt4.cmake
-+@@ -760,7 +760,7 @@ if (QT_QMAKE_EXECUTABLE AND QTVERSION)
-+     endforeach()
-+     set(QT_MKSPECS_DIR NOTFOUND)
-+     find_path(QT_MKSPECS_DIR NAMES qconfig.pri
-+-      HINTS ${qt_cross_paths} ${qt_mkspecs_dirs}
-++      HINTS ${qt_cross_paths} ${qt_mkspecs_dirs} NO_CMAKE_FIND_ROOT_PATH
-+       DOC "The location of the Qt mkspecs containing qconfig.pri")
-+   endif()
-+ 
-+-- 
-+1.8.3.2
-+
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 0607693..59a6cc2 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -201,8 +201,8 @@ config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109
+ 
+ 	  This toolchain uses software-floating point.
+ 
+-config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305
+-	bool "Sourcery CodeBench MIPS 2013.05"
++config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311
++	bool "Sourcery CodeBench MIPS 2013.11"
+ 	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	depends on !BR2_MIPS_NABI32
+@@ -213,9 +213,9 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305
+ 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+ 	help
+ 	  Sourcery CodeBench toolchain for the MIPS architecture, from
+-	  Mentor Graphics. It uses gcc 4.7.3, binutils 2.23.52, glibc
+-	  2.17, uClibc 0.9.30 and gdb 7.4.50, kernel headers
+-	  3.8.2. It has support for the following variants:
++	  Mentor Graphics. It uses gcc 4.8.1, binutils 2.23.52, glibc
++	  2.18, uClibc 0.9.30 and gdb 7.6.50, kernel headers
++	  3.11. It has support for the following variants:
+ 	    - MIPS32 O32 big endian glibc
+ 	      Select a MIPS generic core
+ 	      Disable BR2_SOFT_FLOAT
+@@ -269,9 +269,9 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305
+ 	    - MIPS32 little endian soft float uclibc
+ 	      Not usable in Buildroot yet.
+ 
+-config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
+-	bool "Sourcery CodeBench MIPS 2012.09"
+-	depends on BR2_mips || BR2_mipsel
++config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305
++	bool "Sourcery CodeBench MIPS 2013.05"
++	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	depends on !BR2_MIPS_NABI32
+ 	depends on !BR2_PREFER_STATIC_LIB
+@@ -281,35 +281,35 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
+ 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+ 	help
+ 	  Sourcery CodeBench toolchain for the MIPS architecture, from
+-	  Mentor Graphics. It uses gcc 4.7.2, binutils 2.23.51, glibc
+-	  2.16, uClibc 0.9.30 and gdb 7.4.50, kernel headers
+-	  3.5.4. It has support for the following variants:
++	  Mentor Graphics. It uses gcc 4.7.3, binutils 2.23.52, glibc
++	  2.17, uClibc 0.9.30 and gdb 7.4.50, kernel headers
++	  3.8.2. It has support for the following variants:
+ 	    - MIPS32 O32 big endian glibc
+ 	      Select a MIPS generic core
+ 	      Disable BR2_SOFT_FLOAT
+ 	    - MIPS64 big endian glibc
+-	      Select a MIPS generic core
++	      Select a MIPS64 generic core
+ 	      Select the n64 ABI
+ 	      Disable BR2_SOFT_FLOAT
+ 	    - MIPS32 O32 little endian glibc
+ 	      Select a MIPS generic core
+ 	      Disable BR2_SOFT_FLOAT
+ 	    - MIPS64 little endian glibc
+-	      Select a MIPS generic core
++	      Select a MIPS64 generic core
+ 	      Select the n64 ABI
+ 	      Disable BR2_SOFT_FLOAT
+ 	    - MIPS32 big endian soft float glibc
+ 	      Select a MIPS generic core
+ 	      Select BR2_SOFT_FLOAT
+ 	    - MIPS64 big endian soft float glibc
+-	      Select a MIPS generic core
++	      Select a MIPS64 generic core
+ 	      Select the n64 ABI
+ 	      Select BR2_SOFT_FLOAT
+ 	    - MIPS32 little endian soft float glibc
+ 	      Select a MIPS generic core
+ 	      Select BR2_SOFT_FLOAT
+ 	    - MIPS64 little endian soft float glibc
+-	      Select a MIPS generic core
++	      Select a MIPS64 generic core
+ 	      Select the n64 ABI
+ 	      Select BR2_SOFT_FLOAT
+ 	    - MIPS32 big endian microMIPS glibc
+@@ -337,8 +337,8 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
+ 	    - MIPS32 little endian soft float uclibc
+ 	      Not usable in Buildroot yet.
+ 
+-config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203
+-	bool "Sourcery CodeBench MIPS 2012.03"
++config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
++	bool "Sourcery CodeBench MIPS 2012.09"
+ 	depends on BR2_mips || BR2_mipsel
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	depends on !BR2_MIPS_NABI32
+@@ -349,35 +349,35 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203
+ 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+ 	help
+ 	  Sourcery CodeBench toolchain for the MIPS architecture, from
+-	  Mentor Graphics. It uses gcc 4.6.3, binutils 2.21.53, glibc
+-	  2.15, uClibc 0.9.30 and gdb 7.2.50, kernel headers
+-	  3.2.10. It has support for the following variants:
++	  Mentor Graphics. It uses gcc 4.7.2, binutils 2.23.51, glibc
++	  2.16, uClibc 0.9.30 and gdb 7.4.50, kernel headers
++	  3.5.4. It has support for the following variants:
+ 	    - MIPS32 O32 big endian glibc
+ 	      Select a MIPS generic core
+ 	      Disable BR2_SOFT_FLOAT
+ 	    - MIPS64 big endian glibc
+-	      Select a MIPS generic core
++	      Select a MIPS64 generic core
+ 	      Select the n64 ABI
+ 	      Disable BR2_SOFT_FLOAT
+ 	    - MIPS32 O32 little endian glibc
+ 	      Select a MIPS generic core
+ 	      Disable BR2_SOFT_FLOAT
+ 	    - MIPS64 little endian glibc
+-	      Select a MIPS generic core
++	      Select a MIPS64 generic core
+ 	      Select the n64 ABI
+ 	      Disable BR2_SOFT_FLOAT
+ 	    - MIPS32 big endian soft float glibc
+ 	      Select a MIPS generic core
+ 	      Select BR2_SOFT_FLOAT
+ 	    - MIPS64 big endian soft float glibc
+-	      Select a MIPS generic core
++	      Select a MIPS64 generic core
+ 	      Select the n64 ABI
+ 	      Select BR2_SOFT_FLOAT
+ 	    - MIPS32 little endian soft float glibc
+ 	      Select a MIPS generic core
+ 	      Select BR2_SOFT_FLOAT
+ 	    - MIPS64 little endian soft float glibc
+-	      Select a MIPS generic core
++	      Select a MIPS64 generic core
+ 	      Select the n64 ABI
+ 	      Select BR2_SOFT_FLOAT
+ 	    - MIPS32 big endian microMIPS glibc
+@@ -851,9 +851,9 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default "microblazeel-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2
+ 	default "microblaze-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_14_3
+ 	default "microblaze-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2
+-	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203
+ 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
+ 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305
++	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311
+ 	default "nios2-linux-gnu"        if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
+ 	default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
+ 	default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 747d7e3..64c4d0b 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -277,15 +277,15 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_09),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/13.09/components/toolchain/binaries/
+ TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.8-2013.09_linux.tar.xz
+ TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
+-else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203),y)
+-TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
+-TOOLCHAIN_EXTERNAL_SOURCE = mips-2012.03-63-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
+ TOOLCHAIN_EXTERNAL_SOURCE = mips-2012.09-99-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
+ TOOLCHAIN_EXTERNAL_SOURCE = mips-2013.05-66-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311),y)
++TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
++TOOLCHAIN_EXTERNAL_SOURCE = mips-2013.11-36-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/nios2-linux-gnu/
+ TOOLCHAIN_EXTERNAL_SOURCE = sourceryg++-2013.05-43-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
