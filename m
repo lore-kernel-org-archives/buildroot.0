@@ -1,62 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Dec 2013 00:19:06 +0100
-Subject: [Buildroot] [git commit] toolchain-external: mark Microblaze
-	external toolchains as deprecated
-Message-ID: <20131231081149.B6A649C29F@busybox.osuosl.org>
+Date: Tue, 31 Dec 2013 09:10:33 +0100
+Subject: [Buildroot] [git commit] taglib: depend on zlib if appropriate
+Message-ID: <20131231081149.D9C079C2DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=89be0985d6e6128878340ef8e3a3caa1315c7a63
+commit: http://git.buildroot.net/buildroot/commit/?id=6d13ec0afc16401551df6b7e26d28deb1b078b75
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The Xilinx Microblaze external toolchains that we had support for are
-very old, and are causing a huge number of build issues. Thanks to
-Spenser Gilliland, we now have support for Microblaze in the internal
-toolchain backend, and the autobuilders have been using the internal
-toolchain backend since then. Therefore, it's time to deprecate those
-old and unusable external toolchains.
-
+Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/Config.in |    4 ++++
+ package/taglib/taglib.mk |    4 ++++
  1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 3bd17f3..e559902 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -704,6 +704,7 @@ config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_14_3
- 	depends on BR2_microblazeel
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on !BR2_PREFER_STATIC_LIB
-+	depends on BR2_DEPRECATED
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-@@ -717,6 +718,7 @@ config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2
- 	depends on BR2_microblazeel
- 	depends on BR2_HOSTARCH = "x86_64"
- 	depends on !BR2_PREFER_STATIC_LIB
-+	depends on BR2_DEPRECATED
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	help
-@@ -728,6 +730,7 @@ config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_14_3
- 	depends on BR2_microblazebe
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on !BR2_PREFER_STATIC_LIB
-+	depends on BR2_DEPRECATED
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-@@ -741,6 +744,7 @@ config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2
- 	depends on BR2_microblazebe
- 	depends on BR2_HOSTARCH = "x86_64"
- 	depends on !BR2_PREFER_STATIC_LIB
-+	depends on BR2_DEPRECATED
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	help
+diff --git a/package/taglib/taglib.mk b/package/taglib/taglib.mk
+index 75e8e67..c04c88b 100644
+--- a/package/taglib/taglib.mk
++++ b/package/taglib/taglib.mk
+@@ -10,6 +10,10 @@ TAGLIB_INSTALL_STAGING = YES
+ TAGLIB_LICENSE = LGPLv2.1 MPL
+ TAGLIB_LICENSE_FILES = COPYING.LGPL COPYING.MPL
+ 
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++TAGLIB_DEPENDENCIES += zlib
++endif
++
+ ifeq ($(BR2_PACKAGE_TAGLIB_ASF),y)
+ TAGLIB_CONF_OPT += -DWITH_ASF=ON
+ endif
