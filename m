@@ -1,81 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Dec 2013 00:19:13 +0100
-Subject: [Buildroot] [git commit] toolchain-external: add support for the
-	Blackfin 2013R1 toolchain
-Message-ID: <20131231081149.CC1679C2DC@busybox.osuosl.org>
+Date: Tue, 31 Dec 2013 09:12:30 +0100
+Subject: [Buildroot] [PATCH 1/1] taglib: depend on zlib if appropriate
+In-Reply-To: <BLU0-SMTP5968381DB69C5BB04A3EA3D9CE0@phx.gbl>
+References: <BLU0-SMTP5968381DB69C5BB04A3EA3D9CE0@phx.gbl>
+Message-ID: <20131231091230.1aeeaecc@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=951fc4c63f3e14f160ae0d2e306b0a5f0e7b3f6d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Bernd Kuhls,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/toolchain-external/Config.in             |   19 +++++++++++++++++++
- toolchain/toolchain-external/toolchain-external.mk |    6 +++++-
- 2 files changed, 24 insertions(+), 1 deletions(-)
+On Mon, 30 Dec 2013 19:02:49 +0100, Bernd Kuhls wrote:
+> 
+> Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
+> ---
+>  package/taglib/taglib.mk |    4 ++++
+>  1 file changed, 4 insertions(+)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index e559902..0f25db3 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -665,6 +665,23 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
- 	  Other architecture variants (beyond Pentium-4/Xeon) are
- 	  supported as well, but glibc is not optimised for it.
- 
-+config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1
-+	bool "Blackfin.uclinux.org 2013R1"
-+	depends on BR2_bfin
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
-+	select BR2_INSTALL_LIBSTDCPP
-+	select BR2_LARGEFILE
-+	select BR2_INET_IPV6
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	select BR2_USE_WCHAR
-+	select BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
-+	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-+	help
-+	  Toolchain for the Blackfin architecture, from
-+	  http://blackfin.uclinux.org.
-+
- config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
- 	bool "Blackfin.uclinux.org 2012R2-RC2"
- 	depends on BR2_bfin
-@@ -873,6 +890,8 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1 && BR2_BINFMT_FDPIC
- 	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 && BR2_BINFMT_FLAT
- 	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 && BR2_BINFMT_FDPIC
-+	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 && BR2_BINFMT_FLAT
-+	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 && BR2_BINFMT_FDPIC
- 	default BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX \
- 					 if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
- 
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 6a44eaf..1084ee2 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -327,6 +327,10 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2),y)
- TOOLCHAIN_EXTERNAL_SITE   = http://downloads.sourceforge.net/project/adi-toolchain/2012R2/2012R2-RC2/i386/
- TOOLCHAIN_EXTERNAL_SOURCE = blackfin-toolchain-2012R2-RC2.i386.tar.bz2
- TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS = blackfin-toolchain-uclibc-full-2012R2-RC2.i386.tar.bz2
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1),y)
-+TOOLCHAIN_EXTERNAL_SITE   = http://downloads.sourceforge.net/project/adi-toolchain/2013R1/2013R1-RC1/i386/
-+TOOLCHAIN_EXTERNAL_SOURCE = blackfin-toolchain-2013R1-RC1.i386.tar.bz2
-+TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS = blackfin-toolchain-uclibc-full-2013R1-RC1.i386.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_14_3),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sources.buildroot.net/
- TOOLCHAIN_EXTERNAL_SOURCE = lin32-microblazeel-unknown-linux-gnu_14.3_early.tar.xz
-@@ -364,7 +368,7 @@ endif
- 
- TOOLCHAIN_EXTERNAL_INSTALL_STAGING = YES
- 
--ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2),y)
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1),y)
- # Special handling for Blackfin toolchain, because of the split in two
- # tarballs, and the organization of tarball contents. The tarballs
- # contain ./opt/uClinux/{bfin-uclinux,bfin-linux-uclibc} directories,
+Applied, thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
