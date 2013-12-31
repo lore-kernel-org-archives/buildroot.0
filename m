@@ -1,110 +1,96 @@
-From: randy <lxr1234@hotmail.com>
-Date: Tue, 31 Dec 2013 20:32:26 +0800
-Subject: [Buildroot] [PATCH 2/2] Package: add x264 20120428-2245-stable
-Message-ID: <BLU0-SMTP144BDBCAB5C34D2374B9972ADC90@phx.gbl>
+From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
+Date: Tue, 31 Dec 2013 13:56:45 +0100
+Subject: [Buildroot] [PATCH 1/2] Remove some absolute paths
+In-Reply-To: <52C1FD9C.9060401@lucaceresoli.net>
+References: <1388421102-29198-1-git-send-email-bjorn.forsman@gmail.com>
+ <52C1FD9C.9060401@lucaceresoli.net>
+Message-ID: <CAEYzJUGnXJ1x-Qcrxd0xy7LLSDLcjie-9=JZwJoV=sR5wWj8kA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
+On 31 December 2013 00:11, Luca Ceresoli <luca@lucaceresoli.net> wrote:
+> Il 30/12/2013 17:31, Bj?rn Forsman ha scritto:
+>
+>> Buildroot fails to run on NixOS because it has no /bin/echo or
+>> /bin/grep. Instead of relying on absolute paths, rely on tools to be
+>> available in PATH. This should work for all systems.
+>>
+>> Signed-off-by: Bj?rn Forsman <bjorn.forsman@gmail.com>
+>> ---
+>>   support/dependencies/dependencies.sh | 96
+>> ++++++++++++++++++------------------
+>>   1 file changed, 48 insertions(+), 48 deletions(-)
+>>
+>> diff --git a/support/dependencies/dependencies.sh
+>> b/support/dependencies/dependencies.sh
+>> index 32b8fea..d1ce918 100755
+>> --- a/support/dependencies/dependencies.sh
+>> +++ b/support/dependencies/dependencies.sh
+>> @@ -7,20 +7,20 @@ export LC_ALL=C
+>>   # Verify that grep works
+>>   echo "WORKS" | grep "WORKS" >/dev/null 2>&1
+>>   if test $? != 0 ; then
+>> -       /bin/echo -e "\ngrep doesn't work\n"
+>> +       echo -e "\ngrep doesn't work\n"
+>
+>
+> I'm ok with the change, but while we're touching these basig commands,
+> why not replacing them with an ECHO and a GREP constant? Such as:
+>   ECHO := $(shell which grep)
+> or, more simply:
+>   ECHO := echo
+> and wherever it's used:
+>
+>  -      /bin/echo -e "\ngrep doesn't work\n"
+>  +      $(ECHO) -e "\ngrep doesn't work\n"
+>
+> This is what we do i.e. for sed. See package/Makefile.in.
+>
+> This allows successive changes to the command definition without
+> the need for a massive search and replace.
 
+I took a quick look in support/dependencies/* and there are
+interactions between several makefiles and shell scripts. Should all
+deps be defined in variables in support/dependencies/dependencies.mk
+and then only be *checked* in support/dependencies/dependencies.sh? Or
+should maybe everything, definitions and checking, be moved to
+makefiles?
 
-x264 is the library for encoder h.264 code.
-The version I choose is which is used in debian wheezy.
+Hm, package/Makefile.in also defines some "dependency" variables:
+INSTALL, FLEX, BISON, SED. Looks like dependency handling/checking in
+Buildroot could use some refactoring.
 
-Signed-off-by: ayaka <ayaka@mail.sumomo.pri>
-- ---
- package/x264/Config.in |  7 +++++++
- package/x264/x264.mk   | 47
-+++++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 54 insertions(+)
- create mode 100644 package/x264/Config.in
- create mode 100644 package/x264/x264.mk
+"But why not just define local variables in
+support/dependencies/dependencies.sh?" My thinking is that as long as
+we're
 
-diff --git a/package/x264/Config.in b/package/x264/Config.in
-new file mode 100644
-index 0000000..bb9fba6
-- --- /dev/null
-+++ b/package/x264/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_X264
-+	bool "x264"
-+	help
-+	  The x264 encoder libraries for videolan.
-+
-+	  https://www.videolan.org/developers/x264.html
-+	
-diff --git a/package/x264/x264.mk b/package/x264/x264.mk
-new file mode 100644
-index 0000000..4a360eb
-- --- /dev/null
-+++ b/package/x264/x264.mk
-@@ -0,0 +1,47 @@
-+###############################################################
-+#
-+# x264
-+#
-+###############################################################
-+
-+X264_VERSION = 20120428-2245-stable
-+X264_SOURCE = x264-snapshot-$(X264_VERSION).tar.bz2
-+X264_SITE= ftp://ftp.videolan.org/pub/videolan/x264/snapshots
-+X264_INSTALL_STAGING = YES
-+X264_INSTALL_TARGET = YES
-+X264_DEPENDENCIES = host-pkgconf
-+
-+define X264_CONFIGURE_CMDS
-+	(cd $(@D);./configure \
-+		--host="$(GNU_TARGET_NAME)" \
-+		--cross-prefix="$(TARGET_CROSS)" \
-+		--enable-static \
-+		--enable-strip \
-+		--enable-pic \
-+		--enable-shared \
-+		--disable-ffms \
-+		--disable-cli \
-+	)
-+endef
-+
-+define X264_BUILD_CMDS
-+	$(MAKE) CC="$(TARGET_CC)" -C $(@D)
-+endef
-+
-+define X264_INSTALL_STAGING_CMDS
-+	$(INSTALL) -D -m 0644 $(@D)/x264.pc
-$(STAGING_DIR)/usr/lib/pkgconfig/x264.pc
-+	$(INSTALL) -D -m 0644 $(@D)/x264.h $(STAGING_DIR)/usr/include
-+	$(INSTALL) -D -m 0644 $(@D)/x264_config.h $(STAGING_DIR)/usr/include
-+	$(INSTALL) -D -m 0755 $(@D)/libx264.so.123
-$(STAGING_DIR)/usr/lib/libx264.so.123
-+	$(INSTALL) -D -m 0755 $(@D)/libx264.a $(STAGING_DIR)/usr/lib/libx264.a
-+#	$(INSTALL) -D -m 0755 $(@D)/x264 $(STAGING_DIR)/usr/bin/x264
-+endef
-+
-+define X264_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0644 $(@D)/x264.pc
-$(TARGET_DIR)/usr/lib/pkgconfig/x264.pc
-+	$(INSTALL) -D -m 0755 $(@D)/libx264.so.123
-$(TARGET_DIR)/usr/lib/libx264.so.123
-+	$(INSTALL) -D -m 0755 $(@D)/libx264.a $(TARGET_DIR)/usr/lib/libx264.a
-+endef
-+
-+
-+$(eval $(generic-package))
-- -- 
-1.8.5.1
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.12 (GNU/Linux)
-Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
+- not using full paths
+- not writing setuid tools
+- not selecting between similarly named commands, but built for host or target
 
-iQEcBAEBAgAGBQJSwrlaAAoJEPb4VsMIzTziNNsH/3squWBs0DihtzWG3coyd+GT
-VUao+0QnP+CYy1mJ7Um30XWRgdfVjuZ3jZrd8WbsJOQKk8isSGODZFGIcBAEnj+l
-HY22KEDijAdNfFm19C22JAMa7nHfbY4fJYMUcqz6bwvF7DF+vafSDlrzjP3LBfo2
-fOzivqlFxMzfsLKcfNrxDnGXx4lx1xtwcxqRcvrGjD8KGfYy9LWCYDASiQHeDi0p
-0DeaT9pbf+sZCYsmjKVIa7a4cgVdoZMtEfxTNxzCQPyU9GAM1lrwQxnjywjpBs4b
-s+y+hD3zP2p7IC36ZLauKkXCPNrCMBTvuAGgXRc6nsi6po365NMkdQI2y3MOV4E=
-=TH21
------END PGP SIGNATURE-----
+there is very little benefit from using e.g. ${GREP} instead of grep.
+Except that it's more difficult to type :-)
+
+I see that SED is defined as "/path/to/sed -i -e". So mixing
+/path/to/tool and tool_options is a way to use such variables. But I
+don't think that's a good idea. I'd rather have separate variables,
+like SED and SED_OPTS, so that there are no surprises: "oh, SED
+changed the source file even though I didn't tell it to". Maybe SED
+should be renamed to SED_INLINE? Or SED_WITH_OPTS?
+
+I guess one benefit from using variables for commands is that it makes
+the dependencies obvious. As in "if there is no variable defined for
+'tool', don't use it", or "if there is no variable defined for 'tool',
+define it in the central location and then use it". But that is
+difficult to enforce. Just search for 'sed' in buildroot sources and
+you'll see :-)
+
+To sum it up, I have mixed feelings about using variables for command
+names (that are always in PATH) and I think it is a different issue
+than this patch set is trying to solve.
+
+Best regards,
+Bj?rn Forsman
