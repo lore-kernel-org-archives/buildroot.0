@@ -1,56 +1,59 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 31 Dec 2013 14:18:21 +0200
-Subject: [Buildroot] [PATCH] coreutils: fix build with uClibc
-Message-ID: <fb99be0f4d3d7d7e92f0e3948d923c624730f1a4.1388492301.git.baruch@tkos.co.il>
+From: Thiyagarajan <thiyagu.bt@gmail.com>
+Date: Tue, 31 Dec 2013 17:53:10 +0530
+Subject: [Buildroot] error: Package requirements (xorg-server >= 1.4 xproto
+ inputproto) were not met:
+Message-ID: <CABsRcuAOLy=xpuDJUDc4Qh-WRgzWSK7GS1EZooxYa_8i8M5LeA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-uClibc needs -lrt for posix_spawn(). As a side effect of the fix, the
-timer_settime() library test breaks. So force timer_settime() library as well.
+I am trying to build the xwindow system for my embedded project.
+I tried with  modular X.org xserver
+When i compile i am getting the following error
 
-Fixes
-http://autobuild.buildroot.net/results/ab1/ab1250c3d402ec3fbaf22eeffd07de218ffafb22/.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
+-- checking whether -lc should be explicitly linked in... no
+checking dynamic linker characteristics... GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+checking whether stripping libraries is possible... yes
+checking if libtool supports shared libraries... yes
+checking whether to build shared libraries... yes
+checking whether to build static libraries... yes
+checking for /home/thiyagu/buildroot/output/host/usr/bin/ccache
+/home/thiyagu/buildroot/output/host/usr/bin/i486-buildroot-linux-gnu-gcc
+option to accept ISO C99... -std=gnu99
+checking whether __clang__ is declared... no
+checking whether __INTEL_COMPILER is declared... no
+checking whether __SUNPRO_C is declared... no
+checking pkg-config is at least version 0.9.0... yes
+checking if /home/thiyagu/buildroot/output/host/usr/bin/ccache
+/home/thiyagu/buildroot/output/host/usr/bin/i486-buildroot-linux-gnu-gcc
+-std=gnu99 supports -Werror=attributes... no
+checking for XORG... no
+configure: error: Package requirements (xorg-server >= 1.4 xproto
+inputproto) were not met:
 
-Note: something along the same lines should also fix m4 build against uClibc.
-But since m4 for target is now deprecated I'm not sure it is worth the effort.
----
- package/coreutils/coreutils.mk | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+Package xorg-server was not found in the pkg-config search path.
+Perhaps you should add the directory containing `xorg-server.pc'
+to the PKG_CONFIG_PATH environment variable
+No package 'xorg-server' found
 
-diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-index e0e9d80..fcf8905 100644
---- a/package/coreutils/coreutils.mk
-+++ b/package/coreutils/coreutils.mk
-@@ -20,6 +20,8 @@ COREUTILS_BIN_PROGS = cat chgrp chmod chown cp date dd df dir echo false hostnam
- 	ln ls mkdir mknod mv pwd rm rmdir vdir sleep stty sync touch true \
- 	uname join
- 
-+COREUTILS_LDFLAGS = $(TARGET_LDFLAGS)
-+
- COREUTILS_CONF_ENV = ac_cv_c_restrict=no \
- 		ac_cv_func_chown_works=yes \
- 		ac_cv_func_euidaccess=no \
-@@ -54,7 +56,14 @@ COREUTILS_CONF_ENV = ac_cv_c_restrict=no \
- 		gl_cv_func_working_utimes=yes \
- 		gl_getline_needs_run_time_check=no \
- 		utils_cv_localtime_cache=no \
--		PERL=missing
-+		PERL=missing \
-+		LDFLAGS="$(COREUTILS_LDFLAGS)"
-+
-+ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
-+COREUTILS_LDFLAGS += -lrt
-+COREUTILS_CONF_ENV += ac_cv_func_posix_spawn=yes \
-+		ac_cv_search_timer_settime=-lrt
-+endif
- 
- COREUTILS_CONF_OPT = --disable-rpath \
- 		--disable-dependency-tracking \
--- 
-1.8.5.2
+Consider adjusting the PKG_CONFIG_PATH environment variable if you
+installed software in a non-standard prefix.
+
+Alternatively, you may set the environment variables XORG_CFLAGS
+and XORG_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details.
+make: ***
+[/home/thiyagu/buildroot/output/build/xdriver_xf86-input-keyboard-1.6.1/.stamp_configured]
+Error 1
+
+Help me to solve the error
+
+B.Thiyagarajan.
+GMRT-TIFR
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131231/729cfc15/attachment.html>
