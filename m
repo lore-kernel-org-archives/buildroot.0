@@ -1,7 +1,7 @@
 From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Wed,  1 Jan 2014 11:08:14 +0000
-Subject: [Buildroot] [PATCH] package: standardise Apache licenses
-Message-ID: <1388574494-6906-1-git-send-email-spdawson@gmail.com>
+Date: Wed,  1 Jan 2014 11:11:34 +0000
+Subject: [Buildroot] [PATCH] package: extend usage of github download helper
+Message-ID: <1388574694-7361-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,138 +10,51 @@ To: buildroot@busybox.net
 
 From: Simon Dawson <spdawson@gmail.com>
 
-Apache licenses are referred to in a variety of ways; standardise these,
-choosing a form which does not contain whitespace.
-
 Signed-off-by: Simon Dawson <spdawson@gmail.com>
 ---
- package/freerdp/freerdp.mk               | 2 +-
- package/imagemagick/imagemagick.mk       | 2 +-
- package/ne10/ne10.mk                     | 2 +-
- package/python-msgpack/python-msgpack.mk | 2 +-
- package/python-pyzmq/python-pyzmq.mk     | 2 +-
- package/python-tornado/python-tornado.mk | 2 +-
- package/subversion/subversion.mk         | 2 +-
- package/thrift/thrift.mk                 | 2 +-
- package/zxing/zxing.mk                   | 2 +-
- 9 files changed, 9 insertions(+), 9 deletions(-)
+ package/lcdapi/lcdapi.mk                         | 2 +-
+ package/lua-msgpack-native/lua-msgpack-native.mk | 2 +-
+ package/ti-utils/ti-utils.mk                     | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
-index 3ac53aa..e92067c 100644
---- a/package/freerdp/freerdp.mk
-+++ b/package/freerdp/freerdp.mk
-@@ -8,7 +8,7 @@ FREERDP_VERSION = 1.0.1
- FREERDP_SITE = https://github.com/downloads/FreeRDP/FreeRDP
- FREERDP_DEPENDENCIES = openssl zlib \
- 	xlib_libX11 xlib_libXt xlib_libXext xlib_libXcursor
--FREERDP_LICENSE = Apache 2.0
-+FREERDP_LICENSE = Apache-2.0
- FREEDRP_LICENSE_FILES = LICENSE
+diff --git a/package/lcdapi/lcdapi.mk b/package/lcdapi/lcdapi.mk
+index 1104151..d90511d 100644
+--- a/package/lcdapi/lcdapi.mk
++++ b/package/lcdapi/lcdapi.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_CUPS),y)
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index ef9c1c0..cf02174 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -10,7 +10,7 @@ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- # available, which is annoying. Use an alternate site that keeps all
- # older versions.
- IMAGEMAGICK_SITE = ftp://ftp.nluug.nl/pub/ImageMagick/
--IMAGEMAGICK_LICENSE = Apache-v2
-+IMAGEMAGICK_LICENSE = Apache-2.0
- IMAGEMAGICK_LICENSE_FILES = LICENSE
+ LCDAPI_VERSION = v0.4
+-LCDAPI_SITE = http://github.com/spdawson/lcdapi/tarball/$(LCDAPI_VERSION)
++LCDAPI_SITE = $(call github,spdawson,lcdapi,$(LCDAPI_VERSION))
+ LCDAPI_LICENSE = LGPLv2.1+
+ LCDAPI_LICENSE_FILES = COPYING
  
- IMAGEMAGICK_INSTALL_STAGING = YES
-diff --git a/package/ne10/ne10.mk b/package/ne10/ne10.mk
-index bb5259f..79b53b8 100644
---- a/package/ne10/ne10.mk
-+++ b/package/ne10/ne10.mk
-@@ -8,7 +8,7 @@
- # one year old.
- NE10_VERSION = 88c18f02199947b2c8b57796f5a3ca53160aff96
- NE10_SITE = http://github.com/projectNe10/Ne10/tarball/$(NE10_VERSION)
--NE10_LICENSE = BSD-3c or Apache 2.0
-+NE10_LICENSE = BSD-3c or Apache-2.0
- NE10_LICENSE_FILES = doc/LICENSE
+diff --git a/package/lua-msgpack-native/lua-msgpack-native.mk b/package/lua-msgpack-native/lua-msgpack-native.mk
+index 3718405..496f8a8 100644
+--- a/package/lua-msgpack-native/lua-msgpack-native.mk
++++ b/package/lua-msgpack-native/lua-msgpack-native.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- ifeq ($(BR2_PREFER_STATIC_LIB),)
-diff --git a/package/python-msgpack/python-msgpack.mk b/package/python-msgpack/python-msgpack.mk
-index 2a7c384..725a29d 100644
---- a/package/python-msgpack/python-msgpack.mk
-+++ b/package/python-msgpack/python-msgpack.mk
-@@ -7,7 +7,7 @@
- PYTHON_MSGPACK_VERSION = 0.4.0
- PYTHON_MSGPACK_SOURCE = msgpack-python-$(PYTHON_MSGPACK_VERSION).tar.gz
- PYTHON_MSGPACK_SITE = https://pypi.python.org/packages/source/m/msgpack-python/
--PYTHON_MSGPACK_LICENSE = Apache License, Version 2.0
-+PYTHON_MSGPACK_LICENSE = Apache-2.0
- PYTHON_MSGPACK_LICENSE_FILES = COPYING
- PYTHON_MSGPACK_SETUP_TYPE = setuptools
- PYTHON_MSGPACK_DEPENDENCIES = msgpack
-diff --git a/package/python-pyzmq/python-pyzmq.mk b/package/python-pyzmq/python-pyzmq.mk
-index b3a8f9d..b792ee9 100644
---- a/package/python-pyzmq/python-pyzmq.mk
-+++ b/package/python-pyzmq/python-pyzmq.mk
-@@ -7,7 +7,7 @@
- PYTHON_PYZMQ_VERSION = 13.1.0
- PYTHON_PYZMQ_SOURCE = pyzmq-$(PYTHON_PYZMQ_VERSION).tar.gz
- PYTHON_PYZMQ_SITE = http://pypi.python.org/packages/source/p/pyzmq/
--PYTHON_PYZMQ_LICENSE = LGPLv3+ BSD-3c Apache License Version 2.0
-+PYTHON_PYZMQ_LICENSE = LGPLv3+ BSD-3c Apache-2.0
- # Apache license only online: http://www.apache.org/licenses/LICENSE-2.0
- PYTHON_PYZMQ_LICENSE_FILES = COPYING.LESSER COPYING.BSD
- PYTHON_PYZMQ_DEPENDENCIES = zeromq
-diff --git a/package/python-tornado/python-tornado.mk b/package/python-tornado/python-tornado.mk
-index 781ec03..bac3ce7 100644
---- a/package/python-tornado/python-tornado.mk
-+++ b/package/python-tornado/python-tornado.mk
-@@ -7,7 +7,7 @@
- PYTHON_TORNADO_VERSION = 3.1.1
- PYTHON_TORNADO_SOURCE = tornado-$(PYTHON_TORNADO_VERSION).tar.gz
- PYTHON_TORNADO_SITE = https://pypi.python.org/packages/source/t/tornado
--PYTHON_TORNADO_LICENSE = Apache-v2
-+PYTHON_TORNADO_LICENSE = Apache-2.0
- PYTHON_TORNADO_SETUP_TYPE = setuptools
+ LUA_MSGPACK_NATIVE_VERSION = 41cce91ab6b54e4426c6d626a0ac41a02ec2096d
+-LUA_MSGPACK_NATIVE_SITE = http://github.com/kengonakajima/lua-msgpack-native/tarball/$(LUA_MSGPACK_NATIVE_VERSION)
++LUA_MSGPACK_NATIVE_SITE = $(call github,kengonakajima,lua-msgpack-native,$(LUA_MSGPACK_NATIVE_VERSION))
+ LUA_MSGPACK_NATIVE_DEPENDENCIES = lua
+ LUA_MSGPACK_NATIVE_LICENSE = Apache-2.0
+ LUA_MSGPACK_NATIVE_LICENSE_FILES = LICENSE.txt
+diff --git a/package/ti-utils/ti-utils.mk b/package/ti-utils/ti-utils.mk
+index 8f7aad6..1d1c1e6 100644
+--- a/package/ti-utils/ti-utils.mk
++++ b/package/ti-utils/ti-utils.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- $(eval $(python-package))
-diff --git a/package/subversion/subversion.mk b/package/subversion/subversion.mk
-index 6eb3218..d7a4b42 100644
---- a/package/subversion/subversion.mk
-+++ b/package/subversion/subversion.mk
-@@ -6,7 +6,7 @@
+ TI_UTILS_VERSION = 06dbdb2727354b5f3ad7c723897f40051fddee49
+-TI_UTILS_SITE = http://github.com/gxk/ti-utils/tarball/$(TI_UTILS_VERSION)
++TI_UTILS_SITE = $(call github,gxk,ti-utils,$(TI_UTILS_VERSION))
+ TI_UTILS_DEPENDENCIES = libnl
  
- SUBVERSION_VERSION = 1.7.14
- SUBVERSION_SITE = http://archive.apache.org/dist/subversion
--SUBVERSION_LICENSE = Apache 2.0
-+SUBVERSION_LICENSE = Apache-2.0
- SUBVERSION_LICENSE_FILES = LICENSE
- 
- SUBVERSION_DEPENDENCIES = apr apr-util expat neon zlib
-diff --git a/package/thrift/thrift.mk b/package/thrift/thrift.mk
-index 8af9643..d61cc3a 100644
---- a/package/thrift/thrift.mk
-+++ b/package/thrift/thrift.mk
-@@ -14,7 +14,7 @@ THRIFT_CONF_OPT = --with-sysroot=$(STAGING_DIR) --with-tests=no \
- 	--with-boost=$(STAGING_DIR)
- HOST_THRIFT_CONF_OPT = --with-sysroot=$(HOST_DIR) --with-tests=no
- THRIFT_AUTORECONF = YES
--THRIFT_LICENSE = Apache 2.0
-+THRIFT_LICENSE = Apache-2.0
- THRIFT_LICENSE_FILES = LICENSE
- 
- ifeq ($(BR2_PREFER_STATIC_LIB),y)
-diff --git a/package/zxing/zxing.mk b/package/zxing/zxing.mk
-index f58be08..367a84f 100644
---- a/package/zxing/zxing.mk
-+++ b/package/zxing/zxing.mk
-@@ -7,7 +7,7 @@
- ZXING_VERSION = 2.3.0
- ZXING_SITE = http://zxing.googlecode.com/files
- ZXING_SOURCE = ZXing-$(ZXING_VERSION).zip
--ZXING_LICENSE = Apache v2.0
-+ZXING_LICENSE = Apache-2.0
- ZXING_LICENSE_FILES = COPYING
- ZXING_INSTALL_STAGING = YES
- 
+ define TI_UTILS_BUILD_CMDS
 -- 
 1.8.3.2
