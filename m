@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  1 Jan 2014 10:58:47 -0300
-Subject: [Buildroot] [PATCH] libcgicc: bump to version 3.2.12
-Message-ID: <1388584727-14862-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed,  1 Jan 2014 10:59:36 -0300
+Subject: [Buildroot] [PATCH] automake: bump to version 1.14.1
+Message-ID: <1388584776-15361-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,27 +10,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- ...tion-option.patch => libcgicc-01-disable-documentation-option.patch} | 0
- package/libcgicc/libcgicc.mk                                            | 2 +-
- 2 files changed, 1 insertion(+), 1 deletion(-)
- rename package/libcgicc/{libcgicc-3.2.9-disable-documentation-option.patch => libcgicc-01-disable-documentation-option.patch} (100%)
+ package/automake/automake.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libcgicc/libcgicc-3.2.9-disable-documentation-option.patch b/package/libcgicc/libcgicc-01-disable-documentation-option.patch
-similarity index 100%
-rename from package/libcgicc/libcgicc-3.2.9-disable-documentation-option.patch
-rename to package/libcgicc/libcgicc-01-disable-documentation-option.patch
-diff --git a/package/libcgicc/libcgicc.mk b/package/libcgicc/libcgicc.mk
-index a3c64d2..f1c181f 100644
---- a/package/libcgicc/libcgicc.mk
-+++ b/package/libcgicc/libcgicc.mk
+diff --git a/package/automake/automake.mk b/package/automake/automake.mk
+index 8431174..fc661c1 100644
+--- a/package/automake/automake.mk
++++ b/package/automake/automake.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBCGICC_VERSION = 3.2.9
-+LIBCGICC_VERSION = 3.2.12
- LIBCGICC_SITE = $(BR2_GNU_MIRROR)/cgicc
- LIBCGICC_SOURCE = cgicc-$(LIBCGICC_VERSION).tar.gz
- LIBCGICC_LICENSE = LGPLv3+
+-AUTOMAKE_VERSION = 1.14
++AUTOMAKE_VERSION = 1.14.1
+ AUTOMAKE_SOURCE = automake-$(AUTOMAKE_VERSION).tar.xz
+ AUTOMAKE_SITE = $(BR2_GNU_MIRROR)/automake
+ AUTOMAKE_LICENSE = GPLv2+
 -- 
 1.8.3.2
