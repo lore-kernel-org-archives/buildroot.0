@@ -1,32 +1,31 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 1 Jan 2014 19:03:25 +0100
-Subject: [Buildroot] [git commit] automake: bump to version 1.14.1
-Message-ID: <20140101180525.6D5B09C20F@busybox.osuosl.org>
+From: Bernd Kuhls <berndkuhls@hotmail.com>
+Date: Wed, 1 Jan 2014 20:35:10 +0100
+Subject: [Buildroot] [PATCH 1/1] mpd: Fix broken download URL
+Message-ID: <BLU0-SMTP1005BFDF4C4664AA662BD57D9C80@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6c653c5002550b9921737b1309a4b6da6b811e0d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
 ---
- package/automake/automake.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/mpd/mpd.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/automake/automake.mk b/package/automake/automake.mk
-index 8431174..fc661c1 100644
---- a/package/automake/automake.mk
-+++ b/package/automake/automake.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index d8f344f..c9fc714 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -6,7 +6,7 @@
  
--AUTOMAKE_VERSION = 1.14
-+AUTOMAKE_VERSION = 1.14.1
- AUTOMAKE_SOURCE = automake-$(AUTOMAKE_VERSION).tar.xz
- AUTOMAKE_SITE = $(BR2_GNU_MIRROR)/automake
- AUTOMAKE_LICENSE = GPLv2+
+ MPD_VERSION = 0.17.6
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+-MPD_SITE = http://www.musicpd.org/download/mpd/stable
++MPD_SITE = http://www.musicpd.org/download/mpd/0.17
+ MPD_DEPENDENCIES = host-pkgconf libglib2
+ MPD_LICENSE = GPLv2
+ MPD_LICENSE_FILES = COPYING
+-- 
+1.7.9.5
