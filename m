@@ -1,16 +1,15 @@
-From: =?UTF-8?B?Q8OpZHJpYyBDaMOpcGllZA==?= <cedric.chepied@gmail.com>
-Date: Wed, 01 Jan 2014 22:53:54 +0100
-Subject: [Buildroot]  [PATCH] ZNC: new package
-Message-ID: <52c48e73.e865b40a.6e3c.062f@mx.google.com>
+From: Ivan Wagner <ivan.wagner@gmail.com>
+Date: Wed, 1 Jan 2014 23:29:09 +0100
+Subject: [Buildroot] Unable to compile qt5base
+Message-ID: <CA+hj=Mpt=CNNYA7AcFB+TjFFZe_mZFRASVQAGG0w7cChgRXhYA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A non-text attachment was scrubbed...
-Name: 0001-ZNC-new-package.patch
-Type: application/octet-stream
-Size: 1992 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140101/98bd1c88/attachment.obj>
+It seems that by removing the compiler cache option it works... But I don't
+know why it was stopping though.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140101/5c9119ef/attachment.html>
