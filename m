@@ -1,8 +1,8 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 02 Jan 2014 13:34:21 +0100
-Subject: [Buildroot] [PATCH alternative 1] dropbear: add support for port
- customization through config file
-Message-ID: <dd980a2e00a9db7b2d4a.1388666061@argentina>
+Date: Thu, 02 Jan 2014 13:34:42 +0100
+Subject: [Buildroot] [PATCH alternative 2] dropbear: add support for custom
+ arguments through config file
+Message-ID: <989a4f7aa922a740098b.1388666082@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -29,10 +29,10 @@ proposed with a patch [1] before, but not accepted.
 
 This patch implements another solution, hinted from the discussion in [1]:
 the default init script now sources a config file /etc/default/dropbear, in
-which the user can set some variables (currently DROPBEAR_PORT). This is in
-line with the S81named init script in the bind package. The config file
-would be added to a project-specific rootfs overlay, a custom skeleton, or
-created from a post-build script.
+which the user can set the variable DROPBEAR_ARGS. This is similar to the
+S81named init script in the bind package. The config file would be added to
+a project-specific rootfs overlay, a custom skeleton, or created from a
+post-build script.
 This approach has the advantage of being simple and non-intrusive, without
 any code duplication or fragile script modifications.
 
@@ -42,13 +42,10 @@ any code duplication or fragile script modifications.
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
- package/dropbear/S50dropbear |  9 +++++++--
- 1 files changed, 7 insertions(+), 2 deletions(-)
+ package/dropbear/S50dropbear |  10 ++++++++--
+ 1 files changed, 8 insertions(+), 2 deletions(-)
 
-NOTE: this is alternative 1, using one variable per config knob.
-The other alternative (that I will send immediately) uses one variable
-DROPBEAR_ARGS for all knobs at the same time (the user then has to know the
-right option letters). I'm OK with either alternative.
+NOTE: this is alternative 2, using one variable for all config knobs.
 
 diff --git a/package/dropbear/S50dropbear b/package/dropbear/S50dropbear
 --- a/package/dropbear/S50dropbear
@@ -62,8 +59,7 @@ diff --git a/package/dropbear/S50dropbear b/package/dropbear/S50dropbear
 +
  start() {
 - 	echo -n "Starting dropbear sshd: "
-+	ARGS="-R"
-+	test -z "$DROPBEAR_PORT" || ARGS="$ARGS -p $DROPBEAR_PORT"
++	DROPBEAR_ARGS="$DROPBEAR_ARGS -R"
 +
 +	echo -n "Starting dropbear sshd: "
  	# Make sure dropbear directory exists
@@ -72,7 +68,8 @@ diff --git a/package/dropbear/S50dropbear b/package/dropbear/S50dropbear
  	fi
  	umask 077
 -	start-stop-daemon -S -q -p /var/run/dropbear.pid --exec /usr/sbin/dropbear -- -R
-+	start-stop-daemon -S -q -p /var/run/dropbear.pid --exec /usr/sbin/dropbear -- $ARGS
++	start-stop-daemon -S -q -p /var/run/dropbear.pid \
++		--exec /usr/sbin/dropbear -- $DROPBEAR_ARGS
  	[ $? == 0 ] && echo "OK" || echo "FAIL"
  }
  stop() {
