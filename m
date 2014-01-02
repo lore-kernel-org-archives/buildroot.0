@@ -1,54 +1,87 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Thu, 02 Jan 2014 16:30:12 +0100
-Subject: [Buildroot] [PATCH 1/1] mpd: Fix broken download URL
-In-Reply-To: <20140102151829.197de141@skate>
-References: <BLU0-SMTP1005BFDF4C4664AA662BD57D9C80@phx.gbl>
- <20140102151829.197de141@skate>
-Message-ID: <52C58604.3010009@trzebnica.net>
+From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+Date: Thu,  2 Jan 2014 17:00:41 +0100
+Subject: [Buildroot] [PATCH] wmctrl: new package
+Message-ID: <1388678441-57138-1-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Provides command line access to almost all the features defined in
+the EWMH specification. It can be used, for example, to get
+information about the window manager, to get a detailed list of
+desktops and managed windows, to switch and resize desktops, to
+make windows full-screen, always-above or sticky, and to activate,
+close, move, resize, maximize and minimize them.
 
-Hi Bernd, Thomas,
+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+---
+ package/Config.in        |  1 +
+ package/wmctrl/Config.in | 21 +++++++++++++++++++++
+ package/wmctrl/wmctrl.mk | 14 ++++++++++++++
+ 3 files changed, 36 insertions(+)
+ create mode 100644 package/wmctrl/Config.in
+ create mode 100644 package/wmctrl/wmctrl.mk
 
-> Dear Bernd Kuhls,
->
-> On Wed, 1 Jan 2014 20:35:10 +0100, Bernd Kuhls wrote:
->> Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
->> ---
->>   package/mpd/mpd.mk |    2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
->> index d8f344f..c9fc714 100644
->> --- a/package/mpd/mpd.mk
->> +++ b/package/mpd/mpd.mk
->> @@ -6,7 +6,7 @@
->>   
->>   MPD_VERSION = 0.17.6
->>   MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
->> -MPD_SITE = http://www.musicpd.org/download/mpd/stable
->> +MPD_SITE = http://www.musicpd.org/download/mpd/0.17
-> Thanks, but I believe we should use the MPD_MAJOR_VERSION scheme that
-> Jerzy Grzegorek has started to introduce:
->
-> MPD_MAJOR_VERSION = 0.17
-> MPD_VERSION = $(MPD_MAJOR_VERSION).6
-> MPD_SITE = http://www.musicpd.org/downloads/mpd/$(MPD_MAJOR_VERSION)
-
-<PKG>_VERSION_MAJOR
-In this case MPD_VERSION_MAJOR
-
-Regards,
-Jerzy
-
->
-> Could you submit an updated version of your patch that takes into
-> account this suggestion? Thanks!
->
-> Best regards,
->
-> Thomas
+diff --git a/package/Config.in b/package/Config.in
+index 311cc6c..857aa84 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -231,6 +231,7 @@ source "package/sylpheed/Config.in"
+ source "package/synergy/Config.in"
+ source "package/torsmo/Config.in"
+ source "package/x11vnc/Config.in"
++source "package/wmctrl/Config.in"
+ source "package/xscreensaver/Config.in"
+ source "package/xstroke/Config.in"
+ source "package/xterm/Config.in"
+diff --git a/package/wmctrl/Config.in b/package/wmctrl/Config.in
+new file mode 100644
+index 0000000..8f2dcf4
+--- /dev/null
++++ b/package/wmctrl/Config.in
+@@ -0,0 +1,21 @@
++config BR2_PACKAGE_WMCTRL
++	bool "wmctrl"
++	select BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_XLIB_LIBXMU
++	select BR2_PACKAGE_LIBGLIB2
++	depends on BR2_USE_WCHAR # libglib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
++	depends on BR2_USE_MMU # libglib2
++	help
++	  Provides command line access to almost all the features defined in 
++	  the EWMH specification. It can be used, for example, to get 
++	  information about the window manager, to get a detailed list of 
++	  desktops and managed windows, to switch and resize desktops, to 
++	  make windows full-screen, always-above or sticky, and to activate, 
++	  close, move, resize, maximize and minimize them. 
++
++	  http://tomas.styblo.name/wmctrl/
++
++comment "libglib2 needs a toolchain w/ mmu, wchar, threads"
++	depends on !BR2_USE_MMU || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++
+diff --git a/package/wmctrl/wmctrl.mk b/package/wmctrl/wmctrl.mk
+new file mode 100644
+index 0000000..d54e062
+--- /dev/null
++++ b/package/wmctrl/wmctrl.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# wmctrl
++#
++################################################################################
++
++WMCTRL_VERSION = 1.07
++WMCTRL_SITE = http://tomas.styblo.name/wmctrl/dist
++WMCTRL_LICENSE = GPLv2
++WMCTRL_LICENSE_FILES = COPYING
++
++WMCTRL_DEPENDENCIES = libglib2 xlib_libX11 xlib_libXmu
++
++$(eval $(autotools-package))
+-- 
+1.8.3.2
