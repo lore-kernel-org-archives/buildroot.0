@@ -1,31 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Jan 2014 10:02:31 +0100
-Subject: [Buildroot] [PATCH] manual: fix uboot subdirectory in example
- layout
-In-Reply-To: <1388574191-6280-1-git-send-email-spdawson@gmail.com>
-References: <1388574191-6280-1-git-send-email-spdawson@gmail.com>
-Message-ID: <20140102100231.71a6b02b@skate>
+From: Jeremy Rosen <jeremy.rosen@openwide.fr>
+Date: Thu, 2 Jan 2014 10:06:30 +0100 (CET)
+Subject: [Buildroot] [PATCH] ZNC: new package
+In-Reply-To: <52c48e73.e865b40a.6e3c.062f@mx.google.com>
+Message-ID: <1821181139.139495.1388653589675.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear spdawson at gmail.com,
 
-On Wed,  1 Jan 2014 11:03:11 +0000, spdawson at gmail.com wrote:
-> From: Simon Dawson <spdawson@gmail.com>
-> 
-> If U-Boot patches are nested under BR2_GLOBAL_PATCH_DIR, then the
-> subdirectory should be called "uboot", and not "u-boot".
-> 
-> Signed-off-by: Simon Dawson <spdawson@gmail.com>
-> ---
->  docs/manual/customize-packages.txt | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+Cedric,
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+FYI I wrote a small "howto contribute to buildroot" here http://www.linuxembedded.fr/2013/03/votre-premiere-contribution-a-buildroot/
+
+it includes a handy checklist of all the stuff you need to check before posting a patch and it also details the git-send-email command to use...
+
+hopefully this will save you some time...
+
+
+Cordialement 
+
+J?r?my Rosen 
++33 (0)1 42 68 28 04
+
+fight key loggers : write some perl using vim 
+
+
+Open Wide Ingenierie
+
+23, rue Daviel
+75012 Paris - France
+www.openwide.fr
+
+
+
+
+
+----- Mail original -----
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
