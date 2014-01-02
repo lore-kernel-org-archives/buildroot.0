@@ -1,34 +1,38 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu,  2 Jan 2014 13:53:03 +0200
-Subject: [Buildroot] [PATCH] uclibc: snapshot: add BSD obsolete signal
-	functions
-Message-ID: <1797e4d78b86649e8a9d5aa44cef8fd83b81825f.1388663583.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 2 Jan 2014 13:17:39 +0100
+Subject: [Buildroot] [PATCH] ZNC: new package
+In-Reply-To: <52c542ae.87ad0e0a.3820.6636@mx.google.com>
+References: <52c48e73.e865b40a.6e3c.062f@mx.google.com>
+ <20140102095901.3816c2f9@skate>
+ <52c542ae.87ad0e0a.3820.6636@mx.google.com>
+Message-ID: <20140102131739.786b567a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/70b/70b79ca0aa97ed451a5679029955ed3709c84b67/.
+Dear C?dric Ch?pied,
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/uclibc/uClibc-snapshot.config | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Thu, 02 Jan 2014 11:42:52 +0100, C?dric Ch?pied wrote:
+> Dear Thomas,
+> 
+> At Thu, 2 Jan 2014 09:59:01 +0100,
+> Thomas Petazzoni wrote:
+> > Thanks for your patch, but you sent it as an attached file, which is
+> > not very practical for reviewing patches. Please send it inline inside
+> > the e-mail.
+> 
+> Do I need to resend it with git send-email or is it ok for this time?
 
-diff --git a/package/uclibc/uClibc-snapshot.config b/package/uclibc/uClibc-snapshot.config
-index 9ca3f9ea983d..890aefd8ec59 100644
---- a/package/uclibc/uClibc-snapshot.config
-+++ b/package/uclibc/uClibc-snapshot.config
-@@ -152,7 +152,7 @@ UCLIBC_LINUX_SPECIFIC=y
- UCLIBC_HAS_GNU_ERROR=y
- UCLIBC_BSD_SPECIFIC=y
- UCLIBC_HAS_BSD_ERR=y
--# UCLIBC_HAS_OBSOLETE_BSD_SIGNAL is not set
-+UCLIBC_HAS_OBSOLETE_BSD_SIGNAL=y
- # UCLIBC_HAS_OBSOLETE_SYSV_SIGNAL is not set
- # UCLIBC_NTP_LEGACY is not set
- # UCLIBC_SV4_DEPRECATED is not set
+Yes, please resend it with git send-email so that we can review the
+patch. Also, please keep the Buildroot mailing list in Cc when
+following up on a Buildroot discussion.
+
+Thanks!
+
+Thomas
 -- 
-1.8.5.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
