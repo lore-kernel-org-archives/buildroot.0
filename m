@@ -1,9 +1,9 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 2 Jan 2014 17:24:32 +0100
-Subject: [Buildroot] [PATCH] wmctrl: new package
-In-Reply-To: <1388678441-57138-1-git-send-email-jezz@sysmic.org>
-References: <1388678441-57138-1-git-send-email-jezz@sysmic.org>
-Message-ID: <CAHXCMMJxbQmmHDJ64V-D6JBD8s7o-+e1BxJsAjy4ieNNZosT1w@mail.gmail.com>
+Date: Thu, 2 Jan 2014 17:26:49 +0100
+Subject: [Buildroot] [PATCH] apitrace: new package
+In-Reply-To: <1388678588-57207-1-git-send-email-jezz@sysmic.org>
+References: <1388678588-57207-1-git-send-email-jezz@sysmic.org>
+Message-ID: <CAHXCMMK9mC7S3iGsXPKdbEbKeDYvsB3+NHB3VLBWMQk6fZbFCw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,94 +14,85 @@ Hi Jerome,
 
 2014/1/2 J?r?me Pouiller <jezz@sysmic.org>
 
-> Provides command line access to almost all the features defined in
-> the EWMH specification. It can be used, for example, to get
-> information about the window manager, to get a detailed list of
-> desktops and managed windows, to switch and resize desktops, to
-> make windows full-screen, always-above or sticky, and to activate,
-> close, move, resize, maximize and minimize them.
+> Trace and replay OpenGL and OpenGL ES APIs calls to/from a file.
 >
+> http://apitrace.github.io/
 > Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 > ---
->  package/Config.in        |  1 +
->  package/wmctrl/Config.in | 21 +++++++++++++++++++++
->  package/wmctrl/wmctrl.mk | 14 ++++++++++++++
->  3 files changed, 36 insertions(+)
->  create mode 100644 package/wmctrl/Config.in
->  create mode 100644 package/wmctrl/wmctrl.mk
+>  package/Config.in            |  1 +
+>  package/apitrace/Config.in   | 13 +++++++++++++
+>  package/apitrace/apitrace.mk | 17 +++++++++++++++++
+>  3 files changed, 31 insertions(+)
+>  create mode 100644 package/apitrace/Config.in
+>  create mode 100644 package/apitrace/apitrace.mk
 >
 > diff --git a/package/Config.in b/package/Config.in
-> index 311cc6c..857aa84 100644
+> index 857aa84..d164f3f 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -231,6 +231,7 @@ source "package/sylpheed/Config.in"
->  source "package/synergy/Config.in"
->  source "package/torsmo/Config.in"
->  source "package/x11vnc/Config.in"
-> +source "package/wmctrl/Config.in"
+> @@ -216,6 +216,7 @@ source "package/weston/Config.in"
 >
-Please, keep the list sorted in alphabetical order.
-
-
->  source "package/xscreensaver/Config.in"
->  source "package/xstroke/Config.in"
->  source "package/xterm/Config.in"
-> diff --git a/package/wmctrl/Config.in b/package/wmctrl/Config.in
+>  comment "X applications"
+>  source "package/alsamixergui/Config.in"
+> +source "package/apitrace/Config.in"
+>  source "package/docker/Config.in"
+>  source "package/feh/Config.in"
+>  source "package/freerdp/Config.in"
+> diff --git a/package/apitrace/Config.in b/package/apitrace/Config.in
 > new file mode 100644
-> index 0000000..8f2dcf4
+> index 0000000..6f23062
 > --- /dev/null
-> +++ b/package/wmctrl/Config.in
-> @@ -0,0 +1,21 @@
-> +config BR2_PACKAGE_WMCTRL
-> +       bool "wmctrl"
-> +       select BR2_PACKAGE_XLIB_LIBX11
-> +       select BR2_PACKAGE_XLIB_LIBXMU
-> +       select BR2_PACKAGE_LIBGLIB2
-> +       depends on BR2_USE_WCHAR # libglib2
-> +       depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-> +       depends on BR2_USE_MMU # libglib2
+> +++ b/package/apitrace/Config.in
+> @@ -0,0 +1,13 @@
+> +comment "apitrace needs a toolchain w/ C++"
+> +        depends on !BR2_INSTALL_LIBSTDCPP
+> +
+> +config BR2_PACKAGE_APITRACE
+> +       bool "apitrace"
+> +        select BR2_INSTALL_LIBSTDCPP
 >
-It should depend on xorg as well.
+You mean 'depends on' here?
+
+
+> +        select BR2_PACKAGE_XLIB_LIBX11
+>
+It should depend on xorg.
 
 
 > +       help
-> +         Provides command line access to almost all the features defined
-> in
-> +         the EWMH specification. It can be used, for example, to get
-> +         information about the window manager, to get a detailed list of
-> +         desktops and managed windows, to switch and resize desktops, to
-> +         make windows full-screen, always-above or sticky, and to
-> activate,
-> +         close, move, resize, maximize and minimize them.
+> +         Trace and replay OpenGL and OpenGL ES APIs calls to/from a file.
+> You
+> +          may install apitrace GUI from your distribution to inspect
+> generated
+> +          traces.
 > +
-> +         http://tomas.styblo.name/wmctrl/
-> +
-> +comment "libglib2 needs a toolchain w/ mmu, wchar, threads"
-> +       depends on !BR2_USE_MMU || !BR2_USE_WCHAR ||
-> !BR2_TOOLCHAIN_HAS_THREADS
-> +
-> diff --git a/package/wmctrl/wmctrl.mk b/package/wmctrl/wmctrl.mk
+> +         http://apitrace.github.io/
+> diff --git a/package/apitrace/apitrace.mk b/package/apitrace/apitrace.mk
 > new file mode 100644
-> index 0000000..d54e062
+> index 0000000..c31a5b3
 > --- /dev/null
-> +++ b/package/wmctrl/wmctrl.mk
-> @@ -0,0 +1,14 @@
+> +++ b/package/apitrace/apitrace.mk
+> @@ -0,0 +1,17 @@
 >
 > +################################################################################
 > +#
-> +# wmctrl
+> +# apitrace
 > +#
 >
 > +################################################################################
 > +
-> +WMCTRL_VERSION = 1.07
-> +WMCTRL_SITE = http://tomas.styblo.name/wmctrl/dist
-> +WMCTRL_LICENSE = GPLv2
-> +WMCTRL_LICENSE_FILES = COPYING
+> +APITRACE_VERSION = c181b7fbf4b1c3912424761fec8ac7124640543a
+> +APITRACE_SITE =
+> http://github.com/apitrace/apitrace/tarball/$(APITRACE_VERSION)
+> +APITRACE_LICENSE = MIT
+> +APITRACE_LICENSE_FILES = LICENSE
 > +
-> +WMCTRL_DEPENDENCIES = libglib2 xlib_libX11 xlib_libXmu
+> +APITRACE_DEPENDENCIES = xlib_libX11 host-python
 > +
-> +$(eval $(autotools-package))
+> +# Gui was never tested, so we prefer to explicitly disable it
+> +APITRACE_CONF_OPT += -DENABLE_GUI=false
+> +
+> +$(eval $(cmake-package))
 > --
 > 1.8.3.2
 >
@@ -117,4 +108,4 @@ Regards,
 Samuel
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140102/a88c3a01/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140102/6051ca21/attachment.html>
