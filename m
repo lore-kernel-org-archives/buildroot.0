@@ -1,7 +1,7 @@
 From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Thu,  2 Jan 2014 21:48:39 +0000
-Subject: [Buildroot] [PATCH] cppczmq: bump git snapshot
-Message-ID: <1388699319-23595-1-git-send-email-spdawson@gmail.com>
+Date: Thu,  2 Jan 2014 21:54:21 +0000
+Subject: [Buildroot] [PATCH] zmqpp: bump git snapshot
+Message-ID: <1388699661-24441-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,33 +10,79 @@ To: buildroot@busybox.net
 
 From: Simon Dawson <spdawson@gmail.com>
 
-Bump the Git snapshot for the cppzmq package. The newer snapshot now
-has a separate license file; update license information accordingly.
+Also remove a patch which is no longer required.
 
 Signed-off-by: Simon Dawson <spdawson@gmail.com>
 ---
- package/cppzmq/cppzmq.mk | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ package/zmqpp/zmqpp-fix-typos-in-code.patch | 46 -----------------------------
+ package/zmqpp/zmqpp.mk                      |  2 +-
+ 2 files changed, 1 insertion(+), 47 deletions(-)
+ delete mode 100644 package/zmqpp/zmqpp-fix-typos-in-code.patch
 
-diff --git a/package/cppzmq/cppzmq.mk b/package/cppzmq/cppzmq.mk
-index 1cb0e56..5cbe424 100644
---- a/package/cppzmq/cppzmq.mk
-+++ b/package/cppzmq/cppzmq.mk
-@@ -4,13 +4,12 @@
+diff --git a/package/zmqpp/zmqpp-fix-typos-in-code.patch b/package/zmqpp/zmqpp-fix-typos-in-code.patch
+deleted file mode 100644
+index a873de9..0000000
+--- a/package/zmqpp/zmqpp-fix-typos-in-code.patch
++++ /dev/null
+@@ -1,46 +0,0 @@
+-Fix a couple of typos in the zmqpp source code.
+-
+-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+-
+-diff -Nurp a/src/zmqpp/socket.cpp b/src/zmqpp/socket.cpp
+---- a/src/zmqpp/socket.cpp	2012-12-11 11:06:23.000000000 +0000
+-+++ b/src/zmqpp/socket.cpp	2013-03-18 17:32:01.464761776 +0000
+-@@ -587,7 +587,7 @@ void socket::get(socket_option const& op
+- 	}
+- }
+- 
+--socket::socket(socket&& source) noexcept
+-+socket::socket(socket& source) noexcept
+- 	: _socket(source._socket)
+- 	, _type(source._type)
+- 	, _recv_buffer()
+-@@ -601,7 +601,7 @@ socket::socket(socket&& source) noexcept
+- 	source._socket = nullptr;
+- }
+- 
+--socket& socket::operator=(socket&& source) noexcept
+-+socket& socket::operator=(socket& source) noexcept
+- {
+- 	_socket = source._socket;
+- 	source._socket = nullptr;
+-diff -Nurp a/src/zmqpp/socket.hpp b/src/zmqpp/socket.hpp
+---- a/src/zmqpp/socket.hpp	2012-12-11 11:06:23.000000000 +0000
+-+++ b/src/zmqpp/socket.hpp	2013-03-18 17:31:53.556790457 +0000
+-@@ -400,7 +400,7 @@ public:
+- 	 *
+- 	 * \param source target socket to steal internals from
+- 	 */
+--	socket(socket&& source) noexcept;
+-+	socket(socket& source) noexcept;
+- 
+- 	/*!
+- 	 * Move operator
+-@@ -413,7 +413,7 @@ public:
+- 	 * \param source target socket to steal internals from
+- 	 * \return socket reference to this
+- 	 */
+--	socket& operator=(socket&& source) noexcept;
+-+	socket& operator=(socket& source) noexcept;
+- 
+- 	/*!
+- 	 * Check the socket is still valid
+diff --git a/package/zmqpp/zmqpp.mk b/package/zmqpp/zmqpp.mk
+index 53c58c3..cfd6f13 100644
+--- a/package/zmqpp/zmqpp.mk
++++ b/package/zmqpp/zmqpp.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CPPZMQ_VERSION = b23297800389149ac37f19b7215fa4734d344998
-+CPPZMQ_VERSION = 235803740753312576495301ebf5b8ed76407173
- CPPZMQ_SITE = git://github.com/zeromq/cppzmq.git
- CPPZMQ_INSTALL_STAGING = YES
- CPPZMQ_DEPENDENCIES = zeromq
- CPPZMQ_LICENSE = MIT
--# No license file, the license is in the installed header
--CPPZMQ_LICENSE_FILES = zmq.hpp
-+CPPZMQ_LICENSE_FILES = LICENSE
- 
- define CPPZMQ_INSTALL_STAGING_CMDS
- 	$(INSTALL) -m 0644 -D $(@D)/zmq.hpp $(STAGING_DIR)/usr/include/zmq.hpp
+-ZMQPP_VERSION = 31220ca4a0fb43a0848d78f5e4f23fce39945777
++ZMQPP_VERSION = 30d72d95f2cfdf9c5cedfd56747f549d65e65847
+ ZMQPP_SITE = git://github.com/benjamg/zmqpp.git
+ ZMQPP_INSTALL_STAGING = YES
+ ZMQPP_DEPENDENCIES = zeromq
 -- 
 1.8.3.2
