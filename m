@@ -1,49 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Jan 2014 15:18:29 +0100
-Subject: [Buildroot] [PATCH 1/1] mpd: Fix broken download URL
-In-Reply-To: <BLU0-SMTP1005BFDF4C4664AA662BD57D9C80@phx.gbl>
-References: <BLU0-SMTP1005BFDF4C4664AA662BD57D9C80@phx.gbl>
-Message-ID: <20140102151829.197de141@skate>
+From: Ivan Wagner <ivan.wagner@gmail.com>
+Date: Thu, 2 Jan 2014 15:34:40 +0100
+Subject: [Buildroot] Building qt5declarative
+Message-ID: <CA+hj=Mp6A-2zunJnGDti5UWka1GXr3jiu+nJCvcfq3j46W7enQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Hi all,
 
-On Wed, 1 Jan 2014 20:35:10 +0100, Bernd Kuhls wrote:
-> 
-> Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
-> ---
->  package/mpd/mpd.mk |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-> index d8f344f..c9fc714 100644
-> --- a/package/mpd/mpd.mk
-> +++ b/package/mpd/mpd.mk
-> @@ -6,7 +6,7 @@
->  
->  MPD_VERSION = 0.17.6
->  MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
-> -MPD_SITE = http://www.musicpd.org/download/mpd/stable
-> +MPD_SITE = http://www.musicpd.org/download/mpd/0.17
+I'm attempting to compile Qt5 including the declarative module.
 
-Thanks, but I believe we should use the MPD_MAJOR_VERSION scheme that
-Jerzy Grzegorek has started to introduce:
+When running the target installation I get the following:
 
-MPD_MAJOR_VERSION = 0.17
-MPD_VERSION = $(MPD_MAJOR_VERSION).6
-MPD_SITE = http://www.musicpd.org/downloads/mpd/$(MPD_MAJOR_VERSION)
+>>> qt5declarative 5.2.0 Installing to target
+cp -dpf /home/ivan/projects/buildroot/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/bin/qml*
+/home/ivan/projects/buildroot/output/target/usr/bin
+cp -dpfr /home/ivan/projects/buildroot/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/qml
+/home/ivan/projects/buildroot/output/target/usr
+cp -dpf /home/ivan/projects/buildroot/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/libQt5Qml*.so.*
+/home/ivan/projects/buildroot/output/target/usr/lib
+cp -dpf /home/ivan/projects/buildroot/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/libQt5Quick*.so.*
+/home/ivan/projects/buildroot/output/target/usr/lib
+cp: cannot stat
+`/home/ivan/projects/buildroot/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/libQt5Quick*.so.*':
+No such file or directory
+make: *** [/home/ivan/projects/buildroot/output/build/qt5declarative-5.2.0/.stamp_target_installed]
+Error
 
-Could you submit an updated version of your patch that takes into
-account this suggestion? Thanks!
+It seems that the libQt5Quick module is not to be found... Has anyone
+faced the same problem?
 
-Best regards,
+Regards,
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Ivan
