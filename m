@@ -1,7 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Jan 2014 13:20:26 +0100
+Date: Thu, 2 Jan 2014 13:21:21 +0100
 Subject: [Buildroot] Wrong compiler path when compiling zlib
-In-Reply-To: <CA+hj=MpO+iC+YwcHcBsSL7kNMfFAhaV8MZz-mai86tnOD6E3Qw@mail.gmail.com>
+In-Reply-To: <CA+hj=MrgJn9phMDkgdZrCuT=BumpmmW2EH6VnWBqRzYSP-6Uig@mail.gmail.com>
 References: <CA+hj=MoNYEZchBs1_34cS4eA=UYfU+2QNdbNBDOqt=u2YFsJPw@mail.gmail.com>
  <20140102044704.GF6589@tarshish>
  <CA+hj=Mqv-+aJiSYFDZUnh_3Est=aC26CfC6kr_FkqM58sjNj3Q@mail.gmail.com>
@@ -9,7 +9,11 @@ References: <CA+hj=MoNYEZchBs1_34cS4eA=UYfU+2QNdbNBDOqt=u2YFsJPw@mail.gmail.com>
  <CA+hj=MoPxwwNn76Sh3vgP5VpkFsUn6uMRKtYW76a-A4DpoMkxg@mail.gmail.com>
  <20140102103439.GW6589@tarshish>
  <CA+hj=MpO+iC+YwcHcBsSL7kNMfFAhaV8MZz-mai86tnOD6E3Qw@mail.gmail.com>
-Message-ID: <20140102132026.68c0bb25@skate>
+ <20140102110639.GY6589@tarshish>
+ <CA+hj=MpY+U_9RNpcVzaSgq9Zmg2tqcxoh8nWWhRbo3O+3yFEgg@mail.gmail.com>
+ <20140102111744.GZ6589@tarshish>
+ <CA+hj=MrgJn9phMDkgdZrCuT=BumpmmW2EH6VnWBqRzYSP-6Uig@mail.gmail.com>
+Message-ID: <20140102132121.02090747@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,18 +22,23 @@ To: buildroot@busybox.net
 
 Dear Ivan Wagner,
 
-On Thu, 2 Jan 2014 11:37:58 +0100, Ivan Wagner wrote:
+On Thu, 2 Jan 2014 12:35:00 +0100, Ivan Wagner wrote:
 
-> yes you're right it's quite unusual in fact I changed it to little
-> endian but I still see the same toolchain paths that aren't pointing
-> to the custom pre-installed I've selected.
+> I think I found out something. At the moment I was only interested in
+> trying to cross-compile qt5 for the ARM arch. So what I've done is to
+> create a basic buildroot configuration where I selected the external
+> toolchain, basic packages and qt5. But then I directly execute "make
+> qt5base-build" and at this stage toolchain-external stuff doesn't get
+> executed. That's why I don't see any symlinks.
+> If I simply run "make" then the toolchain-external is executed.
 
-It is expected that the compiler isn't pointing directly to your
-external toolchain. Buildroot compiles a small wrapper around the
-external toolchain, in order to pass some appropriate arguments when
-the external compiler is called. Therefore it is perfectly normal that
-the compiler is called output/host/usr/bin/arm-<something>-gcc. Any
-other value would be wrong.
+Correct. We currently don't have a dependency on all packages to the
+toolchain. There are pending patches to fix this.
+
+In the mean time, unless you know in details the Buildroot internals,
+you should only do simple "make" commands.
+
+Best regards,
 
 Thomas
 -- 
