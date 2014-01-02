@@ -1,22 +1,43 @@
-From: Ivan Wagner <ivan.wagner@gmail.com>
-Date: Thu, 2 Jan 2014 10:06:58 +0100
-Subject: [Buildroot] Wrong compiler path when compiling zlib
-In-Reply-To: <20140102044704.GF6589@tarshish>
-References: <CA+hj=MoNYEZchBs1_34cS4eA=UYfU+2QNdbNBDOqt=u2YFsJPw@mail.gmail.com>
- <20140102044704.GF6589@tarshish>
-Message-ID: <CA+hj=Mqv-+aJiSYFDZUnh_3Est=aC26CfC6kr_FkqM58sjNj3Q@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 2 Jan 2014 10:08:34 +0100
+Subject: [Buildroot] [PATCH] package: standardise Apache licenses
+In-Reply-To: <1388574494-6906-1-git-send-email-spdawson@gmail.com>
+References: <1388574494-6906-1-git-send-email-spdawson@gmail.com>
+Message-ID: <20140102100834.1cf2658d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
+Dear spdawson at gmail.com,
 
-On Thu, Jan 2, 2014 at 5:47 AM, Baruch Siach <baruch@tkos.co.il> wrote:
-> This should be a symlink to the external toolchain wrapper. See the comment in
-> toolchain/toolchain-external/toolchain-external.mk for some more information
-> on this wrapper. I guess that a 'make clean' would solve your problem.
+On Wed,  1 Jan 2014 11:08:14 +0000, spdawson at gmail.com wrote:
+> From: Simon Dawson <spdawson@gmail.com>
+> 
+> Apache licenses are referred to in a variety of ways; standardise these,
+> choosing a form which does not contain whitespace.
+> 
+> Signed-off-by: Simon Dawson <spdawson@gmail.com>
+> ---
+>  package/freerdp/freerdp.mk               | 2 +-
+>  package/imagemagick/imagemagick.mk       | 2 +-
+>  package/ne10/ne10.mk                     | 2 +-
+>  package/python-msgpack/python-msgpack.mk | 2 +-
+>  package/python-pyzmq/python-pyzmq.mk     | 2 +-
+>  package/python-tornado/python-tornado.mk | 2 +-
+>  package/subversion/subversion.mk         | 2 +-
+>  package/thrift/thrift.mk                 | 2 +-
+>  package/zxing/zxing.mk                   | 2 +-
+>  9 files changed, 9 insertions(+), 9 deletions(-)
 
-I tried with the make clean cmd in order to start with a cleaned env
-but it's not working.
+Your choice matches the SPDX Identifier, which I believe is a good
+idea, so:
+
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
