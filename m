@@ -1,63 +1,55 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 2 Jan 2014 20:21:22 +0100
-Subject: [Buildroot] [PATCH 6/6] Makefile: export PATH
-In-Reply-To: <87mwl3zdm3.fsf@dell.be.48ers.dk>
-References: <1384203586-17790-1-git-send-email-s.martin49@gmail.com>
- <1384203586-17790-7-git-send-email-s.martin49@gmail.com>
- <20131111233113.2e11fd88@skate>
- <CAHXCMMJnox5o3hfiVgj2vzK=1=pbm85cF+9Jutth-4LRvLB5CA@mail.gmail.com>
- <20131115205317.GG3337@free.fr> <87mwl3zdm3.fsf@dell.be.48ers.dk>
-Message-ID: <CAHXCMMJgU5DSHkN5_kG2NF9+VPdjwsLyePZFRVLi0WPZ2_LyHQ@mail.gmail.com>
+From: Bernd Kuhls <berndkuhls@hotmail.com>
+Date: Thu, 2 Jan 2014 20:28:49 +0100
+Subject: [Buildroot] [PATCH 4/4] transmission: Fix build error "conflicting
+	types for 'UTP_Write'" after version bump
+Message-ID: <BLU0-SMTP287B7593393BF8A5143ED5FD9CB0@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+fix taken from http://www.adminsehow.com/2012/10/how-to-install-transmission-2-71-on-debian-6-0-squeeze/
 
-2013/11/17 Peter Korsgaard <jacmet@uclibc.org>
+compile tested on arch sh4, fixes
+http://autobuild.buildroot.org/results/638/63884de929fb7339ebf44b08cb5d1ab30010666a/
 
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
->
-> Hi,
->
->  >> To me, this could make easier writing post-{build,image} scripts.
->
->  > Indeed, it *is* usefull for those scripts.
->
->  > The first thing I do in br.config is to exactly set PATH to include the
->  > host/usr/bin and host/usr/sbin directories in front of the user's PATH.
->
->  > But maybe we should just set PATH at the time we call them?
->
-> I *THINK* always adding those host directories to the path would be
-> safe, as long as it happens after 'which' calls in the toplevel
-> makefile.
+should also fix powerpc
+http://autobuild.buildroot.org/results/eb4/eb486228a11a9602d4bf40e771744d2b2b40508f/
 
-This is already the case. :-)
+Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
+---
+ package/transmission/transmission-fix-utypes.patch |   22 ++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+ create mode 100644 package/transmission/transmission-fix-utypes.patch
 
-
-> This would also allow us to get rid of HOST_PATH / TARGET_PATH
-> (which are currently not identical, but should be).
->
-> But it will need some testing.
->
-
-For what is worth, I use this series on top of master since this first
-submission
-and I haven't got any problem so far.
-
-
->
-> --
-> Bye, Peter Korsgaard
->
-
-Regards,
-
+diff --git a/package/transmission/transmission-fix-utypes.patch b/package/transmission/transmission-fix-utypes.patch
+new file mode 100644
+index 0000000..74f3d32
+--- /dev/null
++++ b/package/transmission/transmission-fix-utypes.patch
+@@ -0,0 +1,22 @@
++diff -uNr transmission-2.82.org/third-party/libutp/utypes.h transmission-2.82/third-party/libutp/utypes.h
++--- transmission-2.82.org/third-party/libutp/utypes.h	2013-08-09 04:47:43.000000000 +0200
+++++ transmission-2.82/third-party/libutp/utypes.h	2014-01-02 20:17:18.000000000 +0100
++@@ -35,8 +35,15 @@
++ typedef const char * cstr;
++ typedef char * str;
++ 
++-#ifndef __cplusplus
++-typedef uint8 bool;
++-#endif
+++//#ifndef __cplusplus
+++//typedef uint8 bool;
+++//#endif
+++#ifndef __cplusplus
+++#ifdef HAVE_STDBOOL_H
+++#include <stdbool.h>
+++#else
+++typedef uint8 bool;
+++#endif
+++#endif
++ 
++ #endif //__UTYPES_H__
 -- 
-Samuel
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140102/14f37043/attachment.html>
+1.7.9.5
