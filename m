@@ -1,92 +1,42 @@
-From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Thu,  2 Jan 2014 22:29:40 +0100
-Subject: [Buildroot] [PATCH v2] wmctrl: new package
-Message-ID: <1388698180-33026-1-git-send-email-jezz@sysmic.org>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Thu,  2 Jan 2014 21:48:39 +0000
+Subject: [Buildroot] [PATCH] cppczmq: bump git snapshot
+Message-ID: <1388699319-23595-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Provides command line access to almost all the features defined in
-the EWMH specification. It can be used, for example, to get
-information about the window manager, to get a detailed list of
-desktops and managed windows, to switch and resize desktops, to
-make windows full-screen, always-above or sticky, and to activate,
-close, move, resize, maximize and minimize them.
+From: Simon Dawson <spdawson@gmail.com>
 
-Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+Bump the Git snapshot for the cppzmq package. The newer snapshot now
+has a separate license file; update license information accordingly.
+
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
 ---
-v2:
- Fix alphabetical order
- Fix dependencies
+ package/cppzmq/cppzmq.mk | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
- package/Config.in        |  1 +
- package/wmctrl/Config.in | 22 ++++++++++++++++++++++
- package/wmctrl/wmctrl.mk | 14 ++++++++++++++
- 3 files changed, 37 insertions(+)
- create mode 100644 package/wmctrl/Config.in
- create mode 100644 package/wmctrl/wmctrl.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index 311cc6c..1ee60c1 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -230,6 +230,7 @@ source "package/rdesktop/Config.in"
- source "package/sylpheed/Config.in"
- source "package/synergy/Config.in"
- source "package/torsmo/Config.in"
-+source "package/wmctrl/Config.in"
- source "package/x11vnc/Config.in"
- source "package/xscreensaver/Config.in"
- source "package/xstroke/Config.in"
-diff --git a/package/wmctrl/Config.in b/package/wmctrl/Config.in
-new file mode 100644
-index 0000000..c1ae6ac
---- /dev/null
-+++ b/package/wmctrl/Config.in
-@@ -0,0 +1,22 @@
-+config BR2_PACKAGE_WMCTRL
-+	bool "wmctrl"
-+	select BR2_PACKAGE_XLIB_LIBX11
-+	select BR2_PACKAGE_XLIB_LIBXMU
-+	select BR2_PACKAGE_LIBGLIB2
-+	depends on BR2_PACKAGE_XORG7
-+	depends on BR2_USE_WCHAR # libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-+	depends on BR2_USE_MMU # libglib2
-+	help
-+	  Provides command line access to almost all the features defined in 
-+	  the EWMH specification. It can be used, for example, to get 
-+	  information about the window manager, to get a detailed list of 
-+	  desktops and managed windows, to switch and resize desktops, to 
-+	  make windows full-screen, always-above or sticky, and to activate, 
-+	  close, move, resize, maximize and minimize them. 
-+
-+	  http://tomas.styblo.name/wmctrl/
-+
-+comment "libglib2 needs a toolchain w/ mmu, wchar, threads"
-+	depends on !BR2_USE_MMU || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+
-diff --git a/package/wmctrl/wmctrl.mk b/package/wmctrl/wmctrl.mk
-new file mode 100644
-index 0000000..d54e062
---- /dev/null
-+++ b/package/wmctrl/wmctrl.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# wmctrl
-+#
-+################################################################################
-+
-+WMCTRL_VERSION = 1.07
-+WMCTRL_SITE = http://tomas.styblo.name/wmctrl/dist
-+WMCTRL_LICENSE = GPLv2
-+WMCTRL_LICENSE_FILES = COPYING
-+
-+WMCTRL_DEPENDENCIES = libglib2 xlib_libX11 xlib_libXmu
-+
-+$(eval $(autotools-package))
+diff --git a/package/cppzmq/cppzmq.mk b/package/cppzmq/cppzmq.mk
+index 1cb0e56..5cbe424 100644
+--- a/package/cppzmq/cppzmq.mk
++++ b/package/cppzmq/cppzmq.mk
+@@ -4,13 +4,12 @@
+ #
+ ################################################################################
+ 
+-CPPZMQ_VERSION = b23297800389149ac37f19b7215fa4734d344998
++CPPZMQ_VERSION = 235803740753312576495301ebf5b8ed76407173
+ CPPZMQ_SITE = git://github.com/zeromq/cppzmq.git
+ CPPZMQ_INSTALL_STAGING = YES
+ CPPZMQ_DEPENDENCIES = zeromq
+ CPPZMQ_LICENSE = MIT
+-# No license file, the license is in the installed header
+-CPPZMQ_LICENSE_FILES = zmq.hpp
++CPPZMQ_LICENSE_FILES = LICENSE
+ 
+ define CPPZMQ_INSTALL_STAGING_CMDS
+ 	$(INSTALL) -m 0644 -D $(@D)/zmq.hpp $(STAGING_DIR)/usr/include/zmq.hpp
 -- 
 1.8.3.2
