@@ -1,37 +1,154 @@
-From: Ivan Wagner <ivan.wagner@gmail.com>
-Date: Thu, 2 Jan 2014 15:34:40 +0100
-Subject: [Buildroot] Building qt5declarative
-Message-ID: <CA+hj=Mp6A-2zunJnGDti5UWka1GXr3jiu+nJCvcfq3j46W7enQ@mail.gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Thu,  2 Jan 2014 15:43:39 +0100
+Subject: [Buildroot] [PATCH v3 1/2] flite: new package
+In-Reply-To: <1388673820-5710-1-git-send-email-s.martin49@gmail.com>
+References: <1388673820-5710-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <1388673820-5710-2-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Cc: Eric Jarrige <eric.jarrige@armadeus.org>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-I'm attempting to compile Qt5 including the declarative module.
+---
+changes v1 -> v2:
+- fix dependencies
 
-When running the target installation I get the following:
+changes v2 -> v3:
+- move flite package in package/flite (flat package tree)
+- remove duplicate --enable-shared options (Peter, ThomasP)
+- misc. cosmetic fixes
+- make flite honor the DESTDIR env. var., so add a patch to fix its
+  build system (ThomasP)
+---
+ package/Config.in                                  |  1 +
+ package/flite/Config.in                            | 16 +++++++++
+ .../flite-0001-now-honor-DESTDIR-env.-var.patch    | 30 ++++++++++++++++
+ package/flite/flite.mk                             | 41 ++++++++++++++++++++++
+ 4 files changed, 88 insertions(+)
+ create mode 100644 package/flite/Config.in
+ create mode 100644 package/flite/flite-0001-now-honor-DESTDIR-env.-var.patch
+ create mode 100644 package/flite/flite.mk
 
->>> qt5declarative 5.2.0 Installing to target
-cp -dpf /home/ivan/projects/buildroot/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/bin/qml*
-/home/ivan/projects/buildroot/output/target/usr/bin
-cp -dpfr /home/ivan/projects/buildroot/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/qml
-/home/ivan/projects/buildroot/output/target/usr
-cp -dpf /home/ivan/projects/buildroot/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/libQt5Qml*.so.*
-/home/ivan/projects/buildroot/output/target/usr/lib
-cp -dpf /home/ivan/projects/buildroot/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/libQt5Quick*.so.*
-/home/ivan/projects/buildroot/output/target/usr/lib
-cp: cannot stat
-`/home/ivan/projects/buildroot/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/libQt5Quick*.so.*':
-No such file or directory
-make: *** [/home/ivan/projects/buildroot/output/build/qt5declarative-5.2.0/.stamp_target_installed]
-Error
-
-It seems that the libQt5Quick module is not to be found... Has anyone
-faced the same problem?
-
-Regards,
-
-Ivan
+diff --git a/package/Config.in b/package/Config.in
+index 429b519..306b50a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -9,6 +9,7 @@ source "package/bellagio/Config.in"
+ source "package/faad2/Config.in"
+ source "package/ffmpeg/Config.in"
+ source "package/flac/Config.in"
++source "package/flite/Config.in"
+ source "package/gstreamer/Config.in"
+ source "package/gstreamer1/Config.in"
+ source "package/lame/Config.in"
+diff --git a/package/flite/Config.in b/package/flite/Config.in
+new file mode 100644
+index 0000000..a02f8fe
+--- /dev/null
++++ b/package/flite/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_FLITE
++	bool "flite"
++	depends on BR2_USE_WCHAR
++	help
++	  Flite: a small, fast run time synthesis engine.
++
++	  Flite (festival-lite) is a small, fast run-time synthesis engine
++	  developed at CMU and primarily designed for small embedded machines
++	  and/or large servers. Flite is designed as an alternative synthesis
++	  engine to Festival for voices built using the FestVox suite of voice
++	  building tools.
++
++	  http://www.speech.cs.cmu.edu/flite
++
++comment "flite require a toolchain with WCHAR support"
++	depends on !BR2_USE_WCHAR
+diff --git a/package/flite/flite-0001-now-honor-DESTDIR-env.-var.patch b/package/flite/flite-0001-now-honor-DESTDIR-env.-var.patch
+new file mode 100644
+index 0000000..5972f34
+--- /dev/null
++++ b/package/flite/flite-0001-now-honor-DESTDIR-env.-var.patch
+@@ -0,0 +1,30 @@
++From 658f3243238efe951f6242fa384e990d77078afc Mon Sep 17 00:00:00 2001
++From: Samuel Martin <s.martin49@gmail.com>
++Date: Fri, 27 Dec 2013 17:42:39 +0100
++Subject: [PATCH] now honor DESTDIR env. var.
++
++Flite used a handwritten a Makefile which doesn't honor DESTDIR environment
++variable, though it uses autoconf.
++
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++---
++ config/config.in | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/config/config.in b/config/config.in
++index 914d2bf..43f1a56 100644
++--- a/config/config.in
+++++ b/config/config.in
++@@ -49,6 +49,6 @@ include $(TOP)/config/$(langvox).lv
++ prefix        = @prefix@
++ exec_prefix   = @exec_prefix@
++ EXEEXT	      = @EXEEXT@
++-INSTALLBINDIR = @bindir@
++-INSTALLLIBDIR = @libdir@
++-INSTALLINCDIR = @includedir@/flite
+++INSTALLBINDIR = $(DESTDIR)@bindir@
+++INSTALLLIBDIR = $(DESTDIR)@libdir@
+++INSTALLINCDIR = $(DESTDIR)@includedir@/flite
++--
++1.8.5.2
++
+diff --git a/package/flite/flite.mk b/package/flite/flite.mk
+new file mode 100644
+index 0000000..b9859fa
+--- /dev/null
++++ b/package/flite/flite.mk
+@@ -0,0 +1,41 @@
++################################################################################
++#
++# flite
++#
++################################################################################
++
++FLITE_VERSION = 1.4
++FLITE_SOURCE = flite-$(FLITE_VERSION)-release.tar.bz2
++FLITE_SITE = http://www.speech.cs.cmu.edu/flite/packed/flite-$(FLITE_VERSION)
++FLITE_LICENSE = BSD-4c
++FLITE_LICENSE_FILES = COPYING
++
++FLITE_INSTALL_STAGING = YES
++
++# Sadly, Flite does not support parallel build, especially when building its
++# shared libraries.
++FLITE_MAKE = $(MAKE1)
++
++# $ tar tf flite-1.4-release.tar.bz2
++# ...
++# flite-1.4-release//install-sh
++# flite-1.4-release//mkinstalldirs
++# flite-1.4-release//Exports.def
++# flite-1.4-release//flite.sln
++# flite-1.4-release//fliteDll.vcproj
++# flite-1.4-release/config/Makefile
++# flite-1.4-release/config/common_make_rules
++# flite-1.4-release/config/project.mak
++# flite-1.4-release/config/config.in
++# flite-1.4-release/config/system.mak.in
++#
++# So, the strip-component trick does not work at all.
++# Let's redefine the extract command.
++define FLITE_EXTRACT_CMDS
++	$(RM) -rf $(FLITE_DIR)
++	$(INFLATE$(suffix $(FLITE_SOURCE))) $(DL_DIR)/$(FLITE_SOURCE) | \
++		$(TAR) -C $(BUILD_DIR) $(TAR_OPTIONS) -
++	mv $(BUILD_DIR)/$(subst .tar.bz2,,$(FLITE_SOURCE)) $(FLITE_DIR)
++endef
++
++$(eval $(autotools-package))
+-- 
+1.8.5.2
