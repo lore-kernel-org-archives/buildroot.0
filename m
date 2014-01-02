@@ -1,7 +1,7 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 2 Jan 2014 13:06:39 +0200
+From: Ivan Wagner <ivan.wagner@gmail.com>
+Date: Thu, 2 Jan 2014 12:09:17 +0100
 Subject: [Buildroot] Wrong compiler path when compiling zlib
-In-Reply-To: <CA+hj=MpO+iC+YwcHcBsSL7kNMfFAhaV8MZz-mai86tnOD6E3Qw@mail.gmail.com>
+In-Reply-To: <20140102110639.GY6589@tarshish>
 References: <CA+hj=MoNYEZchBs1_34cS4eA=UYfU+2QNdbNBDOqt=u2YFsJPw@mail.gmail.com>
  <20140102044704.GF6589@tarshish>
  <CA+hj=Mqv-+aJiSYFDZUnh_3Est=aC26CfC6kr_FkqM58sjNj3Q@mail.gmail.com>
@@ -9,50 +9,20 @@ References: <CA+hj=MoNYEZchBs1_34cS4eA=UYfU+2QNdbNBDOqt=u2YFsJPw@mail.gmail.com>
  <CA+hj=MoPxwwNn76Sh3vgP5VpkFsUn6uMRKtYW76a-A4DpoMkxg@mail.gmail.com>
  <20140102103439.GW6589@tarshish>
  <CA+hj=MpO+iC+YwcHcBsSL7kNMfFAhaV8MZz-mai86tnOD6E3Qw@mail.gmail.com>
-Message-ID: <20140102110639.GY6589@tarshish>
+ <20140102110639.GY6589@tarshish>
+Message-ID: <CA+hj=MpY+U_9RNpcVzaSgq9Zmg2tqcxoh8nWWhRbo3O+3yFEgg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Ivan,
+On Thu, Jan 2, 2014 at 12:06 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+> Check what these symlinks under output/host/usr/bin/ point to.
 
-On Thu, Jan 02, 2014 at 11:37:58AM +0100, Ivan Wagner wrote:
-> yes you're right it's quite unusual in fact I changed it to little
-> endian but I still see the same toolchain paths that aren't pointing
-> to the custom pre-installed I've selected.
+Interesting... There are no symlinks within output/host/usr/bin
 
-Check what these symlinks under output/host/usr/bin/ point to.
+So it seems that the symbolic links are missing? Who's responsible for
+the creation of these symlinks?
 
-baruch
-
-> On Thu, Jan 2, 2014 at 11:34 AM, Baruch Siach <baruch@tkos.co.il> wrote:
-> > HI Ivan,
-> >
-> > On Thu, Jan 02, 2014 at 11:08:16AM +0100, Ivan Wagner wrote:
-> >> On Thu, Jan 2, 2014 at 10:19 AM, Baruch Siach <baruch@tkos.co.il> wrote:
-> >> > Do you see the same error? Something else? Can you post your .config?
-> >>
-> >> Yes the error is exactly the same. Here's the .config file:
-> >
-> > [...]
-> >
-> >> BR2_ARCH="armeb"
-> >> BR2_ENDIAN="BIG"
-> >
-> > Big endian ARM? This is quite unusual.
-> >
-> > [...]
-> >
-> >> BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://arago-project.org/git/projects/linux-am33x.git"
-> >
-> > I don't think that AM33x SoCs are big endian. What happens if you change to
-> > little endian ARM?
-> >
-> > baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Ivan
