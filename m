@@ -1,30 +1,120 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 2 Jan 2014 18:12:21 +0200
-Subject: [Buildroot] [PATCH] valgrind: bump to version 1.9.0
-In-Reply-To: <1388678308-57013-1-git-send-email-jezz@sysmic.org>
-References: <1388678308-57013-1-git-send-email-jezz@sysmic.org>
-Message-ID: <20140102161221.GH6589@tarshish>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Thu, 2 Jan 2014 17:24:32 +0100
+Subject: [Buildroot] [PATCH] wmctrl: new package
+In-Reply-To: <1388678441-57138-1-git-send-email-jezz@sysmic.org>
+References: <1388678441-57138-1-git-send-email-jezz@sysmic.org>
+Message-ID: <CAHXCMMJxbQmmHDJ64V-D6JBD8s7o-+e1BxJsAjy4ieNNZosT1w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi J?r?me,
+Hi Jerome,
 
-On Thu, Jan 02, 2014 at 04:58:28PM +0100, J?r?me Pouiller wrote:
-> Drop some patches:
->  - glibc 2.17 and 2.18 are now supported by upstream
->  - coregrind/link_tool_exe_linux.in has been reworked and should now
->    support ccache
-> 
+2014/1/2 J?r?me Pouiller <jezz@sysmic.org>
+
+> Provides command line access to almost all the features defined in
+> the EWMH specification. It can be used, for example, to get
+> information about the window manager, to get a detailed list of
+> desktops and managed windows, to switch and resize desktops, to
+> make windows full-screen, always-above or sticky, and to activate,
+> close, move, resize, maximize and minimize them.
+>
 > Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+> ---
+>  package/Config.in        |  1 +
+>  package/wmctrl/Config.in | 21 +++++++++++++++++++++
+>  package/wmctrl/wmctrl.mk | 14 ++++++++++++++
+>  3 files changed, 36 insertions(+)
+>  create mode 100644 package/wmctrl/Config.in
+>  create mode 100644 package/wmctrl/wmctrl.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 311cc6c..857aa84 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -231,6 +231,7 @@ source "package/sylpheed/Config.in"
+>  source "package/synergy/Config.in"
+>  source "package/torsmo/Config.in"
+>  source "package/x11vnc/Config.in"
+> +source "package/wmctrl/Config.in"
+>
+Please, keep the list sorted in alphabetical order.
 
-Subject should be 3.9.0.
 
-baruch
+>  source "package/xscreensaver/Config.in"
+>  source "package/xstroke/Config.in"
+>  source "package/xterm/Config.in"
+> diff --git a/package/wmctrl/Config.in b/package/wmctrl/Config.in
+> new file mode 100644
+> index 0000000..8f2dcf4
+> --- /dev/null
+> +++ b/package/wmctrl/Config.in
+> @@ -0,0 +1,21 @@
+> +config BR2_PACKAGE_WMCTRL
+> +       bool "wmctrl"
+> +       select BR2_PACKAGE_XLIB_LIBX11
+> +       select BR2_PACKAGE_XLIB_LIBXMU
+> +       select BR2_PACKAGE_LIBGLIB2
+> +       depends on BR2_USE_WCHAR # libglib2
+> +       depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+> +       depends on BR2_USE_MMU # libglib2
+>
+It should depend on xorg as well.
+
+
+> +       help
+> +         Provides command line access to almost all the features defined
+> in
+> +         the EWMH specification. It can be used, for example, to get
+> +         information about the window manager, to get a detailed list of
+> +         desktops and managed windows, to switch and resize desktops, to
+> +         make windows full-screen, always-above or sticky, and to
+> activate,
+> +         close, move, resize, maximize and minimize them.
+> +
+> +         http://tomas.styblo.name/wmctrl/
+> +
+> +comment "libglib2 needs a toolchain w/ mmu, wchar, threads"
+> +       depends on !BR2_USE_MMU || !BR2_USE_WCHAR ||
+> !BR2_TOOLCHAIN_HAS_THREADS
+> +
+> diff --git a/package/wmctrl/wmctrl.mk b/package/wmctrl/wmctrl.mk
+> new file mode 100644
+> index 0000000..d54e062
+> --- /dev/null
+> +++ b/package/wmctrl/wmctrl.mk
+> @@ -0,0 +1,14 @@
+>
+> +################################################################################
+> +#
+> +# wmctrl
+> +#
+>
+> +################################################################################
+> +
+> +WMCTRL_VERSION = 1.07
+> +WMCTRL_SITE = http://tomas.styblo.name/wmctrl/dist
+> +WMCTRL_LICENSE = GPLv2
+> +WMCTRL_LICENSE_FILES = COPYING
+> +
+> +WMCTRL_DEPENDENCIES = libglib2 xlib_libX11 xlib_libXmu
+> +
+> +$(eval $(autotools-package))
+> --
+> 1.8.3.2
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+Regards,
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Samuel
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140102/a88c3a01/attachment.html>
