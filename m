@@ -1,36 +1,34 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 2 Jan 2014 12:33:16 +0100
-Subject: [Buildroot] Generating Buildroot compatible kernel tarball from
- Git
-In-Reply-To: <CAP0ktjKKsvyH2GB_c=SJ4zKNwa+xOOYRo9KdhycFtNX=crVtVg@mail.gmail.com>
-References: <CAP0ktjJR9UYxM2RuHUgTMWYu7vx2+V-yN31uhScLT53oZAYt4g@mail.gmail.com>
- <CAP0ktjKKsvyH2GB_c=SJ4zKNwa+xOOYRo9KdhycFtNX=crVtVg@mail.gmail.com>
-Message-ID: <20140102113316.GA3417@free.fr>
+From: Ivan Wagner <ivan.wagner@gmail.com>
+Date: Thu, 2 Jan 2014 12:35:00 +0100
+Subject: [Buildroot] Wrong compiler path when compiling zlib
+In-Reply-To: <20140102111744.GZ6589@tarshish>
+References: <CA+hj=MoNYEZchBs1_34cS4eA=UYfU+2QNdbNBDOqt=u2YFsJPw@mail.gmail.com>
+ <20140102044704.GF6589@tarshish>
+ <CA+hj=Mqv-+aJiSYFDZUnh_3Est=aC26CfC6kr_FkqM58sjNj3Q@mail.gmail.com>
+ <20140102091925.GO6589@tarshish>
+ <CA+hj=MoPxwwNn76Sh3vgP5VpkFsUn6uMRKtYW76a-A4DpoMkxg@mail.gmail.com>
+ <20140102103439.GW6589@tarshish>
+ <CA+hj=MpO+iC+YwcHcBsSL7kNMfFAhaV8MZz-mai86tnOD6E3Qw@mail.gmail.com>
+ <20140102110639.GY6589@tarshish>
+ <CA+hj=MpY+U_9RNpcVzaSgq9Zmg2tqcxoh8nWWhRbo3O+3yFEgg@mail.gmail.com>
+ <20140102111744.GZ6589@tarshish>
+Message-ID: <CA+hj=MrgJn9phMDkgdZrCuT=BumpmmW2EH6VnWBqRzYSP-6Uig@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Anmol, All,
+Hi Baruch,
 
-On 2014-01-02 16:58 +0530, Anmol Sarma spake thusly:
-> I am trying to modify the default configuration for BeagleBone to use a
-> custom tarball instead of a Git tree. I generated a tarball using:
-> 
-> git archive bb | bzip2 > linux-3.8.13.tar.bz2
+On Thu, Jan 2, 2014 at 12:17 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+> See the TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER macro in
+> toolchain/toolchain-external/toolchain-external.mk.
 
-You forgot the prefix:
-
-    git archive XXXX --prefix=linux/ |bzip2 ....
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+I think I found out something. At the moment I was only interested in
+trying to cross-compile qt5 for the ARM arch. So what I've done is to
+create a basic buildroot configuration where I selected the external
+toolchain, basic packages and qt5. But then I directly execute "make
+qt5base-build" and at this stage toolchain-external stuff doesn't get
+executed. That's why I don't see any symlinks.
+If I simply run "make" then the toolchain-external is executed.
