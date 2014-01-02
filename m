@@ -1,83 +1,92 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Thu,  2 Jan 2014 22:27:40 +0100
-Subject: [Buildroot] [PATCH v2] apitrace: new package
-Message-ID: <1388698061-32942-1-git-send-email-jezz@sysmic.org>
+Date: Thu,  2 Jan 2014 22:29:40 +0100
+Subject: [Buildroot] [PATCH v2] wmctrl: new package
+Message-ID: <1388698180-33026-1-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Trace and replay OpenGL and OpenGL ES APIs calls to/from a file.
-
-http://apitrace.github.io/
+Provides command line access to almost all the features defined in
+the EWMH specification. It can be used, for example, to get
+information about the window manager, to get a detailed list of
+desktops and managed windows, to switch and resize desktops, to
+make windows full-screen, always-above or sticky, and to activate,
+close, move, resize, maximize and minimize them.
 
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
 v2:
- Fix dependencies problems (identified by Samuel)
+ Fix alphabetical order
+ Fix dependencies
 
- package/Config.in            |  1 +
- package/apitrace/Config.in   | 14 ++++++++++++++
- package/apitrace/apitrace.mk | 17 +++++++++++++++++
- 3 files changed, 32 insertions(+)
- create mode 100644 package/apitrace/Config.in
- create mode 100644 package/apitrace/apitrace.mk
+ package/Config.in        |  1 +
+ package/wmctrl/Config.in | 22 ++++++++++++++++++++++
+ package/wmctrl/wmctrl.mk | 14 ++++++++++++++
+ 3 files changed, 37 insertions(+)
+ create mode 100644 package/wmctrl/Config.in
+ create mode 100644 package/wmctrl/wmctrl.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 1ee60c1..097b487 100644
+index 311cc6c..1ee60c1 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -216,6 +216,7 @@ source "package/weston/Config.in"
- 
- comment "X applications"
- source "package/alsamixergui/Config.in"
-+source "package/apitrace/Config.in"
- source "package/docker/Config.in"
- source "package/feh/Config.in"
- source "package/freerdp/Config.in"
-diff --git a/package/apitrace/Config.in b/package/apitrace/Config.in
+@@ -230,6 +230,7 @@ source "package/rdesktop/Config.in"
+ source "package/sylpheed/Config.in"
+ source "package/synergy/Config.in"
+ source "package/torsmo/Config.in"
++source "package/wmctrl/Config.in"
+ source "package/x11vnc/Config.in"
+ source "package/xscreensaver/Config.in"
+ source "package/xstroke/Config.in"
+diff --git a/package/wmctrl/Config.in b/package/wmctrl/Config.in
 new file mode 100644
-index 0000000..388b3e9
+index 0000000..c1ae6ac
 --- /dev/null
-+++ b/package/apitrace/Config.in
-@@ -0,0 +1,14 @@
-+comment "apitrace needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-+
-+config BR2_PACKAGE_APITRACE
-+	bool "apitrace"
-+	depends on BR2_PACKAGE_XORG7
-+	depends on BR2_INSTALL_LIBSTDCPP
++++ b/package/wmctrl/Config.in
+@@ -0,0 +1,22 @@
++config BR2_PACKAGE_WMCTRL
++	bool "wmctrl"
 +	select BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_XLIB_LIBXMU
++	select BR2_PACKAGE_LIBGLIB2
++	depends on BR2_PACKAGE_XORG7
++	depends on BR2_USE_WCHAR # libglib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
++	depends on BR2_USE_MMU # libglib2
 +	help
-+	  Trace and replay OpenGL and OpenGL ES APIs calls to/from a file. You 
-+	  may install apitrace GUI from your distribution to inspect generated 
-+	  traces.
-+	  
-+	  http://apitrace.github.io/
-diff --git a/package/apitrace/apitrace.mk b/package/apitrace/apitrace.mk
++	  Provides command line access to almost all the features defined in 
++	  the EWMH specification. It can be used, for example, to get 
++	  information about the window manager, to get a detailed list of 
++	  desktops and managed windows, to switch and resize desktops, to 
++	  make windows full-screen, always-above or sticky, and to activate, 
++	  close, move, resize, maximize and minimize them. 
++
++	  http://tomas.styblo.name/wmctrl/
++
++comment "libglib2 needs a toolchain w/ mmu, wchar, threads"
++	depends on !BR2_USE_MMU || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++
+diff --git a/package/wmctrl/wmctrl.mk b/package/wmctrl/wmctrl.mk
 new file mode 100644
-index 0000000..c31a5b3
+index 0000000..d54e062
 --- /dev/null
-+++ b/package/apitrace/apitrace.mk
-@@ -0,0 +1,17 @@
++++ b/package/wmctrl/wmctrl.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# apitrace
++# wmctrl
 +#
 +################################################################################
 +
-+APITRACE_VERSION = c181b7fbf4b1c3912424761fec8ac7124640543a
-+APITRACE_SITE = http://github.com/apitrace/apitrace/tarball/$(APITRACE_VERSION)
-+APITRACE_LICENSE = MIT
-+APITRACE_LICENSE_FILES = LICENSE
++WMCTRL_VERSION = 1.07
++WMCTRL_SITE = http://tomas.styblo.name/wmctrl/dist
++WMCTRL_LICENSE = GPLv2
++WMCTRL_LICENSE_FILES = COPYING
 +
-+APITRACE_DEPENDENCIES = xlib_libX11 host-python 
++WMCTRL_DEPENDENCIES = libglib2 xlib_libX11 xlib_libXmu
 +
-+# Gui was never tested, so we prefer to explicitly disable it
-+APITRACE_CONF_OPT += -DENABLE_GUI=false
-+
-+$(eval $(cmake-package))
++$(eval $(autotools-package))
 -- 
 1.8.3.2
