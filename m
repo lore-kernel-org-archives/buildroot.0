@@ -1,35 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Jan 2014 13:17:39 +0100
-Subject: [Buildroot] [PATCH] ZNC: new package
-In-Reply-To: <52c542ae.87ad0e0a.3820.6636@mx.google.com>
-References: <52c48e73.e865b40a.6e3c.062f@mx.google.com>
- <20140102095901.3816c2f9@skate>
- <52c542ae.87ad0e0a.3820.6636@mx.google.com>
-Message-ID: <20140102131739.786b567a@skate>
+Date: Thu, 2 Jan 2014 13:20:26 +0100
+Subject: [Buildroot] Wrong compiler path when compiling zlib
+In-Reply-To: <CA+hj=MpO+iC+YwcHcBsSL7kNMfFAhaV8MZz-mai86tnOD6E3Qw@mail.gmail.com>
+References: <CA+hj=MoNYEZchBs1_34cS4eA=UYfU+2QNdbNBDOqt=u2YFsJPw@mail.gmail.com>
+ <20140102044704.GF6589@tarshish>
+ <CA+hj=Mqv-+aJiSYFDZUnh_3Est=aC26CfC6kr_FkqM58sjNj3Q@mail.gmail.com>
+ <20140102091925.GO6589@tarshish>
+ <CA+hj=MoPxwwNn76Sh3vgP5VpkFsUn6uMRKtYW76a-A4DpoMkxg@mail.gmail.com>
+ <20140102103439.GW6589@tarshish>
+ <CA+hj=MpO+iC+YwcHcBsSL7kNMfFAhaV8MZz-mai86tnOD6E3Qw@mail.gmail.com>
+Message-ID: <20140102132026.68c0bb25@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear C?dric Ch?pied,
+Dear Ivan Wagner,
 
-On Thu, 02 Jan 2014 11:42:52 +0100, C?dric Ch?pied wrote:
-> Dear Thomas,
-> 
-> At Thu, 2 Jan 2014 09:59:01 +0100,
-> Thomas Petazzoni wrote:
-> > Thanks for your patch, but you sent it as an attached file, which is
-> > not very practical for reviewing patches. Please send it inline inside
-> > the e-mail.
-> 
-> Do I need to resend it with git send-email or is it ok for this time?
+On Thu, 2 Jan 2014 11:37:58 +0100, Ivan Wagner wrote:
 
-Yes, please resend it with git send-email so that we can review the
-patch. Also, please keep the Buildroot mailing list in Cc when
-following up on a Buildroot discussion.
+> yes you're right it's quite unusual in fact I changed it to little
+> endian but I still see the same toolchain paths that aren't pointing
+> to the custom pre-installed I've selected.
 
-Thanks!
+It is expected that the compiler isn't pointing directly to your
+external toolchain. Buildroot compiles a small wrapper around the
+external toolchain, in order to pass some appropriate arguments when
+the external compiler is called. Therefore it is perfectly normal that
+the compiler is called output/host/usr/bin/arm-<something>-gcc. Any
+other value would be wrong.
 
 Thomas
 -- 
