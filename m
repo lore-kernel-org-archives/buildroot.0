@@ -1,54 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Jan 2014 10:15:51 +0100
-Subject: [Buildroot] [PATCH 1/1] transmission: version bump to 2.8.2
-In-Reply-To: <BLU0-SMTP836DDC88AF848215E0249AD9CE0@phx.gbl>
-References: <BLU0-SMTP836DDC88AF848215E0249AD9CE0@phx.gbl>
-Message-ID: <20140102101551.2a562563@skate>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 2 Jan 2014 11:19:25 +0200
+Subject: [Buildroot] Wrong compiler path when compiling zlib
+In-Reply-To: <CA+hj=Mqv-+aJiSYFDZUnh_3Est=aC26CfC6kr_FkqM58sjNj3Q@mail.gmail.com>
+References: <CA+hj=MoNYEZchBs1_34cS4eA=UYfU+2QNdbNBDOqt=u2YFsJPw@mail.gmail.com>
+ <20140102044704.GF6589@tarshish>
+ <CA+hj=Mqv-+aJiSYFDZUnh_3Est=aC26CfC6kr_FkqM58sjNj3Q@mail.gmail.com>
+Message-ID: <20140102091925.GO6589@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Hi Ivan,
 
-On Mon, 30 Dec 2013 18:41:23 +0100, Bernd Kuhls wrote:
+On Thu, Jan 02, 2014 at 10:06:58AM +0100, Ivan Wagner wrote:
+> On Thu, Jan 2, 2014 at 5:47 AM, Baruch Siach <baruch@tkos.co.il> wrote:
+> > This should be a symlink to the external toolchain wrapper. See the comment in
+> > toolchain/toolchain-external/toolchain-external.mk for some more information
+> > on this wrapper. I guess that a 'make clean' would solve your problem.
 > 
-> Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
-> ---
->  package/transmission/transmission.mk |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
-> index 1e7ee48..3ced558 100644
-> --- a/package/transmission/transmission.mk
-> +++ b/package/transmission/transmission.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -TRANSMISSION_VERSION = 2.33
-> +TRANSMISSION_VERSION = 2.82
->  TRANSMISSION_SITE = http://download.transmissionbt.com/files/
->  TRANSMISSION_SOURCE = transmission-$(TRANSMISSION_VERSION).tar.xz
->  TRANSMISSION_DEPENDENCIES = \
+> I tried with the make clean cmd in order to start with a cleaned env
+> but it's not working.
 
-This patch is causing lots of build issues in our autobuilders. See
-http://autobuild.buildroot.org/results/638/63884de929fb7339ebf44b08cb5d1ab30010666a/build-end.log
-for an example. The build error is:
+Do you see the same error? Something else? Can you post your .config?
 
-tr-utp.c:66:1: error: conflicting types for 'UTP_Write'
-In file included from tr-utp.c:28:0:
-../third-party/libutp/utp.h:116:6: note: previous declaration of 'UTP_Write' was here
-make[2]: *** [tr-utp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
+baruch
 
-Can you have a look into this?
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
