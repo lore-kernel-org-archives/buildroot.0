@@ -1,44 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Jan 2014 13:21:21 +0100
-Subject: [Buildroot] Wrong compiler path when compiling zlib
-In-Reply-To: <CA+hj=MrgJn9phMDkgdZrCuT=BumpmmW2EH6VnWBqRzYSP-6Uig@mail.gmail.com>
-References: <CA+hj=MoNYEZchBs1_34cS4eA=UYfU+2QNdbNBDOqt=u2YFsJPw@mail.gmail.com>
- <20140102044704.GF6589@tarshish>
- <CA+hj=Mqv-+aJiSYFDZUnh_3Est=aC26CfC6kr_FkqM58sjNj3Q@mail.gmail.com>
- <20140102091925.GO6589@tarshish>
- <CA+hj=MoPxwwNn76Sh3vgP5VpkFsUn6uMRKtYW76a-A4DpoMkxg@mail.gmail.com>
- <20140102103439.GW6589@tarshish>
- <CA+hj=MpO+iC+YwcHcBsSL7kNMfFAhaV8MZz-mai86tnOD6E3Qw@mail.gmail.com>
- <20140102110639.GY6589@tarshish>
- <CA+hj=MpY+U_9RNpcVzaSgq9Zmg2tqcxoh8nWWhRbo3O+3yFEgg@mail.gmail.com>
- <20140102111744.GZ6589@tarshish>
- <CA+hj=MrgJn9phMDkgdZrCuT=BumpmmW2EH6VnWBqRzYSP-6Uig@mail.gmail.com>
-Message-ID: <20140102132121.02090747@skate>
+Date: Thu, 2 Jan 2014 13:23:18 +0100
+Subject: [Buildroot] [PATCH] uclibc: snapshot: add BSD obsolete signal
+ functions
+In-Reply-To: <1797e4d78b86649e8a9d5aa44cef8fd83b81825f.1388663583.git.baruch@tkos.co.il>
+References: <1797e4d78b86649e8a9d5aa44cef8fd83b81825f.1388663583.git.baruch@tkos.co.il>
+Message-ID: <20140102132318.7315ddde@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ivan Wagner,
+Dear Baruch Siach,
 
-On Thu, 2 Jan 2014 12:35:00 +0100, Ivan Wagner wrote:
+On Thu,  2 Jan 2014 13:53:03 +0200, Baruch Siach wrote:
+> Fixes
+> http://autobuild.buildroot.net/results/70b/70b79ca0aa97ed451a5679029955ed3709c84b67/.
+> 
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  package/uclibc/uClibc-snapshot.config | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/uclibc/uClibc-snapshot.config b/package/uclibc/uClibc-snapshot.config
+> index 9ca3f9ea983d..890aefd8ec59 100644
+> --- a/package/uclibc/uClibc-snapshot.config
+> +++ b/package/uclibc/uClibc-snapshot.config
+> @@ -152,7 +152,7 @@ UCLIBC_LINUX_SPECIFIC=y
+>  UCLIBC_HAS_GNU_ERROR=y
+>  UCLIBC_BSD_SPECIFIC=y
+>  UCLIBC_HAS_BSD_ERR=y
+> -# UCLIBC_HAS_OBSOLETE_BSD_SIGNAL is not set
+> +UCLIBC_HAS_OBSOLETE_BSD_SIGNAL=y
 
-> I think I found out something. At the moment I was only interested in
-> trying to cross-compile qt5 for the ARM arch. So what I've done is to
-> create a basic buildroot configuration where I selected the external
-> toolchain, basic packages and qt5. But then I directly execute "make
-> qt5base-build" and at this stage toolchain-external stuff doesn't get
-> executed. That's why I don't see any symlinks.
-> If I simply run "make" then the toolchain-external is executed.
-
-Correct. We currently don't have a dependency on all packages to the
-toolchain. There are pending patches to fix this.
-
-In the mean time, unless you know in details the Buildroot internals,
-you should only do simple "make" commands.
-
-Best regards,
+We don't have this option enabled in the uClibc-0.9.33.config. Is there
+a reason why it should be enabled for the uClibc-snapshot.config and
+not for uClibc-0.9.33.config ? Does netsnmp builds with uClibc 0.9.33
+on some other architecture?
 
 Thomas
 -- 
