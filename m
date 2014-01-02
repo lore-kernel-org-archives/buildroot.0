@@ -1,49 +1,83 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Jan 2014 22:21:29 +0100
-Subject: [Buildroot] [PATCH 4/4] transmission: Fix build error
- "conflicting types for 'UTP_Write'" after version bump
-In-Reply-To: <BLU0-SMTP287B7593393BF8A5143ED5FD9CB0@phx.gbl>
-References: <BLU0-SMTP287B7593393BF8A5143ED5FD9CB0@phx.gbl>
-Message-ID: <20140102222129.3f5eba3d@skate>
+From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+Date: Thu,  2 Jan 2014 22:27:40 +0100
+Subject: [Buildroot] [PATCH v2] apitrace: new package
+Message-ID: <1388698061-32942-1-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Trace and replay OpenGL and OpenGL ES APIs calls to/from a file.
 
-On Thu, 2 Jan 2014 20:28:49 +0100, Bernd Kuhls wrote:
-> fix taken from http://www.adminsehow.com/2012/10/how-to-install-transmission-2-71-on-debian-6-0-squeeze/
-> 
-> compile tested on arch sh4, fixes
-> http://autobuild.buildroot.org/results/638/63884de929fb7339ebf44b08cb5d1ab30010666a/
-> 
-> should also fix powerpc
-> http://autobuild.buildroot.org/results/eb4/eb486228a11a9602d4bf40e771744d2b2b40508f/
-> 
-> Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
-> ---
->  package/transmission/transmission-fix-utypes.patch |   22 ++++++++++++++++++++
->  1 file changed, 22 insertions(+)
->  create mode 100644 package/transmission/transmission-fix-utypes.patch
-> 
-> diff --git a/package/transmission/transmission-fix-utypes.patch b/package/transmission/transmission-fix-utypes.patch
-> new file mode 100644
-> index 0000000..74f3d32
-> --- /dev/null
-> +++ b/package/transmission/transmission-fix-utypes.patch
+http://apitrace.github.io/
 
-Thanks, but please add a description + Signed-off-by inside the patch
-itself. It should also point to where you found the patch.
+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+---
+v2:
+ Fix dependencies problems (identified by Samuel)
 
-See
-http://buildroot.org/downloads/manual/manual.html#_format_and_licensing_of_the_package_patches
+ package/Config.in            |  1 +
+ package/apitrace/Config.in   | 14 ++++++++++++++
+ package/apitrace/apitrace.mk | 17 +++++++++++++++++
+ 3 files changed, 32 insertions(+)
+ create mode 100644 package/apitrace/Config.in
+ create mode 100644 package/apitrace/apitrace.mk
 
-Thanks!
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index 1ee60c1..097b487 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -216,6 +216,7 @@ source "package/weston/Config.in"
+ 
+ comment "X applications"
+ source "package/alsamixergui/Config.in"
++source "package/apitrace/Config.in"
+ source "package/docker/Config.in"
+ source "package/feh/Config.in"
+ source "package/freerdp/Config.in"
+diff --git a/package/apitrace/Config.in b/package/apitrace/Config.in
+new file mode 100644
+index 0000000..388b3e9
+--- /dev/null
++++ b/package/apitrace/Config.in
+@@ -0,0 +1,14 @@
++comment "apitrace needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
++
++config BR2_PACKAGE_APITRACE
++	bool "apitrace"
++	depends on BR2_PACKAGE_XORG7
++	depends on BR2_INSTALL_LIBSTDCPP
++	select BR2_PACKAGE_XLIB_LIBX11
++	help
++	  Trace and replay OpenGL and OpenGL ES APIs calls to/from a file. You 
++	  may install apitrace GUI from your distribution to inspect generated 
++	  traces.
++	  
++	  http://apitrace.github.io/
+diff --git a/package/apitrace/apitrace.mk b/package/apitrace/apitrace.mk
+new file mode 100644
+index 0000000..c31a5b3
+--- /dev/null
++++ b/package/apitrace/apitrace.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# apitrace
++#
++################################################################################
++
++APITRACE_VERSION = c181b7fbf4b1c3912424761fec8ac7124640543a
++APITRACE_SITE = http://github.com/apitrace/apitrace/tarball/$(APITRACE_VERSION)
++APITRACE_LICENSE = MIT
++APITRACE_LICENSE_FILES = LICENSE
++
++APITRACE_DEPENDENCIES = xlib_libX11 host-python 
++
++# Gui was never tested, so we prefer to explicitly disable it
++APITRACE_CONF_OPT += -DENABLE_GUI=false
++
++$(eval $(cmake-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.3.2
