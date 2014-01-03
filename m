@@ -1,52 +1,116 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 3 Jan 2014 14:01:03 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-01-02
-In-Reply-To: <4147645.zBnW5LtJtb@sagittae>
-References: <20140103073007.E79CA101DFF@stock.ovh.net>
- <2683108.9dlVqoAHeN@sagittae> <20140103085800.GO6589@tarshish>
- <4147645.zBnW5LtJtb@sagittae>
-Message-ID: <20140103120103.GR6589@tarshish>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Fri,  3 Jan 2014 13:44:12 +0100
+Subject: [Buildroot] [PATCH v5 0/5] udev is now provided by systemd or eudev
+Message-ID: <1388753057-13485-1-git-send-email-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi J?r?me,
+This series converts udev to a virtual package, either provided by systemd or
+eudev.
 
-On Fri, Jan 03, 2014 at 10:52:49AM +0100, J?r?me Pouiller wrote:
-> On Fri 03 Jan 2014 10:58:00 Baruch Siach wrote:
-> > On Fri, Jan 03, 2014 at 09:51:55AM +0100, J?r?me Pouiller wrote:
-> > > On Fri 03 Jan 2014 09:45:04 Baruch Siach wrote:
-> > > > On Fri, Jan 03, 2014 at 08:30:07AM +0100, Thomas Petazzoni wrote:
-> > > > >     xtensa |                libcgicc-3.2.12 | NOK |
-> > > > >     http://autobuild.buildroot.net/results/7ccbf088cac523f5cccc36d4b5e
-> > > > >     dc3a45c670044/> > 
-> > > > The cause of this failure is that the static stdc++ library is not
-> > > > copied to the toolchain sysroot. Manually copying
-> > > > build/xtensa-buildroot-linux-uclibc/libstdc++-v3/src/.libs/libstdc++.a
-> > > > to
-> > > > staging/usr/lib fixes the problem. Can someone point me at the code that
-> > > > copies toolchain libraries to sysroot?
-> > > 
-> > > I believe this patch should do the job:
-> > >   http://patchwork.ozlabs.org/patch/282186/
-> > 
-> > Thanks. But in my case libstdc++.a does get built. It just not copied to
-> > staging. Do you thing your patch is still relevant?
-> As far as I remember, when I wrote this patch, all configurations with 
-> BR2_TOOLCHAIN_BUILDROOT=y and BR2_PREFER_STATIC_LIB=y were concerned.
-> 
-> Without the patch, libstdc++.a exists, but libstdc++.la does not refer to it 
-> and libstdc++.a is not installed.
+Starting with version 183, udev has been merged into systemd. This forces the
+use of systemd as the init system if /dev is to be dynamically managed by
+udev. eudev is a fork of udev, maintained by Gentoo, but isolated from
+systemd, so it can be used with any init system.
 
-Right. This fixes my original failure. Added my Tested-by to the original 
-patch.
+Systemd has been bumped to v207 and a new eudev package has been added.
+Version 1.3 of eudev is in sync with systemd v207.
 
-baruch
+The bump of systemd to v207 also introduces new options, like the activation
+of the journal gateway.
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+In the end:
+
+  - if systemd is selected as init system, the /dev management will handled by
+    udev. No other choice possible.
+  - if busybox or SysV is chosen, the user can choose to manage /dev
+    statically, or dynamically using mdev or eudev.
+
+Changes v4 -> v5:
+  - disabled systemd and eudev on avr32.
+  - reverted Busybox binaries overwrite fix.
+
+Changes v3 -> v4:
+  - updated /dev management section in user manual.
+  - fixed indentation of conditionals in Makefiles (suggested by Thomas P).
+  - added missing comments on dependencies (suggested by Thomas P, Thomas DS).
+  - fixed some packages not being converted to BR2_PACKAGE_HAS_UDEV.
+
+Changes v2 -> v3:
+  - reordered patches for better bisectability (suggested by Thomas).
+  - removed uClibc support for Systemd (suggested by Arnout).
+  - bumped systemd to v207 (no more backport patches).
+  - bumped eudev to 1.3.
+
+Changes v1 -> v2:
+  - split patch for better readability.
+  - promoted init system selection above /dev management in "System
+    Configuration" menu.
+  - /dev management selection is not displayed if systemd is chosen as init
+    system, as udev is the only possible choice (suggested by Arnout).
+  - added "Dynamic with eudev" choice in /dev management selection.
+  - less patches for systemd/uclibc compatibility, thanks to recent update of
+    uclibc 0.9.33.2.
+  - autoreconf not needed anymore for systemd (thanks to removal of
+    configure.ac patch).
+  - ACL/Gudev support in systemd activated only if acl/libglib2 are
+    selected (suggested by Arnout).
+  - udev package provides BR2_PACKAGE_HAS_UDEV (suggested by Thomas).
+  - converted packages depending on
+    BR2_PACKAGE_UDEV/BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV to
+    BR2_PACKAGE_HAS_UDEV.
+  - eudev source code fetched as a tarball, not from Git tree (suggested by
+    Arnout).
+  - removed "enable all extras" option from eudev configuration: Gudev support
+    is activated if libglib2 is selected (suggested by Arnout).
+  - added option to build udev rule generator in eudev, as it was in previous
+    version of udev.
+  - removed dependency on hwdata for systemd and eudev, as both embed their
+    own hardware database.
+
+Best regards,
+ELB
+
+Eric Le Bihan (5):
+  sysvinit: depend on SysV selected as init system.
+  eudev: new package.
+  udev: convert to virtual package.
+  systemd: bump to v207.
+  manual: update /dev management section.
+
+ Config.in.legacy                                 |    8 ++
+ docs/manual/configure.txt                        |   16 ++--
+ package/Config.in                                |    1 +
+ package/ccid/ccid.mk                             |    2 +-
+ package/eudev/Config.in                          |   37 ++++++++
+ package/{udev => eudev}/S10udev                  |    2 +-
+ package/eudev/eudev.mk                           |   48 +++++++++++
+ package/gpsd/gpsd.mk                             |    2 +-
+ package/libatasmart/Config.in                    |    4 +-
+ package/network-manager/Config.in                |    6 +-
+ package/pcsc-lite/Config.in                      |    2 +-
+ package/systemd/Config.in                        |   57 ++++++++++++-
+ package/systemd/systemd-fix-getty-unit.patch     |   36 ++++----
+ package/systemd/systemd-fix-page-size.patch      |   43 ----------
+ package/systemd/systemd-uclibc-fix.patch         |   59 -------------
+ package/systemd/systemd.mk                       |   98 +++++++++++++++-------
+ package/sysvinit/Config.in                       |    1 +
+ package/udev/Config.in                           |   48 +----------
+ package/udev/udev.mk                             |   47 +++--------
+ package/udisks/Config.in                         |    8 +-
+ package/usbmount/Config.in                       |    4 +-
+ package/x11r7/xdriver_xf86-input-evdev/Config.in |    4 +-
+ package/xenomai/xenomai.mk                       |    2 +-
+ system/Config.in                                 |   47 +++++++----
+ 24 files changed, 302 insertions(+), 280 deletions(-)
+ create mode 100644 package/eudev/Config.in
+ copy package/{udev => eudev}/S10udev (98%)
+ create mode 100644 package/eudev/eudev.mk
+ delete mode 100644 package/systemd/systemd-fix-page-size.patch
+ delete mode 100644 package/systemd/systemd-uclibc-fix.patch
+
+--
+1.7.9.5
