@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Jan 2014 20:48:52 +0100
-Subject: [Buildroot] [PATCH] zmqpp: bump git snapshot
-In-Reply-To: <1388699661-24441-1-git-send-email-spdawson@gmail.com>
-References: <1388699661-24441-1-git-send-email-spdawson@gmail.com>
-Message-ID: <20140103204852.1cfd0e42@skate>
+Date: Fri, 3 Jan 2014 20:49:04 +0100
+Subject: [Buildroot] [PATCH 0/3] czmq: bump git snapshot for czmq and
+ dependent packages
+In-Reply-To: <1388700400-25062-1-git-send-email-spdawson@gmail.com>
+References: <1388700400-25062-1-git-send-email-spdawson@gmail.com>
+Message-ID: <20140103204904.31337ab6@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,19 +13,18 @@ To: buildroot@busybox.net
 
 Simon,
 
-On Thu,  2 Jan 2014 21:54:21 +0000, spdawson at gmail.com wrote:
+On Thu,  2 Jan 2014 22:06:37 +0000, spdawson at gmail.com wrote:
 > From: Simon Dawson <spdawson@gmail.com>
 > 
-> Also remove a patch which is no longer required.
+> This patch series bumps the Git snapshot for the czmq package, and the
+> dependent packages filemq and zyre.
 > 
-> Signed-off-by: Simon Dawson <spdawson@gmail.com>
-> ---
->  package/zmqpp/zmqpp-fix-typos-in-code.patch | 46 -----------------------------
->  package/zmqpp/zmqpp.mk                      |  2 +-
->  2 files changed, 1 insertion(+), 47 deletions(-)
->  delete mode 100644 package/zmqpp/zmqpp-fix-typos-in-code.patch
+> Simon Dawson (3):
+>   czmq: bump git snapshot
+>   filemq: bump git snapshot
+>   zyre: bump git snapshot
 
-Applied, thanks.
+All three patches applied, thanks.
 
 Thomas
 -- 
