@@ -1,33 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Jan 2014 20:49:04 +0100
-Subject: [Buildroot] [PATCH 0/3] czmq: bump git snapshot for czmq and
- dependent packages
-In-Reply-To: <1388700400-25062-1-git-send-email-spdawson@gmail.com>
-References: <1388700400-25062-1-git-send-email-spdawson@gmail.com>
-Message-ID: <20140103204904.31337ab6@skate>
+Date: Fri, 3 Jan 2014 20:50:04 +0100
+Subject: [Buildroot] [git commit] mpd: Fix broken download URL
+Message-ID: <20140103195018.6F0879C380@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Simon,
+commit: http://git.buildroot.net/buildroot/commit/?id=5dccbffd80c681a6aef603714bf61d0fcfc1f8ee
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  2 Jan 2014 22:06:37 +0000, spdawson at gmail.com wrote:
-> From: Simon Dawson <spdawson@gmail.com>
-> 
-> This patch series bumps the Git snapshot for the czmq package, and the
-> dependent packages filemq and zyre.
-> 
-> Simon Dawson (3):
->   czmq: bump git snapshot
->   filemq: bump git snapshot
->   zyre: bump git snapshot
+Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mpd/mpd.mk |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-All three patches applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index d8f344f..4367cae 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -4,9 +4,10 @@
+ #
+ ################################################################################
+ 
+-MPD_VERSION = 0.17.6
++MPD_VERSION_MAJOR = 0.17
++MPD_VERSION = $(MPD_VERSION_MAJOR).6
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+-MPD_SITE = http://www.musicpd.org/download/mpd/stable
++MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf libglib2
+ MPD_LICENSE = GPLv2
+ MPD_LICENSE_FILES = COPYING
