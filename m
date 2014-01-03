@@ -1,37 +1,45 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 3 Jan 2014 11:05:51 +0200
-Subject: [Buildroot] [PATCH v2] apitrace: new package
-In-Reply-To: <1980406.FpqFHcLL6B@sagittae>
-References: <1388698061-32942-1-git-send-email-jezz@sysmic.org>
- <52C5E626.7050903@trzebnica.net> <1980406.FpqFHcLL6B@sagittae>
-Message-ID: <20140103090551.GP6589@tarshish>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Fri, 03 Jan 2014 10:52:49 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-01-02
+In-Reply-To: <20140103085800.GO6589@tarshish>
+References: <20140103073007.E79CA101DFF@stock.ovh.net>
+ <2683108.9dlVqoAHeN@sagittae> <20140103085800.GO6589@tarshish>
+Message-ID: <4147645.zBnW5LtJtb@sagittae>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi J?r?me,
-
-On Fri, Jan 03, 2014 at 10:01:03AM +0100, J?r?me Pouiller wrote:
-> On Thu 02 Jan 2014 23:20:22 Jerzy Grzegorek wrote:
-> > Hi J?r?me,
-> [...]
-> > > +APITRACE_VERSION = c181b7fbf4b1c3912424761fec8ac7124640543a
-> > > +APITRACE_SITE =
-> > > http://github.com/apitrace/apitrace/tarball/$(APITRACE_VERSION)
-> > I think, we should use github download helper
-> > APITRACE_SITE = $(call github,apitrace,apitrace,$(APITRACE_VERSION))
+On Fri 03 Jan 2014 10:58:00 Baruch Siach wrote:
+> Hi J?r?me,
 > 
-> hmm... This function is not yet included in master branch, is it? Do you think 
-> I should still base my patch on?
+> On Fri, Jan 03, 2014 at 09:51:55AM +0100, J?r?me Pouiller wrote:
+> > On Fri 03 Jan 2014 09:45:04 Baruch Siach wrote:
+> > > On Fri, Jan 03, 2014 at 08:30:07AM +0100, Thomas Petazzoni wrote:
+> > > >     xtensa |                libcgicc-3.2.12 | NOK |
+> > > >     http://autobuild.buildroot.net/results/7ccbf088cac523f5cccc36d4b5e
+> > > >     dc3a45c670044/> > 
+> > > The cause of this failure is that the static stdc++ library is not
+> > > copied to the toolchain sysroot. Manually copying
+> > > build/xtensa-buildroot-linux-uclibc/libstdc++-v3/src/.libs/libstdc++.a
+> > > to
+> > > staging/usr/lib fixes the problem. Can someone point me at the code that
+> > > copies toolchain libraries to sysroot?
+> > 
+> > I believe this patch should do the job:
+> >   http://patchwork.ozlabs.org/patch/282186/
+> 
+> Thanks. But in my case libstdc++.a does get built. It just not copied to
+> staging. Do you thing your patch is still relevant?
+As far as I remember, when I wrote this patch, all configurations with 
+BR2_TOOLCHAIN_BUILDROOT=y and BR2_PREFER_STATIC_LIB=y were concerned.
 
-It's in master branch since commit bb083e95cfae9 (infra: introduce github 
-helper function).
-
-baruch
+Without the patch, libstdc++.a exists, but libstdc++.la does not refer to it 
+and libstdc++.a is not installed.
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
