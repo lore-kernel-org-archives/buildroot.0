@@ -1,65 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Jan 2014 20:41:52 +0100
-Subject: [Buildroot] [git commit] transmission: Fix build error "conflicting
-	types for 'UTP_Write'" after version bump
-Message-ID: <20140103194200.254339C380@busybox.osuosl.org>
+Date: Fri, 3 Jan 2014 20:42:25 +0100
+Subject: [Buildroot] [PATCH v2 1/1] transmission: Fix build error
+ "conflicting types for 'UTP_Write'" after version bump
+In-Reply-To: <BLU0-SMTP19793343AE004AB8BB60FDFD9CA0@phx.gbl>
+References: <BLU0-SMTP19793343AE004AB8BB60FDFD9CA0@phx.gbl>
+Message-ID: <20140103204225.0e1998be@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=836b0ff7f108615e8771005739ecbf1fcdccff0b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Bernd Kuhls,
 
-fix taken from
-http://www.adminsehow.com/2012/10/how-to-install-transmission-2-71-on-debian-6-0-squeeze/
+On Fri, 3 Jan 2014 20:18:21 +0100, Bernd Kuhls wrote:
+> fix taken from
+> http://www.adminsehow.com/2012/10/how-to-install-transmission-2-71-on-debian-6-0-squeeze/
+> 
+> compile tested on arch sh4, fixes
+> http://autobuild.buildroot.org/results/638/63884de929fb7339ebf44b08cb5d1ab30010666a/
+> 
+> should also fix powerpc
+> http://autobuild.buildroot.org/results/eb4/eb486228a11a9602d4bf40e771744d2b2b40508f/
+> 
+> Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
 
-compile tested on arch sh4, fixes
-http://autobuild.buildroot.org/results/638/63884de929fb7339ebf44b08cb5d1ab30010666a/
+Applied, thanks.
 
-should also fix powerpc
-http://autobuild.buildroot.org/results/eb4/eb486228a11a9602d4bf40e771744d2b2b40508f/
-
-Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../transmission/transmission-01-fix-utypes.patch  |   30 ++++++++++++++++++++
- 1 files changed, 30 insertions(+), 0 deletions(-)
-
-diff --git a/package/transmission/transmission-01-fix-utypes.patch b/package/transmission/transmission-01-fix-utypes.patch
-new file mode 100644
-index 0000000..e67ba6a
---- /dev/null
-+++ b/package/transmission/transmission-01-fix-utypes.patch
-@@ -0,0 +1,30 @@
-+Fix build error "conflicting types for 'UTP_Write'"
-+
-+Fetch from: http://www.adminsehow.com/2012/10/how-to-install-transmission-2-71-on-debian-6-0-squeeze/
-+
-+The corresponding upstream bug report (unfixed) can be found here:
-+https://trac.transmissionbt.com/ticket/5232
-+
-+Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
-+
-+--- transmission-2.82.org/third-party/libutp/utypes.h	2013-08-09 04:47:43.000000000 +0200
-++++ transmission-2.82/third-party/libutp/utypes.h	2014-01-02 20:17:18.000000000 +0100
-+@@ -35,8 +35,15 @@
-+ typedef const char * cstr;
-+ typedef char * str;
-+ 
-+-#ifndef __cplusplus
-+-typedef uint8 bool;
-+-#endif
-++//#ifndef __cplusplus
-++//typedef uint8 bool;
-++//#endif
-++#ifndef __cplusplus
-++#ifdef HAVE_STDBOOL_H
-++#include <stdbool.h>
-++#else
-++typedef uint8 bool;
-++#endif
-++#endif
-+ 
-+ #endif //__UTYPES_H__
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
