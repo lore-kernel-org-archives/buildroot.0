@@ -1,32 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Jan 2014 21:03:46 +0100
-Subject: [Buildroot] [PATCH] e2fsprogs: fix posix_fadvise() signature
- mismatch
-In-Reply-To: <87bd00c09f1944edad28fe21411f1e8ab252968e.1388574955.git.baruch@tkos.co.il>
-References: <87bd00c09f1944edad28fe21411f1e8ab252968e.1388574955.git.baruch@tkos.co.il>
-Message-ID: <20140103210346.0e9fab44@skate>
+Date: Fri, 3 Jan 2014 21:04:31 +0100
+Subject: [Buildroot] [git commit] package: extend usage of github download
+	helper
+Message-ID: <20140103200436.7640B9C381@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+commit: http://git.buildroot.net/buildroot/commit/?id=ad0d02b740703f7903f309d0d17f71191b1725ee
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  1 Jan 2014 13:16:36 +0200, Baruch Siach wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/79c/79cdb149d349ce9fe2dffbf53e3ff127a050ed24/.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  ...g-fix-build-when-posix_fadvise-is-missing.patch | 42 ++++++++++++++++++++++
->  1 file changed, 42 insertions(+)
->  create mode 100644 package/e2fsprogs/e2fsprogs-0002-e4defrag-fix-build-when-posix_fadvise-is-missing.patch
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lcdapi/lcdapi.mk                         |    2 +-
+ package/lua-msgpack-native/lua-msgpack-native.mk |    2 +-
+ package/ti-utils/ti-utils.mk                     |    2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/lcdapi/lcdapi.mk b/package/lcdapi/lcdapi.mk
+index 1104151..d90511d 100644
+--- a/package/lcdapi/lcdapi.mk
++++ b/package/lcdapi/lcdapi.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LCDAPI_VERSION = v0.4
+-LCDAPI_SITE = http://github.com/spdawson/lcdapi/tarball/$(LCDAPI_VERSION)
++LCDAPI_SITE = $(call github,spdawson,lcdapi,$(LCDAPI_VERSION))
+ LCDAPI_LICENSE = LGPLv2.1+
+ LCDAPI_LICENSE_FILES = COPYING
+ 
+diff --git a/package/lua-msgpack-native/lua-msgpack-native.mk b/package/lua-msgpack-native/lua-msgpack-native.mk
+index 3718405..496f8a8 100644
+--- a/package/lua-msgpack-native/lua-msgpack-native.mk
++++ b/package/lua-msgpack-native/lua-msgpack-native.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LUA_MSGPACK_NATIVE_VERSION = 41cce91ab6b54e4426c6d626a0ac41a02ec2096d
+-LUA_MSGPACK_NATIVE_SITE = http://github.com/kengonakajima/lua-msgpack-native/tarball/$(LUA_MSGPACK_NATIVE_VERSION)
++LUA_MSGPACK_NATIVE_SITE = $(call github,kengonakajima,lua-msgpack-native,$(LUA_MSGPACK_NATIVE_VERSION))
+ LUA_MSGPACK_NATIVE_DEPENDENCIES = lua
+ LUA_MSGPACK_NATIVE_LICENSE = Apache-2.0
+ LUA_MSGPACK_NATIVE_LICENSE_FILES = LICENSE.txt
+diff --git a/package/ti-utils/ti-utils.mk b/package/ti-utils/ti-utils.mk
+index 8f7aad6..1d1c1e6 100644
+--- a/package/ti-utils/ti-utils.mk
++++ b/package/ti-utils/ti-utils.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ TI_UTILS_VERSION = 06dbdb2727354b5f3ad7c723897f40051fddee49
+-TI_UTILS_SITE = http://github.com/gxk/ti-utils/tarball/$(TI_UTILS_VERSION)
++TI_UTILS_SITE = $(call github,gxk,ti-utils,$(TI_UTILS_VERSION))
+ TI_UTILS_DEPENDENCIES = libnl
+ 
+ define TI_UTILS_BUILD_CMDS
