@@ -1,37 +1,51 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 3 Jan 2014 14:36:19 +0000
-Subject: [Buildroot] [PATCH v2] Disable MIPS64 ISAs for MIPS32 targets
-Message-ID: <1388759779-27871-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 03 Jan 2014 17:02:49 +0100
+Subject: [Buildroot] [PATCH 0 of 5 v3] Introduce new deprecation symbols,
+ and remove squashfs3/ttcp
+Message-ID: <patchbomb.1388764969@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently you can select MIPS64 ISAs, like mips64 and mips64r2, for
-MIPS32 targets. This is incorrect, so we disable the possibility to do
-that.
 
-Reviewed-by: Markos Chandras <markos.chandras@imgtec.com>
-Signed-off-by: Vicente Olivert Riera <vincent.riera@imgtec.com>
+In this third version I have stopped using the feature-removal-schedule.txt
+file, and moved to an alternate strategy: introduce symbols
+BR2_DEPRECATED_SINCE_xxxx_xx, which also provide an indication of when
+features can be removed.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+
 ---
- arch/Config.in.mips |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
-
-diff --git a/arch/Config.in.mips b/arch/Config.in.mips
-index 4121200..9b3fff4 100644
---- a/arch/Config.in.mips
-+++ b/arch/Config.in.mips
-@@ -29,8 +29,10 @@ config BR2_mips_32r2
- 	depends on !BR2_ARCH_IS_64
- config BR2_mips_64
- 	bool "mips 64"
-+	depends on BR2_ARCH_IS_64
- config BR2_mips_64r2
- 	bool "mips 64r2"
-+	depends on BR2_ARCH_IS_64
- endchoice
- 
- 
--- 
-1.7.1
+ Config.in                                              |  42 +++++++++++++-
+ Config.in.legacy                                       |  24 ++++++++
+ arch/Config.in.mips                                    |   8 +-
+ docs/manual/appendix.txt                               |   8 ++-
+ fs/squashfs/Config.in                                  |  16 -----
+ fs/squashfs/squashfs.mk                                |  12 ----
+ package/Config.in                                      |   2 -
+ package/autoconf/Config.in                             |   2 +-
+ package/automake/Config.in                             |   2 +-
+ package/bison/Config.in                                |   4 +-
+ package/busybox/Config.in                              |   2 +-
+ package/ccache/Config.in                               |   2 +-
+ package/flex/Config.in                                 |   3 +-
+ package/gcc/Config.in.host                             |   4 +-
+ package/gdb/Config.in.host                             |   4 +-
+ package/gob2/Config.in                                 |   3 +-
+ package/linux-headers/Config.in.host                   |  14 ++--
+ package/lzma/Config.in                                 |   4 +-
+ package/m4/Config.in                                   |   3 +-
+ package/squashfs3/Config.in                            |  12 ----
+ package/squashfs3/squashfs3-3.4-build-system-fix.patch |  37 ------------
+ package/squashfs3/squashfs3-3.4-get_nprocs.patch       |  33 -----------
+ package/squashfs3/squashfs3.mk                         |  34 -----------
+ package/ttcp/Config.in                                 |   7 --
+ package/ttcp/ttcp-0001-replace-deprecated-bcopy.patch  |  15 -----
+ package/ttcp/ttcp.mk                                   |  25 --------
+ package/vala/Config.in                                 |   4 +-
+ package/xstroke/Config.in                              |   2 +-
+ support/scripts/gen-manual-lists.py                    |  21 ++++---
+ toolchain/toolchain-external/Config.in                 |   8 +-
+ 30 files changed, 121 insertions(+), 236 deletions(-)
