@@ -1,74 +1,65 @@
-From: Ivan Sergeev <vsergeev@kumunetworks.com>
-Date: Fri, 3 Jan 2014 11:41:13 -0800
-Subject: [Buildroot] [PATCH 1/1] skeleton: add systemd network.service
-	unit
-In-Reply-To: <20140103201333.7f4edd47@skate>
-References: <1388713112-4686-1-git-send-email-vsergeev@kumunetworks.com>
- <20140103201333.7f4edd47@skate>
-Message-ID: <CAPyrzo0q7Y3Tf1LOaCe4LK78a7sZrVdToLfnzp4Tc4kow=-nKA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 3 Jan 2014 20:41:52 +0100
+Subject: [Buildroot] [git commit] transmission: Fix build error "conflicting
+	types for 'UTP_Write'" after version bump
+Message-ID: <20140103194200.254339C380@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hah, sorry. I forgot the reply all. This was supposed to be my follow up
-discussion email:
+commit: http://git.buildroot.net/buildroot/commit/?id=836b0ff7f108615e8771005739ecbf1fcdccff0b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hello buildroot,
+fix taken from
+http://www.adminsehow.com/2012/10/how-to-install-transmission-2-71-on-debian-6-0-squeeze/
 
-I'm submitting this in hopes of catching up network init in systemd with
-that of busybox init, which is currently served by /etc/init.d/S40network.
-This patch adds and enables network.service (which assumes ifup / ifdown
-exists and uses them like /etc/init.d/S40network does).
+compile tested on arch sh4, fixes
+http://autobuild.buildroot.org/results/638/63884de929fb7339ebf44b08cb5d1ab30010666a/
 
-I also wanted to bring up a more general issue:
+should also fix powerpc
+http://autobuild.buildroot.org/results/eb4/eb486228a11a9602d4bf40e771744d2b2b40508f/
 
-Currently, it seems that the /etc/init.d scripts are copied over blindly
-from the target skeleton to the target even if systemd (and not busybox) is
-the chosen init system. Moving forward, having both busybox and systemd
-init files in the skeleton, like this patch would have, will always clutter
-/etc/ with some unused init files in the target system, since only one init
-system will be active.
+Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../transmission/transmission-01-fix-utypes.patch  |   30 ++++++++++++++++++++
+ 1 files changed, 30 insertions(+), 0 deletions(-)
 
-Should such init files be conditional targets in system/system.mk?  Or
-should S40network be owned and copied over by package/busybox, and
-network.service be owned and copied over by package/systemd, instead of
-having them included statically in the target skeleton?
-
-Thanks,
-~vsergeev
-Ivan Sergeev
-
-
-On Fri, Jan 3, 2014 at 11:13 AM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
-
-> Dear Ivan Sergeev,
->
-> On Thu,  2 Jan 2014 17:38:32 -0800, Ivan Sergeev wrote:
-> > Add and enable a systemd unit file to bring up / down network with ifup /
-> > ifdown, analogous to the skeleton/etc/init.d/S40network init script.
-> >
-> > Signed-off-by: Ivan Sergeev <vsergeev@kumunetworks.com>
-> > ---
-> >  .../system/multi-user.target.wants/network.service  |  1 +
-> >  system/skeleton/etc/systemd/system/network.service  | 21
-> +++++++++++++++++++++
-> >  2 files changed, 22 insertions(+)
-> >  create mode 120000
-> system/skeleton/etc/systemd/system/multi-user.target.wants/network.service
-> >  create mode 100644 system/skeleton/etc/systemd/system/network.service
->
-> We probably want to make that conditional on the type of init system
-> that is used, no?
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140103/5487751a/attachment.html>
+diff --git a/package/transmission/transmission-01-fix-utypes.patch b/package/transmission/transmission-01-fix-utypes.patch
+new file mode 100644
+index 0000000..e67ba6a
+--- /dev/null
++++ b/package/transmission/transmission-01-fix-utypes.patch
+@@ -0,0 +1,30 @@
++Fix build error "conflicting types for 'UTP_Write'"
++
++Fetch from: http://www.adminsehow.com/2012/10/how-to-install-transmission-2-71-on-debian-6-0-squeeze/
++
++The corresponding upstream bug report (unfixed) can be found here:
++https://trac.transmissionbt.com/ticket/5232
++
++Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
++
++--- transmission-2.82.org/third-party/libutp/utypes.h	2013-08-09 04:47:43.000000000 +0200
+++++ transmission-2.82/third-party/libutp/utypes.h	2014-01-02 20:17:18.000000000 +0100
++@@ -35,8 +35,15 @@
++ typedef const char * cstr;
++ typedef char * str;
++ 
++-#ifndef __cplusplus
++-typedef uint8 bool;
++-#endif
+++//#ifndef __cplusplus
+++//typedef uint8 bool;
+++//#endif
+++#ifndef __cplusplus
+++#ifdef HAVE_STDBOOL_H
+++#include <stdbool.h>
+++#else
+++typedef uint8 bool;
+++#endif
+++#endif
++ 
++ #endif //__UTYPES_H__
