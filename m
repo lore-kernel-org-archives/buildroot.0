@@ -1,32 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Jan 2014 20:43:42 +0100
-Subject: [Buildroot] [PATCH v2] Disable MIPS64 ISAs for MIPS32 targets
-In-Reply-To: <1388759779-27871-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1388759779-27871-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20140103204342.57052738@skate>
+Date: Fri, 3 Jan 2014 20:45:29 +0100
+Subject: [Buildroot] [git commit] openssl: add fix for CVE-2013-6449
+Message-ID: <20140103194535.B1AD99C380@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+commit: http://git.buildroot.net/buildroot/commit/?id=27a7ab51e39ed246f36fa8c39e7370545823ccff
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 3 Jan 2014 14:36:19 +0000, Vicente Olivert Riera wrote:
-> Currently you can select MIPS64 ISAs, like mips64 and mips64r2, for
-> MIPS32 targets. This is incorrect, so we disable the possibility to do
-> that.
-> 
-> Reviewed-by: Markos Chandras <markos.chandras@imgtec.com>
-> Signed-off-by: Vicente Olivert Riera <vincent.riera@imgtec.com>
-> ---
->  arch/Config.in.mips |    2 ++
->  1 files changed, 2 insertions(+), 0 deletions(-)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...s.patch => openssl-001-do-not-build-docs.patch} |    0
+ ...tch => openssl-002-dont-force-large-file.patch} |    0
+ package/openssl/openssl-003-CVE-2013-6449.patch    |   34 ++++++++++++++++++++
+ 3 files changed, 34 insertions(+), 0 deletions(-)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/openssl/openssl-do-not-build-docs.patch b/package/openssl/openssl-001-do-not-build-docs.patch
+similarity index 100%
+rename from package/openssl/openssl-do-not-build-docs.patch
+rename to package/openssl/openssl-001-do-not-build-docs.patch
+diff --git a/package/openssl/openssl-dont-force-large-file.patch b/package/openssl/openssl-002-dont-force-large-file.patch
+similarity index 100%
+rename from package/openssl/openssl-dont-force-large-file.patch
+rename to package/openssl/openssl-002-dont-force-large-file.patch
+diff --git a/package/openssl/openssl-003-CVE-2013-6449.patch b/package/openssl/openssl-003-CVE-2013-6449.patch
+new file mode 100644
+index 0000000..034da7d
+--- /dev/null
++++ b/package/openssl/openssl-003-CVE-2013-6449.patch
+@@ -0,0 +1,34 @@
++https://bugs.gentoo.org/494816
++https://bugzilla.redhat.com/show_bug.cgi?id=1045363
++http://rt.openssl.org/Ticket/Display.html?id=3200&user=guest&pass=guest
++
++From ca989269a2876bae79393bd54c3e72d49975fc75 Mon Sep 17 00:00:00 2001
++From: "Dr. Stephen Henson" <steve@openssl.org>
++Date: Thu, 19 Dec 2013 14:37:39 +0000
++Subject: [PATCH] Use version in SSL_METHOD not SSL structure.
++
++When deciding whether to use TLS 1.2 PRF and record hash algorithms
++use the version number in the corresponding SSL_METHOD structure
++instead of the SSL structure. The SSL structure version is sometimes
++inaccurate. Note: OpenSSL 1.0.2 and later effectively do this already.
++(CVE-2013-6449)
++---
++ ssl/s3_lib.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/ssl/s3_lib.c b/ssl/s3_lib.c
++index bf832bb..c4ef273 100644
++--- a/ssl/s3_lib.c
+++++ b/ssl/s3_lib.c
++@@ -4286,7 +4286,7 @@ need to go to SSL_ST_ACCEPT.
++ long ssl_get_algorithm2(SSL *s)
++ 	{
++ 	long alg2 = s->s3->tmp.new_cipher->algorithm2;
++-	if (TLS1_get_version(s) >= TLS1_2_VERSION &&
+++	if (s->method->version == TLS1_2_VERSION &&
++ 	    alg2 == (SSL_HANDSHAKE_MAC_DEFAULT|TLS1_PRF))
++ 		return SSL_HANDSHAKE_MAC_SHA256 | TLS1_PRF_SHA256;
++ 	return alg2;
++-- 
++1.8.4.3
++
