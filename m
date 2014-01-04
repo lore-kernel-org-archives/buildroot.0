@@ -1,40 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Jan 2014 22:28:32 +0100
-Subject: [Buildroot] Why is sysroot under i686-buildroot-linux-gnu?
-In-Reply-To: <CAJpxd07vs10v6uhOe3=_a=Rj-40x+Q8yWh0cK+YbTnP1HdzLTw@mail.gmail.com>
-References: <CAJpxd07vs10v6uhOe3=_a=Rj-40x+Q8yWh0cK+YbTnP1HdzLTw@mail.gmail.com>
-Message-ID: <20140104222832.7a8dab5b@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 04 Jan 2014 23:40:48 +0100
+Subject: [Buildroot] [PATCH v2] valgrind: bump to version 3.9.0
+In-Reply-To: <1388680480-58533-1-git-send-email-jezz@sysmic.org>
+ (=?utf-8?B?IkrDqXLDtG1l?=
+ Pouiller"'s message of "Thu, 2 Jan 2014 17:34:40 +0100")
+References: <1388680480-58533-1-git-send-email-jezz@sysmic.org>
+Message-ID: <87fvp374lr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bryce Schober,
+>>>>> "J?r?me" == J?r?me Pouiller <jezz@sysmic.org> writes:
 
-On Fri, 3 Jan 2014 15:54:09 -0800, Bryce Schober wrote:
-> I'm using a custom external toolchain built by crosstool-ng that's a
-> fairly ordinary configuration, other than using an old gcc-4.3 and
-> glibc-2.9, ending up with a i686-unknown-linux-gnu toolchain.
-> 
-> Why does buildroot end up installing the toolchain sysroot under
-> output/host/usr/i686-buildroot-linux-gnu instead of under
-> output/host/usr/i686-unknown-linux-gnu?
+ > Drop some patches:
+ >  - glibc 2.17 and 2.18 are now supported by upstream
+ >  - coregrind/link_tool_exe_linux.in has been reworked and should now
+ >    support ccache
 
-Just because we set the vendor part of the tuple to "Buildroot" to
-distinguish the Buildroot compiler/sysroot from the one of the original
-toolchain. There is no strong need for this, it's just a bit nicer.
+ > Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+ > ---
+ > v2: 
+ >    Fix subject of patch
+ >    Use -M option of git-send-email for better reviewing.
 
-> This is causing some problems in some of my external makefiles I have
-> that expect the sysroot dir to match the toolchain tuple...
+ > +++ b/package/valgrind/valgrind.mk
+ > @@ -4,7 +4,7 @@
+ >  #
+ >  ################################################################################
+ 
+ > -VALGRIND_VERSION = 3.8.1
+ > +VALGRIND_VERSION = 3.9.0
+ >  VALGRIND_SITE    = http://valgrind.org/downloads/
+ >  VALGRIND_SOURCE  = valgrind-$(VALGRIND_VERSION).tar.bz2
+ >  VALGRIND_LICENSE = GPLv2 GFDLv1.2
 
-They do: in host/usr/bin/, you have a compiler whose tuple matches the
-sysroot directory name.
+We can also drop AUTORECONF as we're no longer patching configure.in.
 
-Best regards,
+Committed with that fixed, thanks.
 
-Thomas
+ > -- 
+ > 1.8.3.2
+
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot at busybox.net
+ > http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
