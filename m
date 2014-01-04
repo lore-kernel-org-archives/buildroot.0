@@ -1,63 +1,32 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 4 Jan 2014 21:01:39 +0100
-Subject: [Buildroot] [PATCH] manual: use current date/time for
-	'generated on'
-In-Reply-To: <1388852728-27381-1-git-send-email-yann.morin.1998@free.fr>
-References: <1388852728-27381-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <CAHXCMML0F0i_8gWJ8z4ycPWrjBx_QUmV=-Jx8SgTS5KgXR9j6g@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 04 Jan 2014 21:06:27 +0100
+Subject: [Buildroot] [PATCH] zmqpp: fix license information
+In-Reply-To: <1388832344-3725-1-git-send-email-spdawson@gmail.com>
+ (spdawson@gmail.com's message of "Sat, 4 Jan 2014 10:45:44 +0000")
+References: <1388832344-3725-1-git-send-email-spdawson@gmail.com>
+Message-ID: <87wqif7br0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2014/1/4 Yann E. MORIN <yann.morin.1998@free.fr>
+>>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
 
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
->
-> Currently, the manual uses the last modification date and time of
-> manual.txt in the generated manual.
->
-> This is confusing, especially for long-checked-out repositories where
-> the top-level manual.txt has not changed since the check out. Moreover,
-> the manual explicitly states 'generated on', which is confusing at best.
->
-> Use the current date and time instead.
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Samuel Martin <s.martin49@gmail.com>
->
-Acked-by: Samuel Martin <s.martin49@gmail.com>
+ > From: Simon Dawson <spdawson@gmail.com>
+ > Commit 85d28790cdbaa68179632aca7e5708fead7614f0 bumped the zmqpp Git
+ > snapshot to 30d72d95f2cfdf9c5cedfd56747f549d65e65847.
 
+ > However, the zmqpp licensing has changed (from MIT to
+ > "LGPLv3+ with exceptions"), and the license file names have changed.
 
-> ---
->  docs/manual/manual.txt | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
-> index 9ae658e..958afae 100644
-> --- a/docs/manual/manual.txt
-> +++ b/docs/manual/manual.txt
-> @@ -8,8 +8,8 @@ The Buildroot user manual
->  Buildroot usage and documentation by Thomas Petazzoni. Contributions
->  from Karsten Kruse, Ned Ludd, Martin Herren and others.
->
-> -Buildroot {sys:echo $\{BR2_VERSION%%-git*\}} manual generated on {docdate}
-> -{doctime} from git revision {sys:git rev-parse --short HEAD}
-> +Buildroot {sys:echo $\{BR2_VERSION%%-git*\}} manual generated on
-> {localdate}
-> +{localtime} from git revision {sys:git rev-parse --short HEAD}
->
->  image::logo.png[]
->
-> --
-> 1.8.1.2
->
->
+ > Fixes autobuild failures such as the following.
 
+ >   http://autobuild.buildroot.net/results/a60/a6029fcb670cd27687a68cb96f0f14f5c13caf47
+
+ > Signed-off-by: Simon Dawson <spdawson@gmail.com>
+
+Committed, thanks.
 
 -- 
-Samuel
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140104/2917bfe3/attachment-0001.html>
+Bye, Peter Korsgaard
