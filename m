@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat,  4 Jan 2014 09:11:44 -0300
-Subject: [Buildroot] [PATCH 3/4] iftop: bump to version 1.0pre3
+Date: Sat,  4 Jan 2014 09:11:45 -0300
+Subject: [Buildroot] [PATCH 4/4] grep: bump to version 2.16
 In-Reply-To: <1388837505-30232-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1388837505-30232-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1388837505-30232-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1388837505-30232-4-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,25 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/iftop/iftop.mk | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ package/grep/grep.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/iftop/iftop.mk b/package/iftop/iftop.mk
-index de2f1b1..29ec61a 100644
---- a/package/iftop/iftop.mk
-+++ b/package/iftop/iftop.mk
-@@ -4,11 +4,9 @@
+diff --git a/package/grep/grep.mk b/package/grep/grep.mk
+index 91ef7de..6a039d9 100644
+--- a/package/grep/grep.mk
++++ b/package/grep/grep.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IFTOP_VERSION = 1.0pre2
-+IFTOP_VERSION = 1.0pre3
- IFTOP_SITE = http://www.ex-parrot.com/pdw/iftop/download/
--
- IFTOP_DEPENDENCIES = ncurses libpcap
--
- IFTOP_LICENSE = GPLv2+
- IFTOP_LICENSE_FILES = COPYING
- 
+-GREP_VERSION = 2.15
++GREP_VERSION = 2.16
+ GREP_SITE = $(BR2_GNU_MIRROR)/grep
+ GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
+ GREP_LICENSE = GPLv3+
 -- 
 1.8.3.2
