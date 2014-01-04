@@ -1,46 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 4 Jan 2014 21:11:44 +0100
-Subject: [Buildroot] [git commit] manual: use current date/time for
-	'generated on'
-Message-ID: <20140104201238.B99449C3A9@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 4 Jan 2014 22:28:32 +0100
+Subject: [Buildroot] Why is sysroot under i686-buildroot-linux-gnu?
+In-Reply-To: <CAJpxd07vs10v6uhOe3=_a=Rj-40x+Q8yWh0cK+YbTnP1HdzLTw@mail.gmail.com>
+References: <CAJpxd07vs10v6uhOe3=_a=Rj-40x+Q8yWh0cK+YbTnP1HdzLTw@mail.gmail.com>
+Message-ID: <20140104222832.7a8dab5b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4e2b7057c65f06426b7c9b37df8ee9a3d1e62fb9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Bryce Schober,
 
-Currently, the manual uses the last modification date and time of
-manual.txt in the generated manual.
+On Fri, 3 Jan 2014 15:54:09 -0800, Bryce Schober wrote:
+> I'm using a custom external toolchain built by crosstool-ng that's a
+> fairly ordinary configuration, other than using an old gcc-4.3 and
+> glibc-2.9, ending up with a i686-unknown-linux-gnu toolchain.
+> 
+> Why does buildroot end up installing the toolchain sysroot under
+> output/host/usr/i686-buildroot-linux-gnu instead of under
+> output/host/usr/i686-unknown-linux-gnu?
 
-This is confusing, especially for long-checked-out repositories where
-the top-level manual.txt has not changed since the check out. Moreover,
-the manual explicitly states 'generated on', which is confusing at best.
+Just because we set the vendor part of the tuple to "Buildroot" to
+distinguish the Buildroot compiler/sysroot from the one of the original
+toolchain. There is no strong need for this, it's just a bit nicer.
 
-Use the current date and time instead.
+> This is causing some problems in some of my external makefiles I have
+> that expect the sysroot dir to match the toolchain tuple...
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Samuel Martin <s.martin49@gmail.com>
-Acked-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/manual/manual.txt |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+They do: in host/usr/bin/, you have a compiler whose tuple matches the
+sysroot directory name.
 
-diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
-index 9ae658e..958afae 100644
---- a/docs/manual/manual.txt
-+++ b/docs/manual/manual.txt
-@@ -8,8 +8,8 @@ The Buildroot user manual
- Buildroot usage and documentation by Thomas Petazzoni. Contributions
- from Karsten Kruse, Ned Ludd, Martin Herren and others.
- 
--Buildroot {sys:echo $\{BR2_VERSION%%-git*\}} manual generated on {docdate}
--{doctime} from git revision {sys:git rev-parse --short HEAD}
-+Buildroot {sys:echo $\{BR2_VERSION%%-git*\}} manual generated on {localdate}
-+{localtime} from git revision {sys:git rev-parse --short HEAD}
- 
- image::logo.png[]
- 
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
