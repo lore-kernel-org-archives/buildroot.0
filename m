@@ -1,30 +1,44 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sat, 4 Jan 2014 17:20:17 +0100
-Subject: [Buildroot] [RFC PATCH 0/2] gitorious helper
-In-Reply-To: <1387988339-17460-1-git-send-email-alexandre.belloni@free-electrons.com>
-References: <1387988339-17460-1-git-send-email-alexandre.belloni@free-electrons.com>
-Message-ID: <CAAXf6LVLcn4iPgrMXXTjyosSfczTTCLqJsSTv9M5VUfpjR3RJQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat,  4 Jan 2014 17:25:28 +0100
+Subject: [Buildroot] [PATCH] manual: use current date/time for 'generated on'
+Message-ID: <1388852728-27381-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Alexandre,
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-On Wed, Dec 25, 2013 at 5:18 PM, Alexandre Belloni
-<alexandre.belloni@free-electrons.com> wrote:
-> The following patches introduce a gitroious helper to download tarballs for
-> gitorious. I currently see two shortcomings:
->  - the tarball URL is https://gitorious.org/<project>/<repo>/archive/<version>.tar.gz
->    so the downloaded tarball doesn't have any name appart from <version>.tar.gz
->  - It needs two separate functions for target and host packages.
->
-> Alexandre Belloni (2):
->   infra: introduce gitorious helper function
->   packages: use gitorious helper when applicable
+Currently, the manual uses the last modification date and time of
+manual.txt in the generated manual.
 
-Just a quick note: I'm going to review this (hopefully soon)...
+This is confusing, especially for long-checked-out repositories where
+the top-level manual.txt has not changed since the check out. Moreover,
+the manual explicitly states 'generated on', which is confusing at best.
 
-Best regards,
-Thomas
+Use the current date and time instead.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Samuel Martin <s.martin49@gmail.com>
+---
+ docs/manual/manual.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
+index 9ae658e..958afae 100644
+--- a/docs/manual/manual.txt
++++ b/docs/manual/manual.txt
+@@ -8,8 +8,8 @@ The Buildroot user manual
+ Buildroot usage and documentation by Thomas Petazzoni. Contributions
+ from Karsten Kruse, Ned Ludd, Martin Herren and others.
+ 
+-Buildroot {sys:echo $\{BR2_VERSION%%-git*\}} manual generated on {docdate}
+-{doctime} from git revision {sys:git rev-parse --short HEAD}
++Buildroot {sys:echo $\{BR2_VERSION%%-git*\}} manual generated on {localdate}
++{localtime} from git revision {sys:git rev-parse --short HEAD}
+ 
+ image::logo.png[]
+ 
+-- 
+1.8.1.2
