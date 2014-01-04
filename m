@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat,  4 Jan 2014 09:11:43 -0300
-Subject: [Buildroot] [PATCH 2/4] haveged: bump to version 1.8
+Date: Sat,  4 Jan 2014 09:11:44 -0300
+Subject: [Buildroot] [PATCH 3/4] iftop: bump to version 1.0pre3
 In-Reply-To: <1388837505-30232-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1388837505-30232-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1388837505-30232-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1388837505-30232-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,25 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/haveged/haveged.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/iftop/iftop.mk | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/package/haveged/haveged.mk b/package/haveged/haveged.mk
-index 99dbe41..c0e3ba3 100644
---- a/package/haveged/haveged.mk
-+++ b/package/haveged/haveged.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/iftop/iftop.mk b/package/iftop/iftop.mk
+index de2f1b1..29ec61a 100644
+--- a/package/iftop/iftop.mk
++++ b/package/iftop/iftop.mk
+@@ -4,11 +4,9 @@
  #
  ################################################################################
  
--HAVEGED_VERSION = 1.7c
-+HAVEGED_VERSION = 1.8
- HAVEGED_SITE = http://www.issihosts.com/haveged
- HAVEGED_LICENSE = GPLv3+
- HAVEGED_LICENSE_FILES = COPYING
+-IFTOP_VERSION = 1.0pre2
++IFTOP_VERSION = 1.0pre3
+ IFTOP_SITE = http://www.ex-parrot.com/pdw/iftop/download/
+-
+ IFTOP_DEPENDENCIES = ncurses libpcap
+-
+ IFTOP_LICENSE = GPLv2+
+ IFTOP_LICENSE_FILES = COPYING
+ 
 -- 
 1.8.3.2
