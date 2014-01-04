@@ -1,117 +1,114 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sat, 4 Jan 2014 18:12:26 +0100
-Subject: [Buildroot] [PATCH 3/5] board/raspberrypi: provide partition
- description for the new genimages
-In-Reply-To: <20140104170530.GB3417@free.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 4 Jan 2014 18:43:03 +0100
+Subject: [Buildroot] [PATCH 2/5] fs/custom: generate complete,
+ partition-based device images
+In-Reply-To: <CAGduivzPoHPtq3x9se0sEpaJDGvfK7R8GM3GZ9akyMBvqzBsbw@mail.gmail.com>
 References: <cover.1388768519.git.yann.morin.1998@free.fr>
- <ac4d914078b3e77edc1704e0ada84c4fa8ef57f5.1388768519.git.yann.morin.1998@free.fr>
- <CAGduivyP4sdDKUpSG4ZJcfV5b5S7gipteUd=gFsWZ=_KfOMk7A@mail.gmail.com>
- <20140104170530.GB3417@free.fr>
-Message-ID: <CAGduivzo5nQ8V6FGPvG3OPRT5SxHqDGtL_i76yFhmja+r6sFCg@mail.gmail.com>
+ <cfbdbd2e5437db8f56cf1db9944cc072897fbe1a.1388768519.git.yann.morin.1998@free.fr>
+ <CAGduivzPoHPtq3x9se0sEpaJDGvfK7R8GM3GZ9akyMBvqzBsbw@mail.gmail.com>
+Message-ID: <20140104174303.GC3417@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Jan 4, 2014 at 6:05 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Maxime, All,
->
-> On 2014-01-04 17:40 +0100, Maxime Hadjinlian spake thusly:
->> On Fri, Jan 3, 2014 at 6:19 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->> > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
->> >
->> > Now we can generate a complete target storage image with the genimages
->> > infra, add a partition table layout description for the Raspberry Pi
->> > as an example for how to use genimages.
->> >
->> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->> > Cc: Ryan Barnett <rjbarnet@rockwellcollins.com>
->> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->> > ---
->> >  board/raspberrypi/partitions  | 35 +++++++++++++++++++++++++++++++++++
->> >  configs/raspberrypi_defconfig |  3 +++
->> >  2 files changed, 38 insertions(+)
->> >  create mode 100644 board/raspberrypi/partitions
->> >
->> > diff --git a/board/raspberrypi/partitions b/board/raspberrypi/partitions
->> > new file mode 100644
->> > index 0000000..dea9aff
->> > --- /dev/null
->> > +++ b/board/raspberrypi/partitions
->> > @@ -0,0 +1,35 @@
->> > +[global]
->> > +extract=tar
->> > +devices=mmcblk0
->> > +
->> > +[mmcblk0]
->> > +type=boot
->> > +boot_type=mbr
->> > +partitions=boot,root
->> > +partalign=$((1048576))
->> > +
->> > +[root]
->> > +type=fs
->> > +size=$((32*1048576))
->> > +mbr_type=$((0x83))
->> > +fs_type=ext
->> > +fs_vfstype=ext4
->> > +fs_mntops=discard
->> > +fs_root=/
->> > +fs_label=ROOT
->> > +ext_gen=4
->> > +ext_rev=1
->> > +
->> > +[boot]
->> > +type=fs
->> > +size=$((9*1048576))
->> > +mbr_type=$((0xc))
->> > +fs_type=vfat
->> > +fs_files_0=rpi-firmware/bootcode.bin
->> > +fs_files_1=rpi-firmware/start.elf
->> > +fs_files_2=rpi-firmware/fixup.dat
->> > +fs_files_3=rpi-firmware/config.txt
->> > +fs_files_4=rpi-firmware/cmdline.txt
->> > +fs_files_5=zImage
->> > +fs_label=BOOT
->> > +vfat_size=16
->> > diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
->> > index 6a17165..50caf5f 100644
->> > --- a/configs/raspberrypi_defconfig
->> > +++ b/configs/raspberrypi_defconfig
->> > @@ -21,3 +21,6 @@ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="75d03120bc36b1cc3166973b8edc11f033ab7c0d"
->> >  BR2_LINUX_KERNEL_USE_DEFCONFIG=y
->> >  BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi_quick"
->> >  BR2_LINUX_KERNEL_ZIMAGE=y
->> > +
->> > +BR2_TARGET_ROOTFS_CUSTOM=y
->> > +BR2_TARGET_ROOTFS_CUSTOM_PARTITION_TABLE="$(TOPDIR)/board/raspberrypi/partitions"
->> > --
->> > 1.8.1.2
->> Could you please add comments over the various size and also the
->> different type used, 0x83 is not really user friendly to read.
->
-> 0x83 and 0xc are partition types, and there is a pointer in the manual
-> for where to find their meanings and the different values:
->
->     * mbr_type (mandatory): the partition [type]
->
-> where [type] is a pointer to:
->     https://en.wikipedia.org/wiki/Partition_type#List_of_partition_IDs
->
-> But I can add such comments as this is an example.
-Even if it's not an example.
-This kind of file are meant to be read by humans, and as such, every
-information such as partition type or size, should be along side a
-comments for the human reader.
->
-> Regards,
-> Yann E. MORIN.
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+Maxime, All,
+
+Thanks for the review! :-)
+
+On 2014-01-04 17:38 +0100, Maxime Hadjinlian spake thusly:
+> When doing scripting in Buildroot, do we accept the uses of various
+> bash-ism or do we want to stick to POSIX shell ?
+
+bash is already a hard-dependency of Buildroot.
+
+> On Fri, Jan 3, 2014 at 6:19 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+[--SNIP--]
+> > diff --git a/docs/manual/customize-filesystems.txt b/docs/manual/customize-filesystems.txt
+> > new file mode 100644
+> > index 0000000..fd65c97
+> > --- /dev/null
+> > +++ b/docs/manual/customize-filesystems.txt
+> > @@ -0,0 +1,36 @@
+[--SNIP--]
+> How about comments ? Are they supported ?
+> In a next step, it would be really nice to have support for "human"
+> input for the different size, like 1G/M/K.
+
+Yes, comments are supported; I've now added that to the manual.
+
+I've also added that values can be expresed as shell arith,metic
+expansion, such as $((16*1048576)) (aka 16MiB).
+
+Not that G/M/k are SI-prefixes that respectively mean 10^9, 10^6 and
+10^3. The binary prefixes are Gi/Mi/ki, respectively 2^30, 2^20 and
+2^10.
+
+If/when we add support for this kind of values, we'll need to add both
+decimal and binary prefixes.
+
+> > diff --git a/fs/custom/boot/gpt b/fs/custom/boot/gpt
+> > new file mode 100644
+> > index 0000000..f978524
+> > --- /dev/null
+> > +++ b/fs/custom/boot/gpt
+> > @@ -0,0 +1,129 @@
+[--SNIP--]
+> > +#   Simg = 512 + 2*(Sgpt) + ?( aligned(Spart,512) )
+> Don't we want only ASCII char there ?
+
+I don't know.
+
+I find it convenient not to limit ourselves to ASCII.
+
+[--SNIP--]
+> > +# Sicne 4k-large sectors are not really explained on Wikipedia, we can
+> Small typo here.
+
+Thanks, fixed.
+
+[--SNIP--]
+> > +    dd if=/dev/zero of="${img}"     \
+> > +       bs=1 seek=${begin} count=0   \
+> > +       conv=sparse                  2>/dev/null
+> Why the redirect to /dev/null ? Don't we want to see if there was an
+> error ? I know it's unlikely to happen but you never know.
+> I have noticed you did several times so maybe there is a reason I am
+> not seeing here.
+
+dd will always print something to stderr, even if successful. We do not
+want it to pollute the output, since we're using nice traces.
+
+[--SNIP--]
+> > +    ret=${?}
+> > +    [ ${ret} -eq 0 ] || exit ${ret}
+> Why not doing: [ ${ret} -ne 0 ] && exit ${ret} ?
+
+Same answer as to your comment in squashfs, since we're using set -e.
+
+But here, it's a bit complex. POSIX does not specify whether a sub-shell
+that exits with a return code !0 should be caught by set -e. And bash-4.0
+does not catch it, while bash-4.2 does catch it. Both are POSIX complianti
+in this respect, since POSIX does not state what should be done in this
+case.
+
+So, we have to explicitly store the return code, and test it.
+
+But if ret==0, your test would fail, and the complete shell compound
+command " [ ... ] && ... " would also be false, and we would create an
+error that the shell would catch because of set -e, when there was no
+error to begin with.
+
+Thank you for the comments! :-)
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
