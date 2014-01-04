@@ -1,44 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 4 Jan 2014 21:05:12 +0100
-Subject: [Buildroot] [git commit] zmqpp: fix license information
-Message-ID: <20140104200732.BAA809C3AC@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 04 Jan 2014 21:12:21 +0100
+Subject: [Buildroot] [PATCH] manual: use current date/time for
+	'generated on'
+In-Reply-To: <1388852728-27381-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Sat, 4 Jan 2014 17:25:28 +0100")
+References: <1388852728-27381-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87k3ef7bh6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=38332d86ac07b34c8c925a650073848725dab948
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Commit 85d28790cdbaa68179632aca7e5708fead7614f0 bumped the zmqpp Git
-snapshot to 30d72d95f2cfdf9c5cedfd56747f549d65e65847.
+ > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Currently, the manual uses the last modification date and time of
+ > manual.txt in the generated manual.
 
-However, the zmqpp licensing has changed (from MIT to
-"LGPLv3+ with exceptions"), and the license file names have changed.
+ > This is confusing, especially for long-checked-out repositories where
+ > the top-level manual.txt has not changed since the check out. Moreover,
+ > the manual explicitly states 'generated on', which is confusing at best.
 
-Fixes autobuild failures such as the following.
+ > Use the current date and time instead.
 
-  http://autobuild.buildroot.net/results/a60/a6029fcb670cd27687a68cb96f0f14f5c13caf47
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Samuel Martin <s.martin49@gmail.com>
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/zmqpp/zmqpp.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+Committed, thanks.
 
-diff --git a/package/zmqpp/zmqpp.mk b/package/zmqpp/zmqpp.mk
-index cfd6f13..9839e66 100644
---- a/package/zmqpp/zmqpp.mk
-+++ b/package/zmqpp/zmqpp.mk
-@@ -8,8 +8,8 @@ ZMQPP_VERSION = 30d72d95f2cfdf9c5cedfd56747f549d65e65847
- ZMQPP_SITE = git://github.com/benjamg/zmqpp.git
- ZMQPP_INSTALL_STAGING = YES
- ZMQPP_DEPENDENCIES = zeromq
--ZMQPP_LICENSE = MIT
--ZMQPP_LICENSE_FILES = LICENSE
-+ZMQPP_LICENSE = LGPLv3+ with exceptions
-+ZMQPP_LICENSE_FILES = COPYING COPYING.LESSER
- 
- ZMQPP_MAKE_OPT = LD="$(TARGET_CXX)" BUILD_PATH=./build PREFIX=/usr
- ZMQPP_LDFLAGS = $(TARGET_LDFLAGS) -lpthread
+-- 
+Bye, Peter Korsgaard
