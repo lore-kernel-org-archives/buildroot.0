@@ -1,11 +1,11 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sat, 4 Jan 2014 09:20:31 +0100
+Date: Sat, 4 Jan 2014 09:24:03 +0100
 Subject: [Buildroot] [PATCH 1 of 5 v3] deprecated handling: introduce
 	BR2_DEPRECATED_SINCE_xxxx_xx
 In-Reply-To: <14cfc9f6c9b34dc82c58.1388764970@argentina>
 References: <patchbomb.1388764969@argentina>
  <14cfc9f6c9b34dc82c58.1388764970@argentina>
-Message-ID: <CAAXf6LUBViQotcu8tdStGuUgkVX0h89T4gFxAvZtmjYwGjdpEQ@mail.gmail.com>
+Message-ID: <CAAXf6LWCRDOwnpS9dtZo=GaTfsGXKSfN3xr4iepx-yUH03Vxdw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
