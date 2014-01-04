@@ -1,7 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat,  4 Jan 2014 09:11:42 -0300
-Subject: [Buildroot] [PATCH 1/4] squid: bump to version 3.4.2
-Message-ID: <1388837505-30232-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Sat,  4 Jan 2014 09:11:43 -0300
+Subject: [Buildroot] [PATCH 2/4] haveged: bump to version 1.8
+In-Reply-To: <1388837505-30232-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1388837505-30232-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1388837505-30232-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/squid/squid.mk | 2 +-
+ package/haveged/haveged.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index 0b303dd..7f1f0f5 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/haveged/haveged.mk b/package/haveged/haveged.mk
+index 99dbe41..c0e3ba3 100644
+--- a/package/haveged/haveged.mk
++++ b/package/haveged/haveged.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- SQUID_VERSION_MAJOR = 3.4
--SQUID_VERSION = $(SQUID_VERSION_MAJOR).1
-+SQUID_VERSION = $(SQUID_VERSION_MAJOR).2
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
- SQUID_LICENSE = GPLv2+
+-HAVEGED_VERSION = 1.7c
++HAVEGED_VERSION = 1.8
+ HAVEGED_SITE = http://www.issihosts.com/haveged
+ HAVEGED_LICENSE = GPLv3+
+ HAVEGED_LICENSE_FILES = COPYING
 -- 
 1.8.3.2
