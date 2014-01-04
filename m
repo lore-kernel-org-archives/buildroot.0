@@ -1,11 +1,10 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sat, 4 Jan 2014 17:40:42 +0100
-Subject: [Buildroot] [PATCH 3/5] board/raspberrypi: provide partition
- description for the new genimages
-In-Reply-To: <ac4d914078b3e77edc1704e0ada84c4fa8ef57f5.1388768519.git.yann.morin.1998@free.fr>
+Date: Sat, 4 Jan 2014 17:43:38 +0100
+Subject: [Buildroot] [PATCH 4/5] fs/custom: add support for squashfs
+In-Reply-To: <f19557ea778ede9bf0de8be578a2fdd6cdd1785c.1388768519.git.yann.morin.1998@free.fr>
 References: <cover.1388768519.git.yann.morin.1998@free.fr>
- <ac4d914078b3e77edc1704e0ada84c4fa8ef57f5.1388768519.git.yann.morin.1998@free.fr>
-Message-ID: <CAGduivyP4sdDKUpSG4ZJcfV5b5S7gipteUd=gFsWZ=_KfOMk7A@mail.gmail.com>
+ <f19557ea778ede9bf0de8be578a2fdd6cdd1785c.1388768519.git.yann.morin.1998@free.fr>
+Message-ID: <CAGduivx8F02CaJ52nnv6pFKPTJ_4LCBAKymu0RQeoBhtrC8NOg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,78 +16,78 @@ Hi Yann,
 On Fri, Jan 3, 2014 at 6:19 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 >
-> Now we can generate a complete target storage image with the genimages
-> infra, add a partition table layout description for the Raspberry Pi
-> as an example for how to use genimages.
->
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Ryan Barnett <rjbarnet@rockwellcollins.com>
 > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Ryan Barnett <rjbarnet@rockwellcollins.com>
 > ---
->  board/raspberrypi/partitions  | 35 +++++++++++++++++++++++++++++++++++
->  configs/raspberrypi_defconfig |  3 +++
->  2 files changed, 38 insertions(+)
->  create mode 100644 board/raspberrypi/partitions
+>  docs/manual/partition-layout.txt | 11 ++++++++++-
+>  fs/custom/fs/squashfs            | 19 +++++++++++++++++++
+>  2 files changed, 29 insertions(+), 1 deletion(-)
+>  create mode 100644 fs/custom/fs/squashfs
 >
-> diff --git a/board/raspberrypi/partitions b/board/raspberrypi/partitions
+> diff --git a/docs/manual/partition-layout.txt b/docs/manual/partition-layout.txt
+> index 092ae1b..e9027bf 100644
+> --- a/docs/manual/partition-layout.txt
+> +++ b/docs/manual/partition-layout.txt
+> @@ -133,7 +133,8 @@ Properties for +type=fs+
+>
+>  * +fs_type+ (mandatory): the type of filesystem to generate
+>  ** +ext+: generate an extended filesystem (ext2, ext3, ext4)
+> -** +vfat+: generate a VFAT filesystem (FAT16, FAT32)
+> +** +squashfs+: generate a squashfs (version 4) filesystem
+> +** +vfat+: generate a VFAT filesystem (FAT12, FAT16 or FAT32)
+>
+>  * +fs_label+ (optional): the label to assign to this filesystem, if that
+>    filesystem supports a label
+> @@ -177,6 +178,14 @@ Properties for +fs_type=ext+
+>  ** +1+ (mandatory for ext3 or ext4): generate a revision 1 extended
+>     filesystem
+>
+> +Properties for +fs_type=squashfs+
+> +^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> +
+> +* +squashfs_comp+ (mandatory): the compression type to use
+> +** +gzip+, +xz+, +lzo+: gzip, xz or lzo compression
+> +
+> +* +squashfs_block+ (optional): the size of blocks, in bytes
+> +
+>  Properties for +fs_type=vfat+
+>  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>
+> diff --git a/fs/custom/fs/squashfs b/fs/custom/fs/squashfs
 > new file mode 100644
-> index 0000000..dea9aff
+> index 0000000..132d3ef
 > --- /dev/null
-> +++ b/board/raspberrypi/partitions
-> @@ -0,0 +1,35 @@
-> +[global]
-> +extract=tar
-> +devices=mmcblk0
+> +++ b/fs/custom/fs/squashfs
+> @@ -0,0 +1,19 @@
+> +# Create a squashfs filesystem
 > +
-> +[mmcblk0]
-> +type=boot
-> +boot_type=mbr
-> +partitions=boot,root
-> +partalign=$((1048576))
+> +#-----------------------------------------------------------------------------
+> +DEPENDS+=( squashfs )
 > +
-> +[root]
-> +type=fs
-> +size=$((32*1048576))
-> +mbr_type=$((0x83))
-> +fs_type=ext
-> +fs_vfstype=ext4
-> +fs_mntops=discard
-> +fs_root=/
-> +fs_label=ROOT
-> +ext_gen=4
-> +ext_rev=1
+> +#-----------------------------------------------------------------------------
+> +do_image() {
+> +    local root_dir="${1}"
+> +    local img="${2}"
+> +    local -a fs_opts
 > +
-> +[boot]
-> +type=fs
-> +size=$((9*1048576))
-> +mbr_type=$((0xc))
-> +fs_type=vfat
-> +fs_files_0=rpi-firmware/bootcode.bin
-> +fs_files_1=rpi-firmware/start.elf
-> +fs_files_2=rpi-firmware/fixup.dat
-> +fs_files_3=rpi-firmware/config.txt
-> +fs_files_4=rpi-firmware/cmdline.txt
-> +fs_files_5=zImage
-> +fs_label=BOOT
-> +vfat_size=16
-> diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
-> index 6a17165..50caf5f 100644
-> --- a/configs/raspberrypi_defconfig
-> +++ b/configs/raspberrypi_defconfig
-> @@ -21,3 +21,6 @@ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="75d03120bc36b1cc3166973b8edc11f033ab7c0d"
->  BR2_LINUX_KERNEL_USE_DEFCONFIG=y
->  BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi_quick"
->  BR2_LINUX_KERNEL_ZIMAGE=y
+> +    fs_opts+=( -no-progress -noappend )
+> +    [ -z "${squashfs_comp}"  ] || fs_opts+=( -comp "${squashfs_comp}" )
+It just a question of taste, but I really do prefer to read something like:
+[ -n "${squashfs_comp}"  ] && fs_opts+=( -comp "${squashfs_comp}" )
+But that's just a personal taste.
+> +    [ -z "${squashfs_block}" ] || fs_opts+=( -b ${squahsfs_block} )
 > +
-> +BR2_TARGET_ROOTFS_CUSTOM=y
-> +BR2_TARGET_ROOTFS_CUSTOM_PARTITION_TABLE="$(TOPDIR)/board/raspberrypi/partitions"
+> +    mksquashfs "${root_dir}" "${img}" "${fs_opts[@]}" >/dev/null
+> +}
+> +
+> +# vim: ft=sh
 > --
 > 1.8.1.2
-Could you please add comments over the various size and also the
-different type used, 0x83 is not really user friendly to read.
-Thanks !
 >
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
+
+Thanks !
