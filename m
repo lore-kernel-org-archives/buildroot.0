@@ -1,33 +1,30 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Sat, 4 Jan 2014 14:39:02 +0100
-Subject: [Buildroot] [PATCH 33/36] xorg: Bump xproto_xproto version to 7.0.25
-In-Reply-To: <1388842746-12510-1-git-send-email-berndkuhls@hotmail.com>
-References: <1388842746-12510-1-git-send-email-berndkuhls@hotmail.com>
-Message-ID: <BLU0-SMTP244D4A4511D825FE5076777D9B50@phx.gbl>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sat, 4 Jan 2014 17:20:17 +0100
+Subject: [Buildroot] [RFC PATCH 0/2] gitorious helper
+In-Reply-To: <1387988339-17460-1-git-send-email-alexandre.belloni@free-electrons.com>
+References: <1387988339-17460-1-git-send-email-alexandre.belloni@free-electrons.com>
+Message-ID: <CAAXf6LVLcn4iPgrMXXTjyosSfczTTCLqJsSTv9M5VUfpjR3RJQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Alexandre,
 
-Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
----
- package/x11r7/xproto_xproto/xproto_xproto.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, Dec 25, 2013 at 5:18 PM, Alexandre Belloni
+<alexandre.belloni@free-electrons.com> wrote:
+> The following patches introduce a gitroious helper to download tarballs for
+> gitorious. I currently see two shortcomings:
+>  - the tarball URL is https://gitorious.org/<project>/<repo>/archive/<version>.tar.gz
+>    so the downloaded tarball doesn't have any name appart from <version>.tar.gz
+>  - It needs two separate functions for target and host packages.
+>
+> Alexandre Belloni (2):
+>   infra: introduce gitorious helper function
+>   packages: use gitorious helper when applicable
 
-diff --git a/package/x11r7/xproto_xproto/xproto_xproto.mk b/package/x11r7/xproto_xproto/xproto_xproto.mk
-index bfff3be..46779f6 100644
---- a/package/x11r7/xproto_xproto/xproto_xproto.mk
-+++ b/package/x11r7/xproto_xproto/xproto_xproto.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XPROTO_XPROTO_VERSION = 7.0.23
-+XPROTO_XPROTO_VERSION = 7.0.25
- XPROTO_XPROTO_SOURCE = xproto-$(XPROTO_XPROTO_VERSION).tar.bz2
- XPROTO_XPROTO_SITE = http://xorg.freedesktop.org/releases/individual/proto
- XPROTO_XPROTO_LICENSE = MIT
--- 
-1.7.9.5
+Just a quick note: I'm going to review this (hopefully soon)...
+
+Best regards,
+Thomas
