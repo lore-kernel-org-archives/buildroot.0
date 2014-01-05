@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  5 Jan 2014 16:47:59 +0100
-Subject: [Buildroot] [PATCH 1/9] luainterpreter: create virtual package
+Date: Sun,  5 Jan 2014 16:48:01 +0100
+Subject: [Buildroot] [PATCH 3/9] lua*: restore version in module paths
 In-Reply-To: <cover.1388936665.git.yann.morin.1998@free.fr>
 References: <cover.1388936665.git.yann.morin.1998@free.fr>
-Message-ID: <a5540a9111abec98457814f74946ab62b1131ac9.1388936665.git.yann.morin.1998@free.fr>
+Message-ID: <57dd90c214ba2d8b05afb695dd5b667189047771.1388936665.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,401 +12,392 @@ To: buildroot@busybox.net
 
 From: Francois Perrad <fperrad@gmail.com>
 
-This patch introduces the luainterpreter virtual package, which
-is provided either by 'lua' or by 'lua-jit'.
-
-Packages that require a Lua interpreter can then depend on
-BR2_PACKAGE_LUAINTERPRETER (in their Config.in) and luainterpreter
-(in their .mk).
+(like in upstream)
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-[yann.morin.1998 at free.fr: switch to package-defined providers,
-                          apply Thomas' comments]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                                |  3 ++-
- package/lbase64/Config.in                        |  1 +
+ package/cgilua/cgilua.mk                         |  2 +-
+ package/copas/copas.mk                           |  2 +-
+ package/coxpcall/coxpcall.mk                     |  2 +-
  package/lbase64/lbase64.mk                       |  2 +-
- package/lua-ev/Config.in                         |  1 +
  package/lua-ev/lua-ev.mk                         |  2 +-
- package/lua-msgpack-native/Config.in             |  1 +
  package/lua-msgpack-native/lua-msgpack-native.mk |  2 +-
- package/lua/Config.in                            |  4 ++++
- package/luacjson/Config.in                       |  1 +
+ package/lua/lua-01-root-path.patch               | 21 ++++-----------------
+ package/luabitop/luabitop.mk                     |  5 ++---
  package/luacjson/luacjson.mk                     |  2 +-
- package/luaexpat/Config.in                       |  1 +
- package/luaexpat/luaexpat.mk                     |  2 +-
- package/luafilesystem/Config.in                  |  1 +
+ package/luaexpat/luaexpat.mk                     |  6 +++---
+ package/luaexpatutils/luaexpatutils.mk           |  2 +-
  package/luafilesystem/luafilesystem.mk           |  2 +-
- package/luainterpreter/Config.in                 |  6 ++++++
- package/luainterpreter/luainterpreter.mk         | 10 ++++++++++
- package/luajit/Config.in                         |  8 ++++++++
- package/luaposix/Config.in                       |  1 +
+ package/luajit/luajit-01-root-path.patch         | 22 ----------------------
  package/luaposix/luaposix.mk                     |  2 +-
- package/luasec/Config.in                         |  1 +
- package/luasec/luasec.mk                         |  2 +-
- package/luasocket/Config.in                      |  1 +
- package/luasocket/luasocket.mk                   |  2 +-
- package/luasql/Config.in                         |  1 +
- package/luasql/luasql.mk                         |  2 +-
- package/rings/Config.in                          |  1 +
- package/rings/rings.mk                           |  2 +-
- 27 files changed, 52 insertions(+), 12 deletions(-)
- create mode 100644 package/luainterpreter/Config.in
- create mode 100644 package/luainterpreter/luainterpreter.mk
+ package/luasec/luasec.mk                         |  6 ++----
+ package/luasocket/luasocket.mk                   |  4 ++--
+ package/luasql/luasql.mk                         |  5 ++---
+ package/orbit/orbit.mk                           |  2 +-
+ package/rings/rings.mk                           |  3 +--
+ package/wsapi/wsapi.mk                           |  4 ++--
+ package/xavante/xavante.mk                       |  4 +---
+ 21 files changed, 30 insertions(+), 72 deletions(-)
+ delete mode 100644 package/luajit/luajit-01-root-path.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index e2280f1..66fd800 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -355,8 +355,9 @@ source "package/haserl/Config.in"
- source "package/jamvm/Config.in"
- source "package/jimtcl/Config.in"
- source "package/lua/Config.in"
-+source "package/luainterpreter/Config.in"
- source "package/luajit/Config.in"
--if BR2_PACKAGE_LUA || BR2_PACKAGE_LUAJIT
-+if BR2_PACKAGE_HAS_LUA_INTERPRETER
- menu "Lua libraries/modules"
- source "package/cgilua/Config.in"
- source "package/copas/Config.in"
-diff --git a/package/lbase64/Config.in b/package/lbase64/Config.in
-index bd8503a..ca9dd5d 100644
---- a/package/lbase64/Config.in
-+++ b/package/lbase64/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LBASE64
- 	bool "lbase64"
-+	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
- 	help
- 	  A base64 library for Lua
+diff --git a/package/cgilua/cgilua.mk b/package/cgilua/cgilua.mk
+index bf6ce4e..3dd2d77 100644
+--- a/package/cgilua/cgilua.mk
++++ b/package/cgilua/cgilua.mk
+@@ -9,7 +9,7 @@ CGILUA_SITE = http://github.com/downloads/keplerproject/cgilua
+ CGILUA_LICENSE = MIT
  
+ define CGILUA_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) install LUA_DIR="$(TARGET_DIR)/usr/share/lua"
++	$(MAKE) PREFIX="$(TARGET_DIR)/usr" -C $(@D) install
+ endef
+ 
+ $(eval $(generic-package))
+diff --git a/package/copas/copas.mk b/package/copas/copas.mk
+index 61eac58..b8cd425 100644
+--- a/package/copas/copas.mk
++++ b/package/copas/copas.mk
+@@ -10,7 +10,7 @@ COPAS_LICENSE = MIT
+ 
+ define COPAS_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -m 0644 -D $(@D)/src/copas/copas.lua \
+-		$(TARGET_DIR)/usr/share/lua/copas.lua
++		$(TARGET_DIR)/usr/share/lua/5.1/copas.lua
+ endef
+ 
+ $(eval $(generic-package))
+diff --git a/package/coxpcall/coxpcall.mk b/package/coxpcall/coxpcall.mk
+index 0df7be6..de95461 100644
+--- a/package/coxpcall/coxpcall.mk
++++ b/package/coxpcall/coxpcall.mk
+@@ -10,7 +10,7 @@ COXPCALL_LICENSE = MIT
+ 
+ define COXPCALL_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -m 0644 -D $(@D)/src/coxpcall.lua \
+-		$(TARGET_DIR)/usr/share/lua/coxpcall.lua
++		$(TARGET_DIR)/usr/share/lua/5.1/coxpcall.lua
+ endef
+ 
+ $(eval $(generic-package))
 diff --git a/package/lbase64/lbase64.mk b/package/lbase64/lbase64.mk
-index 8e360c8..605dcf7 100644
+index 605dcf7..cb8ef17 100644
 --- a/package/lbase64/lbase64.mk
 +++ b/package/lbase64/lbase64.mk
-@@ -9,7 +9,7 @@ LBASE64_SITE = http://www.tecgraf.puc-rio.br/~lhf/ftp/lua/5.1
- LBASE64_SOURCE = lbase64.tar.gz
- LBASE64_LICENSE = Public domain
- LBASE64_LICENSE_FILES = README
--LBASE64_DEPENDENCIES = lua
-+LBASE64_DEPENDENCIES = luainterpreter
+@@ -18,7 +18,7 @@ endef
  
- define LBASE64_BUILD_CMDS
-        $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
-diff --git a/package/lua-ev/Config.in b/package/lua-ev/Config.in
-index 4f704ad..28da114 100644
---- a/package/lua-ev/Config.in
-+++ b/package/lua-ev/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LUA_EV
- 	bool "lua-ev"
-+	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
- 	select BR2_PACKAGE_LIBEV
- 	depends on !(BR2_avr32 || BR2_bfin) # libev
- 	help
+ define LBASE64_INSTALL_TARGET_CMDS
+        $(INSTALL) -D -m 0755 $(@D)/base64.so \
+-		$(TARGET_DIR)/usr/lib/lua/base64.so
++		$(TARGET_DIR)/usr/lib/lua/5.1/base64.so
+ endef
+ 
+ $(eval $(generic-package))
 diff --git a/package/lua-ev/lua-ev.mk b/package/lua-ev/lua-ev.mk
-index 173cf0b..298bcf2 100644
+index 298bcf2..1236d77 100644
 --- a/package/lua-ev/lua-ev.mk
 +++ b/package/lua-ev/lua-ev.mk
-@@ -6,7 +6,7 @@
- 
- LUA_EV_VERSION = 458165bdfe0c6eadc788813925f11a0e6a823845
- LUA_EV_SITE = $(call github,brimworks,lua-ev,$(LUA_EV_VERSION))
--LUA_EV_DEPENDENCIES = lua libev
-+LUA_EV_DEPENDENCIES = luainterpreter libev
+@@ -9,6 +9,6 @@ LUA_EV_SITE = $(call github,brimworks,lua-ev,$(LUA_EV_VERSION))
+ LUA_EV_DEPENDENCIES = luainterpreter libev
  LUA_EV_LICENSE = MIT
  LUA_EV_LICENSE_FILES = README
- LUA_EV_CONF_OPT = -DINSTALL_CMOD="/usr/lib/lua"
-diff --git a/package/lua-msgpack-native/Config.in b/package/lua-msgpack-native/Config.in
-index 8894ee5..1014298 100644
---- a/package/lua-msgpack-native/Config.in
-+++ b/package/lua-msgpack-native/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LUA_MSGPACK_NATIVE
- 	bool "lua-msgpack-native"
-+	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
- 	help
- 	  This is a native, C language implementation of msgpack
- 	  (http://msgpack.org) library/protocol for Lua language
+-LUA_EV_CONF_OPT = -DINSTALL_CMOD="/usr/lib/lua"
++LUA_EV_CONF_OPT = -DINSTALL_CMOD="/usr/lib/lua/5.1"
+ 
+ $(eval $(cmake-package))
 diff --git a/package/lua-msgpack-native/lua-msgpack-native.mk b/package/lua-msgpack-native/lua-msgpack-native.mk
-index 496f8a8..2c1dede 100644
+index 2c1dede..d4547ae 100644
 --- a/package/lua-msgpack-native/lua-msgpack-native.mk
 +++ b/package/lua-msgpack-native/lua-msgpack-native.mk
-@@ -6,7 +6,7 @@
+@@ -15,7 +15,7 @@ define LUA_MSGPACK_NATIVE_BUILD_CMDS
+ endef
  
- LUA_MSGPACK_NATIVE_VERSION = 41cce91ab6b54e4426c6d626a0ac41a02ec2096d
- LUA_MSGPACK_NATIVE_SITE = $(call github,kengonakajima,lua-msgpack-native,$(LUA_MSGPACK_NATIVE_VERSION))
--LUA_MSGPACK_NATIVE_DEPENDENCIES = lua
-+LUA_MSGPACK_NATIVE_DEPENDENCIES = luainterpreter
- LUA_MSGPACK_NATIVE_LICENSE = Apache-2.0
- LUA_MSGPACK_NATIVE_LICENSE_FILES = LICENSE.txt
+ define LUA_MSGPACK_NATIVE_INSTALL_TARGET_CMDS
+-	$(INSTALL) -m 755 -D $(@D)/msgpack.so $(TARGET_DIR)/usr/lib/lua/msgpack.so
++	$(INSTALL) -m 755 -D $(@D)/msgpack.so $(TARGET_DIR)/usr/lib/lua/5.1/msgpack.so
+ endef
  
-diff --git a/package/lua/Config.in b/package/lua/Config.in
-index 8c05d08..b96ef0e 100644
---- a/package/lua/Config.in
-+++ b/package/lua/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LUA
- 	bool "lua"
-+	select BR2_PACKAGE_HAS_LUA_INTERPRETER
- 	help
- 	  Lua is a powerful, fast, light-weight, embeddable scripting language.
+ $(eval $(generic-package))
+diff --git a/package/lua/lua-01-root-path.patch b/package/lua/lua-01-root-path.patch
+index f82c9c5..fd0da6e 100644
+--- a/package/lua/lua-01-root-path.patch
++++ b/package/lua/lua-01-root-path.patch
+@@ -1,5 +1,4 @@
+ Adjust installation location to /usr.
+-Remove version in module paths.
  
-@@ -7,6 +8,9 @@ config BR2_PACKAGE_LUA
+ Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
  
- if BR2_PACKAGE_LUA
+@@ -7,7 +6,7 @@ Index: b/etc/lua.pc
+ ===================================================================
+ --- a/etc/lua.pc
+ +++ b/etc/lua.pc
+-@@ -8,13 +8,13 @@
++@@ -8,7 +8,7 @@
+  R= 5.1.5
+  
+  # grep '^INSTALL_.*=' ../Makefile | sed 's/INSTALL_TOP/prefix/'
+@@ -16,28 +15,16 @@ Index: b/etc/lua.pc
+  INSTALL_BIN= ${prefix}/bin
+  INSTALL_INC= ${prefix}/include
+  INSTALL_LIB= ${prefix}/lib
+- INSTALL_MAN= ${prefix}/man/man1
+--INSTALL_LMOD= ${prefix}/share/lua/${V}
+--INSTALL_CMOD= ${prefix}/lib/lua/${V}
+-+INSTALL_LMOD= ${prefix}/share/lua
+-+INSTALL_CMOD= ${prefix}/lib/lua
+- 
+- # canonical vars
+- exec_prefix=${prefix}
+ Index: b/src/luaconf.h
+ ===================================================================
+ --- a/src/luaconf.h
+ +++ b/src/luaconf.h
+-@@ -94,9 +94,9 @@
++@@ -94,7 +94,7 @@
+  	".\\?.dll;"  LUA_CDIR"?.dll;" LUA_CDIR"loadall.dll"
+  
+  #else
+ -#define LUA_ROOT	"/usr/local/"
+--#define LUA_LDIR	LUA_ROOT "share/lua/5.1/"
+--#define LUA_CDIR	LUA_ROOT "lib/lua/5.1/"
+ +#define LUA_ROOT	"/usr/"
+-+#define LUA_LDIR	LUA_ROOT "share/lua/"
+-+#define LUA_CDIR	LUA_ROOT "lib/lua/"
++ #define LUA_LDIR	LUA_ROOT "share/lua/5.1/"
++ #define LUA_CDIR	LUA_ROOT "lib/lua/5.1/"
+  #define LUA_PATH_DEFAULT  \
+- 		"./?.lua;"  LUA_LDIR"?.lua;"  LUA_LDIR"?/init.lua;" \
+- 		            LUA_CDIR"?.lua;"  LUA_CDIR"?/init.lua"
+diff --git a/package/luabitop/luabitop.mk b/package/luabitop/luabitop.mk
+index 7addbe6..083be35 100644
+--- a/package/luabitop/luabitop.mk
++++ b/package/luabitop/luabitop.mk
+@@ -12,12 +12,11 @@ LUABITOP_LICENSE_FILES = README
+ LUABITOP_DEPENDENCIES = lua
  
-+config BR2_PACKAGE_PROVIDES_LUA_INTERPRETER
-+	default "lua"
-+
- choice
- 	prompt "Lua Interpreter command-line editing"
- 	default BR2_PACKAGE_LUA_INTERPRETER_EDITING_NONE
-diff --git a/package/luacjson/Config.in b/package/luacjson/Config.in
-index 8a5624f..d3665c0 100644
---- a/package/luacjson/Config.in
-+++ b/package/luacjson/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LUACJSON
- 	bool "luacjson"
-+	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
- 	help
- 	  The Lua CJSON module provides JSON support for Lua. It features:
- 	  - Fast, standards compliant encoding/parsing routines
+ define LUABITOP_BUILD_CMDS
+-	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
++	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) INCLUDES="-I$(STAGING_DIR)/usr/include"
+ endef
+ 
+ define LUABITOP_INSTALL_TARGET_CMDS
+-	mkdir -p $(TARGET_DIR)/usr/lib/lua
+-	$(INSTALL) -p $(@D)/bit.so $(TARGET_DIR)/usr/lib/lua
++	$(INSTALL) -p $(@D)/bit.so $(TARGET_DIR)/usr/lib/lua/5.1
+ endef
+ 
+ $(eval $(generic-package))
 diff --git a/package/luacjson/luacjson.mk b/package/luacjson/luacjson.mk
-index 1ebb588..fcb8a9a 100644
+index fcb8a9a..86be875 100644
 --- a/package/luacjson/luacjson.mk
 +++ b/package/luacjson/luacjson.mk
-@@ -7,7 +7,7 @@
- LUACJSON_VERSION       = 2.1.0
- LUACJSON_SOURCE        = lua-cjson-$(LUACJSON_VERSION).tar.gz
- LUACJSON_SITE          = http://www.kyne.com.au/~mark/software/download
--LUACJSON_DEPENDENCIES  = lua
-+LUACJSON_DEPENDENCIES  = luainterpreter
- LUACJSON_LICENSE       = MIT
- LUACJSON_LICENSE_FILES = LICENSE
+@@ -21,7 +21,7 @@ define LUACJSON_BUILD_CMDS
+ endef
  
-diff --git a/package/luaexpat/Config.in b/package/luaexpat/Config.in
-index 186c5c9..f8db318 100644
---- a/package/luaexpat/Config.in
-+++ b/package/luaexpat/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LUAEXPAT
- 	bool "luaexpat"
- 	select BR2_PACKAGE_EXPAT
-+	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
- 	help
- 	  LuaExpat is a SAX XML parser based on the Expat library.
+ define LUACJSON_INSTALL_TARGET_CMDS
+-	install -D -m 0644 $(@D)/cjson.so $(TARGET_DIR)/usr/lib/lua/cjson.so
++	$(MAKE) DESTDIR="$(TARGET_DIR)" PREFIX="/usr" -C $(@D) install
+ endef
  
+ $(eval $(generic-package))
 diff --git a/package/luaexpat/luaexpat.mk b/package/luaexpat/luaexpat.mk
-index 0d73d28..65d4355 100644
+index 65d4355..734478a 100644
 --- a/package/luaexpat/luaexpat.mk
 +++ b/package/luaexpat/luaexpat.mk
-@@ -6,7 +6,7 @@
- 
- LUAEXPAT_VERSION      = 1.2.0
- LUAEXPAT_SITE         = http://matthewwild.co.uk/projects/luaexpat
--LUAEXPAT_DEPENDENCIES = lua expat
-+LUAEXPAT_DEPENDENCIES = luainterpreter expat
- LUAEXPAT_LICENSE      = MIT
+@@ -11,7 +11,7 @@ LUAEXPAT_LICENSE      = MIT
  
  
-diff --git a/package/luafilesystem/Config.in b/package/luafilesystem/Config.in
-index 7c130f8..489ebf3 100644
---- a/package/luafilesystem/Config.in
-+++ b/package/luafilesystem/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LUAFILESYSTEM
- 	bool "luafilesystem"
-+	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
- 	help
- 	  LuaFileSystem offers a portable way to access
- 	  the underlying directory structure and file attributes.
+ LUAEXPAT_MFLAGS += LUA_VERSION_NUM=501
+-LUAEXPAT_MFLAGS += LUA_INC=$(STAGING_DIR)/usr/include/lua
++LUAEXPAT_MFLAGS += LUA_INC=$(STAGING_DIR)/usr/include
+ LUAEXPAT_MFLAGS += EXPAT_INC=$(STAGING_DIR)/usr/include
+ LUAEXPAT_MFLAGS += LIBNAME=lxp.so
+ LUAEXPAT_MFLAGS += LIB_OPTION="-shared -fPIC $(TARGET_CFLAGS)"
+@@ -23,8 +23,8 @@ define LUAEXPAT_BUILD_CMDS
+ endef
+ 
+ define LUAEXPAT_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D $(@D)/src/lxp.so $(TARGET_DIR)/usr/lib/lua/lxp.so
+-	$(INSTALL) -D -m 0644 $(@D)/src/lxp/lom.lua $(TARGET_DIR)/usr/share/lua/lxp/lom.lua
++	$(INSTALL) -D $(@D)/src/lxp.so $(TARGET_DIR)/usr/lib/lua/5.1/lxp.so
++	$(INSTALL) -D -m 0644 $(@D)/src/lxp/lom.lua $(TARGET_DIR)/usr/share/lua/5.1/lxp/lom.lua
+ endef
+ 
+ $(eval $(generic-package))
+diff --git a/package/luaexpatutils/luaexpatutils.mk b/package/luaexpatutils/luaexpatutils.mk
+index bdbbdd2..93cf621 100644
+--- a/package/luaexpatutils/luaexpatutils.mk
++++ b/package/luaexpatutils/luaexpatutils.mk
+@@ -11,7 +11,7 @@ LUAEXPATUTILS_DEPENDENCIES = luaexpat
+ 
+ define LUAEXPATUTILS_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -m 0644 -D $(@D)/lua/doc.lua \
+-		$(TARGET_DIR)/usr/share/lua/lxp/doc.lua
++		$(TARGET_DIR)/usr/share/lua/5.1/lxp/doc.lua
+ endef
+ 
+ $(eval $(generic-package))
 diff --git a/package/luafilesystem/luafilesystem.mk b/package/luafilesystem/luafilesystem.mk
-index c75d7a7..c928c6e 100644
+index c928c6e..908d02e 100644
 --- a/package/luafilesystem/luafilesystem.mk
 +++ b/package/luafilesystem/luafilesystem.mk
-@@ -6,7 +6,7 @@
+@@ -18,7 +18,7 @@ define LUAFILESYSTEM_BUILD_CMDS
+ endef
  
- LUAFILESYSTEM_VERSION = 1.6.2
- LUAFILESYSTEM_SITE = http://github.com/downloads/keplerproject/luafilesystem
--LUAFILESYSTEM_DEPENDENCIES = lua
-+LUAFILESYSTEM_DEPENDENCIES = luainterpreter
- LUAFILESYSTEM_LICENSE = MIT
+ define LUAFILESYSTEM_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D $(@D)/src/lfs.so $(TARGET_DIR)/usr/lib/lua/lfs.so
++	$(INSTALL) -D $(@D)/src/lfs.so $(TARGET_DIR)/usr/lib/lua/5.1/lfs.so
+ endef
  
- ifeq ($(BR2_LARGEFILE),y)
-diff --git a/package/luainterpreter/Config.in b/package/luainterpreter/Config.in
-new file mode 100644
-index 0000000..1562145
---- /dev/null
-+++ b/package/luainterpreter/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_HAS_LUA_INTERPRETER
-+	bool
-+
-+config BR2_PACKAGE_PROVIDES_LUA_INTERPRETER
-+	string
-+	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
-diff --git a/package/luainterpreter/luainterpreter.mk b/package/luainterpreter/luainterpreter.mk
-new file mode 100644
-index 0000000..04d63d4
---- /dev/null
-+++ b/package/luainterpreter/luainterpreter.mk
-@@ -0,0 +1,10 @@
-+#############################################################
-+#
-+# luainterpreter
-+#
-+#############################################################
-+
-+LUAINTERPRETER_SOURCE =
-+LUAINTERPRETER_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_LUA_INTERPRETER))
-+
-+$(eval $(generic-package))
-diff --git a/package/luajit/Config.in b/package/luajit/Config.in
-index 23b2650..e0bfbf5 100644
---- a/package/luajit/Config.in
-+++ b/package/luajit/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LUAJIT
- 	bool "luajit"
-+	select BR2_PACKAGE_HAS_LUA_INTERPRETER
- 	# Luajit is only available for some target architectures, and
- 	# has some complexity wrt 32/64. See luajit.mk for details.
- 	depends on BR2_i386 || (BR2_x86_64 && BR2_HOSTARCH='x86_64') || BR2_powerpc || BR2_arm || BR2_armeb
-@@ -10,3 +11,10 @@ config BR2_PACKAGE_LUAJIT
- 	  deployed as a drop-in replacement.
- 
- 	  http://luajit.org/
-+
-+if BR2_PACKAGE_LUAJIT
-+
-+config BR2_PACKAGE_PROVIDES_LUA_INTERPRETER
-+	default "luajit"
-+
-+endif
-diff --git a/package/luaposix/Config.in b/package/luaposix/Config.in
-index 598bf11..cad6fe9 100644
---- a/package/luaposix/Config.in
-+++ b/package/luaposix/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LUAPOSIX
- 	bool "luaposix"
-+	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
- 	select BR2_PACKAGE_LUABITOP if BR2_PACKAGE_LUA
- 	# LuaBitOp is already included in LuaJIT
- 	help
+ $(eval $(generic-package))
+diff --git a/package/luajit/luajit-01-root-path.patch b/package/luajit/luajit-01-root-path.patch
+deleted file mode 100644
+index cc2f04f..0000000
+--- a/package/luajit/luajit-01-root-path.patch
++++ /dev/null
+@@ -1,22 +0,0 @@
+-Adjust installation location to /usr
+-
+-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Index: b/src/luaconf.h
+-===================================================================
+---- a/src/luaconf.h
+-+++ b/src/luaconf.h
+-@@ -26,9 +26,9 @@
+- ** Note to distribution maintainers: do NOT patch the following line!
+- ** Please read ../doc/install.html#distro and pass PREFIX=/usr instead.
+- */
+--#define LUA_ROOT	"/usr/local/"
+--#define LUA_LDIR	LUA_ROOT "share/lua/5.1/"
+--#define LUA_CDIR	LUA_ROOT "lib/lua/5.1/"
+-+#define LUA_ROOT	"/usr/"
+-+#define LUA_LDIR	LUA_ROOT "share/lua/"
+-+#define LUA_CDIR	LUA_ROOT "lib/lua/"
+- #ifdef LUA_XROOT
+- #define LUA_JDIR	LUA_XROOT "share/luajit-2.0.0/"
+- #define LUA_XPATH \
 diff --git a/package/luaposix/luaposix.mk b/package/luaposix/luaposix.mk
-index cbcdf32..b398c8c 100644
+index b398c8c..b018995 100644
 --- a/package/luaposix/luaposix.mk
 +++ b/package/luaposix/luaposix.mk
-@@ -9,7 +9,7 @@ LUAPOSIX_SITE = https://github.com/luaposix/luaposix/archive
- LUAPOSIX_SOURCE = release-v$(LUAPOSIX_VERSION).tar.gz
+@@ -10,7 +10,7 @@ LUAPOSIX_SOURCE = release-v$(LUAPOSIX_VERSION).tar.gz
  LUAPOSIX_LICENSE = MIT
  LUAPOSIX_LICENSE_FILES = COPYING
--LUAPOSIX_DEPENDENCIES = lua host-lua
-+LUAPOSIX_DEPENDENCIES = luainterpreter host-lua
- LUAPOSIX_CONF_OPT = --libdir="/usr/lib/lua" --datarootdir="/usr/share/lua"
+ LUAPOSIX_DEPENDENCIES = luainterpreter host-lua
+-LUAPOSIX_CONF_OPT = --libdir="/usr/lib/lua" --datarootdir="/usr/share/lua"
++LUAPOSIX_CONF_OPT = --libdir="/usr/lib/lua/5.1" --datarootdir="/usr/share/lua/5.1"
  
  ifeq ($(BR2_PACKAGE_NCURSES),y)
-diff --git a/package/luasec/Config.in b/package/luasec/Config.in
-index 2d303c1..ed55df7 100644
---- a/package/luasec/Config.in
-+++ b/package/luasec/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_LUASEC
- 	bool "luasec"
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_LUASOCKET
-+	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
- 	help
- 	  LuaSec is a binding for OpenSSL library to provide TLS/SSL
- 	  communication.
+     LUAPOSIX_DEPENDENCIES += ncurses
 diff --git a/package/luasec/luasec.mk b/package/luasec/luasec.mk
-index 9a99034..d89f61d 100644
+index d89f61d..a2a2cc2 100644
 --- a/package/luasec/luasec.mk
 +++ b/package/luasec/luasec.mk
-@@ -8,7 +8,7 @@ LUASEC_VERSION = 0.4.1
- LUASEC_SITE = http://www.inf.puc-rio.br/~brunoos/luasec/download/
- LUASEC_LICENSE = MIT
- LUASEC_LICENSE_FILES = LICENSE
--LUASEC_DEPENDENCIES = lua openssl
-+LUASEC_DEPENDENCIES = luainterpreter openssl
+@@ -17,11 +17,9 @@ define LUASEC_BUILD_CMDS
+ endef
  
- define LUASEC_BUILD_CMDS
- 	$(MAKE) -C $(@D) CC="$(TARGET_CC)" LD="$(TARGET_CC)" \
-diff --git a/package/luasocket/Config.in b/package/luasocket/Config.in
-index 4526303..619d649 100644
---- a/package/luasocket/Config.in
-+++ b/package/luasocket/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LUASOCKET
- 	bool "luasocket"
-+	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
- 	help
- 	  LuaSocket is the most comprehensive networking support library
- 	  for the Lua language.
+ define LUASEC_INSTALL_TARGET_CMDS
+-	mkdir -p $(TARGET_DIR)/usr/share/lua
+-	mkdir -p $(TARGET_DIR)/usr/lib/lua
+ 	$(MAKE) -C $(@D) \
+-		LUAPATH="$(TARGET_DIR)/usr/share/lua" \
+-		LUACPATH="$(TARGET_DIR)/usr/lib/lua" install
++		LUAPATH="$(TARGET_DIR)/usr/share/lua/5.1" \
++		LUACPATH="$(TARGET_DIR)/usr/lib/lua/5.1" install
+ endef
+ 
+ $(eval $(generic-package))
 diff --git a/package/luasocket/luasocket.mk b/package/luasocket/luasocket.mk
-index 4b01a3e..6a2d4c8 100644
+index 6a2d4c8..a55fe17 100644
 --- a/package/luasocket/luasocket.mk
 +++ b/package/luasocket/luasocket.mk
-@@ -6,7 +6,7 @@
+@@ -18,8 +18,8 @@ endef
  
- LUASOCKET_VERSION = 2.0.2
- LUASOCKET_SITE = http://luaforge.net/frs/download.php/2664
--LUASOCKET_DEPENDENCIES = lua
-+LUASOCKET_DEPENDENCIES = luainterpreter
- LUASOCKET_LICENSE = MIT
- LUASOCKET_LICENSE_FILES = LICENSE
+ define LUASOCKET_INSTALL_TARGET_CMDS
+ 	$(MAKE) -C $(@D) -f makefile \
+-		INSTALL_TOP_SHARE="$(TARGET_DIR)/usr/share/lua" \
+-		INSTALL_TOP_LIB="$(TARGET_DIR)/usr/lib/lua" install
++		INSTALL_TOP_SHARE="$(TARGET_DIR)/usr/share/lua/5.1" \
++		INSTALL_TOP_LIB="$(TARGET_DIR)/usr/lib/lua/5.1" install
+ endef
  
-diff --git a/package/luasql/Config.in b/package/luasql/Config.in
-index 4dd011a..96e04fb 100644
---- a/package/luasql/Config.in
-+++ b/package/luasql/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LUASQL
- 	bool "luasql"
-+	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
- 	help
- 	  LuaSQL is a simple interface from Lua to a DBMS.
- 
+ $(eval $(generic-package))
 diff --git a/package/luasql/luasql.mk b/package/luasql/luasql.mk
-index 44ad90d..62d0cf8 100644
+index 62d0cf8..a1447cc 100644
 --- a/package/luasql/luasql.mk
 +++ b/package/luasql/luasql.mk
-@@ -8,7 +8,7 @@ LUASQL_VERSION = v2.3.0
- LUASQL_SITE = $(call github,keplerproject,luasql,$(LUASQL_VERSION))
- LUASQL_LICENSE = MIT
- LUASQL_LICENSE_FILES = README
--LUASQL_DEPENDENCIES = lua
-+LUASQL_DEPENDENCIES = luainterpreter
+@@ -27,9 +27,8 @@ define LUASQL_BUILD_CMDS
+ endef
  
- LUASQL_MAKE_FLAGS = \
- 	CC="$(TARGET_CC)" \
-diff --git a/package/rings/Config.in b/package/rings/Config.in
-index d1f1efe..b1d41f3 100644
---- a/package/rings/Config.in
-+++ b/package/rings/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_RINGS
- 	bool "rings"
-+	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
- 	help
- 	  Provides a way to create new Lua states from within Lua.
+ define LUASQL_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) $(LUASQL_MAKE_FLAGS) PREFIX=/usr \
+-		LUA_DIR="$(TARGET_DIR)/usr/share/lua" \
+-		LUA_LIBDIR="$(TARGET_DIR)/usr/lib/lua" install
++	$(MAKE) -C $(@D) $(LUASQL_MAKE_FLAGS) \
++		PREFIX="$(TARGET_DIR)/usr" install
+ endef
  
+ $(eval $(generic-package))
+diff --git a/package/orbit/orbit.mk b/package/orbit/orbit.mk
+index ba1142f..7115896 100644
+--- a/package/orbit/orbit.mk
++++ b/package/orbit/orbit.mk
+@@ -11,7 +11,7 @@ ORBIT_LICENSE_FILES = doc/us/license.md
+ 
+ define ORBIT_INSTALL_TARGET_CMDS
+ 	$(MAKE) -C $(@D) \
+-		LUA_DIR=$(TARGET_DIR)/usr/share/lua/ \
++		LUA_DIR=$(TARGET_DIR)/usr/share/lua/5.1/ \
+ 		BIN_DIR=$(TARGET_DIR)/usr/bin \
+ 		install
+ endef
 diff --git a/package/rings/rings.mk b/package/rings/rings.mk
-index a483b62..47d25b6 100644
+index 47d25b6..fe1c2b2 100644
 --- a/package/rings/rings.mk
 +++ b/package/rings/rings.mk
-@@ -6,7 +6,7 @@
+@@ -14,8 +14,7 @@ define RINGS_BUILD_CMDS
+ endef
  
- RINGS_VERSION = 1.2.3
- RINGS_SITE = http://github.com/downloads/keplerproject/rings
--RINGS_DEPENDENCIES = lua
-+RINGS_DEPENDENCIES = luainterpreter
- RINGS_LICENSE = MIT
+ define RINGS_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) LUA_LIBDIR="$(TARGET_DIR)/usr/lib/lua" \
+-		LUA_DIR="$(TARGET_DIR)/usr/share/lua" install
++	$(MAKE) -C $(@D) PREFIX="$(TARGET_DIR)/usr" install
+ endef
  
- define RINGS_BUILD_CMDS
+ $(eval $(generic-package))
+diff --git a/package/wsapi/wsapi.mk b/package/wsapi/wsapi.mk
+index ba917a6..46baebf 100644
+--- a/package/wsapi/wsapi.mk
++++ b/package/wsapi/wsapi.mk
+@@ -9,9 +9,9 @@ WSAPI_SITE = http://github.com/downloads/keplerproject/wsapi
+ WSAPI_LICENSE = MIT
+ 
+ define WSAPI_INSTALL_TARGET_CMDS
+-	mkdir -p $(TARGET_DIR)/usr/share/lua/wsapi
++	mkdir -p $(TARGET_DIR)/usr/share/lua/5.1/wsapi
+ 	$(INSTALL) -m 0644 -D $(@D)/src/wsapi/*.lua \
+-		$(TARGET_DIR)/usr/share/lua/wsapi
++		$(TARGET_DIR)/usr/share/lua/5.1/wsapi
+ endef
+ 
+ $(eval $(generic-package))
+diff --git a/package/xavante/xavante.mk b/package/xavante/xavante.mk
+index 9381c02..7c01ee6 100644
+--- a/package/xavante/xavante.mk
++++ b/package/xavante/xavante.mk
+@@ -9,9 +9,7 @@ XAVANTE_SITE = http://github.com/downloads/keplerproject/xavante
+ XAVANTE_LICENSE = MIT
+ 
+ define XAVANTE_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) PREFIX=/usr \
+-		LUA_DIR="$(TARGET_DIR)/usr/share/lua" \
+-		LUA_LIBDIR="$(TARGET_DIR)/usr/lib/lua" install
++	$(MAKE) -C $(@D) PREFIX="$(TARGET_DIR)/usr" install
+ endef
+ 
+ $(eval $(generic-package))
 -- 
 1.8.1.2
