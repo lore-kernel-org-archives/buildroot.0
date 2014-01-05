@@ -1,12 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 05 Jan 2014 22:59:31 +0100
-Subject: [Buildroot] [PATCH 25/36] xorg: Bump xlib_libXxf86vm version to
-	1.1.3
-In-Reply-To: <BLU0-SMTP2380C74A727F7762E880A8FD9B50@phx.gbl> (Bernd Kuhls's
- message of "Sat, 4 Jan 2014 14:38:54 +0100")
+Date: Sun, 05 Jan 2014 23:04:06 +0100
+Subject: [Buildroot] [PATCH 26/36] xorg: Bump xlib_xtrans version to
+	1.3.2
+In-Reply-To: <BLU0-SMTP324BEB68FB01316D53884FBD9B50@phx.gbl> (Bernd Kuhls's
+ message of "Sat, 4 Jan 2014 14:38:55 +0100")
 References: <1388842746-12510-1-git-send-email-berndkuhls@hotmail.com>
- <BLU0-SMTP2380C74A727F7762E880A8FD9B50@phx.gbl>
-Message-ID: <8761py1458.fsf@dell.be.48ers.dk>
+ <BLU0-SMTP324BEB68FB01316D53884FBD9B50@phx.gbl>
+Message-ID: <871u0m13xl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
