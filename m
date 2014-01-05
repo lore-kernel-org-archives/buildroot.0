@@ -1,32 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 5 Jan 2014 22:22:52 +0100
-Subject: [Buildroot] [git commit] xorg: Bump xlib_libSM version to 1.2.2
-Message-ID: <20140105230942.A25D09C3D4@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun,  5 Jan 2014 23:20:22 +0000 (UTC)
+Subject: [Buildroot] [Bug 6752] genext2fs: e2fsck must run before tunefs -U
+	random
+In-Reply-To: <bug-6752-163@https.bugs.busybox.net/>
+References: <bug-6752-163@https.bugs.busybox.net/>
+Message-ID: <20140105232022.2048A81FCC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6796e2ee4c7ac1e310f674eedf19198553fab56a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=6752
 
-Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/x11r7/xlib_libSM/xlib_libSM.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
-diff --git a/package/x11r7/xlib_libSM/xlib_libSM.mk b/package/x11r7/xlib_libSM/xlib_libSM.mk
-index ac3bd37..3352679 100644
---- a/package/x11r7/xlib_libSM/xlib_libSM.mk
-+++ b/package/x11r7/xlib_libSM/xlib_libSM.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XLIB_LIBSM_VERSION = 1.2.1
-+XLIB_LIBSM_VERSION = 1.2.2
- XLIB_LIBSM_SOURCE = libSM-$(XLIB_LIBSM_VERSION).tar.bz2
- XLIB_LIBSM_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBSM_LICENSE = MIT
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
+
+--- Comment #8 from Yann E. MORIN <yann.morin.1998@free.fr> 2014-01-05 23:20:21 UTC ---
+Fix in the repository, with:
+http://git.buildroot.org/buildroot/commit/?id=9e680d0ada829f1cd7e2e1bff138d5e3ec32d0fd
+
+Regards,
+Yann E. MORIN.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
