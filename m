@@ -1,24 +1,23 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun,  5 Jan 2014 21:03:07 +0000 (UTC)
-Subject: [Buildroot] [Bug 6752] genext2fs: e2fsck must run before tunefs -U
-	random
-In-Reply-To: <bug-6752-163@https.bugs.busybox.net/>
-References: <bug-6752-163@https.bugs.busybox.net/>
-Message-ID: <20140105210307.B45659C3D4@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 05 Jan 2014 22:03:53 +0100
+Subject: [Buildroot] [PATCH 30/36] xorg: Bump xproto_randrproto version
+	to 1.4.0
+In-Reply-To: <BLU0-SMTP4627A400E2929F5F61AAD58D9B50@phx.gbl> (Bernd Kuhls's
+ message of "Sat, 4 Jan 2014 14:38:59 +0100")
+References: <1388842746-12510-1-git-send-email-berndkuhls@hotmail.com>
+ <BLU0-SMTP4627A400E2929F5F61AAD58D9B50@phx.gbl>
+Message-ID: <8761py5efa.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6752
+>>>>> "Bernd" == Bernd Kuhls <berndkuhls@hotmail.com> writes:
 
---- Comment #1 from Daniel Mentz <daniel@exxm.de> 2014-01-05 21:03:06 UTC ---
-Created attachment 5144
-  --> https://bugs.busybox.net/attachment.cgi?id=5144
-Build log
+ > Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
+
+Committed, thanks.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
