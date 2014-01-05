@@ -1,47 +1,50 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 05 Jan 2014 21:59:17 +0100
-Subject: [Buildroot] [PATCH 04/36] xorg: Bump xapp_xrandr version to
-	1.4.1
-In-Reply-To: <BLU0-SMTP451CF1192E7F15E363FE1A5D9B50@phx.gbl> (Bernd Kuhls's
- message of "Sat, 4 Jan 2014 14:38:33 +0100")
-References: <1388842746-12510-1-git-send-email-berndkuhls@hotmail.com>
- <BLU0-SMTP451CF1192E7F15E363FE1A5D9B50@phx.gbl>
-Message-ID: <87a9fa5emy.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun,  5 Jan 2014 21:02:27 +0000 (UTC)
+Subject: [Buildroot] [Bug 6752] New: genext2fs: e2fsck must run before
+	tunefs -U random
+Message-ID: <bug-6752-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <berndkuhls@hotmail.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=6752
 
- > Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
- > ---
- >  package/x11r7/xapp_xrandr/xapp_xrandr.mk |    2 +-
- >  1 file changed, 1 insertion(+), 1 deletion(-)
+           Summary: genext2fs: e2fsck must run before tunefs -U random
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: major
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: daniel at exxm.de
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
- > diff --git a/package/x11r7/xapp_xrandr/xapp_xrandr.mk b/package/x11r7/xapp_xrandr/xapp_xrandr.mk
- > index 9ba7332..7e03d29 100644
- > --- a/package/x11r7/xapp_xrandr/xapp_xrandr.mk
- > +++ b/package/x11r7/xapp_xrandr/xapp_xrandr.mk
- > @@ -4,7 +4,7 @@
- >  #
- >  ################################################################################
- 
- > -XAPP_XRANDR_VERSION = 1.3.5
- > +XAPP_XRANDR_VERSION = 1.4.1
 
-That doesn't work:
+Created attachment 5138
+  --> https://bugs.busybox.net/attachment.cgi?id=5138
+patch
 
-checking for XRANDR... configure: error: Package requirements (xrandr >= 1.4 xrender x11 xproto >= 7.0.17) were not met:
+In fs/ext2/genext2fs.sh, e2fsck must run after changing filesystem options and
+before setting the UUID with "tune2fs -U random". Otherwise, the latter command
+will fail.
 
-Package dependency requirement 'xrandr >= 1.4' could not be satisfied.
-Package 'xrandr' has version '1.3.2', required version is '>= 1.4'
+I previously got this error message
 
-Consider adjusting the PKG_CONFIG_PATH environment variable if you
-installed software in a non-standard prefix.
+"tune2fs 1.42.9 (28-Dec-2013)
 
-I guess this should come after the xproto_randrproto bump?
+Please run e2fsck on the filesystem."
+
+It worked for me after moving e2fsck before "tune2fs -U random"
+
+This is based on commit bfbe4dd19e94fb24037e3b6080acd75435adbb67
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
