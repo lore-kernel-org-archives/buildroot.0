@@ -1,33 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 5 Jan 2014 22:28:40 +0100
-Subject: [Buildroot] [git commit] xorg: Bump xlib_libXcomposite version to
-	0.4.4
-Message-ID: <20140105230942.B85E29C3D4@busybox.osuosl.org>
+Date: Sun, 5 Jan 2014 22:59:47 +0100
+Subject: [Buildroot] [git commit] xorg: Bump xlib_xtrans version to 1.3.2
+Message-ID: <20140105230943.00CE79C3D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=11851a59a1feb375e6f558cafe49f5664e4d53ec
+commit: http://git.buildroot.net/buildroot/commit/?id=76e0d9e2a2aa13d7b8a508a4792d82c7e4f0782b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../x11r7/xlib_libXcomposite/xlib_libXcomposite.mk |    2 +-
+ package/x11r7/xlib_xtrans/xlib_xtrans.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXcomposite/xlib_libXcomposite.mk b/package/x11r7/xlib_libXcomposite/xlib_libXcomposite.mk
-index e097e3c..f0e59cb 100644
---- a/package/x11r7/xlib_libXcomposite/xlib_libXcomposite.mk
-+++ b/package/x11r7/xlib_libXcomposite/xlib_libXcomposite.mk
+diff --git a/package/x11r7/xlib_xtrans/xlib_xtrans.mk b/package/x11r7/xlib_xtrans/xlib_xtrans.mk
+index 9e02d21..8c5fd42 100644
+--- a/package/x11r7/xlib_xtrans/xlib_xtrans.mk
++++ b/package/x11r7/xlib_xtrans/xlib_xtrans.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBXCOMPOSITE_VERSION = 0.4.3
-+XLIB_LIBXCOMPOSITE_VERSION = 0.4.4
- XLIB_LIBXCOMPOSITE_SOURCE = libXcomposite-$(XLIB_LIBXCOMPOSITE_VERSION).tar.bz2
- XLIB_LIBXCOMPOSITE_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXCOMPOSITE_LICENSE = MIT
+-XLIB_XTRANS_VERSION = 1.2.7
++XLIB_XTRANS_VERSION = 1.3.2
+ XLIB_XTRANS_SOURCE = xtrans-$(XLIB_XTRANS_VERSION).tar.bz2
+ XLIB_XTRANS_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_XTRANS_LICENSE = MIT
