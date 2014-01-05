@@ -1,81 +1,79 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 5 Jan 2014 21:04:04 +0100
-Subject: [Buildroot] [git commit] xorg: Bump xcb-proto & libxcb version to
-	1.10
-Message-ID: <20140105230941.E6B539C3D4@busybox.osuosl.org>
+Date: Sun, 5 Jan 2014 21:50:02 +0100
+Subject: [Buildroot] [git commit] xapp_xdpyinfo: fix dependencies
+Message-ID: <20140105230941.F08B39BE33@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=862e1221d1c36464d00e5dba2b4bb4f5fc046c85
+commit: http://git.buildroot.net/buildroot/commit/?id=a97b5add2e10c019b23fb331360dcac71f7074d4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-These have to be bumped together as new libxcb requires new xcb-proto, and
-old libxcb doesn't build with new xcb-proto.
+Most of the dependencies listed were optional or only indirectly needed
+(E.G. the xproto ones), so don't select them.
 
-[Peter: fixup xcb-proto.pc instead of playing tricks with --define-variable]
-Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
+Further more, the optional xcomposite and xinerama dependencies were missing.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/libxcb/libxcb.mk       |    8 ++------
- package/x11r7/xcb-proto/xcb-proto.mk |   12 +++++++++++-
- 2 files changed, 13 insertions(+), 7 deletions(-)
+ package/x11r7/xapp_xdpyinfo/Config.in        |    9 ---------
+ package/x11r7/xapp_xdpyinfo/xapp_xdpyinfo.mk |   25 ++++++++++++++++++++++++-
+ 2 files changed, 24 insertions(+), 10 deletions(-)
 
-diff --git a/package/x11r7/libxcb/libxcb.mk b/package/x11r7/libxcb/libxcb.mk
-index dfcf6fa..ef6b4ce 100644
---- a/package/x11r7/libxcb/libxcb.mk
-+++ b/package/x11r7/libxcb/libxcb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBXCB_VERSION = 1.8.1
-+LIBXCB_VERSION = 1.10
- LIBXCB_SOURCE = libxcb-$(LIBXCB_VERSION).tar.bz2
- LIBXCB_SITE = http://xcb.freedesktop.org/dist/
- LIBXCB_LICENSE = MIT
-@@ -15,12 +15,8 @@ LIBXCB_INSTALL_STAGING = YES
- LIBXCB_DEPENDENCIES = \
- 	host-libxslt xlib_libpthread-stubs xcb-proto xlib_libXdmcp xlib_libXau \
- 	host-xcb-proto host-python host-pkgconf
--LIBXCB_CONF_ENV = STAGING_DIR="$(STAGING_DIR)"
--LIBXCB_MAKE_OPT = XCBPROTO_XCBINCLUDEDIR=$(STAGING_DIR)/usr/share/xcb \
--	XCBPROTO_XCBPYTHONDIR=$(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
--LIBXCB_CONF_OPT = --disable-build-docs
- 
--HOST_LIBXCB_CONF_OPT = --disable-build-docs
-+LIBXCB_CONF_OPT = --disable-build-docs
+diff --git a/package/x11r7/xapp_xdpyinfo/Config.in b/package/x11r7/xapp_xdpyinfo/Config.in
+index 261a63f..6584ae1 100644
+--- a/package/x11r7/xapp_xdpyinfo/Config.in
++++ b/package/x11r7/xapp_xdpyinfo/Config.in
+@@ -2,15 +2,6 @@ config BR2_PACKAGE_XAPP_XDPYINFO
+ 	bool "xdpyinfo"
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_LIBXEXT
+-	select BR2_PACKAGE_XLIB_LIBXI
+-	select BR2_PACKAGE_XLIB_LIBXRENDER
+ 	select BR2_PACKAGE_XLIB_LIBXTST
+-	select BR2_PACKAGE_XLIB_LIBXXF86DGA
+-	select BR2_PACKAGE_XLIB_LIBXXF86VM
+-	select BR2_PACKAGE_XPROTO_INPUTPROTO
+-	select BR2_PACKAGE_XPROTO_KBPROTO
+-	select BR2_PACKAGE_XPROTO_RENDERPROTO
+-	select BR2_PACKAGE_XPROTO_XF86DGAPROTO
+-	select BR2_PACKAGE_XPROTO_XF86VIDMODEPROTO
+ 	help
+ 	  display information utility for X
+diff --git a/package/x11r7/xapp_xdpyinfo/xapp_xdpyinfo.mk b/package/x11r7/xapp_xdpyinfo/xapp_xdpyinfo.mk
+index 2143988..dcfe77a 100644
+--- a/package/x11r7/xapp_xdpyinfo/xapp_xdpyinfo.mk
++++ b/package/x11r7/xapp_xdpyinfo/xapp_xdpyinfo.mk
+@@ -9,6 +9,29 @@ XAPP_XDPYINFO_SOURCE = xdpyinfo-$(XAPP_XDPYINFO_VERSION).tar.bz2
+ XAPP_XDPYINFO_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XDPYINFO_LICENSE = MIT
+ XAPP_XDPYINFO_LICENSE_FILES = COPYING
+-XAPP_XDPYINFO_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXi xlib_libXrender xlib_libXtst xlib_libXxf86dga xlib_libXxf86vm xproto_inputproto xproto_kbproto xproto_renderproto xproto_xf86dgaproto xproto_xf86vidmodeproto xlib_libdmx
++XAPP_XDPYINFO_CONF_OPT = --without-xf86misc # not in BR
++XAPP_XDPYINFO_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXtst \
++	$(if $(BR2_PACKAGE_XLIB_LIBXI),xlib_libXi) \
++	$(if $(BR2_PACKAGE_XLIB_LIBXRENDER),xlib_libXrender) \
++	$(if $(BR2_PACKAGE_XLIB_LIBXCOMPOSITE),xlib_libXcomposite) \
++	$(if $(BR2_PACKAGE_XLIB_LIBXXF86VM),xlib_libXxf86vm)
++
++ifeq ($(BR2_PACKAGE_XLIB_LIBXXF86DGA),y)
++XAPP_XDPYINFO_DEPENDENCIES += xlib_libXxf86dga
++else
++XAPP_XDPYINFO_CONF_OPT += --without-dga
++endif
++
++ifeq ($(BR2_PACKAGE_XLIB_LIBDMX),y)
++XAPP_XDPYINFO_DEPENDENCIES += xlib_libdmx
++else
++XAPP_XDPYINFO_CONF_OPT += --without-dmx
++endif
++
++ifeq ($(BR2_PACKAGE_XLIB_LIBXINERAMA),y)
++XAPP_XDPYINFO_DEPENDENCIES += xlib_libXinerama
++else
++XAPP_XDPYINFO_CONF_OPT += --without-xinerama
++endif
  
  $(eval $(autotools-package))
- $(eval $(host-autotools-package))
-diff --git a/package/x11r7/xcb-proto/xcb-proto.mk b/package/x11r7/xcb-proto/xcb-proto.mk
-index 98d0f02..1bf6366 100644
---- a/package/x11r7/xcb-proto/xcb-proto.mk
-+++ b/package/x11r7/xcb-proto/xcb-proto.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XCB_PROTO_VERSION = 1.7.1
-+XCB_PROTO_VERSION = 1.10
- XCB_PROTO_SOURCE = xcb-proto-$(XCB_PROTO_VERSION).tar.bz2
- XCB_PROTO_SITE = http://xcb.freedesktop.org/dist/
- XCB_PROTO_LICENSE = MIT
-@@ -14,5 +14,15 @@ XCB_PROTO_INSTALL_STAGING = YES
- 
- XCB_PROTO_DEPENDENCIES = host-python
- 
-+# xcbincludedir/pythondir is used by E.G. libxcb at build time to find the
-+# xml / python files, so ensure these expand to their full (host) paths
-+define XCB_PROTO_FIXUP_PC_FILE
-+	$(SED) 's|^\(xcbincludedir=\)|\1$(STAGING_DIR)|' \
-+	    -e 's|^\(pythondir=\)|\1$(STAGING_DIR)|' \
-+		$(STAGING_DIR)/usr/lib/pkgconfig/xcb-proto.pc
-+endef
-+
-+XCB_PROTO_POST_INSTALL_STAGING_HOOKS += XCB_PROTO_FIXUP_PC_FILE
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
