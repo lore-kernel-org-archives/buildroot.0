@@ -1,26 +1,26 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 5 Jan 2014 11:23:01 +0100
-Subject: [Buildroot] Patchwork oldest patches cleanup #4 (deadline
-	January 5)
-In-Reply-To: <CAAXf6LVVi6d=xRjsqW8eSMAf1CpKyU-qUTQ2dbfCPU=EF__jcA@mail.gmail.com>
-References: <CAAXf6LWFAfs_i_NjBbD3RZ=Y0RDKftzwj-_8xKuqyYA=69PNsw@mail.gmail.com>
- <CAAXf6LVVi6d=xRjsqW8eSMAf1CpKyU-qUTQ2dbfCPU=EF__jcA@mail.gmail.com>
-Message-ID: <CAAXf6LX7DXk8Bs-6eL2sxAHTSot_Dx1Ya=jnLUb3+0R1U-SUNQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 5 Jan 2014 11:24:58 +0100
+Subject: [Buildroot] [PATCH] dbus-cpp: new package
+In-Reply-To: <52BC4E9A.9050303@zacarias.com.ar>
+References: <1388070026-4256-1-git-send-email-gustavo@zacarias.com.ar>
+ <20131226162407.2debd602@skate> <52BC4E9A.9050303@zacarias.com.ar>
+Message-ID: <CACXmVibKu_hmn4G6hwSRAscsXdcA7ViJCoFO8Kb8NUeVRJh0gg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Jan 5, 2014 at 11:21 AM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-[..]
->>
->> [1/2] dbus: bump dbus version from 1.4.24 to current 1.6.8
->> Gary Coulbourne <bear@bears.org>
->> http://patchwork.ozlabs.org/patch/207507
->
-> No feedback, rejected.
+On Thu, Dec 26, 2013 at 4:43 PM, Gustavo Zacarias
+<gustavo@zacarias.com.ar> wrote:
 
-Sorry, this was incorrect. There was feedback from ThomasP stating
-this was still needed.
+> Me neither, the problem is patching it (bin/lib separately, ditching the
+> src/.libs & other references) won't be upstreamable since the option is
+> right there now and i don't think upstream will want a variation on the
+> subject.
+> It's doable but not upstreamable i think, what do we prefer?
+
+I think it is ok like this - Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
