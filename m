@@ -1,138 +1,79 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  5 Jan 2014 16:48:07 +0100
-Subject: [Buildroot] [PATCH 9/9] manual: adding packages luarocks
-In-Reply-To: <cover.1388936665.git.yann.morin.1998@free.fr>
-References: <cover.1388936665.git.yann.morin.1998@free.fr>
-Message-ID: <cad6cf5f656ef12b3704dc0f191fc73b8e3b7df7.1388936665.git.yann.morin.1998@free.fr>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 5 Jan 2014 17:01:56 +0100
+Subject: [Buildroot] Patchwork oldest patches cleanup #5 (deadline January
+	19)
+Message-ID: <CAAXf6LVcK-fx059K=tetV=NY78amOHczPkbVxkO1pKAuvDCwtA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Francois Perrad <fperrad@gmail.com>
+All,
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-[yann.morin.1998 at free.fr: some cleanups and rephrasing]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- docs/manual/adding-packages-luarocks.txt | 93 ++++++++++++++++++++++++++++++++
- docs/manual/adding-packages.txt          |  2 +
- 2 files changed, 95 insertions(+)
- create mode 100644 docs/manual/adding-packages-luarocks.txt
+Here is the session 5 of the patchwork cleanup. For those who haven't
+followed previous sessions, here is a quick recap: every session we'll
+be posting the list of the 10 oldest patches, with the original patch
+contributors in copy. During two weeks, we have the opportunity to
+discuss the patch, whether it is still necessary or not, how it should
+be changed to be merged.
 
-diff --git a/docs/manual/adding-packages-luarocks.txt b/docs/manual/adding-packages-luarocks.txt
-new file mode 100644
-index 0000000..6e68852
---- /dev/null
-+++ b/docs/manual/adding-packages-luarocks.txt
-@@ -0,0 +1,93 @@
-+// -*- mode:doc; -*-
-+// vim: set syntax=asciidoc:
-+
-+Infrastructure for LuaRocks-based packages
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+[[luarocks-package-tutorial]]
-+
-++luarocks-package+ tutorial
-+^^^^^^^^^^^^^^^^^^^^^^^^^^^
-+
-+First, let's see how to write a +.mk+ file for a LuaRocks-based package,
-+with an example :
-+
-+------------------------
-+01: ################################################################################
-+02: #
-+03: # luafoo
-+04: #
-+05: ################################################################################
-+06:
-+07: LUAFOO_VERSION = 1.0.2-1
-+08: LUAFOO_DEPENDENCIES = foo
-+09:
-+10: LUAFOO_BUILD_OPT += FOO_INCDIR=$(STAGING_DIR)/usr/include
-+11: LUAFOO_BUILD_OPT += FOO_LIBDIR=$(STAGING_DIR)/usr/lib
-+12: LUAFOO_LICENSE = luaFoo license
-+13: LUAFOO_LICENSE_FILES = COPYING
-+14:
-+15: $(eval $(luarocks-package))
-+------------------------
-+
-+On line 7, we declare the version of the package (the same as in the rockspec,
-+which is the concatenation of the upstream version and the rockspec revision,
-+separated by a hyphen '-').
-+
-+On line 8, we declare our dependencies against native libraries, so that they
-+are built before the build process of our package starts.
-+
-+On lines 10-11, we tell Buildroot to pass custom options to LuaRocks when it is
-+building the package.
-+
-+On lines 12-13, we specify the licensing terms for the package.
-+
-+Finally, on line 15, we invoke the +luarocks-package+
-+macro that generates all the Makefile rules that actually allows the
-+package to be built.
-+
-+[[luarocks-package-reference]]
-+
-++luarocks-package+ reference
-+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-+
-+LuaRocks is a deployment and management system for Lua modules, and supports
-+various +build.type+: +builtin+, +make+ and +cmake+. In the contetx of
-+Buildroot, the +luarocks-package+ infrastructure only supports the +builtin+
-+mode. LuaRocks packages that use the +make+ or +cmake+ build mechanisms
-+should instead be packaged using the +generic-package+ and +cmake-package+
-+infrastructures in Buildroot, respectively.
-+
-+The main macro of the LuaRocks package infrastructure is +luarocks-package+:
-+like +generic-package+ it works by defining a number of variables providing
-+meta informations about the package, and then calling +luarocks-package+. It
-+is worth mentioning that building LuaRocks packages for the host is not
-+supported, so the macro +host-luarocks-package+ is not implemented.
-+
-+Just like the generic infrastructure, the LuaRocks infrastructure works
-+by defining a number of variables before calling the +luarocks-package+
-+macro.
-+
-+First, all the package metadata information variables that exist in
-+the generic infrastructure also exist in the LuaRocks infrastructure:
-++LUAFOO_VERSION+, +LUAFOO_SOURCE+, +LUAFOO_SITE+,
-++LUAFOO_DEPENDENCIES+, +LUAFOO_LICENSE+, +LUAFOO_LICENSE_FILES+.
-+
-+Two of them are populated by the LuaRocks infrastructure (for the
-++download+ step). If your package is not hosted on the LuaRocks mirror
-++$(BR2_LUAROCKS_MIRROR)+, you can override them:
-+
-+* +LUAFOO_SITE+, which defaults to +$(BR2_LUAROCKS_MIRROR)+
-+
-+* +LUAFOO_SOURCE+, which defaults to +luafoo-$(LUAFOO_VERSION).src.rock+
-+
-+A few additional variables, specific to the LuaRocks infrastructure, are
-+also defined. They can be overridden in specific cases.
-+
-+* +LUAFOO_ROCKSPEC+, which defaults to +luafoo-$(LUAFOO_VERSION).rockspec+
-+
-+* +LUAFOO_SUBDIR+, which defaults to
-+  +luafoo-$(LUAFOO_VERSION_WITHOUT_ROCKSPEC_REVISION)+
-+
-+* +LUAFOO_BUILD_OPT+ contains additional build options for the
-+  +luarocks build+ call.
-diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
-index 01277d8..cc86529 100644
---- a/docs/manual/adding-packages.txt
-+++ b/docs/manual/adding-packages.txt
-@@ -20,6 +20,8 @@ include::adding-packages-cmake.txt[]
- 
- include::adding-packages-python.txt[]
- 
-+include::adding-packages-luarocks.txt[]
-+
- include::adding-packages-hooks.txt[]
- 
- include::adding-packages-gettext.txt[]
--- 
-1.8.1.2
+In particular, I'm interested in knowing if the original contributor is
+still interested by the patch, or if someone else is interested in
+adopting the patch and sending an updated version, or if the patch no
+longer makes sense due to other changes made in Buildroot.
+
+All patches that have not received any comment or attention before the
+deadline will be removed from patchwork. This is aggressive, but we have
+many 'dead' patches sitting in patchwork, and this cannot work.
+
+Deadline for this session is January 19.
+
+Below are the 10 oldest patches (obtained with a slightly modified
+version of pwclient):
+[ pwclient list -s New -n 17 ] (and skip Delegated patches)
+
+
+tokyocabinet: new package
+Jon Diekema <jon.diekema@gmail.com>
+http://patchwork.ozlabs.org/patch/207827
+
+[RFC,1/2] barebox: Build barebox in separate directory.
+Marek Belisko <marek.belisko@open-nandra.com>
+http://patchwork.ozlabs.org/patch/207942
+
+[RFC,2/2] barebox: Add possibility to build also barebox xloader (MLO).
+Marek Belisko <marek.belisko@open-nandra.com>
+http://patchwork.ozlabs.org/patch/207943
+
+new package: p7zip
+Stefan Fr?berg <stefan.froberg@petroprogram.com>
+http://patchwork.ozlabs.org/patch/207947
+
+toolchain-external: re-introduce Sourcery CodeBench ARM 2010.09
+Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+http://patchwork.ozlabs.org/patch/207978
+
+[1/1,v2] Hide issue and hostname menu when using a custom skeleton.
+Sagaert Johan <sagaert.johan@skynet.be>
+http://patchwork.ozlabs.org/patch/211644
+
+[1/2] new package: python-posix_ipc.
+Matt Weber <rc.lsw.collaborate@gmail.com>
+http://patchwork.ozlabs.org/patch/212498
+
+[2/2] new package: python-posix_ipc
+Matt Weber <rc.lsw.collaborate@gmail.com>
+http://patchwork.ozlabs.org/patch/212499
+
+[1/1] added python unicode selection to menu
+Matt Weber <rc.lsw.collaborate@gmail.com>
+http://patchwork.ozlabs.org/patch/212500
+
+[1/2] makebootfat: new package
+Floris Bos <bos@je-eigen-domein.nl>
+http://patchwork.ozlabs.org/patch/213112
+
+
+Thanks in advance for your feedback,
+Thomas
