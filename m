@@ -1,42 +1,34 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 5 Jan 2014 18:17:02 +0100
-Subject: [Buildroot] Patchwork oldest patches cleanup #5 (deadline
- January 19)
-In-Reply-To: <20140105162014.GA16066@free.fr>
-References: <CAAXf6LVcK-fx059K=tetV=NY78amOHczPkbVxkO1pKAuvDCwtA@mail.gmail.com>
- <20140105162014.GA16066@free.fr>
-Message-ID: <20140105171702.GC16066@free.fr>
+Date: Sun, 5 Jan 2014 18:19:46 +0100
+Subject: [Buildroot] [PATCH 1/1] Adding extlinux to sysliux binaries
+ copied into target/images.
+In-Reply-To: <20140105122039.GA4201@zelow.no>
+References: <20140105122039.GA4201@zelow.no>
+Message-ID: <20140105171946.GD16066@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Floris, All,
+Thomas, All,
 
-On 2014-01-05 17:20 +0100, Yann E. MORIN spake thusly:
-> On 2014-01-05 17:01 +0100, Thomas De Schampheleire spake thusly:
-> > Here is the session 5 of the patchwork cleanup.
+On 2014-01-05 13:20 +0100, Thomas Lundquist spake thusly:
 [--SNIP--]
-> > [1/2] makebootfat: new package
-> > Floris Bos <bos@je-eigen-domein.nl>
-> > http://patchwork.ozlabs.org/patch/213112
-> 
-> I'm not sure we need that one. We already have:
->   - host-dosfstools to generate (empty) fat filesystems in a image file;
->   - host-mtools to add files to a fat filesystem, and it works with
->     image files.
+> diff --git a/boot/syslinux/Config.in b/boot/syslinux/Config.in
+> index 2c39e65..5773abb 100644
+> --- a/boot/syslinux/Config.in
+> +++ b/boot/syslinux/Config.in
+> @@ -17,4 +17,8 @@ config BR2_TARGET_SYSLINUX_PXELINUX
+>  	bool "Install pxelinux"
+>  	default y
+>  
+> +config BR2_TARGET_SYSLINUX_EXTLINUX
+> +	bool "Install extlinux"
+> +	default y
 
-It seems I've spoken a bit fast on that one. There's one thing this
-package provides that is not provided by dosfstools or mtools: an MBR
-bootcode.
-
-However, we already have syslinux, which does provide an MBR bootcode.
-It's currently not installed; it's just a matter of adding one more
-option to syslinux, to install its MBR bootcode.
-
-So, my previous position still stands: we already have the required
-packages; no need to duplicate what we already have.
+While you are working on syslinux, would you also consider adding the
+MBR bootcode as an option, please?
 
 Regards,
 Yann E. MORIN.
