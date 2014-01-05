@@ -1,61 +1,61 @@
-From: =?UTF-8?B?Q8OpZHJpYyBDaMOpcGllZA==?= <cedric.chepied@gmail.com>
-Date: Sun, 05 Jan 2014 12:57:20 +0100
-Subject: [Buildroot] [PATCH] ZNC: new package
-In-Reply-To: <877gae7nd8.fsf@dell.be.48ers.dk>
-References: <1388876370-3441-1-git-send-email-cedric.chepied@gmail.com>
- <877gae7nd8.fsf@dell.be.48ers.dk>
-Message-ID: <52c948a2.e358c20a.0e98.1fdc@mx.google.com>
+From: Thomas Lundquist <lists@zelow.no>
+Date: Sun, 5 Jan 2014 13:20:39 +0100
+Subject: [Buildroot] [PATCH 1/1] Adding extlinux to sysliux binaries copied
+ into target/images.
+Message-ID: <20140105122039.GA4201@zelow.no>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-At Sun, 05 Jan 2014 11:07:47 +0100,
-Peter Korsgaard wrote:
-> 
-> >>>>> "C?dric" == C?dric Ch?pied <cedric.chepied@gmail.com> writes:
->  > diff --git a/package/znc/znc.mk b/package/znc/znc.mk
->  > new file mode 100644
->  > index 0000000..59d10f2
->  > --- /dev/null
->  > +++ b/package/znc/znc.mk
->  > @@ -0,0 +1,22 @@
->  > +ZNC_VERSION = 1.2
->  > +ZNC_SOURCE = znc-$(ZNC_VERSION).tar.gz
->  > +ZNC_SITE = http://znc.in/releases
->  > +ACL_INSTALL_STAGING = YES
-> 
-> Why does it need to install into staging? It's a program and not a
-> library, right?
-
-It does not. This is a bad copy/paste. I made this patch too quickly. 
-
-> 
-> 
->  > +
->  > +# While the configuration system uses autoconf, the Makefiles are
->  > +# hand-written and do not use automake. Therefore, we have to hack
->  > +# around their deficiencies by passing installation paths.
->  > +ACL_INSTALL_STAGING_OPT = 			\
->  > +	prefix=$(STAGING_DIR)/usr 		\
->  > +	exec_prefix=$(STAGING_DIR)/usr 		\
->  > +	PKG_DEVLIB_DIR=$(STAGING_DIR)/usr/lib	\
->  > +	install-dev install-lib
->  > +
->  > +ACL_INSTALL_TARGET_OPT = 			\
->  > +	prefix=$(TARGET_DIR)/usr 		\
->  > +	exec_prefix=$(TARGET_DIR)/usr 		\
->  > +	install install-lib
-> 
-> Out of interest, what does PKG_DEVLIB_DIR do and why don't we pass it
-> for TARGET?
+Using the mail address I have on Github, which is the reason for the difference
+in addresses.
 
 
-Same remark, I'll fix it and submit a new patch.
+Signed-off-by: Thomas Lundquist <thomasez@redpill-linpro.com>
+---
+ boot/syslinux/Config.in   | 4 ++++
+ boot/syslinux/syslinux.mk | 7 +++++++
+ 2 files changed, 11 insertions(+)
 
-Regards,
-
+diff --git a/boot/syslinux/Config.in b/boot/syslinux/Config.in
+index 2c39e65..5773abb 100644
+--- a/boot/syslinux/Config.in
++++ b/boot/syslinux/Config.in
+@@ -17,4 +17,8 @@ config BR2_TARGET_SYSLINUX_PXELINUX
+ 	bool "Install pxelinux"
+ 	default y
+ 
++config BR2_TARGET_SYSLINUX_EXTLINUX
++	bool "Install extlinux"
++	default y
++
+ endif
+diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
+index eedc364..bfc2694 100644
+--- a/boot/syslinux/syslinux.mk
++++ b/boot/syslinux/syslinux.mk
+@@ -26,10 +26,17 @@ endef
+ SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_ISOLINUX) += isolinux.bin
+ SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_PXELINUX) += pxelinux.bin
+ 
++ifeq ($(BR2_TARGET_SYSLINUX_EXTLINUX),y)
++define SYSLINUX_INSTALL_EXTLINUX
++	$(INSTALL) -D -m 0755 $(@D)/extlinux/extlinux $(BINARIES_DIR)/extlinux;
++endef
++endif
++
+ define SYSLINUX_INSTALL_IMAGES_CMDS
+ 	for i in $(SYSLINUX_IMAGES-y); do \
+ 		$(INSTALL) -D -m 0755 $(@D)/core/$$i $(BINARIES_DIR)/$$i; \
+ 	done
++    $(SYSLINUX_INSTALL_EXTLINUX)
+ endef
+ 
+ 
 -- 
-C?dric Ch?pied
-<cedric.chepied@gmail.com>
+1.8.3.2
+
+
+----- End forwarded message -----
