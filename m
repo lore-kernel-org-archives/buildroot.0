@@ -1,32 +1,28 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun,  5 Jan 2014 22:59:33 +0000 (UTC)
-Subject: [Buildroot] [Bug 6752] genext2fs: e2fsck must run before tunefs -U
-	random
-In-Reply-To: <bug-6752-163@https.bugs.busybox.net/>
-References: <bug-6752-163@https.bugs.busybox.net/>
-Message-ID: <20140105225933.614829C3D4@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 06 Jan 2014 00:06:01 +0100
+Subject: [Buildroot] [PATCH] dbus-cpp: fix cross build for tools when
+	expat is missing
+In-Reply-To: <1388948439-9882-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Sun, 5 Jan 2014 16:00:39 -0300")
+References: <1388948439-9882-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87d2k6yqp2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6752
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
---- Comment #7 from Yann E. MORIN <yann.morin.1998@free.fr> 2014-01-05 22:59:33 UTC ---
-Daniel,
+ > dbus-c++ tools use CXX_FOR_BUILD to build in cross scenarios, however
+ > they don't use CXXFLAGS_FOR_BUILD nor LDFLAGS_FOR_BUILD thus breaking
+ > when there aren't any expat devel files in the default PATHs (build
+ > host). Fixes:
+ > http://autobuild.buildroot.net/results/44f/44fc2cab2b60aa82460bb46b1035ddda115af750/
 
-This should be fixed by:
-    http://patchwork.ozlabs.org/patch/307025/
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Care to check on your side, please?
-
-Thanks again for the report!
-
-Regards,
-Yann E. MORIN.
+Committed, thanks.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
