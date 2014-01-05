@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  5 Jan 2014 16:48:04 +0100
-Subject: [Buildroot] [PATCH 6/9] lua-cjson: restore official name
+Date: Sun,  5 Jan 2014 16:48:05 +0100
+Subject: [Buildroot] [PATCH 7/9] luasql-sqlite3: renamed like with LuaRocks
 In-Reply-To: <cover.1388936665.git.yann.morin.1998@free.fr>
 References: <cover.1388936665.git.yann.morin.1998@free.fr>
-Message-ID: <68c274b976501bffd84c43c1d90d2e909fd9d2a9.1388936665.git.yann.morin.1998@free.fr>
+Message-ID: <a40e925a8a0e4ba6b6cccb5de4a866b0df417dab.1388936665.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,109 +12,181 @@ To: buildroot@busybox.net
 
 From: Francois Perrad <fperrad@gmail.com>
 
-(need by LuaRocks)
-
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+[yann.morin.1998 at free.fr: select BR2_PACKAGE_SQLITE]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in.legacy                                        |  7 +++++++
- package/Config.in                                       |  2 +-
- package/{luacjson => lua-cjson}/Config.in               |  4 ++--
- .../{luacjson/luacjson.mk => lua-cjson/lua-cjson.mk}    | 17 ++++++++---------
- 4 files changed, 18 insertions(+), 12 deletions(-)
- rename package/{luacjson => lua-cjson}/Config.in (90%)
- rename package/{luacjson/luacjson.mk => lua-cjson/lua-cjson.mk} (56%)
+ Config.in.legacy                         |  7 +++++++
+ package/Config.in                        |  2 +-
+ package/luasql-sqlite3/Config.in         |  9 +++++++++
+ package/luasql-sqlite3/luasql-sqlite3.mk | 33 +++++++++++++++++++++++++++++++
+ package/luasql/Config.in                 | 22 ---------------------
+ package/luasql/luasql.mk                 | 34 --------------------------------
+ 6 files changed, 50 insertions(+), 57 deletions(-)
+ create mode 100644 package/luasql-sqlite3/Config.in
+ create mode 100644 package/luasql-sqlite3/luasql-sqlite3.mk
+ delete mode 100644 package/luasql/Config.in
+ delete mode 100644 package/luasql/luasql.mk
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index c75e25e..ce05177 100644
+index ce05177..160e5f8 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -118,6 +118,13 @@ config BR2_PACKAGE_NETKITTELNET
  	  been deprecated since 2012.11. 'busybox' provides a telnet
  	  client and should be used instead.
  
-+config BR2_PACKAGE_LUACJSON
-+	bool "luacjson has been replaced by lua-cjson"
-+	select BR2_PACKAGE_LUA_CJSON
++config BR2_PACKAGE_LUASQL
++	bool "luasql has been replaced by luasql-sqlite3"
++	select BR2_PACKAGE_LUASQL_SQLITE3
 +	select BR2_LEGACY
 +	help
-+	  The option has been renamed BR2_PACKAGE_LUA_CJSON.
++	  The option has been renamed BR2_PACKAGE_LUASQL_SQLITE3.
 +
- ###############################################################################
- comment "Legacy options removed in 2013.11"
- 
+ config BR2_PACKAGE_LUACJSON
+ 	bool "luacjson has been replaced by lua-cjson"
+ 	select BR2_PACKAGE_LUA_CJSON
 diff --git a/package/Config.in b/package/Config.in
-index 66fd800..77f362f 100644
+index 77f362f..7345f9e 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -363,10 +363,10 @@ source "package/cgilua/Config.in"
- source "package/copas/Config.in"
- source "package/coxpcall/Config.in"
- source "package/lbase64/Config.in"
-+source "package/lua-cjson/Config.in"
+@@ -366,6 +366,7 @@ source "package/lbase64/Config.in"
+ source "package/lua-cjson/Config.in"
  source "package/lua-ev/Config.in"
  source "package/lua-msgpack-native/Config.in"
++source "package/luasql-sqlite3/Config.in"
  source "package/luabitop/Config.in"
--source "package/luacjson/Config.in"
  source "package/luacrypto/Config.in"
  source "package/luaexpat/Config.in"
- source "package/luaexpatutils/Config.in"
-diff --git a/package/luacjson/Config.in b/package/lua-cjson/Config.in
-similarity index 90%
-rename from package/luacjson/Config.in
-rename to package/lua-cjson/Config.in
-index d3665c0..8129fab 100644
---- a/package/luacjson/Config.in
-+++ b/package/lua-cjson/Config.in
-@@ -1,5 +1,5 @@
--config BR2_PACKAGE_LUACJSON
--	bool "luacjson"
-+config BR2_PACKAGE_LUA_CJSON
-+	bool "lua-cjson"
- 	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
- 	help
- 	  The Lua CJSON module provides JSON support for Lua. It features:
-diff --git a/package/luacjson/luacjson.mk b/package/lua-cjson/lua-cjson.mk
-similarity index 56%
-rename from package/luacjson/luacjson.mk
-rename to package/lua-cjson/lua-cjson.mk
-index 86be875..92af23f 100644
---- a/package/luacjson/luacjson.mk
-+++ b/package/lua-cjson/lua-cjson.mk
-@@ -1,17 +1,16 @@
- ################################################################################
- #
--# luacjson
-+# lua-cjson
- #
- ################################################################################
- 
--LUACJSON_VERSION       = 2.1.0
--LUACJSON_SOURCE        = lua-cjson-$(LUACJSON_VERSION).tar.gz
--LUACJSON_SITE          = http://www.kyne.com.au/~mark/software/download
--LUACJSON_DEPENDENCIES  = luainterpreter
--LUACJSON_LICENSE       = MIT
--LUACJSON_LICENSE_FILES = LICENSE
-+LUA_CJSON_VERSION       = 2.1.0
-+LUA_CJSON_SITE          = http://www.kyne.com.au/~mark/software/download
-+LUA_CJSON_DEPENDENCIES  = luainterpreter
-+LUA_CJSON_LICENSE       = MIT
-+LUA_CJSON_LICENSE_FILES = LICENSE
- 
--define LUACJSON_BUILD_CMDS
-+define LUA_CJSON_BUILD_CMDS
- 	$(MAKE) -C $(@D) \
- 		CFLAGS="$(TARGET_CFLAGS)"   \
- 		LDFLAGS="$(TARGET_LDFLAGS)" \
-@@ -20,7 +19,7 @@ define LUACJSON_BUILD_CMDS
- 		PREFIX=$(STAGING_DIR)/usr
- endef
- 
--define LUACJSON_INSTALL_TARGET_CMDS
-+define LUA_CJSON_INSTALL_TARGET_CMDS
- 	$(MAKE) DESTDIR="$(TARGET_DIR)" PREFIX="/usr" -C $(@D) install
- endef
- 
+@@ -374,7 +375,6 @@ source "package/luafilesystem/Config.in"
+ source "package/luaposix/Config.in"
+ source "package/luasec/Config.in"
+ source "package/luasocket/Config.in"
+-source "package/luasql/Config.in"
+ source "package/orbit/Config.in"
+ source "package/rings/Config.in"
+ source "package/wsapi/Config.in"
+diff --git a/package/luasql-sqlite3/Config.in b/package/luasql-sqlite3/Config.in
+new file mode 100644
+index 0000000..fca6582
+--- /dev/null
++++ b/package/luasql-sqlite3/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_LUASQL_SQLITE3
++	bool "luasql-sqlite3"
++	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
++	select BR2_PACKAGE_SQLITE
++	help
++	  LuaSQL is a simple interface from Lua to a DBMS.
++
++	  http://www.keplerproject.org/luasql
++
+diff --git a/package/luasql-sqlite3/luasql-sqlite3.mk b/package/luasql-sqlite3/luasql-sqlite3.mk
+new file mode 100644
+index 0000000..b114f02
+--- /dev/null
++++ b/package/luasql-sqlite3/luasql-sqlite3.mk
+@@ -0,0 +1,33 @@
++################################################################################
++#
++# luasql-sqlite3
++#
++################################################################################
++
++LUASQL_SQLITE3_VERSION = v2.3.0
++LUASQL_SQLITE3_SITE = https://github.com/keplerproject/luasql/tarball/$(LUASQL_SQLITE3_VERSION)
++LUASQL_SQLITE3_LICENSE = MIT
++LUASQL_SQLITE3_LICENSE_FILES = README
++LUASQL_SQLITE3_DEPENDENCIES = luainterpreter sqlite
++
++LUASQL_SQLITE3_MAKE_FLAGS = \
++	CC="$(TARGET_CC)" \
++	LD="$(TARGET_CC)" \
++	CFLAGS="$(TARGET_CFLAGS) -fPIC" \
++	T="sqlite3" \
++	DRIVER_LIBS="-L$(STAGING_DIR)/usr/lib -lsqlite3"
++
++define LUASQL_SQLITE3_BUILD_CMDS
++	$(MAKE) -C $(@D) $(LUASQL_SQLITE3_MAKE_FLAGS)
++endef
++
++define LUASQL_SQLITE3_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D) $(LUASQL_SQLITE3_MAKE_FLAGS) \
++		PREFIX="$(TARGET_DIR)/usr" install
++endef
++
++define LUASQL_SQLITE3_UNINSTALL_TARGET_CMDS
++	rm -rf $(TARGET_DIR)/usr/lib/lua/5.1/luasql
++endef
++
++$(eval $(generic-package))
+diff --git a/package/luasql/Config.in b/package/luasql/Config.in
+deleted file mode 100644
+index 96e04fb..0000000
+--- a/package/luasql/Config.in
++++ /dev/null
+@@ -1,22 +0,0 @@
+-config BR2_PACKAGE_LUASQL
+-	bool "luasql"
+-	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
+-	help
+-	  LuaSQL is a simple interface from Lua to a DBMS.
+-
+-	  http://www.keplerproject.org/luasql
+-
+-if BR2_PACKAGE_LUASQL
+-choice
+-	prompt "LuaSQL Driver"
+-	help
+-	  Select backend driver for LuaSQL.
+-
+-config BR2_PACKAGE_LUASQL_DRIVER_SQLITE3
+-	bool "SQLite3"
+-	select BR2_PACKAGE_SQLITE
+-	help
+-	  Select if you wish to use the SQLite3 LuaSQL driver.
+-
+-endchoice
+-endif
+diff --git a/package/luasql/luasql.mk b/package/luasql/luasql.mk
+deleted file mode 100644
+index a1447cc..0000000
+--- a/package/luasql/luasql.mk
++++ /dev/null
+@@ -1,34 +0,0 @@
+-################################################################################
+-#
+-# luasql
+-#
+-################################################################################
+-
+-LUASQL_VERSION = v2.3.0
+-LUASQL_SITE = $(call github,keplerproject,luasql,$(LUASQL_VERSION))
+-LUASQL_LICENSE = MIT
+-LUASQL_LICENSE_FILES = README
+-LUASQL_DEPENDENCIES = luainterpreter
+-
+-LUASQL_MAKE_FLAGS = \
+-	CC="$(TARGET_CC)" \
+-	LD="$(TARGET_CC)" \
+-	CFLAGS="$(TARGET_CFLAGS) -fPIC"
+-
+-ifeq ($(BR2_PACKAGE_LUASQL_DRIVER_SQLITE3),y)
+-LUASQL_DEPENDENCIES += sqlite
+-LUASQL_MAKE_FLAGS += \
+-	T="sqlite3" \
+-	DRIVER_LIBS="-L$(STAGING_DIR)/usr/lib -lsqlite3"
+-endif
+-
+-define LUASQL_BUILD_CMDS
+-	$(MAKE) -C $(@D) $(LUASQL_MAKE_FLAGS)
+-endef
+-
+-define LUASQL_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) $(LUASQL_MAKE_FLAGS) \
+-		PREFIX="$(TARGET_DIR)/usr" install
+-endef
+-
+-$(eval $(generic-package))
 -- 
 1.8.1.2
