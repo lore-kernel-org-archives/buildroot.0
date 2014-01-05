@@ -1,65 +1,48 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 05 Jan 2014 21:10:37 +0100
-Subject: [Buildroot] [PATCH 02/36] xorg: Bump xcb-proto & libxcb version
-	to 1.10
-In-Reply-To: <BLU0-SMTP401025A09E72B56EC74214CD9B50@phx.gbl> (Bernd Kuhls's
- message of "Sat, 4 Jan 2014 14:38:31 +0100")
-References: <1388842746-12510-1-git-send-email-berndkuhls@hotmail.com>
- <BLU0-SMTP401025A09E72B56EC74214CD9B50@phx.gbl>
-Message-ID: <87ioty5gw2.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 5 Jan 2014 21:12:55 +0100
+Subject: [Buildroot] Adding support for ipk packages creation?
+In-Reply-To: <CA+hj=MrRS3EUgVDw77WxBeqYGayo+tGuSWrKjTuYssvmTytywg@mail.gmail.com>
+References: <CA+hj=MrRS3EUgVDw77WxBeqYGayo+tGuSWrKjTuYssvmTytywg@mail.gmail.com>
+Message-ID: <20140105201255.GF16066@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <berndkuhls@hotmail.com> writes:
+Ivan, All,
 
- > updated pkgconfig variables code taken from OpenELEC:
- > https://github.com/OpenELEC/OpenELEC.tv/blob/master/packages/x11/lib/libxcb/package.mk
+On 2014-01-05 20:41 +0100, Ivan Wagner spake thusly:
+> I think it has been discussed several times during the past and as far
+> as I understand buildroot provides a basic (or advanced) creation of a
+> rootfs together with bootloader and kernel.
+> 
+> Has anyone ever thought of adding support, or better, does it make
+> sense to add support for the creation of packages?
 
-It would have been good if you could have described why you bumped these
-two packages in the same commit so I didn't had to figure it out myself.
+Buildroot explicitly avoids generating binary packages, on purpose.
 
-I've amended the commit message with a description why.
+Buildroot strive at making it easy to generate a root filesystem (hence
+the name, by the way). That is what we want to make Buildroot good at:
+building a root filesystem.
 
- > Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
- > ---
- >  package/x11r7/libxcb/libxcb.mk       |   10 ++++++----
- >  package/x11r7/xcb-proto/xcb-proto.mk |    2 +-
- >  2 files changed, 7 insertions(+), 5 deletions(-)
+Buildroot is not meant to be a distribution (or rather, a distribution
+generator). It is the opinion of most Buildroot developpers (me included)
+that this is not a goal we should pursue. We believe that there are other
+tools better suited to generate a distro than Buildroot is. For example,
+Open Embedded, or openWRT, are such tools.
 
- > diff --git a/package/x11r7/libxcb/libxcb.mk b/package/x11r7/libxcb/libxcb.mk
- > index dfcf6fa..c3cbfab 100644
- > --- a/package/x11r7/libxcb/libxcb.mk
- > +++ b/package/x11r7/libxcb/libxcb.mk
- > @@ -4,7 +4,7 @@
- >  #
- >  ################################################################################
- 
- > -LIBXCB_VERSION = 1.8.1
- > +LIBXCB_VERSION = 1.10
- >  LIBXCB_SOURCE = libxcb-$(LIBXCB_VERSION).tar.bz2
- >  LIBXCB_SITE = http://xcb.freedesktop.org/dist/
- >  LIBXCB_LICENSE = MIT
- > @@ -15,9 +15,11 @@ LIBXCB_INSTALL_STAGING = YES
- >  LIBXCB_DEPENDENCIES = \
- >  	host-libxslt xlib_libpthread-stubs xcb-proto xlib_libXdmcp xlib_libXau \
- >  	host-xcb-proto host-python host-pkgconf
- > -LIBXCB_CONF_ENV = STAGING_DIR="$(STAGING_DIR)"
- > -LIBXCB_MAKE_OPT = XCBPROTO_XCBINCLUDEDIR=$(STAGING_DIR)/usr/share/xcb \
- > -	XCBPROTO_XCBPYTHONDIR=$(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
- > +
- > +LIBXCB_CONF_ENV = PKG_CONFIG="$$PKG_CONFIG \
- > +	--define-variable=pythondir=$(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
- > +	--define-variable=xcbincludedir=$(STAGING_DIR)/usr/share/xcb"
- > +
+Rather, we prefer to push Buildroot in a direction that makes it easy
+(or even easier) to generate complete root filesystems. This is what
+makes Buildroot stands out in the crowd (among other things, of course!).
 
-I think it makes more sense to simply fixup those variables in
-xcb-proto.pc instead, similar like what we do for include/libdir, so
-I've done that in xcb-proto.mk and dropped this.
-
-Committed with these changes, thanks.
+Regards,
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
