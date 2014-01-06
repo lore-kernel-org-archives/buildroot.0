@@ -1,60 +1,73 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Jan 2014 13:05:03 +0800
-Subject: [Buildroot] Patchwork oldest patches cleanup #4 (deadline
-	January 5)
-In-Reply-To: <CAAXf6LVVi6d=xRjsqW8eSMAf1CpKyU-qUTQ2dbfCPU=EF__jcA@mail.gmail.com>
-References: <CAAXf6LWFAfs_i_NjBbD3RZ=Y0RDKftzwj-_8xKuqyYA=69PNsw@mail.gmail.com>
- <CAAXf6LVVi6d=xRjsqW8eSMAf1CpKyU-qUTQ2dbfCPU=EF__jcA@mail.gmail.com>
-Message-ID: <20140106130503.2df2a9ef@skate>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 6 Jan 2014 07:16:25 +0200
+Subject: [Buildroot] [PATCH] manual/faq: add section about why no binary
+ packages
+In-Reply-To: <1388954663-5692-2-git-send-email-yann.morin.1998@free.fr>
+References: <1388954663-5692-1-git-send-email-yann.morin.1998@free.fr>
+ <1388954663-5692-2-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20140106051625.GD7812@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Hi Yann,
 
-On Sun, 5 Jan 2014 11:21:33 +0100, Thomas De Schampheleire wrote:
-
-> > libatomic_ops version update 7.3alpha2 old version 1.2 does not
-> > compiles with modern gcc and utils
-> > Alexander Khryukin <alexander@mezon.ru>
-> > http://patchwork.ozlabs.org/patch/198133
+On Sun, Jan 05, 2014 at 09:44:23PM +0100, Yann E. MORIN wrote:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > 
-> No feedback, marked as rejected.
-
-I think bumping the version of a package is often useful, so I'm not
-sure I would mark this patch as rejected. Or if no one is pushing to
-bump libatomic_ops, then we should just assume no one cares, and
-therefore there's no point in keeping the patch around?
-
-> > [07/10] libffi: make thread support optional
-> > Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > http://patchwork.ozlabs.org/patch/199883
+> It somes up evry now and then on the list, so better be prepared to
+> point at the manual, rather than rehash the same evry time.
 > 
-> No feedback, marked as rejected.
-
-It's weird because I don't see libffi build failures in the
-autobuilders, even though there is one no thread ARM toolchain in the
-configurations.
-
-> > [4/4] gstreamer: replace gst-ffmpeg with gst-libav
-> > bogdan at nimblex.org
-> > http://patchwork.ozlabs.org/patch/207431
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Samuel Martin <s.martin49@gmail.com>
+> Cc: Peter Korsgaard <jacmet@uclibc.org>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> ---
+>  docs/manual/faq-troubleshooting.txt | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
 > 
-> No feedback, rejected.
+> diff --git a/docs/manual/faq-troubleshooting.txt b/docs/manual/faq-troubleshooting.txt
+> index 4e0612b..e97457a 100644
+> --- a/docs/manual/faq-troubleshooting.txt
+> +++ b/docs/manual/faq-troubleshooting.txt
+> @@ -111,3 +111,24 @@ directory as the new root, will most likely fail.
+>  If you want to run the target filesystem inside a chroot, or as an NFS
+>  root, then use the tarball image generated in +images/+ and extract it
+>  as root.
+> +
+> +[[faq-no-binary-packages]]
+> +Why doesn't Buildroot generate binary packages (.deb, .ipkg...)?
+> +----------------------------------------------------------------
+> +
+> +Buildroot explicitly avoids generating binary packages, on purpose.
+> +
+> +Buildroot strive at making it easy to generate a root filesystem (hence
+> +the name, by the way). That is what we want to make Buildroot good at:
+> +building root filesystems.
+> +
+> +Buildroot is not meant to be a distribution (or rather, a distribution
+> +generator). It is the opinion of most Buildroot developpers (me included)
+> +that this is not a goal we should pursue. We believe that there are other
+> +tools better suited to generate a distro than Buildroot is. For example,
+> +http://openembedded.org/[Open Embedded], or https://openwrt.org/[openWRT],
+> +are such tools.
+> +
+> +Rather, we prefer to push Buildroot in a direction that makes it easy
+> +(or even easier) to generate complete root filesystems. This is what
+> +makes Buildroot stands out in the crowd (among other things, of course!).
 
-I'm a little bit concerned about how we reject patches here. Maybe
-replacing gst-ffmpeg by gst-libav makes sense and should be done? If we
-don't keep the patch around, we'll have no way to remember that it
-should be done at some point in the future. I admit that by doing
-this, we'll never shrink the list of pending patches, but I have the
-feeling that we might be missing useful ideas.
+Thanks for working on this. I think it is also worth mentioning the rationale. 
+By doing source only we avoid the complexity of handling installation time 
+dependency tracking and resolution. We also don't need to track what files 
+each package installs. This makes Buildroot simpler and easier to work with.
 
-Best regards,
+baruch
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
