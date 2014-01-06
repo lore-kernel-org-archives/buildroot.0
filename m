@@ -1,38 +1,36 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon,  6 Jan 2014 19:20:27 +0000 (UTC)
-Subject: [Buildroot] [Bug 6764] Support for kernel signed modules
-In-Reply-To: <bug-6764-163@https.bugs.busybox.net/>
-References: <bug-6764-163@https.bugs.busybox.net/>
-Message-ID: <20140106192027.7825E9C25A@busybox.osuosl.org>
+From: Bernd Kuhls <berndkuhls@hotmail.com>
+Date: Mon, 6 Jan 2014 21:40:03 +0100
+Subject: [Buildroot] [PATCH 0/8] Update more xorg packages
+Message-ID: <BLU0-SMTP34C682EA8AFD076C66C8C5D9B70@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6764
+Bernd Kuhls (8):
+  xorg: Bump xlib_libFS to version 1.0.5
+  xorg: Bump xlib_libXaw to version 1.0.12
+  xorg: Bump xlib_libXcursor to version 1.1.14
+  xorg: Bump xlib_libXpm to version 3.5.11
+  xorg: Bump xlib_libXres to version 1.0.7
+  xorg: Bump xlib_libXv to version 1.0.10
+  xorg: Bump xlib_libXxf86dga to version 1.1.4
+  xorg: Bump xlib_libdmx to version 1.1.3
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |yann.morin.1998 at free.fr
-
---- Comment #2 from Yann E. MORIN <yann.morin.1998@free.fr> 2014-01-06 19:20:26 UTC ---
-Cassiano, All,
-
-Thanks for your patch.
-
-Could you please conmtribute it as explained in the manual, please?
-http://buildroot.net/downloads/manual/manual.html#_contributing_to_buildroot
-
-We do not use the bug-tracker to submit patches, only to track
-actual and unsolved issues.
-
-Regards,
-Yann E. MORIN.
+ package/x11r7/xlib_libFS/xlib_libFS.mk             |    2 +-
+ package/x11r7/xlib_libXaw/xlib_libXaw.mk           |    2 +-
+ package/x11r7/xlib_libXcursor/xlib_libXcursor.mk   |    2 +-
+ package/x11r7/xlib_libXpm/xlib_libXpm.mk           |    2 +-
+ package/x11r7/xlib_libXres/xlib_libXres.mk         |    2 +-
+ package/x11r7/xlib_libXv/xlib_libXv.mk             |    2 +-
+ .../xlib_libXxf86dga-0001-fix-compilation.patch    |   27 -------------------
+ .../xlib_libXxf86dga-0002-fix-compilation.patch    |   28 --------------------
+ package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.mk |    2 +-
+ package/x11r7/xlib_libdmx/xlib_libdmx.mk           |    2 +-
+ 10 files changed, 8 insertions(+), 63 deletions(-)
+ delete mode 100644 package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga-0001-fix-compilation.patch
+ delete mode 100644 package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga-0002-fix-compilation.patch
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.9.5
