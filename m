@@ -1,135 +1,119 @@
-From: sonic.adi at gmail.com <sonic.adi@gmail.com>
-Date: Mon,  6 Jan 2014 19:05:49 +0800
-Subject: [Buildroot] [PATCH] package: icu: detect and add compiler symbol
-	prefix to the assembly code
-Message-ID: <1389006349-32377-1-git-send-email-Sonic.adi@gmail.com>
+From: Bogdan Radulescu <bogdan@nimblex.net>
+Date: Mon, 6 Jan 2014 12:48:05 +0200
+Subject: [Buildroot] Patchwork oldest patches cleanup #4 (deadline
+	January 5)
+In-Reply-To: <CAAXf6LUnqAYQZoQ9-npV0nyDezec__sfnZrvYJY0PouNujE3HQ@mail.gmail.com>
+References: <CAAXf6LWFAfs_i_NjBbD3RZ=Y0RDKftzwj-_8xKuqyYA=69PNsw@mail.gmail.com>
+ <CAAXf6LVVi6d=xRjsqW8eSMAf1CpKyU-qUTQ2dbfCPU=EF__jcA@mail.gmail.com>
+ <20140106130503.2df2a9ef@skate>
+ <CAAXf6LUnqAYQZoQ9-npV0nyDezec__sfnZrvYJY0PouNujE3HQ@mail.gmail.com>
+Message-ID: <CAKu+J9340tMY2TfLwfJdh8Et=5ASJgxf4B4n_MYW0Z8u+yTbZg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Sonic Zhang <sonic.zhang@analog.com>
+Hi,
 
-Some compiler, such as Blackfin GNU compiler, prefix a charater to any
-C symbol in generated assembly code. If any assembly symbol is invoked
-from C code, it needs to be prefixed as well.
+Regarding the http://patchwork.ozlabs.org/patch/207431 patch.
+GStreamer switched from ffmpeg to libav a while ago and newer versions
+don't have the ffmpeg package.
+http://gstreamer.freedesktop.org/releases/gst-libav/0.11.90.html
+http://gstreamer.freedesktop.org/src/gst-ffmpeg/gst-ffmpeg-1.x-README.txt
 
-Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
----
- .../icu/icu-detect-compiler-symbol-prefix.patch    |  104 ++++++++++++++++++++
- 1 file changed, 104 insertions(+)
- create mode 100644 package/icu/icu-detect-compiler-symbol-prefix.patch
+gst-ffmpeg was last updated almost two years ago.
 
-diff --git a/package/icu/icu-detect-compiler-symbol-prefix.patch b/package/icu/icu-detect-compiler-symbol-prefix.patch
-new file mode 100644
-index 0000000..9ca7690
---- /dev/null
-+++ b/package/icu/icu-detect-compiler-symbol-prefix.patch
-@@ -0,0 +1,104 @@
-+package: icu: detect and add compiler symbol prefix to the assembly code
-+
-+Some compiler, such as Blackfin GNU compiler, prefix a charater to any
-+C symbol in generated assembly code. If any assembly symbol is invoked
-+from C code, it needs to be prefixed as well.
-+
-+--- icu-51.2/source/configure	2014-01-06 17:13:20.907249812 +0800
-++++ icu-51.2.bak/source/configure	2014-01-06 17:12:57.335248659 +0800
-+@@ -612,6 +612,7 @@
-+ ICUDATA_CHAR
-+ SAMPLES_TRUE
-+ TESTS_TRUE
-++SYMBOL_PREFIX
-+ ICULIBSUFFIXCNAME
-+ U_HAVE_LIB_SUFFIX
-+ ICULIBSUFFIX
-+@@ -7226,7 +7227,16 @@
-+     U_HAVE_LIB_SUFFIX=0
-+ fi
-+ 
-++# Check compiler generated symbol profix
-++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for symbol prefix" >&5
-++$as_echo "checking for symbol prefix... " >&6; }
-++    SYMBOL_PREFIX=`echo "PREFIX=__USER_LABEL_PREFIX__" \
-++                  | ${CPP-${CC-gcc} -E} - 2>&1 \
-++                  | ${EGREP-grep} "^PREFIX=" \
-++                  | sed -e "s:^PREFIX=::" -e "s:__USER_LABEL_PREFIX__::"`
-+ 
-++    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SYMBOL_PREFIX" >&5
-++$as_echo "$SYMBOL_PREFIX" >&6; }
-+ 
-+ # Enable/disable tests
-+ # Check whether --enable-tests was given.
-+--- icu-51.2/source/extra/uconv/Makefile.in	2014-01-06 17:47:13.991347946 +0800
-++++ icu-51.2.bak/source/extra/uconv/Makefile.in	2014-01-06 17:48:01.571355282 +0800
-+@@ -57,7 +57,7 @@
-+ ## Static mode
-+ ifeq ($(UCONVMSG_MODE),static)
-+ DEFS += -DUCONVMSG_LINK=$(MSGNAME)
-+-UCONVMSG_LIB = $(RESDIR)/$(LIBPREFIX)$(STATIC_PREFIX_WHEN_USED)$(MSGNAME).$(A)
-++UCONVMSG_LIB = $(RESDIR)/$(LIBPREFIX)$(STATIC_PREFIX_WHEN_USED)@SYMBOL_PREFIX@$(MSGNAME).$(A)
-+ LIBS += $(UCONVMSG_LIB)
-+ PKGMODE=static
-+ INSTALLTO=$(libdir)
-+@@ -151,7 +151,7 @@
-+ endif
-+ 
-+ $(UCONVMSG_LIB): $(RESFILES) $(RESDIR)/$(RESDIR).lst pkgdata.inc
-+-	$(INVOKE) $(PKGDATA_INVOKE_OPTS) $(TOOLBINDIR)/pkgdata -p $(MSGNAME) $(PKGDATA_OPTS) -m $(PKGMODE) -s $(RESDIR) -d $(RESDIR) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
-++	$(INVOKE) $(PKGDATA_INVOKE_OPTS) $(TOOLBINDIR)/pkgdata -p @SYMBOL_PREFIX@$(MSGNAME) $(PKGDATA_OPTS) -m $(PKGMODE) -s $(RESDIR) -d $(RESDIR) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
-+ 
-+ $(RESDIR)/$(RESDIR).lst: Makefile $(srcdir)/resfiles.mk
-+ 	@-$(RMV) $@
-+--- icu-51.2/source/data/Makefile.in	2014-01-06 19:00:28.879570005 +0800
-++++ icu-51.2.bak/source/data/Makefile.in	2014-01-06 19:00:07.891570170 +0800
-+@@ -175,13 +175,13 @@
-+ packagedata: icupkg.inc $(PKGDATA_LIST) build-local
-+ ifneq ($(ENABLE_STATIC),)
-+ ifeq ($(PKGDATA_MODE),dll)
-+-	$(PKGDATA_INVOKE) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBSTATICNAME) -m static $(PKGDATA_VERSIONING) $(PKGDATA_LIST)
-++	$(PKGDATA_INVOKE) $(PKGDATA) -e @SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBSTATICNAME) -m static $(PKGDATA_VERSIONING) $(PKGDATA_LIST)
-+ endif
-+ endif
-+ ifneq ($(ICUDATA_SOURCE_IS_NATIVE_TARGET),YES)
-+-	$(PKGDATA_INVOKE) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p $(ICUDATA_NAME) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) $(PKGDATA_LIBNAME) $(PKGDATA_LIST)
-++	$(PKGDATA_INVOKE) $(PKGDATA) -e @SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p $(ICUDATA_NAME) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) $(PKGDATA_LIBNAME) $(PKGDATA_LIST)
-+ ifeq ($(OS390BATCH),1)
-+-	$(PKGDATA_INVOKE) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p $(ICUDATA_NAME) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) $(OS390_PDS_NAME) $(PKGDATA_LIST)
-++	$(PKGDATA_INVOKE) $(PKGDATA) -e @SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p $(ICUDATA_NAME) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) $(OS390_PDS_NAME) $(PKGDATA_LIST)
-+ endif
-+ else
-+ 	$(INSTALL_DATA) $(ICUDATA_SOURCE_ARCHIVE) $(OUTDIR)
-+@@ -203,11 +203,11 @@
-+ endif
-+ ifneq ($(ENABLE_STATIC),)
-+ ifeq ($(PKGDATA_MODE),dll)
-+-	$(PKGDATA_INVOKE) $(PKGDATA) -m static -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBSTATICNAME) $(PKGDATA_LIST) -I $(ICUPKGDATA_INSTALL_LIBDIR)
-++	$(PKGDATA_INVOKE) $(PKGDATA) -m static -e @SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBSTATICNAME) $(PKGDATA_LIST) -I $(ICUPKGDATA_INSTALL_LIBDIR)
-+ endif
-+ endif
-+ ifneq ($(ICUDATA_SOURCE_IS_NATIVE_TARGET),YES)
-+-	$(PKGDATA_INVOKE) $(PKGDATA) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBNAME) $(PKGDATA_LIST) -I $(ICUPKGDATA_INSTALL_DIR)
-++	$(PKGDATA_INVOKE) $(PKGDATA) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) -e @SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBNAME) $(PKGDATA_LIST) -I $(ICUPKGDATA_INSTALL_DIR)
-+ else
-+ 	$(INSTALL_DATA) $(ICUDATA_SOURCE_ARCHIVE) $(DESTDIR)$(ICUPKGDATA_DIR)
-+ endif
-+@@ -218,7 +218,7 @@
-+ #### 390 support
-+ install390: package390
-+ 	$(MKINSTALLDIRS) $(TMPDATADIR) $(DESTDIR)$(libdir)
-+-	$(INVOKE) $(PKGDATA) -s $(BUILDDIR)$(STUB_SUFFIX) -T $(OUTTMPDIR_390STUB) -p $(ICUDATA_NAME)$(STUB_SUFFIX) $(PKGDATA_LIBNAME)$(STUB_SUFFIX) -e $(ICUDATA_ENTRY_POINT) $(OS390LIST) -m dll $(PKGDATA_VERSIONING) -I $(DESTDIR)$(ICUPKGDATA_DIR)
-++	$(INVOKE) $(PKGDATA) -s $(BUILDDIR)$(STUB_SUFFIX) -T $(OUTTMPDIR_390STUB) -p $(ICUDATA_NAME)$(STUB_SUFFIX) $(PKGDATA_LIBNAME)$(STUB_SUFFIX) -e @SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) $(OS390LIST) -m dll $(PKGDATA_VERSIONING) -I $(DESTDIR)$(ICUPKGDATA_DIR)
-+ ifeq ($(PKGDATA_MODE),dll)
-+ 	$(INSTALL-L) $(ICUPKGDATA_OUTDIR)/$(FINAL_IMPORT_LIB) $(DESTDIR)$(ICUPKGDATA_DIR)/$(FINAL_IMPORT_LIB)
-+ endif
-+@@ -226,7 +226,7 @@
-+ #### $(LIB_ICUDATA_NAME)$(STUB_SUFFIX) is the subset data for batch mode
-+ package390: $(OUTTMPDIR)/icudata390.lst $(PKGDATA_LIST) ./icupkg.inc packagedata
-+ 	ln -s $(ICUDATA_NAME) $(OUTDIR)/build/$(ICUDATA_NAME)$(STUB_SUFFIX)
-+-	$(INVOKE) $(PKGDATA) -s $(BUILDDIR)$(STUB_SUFFIX) -T $(OUTTMPDIR_390STUB) -p $(ICUDATA_NAME)$(STUB_SUFFIX) $(PKGDATA_LIBNAME)$(STUB_SUFFIX) -e $(ICUDATA_ENTRY_POINT) $(OS390LIST) -m dll $(PKGDATA_VERSIONING)
-++	$(INVOKE) $(PKGDATA) -s $(BUILDDIR)$(STUB_SUFFIX) -T $(OUTTMPDIR_390STUB) -p $(ICUDATA_NAME)$(STUB_SUFFIX) $(PKGDATA_LIBNAME)$(STUB_SUFFIX) -e @SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) $(OS390LIST) -m dll $(PKGDATA_VERSIONING)
-+ 	cp $(ICUPKGDATA_OUTDIR)/$(LIB_ICUDATA_NAME)$(STUB_SUFFIX).$(SO) $(top_builddir)/stubdata/$(LIB_ICUDATA_NAME)$(STUB_SUFFIX).$(SO)
-+ 
-+ 
--- 
-1.7.9.5
+Even though irrelevant, the situation of ffmpeg and libav is explained here:
+http://blog.pkh.me/p/13-the-ffmpeg-libav-situation.html
+
+The patch was used in production so it's tested.
+
+I think it would be a step back if this patch is discarded.
+
+Best regards,
+Bogdan
+
+
+On Mon, Jan 6, 2014 at 12:16 PM, Thomas De Schampheleire <
+patrickdepinguin@gmail.com> wrote:
+
+> Hi Thomas,
+>
+> On Mon, Jan 6, 2014 at 6:05 AM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+> >> > [07/10] libffi: make thread support optional
+> >> > Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> >> > http://patchwork.ozlabs.org/patch/199883
+> >>
+> >> No feedback, marked as rejected.
+> >
+> > It's weird because I don't see libffi build failures in the
+> > autobuilders, even though there is one no thread ARM toolchain in the
+> > configurations.
+> >
+>
+> It's weird indeed, maybe this has been changed in a newer version of
+> libffi?
+> In any case, if there are no failures anymore, we could forget about
+> this patch, until this problem would pop up again.
+>
+> >> > libatomic_ops version update 7.3alpha2 old version 1.2 does not
+> >> > compiles with modern gcc and utils
+> >> > Alexander Khryukin <alexander@mezon.ru>
+> >> > http://patchwork.ozlabs.org/patch/198133
+> >>
+> >> No feedback, marked as rejected.
+> >
+> > I think bumping the version of a package is often useful, so I'm not
+> > sure I would mark this patch as rejected. Or if no one is pushing to
+> > bump libatomic_ops, then we should just assume no one cares, and
+> > therefore there's no point in keeping the patch around?
+> >
+> >> > [4/4] gstreamer: replace gst-ffmpeg with gst-libav
+> >> > bogdan at nimblex.org
+> >> > http://patchwork.ozlabs.org/patch/207431
+> >>
+> >> No feedback, rejected.
+> >
+> > I'm a little bit concerned about how we reject patches here. Maybe
+> > replacing gst-ffmpeg by gst-libav makes sense and should be done? If we
+> > don't keep the patch around, we'll have no way to remember that it
+> > should be done at some point in the future. I admit that by doing
+> > this, we'll never shrink the list of pending patches, but I have the
+> > feeling that we might be missing useful ideas.
+>
+> I grouped these two because the bottom line is the same: what to do
+> with patches that did not receive feedback?
+>
+> It's true that simply rejecting these patches just to make the list
+> smaller is not the best solution.
+> I think we need some kind of adopt-a-patch principle if we ever want
+> these patches to be integrated. For some of the patches from the
+> cleanups, I marked it as 'delegated to me' so we wouldn't forget. This
+> was either because the original author gave feedback, or in the case
+> of wpa_supplicant because I felt that we should keep the patch. I hope
+> to find some time sooner or later (ideally within the 2014.02 cycle)
+> to verify them and resubmit.
+>
+> However, I cannot do this for all patches. For example, I'm not
+> familiar with gstreamer at all, so I couldn't tell whether the
+> replacement of gst-ffmpeg with gst-libav makes sense or not, which
+> side-effects it may have for users, etc. If there are other developers
+> that have a better view on it, then please step forward. It would
+> indeed be a pity to lose these patches if they are relevant for
+> someone.
+>
+> For this cycle, there was no response on these patches, hence the
+> rejection.
+> Based on your latest feedback, we could change this rejection into a
+> delegation, to you or someone else. What do you say?
+>
+> Specifically for libatomic_ops: it seems there is a github repo now:
+> https://github.com/ivmai/libatomic_ops/
+> where a 7.4.0 version is available. What about going that route then?
+> Are you, or someone else, interested in taking this delegation?
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140106/c3c04121/attachment-0001.html>
