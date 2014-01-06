@@ -1,44 +1,39 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Mon, 06 Jan 2014 21:50:00 +0100
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 6 Jan 2014 22:04:55 +0100
 Subject: [Buildroot] [PATCH 00/36] Update xorg packages
+In-Reply-To: <nghrpaxv56.ln2@ID-313208.user.individual.net>
 References: <BLU0-SMTP322F0B0DA043619A8E91DA1D9B50@phx.gbl>
  <52CA9400.4050307@trzebnica.net>
-Message-ID: <nghrpaxv56.ln2@ID-313208.user.individual.net>
+ <nghrpaxv56.ln2@ID-313208.user.individual.net>
+Message-ID: <20140106210455.GB3383@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Czesc,
+Bernd, Maxime, All,
 
-Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-wrote in news:52CA9400.4050307 at trzebnica.net: 
+On 2014-01-06 21:50 +0100, Bernd Kuhls spake thusly:
+> Currently I am sending my patch pile needed to compile xbmc Gotham[1] for 
+> inclusion in buildroot, so I am concentrating on those patches.
 
-> Did you intentionally not bump
-> 
-> xlib_libFS to version 1.0.5
-> xlib_libXaw to version 1.0.12
-> xlib_libXcursor to version 1.1.14
-> xlib_libXpm to version 3.5.11
-> xlib_libXres to version 1.0.7
-> xlib_libXv to verrsion 1.0.10
-> xlib_libXxf86dga to version 1.1.4
-> xlib_libdmx to version 1.1.3
+Bernd: Maxime also has some work on-going about adding XBMC to
+Buildroot.
 
-yes, xbmc does not depend on them ;)
+Maybe it would be interested that you both put your work in a public git
+tree (shared, or each his own tree), to avoid duplicating the effort.
+IIRC, Maxime already has a public tree, but I can't find it anymore... :-/
 
-Currently I am sending my patch pile needed to compile xbmc Gotham[1] for 
-inclusion in buildroot, so I am concentrating on those patches.
-Hereby I am closely following the OpenELEC project.
+I for one would very much love to see XBMC land in Buildroot! :-)
 
-Nonetheless I just sent a new patchset updating the patches mentioned by you, 
-compile tested using this defconfig, randomly taken from autobuild:
+Regards,
+Yann E. MORIN.
 
-http://autobuild.buildroot.net/results/24f/24f1ffe788ef50470551f440b2fc71ce1c
-5c75e3/defconfig
-
-Regards, Bernd
-
-[1] xbmc now has uclibc-compatability:
-    https://github.com/xbmc/xbmc/pull/3920 :)
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
