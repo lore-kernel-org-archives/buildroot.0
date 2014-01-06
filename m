@@ -1,38 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 6 Jan 2014 14:16:20 +0100
-Subject: [Buildroot] [git commit] libxcb: re-disable building documentation
-	for the host
-Message-ID: <20140106131856.49CA99C25B@busybox.osuosl.org>
+From: Matthew Weber <mlweber1@rockwellcollins.com>
+Date: Mon, 6 Jan 2014 07:45:29 -0600
+Subject: [Buildroot] Patchwork oldest patches cleanup #5 (deadline
+	January	19)
+In-Reply-To: <CAAXf6LVcK-fx059K=tetV=NY78amOHczPkbVxkO1pKAuvDCwtA@mail.gmail.com>
+References: <CAAXf6LVcK-fx059K=tetV=NY78amOHczPkbVxkO1pKAuvDCwtA@mail.gmail.com>
+Message-ID: <OF2BF2EC5E.5C8C5827-ON86257C58.004A99B8-86257C58.004B936D@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=948b92693dd6ee9ea868b9b613a8ffb71baedb47
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
 
-Fixes http://autobuild.buildroot.net/results/98f/98f8dd2d1a9f8fac3024caf5aa0ca54fcf320389/
+buildroot-bounces at busybox.net wrote on 01/05/2014 10:01:56 AM:
 
-Commit 862e1221d (Bump xcb-proto & libxcb version to 1.10) accidently
-dropped the --disable-build-docs configure arguments for the host variant,
-which in the best case slows down the build for no use, and on certain
-hosts breaks the build as doxygen runs out of memory.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/x11r7/libxcb/libxcb.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
-
-diff --git a/package/x11r7/libxcb/libxcb.mk b/package/x11r7/libxcb/libxcb.mk
-index ef6b4ce..fa8ed6d 100644
---- a/package/x11r7/libxcb/libxcb.mk
-+++ b/package/x11r7/libxcb/libxcb.mk
-@@ -17,6 +17,7 @@ LIBXCB_DEPENDENCIES = \
- 	host-xcb-proto host-python host-pkgconf
+> From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> To: buildroot <buildroot@busybox.net>, Matt Weber 
+> <rc.lsw.collaborate@gmail.com>, Jean-Christophe PLAGNIOL-VILLARD 
+> <plagnioj@jcrosoft.com>, Jon Diekema <jon.diekema@gmail.com>, Marek 
+> Belisko <marek.belisko@open-nandra.com>, Floris Bos <bos@je-eigen-
+> domein.nl>, Sagaert Johan <sagaert.johan@skynet.be>, Stefan Fr?berg 
+> <stefan.froberg@petroprogram.com>
+> Date: 01/05/2014 10:02 AM
+> Subject: [Buildroot] Patchwork oldest patches cleanup #5 (deadline 
+January 19)
+> Sent by: buildroot-bounces at busybox.net
+> 
+<snip>
  
- LIBXCB_CONF_OPT = --disable-build-docs
-+HOST_LIBXCB_CONF_OPT = --disable-build-docs
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+> [1/2] new package: python-posix_ipc.
+> Matt Weber <rc.lsw.collaborate@gmail.com>
+> http://patchwork.ozlabs.org/patch/212498
+> 
+> [2/2] new package: python-posix_ipc
+> Matt Weber <rc.lsw.collaborate@gmail.com>
+> http://patchwork.ozlabs.org/patch/212499
+
+Still need this one.  I'll get is updated with the new python pkg hooks
+and submit a v2.
+
+> 
+> [1/1] added python unicode selection to menu
+> Matt Weber <rc.lsw.collaborate@gmail.com>
+> http://patchwork.ozlabs.org/patch/212500
+> 
+
+The default unicode mode of a python build is ucs4.  This patch adds the
+option to select ucs2 or 4 if the unicode mode is enabled.  I'll refresh 
+this one and submit v2.
