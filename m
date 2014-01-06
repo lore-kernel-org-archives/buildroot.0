@@ -1,89 +1,113 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 6 Jan 2014 00:49:52 +0100
-Subject: [Buildroot] [PATCH] manual/faq: add section about why no binary
-	packages
-In-Reply-To: <1388954663-5692-2-git-send-email-yann.morin.1998@free.fr>
-References: <1388954663-5692-1-git-send-email-yann.morin.1998@free.fr>
- <1388954663-5692-2-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <CAHXCMM+z71=dYThDHhryMB+whBjGdMS72GWohj8TMesRovgcYw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon,  6 Jan 2014 01:12:22 +0100
+Subject: [Buildroot] [PATCH] toolchain/external: fix wrapper by not passing
+	conflicting flags
+Message-ID: <1388967142-3456-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, all,
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-2014/1/5 Yann E. MORIN <yann.morin.1998@free.fr>
+In our wrapper, we forcibly add the -march=, -mcpu= and-mtune= flags
+to the actual copmpiler, this in an attempt to always generate correct
+and optimised code for the target.
 
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
->
-> It somes up evry now and then on the list, so better be prepared to
-> point at the manual, rather than rehash the same evry time.
->
-s/evry/every/ (twice)
-hmm... you typed faster than your keyboard can handle? ;-)
+But in some cases, the caller knows better than we do, and passes its
+own set, or subset of those flags. In this case, some may conflict with
+the ones we pass. The most prominent offender being the Linux kernel.
 
+For example, on the ARM Rapsberry Pi, the Linux kernel will set the
+-march=armv6 flag and no -mcpu= flag, but we pass -mcpu=arm1176jzf-s,
+which conflicts:
 
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Samuel Martin <s.martin49@gmail.com>
-> Cc: Peter Korsgaard <jacmet@uclibc.org>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-> ---
->  docs/manual/faq-troubleshooting.txt | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
->
-> diff --git a/docs/manual/faq-troubleshooting.txt
-> b/docs/manual/faq-troubleshooting.txt
-> index 4e0612b..e97457a 100644
-> --- a/docs/manual/faq-troubleshooting.txt
-> +++ b/docs/manual/faq-troubleshooting.txt
-> @@ -111,3 +111,24 @@ directory as the new root, will most likely fail.
->  If you want to run the target filesystem inside a chroot, or as an NFS
->  root, then use the tarball image generated in +images/+ and extract it
->  as root.
-> +
-> +[[faq-no-binary-packages]]
-> +Why doesn't Buildroot generate binary packages (.deb, .ipkg...)?
-> +----------------------------------------------------------------
-> +
-> +Buildroot explicitly avoids generating binary packages, on purpose.
-> +
-> +Buildroot strive at making it easy to generate a root filesystem (hence
-> +the name, by the way). That is what we want to make Buildroot good at:
-> +building root filesystems.
-> +
-> +Buildroot is not meant to be a distribution (or rather, a distribution
-> +generator). It is the opinion of most Buildroot developpers (me included)
->
-s/(me included)//
-Well, this is the manual, not a mail answer; so it'd be better to make this
-impersonal.
+    drivers/scsi/scsi_trace.c:1:0: warning: switch -mcpu=arm1176jzf-s
+    conflicts with -march=armv6 switch
 
-+that this is not a goal we should pursue. We believe that there are other
-> +tools better suited to generate a distro than Buildroot is. For example,
-> +http://openembedded.org/[Open Embedded], or https://openwrt.org/[openWRT]
-> ,
-> +are such tools.
-> +
-> +Rather, we prefer to push Buildroot in a direction that makes it easy
-> +(or even easier) to generate complete root filesystems. This is what
-> +makes Buildroot stands out in the crowd (among other things, of course!).
-> --
-> 1.8.1.2
->
->
-I think i have something roughly about this and other in one of my
-doc-branches, but i lack time to work on it :-/
-Meanwhile, an entry in the FAQ is good enough to me.
+(and so for all the files the kernel compiles, pretty messy)
+(note: arm1176jzf-s is not an armv6, it is an armv6zk. Yeah...)
 
-Regards,
+To avoid this situation, we scan our commandline for any occurence of
+the possibly conflicting flags. If none is found, then we add our owns.
+If any is found, then we don't add any of our owns.
 
+The idea behind this is that we trust the caller to know better than
+we do what it is doing. Since the biggest, and sole so far, offender
+is the Linux kernel, then this is a rather safe bet.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+---
+ .../toolchain-external/ext-toolchain-wrapper.c     | 41 ++++++++++++++++------
+ 1 file changed, 31 insertions(+), 10 deletions(-)
+
+diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+index d54f1f5..dd84a5d 100644
+--- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
++++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+@@ -30,21 +30,17 @@ static char sysroot[PATH_MAX];
+  * that we only pass the predefined one to the real compiler if the inverse
+  * option isn't in the argument list.
+  * This specifies the worst case number of extra arguments we might pass
++ * Currently, we have:
++ * 	-mfloat-abi=
++ * 	-march=
++ * 	-mtune=
++ * 	-mcpu=
+  */
+-#define EXCLUSIVE_ARGS	1
++#define EXCLUSIVE_ARGS	4
+ 
+ static char *predef_args[] = {
+ 	path,
+ 	"--sysroot", sysroot,
+-#ifdef BR_ARCH
+-	"-march=" BR_ARCH,
+-#endif /* BR_ARCH */
+-#ifdef BR_TUNE
+-	"-mtune=" BR_TUNE,
+-#endif /* BR_TUNE */
+-#ifdef BR_CPU
+-	"-mcpu=" BR_CPU,
+-#endif
+ #ifdef BR_ABI
+ 	"-mabi=" BR_ABI,
+ #endif
+@@ -157,6 +153,31 @@ int main(int argc, char **argv)
+ 		*cur++ = "-mfloat-abi=" BR_FLOAT_ABI;
+ #endif
+ 
++#if defined(BR2_ARCH) || \
++    defined(BR2_TUNE) || \
++    defined(BR2_CPU)
++	/* Add our -march/cpu/tune/abi flags, but only if none are
++	 * already specified on the commandline
++	 */
++	for (i = 1; i < argc; i++) {
++		if (!strncmp(argv[i], "-march=", strlen("-march=")) ||
++		    !strncmp(argv[i], "-mtune=", strlen("-mtune=")) ||
++		    !strncmp(argv[i], "-mcpu=",  strlen("-mcpu=" )))
++			break;
++	}
++	if (i == argc) {
++#ifdef BR_ARCH
++		*cur++ = "-march=" BR_ARCH;
++#endif
++#ifdef BR_TUNE
++		*cur++ = "-mtune=" BR_TUNE;
++#endif
++#ifdef BR_CPU
++		*cur++ = "-mcpu=" BR_CPU;
++#endif
++	}
++#endif /* ARCH || TUNE || CPU */
++
+ 	/* append forward args */
+ 	memcpy(cur, &argv[1], sizeof(char *) * (argc - 1));
+ 	cur += argc - 1;
 -- 
-Samuel
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140106/14431e78/attachment.html>
+1.8.1.2
