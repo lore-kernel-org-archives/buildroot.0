@@ -1,39 +1,65 @@
-From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Sun, 5 Jan 2014 18:07:06 -0600
-Subject: [Buildroot] [PATCH v3 00/11] glmark2 and Mesa updates
-In-Reply-To: <i5dopaxu61.ln2@ID-313208.user.individual.net>
-References: <1380237714-2470-1-git-send-email-spenser@gillilanding.com>
- <i5dopaxu61.ln2@ID-313208.user.individual.net>
-Message-ID: <CAEBucnA9c_W=SCfNJ2MMdqBiVda1bJ-ujX8Y0BfHCbiwGUZC_g@mail.gmail.com>
+From: Sonic Zhang <sonic.adi@gmail.com>
+Date: Mon, 6 Jan 2014 10:14:57 +0800
+Subject: [Buildroot] [PATCH] package: libpng: don't append prefix to
+ symbol names in the version script file
+In-Reply-To: <1388399753-11513-1-git-send-email-Sonic.adi@gmail.com>
+References: <1388399753-11513-1-git-send-email-Sonic.adi@gmail.com>
+Message-ID: <CAJxxZ0OMcEzGMgadq15FeiOB=oiK_KQnD-jN-L61ps2KU2XdqA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd,
+Ping
 
-> during the preparation of sending a patch for bumping the version of mesa3d
-> to 10.0.1, based on current buildroot git, I came across your uncommitted
-> patchset. I would like to ask if you still want to work on it and whether the
-> buildroot maintainers are willing to accept it or not.
+Sonic Zhang
 
-I'm still interested in moving this patch set forward but I've been
-severely lacking in time.  I'd be happy for you to take a crack at it
-and I'll rebase on top of your work.
-
-> Depending on the answers I would like to contribute to buildroot so it will
-> carry mesa3d 10.0.1.
-
-Great.
-
-> Regards, Bernd
-
-Thanks,
-Spenser
-
-
--- 
-Spenser Gilliland
-Computer Engineer
-Doctoral Candidate
+On Mon, Dec 30, 2013 at 6:35 PM,  <sonic.adi@gmail.com> wrote:
+> From: Sonic Zhang <sonic.zhang@analog.com>
+>
+> Even if Blackfin GNU toolchain add prefix '_' to all symbols,
+> symbol prefix is not accepted in the link flag --version-script.
+> Don't append prefix in the symbols in the version script file.
+>
+> Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
+> ---
+>  .../libpng/libpng-02-ingore-symbol-prefix.patch    |   26 ++++++++++++++++++++
+>  1 file changed, 26 insertions(+)
+>  create mode 100644 package/libpng/libpng-02-ingore-symbol-prefix.patch
+>
+> diff --git a/package/libpng/libpng-02-ingore-symbol-prefix.patch b/package/libpng/libpng-02-ingore-symbol-prefix.patch
+> new file mode 100644
+> index 0000000..7f2cfff
+> --- /dev/null
+> +++ b/package/libpng/libpng-02-ingore-symbol-prefix.patch
+> @@ -0,0 +1,26 @@
+> +Even if Blackfin GNU toolchain add prefix '_' to all symbols,
+> +symbol prefix is not accepted in the link flag --version-script.
+> +Don't append prefix in the symbols in the version script file.
+> +
+> +--- libpng-1.6.8/Makefile.am   2013-12-30 18:23:08.261797417 +0800
+> ++++ libpng-1.6.8.bak/Makefile.am       2013-12-30 18:22:15.565795726 +0800
+> +@@ -225,7 +225,7 @@
+> + # interfering with the symbol file format.
+> + SYMBOL_CFLAGS = -DPNGLIB_LIBNAME='PNG at PNGLIB_MAJOR@@PNGLIB_MINOR at _0'\
+> +               -DPNGLIB_VERSION='@PNGLIB_VERSION@'\
+> +-              -DSYMBOL_PREFIX='$(SYMBOL_PREFIX)'\
+> ++              -DSYMBOL_PREFIX=''\
+> +               -DPNG_NO_USE_READ_MACROS -DPNG_BUILDING_SYMBOL_TABLE
+> +
+> + if DO_PNG_PREFIX
+> +--- libpng-1.6.8/Makefile.in   2013-12-30 18:23:08.261797417 +0800
+> ++++ libpng-1.6.8.bak/Makefile.in       2013-12-30 18:22:09.853794547 +0800
+> +@@ -698,7 +698,7 @@
+> + # interfering with the symbol file format.
+> + SYMBOL_CFLAGS = -DPNGLIB_LIBNAME='PNG at PNGLIB_MAJOR@@PNGLIB_MINOR at _0' \
+> +       -DPNGLIB_VERSION='@PNGLIB_VERSION@' \
+> +-      -DSYMBOL_PREFIX='$(SYMBOL_PREFIX)' -DPNG_NO_USE_READ_MACROS \
+> ++      -DSYMBOL_PREFIX='' -DPNG_NO_USE_READ_MACROS \
+> +       -DPNG_BUILDING_SYMBOL_TABLE $(am__append_5)
+> + all: $(BUILT_SOURCES) config.h
+> +       $(MAKE) $(AM_MAKEFLAGS) all-am
+> --
+> 1.7.9.5
+>
