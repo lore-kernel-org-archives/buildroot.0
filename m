@@ -1,42 +1,68 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Jan 2014 13:26:38 +0800
-Subject: [Buildroot] [PATCH] manual/faq: add section about why no binary
- packages
-In-Reply-To: <20140106051625.GD7812@tarshish>
-References: <1388954663-5692-1-git-send-email-yann.morin.1998@free.fr>
- <1388954663-5692-2-git-send-email-yann.morin.1998@free.fr>
- <20140106051625.GD7812@tarshish>
-Message-ID: <20140106132638.39cd986c@skate>
+From: Bernd Kuhls <berndkuhls@hotmail.com>
+Date: Mon, 06 Jan 2014 06:35:30 +0100
+Subject: [Buildroot] [PATCH 20/36] xorg: xlib_libXpm depends on libiconv
+	& gettext if appropriate
+References: <1388842746-12510-1-git-send-email-berndkuhls@hotmail.com>
+ <BLU0-SMTP4422A4B5DD408695FF2D014D9B50@phx.gbl>
+ <87k3eeyris.fsf@dell.be.48ers.dk>
+Message-ID: <2urppaxa0n.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+Peter Korsgaard <jacmet@uclibc.org> wrote in
+news:87k3eeyris.fsf at dell.be.48ers.dk: 
 
-On Mon, 6 Jan 2014 07:16:25 +0200, Baruch Siach wrote:
+>>>>>> "Bernd" == Bernd Kuhls
+>>>>>> <berndkuhls@hotmail.com> writes: 
+> 
+> > Signed-off-by: Bernd Kuhls
+> > <berndkuhls@hotmail.com> 
+> 
+> What issue exactly are you trying to fix? I don't seem to be able to
+> trigger it here?
+> 
+> Some more detailed commit message would be good, please.
+> 
 
-> Thanks for working on this. I think it is also worth mentioning the rationale. 
-> By doing source only we avoid the complexity of handling installation time 
-> dependency tracking and resolution. We also don't need to track what files 
-> each package installs. This makes Buildroot simpler and easier to work with.
+Hi,
 
-I would go even further, and explain why tracking what files each
-package installs is by far not sufficient to support binary packages.
-Several people have showed up throughout the project history, willing
-to add support binary packages by assuming that simply tracking which
-files "make install" installs will be sufficient. But that's forgetting
-all the optional dependencies problems, and various other things.
+I need this kind of patch for a lot of packages due to link failures 
+regarding libiconv and, sometimes, libgettext, for example gnupg 
+(http://patchwork.ozlabs.org/patch/305819/):
 
-We had a write-up about this in some report of a past Buildroot
-Developers Meeting, with some good arguments. Would be nice to dig that
-up and summarize these arguments in the doc.
+buildroot/output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a 
+buildroot/output/target/usr/bin/gpg | grep NEEDED
+ 0x00000001 (NEEDED)                     Shared library: [libiconv.so.2]
+ 0x00000001 (NEEDED)                     Shared library: [libz.so.1]
+ 0x00000001 (NEEDED)                     Shared library: [libbz2.so.1.0]
+ 0x00000001 (NEEDED)                     Shared library: [libreadline.so.6]
+ 0x00000001 (NEEDED)                     Shared library: [libgcc_s.so.1]
+ 0x00000001 (NEEDED)                     Shared library: [libc.so.0]
 
-Best regards,
+Here is a patch snippet of the uClibc .config currently in use, I hope this 
+will help you triggering the problem:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+@@ -179,67 +172,65 @@
+ #
+ # String and Stdio Support
+ #
+-# UCLIBC_HAS_STRING_GENERIC_OPT is not set
++UCLIBC_HAS_STRING_GENERIC_OPT=y
+ UCLIBC_HAS_STRING_ARCH_OPT=y
+ UCLIBC_HAS_CTYPE_TABLES=y
+ UCLIBC_HAS_CTYPE_SIGNED=y
+ # UCLIBC_HAS_CTYPE_UNSAFE is not set
+ UCLIBC_HAS_CTYPE_CHECKED=y
+ # UCLIBC_HAS_CTYPE_ENFORCED is not set
+-# UCLIBC_HAS_WCHAR is not set
++UCLIBC_HAS_WCHAR=y
+ # UCLIBC_HAS_LOCALE is not set
+
+The full version can be found here:
+https://ssl.nettworks.org/repo/browse/fli4l/branches/testing/src/src/fbr/bu
+ildroot/package/uclibc/uclibc.config?r=28674
+
+Regards, Bernd
