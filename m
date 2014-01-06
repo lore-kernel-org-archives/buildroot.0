@@ -1,68 +1,39 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 6 Jan 2014 11:18:42 +0100
-Subject: [Buildroot] [PATCH] manual/faq: add section about why no binary
-	packages
-In-Reply-To: <1388954663-5692-2-git-send-email-yann.morin.1998@free.fr>
-References: <1388954663-5692-1-git-send-email-yann.morin.1998@free.fr>
- <1388954663-5692-2-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <CAAXf6LU1Cf3_=zaZ0KBhBFQacAEkS-8VLg92F9OKvGsr3b_myQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 6 Jan 2014 11:29:48 +0100
+Subject: [Buildroot] [git commit] xkeyboard-config: disable 'runtime deps as
+	build time deps'
+Message-ID: <20140106103014.D19BB9C25A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Jan 5, 2014 at 9:44 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
->
-> It somes up evry now and then on the list, so better be prepared to
-> point at the manual, rather than rehash the same evry time.
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Samuel Martin <s.martin49@gmail.com>
-> Cc: Peter Korsgaard <jacmet@uclibc.org>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-> ---
->  docs/manual/faq-troubleshooting.txt | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
->
-> diff --git a/docs/manual/faq-troubleshooting.txt b/docs/manual/faq-troubleshooting.txt
-> index 4e0612b..e97457a 100644
-> --- a/docs/manual/faq-troubleshooting.txt
-> +++ b/docs/manual/faq-troubleshooting.txt
-> @@ -111,3 +111,24 @@ directory as the new root, will most likely fail.
->  If you want to run the target filesystem inside a chroot, or as an NFS
->  root, then use the tarball image generated in +images/+ and extract it
->  as root.
-> +
-> +[[faq-no-binary-packages]]
-> +Why doesn't Buildroot generate binary packages (.deb, .ipkg...)?
-> +----------------------------------------------------------------
-> +
-> +Buildroot explicitly avoids generating binary packages, on purpose.
-> +
-> +Buildroot strive at making it easy to generate a root filesystem (hence
+commit: http://git.buildroot.net/buildroot/commit/?id=2ce67935e80b2ea6b24f22ebf1e810eae3dcefe0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-strives
+Fixes http://autobuild.buildroot.net/results/f11/f11687ae661f9d3570c55a9d62a7822e667ad9ad/
 
-> +the name, by the way). That is what we want to make Buildroot good at:
-> +building root filesystems.
-> +
-> +Buildroot is not meant to be a distribution (or rather, a distribution
-> +generator). It is the opinion of most Buildroot developpers (me included)
+xkeyboard-config has runtime dependencies (when using X11) on xproto and
+libX11, and by default checks at build time if they are available.
 
-developers
+Disable this check as it doesn't apply for wayland and the needed deps are
+taken care of by BR for X11.
 
-> +that this is not a goal we should pursue. We believe that there are other
-> +tools better suited to generate a distro than Buildroot is. For example,
-> +http://openembedded.org/[Open Embedded], or https://openwrt.org/[openWRT],
-> +are such tools.
-> +
-> +Rather, we prefer to push Buildroot in a direction that makes it easy
-> +(or even easier) to generate complete root filesystems. This is what
-> +makes Buildroot stands out in the crowd (among other things, of course!).
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/x11r7/xkeyboard-config/xkeyboard-config.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-Best regards,
-Thomas
+diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.mk b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
+index 05224a7..674d15d 100644
+--- a/package/x11r7/xkeyboard-config/xkeyboard-config.mk
++++ b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
+@@ -10,6 +10,7 @@ XKEYBOARD_CONFIG_SITE = http://www.x.org/releases/individual/data/xkeyboard-conf
+ XKEYBOARD_CONFIG_LICENSE = MIT
+ XKEYBOARD_CONFIG_LICENSE_FILES = COPYING
+ 
++XKEYBOARD_CONFIG_CONF_OPT = --disable-runtime-deps
+ XKEYBOARD_CONFIG_DEPENDENCIES = host-gettext host-intltool host-xapp_xkbcomp
+ 
+ $(eval $(autotools-package))
