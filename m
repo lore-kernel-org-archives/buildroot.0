@@ -1,23 +1,52 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 06 Jan 2014 14:56:48 +0100
-Subject: [Buildroot] [PATCH 1/1] transmission: Fix line feeds in patch
-	file
-In-Reply-To: <BLU0-SMTP20778F191E3944FD27E1226D9B50@phx.gbl> (Bernd Kuhls's
- message of "Sat, 4 Jan 2014 09:51:10 +0100")
-References: <BLU0-SMTP20778F191E3944FD27E1226D9B50@phx.gbl>
-Message-ID: <87zjn9xlgf.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 6 Jan 2014 14:56:22 +0100
+Subject: [Buildroot] [git commit] transmission: Fix line feeds in patch file
+Message-ID: <20140106135710.D6DE09C25B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <berndkuhls@hotmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=c991fabfcfb1984befc7a9ea5701f7de507b16fb
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Upstream code has DOS line endings...
- > Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
+Upstream code has DOS line endings...
 
-Committed, thanks.
+Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../transmission/transmission-01-fix-utypes.patch  |   16 ++++++++--------
+ 1 files changed, 8 insertions(+), 8 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/transmission/transmission-01-fix-utypes.patch b/package/transmission/transmission-01-fix-utypes.patch
+index e67ba6a..96403a6 100644
+--- a/package/transmission/transmission-01-fix-utypes.patch
++++ b/package/transmission/transmission-01-fix-utypes.patch
+@@ -10,12 +10,12 @@ Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
+ --- transmission-2.82.org/third-party/libutp/utypes.h	2013-08-09 04:47:43.000000000 +0200
+ +++ transmission-2.82/third-party/libutp/utypes.h	2014-01-02 20:17:18.000000000 +0100
+ @@ -35,8 +35,15 @@
+- typedef const char * cstr;
+- typedef char * str;
+- 
+--#ifndef __cplusplus
+--typedef uint8 bool;
+--#endif
++ typedef const char * cstr;
++ typedef char * str;
++ 
++-#ifndef __cplusplus
++-typedef uint8 bool;
++-#endif
+ +//#ifndef __cplusplus
+ +//typedef uint8 bool;
+ +//#endif
+@@ -26,5 +26,5 @@ Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
+ +typedef uint8 bool;
+ +#endif
+ +#endif
+- 
+- #endif //__UTYPES_H__
++ 
++ #endif //__UTYPES_H__
