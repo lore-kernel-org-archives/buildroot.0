@@ -1,39 +1,135 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 6 Jan 2014 11:29:48 +0100
-Subject: [Buildroot] [git commit] xkeyboard-config: disable 'runtime deps as
-	build time deps'
-Message-ID: <20140106103014.D19BB9C25A@busybox.osuosl.org>
+From: sonic.adi at gmail.com <sonic.adi@gmail.com>
+Date: Mon,  6 Jan 2014 19:05:49 +0800
+Subject: [Buildroot] [PATCH] package: icu: detect and add compiler symbol
+	prefix to the assembly code
+Message-ID: <1389006349-32377-1-git-send-email-Sonic.adi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2ce67935e80b2ea6b24f22ebf1e810eae3dcefe0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Sonic Zhang <sonic.zhang@analog.com>
 
-Fixes http://autobuild.buildroot.net/results/f11/f11687ae661f9d3570c55a9d62a7822e667ad9ad/
+Some compiler, such as Blackfin GNU compiler, prefix a charater to any
+C symbol in generated assembly code. If any assembly symbol is invoked
+from C code, it needs to be prefixed as well.
 
-xkeyboard-config has runtime dependencies (when using X11) on xproto and
-libX11, and by default checks at build time if they are available.
-
-Disable this check as it doesn't apply for wayland and the needed deps are
-taken care of by BR for X11.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
 ---
- package/x11r7/xkeyboard-config/xkeyboard-config.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ .../icu/icu-detect-compiler-symbol-prefix.patch    |  104 ++++++++++++++++++++
+ 1 file changed, 104 insertions(+)
+ create mode 100644 package/icu/icu-detect-compiler-symbol-prefix.patch
 
-diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.mk b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-index 05224a7..674d15d 100644
---- a/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-+++ b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-@@ -10,6 +10,7 @@ XKEYBOARD_CONFIG_SITE = http://www.x.org/releases/individual/data/xkeyboard-conf
- XKEYBOARD_CONFIG_LICENSE = MIT
- XKEYBOARD_CONFIG_LICENSE_FILES = COPYING
- 
-+XKEYBOARD_CONFIG_CONF_OPT = --disable-runtime-deps
- XKEYBOARD_CONFIG_DEPENDENCIES = host-gettext host-intltool host-xapp_xkbcomp
- 
- $(eval $(autotools-package))
+diff --git a/package/icu/icu-detect-compiler-symbol-prefix.patch b/package/icu/icu-detect-compiler-symbol-prefix.patch
+new file mode 100644
+index 0000000..9ca7690
+--- /dev/null
++++ b/package/icu/icu-detect-compiler-symbol-prefix.patch
+@@ -0,0 +1,104 @@
++package: icu: detect and add compiler symbol prefix to the assembly code
++
++Some compiler, such as Blackfin GNU compiler, prefix a charater to any
++C symbol in generated assembly code. If any assembly symbol is invoked
++from C code, it needs to be prefixed as well.
++
++--- icu-51.2/source/configure	2014-01-06 17:13:20.907249812 +0800
+++++ icu-51.2.bak/source/configure	2014-01-06 17:12:57.335248659 +0800
++@@ -612,6 +612,7 @@
++ ICUDATA_CHAR
++ SAMPLES_TRUE
++ TESTS_TRUE
+++SYMBOL_PREFIX
++ ICULIBSUFFIXCNAME
++ U_HAVE_LIB_SUFFIX
++ ICULIBSUFFIX
++@@ -7226,7 +7227,16 @@
++     U_HAVE_LIB_SUFFIX=0
++ fi
++ 
+++# Check compiler generated symbol profix
+++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for symbol prefix" >&5
+++$as_echo "checking for symbol prefix... " >&6; }
+++    SYMBOL_PREFIX=`echo "PREFIX=__USER_LABEL_PREFIX__" \
+++                  | ${CPP-${CC-gcc} -E} - 2>&1 \
+++                  | ${EGREP-grep} "^PREFIX=" \
+++                  | sed -e "s:^PREFIX=::" -e "s:__USER_LABEL_PREFIX__::"`
++ 
+++    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SYMBOL_PREFIX" >&5
+++$as_echo "$SYMBOL_PREFIX" >&6; }
++ 
++ # Enable/disable tests
++ # Check whether --enable-tests was given.
++--- icu-51.2/source/extra/uconv/Makefile.in	2014-01-06 17:47:13.991347946 +0800
+++++ icu-51.2.bak/source/extra/uconv/Makefile.in	2014-01-06 17:48:01.571355282 +0800
++@@ -57,7 +57,7 @@
++ ## Static mode
++ ifeq ($(UCONVMSG_MODE),static)
++ DEFS += -DUCONVMSG_LINK=$(MSGNAME)
++-UCONVMSG_LIB = $(RESDIR)/$(LIBPREFIX)$(STATIC_PREFIX_WHEN_USED)$(MSGNAME).$(A)
+++UCONVMSG_LIB = $(RESDIR)/$(LIBPREFIX)$(STATIC_PREFIX_WHEN_USED)@SYMBOL_PREFIX@$(MSGNAME).$(A)
++ LIBS += $(UCONVMSG_LIB)
++ PKGMODE=static
++ INSTALLTO=$(libdir)
++@@ -151,7 +151,7 @@
++ endif
++ 
++ $(UCONVMSG_LIB): $(RESFILES) $(RESDIR)/$(RESDIR).lst pkgdata.inc
++-	$(INVOKE) $(PKGDATA_INVOKE_OPTS) $(TOOLBINDIR)/pkgdata -p $(MSGNAME) $(PKGDATA_OPTS) -m $(PKGMODE) -s $(RESDIR) -d $(RESDIR) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
+++	$(INVOKE) $(PKGDATA_INVOKE_OPTS) $(TOOLBINDIR)/pkgdata -p @SYMBOL_PREFIX@$(MSGNAME) $(PKGDATA_OPTS) -m $(PKGMODE) -s $(RESDIR) -d $(RESDIR) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
++ 
++ $(RESDIR)/$(RESDIR).lst: Makefile $(srcdir)/resfiles.mk
++ 	@-$(RMV) $@
++--- icu-51.2/source/data/Makefile.in	2014-01-06 19:00:28.879570005 +0800
+++++ icu-51.2.bak/source/data/Makefile.in	2014-01-06 19:00:07.891570170 +0800
++@@ -175,13 +175,13 @@
++ packagedata: icupkg.inc $(PKGDATA_LIST) build-local
++ ifneq ($(ENABLE_STATIC),)
++ ifeq ($(PKGDATA_MODE),dll)
++-	$(PKGDATA_INVOKE) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBSTATICNAME) -m static $(PKGDATA_VERSIONING) $(PKGDATA_LIST)
+++	$(PKGDATA_INVOKE) $(PKGDATA) -e @SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBSTATICNAME) -m static $(PKGDATA_VERSIONING) $(PKGDATA_LIST)
++ endif
++ endif
++ ifneq ($(ICUDATA_SOURCE_IS_NATIVE_TARGET),YES)
++-	$(PKGDATA_INVOKE) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p $(ICUDATA_NAME) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) $(PKGDATA_LIBNAME) $(PKGDATA_LIST)
+++	$(PKGDATA_INVOKE) $(PKGDATA) -e @SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p $(ICUDATA_NAME) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) $(PKGDATA_LIBNAME) $(PKGDATA_LIST)
++ ifeq ($(OS390BATCH),1)
++-	$(PKGDATA_INVOKE) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p $(ICUDATA_NAME) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) $(OS390_PDS_NAME) $(PKGDATA_LIST)
+++	$(PKGDATA_INVOKE) $(PKGDATA) -e @SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p $(ICUDATA_NAME) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) $(OS390_PDS_NAME) $(PKGDATA_LIST)
++ endif
++ else
++ 	$(INSTALL_DATA) $(ICUDATA_SOURCE_ARCHIVE) $(OUTDIR)
++@@ -203,11 +203,11 @@
++ endif
++ ifneq ($(ENABLE_STATIC),)
++ ifeq ($(PKGDATA_MODE),dll)
++-	$(PKGDATA_INVOKE) $(PKGDATA) -m static -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBSTATICNAME) $(PKGDATA_LIST) -I $(ICUPKGDATA_INSTALL_LIBDIR)
+++	$(PKGDATA_INVOKE) $(PKGDATA) -m static -e @SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBSTATICNAME) $(PKGDATA_LIST) -I $(ICUPKGDATA_INSTALL_LIBDIR)
++ endif
++ endif
++ ifneq ($(ICUDATA_SOURCE_IS_NATIVE_TARGET),YES)
++-	$(PKGDATA_INVOKE) $(PKGDATA) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBNAME) $(PKGDATA_LIST) -I $(ICUPKGDATA_INSTALL_DIR)
+++	$(PKGDATA_INVOKE) $(PKGDATA) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) -e @SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBNAME) $(PKGDATA_LIST) -I $(ICUPKGDATA_INSTALL_DIR)
++ else
++ 	$(INSTALL_DATA) $(ICUDATA_SOURCE_ARCHIVE) $(DESTDIR)$(ICUPKGDATA_DIR)
++ endif
++@@ -218,7 +218,7 @@
++ #### 390 support
++ install390: package390
++ 	$(MKINSTALLDIRS) $(TMPDATADIR) $(DESTDIR)$(libdir)
++-	$(INVOKE) $(PKGDATA) -s $(BUILDDIR)$(STUB_SUFFIX) -T $(OUTTMPDIR_390STUB) -p $(ICUDATA_NAME)$(STUB_SUFFIX) $(PKGDATA_LIBNAME)$(STUB_SUFFIX) -e $(ICUDATA_ENTRY_POINT) $(OS390LIST) -m dll $(PKGDATA_VERSIONING) -I $(DESTDIR)$(ICUPKGDATA_DIR)
+++	$(INVOKE) $(PKGDATA) -s $(BUILDDIR)$(STUB_SUFFIX) -T $(OUTTMPDIR_390STUB) -p $(ICUDATA_NAME)$(STUB_SUFFIX) $(PKGDATA_LIBNAME)$(STUB_SUFFIX) -e @SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) $(OS390LIST) -m dll $(PKGDATA_VERSIONING) -I $(DESTDIR)$(ICUPKGDATA_DIR)
++ ifeq ($(PKGDATA_MODE),dll)
++ 	$(INSTALL-L) $(ICUPKGDATA_OUTDIR)/$(FINAL_IMPORT_LIB) $(DESTDIR)$(ICUPKGDATA_DIR)/$(FINAL_IMPORT_LIB)
++ endif
++@@ -226,7 +226,7 @@
++ #### $(LIB_ICUDATA_NAME)$(STUB_SUFFIX) is the subset data for batch mode
++ package390: $(OUTTMPDIR)/icudata390.lst $(PKGDATA_LIST) ./icupkg.inc packagedata
++ 	ln -s $(ICUDATA_NAME) $(OUTDIR)/build/$(ICUDATA_NAME)$(STUB_SUFFIX)
++-	$(INVOKE) $(PKGDATA) -s $(BUILDDIR)$(STUB_SUFFIX) -T $(OUTTMPDIR_390STUB) -p $(ICUDATA_NAME)$(STUB_SUFFIX) $(PKGDATA_LIBNAME)$(STUB_SUFFIX) -e $(ICUDATA_ENTRY_POINT) $(OS390LIST) -m dll $(PKGDATA_VERSIONING)
+++	$(INVOKE) $(PKGDATA) -s $(BUILDDIR)$(STUB_SUFFIX) -T $(OUTTMPDIR_390STUB) -p $(ICUDATA_NAME)$(STUB_SUFFIX) $(PKGDATA_LIBNAME)$(STUB_SUFFIX) -e @SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) $(OS390LIST) -m dll $(PKGDATA_VERSIONING)
++ 	cp $(ICUPKGDATA_OUTDIR)/$(LIB_ICUDATA_NAME)$(STUB_SUFFIX).$(SO) $(top_builddir)/stubdata/$(LIB_ICUDATA_NAME)$(STUB_SUFFIX).$(SO)
++ 
++ 
+-- 
+1.7.9.5
