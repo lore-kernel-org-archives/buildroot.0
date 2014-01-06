@@ -1,65 +1,60 @@
-From: Sonic Zhang <sonic.adi@gmail.com>
-Date: Mon, 6 Jan 2014 10:14:57 +0800
-Subject: [Buildroot] [PATCH] package: libpng: don't append prefix to
- symbol names in the version script file
-In-Reply-To: <1388399753-11513-1-git-send-email-Sonic.adi@gmail.com>
-References: <1388399753-11513-1-git-send-email-Sonic.adi@gmail.com>
-Message-ID: <CAJxxZ0OMcEzGMgadq15FeiOB=oiK_KQnD-jN-L61ps2KU2XdqA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 6 Jan 2014 13:05:03 +0800
+Subject: [Buildroot] Patchwork oldest patches cleanup #4 (deadline
+	January 5)
+In-Reply-To: <CAAXf6LVVi6d=xRjsqW8eSMAf1CpKyU-qUTQ2dbfCPU=EF__jcA@mail.gmail.com>
+References: <CAAXf6LWFAfs_i_NjBbD3RZ=Y0RDKftzwj-_8xKuqyYA=69PNsw@mail.gmail.com>
+ <CAAXf6LVVi6d=xRjsqW8eSMAf1CpKyU-qUTQ2dbfCPU=EF__jcA@mail.gmail.com>
+Message-ID: <20140106130503.2df2a9ef@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ping
+Dear Thomas De Schampheleire,
 
-Sonic Zhang
+On Sun, 5 Jan 2014 11:21:33 +0100, Thomas De Schampheleire wrote:
 
-On Mon, Dec 30, 2013 at 6:35 PM,  <sonic.adi@gmail.com> wrote:
-> From: Sonic Zhang <sonic.zhang@analog.com>
->
-> Even if Blackfin GNU toolchain add prefix '_' to all symbols,
-> symbol prefix is not accepted in the link flag --version-script.
-> Don't append prefix in the symbols in the version script file.
->
-> Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
-> ---
->  .../libpng/libpng-02-ingore-symbol-prefix.patch    |   26 ++++++++++++++++++++
->  1 file changed, 26 insertions(+)
->  create mode 100644 package/libpng/libpng-02-ingore-symbol-prefix.patch
->
-> diff --git a/package/libpng/libpng-02-ingore-symbol-prefix.patch b/package/libpng/libpng-02-ingore-symbol-prefix.patch
-> new file mode 100644
-> index 0000000..7f2cfff
-> --- /dev/null
-> +++ b/package/libpng/libpng-02-ingore-symbol-prefix.patch
-> @@ -0,0 +1,26 @@
-> +Even if Blackfin GNU toolchain add prefix '_' to all symbols,
-> +symbol prefix is not accepted in the link flag --version-script.
-> +Don't append prefix in the symbols in the version script file.
-> +
-> +--- libpng-1.6.8/Makefile.am   2013-12-30 18:23:08.261797417 +0800
-> ++++ libpng-1.6.8.bak/Makefile.am       2013-12-30 18:22:15.565795726 +0800
-> +@@ -225,7 +225,7 @@
-> + # interfering with the symbol file format.
-> + SYMBOL_CFLAGS = -DPNGLIB_LIBNAME='PNG at PNGLIB_MAJOR@@PNGLIB_MINOR at _0'\
-> +               -DPNGLIB_VERSION='@PNGLIB_VERSION@'\
-> +-              -DSYMBOL_PREFIX='$(SYMBOL_PREFIX)'\
-> ++              -DSYMBOL_PREFIX=''\
-> +               -DPNG_NO_USE_READ_MACROS -DPNG_BUILDING_SYMBOL_TABLE
-> +
-> + if DO_PNG_PREFIX
-> +--- libpng-1.6.8/Makefile.in   2013-12-30 18:23:08.261797417 +0800
-> ++++ libpng-1.6.8.bak/Makefile.in       2013-12-30 18:22:09.853794547 +0800
-> +@@ -698,7 +698,7 @@
-> + # interfering with the symbol file format.
-> + SYMBOL_CFLAGS = -DPNGLIB_LIBNAME='PNG at PNGLIB_MAJOR@@PNGLIB_MINOR at _0' \
-> +       -DPNGLIB_VERSION='@PNGLIB_VERSION@' \
-> +-      -DSYMBOL_PREFIX='$(SYMBOL_PREFIX)' -DPNG_NO_USE_READ_MACROS \
-> ++      -DSYMBOL_PREFIX='' -DPNG_NO_USE_READ_MACROS \
-> +       -DPNG_BUILDING_SYMBOL_TABLE $(am__append_5)
-> + all: $(BUILT_SOURCES) config.h
-> +       $(MAKE) $(AM_MAKEFLAGS) all-am
-> --
-> 1.7.9.5
->
+> > libatomic_ops version update 7.3alpha2 old version 1.2 does not
+> > compiles with modern gcc and utils
+> > Alexander Khryukin <alexander@mezon.ru>
+> > http://patchwork.ozlabs.org/patch/198133
+> 
+> No feedback, marked as rejected.
+
+I think bumping the version of a package is often useful, so I'm not
+sure I would mark this patch as rejected. Or if no one is pushing to
+bump libatomic_ops, then we should just assume no one cares, and
+therefore there's no point in keeping the patch around?
+
+> > [07/10] libffi: make thread support optional
+> > Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > http://patchwork.ozlabs.org/patch/199883
+> 
+> No feedback, marked as rejected.
+
+It's weird because I don't see libffi build failures in the
+autobuilders, even though there is one no thread ARM toolchain in the
+configurations.
+
+> > [4/4] gstreamer: replace gst-ffmpeg with gst-libav
+> > bogdan at nimblex.org
+> > http://patchwork.ozlabs.org/patch/207431
+> 
+> No feedback, rejected.
+
+I'm a little bit concerned about how we reject patches here. Maybe
+replacing gst-ffmpeg by gst-libav makes sense and should be done? If we
+don't keep the patch around, we'll have no way to remember that it
+should be done at some point in the future. I admit that by doing
+this, we'll never shrink the list of pending patches, but I have the
+feeling that we might be missing useful ideas.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
