@@ -1,34 +1,44 @@
 From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Mon, 6 Jan 2014 21:40:11 +0100
-Subject: [Buildroot] [PATCH 8/8] xorg: Bump xlib_libdmx to version 1.1.3
-In-Reply-To: <1389040811-2709-1-git-send-email-berndkuhls@hotmail.com>
-References: <1389040811-2709-1-git-send-email-berndkuhls@hotmail.com>
-Message-ID: <BLU0-SMTP345C2A40CABE380BCB5CFAD9B70@phx.gbl>
+Date: Mon, 06 Jan 2014 21:50:00 +0100
+Subject: [Buildroot] [PATCH 00/36] Update xorg packages
+References: <BLU0-SMTP322F0B0DA043619A8E91DA1D9B50@phx.gbl>
+ <52CA9400.4050307@trzebnica.net>
+Message-ID: <nghrpaxv56.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-thanks to Jerzy Grzegorek for the hint
+Czesc,
 
-Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
----
- package/x11r7/xlib_libdmx/xlib_libdmx.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+wrote in news:52CA9400.4050307 at trzebnica.net: 
 
-diff --git a/package/x11r7/xlib_libdmx/xlib_libdmx.mk b/package/x11r7/xlib_libdmx/xlib_libdmx.mk
-index 73c4b65..c720db6 100644
---- a/package/x11r7/xlib_libdmx/xlib_libdmx.mk
-+++ b/package/x11r7/xlib_libdmx/xlib_libdmx.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XLIB_LIBDMX_VERSION = 1.1.2
-+XLIB_LIBDMX_VERSION = 1.1.3
- XLIB_LIBDMX_SOURCE = libdmx-$(XLIB_LIBDMX_VERSION).tar.bz2
- XLIB_LIBDMX_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBDMX_LICENSE = MIT
--- 
-1.7.9.5
+> Did you intentionally not bump
+> 
+> xlib_libFS to version 1.0.5
+> xlib_libXaw to version 1.0.12
+> xlib_libXcursor to version 1.1.14
+> xlib_libXpm to version 3.5.11
+> xlib_libXres to version 1.0.7
+> xlib_libXv to verrsion 1.0.10
+> xlib_libXxf86dga to version 1.1.4
+> xlib_libdmx to version 1.1.3
+
+yes, xbmc does not depend on them ;)
+
+Currently I am sending my patch pile needed to compile xbmc Gotham[1] for 
+inclusion in buildroot, so I am concentrating on those patches.
+Hereby I am closely following the OpenELEC project.
+
+Nonetheless I just sent a new patchset updating the patches mentioned by you, 
+compile tested using this defconfig, randomly taken from autobuild:
+
+http://autobuild.buildroot.net/results/24f/24f1ffe788ef50470551f440b2fc71ce1c
+5c75e3/defconfig
+
+Regards, Bernd
+
+[1] xbmc now has uclibc-compatability:
+    https://github.com/xbmc/xbmc/pull/3920 :)
