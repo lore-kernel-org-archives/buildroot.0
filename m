@@ -1,52 +1,48 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 7 Jan 2014 07:35:58 +0200
-Subject: [Buildroot] [PATCH] libdmtx: add license information
-In-Reply-To: <1389024846-17491-1-git-send-email-fhunleth@troodon-software.com>
-References: <1389024846-17491-1-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <20140107053558.GE4503@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 7 Jan 2014 14:17:23 +0800
+Subject: [Buildroot] [PATCH 1/1] python-posix-ipc: new package
+In-Reply-To: <1389043097-30018-1-git-send-email-mlweber1@rockwellcollins.com>
+References: <1389043097-30018-1-git-send-email-mlweber1@rockwellcollins.com>
+Message-ID: <20140107141723.0d5b6f4c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Frank,
+Dear Matt Weber,
 
-On Mon, Jan 06, 2014 at 11:14:06AM -0500, Frank Hunleth wrote:
-> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
-> ---
->  package/libdmtx/libdmtx.mk | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/libdmtx/libdmtx.mk b/package/libdmtx/libdmtx.mk
-> index 69c7b88..43b35ec 100644
-> --- a/package/libdmtx/libdmtx.mk
-> +++ b/package/libdmtx/libdmtx.mk
-> @@ -6,6 +6,8 @@
->  
->  LIBDMTX_VERSION = 0.7.4
->  LIBDMTX_SITE = http://downloads.sourceforge.net/project/libdmtx/libdmtx/$(LIBDMTX_VERSION)
-> +LIBDMTX_LICENSE = BSD-2c or Commercial license
-> +LIBDMTX_LICENSE_FILES = LICENSE
+On Mon, 6 Jan 2014 15:18:17 -0600, Matt Weber wrote:
 
-The "alternate terms" section in the LICENSE file states:
+> diff --git a/package/python-posix-ipc/Config.in b/package/python-posix-ipc/Config.in
+> new file mode 100644
+> index 0000000..2fbc7a7
+> --- /dev/null
+> +++ b/package/python-posix-ipc/Config.in
+> @@ -0,0 +1,10 @@
+> +config BR2_PACKAGE_PYTHON_POSIX_IPC
+> +	bool "python-posix-ipc"
+> +	depends on BR2_PACKAGE_PYTHON
 
-> Redistributions in binary form, with or without modification, are permitted 
-> without including the above copyright notice, list of conditions, and  
-> disclaimer if express written permission has been obtained from Dragonfly 
-> Logic, Inc.
+I see #include <pthread.h> in the C code of the module, so maybe this
+Python module should depend on BR2_TOOLCHAIN_HAS_THREADS?
 
-I wouldn't call this written permission a "commercial license", but IANAL.
+> +PYTHON_POSIX_IPC_VERSION = 0.9.6
+> +PYTHON_POSIX_IPC_SOURCE = posix_ipc-$(PYTHON_POSIX_IPC_VERSION).tar.gz
+> +PYTHON_POSIX_IPC_SITE = http://semanchuk.com/philip/posix_ipc/
+> +PYTHON_POSIX_IPC_LICENSE = BSD-2c
 
-baruch
+License is BSD-3c, not BSD-2c.
 
->  LIBDMTX_INSTALL_STAGING = YES
->  
->  $(eval $(autotools-package))
-> -- 
-> 1.8.3.2
+> +PYTHON_POSIX_IPC_LICENSE_FILES = LICENSE
+> +PYTHON_POSIX_IPC_SETUP_TYPE = distutils
 
+Other than that, looks good to me (but I haven't tested).
+
+Thanks!
+
+Thomas
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
