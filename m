@@ -1,93 +1,46 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Tue, 7 Jan 2014 11:05:52 +0100
-Subject: [Buildroot] [PATCH v10 8/8] Makefile: update comment about
-	top-level parallel Makefile
-In-Reply-To: <52B466C8.2000200@mind.be>
-References: <1387363007-19846-1-git-send-email-fabio.porcedda@gmail.com>
- <1387363007-19846-9-git-send-email-fabio.porcedda@gmail.com>
- <52B32EBD.3000202@mind.be>
- <CAHkwnC8fQE+XVB_1EixH2ZXX=bxO=+DZ68yH4e6oLTm1NTedEA@mail.gmail.com>
- <52B466C8.2000200@mind.be>
-Message-ID: <CAHkwnC-7A=vf1fQ6HNxqRtxpfLuKz3fDWh68Ea_EEpVakzXH9w@mail.gmail.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Tue,  7 Jan 2014 11:29:18 +0100
+Subject: [Buildroot] [PATCH 0/3] network-manager: fix DHCP support.
+Message-ID: <1389090561-32196-1-git-send-email-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Dec 20, 2013 at 4:48 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 20/12/13 14:56, Fabio Porcedda wrote:
->>
->> On Thu, Dec 19, 2013 at 6:37 PM, Arnout Vandecappelle<arnout@mind.be>
->> wrote:
->>>
->>> >On 18/12/13 11:36, Fabio Porcedda wrote:
->>>>
->>>> >>
->>>> >>After the latest patches top-level parallel Makefile is working but
->>>> >>there is still an issue when a package has an unspecified optional
->>>> >>dependency so change the comment to explain that.
->>>> >>
->>>> >>Signed-off-by: Fabio Porcedda<fabio.porcedda@gmail.com>
->>>> >>---
->>>> >>   Makefile | 15 ++++++++++++++-
->>>> >>   1 file changed, 14 insertions(+), 1 deletion(-)
->>>> >>
->>>> >>diff --git a/Makefile b/Makefile
->>>> >>index ef2582e..27a6a65 100644
->>>> >>--- a/Makefile
->>>> >>+++ b/Makefile
->>>> >>@@ -42,7 +42,20 @@ export HOSTARCH := $(shell uname -m | \
->>>> >>             -e s/macppc/powerpc/\
->>>> >>             -e s/sh.*/sh/)
->>>> >>
->>>> >>-# This top-level Makefile can*not*  be executed in parallel
->>>>
->>>> >>+# Parallel execution of this Makefile is disabled because it could
->>>> >>+# change the build result if a package has an unspecified optional
->>>> >>+# dependency.
->>>
->>> >
->>> >
->>> >  ... or if two packages manipulate the same file in the target
->>> > directory.
->>
->> Ok, added.
->>
->>> >
->>>>
->>>> >>+# Parallel execution changes the packages building order, that can be
->>>> >>+# a problem when a package has an unspecified optional dependency,
->>>> >>+# because if that dependency is present when the package is built, it
->>>> >>+# is used, otherwise it isn't (but compilation happily proceeds).
->>>> >> This
->>>
->>> >
->>> >
->>> >  This is a repeat of the first sentence.
->>
->> So i just remove it?
->>
->
->  Probably better to remove the first sentence, the second one is more
-> descriptive.
+This patch series fixes DHCP support for NetworkManager.
 
-This is the fixed comment:
+The DHCP client used by NetworkManager can be configured in the "[main]"
+section of /etc/NetworkManager/NetworkManager.conf either as:
 
-# Parallel execution of this Makefile is disabled because it changes
-# the packages building order, that can be a problem when a package
-# has an unspecified optional dependency, because if that dependency
-# is present when the package is built, it is used, otherwise it isn't
-# (but compilation happily proceeds). This means that the packages
-# building order is relevant in that case, and the end result will
-# differ if the order is swapped due to parallel building.  Also
-# changing the building order can be a problem if two packages
-# manipulate the same file in the target directory.
-# Taking into account the above warnings, if you still want to execute
-# this top-level Makefile in parallel comment the following line and
-# execute:
-#    make BR2_JLEVEL= -j$((`getconf _NPROCESSORS_ONLN`+1))
+  dhcp=dhclient
 
-Regards
--- 
-Fabio Porcedda
+or
+
+  dhcp=dhcpcd
+
+The support for either client is enabled by the './configure' script. When
+network-manager was built, the instance of the client installed on the
+development machine was detected and its location used. Most of the time,
+this resulted in dhclient being the only choice...
+
+This patch series:
+
+- installs dhcpcd in the proper directory.
+- configures network-manager according to the DHCP client package selected.
+- bumps network-manager to its latest version.
+
+Best regards,
+ELB
+
+Eric Le Bihan (3):
+  dhcpcd: install dhcpcd as /usr/sbin/dhcpcd.
+  network-manager: fix DHCP clients detection.
+  network-manager: bump to version 0.9.8.2
+
+ package/dhcpcd/dhcpcd.mk                   |    2 +-
+ package/network-manager/network-manager.mk |   10 +++++++++-
+ 2 files changed, 10 insertions(+), 2 deletions(-)
+
+--
+1.7.9.5
