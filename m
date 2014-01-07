@@ -1,76 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 Jan 2014 17:25:04 +0100
-Subject: [Buildroot] [git commit] openssl: bump to version 1.0.1f
-Message-ID: <20140107162535.B103F9C3B7@busybox.osuosl.org>
+From: Matthew Weber <mlweber1@rockwellcollins.com>
+Date: Tue, 7 Jan 2014 10:39:39 -0600
+Subject: [Buildroot] [PATCH v2] added python unicode selection to menu
+In-Reply-To: <20140107231336.3381f187@skate>
+References: <1389043062-29826-1-git-send-email-mlweber1@rockwellcollins.com>	<20140107132316.1b79f953@skate>
+ <OF20FA0FD3.D2194933-ON86257C59.004E4CE8-86257C59.004E75C7@rockwellcollins.com>
+ <20140107231336.3381f187@skate>
+Message-ID: <OF33E46AEC.9B4C36EC-ON86257C59.005B6428-86257C59.005B8584@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=757690a262fa050ee18847ecee02672f16383b49
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
 
-Fixes CVE-2013-4343, CVE-2013-6450 and the previously patched
-CVE-2013-6449.
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote on 01/07/2014 
+09:13:36 AM:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/openssl/openssl-003-CVE-2013-6449.patch |   34 -----------------------
- package/openssl/openssl.mk                      |    2 +-
- 2 files changed, 1 insertions(+), 35 deletions(-)
+> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> To: "Matthew Weber" <mlweber1@rockwellcollins.com>
+> Cc: buildroot at busybox.net
+> Date: 01/07/2014 09:13 AM
+> Subject: Re: [Buildroot] [PATCH v2] added python unicode selection to 
+menu
+> 
+> Dear Matthew Weber,
+> 
+> On Tue, 7 Jan 2014 08:16:59 -0600, Matthew Weber wrote:
+> 
+> > > Why is the selection of UCS4 for the target tied to the usage of 
+UCS4
+> > > on the host?
+> > 
+> > No specific reason, other then we couldn't come up with a case
+> > where you could want the host different from the target.
+> 
+> Normally, BR2_PACKAGE_<foo>_<bar> options are not supposed to affect
+> the configuration of host packages.
 
-diff --git a/package/openssl/openssl-003-CVE-2013-6449.patch b/package/openssl/openssl-003-CVE-2013-6449.patch
-deleted file mode 100644
-index 034da7d..0000000
---- a/package/openssl/openssl-003-CVE-2013-6449.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--https://bugs.gentoo.org/494816
--https://bugzilla.redhat.com/show_bug.cgi?id=1045363
--http://rt.openssl.org/Ticket/Display.html?id=3200&user=guest&pass=guest
--
--From ca989269a2876bae79393bd54c3e72d49975fc75 Mon Sep 17 00:00:00 2001
--From: "Dr. Stephen Henson" <steve@openssl.org>
--Date: Thu, 19 Dec 2013 14:37:39 +0000
--Subject: [PATCH] Use version in SSL_METHOD not SSL structure.
--
--When deciding whether to use TLS 1.2 PRF and record hash algorithms
--use the version number in the corresponding SSL_METHOD structure
--instead of the SSL structure. The SSL structure version is sometimes
--inaccurate. Note: OpenSSL 1.0.2 and later effectively do this already.
--(CVE-2013-6449)
-----
-- ssl/s3_lib.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/ssl/s3_lib.c b/ssl/s3_lib.c
--index bf832bb..c4ef273 100644
----- a/ssl/s3_lib.c
--+++ b/ssl/s3_lib.c
--@@ -4286,7 +4286,7 @@ need to go to SSL_ST_ACCEPT.
-- long ssl_get_algorithm2(SSL *s)
-- 	{
-- 	long alg2 = s->s3->tmp.new_cipher->algorithm2;
---	if (TLS1_get_version(s) >= TLS1_2_VERSION &&
--+	if (s->method->version == TLS1_2_VERSION &&
-- 	    alg2 == (SSL_HANDSHAKE_MAC_DEFAULT|TLS1_PRF))
-- 		return SSL_HANDSHAKE_MAC_SHA256 | TLS1_PRF_SHA256;
-- 	return alg2;
---- 
--1.8.4.3
--
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index 48f522f..98a098c 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENSSL_VERSION = 1.0.1e
-+OPENSSL_VERSION = 1.0.1f
- OPENSSL_SITE = http://www.openssl.org/source
- OPENSSL_LICENSE = OpenSSL or SSLeay
- OPENSSL_LICENSE_FILES = LICENSE
+Ok, we don't currently need support for that option in the host.
+So I'll remove it until someone has a use case.
+
+Thanks
+Matt 
+mlweber1 at rockwellcollins.com
+
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
