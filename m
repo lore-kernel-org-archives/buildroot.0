@@ -1,89 +1,33 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  7 Jan 2014 23:46:08 +0100
-Subject: [Buildroot] [PATCH 5/5] manual: add section about dealing
-	efficiently with big image files
-In-Reply-To: <cover.1389134731.git.yann.morin.1998@free.fr>
-References: <cover.1389134731.git.yann.morin.1998@free.fr>
-Message-ID: <976b993986ff075f38067792121ac0a443cd6369.1389134731.git.yann.morin.1998@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 07 Jan 2014 23:49:21 +0100
+Subject: [Buildroot] [PATCH v3 1/1] minidlna: bump version to 1.1.1
+In-Reply-To: <BLU0-SMTP1012F758793A211AEB40D12D9CA0@phx.gbl> (Bernd Kuhls's
+ message of "Fri, 3 Jan 2014 21:20:45 +0100")
+References: <BLU0-SMTP1012F758793A211AEB40D12D9CA0@phx.gbl>
+Message-ID: <87d2k3wgpa.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>>>>> "Bernd" == Bernd Kuhls <berndkuhls@hotmail.com> writes:
 
-As reported by Ryan, it is not well-known that most tools can deal
-efficiently with big sparse files.
+ > - remove all patches needed for pre-autotools minidlna release
+ > - convert .mk file to autotools-package
+ > - disable broken static build
 
-Add a section in the manual about this, with tar and cp used as
-examples, and a hinting to the man pages for the others.
+It doesn't seem too hard to fix, but ok - I can look into that later.
 
-Reported-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+ > -MINIDLNA_VERSION = 1.0.26
+ > +MINIDLNA_VERSION = 1.1.1
+ >  MINIDLNA_SITE = http://downloads.sourceforge.net/project/minidlna/minidlna/$(MINIDLNA_VERSION)
+ >  MINIDLNA_LICENSE = GPLv2 BSD-3c
+ >  MINIDLNA_LICENSE_FILES = LICENCE LICENCE.miniupnpd
 
----
-changes v2 -> v3:
-  - fix typo  (Thomas DS)
-  - better phrasing to direct the reader to the man pages  (Thomas DS)
+The GPLv2 license file got renamed to COPYING.
 
-changes v1 -> v2:
-  - remove 'dd' since it can be dangerous  (Peter)
-  - add a sentence that sparse files are to be used only on the build
-    machine, not while transferring to the target device  (Peter)
----
- docs/manual/common-usage.txt | 39 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+Committed with that fixed, thanks.
 
-diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
-index c7e4568..1d15c05 100644
---- a/docs/manual/common-usage.txt
-+++ b/docs/manual/common-usage.txt
-@@ -104,3 +104,42 @@ or +g+++ for building helper-binaries on your host, then do
- --------------------
-  $ make HOSTCXX=g++-4.3-HEAD HOSTCC=gcc-4.3-HEAD
- --------------------
-+
-+Dealing efficiently with filesystem images
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+Filesystem images can get pretty big, depending on the filesystem you choose,
-+the number of packages, whether you provisioned free space... Yet, some
-+locations in the filesystems images may just be _empty_ (eg. a long run of
-+'zeroes'); such a file is called a _sparse_ file.
-+
-+Most tools can handle sparse files efficiently, and will only store or write
-+those parts of a sparse file that are not empty.
-+
-+For example:
-+
-+* +tar+ accepts the +-S+ option to tell it to only store non-zero blocks
-+  of sparse files:
-+** +tar cf archive.tar -S [files...]+ will efficiently store sparse files
-+   in a tarball
-+** +tar xf archive.tar -S+ will efficiently store sparse files extracted
-+   from a tarball
-+
-+* +cp+ accepts the +--sparse=WHEN+ option (+WHEN+ is one of +auto+,
-+  +never+ or +always+):
-+** +cp --sparse=always source.file dest.file+ will make +dest.file+ a
-+   sparse file if +source.file+ has long runs of zeroes
-+
-+Other tools may have similar options. Please consult their respective man
-+pages.
-+
-+You can use sparse files if you need to store the filesystem images (eg.
-+to transfer from one machine to another), of if you need to send them (eg.
-+to the Q&A team).
-+
-+Note however that flashing a filesystem image to a device while using the
-+sparse mode of +dd+ may result in a broken filesystem (eg. the block bitmap
-+of an ext2 filesystem may be corrupted; or, if you have sparse files in
-+your filesystem, those parts may not be all-zeroes when read back). You
-+should only use sparse files when handling files on the build machine, not
-+when transferring them to an actual device that will be used on the target.
 -- 
-1.8.1.2
+Bye, Peter Korsgaard
