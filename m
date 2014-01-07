@@ -1,116 +1,84 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  7 Jan 2014 23:46:05 +0100
-Subject: [Buildroot] [PATCH 2/5] toolchain/external: fix wrapper by not
-	passing conflicting flags
+Date: Tue,  7 Jan 2014 23:46:07 +0100
+Subject: [Buildroot] [PATCH 4/5] system: default to empty issue/hostname for
+	custom skeleton
 In-Reply-To: <cover.1389134731.git.yann.morin.1998@free.fr>
 References: <cover.1389134731.git.yann.morin.1998@free.fr>
-Message-ID: <5d0fbb9b1f4439750dde9bb7788b273ec94a3bd5.1389134731.git.yann.morin.1998@free.fr>
+Message-ID: <cffd411631d99ddd729f0e29888b0fb14941889a.1389134731.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+From: Sagaert Johan <sagaert.johan@skynet.be>
 
-In our wrapper, we forcibly add the -march=, -mcpu= and-mtune= flags
-to the actual copmpiler, this in an attempt to always generate correct
-and optimised code for the target.
+A custom skeleton may include /etc/issue and/or /etc/hostname, in
+which case we do not want to override them.
 
-But in some cases, the caller knows better than we do, and passes its
-own set, or subset of those flags. In this case, some may conflict with
-the ones we pass. The most prominent offender being the Linux kernel.
+But those files could also be missing from the custom skeleton, or
+the user may want to override their content.
 
-For example, on the ARM Rapsberry Pi, the Linux kernel will set the
--march=armv6 flag and no -mcpu= flag, but we pass -mcpu=arm1176jzf-s,
-which conflicts:
+Make the current default value for isue and hostname depend on the
+generic skeleton, and default to empty for a custom skeleton.
 
-    drivers/scsi/scsi_trace.c:1:0: warning: switch -mcpu=arm1176jzf-s
-    conflicts with -march=armv6 switch
-
-(and so for all the files the kernel compiles, pretty messy)
-(note: arm1176jzf-s is not an armv6, it is an armv6zk. Yeah...)
-
-To avoid this situation, we scan our commandline for any occurence of
-the possibly conflicting flags. If none is found, then we add our owns.
-If any is found, then we don't add any of our owns.
-
-The idea behind this is that we trust the caller to know better than
-we do what it is doing. Since the biggest, and sole so far, offender
-is the Linux kernel, then this is a rather safe bet.
-
+Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
+[yann.morin.1998 at free.fr: change from hiding it behind SKELETON_DEFAULT
+    to use conditional default values; move below the skeleton choice;
+    improve help entries]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
- .../toolchain-external/ext-toolchain-wrapper.c     | 41 ++++++++++++++++------
- 1 file changed, 31 insertions(+), 10 deletions(-)
+ system/Config.in | 32 ++++++++++++++++++++------------
+ 1 file changed, 20 insertions(+), 12 deletions(-)
 
-diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-index d54f1f5..81c6ed1 100644
---- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
-+++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-@@ -30,21 +30,17 @@ static char sysroot[PATH_MAX];
-  * that we only pass the predefined one to the real compiler if the inverse
-  * option isn't in the argument list.
-  * This specifies the worst case number of extra arguments we might pass
-+ * Currently, we have:
-+ * 	-mfloat-abi=
-+ * 	-march=
-+ * 	-mtune=
-+ * 	-mcpu=
-  */
--#define EXCLUSIVE_ARGS	1
-+#define EXCLUSIVE_ARGS	4
+diff --git a/system/Config.in b/system/Config.in
+index 54c196c..4bdd610 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -1,17 +1,5 @@
+ menu "System configuration"
  
- static char *predef_args[] = {
- 	path,
- 	"--sysroot", sysroot,
--#ifdef BR_ARCH
--	"-march=" BR_ARCH,
--#endif /* BR_ARCH */
--#ifdef BR_TUNE
--	"-mtune=" BR_TUNE,
--#endif /* BR_TUNE */
--#ifdef BR_CPU
--	"-mcpu=" BR_CPU,
--#endif
- #ifdef BR_ABI
- 	"-mabi=" BR_ABI,
- #endif
-@@ -157,6 +153,31 @@ int main(int argc, char **argv)
- 		*cur++ = "-mfloat-abi=" BR_FLOAT_ABI;
- #endif
+-config BR2_TARGET_GENERIC_HOSTNAME
+-	string "System hostname"
+-	default "buildroot"
+-	help
+-	  Select system hostname to be stored in /etc/hostname.
+-
+-config BR2_TARGET_GENERIC_ISSUE
+-	string "System banner"
+-	default "Welcome to Buildroot"
+-	help
+-	  Select system banner (/etc/issue) to be displayed at login.
+-
+ choice
+ 	bool "Passwords encoding"
+ 	default BR2_TARGET_GENERIC_PASSWD_MD5
+@@ -179,6 +167,26 @@ config BR2_ROOTFS_SKELETON_CUSTOM_PATH
+ 	  Path custom target skeleton.
+ endif
  
-+#if defined(BR_ARCH) || \
-+    defined(BR_TUNE) || \
-+    defined(BR_CPU)
-+	/* Add our -march/cpu/tune/abi flags, but only if none are
-+	 * already specified on the commandline
-+	 */
-+	for (i = 1; i < argc; i++) {
-+		if (!strncmp(argv[i], "-march=", strlen("-march=")) ||
-+		    !strncmp(argv[i], "-mtune=", strlen("-mtune=")) ||
-+		    !strncmp(argv[i], "-mcpu=",  strlen("-mcpu=" )))
-+			break;
-+	}
-+	if (i == argc) {
-+#ifdef BR_ARCH
-+		*cur++ = "-march=" BR_ARCH;
-+#endif
-+#ifdef BR_TUNE
-+		*cur++ = "-mtune=" BR_TUNE;
-+#endif
-+#ifdef BR_CPU
-+		*cur++ = "-mcpu=" BR_CPU;
-+#endif
-+	}
-+#endif /* ARCH || TUNE || CPU */
++config BR2_TARGET_GENERIC_HOSTNAME
++	string "System hostname"
++	default "buildroot" if BR2_ROOTFS_SKELETON_DEFAULT
++	default ""          if ! BR2_ROOTFS_SKELETON_DEFAULT
++	help
++	  Select system hostname to be stored in /etc/hostname.
 +
- 	/* append forward args */
- 	memcpy(cur, &argv[1], sizeof(char *) * (argc - 1));
- 	cur += argc - 1;
++	  Leave empty to not create /etc/hostname, or to keep the
++	  one from a custom skeleton.
++
++config BR2_TARGET_GENERIC_ISSUE
++	string "System banner"
++	default "Welcome to Buildroot" if BR2_ROOTFS_SKELETON_DEFAULT
++	default ""                     if ! BR2_ROOTFS_SKELETON_DEFAULT
++	help
++	  Select system banner (/etc/issue) to be displayed at login.
++
++	  Leave empty to not create /etc/issue, or to keep the
++	  one from a custom skeleton.
++
+ if BR2_ROOTFS_SKELETON_DEFAULT
+ 
+ config BR2_TARGET_GENERIC_ROOT_PASSWD
 -- 
 1.8.1.2
