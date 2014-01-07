@@ -1,27 +1,30 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Tue, 07 Jan 2014 06:13:17 +0100
-Subject: [Buildroot] [PATCH 00/36] Update xorg packages
-References: <BLU0-SMTP322F0B0DA043619A8E91DA1D9B50@phx.gbl>
- <52CA9400.4050307@trzebnica.net>
- <nghrpaxv56.ln2@ID-313208.user.individual.net>
- <20140106210455.GB3383@free.fr>
-Message-ID: <d0fspaxp79.ln2@ID-313208.user.individual.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 7 Jan 2014 13:23:16 +0800
+Subject: [Buildroot] [PATCH v2] added python unicode selection to menu
+In-Reply-To: <1389043062-29826-1-git-send-email-mlweber1@rockwellcollins.com>
+References: <1389043062-29826-1-git-send-email-mlweber1@rockwellcollins.com>
+Message-ID: <20140107132316.1b79f953@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote in 
-news:20140106210455.GB3383 at free.fr:
+Dear Matt Weber,
 
-> Bernd: Maxime also has some work on-going about adding XBMC to
-> Buildroot.
+On Mon, 6 Jan 2014 15:17:42 -0600, Matt Weber wrote:
 
-Hi,
+> +# Default is UCS2 w/o a conf opt
+> +ifeq ($(BR2_PACKAGE_PYTHON_UCS4),y)
+> +HOST_PYTHON_CONF_OPT += --enable-unicode=ucs4
+> +PYTHON_CONF_OPT      += --enable-unicode=ucs4
+> +endif
 
-this repo? https://github.com/maximeh/buildroot/tree/xbmc
+Why is the selection of UCS4 for the target tied to the usage of UCS4
+on the host?
 
-I will have a look at it.
-
-Regards, Bernd
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
