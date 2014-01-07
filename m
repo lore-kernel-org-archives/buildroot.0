@@ -1,17 +1,17 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue,  7 Jan 2014 07:37:43 +0000 (UTC)
-Subject: [Buildroot] [Bug 5810] Buildroot 2012.11: Additional GCC option
- "-msoft-float" breaks the build
-In-Reply-To: <bug-5810-163@https.bugs.busybox.net/>
-References: <bug-5810-163@https.bugs.busybox.net/>
-Message-ID: <20140107073743.C71D49C3A5@busybox.osuosl.org>
+Date: Tue,  7 Jan 2014 07:40:09 +0000 (UTC)
+Subject: [Buildroot] [Bug 2629] Segmentation faults and division by zero in
+	Grub on ext2
+In-Reply-To: <bug-2629-163@https.bugs.busybox.net/>
+References: <bug-2629-163@https.bugs.busybox.net/>
+Message-ID: <20140107074009.48F5C9C3A5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5810
+https://bugs.busybox.net/show_bug.cgi?id=2629
 
 Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
@@ -20,14 +20,14 @@ Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
              Status|NEW                         |RESOLVED
          Resolution|                            |FIXED
 
---- Comment #6 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2014-01-07 07:37:43 UTC ---
-The ARM soft-float / hard-float support has been significantly improved in the
-2013.08 release. There is now a clear way of choosing between soft-float,
-hard-float with floating point arguments passed in integer registers (so-called
-softfp) and hard-float with floating point arguments passed in floating point
-registers (so called hardfp).
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2014-01-07 07:40:09 UTC ---
+Since this report, we've updated the Debian revision of the Grub we're using in
+Buildroot. It contains the fix for the problem (2) you mention. I haven't
+checked for problem (1), but Grub runs fine here, tested under Qemu with an
+ext2 filesystem.
 
-Therefore, I believe this bug can now be considered as fixed.
+Marking the bug as fixed. Don't hesitate to reopen if you're still having
+problems with Grub on 2013.11.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
