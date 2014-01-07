@@ -1,33 +1,30 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Tue,  7 Jan 2014 11:29:21 +0100
-Subject: [Buildroot] [PATCH 3/3] network-manager: bump to version 0.9.8.2
-In-Reply-To: <1389090561-32196-1-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1389090561-32196-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <1389090561-32196-4-git-send-email-eric.le.bihan.dev@free.fr>
+From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Rosen?= <jeremy.rosen@openwide.fr>
+Date: Tue,  7 Jan 2014 11:51:09 +0100
+Subject: [Buildroot] [PATCH] udev : mention dependancy on inotify
+Message-ID: <1389091869-13609-1-git-send-email-jeremy.rosen@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Signed-off-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
 ---
- package/network-manager/network-manager.mk |    2 +-
+ package/udev/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-index e847f25..cd8b528 100644
---- a/package/network-manager/network-manager.mk
-+++ b/package/network-manager/network-manager.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/udev/Config.in b/package/udev/Config.in
+index 91dc7cf..d915d24 100644
+--- a/package/udev/Config.in
++++ b/package/udev/Config.in
+@@ -11,7 +11,7 @@ config BR2_PACKAGE_UDEV
+ 	help
+ 	  Userspace device daemon.
  
- NETWORK_MANAGER_VERSION_MAJOR = 0.9
--NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).8.0
-+NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).8.2
- NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
- NETWORK_MANAGER_SITE = http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
- NETWORK_MANAGER_INSTALL_STAGING = YES
+-	  udev requires a Linux kernel >= 2.6.34: it relies on devtmpfs.
++	  udev requires a Linux kernel >= 2.6.34: it relies on devtmpfs and inotify.
+ 
+ 	  ftp://ftp.kernel.org/pub/linux/utils/kernel/hotplug/
+ 
 -- 
-1.7.9.5
+1.8.5.2
