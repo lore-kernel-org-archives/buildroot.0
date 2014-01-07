@@ -1,26 +1,68 @@
-From: =?UTF-8?Q?makowski.pawel?= <makowski.pawel@o2.pl>
-Date: Tue, 07 Jan 2014 14:25:31 +0100
-Subject: [Buildroot] =?utf-8?q?New_Kernel_Module?=
-Message-ID: <6d75f7d2.479c831d.52cc004b.8b1f5@o2.pl>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Tue, 7 Jan 2014 08:48:37 -0500
+Subject: [Buildroot] [PATCH] libdmtx: add license information
+In-Reply-To: <20140107053558.GE4503@tarshish>
+References: <1389024846-17491-1-git-send-email-fhunleth@troodon-software.com>
+ <20140107053558.GE4503@tarshish>
+Message-ID: <CA+-urNTa1LZ-95nFPNN=PMMChMNPSqE3zj64DZLix2TqrXhgTg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello everyone,
-I'm trying to add a new kernel module. In my ?understanding, the best way to do that is to add it into the Sample?Kernel Code?section in Kernel configuration (linux-menuconfig). I performe following steps:
-&gt; 1. I put?an example?c file with well know hello_world example?to?/output/build/linux_xyz/samples/mykmod directory.
-&gt; 2. I create Makefile for it: obj-$(CONFIG_SAMPLE_MYKMOD) += mykmod.o
-&gt; 3. I add the new section to KConfig in samples directory.
-?
-When I run the make linux-menuconfig a new module is visible. So, I check it to the build.
-After issued the make command there is visible that my module is built.
-I download Kernel image and RootFs to the target and I can't find the?module file.
-Where can I find this file ? How can I menage this module ?
---
-Regards/Pozdrawiam
-Pawe? Makowski
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140107/c667c8e5/attachment-0001.html>
+Hi Baruch,
+
+On Tue, Jan 7, 2014 at 12:35 AM, Baruch Siach <baruch@tkos.co.il> wrote:
+>
+> Hi Frank,
+>
+> On Mon, Jan 06, 2014 at 11:14:06AM -0500, Frank Hunleth wrote:
+> > Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+> > ---
+> >  package/libdmtx/libdmtx.mk | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/package/libdmtx/libdmtx.mk b/package/libdmtx/libdmtx.mk
+> > index 69c7b88..43b35ec 100644
+> > --- a/package/libdmtx/libdmtx.mk
+> > +++ b/package/libdmtx/libdmtx.mk
+> > @@ -6,6 +6,8 @@
+> >
+> >  LIBDMTX_VERSION = 0.7.4
+> >  LIBDMTX_SITE = http://downloads.sourceforge.net/project/libdmtx/libdmtx/$(LIBDMTX_VERSION)
+> > +LIBDMTX_LICENSE = BSD-2c or Commercial license
+> > +LIBDMTX_LICENSE_FILES = LICENSE
+>
+> The "alternate terms" section in the LICENSE file states:
+>
+> > Redistributions in binary form, with or without modification, are permitted
+> > without including the above copyright notice, list of conditions, and
+> > disclaimer if express written permission has been obtained from Dragonfly
+> > Logic, Inc.
+>
+> I wouldn't call this written permission a "commercial license", but IANAL.
+
+Yeah, I almost called it "alternate terms", but that felt too vague.
+It seemed like most other packages used the words "commercial license"
+when you could contact the author/company to get out of open source
+license obligations. However, if there's some other language that
+better describes this, then I'll certainly modify the patch. I just
+don't know what those words are.
+
+Thanks,
+Frank
+
+>
+> baruch
+>
+> >  LIBDMTX_INSTALL_STAGING = YES
+> >
+> >  $(eval $(autotools-package))
+> > --
+> > 1.8.3.2
+>
+> --
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+> =}------------------------------------------------ooO--U--Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
