@@ -1,68 +1,26 @@
-From: Mike Zick <minimod@morethan.org>
-Date: Tue, 7 Jan 2014 07:17:52 -0600
-Subject: [Buildroot] [PATCH v10 8/8] Makefile: update comment about
- top-level parallel Makefile
-In-Reply-To: <CAHkwnC-7A=vf1fQ6HNxqRtxpfLuKz3fDWh68Ea_EEpVakzXH9w@mail.gmail.com>
-References: <1387363007-19846-1-git-send-email-fabio.porcedda@gmail.com>
- <1387363007-19846-9-git-send-email-fabio.porcedda@gmail.com>
- <52B32EBD.3000202@mind.be>
- <CAHkwnC8fQE+XVB_1EixH2ZXX=bxO=+DZ68yH4e6oLTm1NTedEA@mail.gmail.com>
- <52B466C8.2000200@mind.be>
- <CAHkwnC-7A=vf1fQ6HNxqRtxpfLuKz3fDWh68Ea_EEpVakzXH9w@mail.gmail.com>
-Message-ID: <20140107071752.65e91042@core2quad.morethan.org>
+From: =?UTF-8?Q?makowski.pawel?= <makowski.pawel@o2.pl>
+Date: Tue, 07 Jan 2014 14:25:31 +0100
+Subject: [Buildroot] =?utf-8?q?New_Kernel_Module?=
+Message-ID: <6d75f7d2.479c831d.52cc004b.8b1f5@o2.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 7 Jan 2014 11:05:52 +0100
-Fabio Porcedda <fabio.porcedda@gmail.com> wrote:
-
-> This is the fixed comment:
-> 
-> # Parallel execution of this Makefile is disabled because it changes
-> # the packages building order, that can be a problem when a package
-> # has an unspecified optional dependency, because if that dependency
-> # is present when the package is built, it is used, otherwise it isn't
-> # (but compilation happily proceeds). This means that the packages
-> # building order is relevant in that case, and the end result will
-> # differ if the order is swapped due to parallel building.  Also
-> # changing the building order can be a problem if two packages
-> # manipulate the same file in the target directory.
-> # Taking into account the above warnings, if you still want to execute
-> # this top-level Makefile in parallel comment the following line and
-> # execute:
-> #    make BR2_JLEVEL= -j$((`getconf _NPROCESSORS_ONLN`+1))
-> 
-> Regards
->
-
-Been a silent reader for years here now, but I just must make a
-suggestion:
-
-# Parallel execution of this top-level Makefile is disabled.
-#
-# Single execution is forced here for two reasons:
-#
-# Maintaining reproducible builds:
-# Packages with an unspecified, optional, dependency could
-# otherwise change the build order among multiple builds.
-#
-# Prevent file modification collisions:
-# This can happen if two packages manipulate the same file.
-#
-# After taking into account the above considerations;
-# If you still want to execute this top-level Makefile in 
-# parallel, comment out the following line and then execute:
-#    make BR2_JLEVEL= -j$((`getconf _NPROCESSORS_ONLN`+1))
-
-Just clarify which line is "the following line" in the context
-of this comment. 
-
-Add styling to first line of each paragraph to match the context.
-
-- - - -
-
-I will return now to my read-only mode.
-Mike
+Hello everyone,
+I'm trying to add a new kernel module. In my ?understanding, the best way to do that is to add it into the Sample?Kernel Code?section in Kernel configuration (linux-menuconfig). I performe following steps:
+&gt; 1. I put?an example?c file with well know hello_world example?to?/output/build/linux_xyz/samples/mykmod directory.
+&gt; 2. I create Makefile for it: obj-$(CONFIG_SAMPLE_MYKMOD) += mykmod.o
+&gt; 3. I add the new section to KConfig in samples directory.
+?
+When I run the make linux-menuconfig a new module is visible. So, I check it to the build.
+After issued the make command there is visible that my module is built.
+I download Kernel image and RootFs to the target and I can't find the?module file.
+Where can I find this file ? How can I menage this module ?
+--
+Regards/Pozdrawiam
+Pawe? Makowski
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140107/c667c8e5/attachment-0001.html>
