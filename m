@@ -1,59 +1,68 @@
-From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Tue, 7 Jan 2014 15:11:16 +0100
-Subject: [Buildroot] [pkg-luarocks infra V4 02/10] luajit: allow to
- build Lua extensions without lua
-In-Reply-To: <20131222182356.6ab0d7ed@skate>
-References: <1384520859-3189-1-git-send-email-francois.perrad@gadz.org>
- <1384520859-3189-2-git-send-email-francois.perrad@gadz.org>
- <20131222182356.6ab0d7ed@skate>
-Message-ID: <CAB0FRsvz8TZAm3NUkf6nsR12uB1ypVYnwiq+ZDpD--xo0uG64w@mail.gmail.com>
+From: Matthew Weber <mlweber1@rockwellcollins.com>
+Date: Tue, 7 Jan 2014 08:15:04 -0600
+Subject: [Buildroot] [PATCH 1/1] python-posix-ipc: new package
+In-Reply-To: <20140107141723.0d5b6f4c@skate>
+References: <1389043097-30018-1-git-send-email-mlweber1@rockwellcollins.com>
+ <20140107141723.0d5b6f4c@skate>
+Message-ID: <OF6343FCB9.35517AA9-ON86257C59.004D5C27-86257C59.004E48DB@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2013/12/22 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
-> Dear Francois Perrad,
->
-> On Fri, 15 Nov 2013 14:07:31 +0100, Francois Perrad wrote:
->>
->> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
->> ---
->>  package/luajit/luajit-05-install-inc.patch |   17 +++++++++++++++++
->>  1 file changed, 17 insertions(+)
->>  create mode 100644 package/luajit/luajit-05-install-inc.patch
->
-> I don't understand what are the consequence of this patch or why it is
-> needed. Could you expand the commit log a little bit?
->
+Hi Thomas,
 
-A Lua native module, like LuaFileSystem, needs the Lua includes at compile time.
-Both lua package and luajit package supply these files.
-The lua package installs them in /usr/include, and luafilesystem, like
-other Lua modules, expects them at this place.
-In LuaJIT upstream, these files are installed
-/usr/include/luajit-2.0.2 in order to not override the Lua ones if
-they are already installed.
-Before the introduction of virtual package luainterpreter,
-luafilesystem depends on lua package.
-Now, it depends on luainterpreter. When luainterpreter is supplied by
-luajit, the include from LuaJIT must be installed in the same place as
-Lua one's.
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote on 01/07/2014 
+12:17:23 AM:
 
-So, the patch luajit-05-install-inc.patch contains the comment :
-"Install includes like lua's ones"
+> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> To: Matt Weber <mlweber1@rockwellcollins.com>
+> Cc: buildroot at busybox.net
+> Date: 01/07/2014 12:17 AM
+> Subject: Re: [Buildroot] [PATCH 1/1] python-posix-ipc: new package
+> 
+> Dear Matt Weber,
+> 
+> On Mon, 6 Jan 2014 15:18:17 -0600, Matt Weber wrote:
+> 
+> > diff --git a/package/python-posix-ipc/Config.in b/package/python-
+> posix-ipc/Config.in
+> > new file mode 100644
+> > index 0000000..2fbc7a7
+> > --- /dev/null
+> > +++ b/package/python-posix-ipc/Config.in
+> > @@ -0,0 +1,10 @@
+> > +config BR2_PACKAGE_PYTHON_POSIX_IPC
+> > +   bool "python-posix-ipc"
+> > +   depends on BR2_PACKAGE_PYTHON
+> 
+> I see #include <pthread.h> in the C code of the module, so maybe this
+> Python module should depend on BR2_TOOLCHAIN_HAS_THREADS?
 
-Fran?ois
+Good catch, that would make sense as it's using mutex and lock 
+functionality.
 
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> > +PYTHON_POSIX_IPC_VERSION = 0.9.6
+> > +PYTHON_POSIX_IPC_SOURCE = 
+posix_ipc-$(PYTHON_POSIX_IPC_VERSION).tar.gz
+> > +PYTHON_POSIX_IPC_SITE = http://semanchuk.com/philip/posix_ipc/
+> > +PYTHON_POSIX_IPC_LICENSE = BSD-2c
+> 
+> License is BSD-3c, not BSD-2c.
+
+Ok, he had the link to the BSD-2c (
+http://opensource.org/licenses/bsd-license.php)
+on his website.  However since the source actually had BSD-3c 
+and is more restrictive, I'll update to that.
+
+> 
+> > +PYTHON_POSIX_IPC_LICENSE_FILES = LICENSE
+> > +PYTHON_POSIX_IPC_SETUP_TYPE = distutils
+> 
+> Other than that, looks good to me (but I haven't tested).
+
+Thanks!
+Matt Weber
+mlweber1 at rockwellcollins.com
