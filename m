@@ -1,34 +1,30 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 Jan 2014 21:33:34 +0100
-Subject: [Buildroot] [git commit] udev: mention dependancy on inotify
-Message-ID: <20140107203417.C734D9BEF5@busybox.osuosl.org>
+From: Bryce Schober <bryce.schober@gmail.com>
+Date: Tue, 7 Jan 2014 12:43:41 -0800
+Subject: [Buildroot] Why is sysroot under i686-buildroot-linux-gnu?
+In-Reply-To: <20140107144553.15c189a4@skate>
+References: <CAJpxd07vs10v6uhOe3=_a=Rj-40x+Q8yWh0cK+YbTnP1HdzLTw@mail.gmail.com>
+ <20140104222832.7a8dab5b@skate>
+ <CAJpxd06=L5uMVHm2ZH2u5iRvB1CbRYQiJcaNfEheeNk-pqWc+w@mail.gmail.com>
+ <20140107144553.15c189a4@skate>
+Message-ID: <CAJpxd048a0Yw7HhO3kh5Sc7opQPiOncNzUhgSLR3JuEXgvOiuQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7b8d3147c7108a448f3c5960d72b48cfe94401d7
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, Jan 6, 2014 at 10:45 PM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
 
-[Peter: wrap help text]
-Signed-off-by: J??r??my Rosen <jeremy.rosen@openwide.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/udev/Config.in |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+> Ok, I think I see what you mean. Can you test the following patch and
+> see if it fixes the problem for you?
+>
 
-diff --git a/package/udev/Config.in b/package/udev/Config.in
-index 91dc7cf..7aa79c4 100644
---- a/package/udev/Config.in
-+++ b/package/udev/Config.in
-@@ -11,7 +11,8 @@ config BR2_PACKAGE_UDEV
- 	help
- 	  Userspace device daemon.
- 
--	  udev requires a Linux kernel >= 2.6.34: it relies on devtmpfs.
-+	  udev requires a Linux kernel >= 2.6.34: it relies on devtmpfs
-+	  and inotify.
- 
- 	  ftp://ftp.kernel.org/pub/linux/utils/kernel/hotplug/
- 
+I don't see how it could, at least not as I was thinking, since
+STAGING_SUBDIR still uses $(GNU_TARGET_NAME)...
+
+<><  <><  <><
+Bryce Schober
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140107/1a7e98e8/attachment-0001.html>
