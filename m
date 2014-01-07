@@ -1,48 +1,65 @@
-From: Bryce Schober <bryce.schober@gmail.com>
-Date: Tue, 7 Jan 2014 15:00:45 -0800
-Subject: [Buildroot] mesa3d autoreconfigure problem
-In-Reply-To: <3kvtpaxsi3.ln2@ID-313208.user.individual.net>
-References: <CAJpxd07aYbSX=Lxc48y+3=GvTp5rujcZNPfp+gOaX_6bf5Z-jA@mail.gmail.com>
- <CAJpxd07F14_pk7k+AEqaoUAjv_QgB1uaxnoHHtO5twd3nSKsRw@mail.gmail.com>
- <3kvtpaxsi3.ln2@ID-313208.user.individual.net>
-Message-ID: <CAJpxd06nTVtqK2c1=yNBHjiWbdCu2HUuQEZ4G9sBjKhxNoAwiw@mail.gmail.com>
+From: Peter Sanford <psanford@nearbuysystems.com>
+Date: Tue, 7 Jan 2014 15:07:18 -0800
+Subject: [Buildroot] command line regular expression substitution fails
+In-Reply-To: <52CC7292.306@alcatel-lucent.com>
+References: <52CC7292.306@alcatel-lucent.com>
+Message-ID: <CAOkaJuVFmrrfda=vG-+06vJp7_jJvhnCAzJy8RJKZ8BxE6XKWA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jan 7, 2014 at 11:02 AM, Bernd Kuhls <berndkuhls@hotmail.com> wrote:
->
+Hi Ed,
+
+I've run into this issue on a different SOC. In my case the problem was my
+target architecture variant was set to one newer than what my cpu actually
+was.
+
+I stopped looking into the problem after I discovered this, so I don't have
+a good understanding of *why* it failed in this manner.
+
+If you can send the buildroot config and more details about your SOC that
+might help.
+
+Good luck,
+
+-psanford
+
+
+On Tue, Jan 7, 2014 at 1:33 PM, Ed Sutter <ed.sutter@alcatel-lucent.com>wrote:
+
 > Hi,
+> I'm using buildroot for the first time to set up rootfs on an iMX6
+> based platform.  I've been debugging a startup issue and just realized
+> that the the line...
 >
-> efforts are currently underway to update mesa3d to 9.x and later 10.x, so it
-> would be a good idea to just sit and wait ;)
-
-Yeah, I noticed that... Do you have a guess for when that might land?
-
-For the time being, the following patch seems to work for me now. Why
-it does is a mystery to me, because if I replace MESA3D_VERSION with
-FOO_BAR_BAZAAR, it "works" equally well.
-
---- a/configure.ac
-+++ b/configure.ac
-@@ -4,9 +4,9 @@
-
- dnl Versioning - scrape the version from configs/default
- m4_define([mesa_version],
--    [m4_esyscmd([${MAKE-make} -s -f bin/version.mk version | tr -d
-'\n' | tr -d '\r'])])
-+    [m4_default_nblank([MESA3D_VERSION],[m4_esyscmd([${MAKE-make} -s
--f bin/version.mk version | tr -d '\n' | tr -d '\r'])])])
- m4_ifval(mesa_version,,
--    [m4_fatal([Failed to get the Mesa version from `make -f
-bin/version.mk version`])])
-+    [m4_fatal([Failed to get the Mesa version from MESA3D_VERSION or
-`make -f bin/version.mk version`])])
-
- dnl Tell the user about autoconf.html in the --help output
- m4_divert_once([HELP_END], [
-
-<><  <><  <><
-Bryce Schober
+> >
+> >for i in /etc/init.d/S??* ;do
+> >
+> in /etc/init.d/rcS is failing because "S??*" is not being replaced by
+> the files that match that expression.  Then I just tried doing something
+> simple on the command line...
+>
+> >
+> >#  ls /bin/m*
+> >ls: /bin/m* : No such file or directory
+> >
+>
+> and I see that fails as well.  I'm guessing this is some kind of busybox
+> configuration (regex/readline/etc..) issue, but since I got it all through
+> buildroot,
+> I figured I'd try here first.
+> Any ideas?
+> Thanks in advance,
+> Ed
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140107/7075123e/attachment.html>
