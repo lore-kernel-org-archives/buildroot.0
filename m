@@ -1,44 +1,33 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Tue,  7 Jan 2014 11:29:20 +0100
-Subject: [Buildroot] [PATCH 2/3] network-manager: fix DHCP clients detection.
+Date: Tue,  7 Jan 2014 11:29:21 +0100
+Subject: [Buildroot] [PATCH 3/3] network-manager: bump to version 0.9.8.2
 In-Reply-To: <1389090561-32196-1-git-send-email-eric.le.bihan.dev@free.fr>
 References: <1389090561-32196-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <1389090561-32196-3-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <1389090561-32196-4-git-send-email-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If either dhclient or dhcpcd are selected, network-manager is now
-configured with the proper paths.
-
-This allows 'dhcp=dhclient' or 'dhcp=dhcpcd' to be set in
-/etc/NetworkManager/NetworkManager.conf.
 
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- package/network-manager/network-manager.mk |    8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/network-manager/network-manager.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-index 7c9cc88..e847f25 100644
+index e847f25..cd8b528 100644
 --- a/package/network-manager/network-manager.mk
 +++ b/package/network-manager/network-manager.mk
-@@ -34,6 +34,14 @@ NETWORK_MANAGER_CONF_OPT = \
- 		--disable-ifupdown \
- 		--disable-ifnet
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_DHCP_CLIENT),y)
-+NETWORK_MANAGER_CONF_OPT += --with-dhclient=/usr/sbin/dhclient
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DHCPCD),y)
-+NETWORK_MANAGER_CONF_OPT += --with-dhcpcd=/usr/sbin/dhcpcd
-+endif
-+
- # uClibc by default doesn't have backtrace support, so don't use it
- ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
- NETWORK_MANAGER_CONF_OPT += --disable-crashtrace
+ NETWORK_MANAGER_VERSION_MAJOR = 0.9
+-NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).8.0
++NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).8.2
+ NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+ NETWORK_MANAGER_SITE = http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
+ NETWORK_MANAGER_INSTALL_STAGING = YES
 -- 
 1.7.9.5
