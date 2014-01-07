@@ -1,10 +1,10 @@
 From: Matthew Weber <mlweber1@rockwellcollins.com>
-Date: Tue, 7 Jan 2014 08:15:04 -0600
-Subject: [Buildroot] [PATCH 1/1] python-posix-ipc: new package
-In-Reply-To: <20140107141723.0d5b6f4c@skate>
-References: <1389043097-30018-1-git-send-email-mlweber1@rockwellcollins.com>
- <20140107141723.0d5b6f4c@skate>
-Message-ID: <OF6343FCB9.35517AA9-ON86257C59.004D5C27-86257C59.004E48DB@rockwellcollins.com>
+Date: Tue, 7 Jan 2014 08:16:59 -0600
+Subject: [Buildroot] [PATCH v2] added python unicode selection to menu
+In-Reply-To: <20140107132316.1b79f953@skate>
+References: <1389043062-29826-1-git-send-email-mlweber1@rockwellcollins.com>
+ <20140107132316.1b79f953@skate>
+Message-ID: <OF20FA0FD3.D2194933-ON86257C59.004E4CE8-86257C59.004E75C7@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,56 +13,39 @@ To: buildroot@busybox.net
 
 Hi Thomas,
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote on 01/07/2014 
-12:17:23 AM:
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote on 01/06/2014 
+11:23:16 PM:
 
 > From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > To: Matt Weber <mlweber1@rockwellcollins.com>
 > Cc: buildroot at busybox.net
-> Date: 01/07/2014 12:17 AM
-> Subject: Re: [Buildroot] [PATCH 1/1] python-posix-ipc: new package
+> Date: 01/06/2014 11:23 PM
+> Subject: Re: [Buildroot] [PATCH v2] added python unicode selection to 
+menu
 > 
 > Dear Matt Weber,
 > 
-> On Mon, 6 Jan 2014 15:18:17 -0600, Matt Weber wrote:
+> On Mon, 6 Jan 2014 15:17:42 -0600, Matt Weber wrote:
 > 
-> > diff --git a/package/python-posix-ipc/Config.in b/package/python-
-> posix-ipc/Config.in
-> > new file mode 100644
-> > index 0000000..2fbc7a7
-> > --- /dev/null
-> > +++ b/package/python-posix-ipc/Config.in
-> > @@ -0,0 +1,10 @@
-> > +config BR2_PACKAGE_PYTHON_POSIX_IPC
-> > +   bool "python-posix-ipc"
-> > +   depends on BR2_PACKAGE_PYTHON
+> > +# Default is UCS2 w/o a conf opt
+> > +ifeq ($(BR2_PACKAGE_PYTHON_UCS4),y)
+> > +HOST_PYTHON_CONF_OPT += --enable-unicode=ucs4
+> > +PYTHON_CONF_OPT      += --enable-unicode=ucs4
+> > +endif
 > 
-> I see #include <pthread.h> in the C code of the module, so maybe this
-> Python module should depend on BR2_TOOLCHAIN_HAS_THREADS?
+> Why is the selection of UCS4 for the target tied to the usage of UCS4
+> on the host?
 
-Good catch, that would make sense as it's using mutex and lock 
-functionality.
-
-> 
-> > +PYTHON_POSIX_IPC_VERSION = 0.9.6
-> > +PYTHON_POSIX_IPC_SOURCE = 
-posix_ipc-$(PYTHON_POSIX_IPC_VERSION).tar.gz
-> > +PYTHON_POSIX_IPC_SITE = http://semanchuk.com/philip/posix_ipc/
-> > +PYTHON_POSIX_IPC_LICENSE = BSD-2c
-> 
-> License is BSD-3c, not BSD-2c.
-
-Ok, he had the link to the BSD-2c (
-http://opensource.org/licenses/bsd-license.php)
-on his website.  However since the source actually had BSD-3c 
-and is more restrictive, I'll update to that.
-
-> 
-> > +PYTHON_POSIX_IPC_LICENSE_FILES = LICENSE
-> > +PYTHON_POSIX_IPC_SETUP_TYPE = distutils
-> 
-> Other than that, looks good to me (but I haven't tested).
+No specific reason, other then we couldn't come up with a case
+where you could want the host different from the target.
 
 Thanks!
 Matt Weber
 mlweber1 at rockwellcollins.com
+
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
