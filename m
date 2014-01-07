@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  7 Jan 2014 23:46:06 +0100
-Subject: [Buildroot] [PATCH 3/5] package/tzdata: install a default localtime
+Date: Tue,  7 Jan 2014 23:46:05 +0100
+Subject: [Buildroot] [PATCH 2/5] toolchain/external: fix wrapper by not
+	passing conflicting flags
 In-Reply-To: <cover.1389134731.git.yann.morin.1998@free.fr>
 References: <cover.1389134731.git.yann.morin.1998@free.fr>
-Message-ID: <d33faa4dcebfdac0f304495fcdac3db1f31c791d.1389134731.git.yann.morin.1998@free.fr>
+Message-ID: <5d0fbb9b1f4439750dde9bb7788b273ec94a3bd5.1389134731.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,55 +13,104 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Add an option to install a default localtime.
+In our wrapper, we forcibly add the -march=, -mcpu= and-mtune= flags
+to the actual copmpiler, this in an attempt to always generate correct
+and optimised code for the target.
 
-since tzdata only makes sense for (e)glibc, we don't care
-that we install timezone files that uClibc can't understand.
+But in some cases, the caller knows better than we do, and passes its
+own set, or subset of those flags. In this case, some may conflict with
+the ones we pass. The most prominent offender being the Linux kernel.
+
+For example, on the ARM Rapsberry Pi, the Linux kernel will set the
+-march=armv6 flag and no -mcpu= flag, but we pass -mcpu=arm1176jzf-s,
+which conflicts:
+
+    drivers/scsi/scsi_trace.c:1:0: warning: switch -mcpu=arm1176jzf-s
+    conflicts with -march=armv6 switch
+
+(and so for all the files the kernel compiles, pretty messy)
+(note: arm1176jzf-s is not an armv6, it is an armv6zk. Yeah...)
+
+To avoid this situation, we scan our commandline for any occurence of
+the possibly conflicting flags. If none is found, then we add our owns.
+If any is found, then we don't add any of our owns.
+
+The idea behind this is that we trust the caller to know better than
+we do what it is doing. Since the biggest, and sole so far, offender
+is the Linux kernel, then this is a rather safe bet.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
- package/tzdata/Config.in | 10 ++++++++++
- package/tzdata/tzdata.mk |  8 +++++++-
- 2 files changed, 17 insertions(+), 1 deletion(-)
+ .../toolchain-external/ext-toolchain-wrapper.c     | 41 ++++++++++++++++------
+ 1 file changed, 31 insertions(+), 10 deletions(-)
 
-diff --git a/package/tzdata/Config.in b/package/tzdata/Config.in
-index 1be6814..c0ede1f 100644
---- a/package/tzdata/Config.in
-+++ b/package/tzdata/Config.in
-@@ -23,4 +23,14 @@ config BR2_PACKAGE_TZDATA_ZONELIST
- 	  The full list is the list of files in the time zone database source,
- 	  not including the build and .tab files.
+diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+index d54f1f5..81c6ed1 100644
+--- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
++++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+@@ -30,21 +30,17 @@ static char sysroot[PATH_MAX];
+  * that we only pass the predefined one to the real compiler if the inverse
+  * option isn't in the argument list.
+  * This specifies the worst case number of extra arguments we might pass
++ * Currently, we have:
++ * 	-mfloat-abi=
++ * 	-march=
++ * 	-mtune=
++ * 	-mcpu=
+  */
+-#define EXCLUSIVE_ARGS	1
++#define EXCLUSIVE_ARGS	4
  
-+config BR2_PACKAGE_TZDATA_LOCALTIME
-+	string "default local time"
-+	help
-+	  The time zone to install as the default local time, expressed as a
-+	  tzdata location, such as:
-+	    GMT, Europe/Paris, America/New_York, Pacific/Wallis...
-+
-+	  If empty, no local time will be set, and the dates will be
-+	  expressed in UTC.
-+
- endif
-diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
-index 1cb5b3f..74263e1 100644
---- a/package/tzdata/tzdata.mk
-+++ b/package/tzdata/tzdata.mk
-@@ -39,8 +39,14 @@ define TZDATA_INSTALL_TARGET_CMDS
- 	cp -a $(@D)/_output/* $(TARGET_DIR)/usr/share/zoneinfo
- 	cd $(TARGET_DIR)/usr/share/zoneinfo;    \
- 	for zone in posix/*; do                 \
--	    ln -sfn "$${zone}" "$${zone##*/}";    \
-+	    ln -sfn "$${zone}" "$${zone##*/}";  \
- 	done
-+	if [ -n "$(BR2_PACKAGE_TZDATA_LOCALTIME)" ]; then                   \
-+	    cd $(TARGET_DIR)/etc;                                           \
-+	    ln -sf ../usr/share/zoneinfo/$(BR2_PACKAGE_TZDATA_LOCALTIME)    \
-+	           localtime;                                               \
-+	    echo "$(BR2_PACKAGE_TZDATA_LOCALTIME)" >timezone;               \
-+	fi
- endef
+ static char *predef_args[] = {
+ 	path,
+ 	"--sysroot", sysroot,
+-#ifdef BR_ARCH
+-	"-march=" BR_ARCH,
+-#endif /* BR_ARCH */
+-#ifdef BR_TUNE
+-	"-mtune=" BR_TUNE,
+-#endif /* BR_TUNE */
+-#ifdef BR_CPU
+-	"-mcpu=" BR_CPU,
+-#endif
+ #ifdef BR_ABI
+ 	"-mabi=" BR_ABI,
+ #endif
+@@ -157,6 +153,31 @@ int main(int argc, char **argv)
+ 		*cur++ = "-mfloat-abi=" BR_FLOAT_ABI;
+ #endif
  
- $(eval $(generic-package))
++#if defined(BR_ARCH) || \
++    defined(BR_TUNE) || \
++    defined(BR_CPU)
++	/* Add our -march/cpu/tune/abi flags, but only if none are
++	 * already specified on the commandline
++	 */
++	for (i = 1; i < argc; i++) {
++		if (!strncmp(argv[i], "-march=", strlen("-march=")) ||
++		    !strncmp(argv[i], "-mtune=", strlen("-mtune=")) ||
++		    !strncmp(argv[i], "-mcpu=",  strlen("-mcpu=" )))
++			break;
++	}
++	if (i == argc) {
++#ifdef BR_ARCH
++		*cur++ = "-march=" BR_ARCH;
++#endif
++#ifdef BR_TUNE
++		*cur++ = "-mtune=" BR_TUNE;
++#endif
++#ifdef BR_CPU
++		*cur++ = "-mcpu=" BR_CPU;
++#endif
++	}
++#endif /* ARCH || TUNE || CPU */
++
+ 	/* append forward args */
+ 	memcpy(cur, &argv[1], sizeof(char *) * (argc - 1));
+ 	cur += argc - 1;
 -- 
 1.8.1.2
