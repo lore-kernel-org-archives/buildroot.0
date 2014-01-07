@@ -1,25 +1,31 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Tue, 7 Jan 2014 11:52:30 +0000
-Subject: [Buildroot] [PATCH] vlc: new package
-In-Reply-To: <20140107115103.GA4659@sapphire.tkos.co.il>
-References: <1389046142-12472-1-git-send-email-spdawson@gmail.com>
- <20140107033917.GD4503@tarshish>
- <CAHt8ZCP=Xicy5PWy7rd_i-YfwPO0KjV5imeKacOSwg0fWMtmLw@mail.gmail.com>
- <20140107115103.GA4659@sapphire.tkos.co.il>
-Message-ID: <CAHt8ZCP5X4nOWCN0ewjMbj4Uajfi37PSSn0MVVKfqpAHsB_2fg@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue,  7 Jan 2014 12:19:52 +0000 (UTC)
+Subject: [Buildroot] [Bug 65] new package: dbus c++ language bindings
+In-Reply-To: <bug-65-163@https.bugs.busybox.net/>
+References: <bug-65-163@https.bugs.busybox.net/>
+Message-ID: <20140107121952.6FF4C9C35D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
+https://bugs.busybox.net/show_bug.cgi?id=65
 
-On 7 January 2014 11:51, Baruch Siach <baruch@tkos.co.il> wrote:
-> This was added with uClibc commit 0dcf66744f53 (librt: add posix_spawn
-> support), which is only in the snapshot version. I think you may add
-> BR2_UCLIBC_VERSION_SNAPSHOT to the dependency list.
+Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
 
-Ah, right. Thanks for the information.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|ASSIGNED                    |RESOLVED
+         Resolution|                            |FIXED
 
-Simon.
+--- Comment #5 from Gustavo Zacarias <gustavo@zacarias.com.ar> 2014-01-07 12:19:52 UTC ---
+After some long long time http://www.freedesktop.org/wiki/Software/dbus-cpp/
+(maintained it seems, release tarballs, recommended) was added to buildroot in
+commit 74922ba73785c56165910cda0c835514866cf2bc for the upcoming 2014.02.
+Thanks.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
