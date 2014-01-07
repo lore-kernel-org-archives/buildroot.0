@@ -1,46 +1,35 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Tue,  7 Jan 2014 11:29:18 +0100
-Subject: [Buildroot] [PATCH 0/3] network-manager: fix DHCP support.
-Message-ID: <1389090561-32196-1-git-send-email-eric.le.bihan.dev@free.fr>
+Date: Tue,  7 Jan 2014 11:29:19 +0100
+Subject: [Buildroot] [PATCH 1/3] dhcpcd: install dhcpcd as /usr/sbin/dhcpcd.
+In-Reply-To: <1389090561-32196-1-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1389090561-32196-1-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <1389090561-32196-2-git-send-email-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch series fixes DHCP support for NetworkManager.
+GNU/Linux distributions usually install dhcpcd in /usr/sbin.
+NetworkManager will look for it in this directory.
 
-The DHCP client used by NetworkManager can be configured in the "[main]"
-section of /etc/NetworkManager/NetworkManager.conf either as:
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+---
+ package/dhcpcd/dhcpcd.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-  dhcp=dhclient
-
-or
-
-  dhcp=dhcpcd
-
-The support for either client is enabled by the './configure' script. When
-network-manager was built, the instance of the client installed on the
-development machine was detected and its location used. Most of the time,
-this resulted in dhclient being the only choice...
-
-This patch series:
-
-- installs dhcpcd in the proper directory.
-- configures network-manager according to the DHCP client package selected.
-- bumps network-manager to its latest version.
-
-Best regards,
-ELB
-
-Eric Le Bihan (3):
-  dhcpcd: install dhcpcd as /usr/sbin/dhcpcd.
-  network-manager: fix DHCP clients detection.
-  network-manager: bump to version 0.9.8.2
-
- package/dhcpcd/dhcpcd.mk                   |    2 +-
- package/network-manager/network-manager.mk |   10 +++++++++-
- 2 files changed, 10 insertions(+), 2 deletions(-)
-
---
+diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
+index 8037706..01ced3a 100644
+--- a/package/dhcpcd/dhcpcd.mk
++++ b/package/dhcpcd/dhcpcd.mk
+@@ -32,7 +32,7 @@ endef
+ 
+ define DHCPCD_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 0755 $(@D)/dhcpcd \
+-		$(TARGET_DIR)/usr/bin/dhcpcd
++		$(TARGET_DIR)/usr/sbin/dhcpcd
+ 	$(INSTALL) -D -m 0644 $(@D)/dhcpcd.conf \
+ 		$(TARGET_DIR)/etc/dhcpcd.conf
+ 	$(INSTALL) -D -m 0755 $(@D)/dhcpcd-run-hooks \
+-- 
 1.7.9.5
