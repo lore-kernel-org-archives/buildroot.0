@@ -1,30 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Jan 2014 13:23:16 +0800
-Subject: [Buildroot] [PATCH v2] added python unicode selection to menu
-In-Reply-To: <1389043062-29826-1-git-send-email-mlweber1@rockwellcollins.com>
-References: <1389043062-29826-1-git-send-email-mlweber1@rockwellcollins.com>
-Message-ID: <20140107132316.1b79f953@skate>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 7 Jan 2014 07:35:58 +0200
+Subject: [Buildroot] [PATCH] libdmtx: add license information
+In-Reply-To: <1389024846-17491-1-git-send-email-fhunleth@troodon-software.com>
+References: <1389024846-17491-1-git-send-email-fhunleth@troodon-software.com>
+Message-ID: <20140107053558.GE4503@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Matt Weber,
+Hi Frank,
 
-On Mon, 6 Jan 2014 15:17:42 -0600, Matt Weber wrote:
+On Mon, Jan 06, 2014 at 11:14:06AM -0500, Frank Hunleth wrote:
+> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+> ---
+>  package/libdmtx/libdmtx.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/libdmtx/libdmtx.mk b/package/libdmtx/libdmtx.mk
+> index 69c7b88..43b35ec 100644
+> --- a/package/libdmtx/libdmtx.mk
+> +++ b/package/libdmtx/libdmtx.mk
+> @@ -6,6 +6,8 @@
+>  
+>  LIBDMTX_VERSION = 0.7.4
+>  LIBDMTX_SITE = http://downloads.sourceforge.net/project/libdmtx/libdmtx/$(LIBDMTX_VERSION)
+> +LIBDMTX_LICENSE = BSD-2c or Commercial license
+> +LIBDMTX_LICENSE_FILES = LICENSE
 
-> +# Default is UCS2 w/o a conf opt
-> +ifeq ($(BR2_PACKAGE_PYTHON_UCS4),y)
-> +HOST_PYTHON_CONF_OPT += --enable-unicode=ucs4
-> +PYTHON_CONF_OPT      += --enable-unicode=ucs4
-> +endif
+The "alternate terms" section in the LICENSE file states:
 
-Why is the selection of UCS4 for the target tied to the usage of UCS4
-on the host?
+> Redistributions in binary form, with or without modification, are permitted 
+> without including the above copyright notice, list of conditions, and  
+> disclaimer if express written permission has been obtained from Dragonfly 
+> Logic, Inc.
 
-Thomas
+I wouldn't call this written permission a "commercial license", but IANAL.
+
+baruch
+
+>  LIBDMTX_INSTALL_STAGING = YES
+>  
+>  $(eval $(autotools-package))
+> -- 
+> 1.8.3.2
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
