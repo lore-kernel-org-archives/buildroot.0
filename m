@@ -1,29 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 07 Jan 2014 21:24:08 +0100
-Subject: [Buildroot] [PATCH 0/8] Update more xorg packages
-In-Reply-To: <BLU0-SMTP34C682EA8AFD076C66C8C5D9B70@phx.gbl> (Bernd Kuhls's
- message of "Mon, 6 Jan 2014 21:40:03 +0100")
-References: <BLU0-SMTP34C682EA8AFD076C66C8C5D9B70@phx.gbl>
-Message-ID: <87lhyrwnfb.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 7 Jan 2014 21:16:50 +0100
+Subject: [Buildroot] [git commit] xorg: Bump xlib_libFS to version 1.0.5
+Message-ID: <20140107202441.A5B2E9C3BB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <berndkuhls@hotmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=62407766bb68b2572c5852fd37c82696ac2451e7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Bernd Kuhls (8):
- >   xorg: Bump xlib_libFS to version 1.0.5
- >   xorg: Bump xlib_libXaw to version 1.0.12
- >   xorg: Bump xlib_libXcursor to version 1.1.14
- >   xorg: Bump xlib_libXpm to version 3.5.11
- >   xorg: Bump xlib_libXres to version 1.0.7
- >   xorg: Bump xlib_libXv to version 1.0.10
- >   xorg: Bump xlib_libXxf86dga to version 1.1.4
- >   xorg: Bump xlib_libdmx to version 1.1.3
+thanks to Jerzy Grzegorek for the hint
 
-Committed series, thanks.
+Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/x11r7/xlib_libFS/xlib_libFS.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/x11r7/xlib_libFS/xlib_libFS.mk b/package/x11r7/xlib_libFS/xlib_libFS.mk
+index c8ca83e..d7b5118 100644
+--- a/package/x11r7/xlib_libFS/xlib_libFS.mk
++++ b/package/x11r7/xlib_libFS/xlib_libFS.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XLIB_LIBFS_VERSION = 1.0.4
++XLIB_LIBFS_VERSION = 1.0.5
+ XLIB_LIBFS_SOURCE = libFS-$(XLIB_LIBFS_VERSION).tar.bz2
+ XLIB_LIBFS_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBFS_LICENSE = MIT
