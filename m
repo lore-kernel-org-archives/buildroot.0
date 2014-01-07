@@ -1,43 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Jan 2014 23:52:09 +0800
-Subject: [Buildroot] New Kernel Module
-In-Reply-To: <6d75f7d2.479c831d.52cc004b.8b1f5@o2.pl>
-References: <6d75f7d2.479c831d.52cc004b.8b1f5@o2.pl>
-Message-ID: <20140107235209.1a53413a@skate>
+From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Rosen?= <jeremy.rosen@openwide.fr>
+Date: Tue,  7 Jan 2014 17:22:07 +0100
+Subject: [Buildroot] [PATCH] prevent recursion in %_defconfig rules
+Message-ID: <1389111727-11021-1-git-send-email-jeremy.rosen@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pawel,
+Signed-off-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
 
-On Tue, 07 Jan 2014 14:25:31 +0100, makowski.pawel wrote:
+---
+The following command, run from a clean buildroot checkout
 
-> &gt; 1. I put?an example?c file with well know hello_world example?to?/output/build/linux_xyz/samples/mykmod directory.
+make O=.. BR2_EXTERNAL=.. raspberrypi_defconfig
 
-Don't do this. output/build is a temporary directory created only for
-the duration of the build. The next time you will do "make clean", it
-will be completely removed, and you will loose your changes.
+cause the following output, and makes stop :
 
-Doing changes in output/build is OK is those are just for quickly
-testing if a change fixes something. But any sort of development should
-*NOT* be done by changing stuff in output/build.
 
-> &gt; 2. I create Makefile for it: obj-$(CONFIG_SAMPLE_MYKMOD) += mykmod.o
-> &gt; 3. I add the new section to KConfig in samples directory.
-> ?
-> When I run the make linux-menuconfig a new module is visible. So, I check it to the build.
-> After issued the make command there is visible that my module is built.
-> I download Kernel image and RootFs to the target and I can't find the?module file.
-> Where can I find this file ? How can I menage this module ?
+make: *** Pas de r?gle pour fabriquer la cible ? /home/rosen/tmp/buildroot/
+configs/../configs/../configs/../configs/<lots more >/../configs/
+raspberrypi_defconfig ?, n?cessaire pour ? /home/rosen/tmp/buildroot/
+configs/../configs/../configs/<lots more>/../configs/
+raspberrypi_defconfig ?. Arr?t.
 
-Check in output/target/lib/modules/<version>/ if it is there.
+The problem is that the buildroot makefile has two rules to generate
+%_defconfig: One that depends on $(TOPDIR)/configs/%_defconfig and the
+other one that depends on $(BR2_EXTERNAL)/configs/%_defconfig.
 
-Best regards,
+When one rule checks for the file, the other rule becomes an implicit rule
+for the dependancy causing an infinite cross-recursion.
 
-Thomas
+By overriding the implicit rule, we prevent the infinite recursion.
+---
+ Makefile | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/Makefile b/Makefile
+index 4320e7b..41d641c 100644
+--- a/Makefile
++++ b/Makefile
+@@ -760,10 +760,14 @@ defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+ 	@$(COMMON_CONFIG_ENV) $< --defconfig=$(TOPDIR)/configs/$@ $(CONFIG_CONFIG_IN)
+ 
++$(TOPDIR)/configs/%_defconfig:;
++
+ %_defconfig: $(BUILD_DIR)/buildroot-config/conf $(BR2_EXTERNAL)/configs/%_defconfig outputmakefile
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+ 	@$(COMMON_CONFIG_ENV) $< --defconfig=$(BR2_EXTERNAL)/configs/$@ $(CONFIG_CONFIG_IN)
+ 
++$(BR2_EXTERNAL)/configs/%_defconfig:;
++
+ savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+ 	@$(COMMON_CONFIG_ENV) $< \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.5.2
