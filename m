@@ -1,33 +1,48 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 07 Jan 2014 23:49:21 +0100
-Subject: [Buildroot] [PATCH v3 1/1] minidlna: bump version to 1.1.1
-In-Reply-To: <BLU0-SMTP1012F758793A211AEB40D12D9CA0@phx.gbl> (Bernd Kuhls's
- message of "Fri, 3 Jan 2014 21:20:45 +0100")
-References: <BLU0-SMTP1012F758793A211AEB40D12D9CA0@phx.gbl>
-Message-ID: <87d2k3wgpa.fsf@dell.be.48ers.dk>
+From: Bryce Schober <bryce.schober@gmail.com>
+Date: Tue, 7 Jan 2014 15:00:45 -0800
+Subject: [Buildroot] mesa3d autoreconfigure problem
+In-Reply-To: <3kvtpaxsi3.ln2@ID-313208.user.individual.net>
+References: <CAJpxd07aYbSX=Lxc48y+3=GvTp5rujcZNPfp+gOaX_6bf5Z-jA@mail.gmail.com>
+ <CAJpxd07F14_pk7k+AEqaoUAjv_QgB1uaxnoHHtO5twd3nSKsRw@mail.gmail.com>
+ <3kvtpaxsi3.ln2@ID-313208.user.individual.net>
+Message-ID: <CAJpxd06nTVtqK2c1=yNBHjiWbdCu2HUuQEZ4G9sBjKhxNoAwiw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <berndkuhls@hotmail.com> writes:
+On Tue, Jan 7, 2014 at 11:02 AM, Bernd Kuhls <berndkuhls@hotmail.com> wrote:
+>
+> Hi,
+>
+> efforts are currently underway to update mesa3d to 9.x and later 10.x, so it
+> would be a good idea to just sit and wait ;)
 
- > - remove all patches needed for pre-autotools minidlna release
- > - convert .mk file to autotools-package
- > - disable broken static build
+Yeah, I noticed that... Do you have a guess for when that might land?
 
-It doesn't seem too hard to fix, but ok - I can look into that later.
+For the time being, the following patch seems to work for me now. Why
+it does is a mystery to me, because if I replace MESA3D_VERSION with
+FOO_BAR_BAZAAR, it "works" equally well.
 
- > -MINIDLNA_VERSION = 1.0.26
- > +MINIDLNA_VERSION = 1.1.1
- >  MINIDLNA_SITE = http://downloads.sourceforge.net/project/minidlna/minidlna/$(MINIDLNA_VERSION)
- >  MINIDLNA_LICENSE = GPLv2 BSD-3c
- >  MINIDLNA_LICENSE_FILES = LICENCE LICENCE.miniupnpd
+--- a/configure.ac
++++ b/configure.ac
+@@ -4,9 +4,9 @@
 
-The GPLv2 license file got renamed to COPYING.
+ dnl Versioning - scrape the version from configs/default
+ m4_define([mesa_version],
+-    [m4_esyscmd([${MAKE-make} -s -f bin/version.mk version | tr -d
+'\n' | tr -d '\r'])])
++    [m4_default_nblank([MESA3D_VERSION],[m4_esyscmd([${MAKE-make} -s
+-f bin/version.mk version | tr -d '\n' | tr -d '\r'])])])
+ m4_ifval(mesa_version,,
+-    [m4_fatal([Failed to get the Mesa version from `make -f
+bin/version.mk version`])])
++    [m4_fatal([Failed to get the Mesa version from MESA3D_VERSION or
+`make -f bin/version.mk version`])])
 
-Committed with that fixed, thanks.
+ dnl Tell the user about autoconf.html in the --help output
+ m4_divert_once([HELP_END], [
 
--- 
-Bye, Peter Korsgaard
+<><  <><  <><
+Bryce Schober
