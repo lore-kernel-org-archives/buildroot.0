@@ -1,41 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Jan 2014 06:23:44 +0800
-Subject: [Buildroot] [git commit] udev: mention dependancy on inotify
-In-Reply-To: <20140107203417.C734D9BEF5@busybox.osuosl.org>
-References: <20140107203417.C734D9BEF5@busybox.osuosl.org>
-Message-ID: <20140108062344.362a979d@skate>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue,  7 Jan 2014 23:46:05 +0100
+Subject: [Buildroot] [PATCH 0/5] Misc accumulated changes
+Message-ID: <cover.1389134731.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-On Tue, 7 Jan 2014 21:33:34 +0100, Peter Korsgaard wrote:
+Hello All!
 
-> -	  udev requires a Linux kernel >= 2.6.34: it relies on devtmpfs.
-> +	  udev requires a Linux kernel >= 2.6.34: it relies on devtmpfs
-> +	  and inotify.
+Here is a small series with a few un-assorted fixes for the toolchain
+wrapper and for graph-depends, a cleanup in the system sub-menu for
+/etc/{hostname,issue}, a new package, and a blurb in the manual about
+dealing efficiently with very large files.
 
-Then, maybe we need something like:
+Regards,
+Yann E. MORIN.
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index fa8aa0c..ab25fe9 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -185,6 +185,8 @@ define LINUX_CONFIGURE_CMDS
-                $(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(@D)/.config))
-        $(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),
-                $(call KCONFIG_SET_OPT,CONFIG_UEVENT_HELPER_PATH,\"/sbin/mdev\",$(@D)/.config))
-+       $(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV),
-+               $(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER,$(@D)/.config))
-        $(if $(BR2_PACKAGE_KTAP),
-                $(call KCONFIG_ENABLE_OPT,CONFIG_DEBUG_FS,$(@D)/.config)
-                $(call KCONFIG_ENABLE_OPT,CONFIG_EVENT_TRACING,$(@D)/.config)
 
-Thomas
+----------------------------------------------------------------
+Sagaert Johan (1):
+      system: default to empty issue/hostname for custom skeleton
+
+Yann E. MORIN (4):
+      Makefile: support running graph-depends from out-of-tree
+      toolchain/external: fix wrapper by not passing conflicting flags
+      package/tzdata: install a default localtime
+      manual: add section about dealing efficiently with big image files
+
+ Makefile                                           |  3 +-
+ docs/manual/common-usage.txt                       | 39 ++++++++++++++++++++
+ package/pkg-generic.mk                             |  3 +-
+ package/tzdata/Config.in                           | 10 ++++++
+ package/tzdata/tzdata.mk                           |  8 ++++-
+ system/Config.in                                   | 32 ++++++++++-------
+ .../toolchain-external/ext-toolchain-wrapper.c     | 41 ++++++++++++++++------
+ 7 files changed, 111 insertions(+), 25 deletions(-)
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
