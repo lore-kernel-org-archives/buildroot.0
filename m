@@ -1,41 +1,93 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 7 Jan 2014 09:44:33 +0000
-Subject: [Buildroot] [PATCH] dtc: broken for static builds
-Message-ID: <1389087873-40458-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Tue, 7 Jan 2014 11:05:52 +0100
+Subject: [Buildroot] [PATCH v10 8/8] Makefile: update comment about
+	top-level parallel Makefile
+In-Reply-To: <52B466C8.2000200@mind.be>
+References: <1387363007-19846-1-git-send-email-fabio.porcedda@gmail.com>
+ <1387363007-19846-9-git-send-email-fabio.porcedda@gmail.com>
+ <52B32EBD.3000202@mind.be>
+ <CAHkwnC8fQE+XVB_1EixH2ZXX=bxO=+DZ68yH4e6oLTm1NTedEA@mail.gmail.com>
+ <52B466C8.2000200@mind.be>
+Message-ID: <CAHkwnC-7A=vf1fQ6HNxqRtxpfLuKz3fDWh68Ea_EEpVakzXH9w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-dtc package has hardcoded shared lib link options in the Makefile, so it
-will fail if you try to build it on a static lib environment.
+On Fri, Dec 20, 2013 at 4:48 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 20/12/13 14:56, Fabio Porcedda wrote:
+>>
+>> On Thu, Dec 19, 2013 at 6:37 PM, Arnout Vandecappelle<arnout@mind.be>
+>> wrote:
+>>>
+>>> >On 18/12/13 11:36, Fabio Porcedda wrote:
+>>>>
+>>>> >>
+>>>> >>After the latest patches top-level parallel Makefile is working but
+>>>> >>there is still an issue when a package has an unspecified optional
+>>>> >>dependency so change the comment to explain that.
+>>>> >>
+>>>> >>Signed-off-by: Fabio Porcedda<fabio.porcedda@gmail.com>
+>>>> >>---
+>>>> >>   Makefile | 15 ++++++++++++++-
+>>>> >>   1 file changed, 14 insertions(+), 1 deletion(-)
+>>>> >>
+>>>> >>diff --git a/Makefile b/Makefile
+>>>> >>index ef2582e..27a6a65 100644
+>>>> >>--- a/Makefile
+>>>> >>+++ b/Makefile
+>>>> >>@@ -42,7 +42,20 @@ export HOSTARCH := $(shell uname -m | \
+>>>> >>             -e s/macppc/powerpc/\
+>>>> >>             -e s/sh.*/sh/)
+>>>> >>
+>>>> >>-# This top-level Makefile can*not*  be executed in parallel
+>>>>
+>>>> >>+# Parallel execution of this Makefile is disabled because it could
+>>>> >>+# change the build result if a package has an unspecified optional
+>>>> >>+# dependency.
+>>>
+>>> >
+>>> >
+>>> >  ... or if two packages manipulate the same file in the target
+>>> > directory.
+>>
+>> Ok, added.
+>>
+>>> >
+>>>>
+>>>> >>+# Parallel execution changes the packages building order, that can be
+>>>> >>+# a problem when a package has an unspecified optional dependency,
+>>>> >>+# because if that dependency is present when the package is built, it
+>>>> >>+# is used, otherwise it isn't (but compilation happily proceeds).
+>>>> >> This
+>>>
+>>> >
+>>> >
+>>> >  This is a repeat of the first sentence.
+>>
+>> So i just remove it?
+>>
+>
+>  Probably better to remove the first sentence, the second one is more
+> descriptive.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/dtc/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+This is the fixed comment:
 
-diff --git a/package/dtc/Config.in b/package/dtc/Config.in
-index fac6ab2..aa9f2b1 100644
---- a/package/dtc/Config.in
-+++ b/package/dtc/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_DTC
- 	bool "dtc (libfdt)"
-+	depends on !BR2_PREFER_STATIC_LIB
- 	help
- 	  The Device Tree Compiler, dtc, takes as input a device-tree in
- 	  a given format and outputs a device-tree in another format.
-@@ -9,6 +10,9 @@ config BR2_PACKAGE_DTC
- 
- 	  http://git.jdl.com/gitweb/?p=dtc.git  (no home page)
- 
-+comment "dtc needs a toolchain w/ dynamic library"
-+	depends on BR2_PREFER_STATIC_LIB
-+
- if BR2_PACKAGE_DTC
- 
- config BR2_PACKAGE_DTC_PROGRAMS
+# Parallel execution of this Makefile is disabled because it changes
+# the packages building order, that can be a problem when a package
+# has an unspecified optional dependency, because if that dependency
+# is present when the package is built, it is used, otherwise it isn't
+# (but compilation happily proceeds). This means that the packages
+# building order is relevant in that case, and the end result will
+# differ if the order is swapped due to parallel building.  Also
+# changing the building order can be a problem if two packages
+# manipulate the same file in the target directory.
+# Taking into account the above warnings, if you still want to execute
+# this top-level Makefile in parallel comment the following line and
+# execute:
+#    make BR2_JLEVEL= -j$((`getconf _NPROCESSORS_ONLN`+1))
+
+Regards
 -- 
-1.7.1
+Fabio Porcedda
