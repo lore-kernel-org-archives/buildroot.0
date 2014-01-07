@@ -1,37 +1,25 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 7 Jan 2014 19:44:07 +0100
-Subject: [Buildroot] [PATCH 00/36] Update xorg packages
-In-Reply-To: <d0fspaxp79.ln2@ID-313208.user.individual.net>
-References: <BLU0-SMTP322F0B0DA043619A8E91DA1D9B50@phx.gbl>
- <52CA9400.4050307@trzebnica.net>
- <nghrpaxv56.ln2@ID-313208.user.individual.net>
- <20140106210455.GB3383@free.fr>
- <d0fspaxp79.ln2@ID-313208.user.individual.net>
-Message-ID: <20140107184407.GA31819@free.fr>
+From: Bernd Kuhls <berndkuhls@hotmail.com>
+Date: Tue, 07 Jan 2014 20:02:59 +0100
+Subject: [Buildroot] mesa3d autoreconfigure problem
+References: <CAJpxd07aYbSX=Lxc48y+3=GvTp5rujcZNPfp+gOaX_6bf5Z-jA@mail.gmail.com>
+ <CAJpxd07F14_pk7k+AEqaoUAjv_QgB1uaxnoHHtO5twd3nSKsRw@mail.gmail.com>
+Message-ID: <3kvtpaxsi3.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2014-01-07 06:13 +0100, Bernd Kuhls spake thusly:
-> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote in 
-> news:20140106210455.GB3383 at free.fr:
-> 
-> > Bernd: Maxime also has some work on-going about adding XBMC to
-> > Buildroot.
-> 
-> this repo? https://github.com/maximeh/buildroot/tree/xbmc
+Bryce Schober <bryce.schober@gmail.com>
+wrote in
+news:CAJpxd07F14_pk7k+AEqaoUAjv_QgB1uaxnoHHtO5twd3nSKsRw at mail.gmail.com: 
 
-Yes, it looks like it. Maxime?
+> What's the best way forward here? I know next to nothing about
+> autoconf... 
 
-Regards,
-Yann E. MORIN.
+Hi,
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+efforts are currently underway to update mesa3d to 9.x and later 10.x, so it 
+would be a good idea to just sit and wait ;)
+
+Regards, Bernd
