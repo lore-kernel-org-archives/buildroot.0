@@ -1,84 +1,89 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  7 Jan 2014 23:46:07 +0100
-Subject: [Buildroot] [PATCH 4/5] system: default to empty issue/hostname for
-	custom skeleton
+Date: Tue,  7 Jan 2014 23:46:08 +0100
+Subject: [Buildroot] [PATCH 5/5] manual: add section about dealing
+	efficiently with big image files
 In-Reply-To: <cover.1389134731.git.yann.morin.1998@free.fr>
 References: <cover.1389134731.git.yann.morin.1998@free.fr>
-Message-ID: <cffd411631d99ddd729f0e29888b0fb14941889a.1389134731.git.yann.morin.1998@free.fr>
+Message-ID: <976b993986ff075f38067792121ac0a443cd6369.1389134731.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Sagaert Johan <sagaert.johan@skynet.be>
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-A custom skeleton may include /etc/issue and/or /etc/hostname, in
-which case we do not want to override them.
+As reported by Ryan, it is not well-known that most tools can deal
+efficiently with big sparse files.
 
-But those files could also be missing from the custom skeleton, or
-the user may want to override their content.
+Add a section in the manual about this, with tar and cp used as
+examples, and a hinting to the man pages for the others.
 
-Make the current default value for isue and hostname depend on the
-generic skeleton, and default to empty for a custom skeleton.
-
-Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
-[yann.morin.1998 at free.fr: change from hiding it behind SKELETON_DEFAULT
-    to use conditional default values; move below the skeleton choice;
-    improve help entries]
+Reported-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- system/Config.in | 32 ++++++++++++++++++++------------
- 1 file changed, 20 insertions(+), 12 deletions(-)
+Cc: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 
-diff --git a/system/Config.in b/system/Config.in
-index 54c196c..4bdd610 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -1,17 +1,5 @@
- menu "System configuration"
- 
--config BR2_TARGET_GENERIC_HOSTNAME
--	string "System hostname"
--	default "buildroot"
--	help
--	  Select system hostname to be stored in /etc/hostname.
--
--config BR2_TARGET_GENERIC_ISSUE
--	string "System banner"
--	default "Welcome to Buildroot"
--	help
--	  Select system banner (/etc/issue) to be displayed at login.
--
- choice
- 	bool "Passwords encoding"
- 	default BR2_TARGET_GENERIC_PASSWD_MD5
-@@ -179,6 +167,26 @@ config BR2_ROOTFS_SKELETON_CUSTOM_PATH
- 	  Path custom target skeleton.
- endif
- 
-+config BR2_TARGET_GENERIC_HOSTNAME
-+	string "System hostname"
-+	default "buildroot" if BR2_ROOTFS_SKELETON_DEFAULT
-+	default ""          if ! BR2_ROOTFS_SKELETON_DEFAULT
-+	help
-+	  Select system hostname to be stored in /etc/hostname.
+---
+changes v2 -> v3:
+  - fix typo  (Thomas DS)
+  - better phrasing to direct the reader to the man pages  (Thomas DS)
+
+changes v1 -> v2:
+  - remove 'dd' since it can be dangerous  (Peter)
+  - add a sentence that sparse files are to be used only on the build
+    machine, not while transferring to the target device  (Peter)
+---
+ docs/manual/common-usage.txt | 39 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+
+diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
+index c7e4568..1d15c05 100644
+--- a/docs/manual/common-usage.txt
++++ b/docs/manual/common-usage.txt
+@@ -104,3 +104,42 @@ or +g+++ for building helper-binaries on your host, then do
+ --------------------
+  $ make HOSTCXX=g++-4.3-HEAD HOSTCC=gcc-4.3-HEAD
+ --------------------
 +
-+	  Leave empty to not create /etc/hostname, or to keep the
-+	  one from a custom skeleton.
++Dealing efficiently with filesystem images
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 +
-+config BR2_TARGET_GENERIC_ISSUE
-+	string "System banner"
-+	default "Welcome to Buildroot" if BR2_ROOTFS_SKELETON_DEFAULT
-+	default ""                     if ! BR2_ROOTFS_SKELETON_DEFAULT
-+	help
-+	  Select system banner (/etc/issue) to be displayed at login.
++Filesystem images can get pretty big, depending on the filesystem you choose,
++the number of packages, whether you provisioned free space... Yet, some
++locations in the filesystems images may just be _empty_ (eg. a long run of
++'zeroes'); such a file is called a _sparse_ file.
 +
-+	  Leave empty to not create /etc/issue, or to keep the
-+	  one from a custom skeleton.
++Most tools can handle sparse files efficiently, and will only store or write
++those parts of a sparse file that are not empty.
 +
- if BR2_ROOTFS_SKELETON_DEFAULT
- 
- config BR2_TARGET_GENERIC_ROOT_PASSWD
++For example:
++
++* +tar+ accepts the +-S+ option to tell it to only store non-zero blocks
++  of sparse files:
++** +tar cf archive.tar -S [files...]+ will efficiently store sparse files
++   in a tarball
++** +tar xf archive.tar -S+ will efficiently store sparse files extracted
++   from a tarball
++
++* +cp+ accepts the +--sparse=WHEN+ option (+WHEN+ is one of +auto+,
++  +never+ or +always+):
++** +cp --sparse=always source.file dest.file+ will make +dest.file+ a
++   sparse file if +source.file+ has long runs of zeroes
++
++Other tools may have similar options. Please consult their respective man
++pages.
++
++You can use sparse files if you need to store the filesystem images (eg.
++to transfer from one machine to another), of if you need to send them (eg.
++to the Q&A team).
++
++Note however that flashing a filesystem image to a device while using the
++sparse mode of +dd+ may result in a broken filesystem (eg. the block bitmap
++of an ext2 filesystem may be corrupted; or, if you have sparse files in
++your filesystem, those parts may not be all-zeroes when read back). You
++should only use sparse files when handling files on the build machine, not
++when transferring them to an actual device that will be used on the target.
 -- 
 1.8.1.2
