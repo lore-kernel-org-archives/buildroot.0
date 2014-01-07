@@ -1,98 +1,37 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Tue,  7 Jan 2014 20:29:50 +0000
-Subject: [Buildroot] [PATCH 1/1] ca-certificates: new package
-Message-ID: <1389126590-25956-1-git-send-email-martin@barkynet.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 07 Jan 2014 21:34:07 +0100
+Subject: [Buildroot] [PATCH] udev : mention dependancy on inotify
+In-Reply-To: <1389091869-13609-1-git-send-email-jeremy.rosen@openwide.fr>
+ (=?utf-8?B?IkrDqXLDqW15?= Rosen"'s message of "Tue, 7 Jan 2014 11:51:09
+ +0100")
+References: <1389091869-13609-1-git-send-email-jeremy.rosen@openwide.fr>
+Message-ID: <87ha9fwmyo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CA certificates used for SSL based applications.  The package installs CA
-certificates to /usr/share/ca-certificates and creates symbolic links under
-/etc/ssl/certs.  For example, the existing libcurl package will use these
-certificates for https urls.  Based on the debian ca-certifcates package.
+>>>>> "J?r?my" == J?r?my Rosen <jeremy.rosen@openwide.fr> writes:
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
----
- package/Config.in                          |    1 +
- package/ca-certificates/Config.in          |    9 +++++++
- package/ca-certificates/ca-certificates.mk |   39 ++++++++++++++++++++++++++++
- 3 files changed, 49 insertions(+)
- create mode 100644 package/ca-certificates/Config.in
- create mode 100644 package/ca-certificates/ca-certificates.mk
+ > Signed-off-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
+ > ---
+ >  package/udev/Config.in | 2 +-
+ >  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index e502cde..28ad4f4 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -471,6 +471,7 @@ endmenu
+ > diff --git a/package/udev/Config.in b/package/udev/Config.in
+ > index 91dc7cf..d915d24 100644
+ > --- a/package/udev/Config.in
+ > +++ b/package/udev/Config.in
+ > @@ -11,7 +11,7 @@ config BR2_PACKAGE_UDEV
+ >  	help
+ >  	  Userspace device daemon.
  
- menu "Crypto"
- source "package/beecrypt/Config.in"
-+source "package/ca-certificates/Config.in"
- source "package/cryptodev/Config.in"
- source "package/gnutls/Config.in"
- source "package/libassuan/Config.in"
-diff --git a/package/ca-certificates/Config.in b/package/ca-certificates/Config.in
-new file mode 100644
-index 0000000..0e52bc1
---- /dev/null
-+++ b/package/ca-certificates/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_CA_CERTIFICATES
-+    bool "CA Certificates"
-+    help
-+      This package includes PEM files of CA certificates to allow
-+      SSL-based applications to check for the authenticity of SSL
-+      connections.
-+
-+      It includes, among others, certificate authorities used by the
-+      Debian infrastructure and those shipped with Mozilla's browsers.
-diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
-new file mode 100644
-index 0000000..1035d2f
---- /dev/null
-+++ b/package/ca-certificates/ca-certificates.mk
-@@ -0,0 +1,39 @@
-+################################################################################
-+#
-+# ca-certificates
-+#
-+################################################################################
-+
-+CA_CERTIFICATES_VERSION = 20130906
-+CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.gz
-+CA_CERTIFICATES_SITE = ftp://ftp.debian.org/debian/pool/main/c/ca-certificates
-+CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python
-+CA_CERTIFICATES_LICENSE = GPLv2+ MPLv2.0
-+CA_CERTIFICATES_LICENSE_FILES = debian/copyright
-+
-+define CA_CERTIFICATES_BUILD_CMDS
-+    PATH=$(HOST_PATH) $(MAKE) -C $(@D) all
-+endef
-+
-+define CA_CERTIFICATES_INSTALL_TARGET_CMDS
-+    $(INSTALL) -d -m 0755 $(TARGET_DIR)/usr/share/ca-certificates
-+    $(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/ssl/certs
-+    $(MAKE) -C $(@D) install DESTDIR=$(TARGET_DIR)
-+    rm -f $(TARGET_DIR)/usr/sbin/update-ca-certificates
-+
-+    #remove any existing certificates under /etc/ssl/certs
-+    rm -f  $(TARGET_DIR)/etc/ssl/certs/*
-+
-+    #generate symlinks to certificates under /etc/ssl/certs
-+    ( \
-+      cd $(TARGET_DIR) ;\
-+      for i in `find usr/share/ca-certificates -name "*.crt"` ; do \
-+            ln -sf ../../../$$i etc/ssl/certs/`basename $${i%.crt}.pem` ;\
-+      done ;\
-+    )
-+
-+    #create symbolic links to the certificates by their hash values
-+    $(HOST_DIR)/usr/bin/c_rehash $(TARGET_DIR)/etc/ssl/certs
-+endef
-+
-+$(eval $(generic-package))
+ > -	  udev requires a Linux kernel >= 2.6.34: it relies on devtmpfs.
+ > +	  udev requires a Linux kernel >= 2.6.34: it relies on devtmpfs and inotify.
+
+Committed with the help text wrapped so it displays without scrolling,
+thanks.
+
 -- 
-1.7.9.5
+Bye, Peter Korsgaard
