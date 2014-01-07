@@ -1,52 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Jan 2014 08:37:23 +0800
-Subject: [Buildroot] [git commit] Makefile: expose 'graph-depends' to
- generate a graph of the dependency tree
-In-Reply-To: <20131229111620.90FC09C227@busybox.osuosl.org>
-References: <20131229111620.90FC09C227@busybox.osuosl.org>
-Message-ID: <20140107083723.2cc506c5@skate>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 7 Jan 2014 05:39:17 +0200
+Subject: [Buildroot] [PATCH] vlc: new package
+In-Reply-To: <1389046142-12472-1-git-send-email-spdawson@gmail.com>
+References: <1389046142-12472-1-git-send-email-spdawson@gmail.com>
+Message-ID: <20140107033917.GD4503@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+Hi Simon,
 
-On Sun, 29 Dec 2013 12:13:19 +0100, Thomas Petazzoni wrote:
-
-> Generate the graph of the complete dependency tree by calling:
->     make graph-depends
+On Mon, Jan 06, 2014 at 10:09:02PM +0000, spdawson at gmail.com wrote:
+> From: Simon Dawson <spdawson@gmail.com>
 > 
-> It's also possible to generate the graph-depends for a single package:
->     make PKG-graph-depends
+> Signed-off-by: Simon Dawson <spdawson@gmail.com>
+> ---
 
-I just tested this in an out-of-tree situation... and it doesn't work.
-It generates the dependency graph of the configuration that is in the
-Buildroot source tree (I happened to have one) and not the one of the
-Buildroot build tree.
+[...]
 
-To reproduce:
+> diff --git a/package/vlc/Config.in b/package/vlc/Config.in
+> new file mode 100644
+> index 0000000..83576e9
+> --- /dev/null
+> +++ b/package/vlc/Config.in
+> @@ -0,0 +1,12 @@
+> +config BR2_PACKAGE_VLC
+> +	bool "vlc"
+> +	depends on BR2_TOOLCHAIN_USES_GLIBC # spawn.h
 
-	cd buildroot-sources/
-	make menuconfig
-	# create some configuration 1
-	mkdir ../buildroot-build
-	cd ../buildroot-build
-	make -C ../buildroot-sources O=$(pwd) menuconfig
-	# create some configuration 2
-	make graph-depends
+My uClibc toolchain has spawn.h as well. Is this a specific feature that is 
+missing in uClibc?
 
-The generated graph will correspond to "configuration 1" and not the
-expected "configuration 2".
+> +	help
+> +	  VLC is a free and open source cross-platform multimedia player
+> +	  and framework that plays most multimedia files as well as DVD,
+> +	  Audio CD, VCD, and various streaming protocols.
+> +
+> +	  http://www.videolan.org/vlc/
+> +
+> +comment "vlc needs an (e)glibc toolchain"
+> +	depends on !BR2_TOOLCHAIN_USES_GLIBC
 
-I suspect it's a problem in the graph-depends script itself rather than
-the integration you made, but I haven't looked in detail.
+baruch
 
-Cheers,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
