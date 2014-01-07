@@ -1,51 +1,27 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 7 Jan 2014 05:39:17 +0200
-Subject: [Buildroot] [PATCH] vlc: new package
-In-Reply-To: <1389046142-12472-1-git-send-email-spdawson@gmail.com>
-References: <1389046142-12472-1-git-send-email-spdawson@gmail.com>
-Message-ID: <20140107033917.GD4503@tarshish>
+From: Bernd Kuhls <berndkuhls@hotmail.com>
+Date: Tue, 07 Jan 2014 06:13:17 +0100
+Subject: [Buildroot] [PATCH 00/36] Update xorg packages
+References: <BLU0-SMTP322F0B0DA043619A8E91DA1D9B50@phx.gbl>
+ <52CA9400.4050307@trzebnica.net>
+ <nghrpaxv56.ln2@ID-313208.user.individual.net>
+ <20140106210455.GB3383@free.fr>
+Message-ID: <d0fspaxp79.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Simon,
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote in 
+news:20140106210455.GB3383 at free.fr:
 
-On Mon, Jan 06, 2014 at 10:09:02PM +0000, spdawson at gmail.com wrote:
-> From: Simon Dawson <spdawson@gmail.com>
-> 
-> Signed-off-by: Simon Dawson <spdawson@gmail.com>
-> ---
+> Bernd: Maxime also has some work on-going about adding XBMC to
+> Buildroot.
 
-[...]
+Hi,
 
-> diff --git a/package/vlc/Config.in b/package/vlc/Config.in
-> new file mode 100644
-> index 0000000..83576e9
-> --- /dev/null
-> +++ b/package/vlc/Config.in
-> @@ -0,0 +1,12 @@
-> +config BR2_PACKAGE_VLC
-> +	bool "vlc"
-> +	depends on BR2_TOOLCHAIN_USES_GLIBC # spawn.h
+this repo? https://github.com/maximeh/buildroot/tree/xbmc
 
-My uClibc toolchain has spawn.h as well. Is this a specific feature that is 
-missing in uClibc?
+I will have a look at it.
 
-> +	help
-> +	  VLC is a free and open source cross-platform multimedia player
-> +	  and framework that plays most multimedia files as well as DVD,
-> +	  Audio CD, VCD, and various streaming protocols.
-> +
-> +	  http://www.videolan.org/vlc/
-> +
-> +comment "vlc needs an (e)glibc toolchain"
-> +	depends on !BR2_TOOLCHAIN_USES_GLIBC
-
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Regards, Bernd
