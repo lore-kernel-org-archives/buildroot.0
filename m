@@ -1,45 +1,104 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Jan 2014 14:17:23 +0800
-Subject: [Buildroot] [PATCH 1/1] python-posix-ipc: new package
-In-Reply-To: <1389043097-30018-1-git-send-email-mlweber1@rockwellcollins.com>
-References: <1389043097-30018-1-git-send-email-mlweber1@rockwellcollins.com>
-Message-ID: <20140107141723.0d5b6f4c@skate>
+Date: Tue, 7 Jan 2014 14:26:17 +0800
+Subject: [Buildroot] [PATCH] vlc: new package
+In-Reply-To: <1389046142-12472-1-git-send-email-spdawson@gmail.com>
+References: <1389046142-12472-1-git-send-email-spdawson@gmail.com>
+Message-ID: <20140107142617.64f53ddc@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Matt Weber,
+Simon,
 
-On Mon, 6 Jan 2014 15:18:17 -0600, Matt Weber wrote:
+On Mon,  6 Jan 2014 22:09:02 +0000, spdawson at gmail.com wrote:
 
-> diff --git a/package/python-posix-ipc/Config.in b/package/python-posix-ipc/Config.in
-> new file mode 100644
-> index 0000000..2fbc7a7
-> --- /dev/null
-> +++ b/package/python-posix-ipc/Config.in
-> @@ -0,0 +1,10 @@
-> +config BR2_PACKAGE_PYTHON_POSIX_IPC
-> +	bool "python-posix-ipc"
-> +	depends on BR2_PACKAGE_PYTHON
+> +ifeq ($(BR2_PACKAGE_ALSA_LIB),)
 
-I see #include <pthread.h> in the C code of the module, so maybe this
-Python module should depend on BR2_TOOLCHAIN_HAS_THREADS?
+Maybe we should use positive logic everywhere, no? I.e invert all the
+conditions to be:
 
-> +PYTHON_POSIX_IPC_VERSION = 0.9.6
-> +PYTHON_POSIX_IPC_SOURCE = posix_ipc-$(PYTHON_POSIX_IPC_VERSION).tar.gz
-> +PYTHON_POSIX_IPC_SITE = http://semanchuk.com/philip/posix_ipc/
-> +PYTHON_POSIX_IPC_LICENSE = BSD-2c
+ifeq ($(BR2_<foo>),y)
+  use the feature
+else
+  don't use the feature
+endif
 
-License is BSD-3c, not BSD-2c.
+> +ifeq ($(BR2_PACKAGE_LIVE555),)
+> +VLC_CONF_OPT += --disable-live555
+> +else
+> +VLC_CONF_OPT += --disable-live555
 
-> +PYTHON_POSIX_IPC_LICENSE_FILES = LICENSE
-> +PYTHON_POSIX_IPC_SETUP_TYPE = distutils
+This should be --enable-live555
 
-Other than that, looks good to me (but I haven't tested).
+> +VLC_DEPENDENCIES += live555
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_LUA),)
+> +VLC_CONF_OPT += --disable-lua
+> +else
+> +VLC_CONF_OPT += --disable-lua
 
-Thanks!
+Same mistake.
+
+> +VLC_DEPENDENCIES += lua
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_QT),)
+> +VLC_CONF_OPT += --disable-qt
+> +else
+> +VLC_CONF_OPT += --disable-qt
+
+Ditto.
+
+> +VLC_DEPENDENCIES += qt
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_SDL),)
+> +VLC_CONF_OPT += --disable-sdl
+> +else
+> +VLC_CONF_OPT += --disable-sdl
+
+Ditto.
+
+> +VLC_DEPENDENCIES += sdl
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_SDL_IMAGE),)
+> +VLC_CONF_OPT += --disable-sdl-image
+> +else
+> +VLC_CONF_OPT += --disable-sdl-image
+
+Ditto.
+
+> +VLC_DEPENDENCIES += sdl-image
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_SPEEX),)
+> +VLC_CONF_OPT += --disable-speex
+> +else
+> +VLC_CONF_OPT += --enable-speex
+> +VLC_DEPENDENCIES += speex
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_TREMOR),)
+> +VLC_CONF_OPT += --disable-tremor
+> +else
+> +VLC_CONF_OPT += --enable-tremor
+> +VLC_DEPENDENCIES += tremor
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_XLIB_LIBX11),)
+> +VLC_CONF_OPT += --without-x
+> +else
+> +VLC_CONF_OPT += --with-x
+> +VLC_DEPENDENCIES += xlib_libX11
+> +endif
+
+I wonder if this block shouldn't interact with the XCB block above.
+
+Best regards,
 
 Thomas
 -- 
