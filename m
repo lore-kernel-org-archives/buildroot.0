@@ -1,30 +1,24 @@
-From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Rosen?= <jeremy.rosen@openwide.fr>
-Date: Tue,  7 Jan 2014 11:51:09 +0100
-Subject: [Buildroot] [PATCH] udev : mention dependancy on inotify
-Message-ID: <1389091869-13609-1-git-send-email-jeremy.rosen@openwide.fr>
+From: Simon Dawson <spdawson@gmail.com>
+Date: Tue, 7 Jan 2014 11:17:14 +0000
+Subject: [Buildroot] [PATCH] vlc: new package
+In-Reply-To: <20140107033917.GD4503@tarshish>
+References: <1389046142-12472-1-git-send-email-spdawson@gmail.com>
+ <20140107033917.GD4503@tarshish>
+Message-ID: <CAHt8ZCP=Xicy5PWy7rd_i-YfwPO0KjV5imeKacOSwg0fWMtmLw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
----
- package/udev/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi Baruch. Thanks for the feedback.
 
-diff --git a/package/udev/Config.in b/package/udev/Config.in
-index 91dc7cf..d915d24 100644
---- a/package/udev/Config.in
-+++ b/package/udev/Config.in
-@@ -11,7 +11,7 @@ config BR2_PACKAGE_UDEV
- 	help
- 	  Userspace device daemon.
- 
--	  udev requires a Linux kernel >= 2.6.34: it relies on devtmpfs.
-+	  udev requires a Linux kernel >= 2.6.34: it relies on devtmpfs and inotify.
- 
- 	  ftp://ftp.kernel.org/pub/linux/utils/kernel/hotplug/
- 
--- 
-1.8.5.2
+On 7 January 2014 03:39, Baruch Siach <baruch@tkos.co.il> wrote:
+> My uClibc toolchain has spawn.h as well. Is this a specific feature that is
+> missing in uClibc?
+
+Are you sure that spawn.h is present? My uClibc 0.9.33.2 doesn't have
+it, and I can't see where it would come from... Apparently, the spawn
+function family is not currently supported in uClibc.
+
+Simon.
