@@ -1,33 +1,37 @@
-From: Bryce Schober <bryce.schober@gmail.com>
-Date: Tue, 7 Jan 2014 10:40:50 -0800
-Subject: [Buildroot] mesa3d autoreconfigure problem
-In-Reply-To: <CAJpxd07aYbSX=Lxc48y+3=GvTp5rujcZNPfp+gOaX_6bf5Z-jA@mail.gmail.com>
-References: <CAJpxd07aYbSX=Lxc48y+3=GvTp5rujcZNPfp+gOaX_6bf5Z-jA@mail.gmail.com>
-Message-ID: <CAJpxd07F14_pk7k+AEqaoUAjv_QgB1uaxnoHHtO5twd3nSKsRw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 7 Jan 2014 19:44:07 +0100
+Subject: [Buildroot] [PATCH 00/36] Update xorg packages
+In-Reply-To: <d0fspaxp79.ln2@ID-313208.user.individual.net>
+References: <BLU0-SMTP322F0B0DA043619A8E91DA1D9B50@phx.gbl>
+ <52CA9400.4050307@trzebnica.net>
+ <nghrpaxv56.ln2@ID-313208.user.individual.net>
+ <20140106210455.GB3383@free.fr>
+ <d0fspaxp79.ln2@ID-313208.user.individual.net>
+Message-ID: <20140107184407.GA31819@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This problem is much, much more generic than I first thought:
+On 2014-01-07 06:13 +0100, Bernd Kuhls spake thusly:
+> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote in 
+> news:20140106210455.GB3383 at free.fr:
+> 
+> > Bernd: Maxime also has some work on-going about adding XBMC to
+> > Buildroot.
+> 
+> this repo? https://github.com/maximeh/buildroot/tree/xbmc
 
-The autoreconfigure step of mesa3d will *always* fail if buildroot's make
-is ever called with from another directory, using the -C option. It looks
-like the mesa3d package's configure.ac is just not meant to handle this
-situation, at least not in the context of buildroot's infrastructure.
+Yes, it looks like it. Maxime?
 
-Their configure.ac uses this faulty dynamic method through
-8.0<http://cgit.freedesktop.org/mesa/mesa/tree/configure.ac?h=8.0>.
-In 9.x <http://cgit.freedesktop.org/mesa/mesa/tree/configure.ac?h=9.2>,
-they switched to a static version number. Then in
-10.0<http://cgit.freedesktop.org/mesa/mesa/tree/configure.ac>,
-they switched to a different method, including it from elsewhere.
+Regards,
+Yann E. MORIN.
 
-What's the best way forward here? I know next to nothing about autoconf...
-
-<><  <><  <><
-Bryce Schober
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140107/e641f69f/attachment-0001.html>
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
