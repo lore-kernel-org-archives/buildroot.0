@@ -1,57 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 Jan 2014 10:05:34 +0100
-Subject: [Buildroot] [git commit] xorg: Bump xdriver_xf86-video-intel
-	version to 2.99.907
-Message-ID: <20140107090604.D21F49C3AA@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 07 Jan 2014 10:23:31 +0100
+Subject: [Buildroot] [PATCH] grub: bump to 0.97-67
+In-Reply-To: <20140107163239.6999bd1c@skate> (Thomas Petazzoni's message of
+ "Tue, 7 Jan 2014 16:32:39 +0800")
+References: <1386191460-10848-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20140107163239.6999bd1c@skate>
+Message-ID: <874n5gxi0c.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4da14cd16bc0bd66443b2def7bc486dfc953d117
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-- enable sna support by default, disable unneeded stuff
-  ported from OpenELEC:
-  https://github.com/OpenELEC/OpenELEC.tv/blob/master/packages/x11/driver/xf86-video-intel/package.mk
+ > Hello,
+ > On Wed,  4 Dec 2013 22:11:00 +0100, Thomas Petazzoni wrote:
+ >> Bump to a more recent version of the Debian patches for grub legacy,
+ >> that fix an incorrect build with gcc 4.6.
+ >> 
+ >> Fixes #6092 and #2629.
+ >> 
+ >> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ >> ---
+ >> boot/grub/grub.200-fix_mbr_handling.patch     |   10 +-
+ >> boot/grub/grub.300-honor_UCLIBC_HAS_LFS.patch |   14 +-
+ >> boot/grub/grub.400-nic_update2.patch          | 3332 ++++---------------------
+ >> boot/grub/grub.mk                             |    6 +-
+ >> 4 files changed, 475 insertions(+), 2887 deletions(-)
 
-[Peter: drop Xtst dependency]
-Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../xdriver_xf86-video-intel.mk                    |   16 ++++++++++++++--
- 1 files changed, 14 insertions(+), 2 deletions(-)
+ > Any reason why this patch was never applied? Interestingly, I don't see
+ > it anymore in patchwork, but it wasn't applied either.
 
-diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-index 97fef99..332de54 100644
---- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-+++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-@@ -4,13 +4,25 @@
- #
- ################################################################################
- 
--XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.19.0
-+XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.907
- XDRIVER_XF86_VIDEO_INTEL_SOURCE = xf86-video-intel-$(XDRIVER_XF86_VIDEO_INTEL_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_INTEL_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_INTEL_LICENSE = MIT
- XDRIVER_XF86_VIDEO_INTEL_LICENSE_FILES = COPYING
- XDRIVER_XF86_VIDEO_INTEL_AUTORECONF = YES
--XDRIVER_XF86_VIDEO_INTEL_CONF_OPT = --enable-dri
-+
-+XDRIVER_XF86_VIDEO_INTEL_CONF_OPT = \
-+	--enable-dri \
-+	--enable-kms-only \
-+	--disable-xvmc \
-+	--disable-ums-only \
-+	--enable-sna \
-+	--disable-uxa \
-+	--disable-glamor \
-+	--disable-xaa \
-+	--disable-dga \
-+	--disable-async-swap
-+
- XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xproto libdrm xlib_libpciaccess
- 
- $(eval $(autotools-package))
+Odd, it must somehow have fallen between the crack ..
+
+ > Could it be applied?
+
+Sure, done - Thanks.
+
+-- 
+Bye, Peter Korsgaard
