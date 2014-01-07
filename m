@@ -1,87 +1,58 @@
-From: Mike Zick <minimod@morethan.org>
-Date: Tue, 7 Jan 2014 07:58:14 -0600
-Subject: [Buildroot] [PATCH] libdmtx: add license information
-In-Reply-To: <CA+-urNTa1LZ-95nFPNN=PMMChMNPSqE3zj64DZLix2TqrXhgTg@mail.gmail.com>
-References: <1389024846-17491-1-git-send-email-fhunleth@troodon-software.com>
- <20140107053558.GE4503@tarshish>
- <CA+-urNTa1LZ-95nFPNN=PMMChMNPSqE3zj64DZLix2TqrXhgTg@mail.gmail.com>
-Message-ID: <20140107075814.19ea98c9@core2quad.morethan.org>
+From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Tue, 7 Jan 2014 15:11:16 +0100
+Subject: [Buildroot] [pkg-luarocks infra V4 02/10] luajit: allow to
+ build Lua extensions without lua
+In-Reply-To: <20131222182356.6ab0d7ed@skate>
+References: <1384520859-3189-1-git-send-email-francois.perrad@gadz.org>
+ <1384520859-3189-2-git-send-email-francois.perrad@gadz.org>
+ <20131222182356.6ab0d7ed@skate>
+Message-ID: <CAB0FRsvz8TZAm3NUkf6nsR12uB1ypVYnwiq+ZDpD--xo0uG64w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 7 Jan 2014 08:48:37 -0500
-Frank Hunleth <fhunleth@troodon-software.com> wrote:
+2013/12/22 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+> Dear Francois Perrad,
+>
+> On Fri, 15 Nov 2013 14:07:31 +0100, Francois Perrad wrote:
+>>
+>> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+>> ---
+>>  package/luajit/luajit-05-install-inc.patch |   17 +++++++++++++++++
+>>  1 file changed, 17 insertions(+)
+>>  create mode 100644 package/luajit/luajit-05-install-inc.patch
+>
+> I don't understand what are the consequence of this patch or why it is
+> needed. Could you expand the commit log a little bit?
+>
 
-> Hi Baruch,
-> 
-> On Tue, Jan 7, 2014 at 12:35 AM, Baruch Siach <baruch@tkos.co.il>
-> wrote:
-> >
-> > Hi Frank,
-> >
-> > On Mon, Jan 06, 2014 at 11:14:06AM -0500, Frank Hunleth wrote:
-> > > Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
-> > > ---
-> > >  package/libdmtx/libdmtx.mk | 2 ++
-> > >  1 file changed, 2 insertions(+)
-> > >
-> > > diff --git a/package/libdmtx/libdmtx.mk
-> > > b/package/libdmtx/libdmtx.mk index 69c7b88..43b35ec 100644
-> > > --- a/package/libdmtx/libdmtx.mk
-> > > +++ b/package/libdmtx/libdmtx.mk
-> > > @@ -6,6 +6,8 @@
-> > >
-> > >  LIBDMTX_VERSION = 0.7.4
-> > >  LIBDMTX_SITE =
-> > > http://downloads.sourceforge.net/project/libdmtx/libdmtx/$(LIBDMTX_VERSION)
-> > > +LIBDMTX_LICENSE = BSD-2c or Commercial license
-> > > +LIBDMTX_LICENSE_FILES = LICENSE
-> >
-> > The "alternate terms" section in the LICENSE file states:
-> >
-> > > Redistributions in binary form, with or without modification, are
-> > > permitted without including the above copyright notice, list of
-> > > conditions, and disclaimer if express written permission has been
-> > > obtained from Dragonfly Logic, Inc.
-> >
-> > I wouldn't call this written permission a "commercial license", but
-> > IANAL.
-> 
-> Yeah, I almost called it "alternate terms", but that felt too vague.
-> It seemed like most other packages used the words "commercial license"
-> when you could contact the author/company to get out of open source
-> license obligations. However, if there's some other language that
-> better describes this, then I'll certainly modify the patch. I just
-> don't know what those words are.
-> 
-> Thanks,
-> Frank
-> 
+A Lua native module, like LuaFileSystem, needs the Lua includes at compile time.
+Both lua package and luajit package supply these files.
+The lua package installs them in /usr/include, and luafilesystem, like
+other Lua modules, expects them at this place.
+In LuaJIT upstream, these files are installed
+/usr/include/luajit-2.0.2 in order to not override the Lua ones if
+they are already installed.
+Before the introduction of virtual package luainterpreter,
+luafilesystem depends on lua package.
+Now, it depends on luainterpreter. When luainterpreter is supplied by
+luajit, the include from LuaJIT must be installed in the same place as
+Lua one's.
 
-BSD-2c or Special Permission
+So, the patch luajit-05-install-inc.patch contains the comment :
+"Install includes like lua's ones"
 
-Those are the words, but "or Special Permission (of the author)" is
-a null statement - it is always true.
+Fran?ois
 
-Mike
-> >
-> > baruch
-> >
-> > >  LIBDMTX_INSTALL_STAGING = YES
-> > >
-> > >  $(eval $(autotools-package))
-> > > --
-> > > 1.8.3.2
-> >
-> > --
-> >      http://baruch.siach.name/blog/                  ~. .~   Tk
-> > Open Systems
-> > =}------------------------------------------------ooO--U--Ooo------------{=
-> >    - baruch at tkos.co.il - tel: +972.2.679.5364,
-> > http://www.tkos.co.il -
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
