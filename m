@@ -1,45 +1,51 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 7 Jan 2014 19:08:29 +0100
-Subject: [Buildroot] [git commit] Makefile: expose 'graph-depends' to
- generate a graph of the dependency tree
-In-Reply-To: <20140107083723.2cc506c5@skate>
-References: <20131229111620.90FC09C227@busybox.osuosl.org>
- <20140107083723.2cc506c5@skate>
-Message-ID: <20140107180829.GA3713@free.fr>
+Date: Tue,  7 Jan 2014 19:27:53 +0100
+Subject: [Buildroot] [PATCH] Makefile: support running graph-depends from
+	out-of-tree
+Message-ID: <1389119273-18621-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-On 2014-01-07 08:37 +0800, Thomas Petazzoni spake thusly:
-> On Sun, 29 Dec 2013 12:13:19 +0100, Thomas Petazzoni wrote:
-> 
-> > Generate the graph of the complete dependency tree by calling:
-> >     make graph-depends
-> > 
-> > It's also possible to generate the graph-depends for a single package:
-> >     make PKG-graph-depends
-> 
-> I just tested this in an out-of-tree situation... and it doesn't work.
-> It generates the dependency graph of the configuration that is in the
-> Buildroot source tree (I happened to have one) and not the one of the
-> Buildroot build tree.
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Makefile               | 3 ++-
+ package/pkg-generic.mk | 3 ++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-It is evven broken when there is no configuration in the Buildroot
-source tree.
-
-I'll see what I can do...
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/Makefile b/Makefile
+index 4320e7b..dd21133 100644
+--- a/Makefile
++++ b/Makefile
+@@ -647,7 +647,8 @@ graph-build: $(O)/build/build-time.log
+ 
+ graph-depends:
+ 	@$(INSTALL) -d $(O)/graphs
+-	@./support/scripts/graph-depends \
++	@cd "$(CONFIG_DIR)"; \
++	$(TOPDIR)/support/scripts/graph-depends \
+ 	|dot -T$(BR2_GRAPH_OUT) -o $(O)/graphs/$(@).$(BR2_GRAPH_OUT)
+ 
+ else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index b519d69..279303e 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -470,7 +470,8 @@ $(1)-show-depends:
+ 
+ $(1)-graph-depends:
+ 			@$(INSTALL) -d $(O)/graphs
+-			@./support/scripts/graph-depends $(1) \
++			@cd "$(CONFIG_DIR))"; \
++			$(TOPDIR)/support/scripts/graph-depends $(1) \
+ 			|dot -T$(BR2_GRAPH_OUT) -o $(O)/graphs/$$(@).$(BR2_GRAPH_OUT)
+ 
+ $(1)-dirclean:		$$($(2)_TARGET_DIRCLEAN)
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.1.2
