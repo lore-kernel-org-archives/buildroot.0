@@ -1,7 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  7 Jan 2014 23:46:05 +0100
-Subject: [Buildroot] [PATCH 0/5] Misc accumulated changes
-Message-ID: <cover.1389134731.git.yann.morin.1998@free.fr>
+Date: Tue,  7 Jan 2014 23:46:04 +0100
+Subject: [Buildroot] [PATCH 1/5] Makefile: support running graph-depends
+	from out-of-tree
+In-Reply-To: <cover.1389134731.git.yann.morin.1998@free.fr>
+References: <cover.1389134731.git.yann.morin.1998@free.fr>
+Message-ID: <0369fa11267aaf6256b8cb5d676ee5570ca32986.1389134731.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,40 +13,41 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Hello All!
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Makefile               | 3 ++-
+ package/pkg-generic.mk | 3 ++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-Here is a small series with a few un-assorted fixes for the toolchain
-wrapper and for graph-depends, a cleanup in the system sub-menu for
-/etc/{hostname,issue}, a new package, and a blurb in the manual about
-dealing efficiently with very large files.
-
-Regards,
-Yann E. MORIN.
-
-
-----------------------------------------------------------------
-Sagaert Johan (1):
-      system: default to empty issue/hostname for custom skeleton
-
-Yann E. MORIN (4):
-      Makefile: support running graph-depends from out-of-tree
-      toolchain/external: fix wrapper by not passing conflicting flags
-      package/tzdata: install a default localtime
-      manual: add section about dealing efficiently with big image files
-
- Makefile                                           |  3 +-
- docs/manual/common-usage.txt                       | 39 ++++++++++++++++++++
- package/pkg-generic.mk                             |  3 +-
- package/tzdata/Config.in                           | 10 ++++++
- package/tzdata/tzdata.mk                           |  8 ++++-
- system/Config.in                                   | 32 ++++++++++-------
- .../toolchain-external/ext-toolchain-wrapper.c     | 41 ++++++++++++++++------
- 7 files changed, 111 insertions(+), 25 deletions(-)
-
+diff --git a/Makefile b/Makefile
+index 4320e7b..dd21133 100644
+--- a/Makefile
++++ b/Makefile
+@@ -647,7 +647,8 @@ graph-build: $(O)/build/build-time.log
+ 
+ graph-depends:
+ 	@$(INSTALL) -d $(O)/graphs
+-	@./support/scripts/graph-depends \
++	@cd "$(CONFIG_DIR)"; \
++	$(TOPDIR)/support/scripts/graph-depends \
+ 	|dot -T$(BR2_GRAPH_OUT) -o $(O)/graphs/$(@).$(BR2_GRAPH_OUT)
+ 
+ else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index b519d69..1b99c2a 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -470,7 +470,8 @@ $(1)-show-depends:
+ 
+ $(1)-graph-depends:
+ 			@$(INSTALL) -d $(O)/graphs
+-			@./support/scripts/graph-depends $(1) \
++			@cd "$(CONFIG_DIR)"; \
++			$(TOPDIR)/support/scripts/graph-depends $(1) \
+ 			|dot -T$(BR2_GRAPH_OUT) -o $(O)/graphs/$$(@).$(BR2_GRAPH_OUT)
+ 
+ $(1)-dirclean:		$$($(2)_TARGET_DIRCLEAN)
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.1.2
