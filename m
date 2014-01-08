@@ -1,73 +1,55 @@
-From: Jeremy Rosen <jeremy.rosen@openwide.fr>
-Date: Wed, 8 Jan 2014 09:24:06 +0100 (CET)
-Subject: [Buildroot] [git commit] udev: mention dependancy on inotify
-In-Reply-To: <20140108062344.362a979d@skate>
-Message-ID: <1610238026.1343969.1389169446910.JavaMail.root@openwide.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 8 Jan 2014 09:00:11 +0100
+Subject: [Buildroot] [git commit] minidlna: fix static linking
+Message-ID: <20140108082945.20CF58DE52@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Oh...
+commit: http://git.buildroot.net/buildroot/commit/?id=822b3f0b0f705c49b50f40abc73a8e274e972f46
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-the kernel option handling was in the kernel and not in the package...
+The configure script / Makefile forgets to link with some of the dependent
+libraries breaking static linking, so help it along.
 
-that's why I missed it.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/minidlna/Config.in   |    2 --
+ package/minidlna/minidlna.mk |    8 +++++++-
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
-I'll post a followup patch
-
-Cordialement 
-
-J?r?my Rosen 
-+33 (0)1 42 68 28 04
-
-fight key loggers : write some perl using vim 
-
-
-Open Wide Ingenierie
-
-23, rue Daviel
-75012 Paris - France
-www.openwide.fr
-
-
-
-
-
------ Mail original -----
-> Dear Peter Korsgaard,
-> 
-> On Tue, 7 Jan 2014 21:33:34 +0100, Peter Korsgaard wrote:
-> 
-> > -	  udev requires a Linux kernel >= 2.6.34: it relies on devtmpfs.
-> > +	  udev requires a Linux kernel >= 2.6.34: it relies on devtmpfs
-> > +	  and inotify.
-> 
-> Then, maybe we need something like:
-> 
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index fa8aa0c..ab25fe9 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -185,6 +185,8 @@ define LINUX_CONFIGURE_CMDS
->                 $(call
->                 KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(@D)/.config))
->         $(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),
->                 $(call
->                 KCONFIG_SET_OPT,CONFIG_UEVENT_HELPER_PATH,\"/sbin/mdev\",$(@D)/.config))
-> +       $(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV),
-> +               $(call
-> KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER,$(@D)/.config))
->         $(if $(BR2_PACKAGE_KTAP),
->                 $(call
->                 KCONFIG_ENABLE_OPT,CONFIG_DEBUG_FS,$(@D)/.config)
->                 $(call
->                 KCONFIG_ENABLE_OPT,CONFIG_EVENT_TRACING,$(@D)/.config)
-> 
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-> 
+diff --git a/package/minidlna/Config.in b/package/minidlna/Config.in
+index 9ec4bb4..1fcecde 100644
+--- a/package/minidlna/Config.in
++++ b/package/minidlna/Config.in
+@@ -4,8 +4,6 @@ config BR2_PACKAGE_MINIDLNA
+ 	depends on BR2_INET_IPV6 # ffmpeg
+ 	depends on BR2_USE_MMU # fork
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	# static build is broken w.r.t libgcc_s
+-	depends on !BR2_PREFER_STATIC_LIB
+ 	select BR2_PACKAGE_FFMPEG
+ 	select BR2_PACKAGE_FLAC
+ 	select BR2_PACKAGE_LIBVORBIS # selects libogg
+diff --git a/package/minidlna/minidlna.mk b/package/minidlna/minidlna.mk
+index df9c3bb..94c2641 100644
+--- a/package/minidlna/minidlna.mk
++++ b/package/minidlna/minidlna.mk
+@@ -13,8 +13,14 @@ MINIDLNA_DEPENDENCIES = \
+ 	ffmpeg flac libvorbis libogg libid3tag libexif libjpeg sqlite \
+ 	host-xutil_makedepend
+ 
+-# static build is broken w.r.t libgcc_s
++ifeq ($(BR2_PREFER_STATIC_LIB),y)
++# the configure script / Makefile forgets to link with some of the dependent
++# libraries breaking static linking, so help it along
++MINIDLNA_CONF_ENV = \
++	LIBS='-lavformat -lavcodec -lavutil -logg -lz -lpthread -lm'
++else
+ MINIDLNA_CONF_OPT = \
+ 	--disable-static
++endif
+ 
+ $(eval $(autotools-package))
