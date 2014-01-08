@@ -1,118 +1,98 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Wed, 8 Jan 2014 13:13:53 +0000
-Subject: [Buildroot] [PATCH 1/1] ca-certificates: new package
-In-Reply-To: <20140108115517.GH4659@sapphire.tkos.co.il>
-References: <1389126590-25956-1-git-send-email-martin@barkynet.com>
- <20140108045207.GD4659@sapphire.tkos.co.il>
- <CAFGQKxcycH3_PtqzeXsGoVHw49j0hXt9FWM=ZQNQwPnk5uLF-g@mail.gmail.com>
- <20140108115517.GH4659@sapphire.tkos.co.il>
-Message-ID: <CAFGQKxewJz6CyMv-+yg3YHzkR_oAJT9_NWWDVch6UN9MhFnw5Q@mail.gmail.com>
+From: Ed Sutter <ed.sutter@alcatel-lucent.com>
+Date: Wed, 08 Jan 2014 08:31:44 -0500
+Subject: [Buildroot] command line regular expression substitution fails
+In-Reply-To: <CAOkaJuVFmrrfda=vG-+06vJp7_jJvhnCAzJy8RJKZ8BxE6XKWA@mail.gmail.com>
+References: <52CC7292.306@alcatel-lucent.com>
+ <CAOkaJuVFmrrfda=vG-+06vJp7_jJvhnCAzJy8RJKZ8BxE6XKWA@mail.gmail.com>
+Message-ID: <52CD5340.2090200@alcatel-lucent.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch,
+Peter,
+Thanks, I rebuilt my rootfs starting from scratch (just to make sure I 
+didn't accidentally
+change something in .config).  Problem persists...
+Verbosely here are the changes I made:
+$ make menuconfig...
+#   Target ARM (Little-Endian)
+#   Target Cortex A-9
+#   Under toolchain:
+#       External
+#       Sourcery Codebench ARM 2013.05
+#       Downloaded and installed
+#   Under System Configuration, chose ttymxc0 as the Port to run a getty 
+(login prompt) on,
+#   Under Target Packages->Filesystem and Flash utilities: enable 
+dosfstools and e2fsprogs
+#   Under Filesystem Images, selected Output cpio - gzipped; tar the 
+root filesystem
+$ make busybox-menuconfig...
+#    Linux System Utilities ---> [*] fdisk
 
-I'll make that change and submit a v2 patch
+The iMX6 is a Cortex A9; however, looking at my notes, I see that the 
+instructions
+I got this from say to use Cortex A8.  When I make that one change, this 
+problem goes away...
+How is it that changing from A9 (valid for iMX6) to A8 would affect 
+command line regular
+expression parsing?
+Ed
 
-Thanks
-
-Martin
-
-
-On 8 January 2014 11:55, Baruch Siach <baruch@tkos.co.il> wrote:
-
-> Hi Martin,
+> Hi Ed,
 >
-> On Wed, Jan 08, 2014 at 11:30:25AM +0000, Martin Bark wrote:
-> > Thanks for the feedback Baruch,
-> >
-> > I'll update to use $(BR2_DEBIAN_MIRROR)
-> >
-> > Although the files mentioned in debian/copying do not directly end up in
-> > the rootfs they are used.  mozilla/certdata.txt is a big list of
-> > certificates and mozilla/certdata2pem.py is a python script which is run
-> to
-> > split mozilla/certdata.txt into all the separate pem files that end up in
-> > the rootfs.  Therefore i think this license info is valid.
+> I've run into this issue on a different SOC. In my case the problem 
+> was my target architecture variant was set to one newer than what my 
+> cpu actually was.
 >
-> I think you are right, but the string should indicate that. Something like
+> I stopped looking into the problem after I discovered this, so I don't 
+> have a good understanding of *why* it failed in this manner.
 >
-> CA_CERTIFICATES_LICENSE = GPLv2+ (script), MPLv2.0 (data)
+> If you can send the buildroot config and more details about your SOC 
+> that might help.
 >
-> baruch
+> Good luck,
 >
-> > On 8 January 2014 04:52, Baruch Siach <baruch@tkos.co.il> wrote:
-> > > Thanks for the patch. A few comments below.
-> > >
-> > > On Tue, Jan 07, 2014 at 08:29:50PM +0000, Martin Bark wrote:
-> > > > CA certificates used for SSL based applications.  The package
-> installs CA
-> > > > certificates to /usr/share/ca-certificates and creates symbolic links
-> > > under
-> > > > /etc/ssl/certs.  For example, the existing libcurl package will use
-> these
-> > > > certificates for https urls.  Based on the debian ca-certifcates
-> package.
-> > > >
-> > > > Signed-off-by: Martin Bark <martin@barkynet.com>
-> > >
-> > > [...]
-> > >
-> > > > +CA_CERTIFICATES_VERSION = 20130906
-> > > > +CA_CERTIFICATES_SOURCE =
-> > > ca-certificates_$(CA_CERTIFICATES_VERSION).tar.gz
-> > > > +CA_CERTIFICATES_SITE =
-> > > ftp://ftp.debian.org/debian/pool/main/c/ca-certificates
-> > >
-> > > Please use $(BR2_DEBIAN_MIRROR). See package/at/at.mk, for example.
-> > >
-> > > > +CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python
-> > > > +CA_CERTIFICATES_LICENSE = GPLv2+ MPLv2.0
-> > > > +CA_CERTIFICATES_LICENSE_FILES = debian/copyright
-> > >
-> > > According to debian/copyright these licenses apply to the specific
-> files
-> > > listed there. You don't use any of these files as far as I can see.
-> > >
-> > > > +define CA_CERTIFICATES_BUILD_CMDS
-> > > > +    PATH=$(HOST_PATH) $(MAKE) -C $(@D) all
-> > > > +endef
-> > > > +
-> > > > +define CA_CERTIFICATES_INSTALL_TARGET_CMDS
-> > > > +    $(INSTALL) -d -m 0755 $(TARGET_DIR)/usr/share/ca-certificates
-> > > > +    $(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/ssl/certs
-> > > > +    $(MAKE) -C $(@D) install DESTDIR=$(TARGET_DIR)
-> > > > +    rm -f $(TARGET_DIR)/usr/sbin/update-ca-certificates
-> > > > +
-> > > > +    #remove any existing certificates under /etc/ssl/certs
-> > > > +    rm -f  $(TARGET_DIR)/etc/ssl/certs/*
-> > > > +
-> > > > +    #generate symlinks to certificates under /etc/ssl/certs
-> > > > +    ( \
-> > > > +      cd $(TARGET_DIR) ;\
-> > > > +      for i in `find usr/share/ca-certificates -name "*.crt"` ; do \
-> > > > +            ln -sf ../../../$$i etc/ssl/certs/`basename
-> $${i%.crt}.pem`
-> > > ;\
-> > > > +      done ;\
-> > > > +    )
-> > > > +
-> > > > +    #create symbolic links to the certificates by their hash values
-> > > > +    $(HOST_DIR)/usr/bin/c_rehash $(TARGET_DIR)/etc/ssl/certs
-> > > > +endef
-> > > > +
-> > > > +$(eval $(generic-package))
-> > > > --
+> -psanford
 >
-> --
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open
-> Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
 >
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140108/9d9efdfa/attachment.html>
+> On Tue, Jan 7, 2014 at 1:33 PM, Ed Sutter 
+> <ed.sutter at alcatel-lucent.com <mailto:ed.sutter@alcatel-lucent.com>> 
+> wrote:
+>
+>     Hi,
+>     I'm using buildroot for the first time to set up rootfs on an iMX6
+>     based platform.  I've been debugging a startup issue and just realized
+>     that the the line...
+>
+>     >
+>     >for i in /etc/init.d/S??* ;do
+>     >
+>     in /etc/init.d/rcS is failing because "S??*" is not being replaced by
+>     the files that match that expression.  Then I just tried doing
+>     something
+>     simple on the command line...
+>
+>     >
+>     >#  ls /bin/m*
+>     >ls: /bin/m* : No such file or directory
+>     >
+>
+>     and I see that fails as well.  I'm guessing this is some kind of
+>     busybox
+>     configuration (regex/readline/etc..) issue, but since I got it all
+>     through buildroot,
+>     I figured I'd try here first.
+>     Any ideas?
+>     Thanks in advance,
+>     Ed
+>
+>
+>     _______________________________________________
+>     buildroot mailing list
+>     buildroot at busybox.net <mailto:buildroot@busybox.net>
+>     http://lists.busybox.net/mailman/listinfo/buildroot
+>
+>
