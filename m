@@ -1,27 +1,29 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 08 Jan 2014 22:44:53 +0100
-Subject: [Buildroot] Empty utility package scripts
-In-Reply-To: <CAPfzE3bOwMBNDLJszXtEK8OfAsWdgLTvt-8ObvJvnBcnyHQhDw@mail.gmail.com>
- (Andre Renaud's message of "Thu, 9 Jan 2014 09:36:47 +1300")
-References: <CAPfzE3bOwMBNDLJszXtEK8OfAsWdgLTvt-8ObvJvnBcnyHQhDw@mail.gmail.com>
-Message-ID: <874n5eno6i.fsf@dell.be.48ers.dk>
+Date: Wed, 08 Jan 2014 23:09:47 +0100
+Subject: [Buildroot] [PATCH v3] evemu: new package
+In-Reply-To: <1389197108-20536-1-git-send-email-anaumann@ultratronik.de>
+ (Andreas Naumann's message of "Wed, 8 Jan 2014 17:05:08 +0100")
+References: <1389197108-20536-1-git-send-email-anaumann@ultratronik.de>
+Message-ID: <87zjn6m8gk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Andre" == Andre Renaud <andre@bluewatersys.com> writes:
+>>>>> "Andreas" == Andreas Naumann <anaumann@ultratronik.de> writes:
 
- > Hi,
- > I'm trying to create a utility package script which doesn't do any
- > downloading, just copies some local files around (startup scripts),
- > and creates a user in /etc/passwd. However I can't find any examples
- > of packages that don't do any downloading/configuring/building.
+ > Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+ > ---
+ >  package/Config.in       |  1 +
+ >  package/evemu/Config.in |  7 +++++++
+ >  package/evemu/evemu.mk  | 22 ++++++++++++++++++++++
+ >  3 files changed, 30 insertions(+)
+ >  create mode 100644 package/evemu/Config.in
+ >  create mode 100644 package/evemu/evemu.mk
 
- > Is this possible, or am I going about it the wrong way?
-
-Sure, have a look at package/makedevs (that one does build a binary though).
+Committed with a fix to not generate manpages if the host has asciidoc
+available, thanks.
 
 -- 
 Bye, Peter Korsgaard
