@@ -1,41 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Jan 2014 22:34:19 +0100
-Subject: [Buildroot] [git commit] perl: bump to version 5.18.2
-Message-ID: <20140108213639.C282D9C3E8@busybox.osuosl.org>
+Date: Wed, 8 Jan 2014 22:28:00 +0100
+Subject: [Buildroot] [git commit] linux: force inotify kernel option when
+	udev is used as dev handler
+Message-ID: <20140108213639.B8BD99C3DE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=542801aca9dcfc68fc9588d117f97ea54df54954
+commit: http://git.buildroot.net/buildroot/commit/?id=bd53398cd6f6b62c3c2834ea7ec77298b4de2488
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+[Peter: drop unneeded devtmpfs handling]
+Signed-off-by: J??r??my Rosen <jeremy.rosen@openwide.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/perl/perl.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ linux/linux.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 1c7df9b..bf8eac2 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- PERL_VERSION_MAJOR = 18
--PERL_VERSION = 5.$(PERL_VERSION_MAJOR).1
-+PERL_VERSION = 5.$(PERL_VERSION_MAJOR).2
- PERL_SITE = http://www.cpan.org/src/5.0
- PERL_SOURCE = perl-$(PERL_VERSION).tar.bz2
- PERL_LICENSE = Artistic or GPLv1+
-@@ -85,7 +85,7 @@ endef
- # perlcross's miniperl_top forgets base, which is required by mktables.
- # Instead of patching, it's easier to just set PERL5LIB
- define PERL_BUILD_CMDS
--	PERL5LIB=$(@D)/dist/base/lib $(MAKE1) -C $(@D) perl modules
-+	PERL5LIB=$(@D)/dist/base/lib $(MAKE1) -C $(@D) all
- endef
- 
- define PERL_INSTALL_STAGING_CMDS
+diff --git a/linux/linux.mk b/linux/linux.mk
+index fa8aa0c..ab25fe9 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -185,6 +185,8 @@ define LINUX_CONFIGURE_CMDS
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(@D)/.config))
+ 	$(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),
+ 		$(call KCONFIG_SET_OPT,CONFIG_UEVENT_HELPER_PATH,\"/sbin/mdev\",$(@D)/.config))
++	$(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV),
++		$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER,$(@D)/.config))
+ 	$(if $(BR2_PACKAGE_KTAP),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_DEBUG_FS,$(@D)/.config)
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_EVENT_TRACING,$(@D)/.config)
