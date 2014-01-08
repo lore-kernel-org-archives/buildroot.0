@@ -1,32 +1,30 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Jan 2014 23:18:45 +0100
-Subject: [Buildroot] [git commit] python-nfc: bump version
-Message-ID: <20140108222025.E008B9C3E1@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 08 Jan 2014 23:23:27 +0100
+Subject: [Buildroot] [PATCH] strace: Fix build issue with duplicate
+	ptrace_peeksiginfo_args definition
+In-Reply-To: <20131202173337.730038ed@kryten> (Anton Blanchard's message of
+ "Mon, 2 Dec 2013 17:33:37 +1100")
+References: <20131202173337.730038ed@kryten>
+Message-ID: <87lhyqm7ts.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bf93f6a2e2f22f10e7257c0e987a2c319df1519a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Anton" == Anton Blanchard <anton@samba.org> writes:
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-nfc/python-nfc.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ > Backport a patch from upstream to fix a conflict between glibc
+ > headers and recent kernel headers (v3.10 or newer).
+    
+ > Signed-off-by: Anton Blanchard <anton@samba.org>
+ > ---
 
-diff --git a/package/python-nfc/python-nfc.mk b/package/python-nfc/python-nfc.mk
-index 5f486d9..4c14a17 100644
---- a/package/python-nfc/python-nfc.mk
-+++ b/package/python-nfc/python-nfc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PYTHON_NFC_VERSION = 142
-+PYTHON_NFC_VERSION = 212
- PYTHON_NFC_SITE = https://launchpad.net/nfcpy
- PYTHON_NFC_SITE_METHOD = bzr
- PYTHON_NFC_DEPENDENCIES = libusb libusb-compat
+ > Since it would not autoreconf cleanly, I included a separate patch that
+ > made the configure changes. Not sure if the preference is to roll that
+ > into an upstream patch, or to provide it separately.
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
