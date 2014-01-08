@@ -1,32 +1,20 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Jan 2014 22:33:15 +0100
-Subject: [Buildroot] [git commit] libdmtx: add license information
-Message-ID: <20140108213640.0FF259C3EF@busybox.osuosl.org>
+From: Andre Renaud <andre@bluewatersys.com>
+Date: Thu, 9 Jan 2014 09:36:47 +1300
+Subject: [Buildroot] Empty utility package scripts
+Message-ID: <CAPfzE3bOwMBNDLJszXtEK8OfAsWdgLTvt-8ObvJvnBcnyHQhDw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3c96bc7372fda02c782740c6fb81c085119b9c66
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
+I'm trying to create a utility package script which doesn't do any
+downloading, just copies some local files around (startup scripts),
+and creates a user in /etc/passwd. However I can't find any examples
+of packages that don't do any downloading/configuring/building.
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libdmtx/libdmtx.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+Is this possible, or am I going about it the wrong way?
 
-diff --git a/package/libdmtx/libdmtx.mk b/package/libdmtx/libdmtx.mk
-index 69c7b88..146534e 100644
---- a/package/libdmtx/libdmtx.mk
-+++ b/package/libdmtx/libdmtx.mk
-@@ -6,6 +6,8 @@
- 
- LIBDMTX_VERSION = 0.7.4
- LIBDMTX_SITE = http://downloads.sourceforge.net/project/libdmtx/libdmtx/$(LIBDMTX_VERSION)
-+LIBDMTX_LICENSE = BSD-2c or Special Permission
-+LIBDMTX_LICENSE_FILES = LICENSE
- LIBDMTX_INSTALL_STAGING = YES
- 
- $(eval $(autotools-package))
+Regards,
+Andre
