@@ -1,102 +1,40 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Wed, 8 Jan 2014 11:30:25 +0000
-Subject: [Buildroot] [PATCH 1/1] ca-certificates: new package
-In-Reply-To: <20140108045207.GD4659@sapphire.tkos.co.il>
-References: <1389126590-25956-1-git-send-email-martin@barkynet.com>
- <20140108045207.GD4659@sapphire.tkos.co.il>
-Message-ID: <CAFGQKxcycH3_PtqzeXsGoVHw49j0hXt9FWM=ZQNQwPnk5uLF-g@mail.gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Wed,  8 Jan 2014 13:27:26 +0100
+Subject: [Buildroot] [PATCH 1/2] perl: bump to version 5.18.2
+Message-ID: <1389184048-21247-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks for the feedback Baruch,
 
-I'll update to use $(BR2_DEBIAN_MIRROR)
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/perl/perl.mk |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Although the files mentioned in debian/copying do not directly end up in
-the rootfs they are used.  mozilla/certdata.txt is a big list of
-certificates and mozilla/certdata2pem.py is a python script which is run to
-split mozilla/certdata.txt into all the separate pem files that end up in
-the rootfs.  Therefore i think this license info is valid.
-
-Please let me know what you think and I'll post a v2 patch
-
-Thanks
-
-Martin
-
-
-On 8 January 2014 04:52, Baruch Siach <baruch@tkos.co.il> wrote:
-
-> Hi Martin,
->
-> Thanks for the patch. A few comments below.
->
-> On Tue, Jan 07, 2014 at 08:29:50PM +0000, Martin Bark wrote:
-> > CA certificates used for SSL based applications.  The package installs CA
-> > certificates to /usr/share/ca-certificates and creates symbolic links
-> under
-> > /etc/ssl/certs.  For example, the existing libcurl package will use these
-> > certificates for https urls.  Based on the debian ca-certifcates package.
-> >
-> > Signed-off-by: Martin Bark <martin@barkynet.com>
->
-> [...]
->
-> > +CA_CERTIFICATES_VERSION = 20130906
-> > +CA_CERTIFICATES_SOURCE =
-> ca-certificates_$(CA_CERTIFICATES_VERSION).tar.gz
-> > +CA_CERTIFICATES_SITE =
-> ftp://ftp.debian.org/debian/pool/main/c/ca-certificates
->
-> Please use $(BR2_DEBIAN_MIRROR). See package/at/at.mk, for example.
->
-> > +CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python
-> > +CA_CERTIFICATES_LICENSE = GPLv2+ MPLv2.0
-> > +CA_CERTIFICATES_LICENSE_FILES = debian/copyright
->
-> According to debian/copyright these licenses apply to the specific files
-> listed there. You don't use any of these files as far as I can see.
->
-> > +define CA_CERTIFICATES_BUILD_CMDS
-> > +    PATH=$(HOST_PATH) $(MAKE) -C $(@D) all
-> > +endef
-> > +
-> > +define CA_CERTIFICATES_INSTALL_TARGET_CMDS
-> > +    $(INSTALL) -d -m 0755 $(TARGET_DIR)/usr/share/ca-certificates
-> > +    $(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/ssl/certs
-> > +    $(MAKE) -C $(@D) install DESTDIR=$(TARGET_DIR)
-> > +    rm -f $(TARGET_DIR)/usr/sbin/update-ca-certificates
-> > +
-> > +    #remove any existing certificates under /etc/ssl/certs
-> > +    rm -f  $(TARGET_DIR)/etc/ssl/certs/*
-> > +
-> > +    #generate symlinks to certificates under /etc/ssl/certs
-> > +    ( \
-> > +      cd $(TARGET_DIR) ;\
-> > +      for i in `find usr/share/ca-certificates -name "*.crt"` ; do \
-> > +            ln -sf ../../../$$i etc/ssl/certs/`basename $${i%.crt}.pem`
-> ;\
-> > +      done ;\
-> > +    )
-> > +
-> > +    #create symbolic links to the certificates by their hash values
-> > +    $(HOST_DIR)/usr/bin/c_rehash $(TARGET_DIR)/etc/ssl/certs
-> > +endef
-> > +
-> > +$(eval $(generic-package))
-> > --
->
-> baruch
->
-> --
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open
-> Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140108/9f96d801/attachment.html>
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index 1c7df9b..bf8eac2 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ PERL_VERSION_MAJOR = 18
+-PERL_VERSION = 5.$(PERL_VERSION_MAJOR).1
++PERL_VERSION = 5.$(PERL_VERSION_MAJOR).2
+ PERL_SITE = http://www.cpan.org/src/5.0
+ PERL_SOURCE = perl-$(PERL_VERSION).tar.bz2
+ PERL_LICENSE = Artistic or GPLv1+
+@@ -85,7 +85,7 @@ endef
+ # perlcross's miniperl_top forgets base, which is required by mktables.
+ # Instead of patching, it's easier to just set PERL5LIB
+ define PERL_BUILD_CMDS
+-	PERL5LIB=$(@D)/dist/base/lib $(MAKE1) -C $(@D) perl modules
++	PERL5LIB=$(@D)/dist/base/lib $(MAKE1) -C $(@D) all
+ endef
+ 
+ define PERL_INSTALL_STAGING_CMDS
+-- 
+1.7.9.5
