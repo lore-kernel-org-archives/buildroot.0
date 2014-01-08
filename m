@@ -1,98 +1,126 @@
-From: Ed Sutter <ed.sutter@alcatel-lucent.com>
-Date: Wed, 08 Jan 2014 08:31:44 -0500
-Subject: [Buildroot] command line regular expression substitution fails
-In-Reply-To: <CAOkaJuVFmrrfda=vG-+06vJp7_jJvhnCAzJy8RJKZ8BxE6XKWA@mail.gmail.com>
-References: <52CC7292.306@alcatel-lucent.com>
- <CAOkaJuVFmrrfda=vG-+06vJp7_jJvhnCAzJy8RJKZ8BxE6XKWA@mail.gmail.com>
-Message-ID: <52CD5340.2090200@alcatel-lucent.com>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Wed,  8 Jan 2014 13:37:56 +0000
+Subject: [Buildroot] [PATCH] libnfc: bump version
+Message-ID: <1389188276-29818-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
-Thanks, I rebuilt my rootfs starting from scratch (just to make sure I 
-didn't accidentally
-change something in .config).  Problem persists...
-Verbosely here are the changes I made:
-$ make menuconfig...
-#   Target ARM (Little-Endian)
-#   Target Cortex A-9
-#   Under toolchain:
-#       External
-#       Sourcery Codebench ARM 2013.05
-#       Downloaded and installed
-#   Under System Configuration, chose ttymxc0 as the Port to run a getty 
-(login prompt) on,
-#   Under Target Packages->Filesystem and Flash utilities: enable 
-dosfstools and e2fsprogs
-#   Under Filesystem Images, selected Output cpio - gzipped; tar the 
-root filesystem
-$ make busybox-menuconfig...
-#    Linux System Utilities ---> [*] fdisk
+From: Simon Dawson <spdawson@gmail.com>
 
-The iMX6 is a Cortex A9; however, looking at my notes, I see that the 
-instructions
-I got this from say to use Cortex A8.  When I make that one change, this 
-problem goes away...
-How is it that changing from A9 (valid for iMX6) to A8 would affect 
-command line regular
-expression parsing?
-Ed
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ ...build-systems-make-example-build-optional.patch | 52 ++++++++--------------
+ package/libnfc/libnfc.mk                           |  2 +-
+ 2 files changed, 19 insertions(+), 35 deletions(-)
 
-> Hi Ed,
->
-> I've run into this issue on a different SOC. In my case the problem 
-> was my target architecture variant was set to one newer than what my 
-> cpu actually was.
->
-> I stopped looking into the problem after I discovered this, so I don't 
-> have a good understanding of *why* it failed in this manner.
->
-> If you can send the buildroot config and more details about your SOC 
-> that might help.
->
-> Good luck,
->
-> -psanford
->
->
-> On Tue, Jan 7, 2014 at 1:33 PM, Ed Sutter 
-> <ed.sutter at alcatel-lucent.com <mailto:ed.sutter@alcatel-lucent.com>> 
-> wrote:
->
->     Hi,
->     I'm using buildroot for the first time to set up rootfs on an iMX6
->     based platform.  I've been debugging a startup issue and just realized
->     that the the line...
->
->     >
->     >for i in /etc/init.d/S??* ;do
->     >
->     in /etc/init.d/rcS is failing because "S??*" is not being replaced by
->     the files that match that expression.  Then I just tried doing
->     something
->     simple on the command line...
->
->     >
->     >#  ls /bin/m*
->     >ls: /bin/m* : No such file or directory
->     >
->
->     and I see that fails as well.  I'm guessing this is some kind of
->     busybox
->     configuration (regex/readline/etc..) issue, but since I got it all
->     through buildroot,
->     I figured I'd try here first.
->     Any ideas?
->     Thanks in advance,
->     Ed
->
->
->     _______________________________________________
->     buildroot mailing list
->     buildroot at busybox.net <mailto:buildroot@busybox.net>
->     http://lists.busybox.net/mailman/listinfo/buildroot
->
->
+diff --git a/package/libnfc/libnfc-build-systems-make-example-build-optional.patch b/package/libnfc/libnfc-build-systems-make-example-build-optional.patch
+index b0ca220..06577c5 100644
+--- a/package/libnfc/libnfc-build-systems-make-example-build-optional.patch
++++ b/package/libnfc/libnfc-build-systems-make-example-build-optional.patch
+@@ -10,28 +10,18 @@ In order to keep the former behavior, example build is enabled by default.
+ 
+ Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+ 
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index dd7904d..0e35229 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -27,6 +27,7 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/incl
+- SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules/")
++diff -Nurp a/CMakeLists.txt b/CMakeLists.txt
++--- a/CMakeLists.txt	2013-12-08 18:51:01.000000000 +0000
+++++ b/CMakeLists.txt	2014-01-08 12:51:42.435096403 +0000
++@@ -39,6 +39,7 @@ IF(LIBNFC_ENVVARS)
++   ADD_DEFINITIONS(-DENVVARS)
++ ENDIF(LIBNFC_ENVVARS)
+  
+- # Options
+ +SET(BUILD_EXAMPLES ON CACHE BOOL "Build examples")
+- SET(LIBNFC_DEBUG_OUTPUT OFF CACHE BOOL "Debug output of communication with the NFC chip")
+- IF(LIBNFC_DEBUG_OUTPUT)
+-   ADD_DEFINITIONS(-DDEBUG -g3)
+-@@ -84,7 +85,7 @@ IF(NOT WIN32)
+-   ENDIF(LIBNFC_DRIVER_ACR122)
+-   # CMake lists are separated by a semi colon, replace with colon
+-   STRING(REPLACE ";" "," PKG_CONFIG_REQUIRES "${PKG_REQ}")
+--  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/libnfc.pc.in ${CMAKE_CURRENT_BINARY_DIR}/libnfc.pc @ONLY) 
+-+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/libnfc.pc.in ${CMAKE_CURRENT_BINARY_DIR}/libnfc.pc @ONLY)
+-   INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/libnfc.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
+- ENDIF(NOT WIN32)
+- 
+-@@ -101,7 +102,10 @@ ENDIF(LIBUSB_INCLUDE_DIRS)
++ SET(LIBNFC_DEBUG_MODE OFF CACHE BOOL "Debug mode")
++ IF(LIBNFC_DEBUG_MODE)
++   ADD_DEFINITIONS(-DDEBUG)
++@@ -155,7 +156,10 @@ ENDIF(WIN32)
+  ADD_SUBDIRECTORY(libnfc)
+  ADD_SUBDIRECTORY(include)
+  ADD_SUBDIRECTORY(utils)
+@@ -43,10 +33,9 @@ index dd7904d..0e35229 100644
+  
+  # Binary Package
+  IF(WIN32)
+-diff --git a/Makefile.am b/Makefile.am
+-index 3671cb6..59fd75a 100644
+---- a/Makefile.am
+-+++ b/Makefile.am
++diff -Nurp a/Makefile.am b/Makefile.am
++--- a/Makefile.am	2013-12-08 18:51:01.000000000 +0000
+++++ b/Makefile.am	2014-01-08 12:52:12.807018593 +0000
+ @@ -2,7 +2,13 @@ ACLOCAL_AMFLAGS = -I m4
+  
+  AM_CFLAGS = $(LIBNFC_CFLAGS)
+@@ -62,11 +51,10 @@ index 3671cb6..59fd75a 100644
+  
+  pkgconfigdir = $(libdir)/pkgconfig
+  pkgconfig_DATA = libnfc.pc
+-diff --git a/configure.ac b/configure.ac
+-index 0a222a8..6988164 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -111,6 +111,14 @@ then
++diff -Nurp a/configure.ac b/configure.ac
++--- a/configure.ac	2013-12-08 18:51:01.000000000 +0000
+++++ b/configure.ac	2014-01-08 12:53:02.054872564 +0000
++@@ -142,6 +142,14 @@ then
+  fi
+  AM_CONDITIONAL(DOC_ENABLED, [test x"$enable_doc" = xyes])
+  
+@@ -81,11 +69,10 @@ index 0a222a8..6988164 100644
+  # Dependencies
+  PKG_CONFIG_REQUIRES=""
+  
+-@@ -129,7 +137,11 @@ if test x$ac_cv_with_cutter = xyes -a x$ac_cv_use_cutter = xno; then
++@@ -160,7 +168,10 @@ if test x$ac_cv_with_cutter = xyes -a x$
+  fi
+  AM_CONDITIONAL([WITH_CUTTER], [test "$ac_cv_use_cutter" != "no"])
+  
+-+
+ +if test x"$enable_example" = "xyes"
+ +then
+  AC_CHECK_READLINE
+@@ -93,6 +80,3 @@ index 0a222a8..6988164 100644
+  
+  # Help us to write great code ;-)
+  CFLAGS="$CFLAGS -Wall -pedantic -Wextra"
+--- 
+-1.7.10.3
+-
+diff --git a/package/libnfc/libnfc.mk b/package/libnfc/libnfc.mk
+index 50bfcd5..a0ea877 100644
+--- a/package/libnfc/libnfc.mk
++++ b/package/libnfc/libnfc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNFC_VERSION = fda8d60ce062409bb32c76a229f02f7502948ce8
++LIBNFC_VERSION = 7b7f5061427b5456835dd48923a8cc0563cfd1e9
+ LIBNFC_SITE = http://libnfc.googlecode.com/git/
+ LIBNFC_SITE_METHOD = git
+ LIBNFC_LICENSE = LGPLv3+
+-- 
+1.8.3.2
