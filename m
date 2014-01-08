@@ -1,32 +1,36 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Wed, 8 Jan 2014 10:56:50 +0100
-Subject: [Buildroot] [PATCH v10 0/8] Add support for top-level parallel
-	make
-In-Reply-To: <52B32DF1.2010702@mind.be>
-References: <1387363007-19846-1-git-send-email-fabio.porcedda@gmail.com>
- <52B32DF1.2010702@mind.be>
-Message-ID: <CAHkwnC8S0Cno0L5rokUF4o9pDfuDompzShJ1WBoZ=QjR-d5CgA@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed,  8 Jan 2014 12:16:31 +0200
+Subject: [Buildroot] [PATCH 0/4] uclibc: build fixes for xtensa snapshot
+	version
+Message-ID: <cover.1389168903.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Dec 19, 2013 at 6:33 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 18/12/13 11:36, Fabio Porcedda wrote:
-<snip>
->> On my quad core system the building time for qemu_x86_defconfig
->> is 14m versus 11m and with ccache enabled 7m vs 5m.
->
->
->  These are not very relevant benchmarks because there's not a lot that can
-> be done in parallel there. It would be much more interesting with an
-> allpackageyesconfig (which you'll have to modify by hand BTW to exclude some
-> packages that don't build...).
+This series adds fixes to the xtensa default uclibc version. The first patch is
+not xtensa specific, but the rest are. All patches fix autobuild failures, and
+all were sent upstream.
 
-I've build  the first 220 packages of the "allpackageyesconfig", now
-the numbers look better: 43m vs 18m.
+The last patch in this series reverts a previous e2fsprogs fix that is both
+wrong and superseded by the xtensa posix_fadvise fix.
 
-Best regards
+Baruch Siach (4):
+  uclibc: xtensa: fix posix_spawn autoconf detection
+  uclibc: xtensa: restore posix_fadvise
+  uclibc: xtensa: update ptrace.h
+  Revert "e2fsprogs: fix posix_fadvise() signature mismatch"
+
+ ...g-fix-build-when-posix_fadvise-is-missing.patch |  42 -----
+ .../0001-spawn-move-from-librt-to-libc.patch       | 142 ++++++++++++++++
+ ..._fadvise-restore-implementation-for-xtens.patch |  68 ++++++++
+ .../0003-xtensa-use-common-ptrace.h.patch          | 184 +++++++++++++++++++++
+ 4 files changed, 394 insertions(+), 42 deletions(-)
+ delete mode 100644 package/e2fsprogs/e2fsprogs-0002-e4defrag-fix-build-when-posix_fadvise-is-missing.patch
+ create mode 100644 package/uclibc/3a3ad3dfc10876b3648369f22df8fc06661ddef0/0001-spawn-move-from-librt-to-libc.patch
+ create mode 100644 package/uclibc/3a3ad3dfc10876b3648369f22df8fc06661ddef0/0002-linux-posix_fadvise-restore-implementation-for-xtens.patch
+ create mode 100644 package/uclibc/3a3ad3dfc10876b3648369f22df8fc06661ddef0/0003-xtensa-use-common-ptrace.h.patch
+
 -- 
-Fabio Porcedda
+1.8.5.2
