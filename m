@@ -1,53 +1,34 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Wed, 8 Jan 2014 09:13:25 -0500
-Subject: [Buildroot] [PATCH] force devtmpfs and inotify kernel option
- when udev is used as dev handler
-In-Reply-To: <1389188913-15173-1-git-send-email-jeremy.rosen@openwide.fr>
-References: <1389188913-15173-1-git-send-email-jeremy.rosen@openwide.fr>
-Message-ID: <CANxTyt7ihvMb8NCwuNUbfvFXVsfC8M1KQA851zG5TpsLX3j-7g@mail.gmail.com>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Wed,  8 Jan 2014 09:16:09 -0500
+Subject: [Buildroot] [PATCH v2] libdmtx: add license information
+Message-ID: <1389190569-3570-1-git-send-email-fhunleth@troodon-software.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?r?my,
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+---
+Changes v1 -> v2:
+  - Changed alternate license wording to "Special Permission" as
+    suggested by Mike Zick
 
-On Wed, Jan 8, 2014 at 8:48 AM, J?r?my Rosen <jeremy.rosen@openwide.fr> wrote:
-> Signed-off-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
->
-> ---
-> patch suggested by Thomas Petazzoni
->
-> I also added devtmpfs because it's documented as needed but wasn't enforced
-> ---
->  linux/linux.mk | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index fa8aa0c..2482952 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -185,6 +185,10 @@ define LINUX_CONFIGURE_CMDS
->                 $(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(@D)/.config))
->         $(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),
->                 $(call KCONFIG_SET_OPT,CONFIG_UEVENT_HELPER_PATH,\"/sbin/mdev\",$(@D)/.config))
-> +       $(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV),
-> +                $(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER,$(@D)/.config)
+ package/libdmtx/libdmtx.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-The above INOTIFY line has an extra leading space compared with the other lines.
-
-Danomi -
-
-> +               $(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS,$(@D)/.config)
-> +               $(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(@D)/.config))
->         $(if $(BR2_PACKAGE_KTAP),
->                 $(call KCONFIG_ENABLE_OPT,CONFIG_DEBUG_FS,$(@D)/.config)
->                 $(call KCONFIG_ENABLE_OPT,CONFIG_EVENT_TRACING,$(@D)/.config)
-> --
-> 1.8.5.2
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/libdmtx/libdmtx.mk b/package/libdmtx/libdmtx.mk
+index 69c7b88..146534e 100644
+--- a/package/libdmtx/libdmtx.mk
++++ b/package/libdmtx/libdmtx.mk
+@@ -6,6 +6,8 @@
+ 
+ LIBDMTX_VERSION = 0.7.4
+ LIBDMTX_SITE = http://downloads.sourceforge.net/project/libdmtx/libdmtx/$(LIBDMTX_VERSION)
++LIBDMTX_LICENSE = BSD-2c or Special Permission
++LIBDMTX_LICENSE_FILES = LICENSE
+ LIBDMTX_INSTALL_STAGING = YES
+ 
+ $(eval $(autotools-package))
+-- 
+1.8.3.2
