@@ -1,174 +1,67 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 8 Jan 2014 17:32:43 +0000
-Subject: [Buildroot] [PATCH 1/2] uclibc: add a missing function member to
-	siginfo.h
-Message-ID: <1389202364-19387-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 8 Jan 2014 19:01:41 +0100
+Subject: [Buildroot] [PATCH 2/5] toolchain/external: fix wrapper by not
+ passing conflicting flags
+In-Reply-To: <CAGduivw60X1M=cG9xx_ZJqVOgnKB5C7DpfduEwLJD+j0r46sSA@mail.gmail.com>
+References: <cover.1389134731.git.yann.morin.1998@free.fr>
+ <5d0fbb9b1f4439750dde9bb7788b273ec94a3bd5.1389134731.git.yann.morin.1998@free.fr>
+ <CAGduivx327zJ_Vy=NDzE9pQKBEkd+OPWHLw2SOYaHACMtvX07Q@mail.gmail.com>
+ <20140108235132.2e741f4a@skate>
+ <CAGduivw60X1M=cG9xx_ZJqVOgnKB5C7DpfduEwLJD+j0r46sSA@mail.gmail.com>
+Message-ID: <20140108180141.GA3430@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Applying an upstream patch to add a missing function member on ia64,
-mips and sparc arches.
+Maxime, All,
 
-Upstream patch URL:
-   http://git.uclibc.org/uClibc/commit/libc/sysdeps/linux?id=b4e6e61e2f7c6fb4bf59f66efaa74591a2112912
+On 2014-01-08 16:57 +0100, Maxime Hadjinlian spake thusly:
+> On Wed, Jan 8, 2014 at 4:51 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+> > Dear Maxime Hadjinlian,
+> Hi Thomas,
+> >
+> > On Wed, 8 Jan 2014 13:45:59 +0100, Maxime Hadjinlian wrote:
+> >
+> >> Shouldn't we change the different defconfig that exists ? At least the
+> >> RaspberryPi so it would sets an example (and maybe add something about
+> >> this in the manual ?)
+> >
+> > Why would the defconfig need some changes following this patch?
+> To set a visible example of settings the correct -march/mcpu/mtune options ?
+> Also, this would eliminate all the warnings that Yann saw while
+> building a kernel for the rpi, so it seems like a good candidate.
 
-Fixes:
-   http://autobuild.buildroot.net/results/fa0/fa03ecc087a4b30df8b0366bb238be3d167a56d9/
+There is nothing in that patch that impacts the configuration.
+There is no reason to change any defconfig to 'activate' this change.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- ...9-siginfo_h-add-a-missing-function-member.patch |   66 ++++++++++++++++++++
- ...5-siginfo_h-add-a-missing-function-member.patch |   66 ++++++++++++++++++++
- 2 files changed, 132 insertions(+), 0 deletions(-)
- create mode 100644 package/uclibc/0.9.32.1/uclibc-0009-siginfo_h-add-a-missing-function-member.patch
- create mode 100644 package/uclibc/0.9.33.2/uclibc-0055-siginfo_h-add-a-missing-function-member.patch
+Rather, the config options BR2_GCC_TARGET_CPU, BR2_GCC_TARGET_ARCH, and
+BR2_GCC_TARGET_MTUNE, if any, are pased at the time we build the wrapper
+itself.
 
-diff --git a/package/uclibc/0.9.32.1/uclibc-0009-siginfo_h-add-a-missing-function-member.patch b/package/uclibc/0.9.32.1/uclibc-0009-siginfo_h-add-a-missing-function-member.patch
-new file mode 100644
-index 0000000..1a837bb
---- /dev/null
-+++ b/package/uclibc/0.9.32.1/uclibc-0009-siginfo_h-add-a-missing-function-member.patch
-@@ -0,0 +1,66 @@
-+siginfo.h: add a missing function member on ia64, mips and sparc arches
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+
-+From b4e6e61e2f7c6fb4bf59f66efaa74591a2112912 Mon Sep 17 00:00:00 2001
-+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+Date: Thu, 02 Jan 2014 15:02:11 +0000
-+Subject: siginfo.h: add a missing function member on ia64, mips and sparc arches
-+
-+Add "__pid_t _tid" member which is used for some packages, like rt-test
-+for instance, which fails with an error like this one:
-+
-+src/cyclictest/cyclictest.c:638:9: error: 'union <anonymous>' has no
-+member named '_tid'
-+
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-+---
-+(limited to 'libc/sysdeps/linux')
-+
-+diff --git a/libc/sysdeps/linux/ia64/bits/siginfo.h b/libc/sysdeps/linux/ia64/bits/siginfo.h
-+index f571f46..82cc73f 100644
-+--- a/libc/sysdeps/linux/ia64/bits/siginfo.h
-++++ b/libc/sysdeps/linux/ia64/bits/siginfo.h
-+@@ -309,6 +309,10 @@ typedef struct sigevent
-+       {
-+ 	int _pad[__SIGEV_PAD_SIZE];
-+ 
-++	/* When SIGEV_SIGNAL and SIGEV_THREAD_ID set, LWP ID of the
-++	   thread to receive the signal.  */
-++	__pid_t _tid;
-++
-+ 	struct
-+ 	  {
-+ 	    void (*_function) (sigval_t);	/* Function to start.  */
-+diff --git a/libc/sysdeps/linux/mips/bits/siginfo.h b/libc/sysdeps/linux/mips/bits/siginfo.h
-+index 79fb15a..84b08ca 100644
-+--- a/libc/sysdeps/linux/mips/bits/siginfo.h
-++++ b/libc/sysdeps/linux/mips/bits/siginfo.h
-+@@ -281,6 +281,10 @@ typedef struct sigevent
-+       {
-+ 	int _pad[__SIGEV_PAD_SIZE];
-+ 
-++	/* When SIGEV_SIGNAL and SIGEV_THREAD_ID set, LWP ID of the
-++	   thread to receive the signal.  */
-++	__pid_t _tid;
-++
-+ 	struct
-+ 	  {
-+ 	    void (*_function) (sigval_t);	/* Function to start.  */
-+diff --git a/libc/sysdeps/linux/sparc/bits/siginfo.h b/libc/sysdeps/linux/sparc/bits/siginfo.h
-+index 6f2d035..3ffeb6d 100644
-+--- a/libc/sysdeps/linux/sparc/bits/siginfo.h
-++++ b/libc/sysdeps/linux/sparc/bits/siginfo.h
-+@@ -288,6 +288,10 @@ typedef struct sigevent
-+       {
-+ 	int _pad[__SIGEV_PAD_SIZE];
-+ 
-++	/* When SIGEV_SIGNAL and SIGEV_THREAD_ID set, LWP ID of the
-++	   thread to receive the signal.  */
-++	__pid_t _tid;
-++
-+ 	struct
-+ 	  {
-+ 	    void (*_function) (sigval_t);	/* Function to start.  */
-+--
-+cgit v0.9.1
-diff --git a/package/uclibc/0.9.33.2/uclibc-0055-siginfo_h-add-a-missing-function-member.patch b/package/uclibc/0.9.33.2/uclibc-0055-siginfo_h-add-a-missing-function-member.patch
-new file mode 100644
-index 0000000..1a837bb
---- /dev/null
-+++ b/package/uclibc/0.9.33.2/uclibc-0055-siginfo_h-add-a-missing-function-member.patch
-@@ -0,0 +1,66 @@
-+siginfo.h: add a missing function member on ia64, mips and sparc arches
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+
-+From b4e6e61e2f7c6fb4bf59f66efaa74591a2112912 Mon Sep 17 00:00:00 2001
-+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+Date: Thu, 02 Jan 2014 15:02:11 +0000
-+Subject: siginfo.h: add a missing function member on ia64, mips and sparc arches
-+
-+Add "__pid_t _tid" member which is used for some packages, like rt-test
-+for instance, which fails with an error like this one:
-+
-+src/cyclictest/cyclictest.c:638:9: error: 'union <anonymous>' has no
-+member named '_tid'
-+
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-+---
-+(limited to 'libc/sysdeps/linux')
-+
-+diff --git a/libc/sysdeps/linux/ia64/bits/siginfo.h b/libc/sysdeps/linux/ia64/bits/siginfo.h
-+index f571f46..82cc73f 100644
-+--- a/libc/sysdeps/linux/ia64/bits/siginfo.h
-++++ b/libc/sysdeps/linux/ia64/bits/siginfo.h
-+@@ -309,6 +309,10 @@ typedef struct sigevent
-+       {
-+ 	int _pad[__SIGEV_PAD_SIZE];
-+ 
-++	/* When SIGEV_SIGNAL and SIGEV_THREAD_ID set, LWP ID of the
-++	   thread to receive the signal.  */
-++	__pid_t _tid;
-++
-+ 	struct
-+ 	  {
-+ 	    void (*_function) (sigval_t);	/* Function to start.  */
-+diff --git a/libc/sysdeps/linux/mips/bits/siginfo.h b/libc/sysdeps/linux/mips/bits/siginfo.h
-+index 79fb15a..84b08ca 100644
-+--- a/libc/sysdeps/linux/mips/bits/siginfo.h
-++++ b/libc/sysdeps/linux/mips/bits/siginfo.h
-+@@ -281,6 +281,10 @@ typedef struct sigevent
-+       {
-+ 	int _pad[__SIGEV_PAD_SIZE];
-+ 
-++	/* When SIGEV_SIGNAL and SIGEV_THREAD_ID set, LWP ID of the
-++	   thread to receive the signal.  */
-++	__pid_t _tid;
-++
-+ 	struct
-+ 	  {
-+ 	    void (*_function) (sigval_t);	/* Function to start.  */
-+diff --git a/libc/sysdeps/linux/sparc/bits/siginfo.h b/libc/sysdeps/linux/sparc/bits/siginfo.h
-+index 6f2d035..3ffeb6d 100644
-+--- a/libc/sysdeps/linux/sparc/bits/siginfo.h
-++++ b/libc/sysdeps/linux/sparc/bits/siginfo.h
-+@@ -288,6 +288,10 @@ typedef struct sigevent
-+       {
-+ 	int _pad[__SIGEV_PAD_SIZE];
-+ 
-++	/* When SIGEV_SIGNAL and SIGEV_THREAD_ID set, LWP ID of the
-++	   thread to receive the signal.  */
-++	__pid_t _tid;
-++
-+ 	struct
-+ 	  {
-+ 	    void (*_function) (sigval_t);	/* Function to start.  */
-+--
-+cgit v0.9.1
+Those options are set automatically when you choose, in the menuconfig,
+the type of CPU your target has. And since that will automatically set
+the BR2_GCC_TARGET_{ARCH,CPU,MTUNE} options, they are forcibly set.
+
+And since the raspberrypi_defconfig (as you use that as an example)
+already sets BR2_arm1176jzf_s=y, this will set BR2_GCC_TARGET_ARCH and
+BR2_GCC_TARGET_CPU.
+
+And this is exactly this situation this patch fixes: our options forcing
+the compiler flags, when some are already provided on the command line.
+
+So, there is no need (and no reason) to change any of our defconfigs to
+take advantage of this change.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.7.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
