@@ -1,37 +1,53 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed,  8 Jan 2014 16:47:05 +0000 (UTC)
-Subject: [Buildroot] [Bug 6770] openssl bump
-In-Reply-To: <bug-6770-163@https.bugs.busybox.net/>
-References: <bug-6770-163@https.bugs.busybox.net/>
-Message-ID: <20140108164705.63A429C3EB@busybox.osuosl.org>
+From: Hartley Sweeten <HartleyS@visionengravers.com>
+Date: Wed, 8 Jan 2014 17:05:44 +0000
+Subject: [Buildroot] ParaGUI package?
+In-Reply-To: <20140108113404.413a4685@skate>
+References: <DC148C5AA1CEBA4E87973D432B1C2D8817E678D7@P3PWEX4MB008.ex4.secureserver.net>
+ <20140108113404.413a4685@skate>
+Message-ID: <DC148C5AA1CEBA4E87973D432B1C2D8817E69053@P3PWEX4MB008.ex4.secureserver.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6770
+On Tuesday, January 07, 2014 8:34 PM, Thomas Petazzoni wrote:
+> On Wed, 8 Jan 2014 00:10:29 +0000, Hartley Sweeten wrote:
+>> I'm trying to find a simple GUI library that can be used with SDL and this one appears
+>> to cover my needs. Unfortunately the ParaGUI library appears to be a bit dead. The
+>> latest release at http://download.savannah.gnu.org/releases/paragui/ is
+>> 
+>> paragui-1.1.8.tar.gz	19-Oct-2004
+>> 
+>> I found a newer branch on https://github.com/pipelka/paragui that appears to be
+>> version 1.1.11.
+>
+> My first reaction is: do you really want to start using something that
+> appears to be dead/deprecated?
 
-Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
+Not really.. But, I have not been able to find anything else that fits my needs.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |ASSIGNED
-         AssignedTo|unassigned at buildroot.uclibc |gustavo at zacarias.com.ar
-                   |.org                        |
+>> Makefile.am: error: required file './NEWS' not found
+>> Makefile.am: error: required file './ChangeLog' not found
+>
+> These seems to be the real problems. Easiest solution is to add a post
+> patch hook with "touch $(@D)/NEWS $(@D)/ChangeLog"
+>
+> A cleaner solution is to add the "foreign" option in the
+> AM_INIT_AUTOMAKE call in configure.in, like:
+>
+> AM_INIT_AUTOMAKE([1.10 no-define foreign])
 
---- Comment #2 from Gustavo Zacarias <gustavo@zacarias.com.ar> 2014-01-08 16:47:05 UTC ---
-Tried a simple i386/i586 sourcery 2012.09 + ARM A9 EABI linaro 2013.11 target
-with openssl + wpa_supplicant + netsnmp enabled without issues.
-And i'm not seeing any failure in the autobuilders either.
-And i've personally built for uClibc toolchains with e300c3 & e500v2 targets
-without issues either (which include netsnmp, wpa_supplicant and other packages
-that use openssl).
-So i can't get a failure scenario.
-Sure there's nothing else going on? (specially since you're using your own
-toolchains) and the problem lies somewhere else?
+I was able to get it to compile under Buildroot yesterday. Now I just need to
+figure out what I did to make it work...
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+One issue I had was:
+
+aclocal: warning: autoconf input should be named 'configure.ac', not 'configure.in'
+
+The only way I could make this go away was by renaming the configure.in files.
+Is this warning normal? I don't remember seeing it with any other packages in
+Buildroot.
+
+Thanks,
+Hartley
