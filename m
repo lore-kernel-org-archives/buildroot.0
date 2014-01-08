@@ -1,125 +1,93 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Wed, 8 Jan 2014 13:45:59 +0100
-Subject: [Buildroot] [PATCH 2/5] toolchain/external: fix wrapper by not
- passing conflicting flags
-In-Reply-To: <5d0fbb9b1f4439750dde9bb7788b273ec94a3bd5.1389134731.git.yann.morin.1998@free.fr>
-References: <cover.1389134731.git.yann.morin.1998@free.fr>
- <5d0fbb9b1f4439750dde9bb7788b273ec94a3bd5.1389134731.git.yann.morin.1998@free.fr>
-Message-ID: <CAGduivx327zJ_Vy=NDzE9pQKBEkd+OPWHLw2SOYaHACMtvX07Q@mail.gmail.com>
+From: julien.boibessot at free.fr <julien.boibessot@free.fr>
+Date: Wed,  8 Jan 2014 14:07:36 +0100
+Subject: [Buildroot] [PATCH] Add LTris package (SDL game)
+Message-ID: <1389186456-21848-1-git-send-email-julien.boibessot@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, all
+From: Julien Boibessot <julien.boibessot@armadeus.com>
 
-On Tue, Jan 7, 2014 at 11:46 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
->
-> In our wrapper, we forcibly add the -march=, -mcpu= and-mtune= flags
-> to the actual copmpiler, this in an attempt to always generate correct
-> and optimised code for the target.
->
-> But in some cases, the caller knows better than we do, and passes its
-> own set, or subset of those flags. In this case, some may conflict with
-> the ones we pass. The most prominent offender being the Linux kernel.
->
-> For example, on the ARM Rapsberry Pi, the Linux kernel will set the
-> -march=armv6 flag and no -mcpu= flag, but we pass -mcpu=arm1176jzf-s,
-> which conflicts:
->
->     drivers/scsi/scsi_trace.c:1:0: warning: switch -mcpu=arm1176jzf-s
->     conflicts with -march=armv6 switch
->
-> (and so for all the files the kernel compiles, pretty messy)
-> (note: arm1176jzf-s is not an armv6, it is an armv6zk. Yeah...)
->
-> To avoid this situation, we scan our commandline for any occurence of
-> the possibly conflicting flags. If none is found, then we add our owns.
-> If any is found, then we don't add any of our owns.
->
-> The idea behind this is that we trust the caller to know better than
-> we do what it is doing. Since the biggest, and sole so far, offender
-> is the Linux kernel, then this is a rather safe bet.
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Peter Korsgaard <jacmet@uclibc.org>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> ---
->  .../toolchain-external/ext-toolchain-wrapper.c     | 41 ++++++++++++++++------
->  1 file changed, 31 insertions(+), 10 deletions(-)
->
-> diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-> index d54f1f5..81c6ed1 100644
-> --- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
-> +++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-> @@ -30,21 +30,17 @@ static char sysroot[PATH_MAX];
->   * that we only pass the predefined one to the real compiler if the inverse
->   * option isn't in the argument list.
->   * This specifies the worst case number of extra arguments we might pass
-> + * Currently, we have:
-> + *     -mfloat-abi=
-> + *     -march=
-> + *     -mtune=
-> + *     -mcpu=
->   */
-> -#define EXCLUSIVE_ARGS 1
-> +#define EXCLUSIVE_ARGS 4
->
->  static char *predef_args[] = {
->         path,
->         "--sysroot", sysroot,
-> -#ifdef BR_ARCH
-> -       "-march=" BR_ARCH,
-> -#endif /* BR_ARCH */
-> -#ifdef BR_TUNE
-> -       "-mtune=" BR_TUNE,
-> -#endif /* BR_TUNE */
-> -#ifdef BR_CPU
-> -       "-mcpu=" BR_CPU,
-> -#endif
->  #ifdef BR_ABI
->         "-mabi=" BR_ABI,
->  #endif
-> @@ -157,6 +153,31 @@ int main(int argc, char **argv)
->                 *cur++ = "-mfloat-abi=" BR_FLOAT_ABI;
->  #endif
->
-> +#if defined(BR_ARCH) || \
-> +    defined(BR_TUNE) || \
-> +    defined(BR_CPU)
-> +       /* Add our -march/cpu/tune/abi flags, but only if none are
-> +        * already specified on the commandline
-> +        */
-> +       for (i = 1; i < argc; i++) {
-> +               if (!strncmp(argv[i], "-march=", strlen("-march=")) ||
-> +                   !strncmp(argv[i], "-mtune=", strlen("-mtune=")) ||
-> +                   !strncmp(argv[i], "-mcpu=",  strlen("-mcpu=" )))
-> +                       break;
-> +       }
-> +       if (i == argc) {
-> +#ifdef BR_ARCH
-> +               *cur++ = "-march=" BR_ARCH;
-> +#endif
-> +#ifdef BR_TUNE
-> +               *cur++ = "-mtune=" BR_TUNE;
-> +#endif
-> +#ifdef BR_CPU
-> +               *cur++ = "-mcpu=" BR_CPU;
-> +#endif
-> +       }
-> +#endif /* ARCH || TUNE || CPU */
-> +
->         /* append forward args */
->         memcpy(cur, &argv[1], sizeof(char *) * (argc - 1));
->         cur += argc - 1;
-> --
-> 1.8.1.2
->
-Seems good to me.
-Shouldn't we change the different defconfig that exists ? At least the
-RaspberryPi so it would sets an example (and maybe add something about
-this in the manual ?)
+
+Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+---
+ package/Config.in       |    1 +
+ package/ltris/Config.in |   21 +++++++++++++++++++++
+ package/ltris/ltris.mk  |   24 ++++++++++++++++++++++++
+ 3 files changed, 46 insertions(+), 0 deletions(-)
+ create mode 100644 package/ltris/Config.in
+ create mode 100644 package/ltris/ltris.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index e502cde..35a7eea 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -158,6 +158,7 @@ menu "Games"
+ source "package/doom-wad/Config.in"
+ source "package/gnuchess/Config.in"
+ source "package/lbreakout2/Config.in"
++source "package/ltris/Config.in"
+ source "package/prboom/Config.in"
+ source "package/rubix/Config.in"
+ endmenu
+diff --git a/package/ltris/Config.in b/package/ltris/Config.in
+new file mode 100644
+index 0000000..ef0623c
+--- /dev/null
++++ b/package/ltris/Config.in
+@@ -0,0 +1,21 @@
++config BR2_PACKAGE_LTRIS
++	bool "LTris"
++	select BR2_PACKAGE_SDL
++	help
++	  LTris as a tetris clone, using SDL. It optionnally requires
++	  SDL_mixer for audio support.
++	  A display with minimum 640x480 resolution and a keyboard are
++	  recommanded.
++
++	  http://lgames.sourceforge.net/index.php?project=LTris
++
++if BR2_PACKAGE_LTRIS
++
++config BR2_PACKAGE_LTRIS_AUDIO
++	bool "audio support"
++	default y
++	select BR2_PACKAGE_SDL_MIXER
++	help
++	  Activates audio support in LTris. Will add SDL_mixer.
++
++endif
+diff --git a/package/ltris/ltris.mk b/package/ltris/ltris.mk
+new file mode 100644
+index 0000000..e26bf45
+--- /dev/null
++++ b/package/ltris/ltris.mk
+@@ -0,0 +1,24 @@
++#############################################################
++#
++# ltris
++#
++#############################################################
++
++LTRIS_SITE = http://downloads.sourceforge.net/lgames/ltris/
++LTRIS_VERSION = 1.0.19
++LTRIS_LICENSE = GPLv2+
++LTRIS_LICENSE_FILES = COPYING
++
++LTRIS_DEPENDENCIES = sdl
++
++LTRIS_CONF_ENV = \
++	SDL_CONFIG="$(STAGING_DIR)/usr/bin/sdl-config"
++
++ifeq ($(BR2_PACKAGE_LTRIS_AUDIO),y)
++LTRIS_DEPENDENCIES += sdl_mixer
++LTRIS_CONF_OPT += --enable-audio=yes
++else
++LTRIS_CONF_OPT += --disable-audio
++endif
++
++$(eval $(autotools-package))
+-- 
+1.7.5.4
