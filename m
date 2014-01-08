@@ -1,32 +1,27 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed,  8 Jan 2014 05:02:00 +0000 (UTC)
-Subject: [Buildroot] [Bug 6092] Bootable ISO image creation seems to have
- stopped working since 2012.08
-In-Reply-To: <bug-6092-163@https.bugs.busybox.net/>
-References: <bug-6092-163@https.bugs.busybox.net/>
-Message-ID: <20140108050200.AEFDB9C38C@busybox.osuosl.org>
+Date: Wed,  8 Jan 2014 05:18:06 +0000 (UTC)
+Subject: [Buildroot] [Bug 6080] Git fetch caching
+In-Reply-To: <bug-6080-163@https.bugs.busybox.net/>
+References: <bug-6080-163@https.bugs.busybox.net/>
+Message-ID: <20140108051806.53B739C3E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6092
+https://bugs.busybox.net/show_bug.cgi?id=6080
 
 Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
              Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+         Resolution|                            |WONTFIX
 
---- Comment #10 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2014-01-08 05:01:59 UTC ---
-I've tested ISO support with Grub recently on the master Buildroot branch, and
-it just worked. I did a few improvements to make things slightly better, but
-I'm not experiencing the problems described in this bug report.
-
-Therefore, I believe the bug has been fixed. If not, feel free to reopen, after
-testing the latest Buildroot version. Thanks!
+--- Comment #4 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2014-01-08 05:18:06 UTC ---
+I don't think this was really a "bug", what the user is seeing is expected
+Buildroot behavior.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
