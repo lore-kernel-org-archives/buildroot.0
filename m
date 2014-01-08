@@ -1,84 +1,37 @@
-From: Jeremy Rosen <jeremy.rosen@openwide.fr>
-Date: Wed, 8 Jan 2014 16:42:42 +0100 (CET)
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 8 Jan 2014 23:45:25 +0800
 Subject: [Buildroot] [PATCH] force devtmpfs and inotify kernel option
  when udev is used as dev handler
-In-Reply-To: <CANxTyt7ihvMb8NCwuNUbfvFXVsfC8M1KQA851zG5TpsLX3j-7g@mail.gmail.com>
-Message-ID: <1941682913.1448049.1389195762508.JavaMail.root@openwide.fr>
+In-Reply-To: <1389188913-15173-1-git-send-email-jeremy.rosen@openwide.fr>
+References: <1389188913-15173-1-git-send-email-jeremy.rosen@openwide.fr>
+Message-ID: <20140108234525.49fae894@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-good catch, i'll wait for more feedback (if any) and then resend
+Dear J?r?my Rosen,
 
-Cordialement 
+On Wed,  8 Jan 2014 14:48:33 +0100, J?r?my Rosen wrote:
 
-J?r?my Rosen 
-+33 (0)1 42 68 28 04
+> +	$(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV),
+> +                $(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER,$(@D)/.config)
+> +		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS,$(@D)/.config)
+> +		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(@D)/.config))
 
-fight key loggers : write some perl using vim 
+These two last lines are not needed, we already have:
 
+        $(if $(BR2_ROOTFS_DEVICE_CREATION_STATIC),,
+                $(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS,$(@D)/.config)
+                $(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(@D)/.config))
 
-Open Wide Ingenierie
+Note the two commas at the end of the first line. It means that when
+BR2_ROOTFS_DEVICE_CREATION_STATIC is *NOT* enabled, then we enabled
+devtmpfs and devtmpfs_mount.
 
-23, rue Daviel
-75012 Paris - France
-www.openwide.fr
-
-
-
-
-
------ Mail original -----
-> J?r?my,
-> 
-> On Wed, Jan 8, 2014 at 8:48 AM, J?r?my Rosen
-> <jeremy.rosen@openwide.fr> wrote:
-> > Signed-off-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
-> >
-> > ---
-> > patch suggested by Thomas Petazzoni
-> >
-> > I also added devtmpfs because it's documented as needed but wasn't
-> > enforced
-> > ---
-> >  linux/linux.mk | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> >
-> > diff --git a/linux/linux.mk b/linux/linux.mk
-> > index fa8aa0c..2482952 100644
-> > --- a/linux/linux.mk
-> > +++ b/linux/linux.mk
-> > @@ -185,6 +185,10 @@ define LINUX_CONFIGURE_CMDS
-> >                 $(call
-> >                 KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(@D)/.config))
-> >         $(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),
-> >                 $(call
-> >                 KCONFIG_SET_OPT,CONFIG_UEVENT_HELPER_PATH,\"/sbin/mdev\",$(@D)/.config))
-> > +       $(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV),
-> > +                $(call
-> > KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER,$(@D)/.config)
-> 
-> The above INOTIFY line has an extra leading space compared with the
-> other lines.
-> 
-> Danomi -
-> 
-> > +               $(call
-> > KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS,$(@D)/.config)
-> > +               $(call
-> > KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(@D)/.config))
-> >         $(if $(BR2_PACKAGE_KTAP),
-> >                 $(call
-> >                 KCONFIG_ENABLE_OPT,CONFIG_DEBUG_FS,$(@D)/.config)
-> >                 $(call
-> >                 KCONFIG_ENABLE_OPT,CONFIG_EVENT_TRACING,$(@D)/.config)
-> > --
-> > 1.8.5.2
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
