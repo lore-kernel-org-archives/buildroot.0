@@ -1,83 +1,76 @@
 From: Matt Weber <mlweber1@rockwellcollins.com>
-Date: Tue, 7 Jan 2014 22:25:34 -0600
-Subject: [Buildroot] [PATCH v2] python-posix-ipc: new package
-Message-ID: <1389155134-14506-1-git-send-email-mlweber1@rockwellcollins.com>
+Date: Tue, 7 Jan 2014 22:34:07 -0600
+Subject: [Buildroot] [PATCH v3] added python unicode selection to menu
+Message-ID: <1389155647-17521-1-git-send-email-mlweber1@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Matthew Weber <mlweber1@rockwellcollins.com>
+
 This patch is based on the original new pkg patch submitted last Jan
-and is part of the "Patchwork oldest patches cleanup #5".  It combines
-the original "[1/2]/[2/2] new package: python-posix_ipc" patch files.
+and is part of the "Patchwork oldest patches cleanup #5".
 
 Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
----
-Changes v1 -> v2:
- - Added depends on BR2_TOOLCHAIN_HAS_THREADS (Suggested by Thomas P)
-   (used for critical section calls, mutex/etc...)
- - Fixed license to be BSD-3c, important to note the pkg website
-   lists BSD-2c.  (Suggested by Thomas P)
----
- package/Config.in                            |    1 +
- package/python-posix-ipc/Config.in           |   14 ++++++++++++++
- package/python-posix-ipc/python-poxix-ipc.mk |   14 ++++++++++++++
- 3 files changed, 29 insertions(+), 0 deletions(-)
- create mode 100644 package/python-posix-ipc/Config.in
- create mode 100644 package/python-posix-ipc/python-poxix-ipc.mk
+--
 
-diff --git a/package/Config.in b/package/Config.in
-index e502cde..501bd3d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -406,6 +406,7 @@ source "package/python-meld3/Config.in"
- source "package/python-msgpack/Config.in"
- source "package/python-netifaces/Config.in"
- source "package/python-nfc/Config.in"
-+source "package/python-posix-ipc/Config.in"
- source "package/python-protobuf/Config.in"
- source "package/python-pyasn/Config.in"
- source "package/python-pycrypto/Config.in"
-diff --git a/package/python-posix-ipc/Config.in b/package/python-posix-ipc/Config.in
-new file mode 100644
-index 0000000..eba36ed
---- /dev/null
-+++ b/package/python-posix-ipc/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_PYTHON_POSIX_IPC
-+	bool "python-posix-ipc"
-+	depends on BR2_PACKAGE_PYTHON
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
+Changes v2 -> v3:
+ - Removed host-python unicode configuration
+   (No usecase and host doesn't have to match target) Suggested by Thomas P.
+
+Changes v1 -> v2:
+ - None, resubmit after testing against current tip.
+---
+ package/python/Config.in |   18 ++++++++++++++++++
+ package/python/python.mk |    5 +++++
+ 2 files changed, 23 insertions(+), 0 deletions(-)
+
+diff --git a/package/python/Config.in b/package/python/Config.in
+index b1c0935..a0c78c6 100644
+--- a/package/python/Config.in
++++ b/package/python/Config.in
+@@ -84,6 +84,24 @@ config BR2_PACKAGE_PYTHON_UNICODEDATA
+ 	help
+ 	  Unicode character database (used by stringprep module) (large).
+ 
++if BR2_PACKAGE_PYTHON_UNICODEDATA
++
++choice
++	prompt "Python unicode database format"
++	default BR2_PACKAGE_PYTHON_UCS2
 +	help
-+	  The Python extension module posix_ipc gives access to POSIX
-+	  inter-process semaphores, shared memory and message queues
-+	  on systems that support the POSIX Realtime Extensions
-+	  a.k.a. POSIX 1003.1b-1993.
++	  Select Python unicode database format for target
 +
-+	  http://semanchuk.com/philip/posix_ipc/
++config BR2_PACKAGE_PYTHON_UCS2
++	bool "Universal Character Set 2-byte (UCS2)"
 +
-+comment "python-posix-ipc needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/python-posix-ipc/python-poxix-ipc.mk b/package/python-posix-ipc/python-poxix-ipc.mk
-new file mode 100644
-index 0000000..3e81bbf
---- /dev/null
-+++ b/package/python-posix-ipc/python-poxix-ipc.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-posix-ipc
-+#
-+################################################################################
++config BR2_PACKAGE_PYTHON_UCS4
++	bool "Universal Character Set 4-byte (UCS4)"
 +
-+PYTHON_POSIX_IPC_VERSION = 0.9.6
-+PYTHON_POSIX_IPC_SOURCE = posix_ipc-$(PYTHON_POSIX_IPC_VERSION).tar.gz
-+PYTHON_POSIX_IPC_SITE = http://semanchuk.com/philip/posix_ipc/
-+PYTHON_POSIX_IPC_LICENSE = BSD-3c
-+PYTHON_POSIX_IPC_LICENSE_FILES = LICENSE
-+PYTHON_POSIX_IPC_SETUP_TYPE = distutils
++endchoice
 +
-+$(eval $(python-package))
++endif
++
+ config BR2_PACKAGE_PYTHON_SQLITE
+ 	bool "sqlite module"
+ 	select BR2_PACKAGE_SQLITE
+diff --git a/package/python/python.mk b/package/python/python.mk
+index bc42e8f..42ca538 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -102,6 +102,11 @@ ifneq ($(BR2_PACKAGE_PYTHON_UNICODEDATA),y)
+ PYTHON_CONF_OPT += --disable-unicodedata
+ endif
+ 
++# Default is UCS2 w/o a conf opt
++ifeq ($(BR2_PACKAGE_PYTHON_UCS4),y)
++PYTHON_CONF_OPT      += --enable-unicode=ucs4
++endif
++
+ ifeq ($(BR2_PACKAGE_PYTHON_BZIP2),y)
+ PYTHON_DEPENDENCIES += bzip2
+ else
 -- 
 1.7.1
