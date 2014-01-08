@@ -1,35 +1,44 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Wed, 08 Jan 2014 22:22:23 +0100
-Subject: [Buildroot] [PATCH 0/2] Drop X11 dependency of libpthread-stubs
-	and libdrm
-References: <1387553624-6780-1-git-send-email-paul@crapouillou.net>
- <20131220165345.7cdfe46b@skate>
-Message-ID: <f5s0qaxfsc.ln2@ID-313208.user.individual.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 08 Jan 2014 22:28:59 +0100
+Subject: [Buildroot] [PATCH] force devtmpfs and inotify kernel option
+	when udev is used as dev handler
+In-Reply-To: <1389188913-15173-1-git-send-email-jeremy.rosen@openwide.fr>
+ (=?utf-8?B?IkrDqXLDqW15?= Rosen"'s message of "Wed, 8 Jan 2014 14:48:33
+ +0100")
+References: <1389188913-15173-1-git-send-email-jeremy.rosen@openwide.fr>
+Message-ID: <87ha9enox0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote
-in news:20131220165345.7cdfe46b at skate: 
+>>>>> "J?r?my" == J?r?my Rosen <jeremy.rosen@openwide.fr> writes:
 
-> Just wanted to mention that these patches are very similar to the ones
-> sent by Spenser quite a long time ago:
-> 
->   http://patchwork.ozlabs.org/patch/278296/
->   http://patchwork.ozlabs.org/patch/278297/
+ > Signed-off-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
+ > ---
+ > patch suggested by Thomas Petazzoni
 
-Hi,
+ > I also added devtmpfs because it's documented as needed but wasn't enforced
+ > ---
+ >  linux/linux.mk | 4 ++++
+ >  1 file changed, 4 insertions(+)
 
-yes, they are similar, but Paul addressed the hints given by you to Spenser?s 
-original patches. As Spenser seems to lack time[1] and Paul?s patches apply 
-without errors upon git HEAD it maybe a good idea to have a look at them 
-again ;)
+ > diff --git a/linux/linux.mk b/linux/linux.mk
+ > index fa8aa0c..2482952 100644
+ > --- a/linux/linux.mk
+ > +++ b/linux/linux.mk
+ > @@ -185,6 +185,10 @@ define LINUX_CONFIGURE_CMDS
+ >  		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(@D)/.config))
+ >  	$(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),
+ >  		$(call KCONFIG_SET_OPT,CONFIG_UEVENT_HELPER_PATH,\"/sbin/mdev\",$(@D)/.config))
+ > +	$(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV),
+ > +                $(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER,$(@D)/.config)
+ > +		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS,$(@D)/.config)
+ > +		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(@D)/.config))
 
-Currently I am compile-testing Paul?s patches...
+Committed with the indentation fixed and the unneeded devtmpfs handling
+removed, thanks.
 
-Regards, Bernd
-
-[1] http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/73716
+-- 
+Bye, Peter Korsgaard
