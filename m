@@ -1,98 +1,211 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed,  8 Jan 2014 12:16:33 +0200
-Subject: [Buildroot] [PATCH 2/4] uclibc: xtensa: restore posix_fadvise
+Date: Wed,  8 Jan 2014 12:16:34 +0200
+Subject: [Buildroot] [PATCH 3/4] uclibc: xtensa: update ptrace.h
 In-Reply-To: <cover.1389168903.git.baruch@tkos.co.il>
 References: <cover.1389168903.git.baruch@tkos.co.il>
-Message-ID: <4530342fbc11d02c54250cb51da9009c2c83a33f.1389175037.git.baruch@tkos.co.il>
+Message-ID: <9a706d5ab9ea59687cf9c88c5684e0131e7e91eb.1389175037.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is the correct fix to
-http://autobuild.buildroot.net/results/79c/79cdb149d349ce9fe2dffbf53e3ff127a050ed24/.
-Commit c3d690166c (e2fsprogs: fix posix_fadvise() signature mismatch) fixed the
-build failure, but not the underlying problem. The e2fsprogs internal
-posix_fadvise() is broken, and upstream has removed it entirely.
+Fixes
+http://autobuild.buildroot.net/results/84f/84fb918efbcbf1312a228a9c11608edf096b3c40/.
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- ..._fadvise-restore-implementation-for-xtens.patch | 68 ++++++++++++++++++++++
- 1 file changed, 68 insertions(+)
- create mode 100644 package/uclibc/3a3ad3dfc10876b3648369f22df8fc06661ddef0/0002-linux-posix_fadvise-restore-implementation-for-xtens.patch
+ .../0003-xtensa-use-common-ptrace.h.patch          | 184 +++++++++++++++++++++
+ 1 file changed, 184 insertions(+)
+ create mode 100644 package/uclibc/3a3ad3dfc10876b3648369f22df8fc06661ddef0/0003-xtensa-use-common-ptrace.h.patch
 
-diff --git a/package/uclibc/3a3ad3dfc10876b3648369f22df8fc06661ddef0/0002-linux-posix_fadvise-restore-implementation-for-xtens.patch b/package/uclibc/3a3ad3dfc10876b3648369f22df8fc06661ddef0/0002-linux-posix_fadvise-restore-implementation-for-xtens.patch
+diff --git a/package/uclibc/3a3ad3dfc10876b3648369f22df8fc06661ddef0/0003-xtensa-use-common-ptrace.h.patch b/package/uclibc/3a3ad3dfc10876b3648369f22df8fc06661ddef0/0003-xtensa-use-common-ptrace.h.patch
 new file mode 100644
-index 0000000..3d4c999
+index 0000000..a0a4221
 --- /dev/null
-+++ b/package/uclibc/3a3ad3dfc10876b3648369f22df8fc06661ddef0/0002-linux-posix_fadvise-restore-implementation-for-xtens.patch
-@@ -0,0 +1,68 @@
-+From 0613b77cea6a01e4ad7d12977ae601a97e1ffdc5 Mon Sep 17 00:00:00 2001
-+Message-Id: <0613b77cea6a01e4ad7d12977ae601a97e1ffdc5.1389164521.git.baruch@tkos.co.il>
++++ b/package/uclibc/3a3ad3dfc10876b3648369f22df8fc06661ddef0/0003-xtensa-use-common-ptrace.h.patch
+@@ -0,0 +1,184 @@
++From fbb30f0471176a18fb14ebf0ac4abc491f5bdf1a Mon Sep 17 00:00:00 2001
++Message-Id: <fbb30f0471176a18fb14ebf0ac4abc491f5bdf1a.1389164521.git.baruch@tkos.co.il>
 +In-Reply-To: <7dbb2e43f34f53305d7807018865691c430efe5e.1389164521.git.baruch@tkos.co.il>
 +References: <7dbb2e43f34f53305d7807018865691c430efe5e.1389164521.git.baruch@tkos.co.il>
 +From: Baruch Siach <baruch@tkos.co.il>
-+Date: Sun, 5 Jan 2014 11:44:02 +0200
-+Subject: [PATCH 2/3] linux: posix_fadvise: restore implementation for xtensa
++Date: Sun, 5 Jan 2014 14:39:03 +0200
++Subject: [PATCH 3/3] xtensa: use common ptrace.h
 +
-+Commit ee84b8b400 (linux: posix_fadvise: use new SYSCALL_ALIGN_64BIT)
-+removed posix_fadvise implementation for xtensa, since xtensa does not
-+define __NR_fadvise64. Reuse the ARM support code to restore xtensa support.
-+
-+This commit is based Mike Frysinger's suggested patch.
++Adds support for architecture independent actions.
 +
 +Patch status: posted upstream
-+(http://lists.uclibc.org/pipermail/uclibc/2014-January/048148.html)
++(http://lists.uclibc.org/pipermail/uclibc/2014-January/048149.html).
 +
-+Cc: Mike Frysinger <vapier@gentoo.org>
++Cc: Chris Zankel <chris@zankel.net>
 +Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 +---
-+ libc/sysdeps/linux/common/posix_fadvise.c | 15 +++++++++++----
-+ 1 file changed, 11 insertions(+), 4 deletions(-)
++ libc/sysdeps/linux/xtensa/sys/ptrace.h | 155 ---------------------------------
++ 1 file changed, 155 deletions(-)
++ delete mode 100644 libc/sysdeps/linux/xtensa/sys/ptrace.h
 +
-+diff --git a/libc/sysdeps/linux/common/posix_fadvise.c b/libc/sysdeps/linux/common/posix_fadvise.c
-+index e102ce7..25c2941 100644
-+--- a/libc/sysdeps/linux/common/posix_fadvise.c
-++++ b/libc/sysdeps/linux/common/posix_fadvise.c
-+@@ -10,18 +10,25 @@
-+ 
-+ #include <sys/syscall.h>
-+ 
-+-#if defined(__NR_fadvise64) || defined(__NR_arm_fadvise64_64)
-++#ifdef __NR_arm_fadvise64_64
-++/* We handle the 64bit alignment issue which is why the arm guys renamed their
-++ * syscall in the first place.  So rename it back.
-++ */
-++# define __NR_fadvise64_64 __NR_arm_fadvise64_64
-++#endif
-++
-++#if defined(__NR_fadvise64) || defined(__NR_fadvise64_64)
-+ # include <fcntl.h>
-+ # include <endian.h>
-+ # include <bits/wordsize.h>
-+ 
-+-# ifdef __NR_arm_fadvise64_64
-++# ifdef __NR_fadvise64_64
-+ int posix_fadvise64(int fd, off64_t offset, off64_t len, int advice);
-+ # endif
-+ 
-+ int posix_fadvise(int fd, off_t offset, off_t len, int advice)
-+ {
-+-# ifdef __NR_arm_fadvise64_64
-++# ifdef __NR_fadvise64_64
-+ 	return posix_fadvise64(fd, offset, len, advice);
-+ # else
-+ 	int ret;
-+@@ -41,7 +48,7 @@ int posix_fadvise(int fd, off_t offset, off_t len, int advice)
-+ 	return 0;
-+ #  endif
-+ }
-+-# if defined __UCLIBC_HAS_LFS__ && ((!defined __NR_fadvise64_64 && !defined __NR_arm_fadvise64_64) || __WORDSIZE == 64)
-++# if defined __UCLIBC_HAS_LFS__ && (!defined __NR_fadvise64_64 || __WORDSIZE == 64)
-+ strong_alias(posix_fadvise,posix_fadvise64)
-+ # endif
-+ #endif
++diff --git a/libc/sysdeps/linux/xtensa/sys/ptrace.h b/libc/sysdeps/linux/xtensa/sys/ptrace.h
++deleted file mode 100644
++index 882b8c8..0000000
++--- a/libc/sysdeps/linux/xtensa/sys/ptrace.h
+++++ /dev/null
++@@ -1,155 +0,0 @@
++-/* `ptrace' debugger support interface.  Linux version.
++-   Copyright (C) 1996, 1997, 1998, 1999, 2000, 2007
++-   Free Software Foundation, Inc.
++-   This file is part of the GNU C Library.
++-
++-   The GNU C Library is free software; you can redistribute it and/or
++-   modify it under the terms of the GNU Lesser General Public
++-   License as published by the Free Software Foundation; either
++-   version 2.1 of the License, or (at your option) any later version.
++-
++-   The GNU C Library is distributed in the hope that it will be useful,
++-   but WITHOUT ANY WARRANTY; without even the implied warranty of
++-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++-   Lesser General Public License for more details.
++-
++-   You should have received a copy of the GNU Lesser General Public
++-   License along with the GNU C Library; if not, see
++-   <http://www.gnu.org/licenses/>.  */
++-
++-#ifndef _SYS_PTRACE_H
++-#define _SYS_PTRACE_H	1
++-
++-#include <features.h>
++-
++-/* Kludge away careless namespace pollution from the kernel. */
++-
++-#undef PTRACE_GETREGS
++-#undef PTRACE_SETREGS
++-#undef PTRACE_GETFPREGS
++-#undef PTRACE_SETFPREGS
++-#undef PTRACE_GETFPREGSIZE
++-
++-
++-__BEGIN_DECLS
++-
++-/* Type of the REQUEST argument to `ptrace.'  */
++-enum __ptrace_request
++-{
++-  /* Indicate that the process making this request should be traced.
++-     All signals received by this process can be intercepted by its
++-     parent, and its parent can use the other `ptrace' requests.  */
++-  PTRACE_TRACEME = 0,
++-#define PT_TRACE_ME PTRACE_TRACEME
++-
++-  /* Return the word in the process's text space at address ADDR.  */
++-  PTRACE_PEEKTEXT = 1,
++-#define PT_READ_I PTRACE_PEEKTEXT
++-
++-  /* Return the word in the process's data space at address ADDR.  */
++-  PTRACE_PEEKDATA = 2,
++-#define PT_READ_D PTRACE_PEEKDATA
++-
++-  /* Return the word in the process's user area at offset ADDR.  */
++-  PTRACE_PEEKUSER = 3,
++-#define PT_READ_U PTRACE_PEEKUSER
++-
++-  /* Write the word DATA into the process's text space at address ADDR.  */
++-  PTRACE_POKETEXT = 4,
++-#define PT_WRITE_I PTRACE_POKETEXT
++-
++-  /* Write the word DATA into the process's data space at address ADDR.  */
++-  PTRACE_POKEDATA = 5,
++-#define PT_WRITE_D PTRACE_POKEDATA
++-
++-  /* Write the word DATA into the process's user area at offset ADDR.  */
++-  PTRACE_POKEUSER = 6,
++-#define PT_WRITE_U PTRACE_POKEUSER
++-
++-  /* Continue the process.  */
++-  PTRACE_CONT = 7,
++-#define PT_CONTINUE PTRACE_CONT
++-
++-  /* Kill the process.  */
++-  PTRACE_KILL = 8,
++-#define PT_KILL PTRACE_KILL
++-
++-  /* Single step the process.
++-     This is not supported on all machines.  */
++-  PTRACE_SINGLESTEP = 9,
++-#define PT_STEP PTRACE_SINGLESTEP
++-
++-  /* Get all general purpose registers used by a processes.
++-     This is not supported on all machines.  */
++-   PTRACE_GETREGS = 12,
++-#define PT_GETREGS PTRACE_GETREGS
++-
++-  /* Set all general purpose registers used by a processes.
++-     This is not supported on all machines.  */
++-   PTRACE_SETREGS = 13,
++-#define PT_SETREGS PTRACE_SETREGS
++-
++-  /* Get all floating point registers used by a processes.
++-     This is not supported on all machines.  */
++-   PTRACE_GETFPREGS = 14,
++-#define PT_GETFPREGS PTRACE_GETFPREGS
++-
++-  /* Set all floating point registers used by a processes.
++-     This is not supported on all machines.  */
++-   PTRACE_SETFPREGS = 15,
++-#define PT_SETFPREGS PTRACE_SETFPREGS
++-
++-  /* Attach to a process that is already running. */
++-  PTRACE_ATTACH = 16,
++-#define PT_ATTACH PTRACE_ATTACH
++-
++-  /* Detach from a process attached to with PTRACE_ATTACH.  */
++-  PTRACE_DETACH = 17,
++-#define PT_DETACH PTRACE_DETACH
++-
++-  /* Get size required for the buffer holding the floating point registers.
++-     This is not supported on all machines.  */
++-   PTRACE_GETFPREGSIZE = 18,
++-#define PT_GETFPREGSIZE PTRACE_GETFPREGSIZE
++-
++-  /* Continue and stop at the next (return from) syscall.  */
++-  PTRACE_SYSCALL = 24
++-#define PT_SYSCALL PTRACE_SYSCALL
++-};
++-
++-/* Options set using PTRACE_SETOPTIONS.  */
++-enum __ptrace_setoptions {
++-  PTRACE_O_TRACESYSGOOD	= 0x00000001,
++-  PTRACE_O_TRACEFORK	= 0x00000002,
++-  PTRACE_O_TRACEVFORK   = 0x00000004,
++-  PTRACE_O_TRACECLONE	= 0x00000008,
++-  PTRACE_O_TRACEEXEC	= 0x00000010,
++-  PTRACE_O_TRACEVFORKDONE = 0x00000020,
++-  PTRACE_O_TRACEEXIT	= 0x00000040,
++-  PTRACE_O_MASK		= 0x0000007f
++-};
++-
++-/* Wait extended result codes for the above trace options.  */
++-enum __ptrace_eventcodes {
++-  PTRACE_EVENT_FORK	= 1,
++-  PTRACE_EVENT_VFORK	= 2,
++-  PTRACE_EVENT_CLONE	= 3,
++-  PTRACE_EVENT_EXEC	= 4,
++-  PTRACE_EVENT_VFORK_DONE = 5,
++-  PTRACE_EVENT_EXIT	= 6
++-};
++-
++-/* Perform process tracing functions.  REQUEST is one of the values
++-   above, and determines the action to be taken.
++-   For all requests except PTRACE_TRACEME, PID specifies the process to be
++-   traced.
++-
++-   PID and the other arguments described above for the various requests should
++-   appear (those that are used for the particular request) as:
++-     pid_t PID, void *ADDR, int DATA, void *ADDR2
++-   after REQUEST.  */
++-extern long int ptrace (enum __ptrace_request __request, ...) __THROW;
++-
++-__END_DECLS
++-
++-#endif /* _SYS_PTRACE_H */
 +-- 
 +1.8.5.2
 +
