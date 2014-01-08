@@ -1,178 +1,95 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed,  8 Jan 2014 12:16:32 +0200
-Subject: [Buildroot] [PATCH 1/4] uclibc: xtensa: fix posix_spawn autoconf
-	detection
-In-Reply-To: <cover.1389168903.git.baruch@tkos.co.il>
-References: <cover.1389168903.git.baruch@tkos.co.il>
-Message-ID: <c4d6811f859e8dcc4346652ae94c1b42fffc9fac.1389175037.git.baruch@tkos.co.il>
+Date: Wed, 8 Jan 2014 13:55:18 +0200
+Subject: [Buildroot] [PATCH 1/1] ca-certificates: new package
+In-Reply-To: <CAFGQKxcycH3_PtqzeXsGoVHw49j0hXt9FWM=ZQNQwPnk5uLF-g@mail.gmail.com>
+References: <1389126590-25956-1-git-send-email-martin@barkynet.com>
+ <20140108045207.GD4659@sapphire.tkos.co.il>
+ <CAFGQKxcycH3_PtqzeXsGoVHw49j0hXt9FWM=ZQNQwPnk5uLF-g@mail.gmail.com>
+Message-ID: <20140108115517.GH4659@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-posix_spawn is a new feature in uClibc development branch. Move posix_spawn
-implementation from librt to libc so that gnulib can detect it correctly.
+Hi Martin,
 
-Fixes
-http://autobuild.buildroot.net/results/ab1/ab1250c3d402ec3fbaf22eeffd07de218ffafb22/.
+On Wed, Jan 08, 2014 at 11:30:25AM +0000, Martin Bark wrote:
+> Thanks for the feedback Baruch,
+> 
+> I'll update to use $(BR2_DEBIAN_MIRROR)
+> 
+> Although the files mentioned in debian/copying do not directly end up in
+> the rootfs they are used.  mozilla/certdata.txt is a big list of
+> certificates and mozilla/certdata2pem.py is a python script which is run to
+> split mozilla/certdata.txt into all the separate pem files that end up in
+> the rootfs.  Therefore i think this license info is valid.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
+I think you are right, but the string should indicate that. Something like
 
-This a more correct alternative to http://patchwork.ozlabs.org/patch/305872/.
----
- .../0001-spawn-move-from-librt-to-libc.patch       | 142 +++++++++++++++++++++
- 1 file changed, 142 insertions(+)
- create mode 100644 package/uclibc/3a3ad3dfc10876b3648369f22df8fc06661ddef0/0001-spawn-move-from-librt-to-libc.patch
+CA_CERTIFICATES_LICENSE = GPLv2+ (script), MPLv2.0 (data)
 
-diff --git a/package/uclibc/3a3ad3dfc10876b3648369f22df8fc06661ddef0/0001-spawn-move-from-librt-to-libc.patch b/package/uclibc/3a3ad3dfc10876b3648369f22df8fc06661ddef0/0001-spawn-move-from-librt-to-libc.patch
-new file mode 100644
-index 0000000..d47a06f
---- /dev/null
-+++ b/package/uclibc/3a3ad3dfc10876b3648369f22df8fc06661ddef0/0001-spawn-move-from-librt-to-libc.patch
-@@ -0,0 +1,142 @@
-+From 7dbb2e43f34f53305d7807018865691c430efe5e Mon Sep 17 00:00:00 2001
-+Message-Id: <7dbb2e43f34f53305d7807018865691c430efe5e.1389164521.git.baruch@tkos.co.il>
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Wed, 8 Jan 2014 07:43:49 +0200
-+Subject: [PATCH 1/3] spawn: move from librt to libc
-+
-+This makes uClibc compatible with glibc, and allows gnulib autoconf macros to
-+correctly detect posix_spawn support.
-+
-+Patch status: posted upstream
-+(http://lists.uclibc.org/pipermail/uclibc/2014-January/048160.html)
-+
-+Cc: Ismael Luceno <ismael.luceno@gmail.com>
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+ libc/Makefile.in                               |  1 +
-+ libc/spawn/Makefile                            | 13 +++++++++++++
-+ libc/spawn/Makefile.in                         | 25 +++++++++++++++++++++++++
-+ {librt => libc/spawn}/spawn.c                  |  0
-+ {librt => libc/spawn}/spawn_faction_addclose.c |  0
-+ {librt => libc/spawn}/spawn_faction_adddup2.c  |  0
-+ {librt => libc/spawn}/spawn_faction_addopen.c  |  0
-+ {librt => libc/spawn}/spawn_faction_init.c     |  0
-+ {librt => libc/spawn}/spawn_int.h              |  0
-+ librt/Makefile.in                              |  7 -------
-+ 10 files changed, 39 insertions(+), 7 deletions(-)
-+ create mode 100644 libc/spawn/Makefile
-+ create mode 100644 libc/spawn/Makefile.in
-+ rename {librt => libc/spawn}/spawn.c (100%)
-+ rename {librt => libc/spawn}/spawn_faction_addclose.c (100%)
-+ rename {librt => libc/spawn}/spawn_faction_adddup2.c (100%)
-+ rename {librt => libc/spawn}/spawn_faction_addopen.c (100%)
-+ rename {librt => libc/spawn}/spawn_faction_init.c (100%)
-+ rename {librt => libc/spawn}/spawn_int.h (100%)
-+
-+diff --git a/libc/Makefile.in b/libc/Makefile.in
-+index 3b6a17b..4dd980b 100644
-+--- a/libc/Makefile.in
-++++ b/libc/Makefile.in
-+@@ -37,6 +37,7 @@ include $(libc_DIR)/inet/Makefile.in
-+ include $(libc_DIR)/signal/Makefile.in
-+ include $(libc_DIR)/stdlib/Makefile.in
-+ include $(libc_DIR)/unistd/Makefile.in
-++include $(libc_DIR)/spawn/Makefile.in
-+ 
-+ ifeq ($(DOPIC),y)
-+ libc-a-y = $(libc-y:.o=.os) $(libc-static-y:.o=.os)
-+diff --git a/libc/spawn/Makefile b/libc/spawn/Makefile
-+new file mode 100644
-+index 0000000..11f362a
-+--- /dev/null
-++++ b/libc/spawn/Makefile
-+@@ -0,0 +1,13 @@
-++# Makefile for uClibc
-++#
-++# Copyright (C) 2000-2005 Erik Andersen <andersen@uclibc.org>
-++#
-++# Licensed under the LGPL v2.1, see the file COPYING.LIB in this tarball.
-++#
-++
-++top_srcdir=../../
-++top_builddir=../../
-++all: objs
-++include $(top_builddir)Rules.mak
-++include Makefile.in
-++include $(top_srcdir)Makerules
-+diff --git a/libc/spawn/Makefile.in b/libc/spawn/Makefile.in
-+new file mode 100644
-+index 0000000..8a06309
-+--- /dev/null
-++++ b/libc/spawn/Makefile.in
-+@@ -0,0 +1,25 @@
-++# Makefile for uClibc
-++#
-++# Copyright (C) 2000-2008 Erik Andersen <andersen@uclibc.org>
-++#
-++# Licensed under the LGPL v2.1, see the file COPYING.LIB in this tarball.
-++#
-++
-++subdirs += libc/spawn
-++
-++CSRC-y :=
-++CSRC-$(UCLIBC_HAS_ADVANCED_REALTIME) := spawn.c spawn_faction_addclose.c \
-++	spawn_faction_adddup2.c spawn_faction_addopen.c spawn_faction_init.c
-++
-++SPAWN_DIR := $(top_srcdir)libc/spawn
-++SPAWN_OUT := $(top_builddir)libc/spawn
-++
-++SPAWN_SRC := $(patsubst %.c,$(SPAWN_DIR)/%.c,$(CSRC-y))
-++SPAWN_OBJ := $(patsubst %.c,$(SPAWN_OUT)/%.o,$(CSRC-y))
-++
-++libc-y += $(SPAWN_OBJ)
-++
-++objclean-y += CLEAN_libc/spawn
-++
-++CLEAN_libc/spawn:
-++	$(do_rm) $(addprefix $(SPAWN_OUT)/*., o os)
-+diff --git a/librt/spawn.c b/libc/spawn/spawn.c
-+similarity index 100%
-+rename from librt/spawn.c
-+rename to libc/spawn/spawn.c
-+diff --git a/librt/spawn_faction_addclose.c b/libc/spawn/spawn_faction_addclose.c
-+similarity index 100%
-+rename from librt/spawn_faction_addclose.c
-+rename to libc/spawn/spawn_faction_addclose.c
-+diff --git a/librt/spawn_faction_adddup2.c b/libc/spawn/spawn_faction_adddup2.c
-+similarity index 100%
-+rename from librt/spawn_faction_adddup2.c
-+rename to libc/spawn/spawn_faction_adddup2.c
-+diff --git a/librt/spawn_faction_addopen.c b/libc/spawn/spawn_faction_addopen.c
-+similarity index 100%
-+rename from librt/spawn_faction_addopen.c
-+rename to libc/spawn/spawn_faction_addopen.c
-+diff --git a/librt/spawn_faction_init.c b/libc/spawn/spawn_faction_init.c
-+similarity index 100%
-+rename from librt/spawn_faction_init.c
-+rename to libc/spawn/spawn_faction_init.c
-+diff --git a/librt/spawn_int.h b/libc/spawn/spawn_int.h
-+similarity index 100%
-+rename from librt/spawn_int.h
-+rename to libc/spawn/spawn_int.h
-+diff --git a/librt/Makefile.in b/librt/Makefile.in
-+index 8555e94..abaa8ca 100644
-+--- a/librt/Makefile.in
-++++ b/librt/Makefile.in
-+@@ -35,13 +35,6 @@ librt_filter_SRC += clock_nanosleep.c clock_getcpuclockid.c clock_gettime.c
-+ librt_SSRC :=
-+ endif
-+ 
-+-librt_filter_SRC += $(if $(UCLIBC_HAS_ADVANCED_REALTIME),, \
-+-	spawn.c \
-+-	spawn_faction_addclose.c \
-+-	spawn_faction_adddup2.c \
-+-	spawn_faction_addopen.c \
-+-	spawn_faction_init.c)
-+-
-+ librt_SRC := $(filter-out $(librt_filter_SRC),$(librt_SRC))
-+ 
-+ librt_OBJ := $(patsubst %.c,$(librt_OUT)/%.o,$(librt_SRC))
-+-- 
-+1.8.5.2
-+
+baruch
+
+> On 8 January 2014 04:52, Baruch Siach <baruch@tkos.co.il> wrote:
+> > Thanks for the patch. A few comments below.
+> >
+> > On Tue, Jan 07, 2014 at 08:29:50PM +0000, Martin Bark wrote:
+> > > CA certificates used for SSL based applications.  The package installs CA
+> > > certificates to /usr/share/ca-certificates and creates symbolic links
+> > under
+> > > /etc/ssl/certs.  For example, the existing libcurl package will use these
+> > > certificates for https urls.  Based on the debian ca-certifcates package.
+> > >
+> > > Signed-off-by: Martin Bark <martin@barkynet.com>
+> >
+> > [...]
+> >
+> > > +CA_CERTIFICATES_VERSION = 20130906
+> > > +CA_CERTIFICATES_SOURCE =
+> > ca-certificates_$(CA_CERTIFICATES_VERSION).tar.gz
+> > > +CA_CERTIFICATES_SITE =
+> > ftp://ftp.debian.org/debian/pool/main/c/ca-certificates
+> >
+> > Please use $(BR2_DEBIAN_MIRROR). See package/at/at.mk, for example.
+> >
+> > > +CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python
+> > > +CA_CERTIFICATES_LICENSE = GPLv2+ MPLv2.0
+> > > +CA_CERTIFICATES_LICENSE_FILES = debian/copyright
+> >
+> > According to debian/copyright these licenses apply to the specific files
+> > listed there. You don't use any of these files as far as I can see.
+> >
+> > > +define CA_CERTIFICATES_BUILD_CMDS
+> > > +    PATH=$(HOST_PATH) $(MAKE) -C $(@D) all
+> > > +endef
+> > > +
+> > > +define CA_CERTIFICATES_INSTALL_TARGET_CMDS
+> > > +    $(INSTALL) -d -m 0755 $(TARGET_DIR)/usr/share/ca-certificates
+> > > +    $(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/ssl/certs
+> > > +    $(MAKE) -C $(@D) install DESTDIR=$(TARGET_DIR)
+> > > +    rm -f $(TARGET_DIR)/usr/sbin/update-ca-certificates
+> > > +
+> > > +    #remove any existing certificates under /etc/ssl/certs
+> > > +    rm -f  $(TARGET_DIR)/etc/ssl/certs/*
+> > > +
+> > > +    #generate symlinks to certificates under /etc/ssl/certs
+> > > +    ( \
+> > > +      cd $(TARGET_DIR) ;\
+> > > +      for i in `find usr/share/ca-certificates -name "*.crt"` ; do \
+> > > +            ln -sf ../../../$$i etc/ssl/certs/`basename $${i%.crt}.pem`
+> > ;\
+> > > +      done ;\
+> > > +    )
+> > > +
+> > > +    #create symbolic links to the certificates by their hash values
+> > > +    $(HOST_DIR)/usr/bin/c_rehash $(TARGET_DIR)/etc/ssl/certs
+> > > +endef
+> > > +
+> > > +$(eval $(generic-package))
+> > > --
+
 -- 
-1.8.5.2
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
