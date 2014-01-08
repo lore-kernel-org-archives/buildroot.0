@@ -1,32 +1,39 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Wed, 8 Jan 2014 19:25:24 +0100
-Subject: [Buildroot] [PATCH 1/1] xorg: Bump xlib_libXfont version to 1.4.7
-Message-ID: <BLU0-SMTP123C86DC2F5240BB0AA92F2D9B10@phx.gbl>
+From: Clayton Shotwell <clshotwe@rockwellcollins.com>
+Date: Wed, 8 Jan 2014 12:27:38 -0600
+Subject: [Buildroot] [PATCH] cryptsetup: Link against -lrt for
+	clock_gettime
+In-Reply-To: <52CD7B62.6000106@zacarias.com.ar>
+References: <1389115451-4096-1-git-send-email-Vincent.Riera@imgtec.com>
+ <OF00B93CC6.8A6EB2A8-ON86257C5A.0052E7B2-86257C5A.00538718@rockwellcollins.com>
+ <52CD7B62.6000106@zacarias.com.ar>
+Message-ID: <OF2E6B5209.C0B8B95C-ON86257C5A.006542A1-86257C5A.00655EBD@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CVE-2013-6462: unlimited sscanf overflows stack buffer in bdfReadCharacters()
+Gustavo,
 
-Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
----
- package/x11r7/xlib_libXfont/xlib_libXfont.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Gustavo Zacarias <gustavo@zacarias.com.ar> wrote on 01/08/2014 10:22:58 
+AM:
 
-diff --git a/package/x11r7/xlib_libXfont/xlib_libXfont.mk b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
-index 735c5e7..b692d08 100644
---- a/package/x11r7/xlib_libXfont/xlib_libXfont.mk
-+++ b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XLIB_LIBXFONT_VERSION = 1.4.6
-+XLIB_LIBXFONT_VERSION = 1.4.7
- XLIB_LIBXFONT_SOURCE = libXfont-$(XLIB_LIBXFONT_VERSION).tar.bz2
- XLIB_LIBXFONT_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXFONT_LICENSE = MIT
--- 
-1.7.9.5
+> Hi, take a look at packages/linux-pam/linux-pam-04-mkdir.patch maybe
+> it's the same problem? (very old bundled gettext).
+> Regards.
+
+That is the same problem exactly.  Thanks for pointing that out.
+
+Vicente,
+
+Would you be able to incorporate that patch into your submission for 
+fixing cryptsetup?
+
+
+Thanks,
+Clayton
+
+Clayton Shotwell
+Software Engineer
+clshotwe at rockwellcollins.com
+www.rockwellcollins.com 
