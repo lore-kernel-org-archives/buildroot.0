@@ -1,53 +1,158 @@
-From: Clayton Shotwell <clshotwe@rockwellcollins.com>
-Date: Wed, 8 Jan 2014 09:12:45 -0600
-Subject: [Buildroot] [PATCH] cryptsetup: Link against -lrt for
-	clock_gettime
-In-Reply-To: <1389115451-4096-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1389115451-4096-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <OF00B93CC6.8A6EB2A8-ON86257C5A.0052E7B2-86257C5A.00538718@rockwellcollins.com>
+From: julien.boibessot at free.fr <julien.boibessot@free.fr>
+Date: Wed,  8 Jan 2014 16:18:09 +0100
+Subject: [Buildroot] [PATCH] Add SMS Tools Server 3 package
+Message-ID: <1389194289-10657-1-git-send-email-julien.boibessot@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Vincent,
+From: Julien Boibessot <julien.boibessot@armadeus.com>
 
-buildroot-bounces at busybox.net wrote on 01/07/2014 11:24:11 AM:
 
-> Applying an upstream patch to fix clock_gettime undefined reference
-> errors.
-> 
-> Upstream patch URL:
->    https://code.google.com/p/cryptsetup/source/detail?
-> r=3ba95a822f70ff1e8141230bc2830ae46346486b
-> 
-> Fixes:
->    http://autobuild.buildroot.net/results/bed/
-> bed37fac9bc54d3dbe956e4af632a044a5829acd/
-> 
+Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+---
+ package/Config.in              |    1 +
+ package/smstools3/Config.in    |   24 ++++++++++++++++++++++
+ package/smstools3/S50smsd      |   43 ++++++++++++++++++++++++++++++++++++++++
+ package/smstools3/smstools3.mk |   35 ++++++++++++++++++++++++++++++++
+ 4 files changed, 103 insertions(+), 0 deletions(-)
+ create mode 100644 package/smstools3/Config.in
+ create mode 100644 package/smstools3/S50smsd
+ create mode 100644 package/smstools3/smstools3.mk
 
-I tried your patch but the build errored with the following lines.
-
-Making install in po
-/home/test/outputs/b5e/b5ef439aed8bce6c43381daa69bce690131d2934/output/target/usr/share
-make[3]: execvp: 
-/home/test/outputs/b5e/b5ef439aed8bce6c43381daa69bce690131d2934/output/target/usr/share: 
-Permission denied
-make[3]: *** [install-data-yes] Error 127
-make[2]: *** [install-recursive] Error 1
-make[1]: *** 
-[/home/test/outputs/b5e/b5ef439aed8bce6c43381daa69bce690131d2934/output/build/cryptsetup-1.6.3/.stamp_target_installed] 
-Error 2
-make: *** [_all] Error 2
-
-This seems to be the same error that Axel Lin reported on 12/19 but I am 
-not sure how to fix it. The issue is related to MKDIR_P not being defined 
-properly (should be defined as "/bin/mkdir -p")when the install step is 
-called for the po folder. The MKDIR_P variable is being found properly 
-accoring to the config.log. I did a little digging but I was unable to 
-find a solution. I am not an autoconf expert by any means but there may be 
-someone else who has seen this issue before.
-
-Thanks,
-Clayton
+diff --git a/package/Config.in b/package/Config.in
+index e502cde..1f4fe14 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -901,6 +901,7 @@ source "package/samba/Config.in"
+ source "package/sconeserver/Config.in"
+ source "package/ser2net/Config.in"
+ source "package/smcroute/Config.in"
++source "package/smstools3/Config.in"
+ source "package/socat/Config.in"
+ source "package/socketcand/Config.in"
+ source "package/spawn-fcgi/Config.in"
+diff --git a/package/smstools3/Config.in b/package/smstools3/Config.in
+new file mode 100644
+index 0000000..e0ea0f7
+--- /dev/null
++++ b/package/smstools3/Config.in
+@@ -0,0 +1,24 @@
++config BR2_PACKAGE_SMSTOOLS3
++	bool "smstools3"
++	depends on BR2_USE_WCHAR
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  The SMS Server Tools 3 is a SMS Gateway software which can send and
++	  receive short messages through GSM modems and mobile phones.
++
++	  http://smstools3.kekekasvi.com/
++
++if BR2_PACKAGE_SMSTOOLS3
++
++config BR2_PACKAGE_SMSTOOLS3_NB_MODEMS
++	string "Number of modems to support"
++	default 1
++
++config BR2_PACKAGE_SMSTOOLS3_START_AT_BOOT
++	bool "Start SMS Server Tools at system boot"
++	default y
++
++endif
++
++comment "smstools3 needs a toolchain w/ wchar, threads"
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/smstools3/S50smsd b/package/smstools3/S50smsd
+new file mode 100644
+index 0000000..ded4189
+--- /dev/null
++++ b/package/smstools3/S50smsd
+@@ -0,0 +1,43 @@
++#!/bin/sh
++#
++# Starts the SMS Server Tools 3
++#
++
++NAME=smsd
++DAEMON=/usr/local/bin/$NAME
++PIDFILE=/var/run/$NAME.pid
++SPOOL=/var/spool/sms
++
++start()
++{
++	echo -n "Starting $NAME: "
++	mkdir -p $SPOOL/outgoing
++	mkdir -p $SPOOL/incoming
++	mkdir -p $SPOOL/checked
++	start-stop-daemon -S -q -p $PIDFILE --exec $DAEMON -- -c /etc/smsd.conf && echo "OK" || echo "Failed"
++}
++
++stop()
++{
++	echo -n "Stopping $NAME: "
++	start-stop-daemon -K -q -p $PIDFILE && echo "OK" || echo "Failed"
++	rm -f $PIDFILE
++}
++
++case "$1" in
++	start)
++		start
++		;;
++	stop)
++		stop
++		;;
++	restart|reload)
++		stop
++		start
++		;;
++	*)
++		echo "Usage: $0 {start|stop|restart}"
++		exit 1
++esac
++
++exit $?
+diff --git a/package/smstools3/smstools3.mk b/package/smstools3/smstools3.mk
+new file mode 100644
+index 0000000..2403b6f
+--- /dev/null
++++ b/package/smstools3/smstools3.mk
+@@ -0,0 +1,35 @@
++#############################################################
++#
++# smstools3
++#
++#############################################################
++
++SMSTOOLS3_VERSION = 3.1.15
++SMSTOOLS3_SITE = http://smstools3.kekekasvi.com/packages/
++SMSTOOLS3_LICENSE = GPLv2+
++SMSTOOLS3_LICENSE_FILES = doc/license.html LICENSE
++
++SMSTOOLS3_NB_MODEMS = $(call qstrip,$(BR2_PACKAGE_SMSTOOLS3_NB_MODEMS))
++SMSTOOLS3_CFLAGS = $(TARGET_CFLAGS)
++SMSTOOLS3_CFLAGS += -D NUMBER_OF_MODEMS=$(SMSTOOLS3_NB_MODEMS)
++SMSTOOLS3_CFLAGS += -D NOSTATS
++
++define SMSTOOLS3_BUILD_CMDS
++	$(MAKE) CC="$(TARGET_CC)" CFLAGS="$(SMSTOOLS3_CFLAGS)" -C $(@D)
++endef
++
++ifeq ($(BR2_PACKAGE_SMSTOOLS3_START_AT_BOOT),y)
++SMSTOOLS3_INIT_SCRIPT_NAME = S50smsd
++else
++SMSTOOLS3_INIT_SCRIPT_NAME = 50smsd
++endif
++
++define SMSTOOLS3_INSTALL_TARGET_CMDS
++	mkdir -p $(TARGET_DIR)/usr/local/bin
++	cp $(@D)/src/smsd $(TARGET_DIR)/usr/local/bin
++	cp $(@D)/scripts/sendsms $(TARGET_DIR)/usr/local/bin
++	cp $(@D)/examples/smsd.conf.easy $(TARGET_DIR)/etc/
++	$(INSTALL) -m 0755 -D package/smstools3/S50smsd $(TARGET_DIR)/etc/init.d/$(SMSTOOLS3_INIT_SCRIPT_NAME)
++endef
++
++$(eval $(generic-package))
+-- 
+1.7.5.4
