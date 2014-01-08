@@ -1,20 +1,23 @@
-From: Andre Renaud <andre@bluewatersys.com>
-Date: Thu, 9 Jan 2014 09:36:47 +1300
-Subject: [Buildroot] Empty utility package scripts
-Message-ID: <CAPfzE3bOwMBNDLJszXtEK8OfAsWdgLTvt-8ObvJvnBcnyHQhDw@mail.gmail.com>
+From: Bernd Kuhls <berndkuhls@hotmail.com>
+Date: Wed, 08 Jan 2014 22:32:48 +0100
+Subject: [Buildroot] [PATCH 1/1] libdrm: bump to version 2.4.50
+References: <BLU0-SMTP198AF3F5E0B3969DC570633D9CE0@phx.gbl>
+Message-ID: <0ps0qax4le.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Bernd Kuhls <berndkuhls@hotmail.com> wrote in
+news:BLU0-SMTP198AF3F5E0B3969DC570633D9CE0 at phx.gbl: 
+
+> -LIBDRM_VERSION = 2.4.46
+> +LIBDRM_VERSION = 2.4.50
+
 Hi,
-I'm trying to create a utility package script which doesn't do any
-downloading, just copies some local files around (startup scripts),
-and creates a user in /etc/passwd. However I can't find any examples
-of packages that don't do any downloading/configuring/building.
 
-Is this possible, or am I going about it the wrong way?
+superseded by http://patchwork.ozlabs.org/patch/308462/
+Old patch marked as superseded in patchworks.
 
-Regards,
-Andre
+Regards, Bernd
