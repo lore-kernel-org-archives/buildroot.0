@@ -1,34 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Jan 2014 22:04:05 +0100
-Subject: [Buildroot] [git commit] xorg: Bump xlib_libXfont version to 1.4.7
-Message-ID: <20140108213639.9807B9C3EB@busybox.osuosl.org>
+Date: Wed, 8 Jan 2014 22:33:15 +0100
+Subject: [Buildroot] [git commit] libdmtx: add license information
+Message-ID: <20140108213640.0FF259C3EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a4df98122f5012c79ce0ef9006476d4a61440bba
+commit: http://git.buildroot.net/buildroot/commit/?id=3c96bc7372fda02c782740c6fb81c085119b9c66
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-CVE-2013-6462: unlimited sscanf overflows stack buffer in bdfReadCharacters()
-
-Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xlib_libXfont/xlib_libXfont.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/libdmtx/libdmtx.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXfont/xlib_libXfont.mk b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
-index 735c5e7..b692d08 100644
---- a/package/x11r7/xlib_libXfont/xlib_libXfont.mk
-+++ b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libdmtx/libdmtx.mk b/package/libdmtx/libdmtx.mk
+index 69c7b88..146534e 100644
+--- a/package/libdmtx/libdmtx.mk
++++ b/package/libdmtx/libdmtx.mk
+@@ -6,6 +6,8 @@
  
--XLIB_LIBXFONT_VERSION = 1.4.6
-+XLIB_LIBXFONT_VERSION = 1.4.7
- XLIB_LIBXFONT_SOURCE = libXfont-$(XLIB_LIBXFONT_VERSION).tar.bz2
- XLIB_LIBXFONT_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXFONT_LICENSE = MIT
+ LIBDMTX_VERSION = 0.7.4
+ LIBDMTX_SITE = http://downloads.sourceforge.net/project/libdmtx/libdmtx/$(LIBDMTX_VERSION)
++LIBDMTX_LICENSE = BSD-2c or Special Permission
++LIBDMTX_LICENSE_FILES = LICENSE
+ LIBDMTX_INSTALL_STAGING = YES
+ 
+ $(eval $(autotools-package))
