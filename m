@@ -1,102 +1,181 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Wed,  8 Jan 2014 17:15:30 +0000
-Subject: [Buildroot] [PATCH v2] ca-certificates: new package
-Message-ID: <1389201330-2420-1-git-send-email-martin@barkynet.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 8 Jan 2014 17:32:44 +0000
+Subject: [Buildroot] [PATCH 2/2] uclibc: Make __SIGEV_PAD_SIZE to take
+	__WORDSIZE into account
+In-Reply-To: <1389202364-19387-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1389202364-19387-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <1389202364-19387-2-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CA certificates used for SSL based applications.  The package installs CA
-certificates to /usr/share/ca-certificates and creates symbolic links under
-/etc/ssl/certs.  For example, the existing libcurl package will use these
-certificates for https urls.  Based on the debian ca-certifcates package.
+Applying an upstream patch to make __SIGEV_PAD_SIZE to take __WORDSIZE
+into account for alpha, mips and ia64 arches.
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
----
-Changes v1 -> v2
-    - Change CA_CERTIFICATES_SITE to use $(BR2_DEBIAN_MIRROR) (suggested by Baruch Siach)
-    - Clarify license usage in CA_CERTIFICATES_LICENSE (suggested by Baruch Siach)
----
- package/Config.in                          |    1 +
- package/ca-certificates/Config.in          |    9 +++++++
- package/ca-certificates/ca-certificates.mk |   39 ++++++++++++++++++++++++++++
- 3 files changed, 49 insertions(+)
- create mode 100644 package/ca-certificates/Config.in
- create mode 100644 package/ca-certificates/ca-certificates.mk
+Upstream patch URL:
+   http://git.uclibc.org/uClibc/commit/libc/sysdeps/linux?id=b97b4b698b023f75b54f987859c856ab4861ea00
 
-diff --git a/package/Config.in b/package/Config.in
-index e502cde..28ad4f4 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -471,6 +471,7 @@ endmenu
- 
- menu "Crypto"
- source "package/beecrypt/Config.in"
-+source "package/ca-certificates/Config.in"
- source "package/cryptodev/Config.in"
- source "package/gnutls/Config.in"
- source "package/libassuan/Config.in"
-diff --git a/package/ca-certificates/Config.in b/package/ca-certificates/Config.in
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ ...EV_PAD_SIZE-takes-__WORDSIZE-into-account.patch |   70 ++++++++++++++++++++
+ ...EV_PAD_SIZE-takes-__WORDSIZE-into-account.patch |   70 ++++++++++++++++++++
+ 2 files changed, 140 insertions(+), 0 deletions(-)
+ create mode 100644 package/uclibc/0.9.32.1/uclibc-0010-siginfo_h-__SIGEV_PAD_SIZE-takes-__WORDSIZE-into-account.patch
+ create mode 100644 package/uclibc/0.9.33.2/uclibc-0056-siginfo_h-__SIGEV_PAD_SIZE-takes-__WORDSIZE-into-account.patch
+
+diff --git a/package/uclibc/0.9.32.1/uclibc-0010-siginfo_h-__SIGEV_PAD_SIZE-takes-__WORDSIZE-into-account.patch b/package/uclibc/0.9.32.1/uclibc-0010-siginfo_h-__SIGEV_PAD_SIZE-takes-__WORDSIZE-into-account.patch
 new file mode 100644
-index 0000000..0e52bc1
+index 0000000..1ad84c5
 --- /dev/null
-+++ b/package/ca-certificates/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_CA_CERTIFICATES
-+    bool "CA Certificates"
-+    help
-+      This package includes PEM files of CA certificates to allow
-+      SSL-based applications to check for the authenticity of SSL
-+      connections.
++++ b/package/uclibc/0.9.32.1/uclibc-0010-siginfo_h-__SIGEV_PAD_SIZE-takes-__WORDSIZE-into-account.patch
+@@ -0,0 +1,70 @@
++siginfo.h: __SIGEV_PAD_SIZE takes __WORDSIZE into account
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 +
-+      It includes, among others, certificate authorities used by the
-+      Debian infrastructure and those shipped with Mozilla's browsers.
-diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
++From b97b4b698b023f75b54f987859c856ab4861ea00 Mon Sep 17 00:00:00 2001
++From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++Date: Thu, 02 Jan 2014 15:02:12 +0000
++Subject: siginfo.h: __SIGEV_PAD_SIZE takes __WORDSIZE into account
++
++Make __SIGEV_PAD_SIZE to take __WORDSIZE into account for alpha, mips
++and ia64 arches.
++
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
++---
++(limited to 'libc/sysdeps/linux')
++
++diff --git a/libc/sysdeps/linux/alpha/bits/siginfo.h b/libc/sysdeps/linux/alpha/bits/siginfo.h
++index 9993f66..0a37ad0 100644
++--- a/libc/sysdeps/linux/alpha/bits/siginfo.h
+++++ b/libc/sysdeps/linux/alpha/bits/siginfo.h
++@@ -257,7 +257,11 @@ enum
++ 
++ /* Structure to transport application-defined values with signals.  */
++ # define __SIGEV_MAX_SIZE	64
++-# define __SIGEV_PAD_SIZE	((__SIGEV_MAX_SIZE / sizeof (int)) - 4)
+++# if __WORDSIZE == 64
+++#  define __SIGEV_PAD_SIZE	((__SIGEV_MAX_SIZE / sizeof (int)) - 4)
+++# else
+++#  define __SIGEV_PAD_SIZE	((__SIGEV_MAX_SIZE / sizeof (int)) - 3)
+++# endif
++ 
++ typedef struct sigevent
++   {
++diff --git a/libc/sysdeps/linux/ia64/bits/siginfo.h b/libc/sysdeps/linux/ia64/bits/siginfo.h
++index 82cc73f..3ac988b 100644
++--- a/libc/sysdeps/linux/ia64/bits/siginfo.h
+++++ b/libc/sysdeps/linux/ia64/bits/siginfo.h
++@@ -297,7 +297,11 @@ enum
++ 
++ /* Structure to transport application-defined values with signals.  */
++ # define __SIGEV_MAX_SIZE	64
++-# define __SIGEV_PAD_SIZE	((__SIGEV_MAX_SIZE / sizeof (int)) - 4)
+++# if __WORDSIZE == 64
+++#  define __SIGEV_PAD_SIZE	((__SIGEV_MAX_SIZE / sizeof (int)) - 4)
+++# else
+++#  define __SIGEV_PAD_SIZE	((__SIGEV_MAX_SIZE / sizeof (int)) - 3)
+++# endif
++ 
++ typedef struct sigevent
++   {
++diff --git a/libc/sysdeps/linux/mips/bits/siginfo.h b/libc/sysdeps/linux/mips/bits/siginfo.h
++index 84b08ca..a6e4135 100644
++--- a/libc/sysdeps/linux/mips/bits/siginfo.h
+++++ b/libc/sysdeps/linux/mips/bits/siginfo.h
++@@ -264,8 +264,11 @@ enum
++ 
++ /* Structure to transport application-defined values with signals.  */
++ # define __SIGEV_MAX_SIZE	64
++-# define __SIGEV_HEAD_SIZE	(sizeof(long) + 2*sizeof(int))
++-# define __SIGEV_PAD_SIZE	((__SIGEV_MAX_SIZE - __SIGEV_HEAD_SIZE) / sizeof (int))
+++# if __WORDSIZE == 64
+++#  define __SIGEV_PAD_SIZE	((__SIGEV_MAX_SIZE / sizeof (int)) - 4)
+++# else
+++#  define __SIGEV_PAD_SIZE	((__SIGEV_MAX_SIZE / sizeof (int)) - 3)
+++# endif
++ 
++ /* Forward declaration of the `pthread_attr_t' type.  */
++ struct __pthread_attr_s;
++--
++cgit v0.9.1
+diff --git a/package/uclibc/0.9.33.2/uclibc-0056-siginfo_h-__SIGEV_PAD_SIZE-takes-__WORDSIZE-into-account.patch b/package/uclibc/0.9.33.2/uclibc-0056-siginfo_h-__SIGEV_PAD_SIZE-takes-__WORDSIZE-into-account.patch
 new file mode 100644
-index 0000000..6cf2e7a
+index 0000000..1ad84c5
 --- /dev/null
-+++ b/package/ca-certificates/ca-certificates.mk
-@@ -0,0 +1,39 @@
-+################################################################################
-+#
-+# ca-certificates
-+#
-+################################################################################
++++ b/package/uclibc/0.9.33.2/uclibc-0056-siginfo_h-__SIGEV_PAD_SIZE-takes-__WORDSIZE-into-account.patch
+@@ -0,0 +1,70 @@
++siginfo.h: __SIGEV_PAD_SIZE takes __WORDSIZE into account
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 +
-+CA_CERTIFICATES_VERSION = 20130906
-+CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.gz
-+CA_CERTIFICATES_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/c/ca-certificates
-+CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python
-+CA_CERTIFICATES_LICENSE = GPLv2+ (script), MPLv2.0 (data)
-+CA_CERTIFICATES_LICENSE_FILES = debian/copyright
++From b97b4b698b023f75b54f987859c856ab4861ea00 Mon Sep 17 00:00:00 2001
++From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++Date: Thu, 02 Jan 2014 15:02:12 +0000
++Subject: siginfo.h: __SIGEV_PAD_SIZE takes __WORDSIZE into account
 +
-+define CA_CERTIFICATES_BUILD_CMDS
-+    PATH=$(HOST_PATH) $(MAKE) -C $(@D) all
-+endef
++Make __SIGEV_PAD_SIZE to take __WORDSIZE into account for alpha, mips
++and ia64 arches.
 +
-+define CA_CERTIFICATES_INSTALL_TARGET_CMDS
-+    $(INSTALL) -d -m 0755 $(TARGET_DIR)/usr/share/ca-certificates
-+    $(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/ssl/certs
-+    $(MAKE) -C $(@D) install DESTDIR=$(TARGET_DIR)
-+    rm -f $(TARGET_DIR)/usr/sbin/update-ca-certificates
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
++---
++(limited to 'libc/sysdeps/linux')
 +
-+    #remove any existing certificates under /etc/ssl/certs
-+    rm -f  $(TARGET_DIR)/etc/ssl/certs/*
-+
-+    #generate symlinks to certificates under /etc/ssl/certs
-+    ( \
-+      cd $(TARGET_DIR) ;\
-+      for i in `find usr/share/ca-certificates -name "*.crt"` ; do \
-+            ln -sf ../../../$$i etc/ssl/certs/`basename $${i%.crt}.pem` ;\
-+      done ;\
-+    )
-+
-+    #create symbolic links to the certificates by their hash values
-+    $(HOST_DIR)/usr/bin/c_rehash $(TARGET_DIR)/etc/ssl/certs
-+endef
-+
-+$(eval $(generic-package))
++diff --git a/libc/sysdeps/linux/alpha/bits/siginfo.h b/libc/sysdeps/linux/alpha/bits/siginfo.h
++index 9993f66..0a37ad0 100644
++--- a/libc/sysdeps/linux/alpha/bits/siginfo.h
+++++ b/libc/sysdeps/linux/alpha/bits/siginfo.h
++@@ -257,7 +257,11 @@ enum
++ 
++ /* Structure to transport application-defined values with signals.  */
++ # define __SIGEV_MAX_SIZE	64
++-# define __SIGEV_PAD_SIZE	((__SIGEV_MAX_SIZE / sizeof (int)) - 4)
+++# if __WORDSIZE == 64
+++#  define __SIGEV_PAD_SIZE	((__SIGEV_MAX_SIZE / sizeof (int)) - 4)
+++# else
+++#  define __SIGEV_PAD_SIZE	((__SIGEV_MAX_SIZE / sizeof (int)) - 3)
+++# endif
++ 
++ typedef struct sigevent
++   {
++diff --git a/libc/sysdeps/linux/ia64/bits/siginfo.h b/libc/sysdeps/linux/ia64/bits/siginfo.h
++index 82cc73f..3ac988b 100644
++--- a/libc/sysdeps/linux/ia64/bits/siginfo.h
+++++ b/libc/sysdeps/linux/ia64/bits/siginfo.h
++@@ -297,7 +297,11 @@ enum
++ 
++ /* Structure to transport application-defined values with signals.  */
++ # define __SIGEV_MAX_SIZE	64
++-# define __SIGEV_PAD_SIZE	((__SIGEV_MAX_SIZE / sizeof (int)) - 4)
+++# if __WORDSIZE == 64
+++#  define __SIGEV_PAD_SIZE	((__SIGEV_MAX_SIZE / sizeof (int)) - 4)
+++# else
+++#  define __SIGEV_PAD_SIZE	((__SIGEV_MAX_SIZE / sizeof (int)) - 3)
+++# endif
++ 
++ typedef struct sigevent
++   {
++diff --git a/libc/sysdeps/linux/mips/bits/siginfo.h b/libc/sysdeps/linux/mips/bits/siginfo.h
++index 84b08ca..a6e4135 100644
++--- a/libc/sysdeps/linux/mips/bits/siginfo.h
+++++ b/libc/sysdeps/linux/mips/bits/siginfo.h
++@@ -264,8 +264,11 @@ enum
++ 
++ /* Structure to transport application-defined values with signals.  */
++ # define __SIGEV_MAX_SIZE	64
++-# define __SIGEV_HEAD_SIZE	(sizeof(long) + 2*sizeof(int))
++-# define __SIGEV_PAD_SIZE	((__SIGEV_MAX_SIZE - __SIGEV_HEAD_SIZE) / sizeof (int))
+++# if __WORDSIZE == 64
+++#  define __SIGEV_PAD_SIZE	((__SIGEV_MAX_SIZE / sizeof (int)) - 4)
+++# else
+++#  define __SIGEV_PAD_SIZE	((__SIGEV_MAX_SIZE / sizeof (int)) - 3)
+++# endif
++ 
++ /* Forward declaration of the `pthread_attr_t' type.  */
++ struct __pthread_attr_s;
++--
++cgit v0.9.1
 -- 
-1.7.9.5
+1.7.1
