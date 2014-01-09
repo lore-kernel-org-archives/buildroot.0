@@ -1,30 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Jan 2014 07:23:47 +0800
-Subject: [Buildroot] [PATCH] libnfc-llcp: rename to libllcp and bump
- version
-In-Reply-To: <1389287265-1498-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1389287265-1498-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20140110072347.40221f62@skate>
+Date: Fri, 10 Jan 2014 07:26:26 +0800
+Subject: [Buildroot] make clean (did not really clean)
+In-Reply-To: <CAPFcPT+R7f7+iJokS2cm-bFqtcsETy03FTKvSaSuft9HuZC57w@mail.gmail.com>
+References: <CAPFcPT+R7f7+iJokS2cm-bFqtcsETy03FTKvSaSuft9HuZC57w@mail.gmail.com>
+Message-ID: <20140110072626.0532ebf2@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Dear Mau Z,
 
-On Thu, 9 Jan 2014 17:07:45 +0000, Vicente Olivert Riera wrote:
+On Thu, 9 Jan 2014 14:40:20 +0200, Mau Z wrote:
 
-> -config BR2_PACKAGE_LIBNFC_LLCP
-> -	bool "libnfc-llcp"
-> +config BR2_PACKAGE_LIBLLCP
-> +	bool "libllcp"
+> I just want to share some information (maybe known to all):
+> 
+> I did several experiments in order to build a Linux image (with build-root
+> 13.05).
+> In one of them I have added udev to the image. later on I have removed udev
+> from the image.
+> But, actually I was not removed whatever I did, it was still there on the
+> next boot (I could see it in dmesg).
+> 
+> make clean
+> delete every thing from the target
 
-You're renaming an option which I believe was part of a Buildroot
-release, so please add the necessary Config.in.legacy stuff to ensure
-that users upgrading are notified of this change.
+No, "make clean" does not only removes the target stuff. It removes
+*everything* that was built, i.e everything that was in output/.
 
-Thanks!
+> The only thing that helped was "make distclean"
+> Warning about "make distclean" :  it deletes ALL files which where not part
+> of the build-root distribution (This is it's design). So, one should copy
+> text files and config files to a temporary location before issuing "make
+> distclean".
+
+This is not expected. "make clean" should clearly be sufficient.
+
+Best regards,
 
 Thomas
 -- 
