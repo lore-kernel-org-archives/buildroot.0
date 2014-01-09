@@ -1,169 +1,120 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 9 Jan 2014 16:26:03 +0100
-Subject: [Buildroot] [git commit] busybox: add upstream 1.22.0 fixes
-Message-ID: <20140109152751.3B9719C3D3@busybox.osuosl.org>
+Date: Thu, 9 Jan 2014 16:22:32 +0100
+Subject: [Buildroot] [git commit] sdl: Fix compilation with libX11 >=
+	1.5.99.902
+Message-ID: <20140109152751.337F99C3D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=49cfa71e41e8d401cb4616c7f6bab2deafb5072e
+commit: http://git.buildroot.net/buildroot/commit/?id=4f3f23a55f0873562cad02629936dc5392ea5c40
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Applying an upstream patch to fix a compilation error with versions of
+libX11 since 1.5.99.902. This patch modifies configure.in so we need to
+run autogen.sh to make it working correctly. Running autoreconf will
+fail because SDL uses bit tricky automake/autoconf configuration.
+
+Upstream patch URL:
+   http://hg.libsdl.org/SDL/rev/91ad7b43317a
+
+Fixes:
+   http://autobuild.buildroot.net/results/bf8/bf83466a7bbb0635d97fe279a18778d92f20bea2/
+
+[Peter: add comment why we're doing this, add needed dependencies]
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../busybox/1.22.0/0002-busybox-1.22.0-find.patch  |   40 ++++++++++
- .../busybox/1.22.0/0003-busybox-1.22.0-grep.patch  |   80 ++++++++++++++++++++
- .../busybox/1.22.0/0004-busybox-1.22.0-ntpd.patch  |   11 +++
- 3 files changed, 131 insertions(+), 0 deletions(-)
+ .../sdl/sdl-0002-fix-compilation-with-libx11.patch |   60 ++++++++++++++++++++
+ package/sdl/sdl.mk                                 |   10 +++
+ 2 files changed, 70 insertions(+), 0 deletions(-)
 
-diff --git a/package/busybox/1.22.0/0002-busybox-1.22.0-find.patch b/package/busybox/1.22.0/0002-busybox-1.22.0-find.patch
+diff --git a/package/sdl/sdl-0002-fix-compilation-with-libx11.patch b/package/sdl/sdl-0002-fix-compilation-with-libx11.patch
 new file mode 100644
-index 0000000..75a06a8
+index 0000000..27f2448
 --- /dev/null
-+++ b/package/busybox/1.22.0/0002-busybox-1.22.0-find.patch
-@@ -0,0 +1,40 @@
-+--- busybox-1.22.0/findutils/find.c
-++++ busybox-1.22.0-find/findutils/find.c
-+@@ -1291,9 +1291,27 @@ int find_main(int argc, char **argv) MAI
-+ int find_main(int argc UNUSED_PARAM, char **argv)
-+ {
-+ 	int i, firstopt, status = EXIT_SUCCESS;
-++	char **past_HLP, *saved;
-+ 
-+ 	INIT_G();
-+ 
-++	/* "find -type f" + getopt("+HLP") => disaster.
-++	 * Need to avoid getopt running into a non-HLP option.
-++	 * Do this by temporarily storing NULL there:
-++	 */
-++	past_HLP = argv;
-++	for (;;) {
-++		saved = *++past_HLP;
-++		if (!saved)
-++			break;
-++		if (saved[0] != '-')
-++			break;
-++		if (!saved[1])
-++			break; /* it is "-" */
-++		if ((saved+1)[strspn(saved+1, "HLP")] != '\0')
-++			break;
-++	}
-++	*past_HLP = NULL;
-+ 	/* "+": stop on first non-option */
-+ 	i = getopt32(argv, "+HLP");
-+ 	if (i & (1<<0))
-+@@ -1301,7 +1319,8 @@ int find_main(int argc UNUSED_PARAM, cha
-+ 	if (i & (1<<1))
-+ 		G.recurse_flags |= ACTION_FOLLOWLINKS | ACTION_DANGLING_OK;
-+ 	/* -P is default and is ignored */
-+-	argv += optind;
-++	argv = past_HLP; /* same result as "argv += optind;" */
-++	*past_HLP = saved;
-+ 
-+ 	for (firstopt = 0; argv[firstopt]; firstopt++) {
-+ 		if (argv[firstopt][0] == '-')
-diff --git a/package/busybox/1.22.0/0003-busybox-1.22.0-grep.patch b/package/busybox/1.22.0/0003-busybox-1.22.0-grep.patch
-new file mode 100644
-index 0000000..053245d
---- /dev/null
-+++ b/package/busybox/1.22.0/0003-busybox-1.22.0-grep.patch
-@@ -0,0 +1,80 @@
-+--- busybox-1.22.0/findutils/grep.c
-++++ busybox-1.22.0-grep/findutils/grep.c
-+@@ -373,6 +373,9 @@ static int grep_file(FILE *file)
-+  opt_f_not_found: ;
-+ 				}
-+ 			} else {
-++#if ENABLE_EXTRA_COMPAT
-++				unsigned start_pos;
-++#endif
-+ 				char *match_at;
-+ 
-+ 				if (!(gl->flg_mem_alocated_compiled & COMPILED)) {
-+@@ -389,15 +392,18 @@ static int grep_file(FILE *file)
-+ #if !ENABLE_EXTRA_COMPAT
-+ 				gl->matched_range.rm_so = 0;
-+ 				gl->matched_range.rm_eo = 0;
++++ b/package/sdl/sdl-0002-fix-compilation-with-libx11.patch
+@@ -0,0 +1,60 @@
++sdl: Fix compilation with libX11 >= 1.5.99.902
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++
++# HG changeset patch
++# User Azamat H. Hackimov <azamat.hackimov@gmail.com>
++# Date 1370184533 -21600
++# Node ID 91ad7b43317a6387e115ecdf63a49137f47e42c8
++# Parent  f7fd5c3951b9ed922fdf696f7182e71b58a13268
++Fix compilation with libX11 >= 1.5.99.902.
++
++These changes fixes bug #1769 for SDL 1.2
++(http://bugzilla.libsdl.org/show_bug.cgi?id=1769).
++
++diff -r f7fd5c3951b9 -r 91ad7b43317a configure.in
++--- a/configure.in	Wed Apr 17 00:56:53 2013 -0700
+++++ b/configure.in	Sun Jun 02 20:48:53 2013 +0600
++@@ -1169,6 +1169,17 @@
++             if test x$definitely_enable_video_x11_xrandr = xyes; then
++                 AC_DEFINE(SDL_VIDEO_DRIVER_X11_XRANDR)
++             fi
+++            AC_MSG_CHECKING(for const parameter to _XData32)
+++            have_const_param_xdata32=no
+++            AC_TRY_COMPILE([
+++              #include <X11/Xlibint.h>
+++              extern int _XData32(Display *dpy,register _Xconst long *data,unsigned len);
+++            ],[
+++            ],[
+++            have_const_param_xdata32=yes
+++            AC_DEFINE(SDL_VIDEO_DRIVER_X11_CONST_PARAM_XDATA32)
+++            ])
+++            AC_MSG_RESULT($have_const_param_xdata32)
++         fi
++     fi
++ }
++diff -r f7fd5c3951b9 -r 91ad7b43317a include/SDL_config.h.in
++--- a/include/SDL_config.h.in	Wed Apr 17 00:56:53 2013 -0700
+++++ b/include/SDL_config.h.in	Sun Jun 02 20:48:53 2013 +0600
++@@ -283,6 +283,7 @@
++ #undef SDL_VIDEO_DRIVER_WINDIB
++ #undef SDL_VIDEO_DRIVER_WSCONS
++ #undef SDL_VIDEO_DRIVER_X11
+++#undef SDL_VIDEO_DRIVER_X11_CONST_PARAM_XDATA32
++ #undef SDL_VIDEO_DRIVER_X11_DGAMOUSE
++ #undef SDL_VIDEO_DRIVER_X11_DYNAMIC
++ #undef SDL_VIDEO_DRIVER_X11_DYNAMIC_XEXT
++diff -r f7fd5c3951b9 -r 91ad7b43317a src/video/x11/SDL_x11sym.h
++--- a/src/video/x11/SDL_x11sym.h	Wed Apr 17 00:56:53 2013 -0700
+++++ b/src/video/x11/SDL_x11sym.h	Sun Jun 02 20:48:53 2013 +0600
++@@ -165,7 +165,11 @@
++  */
++ #ifdef LONG64
++ SDL_X11_MODULE(IO_32BIT)
+++#if SDL_VIDEO_DRIVER_X11_CONST_PARAM_XDATA32
+++SDL_X11_SYM(int,_XData32,(Display *dpy,register _Xconst long *data,unsigned len),(dpy,data,len),return)
 ++#else
-++				start_pos = 0;
-+ #endif
-+ 				match_at = line;
-+  opt_w_again:
-++//bb_error_msg("'%s' start_pos:%d line_len:%d", match_at, start_pos, line_len);
-+ 				if (
-+ #if !ENABLE_EXTRA_COMPAT
-+ 					regexec(&gl->compiled_regex, match_at, 1, &gl->matched_range, 0) == 0
-+ #else
-+ 					re_search(&gl->compiled_regex, match_at, line_len,
-+-							/*start:*/ 0, /*range:*/ line_len,
-++							start_pos, /*range:*/ line_len,
-+ 							&gl->matched_range) >= 0
-+ #endif
-+ 				) {
-+@@ -416,8 +422,24 @@ static int grep_file(FILE *file)
-+ 							if (!c || (!isalnum(c) && c != '_')) {
-+ 								found = 1;
-+ 							} else {
-+-								match_at += gl->matched_range.rm_eo;
-+-								goto opt_w_again;
-++			/*
-++			 * Why check gl->matched_range.rm_eo?
-++			 * Zero-length match makes -w skip the line:
-++			 * "echo foo | grep ^" prints "foo",
-++			 * "echo foo | grep -w ^" prints nothing.
-++			 * Without such check, we can loop forever.
-++			 */
-++#if !ENABLE_EXTRA_COMPAT
-++								if (gl->matched_range.rm_eo != 0) {
-++									match_at += gl->matched_range.rm_eo;
-++									goto opt_w_again;
-++								}
-++#else
-++								if (gl->matched_range.rm_eo > start_pos) {
-++									start_pos = gl->matched_range.rm_eo;
-++									goto opt_w_again;
-++								}
++ SDL_X11_SYM(int,_XData32,(Display *dpy,register long *data,unsigned len),(dpy,data,len),return)
 ++#endif
-+ 							}
-+ 						}
-+ 					}
-+--- busybox-1.22.0/testsuite/grep.tests
-++++ busybox-1.22.0-grep/testsuite/grep.tests
-+@@ -147,6 +147,18 @@ testing "grep -w doesn't stop on 1st mis
-+ 	"foop foo\n" \
-+ 	""
++ SDL_X11_SYM(void,_XRead32,(Display *dpy,register long *data,long len),(dpy,data,len),)
++ #endif
 + 
-++testing "grep -w ^str doesn't match str not at the beginning" \
-++	"grep -w ^str input" \
-++	"" \
-++	"strstr\n" \
-++	""
-++
-++testing "grep -w ^ doesn't hang" \
-++	"grep -w ^ input" \
-++	"" \
-++	"anything\n" \
-++	""
-++
-+ # testing "test name" "commands" "expected result" "file input" "stdin"
-+ #   file input will be file called "input"
-+ #   test can create a file "actual" instead of writing to stdout
-diff --git a/package/busybox/1.22.0/0004-busybox-1.22.0-ntpd.patch b/package/busybox/1.22.0/0004-busybox-1.22.0-ntpd.patch
-new file mode 100644
-index 0000000..1334f57
---- /dev/null
-+++ b/package/busybox/1.22.0/0004-busybox-1.22.0-ntpd.patch
-@@ -0,0 +1,11 @@
-+--- busybox-1.22.0/networking/ntpd.c
-++++ busybox-1.22.0-ntpd/networking/ntpd.c
-+@@ -1445,6 +1445,8 @@ update_local_clock(peer_t *p)
-+ 
-+ 		run_script("step", offset);
-+ 
-++		recv_time += offset;
-++
-+ #if USING_INITIAL_FREQ_ESTIMATION
-+ 		if (G.discipline_state == STATE_NSET) {
-+ 			set_new_values(STATE_FREQ, /*offset:*/ 0, recv_time);
+diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
+index ef723dd..a30a31e 100644
+--- a/package/sdl/sdl.mk
++++ b/package/sdl/sdl.mk
+@@ -11,6 +11,16 @@ SDL_LICENSE = LGPLv2.1+
+ SDL_LICENSE_FILES = COPYING
+ SDL_INSTALL_STAGING = YES
+ 
++# we're patching configure.in, but package cannot autoreconf with our version of
++# autotools, so we have to do it manually instead of setting SD_AUTORECONF = YES
++define SDL_RUN_AUTOGEN
++	cd $(@D) && ./autogen.sh
++endef
++
++SDL_POST_PATCH_HOOKS += SDL_RUN_AUTOGEN
++SDL_DEPENDENCIES += host-automake host-autoconf host-libtool
++
++
+ ifeq ($(BR2_PACKAGE_SDL_FBCON),y)
+ SDL_CONF_OPT += --enable-video-fbcon=yes
+ else
