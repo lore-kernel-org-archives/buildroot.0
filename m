@@ -1,51 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 9 Jan 2014 21:16:30 +0100
-Subject: [Buildroot] [git commit] Makefile: support running graph-depends
-	from out-of-tree
-Message-ID: <20140109205952.04CBF9AD4A@busybox.osuosl.org>
+Date: Thu, 9 Jan 2014 21:03:58 +0100
+Subject: [Buildroot] [git commit] qt4: allow separate build/installation of
+	demos and examples
+Message-ID: <20140109205951.602B49C415@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=56eb3944d5d6d58b0125b22da7dcaeff5c0d3d1f
+commit: http://git.buildroot.net/buildroot/commit/?id=195235c9d9b3cb66392102cf292f31800765ca7a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Jeremie Scheer <jeremie.scheer@armadeus.com>
+Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Makefile               |    3 ++-
- package/pkg-generic.mk |    3 ++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/qt/Config.in |    8 +++++++-
+ package/qt/qt.mk     |    9 +++++++--
+ 2 files changed, 14 insertions(+), 3 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 6faa698..7624f59 100644
---- a/Makefile
-+++ b/Makefile
-@@ -647,7 +647,8 @@ graph-build: $(O)/build/build-time.log
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index dd2b6d9..926d54c 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -21,7 +21,13 @@ config BR2_PACKAGE_QT_DEBUG
+ 	  If unsure, say N.
  
- graph-depends:
- 	@$(INSTALL) -d $(O)/graphs
--	@./support/scripts/graph-depends \
-+	@cd "$(CONFIG_DIR)"; \
-+	$(TOPDIR)/support/scripts/graph-depends \
- 	|dot -T$(BR2_GRAPH_OUT) -o $(O)/graphs/$(@).$(BR2_GRAPH_OUT)
+ config BR2_PACKAGE_QT_DEMOS
+-	bool "Compile and install demos and examples (with code)"
++	bool "Compile and install Qt demos (with code)"
++	select BR2_PACKAGE_QT_GUI_MODULE
++	help
++	  If unsure, say N.
++
++config BR2_PACKAGE_QT_EXAMPLES
++	bool "Compile and install Qt examples (with code)"
+ 	select BR2_PACKAGE_QT_GUI_MODULE
+ 	help
+ 	  If unsure, say N.
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index 029d317..867b798 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -59,9 +59,14 @@ QT_CONFIGURE_OPTS += -no-qt3support
+ endif
  
- else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index b519d69..1b99c2a 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -470,7 +470,8 @@ $(1)-show-depends:
+ ifeq ($(BR2_PACKAGE_QT_DEMOS),y)
+-QT_CONFIGURE_OPTS += -examplesdir $(TARGET_DIR)/usr/share/qt/examples -demosdir $(TARGET_DIR)/usr/share/qt/demos
++QT_CONFIGURE_OPTS += -demosdir $(TARGET_DIR)/usr/share/qt/demos
+ else
+-QT_CONFIGURE_OPTS += -nomake examples -nomake demos
++QT_CONFIGURE_OPTS += -nomake demos
++endif
++ifeq ($(BR2_PACKAGE_QT_EXAMPLES),y)
++QT_CONFIGURE_OPTS += -examplesdir $(TARGET_DIR)/usr/share/qt/examples
++else
++QT_CONFIGURE_OPTS += -nomake examples
+ endif
  
- $(1)-graph-depends:
- 			@$(INSTALL) -d $(O)/graphs
--			@./support/scripts/graph-depends $(1) \
-+			@cd "$(CONFIG_DIR)"; \
-+			$(TOPDIR)/support/scripts/graph-depends $(1) \
- 			|dot -T$(BR2_GRAPH_OUT) -o $(O)/graphs/$$(@).$(BR2_GRAPH_OUT)
- 
- $(1)-dirclean:		$$($(2)_TARGET_DIRCLEAN)
+ # ensure glib is built first if enabled for Qt's glib support
