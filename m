@@ -1,40 +1,45 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 09 Jan 2014 13:19:19 +0100
-Subject: [Buildroot] [PATCH 0/3] network-manager: fix DHCP support.
-In-Reply-To: <1389090561-32196-1-git-send-email-eric.le.bihan.dev@free.fr>
- (Eric Le Bihan's message of "Tue, 7 Jan 2014 11:29:18 +0100")
-References: <1389090561-32196-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <87y52pe4ag.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 9 Jan 2014 13:17:48 +0100
+Subject: [Buildroot] [git commit] network-manager: fix DHCP clients
+	detection.
+Message-ID: <20140109122318.325339C3E8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Eric" == Eric Le Bihan <eric.le.bihan.dev@free.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=16937a45db8847798f66a16a0e2e44969858b4c1
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > This patch series fixes DHCP support for NetworkManager.
- > The DHCP client used by NetworkManager can be configured in the "[main]"
- > section of /etc/NetworkManager/NetworkManager.conf either as:
+If either dhclient or dhcpcd are selected, network-manager is now
+configured with the proper paths.
 
- >   dhcp=dhclient
+This allows 'dhcp=dhclient' or 'dhcp=dhcpcd' to be set in
+/etc/NetworkManager/NetworkManager.conf.
 
- > or
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/network-manager/network-manager.mk |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
 
- >   dhcp=dhcpcd
-
- > The support for either client is enabled by the './configure' script. When
- > network-manager was built, the instance of the client installed on the
- > development machine was detected and its location used. Most of the time,
- > this resulted in dhclient being the only choice...
-
- > This patch series:
-
- > - installs dhcpcd in the proper directory.
- > - configures network-manager according to the DHCP client package selected.
- > - bumps network-manager to its latest version.
-
-Committed series, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 7c9cc88..e847f25 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -34,6 +34,14 @@ NETWORK_MANAGER_CONF_OPT = \
+ 		--disable-ifupdown \
+ 		--disable-ifnet
+ 
++ifeq ($(BR2_PACKAGE_DHCP_CLIENT),y)
++NETWORK_MANAGER_CONF_OPT += --with-dhclient=/usr/sbin/dhclient
++endif
++
++ifeq ($(BR2_PACKAGE_DHCPCD),y)
++NETWORK_MANAGER_CONF_OPT += --with-dhcpcd=/usr/sbin/dhcpcd
++endif
++
+ # uClibc by default doesn't have backtrace support, so don't use it
+ ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+ NETWORK_MANAGER_CONF_OPT += --disable-crashtrace
