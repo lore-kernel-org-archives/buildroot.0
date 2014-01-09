@@ -1,51 +1,37 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  9 Jan 2014 19:32:47 -0300
-Subject: [Buildroot] [PATCH] ltrace: narrow down available architectures
-Message-ID: <1389306767-18579-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 10 Jan 2014 06:34:21 +0800
+Subject: [Buildroot] ParaGUI package?
+In-Reply-To: <52CED5E4.90603@mind.be>
+References: <DC148C5AA1CEBA4E87973D432B1C2D8817E678D7@P3PWEX4MB008.ex4.secureserver.net>
+ <20140108113404.413a4685@skate> <52CED5E4.90603@mind.be>
+Message-ID: <20140110063421.2709bb16@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-First switch the architecture availability to positive logic since it's
-cleaner and avoids issues when new ones are introduced.
-Then look at the source for the available ones at sysdeps/linux-gnu/...
+Dear Arnout Vandecappelle,
 
-aarch64 -> NULL
-arc -> NULL
-arm -> hardcoded to little endian, so no armeb
-avr32 -> NULL
-blackfin -> NULL
-microblaze -> NULL
-mips -> little/big endian handled but not for 64 bits
-nios2 -> NULL
-ppc -> OK
-sh -> NULL
-sparc -> OK
-x86 -> Both i386 and x86_64 handled
-xtensa -> NULL
+On Thu, 09 Jan 2014 18:01:24 +0100, Arnout Vandecappelle wrote:
 
-Fixes:
-http://autobuild.buildroot.net/results/cd2/cd24e7b6f863ab413d76ca7a81bd357ddf1dc4f7/
+> >> Makefile.am: error: required file './NEWS' not found
+> >> Makefile.am: error: required file './ChangeLog' not found
+> >
+> > These seems to be the real problems. Easiest solution is to add a post
+> > patch hook with "touch $(@D)/NEWS $(@D)/ChangeLog"
+> 
+>   Actually, perhaps we should always to this when PKG_AUTORECONF is YES? 
+> There are quite a lot of packages that have this touch trick.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/ltrace/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+I think I'd prefer these packages to be fixed upstream by adding the
+"foreign" argument to AM_INIT_AUTOMAKE. It's not like a patch doing
+this should be hard to get merged upstream, no?
 
-diff --git a/package/ltrace/Config.in b/package/ltrace/Config.in
-index 943af8d..3448342 100644
---- a/package/ltrace/Config.in
-+++ b/package/ltrace/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LTRACE
- 	bool "ltrace"
--	depends on !(BR2_avr32 || BR2_sh || BR2_sh64 || BR2_xtensa || BR2_aarch64 || BR2_arc)
-+	depends on (BR2_i386 || BR2_arm || BR2_mips || BR2_mipsel \
-+		|| BR2_powerpc || BR2_sparc || BR2_x86_64)
- 	select BR2_PACKAGE_LIBELF
- 	help
- 	  Debugging program which runs a specified command until it exits.
+Thanks!
+
+Thomas
 -- 
-1.8.3.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
