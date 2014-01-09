@@ -1,26 +1,26 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 09 Jan 2014 21:14:42 +0100
-Subject: [Buildroot] [PATCH] dtc: broken for static builds
-In-Reply-To: <1389087873-40458-1-git-send-email-Vincent.Riera@imgtec.com>
- (Vicente Olivert Riera's message of "Tue, 7 Jan 2014 09:44:33 +0000")
-References: <1389087873-40458-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <87fvowc3pp.fsf@dell.be.48ers.dk>
+Date: Thu, 09 Jan 2014 21:28:12 +0100
+Subject: [Buildroot] [PATCH 1/5] Makefile: support running graph-depends
+	from out-of-tree
+In-Reply-To: <0369fa11267aaf6256b8cb5d676ee5570ca32986.1389134731.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Tue, 7 Jan 2014 23:46:04 +0100")
+References: <cover.1389134731.git.yann.morin.1998@free.fr>
+ <0369fa11267aaf6256b8cb5d676ee5570ca32986.1389134731.git.yann.morin.1998@free.fr>
+Message-ID: <87bnzkc337.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > dtc package has hardcoded shared lib link options in the Makefile, so it
- > will fail if you try to build it on a static lib environment.
+ > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Really? I just did a quick test build and it seems to work here:
-
-file output/target/usr/bin/dtc
-output/target/usr/bin/dtc: ELF 32-bit LSB executable, ARM, version 1
-(SYSV), statically linked, stripped
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
