@@ -1,81 +1,57 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 09 Jan 2014 08:14:15 +0100
-Subject: [Buildroot] [RFC] python: select vs depends on
-In-Reply-To: <CAAXf6LUi0n6Mf0b9njsffZYcPMqCKD5ZoK41REhu_oRrJLiovA@mail.gmail.com>
-References: <CAAXf6LWHabEdHC4V4rzVduUqxx3a9vPjiJ91yYjs9+5UQtaFQQ@mail.gmail.com>
- <20131224172836.GB3627@free.fr>
- <CAAXf6LUi0n6Mf0b9njsffZYcPMqCKD5ZoK41REhu_oRrJLiovA@mail.gmail.com>
-Message-ID: <52CE4C47.9020808@mind.be>
+Date: Thu, 09 Jan 2014 08:00:21 +0100
+Subject: [Buildroot] Untypical situation - python-smbus which is also a
+ part of i2c-tools.
+In-Reply-To: <CAMduVEehZnpUyUbdY-CY1xo=yABivLkrFdxa1atK537NYE9huA@mail.gmail.com>
+References: <CAMduVEehZnpUyUbdY-CY1xo=yABivLkrFdxa1atK537NYE9huA@mail.gmail.com>
+Message-ID: <52CE4905.4070102@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 25/12/13 19:42, Thomas De Schampheleire wrote:
-> Hi Yann,
->
-> On Tue, Dec 24, 2013 at 6:28 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->> On 2013-12-24 18:14 +0100, Thomas De Schampheleire spake thusly:
->>> Currently, we have a dual strategy with respect to packages that have
->>> optional Python support: alsa-lib uses 'depends on python' for its
->>> 'python support' option, while ola uses 'select python' for its
->>> 'python bindings'.
->> [--SNIP--]
->>> - python modules (typically named python-foo): here the current
->>> strategy is to use 'depends on', and this is followed by all such
->>> packages. For me, this is perfectly sane, and is (IMO) not open for
->>> discussion.
->>> Note: in fact, all these modules are in one 'if python' block in
->>> package/Config.in, and I have prepared a patch to remove the redundant
->>> 'depends on'.
->>>
->>> - for 'normal' packages that need python for there normal behavior, we
->>> typically use 'select python'. In this case, the user may not be aware
->>> of the python dependency, and requiring him/her to first enable python
->>> is not logical. I think this reasoning is sane too.
->>>
->>> - for 'normal' packages that do not require python, but have optional
->>> python support (as is the case for ola and alsa-lib), I have no strong
->>> preference. Whichever is preferred by the community is ok with me, as
->>> long as we keep one guideline for this case.
->>
->> Or what about just removing the 'depends on' or 'select' for packages
->> sub-options, and just add the dependencies and options in the .mk files,
->> such as:
->>
->> ---8<--- alsa-lib.mk ---8<---
->> ifeq ($(or $(BR2_PACKAGE_PYTHON),$(BR2_PACKAGE_PYTHON3)),y)
->> ALSA_LIB_CONF_OPT += \
->>          --with-pythonlibs=-lpython$(PYTHON_VERSION_MAJOR) \
->>          --with-pythonincludes=$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)
->> ALSA_LIB_CFLAGS+=-I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)
->> ALSA_LIB_DEPENDENCIES = python
->> else
->> ALSA_LIB_CONF_OPT += --disable-python
->> endif
->> ---8<--- alsa-lib.mk ---8<---
->>
->> And so on for other packages...
->>
->> We already ave this behaviour in other packages:
->>    - bind adds features if openssl or libxml2 are selected
->>    - libvncserver, with libgcrypt, libjpeg, or openssl
->>    - libpcap, with libusb or libnl
->>    - and so on. countless times...
->
-> To me that sounds fine. So for optional support of other packages, we
-> automatically enable it when the dependency is present, from the .mk
-> file, and the Config.in does not contain an explicit option.
->
-> Is this accepted by other contributors as well?
+  Hi Wojciech,
 
-  I agree with the principle that scripting language bindings are enabled 
-automatically when the scripting language is selected.
+  [I'm catching up on old mail...]
 
-  There could be exceptions when the bindings add a lot of bloat, like 
-e.g. Riverbank's python bindings of Qt4 (but these are anyway a separate 
-package).
+On 24/12/13 22:33, Wojciech Zabolotny wrote:
+> I needed to assure access to i2c peripherals from Python programs in
+> my buildroot based embedded system.
+> There is a py-smbus module, which is available as a part of i2c-tools,
+> but which is not compiled during compilation of this package, and uses
+> other tools for compilation.
+>
+> Simple addition of EXTRA="py-smbus" when executing make (as described
+> in original README) doesn't help as it was discussed in a thread:
+> http://lists.busybox.net/pipermail/buildroot/2013-June/074037.html
+>
+> After some review of some packages which use python components, I have
+> got the attached mk file, which works, but is not a clean solution.
+> I don't know if there is a cleaner way to achieve that?
+
+  For me, the solution you propose is not that bad. We have several 
+packages (kernel-headers and u-boot-tools are the most important ones) 
+that share their source with another package.
+
+  One small thing though: it should use $(PYTHON_SMBUS_VERSION) instead 
+of $(I2C_TOOLS_VERSION). And of course it should now use the generic 
+python package infrastructure. FYI I've attached an example of these changes.
+
+
+> The ideal solution would be probably to allow selection of the
+> python-smbus as a part of the i2c-tools package.
+> How should it be done?
+
+  That is also an acceptable option, but then you can't use the generic 
+python package infrastructure anymore (except by using 
+PKG_PYTHON_DISTUTILS_ENV). You can add the PYTHON_SMBUS_BUILD_CMDS to 
+I2C_TOOLS_POST_BUILD_HOOKS.
+
+  However, I'm not convinced that's it's cleaner, because it offers no 
+way to build py-smbus without the rest of the i2c-tools. Of course, this 
+additional 100K won't matter when you have python installed, but in 
+principle we try to keep things as small as possible.
 
 
   Regards,
@@ -89,3 +65,20 @@ Essensium/Mind                                http://www.mind.be
 G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
 LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
 GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+-------------- next part --------------
+################################################################################
+#
+# python-smbus
+#
+################################################################################
+
+PYTHON_SMBUS_VERSION = 3.1.0
+PYTHON_SMBUS_SOURCE = i2c-tools-$(PYTHON_SMBUS_VERSION).tar.bz2
+PYTHON_SMBUS_SITE = http://dl.lm-sensors.org/i2c-tools/releases
+PYTHON_SMBUS_SETUP_TYPE = distutils
+PYTHON_SMBUS_SUBDIR = py-smbus
+PYTHON_SMBUS_ENV = CPPFLAGS="$(TARGET_CPPFLAGS) -I../include"
+
+PYTHON_SMBUS_LICENSE = MIT
+
+$(eval $(python-package))
