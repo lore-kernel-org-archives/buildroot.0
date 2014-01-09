@@ -1,27 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Jan 2014 07:36:41 +0800
-Subject: [Buildroot] [PATCH 2/4] libnspr: add microblaze support
-In-Reply-To: <52CED554.20103@mind.be>
+Date: Fri, 10 Jan 2014 07:37:20 +0800
+Subject: [Buildroot] [PATCH 3/4] libsigsegv: fix for microblaze
+In-Reply-To: <1389198785-11923-4-git-send-email-spenser@gillilanding.com>
 References: <1389198785-11923-1-git-send-email-spenser@gillilanding.com>
- <1389198785-11923-3-git-send-email-spenser@gillilanding.com>
- <52CED554.20103@mind.be>
-Message-ID: <20140110073641.60e41ea3@skate>
+ <1389198785-11923-4-git-send-email-spenser@gillilanding.com>
+Message-ID: <20140110073720.608c78fa@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+Dear Spenser Gilliland,
 
-On Thu, 09 Jan 2014 17:59:00 +0100, Arnout Vandecappelle wrote:
+On Wed,  8 Jan 2014 10:33:04 -0600, Spenser Gilliland wrote:
+> Fixes autobuild failure
+> 
+> http://autobuild.buildroot.net/results/799/799ac378713d82f9632a2aa925223e21157b1042/build-end.log
+> http://autobuild.buildroot.net/results/ae6/ae6a10ae7cd8f2d2f3891ea9c6e867695ca1acfe/build-end.log
+> http://autobuild.buildroot.net/results/db4/db48622f6c3a998ecec84ec51f21b4a031ab0fb5/build-end.log
+> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 
->   Maybe it's better to add this as a separate patch rather than updating 
-> the existing patch. That will make it slightly easier to track upstream 
-> if either of these is ever accepted there.
+Missing empty new line before Signed-off-by line.
 
-Fully agreed. Microblaze and NIOS II support should be in separate
-patches.
+Other than that, looks good. Can you push the patch upstream?
+
+Thanks!
 
 Thomas
 -- 
