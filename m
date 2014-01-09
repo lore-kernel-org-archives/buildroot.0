@@ -1,35 +1,25 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 9 Jan 2014 11:23:56 +0100
-Subject: [Buildroot] [git commit] libfreefare: examples need to link with
-	zlib for openssl when static linking
-Message-ID: <20140109102815.142179C40A@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 09 Jan 2014 12:25:26 +0100
+Subject: [Buildroot] [PATCH] cryptsetup: fix build error after bump
+	version
+In-Reply-To: <1389233309.19475.1.camel@phoenix> (Axel Lin's message of "Thu,
+ 09 Jan 2014 10:08:29 +0800")
+References: <1389233309.19475.1.camel@phoenix>
+Message-ID: <8738kxflcp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=712ebe85799287c3964aeab62982013b15076f92
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Axel" == Axel Lin <axel.lin@ingics.com> writes:
 
-Fixes http://autobuild.buildroot.net/results/f09/f09d515f0e7b6d78010f1ce624336ceaef624989/
+ > Fixes:
+ > http://autobuild.buildroot.net/results/9ca/9cad1cf49ee6b5c58d8260ee33beef2e6c1ada4d/
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libfreefare/libfreefare.mk |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ > Signed-off-by: Axel Lin <axel.lin@ingics.com>
 
-diff --git a/package/libfreefare/libfreefare.mk b/package/libfreefare/libfreefare.mk
-index 8dcd6b8..362cab2 100644
---- a/package/libfreefare/libfreefare.mk
-+++ b/package/libfreefare/libfreefare.mk
-@@ -8,4 +8,9 @@ LIBFREEFARE_VERSION = 0.3.4
- LIBFREEFARE_SITE = http://libfreefare.googlecode.com/files
- LIBFREEFARE_DEPENDENCIES = libnfc openssl
- 
-+ifeq ($(BR2_PREFER_STATIC_LIB),y)
-+# openssl needs zlib even if the libfreefare example itself doesn't
-+LIBFREEFARE_CONF_ENV += LIBS='-lz'
-+endif
-+
- $(eval $(autotools-package))
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
