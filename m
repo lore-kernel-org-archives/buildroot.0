@@ -1,41 +1,30 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  9 Jan 2014 18:00:27 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: bump to version 3.12.7
-In-Reply-To: <1389301227-12744-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1389301227-12744-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1389301227-12744-2-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 09 Jan 2014 22:05:18 +0100
+Subject: [Buildroot] [PATCH] package/ola: fix build against
+	google.protobuf
+In-Reply-To: <1389294901-15490-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Thu, 9 Jan 2014 20:15:01 +0100")
+References: <20140109191427.GB3713@free.fr>
+ <1389294901-15490-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <877ga8amsx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-diff --git a/linux/Config.in b/linux/Config.in
-index cfb74d4..dcdf5f3 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.12.6"
-+	bool "3.12.7"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -87,7 +87,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.12.6" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.12.7" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > To test for the google.protobuf presence, ola's ./conifgure runs the
+ > host Python. This is doomed to fail, as google.protobuf is installed
+ > in target/ and not in host/
+
+ > Since our dependencies ensures that goole.protobuf is indeed installed
+
+s/goole/google/
+
+Committed with that fixed, thanks.
+
 -- 
-1.8.3.2
+Bye, Peter Korsgaard
