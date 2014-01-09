@@ -1,55 +1,112 @@
-From: Mau Z <zmau1962@gmail.com>
-Date: Thu, 9 Jan 2014 13:56:08 +0200
-Subject: [Buildroot] How to suspend to RAM (S3) on the target
-In-Reply-To: <CAPFcPTJHyVEXosmFspxbAnPZN=LiD9Ne2UxmNcujK7PaXqtCnw@mail.gmail.com>
-References: <CAPFcPTJ8i1o1qoZFpjpV6Un3psR8LORtq4tXnUcMXtagdZU3RQ@mail.gmail.com>
- <CAPFcPTKCVvQd1W7_XrQ0tJZTTi_uREYBLpJJ_Too3Gm1XaJaKg@mail.gmail.com>
- <CALR4fELa0SDGawJDnj5uPqdzYQQt3qE_4-8qOTjQvAGqbXur9Q@mail.gmail.com>
- <CAPFcPTJHyVEXosmFspxbAnPZN=LiD9Ne2UxmNcujK7PaXqtCnw@mail.gmail.com>
-Message-ID: <CAPFcPTKGJhjR4pM9=JZGWyN+ZFT4B5JFtayzt1i1-ar9CTbZYw@mail.gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 9 Jan 2014 11:57:32 +0000
+Subject: [Buildroot] [PATCH 1/2] sdl: rename patches to add sequence numbers
+Message-ID: <1389268653-45909-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I forgot to put the link :
-http://comments.gmane.org/gmane.comp.lib.uclibc.buildroot/69659
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ .../sdl/sdl-0001-use-correct-directfb-config.patch |   40 ++++++++++++++++++++
+ package/sdl/sdl-use-correct-directfb-config.patch  |   40 --------------------
+ 2 files changed, 40 insertions(+), 40 deletions(-)
+ create mode 100644 package/sdl/sdl-0001-use-correct-directfb-config.patch
+ delete mode 100644 package/sdl/sdl-use-correct-directfb-config.patch
 
-
-
-On Thu, Jan 9, 2014 at 1:55 PM, Mau Z <zmau1962@gmail.com> wrote:
-
-> Hi,
->
-> 1) Read the following link to understand why I asked to skip the question.
-> 2) The solution is
->
-> echo "mem" > /sys/power/state
->
-> BUT, in order for this to work, you need the support of the
-> BIOS/hardware/firmware (and I did not have this at the time).
->
-> If you want, I can say some more things about this issue (but I think that
-> it is relevant only for newbies).
->
->
->
-> Thanks
-> Mau
->
->
->
-> On Tue, Jan 7, 2014 at 1:21 PM, Diego Iastrubni <diegoiast@gmail.com>wrote:
->
->> On Mon, Jan 6, 2014 at 7:15 PM, Mau Z <zmau1962@gmail.com> wrote:
->> >
->> > Skip the question please.
->> >
->> Found the solution? Why not sharing the solution?
->>
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140109/661e4b25/attachment.html>
+diff --git a/package/sdl/sdl-0001-use-correct-directfb-config.patch b/package/sdl/sdl-0001-use-correct-directfb-config.patch
+new file mode 100644
+index 0000000..2250790
+--- /dev/null
++++ b/package/sdl/sdl-0001-use-correct-directfb-config.patch
+@@ -0,0 +1,40 @@
++[PATCH] configure.in: use correct directfb-config in version check
++
++The configure script has just checked for the correct directfb-config
++script, so also use it for the version check instead of whatever
++might be in the path.
++
++Also patch the generated configure, as it doesn't cleanly autoreconf.
++
++Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
++---
++ configure    |    2 +-
++ configure.in |    2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++Index: SDL-1.2.15/configure.in
++===================================================================
++--- SDL-1.2.15.orig/configure.in
+++++ SDL-1.2.15/configure.in
++@@ -1276,7 +1276,7 @@
++         else
++             set -- `echo $DIRECTFB_REQUIRED_VERSION | sed 's/\./ /g'`
++             NEED_VERSION=`expr $1 \* 10000 + $2 \* 100 + $3`
++-            set -- `directfb-config --version | sed 's/\./ /g'`
+++            set -- `$DIRECTFBCONFIG --version | sed 's/\./ /g'`
++             HAVE_VERSION=`expr $1 \* 10000 + $2 \* 100 + $3`
++             if test $HAVE_VERSION -ge $NEED_VERSION; then
++                 DIRECTFB_CFLAGS=`$DIRECTFBCONFIG --cflags`
++Index: SDL-1.2.15/configure
++===================================================================
++--- SDL-1.2.15.orig/configure
+++++ SDL-1.2.15/configure
++@@ -24958,7 +24958,7 @@
++         else
++             set -- `echo $DIRECTFB_REQUIRED_VERSION | sed 's/\./ /g'`
++             NEED_VERSION=`expr $1 \* 10000 + $2 \* 100 + $3`
++-            set -- `directfb-config --version | sed 's/\./ /g'`
+++            set -- `$DIRECTFBCONFIG --version | sed 's/\./ /g'`
++             HAVE_VERSION=`expr $1 \* 10000 + $2 \* 100 + $3`
++             if test $HAVE_VERSION -ge $NEED_VERSION; then
++                 DIRECTFB_CFLAGS=`$DIRECTFBCONFIG --cflags`
+diff --git a/package/sdl/sdl-use-correct-directfb-config.patch b/package/sdl/sdl-use-correct-directfb-config.patch
+deleted file mode 100644
+index 2250790..0000000
+--- a/package/sdl/sdl-use-correct-directfb-config.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-[PATCH] configure.in: use correct directfb-config in version check
+-
+-The configure script has just checked for the correct directfb-config
+-script, so also use it for the version check instead of whatever
+-might be in the path.
+-
+-Also patch the generated configure, as it doesn't cleanly autoreconf.
+-
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+----
+- configure    |    2 +-
+- configure.in |    2 +-
+- 2 files changed, 2 insertions(+), 2 deletions(-)
+-
+-Index: SDL-1.2.15/configure.in
+-===================================================================
+---- SDL-1.2.15.orig/configure.in
+-+++ SDL-1.2.15/configure.in
+-@@ -1276,7 +1276,7 @@
+-         else
+-             set -- `echo $DIRECTFB_REQUIRED_VERSION | sed 's/\./ /g'`
+-             NEED_VERSION=`expr $1 \* 10000 + $2 \* 100 + $3`
+--            set -- `directfb-config --version | sed 's/\./ /g'`
+-+            set -- `$DIRECTFBCONFIG --version | sed 's/\./ /g'`
+-             HAVE_VERSION=`expr $1 \* 10000 + $2 \* 100 + $3`
+-             if test $HAVE_VERSION -ge $NEED_VERSION; then
+-                 DIRECTFB_CFLAGS=`$DIRECTFBCONFIG --cflags`
+-Index: SDL-1.2.15/configure
+-===================================================================
+---- SDL-1.2.15.orig/configure
+-+++ SDL-1.2.15/configure
+-@@ -24958,7 +24958,7 @@
+-         else
+-             set -- `echo $DIRECTFB_REQUIRED_VERSION | sed 's/\./ /g'`
+-             NEED_VERSION=`expr $1 \* 10000 + $2 \* 100 + $3`
+--            set -- `directfb-config --version | sed 's/\./ /g'`
+-+            set -- `$DIRECTFBCONFIG --version | sed 's/\./ /g'`
+-             HAVE_VERSION=`expr $1 \* 10000 + $2 \* 100 + $3`
+-             if test $HAVE_VERSION -ge $NEED_VERSION; then
+-                 DIRECTFB_CFLAGS=`$DIRECTFBCONFIG --cflags`
+-- 
+1.7.1
