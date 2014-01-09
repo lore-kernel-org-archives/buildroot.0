@@ -1,52 +1,81 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 9 Jan 2014 20:14:27 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-01-08
-In-Reply-To: <20140109073009.A1897100CCB@stock.ovh.net>
-References: <20140109073009.A1897100CCB@stock.ovh.net>
-Message-ID: <20140109191427.GB3713@free.fr>
+Date: Thu,  9 Jan 2014 20:15:01 +0100
+Subject: [Buildroot] [PATCH] package/ola: fix build against google.protobuf
+In-Reply-To: <20140109191427.GB3713@free.fr>
+References: <20140109191427.GB3713@free.fr>
+Message-ID: <1389294901-15490-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2014-01-09 08:30 +0100, Thomas Petazzoni spake thusly:
-[--SNIP--]
-> Detail of failures
-[--SNIP--]
->        arm |                     ola-0.8.32 | NOK | http://autobuild.buildroot.net/results/40a5dde3b553e98c05a7f52d1c1ff7a230686c8b/
->     x86_64 |                     ola-0.8.32 | NOK | http://autobuild.buildroot.net/results/eb94659357e0dc68efd45aaa9e9fa03ee286f533/
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-OK, so I've digged a bit into that ola build failure.
+To test for the google.protobuf presence, ola's ./conifgure runs the
+host Python. This is doomed to fail, as google.protobuf is installed
+in target/ and not in host/
 
-What happens is that ola runs the host-python to check if it can
-'import' the google.protobuf module.
+Since our dependencies ensures that goole.protobuf is indeed installed
+before we attempt to configure and build ola, we can just ditch the
+test altogether.
 
-Of course, this fails since google.protobuf is installed in target/ and
-not in host/ (and we do not explicitly install a host-variant).
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ .../ola-0002-fix-check-for-google.protobuf.patch   | 30 ++++++++++++++++++++++
+ package/ola/ola.mk                                 |  3 +++
+ 2 files changed, 33 insertions(+)
+ create mode 100644 package/ola/ola-0002-fix-check-for-google.protobuf.patch
 
-So, this test is inherently flawed for cross-compilation.
-
-There is a very simple trick^Whack we can use to fix this issue, either:
-  - remove the test entirely, since we enforce the dependency from the
-    Config.in an ola.mk, and thus we know google.protobuf will be
-    present
-  - install a host-google-protobuf as well, so our host Python finds it.
-
-I've tested the first solution, and it builds fine. Not runtime-tested,
-since I don't have any OLP hardware.
-
-I'll shortly send a patch with this first solution. If any interested in
-this package could test and report sucess/failure, that be great! TIA! ;-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/ola/ola-0002-fix-check-for-google.protobuf.patch b/package/ola/ola-0002-fix-check-for-google.protobuf.patch
+new file mode 100644
+index 0000000..f0bc465
+--- /dev/null
++++ b/package/ola/ola-0002-fix-check-for-google.protobuf.patch
+@@ -0,0 +1,30 @@
++configure: do not check for google.protobuf
++
++The check for google.protobuf is inherently flawed for cross-compilation,
++as it uses the host Python to check for target modules.
++
++In Buildroot, our dependencies ensures that google.protobuf is present
++by the time we configure and build ola, so we can just skip the test
++altogether.
++
++We don't need to fake the result of the test: it is used nowhere; the
++test is only here to fail or succeed.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++diff -durN ola-0.8.32.orig/configure.ac ola-0.8.32/configure.ac
++--- ola-0.8.32.orig/configure.ac	2013-09-29 19:46:48.000000000 +0200
+++++ ola-0.8.32/configure.ac	2014-01-09 19:43:55.342044336 +0100
++@@ -530,7 +530,11 @@
++ 
++ if test "${enable_python_libs}" = "yes"; then
++  AM_PATH_PYTHON(2.6)
++- AX_PYTHON_MODULE("google.protobuf", "fatal")
+++# AX_PYTHON_MODULE is inherently broken for cross-compilation
+++# since it executes the host Python to check for target modules.
+++# In Buildroot, we do not need to check for google.protobuf,
+++# since our dependencies ensure it is available.
+++# AX_PYTHON_MODULE("google.protobuf", "fatal")
++ fi
++ 
++ # Maybe build the logic sniffer tools
+diff --git a/package/ola/ola.mk b/package/ola/ola.mk
+index bc7de24..542aa77 100644
+--- a/package/ola/ola.mk
++++ b/package/ola/ola.mk
+@@ -11,6 +11,9 @@ OLA_LICENSE = LGPLv2.1+ (libola, libolacommon, Python bindings), GPLv2+ (libolas
+ OLA_LICENSE_FILES = LICENCE GPL LGPL
+ OLA_INSTALL_STAGING = YES
+ 
++# We modify configure.ac, so we need to autoreconf
++OLA_AUTORECONF = YES
++
+ # util-linux provides uuid lib
+ OLA_DEPENDENCIES = protobuf util-linux host-bison host-flex
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.1.2
