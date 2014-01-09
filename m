@@ -1,79 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 9 Jan 2014 22:04:26 +0100
-Subject: [Buildroot] [git commit] package/ola: fix build against
-	google.protobuf
-Message-ID: <20140109210614.80DD09C413@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 09 Jan 2014 17:59:00 +0100
+Subject: [Buildroot] [PATCH 2/4] libnspr: add microblaze support
+In-Reply-To: <1389198785-11923-3-git-send-email-spenser@gillilanding.com>
+References: <1389198785-11923-1-git-send-email-spenser@gillilanding.com>
+ <1389198785-11923-3-git-send-email-spenser@gillilanding.com>
+Message-ID: <52CED554.20103@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=db255491868440a0f45b75cea3304d7f8a486bb2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 08/01/14 17:33, Spenser Gilliland wrote:
+> fixes autobuild failures
+>
+> http://autobuild.buildroot.net/results/493/4932900522e87da84a47fbf2d796c2fbb3f7e741/build-end.log
+> Signed-off-by: Spenser Gilliland<spenser@gillilanding.com>
+> ---
+>   ...-nios2.patch => libnspr-microblaze-nios2.patch} | 59 ++++++++++++++++++++--
+>   1 file changed, 56 insertions(+), 3 deletions(-)
+>   rename package/libnspr/{libnspr-nios2.patch => libnspr-microblaze-nios2.patch} (59%)
+>
+> diff --git a/package/libnspr/libnspr-nios2.patch b/package/libnspr/libnspr-microblaze-nios2.patch
+> similarity index 59%
+> rename from package/libnspr/libnspr-nios2.patch
+> rename to package/libnspr/libnspr-microblaze-nios2.patch
 
-To test for the google.protobuf presence, ola's ./conifgure runs the
-host Python. This is doomed to fail, as google.protobuf is installed
-in target/ and not in host/
+  If you're anyway renaming patches, please at a sequence number.
 
-Since our dependencies ensures that google.protobuf is indeed installed
-before we attempt to configure and build ola, we can just ditch the
-test altogether.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../ola-0002-fix-check-for-google.protobuf.patch   |   30 ++++++++++++++++++++
- package/ola/ola.mk                                 |    3 ++
- 2 files changed, 33 insertions(+), 0 deletions(-)
+> index cffb2ef..a82317b 100644
+> --- a/package/libnspr/libnspr-nios2.patch
+> +++ b/package/libnspr/libnspr-microblaze-nios2.patch
+> @@ -1,14 +1,65 @@
+> -Add Nios-II support
+> +Add Microblaze and Nios-II support
+>
+> +Signed-off-by: Spenser Gilliland<spenser@gillilanding.com>
+>   Signed-off-by: Ezequiel Garcia<ezequiel@vanguardiasur.com.ar>
+>
 
-diff --git a/package/ola/ola-0002-fix-check-for-google.protobuf.patch b/package/ola/ola-0002-fix-check-for-google.protobuf.patch
-new file mode 100644
-index 0000000..f0bc465
---- /dev/null
-+++ b/package/ola/ola-0002-fix-check-for-google.protobuf.patch
-@@ -0,0 +1,30 @@
-+configure: do not check for google.protobuf
-+
-+The check for google.protobuf is inherently flawed for cross-compilation,
-+as it uses the host Python to check for target modules.
-+
-+In Buildroot, our dependencies ensures that google.protobuf is present
-+by the time we configure and build ola, so we can just skip the test
-+altogether.
-+
-+We don't need to fake the result of the test: it is used nowhere; the
-+test is only here to fail or succeed.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+diff -durN ola-0.8.32.orig/configure.ac ola-0.8.32/configure.ac
-+--- ola-0.8.32.orig/configure.ac	2013-09-29 19:46:48.000000000 +0200
-++++ ola-0.8.32/configure.ac	2014-01-09 19:43:55.342044336 +0100
-+@@ -530,7 +530,11 @@
-+ 
-+ if test "${enable_python_libs}" = "yes"; then
-+  AM_PATH_PYTHON(2.6)
-+- AX_PYTHON_MODULE("google.protobuf", "fatal")
-++# AX_PYTHON_MODULE is inherently broken for cross-compilation
-++# since it executes the host Python to check for target modules.
-++# In Buildroot, we do not need to check for google.protobuf,
-++# since our dependencies ensure it is available.
-++# AX_PYTHON_MODULE("google.protobuf", "fatal")
-+ fi
-+ 
-+ # Maybe build the logic sniffer tools
-diff --git a/package/ola/ola.mk b/package/ola/ola.mk
-index bc7de24..542aa77 100644
---- a/package/ola/ola.mk
-+++ b/package/ola/ola.mk
-@@ -11,6 +11,9 @@ OLA_LICENSE = LGPLv2.1+ (libola, libolacommon, Python bindings), GPLv2+ (libolas
- OLA_LICENSE_FILES = LICENCE GPL LGPL
- OLA_INSTALL_STAGING = YES
- 
-+# We modify configure.ac, so we need to autoreconf
-+OLA_AUTORECONF = YES
-+
- # util-linux provides uuid lib
- OLA_DEPENDENCIES = protobuf util-linux host-bison host-flex
- 
+  Maybe it's better to add this as a separate patch rather than updating 
+the existing patch. That will make it slightly easier to track upstream 
+if either of these is ever accepted there.
+
+  Regards,
+  Arnout
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
