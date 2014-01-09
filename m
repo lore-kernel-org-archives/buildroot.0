@@ -1,73 +1,28 @@
-From: Peter Thompson <peter.macleod.thompson@gmail.com>
-Date: Wed, 8 Jan 2014 20:38:10 -0700
-Subject: [Buildroot] Problems building SDL, SDL_image, SDL_ttf,
-	SDL_gfx via buildroot-2013.11
-Message-ID: <CAGrGpJBkBcVq+N8X2z_mArrzM30Sbq0_m4T4B3hzDaoaZWtoWg@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu,  9 Jan 2014 03:51:23 +0000 (UTC)
+Subject: [Buildroot] [Bug 6770] openssl bump
+In-Reply-To: <bug-6770-163@https.bugs.busybox.net/>
+References: <bug-6770-163@https.bugs.busybox.net/>
+Message-ID: <20140109035123.9FFEE9C3FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I created a igepv2 target rootfs using buildroot-2013.11 ==> configured as
-follows:
-ARM (little endian),
-arm926t,
-ct-ng-1.18.0 external toolchain, and
-SDL + SDL framebuffer console video driver +
-SDL_gfx  +
-SDL_image +
-SDL_ttf.
+https://bugs.busybox.net/show_bug.cgi?id=6770
 
-I used the following before cross-compiling my application.   I do have SDL
-on my host so for pkg-config to work, the felabs path has to appear first
-in the path list
-export CROSS_COMPILE=arm-linux-
-export ARCH=arm
-export PATH=/usr/local/xtools/arm-unknown-linux-uclibcgnueabi/bin:$PATH
-export
-PATH=/home/peter/Documents/felabs/sysdev/buildsdl/buildroot-2013.11/output/host/usr/bin:$PATH
+--- Comment #3 from mlweber1 at rockwellcollins.com 2014-01-09 03:51:22 UTC ---
+I'm wondering if what I'm seeing is ccache related.  I'll clear out my cache
+and rebuild to night and see where things stand. Everything had built find up
+to that openssl bump and that bump wasn't a major set of changes is what
+confused me. 
 
-While just SDL seems to work fine using
-arm-linux-gcc -o lazystatic -static lazyfoo1.c $(pkg-config --libs --cflags
-sdl)
+Sorry should have tried clearing the cash before posting the bug.  Didn't think
+it could just stale cached objs.  I'll tomorrow with results/clarification of
+the issue.
 
-
-the combo of SDL + SDL_image + SDL_ttf + SDL_gfx using
-arm-linux-g++  -o oz         \
-    /home/peter/Documents/oz3/display/main.cpp    \
-        ....(list of about 10 files)
-    /home/peter/Documents/oz4/keyboard/ttfopen.c        \
-    -lSDL -lSDL_image -lSDL_gfx -lSDL_ttf                   \
-    $(pkg-config --libs --cflags sdl SDL_image SDL_gfx      \
-           SDL_ttf)
-
-doesn't seem to work.
-
-The dynamic .so cross-compiles ok but has a seg fault part way through when
-running on IGEPv2.   The source is complex so I haven't figured out the
-point of error but I suspect a .so error.   I am preparing a simpler
-version for testing to track it down.
-
-The static won't cross-compile because for some reason SDL_image.a is
-missing from
-/home/peter/Documents/felabs/sysdev/buildsdl/buildroot-2013.11/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib
-
-I tried copying SDL_image.a from a different library I had cross-compiled
-from-scratch but that didn't seem to help.
-
-A copy of my .config file is attached.
-
-Super thanks in advance for any advice or pointers you can give.
-
-Peter
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140108/8276fc59/attachment-0001.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: copyof.config
-Type: application/octet-stream
-Size: 37809 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140108/8276fc59/attachment-0001.obj>
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
