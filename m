@@ -1,116 +1,33 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 9 Jan 2014 11:57:33 +0000
-Subject: [Buildroot] [PATCH 2/2] sdl: Fix compilation with libX11 >=
-	1.5.99.902
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 9 Jan 2014 14:08:01 +0200
+Subject: [Buildroot] [PATCH 1/2] sdl: rename patches to add sequence
+ numbers
 In-Reply-To: <1389268653-45909-1-git-send-email-Vincent.Riera@imgtec.com>
 References: <1389268653-45909-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1389268653-45909-2-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20140109120801.GS4659@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Applying an upstream patch to fix a compilation error with versions of
-libX11 since 1.5.99.902. This patch modifies configure.in so we need to
-run autogen.sh to make it working correctly. Running autoreconf will
-fail because SDL uses bit tricky automake/autoconf configuration.
+Hi Vicente,
 
-Upstream patch URL:
-   http://hg.libsdl.org/SDL/rev/91ad7b43317a
+On Thu, Jan 09, 2014 at 11:57:32AM +0000, Vicente Olivert Riera wrote:
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  .../sdl/sdl-0001-use-correct-directfb-config.patch |   40 ++++++++++++++++++++
+>  package/sdl/sdl-use-correct-directfb-config.patch  |   40 --------------------
+>  2 files changed, 40 insertions(+), 40 deletions(-)
+>  create mode 100644 package/sdl/sdl-0001-use-correct-directfb-config.patch
+>  delete mode 100644 package/sdl/sdl-use-correct-directfb-config.patch
 
-Fixes:
-   http://autobuild.buildroot.net/results/bf8/bf83466a7bbb0635d97fe279a18778d92f20bea2/
+When generating rename patches like this one please add -M to your 'git 
+format-patch' or 'git send-email' commands. This makes reviewing easier.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- .../sdl/sdl-0002-fix-compilation-with-libx11.patch |   60 ++++++++++++++++++++
- package/sdl/sdl.mk                                 |    6 ++
- 2 files changed, 66 insertions(+), 0 deletions(-)
- create mode 100644 package/sdl/sdl-0002-fix-compilation-with-libx11.patch
+baruch
 
-diff --git a/package/sdl/sdl-0002-fix-compilation-with-libx11.patch b/package/sdl/sdl-0002-fix-compilation-with-libx11.patch
-new file mode 100644
-index 0000000..27f2448
---- /dev/null
-+++ b/package/sdl/sdl-0002-fix-compilation-with-libx11.patch
-@@ -0,0 +1,60 @@
-+sdl: Fix compilation with libX11 >= 1.5.99.902
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+
-+# HG changeset patch
-+# User Azamat H. Hackimov <azamat.hackimov@gmail.com>
-+# Date 1370184533 -21600
-+# Node ID 91ad7b43317a6387e115ecdf63a49137f47e42c8
-+# Parent  f7fd5c3951b9ed922fdf696f7182e71b58a13268
-+Fix compilation with libX11 >= 1.5.99.902.
-+
-+These changes fixes bug #1769 for SDL 1.2
-+(http://bugzilla.libsdl.org/show_bug.cgi?id=1769).
-+
-+diff -r f7fd5c3951b9 -r 91ad7b43317a configure.in
-+--- a/configure.in	Wed Apr 17 00:56:53 2013 -0700
-++++ b/configure.in	Sun Jun 02 20:48:53 2013 +0600
-+@@ -1169,6 +1169,17 @@
-+             if test x$definitely_enable_video_x11_xrandr = xyes; then
-+                 AC_DEFINE(SDL_VIDEO_DRIVER_X11_XRANDR)
-+             fi
-++            AC_MSG_CHECKING(for const parameter to _XData32)
-++            have_const_param_xdata32=no
-++            AC_TRY_COMPILE([
-++              #include <X11/Xlibint.h>
-++              extern int _XData32(Display *dpy,register _Xconst long *data,unsigned len);
-++            ],[
-++            ],[
-++            have_const_param_xdata32=yes
-++            AC_DEFINE(SDL_VIDEO_DRIVER_X11_CONST_PARAM_XDATA32)
-++            ])
-++            AC_MSG_RESULT($have_const_param_xdata32)
-+         fi
-+     fi
-+ }
-+diff -r f7fd5c3951b9 -r 91ad7b43317a include/SDL_config.h.in
-+--- a/include/SDL_config.h.in	Wed Apr 17 00:56:53 2013 -0700
-++++ b/include/SDL_config.h.in	Sun Jun 02 20:48:53 2013 +0600
-+@@ -283,6 +283,7 @@
-+ #undef SDL_VIDEO_DRIVER_WINDIB
-+ #undef SDL_VIDEO_DRIVER_WSCONS
-+ #undef SDL_VIDEO_DRIVER_X11
-++#undef SDL_VIDEO_DRIVER_X11_CONST_PARAM_XDATA32
-+ #undef SDL_VIDEO_DRIVER_X11_DGAMOUSE
-+ #undef SDL_VIDEO_DRIVER_X11_DYNAMIC
-+ #undef SDL_VIDEO_DRIVER_X11_DYNAMIC_XEXT
-+diff -r f7fd5c3951b9 -r 91ad7b43317a src/video/x11/SDL_x11sym.h
-+--- a/src/video/x11/SDL_x11sym.h	Wed Apr 17 00:56:53 2013 -0700
-++++ b/src/video/x11/SDL_x11sym.h	Sun Jun 02 20:48:53 2013 +0600
-+@@ -165,7 +165,11 @@
-+  */
-+ #ifdef LONG64
-+ SDL_X11_MODULE(IO_32BIT)
-++#if SDL_VIDEO_DRIVER_X11_CONST_PARAM_XDATA32
-++SDL_X11_SYM(int,_XData32,(Display *dpy,register _Xconst long *data,unsigned len),(dpy,data,len),return)
-++#else
-+ SDL_X11_SYM(int,_XData32,(Display *dpy,register long *data,unsigned len),(dpy,data,len),return)
-++#endif
-+ SDL_X11_SYM(void,_XRead32,(Display *dpy,register long *data,long len),(dpy,data,len),)
-+ #endif
-+ 
-diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
-index ef723dd..0032b97 100644
---- a/package/sdl/sdl.mk
-+++ b/package/sdl/sdl.mk
-@@ -67,6 +67,12 @@ define SDL_FIXUP_SDL_CONFIG
- 		$(STAGING_DIR)/usr/bin/sdl-config
- endef
- 
-+define SDL_RUN_AUTOGEN
-+	cd $(@D) && ./autogen.sh
-+endef
-+
-+SDL_POST_PATCH_HOOKS += SDL_RUN_AUTOGEN
-+
- SDL_POST_INSTALL_STAGING_HOOKS += SDL_FIXUP_SDL_CONFIG
- 
- $(eval $(autotools-package))
 -- 
-1.7.1
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
