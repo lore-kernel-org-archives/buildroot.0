@@ -1,43 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Jan 2014 07:26:26 +0800
-Subject: [Buildroot] make clean (did not really clean)
-In-Reply-To: <CAPFcPT+R7f7+iJokS2cm-bFqtcsETy03FTKvSaSuft9HuZC57w@mail.gmail.com>
-References: <CAPFcPT+R7f7+iJokS2cm-bFqtcsETy03FTKvSaSuft9HuZC57w@mail.gmail.com>
-Message-ID: <20140110072626.0532ebf2@skate>
+Date: Fri, 10 Jan 2014 07:29:38 +0800
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2014-01-08
+In-Reply-To: <20140109191427.GB3713@free.fr>
+References: <20140109073009.A1897100CCB@stock.ovh.net>
+ <20140109191427.GB3713@free.fr>
+Message-ID: <20140110072938.27628d13@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Mau Z,
+Dear Yann E. MORIN,
 
-On Thu, 9 Jan 2014 14:40:20 +0200, Mau Z wrote:
+On Thu, 9 Jan 2014 20:14:27 +0100, Yann E. MORIN wrote:
 
-> I just want to share some information (maybe known to all):
+> What happens is that ola runs the host-python to check if it can
+> 'import' the google.protobuf module.
 > 
-> I did several experiments in order to build a Linux image (with build-root
-> 13.05).
-> In one of them I have added udev to the image. later on I have removed udev
-> from the image.
-> But, actually I was not removed whatever I did, it was still there on the
-> next boot (I could see it in dmesg).
-> 
-> make clean
-> delete every thing from the target
+> Of course, this fails since google.protobuf is installed in target/ and
+> not in host/ (and we do not explicitly install a host-variant).
 
-No, "make clean" does not only removes the target stuff. It removes
-*everything* that was built, i.e everything that was in output/.
+Correct. But what is odd is that this test was *not* failing before the
+migration to the Python infrastructure. I've started investigating
+this, but haven't found the reason why before the Python infra it was
+building OK, and not after the Python infra.
 
-> The only thing that helped was "make distclean"
-> Warning about "make distclean" :  it deletes ALL files which where not part
-> of the build-root distribution (This is it's design). So, one should copy
-> text files and config files to a temporary location before issuing "make
-> distclean".
+> There is a very simple trick^Whack we can use to fix this issue, either:
+>   - remove the test entirely, since we enforce the dependency from the
+>     Config.in an ola.mk, and thus we know google.protobuf will be
+>     present
 
-This is not expected. "make clean" should clearly be sufficient.
+The problem of this solution is that the patch you've done cannot be
+upstreamed, and therefore we would have to keep AUTORECONF = YES
+forever on this package. Maybe we can make the configure.ac test
+conditional on whether we're cross-compiling and push the patch
+upstream?
 
-Best regards,
+Thanks!
 
 Thomas
 -- 
