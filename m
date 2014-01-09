@@ -1,25 +1,45 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 09 Jan 2014 08:52:13 -0300
-Subject: [Buildroot] [PATCH 1/3] dhcpcd: install dhcpcd as
-	/usr/sbin/dhcpcd.
-In-Reply-To: <1389090561-32196-2-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1389090561-32196-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1389090561-32196-2-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <52CE8D6D.9090205@zacarias.com.ar>
+From: Mau Z <zmau1962@gmail.com>
+Date: Thu, 9 Jan 2014 13:55:30 +0200
+Subject: [Buildroot] How to suspend to RAM (S3) on the target
+In-Reply-To: <CALR4fELa0SDGawJDnj5uPqdzYQQt3qE_4-8qOTjQvAGqbXur9Q@mail.gmail.com>
+References: <CAPFcPTJ8i1o1qoZFpjpV6Un3psR8LORtq4tXnUcMXtagdZU3RQ@mail.gmail.com>
+ <CAPFcPTKCVvQd1W7_XrQ0tJZTTi_uREYBLpJJ_Too3Gm1XaJaKg@mail.gmail.com>
+ <CALR4fELa0SDGawJDnj5uPqdzYQQt3qE_4-8qOTjQvAGqbXur9Q@mail.gmail.com>
+Message-ID: <CAPFcPTJHyVEXosmFspxbAnPZN=LiD9Ne2UxmNcujK7PaXqtCnw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/07/2014 07:29 AM, Eric Le Bihan wrote:
+Hi,
 
-> GNU/Linux distributions usually install dhcpcd in /usr/sbin.
-> NetworkManager will look for it in this directory.
-> 
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+1) Read the following link to understand why I asked to skip the question.
+2) The solution is
 
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+echo "mem" > /sys/power/state
 
-(It should live in sbin regardless!)
-Regards.
+BUT, in order for this to work, you need the support of the
+BIOS/hardware/firmware (and I did not have this at the time).
+
+If you want, I can say some more things about this issue (but I think that
+it is relevant only for newbies).
+
+
+
+Thanks
+Mau
+
+
+
+On Tue, Jan 7, 2014 at 1:21 PM, Diego Iastrubni <diegoiast@gmail.com> wrote:
+
+> On Mon, Jan 6, 2014 at 7:15 PM, Mau Z <zmau1962@gmail.com> wrote:
+> >
+> > Skip the question please.
+> >
+> Found the solution? Why not sharing the solution?
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140109/5abcbd78/attachment.html>
