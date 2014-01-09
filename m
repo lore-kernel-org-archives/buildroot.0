@@ -1,65 +1,96 @@
-From: Hartley Sweeten <HartleyS@visionengravers.com>
-Date: Thu, 9 Jan 2014 22:37:40 +0000
-Subject: [Buildroot] ParaGUI package?
-In-Reply-To: <52CED5E4.90603@mind.be>
-References: <DC148C5AA1CEBA4E87973D432B1C2D8817E678D7@P3PWEX4MB008.ex4.secureserver.net>
- <20140108113404.413a4685@skate> <52CED5E4.90603@mind.be>
-Message-ID: <DC148C5AA1CEBA4E87973D432B1C2D8817E6C50F@P3PWEX4MB008.ex4.secureserver.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 9 Jan 2014 23:57:42 +0100
+Subject: [Buildroot] [PATCH 3/5] package/tzdata: install a default
+ localtime
+In-Reply-To: <52CED8B3.5090800@mind.be>
+References: <cover.1389134731.git.yann.morin.1998@free.fr>
+ <d33faa4dcebfdac0f304495fcdac3db1f31c791d.1389134731.git.yann.morin.1998@free.fr>
+ <52CED8B3.5090800@mind.be>
+Message-ID: <20140109225741.GG3713@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thursday, January 09, 2014 10:01 AM, Arnout Vandecappelle wrote:
-> On 08/01/14 04:34, Thomas Petazzoni wrote:
->> On Wed, 8 Jan 2014 00:10:29 +0000, Hartley Sweeten wrote:
->>> I'm trying to find a simple GUI library that can be used with SDL and this one appears
->>> to cover my needs. Unfortunately the ParaGUI library appears to be a bit dead. The
->>> latest release at http://download.savannah.gnu.org/releases/paragui/ is
->>>
->>> paragui-1.1.8.tar.gz	19-Oct-2004
->>>
->>> I found a newer branch on https://github.com/pipelka/paragui that appears to be
->>> version 1.1.11.
->>
->> My first reaction is: do you really want to start using something that
->> appears to be dead/deprecated?
->>
->>> Makefile.am: error: required file './NEWS' not found
->>> Makefile.am: error: required file './ChangeLog' not found
->>
->> These seems to be the real problems. Easiest solution is to add a post
->> patch hook with "touch $(@D)/NEWS $(@D)/ChangeLog"
->
->  Actually, perhaps we should always to this when PKG_AUTORECONF is YES? 
-> There are quite a lot of packages that have this touch trick.
+Arnout, All,
 
-I was finally able to get paragui to compile with Buildroot using a POST_PATCH_HOOKS
-like was just done for the sdl package:
+On 2014-01-09 18:13 +0100, Arnout Vandecappelle spake thusly:
+> On 07/01/14 23:46, Yann E. MORIN wrote:
+> >From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> >Add an option to install a default localtime.
+[--SNIP--]
+> >+config BR2_PACKAGE_TZDATA_LOCALTIME
+> >+	string "default local time"
+> >+	help
+> >+	  The time zone to install as the default local time, expressed as a
+> >+	  tzdata location, such as:
+> >+	    GMT, Europe/Paris, America/New_York, Pacific/Wallis...
+> 
+>  I hope this will not confuse users to think that they can specify multiple
+> values separated by a comma...
 
-define PARAGUI_RUN_AUTOGEN
-	cd $(@D) && ./autogen.sh
-endef
+Now you point me to it, indeed, that may sound confusing.
 
-PARAGUI_POST_PATCH_HOOKS += PARAGUI_RUN_AUTOGEN
+OTOH, the sentence always use the singular 'a timezone", or "the
+timezone", so hopefully this is not so confusing... After all, it does
+not make sense to say that the current timezone is a multi-timezone,
+doesn't it?
 
-Doing this I only needed 2 patches.
-1) to use the correct sdl-config
-2) to include <ostream> in a source file (I think this is needed because of a gcc 4.3.3 bug)
+> >diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
+> >index 1cb5b3f..74263e1 100644
+> >--- a/package/tzdata/tzdata.mk
+> >+++ b/package/tzdata/tzdata.mk
+> >@@ -39,8 +39,14 @@ define TZDATA_INSTALL_TARGET_CMDS
+> >  	cp -a $(@D)/_output/* $(TARGET_DIR)/usr/share/zoneinfo
+> >  	cd $(TARGET_DIR)/usr/share/zoneinfo;    \
+> >  	for zone in posix/*; do                 \
+> >-	    ln -sfn "$${zone}" "$${zone##*/}";    \
+> >+	    ln -sfn "$${zone}" "$${zone##*/}";  \
+> >  	done
+> >+	if [ -n "$(BR2_PACKAGE_TZDATA_LOCALTIME)" ]; then                   \
+> 
+>  Ick, this looks ugly... If it is unset, make will evaluate it to
+> 
+> 	if [ -n """" ]; then ...
+> 
+> which is indeed an empty string, but not so nice... IOW, it's missing a
+> qstrip.
 
-I was also able to get the package to compile using AUTORECONF = YES but that
-needed a lot more patches.
+Doh, I always forget about this one. Sigh... Thanks for pointing this
+out.
 
-I can post the patch to add the paragui package but there is one issue. ParaGUI requires
-libsigc++ 1.2 (>= 1.2.5) but the current libsigc package in Buildroot is for libsigc++ 2.2 (2.2.11).
-The API is quite different between the 1.2 and 2.2 versions. So to get paragui to compile I
-had to also add a libsigc1 package (leaving the current libsigc as-is).
+>  Also, instead of a shell condition I'd prefer a make condition, but that's
+> probably a matter of taste.
 
-Is this acceptable? If so I can post 2 patches:
+I also pundered this, but it looke really ugly to me. Besides, we can't
+have ifeq-blocks in a define-block, that does not work (IIRC).
 
-1) add package libsigc1
-2) add package paragui
+> >+	    cd $(TARGET_DIR)/etc;                                           \
+> >+	    ln -sf ../usr/share/zoneinfo/$(BR2_PACKAGE_TZDATA_LOCALTIME)    \
+> 
+>  Same here. But also quotes should be added in case the user put something
+> stupid there.
 
-Thanks,
-Hartley
+Ditto, I just forget about qtrip everytime.
+
+> >+	           localtime;                                               \
+> >+	    echo "$(BR2_PACKAGE_TZDATA_LOCALTIME)" >timezone;               \
+> 
+>  Same here. The quotes are not actually quoting anything now...
+
+Ditto.
+
+I'll send a fix-patch soon.
+Thank you!
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
