@@ -1,36 +1,34 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 9 Jan 2014 12:09:30 +0000
-Subject: [Buildroot] [PATCH 1/2] sdl: rename patches to add sequence
-	numbers
-In-Reply-To: <20140109120801.GS4659@sapphire.tkos.co.il>
-References: <1389268653-45909-1-git-send-email-Vincent.Riera@imgtec.com>
- <20140109120801.GS4659@sapphire.tkos.co.il>
-Message-ID: <52CE917A.20604@imgtec.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu,  9 Jan 2014 09:12:29 -0300
+Subject: [Buildroot] [PATCH] grep: enable optional pcre integration
+Message-ID: <1389269549-14970-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/09/2014 12:08 PM, Baruch Siach wrote:
-> Hi Vicente,
->
-> On Thu, Jan 09, 2014 at 11:57:32AM +0000, Vicente Olivert Riera wrote:
->> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->> ---
->>   .../sdl/sdl-0001-use-correct-directfb-config.patch |   40 ++++++++++++++++++++
->>   package/sdl/sdl-use-correct-directfb-config.patch  |   40 --------------------
->>   2 files changed, 40 insertions(+), 40 deletions(-)
->>   create mode 100644 package/sdl/sdl-0001-use-correct-directfb-config.patch
->>   delete mode 100644 package/sdl/sdl-use-correct-directfb-config.patch
->
-> When generating rename patches like this one please add -M to your 'git
-> format-patch' or 'git send-email' commands. This makes reviewing easier.
->
-> baruch
->
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/grep/grep.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Oh, ok. I didn't know that, sorry.
-
+diff --git a/package/grep/grep.mk b/package/grep/grep.mk
+index 6a039d9..ee6de39 100644
+--- a/package/grep/grep.mk
++++ b/package/grep/grep.mk
+@@ -18,6 +18,12 @@ GREP_CONF_ENV += LIBS=-liconv
+ GREP_DEPENDENCIES += libiconv
+ endif
+ 
++# link with pcre if enabled
++ifeq ($(BR2_PACKAGE_PCRE),y)
++GREP_CONF_OPT += --enable-perl-regexp
++GREP_DEPENDENCIES += pcre
++endif
++
+ # Full grep preferred over busybox grep
+ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ GREP_DEPENDENCIES += busybox
 -- 
-Vincent
+1.8.3.2
