@@ -1,64 +1,114 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  9 Jan 2014 13:35:44 +0000 (UTC)
-Subject: [Buildroot] [Bug 6770] openssl bump
-In-Reply-To: <bug-6770-163@https.bugs.busybox.net/>
-References: <bug-6770-163@https.bugs.busybox.net/>
-Message-ID: <20140109133544.8691F9C40E@busybox.osuosl.org>
+From: Clayton Shotwell <clshotwe@rockwellcollins.com>
+Date: Thu, 9 Jan 2014 08:21:30 -0600
+Subject: [Buildroot] [RFC] python: select vs depends on
+In-Reply-To: <52CE4C47.9020808@mind.be>
+References: <CAAXf6LWHabEdHC4V4rzVduUqxx3a9vPjiJ91yYjs9+5UQtaFQQ@mail.gmail.com>
+ <20131224172836.GB3627@free.fr>
+ <CAAXf6LUi0n6Mf0b9njsffZYcPMqCKD5ZoK41REhu_oRrJLiovA@mail.gmail.com>
+ <52CE4C47.9020808@mind.be>
+Message-ID: <OF6AA003C2.855761A0-ON86257C5B.004E8CAE-86257C5B.004ED616@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6770
+> From: Arnout Vandecappelle <arnout@mind.be>
+> To: Thomas De Schampheleire <patrickdepinguin@gmail.com>, "Yann E. 
+> MORIN" <yann.morin.1998@free.fr>
+> Cc: buildroot <buildroot@busybox.net>
+> Date: 01/09/2014 01:46 AM
+> Subject: Re: [Buildroot] [RFC] python: select vs depends on
+> Sent by: buildroot-bounces at busybox.net
+> 
+> On 25/12/13 19:42, Thomas De Schampheleire wrote:
+> > Hi Yann,
+> >
+> > On Tue, Dec 24, 2013 at 6:28 PM, Yann E. MORIN <yann.morin.
+> 1998 at free.fr> wrote:
+> >> On 2013-12-24 18:14 +0100, Thomas De Schampheleire spake thusly:
+> >>> Currently, we have a dual strategy with respect to packages that 
+have
+> >>> optional Python support: alsa-lib uses 'depends on python' for its
+> >>> 'python support' option, while ola uses 'select python' for its
+> >>> 'python bindings'.
+> >> [--SNIP--]
+> >>> - python modules (typically named python-foo): here the current
+> >>> strategy is to use 'depends on', and this is followed by all such
+> >>> packages. For me, this is perfectly sane, and is (IMO) not open for
+> >>> discussion.
+> >>> Note: in fact, all these modules are in one 'if python' block in
+> >>> package/Config.in, and I have prepared a patch to remove the 
+redundant
+> >>> 'depends on'.
+> >>>
+> >>> - for 'normal' packages that need python for there normal behavior, 
+we
+> >>> typically use 'select python'. In this case, the user may not be 
+aware
+> >>> of the python dependency, and requiring him/her to first enable 
+python
+> >>> is not logical. I think this reasoning is sane too.
+> >>>
+> >>> - for 'normal' packages that do not require python, but have 
+optional
+> >>> python support (as is the case for ola and alsa-lib), I have no 
+strong
+> >>> preference. Whichever is preferred by the community is ok with me, 
+as
+> >>> long as we keep one guideline for this case.
+> >>
+> >> Or what about just removing the 'depends on' or 'select' for packages
+> >> sub-options, and just add the dependencies and options in the .mk 
+files,
+> >> such as:
+> >>
+> >> ---8<--- alsa-lib.mk ---8<---
+> >> ifeq ($(or $(BR2_PACKAGE_PYTHON),$(BR2_PACKAGE_PYTHON3)),y)
+> >> ALSA_LIB_CONF_OPT += \
+> >>          --with-pythonlibs=-lpython$(PYTHON_VERSION_MAJOR) \
+> >>          --with-pythonincludes=$(STAGING_DIR)/usr/include/python$
+> (PYTHON_VERSION_MAJOR)
+> >> 
+ALSA_LIB_CFLAGS+=-I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)
+> >> ALSA_LIB_DEPENDENCIES = python
+> >> else
+> >> ALSA_LIB_CONF_OPT += --disable-python
+> >> endif
+> >> ---8<--- alsa-lib.mk ---8<---
+> >>
+> >> And so on for other packages...
+> >>
+> >> We already ave this behaviour in other packages:
+> >>    - bind adds features if openssl or libxml2 are selected
+> >>    - libvncserver, with libgcrypt, libjpeg, or openssl
+> >>    - libpcap, with libusb or libnl
+> >>    - and so on. countless times...
+> >
+> > To me that sounds fine. So for optional support of other packages, we
+> > automatically enable it when the dependency is present, from the .mk
+> > file, and the Config.in does not contain an explicit option.
+> >
+> > Is this accepted by other contributors as well?
+> 
+>   I agree with the principle that scripting language bindings are 
+enabled 
+> automatically when the scripting language is selected.
+> 
+>   There could be exceptions when the bindings add a lot of bloat, like 
+> e.g. Riverbank's python bindings of Qt4 (but these are anyway a separate 
 
---- Comment #4 from mlweber1 at rockwellcollins.com 2014-01-09 13:35:44 UTC ---
-It looks like it's ccache related, below is output from the build of openssl. 
-It wasn't creating libcrypto.so, which would explain netsnmp and wpa_supplicant
-failing.
-I would add ccache to your test build and that should reproduce it.
+> package).
 
-This was caught by our nightly builder, I think the only difference between the
-autobuilder builds and what we do, is that we use ccache (So that might explain
-why it didn't catch it).  
+For what it's worth, I added in menuconfig options to all of the SELinux 
+packages to specifically enable the Python bindings.  When that option is 
+enabled, Python is selected.  Doing it this was way chosen after several 
+conversations with Thomas P. about the issue.
 
+Thanks,
+Clayton
 
-
-make[5]: Entering directory
-`/accts/mlweber1/proj/br-continuous/cfgs/10-omap-arm-eglibc-ext/build/openssl-1.0.1f'
-/accts/mlweber1/proj/br-continuous/cfgs/10-omap-arm-eglibc-ext/host/usr/bin/ccache:
-invalid option -- 'f'
-Usage:
-    ccache [options]
-    ccache compiler [compiler options]
-    compiler [compiler options]          (via symbolic link)
-
-Options:
-    -c, --cleanup         delete old files and recalculate size counters
-                          (normally not needed as this is done automatically)
-    -C, --clear           clear the cache completely
-    -F, --max-files=N     set maximum number of files in cache to N (use 0 for
-                          no limit)
-    -M, --max-size=SIZE   set maximum size of cache to SIZE (use 0 for no
-                          limit; available suffixes: G, M and K; default
-                          suffix: G)
-    -s, --show-stats      show statistics summary
-    -z, --zero-stats      zero statistics counters
-
-    -h, --help            print this help text
-    -V, --version         print version and copyright information
-
-See also <http://ccache.samba.org>.
-make[5]: *** [link_a.gnu] Error 1
-make[5]: Leaving directory
-`/accts/mlweber1/proj/br-continuous/cfgs/10-omap-arm-eglibc-ext/build/openssl-1.0.1f'
-make[4]: *** [do_linux-shared] Error 2
-make[4]: Leaving directory
-`/accts/mlweber1/proj/br-continuous/cfgs/10-omap-arm-eglibc-ext/build/openssl-1.0.1f'
-make[4]: Entering directory
-`/accts/mlweber1/proj/br-continuous/cfgs/10-omap-arm-eglibc-ext/build/openssl-1.0.1f'
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Clayton Shotwell
+Software Engineer
+clshotwe at rockwellcollins.com
+www.rockwellcollins.com 
