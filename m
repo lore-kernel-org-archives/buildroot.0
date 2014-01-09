@@ -1,23 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 9 Jan 2014 15:15:16 +0100
-Subject: [Buildroot] [git commit] sdl: rename patches to add sequence numbers
-Message-ID: <20140109152751.25C9B9C3D3@busybox.osuosl.org>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 9 Jan 2014 15:28:53 +0000
+Subject: [Buildroot] [PATCH 2/2] sdl: Fix compilation with libX11 >=
+	1.5.99.902
+In-Reply-To: <878uupdvqj.fsf@dell.be.48ers.dk>
+References: <1389268653-45909-1-git-send-email-Vincent.Riera@imgtec.com>
+ <1389268653-45909-2-git-send-email-Vincent.Riera@imgtec.com>
+ <87lhype3bi.fsf@dell.be.48ers.dk> <52CE9FA6.2020909@imgtec.com>
+ <87d2k1e19f.fsf@dell.be.48ers.dk> <878uupdvqj.fsf@dell.be.48ers.dk>
+Message-ID: <52CEC035.2090503@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bb79b96472649ee1307c1d6ad14d626384395a22
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 01/09/2014 03:24 PM, Peter Korsgaard wrote:
+>>>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
+>
+>>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+>   >>> Hmm, this ends up relying on the use having compatible auto* tools
+>   >>> installed on the build machine. Are you sure we cannot use our
+>   >>> pkg_AUTORECONF = YES handling?
+>
+>   >> I tried it but I can't get it working properly. Maybe you could try it.
+>
+>   > ok, I'll take a look.
+>
+> autoheader indeed errors out (without any error message :/), so I kept
+> it like this (with a description why and the needed host-* dependencies
+> added).
+>
+> Committed series with those changes, thanks.
+>
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ... => sdl-0001-use-correct-directfb-config.patch} |    0
- 1 files changed, 0 insertions(+), 0 deletions(-)
+Thanks to you Peter.
 
-diff --git a/package/sdl/sdl-use-correct-directfb-config.patch b/package/sdl/sdl-0001-use-correct-directfb-config.patch
-similarity index 100%
-rename from package/sdl/sdl-use-correct-directfb-config.patch
-rename to package/sdl/sdl-0001-use-correct-directfb-config.patch
+Maybe I could try to help you to fix it the way that you want. If you 
+have some time you can ping me at IRC.
+
+Best regards,
+
+-- 
+Vincent
