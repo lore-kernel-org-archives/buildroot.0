@@ -1,64 +1,64 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 9 Jan 2014 21:44:58 +0100
-Subject: [Buildroot] [PATCH 4/5] system: default to empty issue/hostname
- for custom skeleton
-In-Reply-To: <87r48gaoc0.fsf@dell.be.48ers.dk>
-References: <cover.1389134731.git.yann.morin.1998@free.fr>
- <cffd411631d99ddd729f0e29888b0fb14941889a.1389134731.git.yann.morin.1998@free.fr>
- <87r48gaoc0.fsf@dell.be.48ers.dk>
-Message-ID: <20140109204458.GE3713@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 9 Jan 2014 21:23:05 +0100
+Subject: [Buildroot] [git commit] package/tzdata: install a default localtime
+Message-ID: <20140109205952.2AAEA9C413@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=f96e4d7f348ce1b7b53763f102bbedb1ef6a1991
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2014-01-09 21:32 +0100, Peter Korsgaard spake thusly:
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
-> 
->  > From: Sagaert Johan <sagaert.johan@skynet.be>
->  > A custom skeleton may include /etc/issue and/or /etc/hostname, in
->  > which case we do not want to override them.
-> 
->  > But those files could also be missing from the custom skeleton, or
->  > the user may want to override their content.
-> 
->  > Make the current default value for isue and hostname depend on the
->  > generic skeleton, and default to empty for a custom skeleton.
-> 
->  > Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
->  > [yann.morin.1998 at free.fr: change from hiding it behind SKELETON_DEFAULT
->  >     to use conditional default values; move below the skeleton choice;
->  >     improve help entries]
->  > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> Do we really need to add this extra complexity? A custom skeleton is not
-> recommended (and in any case an advanced option), and the fix for
-> people not wanting /etc/issues / hostname overwritten is very easy, they
-> can just set it to the empty string.
-> 
-> What do others say?
+Add an option to install a default localtime.
 
-Note that this is part of the patchwork-cleanup effort #5 by Thomas DS:
-    http://lists.busybox.net/pipermail/buildroot/2014-January/086071.html
+since tzdata only makes sense for (e)glibc, we don't care
+that we install timezone files that uClibc can't understand.
 
-The original patch was:
-    http://patchwork.ozlabs.org/patch/211644/
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/tzdata/Config.in |   10 ++++++++++
+ package/tzdata/tzdata.mk |    8 +++++++-
+ 2 files changed, 17 insertions(+), 1 deletions(-)
 
-Which is now superseded by this very patch we're discussing.
-
-I don't much care about it either. Sagaert Johan, maybe you could expose
-your arguments in favour of this change?
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/tzdata/Config.in b/package/tzdata/Config.in
+index 1be6814..c0ede1f 100644
+--- a/package/tzdata/Config.in
++++ b/package/tzdata/Config.in
+@@ -23,4 +23,14 @@ config BR2_PACKAGE_TZDATA_ZONELIST
+ 	  The full list is the list of files in the time zone database source,
+ 	  not including the build and .tab files.
+ 
++config BR2_PACKAGE_TZDATA_LOCALTIME
++	string "default local time"
++	help
++	  The time zone to install as the default local time, expressed as a
++	  tzdata location, such as:
++	    GMT, Europe/Paris, America/New_York, Pacific/Wallis...
++
++	  If empty, no local time will be set, and the dates will be
++	  expressed in UTC.
++
+ endif
+diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
+index 1cb5b3f..74263e1 100644
+--- a/package/tzdata/tzdata.mk
++++ b/package/tzdata/tzdata.mk
+@@ -39,8 +39,14 @@ define TZDATA_INSTALL_TARGET_CMDS
+ 	cp -a $(@D)/_output/* $(TARGET_DIR)/usr/share/zoneinfo
+ 	cd $(TARGET_DIR)/usr/share/zoneinfo;    \
+ 	for zone in posix/*; do                 \
+-	    ln -sfn "$${zone}" "$${zone##*/}";    \
++	    ln -sfn "$${zone}" "$${zone##*/}";  \
+ 	done
++	if [ -n "$(BR2_PACKAGE_TZDATA_LOCALTIME)" ]; then                   \
++	    cd $(TARGET_DIR)/etc;                                           \
++	    ln -sf ../usr/share/zoneinfo/$(BR2_PACKAGE_TZDATA_LOCALTIME)    \
++	           localtime;                                               \
++	    echo "$(BR2_PACKAGE_TZDATA_LOCALTIME)" >timezone;               \
++	fi
+ endef
+ 
+ $(eval $(generic-package))
