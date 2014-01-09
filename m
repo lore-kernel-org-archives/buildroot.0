@@ -1,36 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 09 Jan 2014 16:24:04 +0100
-Subject: [Buildroot] [PATCH 2/2] sdl: Fix compilation with libX11 >=
-	1.5.99.902
-In-Reply-To: <87d2k1e19f.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Thu, 09 Jan 2014 14:24:44 +0100")
-References: <1389268653-45909-1-git-send-email-Vincent.Riera@imgtec.com>
- <1389268653-45909-2-git-send-email-Vincent.Riera@imgtec.com>
- <87lhype3bi.fsf@dell.be.48ers.dk> <52CE9FA6.2020909@imgtec.com>
- <87d2k1e19f.fsf@dell.be.48ers.dk>
-Message-ID: <878uupdvqj.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 9 Jan 2014 13:32:28 +0100
+Subject: [Buildroot] [git commit] grep: enable optional pcre integration
+Message-ID: <20140109152751.1EF369C40E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=0f03606fdb434bed0d67b26555f2555ad20307e5
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
- >>> Hmm, this ends up relying on the use having compatible auto* tools
- >>> installed on the build machine. Are you sure we cannot use our
- >>> pkg_AUTORECONF = YES handling?
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/grep/grep.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
- >> I tried it but I can't get it working properly. Maybe you could try it.
-
- > ok, I'll take a look.
-
-autoheader indeed errors out (without any error message :/), so I kept
-it like this (with a description why and the needed host-* dependencies
-added).
-
-Committed series with those changes, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/grep/grep.mk b/package/grep/grep.mk
+index 6a039d9..ee6de39 100644
+--- a/package/grep/grep.mk
++++ b/package/grep/grep.mk
+@@ -18,6 +18,12 @@ GREP_CONF_ENV += LIBS=-liconv
+ GREP_DEPENDENCIES += libiconv
+ endif
+ 
++# link with pcre if enabled
++ifeq ($(BR2_PACKAGE_PCRE),y)
++GREP_CONF_OPT += --enable-perl-regexp
++GREP_DEPENDENCIES += pcre
++endif
++
+ # Full grep preferred over busybox grep
+ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ GREP_DEPENDENCIES += busybox
