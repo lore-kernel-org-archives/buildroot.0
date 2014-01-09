@@ -1,109 +1,48 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  9 Jan 2014 10:22:09 +0000 (UTC)
-Subject: [Buildroot] [Bug 6776] New: systemd error: static declaration of
- 'execvpe' follows non-static declaration
-Message-ID: <bug-6776-163@https.bugs.busybox.net/>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 09 Jan 2014 11:27:50 +0100
+Subject: [Buildroot] [PATCH] libfreefare: Fix build on static
+In-Reply-To: <1386267434-7144-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Thu, 5 Dec 2013 18:17:14 +0000")
+References: <1386267434-7144-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <87ha9dmoux.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6776
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-           Summary: systemd error: static declaration of 'execvpe' follows
-                    non-static declaration
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: jason at dickson.st
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+ > This patch makes this package building correctly on static.
+ > Fixes:
 
+ >    http://autobuild.buildroot.net/results/f09/f09d515f0e7b6d78010f1ce624336ceaef624989/
 
-Created attachment 5174
-  --> https://bugs.busybox.net/attachment.cgi?id=5174
-.config file that causes the error
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ > ---
+ >  .../libfreefare-001-fix-static-build.patch         |   10 ++++++++++
+ >  1 files changed, 10 insertions(+), 0 deletions(-)
+ >  create mode 100644 package/libfreefare/libfreefare-001-fix-static-build.patch
 
-I added systemd (among other things) as one of the packages to build and then
-received this error after a doing a make clean; make
+ > diff --git a/package/libfreefare/libfreefare-001-fix-static-build.patch b/package/libfreefare/libfreefare-001-fix-static-build.patch
+ > new file mode 100644
+ > index 0000000..31dfa30
+ > --- /dev/null
+ > +++ b/package/libfreefare/libfreefare-001-fix-static-build.patch
+ > @@ -0,0 +1,10 @@
+ > +--- libfreefare-0.3.4/examples/Makefile.am.orig	2013-12-05 17:08:16.058185440 +0000
+ > ++++ libfreefare-0.3.4/examples/Makefile.am	2013-12-05 17:14:02.270548090 +0000
+ > +@@ -2,6 +2,7 @@
+ > + 
+ > + AM_CFLAGS = -I. -I$(top_srcdir)/libfreefare @LIBNFC_CFLAGS@
+ > + AM_LDFLAGS = @LIBNFC_LIBS@
+ > ++LIBS = -lcrypto -lz
 
-This is using buildroot fetched from git. version
-c991fabfcfb1984befc7a9ea5701f7de507b16fb
+Thanks, but it's nicer to just pass LIBS= to configure instead of
+patching the Makefile.am (and running autoreconf).
 
-on debian unstable.
-
-make[1]: Entering directory `/home/jason/buildroot/output/build/systemd-44'
-/usr/bin/make  all-recursive
-make[2]: Entering directory `/home/jason/buildroot/output/build/systemd-44'
-Making all in po
-make[3]: Entering directory `/home/jason/buildroot/output/build/systemd-44/po'
-make[3]: Nothing to be done for `all'.
-make[3]: Leaving directory `/home/jason/buildroot/output/build/systemd-44/po'
-make[3]: Entering directory `/home/jason/buildroot/output/build/systemd-44'
-  CC     src/libsystemd_daemon_la-sd-daemon.lo
-  CC     src/libsystemd_id128_la-sd-id128.lo
-  CC     src/libsystemd_basic_la-util.lo
-  CC     src/libsystemd_basic_la-virt.lo
-  CC     src/libsystemd_basic_la-label.lo
-In file included from src/util.h:38:0,
-                 from src/virt.c:26:
-src/macro.h:39:19: error: static declaration of 'execvpe' follows non-static
-declaration
-In file included from src/virt.c:24:0:
-/home/jason/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/unistd.h:553:12:
-note: previous declaration of 'execvpe' was here
-In file included from src/util.h:38:0,
-                 from src/label.c:30:
-src/macro.h:39:19: error: static declaration of 'execvpe' follows non-static
-declaration
-In file included from src/label.c:24:0:
-/home/jason/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/unistd.h:553:12:
-note: previous declaration of 'execvpe' was here
-make[3]: *** [src/libsystemd_basic_la-label.lo] Error 1
-make[3]: *** Waiting for unfinished jobs....
-make[3]: *** [src/libsystemd_basic_la-virt.lo] Error 1
-In file included from src/util.h:38:0,
-                 from src/sd-id128.c:28:
-src/macro.h:39:19: error: static declaration of 'execvpe' follows non-static
-declaration
-In file included from src/sd-id128.c:24:0:
-/home/jason/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/unistd.h:553:12:
-note: previous declaration of 'execvpe' was here
-make[3]: *** [src/libsystemd_id128_la-sd-id128.lo] Error 1
-In file included from src/util.c:60:0:
-src/macro.h:39:19: error: static declaration of 'execvpe' follows non-static
-declaration
-In file included from src/util.c:24:0:
-/home/jason/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/unistd.h:553:12:
-note: previous declaration of 'execvpe' was here
-src/util.c: In function 'acquire_terminal':
-src/util.c:2816:29: warning: cast increases required alignment of target type
-[-Wcast-align]
-src/util.c:2829:37: warning: cast increases required alignment of target type
-[-Wcast-align]
-src/util.c: In function 'rename_process':
-src/util.c:3311:17: warning: passing argument 1 of 'strncpy' discards 'const'
-qualifier from pointer target type [enabled by default]
-In file included from src/util.c:23:0:
-/home/jason/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/string.h:87:14:
-note: expected 'char * restrict' but argument is of type 'const char *'
-make[3]: *** [src/libsystemd_basic_la-util.lo] Error 1
-make[3]: Leaving directory `/home/jason/buildroot/output/build/systemd-44'
-make[2]: *** [all-recursive] Error 1
-make[2]: Leaving directory `/home/jason/buildroot/output/build/systemd-44'
-make[1]: *** [all] Error 2
-make[1]: Leaving directory `/home/jason/buildroot/output/build/systemd-44'
-make: *** [/home/jason/buildroot/output/build/systemd-44/.stamp_built] Error 2
-jason at vm:~/buildroot$
+As far as I can see from the autobuild error (and local testing), it's
+only missing -lz, so I left out -lcrypto.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
