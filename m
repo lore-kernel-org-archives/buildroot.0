@@ -1,90 +1,33 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Thu, 9 Jan 2014 09:10:25 +0100
-Subject: [Buildroot] [PATCH v10 8/8] Makefile: update comment about
- top-level parallel Makefile
-In-Reply-To: <20140107071752.65e91042@core2quad.morethan.org>
-References: <1387363007-19846-1-git-send-email-fabio.porcedda@gmail.com>
- <1387363007-19846-9-git-send-email-fabio.porcedda@gmail.com>
- <52B32EBD.3000202@mind.be>
- <CAHkwnC8fQE+XVB_1EixH2ZXX=bxO=+DZ68yH4e6oLTm1NTedEA@mail.gmail.com>
- <52B466C8.2000200@mind.be>
- <CAHkwnC-7A=vf1fQ6HNxqRtxpfLuKz3fDWh68Ea_EEpVakzXH9w@mail.gmail.com>
- <20140107071752.65e91042@core2quad.morethan.org>
-Message-ID: <CAHkwnC8TX7hP98Q=6HWRXF_GQDikGamT6CDWxM4okBvd_a-DUQ@mail.gmail.com>
+From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Thu, 9 Jan 2014 09:14:20 +0100
+Subject: [Buildroot] [PATCH 1/2] perl: bump to version 5.18.2
+In-Reply-To: <878uuqnokt.fsf@dell.be.48ers.dk>
+References: <1389184048-21247-1-git-send-email-francois.perrad@gadz.org>
+ <878uuqnokt.fsf@dell.be.48ers.dk>
+Message-ID: <CAB0FRsu6-ccW0Fp5_zOaJeJWYyQhZzmF_XsqoEeH_kbbCBwodQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jan 7, 2014 at 2:17 PM, Mike Zick <minimod@morethan.org> wrote:
-> On Tue, 7 Jan 2014 11:05:52 +0100
-> Fabio Porcedda <fabio.porcedda@gmail.com> wrote:
+2014/1/8 Peter Korsgaard <jacmet@uclibc.org>:
+>>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
 >
->> This is the fixed comment:
->>
->> # Parallel execution of this Makefile is disabled because it changes
->> # the packages building order, that can be a problem when a package
->> # has an unspecified optional dependency, because if that dependency
->> # is present when the package is built, it is used, otherwise it isn't
->> # (but compilation happily proceeds). This means that the packages
->> # building order is relevant in that case, and the end result will
->> # differ if the order is swapped due to parallel building.  Also
->> # changing the building order can be a problem if two packages
->> # manipulate the same file in the target directory.
->> # Taking into account the above warnings, if you still want to execute
->> # this top-level Makefile in parallel comment the following line and
->> # execute:
->> #    make BR2_JLEVEL= -j$((`getconf _NPROCESSORS_ONLN`+1))
->>
->> Regards
->>
+>  > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 >
-> Been a silent reader for years here now, but I just must make a
-> suggestion:
-
-Hi Mike,
-welcome as a writer :)
-
-
-> # Parallel execution of this top-level Makefile is disabled.
-> #
-> # Single execution is forced here for two reasons:
-> #
-> # Maintaining reproducible builds:
-> # Packages with an unspecified, optional, dependency could
-> # otherwise change the build order among multiple builds.
-> #
-> # Prevent file modification collisions:
-> # This can happen if two packages manipulate the same file.
-> #
-> # After taking into account the above considerations;
-> # If you still want to execute this top-level Makefile in
-> # parallel, comment out the following line and then execute:
-> #    make BR2_JLEVEL= -j$((`getconf _NPROCESSORS_ONLN`+1))
+> Committed both, thanks.
 >
-> Just clarify which line is "the following line" in the context
-> of this comment.
->
-> Add styling to first line of each paragraph to match the context.
 
-Thanks for the suggestion, maybe a mix of the two:
+Peter,
 
-# Parallel execution of this Makefile is disabled because it changes
-# the packages building order, that can be a problem for two reasons:
-# - If a package has an unspecified optional dependency and that
-#   dependency is present when the package is built, it is used,
-#   otherwise it isn't (but compilation happily proceeds) so the end
-#   result will differ if the order is swapped due to parallel
-#   building.
-# - Also changing the building order can be a problem if two packages
-#   manipulate the same file in the target directory.
-#
-# Taking into account the above considerations, if you still want to execute
-# this top-level Makefile in parallel comment the ".NOTPARALLEL" line and
-# build using the following command:
-#    make BR2_JLEVEL= -j$((`getconf _NPROCESSORS_ONLN`+1))
+what do you think about the serie : pkg-perl infra V3 ?
 
-Regards
--- 
-Fabio Porcedda
+Fran?ois.
+
+> --
+> Bye, Peter Korsgaard
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
