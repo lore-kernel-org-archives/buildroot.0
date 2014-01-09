@@ -1,38 +1,54 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 09 Jan 2014 18:30:33 +0100
-Subject: [Buildroot] [PATCH v10 1/8] package: add base dependency to
-	every package
-In-Reply-To: <1387363007-19846-2-git-send-email-fabio.porcedda@gmail.com>
-References: <1387363007-19846-1-git-send-email-fabio.porcedda@gmail.com>
- <1387363007-19846-2-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <52CEDCB9.9090102@mind.be>
+Date: Thu, 09 Jan 2014 18:01:24 +0100
+Subject: [Buildroot] ParaGUI package?
+In-Reply-To: <20140108113404.413a4685@skate>
+References: <DC148C5AA1CEBA4E87973D432B1C2D8817E678D7@P3PWEX4MB008.ex4.secureserver.net>
+ <20140108113404.413a4685@skate>
+Message-ID: <52CED5E4.90603@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18/12/13 11:36, Fabio Porcedda wrote:
-> Move "dependencies" "dirs" "prepare" dependencies from "toolchain" to
-> every package.
-> This way we can build correctly every package right after the clean
-> stage.
-> As example with this commit we can build successfully the glibc right
-> after the clean stage:
-> 	make clean glibc
+On 08/01/14 04:34, Thomas Petazzoni wrote:
+> Dear Hartley Sweeten,
 >
-> This is also a step forward supporting top-level parallel make.
+> On Wed, 8 Jan 2014 00:10:29 +0000, Hartley Sweeten wrote:
 >
-> Signed-off-by: Fabio Porcedda<fabio.porcedda@gmail.com>
-> Acked-by: Arnout Vandecappelle (Essensium/Mind)<arnout@mind.be>
+>> I'm trying to find a simple GUI library that can be used with SDL and this one appears
+>> to cover my needs. Unfortunately the ParaGUI library appears to be a bit dead. The
+>> latest release at http://download.savannah.gnu.org/releases/paragui/ is
+>>
+>> paragui-1.1.8.tar.gz	19-Oct-2004
+>>
+>> I found a newer branch on https://github.com/pipelka/paragui that appears to be
+>> version 1.1.11.
+>
+> My first reaction is: do you really want to start using something that
+> appears to be dead/deprecated?
+>
+>> Makefile.am: error: required file './NEWS' not found
+>> Makefile.am: error: required file './ChangeLog' not found
+>
+> These seems to be the real problems. Easiest solution is to add a post
+> patch hook with "touch $(@D)/NEWS $(@D)/ChangeLog"
 
-  Peter,
-
-  This one is fixing a problem reported by a user and has already gone 
-through 10 iterations. Can it be committed?
+  Actually, perhaps we should always to this when PKG_AUTORECONF is YES? 
+There are quite a lot of packages that have this touch trick.
 
   Regards,
   Arnout
+
+>
+> A cleaner solution is to add the "foreign" option in the
+> AM_INIT_AUTOMAKE call in configure.in, like:
+>
+> AM_INIT_AUTOMAKE([1.10 no-define foreign])
+>
+> Thomas
+>
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
