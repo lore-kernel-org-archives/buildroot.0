@@ -1,82 +1,100 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Jan 2014 07:40:08 +0800
-Subject: [Buildroot] [PATCH 4/4] pixman: do not build demos or tests
-In-Reply-To: <1389198785-11923-5-git-send-email-spenser@gillilanding.com>
-References: <1389198785-11923-1-git-send-email-spenser@gillilanding.com>
- <1389198785-11923-5-git-send-email-spenser@gillilanding.com>
-Message-ID: <20140110074008.2c60836d@skate>
+Date: Fri, 10 Jan 2014 07:45:37 +0800
+Subject: [Buildroot] [PATCH v2] ca-certificates: new package
+In-Reply-To: <1389201330-2420-1-git-send-email-martin@barkynet.com>
+References: <1389201330-2420-1-git-send-email-martin@barkynet.com>
+Message-ID: <20140110074537.75d0a765@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Spenser Gilliland,
+Dear Martin Bark,
 
-On Wed,  8 Jan 2014 10:33:05 -0600, Spenser Gilliland wrote:
-> Test code does not compile correctly on microblaze architecture.  Disable both
-> tests and demos from being built to reduce failures and decrease build time.
-> 
-> Fixes autobuild failures
-> 
-> http://autobuild.buildroot.net/results/a4b/a4b0ce0621701df55c146609388c3e529ea3411e/build-end.log
-> http://autobuild.buildroot.net/results/e2f/e2f6e4750d8b93320681abf09157917d131c8de0/build-end.log
-> http://autobuild.buildroot.net/results/878/878f0665c1b3e0c8895912c3a5a3078f937a9c75/build-end.log
-> http://autobuild.buildroot.net/results/018/01869b49eb1d305cec98d4d9ecf046427e88c2f3/build-end.log
-> http://autobuild.buildroot.net/results/0e8/0e8a2f5fc1425e153c112f87083e8a93f726e3df/build-end.log
-> http://autobuild.buildroot.net/results/980/980e03c5f8a7678f3343439dc37636855f637f9e/build-end.log
-> http://autobuild.buildroot.net/results/e1c/e1c86da68e012dfbff345436b0967d7774c9d9c5/build-end.log
-> http://autobuild.buildroot.net/results/63c/63c4cc230fb0c1b359f2ca15721e20deaa0eecc9/build-end.log
-> http://autobuild.buildroot.net/results/db7/db7785da51133d9874857731de6e7ff19e13527b/build-end.log
-> http://autobuild.buildroot.net/results/af6/af6a646e560b9a743d909966a1243b1ee8dcb15f/build-end.log
-> http://autobuild.buildroot.net/results/e36/e360e979fbafa5add49dba4ae3f6972220966e0d/build-end.log
-> http://autobuild.buildroot.net/results/79e/79e4e0c94b833c247457d4839a46ff92a524f0bb/build-end.log
-> http://autobuild.buildroot.net/results/b67/b671f57bbfe3609d59d30281c7ee931b5ebf3df1/build-end.log
-> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+On Wed,  8 Jan 2014 17:15:30 +0000, Martin Bark wrote:
 
-Missing empty new line before Signed-off-by. Also, some comment below.
+> +config BR2_PACKAGE_CA_CERTIFICATES
+> +    bool "CA Certificates"
+> +    help
 
+Indentation should be one tab.
 
-> ---
->  package/pixman/pixman-disable-demos-and-tests.patch | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
->  create mode 100644 package/pixman/pixman-disable-demos-and-tests.patch
-> 
-> diff --git a/package/pixman/pixman-disable-demos-and-tests.patch b/package/pixman/pixman-disable-demos-and-tests.patch
+> +      This package includes PEM files of CA certificates to allow
+> +      SSL-based applications to check for the authenticity of SSL
+> +      connections.
+
+And here one tab + two spaces.
+
+> +
+> +      It includes, among others, certificate authorities used by the
+> +      Debian infrastructure and those shipped with Mozilla's browsers.
+
+If possible, please add an upstream URL here.
+
+> diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
 > new file mode 100644
-> index 0000000..f55fc0d
+> index 0000000..6cf2e7a
 > --- /dev/null
-> +++ b/package/pixman/pixman-disable-demos-and-tests.patch
-> @@ -0,0 +1,14 @@
-> +pixman: do not build demos or tests
+> +++ b/package/ca-certificates/ca-certificates.mk
+> @@ -0,0 +1,39 @@
+> +################################################################################
+> +#
+> +# ca-certificates
+> +#
+> +################################################################################
 > +
-> +Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+> +CA_CERTIFICATES_VERSION = 20130906
+> +CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.gz
+> +CA_CERTIFICATES_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/c/ca-certificates
+
+I think we should use snapshot.debian.net instead of BR2_DEBIAN_MIRROR.
+Maybe we should even completely remove BR2_DEBIAN_MIRROR altogether.
+The problem of using BR2_DEBIAN_MIRROR is that there is no guarantee
+that the tarballs are going to stay at the same location, as Debian
+evolves. While snapshot.debian.net guarantees this.
+
+> +CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python
+> +CA_CERTIFICATES_LICENSE = GPLv2+ (script), MPLv2.0 (data)
+> +CA_CERTIFICATES_LICENSE_FILES = debian/copyright
 > +
-> +Index: pixman-0.30.0/Makefile.am
-> +===================================================================
-> +--- pixman-0.30.0.orig/Makefile.am	2014-01-08 10:14:23.773508352 -0600
-> ++++ pixman-0.30.0/Makefile.am	2014-01-08 10:14:39.549508640 -0600
-> +@@ -1,4 +1,4 @@
-> +-SUBDIRS = pixman demos test
-> ++SUBDIRS = pixman
-> + 
-> + pkgconfigdir=$(libdir)/pkgconfig
-> + pkgconfig_DATA=pixman-1.pc
+> +define CA_CERTIFICATES_BUILD_CMDS
+> +    PATH=$(HOST_PATH) $(MAKE) -C $(@D) all
 
-This sort of solution annoys me a bit, because it is not upstreamable,
-but requires AUTORECONF = YES, which we would have to keep forever for
-this package. Therefore, I'd very much prefer a solution that is
-upstreamable (like additional --enable-demos / --enable-tests options,
-or if not accepted upstream, we can get back to an ugly SED of the
-Makefile.in).
+Instead of PATH=$(HOST_PATH), I'd prefer to see:
 
-Note that there is already a patch for pixman that touches
-configure.ac, but that patch is a backport from upstream, and therefore
-at the next upgrade of pixman, we could remove the patch, and remove
-AUTORECONF = YES.
+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) all
 
-Also, if you add a new patch to pixman, please add sequence numbers to
-the patches while you're at it :-)
+Also, the indentation of the command should be one tab.
+
+> +endef
+> +
+> +define CA_CERTIFICATES_INSTALL_TARGET_CMDS
+> +    $(INSTALL) -d -m 0755 $(TARGET_DIR)/usr/share/ca-certificates
+> +    $(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/ssl/certs
+> +    $(MAKE) -C $(@D) install DESTDIR=$(TARGET_DIR)
+> +    rm -f $(TARGET_DIR)/usr/sbin/update-ca-certificates
+> +
+> +    #remove any existing certificates under /etc/ssl/certs
+> +    rm -f  $(TARGET_DIR)/etc/ssl/certs/*
+> +
+> +    #generate symlinks to certificates under /etc/ssl/certs
+> +    ( \
+> +      cd $(TARGET_DIR) ;\
+> +      for i in `find usr/share/ca-certificates -name "*.crt"` ; do \
+> +            ln -sf ../../../$$i etc/ssl/certs/`basename $${i%.crt}.pem` ;\
+> +      done ;\
+> +    )
+
+This is not very pretty, but I don't really have a better suggestion,
+unfortunately.
+
+> +
+> +    #create symbolic links to the certificates by their hash values
+> +    $(HOST_DIR)/usr/bin/c_rehash $(TARGET_DIR)/etc/ssl/certs
+> +endef
+> +
+> +$(eval $(generic-package))
 
 Thanks!
 
