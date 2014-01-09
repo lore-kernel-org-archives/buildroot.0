@@ -1,42 +1,39 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 09 Jan 2014 14:15:27 +0100
-Subject: [Buildroot] [PATCH] rt-tests: disable for architectures not
-	supporting NPTL
-In-Reply-To: <20140109130845.GV4659@sapphire.tkos.co.il> (Baruch Siach's
- message of "Thu, 9 Jan 2014 15:08:45 +0200")
-References: <2a175498f9ed0528e619f3a0124836eb72729bc3.1389256828.git.baruch@tkos.co.il>
- <87ppo1e3hg.fsf@dell.be.48ers.dk>
- <20140109130845.GV4659@sapphire.tkos.co.il>
-Message-ID: <87ha9de1ow.fsf@dell.be.48ers.dk>
+Date: Thu, 09 Jan 2014 14:24:44 +0100
+Subject: [Buildroot] [PATCH 2/2] sdl: Fix compilation with libX11 >=
+	1.5.99.902
+In-Reply-To: <52CE9FA6.2020909@imgtec.com> (Vicente Olivert Riera's message of
+ "Thu, 9 Jan 2014 13:09:58 +0000")
+References: <1389268653-45909-1-git-send-email-Vincent.Riera@imgtec.com>
+ <1389268653-45909-2-git-send-email-Vincent.Riera@imgtec.com>
+ <87lhype3bi.fsf@dell.be.48ers.dk> <52CE9FA6.2020909@imgtec.com>
+Message-ID: <87d2k1e19f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-Hi,
+ >> Hmm, this ends up relying on the use having compatible auto* tools
+ >> installed on the build machine. Are you sure we cannot use our
+ >> pkg_AUTORECONF = YES handling?
 
- >> So shouldn't we depend on !BR2_PTHREADS && !BR2_PTHREADS_OLD instead? What
- >> happens if you configure uClibc on E.G. ARM to use pthreads-old?
+ > I tried it but I can't get it working properly. Maybe you could try it.
 
- > We could, but this doesn't solve the problem for external toolchains. This 
- > issue of packages that require NPTL keeps coming up, but no solution has been 
- > implemented yet.
+ok, I'll take a look.
 
- > This patch takes the minimal approach of disabling rt-tests for arches that 
- > are known not to have NPTL support at all.
 
-Ok, then I think the nicest approach would be to depend on
-!linuxthreads/old (for internal toolchains) and the explicit list of
-archs where we know glibc/nptl aren't available (for external
-toolchains).
+ >> Alternatively, it should depend on
+ >> host-automake host-autoconf host-libtool so we build our own versions of
+ >> the tools, similar to how AUTORECONF does.
 
-If any of the archs we have blacklisted for nptl
-(arc/avr32/bfin/extensa/x86_i386) support glibc (with the needed
-functionality), then we could combine the arch list with
-BR2_TOOLCHAIN_EXTERNAL_UCLIBC.
+ > So, what do you want I do, sending an updated patch adding those
+ > dependencies, or do you prefer to try to use the pkg_AUTORECONF = YES
+ > way?
+
+I'll handle it. Thanks.
 
 -- 
 Bye, Peter Korsgaard
