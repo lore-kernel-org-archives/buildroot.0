@@ -1,34 +1,40 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  9 Jan 2014 09:12:29 -0300
-Subject: [Buildroot] [PATCH] grep: enable optional pcre integration
-Message-ID: <1389269549-14970-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 09 Jan 2014 13:19:19 +0100
+Subject: [Buildroot] [PATCH 0/3] network-manager: fix DHCP support.
+In-Reply-To: <1389090561-32196-1-git-send-email-eric.le.bihan.dev@free.fr>
+ (Eric Le Bihan's message of "Tue, 7 Jan 2014 11:29:18 +0100")
+References: <1389090561-32196-1-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <87y52pe4ag.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/grep/grep.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+>>>>> "Eric" == Eric Le Bihan <eric.le.bihan.dev@free.fr> writes:
 
-diff --git a/package/grep/grep.mk b/package/grep/grep.mk
-index 6a039d9..ee6de39 100644
---- a/package/grep/grep.mk
-+++ b/package/grep/grep.mk
-@@ -18,6 +18,12 @@ GREP_CONF_ENV += LIBS=-liconv
- GREP_DEPENDENCIES += libiconv
- endif
- 
-+# link with pcre if enabled
-+ifeq ($(BR2_PACKAGE_PCRE),y)
-+GREP_CONF_OPT += --enable-perl-regexp
-+GREP_DEPENDENCIES += pcre
-+endif
-+
- # Full grep preferred over busybox grep
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- GREP_DEPENDENCIES += busybox
+ > This patch series fixes DHCP support for NetworkManager.
+ > The DHCP client used by NetworkManager can be configured in the "[main]"
+ > section of /etc/NetworkManager/NetworkManager.conf either as:
+
+ >   dhcp=dhclient
+
+ > or
+
+ >   dhcp=dhcpcd
+
+ > The support for either client is enabled by the './configure' script. When
+ > network-manager was built, the instance of the client installed on the
+ > development machine was detected and its location used. Most of the time,
+ > this resulted in dhclient being the only choice...
+
+ > This patch series:
+
+ > - installs dhcpcd in the proper directory.
+ > - configures network-manager according to the DHCP client package selected.
+ > - bumps network-manager to its latest version.
+
+Committed series, thanks.
+
 -- 
-1.8.3.2
+Bye, Peter Korsgaard
