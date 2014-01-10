@@ -1,29 +1,47 @@
 From: Martin Bark <martin@barkynet.com>
-Date: Fri, 10 Jan 2014 14:23:36 +0000
+Date: Fri, 10 Jan 2014 14:24:02 +0000
 Subject: [Buildroot] [PATCH v2] ca-certificates: new package
-In-Reply-To: <20140110074537.75d0a765@skate>
+In-Reply-To: <20140109235917.GH3713@free.fr>
 References: <1389201330-2420-1-git-send-email-martin@barkynet.com>
- <20140110074537.75d0a765@skate>
-Message-ID: <52D00268.8000505@barkynet.com>
+ <20140109235917.GH3713@free.fr>
+Message-ID: <52D00282.8040607@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Yann,
 
-Thomas,
+Thanks for the feedback.
 
-Thanks for the reply.  I'll fix the issues.
+On 09/01/14 23:59, Yann E. MORIN wrote:
 
-On 09/01/14 23:45, Thomas Petazzoni wrote:
 [--SNIP--]
+
+>> +    #generate symlinks to certificates under /etc/ssl/certs
+>> +    ( \
+>> +      cd $(TARGET_DIR) ;\
+>> +      for i in `find usr/share/ca-certificates -name "*.crt"` ; do \
+>> +            ln -sf ../../../$$i etc/ssl/certs/`basename $${i%.crt}.pem` ;\
+>> +      done ;\
+>> +    )
 >
-> If possible, please add an upstream URL here.
+> As stated by Thomas, this is not very nice.
+>
+> However, you do not need to enclose the command in-between a ()-pair,
+> since make will spawn a shell for each 'command', and thus the cd is in
+> effect only in that shell. That is, the following line:
+>
+>> +    $(HOST_DIR)/usr/bin/c_rehash $(TARGET_DIR)/etc/ssl/certs
+>
+> Will be executed in another shell.
+>
+> Also, your use of basename is weird. I'd use this instead:
+>      `basename $${i} .crt`.pem
 >
 
-There is the a browsable version of the git repo here
-http://anonscm.debian.org/gitweb/?p=collab-maint/ca-certificates.git
-would that do?
+I was using the bash ${var%Pattern} substitution but your solution is 
+neater.  I'll make those changes now.
 
 Thanks
