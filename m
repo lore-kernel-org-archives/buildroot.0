@@ -1,35 +1,51 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 10 Jan 2014 07:55:47 +0100
-Subject: [Buildroot] [PATCH 4 of 5 v3] squashfs3: remove deprecated
-	package/rootfs
-In-Reply-To: <4ddef97a82357d616713.1388764973@argentina>
-References: <patchbomb.1388764969@argentina>
- <4ddef97a82357d616713.1388764973@argentina>
-Message-ID: <52CF9973.2040205@mind.be>
+Date: Fri, 10 Jan 2014 07:04:55 +0100
+Subject: [Buildroot] [PATCH] libnfc-llcp: rename to libllcp and bump
+	version
+In-Reply-To: <1389287265-1498-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1389287265-1498-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <52CF8D87.20000@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/01/14 17:02, Thomas De Schampheleire wrote:
-> Signed-off-by: Thomas De Schampheleire<thomas.de.schampheleire@gmail.com>
+On 09/01/14 18:07, Vicente Olivert Riera wrote:
+> This package has been renamed upstream to libllcp.
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+  This is not sufficient reason to rename the package in buildroot as 
+well. Renaming makes it difficult for people to follow buildroot upstream 
+with their configurations.
 
->
-> ---
-> Note: I did not add a legacy entry for  BR2_TARGET_ROOTFS_SQUASHFS4 because
-> it's simply removed, its role now played by the parent
-> BR2_TARGET_ROOTFS_SQUASHFS. Therefore, I don't think we need legacy symbols
-> in this case, right?
+  Also, if any existing symbol is removed (or renamed), entries have to 
+be added to Config.in.legacy. This makes is slightly easier for users to 
+maintain buildroot configurations, but it's still annoying so renaming of 
+symbols should be done with care.
 
-  This should have been part of the commit message...
-
-  But I agree with the principle.
+  It _is_ an option to still rename it in the menu. I'm not entirely sure 
+what should be done with the alphabetical ordering in that case - 
+probably follow the visible name, not the internal name.
 
   Regards,
   Arnout
+
+> Also, the current
+> package we have in Buildroot fails to compile due to a version bump of
+> it's main dependence, libnfc. A version bump is required because this
+> package has been adapted upstream to work with libnfc-1.7.0-rc6.
+>
+> Signed-off-by: Vicente Olivert Riera<Vincent.Riera@imgtec.com>
+> ---
+>   package/Config.in                          |    2 +-
+>   package/{libnfc-llcp => libllcp}/Config.in |    6 +++---
+>   package/libllcp/libllcp.mk                 |   15 +++++++++++++++
+>   package/libnfc-llcp/libnfc-llcp.mk         |   15 ---------------
+>   4 files changed, 19 insertions(+), 19 deletions(-)
+>   rename package/{libnfc-llcp => libllcp}/Config.in (56%)
+>   create mode 100644 package/libllcp/libllcp.mk
+>   delete mode 100644 package/libnfc-llcp/libnfc-llcp.mk
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
