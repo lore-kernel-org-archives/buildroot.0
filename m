@@ -1,131 +1,126 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 10 Jan 2014 10:03:47 +0000
-Subject: [Buildroot] [PATCH v2] libnfc-llcp: rename to libllcp and bump
-	version
-Message-ID: <1389348227-55991-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Fri, 10 Jan 2014 11:06:00 +0100
+Subject: [Buildroot] [PATCH v11 0/8] Add support for top-level parallel make
+Message-ID: <1389348368-2509-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package has been renamed upstream to libllcp. Also, the current
-package we have in Buildroot fails to compile due to a version bump of
-it's main dependence, libnfc. A version bump is required because this
-package has been adapted upstream to work with libnfc-1.7.0-rc6.
+Hi all,
+this is a patch set for adding support for top-level parallel make in
+buildroot, the common problem scattered in buildroot's top-level
+makefiles is that in the rules it relies on the order of evaluation of
+the prerequisites, to be able to use top-level parallel make instead
+of reling on the left to right ordering of evaluation of the
+prerequisites we must add an explicit rule to describe the
+dependencies.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- Config.in.legacy                           |   11 +++++++++++
- package/Config.in                          |    2 +-
- package/{libnfc-llcp => libllcp}/Config.in |    6 +++---
- package/libllcp/libllcp.mk                 |   17 +++++++++++++++++
- package/libnfc-llcp/libnfc-llcp.mk         |   15 ---------------
- 5 files changed, 32 insertions(+), 19 deletions(-)
- rename package/{libnfc-llcp => libllcp}/Config.in (56%)
- create mode 100644 package/libllcp/libllcp.mk
- delete mode 100644 package/libnfc-llcp/libnfc-llcp.mk
+With this patch set the top-level parallel make seems to works fine,
+example:
+	make clean
+	make BR2_JLEVEL= -j$((`getconf _NPROCESSORS_ONLN` + 1))
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index c75e25e..d9128fc 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -99,6 +99,17 @@ comment "----------------------------------------------------"
- endif
- 
- ###############################################################################
-+config BR2_PACKAGE_LIBNFC_LLCP
-+	bool "libnfc-llcp has been removed"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
-+	select BR2_PACKAGE_LIBNFC
-+	select BR2_LEGACY
-+	help
-+	  The 'libnfc-llcp' package has been removed since upstream renamed
-+          to 'libllcp'. We have added a new package for 'libllcp' and bumped
-+          the version at the same time.
-+
-+###############################################################################
- comment "Legacy options removed in 2014.02"
- 
- config BR2_PACKAGE_NETKITBASE
-diff --git a/package/Config.in b/package/Config.in
-index 8af6a1e..342dd18 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -565,9 +565,9 @@ source "package/libfreefare/Config.in"
- source "package/libftdi/Config.in"
- source "package/libhid/Config.in"
- source "package/libiqrf/Config.in"
-+source "package/libllcp/Config.in"
- source "package/libmbim/Config.in"
- source "package/libnfc/Config.in"
--source "package/libnfc-llcp/Config.in"
- source "package/libqmi/Config.in"
- source "package/libraw1394/Config.in"
- source "package/libserial/Config.in"
-diff --git a/package/libnfc-llcp/Config.in b/package/libllcp/Config.in
-similarity index 56%
-rename from package/libnfc-llcp/Config.in
-rename to package/libllcp/Config.in
-index f557926..e5b2108 100644
---- a/package/libnfc-llcp/Config.in
-+++ b/package/libllcp/Config.in
-@@ -1,9 +1,9 @@
--config BR2_PACKAGE_LIBNFC_LLCP
--	bool "libnfc-llcp"
-+config BR2_PACKAGE_LIBLLCP
-+	bool "libllcp"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
- 	select BR2_PACKAGE_LIBNFC
- 	help
- 	  Library extending libnfc with support for Logical Link Control
- 	  Protocol.
- 
--	  http://code.google.com/p/nfc-tools/source/browse/trunk/libnfc-llcp/
-+	  https://code.google.com/p/libllcp/
-diff --git a/package/libllcp/libllcp.mk b/package/libllcp/libllcp.mk
-new file mode 100644
-index 0000000..c9cd9cf
---- /dev/null
-+++ b/package/libllcp/libllcp.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# libllcp
-+#
-+################################################################################
-+
-+LIBLLCP_VERSION = cf0c4b3c9df98851c6092c130192130c3f5a46bd
-+LIBLLCP_SITE = https://libllcp.googlecode.com/git/
-+LIBLLCP_SITE_METHOD = git
-+LIBLLCP_DEPENDENCIES = libnfc
-+# There's no ./configure is the repository, so we need to autoreconf
-+LIBLLCP_AUTORECONF = YES
-+LIBLLCP_INSTALL_STAGING = YES
-+LIBLLCP_LICENSE = GPLv3+
-+LIBLLCP_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
-diff --git a/package/libnfc-llcp/libnfc-llcp.mk b/package/libnfc-llcp/libnfc-llcp.mk
-deleted file mode 100644
-index d410b55..0000000
---- a/package/libnfc-llcp/libnfc-llcp.mk
-+++ /dev/null
-@@ -1,15 +0,0 @@
--################################################################################
--#
--# libnfc-llcp
--#
--################################################################################
--
--LIBNFC_LLCP_VERSION = 1103
--LIBNFC_LLCP_SITE = http://nfc-tools.googlecode.com/svn/trunk/libnfc-llcp/
--LIBNFC_LLCP_SITE_METHOD = svn
--LIBNFC_LLCP_DEPENDENCIES = libnfc
--LIBNFC_LLCP_AUTORECONF = YES
--LIBNFC_LLCP_AUTORECONF_OPT = --install --force --verbose
--LIBNFC_LLCP_INSTALL_STAGING = YES
--
--$(eval $(autotools-package))
+Before to try it remeber to remove the ".NOTPARALLEL" line.
+
+On my quad core system the building time for the first 220 packages of
+the "allpackageyesconfig" is 43m vs 18m.
+
+I've tested the qemu_x86_defconfig, uclibc/eglibc/glibc,
+ccache off/on, sstrip off/on.
+
+I've finished to work on this patch set, Arnout has acked some patches
+so i hope that this patch set is going to be merged soon because is
+frustrating to rebase this patch set. In the latest Buildroot
+Developer Day in Edinburgh
+(http://elinux.org/Buildroot:DeveloperDaysELCE2013) you agreed to
+accept this patch set, so what are you wating for?
+
+Thank you for all reviews and in particular Arnout.
+
+Best regards
+Fabio Porcedda
+
+v11:
+ - Rebased over master
+ - Added support for pythone framework in the second patch.
+ - Changed comment on the latest patch.
+v10:
+ - Added Acked-by: Arnout Vandecappelle on the first two patches
+ - Improved descption and text of the last patch
+ - Rebased over master
+v9:
+ - Added Acked-by: Arnout Vandecappelle on some patches.
+ - Changed the patches contents and descriptions following advices of Arnout
+   - 1th patch: fixed to support ccache & sstrip
+   - 2th patch: added pkg-cmake.mk
+   - 2th patch: splitted ifeq
+   - 3th patch: improved description
+   - 3th patch: does not use %_BUILD_DEPENDENCIES anymore
+   - 3th patch: added a comment about "|"
+   - 4th patch: added a comment
+   - 5th patch: added a comment
+   - 6th patch: 
+ - 2th patch: fixed a comment
+ - 8th patch: now it change only the comment
+v8:
+ - rebased over master
+ - added patche for for base dependency
+ - added patche for for glibc package
+ - added patche for for uclibc package
+ - removed patch already merged
+ - changed some descriptions
+ - modified the patch for toolchain dependency to prevent circular dependency
+v7:
+ - add the latest patch
+ - add to the first patch the <pkgname>_TOOLCHAIN variable
+ - improve the fifth patch
+v6:
+ - added the fifth patch
+ - updated the fourth patch adding the install targets
+ - updated the second patch to remove TARGETS_ALL
+v5:
+ - added the fourth patch
+ - fixed some typos
+ - rewrited the second patch to use only $$($(2)_TARGET_*) in the rules
+ - add support for top-level parallel make for the glibc package
+v4:
+ - rebased over master
+ - add Acked-by: Thomas Petazzoni on the third patch
+ - changed the orderd of the patches
+v3:
+ - add back the patch "package: add toolchain dependency to
+    inner-generic-package" because now is working fine.
+ - add Acked-by: Arnout Vandecappelle to the third patch.
+ - reworked the second patch following Arnout suggestions.
+v2:
+ - remove patch "package: add toolchain dependency to inner-generic-package"
+   because was not working fine against recent toolchain changes.
+
+Fabio Porcedda (8):
+  package: add base dependency to every package
+  package: add toolchain dependency to every target package
+  package: add support for top-level parallel make
+  uclibc: add support for top-level parallel make
+  glibc: add support for top-level parallel make
+  Makefile: add support for top-level parallel make
+  package: enable jobserver for recursive make
+  Makefile: update comment about top-level parallel Makefile
+
+ Makefile                                           | 34 ++++++-----
+ fs/common.mk                                       |  4 +-
+ package/glibc/glibc.mk                             | 12 +++-
+ package/linux-headers/linux-headers.mk             |  3 +
+ package/pkg-autotools.mk                           |  3 +-
+ package/pkg-cmake.mk                               |  2 +-
+ package/pkg-generic.mk                             | 67 ++++++++++++++--------
+ package/pkg-python.mk                              |  2 +-
+ package/uclibc/uclibc.mk                           | 12 +++-
+ .../toolchain-buildroot/toolchain-buildroot.mk     |  2 +
+ toolchain/toolchain-external/toolchain-external.mk |  2 +
+ toolchain/toolchain/toolchain.mk                   |  5 +-
+ 12 files changed, 99 insertions(+), 49 deletions(-)
+
 -- 
-1.7.1
+1.8.5.2
