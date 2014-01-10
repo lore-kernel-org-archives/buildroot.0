@@ -1,36 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 11 Jan 2014 00:09:44 +0100
-Subject: [Buildroot] [git commit] uclibc: snapshot: add BSD obsolete signal
-	functions
-Message-ID: <20140110231044.82F959C43A@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 11 Jan 2014 00:15:42 +0100
+Subject: [Buildroot] [PATCH] ltrace: narrow down available architectures
+In-Reply-To: <1389306767-18579-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 9 Jan 2014 19:32:47 -0300")
+References: <1389306767-18579-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87wqi75syp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=70de2d01284e70cfdbc929fbd6a20e113af0c7a9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Fixes
-http://autobuild.buildroot.net/results/70b/70b79ca0aa97ed451a5679029955ed3709c84b67/.
+ > First switch the architecture availability to positive logic since it's
+ > cleaner and avoids issues when new ones are introduced.
+ > Then look at the source for the available ones at sysdeps/linux-gnu/...
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/uclibc/uClibc-snapshot.config |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ > aarch64 -> NULL
+ > arc -> NULL
+ > arm -> hardcoded to little endian, so no armeb
+ > avr32 -> NULL
+ > blackfin -> NULL
+ > microblaze -> NULL
+ > mips -> little/big endian handled but not for 64 bits
+ > nios2 -> NULL
+ > ppc -> OK
+ > sh -> NULL
+ > sparc -> OK
+ > x86 -> Both i386 and x86_64 handled
+ > xtensa -> NULL
 
-diff --git a/package/uclibc/uClibc-snapshot.config b/package/uclibc/uClibc-snapshot.config
-index 9ca3f9e..890aefd 100644
---- a/package/uclibc/uClibc-snapshot.config
-+++ b/package/uclibc/uClibc-snapshot.config
-@@ -152,7 +152,7 @@ UCLIBC_LINUX_SPECIFIC=y
- UCLIBC_HAS_GNU_ERROR=y
- UCLIBC_BSD_SPECIFIC=y
- UCLIBC_HAS_BSD_ERR=y
--# UCLIBC_HAS_OBSOLETE_BSD_SIGNAL is not set
-+UCLIBC_HAS_OBSOLETE_BSD_SIGNAL=y
- # UCLIBC_HAS_OBSOLETE_SYSV_SIGNAL is not set
- # UCLIBC_NTP_LEGACY is not set
- # UCLIBC_SV4_DEPRECATED is not set
+ > Fixes:
+ > http://autobuild.buildroot.net/results/cd2/cd24e7b6f863ab413d76ca7a81bd357ddf1dc4f7/
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
