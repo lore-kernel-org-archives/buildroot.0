@@ -1,53 +1,48 @@
-From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-Date: Fri, 10 Jan 2014 01:44:32 +0100
-Subject: [Buildroot] [git commit] package/tzdata: install a default
-	localtime
-In-Reply-To: <20140110072223.5bb42cc1@skate>
-References: <20140109205952.2AAEA9C413@busybox.osuosl.org>
- <20140110072223.5bb42cc1@skate>
-Message-ID: <52CF4270.4000707@free-electrons.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 10 Jan 2014 10:34:58 +0800
+Subject: [Buildroot] [pkg-luarocks infra V4 02/10] luajit: allow to
+ build Lua extensions without lua
+In-Reply-To: <CAB0FRsvz8TZAm3NUkf6nsR12uB1ypVYnwiq+ZDpD--xo0uG64w@mail.gmail.com>
+References: <1384520859-3189-1-git-send-email-francois.perrad@gadz.org>
+ <1384520859-3189-2-git-send-email-francois.perrad@gadz.org>
+ <20131222182356.6ab0d7ed@skate>
+ <CAB0FRsvz8TZAm3NUkf6nsR12uB1ypVYnwiq+ZDpD--xo0uG64w@mail.gmail.com>
+Message-ID: <20140110103458.4dad7279@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/01/2014 00:22, Thomas Petazzoni wrote:
-> Dear Peter Korsgaard,
-> 
-> On Thu, 9 Jan 2014 21:23:05 +0100, Peter Korsgaard wrote:
->> commit: http://git.buildroot.net/buildroot/commit/?id=f96e4d7f348ce1b7b53763f102bbedb1ef6a1991
->> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->>
->> Add an option to install a default localtime.
->>
->> since tzdata only makes sense for (e)glibc, we don't care
->> that we install timezone files that uClibc can't understand.
->>
->> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> 
-> I know I should have raised my voice earlier, but I'm not entirely sure
-> about this one. Instead of having this as a tzdata specific option, I'd
-> very much prefer to have a "System configuration" option that allows to
-> set the default time zone, and which works for both glibc and uClibc.
-> 
-> Alexandre Belloni has posted some patches some time ago around time
-> zone handling with uClibc, it would have be great to have a better
-> integration here.
-> 
+Dear Fran?ois Perrad,
 
-Yeah, it is still on my todo list. I'm trying to get the timezone
-specification generated automatically but it requires some host packages
-and I still didn't take the time to do that correctly.
+On Tue, 7 Jan 2014 15:11:16 +0100, Fran?ois Perrad wrote:
 
-> Thanks,
-> 
-> Thomas
-> 
+> A Lua native module, like LuaFileSystem, needs the Lua includes at compile time.
+> Both lua package and luajit package supply these files.
+> The lua package installs them in /usr/include, and luafilesystem, like
+> other Lua modules, expects them at this place.
+> In LuaJIT upstream, these files are installed
+> /usr/include/luajit-2.0.2 in order to not override the Lua ones if
+> they are already installed.
+> Before the introduction of virtual package luainterpreter,
+> luafilesystem depends on lua package.
+> Now, it depends on luainterpreter. When luainterpreter is supplied by
+> luajit, the include from LuaJIT must be installed in the same place as
+> Lua one's.
 
+Ok, now it makes a lot of sense.
 
+> So, the patch luajit-05-install-inc.patch contains the comment :
+> "Install includes like lua's ones"
+
+I think your patch description would have been immensely better if you
+had included an explanation like you did above!
+
+Thanks!
+
+Thomas
 -- 
-Alexandre Belloni, Free Electrons
+Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
