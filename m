@@ -1,22 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 11 Jan 2014 00:21:00 +0100
-Subject: [Buildroot] [PATCH] Add LTris package (SDL game)
-In-Reply-To: <1389186456-21848-1-git-send-email-julien.boibessot@free.fr>
- (julien boibessot's message of "Wed, 8 Jan 2014 14:07:36 +0100")
-References: <1389186456-21848-1-git-send-email-julien.boibessot@free.fr>
-Message-ID: <87sisv5spv.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 11 Jan 2014 07:43:35 +0800
+Subject: [Buildroot] [PATCH v2] ca-certificates: new package
+In-Reply-To: <52D00268.8000505@barkynet.com>
+References: <1389201330-2420-1-git-send-email-martin@barkynet.com>
+ <20140110074537.75d0a765@skate> <52D00268.8000505@barkynet.com>
+Message-ID: <20140111074335.5e592757@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "julien" == julien boibessot <julien.boibessot@free.fr> writes:
+Dear Martin Bark,
 
- > From: Julien Boibessot <julien.boibessot@armadeus.com>
- > Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+On Fri, 10 Jan 2014 14:23:36 +0000, Martin Bark wrote:
 
-Committed with a minor tweak to the help text, thanks.
+> > If possible, please add an upstream URL here.
+> 
+> There is the a browsable version of the git repo here
+> http://anonscm.debian.org/gitweb/?p=collab-maint/ca-certificates.git
+> would that do?
 
+Well, if there's no other web site for that, it's ok.
+
+Thanks!
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
