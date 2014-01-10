@@ -1,25 +1,26 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 10 Jan 2014 15:01:37 +0100
-Subject: [Buildroot] [PATCH 1/1] zmqpp: add proper header include
-In-Reply-To: <1389359873-24316-1-git-send-email-alexander.lukichev@gmail.com>
- (Alexander Lukichev's message of "Fri, 10 Jan 2014 15:17:53 +0200")
-References: <1389359873-24316-1-git-send-email-alexander.lukichev@gmail.com>
-Message-ID: <87ha9c7x6m.fsf@dell.be.48ers.dk>
+Date: Fri, 10 Jan 2014 15:03:16 +0100
+Subject: [Buildroot] [PATCH v3] omniorb: add COS Naming Service
+In-Reply-To: <1389029826-10415-1-git-send-email-mlweber1@rockwellcollins.com>
+ (Matt Weber's message of "Mon, 6 Jan 2014 11:37:06 -0600")
+References: <1389029826-10415-1-git-send-email-mlweber1@rockwellcollins.com>
+Message-ID: <87d2k07x3v.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexander" == Alexander Lukichev <alexander.lukichev@gmail.com> writes:
+>>>>> "Matt" == Matt Weber <mlweber1@rockwellcollins.com> writes:
 
- > The patch has been submitted upstream. If it is accepted, the
- > patch here will not be necessary.
+ > Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
+ > ---
 
- > Fixes http://autobuild.buildroot.net/results/425/42590285167f779e27a4e8db9853c7065b9e31c0/
- > and some others.
-
- > Signed-off-by: Alexander Lukichev <alexander.lukichev@gmail.com>
+ > Changes v2 -> v3:
+ >  - Updated patch to be more generic and enable apps/services
+ >      disabled by selecting the reduced embedded build option
+ >  - Added comments in .mk to clarify what the reduced embedded
+ >      build configuration consisted of
 
 Committed, thanks.
 
