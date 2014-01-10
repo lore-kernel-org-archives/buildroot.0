@@ -1,51 +1,46 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 10 Jan 2014 07:04:55 +0100
-Subject: [Buildroot] [PATCH] libnfc-llcp: rename to libllcp and bump
-	version
-In-Reply-To: <1389287265-1498-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1389287265-1498-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <52CF8D87.20000@mind.be>
+Date: Fri, 10 Jan 2014 08:13:53 +0100
+Subject: [Buildroot] [PATCH v3] omniorb: add COS Naming Service
+In-Reply-To: <1389029826-10415-1-git-send-email-mlweber1@rockwellcollins.com>
+References: <1389029826-10415-1-git-send-email-mlweber1@rockwellcollins.com>
+Message-ID: <52CF9DB1.4060709@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/01/14 18:07, Vicente Olivert Riera wrote:
-> This package has been renamed upstream to libllcp.
+On 06/01/14 18:37, Matt Weber wrote:
+> Signed-off-by: Matt Weber<mlweber1@rockwellcollins.com>
 
-  This is not sufficient reason to rename the package in buildroot as 
-well. Renaming makes it difficult for people to follow buildroot upstream 
-with their configurations.
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-  Also, if any existing symbol is removed (or renamed), entries have to 
-be added to Config.in.legacy. This makes is slightly easier for users to 
-maintain buildroot configurations, but it's still annoying so renaming of 
-symbols should be done with care.
+> ---
+>
+> Changes v2 -> v3:
+>   - Updated patch to be more generic and enable apps/services
+>       disabled by selecting the reduced embedded build option
 
-  It _is_ an option to still rename it in the menu. I'm not entirely sure 
-what should be done with the alphabetical ordering in that case - 
-probably follow the visible name, not the internal name.
+  You should probably have updated the commit message as well, because 
+that still mentions the COS Naming Service only.
+
 
   Regards,
   Arnout
 
-> Also, the current
-> package we have in Buildroot fails to compile due to a version bump of
-> it's main dependence, libnfc. A version bump is required because this
-> package has been adapted upstream to work with libnfc-1.7.0-rc6.
+>   - Added comments in .mk to clarify what the reduced embedded
+>       build configuration consisted of
 >
-> Signed-off-by: Vicente Olivert Riera<Vincent.Riera@imgtec.com>
+> Changes v1 -> v2:
+>   - Moved comment to top package/omniorb/Config.in (suggested by Thomas S)
+>   - Removed indents of variable assigments and changed hook
+>       to be a post patch hook package/omniorb/Config.in (suggested by Arnout V)
+>   - Cleaned up tab/spaces package/omniorb/Config.in (suggested by Thomas P)
 > ---
->   package/Config.in                          |    2 +-
->   package/{libnfc-llcp => libllcp}/Config.in |    6 +++---
->   package/libllcp/libllcp.mk                 |   15 +++++++++++++++
->   package/libnfc-llcp/libnfc-llcp.mk         |   15 ---------------
->   4 files changed, 19 insertions(+), 19 deletions(-)
->   rename package/{libnfc-llcp => libllcp}/Config.in (56%)
->   create mode 100644 package/libllcp/libllcp.mk
->   delete mode 100644 package/libnfc-llcp/libnfc-llcp.mk
-
+>   package/omniorb/Config.in  |   15 +++++++++++++--
+>   package/omniorb/omniorb.mk |   15 ++++++++++++++-
+>   2 files changed, 27 insertions(+), 3 deletions(-)
+[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
