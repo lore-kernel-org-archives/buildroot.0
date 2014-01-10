@@ -1,61 +1,82 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 Jan 2014 15:01:27 +0100
-Subject: [Buildroot] [git commit] zmqpp: add proper header include
-Message-ID: <20140110141523.E7EFB9C425@busybox.osuosl.org>
+Date: Fri, 10 Jan 2014 15:02:45 +0100
+Subject: [Buildroot] [git commit] omniorb: add option to build applications
+	and services
+Message-ID: <20140110141524.00E159C420@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5a3554a1527b3485689ce7d77339a667867ddca8
+commit: http://git.buildroot.net/buildroot/commit/?id=b4a28e6c5cb4c74649990f5256cf0f7971c1abec
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The patch has been submitted upstream. If it is accepted, the
-patch here will not be necessary.
-
-Fixes http://autobuild.buildroot.net/results/425/42590285167f779e27a4e8db9853c7065b9e31c0/
-and some others.
-
-Signed-off-by: Alexander Lukichev <alexander.lukichev@gmail.com>
+Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...include-for-definitions-of-EXIT_-constant.patch |   30 ++++++++++++++++++++
- 1 files changed, 30 insertions(+), 0 deletions(-)
+ package/omniorb/Config.in  |   15 +++++++++++++--
+ package/omniorb/omniorb.mk |   15 ++++++++++++++-
+ 2 files changed, 27 insertions(+), 3 deletions(-)
 
-diff --git a/package/zmqpp/0001-Add-proper-include-for-definitions-of-EXIT_-constant.patch b/package/zmqpp/0001-Add-proper-include-for-definitions-of-EXIT_-constant.patch
-new file mode 100644
-index 0000000..8df755a
---- /dev/null
-+++ b/package/zmqpp/0001-Add-proper-include-for-definitions-of-EXIT_-constant.patch
-@@ -0,0 +1,30 @@
-+From 9aebdc0e54a6700ea62553365026727456c4969e Mon Sep 17 00:00:00 2001
-+From: Alexander Lukichev <alexander.lukichev@espotel.com>
-+Date: Thu, 9 Jan 2014 12:15:31 +0200
-+Subject: [PATCH] Add proper include for definitions of EXIT_* constants
+diff --git a/package/omniorb/Config.in b/package/omniorb/Config.in
+index 192ad54..b8c4e0a 100644
+--- a/package/omniorb/Config.in
++++ b/package/omniorb/Config.in
+@@ -1,3 +1,7 @@
 +
-+These constants are referenced in src/client/main.cpp but their
-+definitions are pulled indirectly through other header files. For
-+some toolchains they are not pulled through those headers, which
-+breaks compilation.
++comment "omniORB needs a toolchain w/ C++, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
 +
-+Signed-off-by: Alexander Lukichev <alexander.lukichev@gmail.com>
-+---
-+ src/client/main.cpp | 1 +
-+ 1 file changed, 1 insertion(+)
+ config BR2_PACKAGE_OMNIORB
+ 	bool "omniorb"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+@@ -11,5 +15,12 @@ config BR2_PACKAGE_OMNIORB
+ 
+ 	  http://omniorb.sourceforge.net/
+ 
+-comment "omniORB needs a toolchain w/ C++, threads"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++if BR2_PACKAGE_OMNIORB
 +
-+diff --git a/src/client/main.cpp b/src/client/main.cpp
-+index 37c30a0..3679891 100644
-+--- a/src/client/main.cpp
-++++ b/src/client/main.cpp
-+@@ -4,6 +4,7 @@
-+  */
-+ 
-+ #include <array>
-++#include <cstdlib>
-+ #include <iostream>
-+ #include <tuple>
-+ 
-+-- 
-+1.8.0.1
++config BR2_PACKAGE_OMNIORB_WITH_APPS
++	bool "Enable Apps and Services"
++	help
++	  omniORB applications and services disabled by default
++	  embedded system build configuration.
 +
++endif
+diff --git a/package/omniorb/omniorb.mk b/package/omniorb/omniorb.mk
+index 490ff93..fa2492f 100644
+--- a/package/omniorb/omniorb.mk
++++ b/package/omniorb/omniorb.mk
+@@ -24,6 +24,19 @@ OMNIORB_INSTALL_TARGET = YES
+ OMNIORB_CONF_OPT += --disable-longdouble
+ HOST_OMNIORB_CONF_OPT += --disable-longdouble
+ 
++# The EmbeddedSystem define (set below in OMNIORB_ADJUST_TOOLDIR)
++# enables building of just the lib and disables building of
++# tools/apps/services.  In some cases the apps/services are still
++# required.  The tools however are host related and should never
++# be required on target.
++define OMNIORB_ENABLE_EXTRA_APPS
++$(SED) 's:SUBDIRS += lib:SUBDIRS += lib appl services:g' $(@D)/src/dir.mk
++endef
++
++ifeq ($(BR2_PACKAGE_OMNIORB_WITH_APPS),y)
++OMNIORB_POST_PATCH_HOOKS += OMNIORB_ENABLE_EXTRA_APPS
++endif
++
+ # omniORB is not completely cross-compile friendly and has some
+ # assumptions where a couple host tools must be built and then
+ # used by the target build.  The host tools generate code from
+@@ -32,7 +45,7 @@ HOST_OMNIORB_CONF_OPT += --disable-longdouble
+ define OMNIORB_ADJUST_TOOLDIR
+ 	# Point to the host folder to get HOST_OMNIORB tools
+ 	$(SED) 's:TOOLBINDIR = $$(TOP)/$$(BINDIR):TOOLBINDIR = $(HOST_DIR)/usr/bin:g' $(@D)/mk/beforeauto.mk
+-	# Disables OMNIORB tool building
++	# Disables OMNIORB app/service/tool building
+ 	echo "EmbeddedSystem=1" >> $(@D)/mk/beforeauto.mk
+ endef
+ OMNIORB_POST_CONFIGURE_HOOKS += OMNIORB_ADJUST_TOOLDIR
