@@ -1,40 +1,34 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 10 Jan 2014 14:51:14 +0000
-Subject: [Buildroot] [PATCH] dtc: broken for static builds
-In-Reply-To: <87fvowc3pp.fsf@dell.be.48ers.dk>
-References: <1389087873-40458-1-git-send-email-Vincent.Riera@imgtec.com>
- <87fvowc3pp.fsf@dell.be.48ers.dk>
-Message-ID: <52D008E2.6000600@imgtec.com>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Fri, 10 Jan 2014 14:55:01 +0000
+Subject: [Buildroot] [PATCH] python-nfc: fix autobuild failures
+Message-ID: <1389365701-12078-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/09/2014 08:14 PM, Peter Korsgaard wrote:
->>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
->
->   > dtc package has hardcoded shared lib link options in the Makefile, so it
->   > will fail if you try to build it on a static lib environment.
->
-> Really? I just did a quick test build and it seems to work here:
->
-> file output/target/usr/bin/dtc
-> output/target/usr/bin/dtc: ELF 32-bit LSB executable, ARM, version 1
-> (SYSV), statically linked, stripped
->
+From: Simon Dawson <spdawson@gmail.com>
 
-I have tried right now with a simple buildroot configuration for x86_64 
-and it fails. Please, try to reproduce it following these steps:
+Fixes autobuild failures such as the following.
 
--make clean
--make distclean
--make menuconfig
-(choose x86_64 target)
-(choose prefer static libs)
-(choose dtc package)
--save changes
--make
+  http://autobuild.buildroot.net/results/2e1/2e11b9e946a854deb28ba144ca7e398a9c996a02/
 
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ package/python-nfc/python-nfc-add-setup-py.patch | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/python-nfc/python-nfc-add-setup-py.patch b/package/python-nfc/python-nfc-add-setup-py.patch
+index 307b749..5a51452 100644
+--- a/package/python-nfc/python-nfc-add-setup-py.patch
++++ b/package/python-nfc/python-nfc-add-setup-py.patch
+@@ -22,5 +22,5 @@ Index: b/setup.py
+ +      author_email='stephen.tiedemann at googlemail.com',
+ +      url='https://launchpad.net/nfcpy',
+ +      packages=['nfc', 'nfc/dev', 'nfc/llcp', 'nfc/ndef',
+-+                'nfc/npp', 'nfc/snep'],
+++                'nfc/snep'],
+ +      )
 -- 
-Vincent
+1.8.3.2
