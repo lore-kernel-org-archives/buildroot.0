@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 10 Jan 2014 07:51:22 +0100
-Subject: [Buildroot] [PATCH 1 of 5 v3] deprecated handling: introduce
- BR2_DEPRECATED_SINCE_xxxx_xx
-In-Reply-To: <14cfc9f6c9b34dc82c58.1388764970@argentina>
+Date: Fri, 10 Jan 2014 07:44:53 +0100
+Subject: [Buildroot] [PATCH 3 of 5 v3] manual package list: add symbol
+ name in table
+In-Reply-To: <aede5cd8614f3dd67a21.1388764972@argentina>
 References: <patchbomb.1388764969@argentina>
- <14cfc9f6c9b34dc82c58.1388764970@argentina>
-Message-ID: <52CF986A.9010604@mind.be>
+ <aede5cd8614f3dd67a21.1388764972@argentina>
+Message-ID: <52CF96E5.50305@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,31 +13,28 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 03/01/14 17:02, Thomas De Schampheleire wrote:
-> In order to keep better track of when a feature got deprecated, and hence
-> when it can be removed, a new set of symbols BR2_DEPRECATED_SINCE_xxxx_xx is
-> introduced. These symbols are automatically selected when BR2_DEPRECATED is
-> selected, and thus are transparent to the user.
-> A deprecated feature will no longer depend on BR2_DEPRECATED directly, but
-> rather on the appropriate BR2_DEPRECATED_SINCE_xxxx_xx. If that symbol does
-> not yet exist, it has to be created in Config.in.
-> When removing a deprecated feature, one should also check whether this was
-> the last feature using the BR2_DEPRECATED_SINCE_xxxx_xx symbol, in which
-> case the latter can be removed from Config.in.
+> Particularly in the list of deprecated packages, it is not always clear what
+> the entry name refers to. For example, for squashfs3 rootfs support, the
+> string is simply "3.x". Likewise for the flex target binary: "Install tool
+> in the target".
 >
-> A followup patch will make sure the overview is added to the list of
-> deprecated features in the manual, so that a buildroot core developer can
-> easily determine which features to remove in a given development cycle.
+> To clarify the entries, add the actual symbol name (BR2_xxx) in the table.
 >
 > Signed-off-by: Thomas De Schampheleire<thomas.de.schampheleire@gmail.com>
 
-  At first I was afraid of the complexity added by this patch, but it's 
-actually not that bad. Therefore:
+  I checked the PDF output, and the column with the symbol names 
+overflows into the following column, rendering the whole thing unreadable.
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
+  Since it's only the two entries that you mention that are confusing, 
+and since the squashfs3 part will be removed in the next patch, I'd 
+dispense of this completely and instead change the wording of the flex 
+symbol.
 
   Regards,
   Arnout
+
+[snip]
+
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
