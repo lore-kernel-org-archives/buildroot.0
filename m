@@ -1,47 +1,33 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Fri, 10 Jan 2014 14:24:02 +0000
-Subject: [Buildroot] [PATCH v2] ca-certificates: new package
-In-Reply-To: <20140109235917.GH3713@free.fr>
-References: <1389201330-2420-1-git-send-email-martin@barkynet.com>
- <20140109235917.GH3713@free.fr>
-Message-ID: <52D00282.8040607@barkynet.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 10 Jan 2014 15:35:50 +0100
+Subject: [Buildroot] [PATCH 4/5] system: default to empty issue/hostname
+	for custom skeleton
+In-Reply-To: <7760A17EBB28454BB3DB504F6FC2E45C@JohanW7> (Sagaert Johan's
+ message of "Fri, 10 Jan 2014 09:52:23 +0100")
+References: <cover.1389134731.git.yann.morin.1998@free.fr>
+ <cffd411631d99ddd729f0e29888b0fb14941889a.1389134731.git.yann.morin.1998@free.fr>
+ <87r48gaoc0.fsf@dell.be.48ers.dk> <20140109204458.GE3713@free.fr>
+ <7760A17EBB28454BB3DB504F6FC2E45C@JohanW7>
+Message-ID: <87zjn37vll.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+>>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
 
-Thanks for the feedback.
+ > Hi All;
 
-On 09/01/14 23:59, Yann E. MORIN wrote:
+ > I made this patch because I found it made more sense if I selected a
+ > custom skeleton that in that case buildroot should not insert its own
+ > hostname, issue,TZ etc into the target root directory.  If I can
+ > achieve the same result by leaving the hostname etc... empty in
+ > buildroot menu then this is fine.  I just wanted buildroot not to
+ > overwrite anything when I selected a custom skeleton.
 
-[--SNIP--]
+Ok, thanks. Then I'll just take the part of the patch that updates the
+documention.
 
->> +    #generate symlinks to certificates under /etc/ssl/certs
->> +    ( \
->> +      cd $(TARGET_DIR) ;\
->> +      for i in `find usr/share/ca-certificates -name "*.crt"` ; do \
->> +            ln -sf ../../../$$i etc/ssl/certs/`basename $${i%.crt}.pem` ;\
->> +      done ;\
->> +    )
->
-> As stated by Thomas, this is not very nice.
->
-> However, you do not need to enclose the command in-between a ()-pair,
-> since make will spawn a shell for each 'command', and thus the cd is in
-> effect only in that shell. That is, the following line:
->
->> +    $(HOST_DIR)/usr/bin/c_rehash $(TARGET_DIR)/etc/ssl/certs
->
-> Will be executed in another shell.
->
-> Also, your use of basename is weird. I'd use this instead:
->      `basename $${i} .crt`.pem
->
-
-I was using the bash ${var%Pattern} substitution but your solution is 
-neater.  I'll make those changes now.
-
-Thanks
+-- 
+Bye, Peter Korsgaard
