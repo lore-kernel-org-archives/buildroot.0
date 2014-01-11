@@ -1,31 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 11 Jan 2014 23:47:15 +0100
-Subject: [Buildroot] [PATCH] Compile static versions of gcc libraries
-In-Reply-To: <1381398042-6925-1-git-send-email-jezz@sysmic.org>
-References: <1381398042-6925-1-git-send-email-jezz@sysmic.org>
-Message-ID: <CACXmViaGn2BhqVwU=SpeCt7V1ujWh4gGRgTvu9DiJUv-6MR-pg@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 12 Jan 2014 00:07:10 +0100
+Subject: [Buildroot] [PATCH v2] ca-certificates: new package
+In-Reply-To: <52D00282.8040607@barkynet.com>
+References: <1389201330-2420-1-git-send-email-martin@barkynet.com>
+ <20140109235917.GH3713@free.fr> <52D00282.8040607@barkynet.com>
+Message-ID: <20140111230710.GC3391@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Oct 10, 2013 at 11:40 AM, J?r?me Pouiller <jezz@sysmic.org> wrote:
-> Since default configure options for host packages include
-> --disable-static, gcc was not configured to build static version of its
-> libraries (libgcc.a, libstdc++.a, ...).
->
-> This patch replace --disable-static by --enable-static in configure
-> command. Notice some options was removed sinces they was ignored by gcc
-> configure script.
->
-> Once it was compiled, this commit takes care to copy static libraries to
-> $STAGING
->
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+Martin, All,
 
-Committed, thanks.
+On 2014-01-10 14:24 +0000, Martin Bark spake thusly:
+> On 09/01/14 23:59, Yann E. MORIN wrote:
+[--SNIP--]
+> >>+    #generate symlinks to certificates under /etc/ssl/certs
+> >>+    ( \
+> >>+      cd $(TARGET_DIR) ;\
+> >>+      for i in `find usr/share/ca-certificates -name "*.crt"` ; do \
+> >>+            ln -sf ../../../$$i etc/ssl/certs/`basename $${i%.crt}.pem` ;\
+> >>+      done ;\
+> >>+    )
+> >
+> >As stated by Thomas, this is not very nice.
+> >
+> >However, you do not need to enclose the command in-between a ()-pair,
+> >since make will spawn a shell for each 'command', and thus the cd is in
+> >effect only in that shell. That is, the following line:
+> >
+> >>+    $(HOST_DIR)/usr/bin/c_rehash $(TARGET_DIR)/etc/ssl/certs
+> >
+> >Will be executed in another shell.
+> >
+> >Also, your use of basename is weird. I'd use this instead:
+> >     `basename $${i} .crt`.pem
+> 
+> I was using the bash ${var%Pattern} substitution but your solution is
+> neater.  I'll make those changes now.
 
+Yes, I know about this, and I even use it a lot. But I think it is not
+obvious enough in this context.
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
