@@ -1,120 +1,102 @@
-From: Lucas De Marchi <lucas.de.marchi@gmail.com>
-Date: Sat, 11 Jan 2014 10:27:41 -0200
-Subject: [Buildroot] [PATCH 3/3] pi4j: new package
-In-Reply-To: <20140111144047.5370b25b@skate>
-References: <1389383422-29665-1-git-send-email-lucas.de.marchi@gmail.com>
- <1389383422-29665-3-git-send-email-lucas.de.marchi@gmail.com>
- <20140111144047.5370b25b@skate>
-Message-ID: <CAKi4VAKJukCe-DOS2PrDG1729NMvbFS+znV0_W65S_DkvOyB-A@mail.gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sat, 11 Jan 2014 16:42:02 +0100
+Subject: [Buildroot] [pkg-luarocks infra v7 00/15] a package infrastructure
+	for Lua modules
+Message-ID: <1389454937-13494-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Jan 11, 2014 at 4:40 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Lucas De Marchi,
->
-> On Fri, 10 Jan 2014 17:50:22 -0200, Lucas De Marchi wrote:
->
->> Add pi4j using its released binaries. The java archives are a bit
->> different than other packages. Since they are coming already
->> pre-compiled put them in /opt with the same layout as in raspbian,
->> according to http://pi4j.com/install.html
->
-> I think this is quite certainly the first Java library for which we
-> have a package. Which JVM are you using to run this on the target? The
-> official Oracle JDK?
+Changes v6 -> v7:
+  - luarocks 2.1.2 which requires no patch
+  - bump and convert more Lua modules
 
-I'm using the official Oracle JDK. However I think we are not allowed
-to distribute it or make "recipes" to distribute it as part of
-buildroot, are we? Its license looks really restrictive. My current
-approach for the rootfs I'm building for a friend of mine is to
-install the Oracle jdk by using a overlay directory in buildroot.  Do
-you think it would be possible to add the oracle jdk to buildroot?
+Francois Perrad (15):
+  luainterpreter: create virtual package
+  luajit: allow to build Lua extensions without lua
+  lua*: restore version in module paths
+  luarocks: new package
+  luarocks: new infrastructure
+  lua-cjson: restore official name
+  luasql-sqlite3: renamed like with LuaRocks
+  lua*: refactor with luarocks infrastructure
+  manual: adding packages luarocks
+  luasocket: bump to version 3.0-rc1
+  coxpcall: bump to version 1.14.0
+  copas: bump to version 1.2.1
+  rings: bump to version 1.3.0
+  wsapi: bump to version 1.6
+  xavante: bump to version 2.3.0
 
->
-> I think this package, like Python/Lua/Perl packages, should depend on
-> the selection of a JVM, be it the official Oracle JDK (for which a
-> package would have to be created), or JamVM, if this package is
-> actually compatible with it.
->
-> Regarding the installation in /opt, I'm not sure. The fact that
-> Raspbian installs it here is not that much of an argument to me (quite
-> the opposite, actually!).
+ Config.in                                          |    8 ++
+ Config.in.legacy                                   |   14 +++
+ Makefile                                           |    1 +
+ docs/manual/adding-packages-luarocks.txt           |   93 ++++++++++++++++++++
+ docs/manual/adding-packages.txt                    |    2 +
+ package/Config.in                                  |    7 +-
+ package/Makefile.in                                |    1 +
+ package/cgilua/cgilua.mk                           |    9 +-
+ package/copas/copas.mk                             |   11 +--
+ package/coxpcall/coxpcall.mk                       |   11 +--
+ package/lbase64/Config.in                          |    1 +
+ package/lbase64/lbase64.mk                         |   20 +----
+ package/{luacjson => lua-cjson}/Config.in          |    5 +-
+ package/lua-cjson/lua-cjson.mk                     |   12 +++
+ package/lua-ev/Config.in                           |    1 +
+ package/lua-ev/lua-ev.mk                           |    4 +-
+ package/lua-msgpack-native/Config.in               |    1 +
+ package/lua-msgpack-native/lua-msgpack-native.mk   |    4 +-
+ package/lua/Config.in                              |    4 +
+ package/lua/lua-01-root-path.patch                 |   21 +----
+ package/luabitop/luabitop.mk                       |   20 ++---
+ package/luacjson/luacjson.mk                       |   27 ------
+ package/luaexpat/Config.in                         |    1 +
+ package/luaexpat/luaexpat.mk                       |   27 +-----
+ package/luaexpatutils/luaexpatutils.mk             |    2 +-
+ package/luafilesystem/Config.in                    |    1 +
+ .../luafilesystem-without_large_file.patch         |    8 +-
+ package/luafilesystem/luafilesystem.mk             |   18 +---
+ package/luainterpreter/Config.in                   |    6 ++
+ package/luainterpreter/luainterpreter.mk           |   10 +++
+ package/luajit/Config.in                           |    8 ++
+ package/luajit/luajit-01-root-path.patch           |   22 -----
+ package/luajit/luajit-05-install-inc.patch         |   17 ++++
+ package/luaposix/Config.in                         |    1 +
+ package/luaposix/luaposix.mk                       |    4 +-
+ package/luarocks/luarocks.mk                       |   45 ++++++++++
+ package/luasec/Config.in                           |    1 +
+ package/luasec/luasec.mk                           |   25 ++----
+ package/luasocket/Config.in                        |    1 +
+ package/luasocket/luasocket.mk                     |   21 +----
+ package/luasql-sqlite3/Config.in                   |    9 ++
+ package/luasql-sqlite3/luasql-sqlite3.mk           |   13 +++
+ package/luasql/Config.in                           |   21 -----
+ package/luasql/luasql.mk                           |   35 --------
+ package/orbit/orbit-01-fix-installation.patch      |   26 ------
+ package/orbit/orbit.mk                             |   16 ++--
+ package/pkg-luarocks.mk                            |   82 +++++++++++++++++
+ package/rings/Config.in                            |    1 +
+ package/rings/rings.mk                             |   16 +---
+ package/wsapi/wsapi.mk                             |   11 +--
+ package/xavante/xavante.mk                         |   11 +--
+ 51 files changed, 401 insertions(+), 335 deletions(-)
+ create mode 100644 docs/manual/adding-packages-luarocks.txt
+ rename package/{luacjson => lua-cjson}/Config.in (82%)
+ create mode 100644 package/lua-cjson/lua-cjson.mk
+ delete mode 100644 package/luacjson/luacjson.mk
+ create mode 100644 package/luainterpreter/Config.in
+ create mode 100644 package/luainterpreter/luainterpreter.mk
+ delete mode 100644 package/luajit/luajit-01-root-path.patch
+ create mode 100644 package/luajit/luajit-05-install-inc.patch
+ create mode 100644 package/luarocks/luarocks.mk
+ create mode 100644 package/luasql-sqlite3/Config.in
+ create mode 100644 package/luasql-sqlite3/luasql-sqlite3.mk
+ delete mode 100644 package/luasql/Config.in
+ delete mode 100644 package/luasql/luasql.mk
+ delete mode 100644 package/orbit/orbit-01-fix-installation.patch
+ create mode 100644 package/pkg-luarocks.mk
 
-I put it there actually because it's a pre-compiled thing.
-
->
-> On Ubuntu, the Java libraries are apparently installed
-> in /usr/share/java/, which seems a bit more sensible to me. The JNI
-> parts are installed in /usr/lib/jni/. See:
->
-> $ dpkg -L librxtx-java
-> [... skip documentation ...]
-> /usr/share/java
-> /usr/share/java/RXTXcomm-2.2pre2.jar
-> /usr/share/lintian
-> /usr/share/lintian/overrides
-> /usr/share/lintian/overrides/librxtx-java
-> /usr/lib
-> /usr/lib/jni
-> /usr/lib/jni/librxtxRaw-2.2pre1.so
-> /usr/lib/jni/librxtxI2C-2.2pre1.so
-> /usr/lib/jni/librxtxRS485-2.2pre1.so
-> /usr/lib/jni/librxtxSerial-2.2pre1.so
-> /usr/lib/jni/librxtxParallel-2.2pre1.so
-> /usr/share/java/RXTXcomm.jar
-> /usr/lib/jni/librxtxSerial.so
-> /usr/lib/jni/librxtxRS485.so
-> /usr/lib/jni/librxtxI2C.so
-> /usr/lib/jni/librxtxParallel.so
-> /usr/lib/jni/librxtxRaw.so
->
->
->> diff --git a/package/pi4j/Config.in b/package/pi4j/Config.in
->> new file mode 100644
->> index 0000000..99736bf
->> --- /dev/null
->> +++ b/package/pi4j/Config.in
->> @@ -0,0 +1,10 @@
->> +config BR2_PACKAGE_PI4J
->> +     bool "pi4j"
->> +     depends on BR2_PACKAGE_RPI_USERLAND
->
-> Why this dependency?
-
-the same as for wiringpi. This package is specific to rpi and doesn't
-make sense on other platforms.
-
->
-> As stated above, we should ensure that a JVM is selected here.
->
->> +define PI4J_INSTALL_TARGET_CMDS
->> +     $(INSTALL) -D -m 0644 $(@D)/lib/pi4j-core.jar \
->> +             $(TARGET_DIR)/opt/pi4j/lib/pi4j-core.jar
->> +     $(INSTALL) -D -m 0644 $(@D)/lib/pi4j-device.jar \
->> +             $(TARGET_DIR)/opt/pi4j/lib/pi4j-device.jar
->> +     $(INSTALL) -D -m 0644 $(@D)/lib/pi4j-example.jar \
->> +             $(TARGET_DIR)/opt/pi4j/lib/pi4j-example.jar
->> +     $(INSTALL) -D -m 0644 $(@D)/lib/pi4j-gpio-extension.jar \
->> +             $(TARGET_DIR)/opt/pi4j/lib/pi4j-extension.jar
->> +     $(INSTALL) -D -m 0644 $(@D)/lib/pi4j-service.jar \
->> +             $(TARGET_DIR)/opt/pi4j/lib/pi4j-service.jar
->> +endef
->
-> This can probably be improved a little bit:
->
-> PI4J_LIBS = core device example extension service
->
-> define PI4J_INSTALL_TARGET_CMDS
->         $(foreach lib,$(PI4J_LIBS),\
->                 $(INSTALL) -D -m 0644 $(@D)/lib/pi4j-$(lib).jar $(TARGET_DIR)/opt/pi4j/lib/pi4j-$(lib).jar)
-> endef
->
-> Thanks!
-
-ok, thanks.
-
-Lucas De Marchi
+-- 
+1.7.9.5
