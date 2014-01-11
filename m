@@ -1,31 +1,31 @@
-From: Charles Krinke <charles.krinke@gmail.com>
-Date: Sat, 11 Jan 2014 13:52:56 -0800
-Subject: [Buildroot] busybox and exporting variables
-Message-ID: <CALo-6+gWgZ0Oj23CU7MzMtWGYShcL3uPcNUn5Mstj3GO=UCVMA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 11 Jan 2014 23:47:15 +0100
+Subject: [Buildroot] [PATCH] Compile static versions of gcc libraries
+In-Reply-To: <1381398042-6925-1-git-send-email-jezz@sysmic.org>
+References: <1381398042-6925-1-git-send-email-jezz@sysmic.org>
+Message-ID: <CACXmViaGn2BhqVwU=SpeCt7V1ujWh4gGRgTvu9DiJUv-6MR-pg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is more of a busybox then buildroot question, but please bear with me.
+On Thu, Oct 10, 2013 at 11:40 AM, J?r?me Pouiller <jezz@sysmic.org> wrote:
+> Since default configure options for host packages include
+> --disable-static, gcc was not configured to build static version of its
+> libraries (libgcc.a, libstdc++.a, ...).
+>
+> This patch replace --disable-static by --enable-static in configure
+> command. Notice some options was removed sinces they was ignored by gcc
+> configure script.
+>
+> Once it was compiled, this commit takes care to copy static libraries to
+> $STAGING
+>
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 
-I have two designs now in production using buildroot and need to accomplish
-a few things that seem to be escaping me with busybox and would appreciate
-a bit of advice.
+Committed, thanks.
 
-1. I would like to execute a couple of bash commands (killall and rmmod)
-when the "reboot" command is executed. I *thougth* that I could add these
-to /etc/inittab in the shutdown section, but they dont execute. Is there a
-way to easily execute a couple of bash commands in busybox when the
-"shutdown" command is executed?
 
-2. I cannot seem to export variables from /etc/init.d resource scripts.
-What could be unique about a busybox environment that would preclude any
-script executing in /etc/init.d to *not* export a variable. A clue or two
-would be appreciated.
-
-Charles Krinke
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140111/1a2acf86/attachment.html>
+-- 
+Bye, Peter Korsgaard
