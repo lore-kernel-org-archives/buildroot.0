@@ -1,29 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Jan 2014 07:43:35 +0800
-Subject: [Buildroot] [PATCH v2] ca-certificates: new package
-In-Reply-To: <52D00268.8000505@barkynet.com>
-References: <1389201330-2420-1-git-send-email-martin@barkynet.com>
- <20140110074537.75d0a765@skate> <52D00268.8000505@barkynet.com>
-Message-ID: <20140111074335.5e592757@skate>
+Date: Sat, 11 Jan 2014 08:47:52 +0800
+Subject: [Buildroot] [PATCH] libnfc-llcp: rename to libllcp and bump
+ version
+In-Reply-To: <52CF8D87.20000@mind.be>
+References: <1389287265-1498-1-git-send-email-Vincent.Riera@imgtec.com>
+ <52CF8D87.20000@mind.be>
+Message-ID: <20140111084752.50fe9b83@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Martin Bark,
+Hello,
 
-On Fri, 10 Jan 2014 14:23:36 +0000, Martin Bark wrote:
-
-> > If possible, please add an upstream URL here.
+On Fri, 10 Jan 2014 07:04:55 +0100, Arnout Vandecappelle wrote:
+> On 09/01/14 18:07, Vicente Olivert Riera wrote:
+> > This package has been renamed upstream to libllcp.
 > 
-> There is the a browsable version of the git repo here
-> http://anonscm.debian.org/gitweb/?p=collab-maint/ca-certificates.git
-> would that do?
+>   This is not sufficient reason to rename the package in buildroot as 
+> well. Renaming makes it difficult for people to follow buildroot upstream 
+> with their configurations.
 
-Well, if there's no other web site for that, it's ok.
+True, but having packages in Buildroot that progressively do not follow
+the upstream names of the packages is also going to be big mess, as we
+are going to have more and more of such packages.
 
-Thanks!
+Since we have the Config.in.legacy thing in place, I'd very much prefer
+to rename packages to follow upstream decisions.
+
+Best regards,
 
 Thomas
 -- 
