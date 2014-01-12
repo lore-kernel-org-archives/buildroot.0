@@ -1,48 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 12 Jan 2014 10:06:39 +0100
-Subject: [Buildroot] [git commit] ltris2: needs gettext on uClibc toolchains
-	w/ locale
-Message-ID: <20140112090843.471DB9BF61@busybox.osuosl.org>
+From: Philippe Reynes <tremyfr@yahoo.fr>
+Date: Sun, 12 Jan 2014 10:31:07 +0100
+Subject: [Buildroot] [PATCH] apf27: bump kernel version to 3.12.7
+Message-ID: <1389519067-25993-1-git-send-email-tremyfr@yahoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=454a41016f2f074b69e2c677f4749c213c653e86
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes http://autobuild.buildroot.net/results/599/599554ea08aafed20c487a25fcbf641eb9ac2e5f/
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Philippe Reynes <tremyfr@yahoo.fr>
 ---
- package/ltris/Config.in |    1 +
- package/ltris/ltris.mk  |    5 +++++
- 2 files changed, 6 insertions(+), 0 deletions(-)
+ configs/armadeus_apf27_defconfig |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ltris/Config.in b/package/ltris/Config.in
-index 1ce52da..b4e0ccf 100644
---- a/package/ltris/Config.in
-+++ b/package/ltris/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LTRIS
- 	bool "LTris"
- 	select BR2_PACKAGE_SDL
-+	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	help
- 	  LTris as a tetris clone, using SDL. It optionally requires
- 	  SDL_mixer for audio support.  A display with minimum 640x480
-diff --git a/package/ltris/ltris.mk b/package/ltris/ltris.mk
-index e26bf45..008f0d7 100644
---- a/package/ltris/ltris.mk
-+++ b/package/ltris/ltris.mk
-@@ -21,4 +21,9 @@ else
- LTRIS_CONF_OPT += --disable-audio
- endif
+diff --git a/configs/armadeus_apf27_defconfig b/configs/armadeus_apf27_defconfig
+index 21af2fb..0e2fb76 100644
+--- a/configs/armadeus_apf27_defconfig
++++ b/configs/armadeus_apf27_defconfig
+@@ -4,7 +4,7 @@ BR2_arm926t=y
  
-+ifeq ($(BR2_PACKAGE_GETTEXT),y)
-+LTRIS_DEPENDENCIES += gettext
-+LTRIS_CONF_ENV += LIBS=-lintl
-+endif
-+
- $(eval $(autotools-package))
+ # Lock down headers to avoid breaking with new defaults
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.12.6"
++BR2_DEFAULT_KERNEL_VERSION="3.12.7"
+ 
+ # System
+ BR2_TARGET_GENERIC_HOSTNAME="apf27"
+@@ -20,7 +20,7 @@ BR2_TARGET_ROOTFS_UBI=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.7"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/armadeus/apf27/linux-3.12.config"
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0xA0008000"
+-- 
+1.7.4.4
