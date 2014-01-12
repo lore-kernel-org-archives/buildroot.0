@@ -1,34 +1,28 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 13 Jan 2014 00:44:49 +0100
-Subject: [Buildroot] [PATCH 6/6] package/ca-certificates: add tarball's hash
-In-Reply-To: <cover.1389569992.git.yann.morin.1998@free.fr>
-References: <cover.1389569992.git.yann.morin.1998@free.fr>
-Message-ID: <6c920feeb43c276de633d1a1724e47f96b97b6b0.1389569992.git.yann.morin.1998@free.fr>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Mon, 13 Jan 2014 12:38:49 +1300
+Subject: [Buildroot] [PATCH 0/0] update tcpreplay
+Message-ID: <1389569930-17065-1-git-send-email-judge.packham@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+I ran into Thomas at linux.conf.au an he inspired me to get a little more
+active. So here's a bit of low-hanging fruit for a package I added a while ago.
 
-ca-certificates contains sensitive security-related information,
-and we want to ensure the archive that we download has not been
-compromised.
+Chris Packham (1):
+      tcpreplay: bump version to 4.0.0
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Martin Bark <martin@barkynet.com>
----
- package/ca-certificates/ca-certificates.hash | 1 +
- 1 file changed, 1 insertion(+)
- create mode 100644 package/ca-certificates/ca-certificates.hash
 
-diff --git a/package/ca-certificates/ca-certificates.hash b/package/ca-certificates/ca-certificates.hash
-new file mode 100644
-index 0000000..6bc31e6
---- /dev/null
-+++ b/package/ca-certificates/ca-certificates.hash
-@@ -0,0 +1 @@
-+7f197c1bf7c7fc82e9f8f2fec6d8cc65f6a6187b  ca-certificates_20130906.tar.gz
--- 
-1.8.1.2
+NOTICE: This message contains privileged and confidential
+information intended only for the use of the addressee
+named above. If you are not the intended recipient of
+this message you are hereby notified that you must not
+disseminate, copy or take any action in reliance on it.
+If you have received this message in error please
+notify Allied Telesis Labs Ltd immediately.
+Any views expressed in this message are those of the
+individual sender, except where the sender has the
+authority to issue and specifically states them to
+be the views of Allied Telesis Labs.
