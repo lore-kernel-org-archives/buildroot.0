@@ -1,40 +1,59 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 12 Jan 2014 11:04:41 +0100
-Subject: [Buildroot] [PATCH] coreutils: fix build with uClibc
-In-Reply-To: <20140112093913.GD4659@sapphire.tkos.co.il> (Baruch Siach's
- message of "Sun, 12 Jan 2014 11:39:13 +0200")
-References: <fb99be0f4d3d7d7e92f0e3948d923c624730f1a4.1388492301.git.baruch@tkos.co.il>
- <8761pr77v2.fsf@dell.be.48ers.dk>
- <20140112093913.GD4659@sapphire.tkos.co.il>
-Message-ID: <87ob3h4iti.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 12 Jan 2014 12:27:43 +0100
+Subject: [Buildroot] [PATCH v3] ca-certificates: new package
+In-Reply-To: <87zjn14mtn.fsf@dell.be.48ers.dk>
+References: <1389368384-1332-1-git-send-email-martin@barkynet.com>
+ <20140111234853.GE3391@free.fr> <87zjn14mtn.fsf@dell.be.48ers.dk>
+Message-ID: <20140112112743.GA3374@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+Peter, All,
 
- > Hi Peter,
- > On Sat, Jan 11, 2014 at 12:08:33AM +0100, Peter Korsgaard wrote:
- >> >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
- >> > +ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
- >> > +COREUTILS_LDFLAGS += -lrt
- >> > +COREUTILS_CONF_ENV += ac_cv_func_posix_spawn=yes \
- >> > +		ac_cv_search_timer_settime=-lrt
- >> 
- >> Hmm, this is only for uClibc snapshot, right? My 0.9.33 doesn't seem to
- >> have posix_spawn, so this breaks the build.
+On 2014-01-12 09:38 +0100, Peter Korsgaard spake thusly:
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>  > It's a pity we can't get that from a trusted channel (ie. https instead
+>  > of plain http). Sigh... :-(
+> 
+>  > I know we do not do that for the other packages, but I'd like that we
+>  > check the authenticity of that specific one. There's no point in adding
+>  > a security-related package that we can validate in the first place.
+> 
+>  > I'd suggest we do that with a _POST_DOWNLOAD_HOOKS, something like:
+> 
+>  > CA_CERTIFICATES_CHECKSUM = SHA1-hash
+>  > define CA_CERTIFICATES_VERIFY_CHECKSUM
+>  >     hash=$$( sha1sum $(DL_DIR)/$(CA_CERTIFICATES_SOURCE) |cut -d ' ' -f 1 )
+>  >     if [ ! $${hash} = $(CA_CERTIFICATES_CHECKSUM) ]; then
+>  >         printf "ERROR: $(CA_CERTIFICATES_SOURCE) has wrong SHA1\n"
+>  >         printf "ERROR: Maybe the download was MITMed\n"
+>  >         exit 1
+>  >     fi
+>  > endef
+>  > CA_CERTIFICATES_POST_DOWNLOAD_HOOKS += CA_CERTIFICATES_VERIFY_CHECKSUM
+> 
+>  > I don't know what others think of it. Peter, Thomas, others?
+> 
+> If we want to do something like this, then I would much prefer to move
+> it into the package infrastructure and do it for all packages (but not
+> require it, similar to how we're progressively adding licensing info to
+> packages).
 
- > Correct. posix_spawn support was added in uClibc after 0.9.33. I posted 
- > recently a patch series with a better fix in uClibc 
- > (http://thread.gmane.org/gmane.comp.lib.uclibc.buildroot/73863, first patch).  
- > Since then, however, patches 2 and 3 (but not 1) were applied to uClibc 
- > master.  I'll send an update series that bumps the xtnesa uClibc snapshot 
- > version instead.
+Eh! I knew you'd say that! :-)
 
-Ok, great. Could you please also mark obsolete patches as such in
-patchwork?
+I guess there's no point in adding such a check for git, svn and all
+other VCSes. Only 'static' content wouls be elligible to being checked.
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
