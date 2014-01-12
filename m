@@ -1,40 +1,38 @@
-From: Philippe Reynes <tremyfr@yahoo.fr>
-Date: Sun, 12 Jan 2014 10:31:07 +0100
-Subject: [Buildroot] [PATCH] apf27: bump kernel version to 3.12.7
-Message-ID: <1389519067-25993-1-git-send-email-tremyfr@yahoo.fr>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 12 Jan 2014 11:39:13 +0200
+Subject: [Buildroot] [PATCH] coreutils: fix build with uClibc
+In-Reply-To: <8761pr77v2.fsf@dell.be.48ers.dk>
+References: <fb99be0f4d3d7d7e92f0e3948d923c624730f1a4.1388492301.git.baruch@tkos.co.il>
+ <8761pr77v2.fsf@dell.be.48ers.dk>
+Message-ID: <20140112093913.GD4659@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Peter,
 
-Signed-off-by: Philippe Reynes <tremyfr@yahoo.fr>
----
- configs/armadeus_apf27_defconfig |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+On Sat, Jan 11, 2014 at 12:08:33AM +0100, Peter Korsgaard wrote:
+> >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>  > +ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+>  > +COREUTILS_LDFLAGS += -lrt
+>  > +COREUTILS_CONF_ENV += ac_cv_func_posix_spawn=yes \
+>  > +		ac_cv_search_timer_settime=-lrt
+> 
+> Hmm, this is only for uClibc snapshot, right? My 0.9.33 doesn't seem to
+> have posix_spawn, so this breaks the build.
 
-diff --git a/configs/armadeus_apf27_defconfig b/configs/armadeus_apf27_defconfig
-index 21af2fb..0e2fb76 100644
---- a/configs/armadeus_apf27_defconfig
-+++ b/configs/armadeus_apf27_defconfig
-@@ -4,7 +4,7 @@ BR2_arm926t=y
- 
- # Lock down headers to avoid breaking with new defaults
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.12.6"
-+BR2_DEFAULT_KERNEL_VERSION="3.12.7"
- 
- # System
- BR2_TARGET_GENERIC_HOSTNAME="apf27"
-@@ -20,7 +20,7 @@ BR2_TARGET_ROOTFS_UBI=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.6"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.7"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/armadeus/apf27/linux-3.12.config"
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0xA0008000"
+Correct. posix_spawn support was added in uClibc after 0.9.33. I posted 
+recently a patch series with a better fix in uClibc 
+(http://thread.gmane.org/gmane.comp.lib.uclibc.buildroot/73863, first patch).  
+Since then, however, patches 2 and 3 (but not 1) were applied to uClibc 
+master.  I'll send an update series that bumps the xtnesa uClibc snapshot 
+version instead.
+
+baruch
+
 -- 
-1.7.4.4
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
