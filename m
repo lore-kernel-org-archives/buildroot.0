@@ -1,31 +1,44 @@
 From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Sun, 12 Jan 2014 13:00:32 +0100
-Subject: [Buildroot] [PATCH 0/6] xorg: Finally bump xserver_xorg-server
-	version to 1.15.0
-References: <BLU0-SMTP30016302819EB8819E5610D9B20@phx.gbl>
-Message-ID: <0ocaqaxl87.ln2@ID-313208.user.individual.net>
+Date: Sun, 12 Jan 2014 14:14:30 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-01-11
+References: <20140112073009.34B81101069@stock.ovh.net>
+Message-ID: <m2haqaxilq.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd Kuhls <berndkuhls@hotmail.com> wrote in
-news:BLU0-SMTP30016302819EB8819E5610D9B20 at phx.gbl: 
+Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote
+in news:20140112073009.34B81101069 at stock.ovh.net: 
 
-> These patches depend on each other to bump xserver_xorg-server to
-> 1.15.0: 
-> 
-> - mesa3d requires libdrm >= 2.4.49 when the intel driver is selected
-> - xorg requires mesa3d >= 9.2.0
-> 
-> This patch series supersedes the previous versions of the corresponding
-> patches, patchworks was also updated to reflect this.
+>             libvncserver-0.9.9 | 1 
+
+>        arm |             libvncserver-0.9.9 | NOK |
+>        http://autobuild.buildroot.net/results/061715052ec56fa2f1e446ff7ea
+>        70feac9d92174/ 
 
 Hi,
 
-I created a bundle on patchwork for easier testing:
+I found the problem, buildroot/output/host/usr/powerpc-buildroot-linux-
+gnu/sysroot/usr/lib/pkgconfig/gnutls.pc misses "-lrt" at "Libs:" letting 
+libvncserver configure fail when
 
-http://patchwork.ozlabs.org/bundle/bkuhls/xorg/mbox/
+checking for getaddrinfo... yes
+
+Without the forementioned addition this happens:
+
+checking for getaddrinfo... no
+checking for getaddrinfo in -lsocket... no
+checking for getaddrinfo in -lws2_32... no
+
+quoting config.log:
+/home/test/buildroot/output/host/usr/powerpc-buildroot-linux-
+gnu/sysroot/usr/lib/libgnutls.so: undefined reference to `clock_gettime'
+
+I am unsure however if adding "-lrt" in gnutls.pc for all platforms is the 
+solution.
 
 Regards, Bernd
