@@ -1,47 +1,43 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 12 Jan 2014 09:38:12 +0100
-Subject: [Buildroot] [PATCH v3] ca-certificates: new package
-In-Reply-To: <20140111234853.GE3391@free.fr> (Yann E. MORIN's message of "Sun, 
- 12 Jan 2014 00:48:53 +0100")
-References: <1389368384-1332-1-git-send-email-martin@barkynet.com>
- <20140111234853.GE3391@free.fr>
-Message-ID: <87zjn14mtn.fsf@dell.be.48ers.dk>
+Date: Sun, 12 Jan 2014 09:42:34 +0100
+Subject: [Buildroot] busybox and exporting variables
+In-Reply-To: <CALo-6+gWgZ0Oj23CU7MzMtWGYShcL3uPcNUn5Mstj3GO=UCVMA@mail.gmail.com>
+ (Charles Krinke's message of "Sat, 11 Jan 2014 13:52:56 -0800")
+References: <CALo-6+gWgZ0Oj23CU7MzMtWGYShcL3uPcNUn5Mstj3GO=UCVMA@mail.gmail.com>
+Message-ID: <87sist4mmd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Charles" == Charles Krinke <charles.krinke@gmail.com> writes:
 
-Hi,
+ > This is more of a busybox then buildroot question, but please bear with me.
+ > I have two designs now in production using buildroot and need to accomplish a
+ > few things that seem to be escaping me with busybox and would appreciate a bit
+ > of advice.
 
- > It's a pity we can't get that from a trusted channel (ie. https instead
- > of plain http). Sigh... :-(
+ > 1. I would like to execute a couple of bash commands (killall and rmmod) when
+ > the "reboot" command is executed. I *thougth* that I could add these to /etc/
+ > inittab in the shutdown section, but they dont execute. Is there a way to
+ > easily execute a couple of bash commands in busybox when the "shutdown" command
+ > is executed?
 
- > I know we do not do that for the other packages, but I'd like that we
- > check the authenticity of that specific one. There's no point in adding
- > a security-related package that we can validate in the first place.
+Are you 100% sure they don't execute? E.G. try stracing init while you
+execute reboot. The busybox init program executes the shutdown commands
+nicely here.
 
- > I'd suggest we do that with a _POST_DOWNLOAD_HOOKS, something like:
+ > 2. I cannot seem to export variables from /etc/init.d resource scripts. What
+ > could be unique about a busybox environment that would preclude any script
+ > executing in /etc/init.d to *not* export a variable. A clue or two would be
+ > appreciated.
 
- > CA_CERTIFICATES_CHECKSUM = SHA1-hash
- > define CA_CERTIFICATES_VERIFY_CHECKSUM
- >     hash=$$( sha1sum $(DL_DIR)/$(CA_CERTIFICATES_SOURCE) |cut -d ' ' -f 1 )
- >     if [ ! $${hash} = $(CA_CERTIFICATES_CHECKSUM) ]; then
- >         printf "ERROR: $(CA_CERTIFICATES_SOURCE) has wrong SHA1\n"
- >         printf "ERROR: Maybe the download was MITMed\n"
- >         exit 1
- >     fi
- > endef
- > CA_CERTIFICATES_POST_DOWNLOAD_HOOKS += CA_CERTIFICATES_VERIFY_CHECKSUM
+export to where? Anything exported from /etc/init.d is gone when the
+init script ends.
 
- > I don't know what others think of it. Peter, Thomas, others?
-
-If we want to do something like this, then I would much prefer to move
-it into the package infrastructure and do it for all packages (but not
-require it, similar to how we're progressively adding licensing info to
-packages).
+If you want to export variables globally, consider adding it to
+/etc/profile (or better create a /etc/profile/<whatever>.sh)
 
 -- 
 Bye, Peter Korsgaard
