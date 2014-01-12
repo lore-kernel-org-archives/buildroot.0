@@ -1,28 +1,26 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Sun, 12 Jan 2014 19:40:08 +0100
-Subject: [Buildroot] [PATCH 04/14] libbluray: new package
-References: <1389549208-19078-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1389549208-19078-5-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <854bqaxocd.ln2@ID-313208.user.individual.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 12 Jan 2014 21:09:22 +0100
+Subject: [Buildroot] [PATCH v3] ca-certificates: new package
+In-Reply-To: <1389368384-1332-1-git-send-email-martin@barkynet.com> (Martin
+ Bark's message of "Fri, 10 Jan 2014 15:39:44 +0000")
+References: <1389368384-1332-1-git-send-email-martin@barkynet.com>
+Message-ID: <87y52l2c99.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Maxime Hadjinlian
-<maxime.hadjinlian@gmail.com> wrote in
-news:1389549208-19078-5-git-send-email-maxime.hadjinlian at gmail.com: 
+>>>>> "Martin" == Martin Bark <martin@barkynet.com> writes:
 
-> +LIBBLURAY_VERSION = 0.2.2
+ > CA certificates used for SSL based applications.  The package installs CA
+ > certificates to /usr/share/ca-certificates and creates symbolic links under
+ > /etc/ssl/certs.  For example, the existing libcurl package will use these
+ > certificates for https urls.  Based on the debian ca-certifcates package.
 
-Hi,
+ > Signed-off-by: Martin Bark <martin@barkynet.com>
 
-current version is 0.5.0.
+Committed with Yann's comment taken into account, thanks.
 
-My local package also included these depends, maybe you also need them:
-
-LIBBLURAY_DEPENDENCIES = host-pkgconf freetype bzip2 libxml2 zlib $(if $(BR2
-_PACKAGE_LIBICONV),libiconv)
-
-Regards, Bernd
+-- 
+Bye, Peter Korsgaard
