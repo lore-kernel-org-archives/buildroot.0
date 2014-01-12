@@ -1,238 +1,64 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 12 Jan 2014 23:58:31 +0100
-Subject: [Buildroot] [git commit] ffmpeg: bump to version 1.2.4
-Message-ID: <20140112230003.066CC9C48A@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 13 Jan 2014 00:44:46 +0100
+Subject: [Buildroot] [PATCH 0/6] [RFC] some download-related changes
+Message-ID: <cover.1389569992.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=62ab07ef769bd6504fe1db144aaac3fd45db9dad
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Compile tested the following packages which depend on ffmpeg:
+Hello All!
 
-freerdp
-mpd
-gstreamer
+This series contains two download-related changes:
 
-For minidlna please see the separate patch for version bump to 1.1.1
+The first part, patch 1 to 3, are a fix the git download helper, which
+is currently broken in case a PKG_VERSION is a sha1 that does not exist
+in the repository.
 
-Some compile options were taken from OpenELEC:
-https://github.com/OpenELEC/OpenELEC.tv/blob/master/packages/multimedia/ffmpeg/build
+Since the make macro was a bit complex to read and maintain, Peter
+suggested it be moved to a shell script. If this change is OK, I'll
+move the other download helpers to their own shell script.
 
-[Peter: fix ARM VFP option, target tune, enable PIC for !static]
-Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ffmpeg/ffmpeg-sdlconfig.patch |   17 -----
- package/ffmpeg/ffmpeg.mk              |  124 +++++++++++++++++++++++++++++---
- 2 files changed, 112 insertions(+), 29 deletions(-)
+The second part, patches 4 to 6, add the infrastructure to check the
+hashes of the files Buildroot may download, so as to check their
+integrity.
 
-diff --git a/package/ffmpeg/ffmpeg-sdlconfig.patch b/package/ffmpeg/ffmpeg-sdlconfig.patch
-deleted file mode 100644
-index 64371b2..0000000
---- a/package/ffmpeg/ffmpeg-sdlconfig.patch
-+++ /dev/null
-@@ -1,17 +0,0 @@
--We need to pass the location sdl-config so that ffmpeg picks it up.
--So just pass the whole string to make things simpler.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--diff -Nura ffmpeg-0.8.7.orig/configure ffmpeg-0.8.7/configure
----- ffmpeg-0.8.7.orig/configure	2011-11-21 16:49:30.000000000 -0300
--+++ ffmpeg-0.8.7/configure	2011-12-02 08:13:36.746619395 -0300
--@@ -2957,7 +2957,7 @@
-- enabled libxvid    && require  libxvid xvid.h xvid_global -lxvidcore
-- enabled mlib       && require  mediaLib mlib_types.h mlib_VectorSub_S16_U8_Mod -lmlib
-- 
---SDL_CONFIG="${cross_prefix}sdl-config"
--+SDL_CONFIG="${SDL_CONFIG}"
-- if check_pkg_config sdl SDL_version.h SDL_Linked_Version; then
--     check_cpp_condition SDL.h "(SDL_MAJOR_VERSION<<16 | SDL_MINOR_VERSION<<8 | SDL_PATCHLEVEL) >= 0x010201" $sdl_cflags &&
--     enable sdl &&
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index f1fc920..f717115 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FFMPEG_VERSION = 0.8.15
-+FFMPEG_VERSION = 1.2.4
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.bz2
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
-@@ -18,9 +18,61 @@ endif
- 
- FFMPEG_CONF_OPT = \
- 	--prefix=/usr		\
--	--disable-avfilter	\
-+	--enable-avfilter \
-+	--disable-debug \
-+	--disable-version3 \
-+	--enable-logging \
-+	--disable-pic \
-+	--enable-optimizations \
-+	--disable-extra-warnings \
-+	--disable-ffprobe \
-+	--enable-avdevice \
-+	--enable-avcodec \
-+	--enable-avformat \
-+	--enable-swscale \
-+	--enable-postproc \
-+	--disable-x11grab \
-+	--enable-network \
-+	--disable-gray \
-+	--enable-swscale-alpha \
-+	--disable-small \
-+	--enable-dct \
-+	--enable-fft \
-+	--enable-mdct \
-+	--enable-rdft \
-+	--disable-crystalhd \
-+	--disable-vaapi \
-+	--disable-vdpau \
-+	--disable-dxva2 \
-+	--enable-runtime-cpudetect \
-+	--disable-hardcoded-tables \
-+	--disable-memalign-hack \
-+	--enable-hwaccels \
-+	--disable-avisynth \
-+	--disable-frei0r \
-+	--disable-libopencore-amrnb \
-+	--disable-libopencore-amrwb \
-+	--disable-libopencv \
-+	--disable-libdc1394 \
-+	--disable-libfaac \
-+	--disable-libfreetype \
-+	--disable-libgsm \
-+	--disable-libmp3lame \
-+	--disable-libnut \
-+	--disable-libopenjpeg \
-+	--disable-librtmp \
-+	--disable-libschroedinger \
-+	--disable-libspeex \
-+	--disable-libtheora \
-+	--disable-libvo-aacenc \
-+	--disable-libvo-amrwbenc \
-+	--disable-vis \
-+	--disable-sram \
-+	--disable-symver \
- 	$(if $(BR2_HAVE_DOCUMENTATION),,--disable-doc)
- 
-+FFMPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBICONV),libiconv)
-+
- FFMPEG_CFLAGS = $(TARGET_CFLAGS)
- 
- ifeq ($(BR2_xtensa),y)
-@@ -100,7 +152,7 @@ endif
- 
- ifneq ($(call qstrip,$(BR2_PACKAGE_FFMPEG_BSFS)),all)
- FFMPEG_CONF_OPT += --disable-bsfs \
--	$(foreach x,$(call qstrip,$(BR2_PACKAGE_FFMPEG_BSFS)),--enable-bsf=$(x))
-+	$(foreach x,$(call qstrip,$(BR2_PACKAGE_FFMPEG_BSFS)),--enable-bsfs=$(x))
- endif
- 
- ifneq ($(call qstrip,$(BR2_PACKAGE_FFMPEG_PROTOCOLS)),all)
-@@ -138,14 +190,58 @@ else
- FFMPEG_CONF_OPT += --disable-zlib
- endif
- 
--ifeq ($(BR2_i386)$(BR2_x86_64),y)
--# MMX on is default for x86, disable it for lowly x86-type processors
--ifeq ($(BR2_x86_i386)$(BR2_x86_i486)$(BR2_x86_i586)$(BR2_x86_i686)$(BR2_x86_pentiumpro)$(BR2_x86_geode),y)
-+ifeq ($(BR2_PACKAGE_BZIP2),y)
-+FFMPEG_CONF_OPT += --enable-bzlib
-+FFMPEG_DEPENDENCIES += bzip2
-+else
-+FFMPEG_CONF_OPT += --disable-bzlib
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+FFMPEG_CONF_OPT += --enable-openssl
-+FFMPEG_DEPENDENCIES += openssl
-+else
-+FFMPEG_CONF_OPT += --disable-openssl
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBVORBIS),y)
-+FFMPEG_DEPENDENCIES += libvorbis
-+FFMPEG_CONF_OPT += \
-+	--enable-libvorbis \
-+	--enable-muxer=ogg \
-+	--enable-encoder=libvorbis
-+endif
-+
-+ifeq ($(BR2_X86_CPU_HAS_MMX),y)
-+FFMPEG_CONF_OPT += --enable-yasm
-+FFMPEG_DEPENDENCIES += yasm
-+else
-+FFMPEG_CONF_OPT += --disable-yasm
- FFMPEG_CONF_OPT += --disable-mmx
-+endif
-+
-+ifeq ($(BR2_X86_CPU_HAS_SSE),y)
-+FFMPEG_CONF_OPT += --enable-sse
-+else
-+FFMPEG_CONF_OPT += --disable-sse
-+endif
-+
-+ifeq ($(BR2_X86_CPU_HAS_SSE2),y)
-+FFMPEG_CONF_OPT += --enable-sse2
- else
--# If it is enabled, nasm is required
--FFMPEG_DEPENDENCIES += host-nasm
-+FFMPEG_CONF_OPT += --disable-sse2
- endif
-+
-+ifeq ($(BR2_X86_CPU_HAS_SSE3),y)
-+FFMPEG_CONF_OPT += --enable-sse3
-+else
-+FFMPEG_CONF_OPT += --disable-sse3
-+endif
-+
-+ifeq ($(BR2_X86_CPU_HAS_SSSE3),y)
-+FFMPEG_CONF_OPT += --enable-ssse3
-+else
-+FFMPEG_CONF_OPT += --disable-ssse3
- endif
- 
- # Explicitly disable everything that doesn't match for ARM
-@@ -160,9 +256,9 @@ else
- FFMPEG_CONF_OPT += --disable-armv6 --disable-armv6t2
- endif
- ifeq ($(BR2_arm10)$(BR2_arm1136jf_s)$(BR2_arm1176jz_s)$(BR2_arm1176jzf_s)$(BR2_cortex_a5)$(BR2_cortex_a8)$(BR2_cortex_a9)$(BR2_cortex_a15),y)
--FFMPEG_CONF_OPT += --enable-armvfp
-+FFMPEG_CONF_OPT += --enable-vfp
- else
--FFMPEG_CONF_OPT += --disable-armvfp
-+FFMPEG_CONF_OPT += --disable-vfp
- endif
- ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
- FFMPEG_CONF_OPT += --enable-neon
-@@ -177,6 +273,10 @@ FFMPEG_CONF_OPT += --disable-altivec
- endif
- endif
- 
-+ifeq ($(BR2_PREFER_STATIC_LIB),)
-+FFMPEG_CONF_OPT += --enable-pic
-+endif
-+
- FFMPEG_CONF_OPT += $(call qstrip,$(BR2_PACKAGE_FFMPEG_EXTRACONF))
- 
- # Override FFMPEG_CONFIGURE_CMDS: FFmpeg does not support --target and others
-@@ -191,8 +291,8 @@ define FFMPEG_CONFIGURE_CMDS
- 		--sysroot=$(STAGING_DIR) \
- 		--host-cc="$(HOSTCC)" \
- 		--arch=$(BR2_ARCH) \
--		--target-os=linux \
--		--extra-cflags=-fPIC \
-+		--target-os="linux" \
-+		$(if $(BR2_GCC_TARGET_TUNE),--cpu=$(BR2_GCC_TARGET_TUNE)) \
- 		$(SHARED_STATIC_LIBS_OPTS) \
- 		$(FFMPEG_CONF_OPT) \
- 	)
+This is needed for some packages for which a trusted channel (eg. https)
+is not available, and only a insecure channel (eg. http) is available.
+
+Regards,
+Yann E. MORIN.
+
+
+----------------------------------------------------------------
+Yann E. MORIN (6):
+      Makefile: rename USER_HOOKS_EXTRA_ENV to EXTRA_ENV
+      pkg-infra: move git download helper to a script
+      pkg-infra: git helper creates an empty archive if PKG_VERSION is a missing hash
+      package infra: DOWNLOAD is never called with two arguments
+      pkg-infra: add possiblity to check downloaded files against known hashes
+      package/ca-certificates: add tarball's hash
+
+ Makefile                                     |  4 +--
+ docs/manual/adding-packages-directory.txt    | 35 +++++++++++++++++++++++
+ package/Makefile.in                          |  2 +-
+ package/ca-certificates/ca-certificates.hash |  1 +
+ package/pkg-download.mk                      | 36 ++++++++++++------------
+ package/pkg-generic.mk                       |  2 +-
+ support/download/check-hash                  | 38 +++++++++++++++++++++++++
+ support/download/git                         | 42 ++++++++++++++++++++++++++++
+ 8 files changed, 138 insertions(+), 22 deletions(-)
+ create mode 100644 package/ca-certificates/ca-certificates.hash
+ create mode 100755 support/download/check-hash
+ create mode 100755 support/download/git
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
