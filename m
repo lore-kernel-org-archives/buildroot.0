@@ -1,44 +1,30 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Sun, 12 Jan 2014 14:14:30 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-01-11
-References: <20140112073009.34B81101069@stock.ovh.net>
-Message-ID: <m2haqaxilq.ln2@ID-313208.user.individual.net>
+From: Axel Lin <axel.lin@ingics.com>
+Date: Sun, 12 Jan 2014 21:34:34 +0800
+Subject: [Buildroot] [PATCH] zsh: bump to version 5.0.5
+Message-ID: <1389533674.29736.1.camel@phoenix>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote
-in news:20140112073009.34B81101069 at stock.ovh.net: 
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
+---
+ package/zsh/zsh.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->             libvncserver-0.9.9 | 1 
-
->        arm |             libvncserver-0.9.9 | NOK |
->        http://autobuild.buildroot.net/results/061715052ec56fa2f1e446ff7ea
->        70feac9d92174/ 
-
-Hi,
-
-I found the problem, buildroot/output/host/usr/powerpc-buildroot-linux-
-gnu/sysroot/usr/lib/pkgconfig/gnutls.pc misses "-lrt" at "Libs:" letting 
-libvncserver configure fail when
-
-checking for getaddrinfo... yes
-
-Without the forementioned addition this happens:
-
-checking for getaddrinfo... no
-checking for getaddrinfo in -lsocket... no
-checking for getaddrinfo in -lws2_32... no
-
-quoting config.log:
-/home/test/buildroot/output/host/usr/powerpc-buildroot-linux-
-gnu/sysroot/usr/lib/libgnutls.so: undefined reference to `clock_gettime'
-
-I am unsure however if adding "-lrt" in gnutls.pc for all platforms is the 
-solution.
-
-Regards, Bernd
+diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
+index ca865a4..70b2fb1 100644
+--- a/package/zsh/zsh.mk
++++ b/package/zsh/zsh.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ZSH_VERSION=5.0.2
++ZSH_VERSION=5.0.5
+ ZSH_SITE=http://downloads.sourceforge.net/project/zsh/zsh/$(ZSH_VERSION)
+ ZSH_LICENSE = MIT-like
+ ZSH_LICENSE_FILES = LICENCE
+-- 
+1.8.1.2
