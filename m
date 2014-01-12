@@ -1,77 +1,65 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 12 Jan 2014 21:39:38 +0100
-Subject: [Buildroot] [git commit] python-posix-ipc: new package
-Message-ID: <20140112204757.A54549C488@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 12 Jan 2014 22:01:12 +0100
+Subject: [Buildroot] [PATCH v3] ca-certificates: new package
+In-Reply-To: <87lhyl2b5w.fsf@dell.be.48ers.dk>
+References: <1389368384-1332-1-git-send-email-martin@barkynet.com>
+ <20140111234853.GE3391@free.fr> <87zjn14mtn.fsf@dell.be.48ers.dk>
+ <20140112112743.GA3374@free.fr> <87bnzh3vqy.fsf@dell.be.48ers.dk>
+ <20140112183442.GB3374@free.fr> <8738kt3t5f.fsf@dell.be.48ers.dk>
+ <20140112200937.GC3374@free.fr> <87lhyl2b5w.fsf@dell.be.48ers.dk>
+Message-ID: <20140112210111.GD3374@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b73ae969bd14b6af4aa1a2a8f70fa6bada00fc1f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Peter, All,
 
-This patch is based on the original new pkg patch submitted last Jan
-and is part of the "Patchwork oldest patches cleanup #5".  It combines
-the original "[1/2]/[2/2] new package: python-posix_ipc" patch files.
+On 2014-01-12 21:32 +0100, Peter Korsgaard spake thusly:
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>  > An third alternative is to add a package/pkg/pkg.hash file, which
+>  > contains the list of files, and their hashes; in fact, the output of the
+>  > hash util we'd use:
+>  >     ABCDEF1234567890  foo-1.2.3.patch
+>  >     ABCDEF1234567890  bla.patch
+>  >     ABCDEF1234567890  file.bin
+> 
+> That sounds good to me, and is easy to handle. Another alternative would
+> be to make <pkg>_CHECKSUM a list of hashes, in the same order as the
+> files are handled (_SOURCE, _EXTRA_DOWNLOADS, _PATCH).
 
-Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/Config.in                            |    1 +
- package/python-posix-ipc/Config.in           |   14 ++++++++++++++
- package/python-posix-ipc/python-poxix-ipc.mk |   14 ++++++++++++++
- 3 files changed, 29 insertions(+), 0 deletions(-)
+And how do you suggest we correlate the hash from that list to the file
+we're actually just downloaded?
 
-diff --git a/package/Config.in b/package/Config.in
-index de1132b..aac6f02 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -409,6 +409,7 @@ source "package/python-meld3/Config.in"
- source "package/python-msgpack/Config.in"
- source "package/python-netifaces/Config.in"
- source "package/python-nfc/Config.in"
-+source "package/python-posix-ipc/Config.in"
- source "package/python-protobuf/Config.in"
- source "package/python-pyasn/Config.in"
- source "package/python-pycrypto/Config.in"
-diff --git a/package/python-posix-ipc/Config.in b/package/python-posix-ipc/Config.in
-new file mode 100644
-index 0000000..eba36ed
---- /dev/null
-+++ b/package/python-posix-ipc/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_PYTHON_POSIX_IPC
-+	bool "python-posix-ipc"
-+	depends on BR2_PACKAGE_PYTHON
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	help
-+	  The Python extension module posix_ipc gives access to POSIX
-+	  inter-process semaphores, shared memory and message queues
-+	  on systems that support the POSIX Realtime Extensions
-+	  a.k.a. POSIX 1003.1b-1993.
-+
-+	  http://semanchuk.com/philip/posix_ipc/
-+
-+comment "python-posix-ipc needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/python-posix-ipc/python-poxix-ipc.mk b/package/python-posix-ipc/python-poxix-ipc.mk
-new file mode 100644
-index 0000000..3e81bbf
---- /dev/null
-+++ b/package/python-posix-ipc/python-poxix-ipc.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-posix-ipc
-+#
-+################################################################################
-+
-+PYTHON_POSIX_IPC_VERSION = 0.9.6
-+PYTHON_POSIX_IPC_SOURCE = posix_ipc-$(PYTHON_POSIX_IPC_VERSION).tar.gz
-+PYTHON_POSIX_IPC_SITE = http://semanchuk.com/philip/posix_ipc/
-+PYTHON_POSIX_IPC_LICENSE = BSD-3c
-+PYTHON_POSIX_IPC_LICENSE_FILES = LICENSE
-+PYTHON_POSIX_IPC_SETUP_TYPE = distutils
-+
-+$(eval $(python-package))
+The tarball is in one variable, the patches in a second, and the extra
+files in a third.
+
+We'd have to look in each of those variables to find the file, and
+derive an offset in the list form that, and then extract the n-th
+element of that list.
+
+I guess this is not so easy as you think it is. ;-)
+
+>  > Also, we'd have to settle for a hash function.
+[--SNIP--]
+> Next to their strength is also the issue about how likely it is that
+> those tools are available on the build host.
+
+Right, those pesky companies using "Enterprise Editions" and then stuck
+back in the 20th century... ;-]
+
+sha1 shall it be, then. ;-)
+
+(Note: sha2 was added to coreutils seven years ago, 2005-10-23)
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
