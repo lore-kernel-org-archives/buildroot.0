@@ -1,181 +1,75 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun, 12 Jan 2014 18:53:16 +0100
-Subject: [Buildroot] [PATCH 02/14] libenca: new package
+Date: Sun, 12 Jan 2014 18:53:17 +0100
+Subject: [Buildroot] [PATCH 03/14] libass: new package
 In-Reply-To: <1389549208-19078-1-git-send-email-maxime.hadjinlian@gmail.com>
 References: <1389549208-19078-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <1389549208-19078-3-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <1389549208-19078-4-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Extremely Naive Charset Analyser.
-
+libass is a portable subtitle renderer for the
+ASS/SSA (Advanced Substation Alpha/Substation Alpha) subtitle format.
 This package was originally found at : https://github.com/huceke/buildroot-rbp
 By gimli <ebsi4711@gmail.com>
 
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
- package/Config.in                                  |  1 +
- package/libenca/Config.in                          |  6 ++++
- package/libenca/libenca-1.9-dont-build-tools.patch | 33 ++++++++++++++++++++++
- package/libenca/libenca-1.9-fix-clean.patch        | 22 +++++++++++++++
- package/libenca/libenca-1.9-fix-prefix.patch       | 19 +++++++++++++
- package/libenca/libenca.mk                         | 26 +++++++++++++++++
- 6 files changed, 107 insertions(+)
- create mode 100644 package/libenca/Config.in
- create mode 100644 package/libenca/libenca-1.9-dont-build-tools.patch
- create mode 100644 package/libenca/libenca-1.9-fix-clean.patch
- create mode 100644 package/libenca/libenca-1.9-fix-prefix.patch
- create mode 100644 package/libenca/libenca.mk
+ package/Config.in        |  1 +
+ package/libass/Config.in | 10 ++++++++++
+ package/libass/libass.mk | 14 ++++++++++++++
+ 3 files changed, 25 insertions(+)
+ create mode 100644 package/libass/Config.in
+ create mode 100644 package/libass/libass.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index c47f1ad..b1a805b 100644
+index b1a805b..0b00a9e 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -757,6 +757,7 @@ menu "Text and terminal handling"
- source "package/enchant/Config.in"
- source "package/icu/Config.in"
- source "package/libedit/Config.in"
-+source "package/libenca/Config.in"
- source "package/libfribidi/Config.in"
- source "package/libiconv/Config.in"
- source "package/linenoise/Config.in"
-diff --git a/package/libenca/Config.in b/package/libenca/Config.in
+@@ -620,6 +620,7 @@ source "package/yajl/Config.in"
+ endmenu
+ 
+ menu "Multimedia"
++source "package/libass/Config.in"
+ source "package/libdvbsi/Config.in"
+ source "package/libdvdnav/Config.in"
+ source "package/libdvdread/Config.in"
+diff --git a/package/libass/Config.in b/package/libass/Config.in
 new file mode 100644
-index 0000000..5e951ed
+index 0000000..ff34b64
 --- /dev/null
-+++ b/package/libenca/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_LIBENCA
-+	bool "libenca"
++++ b/package/libass/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_LIBASS
++	bool "libass"
++	select BR2_PACKAGE_FREETYPE
++	select BR2_PACKAGE_FONTCONFIG
++	select BR2_PACKAGE_LIBENCA
 +	help
-+	  Extremely Naive Charset Analyser
++	  libass is a portable subtitle renderer for the ASS/SSA
++	  (Advanced Substation Alpha/Substation Alpha) subtitle format
 +
-+	  http://cihar.com/software/enca/
-diff --git a/package/libenca/libenca-1.9-dont-build-tools.patch b/package/libenca/libenca-1.9-dont-build-tools.patch
++	  http://code.google.com/p/libass/
+diff --git a/package/libass/libass.mk b/package/libass/libass.mk
 new file mode 100644
-index 0000000..43b3420
+index 0000000..3fd748a
 --- /dev/null
-+++ b/package/libenca/libenca-1.9-dont-build-tools.patch
-@@ -0,0 +1,33 @@
-+diff -ruN libenca-1.9.orig/Makefile.in libenca-1.9/Makefile.in
-+--- libenca-1.9.orig/Makefile.in	2011-07-23 20:02:58.304328321 -0400
-++++ libenca-1.9/Makefile.in	2011-07-23 20:03:34.246328297 -0400
-+@@ -78,7 +78,7 @@
-+ DATA = $(pkgconfig_DATA)
-+ ETAGS = etags
-+ CTAGS = ctags
-+-DIST_SUBDIRS = tools script lib src devel-docs test data
-++DIST_SUBDIRS = script lib src devel-docs test data
-+ DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-+ distdir = $(PACKAGE)-$(VERSION)
-+ top_distdir = $(distdir)
-+@@ -207,10 +207,10 @@
-+ sharedstatedir = @sharedstatedir@
-+ sysconfdir = @sysconfdir@
-+ target_alias = @target_alias@
-+- at MAINTAINER_MODE_FALSE@SUBDIRS = tools script lib src devel-docs test
-++ at MAINTAINER_MODE_FALSE@SUBDIRS = script lib src devel-docs test
-+
-+ # @(#) $Id: Makefile.am,v 1.35 2005/11/24 10:21:32 yeti Exp $
-+- at MAINTAINER_MODE_TRUE@SUBDIRS = tools data script lib src devel-docs test
-++ at MAINTAINER_MODE_TRUE@SUBDIRS = data script lib src devel-docs test
-+ man_MANS = man/enca.1
-+ DISTCHECK_CONFIGURE_FLAGS = --enable-maintainer-mode
-+ M4TESTS = \
-+@@ -223,7 +223,6 @@
-+   m4/long-text.l2 \
-+   m4/recode-bugs.m4 \
-+   m4/scanf.m4 \
-+-  m4/tools.m4 \
-+   m4/typevar.m4
-+
-+ EXTRA_DIST = \
-diff --git a/package/libenca/libenca-1.9-fix-clean.patch b/package/libenca/libenca-1.9-fix-clean.patch
-new file mode 100644
-index 0000000..9c206ad
---- /dev/null
-+++ b/package/libenca/libenca-1.9-fix-clean.patch
-@@ -0,0 +1,22 @@
-+--- libenca-1.9.orig/src/Makefile.in	2011-07-23 20:19:28.744327998 -0400
-++++ libenca-1.9/src/Makefile.in	2011-07-23 20:22:47.894327936 -0400
-+@@ -694,7 +694,7 @@
-+	cd $(DESTDIR)$(bindir); \
-+	inst1=`echo enca | sed '$(transform)'`; \
-+	inst2=`echo enconv | sed '$(transform)'`; \
-+-	$(LN_S) $$inst1$(EXEEXT) $$inst2$(EXEEXT)
-++	$(LN_S) -f $$inst1$(EXEEXT) $$inst2$(EXEEXT)
-+
-+ uninstall-hook:
-+	inst=`echo enconv | sed '$(transform)'`; \
-+--- libenca-1.9.orig/Makefile.in	2011-07-23 20:19:28.746327999 -0400
-++++ libenca-1.9/Makefile.in	2011-07-23 20:36:48.742327668 -0400
-+@@ -768,7 +768,7 @@
-+	cd $(DESTDIR)$(man1dir); \
-+	inst1=`echo enca | sed '$(transform)'`.1; \
-+	inst2=`echo enconv | sed '$(transform)'`.1; \
-+-	$(LN_S) $$inst1 $$inst2
-++	$(LN_S) -f $$inst1 $$inst2
-+
-+ uninstall-hook:
-+	inst=`echo enconv | sed '$(transform)'`.1; \
-diff --git a/package/libenca/libenca-1.9-fix-prefix.patch b/package/libenca/libenca-1.9-fix-prefix.patch
-new file mode 100644
-index 0000000..6fd195b
---- /dev/null
-+++ b/package/libenca/libenca-1.9-fix-prefix.patch
-@@ -0,0 +1,19 @@
-+--- libenca-1.9.orig/configure
-++++ libenca-1.9/configure
-+
-+@@ -20808,15 +20808,6 @@ _ACEOF
-+ fi
-+
-+
-+-if test "$prefix" = "NONE"; then
-+-  LDFLAGS="$LDFLAGS -L$ac_default_prefix/lib"
-+-  CPPFLAGS="$CPPFLAGS -I$ac_default_prefix/include"
-+-else
-+-  LDFLAGS="$LDFLAGS -L$prefix/lib"
-+-  CPPFLAGS="$CPPFLAGS -I$prefix/include"
-+-fi
-+-
-+-
-+ case "$target" in
-+ NONE) yeti_libm_target="$host" ;;
-+ *) yeti_libm_target="$target" ;;
-diff --git a/package/libenca/libenca.mk b/package/libenca/libenca.mk
-new file mode 100644
-index 0000000..e9dba18
---- /dev/null
-+++ b/package/libenca/libenca.mk
-@@ -0,0 +1,26 @@
++++ b/package/libass/libass.mk
+@@ -0,0 +1,14 @@
 +#############################################################
 +#
-+# libenca
++# libass
 +#
 +#############################################################
 +
-+LIBENCA_VERSION = 1.9
-+LIBENCA_SITE = http://dl.cihar.com/enca
-+LIBENCA_SOURCE = enca-$(LIBENCA_VERSION).tar.bz2
-+LIBENCA_INSTALL_STAGING = YES
-+LIBENCA_LICENSE = GPLv2
-+LIBENCA_LICENSE_FILES = COPYING
-+
-+LIBENCA_CONF_ENV += ac_cv_file__dev_random=yes
-+LIBENCA_CONF_ENV += ac_cv_file__dev_urandom=yes
-+LIBENCA_CONF_ENV += ac_cv_file__dev_arandom=no
-+LIBENCA_CONF_ENV += ac_cv_file__dev_srandom=no
-+LIBENCA_CONF_ENV += yeti_cv_func_scanf_modif_size_t=yes
-+
-+define LIBENCA_MAKE_HOST_TOOL
-+cd $(@D)/tools && $(HOSTCC) -o make_hash make_hash.c
-+endef
-+
-+LIBENCA_POST_CONFIGURE_HOOKS += LIBENCA_MAKE_HOST_TOOL
++LIBASS_VERSION = 0.9.12
++LIBASS_SITE = http://libass.googlecode.com/files
++LIBASS_INSTALL_STAGING = YES
++LIBASS_DEPENDENCIES = freetype fontconfig libenca
++LIBASS_LICENSE = BSD-3c
++LIBASS_LICENSE_FILES = COPYING
 +
 +$(eval $(autotools-package))
 -- 
