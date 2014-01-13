@@ -1,12 +1,12 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 13 Jan 2014 18:50:13 +0100
-Subject: [Buildroot] [PATCH 3/6] pkg-infra: git helper creates an empty
- archive if PKG_VERSION is a missing hash
-In-Reply-To: <52D3F6B4.8000702@lucaceresoli.net>
+Date: Mon, 13 Jan 2014 18:51:07 +0100
+Subject: [Buildroot] [PATCH 2/6] pkg-infra: move git download helper to
+ a script
+In-Reply-To: <52D3F59E.5090004@lucaceresoli.net>
 References: <cover.1389569992.git.yann.morin.1998@free.fr>
- <b528cb41d4ac90bbccf471a88485b249eabfdc82.1389569992.git.yann.morin.1998@free.fr>
- <52D3F6B4.8000702@lucaceresoli.net>
-Message-ID: <20140113175013.GA3344@free.fr>
+ <add407fe211f2032f76fda6442b06b7d8a3af2cc.1389569992.git.yann.morin.1998@free.fr>
+ <52D3F59E.5090004@lucaceresoli.net>
+Message-ID: <20140113175107.GB3344@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,41 +15,59 @@ To: buildroot@busybox.net
 
 Luca, All,
 
-On 2014-01-13 15:22 +0100, Luca Ceresoli spake thusly:
+On 2014-01-13 15:18 +0100, Luca Ceresoli spake thusly:
 > Yann E. MORIN wrote:
 > >From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > >
-> >If the PKG_VERSION is a sha1 that does not exist in the repository, the git
-> >helper just creates an empty archive instead of failing and erroring out.
+> >The git download helper is getting a bit more complex, and does not
+> >raise an error when a PKG_VERSION is a sha1 that does not exist in
+> >the repository. Instead, it generates an empty archive.
 > >
-> >This is because of the way we create the archive:
-> >     git archive ${cset} |gzip -c >"${archive}"
+> >Fixing it in the Makefile proves to be challenging, to say the least.
 > >
-> >In this construct, git does exit with a non-zero exit-code, but gzip does not,
-> >as it was successful in creating the archive (from an empty output, but gzip
-> >does not mind that).
-> >
-> >Since a pipe exits with the exit-code of the right-most simple command (see
-> >POSIX.1-2008), the pipe above exits with gzip's exit-code. And we miss the
-> >error altogether.
-> >
-> >This is most harmful, in that the error may not occur until much later, when
-> >we try to configure the package, with the error message buried deep down
-> >ipotentially thousands of lines above... :-(
-> 
-> s/ipotentially/potentially/
-
-Fixed.
-
-This is where you see that I use vi as my editor! ;-)
-
-> >Fix that by checking that the hash (or whatever treeish we've been passed, for
-> >that matters) does indeed exist in the repository, before we even attempt to
-> >create the archive.
+> >Move it into a shell script in support/download/git, which will make
+> >it much easier to read, maintain, fix an enhance in the future.
 > >
 > >Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> >Cc: Peter Korsgaard <jacmet@uclibc.org>
+> >Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > 
+> This is a very welcome change, thanks for caring!
+> 
+> Just a minor note below, but looks ok anyway:
 > Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+[--SNIP--]
+> >diff --git a/support/download/git b/support/download/git
+> >new file mode 100755
+> >index 0000000..99ea1b2
+> >--- /dev/null
+> >+++ b/support/download/git
+> >@@ -0,0 +1,36 @@
+> >+#!/bin/sh
+> >+set -e
+> >+
+> >+# Download helper for git
+> >+# Call it with:
+> >+#   $1: git repo
+> >+#   $2: git cset
+> >+#   $3: prefix/
+> >+#   $4: output file
+> >+# And this environment:
+> >+#   GIT      :  the git command to call
+> >+#   BUILD_DIR:  path to Buildroot's build dir
+> >+
+> >+repo="${1}"
+> >+cset="${2}"
+> >+prefix="${3}"
+> >+output="${4}"
+> >+
+> >+pushd "${BUILD_DIR}" >/dev/null
+> >+rm -rf .git-tmp-repo    # In case a previous attempt was interrupted
+> 
+> This rm did not exist in the original version. I would move this into a
+> separate commit.
+
+Indeed, I've moved it to the next commit.
 
 Thank you!
 
