@@ -1,41 +1,44 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 13 Jan 2014 23:20:55 +0100
-Subject: [Buildroot] [pkg-luarocks infra v7 00/15] a package
-	infrastructure for Lua modules
-In-Reply-To: <1389454937-13494-1-git-send-email-francois.perrad@gadz.org>
- (Francois Perrad's message of "Sat, 11 Jan 2014 16:42:02 +0100")
-References: <1389454937-13494-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <87iotnzfp4.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 13 Jan 2014 23:15:54 +0100
+Subject: [Buildroot] [git commit] luajit: allow to build Lua extensions
+	without lua
+Message-ID: <20140113222141.C77289B94E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=443f8c1f4d394c94731a333e26ab523f0fb84abc
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Changes v6 -> v7:
- >   - luarocks 2.1.2 which requires no patch
- >   - bump and convert more Lua modules
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/luajit/luajit-05-install-inc.patch |   17 +++++++++++++++++
+ 1 files changed, 17 insertions(+), 0 deletions(-)
 
- > Francois Perrad (15):
- >   luainterpreter: create virtual package
- >   luajit: allow to build Lua extensions without lua
- >   lua*: restore version in module paths
- >   luarocks: new package
- >   luarocks: new infrastructure
- >   lua-cjson: restore official name
- >   luasql-sqlite3: renamed like with LuaRocks
- >   lua*: refactor with luarocks infrastructure
- >   manual: adding packages luarocks
- >   luasocket: bump to version 3.0-rc1
- >   coxpcall: bump to version 1.14.0
- >   copas: bump to version 1.2.1
- >   rings: bump to version 1.3.0
- >   wsapi: bump to version 1.6
- >   xavante: bump to version 2.3.0
-
-Committed series, thanks!
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/luajit/luajit-05-install-inc.patch b/package/luajit/luajit-05-install-inc.patch
+new file mode 100644
+index 0000000..1fd11b1
+--- /dev/null
++++ b/package/luajit/luajit-05-install-inc.patch
+@@ -0,0 +1,17 @@
++Install includes like lua's ones
++
++Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++
++Index: b/Makefile
++===================================================================
++--- a/Makefile
+++++ b/Makefile
++@@ -31,7 +31,7 @@ DPREFIX= $(DESTDIR)$(PREFIX)
++ INSTALL_BIN=   $(DPREFIX)/bin
++ INSTALL_LIB=   $(DPREFIX)/lib
++ INSTALL_SHARE= $(DPREFIX)/share
++-INSTALL_INC=   $(DPREFIX)/include/luajit-$(MAJVER).$(MINVER)
+++INSTALL_INC=   $(DPREFIX)/include
++ 
++ INSTALL_LJLIBD= $(INSTALL_SHARE)/luajit-$(VERSION)
++ INSTALL_JITLIB= $(INSTALL_LJLIBD)/jit
