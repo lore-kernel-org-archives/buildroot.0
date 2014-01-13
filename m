@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Jan 2014 16:10:12 +0800
-Subject: [Buildroot] [PATCH v2] rt-tests: disable NPTL is missing
-In-Reply-To: <0255f67e72bc626106163b3cfb821a68d99970fd.1389596187.git.baruch@tkos.co.il>
-References: <0255f67e72bc626106163b3cfb821a68d99970fd.1389596187.git.baruch@tkos.co.il>
-Message-ID: <20140113161012.06535faf@skate>
+Date: Mon, 13 Jan 2014 16:13:08 +0800
+Subject: [Buildroot] [PATCH v2 0/3] uclibc: build fixes for xtensa
+ snapshot version
+In-Reply-To: <cover.1389594195.git.baruch@tkos.co.il>
+References: <cover.1389594195.git.baruch@tkos.co.il>
+Message-ID: <20140113161308.356138d7@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +13,13 @@ To: buildroot@busybox.net
 
 Dear Baruch Siach,
 
-On Mon, 13 Jan 2014 08:56:27 +0200, Baruch Siach wrote:
+On Mon, 13 Jan 2014 08:26:11 +0200, Baruch Siach wrote:
 
-> +	# priority-inheritance mutex needs NPTL
-> +	depends on !BR2_PTHREADS && !BR2_PTHREADS_OLD
+> Baruch Siach (3):
+>   uclibc: bump xtensa snapshot version
+>   uclibc: xtensa: fix posix_spawn autoconf detection
 
-No, these symbols are specific to the internal toolchain backend, and
-do not make sense for external toolchains. Therefore, they shouldn't be
-used for package dependencies.
+Why is this patch xtensa specific?
 
 Thomas
 -- 
