@@ -1,25 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Jan 2014 16:13:08 +0800
-Subject: [Buildroot] [PATCH v2 0/3] uclibc: build fixes for xtensa
- snapshot version
-In-Reply-To: <cover.1389594195.git.baruch@tkos.co.il>
-References: <cover.1389594195.git.baruch@tkos.co.il>
-Message-ID: <20140113161308.356138d7@skate>
+Date: Mon, 13 Jan 2014 16:16:43 +0800
+Subject: [Buildroot] [git commit] jasper: new package
+In-Reply-To: <20140112182938.A3B479BFDF@busybox.osuosl.org>
+References: <20140112182938.A3B479BFDF@busybox.osuosl.org>
+Message-ID: <20140113161643.2cbf3d59@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+Dear Peter Korsgaard,
 
-On Mon, 13 Jan 2014 08:26:11 +0200, Baruch Siach wrote:
+On Sun, 12 Jan 2014 19:23:45 +0100, Peter Korsgaard wrote:
 
-> Baruch Siach (3):
->   uclibc: bump xtensa snapshot version
->   uclibc: xtensa: fix posix_spawn autoconf detection
+> +#############################################################
+> +#
+> +# jasper
+> +#
+> +#############################################################
 
-Why is this patch xtensa specific?
+Wrong number of # signs, there should be 80 of them.
+
+</nitpick>
 
 Thomas
 -- 
