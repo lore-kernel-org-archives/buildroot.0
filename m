@@ -1,165 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 13 Jan 2014 22:08:46 +0100
-Subject: [Buildroot] [git commit] mplayer: add patch to fix building with
-	modern versions of live555
-Message-ID: <20140113211744.6D1BB9C4A0@busybox.osuosl.org>
+Date: Mon, 13 Jan 2014 13:43:10 +0100
+Subject: [Buildroot] [git commit] live555: bump version
+Message-ID: <20140113211744.6607D9C414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1a8d62cde9194611de9cb5c564789f9cbf0edf19
+commit: http://git.buildroot.net/buildroot/commit/?id=02e51ba86483a0260b39f1871a95012deef0a25f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Patch taken from: https://raw.github.com/sherpya/mplayer-be/master/patches/mp/0025-mpdemux-live555-async-interface.patch
-
-At the same time rename patches to follow the new convention.
+And cleanup/add license info while we're at it.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ch => mplayer-0001-disable-install-strip.patch} |    0
- ...ing.patch => mplayer-0002-fix-cc-parsing.patch} |    0
- ...ayer-0003-mpdemux-live555-async-interface.patch |  126 ++++++++++++++++++++
- 3 files changed, 126 insertions(+), 0 deletions(-)
+ package/live555/live555.mk |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mplayer/mplayer-1.1-disable-install-strip.patch b/package/mplayer/mplayer-0001-disable-install-strip.patch
-similarity index 100%
-rename from package/mplayer/mplayer-1.1-disable-install-strip.patch
-rename to package/mplayer/mplayer-0001-disable-install-strip.patch
-diff --git a/package/mplayer/mplayer-1.1-fix-cc-parsing.patch b/package/mplayer/mplayer-0002-fix-cc-parsing.patch
-similarity index 100%
-rename from package/mplayer/mplayer-1.1-fix-cc-parsing.patch
-rename to package/mplayer/mplayer-0002-fix-cc-parsing.patch
-diff --git a/package/mplayer/mplayer-0003-mpdemux-live555-async-interface.patch b/package/mplayer/mplayer-0003-mpdemux-live555-async-interface.patch
-new file mode 100644
-index 0000000..5a62a18
---- /dev/null
-+++ b/package/mplayer/mplayer-0003-mpdemux-live555-async-interface.patch
-@@ -0,0 +1,126 @@
-+From d3195ea13f4a9aae546ff996e53681349a1a3cdb Mon Sep 17 00:00:00 2001
-+From: sherpya <sherpya@netfarm.it>
-+Date: Fri, 14 Jun 2013 05:25:38 +0200
-+Subject: [PATCH 25/27] mpdemux: live555 async interface
-+
-+From: https://raw.github.com/sherpya/mplayer-be/master/patches/mp/0025-mpdemux-live555-async-interface.patch
-+
-+Adjust live555 interface code for modern versions of live555.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ libmpdemux/demux_rtp.cpp | 51 ++++++++++++++++++++++++++++++++----------------
-+ 2 files changed, 35 insertions(+), 22 deletions(-)
-+
-+diff --git a/libmpdemux/demux_rtp.cpp b/libmpdemux/demux_rtp.cpp
-+index ad7a7f1..05d06e0 100644
-+--- a/libmpdemux/demux_rtp.cpp
-++++ b/libmpdemux/demux_rtp.cpp
-+@@ -19,8 +19,6 @@
-+  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-+  */
-+ 
-+-#define RTSPCLIENT_SYNCHRONOUS_INTERFACE 1
-+-
-+ extern "C" {
-+ // on MinGW, we must include windows.h before the things it conflicts
-+ #ifdef __MINGW32__    // with.  they are each protected from
-+@@ -94,15 +92,6 @@ struct RTPState {
-+ 
-+ extern "C" char* network_username;
-+ extern "C" char* network_password;
-+-static char* openURL_rtsp(RTSPClient* client, char const* url) {
-+-  // If we were given a user name (and optional password), then use them:
-+-  if (network_username != NULL) {
-+-    char const* password = network_password == NULL ? "" : network_password;
-+-    return client->describeWithPassword(url, network_username, password);
-+-  } else {
-+-    return client->describeURL(url);
-+-  }
-+-}
-+ 
-+ static char* openURL_sip(SIPClient* client, char const* url) {
-+   // If we were given a user name (and optional password), then use them:
-+@@ -118,6 +107,19 @@ static char* openURL_sip(SIPClient* client, char const* url) {
-+ extern AVCodecContext *avcctx;
-+ #endif
-+ 
-++static char fWatchVariableForSyncInterface;
-++static char* fResultString;
-++static int fResultCode;
-++
-++static void responseHandlerForSyncInterface(RTSPClient* rtspClient, int responseCode, char* responseString) {
-++  // Set result values:
-++  fResultCode = responseCode;
-++  fResultString = responseString;
-++
-++  // Signal a break from the event loop (thereby returning from the blocking command):
-++  fWatchVariableForSyncInterface = ~0;
-++}
-++
-+ extern "C" int audio_id, video_id, dvdsub_id;
-+ extern "C" demuxer_t* demux_open_rtp(demuxer_t* demuxer) {
-+   Boolean success = False;
-+@@ -146,13 +148,19 @@ extern "C" demuxer_t* demux_open_rtp(demuxer_t* demuxer) {
-+ 	  rtsp_transport_http = demuxer->stream->streaming_ctrl->url->port;
-+ 	  rtsp_transport_tcp = 1;
-+ 	}
-+-	rtspClient = RTSPClient::createNew(*env, verbose, "MPlayer", rtsp_transport_http);
-++	rtspClient = RTSPClient::createNew(*env, url, verbose, "MPlayer", rtsp_transport_http);
-+ 	if (rtspClient == NULL) {
-+ 	  fprintf(stderr, "Failed to create RTSP client: %s\n",
-+ 		  env->getResultMsg());
-+ 	  break;
-+ 	}
-+-	sdpDescription = openURL_rtsp(rtspClient, url);
-++	fWatchVariableForSyncInterface = 0;
-++	rtspClient->sendDescribeCommand(responseHandlerForSyncInterface);
-++	env->taskScheduler().doEventLoop(&fWatchVariableForSyncInterface);
-++	if (fResultCode == 0)
-++	    sdpDescription = fResultString;
-++	else
-++	    delete[] fResultString;
-+       } else { // SIP
-+ 	unsigned char desiredAudioType = 0; // PCMU (use 3 for GSM)
-+ 	sipClient = SIPClient::createNew(*env, desiredAudioType, NULL,
-+@@ -236,8 +244,12 @@ extern "C" demuxer_t* demux_open_rtp(demuxer_t* demuxer) {
-+ 
-+ 	if (rtspClient != NULL) {
-+ 	  // Issue a RTSP "SETUP" command on the chosen subsession:
-+-	  if (!rtspClient->setupMediaSubsession(*subsession, False,
-+-						rtsp_transport_tcp)) break;
-++	  fWatchVariableForSyncInterface = 0;
-++	  rtspClient->sendSetupCommand(*subsession, responseHandlerForSyncInterface, False, rtsp_transport_tcp);
-++	  env->taskScheduler().doEventLoop(&fWatchVariableForSyncInterface);
-++	  delete[] fResultString;
-++	  if (fResultCode != 0) break;
-++
-+ 	  if (!strcmp(subsession->mediumName(), "audio"))
-+ 	    audiofound = 1;
-+ 	  if (!strcmp(subsession->mediumName(), "video"))
-+@@ -248,7 +260,11 @@ extern "C" demuxer_t* demux_open_rtp(demuxer_t* demuxer) {
-+ 
-+     if (rtspClient != NULL) {
-+       // Issue a RTSP aggregate "PLAY" command on the whole session:
-+-      if (!rtspClient->playMediaSession(*mediaSession)) break;
-++      fWatchVariableForSyncInterface = 0;
-++      rtspClient->sendPlayCommand(*mediaSession, responseHandlerForSyncInterface);
-++      env->taskScheduler().doEventLoop(&fWatchVariableForSyncInterface);
-++      delete[] fResultString;
-++      if (fResultCode != 0) break;
-+     } else if (sipClient != NULL) {
-+       sipClient->sendACK(); // to start the stream flowing
-+     }
-+@@ -637,7 +653,8 @@ static void teardownRTSPorSIPSession(RTPState* rtpState) {
-+   MediaSession* mediaSession = rtpState->mediaSession;
-+   if (mediaSession == NULL) return;
-+   if (rtpState->rtspClient != NULL) {
-+-    rtpState->rtspClient->teardownMediaSession(*mediaSession);
-++    fWatchVariableForSyncInterface = 0;
-++    rtpState->rtspClient->sendTeardownCommand(*mediaSession, NULL);
-+   } else if (rtpState->sipClient != NULL) {
-+     rtpState->sipClient->sendBYE();
-+   }
-+-- 
-+1.8.5.2
-+
+diff --git a/package/live555/live555.mk b/package/live555/live555.mk
+index 1fc533b..7bb45cf 100644
+--- a/package/live555/live555.mk
++++ b/package/live555/live555.mk
+@@ -4,9 +4,11 @@
+ #
+ ################################################################################
+ 
+-LIVE555_VERSION = 2011.06.16
++LIVE555_VERSION = 2014.01.11
+ LIVE555_SOURCE = live.$(LIVE555_VERSION).tar.gz
+ LIVE555_SITE = http://www.live555.com/liveMedia/public/
++LIVE555_LICENSE = LGPLv2.1+
++LIVE555_LICENSE_FILES = COPYING
+ LIVE555_INSTALL_STAGING = YES
+ 
+ define LIVE555_CONFIGURE_CMDS
+@@ -34,12 +36,10 @@ LIVE555_LIBS_TO_INSTALL = \
+ 	UsageEnvironment/libUsageEnvironment.a \
+ 	BasicUsageEnvironment/libBasicUsageEnvironment.a
+ 
+-LIVE555_FILES_TO_INSTALL- =
+ LIVE555_FILES_TO_INSTALL-y =
+ LIVE555_FILES_TO_INSTALL-$(BR2_PACKAGE_LIVE555_OPENRTSP) += testProgs/openRTSP
+ LIVE555_FILES_TO_INSTALL-$(BR2_PACKAGE_LIVE555_MEDIASERVER) += mediaServer/live555MediaServer
+ LIVE555_FILES_TO_INSTALL-$(BR2_PACKAGE_LIVE555_MPEG2_INDEXER) += testProgs/MPEG2TransportStreamIndexer
+-LIVE555_FILES_TO_INSTALL- += $(LIVE555_FILES_TO_INSTALL-y)
+ 
+ define LIVE555_INSTALL_STAGING_CMDS
+ 	for i in $(LIVE555_HEADERS_TO_INSTALL); do \
