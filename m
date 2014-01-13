@@ -1,52 +1,167 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 13 Jan 2014 23:19:10 +0100
-Subject: [Buildroot] [git commit] luasocket: bump to version 3.0-rc1
-Message-ID: <20140113222142.26E0B9C4A5@busybox.osuosl.org>
+Date: Mon, 13 Jan 2014 23:17:18 +0100
+Subject: [Buildroot] [git commit] luarocks: new infrastructure
+Message-ID: <20140113222141.E2D7E9C4A5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=91d8aa63060a3769a1f31e0b7fadfd5439ff5dff
+commit: http://git.buildroot.net/buildroot/commit/?id=72afb294fffe7b06aa6d1db1ced637852e408d21
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-and refactor with luarocks infra
-
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+[yann.morin.1998 at free.fr: apply Thomas' comments]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/luasocket/luasocket.mk |   21 ++++-----------------
- 1 files changed, 4 insertions(+), 17 deletions(-)
+ Config.in                    |    8 ++++
+ Makefile                     |    1 +
+ package/Makefile.in          |    1 +
+ package/luarocks/luarocks.mk |    3 ++
+ package/pkg-luarocks.mk      |   82 ++++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 95 insertions(+), 0 deletions(-)
 
-diff --git a/package/luasocket/luasocket.mk b/package/luasocket/luasocket.mk
-index a55fe17..ca72277 100644
---- a/package/luasocket/luasocket.mk
-+++ b/package/luasocket/luasocket.mk
-@@ -4,22 +4,9 @@
- #
- ################################################################################
+diff --git a/Config.in b/Config.in
+index 667c084..93d8fce 100644
+--- a/Config.in
++++ b/Config.in
+@@ -217,6 +217,14 @@ config BR2_DEBIAN_MIRROR
  
--LUASOCKET_VERSION = 2.0.2
--LUASOCKET_SITE = http://luaforge.net/frs/download.php/2664
--LUASOCKET_DEPENDENCIES = luainterpreter
-+LUASOCKET_VERSION = 3.0rc1-1
-+LUASOCKET_SUBDIR  = luasocket-3.0-rc1
- LUASOCKET_LICENSE = MIT
--LUASOCKET_LICENSE_FILES = LICENSE
-+LUASOCKET_LICENSE_FILES = $(LUASOCKET_SUBDIR)/LICENSE
+ endif
  
--define LUASOCKET_BUILD_CMDS
--	$(MAKE) -C $(@D) -f makefile \
--		CC="$(TARGET_CC)" LD="$(TARGET_CC)" \
--		CFLAGS="$(TARGET_CFLAGS) -fPIC"
--endef
--
--define LUASOCKET_INSTALL_TARGET_CMDS
--	$(MAKE) -C $(@D) -f makefile \
--		INSTALL_TOP_SHARE="$(TARGET_DIR)/usr/share/lua/5.1" \
--		INSTALL_TOP_LIB="$(TARGET_DIR)/usr/lib/lua/5.1" install
--endef
--
--$(eval $(generic-package))
-+$(eval $(luarocks-package))
++config BR2_LUAROCKS_MIRROR
++	string "LuaRocks mirror"
++	default "http://luarocks.org/repositories/rocks"
++	help
++	  LuaRocks repository.
++
++	  See http://luarocks.org
++
+ endmenu
+ 
+ config BR2_JLEVEL
+diff --git a/Makefile b/Makefile
+index 9aa8536..9adc0ec 100644
+--- a/Makefile
++++ b/Makefile
+@@ -512,6 +512,7 @@ endif
+ ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
+ 	find $(TARGET_DIR)/usr/lib/ -name '*.py' -print0 | xargs -0 rm -f
+ endif
++	rm -rf $(TARGET_DIR)/usr/lib/luarocks
+ 	$(STRIP_FIND_CMD) | xargs $(STRIPCMD) 2>/dev/null || true
+ 	if test -d $(TARGET_DIR)/lib/modules; then \
+ 		find $(TARGET_DIR)/lib/modules -type f -name '*.ko' | \
+diff --git a/package/Makefile.in b/package/Makefile.in
+index f5d6289..2e433fd 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -371,5 +371,6 @@ include package/pkg-utils.mk
+ include package/pkg-download.mk
+ include package/pkg-autotools.mk
+ include package/pkg-cmake.mk
++include package/pkg-luarocks.mk
+ include package/pkg-python.mk
+ include package/pkg-generic.mk
+diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
+index 149af0f..85b6866 100644
+--- a/package/luarocks/luarocks.mk
++++ b/package/luarocks/luarocks.mk
+@@ -40,3 +40,6 @@ define HOST_LUAROCKS_INSTALL_CMDS
+ endef
+ 
+ $(eval $(host-generic-package))
++
++LUAROCKS_RUN = LUA_PATH="$(HOST_DIR)/usr/share/lua/5.1/?.lua" \
++	$(HOST_DIR)/usr/bin/lua $(HOST_DIR)/usr/bin/luarocks
+diff --git a/package/pkg-luarocks.mk b/package/pkg-luarocks.mk
+new file mode 100644
+index 0000000..e82818a
+--- /dev/null
++++ b/package/pkg-luarocks.mk
+@@ -0,0 +1,82 @@
++################################################################################
++# LuaRocks package infrastructure
++# see http://luarocks.org/
++#
++# This file implements an infrastructure that eases development of
++# package .mk files for LuaRocks packages.
++# LuaRocks supports various build.type : builtin, make, cmake.
++# This luarocks infrastructure supports only the builtin mode,
++# the make & cmake modes could be directly handled by generic & cmake infrastructure.
++#
++# See the Buildroot documentation for details on the usage of this
++# infrastructure
++#
++# In terms of implementation, this LuaRocks infrastructure requires
++# the .mk file to only specify metadata informations about the
++# package: name, version, etc.
++#
++################################################################################
++
++################################################################################
++# inner-luarocks-package -- defines how the configuration, compilation and
++# installation of a LuaRocks package should be done, implements a few hooks to
++# tune the build process and calls the generic package infrastructure to
++# generate the necessary make targets
++#
++#  argument 1 is the lowercase package name
++#  argument 2 is the uppercase package name, including an HOST_ prefix
++#             for host packages
++#  argument 3 is the uppercase package name, without the HOST_ prefix
++#             for host packages
++#  argument 4 is the package directory prefix
++#  argument 5 is the type (target or host)
++################################################################################
++
++define inner-luarocks-package
++
++$(2)_BUILD_OPT		?=
++$(2)_SUBDIR		?= $(1)-$(shell echo "$($(3)_VERSION)" | sed -e "s/-[0-9]$$//")
++$(2)_ROCKSPEC		?= $(1)-$($(3)_VERSION).rockspec
++$(2)_SOURCE		?= $(1)-$($(3)_VERSION).src.rock
++$(2)_SITE		?= $(call qstrip,$(BR2_LUAROCKS_MIRROR))
++
++# Since we do not support host-luarocks-package, we know this is
++# a target package, and can just add the required dependencies
++$(2)_DEPENDENCIES	+= host-luarocks luainterpreter
++
++# $(2)_DEPENDENCIES are handled for configure step (too late)
++# but host-luarocks is required to do the extract
++$(1)-extract: host-luarocks
++
++#
++# Extract step
++#
++ifndef $(2)_EXTRACT_CMDS
++define $(2)_EXTRACT_CMDS
++	cd $$($(2)_DIR)/.. && \
++	 $$(LUAROCKS_RUN) unpack --force $(DL_DIR)/$$($(2)_SOURCE)
++endef
++endif
++
++#
++# Build/install step.
++#
++ifndef $(2)_INSTALL_TARGET_CMDS
++define $(2)_INSTALL_TARGET_CMDS
++	cd $$($(2)_SRCDIR) && \
++	 $$(LUAROCKS_RUN) make --deps-mode=none --keep $$($(2)_ROCKSPEC) $$($(2)_BUILD_OPT)
++endef
++endif
++
++# Call the generic package infrastructure to generate the necessary
++# make targets
++$(call inner-generic-package,$(1),$(2),$(3),$(4),$(5))
++
++endef
++
++################################################################################
++# luarocks-package -- the target generator macro for LuaRocks packages
++################################################################################
++
++luarocks-package = $(call inner-luarocks-package,$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),target)
++# host-luarocks-package not supported
