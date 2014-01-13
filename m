@@ -1,128 +1,41 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 13 Jan 2014 19:17:18 -0300
-Subject: [Buildroot] [PATCH 2/2] mpd: bump to version 0.18.7
-In-Reply-To: <1389651438-13529-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1389651438-13529-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1389651438-13529-2-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 13 Jan 2014 23:20:55 +0100
+Subject: [Buildroot] [pkg-luarocks infra v7 00/15] a package
+	infrastructure for Lua modules
+In-Reply-To: <1389454937-13494-1-git-send-email-francois.perrad@gadz.org>
+ (Francois Perrad's message of "Sat, 11 Jan 2014 16:42:02 +0100")
+References: <1389454937-13494-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <87iotnzfp4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/mpd/Config.in | 15 +++++++++++++++
- package/mpd/S95mpd    | 12 ++++++++----
- package/mpd/mpd.mk    | 18 +++++++++++++++---
- 3 files changed, 38 insertions(+), 7 deletions(-)
+>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
 
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index 62bdfa7..5a03a62 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -4,6 +4,8 @@ menuconfig BR2_PACKAGE_MPD
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
- 	depends on BR2_USE_MMU # libglib2
-+	depends on !(BR2_avr32 || BR2_sparc) # gcc too old
-+	depends on !BR2_UCLIBC_VERSION_0_9_32 # lacks signalfd
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	select BR2_PACKAGE_MPD_TREMOR if !(BR2_PACKAGE_MPD_MAD || BR2_PACKAGE_MPD_MPG123 || BR2_PACKAGE_MPD_VORBIS || BR2_PACKAGE_MPD_WAVPACK || BR2_PACKAGE_MPD_FLAC || BR2_PACKAGE_MPD_MUSEPACK || BR2_PACKAGE_MPD_FFMPEG)
-@@ -142,6 +144,19 @@ config BR2_PACKAGE_MPD_MUSEPACK
- 	  Enable musepack input support.
- 	  Select this if you want to play back MPC files.
- 
-+config BR2_PACKAGE_MPD_OPUS
-+	bool "opus"
-+	select BR2_PACKAGE_OPUS
-+	help
-+	  Enable opus input support.
-+	  Select this if you want to play back OPUS encoded files.
-+
-+config BR2_PACKAGE_MPD_SOUNDCLOUD
-+	bool "soundcloud"
-+	select BR2_PACKAGE_YAJL
-+	help
-+	  Enable soundcloud.com playlist support.
-+
- config BR2_PACKAGE_MPD_SQLITE
- 	bool "sqlite"
- 	select BR2_PACKAGE_SQLITE
-diff --git a/package/mpd/S95mpd b/package/mpd/S95mpd
-index a4f1271..f25135d 100644
---- a/package/mpd/S95mpd
-+++ b/package/mpd/S95mpd
-@@ -1,15 +1,19 @@
- #!/bin/sh
- 
-+# Sanity checks
-+test -f /usr/bin/mpd || exit 0
-+test -f /etc/mpd.conf || exit 0
-+
- start() {
- 	echo -n "Starting mpd: "
--	start-stop-daemon --start --quiet --background --exec /usr/bin/mpd
--	echo "OK"
-+	start-stop-daemon --start --quiet --background --exec /usr/bin/mpd \
-+		&& echo "OK" || echo "FAIL"
- }
- 
- stop() {
- 	echo -n "Stopping mpd: "
--	start-stop-daemon --stop --quiet --pidfile /var/run/mpd.pid
--	echo "OK"
-+	start-stop-daemon --stop --quiet --pidfile /var/run/mpd.pid \
-+		&& echo "OK" || echo "FAIL"
- }
- 
- case "$1" in
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 4367cae..4a7926c 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -4,12 +4,12 @@
- #
- ################################################################################
- 
--MPD_VERSION_MAJOR = 0.17
--MPD_VERSION = $(MPD_VERSION_MAJOR).6
-+MPD_VERSION_MAJOR = 0.18
-+MPD_VERSION = $(MPD_VERSION_MAJOR).7
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf libglib2
--MPD_LICENSE = GPLv2
-+MPD_LICENSE = GPLv2+
- MPD_LICENSE_FILES = COPYING
- 
- # Some options need an explicit --disable or --enable
-@@ -82,6 +82,12 @@ else
- MPD_CONF_OPT += --disable-sndfile
- endif
- 
-+ifeq ($(BR2_PACKAGE_MPD_OPUS),y)
-+MPD_DEPENDENCIES += opus
-+else
-+MPD_CONF_OPT += --disable-opus
-+endif
-+
- ifeq ($(BR2_PACKAGE_MPD_VORBIS),y)
- MPD_DEPENDENCIES += libvorbis
- else
-@@ -100,6 +106,12 @@ else
- MPD_CONF_OPT += --disable-mpc
- endif
- 
-+ifeq ($(BR2_PACKAGE_MPD_SOUNDCLOUD),y)
-+MPD_DEPENDENCIES += yajl
-+else
-+MPD_CONF_OPT += --disable-soundcloud
-+endif
-+
- ifeq ($(BR2_PACKAGE_MPD_SQLITE),y)
- MPD_DEPENDENCIES += sqlite
- else
+ > Changes v6 -> v7:
+ >   - luarocks 2.1.2 which requires no patch
+ >   - bump and convert more Lua modules
+
+ > Francois Perrad (15):
+ >   luainterpreter: create virtual package
+ >   luajit: allow to build Lua extensions without lua
+ >   lua*: restore version in module paths
+ >   luarocks: new package
+ >   luarocks: new infrastructure
+ >   lua-cjson: restore official name
+ >   luasql-sqlite3: renamed like with LuaRocks
+ >   lua*: refactor with luarocks infrastructure
+ >   manual: adding packages luarocks
+ >   luasocket: bump to version 3.0-rc1
+ >   coxpcall: bump to version 1.14.0
+ >   copas: bump to version 1.2.1
+ >   rings: bump to version 1.3.0
+ >   wsapi: bump to version 1.6
+ >   xavante: bump to version 2.3.0
+
+Committed series, thanks!
+
 -- 
-1.8.3.2
+Bye, Peter Korsgaard
