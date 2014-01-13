@@ -1,33 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 13 Jan 2014 09:21:13 +0100
-Subject: [Buildroot] [git commit] jasper: new package
-In-Reply-To: <20140113161643.2cbf3d59@skate> (Thomas Petazzoni's message of
- "Mon, 13 Jan 2014 16:16:43 +0800")
-References: <20140112182938.A3B479BFDF@busybox.osuosl.org>
- <20140113161643.2cbf3d59@skate>
-Message-ID: <87vbxo1edi.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 13 Jan 2014 09:20:36 +0100
+Subject: [Buildroot] [git commit] jasper: fix file header comment
+Message-ID: <20140113082148.46DD59C49A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=1eac073b3afa4209f93a93cb8c7dcb84f72af488
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Dear Peter Korsgaard,
- > On Sun, 12 Jan 2014 19:23:45 +0100, Peter Korsgaard wrote:
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/jasper/jasper.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
- >> +#############################################################
- >> +#
- >> +# jasper
- >> +#
- >> +#############################################################
-
- > Wrong number of # signs, there should be 80 of them.
-
- > </nitpick>
-
-Ahh yes, fixed - Thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/jasper/jasper.mk b/package/jasper/jasper.mk
+index 5092ab3..b349cfc 100644
+--- a/package/jasper/jasper.mk
++++ b/package/jasper/jasper.mk
+@@ -1,8 +1,8 @@
+-#############################################################
++################################################################################
+ #
+ # jasper
+ #
+-#############################################################
++################################################################################
+ 
+ JASPER_VERSION = 1.900.1
+ JASPER_SITE = http://sources.openelec.tv/devel
