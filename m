@@ -1,27 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 13 Jan 2014 23:35:08 +0100
-Subject: [Buildroot] [PATCH v6 1/5] sysvinit: depend on SysV selected as
-	init system.
-In-Reply-To: <1389627907-7821-2-git-send-email-eric.le.bihan.dev@free.fr>
- (Eric Le Bihan's message of "Mon, 13 Jan 2014 16:45:02 +0100")
-References: <1389627907-7821-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1389627907-7821-2-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <8761pnzf1f.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 13 Jan 2014 23:31:20 +0100
+Subject: [Buildroot] [git commit] system: fix kconfig warning about
+	BR2_PACKAGE_SYSVINIT
+Message-ID: <20140113223524.263CB9C424@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Eric" == Eric Le Bihan <eric.le.bihan.dev@free.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=cac4fe50a4330f5f08f0484f3dcb82818c609f8b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > In order to prevent sysvinit and systemd to be selected at the same
- > time, sysvinit can now only be selected if SysV is chosen as init
- > system.
+Fixes:
 
- > Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+warning: (BR2_INIT_SYSV) selects BR2_PACKAGE_SYSVINIT which has unmet direct
+dependencies (BR2_PACKAGE_BUSYBOX_SHOW_OTHERS && BR2_INIT_SYSV)
 
-Committed, thanks.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ system/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/system/Config.in b/system/Config.in
+index 8288335..181a0ac 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -82,6 +82,7 @@ config BR2_INIT_BUSYBOX
+ 
+ config BR2_INIT_SYSV
+ 	bool "systemV"
++	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # sysvinit
+ 	select BR2_PACKAGE_SYSVINIT
+ 
+ config BR2_INIT_SYSTEMD
