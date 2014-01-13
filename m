@@ -1,11 +1,10 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 13 Jan 2014 10:23:38 +0200
-Subject: [Buildroot] [PATCH v2 0/3] uclibc: build fixes for xtensa
- snapshot version
-In-Reply-To: <20140113161308.356138d7@skate>
-References: <cover.1389594195.git.baruch@tkos.co.il>
- <20140113161308.356138d7@skate>
-Message-ID: <20140113082338.GJ4944@tarshish>
+Date: Mon, 13 Jan 2014 10:25:45 +0200
+Subject: [Buildroot] [PATCH v2] rt-tests: disable NPTL is missing
+In-Reply-To: <20140113161012.06535faf@skate>
+References: <0255f67e72bc626106163b3cfb821a68d99970fd.1389596187.git.baruch@tkos.co.il>
+ <20140113161012.06535faf@skate>
+Message-ID: <20140113082545.GK4944@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,20 +13,18 @@ To: buildroot@busybox.net
 
 Hi Thomas,
 
-On Mon, Jan 13, 2014 at 04:13:08PM +0800, Thomas Petazzoni wrote:
-> On Mon, 13 Jan 2014 08:26:11 +0200, Baruch Siach wrote:
+On Mon, Jan 13, 2014 at 04:10:12PM +0800, Thomas Petazzoni wrote:
+> On Mon, 13 Jan 2014 08:56:27 +0200, Baruch Siach wrote:
 > 
-> > Baruch Siach (3):
-> >   uclibc: bump xtensa snapshot version
-> >   uclibc: xtensa: fix posix_spawn autoconf detection
+> > +	# priority-inheritance mutex needs NPTL
+> > +	depends on !BR2_PTHREADS && !BR2_PTHREADS_OLD
 > 
-> Why is this patch xtensa specific?
+> No, these symbols are specific to the internal toolchain backend, and
+> do not make sense for external toolchains. Therefore, they shouldn't be
+> used for package dependencies.
 
-It it not. It's uClibc snapshot specific, and I don't think that blindly 
-applying this patch to any random snapshot version is a good idea. Only xtensa 
-and arc have a fixed default uClibc snapshot version. arc uses its own uClibc 
-git tree, so this patch can be applied there if it's considered useful (adding 
-Mischa to Cc).
+Well, my v1 patch didn't have this dependency. Do you have any better 
+suggestion for the NPTL situation?
 
 baruch
 
