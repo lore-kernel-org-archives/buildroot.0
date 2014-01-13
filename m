@@ -1,44 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 13 Jan 2014 08:40:27 +0100
-Subject: [Buildroot] [PATCH v1] tcpreplay: bump version to 4.0.0
-In-Reply-To: <1389575003-17982-1-git-send-email-judge.packham@gmail.com>
- (judge packham's message of "Mon, 13 Jan 2014 14:03:23 +1300")
-References: <1389575003-17982-1-git-send-email-judge.packham@gmail.com>
-Message-ID: <87zjn01g9g.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 13 Jan 2014 08:35:56 +0100
+Subject: [Buildroot] [git commit] ffmpeg: Fix build error regarding missing
+	host-yasm
+Message-ID: <20140113074100.92D009C49A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "judge" == judge packham <judge.packham@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=8eb78ba124ac181d22b1cdfe513f79aa68014a18
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: Chris Packham <judge.packham@gmail.com>
- > Update the tcpreplay package to version 4.0.0. The upstream package has
- > a new maintainer and license. Version 4.0.0 brings a number of new
- > features see http://tcpreplay.appneta.com/ for details.
+Fixes http://autobuild.buildroot.net/results/b2a/b2aefd25431bab3d0f4fcf4c3e6de1ff6fc54ffa//
 
- > Signed-off-by: Chris Packham <judge.packham@gmail.com>
- > ---
- > Changes since v0:
- > . Updated my git configuration to use a smtp server that doesn't modify my
- >   messages in-flight.
+Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ffmpeg/ffmpeg.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index f717115..2168785 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -214,7 +214,7 @@ endif
  
- > -TCPREPLAY_VERSION = 3.4.3
- > +TCPREPLAY_VERSION = 4.0.0
- >  TCPREPLAY_SITE = http://downloads.sourceforge.net/project/tcpreplay/tcpreplay/$(TCPREPLAY_VERSION)
- > -TCPREPLAY_CONF_ENV = tr_cv_libpcap_version=">= 0.7.0"
- > +TCPREPLAY_LICENSE = GPLv3
- > +TCPREPLAY_LICENSE_FILES = docs/LICENSE
- > +TCPREPLAY_CONF_ENV = \
- > +	tr_cv_libpcap_version=">= 0.7.0" \
- > +	ac_cv_have_bpf=no
- >  TCPREPLAY_CONF_OPT = --with-libpcap=$(STAGING_DIR)/usr
- >  TCPREPLAY_AUTORECONF = YES
-
-AUTORECONF can also go now that all the patches are gone.
-
-Committed with that fixed, thanks.
-
--- 
-Bye, Peter Korsgaard
+ ifeq ($(BR2_X86_CPU_HAS_MMX),y)
+ FFMPEG_CONF_OPT += --enable-yasm
+-FFMPEG_DEPENDENCIES += yasm
++FFMPEG_DEPENDENCIES += host-yasm
+ else
+ FFMPEG_CONF_OPT += --disable-yasm
+ FFMPEG_CONF_OPT += --disable-mmx
