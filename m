@@ -1,27 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 13 Jan 2014 12:43:54 +0100
-Subject: [Buildroot] [PATCH v3] libnfc-llcp: rename to libllcp and bump
-	version
-In-Reply-To: <1389348379-56045-1-git-send-email-Vincent.Riera@imgtec.com>
- (Vicente Olivert Riera's message of "Fri, 10 Jan 2014 10:06:19 +0000")
-References: <1389348379-56045-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <87eh4c14zp.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 13 Jan 2014 09:59:44 +0100
+Subject: [Buildroot] [git commit] prevent recursion in %_defconfig rules
+Message-ID: <20140113114415.F1E469C49B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=94dd02f5d0ce89549a82a99c56602e1c4a73bae7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > This package has been renamed upstream to libllcp. Also, the current
- > package we have in Buildroot fails to compile due to a version bump of
- > it's main dependence, libnfc. A version bump is required because this
- > package has been adapted upstream to work with libnfc-1.7.0-rc6.
+Signed-off-by: J??r??my Rosen <jeremy.rosen@openwide.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ Makefile |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
- > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/Makefile b/Makefile
+index 7624f59..9aa8536 100644
+--- a/Makefile
++++ b/Makefile
+@@ -761,10 +761,14 @@ defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+ 	@$(COMMON_CONFIG_ENV) $< --defconfig=$(TOPDIR)/configs/$@ $(CONFIG_CONFIG_IN)
+ 
++$(TOPDIR)/configs/%_defconfig:;
++
+ %_defconfig: $(BUILD_DIR)/buildroot-config/conf $(BR2_EXTERNAL)/configs/%_defconfig outputmakefile
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+ 	@$(COMMON_CONFIG_ENV) $< --defconfig=$(BR2_EXTERNAL)/configs/$@ $(CONFIG_CONFIG_IN)
+ 
++$(BR2_EXTERNAL)/configs/%_defconfig:;
++
+ savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+ 	@$(COMMON_CONFIG_ENV) $< \
