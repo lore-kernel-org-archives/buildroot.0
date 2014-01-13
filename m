@@ -1,42 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 13 Jan 2014 23:19:20 +0100
-Subject: [Buildroot] [git commit] coxpcall: bump to version 1.14.0
-Message-ID: <20140113222142.2EED29C4A5@busybox.osuosl.org>
+Date: Mon, 13 Jan 2014 23:19:28 +0100
+Subject: [Buildroot] [git commit] copas: bump to version 1.2.1
+Message-ID: <20140113222142.3AC169C4A5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dfbb747238cb6bd6d9ef5383de83a44f7346c4bd
+commit: http://git.buildroot.net/buildroot/commit/?id=072400c65cb03822647479d3cb42f659d949c045
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-and refactor with luarocks infra
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/coxpcall/coxpcall.mk |   11 +++--------
- 1 files changed, 3 insertions(+), 8 deletions(-)
+ package/copas/copas.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/coxpcall/coxpcall.mk b/package/coxpcall/coxpcall.mk
-index de95461..11f823f 100644
---- a/package/coxpcall/coxpcall.mk
-+++ b/package/coxpcall/coxpcall.mk
-@@ -4,13 +4,8 @@
+diff --git a/package/copas/copas.mk b/package/copas/copas.mk
+index 3021139..e24549e 100644
+--- a/package/copas/copas.mk
++++ b/package/copas/copas.mk
+@@ -4,7 +4,8 @@
  #
  ################################################################################
  
--COXPCALL_VERSION = 1.13.0
--COXPCALL_SITE = http://luaforge.net/frs/download.php/3406
-+COXPCALL_VERSION = 1.14.0-1
-+COXPCALL_SUBDIR  = coxpcall-1_14_0
- COXPCALL_LICENSE = MIT
+-COPAS_VERSION = 1.1.6-1
++COPAS_VERSION = 1.2.1-1
++COPAS_SUBDIR  = copas-1_2_1
+ COPAS_LICENSE = MIT
  
--define COXPCALL_INSTALL_TARGET_CMDS
--	$(INSTALL) -m 0644 -D $(@D)/src/coxpcall.lua \
--		$(TARGET_DIR)/usr/share/lua/5.1/coxpcall.lua
--endef
--
--$(eval $(generic-package))
-+$(eval $(luarocks-package))
+ $(eval $(luarocks-package))
