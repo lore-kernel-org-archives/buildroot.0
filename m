@@ -1,35 +1,90 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 13 Jan 2014 09:27:43 +0100
-Subject: [Buildroot] [PATCH v2] rt-tests: disable NPTL is missing
-In-Reply-To: <20140113161012.06535faf@skate> (Thomas Petazzoni's message of
- "Mon, 13 Jan 2014 16:10:12 +0800")
-References: <0255f67e72bc626106163b3cfb821a68d99970fd.1389596187.git.baruch@tkos.co.il>
- <20140113161012.06535faf@skate>
-Message-ID: <87r48c1e2o.fsf@dell.be.48ers.dk>
+From: Jeremy Rosen <jeremy.rosen@openwide.fr>
+Date: Mon, 13 Jan 2014 09:52:45 +0100 (CET)
+Subject: [Buildroot] [PATCH] prevent recursion in %_defconfig rules
+In-Reply-To: <1389111727-11021-1-git-send-email-jeremy.rosen@openwide.fr>
+Message-ID: <713578016.3542538.1389603165287.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+ping ?
 
- > Dear Baruch Siach,
- > On Mon, 13 Jan 2014 08:56:27 +0200, Baruch Siach wrote:
+Cordialement 
 
- >> +	# priority-inheritance mutex needs NPTL
- >> +	depends on !BR2_PTHREADS && !BR2_PTHREADS_OLD
+J?r?my Rosen 
++33 (0)1 42 68 28 04
 
- > No, these symbols are specific to the internal toolchain backend, and
- > do not make sense for external toolchains. Therefore, they shouldn't be
- > used for package dependencies.
+fight key loggers : write some perl using vim 
 
-Notice that the dependency is !BR_THREADS, E.G. only hide if using the
-internal uClibc toolchain with linuxthreads. That I believe is OK.
 
-For external uClibc toolchains we don't know the threads variant, which
-is why the 2nd line disables it for the specific archs where we know
-NPTL isn't available.
+Open Wide Ingenierie
 
--- 
-Bye, Peter Korsgaard
+23, rue Daviel
+75012 Paris - France
+www.openwide.fr
+
+
+
+
+
+----- Mail original -----
+> Signed-off-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
+> 
+> ---
+> The following command, run from a clean buildroot checkout
+> 
+> make O=.. BR2_EXTERNAL=.. raspberrypi_defconfig
+> 
+> cause the following output, and makes stop :
+> 
+> 
+> make: *** Pas de r?gle pour fabriquer la cible ?
+> /home/rosen/tmp/buildroot/
+> configs/../configs/../configs/../configs/<lots more >/../configs/
+> raspberrypi_defconfig ?, n?cessaire pour ? /home/rosen/tmp/buildroot/
+> configs/../configs/../configs/<lots more>/../configs/
+> raspberrypi_defconfig ?. Arr?t.
+> 
+> The problem is that the buildroot makefile has two rules to generate
+> %_defconfig: One that depends on $(TOPDIR)/configs/%_defconfig and
+> the
+> other one that depends on $(BR2_EXTERNAL)/configs/%_defconfig.
+> 
+> When one rule checks for the file, the other rule becomes an implicit
+> rule
+> for the dependancy causing an infinite cross-recursion.
+> 
+> By overriding the implicit rule, we prevent the infinite recursion.
+> ---
+>  Makefile | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/Makefile b/Makefile
+> index 4320e7b..41d641c 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -760,10 +760,14 @@ defconfig: $(BUILD_DIR)/buildroot-config/conf
+> outputmakefile
+>  	@mkdir -p $(BUILD_DIR)/buildroot-config
+>  	@$(COMMON_CONFIG_ENV) $< --defconfig=$(TOPDIR)/configs/$@
+>  	$(CONFIG_CONFIG_IN)
+>  
+> +$(TOPDIR)/configs/%_defconfig:;
+> +
+>  %_defconfig: $(BUILD_DIR)/buildroot-config/conf
+>  $(BR2_EXTERNAL)/configs/%_defconfig outputmakefile
+>  	@mkdir -p $(BUILD_DIR)/buildroot-config
+>  	@$(COMMON_CONFIG_ENV) $< --defconfig=$(BR2_EXTERNAL)/configs/$@
+>  	$(CONFIG_CONFIG_IN)
+>  
+> +$(BR2_EXTERNAL)/configs/%_defconfig:;
+> +
+>  savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+>  	@mkdir -p $(BUILD_DIR)/buildroot-config
+>  	@$(COMMON_CONFIG_ENV) $< \
+> --
+> 1.8.5.2
+> 
+> 
