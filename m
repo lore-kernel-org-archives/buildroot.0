@@ -1,400 +1,440 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 13 Jan 2014 23:16:18 +0100
-Subject: [Buildroot] [git commit] lua*: restore version in module paths
-Message-ID: <20140113222141.D29769B94E@busybox.osuosl.org>
+Date: Mon, 13 Jan 2014 23:18:29 +0100
+Subject: [Buildroot] [git commit] lua*: refactor with luarocks infrastructure
+Message-ID: <20140113222142.1718F9B94E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ccd68a513fc155578b724d629d61f1a9686547ee
+commit: http://git.buildroot.net/buildroot/commit/?id=5886f8c339fb0c37de0ba3e991471800906e310e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-(like in upstream)
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cgilua/cgilua.mk                         |    2 +-
- package/copas/copas.mk                           |    2 +-
- package/coxpcall/coxpcall.mk                     |    2 +-
- package/lbase64/lbase64.mk                       |    2 +-
- package/lua-ev/lua-ev.mk                         |    2 +-
- package/lua-msgpack-native/lua-msgpack-native.mk |    2 +-
- package/lua/lua-01-root-path.patch               |   21 ++++-----------------
- package/luabitop/luabitop.mk                     |    5 ++---
- package/luacjson/luacjson.mk                     |    2 +-
- package/luaexpat/luaexpat.mk                     |    6 +++---
- package/luaexpatutils/luaexpatutils.mk           |    2 +-
- package/luafilesystem/luafilesystem.mk           |    2 +-
- package/luajit/luajit-01-root-path.patch         |   22 ----------------------
- package/luaposix/luaposix.mk                     |    2 +-
- package/luasec/luasec.mk                         |    6 ++----
- package/luasocket/luasocket.mk                   |    4 ++--
- package/luasql/luasql.mk                         |    5 ++---
- package/orbit/orbit.mk                           |    2 +-
- package/rings/rings.mk                           |    3 +--
- package/wsapi/wsapi.mk                           |    4 ++--
- package/xavante/xavante.mk                       |    4 +---
- 21 files changed, 30 insertions(+), 72 deletions(-)
+ package/cgilua/cgilua.mk                           |    9 +----
+ package/copas/copas.mk                             |   10 +-----
+ package/lbase64/lbase64.mk                         |   20 ++----------
+ package/lua-cjson/lua-cjson.mk                     |   24 +++------------
+ package/luabitop/luabitop.mk                       |   19 +++---------
+ package/luaexpat/luaexpat.mk                       |   27 ++---------------
+ .../luafilesystem-without_large_file.patch         |    8 ++--
+ package/luafilesystem/luafilesystem.mk             |   18 +----------
+ package/luasec/luasec.mk                           |   23 ++++-----------
+ package/luasql-sqlite3/luasql-sqlite3.mk           |   30 +++----------------
+ package/orbit/orbit-01-fix-installation.patch      |   26 -----------------
+ package/orbit/orbit.mk                             |   16 +++-------
+ package/rings/rings.mk                             |   14 +--------
+ package/wsapi/wsapi.mk                             |   11 +------
+ package/xavante/xavante.mk                         |    9 +----
+ 15 files changed, 50 insertions(+), 214 deletions(-)
 
 diff --git a/package/cgilua/cgilua.mk b/package/cgilua/cgilua.mk
-index bf6ce4e..3dd2d77 100644
+index 3dd2d77..bdb1411 100644
 --- a/package/cgilua/cgilua.mk
 +++ b/package/cgilua/cgilua.mk
-@@ -9,7 +9,7 @@ CGILUA_SITE = http://github.com/downloads/keplerproject/cgilua
+@@ -4,12 +4,7 @@
+ #
+ ################################################################################
+ 
+-CGILUA_VERSION = 5.1.4
+-CGILUA_SITE = http://github.com/downloads/keplerproject/cgilua
++CGILUA_VERSION = 5.1.4-1
  CGILUA_LICENSE = MIT
  
- define CGILUA_INSTALL_TARGET_CMDS
--	$(MAKE) -C $(@D) install LUA_DIR="$(TARGET_DIR)/usr/share/lua"
-+	$(MAKE) PREFIX="$(TARGET_DIR)/usr" -C $(@D) install
- endef
- 
- $(eval $(generic-package))
+-define CGILUA_INSTALL_TARGET_CMDS
+-	$(MAKE) PREFIX="$(TARGET_DIR)/usr" -C $(@D) install
+-endef
+-
+-$(eval $(generic-package))
++$(eval $(luarocks-package))
 diff --git a/package/copas/copas.mk b/package/copas/copas.mk
-index 61eac58..b8cd425 100644
+index b8cd425..3021139 100644
 --- a/package/copas/copas.mk
 +++ b/package/copas/copas.mk
-@@ -10,7 +10,7 @@ COPAS_LICENSE = MIT
+@@ -4,13 +4,7 @@
+ #
+ ################################################################################
  
- define COPAS_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 0644 -D $(@D)/src/copas/copas.lua \
--		$(TARGET_DIR)/usr/share/lua/copas.lua
-+		$(TARGET_DIR)/usr/share/lua/5.1/copas.lua
- endef
+-COPAS_VERSION = 1.1.6
+-COPAS_SITE = http://github.com/downloads/keplerproject/copas
++COPAS_VERSION = 1.1.6-1
+ COPAS_LICENSE = MIT
  
- $(eval $(generic-package))
-diff --git a/package/coxpcall/coxpcall.mk b/package/coxpcall/coxpcall.mk
-index 0df7be6..de95461 100644
---- a/package/coxpcall/coxpcall.mk
-+++ b/package/coxpcall/coxpcall.mk
-@@ -10,7 +10,7 @@ COXPCALL_LICENSE = MIT
- 
- define COXPCALL_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 0644 -D $(@D)/src/coxpcall.lua \
--		$(TARGET_DIR)/usr/share/lua/coxpcall.lua
-+		$(TARGET_DIR)/usr/share/lua/5.1/coxpcall.lua
- endef
- 
- $(eval $(generic-package))
+-define COPAS_INSTALL_TARGET_CMDS
+-	$(INSTALL) -m 0644 -D $(@D)/src/copas/copas.lua \
+-		$(TARGET_DIR)/usr/share/lua/5.1/copas.lua
+-endef
+-
+-$(eval $(generic-package))
++$(eval $(luarocks-package))
 diff --git a/package/lbase64/lbase64.mk b/package/lbase64/lbase64.mk
-index 605dcf7..cb8ef17 100644
+index cb8ef17..4289f58 100644
 --- a/package/lbase64/lbase64.mk
 +++ b/package/lbase64/lbase64.mk
-@@ -18,7 +18,7 @@ endef
+@@ -4,21 +4,9 @@
+ #
+ ################################################################################
  
- define LBASE64_INSTALL_TARGET_CMDS
-        $(INSTALL) -D -m 0755 $(@D)/base64.so \
--		$(TARGET_DIR)/usr/lib/lua/base64.so
-+		$(TARGET_DIR)/usr/lib/lua/5.1/base64.so
- endef
+-LBASE64_VERSION = 20100323
+-LBASE64_SITE = http://www.tecgraf.puc-rio.br/~lhf/ftp/lua/5.1
+-LBASE64_SOURCE = lbase64.tar.gz
++LBASE64_VERSION = 20120820-1
++LBASE64_SUBDIR  = base64
+ LBASE64_LICENSE = Public domain
+-LBASE64_LICENSE_FILES = README
+-LBASE64_DEPENDENCIES = luainterpreter
++LBASE64_LICENSE_FILES = $(LBASE64_SUBDIR)/README
  
- $(eval $(generic-package))
-diff --git a/package/lua-ev/lua-ev.mk b/package/lua-ev/lua-ev.mk
-index 298bcf2..1236d77 100644
---- a/package/lua-ev/lua-ev.mk
-+++ b/package/lua-ev/lua-ev.mk
-@@ -9,6 +9,6 @@ LUA_EV_SITE = $(call github,brimworks,lua-ev,$(LUA_EV_VERSION))
- LUA_EV_DEPENDENCIES = luainterpreter libev
- LUA_EV_LICENSE = MIT
- LUA_EV_LICENSE_FILES = README
--LUA_EV_CONF_OPT = -DINSTALL_CMOD="/usr/lib/lua"
-+LUA_EV_CONF_OPT = -DINSTALL_CMOD="/usr/lib/lua/5.1"
+-define LBASE64_BUILD_CMDS
+-       $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
+-		CFLAGS="$(TARGET_CFLAGS) -fPIC" so
+-endef
+-
+-define LBASE64_INSTALL_TARGET_CMDS
+-       $(INSTALL) -D -m 0755 $(@D)/base64.so \
+-		$(TARGET_DIR)/usr/lib/lua/5.1/base64.so
+-endef
+-
+-$(eval $(generic-package))
++$(eval $(luarocks-package))
+diff --git a/package/lua-cjson/lua-cjson.mk b/package/lua-cjson/lua-cjson.mk
+index 92af23f..16cb974 100644
+--- a/package/lua-cjson/lua-cjson.mk
++++ b/package/lua-cjson/lua-cjson.mk
+@@ -4,23 +4,9 @@
+ #
+ ################################################################################
  
- $(eval $(cmake-package))
-diff --git a/package/lua-msgpack-native/lua-msgpack-native.mk b/package/lua-msgpack-native/lua-msgpack-native.mk
-index 2c1dede..d4547ae 100644
---- a/package/lua-msgpack-native/lua-msgpack-native.mk
-+++ b/package/lua-msgpack-native/lua-msgpack-native.mk
-@@ -15,7 +15,7 @@ define LUA_MSGPACK_NATIVE_BUILD_CMDS
- endef
+-LUA_CJSON_VERSION       = 2.1.0
+-LUA_CJSON_SITE          = http://www.kyne.com.au/~mark/software/download
+-LUA_CJSON_DEPENDENCIES  = luainterpreter
+-LUA_CJSON_LICENSE       = MIT
+-LUA_CJSON_LICENSE_FILES = LICENSE
++LUA_CJSON_VERSION_UPSTREAM = 2.1.0
++LUA_CJSON_VERSION = $(LUA_CJSON_VERSION_UPSTREAM)-1
++LUA_CJSON_LICENSE = MIT
++LUA_CJSON_LICENSE_FILES = lua-cjson-$(LUA_CJSON_VERSION_UPSTREAM)/LICENSE
  
- define LUA_MSGPACK_NATIVE_INSTALL_TARGET_CMDS
--	$(INSTALL) -m 755 -D $(@D)/msgpack.so $(TARGET_DIR)/usr/lib/lua/msgpack.so
-+	$(INSTALL) -m 755 -D $(@D)/msgpack.so $(TARGET_DIR)/usr/lib/lua/5.1/msgpack.so
- endef
- 
- $(eval $(generic-package))
-diff --git a/package/lua/lua-01-root-path.patch b/package/lua/lua-01-root-path.patch
-index f82c9c5..fd0da6e 100644
---- a/package/lua/lua-01-root-path.patch
-+++ b/package/lua/lua-01-root-path.patch
-@@ -1,5 +1,4 @@
- Adjust installation location to /usr.
--Remove version in module paths.
- 
- Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
- 
-@@ -7,7 +6,7 @@ Index: b/etc/lua.pc
- ===================================================================
- --- a/etc/lua.pc
- +++ b/etc/lua.pc
--@@ -8,13 +8,13 @@
-+@@ -8,7 +8,7 @@
-  R= 5.1.5
-  
-  # grep '^INSTALL_.*=' ../Makefile | sed 's/INSTALL_TOP/prefix/'
-@@ -16,28 +15,16 @@ Index: b/etc/lua.pc
-  INSTALL_BIN= ${prefix}/bin
-  INSTALL_INC= ${prefix}/include
-  INSTALL_LIB= ${prefix}/lib
-- INSTALL_MAN= ${prefix}/man/man1
---INSTALL_LMOD= ${prefix}/share/lua/${V}
---INSTALL_CMOD= ${prefix}/lib/lua/${V}
--+INSTALL_LMOD= ${prefix}/share/lua
--+INSTALL_CMOD= ${prefix}/lib/lua
-- 
-- # canonical vars
-- exec_prefix=${prefix}
- Index: b/src/luaconf.h
- ===================================================================
- --- a/src/luaconf.h
- +++ b/src/luaconf.h
--@@ -94,9 +94,9 @@
-+@@ -94,7 +94,7 @@
-  	".\\?.dll;"  LUA_CDIR"?.dll;" LUA_CDIR"loadall.dll"
-  
-  #else
- -#define LUA_ROOT	"/usr/local/"
---#define LUA_LDIR	LUA_ROOT "share/lua/5.1/"
---#define LUA_CDIR	LUA_ROOT "lib/lua/5.1/"
- +#define LUA_ROOT	"/usr/"
--+#define LUA_LDIR	LUA_ROOT "share/lua/"
--+#define LUA_CDIR	LUA_ROOT "lib/lua/"
-+ #define LUA_LDIR	LUA_ROOT "share/lua/5.1/"
-+ #define LUA_CDIR	LUA_ROOT "lib/lua/5.1/"
-  #define LUA_PATH_DEFAULT  \
-- 		"./?.lua;"  LUA_LDIR"?.lua;"  LUA_LDIR"?/init.lua;" \
-- 		            LUA_CDIR"?.lua;"  LUA_CDIR"?/init.lua"
+-define LUA_CJSON_BUILD_CMDS
+-	$(MAKE) -C $(@D) \
+-		CFLAGS="$(TARGET_CFLAGS)"   \
+-		LDFLAGS="$(TARGET_LDFLAGS)" \
+-		CC="$(TARGET_CC)"           \
+-		LD="$(TARGET_LD)"           \
+-		PREFIX=$(STAGING_DIR)/usr
+-endef
+-
+-define LUA_CJSON_INSTALL_TARGET_CMDS
+-	$(MAKE) DESTDIR="$(TARGET_DIR)" PREFIX="/usr" -C $(@D) install
+-endef
+-
+-$(eval $(generic-package))
++$(eval $(luarocks-package))
 diff --git a/package/luabitop/luabitop.mk b/package/luabitop/luabitop.mk
-index 7addbe6..083be35 100644
+index 083be35..4368c94 100644
 --- a/package/luabitop/luabitop.mk
 +++ b/package/luabitop/luabitop.mk
-@@ -12,12 +12,11 @@ LUABITOP_LICENSE_FILES = README
- LUABITOP_DEPENDENCIES = lua
+@@ -4,19 +4,10 @@
+ #
+ ################################################################################
  
- define LUABITOP_BUILD_CMDS
--	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
-+	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) INCLUDES="-I$(STAGING_DIR)/usr/include"
- endef
+-LUABITOP_VERSION = 1.0.2
+-LUABITOP_SOURCE = LuaBitOp-$(LUABITOP_VERSION).tar.gz
+-LUABITOP_SITE = http://bitop.luajit.org/download
++LUABITOP_VERSION_UPSTREAM = 1.0.2
++LUABITOP_VERSION = $(LUABITOP_VERSION_UPSTREAM)-1
++LUABITOP_SUBDIR  = LuaBitOp-$(LUABITOP_VERSION_UPSTREAM)
+ LUABITOP_LICENSE = MIT
+-LUABITOP_LICENSE_FILES = README
+-LUABITOP_DEPENDENCIES = lua
++LUABITOP_LICENSE_FILES = $(LUABITOP_SUBDIR)/README
  
- define LUABITOP_INSTALL_TARGET_CMDS
--	mkdir -p $(TARGET_DIR)/usr/lib/lua
--	$(INSTALL) -p $(@D)/bit.so $(TARGET_DIR)/usr/lib/lua
-+	$(INSTALL) -p $(@D)/bit.so $(TARGET_DIR)/usr/lib/lua/5.1
- endef
- 
- $(eval $(generic-package))
-diff --git a/package/luacjson/luacjson.mk b/package/luacjson/luacjson.mk
-index fcb8a9a..86be875 100644
---- a/package/luacjson/luacjson.mk
-+++ b/package/luacjson/luacjson.mk
-@@ -21,7 +21,7 @@ define LUACJSON_BUILD_CMDS
- endef
- 
- define LUACJSON_INSTALL_TARGET_CMDS
--	install -D -m 0644 $(@D)/cjson.so $(TARGET_DIR)/usr/lib/lua/cjson.so
-+	$(MAKE) DESTDIR="$(TARGET_DIR)" PREFIX="/usr" -C $(@D) install
- endef
- 
- $(eval $(generic-package))
+-define LUABITOP_BUILD_CMDS
+-	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) INCLUDES="-I$(STAGING_DIR)/usr/include"
+-endef
+-
+-define LUABITOP_INSTALL_TARGET_CMDS
+-	$(INSTALL) -p $(@D)/bit.so $(TARGET_DIR)/usr/lib/lua/5.1
+-endef
+-
+-$(eval $(generic-package))
++$(eval $(luarocks-package))
 diff --git a/package/luaexpat/luaexpat.mk b/package/luaexpat/luaexpat.mk
-index 65d4355..734478a 100644
+index 734478a..d507c2a 100644
 --- a/package/luaexpat/luaexpat.mk
 +++ b/package/luaexpat/luaexpat.mk
-@@ -11,7 +11,7 @@ LUAEXPAT_LICENSE      = MIT
+@@ -4,27 +4,8 @@
+ #
+ ################################################################################
  
+-LUAEXPAT_VERSION      = 1.2.0
+-LUAEXPAT_SITE         = http://matthewwild.co.uk/projects/luaexpat
+-LUAEXPAT_DEPENDENCIES = luainterpreter expat
+-LUAEXPAT_LICENSE      = MIT
++LUAEXPAT_VERSION = 1.2.0-1
++LUAEXPAT_DEPENDENCIES = expat
++LUAEXPAT_LICENSE = MIT
  
- LUAEXPAT_MFLAGS += LUA_VERSION_NUM=501
--LUAEXPAT_MFLAGS += LUA_INC=$(STAGING_DIR)/usr/include/lua
-+LUAEXPAT_MFLAGS += LUA_INC=$(STAGING_DIR)/usr/include
- LUAEXPAT_MFLAGS += EXPAT_INC=$(STAGING_DIR)/usr/include
- LUAEXPAT_MFLAGS += LIBNAME=lxp.so
- LUAEXPAT_MFLAGS += LIB_OPTION="-shared -fPIC $(TARGET_CFLAGS)"
-@@ -23,8 +23,8 @@ define LUAEXPAT_BUILD_CMDS
- endef
- 
- define LUAEXPAT_INSTALL_TARGET_CMDS
--	$(INSTALL) -D $(@D)/src/lxp.so $(TARGET_DIR)/usr/lib/lua/lxp.so
--	$(INSTALL) -D -m 0644 $(@D)/src/lxp/lom.lua $(TARGET_DIR)/usr/share/lua/lxp/lom.lua
-+	$(INSTALL) -D $(@D)/src/lxp.so $(TARGET_DIR)/usr/lib/lua/5.1/lxp.so
-+	$(INSTALL) -D -m 0644 $(@D)/src/lxp/lom.lua $(TARGET_DIR)/usr/share/lua/5.1/lxp/lom.lua
- endef
- 
- $(eval $(generic-package))
-diff --git a/package/luaexpatutils/luaexpatutils.mk b/package/luaexpatutils/luaexpatutils.mk
-index bdbbdd2..93cf621 100644
---- a/package/luaexpatutils/luaexpatutils.mk
-+++ b/package/luaexpatutils/luaexpatutils.mk
-@@ -11,7 +11,7 @@ LUAEXPATUTILS_DEPENDENCIES = luaexpat
- 
- define LUAEXPATUTILS_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 0644 -D $(@D)/lua/doc.lua \
--		$(TARGET_DIR)/usr/share/lua/lxp/doc.lua
-+		$(TARGET_DIR)/usr/share/lua/5.1/lxp/doc.lua
- endef
- 
- $(eval $(generic-package))
+-
+-LUAEXPAT_MFLAGS += LUA_VERSION_NUM=501
+-LUAEXPAT_MFLAGS += LUA_INC=$(STAGING_DIR)/usr/include
+-LUAEXPAT_MFLAGS += EXPAT_INC=$(STAGING_DIR)/usr/include
+-LUAEXPAT_MFLAGS += LIBNAME=lxp.so
+-LUAEXPAT_MFLAGS += LIB_OPTION="-shared -fPIC $(TARGET_CFLAGS)"
+-LUAEXPAT_MFLAGS += CC="$(TARGET_CC) -fPIC $(TARGET_CFLAGS)"
+-
+-
+-define LUAEXPAT_BUILD_CMDS
+-	$(MAKE) -C $(@D) $(LUAEXPAT_MFLAGS)
+-endef
+-
+-define LUAEXPAT_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D $(@D)/src/lxp.so $(TARGET_DIR)/usr/lib/lua/5.1/lxp.so
+-	$(INSTALL) -D -m 0644 $(@D)/src/lxp/lom.lua $(TARGET_DIR)/usr/share/lua/5.1/lxp/lom.lua
+-endef
+-
+-$(eval $(generic-package))
++$(eval $(luarocks-package))
+diff --git a/package/luafilesystem/luafilesystem-without_large_file.patch b/package/luafilesystem/luafilesystem-without_large_file.patch
+index b1f41c0..5b24b99 100644
+--- a/package/luafilesystem/luafilesystem-without_large_file.patch
++++ b/package/luafilesystem/luafilesystem-without_large_file.patch
+@@ -1,7 +1,7 @@
+-diff --git a/src/lfs.c b/src/lfs.c
+-index 85f01e3..ed49f50 100644
+---- a/src/lfs.c
+-+++ b/src/lfs.c
++Index: b/luafilesystem-1.6.2/src/lfs.c
++===================================================================
++--- a/luafilesystem-1.6.2/src/lfs.c
+++++ b/luafilesystem-1.6.2/src/lfs.c
+ @@ -22,13 +22,13 @@
+  
+  #ifndef _WIN32
 diff --git a/package/luafilesystem/luafilesystem.mk b/package/luafilesystem/luafilesystem.mk
-index c928c6e..908d02e 100644
+index 908d02e..7943201 100644
 --- a/package/luafilesystem/luafilesystem.mk
 +++ b/package/luafilesystem/luafilesystem.mk
-@@ -18,7 +18,7 @@ define LUAFILESYSTEM_BUILD_CMDS
- endef
+@@ -4,21 +4,7 @@
+ #
+ ################################################################################
  
- define LUAFILESYSTEM_INSTALL_TARGET_CMDS
--	$(INSTALL) -D $(@D)/src/lfs.so $(TARGET_DIR)/usr/lib/lua/lfs.so
-+	$(INSTALL) -D $(@D)/src/lfs.so $(TARGET_DIR)/usr/lib/lua/5.1/lfs.so
- endef
+-LUAFILESYSTEM_VERSION = 1.6.2
+-LUAFILESYSTEM_SITE = http://github.com/downloads/keplerproject/luafilesystem
+-LUAFILESYSTEM_DEPENDENCIES = luainterpreter
++LUAFILESYSTEM_VERSION = 1.6.2-1
+ LUAFILESYSTEM_LICENSE = MIT
  
- $(eval $(generic-package))
-diff --git a/package/luajit/luajit-01-root-path.patch b/package/luajit/luajit-01-root-path.patch
-deleted file mode 100644
-index cc2f04f..0000000
---- a/package/luajit/luajit-01-root-path.patch
-+++ /dev/null
-@@ -1,22 +0,0 @@
--Adjust installation location to /usr
+-ifeq ($(BR2_LARGEFILE),y)
+-LFS_CFLAGS = -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE
+-endif
 -
--Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-define LUAFILESYSTEM_BUILD_CMDS
+-	$(MAKE) -C $(@D) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS) $(LFS_CFLAGS) -fPIC"
+-endef
 -
--Index: b/src/luaconf.h
--===================================================================
----- a/src/luaconf.h
--+++ b/src/luaconf.h
--@@ -26,9 +26,9 @@
-- ** Note to distribution maintainers: do NOT patch the following line!
-- ** Please read ../doc/install.html#distro and pass PREFIX=/usr instead.
-- */
---#define LUA_ROOT	"/usr/local/"
---#define LUA_LDIR	LUA_ROOT "share/lua/5.1/"
---#define LUA_CDIR	LUA_ROOT "lib/lua/5.1/"
--+#define LUA_ROOT	"/usr/"
--+#define LUA_LDIR	LUA_ROOT "share/lua/"
--+#define LUA_CDIR	LUA_ROOT "lib/lua/"
-- #ifdef LUA_XROOT
-- #define LUA_JDIR	LUA_XROOT "share/luajit-2.0.0/"
-- #define LUA_XPATH \
-diff --git a/package/luaposix/luaposix.mk b/package/luaposix/luaposix.mk
-index b398c8c..b018995 100644
---- a/package/luaposix/luaposix.mk
-+++ b/package/luaposix/luaposix.mk
-@@ -10,7 +10,7 @@ LUAPOSIX_SOURCE = release-v$(LUAPOSIX_VERSION).tar.gz
- LUAPOSIX_LICENSE = MIT
- LUAPOSIX_LICENSE_FILES = COPYING
- LUAPOSIX_DEPENDENCIES = luainterpreter host-lua
--LUAPOSIX_CONF_OPT = --libdir="/usr/lib/lua" --datarootdir="/usr/share/lua"
-+LUAPOSIX_CONF_OPT = --libdir="/usr/lib/lua/5.1" --datarootdir="/usr/share/lua/5.1"
- 
- ifeq ($(BR2_PACKAGE_NCURSES),y)
-     LUAPOSIX_DEPENDENCIES += ncurses
+-define LUAFILESYSTEM_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D $(@D)/src/lfs.so $(TARGET_DIR)/usr/lib/lua/5.1/lfs.so
+-endef
+-
+-$(eval $(generic-package))
++$(eval $(luarocks-package))
 diff --git a/package/luasec/luasec.mk b/package/luasec/luasec.mk
-index d89f61d..a2a2cc2 100644
+index a2a2cc2..354e805 100644
 --- a/package/luasec/luasec.mk
 +++ b/package/luasec/luasec.mk
-@@ -17,11 +17,9 @@ define LUASEC_BUILD_CMDS
- endef
+@@ -4,22 +4,11 @@
+ #
+ ################################################################################
  
- define LUASEC_INSTALL_TARGET_CMDS
--	mkdir -p $(TARGET_DIR)/usr/share/lua
--	mkdir -p $(TARGET_DIR)/usr/lib/lua
- 	$(MAKE) -C $(@D) \
--		LUAPATH="$(TARGET_DIR)/usr/share/lua" \
--		LUACPATH="$(TARGET_DIR)/usr/lib/lua" install
-+		LUAPATH="$(TARGET_DIR)/usr/share/lua/5.1" \
-+		LUACPATH="$(TARGET_DIR)/usr/lib/lua/5.1" install
- endef
+-LUASEC_VERSION = 0.4.1
+-LUASEC_SITE = http://www.inf.puc-rio.br/~brunoos/luasec/download/
++LUASEC_VERSION_UPSTREAM = 0.4.1
++LUASEC_VERSION = $(LUASEC_VERSION_UPSTREAM)-2
++LUASEC_SUBDIR  = luasec-luasec-$(LUASEC_VERSION_UPSTREAM)
+ LUASEC_LICENSE = MIT
+-LUASEC_LICENSE_FILES = LICENSE
+-LUASEC_DEPENDENCIES = luainterpreter openssl
++LUASEC_LICENSE_FILES = $(LUASEC_SUBDIR)/LICENSE
++LUASEC_DEPENDENCIES = openssl
  
- $(eval $(generic-package))
-diff --git a/package/luasocket/luasocket.mk b/package/luasocket/luasocket.mk
-index 6a2d4c8..a55fe17 100644
---- a/package/luasocket/luasocket.mk
-+++ b/package/luasocket/luasocket.mk
-@@ -18,8 +18,8 @@ endef
+-define LUASEC_BUILD_CMDS
+-	$(MAKE) -C $(@D) CC="$(TARGET_CC)" LD="$(TARGET_CC)" \
+-		CFLAGS="$(TARGET_CFLAGS) -fPIC" \
+-		LDFLAGS="$(TARGET_LDFLAGS) -shared" linux
+-endef
+-
+-define LUASEC_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) \
+-		LUAPATH="$(TARGET_DIR)/usr/share/lua/5.1" \
+-		LUACPATH="$(TARGET_DIR)/usr/lib/lua/5.1" install
+-endef
+-
+-$(eval $(generic-package))
++$(eval $(luarocks-package))
+diff --git a/package/luasql-sqlite3/luasql-sqlite3.mk b/package/luasql-sqlite3/luasql-sqlite3.mk
+index b114f02..0e7ae6a 100644
+--- a/package/luasql-sqlite3/luasql-sqlite3.mk
++++ b/package/luasql-sqlite3/luasql-sqlite3.mk
+@@ -4,30 +4,10 @@
+ #
+ ################################################################################
  
- define LUASOCKET_INSTALL_TARGET_CMDS
- 	$(MAKE) -C $(@D) -f makefile \
--		INSTALL_TOP_SHARE="$(TARGET_DIR)/usr/share/lua" \
--		INSTALL_TOP_LIB="$(TARGET_DIR)/usr/lib/lua" install
-+		INSTALL_TOP_SHARE="$(TARGET_DIR)/usr/share/lua/5.1" \
-+		INSTALL_TOP_LIB="$(TARGET_DIR)/usr/lib/lua/5.1" install
- endef
+-LUASQL_SQLITE3_VERSION = v2.3.0
+-LUASQL_SQLITE3_SITE = https://github.com/keplerproject/luasql/tarball/$(LUASQL_SQLITE3_VERSION)
++LUASQL_SQLITE3_VERSION = 2.3.0-1
++LUASQL_SQLITE3_SUBDIR  = luasql
+ LUASQL_SQLITE3_LICENSE = MIT
+-LUASQL_SQLITE3_LICENSE_FILES = README
+-LUASQL_SQLITE3_DEPENDENCIES = luainterpreter sqlite
++LUASQL_SQLITE3_LICENSE_FILES = $(LUASQL_SQLITE3_SUBDIR)/README
++LUASQL_SQLITE3_DEPENDENCIES = sqlite
  
- $(eval $(generic-package))
-diff --git a/package/luasql/luasql.mk b/package/luasql/luasql.mk
-index 62d0cf8..a1447cc 100644
---- a/package/luasql/luasql.mk
-+++ b/package/luasql/luasql.mk
-@@ -27,9 +27,8 @@ define LUASQL_BUILD_CMDS
- endef
- 
- define LUASQL_INSTALL_TARGET_CMDS
--	$(MAKE) -C $(@D) $(LUASQL_MAKE_FLAGS) PREFIX=/usr \
--		LUA_DIR="$(TARGET_DIR)/usr/share/lua" \
--		LUA_LIBDIR="$(TARGET_DIR)/usr/lib/lua" install
-+	$(MAKE) -C $(@D) $(LUASQL_MAKE_FLAGS) \
-+		PREFIX="$(TARGET_DIR)/usr" install
- endef
- 
- $(eval $(generic-package))
+-LUASQL_SQLITE3_MAKE_FLAGS = \
+-	CC="$(TARGET_CC)" \
+-	LD="$(TARGET_CC)" \
+-	CFLAGS="$(TARGET_CFLAGS) -fPIC" \
+-	T="sqlite3" \
+-	DRIVER_LIBS="-L$(STAGING_DIR)/usr/lib -lsqlite3"
+-
+-define LUASQL_SQLITE3_BUILD_CMDS
+-	$(MAKE) -C $(@D) $(LUASQL_SQLITE3_MAKE_FLAGS)
+-endef
+-
+-define LUASQL_SQLITE3_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) $(LUASQL_SQLITE3_MAKE_FLAGS) \
+-		PREFIX="$(TARGET_DIR)/usr" install
+-endef
+-
+-define LUASQL_SQLITE3_UNINSTALL_TARGET_CMDS
+-	rm -rf $(TARGET_DIR)/usr/lib/lua/5.1/luasql
+-endef
+-
+-$(eval $(generic-package))
++$(eval $(luarocks-package))
+diff --git a/package/orbit/orbit-01-fix-installation.patch b/package/orbit/orbit-01-fix-installation.patch
+deleted file mode 100644
+index ae50ad9..0000000
+--- a/package/orbit/orbit-01-fix-installation.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-Fix installation commands
+-
+-The installation commands did not match the location of the source
+-files within the Orbit source tree.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Index: b/Makefile
+-===================================================================
+---- a/Makefile
+-+++ b/Makefile
+-@@ -11,12 +11,9 @@
+- 	mkdir -p $(LUA_DIR)
+- 	cp src/orbit.lua $(LUA_DIR)
+- 	mkdir -p $(LUA_DIR)/orbit
+--	cp src/model.lua $(LUA_DIR)/orbit
+--	cp src/cache.lua $(LUA_DIR)/orbit
+--	cp src/pages.lua $(LUA_DIR)/orbit
+--	cp src/ophandler.lua $(LUA_DIR)/orbit
+-+	cp src/orbit/*.lua $(LUA_DIR)/orbit
+- 	mkdir -p $(BIN_DIR)
+--	cp src/orbit $(BIN_DIR)
+-+	cp src/launchers/* $(BIN_DIR)
+- 	if [ -f ./wsapi/Makefile ]; then \
+- 	  cd wsapi && make install; \
+- 	fi
 diff --git a/package/orbit/orbit.mk b/package/orbit/orbit.mk
-index ba1142f..7115896 100644
+index 7115896..e5a8676 100644
 --- a/package/orbit/orbit.mk
 +++ b/package/orbit/orbit.mk
-@@ -11,7 +11,7 @@ ORBIT_LICENSE_FILES = doc/us/license.md
+@@ -4,16 +4,10 @@
+ #
+ ################################################################################
  
- define ORBIT_INSTALL_TARGET_CMDS
- 	$(MAKE) -C $(@D) \
--		LUA_DIR=$(TARGET_DIR)/usr/share/lua/ \
-+		LUA_DIR=$(TARGET_DIR)/usr/share/lua/5.1/ \
- 		BIN_DIR=$(TARGET_DIR)/usr/bin \
- 		install
- endef
+-ORBIT_VERSION = 2.2.0
+-ORBIT_SITE = http://github.com/downloads/keplerproject/orbit
++ORBIT_VERSION_UPSTREAM = 2.2.0
++ORBIT_VERSION = $(ORBIT_VERSION_UPSTREAM)-2
++ORBIT_SUBDIR  = orbit-$(ORBIT_VERSION_UPSTREAM)
+ ORBIT_LICENSE = MIT
+-ORBIT_LICENSE_FILES = doc/us/license.md
++ORBIT_LICENSE_FILES = $(ORBIT_SUBDIR)/doc/us/license.md
+ 
+-define ORBIT_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) \
+-		LUA_DIR=$(TARGET_DIR)/usr/share/lua/5.1/ \
+-		BIN_DIR=$(TARGET_DIR)/usr/bin \
+-		install
+-endef
+-
+-$(eval $(generic-package))
++$(eval $(luarocks-package))
 diff --git a/package/rings/rings.mk b/package/rings/rings.mk
-index 47d25b6..fe1c2b2 100644
+index fe1c2b2..c23f879 100644
 --- a/package/rings/rings.mk
 +++ b/package/rings/rings.mk
-@@ -14,8 +14,7 @@ define RINGS_BUILD_CMDS
- endef
+@@ -4,17 +4,7 @@
+ #
+ ################################################################################
  
- define RINGS_INSTALL_TARGET_CMDS
--	$(MAKE) -C $(@D) LUA_LIBDIR="$(TARGET_DIR)/usr/lib/lua" \
--		LUA_DIR="$(TARGET_DIR)/usr/share/lua" install
-+	$(MAKE) -C $(@D) PREFIX="$(TARGET_DIR)/usr" install
- endef
+-RINGS_VERSION = 1.2.3
+-RINGS_SITE = http://github.com/downloads/keplerproject/rings
+-RINGS_DEPENDENCIES = luainterpreter
++RINGS_VERSION = 1.2.3-2
+ RINGS_LICENSE = MIT
  
- $(eval $(generic-package))
+-define RINGS_BUILD_CMDS
+-	$(MAKE) -C $(@D) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS) -fPIC"
+-endef
+-
+-define RINGS_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) PREFIX="$(TARGET_DIR)/usr" install
+-endef
+-
+-$(eval $(generic-package))
++$(eval $(luarocks-package))
 diff --git a/package/wsapi/wsapi.mk b/package/wsapi/wsapi.mk
-index ba917a6..46baebf 100644
+index 46baebf..f1ea9b5 100644
 --- a/package/wsapi/wsapi.mk
 +++ b/package/wsapi/wsapi.mk
-@@ -9,9 +9,9 @@ WSAPI_SITE = http://github.com/downloads/keplerproject/wsapi
+@@ -4,14 +4,7 @@
+ #
+ ################################################################################
+ 
+-WSAPI_VERSION = 1.5
+-WSAPI_SITE = http://github.com/downloads/keplerproject/wsapi
++WSAPI_VERSION = 1.5-1
  WSAPI_LICENSE = MIT
  
- define WSAPI_INSTALL_TARGET_CMDS
--	mkdir -p $(TARGET_DIR)/usr/share/lua/wsapi
-+	mkdir -p $(TARGET_DIR)/usr/share/lua/5.1/wsapi
- 	$(INSTALL) -m 0644 -D $(@D)/src/wsapi/*.lua \
--		$(TARGET_DIR)/usr/share/lua/wsapi
-+		$(TARGET_DIR)/usr/share/lua/5.1/wsapi
- endef
- 
- $(eval $(generic-package))
+-define WSAPI_INSTALL_TARGET_CMDS
+-	mkdir -p $(TARGET_DIR)/usr/share/lua/5.1/wsapi
+-	$(INSTALL) -m 0644 -D $(@D)/src/wsapi/*.lua \
+-		$(TARGET_DIR)/usr/share/lua/5.1/wsapi
+-endef
+-
+-$(eval $(generic-package))
++$(eval $(luarocks-package))
 diff --git a/package/xavante/xavante.mk b/package/xavante/xavante.mk
-index 9381c02..7c01ee6 100644
+index 7c01ee6..c8d4d93 100644
 --- a/package/xavante/xavante.mk
 +++ b/package/xavante/xavante.mk
-@@ -9,9 +9,7 @@ XAVANTE_SITE = http://github.com/downloads/keplerproject/xavante
+@@ -4,12 +4,7 @@
+ #
+ ################################################################################
+ 
+-XAVANTE_VERSION = 2.2.1
+-XAVANTE_SITE = http://github.com/downloads/keplerproject/xavante
++XAVANTE_VERSION = 2.2.0-1
  XAVANTE_LICENSE = MIT
  
- define XAVANTE_INSTALL_TARGET_CMDS
--	$(MAKE) -C $(@D) PREFIX=/usr \
--		LUA_DIR="$(TARGET_DIR)/usr/share/lua" \
--		LUA_LIBDIR="$(TARGET_DIR)/usr/lib/lua" install
-+	$(MAKE) -C $(@D) PREFIX="$(TARGET_DIR)/usr" install
- endef
- 
- $(eval $(generic-package))
+-define XAVANTE_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) PREFIX="$(TARGET_DIR)/usr" install
+-endef
+-
+-$(eval $(generic-package))
++$(eval $(luarocks-package))
