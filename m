@@ -1,61 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 13 Jan 2014 22:16:41 +0100
-Subject: [Buildroot] [PATCH] website: add pointers to the PGP signatures for
-	releases
-Message-ID: <1389647801-452-1-git-send-email-yann.morin.1998@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 13 Jan 2014 22:16:19 +0100
+Subject: [Buildroot] [git commit] barebox: bump to version 2014.01.0
+Message-ID: <20140113211744.7A4569C49F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+commit: http://git.buildroot.net/buildroot/commit/?id=8c71d1a144f4e48cf07f07c4b02b64984cc19928
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Peter has just pointed me to the PGP signatures of the release tarballs,
-which exist since he's been doing releases.
-
-This was not obvious to me that the releases were signed, as there was
-no info about it on the website.
-
-So, add such links on the downloads page.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/download.html | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ boot/barebox/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/docs/download.html b/docs/download.html
-index b9a9fcf..4cf44cc 100644
---- a/docs/download.html
-+++ b/docs/download.html
-@@ -10,8 +10,10 @@ The latest stable release is <b>2013.11</b>, which can be downloaded
- here:<p>
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index cdda5d2..7db6a98 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -12,7 +12,7 @@ choice
+ 	  Select the specific Barebox version you want to use
  
- <a href="/downloads/buildroot-2013.11.tar.gz">buildroot-2013.11.tar.gz</a>
-+(<a href="/downloads/buildroot-2013.11.tar.gz.sign">PGP signature</a>)
- or
--<a href="/downloads/buildroot-2013.11.tar.bz2">buildroot-2013.11.tar.bz2</a>.
-+<a href="/downloads/buildroot-2013.11.tar.bz2">buildroot-2013.11.tar.bz2</a>
-+(<a href="/downloads/buildroot-2013.11.tar.bz2.sign">PGP signature</a>).
+ config BR2_TARGET_BAREBOX_LATEST_VERSION
+-	bool "2013.12.0"
++	bool "2014.01.0"
  
- <p>
- <!--
-@@ -19,11 +21,13 @@ The latest release candidate is <b>2013.11-rc3</b>, which can be
- downloaded here:<p>
+ config BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -40,7 +40,7 @@ endif
  
- <a href="/downloads/buildroot-2013.11-rc3.tar.gz">buildroot-2013.11-rc3.tar.gz</a>
-+(<a href="/downloads/buildroot-2013.11-rc3.tar.gz.sign">PGP signature</a>)
- or
--<a href="/downloads/buildroot-2013.11-rc3.tar.bz2">buildroot-2013.11-rc3.tar.bz2</a>.
-+<a href="/downloads/buildroot-2013.11-rc3.tar.bz2">buildroot-2013.11-rc3.tar.bz2</a>
-+(<a href="/downloads/buildroot-2013.11-rc3.tar.bz2.sign">PGP signature</a>).
- <p>
- -->
--This and earlier releases can always be downloaded from
-+This and earlier releases (and their PGP signatures) can always be downloaded from
- <a href="/downloads/">http://buildroot.net/downloads/</a>.
- 
- <p>
--- 
-1.8.1.2
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2013.12.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
++	default "2014.01.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
+ 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
