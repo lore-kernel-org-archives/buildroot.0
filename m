@@ -1,73 +1,66 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 13 Jan 2014 18:51:07 +0100
-Subject: [Buildroot] [PATCH 2/6] pkg-infra: move git download helper to
- a script
-In-Reply-To: <52D3F59E.5090004@lucaceresoli.net>
+Date: Mon, 13 Jan 2014 18:52:27 +0100
+Subject: [Buildroot] [PATCH 5/6] pkg-infra: add possiblity to check
+ downloaded files against known hashes
+In-Reply-To: <20140113045330.GF4944@tarshish>
 References: <cover.1389569992.git.yann.morin.1998@free.fr>
- <add407fe211f2032f76fda6442b06b7d8a3af2cc.1389569992.git.yann.morin.1998@free.fr>
- <52D3F59E.5090004@lucaceresoli.net>
-Message-ID: <20140113175107.GB3344@free.fr>
+ <dc5d6ba62805a74ef57fc2c779e97a00056cbfa6.1389569992.git.yann.morin.1998@free.fr>
+ <20140113045330.GF4944@tarshish>
+Message-ID: <20140113175227.GC3344@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Luca, All,
+Baruch, All,
 
-On 2014-01-13 15:18 +0100, Luca Ceresoli spake thusly:
-> Yann E. MORIN wrote:
-> >From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> >
-> >The git download helper is getting a bit more complex, and does not
-> >raise an error when a PKG_VERSION is a sha1 that does not exist in
-> >the repository. Instead, it generates an empty archive.
-> >
-> >Fixing it in the Makefile proves to be challenging, to say the least.
-> >
-> >Move it into a shell script in support/download/git, which will make
-> >it much easier to read, maintain, fix an enhance in the future.
-> >
-> >Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> >Cc: Peter Korsgaard <jacmet@uclibc.org>
-> >Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> 
-> This is a very welcome change, thanks for caring!
-> 
-> Just a minor note below, but looks ok anyway:
-> Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+On 2014-01-13 06:53 +0200, Baruch Siach spake thusly:
+> On Mon, Jan 13, 2014 at 12:44:48AM +0100, Yann E. MORIN wrote:
 [--SNIP--]
-> >diff --git a/support/download/git b/support/download/git
-> >new file mode 100755
-> >index 0000000..99ea1b2
-> >--- /dev/null
-> >+++ b/support/download/git
-> >@@ -0,0 +1,36 @@
-> >+#!/bin/sh
-> >+set -e
-> >+
-> >+# Download helper for git
-> >+# Call it with:
-> >+#   $1: git repo
-> >+#   $2: git cset
-> >+#   $3: prefix/
-> >+#   $4: output file
-> >+# And this environment:
-> >+#   GIT      :  the git command to call
-> >+#   BUILD_DIR:  path to Buildroot's build dir
-> >+
-> >+repo="${1}"
-> >+cset="${2}"
-> >+prefix="${3}"
-> >+output="${4}"
-> >+
-> >+pushd "${BUILD_DIR}" >/dev/null
-> >+rm -rf .git-tmp-repo    # In case a previous attempt was interrupted
+> > diff --git a/support/download/check-hash b/support/download/check-hash
+> > new file mode 100755
+> > index 0000000..5cf708f
+> > --- /dev/null
+> > +++ b/support/download/check-hash
+> > @@ -0,0 +1,38 @@
+> > +#!/bin/sh
+> > +set -e
+> > +
+> > +# Helper to check a file matches its known hash
+> > +# Call it with:
+> > +#   $1: the basename of the package's tarball
+> > +#   $2: the full path to the file to check
+> > +#   $3: the path of the file containing all the the expected hashes
+> > +
+> > +tarball="${1}"
+> > +file="${2}"
+> > +h_file="${3}"
+> > +
+> > +# Does the hash-file exist?
+> > +if [ ! -f "${h_file}" ]; then
+> > +    exit 0
+> > +fi
+> > +
+> > +# Do we know a hash for that tarball?
+> > +known=$( grep -E '^[[:xdigit:]]+[[:space:]]{2}'"${tarball}"'$$' "${h_file}" \
+> > +         |cut -d ' ' -f 1
+> > +       )
+> > +if [ -z "${known}" ]; then
+> > +    exit 0
+> > +fi
+> > +
+> > +# Do the hashes match?
+> > +hash=$( sha1sum "${file}" |cut -d ' ' -f 1 )
+> > +if [ "${hash}" = "${known}" ]; then
+> > +    exit 0
+> > +fi
+> > +
+> > +printf "ERROR: %s has wrong SHA256\n" "${tarball}"
 > 
-> This rm did not exist in the original version. I would move this into a
-> separate commit.
+> That's SHA1.
 
-Indeed, I've moved it to the next commit.
+Doh, good catch!
 
 Thank you!
 
