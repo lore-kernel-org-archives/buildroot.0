@@ -1,33 +1,36 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Mon, 13 Jan 2014 06:48:11 +0100
-Subject: [Buildroot] [PATCH 1/1] ffmpeg: Fix build error regarding missing
-	host-yasm
-Message-ID: <BLU0-SMTP463FE58CE6FFFBCD32F870BD9BC0@phx.gbl>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 13 Jan 2014 08:26:11 +0200
+Subject: [Buildroot] [PATCH v2 0/3] uclibc: build fixes for xtensa snapshot
+	version
+Message-ID: <cover.1389594195.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes http://autobuild.buildroot.net/results/b2a/b2aefd25431bab3d0f4fcf4c3e6de1ff6fc54ffa//
+This series bumps xtensa default uclibc version to add upstream fixes to 
+autobuild failures. This series also adds a uclibc patch to fix posix_spawn 
+autoconf detection.
 
-Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
----
- package/ffmpeg/ffmpeg.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The last patch in this series reverts a previous e2fsprogs fix that is both
+wrong and is superseded by the xtensa posix_fadvise fix in upstream uclibc.
 
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index f717115..2168785 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -214,7 +214,7 @@ endif
- 
- ifeq ($(BR2_X86_CPU_HAS_MMX),y)
- FFMPEG_CONF_OPT += --enable-yasm
--FFMPEG_DEPENDENCIES += yasm
-+FFMPEG_DEPENDENCIES += host-yasm
- else
- FFMPEG_CONF_OPT += --disable-yasm
- FFMPEG_CONF_OPT += --disable-mmx
+v2:
+   * Bump uclibc version
+   * Remove patches applied upstream
+
+Baruch Siach (3):
+  uclibc: bump xtensa snapshot version
+  uclibc: xtensa: fix posix_spawn autoconf detection
+  Revert "e2fsprogs: fix posix_fadvise() signature mismatch"
+
+ ...g-fix-build-when-posix_fadvise-is-missing.patch |  42 ------
+ .../0001-spawn-move-from-librt-to-libc.patch       | 142 +++++++++++++++++++++
+ package/uclibc/Config.in                           |   2 +-
+ 3 files changed, 143 insertions(+), 43 deletions(-)
+ delete mode 100644 package/e2fsprogs/e2fsprogs-0002-e4defrag-fix-build-when-posix_fadvise-is-missing.patch
+ create mode 100644 package/uclibc/7bf35c8b7d4a1f97174eb49f47f33946b282114c/0001-spawn-move-from-librt-to-libc.patch
+
 -- 
-1.7.9.5
+1.8.5.2
