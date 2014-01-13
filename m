@@ -1,32 +1,21 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 13 Jan 2014 23:19:40 +0100
-Subject: [Buildroot] [git commit] wsapi: bump to version 1.6
-Message-ID: <20140113222142.4B6739C4A5@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 13 Jan 2014 23:22:49 +0100
+Subject: [Buildroot] [PATCH 1/2] mpg123: bump to version 1.17.0
+In-Reply-To: <1389651438-13529-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 13 Jan 2014 19:17:17 -0300")
+References: <1389651438-13529-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87eh4bzfly.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8af8db879ff51d4f1626603835f89c9f55102759
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wsapi/wsapi.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-diff --git a/package/wsapi/wsapi.mk b/package/wsapi/wsapi.mk
-index f1ea9b5..9171b71 100644
---- a/package/wsapi/wsapi.mk
-+++ b/package/wsapi/wsapi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WSAPI_VERSION = 1.5-1
-+WSAPI_VERSION = 1.6-1
- WSAPI_LICENSE = MIT
- 
- $(eval $(luarocks-package))
+Committed both, thanks.
+
+-- 
+Bye, Peter Korsgaard
