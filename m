@@ -1,49 +1,47 @@
 From: =?UTF-8?q?Stefan=20S=C3=B8rensen?= <stefan.sorensen@spectralink.com>
-Date: Tue, 14 Jan 2014 09:21:36 +0100
-Subject: [Buildroot] [PATCH 3/3] protobuf-c: Don't require protobuf on
-	target.
-In-Reply-To: <1389687696-4824-1-git-send-email-stefan.sorensen@spectralink.com>
-References: <1389687696-4824-1-git-send-email-stefan.sorensen@spectralink.com>
-Message-ID: <1389687696-4824-3-git-send-email-stefan.sorensen@spectralink.com>
+Date: Tue, 14 Jan 2014 09:21:34 +0100
+Subject: [Buildroot] [PATCH 1/3] toolchain-external: Fix EABIhf check
+Message-ID: <1389687696-4824-1-git-send-email-stefan.sorensen@spectralink.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-protobuf-c only requires protobuf when building the protoc compiler,
-hence protobuf can be dropped from the target dependencies.
+Currently the check for EABI/EABIhf toolchains looks for the
+Tag_ABI_VFP_args attribute in the crt1.o file which gcc adds
+in a EABIhw toolchain. The crt1.o is however often not compiled
+from c but assembler, and will then always failt he EABIhf check.
+
+Fix by compiling a temporary .c file and checking for the
+attribute.
 
 Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
 ---
- package/protobuf-c/Config.in     | 1 -
- package/protobuf-c/protobuf-c.mk | 2 +-
- 2 files changed, 1 insertion(+), 2 deletions(-)
+ toolchain/helpers.mk | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/protobuf-c/Config.in b/package/protobuf-c/Config.in
-index 3baa05e..732befc 100644
---- a/package/protobuf-c/Config.in
-+++ b/package/protobuf-c/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_PROTOBUF_C
- 	bool "protobuf-c"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf
--	select BR2_PACKAGE_PROTOBUF
- 	help
- 	  Code generator and runtime libraries to use Protocol Buffers
- 	  from pure C (not C++).
-diff --git a/package/protobuf-c/protobuf-c.mk b/package/protobuf-c/protobuf-c.mk
-index 271f6d8..42f592b 100644
---- a/package/protobuf-c/protobuf-c.mk
-+++ b/package/protobuf-c/protobuf-c.mk
-@@ -6,7 +6,7 @@
- 
- PROTOBUF_C_VERSION = 0.15
- PROTOBUF_C_SITE = http://protobuf-c.googlecode.com/files
--PROTOBUF_C_DEPENDENCIES = protobuf host-protobuf-c
-+PROTOBUF_C_DEPENDENCIES = host-protobuf-c
- HOST_PROTOBUF_C_DEPENDENCIES = host-protobuf
- PROTOBUF_C_MAKE = $(MAKE1)
- PROTOBUF_C_CONF_OPT = --disable-protoc
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index faa9d90..0accb7b 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -284,12 +284,15 @@ check_arm_abi = \
+ 		echo "External toolchain uses the unsuported OABI" ; \
+ 		exit 1 ; \
+ 	fi ; \
+-	EXT_TOOLCHAIN_CRT1=`LANG=C $${__CROSS_CC} -print-file-name=crt1.o` ; \
+-	if $${__CROSS_READELF} -A $${EXT_TOOLCHAIN_CRT1} | grep -q "Tag_ABI_VFP_args:" ; then \
++	TEMP_C_FILE=`mktemp --tmpdir --suffix=.c`; \
++	touch $${TEMP_C_FILE}; \
++	$${__CROSS_CC} -c -o $${TEMP_C_FILE}.o $${TEMP_C_FILE}; \
++	if $${__CROSS_READELF} -A $${TEMP_C_FILE}.o | grep -q "Tag_ABI_VFP_args:" ; then \
+ 		EXT_TOOLCHAIN_ABI="eabihf" ; \
+ 	else \
+ 		EXT_TOOLCHAIN_ABI="eabi" ; \
+ 	fi ; \
++	rm -f $${TEMP_C_FILE} $${TEMP_C_FILE}.o; \
+ 	if [ "$(BR2_ARM_EABI)" = "y" -a "$${EXT_TOOLCHAIN_ABI}" = "eabihf" ] ; then \
+ 		echo "Incorrect ABI setting: EABI selected, but toolchain uses EABIhf" ; \
+ 		exit 1 ; \
 -- 
 1.8.4.2
