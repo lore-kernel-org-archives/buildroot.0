@@ -1,70 +1,36 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Tue, 14 Jan 2014 09:47:05 -0500
-Subject: [Buildroot] Problem with multi interface support in udhcpc script?
-Message-ID: <CANxTyt44suVoSpVTivmKde77P7fUYRa04a_fQfb=ceA-Yym9sQ@mail.gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue, 14 Jan 2014 15:59:41 +0100
+Subject: [Buildroot] [PATCH v3 1/2] ffmpeg: bump to version 1.2.4
+In-Reply-To: <BLU0-SMTP2638CE0203ADFD44E6B8961D9CB0@phx.gbl>
+References: <BLU0-SMTP2638CE0203ADFD44E6B8961D9CB0@phx.gbl>
+Message-ID: <CAHXCMM+SfJ0j1vUTyHv7c2VbL9F1BimMcZD7YcfqXbOPmasssA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
-
-Back in June 2013, you committed this change to add support for
-multiple neetwork interfaces in resolv.conf:
-
-http://git.buildroot.net/buildroot/commit/package/busybox/udhcpc.script?id=584f418ec1ae3f0b5e09c10133c82578d78a3e03
-
-However, I don't think that this quite works.  The "nameserver" lines
-are okay, because it's supposed to be one server per line.  But there
-is supposed to be only one "search" line.  So, for example, if I use
-the resolv library to dump resolv.conf data, I only get the search
-domains from the *last* search line.   Similarly, when I try to
-resolve a name, the search domain ommitted by the reolve library info
-appears to not be used by busybox's "nslookup" app.
-
-FYI, the program that used to dump resolv.conf info is below.
-
-I'm wondering if there needs to be comment lines to track the search
-domains per interface, and then a fancy grep+sed bit to synthesize a
-single aggregate search line from those comments.
-
-When you did the original change, do you recall if you tested if the
-multiple search lines let you resolve non-FQDN refs correctly?
-
-Danomi -
+Bernd,
 
 
-// gcc -Wall res_dump.c -o res_dump -lresolv
-#include <stdio.h>
-#include <stdlib.h>
-#include <netinet/in.h>
-#include <arpa/nameser.h>
-#include <arpa/inet.h>
-#include <resolv.h>
+2014/1/2 Bernd Kuhls <berndkuhls@hotmail.com>
 
-int main(int argc, char *argv[])
-{
-    char net_data[256];
-    int ii;
+> Compile tested the following packages which depend on ffmpeg:
+>
+> freerdp
+> mpd
+> gstreamer
+>
+Have you tried gst-ffmpeg?
+It seems this bump triggers some build failures:
+http://autobuild.buildroot.net/results/3cd/3cd2a39bba732a625117aa2941923c200ec55f51/build-end.log
 
-    if (res_init() != 0) return EXIT_FAILURE;
+Reverting back to version 0.8.15 fixes the build.
 
-    printf("search");
-    for (ii=0; ii<MAXDNSRCH; ii++)
-        if (_res.dnsrch[ii] != NULL)
-            printf(" %s", _res.dnsrch[ii]);
-    printf("\n");
+Regards,
 
-    for (ii=0; ii<_res.nscount; ii++)
-    {
-        const struct sockaddr_in *dns_addr = &_res.nsaddr_list[ii];
-        if (dns_addr != NULL)
-            if (dns_addr->sin_family == AF_INET)
-                if (inet_ntop(AF_INET, &dns_addr->sin_addr, net_data,
-sizeof(net_data)) != NULL)
-                    printf("nameserver %s\n", net_data);
-    }
-
-    return EXIT_SUCCESS;
-}
+-- 
+Samuel
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140114/d19bacef/attachment.html>
