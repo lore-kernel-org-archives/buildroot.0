@@ -1,72 +1,35 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 14 Jan 2014 18:10:16 +0100
-Subject: [Buildroot] [PATCH v3 2/2] ffmpeg: Add sse4 related options
- BR2_X86_CPU_HAS_SSE4 / BR2_X86_CPU_HAS_SSE4
-In-Reply-To: <BLU0-SMTP37762C5CD6B3E076E490852D9CB0@phx.gbl>
-References: <1388685585-23467-1-git-send-email-berndkuhls@hotmail.com>
- <BLU0-SMTP37762C5CD6B3E076E490852D9CB0@phx.gbl>
-Message-ID: <52D56F78.50304@mind.be>
+Date: Tue, 14 Jan 2014 18:06:23 +0100
+Subject: [Buildroot] [PATCH v3] arch: add support for "jaguar" AMD CPU
+ optimisations.
+In-Reply-To: <828938079.582663.1389643754921.JavaMail.root@mail>
+References: <828938079.582663.1389643754921.JavaMail.root@mail>
+Message-ID: <52D56E8F.3000100@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/01/14 18:59, Bernd Kuhls wrote:
+On 13/01/14 21:09, Adrien B?raud wrote:
+> AMD Jaguar (https://en.wikipedia.org/wiki/Jaguar_%28microarchitecture%29  ) is suddenly
+> a popular architecture since it is used in the PS4 and the XBox One.
+> Many embedded systems are also likely to use it in the next years.
 >
-> Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
-> ---
->   arch/Config.in.x86       |    4 ++++
->   package/ffmpeg/ffmpeg.mk |   14 +++++++++++++-
->   2 files changed, 17 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
-> index ce30605..15d5c16 100644
-> --- a/arch/Config.in.x86
-> +++ b/arch/Config.in.x86
-> @@ -9,6 +9,10 @@ config BR2_X86_CPU_HAS_SSE3
->   	bool
->   config BR2_X86_CPU_HAS_SSSE3
->   	bool
-> +config BR2_X86_CPU_HAS_SSE4
-> +	bool
-> +config BR2_X86_CPU_HAS_SSE42
-> +	bool
+> This patch adds support for GCC architecture-specific optimizations and tuning for these CPUs.
+> These optimizations are available with GCC 4.8+.
 
-  Since nobody selects these symbols, this patch just adds dead code, right?
+  You'll also need to update the dependencies of 
+BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_*
+
 
   Regards,
   Arnout
 
 >
->   choice
->   	prompt "Target Architecture Variant"
-> diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-> index ea7b20d..6b5060d 100644
-> --- a/package/ffmpeg/ffmpeg.mk
-> +++ b/package/ffmpeg/ffmpeg.mk
-> @@ -244,6 +244,18 @@ else
->   FFMPEG_CONF_OPT += --disable-ssse3
->   endif
->
-> +ifeq ($(BR2_X86_CPU_HAS_SSE4),y)
-> +FFMPEG_CONF_OPT += --enable-sse4
-> +else
-> +FFMPEG_CONF_OPT += --disable-sse4
-> +endif
-> +
-> +ifeq ($(BR2_X86_CPU_HAS_SSE42),y)
-> +FFMPEG_CONF_OPT += --enable-sse42
-> +else
-> +FFMPEG_CONF_OPT += --disable-sse42
-> +endif
-> +
->   # Explicitly disable everything that doesn't match for ARM
->   # FFMPEG "autodetects" by compiling an extended instruction via AS
->   # This works on compilers that aren't built for generic by default
->
+> Signed-off-by: Adrien Beraud<adrien.beraud@savoirfairelinux.com>
 
-
+[snip]
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
