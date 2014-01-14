@@ -1,52 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 14 Jan 2014 22:26:14 +0100
-Subject: [Buildroot] [git commit] aiccu: fix undefined reference to clock_*
-	functions
-Message-ID: <20140114214716.ABDAE9C4C5@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 14 Jan 2014 22:52:00 +0100
+Subject: [Buildroot] [PATCH] package: icu: detect and add compiler
+	symbol prefix to the assembly code
+In-Reply-To: <1389006349-32377-1-git-send-email-Sonic.adi@gmail.com> (sonic
+ adi's message of "Mon, 6 Jan 2014 19:05:49 +0800")
+References: <1389006349-32377-1-git-send-email-Sonic.adi@gmail.com>
+Message-ID: <87y52iw7sv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=80882ee66177160997ac449851aabce9e92e3333
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "sonic" == sonic adi <sonic.adi@gmail.com> writes:
 
-Since glibc 2.17 the clock_* suite functions are available directly in
-the main C library. For previous versions we still need -lrt to link.
+ > From: Sonic Zhang <sonic.zhang@analog.com>
+ > Some compiler, such as Blackfin GNU compiler, prefix a charater to any
+ > C symbol in generated assembly code. If any assembly symbol is invoked
+ > from C code, it needs to be prefixed as well.
 
-Upstream is aware of this problem.
+ > Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
 
-Fixes:
-   http://autobuild.buildroot.net/results/c11/c1182b00f9d968e587acba15af4af905b92227f5/
+Thanks. Has this been submitted upstream?
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../aiccu-0003-clock-suite-functions-fix.patch     |   18 ++++++++++++++++++
- 1 files changed, 18 insertions(+), 0 deletions(-)
+ > ---
+ >  .../icu/icu-detect-compiler-symbol-prefix.patch    |  104 ++++++++++++++++++++
+ >  1 file changed, 104 insertions(+)
+ >  create mode 100644 package/icu/icu-detect-compiler-symbol-prefix.patch
 
-diff --git a/package/aiccu/aiccu-0003-clock-suite-functions-fix.patch b/package/aiccu/aiccu-0003-clock-suite-functions-fix.patch
-new file mode 100644
-index 0000000..365e72a
---- /dev/null
-+++ b/package/aiccu/aiccu-0003-clock-suite-functions-fix.patch
-@@ -0,0 +1,18 @@
-+aiccu: fix undefined reference to clock_* functions
-+
-+Since glibc 2.17 the clock_* suite functions are available directly in 
-+the main C library. For previous versions we still need -lrt to link.
-+
-+Signed-off-by: Vicente Olivert Riera <vincent.riera@imgtec.com>
-+
-+--- aiccu/unix-console/Makefile.orig	2014-01-14 10:17:20.204602513 +0000
-++++ aiccu/unix-console/Makefile	2014-01-14 10:17:31.435777359 +0000
-+@@ -42,7 +42,7 @@ CFLAGS	+= -D AICCU_CONSOLE
-+ # Currently defaultly builds only on Linux, but other platforms might easily also support it
-+ ifeq ($(shell uname | grep -c "Linux"),1)
-+ CFLAGS	+= -D AICCU_GNUTLS
-+-LDFLAGS += -lgnutls
-++LDFLAGS += -lgnutls -lrt
-+ endif
-+ 
-+ # Linux
+ > diff --git a/package/icu/icu-detect-compiler-symbol-prefix.patch b/package/icu/icu-detect-compiler-symbol-prefix.patch
+ > new file mode 100644
+ > index 0000000..9ca7690
+ > --- /dev/null
+ > +++ b/package/icu/icu-detect-compiler-symbol-prefix.patch
+ > @@ -0,0 +1,104 @@
+ > +package: icu: detect and add compiler symbol prefix to the assembly code
+ > +
+ > +Some compiler, such as Blackfin GNU compiler, prefix a charater to any
+ > +C symbol in generated assembly code. If any assembly symbol is invoked
+ > +from C code, it needs to be prefixed as well.
+ > +
+ > +--- icu-51.2/source/configure	2014-01-06 17:13:20.907249812 +0800
+ > ++++ icu-51.2.bak/source/configure	2014-01-06 17:12:57.335248659 +0800
+
+Please adjust configure.ac and set ICU_AUTORECONF = YES instead.
+
+-- 
+Bye, Peter Korsgaard
