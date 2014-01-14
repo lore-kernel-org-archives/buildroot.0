@@ -1,47 +1,55 @@
-From: =?UTF-8?q?Stefan=20S=C3=B8rensen?= <stefan.sorensen@spectralink.com>
-Date: Tue, 14 Jan 2014 09:21:34 +0100
-Subject: [Buildroot] [PATCH 1/3] toolchain-external: Fix EABIhf check
-Message-ID: <1389687696-4824-1-git-send-email-stefan.sorensen@spectralink.com>
+From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Tue, 14 Jan 2014 09:51:43 +0100
+Subject: [Buildroot] [pkg-luarocks infra v7 00/15] a package
+ infrastructure for Lua modules
+In-Reply-To: <87iotnzfp4.fsf@dell.be.48ers.dk>
+References: <1389454937-13494-1-git-send-email-francois.perrad@gadz.org>
+ <87iotnzfp4.fsf@dell.be.48ers.dk>
+Message-ID: <CAB0FRsuRzCzf9X1yV2PKcE8Emv+EVt01FmZ=+Y0muDUAf6E7AQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently the check for EABI/EABIhf toolchains looks for the
-Tag_ABI_VFP_args attribute in the crt1.o file which gcc adds
-in a EABIhw toolchain. The crt1.o is however often not compiled
-from c but assembler, and will then always failt he EABIhf check.
+2014/1/13 Peter Korsgaard <jacmet@uclibc.org>:
+>>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
+>
+>  > Changes v6 -> v7:
+>  >   - luarocks 2.1.2 which requires no patch
+>  >   - bump and convert more Lua modules
+>
+>  > Francois Perrad (15):
+>  >   luainterpreter: create virtual package
+>  >   luajit: allow to build Lua extensions without lua
+>  >   lua*: restore version in module paths
+>  >   luarocks: new package
+>  >   luarocks: new infrastructure
+>  >   lua-cjson: restore official name
+>  >   luasql-sqlite3: renamed like with LuaRocks
+>  >   lua*: refactor with luarocks infrastructure
+>  >   manual: adding packages luarocks
+>  >   luasocket: bump to version 3.0-rc1
+>  >   coxpcall: bump to version 1.14.0
+>  >   copas: bump to version 1.2.1
+>  >   rings: bump to version 1.3.0
 
-Fix by compiling a temporary .c file and checking for the
-attribute.
+Peter,
 
-Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
----
- toolchain/helpers.mk | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+you miss this one : `rings`, see
+http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/74131
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index faa9d90..0accb7b 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -284,12 +284,15 @@ check_arm_abi = \
- 		echo "External toolchain uses the unsuported OABI" ; \
- 		exit 1 ; \
- 	fi ; \
--	EXT_TOOLCHAIN_CRT1=`LANG=C $${__CROSS_CC} -print-file-name=crt1.o` ; \
--	if $${__CROSS_READELF} -A $${EXT_TOOLCHAIN_CRT1} | grep -q "Tag_ABI_VFP_args:" ; then \
-+	TEMP_C_FILE=`mktemp --tmpdir --suffix=.c`; \
-+	touch $${TEMP_C_FILE}; \
-+	$${__CROSS_CC} -c -o $${TEMP_C_FILE}.o $${TEMP_C_FILE}; \
-+	if $${__CROSS_READELF} -A $${TEMP_C_FILE}.o | grep -q "Tag_ABI_VFP_args:" ; then \
- 		EXT_TOOLCHAIN_ABI="eabihf" ; \
- 	else \
- 		EXT_TOOLCHAIN_ABI="eabi" ; \
- 	fi ; \
-+	rm -f $${TEMP_C_FILE} $${TEMP_C_FILE}.o; \
- 	if [ "$(BR2_ARM_EABI)" = "y" -a "$${EXT_TOOLCHAIN_ABI}" = "eabihf" ] ; then \
- 		echo "Incorrect ABI setting: EABI selected, but toolchain uses EABIhf" ; \
- 		exit 1 ; \
--- 
-1.8.4.2
+Fran?ois
+
+
+>  >   wsapi: bump to version 1.6
+>  >   xavante: bump to version 2.3.0
+>
+> Committed series, thanks!
+>
+> --
+> Bye, Peter Korsgaard
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
