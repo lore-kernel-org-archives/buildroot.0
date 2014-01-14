@@ -1,64 +1,70 @@
-From: mlweber1 at rockwellcollins.com <mlweber1@rockwellcollins.com>
-Date: Tue, 14 Jan 2014 08:13:51 -0600
-Subject: [Buildroot] [PATCH] openssl: fix bug #6770
-In-Reply-To: <52D4DDC2.9030904@mind.be>
-References: <1389309614-17911-1-git-send-email-gustavo@zacarias.com.ar>
- <52D4DDC2.9030904@mind.be>
-Message-ID: <OF1D1765AA.083F3C2A-ON86257C60.004DDE03-86257C60.004E2C44@rockwellcollins.com>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Tue, 14 Jan 2014 09:47:05 -0500
+Subject: [Buildroot] Problem with multi interface support in udhcpc script?
+Message-ID: <CANxTyt44suVoSpVTivmKde77P7fUYRa04a_fQfb=ceA-Yym9sQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-buildroot-bounces at busybox.net wrote on 01/14/2014 12:48:34 AM:
+Peter,
 
-> From: Arnout Vandecappelle <arnout@mind.be>
-> To: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>, 
-> buildroot at busybox.net, Peter Korsgaard <jacmet@uclibc.org>
-> Date: 01/14/2014 01:49 AM
-> Subject: Re: [Buildroot] [PATCH] openssl: fix bug #6770
-> Sent by: buildroot-bounces at busybox.net
-> 
-> On 10/01/14 00:20, Gustavo Zacarias wrote:
-> > openssl 1.0.1f Makefile.org doesn't quote $(CC) when passing the
-> > parameter in another invocation of make, hence breaking when the
-> > compiler string contains a space with multiple strings (for example 
-with
-> > ccache).
-> 
->   It would be nice if the autobuilders would capture this issue. E.g. by 
+Back in June 2013, you committed this change to add support for
+multiple neetwork interfaces in resolv.conf:
 
-> enabling ccache 50% of the time (and clearing the cache every time, 
-> because we know it doesn't work correctly and because failures would be 
-> impossible to reproduce).
+http://git.buildroot.net/buildroot/commit/package/busybox/udhcpc.script?id=584f418ec1ae3f0b5e09c10133c82578d78a3e03
 
-Until they can, I'll keep posting bugs from my internal builder that does
-verification builds across (arm/PPC/x86) architectures and has ccache 
-enabled.
-I won't catch all package configurations, but would cover most of the 
-commonly
-used packages. 
+However, I don't think that this quite works.  The "nameserver" lines
+are okay, because it's supposed to be one server per line.  But there
+is supposed to be only one "search" line.  So, for example, if I use
+the resolv library to dump resolv.conf data, I only get the search
+domains from the *last* search line.   Similarly, when I try to
+resolve a name, the search domain ommitted by the reolve library info
+appears to not be used by busybox's "nslookup" app.
 
-Matt
-mlweber1 at rockwellcollins.com
+FYI, the program that used to dump resolv.conf info is below.
 
-> 
->   Regards,
->   Arnout
-> 
-> >
-> > Signed-off-by: Gustavo Zacarias<gustavo@zacarias.com.ar>
-> 
-> 
-> -- 
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+I'm wondering if there needs to be comment lines to track the search
+domains per interface, and then a fancy grep+sed bit to synthesize a
+single aggregate search line from those comments.
+
+When you did the original change, do you recall if you tested if the
+multiple search lines let you resolve non-FQDN refs correctly?
+
+Danomi -
+
+
+// gcc -Wall res_dump.c -o res_dump -lresolv
+#include <stdio.h>
+#include <stdlib.h>
+#include <netinet/in.h>
+#include <arpa/nameser.h>
+#include <arpa/inet.h>
+#include <resolv.h>
+
+int main(int argc, char *argv[])
+{
+    char net_data[256];
+    int ii;
+
+    if (res_init() != 0) return EXIT_FAILURE;
+
+    printf("search");
+    for (ii=0; ii<MAXDNSRCH; ii++)
+        if (_res.dnsrch[ii] != NULL)
+            printf(" %s", _res.dnsrch[ii]);
+    printf("\n");
+
+    for (ii=0; ii<_res.nscount; ii++)
+    {
+        const struct sockaddr_in *dns_addr = &_res.nsaddr_list[ii];
+        if (dns_addr != NULL)
+            if (dns_addr->sin_family == AF_INET)
+                if (inet_ntop(AF_INET, &dns_addr->sin_addr, net_data,
+sizeof(net_data)) != NULL)
+                    printf("nameserver %s\n", net_data);
+    }
+
+    return EXIT_SUCCESS;
+}
