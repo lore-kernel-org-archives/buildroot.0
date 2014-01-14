@@ -1,32 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 14 Jan 2014 11:51:31 +0100
-Subject: [Buildroot] [git commit] imagemagick: bump to version 6.8.8-2
-Message-ID: <20140114105712.B9E629C4C1@busybox.osuosl.org>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 14 Jan 2014 11:22:27 +0000
+Subject: [Buildroot] [PATCH] aiccu: fix undefined reference to clock_*
+	functions
+Message-ID: <1389698547-27787-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=52420e359e6c6753c1d990350965c8a744c53b52
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Since glibc 2.17 the clock_* suite functions are available directly in
+the main C library. For previous versions we still need -lrt to link.
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Upstream is aware of this problem.
+
+Fixes:
+   http://autobuild.buildroot.net/results/c11/c1182b00f9d968e587acba15af4af905b92227f5/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/imagemagick/imagemagick.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ .../aiccu-0003-clock-suite-functions-fix.patch     |   18 ++++++++++++++++++
+ 1 files changed, 18 insertions(+), 0 deletions(-)
+ create mode 100644 package/aiccu/aiccu-0003-clock-suite-functions-fix.patch
 
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 966837d..3fb97f7 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IMAGEMAGICK_VERSION = 6.8.8-1
-+IMAGEMAGICK_VERSION = 6.8.8-2
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- # The official ImageMagick site only keeps the latest versions
- # available, which is annoying. Use an alternate site that keeps all
+diff --git a/package/aiccu/aiccu-0003-clock-suite-functions-fix.patch b/package/aiccu/aiccu-0003-clock-suite-functions-fix.patch
+new file mode 100644
+index 0000000..365e72a
+--- /dev/null
++++ b/package/aiccu/aiccu-0003-clock-suite-functions-fix.patch
+@@ -0,0 +1,18 @@
++aiccu: fix undefined reference to clock_* functions
++
++Since glibc 2.17 the clock_* suite functions are available directly in 
++the main C library. For previous versions we still need -lrt to link.
++
++Signed-off-by: Vicente Olivert Riera <vincent.riera@imgtec.com>
++
++--- aiccu/unix-console/Makefile.orig	2014-01-14 10:17:20.204602513 +0000
+++++ aiccu/unix-console/Makefile	2014-01-14 10:17:31.435777359 +0000
++@@ -42,7 +42,7 @@ CFLAGS	+= -D AICCU_CONSOLE
++ # Currently defaultly builds only on Linux, but other platforms might easily also support it
++ ifeq ($(shell uname | grep -c "Linux"),1)
++ CFLAGS	+= -D AICCU_GNUTLS
++-LDFLAGS += -lgnutls
+++LDFLAGS += -lgnutls -lrt
++ endif
++ 
++ # Linux
+-- 
+1.7.1
