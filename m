@@ -1,42 +1,64 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 14 Jan 2014 14:53:18 +0100
-Subject: [Buildroot] [git commit] configs: bump apf28 module Linux version
-	to latest vanilla stable one (3.12.7)
-Message-ID: <20140114135454.03B8A9BF79@busybox.osuosl.org>
+From: mlweber1 at rockwellcollins.com <mlweber1@rockwellcollins.com>
+Date: Tue, 14 Jan 2014 08:13:51 -0600
+Subject: [Buildroot] [PATCH] openssl: fix bug #6770
+In-Reply-To: <52D4DDC2.9030904@mind.be>
+References: <1389309614-17911-1-git-send-email-gustavo@zacarias.com.ar>
+ <52D4DDC2.9030904@mind.be>
+Message-ID: <OF1D1765AA.083F3C2A-ON86257C60.004DDE03-86257C60.004E2C44@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4950bda10f1bf7468cec7c8af8dca6b20f36f6d4
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+buildroot-bounces at busybox.net wrote on 01/14/2014 12:48:34 AM:
 
-Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- configs/armadeus_apf28_defconfig |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+> From: Arnout Vandecappelle <arnout@mind.be>
+> To: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>, 
+> buildroot at busybox.net, Peter Korsgaard <jacmet@uclibc.org>
+> Date: 01/14/2014 01:49 AM
+> Subject: Re: [Buildroot] [PATCH] openssl: fix bug #6770
+> Sent by: buildroot-bounces at busybox.net
+> 
+> On 10/01/14 00:20, Gustavo Zacarias wrote:
+> > openssl 1.0.1f Makefile.org doesn't quote $(CC) when passing the
+> > parameter in another invocation of make, hence breaking when the
+> > compiler string contains a space with multiple strings (for example 
+with
+> > ccache).
+> 
+>   It would be nice if the autobuilders would capture this issue. E.g. by 
 
-diff --git a/configs/armadeus_apf28_defconfig b/configs/armadeus_apf28_defconfig
-index 360e113..06a6e76 100644
---- a/configs/armadeus_apf28_defconfig
-+++ b/configs/armadeus_apf28_defconfig
-@@ -4,7 +4,7 @@ BR2_arm926t=y
- 
- # Lock down headers to avoid breaking with new defaults
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.12.6"
-+BR2_DEFAULT_KERNEL_VERSION="3.12.7"
- 
- # System
- BR2_TARGET_GENERIC_HOSTNAME="apf28"
-@@ -15,7 +15,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.6"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.7"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/armadeus/apf28/linux-3.12.config"
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x40008000"
+> enabling ccache 50% of the time (and clearing the cache every time, 
+> because we know it doesn't work correctly and because failures would be 
+> impossible to reproduce).
+
+Until they can, I'll keep posting bugs from my internal builder that does
+verification builds across (arm/PPC/x86) architectures and has ccache 
+enabled.
+I won't catch all package configurations, but would cover most of the 
+commonly
+used packages. 
+
+Matt
+mlweber1 at rockwellcollins.com
+
+> 
+>   Regards,
+>   Arnout
+> 
+> >
+> > Signed-off-by: Gustavo Zacarias<gustavo@zacarias.com.ar>
+> 
+> 
+> -- 
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
