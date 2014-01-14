@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 14 Jan 2014 21:39:12 +0100
-Subject: [Buildroot] [PATCH 2/6] pkg-infra: move git download helper to
- a script
-In-Reply-To: <add407fe211f2032f76fda6442b06b7d8a3af2cc.1389569992.git.yann.morin.1998@free.fr>
+Date: Tue, 14 Jan 2014 21:43:39 +0100
+Subject: [Buildroot] [PATCH 3/6] pkg-infra: git helper creates an empty
+ archive if PKG_VERSION is a missing hash
+In-Reply-To: <b528cb41d4ac90bbccf471a88485b249eabfdc82.1389569992.git.yann.morin.1998@free.fr>
 References: <cover.1389569992.git.yann.morin.1998@free.fr>
- <add407fe211f2032f76fda6442b06b7d8a3af2cc.1389569992.git.yann.morin.1998@free.fr>
-Message-ID: <52D5A070.5040800@mind.be>
+ <b528cb41d4ac90bbccf471a88485b249eabfdc82.1389569992.git.yann.morin.1998@free.fr>
+Message-ID: <52D5A17B.8010703@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,90 +15,65 @@ To: buildroot@busybox.net
 On 13/01/14 00:44, Yann E. MORIN wrote:
 > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 >
-> The git download helper is getting a bit more complex, and does not
-> raise an error when a PKG_VERSION is a sha1 that does not exist in
-> the repository. Instead, it generates an empty archive.
+> If the PKG_VERSION is a sha1 that does not exist in the repository, the git
+> helper just creates an empty archive instead of failing and erroring out.
 >
-> Fixing it in the Makefile proves to be challenging, to say the least.
+> This is because of the way we create the archive:
+>      git archive ${cset} |gzip -c >"${archive}"
 >
-> Move it into a shell script in support/download/git, which will make
-> it much easier to read, maintain, fix an enhance in the future.
-
-  This patch contains a few more changes than just moving it to a script. 
-These should ideally be done in separate patches.
-
-[snip]
+> In this construct, git does exit with a non-zero exit-code, but gzip does not,
+> as it was successful in creating the archive (from an empty output, but gzip
+> does not mind that).
+>
+> Since a pipe exits with the exit-code of the right-most simple command (see
+> POSIX.1-2008), the pipe above exits with gzip's exit-code. And we miss the
+> error altogether.
+>
+> This is most harmful, in that the error may not occur until much later, when
+> we try to configure the package, with the error message buried deep down
+> ipotentially thousands of lines above... :-(
+>
+> Fix that by checking that the hash (or whatever treeish we've been passed, for
+> that matters) does indeed exist in the repository, before we even attempt to
+> create the archive.
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>   support/download/git | 10 ++++++++--
+>   1 file changed, 8 insertions(+), 2 deletions(-)
+>
 > diff --git a/support/download/git b/support/download/git
-> new file mode 100755
-> index 0000000..99ea1b2
-> --- /dev/null
+> index 99ea1b2..508f8a1 100755
+> --- a/support/download/git
 > +++ b/support/download/git
-> @@ -0,0 +1,36 @@
-> +#!/bin/sh
-> +set -e
-> +
-> +# Download helper for git
-> +# Call it with:
-> +#   $1: git repo
-> +#   $2: git cset
-> +#   $3: prefix/
-> +#   $4: output file
-> +# And this environment:
-> +#   GIT      :  the git command to call
-> +#   BUILD_DIR:  path to Buildroot's build dir
-> +
-> +repo="${1}"
-> +cset="${2}"
-> +prefix="${3}"
-> +output="${4}"
-> +
-> +pushd "${BUILD_DIR}" >/dev/null
+> @@ -28,9 +28,15 @@ else
+>   fi
+>
+>   pushd .git-tmp-repo >/dev/null
+> -${GIT} archive --prefix="${prefix}" --format=tar "${cset}"  \
+> -|gzip -c >"${output}"
+> +res=1
+> +if ${GIT} rev-list -n 1 "${cset}" >/dev/null 2>&1; then
 
-  This used to be DL_DIR.
+  When we've done a shallow clone, this check is redundant because we 
+have cloned exactly this ref.
 
-  Note that I agree that BUILD_DIR is more appropriate.
-
-  Although the original indeed does a pushd, this is quite redundant when 
-it's done in a script. So I'd directly make it a simple cd (without 
-redirection).
-
-> +rm -rf .git-tmp-repo    # In case a previous attempt was interrupted
-> +
-> +if [ -n "$(${GIT} ls-remote "${repo}" "${cset}" 2>&1)" ]; then
-> +    printf "Doing shallow clone\n"
-> +    ${GIT} clone --depth 1 -b "${cset}" --bare "${repo}" .git-tmp-repo
-
-  It used to be extracted into $($(PKG)_BASE_NAME). That has the 
-advantage that it is unique, which makes it possible to do multiple 
-downloads in parallel (which I sometimes do BTW, by manually starting 
-downloads in separate shells).
-
-  But even better would be $($(PKG)_BASE_NAME).git-tmp-repo :-)
-
-> +else
-> +    printf "Doing full clone\n"
-> +    ${GIT} clone --bare "${repo}" .git-tmp-repo
-> +fi
-> +
-> +pushd .git-tmp-repo >/dev/null
-> +${GIT} archive --prefix="${prefix}" --format=tar "${cset}"  \
-> +|gzip -c >"${output}"
-
-  We have about 20 instances of the | at the end of the line (as was the 
-original), and only 4 at the beginning of the line (and two of these were 
-done by you...).
-
-  In the original, the / at the end of the prefix is added explicitly 
-here in the call to git archive. I think that makes more sense than 
-adding the / in the call itself.
+  So instead, I'd do the check in the full clone condition, with an 
+explicit exit.
 
   Regards,
   Arnout
 
-> +popd >/dev/null
+> +    ${GIT} archive --prefix="${prefix}" --format=tar "${cset}"  \
+> +    |gzip -c >"${output}"
+> +    res=0
+> +fi
+>   popd >/dev/null
+>
+>   rm -rf .git-tmp-repo
+>   popd >/dev/null
 > +
-> +rm -rf .git-tmp-repo
-> +popd >/dev/null
+> +exit ${res}
 >
 
 
