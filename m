@@ -1,33 +1,26 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 14 Jan 2014 23:32:51 +0100
-Subject: [Buildroot] [PATCH 05/14] libcdio: new package
-In-Reply-To: <1389549208-19078-6-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1389549208-19078-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1389549208-19078-6-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20140114223251.GF3328@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 14 Jan 2014 23:34:56 +0100
+Subject: [Buildroot] [PATCH 3/4] libsigsegv: fix for microblaze
+In-Reply-To: <1389198785-11923-4-git-send-email-spenser@gillilanding.com>
+ (Spenser Gilliland's message of "Wed, 8 Jan 2014 10:33:04 -0600")
+References: <1389198785-11923-1-git-send-email-spenser@gillilanding.com>
+ <1389198785-11923-4-git-send-email-spenser@gillilanding.com>
+Message-ID: <87lhyiw5tb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Maxime, All,
+>>>>> "Spenser" == Spenser Gilliland <spenser@gillilanding.com> writes:
 
-As seen on IRC: 80 chars... :-p
+ > Fixes autobuild failure
+ > http://autobuild.buildroot.net/results/799/799ac378713d82f9632a2aa925223e21157b1042/build-end.log
+ > http://autobuild.buildroot.net/results/ae6/ae6a10ae7cd8f2d2f3891ea9c6e867695ca1acfe/build-end.log
+ > http://autobuild.buildroot.net/results/db4/db48622f6c3a998ecec84ec51f21b4a031ab0fb5/build-end.log
+ > Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 
-On 2014-01-12 18:53 +0100, Maxime Hadjinlian spake thusly:
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-
-Otherwise:
-    Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
+Committed, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
