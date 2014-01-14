@@ -1,33 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 14 Jan 2014 09:54:47 +0100
-Subject: [Buildroot] [git commit] rings: bump to version 1.3.0
-Message-ID: <20140114085542.234719C4BC@busybox.osuosl.org>
+Date: Tue, 14 Jan 2014 10:57:50 +0100
+Subject: [Buildroot] [git commit] vlc: correct libtheora dependency name
+Message-ID: <20140114095833.D03339C4C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c1019e0cae180f41942a6da5cf9d9fad362eb0b0
+commit: http://git.buildroot.net/buildroot/commit/?id=373d6f385e8a471a8bbe4fbe32cfd9bf64ae39ae
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Fixes http://autobuild.buildroot.net/results/7b5/7b5387fa4e50036b7db407bf6ce866156bafcfdd/
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rings/rings.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/vlc/vlc.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/rings/rings.mk b/package/rings/rings.mk
-index c23f879..d052f5d 100644
---- a/package/rings/rings.mk
-+++ b/package/rings/rings.mk
-@@ -4,7 +4,8 @@
- #
- ################################################################################
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index d144608..516876b 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -139,7 +139,7 @@ endif
  
--RINGS_VERSION = 1.2.3-2
-+RINGS_VERSION = 1.3.0-1
-+RINGS_SUBDIR  = rings-v_1_3_0
- RINGS_LICENSE = MIT
- 
- $(eval $(luarocks-package))
+ ifeq ($(BR2_PACKAGE_LIBTHEORA),y)
+ VLC_CONF_OPT += --enable-theora
+-VLC_DEPENDENCIES += theora
++VLC_DEPENDENCIES += libtheora
+ else
+ VLC_CONF_OPT += --disable-theora
+ endif
