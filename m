@@ -1,72 +1,55 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 14 Jan 2014 21:51:17 +0100
-Subject: [Buildroot] [PATCH 4/6] package infra: DOWNLOAD is never called
- with two arguments
-In-Reply-To: <894fddeb65b5990ef4926605cfe58f1d19804ec8.1389569992.git.yann.morin.1998@free.fr>
-References: <cover.1389569992.git.yann.morin.1998@free.fr>
- <894fddeb65b5990ef4926605cfe58f1d19804ec8.1389569992.git.yann.morin.1998@free.fr>
-Message-ID: <52D5A345.6080309@mind.be>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue, 14 Jan 2014 22:02:06 +0100
+Subject: [Buildroot] [PATCH v3 2/2] ffmpeg: Add sse4 related options
+ BR2_X86_CPU_HAS_SSE4 / BR2_X86_CPU_HAS_SSE4
+In-Reply-To: <52D56F78.50304@mind.be>
+References: <1388685585-23467-1-git-send-email-berndkuhls@hotmail.com>
+ <BLU0-SMTP37762C5CD6B3E076E490852D9CB0@phx.gbl> <52D56F78.50304@mind.be>
+Message-ID: <CAHXCMMLOCeXkkDZqTGvX4MGivUNW7dk3fE02Y228F=T6GqPHfg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 13/01/14 00:44, Yann E. MORIN wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
->
-> Currently, the DOWNLOAD helper accepts one or two arguments:
->    - the source URI
->    - the source filename, if missing, derived from the URI
+Arnout, all,
 
-  The idea was that it would be possible to download to a different local 
-file than what is in the URL, which would e.g. work around the 
-<sha1>.tar.gz URLs of gitorious. However, that currently anyway doesn't 
-work (because the primary and secondary download sites should use the 
-buildroot-filename rather than the url-filename). So I'm OK with removing it.
+2014/1/14 Arnout Vandecappelle <arnout@mind.be>
 
+> On 02/01/14 18:59, Bernd Kuhls wrote:
 >
-> But we have no caller of DOWNLOAD that passes a second argument.
+>>
+>> Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
+>> ---
+>>   arch/Config.in.x86       |    4 ++++
+>>   package/ffmpeg/ffmpeg.mk |   14 +++++++++++++-
+>>   2 files changed, 17 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
+>> index ce30605..15d5c16 100644
+>> --- a/arch/Config.in.x86
+>> +++ b/arch/Config.in.x86
+>> @@ -9,6 +9,10 @@ config BR2_X86_CPU_HAS_SSE3
+>>         bool
+>>   config BR2_X86_CPU_HAS_SSSE3
+>>         bool
+>> +config BR2_X86_CPU_HAS_SSE4
+>> +       bool
+>> +config BR2_X86_CPU_HAS_SSE42
+>> +       bool
+>>
 >
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>  Since nobody selects these symbols, this patch just adds dead code, right?
+>
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Well, I have a bump of opencv in the pipe that can use these new symbols
+too.
 
-  Regards,
-  Arnout
-
-> ---
->   package/pkg-download.mk | 5 ++---
->   1 file changed, 2 insertions(+), 3 deletions(-)
->
-> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-> index 8e6f7a3..f3354d1 100644
-> --- a/package/pkg-download.mk
-> +++ b/package/pkg-download.mk
-> @@ -227,14 +227,13 @@ endef
->   # 3) BR2_BACKUP_SITE if enabled, unless BR2_PRIMARY_SITE_ONLY is set
->   #
->   # Argument 1 is the source location
-> -# Argument 2 is the source filename
->   #
->   # E.G. use like this:
-> -# $(call DOWNLOAD,$(FOO_SITE),$(FOO_SOURCE))
-> +# $(call DOWNLOAD,$(FOO_SITE))
->   ################################################################################
->
->   define DOWNLOAD
-> -	$(call DOWNLOAD_INNER,$(1),$(if $(2),$(2),$(notdir $(1))))
-> +	$(call DOWNLOAD_INNER,$(1),$(notdir $(1)))
->   endef
->
->   define DOWNLOAD_INNER
->
+Regards,
 
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Samuel
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140114/afa3c89c/attachment.html>
