@@ -1,60 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 14 Jan 2014 22:44:17 +0100
-Subject: [Buildroot] [git commit] ffmpeg: Add mips related configure options
-	to fix build errors
-Message-ID: <20140114214716.BE9C79C424@busybox.osuosl.org>
+Date: Tue, 14 Jan 2014 22:26:14 +0100
+Subject: [Buildroot] [git commit] aiccu: fix undefined reference to clock_*
+	functions
+Message-ID: <20140114214716.ABDAE9C4C5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0fff2505ebfc5deb7689ab33ca4684fc2f936488
+commit: http://git.buildroot.net/buildroot/commit/?id=80882ee66177160997ac449851aabce9e92e3333
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-http://autobuild.buildroot.net/results/aa5/aa5cb447342af9995d8f198eb0a151fe6e3d5c19//
-http://autobuild.buildroot.net/results/355/355f56f6b466521e2c4c71f69b06a0ca2a56949b//
+Since glibc 2.17 the clock_* suite functions are available directly in
+the main C library. For previous versions we still need -lrt to link.
 
-Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
+Upstream is aware of this problem.
+
+Fixes:
+   http://autobuild.buildroot.net/results/c11/c1182b00f9d968e587acba15af4af905b92227f5/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ffmpeg/ffmpeg.mk |   26 ++++++++++++++++++++++++++
- 1 files changed, 26 insertions(+), 0 deletions(-)
+ .../aiccu-0003-clock-suite-functions-fix.patch     |   18 ++++++++++++++++++
+ 1 files changed, 18 insertions(+), 0 deletions(-)
 
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 35c03a3..df8cb66 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -281,6 +281,32 @@ ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
- FFMPEG_CONF_OPT += --enable-neon
- endif
- 
-+ifeq ($(BR2_MIPS_SOFT_FLOAT),y)
-+FFMPEG_CONF_OPT += \
-+	--disable-mipsfpu
-+else
-+FFMPEG_CONF_OPT += \
-+	--enable-mipsfpu
-+endif
+diff --git a/package/aiccu/aiccu-0003-clock-suite-functions-fix.patch b/package/aiccu/aiccu-0003-clock-suite-functions-fix.patch
+new file mode 100644
+index 0000000..365e72a
+--- /dev/null
++++ b/package/aiccu/aiccu-0003-clock-suite-functions-fix.patch
+@@ -0,0 +1,18 @@
++aiccu: fix undefined reference to clock_* functions
 +
-+ifeq ($(BR2_mips_32r2),y)
-+FFMPEG_CONF_OPT += \
-+	--enable-mips32r2
-+else
-+FFMPEG_CONF_OPT += \
-+	--disable-mips32r2
-+endif
++Since glibc 2.17 the clock_* suite functions are available directly in 
++the main C library. For previous versions we still need -lrt to link.
 +
-+ifeq ($(BR2_mips_64r2),y)
-+FFMPEG_CONF_OPT += \
-+	--enable-mipsdspr1 \
-+	--enable-mipsdspr2
-+else
-+FFMPEG_CONF_OPT += \
-+	--disable-mipsdspr1 \
-+	--disable-mipsdspr2
-+endif
++Signed-off-by: Vicente Olivert Riera <vincent.riera@imgtec.com>
 +
- # Set powerpc altivec appropriately
- ifeq ($(BR2_powerpc),y)
- ifeq ($(BR2_powerpc_7400)$(BR2_powerpc_7450)$(BR2_powerpc_970),y)
++--- aiccu/unix-console/Makefile.orig	2014-01-14 10:17:20.204602513 +0000
+++++ aiccu/unix-console/Makefile	2014-01-14 10:17:31.435777359 +0000
++@@ -42,7 +42,7 @@ CFLAGS	+= -D AICCU_CONSOLE
++ # Currently defaultly builds only on Linux, but other platforms might easily also support it
++ ifeq ($(shell uname | grep -c "Linux"),1)
++ CFLAGS	+= -D AICCU_GNUTLS
++-LDFLAGS += -lgnutls
+++LDFLAGS += -lgnutls -lrt
++ endif
++ 
++ # Linux
