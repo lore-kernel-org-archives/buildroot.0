@@ -1,110 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 14 Jan 2014 14:54:31 +0100
-Subject: [Buildroot] [git commit] package: unification of use $(subst [._-],
-	[._-], $(<PKG>_VERSION)) macro
-Message-ID: <20140114135454.0E2999BF79@busybox.osuosl.org>
+Date: Tue, 14 Jan 2014 14:53:18 +0100
+Subject: [Buildroot] [git commit] configs: bump apf28 module Linux version
+	to latest vanilla stable one (3.12.7)
+Message-ID: <20140114135454.03B8A9BF79@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c4cc84afc60bbfa34b405ac1589a52087212fd84
+commit: http://git.buildroot.net/buildroot/commit/?id=4950bda10f1bf7468cec7c8af8dca6b20f36f6d4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, there are five packages which use 'subst' macro to change their version.
-
-* Three of them (ebtables, icu, perl) use this macro "in place" :
-
-   EBTABLES_SITE = http://downloads.sourceforge.net/project/ebtables/ebtables/ebtables-$(subst .,-,$(EBTABLES_VERSION))
-
-   ICU_SOURCE = icu4c-$(subst .,_,$(ICU_VERSION))-src.tgz
-
-   PERL_CROSS_OLD_POD = perl$(subst .,,$(PERL_CROSS_BASE_VERSION))delta.pod
-   PERL_CROSS_NEW_POD = perl$(subst .,,$(PERL_VERSION))delta.pod
-
-* Two of them (boost, libnss) use an additional variable :
-
-   BOOST_FILE_VERSION = $(subst .,_,$(BOOST_VERSION))
-   BOOST_SOURCE = boost_$(BOOST_FILE_VERSION).tar.bz2
-
-   LIBNSS_SITE_VERSION = $(subst .,_,$(LIBNSS_VERSION))
-   LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(LIBNSS_SITE_VERSION)_RTM/src
-
-* Additionally two packages (duma, rings) doesn't use it at all :
-
-   DUMA_VERSION = 2_5_15
-   DUMA_SITE = http://downloads.sourceforge.net/project/duma/duma/2.5.15
-
-   RINGS_VERSION_MAJOR = 1.3.0
-   RINGS_SUBDIR  = rings-v_1_3_0
-
-This commit makes changes to use 'subst' macro "in place", in all of them.
-
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/boost/boost.mk   |    3 +--
- package/duma/duma.mk     |    6 +++---
- package/libnss/libnss.mk |    3 +--
- package/rings/rings.mk   |    2 +-
- 4 files changed, 6 insertions(+), 8 deletions(-)
+ configs/armadeus_apf28_defconfig |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index 9ead1dd..7aab614 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -5,8 +5,7 @@
- ################################################################################
+diff --git a/configs/armadeus_apf28_defconfig b/configs/armadeus_apf28_defconfig
+index 360e113..06a6e76 100644
+--- a/configs/armadeus_apf28_defconfig
++++ b/configs/armadeus_apf28_defconfig
+@@ -4,7 +4,7 @@ BR2_arm926t=y
  
- BOOST_VERSION = 1.55.0
--BOOST_FILE_VERSION = $(subst .,_,$(BOOST_VERSION))
--BOOST_SOURCE = boost_$(BOOST_FILE_VERSION).tar.bz2
-+BOOST_SOURCE = boost_$(subst .,_,$(BOOST_VERSION)).tar.bz2
- BOOST_SITE = http://downloads.sourceforge.net/project/boost/boost/$(BOOST_VERSION)
- BOOST_INSTALL_STAGING = YES
- BOOST_LICENSE = Boost Software License 1.0
-diff --git a/package/duma/duma.mk b/package/duma/duma.mk
-index 93ae16e..d11987f 100644
---- a/package/duma/duma.mk
-+++ b/package/duma/duma.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+ # Lock down headers to avoid breaking with new defaults
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.12.6"
++BR2_DEFAULT_KERNEL_VERSION="3.12.7"
  
--DUMA_VERSION = 2_5_15
--DUMA_SOURCE = duma_$(DUMA_VERSION).tar.gz
--DUMA_SITE = http://downloads.sourceforge.net/project/duma/duma/2.5.15
-+DUMA_VERSION = 2.5.15
-+DUMA_SOURCE = duma_$(subst .,_,$(DUMA_VERSION)).tar.gz
-+DUMA_SITE = http://downloads.sourceforge.net/project/duma/duma/$(DUMA_VERSION)
- DUMA_LICENSE = GPLv2+ LGPLv2.1+
- DUMA_LICENSE_FILES = COPYING-GPL COPYING-LGPL
- 
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 7215127..666df74 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -6,8 +6,7 @@
- 
- LIBNSS_VERSION = 3.14.5
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
--LIBNSS_SITE_VERSION = $(subst .,_,$(LIBNSS_VERSION))
--LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(LIBNSS_SITE_VERSION)_RTM/src
-+LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_SUBDIR = mozilla/security
- LIBNSS_DISTDIR = mozilla/dist
- LIBNSS_INSTALL_STAGING = YES
-diff --git a/package/rings/rings.mk b/package/rings/rings.mk
-index 2876162..09d9b02 100644
---- a/package/rings/rings.mk
-+++ b/package/rings/rings.mk
-@@ -6,7 +6,7 @@
- 
- RINGS_VERSION_MAJOR = 1.3.0
- RINGS_VERSION = $(RINGS_VERSION_MAJOR)-1
--RINGS_SUBDIR  = rings-v_1_3_0
-+RINGS_SUBDIR  = rings-v_$(subst .,_,$(RINGS_VERSION_MAJOR))
- RINGS_LICENSE = MIT
- 
- $(eval $(luarocks-package))
+ # System
+ BR2_TARGET_GENERIC_HOSTNAME="apf28"
+@@ -15,7 +15,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.7"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/armadeus/apf28/linux-3.12.config"
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x40008000"
