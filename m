@@ -1,7 +1,7 @@
 From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Tue, 14 Jan 2014 11:30:12 +0100
-Subject: [Buildroot] [PATCH 1/1] imagemagick: bump to version 6.8.8-2
-Message-ID: <1389695415-19540-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Date: Tue, 14 Jan 2014 11:30:57 +0100
+Subject: [Buildroot] [PATCH 1/2] rings: add the version major variable
+Message-ID: <1389695458-19578-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,21 +10,22 @@ To: buildroot@busybox.net
 
 Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 ---
- package/imagemagick/imagemagick.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/rings/rings.mk |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 966837d..3fb97f7 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/rings/rings.mk b/package/rings/rings.mk
+index d052f5d..2876162 100644
+--- a/package/rings/rings.mk
++++ b/package/rings/rings.mk
+@@ -4,7 +4,8 @@
  #
  ################################################################################
  
--IMAGEMAGICK_VERSION = 6.8.8-1
-+IMAGEMAGICK_VERSION = 6.8.8-2
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- # The official ImageMagick site only keeps the latest versions
- # available, which is annoying. Use an alternate site that keeps all
+-RINGS_VERSION = 1.3.0-1
++RINGS_VERSION_MAJOR = 1.3.0
++RINGS_VERSION = $(RINGS_VERSION_MAJOR)-1
+ RINGS_SUBDIR  = rings-v_1_3_0
+ RINGS_LICENSE = MIT
+ 
 -- 
 1.7.9.5
