@@ -1,33 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 14 Jan 2014 11:52:57 +0100
-Subject: [Buildroot] [git commit] rings: add the version major variable
-Message-ID: <20140114105712.DBF6E9C4A4@busybox.osuosl.org>
+Date: Tue, 14 Jan 2014 11:51:31 +0100
+Subject: [Buildroot] [git commit] imagemagick: bump to version 6.8.8-2
+Message-ID: <20140114105712.B9E629C4C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=af23b6e128cd5b2d9c93059a1810183cc1590cda
+commit: http://git.buildroot.net/buildroot/commit/?id=52420e359e6c6753c1d990350965c8a744c53b52
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rings/rings.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/imagemagick/imagemagick.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/rings/rings.mk b/package/rings/rings.mk
-index d052f5d..2876162 100644
---- a/package/rings/rings.mk
-+++ b/package/rings/rings.mk
-@@ -4,7 +4,8 @@
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 966837d..3fb97f7 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RINGS_VERSION = 1.3.0-1
-+RINGS_VERSION_MAJOR = 1.3.0
-+RINGS_VERSION = $(RINGS_VERSION_MAJOR)-1
- RINGS_SUBDIR  = rings-v_1_3_0
- RINGS_LICENSE = MIT
- 
+-IMAGEMAGICK_VERSION = 6.8.8-1
++IMAGEMAGICK_VERSION = 6.8.8-2
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ # The official ImageMagick site only keeps the latest versions
+ # available, which is annoying. Use an alternate site that keeps all
