@@ -1,10 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 14 Jan 2014 18:27:36 +0100
-Subject: [Buildroot] [PATCH 2/3] lua: add official patches
-In-Reply-To: <1389705298-27263-3-git-send-email-francois.perrad@gadz.org>
+Date: Tue, 14 Jan 2014 18:36:54 +0100
+Subject: [Buildroot] [PATCH 3/3] lua-modules: choice between Lua 5.1.x &
+ Lua 5.2.x
+In-Reply-To: <1389705298-27263-4-git-send-email-francois.perrad@gadz.org>
 References: <1389705298-27263-1-git-send-email-francois.perrad@gadz.org>
- <1389705298-27263-3-git-send-email-francois.perrad@gadz.org>
-Message-ID: <52D57388.3070109@mind.be>
+ <1389705298-27263-4-git-send-email-francois.perrad@gadz.org>
+Message-ID: <52D575B6.3050401@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,79 +13,57 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 14/01/14 14:14, Francois Perrad wrote:
-> from http://www.lua.org/bugs.html
->
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> Signed-off-by: Francois Perrad<francois.perrad@gadz.org>
 > ---
->   package/lua/5.1.5/lua-bug2.patch |   46 ++++++++++++++++++++++++++++++++++++++
->   1 file changed, 46 insertions(+)
->   create mode 100644 package/lua/5.1.5/lua-bug2.patch
+>   package/lbase64/Config.in                        |    4 ++++
+>   package/lua-ev/lua-ev.mk                         |    2 +-
+>   package/lua-msgpack-native/Config.in             |    4 ++++
+>   package/lua-msgpack-native/lua-msgpack-native.mk |    3 ++-
+>   package/luaexpat/Config.in                       |    4 ++++
+>   package/luaexpatutils/Config.in                  |    4 ++++
+>   package/luaexpatutils/luaexpatutils.mk           |    2 +-
+>   package/luaposix/Config.in                       |    2 +-
+>   package/luaposix/luaposix.mk                     |    2 +-
+>   package/luarocks/luarocks.mk                     |    4 ++--
+>   package/luasec/Config.in                         |    4 ++++
+
+  I wonder if this patch shouldn't be squashed with the first one - I 
+guess without this patch, all these packages are broken when 5.2 is selected.
+
+>   11 files changed, 28 insertions(+), 7 deletions(-)
 >
-> diff --git a/package/lua/5.1.5/lua-bug2.patch b/package/lua/5.1.5/lua-bug2.patch
-> new file mode 100644
-> index 0000000..729c22d
-> --- /dev/null
-> +++ b/package/lua/5.1.5/lua-bug2.patch
-> @@ -0,0 +1,46 @@
-> +When loading a file, Lua may call the reader function again after it returned end of input.
+> diff --git a/package/lbase64/Config.in b/package/lbase64/Config.in
+> index ca9dd5d..9cc2e2b 100644
+> --- a/package/lbase64/Config.in
+> +++ b/package/lbase64/Config.in
+> @@ -1,7 +1,11 @@
+>   config BR2_PACKAGE_LBASE64
+>   	bool "lbase64"
+>   	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
+> +	depends on !BR2_PACKAGE_LUA_5_2
 
-  This doesn't look like a patch related to cross-compilation or uClibc 
-support, so it isn't really buildroot's business I'd say.
+  I think this should be "depends on BR2_PACKAGE_LUA_5_1", because this 
+package most likely still won't work when a Lua 5.3 is added in the 
+future. But of course, to make that possible you need a 
+BR2_PACKAGE_LUAINTERPRETER_ABI_5_1 symbol.
 
-  Also, the patch should be numbered and it should get a better filename 
-than "bug2".
+>   	help
+>   	  A base64 library for Lua
+>
+>   	http://luaforge.net/projects/lbase64/
+> +
+> +comment "lbase64 only with Lua 5.1"
+> +	depends on BR2_PACKAGE_LUA_5_2
+
+  To make it consistent with the toolchain comments, I'd write:
+
+comment "lbase64 needs a Lua 5.1 interpreter"
+
 
   Regards,
   Arnout
 
-> +
-> +Backported from http://www.lua.org/bugs.html#5.1.5-2
-> +
-> +Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> +
-> +Index: b/src/lzio.c
-> +===================================================================
-> +--- a/src/lzio.c
-> ++++ b/src/lzio.c
-> +@@ -22,10 +22,14 @@
-> +   size_t size;
-> +   lua_State *L = z->L;
-> +   const char *buff;
-> ++  if (z->eoz) return EOZ;
-> +   lua_unlock(L);
-> +   buff = z->reader(L, z->data, &size);
-> +   lua_lock(L);
-> +-  if (buff == NULL || size == 0) return EOZ;
-> ++  if (buff == NULL || size == 0) {
-> ++    z->eoz = 1;  /* avoid calling reader function next time */
-> ++    return EOZ;
-> ++  }
-> +   z->n = size - 1;
-> +   z->p = buff;
-> +   return char2int(*(z->p++));
-> +@@ -51,6 +55,7 @@
-> +   z->data = data;
-> +   z->n = 0;
-> +   z->p = NULL;
-> ++  z->eoz = 0;
-> + }
-> +
-> +
-> +Index: b/src/lzio.h
-> +===================================================================
-> +--- a/src/lzio.h
-> ++++ b/src/lzio.h
-> +@@ -59,6 +59,7 @@
-> +   lua_Reader reader;
-> +   void* data;			/* additional data */
-> +   lua_State *L;			/* Lua state (for reader) */
-> ++  int eoz;			/* true if reader has no more data */
-> + };
-> +
-> +
->
-
-
+[snip]
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
