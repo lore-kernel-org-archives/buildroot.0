@@ -1,51 +1,42 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 14 Jan 2014 22:05:16 +0100
-Subject: [Buildroot] [PATCH v3 2/2] ffmpeg: Add sse4 related options
-	BR2_X86_CPU_HAS_SSE4 / BR2_X86_CPU_HAS_SSE4
-In-Reply-To: <52D56F78.50304@mind.be> (Arnout Vandecappelle's message of "Tue, 
- 14 Jan 2014 18:10:16 +0100")
-References: <1388685585-23467-1-git-send-email-berndkuhls@hotmail.com>
- <BLU0-SMTP37762C5CD6B3E076E490852D9CB0@phx.gbl>
- <52D56F78.50304@mind.be>
-Message-ID: <87bnzexoj7.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 14 Jan 2014 22:23:55 +0100
+Subject: [Buildroot] [PATCH 0/2] Fix check for Python modules for
+	cross-compilation
+Message-ID: <1389734637-8329-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+Hello Simon and Peter!
 
- > On 02/01/14 18:59, Bernd Kuhls wrote:
- >> 
- >> Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
- >> ---
- >> arch/Config.in.x86       |    4 ++++
- >> package/ffmpeg/ffmpeg.mk |   14 +++++++++++++-
- >> 2 files changed, 17 insertions(+), 1 deletion(-)
- >> 
- >> diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
- >> index ce30605..15d5c16 100644
- >> --- a/arch/Config.in.x86
- >> +++ b/arch/Config.in.x86
- >> @@ -9,6 +9,10 @@ config BR2_X86_CPU_HAS_SSE3
- >> bool
- >> config BR2_X86_CPU_HAS_SSSE3
- >> bool
- >> +config BR2_X86_CPU_HAS_SSE4
- >> +	bool
- >> +config BR2_X86_CPU_HAS_SSE42
- >> +	bool
+Here are two patches to enhance (fix) the check of Python modules while
+cross-compiling.
 
- >  Since nobody selects these symbols, this patch just adds dead code,
- >  right?
+There is extensive explanations in the commit log of each patch, but it
+basically boils down to the fact that we can't check for Python modules
+while doing cross-compilation:
+  - we can't execute the target Python (obviously) 
+  - the host Python may not have the required module(s)
 
-Yes, for now it does. I was expecting to see a followup patch adding new
-CPUs. I have sse4 on my laptop atleast:
+We've stumbled into this issue while building ola with Buildroot:
+    http://buildroot.org/
 
-egrep 'name|sse4' /proc/cpuinfo|head -n 2
-model name      : Intel(R) Core(TM) i5-3320M CPU @ 2.60GHz
-flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm ida arat epb xsaveopt pln pts dtherm tpr_shadow vnmi flexpriority ept vpid fsgsbase smep erms
+If you prefer a pull-request, I can set up a public repo for you to pull
+from.
+
+I'm sending those to you two, since I could not find a contact info for
+where to send the patches. If I missed it, please be kind enough to
+point me to the correct recipient(s) or mailing list.
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
