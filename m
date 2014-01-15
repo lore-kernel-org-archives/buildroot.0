@@ -1,39 +1,45 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 15 Jan 2014 21:14:49 +0100
-Subject: [Buildroot] [PATCH 1/1] gst-ffmpeg: Use internal libav instead
-	of external ffmpeg
-In-Reply-To: <52D6EACE.8020403@zacarias.com.ar> (Gustavo Zacarias's message of
- "Wed, 15 Jan 2014 17:08:46 -0300")
-References: <BLU0-SMTP442A9DE801569E9B4917C36D9BE0@phx.gbl>
- <87lhyht3mx.fsf@dell.be.48ers.dk> <52D6EACE.8020403@zacarias.com.ar>
-Message-ID: <87ha95t32e.fsf@dell.be.48ers.dk>
+Date: Wed, 15 Jan 2014 21:40:08 +0100
+Subject: [Buildroot] [PATCH v4] arch: add support for "jaguar" AMD CPU
+	optimisations.
+In-Reply-To: <403077357.139986.1389802808673.JavaMail.root@mail> ("Adrien
+ =?utf-8?Q?B=C3=A9raud=22's?= message of "Wed, 15 Jan 2014 11:20:08 -0500
+ (EST)")
+References: <403077357.139986.1389802808673.JavaMail.root@mail>
+Message-ID: <87d2jtt1w7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Adrien" == Adrien B?raud <adrien.beraud@savoirfairelinux.com> writes:
 
- > On 01/15/2014 05:02 PM, Peter Korsgaard wrote:
- >> But what about all the CPU optimization flags we have in ffmpeg? Don't
- >> we need to reproduce those as well here?
+ > AMD Jaguar ( https://en.wikipedia.org/wiki/Jaguar_%28microarchitecture%29 ) is suddenly
+ > a popular architecture since it is used in the PS4 and the XBox One.
+ > Many embedded systems are also likely to use it in the next years.
 
- > I'm a bit wary about using the builtin ffmpeg support at all, all of the
- > security fixes from newer versions of the unbundled library will be gone.
- > And i also think the bump was fine, it was time to move along (and mpd's
- > support for ffmpeg needed it for example, it won't work with oldish
- > ffmpeg versions).
- > Maybe it's a bit harsh but we should consider deprecating gst-ffmpeg?
+ > This patch adds support for GCC architecture-specific optimizations and tuning for these CPUs.
+ > These optimizations are available with GCC 4.8+.
 
-s/gst-ffmpeg/gstreamer 0.10/, but yeah. Upstream officially announced
-that almost a year ago:
+ > Signed-off-by: Adrien Beraud <adrien.beraud@savoirfairelinux.com>
 
-http://lists.freedesktop.org/archives/gstreamer-announce/2013-March/000273.html
+Thanks, looks good - But it doesn't apply to current git:
 
-I do think moving to the internal libav copy for gst-ffmpeg until we can
-completely remove it is OK though. If people really need it, then the
-(outdated) bundled library is still better than no gst-ffmpeg.
+Applying: arch: add support for "jaguar" AMD CPU optimisations.
+Using index info to reconstruct a base tree...
+M       arch/Config.in.x86
+M       package/gcc/Config.in.host
+M       toolchain/toolchain-external/Config.in
+Falling back to patching base and 3-way merge...
+Auto-merging toolchain/toolchain-external/Config.in
+Auto-merging package/gcc/Config.in.host
+CONFLICT (content): Merge conflict in package/gcc/Config.in.host
+Auto-merging arch/Config.in.x86
+Failed to merge in the changes.
+Patch failed at 0001 arch: add support for "jaguar" AMD CPU optimisations.
+
+Care to rebase against git HEAD and resubmit? Thanks.
 
 -- 
 Bye, Peter Korsgaard
