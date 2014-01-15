@@ -1,38 +1,81 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 15 Jan 2014 15:30:33 +0100
-Subject: [Buildroot] [PATCH v2 2/3] uclibc: xtensa: fix posix_spawn
-	autoconf detection
-In-Reply-To: <20140115133108.GP4602@tarshish> (Baruch Siach's message of "Wed, 
- 15 Jan 2014 15:31:08 +0200")
-References: <cover.1389594195.git.baruch@tkos.co.il>
- <dc000d1809a9e23ee01cfc2741341065cb5118e7.1389594195.git.baruch@tkos.co.il>
- <20140115133108.GP4602@tarshish>
-Message-ID: <877ga1uxkm.fsf@dell.be.48ers.dk>
+From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
+Date: Wed, 15 Jan 2014 10:47:00 +0100
+Subject: [Buildroot] [PATCH 1/1] mmc-utils: new package
+Message-ID: <1389779220-18026-1-git-send-email-sebastien.szymanski@armadeus.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+mmc-utils provides tools to manipulate mmc device registers.
+It is under "Hardware handling".
 
- > Hi buildroot list,
- > On Mon, Jan 13, 2014 at 08:26:13AM +0200, Baruch Siach wrote:
- >> posix_spawn is a new feature in uClibc development branch. Move posix_spawn
- >> implementation from librt to libc so that gnulib can detect it correctly.
- >> 
- >> Fixes
- >> http://autobuild.buildroot.net/results/ab1/ab1250c3d402ec3fbaf22eeffd07de218ffafb22/.
- >> 
- >> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+---
+ package/Config.in              |  1 +
+ package/mmc-utils/Config.in    | 10 ++++++++++
+ package/mmc-utils/mmc-utils.mk | 23 +++++++++++++++++++++++
+ 3 files changed, 34 insertions(+)
+ create mode 100644 package/mmc-utils/Config.in
+ create mode 100644 package/mmc-utils/mmc-utils.mk
 
- > Mike Frysinger has rejected this uclibc patch 
- > (http://article.gmane.org/gmane.comp.lib.gnulib.bugs/33613), but there is a 
- > different solution suggested for the coreutils build problem 
- > (http://article.gmane.org/gmane.comp.gnu.coreutils.general/4995). In the mean 
- > time I'm marking this patch as rejected in patchwork.
-
-Ok, thanks for following up on it.
-
+diff --git a/package/Config.in b/package/Config.in
+index 78c0e06..058c1e4 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -312,6 +312,7 @@ source "package/mdadm/Config.in"
+ source "package/media-ctl/Config.in"
+ source "package/memtester/Config.in"
+ source "package/minicom/Config.in"
++source "package/mmc-utils/Config.in"
+ source "package/nanocom/Config.in"
+ source "package/neard/Config.in"
+ source "package/ofono/Config.in"
+diff --git a/package/mmc-utils/Config.in b/package/mmc-utils/Config.in
+new file mode 100644
+index 0000000..07650c8
+--- /dev/null
++++ b/package/mmc-utils/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_MMC_UTILS
++	bool "mmc-utils"
++	depends on BR2_LARGEFILE
++	help
++	  MMC utils
++
++	  https://git.kernel.org/cgit/linux/kernel/git/cjb/mmc-utils.git
++
++comment "mmc-utils needs a toolchain w/ largefile"
++	depends on !BR2_LARGEFILE
+diff --git a/package/mmc-utils/mmc-utils.mk b/package/mmc-utils/mmc-utils.mk
+new file mode 100644
+index 0000000..857d9ac
+--- /dev/null
++++ b/package/mmc-utils/mmc-utils.mk
+@@ -0,0 +1,23 @@
++################################################################################
++#
++# mmc-utils
++#
++################################################################################
++
++MMC_UTILS_VERSION = 11f2ceabc4ad3f0dd568e0ce68166e4803e0615b
++MMC_UTILS_SITE    = git://git.kernel.org/pub/scm/linux/kernel/git/cjb/mmc-utils.git
++MMC_UTILS_LICENSE = GPLv2
++
++define MMC_UTILS_BUILD_CMDS
++	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
++endef
++
++define MMC_UTILS_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/mmc $(TARGET_DIR)/usr/bin/mmc
++endef
++
++define MMC_UTILS_UNINSTALL_TARGET_CMDS
++	$(RM) $(TARGET_DIR)/usr/bin/mmc
++endef
++
++$(eval $(generic-package))
 -- 
-Bye, Peter Korsgaard
+1.8.3.2
