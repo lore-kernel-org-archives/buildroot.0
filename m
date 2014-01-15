@@ -1,45 +1,86 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Thu, 16 Jan 2014 09:50:20 +1300
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-01-13
-In-Reply-To: <87vbxlv3q3.fsf@dell.be.48ers.dk>
-References: <20140114073009.D944B10264B@stock.ovh.net>
- <CAFOYHZB+FECgTWX1aa2cSDQMHSS83f8Ri7yOj7H+nZyY6Lr_kw@mail.gmail.com>
- <87vbxlv3q3.fsf@dell.be.48ers.dk>
-Message-ID: <CAFOYHZBcBNWvhVYd6oABiA2RSTP=Hr1oifA+5AggWS46h95yrg@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 15 Jan 2014 21:55:07 +0100
+Subject: [Buildroot] [PATCH 06/14] libmodplug: new package
+In-Reply-To: <1389549208-19078-7-git-send-email-maxime.hadjinlian@gmail.com>
+ (Maxime Hadjinlian's message of "Sun, 12 Jan 2014 18:53:20 +0100")
+References: <1389549208-19078-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <1389549208-19078-7-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <878uuht178.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jan 16, 2014 at 1:17 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Chris" == Chris Packham <judge.packham@gmail.com> writes:
->
->  > Hi
->  > On Tue, Jan 14, 2014 at 8:30 PM, Thomas Petazzoni
->  > <thomas.petazzoni@free-electrons.com> wrote:
->  >> arm |                tcpreplay-4.0.0 | NOK | http://autobuild.buildroot.net/results/54b739bd3713de87113cbed35e05b9074282b30d/
->  >> arm |                tcpreplay-4.0.0 | NOK | http://autobuild.buildroot.net/results/fec13bcb3e65e691f6f3c34548024312c3ba9ec1/
->
->  > I have tried to reproduce both of these build configs. The first one
->  > fails for me with an unrelated error ( /usr/X11R6/lib in chroot .: No
->  > such file or directory). The second one succeeds. Am I doing something
->  > wrong?
->
-> Are you sure the first one really fails? The message sounds like the
-> warning from ldconfig about the rootfs not having /usr/X11R6/lib unless
-> you have X11 enabled, but that's just a warning.
+>>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
 
-I could be misinterpreting the message, it's just the last thing in
-the console output. In lieu of a reassuring green light I interpreted
-the message as a failure.
+ > MOD music file decoder.
+ > This package was originally found at : https://github.com/huceke/buildroot-rbp
+ > By gimli <ebsi4711@gmail.com>
 
-> I also cannot reproduce the tcpreplay issue here. I see that all of the
-> failures happens on Thomas' machine, so hopefully he can take a closer
-> look once he is back.
+ > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+ > ---
+ >  package/Config.in                |  1 +
+ >  package/libmodplug/Config.in     | 10 ++++++++++
+ >  package/libmodplug/libmodplug.mk | 12 ++++++++++++
+ >  3 files changed, 23 insertions(+)
+ >  create mode 100644 package/libmodplug/Config.in
+ >  create mode 100644 package/libmodplug/libmodplug.mk
 
-I took a look at last nights new failures (for x86_64) and can't
-reproduce them either. Does anything insert extra CFLAGS from outside
-of the defconfig? I notice a few warnings that -Werror would bail on.
-I'll see if I can get them fixed upstream just to reduce noise.
+ > diff --git a/package/Config.in b/package/Config.in
+ > index d50c5ec..836dc7e 100644
+ > --- a/package/Config.in
+ > +++ b/package/Config.in
+ > @@ -452,6 +452,7 @@ source "package/libcuefile/Config.in"
+ >  source "package/libid3tag/Config.in"
+ >  source "package/liblo/Config.in"
+ >  source "package/libmad/Config.in"
+ > +source "package/libmodplug/Config.in"
+ >  source "package/libmpd/Config.in"
+ >  source "package/libreplaygain/Config.in"
+ >  source "package/libsamplerate/Config.in"
+ > diff --git a/package/libmodplug/Config.in b/package/libmodplug/Config.in
+ > new file mode 100644
+ > index 0000000..976a08b
+ > --- /dev/null
+ > +++ b/package/libmodplug/Config.in
+ > @@ -0,0 +1,10 @@
+ > +config BR2_PACKAGE_LIBMODPLUG
+ > +	bool "libmodplug"
+ > +	depends on BR2_INSTALL_LIBSTDCPP
+ > +	help
+ > +	  MOD music file decoder
+ > +
+ > +	  http://modplug-xmms.sourceforge.net/
+ > +
+ > +comment "libmodplug requires C++ support in toolchain"
+ > +	depends on !BR2_INSTALL_LIBSTDCPP
+
+We've standardized on '<foo> needs a toolchain w/ C++' now.
+
+ > diff --git a/package/libmodplug/libmodplug.mk b/package/libmodplug/libmodplug.mk
+ > new file mode 100644
+ > index 0000000..14df808
+ > --- /dev/null
+ > +++ b/package/libmodplug/libmodplug.mk
+ > @@ -0,0 +1,12 @@
+ > +#############################################################
+
+80 char #'s.
+
+ > +#
+ > +# libmodplug
+ > +#
+ > +#############################################################
+ > +
+ > +LIBMODPLUG_VERSION = 0.8.7
+ > +LIBMODPLUG_SITE = http://downloads.sourceforge.net/project/modplug-xmms/libmodplug/$(LIBMODPLUG_VERSION)
+ > +LIBMODPLUG_INSTALL_STAGING = YES
+ > +LIBMODPLUG_LICENSE = Public Domain
+
+You forgot _LICENSE_FILES.
+
+Committed with these fixes, thanks.
+
+-- 
+Bye, Peter Korsgaard
