@@ -1,45 +1,45 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 15 Jan 2014 21:40:08 +0100
-Subject: [Buildroot] [PATCH v4] arch: add support for "jaguar" AMD CPU
-	optimisations.
-In-Reply-To: <403077357.139986.1389802808673.JavaMail.root@mail> ("Adrien
- =?utf-8?Q?B=C3=A9raud=22's?= message of "Wed, 15 Jan 2014 11:20:08 -0500
- (EST)")
-References: <403077357.139986.1389802808673.JavaMail.root@mail>
-Message-ID: <87d2jtt1w7.fsf@dell.be.48ers.dk>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Thu, 16 Jan 2014 09:50:20 +1300
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-01-13
+In-Reply-To: <87vbxlv3q3.fsf@dell.be.48ers.dk>
+References: <20140114073009.D944B10264B@stock.ovh.net>
+ <CAFOYHZB+FECgTWX1aa2cSDQMHSS83f8Ri7yOj7H+nZyY6Lr_kw@mail.gmail.com>
+ <87vbxlv3q3.fsf@dell.be.48ers.dk>
+Message-ID: <CAFOYHZBcBNWvhVYd6oABiA2RSTP=Hr1oifA+5AggWS46h95yrg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Adrien" == Adrien B?raud <adrien.beraud@savoirfairelinux.com> writes:
+On Thu, Jan 16, 2014 at 1:17 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "Chris" == Chris Packham <judge.packham@gmail.com> writes:
+>
+>  > Hi
+>  > On Tue, Jan 14, 2014 at 8:30 PM, Thomas Petazzoni
+>  > <thomas.petazzoni@free-electrons.com> wrote:
+>  >> arm |                tcpreplay-4.0.0 | NOK | http://autobuild.buildroot.net/results/54b739bd3713de87113cbed35e05b9074282b30d/
+>  >> arm |                tcpreplay-4.0.0 | NOK | http://autobuild.buildroot.net/results/fec13bcb3e65e691f6f3c34548024312c3ba9ec1/
+>
+>  > I have tried to reproduce both of these build configs. The first one
+>  > fails for me with an unrelated error ( /usr/X11R6/lib in chroot .: No
+>  > such file or directory). The second one succeeds. Am I doing something
+>  > wrong?
+>
+> Are you sure the first one really fails? The message sounds like the
+> warning from ldconfig about the rootfs not having /usr/X11R6/lib unless
+> you have X11 enabled, but that's just a warning.
 
- > AMD Jaguar ( https://en.wikipedia.org/wiki/Jaguar_%28microarchitecture%29 ) is suddenly
- > a popular architecture since it is used in the PS4 and the XBox One.
- > Many embedded systems are also likely to use it in the next years.
+I could be misinterpreting the message, it's just the last thing in
+the console output. In lieu of a reassuring green light I interpreted
+the message as a failure.
 
- > This patch adds support for GCC architecture-specific optimizations and tuning for these CPUs.
- > These optimizations are available with GCC 4.8+.
+> I also cannot reproduce the tcpreplay issue here. I see that all of the
+> failures happens on Thomas' machine, so hopefully he can take a closer
+> look once he is back.
 
- > Signed-off-by: Adrien Beraud <adrien.beraud@savoirfairelinux.com>
-
-Thanks, looks good - But it doesn't apply to current git:
-
-Applying: arch: add support for "jaguar" AMD CPU optimisations.
-Using index info to reconstruct a base tree...
-M       arch/Config.in.x86
-M       package/gcc/Config.in.host
-M       toolchain/toolchain-external/Config.in
-Falling back to patching base and 3-way merge...
-Auto-merging toolchain/toolchain-external/Config.in
-Auto-merging package/gcc/Config.in.host
-CONFLICT (content): Merge conflict in package/gcc/Config.in.host
-Auto-merging arch/Config.in.x86
-Failed to merge in the changes.
-Patch failed at 0001 arch: add support for "jaguar" AMD CPU optimisations.
-
-Care to rebase against git HEAD and resubmit? Thanks.
-
--- 
-Bye, Peter Korsgaard
+I took a look at last nights new failures (for x86_64) and can't
+reproduce them either. Does anything insert extra CFLAGS from outside
+of the defconfig? I notice a few warnings that -Werror would bail on.
+I'll see if I can get them fixed upstream just to reduce noise.
