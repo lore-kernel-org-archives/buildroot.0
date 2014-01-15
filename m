@@ -1,49 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 15 Jan 2014 15:02:21 +0100
-Subject: [Buildroot] [PATCH 1/1] mmc-utils: new package
-In-Reply-To: <1389790554-24337-1-git-send-email-sebastien.szymanski@armadeus.com>
- (=?utf-8?Q?=22S=C3=A9bastien?= Szymanski"'s message of "Wed, 15 Jan 2014
- 13:55:54 +0100")
-References: <1389790554-24337-1-git-send-email-sebastien.szymanski@armadeus.com>
-Message-ID: <87eh49uyvm.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 15 Jan 2014 14:20:20 +0100
+Subject: [Buildroot] [git commit] busybox 1.22.0: add line edit patch
+Message-ID: <20140115140318.8F1679C4E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "S?bastien" == S?bastien Szymanski <sebastien.szymanski@armadeus.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=c75e5117b473bc9d0b8789295527e0156b769d84
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > mmc-utils provides tools to manipulate mmc device registers.
- > It is under "Hardware handling".
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../1.22.0/0005-busybox-1.22.0-lineedit.patch      |   12 ++++++++++++
+ 1 files changed, 12 insertions(+), 0 deletions(-)
 
-I know it could go in both sections, but we have E.G. flashbench under
-filesystem and flash utilities, so I put it there instead.
-
- > +################################################################################
- > +#
- > +# mmc-utils
- > +#
- > +################################################################################
- > +
- > +MMC_UTILS_VERSION = 11f2ceabc4ad3f0dd568e0ce68166e4803e0615b
- > +MMC_UTILS_SITE    = git://git.kernel.org/pub/scm/linux/kernel/git/cjb/mmc-utils.git
- > +MMC_UTILS_LICENSE = GPLv2
- > +
- > +define MMC_UTILS_BUILD_CMDS
- > +	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
- > +endef
- > +
- > +define MMC_UTILS_INSTALL_TARGET_CMDS
- > +	$(INSTALL) -D -m 0755 $(@D)/mmc $(TARGET_DIR)/usr/bin/mmc
- > +endef
- > +
- > +define MMC_UTILS_UNINSTALL_TARGET_CMDS
- > +	$(RM) $(TARGET_DIR)/usr/bin/mmc
- > +endef
-
-We have deprecated uninstall commands, so this can go. Other than that
-it looks good - Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/busybox/1.22.0/0005-busybox-1.22.0-lineedit.patch b/package/busybox/1.22.0/0005-busybox-1.22.0-lineedit.patch
+new file mode 100644
+index 0000000..e414314
+--- /dev/null
++++ b/package/busybox/1.22.0/0005-busybox-1.22.0-lineedit.patch
+@@ -0,0 +1,12 @@
++--- busybox-1.22.0/libbb/lineedit.c
+++++ busybox-1.22.0-lineedit/libbb/lineedit.c
++@@ -1255,7 +1255,9 @@ line_input_t* FAST_FUNC new_line_input_t
++ {
++ 	line_input_t *n = xzalloc(sizeof(*n));
++ 	n->flags = flags;
+++#if MAX_HISTORY > 0
++ 	n->max_history = MAX_HISTORY;
+++#endif
++ 	return n;
++ }
++ 
