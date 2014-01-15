@@ -1,140 +1,45 @@
-From: =?UTF-8?q?Adrien=20B=C3=A9raud?= <adrien.beraud@savoirfairelinux.com>
-Date: Wed, 15 Jan 2014 17:17:10 -0500
-Subject: [Buildroot] [PATCH v5] arch: add support for "jaguar" AMD CPU
-	optimisations
-Message-ID: <1389824230-3068-1-git-send-email-adrien.beraud@savoirfairelinux.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 15 Jan 2014 23:18:26 +0100
+Subject: [Buildroot] [PATCH 2/3] psplash: use git repository
+In-Reply-To: <1389383422-29665-2-git-send-email-lucas.de.marchi@gmail.com>
+ (Lucas De Marchi's message of "Fri, 10 Jan 2014 17:50:21 -0200")
+References: <1389383422-29665-1-git-send-email-lucas.de.marchi@gmail.com>
+ <1389383422-29665-2-git-send-email-lucas.de.marchi@gmail.com>
+Message-ID: <87vbxksxcd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-AMD Jaguar ( https://en.wikipedia.org/wiki/Jaguar_%28microarchitecture%29 ) is
-suddenly a popular architecture since it is used in the PS4 and the XBox One.
-Many embedded systems are also likely to use it in the next years.
+>>>>> "Lucas" == Lucas De Marchi <lucas.de.marchi@gmail.com> writes:
 
-This patch adds support for GCC architecture-specific optimisations and
-tuning for these CPUs.
-These optimizations are available with GCC 4.8+.
+ > psplash doesn't see a new release for quite some time. The lattest
+ > commits brought some nice bug fixes and a feature that allows to
+ > easily customize the splash image.
 
-Signed-off-by: Adrien Beraud <adrien.beraud@savoirfairelinux.com>
----
- arch/Config.in.x86                     | 10 ++++++++++
- package/gcc/Config.in.host             | 10 +++++-----
- toolchain/toolchain-external/Config.in |  3 +++
- 3 files changed, 18 insertions(+), 5 deletions(-)
+ > Signed-off-by: Lucas De Marchi <lucas.de.marchi@gmail.com>
+ > ---
+ >  package/psplash/psplash.mk | 5 +++--
+ >  1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
-index 15d5c16..bbedfb4 100644
---- a/arch/Config.in.x86
-+++ b/arch/Config.in.x86
-@@ -124,6 +124,13 @@ config BR2_x86_barcelona
- 	select BR2_X86_CPU_HAS_SSE
- 	select BR2_X86_CPU_HAS_SSE2
- 	select BR2_X86_CPU_HAS_SSE3
-+config BR2_x86_jaguar
-+	bool "jaguar"
-+	select BR2_X86_CPU_HAS_MMX
-+	select BR2_X86_CPU_HAS_SSE
-+	select BR2_X86_CPU_HAS_SSE2
-+	select BR2_X86_CPU_HAS_SSE3
-+	select BR2_X86_CPU_HAS_SSSE3
- config BR2_x86_geode
- 	bool "geode"
- 	# Don't include MMX support because there several variant of geode
-@@ -172,6 +179,7 @@ config BR2_ARCH
- 	default "i686"		if BR2_x86_opteron && BR2_i386
- 	default "i686"		if BR2_x86_opteron_sse3 && BR2_i386
- 	default "i686"		if BR2_x86_barcelona && BR2_i386
-+	default "i686"		if BR2_x86_jaguar && BR2_i386
- 	default "i686"		if BR2_x86_k6
- 	default "i686"		if BR2_x86_k6_2
- 	default "i686"		if BR2_x86_athlon
-@@ -200,6 +208,7 @@ config BR2_GCC_TARGET_TUNE
- 	default "k8"		if BR2_x86_opteron
- 	default "k8-sse3"	if BR2_x86_opteron_sse3
- 	default "barcelona"	if BR2_x86_barcelona
-+	default "btver2"	if BR2_x86_jaguar
- 	default "k6"		if BR2_x86_k6
- 	default "k6-2"		if BR2_x86_k6_2
- 	default "athlon"	if BR2_x86_athlon
-@@ -229,6 +238,7 @@ config BR2_GCC_TARGET_ARCH
- 	default "k8"		if BR2_x86_opteron
- 	default "k8-sse3"	if BR2_x86_opteron_sse3
- 	default "barcelona"	if BR2_x86_barcelona
-+	default "btver2"	if BR2_x86_jaguar
- 	default "k6"		if BR2_x86_k6
- 	default "k6-2"		if BR2_x86_k6_2
- 	default "athlon"	if BR2_x86_athlon
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 87543d9..7bd1eb3 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -19,12 +19,12 @@ choice
- 		bool "gcc 4.2.2-avr32-2.1.5"
+ > diff --git a/package/psplash/psplash.mk b/package/psplash/psplash.mk
+ > index cb1c54a..fe14f44 100644
+ > --- a/package/psplash/psplash.mk
+ > +++ b/package/psplash/psplash.mk
+ > @@ -4,9 +4,10 @@
+ >  #
+ >  ################################################################################
  
- 	config BR2_GCC_VERSION_4_3_X
--		depends on !BR2_microblaze && !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_cortex_a5 && !BR2_cortex_a7 && !BR2_cortex_a8 && !BR2_cortex_a9 && !BR2_cortex_a15 && !BR2_x86_atom && !BR2_powerpc_e300c2 && !BR2_powerpc_e300c3 && !BR2_powerpc_e500mc && !BR2_powerpc_464 && !BR2_powerpc_464fp && !BR2_powerpc_476 && !BR2_powerpc_476fp && !BR2_fa526 && !BR2_pj4
-+		depends on !BR2_microblaze && !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_cortex_a5 && !BR2_cortex_a7 && !BR2_cortex_a8 && !BR2_cortex_a9 && !BR2_cortex_a15 && !BR2_x86_atom && !BR2_x86_jaguar && !BR2_powerpc_e300c2 && !BR2_powerpc_e300c3 && !BR2_powerpc_e500mc && !BR2_powerpc_464 && !BR2_powerpc_464fp && !BR2_powerpc_476 && !BR2_powerpc_476fp && !BR2_fa526 && !BR2_pj4
- 		depends on !BR2_ARM_EABIHF
- 		bool "gcc 4.3.x"
- 
- 	config BR2_GCC_VERSION_4_4_X
--		depends on !BR2_microblaze && !BR2_arc && !BR2_avr32 && !BR2_cortex_a5 && !BR2_cortex_a7 && !BR2_cortex_a15 && !BR2_x86_atom && !BR2_powerpc_476 && !BR2_powerpc_476fp && !BR2_fa526 && !BR2_pj4
-+		depends on !BR2_microblaze && !BR2_arc && !BR2_avr32 && !BR2_cortex_a5 && !BR2_cortex_a7 && !BR2_cortex_a15 && !BR2_x86_atom && !BR2_x86_jaguar && !BR2_powerpc_476 && !BR2_powerpc_476fp && !BR2_fa526 && !BR2_pj4
- 		bool "gcc 4.4.x"
- 		# ARM EABIhf support appeared in gcc 4.6
- 		depends on !BR2_ARM_EABIHF
-@@ -32,19 +32,19 @@ choice
- 		depends on !BR2_ARM_FPU_VFPV4 && !BR2_ARM_FPU_VFPV4D16
- 
- 	config BR2_GCC_VERSION_4_5_X
--		depends on !BR2_microblaze && !BR2_arc && !BR2_avr32 && !BR2_cortex_a7 && !BR2_cortex_a15 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_fa526 && !BR2_pj4
-+		depends on !BR2_microblaze && !BR2_arc && !BR2_avr32 && !BR2_cortex_a7 && !BR2_cortex_a15 && !BR2_x86_jaguar && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_fa526 && !BR2_pj4
- 		select BR2_GCC_NEEDS_MPC
- 		# ARM EABIhf support appeared in gcc 4.6
- 		depends on !BR2_ARM_EABIHF
- 		bool "gcc 4.5.x"
- 
- 	config BR2_GCC_VERSION_4_6_X
--		depends on !BR2_microblaze && !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_cortex_a7 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_pj4
-+		depends on !BR2_microblaze && !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_cortex_a7 && !BR2_x86_jaguar && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_pj4
- 		select BR2_GCC_NEEDS_MPC
- 		bool "gcc 4.6.x"
- 
- 	config BR2_GCC_VERSION_4_7_X
--		depends on !BR2_microblaze && !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_pj4
-+		depends on !BR2_microblaze && !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_x86_jaguar && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_pj4
- 		select BR2_GCC_NEEDS_MPC
- 		bool "gcc 4.7.x"
- 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index e3d4bb9..f02f89b 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -596,6 +596,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201209
- 	depends on BR2_i386 || BR2_x86_64
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on !BR2_PREFER_STATIC_LIB
-+	depends on !BR2_x86_jaguar
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -621,6 +622,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201203
- 	depends on BR2_i386 || BR2_x86_64
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on !BR2_PREFER_STATIC_LIB
-+	depends on !BR2_x86_jaguar
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-@@ -645,6 +647,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
- 	depends on BR2_i386 || BR2_x86_64
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on !BR2_PREFER_STATIC_LIB
-+	depends on !BR2_x86_jaguar
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
+ > -PSPLASH_VERSION = 0.1
+ > -PSPLASH_SITE = http://downloads.yoctoproject.org/releases/psplash
+ > +PSPLASH_VERSION = afd4e228c606a9998feae44a3fed4474803240b7
+ > +PSPLASH_SITE = git://git.yoctoproject.org/psplash
+ >  PSPLASH_LICENSE = GPLv2+
+ >  PSPLASH_LICENSE_FILES = COPYING
+
+That git revision no longer has a COPYING file, so I've dropped this
+line and committed, thanks.
+
 -- 
-1.8.5.2
+Bye, Peter Korsgaard
