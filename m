@@ -1,140 +1,114 @@
-From: Adrien =?utf-8?Q?B=C3=A9raud?= <adrien.beraud@savoirfairelinux.com>
-Date: Wed, 15 Jan 2014 11:20:08 -0500 (EST)
-Subject: [Buildroot] [PATCH v4] arch: add support for "jaguar" AMD CPU
- optimisations.
-In-Reply-To: <828938079.582663.1389643754921.JavaMail.root@mail>
-Message-ID: <403077357.139986.1389802808673.JavaMail.root@mail>
+From: julien.boibessot at free.fr <julien.boibessot@free.fr>
+Date: Wed, 15 Jan 2014 18:27:10 +0100
+Subject: [Buildroot] [PATCH] Add gpm (general purpose mouse) server package
+Message-ID: <1389806830-24712-1-git-send-email-julien.boibessot@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-AMD Jaguar ( https://en.wikipedia.org/wiki/Jaguar_%28microarchitecture%29 ) is suddenly
-a popular architecture since it is used in the PS4 and the XBox One.
-Many embedded systems are also likely to use it in the next years.
+From: Julien Boibessot <julien.boibessot@armadeus.com>
 
-This patch adds support for GCC architecture-specific optimizations and tuning for these CPUs.
-These optimizations are available with GCC 4.8+.
+To test it:
+* configure a getty on tty1 (virtual Framebuffer terminal)
+* plug USB keyboard and mouse, login in tty1
+* launch gpm: gpm -m /dev/input/mouse0 -t imps2
+* mouse cut & paste should work on terminal
+* launch gpm-root from this terminal
+* Ctrl+mouse buttons should open text menus
 
-Signed-off-by: Adrien Beraud <adrien.beraud@savoirfairelinux.com>
+Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
 ---
- arch/Config.in.x86                     | 10 ++++++++++
- package/gcc/Config.in.host             | 10 +++++-----
- toolchain/toolchain-external/Config.in |  3 +++
- 3 files changed, 18 insertions(+), 5 deletions(-)
+ package/Config.in     |    1 +
+ package/gpm/Config.in |   20 ++++++++++++++++++++
+ package/gpm/gpm.mk    |   39 +++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 60 insertions(+), 0 deletions(-)
+ create mode 100644 package/gpm/Config.in
+ create mode 100644 package/gpm/gpm.mk
 
-diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
-index ce30605..1884251 100644
---- a/arch/Config.in.x86
-+++ b/arch/Config.in.x86
-@@ -120,6 +120,13 @@ config BR2_x86_barcelona
- 	select BR2_X86_CPU_HAS_SSE
- 	select BR2_X86_CPU_HAS_SSE2
- 	select BR2_X86_CPU_HAS_SSE3
-+config BR2_x86_jaguar
-+	bool "jaguar"
-+	select BR2_X86_CPU_HAS_MMX
-+	select BR2_X86_CPU_HAS_SSE
-+	select BR2_X86_CPU_HAS_SSE2
-+	select BR2_X86_CPU_HAS_SSE3
-+	select BR2_X86_CPU_HAS_SSSE3
- config BR2_x86_geode
- 	bool "geode"
- 	# Don't include MMX support because there several variant of geode
-@@ -168,6 +175,7 @@ config BR2_ARCH
- 	default "i686"		if BR2_x86_opteron && BR2_i386
- 	default "i686"		if BR2_x86_opteron_sse3 && BR2_i386
- 	default "i686"		if BR2_x86_barcelona && BR2_i386
-+	default "i686"		if BR2_x86_jaguar && BR2_i386
- 	default "i686"		if BR2_x86_k6
- 	default "i686"		if BR2_x86_k6_2
- 	default "i686"		if BR2_x86_athlon
-@@ -196,6 +204,7 @@ config BR2_GCC_TARGET_TUNE
- 	default "k8"		if BR2_x86_opteron
- 	default "k8-sse3"	if BR2_x86_opteron_sse3
- 	default "barcelona"	if BR2_x86_barcelona
-+	default "btver2"	if BR2_x86_jaguar
- 	default "k6"		if BR2_x86_k6
- 	default "k6-2"		if BR2_x86_k6_2
- 	default "athlon"	if BR2_x86_athlon
-@@ -225,6 +234,7 @@ config BR2_GCC_TARGET_ARCH
- 	default "k8"		if BR2_x86_opteron
- 	default "k8-sse3"	if BR2_x86_opteron_sse3
- 	default "barcelona"	if BR2_x86_barcelona
-+	default "btver2"	if BR2_x86_jaguar
- 	default "k6"		if BR2_x86_k6
- 	default "k6-2"		if BR2_x86_k6_2
- 	default "athlon"	if BR2_x86_athlon
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 41c1213..db14564 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -18,12 +18,12 @@ choice
- 		bool "gcc 4.2.2-avr32-2.1.5"
- 
- 	config BR2_GCC_VERSION_4_3_X
--		depends on !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_cortex_a5 && !BR2_cortex_a7 && !BR2_cortex_a8 && !BR2_cortex_a9 && !BR2_cortex_a15 && !BR2_x86_atom && !BR2_powerpc_e300c2 && !BR2_powerpc_e300c3 && !BR2_powerpc_e500mc && !BR2_powerpc_464 && !BR2_powerpc_464fp && !BR2_powerpc_476 && !BR2_powerpc_476fp && !BR2_fa526 && !BR2_pj4
-+		depends on !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_cortex_a5 && !BR2_cortex_a7 && !BR2_cortex_a8 && !BR2_cortex_a9 && !BR2_cortex_a15 && !BR2_x86_atom && !BR2_x86_jaguar && !BR2_powerpc_e300c2 && !BR2_powerpc_e300c3 && !BR2_powerpc_e500mc && !BR2_powerpc_464 && !BR2_powerpc_464fp && !BR2_powerpc_476 && !BR2_powerpc_476fp && !BR2_fa526 && !BR2_pj4
- 		depends on !BR2_ARM_EABIHF
- 		bool "gcc 4.3.x"
- 
- 	config BR2_GCC_VERSION_4_4_X
--		depends on !BR2_arc && !BR2_avr32 && !BR2_cortex_a5 && !BR2_cortex_a7 && !BR2_cortex_a15 && !BR2_x86_atom && !BR2_powerpc_476 && !BR2_powerpc_476fp && !BR2_fa526 && !BR2_pj4
-+		depends on !BR2_arc && !BR2_avr32 && !BR2_cortex_a5 && !BR2_cortex_a7 && !BR2_cortex_a15 && !BR2_x86_atom && !BR2_x86_jaguar && !BR2_powerpc_476 && !BR2_powerpc_476fp && !BR2_fa526 && !BR2_pj4
- 		bool "gcc 4.4.x"
- 		# ARM EABIhf support appeared in gcc 4.6
- 		depends on !BR2_ARM_EABIHF
-@@ -31,19 +31,19 @@ choice
- 		depends on !BR2_ARM_FPU_VFPV4 && !BR2_ARM_FPU_VFPV4D16
- 
- 	config BR2_GCC_VERSION_4_5_X
--		depends on !BR2_arc && !BR2_avr32 && !BR2_cortex_a7 && !BR2_cortex_a15 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_fa526 && !BR2_pj4
-+		depends on !BR2_arc && !BR2_avr32 && !BR2_cortex_a7 && !BR2_cortex_a15 && !BR2_x86_jaguar && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_fa526 && !BR2_pj4
- 		select BR2_GCC_NEEDS_MPC
- 		# ARM EABIhf support appeared in gcc 4.6
- 		depends on !BR2_ARM_EABIHF
- 		bool "gcc 4.5.x"
- 
- 	config BR2_GCC_VERSION_4_6_X
--		depends on !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_cortex_a7 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_pj4
-+		depends on !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_cortex_a7 && !BR2_x86_jaguar && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_pj4
- 		select BR2_GCC_NEEDS_MPC
- 		bool "gcc 4.6.x"
- 
- 	config BR2_GCC_VERSION_4_7_X
--		depends on !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_pj4
-+		depends on !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_x86_jaguar && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_pj4
- 		select BR2_GCC_NEEDS_MPC
- 		bool "gcc 4.7.x"
- 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 22e3fb2..908eb50 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -596,6 +596,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201209
- 	depends on BR2_i386 || BR2_x86_64
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on !BR2_PREFER_STATIC_LIB
-+	depends on !BR2_x86_jaguar
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -621,6 +622,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201203
- 	depends on BR2_i386 || BR2_x86_64
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on !BR2_PREFER_STATIC_LIB
-+	depends on !BR2_x86_jaguar
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-@@ -645,6 +647,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
- 	depends on BR2_i386 || BR2_x86_64
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on !BR2_PREFER_STATIC_LIB
-+	depends on !BR2_x86_jaguar
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
+diff --git a/package/Config.in b/package/Config.in
+index 78c0e06..d52c65e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -290,6 +290,7 @@ source "package/fmtools/Config.in"
+ source "package/freescale-imx/Config.in"
+ source "package/fxload/Config.in"
+ source "package/gadgetfs-test/Config.in"
++source "package/gpm/Config.in"
+ source "package/gpsd/Config.in"
+ source "package/gptfdisk/Config.in"
+ source "package/gvfs/Config.in"
+diff --git a/package/gpm/Config.in b/package/gpm/Config.in
+new file mode 100644
+index 0000000..b60f4a3
+--- /dev/null
++++ b/package/gpm/Config.in
+@@ -0,0 +1,20 @@
++config BR2_PACKAGE_GPM
++	bool "gpm mouse server"
++	help
++	  "gpm" means general purpose mouse (server) and provides mouse support
++	  for Linux virtual consoles.
++	  gpm-root (to draw menus in current virtual console; config file in
++	  /etc/gpm-root.conf) and disable-paste (to disable paste buffer for
++	  security reasons), will also be installed.
++
++	  http://www.nico.schottelius.org/software/gpm/
++
++if BR2_PACKAGE_GPM
++
++config BR2_PACKAGE_GPM_INSTALL_TEST_TOOLS
++	bool "install gpm test tools also"
++	help
++	  Install gpm test tools (get-versions, mev, hltest, mouse-test,
++	  display-buttons & display-coords).
++
++endif
+diff --git a/package/gpm/gpm.mk b/package/gpm/gpm.mk
+new file mode 100644
+index 0000000..49ac8df
+--- /dev/null
++++ b/package/gpm/gpm.mk
+@@ -0,0 +1,39 @@
++#############################################################
++#
++# gpm
++#
++#############################################################
++
++GPM_VERSION = 1.20.7
++GPM_SOURCE = gpm-$(GPM_VERSION).tar.bz2
++GPM_SITE = http://www.nico.schottelius.org/software/gpm/archives/
++GPM_LICENSE = GPLv2+
++GPM_LICENSE_FILES = COPYING
++
++GPM_INSTALL_STAGING = YES
++
++# To generate missing configure:
++define GPM_AUTOGEN_CALL
++	cd $(@D); ./autogen.sh
++endef
++
++GPM_PRE_CONFIGURE_HOOKS += GPM_AUTOGEN_CALL
++
++define GPM_REMOVE_TEST_TOOLS_FROM_TARGET
++	for tools in mev hltest mouse-test display-buttons \
++			get-versions display-coords; do \
++		rm -f $(TARGET_DIR)/usr/bin/$$tools ; \
++	done
++endef
++
++ifeq ($(BR2_PACKAGE_GPM_INSTALL_TEST_TOOLS),)
++GPM_POST_INSTALL_TARGET_HOOKS += GPM_REMOVE_TEST_TOOLS_FROM_TARGET
++endif
++
++define GPM_INSTALL_GPM_ROOT_CONF_ON_TARGET
++	$(INSTALL) -m 0644 -D $(@D)/conf/gpm-root.conf $(TARGET_DIR)/etc/
++endef
++
++GPM_POST_INSTALL_TARGET_HOOKS += GPM_INSTALL_GPM_ROOT_CONF_ON_TARGET
++
++$(eval $(autotools-package))
 -- 
-1.8.5.2
+1.7.5.4
