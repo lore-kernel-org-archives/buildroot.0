@@ -1,63 +1,63 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Wed, 15 Jan 2014 19:12:04 +0100
-Subject: [Buildroot] [PATCH v3 1/2] ffmpeg: bump to version 1.2.4
-References: <BLU0-SMTP2638CE0203ADFD44E6B8961D9CB0@phx.gbl>
- <CAHXCMM+SfJ0j1vUTyHv7c2VbL9F1BimMcZD7YcfqXbOPmasssA@mail.gmail.com>
-Message-ID: <kkviqaxprn.ln2@ID-313208.user.individual.net>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 15 Jan 2014 15:24:27 -0300
+Subject: [Buildroot] [PATCH] Add SMS Tools Server 3 package
+In-Reply-To: <1389194289-10657-1-git-send-email-julien.boibessot@free.fr>
+References: <1389194289-10657-1-git-send-email-julien.boibessot@free.fr>
+Message-ID: <52D6D25B.3040603@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Samuel Martin <s.martin49@gmail.com> wrote
-in
-news:CAHXCMM+SfJ0j1vUTyHv7c2VbL9F1BimMcZD7YcfqXbOPmasssA at mail.gmail.com: 
+On 01/08/2014 12:18 PM, julien.boibessot at free.fr wrote:
 
-> Have you tried gst-ffmpeg?
-> It seems this bump triggers some build failures:
-> http://autobuild.buildroot.net/results/3cd/3cd2a39bba732a625117aa2941923c
-> 200ec55f51/build-end.log 
-> 
-> Reverting back to version 0.8.15 fixes the build.
+Hi. Let's see...
 
-Hi,
+> +config BR2_PACKAGE_SMSTOOLS3_NB_MODEMS
+> +	string "Number of modems to support"
+> +	default 1
 
-config logfrom gst-ffmpeg says:
+What does this knob do in/to the code?
 
-configure: Using system-installed FFMpeg code
-configure: WARNING:
-  ======================================================================
-   WARNING: you have chosen to build gst-ffmpeg against a random
-   external version of Libav instead of building it against the tested
-   internal Libav snapshot that is included with gst-ffmpeg.
+> +
+> +config BR2_PACKAGE_SMSTOOLS3_START_AT_BOOT
+> +	bool "Start SMS Server Tools at system boot"
+> +	default y
 
-   This is a very bad idea.  So bad in fact that words cannot express
-   just how bad it is.  Suffice to say that it is BAD.
+Ehhmm no, we don't make initscripts conditional that way, there are
+various hooks to get rid of it if someone doesn't want it that way or
+they run services their own way.
 
-   The GStreamer developers cannot and will not support a gst-ffmpeg
-   built this way.  Any bug reports that indicate there is an external
-   version of Libav involved will be closed immediately without further
-   investigation.
+> +
+> +endif
+> +
+> +comment "smstools3 needs a toolchain w/ wchar, threads"
+> +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+> diff --git a/package/smstools3/S50smsd b/package/smstools3/S50smsd
+> new file mode 100644
+> index 0000000..ded4189
+> --- /dev/null
+> +++ b/package/smstools3/S50smsd
+> @@ -0,0 +1,43 @@
+> +#!/bin/sh
+> +#
+> +# Starts the SMS Server Tools 3
+> +#
+> +
+> +NAME=smsd
+> +DAEMON=/usr/local/bin/$NAME
 
-   The reason such a setup can't be supported is that the Libav API
-   and ABI is in constant flux, yet there aren't any official releases
-   of the Libav library to develop against.  This makes it impossible
-   to guarantee that gst-ffmpeg will work reliably, or even compile,
-   with a randomly picked version Libav.  Even if gst-ffmpeg compiles
-   and superficially appears to work fine against your chosen external
-   Libav version, that might just not be the case on other systems, or
-   even the same system at a later time, or when using decoders,
-   encoders, demuxers or muxers that have not been tested.
+/usr/local? Why?
 
-   Please do not create or distribute binary packages of gst-Libav
-   that link against an external ffmpeg. Thank you!
-  ======================================================================
-  
-configure: creating ./config.status
+> +ifeq ($(BR2_PACKAGE_SMSTOOLS3_START_AT_BOOT),y)
+> +SMSTOOLS3_INIT_SCRIPT_NAME = S50smsd
+> +else
+> +SMSTOOLS3_INIT_SCRIPT_NAME = 50smsd
+> +endif
 
-Currently I am testing a patch for gst-ffmpeg which uses "the tested 
-internal Libav snapshot that is included with gst-ffmpeg". This should fix 
-the problem.
+Please use SMSTOOLS3_INSTALL_INIT_SYSV for the script.
+See docs/manual/adding-packages-generic.txt for the reason.
 
-Regards, Bernd
+Otherwise looking good in general without testing it though.
+Regards.
