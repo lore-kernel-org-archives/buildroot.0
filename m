@@ -1,42 +1,46 @@
-From: Mike Zick <minimod@morethan.org>
-Date: Wed, 15 Jan 2014 06:59:05 -0600
-Subject: [Buildroot] [PATCH] luarocks: fix compilation on 64bits
-In-Reply-To: <87zjmxv3up.fsf@dell.be.48ers.dk>
-References: <1389775370-29415-1-git-send-email-francois.perrad@gadz.org>
- <874n55wo2y.fsf@dell.be.48ers.dk>
- <CAB0FRstP_cEdRwAKjiF2qVYicWP9XaVQKbPFL9oFUaiqM5Wq7w@mail.gmail.com>
- <87zjmxv3up.fsf@dell.be.48ers.dk>
-Message-ID: <20140115065905.538e66a5@core2quad.morethan.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 15 Jan 2014 10:03:44 -0300
+Subject: [Buildroot] [PATCH] mpd: add more gcc exclusions
+Message-ID: <1389791024-15833-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 15 Jan 2014 13:14:54 +0100
-Peter Korsgaard <jacmet@uclibc.org> wrote:
+The codesourcery powerpc toolchains also include a gcc that's too old
+for mpd to build properly. Fixes:
+http://autobuild.buildroot.net/results/be0/be0aff9814ded4ba74999283530b805af01992da/
 
->  >> What about BR2_PREFER_STATIC_LIB (for both CFLAGS and LDFLAGS
->  >> lines)?  
-> 
->  > native Lua modules/extensions are always shared lib.  
-> 
-> Ok, committed with a reworded commit message, thanks.
->
+Also add toolchain comment exclusion for avr32 & sparc since it won't be
+available anyway.
 
-"Close enough" for the purposes of Buildroot.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/mpd/Config.in | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Both modules and extensions in either native Lua or as
-objects from foreign languages (such as "C") may be 
-statically linked into the Lua interpreter.
-
-The process and changes required are well documented,
-but would probably be impractical to automate in the
-build system.
-
-So the answer for the BR2_PREFER_STATIC_LIB question is:
-"Not supported within the Buildroot system."
-or on a positive note:
-"Buildroot only supports Lua externals as dynamic libraries."
-
-Mike
+diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+index 5a03a62..063c65d 100644
+--- a/package/mpd/Config.in
++++ b/package/mpd/Config.in
+@@ -4,7 +4,9 @@ menuconfig BR2_PACKAGE_MPD
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+ 	depends on BR2_USE_MMU # libglib2
+-	depends on !(BR2_avr32 || BR2_sparc) # gcc too old
++	# avr32, sparc & CS powerpc gcc are too old
++	depends on !(BR2_avr32 || BR2_sparc)
++	depends on !(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 || BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009)
+ 	depends on !BR2_UCLIBC_VERSION_0_9_32 # lacks signalfd
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+@@ -200,5 +202,6 @@ endif
+ 
+ comment "mpd needs a toolchain w/ C++, threads, wchar"
+ 	depends on BR2_USE_MMU
++	depends on !(BR2_avr32 || BR2_sparc)
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS
+-- 
+1.8.3.2
