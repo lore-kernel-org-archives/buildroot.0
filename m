@@ -1,30 +1,29 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Wed, 15 Jan 2014 12:46:15 +1300
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-01-13
-In-Reply-To: <20140114073009.D944B10264B@stock.ovh.net>
-References: <20140114073009.D944B10264B@stock.ovh.net>
-Message-ID: <CAFOYHZB+FECgTWX1aa2cSDQMHSS83f8Ri7yOj7H+nZyY6Lr_kw@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 14 Jan 2014 21:08:02 -0300
+Subject: [Buildroot] [PATCH 5/6] pkg-infra: add possiblity to check
+ downloaded files against known hashes
+In-Reply-To: <dc5d6ba62805a74ef57fc2c779e97a00056cbfa6.1389569992.git.yann.morin.1998@free.fr>
+References: <cover.1389569992.git.yann.morin.1998@free.fr>
+ <dc5d6ba62805a74ef57fc2c779e97a00056cbfa6.1389569992.git.yann.morin.1998@free.fr>
+Message-ID: <52D5D162.7020203@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+On 01/12/2014 08:44 PM, Yann E. MORIN wrote:
 
-On Tue, Jan 14, 2014 at 8:30 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
->        arm |                tcpreplay-4.0.0 | NOK | http://autobuild.buildroot.net/results/54b739bd3713de87113cbed35e05b9074282b30d/
->        arm |                tcpreplay-4.0.0 | NOK | http://autobuild.buildroot.net/results/fec13bcb3e65e691f6f3c34548024312c3ba9ec1/
+> The choosen hash function is SHA1 since it is widely available, though
+> theoretical attacks have been devised (but no known practical attack is
+> known).
 
-I have tried to reproduce both of these build configs. The first one
-fails for me with an unrelated error ( /usr/X11R6/lib in chroot .: No
-such file or directory). The second one succeeds. Am I doing something
-wrong?
-
-  git checkout `curl
-http://autobuild.buildroot.net/results/fec/fec13bcb3e65e691f6f3c34548024312c3ba9ec1/gitid`
-  curl http://autobuild.buildroot.net/results/fec/fec13bcb3e65e691f6f3c34548024312c3ba9ec1/config
-| sed 's|/home/test/||' > .config
-  make
+Hi.
+Normally you want whichever upstream uses for their announcement, you
+shouldn't hardcode the method and you definitely shouldn't compute when
+you download.
+That's because you may bump some time later after compromise and if you
+compute it when bumping then you're just giving your word on a maybe
+compromised one.
+Just my $.02
+Regards.
