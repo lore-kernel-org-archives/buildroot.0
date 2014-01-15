@@ -1,38 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 15 Jan 2014 14:10:44 +0100
-Subject: [Buildroot] [PATCH 03/29] ARC: [eznps] fix STRIP_none for uclibc
-In-Reply-To: <264C179F799EF24AB26D5319053335E80E59B737BE@ezexch.ezchip.com>
- (Noam Camus's message of "Sun, 22 Dec 2013 17:31:38 +0200")
-References: <264C179F799EF24AB26D5319053335E80E59B737BE@ezexch.ezchip.com>
-Message-ID: <87r489v19n.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 15 Jan 2014 14:11:05 +0100
+Subject: [Buildroot] [git commit] uclibc: fix STRIP_none handling
+Message-ID: <20140115131134.5697D9C4E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Noam" == Noam Camus <noamc@ezchip.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=e090aeaa87c1ede3c10869d2aef4f7a2a936ad54
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > It was with reversed logic
- > Signed-off-by: Noam Camus <noamc@ezchip.com>
- > ---
- >  package/uclibc/uclibc.mk |    2 ++
- >  1 files changed, 2 insertions(+), 0 deletions(-)
+It was with reversed logic
 
- > diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk index def5388..5555bf5 100644
- > --- a/package/uclibc/uclibc.mk
- > +++ b/package/uclibc/uclibc.mk
- > @@ -403,6 +403,8 @@ endif
- >  #
+Signed-off-by: Noam Camus <noamc@ezchip.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/uclibc/uclibc.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index bf1de05..1978bbd 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -398,6 +398,8 @@ endif
+ #
  
- >  ifeq ($(BR2_STRIP_none),y)
- > +UCLIBC_STRIP_CONFIG = $(call UCLIBC_OPT_UNSET,DOSTRIP,$(@D)) else
- >  UCLIBC_STRIP_CONFIG = $(call UCLIBC_OPT_SET,DOSTRIP,y,$(@D))  endif
-
-It looks like your mailer has corrupted the patch pretty badly, but I've
-fixed it up and committed - Thanks.
-
-Please consider using git send-email in the future.
-
--- 
-Bye, Peter Korsgaard
+ ifeq ($(BR2_STRIP_none),y)
++UCLIBC_STRIP_CONFIG = $(call UCLIBC_OPT_UNSET,DOSTRIP,$(@D))
++else
+ UCLIBC_STRIP_CONFIG = $(call UCLIBC_OPT_SET,DOSTRIP,y,$(@D))
+ endif
+ 
