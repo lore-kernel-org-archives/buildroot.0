@@ -1,39 +1,65 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Jan 2014 11:10:24 +0100
-Subject: [Buildroot] [git commit] raspberrypi: tweak readme
-Message-ID: <20140115102206.C36AB9C4BD@busybox.osuosl.org>
+From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Wed, 15 Jan 2014 11:49:14 +0100
+Subject: [Buildroot] [PATCH] luarocks: fix compilation on 64bits
+In-Reply-To: <874n55wo2y.fsf@dell.be.48ers.dk>
+References: <1389775370-29415-1-git-send-email-francois.perrad@gadz.org>
+ <874n55wo2y.fsf@dell.be.48ers.dk>
+Message-ID: <CAB0FRstP_cEdRwAKjiF2qVYicWP9XaVQKbPFL9oFUaiqM5Wq7w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fae5ac30f0e527c67fc52244b9af909630f3a992
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+2014/1/15 Peter Korsgaard <jacmet@uclibc.org>:
+>>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
+>
+>  > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+>
+> Where did you see this? On the autobuilders? If yes, please add a link.
+>
 
-Make the readme.txt for the raspberrypi board less misleading regarding the
-kernel image file name.
+in the latest autobuilder report, native Lua modules using the
+`luarocks-package` infrastructure are broken :
+x86_64 | lbase64-20120820-1 | NOK |
+http://autobuild.buildroot.net/results/f28a624f89f4de249a1b7a718f5ae31109ba9171/
+x86_64 | luabitop-1.0.2-1 | NOK |
+http://autobuild.buildroot.net/results/1ead0a162a251d3e7bf8598036fa06c4befeb3d9/
+x86_64 | luaexpat-1.2.0-1 | NOK |
+http://autobuild.buildroot.net/results/0544cead086ba51b45dfa1df114787a8f22eaf8d/
+x86_64 | luafilesystem-1.6.2-1 | NOK |
+http://autobuild.buildroot.net/results/60161d13d596d41dd4059977eb947d72c172f0d5/
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- board/raspberrypi/readme.txt |    5 ++---
- 1 files changed, 2 insertions(+), 3 deletions(-)
+> It's not really about 32bits/64bits, but yes, x86-64 is one of the archs
+> needing -fPIC.
 
-diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
-index 2052e2b..8532de4 100644
---- a/board/raspberrypi/readme.txt
-+++ b/board/raspberrypi/readme.txt
-@@ -100,10 +100,9 @@ files:
- For example:
- 
-  $ cp output/images/rpi-firmware/* /mnt/mountpointboot
-- $ cp output/images/zImage /mnt/mountpointboot/zImage.img
-+ $ cp output/images/zImage /mnt/mountpointboot
- 
--Note: The default name is kernel.img.
--Actually, the name is zImage and it's define in the file config.txt like:
-+Note: The kernel image file name is defined in config.txt like this:
- kernel=zImage
- 
- If you use a volatile rootfs, Skip to "Finish", below. For a persistent
+Yes, x86_64
+
+>
+>  > ---
+>  >  package/luarocks/luarocks.mk |    2 +-
+>  >  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+>  > diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
+>  > index 85b6866..6cfd92e 100644
+>  > --- a/package/luarocks/luarocks.mk
+>  > +++ b/package/luarocks/luarocks.mk
+>  > @@ -31,7 +31,7 @@ define HOST_LUAROCKS_INSTALL_CMDS
+>  >      echo "   LUA_LIBDIR = [[$(STAGING_DIR)/usr/lib]],"      >> $(LUAROCKS_CONFIG_FILE)
+>  >      echo "   CC = [[$(TARGET_CC)]],"                        >> $(LUAROCKS_CONFIG_FILE)
+>  >      echo "   LD = [[$(TARGET_CC)]],"                        >> $(LUAROCKS_CONFIG_FILE)
+>  > -    echo "   CFLAGS = [[$(TARGET_CFLAGS)]],"                >> $(LUAROCKS_CONFIG_FILE)
+>  > +    echo "   CFLAGS = [[$(TARGET_CFLAGS) -fPIC]],"          >> $(LUAROCKS_CONFIG_FILE)
+>  >      echo "   LIBFLAG = [[-shared $(TARGET_LDFLAGS)]],"      >> $(LUAROCKS_CONFIG_FILE)
+>
+> What about BR2_PREFER_STATIC_LIB (for both CFLAGS and LDFLAGS lines)?
+
+native Lua modules/extensions are always shared lib.
+
+>
+> --
+> Bye, Peter Korsgaard
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
