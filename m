@@ -1,16 +1,16 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Thu, 16 Jan 2014 01:15:46 +0100
-Subject: [Buildroot] [PATCH v2 03/12] libcdio: new package
+Date: Thu, 16 Jan 2014 01:15:47 +0100
+Subject: [Buildroot] [PATCH v2 04/12] libnfs: new package
 In-Reply-To: <1389831355-19983-1-git-send-email-maxime.hadjinlian@gmail.com>
 References: <1389831355-19983-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <1389831355-19983-4-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <1389831355-19983-5-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The GNU Compact Disc Input and Control library.
+nfs userspace implementation.
 This package was originally found at : https://github.com/huceke/buildroot-rbp
 By gimli <ebsi4711@gmail.com>
 
@@ -19,67 +19,65 @@ Cc: gimli <ebsi4711@gmail.com>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
 Changes v1 -> v2
-  - Bump version to 0.90 (Bernd Kuhls)
-  - Fix comment for requiring C++ (Peter Korsgaard)
+  - Bump version to 1.8.0 (Bernd Kuhls)
+  - Fix comment on toolchain option needed (Peter Korsgaard)
 ---
- package/Config.in          |  1 +
- package/libcdio/Config.in  | 11 +++++++++++
- package/libcdio/libcdio.mk | 18 ++++++++++++++++++
- 3 files changed, 30 insertions(+)
- create mode 100644 package/libcdio/Config.in
- create mode 100644 package/libcdio/libcdio.mk
+ package/Config.in        |  1 +
+ package/libnfs/Config.in | 11 +++++++++++
+ package/libnfs/libnfs.mk | 16 ++++++++++++++++
+ 3 files changed, 28 insertions(+)
+ create mode 100644 package/libnfs/Config.in
+ create mode 100644 package/libnfs/libnfs.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 0d3c0ce..27592d7 100644
+index 27592d7..bd5bec1 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -451,6 +451,7 @@ source "package/celt051/Config.in"
- source "package/fdk-aac/Config.in"
- source "package/libao/Config.in"
- source "package/libcdaudio/Config.in"
-+source "package/libcdio/Config.in"
- source "package/libcue/Config.in"
- source "package/libcuefile/Config.in"
- source "package/libid3tag/Config.in"
-diff --git a/package/libcdio/Config.in b/package/libcdio/Config.in
+@@ -514,6 +514,7 @@ source "package/libconfig/Config.in"
+ source "package/libconfuse/Config.in"
+ source "package/libfuse/Config.in"
+ source "package/liblockfile/Config.in"
++source "package/libnfs/Config.in"
+ source "package/libsysfs/Config.in"
+ source "package/lockdev/Config.in"
+ endmenu
+diff --git a/package/libnfs/Config.in b/package/libnfs/Config.in
 new file mode 100644
-index 0000000..d2d61e7
+index 0000000..657bdda
 --- /dev/null
-+++ b/package/libcdio/Config.in
++++ b/package/libnfs/Config.in
 @@ -0,0 +1,11 @@
-+config BR2_PACKAGE_LIBCDIO
-+	bool "libcdio"
-+	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
-+	depends on BR2_INSTALL_LIBSTDCPP
++config BR2_PACKAGE_LIBNFS
++	bool "libnfs"
++	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	depends on BR2_LARGEFILE
 +	help
-+	  The GNU Compact Disc Input and Control library.
++	  nfs userspace implementation.
 +
-+	  http://www.gnu.org/software/libcdio/
++	  http://github.com/sahlberg/libnfs
 +
-+comment "libcdio needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/libcdio/libcdio.mk b/package/libcdio/libcdio.mk
++comment "libnfs needs a toolchain w/ RPC and LARGEFILE"
++	depends on !(BR2_TOOLCHAIN_HAS_NATIVE_RPC && BR2_LARGEFILE)
+diff --git a/package/libnfs/libnfs.mk b/package/libnfs/libnfs.mk
 new file mode 100644
-index 0000000..a55c7b4
+index 0000000..a17d8c3
 --- /dev/null
-+++ b/package/libcdio/libcdio.mk
-@@ -0,0 +1,18 @@
++++ b/package/libnfs/libnfs.mk
+@@ -0,0 +1,16 @@
 +################################################################################
 +#
-+# libcdio
++# libnfs
 +#
 +################################################################################
 +
-+LIBCDIO_VERSION = 0.90
-+LIBCDIO_SITE = $(BR2_GNU_MIRROR)/libcdio
-+LIBCDIO_INSTALL_STAGING = YES
-+LIBCDIO_LICENSE = GPLv3+
-+LIBCDIO_LICENSE_FILES = COPYING
-+LIBCDIO_CONF_OPT = --disable-example-progs
-+
-+ifeq ($(BR2_ENABLE_LOCALE),)
-+LIBCDIO_DEPENDENCIES = libiconv
-+endif
++LIBNFS_VERSION = libnfs-1.8.0
++LIBNFS_SITE = $(call github,sahlberg,libnfs,$(LIBNFS_VERSION))
++LIBNFS_INSTALL_STAGING = YES
++LIBNFS_AUTORECONF = YES
++LIBNFS_MAKE = $(MAKE1)
++LIBNFS_LICENSE = LGPLv2.1+
++LIBNFS_LICENSE_FILES = LICENCE-LGPL-2.1.txt
++LIBNFS_DEPENDENCIES = host-pkgconf
 +
 +$(eval $(autotools-package))
 -- 
