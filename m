@@ -1,85 +1,66 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Thu, 16 Jan 2014 17:02:21 +0100
-Subject: [Buildroot] [PATCH] weston: fix fbdev backend.
-Message-ID: <1389888141-3030-1-git-send-email-eric.le.bihan.dev@free.fr>
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+Date: Thu, 16 Jan 2014 15:30:56 -0200
+Subject: [Buildroot] [PATCH v6 0/5] udev is now provided by systemd or
+	eudev
+In-Reply-To: <CAKi4VAJs4xU0YNJGyf9nuU4YDpKKpcJydg=j8Jf3-_g0iJ_kUw@mail.gmail.com>
+References: <1389627907-7821-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <CAKi4VAJs4xU0YNJGyf9nuU4YDpKKpcJydg=j8Jf3-_g0iJ_kUw@mail.gmail.com>
+Message-ID: <CAKi4VAKXDGyPrL-1DaZHdRHpajy0s2NZwYrdpRjo0n+TrAHoNw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The compilation of the program weston-launcher is currently disabled, so
-the only way to launch Weston (on framebuffer) is to execute (as root):
+Hi Peter,
 
-  $ openvt -c 2 -s -- weston \
-  	--backend=/usr/lib/weston/fbdev-backend.so \
-	--tty=2 \
-	--log=/tmp/weston.log
+Any plans to apply the rest of this series?
 
-Unfortunately you will only end up with a black screen. The reason is
-given in the log file:
+thanks
+Lucas De Marchi
 
-  /dev/tty2 is already in graphics mode, is another display server running?
+On Mon, Jan 13, 2014 at 2:04 PM, Lucas De Marchi
+<lucas.de.marchi@gmail.com> wrote:
+> Hi Eric,
+>
+> On Mon, Jan 13, 2014 at 1:45 PM, Eric Le Bihan
+> <eric.le.bihan.dev@free.fr> wrote:
+>> This series converts udev to a virtual package, either provided by systemd or
+>> eudev.
+>>
+>> Starting with version 183, udev has been merged into systemd. This forces the
+>> use of systemd as the init system if /dev is to be dynamically managed by
+>> udev. eudev is a fork of udev, maintained by Gentoo, but isolated from
+>> systemd, so it can be used with any init system.
+>>
+>> Systemd has been bumped to v207 and a new eudev package has been added.
+>> Version 1.3 of eudev is in sync with systemd v207.
+>>
+>> The bump of systemd to v207 also introduces new options, like the activation
+>> of the journal gateway.
+>>
+>> In the end:
+>>
+>>   - if systemd is selected as init system, the /dev management will handled by
+>>     udev. No other choice possible.
+>>   - if busybox or SysV is chosen, the user can choose to manage /dev
+>>     statically, or dynamically using mdev or eudev.
+>>
+>> Changes v5 -> v6:
+>>   - fixed packages not properly converted to BR2_PACKAGE_HAS_UDEV
+>>     (reported by Samuel M.).
+>>   - forced inotify support in Linux if eudev is used for /dev management.
+>>   - forced inotify support in Linux if systemd is used as init system.
+>>   - updated information about systemd requirements.
+>
+> Looks good. I'm successfully using this.
+>
+> thanks
+>
+> Lucas De Marchi
 
-Here is the fix from upcoming version 1.4.
 
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
----
- ...weston-0004-fbdev-open-launcher-only-once.patch |   46 ++++++++++++++++++++
- 1 file changed, 46 insertions(+)
- create mode 100644 package/weston/weston-0004-fbdev-open-launcher-only-once.patch
 
-diff --git a/package/weston/weston-0004-fbdev-open-launcher-only-once.patch b/package/weston/weston-0004-fbdev-open-launcher-only-once.patch
-new file mode 100644
-index 0000000..eaf7e31
---- /dev/null
-+++ b/package/weston/weston-0004-fbdev-open-launcher-only-once.patch
-@@ -0,0 +1,46 @@
-+From 1641d14b824df487bba23597aa128219c057df88 Mon Sep 17 00:00:00 2001
-+From: David Herrmann <dh.herrmann@gmail.com>
-+Date: Tue, 15 Oct 2013 14:29:57 +0200
-+Subject: [PATCH] fbdev: open launcher only once
-+
-+We currently call launcher_connect() twice, which is redundant and
-+amazingly works (ugh?). Fix this and connect only once to the launcher.
-+
-+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-+---
-+ src/compositor-fbdev.c |   12 ++----------
-+ 1 file changed, 2 insertions(+), 10 deletions(-)
-+
-+diff --git a/src/compositor-fbdev.c b/src/compositor-fbdev.c
-+index 002ce0b..4376345 100644
-+--- a/src/compositor-fbdev.c
-++++ b/src/compositor-fbdev.c
-+@@ -883,15 +883,6 @@ fbdev_compositor_create(struct wl_display *display, int *argc, char *argv[],
-+ 	                           config) < 0)
-+ 		goto out_free;
-+
-+-	/* Check if we run fbdev-backend using weston-launch */
-+-	compositor->base.launcher =
-+-		weston_launcher_connect(&compositor->base, param->tty);
-+-	if (compositor->base.launcher == NULL && geteuid() != 0) {
-+-		weston_log("fatal: fbdev backend should be run "
-+-			   "using weston-launch binary or as root\n");
-+-		goto out_compositor;
-+-	}
-+-
-+ 	compositor->udev = udev_new();
-+ 	if (compositor->udev == NULL) {
-+ 		weston_log("Failed to initialize udev context.\n");
-+@@ -905,7 +896,8 @@ fbdev_compositor_create(struct wl_display *display, int *argc, char *argv[],
-+ 	compositor->base.launcher =
-+ 		weston_launcher_connect(&compositor->base, param->tty);
-+ 	if (!compositor->base.launcher) {
-+-		weston_log("Failed to set up launcher.\n");
-++		weston_log("fatal: fbdev backend should be run "
-++			   "using weston-launch binary or as root\n");
-+ 		goto out_udev;
-+ 	}
-+
-+--
-+1.7.9.5
-+
 -- 
-1.7.9.5
+
+Lucas De Marchi
