@@ -1,118 +1,62 @@
 From: Jeremy Kerr <jk@ozlabs.org>
 Date: Thu, 16 Jan 2014 16:52:18 +0800
 Subject: [Buildroot] [RFC,
-	PATCH 7/8] package/iprutils: Add IBM Power RAID utilities
+	PATCH 1/8] package/busybox: Add facility for DHCP hooks
 In-Reply-To: <1389862338.917573.283530987294.0.gpush@pablo>
-Message-ID: <1389862338.919734.499084473099.7.gpush@pablo>
+Message-ID: <1389862338.917966.273409717366.1.gpush@pablo>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The (u)dhcpc hook installed by the busybox package configures the
+network and exits. If we want to do anything further with a DHCP lease,
+we'd have to replace the script entirely.
+
+This change introduces a .d directory for hooks (based on the script
+filename), which are executed after the interface configuration. This
+allows packages to drop a script file in the .d directory to perform
+actions on DHCP events.
+
+We'll use this in a later change to notify petitboot of DHCP boot
+information.
+
 Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
 
 ---
- package/Config.in                                |    1 
- package/iprutils/Config.in                       |   10 +++++
- package/iprutils/iprutils-dont-use-gettext.patch |   30 +++++++++++++++
- package/iprutils/iprutils.mk                     |   27 +++++++++++++
- 4 files changed, 68 insertions(+)
+ package/busybox/busybox.mk    |    2 ++
+ package/busybox/udhcpc.script |    9 +++++++++
+ 2 files changed, 11 insertions(+)
 
-diff --git a/package/Config.in b/package/Config.in
-index f650476c..a9fc035f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1000,6 +1000,7 @@ endif
- source "package/cpuload/Config.in"
- source "package/dsp-tools/Config.in"
- source "package/htop/Config.in"
-+source "package/iprutils/Config.in"
- source "package/keyutils/Config.in"
- source "package/kmod/Config.in"
- source "package/lxc/Config.in"
-diff --git a/package/iprutils/Config.in b/package/iprutils/Config.in
-new file mode 100644
-index 00000000..d72688f2
---- /dev/null
-+++ b/package/iprutils/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_IPRUTILS
-+	bool "iprutils"
-+	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_NCURSES_TARGET_PANEL
-+	select BR2_PACKAGE_NCURSES_TARGET_FORM
-+	select BR2_PACKAGE_NCURSES_TARGET_MENU
-+	select BR2_PACKAGE_LIBSYSFS
-+	select BR2_PACKAGE_PCIUTILS
-+	help
-+	  System utilities for IBM Power RAID devices
-diff --git a/package/iprutils/iprutils-dont-use-gettext.patch b/package/iprutils/iprutils-dont-use-gettext.patch
-new file mode 100644
-index 00000000..8d3d5dd9
---- /dev/null
-+++ b/package/iprutils/iprutils-dont-use-gettext.patch
-@@ -0,0 +1,30 @@
-+From 0aa3952890e14f5447147ae4d0d37c515e4fefea Mon Sep 17 00:00:00 2001
-+From: Jeremy Kerr <jk@ozlabs.org>
-+Date: Fri, 26 Jul 2013 13:07:22 +0800
-+Subject: [PATCH] iprconfig: Don't use gettext
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index f6f542e2..6ff5f3da 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -200,6 +200,8 @@ define BUSYBOX_INSTALL_TARGET_CMDS
+ 	if [ ! -f $(TARGET_DIR)/usr/share/udhcpc/default.script ]; then \
+ 		$(INSTALL) -m 0755 -D package/busybox/udhcpc.script \
+ 			$(TARGET_DIR)/usr/share/udhcpc/default.script; \
++		$(INSTALL) -m 755 -d \
++			$(TARGET_DIR)/usr/share/udhcpc/default.script.d; \
+ 	fi
+ 	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
+ 	$(BUSYBOX_INSTALL_MDEV_CONF)
+diff --git a/package/busybox/udhcpc.script b/package/busybox/udhcpc.script
+index 43742fbd..8930d4a8 100755
+--- a/package/busybox/udhcpc.script
++++ b/package/busybox/udhcpc.script
+@@ -63,4 +63,13 @@ case "$1" in
+ 		;;
+ esac
+ 
++HOOK_DIR="$0.d"
++if [ -d "$HOOK_DIR" ]
++then
++	for HOOK in $HOOK_DIR/*; do
++		$HOOK "$@"
++	done
++fi
 +
-+... since we don't have any translations.
 +
-+Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
-+---
-+ iprconfig.h |    4 +---
-+ 1 file changed, 1 insertion(+), 3 deletions(-)
-+
-+diff --git a/iprconfig.h b/iprconfig.h
-+index 867b5ac..a9cdf5e 100644
-+--- a/iprconfig.h
-++++ b/iprconfig.h
-+@@ -11,9 +11,7 @@
-+  *
-+  **/
-+ 
-+-#include <libintl.h>
-+-
-+-#define _(string) gettext(string)
-++#define _(string) (string)
-+ #define __(string) (string)
-+ #define EXIT_FLAG		0x8000	/* stops at given screen on exit call */
-+ #define CANCEL_FLAG		0x4000	/* stops at given screen on quit call */
-+-- 
-+1.7.10.4
-+
-diff --git a/package/iprutils/iprutils.mk b/package/iprutils/iprutils.mk
-new file mode 100644
-index 00000000..0aa94f38
---- /dev/null
-+++ b/package/iprutils/iprutils.mk
-@@ -0,0 +1,27 @@
-+#############################################################
-+#
-+# iprutils
-+#
-+#############################################################
-+
-+IPRUTILS_VERSION = 2.3.15
-+IPRUTILS_SITE = http://downloads.sourceforge.net/project/iprdd/iprutils%20for%202.6%20kernels/$(IPRUTILS_VERSION)
-+IPRUTILS_SOURCE=iprutils-$(IPRUTILS_VERSION)-src.tgz
-+IPRUTILS_DEPENDENCIES = ncurses libsysfs pciutils
-+IPRUTILS_LICENSE = Common Public License Version 1.0
-+IPRUTILS_LICENSE_FILES = LICENSE
-+
-+define IPRUTILS_BUILD_CMDS
-+	$(MAKE) CC=$(TARGET_CC) LD=$(TARGET_LD) -C $(@D) all
-+endef
-+
-+define IPRUTILS_INSTALL_TARGET_CMDS
-+        $(INSTALL) -d $(TARGET_DIR)/sbin
-+        $(INSTALL) -D --mode=755 $(@D)/iprconfig $(TARGET_DIR)/sbin/
-+        $(INSTALL) -D --mode=755 $(@D)/iprupdate $(TARGET_DIR)/sbin/
-+        $(INSTALL) -D --mode=755 $(@D)/iprdump $(TARGET_DIR)/sbin/
-+        $(INSTALL) -D --mode=755 $(@D)/iprinit $(TARGET_DIR)/sbin/
-+        $(INSTALL) -D --mode=700 $(@D)/iprdbg $(TARGET_DIR)/sbin/
-+endef
-+
-+$(eval $(generic-package))
+ exit 0
