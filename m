@@ -1,84 +1,138 @@
 From: Jeremy Kerr <jk@ozlabs.org>
 Date: Thu, 16 Jan 2014 16:52:18 +0800
 Subject: [Buildroot] [RFC,
-	PATCH 0/8] Enable a buildroot-based petitboot bootloader
+	PATCH 3/8] package/ncurses: Allow building wide char support
 In-Reply-To: <1389862338.917573.283530987294.0.gpush@pablo>
-Message-ID: <1389862338.917573.283530987294.0.gpush@pablo>
+Message-ID: <1389862338.918565.412332853863.3.gpush@pablo>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Allow ncurses to be configured with wide char support; this causes the
+libraries to be built with the 'w' suffix (eg libncursesw.so,
+libmenuw.so, etc), so we need to create a few symlinks.
 
-The following series allows us to build a petitboot-based bootloader
-using buildroot.
-
-Petitboot is a kexec-based bootloader; by plumbing together a few linux
-utilities, we can implement a bootloader in userspace, using standard
-Linux drivers for hardware support. There's a bit of background of
-petitboot in my recent linux.conf.au talk:
-
- http://mirror.linux.org.au/linux.conf.au/2014/Thursday/89-Petitboot_doing_interesting_things_in_your_bootloader_-_Jeremy_Kerr.mp4
- 
-And the project homepage:
-
- https://www.kernel.org/pub/linux/kernel/people/geoff/petitboot/petitboot.html
-
-My primary target here is powerpc machines (and this series adds a
-defconfig to do a powerpc petitboot build), but I've also been able to
-get most of petitboot working when built as an EFI stub on x86 machines
-(we still need some platform-specific bits in petitboot for proper
-configuration persistence).
-
-While most of this series is fairly straightforward, there are a few
-items that might need a little more attention:
-
- - At the moment, I'm using my local repo for petitboot sources; it may
-   be better to wait until everything is merged upstream. Upstream is
-   still active, and I don't think this should take long.
-
- - We add wide-char support for ncurses; this seems to be working okay,
-   but could do with a little review.
-
- - I still need a couple of tweaks to the target system (/etc/locale and
-   /etc/inittab). At the moment, I'm carrying a change that introduces
-   an overlay for these two files, but that's not suitable for upstream
-   use:
-
-     http://git.ozlabs.org/?p=buildroot;a=commitdiff;h=d50bd74b
-   
-   Is there any way I can provide updates to these files? The changes
-   aren't board-specific; they're due to petitboot expecting to own
-   the default consoles for UIs. Or is there a better way to do this?
-
-This series is also available in my git tree, at:
-
-  git://git.ozlabs.org/~jk/buildroot/
-
-- in the petitboot branch. Note that that branch includes the overlay
-too, which isn't intended for upstream.
-
-Also, I'd like to give a big thanks to the buildroot developers; being
-able to re-roll an entire system with one command has made petitboot
-development *significantly* easier. Also, thanks to Thomas for the nudge
-to send these changes upstream!
-
-Please let me know if you have questions/comments/etc.
-
-Cheers,
-
-
-Jeremy
+Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
 
 ---
-Jeremy Kerr (8):
-      package/busybox: Add facility for DHCP hooks
-      package/dropbear: Add separate configuration options for client and server
-      package/ncurses: Allow building wide char support
-      package/powerpc-utils: Add powerpc hardware utilities
-      package/kexec-lite: Add a package for the kexec-lite tools
-      package/petitboot: Add petitboot, the userspace bootloader
-      package/iprutils: Add IBM Power RAID utilities
-      Add powerpc petitboot defconfig
+ package/ncurses/Config.in  |    5 +++
+ package/ncurses/ncurses.mk |   50 +++++++++++++++++++++++++++++++++----
+ 2 files changed, 50 insertions(+), 5 deletions(-)
+
+diff --git a/package/ncurses/Config.in b/package/ncurses/Config.in
+index e8ab7102..337b0160 100644
+--- a/package/ncurses/Config.in
++++ b/package/ncurses/Config.in
+@@ -9,6 +9,11 @@ config BR2_PACKAGE_NCURSES
+ 	  http://www.gnu.org/software/ncurses/
+ 
+ if BR2_PACKAGE_NCURSES
++config BR2_PACKAGE_NCURSES_WIDEC
++	bool "enable wide char support"
++	depends on BR2_PACKAGE_NCURSES
++	help
++	  Enable wide char & UTF-8 support in ncurses libraries
+ 
+ config BR2_PACKAGE_NCURSES_TARGET_PANEL
+ 	bool "ncurses libpanel in target"
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index f3319763..ba4cacd1 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -12,7 +12,7 @@ HOST_NCURSES_DEPENDENCIES =
+ NCURSES_PROGS = clear infocmp tabs tic toe tput tset
+ NCURSES_LICENSE = MIT with advertising clause
+ NCURSES_LICENSE_FILES = README
+-NCURSES_CONFIG_SCRIPTS = ncurses5-config
++NCURSES_CONFIG_SCRIPTS = ncurses$(W)5-config
+ 
+ NCURSES_CONF_OPT = \
+ 	$(if $(BR2_PREFER_STATIC_LIB),--without-shared,--with-shared) \
+@@ -36,6 +36,15 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ 	NCURSES_DEPENDENCIES += busybox
+ endif
+ 
++ifeq ($(BR2_PACKAGE_NCURSES_WIDEC),y)
++NCURSES_CONF_OPT += --enable-widec
++W=w
++W_LINK=ln -sf
++else
++W=
++W_LINK=:
++endif
++
+ ifneq ($(BR2_ENABLE_DEBUG),y)
+ NCURSES_CONF_OPT += --without-debug
+ endif
+@@ -48,19 +57,22 @@ ifneq ($(BR2_PREFER_STATIC_LIB),y)
+ 
+ ifeq ($(BR2_PACKAGE_NCURSES_TARGET_PANEL),y)
+ define NCURSES_INSTALL_TARGET_PANEL
+-	cp -dpf $(NCURSES_DIR)/lib/libpanel.so* $(TARGET_DIR)/usr/lib/
++	cp -dpf $(NCURSES_DIR)/lib/libpanel$(W).so* $(TARGET_DIR)/usr/lib/
++	$(W_LINK) libpanelw.so $(TARGET_DIR)/usr/lib/libpanel.so
+ endef
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_NCURSES_TARGET_FORM),y)
+ define NCURSES_INSTALL_TARGET_FORM
+-	cp -dpf $(NCURSES_DIR)/lib/libform.so* $(TARGET_DIR)/usr/lib/
++	cp -dpf $(NCURSES_DIR)/lib/libform$(W).so* $(TARGET_DIR)/usr/lib/
++	$(W_LINK) libformw.so $(TARGET_DIR)/usr/lib/libform.so
+ endef
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_NCURSES_TARGET_MENU),y)
+ define NCURSES_INSTALL_TARGET_MENU
+-	cp -dpf $(NCURSES_DIR)/lib/libmenu.so* $(TARGET_DIR)/usr/lib/
++	cp -dpf $(NCURSES_DIR)/lib/libmenu$(W).so* $(TARGET_DIR)/usr/lib/
++	$(W_LINK) libmenuw.so $(TARGET_DIR)/usr/lib/libmenu.so
+ endef
+ endif
+ 
+@@ -78,7 +90,8 @@ endif
+ 
+ define NCURSES_INSTALL_TARGET_CMDS
+ 	mkdir -p $(TARGET_DIR)/usr/lib
+-	$(if $(BR2_PREFER_STATIC_LIB),,cp -dpf $(NCURSES_DIR)/lib/libncurses.so* $(TARGET_DIR)/usr/lib/)
++	$(if $(BR2_PREFER_STATIC_LIB),,cp -dpf $(NCURSES_DIR)/lib/libncurses$(W).so* $(TARGET_DIR)/usr/lib/)
++	$(W_LINK) libncursesw.so $(TARGET_DIR)/usr/lib/libncurses.so
+ 	$(NCURSES_INSTALL_TARGET_PANEL)
+ 	$(NCURSES_INSTALL_TARGET_FORM)
+ 	$(NCURSES_INSTALL_TARGET_MENU)
+@@ -101,6 +114,33 @@ define NCURSES_INSTALL_TARGET_CMDS
+ 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/s/screen $(TARGET_DIR)/usr/share/terminfo/s
+ endef # NCURSES_INSTALL_TARGET_CMDS
+ 
++define NCURSES_POST_INSTALL_SYMLINK
++	$(W_LINK) libncursesw.so $(STAGING_DIR)/usr/lib/libncurses.so
++endef
++NCURSES_POST_INSTALL_STAGING_HOOKS += NCURSES_POST_INSTALL_SYMLINK
++
++ifeq ($(BR2_PACKAGE_NCURSES_TARGET_PANEL),y)
++define NCURSES_POST_INSTALL_SYMLINK_PANEL
++	$(W_LINK) libpanelw.so $(STAGING_DIR)/usr/lib/libpanel.so
++endef
++NCURSES_POST_INSTALL_STAGING_HOOKS += NCURSES_POST_INSTALL_SYMLINK_PANEL
++endif
++
++ifeq ($(BR2_PACKAGE_NCURSES_TARGET_FORM),y)
++define NCURSES_POST_INSTALL_SYMLINK_FORM
++	$(W_LINK) libformw.so $(STAGING_DIR)/usr/lib/libform.so
++endef
++NCURSES_POST_INSTALL_STAGING_HOOKS += NCURSES_POST_INSTALL_SYMLINK_FORM
++endif
++
++ifeq ($(BR2_PACKAGE_NCURSES_TARGET_MENU),y)
++define NCURSES_POST_INSTALL_SYMLINK_MENU
++	$(W_LINK) libmenuw.so $(STAGING_DIR)/usr/lib/libmenu.so
++endef
++NCURSES_POST_INSTALL_STAGING_HOOKS += NCURSES_POST_INSTALL_SYMLINK_MENU
++endif
++
++
+ #
+ # On systems with an older version of tic, the installation of ncurses hangs
+ # forever. To resolve the problem, build a static version of tic on host
