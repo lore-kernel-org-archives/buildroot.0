@@ -1,43 +1,40 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Thu, 16 Jan 2014 10:57:42 +0100
-Subject: [Buildroot] [PATCH] lvm2: cleanup: remove the unused variable
-	LVM2_BINS
-Message-ID: <1389866262-24514-1-git-send-email-fabio.porcedda@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 16 Jan 2014 09:24:56 -0300
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{4, 10,
+	12}.x stable versions
+Message-ID: <1389875097-29045-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The LVM2_BINS variable is a leftover of the
-commit 564e0c7e655f4cbb225427230cf3b22be0575653.
-
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/lvm2/lvm2.mk | 11 -----------
- 1 file changed, 11 deletions(-)
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index 2761100..6566b32 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -11,17 +11,6 @@ LVM2_INSTALL_STAGING = YES
- LVM2_LICENSE = GPLv2 LGPLv2.1
- LVM2_LICENSE_FILES = COPYING COPYING.LIB
- 
--LVM2_BINS = \
--	dmsetup fsadm lvm lvmconf lvmdump vgimportclone \
--	lvchange lvconvert lvcreate lvdisplay lvextend 	\
--	lvmchange lvmdiskscan lvmsadc lvmsar lvreduce  	\
--	lvremove lvrename lvresize lvs lvscan pvchange 	\
--	pvck pvcreate pvdisplay pvmove pvremove 	\
--	pvresize pvs pvscan vgcfgbackup vgcfgrestore 	\
--	vgchange vgck vgconvert vgcreate vgdisplay 	\
--	vgexport vgextend vgimport vgmerge vgmknodes 	\
--	vgreduce vgremove vgrename vgs vgscan vgsplit
--
- # Make sure that binaries and libraries are installed with write
- # permissions for the owner.
- LVM2_CONF_OPT += --enable-write_install --enable-pkgconfig
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 6d7b447..2285c4d 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -83,14 +83,14 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+ 	default "3.2.54"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.76"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.77"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
+ 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
+ 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
+ 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
+ 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
+-	default "3.10.26"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.27"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+-	default "3.12.7"	if BR2_KERNEL_HEADERS_3_12
++	default "3.12.8"	if BR2_KERNEL_HEADERS_3_12
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-1.8.5.2
+1.8.3.2
