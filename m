@@ -1,45 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Jan 2014 09:19:35 +0100
-Subject: [Buildroot] [git commit] vlc: add udev support
-Message-ID: <20140116081945.00BFA9C4F3@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 16 Jan 2014 10:20:53 +0200
+Subject: [Buildroot] [PATCH] tvheadend: disable when NPTL is missing
+In-Reply-To: <87ob3cqr30.fsf@dell.be.48ers.dk>
+References: <ab66cde1a0e02e60b0238a227bf982aa22f8eac5.1389858574.git.baruch@tkos.co.il>
+ <87ob3cqr30.fsf@dell.be.48ers.dk>
+Message-ID: <20140116082053.GA4602@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=96b7f4e9a91fe67d4d02c08329b398d698d8da9e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Peter,
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/vlc/vlc.mk |    8 +++++++-
- 1 files changed, 7 insertions(+), 1 deletions(-)
+On Thu, Jan 16, 2014 at 09:16:35AM +0100, Peter Korsgaard wrote:
+> >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+> 
+>  > Fixes
+>  > http://autobuild.buildroot.net/results/0ae/0ae5c5158215a48d4d4849f52837bbe4b36db381/.
+> 
+>  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> 
+> Committed, thanks.
 
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index ce51f37..ec5727d 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -30,7 +30,6 @@ VLC_CONF_OPT += \
- 	--disable-goom \
- 	--disable-projectm \
- 	--disable-vsxu \
--	--disable-udev \
- 	--disable-mtp
- 
- ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
-@@ -234,6 +233,13 @@ else
- VLC_CONF_OPT += --disable-tremor
- endif
- 
-+ifeq ($(BR2_PACKAGE_UDEV),y)
-+VLC_CONF_OPT += --enable-udev
-+VLC_DEPENDENCIES += udev
-+else
-+VLC_CONF_OPT += --disable-udev
-+endif
-+
- ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
- VLC_CONF_OPT += --with-x
- VLC_DEPENDENCIES += xlib_libX11
+Thanks. What about the similar rt-tests patch 
+(http://patchwork.ozlabs.org/patch/309709/)?
+
+baurch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
