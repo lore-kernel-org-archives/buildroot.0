@@ -1,16 +1,16 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Thu, 16 Jan 2014 01:15:45 +0100
-Subject: [Buildroot] [PATCH v2 02/12] libbluray: new package
+Date: Thu, 16 Jan 2014 01:15:46 +0100
+Subject: [Buildroot] [PATCH v2 03/12] libcdio: new package
 In-Reply-To: <1389831355-19983-1-git-send-email-maxime.hadjinlian@gmail.com>
 References: <1389831355-19983-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <1389831355-19983-3-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <1389831355-19983-4-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-LIBBLURAY is a client library for accessing bluray disks.
+The GNU Compact Disc Input and Control library.
 This package was originally found at : https://github.com/huceke/buildroot-rbp
 By gimli <ebsi4711@gmail.com>
 
@@ -19,61 +19,66 @@ Cc: gimli <ebsi4711@gmail.com>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
 Changes v1 -> v2
-    - Bump version to 0.5.0 and add missing build dependency (Bernd Kuhls)
+  - Bump version to 0.90 (Bernd Kuhls)
+  - Fix comment for requiring C++ (Peter Korsgaard)
 ---
- package/Config.in              |  1 +
- package/libbluray/Config.in    |  6 ++++++
- package/libbluray/libbluray.mk | 19 +++++++++++++++++++
- 3 files changed, 26 insertions(+)
- create mode 100644 package/libbluray/Config.in
- create mode 100644 package/libbluray/libbluray.mk
+ package/Config.in          |  1 +
+ package/libcdio/Config.in  | 11 +++++++++++
+ package/libcdio/libcdio.mk | 18 ++++++++++++++++++
+ 3 files changed, 30 insertions(+)
+ create mode 100644 package/libcdio/Config.in
+ create mode 100644 package/libcdio/libcdio.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 1d6c9c6..0d3c0ce 100644
+index 0d3c0ce..27592d7 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -628,6 +628,7 @@ endmenu
- 
- menu "Multimedia"
- source "package/libass/Config.in"
-+source "package/libbluray/Config.in"
- source "package/libdvbsi/Config.in"
- source "package/libdvdnav/Config.in"
- source "package/libdvdread/Config.in"
-diff --git a/package/libbluray/Config.in b/package/libbluray/Config.in
+@@ -451,6 +451,7 @@ source "package/celt051/Config.in"
+ source "package/fdk-aac/Config.in"
+ source "package/libao/Config.in"
+ source "package/libcdaudio/Config.in"
++source "package/libcdio/Config.in"
+ source "package/libcue/Config.in"
+ source "package/libcuefile/Config.in"
+ source "package/libid3tag/Config.in"
+diff --git a/package/libcdio/Config.in b/package/libcdio/Config.in
 new file mode 100644
-index 0000000..eeb93dc
+index 0000000..d2d61e7
 --- /dev/null
-+++ b/package/libbluray/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_LIBBLURAY
-+	bool "libbluray"
++++ b/package/libcdio/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_LIBCDIO
++	bool "libcdio"
++	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
++	depends on BR2_INSTALL_LIBSTDCPP
 +	help
-+	  libbluray is a client library for accessing bluray disks.
++	  The GNU Compact Disc Input and Control library.
 +
-+	  http://www.videolan.org/developers/libbluray.html
-diff --git a/package/libbluray/libbluray.mk b/package/libbluray/libbluray.mk
++	  http://www.gnu.org/software/libcdio/
++
++comment "libcdio needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/libcdio/libcdio.mk b/package/libcdio/libcdio.mk
 new file mode 100644
-index 0000000..e1e6bdd
+index 0000000..a55c7b4
 --- /dev/null
-+++ b/package/libbluray/libbluray.mk
-@@ -0,0 +1,19 @@
++++ b/package/libcdio/libcdio.mk
+@@ -0,0 +1,18 @@
 +################################################################################
 +#
-+# libbluray
++# libcdio
 +#
 +################################################################################
 +
-+LIBBLURAY_VERSION = 0.5.0
-+LIBBLURAY_SITE = ftp://ftp.videolan.org/pub/videolan/libbluray/$(LIBBLURAY_VERSION)
-+LIBBLURAY_SOURCE = libbluray-$(LIBBLURAY_VERSION).tar.bz2
-+LIBBLURAY_INSTALL_STAGING = YES
-+LIBBLURAY_LICENSE = LGPLv2.1+
-+LIBBLURAY_LICENSE_FILES = COPYING
-+LIBBLURAY_DEPENDENCIES = host-pkgconf freetype bzip2 libxml2 zlib
++LIBCDIO_VERSION = 0.90
++LIBCDIO_SITE = $(BR2_GNU_MIRROR)/libcdio
++LIBCDIO_INSTALL_STAGING = YES
++LIBCDIO_LICENSE = GPLv3+
++LIBCDIO_LICENSE_FILES = COPYING
++LIBCDIO_CONF_OPT = --disable-example-progs
 +
-+ifeq ($(BR2_PACKAGE_LIBICONV),y)
-+	LIBBLURAY_DEPENDENCIES += libiconv
++ifeq ($(BR2_ENABLE_LOCALE),)
++LIBCDIO_DEPENDENCIES = libiconv
 +endif
 +
 +$(eval $(autotools-package))
