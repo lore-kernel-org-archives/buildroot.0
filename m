@@ -1,25 +1,22 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 16 Jan 2014 13:32:44 +0100
-Subject: [Buildroot] [PATCH] lvm2: cleanup: remove the unused variable
-	LVM2_BINS
-In-Reply-To: <1389866262-24514-1-git-send-email-fabio.porcedda@gmail.com>
- (Fabio Porcedda's message of "Thu, 16 Jan 2014 10:57:42 +0100")
-References: <1389866262-24514-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <87y52gp0nn.fsf@dell.be.48ers.dk>
+Date: Thu, 16 Jan 2014 13:32:53 +0100
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{4, 10,
+	12}.x stable versions
+In-Reply-To: <1389875097-29045-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 16 Jan 2014 09:24:56 -0300")
+References: <1389875097-29045-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87txd4p0ne.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > The LVM2_BINS variable is a leftover of the
- > commit 564e0c7e655f4cbb225427230cf3b22be0575653.
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
- > Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-
-Committed, thanks.
+Committed both, thanks.
 
 -- 
 Bye, Peter Korsgaard
