@@ -1,21 +1,86 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 16 Jan 2014 23:37:35 +0100
-Subject: [Buildroot] [PATCH] mpc: bump to version 1.0.2
-In-Reply-To: <1389878469-11421-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 16 Jan 2014 10:21:09 -0300")
-References: <1389878469-11421-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87d2jrpn80.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 16 Jan 2014 23:36:44 +0100
+Subject: [Buildroot] [git commit] weston: fix fbdev backend.
+Message-ID: <20140116223751.DD9F89C518@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=21cb4b35e211ba62ea01fca2a8eed2015b91111f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+The compilation of the program weston-launcher is currently disabled, so
+the only way to launch Weston (on framebuffer) is to execute (as root):
 
-Committed, thanks.
+  $ openvt -c 2 -s -- weston \
+  	--backend=/usr/lib/weston/fbdev-backend.so \
+	--tty=2 \
+	--log=/tmp/weston.log
 
--- 
-Bye, Peter Korsgaard
+Unfortunately you will only end up with a black screen. The reason is
+given in the log file:
+
+  /dev/tty2 is already in graphics mode, is another display server running?
+
+Here is the fix from upcoming version 1.4.
+
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...weston-0004-fbdev-open-launcher-only-once.patch |   46 ++++++++++++++++++++
+ 1 files changed, 46 insertions(+), 0 deletions(-)
+
+diff --git a/package/weston/weston-0004-fbdev-open-launcher-only-once.patch b/package/weston/weston-0004-fbdev-open-launcher-only-once.patch
+new file mode 100644
+index 0000000..eaf7e31
+--- /dev/null
++++ b/package/weston/weston-0004-fbdev-open-launcher-only-once.patch
+@@ -0,0 +1,46 @@
++From 1641d14b824df487bba23597aa128219c057df88 Mon Sep 17 00:00:00 2001
++From: David Herrmann <dh.herrmann@gmail.com>
++Date: Tue, 15 Oct 2013 14:29:57 +0200
++Subject: [PATCH] fbdev: open launcher only once
++
++We currently call launcher_connect() twice, which is redundant and
++amazingly works (ugh?). Fix this and connect only once to the launcher.
++
++Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
++---
++ src/compositor-fbdev.c |   12 ++----------
++ 1 file changed, 2 insertions(+), 10 deletions(-)
++
++diff --git a/src/compositor-fbdev.c b/src/compositor-fbdev.c
++index 002ce0b..4376345 100644
++--- a/src/compositor-fbdev.c
+++++ b/src/compositor-fbdev.c
++@@ -883,15 +883,6 @@ fbdev_compositor_create(struct wl_display *display, int *argc, char *argv[],
++ 	                           config) < 0)
++ 		goto out_free;
++
++-	/* Check if we run fbdev-backend using weston-launch */
++-	compositor->base.launcher =
++-		weston_launcher_connect(&compositor->base, param->tty);
++-	if (compositor->base.launcher == NULL && geteuid() != 0) {
++-		weston_log("fatal: fbdev backend should be run "
++-			   "using weston-launch binary or as root\n");
++-		goto out_compositor;
++-	}
++-
++ 	compositor->udev = udev_new();
++ 	if (compositor->udev == NULL) {
++ 		weston_log("Failed to initialize udev context.\n");
++@@ -905,7 +896,8 @@ fbdev_compositor_create(struct wl_display *display, int *argc, char *argv[],
++ 	compositor->base.launcher =
++ 		weston_launcher_connect(&compositor->base, param->tty);
++ 	if (!compositor->base.launcher) {
++-		weston_log("Failed to set up launcher.\n");
+++		weston_log("fatal: fbdev backend should be run "
+++			   "using weston-launch binary or as root\n");
++ 		goto out_udev;
++ 	}
++
++--
++1.7.9.5
++
