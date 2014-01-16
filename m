@@ -1,65 +1,59 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Thu, 16 Jan 2014 10:00:21 +0100
-Subject: [Buildroot] [PATCH] libsocketcan: new package
-In-Reply-To: <1389862821-16980-1-git-send-email-yegorslists@googlemail.com>
-References: <1389862821-16980-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <1389862821-16980-2-git-send-email-yegorslists@googlemail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 16 Jan 2014 11:30:38 +0200
+Subject: [Buildroot] [RFC,
+ PATCH 4/8] package/powerpc-utils: Add powerpc hardware utilities
+In-Reply-To: <1389862338.918857.878477328980.4.gpush@pablo>
+References: <1389862338.917573.283530987294.0.gpush@pablo>
+ <1389862338.918857.878477328980.4.gpush@pablo>
+Message-ID: <20140116093038.GB4602@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Hi Jeremy,
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/Config.in                    |    1 +
- package/libsocketcan/Config.in       |    6 ++++++
- package/libsocketcan/libsocketcan.mk |   10 ++++++++++
- 3 files changed, 17 insertions(+), 0 deletions(-)
- create mode 100644 package/libsocketcan/Config.in
- create mode 100644 package/libsocketcan/libsocketcan.mk
+On Thu, Jan 16, 2014 at 04:52:18PM +0800, Jeremy Kerr wrote:
+> This change adds a package definition for the powerpc-utils project,
+> containing a set of powerpc-specific hardware management utilities.
+> 
+> We're using a git tag from upstream, which contains a few build-system
+> fixes. We also add a patch to use `reboot` instead of `shutdown -r`,
+> allowing compatibility with busybox.
+> 
+> Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
 
-diff --git a/package/Config.in b/package/Config.in
-index 2f62d6c..dca90d9 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -677,6 +677,7 @@ source "package/liboping/Config.in"
- source "package/libosip2/Config.in"
- source "package/libpcap/Config.in"
- source "package/librsync/Config.in"
-+source "package/libsocketcan/Config.in"
- source "package/libsoup/Config.in"
- source "package/libtirpc/Config.in"
- source "package/libtorrent/Config.in"
-diff --git a/package/libsocketcan/Config.in b/package/libsocketcan/Config.in
-new file mode 100644
-index 0000000..97903db
---- /dev/null
-+++ b/package/libsocketcan/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_LIBSOCKETCAN
-+	bool "libsocketcan"
-+	help
-+	  SocketCAN library to control CAN devices from C code.
-+
-+	  http://git.pengutronix.de/?p=tools/libsocketcan.git;a=summary
-diff --git a/package/libsocketcan/libsocketcan.mk b/package/libsocketcan/libsocketcan.mk
-new file mode 100644
-index 0000000..920a900
---- /dev/null
-+++ b/package/libsocketcan/libsocketcan.mk
-@@ -0,0 +1,10 @@
-+################################################################################
-+#
-+# libsocketcan
-+#
-+################################################################################
-+LIBSOCKETCAN_VERSION = 0.0.9
-+LIBSOCKETCAN_SITE = http://www.pengutronix.de/software/libsocketcan/download/
-+LIBSOCKETCAN_SOURCE = libsocketcan-$(LIBSOCKETCAN_VERSION).tar.bz2
-+
-+$(eval $(autotools-package))
+[...]
+
+> diff --git a/package/powerpc-utils/powerpc-utils.mk 
+> b/package/powerpc-utils/powerpc-utils.mk
+> new file mode 100644
+> index 00000000..15deb2e9
+> --- /dev/null
+> +++ b/package/powerpc-utils/powerpc-utils.mk
+> @@ -0,0 +1,14 @@
+> +#############################################################
+> +#
+> +# powerpc-utils
+> +#
+> +#############################################################
+> +
+> +POWERPC_UTILS_VERSION = aeb32757
+
+Please use the full 40-char commit id.
+
+> +POWERPC_UTILS_SITE = git://git.code.sf.net/p/powerpc-utils/powerpc-utils
+> +POWERPC_UTILS_AUTORECONF = YES
+> +POWERPC_UTILS_DEPENDENCIES = zlib
+> +
+> +POWERPC_UTILS_CONF_OPT += --without-librtas
+> +
+> +$(eval $(autotools-package))
+
+baruch
+
 -- 
-1.7.7
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
