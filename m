@@ -1,41 +1,21 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 16 Jan 2014 09:24:57 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: bump to version 3.12.8
-In-Reply-To: <1389875097-29045-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1389875097-29045-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1389875097-29045-2-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 16 Jan 2014 13:32:22 +0100
+Subject: [Buildroot] [PATCH 1/1] package: fix white spaces
+In-Reply-To: <1389859770-31118-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+ (Jerzy Grzegorek's message of "Thu, 16 Jan 2014 09:09:30 +0100")
+References: <1389859770-31118-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <877ga0qf8p.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+>>>>> "Jerzy" == Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net> writes:
 
-diff --git a/linux/Config.in b/linux/Config.in
-index dcdf5f3..ee293fc 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.12.7"
-+	bool "3.12.8"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -87,7 +87,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.12.7" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.12.8" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ > Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+
+Committed, thanks.
+
 -- 
-1.8.3.2
+Bye, Peter Korsgaard
