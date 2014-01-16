@@ -1,119 +1,84 @@
 From: Jeremy Kerr <jk@ozlabs.org>
 Date: Thu, 16 Jan 2014 16:52:18 +0800
 Subject: [Buildroot] [RFC,
-	PATCH 4/8] package/powerpc-utils: Add powerpc hardware utilities
+	PATCH 0/8] Enable a buildroot-based petitboot bootloader
 In-Reply-To: <1389862338.917573.283530987294.0.gpush@pablo>
-Message-ID: <1389862338.918857.878477328980.4.gpush@pablo>
+Message-ID: <1389862338.917573.283530987294.0.gpush@pablo>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This change adds a package definition for the powerpc-utils project,
-containing a set of powerpc-specific hardware management utilities.
+Hi all,
 
-We're using a git tag from upstream, which contains a few build-system
-fixes. We also add a patch to use `reboot` instead of `shutdown -r`,
-allowing compatibility with busybox.
+The following series allows us to build a petitboot-based bootloader
+using buildroot.
 
-Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
+Petitboot is a kexec-based bootloader; by plumbing together a few linux
+utilities, we can implement a bootloader in userspace, using standard
+Linux drivers for hardware support. There's a bit of background of
+petitboot in my recent linux.conf.au talk:
+
+ http://mirror.linux.org.au/linux.conf.au/2014/Thursday/89-Petitboot_doing_interesting_things_in_your_bootloader_-_Jeremy_Kerr.mp4
+ 
+And the project homepage:
+
+ https://www.kernel.org/pub/linux/kernel/people/geoff/petitboot/petitboot.html
+
+My primary target here is powerpc machines (and this series adds a
+defconfig to do a powerpc petitboot build), but I've also been able to
+get most of petitboot working when built as an EFI stub on x86 machines
+(we still need some platform-specific bits in petitboot for proper
+configuration persistence).
+
+While most of this series is fairly straightforward, there are a few
+items that might need a little more attention:
+
+ - At the moment, I'm using my local repo for petitboot sources; it may
+   be better to wait until everything is merged upstream. Upstream is
+   still active, and I don't think this should take long.
+
+ - We add wide-char support for ncurses; this seems to be working okay,
+   but could do with a little review.
+
+ - I still need a couple of tweaks to the target system (/etc/locale and
+   /etc/inittab). At the moment, I'm carrying a change that introduces
+   an overlay for these two files, but that's not suitable for upstream
+   use:
+
+     http://git.ozlabs.org/?p=buildroot;a=commitdiff;h=d50bd74b
+   
+   Is there any way I can provide updates to these files? The changes
+   aren't board-specific; they're due to petitboot expecting to own
+   the default consoles for UIs. Or is there a better way to do this?
+
+This series is also available in my git tree, at:
+
+  git://git.ozlabs.org/~jk/buildroot/
+
+- in the petitboot branch. Note that that branch includes the overlay
+too, which isn't intended for upstream.
+
+Also, I'd like to give a big thanks to the buildroot developers; being
+able to re-roll an entire system with one command has made petitboot
+development *significantly* easier. Also, thanks to Thomas for the nudge
+to send these changes upstream!
+
+Please let me know if you have questions/comments/etc.
+
+Cheers,
+
+
+Jeremy
 
 ---
- package/Config.in                                                                             |    1 
- package/powerpc-utils/Config.in                                                               |    5 +
- package/powerpc-utils/powerpc-utils-scripts-update_flash-Use-reboot-instead-of-shutdown.patch |   42 ++++++++++
- package/powerpc-utils/powerpc-utils.mk                                                        |   14 +++
- 4 files changed, 62 insertions(+)
-
-diff --git a/package/Config.in b/package/Config.in
-index 78c0e066..61f4c9e0 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1006,6 +1006,7 @@ source "package/monit/Config.in"
- source "package/ncdu/Config.in"
- source "package/numactl/Config.in"
- source "package/nut/Config.in"
-+source "package/powerpc-utils/Config.in"
- source "package/polkit/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/procps/Config.in"
-diff --git a/package/powerpc-utils/Config.in b/package/powerpc-utils/Config.in
-new file mode 100644
-index 00000000..c919094a
---- /dev/null
-+++ b/package/powerpc-utils/Config.in
-@@ -0,0 +1,5 @@
-+config BR2_PACKAGE_POWERPC_UTILS
-+	bool "powerpc-utils"
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  System utilities for powerpc machines
-diff --git a/package/powerpc-utils/powerpc-utils-scripts-update_flash-Use-reboot-instead-of-shutdown.patch b/package/powerpc-utils/powerpc-utils-scripts-update_flash-Use-reboot-instead-of-shutdown.patch
-new file mode 100644
-index 00000000..f3db5338
---- /dev/null
-+++ b/package/powerpc-utils/powerpc-utils-scripts-update_flash-Use-reboot-instead-of-shutdown.patch
-@@ -0,0 +1,42 @@
-+From 673507f4163ed313f66fa2c120e7074f8bb3d7c7 Mon Sep 17 00:00:00 2001
-+From: Jeremy Kerr <jk@ozlabs.org>
-+Date: Wed, 11 Dec 2013 11:54:49 +0800
-+Subject: [PATCH] scripts/update_flash: Use reboot instead of shutdown
-+
-+We don't have shutdown on busybox.
-+
-+Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
-+---
-+ scripts/update_flash    |    2 +-
-+ scripts/update_flash_nv |    2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/scripts/update_flash b/scripts/update_flash
-+index a566a627..32801c64 100755
-+--- a/scripts/update_flash
-++++ b/scripts/update_flash
-+@@ -317,7 +317,7 @@ update_flash_from_file() {
-+ 	fi
-+ 
-+ 	#XXX
-+-	shutdown -r now
-++	reboot
-+ 
-+ 	return 0;
-+ }
-+diff --git a/scripts/update_flash_nv b/scripts/update_flash_nv
-+index ead29ef8..e72f01fd 100644
-+--- a/scripts/update_flash_nv
-++++ b/scripts/update_flash_nv
-+@@ -304,7 +304,7 @@ update_flash_from_file() {
-+ 	echo_update_return_status "$output"
-+ 
-+ 	# Reboot system, so that we can flash new image
-+-	shutdown -r now
-++	reboot
-+ 
-+ 	exit $E_SUCCESS
-+ }
-+-- 
-+1.7.10.4
-+
-diff --git a/package/powerpc-utils/powerpc-utils.mk b/package/powerpc-utils/powerpc-utils.mk
-new file mode 100644
-index 00000000..15deb2e9
---- /dev/null
-+++ b/package/powerpc-utils/powerpc-utils.mk
-@@ -0,0 +1,14 @@
-+#############################################################
-+#
-+# powerpc-utils
-+#
-+#############################################################
-+
-+POWERPC_UTILS_VERSION = aeb32757
-+POWERPC_UTILS_SITE = git://git.code.sf.net/p/powerpc-utils/powerpc-utils
-+POWERPC_UTILS_AUTORECONF = YES
-+POWERPC_UTILS_DEPENDENCIES = zlib
-+
-+POWERPC_UTILS_CONF_OPT += --without-librtas
-+
-+$(eval $(autotools-package))
+Jeremy Kerr (8):
+      package/busybox: Add facility for DHCP hooks
+      package/dropbear: Add separate configuration options for client and server
+      package/ncurses: Allow building wide char support
+      package/powerpc-utils: Add powerpc hardware utilities
+      package/kexec-lite: Add a package for the kexec-lite tools
+      package/petitboot: Add petitboot, the userspace bootloader
+      package/iprutils: Add IBM Power RAID utilities
+      Add powerpc petitboot defconfig
