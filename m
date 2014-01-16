@@ -1,99 +1,134 @@
-From: Sven Neumann <neumann@teufel.de>
-Date: Thu, 16 Jan 2014 14:57:52 +0100
-Subject: [Buildroot] [PATCH] gst1-libav: new package
-Message-ID: <1389880672-15503-1-git-send-email-neumann@teufel.de>
+From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Thu, 16 Jan 2014 15:39:04 +0100
+Subject: [Buildroot] [PATCH v3 1/1] ljsyscall: new package
+In-Reply-To: <1383095910-2399-1-git-send-email-danomimanchego123@gmail.com>
+References: <1383095910-2399-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <CAB0FRsu5UTAWHZh9zBfVJz_SooKwfr0ymnYa14i2igsCM6WkfQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Sven Neumann <neumann@teufel.de>
----
- package/gstreamer1/Config.in                |  1 +
- package/gstreamer1/gst1-libav/Config.in     | 14 ++++++++++
- package/gstreamer1/gst1-libav/gst1-libav.mk | 41 +++++++++++++++++++++++++++++
- 3 files changed, 56 insertions(+)
- create mode 100644 package/gstreamer1/gst1-libav/Config.in
- create mode 100644 package/gstreamer1/gst1-libav/gst1-libav.mk
+2013/10/30 Danomi Manchego <danomimanchego123@gmail.com>:
+> An FFI implementation of the Linux and NetBSD kernel ABIs for LuaJIT.
+>
+> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+>
+> ---
+>
+> Note: this package requires LuaJIT specifically, so there is a depends-on
+> in the ljsyscall/Config.in, even though though it is included from a
+> menu with a "if BR2_PACKAGE_LUA || BR2_PACKAGE_LUAJIT" test around it.
+>
+> v1 -> v2:
+>  - Removed unnecessary build time dependency on LuaJIT.
+>  - Specify -m 0644 during installation, since .lua files need not be executable.
+>
+> v2 -> v3:
+>  - Config.in: add depends-on particular target architectures, like LuaJIT.  Note
+>            that this is not a compile time requirement but rather based on what
+>            the package itself supports.
+>  - Config.in: add comment stating when ljsyscall is hidden due to no LuaJIT
+>  - ljsyscall.mk: simplify ifeq / else ifeq block
+>  - ljsyscall.mk: use intermediate variable to simplify install lines
+> ---
+>  package/Config.in              |    1 +
+>  package/ljsyscall/Config.in    |   14 ++++++++++++++
+>  package/ljsyscall/ljsyscall.mk |   34 ++++++++++++++++++++++++++++++++++
+>  3 files changed, 49 insertions(+)
+>  create mode 100644 package/ljsyscall/Config.in
+>  create mode 100644 package/ljsyscall/ljsyscall.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 4c4da51..be4ccc3 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -359,6 +359,7 @@ source "package/cgilua/Config.in"
+>  source "package/copas/Config.in"
+>  source "package/coxpcall/Config.in"
+>  source "package/lbase64/Config.in"
+> +source "package/ljsyscall/Config.in"
+>  source "package/luabitop/Config.in"
+>  source "package/luacjson/Config.in"
+>  source "package/luacrypto/Config.in"
+> diff --git a/package/ljsyscall/Config.in b/package/ljsyscall/Config.in
+> new file mode 100644
+> index 0000000..dcbd521
+> --- /dev/null
+> +++ b/package/ljsyscall/Config.in
+> @@ -0,0 +1,14 @@
+> +config BR2_PACKAGE_LJSYSCALL
+> +       bool "ljsyscall"
+> +       # ljsyscall is specifically for LuaJIT, not Lua.
+> +       depends on BR2_PACKAGE_LUAJIT
+> +       # ljsyscall is only available for some target architectures
+> +       depends on BR2_i386 || BR2_x86_64 || BR2_powerpc || BR2_arm || BR2_armeb
+> +       help
+> +         An FFI implementation of the Linux and NetBSD kernel ABIs for LuaJIT.
+> +
+> +         http://github.com/justincormack/ljsyscall
+> +
+> +comment "ljsyscall needs LuaJIT"
+> +       depends on !BR2_PACKAGE_LUAJIT && (BR2_i386 || BR2_x86_64 || BR2_powerpc || BR2_arm || BR2_armeb)
+> +
+> diff --git a/package/ljsyscall/ljsyscall.mk b/package/ljsyscall/ljsyscall.mk
+> new file mode 100644
+> index 0000000..861a778
+> --- /dev/null
+> +++ b/package/ljsyscall/ljsyscall.mk
+> @@ -0,0 +1,34 @@
+> +################################################################################
+> +#
+> +# ljsyscall
+> +#
+> +################################################################################
+> +
+> +LJSYSCALL_VERSION = v0.8
+> +LJSYSCALL_SITE = http://github.com/justincormack/ljsyscall/tarball/$(LJSYSCALL_VERSION)
 
-diff --git a/package/gstreamer1/Config.in b/package/gstreamer1/Config.in
-index f7b98c7..fe0ad48 100644
---- a/package/gstreamer1/Config.in
-+++ b/package/gstreamer1/Config.in
-@@ -6,5 +6,6 @@ source "package/gstreamer1/gst1-plugins-base/Config.in"
- source "package/gstreamer1/gst1-plugins-good/Config.in"
- source "package/gstreamer1/gst1-plugins-bad/Config.in"
- source "package/gstreamer1/gst1-plugins-ugly/Config.in"
-+source "package/gstreamer1/gst1-libav/Config.in"
- source "package/gstreamer1/gst-omx/Config.in"
- endif
-diff --git a/package/gstreamer1/gst1-libav/Config.in b/package/gstreamer1/gst1-libav/Config.in
-new file mode 100644
-index 0000000..859bdff
---- /dev/null
-+++ b/package/gstreamer1/gst1-libav/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_GST1_LIBAV
-+	bool "gst1-libav"
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE
-+	depends on BR2_LARGEFILE
-+	help
-+	  GStreamer plugin (formerly gst-ffmpeg).
-+
-+	  This package contains GStreamer plugins based on
-+	  the libav project.
-+
-+	  http://gstreamer.freedesktop.org/
-+
-+comment "gst1-libav requires a toolchain with LARGEFILE support"
-+	depends on !(BR2_LARGEFILE)
-diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
-new file mode 100644
-index 0000000..e90f6c5
---- /dev/null
-+++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
-@@ -0,0 +1,41 @@
-+#############################################################
-+#
-+# gst1-libav
-+#
-+#############################################################
-+
-+GST1_LIBAV_VERSION = 1.2.2
-+GST1_LIBAV_SOURCE = gst-libav-$(GST1_LIBAV_VERSION).tar.xz
-+GST1_LIBAV_SITE = http://gstreamer.freedesktop.org/src/gst-libav
-+
-+GST1_LIBAV_DEPENDENCIES = host-pkgconf gstreamer1 gst1-plugins-base
-+
-+GST1_LIBAV_CONF_OPT = \
-+	--with-libav-extra-configure="--target-os=linux \
-+	                               --disable-debug \
-+				       --disable-ffmpeg \
-+				       --disable-avconv \
-+				       --disable-avdevice \
-+				       --disable-avplay \
-+				       --disable-avserver \
-+                                       --enable-pthreads \
-+                                       --enable-zlib \
-+                                       --prefix=$(STAGING_DIR)/usr \
-+                                       --sysroot=$(STAGING_DIR) \
-+                                       --host-cc=$(TARGET_CC) \
-+                                       --cc=$(TARGET_CC) \
-+                                       --arch=$(BR2_ARCH) \
-+                                       --enable-cross-compile \
-+                                       --cross-prefix=$(TARGET_CROSS) \
-+                                       --disable-shared \
-+                                       --enable-static"
-+
-+ifeq ($(BR2_PACKAGE_BZIP2),y)
-+GST1_LIBAV_DEPENDENCIES += bzip2
-+endif
-+
-+ifeq ($(BR2_i386),y)
-+GST1_LIBAV_DEPENDENCIES += host-yasm
-+endif
-+
-+$(eval $(autotools-package))
--- 
-1.8.3.2
+Danomi,
+
+at this time, the version 0.9 was released (caution: with a new
+subdirectory syscall/shared),
+and a github helper was introduced in BR
+
+  LJSYSCALL_SITE = $(call github,justincormack,ljsyscall,$(LJSYSCALL_VERSION))
+
+(note: have you seen https://github.com/fperrad/ljlinenoise which uses it ?)
+
+Fran?ois.
+
+> +LJSYSCALL_LICENSE = MIT
+> +LJSYSCALL_LICENSE_FILES = COPYRIGHT
+> +
+> +ifeq ($(BR2_i386),y)
+> +LJSYSCALL_ARCH = x86
+> +else ifeq ($(BR2_x86_64),y)
+> +LJSYSCALL_ARCH = x64
+> +else ifeq ($(BR2_powerpc),y)
+> +LJSYSCALL_ARCH = ppc
+> +else ifeq ($(LJSYSCALL_ARCH),)
+> +LJSYSCALL_ARCH = $(BR2_ARCH)
+> +endif
+> +
+> +LJSYSCALL_TARGET_DIR = $(TARGET_DIR)/usr/share/luajit-$(LUAJIT_VERSION)
+> +
+> +define LJSYSCALL_INSTALL_TARGET_CMDS
+> +       $(INSTALL) -d $(LJSYSCALL_TARGET_DIR)/syscall
+> +       $(INSTALL) -m 0644 -t $(LJSYSCALL_TARGET_DIR)/ $(@D)/syscall.lua
+> +       $(INSTALL) -m 0644 -t $(LJSYSCALL_TARGET_DIR)/syscall $(@D)/syscall/*.lua
+> +
+> +       $(INSTALL) -d $(LJSYSCALL_TARGET_DIR)/syscall/linux/$(LJSYSCALL_ARCH)
+> +       $(INSTALL) -m 0644 -t $(LJSYSCALL_TARGET_DIR)/syscall/linux/ $(@D)/syscall/linux/*.lua
+> +       $(INSTALL) -m 0644 -t $(LJSYSCALL_TARGET_DIR)/syscall/linux/$(LJSYSCALL_ARCH) $(@D)/syscall/linux/$(LJSYSCALL_ARCH)/*.lua
+> +endef
+> +
+> +$(eval $(generic-package))
+> --
+> 1.7.9.5
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
