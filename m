@@ -1,11 +1,12 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 16 Jan 2014 11:30:38 +0200
+Date: Thu, 16 Jan 2014 11:36:42 +0200
 Subject: [Buildroot] [RFC,
- PATCH 4/8] package/powerpc-utils: Add powerpc hardware utilities
-In-Reply-To: <1389862338.918857.878477328980.4.gpush@pablo>
+ PATCH 5/8] package/kexec-lite: Add a package for the kexec-lite
+ tools
+In-Reply-To: <1389862338.919140.855251422258.5.gpush@pablo>
 References: <1389862338.917573.283530987294.0.gpush@pablo>
- <1389862338.918857.878477328980.4.gpush@pablo>
-Message-ID: <20140116093038.GB4602@tarshish>
+ <1389862338.919140.855251422258.5.gpush@pablo>
+Message-ID: <20140116093642.GC4602@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,41 +16,67 @@ To: buildroot@busybox.net
 Hi Jeremy,
 
 On Thu, Jan 16, 2014 at 04:52:18PM +0800, Jeremy Kerr wrote:
-> This change adds a package definition for the powerpc-utils project,
-> containing a set of powerpc-specific hardware management utilities.
-> 
-> We're using a git tag from upstream, which contains a few build-system
-> fixes. We also add a patch to use `reboot` instead of `shutdown -r`,
-> allowing compatibility with busybox.
+> Kexec-lite is a tiny impementation of kexec for devicetree-based
+> platforms.
 > 
 > Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
 
 [...]
 
-> diff --git a/package/powerpc-utils/powerpc-utils.mk 
-> b/package/powerpc-utils/powerpc-utils.mk
+> diff --git a/package/kexec-lite/Config.in b/package/kexec-lite/Config.in
 > new file mode 100644
-> index 00000000..15deb2e9
+> index 00000000..0dc05155
 > --- /dev/null
-> +++ b/package/powerpc-utils/powerpc-utils.mk
-> @@ -0,0 +1,14 @@
-> +#############################################################
-> +#
-> +# powerpc-utils
-> +#
-> +#############################################################
-> +
-> +POWERPC_UTILS_VERSION = aeb32757
+> +++ b/package/kexec-lite/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_KEXEC_LITE
+> +	bool "kexec-lite"
+> +	depends on BR2_powerpc
+> +	select BR2_PACKAGE_LIBELF
+> +	select BR2_PACKAGE_DTC
+> +	select BR2_PACKAGE_DTC_PROGRAMS
+> +	help
+> +	  Kexec is a user space utiltity for loading another kernel
+> +	  and asking the currently running kernel to do something with it.
 
-Please use the full 40-char commit id.
+This looks like a description of the generic kexec. You should mention that 
+this is a special version as the commit log says.
 
-> +POWERPC_UTILS_SITE = git://git.code.sf.net/p/powerpc-utils/powerpc-utils
-> +POWERPC_UTILS_AUTORECONF = YES
-> +POWERPC_UTILS_DEPENDENCIES = zlib
+[...]
+
+> diff --git a/package/kexec-lite/kexec-lite.mk 
+> b/package/kexec-lite/kexec-lite.mk
+> new file mode 100644
+> index 00000000..4d844f43
+> --- /dev/null
+> +++ b/package/kexec-lite/kexec-lite.mk
+> @@ -0,0 +1,20 @@
+> +################################################################################
+> +#
+> +# kexec
+> +#
+> +################################################################################
 > +
-> +POWERPC_UTILS_CONF_OPT += --without-librtas
+> +KEXEC_LITE_VERSION = 6c762a7
+
+Full commit id.
+
+> +KEXEC_LITE_SITE = git://github.com/antonblanchard/kexec-lite
+
+Please use the github helper. See docs/manual/adding-packages-tips.txt.
+
+> +KEXEC_LITE_LICENSE = GPL
+> +KEXEC_LITE_DEPENDENCIES = libelf dtc
 > +
-> +$(eval $(autotools-package))
+> +define KEXEC_LITE_BUILD_CMDS
+> +	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
+> +endef
+> +
+> +define KEXEC_LITE_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -D -m 755 $(@D)/kexec $(TARGET_DIR)/usr/sbin/
+> +endef
+> +
+> +$(eval $(generic-package))
 
 baruch
 
