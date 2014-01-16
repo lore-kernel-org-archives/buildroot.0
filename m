@@ -1,40 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Jan 2014 08:43:43 +0100
-Subject: [Buildroot] [git commit] usb_modeswitch_data: bump to version
-	20131113
-Message-ID: <20140116081738.38CFD9C013@busybox.osuosl.org>
+Date: Thu, 16 Jan 2014 09:06:17 +0100
+Subject: [Buildroot] [git commit] package/linux-firmware: Add bnx2x firmware
+Message-ID: <20140116081740.0E5F99C50A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0469ab88354cb18a4379ed14411bfefcc923aa00
+commit: http://git.buildroot.net/buildroot/commit/?id=bd483443ec1bd1bbc96bfa5a1ae67ebeb47cdc03
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-20131113:
-    Added devices: Quanta 1KR / USB-lte 7410, Quanta MobileGenie 4G lte,
-    AVM Fritz!Wlan USB N v2, Alcatel-sbell ASB TL131 TD-LTE, Vodafone K4305,
-    K5150, K4201, K4202 and K4606; ZTE MF821D (Variant), ZTE MF70, ZTE MF60,
-    Haier EVDO Rev. A; several cleanups and fixes. Special thanks to Lars
-    Melin for many device contributions and corrections!
+Add revision 17 of the Broadcom NetXtreme II 10Gb ethernet driver.
 
-Signed-off-by: Axel Lin <axel.lin@ingics.com>
+We also add an ethernet submenu for the firmware selection.
+
+Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/usb_modeswitch_data/usb_modeswitch_data.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/linux-firmware/Config.in         |    9 +++++++++
+ package/linux-firmware/linux-firmware.mk |    9 +++++++++
+ 2 files changed, 18 insertions(+), 0 deletions(-)
 
-diff --git a/package/usb_modeswitch_data/usb_modeswitch_data.mk b/package/usb_modeswitch_data/usb_modeswitch_data.mk
-index c7dc951..9aa0dc4 100644
---- a/package/usb_modeswitch_data/usb_modeswitch_data.mk
-+++ b/package/usb_modeswitch_data/usb_modeswitch_data.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index c8d7a55..57f8096 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -93,6 +93,15 @@ config BR2_PACKAGE_LINUX_FIRMWARE_TI_WL128X
  
--USB_MODESWITCH_DATA_VERSION = 20130807
-+USB_MODESWITCH_DATA_VERSION = 20131113
- USB_MODESWITCH_DATA_SOURCE = usb-modeswitch-data-$(USB_MODESWITCH_DATA_VERSION).tar.bz2
- USB_MODESWITCH_DATA_SITE = http://www.draisberghof.de/usb_modeswitch
- USB_MODESWITCH_DATA_DEPENDENCIES = usb_modeswitch
+ endmenu
+ 
++menu "Ethernet firmware"
++
++config BR2_PACKAGE_LINUX_FIRMWARE_BNX2X
++	bool "Broadcom NetXtremeII"
++	help
++	  Firmware files for Broadcom NetXtreme 10Gb ethernet cards (bnx2x)
++
++endmenu
++
+ menu "DVB firmware"
+ 
+ config BR2_PACKAGE_LINUX_FIRMWARE_DIB0700
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 27b6ab5..db9928d 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -135,6 +135,15 @@ LINUX_FIRMWARE_FILES += iwlwifi-5000-5.ucode
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_BNX2X),y)
++LINUX_FIRMWARE_FILES += \
++	bnx2x/bnx2x-e1-7.8.17.0.fw \
++	bnx2x/bnx2x-e1h-7.8.17.0.fw \
++	bnx2x/bnx2x-e2-7.8.17.0.fw
++# No license file; the license is in the file WHENCE
++# which is installed unconditionally
++endif
++
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_XC5000),y)
+ LINUX_FIRMWARE_FILES += dvb-fe-xc5000-1.6.114.fw
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.xc5000
