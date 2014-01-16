@@ -1,68 +1,72 @@
-From: Sven Neumann <neumann@teufel.de>
-Date: Thu, 16 Jan 2014 14:05:29 +0100
-Subject: [Buildroot] [PATCH 1/1] gst-ffmpeg: Use internal libav instead
- of external ffmpeg
-In-Reply-To: <87ha95t32e.fsf@dell.be.48ers.dk>
-References: <BLU0-SMTP442A9DE801569E9B4917C36D9BE0@phx.gbl>
- <87lhyht3mx.fsf@dell.be.48ers.dk> <52D6EACE.8020403@zacarias.com.ar>
- <87ha95t32e.fsf@dell.be.48ers.dk>
-Message-ID: <1389877529.6623.4.camel@sven>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Thu, 16 Jan 2014 14:11:36 +0100
+Subject: [Buildroot] [RFC,
+ PATCH 4/8] package/powerpc-utils: Add powerpc hardware utilities
+In-Reply-To: <1389862338.918857.878477328980.4.gpush@pablo>
+References: <1389862338.918857.878477328980.4.gpush@pablo>
+Message-ID: <52D7DA88.9040409@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-On Mi, 2014-01-15 at 21:14 +0100, Peter Korsgaard wrote:
-> >>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
-> 
->  > On 01/15/2014 05:02 PM, Peter Korsgaard wrote:
->  >> But what about all the CPU optimization flags we have in ffmpeg? Don't
->  >> we need to reproduce those as well here?
-> 
->  > I'm a bit wary about using the builtin ffmpeg support at all, all of the
->  > security fixes from newer versions of the unbundled library will be gone.
->  > And i also think the bump was fine, it was time to move along (and mpd's
->  > support for ffmpeg needed it for example, it won't work with oldish
->  > ffmpeg versions).
->  > Maybe it's a bit harsh but we should consider deprecating gst-ffmpeg?
-> 
-> s/gst-ffmpeg/gstreamer 0.10/, but yeah. Upstream officially announced
-> that almost a year ago:
-> 
-> http://lists.freedesktop.org/archives/gstreamer-announce/2013-March/000273.html
-> 
-> I do think moving to the internal libav copy for gst-ffmpeg until we can
-> completely remove it is OK though. If people really need it, then the
-> (outdated) bundled library is still better than no gst-ffmpeg.
+Hi Jeremy,
 
-Are you interested in a patch that adds gst1-libav (version 1.2.x) ? We
-are using this for a while now. Our package uses the internally bundled
-library though.
+> This change adds a package definition for the powerpc-utils project,
+> containing a set of powerpc-specific hardware management utilities.
+>
+> We're using a git tag from upstream, which contains a few build-system
+> fixes. We also add a patch to use `reboot` instead of `shutdown -r`,
+> allowing compatibility with busybox.
+>
+> Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
+>
+> ---
+>   package/Config.in                                                                             |    1
+>   package/powerpc-utils/Config.in                                                               |    5 +
+>   package/powerpc-utils/powerpc-utils-scripts-update_flash-Use-reboot-instead-of-shutdown.patch |   42 ++++++++++
 
+powerpc-utils-01-scripts-update_flash-Use-reboot-instead-of-shutdown.patch
+
+
+>   package/powerpc-utils/powerpc-utils.mk                                                        |   14 +++
+>   4 files changed, 62 insertions(+)
+
+[...]
+
+> diff --git a/package/powerpc-utils/powerpc-utils.mk b/package/powerpc-utils/powerpc-utils.mk
+> new file mode 100644
+> index 00000000..15deb2e9
+> --- /dev/null
+> +++ b/package/powerpc-utils/powerpc-utils.mk
+> @@ -0,0 +1,14 @@
+> +#############################################################
+
+80 of # signs
+
+> +#
+> +# powerpc-utils
+> +#
+> +#############################################################
+
+ditto
 
 Regards,
-Sven
+Jerzy
 
--- 
-Sven Neumann
-Senior System Architect
-
-Lautsprecher Teufel GmbH
-Gewerbehof B?lowbogen, Aufgang D1
-B?lowstr. 66
-10783 Berlin
-Germany
-
-Direkt   +49 (0) 30 / 300 930-153
-Telefon  +49 (0) 30 / 300 930-0
-
-neumann at teufel.de
-
-Registernummer HRB 20271 beim Amtsgericht Berlin-Charlottenburg
-Gesch?ftsf?hrer: J?rgen Schneider, Edgar van Velzen
-Umsatzsteuer-ID: DE136745959
-
-www.teufel.de - www.teufelaudio.com - www.raumfeld.com
+> +
+> +POWERPC_UTILS_VERSION = aeb32757
+> +POWERPC_UTILS_SITE = git://git.code.sf.net/p/powerpc-utils/powerpc-utils
+> +POWERPC_UTILS_AUTORECONF = YES
+> +POWERPC_UTILS_DEPENDENCIES = zlib
+> +
+> +POWERPC_UTILS_CONF_OPT += --without-librtas
+> +
+> +$(eval $(autotools-package))
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
