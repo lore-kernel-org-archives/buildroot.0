@@ -1,11 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 16 Jan 2014 09:24:06 +0100
-Subject: [Buildroot] [PATCH] tvheadend: disable when NPTL is missing
-In-Reply-To: <20140116082053.GA4602@tarshish> (Baruch Siach's message of "Thu, 
- 16 Jan 2014 10:20:53 +0200")
-References: <ab66cde1a0e02e60b0238a227bf982aa22f8eac5.1389858574.git.baruch@tkos.co.il>
- <87ob3cqr30.fsf@dell.be.48ers.dk> <20140116082053.GA4602@tarshish>
-Message-ID: <87k3e0qqqh.fsf@dell.be.48ers.dk>
+Date: Thu, 16 Jan 2014 09:25:31 +0100
+Subject: [Buildroot] [PATCH v2] rt-tests: disable NPTL is missing
+In-Reply-To: <0255f67e72bc626106163b3cfb821a68d99970fd.1389596187.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Mon, 13 Jan 2014 08:56:27 +0200")
+References: <0255f67e72bc626106163b3cfb821a68d99970fd.1389596187.git.baruch@tkos.co.il>
+Message-ID: <87fvooqqo4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,21 +13,14 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Hi Peter,
- > On Thu, Jan 16, 2014 at 09:16:35AM +0100, Peter Korsgaard wrote:
- >> >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
- >> 
- >> > Fixes
- >> > http://autobuild.buildroot.net/results/0ae/0ae5c5158215a48d4d4849f52837bbe4b36db381/.
- >> 
- >> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
- >> 
- >> Committed, thanks.
+ > Fixes
+ > http://autobuild.buildroot.net/results/8aa/8aaa4b56a53241b7342fede568fbc72a7656cc38/.
 
- > Thanks. What about the similar rt-tests patch 
- > (http://patchwork.ozlabs.org/patch/309709/)?
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > ---
+ > v2: exclude linuxthreads-{old,new} for internal toolchains (Peter Korsgaard)
 
-I'll handle it now. I know Thomas disagreed, but I think it makes sense.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
