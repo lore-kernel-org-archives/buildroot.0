@@ -1,25 +1,30 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 16 Jan 2014 09:14:41 +0100
-Subject: [Buildroot] [PATCH] busybox: udhcpc script: suppress useless
-	error message
-In-Reply-To: <d91ce81270c14b0f3d76ecb8f3ce31528d5efdf2.1389859113.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Thu, 16 Jan 2014 09:58:33 +0200")
-References: <d91ce81270c14b0f3d76ecb8f3ce31528d5efdf2.1389859113.git.baruch@tkos.co.il>
-Message-ID: <8761pks5qm.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 16 Jan 2014 09:15:05 +0100
+Subject: [Buildroot] [PATCH] usb_modeswitch_data: bump to version
+	20131113
+In-Reply-To: <1389849847.22266.0.camel@phoenix> (Axel Lin's message of "Thu,
+ 16 Jan 2014 13:24:07 +0800")
+References: <1389849847.22266.0.camel@phoenix>
+Message-ID: <871u08s5py.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Axel" == Axel Lin <axel.lin@ingics.com> writes:
 
- > Suppress the following error:
- > route: SIOCDELRT: No such process
+ > 20131113:
+ >     Added devices: Quanta 1KR / USB-lte 7410, Quanta MobileGenie 4G lte,
+ >     AVM Fritz!Wlan USB N v2, Alcatel-sbell ASB TL131 TD-LTE, Vodafone K4305,
+ >     K5150, K4201, K4202 and K4606; ZTE MF821D (Variant), ZTE MF70, ZTE MF60,
+ >     Haier EVDO Rev. A; several cleanups and fixes. Special thanks to Lars
+ >     Melin for many device contributions and corrections!
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > Signed-off-by: Axel Lin <axel.lin@ingics.com>
 
 Committed, thanks.
 
 -- 
-Bye, Peter Korsgaard
+Venlig hilsen,
+Peter Korsgaard 
