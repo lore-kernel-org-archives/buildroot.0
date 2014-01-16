@@ -1,134 +1,85 @@
-From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Thu, 16 Jan 2014 15:39:04 +0100
-Subject: [Buildroot] [PATCH v3 1/1] ljsyscall: new package
-In-Reply-To: <1383095910-2399-1-git-send-email-danomimanchego123@gmail.com>
-References: <1383095910-2399-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <CAB0FRsu5UTAWHZh9zBfVJz_SooKwfr0ymnYa14i2igsCM6WkfQ@mail.gmail.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Thu, 16 Jan 2014 17:02:21 +0100
+Subject: [Buildroot] [PATCH] weston: fix fbdev backend.
+Message-ID: <1389888141-3030-1-git-send-email-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2013/10/30 Danomi Manchego <danomimanchego123@gmail.com>:
-> An FFI implementation of the Linux and NetBSD kernel ABIs for LuaJIT.
->
-> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
->
-> ---
->
-> Note: this package requires LuaJIT specifically, so there is a depends-on
-> in the ljsyscall/Config.in, even though though it is included from a
-> menu with a "if BR2_PACKAGE_LUA || BR2_PACKAGE_LUAJIT" test around it.
->
-> v1 -> v2:
->  - Removed unnecessary build time dependency on LuaJIT.
->  - Specify -m 0644 during installation, since .lua files need not be executable.
->
-> v2 -> v3:
->  - Config.in: add depends-on particular target architectures, like LuaJIT.  Note
->            that this is not a compile time requirement but rather based on what
->            the package itself supports.
->  - Config.in: add comment stating when ljsyscall is hidden due to no LuaJIT
->  - ljsyscall.mk: simplify ifeq / else ifeq block
->  - ljsyscall.mk: use intermediate variable to simplify install lines
-> ---
->  package/Config.in              |    1 +
->  package/ljsyscall/Config.in    |   14 ++++++++++++++
->  package/ljsyscall/ljsyscall.mk |   34 ++++++++++++++++++++++++++++++++++
->  3 files changed, 49 insertions(+)
->  create mode 100644 package/ljsyscall/Config.in
->  create mode 100644 package/ljsyscall/ljsyscall.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 4c4da51..be4ccc3 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -359,6 +359,7 @@ source "package/cgilua/Config.in"
->  source "package/copas/Config.in"
->  source "package/coxpcall/Config.in"
->  source "package/lbase64/Config.in"
-> +source "package/ljsyscall/Config.in"
->  source "package/luabitop/Config.in"
->  source "package/luacjson/Config.in"
->  source "package/luacrypto/Config.in"
-> diff --git a/package/ljsyscall/Config.in b/package/ljsyscall/Config.in
-> new file mode 100644
-> index 0000000..dcbd521
-> --- /dev/null
-> +++ b/package/ljsyscall/Config.in
-> @@ -0,0 +1,14 @@
-> +config BR2_PACKAGE_LJSYSCALL
-> +       bool "ljsyscall"
-> +       # ljsyscall is specifically for LuaJIT, not Lua.
-> +       depends on BR2_PACKAGE_LUAJIT
-> +       # ljsyscall is only available for some target architectures
-> +       depends on BR2_i386 || BR2_x86_64 || BR2_powerpc || BR2_arm || BR2_armeb
-> +       help
-> +         An FFI implementation of the Linux and NetBSD kernel ABIs for LuaJIT.
-> +
-> +         http://github.com/justincormack/ljsyscall
-> +
-> +comment "ljsyscall needs LuaJIT"
-> +       depends on !BR2_PACKAGE_LUAJIT && (BR2_i386 || BR2_x86_64 || BR2_powerpc || BR2_arm || BR2_armeb)
-> +
-> diff --git a/package/ljsyscall/ljsyscall.mk b/package/ljsyscall/ljsyscall.mk
-> new file mode 100644
-> index 0000000..861a778
-> --- /dev/null
-> +++ b/package/ljsyscall/ljsyscall.mk
-> @@ -0,0 +1,34 @@
-> +################################################################################
-> +#
-> +# ljsyscall
-> +#
-> +################################################################################
-> +
-> +LJSYSCALL_VERSION = v0.8
-> +LJSYSCALL_SITE = http://github.com/justincormack/ljsyscall/tarball/$(LJSYSCALL_VERSION)
+The compilation of the program weston-launcher is currently disabled, so
+the only way to launch Weston (on framebuffer) is to execute (as root):
 
-Danomi,
+  $ openvt -c 2 -s -- weston \
+  	--backend=/usr/lib/weston/fbdev-backend.so \
+	--tty=2 \
+	--log=/tmp/weston.log
 
-at this time, the version 0.9 was released (caution: with a new
-subdirectory syscall/shared),
-and a github helper was introduced in BR
+Unfortunately you will only end up with a black screen. The reason is
+given in the log file:
 
-  LJSYSCALL_SITE = $(call github,justincormack,ljsyscall,$(LJSYSCALL_VERSION))
+  /dev/tty2 is already in graphics mode, is another display server running?
 
-(note: have you seen https://github.com/fperrad/ljlinenoise which uses it ?)
+Here is the fix from upcoming version 1.4.
 
-Fran?ois.
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+---
+ ...weston-0004-fbdev-open-launcher-only-once.patch |   46 ++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+ create mode 100644 package/weston/weston-0004-fbdev-open-launcher-only-once.patch
 
-> +LJSYSCALL_LICENSE = MIT
-> +LJSYSCALL_LICENSE_FILES = COPYRIGHT
-> +
-> +ifeq ($(BR2_i386),y)
-> +LJSYSCALL_ARCH = x86
-> +else ifeq ($(BR2_x86_64),y)
-> +LJSYSCALL_ARCH = x64
-> +else ifeq ($(BR2_powerpc),y)
-> +LJSYSCALL_ARCH = ppc
-> +else ifeq ($(LJSYSCALL_ARCH),)
-> +LJSYSCALL_ARCH = $(BR2_ARCH)
-> +endif
-> +
-> +LJSYSCALL_TARGET_DIR = $(TARGET_DIR)/usr/share/luajit-$(LUAJIT_VERSION)
-> +
-> +define LJSYSCALL_INSTALL_TARGET_CMDS
-> +       $(INSTALL) -d $(LJSYSCALL_TARGET_DIR)/syscall
-> +       $(INSTALL) -m 0644 -t $(LJSYSCALL_TARGET_DIR)/ $(@D)/syscall.lua
-> +       $(INSTALL) -m 0644 -t $(LJSYSCALL_TARGET_DIR)/syscall $(@D)/syscall/*.lua
-> +
-> +       $(INSTALL) -d $(LJSYSCALL_TARGET_DIR)/syscall/linux/$(LJSYSCALL_ARCH)
-> +       $(INSTALL) -m 0644 -t $(LJSYSCALL_TARGET_DIR)/syscall/linux/ $(@D)/syscall/linux/*.lua
-> +       $(INSTALL) -m 0644 -t $(LJSYSCALL_TARGET_DIR)/syscall/linux/$(LJSYSCALL_ARCH) $(@D)/syscall/linux/$(LJSYSCALL_ARCH)/*.lua
-> +endef
-> +
-> +$(eval $(generic-package))
-> --
-> 1.7.9.5
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/weston/weston-0004-fbdev-open-launcher-only-once.patch b/package/weston/weston-0004-fbdev-open-launcher-only-once.patch
+new file mode 100644
+index 0000000..eaf7e31
+--- /dev/null
++++ b/package/weston/weston-0004-fbdev-open-launcher-only-once.patch
+@@ -0,0 +1,46 @@
++From 1641d14b824df487bba23597aa128219c057df88 Mon Sep 17 00:00:00 2001
++From: David Herrmann <dh.herrmann@gmail.com>
++Date: Tue, 15 Oct 2013 14:29:57 +0200
++Subject: [PATCH] fbdev: open launcher only once
++
++We currently call launcher_connect() twice, which is redundant and
++amazingly works (ugh?). Fix this and connect only once to the launcher.
++
++Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
++---
++ src/compositor-fbdev.c |   12 ++----------
++ 1 file changed, 2 insertions(+), 10 deletions(-)
++
++diff --git a/src/compositor-fbdev.c b/src/compositor-fbdev.c
++index 002ce0b..4376345 100644
++--- a/src/compositor-fbdev.c
+++++ b/src/compositor-fbdev.c
++@@ -883,15 +883,6 @@ fbdev_compositor_create(struct wl_display *display, int *argc, char *argv[],
++ 	                           config) < 0)
++ 		goto out_free;
++
++-	/* Check if we run fbdev-backend using weston-launch */
++-	compositor->base.launcher =
++-		weston_launcher_connect(&compositor->base, param->tty);
++-	if (compositor->base.launcher == NULL && geteuid() != 0) {
++-		weston_log("fatal: fbdev backend should be run "
++-			   "using weston-launch binary or as root\n");
++-		goto out_compositor;
++-	}
++-
++ 	compositor->udev = udev_new();
++ 	if (compositor->udev == NULL) {
++ 		weston_log("Failed to initialize udev context.\n");
++@@ -905,7 +896,8 @@ fbdev_compositor_create(struct wl_display *display, int *argc, char *argv[],
++ 	compositor->base.launcher =
++ 		weston_launcher_connect(&compositor->base, param->tty);
++ 	if (!compositor->base.launcher) {
++-		weston_log("Failed to set up launcher.\n");
+++		weston_log("fatal: fbdev backend should be run "
+++			   "using weston-launch binary or as root\n");
++ 		goto out_udev;
++ 	}
++
++--
++1.7.9.5
++
+-- 
+1.7.9.5
