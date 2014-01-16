@@ -1,82 +1,62 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Thu, 16 Jan 2014 14:24:41 +0100
-Subject: [Buildroot] [RFC,
- PATCH 7/8] package/iprutils: Add IBM Power RAID utilities
-In-Reply-To: <1389862338.919734.499084473099.7.gpush@pablo>
-References: <1389862338.919734.499084473099.7.gpush@pablo>
-Message-ID: <52D7DD99.2020805@trzebnica.net>
+From: Sven Neumann <neumann@teufel.de>
+Date: Thu, 16 Jan 2014 14:57:10 +0100
+Subject: [Buildroot] [PATCH 1/1] gst-ffmpeg: Use internal libav instead
+ of external ffmpeg
+In-Reply-To: <87ppnsoyrz.fsf@dell.be.48ers.dk>
+References: <BLU0-SMTP442A9DE801569E9B4917C36D9BE0@phx.gbl>
+ <87lhyht3mx.fsf@dell.be.48ers.dk> <52D6EACE.8020403@zacarias.com.ar>
+ <87ha95t32e.fsf@dell.be.48ers.dk> <1389877529.6623.4.camel@sven>
+ <87ppnsoyrz.fsf@dell.be.48ers.dk>
+Message-ID: <1389880630.6623.6.camel@sven>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
 
-Hi Jeremy,
+On Do, 2014-01-16 at 14:13 +0100, Peter Korsgaard wrote:
+> >>>>> "Sven" == Sven Neumann <neumann@teufel.de> writes:
+> 
+> Hi,
+> 
+> > I do think moving to the internal libav copy for gst-ffmpeg until we can
+>  >> completely remove it is OK though. If people really need it, then the
+>  >> (outdated) bundled library is still better than no gst-ffmpeg.
+> 
+>  > Are you interested in a patch that adds gst1-libav (version 1.2.x) ? We
+>  > are using this for a while now. Our package uses the internally bundled
+>  > library though.
+> 
+> Sure!
 
-> Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
->
-> ---
->   package/Config.in                                |    1
->   package/iprutils/Config.in                       |   10 +++++
->   package/iprutils/iprutils-dont-use-gettext.patch |   30 +++++++++++++++
-
-iprutils-01-dont-use-gettext.patch
-
-
->   package/iprutils/iprutils.mk                     |   27 +++++++++++++
->   4 files changed, 68 insertions(+)
-
-[...]
-
-> diff --git a/package/iprutils/iprutils.mk b/package/iprutils/iprutils.mk
-> new file mode 100644
-> index 00000000..0aa94f38
-> --- /dev/null
-> +++ b/package/iprutils/iprutils.mk
-> @@ -0,0 +1,27 @@
-> +#############################################################
-
-80 of # signs
-
-> +#
-> +# iprutils
-> +#
-> +#############################################################
-
-ditto
-
-> +
-> +IPRUTILS_VERSION = 2.3.15
-> +IPRUTILS_SITE = http://downloads.sourceforge.net/project/iprdd/iprutils%20for%202.6%20kernels/$(IPRUTILS_VERSION)
-> +IPRUTILS_SOURCE=iprutils-$(IPRUTILS_VERSION)-src.tgz
-
-IPRUTILS_SOURCE = iprutils-$(IPRUTILS_VERSION)-src.tgz
+To be honest, our version of the gst1-libav package disables almost
+everything and just builds a handful of audio decoder plug-ins. But I'll
+remove these hacks and submit a full version. I can not guarantee that
+it will build cleanly though.
 
 
 Regards,
-Jerzy
+Sven
 
-> +IPRUTILS_DEPENDENCIES = ncurses libsysfs pciutils
-> +IPRUTILS_LICENSE = Common Public License Version 1.0
-> +IPRUTILS_LICENSE_FILES = LICENSE
-> +
-> +define IPRUTILS_BUILD_CMDS
-> +	$(MAKE) CC=$(TARGET_CC) LD=$(TARGET_LD) -C $(@D) all
-> +endef
-> +
-> +define IPRUTILS_INSTALL_TARGET_CMDS
-> +        $(INSTALL) -d $(TARGET_DIR)/sbin
-> +        $(INSTALL) -D --mode=755 $(@D)/iprconfig $(TARGET_DIR)/sbin/
-> +        $(INSTALL) -D --mode=755 $(@D)/iprupdate $(TARGET_DIR)/sbin/
-> +        $(INSTALL) -D --mode=755 $(@D)/iprdump $(TARGET_DIR)/sbin/
-> +        $(INSTALL) -D --mode=755 $(@D)/iprinit $(TARGET_DIR)/sbin/
-> +        $(INSTALL) -D --mode=700 $(@D)/iprdbg $(TARGET_DIR)/sbin/
-> +endef
-> +
-> +$(eval $(generic-package))
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+-- 
+Sven Neumann
+Senior System Architect
+
+Lautsprecher Teufel GmbH
+Gewerbehof B?lowbogen, Aufgang D1
+B?lowstr. 66
+10783 Berlin
+Germany
+
+Direkt   +49 (0) 30 / 300 930-153
+Telefon  +49 (0) 30 / 300 930-0
+
+neumann at teufel.de
+
+Registernummer HRB 20271 beim Amtsgericht Berlin-Charlottenburg
+Gesch?ftsf?hrer: J?rgen Schneider, Edgar van Velzen
+Umsatzsteuer-ID: DE136745959
+
+www.teufel.de - www.teufelaudio.com - www.raumfeld.com
