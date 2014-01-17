@@ -1,102 +1,67 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Fri, 17 Jan 2014 00:17:03 +0100
-Subject: [Buildroot] [PATCH] Add gpm (general purpose mouse) server
-	package
-In-Reply-To: <52D8300E.80008@free.fr>
-References: <1389806830-24712-1-git-send-email-julien.boibessot@free.fr>
- <52D6FE2C.5020500@openwide.fr> <52D8300E.80008@free.fr>
-Message-ID: <52D8686F.1060704@openwide.fr>
+From: Jeremy Kerr <jk@ozlabs.org>
+Date: Fri, 17 Jan 2014 09:51:34 +0800
+Subject: [Buildroot] [RFC,
+ PATCH 5/8] package/kexec-lite: Add a package for the kexec-lite
+ tools
+In-Reply-To: <20140116093642.GC4602@tarshish>
+References: <1389862338.917573.283530987294.0.gpush@pablo>
+ <1389862338.919140.855251422258.5.gpush@pablo>
+ <20140116093642.GC4602@tarshish>
+Message-ID: <52D88CA6.4010203@ozlabs.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Julien,
+Hi Baruch,
 
-Le 16/01/2014 20:16, Julien Boibessot a ?crit :
-> Hello Romain,
->
-> and thanks for the review !
->
+Thanks for taking a look at the patches.
 
-You're welcome.
+>> +++ b/package/kexec-lite/Config.in
+>> @@ -0,0 +1,9 @@
+>> +config BR2_PACKAGE_KEXEC_LITE
+>> +	bool "kexec-lite"
+>> +	depends on BR2_powerpc
+>> +	select BR2_PACKAGE_LIBELF
+>> +	select BR2_PACKAGE_DTC
+>> +	select BR2_PACKAGE_DTC_PROGRAMS
+>> +	help
+>> +	  Kexec is a user space utiltity for loading another kernel
+>> +	  and asking the currently running kernel to do something with it.
+> 
+> This looks like a description of the generic kexec. You should mention that 
+> this is a special version as the commit log says.
 
->> May I suggest you to test gpm package with different toolchain 
->> configuration ?
->>
->> It won't build in static case (BR2_PREFER_STATIC_LIB=y):
->> "i686-buildroot-linux-uclibc/bin/ld: attempted static link of dynamic 
->> object `lib/libgpm.so.2'
->> collect2: error: ld returned 1 exit status"
->
-> When I send patches they have been tested on different ARM target with 
-> mainly 2 uClibc configs ("default" and "with large file, threads and 
-> Co"), but not the one you mentionned (static lib)... sorry :-(
-> Have you other configs that could lead to compilation problems ?
+Yep, shamelessly stolen from kexec.mk. :) I've updated this with a
+description similar to the changelog.
 
-It's common source of failure in autobuilder, especially with new packages.
-I'm not sure about mmu less case (BR2_USE_MMU=n)...
+>> --- /dev/null
+>> +++ b/package/kexec-lite/kexec-lite.mk
+>> @@ -0,0 +1,20 @@
+>> +################################################################################
+>> +#
+>> +# kexec
+>> +#
+>> +################################################################################
+>> +
+>> +KEXEC_LITE_VERSION = 6c762a7
+> 
+> Full commit id.
 
->
->>
->> There is also some errors about missing gpm.h in these files: (wrong 
->> path)
->> display-buttons.c
->> display-coords.c
->> get-versions.c
->
-> where do you see that error ? (for me these tools are compiling fine 
-> and working on target)
-I get these error when ncurses is missing (see below):
-prog/display-buttons.c:39:57: fatal error: gpm.h: no such file or directory
-compilation terminated.
-prog/display-coords.c:40:57: fatal error: gpm.h: no such file or directory
-compilation terminated.
-prog/get-versions.c:25:57: fatal error: gpm.h: no such file or directory
-compilation terminated.
+Fixed, along with the other git version strings you've mentioned in this
+series.
 
-I need to add "headers/" before gpm.h
+>> +KEXEC_LITE_SITE = git://github.com/antonblanchard/kexec-lite
+> 
+> Please use the github helper. See docs/manual/adding-packages-tips.txt.
 
-There is an optional dependency on ncurses:
-ifeq ($(BR2_PACKAGE_NCURSES),y)
-GPM_DEPENDENCIES += ncurses
-GPM_CONF_OPT += --with-curses
-else
-GPM_CONF_OPT += --without-curses
-endif
->
->> ||
->> And It would be good to disable the doc installation on target.
->
-> why ?
-> /usr/share/info/ and /usr/share/man/ are cleaned by Buildroot before 
-> generating root filesystem images.
-> Am I wrong ?
-Sorry your right, I was abused by my command line :
-"make toolchain gpm" which doesn't run target-finalize.
+Ah, that's pretty neat. Updated to use $(call github  ...).
 
-But this script (/usr/share/emacs/site-lisp/t-mouse.el) remain on target
-I'm not sure it is really useful.
-You can remove it with:
-GPM_CONF_OPT += ac_cv_path_emacs=no
+I've updated my series with these changes, but will see if there's any
+more feedback before reposting.
 
-Be careful with makeinfo, because some host don't have it and fail to 
-build the documentation.
-Normally you can disable makeinfo with:
-GPM_CONF_OPT += ac_cv_path_MAKEINFO=no
-But I get an error during install...
+Cheers,
 
->
->>
->> Thank for your contribution (I was working on gpm package too ;-) )
->
-> Is yours very different from mine ? I'm not against merging your work 
-> and sharing the credits or vis et versa.
-Thanks, I gave you all my notes :)
 
-Best regards,
-Romain Naour
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140117/d39b9318/attachment.html>
+Jeremy
