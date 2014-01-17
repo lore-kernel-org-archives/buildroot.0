@@ -1,27 +1,155 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Fri, 17 Jan 2014 16:44:54 +0100
-Subject: [Buildroot] python Gobject
-In-Reply-To: <CAAs3wMh5xwOK_bEDVM1JMJvw6vYYL2frZYxTc_4ehyLK2sj++g@mail.gmail.com>
-References: <CAAs3wMgAbEnReJ-XW_QnQ=kAU6G7cwzss7yUMytcmHMRYMsjnw@mail.gmail.com>
- <20140117113153.GB10730@pc-eric>
- <CAAs3wMh5xwOK_bEDVM1JMJvw6vYYL2frZYxTc_4ehyLK2sj++g@mail.gmail.com>
-Message-ID: <20140117154452.GC10730@pc-eric>
+From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Fri, 17 Jan 2014 18:46:06 +0100
+Subject: [Buildroot] [V2 1/3] lua: choice between 5.1.x & 5.2.x
+In-Reply-To: <52D81918.2000205@mind.be>
+References: <1389815674-14759-1-git-send-email-francois.perrad@gadz.org>
+ <52D81918.2000205@mind.be>
+Message-ID: <CAB0FRss-qVWYO1S5jPCKkYWMHEGS9K3tSVtJg-n0m5wKE5DxKw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jan 17, 2014 at 01:39:19PM +0100, Freedreamer wrote:
->    now i've been using python 2.7. you confirm there is no package?
+2014/1/16 Arnout Vandecappelle <arnout@mind.be>:
+> On 15/01/14 20:54, Francois Perrad wrote:
+>>
+>>
+>> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+>
+> [snip]
+>
+>> diff --git a/package/lua/5.2.3/lua-04-lua-pc.patch
+>> b/package/lua/5.2.3/lua-04-lua-pc.patch
+>> new file mode 100644
+>> index 0000000..62acb20
+>> --- /dev/null
+>> +++ b/package/lua/5.2.3/lua-04-lua-pc.patch
+>> @@ -0,0 +1,40 @@
+>> +add lua.pc
+>
+>
+>  So they had a .pc file, and now they removed it? How weird...
+>
 
-Adding a new package for python-gobject 2.28 is pretty straightforward. I
-did it in my repo:
-https://github.com/elebihan/buildroot/commit/4107b0e4549aa4a234496c840361528381f57edf.
+Yes, :)
 
-I wrote a test script where I subclassed gobject.GObject and tested it on an
-emulated ARM platform: the code works without problems, though GLib emits a
-warning about the props being initialized after class init.
+> [snip]
+>
+>> diff --git a/package/lua/lua.mk b/package/lua/lua.mk
+>> index a88a11e..2c867f6 100644
+>> --- a/package/lua/lua.mk
+>> +++ b/package/lua/lua.mk
+>> @@ -4,7 +4,11 @@
+>>   #
+>>
+>> ################################################################################
+>>
+>> +ifeq ($(BR2_PACKAGE_LUA_5_2),y)
+>> +LUA_VERSION = 5.2.3
+>> +else
+>>   LUA_VERSION = 5.1.5
+>> +endif
+>>   LUA_SITE = http://www.lua.org/ftp
+>>   LUA_INSTALL_STAGING = YES
+>>   LUA_LICENSE = MIT
+>> @@ -13,6 +17,13 @@ LUA_LICENSE_FILES = COPYRIGHT
+>>   LUA_CFLAGS = -Wall -fPIC
+>>   LUA_MYLIBS += -ldl
+>>
+>> +ifeq ($(BR2_PACKAGE_LUA_5_2),y)
+>> +LUA_CFLAGS += -DLUA_COMPAT_ALL
+>> +ifneq ($(BR2_LARGEFILE),y)
+>> +LUA_CFLAGS += -D_FILE_OFFSET_BITS=32
+>> +endif
+>> +endif
+>> +
+>>   ifeq ($(BR2_PACKAGE_LUA_INTERPRETER_READLINE),y)
+>>         LUA_DEPENDENCIES = readline ncurses
+>>         LUA_MYLIBS += -lreadline -lhistory -lncurses
+>> @@ -33,6 +44,10 @@ HOST_LUA_DEPENDENCIES =
+>>   HOST_LUA_CFLAGS = -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX
+>>   HOST_LUA_MYLIBS = -ldl
+>>
+>> +ifeq ($(BR2_PACKAGE_LUA_5_2),y)
+>> +HOST_LUA_CFLAGS += -DLUA_COMPAT_ALL
+>> +endif
+>
+>
+> [snip]
+>
+>
+>> diff --git a/package/luainterpreter/Config.in
+>> b/package/luainterpreter/Config.in
+>> index 1562145..ec51c1a 100644
+>> --- a/package/luainterpreter/Config.in
+>> +++ b/package/luainterpreter/Config.in
+>> @@ -4,3 +4,8 @@ config BR2_PACKAGE_HAS_LUA_INTERPRETER
+>>   config BR2_PACKAGE_PROVIDES_LUA_INTERPRETER
+>>         string
+>>         depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
+>> +
+>> +config BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION
+>> +       string
+>> +       default "5.1"   if BR2_PACKAGE_LUA_5_1 || BR2_PACKAGE_LUAJIT
+>> +       default "5.2"   if BR2_PACKAGE_LUA_5_2
+>
+>
+>  Sorry, not OK. It should be split over the three packages.
+>
+>  In luainterpreter/Config.in:
+>
+> config BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION
+>         string
+>
+>
+>  In lua/Config.in (inside the LUA condition):
+>
+> config BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION
+>         default "5.1" if BR2_PACKAGE_LUA_5_1
+>         default "5.2" if BR2_PACKAGE_LUA_5_2
+>
+>
+>  In luajit/Config.in:
+>
+> config BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION
+>         default "5.1"
+>
 
-Best regards,
-ELB
+Ok
+
+Fran?ois
+
+>
+>  Regards,
+>  Arnout
+>
+>
+>> diff --git a/package/luainterpreter/luainterpreter.mk
+>> b/package/luainterpreter/luainterpreter.mk
+>> index 04d63d4..c37d621 100644
+>> --- a/package/luainterpreter/luainterpreter.mk
+>> +++ b/package/luainterpreter/luainterpreter.mk
+>> @@ -7,4 +7,6 @@
+>>   LUAINTERPRETER_SOURCE =
+>>   LUAINTERPRETER_DEPENDENCIES = $(call
+>> qstrip,$(BR2_PACKAGE_PROVIDES_LUA_INTERPRETER))
+>>
+>> +LUAINTERPRETER_ABIVER = $(call
+>> qstrip,$(BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION))
+>> +
+>>   $(eval $(generic-package))
+>>
+>
+>
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
