@@ -1,90 +1,80 @@
-From: Julien Boibessot <julien.boibessot@free.fr>
-Date: Thu, 16 Jan 2014 19:58:55 +0100
-Subject: [Buildroot] [PATCH] Add SMS Tools Server 3 package
-In-Reply-To: <52D6D25B.3040603@zacarias.com.ar>
-References: <1389194289-10657-1-git-send-email-julien.boibessot@free.fr>
- <52D6D25B.3040603@zacarias.com.ar>
-Message-ID: <52D82BEF.2030209@free.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 17 Jan 2014 20:54:05 +0100
+Subject: [Buildroot] [PATCH] prevent recursion in %_defconfig rules
+In-Reply-To: <20140117180935.GB3982@free.fr>
+References: <1389111727-11021-1-git-send-email-jeremy.rosen@openwide.fr>
+ <20140117175251.GA3982@free.fr> <20140117180935.GB3982@free.fr>
+Message-ID: <20140117195405.GC3982@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Gustavo,
+J?r?my, All,
 
-and thanks for the review !
+On 2014-01-17 19:09 +0100, Yann E. MORIN spake thusly:
+> On 2014-01-17 18:52 +0100, Yann E. MORIN spake thusly:
+> > On 2014-01-07 17:22 +0100, J?r?my Rosen spake thusly:
+> > > Signed-off-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
+> > > 
+> > > ---
+> > > The following command, run from a clean buildroot checkout
+> > > 
+> > > make O=.. BR2_EXTERNAL=.. raspberrypi_defconfig
+> > > 
+> > > cause the following output, and makes stop :
+> > > 
+> > > 
+> > > make: *** Pas de r?gle pour fabriquer la cible ? /home/rosen/tmp/buildroot/
+> > > configs/../configs/../configs/../configs/<lots more >/../configs/
+> > > raspberrypi_defconfig ?, n?cessaire pour ? /home/rosen/tmp/buildroot/
+> > > configs/../configs/../configs/<lots more>/../configs/
+> > > raspberrypi_defconfig ?. Arr?t.
+> > > 
+> > > The problem is that the buildroot makefile has two rules to generate
+> > > %_defconfig: One that depends on $(TOPDIR)/configs/%_defconfig and the
+> > > other one that depends on $(BR2_EXTERNAL)/configs/%_defconfig.
+> > > 
+> > > When one rule checks for the file, the other rule becomes an implicit rule
+> > > for the dependancy causing an infinite cross-recursion.
+> > > 
+> > > By overriding the implicit rule, we prevent the infinite recursion.
+> > 
+> > This breaks defconfigs from BR2_EXTERNAL when used with an out-of-tree
+> > build:
+> > 
+> >     make -C /path/to/buildroot              \
+> >          O=/path/to/build                   \
+> >          BR2_EXTERNAL=/path/to/br2.external \
+> >          yem_defconfig
+> >     [--SNIP--]
+> >     *** Can't find default configuration "/home/ymorin/dev/buildroot/buildroot/configs/yem_defconfig"!
+> 
+> It even breaks BR2_EXTERNAL for in-tree builds.
+> 
+> Reverting that patch fixes both issues, and does not exhibit the
+> reported problem.
+> 
+> Peter, can we just revert that patch (cset 94dd02f) for now, please?
+> 
+> J?r?my, can you describe your setup, so we can try to reproduce it, and
+> find a proper fix?
 
-On 01/15/2014 07:24 PM, Gustavo Zacarias wrote:
-> On 01/08/2014 12:18 PM, julien.boibessot at free.fr wrote:
->
-> Hi. Let's see...
->
->> +config BR2_PACKAGE_SMSTOOLS3_NB_MODEMS
->> +	string "Number of modems to support"
->> +	default 1
-> What does this knob do in/to the code?
+Out of curiosity, I just installed a make-4.0 to make sure that was not
+due to some idiocy of make-4.0 (since it hs changed quite a few
+behaviours that were relied on from previous versions, such as the
+ordering of files in $(wildcard ...) ).
 
-It (NUMBER_OF_MODEMS) is used in a very large number of loops of the
-program and by default set to 64.
-
-Doc says: "If you are running SMSTools3 in an embedded device, you can
-use NUMBER_OF_MODEMS=1 to save memory."
-
-Don't know why the author didn't choose to take dynamic command
-parameters instead of static code define...
-
->
->> +
->> +config BR2_PACKAGE_SMSTOOLS3_START_AT_BOOT
->> +	bool "Start SMS Server Tools at system boot"
->> +	default y
-> Ehhmm no, we don't make initscripts conditional that way, there are
-> various hooks to get rid of it if someone doesn't want it that way or
-> they run services their own way.
-
-ok !
-
->
->> +
->> +endif
->> +
->> +comment "smstools3 needs a toolchain w/ wchar, threads"
->> +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
->> diff --git a/package/smstools3/S50smsd b/package/smstools3/S50smsd
->> new file mode 100644
->> index 0000000..ded4189
->> --- /dev/null
->> +++ b/package/smstools3/S50smsd
->> @@ -0,0 +1,43 @@
->> +#!/bin/sh
->> +#
->> +# Starts the SMS Server Tools 3
->> +#
->> +
->> +NAME=smsd
->> +DAEMON=/usr/local/bin/$NAME
-> /usr/local? Why?
-
-Well... no particular reason :-)
-/usr would be ok ?
-
->
->> +ifeq ($(BR2_PACKAGE_SMSTOOLS3_START_AT_BOOT),y)
->> +SMSTOOLS3_INIT_SCRIPT_NAME = S50smsd
->> +else
->> +SMSTOOLS3_INIT_SCRIPT_NAME = 50smsd
->> +endif
-> Please use SMSTOOLS3_INSTALL_INIT_SYSV for the script.
-> See docs/manual/adding-packages-generic.txt for the reason.
-
-ok !
-
->
-> Otherwise looking good in general without testing it though.
-
-Thanks !
-I will send a corrected version tomorrow.
+But no, it works as expected, with make-3.81 and make-4.0 alike.
 
 Regards,
-Julien
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
