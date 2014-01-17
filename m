@@ -1,13 +1,13 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 17 Jan 2014 23:35:44 +0100
-Subject: [Buildroot] [PATCH 3/6] pkg-infra: git helper creates an empty
- archive if PKG_VERSION is a missing hash
-In-Reply-To: <52D6440F.3020309@mind.be>
+Date: Fri, 17 Jan 2014 23:41:36 +0100
+Subject: [Buildroot] [PATCH 5/6] pkg-infra: add possiblity to check
+ downloaded files against known hashes
+In-Reply-To: <52D64559.90705@mind.be>
 References: <cover.1389569992.git.yann.morin.1998@free.fr>
- <b528cb41d4ac90bbccf471a88485b249eabfdc82.1389569992.git.yann.morin.1998@free.fr>
- <52D5A17B.8010703@mind.be> <20140114232126.GK3328@free.fr>
- <52D6440F.3020309@mind.be>
-Message-ID: <20140117223544.GD3982@free.fr>
+ <dc5d6ba62805a74ef57fc2c779e97a00056cbfa6.1389569992.git.yann.morin.1998@free.fr>
+ <52D5AE11.60804@mind.be> <20140114233438.GL3328@free.fr>
+ <52D64559.90705@mind.be>
+Message-ID: <20140117224136.GE3982@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,45 +16,49 @@ To: buildroot@busybox.net
 
 Arnout, All,
 
-On 2014-01-15 09:17 +0100, Arnout Vandecappelle spake thusly:
-> On 15/01/14 00:21, Yann E. MORIN wrote:
+On 2014-01-15 09:22 +0100, Arnout Vandecappelle spake thusly:
+> On 15/01/14 00:34, Yann E. MORIN wrote:
 > >Arnout, All,
 > >
-> >On 2014-01-14 21:43 +0100, Arnout Vandecappelle spake thusly:
+> >On 2014-01-14 22:37 +0100, Arnout Vandecappelle spake thusly:
 > >>On 13/01/14 00:44, Yann E. MORIN wrote:
-> >>>From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> >[--SNIP--]
-> >>>-${GIT} archive --prefix="${prefix}" --format=tar "${cset}"  \
-> >>>-|gzip -c >"${output}"
-> >>>+res=1
-> >>>+if ${GIT} rev-list -n 1 "${cset}" >/dev/null 2>&1; then
+> [snip]
+> >>>Note-2: The laternative to sha1 would be sha2 (256- or 512-bit), but
+> >>>oldish "enterprise-class" distributions  may be missing them entirely.
+> >>>sha256sum and sha512sum were added to coreutils in 2005-10-23, and RHEL5
+> >>>seems to have them. But better be safe than sorry. If sha2 should be
+> >>>considered instead of sha1, then it is very easy to switch now. Switching
+> >>>later would require that we revalidate all packages that have hashes,
+> >>>which could prove to be quite time-demanding if we have lots of
+> >>>packages using hashes.
 > >>
-> >>  When we've done a shallow clone, this check is redundant because we have
-> >>cloned exactly this ref.
-> >>
-> >>  So instead, I'd do the check in the full clone condition, with an explicit
-> >>exit.
+> >>  We can be more future-safe by storing the hash that is used in the .hash
+> >>file itself.
 > >
-> >I see. But it complexifies the script.
-> >
-> >And doing the check a second time ensures we did not download garbage
-> >
-> >Heck, there's even a race condition, since we check the remote, then
-> >clone it, and the ref may have vanished (granted, very unlikely, but
-> >yet...). :-p
+> >Hu?
 > 
->  True. I yield to your wisdom.
+>  If the hash file contains the following:
+> 
+> 486fb55c3efa71148fe07895fd713ea3a5ae343a  sha1  libfoo-1.2.3.tar.bz2
 
-Sorry, that race-condition was not meant to be taken in the first degree.
-Of course, the chances it happens are so thin we can easily ignore it.
+OK, I see what you meant, now.
 
-However, I tried massaging the script so that we do the check only once,
-and I can't find an easy way, except duplicating the check before
-calling git archive.
+> then you can now let the script check that the second field is sha1, and
+> later you can support different hash methods. In that case, it is not
+> necessary to update all the files when we want to switch to a new hash
+> method.
 
-I've added a comment saying so in the script.
+However, that means the file is no longer the output of:
+    sha1sum files-to-check* >package.hash
 
-Thank you for the review! :-)
+or of any other hash utility: sha*sum all generates similarly-formatted
+outputs:
+    hash <two spaces> filename
+
+Which was the reason I choose that format.
+
+If we'd use your suggestion, we'd need a simple way to generate that
+file, or it'd be error prone.
 
 Regards,
 Yann E. MORIN.
