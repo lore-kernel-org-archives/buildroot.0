@@ -1,74 +1,64 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 17 Jan 2014 18:47:37 +0100
-Subject: [Buildroot] [V3 3/3] lua: add an upstream patch
-In-Reply-To: <1389980858-1924-1-git-send-email-francois.perrad@gadz.org>
-References: <1389980858-1924-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1389980858-1924-3-git-send-email-francois.perrad@gadz.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 17 Jan 2014 18:52:51 +0100
+Subject: [Buildroot] [PATCH] prevent recursion in %_defconfig rules
+In-Reply-To: <1389111727-11021-1-git-send-email-jeremy.rosen@openwide.fr>
+References: <1389111727-11021-1-git-send-email-jeremy.rosen@openwide.fr>
+Message-ID: <20140117175251.GA3982@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-from http://www.lua.org/bugs.html
+J?r?my, All,
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/lua/5.1.5/lua-12-fix-reader-at-eoz.patch |   46 ++++++++++++++++++++++
- 1 file changed, 46 insertions(+)
- create mode 100644 package/lua/5.1.5/lua-12-fix-reader-at-eoz.patch
+On 2014-01-07 17:22 +0100, J?r?my Rosen spake thusly:
+> Signed-off-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
+> 
+> ---
+> The following command, run from a clean buildroot checkout
+> 
+> make O=.. BR2_EXTERNAL=.. raspberrypi_defconfig
+> 
+> cause the following output, and makes stop :
+> 
+> 
+> make: *** Pas de r?gle pour fabriquer la cible ? /home/rosen/tmp/buildroot/
+> configs/../configs/../configs/../configs/<lots more >/../configs/
+> raspberrypi_defconfig ?, n?cessaire pour ? /home/rosen/tmp/buildroot/
+> configs/../configs/../configs/<lots more>/../configs/
+> raspberrypi_defconfig ?. Arr?t.
+> 
+> The problem is that the buildroot makefile has two rules to generate
+> %_defconfig: One that depends on $(TOPDIR)/configs/%_defconfig and the
+> other one that depends on $(BR2_EXTERNAL)/configs/%_defconfig.
+> 
+> When one rule checks for the file, the other rule becomes an implicit rule
+> for the dependancy causing an infinite cross-recursion.
+> 
+> By overriding the implicit rule, we prevent the infinite recursion.
 
-diff --git a/package/lua/5.1.5/lua-12-fix-reader-at-eoz.patch b/package/lua/5.1.5/lua-12-fix-reader-at-eoz.patch
-new file mode 100644
-index 0000000..17a28ba
---- /dev/null
-+++ b/package/lua/5.1.5/lua-12-fix-reader-at-eoz.patch
-@@ -0,0 +1,46 @@
-+When loading a file, Lua may call the reader function again after it returned end of input.
-+
-+Fetch from: http://www.lua.org/bugs.html#5.1.5-2
-+
-+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-+
-+Index: b/src/lzio.c
-+===================================================================
-+--- a/src/lzio.c
-++++ b/src/lzio.c
-+@@ -22,10 +22,14 @@
-+   size_t size;
-+   lua_State *L = z->L;
-+   const char *buff;
-++  if (z->eoz) return EOZ;
-+   lua_unlock(L);
-+   buff = z->reader(L, z->data, &size);
-+   lua_lock(L);
-+-  if (buff == NULL || size == 0) return EOZ;
-++  if (buff == NULL || size == 0) {
-++    z->eoz = 1;  /* avoid calling reader function next time */
-++    return EOZ;
-++  }
-+   z->n = size - 1;
-+   z->p = buff;
-+   return char2int(*(z->p++));
-+@@ -51,6 +55,7 @@
-+   z->data = data;
-+   z->n = 0;
-+   z->p = NULL;
-++  z->eoz = 0;
-+ }
-+ 
-+ 
-+Index: b/src/lzio.h
-+===================================================================
-+--- a/src/lzio.h
-++++ b/src/lzio.h
-+@@ -59,6 +59,7 @@
-+   lua_Reader reader;
-+   void* data;			/* additional data */
-+   lua_State *L;			/* Lua state (for reader) */
-++  int eoz;			/* true if reader has no more data */
-+ };
-+ 
-+ 
+This breaks defconfigs from BR2_EXTERNAL when used with an out-of-tree
+build:
+
+    make -C /path/to/buildroot              \
+         O=/path/to/build                   \
+         BR2_EXTERNAL=/path/to/br2.external \
+         yem_defconfig
+    [--SNIP--]
+    *** Can't find default configuration "/home/ymorin/dev/buildroot/buildroot/configs/yem_defconfig"!
+
+:-(
+
+I'm looking into it...
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.7.9.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
