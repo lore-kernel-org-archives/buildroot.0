@@ -1,31 +1,34 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Fri, 17 Jan 2014 21:08:35 +0100
-Subject: [Buildroot] [PATCH 1/1] ffmpeg: Bump version to 1.2.5
-Message-ID: <BLU0-SMTP285DCAB71FFC624A08CC901D9B80@phx.gbl>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 17 Jan 2014 21:56:41 +0100
+Subject: [Buildroot] [PATCH] Revert "prevent recursion in %_defconfig
+	rules"
+In-Reply-To: <1389982376-18064-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Fri, 17 Jan 2014 19:12:56 +0100")
+References: <1389982376-18064-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87a9eunx86.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
----
- package/ffmpeg/ffmpeg.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > This reverts commit 94dd02f5d0ce89549a82a99c56602e1c4a73bae7.
 
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index df8cb66..d800ebe 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FFMPEG_VERSION = 1.2.4
-+FFMPEG_VERSION = 1.2.5
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.bz2
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
+ > The change breaks defconfigs from BR2_EXTERNAL, both for in-tree and
+ > out-of-tree builds.
+
+ > Besides, the problem reported in 94dd02f could not be reproduced.
+
+ > I can read French, and I suspect a relative path was used for either
+ > BR2_EXTERNAL or O.
+
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: J?r?my Rosen <jeremy.rosen@openwide.fr>
+
+Committed, thanks.
+
 -- 
-1.7.9.5
+Bye, Peter Korsgaard
