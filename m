@@ -1,32 +1,46 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Fri, 17 Jan 2014 12:31:55 +0100
-Subject: [Buildroot] python Gobject
-In-Reply-To: <CAAs3wMgAbEnReJ-XW_QnQ=kAU6G7cwzss7yUMytcmHMRYMsjnw@mail.gmail.com>
-References: <CAAs3wMgAbEnReJ-XW_QnQ=kAU6G7cwzss7yUMytcmHMRYMsjnw@mail.gmail.com>
-Message-ID: <20140117113153.GB10730@pc-eric>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 17 Jan 2014 08:39:57 -0300
+Subject: [Buildroot] [PATCH] Add SMS Tools Server 3 package
+In-Reply-To: <52D82BEF.2030209@free.fr>
+References: <1389194289-10657-1-git-send-email-julien.boibessot@free.fr>
+ <52D6D25B.3040603@zacarias.com.ar> <52D82BEF.2030209@free.fr>
+Message-ID: <52D9168D.50008@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+On 01/16/2014 03:58 PM, Julien Boibessot wrote:
 
-On Fri, Jan 17, 2014 at 11:39:10AM +0100, Freedreamer wrote:
+>>> +config BR2_PACKAGE_SMSTOOLS3_NB_MODEMS
+>>> +	string "Number of modems to support"
+>>> +	default 1
+>> What does this knob do in/to the code?
+> 
+> It (NUMBER_OF_MODEMS) is used in a very large number of loops of the
+> program and by default set to 64.
+> 
+> Doc says: "If you are running SMSTools3 in an embedded device, you can
+> use NUMBER_OF_MODEMS=1 to save memory."
+> 
+> Don't know why the author didn't choose to take dynamic command
+> parameters instead of static code define...
 
->    In my br rootfs I 've been using a lot of scripts based on python and a
->    lot of them are based on Gobject. Unfourtanetely when I try to start one I
->    always got a problem 'cause python misses the support for the Gobject.
+Ok, i'm usually not comfortable with this kind of tuning but it's up to
+upstream to fix it.
 
-Which versions of Python and GObject bindings are you using? Two combos are
-possible:
 
-1) Python 2.7 + Python-GObject < 2.28 (classic Python C bindings).
-2) Python 3.x + Python-GObject > 3.x (bindings based on GObject introspection).
+> Well... no particular reason :-)
+> /usr would be ok ?
 
-It looks like there are no packages (yet) for either one.
-Packaging python-gobject 2.28 (also known as PyGtk) should be doable, but the
-other combo requires to package gobject-introspection.
+Yes, /usr is the usual install directory, /usr/local is normally outside
+of the PATH and not practical.
+Historically it's reserved for customizations so it shouldn't be used
+for a "default target".
 
-Best regards,
-ELB
+> Thanks !
+> I will send a corrected version tomorrow.
+
+Thanks, looking forward to it :)
+Regards.
