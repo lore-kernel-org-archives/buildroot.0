@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 17 Jan 2014 18:52:51 +0100
+Date: Fri, 17 Jan 2014 19:09:35 +0100
 Subject: [Buildroot] [PATCH] prevent recursion in %_defconfig rules
-In-Reply-To: <1389111727-11021-1-git-send-email-jeremy.rosen@openwide.fr>
+In-Reply-To: <20140117175251.GA3982@free.fr>
 References: <1389111727-11021-1-git-send-email-jeremy.rosen@openwide.fr>
-Message-ID: <20140117175251.GA3982@free.fr>
+ <20140117175251.GA3982@free.fr>
+Message-ID: <20140117180935.GB3982@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,45 +13,52 @@ To: buildroot@busybox.net
 
 J?r?my, All,
 
-On 2014-01-07 17:22 +0100, J?r?my Rosen spake thusly:
-> Signed-off-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
+On 2014-01-17 18:52 +0100, Yann E. MORIN spake thusly:
+> On 2014-01-07 17:22 +0100, J?r?my Rosen spake thusly:
+> > Signed-off-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
+> > 
+> > ---
+> > The following command, run from a clean buildroot checkout
+> > 
+> > make O=.. BR2_EXTERNAL=.. raspberrypi_defconfig
+> > 
+> > cause the following output, and makes stop :
+> > 
+> > 
+> > make: *** Pas de r?gle pour fabriquer la cible ? /home/rosen/tmp/buildroot/
+> > configs/../configs/../configs/../configs/<lots more >/../configs/
+> > raspberrypi_defconfig ?, n?cessaire pour ? /home/rosen/tmp/buildroot/
+> > configs/../configs/../configs/<lots more>/../configs/
+> > raspberrypi_defconfig ?. Arr?t.
+> > 
+> > The problem is that the buildroot makefile has two rules to generate
+> > %_defconfig: One that depends on $(TOPDIR)/configs/%_defconfig and the
+> > other one that depends on $(BR2_EXTERNAL)/configs/%_defconfig.
+> > 
+> > When one rule checks for the file, the other rule becomes an implicit rule
+> > for the dependancy causing an infinite cross-recursion.
+> > 
+> > By overriding the implicit rule, we prevent the infinite recursion.
 > 
-> ---
-> The following command, run from a clean buildroot checkout
+> This breaks defconfigs from BR2_EXTERNAL when used with an out-of-tree
+> build:
 > 
-> make O=.. BR2_EXTERNAL=.. raspberrypi_defconfig
-> 
-> cause the following output, and makes stop :
-> 
-> 
-> make: *** Pas de r?gle pour fabriquer la cible ? /home/rosen/tmp/buildroot/
-> configs/../configs/../configs/../configs/<lots more >/../configs/
-> raspberrypi_defconfig ?, n?cessaire pour ? /home/rosen/tmp/buildroot/
-> configs/../configs/../configs/<lots more>/../configs/
-> raspberrypi_defconfig ?. Arr?t.
-> 
-> The problem is that the buildroot makefile has two rules to generate
-> %_defconfig: One that depends on $(TOPDIR)/configs/%_defconfig and the
-> other one that depends on $(BR2_EXTERNAL)/configs/%_defconfig.
-> 
-> When one rule checks for the file, the other rule becomes an implicit rule
-> for the dependancy causing an infinite cross-recursion.
-> 
-> By overriding the implicit rule, we prevent the infinite recursion.
+>     make -C /path/to/buildroot              \
+>          O=/path/to/build                   \
+>          BR2_EXTERNAL=/path/to/br2.external \
+>          yem_defconfig
+>     [--SNIP--]
+>     *** Can't find default configuration "/home/ymorin/dev/buildroot/buildroot/configs/yem_defconfig"!
 
-This breaks defconfigs from BR2_EXTERNAL when used with an out-of-tree
-build:
+It even breaks BR2_EXTERNAL for in-tree builds.
 
-    make -C /path/to/buildroot              \
-         O=/path/to/build                   \
-         BR2_EXTERNAL=/path/to/br2.external \
-         yem_defconfig
-    [--SNIP--]
-    *** Can't find default configuration "/home/ymorin/dev/buildroot/buildroot/configs/yem_defconfig"!
+Reverting that patch fixes both issues, and does not exhibit the
+reported problem.
 
-:-(
+Peter, can we just revert that patch (cset 94dd02f) for now, please?
 
-I'm looking into it...
+J?r?my, can you describe your setup, so we can try to reproduce it, and
+find a proper fix?
 
 Regards,
 Yann E. MORIN.
