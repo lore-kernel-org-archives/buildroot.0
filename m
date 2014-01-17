@@ -1,52 +1,122 @@
-From: Jeremy Kerr <jk@ozlabs.org>
-Date: Fri, 17 Jan 2014 10:16:41 +0800
-Subject: [Buildroot] [RFC,
- PATCH 0/8] Enable a buildroot-based petitboot bootloader
-In-Reply-To: <1389862338.917573.283530987294.0.gpush@pablo>
-References: <1389862338.917573.283530987294.0.gpush@pablo>
-Message-ID: <52D89289.4070205@ozlabs.org>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Thu, 16 Jan 2014 22:10:25 -0500
+Subject: [Buildroot] [PATCH v4 1/1] ljsyscall: new package
+Message-ID: <1389928225-1845-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+An FFI implementation of the Linux and NetBSD kernel ABIs for LuaJIT.
 
-> While most of this series is fairly straightforward, there are a few
-> items that might need a little more attention:
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 
-Also, the way I'm doing the kexec could use a sanity check. Currently,
-it goes like this:
+---
 
-- we configure busybox init (permanently through inittab) to use
-  /usr/sbin/kexec-restart as the "restart" handler.
+Note: this package requires LuaJIT specifically, so there is a depends-on
+in the ljsyscall/Config.in, even though though it is included from a
+menu with a "if BR2_PACKAGE_LUA || BR2_PACKAGE_LUAJIT" test around it.
 
-- when petitboot is told to boot a new kernel, it loads it (along with
-  optional initrd and device-tree blob) into the running kernel
-  with the kexec command. This only loads the new kernel through the
-  kexec_load syscall, it doesn't initiate any boot process.
+v3 -> v4:
+ - Rebase to master
+ - Bump version to 0.9
+ - Use github helper for download
+ - Account for shared directory
 
-- next, petitboot runs its shutdown command, which we've configured
-  as /usr/libexec/petitboot/bb-kexec-reboot. This is a busybox-
-  init-specific script that simply sends a SIGQUIT to bb init to
-  invoke the restart.
+v2 -> v3:
+ - Config.in: add depends-on particular target architectures, like LuaJIT.  Note
+           that this is not a compile time requirement but rather based on what
+           the package itself supports.
+ - Config.in: add comment stating when ljsyscall is hidden due to no LuaJIT
+ - ljsyscall.mk: simplify ifeq / else ifeq block
+ - ljsyscall.mk: use intermediate variable to simplify install lines
 
-- bb init starts the shutdown procedure, and terminates running
-  processes, then finally executes the restart handler (which we
-  configured earlier to /usr/sbin/kexec-restart).
+v1 -> v2:
+ - Removed unnecessary build time dependency on LuaJIT.
+ - Specify -m 0644 during installation, since .lua files need not be executable.
+---
+ package/Config.in              |    1 +
+ package/ljsyscall/Config.in    |   14 ++++++++++++++
+ package/ljsyscall/ljsyscall.mk |   37 +++++++++++++++++++++++++++++++++++++
+ 3 files changed, 52 insertions(+)
+ create mode 100644 package/ljsyscall/Config.in
+ create mode 100644 package/ljsyscall/ljsyscall.mk
 
-- /usr/sbin/kexec-restart simply calls the reboot() syscall, with
-  the correct magic value to execute the kernel we loaded earlier.
-
-The reason we're using the restart handler here is that busybox init
-doesn't know about the reboot()'s magic value to perform a kexec, and
-the busybox folks would rather that this *isn't* handled by init (which
-makes sense).
-
-Feedback welcome!
-
-Cheers,
-
-
-Jeremy
+diff --git a/package/Config.in b/package/Config.in
+index 2f62d6c..873a54d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -369,6 +369,7 @@ source "package/cgilua/Config.in"
+ source "package/copas/Config.in"
+ source "package/coxpcall/Config.in"
+ source "package/lbase64/Config.in"
++source "package/ljsyscall/Config.in"
+ source "package/lua-cjson/Config.in"
+ source "package/lua-ev/Config.in"
+ source "package/lua-msgpack-native/Config.in"
+diff --git a/package/ljsyscall/Config.in b/package/ljsyscall/Config.in
+new file mode 100644
+index 0000000..dcbd521
+--- /dev/null
++++ b/package/ljsyscall/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_LJSYSCALL
++	bool "ljsyscall"
++	# ljsyscall is specifically for LuaJIT, not Lua.
++	depends on BR2_PACKAGE_LUAJIT
++	# ljsyscall is only available for some target architectures
++	depends on BR2_i386 || BR2_x86_64 || BR2_powerpc || BR2_arm || BR2_armeb
++	help
++	  An FFI implementation of the Linux and NetBSD kernel ABIs for LuaJIT.
++
++	  http://github.com/justincormack/ljsyscall
++
++comment "ljsyscall needs LuaJIT"
++	depends on !BR2_PACKAGE_LUAJIT && (BR2_i386 || BR2_x86_64 || BR2_powerpc || BR2_arm || BR2_armeb)
++
+diff --git a/package/ljsyscall/ljsyscall.mk b/package/ljsyscall/ljsyscall.mk
+new file mode 100644
+index 0000000..1f36dc7
+--- /dev/null
++++ b/package/ljsyscall/ljsyscall.mk
+@@ -0,0 +1,37 @@
++################################################################################
++#
++# ljsyscall
++#
++################################################################################
++
++LJSYSCALL_VERSION = v0.9
++LJSYSCALL_SITE = $(call github,justincormack,ljsyscall,$(LJSYSCALL_VERSION))
++LJSYSCALL_LICENSE = MIT
++LJSYSCALL_LICENSE_FILES = COPYRIGHT
++
++ifeq ($(BR2_i386),y)
++LJSYSCALL_ARCH = x86
++else ifeq ($(BR2_x86_64),y)
++LJSYSCALL_ARCH = x64
++else ifeq ($(BR2_powerpc),y)
++LJSYSCALL_ARCH = ppc
++else ifeq ($(LJSYSCALL_ARCH),)
++LJSYSCALL_ARCH = $(BR2_ARCH)
++endif
++
++LJSYSCALL_TARGET_DIR = $(TARGET_DIR)/usr/share/luajit-$(LUAJIT_VERSION)
++
++define LJSYSCALL_INSTALL_TARGET_CMDS
++	$(INSTALL) -d $(LJSYSCALL_TARGET_DIR)/syscall
++	$(INSTALL) -m 0644 -t $(LJSYSCALL_TARGET_DIR)/ $(@D)/syscall.lua
++	$(INSTALL) -m 0644 -t $(LJSYSCALL_TARGET_DIR)/syscall $(@D)/syscall/*.lua
++
++	$(INSTALL) -d $(LJSYSCALL_TARGET_DIR)/syscall/linux/$(LJSYSCALL_ARCH)
++	$(INSTALL) -m 0644 -t $(LJSYSCALL_TARGET_DIR)/syscall/linux/ $(@D)/syscall/linux/*.lua
++	$(INSTALL) -m 0644 -t $(LJSYSCALL_TARGET_DIR)/syscall/linux/$(LJSYSCALL_ARCH) $(@D)/syscall/linux/$(LJSYSCALL_ARCH)/*.lua
++
++	$(INSTALL) -d $(LJSYSCALL_TARGET_DIR)/syscall/shared
++	$(INSTALL) -m 0644 -t $(LJSYSCALL_TARGET_DIR)/syscall/shared/ $(@D)/syscall/shared/*.lua
++endef
++
++$(eval $(generic-package))
+-- 
+1.7.9.5
