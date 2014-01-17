@@ -1,11 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 17 Jan 2014 09:08:09 +0100
-Subject: [Buildroot] [PATCH v2 01/12] libass: new package
-In-Reply-To: <1389831355-19983-2-git-send-email-maxime.hadjinlian@gmail.com>
- (Maxime Hadjinlian's message of "Thu, 16 Jan 2014 01:15:44 +0100")
+Date: Fri, 17 Jan 2014 09:10:35 +0100
+Subject: [Buildroot] [PATCH v2 11/12] libenca: new package
+In-Reply-To: <1389831355-19983-12-git-send-email-maxime.hadjinlian@gmail.com>
+ (Maxime Hadjinlian's message of "Thu, 16 Jan 2014 01:15:54 +0100")
 References: <1389831355-19983-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1389831355-19983-2-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <874n53owt2.fsf@dell.be.48ers.dk>
+ <1389831355-19983-12-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <87zjmvni4k.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,28 +14,58 @@ To: buildroot@busybox.net
 
 >>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
 
- > libass is a portable subtitle renderer for the
- > ASS/SSA (Advanced Substation Alpha/Substation Alpha) subtitle format.
+ > Extremely Naive Charset Analyser.
  > This package was originally found at : https://github.com/huceke/buildroot-rbp
  > By gimli <ebsi4711@gmail.com>
 
  > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
  > Cc: gimli <ebsi4711@gmail.com>
- > Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
  > ---
- > Changes v2 -> v3
- >   - Fix header
- > Changes v1 -> v2
- >   - Bump version to 0.10.2 (Bernd Kuhls)
+ > Changes v3 --> v4:
+ >   - New patch against Makefile.am and do AUTORECONF (Thomas Petazzoni,
+ >     Yann E. Morin)
+ >   - Remove the uses of prefix by adding a patch which removes a hack in
+ >     the configure.ac (Yann E. Morin)
 
- > +config BR2_PACKAGE_LIBASS
- > +	bool "libass"
- > +	select BR2_PACKAGE_FREETYPE
- > +	select BR2_PACKAGE_FONTCONFIG
- > +	select BR2_PACKAGE_LIBENCA
+ > @@ -0,0 +1,36 @@
+ > +################################################################################
+ > +#
+ > +# libenca
+ > +#
+ > +################################################################################
+ > +
+ > +LIBENCA_VERSION = 1.15
+ > +LIBENCA_SITE = $(call github,nijel,enca,$(LIBENCA_VERSION))
+ > +LIBENCA_INSTALL_STAGING = YES
+ > +LIBENCA_AUTORECONF = YES
+ > +LIBENCA_LICENSE = GPLv2
+ > +LIBENCA_LICENSE_FILES = COPYING
+ > +
+ > +LIBENCA_CONF_ENV += ac_cv_file__dev_random=yes \
+ > +			ac_cv_file__dev_urandom=yes \
+ > +			ac_cv_file__dev_arandom=no \
+ > +			ac_cv_file__dev_srandom=no
+ > +
+ > +define LIBENCA_MAKE_HOST_TOOL
+ > +	cd $(@D)/tools && sed -e 's/^#define \([A-Z0-9_]*\) \(.*\)/@\1@ \2/' \
+ > +		-e 's/"//g' \
+ > +		-e 's/NULL$$//' \
+ > +		-e 's/ /\//' \
+ > +		-e 's/^\(.*\)$$/s\/\1\//' \
+ > +		../iconvenc.h >encodings.sed
+ > +	cd $(@D)/tools && $(HOSTCC) -o make_hash make_hash.c
+ > +	cd $(@D)/tools && sed -f encodings.sed ./encodings.dat | ./make_hash >encodings.h
+ > +endef
+ > +
+ > +LIBENCA_POST_CONFIGURE_HOOKS += LIBENCA_MAKE_HOST_TOOL
+ > +
+ > +$(eval $(autotools-package))
+ > +
+ > +XERCES_CONF_OPT = --disable-threads \
+ > +		  --with-gnu-ld
+ > +
 
-The patch ordering is wrong. You only introduce libenca in patch
-11. Otherwise it looks OK.
+Huh, what is this about?
 
 -- 
 Bye, Peter Korsgaard
