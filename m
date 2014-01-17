@@ -1,46 +1,243 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 17 Jan 2014 08:39:57 -0300
-Subject: [Buildroot] [PATCH] Add SMS Tools Server 3 package
-In-Reply-To: <52D82BEF.2030209@free.fr>
-References: <1389194289-10657-1-git-send-email-julien.boibessot@free.fr>
- <52D6D25B.3040603@zacarias.com.ar> <52D82BEF.2030209@free.fr>
-Message-ID: <52D9168D.50008@zacarias.com.ar>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Fri, 17 Jan 2014 13:02:02 +0100
+Subject: [Buildroot] [PATCH] luasocket: fix build with uClibc without IPv6
+Message-ID: <1389960122-32618-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/16/2014 03:58 PM, Julien Boibessot wrote:
+see http://autobuild.buildroot.net/results/698/6989e71bf50946d62b696dbe07e8f00679b6aad9/
 
->>> +config BR2_PACKAGE_SMSTOOLS3_NB_MODEMS
->>> +	string "Number of modems to support"
->>> +	default 1
->> What does this knob do in/to the code?
-> 
-> It (NUMBER_OF_MODEMS) is used in a very large number of loops of the
-> program and by default set to 64.
-> 
-> Doc says: "If you are running SMSTools3 in an embedded device, you can
-> use NUMBER_OF_MODEMS=1 to save memory."
-> 
-> Don't know why the author didn't choose to take dynamic command
-> parameters instead of static code define...
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/luasocket/luasocket-01-uClibc-IPv6.patch |  217 ++++++++++++++++++++++
+ 1 file changed, 217 insertions(+)
+ create mode 100644 package/luasocket/luasocket-01-uClibc-IPv6.patch
 
-Ok, i'm usually not comfortable with this kind of tuning but it's up to
-upstream to fix it.
-
-
-> Well... no particular reason :-)
-> /usr would be ok ?
-
-Yes, /usr is the usual install directory, /usr/local is normally outside
-of the PATH and not practical.
-Historically it's reserved for customizations so it shouldn't be used
-for a "default target".
-
-> Thanks !
-> I will send a corrected version tomorrow.
-
-Thanks, looking forward to it :)
-Regards.
+diff --git a/package/luasocket/luasocket-01-uClibc-IPv6.patch b/package/luasocket/luasocket-01-uClibc-IPv6.patch
+new file mode 100644
+index 0000000..ae70b4d
+--- /dev/null
++++ b/package/luasocket/luasocket-01-uClibc-IPv6.patch
+@@ -0,0 +1,217 @@
++fix build with uClibc without IPv6 support
++
++see Pull Request: https://github.com/diegonehab/luasocket/pull/90
++
++Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++
++Index: b/luasocket-3.0-rc1/src/options.c
++===================================================================
++--- a/luasocket-3.0-rc1/src/options.c
+++++ b/luasocket-3.0-rc1/src/options.c
++@@ -110,6 +110,7 @@
++     return opt_setboolean(L, ps, SOL_SOCKET, SO_BROADCAST);
++ }
++ 
+++#ifdef IPV6_UNICAST_HOPS
++ int opt_set_ip6_unicast_hops(lua_State *L, p_socket ps)
++ {
++   return opt_setint(L, ps, IPPROTO_IPV6, IPV6_UNICAST_HOPS);
++@@ -119,7 +120,9 @@
++ {
++   return opt_getint(L, ps, IPPROTO_IPV6, IPV6_UNICAST_HOPS);
++ }
+++#endif
++ 
+++#ifdef IPV6_MULTICAST_HOPS
++ int opt_set_ip6_multicast_hops(lua_State *L, p_socket ps)
++ {
++   return opt_setint(L, ps, IPPROTO_IPV6, IPV6_MULTICAST_HOPS);
++@@ -129,6 +132,7 @@
++ {
++   return opt_getint(L, ps, IPPROTO_IPV6, IPV6_MULTICAST_HOPS);
++ }
+++#endif
++ 
++ int opt_set_ip_multicast_loop(lua_State *L, p_socket ps)
++ {
++@@ -140,6 +144,7 @@
++     return opt_getboolean(L, ps, IPPROTO_IP, IP_MULTICAST_LOOP);
++ }
++ 
+++#ifdef IPV6_MULTICAST_LOOP
++ int opt_set_ip6_multicast_loop(lua_State *L, p_socket ps)
++ {
++     return opt_setboolean(L, ps, IPPROTO_IPV6, IPV6_MULTICAST_LOOP);
++@@ -149,6 +154,7 @@
++ {
++     return opt_getboolean(L, ps, IPPROTO_IPV6, IPV6_MULTICAST_LOOP);
++ }
+++#endif
++ 
++ int opt_set_linger(lua_State *L, p_socket ps)
++ {
++@@ -221,16 +227,21 @@
++     return opt_setmembership(L, ps, IPPROTO_IP, IP_DROP_MEMBERSHIP);
++ }
++ 
+++#ifdef IPV6_ADD_MEMBERSHIP
++ int opt_set_ip6_add_membership(lua_State *L, p_socket ps)
++ {
++     return opt_ip6_setmembership(L, ps, IPPROTO_IPV6, IPV6_ADD_MEMBERSHIP);
++ }
+++#endif
++ 
+++#ifdef IPV6_DROP_MEMBERSHIP
++ int opt_set_ip6_drop_membersip(lua_State *L, p_socket ps)
++ {
++     return opt_ip6_setmembership(L, ps, IPPROTO_IPV6, IPV6_DROP_MEMBERSHIP);
++ }
+++#endif
++ 
+++#ifdef IPV6_V6ONLY
++ int opt_get_ip6_v6only(lua_State *L, p_socket ps)
++ {
++     return opt_getboolean(L, ps, IPPROTO_IPV6, IPV6_V6ONLY);
++@@ -240,6 +251,7 @@
++ {
++     return opt_setboolean(L, ps, IPPROTO_IPV6, IPV6_V6ONLY);
++ }
+++#endif
++ 
++ /*=========================================================================*\
++ * Auxiliar functions
++Index: b/luasocket-3.0-rc1/src/options.h
++===================================================================
++--- a/luasocket-3.0-rc1/src/options.h
+++++ b/luasocket-3.0-rc1/src/options.h
++@@ -32,12 +32,24 @@
++ int opt_set_ip_multicast_loop(lua_State *L, p_socket ps);
++ int opt_set_ip_add_membership(lua_State *L, p_socket ps);
++ int opt_set_ip_drop_membersip(lua_State *L, p_socket ps);
+++#ifdef IPV6_UNICAST_HOPS
++ int opt_set_ip6_unicast_hops(lua_State *L, p_socket ps);
+++#endif
+++#ifdef IPV6_MULTICAST_HOPS
++ int opt_set_ip6_multicast_hops(lua_State *L, p_socket ps);
+++#endif
+++#ifdef IPV6_MULTICAST_LOOP
++ int opt_set_ip6_multicast_loop(lua_State *L, p_socket ps);
+++#endif
+++#ifdef IPV6_ADD_MEMBERSHIP
++ int opt_set_ip6_add_membership(lua_State *L, p_socket ps);
+++#endif
+++#ifdef IPV6_DROP_MEMBERSHIP
++ int opt_set_ip6_drop_membersip(lua_State *L, p_socket ps);
+++#endif
+++#ifdef IPV6_V6ONLY
++ int opt_set_ip6_v6only(lua_State *L, p_socket ps);
+++#endif
++ 
++ /* supported options for getoption */
++ int opt_get_reuseaddr(lua_State *L, p_socket ps);
++@@ -48,10 +60,18 @@
++ int opt_get_ip_multicast_loop(lua_State *L, p_socket ps);
++ int opt_get_ip_multicast_if(lua_State *L, p_socket ps);
++ int opt_get_error(lua_State *L, p_socket ps);
+++#ifdef IPV6_MULTICAST_LOOP
++ int opt_get_ip6_multicast_loop(lua_State *L, p_socket ps);
+++#endif
+++#ifdef IPV6_MULTICAST_HOPS
++ int opt_get_ip6_multicast_hops(lua_State *L, p_socket ps);
+++#endif
+++#ifdef IPV6_UNICAST_HOPS
++ int opt_get_ip6_unicast_hops(lua_State *L, p_socket ps);
+++#endif
+++#ifdef IPV6_V6ONLY
++ int opt_get_ip6_v6only(lua_State *L, p_socket ps); 
+++#endif
++ 
++ /* invokes the appropriate option handler */
++ int opt_meth_setoption(lua_State *L, p_opt opt, p_socket ps);
++Index: b/luasocket-3.0-rc1/src/tcp.c
++===================================================================
++--- a/luasocket-3.0-rc1/src/tcp.c
+++++ b/luasocket-3.0-rc1/src/tcp.c
++@@ -81,7 +81,9 @@
++     {"keepalive",   opt_set_keepalive},
++     {"reuseaddr",   opt_set_reuseaddr},
++     {"tcp-nodelay", opt_set_tcp_nodelay},
+++#ifdef IPV6_V6ONLY
++     {"ipv6-v6only", opt_set_ip6_v6only},
+++#endif
++     {"linger",      opt_set_linger},
++     {NULL,          NULL}
++ };
++@@ -366,11 +368,13 @@
++         auxiliar_setclass(L, "tcp{master}", -1);
++         /* initialize remaining structure fields */
++         socket_setnonblocking(&sock);
+++#ifdef IPV6_V6ONLY
++         if (family == PF_INET6) {
++             int yes = 1;
++             setsockopt(sock, IPPROTO_IPV6, IPV6_V6ONLY,
++                 (void *)&yes, sizeof(yes));
++         }
+++#endif
++         tcp->sock = sock;
++         io_init(&tcp->io, (p_send) socket_send, (p_recv) socket_recv,
++                 (p_error) socket_ioerror, &tcp->sock);
++Index: b/luasocket-3.0-rc1/src/udp.c
++===================================================================
++--- a/luasocket-3.0-rc1/src/udp.c
+++++ b/luasocket-3.0-rc1/src/udp.c
++@@ -78,12 +78,22 @@
++     {"ip-multicast-loop",    opt_set_ip_multicast_loop},
++     {"ip-add-membership",    opt_set_ip_add_membership},
++     {"ip-drop-membership",   opt_set_ip_drop_membersip},
+++#ifdef IPV6_UNICAST_HOPS
++     {"ipv6-unicast-hops",    opt_set_ip6_unicast_hops},
++     {"ipv6-multicast-hops",  opt_set_ip6_unicast_hops},
+++#endif
+++#ifdef IPV6_MULTICAST_LOOP
++     {"ipv6-multicast-loop",  opt_set_ip6_multicast_loop},
+++#endif
+++#ifdef IPV6_ADD_MEMBERSHIP
++     {"ipv6-add-membership",  opt_set_ip6_add_membership},
+++#endif
+++#ifdef IPV6_DROP_MEMBERSHIP
++     {"ipv6-drop-membership", opt_set_ip6_drop_membersip},
+++#endif
+++#ifdef IPV6_V6ONLY
++     {"ipv6-v6only",          opt_set_ip6_v6only},
+++#endif
++     {NULL,                   NULL}
++ };
++ 
++@@ -92,10 +102,16 @@
++     {"ip-multicast-if",      opt_get_ip_multicast_if},
++     {"ip-multicast-loop",    opt_get_ip_multicast_loop},
++     {"error",                opt_get_error},
+++#ifdef IPV6_UNICAST_HOPS
++     {"ipv6-unicast-hops",    opt_get_ip6_unicast_hops},
++     {"ipv6-multicast-hops",  opt_get_ip6_unicast_hops},
+++#endif
+++#ifdef IPV6_MULTICAST_LOOP
++     {"ipv6-multicast-loop",  opt_get_ip6_multicast_loop},
+++#endif
+++#ifdef IPV6_V6ONLY
++     {"ipv6-v6only",          opt_get_ip6_v6only},
+++#endif
++     {NULL,                   NULL}
++ };
++ 
++@@ -416,11 +432,13 @@
++         auxiliar_setclass(L, "udp{unconnected}", -1);
++         /* initialize remaining structure fields */
++         socket_setnonblocking(&sock);
+++#ifdef IPV6_V6ONLY
++         if (family == PF_INET6) {
++             int yes = 1;
++             setsockopt(sock, IPPROTO_IPV6, IPV6_V6ONLY,
++                 (void *)&yes, sizeof(yes));
++         }
+++#endif
++         udp->sock = sock;
++         timeout_init(&udp->tm, -1, -1);
++         udp->family = family;
++
+-- 
+1.7.9.5
