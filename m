@@ -1,73 +1,27 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 17 Jan 2014 16:15:25 +0100
-Subject: [Buildroot] RFC: Revert uClibc 0.9.33.2 pread/pwrite patches?
-Message-ID: <87eh46od0y.fsf@dell.be.48ers.dk>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Fri, 17 Jan 2014 16:44:54 +0100
+Subject: [Buildroot] python Gobject
+In-Reply-To: <CAAs3wMh5xwOK_bEDVM1JMJvw6vYYL2frZYxTc_4ehyLK2sj++g@mail.gmail.com>
+References: <CAAs3wMgAbEnReJ-XW_QnQ=kAU6G7cwzss7yUMytcmHMRYMsjnw@mail.gmail.com>
+ <20140117113153.GB10730@pc-eric>
+ <CAAs3wMh5xwOK_bEDVM1JMJvw6vYYL2frZYxTc_4ehyLK2sj++g@mail.gmail.com>
+Message-ID: <20140117154452.GC10730@pc-eric>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Fri, Jan 17, 2014 at 01:39:19PM +0100, Freedreamer wrote:
+>    now i've been using python 2.7. you confirm there is no package?
 
-As you probably are all aware of, there hasn't been any uClibc release
-in quite a while. Back in September an issue was reported (on IRC I
-believe) and the fact that a fix for this and other issues were already
-lined up in uClibc git for a 0.9.33.3 release, so I ended up adding
-those fixes to BR:
+Adding a new package for python-gobject 2.28 is pretty straightforward. I
+did it in my repo:
+https://github.com/elebihan/buildroot/commit/4107b0e4549aa4a234496c840361528381f57edf.
 
-commit 055f1c02d35068d0b089f3b29ffdd4fb2717bb5c
-Author: Peter Korsgaard <jacmet@sunsite.dk>
-Date:   Fri Sep 6 15:28:51 2013 +0200
+I wrote a test script where I subclassed gobject.GObject and tested it on an
+emulated ARM platform: the code works without problems, though GLib emits a
+warning about the props being initialized after class init.
 
-    uclibc: add upstream 0.9.33 fixes
-    
-    Upstream has a large number of patches lined up for the next 0.9.33.x bugfix
-    release;
-    
-    http://git.uclibc.org/uClibc/log/?h=0.9.33
-    
-    Add them here, as atleast some of them are quite critical (E.G. the eventfd
-    issue gets triggered by recent glib versions).
-    
-    I've skipped the microblaze and xtensa fixes as we don't currently support
-    those with 0.9.33.2.
-    
-    Drop uclibc-0002-Add-definition-of-MSG_WAITFORONE-and-MSG_CMSG_CMSG_CLOEXE.patch
-    as that is a subset of uclibc-0035-socket.h-pull-socket_type.h-from-eglibc.patch
-    
-    Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-
-
-One of the issues fixed was that uClibc was still using a pread/pwrite
-emulation (using lseek+read/write), even though pread/pwrite has been
-natively supported by the kernel since the 2.1.x days - And this
-implementation is racy in multithreaded applications.
-
-The system call uses 64bit for the offset parameter, and the
-implementation on the 0.9.33 branch unfortunately doesn't take into
-consideration architectures with an ABI requiring natural alignment for
-64bit arguments (afaik ARM EABI, MIPS O32, PPC, SH and Xtensa), causing
-havoc when pread/pwrite is used.
-
-I brought the issue up on the uClibc list back in October, but so far it
-hasn't been fixed:
-
-http://lists.uclibc.org/pipermail/uclibc/2013-October/047968.html
-
-It IS fixed on the main branch, but it looks nontrivial to backport it.
-
-
-So what do we do?
-
-- Remove the uClibc patches (14, 21, 32 and 54), and tell people running
-  into the race condition to use uClibc master / Glibc?
-
-- Backport fix from uClibc master?
-
-- Deprecate 0.9.33.2 and instead use a git snapshot of master?
-
-What do you think?
-
--- 
-Bye, Peter Korsgaard
+Best regards,
+ELB
