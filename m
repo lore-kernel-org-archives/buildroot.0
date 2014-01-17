@@ -1,41 +1,41 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 17 Jan 2014 09:39:38 +0200
-Subject: [Buildroot] [PATCH] sconeserver: needs NPTL
-Message-ID: <323ae6b31cfac5eb77c3f9350671a2a468713e7d.1389944378.git.baruch@tkos.co.il>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 17 Jan 2014 09:08:09 +0100
+Subject: [Buildroot] [PATCH v2 01/12] libass: new package
+In-Reply-To: <1389831355-19983-2-git-send-email-maxime.hadjinlian@gmail.com>
+ (Maxime Hadjinlian's message of "Thu, 16 Jan 2014 01:15:44 +0100")
+References: <1389831355-19983-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <1389831355-19983-2-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <874n53owt2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/fb8/fb8d071411b571780806792b7436d20f62a9a0f7/.
+>>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/sconeserver/Config.in | 6 ++++++
- 1 file changed, 6 insertions(+)
+ > libass is a portable subtitle renderer for the
+ > ASS/SSA (Advanced Substation Alpha/Substation Alpha) subtitle format.
+ > This package was originally found at : https://github.com/huceke/buildroot-rbp
+ > By gimli <ebsi4711@gmail.com>
 
-diff --git a/package/sconeserver/Config.in b/package/sconeserver/Config.in
-index b8755c618495..839c1111cf45 100644
---- a/package/sconeserver/Config.in
-+++ b/package/sconeserver/Config.in
-@@ -2,6 +2,10 @@ menuconfig BR2_PACKAGE_SCONESERVER
- 	bool "sconeserver"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	# pthread_setschedprio needs NPTL
-+	depends on !BR2_PTHREADS && !BR2_PTHREADS_OLD
-+	# no NPTL for these archs
-+	depends on !BR2_avr32 && !BR2_xtensa && !BR2_arc
- 	select BR2_PACKAGE_PCRE
- 	help
- 	  Sconeserver is a modular, object-orientated and extremely versatile
-@@ -99,3 +103,5 @@ endif # BR2_PACKAGE_SCONESERVER
- 
- comment "sconeserver needs a toolchain w/ C++, threads"
- 	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
-+	depends on !BR2_PTHREADS && !BR2_PTHREADS_OLD
-+	depends on !BR2_avr32 && !BR2_xtensa && !BR2_arc
+ > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+ > Cc: gimli <ebsi4711@gmail.com>
+ > Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > ---
+ > Changes v2 -> v3
+ >   - Fix header
+ > Changes v1 -> v2
+ >   - Bump version to 0.10.2 (Bernd Kuhls)
+
+ > +config BR2_PACKAGE_LIBASS
+ > +	bool "libass"
+ > +	select BR2_PACKAGE_FREETYPE
+ > +	select BR2_PACKAGE_FONTCONFIG
+ > +	select BR2_PACKAGE_LIBENCA
+
+The patch ordering is wrong. You only introduce libenca in patch
+11. Otherwise it looks OK.
+
 -- 
-1.8.5.2
+Bye, Peter Korsgaard
