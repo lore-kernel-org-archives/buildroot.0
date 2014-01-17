@@ -1,7 +1,10 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 17 Jan 2014 18:47:35 +0100
-Subject: [Buildroot] [V3 1/3] lua: choice between 5.1.x & 5.2.x
-Message-ID: <1389980858-1924-1-git-send-email-francois.perrad@gadz.org>
+Date: Fri, 17 Jan 2014 18:47:36 +0100
+Subject: [Buildroot] [V3 2/3] lua-modules: choice between Lua 5.1.x & Lua
+	5.2.x
+In-Reply-To: <1389980858-1924-1-git-send-email-francois.perrad@gadz.org>
+References: <1389980858-1924-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1389980858-1924-2-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,327 +14,186 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/lua/{ => 5.1.5}/lua-01-root-path.patch     |    0
- .../{ => 5.1.5}/lua-02-shared-libs-for-lua.patch   |    0
- package/lua/{ => 5.1.5}/lua-11-linenoise.patch     |    0
- package/lua/5.2.3/lua-01-root-path.patch           |   17 +++++++++
- .../{ => 5.2.3}/lua-02-shared-libs-for-lua.patch   |   28 +++++++-------
- package/lua/5.2.3/lua-04-lua-pc.patch              |   40 ++++++++++++++++++++
- package/lua/{ => 5.2.3}/lua-11-linenoise.patch     |   22 ++++++-----
- package/lua/Config.in                              |   18 +++++++++
- package/lua/lua.mk                                 |   18 ++++++++-
- package/luainterpreter/Config.in                   |    3 ++
- package/luainterpreter/luainterpreter.mk           |    2 +
- package/luajit/Config.in                           |    3 ++
- 12 files changed, 126 insertions(+), 25 deletions(-)
- rename package/lua/{ => 5.1.5}/lua-01-root-path.patch (100%)
- copy package/lua/{ => 5.1.5}/lua-02-shared-libs-for-lua.patch (100%)
- copy package/lua/{ => 5.1.5}/lua-11-linenoise.patch (100%)
- create mode 100644 package/lua/5.2.3/lua-01-root-path.patch
- rename package/lua/{ => 5.2.3}/lua-02-shared-libs-for-lua.patch (59%)
- create mode 100644 package/lua/5.2.3/lua-04-lua-pc.patch
- rename package/lua/{ => 5.2.3}/lua-11-linenoise.patch (60%)
+ package/lbase64/Config.in                        |    4 ++++
+ package/lua-ev/lua-ev.mk                         |    2 +-
+ package/lua-msgpack-native/Config.in             |    4 ++++
+ package/lua-msgpack-native/lua-msgpack-native.mk |    3 ++-
+ package/luaexpat/Config.in                       |    4 ++++
+ package/luaexpatutils/Config.in                  |    4 ++++
+ package/luaexpatutils/luaexpatutils.mk           |    2 +-
+ package/luaposix/Config.in                       |    2 +-
+ package/luaposix/luaposix.mk                     |    2 +-
+ package/luarocks/luarocks.mk                     |    4 ++--
+ package/luasec/Config.in                         |    4 ++++
+ 11 files changed, 28 insertions(+), 7 deletions(-)
 
-diff --git a/package/lua/lua-01-root-path.patch b/package/lua/5.1.5/lua-01-root-path.patch
-similarity index 100%
-rename from package/lua/lua-01-root-path.patch
-rename to package/lua/5.1.5/lua-01-root-path.patch
-diff --git a/package/lua/lua-02-shared-libs-for-lua.patch b/package/lua/5.1.5/lua-02-shared-libs-for-lua.patch
-similarity index 100%
-copy from package/lua/lua-02-shared-libs-for-lua.patch
-copy to package/lua/5.1.5/lua-02-shared-libs-for-lua.patch
-diff --git a/package/lua/lua-11-linenoise.patch b/package/lua/5.1.5/lua-11-linenoise.patch
-similarity index 100%
-copy from package/lua/lua-11-linenoise.patch
-copy to package/lua/5.1.5/lua-11-linenoise.patch
-diff --git a/package/lua/5.2.3/lua-01-root-path.patch b/package/lua/5.2.3/lua-01-root-path.patch
-new file mode 100644
-index 0000000..c6f242c
---- /dev/null
-+++ b/package/lua/5.2.3/lua-01-root-path.patch
-@@ -0,0 +1,17 @@
-+Adjust installation location to /usr.
-+
-+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-+
-+Index: b/src/luaconf.h
-+===================================================================
-+--- a/src/luaconf.h
-++++ b/src/luaconf.h
-+@@ -100,7 +100,7 @@
-+ #else			/* }{ */
-+ 
-+ #define LUA_VDIR	LUA_VERSION_MAJOR "." LUA_VERSION_MINOR "/"
-+-#define LUA_ROOT	"/usr/local/"
-++#define LUA_ROOT	"/usr/"
-+ #define LUA_LDIR	LUA_ROOT "share/lua/" LUA_VDIR
-+ #define LUA_CDIR	LUA_ROOT "lib/lua/" LUA_VDIR
-+ #define LUA_PATH_DEFAULT  \
-diff --git a/package/lua/lua-02-shared-libs-for-lua.patch b/package/lua/5.2.3/lua-02-shared-libs-for-lua.patch
-similarity index 59%
-rename from package/lua/lua-02-shared-libs-for-lua.patch
-rename to package/lua/5.2.3/lua-02-shared-libs-for-lua.patch
-index 97a7068..4679325 100644
---- a/package/lua/lua-02-shared-libs-for-lua.patch
-+++ b/package/lua/5.2.3/lua-02-shared-libs-for-lua.patch
-@@ -7,43 +7,43 @@ Index: b/src/Makefile
- ===================================================================
- --- a/src/Makefile
- +++ b/src/Makefile
--@@ -23,6 +23,7 @@
-+@@ -29,6 +29,7 @@
-  PLATS= aix ansi bsd freebsd generic linux macosx mingw posix solaris
-  
-  LUA_A=	liblua.a
- +LUA_SO=	liblua.so
-- CORE_O=	lapi.o lcode.o ldebug.o ldo.o ldump.o lfunc.o lgc.o llex.o lmem.o \
-- 	lobject.o lopcodes.o lparser.o lstate.o lstring.o ltable.o ltm.o  \
-- 	lundump.o lvm.o lzio.o
--@@ -36,8 +37,9 @@
-- LUAC_O=	luac.o print.o
-+ CORE_O=	lapi.o lcode.o lctype.o ldebug.o ldo.o ldump.o lfunc.o lgc.o llex.o \
-+ 	lmem.o lobject.o lopcodes.o lparser.o lstate.o lstring.o ltable.o \
-+ 	ltm.o lundump.o lvm.o lzio.o
-+@@ -43,8 +44,9 @@
-+ LUAC_O=	luac.o
-  
-- ALL_O= $(CORE_O) $(LIB_O) $(LUA_O) $(LUAC_O)
-+ ALL_O= $(BASE_O) $(LUA_O) $(LUAC_O)
- -ALL_T= $(LUA_A) $(LUA_T) $(LUAC_T)
- +ALL_T= $(LUA_A) $(LUA_SO) $(LUA_T) $(LUAC_T)
-  ALL_A= $(LUA_A)
- +ALL_SO= $(LUA_SO)
-  
-+ # Targets start here.
-  default: $(PLAT)
-- 
--@@ -47,12 +49,18 @@
-+@@ -55,12 +57,18 @@
-  
-  a:	$(ALL_A)
-  
- +so:	$(ALL_SO)
- +
-- $(LUA_A): $(CORE_O) $(LIB_O)
-- 	$(AR) $@ $(CORE_O) $(LIB_O)	# DLL needs all object files
-+ $(LUA_A): $(BASE_O)
-+ 	$(AR) $@ $(BASE_O)
-  	$(RANLIB) $@
-  
- -$(LUA_T): $(LUA_O) $(LUA_A)
---	$(CC) -o $@ $(MYLDFLAGS) $(LUA_O) $(LUA_A) $(LIBS)
-+-	$(CC) -o $@ $(LDFLAGS) $(LUA_O) $(LUA_A) $(LIBS)
- +$(LUA_SO): $(CORE_O) $(LIB_O)
- +	$(CC) -o $@.$(PKG_VERSION) -shared -Wl,-soname="$@.$(PKG_VERSION)" $?
- +	ln -fs $@.$(PKG_VERSION) $@
- +
- +$(LUA_T): $(LUA_O) $(LUA_SO)
--+	$(CC) -o $@ -L. $(MYLDFLAGS) $(LUA_O) -llua $(LIBS)
-++	$(CC) -o $@ -L. $(LDFLAGS) $(LUA_O) -llua $(LIBS)
-  
-  $(LUAC_T): $(LUAC_O) $(LUA_A)
-- 	$(CC) -o $@ $(MYLDFLAGS) $(LUAC_O) $(LUA_A) $(LIBS)
-+ 	$(CC) -o $@ $(LDFLAGS) $(LUAC_O) $(LUA_A) $(LIBS)
-diff --git a/package/lua/5.2.3/lua-04-lua-pc.patch b/package/lua/5.2.3/lua-04-lua-pc.patch
-new file mode 100644
-index 0000000..62acb20
---- /dev/null
-+++ b/package/lua/5.2.3/lua-04-lua-pc.patch
-@@ -0,0 +1,40 @@
-+add lua.pc
-+
-+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-+
-+Index: b/etc/lua.pc
-+===================================================================
-+--- /dev/null
-++++ b/etc/lua.pc
-+@@ -0,0 +1,31 @@
-++# lua.pc -- pkg-config data for Lua
-++
-++# vars from install Makefile
-++
-++# grep '^V=' ../Makefile
-++V= 5.2
-++# grep '^R=' ../Makefile
-++R= 5.2.3
-++
-++# grep '^INSTALL_.*=' ../Makefile | sed 's/INSTALL_TOP/prefix/'
-++prefix= /usr
-++INSTALL_BIN= ${prefix}/bin
-++INSTALL_INC= ${prefix}/include
-++INSTALL_LIB= ${prefix}/lib
-++INSTALL_MAN= ${prefix}/man/man1
-++INSTALL_LMOD= ${prefix}/share/lua/${V}
-++INSTALL_CMOD= ${prefix}/lib/lua/${V}
-++
-++# canonical vars
-++exec_prefix=${prefix}
-++libdir=${exec_prefix}/lib
-++includedir=${prefix}/include
-++
-++Name: Lua
-++Description: An Extensible Extension Language
-++Version: ${R}
-++Requires: 
-++Libs: -L${libdir} -llua -lm
-++Cflags: -I${includedir}
-++
-++# (end of lua.pc)
-diff --git a/package/lua/lua-11-linenoise.patch b/package/lua/5.2.3/lua-11-linenoise.patch
-similarity index 60%
-rename from package/lua/lua-11-linenoise.patch
-rename to package/lua/5.2.3/lua-11-linenoise.patch
-index 488c080..b1f228c 100644
---- a/package/lua/lua-11-linenoise.patch
-+++ b/package/lua/5.2.3/lua-11-linenoise.patch
-@@ -4,21 +4,23 @@ see discussion, http://lua-users.org/lists/lua-l/2010-03/msg00879.html
+diff --git a/package/lbase64/Config.in b/package/lbase64/Config.in
+index ca9dd5d..4593ab9 100644
+--- a/package/lbase64/Config.in
++++ b/package/lbase64/Config.in
+@@ -1,7 +1,11 @@
+ config BR2_PACKAGE_LBASE64
+ 	bool "lbase64"
+ 	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
++	depends on !BR2_PACKAGE_LUA_5_2
+ 	help
+ 	  A base64 library for Lua
  
- Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+ 	  http://luaforge.net/projects/lbase64/
++
++comment "lbase64 needs a Lua 5.1 interpreter"
++	depends on BR2_PACKAGE_LUA_5_2
+diff --git a/package/lua-ev/lua-ev.mk b/package/lua-ev/lua-ev.mk
+index 1236d77..1b10a80 100644
+--- a/package/lua-ev/lua-ev.mk
++++ b/package/lua-ev/lua-ev.mk
+@@ -9,6 +9,6 @@ LUA_EV_SITE = $(call github,brimworks,lua-ev,$(LUA_EV_VERSION))
+ LUA_EV_DEPENDENCIES = luainterpreter libev
+ LUA_EV_LICENSE = MIT
+ LUA_EV_LICENSE_FILES = README
+-LUA_EV_CONF_OPT = -DINSTALL_CMOD="/usr/lib/lua/5.1"
++LUA_EV_CONF_OPT = -DINSTALL_CMOD="/usr/lib/lua/$(LUAINTERPRETER_ABIVER)"
  
--Index: b/src/luaconf.h
-+Index: b/src/lua.c
- ===================================================================
----- a/src/luaconf.h
--+++ b/src/luaconf.h
--@@ -279,6 +279,13 @@
-- 	if (lua_strlen(L,idx) > 0)  /* non-empty line? */ \
-- 	  add_history(lua_tostring(L, idx));  /* add it to history */
-+--- a/src/lua.c
-++++ b/src/lua.c
-+@@ -72,6 +72,15 @@
-+           add_history(lua_tostring(L, idx));  /* add it to history */
-  #define lua_freeline(L,b)	((void)L, free(b))
-+ 
- +#elif defined(LUA_USE_LINENOISE)
-++
- +#include <linenoise.h>
- +#define lua_readline(L,b,p)	((void)L, ((b)=linenoise(p)) != NULL)
- +#define lua_saveline(L,idx) \
--+	if (lua_strlen(L,idx) > 0)  /* non-empty line? */ \
-++	if (lua_rawlen(L,idx) > 0)  /* non-empty line? */ \
- +	  linenoiseHistoryAdd(lua_tostring(L, idx));  /* add it to history */
- +#define lua_freeline(L,b)	((void)L, free(b))
-- #else
-- #define lua_readline(L,b,p)	\
-- 	((void)L, fputs(p, stdout), fflush(stdout),  /* show prompt */ \
-++
-+ #elif !defined(lua_readline)
-+ 
-+ #define lua_readline(L,b,p) \
-diff --git a/package/lua/Config.in b/package/lua/Config.in
-index b96ef0e..c4c12e9 100644
---- a/package/lua/Config.in
-+++ b/package/lua/Config.in
-@@ -12,6 +12,24 @@ config BR2_PACKAGE_PROVIDES_LUA_INTERPRETER
- 	default "lua"
+ $(eval $(cmake-package))
+diff --git a/package/lua-msgpack-native/Config.in b/package/lua-msgpack-native/Config.in
+index 1014298..498b30c 100644
+--- a/package/lua-msgpack-native/Config.in
++++ b/package/lua-msgpack-native/Config.in
+@@ -1,8 +1,12 @@
+ config BR2_PACKAGE_LUA_MSGPACK_NATIVE
+ 	bool "lua-msgpack-native"
+ 	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
++	depends on !BR2_PACKAGE_LUA_5_2
+ 	help
+ 	  This is a native, C language implementation of msgpack
+ 	  (http://msgpack.org) library/protocol for Lua language
  
- choice
-+	prompt "Lua Version"
-+	default BR2_PACKAGE_LUA_5_1
-+	help
-+	  Select the version of Lua API/ABI you wish to use.
+ 	  https://github.com/kengonakajima/lua-msgpack-native
 +
-+	config BR2_PACKAGE_LUA_5_1
-+		bool "Lua 5.1.x"
-+
-+	config BR2_PACKAGE_LUA_5_2
-+		bool "Lua 5.2.x"
-+
-+endchoice
-+
-+config BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION
-+	default "5.1"	if BR2_PACKAGE_LUA_5_1
-+	default "5.2"	if BR2_PACKAGE_LUA_5_2
-+
-+choice
- 	prompt "Lua Interpreter command-line editing"
- 	default BR2_PACKAGE_LUA_INTERPRETER_EDITING_NONE
- 
-diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-index a88a11e..2c867f6 100644
---- a/package/lua/lua.mk
-+++ b/package/lua/lua.mk
-@@ -4,7 +4,11 @@
- #
- ################################################################################
- 
-+ifeq ($(BR2_PACKAGE_LUA_5_2),y)
-+LUA_VERSION = 5.2.3
-+else
- LUA_VERSION = 5.1.5
-+endif
- LUA_SITE = http://www.lua.org/ftp
- LUA_INSTALL_STAGING = YES
- LUA_LICENSE = MIT
-@@ -13,6 +17,13 @@ LUA_LICENSE_FILES = COPYRIGHT
- LUA_CFLAGS = -Wall -fPIC
- LUA_MYLIBS += -ldl
- 
-+ifeq ($(BR2_PACKAGE_LUA_5_2),y)
-+LUA_CFLAGS += -DLUA_COMPAT_ALL
-+ifneq ($(BR2_LARGEFILE),y)
-+LUA_CFLAGS += -D_FILE_OFFSET_BITS=32
-+endif
-+endif
-+
- ifeq ($(BR2_PACKAGE_LUA_INTERPRETER_READLINE),y)
- 	LUA_DEPENDENCIES = readline ncurses
- 	LUA_MYLIBS += -lreadline -lhistory -lncurses
-@@ -33,6 +44,10 @@ HOST_LUA_DEPENDENCIES =
- HOST_LUA_CFLAGS = -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX
- HOST_LUA_MYLIBS = -ldl
- 
-+ifeq ($(BR2_PACKAGE_LUA_5_2),y)
-+HOST_LUA_CFLAGS += -DLUA_COMPAT_ALL
-+endif
-+
- define LUA_BUILD_CMDS
- 	$(MAKE) \
- 	CC="$(TARGET_CC)" RANLIB="$(TARGET_RANLIB)" \
-@@ -70,7 +85,8 @@ define LUA_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 0755 -D $(@D)/src/liblua.so.$(LUA_VERSION) \
- 		$(TARGET_DIR)/usr/lib/liblua.so.$(LUA_VERSION)
- 	ln -sf liblua.so.$(LUA_VERSION) $(TARGET_DIR)/usr/lib/liblua.so
--	$(INSTALL) -m 0644 -D $(@D)/src/liblua.a $(TARGET_DIR)/usr/lib/liblua.a
-+	mkdir -p $(TARGET_DIR)/usr/lib/lua/$(LUAINTERPRETER_ABIVER)
-+	mkdir -p $(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)
++comment "lua-msgpack-native needs a Lua 5.1 interpreter"
++	depends on BR2_PACKAGE_LUA_5_2
+diff --git a/package/lua-msgpack-native/lua-msgpack-native.mk b/package/lua-msgpack-native/lua-msgpack-native.mk
+index d4547ae..ceb453d 100644
+--- a/package/lua-msgpack-native/lua-msgpack-native.mk
++++ b/package/lua-msgpack-native/lua-msgpack-native.mk
+@@ -15,7 +15,8 @@ define LUA_MSGPACK_NATIVE_BUILD_CMDS
  endef
  
- define HOST_LUA_INSTALL_CMDS
-diff --git a/package/luainterpreter/Config.in b/package/luainterpreter/Config.in
-index 1562145..a05bde1 100644
---- a/package/luainterpreter/Config.in
-+++ b/package/luainterpreter/Config.in
-@@ -4,3 +4,6 @@ config BR2_PACKAGE_HAS_LUA_INTERPRETER
- config BR2_PACKAGE_PROVIDES_LUA_INTERPRETER
- 	string
- 	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
-+
-+config BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION
-+	string
-diff --git a/package/luainterpreter/luainterpreter.mk b/package/luainterpreter/luainterpreter.mk
-index 04d63d4..c37d621 100644
---- a/package/luainterpreter/luainterpreter.mk
-+++ b/package/luainterpreter/luainterpreter.mk
-@@ -7,4 +7,6 @@
- LUAINTERPRETER_SOURCE =
- LUAINTERPRETER_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_LUA_INTERPRETER))
+ define LUA_MSGPACK_NATIVE_INSTALL_TARGET_CMDS
+-	$(INSTALL) -m 755 -D $(@D)/msgpack.so $(TARGET_DIR)/usr/lib/lua/5.1/msgpack.so
++	$(INSTALL) -m 755 -D $(@D)/msgpack.so \
++		$(TARGET_DIR)/usr/lib/lua/$(LUAINTERPRETER_ABIVER)/msgpack.so
+ endef
  
-+LUAINTERPRETER_ABIVER = $(call qstrip,$(BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION))
-+
  $(eval $(generic-package))
-diff --git a/package/luajit/Config.in b/package/luajit/Config.in
-index e0bfbf5..9c4ecc3 100644
---- a/package/luajit/Config.in
-+++ b/package/luajit/Config.in
-@@ -17,4 +17,7 @@ if BR2_PACKAGE_LUAJIT
- config BR2_PACKAGE_PROVIDES_LUA_INTERPRETER
- 	default "luajit"
+diff --git a/package/luaexpat/Config.in b/package/luaexpat/Config.in
+index f8db318..3394780 100644
+--- a/package/luaexpat/Config.in
++++ b/package/luaexpat/Config.in
+@@ -2,7 +2,11 @@ config BR2_PACKAGE_LUAEXPAT
+ 	bool "luaexpat"
+ 	select BR2_PACKAGE_EXPAT
+ 	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
++	depends on !BR2_PACKAGE_LUA_5_2
+ 	help
+ 	  LuaExpat is a SAX XML parser based on the Expat library.
  
-+config BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION
-+	default "5.1"
+ 	  http://matthewwild.co.uk/projects/luaexpat/
 +
- endif
++comment "luaexpat needs a Lua 5.1 interpreter"
++	depends on BR2_PACKAGE_LUA_5_2
+diff --git a/package/luaexpatutils/Config.in b/package/luaexpatutils/Config.in
+index cb2887a..333f98d 100644
+--- a/package/luaexpatutils/Config.in
++++ b/package/luaexpatutils/Config.in
+@@ -1,8 +1,12 @@
+ config BR2_PACKAGE_LUAEXPATUTILS
+ 	bool "luaexpatutils"
+ 	select BR2_PACKAGE_LUAEXPAT
++	depends on !BR2_PACKAGE_LUA_5_2
+ 	help
+ 	  lxp.doc is a module that provides useful features for working with
+ 	  XML formats in LOM format as used by the LuaExpat project from Kepler.
+ 
+ 	  https://github.com/stevedonovan/LuaExpatUtils
++
++comment "luaexpatutils needs a Lua 5.1 interpreter"
++	depends on BR2_PACKAGE_LUA_5_2
+diff --git a/package/luaexpatutils/luaexpatutils.mk b/package/luaexpatutils/luaexpatutils.mk
+index 93cf621..9bfc654 100644
+--- a/package/luaexpatutils/luaexpatutils.mk
++++ b/package/luaexpatutils/luaexpatutils.mk
+@@ -11,7 +11,7 @@ LUAEXPATUTILS_DEPENDENCIES = luaexpat
+ 
+ define LUAEXPATUTILS_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -m 0644 -D $(@D)/lua/doc.lua \
+-		$(TARGET_DIR)/usr/share/lua/5.1/lxp/doc.lua
++		$(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/lxp/doc.lua
+ endef
+ 
+ $(eval $(generic-package))
+diff --git a/package/luaposix/Config.in b/package/luaposix/Config.in
+index cad6fe9..a95c825 100644
+--- a/package/luaposix/Config.in
++++ b/package/luaposix/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_LUAPOSIX
+ 	bool "luaposix"
+ 	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
+-	select BR2_PACKAGE_LUABITOP if BR2_PACKAGE_LUA
++	select BR2_PACKAGE_LUABITOP if BR2_PACKAGE_LUA_5_1
+ 	# LuaBitOp is already included in LuaJIT
+ 	help
+ 	  luaposix is a POSIX binding, including curses, for Lua 5.1
+diff --git a/package/luaposix/luaposix.mk b/package/luaposix/luaposix.mk
+index b018995..77f5e62 100644
+--- a/package/luaposix/luaposix.mk
++++ b/package/luaposix/luaposix.mk
+@@ -10,7 +10,7 @@ LUAPOSIX_SOURCE = release-v$(LUAPOSIX_VERSION).tar.gz
+ LUAPOSIX_LICENSE = MIT
+ LUAPOSIX_LICENSE_FILES = COPYING
+ LUAPOSIX_DEPENDENCIES = luainterpreter host-lua
+-LUAPOSIX_CONF_OPT = --libdir="/usr/lib/lua/5.1" --datarootdir="/usr/share/lua/5.1"
++LUAPOSIX_CONF_OPT = --libdir="/usr/lib/lua/$(LUAINTERPRETER_ABIVER)" --datarootdir="/usr/share/lua/$(LUAINTERPRETER_ABIVER)"
+ 
+ ifeq ($(BR2_PACKAGE_NCURSES),y)
+     LUAPOSIX_DEPENDENCIES += ncurses
+diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
+index 6cfd92e..88ab22a 100644
+--- a/package/luarocks/luarocks.mk
++++ b/package/luarocks/luarocks.mk
+@@ -12,7 +12,7 @@ LUAROCKS_LICENSE_FILES = COPYING
+ HOST_LUAROCKS_DEPENDENCIES = host-lua luainterpreter
+ 
+ LUAROCKS_CONFIG_DIR  = $(HOST_DIR)/usr/etc/luarocks
+-LUAROCKS_CONFIG_FILE = $(LUAROCKS_CONFIG_DIR)/config-5.1.lua
++LUAROCKS_CONFIG_FILE = $(LUAROCKS_CONFIG_DIR)/config-$(LUAINTERPRETER_ABIVER).lua
+ 
+ define HOST_LUAROCKS_CONFIGURE_CMDS
+ 	cd $(@D) && ./configure \
+@@ -41,5 +41,5 @@ endef
+ 
+ $(eval $(host-generic-package))
+ 
+-LUAROCKS_RUN = LUA_PATH="$(HOST_DIR)/usr/share/lua/5.1/?.lua" \
++LUAROCKS_RUN = LUA_PATH="$(HOST_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/?.lua" \
+ 	$(HOST_DIR)/usr/bin/lua $(HOST_DIR)/usr/bin/luarocks
+diff --git a/package/luasec/Config.in b/package/luasec/Config.in
+index ed55df7..48aa766 100644
+--- a/package/luasec/Config.in
++++ b/package/luasec/Config.in
+@@ -3,8 +3,12 @@ config BR2_PACKAGE_LUASEC
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_LUASOCKET
+ 	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
++	depends on !BR2_PACKAGE_LUA_5_2
+ 	help
+ 	  LuaSec is a binding for OpenSSL library to provide TLS/SSL
+ 	  communication.
+ 
+ 	  http://www.inf.puc-rio.br/~brunoos/luasec/
++
++comment "luasec needs a Lua 5.1 interpreter"
++	depends on BR2_PACKAGE_LUA_5_2
 -- 
 1.7.9.5
