@@ -1,65 +1,54 @@
 From: Jeremy Kerr <jk@ozlabs.org>
-Date: Fri, 17 Jan 2014 09:51:34 +0800
+Date: Fri, 17 Jan 2014 09:58:58 +0800
 Subject: [Buildroot] [RFC,
- PATCH 5/8] package/kexec-lite: Add a package for the kexec-lite
- tools
-In-Reply-To: <20140116093642.GC4602@tarshish>
-References: <1389862338.917573.283530987294.0.gpush@pablo>
- <1389862338.919140.855251422258.5.gpush@pablo>
- <20140116093642.GC4602@tarshish>
-Message-ID: <52D88CA6.4010203@ozlabs.org>
+ PATCH 7/8] package/iprutils: Add IBM Power RAID utilities
+In-Reply-To: <52D7DD99.2020805@trzebnica.net>
+References: <1389862338.919734.499084473099.7.gpush@pablo>
+ <52D7DD99.2020805@trzebnica.net>
+Message-ID: <52D88E62.9010607@ozlabs.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
+Hi Jerzy,
 
-Thanks for taking a look at the patches.
+Thanks for the review. Comments inline:
 
->> +++ b/package/kexec-lite/Config.in
->> @@ -0,0 +1,9 @@
->> +config BR2_PACKAGE_KEXEC_LITE
->> +	bool "kexec-lite"
->> +	depends on BR2_powerpc
->> +	select BR2_PACKAGE_LIBELF
->> +	select BR2_PACKAGE_DTC
->> +	select BR2_PACKAGE_DTC_PROGRAMS
->> +	help
->> +	  Kexec is a user space utiltity for loading another kernel
->> +	  and asking the currently running kernel to do something with it.
+>>   package/Config.in                                |    1
+>>   package/iprutils/Config.in                       |   10 +++++
+>>   package/iprutils/iprutils-dont-use-gettext.patch |   30 +++++++++++++++
 > 
-> This looks like a description of the generic kexec. You should mention that 
-> this is a special version as the commit log says.
+> iprutils-01-dont-use-gettext.patch
 
-Yep, shamelessly stolen from kexec.mk. :) I've updated this with a
-description similar to the changelog.
+Makes sense. Fixed, along with the other patches introduced in this series.
 
+>> diff --git a/package/iprutils/iprutils.mk b/package/iprutils/iprutils.mk
+>> new file mode 100644
+>> index 00000000..0aa94f38
 >> --- /dev/null
->> +++ b/package/kexec-lite/kexec-lite.mk
->> @@ -0,0 +1,20 @@
->> +################################################################################
->> +#
->> +# kexec
->> +#
->> +################################################################################
+>> +++ b/package/iprutils/iprutils.mk
+>> @@ -0,0 +1,27 @@
+>> +#############################################################
+> 
+> 80 of # signs
+
+Fixed, including other new .mk files in this series
+
 >> +
->> +KEXEC_LITE_VERSION = 6c762a7
+>> +IPRUTILS_VERSION = 2.3.15
+>> +IPRUTILS_SITE =
+>> http://downloads.sourceforge.net/project/iprdd/iprutils%20for%202.6%20kernels/$(IPRUTILS_VERSION)
+>>
+>> +IPRUTILS_SOURCE=iprutils-$(IPRUTILS_VERSION)-src.tgz
 > 
-> Full commit id.
+> IPRUTILS_SOURCE = iprutils-$(IPRUTILS_VERSION)-src.tgz
 
-Fixed, along with the other git version strings you've mentioned in this
-series.
+Fixed.
 
->> +KEXEC_LITE_SITE = git://github.com/antonblanchard/kexec-lite
-> 
-> Please use the github helper. See docs/manual/adding-packages-tips.txt.
-
-Ah, that's pretty neat. Updated to use $(call github  ...).
-
-I've updated my series with these changes, but will see if there's any
-more feedback before reposting.
+I've updated my git tree based on your feedback, I'll repost after a
+little while, in case there are any more changes requested.
 
 Cheers,
 
