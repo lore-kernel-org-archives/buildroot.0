@@ -1,69 +1,23 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Fri, 17 Jan 2014 09:30:17 +0100
-Subject: [Buildroot] [PATCH] socketcand: bump version and remove obsolete
-	patch
-Message-ID: <1389947417-14663-1-git-send-email-yegorslists@googlemail.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Fri, 17 Jan 2014 09:36:41 +0100
+Subject: [Buildroot] [PATCH v6 4/5] systemd: bump to v207.
+In-Reply-To: <CAHXCMMKi20cf2THNYw4kmF8E50Ph8DeZgcDh3J2bw5RbAc8g6g@mail.gmail.com>
+References: <1389627907-7821-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <1389627907-7821-5-git-send-email-eric.le.bihan.dev@free.fr>
+ <CAHXCMMKi20cf2THNYw4kmF8E50Ph8DeZgcDh3J2bw5RbAc8g6g@mail.gmail.com>
+Message-ID: <20140117083641.GA10730@pc-eric>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Hi!
 
-The latest socketcand revision replaced 'cp -n' with proper
-'install command.
+On Thu, Jan 16, 2014 at 06:51:21PM +0100, Samuel Martin wrote:
+>    Since you are adding a command in the if-block, there is an extra ")" at
+>    the end of the CONFIG_CGROUPS command line.
+D'oh! Sloppy copy-paste... Thanks for noticing.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- .../socketcand-replace-cp-by-install.patch         |   25 --------------------
- package/socketcand/socketcand.mk                   |    2 +-
- 2 files changed, 1 insertions(+), 26 deletions(-)
- delete mode 100644 package/socketcand/socketcand-replace-cp-by-install.patch
-
-diff --git a/package/socketcand/socketcand-replace-cp-by-install.patch b/package/socketcand/socketcand-replace-cp-by-install.patch
-deleted file mode 100644
-index 4462ddf..0000000
---- a/package/socketcand/socketcand-replace-cp-by-install.patch
-+++ /dev/null
-@@ -1,25 +0,0 @@
--From 9d2797ce08034aba0087e6fe45873c3ccd8db489 Mon Sep 17 00:00:00 2001
--From: Maxime Ripard <maxime.ripard@free-electrons.com>
--Date: Tue, 3 Apr 2012 10:35:09 +0200
--Subject: [PATCH] Remove cp -n which might not exist on old system and rely on install instead
--
--Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
-----
-- Makefile.in |    2 +-
-- 1 files changed, 1 insertions(+), 1 deletions(-)
--
--diff --git a/Makefile.in b/Makefile.in
--index 40d8193..290a8dd 100644
----- a/Makefile.in
--+++ b/Makefile.in
--@@ -38,6 +38,6 @@ install: socketcand
-- 	mkdir -p $(DESTDIR)$(sysroot)$(mandir)
-- 	cp $(srcdir)/socketcand.1 $(DESTDIR)$(sysroot)$(mandir)/
-- 	mkdir -p $(DESTDIR)$(sysroot)/etc/
---	cp -n $(srcdir)/etc/socketcand.conf $(DESTDIR)$(sysroot)/etc/
--+	install -m 0644 $(srcdir)/etc/socketcand.conf $(DESTDIR)$(sysroot)/etc/
-- 	if [ $(init_script) = yes ]; then mkdir -p $(DESTDIR)$(sysroot)/etc/init.d; install --mode=755 $(srcdir)/init.d/socketcand $(DESTDIR)$(sysroot)/etc/init.d/socketcand; fi
-- 	if [ $(rc_script) = yes ]; then install --mode=755 $(srcdir)/rc.d/socketcand $(DESTDIR)$(sysroot)/etc/rc.d/socketcand; fi
---- 
--1.7.4.1
--
-diff --git a/package/socketcand/socketcand.mk b/package/socketcand/socketcand.mk
-index 1a2c9fc..fdba96e 100644
---- a/package/socketcand/socketcand.mk
-+++ b/package/socketcand/socketcand.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SOCKETCAND_VERSION = dc3437abf17359fa8cb16567415b47e7ef8568d0
-+SOCKETCAND_VERSION = 274e4e44107f6138a29bbc4e20f9fbd2a7d4dab1
- SOCKETCAND_SITE = $(call github,dschanoeh,socketcand,$(SOCKETCAND_VERSION))
- SOCKETCAND_AUTORECONF = YES
- 
--- 
-1.7.7
+Best regards,
+ELB
