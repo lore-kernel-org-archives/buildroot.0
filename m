@@ -1,54 +1,50 @@
 From: Jeremy Kerr <jk@ozlabs.org>
-Date: Fri, 17 Jan 2014 09:58:58 +0800
+Date: Fri, 17 Jan 2014 10:16:41 +0800
 Subject: [Buildroot] [RFC,
- PATCH 7/8] package/iprutils: Add IBM Power RAID utilities
-In-Reply-To: <52D7DD99.2020805@trzebnica.net>
-References: <1389862338.919734.499084473099.7.gpush@pablo>
- <52D7DD99.2020805@trzebnica.net>
-Message-ID: <52D88E62.9010607@ozlabs.org>
+ PATCH 0/8] Enable a buildroot-based petitboot bootloader
+In-Reply-To: <1389862338.917573.283530987294.0.gpush@pablo>
+References: <1389862338.917573.283530987294.0.gpush@pablo>
+Message-ID: <52D89289.4070205@ozlabs.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Jerzy,
+Hi all,
 
-Thanks for the review. Comments inline:
+> While most of this series is fairly straightforward, there are a few
+> items that might need a little more attention:
 
->>   package/Config.in                                |    1
->>   package/iprutils/Config.in                       |   10 +++++
->>   package/iprutils/iprutils-dont-use-gettext.patch |   30 +++++++++++++++
-> 
-> iprutils-01-dont-use-gettext.patch
+Also, the way I'm doing the kexec could use a sanity check. Currently,
+it goes like this:
 
-Makes sense. Fixed, along with the other patches introduced in this series.
+- we configure busybox init (permanently through inittab) to use
+  /usr/sbin/kexec-restart as the "restart" handler.
 
->> diff --git a/package/iprutils/iprutils.mk b/package/iprutils/iprutils.mk
->> new file mode 100644
->> index 00000000..0aa94f38
->> --- /dev/null
->> +++ b/package/iprutils/iprutils.mk
->> @@ -0,0 +1,27 @@
->> +#############################################################
-> 
-> 80 of # signs
+- when petitboot is told to boot a new kernel, it loads it (along with
+  optional initrd and device-tree blob) into the running kernel
+  with the kexec command. This only loads the new kernel through the
+  kexec_load syscall, it doesn't initiate any boot process.
 
-Fixed, including other new .mk files in this series
+- next, petitboot runs its shutdown command, which we've configured
+  as /usr/libexec/petitboot/bb-kexec-reboot. This is a busybox-
+  init-specific script that simply sends a SIGQUIT to bb init to
+  invoke the restart.
 
->> +
->> +IPRUTILS_VERSION = 2.3.15
->> +IPRUTILS_SITE =
->> http://downloads.sourceforge.net/project/iprdd/iprutils%20for%202.6%20kernels/$(IPRUTILS_VERSION)
->>
->> +IPRUTILS_SOURCE=iprutils-$(IPRUTILS_VERSION)-src.tgz
-> 
-> IPRUTILS_SOURCE = iprutils-$(IPRUTILS_VERSION)-src.tgz
+- bb init starts the shutdown procedure, and terminates running
+  processes, then finally executes the restart handler (which we
+  configured earlier to /usr/sbin/kexec-restart).
 
-Fixed.
+- /usr/sbin/kexec-restart simply calls the reboot() syscall, with
+  the correct magic value to execute the kernel we loaded earlier.
 
-I've updated my git tree based on your feedback, I'll repost after a
-little while, in case there are any more changes requested.
+The reason we're using the restart handler here is that busybox init
+doesn't know about the reboot()'s magic value to perform a kexec, and
+the busybox folks would rather that this *isn't* handled by init (which
+makes sense).
+
+Feedback welcome!
 
 Cheers,
 
