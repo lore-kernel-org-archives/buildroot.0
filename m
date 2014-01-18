@@ -1,24 +1,44 @@
-From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
-Date: Sat, 18 Jan 2014 17:00:34 +0100
-Subject: [Buildroot] [PATCH 1/2] Remove some absolute paths
-In-Reply-To: <1388421102-29198-1-git-send-email-bjorn.forsman@gmail.com>
-References: <1388421102-29198-1-git-send-email-bjorn.forsman@gmail.com>
-Message-ID: <CAEYzJUEM2FDufa-EPLpu6B6Eiyp9Xg-S5qsg8TCQ5X75hVDVxg@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 18 Jan 2014 19:40:15 +0100
+Subject: [Buildroot] [PATCH 0/5] Misc bumps
+Message-ID: <cover.1390070341.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 30 December 2013 17:31, Bj?rn Forsman <bjorn.forsman@gmail.com> wrote:
-> Buildroot fails to run on NixOS because it has no /bin/echo or
-> /bin/grep. Instead of relying on absolute paths, rely on tools to be
-> available in PATH. This should work for all systems.
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Ping?
+Hello All!
 
-When this is applied, make sure to also apply "[PATCH 2/2] Prefer
-'printf' over 'echo -e' (for portability)".
+Here are a few bunps:
+  - packages and defconfig for Raspberry Pi
+  - linux-firmware, plus install two new firmware files
 
-Best regards,
-Bj?rn Forsman
+Regards,
+Yann E. MORIN.
+
+
+----------------------------------------------------------------
+Yann E. MORIN (5):
+      package/rpi-firmware: bump for misc fixes/improvements
+      package/rpi-userland: bumps for misc fixes and improvements
+      configs/raspberrypi: bump kernel version
+      package/linux-firmware: bump
+      package/linux-firmware: add iwlwifi 3160 and 7260 firmware files
+
+ configs/raspberrypi_defconfig            |  2 +-
+ package/linux-firmware/Config.in         | 12 ++++++++++++
+ package/linux-firmware/linux-firmware.mk | 12 +++++++++++-
+ package/rpi-firmware/rpi-firmware.mk     |  2 +-
+ package/rpi-userland/rpi-userland.mk     |  2 +-
+ 5 files changed, 26 insertions(+), 4 deletions(-)
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
