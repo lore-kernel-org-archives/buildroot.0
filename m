@@ -1,67 +1,67 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 18 Jan 2014 20:23:44 +0100
-Subject: [Buildroot] [PATCH 07/10] connman: add systemd unit file
+Date: Sat, 18 Jan 2014 20:23:45 +0100
+Subject: [Buildroot] [PATCH 08/10] support: mkusers: add warning when using
+	mkpasswd from the host system
 In-Reply-To: <1390073027-14239-1-git-send-email-s.martin49@gmail.com>
 References: <1390073027-14239-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1390073027-14239-8-git-send-email-s.martin49@gmail.com>
+Message-ID: <1390073027-14239-9-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch cleans up the init material installation:
-- it uses the *_INSTALL_INIT_SYSV infra instead of the custom hook;
-- it add and install the systemd unit file
+Because the mkpasswd provided by some distribution does not support all
+options used in the mkusers script, mkpasswd has been integrated as a
+package.
 
+However, using a custom rootfs skeleton, the host-mkpasswd target is not
+automatically built, even if some packages add users.
+
+In this case, to help the Buildroot users understanding what happen when
+the mkpasswd from the host system is used (so, might fail), mkusers now
+print a warning message explaining how to solve this.
+
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/connman/connman.mk      | 10 ++++++++--
- package/connman/connman.service | 12 ++++++++++++
- 2 files changed, 20 insertions(+), 2 deletions(-)
- create mode 100644 package/connman/connman.service
+ support/scripts/mkusers | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index 64c1f0e..9161cce 100644
---- a/package/connman/connman.mk
-+++ b/package/connman/connman.mk
-@@ -24,11 +24,17 @@ CONNMAN_DEPENDENCIES += \
- 	$(if $(BR2_PACKAGE_CONNMAN_NEARD),neard) \
- 	$(if $(BR2_PACKAGE_CONNMAN_OFONO),ofono)
+diff --git a/support/scripts/mkusers b/support/scripts/mkusers
+index 3b287b8..dd011eb 100755
+--- a/support/scripts/mkusers
++++ b/support/scripts/mkusers
+@@ -52,6 +52,22 @@ PASSWD_METHOD="$( sed -r -e '/^BR2_TARGET_GENERIC_PASSWD_METHOD="(.*)"$/!d;'
+                 )"
  
--define CONNMAN_INSTALL_INITSCRIPT
-+define CONNMAN_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 0755 -D package/connman/S45connman $(TARGET_DIR)/etc/init.d/S45connman
- endef
+ #----------------------------------------------------------------------------
++check_mkpasswd() {
++    local mkpasswd_path="$(readlink -f $(which mkpasswd 2>/dev/null))"
++    local host_dir="$(readlink -f "${HOST_DIR}")"
++    case "${mkpasswd_path}" in
++        "${host_dir}"*) ;;
++        *)
++            error \
++                "WARNING: using mkpasswd from the host system: '%s'. %s%s%s\n" \
++                "${mkpasswd_path}"                                             \
++                "To avoid build failures because of unsupported options by "   \
++                "your host system's mkpasswd, make sure to use the one "       \
++                "Buildroot provides, by building the 'host-mkpasswd' target."
++            ;;
++    esac
++}
++#----------------------------------------------------------------------------
+ get_uid() {
+     local username="${1}"
  
--CONNMAN_POST_INSTALL_TARGET_HOOKS = CONNMAN_INSTALL_INITSCRIPT
-+define CONNMAN_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/connman/connman.service \
-+		$(TARGET_DIR)/etc/systemd/system/connman.service
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -fs ../connman.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/connman.service
-+endef
+@@ -264,6 +280,7 @@ add_user_to_group() {
+ encode_password() {
+     local passwd="${1}"
  
- ifeq ($(BR2_PACKAGE_CONNMAN_CLIENT),y)
- CONNMAN_CONF_OPT += --enable-client
-diff --git a/package/connman/connman.service b/package/connman/connman.service
-new file mode 100644
-index 0000000..bb6b3c0
---- /dev/null
-+++ b/package/connman/connman.service
-@@ -0,0 +1,12 @@
-+[Unit]
-+Description=Connection service
-+After=syslog.target
-+
-+[Service]
-+Type=dbus
-+BusName=net.connman
-+Restart=on-failure
-+ExecStart=/usr/bin/connmand -n
-+
-+[Install]
-+WantedBy=multi-user.target
++    check_mkpasswd
+     mkpasswd -m "${PASSWD_METHOD}" "${passwd}"
+ }
+ 
 -- 
 1.8.5.3
