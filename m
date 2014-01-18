@@ -1,90 +1,74 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sat, 18 Jan 2014 16:35:13 +0100
-Subject: [Buildroot] Patchwork oldest patches cleanup #5 (deadline
-	January 19)
-In-Reply-To: <CAAXf6LVcK-fx059K=tetV=NY78amOHczPkbVxkO1pKAuvDCwtA@mail.gmail.com>
-References: <CAAXf6LVcK-fx059K=tetV=NY78amOHczPkbVxkO1pKAuvDCwtA@mail.gmail.com>
-Message-ID: <CAAXf6LXZbXMcBkYbta9_ymfKp0KCB=FkoD+j4BCgLqXZ7+f8ZQ@mail.gmail.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Sat, 18 Jan 2014 16:53:05 +0100
+Subject: [Buildroot] [PATCH 5/6] pkg-infra: add possiblity to check
+ downloaded files against known hashes
+In-Reply-To: <20140117224136.GE3982@free.fr>
+References: <cover.1389569992.git.yann.morin.1998@free.fr>
+ <dc5d6ba62805a74ef57fc2c779e97a00056cbfa6.1389569992.git.yann.morin.1998@free.fr>
+ <52D5AE11.60804@mind.be> <20140114233438.GL3328@free.fr>
+ <52D64559.90705@mind.be> <20140117224136.GE3982@free.fr>
+Message-ID: <52DAA361.8040100@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi Yann, Arnout,
 
-On Sun, Jan 5, 2014 at 5:01 PM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> All,
+Yann E. MORIN wrote:
+> Arnout, All,
 >
-> Here is the session 5 of the patchwork cleanup. For those who haven't
-> followed previous sessions, here is a quick recap: every session we'll
-> be posting the list of the 10 oldest patches, with the original patch
-> contributors in copy. During two weeks, we have the opportunity to
-> discuss the patch, whether it is still necessary or not, how it should
-> be changed to be merged.
+> On 2014-01-15 09:22 +0100, Arnout Vandecappelle spake thusly:
+>> On 15/01/14 00:34, Yann E. MORIN wrote:
+>>> Arnout, All,
+>>>
+>>> On 2014-01-14 22:37 +0100, Arnout Vandecappelle spake thusly:
+>>>> On 13/01/14 00:44, Yann E. MORIN wrote:
+>> [snip]
+>>>>> Note-2: The laternative to sha1 would be sha2 (256- or 512-bit), but
+>>>>> oldish "enterprise-class" distributions  may be missing them entirely.
+>>>>> sha256sum and sha512sum were added to coreutils in 2005-10-23, and RHEL5
+>>>>> seems to have them. But better be safe than sorry. If sha2 should be
+>>>>> considered instead of sha1, then it is very easy to switch now. Switching
+>>>>> later would require that we revalidate all packages that have hashes,
+>>>>> which could prove to be quite time-demanding if we have lots of
+>>>>> packages using hashes.
+>>>>
+>>>>   We can be more future-safe by storing the hash that is used in the .hash
+>>>> file itself.
+>>>
+>>> Hu?
+>>
+>>   If the hash file contains the following:
+>>
+>> 486fb55c3efa71148fe07895fd713ea3a5ae343a  sha1  libfoo-1.2.3.tar.bz2
 >
-> In particular, I'm interested in knowing if the original contributor is
-> still interested by the patch, or if someone else is interested in
-> adopting the patch and sending an updated version, or if the patch no
-> longer makes sense due to other changes made in Buildroot.
+> OK, I see what you meant, now.
 >
-> All patches that have not received any comment or attention before the
-> deadline will be removed from patchwork. This is aggressive, but we have
-> many 'dead' patches sitting in patchwork, and this cannot work.
+>> then you can now let the script check that the second field is sha1, and
+>> later you can support different hash methods. In that case, it is not
+>> necessary to update all the files when we want to switch to a new hash
+>> method.
 >
-> Deadline for this session is January 19.
+> However, that means the file is no longer the output of:
+>      sha1sum files-to-check* >package.hash
 >
-> Below are the 10 oldest patches (obtained with a slightly modified
-> version of pwclient):
-> [ pwclient list -s New -n 17 ] (and skip Delegated patches)
+> or of any other hash utility: sha*sum all generates similarly-formatted
+> outputs:
+>      hash <two spaces> filename
 >
+> Which was the reason I choose that format.
 >
-> tokyocabinet: new package
-> Jon Diekema <jon.diekema@gmail.com>
-> http://patchwork.ozlabs.org/patch/207827
->
-> [RFC,1/2] barebox: Build barebox in separate directory.
-> Marek Belisko <marek.belisko@open-nandra.com>
-> http://patchwork.ozlabs.org/patch/207942
->
-> [RFC,2/2] barebox: Add possibility to build also barebox xloader (MLO).
-> Marek Belisko <marek.belisko@open-nandra.com>
-> http://patchwork.ozlabs.org/patch/207943
->
-> new package: p7zip
-> Stefan Fr?berg <stefan.froberg@petroprogram.com>
-> http://patchwork.ozlabs.org/patch/207947
->
-> toolchain-external: re-introduce Sourcery CodeBench ARM 2010.09
-> Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
-> http://patchwork.ozlabs.org/patch/207978
->
-> [1/1,v2] Hide issue and hostname menu when using a custom skeleton.
-> Sagaert Johan <sagaert.johan@skynet.be>
-> http://patchwork.ozlabs.org/patch/211644
->
-> [1/2] new package: python-posix_ipc.
-> Matt Weber <rc.lsw.collaborate@gmail.com>
-> http://patchwork.ozlabs.org/patch/212498
->
-> [2/2] new package: python-posix_ipc
-> Matt Weber <rc.lsw.collaborate@gmail.com>
-> http://patchwork.ozlabs.org/patch/212499
->
-> [1/1] added python unicode selection to menu
-> Matt Weber <rc.lsw.collaborate@gmail.com>
-> http://patchwork.ozlabs.org/patch/212500
->
-> [1/2] makebootfat: new package
-> Floris Bos <bos@je-eigen-domein.nl>
-> http://patchwork.ozlabs.org/patch/213112
->
->
+> If we'd use your suggestion, we'd need a simple way to generate that
+> file, or it'd be error prone.
 
-Sorry that I did not yet send any reminder last week. Here is a quick
-one: if you think any of these patches (that did not yet receive
-positive feedback) are still needed, let us know.
+Or keep in BR one file per each hash algorithm: a *.hash.sha1
+file, a *.hash.sha256 file etc. Whichever file(s) are found are
+checked.
 
-Thanks,
-Thomas
+This would save both needs, wouldn't it? It should not take many more
+lines of code to implement.
+
+-- 
+Luca
