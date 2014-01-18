@@ -1,67 +1,63 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 18 Jan 2014 20:23:45 +0100
-Subject: [Buildroot] [PATCH 08/10] support: mkusers: add warning when using
-	mkpasswd from the host system
+Date: Sat, 18 Jan 2014 20:23:46 +0100
+Subject: [Buildroot] [PATCH 09/10] urg: make sdl support optional
 In-Reply-To: <1390073027-14239-1-git-send-email-s.martin49@gmail.com>
 References: <1390073027-14239-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1390073027-14239-9-git-send-email-s.martin49@gmail.com>
+Message-ID: <1390073027-14239-10-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Because the mkpasswd provided by some distribution does not support all
-options used in the mkusers script, mkpasswd has been integrated as a
-package.
+Only enable SDL support if SDL and SDL_net are already enabled in the
+configuration.
 
-However, using a custom rootfs skeleton, the host-mkpasswd target is not
-automatically built, even if some packages add users.
-
-In this case, to help the Buildroot users understanding what happen when
-the mkpasswd from the host system is used (so, might fail), mkusers now
-print a warning message explaining how to solve this.
-
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- support/scripts/mkusers | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ package/urg/Config.in |  5 ++---
+ package/urg/urg.mk    | 10 +++++++---
+ 2 files changed, 9 insertions(+), 6 deletions(-)
 
-diff --git a/support/scripts/mkusers b/support/scripts/mkusers
-index 3b287b8..dd011eb 100755
---- a/support/scripts/mkusers
-+++ b/support/scripts/mkusers
-@@ -52,6 +52,22 @@ PASSWD_METHOD="$( sed -r -e '/^BR2_TARGET_GENERIC_PASSWD_METHOD="(.*)"$/!d;'
-                 )"
+diff --git a/package/urg/Config.in b/package/urg/Config.in
+index ded8204..232f4c4 100644
+--- a/package/urg/Config.in
++++ b/package/urg/Config.in
+@@ -1,11 +1,10 @@
+ config BR2_PACKAGE_URG
+ 	bool "urg"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	select BR2_PACKAGE_SDL
+-	select BR2_PACKAGE_SDL_NET
+ 	help
+ 	  Library to control Hokuyo's URG series sensors.
+-	  Requires SDL & SDL_net.
++
++	  If SDL and SDL_net are enable, SDL support will be automatically added.
  
- #----------------------------------------------------------------------------
-+check_mkpasswd() {
-+    local mkpasswd_path="$(readlink -f $(which mkpasswd 2>/dev/null))"
-+    local host_dir="$(readlink -f "${HOST_DIR}")"
-+    case "${mkpasswd_path}" in
-+        "${host_dir}"*) ;;
-+        *)
-+            error \
-+                "WARNING: using mkpasswd from the host system: '%s'. %s%s%s\n" \
-+                "${mkpasswd_path}"                                             \
-+                "To avoid build failures because of unsupported options by "   \
-+                "your host system's mkpasswd, make sure to use the one "       \
-+                "Buildroot provides, by building the 'host-mkpasswd' target."
-+            ;;
-+    esac
-+}
-+#----------------------------------------------------------------------------
- get_uid() {
-     local username="${1}"
+ 	  http://www.hokuyo-aut.jp/02sensor/07scanner/download/urg_programs_en/
  
-@@ -264,6 +280,7 @@ add_user_to_group() {
- encode_password() {
-     local passwd="${1}"
+diff --git a/package/urg/urg.mk b/package/urg/urg.mk
+index e16393a..075a0b3 100644
+--- a/package/urg/urg.mk
++++ b/package/urg/urg.mk
+@@ -12,10 +12,14 @@ URG_LICENSE_FILES = COPYING
  
-+    check_mkpasswd
-     mkpasswd -m "${PASSWD_METHOD}" "${passwd}"
- }
+ URG_INSTALL_STAGING = YES
+ 
+-URG_DEPENDENCIES = sdl sdl_net
+-
+-URG_CONF_OPT = --with-sdl-prefix=$(STAGING_DIR)/usr \
++ifeq ($(BR2_PACKAGE_SDL)$(BR2_PACKAGE_SDL_NET),yy)
++URG_DEPENDENCIES += sdl sdl_net
++URG_CONF_OPT += --with-sdl-prefix=$(STAGING_DIR)/usr \
+ 		--with-sdl-exec-prefix=$(STAGING_DIR)/usr
++else
++URG_CONF_OPT = --without-sdl
++URG_CONF_ENV += ac_cv_path_SDL_CONFIG=""
++endif
+ 
+ URG_CONFIG_SCRIPTS = c_urg-config urg-config
  
 -- 
 1.8.5.3
