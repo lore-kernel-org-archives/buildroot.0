@@ -1,238 +1,87 @@
-From: Marcelo Gutierrez <kuyurix@gmail.com>
-Date: Sat, 18 Jan 2014 19:24:51 -0200
-Subject: [Buildroot] [PATCH 2/2] Update MySQL client package
-Message-ID: <CA+kK6Wt+nNbrUuOp1Ymq0KzRZfG5CAZQAa+9KK6w=S0mV+D16Q@mail.gmail.com>
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+Date: Sat, 18 Jan 2014 20:19:56 -0200
+Subject: [Buildroot] [PATCH 07/10] connman: add systemd unit file
+In-Reply-To: <1390073027-14239-8-git-send-email-s.martin49@gmail.com>
+References: <1390073027-14239-1-git-send-email-s.martin49@gmail.com>
+ <1390073027-14239-8-git-send-email-s.martin49@gmail.com>
+Message-ID: <CAKi4VAKwCWt6MvkWXHdMQ0RT7=QU+qbj+5zVHvh7tr+6GxCEtw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changes v1 -> v2:
-        - fix comments following new policy
-        - rename patches
-        - remove useless hook points
-        - add the URL to the home of MySQL
-        - add commit-log description to the patches
-        - install host tools to $(HOST_DIR)/usr/bin
-        - fix only builds the required program
+On Jan 18, 2014 5:24 PM, "Samuel Martin" <s.martin49@gmail.com> wrote:
+>
+> This patch cleans up the init material installation:
+> - it uses the *_INSTALL_INIT_SYSV infra instead of the custom hook;
+> - it add and install the systemd unit file
+>
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> ---
+>  package/connman/connman.mk      | 10 ++++++++--
+>  package/connman/connman.service | 12 ++++++++++++
+>  2 files changed, 20 insertions(+), 2 deletions(-)
+>  create mode 100644 package/connman/connman.service
 
+Why not enable the configure flag to install the systemd service from
+upstream?
 
-Signed-off-by: Marcelo Guti?rrez(UTN/FRH) <kuyurix@gmail.com>
----
- package/mysql_client/Config.in                     |   20 +++++++--
- package/mysql_client/S60mysqld                     |   25 +++++++++++
- .../mysql_client-Fix-gen_lex_hash-execution.patch  |   28 ++++++++++++
- .../mysql_client-ac_stack_direction-is-unset.patch |   15 +++++++
- package/mysql_client/mysql_client.mk               |   47 +++++++++++++++++++-
- 5 files changed, 130 insertions(+), 5 deletions(-)
- create mode 100644 package/mysql_client/S60mysqld
- create mode 100644
-package/mysql_client/mysql_client-Fix-gen_lex_hash-execution.patch
- create mode 100644
-package/mysql_client/mysql_client-ac_stack_direction-is-unset.patch
+Lucas De Marchi
 
-diff --git a/package/mysql_client/Config.in b/package/mysql_client/Config.in
-index 543bed1..8ebe70f 100644
---- a/package/mysql_client/Config.in
-+++ b/package/mysql_client/Config.in
-@@ -1,13 +1,25 @@
--config BR2_PACKAGE_MYSQL_CLIENT
--       bool "MySQL client"
-+config BR2_PACKAGE_MYSQL
-+       bool "MySQL"
-        depends on BR2_INSTALL_LIBSTDCPP
-        depends on BR2_USE_MMU # fork()
-        depends on BR2_TOOLCHAIN_HAS_THREADS
-        select BR2_PACKAGE_NCURSES
-        select BR2_PACKAGE_READLINE
-        help
--         MySQL client
-+         The MySQL Open Source Database System
-+         http://www.mysql.com/
-
--comment "MySQL client needs a toolchain w/ C++, threads"
-+comment "MySQL server and MySQL client needs a toolchain w/ C++, threads"
-        depends on BR2_USE_MMU
-        depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-+
-+if BR2_PACKAGE_MYSQL
-+
-+config BR2_PACKAGE_MYSQL_CLIENT
-+        bool "MySQL client"
-+
-+config BR2_PACKAGE_MYSQL_CLIENT_SERVER
-+       bool "MySQL server"
-+
-+endif
-+
-diff --git a/package/mysql_client/S60mysqld b/package/mysql_client/S60mysqld
-new file mode 100644
-index 0000000..38e1c41
---- /dev/null
-+++ b/package/mysql_client/S60mysqld
-@@ -0,0 +1,25 @@
-+#!/bin/sh
-+#
-+# Starts mysqld.
-+#
-+
-+case "$1" in
-+       start)
-+               /usr/bin/mysqld_safe &
-+               ;;
-+       stop)
-+               if test -f /var/lib/mysql/mysqld.pid ; then
-+                       PID=`cat /var/lib/mysql/mysqld.pid`
-+                       kill $PID
-+               fi
-+               ;;
-+       restart)
-+               $0 stop
-+               $0 start
-+               ;;
-+       *)
-+               echo "Usage: /etc/init.d/mysqld {start|stop|restart}"
-+               ;;
-+esac
-+
-+exit 0
-diff --git a/package/mysql_client/mysql_client-Fix-gen_lex_hash-execution.patch
-b/package/mysql_client/mysql_client-Fix-gen_lex_hash-execution.patch
-new file mode 100644
-index 0000000..377cabb
---- /dev/null
-+++ b/package/mysql_client/mysql_client-Fix-gen_lex_hash-execution.patch
-@@ -0,0 +1,28 @@
-+When MySQL server is enabled, I first compile the tool with the host gcc
-+and then copy into the "$(HOST_DIR)/usr/bin/" folder
-+
-+Signed-off-by: Marcelo Gutierrez (UTN/FRH) <kuyurix@gmail.com>
-+
-+--- mysql-5.1.70/sql/Makefile.am
-++++ mysql-5.1.70.patch/sql/Makefile.am
-+@@ -177,7 +177,7 @@
-+ # this avoid the rebuild of the built files in a source dist
-+ lex_hash.h:   gen_lex_hash.cc lex.h
-+               $(MAKE) $(AM_MAKEFLAGS) gen_lex_hash$(EXEEXT)
-+-              ./gen_lex_hash$(EXEEXT) > $@-t
-++              gen_lex_hash$(EXEEXT) > $@-t
-+               $(MV) $@-t $@
-+
-+ # For testing of udf_example.so
-+
-+--- mysql-5.1.70/sql/Makefile.in
-++++ mysql-5.1.70.patch/sql/Makefile.in
-+@@ -1310,7 +1310,7 @@
-+ # this avoid the rebuild of the built files in a source dist
-+ lex_hash.h:   gen_lex_hash.cc lex.h
-+               $(MAKE) $(AM_MAKEFLAGS) gen_lex_hash$(EXEEXT)
-+-              ./gen_lex_hash$(EXEEXT) > $@-t
-++              gen_lex_hash$(EXEEXT) > $@-t
-+               $(MV) $@-t $@
-+
-+ # We might have some stuff not built in this build, but that we want
-to install
-diff --git a/package/mysql_client/mysql_client-ac_stack_direction-is-unset.patch
-b/package/mysql_client/mysql_client-ac_stack_direction-is-unset.patch
-new file mode 100644
-index 0000000..6fef0a9
---- /dev/null
-+++ b/package/mysql_client/mysql_client-ac_stack_direction-is-unset.patch
-@@ -0,0 +1,15 @@
-+misc.m4: ac_cv_c_stack_direction is unset.
-+
-+Signed-off-by: Marcelo Gutierrez (UTN/FRH) <kuyurix@gmail.com>
-+
-+--- mysql-5.1.70.orig/config/ac-macros/misc.m4
-++++ mysql-5.1.70/config/ac-macros/misc.m4
-+@@ -477,7 +477,7 @@
-+     exit(ptr_f(&a) < 0);
-+   }
-+   ], ac_cv_c_stack_direction=1, ac_cv_c_stack_direction=-1,
-+-   ac_cv_c_stack_direction=)])
-++   ac_cv_c_stack_direction=0)])
-+  AC_DEFINE_UNQUOTED(STACK_DIRECTION, $ac_cv_c_stack_direction)
-+ ])dnl
-+
-diff --git a/package/mysql_client/mysql_client.mk
-b/package/mysql_client/mysql_client.mk
-index bd4c565..127f65e 100644
---- a/package/mysql_client/mysql_client.mk
-+++ b/package/mysql_client/mysql_client.mk
-@@ -14,6 +14,15 @@ MYSQL_CLIENT_AUTORECONF = YES
- MYSQL_CLIENT_LICENSE = GPLv2
- MYSQL_CLIENT_LICENSE_FILES = README COPYING
-
-+
-+ifeq ($(BR2_PACKAGE_MYSQL_CLIENT_SERVER),y)
-+MYSQL_CLIENT_DEPENDENCIES += host-mysql_client
-+HOST_MYSQL_CLIENT_DEPENDENCIES =
-+
-+HOST_MYSQL_CLIENT_CONF_OPT = \
-+       --with-embedded-server
-+endif
-+
- MYSQL_CLIENT_CONF_ENV = \
-        ac_cv_sys_restartable_syscalls=yes \
-        ac_cv_path_PS=/bin/ps \
-@@ -25,15 +34,50 @@ MYSQL_CLIENT_CONF_ENV = \
-
- MYSQL_CLIENT_CONF_OPT = \
-        --without-ndb-binlog \
--       --without-server \
-        --without-docs \
-        --without-man \
-        --without-libedit \
-        --without-readline \
-+       --without-libedit \
-+       --disable-dependency-tracking \
-        --with-low-memory \
-+       --with-atomic-ops=up \
-        --enable-thread-safe-client \
-+       --without-query-cache \
-+       --without-plugin-partition \
-+       --without-plugin-daemon_example \
-+       --without-plugin-ftexample \
-+       --without-plugin-archive \
-+       --without-plugin-blackhole \
-+       --without-plugin-example \
-+       --without-plugin-federated \
-+       --without-plugin-ibmdb2i \
-+       --without-plugin-innobase \
-+       --without-plugin-innodb_plugin \
-+       --without-plugin-ndbcluster \
-        $(ENABLE_DEBUG)
-
-+ifeq ($(BR2_PACKAGE_MYSQL_CLIENT_SERVER),y)
-+       MYSQL_CLIENT_CONF_OPT += --with-embedded-server
-+
-+define HOST_MYSQL_CLIENT_BUILD_CMDS
-+       $(MAKE) -C $(@D)/include my_config.h
-+       $(MAKE) -C $(@D)/mysys libmysys.a
-+       $(MAKE) -C $(@D)/strings libmystrings.a
-+       $(MAKE) -C $(@D)/vio libvio.a
-+       $(MAKE) -C $(@D)/dbug libdbug.a
-+       $(MAKE) -C $(@D)/regex libregex.a
-+       $(MAKE) -C $(@D)/sql gen_lex_hash
-+endef
-+
-+define HOST_MYSQL_CLIENT_INSTALL_CMDS
-+       $(INSTALL) -m 0755  $(@D)/sql/gen_lex_hash  $(HOST_DIR)/usr/bin/
-+endef
-+
-+else
-+MYSQL_CLIENT_CONF_OPT += --without-server
-+endif
-+
- define MYSQL_CLIENT_REMOVE_TEST_PROGS
-        rm -rf $(TARGET_DIR)/usr/mysql-test $(TARGET_DIR)/usr/sql-bench
- endef
-@@ -46,3 +90,4 @@ MYSQL_CLIENT_POST_INSTALL_TARGET_HOOKS +=
-MYSQL_CLIENT_REMOVE_TEST_PROGS
- MYSQL_CLIENT_POST_INSTALL_TARGET_HOOKS += MYSQL_CLIENT_ADD_MYSQL_LIB_PATH
-
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
--- 
-1.7.10.4
+>
+> diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+> index 64c1f0e..9161cce 100644
+> --- a/package/connman/connman.mk
+> +++ b/package/connman/connman.mk
+> @@ -24,11 +24,17 @@ CONNMAN_DEPENDENCIES += \
+>         $(if $(BR2_PACKAGE_CONNMAN_NEARD),neard) \
+>         $(if $(BR2_PACKAGE_CONNMAN_OFONO),ofono)
+>
+> -define CONNMAN_INSTALL_INITSCRIPT
+> +define CONNMAN_INSTALL_INIT_SYSV
+>         $(INSTALL) -m 0755 -D package/connman/S45connman
+$(TARGET_DIR)/etc/init.d/S45connman
+>  endef
+>
+> -CONNMAN_POST_INSTALL_TARGET_HOOKS = CONNMAN_INSTALL_INITSCRIPT
+> +define CONNMAN_INSTALL_INIT_SYSTEMD
+> +       $(INSTALL) -D -m 644 package/connman/connman.service \
+> +               $(TARGET_DIR)/etc/systemd/system/connman.service
+> +       mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+> +       ln -fs ../connman.service \
+> +
+$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/connman.service
+> +endef
+>
+>  ifeq ($(BR2_PACKAGE_CONNMAN_CLIENT),y)
+>  CONNMAN_CONF_OPT += --enable-client
+> diff --git a/package/connman/connman.service
+b/package/connman/connman.service
+> new file mode 100644
+> index 0000000..bb6b3c0
+> --- /dev/null
+> +++ b/package/connman/connman.service
+> @@ -0,0 +1,12 @@
+> +[Unit]
+> +Description=Connection service
+> +After=syslog.target
+> +
+> +[Service]
+> +Type=dbus
+> +BusName=net.connman
+> +Restart=on-failure
+> +ExecStart=/usr/bin/connmand -n
+> +
+> +[Install]
+> +WantedBy=multi-user.target
+> --
+> 1.8.5.3
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140118/cf96d51f/attachment.html>
