@@ -1,43 +1,67 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 18 Jan 2014 20:23:43 +0100
-Subject: [Buildroot] [PATCH 06/10] opencv: fix qt selection when highgui is
-	enable
+Date: Sat, 18 Jan 2014 20:23:44 +0100
+Subject: [Buildroot] [PATCH 07/10] connman: add systemd unit file
 In-Reply-To: <1390073027-14239-1-git-send-email-s.martin49@gmail.com>
 References: <1390073027-14239-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1390073027-14239-7-git-send-email-s.martin49@gmail.com>
+Message-ID: <1390073027-14239-8-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The OpenCV highgui module links against QtGui and QtTest.
-The latter is built by default but was never installed.
-Thanks to the previous patch on Qt, this can be rectified.
-
-So, update the OpenCV Config.in with the missing Qt module selection.
+This patch cleans up the init material installation:
+- it uses the *_INSTALL_INIT_SYSV infra instead of the custom hook;
+- it add and install the systemd unit file
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/opencv/Config.in | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/connman/connman.mk      | 10 ++++++++--
+ package/connman/connman.service | 12 ++++++++++++
+ 2 files changed, 20 insertions(+), 2 deletions(-)
+ create mode 100644 package/connman/connman.service
 
-diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index 146011a..79c7b0b 100644
---- a/package/opencv/Config.in
-+++ b/package/opencv/Config.in
-@@ -174,9 +174,11 @@ config BR2_PACKAGE_OPENCV_WITH_QT
- 	depends on !BR2_avr32 # qt
- 	select BR2_PACKAGE_QT
- 	select BR2_PACKAGE_QT_STL
-+	select BR2_PACKAGE_QT_GUI_MODULE if BR2_PACKAGE_OPENCV_LIB_HIGHGUI
-+	select BR2_PACKAGE_QT_TEST       if BR2_PACKAGE_OPENCV_LIB_HIGHGUI
- 	default y
- 	help
--	  Use Qt with STL support
-+	  Use Qt with QtTest module and STL support
+diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+index 64c1f0e..9161cce 100644
+--- a/package/connman/connman.mk
++++ b/package/connman/connman.mk
+@@ -24,11 +24,17 @@ CONNMAN_DEPENDENCIES += \
+ 	$(if $(BR2_PACKAGE_CONNMAN_NEARD),neard) \
+ 	$(if $(BR2_PACKAGE_CONNMAN_OFONO),ofono)
  
- config BR2_PACKAGE_OPENCV_WITH_TIFF
- 	bool "tiff support"
+-define CONNMAN_INSTALL_INITSCRIPT
++define CONNMAN_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 -D package/connman/S45connman $(TARGET_DIR)/etc/init.d/S45connman
+ endef
+ 
+-CONNMAN_POST_INSTALL_TARGET_HOOKS = CONNMAN_INSTALL_INITSCRIPT
++define CONNMAN_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/connman/connman.service \
++		$(TARGET_DIR)/etc/systemd/system/connman.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -fs ../connman.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/connman.service
++endef
+ 
+ ifeq ($(BR2_PACKAGE_CONNMAN_CLIENT),y)
+ CONNMAN_CONF_OPT += --enable-client
+diff --git a/package/connman/connman.service b/package/connman/connman.service
+new file mode 100644
+index 0000000..bb6b3c0
+--- /dev/null
++++ b/package/connman/connman.service
+@@ -0,0 +1,12 @@
++[Unit]
++Description=Connection service
++After=syslog.target
++
++[Service]
++Type=dbus
++BusName=net.connman
++Restart=on-failure
++ExecStart=/usr/bin/connmand -n
++
++[Install]
++WantedBy=multi-user.target
 -- 
 1.8.5.3
