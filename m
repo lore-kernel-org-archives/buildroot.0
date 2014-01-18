@@ -1,7 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Sat, 18 Jan 2014 19:40:15 +0100
-Subject: [Buildroot] [PATCH 0/5] Misc bumps
-Message-ID: <cover.1390070341.git.yann.morin.1998@free.fr>
+Subject: [Buildroot] [PATCH 1/5] package/rpi-firmware: bump for misc
+	fixes/improvements
+In-Reply-To: <cover.1390070341.git.yann.morin.1998@free.fr>
+References: <cover.1390070341.git.yann.morin.1998@free.fr>
+Message-ID: <2b45941e91168c720077746a5a8e0a4a7aeb43d8.1390070341.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,35 +13,31 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Hello All!
+Bring a slew of fixes and improvements to:
+  - boot hang
+  - camera zoom, night mode
+  - MJPEG decoder/encoder
+  - video decoder/encoder
+  - dispmanx (3D engine)
+  - documentation
 
-Here are a few bunps:
-  - packages and defconfig for Raspberry Pi
-  - linux-firmware, plus install two new firmware files
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/rpi-firmware/rpi-firmware.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Regards,
-Yann E. MORIN.
-
-
-----------------------------------------------------------------
-Yann E. MORIN (5):
-      package/rpi-firmware: bump for misc fixes/improvements
-      package/rpi-userland: bumps for misc fixes and improvements
-      configs/raspberrypi: bump kernel version
-      package/linux-firmware: bump
-      package/linux-firmware: add iwlwifi 3160 and 7260 firmware files
-
- configs/raspberrypi_defconfig            |  2 +-
- package/linux-firmware/Config.in         | 12 ++++++++++++
- package/linux-firmware/linux-firmware.mk | 12 +++++++++++-
- package/rpi-firmware/rpi-firmware.mk     |  2 +-
- package/rpi-userland/rpi-userland.mk     |  2 +-
- 5 files changed, 26 insertions(+), 4 deletions(-)
-
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index 664f6ad..5d2c0cf 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RPI_FIRMWARE_VERSION = e618d4ff2dc20051bc726834b22487fe2e236fe5
++RPI_FIRMWARE_VERSION = 940dc3b5ea0a001096c5fbb2d483a961d42fe85c
+ RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
+ RPI_FIRMWARE_LICENSE = BSD-3c
+ RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.1.2
