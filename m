@@ -1,54 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Jan 2014 22:29:32 +0100
-Subject: [Buildroot] [PATCH 08/10] support: mkusers: add warning when
- using mkpasswd from the host system
-In-Reply-To: <87bnz7n2au.fsf@dell.be.48ers.dk>
-References: <1390073027-14239-1-git-send-email-s.martin49@gmail.com>
- <1390073027-14239-9-git-send-email-s.martin49@gmail.com>
- <87bnz7n2au.fsf@dell.be.48ers.dk>
-Message-ID: <20140119212932.GH3387@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 19 Jan 2014 22:48:42 +0100
+Subject: [Buildroot] [PATCH v3 01/12] libbluray: new package
+In-Reply-To: <1390165448-9130-2-git-send-email-maxime.hadjinlian@gmail.com>
+ (Maxime Hadjinlian's message of "Sun, 19 Jan 2014 22:03:57 +0100")
+References: <1390165448-9130-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <1390165448-9130-2-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <8738kjmymd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+>>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
 
-On 2014-01-19 21:29 +0100, Peter Korsgaard spake thusly:
-> >>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
-> 
->  > Because the mkpasswd provided by some distribution does not support all
->  > options used in the mkusers script, mkpasswd has been integrated as a
->  > package.
-> 
->  > However, using a custom rootfs skeleton, the host-mkpasswd target is not
->  > automatically built, even if some packages add users.
-> 
->  > In this case, to help the Buildroot users understanding what happen when
->  > the mkpasswd from the host system is used (so, might fail), mkusers now
->  > print a warning message explaining how to solve this.
-> 
-> Why not just fix it to always use our mkpasswd? E.G. something like
-> adding host-mkpasswd to dependencies in fs/common.mk if PACKAGE_USERS
-> isn't empty?
+ > LIBBLURAY is a client library for accessing bluray disks.
+ > This package was originally found at : https://github.com/huceke/buildroot-rbp
+ > By gimli <ebsi4711@gmail.com>
 
-We've already spoke about it with Samuel on IRC, and I was rather
-leaning toward this: if the user uses a custom skeleton, lets just rely
-on him to provide a proper set of users.
+ > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+ > Cc: gimli <ebsi4711@gmail.com>
+ > Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > ---
+ > Changes v2 -> v3:
+ > 	- None
+ > Changes v1 -> v2
+ > 	- Bump version to 0.5.0 and add missing build dependency (Bernd Kuhls)
+ > +
+ > +LIBBLURAY_VERSION = 0.5.0
+ > +LIBBLURAY_SITE = ftp://ftp.videolan.org/pub/videolan/libbluray/$(LIBBLURAY_VERSION)
+ > +LIBBLURAY_SOURCE = libbluray-$(LIBBLURAY_VERSION).tar.bz2
+ > +LIBBLURAY_INSTALL_STAGING = YES
+ > +LIBBLURAY_LICENSE = LGPLv2.1+
+ > +LIBBLURAY_LICENSE_FILES = COPYING
+ > +LIBBLURAY_DEPENDENCIES = host-pkgconf freetype bzip2 libxml2 zlib
 
-As an afterthought, I think this would not be correct from us, and that
-we should indeed continue to generate those users.
+You need to select these in Config.in. Looking closer I see that bzip2
+and zlib aren't used, and freetype/libxml2 are optional.
 
-So, agreed with Peter on that one. Sorry Samuel... :-)
-
-Regards,
-Yann E. MORIN.
+Committed with that fixed, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
