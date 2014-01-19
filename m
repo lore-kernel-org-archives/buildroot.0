@@ -1,87 +1,82 @@
-From: Lucas De Marchi <lucas.de.marchi@gmail.com>
-Date: Sat, 18 Jan 2014 20:19:56 -0200
-Subject: [Buildroot] [PATCH 07/10] connman: add systemd unit file
-In-Reply-To: <1390073027-14239-8-git-send-email-s.martin49@gmail.com>
-References: <1390073027-14239-1-git-send-email-s.martin49@gmail.com>
- <1390073027-14239-8-git-send-email-s.martin49@gmail.com>
-Message-ID: <CAKi4VAKwCWt6MvkWXHdMQ0RT7=QU+qbj+5zVHvh7tr+6GxCEtw@mail.gmail.com>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Sat, 18 Jan 2014 20:59:50 -0500
+Subject: [Buildroot] [PATCH v2 1/1] gst-ffmpeg: add option for LGPL build
+Message-ID: <1390096790-1864-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Jan 18, 2014 5:24 PM, "Samuel Martin" <s.martin49@gmail.com> wrote:
->
-> This patch cleans up the init material installation:
-> - it uses the *_INSTALL_INIT_SYSV infra instead of the custom hook;
-> - it add and install the systemd unit file
->
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> ---
->  package/connman/connman.mk      | 10 ++++++++--
->  package/connman/connman.service | 12 ++++++++++++
->  2 files changed, 20 insertions(+), 2 deletions(-)
->  create mode 100644 package/connman/connman.service
+Add option to build a LGPL licensed gst-ffmpeg.
 
-Why not enable the configure flag to install the systemd service from
-upstream?
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 
-Lucas De Marchi
+---
 
->
-> diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-> index 64c1f0e..9161cce 100644
-> --- a/package/connman/connman.mk
-> +++ b/package/connman/connman.mk
-> @@ -24,11 +24,17 @@ CONNMAN_DEPENDENCIES += \
->         $(if $(BR2_PACKAGE_CONNMAN_NEARD),neard) \
->         $(if $(BR2_PACKAGE_CONNMAN_OFONO),ofono)
->
-> -define CONNMAN_INSTALL_INITSCRIPT
-> +define CONNMAN_INSTALL_INIT_SYSV
->         $(INSTALL) -m 0755 -D package/connman/S45connman
-$(TARGET_DIR)/etc/init.d/S45connman
->  endef
->
-> -CONNMAN_POST_INSTALL_TARGET_HOOKS = CONNMAN_INSTALL_INITSCRIPT
-> +define CONNMAN_INSTALL_INIT_SYSTEMD
-> +       $(INSTALL) -D -m 644 package/connman/connman.service \
-> +               $(TARGET_DIR)/etc/systemd/system/connman.service
-> +       mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-> +       ln -fs ../connman.service \
-> +
-$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/connman.service
-> +endef
->
->  ifeq ($(BR2_PACKAGE_CONNMAN_CLIENT),y)
->  CONNMAN_CONF_OPT += --enable-client
-> diff --git a/package/connman/connman.service
-b/package/connman/connman.service
-> new file mode 100644
-> index 0000000..bb6b3c0
-> --- /dev/null
-> +++ b/package/connman/connman.service
-> @@ -0,0 +1,12 @@
-> +[Unit]
-> +Description=Connection service
-> +After=syslog.target
-> +
-> +[Service]
-> +Type=dbus
-> +BusName=net.connman
-> +Restart=on-failure
-> +ExecStart=/usr/bin/connmand -n
-> +
-> +[Install]
-> +WantedBy=multi-user.target
-> --
-> 1.8.5.3
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140118/cf96d51f/attachment.html>
+v1 -> v2:
+ - Move GST_FFMPEG_CONF_OPT adjustment (introduced by this patch)
+   higher in the file, so that GST_FFMPEG_CONF_EXTRA_OPT lines
+   don't get split.
+---
+ package/gstreamer/gst-ffmpeg/Config.in     |   13 ++++++++++++-
+ package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk |   11 ++++++++++-
+ 2 files changed, 22 insertions(+), 2 deletions(-)
+
+diff --git a/package/gstreamer/gst-ffmpeg/Config.in b/package/gstreamer/gst-ffmpeg/Config.in
+index d879f5e..220f4d7 100644
+--- a/package/gstreamer/gst-ffmpeg/Config.in
++++ b/package/gstreamer/gst-ffmpeg/Config.in
+@@ -1,4 +1,4 @@
+-config BR2_PACKAGE_GST_FFMPEG
++menuconfig BR2_PACKAGE_GST_FFMPEG
+ 	bool "gst-ffmpeg"
+ 	select BR2_PACKAGE_GST_PLUGINS_BASE
+ 	depends on BR2_LARGEFILE
+@@ -8,5 +8,16 @@ config BR2_PACKAGE_GST_FFMPEG
+ 
+ 	  http://gstreamer.freedesktop.org/
+ 
++if BR2_PACKAGE_GST_FFMPEG
++
++config BR2_PACKAGE_GST_FFMPEG_LGPL_BUILD
++	bool "Build a LGPL licensed gst-ffmpeg"
++	help
++	  This removes --enable-gpl and --enable-postproc from the
++	  ffmpeg configure line, and disables building the postproc
++	  gstreamer plugin.
++
++endif
++
+ comment "gst-ffmpeg needs a toolchain w/ largefile, IPv6"
+ 	depends on !(BR2_LARGEFILE && BR2_INET_IPV6)
+diff --git a/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk b/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
+index 6534f93..ed2b519 100644
+--- a/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
++++ b/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
+@@ -10,6 +10,15 @@ GST_FFMPEG_SITE = http://gstreamer.freedesktop.org/src/gst-ffmpeg
+ GST_FFMPEG_INSTALL_STAGING = YES
+ GST_FFMPEG_DEPENDENCIES = host-pkgconf gstreamer gst-plugins-base
+ 
++ifeq ($(BR2_PACKAGE_GST_FFMPEG_LGPL_BUILD),y)
++GST_FFMPEG_CONF_OPT += --enable-lgpl
++GST_FFMPEG_LICENSE = LGPL2+ (gst-ffmpeg), LGPLv2.1+/LGPL3+ (libav)
++GST_FFMPEG_LICENSE_FILES = COPYING.LIB gst-libs/ext/libav/COPYING.LGPLv2.1 gst-libs/ext/libav/COPYING.LGPLv3
++else
++GST_FFMPEG_LICENSE = GPLv2+ (gst-ffmpeg), GPLv2+/GPL3+ (libav)
++GST_FFMPEG_LICENSE_FILES = COPYING gst-libs/ext/libav/COPYING.GPLv2 gst-libs/ext/libav/COPYING.GPLv3
++endif
++
+ GST_FFMPEG_CONF_EXTRA_OPT = \
+ 		--cross-prefix=$(TARGET_CROSS) \
+ 		--target-os=linux
+@@ -76,6 +85,6 @@ ifeq ($(BR2_PREFER_STATIC_LIB),)
+ GST_FFMPEG_CONF_EXTRA_OPT += --enable-pic
+ endif
+ 
+-GST_FFMPEG_CONF_OPT = --with-ffmpeg-extra-configure="$(GST_FFMPEG_CONF_EXTRA_OPT)"
++GST_FFMPEG_CONF_OPT += --with-ffmpeg-extra-configure="$(GST_FFMPEG_CONF_EXTRA_OPT)"
+ 
+ $(eval $(autotools-package))
+-- 
+1.7.9.5
