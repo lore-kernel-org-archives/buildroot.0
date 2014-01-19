@@ -1,89 +1,83 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun, 19 Jan 2014 22:03:56 +0100
-Subject: [Buildroot] [PATCH v3 00/12] Introducing XBMC
-Message-ID: <1390165448-9130-1-git-send-email-maxime.hadjinlian@gmail.com>
+Date: Sun, 19 Jan 2014 22:03:57 +0100
+Subject: [Buildroot] [PATCH v3 01/12] libbluray: new package
+In-Reply-To: <1390165448-9130-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1390165448-9130-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <1390165448-9130-2-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Here we are again for the v3 :).
-Including all the comments made during the last round of reviews.
-Note: librtmp is now rtmpdump
+LIBBLURAY is a client library for accessing bluray disks.
+This package was originally found at : https://github.com/huceke/buildroot-rbp
+By gimli <ebsi4711@gmail.com>
 
-Maxime Hadjinlian (12):
-  libbluray: new package
-  libcdio: new package
-  libnfs: new package
-  libplist: new package
-  rtmpdump: new package
-  libshairplay: new package
-  tinyxml: new package
-  sdl: add host version
-  sdl_image: add host version
-  libenca: new package
-  libass: new package
-  xbmc: new package
-
- package/Config.in                                  |  10 +
- package/libass/Config.in                           |  11 ++
- package/libass/libass.mk                           |  14 ++
- package/libbluray/Config.in                        |   6 +
- package/libbluray/libbluray.mk                     |  19 ++
- package/libcdio/Config.in                          |  11 ++
- package/libcdio/libcdio.mk                         |  18 ++
- package/libenca/Config.in                          |   6 +
- .../libenca/libenca-000-do-not-build-tools.patch   |  44 +++++
- .../libenca-001-fix-installation-error.patch       |  44 +++++
- ...benca-002-remove-prefix-hack-in-configure.patch |  33 ++++
- package/libenca/libenca.mk                         |  36 ++++
- package/libnfs/Config.in                           |  11 ++
- package/libnfs/libnfs.mk                           |  16 ++
- package/libplist/Config.in                         |  12 ++
- package/libplist/libplist.mk                       |  15 ++
- package/libshairplay/Config.in                     |  11 ++
- package/libshairplay/libshairplay.mk               |  15 ++
- package/rtmpdump/Config.in                         |   9 +
- package/rtmpdump/rtmpdump.mk                       |  50 +++++
- package/sdl/sdl.mk                                 |   2 +
- package/sdl_image/sdl_image.mk                     |  11 ++
- package/tinyxml/Config.in                          |  11 ++
- package/tinyxml/tinyxml.mk                         |  15 ++
- package/xbmc/Config.in                             | 202 +++++++++++++++++++++
- package/xbmc/S99xbmc.default                       |  24 +++
- package/xbmc/S99xbmc.raspberrypi                   |  31 ++++
- package/xbmc/xbmc-0001-Fixup-include-path.patch    |  79 ++++++++
- .../xbmc-0002-RaspberryPi-Default-Settings.patch   | 167 +++++++++++++++++
- package/xbmc/xbmc.mk                               | 167 +++++++++++++++++
- 30 files changed, 1100 insertions(+)
- create mode 100644 package/libass/Config.in
- create mode 100644 package/libass/libass.mk
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: gimli <ebsi4711@gmail.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+Changes v2 -> v3:
+	- None
+Changes v1 -> v2
+	- Bump version to 0.5.0 and add missing build dependency (Bernd Kuhls)
+---
+ package/Config.in              |  1 +
+ package/libbluray/Config.in    |  6 ++++++
+ package/libbluray/libbluray.mk | 19 +++++++++++++++++++
+ 3 files changed, 26 insertions(+)
  create mode 100644 package/libbluray/Config.in
  create mode 100644 package/libbluray/libbluray.mk
- create mode 100644 package/libcdio/Config.in
- create mode 100644 package/libcdio/libcdio.mk
- create mode 100644 package/libenca/Config.in
- create mode 100644 package/libenca/libenca-000-do-not-build-tools.patch
- create mode 100644 package/libenca/libenca-001-fix-installation-error.patch
- create mode 100644 package/libenca/libenca-002-remove-prefix-hack-in-configure.patch
- create mode 100644 package/libenca/libenca.mk
- create mode 100644 package/libnfs/Config.in
- create mode 100644 package/libnfs/libnfs.mk
- create mode 100644 package/libplist/Config.in
- create mode 100644 package/libplist/libplist.mk
- create mode 100644 package/libshairplay/Config.in
- create mode 100644 package/libshairplay/libshairplay.mk
- create mode 100644 package/rtmpdump/Config.in
- create mode 100644 package/rtmpdump/rtmpdump.mk
- create mode 100644 package/tinyxml/Config.in
- create mode 100644 package/tinyxml/tinyxml.mk
- create mode 100644 package/xbmc/Config.in
- create mode 100755 package/xbmc/S99xbmc.default
- create mode 100755 package/xbmc/S99xbmc.raspberrypi
- create mode 100644 package/xbmc/xbmc-0001-Fixup-include-path.patch
- create mode 100644 package/xbmc/xbmc-0002-RaspberryPi-Default-Settings.patch
- create mode 100644 package/xbmc/xbmc.mk
 
---
+diff --git a/package/Config.in b/package/Config.in
+index 2f62d6c..3f78651 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -627,6 +627,7 @@ source "package/yajl/Config.in"
+ endmenu
+ 
+ menu "Multimedia"
++source "package/libbluray/Config.in"
+ source "package/libdvbsi/Config.in"
+ source "package/libdvdnav/Config.in"
+ source "package/libdvdread/Config.in"
+diff --git a/package/libbluray/Config.in b/package/libbluray/Config.in
+new file mode 100644
+index 0000000..eeb93dc
+--- /dev/null
++++ b/package/libbluray/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_LIBBLURAY
++	bool "libbluray"
++	help
++	  libbluray is a client library for accessing bluray disks.
++
++	  http://www.videolan.org/developers/libbluray.html
+diff --git a/package/libbluray/libbluray.mk b/package/libbluray/libbluray.mk
+new file mode 100644
+index 0000000..e1e6bdd
+--- /dev/null
++++ b/package/libbluray/libbluray.mk
+@@ -0,0 +1,19 @@
++################################################################################
++#
++# libbluray
++#
++################################################################################
++
++LIBBLURAY_VERSION = 0.5.0
++LIBBLURAY_SITE = ftp://ftp.videolan.org/pub/videolan/libbluray/$(LIBBLURAY_VERSION)
++LIBBLURAY_SOURCE = libbluray-$(LIBBLURAY_VERSION).tar.bz2
++LIBBLURAY_INSTALL_STAGING = YES
++LIBBLURAY_LICENSE = LGPLv2.1+
++LIBBLURAY_LICENSE_FILES = COPYING
++LIBBLURAY_DEPENDENCIES = host-pkgconf freetype bzip2 libxml2 zlib
++
++ifeq ($(BR2_PACKAGE_LIBICONV),y)
++	LIBBLURAY_DEPENDENCIES += libiconv
++endif
++
++$(eval $(autotools-package))
+-- 
 1.8.5.2
