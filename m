@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Jan 2014 16:47:56 +0100
-Subject: [Buildroot] [PATCH v2 09/12] sdl: add host version
-In-Reply-To: <1389831355-19983-10-git-send-email-maxime.hadjinlian@gmail.com>
+Date: Sun, 19 Jan 2014 16:53:18 +0100
+Subject: [Buildroot] [PATCH v2 10/12] sdl_image: add host version
+In-Reply-To: <1389831355-19983-11-git-send-email-maxime.hadjinlian@gmail.com>
 References: <1389831355-19983-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1389831355-19983-10-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20140119154756.GE3387@free.fr>
+ <1389831355-19983-11-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20140119155318.GF3387@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
