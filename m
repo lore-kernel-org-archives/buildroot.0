@@ -1,92 +1,265 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Jan 2014 08:30:10 +0100 (CET)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-01-18
-Message-ID: <20140119073010.9F438100B89@stock.ovh.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 19 Jan 2014 12:51:24 +0100
+Subject: [Buildroot] [PATCH 2/2] Update MySQL client package
+In-Reply-To: <CA+kK6Wt+nNbrUuOp1Ymq0KzRZfG5CAZQAa+9KK6w=S0mV+D16Q@mail.gmail.com>
+References: <CA+kK6Wt+nNbrUuOp1Ymq0KzRZfG5CAZQAa+9KK6w=S0mV+D16Q@mail.gmail.com>
+Message-ID: <20140119115124.GA3387@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2014-01-18
-===============================
+Marcelo, All,
 
-        success : 82 
-       failures : 36 
-       timeouts : 3  
-          TOTAL : 121
+On 2014-01-18 19:24 -0200, Marcelo Gutierrez spake thusly:
+> Changes v1 -> v2:
+>         - fix comments following new policy
+>         - rename patches
+>         - remove useless hook points
+>         - add the URL to the home of MySQL
+>         - add commit-log description to the patches
+>         - install host tools to $(HOST_DIR)/usr/bin
+>         - fix only builds the required program
+> 
+> 
+> Signed-off-by: Marcelo Guti?rrez(UTN/FRH) <kuyurix@gmail.com>
 
-Classification of failures by reason
-====================================
+The patch is space-mangled: tabs were replaced by spaces.
+So we can't apply it.
 
-               tcpreplay-4.0.0 | 7 
-                       unknown | 3 
-                       kmod-16 | 2 
-            live555-2014.01.11 | 2 
-                 cairo-1.12.10 | 2 
-                   ncftp-3.2.5 | 2 
-                    fltk-1.3.2 | 2 
-                 pixman-0.30.0 | 2 
-                  libogg-1.3.0 | 2 
-                 tcpdump-4.5.1 | 1 
-                 libraw-0.13.4 | 1 
-make: *** No rule to make t... | 1 
-                  samba-3.6.22 | 1 
-              lm-sensors-3.3.4 | 1 
-mmc-utils-11f2ceabc4ad3f0dd... | 1 
-                oprofile-0.9.8 | 1 
-             util-linux-2.23.2 | 1 
-             alsa-utils-1.0.26 | 1 
-                     vlc-2.1.2 | 1 
-                 msgpack-0.5.4 | 1 
-                 libxml2-2.9.1 | 1 
-                  avahi-0.6.31 | 1 
-        ltp-testsuite-20130904 | 1 
-             iputils-s20121011 | 1 
+Please fix your mailer, or better yet, use 'git send-email' to send your
+patches.
 
-Detail of failures
-===================
+However, still a few comments, below...
 
-      bfin |              alsa-utils-1.0.26 | NOK | http://autobuild.buildroot.net/results/6c8095a61adf7638ab78b91dceb84401e0bf369f/
-    mipsel |                   avahi-0.6.31 | NOK | http://autobuild.buildroot.net/results/e580cf00a91fe0bff0bd7ab3fbac4c850fa82afe/
-       arm |                  cairo-1.12.10 | NOK | http://autobuild.buildroot.net/results/e9fc14f397e822143ffd625e38e1877c3296d7d1/
-       arm |                  cairo-1.12.10 | NOK | http://autobuild.buildroot.net/results/95a8b6ad45a0b7b095e5462230d7c4b59be5e2a0/
-    x86_64 |                     fltk-1.3.2 | NOK | http://autobuild.buildroot.net/results/23c1b8c9aae9a02cd49a1850320608bedbc16082/
-    x86_64 |                     fltk-1.3.2 | NOK | http://autobuild.buildroot.net/results/32c109bcf7adc8715a47fcf16ee16dd3b3d71fc4/
-     avr32 |              iputils-s20121011 | NOK | http://autobuild.buildroot.net/results/87c7b709aca57f60d6a3484824f4890c2cf74e11/
-    xtensa |                        kmod-16 | NOK | http://autobuild.buildroot.net/results/b38ccad7aa6f90407b1015a00ad354b37438abfa/
-    xtensa |                        kmod-16 | NOK | http://autobuild.buildroot.net/results/07525c315eae65229ddf8c7f2eaec75d7cc1db1d/
-       arc |                   libogg-1.3.0 | NOK | http://autobuild.buildroot.net/results/c1bec1f628323b8458132b451179ceb5ede562e1/
-       arc |                   libogg-1.3.0 | NOK | http://autobuild.buildroot.net/results/925d834f695701a10e999390c82967cff122058f/
-      mips |                  libraw-0.13.4 | NOK | http://autobuild.buildroot.net/results/33d6af5dc3760ffa8a2c8a1b1ed1ac3b1e23ac1d/
-       arc |                  libxml2-2.9.1 | NOK | http://autobuild.buildroot.net/results/28a978c08605ad2ade5deb04caee33dd3c91d578/
-       arm |             live555-2014.01.11 | NOK | http://autobuild.buildroot.net/results/9c8b3c566591108b3cd7a9681225d61cab48b67c/
-       arm |             live555-2014.01.11 | NOK | http://autobuild.buildroot.net/results/b34f8916965904afac3d4c065dc1cbcc2a6cc9d4/
-       arm |               lm-sensors-3.3.4 | NOK | http://autobuild.buildroot.net/results/060d897c49aefcbd053966219636687e695f57c2/
-       arm |         ltp-testsuite-20130904 | NOK | http://autobuild.buildroot.net/results/323f1e1c09019375732cab0a31056da32465b624/
-       arm | make: *** No rule to make t... | NOK | http://autobuild.buildroot.net/results/b6efe177b86e5a7c319ddc779bfa26c05d8b1e68/
-   powerpc | mmc-utils-11f2ceabc4ad3f0dd... | NOK | http://autobuild.buildroot.net/results/4788905a4255f072452103b31039c6c01ae7a960/
-       arc |                  msgpack-0.5.4 | NOK | http://autobuild.buildroot.net/results/e7fc9631b0ac14ea6a882f717d5aa495cd95e5fe/
-      i686 |                    ncftp-3.2.5 | NOK | http://autobuild.buildroot.net/results/ab1ed10c1dd20c20b6bc91be51260697af4b1b0e/
-      i686 |                    ncftp-3.2.5 | NOK | http://autobuild.buildroot.net/results/56384f7949ee6b8c4926e634a00f547ccca7e034/
-       arc |                 oprofile-0.9.8 | NOK | http://autobuild.buildroot.net/results/e24038629640612b74716bdde8e46c3eab120835/
-microblaze |                  pixman-0.30.0 | NOK | http://autobuild.buildroot.net/results/ffe52e8b8177686a8343546f528911d05cccf528/
-microblaze |                  pixman-0.30.0 | NOK | http://autobuild.buildroot.net/results/3d6f23d442acc1beeb741420fb1eea3375ebd95d/
-     nios2 |                   samba-3.6.22 | NOK | http://autobuild.buildroot.net/results/0a521e0cb04f6e7ba279c55b72a240acf135f951/
-   powerpc |                  tcpdump-4.5.1 | NOK | http://autobuild.buildroot.net/results/272c7b57a6ebd86e0e500c36fd67e59d4655858f/
-   aarch64 |                tcpreplay-4.0.0 | NOK | http://autobuild.buildroot.net/results/9a10c4ba477a7b057b473fc15b4fd34492bd8bfa/
-      i686 |                tcpreplay-4.0.0 | NOK | http://autobuild.buildroot.net/results/72d336daf92c90ea2a7b6b18de53bca20c16f24d/
-      i686 |                tcpreplay-4.0.0 | NOK | http://autobuild.buildroot.net/results/959d65227ec494453b76991cf1528b58e8047a25/
-   powerpc |                tcpreplay-4.0.0 | NOK | http://autobuild.buildroot.net/results/77484eb846b8022ec33bc6f5d9924c7ea923e673/
-   powerpc |                tcpreplay-4.0.0 | NOK | http://autobuild.buildroot.net/results/b6f0fb0a88cdc7d939270eafeff795b28046f770/
-       arm |                tcpreplay-4.0.0 | NOK | http://autobuild.buildroot.net/results/da4e8df8b1121cbbebad74e13b70c60c6fd37f37/
-       arm |                tcpreplay-4.0.0 | NOK | http://autobuild.buildroot.net/results/cd033dea134fc9930daf34d8b95f3bdfe5856016/
-   powerpc |                        unknown | TIM | http://autobuild.buildroot.net/results/9822691bb76fa2219ea0e15f675aef5a5793fb19/
-   aarch64 |                        unknown | TIM | http://autobuild.buildroot.net/results/bcb40a53063ed4bcbceb1a8a615c74501d461be0/
-   powerpc |                        unknown | TIM | http://autobuild.buildroot.net/results/198b192a76c317cc51bea93127a806b42af2f496/
-   powerpc |              util-linux-2.23.2 | NOK | http://autobuild.buildroot.net/results/1a38982a3ae7e1f317cfdfeb69be44fe85ce0e3c/
-  mips64el |                      vlc-2.1.2 | NOK | http://autobuild.buildroot.net/results/4a02e1a9785ff4008114956997d4c9da89386d5e/
+> ---
+>  package/mysql_client/Config.in                     |   20 +++++++--
+>  package/mysql_client/S60mysqld                     |   25 +++++++++++
+>  .../mysql_client-Fix-gen_lex_hash-execution.patch  |   28 ++++++++++++
+>  .../mysql_client-ac_stack_direction-is-unset.patch |   15 +++++++
 
+As I said in my previous review, the patches should be named as:
+    mysql_client-0000-ac_stack_direction-is-unset.patch
+    mysql_client-0001-Fix-gen_lex_hash-execution.patch
+
+Ie. they should be numbered.
+
+I know the existing patches are not, so just provide a preliminary patch
+that renames them, please.
+
+>  package/mysql_client/mysql_client.mk               |   47 +++++++++++++++++++-
+>  5 files changed, 130 insertions(+), 5 deletions(-)
+>  create mode 100644 package/mysql_client/S60mysqld
+>  create mode 100644
+> package/mysql_client/mysql_client-Fix-gen_lex_hash-execution.patch
+>  create mode 100644
+> package/mysql_client/mysql_client-ac_stack_direction-is-unset.patch
+> 
+> diff --git a/package/mysql_client/Config.in b/package/mysql_client/Config.in
+> index 543bed1..8ebe70f 100644
+> --- a/package/mysql_client/Config.in
+> +++ b/package/mysql_client/Config.in
+> @@ -1,13 +1,25 @@
+> -config BR2_PACKAGE_MYSQL_CLIENT
+> -       bool "MySQL client"
+> +config BR2_PACKAGE_MYSQL
+> +       bool "MySQL"
+
+You can't rename the option: it should match the name of the package.
+The package infrastructure uses that to decide if a package should be
+built or not.
+
+But since the mysql_client package may now also be able to build the
+server part, it could make sense to rename the package. But even then,
+it should be done in a different patch, eg:
+  - patch-1: rename the package and the existing patches
+  - patch-3: add support for building the server
+
+In patch-1, don;t forget to add the option in Config.in.legacy.
+
+>         depends on BR2_INSTALL_LIBSTDCPP
+>         depends on BR2_USE_MMU # fork()
+>         depends on BR2_TOOLCHAIN_HAS_THREADS
+>         select BR2_PACKAGE_NCURSES
+>         select BR2_PACKAGE_READLINE
+>         help
+> -         MySQL client
+> +         The MySQL Open Source Database System
+> +         http://www.mysql.com/
+> 
+> -comment "MySQL client needs a toolchain w/ C++, threads"
+> +comment "MySQL server and MySQL client needs a toolchain w/ C++, threads"
+
+What about just:
+    "MySQL needs a toolchain w/ C++, threads"
+
+>         depends on BR2_USE_MMU
+>         depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+> +
+> +if BR2_PACKAGE_MYSQL
+> +
+> +config BR2_PACKAGE_MYSQL_CLIENT
+> +        bool "MySQL client"
+> +
+> +config BR2_PACKAGE_MYSQL_CLIENT_SERVER
+> +       bool "MySQL server"
+> +
+> +endif
+
+What if neither the client nor the server is selected? Does that make
+sense? If not, then always build the client (as we currently do), and
+make the server an option (as you did in your previous patch).
+
+> diff --git a/package/mysql_client/S60mysqld b/package/mysql_client/S60mysqld
+> new file mode 100644
+> index 0000000..38e1c41
+> --- /dev/null
+> +++ b/package/mysql_client/S60mysqld
+> @@ -0,0 +1,25 @@
+> +#!/bin/sh
+> +#
+> +# Starts mysqld.
+> +#
+> +
+> +case "$1" in
+> +       start)
+> +               /usr/bin/mysqld_safe &
+> +               ;;
+> +       stop)
+> +               if test -f /var/lib/mysql/mysqld.pid ; then
+> +                       PID=`cat /var/lib/mysql/mysqld.pid`
+> +                       kill $PID
+> +               fi
+> +               ;;
+> +       restart)
+> +               $0 stop
+> +               $0 start
+> +               ;;
+> +       *)
+> +               echo "Usage: /etc/init.d/mysqld {start|stop|restart}"
+> +               ;;
+> +esac
+> +
+> +exit 0
+
+"exit 0" is not needed.
+
+> diff --git a/package/mysql_client/mysql_client-Fix-gen_lex_hash-execution.patch
+> b/package/mysql_client/mysql_client-Fix-gen_lex_hash-execution.patch
+> new file mode 100644
+> index 0000000..377cabb
+> --- /dev/null
+> +++ b/package/mysql_client/mysql_client-Fix-gen_lex_hash-execution.patch
+> @@ -0,0 +1,28 @@
+> +When MySQL server is enabled, I first compile the tool with the host gcc
+> +and then copy into the "$(HOST_DIR)/usr/bin/" folder
+
+This is more descriptive, as it states the reason, and explains the fix:
+
+    Makefile: fix cross-compiling the server
+
+    MySQL Makefile believes it can run code it just compiled, to
+    generate a header. This does not work for cross-compilation.
+
+    Instead, use a pre-installed host-version of the required tool.
+
+[--SNIP--]
+> diff --git a/package/mysql_client/mysql_client.mk
+> b/package/mysql_client/mysql_client.mk
+> index bd4c565..127f65e 100644
+> --- a/package/mysql_client/mysql_client.mk
+> +++ b/package/mysql_client/mysql_client.mk
+> @@ -14,6 +14,15 @@ MYSQL_CLIENT_AUTORECONF = YES
+>  MYSQL_CLIENT_LICENSE = GPLv2
+>  MYSQL_CLIENT_LICENSE_FILES = README COPYING
+> 
+> +
+> +ifeq ($(BR2_PACKAGE_MYSQL_CLIENT_SERVER),y)
+> +MYSQL_CLIENT_DEPENDENCIES += host-mysql_client
+> +HOST_MYSQL_CLIENT_DEPENDENCIES =
+> +
+> +HOST_MYSQL_CLIENT_CONF_OPT = \
+> +       --with-embedded-server
+> +endif
+> +
+>  MYSQL_CLIENT_CONF_ENV = \
+>         ac_cv_sys_restartable_syscalls=yes \
+>         ac_cv_path_PS=/bin/ps \
+> @@ -25,15 +34,50 @@ MYSQL_CLIENT_CONF_ENV = \
+> 
+>  MYSQL_CLIENT_CONF_OPT = \
+>         --without-ndb-binlog \
+> -       --without-server \
+>         --without-docs \
+>         --without-man \
+>         --without-libedit \
+>         --without-readline \
+> +       --without-libedit \
+> +       --disable-dependency-tracking \
+>         --with-low-memory \
+> +       --with-atomic-ops=up \
+>         --enable-thread-safe-client \
+> +       --without-query-cache \
+> +       --without-plugin-partition \
+> +       --without-plugin-daemon_example \
+> +       --without-plugin-ftexample \
+> +       --without-plugin-archive \
+> +       --without-plugin-blackhole \
+> +       --without-plugin-example \
+> +       --without-plugin-federated \
+> +       --without-plugin-ibmdb2i \
+> +       --without-plugin-innobase \
+> +       --without-plugin-innodb_plugin \
+> +       --without-plugin-ndbcluster \
+
+I would move all those new options in the
+ifeq ($(BR2_PACKAGE_MYSQL_CLIENT_SERVER),y) below...
+
+>         $(ENABLE_DEBUG)
+> 
+> +ifeq ($(BR2_PACKAGE_MYSQL_CLIENT_SERVER),y)
+> +       MYSQL_CLIENT_CONF_OPT += --with-embedded-server
+
+... here    ^^^
+
+> +define HOST_MYSQL_CLIENT_BUILD_CMDS
+> +       $(MAKE) -C $(@D)/include my_config.h
+> +       $(MAKE) -C $(@D)/mysys libmysys.a
+> +       $(MAKE) -C $(@D)/strings libmystrings.a
+> +       $(MAKE) -C $(@D)/vio libvio.a
+> +       $(MAKE) -C $(@D)/dbug libdbug.a
+> +       $(MAKE) -C $(@D)/regex libregex.a
+> +       $(MAKE) -C $(@D)/sql gen_lex_hash
+> +endef
+> +
+> +define HOST_MYSQL_CLIENT_INSTALL_CMDS
+> +       $(INSTALL) -m 0755  $(@D)/sql/gen_lex_hash  $(HOST_DIR)/usr/bin/
+> +endef
+> +
+> +else
+> +MYSQL_CLIENT_CONF_OPT += --without-server
+> +endif
+> +
+>  define MYSQL_CLIENT_REMOVE_TEST_PROGS
+>         rm -rf $(TARGET_DIR)/usr/mysql-test $(TARGET_DIR)/usr/sql-bench
+>  endef
+> @@ -46,3 +90,4 @@ MYSQL_CLIENT_POST_INSTALL_TARGET_HOOKS +=
+> MYSQL_CLIENT_REMOVE_TEST_PROGS
+>  MYSQL_CLIENT_POST_INSTALL_TARGET_HOOKS += MYSQL_CLIENT_ADD_MYSQL_LIB_PATH
+> 
+>  $(eval $(autotools-package))
+> +$(eval $(host-autotools-package))
+
+This is getting really good! :-)
+
+Regards,
+Yann E. MORIN.
 
 -- 
-http://autobuild.buildroot.net
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
