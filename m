@@ -1,12 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 19 Jan 2014 21:19:48 +0100
-Subject: [Buildroot] [PATCH 03/10] transmission: use
-	<PKG>_INSTALL_INIT_SYSV infra instead of custom hook
-In-Reply-To: <1390073027-14239-4-git-send-email-s.martin49@gmail.com> (Samuel
- Martin's message of "Sat, 18 Jan 2014 20:23:40 +0100")
+Date: Sun, 19 Jan 2014 21:28:13 +0100
+Subject: [Buildroot] [PATCH 04/10] pkg-cmake.mk: build shared library
+	when !BR2_PREFER_STATIC_LIB
+In-Reply-To: <1390073027-14239-5-git-send-email-s.martin49@gmail.com> (Samuel
+ Martin's message of "Sat, 18 Jan 2014 20:23:41 +0100")
 References: <1390073027-14239-1-git-send-email-s.martin49@gmail.com>
- <1390073027-14239-4-git-send-email-s.martin49@gmail.com>
-Message-ID: <87k3dvn2qj.fsf@dell.be.48ers.dk>
+ <1390073027-14239-5-git-send-email-s.martin49@gmail.com>
+Message-ID: <87fvojn2ci.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,36 +17,25 @@ To: buildroot@busybox.net
 
  > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
  > ---
- >  package/transmission/transmission.mk | 3 +--
- >  1 file changed, 1 insertion(+), 2 deletions(-)
+ >  package/pkg-cmake.mk | 1 +
+ >  1 file changed, 1 insertion(+)
 
- > diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
- > index 3ced558..e52c7be 100644
- > --- a/package/transmission/transmission.mk
- > +++ b/package/transmission/transmission.mk
- > @@ -19,7 +19,7 @@ TRANSMISSION_CONF_OPT = \
- >  	--disable-libnotify \
- >  	--enable-lightweight
- 
- > -define TRANSMISSION_INIT_SCRIPT_INSTALL
- > +define TRANSMISSION_INSTALL_INIT_SYSV
- >  	[ -f $(TARGET_DIR)/etc/init.d/S92transmission ] || \
- >  		$(INSTALL) -m 0755 -D package/transmission/S92transmission \
- >  			$(TARGET_DIR)/etc/init.d/S92transmission
- > @@ -39,7 +39,6 @@ endif
- 
- >  ifeq ($(BR2_PACKAGE_TRANSMISSION_DAEMON),y)
- >  	TRANSMISSION_CONF_OPT += --enable-daemon
- > -	TRANSMISSION_POST_INSTALL_TARGET_HOOKS += TRANSMISSION_INIT_SCRIPT_INSTALL
+ > diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+ > index 463cd63..aedd1fc 100644
+ > --- a/package/pkg-cmake.mk
+ > +++ b/package/pkg-cmake.mk
+ > @@ -64,6 +64,7 @@ define $(2)_CONFIGURE_CMDS
+ >  	$$($$(PKG)_CONF_ENV) $(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
+ >  		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
+ >  		-DCMAKE_INSTALL_PREFIX="/usr" \
+ > +		-DBUILD_SHARED_LIBS=$(if $(BR2_PREFER_STATIC_LIB),OFF,ON) \
 
-With this change we're installing the init script even if _DAEMON isn't
-enabled, so I've fixed it by moving TRANSMISSION_INSTALL_INIT_SYSV here.
+I don't know much about cmake, but what exact problem does this fix and
+with how many packages did you test this?
 
-Committed with that change, thanks.
-
- >  else
- >  	TRANSMISSION_CONF_OPT += --disable-daemon
- >  endif
+ >  		$$($$(PKG)_CONF_OPT) \
+ >  	)
+ >  endef
  > -- 
  > 1.8.5.3
 
