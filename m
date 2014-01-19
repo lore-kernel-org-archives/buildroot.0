@@ -1,31 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 19 Jan 2014 20:44:15 +0100
-Subject: [Buildroot] [git commit] netstat-nat: add license information
-Message-ID: <20140119195139.A84EA9C546@busybox.osuosl.org>
+Date: Sun, 19 Jan 2014 20:46:18 +0100
+Subject: [Buildroot] [git commit] configs/raspberrypi: bump kernel version
+Message-ID: <20140119195139.C7A5D9C54A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7110b4ad54f4667d3e32332a61991a9eeb0e4fb2
+commit: http://git.buildroot.net/buildroot/commit/?id=7b4a96de9dc52dce2e53e26673277e07a08a4ded
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Axel Lin <axel.lin@ingics.com>
+Bump to linux-3.10.27, plus a slew of RPi-specific fixes.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/netstat-nat/netstat-nat.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ configs/raspberrypi_defconfig |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/netstat-nat/netstat-nat.mk b/package/netstat-nat/netstat-nat.mk
-index d94c6f0..9a60f12 100644
---- a/package/netstat-nat/netstat-nat.mk
-+++ b/package/netstat-nat/netstat-nat.mk
-@@ -6,5 +6,7 @@
- 
- NETSTAT_NAT_VERSION = 1.4.10
- NETSTAT_NAT_SITE = http://tweegy.nl/download
-+NETSTAT_NAT_LICENSE = GPLv2+
-+NETSTAT_NAT_LICENSE_FILES = COPYING
- 
- $(eval $(autotools-package))
+diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
+index 6a17165..ffcb027 100644
+--- a/configs/raspberrypi_defconfig
++++ b/configs/raspberrypi_defconfig
+@@ -17,7 +17,7 @@ BR2_DEFAULT_KERNEL_VERSION="3.10.25"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/raspberrypi/linux.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="75d03120bc36b1cc3166973b8edc11f033ab7c0d"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="ab2ed0dbf37e8d397e60f37621629082da75cd58"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi_quick"
+ BR2_LINUX_KERNEL_ZIMAGE=y
