@@ -1,63 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 19 Jan 2014 21:31:02 +0100
-Subject: [Buildroot] [git commit] urg: make sdl support optional
-Message-ID: <20140119203153.498A49C551@busybox.osuosl.org>
+Date: Sun, 19 Jan 2014 21:13:54 +0100
+Subject: [Buildroot] [git commit] eigen: add C++ toolchain dependency
+Message-ID: <20140119203153.020FF9C551@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d0433603e3c7de5a0d7d6a434b4cb45ef5e5b533
+commit: http://git.buildroot.net/buildroot/commit/?id=76f02e371a3b9d73d62bd6a74a85437b9dec7f9a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Only enable SDL support if SDL and SDL_net are already enabled in the
-configuration.
+As said in its help text, eigen heavily uses C++ features.
+So, explicit this dependency in the Config.in.
 
-[Peter: drop SDL comment]
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/urg/Config.in |    3 ---
- package/urg/urg.mk    |   10 +++++++---
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ package/eigen/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/urg/Config.in b/package/urg/Config.in
-index ded8204..9d57645 100644
---- a/package/urg/Config.in
-+++ b/package/urg/Config.in
-@@ -1,11 +1,8 @@
- config BR2_PACKAGE_URG
- 	bool "urg"
- 	depends on BR2_INSTALL_LIBSTDCPP
--	select BR2_PACKAGE_SDL
--	select BR2_PACKAGE_SDL_NET
+diff --git a/package/eigen/Config.in b/package/eigen/Config.in
+index c7fcde2..e94f9a3 100644
+--- a/package/eigen/Config.in
++++ b/package/eigen/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_EIGEN
+ 	bool "eigen"
++	depends on BR2_INSTALL_LIBSTDCPP
  	help
- 	  Library to control Hokuyo's URG series sensors.
--	  Requires SDL & SDL_net.
+ 	  Eigen is a C++ template library for linear algebra: vectors,
+ 	  matrices, and related algorithms. It is versatile, fast, elegant
+@@ -11,3 +12,6 @@ config BR2_PACKAGE_EIGEN
+ 	  template library defined in the headers.
  
- 	  http://www.hokuyo-aut.jp/02sensor/07scanner/download/urg_programs_en/
- 
-diff --git a/package/urg/urg.mk b/package/urg/urg.mk
-index e16393a..075a0b3 100644
---- a/package/urg/urg.mk
-+++ b/package/urg/urg.mk
-@@ -12,10 +12,14 @@ URG_LICENSE_FILES = COPYING
- 
- URG_INSTALL_STAGING = YES
- 
--URG_DEPENDENCIES = sdl sdl_net
--
--URG_CONF_OPT = --with-sdl-prefix=$(STAGING_DIR)/usr \
-+ifeq ($(BR2_PACKAGE_SDL)$(BR2_PACKAGE_SDL_NET),yy)
-+URG_DEPENDENCIES += sdl sdl_net
-+URG_CONF_OPT += --with-sdl-prefix=$(STAGING_DIR)/usr \
- 		--with-sdl-exec-prefix=$(STAGING_DIR)/usr
-+else
-+URG_CONF_OPT = --without-sdl
-+URG_CONF_ENV += ac_cv_path_SDL_CONFIG=""
-+endif
- 
- URG_CONFIG_SCRIPTS = c_urg-config urg-config
- 
+ 	  http://eigen.tuxfamily.org/
++
++comment "eigen needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
