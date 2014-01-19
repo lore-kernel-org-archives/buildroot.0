@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Jan 2014 16:41:17 +0100
-Subject: [Buildroot] [PATCH v2 08/12] tinyxml: new package
-In-Reply-To: <1389831355-19983-9-git-send-email-maxime.hadjinlian@gmail.com>
+Date: Sun, 19 Jan 2014 16:47:56 +0100
+Subject: [Buildroot] [PATCH v2 09/12] sdl: add host version
+In-Reply-To: <1389831355-19983-10-git-send-email-maxime.hadjinlian@gmail.com>
 References: <1389831355-19983-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1389831355-19983-9-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20140119154116.GD3387@free.fr>
+ <1389831355-19983-10-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20140119154756.GE3387@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,19 +14,11 @@ To: buildroot@busybox.net
 Maxime, All,
 
 On 2014-01-16 01:15 +0100, Maxime Hadjinlian spake thusly:
-> Tiny XML Parser.
-[--SNIP--]
-> diff --git a/package/tinyxml/Config.in b/package/tinyxml/Config.in
-> new file mode 100644
-> index 0000000..33d87ca
-> --- /dev/null
-> +++ b/package/tinyxml/Config.in
-> @@ -0,0 +1,11 @@
-> +config BR2_PACKAGE_TINYXML
-> +	bool "tinyxml"
-> +	  depends on BR2_INSTALL_LIBSTDCPP
+> Host version is needed to build xbmc
+> 
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 
-Leading tabs, please.
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
