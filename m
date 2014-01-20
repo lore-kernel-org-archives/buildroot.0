@@ -1,98 +1,35 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 20 Jan 2014 16:58:03 +0100
-Subject: [Buildroot] Patchwork oldest patches cleanup #4 (deadline
-	January 5)
-In-Reply-To: <CAAXf6LUnqAYQZoQ9-npV0nyDezec__sfnZrvYJY0PouNujE3HQ@mail.gmail.com>
-References: <CAAXf6LWFAfs_i_NjBbD3RZ=Y0RDKftzwj-_8xKuqyYA=69PNsw@mail.gmail.com>
- <CAAXf6LVVi6d=xRjsqW8eSMAf1CpKyU-qUTQ2dbfCPU=EF__jcA@mail.gmail.com>
- <20140106130503.2df2a9ef@skate>
- <CAAXf6LUnqAYQZoQ9-npV0nyDezec__sfnZrvYJY0PouNujE3HQ@mail.gmail.com>
-Message-ID: <CAAXf6LX66a699zwPQ2E1qQc3xjuWk9eUE7Pp4RLrG=nZKfn8Zw@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 20 Jan 2014 13:20:52 -0300
+Subject: [Buildroot] [PATCH] libbluray: needs threads
+Message-ID: <1390234852-4645-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Fixes:
+http://autobuild.buildroot.net/results/2bc/2bc0ce057e54bd6ff7f9ade115c389648a2df2eb/
 
-On Mon, Jan 6, 2014 at 11:16 AM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> Hi Thomas,
->
-> On Mon, Jan 6, 2014 at 6:05 AM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->>> > [07/10] libffi: make thread support optional
->>> > Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->>> > http://patchwork.ozlabs.org/patch/199883
->>>
->>> No feedback, marked as rejected.
->>
->> It's weird because I don't see libffi build failures in the
->> autobuilders, even though there is one no thread ARM toolchain in the
->> configurations.
->>
->
-> It's weird indeed, maybe this has been changed in a newer version of libffi?
-> In any case, if there are no failures anymore, we could forget about
-> this patch, until this problem would pop up again.
->
->>> > libatomic_ops version update 7.3alpha2 old version 1.2 does not
->>> > compiles with modern gcc and utils
->>> > Alexander Khryukin <alexander@mezon.ru>
->>> > http://patchwork.ozlabs.org/patch/198133
->>>
->>> No feedback, marked as rejected.
->>
->> I think bumping the version of a package is often useful, so I'm not
->> sure I would mark this patch as rejected. Or if no one is pushing to
->> bump libatomic_ops, then we should just assume no one cares, and
->> therefore there's no point in keeping the patch around?
->>
->>> > [4/4] gstreamer: replace gst-ffmpeg with gst-libav
->>> > bogdan at nimblex.org
->>> > http://patchwork.ozlabs.org/patch/207431
->>>
->>> No feedback, rejected.
->>
->> I'm a little bit concerned about how we reject patches here. Maybe
->> replacing gst-ffmpeg by gst-libav makes sense and should be done? If we
->> don't keep the patch around, we'll have no way to remember that it
->> should be done at some point in the future. I admit that by doing
->> this, we'll never shrink the list of pending patches, but I have the
->> feeling that we might be missing useful ideas.
->
-> I grouped these two because the bottom line is the same: what to do
-> with patches that did not receive feedback?
->
-> It's true that simply rejecting these patches just to make the list
-> smaller is not the best solution.
-> I think we need some kind of adopt-a-patch principle if we ever want
-> these patches to be integrated. For some of the patches from the
-> cleanups, I marked it as 'delegated to me' so we wouldn't forget. This
-> was either because the original author gave feedback, or in the case
-> of wpa_supplicant because I felt that we should keep the patch. I hope
-> to find some time sooner or later (ideally within the 2014.02 cycle)
-> to verify them and resubmit.
->
-> However, I cannot do this for all patches. For example, I'm not
-> familiar with gstreamer at all, so I couldn't tell whether the
-> replacement of gst-ffmpeg with gst-libav makes sense or not, which
-> side-effects it may have for users, etc. If there are other developers
-> that have a better view on it, then please step forward. It would
-> indeed be a pity to lose these patches if they are relevant for
-> someone.
->
-> For this cycle, there was no response on these patches, hence the rejection.
-> Based on your latest feedback, we could change this rejection into a
-> delegation, to you or someone else. What do you say?
->
-> Specifically for libatomic_ops: it seems there is a github repo now:
-> https://github.com/ivmai/libatomic_ops/
-> where a 7.4.0 version is available. What about going that route then?
-> Are you, or someone else, interested in taking this delegation?
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libbluray/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Any further feedback on this?
-
-Thanks,
-Thomas
+diff --git a/package/libbluray/Config.in b/package/libbluray/Config.in
+index eeb93dc..2571f5c 100644
+--- a/package/libbluray/Config.in
++++ b/package/libbluray/Config.in
+@@ -1,6 +1,10 @@
+ config BR2_PACKAGE_LIBBLURAY
+ 	bool "libbluray"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  libbluray is a client library for accessing bluray disks.
+ 
+ 	  http://www.videolan.org/developers/libbluray.html
++
++comment "libbluray needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+-- 
+1.8.3.2
