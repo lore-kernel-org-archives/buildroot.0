@@ -1,34 +1,21 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 20 Jan 2014 22:21:28 +0100
-Subject: [Buildroot] [PATCH v3 03/12] libnfs: new package
-In-Reply-To: <1390165448-9130-4-git-send-email-maxime.hadjinlian@gmail.com>
- (Maxime Hadjinlian's message of "Sun, 19 Jan 2014 22:03:59 +0100")
-References: <1390165448-9130-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1390165448-9130-4-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <87d2jml57r.fsf@dell.be.48ers.dk>
+Date: Mon, 20 Jan 2014 22:21:40 +0100
+Subject: [Buildroot] [PATCH 1/2] linux-headers: add 3.13.x series
+In-Reply-To: <1390229043-22002-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 20 Jan 2014 11:44:02 -0300")
+References: <1390229043-22002-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <878uual57f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > nfs userspace implementation.
- > This package was originally found at : https://github.com/huceke/buildroot-rbp
- > By gimli <ebsi4711@gmail.com>
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
- > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
- > Cc: gimli <ebsi4711@gmail.com>
- > Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > ---
- > Changes v2 -> v3:
- >   - None
- > Changes v1 -> v2
- >   - Bump version to 1.8.0 (Bernd Kuhls)
- >   - Fix comment on toolchain option needed (Peter Korsgaard)
-
-Committed, thanks.
+Committed both, thanks.
 
 -- 
 Bye, Peter Korsgaard
