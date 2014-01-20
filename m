@@ -1,71 +1,35 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 20 Jan 2014 22:33:51 +0100
-Subject: [Buildroot] [PATCH 1/2] Rename MySQL client package
-In-Reply-To: <1390172539-5207-1-git-send-email-kuyurix@gmail.com>
-References: <1390172539-5207-1-git-send-email-kuyurix@gmail.com>
-Message-ID: <20140120213351.GD3421@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 20 Jan 2014 22:37:39 +0100
+Subject: [Buildroot] [PATCH v2 1/3] uclibc: bump xtensa snapshot version
+In-Reply-To: <2cb50cbfb9dff5627aecbebc8cd4d1bd76c505f1.1389594195.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Mon, 13 Jan 2014 08:26:12 +0200")
+References: <cover.1389594195.git.baruch@tkos.co.il>
+ <2cb50cbfb9dff5627aecbebc8cd4d1bd76c505f1.1389594195.git.baruch@tkos.co.il>
+Message-ID: <87a9eqjpwc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Marcelo, All,
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-On 2014-01-19 23:02 +0000, Marcelo Guti?rrez spake thusly:
-> From: "Marcelo Guti?rrez(UTN/FRH)" <kuyurix@gmail.com>
-> 
-> 
-> Signed-off-by: Marcelo Guti?rrez(UTN/FRH) <kuyurix@gmail.com>
-> ---
->  Config.in.legacy                                   |    7 +
->  package/Config.in                                  |    2 +-
->  package/mysql/Config.in                            |   14 ++
->  package/mysql/mysql-ac_cache_check.patch           |  156 ++++++++++++++++++++
->  package/mysql/mysql-configure-ps-cache-check.patch |   39 +++++
->  package/mysql/mysql-use-new-readline-iface.patch   |   21 +++
->  package/mysql/mysql.mk                             |   48 ++++++
->  7 files changed, 286 insertions(+), 1 deletion(-)
->  create mode 100644 package/mysql/Config.in
->  create mode 100644 package/mysql/mysql-ac_cache_check.patch
->  create mode 100644 package/mysql/mysql-configure-ps-cache-check.patch
->  create mode 100644 package/mysql/mysql-use-new-readline-iface.patch
->  create mode 100644 package/mysql/mysql.mk
+ > This new version includes two xtensa fixes:
+ > 00571b43df2e libc: posix_fadvise: restore implementation for xtensa
+ > de6561f66693 xtensa: use common ptrace.h
 
-Did you forget to rm the old mysql_client package, by chance? ;-)
+ > The first fixes (correctly)
+ > http://autobuild.buildroot.net/results/ab1/ab1250c3d402ec3fbaf22eeffd07de218ffafb22/.
 
-Also, when sending mails, use the '-C -M' options: it will detect
-renames and copies of files, and thus the diff will be much smaller.
-It is even as smart as to detect a rename with modifications! :-)
+ > The second fixes
+ > http://autobuild.buildroot.net/results/84f/84fb918efbcbf1312a228a9c11608edf096b3c40/.
 
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index 597534e..31fad3e 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -112,6 +112,13 @@ config BR2_PACKAGE_LIBNFC_LLCP
->  ###############################################################################
->  comment "Legacy options removed in 2014.02"
->  
-> +config BR2_PACKAGE_MYSQL_CLIENT
-> +        bool "MySQL client renamed to MySQL"
-> +        select BR2_LEGACY
-> +        select BR2_PACKAGE_MYSQL
-> +        help
+ > The unifdef regression (the original motivation for the fixed xtensa snapshot
+ > version introduced in commit cecaf09cd6) should now be fixed.
 
-This needs to be: one leading tab, not spaces.
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-> +	  The option has been renamed BR2_PACKAGE_MYSQL
-> +
-
-Otherwise, this legacy entry is good! :-)
-
-Regards,
-Yann E. MORIN.
+Committed, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
