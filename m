@@ -1,32 +1,31 @@
 From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Mon, 20 Jan 2014 20:05:50 +0100
-Subject: [Buildroot] [PATCH 1/2] package/ffmpeg2: new package
-References: <cover.1390242867.git.yann.morin.1998@free.fr>
- <d4f3847e403c1e5c4e8733f75bbfccce6e0b4975.1390242867.git.yann.morin.1998@free.fr>
-Message-ID: <el80raxhff.ln2@ID-313208.user.individual.net>
+Date: Mon, 20 Jan 2014 20:25:52 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-01-19
+References: <20140120073009.9260E101682@stock.ovh.net>
+ <52DCDFDD.3000303@gmail.com>
+Message-ID: <0r90rax63l.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote in
-news:d4f3847e403c1e5c4e8733f75bbfccce6e0b4975.1390242867.git.yann.morin.199
-8 at free.fr: 
+Chris Packham <judge.packham@gmail.com>
+wrote in news:52DCDFDD.3000303 at gmail.com: 
 
-> We package ffmpeg2 as a separate package from ffmpeg, instead of
-> bumping the latter, since gstreamer-0.10's gst-ffmpeg still use an
-> older version of ffmpeg.
+> So far I've not been able to reproduce the issue.
 
 Hi,
 
-this is not true anymore:
+did you use defconfig[1] used by autobuild like this?
+http://permalink.gmane.org/gmane.comp.lib.uclibc.buildroot/68428
 
-gst-ffmpeg: Use internal libav instead of external ffmpeg: 
-http://git.buildroot.net/buildroot/commit/?id=
-6ea49a23df3fa950e253bf704188e87a583a8ba4
-
-ffmpeg: Bump version to 1.2.5: http://git.buildroot.net/buildroot/commit/?id=
-4b959fcb67675b9e0594dc6b12742e119c82c96e
+I could reproduce the build error with tcpreplay 4.0.2, no known solution 
+though.
 
 Regards, Bernd
+
+[1]
+http://autobuild.buildroot.net/results/9d9/9d93582362773bad2dbb495a7796682f43
+2e8915/defconfig
