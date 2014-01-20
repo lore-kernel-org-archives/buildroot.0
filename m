@@ -1,68 +1,54 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 20 Jan 2014 21:28:23 +0100
-Subject: [Buildroot] Patchwork oldest patches cleanup #4 (deadline
-	January 5)
-In-Reply-To: <CAAXf6LXHSES8Xv5PP6fAL5d9rGZWV2MFwe6MoGQsyj4aZx0ybw@mail.gmail.com>
-References: <CAAXf6LWFAfs_i_NjBbD3RZ=Y0RDKftzwj-_8xKuqyYA=69PNsw@mail.gmail.com>
- <CAAXf6LVVi6d=xRjsqW8eSMAf1CpKyU-qUTQ2dbfCPU=EF__jcA@mail.gmail.com>
- <20140106130503.2df2a9ef@skate>
- <CAAXf6LUnqAYQZoQ9-npV0nyDezec__sfnZrvYJY0PouNujE3HQ@mail.gmail.com>
- <CAKu+J9340tMY2TfLwfJdh8Et=5ASJgxf4B4n_MYW0Z8u+yTbZg@mail.gmail.com>
- <CAAXf6LXHSES8Xv5PP6fAL5d9rGZWV2MFwe6MoGQsyj4aZx0ybw@mail.gmail.com>
-Message-ID: <CAAXf6LXEKQP07Sfxd+7kJrw74uM94GR_WTF5_zOezus-9kcm7Q@mail.gmail.com>
+Date: Mon, 20 Jan 2014 21:37:30 +0100
+Subject: [Buildroot] Patchwork oldest patches cleanup #5 (deadline
+	January 19)
+In-Reply-To: <20140105171702.GC16066@free.fr>
+References: <CAAXf6LVcK-fx059K=tetV=NY78amOHczPkbVxkO1pKAuvDCwtA@mail.gmail.com>
+ <20140105162014.GA16066@free.fr> <20140105171702.GC16066@free.fr>
+Message-ID: <CAAXf6LVP6OkzizTdx1GV8wc1vOUBr6Q9eRVQY7dYvK=14qj7=w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bogdan,
+Hi Yann,
 
-On Mon, Jan 20, 2014 at 4:48 PM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> Hi Bogdan,
+On Sun, Jan 5, 2014 at 6:17 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Thomas, Floris, All,
 >
-> Sorry for the late reply...
+> On 2014-01-05 17:20 +0100, Yann E. MORIN spake thusly:
+>> On 2014-01-05 17:01 +0100, Thomas De Schampheleire spake thusly:
+>> > Here is the session 5 of the patchwork cleanup.
+> [--SNIP--]
+>> > [1/2] makebootfat: new package
+>> > Floris Bos <bos@je-eigen-domein.nl>
+>> > http://patchwork.ozlabs.org/patch/213112
+>>
+>> I'm not sure we need that one. We already have:
+>>   - host-dosfstools to generate (empty) fat filesystems in a image file;
+>>   - host-mtools to add files to a fat filesystem, and it works with
+>>     image files.
 >
-> On Mon, Jan 6, 2014 at 11:48 AM, Bogdan Radulescu <bogdan@nimblex.net> wrote:
->> Hi,
->>
->> Regarding the http://patchwork.ozlabs.org/patch/207431 patch.
->> GStreamer switched from ffmpeg to libav a while ago and newer versions don't
->> have the ffmpeg package.
->> http://gstreamer.freedesktop.org/releases/gst-libav/0.11.90.html
->> http://gstreamer.freedesktop.org/src/gst-ffmpeg/gst-ffmpeg-1.x-README.txt
->>
->> gst-ffmpeg was last updated almost two years ago.
->>
->> Even though irrelevant, the situation of ffmpeg and libav is explained here:
->> http://blog.pkh.me/p/13-the-ffmpeg-libav-situation.html
->>
->> The patch was used in production so it's tested.
->>
->> I think it would be a step back if this patch is discarded.
->>
+> It seems I've spoken a bit fast on that one. There's one thing this
+> package provides that is not provided by dosfstools or mtools: an MBR
+> bootcode.
 >
-> Thanks a lot for your feedback. The info you gave is very interesting.
-> In fact, it's the type of information that would be suitable for the
-> commit message, as it gives the rationale for the switch.
+> However, we already have syslinux, which does provide an MBR bootcode.
+> It's currently not installed; it's just a matter of adding one more
+> option to syslinux, to install its MBR bootcode.
 >
-> Based on your feedback, I agree we shouldn't throw away this patch.
-> Would it be possible for you to rebase the patch based on latest
-> buildroot and resubmit? In the mean time some of the code changed, for
-> example the multimedia directory is removed now. If you have time, I
-> think this would be the fastest and best solution, as you are the
-> original author.
->
-> Awaiting your feedback, I'll already mark it as 'Delegated to me', so
-> that the patch is not forgotten.
+> So, my previous position still stands: we already have the required
+> packages; no need to duplicate what we already have.
 
-Please have a look at this thread:
-http://lists.busybox.net/pipermail/buildroot/2014-January/087200.html
-It seems that there is a patch addressing the same issue but in a
-different way is already included in buildroot.
-It would be great if you and Bernd could check what is still needed
-from your patch.
+For me this conclusion is fine.
+There is a second patch in that same series:
+http://patchwork.ozlabs.org/patch/213113/
+[2/2] Basic filesystem image with partition table support
+
+which sounds a lot like your 'fs/custom' patch series. If you agree, I
+propose to also reject that second patch since fs/custom is a more
+generic solution to the same problem.
 
 Thanks,
 Thomas
