@@ -1,61 +1,65 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 20 Jan 2014 22:45:15 +0100
-Subject: [Buildroot] [git commit] libsocketcan: new package
-Message-ID: <20140120214721.7DDEE9A0BB@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 20 Jan 2014 22:58:52 +0100
+Subject: [Buildroot] [PATCH 4 of 5 v2] lzma: remove deprecated target
+ package
+In-Reply-To: <ad3654061390422916af.1390254369@argentina>
+References: <patchbomb.1390254365@argentina>
+ <ad3654061390422916af.1390254369@argentina>
+Message-ID: <20140120215852.GG3421@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=74975dee52f2d9a0324e115b00d4c68d6e33dc7c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas, All,
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/Config.in                    |    1 +
- package/libsocketcan/Config.in       |    6 ++++++
- package/libsocketcan/libsocketcan.mk |   10 ++++++++++
- 3 files changed, 17 insertions(+), 0 deletions(-)
+On 2014-01-20 22:46 +0100, Thomas De Schampheleire spake thusly:
+> The on-target lzma package has been deprecated for a long time, so remove
+> it. This does not remove the support for generating lzma-compressed rootfs
+> images.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+[--SNIP--]
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -99,6 +99,16 @@ comment "-------------------------------
+>  endif
+>  
+>  ###############################################################################
+> +comment "Legacy options removed in 2014.02"
+> +
+> +config BR2_PACKAGE_LZMA
+> +	bool "lzma target package has been removed"
+> +	select BR2_LEGACY
+> +	help
+> +	  The 'lzma' target package has been removed since it has been
+> +	  deprecated for more than four buildroot releases.
+> +	  Note: generating lzma-compressed rootfs images is still supported.
+> +
+>  config BR2_PACKAGE_LIBNFC_LLCP
+>  	bool "libnfc-llcp has been removed"
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
+> @@ -109,9 +119,6 @@ config BR2_PACKAGE_LIBNFC_LLCP
+>            to 'libllcp'. We have added a new package for 'libllcp' and bumped
+>            the version at the same time.
+>  
+> -###############################################################################
+> -comment "Legacy options removed in 2014.02"
+> -
 
-diff --git a/package/Config.in b/package/Config.in
-index 8c8f616..8495cdd 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -681,6 +681,7 @@ source "package/liboping/Config.in"
- source "package/libosip2/Config.in"
- source "package/libpcap/Config.in"
- source "package/librsync/Config.in"
-+source "package/libsocketcan/Config.in"
- source "package/libsoup/Config.in"
- source "package/libtirpc/Config.in"
- source "package/libtorrent/Config.in"
-diff --git a/package/libsocketcan/Config.in b/package/libsocketcan/Config.in
-new file mode 100644
-index 0000000..97903db
---- /dev/null
-+++ b/package/libsocketcan/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_LIBSOCKETCAN
-+	bool "libsocketcan"
-+	help
-+	  SocketCAN library to control CAN devices from C code.
-+
-+	  http://git.pengutronix.de/?p=tools/libsocketcan.git;a=summary
-diff --git a/package/libsocketcan/libsocketcan.mk b/package/libsocketcan/libsocketcan.mk
-new file mode 100644
-index 0000000..920a900
---- /dev/null
-+++ b/package/libsocketcan/libsocketcan.mk
-@@ -0,0 +1,10 @@
-+################################################################################
-+#
-+# libsocketcan
-+#
-+################################################################################
-+LIBSOCKETCAN_VERSION = 0.0.9
-+LIBSOCKETCAN_SITE = http://www.pengutronix.de/software/libsocketcan/download/
-+LIBSOCKETCAN_SOURCE = libsocketcan-$(LIBSOCKETCAN_VERSION).tar.bz2
-+
-+$(eval $(autotools-package))
+Moving the comment will gonna clash with my recent patch being applied
+by Peter:
+    http://git.buildroot.org/buildroot/commit/?id=f169e5e1055600fda1b3ff0c852ee84d2ec80460
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
