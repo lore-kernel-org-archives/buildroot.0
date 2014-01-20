@@ -1,115 +1,52 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 20 Jan 2014 21:58:52 +0100
-Subject: [Buildroot] Patchwork oldest patches cleanup #5 (deadline
-	January 19)
-In-Reply-To: <CAAXf6LVcK-fx059K=tetV=NY78amOHczPkbVxkO1pKAuvDCwtA@mail.gmail.com>
-References: <CAAXf6LVcK-fx059K=tetV=NY78amOHczPkbVxkO1pKAuvDCwtA@mail.gmail.com>
-Message-ID: <CAAXf6LVhGnZrVy7bTPjWa+xjbHtKrHU6pFE8aVmAmjbEB_X46w@mail.gmail.com>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Tue, 21 Jan 2014 10:03:58 +1300
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-01-19
+In-Reply-To: <0r90rax63l.ln2@ID-313208.user.individual.net>
+References: <20140120073009.9260E101682@stock.ovh.net>
+ <52DCDFDD.3000303@gmail.com>
+ <0r90rax63l.ln2@ID-313208.user.individual.net>
+Message-ID: <CAFOYHZDo0rTdF6L3qHFycupL+62+v+b1m1DJoWuJaO+JEPiFPA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
-
-On Sun, Jan 5, 2014 at 5:01 PM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> All,
+On Tue, Jan 21, 2014 at 8:25 AM, Bernd Kuhls <berndkuhls@hotmail.com> wrote:
+> Chris Packham <judge.packham@gmail.com>
+> wrote in news:52DCDFDD.3000303 at gmail.com:
 >
-> Here is the session 5 of the patchwork cleanup. For those who haven't
-> followed previous sessions, here is a quick recap: every session we'll
-> be posting the list of the 10 oldest patches, with the original patch
-> contributors in copy. During two weeks, we have the opportunity to
-> discuss the patch, whether it is still necessary or not, how it should
-> be changed to be merged.
+>> So far I've not been able to reproduce the issue.
 >
-> In particular, I'm interested in knowing if the original contributor is
-> still interested by the patch, or if someone else is interested in
-> adopting the patch and sending an updated version, or if the patch no
-> longer makes sense due to other changes made in Buildroot.
+> Hi,
 >
-> All patches that have not received any comment or attention before the
-> deadline will be removed from patchwork. This is aggressive, but we have
-> many 'dead' patches sitting in patchwork, and this cannot work.
+> did you use defconfig[1] used by autobuild like this?
+> http://permalink.gmane.org/gmane.comp.lib.uclibc.buildroot/68428
+
+Not quite my method. I'm actually using the config not defconfig. My
+steps are this:
+
+git clean -fxd
+git fetch
+git checkout `curl
+http://autobuild.buildroot.net/results/c59/c59b8f9d93d77c8b75c02172ff6e6072e8f62228/gitid`
+curl http://autobuild.buildroot.net/results/c59/c59b8f9d93d77c8b75c02172ff6e6072e8f62228/config
+| sed 's|/home/test|/home/chrisp|' >.config
+make
+
+I'll try the method mentioned in the link you provided.
+
+> I could reproduce the build error with tcpreplay 4.0.2, no known solution
+> though.
 >
-> Deadline for this session is January 19.
+> Regards, Bernd
 >
-> Below are the 10 oldest patches (obtained with a slightly modified
-> version of pwclient):
-> [ pwclient list -s New -n 17 ] (and skip Delegated patches)
+> [1]
+> http://autobuild.buildroot.net/results/9d9/9d93582362773bad2dbb495a7796682f43
+> 2e8915/defconfig
 >
-
-Here is the conclusion for this session:
-
->
-> tokyocabinet: new package
-> Jon Diekema <jon.diekema@gmail.com>
-> http://patchwork.ozlabs.org/patch/207827
-
-No feedback: rejected.
-
->
-> [RFC,1/2] barebox: Build barebox in separate directory.
-> Marek Belisko <marek.belisko@open-nandra.com>
-> http://patchwork.ozlabs.org/patch/207942
->
-> [RFC,2/2] barebox: Add possibility to build also barebox xloader (MLO).
-> Marek Belisko <marek.belisko@open-nandra.com>
-> http://patchwork.ozlabs.org/patch/207943
-
-No feedback. I would tend to reject these two patches, unless someone
-still pops up and wants to adopt these patches. They introduce a
-second build of barebox: one for the standard barebox, and another one
-for the xloader. In fact, the only real difference seems to be that
-both builds use a separate config file.
-
->
-> new package: p7zip
-> Stefan Fr?berg <stefan.froberg@petroprogram.com>
-> http://patchwork.ozlabs.org/patch/207947
-
-No feedback: rejected.
-
->
-> toolchain-external: re-introduce Sourcery CodeBench ARM 2010.09
-> Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
-> http://patchwork.ozlabs.org/patch/207978
-
-No feedback: rejected.
-
->
-> [1/1,v2] Hide issue and hostname menu when using a custom skeleton.
-> Sagaert Johan <sagaert.johan@skynet.be>
-> http://patchwork.ozlabs.org/patch/211644
-
-Superseded thanks to Yann.
-
->
-> [1/2] new package: python-posix_ipc.
-> Matt Weber <rc.lsw.collaborate@gmail.com>
-> http://patchwork.ozlabs.org/patch/212498
->
-> [2/2] new package: python-posix_ipc
-> Matt Weber <rc.lsw.collaborate@gmail.com>
-> http://patchwork.ozlabs.org/patch/212499
-
-Both superseded thanks to Matt.
-
->
-> [1/1] added python unicode selection to menu
-> Matt Weber <rc.lsw.collaborate@gmail.com>
-> http://patchwork.ozlabs.org/patch/212500
-
-v2 submitted and awaiting further review/integration.
-
->
-> [1/2] makebootfat: new package
-> Floris Bos <bos@je-eigen-domein.nl>
-> http://patchwork.ozlabs.org/patch/213112
-
-Marked as rejected based on feedback from Yann. If someone disagrees,
-just let me know...
-
-Best regards,
-Thomas
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
