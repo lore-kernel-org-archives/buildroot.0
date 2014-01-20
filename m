@@ -1,42 +1,68 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 20 Jan 2014 21:25:10 +0100
-Subject: [Buildroot] [PATCH 1/2] package/ffmpeg2: new package
-In-Reply-To: <el80raxhff.ln2@ID-313208.user.individual.net>
-References: <cover.1390242867.git.yann.morin.1998@free.fr>
- <d4f3847e403c1e5c4e8733f75bbfccce6e0b4975.1390242867.git.yann.morin.1998@free.fr>
- <el80raxhff.ln2@ID-313208.user.individual.net>
-Message-ID: <CAAXf6LXbFyZg57qNevJG6_0MWRvtr0msenSOHT-7uv0rXdCcLA@mail.gmail.com>
+Date: Mon, 20 Jan 2014 21:28:23 +0100
+Subject: [Buildroot] Patchwork oldest patches cleanup #4 (deadline
+	January 5)
+In-Reply-To: <CAAXf6LXHSES8Xv5PP6fAL5d9rGZWV2MFwe6MoGQsyj4aZx0ybw@mail.gmail.com>
+References: <CAAXf6LWFAfs_i_NjBbD3RZ=Y0RDKftzwj-_8xKuqyYA=69PNsw@mail.gmail.com>
+ <CAAXf6LVVi6d=xRjsqW8eSMAf1CpKyU-qUTQ2dbfCPU=EF__jcA@mail.gmail.com>
+ <20140106130503.2df2a9ef@skate>
+ <CAAXf6LUnqAYQZoQ9-npV0nyDezec__sfnZrvYJY0PouNujE3HQ@mail.gmail.com>
+ <CAKu+J9340tMY2TfLwfJdh8Et=5ASJgxf4B4n_MYW0Z8u+yTbZg@mail.gmail.com>
+ <CAAXf6LXHSES8Xv5PP6fAL5d9rGZWV2MFwe6MoGQsyj4aZx0ybw@mail.gmail.com>
+Message-ID: <CAAXf6LXEKQP07Sfxd+7kJrw74uM94GR_WTF5_zOezus-9kcm7Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd,
+Hi Bogdan,
 
-On Mon, Jan 20, 2014 at 8:05 PM, Bernd Kuhls <berndkuhls@hotmail.com> wrote:
-[..]
+On Mon, Jan 20, 2014 at 4:48 PM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+> Hi Bogdan,
 >
-> this is not true anymore:
+> Sorry for the late reply...
 >
-> gst-ffmpeg: Use internal libav instead of external ffmpeg:
-> http://git.buildroot.net/buildroot/commit/?id=
-> 6ea49a23df3fa950e253bf704188e87a583a8ba4
+> On Mon, Jan 6, 2014 at 11:48 AM, Bogdan Radulescu <bogdan@nimblex.net> wrote:
+>> Hi,
+>>
+>> Regarding the http://patchwork.ozlabs.org/patch/207431 patch.
+>> GStreamer switched from ffmpeg to libav a while ago and newer versions don't
+>> have the ffmpeg package.
+>> http://gstreamer.freedesktop.org/releases/gst-libav/0.11.90.html
+>> http://gstreamer.freedesktop.org/src/gst-ffmpeg/gst-ffmpeg-1.x-README.txt
+>>
+>> gst-ffmpeg was last updated almost two years ago.
+>>
+>> Even though irrelevant, the situation of ffmpeg and libav is explained here:
+>> http://blog.pkh.me/p/13-the-ffmpeg-libav-situation.html
+>>
+>> The patch was used in production so it's tested.
+>>
+>> I think it would be a step back if this patch is discarded.
+>>
+>
+> Thanks a lot for your feedback. The info you gave is very interesting.
+> In fact, it's the type of information that would be suitable for the
+> commit message, as it gives the rationale for the switch.
+>
+> Based on your feedback, I agree we shouldn't throw away this patch.
+> Would it be possible for you to rebase the patch based on latest
+> buildroot and resubmit? In the mean time some of the code changed, for
+> example the multimedia directory is removed now. If you have time, I
+> think this would be the fastest and best solution, as you are the
+> original author.
+>
+> Awaiting your feedback, I'll already mark it as 'Delegated to me', so
+> that the patch is not forgotten.
 
-
-In fact, there is another patch in patchwork by Bogdan Radulescu that
-removes gst-ffmpeg entirely in favor of gst-libav:
-http://patchwork.ozlabs.org/patch/207431/
-
-The conclusion from patchwork cleanup session #4 was that this patch
-is still relevant. It seems that your patch (that has been included in
-buildroot already) addresses the same problem, but in a different way.
-
-It would be great if you and Bogdan could review the patch mentioned
-above in the light of the current buildroot version, and assess which
-parts of this patch still need to be applied, if any. For example, the
-patch removes gst-dsp and gst-omapfb from gstreamer, but that was for
-gstreamer1 and this is already addressed in current buildroot.
+Please have a look at this thread:
+http://lists.busybox.net/pipermail/buildroot/2014-January/087200.html
+It seems that there is a patch addressing the same issue but in a
+different way is already included in buildroot.
+It would be great if you and Bernd could check what is still needed
+from your patch.
 
 Thanks,
 Thomas
