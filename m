@@ -1,87 +1,71 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 20 Jan 2014 22:06:25 +0100
-Subject: [Buildroot] Patchwork oldest patches cleanup #6 (deadline February
-	2)
-Message-ID: <CAAXf6LX2yqbapp6GBuN5qoT1R93CGD3NCLguY8fQhFoApJz2uw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 20 Jan 2014 22:20:33 +0100
+Subject: [Buildroot] Patchwork oldest patches cleanup #5 (deadline
+ January 19)
+In-Reply-To: <CAAXf6LVP6OkzizTdx1GV8wc1vOUBr6Q9eRVQY7dYvK=14qj7=w@mail.gmail.com>
+References: <CAAXf6LVcK-fx059K=tetV=NY78amOHczPkbVxkO1pKAuvDCwtA@mail.gmail.com>
+ <20140105162014.GA16066@free.fr> <20140105171702.GC16066@free.fr>
+ <CAAXf6LVP6OkzizTdx1GV8wc1vOUBr6Q9eRVQY7dYvK=14qj7=w@mail.gmail.com>
+Message-ID: <20140120212033.GB3421@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Thomas, All,
 
-Here is session 6 of the patchwork cleanup. For those who haven't
-followed previous sessions, here is a quick recap: every session we'll
-be posting the list of the 10 oldest patches, with the original patch
-contributors in copy. During two weeks, we have the opportunity to
-discuss the patch, whether it is still necessary or not, how it should
-be changed to be merged.
+On 2014-01-20 21:37 +0100, Thomas De Schampheleire spake thusly:
+> On Sun, Jan 5, 2014 at 6:17 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > Thomas, Floris, All,
+> >
+> > On 2014-01-05 17:20 +0100, Yann E. MORIN spake thusly:
+> >> On 2014-01-05 17:01 +0100, Thomas De Schampheleire spake thusly:
+> >> > Here is the session 5 of the patchwork cleanup.
+> > [--SNIP--]
+> >> > [1/2] makebootfat: new package
+> >> > Floris Bos <bos@je-eigen-domein.nl>
+> >> > http://patchwork.ozlabs.org/patch/213112
+> >>
+> >> I'm not sure we need that one. We already have:
+> >>   - host-dosfstools to generate (empty) fat filesystems in a image file;
+> >>   - host-mtools to add files to a fat filesystem, and it works with
+> >>     image files.
+> >
+> > It seems I've spoken a bit fast on that one. There's one thing this
+> > package provides that is not provided by dosfstools or mtools: an MBR
+> > bootcode.
+> >
+> > However, we already have syslinux, which does provide an MBR bootcode.
+> > It's currently not installed; it's just a matter of adding one more
+> > option to syslinux, to install its MBR bootcode.
+> >
+> > So, my previous position still stands: we already have the required
+> > packages; no need to duplicate what we already have.
+> 
+> For me this conclusion is fine.
+> There is a second patch in that same series:
+> http://patchwork.ozlabs.org/patch/213113/
+> [2/2] Basic filesystem image with partition table support
+> 
+> which sounds a lot like your 'fs/custom' patch series. If you agree, I
+> propose to also reject that second patch since fs/custom is a more
+> generic solution to the same problem.
 
-In particular, I'm interested in knowing if the original contributor is
-still interested by the patch, or if someone else is interested in
-adopting the patch and sending an updated version, or if the patch no
-longer makes sense due to other changes made in Buildroot.
+I've had only a quick look at that patch, and it is limited to building
+MBR-based images, indeed.
 
-All patches that have not received any comment or attention before the
-deadline will be removed from patchwork. This is aggressive, but we have
-many 'dead' patches sitting in patchwork, and this cannot work.
+Not because I'm the author (Ok, a bit becasue I'm the author), I'd
+prefer we work to merge genimages, since it is more generic, already
+supports MBR and GPT, and is more easily extendable to other formats.
 
-Deadline for this session is February 2 (FOSDEM + Buildroot developer days!).
+Regards,
+Yann E. MORIN.
 
-Below are the 11 oldest patches (obtained with a slightly modified
-version of pwclient):
-[ pwclient list -s New -n 21 ] (and skip Delegated patches)
-
-(Note: temporarily increased amount to 11 to include the entire python
-patch series)
-
-
-Update dmraid from 1.0.0-rc15 to 1.0.0-rc16-3.
-Antony Vennard <arv@vx9.co.uk>
-http://patchwork.ozlabs.org/patch/213230
-
-Linux: enable local Linux tarball in config
-Stephan Hoffmann <sho@relinux.de>
-http://patchwork.ozlabs.org/patch/217204
-
-minimal dockstar setup
-Steve Calfee <stevecalfee@gmail.com>
-http://patchwork.ozlabs.org/patch/217639
-
-scripts: xorg-release: handle case when version needs downgrade
-Nicolas Dechesne <ndec13@gmail.com>
-http://patchwork.ozlabs.org/patch/218109
-
-[v2] configs: at91sam9260eknf: new configuration for Atmel AT91SAM9260-EK
-Fabio Porcedda <fabio.porcedda@gmail.com>
-http://patchwork.ozlabs.org/patch/218928
-
-[1/1] python: fix to ensure libpython is stripped
-Przemyslaw Wrzos <przemyslaw.wrzos@calyptech.com>
-http://patchwork.ozlabs.org/patch/220024
-
-[v4,1/5] Python menu reorganization
-kpa_info at yahoo.fr
-http://patchwork.ozlabs.org/patch/220706
-
-[v4,2/5] Add python3 config directory simlink
-kpa_info at yahoo.fr
-http://patchwork.ozlabs.org/patch/220707
-
-[v4,3/5] Add PYTHON variable to ease the support of both version
-kpa_info at yahoo.fr
-http://patchwork.ozlabs.org/patch/220705
-
-[v4,4/5] python-bottle: Convert package to be used with python2 or python3
-kpa_info at yahoo.fr
-http://patchwork.ozlabs.org/patch/220708
-
-[v4,5/5] python-serial: Convert package to be used with python2 or python3
-kpa_info at yahoo.fr
-http://patchwork.ozlabs.org/patch/220709
-
-
-Thanks in advance for your feedback!
-
-Thomas
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
