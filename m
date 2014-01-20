@@ -1,31 +1,42 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Mon, 20 Jan 2014 20:25:52 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-01-19
-References: <20140120073009.9260E101682@stock.ovh.net>
- <52DCDFDD.3000303@gmail.com>
-Message-ID: <0r90rax63l.ln2@ID-313208.user.individual.net>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 20 Jan 2014 21:25:10 +0100
+Subject: [Buildroot] [PATCH 1/2] package/ffmpeg2: new package
+In-Reply-To: <el80raxhff.ln2@ID-313208.user.individual.net>
+References: <cover.1390242867.git.yann.morin.1998@free.fr>
+ <d4f3847e403c1e5c4e8733f75bbfccce6e0b4975.1390242867.git.yann.morin.1998@free.fr>
+ <el80raxhff.ln2@ID-313208.user.individual.net>
+Message-ID: <CAAXf6LXbFyZg57qNevJG6_0MWRvtr0msenSOHT-7uv0rXdCcLA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Chris Packham <judge.packham@gmail.com>
-wrote in news:52DCDFDD.3000303 at gmail.com: 
+Hi Bernd,
 
-> So far I've not been able to reproduce the issue.
+On Mon, Jan 20, 2014 at 8:05 PM, Bernd Kuhls <berndkuhls@hotmail.com> wrote:
+[..]
+>
+> this is not true anymore:
+>
+> gst-ffmpeg: Use internal libav instead of external ffmpeg:
+> http://git.buildroot.net/buildroot/commit/?id=
+> 6ea49a23df3fa950e253bf704188e87a583a8ba4
 
-Hi,
 
-did you use defconfig[1] used by autobuild like this?
-http://permalink.gmane.org/gmane.comp.lib.uclibc.buildroot/68428
+In fact, there is another patch in patchwork by Bogdan Radulescu that
+removes gst-ffmpeg entirely in favor of gst-libav:
+http://patchwork.ozlabs.org/patch/207431/
 
-I could reproduce the build error with tcpreplay 4.0.2, no known solution 
-though.
+The conclusion from patchwork cleanup session #4 was that this patch
+is still relevant. It seems that your patch (that has been included in
+buildroot already) addresses the same problem, but in a different way.
 
-Regards, Bernd
+It would be great if you and Bogdan could review the patch mentioned
+above in the light of the current buildroot version, and assess which
+parts of this patch still need to be applied, if any. For example, the
+patch removes gst-dsp and gst-omapfb from gstreamer, but that was for
+gstreamer1 and this is already addressed in current buildroot.
 
-[1]
-http://autobuild.buildroot.net/results/9d9/9d93582362773bad2dbb495a7796682f43
-2e8915/defconfig
+Thanks,
+Thomas
