@@ -1,22 +1,24 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 20 Jan 2014 22:21:56 +0100
-Subject: [Buildroot] [PATCH] libbluray: needs threads
-In-Reply-To: <1390234852-4645-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 20 Jan 2014 13:20:52 -0300")
-References: <1390234852-4645-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87vbxejqmj.fsf@dell.be.48ers.dk>
+Date: Mon, 20 Jan 2014 22:22:03 +0100
+Subject: [Buildroot] [PATCH] arch: use BR2_X86_CPU_HAS_SSE4,
+	SSE42 with jaguar
+In-Reply-To: <1390239317-24409-1-git-send-email-adrien.beraud@savoirfairelinux.com>
+ ("Adrien =?utf-8?Q?B=C3=A9raud=22's?= message of "Mon, 20 Jan 2014 12:35:17
+ -0500")
+References: <1390239317-24409-1-git-send-email-adrien.beraud@savoirfairelinux.com>
+Message-ID: <87r482jqmc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Adrien" == Adrien B?raud <adrien.beraud@savoirfairelinux.com> writes:
 
- > Fixes:
- > http://autobuild.buildroot.net/results/2bc/2bc0ce057e54bd6ff7f9ade115c389648a2df2eb/
+ > This follow-up commit adds support for SSE 4 and SSE 4.2 to
+ > the jaguar architecture.
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > Signed-off-by: Adrien B?raud <adrien.beraud@savoirfairelinux.com>
 
 Committed, thanks.
 
