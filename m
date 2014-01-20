@@ -1,54 +1,80 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 20 Jan 2014 21:37:30 +0100
-Subject: [Buildroot] Patchwork oldest patches cleanup #5 (deadline
-	January 19)
-In-Reply-To: <20140105171702.GC16066@free.fr>
-References: <CAAXf6LVcK-fx059K=tetV=NY78amOHczPkbVxkO1pKAuvDCwtA@mail.gmail.com>
- <20140105162014.GA16066@free.fr> <20140105171702.GC16066@free.fr>
-Message-ID: <CAAXf6LVP6OkzizTdx1GV8wc1vOUBr6Q9eRVQY7dYvK=14qj7=w@mail.gmail.com>
+Date: Mon, 20 Jan 2014 21:41:56 +0100
+Subject: [Buildroot] [PATCH v3] added python unicode selection to menu
+In-Reply-To: <1389155647-17521-1-git-send-email-mlweber1@rockwellcollins.com>
+References: <1389155647-17521-1-git-send-email-mlweber1@rockwellcollins.com>
+Message-ID: <CAAXf6LX1UE7KJMD8LeUhFipo46vU7bpNF_5ibaBst9ZBbU3vMg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
-
-On Sun, Jan 5, 2014 at 6:17 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Thomas, Floris, All,
+On Wed, Jan 8, 2014 at 5:34 AM, Matt Weber <mlweber1@rockwellcollins.com> wrote:
+> From: Matthew Weber <mlweber1@rockwellcollins.com>
 >
-> On 2014-01-05 17:20 +0100, Yann E. MORIN spake thusly:
->> On 2014-01-05 17:01 +0100, Thomas De Schampheleire spake thusly:
->> > Here is the session 5 of the patchwork cleanup.
-> [--SNIP--]
->> > [1/2] makebootfat: new package
->> > Floris Bos <bos@je-eigen-domein.nl>
->> > http://patchwork.ozlabs.org/patch/213112
->>
->> I'm not sure we need that one. We already have:
->>   - host-dosfstools to generate (empty) fat filesystems in a image file;
->>   - host-mtools to add files to a fat filesystem, and it works with
->>     image files.
+> This patch is based on the original new pkg patch submitted last Jan
+> and is part of the "Patchwork oldest patches cleanup #5".
 >
-> It seems I've spoken a bit fast on that one. There's one thing this
-> package provides that is not provided by dosfstools or mtools: an MBR
-> bootcode.
+> Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
+> --
 >
-> However, we already have syslinux, which does provide an MBR bootcode.
-> It's currently not installed; it's just a matter of adding one more
-> option to syslinux, to install its MBR bootcode.
+> Changes v2 -> v3:
+>  - Removed host-python unicode configuration
+>    (No usecase and host doesn't have to match target) Suggested by Thomas P.
 >
-> So, my previous position still stands: we already have the required
-> packages; no need to duplicate what we already have.
+> Changes v1 -> v2:
+>  - None, resubmit after testing against current tip.
+> ---
+>  package/python/Config.in |   18 ++++++++++++++++++
+>  package/python/python.mk |    5 +++++
+>  2 files changed, 23 insertions(+), 0 deletions(-)
+>
+> diff --git a/package/python/Config.in b/package/python/Config.in
+> index b1c0935..a0c78c6 100644
+> --- a/package/python/Config.in
+> +++ b/package/python/Config.in
+> @@ -84,6 +84,24 @@ config BR2_PACKAGE_PYTHON_UNICODEDATA
+>         help
+>           Unicode character database (used by stringprep module) (large).
+>
+> +if BR2_PACKAGE_PYTHON_UNICODEDATA
+> +
+> +choice
+> +       prompt "Python unicode database format"
+> +       default BR2_PACKAGE_PYTHON_UCS2
+> +       help
+> +         Select Python unicode database format for target
+> +
+> +config BR2_PACKAGE_PYTHON_UCS2
+> +       bool "Universal Character Set 2-byte (UCS2)"
+> +
+> +config BR2_PACKAGE_PYTHON_UCS4
+> +       bool "Universal Character Set 4-byte (UCS4)"
+> +
+> +endchoice
+> +
+> +endif
+> +
+>  config BR2_PACKAGE_PYTHON_SQLITE
+>         bool "sqlite module"
+>         select BR2_PACKAGE_SQLITE
+> diff --git a/package/python/python.mk b/package/python/python.mk
+> index bc42e8f..42ca538 100644
+> --- a/package/python/python.mk
+> +++ b/package/python/python.mk
+> @@ -102,6 +102,11 @@ ifneq ($(BR2_PACKAGE_PYTHON_UNICODEDATA),y)
+>  PYTHON_CONF_OPT += --disable-unicodedata
+>  endif
+>
+> +# Default is UCS2 w/o a conf opt
+> +ifeq ($(BR2_PACKAGE_PYTHON_UCS4),y)
+> +PYTHON_CONF_OPT      += --enable-unicode=ucs4
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_PYTHON_BZIP2),y)
+>  PYTHON_DEPENDENCIES += bzip2
+>  else
+> --
 
-For me this conclusion is fine.
-There is a second patch in that same series:
-http://patchwork.ozlabs.org/patch/213113/
-[2/2] Basic filesystem image with partition table support
-
-which sounds a lot like your 'fs/custom' patch series. If you agree, I
-propose to also reject that second patch since fs/custom is a more
-generic solution to the same problem.
-
-Thanks,
-Thomas
+Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
