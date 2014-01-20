@@ -1,65 +1,91 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 20 Jan 2014 22:58:52 +0100
-Subject: [Buildroot] [PATCH 4 of 5 v2] lzma: remove deprecated target
- package
-In-Reply-To: <ad3654061390422916af.1390254369@argentina>
-References: <patchbomb.1390254365@argentina>
- <ad3654061390422916af.1390254369@argentina>
-Message-ID: <20140120215852.GG3421@free.fr>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Mon, 20 Jan 2014 23:58:28 +0100
+Subject: [Buildroot] [PATCH] prevent recursion in %_defconfig rules
+In-Reply-To: <748467273.4509268.1390205590826.JavaMail.root@openwide.fr>
+References: <748467273.4509268.1390205590826.JavaMail.root@openwide.fr>
+Message-ID: <52DDAA14.5060307@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Le 20/01/2014 09:13, Jeremy Rosen a ?crit :
+> aaand reproduced.
+>
+> following the steps described, I get that problem systematically
+>
+> I use make 3.81 (debian testing) and I'm not sure what else is
+> involved when crashing that early.
+>
+>
+> I tried with LANG=C in case there was anything weird, but apparently not
+>
+> My make skills are not very high so i'll gladly take any help on
+> figuring that one out...
+>
+> Cordialement
+>
+> J?r?my Rosen
+> +33 (0)1 42 68 28 04
+>
+> fight key loggers : write some perl using vim
+>
+>
+> Open Wide Ingenierie
+>
+> 23, rue Daviel
+> 75012 Paris - France
+> www.openwide.fr
+>
+>
+>
+>
+>
+> ----- Mail original -----
+>>>> J?r?my, can you describe your setup, so we can try to reproduce
+>>>> it,
+>>>> and
+>>>> find a proper fix?
+>>
+>> Ok, i'll look into it and try to figure out...
+>>
+>> it's really weird that you were not able to reproduce with the steps
+>>   in the patch, it was pretty systematic for me. I'll try to reproduce
+>> and report whatever I find
+>>
+Hi J?r?my, Yann
 
-On 2014-01-20 22:46 +0100, Thomas De Schampheleire spake thusly:
-> The on-target lzma package has been deprecated for a long time, so remove
-> it. This does not remove the support for generating lzma-compressed rootfs
-> images.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-[--SNIP--]
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -99,6 +99,16 @@ comment "-------------------------------
->  endif
->  
->  ###############################################################################
-> +comment "Legacy options removed in 2014.02"
-> +
-> +config BR2_PACKAGE_LZMA
-> +	bool "lzma target package has been removed"
-> +	select BR2_LEGACY
-> +	help
-> +	  The 'lzma' target package has been removed since it has been
-> +	  deprecated for more than four buildroot releases.
-> +	  Note: generating lzma-compressed rootfs images is still supported.
-> +
->  config BR2_PACKAGE_LIBNFC_LLCP
->  	bool "libnfc-llcp has been removed"
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
-> @@ -109,9 +119,6 @@ config BR2_PACKAGE_LIBNFC_LLCP
->            to 'libllcp'. We have added a new package for 'libllcp' and bumped
->            the version at the same time.
->  
-> -###############################################################################
-> -comment "Legacy options removed in 2014.02"
-> -
+I'm able to reproduce the issue here.
 
-Moving the comment will gonna clash with my recent patch being applied
-by Peter:
-    http://git.buildroot.org/buildroot/commit/?id=f169e5e1055600fda1b3ff0c852ee84d2ec80460
+There is no specific setup, I used my current buildroot directory and run:
 
-Regards,
-Yann E. MORIN.
+make O=.. BR2_EXTERNAL=.. raspberrypi_defconfig
+make: stat: /home/naourr/git/buildroot/configs/../configs/../configs/..
+[snip]
+../configs/raspberrypi_defconfig ?. Stop
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Or
+
+make O=../output BR2_EXTERNAL=.. raspberrypi_defconfig
+make: stat: /home/naourr/git/buildroot/configs/../configs/../configs/..
+[snip]
+../configs/raspberrypi_defconfig ?. Stop
+
+But it's ok with :
+
+make O=../output BR2_EXTERNAL=../external raspberrypi_defconfig  GEN     
+../output/Makefile
+#
+# configuration written to ../output/.config
+#
+
+I have no solution currently, but I hope this help...
+
+Yann, what's wrong with relative path for BR2_EXTERNAL or O ?
+
+Best regards,
+Romain Naour
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140120/bc34c76b/attachment.html>
