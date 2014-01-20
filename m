@@ -1,44 +1,132 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 20 Jan 2014 22:46:08 +0100
-Subject: [Buildroot] [PATCH 3 of 5 v2] flex: change config text of 'target
-	binary' option
+Date: Mon, 20 Jan 2014 22:46:07 +0100
+Subject: [Buildroot] [PATCH 2 of 5 v2] ttcp: remove deprecated package
 In-Reply-To: <patchbomb.1390254365@argentina>
 References: <patchbomb.1390254365@argentina>
-Message-ID: <6d5af3ef7cde496c01cc.1390254368@argentina>
+Message-ID: <8c727b58811d869e1736.1390254367@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The buildroot manual contains a list of deprecated items, with their config
-title text, and the location in the config menu. If the config text does not
-mention a package name, this can be confusing.
-
-For example, the symbol BR2_PACKAGE_FLEX_BINARY has as text:
-'Install tool in the target', which outside of the flex context makes no
-sense at all.
-
-To make sure the deprecated packages list in the manual is understandable,
-rename the (deprecated) flex 'target binary' config option.
+Since this is the only package depending on BR2_DEPRECATED_SINCE_2012_05,
+remove that symbol as well.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
-v2: new patch based on feedback from Arnout Vandecappelle
+v2: also remove deprecation symbol.
 
- package/flex/Config.in |  2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ Config.in                                             |   4 --
+ Config.in.legacy                                      |   7 ++++
+ package/Config.in                                     |   1 -
+ package/ttcp/Config.in                                |   7 ----
+ package/ttcp/ttcp-0001-replace-deprecated-bcopy.patch |  15 ---------
+ package/ttcp/ttcp.mk                                  |  25 ---------------
+ 6 files changed, 7 insertions(+), 52 deletions(-)
 
-diff --git a/package/flex/Config.in b/package/flex/Config.in
---- a/package/flex/Config.in
-+++ b/package/flex/Config.in
-@@ -10,7 +10,7 @@ config BR2_PACKAGE_FLEX
- if BR2_PACKAGE_FLEX
+diff --git a/Config.in b/Config.in
+--- a/Config.in
++++ b/Config.in
+@@ -268,10 +268,6 @@ config BR2_DEPRECATED_SINCE_2010_11
+ 	bool
+ 	default y
  
- config BR2_PACKAGE_FLEX_BINARY
--	bool "Install tool in the target"
-+	bool "Install flex binary on target"
- 	# needs fork()
- 	depends on BR2_USE_MMU
- 	# runtime dependency
+-config BR2_DEPRECATED_SINCE_2012_05
+-	bool
+-	default y
+-
+ config BR2_DEPRECATED_SINCE_2012_11
+ 	bool
+ 	default y
+diff --git a/Config.in.legacy b/Config.in.legacy
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -112,6 +112,13 @@ config BR2_PACKAGE_LIBNFC_LLCP
+ ###############################################################################
+ comment "Legacy options removed in 2014.02"
+ 
++config BR2_PACKAGE_TTCP
++	bool "ttcp has been removed"
++	select BR2_LEGACY
++	help
++	  The 'ttcp' package has been removed since it has been
++	  deprecated for more than four buildroot releases.
++
+ config BR2_PACKAGE_SQUASHFS3
+ 	bool "squashfs3 has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -931,7 +931,6 @@ source "package/thttpd/Config.in"
+ source "package/tinyhttpd/Config.in"
+ source "package/tn5250/Config.in"
+ source "package/transmission/Config.in"
+-source "package/ttcp/Config.in"
+ source "package/tvheadend/Config.in"
+ source "package/udpcast/Config.in"
+ source "package/ulogd/Config.in"
+diff --git a/package/ttcp/Config.in b/package/ttcp/Config.in
+deleted file mode 100644
+--- a/package/ttcp/Config.in
++++ /dev/null
+@@ -1,7 +0,0 @@
+-config BR2_PACKAGE_TTCP
+-	bool "ttcp"
+-	depends on BR2_DEPRECATED_SINCE_2012_05
+-	help
+-	  Benchmarking tool for determining TCP and UDP performance.
+-
+-	  ftp://ftp.sgi.com/sgi/src/ttcp/README
+diff --git a/package/ttcp/ttcp-0001-replace-deprecated-bcopy.patch b/package/ttcp/ttcp-0001-replace-deprecated-bcopy.patch
+deleted file mode 100644
+--- a/package/ttcp/ttcp-0001-replace-deprecated-bcopy.patch
++++ /dev/null
+@@ -1,15 +0,0 @@
+-Replace deprecated bcopy call by using memmove instead.
+-
+-Index: b/ttcp.c
+-===================================================================
+---- a/ttcp.c
+-+++ b/ttcp.c
+-@@ -241,7 +241,7 @@
+- 			if ((addr=gethostbyname(host)) == NULL)
+- 				err("bad hostname");
+- 			sinhim.sin_family = addr->h_addrtype;
+--			bcopy(addr->h_addr,(char*)&addr_tmp, addr->h_length);
+-+			memmove((char*)&addr_tmp, addr->h_addr, addr->h_length);
+- #if defined(cray)
+- 			sinhim.sin_addr = addr_tmp;
+- #else
+diff --git a/package/ttcp/ttcp.mk b/package/ttcp/ttcp.mk
+deleted file mode 100644
+--- a/package/ttcp/ttcp.mk
++++ /dev/null
+@@ -1,25 +0,0 @@
+-################################################################################
+-#
+-# ttcp
+-#
+-################################################################################
+-
+-TTCP_VERSION = 1.12
+-TTCP_SITE    = ftp://ftp.sgi.com/sgi/src/ttcp/
+-TTCP_SOURCE  = ttcp.c
+-TTCP_LICENSE = public domain
+-
+-define TTCP_EXTRACT_CMDS
+-	cp -f -t $(@D) $(DL_DIR)/$(TTCP_SOURCE)
+-endef
+-
+-define TTCP_BUILD_CMDS
+-	$(TARGET_CC) $(TARGET_CPPFLAGS) $(TARGET_CFLAGS) \
+-		-o $(@D)/ttcp $(@D)/$(TTCP_SOURCE)
+-endef
+-
+-define TTCP_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m 0755 $(@D)/ttcp $(TARGET_DIR)/usr/bin/ttcp
+-endef
+-
+-$(eval $(generic-package))
