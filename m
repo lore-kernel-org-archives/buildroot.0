@@ -1,34 +1,43 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Mon, 20 Jan 2014 11:01:31 +0100
-Subject: [Buildroot] uImage for MIPS architecture
-In-Reply-To: <CAEk6gTCvgeb5aP88O_ZSN9Y0uqbB+AaFMYm8cW1syd+PR0eokw@mail.gmail.com>
-References: <CAEk6gTCvgeb5aP88O_ZSN9Y0uqbB+AaFMYm8cW1syd+PR0eokw@mail.gmail.com>
-Message-ID: <CAGduivz2=id74vKyvt2mF5LNtX8Mq-xTRLgjuQTn2sT3iypK9w@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 20 Jan 2014 12:33:40 +0200
+Subject: [Buildroot] [PATCH] gst-ffmpeg: fix build for xtensa
+Message-ID: <c047dbb77048875f512696ec613ef7d204724753.1390214020.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jan 20, 2014 at 10:13 AM, Drasko DRASKOVIC
-<drasko.draskovic@gmail.com> wrote:
-Hi Drasko,
-> Hi all,
-> in linux/Config.in I can see:
->
-> config BR2_LINUX_KERNEL_UIMAGE
-> bool "uImage"
-> depends on BR2_arm || BR2_armeb || BR2_bfin || BR2_powerpc ||
-> BR2_avr32 || BR2_sh || BR2_sh64
-> select BR2_LINUX_KERNEL_UBOOT_IMAGE
->
-> Why MIPS architecture is not supported?
-Well, I don't really see why it shouldn't be.
-Would you care to test and send a patch ? :)
->
-> Best regards,
-> Drasko
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Since commit 6ea49a23df3 (gst-ffmpeg: Use internal libav instead of external
+ffmpeg) gst-ffmpge uses its internal libav. This requires the same fix for
+xtensa like ffmpeg got in commit 4ec35e76b8a3 (ffmpeg: fix build for xtensa).
+
+Fixes
+http://autobuild.buildroot.net/results/08a/08a27891fd5336250f00e611a15ea45505985f67/.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk b/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
+index 6534f9310795..eb7389f90f30 100644
+--- a/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
++++ b/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
+@@ -14,6 +14,14 @@ GST_FFMPEG_CONF_EXTRA_OPT = \
+ 		--cross-prefix=$(TARGET_CROSS) \
+ 		--target-os=linux
+ 
++GST_FFMPEG_CFLAGS = $(TARGET_CFLAGS)
++
++ifeq ($(BR2_xtensa),y)
++GST_FFMPEG_CFLAGS += -mtext-section-literals
++endif
++
++GST_FFMPEG_CONF_ENV = CFLAGS="$(GST_FFMPEG_CFLAGS)"
++
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ GST_FFMPEG_CONF_EXTRA_OPT += --enable-zlib
+ GST_FFMPEG_DEPENDENCIES += zlib
+-- 
+1.8.5.2
