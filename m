@@ -1,91 +1,52 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Mon, 20 Jan 2014 23:58:28 +0100
-Subject: [Buildroot] [PATCH] prevent recursion in %_defconfig rules
-In-Reply-To: <748467273.4509268.1390205590826.JavaMail.root@openwide.fr>
-References: <748467273.4509268.1390205590826.JavaMail.root@openwide.fr>
-Message-ID: <52DDAA14.5060307@openwide.fr>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Tue, 21 Jan 2014 12:35:18 +1300
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-01-19
+In-Reply-To: <CAFOYHZDo0rTdF6L3qHFycupL+62+v+b1m1DJoWuJaO+JEPiFPA@mail.gmail.com>
+References: <20140120073009.9260E101682@stock.ovh.net>
+ <52DCDFDD.3000303@gmail.com>
+ <0r90rax63l.ln2@ID-313208.user.individual.net>
+ <CAFOYHZDo0rTdF6L3qHFycupL+62+v+b1m1DJoWuJaO+JEPiFPA@mail.gmail.com>
+Message-ID: <CAFOYHZB8-NGmU0kEFW2D0cPmLZEE-WuAsuHrZ9R9Wz0f2xtJZg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 20/01/2014 09:13, Jeremy Rosen a ?crit :
-> aaand reproduced.
->
-> following the steps described, I get that problem systematically
->
-> I use make 3.81 (debian testing) and I'm not sure what else is
-> involved when crashing that early.
->
->
-> I tried with LANG=C in case there was anything weird, but apparently not
->
-> My make skills are not very high so i'll gladly take any help on
-> figuring that one out...
->
-> Cordialement
->
-> J?r?my Rosen
-> +33 (0)1 42 68 28 04
->
-> fight key loggers : write some perl using vim
->
->
-> Open Wide Ingenierie
->
-> 23, rue Daviel
-> 75012 Paris - France
-> www.openwide.fr
->
->
->
->
->
-> ----- Mail original -----
->>>> J?r?my, can you describe your setup, so we can try to reproduce
->>>> it,
->>>> and
->>>> find a proper fix?
+On Tue, Jan 21, 2014 at 10:03 AM, Chris Packham <judge.packham@gmail.com> wrote:
+> On Tue, Jan 21, 2014 at 8:25 AM, Bernd Kuhls <berndkuhls@hotmail.com> wrote:
+>> Chris Packham <judge.packham@gmail.com>
+>> wrote in news:52DCDFDD.3000303 at gmail.com:
 >>
->> Ok, i'll look into it and try to figure out...
+>>> So far I've not been able to reproduce the issue.
 >>
->> it's really weird that you were not able to reproduce with the steps
->>   in the patch, it was pretty systematic for me. I'll try to reproduce
->> and report whatever I find
+>> Hi,
 >>
-Hi J?r?my, Yann
+>> did you use defconfig[1] used by autobuild like this?
+>> http://permalink.gmane.org/gmane.comp.lib.uclibc.buildroot/68428
+>
+> Not quite my method. I'm actually using the config not defconfig. My
+> steps are this:
+>
+> git clean -fxd
+> git fetch
+> git checkout `curl
+> http://autobuild.buildroot.net/results/c59/c59b8f9d93d77c8b75c02172ff6e6072e8f62228/gitid`
+> curl http://autobuild.buildroot.net/results/c59/c59b8f9d93d77c8b75c02172ff6e6072e8f62228/config
+> | sed 's|/home/test|/home/chrisp|' >.config
+> make
+>
+> I'll try the method mentioned in the link you provided.
+>
+>> I could reproduce the build error with tcpreplay 4.0.2, no known solution
+>> though.
+>>
+>> Regards, Bernd
+>>
+>> [1]
+>> http://autobuild.buildroot.net/results/9d9/9d93582362773bad2dbb495a7796682f43
+>> 2e8915/defconfig
 
-I'm able to reproduce the issue here.
-
-There is no specific setup, I used my current buildroot directory and run:
-
-make O=.. BR2_EXTERNAL=.. raspberrypi_defconfig
-make: stat: /home/naourr/git/buildroot/configs/../configs/../configs/..
-[snip]
-../configs/raspberrypi_defconfig ?. Stop
-
-Or
-
-make O=../output BR2_EXTERNAL=.. raspberrypi_defconfig
-make: stat: /home/naourr/git/buildroot/configs/../configs/../configs/..
-[snip]
-../configs/raspberrypi_defconfig ?. Stop
-
-But it's ok with :
-
-make O=../output BR2_EXTERNAL=../external raspberrypi_defconfig  GEN     
-../output/Makefile
-#
-# configuration written to ../output/.config
-#
-
-I have no solution currently, but I hope this help...
-
-Yann, what's wrong with relative path for BR2_EXTERNAL or O ?
-
-Best regards,
-Romain Naour
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140120/bc34c76b/attachment.html>
+Even with this I can't see a failure. I'm starting to wonder if it has
+some other host tool dependencies.
