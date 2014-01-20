@@ -1,115 +1,54 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 20 Jan 2014 22:46:09 +0100
-Subject: [Buildroot] [PATCH 4 of 5 v2] lzma: remove deprecated target package
+Date: Mon, 20 Jan 2014 22:46:10 +0100
+Subject: [Buildroot] [PATCH 5 of 5 v2] Config.in.legacy: fix misc. problems
+ with libnfc-llcp removal
 In-Reply-To: <patchbomb.1390254365@argentina>
 References: <patchbomb.1390254365@argentina>
-Message-ID: <ad3654061390422916af.1390254369@argentina>
+Message-ID: <77fb0983c163d2419e94.1390254370@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The on-target lzma package has been deprecated for a long time, so remove
-it. This does not remove the support for generating lzma-compressed rootfs
-images.
+The Config.in.legacy entry associated with the replacement of libnfc-llcp
+was broken in multiple ways:
+
+- it was not correctly added within the section for 2014.02 deprecation
+  (incidentally fixed with the patch removing target lzma)
+- it still had select/depend statement from the original symbol, which
+  should not be added in Config.in.legacy.
+- it did not select the replacement symbol as to make the transition for
+  users more convenient.
+- indentation of the help text was not tab+2spaces.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
 v2: new patch
 
- Config.in              |   4 ----
- Config.in.legacy       |  13 ++++++++++---
- package/Config.in      |   1 -
- package/lzma/Config.in |  13 -------------
- package/lzma/lzma.mk   |   2 --
- 5 files changed, 10 insertions(+), 23 deletions(-)
+ Config.in.legacy |  9 ++++-----
+ 1 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/Config.in b/Config.in
---- a/Config.in
-+++ b/Config.in
-@@ -264,10 +264,6 @@ config BR2_DEPRECATED
- 
- if BR2_DEPRECATED
- 
--config BR2_DEPRECATED_SINCE_2010_11
--	bool
--	default y
--
- config BR2_DEPRECATED_SINCE_2012_11
- 	bool
- 	default y
 diff --git a/Config.in.legacy b/Config.in.legacy
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -99,6 +99,16 @@ comment "-------------------------------
- endif
+@@ -110,14 +110,13 @@ config BR2_PACKAGE_LZMA
+ 	  Note: generating lzma-compressed rootfs images is still supported.
  
- ###############################################################################
-+comment "Legacy options removed in 2014.02"
-+
-+config BR2_PACKAGE_LZMA
-+	bool "lzma target package has been removed"
-+	select BR2_LEGACY
-+	help
-+	  The 'lzma' target package has been removed since it has been
-+	  deprecated for more than four buildroot releases.
-+	  Note: generating lzma-compressed rootfs images is still supported.
-+
  config BR2_PACKAGE_LIBNFC_LLCP
- 	bool "libnfc-llcp has been removed"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
-@@ -109,9 +119,6 @@ config BR2_PACKAGE_LIBNFC_LLCP
-           to 'libllcp'. We have added a new package for 'libllcp' and bumped
-           the version at the same time.
+-	bool "libnfc-llcp has been removed"
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
+-	select BR2_PACKAGE_LIBNFC
++	bool "libnfc-llcp has been replaced by libllcp"
+ 	select BR2_LEGACY
++	select BR2_PACKAGE_LIBLLCP
+ 	help
+ 	  The 'libnfc-llcp' package has been removed since upstream renamed
+-          to 'libllcp'. We have added a new package for 'libllcp' and bumped
+-          the version at the same time.
++	  to 'libllcp'. We have added a new package for 'libllcp' and bumped
++	  the version at the same time.
  
--###############################################################################
--comment "Legacy options removed in 2014.02"
--
  config BR2_PACKAGE_TTCP
  	bool "ttcp has been removed"
- 	select BR2_LEGACY
-diff --git a/package/Config.in b/package/Config.in
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -35,7 +35,6 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/gzip/Config.in"
- endif
- source "package/infozip/Config.in"
--source "package/lzma/Config.in"
- source "package/lzop/Config.in"
- source "package/xz/Config.in"
- endmenu
-diff --git a/package/lzma/Config.in b/package/lzma/Config.in
-deleted file mode 100644
---- a/package/lzma/Config.in
-+++ /dev/null
-@@ -1,13 +0,0 @@
--config BR2_PACKAGE_LZMA
--	bool "lzma"
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_DEPRECATED_SINCE_2010_11
--	help
--	  Lempel Ziv compression method (LZMA) is a compression
--	  algorithm with high compression ratio.
--
--	  http://tukaani.org/lzma/
--
--comment "lzma needs a toolchain w/ C++"
--	depends on BR2_DEPRECATED_SINCE_2010_11
--	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/lzma/lzma.mk b/package/lzma/lzma.mk
---- a/package/lzma/lzma.mk
-+++ b/package/lzma/lzma.mk
-@@ -7,10 +7,8 @@
- LZMA_VERSION = 4.32.7
- LZMA_SOURCE = lzma-$(LZMA_VERSION).tar.xz
- LZMA_SITE = http://tukaani.org/lzma/
--LZMA_INSTALL_STAGING = YES
- LZMA_CONF_OPT = $(if $(BR2_ENABLE_DEBUG),--enable-debug,--disable-debug)
- 
--$(eval $(autotools-package))
- $(eval $(host-autotools-package))
- 
- LZMA = $(HOST_DIR)/usr/bin/lzma
