@@ -1,19 +1,26 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 20 Jan 2014 22:22:36 +0100
-Subject: [Buildroot] [PATCH] lighttpd: bump to version 1.4.34
-In-Reply-To: <1390241946-20339-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 20 Jan 2014 15:19:06 -0300")
-References: <1390241946-20339-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87mwiqjqlf.fsf@dell.be.48ers.dk>
+Date: Mon, 20 Jan 2014 22:23:46 +0100
+Subject: [Buildroot] [PATCH] gst-ffmpeg: fix build for xtensa
+In-Reply-To: <c047dbb77048875f512696ec613ef7d204724753.1390214020.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Mon, 20 Jan 2014 12:33:40 +0200")
+References: <c047dbb77048875f512696ec613ef7d204724753.1390214020.git.baruch@tkos.co.il>
+Message-ID: <87iotejqjh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > Since commit 6ea49a23df3 (gst-ffmpeg: Use internal libav instead of external
+ > ffmpeg) gst-ffmpge uses its internal libav. This requires the same fix for
+ > xtensa like ffmpeg got in commit 4ec35e76b8a3 (ffmpeg: fix build for xtensa).
+
+ > Fixes
+ > http://autobuild.buildroot.net/results/08a/08a27891fd5336250f00e611a15ea45505985f67/.
+
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed, thanks.
 
