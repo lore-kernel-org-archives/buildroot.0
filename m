@@ -1,30 +1,56 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 20 Jan 2014 12:07:34 -0300
-Subject: [Buildroot] [PATCH] dosfstools: bump to version 3.0.25
-Message-ID: <1390230454-14267-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 20 Jan 2014 16:48:57 +0100
+Subject: [Buildroot] Patchwork oldest patches cleanup #4 (deadline
+	January 5)
+In-Reply-To: <CAKu+J9340tMY2TfLwfJdh8Et=5ASJgxf4B4n_MYW0Z8u+yTbZg@mail.gmail.com>
+References: <CAAXf6LWFAfs_i_NjBbD3RZ=Y0RDKftzwj-_8xKuqyYA=69PNsw@mail.gmail.com>
+ <CAAXf6LVVi6d=xRjsqW8eSMAf1CpKyU-qUTQ2dbfCPU=EF__jcA@mail.gmail.com>
+ <20140106130503.2df2a9ef@skate>
+ <CAAXf6LUnqAYQZoQ9-npV0nyDezec__sfnZrvYJY0PouNujE3HQ@mail.gmail.com>
+ <CAKu+J9340tMY2TfLwfJdh8Et=5ASJgxf4B4n_MYW0Z8u+yTbZg@mail.gmail.com>
+Message-ID: <CAAXf6LXHSES8Xv5PP6fAL5d9rGZWV2MFwe6MoGQsyj4aZx0ybw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/dosfstools/dosfstools.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi Bogdan,
 
-diff --git a/package/dosfstools/dosfstools.mk b/package/dosfstools/dosfstools.mk
-index c389fdd..94fb5e6 100644
---- a/package/dosfstools/dosfstools.mk
-+++ b/package/dosfstools/dosfstools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DOSFSTOOLS_VERSION = 3.0.24
-+DOSFSTOOLS_VERSION = 3.0.25
- DOSFSTOOLS_SOURCE = dosfstools-$(DOSFSTOOLS_VERSION).tar.xz
- DOSFSTOOLS_SITE = http://daniel-baumann.ch/files/software/dosfstools
- DOSFSTOOLS_LICENSE = GPLv3+
--- 
-1.8.3.2
+Sorry for the late reply...
+
+On Mon, Jan 6, 2014 at 11:48 AM, Bogdan Radulescu <bogdan@nimblex.net> wrote:
+> Hi,
+>
+> Regarding the http://patchwork.ozlabs.org/patch/207431 patch.
+> GStreamer switched from ffmpeg to libav a while ago and newer versions don't
+> have the ffmpeg package.
+> http://gstreamer.freedesktop.org/releases/gst-libav/0.11.90.html
+> http://gstreamer.freedesktop.org/src/gst-ffmpeg/gst-ffmpeg-1.x-README.txt
+>
+> gst-ffmpeg was last updated almost two years ago.
+>
+> Even though irrelevant, the situation of ffmpeg and libav is explained here:
+> http://blog.pkh.me/p/13-the-ffmpeg-libav-situation.html
+>
+> The patch was used in production so it's tested.
+>
+> I think it would be a step back if this patch is discarded.
+>
+
+Thanks a lot for your feedback. The info you gave is very interesting.
+In fact, it's the type of information that would be suitable for the
+commit message, as it gives the rationale for the switch.
+
+Based on your feedback, I agree we shouldn't throw away this patch.
+Would it be possible for you to rebase the patch based on latest
+buildroot and resubmit? In the mean time some of the code changed, for
+example the multimedia directory is removed now. If you have time, I
+think this would be the fastest and best solution, as you are the
+original author.
+
+Awaiting your feedback, I'll already mark it as 'Delegated to me', so
+that the patch is not forgotten.
+
+Thanks,
+Thomas
