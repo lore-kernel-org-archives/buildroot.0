@@ -1,107 +1,134 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Jan 2014 21:58:07 +0100
-Subject: [Buildroot] [git commit] lzma: remove deprecated target package
-Message-ID: <20140121205928.35F6C9AB97@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 21 Jan 2014 22:04:57 +0100
+Subject: [Buildroot] [PATCH] BR2_EXTERNAL: check it is a valid BR2_EXTERNAL
+	dir before using it
+Message-ID: <1390338297-733-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0a07731933bded233b840e71770c01118b3a709c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-The on-target lzma package has been deprecated for a long time, so remove
-it. This does not remove the support for generating lzma-compressed rootfs
-images.
+Using a relative path for BR2_EXTERNAL, and using an external defconfig,
+such as in (from a Buildroot top-dir):
+    make O=.. BR2_EXTERNAL=.. foo_defconfig
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+is broken. It is unclear why the %_defconfig rule recurses in that case,
+but using relative paths is inherently broken.
+
+This patch first makes BR2_EXTERNAL canonical (ie. makes it an absolute
+path). Then we check this path exists and contains a valid BR2_EXTERNAL
+tree, by checking external.mk and Config.in exist.
+
+The manual is updated to discourage using relative paths.
+
+Also, a note is added to the O documentation that relative paths are
+discouraged as well.
+
+Reported-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Cc: Romain Naour <romain.naour@openwide.fr>
 ---
- Config.in              |    4 ----
- Config.in.legacy       |    8 ++++++++
- package/Config.in      |    1 -
- package/lzma/Config.in |   13 -------------
- package/lzma/lzma.mk   |    2 --
- 5 files changed, 8 insertions(+), 20 deletions(-)
+ Makefile                             | 10 +++++++++-
+ docs/manual/common-usage.txt         | 13 ++++++++++---
+ docs/manual/customize-outside-br.txt | 12 +++++++-----
+ 3 files changed, 26 insertions(+), 9 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index fa723fe..7ec7c2a 100644
---- a/Config.in
-+++ b/Config.in
-@@ -264,10 +264,6 @@ config BR2_DEPRECATED
- 
- if BR2_DEPRECATED
- 
--config BR2_DEPRECATED_SINCE_2010_11
--	bool
--	default y
--
- config BR2_DEPRECATED_SINCE_2012_11
- 	bool
- 	default y
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 473d0ef..631286a 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -101,6 +101,14 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2014.02"
- 
-+config BR2_PACKAGE_LZMA
-+	bool "lzma target package has been removed"
-+	select BR2_LEGACY
-+	help
-+	  The 'lzma' target package has been removed since it has been
-+	  deprecated for more than four buildroot releases.
-+	  Note: generating lzma-compressed rootfs images is still supported.
-+
- config BR2_PACKAGE_TTCP
- 	bool "ttcp has been removed"
- 	select BR2_LEGACY
-diff --git a/package/Config.in b/package/Config.in
-index ed31354..c45f8bd 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -35,7 +35,6 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/gzip/Config.in"
+diff --git a/Makefile b/Makefile
+index 9dfb1e0..5753f81 100644
+--- a/Makefile
++++ b/Makefile
+@@ -118,7 +118,15 @@ ifeq ($(BR2_EXTERNAL),)
+   override BR2_EXTERNAL = support/dummy-external
+   $(shell rm -f $(BR2_EXTERNAL_FILE))
+ else
+-  $(shell echo BR2_EXTERNAL ?= $(BR2_EXTERNAL) > $(BR2_EXTERNAL_FILE))
++  _BR2_EXTERNAL = $(shell cd $(BR2_EXTERNAL) >/dev/null 2>&1 && pwd)
++  ifeq ($(and $(_BR2_EXTERNAL),$(wildcard $(_BR2_EXTERNAL)/external.mk),$(wildcard $(_BR2_EXTERNAL)/Config.in)),)
++    ifeq ($(patsubst /%,/,$(BR2_EXTERNAL)),)
++      $(error BR2_EXTERNAL='$(BR2_EXTERNAL)' does not exist)
++    else
++      $(error BR2_EXTERNAL='$(BR2_EXTERNAL)' does not exist, relatively to $(TOPDIR))
++    endif
++  endif
++  $(shell echo BR2_EXTERNAL ?= $(_BR2_EXTERNAL) > $(BR2_EXTERNAL_FILE))
  endif
- source "package/infozip/Config.in"
--source "package/lzma/Config.in"
- source "package/lzop/Config.in"
- source "package/xz/Config.in"
- endmenu
-diff --git a/package/lzma/Config.in b/package/lzma/Config.in
-deleted file mode 100644
-index d7e8827..0000000
---- a/package/lzma/Config.in
-+++ /dev/null
-@@ -1,13 +0,0 @@
--config BR2_PACKAGE_LZMA
--	bool "lzma"
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_DEPRECATED_SINCE_2010_11
--	help
--	  Lempel Ziv compression method (LZMA) is a compression
--	  algorithm with high compression ratio.
--
--	  http://tukaani.org/lzma/
--
--comment "lzma needs a toolchain w/ C++"
--	depends on BR2_DEPRECATED_SINCE_2010_11
--	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/lzma/lzma.mk b/package/lzma/lzma.mk
-index 9049833..e7129dd 100644
---- a/package/lzma/lzma.mk
-+++ b/package/lzma/lzma.mk
-@@ -7,10 +7,8 @@
- LZMA_VERSION = 4.32.7
- LZMA_SOURCE = lzma-$(LZMA_VERSION).tar.xz
- LZMA_SITE = http://tukaani.org/lzma/
--LZMA_INSTALL_STAGING = YES
- LZMA_CONF_OPT = $(if $(BR2_ENABLE_DEBUG),--enable-debug,--disable-debug)
  
--$(eval $(autotools-package))
- $(eval $(host-autotools-package))
+ # Need that early, before we scan packages
+diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
+index 1d15c05..ca44b10 100644
+--- a/docs/manual/common-usage.txt
++++ b/docs/manual/common-usage.txt
+@@ -40,7 +40,8 @@ Or:
+  $ cd /tmp/build; make O=$PWD -C path/to/buildroot
+ --------------------
  
- LZMA = $(HOST_DIR)/usr/bin/lzma
+-All the output files will be located under +/tmp/build+.
++All the output files will be located under +/tmp/build+. If the +O+
++path does not exist, Buildroot will create it.
+ 
+ When using out-of-tree builds, the Buildroot +.config+ and temporary
+ files are also stored in the output directory. This means that you can
+@@ -48,13 +49,19 @@ safely run multiple builds in parallel using the same source tree as
+ long as they use unique output directories.
+ 
+ For ease of use, Buildroot generates a Makefile wrapper in the output
+-directory - so after the first run, you no longer need to pass +O=..+
+-and +-C ..+, simply run (in the output directory):
++directory - so after the first run, you no longer need to pass +O=<...>+
++and +-C <...>+, simply run (in the output directory):
+ 
+ --------------------
+  $ make <target>
+ --------------------
+ 
++The +O+ path can be either an absolute or a relative path, but if it's
++passed as a relative path, it is important to note that it is interpreted
++relative to the main Buildroot source directory, not the current working
++directory. Using relative paths can lead to various broken setups, and
++thus is highly discouraged in favour of using absolute paths.
++
+ [[env-vars]]
+ 
+ Environment variables
+diff --git a/docs/manual/customize-outside-br.txt b/docs/manual/customize-outside-br.txt
+index 19257e6..53d88d7 100644
+--- a/docs/manual/customize-outside-br.txt
++++ b/docs/manual/customize-outside-br.txt
+@@ -32,16 +32,18 @@ removed by passing an empty value.
+ 
+ The +BR2_EXTERNAL+ path can be either an absolute or a relative path,
+ but if it's passed as a relative path, it is important to note that it
+-is interpreted relatively to the main Buildroot source directory, not
+-the Buildroot output directory.
++is interpreted relative to the main Buildroot source directory, not
++the Buildroot output directory. Using relative paths can lead to various
++broken setups, and thus is highly discouraged in favour of using
++absolute paths.
+ 
+ Some examples:
+ 
+ -----
+- buildroot/ $ make BR2_EXTERNAL=../foobar menuconfig
++ buildroot/ $ make BR2_EXTERNAL=/path/to/foobar menuconfig
+ -----
+ 
+-Starting from now on, external definitions from the +../foobar+
++Starting from now on, external definitions from the +/path/to/foobar+
+ directory will be used:
+ 
+ -----
+@@ -52,7 +54,7 @@ directory will be used:
+ We can switch to another external definitions directory at any time:
+ 
+ -----
+- buildroot/ $ make BR2_EXTERNAL=../barfoo xconfig
++ buildroot/ $ make BR2_EXTERNAL=/where/we/have/barfoo xconfig
+ -----
+ 
+ Or disable the usage of external definitions:
+-- 
+1.8.1.2
