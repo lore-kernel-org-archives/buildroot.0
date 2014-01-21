@@ -1,93 +1,74 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Tue, 21 Jan 2014 10:35:21 +0000
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-01-19
-In-Reply-To: <CAFOYHZB8-NGmU0kEFW2D0cPmLZEE-WuAsuHrZ9R9Wz0f2xtJZg@mail.gmail.com>
-References: <20140120073009.9260E101682@stock.ovh.net>
- <52DCDFDD.3000303@gmail.com> <0r90rax63l.ln2@ID-313208.user.individual.net>
- <CAFOYHZDo0rTdF6L3qHFycupL+62+v+b1m1DJoWuJaO+JEPiFPA@mail.gmail.com>
- <CAFOYHZB8-NGmU0kEFW2D0cPmLZEE-WuAsuHrZ9R9Wz0f2xtJZg@mail.gmail.com>
-Message-ID: <52DE4D69.9070506@barkynet.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 21 Jan 2014 12:49:05 +0100
+Subject: [Buildroot] Problem with multi interface support in udhcpc
+	script?
+In-Reply-To: <CANxTyt44suVoSpVTivmKde77P7fUYRa04a_fQfb=ceA-Yym9sQ@mail.gmail.com>
+ (Danomi Manchego's message of "Tue, 14 Jan 2014 09:47:05 -0500")
+References: <CANxTyt44suVoSpVTivmKde77P7fUYRa04a_fQfb=ceA-Yym9sQ@mail.gmail.com>
+Message-ID: <87fvohimha.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
 
-Chris, All,
+Hi,
 
-I think i found the issue with the tcpreplay package.  I created a 
-minimal defconfig with just a toolchain and tcpreplay and this builds 
-fine.  I noticed in the tcpreplay configure output it shows the line
+ > Peter,
+ > Back in June 2013, you committed this change to add support for
+ > multiple neetwork interfaces in resolv.conf:
 
-	tcpdump binary path:        /usr/sbin/tcpdump
+ > http://git.buildroot.net/buildroot/commit/package/busybox/udhcpc.script?id=584f418ec1ae3f0b5e09c10133c82578d78a3e03
 
-but this is not in the logs from the auto builds.  So i removed the 
-tcpdump package from my host and now tcpreplay fails to build.
+ > However, I don't think that this quite works.  The "nameserver" lines
+ > are okay, because it's supposed to be one server per line.  But there
+ > is supposed to be only one "search" line.  So, for example, if I use
+ > the resolv library to dump resolv.conf data, I only get the search
+ > domains from the *last* search line.   Similarly, when I try to
+ > resolve a name, the search domain ommitted by the reolve library info
+ > appears to not be used by busybox's "nslookup" app.
 
-I looked in configure.ac and i see it tests for the tcpdump binary on 
-the host and if it's found it sets the #define ENABLE_VERBOSE.  The code 
-that fails is this
+Ahh, so we need to add per-interface domain comments and generate a
+'search' line with all domains. As you say, the last search line "wins"
+(also verified in uClibc code), we could perhaps just so something
+similar to the nameservers, E.G.:
 
-#ifdef ENABLE_VERBOSE
-     ctx->options->verbose = value;
-     return 0;
-#else
-     tcpreplay_seterr(ctx, "verbose mode not supported");
-     return -1;
-#endif
-
-So i can only assume if ENABLE_VERBOSE is not set then tcpreplay does 
-not actually compile.
-
-All i did to fix this is set tcpreplay to be dependent on tcpdump and 
-point the configure script to look for tcpdump on the target.
-
-I'll post a patch
-
-Thanks
+nameserver ... # eth0
+search foo # eth0
+nameserver ... # eth1
+search bar # eth1
+search foo bar # COMBINED
 
 
-On 20/01/14 23:35, Chris Packham wrote:
-> On Tue, Jan 21, 2014 at 10:03 AM, Chris Packham <judge.packham@gmail.com> wrote:
->> On Tue, Jan 21, 2014 at 8:25 AM, Bernd Kuhls <berndkuhls@hotmail.com> wrote:
->>> Chris Packham <judge.packham@gmail.com>
->>> wrote in news:52DCDFDD.3000303 at gmail.com:
->>>
->>>> So far I've not been able to reproduce the issue.
->>>
->>> Hi,
->>>
->>> did you use defconfig[1] used by autobuild like this?
->>> http://permalink.gmane.org/gmane.comp.lib.uclibc.buildroot/68428
->>
->> Not quite my method. I'm actually using the config not defconfig. My
->> steps are this:
->>
->> git clean -fxd
->> git fetch
->> git checkout `curl
->> http://autobuild.buildroot.net/results/c59/c59b8f9d93d77c8b75c02172ff6e6072e8f62228/gitid`
->> curl http://autobuild.buildroot.net/results/c59/c59b8f9d93d77c8b75c02172ff6e6072e8f62228/config
->> | sed 's|/home/test|/home/chrisp|' >.config
->> make
->>
->> I'll try the method mentioned in the link you provided.
->>
->>> I could reproduce the build error with tcpreplay 4.0.2, no known solution
->>> though.
->>>
->>> Regards, Bernd
->>>
->>> [1]
->>> http://autobuild.buildroot.net/results/9d9/9d93582362773bad2dbb495a7796682f43
->>> 2e8915/defconfig
->
-> Even with this I can't see a failure. I'm starting to wonder if it has
-> some other host tool dependencies.
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+while read KEYWORD VALUE COMMENT;
+do
+    # drop combined search line
+    case "$COMMENT" in
+        *COMBINED) continue ;;
+    esac
+
+    if [ "$KEYWORD" = "search" ]; then
+        DOMAINS="$DOMAINS$VALUE "
+    fi
+
+    echo "$KEYWORD $VALUE $COMMENT"
+done < /tmp/resolv.conf
+
+echo "search $DOMAINS # COMBINED"
+
+ > FYI, the program that used to dump resolv.conf info is below.
+
+ > I'm wondering if there needs to be comment lines to track the search
+ > domains per interface, and then a fancy grep+sed bit to synthesize a
+ > single aggregate search line from those comments.
+
+ > When you did the original change, do you recall if you tested if the
+ > multiple search lines let you resolve non-FQDN refs correctly?
+
+No, I must say that the setup where I needed DHCP on multiple interfaces
+only had DNS setup on a single one.
+
+-- 
+Bye, Peter Korsgaard
