@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 21 Jan 2014 10:10:58 -0300
-Subject: [Buildroot] [PATCH] cryptodev-linux: add fix for kernels >=3.13
-Message-ID: <1390309858-13922-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 21 Jan 2014 10:26:15 -0300
+Subject: [Buildroot] [PATCH 1/2] uboot-tools: bump to version 2014.01
+Message-ID: <1390310776-8840-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,98 +10,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- ...ce_INIT_COMPLETION_with_reinit_completion.patch | 83 ++++++++++++++++++++++
- 1 file changed, 83 insertions(+)
- create mode 100644 package/cryptodev-linux/cryptodev-linux-01-Replace_INIT_COMPLETION_with_reinit_completion.patch
+ package/uboot-tools/uboot-tools.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/cryptodev-linux/cryptodev-linux-01-Replace_INIT_COMPLETION_with_reinit_completion.patch b/package/cryptodev-linux/cryptodev-linux-01-Replace_INIT_COMPLETION_with_reinit_completion.patch
-new file mode 100644
-index 0000000..3c1b580
---- /dev/null
-+++ b/package/cryptodev-linux/cryptodev-linux-01-Replace_INIT_COMPLETION_with_reinit_completion.patch
-@@ -0,0 +1,83 @@
-+From: Cosmin Paraschiv <cosmin.paraschiv@freescale.com>
-+To: <cryptodev-linux-devel@gna.org>
-+Subject: [Cryptodev-linux-devel] [PATCH v2] Replace INIT_COMPLETION with
-+	reinit_completion.
-+
-+In the 3.13-rc1 Linux kernel, the INIT_COMPLETION macro has been replaced
-+with an inline function, reinit_completion [1][2]. We are currently
-+using the 3.13-rc3 Linux kernel, which leads to the following error:
-+
-+cryptlib.c:279:2: error: implicit declaration of function 'INIT_COMPLETION' [-Werror=implicit-function-declaration]
-+  INIT_COMPLETION(cdata->async.result->completion);
-+
-+[1] https://github.com/torvalds/linux/commit/c32f74ab2872994bc8336ed367313da3139350ca
-+[2] https://github.com/torvalds/linux/commit/62026aedaacedbe1ffe94a3599ad4acd8ecdf587
-+
-+Signed-off-by: Cosmin Paraschiv <cosmin.paraschiv@freescale.com>
-+Reviewed-by: Cristian Stoica <cristian.stoica@freescale.com>
-+Tested-by: Cristian Stoica <cristian.stoica@freescale.com>
-+Signed-off-by: Horia Geanta <horia.geanta@freescale.com>
-+---
-+ cryptlib.c      | 8 ++++----
-+ cryptodev_int.h | 6 ++++++
-+ 2 files changed, 10 insertions(+), 4 deletions(-)
-+
-+diff --git a/cryptlib.c b/cryptlib.c
-+index e6c91fc..fe25563 100644
-+--- a/cryptlib.c
-++++ b/cryptlib.c
-+@@ -276,7 +276,7 @@ ssize_t cryptodev_cipher_encrypt(struct cipher_data *cdata,
-+ {
-+ 	int ret;
-+ 
-+-	INIT_COMPLETION(cdata->async.result->completion);
-++	reinit_completion(&cdata->async.result->completion);
-+ 
-+ 	if (cdata->aead == 0) {
-+ 		ablkcipher_request_set_crypt(cdata->async.request,
-+@@ -299,7 +299,7 @@ ssize_t cryptodev_cipher_decrypt(struct cipher_data *cdata,
-+ {
-+ 	int ret;
-+ 
-+-	INIT_COMPLETION(cdata->async.result->completion);
-++	reinit_completion(&cdata->async.result->completion);
-+ 	if (cdata->aead == 0) {
-+ 		ablkcipher_request_set_crypt(cdata->async.request,
-+ 			(struct scatterlist *)src, dst,
-+@@ -410,7 +410,7 @@ ssize_t cryptodev_hash_update(struct hash_data *hdata,
-+ {
-+ 	int ret;
-+ 
-+-	INIT_COMPLETION(hdata->async.result->completion);
-++	reinit_completion(&hdata->async.result->completion);
-+ 	ahash_request_set_crypt(hdata->async.request, sg, NULL, len);
-+ 
-+ 	ret = crypto_ahash_update(hdata->async.request);
-+@@ -422,7 +422,7 @@ int cryptodev_hash_final(struct hash_data *hdata, void* output)
-+ {
-+ 	int ret;
-+ 
-+-	INIT_COMPLETION(hdata->async.result->completion);
-++	reinit_completion(&hdata->async.result->completion);
-+ 	ahash_request_set_crypt(hdata->async.request, NULL, output, 0);
-+ 
-+ 	ret = crypto_ahash_final(hdata->async.request);
-+diff --git a/cryptodev_int.h b/cryptodev_int.h
-+index eb2aabf..3834ef1 100644
-+--- a/cryptodev_int.h
-++++ b/cryptodev_int.h
-+@@ -2,6 +2,12 @@
-+ #ifndef CRYPTODEV_INT_H
-+ # define CRYPTODEV_INT_H
-+ 
-++#include <linux/version.h>
-++
-++#if (LINUX_VERSION_CODE < KERNEL_VERSION(3, 13, 0))
-++#  define reinit_completion(x) INIT_COMPLETION(*(x))
-++#endif
-++
-+ #include <linux/init.h>
-+ #include <linux/sched.h>
-+ #include <linux/fs.h>
-+-- 
-+1.8.3.1
+diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
+index 6c09110..398ce8b 100644
+--- a/package/uboot-tools/uboot-tools.mk
++++ b/package/uboot-tools/uboot-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UBOOT_TOOLS_VERSION = 2013.10
++UBOOT_TOOLS_VERSION = 2014.01
+ UBOOT_TOOLS_SOURCE  = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
+ UBOOT_TOOLS_SITE    = ftp://ftp.denx.de/pub/u-boot
+ UBOOT_TOOLS_LICENSE = GPLv2+
 -- 
 1.8.3.2
