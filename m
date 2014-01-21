@@ -1,52 +1,45 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 21 Jan 2014 09:18:33 +0100
-Subject: [Buildroot] Patchwork oldest patches cleanup #6 (deadline
-	February 2)
-In-Reply-To: <52DE28BD.8020306@relinux.de>
-References: <CAAXf6LX2yqbapp6GBuN5qoT1R93CGD3NCLguY8fQhFoApJz2uw@mail.gmail.com>
- <52DE28BD.8020306@relinux.de>
-Message-ID: <CAAXf6LX+8s0EC9itepQ2aoZK21AkTvQfDdoOa61aAqcwsJms5Q@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 21 Jan 2014 09:28:15 +0100
+Subject: [Buildroot] [git commit] live555: unbreak build without locale
+	support in toolchain
+Message-ID: <20140121083119.129319C54D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Stephan,
+commit: http://git.buildroot.net/buildroot/commit/?id=20a6dae075f2c78cf6703e9b6d3e85916d34fd2c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, Jan 21, 2014 at 8:58 AM, Stephan Hoffmann <sho@relinux.de> wrote:
-> Am 20.01.2014 22:06, schrieb Thomas De Schampheleire:
->> All,
->>
->> Here is session 6 of the patchwork cleanup. For those who haven't
->> followed previous sessions, here is a quick recap: every session we'll
->> be posting the list of the 10 oldest patches, with the original patch
->> contributors in copy. During two weeks, we have the opportunity to
->> discuss the patch, whether it is still necessary or not, how it should
->> be changed to be merged.
->>
->> In particular, I'm interested in knowing if the original contributor is
->> still interested by the patch, or if someone else is interested in
->> adopting the patch and sending an updated version, or if the patch no
->> longer makes sense due to other changes made in Buildroot.
-> .....
->> ...
->>
->> Linux: enable local Linux tarball in config
->> Stephan Hoffmann <sho@relinux.de>
->> http://patchwork.ozlabs.org/patch/217204
-> Thomas, all,
->
-> I still think that this would be a useful feature for buildroot,
-> especially when dealing with soc or boards that come with a kernel
-> tarball from the vendor that is not easily accessible online.
->
+Fixes:
+  http://autobuild.buildroot.net/results/7c1/7c1a1847c5d8ce1d97ef077f26289153660848e8/
+  http://autobuild.buildroot.net/results/d2b/d2bb82d0cca04ff66f7d1c8c2f0493f41b43ad3f/
+  http://autobuild.buildroot.net/results/3b2/3b2e5f3a3914a3a651086cd8d8520380a7612d7e/
+  http://autobuild.buildroot.net/results/c00/c00835074917e14adc759df1b6bdbe3f6221e84e/
 
-I just looked at your patch, but it is not needed to achieve what you
-want. If you specify:
-file:///path/to/local/file
-then the site method will be automatically set to file (just tested).
-Could you verify that this indeed fits your use case?
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/live555/live555.mk |    8 +++++++-
+ 1 files changed, 7 insertions(+), 1 deletions(-)
 
-Thanks,
-Thomas
+diff --git a/package/live555/live555.mk b/package/live555/live555.mk
+index 7bb45cf..756bec6 100644
+--- a/package/live555/live555.mk
++++ b/package/live555/live555.mk
+@@ -11,8 +11,14 @@ LIVE555_LICENSE = LGPLv2.1+
+ LIVE555_LICENSE_FILES = COPYING
+ LIVE555_INSTALL_STAGING = YES
+ 
++LIVE555_CFLAGS = $(TARGET_CFLAGS)
++
++ifndef ($(BR2_ENABLE_LOCALE),y)
++LIVE555_CFLAGS += -DLOCALE_NOT_USED
++endif
++
+ define LIVE555_CONFIGURE_CMDS
+-	echo 'COMPILE_OPTS = $$(INCLUDES) -I. -DSOCKLEN_T=socklen_t $(TARGET_CFLAGS)' >> $(@D)/config.linux
++	echo 'COMPILE_OPTS = $$(INCLUDES) -I. -DSOCKLEN_T=socklen_t $(LIVE555_CFLAGS)' >> $(@D)/config.linux
+ 	echo 'C_COMPILER = $(TARGET_CC)' >> $(@D)/config.linux
+ 	echo 'CPLUSPLUS_COMPILER = $(TARGET_CXX)' >> $(@D)/config.linux
+ 	echo 'LINK = $(TARGET_CXX) -o' >> $(@D)/config.linux
