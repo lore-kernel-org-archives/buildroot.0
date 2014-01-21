@@ -1,37 +1,33 @@
-From: Przemyslaw Wrzos <przemyslaw.wrzos@calyptech.com>
-Date: Tue, 21 Jan 2014 13:53:57 +1100
-Subject: [Buildroot] Patchwork oldest patches cleanup #6 (deadline
-	February 2)
-In-Reply-To: <CAAXf6LX2yqbapp6GBuN5qoT1R93CGD3NCLguY8fQhFoApJz2uw@mail.gmail.com>
-References: <CAAXf6LX2yqbapp6GBuN5qoT1R93CGD3NCLguY8fQhFoApJz2uw@mail.gmail.com>
-Message-ID: <000601cf1654$07ca5c00$175f1400$@calyptech.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 21 Jan 2014 07:29:09 +0100
+Subject: [Buildroot] [git commit] vlc: correct sdl_image dependency name
+Message-ID: <20140121063005.B4C099C517@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+commit: http://git.buildroot.net/buildroot/commit/?id=67e4407b9f647462f511fd4c1979abbf8332230e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 21 Jan 2014 at 08:06:25, Thomas De Schampheleire wrote:
+Fixes http://autobuild.buildroot.net/results/7e8/7e85b79612a46df2eee0278703f54d872da72ed5/
 
-> In particular, I'm interested in knowing if the original contributor is
-> still interested by the patch, or if someone else is interested in
-> adopting the patch and sending an updated version, or if the patch no
-> longer makes sense due to other changes made in Buildroot.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/vlc/vlc.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-...
-
-> [1/1] python: fix to ensure libpython is stripped Przemyslaw Wrzos
-> <przemyslaw.wrzos@calyptech.com>
-http://patchwork.ozlabs.org/patch/220024
-
-I'd still like to see this one included in some form. For embedded systems
-that count their image sizes in the tens of megabytes, this patch can make
-a not insignificant difference.
-
-The patch still applies as is to the latest source tree. Let me know if
-anything else need to be done from my end.
-
-Cheers,
-Przemyslaw Wrzos
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index ec5727d..458fe1c 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -214,7 +214,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_SDL_IMAGE),y)
+ VLC_CONF_OPT += --enable-sdl-image
+-VLC_DEPENDENCIES += sdl-image
++VLC_DEPENDENCIES += sdl_image
+ else
+ VLC_CONF_OPT += --disable-sdl-image
+ endif
