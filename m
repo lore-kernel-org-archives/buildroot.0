@@ -1,46 +1,40 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Tue, 21 Jan 2014 18:36:58 +0100
-Subject: [Buildroot] python Gobject
-In-Reply-To: <1390290077263-60414.post@n4.nabble.com>
-References: <CAAs3wMgAbEnReJ-XW_QnQ=kAU6G7cwzss7yUMytcmHMRYMsjnw@mail.gmail.com>
- <20140117113153.GB10730@pc-eric>
- <CAAs3wMh5xwOK_bEDVM1JMJvw6vYYL2frZYxTc_4ehyLK2sj++g@mail.gmail.com>
- <20140117154452.GC10730@pc-eric>
- <1390290077263-60414.post@n4.nabble.com>
-Message-ID: <20140121173657.GA11605@pc-eric>
+From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
+Date: Tue, 21 Jan 2014 19:07:11 +0100
+Subject: [Buildroot] [PATCH 2/2] Prefer 'printf' over 'echo -e' (for
+	portability)
+In-Reply-To: <87ob35iv7l.fsf@dell.be.48ers.dk>
+References: <1388421102-29198-1-git-send-email-bjorn.forsman@gmail.com>
+ <1388421102-29198-2-git-send-email-bjorn.forsman@gmail.com>
+ <CAAXf6LXy=maSi1ytsQcEMeVwvV4KvTiRPHOPMe+b12TrS1FDeA@mail.gmail.com>
+ <87ob35iv7l.fsf@dell.be.48ers.dk>
+Message-ID: <CAEYzJUE=nMbE_Wkm-gEM2Vtx4Ssd=jqTgcNVs64Xr1YjV=OY+A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
-On Mon, Jan 20, 2014 at 11:41:17PM -0800, sambuff wrote:
-> > Adding a new package for python-gobject 2.28 is pretty straightforward. I
-> >did it in my repo:
-> https://github.com/elebihan/buildroot/commit/4107b0e4549aa4a234496c840361528381f57edf.
+On 21 January 2014 09:40, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 >
-> Thanks for the link but I've failed to build it though.
+> Hi,
 >
-> I've tried your new package with br-2013.11but the build fails because of
-> "missing python headers"
+>  > I find it very strange that we're mixing printf and echo in this same
+>  > file. I would suggest to either use echo only, or printf only. The
+>  > statement
+>  > echo -e '\nblaat'
+>  > is functionally equivalent to:
+>  > echo
+>  > echo blaat
+>
+>  > Your point about printf being more portable is valid, and has been
+>  > raised in the past by Yann (I believe) as well.
+>  > This means that moving to printf iso echo makes sense, but then this
+>  > patch should be reworked as to fix the entire file.
+>
+>  > Note that this is just my opinion, I can't speak for the entire community.
+>
+> Yes, I agree. I would also like to see the same style used everywhere in
+> the file.
 
-D'Oh! I forgot to add 'python' after 'host-python' in
-package/python-gobject/python-gobject.mk.
-
-I reworked the package and added proper support for PyGtk. Development now
-takes place in https://github.com/elebihan/buildroot/tree/pygtk-support/.
-The complete stack has been added:
-
-- python-pygobject (formerly python-gobject).
-- python-xpyb.
-- python-pycairo.
-- python-pygtk.
-
-Two demo boards (elebihan_demo_pygtk*) are available.
-This is still WIP.
-
-Thanks for your feedback.
-
-Best regards,
-ELB.
+I agree. I'll fix it and send new patches.
