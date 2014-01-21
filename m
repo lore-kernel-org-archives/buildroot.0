@@ -1,40 +1,50 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 21 Jan 2014 11:20:09 +0100
-Subject: [Buildroot] Patchwork oldest patches cleanup #6 (deadline
-	February 2)
-In-Reply-To: <52DE4042.6060108@relinux.de>
-References: <CAAXf6LX2yqbapp6GBuN5qoT1R93CGD3NCLguY8fQhFoApJz2uw@mail.gmail.com>
- <52DE28BD.8020306@relinux.de>
- <CAAXf6LX+8s0EC9itepQ2aoZK21AkTvQfDdoOa61aAqcwsJms5Q@mail.gmail.com>
- <52DE4042.6060108@relinux.de>
-Message-ID: <CAAXf6LX+3MuF3GxM33bhKdoDPiDpcr93iL-Ot_JRBOcuQ8iVDw@mail.gmail.com>
+From: Martin Bark <martin@barkynet.com>
+Date: Tue, 21 Jan 2014 10:41:26 +0000
+Subject: [Buildroot] [PATCH 1/1] Fixed tcpreplay auto build errors
+Message-ID: <1390300886-15282-1-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jan 21, 2014 at 10:39 AM, Stephan Hoffmann <sho@relinux.de> wrote:
-[..]
->>>> Linux: enable local Linux tarball in config
->>>> Stephan Hoffmann <sho@relinux.de>
->>>> http://patchwork.ozlabs.org/patch/217204
->>> Thomas, all,
->>>
->>> I still think that this would be a useful feature for buildroot,
->>> especially when dealing with soc or boards that come with a kernel
->>> tarball from the vendor that is not easily accessible online.
->>>
->> I just looked at your patch, but it is not needed to achieve what you
->> want. If you specify:
->> file:///path/to/local/file
->> then the site method will be automatically set to file (just tested).
->> Could you verify that this indeed fits your use case?
-> Yes, it does, and it does with the old buildroot I had then, too. So my
-> patch is obsolete, please remove it. I do not remember why I did not
-> find this last year.
+tcpreplay fails to compile unless it finds the tcpdump binary.  This patch
+makes tcpreplay dependent on tcpdump and sets the configure script to use
+tcpdump on the target
 
-Ok, great that we sorted this out. I'll mark the patch as rejected in patchwork.
+Signed-off-by: Martin Bark <martin@barkynet.com>
+---
+ package/tcpreplay/Config.in    |    1 +
+ package/tcpreplay/tcpreplay.mk |    5 +++--
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-Thanks,
-Thomas
+diff --git a/package/tcpreplay/Config.in b/package/tcpreplay/Config.in
+index 2ba2eb5..49c3284 100644
+--- a/package/tcpreplay/Config.in
++++ b/package/tcpreplay/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_TCPREPLAY
+ 	bool "tcpreplay"
+ 	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_LIBPCAP
++	select BR2_PACKAGE_TCPDUMP
+ 	help
+ 	  Tcpreplay is a tool for replaying network traffic from files saved
+ 	  with tcpdump or other tools which write pcap(3) files.
+diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
+index 0939c6c..f6a7c85 100644
+--- a/package/tcpreplay/tcpreplay.mk
++++ b/package/tcpreplay/tcpreplay.mk
+@@ -11,8 +11,9 @@ TCPREPLAY_LICENSE_FILES = docs/LICENSE
+ TCPREPLAY_CONF_ENV = \
+ 	tr_cv_libpcap_version=">= 0.7.0" \
+ 	ac_cv_have_bpf=no
+-TCPREPLAY_CONF_OPT = --with-libpcap=$(STAGING_DIR)/usr
+-TCPREPLAY_DEPENDENCIES = libpcap
++TCPREPLAY_CONF_OPT = --with-libpcap=$(STAGING_DIR)/usr \
++	--with-tcpdump=$(TARGET_DIR)/usr/sbin/tcpdump
++TCPREPLAY_DEPENDENCIES = libpcap tcpdump
+ 
+ # libpcap may depend on symbols in libusb as well
+ TCPREPLAY_LIBS = -lpcap $(if $(BR2_PACKAGE_LIBUSB),-lusb-1.0)
+-- 
+1.7.9.5
