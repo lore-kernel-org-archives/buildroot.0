@@ -1,39 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Jan 2014 21:57:20 +0100
-Subject: [Buildroot] [git commit] ttcp: remove deprecated package
-Message-ID: <20140121205928.201769AB97@busybox.osuosl.org>
+Date: Tue, 21 Jan 2014 21:58:07 +0100
+Subject: [Buildroot] [git commit] lzma: remove deprecated target package
+Message-ID: <20140121205928.35F6C9AB97@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7ef5c3a5c707be1cbfd233223cdfb5528925e2a6
+commit: http://git.buildroot.net/buildroot/commit/?id=0a07731933bded233b840e71770c01118b3a709c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since this is the only package depending on BR2_DEPRECATED_SINCE_2012_05,
-remove that symbol as well.
+The on-target lzma package has been deprecated for a long time, so remove
+it. This does not remove the support for generating lzma-compressed rootfs
+images.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in                                          |    4 ---
- Config.in.legacy                                   |    7 +++++
- package/Config.in                                  |    1 -
- package/ttcp/Config.in                             |    7 -----
- .../ttcp/ttcp-0001-replace-deprecated-bcopy.patch  |   15 ------------
- package/ttcp/ttcp.mk                               |   25 --------------------
- 6 files changed, 7 insertions(+), 52 deletions(-)
+ Config.in              |    4 ----
+ Config.in.legacy       |    8 ++++++++
+ package/Config.in      |    1 -
+ package/lzma/Config.in |   13 -------------
+ package/lzma/lzma.mk   |    2 --
+ 5 files changed, 8 insertions(+), 20 deletions(-)
 
 diff --git a/Config.in b/Config.in
-index 93d8fce..fa723fe 100644
+index fa723fe..7ec7c2a 100644
 --- a/Config.in
 +++ b/Config.in
-@@ -268,10 +268,6 @@ config BR2_DEPRECATED_SINCE_2010_11
- 	bool
- 	default y
+@@ -264,10 +264,6 @@ config BR2_DEPRECATED
  
--config BR2_DEPRECATED_SINCE_2012_05
+ if BR2_DEPRECATED
+ 
+-config BR2_DEPRECATED_SINCE_2010_11
 -	bool
 -	default y
 -
@@ -41,97 +41,67 @@ index 93d8fce..fa723fe 100644
  	bool
  	default y
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 2fed2d8..473d0ef 100644
+index 473d0ef..631286a 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -101,6 +101,13 @@ endif
+@@ -101,6 +101,14 @@ endif
  ###############################################################################
  comment "Legacy options removed in 2014.02"
  
-+config BR2_PACKAGE_TTCP
-+	bool "ttcp has been removed"
++config BR2_PACKAGE_LZMA
++	bool "lzma target package has been removed"
 +	select BR2_LEGACY
 +	help
-+	  The 'ttcp' package has been removed since it has been
++	  The 'lzma' target package has been removed since it has been
 +	  deprecated for more than four buildroot releases.
++	  Note: generating lzma-compressed rootfs images is still supported.
 +
- config BR2_PACKAGE_LIBNFC_LLCP
- 	bool "libnfc-llcp has been removed"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
+ config BR2_PACKAGE_TTCP
+ 	bool "ttcp has been removed"
+ 	select BR2_LEGACY
 diff --git a/package/Config.in b/package/Config.in
-index cd869d8..ed31354 100644
+index ed31354..c45f8bd 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -935,7 +935,6 @@ source "package/thttpd/Config.in"
- source "package/tinyhttpd/Config.in"
- source "package/tn5250/Config.in"
- source "package/transmission/Config.in"
--source "package/ttcp/Config.in"
- source "package/tvheadend/Config.in"
- source "package/udpcast/Config.in"
- source "package/ulogd/Config.in"
-diff --git a/package/ttcp/Config.in b/package/ttcp/Config.in
+@@ -35,7 +35,6 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/gzip/Config.in"
+ endif
+ source "package/infozip/Config.in"
+-source "package/lzma/Config.in"
+ source "package/lzop/Config.in"
+ source "package/xz/Config.in"
+ endmenu
+diff --git a/package/lzma/Config.in b/package/lzma/Config.in
 deleted file mode 100644
-index 53b1c32..0000000
---- a/package/ttcp/Config.in
+index d7e8827..0000000
+--- a/package/lzma/Config.in
 +++ /dev/null
-@@ -1,7 +0,0 @@
--config BR2_PACKAGE_TTCP
--	bool "ttcp"
--	depends on BR2_DEPRECATED_SINCE_2012_05
+@@ -1,13 +0,0 @@
+-config BR2_PACKAGE_LZMA
+-	bool "lzma"
+-	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_DEPRECATED_SINCE_2010_11
 -	help
--	  Benchmarking tool for determining TCP and UDP performance.
+-	  Lempel Ziv compression method (LZMA) is a compression
+-	  algorithm with high compression ratio.
 -
--	  ftp://ftp.sgi.com/sgi/src/ttcp/README
-diff --git a/package/ttcp/ttcp-0001-replace-deprecated-bcopy.patch b/package/ttcp/ttcp-0001-replace-deprecated-bcopy.patch
-deleted file mode 100644
-index fb8ef7f..0000000
---- a/package/ttcp/ttcp-0001-replace-deprecated-bcopy.patch
-+++ /dev/null
-@@ -1,15 +0,0 @@
--Replace deprecated bcopy call by using memmove instead.
+-	  http://tukaani.org/lzma/
 -
--Index: b/ttcp.c
--===================================================================
----- a/ttcp.c
--+++ b/ttcp.c
--@@ -241,7 +241,7 @@
-- 			if ((addr=gethostbyname(host)) == NULL)
-- 				err("bad hostname");
-- 			sinhim.sin_family = addr->h_addrtype;
---			bcopy(addr->h_addr,(char*)&addr_tmp, addr->h_length);
--+			memmove((char*)&addr_tmp, addr->h_addr, addr->h_length);
-- #if defined(cray)
-- 			sinhim.sin_addr = addr_tmp;
-- #else
-diff --git a/package/ttcp/ttcp.mk b/package/ttcp/ttcp.mk
-deleted file mode 100644
-index 7667b20..0000000
---- a/package/ttcp/ttcp.mk
-+++ /dev/null
-@@ -1,25 +0,0 @@
--################################################################################
--#
--# ttcp
--#
--################################################################################
--
--TTCP_VERSION = 1.12
--TTCP_SITE    = ftp://ftp.sgi.com/sgi/src/ttcp/
--TTCP_SOURCE  = ttcp.c
--TTCP_LICENSE = public domain
--
--define TTCP_EXTRACT_CMDS
--	cp -f -t $(@D) $(DL_DIR)/$(TTCP_SOURCE)
--endef
--
--define TTCP_BUILD_CMDS
--	$(TARGET_CC) $(TARGET_CPPFLAGS) $(TARGET_CFLAGS) \
--		-o $(@D)/ttcp $(@D)/$(TTCP_SOURCE)
--endef
--
--define TTCP_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 0755 $(@D)/ttcp $(TARGET_DIR)/usr/bin/ttcp
--endef
--
--$(eval $(generic-package))
+-comment "lzma needs a toolchain w/ C++"
+-	depends on BR2_DEPRECATED_SINCE_2010_11
+-	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/lzma/lzma.mk b/package/lzma/lzma.mk
+index 9049833..e7129dd 100644
+--- a/package/lzma/lzma.mk
++++ b/package/lzma/lzma.mk
+@@ -7,10 +7,8 @@
+ LZMA_VERSION = 4.32.7
+ LZMA_SOURCE = lzma-$(LZMA_VERSION).tar.xz
+ LZMA_SITE = http://tukaani.org/lzma/
+-LZMA_INSTALL_STAGING = YES
+ LZMA_CONF_OPT = $(if $(BR2_ENABLE_DEBUG),--enable-debug,--disable-debug)
+ 
+-$(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+ 
+ LZMA = $(HOST_DIR)/usr/bin/lzma
