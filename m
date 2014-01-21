@@ -1,74 +1,29 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 21 Jan 2014 12:49:05 +0100
-Subject: [Buildroot] Problem with multi interface support in udhcpc
-	script?
-In-Reply-To: <CANxTyt44suVoSpVTivmKde77P7fUYRa04a_fQfb=ceA-Yym9sQ@mail.gmail.com>
- (Danomi Manchego's message of "Tue, 14 Jan 2014 09:47:05 -0500")
-References: <CANxTyt44suVoSpVTivmKde77P7fUYRa04a_fQfb=ceA-Yym9sQ@mail.gmail.com>
-Message-ID: <87fvohimha.fsf@dell.be.48ers.dk>
+From: Frank Ihle <frank.ihle@hs-offenburg.de>
+Date: Tue, 21 Jan 2014 13:14:02 +0100
+Subject: [Buildroot] Do i have to build from scratch everytime ?
+Message-ID: <52DE729A0200004600049269@gwia2.rz.hs-offenburg.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
-
-Hi,
-
- > Peter,
- > Back in June 2013, you committed this change to add support for
- > multiple neetwork interfaces in resolv.conf:
-
- > http://git.buildroot.net/buildroot/commit/package/busybox/udhcpc.script?id=584f418ec1ae3f0b5e09c10133c82578d78a3e03
-
- > However, I don't think that this quite works.  The "nameserver" lines
- > are okay, because it's supposed to be one server per line.  But there
- > is supposed to be only one "search" line.  So, for example, if I use
- > the resolv library to dump resolv.conf data, I only get the search
- > domains from the *last* search line.   Similarly, when I try to
- > resolve a name, the search domain ommitted by the reolve library info
- > appears to not be used by busybox's "nslookup" app.
-
-Ahh, so we need to add per-interface domain comments and generate a
-'search' line with all domains. As you say, the last search line "wins"
-(also verified in uClibc code), we could perhaps just so something
-similar to the nameservers, E.G.:
-
-nameserver ... # eth0
-search foo # eth0
-nameserver ... # eth1
-search bar # eth1
-search foo bar # COMBINED
+Hi everyone,
 
 
-while read KEYWORD VALUE COMMENT;
-do
-    # drop combined search line
-    case "$COMMENT" in
-        *COMBINED) continue ;;
-    esac
+I'm using Buildroot the last version of 2013 and i like that little helper, so thanks for the support. 
 
-    if [ "$KEYWORD" = "search" ]; then
-        DOMAINS="$DOMAINS$VALUE "
-    fi
+I'm trying to lower the startup time of an embedded system and I'd like to check the options available step by step, not all at once. I'm working with it for some months and right now I've got this feeling: to be sure, that the settings are only done the way i picked them, is to do a "clean" before a "make". Not only when the toolchain is changed, randomly i get Images generated, whose actual settings were ignored (like leave out the init system BusyBox - even when deleting it completely from the "build" folder). 
 
-    echo "$KEYWORD $VALUE $COMMENT"
-done < /tmp/resolv.conf
+When I make it clean first everything runs smoothly. But it takes forever. I don't have a High-End PC and (based on the settings) a make takes about 45 min. So I'm doing this 5-6 times and the day is over.
 
-echo "search $DOMAINS # COMBINED"
+That's why I have this question: Do i really have to build from scratch everytime? Or is there some kind of a secure way to patch my Image (or any other method)?
 
- > FYI, the program that used to dump resolv.conf info is below.
+Thanks For your help
+Kind Regards
 
- > I'm wondering if there needs to be comment lines to track the search
- > domains per interface, and then a fancy grep+sed bit to synthesize a
- > single aggregate search line from those comments.
+Frank Ihle
 
- > When you did the original change, do you recall if you tested if the
- > multiple search lines let you resolve non-FQDN refs correctly?
-
-No, I must say that the setup where I needed DHCP on multiple interfaces
-only had DNS setup on a single one.
-
--- 
-Bye, Peter Korsgaard
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140121/1c8c16c5/attachment.html>
