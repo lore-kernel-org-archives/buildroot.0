@@ -1,23 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 21 Jan 2014 23:41:35 +0100
-Subject: [Buildroot] [PATCH 2/3] rename the patches so they have a number
-In-Reply-To: <1390313407-3495-2-git-send-email-kuyurix@gmail.com> ("Marcelo
- =?utf-8?Q?Guti=C3=A9rrez=22's?= message of "Tue, 21 Jan 2014 14:10:06
- +0000")
-References: <1390313407-3495-2-git-send-email-kuyurix@gmail.com>
-Message-ID: <87fvohez4w.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 21 Jan 2014 23:41:16 +0100
+Subject: [Buildroot] [git commit] mysql: rename the patches so they have a
+	number
+Message-ID: <20140121224154.498DA9A355@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Marcelo" == Marcelo Guti?rrez <kuyurix@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=e2b2ecb691ab7e8cd7e88514483c2a966389c6f1
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Rename patches to add sequence numbers
- > Signed-off-by: Marcelo Guti?rrez <kuyurix@gmail.com>
+Rename patches to add sequence numbers
 
-Committed, thanks.
+Signed-off-by: Marcelo Guti??rrez <kuyurix@gmail.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...check.patch => mysql-0000-ac_cache_check.patch} |    0
+ ...h => mysql-0001-configure-ps-cache-check.patch} |    0
+ ...tch => mysql-0002-use-new-readline-iface.patch} |    0
+ 3 files changed, 0 insertions(+), 0 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/mysql/mysql-ac_cache_check.patch b/package/mysql/mysql-0000-ac_cache_check.patch
+similarity index 100%
+rename from package/mysql/mysql-ac_cache_check.patch
+rename to package/mysql/mysql-0000-ac_cache_check.patch
+diff --git a/package/mysql/mysql-configure-ps-cache-check.patch b/package/mysql/mysql-0001-configure-ps-cache-check.patch
+similarity index 100%
+rename from package/mysql/mysql-configure-ps-cache-check.patch
+rename to package/mysql/mysql-0001-configure-ps-cache-check.patch
+diff --git a/package/mysql/mysql-use-new-readline-iface.patch b/package/mysql/mysql-0002-use-new-readline-iface.patch
+similarity index 100%
+rename from package/mysql/mysql-use-new-readline-iface.patch
+rename to package/mysql/mysql-0002-use-new-readline-iface.patch
