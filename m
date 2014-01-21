@@ -1,261 +1,158 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Jan 2014 09:43:27 +0100
-Subject: [Buildroot] [git commit] support/dependencies/dependencies.sh:
-	Remove some absolute paths
-Message-ID: <20140121084400.C18299C54D@busybox.osuosl.org>
+From: Jeremy Rosen <jeremy.rosen@openwide.fr>
+Date: Tue, 21 Jan 2014 09:44:51 +0100 (CET)
+Subject: [Buildroot] [PATCH] prevent recursion in %_defconfig rules
+In-Reply-To: <20140120235847.GA10408@free.fr>
+Message-ID: <1761803788.4552868.1390293891943.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f975a1a4738ace6344108a28a92767b95d6cef89
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Buildroot fails to run on NixOS because it has no /bin/echo or
-/bin/grep. Instead of relying on absolute paths, rely on tools to be
-available in PATH. This should work for all systems.
+> > 
+> > There is no specific setup, I used my current buildroot directory
+> > and run:
+> > 
+> > make O=.. BR2_EXTERNAL=.. raspberrypi_defconfig
+> > make: stat:
+> > /home/naourr/git/buildroot/configs/../configs/../configs/..
+> > [snip]
+> > ../configs/raspberrypi_defconfig ?. Stop
+> > 
+> > Or
+> > 
+> > make O=../output BR2_EXTERNAL=.. raspberrypi_defconfig
+> > make: stat:
+> > /home/naourr/git/buildroot/configs/../configs/../configs/..
+> > [snip]
+> > ../configs/raspberrypi_defconfig ?. Stop
+> 
+> OK, we have a way to reproduce it, now. We can investigate. Good! :-)
+>  
 
-Signed-off-by: Bj??rn Forsman <bjorn.forsman@gmail.com>
-Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- support/dependencies/dependencies.sh |   96 +++++++++++++++++-----------------
- 1 files changed, 48 insertions(+), 48 deletions(-)
+Awesome, do you still need me to run your script or are your fine ?
 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index 32b8fea..d1ce918 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -7,20 +7,20 @@ export LC_ALL=C
- # Verify that grep works
- echo "WORKS" | grep "WORKS" >/dev/null 2>&1
- if test $? != 0 ; then
--	/bin/echo -e "\ngrep doesn't work\n"
-+	echo -e "\ngrep doesn't work\n"
- 	exit 1
- fi
- 
- # sanity check for CWD in LD_LIBRARY_PATH
- # try not to rely on egrep..
- if test -n "$LD_LIBRARY_PATH" ; then
--	/bin/echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | /bin/grep ':\.:' >/dev/null 2>&1 ||
--	/bin/echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | /bin/grep 'TRiGGER_start\.:' >/dev/null 2>&1 ||
--	/bin/echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | /bin/grep ':\.TRiGGER_end' >/dev/null 2>&1 ||
--	/bin/echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | /bin/grep 'TRiGGER_start\.TRiGGER_end' >/dev/null 2>&1
-+	echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | grep ':\.:' >/dev/null 2>&1 ||
-+	echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | grep 'TRiGGER_start\.:' >/dev/null 2>&1 ||
-+	echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | grep ':\.TRiGGER_end' >/dev/null 2>&1 ||
-+	echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | grep 'TRiGGER_start\.TRiGGER_end' >/dev/null 2>&1
- 	if test $? = 0; then
--		/bin/echo -e "\nYou seem to have the current working directory in your"
--		/bin/echo -e "LD_LIBRARY_PATH environment variable. This doesn't work.\n"
-+		echo -e "\nYou seem to have the current working directory in your"
-+		echo -e "LD_LIBRARY_PATH environment variable. This doesn't work.\n"
- 		exit 1;
- 	fi
- fi;
-@@ -29,51 +29,51 @@ fi;
- # in the PATH makes the toolchain build process break.
- # try not to rely on egrep..
- if test -n "$PATH" ; then
--	/bin/echo TRiGGER_start"$PATH"TRiGGER_end | /bin/grep ':\.:' >/dev/null 2>&1 ||
--	/bin/echo TRiGGER_start"$PATH"TRiGGER_end | /bin/grep 'TRiGGER_start\.:' >/dev/null 2>&1 ||
--	/bin/echo TRiGGER_start"$PATH"TRiGGER_end | /bin/grep ':\.TRiGGER_end' >/dev/null 2>&1 ||
--	/bin/echo TRiGGER_start"$PATH"TRiGGER_end | /bin/grep 'TRiGGER_start\.TRiGGER_end' >/dev/null 2>&1
-+	echo TRiGGER_start"$PATH"TRiGGER_end | grep ':\.:' >/dev/null 2>&1 ||
-+	echo TRiGGER_start"$PATH"TRiGGER_end | grep 'TRiGGER_start\.:' >/dev/null 2>&1 ||
-+	echo TRiGGER_start"$PATH"TRiGGER_end | grep ':\.TRiGGER_end' >/dev/null 2>&1 ||
-+	echo TRiGGER_start"$PATH"TRiGGER_end | grep 'TRiGGER_start\.TRiGGER_end' >/dev/null 2>&1
- 	if test $? = 0; then
--		/bin/echo -e "\nYou seem to have the current working directory in your"
--		/bin/echo -e "PATH environment variable. This doesn't work.\n"
-+		echo -e "\nYou seem to have the current working directory in your"
-+		echo -e "PATH environment variable. This doesn't work.\n"
- 		exit 1;
- 	fi
- fi;
- 
- if test -n "$PERL_MM_OPT" ; then
--    /bin/echo -e "\nYou have PERL_MM_OPT defined because Perl local::lib"
--    /bin/echo -e "is installed on your system. Please unset this variable"
--    /bin/echo -e "before starting Buildroot, otherwise the compilation of"
--    /bin/echo -e "Perl related packages will fail"
-+    echo -e "\nYou have PERL_MM_OPT defined because Perl local::lib"
-+    echo -e "is installed on your system. Please unset this variable"
-+    echo -e "before starting Buildroot, otherwise the compilation of"
-+    echo -e "Perl related packages will fail"
-     exit 1
- fi
- 
- # Verify that which is installed
- if ! which which > /dev/null ; then
--	/bin/echo -e "\nYou must install 'which' on your build machine\n";
-+	echo -e "\nYou must install 'which' on your build machine\n";
- 	exit 1;
- fi;
- 
- if ! which sed > /dev/null ; then
--	/bin/echo -e "\nYou must install 'sed' on your build machine\n"
-+	echo -e "\nYou must install 'sed' on your build machine\n"
- 	exit 1
- fi
- 
- # Check make
- MAKE=$(which make 2> /dev/null)
- if [ -z "$MAKE" ] ; then
--	/bin/echo -e "\nYou must install 'make' on your build machine\n";
-+	echo -e "\nYou must install 'make' on your build machine\n";
- 	exit 1;
- fi;
- MAKE_VERSION=$($MAKE --version 2>&1 | sed -e 's/^.* \([0-9\.]\)/\1/g' -e 's/[-\ ].*//g' -e '1q')
- if [ -z "$MAKE_VERSION" ] ; then
--	/bin/echo -e "\nYou must install 'make' on your build machine\n";
-+	echo -e "\nYou must install 'make' on your build machine\n";
- 	exit 1;
- fi;
- MAKE_MAJOR=$(echo $MAKE_VERSION | sed -e "s/\..*//g")
- MAKE_MINOR=$(echo $MAKE_VERSION | sed -e "s/^$MAKE_MAJOR\.//g" -e "s/\..*//g" -e "s/[a-zA-Z].*//g")
- if [ $MAKE_MAJOR -lt 3 ] || [ $MAKE_MAJOR -eq 3 -a $MAKE_MINOR -lt 81 ] ; then
--	/bin/echo -e "\nYou have make '$MAKE_VERSION' installed.  GNU make >=3.81 is required\n"
-+	echo -e "\nYou have make '$MAKE_VERSION' installed.  GNU make >=3.81 is required\n"
- 	exit 1;
- fi;
- 
-@@ -83,14 +83,14 @@ if [ -z "$COMPILER" ] ; then
- 	COMPILER=$(which cc 2> /dev/null)
- fi;
- if [ -z "$COMPILER" ] ; then
--	/bin/echo -e "\nYou must install 'gcc' on your build machine\n";
-+	echo -e "\nYou must install 'gcc' on your build machine\n";
- 	exit 1;
- fi;
- 
- COMPILER_VERSION=$($COMPILER -v 2>&1 | sed -n '/^gcc version/p' |
- 	sed -e 's/^gcc version \([0-9\.]\)/\1/g' -e 's/[-\ ].*//g' -e '1q')
- if [ -z "$COMPILER_VERSION" ] ; then
--	/bin/echo -e "\nYou must install 'gcc' on your build machine\n";
-+	echo -e "\nYou must install 'gcc' on your build machine\n";
- 	exit 1;
- fi;
- COMPILER_MAJOR=$(echo $COMPILER_VERSION | sed -e "s/\..*//g")
-@@ -106,27 +106,27 @@ if [ -z "$CXXCOMPILER" ] ; then
- 	CXXCOMPILER=$(which c++ 2> /dev/null)
- fi
- if [ -z "$CXXCOMPILER" ] ; then
--	/bin/echo -e "\nYou may have to install 'g++' on your build machine\n"
-+	echo -e "\nYou may have to install 'g++' on your build machine\n"
- 	#exit 1
- fi
- if [ ! -z "$CXXCOMPILER" ] ; then
- 	CXXCOMPILER_VERSION=$($CXXCOMPILER -v 2>&1 | sed -n '/^gcc version/p' |
- 		sed -e 's/^gcc version \([0-9\.]\)/\1/g' -e 's/[-\ ].*//g' -e '1q')
- 	if [ -z "$CXXCOMPILER_VERSION" ] ; then
--		/bin/echo -e "\nYou may have to install 'g++' on your build machine\n"
-+		echo -e "\nYou may have to install 'g++' on your build machine\n"
- 	fi
- 
- 	CXXCOMPILER_MAJOR=$(echo $CXXCOMPILER_VERSION | sed -e "s/\..*//g")
- 	CXXCOMPILER_MINOR=$(echo $CXXCOMPILER_VERSION | sed -e "s/^$CXXCOMPILER_MAJOR\.//g" -e "s/\..*//g")
- 	if [ $CXXCOMPILER_MAJOR -lt 3 -o $CXXCOMPILER_MAJOR -eq 2 -a $CXXCOMPILER_MINOR -lt 95 ] ; then
--		/bin/echo -e "\nYou have g++ '$CXXCOMPILER_VERSION' installed.  g++ >= 2.95 is required\n"
-+		echo -e "\nYou have g++ '$CXXCOMPILER_VERSION' installed.  g++ >= 2.95 is required\n"
- 		exit 1
- 	fi
- fi
- 
- # Check bash
- if ! $SHELL --version 2>&1 | grep -q '^GNU bash'; then
--	/bin/echo -e "\nYou must install 'bash' on your build machine\n";
-+	echo -e "\nYou must install 'bash' on your build machine\n";
- 	exit 1;
- fi;
- 
-@@ -134,16 +134,16 @@ fi;
- missing_progs="no"
- for prog in patch perl tar wget cpio python unzip rsync bc ${DL_TOOLS} ; do
-     if ! which $prog > /dev/null ; then
--	/bin/echo -e "You must install '$prog' on your build machine";
-+	echo -e "You must install '$prog' on your build machine";
- 	missing_progs="yes"
- 	if test $prog = "svn" ; then
--	    /bin/echo -e "  svn is usually part of the subversion package in your distribution"
-+	    echo -e "  svn is usually part of the subversion package in your distribution"
- 	elif test $prog = "hg" ; then
--            /bin/echo -e "  hg is usually part of the mercurial package in your distribution"
-+            echo -e "  hg is usually part of the mercurial package in your distribution"
- 	elif test $prog = "zcat" ; then
--            /bin/echo -e "  zcat is usually part of the gzip package in your distribution"
-+            echo -e "  zcat is usually part of the gzip package in your distribution"
- 	elif test $prog = "bzcat" ; then
--            /bin/echo -e "  bzcat is usually part of the bzip2 package in your distribution"
-+            echo -e "  bzcat is usually part of the bzip2 package in your distribution"
- 	fi
-     fi
- done
-@@ -155,11 +155,11 @@ fi
- if grep ^BR2_TOOLCHAIN_BUILDROOT=y $BUILDROOT_CONFIG > /dev/null && \
-    grep ^BR2_ENABLE_LOCALE=y       $BUILDROOT_CONFIG > /dev/null ; then
-    if ! which locale > /dev/null ; then
--       /bin/echo -e "\nYou need locale support on your build machine to build a toolchain supporting locales\n"
-+       echo -e "\nYou need locale support on your build machine to build a toolchain supporting locales\n"
-        exit 1 ;
-    fi
-    if ! locale -a | grep -q -i utf8$ ; then
--       /bin/echo -e "\nYou need at least one UTF8 locale to build a toolchain supporting locales\n"
-+       echo -e "\nYou need at least one UTF8 locale to build a toolchain supporting locales\n"
-        exit 1 ;
-    fi
- fi
-@@ -167,7 +167,7 @@ fi
- if grep -q ^BR2_PACKAGE_CLASSPATH=y $BUILDROOT_CONFIG ; then
-     for prog in javac jar; do
- 	if ! which $prog > /dev/null ; then
--	    /bin/echo -e "\nYou must install '$prog' on your build machine\n" >&2
-+	    echo -e "\nYou must install '$prog' on your build machine\n" >&2
- 	    exit 1
- 	fi
-     done
-@@ -175,22 +175,22 @@ fi
- 
- if grep -q ^BR2_HOSTARCH_NEEDS_IA32_LIBS=y $BUILDROOT_CONFIG ; then
-     if test ! -f /lib/ld-linux.so.2 ; then
--	/bin/echo -e "\nYour Buildroot configuration uses pre-built tools for the x86 architecture,"
--	/bin/echo -e "but your build machine uses the x86-64 architecture without the 32 bits compatibility"
--	/bin/echo -e "library."
--	/bin/echo -e "If you're running a Debian/Ubuntu distribution, install the libc6:i386,"
--	/bin/echo -e "libstdc++6:i386, and zlib1g:i386 packages."
--	/bin/echo -e "For other distributions, refer to the documentation on how to install the 32 bits"
--	/bin/echo -e "compatibility libraries."
-+	echo -e "\nYour Buildroot configuration uses pre-built tools for the x86 architecture,"
-+	echo -e "but your build machine uses the x86-64 architecture without the 32 bits compatibility"
-+	echo -e "library."
-+	echo -e "If you're running a Debian/Ubuntu distribution, install the libc6:i386,"
-+	echo -e "libstdc++6:i386, and zlib1g:i386 packages."
-+	echo -e "For other distributions, refer to the documentation on how to install the 32 bits"
-+	echo -e "compatibility libraries."
- 	exit 1
-     fi
- fi
- 
- if grep -q ^BR2_HOSTARCH_NEEDS_IA32_COMPILER=y $BUILDROOT_CONFIG ; then
-     if ! echo "int main(void) {}" | gcc -m32 -x c - ; then
--	/bin/echo -e "\nYour Buildroot configuration needs a compiler capable of building 32 bits binaries."
--	/bin/echo -e "If you're running a Debian/Ubuntu distribution, install the gcc-multilib package."
--	/bin/echo -e "For other distributions, refer to their documentation."
-+	echo -e "\nYour Buildroot configuration needs a compiler capable of building 32 bits binaries."
-+	echo -e "If you're running a Debian/Ubuntu distribution, install the gcc-multilib package."
-+	echo -e "For other distributions, refer to their documentation."
- 	exit 1
-     fi
- fi
-@@ -198,7 +198,7 @@ fi
- # Check that the Perl installation is complete enough to build
- # host-autoconf.
- if ! perl  -e "require Data::Dumper" > /dev/null 2>&1 ; then
--    /bin/echo -e "Your Perl installation is not complete enough, at least Data::Dumper is missing."
--    /bin/echo -e "On Debian/Ubuntu distributions, install the 'perl' package."
-+    echo -e "Your Perl installation is not complete enough, at least Data::Dumper is missing."
-+    echo -e "On Debian/Ubuntu distributions, install the 'perl' package."
-     exit 1
- fi
+as a side note, i'm boucman on IRC, i'll try to ping you if I see you
+around...
+
+> > But it's ok with :
+> > 
+> > make O=../output BR2_EXTERNAL=../external raspberrypi_defconfig
+> >  GEN
+> > ../output/Makefile
+> > #
+> > # configuration written to ../output/.config
+> > #
+> > 
+> > I have no solution currently, but I hope this help...
+> > 
+> > Yann, what's wrong with relative path for BR2_EXTERNAL or O ?
+> 
+> Because they do not work as you would expect. If you pass relative
+> paths, they are interpreted relative to the buildroot directory.
+> 
+
+that was indeed my understanding, I am trying to have the layout at 
+
+https://github.com/Openwide-Ingenierie/raspaudio
+
+that is:
+
+* Having a buildroot/ subdirectory at the root of the project
+* Having a Makefile in the root of the project that correctly 
+  allows to build the project
+* Having BR2_EXTERNAL be the root of the project (and as much 
+  as possible, all config files in the root of the project)
+* Having an output/ subdirectory in the root of the project 
+  with all build files
+* Having everything relocatable (since I want to save it to git, I 
+  can't have absolute paths)
+
+That is currently not possible and maybe it's a bad idea, but this 
+layout seems to make sense to me and the relative path requirement
+makes sense too, since it's needed for other people to use my project
+
+
+> In your first two cases, you would expect it would work, but not in
+> the
+> following case:
+> 
+>     make -C buildroot O=build BR2_EXTERNAL=br2.external foo_defconfig
+> 
+> In this case, you'd expect O and BR2_EXTERNAL to be relative to the
+> current working directory. But hey are not. They are interpreted
+> relative to the Buildroot dir. Bummer, that's not what you expect.
+> 
+
+actually, I did expect that not to work. I did look at everything I
+could in the usermanual :P
+
+Though I agree that it would be more sensible to have 0= and 
+BR2_EXTERNAL be relative to cwd...
+
+> So, you should only pass absolute paths to O and BR2_EXTERNAL (IMHO).
+> 
+
+see my use-case above... I need to commit the makefile to git, so no
+absolute path for me...
+
+
+> And ditto for O, although nothing is psecified about using relative
+> paths. :-(
+> 
+
+yes, this needs to be added, i'll add a note.
+
+note that the makefile generated in the O= directory has an absolute 
+path to the buildroot directory, not a relative one, which breaks
+my use case
+
+> Now, I don't know why it fails as thus in your case... But it's late
+> here. More on this tomorrow. If someone has a good idea about it...
+> ;-)
+> 
+> But the bottom line is: relative paths are a plague! ;-]
+> 
+
+i'd call them a necessary evil, but I see your point
+
+> Anyway, I'm all for fixing this problem you see, but the proposed
+> patch
+> broke another legitimate use-case. So we have to find a better fix,
+> if
+> possible.
+
+
+fair enough. I have some clues at what's going on (the biggest one
+being that the previous patch did fix my issue) but as I said I am
+at the limit of my make-fu...
+
+> 
+> I for one would prefer we just forbid relative paths altogether, but
+> I'm
+> totaly open on keeping them, as long as:
+>   - we document it's very picky, and
+>   - we check for special cases such as the one mentioned above.
+> 
+
+as stated above, I need relative path for my use-case. If absolute
+paths are required, we need to find a way to properly save in git a
+buildroot-based project. I am not sure how to do that but i'm opened
+to suggestions...
+
+> Regards,
+> Yann E. MORIN.
+> 
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
+> |  conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
+> |               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/
+> |  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
+> |   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
+>
