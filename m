@@ -1,134 +1,57 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 21 Jan 2014 22:04:57 +0100
-Subject: [Buildroot] [PATCH] BR2_EXTERNAL: check it is a valid BR2_EXTERNAL
-	dir before using it
-Message-ID: <1390338297-733-1-git-send-email-yann.morin.1998@free.fr>
+Date: Tue, 21 Jan 2014 23:06:38 +0100
+Subject: [Buildroot] [PATCH v2, 1/3] Rename MySQL client package
+In-Reply-To: <1390313310-3453-1-git-send-email-kuyurix@gmail.com>
+References: <1390313310-3453-1-git-send-email-kuyurix@gmail.com>
+Message-ID: <20140121220638.GC3455@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Marcelo, All,
 
-Using a relative path for BR2_EXTERNAL, and using an external defconfig,
-such as in (from a Buildroot top-dir):
-    make O=.. BR2_EXTERNAL=.. foo_defconfig
+On 2014-01-21 14:08 +0000, Marcelo Guti?rrez spake thusly:
+> MySQL client package has been renamed to MySQL.
+> 
+> Signed-off-by: Marcelo Guti?rrez <kuyurix@gmail.com>
 
-is broken. It is unclear why the %_defconfig rule recurses in that case,
-but using relative paths is inherently broken.
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-This patch first makes BR2_EXTERNAL canonical (ie. makes it an absolute
-path). Then we check this path exists and contains a valid BR2_EXTERNAL
-tree, by checking external.mk and Config.in exist.
+However, a minor nit, see below...
 
-The manual is updated to discourage using relative paths.
+> diff --git a/package/mysql_client/Config.in b/package/mysql/Config.in
+> similarity index 61%
+> rename from package/mysql_client/Config.in
+> rename to package/mysql/Config.in
+> index 543bed1..229e050 100644
+> --- a/package/mysql_client/Config.in
+> +++ b/package/mysql/Config.in
+> @@ -1,13 +1,14 @@
+> -config BR2_PACKAGE_MYSQL_CLIENT
+> -	bool "MySQL client"
+> +config BR2_PACKAGE_MYSQL
+> +	bool "MySQL"
+>  	depends on BR2_INSTALL_LIBSTDCPP
+>  	depends on BR2_USE_MMU # fork()
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+>  	select BR2_PACKAGE_NCURSES
+>  	select BR2_PACKAGE_READLINE
+>  	help
+> -	  MySQL client
+> +          The MySQL Open Source Database System
 
-Also, a note is added to the O documentation that relative paths are
-discouraged as well.
+This hould be a leading tab and two spaces. No need to resend, Peter can
+fix while committing, I guess! ;-)
 
-Reported-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
-Cc: Romain Naour <romain.naour@openwide.fr>
----
- Makefile                             | 10 +++++++++-
- docs/manual/common-usage.txt         | 13 ++++++++++---
- docs/manual/customize-outside-br.txt | 12 +++++++-----
- 3 files changed, 26 insertions(+), 9 deletions(-)
+Regards,
+Yann E. MORIN.
 
-diff --git a/Makefile b/Makefile
-index 9dfb1e0..5753f81 100644
---- a/Makefile
-+++ b/Makefile
-@@ -118,7 +118,15 @@ ifeq ($(BR2_EXTERNAL),)
-   override BR2_EXTERNAL = support/dummy-external
-   $(shell rm -f $(BR2_EXTERNAL_FILE))
- else
--  $(shell echo BR2_EXTERNAL ?= $(BR2_EXTERNAL) > $(BR2_EXTERNAL_FILE))
-+  _BR2_EXTERNAL = $(shell cd $(BR2_EXTERNAL) >/dev/null 2>&1 && pwd)
-+  ifeq ($(and $(_BR2_EXTERNAL),$(wildcard $(_BR2_EXTERNAL)/external.mk),$(wildcard $(_BR2_EXTERNAL)/Config.in)),)
-+    ifeq ($(patsubst /%,/,$(BR2_EXTERNAL)),)
-+      $(error BR2_EXTERNAL='$(BR2_EXTERNAL)' does not exist)
-+    else
-+      $(error BR2_EXTERNAL='$(BR2_EXTERNAL)' does not exist, relatively to $(TOPDIR))
-+    endif
-+  endif
-+  $(shell echo BR2_EXTERNAL ?= $(_BR2_EXTERNAL) > $(BR2_EXTERNAL_FILE))
- endif
- 
- # Need that early, before we scan packages
-diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
-index 1d15c05..ca44b10 100644
---- a/docs/manual/common-usage.txt
-+++ b/docs/manual/common-usage.txt
-@@ -40,7 +40,8 @@ Or:
-  $ cd /tmp/build; make O=$PWD -C path/to/buildroot
- --------------------
- 
--All the output files will be located under +/tmp/build+.
-+All the output files will be located under +/tmp/build+. If the +O+
-+path does not exist, Buildroot will create it.
- 
- When using out-of-tree builds, the Buildroot +.config+ and temporary
- files are also stored in the output directory. This means that you can
-@@ -48,13 +49,19 @@ safely run multiple builds in parallel using the same source tree as
- long as they use unique output directories.
- 
- For ease of use, Buildroot generates a Makefile wrapper in the output
--directory - so after the first run, you no longer need to pass +O=..+
--and +-C ..+, simply run (in the output directory):
-+directory - so after the first run, you no longer need to pass +O=<...>+
-+and +-C <...>+, simply run (in the output directory):
- 
- --------------------
-  $ make <target>
- --------------------
- 
-+The +O+ path can be either an absolute or a relative path, but if it's
-+passed as a relative path, it is important to note that it is interpreted
-+relative to the main Buildroot source directory, not the current working
-+directory. Using relative paths can lead to various broken setups, and
-+thus is highly discouraged in favour of using absolute paths.
-+
- [[env-vars]]
- 
- Environment variables
-diff --git a/docs/manual/customize-outside-br.txt b/docs/manual/customize-outside-br.txt
-index 19257e6..53d88d7 100644
---- a/docs/manual/customize-outside-br.txt
-+++ b/docs/manual/customize-outside-br.txt
-@@ -32,16 +32,18 @@ removed by passing an empty value.
- 
- The +BR2_EXTERNAL+ path can be either an absolute or a relative path,
- but if it's passed as a relative path, it is important to note that it
--is interpreted relatively to the main Buildroot source directory, not
--the Buildroot output directory.
-+is interpreted relative to the main Buildroot source directory, not
-+the Buildroot output directory. Using relative paths can lead to various
-+broken setups, and thus is highly discouraged in favour of using
-+absolute paths.
- 
- Some examples:
- 
- -----
-- buildroot/ $ make BR2_EXTERNAL=../foobar menuconfig
-+ buildroot/ $ make BR2_EXTERNAL=/path/to/foobar menuconfig
- -----
- 
--Starting from now on, external definitions from the +../foobar+
-+Starting from now on, external definitions from the +/path/to/foobar+
- directory will be used:
- 
- -----
-@@ -52,7 +54,7 @@ directory will be used:
- We can switch to another external definitions directory at any time:
- 
- -----
-- buildroot/ $ make BR2_EXTERNAL=../barfoo xconfig
-+ buildroot/ $ make BR2_EXTERNAL=/where/we/have/barfoo xconfig
- -----
- 
- Or disable the usage of external definitions:
 -- 
-1.8.1.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
