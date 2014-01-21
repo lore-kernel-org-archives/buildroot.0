@@ -1,71 +1,75 @@
-From: Alexander Lukichev <alexander.lukichev@gmail.com>
-Date: Tue, 21 Jan 2014 16:49:02 +0200
-Subject: [Buildroot] [PATCH] zmqpp: bump git snapshot and remove patch
-Message-ID: <1390315742-6127-1-git-send-email-alexander.lukichev@gmail.com>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Tue, 21 Jan 2014 10:23:12 -0500
+Subject: [Buildroot] Problem with multi interface support in udhcpc
+	script?
+In-Reply-To: <87fvohimha.fsf@dell.be.48ers.dk>
+References: <CANxTyt44suVoSpVTivmKde77P7fUYRa04a_fQfb=ceA-Yym9sQ@mail.gmail.com>
+ <87fvohimha.fsf@dell.be.48ers.dk>
+Message-ID: <CANxTyt6sZiRD7SgdnYeshPG4gma_m21gyiYOUP9=MP1dLOL7Sg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The patch has been merged upstream, hence the bump and its removal
-from package directory.
+Peter,
 
-Signed-off-by: Alexander Lukichev <alexander.lukichev@gmail.com>
----
- ...include-for-definitions-of-EXIT_-constant.patch | 30 ----------------------
- package/zmqpp/zmqpp.mk                             |  2 +-
- 2 files changed, 1 insertion(+), 31 deletions(-)
- delete mode 100644 package/zmqpp/0001-Add-proper-include-for-definitions-of-EXIT_-constant.patch
+On Tue, Jan 21, 2014 at 6:49 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+> Ahh, so we need to add per-interface domain comments and generate a
+> 'search' line with all domains. As you say, the last search line "wins"
+> (also verified in uClibc code), we could perhaps just so something
+> similar to the nameservers, E.G.:
+>
+> nameserver ... # eth0
+> search foo # eth0
+> nameserver ... # eth1
+> search bar # eth1
+> search foo bar # COMBINED
 
-diff --git a/package/zmqpp/0001-Add-proper-include-for-definitions-of-EXIT_-constant.patch b/package/zmqpp/0001-Add-proper-include-for-definitions-of-EXIT_-constant.patch
-deleted file mode 100644
-index 8df755a..0000000
---- a/package/zmqpp/0001-Add-proper-include-for-definitions-of-EXIT_-constant.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From 9aebdc0e54a6700ea62553365026727456c4969e Mon Sep 17 00:00:00 2001
--From: Alexander Lukichev <alexander.lukichev@espotel.com>
--Date: Thu, 9 Jan 2014 12:15:31 +0200
--Subject: [PATCH] Add proper include for definitions of EXIT_* constants
--
--These constants are referenced in src/client/main.cpp but their
--definitions are pulled indirectly through other header files. For
--some toolchains they are not pulled through those headers, which
--breaks compilation.
--
--Signed-off-by: Alexander Lukichev <alexander.lukichev@gmail.com>
-----
-- src/client/main.cpp | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/client/main.cpp b/src/client/main.cpp
--index 37c30a0..3679891 100644
----- a/src/client/main.cpp
--+++ b/src/client/main.cpp
--@@ -4,6 +4,7 @@
--  */
-- 
-- #include <array>
--+#include <cstdlib>
-- #include <iostream>
-- #include <tuple>
-- 
---- 
--1.8.0.1
--
-diff --git a/package/zmqpp/zmqpp.mk b/package/zmqpp/zmqpp.mk
-index 9839e66..5621d71 100644
---- a/package/zmqpp/zmqpp.mk
-+++ b/package/zmqpp/zmqpp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ZMQPP_VERSION = 30d72d95f2cfdf9c5cedfd56747f549d65e65847
-+ZMQPP_VERSION = 36413487f05b165dfc82ad307a5a1c36a795e607
- ZMQPP_SITE = git://github.com/benjamg/zmqpp.git
- ZMQPP_INSTALL_STAGING = YES
- ZMQPP_DEPENDENCIES = zeromq
--- 
-1.8.0.1
+Rather than relying on the last search line winning for the future, I
+was thinking that the per-interface search lines should be comments,
+something like:
+
+nameserver ... # eth0
+#search foo # eth0
+nameserver ... # eth1
+#search bar # eth1
+search foo bar
+
+(Of course, you can replace "#search" with whatever you want.)
+
+Also, if you run the little libresolv program that I sent earlier,
+then you'll see that the "#" and "COMBINED" show up as search domains
+- at least, I do, with both my Ubuntu 12.04 machine and with my
+embedded target compiled with CodeSourcery 2009q1-203.  So I do not
+think that it is safe to have a comment on the aggregated search line.
+ Therefore, if you must identify the combined search line then you
+might want to to grep for '^search '.  I was thinking that perhaps it
+would be better to just regenerate the whole thing each time - for
+example:
+
+        TMPFILE=$(mktemp)
+        grep -vE "# $interface\$" $RESOLV_CONF > $TMPFILE
+        sed -i '/^search /d' $RESOLV_CONF
+
+        [ -n "$domain" ] && echo "#search $domain # $interface" >> $TMPFILE
+        for i in $dns ; do
+            echo "nameserver $i # $interface" >> $TMPFILE
+        done
+
+        echo "search $(grep '#search ' $TMPFILE | sed 's/^#search
+//;s/ # .*$//' | xargs)" >> $TMPFILE
+
+        mv $TMPFILE $RESOLV_CONF
+
+However, there is still a problem with this strategy - the order of
+the name servers and the search domains affect how DNS queries are
+made.  Catting lines to the end of a file will make server and search
+domain priority a function of when DHCP info is acquired, not
+planning.  So I ended up funneling all DNS info to our project's
+network app rather than relying on this script to do it for us, to
+roll my own "resolvconf".  But then, incremental improvement is still
+improvement, so changing the way this scipt is now may still be a good
+thing.
+
+Danomi -
