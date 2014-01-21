@@ -1,69 +1,33 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 21 Jan 2014 17:25:18 +0100
-Subject: [Buildroot] Problem with multi interface support in udhcpc
-	script?
-In-Reply-To: <CANxTyt6sZiRD7SgdnYeshPG4gma_m21gyiYOUP9=MP1dLOL7Sg@mail.gmail.com>
- (Danomi Manchego's message of "Tue, 21 Jan 2014 10:23:12 -0500")
-References: <CANxTyt44suVoSpVTivmKde77P7fUYRa04a_fQfb=ceA-Yym9sQ@mail.gmail.com>
- <87fvohimha.fsf@dell.be.48ers.dk>
- <CANxTyt6sZiRD7SgdnYeshPG4gma_m21gyiYOUP9=MP1dLOL7Sg@mail.gmail.com>
-Message-ID: <87iotdgv4h.fsf@dell.be.48ers.dk>
+Date: Tue, 21 Jan 2014 17:34:17 +0100
+Subject: [Buildroot] [PATCH v3 04/12] libplist: new package
+In-Reply-To: <1390165448-9130-5-git-send-email-maxime.hadjinlian@gmail.com>
+ (Maxime Hadjinlian's message of "Sun, 19 Jan 2014 22:04:00 +0100")
+References: <1390165448-9130-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <1390165448-9130-5-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <87eh41gupi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
+>>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
 
-Hi,
+ > libplist is a client for manipulating Apple Property List (.plist) files
+ > This package was originally found at : https://github.com/huceke/buildroot-rbp
+ > By gimli <ebsi4711@gmail.com>
 
- > Rather than relying on the last search line winning for the future, I
- > was thinking that the per-interface search lines should be comments,
- > something like:
+ > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+ > Cc: gimli <ebsi4711@gmail.com>
+ > ---
+ > Changes v2 -> v3:
+ >   - None
+ > Changes v1 -> v2:
+ >   - Fix header (Yann E. Morin)
+ >   - Fix comments on toolchain option (Peter Korsgaard)
 
- > nameserver ... # eth0
- > #search foo # eth0
- > nameserver ... # eth1
- > #search bar # eth1
- > search foo bar
-
- > (Of course, you can replace "#search" with whatever you want.)
-
-Sure, that's also fine.
-
-
- > Also, if you run the little libresolv program that I sent earlier,
- > then you'll see that the "#" and "COMBINED" show up as search domains
- > - at least, I do, with both my Ubuntu 12.04 machine and with my
- > embedded target compiled with CodeSourcery 2009q1-203.  So I do not
- > think that it is safe to have a comment on the aggregated search line.
-
-Ok, as far as I can see uClibc atleast stops parsing on '#', but yeah,
-not having it is safer.
-
- >  Therefore, if you must identify the combined search line then you
- > might want to to grep for '^search '.  I was thinking that perhaps it
- > would be better to just regenerate the whole thing each time - for
- > example:
-
-Yes, with a combined search line you alway need to regenerate the file.
-
-
- > However, there is still a problem with this strategy - the order of
- > the name servers and the search domains affect how DNS queries are
- > made.  Catting lines to the end of a file will make server and search
- > domain priority a function of when DHCP info is acquired, not
- > planning.  So I ended up funneling all DNS info to our project's
- > network app rather than relying on this script to do it for us, to
- > roll my own "resolvconf".  But then, incremental improvement is still
- > improvement, so changing the way this scipt is now may still be a good
- > thing.
-
-Yes, you always have the option of using a custom udhcpc script, but it
-makes sense to atleast try to do it correctly by default.
-
-Thanks, I'll take a look at implementing it.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
