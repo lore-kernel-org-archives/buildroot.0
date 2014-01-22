@@ -1,78 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 22 Jan 2014 23:47:57 +0100
-Subject: [Buildroot] [git commit] libshairplay: new package
-Message-ID: <20140122224834.D4E3F9C5D5@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 22 Jan 2014 23:51:11 +0100
+Subject: [Buildroot] [PATCH 1/2] package/ffmpeg2: new package
+In-Reply-To: <20140122223320.GD3592@free.fr> (Yann E. MORIN's message of "Wed, 
+ 22 Jan 2014 23:33:20 +0100")
+References: <cover.1390242867.git.yann.morin.1998@free.fr>
+ <d4f3847e403c1e5c4e8733f75bbfccce6e0b4975.1390242867.git.yann.morin.1998@free.fr>
+ <el80raxhff.ln2@ID-313208.user.individual.net>
+ <20140120212701.GC3421@free.fr> <20140122223320.GD3592@free.fr>
+Message-ID: <8738kfd40w.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ac37a9b42f821ad9f72123b3ab411382b3aafcf8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-libshairplay is a client library that emulates an airplay server
-This package was originally found at : https://github.com/huceke/buildroot-rbp
-By gimli <ebsi4711@gmail.com>
+Hi,
 
-[Peter: fix whitespace, needs threads, host-pkgconf and optionally libao]
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Cc: gimli <ebsi4711@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/Config.in                    |    1 +
- package/libshairplay/Config.in       |   12 ++++++++++++
- package/libshairplay/libshairplay.mk |   15 +++++++++++++++
- 3 files changed, 28 insertions(+), 0 deletions(-)
+ >> Ah, yes. This ffmpeg2 patch of mine I did some three months ago. I just
+ >> refreshed it yesterday, and forgot to re-check the compatibilty issue.
+ >> 
+ >> I'll double check what needs to be done, rework the commit log, and
+ >> resubmit later.
 
-diff --git a/package/Config.in b/package/Config.in
-index fcbf720..3bf3434 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -682,6 +682,7 @@ source "package/libosip2/Config.in"
- source "package/libpcap/Config.in"
- source "package/librsync/Config.in"
- source "package/libsocketcan/Config.in"
-+source "package/libshairplay/Config.in"
- source "package/libsoup/Config.in"
- source "package/libtirpc/Config.in"
- source "package/libtorrent/Config.in"
-diff --git a/package/libshairplay/Config.in b/package/libshairplay/Config.in
-new file mode 100644
-index 0000000..bcdad3f
---- /dev/null
-+++ b/package/libshairplay/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_LIBSHAIRPLAY
-+	bool "libshairplay"
-+	depends on BR2_INET_IPV6
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	help
-+	  libshairplay is a client library that emulates an airplay
-+	  server.
-+
-+	  https://github.com/juhovh/shairplay
-+
-+comment "libshairplay needs a toolchain w/ IPv6, threads"
-+	depends on !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libshairplay/libshairplay.mk b/package/libshairplay/libshairplay.mk
-new file mode 100644
-index 0000000..fc397d7
---- /dev/null
-+++ b/package/libshairplay/libshairplay.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# libshairplay
-+#
-+################################################################################
-+
-+LIBSHAIRPLAY_VERSION = 139d5ef55564514c31f02dd82cef91236c9ff523
-+LIBSHAIRPLAY_SITE = $(call github,juhovh,shairplay,$(LIBSHAIRPLAY_VERSION))
-+LIBSHAIRPLAY_INSTALL_STAGING = YES
-+LIBSHAIRPLAY_AUTORECONF = YES
-+LIBSHAIRPLAY_LICENSE = MIT, BSD-3c, LGPLv2.1+
-+LIBSHAIRPLAY_LICENSE_FILES = LICENSE
-+LIBSHAIRPLAY_DEPENDENCIES = host-pkgconf $(if $(BR2_PACKAGE_LIBAO),libao)
-+
-+$(eval $(autotools-package))
+ > The sets of files installed by each version has a non-null intersection,
+ > especially the header files, and the .pc files.
+
+ > The libraries have different versions, indeed, but we still can't
+ > install both, as the .so links will point to the latest being installed,
+ > which is not predictible.
+
+ > Say for example:
+ >   - package 'zzz' depends on ffmpeg (and is incompatible with ffmpeg2)
+
+Do we have any examples of this?
+
+If not, I would simply say that ffmpeg 2.x is the latest and greatest of
+ffmpeg, so ffmpeg.mk should build 2.x (and we shouldn't have a
+ffmpeg2.mk)
+
+-- 
+Bye, Peter Korsgaard
