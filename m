@@ -1,46 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 22 Jan 2014 22:10:50 +0100
-Subject: [Buildroot] [PATCH] BR2_EXTERNAL: check it is a valid
- BR2_EXTERNAL dir before using it
-In-Reply-To: <1880877953.4607498.1390394593186.JavaMail.root@openwide.fr>
-References: <1410002893.284525363.1390386070110.JavaMail.root@zimbra96-e16.priv.proxad.net>
- <1880877953.4607498.1390394593186.JavaMail.root@openwide.fr>
-Message-ID: <20140122211050.GC3592@free.fr>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Wed, 22 Jan 2014 22:18:11 +0100
+Subject: [Buildroot] [PATCH 3/3] manual: add explanations on limitation
+ about using O=...
+In-Reply-To: <d384f7fdfa66bf7c3f4b0fa37465fee8a494084b.1390424303.git.yann.morin.1998@free.fr>
+References: <cover.1390424302.git.yann.morin.1998@free.fr>
+ <d384f7fdfa66bf7c3f4b0fa37465fee8a494084b.1390424303.git.yann.morin.1998@free.fr>
+Message-ID: <CAHXCMM+_6pSVW7VJFAaFRw1jy=mpvUfGL03V1jEGnm4JD4M3mg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?r?my, All,
+2014/1/22 Yann E. MORIN <yann.morin.1998@free.fr>
 
-On 2014-01-22 13:43 +0100, Jeremy Rosen spake thusly:
-> my remark about the error message still not being clean still stands
-> 
-> and the doc is not explicit about Config.in and external.mk being 
-> required
-
-Hopefully, my new series will address those two points.
-
-> if you don't want to add these to your patch I can post a separate
-> one, but for the technical part :
-> 
-> Tested-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
-
-Thank you!
-
-I haven't included your Tested-by in the new series, though, since I've
-modified it more than a bit. Care to have a quick look?
-
-Thanks for the feedback! :-)
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>
+> Using a relative path for O=... has limitations, since it is interpreted
+> relative to the Buildroot tree, and thus may lead to unexpected results.
+>
+> For example, running this:
+>     make -C buildroot O=my-O
+>
+> will not vreate my-O in the current working directory, but as a
+> sub-directory of the Buildroot tree, here in buildroot/my-O
+>
+> Explain this in the manual (as is similarly done for BR2_EXTERNAL).
+> Also add a note that $(O) will be created if missing.
+>
+> Reported-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>
+Acked-by: Samuel Martin <s.martin49@gmail.com>
 
 Regards,
-Yann E. MORIN.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Samuel
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140122/2e52d0ed/attachment.html>
