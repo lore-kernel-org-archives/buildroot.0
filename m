@@ -1,186 +1,62 @@
-From: Jeremy Rosen <jeremy.rosen@openwide.fr>
-Date: Wed, 22 Jan 2014 10:00:40 +0100 (CET)
-Subject: [Buildroot] [PATCH] BR2_EXTERNAL: check it is a valid
- BR2_EXTERNAL dir before using it
-In-Reply-To: <1390338297-733-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1751679476.4596486.1390381240766.JavaMail.root@openwide.fr>
+From: Sonic Zhang <sonic.adi@gmail.com>
+Date: Wed, 22 Jan 2014 17:18:13 +0800
+Subject: [Buildroot] [PATCH] package: icu: detect and add compiler
+ symbol prefix to the assembly code
+In-Reply-To: <87y52iw7sv.fsf@dell.be.48ers.dk>
+References: <1389006349-32377-1-git-send-email-Sonic.adi@gmail.com>
+ <87y52iw7sv.fsf@dell.be.48ers.dk>
+Message-ID: <CAJxxZ0OOzpH-sT5WvywjiCEBQiHT4puZsa_tyV4ZAQgNytTLew@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ok, I tried your patch and I have a couple of problems
+Hi Peter,
 
-I'm still trying my use-case (I'm only half convinced it's uesfull at
-this point, but it's still supposed to work, which is a good enough 
-reason to try to understand what's going on)
+On Wed, Jan 15, 2014 at 5:52 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "sonic" == sonic adi <sonic.adi@gmail.com> writes:
+>
+>  > From: Sonic Zhang <sonic.zhang@analog.com>
+>  > Some compiler, such as Blackfin GNU compiler, prefix a charater to any
+>  > C symbol in generated assembly code. If any assembly symbol is invoked
+>  > from C code, it needs to be prefixed as well.
+>
+>  > Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
+>
+> Thanks. Has this been submitted upstream?
 
+Do you mean the icu source upstream? Not yet. Where do you prefer to
+host this patch? in buildroot or icu project?
 
-with the tmp/ directory containing only the buildroot subdirectory
-i get:
+>
+>  > ---
+>  >  .../icu/icu-detect-compiler-symbol-prefix.patch    |  104 ++++++++++++++++++++
+>  >  1 file changed, 104 insertions(+)
+>  >  create mode 100644 package/icu/icu-detect-compiler-symbol-prefix.patch
+>
+>  > diff --git a/package/icu/icu-detect-compiler-symbol-prefix.patch b/package/icu/icu-detect-compiler-symbol-prefix.patch
+>  > new file mode 100644
+>  > index 0000000..9ca7690
+>  > --- /dev/null
+>  > +++ b/package/icu/icu-detect-compiler-symbol-prefix.patch
+>  > @@ -0,0 +1,104 @@
+>  > +package: icu: detect and add compiler symbol prefix to the assembly code
+>  > +
+>  > +Some compiler, such as Blackfin GNU compiler, prefix a charater to any
+>  > +C symbol in generated assembly code. If any assembly symbol is invoked
+>  > +from C code, it needs to be prefixed as well.
+>  > +
+>  > +--- icu-51.2/source/configure       2014-01-06 17:13:20.907249812 +0800
+>  > ++++ icu-51.2.bak/source/configure   2014-01-06 17:12:57.335248659 +0800
+>
+> Please adjust configure.ac and set ICU_AUTORECONF = YES instead.
 
-rosen at pcrosen:~/tmp/buildroot$ LANG=C make O=.. BR2_EXTERNAL=.. raspberrypi_defconfig
-Makefile:126: *** BR2_EXTERNAL='..' does not exist, relatively to /home/rosen/tmp/buildroot.  Stop.
+But, there is no configure.ac file in the icu source code.
 
+Regards,
 
-Which is a confusing error message, the problem is that I don't have
-a Config.in and external.mk file  in tmp /(which are mandatory in
-BR2_EXTERNAL though that's not stated in the doc afaics)
-
-once that is fixed, that command line still creates the infinite
-recursion on calling defconfig. So that doesn't solve that particular issue...
-
-
-
------ Mail original -----
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> Using a relative path for BR2_EXTERNAL, and using an external
-> defconfig,
-> such as in (from a Buildroot top-dir):
->     make O=.. BR2_EXTERNAL=.. foo_defconfig
-> 
-> is broken. It is unclear why the %_defconfig rule recurses in that
-> case,
-> but using relative paths is inherently broken.
-> 
-> This patch first makes BR2_EXTERNAL canonical (ie. makes it an
-> absolute
-> path). Then we check this path exists and contains a valid
-> BR2_EXTERNAL
-> tree, by checking external.mk and Config.in exist.
-> 
-> The manual is updated to discourage using relative paths.
-> 
-> Also, a note is added to the O documentation that relative paths are
-> discouraged as well.
-> 
-> Reported-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Peter Korsgaard <jacmet@uclibc.org>
-> Cc: Romain Naour <romain.naour@openwide.fr>
-> ---
->  Makefile                             | 10 +++++++++-
->  docs/manual/common-usage.txt         | 13 ++++++++++---
->  docs/manual/customize-outside-br.txt | 12 +++++++-----
->  3 files changed, 26 insertions(+), 9 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 9dfb1e0..5753f81 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -118,7 +118,15 @@ ifeq ($(BR2_EXTERNAL),)
->    override BR2_EXTERNAL = support/dummy-external
->    $(shell rm -f $(BR2_EXTERNAL_FILE))
->  else
-> -  $(shell echo BR2_EXTERNAL ?= $(BR2_EXTERNAL) >
-> $(BR2_EXTERNAL_FILE))
-> +  _BR2_EXTERNAL = $(shell cd $(BR2_EXTERNAL) >/dev/null 2>&1 && pwd)
-> +  ifeq ($(and $(_BR2_EXTERNAL),$(wildcard
-> $(_BR2_EXTERNAL)/external.mk),$(wildcard
-> $(_BR2_EXTERNAL)/Config.in)),)
-> +    ifeq ($(patsubst /%,/,$(BR2_EXTERNAL)),)
-> +      $(error BR2_EXTERNAL='$(BR2_EXTERNAL)' does not exist)
-> +    else
-> +      $(error BR2_EXTERNAL='$(BR2_EXTERNAL)' does not exist,
-> relatively to $(TOPDIR))
-> +    endif
-> +  endif
-> +  $(shell echo BR2_EXTERNAL ?= $(_BR2_EXTERNAL) >
-> $(BR2_EXTERNAL_FILE))
->  endif
->  
->  # Need that early, before we scan packages
-> diff --git a/docs/manual/common-usage.txt
-> b/docs/manual/common-usage.txt
-> index 1d15c05..ca44b10 100644
-> --- a/docs/manual/common-usage.txt
-> +++ b/docs/manual/common-usage.txt
-> @@ -40,7 +40,8 @@ Or:
->   $ cd /tmp/build; make O=$PWD -C path/to/buildroot
->  --------------------
->  
-> -All the output files will be located under +/tmp/build+.
-> +All the output files will be located under +/tmp/build+. If the +O+
-> +path does not exist, Buildroot will create it.
->  
->  When using out-of-tree builds, the Buildroot +.config+ and temporary
->  files are also stored in the output directory. This means that you
->  can
-> @@ -48,13 +49,19 @@ safely run multiple builds in parallel using the
-> same source tree as
->  long as they use unique output directories.
->  
->  For ease of use, Buildroot generates a Makefile wrapper in the
->  output
-> -directory - so after the first run, you no longer need to pass
-> +O=..+
-> -and +-C ..+, simply run (in the output directory):
-> +directory - so after the first run, you no longer need to pass
-> +O=<...>+
-> +and +-C <...>+, simply run (in the output directory):
->  
->  --------------------
->   $ make <target>
->  --------------------
->  
-> +The +O+ path can be either an absolute or a relative path, but if
-> it's
-> +passed as a relative path, it is important to note that it is
-> interpreted
-> +relative to the main Buildroot source directory, not the current
-> working
-> +directory. Using relative paths can lead to various broken setups,
-> and
-> +thus is highly discouraged in favour of using absolute paths.
-> +
->  [[env-vars]]
->  
->  Environment variables
-> diff --git a/docs/manual/customize-outside-br.txt
-> b/docs/manual/customize-outside-br.txt
-> index 19257e6..53d88d7 100644
-> --- a/docs/manual/customize-outside-br.txt
-> +++ b/docs/manual/customize-outside-br.txt
-> @@ -32,16 +32,18 @@ removed by passing an empty value.
->  
->  The +BR2_EXTERNAL+ path can be either an absolute or a relative
->  path,
->  but if it's passed as a relative path, it is important to note that
->  it
-> -is interpreted relatively to the main Buildroot source directory,
-> not
-> -the Buildroot output directory.
-> +is interpreted relative to the main Buildroot source directory, not
-> +the Buildroot output directory. Using relative paths can lead to
-> various
-> +broken setups, and thus is highly discouraged in favour of using
-> +absolute paths.
->  
->  Some examples:
->  
->  -----
-> - buildroot/ $ make BR2_EXTERNAL=../foobar menuconfig
-> + buildroot/ $ make BR2_EXTERNAL=/path/to/foobar menuconfig
->  -----
->  
-> -Starting from now on, external definitions from the +../foobar+
-> +Starting from now on, external definitions from the
-> +/path/to/foobar+
->  directory will be used:
->  
->  -----
-> @@ -52,7 +54,7 @@ directory will be used:
->  We can switch to another external definitions directory at any time:
->  
->  -----
-> - buildroot/ $ make BR2_EXTERNAL=../barfoo xconfig
-> + buildroot/ $ make BR2_EXTERNAL=/where/we/have/barfoo xconfig
->  -----
->  
->  Or disable the usage of external definitions:
+Sonic
+>
 > --
-> 1.8.1.2
-> 
-> 
+> Bye, Peter Korsgaard
