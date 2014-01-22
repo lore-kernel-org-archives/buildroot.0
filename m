@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 22 Jan 2014 21:59:34 +0100
-Subject: [Buildroot] [PATCH 1/3] Makefile: use absolute paths to BR2_EXTERNAL
+Date: Wed, 22 Jan 2014 21:59:35 +0100
+Subject: [Buildroot] [PATCH 2/3] manual: $(BR2_EXTERNAL)/{Config.in,
+	external.mk} are mandatory
 In-Reply-To: <cover.1390424302.git.yann.morin.1998@free.fr>
 References: <cover.1390424302.git.yann.morin.1998@free.fr>
-Message-ID: <44e6c31931f55e79eec713be1a202f2c170667b7.1390424303.git.yann.morin.1998@free.fr>
+Message-ID: <8b035b6b84c14ff7cf24d1ffe3ddf139759376fa.1390424303.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,82 +13,28 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Using a relative path for BR2_EXTERNAL, and using an external defconfig,
-such as in (from a Buildroot top-dir):
-    make O=.. BR2_EXTERNAL=.. foo_defconfig
+The manual is a bit vague about whether Config.in and external.mk
+are mandatory or optional.
 
-is broken. It is unclear why the %_defconfig rule recurses in that case,
-but using relative paths is inherently broken.
-
-This patch makes BR2_EXTERNAL canonical (ie. makes it an absolute path),
-and checks the directory exists.
-
-The manual is updated to discourage using relative paths.
+Make it explicit in the manual that they are mandatory.
 
 Reported-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
-Cc: Romain Naour <romain.naour@openwide.fr>
 ---
- Makefile                             |  9 +++++++++
- docs/manual/customize-outside-br.txt | 12 +++++++-----
- 2 files changed, 16 insertions(+), 5 deletions(-)
+ docs/manual/customize-outside-br.txt | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Makefile b/Makefile
-index 9dfb1e0..64fa138 100644
---- a/Makefile
-+++ b/Makefile
-@@ -118,6 +118,15 @@ ifeq ($(BR2_EXTERNAL),)
-   override BR2_EXTERNAL = support/dummy-external
-   $(shell rm -f $(BR2_EXTERNAL_FILE))
- else
-+  _BR2_EXTERNAL = $(shell cd $(BR2_EXTERNAL) >/dev/null 2>&1 && pwd)
-+  ifeq ($(_BR2_EXTERNAL),)
-+    ifeq ($(patsubst /%,/,$(BR2_EXTERNAL)),/)
-+      $(error BR2_EXTERNAL='$(BR2_EXTERNAL)' does not exist)
-+    else
-+      $(error BR2_EXTERNAL='$(BR2_EXTERNAL)' does not exist, relatively to $(TOPDIR))
-+    endif
-+  endif
-+  BR2_EXTERNAL := $(_BR2_EXTERNAL)
-   $(shell echo BR2_EXTERNAL ?= $(BR2_EXTERNAL) > $(BR2_EXTERNAL_FILE))
- endif
- 
 diff --git a/docs/manual/customize-outside-br.txt b/docs/manual/customize-outside-br.txt
-index 19257e6..53d88d7 100644
+index 53d88d7..efebc6a 100644
 --- a/docs/manual/customize-outside-br.txt
 +++ b/docs/manual/customize-outside-br.txt
-@@ -32,16 +32,18 @@ removed by passing an empty value.
- 
- The +BR2_EXTERNAL+ path can be either an absolute or a relative path,
- but if it's passed as a relative path, it is important to note that it
--is interpreted relatively to the main Buildroot source directory, not
--the Buildroot output directory.
-+is interpreted relative to the main Buildroot source directory, not
-+the Buildroot output directory. Using relative paths can lead to various
-+broken setups, and thus is highly discouraged in favour of using
-+absolute paths.
- 
- Some examples:
- 
- -----
-- buildroot/ $ make BR2_EXTERNAL=../foobar menuconfig
-+ buildroot/ $ make BR2_EXTERNAL=/path/to/foobar menuconfig
- -----
- 
--Starting from now on, external definitions from the +../foobar+
-+Starting from now on, external definitions from the +/path/to/foobar+
- directory will be used:
- 
- -----
-@@ -52,7 +54,7 @@ directory will be used:
- We can switch to another external definitions directory at any time:
- 
- -----
-- buildroot/ $ make BR2_EXTERNAL=../barfoo xconfig
-+ buildroot/ $ make BR2_EXTERNAL=/where/we/have/barfoo xconfig
- -----
- 
- Or disable the usage of external definitions:
+@@ -85,6 +85,7 @@ Or disable the usage of external definitions:
+    logic. Buildroot automatically includes +BR2_EXTERNAL/Config.in+ to
+    make it appear in the top-level configuration menu, and includes
+    +BR2_EXTERNAL/external.mk+ with the rest of the makefile logic.
++   Providing those two files is mandatory, but they can be empty.
+ +
+ The main usage of this is to store package recipes. The recommended
+    way to do this is to write a +BR2_EXTERNAL/Config.in+ that looks
 -- 
 1.8.1.2
