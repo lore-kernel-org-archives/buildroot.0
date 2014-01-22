@@ -1,52 +1,59 @@
-From: yann.morin.1998 at free.fr <yann.morin.1998@free.fr>
-Date: Wed, 22 Jan 2014 11:21:10 +0100 (CET)
-Subject: [Buildroot] [PATCH] BR2_EXTERNAL: check it is a valid
- BR2_EXTERNAL dir before using it
-In-Reply-To: <1751679476.4596486.1390381240766.JavaMail.root@openwide.fr>
-Message-ID: <1410002893.284525363.1390386070110.JavaMail.root@zimbra96-e16.priv.proxad.net>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Wed, 22 Jan 2014 12:13:34 +0100
+Subject: [Buildroot] [PATCH] lua: fix compilation with Blackfin FLAT
+Message-ID: <1390389214-9768-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?r?my, All,
+the dlfcn interface is not available with flat memory model
 
------ Original Message -----
-From: "Jeremy Rosen" <jeremy.rosen@openwide.fr>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: "Peter Korsgaard" <jacmet@uclibc.org>, "Romain Naour" <romain.naour@openwide.fr>, buildroot at busybox.net
-Sent: Wednesday, January 22, 2014 10:00:40 AM
-Subject: Re: [PATCH] BR2_EXTERNAL: check it is a valid BR2_EXTERNAL dir before using it
+see http://autobuild.buildroot.net/results/b41/b4146bf821d59f694546f6e3a341394cc8fa43ce/
 
-ok, I tried your patch and I have a couple of problems
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/lua/lua.mk |   12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-[--SNIP--]
-> diff --git a/Makefile b/Makefile
-> index 9dfb1e0..5753f81 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -118,7 +118,15 @@ ifeq ($(BR2_EXTERNAL),)
->    override BR2_EXTERNAL = support/dummy-external
->    $(shell rm -f $(BR2_EXTERNAL_FILE))
->  else
-> -  $(shell echo BR2_EXTERNAL ?= $(BR2_EXTERNAL) > $(BR2_EXTERNAL_FILE))
-> +  _BR2_EXTERNAL = $(shell cd $(BR2_EXTERNAL) >/dev/null 2>&1 && pwd)
-> +  ifeq ($(and $(_BR2_EXTERNAL),$(wildcard $(_BR2_EXTERNAL)/external.mk),$(wildcard $(_BR2_EXTERNAL)/Config.in)),)
-> +    ifeq ($(patsubst /%,/,$(BR2_EXTERNAL)),)
-> +      $(error BR2_EXTERNAL='$(BR2_EXTERNAL)' does not exist)
-> +    else
-> +      $(error BR2_EXTERNAL='$(BR2_EXTERNAL)' does not exist, relatively to $(TOPDIR))
-> +    endif
-> +  endif
-
-Doh, I forgot to commit with this line:
-    override BR2_EXTERNAL := $(_BR2_EXTERNAL)
-
-> +  $(shell echo BR2_EXTERNAL ?= $(_BR2_EXTERNAL) > $(BR2_EXTERNAL_FILE))
->  endif
-
-Care to test again, please?
-
-Regards,
-Yann E. MORIN.
+diff --git a/package/lua/lua.mk b/package/lua/lua.mk
+index 2c867f6..b263070 100644
+--- a/package/lua/lua.mk
++++ b/package/lua/lua.mk
+@@ -15,7 +15,6 @@ LUA_LICENSE = MIT
+ LUA_LICENSE_FILES = COPYRIGHT
+ 
+ LUA_CFLAGS = -Wall -fPIC
+-LUA_MYLIBS += -ldl
+ 
+ ifeq ($(BR2_PACKAGE_LUA_5_2),y)
+ LUA_CFLAGS += -DLUA_COMPAT_ALL
+@@ -24,17 +23,22 @@ LUA_CFLAGS += -D_FILE_OFFSET_BITS=32
+ endif
+ endif
+ 
++ifneq ($(BR2_BINFMT_FLAT),y)
++	LUA_CFLAGS += -DLUA_USE_DLOPEN
++	LUA_MYLIBS += -ldl
++endif
++
+ ifeq ($(BR2_PACKAGE_LUA_INTERPRETER_READLINE),y)
+ 	LUA_DEPENDENCIES = readline ncurses
+ 	LUA_MYLIBS += -lreadline -lhistory -lncurses
+-	LUA_CFLAGS += -DLUA_USE_POSIX -DLUA_USE_DLOPEN -DLUA_USE_READLINE
++	LUA_CFLAGS += -DLUA_USE_POSIX -DLUA_USE_READLINE
+ else
+ ifeq ($(BR2_PACKAGE_LUA_INTERPRETER_LINENOISE),y)
+ 	LUA_DEPENDENCIES = linenoise
+ 	LUA_MYLIBS += -llinenoise
+-	LUA_CFLAGS += -DLUA_USE_POSIX -DLUA_USE_DLOPEN -DLUA_USE_LINENOISE
++	LUA_CFLAGS += -DLUA_USE_POSIX -DLUA_USE_LINENOISE
+ else
+-	LUA_CFLAGS += -DLUA_USE_POSIX -DLUA_USE_DLOPEN
++	LUA_CFLAGS += -DLUA_USE_POSIX
+ endif
+ endif
+ 
+-- 
+1.7.9.5
