@@ -1,70 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 22 Jan 2014 22:39:36 +0100
-Subject: [Buildroot] [git commit] added python unicode selection to menu
-Message-ID: <20140122214049.811EB9C5CE@busybox.osuosl.org>
+From: Steve Calfee <stevecalfee@gmail.com>
+Date: Wed, 22 Jan 2014 14:10:31 -0800
+Subject: [Buildroot] Patchwork oldest patches cleanup #6 (deadline
+	February 2)
+In-Reply-To: <CAAXf6LX2yqbapp6GBuN5qoT1R93CGD3NCLguY8fQhFoApJz2uw@mail.gmail.com>
+References: <CAAXf6LX2yqbapp6GBuN5qoT1R93CGD3NCLguY8fQhFoApJz2uw@mail.gmail.com>
+Message-ID: <CAJJ6jxvu=r8wn=LbLYtXW-Omyv4jwTLQPE5RuFHh9eYS9N82Vg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9dada44cd886ae3cc5671791a3e181ec963ad0f1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, Jan 20, 2014 at 1:06 PM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+> All,
+>
+> Here is session 6 of the patchwork cleanup. For those who haven't
+> followed previous sessions, here is a quick recap: every session we'll
+> be posting the list of the 10 oldest patches, with the original patch
+> contributors in copy. During two weeks, we have the opportunity to
+> discuss the patch, whether it is still necessary or not, how it should
+> be changed to be merged.
+>
+> In particular, I'm interested in knowing if the original contributor is
+> still interested by the patch, or if someone else is interested in
+> adopting the patch and sending an updated version, or if the patch no
+> longer makes sense due to other changes made in Buildroot.
+>
+> All patches that have not received any comment or attention before the
+> deadline will be removed from patchwork. This is aggressive, but we have
+> many 'dead' patches sitting in patchwork, and this cannot work.
+>
+> Deadline for this session is February 2 (FOSDEM + Buildroot developer days!).
+>
+<snip>
+> minimal dockstar setup
+> Steve Calfee <stevecalfee@gmail.com>
+> http://patchwork.ozlabs.org/patch/217639
+>
 
-This patch is based on the original new pkg patch submitted last Jan
-and is part of the "Patchwork oldest patches cleanup #5".
+I guess you might as well drop the patch. At the time before rpi, the
+$30 retail dockstar was the cheapest linux computer you could buy. I
+thought others might be interested, but have received no comments, so
+don't bother with this.
 
-[Peter: fix CONF_OPT indentation]
-Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
-Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python/Config.in |   18 ++++++++++++++++++
- package/python/python.mk |    5 +++++
- 2 files changed, 23 insertions(+), 0 deletions(-)
+It still builds and works fine, but with later kernels beyond 3.6.8 (I
+think) they changed the kernel for device tree, and that broke my
+uboot. Changing uboot is a very dangerous thing, risking bricking the
+dockstar, so I have stopped at that kernel for now. Still a nice NAS
+for home, though.
 
-diff --git a/package/python/Config.in b/package/python/Config.in
-index b1c0935..a0c78c6 100644
---- a/package/python/Config.in
-+++ b/package/python/Config.in
-@@ -84,6 +84,24 @@ config BR2_PACKAGE_PYTHON_UNICODEDATA
- 	help
- 	  Unicode character database (used by stringprep module) (large).
- 
-+if BR2_PACKAGE_PYTHON_UNICODEDATA
-+
-+choice
-+	prompt "Python unicode database format"
-+	default BR2_PACKAGE_PYTHON_UCS2
-+	help
-+	  Select Python unicode database format for target
-+
-+config BR2_PACKAGE_PYTHON_UCS2
-+	bool "Universal Character Set 2-byte (UCS2)"
-+
-+config BR2_PACKAGE_PYTHON_UCS4
-+	bool "Universal Character Set 4-byte (UCS4)"
-+
-+endchoice
-+
-+endif
-+
- config BR2_PACKAGE_PYTHON_SQLITE
- 	bool "sqlite module"
- 	select BR2_PACKAGE_SQLITE
-diff --git a/package/python/python.mk b/package/python/python.mk
-index bc42e8f..6187d66 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -102,6 +102,11 @@ ifneq ($(BR2_PACKAGE_PYTHON_UNICODEDATA),y)
- PYTHON_CONF_OPT += --disable-unicodedata
- endif
- 
-+# Default is UCS2 w/o a conf opt
-+ifeq ($(BR2_PACKAGE_PYTHON_UCS4),y)
-+PYTHON_CONF_OPT += --enable-unicode=ucs4
-+endif
-+
- ifeq ($(BR2_PACKAGE_PYTHON_BZIP2),y)
- PYTHON_DEPENDENCIES += bzip2
- else
+Regards, Steve
