@@ -1,41 +1,58 @@
-From: sambuff <samuel.buffet@gmail.com>
-Date: Wed, 22 Jan 2014 11:57:10 -0800 (PST)
-Subject: [Buildroot] python Gobject
-In-Reply-To: <20140121173657.GA11605@pc-eric>
-References: <CAAs3wMgAbEnReJ-XW_QnQ=kAU6G7cwzss7yUMytcmHMRYMsjnw@mail.gmail.com>
- <20140117113153.GB10730@pc-eric>
- <CAAs3wMh5xwOK_bEDVM1JMJvw6vYYL2frZYxTc_4ehyLK2sj++g@mail.gmail.com>
- <20140117154452.GC10730@pc-eric> <1390290077263-60414.post@n4.nabble.com>
- <20140121173657.GA11605@pc-eric>
-Message-ID: <1390420630566-60535.post@n4.nabble.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 22 Jan 2014 21:39:14 +0100
+Subject: [Buildroot] [git commit] libvorbis: bump version
+Message-ID: <20140122204038.23E4B9C5BE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Eric Hi,
+commit: http://git.buildroot.net/buildroot/commit/?id=df7684b5b6312ad7d723e91e890d6c48fae3b430
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
->D'Oh! I forgot to add 'python' after 'host-python' in
->package/python-gobject/python-gobject.mk.
->
->I reworked the package and added proper support for PyGtk. Development now
->takes place in https://github.com/elebihan/buildroot/tree/pygtk-support/.
->The complete stack has been added: 
+Shrinks library size. From the release notes:
 
-Cool !  I'll take a look to pygtk also later on.
+   Nathan Froyd at Mozilla noticed something odd in the libvorbis
+   sourcebase. Codebook 'length lists' only use integers in the range
+   of 0 to 32. Well, worse than integers, actually, longs. And the
+   lengthlists are big; the static data comprises the bulk of
+   libvorbisenc.
 
-Regarding the 'python-gopbject' package I've tried to add 'python' after
-'host-python' as you said. And I've also tried your new package in
-https://github.com/elebihan/buildroot/tree/pygtk-support/. but I still have
-the "missing headers" error. Haven't you got yourself this error with your
-last branch ?
+   In the earliest days of Vorbis development 15 years ago, codebooks
+   were constructed differently and the lengthlists were quite small.
+   Longs still weren't necessary, but the wasted space was
+   negligible. When the coding strategy shifted and these lists
+   became much larger, no one caught the wasted space. The vast
+   majority of optimization was always for speed, not space. The only
+   concentrated effort in trimming Vorbis library size down over the
+   past decade had been in the decoder.
 
-Thanks again :)
-Sam
+   But now browsers need to ship encoders, and size matters. Add that
+   to 64 bit taking over (and doubling the wasted space in the
+   lengthlists), someone finally noticed the oversight.
 
+   That's a long way of saying [1]"Xiph.Org is pleased to announce
+   the release of libvorbis 1.3.4..."
 
+   No functional changes, but the encoder lib is now a shade over 25%
+   the size it was in the 1.3.3 release.
 
---
-View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/python-Gobject-tp60199p60535.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libvorbis/libvorbis.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/libvorbis/libvorbis.mk b/package/libvorbis/libvorbis.mk
+index 948a43d..d5e290f 100644
+--- a/package/libvorbis/libvorbis.mk
++++ b/package/libvorbis/libvorbis.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBVORBIS_VERSION = 1.3.3
++LIBVORBIS_VERSION = 1.3.4
+ LIBVORBIS_SOURCE = libvorbis-$(LIBVORBIS_VERSION).tar.xz
+ LIBVORBIS_SITE = http://downloads.xiph.org/releases/vorbis/
+ LIBVORBIS_INSTALL_STAGING = YES
