@@ -1,48 +1,93 @@
-From: Anders Darander <anders@chargestorm.se>
-Date: Wed, 22 Jan 2014 12:25:27 +0100
-Subject: [Buildroot] [PATCH 0/4] beaglebone: u-boot and kernel updates
-Message-ID: <1390389931-32589-1-git-send-email-anders@chargestorm.se>
+From: Jeremy Rosen <jeremy.rosen@openwide.fr>
+Date: Wed, 22 Jan 2014 13:43:13 +0100 (CET)
+Subject: [Buildroot] [PATCH] BR2_EXTERNAL: check it is a valid
+ BR2_EXTERNAL dir before using it
+In-Reply-To: <1410002893.284525363.1390386070110.JavaMail.root@zimbra96-e16.priv.proxad.net>
+Message-ID: <1880877953.4607498.1390394593186.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Ok, thx Yann
 
-This patch series upgrades the kernel for the BeagleBone to 3.12.
+my remark about the error message still not being clean still stands
 
-The 3.12 kernel is taken from TI's own repo, and the actual branch/commit used
-is from the latest patch to be used in their own BSP (see meta-ti for
-OpenEmbedded / Yocto).
+and the doc is not explicit about Config.in and external.mk being 
+required
 
-I've tried to keep the defconfig as close to the 3.8 version as possible. Though, 
-it's quite likely that some added configuration could have been removed.
+if you don't want to add these to your patch I can post a separate
+one, but for the technical part :
 
-It's only been tested on a BeagleBone White, using my usual NFS-root setup.
 
-The PM FW in am33x-cm3 has been update to keep it in sync with the kernel.
-The revision used is taken from meta-ti.
+Tested-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
 
-There's also an update to the latest U-Boot, and as a followup to that patch,
-a change to zImage instead of uImage. (As that's the current default in 
-U-Boot).
+Cordialement 
 
-Cheers,
-Anders
+J?r?my Rosen 
++33 (0)1 42 68 28 04
 
-Anders Darander (4):
-  beaglebone: update to TI 3.12 kernel
-  am33x-cm3: update to latest version
-  beaglebone: update to latest U-Boot
-  beaglebone: change to zImage
+fight key loggers : write some perl using vim 
 
- .../{linux-3.8.config => linux-3.12.config}        | 104 ++++++++++++++-------
- configs/beaglebone_defconfig                       |   7 +-
- .../am33x-cm3/am33x-cm3-0001-fix-makefile.patch    |  16 ++--
- package/am33x-cm3/am33x-cm3.mk                     |   2 +-
- 4 files changed, 86 insertions(+), 43 deletions(-)
- rename board/beaglebone/{linux-3.8.config => linux-3.12.config} (68%)
 
--- 
-1.8.5.3
+Open Wide Ingenierie
+
+23, rue Daviel
+75012 Paris - France
+www.openwide.fr
+
+
+
+
+
+----- Mail original -----
+> J?r?my, All,
+> 
+> ----- Original Message -----
+> From: "Jeremy Rosen" <jeremy.rosen@openwide.fr>
+> To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: "Peter Korsgaard" <jacmet@uclibc.org>, "Romain Naour"
+> <romain.naour@openwide.fr>, buildroot at busybox.net
+> Sent: Wednesday, January 22, 2014 10:00:40 AM
+> Subject: Re: [PATCH] BR2_EXTERNAL: check it is a valid BR2_EXTERNAL
+> dir before using it
+> 
+> ok, I tried your patch and I have a couple of problems
+> 
+> [--SNIP--]
+> > diff --git a/Makefile b/Makefile
+> > index 9dfb1e0..5753f81 100644
+> > --- a/Makefile
+> > +++ b/Makefile
+> > @@ -118,7 +118,15 @@ ifeq ($(BR2_EXTERNAL),)
+> >    override BR2_EXTERNAL = support/dummy-external
+> >    $(shell rm -f $(BR2_EXTERNAL_FILE))
+> >  else
+> > -  $(shell echo BR2_EXTERNAL ?= $(BR2_EXTERNAL) >
+> > $(BR2_EXTERNAL_FILE))
+> > +  _BR2_EXTERNAL = $(shell cd $(BR2_EXTERNAL) >/dev/null 2>&1 &&
+> > pwd)
+> > +  ifeq ($(and $(_BR2_EXTERNAL),$(wildcard
+> > $(_BR2_EXTERNAL)/external.mk),$(wildcard
+> > $(_BR2_EXTERNAL)/Config.in)),)
+> > +    ifeq ($(patsubst /%,/,$(BR2_EXTERNAL)),)
+> > +      $(error BR2_EXTERNAL='$(BR2_EXTERNAL)' does not exist)
+> > +    else
+> > +      $(error BR2_EXTERNAL='$(BR2_EXTERNAL)' does not exist,
+> > relatively to $(TOPDIR))
+> > +    endif
+> > +  endif
+> 
+> Doh, I forgot to commit with this line:
+>     override BR2_EXTERNAL := $(_BR2_EXTERNAL)
+> 
+> > +  $(shell echo BR2_EXTERNAL ?= $(_BR2_EXTERNAL) >
+> > $(BR2_EXTERNAL_FILE))
+> >  endif
+> 
+> Care to test again, please?
+> 
+> Regards,
+> Yann E. MORIN.
+>
