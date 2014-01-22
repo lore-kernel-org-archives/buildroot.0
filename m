@@ -1,49 +1,49 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 22 Jan 2014 22:05:28 +0100
-Subject: [Buildroot] [PATCH] lua: fix compilation with Blackfin FLAT
-In-Reply-To: <1390389214-9768-1-git-send-email-francois.perrad@gadz.org>
- (Francois Perrad's message of "Wed, 22 Jan 2014 12:13:34 +0100")
-References: <1390389214-9768-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <87ob33d8x3.fsf@dell.be.48ers.dk>
+Date: Wed, 22 Jan 2014 22:08:50 +0100
+Subject: [Buildroot] [PATCH v2 1/5] pkg-cmake.mk: build shared library
+	when !BR2_PREFER_STATIC_LIB
+In-Reply-To: <1390424381-6889-1-git-send-email-s.martin49@gmail.com> (Samuel
+ Martin's message of "Wed, 22 Jan 2014 21:59:37 +0100")
+References: <1390424381-6889-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <87k3drd8rh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
+>>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
 
- > the dlfcn interface is not available with flat memory model
- > see http://autobuild.buildroot.net/results/b41/b4146bf821d59f694546f6e3a341394cc8fa43ce/
+ > CMake offers a couple of places where one can specify how to build a
+ > library:
+ > - when you create the library target itself, by calling
+ >   add_library(target [SHARED|STATIC] ...)
+ > - or globally, when you configure the build, by setting the
+ >   BUILD_SHARED_LIBS CMake flag.
 
- > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
- > ---
- >  package/lua/lua.mk |   12 ++++++++----
- >  1 file changed, 8 insertions(+), 4 deletions(-)
+ > * if the library target kind of library is specified:
+ >     it overrides the global setting BUILD_SHARED_LIBS;
+ > * else, if the global setting BUILD_SHARED_LIBS is set:
+ >     it builds according to the BUILD_SHARED_LIBS flags;
+ > * otherwise:
+ >     for linux, it will build static library (like BUILD_SHARED_LIBS
+ >     default is OFF).
 
- > diff --git a/package/lua/lua.mk b/package/lua/lua.mk
- > index 2c867f6..b263070 100644
- > --- a/package/lua/lua.mk
- > +++ b/package/lua/lua.mk
- > @@ -15,7 +15,6 @@ LUA_LICENSE = MIT
- >  LUA_LICENSE_FILES = COPYRIGHT
- 
- >  LUA_CFLAGS = -Wall -fPIC
- > -LUA_MYLIBS += -ldl
- 
- >  ifeq ($(BR2_PACKAGE_LUA_5_2),y)
- >  LUA_CFLAGS += -DLUA_COMPAT_ALL
- > @@ -24,17 +23,22 @@ LUA_CFLAGS += -D_FILE_OFFSET_BITS=32
- >  endif
- >  endif
- 
- > +ifneq ($(BR2_BINFMT_FLAT),y)
- > +	LUA_CFLAGS += -DLUA_USE_DLOPEN
- > +	LUA_MYLIBS += -ldl
- > +endif
+ > So, we can consider the setting BUILD_SHARED_LIBS acts a bit similarly
+ > to the autotools ones '--disable-static' and '--enable-shared'.
+ > Thus, it makes sense for Buildroot to globally drive to CMake flags in
+ > the cmake-package infrastructure.
 
-But BINFMT_FLAT imply BR2_PREFER_STATIC_LIB. I guess we should do this
-whenever BR2_PREFER_STATIC_LIB is enabled, right?
+ > It seems we never trigger this so far because:
+ > - either we specified it in the *.mk file (e.g. opencv.mk);
+ > - or it was already set per target by the projects' upstreams.
+
+ > Followup patches will clean the remaining BUILD_SHARED_LIBS in the
+ > package *.mk files.
+
+ > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+
+Committed series, thanks.
 
 -- 
 Bye, Peter Korsgaard
