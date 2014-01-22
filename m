@@ -1,49 +1,49 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 23 Jan 2014 00:49:39 +0100
-Subject: [Buildroot] [PATCH v3 07/12] tinyxml: new package
-In-Reply-To: <1390165448-9130-8-git-send-email-maxime.hadjinlian@gmail.com>
- (Maxime Hadjinlian's message of "Sun, 19 Jan 2014 22:04:03 +0100")
-References: <1390165448-9130-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1390165448-9130-8-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <87y527bmr0.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 23 Jan 2014 00:51:19 +0100
+Subject: [Buildroot] [git commit] rtmpdump: workaround kconfig issue by
+	defaulting to gnutls
+Message-ID: <20140122235353.61CE59C4E2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=42ed108013082c6836673aabe8d6258f9e7a490f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Tiny XML Parser.
- > This package was originally found at : https://github.com/huceke/buildroot-rbp
- > By gimli <ebsi4711@gmail.com>
+Otherwise we get:
 
- > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
- > Cc: gimli <ebsi4711@gmail.com>
- > ---
- > Changes v2 -> v3:
- >   - Fix indent (Yann E. Morin)
- > Changes v1 -> v2:
- >   - Fix header (Yann E. Morin)
- >   - Fix comment on toolchain option (Peter Korsgaard)
- > ---
- > +################################################################################
- > +#
- > +# tinyxml
- > +#
- > +################################################################################
- > +
- > +TINYXML_VERSION = 2.6.2_2
- > +TINYXML_SITE = http://mirrors.xbmc.org/build-deps/sources
- > +# AUTORECONF is needed because the XBMC's version of TinyXML contains a
- > +# configure.ac which is not present in mainline.
- > +TINYXML_AUTORECONF = YES
- > +TINYXML_INSTALL_STAGING = YES
- > +TINYXML_LICENSE = zlib
+package/openssl/Config.in:1:error: recursive dependency detected!
+package/openssl/Config.in:1:    symbol BR2_PACKAGE_OPENSSL is selected by BR2_PACKAGE_GNUTLS
+package/gnutls/Config.in:1:     symbol BR2_PACKAGE_GNUTLS is selected by BR2_PACKAGE_OPENSSL
 
-It's missing a LICENSE_FILES tag (to README).
+Which is caused by lftp doing:
 
-Committed with that fixed, thanks.
+  select BR2_PACKAGE_GNUTLS if !BR2_PACKAGE_OPENSSL
 
--- 
-Bye, Peter Korsgaard
+And rtmpdump doing:
+
+  select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_POLARSSL && !BR2_PACKAGE_GNUTLS
+
+Which confuses kconfig. Work around it by swapping gnutls and openssl in
+rtmpdump so it matches lftp.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/rtmpdump/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/rtmpdump/Config.in b/package/rtmpdump/Config.in
+index d13c55b..c37118a 100644
+--- a/package/rtmpdump/Config.in
++++ b/package/rtmpdump/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_RTMPDUMP
+ 	bool "librtmp"
+ 	select BR2_PACKAGE_ZLIB
+-	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_POLARSSL && !BR2_PACKAGE_GNUTLS
++	select BR2_PACKAGE_GNUTLS if !BR2_PACKAGE_POLARSSL && !BR2_PACKAGE_OPENSSL
+ 	help
+ 	  rtmpdump - RTMPDump Real-Time Messaging Protocol API
+ 	  Only librtmp is installed by this package.
