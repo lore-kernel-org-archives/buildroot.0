@@ -1,47 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 22 Jan 2014 22:08:28 +0100
-Subject: [Buildroot] [git commit] fs/common.mk: add host-mkpasswd if
-	PACKAGES_USERS is not empty
-Message-ID: <20140122210913.B2F979C5BE@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 22 Jan 2014 22:10:50 +0100
+Subject: [Buildroot] [PATCH] BR2_EXTERNAL: check it is a valid
+ BR2_EXTERNAL dir before using it
+In-Reply-To: <1880877953.4607498.1390394593186.JavaMail.root@openwide.fr>
+References: <1410002893.284525363.1390386070110.JavaMail.root@zimbra96-e16.priv.proxad.net>
+ <1880877953.4607498.1390394593186.JavaMail.root@openwide.fr>
+Message-ID: <20140122211050.GC3592@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=22cdb652f51f08c52a87f66da49036eecdf68e8a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+J?r?my, All,
 
-When using a custom rootfs skeleton, the host-mkpasswd target is not
-automatically built, even if some packages add users (i.e. when
-PACKAGES_USERS is not empty).
+On 2014-01-22 13:43 +0100, Jeremy Rosen spake thusly:
+> my remark about the error message still not being clean still stands
+> 
+> and the doc is not explicit about Config.in and external.mk being 
+> required
 
-In this case, the rootfs generation may fail because the mkpasswd
-provided by some distribution does not support all options used in the
-mkusers script.
+Hopefully, my new series will address those two points.
 
-This patch avoids such trouble by automatically adding the host-mkpasswd
-package to the dependency list of the rootfs targets if users needs
-to be created.
+> if you don't want to add these to your patch I can post a separate
+> one, but for the technical part :
+> 
+> Tested-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
 
-[Peter: minor rewording of commit message]
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- fs/common.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+Thank you!
 
-diff --git a/fs/common.mk b/fs/common.mk
-index aa9d961..9f32620 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -37,7 +37,8 @@ USERS_TABLE = $(BUILD_DIR)/_users_table.txt
- define ROOTFS_TARGET_INTERNAL
- 
- # extra deps
--ROOTFS_$(2)_DEPENDENCIES += host-fakeroot host-makedevs
-+ROOTFS_$(2)_DEPENDENCIES += host-fakeroot host-makedevs \
-+	$(if $(PACKAGES_USERS),host-mkpasswd)
- 
- ifeq ($$(BR2_TARGET_ROOTFS_$(2)_GZIP),y)
- ROOTFS_$(2)_COMPRESS_EXT = .gz
+I haven't included your Tested-by in the new series, though, since I've
+modified it more than a bit. Care to have a quick look?
+
+Thanks for the feedback! :-)
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
