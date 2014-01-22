@@ -1,39 +1,52 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 22 Jan 2014 10:59:13 +0100
-Subject: [Buildroot] [PATCH] package: icu: detect and add compiler
-	symbol prefix to the assembly code
-In-Reply-To: <CAJxxZ0OOzpH-sT5WvywjiCEBQiHT4puZsa_tyV4ZAQgNytTLew@mail.gmail.com>
- (Sonic Zhang's message of "Wed, 22 Jan 2014 17:18:13 +0800")
-References: <1389006349-32377-1-git-send-email-Sonic.adi@gmail.com>
- <87y52iw7sv.fsf@dell.be.48ers.dk>
- <CAJxxZ0OOzpH-sT5WvywjiCEBQiHT4puZsa_tyV4ZAQgNytTLew@mail.gmail.com>
-Message-ID: <87mwioe3ri.fsf@dell.be.48ers.dk>
+From: yann.morin.1998 at free.fr <yann.morin.1998@free.fr>
+Date: Wed, 22 Jan 2014 11:21:10 +0100 (CET)
+Subject: [Buildroot] [PATCH] BR2_EXTERNAL: check it is a valid
+ BR2_EXTERNAL dir before using it
+In-Reply-To: <1751679476.4596486.1390381240766.JavaMail.root@openwide.fr>
+Message-ID: <1410002893.284525363.1390386070110.JavaMail.root@zimbra96-e16.priv.proxad.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sonic" == Sonic Zhang <sonic.adi@gmail.com> writes:
+J?r?my, All,
 
-Hi,
+----- Original Message -----
+From: "Jeremy Rosen" <jeremy.rosen@openwide.fr>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: "Peter Korsgaard" <jacmet@uclibc.org>, "Romain Naour" <romain.naour@openwide.fr>, buildroot at busybox.net
+Sent: Wednesday, January 22, 2014 10:00:40 AM
+Subject: Re: [PATCH] BR2_EXTERNAL: check it is a valid BR2_EXTERNAL dir before using it
 
- >> Thanks. Has this been submitted upstream?
+ok, I tried your patch and I have a couple of problems
 
- > Do you mean the icu source upstream? Not yet. Where do you prefer to
- > host this patch? in buildroot or icu project?
+[--SNIP--]
+> diff --git a/Makefile b/Makefile
+> index 9dfb1e0..5753f81 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -118,7 +118,15 @@ ifeq ($(BR2_EXTERNAL),)
+>    override BR2_EXTERNAL = support/dummy-external
+>    $(shell rm -f $(BR2_EXTERNAL_FILE))
+>  else
+> -  $(shell echo BR2_EXTERNAL ?= $(BR2_EXTERNAL) > $(BR2_EXTERNAL_FILE))
+> +  _BR2_EXTERNAL = $(shell cd $(BR2_EXTERNAL) >/dev/null 2>&1 && pwd)
+> +  ifeq ($(and $(_BR2_EXTERNAL),$(wildcard $(_BR2_EXTERNAL)/external.mk),$(wildcard $(_BR2_EXTERNAL)/Config.in)),)
+> +    ifeq ($(patsubst /%,/,$(BR2_EXTERNAL)),)
+> +      $(error BR2_EXTERNAL='$(BR2_EXTERNAL)' does not exist)
+> +    else
+> +      $(error BR2_EXTERNAL='$(BR2_EXTERNAL)' does not exist, relatively to $(TOPDIR))
+> +    endif
+> +  endif
 
-I would very much prefer if this gets included upstream in icu.
+Doh, I forgot to commit with this line:
+    override BR2_EXTERNAL := $(_BR2_EXTERNAL)
 
+> +  $(shell echo BR2_EXTERNAL ?= $(_BR2_EXTERNAL) > $(BR2_EXTERNAL_FILE))
+>  endif
 
- >> > +--- icu-51.2/source/configure       2014-01-06 17:13:20.907249812 +0800
- >> > ++++ icu-51.2.bak/source/configure   2014-01-06 17:12:57.335248659 +0800
- >> 
- >> Please adjust configure.ac and set ICU_AUTORECONF = YES instead.
+Care to test again, please?
 
- > But, there is no configure.ac file in the icu source code.
-
-Ahh, I didn't know. Ok, then.
-
--- 
-Bye, Peter Korsgaard
+Regards,
+Yann E. MORIN.
