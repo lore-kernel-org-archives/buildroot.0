@@ -1,33 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 22 Jan 2014 22:06:21 +0100
-Subject: [Buildroot] [git commit] opencv: remove BUILD_SHARED_LIBS flags
-Message-ID: <20140122210913.906B99C59B@busybox.osuosl.org>
+Date: Wed, 22 Jan 2014 22:07:18 +0100
+Subject: [Buildroot] [git commit] connman: enable systemd unit-files
+	installation
+Message-ID: <20140122210913.ACB3C9C5C6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e5cf8d5999be6459ce2ff37531f07e5a1dd55762
+commit: http://git.buildroot.net/buildroot/commit/?id=8157159b22efa774cb94030e5a079e628b0cea67
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This CMake flag is now handled by the cmake-package infrastructure.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/opencv/opencv.mk |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+ package/connman/connman.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
-index b9ed8cb..de38ae0 100644
---- a/package/opencv/opencv.mk
-+++ b/package/opencv/opencv.mk
-@@ -11,7 +11,6 @@ OPENCV_INSTALL_STAGING = YES
+diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+index 1979454..e0ae7a6 100644
+--- a/package/connman/connman.mk
++++ b/package/connman/connman.mk
+@@ -18,7 +18,8 @@ CONNMAN_CONF_OPT += --localstatedir=/var \
+ 	$(if $(BR2_PACKAGE_CONNMAN_BLUETOOTH),--enable-bluetooth,--disable-bluetooth)	\
+ 	$(if $(BR2_PACKAGE_CONNMAN_LOOPBACK),--enable-loopback,--disable-loopback)	\
+ 	$(if $(BR2_PACKAGE_CONNMAN_NEARD),--enable-neard,--disable-neard) \
+-	$(if $(BR2_PACKAGE_CONNMAN_OFONO),--enable-ofono,--disable-ofono)
++	$(if $(BR2_PACKAGE_CONNMAN_OFONO),--enable-ofono,--disable-ofono) \
++	$(if $(BR2_INIT_SYSTEMD),--with-systemdunitdir=/usr/lib/systemd/system)
  
- OPENCV_CONF_OPT += \
- 	-DCMAKE_BUILD_TYPE=$(if $(BR2_ENABLE_DEBUG),Debug,Release)   \
--	-DBUILD_SHARED_LIBS=$(if $(BR2_PREFER_STATIC_LIB),OFF,ON)    \
- 	-DBUILD_WITH_STATIC_CRT=OFF                                  \
- 	-DBUILD_DOCS=$(if $(BR2_HAVE_DOCUMENTATION),ON,OFF)          \
- 	-DBUILD_EXAMPLES=OFF                                         \
+ CONNMAN_DEPENDENCIES += \
+ 	$(if $(BR2_PACKAGE_CONNMAN_NEARD),neard) \
