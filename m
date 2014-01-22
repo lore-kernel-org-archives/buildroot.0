@@ -1,26 +1,25 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 22 Jan 2014 21:44:47 +0100
-Subject: [Buildroot] [PATCH v3] libnftnl: new package
-In-Reply-To: <1390401447-30520-1-git-send-email-yegorslists@googlemail.com>
- (yegorslists@googlemail.com's message of "Wed, 22 Jan 2014 15:37:27
- +0100")
-References: <1390401447-30520-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <87eh3zeog0.fsf@dell.be.48ers.dk>
+Date: Wed, 22 Jan 2014 21:45:43 +0100
+Subject: [Buildroot] [PATCHv2] e2fsprogs: Install libraries to staging
+In-Reply-To: <52DFC2E0.1030000@zacarias.com.ar> (Gustavo Zacarias's message of
+ "Wed, 22 Jan 2014 10:08:48 -0300")
+References: <1385661237-13975-1-git-send-email-daniel.nystrom@timeterminal.se>
+ <52DFC2E0.1030000@zacarias.com.ar>
+Message-ID: <87a9eneoeg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > From: Yegor Yefremov <yegorslists@googlemail.com>
- > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
- > ---
- > v3: fix toolchain dependecies
- > v2: add toolchain dependecies (Gustavo Zacarias)
+ > On 11/28/2013 02:53 PM, Daniel Nystr?m wrote:
+ >> Signed-off-by: Daniel Nystr?m <daniel.nystrom@timeterminal.se>
 
-Committed with the license fixed, thanks.
+ > Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
