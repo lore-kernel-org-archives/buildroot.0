@@ -1,59 +1,53 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Wed, 22 Jan 2014 12:13:34 +0100
-Subject: [Buildroot] [PATCH] lua: fix compilation with Blackfin FLAT
-Message-ID: <1390389214-9768-1-git-send-email-francois.perrad@gadz.org>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Wed, 22 Jan 2014 12:19:04 +0100
+Subject: [Buildroot] [PATCH] libnftnl: new package
+In-Reply-To: <52DEDA5B.1070004@zacarias.com.ar>
+References: <1390322446-3392-1-git-send-email-yegorslists@googlemail.com>
+ <52DEDA5B.1070004@zacarias.com.ar>
+Message-ID: <CAGm1_ksw0thmdH1w+G79cOsyrtVxG9T=dAuw9oyego+Ya9W8pw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-the dlfcn interface is not available with flat memory model
+On Tue, Jan 21, 2014 at 9:36 PM, Gustavo Zacarias
+<gustavo@zacarias.com.ar> wrote:
+> On 01/21/2014 01:40 PM, yegorslists at googlemail.com wrote:
+>> --- /dev/null
+>> +++ b/package/libnftnl/Config.in
+>> @@ -0,0 +1,11 @@
+>> +config BR2_PACKAGE_LIBNFTNL
+>> +     bool "libnftnl"
+>> +     select BR2_PACKAGE_LIBMNL
+>> +     help
+>> +       libnftnl is a userspace library providing a low-level
+>> +       netlink programming interface (API) to the in-kernel
+>> +       nf_tables subsystem. The library libnftnl has been
+>> +       previously known as libnftables. This library is
+>> +       currently used by nftables.
+>> +
+>> +       http://netfilter.org/projects/libnftnl/index.html
+>
+> +       depends on BR2_INET_IPV6
+> +       depends on BR2_LARGEFILE
+> +       depends on BR2_TOOLCHAIN_HAS_THREADS
+>
+> I've already tested the messy stuff :)
+> Also got a nftables package, didn't submit the set yet because it
+> doesn't seem to run properly on a ppc target:
+>
+> ~ # nft list table filter
+> <cmdline>:1:1-17: Error: Could not receive sets from kernel: Address
+> family not supported by protocol
+>
+> Didn't track the sucker down yet (yeah got ipv6, all of the netfilter
+> and nft modules loaded and so on).
 
-see http://autobuild.buildroot.net/results/b41/b4146bf821d59f694546f6e3a341394cc8fa43ce/
+I've send v2.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/lua/lua.mk |   12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+It will be good, if we could at least get all needed packages into BR.
+I can imagine, that new version would appear in the near future, as
+different distros would package nftables :-)
 
-diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-index 2c867f6..b263070 100644
---- a/package/lua/lua.mk
-+++ b/package/lua/lua.mk
-@@ -15,7 +15,6 @@ LUA_LICENSE = MIT
- LUA_LICENSE_FILES = COPYRIGHT
- 
- LUA_CFLAGS = -Wall -fPIC
--LUA_MYLIBS += -ldl
- 
- ifeq ($(BR2_PACKAGE_LUA_5_2),y)
- LUA_CFLAGS += -DLUA_COMPAT_ALL
-@@ -24,17 +23,22 @@ LUA_CFLAGS += -D_FILE_OFFSET_BITS=32
- endif
- endif
- 
-+ifneq ($(BR2_BINFMT_FLAT),y)
-+	LUA_CFLAGS += -DLUA_USE_DLOPEN
-+	LUA_MYLIBS += -ldl
-+endif
-+
- ifeq ($(BR2_PACKAGE_LUA_INTERPRETER_READLINE),y)
- 	LUA_DEPENDENCIES = readline ncurses
- 	LUA_MYLIBS += -lreadline -lhistory -lncurses
--	LUA_CFLAGS += -DLUA_USE_POSIX -DLUA_USE_DLOPEN -DLUA_USE_READLINE
-+	LUA_CFLAGS += -DLUA_USE_POSIX -DLUA_USE_READLINE
- else
- ifeq ($(BR2_PACKAGE_LUA_INTERPRETER_LINENOISE),y)
- 	LUA_DEPENDENCIES = linenoise
- 	LUA_MYLIBS += -llinenoise
--	LUA_CFLAGS += -DLUA_USE_POSIX -DLUA_USE_DLOPEN -DLUA_USE_LINENOISE
-+	LUA_CFLAGS += -DLUA_USE_POSIX -DLUA_USE_LINENOISE
- else
--	LUA_CFLAGS += -DLUA_USE_POSIX -DLUA_USE_DLOPEN
-+	LUA_CFLAGS += -DLUA_USE_POSIX
- endif
- endif
- 
--- 
-1.7.9.5
+Yegor
