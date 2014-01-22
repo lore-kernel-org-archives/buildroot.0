@@ -1,33 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 22 Jan 2014 21:45:15 +0100
-Subject: [Buildroot] [git commit] e2fsprogs: Install libraries to staging
-Message-ID: <20140122204854.867909A0BB@busybox.osuosl.org>
+Date: Wed, 22 Jan 2014 21:48:19 +0100
+Subject: [Buildroot] [git commit] linux/Config.in: clarify longterm 2.6 URL
+	exception
+Message-ID: <20140122204854.B02559C5C6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1ee98ea68fdf0767288914230031a18fbb2f9d55
+commit: http://git.buildroot.net/buildroot/commit/?id=a1ede0a51366a3418666f4cb1afd445fb969b967
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Daniel Nystr??m <daniel.nystrom@timeterminal.se>
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+As this question has popped up multiple times on the mailing list, clarify
+that selecting longterm 2.6 kernels requires the 'custom tarball' option
+instead of 'custom version'.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/e2fsprogs/e2fsprogs.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ linux/Config.in |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index 0f1b7d4..2eb59f5 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -8,6 +8,8 @@ E2FSPROGS_VERSION = 1.42.9
- E2FSPROGS_SITE = http://downloads.sourceforge.net/project/e2fsprogs/e2fsprogs/v$(E2FSPROGS_VERSION)
- E2FSPROGS_LICENSE = GPLv2, libuuid BSD-3c, libss and libet MIT-like with advertising clause
- E2FSPROGS_LICENSE_FILES = COPYING lib/uuid/COPYING lib/ss/mit-sipb-copyright.h lib/et/internal.h
-+E2FSPROGS_INSTALL_STAGING = YES
-+E2FSPROGS_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install-libs
+diff --git a/linux/Config.in b/linux/Config.in
+index 583735e..be619d3 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -40,6 +40,11 @@ config BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	  This option allows to use a specific official version from
+ 	  kernel.org, like 2.6.x, 2.6.x.y, 3.x.y, ...
  
- E2FSPROGS_CONF_OPT = \
- 	--disable-tls \
++	  Note: you cannot use this option to select a _longterm_ 2.6
++	  kernel, because these kernels are not located at the standard
++	  URL at kernel.org. Instead, select "Custom tarball" and
++	  specify the right URL directly.
++
+ config BR2_LINUX_KERNEL_CUSTOM_TARBALL
+ 	bool "Custom tarball"
+ 	help
