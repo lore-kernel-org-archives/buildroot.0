@@ -1,10 +1,10 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Wed, 22 Jan 2014 21:59:39 +0100
-Subject: [Buildroot] [PATCH v2 3/5] connman: use the *_INSTALL_INIT_SYSV
-	infra instead of the custom hook
+Date: Wed, 22 Jan 2014 21:59:40 +0100
+Subject: [Buildroot] [PATCH v2 4/5] connman: enable systemd unit-files
+	installation
 In-Reply-To: <1390424381-6889-1-git-send-email-s.martin49@gmail.com>
 References: <1390424381-6889-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1390424381-6889-3-git-send-email-s.martin49@gmail.com>
+Message-ID: <1390424381-6889-4-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,28 +15,25 @@ Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
 ---
 changes v1 -> v2:
-- split patch: one for using _INIT_SYSV infra, the other for init systemd
-  support (Yann)
+- split patch: one for sysvinit, the other for systemd init (Yann)
+- use connman configure option to install the unit-files (LucasDM)
 ---
- package/connman/connman.mk | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ package/connman/connman.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index 64c1f0e..1979454 100644
+index 1979454..e0ae7a6 100644
 --- a/package/connman/connman.mk
 +++ b/package/connman/connman.mk
-@@ -24,11 +24,10 @@ CONNMAN_DEPENDENCIES += \
+@@ -18,7 +18,8 @@ CONNMAN_CONF_OPT += --localstatedir=/var \
+ 	$(if $(BR2_PACKAGE_CONNMAN_BLUETOOTH),--enable-bluetooth,--disable-bluetooth)	\
+ 	$(if $(BR2_PACKAGE_CONNMAN_LOOPBACK),--enable-loopback,--disable-loopback)	\
+ 	$(if $(BR2_PACKAGE_CONNMAN_NEARD),--enable-neard,--disable-neard) \
+-	$(if $(BR2_PACKAGE_CONNMAN_OFONO),--enable-ofono,--disable-ofono)
++	$(if $(BR2_PACKAGE_CONNMAN_OFONO),--enable-ofono,--disable-ofono) \
++	$(if $(BR2_INIT_SYSTEMD),--with-systemdunitdir=/usr/lib/systemd/system)
+ 
+ CONNMAN_DEPENDENCIES += \
  	$(if $(BR2_PACKAGE_CONNMAN_NEARD),neard) \
- 	$(if $(BR2_PACKAGE_CONNMAN_OFONO),ofono)
- 
--define CONNMAN_INSTALL_INITSCRIPT
-+define CONNMAN_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 0755 -D package/connman/S45connman $(TARGET_DIR)/etc/init.d/S45connman
- endef
- 
--CONNMAN_POST_INSTALL_TARGET_HOOKS = CONNMAN_INSTALL_INITSCRIPT
- 
- ifeq ($(BR2_PACKAGE_CONNMAN_CLIENT),y)
- CONNMAN_CONF_OPT += --enable-client
 -- 
 1.8.5.3
