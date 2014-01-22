@@ -1,82 +1,83 @@
-From: Jeremy Rosen <jeremy.rosen@openwide.fr>
-Date: Wed, 22 Jan 2014 15:16:12 +0100 (CET)
-Subject: [Buildroot] [PATCH] prevent recursion in %_defconfig rules
-In-Reply-To: <20140121183820.GB3455@free.fr>
-Message-ID: <686484103.4612359.1390400172918.JavaMail.root@openwide.fr>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Wed, 22 Jan 2014 15:37:27 +0100
+Subject: [Buildroot] [PATCH v3] libnftnl: new package
+Message-ID: <1390401447-30520-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-> > 
-> > * Having a buildroot/ subdirectory at the root of the project
-> > * Having a Makefile in the root of the project that correctly
-> >   allows to build the project
-> > * Having BR2_EXTERNAL be the root of the project (and as much
-> >   as possible, all config files in the root of the project)
-> > * Having an output/ subdirectory in the root of the project
-> >   with all build files
-> > * Having everything relocatable (since I want to save it to git, I
-> >   can't have absolute paths)
-> > 
-> > That is currently not possible and maybe it's a bad idea, but this
-> > layout seems to make sense to me and the relative path requirement
-> > makes sense too, since it's needed for other people to use my
-> > project
-> 
-> But your Makefile already does not use relative paths:
->     MAKEARGS := -C $(CURDIR)/buildroot
->     MAKEARGS += O=$(CURDIR)/output
->     MAKEARGS += BR2_EXTERNAL=$(CURDIR)
-> 
-> which is IMHO the way to go.
-> 
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+v3: fix toolchain dependecies
+v2: add toolchain dependecies (Gustavo Zacarias)
 
-ok, good. i'll stay with that approch (that doesn't use the br
-generated makefile nor the .br-external file) for my project
+ package/Config.in            |    1 +
+ package/libnftnl/Config.in   |   18 ++++++++++++++++++
+ package/libnftnl/libnftnl.mk |   15 +++++++++++++++
+ 3 files changed, 34 insertions(+), 0 deletions(-)
+ create mode 100644 package/libnftnl/Config.in
+ create mode 100644 package/libnftnl/libnftnl.mk
 
-
-> [--SNIP--]
-> > Though I agree that it would be more sensible to have 0= and
-> > BR2_EXTERNAL be relative to cwd...
-> 
-> But since we may call 'make -C /bla/bla', CWD is lost long before we
-> even get to the point our Makefile is parsed.
-> 
-
-indeed. so no CWD, then. makes sense
-
-<snip>
-
-
-> 
-> Well, just look at your repository! ;-)
-> Unles I missed something obvious, that is... :-)
-> 
-
-yes, indeed. I didn't realize that it was working for me :)
-
-BR2_EXTERNAL does indeed do what I want now. I'll move foward
-with the next step in my proof of concept project: relocating
-the various .config files
-
-but that's a story for another day :)
-
-
-> Regards,
-> Yann E. MORIN.
-> 
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> |  conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
-> |               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/
-> |  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
-> |   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-> 
+diff --git a/package/Config.in b/package/Config.in
+index 8495cdd..d2e0424 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -675,6 +675,7 @@ source "package/libnetfilter_cttimeout/Config.in"
+ source "package/libnetfilter_log/Config.in"
+ source "package/libnetfilter_queue/Config.in"
+ source "package/libnfnetlink/Config.in"
++source "package/libnftnl/Config.in"
+ source "package/libnl/Config.in"
+ source "package/liboauth/Config.in"
+ source "package/liboping/Config.in"
+diff --git a/package/libnftnl/Config.in b/package/libnftnl/Config.in
+new file mode 100644
+index 0000000..66d0513
+--- /dev/null
++++ b/package/libnftnl/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_LIBNFTNL
++	bool "libnftnl"
++	depends on BR2_INET_IPV6
++	depends on BR2_LARGEFILE
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_LIBMNL
++	help
++	  libnftnl is a userspace library providing a low-level
++	  netlink programming interface (API) to the in-kernel
++	  nf_tables subsystem. The library libnftnl has been
++	  previously known as libnftables. This library is
++	  currently used by nftables.
++
++	  http://netfilter.org/projects/libnftnl/index.html
++
++comment "libnftnl needs a toolchain w/ threads, IPv6, largefile"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INET_IPV6 || \
++		!BR2_LARGEFILE
+diff --git a/package/libnftnl/libnftnl.mk b/package/libnftnl/libnftnl.mk
+new file mode 100644
+index 0000000..bb8bdb4
+--- /dev/null
++++ b/package/libnftnl/libnftnl.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# libnftnl
++#
++################################################################################
++
++LIBNFTNL_VERSION = 1.0.0
++LIBNFTNL_SITE = http://netfilter.org/projects/libnftnl/files/
++LIBNFTNL_SOURCE = libnftnl-$(LIBNFTNL_VERSION).tar.bz2
++LIBNFTNL_LICENSE = GPLv2
++LIBNFTNL_LICENSE_FILES = COPYING
++LIBNFTNL_INSTALL_STAGING = YES
++LIBNFTNL_DEPENDENCIES = host-pkgconf libmnl
++
++$(eval $(autotools-package))
+-- 
+1.7.7
