@@ -1,70 +1,56 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 22 Jan 2014 23:33:20 +0100
-Subject: [Buildroot] [PATCH 1/2] package/ffmpeg2: new package
-In-Reply-To: <20140120212701.GC3421@free.fr>
-References: <cover.1390242867.git.yann.morin.1998@free.fr>
- <d4f3847e403c1e5c4e8733f75bbfccce6e0b4975.1390242867.git.yann.morin.1998@free.fr>
- <el80raxhff.ln2@ID-313208.user.individual.net>
- <20140120212701.GC3421@free.fr>
-Message-ID: <20140122223320.GD3592@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 22 Jan 2014 23:48:26 +0100
+Subject: [Buildroot] [PATCH v3 06/12] libshairplay: new package
+In-Reply-To: <1390165448-9130-7-git-send-email-maxime.hadjinlian@gmail.com>
+ (Maxime Hadjinlian's message of "Sun, 19 Jan 2014 22:04:02 +0100")
+References: <1390165448-9130-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <1390165448-9130-7-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <877g9rd45h.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+>>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
 
-On 2014-01-20 22:27 +0100, Yann E. MORIN spake thusly:
-> On 2014-01-20 20:05 +0100, Bernd Kuhls spake thusly:
-> > "Yann E. MORIN" <yann.morin.1998@free.fr> wrote in
-> > news:d4f3847e403c1e5c4e8733f75bbfccce6e0b4975.1390242867.git.yann.morin.199
-> > 8 at free.fr: 
-> > 
-> > > We package ffmpeg2 as a separate package from ffmpeg, instead of
-> > > bumping the latter, since gstreamer-0.10's gst-ffmpeg still use an
-> > > older version of ffmpeg.
-> > 
-> > Hi,
-> > 
-> > this is not true anymore:
-> > 
-> > gst-ffmpeg: Use internal libav instead of external ffmpeg: 
-> > http://git.buildroot.net/buildroot/commit/?id=
-> > 6ea49a23df3fa950e253bf704188e87a583a8ba4
-> > 
-> > ffmpeg: Bump version to 1.2.5: http://git.buildroot.net/buildroot/commit/?id=
-> > 4b959fcb67675b9e0594dc6b12742e119c82c96e
-> 
-> Ah, yes. This ffmpeg2 patch of mine I did some three months ago. I just
-> refreshed it yesterday, and forgot to re-check the compatibilty issue.
-> 
-> I'll double check what needs to be done, rework the commit log, and
-> resubmit later.
+ > libshairplay is a client library that emulates an airplay server
+ > This package was originally found at : https://github.com/huceke/buildroot-rbp
+ > By gimli <ebsi4711@gmail.com>
 
-The sets of files installed by each version has a non-null intersection,
-especially the header files, and the .pc files.
+Committed with minor fixes (see below) - Thanks.
 
-The libraries have different versions, indeed, but we still can't
-install both, as the .so links will point to the latest being installed,
-which is not predictible.
+ > +config BR2_PACKAGE_LIBSHAIRPLAY
+ > +  bool "libshairplay"
+ > +  depends on BR2_INET_IPV6
+ > +  help
 
-Say for example:
-  - package 'zzz' depends on ffmpeg (and is incompatible with ffmpeg2)
-  - the Makefile builds the package in alphabetical order, so we'd build:
-    ffmpeg -> ffmpeg2 -> zzz
-  - zzz will see header and .pc files, and .so symlinks from ffmpeg2,
-    not ffmpeg.
+Indentation is wrong (should be tab).
 
-So, I still think we should consider ffmpeg2 to be clashing with ffmpeg1.
+It uses pthreads, so it should also depend on BR2_TOOLCHAIN_HAS_THREADS.
 
-Regards,
-Yann E. MORIN.
+ > +++ b/package/libshairplay/libshairplay.mk
+ > @@ -0,0 +1,15 @@
+ > +################################################################################
+ > +#
+ > +# libshairplay
+ > +#
+ > +################################################################################
+ > +
+ > +LIBSHAIRPLAY_VERSION = 139d5ef55564514c31f02dd82cef91236c9ff523
+ > +LIBSHAIRPLAY_SITE = $(call github,juhovh,shairplay,$(LIBSHAIRPLAY_VERSION))
+ > +LIBSHAIRPLAY_INSTALL_STAGING = YES
+ > +LIBSHAIRPLAY_INSTALL_TARGET = YES
+
+This defaults to YES, so that isn't needed.
+
+ > +LIBSHAIRPLAY_AUTORECONF = YES
+ > +LIBSHAIRPLAY_LICENSE = MIT, BSD-3c, LGPLv2.1+
+ > +LIBSHAIRPLAY_LICENSE_FILES = LICENSE
+
+The configure script uses pkg-config so it should depend on
+host-pkgconf. It also has optional support for libao, so we should add
+that as well if enabled.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
