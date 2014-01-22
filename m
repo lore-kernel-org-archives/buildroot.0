@@ -1,53 +1,182 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed, 22 Jan 2014 12:19:04 +0100
-Subject: [Buildroot] [PATCH] libnftnl: new package
-In-Reply-To: <52DEDA5B.1070004@zacarias.com.ar>
-References: <1390322446-3392-1-git-send-email-yegorslists@googlemail.com>
- <52DEDA5B.1070004@zacarias.com.ar>
-Message-ID: <CAGm1_ksw0thmdH1w+G79cOsyrtVxG9T=dAuw9oyego+Ya9W8pw@mail.gmail.com>
+From: Sonic Zhang <sonic.adi@gmail.com>
+Date: Wed, 22 Jan 2014 19:19:27 +0800
+Subject: [Buildroot] Fwd: [Patch] package: icu: detect and add compiler
+ symbol prefix to the assembly code
+In-Reply-To: <CAJxxZ0N7Zx+Z5XD7HvV7dkfuGZxfmnxKCHiKStf23GBoLQaLsw@mail.gmail.com>
+References: <CAJxxZ0N7Zx+Z5XD7HvV7dkfuGZxfmnxKCHiKStf23GBoLQaLsw@mail.gmail.com>
+Message-ID: <CAJxxZ0NvPJJP+SYmROB=Ld=4rTg3d5bKV+3hmc-3kRrsDPas3A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jan 21, 2014 at 9:36 PM, Gustavo Zacarias
-<gustavo@zacarias.com.ar> wrote:
-> On 01/21/2014 01:40 PM, yegorslists at googlemail.com wrote:
->> --- /dev/null
->> +++ b/package/libnftnl/Config.in
->> @@ -0,0 +1,11 @@
->> +config BR2_PACKAGE_LIBNFTNL
->> +     bool "libnftnl"
->> +     select BR2_PACKAGE_LIBMNL
->> +     help
->> +       libnftnl is a userspace library providing a low-level
->> +       netlink programming interface (API) to the in-kernel
->> +       nf_tables subsystem. The library libnftnl has been
->> +       previously known as libnftables. This library is
->> +       currently used by nftables.
->> +
->> +       http://netfilter.org/projects/libnftnl/index.html
->
-> +       depends on BR2_INET_IPV6
-> +       depends on BR2_LARGEFILE
-> +       depends on BR2_TOOLCHAIN_HAS_THREADS
->
-> I've already tested the messy stuff :)
-> Also got a nftables package, didn't submit the set yet because it
-> doesn't seem to run properly on a ppc target:
->
-> ~ # nft list table filter
-> <cmdline>:1:1-17: Error: Could not receive sets from kernel: Address
-> family not supported by protocol
->
-> Didn't track the sucker down yet (yeah got ipv6, all of the netfilter
-> and nft modules loaded and so on).
+CC buildroot mailing list as well.
 
-I've send v2.
+Sonic
 
-It will be good, if we could at least get all needed packages into BR.
-I can imagine, that new version would appear in the near future, as
-different distros would package nftables :-)
 
-Yegor
+---------- Forwarded message ----------
+From: Sonic Zhang <sonic.adi@gmail.com>
+Date: Wed, Jan 22, 2014 at 7:12 PM
+Subject: [Patch] package: icu: detect and add compiler symbol prefix
+to the assembly code
+To: icu-support at lists.sourceforge.net
+
+
+package: icu: detect and add compiler symbol prefix to the assembly code
+
+Some compiler, such as Blackfin GNU compiler, prefix a charater to any
+C symbol in generated assembly code. If any assembly symbol is invoked
+from C code, it needs to be prefixed as well.
+
+Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
+
+--- icu-51.2/source/configure    2014-01-06 17:13:20.907249812 +0800
++++ icu-51.2.bak/source/configure    2014-01-06 17:12:57.335248659 +0800
+@@ -612,6 +612,7 @@
+ ICUDATA_CHAR
+ SAMPLES_TRUE
+ TESTS_TRUE
++SYMBOL_PREFIX
+ ICULIBSUFFIXCNAME
+ U_HAVE_LIB_SUFFIX
+ ICULIBSUFFIX
+@@ -7226,7 +7227,16 @@
+     U_HAVE_LIB_SUFFIX=0
+ fi
+
++# Check compiler generated symbol profix
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for symbol prefix" >&5
++$as_echo "checking for symbol prefix... " >&6; }
++    SYMBOL_PREFIX=`echo "PREFIX=__USER_LABEL_PREFIX__" \
++                  | ${CPP-${CC-gcc} -E} - 2>&1 \
++                  | ${EGREP-grep} "^PREFIX=" \
++                  | sed -e "s:^PREFIX=::" -e "s:__USER_LABEL_PREFIX__::"`
+
++    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SYMBOL_PREFIX" >&5
++$as_echo "$SYMBOL_PREFIX" >&6; }
+
+ # Enable/disable tests
+ # Check whether --enable-tests was given.
+--- icu-51.2/source/extra/uconv/Makefile.in    2014-01-06
+17:47:13.991347946 +0800
++++ icu-51.2.bak/source/extra/uconv/Makefile.in    2014-01-06
+17:48:01.571355282 +0800
+@@ -57,7 +57,7 @@
+ ## Static mode
+ ifeq ($(UCONVMSG_MODE),static)
+ DEFS += -DUCONVMSG_LINK=$(MSGNAME)
+-UCONVMSG_LIB = $(RESDIR)/$(LIBPREFIX)$(STATIC_PREFIX_WHEN_USED)$(MSGNAME).$(A)
++UCONVMSG_LIB =
+$(RESDIR)/$(LIBPREFIX)$(STATIC_PREFIX_WHEN_USED)@SYMBOL_PREFIX@$(MSGNAME).$(A)
+ LIBS += $(UCONVMSG_LIB)
+ PKGMODE=static
+ INSTALLTO=$(libdir)
+@@ -151,7 +151,7 @@
+ endif
+
+ $(UCONVMSG_LIB): $(RESFILES) $(RESDIR)/$(RESDIR).lst pkgdata.inc
+-    $(INVOKE) $(PKGDATA_INVOKE_OPTS) $(TOOLBINDIR)/pkgdata -p
+$(MSGNAME) $(PKGDATA_OPTS) -m $(PKGMODE) -s $(RESDIR) -d $(RESDIR) -T
+$(RESDIR) $(RESDIR)/$(RESDIR).lst
++    $(INVOKE) $(PKGDATA_INVOKE_OPTS) $(TOOLBINDIR)/pkgdata -p
+@SYMBOL_PREFIX@$(MSGNAME) $(PKGDATA_OPTS) -m $(PKGMODE) -s $(RESDIR)
+-d $(RESDIR) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
+
+ $(RESDIR)/$(RESDIR).lst: Makefile $(srcdir)/resfiles.mk
+     @-$(RMV) $@
+--- icu-51.2/source/data/Makefile.in    2014-01-06 19:00:28.879570005 +0800
++++ icu-51.2.bak/source/data/Makefile.in    2014-01-06 19:00:07.891570170 +0800
+@@ -175,13 +175,13 @@
+ packagedata: icupkg.inc $(PKGDATA_LIST) build-local
+ ifneq ($(ENABLE_STATIC),)
+ ifeq ($(PKGDATA_MODE),dll)
+-    $(PKGDATA_INVOKE) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T
+$(OUTTMPDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBSTATICNAME) -m static
+$(PKGDATA_VERSIONING) $(PKGDATA_LIST)
++    $(PKGDATA_INVOKE) $(PKGDATA) -e
+@SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p
+$(ICUDATA_NAME) $(PKGDATA_LIBSTATICNAME) -m static
+$(PKGDATA_VERSIONING) $(PKGDATA_LIST)
+ endif
+ endif
+ ifneq ($(ICUDATA_SOURCE_IS_NATIVE_TARGET),YES)
+-    $(PKGDATA_INVOKE) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T
+$(OUTTMPDIR) -p $(ICUDATA_NAME) -m $(PKGDATA_MODE)
+$(PKGDATA_VERSIONING) $(PKGDATA_LIBNAME) $(PKGDATA_LIST)
++    $(PKGDATA_INVOKE) $(PKGDATA) -e
+@SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p
+$(ICUDATA_NAME) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING)
+$(PKGDATA_LIBNAME) $(PKGDATA_LIST)
+ ifeq ($(OS390BATCH),1)
+-    $(PKGDATA_INVOKE) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T
+$(OUTTMPDIR) -p $(ICUDATA_NAME) -m $(PKGDATA_MODE)
+$(PKGDATA_VERSIONING) $(OS390_PDS_NAME) $(PKGDATA_LIST)
++    $(PKGDATA_INVOKE) $(PKGDATA) -e
+@SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p
+$(ICUDATA_NAME) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING)
+$(OS390_PDS_NAME) $(PKGDATA_LIST)
+ endif
+ else
+     $(INSTALL_DATA) $(ICUDATA_SOURCE_ARCHIVE) $(OUTDIR)
+@@ -203,11 +203,11 @@
+ endif
+ ifneq ($(ENABLE_STATIC),)
+ ifeq ($(PKGDATA_MODE),dll)
+-    $(PKGDATA_INVOKE) $(PKGDATA) -m static -e $(ICUDATA_ENTRY_POINT)
+-T $(OUTTMPDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME)
+$(PKGDATA_LIBSTATICNAME) $(PKGDATA_LIST) -I
+$(ICUPKGDATA_INSTALL_LIBDIR)
++    $(PKGDATA_INVOKE) $(PKGDATA) -m static -e
+@SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -s $(BUILDDIR)
+-p $(ICUDATA_NAME) $(PKGDATA_LIBSTATICNAME) $(PKGDATA_LIST) -I
+$(ICUPKGDATA_INSTALL_LIBDIR)
+ endif
+ endif
+ ifneq ($(ICUDATA_SOURCE_IS_NATIVE_TARGET),YES)
+-    $(PKGDATA_INVOKE) $(PKGDATA) -m $(PKGDATA_MODE)
+$(PKGDATA_VERSIONING) -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -s
+$(BUILDDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBNAME) $(PKGDATA_LIST) -I
+$(ICUPKGDATA_INSTALL_DIR)
++    $(PKGDATA_INVOKE) $(PKGDATA) -m $(PKGDATA_MODE)
+$(PKGDATA_VERSIONING) -e @SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) -T
+$(OUTTMPDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBNAME)
+$(PKGDATA_LIST) -I $(ICUPKGDATA_INSTALL_DIR)
+ else
+     $(INSTALL_DATA) $(ICUDATA_SOURCE_ARCHIVE) $(DESTDIR)$(ICUPKGDATA_DIR)
+ endif
+@@ -218,7 +218,7 @@
+ #### 390 support
+ install390: package390
+     $(MKINSTALLDIRS) $(TMPDATADIR) $(DESTDIR)$(libdir)
+-    $(INVOKE) $(PKGDATA) -s $(BUILDDIR)$(STUB_SUFFIX) -T
+$(OUTTMPDIR_390STUB) -p $(ICUDATA_NAME)$(STUB_SUFFIX)
+$(PKGDATA_LIBNAME)$(STUB_SUFFIX) -e $(ICUDATA_ENTRY_POINT)
+$(OS390LIST) -m dll $(PKGDATA_VERSIONING) -I
+$(DESTDIR)$(ICUPKGDATA_DIR)
++    $(INVOKE) $(PKGDATA) -s $(BUILDDIR)$(STUB_SUFFIX) -T
+$(OUTTMPDIR_390STUB) -p $(ICUDATA_NAME)$(STUB_SUFFIX)
+$(PKGDATA_LIBNAME)$(STUB_SUFFIX) -e
+@SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) $(OS390LIST) -m dll
+$(PKGDATA_VERSIONING) -I $(DESTDIR)$(ICUPKGDATA_DIR)
+ ifeq ($(PKGDATA_MODE),dll)
+     $(INSTALL-L) $(ICUPKGDATA_OUTDIR)/$(FINAL_IMPORT_LIB)
+$(DESTDIR)$(ICUPKGDATA_DIR)/$(FINAL_IMPORT_LIB)
+ endif
+@@ -226,7 +226,7 @@
+ #### $(LIB_ICUDATA_NAME)$(STUB_SUFFIX) is the subset data for batch mode
+ package390: $(OUTTMPDIR)/icudata390.lst $(PKGDATA_LIST) ./icupkg.inc
+packagedata
+     ln -s $(ICUDATA_NAME) $(OUTDIR)/build/$(ICUDATA_NAME)$(STUB_SUFFIX)
+-    $(INVOKE) $(PKGDATA) -s $(BUILDDIR)$(STUB_SUFFIX) -T
+$(OUTTMPDIR_390STUB) -p $(ICUDATA_NAME)$(STUB_SUFFIX)
+$(PKGDATA_LIBNAME)$(STUB_SUFFIX) -e $(ICUDATA_ENTRY_POINT)
+$(OS390LIST) -m dll $(PKGDATA_VERSIONING)
++    $(INVOKE) $(PKGDATA) -s $(BUILDDIR)$(STUB_SUFFIX) -T
+$(OUTTMPDIR_390STUB) -p $(ICUDATA_NAME)$(STUB_SUFFIX)
+$(PKGDATA_LIBNAME)$(STUB_SUFFIX) -e
+@SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) $(OS390LIST) -m dll
+$(PKGDATA_VERSIONING)
+     cp $(ICUPKGDATA_OUTDIR)/$(LIB_ICUDATA_NAME)$(STUB_SUFFIX).$(SO)
+$(top_builddir)/stubdata/$(LIB_ICUDATA_NAME)$(STUB_SUFFIX).$(SO)
