@@ -1,53 +1,70 @@
-From: Steve Calfee <stevecalfee@gmail.com>
-Date: Wed, 22 Jan 2014 14:10:31 -0800
-Subject: [Buildroot] Patchwork oldest patches cleanup #6 (deadline
-	February 2)
-In-Reply-To: <CAAXf6LX2yqbapp6GBuN5qoT1R93CGD3NCLguY8fQhFoApJz2uw@mail.gmail.com>
-References: <CAAXf6LX2yqbapp6GBuN5qoT1R93CGD3NCLguY8fQhFoApJz2uw@mail.gmail.com>
-Message-ID: <CAJJ6jxvu=r8wn=LbLYtXW-Omyv4jwTLQPE5RuFHh9eYS9N82Vg@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 22 Jan 2014 23:33:20 +0100
+Subject: [Buildroot] [PATCH 1/2] package/ffmpeg2: new package
+In-Reply-To: <20140120212701.GC3421@free.fr>
+References: <cover.1390242867.git.yann.morin.1998@free.fr>
+ <d4f3847e403c1e5c4e8733f75bbfccce6e0b4975.1390242867.git.yann.morin.1998@free.fr>
+ <el80raxhff.ln2@ID-313208.user.individual.net>
+ <20140120212701.GC3421@free.fr>
+Message-ID: <20140122223320.GD3592@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jan 20, 2014 at 1:06 PM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> All,
->
-> Here is session 6 of the patchwork cleanup. For those who haven't
-> followed previous sessions, here is a quick recap: every session we'll
-> be posting the list of the 10 oldest patches, with the original patch
-> contributors in copy. During two weeks, we have the opportunity to
-> discuss the patch, whether it is still necessary or not, how it should
-> be changed to be merged.
->
-> In particular, I'm interested in knowing if the original contributor is
-> still interested by the patch, or if someone else is interested in
-> adopting the patch and sending an updated version, or if the patch no
-> longer makes sense due to other changes made in Buildroot.
->
-> All patches that have not received any comment or attention before the
-> deadline will be removed from patchwork. This is aggressive, but we have
-> many 'dead' patches sitting in patchwork, and this cannot work.
->
-> Deadline for this session is February 2 (FOSDEM + Buildroot developer days!).
->
-<snip>
-> minimal dockstar setup
-> Steve Calfee <stevecalfee@gmail.com>
-> http://patchwork.ozlabs.org/patch/217639
->
+Bernd, All,
 
-I guess you might as well drop the patch. At the time before rpi, the
-$30 retail dockstar was the cheapest linux computer you could buy. I
-thought others might be interested, but have received no comments, so
-don't bother with this.
+On 2014-01-20 22:27 +0100, Yann E. MORIN spake thusly:
+> On 2014-01-20 20:05 +0100, Bernd Kuhls spake thusly:
+> > "Yann E. MORIN" <yann.morin.1998@free.fr> wrote in
+> > news:d4f3847e403c1e5c4e8733f75bbfccce6e0b4975.1390242867.git.yann.morin.199
+> > 8 at free.fr: 
+> > 
+> > > We package ffmpeg2 as a separate package from ffmpeg, instead of
+> > > bumping the latter, since gstreamer-0.10's gst-ffmpeg still use an
+> > > older version of ffmpeg.
+> > 
+> > Hi,
+> > 
+> > this is not true anymore:
+> > 
+> > gst-ffmpeg: Use internal libav instead of external ffmpeg: 
+> > http://git.buildroot.net/buildroot/commit/?id=
+> > 6ea49a23df3fa950e253bf704188e87a583a8ba4
+> > 
+> > ffmpeg: Bump version to 1.2.5: http://git.buildroot.net/buildroot/commit/?id=
+> > 4b959fcb67675b9e0594dc6b12742e119c82c96e
+> 
+> Ah, yes. This ffmpeg2 patch of mine I did some three months ago. I just
+> refreshed it yesterday, and forgot to re-check the compatibilty issue.
+> 
+> I'll double check what needs to be done, rework the commit log, and
+> resubmit later.
 
-It still builds and works fine, but with later kernels beyond 3.6.8 (I
-think) they changed the kernel for device tree, and that broke my
-uboot. Changing uboot is a very dangerous thing, risking bricking the
-dockstar, so I have stopped at that kernel for now. Still a nice NAS
-for home, though.
+The sets of files installed by each version has a non-null intersection,
+especially the header files, and the .pc files.
 
-Regards, Steve
+The libraries have different versions, indeed, but we still can't
+install both, as the .so links will point to the latest being installed,
+which is not predictible.
+
+Say for example:
+  - package 'zzz' depends on ffmpeg (and is incompatible with ffmpeg2)
+  - the Makefile builds the package in alphabetical order, so we'd build:
+    ffmpeg -> ffmpeg2 -> zzz
+  - zzz will see header and .pc files, and .so symlinks from ffmpeg2,
+    not ffmpeg.
+
+So, I still think we should consider ffmpeg2 to be clashing with ffmpeg1.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
