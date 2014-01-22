@@ -1,20 +1,38 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 22 Jan 2014 11:49:59 -0300
-Subject: [Buildroot] [PATCH v3] libnftnl: new package
-In-Reply-To: <1390401447-30520-1-git-send-email-yegorslists@googlemail.com>
-References: <1390401447-30520-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <52DFDA97.3010702@zacarias.com.ar>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 22 Jan 2014 17:12:43 +0100
+Subject: [Buildroot] [PATCH] manual: remove suggestion of aligning = signs
+	in .mk files
+Message-ID: <6da682c597e1ae750535.1390407163@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/22/2014 11:37 AM, yegorslists at googlemail.com wrote:
+It is not buildroot convention to align the = signs in .mk files, so this
+shouldn't be suggested in the manual.
 
-> +LIBNFTNL_LICENSE = GPLv2
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Looks like GPLv2+ according to the source.
-Other than that:
+---
+ docs/manual/writing-rules.txt |  8 +-------
+ 1 files changed, 1 insertions(+), 7 deletions(-)
 
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+diff --git a/docs/manual/writing-rules.txt b/docs/manual/writing-rules.txt
+--- a/docs/manual/writing-rules.txt
++++ b/docs/manual/writing-rules.txt
+@@ -71,13 +71,7 @@ LIBFOO_VERSION = 1.0
+ LIBFOO_CONF_OPT += --without-python-support
+ ---------------------
+ +
+-It is also possible to align the +=+ signs:
+-+
+----------------------
+-LIBFOO_VERSION   = 1.0
+-LIBFOO_SOURCE    = foo-$(LIBFOO_VERSION).tar.gz
+-LIBFOO_CONF_OPT += --without-python-support
+----------------------
++Do not align the +=+ signs.
+ 
+ * Indentation: use tab only:
+ +
