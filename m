@@ -1,93 +1,17 @@
-From: Jeremy Rosen <jeremy.rosen@openwide.fr>
-Date: Wed, 22 Jan 2014 13:43:13 +0100 (CET)
-Subject: [Buildroot] [PATCH] BR2_EXTERNAL: check it is a valid
- BR2_EXTERNAL dir before using it
-In-Reply-To: <1410002893.284525363.1390386070110.JavaMail.root@zimbra96-e16.priv.proxad.net>
-Message-ID: <1880877953.4607498.1390394593186.JavaMail.root@openwide.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 22 Jan 2014 10:08:48 -0300
+Subject: [Buildroot] [PATCHv2] e2fsprogs: Install libraries to staging
+In-Reply-To: <1385661237-13975-1-git-send-email-daniel.nystrom@timeterminal.se>
+References: <1385661237-13975-1-git-send-email-daniel.nystrom@timeterminal.se>
+Message-ID: <52DFC2E0.1030000@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ok, thx Yann
+On 11/28/2013 02:53 PM, Daniel Nystr?m wrote:
 
-my remark about the error message still not being clean still stands
+> Signed-off-by: Daniel Nystr?m <daniel.nystrom@timeterminal.se>
 
-and the doc is not explicit about Config.in and external.mk being 
-required
-
-if you don't want to add these to your patch I can post a separate
-one, but for the technical part :
-
-
-Tested-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
-
-Cordialement 
-
-J?r?my Rosen 
-+33 (0)1 42 68 28 04
-
-fight key loggers : write some perl using vim 
-
-
-Open Wide Ingenierie
-
-23, rue Daviel
-75012 Paris - France
-www.openwide.fr
-
-
-
-
-
------ Mail original -----
-> J?r?my, All,
-> 
-> ----- Original Message -----
-> From: "Jeremy Rosen" <jeremy.rosen@openwide.fr>
-> To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: "Peter Korsgaard" <jacmet@uclibc.org>, "Romain Naour"
-> <romain.naour@openwide.fr>, buildroot at busybox.net
-> Sent: Wednesday, January 22, 2014 10:00:40 AM
-> Subject: Re: [PATCH] BR2_EXTERNAL: check it is a valid BR2_EXTERNAL
-> dir before using it
-> 
-> ok, I tried your patch and I have a couple of problems
-> 
-> [--SNIP--]
-> > diff --git a/Makefile b/Makefile
-> > index 9dfb1e0..5753f81 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -118,7 +118,15 @@ ifeq ($(BR2_EXTERNAL),)
-> >    override BR2_EXTERNAL = support/dummy-external
-> >    $(shell rm -f $(BR2_EXTERNAL_FILE))
-> >  else
-> > -  $(shell echo BR2_EXTERNAL ?= $(BR2_EXTERNAL) >
-> > $(BR2_EXTERNAL_FILE))
-> > +  _BR2_EXTERNAL = $(shell cd $(BR2_EXTERNAL) >/dev/null 2>&1 &&
-> > pwd)
-> > +  ifeq ($(and $(_BR2_EXTERNAL),$(wildcard
-> > $(_BR2_EXTERNAL)/external.mk),$(wildcard
-> > $(_BR2_EXTERNAL)/Config.in)),)
-> > +    ifeq ($(patsubst /%,/,$(BR2_EXTERNAL)),)
-> > +      $(error BR2_EXTERNAL='$(BR2_EXTERNAL)' does not exist)
-> > +    else
-> > +      $(error BR2_EXTERNAL='$(BR2_EXTERNAL)' does not exist,
-> > relatively to $(TOPDIR))
-> > +    endif
-> > +  endif
-> 
-> Doh, I forgot to commit with this line:
->     override BR2_EXTERNAL := $(_BR2_EXTERNAL)
-> 
-> > +  $(shell echo BR2_EXTERNAL ?= $(_BR2_EXTERNAL) >
-> > $(BR2_EXTERNAL_FILE))
-> >  endif
-> 
-> Care to test again, please?
-> 
-> Regards,
-> Yann E. MORIN.
->
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
