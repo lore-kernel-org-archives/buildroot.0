@@ -1,167 +1,42 @@
-From: julien.boibessot at free.fr <julien.boibessot@free.fr>
-Date: Thu, 23 Jan 2014 16:38:04 +0100
-Subject: [Buildroot] [PATCH v2] Add SMS Tools Server 3 package
-Message-ID: <1390491484-1394-1-git-send-email-julien.boibessot@free.fr>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Thu, 23 Jan 2014 18:02:56 +0100
+Subject: [Buildroot] python Gobject
+In-Reply-To: <CAGzWX_Jgdzctc_=-9XBg4Bw__KtdNwF3MChWvG4mi6XVNFUEhQ@mail.gmail.com>
+References: <CAAs3wMgAbEnReJ-XW_QnQ=kAU6G7cwzss7yUMytcmHMRYMsjnw@mail.gmail.com>
+ <20140117113153.GB10730@pc-eric>
+ <CAAs3wMh5xwOK_bEDVM1JMJvw6vYYL2frZYxTc_4ehyLK2sj++g@mail.gmail.com>
+ <20140117154452.GC10730@pc-eric>
+ <1390290077263-60414.post@n4.nabble.com>
+ <20140121173657.GA11605@pc-eric>
+ <1390420630566-60535.post@n4.nabble.com>
+ <20140123134942.GA10856@pc-eric>
+ <CAGzWX_Jgdzctc_=-9XBg4Bw__KtdNwF3MChWvG4mi6XVNFUEhQ@mail.gmail.com>
+Message-ID: <20140123170253.GB10856@pc-eric>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Julien Boibessot <julien.boibessot@armadeus.com>
+On Thu, Jan 23, 2014 at 03:27:32PM +0100, Samuel Buffet wrote:
 
-Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
----
- Changes since v1:
- - 80x '#' in smstools3.mk header
- - use 'install' instead of 'cp'
- - took Gustavo's remarks into account:
-   * help text for BR2_PACKAGE_SMSTOOLS3_NB_MODEMS option
-   * install binaries in /usr/bin/
-   * use xxx_INSTALL_INIT_SYSV for init script installation
+I poked my nose in your build/python-pygobject-2.28.6/config.log. The
+configure script of pygobject complains about not having found Python headers
+because it fails to compile a test program:
 
- package/Config.in              |    1 +
- package/smstools3/Config.in    |   24 ++++++++++++++++++++++
- package/smstools3/S50smsd      |   43 ++++++++++++++++++++++++++++++++++++++++
- package/smstools3/smstools3.mk |   37 ++++++++++++++++++++++++++++++++++
- 4 files changed, 105 insertions(+), 0 deletions(-)
- create mode 100644 package/smstools3/Config.in
- create mode 100644 package/smstools3/S50smsd
- create mode 100644 package/smstools3/smstools3.mk
+> configure:14934: checking for headers required to compile python extensions
+> configure:14954: /home/toto/Documents/homeproject/buildroot/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-cpp -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I/home/toto/Documents/homeproject/buildroot/output/host/usr/include/python2.7 -I/home/toto/Documents/homeproject/buildroot/output/host/usr/include/python2.7 conftest.c
+> In file included from /home/toto/Documents/homeproject/buildroot/output/host/usr/include/python2.7/Python.h:58:0,
+>                  from conftest.c:26:
+> /home/toto/Documents/homeproject/buildroot/output/host/usr/include/python2.7/pyport.h:849:2: error: #error "LONG_BIT definition appears wrong for platform (bad gcc/glibc config?)."
+> [...]
+> configure:14959: result: not found
+> configure:14961: error: could not find Python headers
 
-diff --git a/package/Config.in b/package/Config.in
-index e502cde..1f4fe14 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -901,6 +901,7 @@ source "package/samba/Config.in"
- source "package/sconeserver/Config.in"
- source "package/ser2net/Config.in"
- source "package/smcroute/Config.in"
-+source "package/smstools3/Config.in"
- source "package/socat/Config.in"
- source "package/socketcand/Config.in"
- source "package/spawn-fcgi/Config.in"
-diff --git a/package/smstools3/Config.in b/package/smstools3/Config.in
-new file mode 100644
-index 0000000..6ca533f
---- /dev/null
-+++ b/package/smstools3/Config.in
-@@ -0,0 +1,24 @@
-+config BR2_PACKAGE_SMSTOOLS3
-+	bool "smstools3"
-+	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	help
-+	  The SMS Server Tools 3 is a SMS Gateway software which can send and
-+	  receive short messages through GSM modems and mobile phones.
-+
-+	  http://smstools3.kekekasvi.com/
-+
-+if BR2_PACKAGE_SMSTOOLS3
-+
-+config BR2_PACKAGE_SMSTOOLS3_NB_MODEMS
-+	string "Number of modems to support"
-+	default 1
-+	help
-+	  To reduce memory footprint of SMS Server Tools, you can specify the
-+	  exact number of modems connected to your board. By default only 1
-+	  modem is used.
-+
-+endif
-+
-+comment "smstools3 needs a toolchain w/ wchar, threads"
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/smstools3/S50smsd b/package/smstools3/S50smsd
-new file mode 100644
-index 0000000..239c3e3
---- /dev/null
-+++ b/package/smstools3/S50smsd
-@@ -0,0 +1,43 @@
-+#!/bin/sh
-+#
-+# Starts the SMS Server Tools 3
-+#
-+
-+NAME=smsd
-+DAEMON=/usr/bin/$NAME
-+PIDFILE=/var/run/$NAME.pid
-+SPOOL=/var/spool/sms
-+
-+start()
-+{
-+	echo -n "Starting $NAME: "
-+	mkdir -p $SPOOL/outgoing
-+	mkdir -p $SPOOL/incoming
-+	mkdir -p $SPOOL/checked
-+	start-stop-daemon -S -q -p $PIDFILE --exec $DAEMON -- -c /etc/smsd.conf && echo "OK" || echo "Failed"
-+}
-+
-+stop()
-+{
-+	echo -n "Stopping $NAME: "
-+	start-stop-daemon -K -q -p $PIDFILE && echo "OK" || echo "Failed"
-+	rm -f $PIDFILE
-+}
-+
-+case "$1" in
-+	start)
-+		start
-+		;;
-+	stop)
-+		stop
-+		;;
-+	restart|reload)
-+		stop
-+		start
-+		;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart}"
-+		exit 1
-+esac
-+
-+exit $?
-diff --git a/package/smstools3/smstools3.mk b/package/smstools3/smstools3.mk
-new file mode 100644
-index 0000000..edc57cb
---- /dev/null
-+++ b/package/smstools3/smstools3.mk
-@@ -0,0 +1,37 @@
-+###############################################################################
-+#
-+# smstools3
-+#
-+###############################################################################
-+
-+SMSTOOLS3_VERSION = 3.1.15
-+SMSTOOLS3_SITE = http://smstools3.kekekasvi.com/packages/
-+SMSTOOLS3_LICENSE = GPLv2+
-+SMSTOOLS3_LICENSE_FILES = doc/license.html LICENSE
-+
-+SMSTOOLS3_NB_MODEMS = $(call qstrip,$(BR2_PACKAGE_SMSTOOLS3_NB_MODEMS))
-+SMSTOOLS3_CFLAGS = $(TARGET_CFLAGS)
-+SMSTOOLS3_CFLAGS += -D NUMBER_OF_MODEMS=$(SMSTOOLS3_NB_MODEMS)
-+SMSTOOLS3_CFLAGS += -D NOSTATS
-+SMSTOOLS3_TARGET_BINARIES_DIR = $(TARGET_DIR)/usr/bin
-+
-+define SMSTOOLS3_BUILD_CMDS
-+	$(MAKE) CC="$(TARGET_CC)" CFLAGS="$(SMSTOOLS3_CFLAGS)" -C $(@D)
-+endef
-+
-+define SMSTOOLS3_INSTALL_INIT_SYSV
-+	$(INSTALL) -m 0755 -D package/smstools3/S50smsd \
-+		$(TARGET_DIR)/etc/init.d/S50smsd
-+endef
-+
-+define SMSTOOLS3_INSTALL_TARGET_CMDS
-+	mkdir -p $(SMSTOOLS3_TARGET_BINARIES_DIR)
-+	$(INSTALL) -m 0755 -D $(@D)/src/smsd \
-+		$(SMSTOOLS3_TARGET_BINARIES_DIR)/smsd
-+	$(INSTALL) -m 0755 -D $(@D)/scripts/sendsms \
-+		$(SMSTOOLS3_TARGET_BINARIES_DIR)/sendsms
-+	$(INSTALL) -m 0644 -D $(@D)/examples/smsd.conf.easy \
-+		$(TARGET_DIR)/etc/smsd.conf.easy
-+endef
-+
-+$(eval $(generic-package))
--- 
-1.7.5.4
+Are you building a 32-bit ARM guest on a 64-bit host machine?
+I dug into the mailing list and found this discussion, which seems to be
+related to this problem:
+http://lists.busybox.net/pipermail/buildroot/2011-August/045038.html.
+
+Best regards,
+ELB
