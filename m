@@ -1,41 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 23 Jan 2014 12:45:33 +0100
-Subject: [Buildroot] [git commit] sqlcipher: fix build for xtensa
-Message-ID: <20140123114929.AEBED9C5F4@busybox.osuosl.org>
+Date: Thu, 23 Jan 2014 12:47:19 +0100
+Subject: [Buildroot] [git commit] busybox: 1.22.1: correct ash patch
+Message-ID: <20140123114929.C519B8E277@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=43d8dc3a392dcb769075cf1b076376a280c15c99
+commit: http://git.buildroot.net/buildroot/commit/?id=99fa554bd64561e36b8f337821d2fb387f506ef6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The sqlcipher package generates libraries that are too large for the xtensa
-default placement of literals in a dedicated section. Use
--mtext-section-literal to place literals in the text section.
+Upstream initially put the wrong patch online:
 
-Fixes:
-http://autobuild.buildroot.net/results/921/92116c2837e4c449919e7a0ab9aebd6abb1cbaf1/
+http://lists.busybox.net/pipermail/busybox/2014-January/080364.html
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sqlcipher/sqlcipher.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ .../busybox/1.22.1/0002-busybox-1.22.1-ash.patch   |   31 +++++++-------------
+ 1 files changed, 11 insertions(+), 20 deletions(-)
 
-diff --git a/package/sqlcipher/sqlcipher.mk b/package/sqlcipher/sqlcipher.mk
-index 6130870..ace5ce8 100644
---- a/package/sqlcipher/sqlcipher.mk
-+++ b/package/sqlcipher/sqlcipher.mk
-@@ -32,6 +32,10 @@ ifeq ($(BR2_PACKAGE_SQLCIPHER_STAT3),y)
- SQLCIPHER_CFLAGS += -DSQLITE_ENABLE_STAT3
- endif
- 
-+ifeq ($(BR2_xtensa),y)
-+SQLCIPHER_CFLAGS += -mtext-section-literals
-+endif
-+
- ifeq ($(BR2_PACKAGE_SQLCIPHER_READLINE),y)
- SQLCIPHER_DEPENDENCIES += ncurses readline
- SQLCIPHER_CONF_OPT += --with-readline-inc="-I$(STAGING_DIR)/usr/include"
+diff --git a/package/busybox/1.22.1/0002-busybox-1.22.1-ash.patch b/package/busybox/1.22.1/0002-busybox-1.22.1-ash.patch
+index 767c3a8..301e942 100644
+--- a/package/busybox/1.22.1/0002-busybox-1.22.1-ash.patch
++++ b/package/busybox/1.22.1/0002-busybox-1.22.1-ash.patch
+@@ -1,20 +1,11 @@
+---- busybox-1.22.1/procps/top.c
+-+++ busybox-1.22.1-ash/procps/top.c
+-@@ -917,17 +917,12 @@ enum {
+- #if ENABLE_FEATURE_USE_TERMIOS
+- static unsigned handle_input(unsigned scan_mask, unsigned interval)
+- {
+--	struct pollfd pfd[1];
+--
+- 	if (option_mask32 & OPT_EOF) {
+- 		/* EOF on stdin ("top </dev/null") */
+- 		sleep(interval);
+- 		return scan_mask;
+- 	}
+- 
+--	pfd[0].fd = 0;
+--	pfd[0].events = POLLIN;
+--
+- 	while (1) {
+- 		int32_t c;
+- 
++--- busybox-1.22.1/shell/ash.c
+++++ busybox-1.22.1-ash/shell/ash.c
++@@ -13014,7 +13014,7 @@ init(void)
++ 		setvar2("PPID", utoa(getppid()));
++ #if ENABLE_ASH_BASH_COMPAT
++ 		p = lookupvar("SHLVL");
++-		setvar2("SHLVL", utoa(p ? atoi(p) + 1 : 1));
+++		setvar("SHLVL", utoa((p ? atoi(p) : 0) + 1), VEXPORT);
++ #endif
++ 		p = lookupvar("PWD");
++ 		if (p) {
