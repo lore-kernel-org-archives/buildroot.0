@@ -1,120 +1,116 @@
 From: Jeremy Rosen <jeremy.rosen@openwide.fr>
-Date: Thu, 23 Jan 2014 09:30:00 +0100 (CET)
-Subject: [Buildroot] Post build script issue
-In-Reply-To: <CAHKzcEOSork9JxSZWsef6m1wmPrZ2z1jEQqaig=LFkysgzqvNg@mail.gmail.com>
-Message-ID: <1088543382.4633672.1390465800734.JavaMail.root@openwide.fr>
+Date: Thu, 23 Jan 2014 09:48:04 +0100 (CET)
+Subject: [Buildroot] [PATCH 1/3] Makefile: use absolute paths to
+ BR2_EXTERNAL
+In-Reply-To: <44e6c31931f55e79eec713be1a202f2c170667b7.1390424303.git.yann.morin.1998@free.fr>
+Message-ID: <1628424372.4635064.1390466884782.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I always set my script setup in buildroot to absolute paths using
-global variables.
-
-depending on where you put your script, you probably want to set it 
-to $(TOPDIR)/foo.sh (TOPDIR is the buildroot directory or
-$(BR2_EXTERNAL)/foo.sh if you use BR2_EXTERNAL. There are a couple 
-more variables like that, but I don't know them. Just check the 
-documentation.
-
-Having a relative path to CWD seems like a bad idea when you can
-use these variables to have a dinamically expanded absolute path...
-
-Cordialement 
-
-J?r?my Rosen 
-+33 (0)1 42 68 28 04
-
-fight key loggers : write some perl using vim 
-
-
-Open Wide Ingenierie
-
-23, rue Daviel
-75012 Paris - France
-www.openwide.fr
-
-
-
-
+Yann, all
 
 ----- Mail original -----
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > 
+> Using a relative path for BR2_EXTERNAL, and using an external
+> defconfig,
+> such as in (from a Buildroot top-dir):
+>     make O=.. BR2_EXTERNAL=.. foo_defconfig
 > 
-> Hi,
+> is broken. It is unclear why the %_defconfig rule recurses in that
+> case,
+> but using relative paths is inherently broken.
 > 
+> This patch makes BR2_EXTERNAL canonical (ie. makes it an absolute
+> path),
+> and checks the directory exists.
 > 
-> Recently, I've tried to use post-script feature and found an issue,
+> The manual is updated to discourage using relative paths.
 > 
+> Reported-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Peter Korsgaard <jacmet@uclibc.org>
+> Cc: Romain Naour <romain.naour@openwide.fr>
+> ---
+>  Makefile                             |  9 +++++++++
+>  docs/manual/customize-outside-br.txt | 12 +++++++-----
+>  2 files changed, 16 insertions(+), 5 deletions(-)
 > 
-> I created foo.sh with 755 mode and configured buildroot to use this
-> post-script. However, make failed with the message:
-> 
-> 
-> >>> Executing post-image script foo.sh
-> 
-> 
-> /bin/bash: foo.sh: command not found
-> 
-> 
-> It's because post-script is called in Makefile just by the name
-> assuming that the . directory is in your PATH.
-> 
-> 
-> 
-> target-post-image:
-> @$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_ IMAGE _SCRIPT)), \
-> $(call MESSAGE,"Executing post-image script $(s)"); \
-> ---->>> $(USER_HOOKS_EXTRA_ENV) $(s) $(BINARIES_DIR) $(call
-> qstrip,$(BR2_ROOTFS_POST_ SCRIP T_ARGS))$(sep))
-> 
-> 
-> 
-> 
-> Therefore, I added '.' dir to my PATH and ran make again. Again I got
-> an error.
-> 
-> 
-> "You seem to have the current working directory in your PATH
-> environment variable. This doesn't work.
-> 
-> 
-> make: *** [core-dependencies] Error 1"
-> 
-> 
-> How does it work for you?
-> 
-> 
-> Don't you think the Makefile should call the script this way:
-> 
-> 
-> 
-> - $(USER_HOOKS_EXTRA_ENV) $(s) $(TARGET_DIR) $(call
-> qstrip,$(BR2_ROOTFS_POST_ SCRIP T_ARGS))$(sep))
-> + $(USER_HOOKS_EXTRA_ENV) ./$(s) $(TARGET_DIR) $(call
-> qstrip,$(BR2_ROOTFS_POST_ SCRIP T_ARGS))$(sep))
-> 
-> 
-> 
-> 
-> Let me know I will prepare a patch.
-> 
-> 
-> Thanks,
-> /Waldek
-> 
-> 
-> 
-> 
-> 
-> 
-> 
-> 
-> 
-> 
-> 
-> 
+> diff --git a/Makefile b/Makefile
+> index 9dfb1e0..64fa138 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -118,6 +118,15 @@ ifeq ($(BR2_EXTERNAL),)
+>    override BR2_EXTERNAL = support/dummy-external
+>    $(shell rm -f $(BR2_EXTERNAL_FILE))
+>  else
+> +  _BR2_EXTERNAL = $(shell cd $(BR2_EXTERNAL) >/dev/null 2>&1 && pwd)
+> +  ifeq ($(_BR2_EXTERNAL),)
+> +    ifeq ($(patsubst /%,/,$(BR2_EXTERNAL)),/)
+> +      $(error BR2_EXTERNAL='$(BR2_EXTERNAL)' does not exist)
+> +    else
+> +      $(error BR2_EXTERNAL='$(BR2_EXTERNAL)' does not exist,
+> relatively to $(TOPDIR))
+> +    endif
+> +  endif
+> +  BR2_EXTERNAL := $(_BR2_EXTERNAL)
+
+you need an override keyword here.
+
+once this is added, the patch works correctly.
+
+
+>    $(shell echo BR2_EXTERNAL ?= $(BR2_EXTERNAL) >
+>    $(BR2_EXTERNAL_FILE))
+>  endif
+>  
+> diff --git a/docs/manual/customize-outside-br.txt
+> b/docs/manual/customize-outside-br.txt
+> index 19257e6..53d88d7 100644
+> --- a/docs/manual/customize-outside-br.txt
+> +++ b/docs/manual/customize-outside-br.txt
+> @@ -32,16 +32,18 @@ removed by passing an empty value.
+>  
+>  The +BR2_EXTERNAL+ path can be either an absolute or a relative
+>  path,
+>  but if it's passed as a relative path, it is important to note that
+>  it
+> -is interpreted relatively to the main Buildroot source directory,
+> not
+> -the Buildroot output directory.
+> +is interpreted relative to the main Buildroot source directory, not
+> +the Buildroot output directory. Using relative paths can lead to
+> various
+> +broken setups, and thus is highly discouraged in favour of using
+> +absolute paths.
+>  
+>  Some examples:
+>  
+>  -----
+> - buildroot/ $ make BR2_EXTERNAL=../foobar menuconfig
+> + buildroot/ $ make BR2_EXTERNAL=/path/to/foobar menuconfig
+>  -----
+>  
+> -Starting from now on, external definitions from the +../foobar+
+> +Starting from now on, external definitions from the
+> +/path/to/foobar+
+>  directory will be used:
+>  
+>  -----
+> @@ -52,7 +54,7 @@ directory will be used:
+>  We can switch to another external definitions directory at any time:
+>  
+>  -----
+> - buildroot/ $ make BR2_EXTERNAL=../barfoo xconfig
+> + buildroot/ $ make BR2_EXTERNAL=/where/we/have/barfoo xconfig
+>  -----
+>  
+>  Or disable the usage of external definitions:
+> --
+> 1.8.1.2
 > 
 > _______________________________________________
 > buildroot mailing list
