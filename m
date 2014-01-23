@@ -1,63 +1,30 @@
 From: Przemyslaw Wrzos <przemyslaw.wrzos@calyptech.com>
-Date: Thu, 23 Jan 2014 14:40:38 +1100
-Subject: [Buildroot] [PATCH] python: fix to ensure libpython is stripped
-Message-ID: <1390448438-13114-1-git-send-email-przemyslaw.wrzos@calyptech.com>
+Date: Thu, 23 Jan 2014 14:43:22 +1100
+Subject: [Buildroot] Patchwork oldest patches cleanup #6 (deadline
+	February 2)
+In-Reply-To: <CAAXf6LXxqFjgbv17WsqhT71pp2oncS+bvx4MsEfJuKTqisASoA@mail.gmail.com>
+References: <CAAXf6LX2yqbapp6GBuN5qoT1R93CGD3NCLguY8fQhFoApJz2uw@mail.gmail.com>	<000601cf1654$07ca5c00$175f1400$@calyptech.com>
+ <CAAXf6LXxqFjgbv17WsqhT71pp2oncS+bvx4MsEfJuKTqisASoA@mail.gmail.com>
+Message-ID: <001201cf17ed$43e65410$cbb2fc30$@calyptech.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The python and python3 builds mark libpython as read-only which
-prevents it from being stripped out correctly for the target.
+Hello Thomas,
 
-Signed-off-by: Przemyslaw Wrzos <przemyslaw.wrzos@calyptech.com>
----
- package/python/python.mk   | 9 +++++++++
- package/python3/python3.mk | 9 +++++++++
- 2 files changed, 18 insertions(+)
+On Tue, 21 Jan 2014 at 18:46:04, Thomas De Schampheleire wrote:
 
- NOTE: Resubmitting as part of patchwork cleanup #6.
+> If you have time to resubmit your patch to the list, I think that
+> would be best. It will be back at the top of the list, encouraging
+> review and eventually integration. You could add a note below the
+> '---' line stating that this patch was part of patchwork cleanup #6.
+> 
+> Thanks!
+> Thomas
 
-diff --git a/package/python/python.mk b/package/python/python.mk
-index 6a6aaac..69662c3 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -162,6 +162,15 @@ endef
- 
- PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_REMOVE_USELESS_FILES
- 
-+#
-+# Make sure libpython gets stripped out on target
-+#
-+define PYTHON_ENSURE_LIBPYTHON_STRIPPED
-+	chmod u+w $(TARGET_DIR)/usr/lib/libpython$(PYTHON_VERSION_MAJOR)*.so
-+endef
-+
-+PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_ENSURE_LIBPYTHON_STRIPPED
-+
- PYTHON_AUTORECONF = YES
- 
- $(eval $(autotools-package))
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index b5e9689..6cbe772 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -149,6 +149,15 @@ endef
- 
- PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_REMOVE_USELESS_FILES
- 
-+#
-+# Make sure libpython gets stripped out on target
-+#
-+define PYTHON3_ENSURE_LIBPYTHON_STRIPPED
-+	chmod u+w $(TARGET_DIR)/usr/lib/libpython$(PYTHON3_VERSION_MAJOR)*.so
-+endef
-+
-+PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_ENSURE_LIBPYTHON_STRIPPED
-+
- PYTHON3_AUTORECONF = YES
- 
- define PYTHON3_INSTALL_SYMLINK
--- 
-1.8.3.2
+No problem, I've resubmitted the patch (also CC'ed you on that e-mail).
+
+Cheers,
+Przemyslaw Wrzos
