@@ -1,51 +1,37 @@
-From: =?UTF-8?B?UGF3ZcWCIEdpYmFzemVr?= <gibol666@gmail.com>
-Date: Thu, 23 Jan 2014 19:33:06 +0100
-Subject: [Buildroot] QMultimedia problem
-In-Reply-To: <201401150846.28371.fatih.asici@gmail.com>
-References: <52D4C3EC.70103@gmail.com> <52D4C4C0.70503@gmail.com>
- <201401150846.28371.fatih.asici@gmail.com>
-Message-ID: <52E16062.8070404@gmail.com>
+From: Bernd Kuhls <berndkuhls@hotmail.com>
+Date: Thu, 23 Jan 2014 19:47:53 +0100
+Subject: [Buildroot] [PATCH 1/2] package/ffmpeg2: new package
+References: <cover.1390242867.git.yann.morin.1998@free.fr>
+ <d4f3847e403c1e5c4e8733f75bbfccce6e0b4975.1390242867.git.yann.morin.1998@free.fr>
+ <el80raxhff.ln2@ID-313208.user.individual.net>
+ <20140120212701.GC3421@free.fr> <20140122223320.GD3592@free.fr>
+ <8738kfd40w.fsf@dell.be.48ers.dk>
+ <skn6raxead.ln2@ID-313208.user.individual.net>
+ <20140123175214.GA3446@free.fr>
+Message-ID: <pn48raxrjo.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-W dniu 2014-01-15 07:46, Fatih A??c? pisze:
->
-> Would you send the config file to reproduce this problem?
->
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote in 
+news:20140123175214.GA3446 at free.fr:
 
-Sorry for the delay, here is my config:
-http://gibol.info/upload/.config
+Hi,
 
+> Do you know of another reason why Gotham can't build with latest ffmpeg2
+> (that is, ffmpeg 2.1.3 or ffmpeg master)?
 
-Original message:
->
->  I have problem with QMultimedia from Qt5 package.
->  I'm using QMediaPlayer in my application and it reports error:
-> [ defaultServiceProvider::requestService(): no service found for - 
-> "org.qt-project.qt.mediaplayer" ]
->
-> I suspect that libgstmediaplayer.so plugin cant be loaded due to 
-> missing dependency:
-> [
-> ldd /usr/lib/qt/plugins/mediaservice/libgstmediaplayer.so | grep found
-> checking sub-depends for 'not found'
-> libqgsttools_p.so.1 => not found (0x00000000)
-> ]
->
-> On x86 ubuntu machine this lib is present and the app is working.
->
-> How can i fix this?
-> I'm a newbie so forgive me if I'm missing something obvious.
-> I'm using Buildroot 2014.02-git-00566-gd66c981.
->  I've also selected gsteamer1 in addition to gstreamer-0.10 and did 
-> make clean but it didn't help.
->
->
+building gotham with ffmpeg git master is not the problem but last time I 
+tried during runtime I had sound problems:
+http://forum.xbmc.org/showthread.php?tid=180859&pid=1578887#pid1578887
 
+Downgrading to ffmpeg 1.2.x, copying OpenELEC here, fixed the problem.
+I still did not find the time to test the patch I mentioned on the xbmc forum 
+though, maybe this weekend I find some time for this...
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140123/e56fdf3e/attachment.html>
+Btw, work seems to have started to support ffmpeg2 in xbmc:
+https://github.com/FernetMenta/xbmc/commits/ffmpeg2
+
+Regards, Bernd
