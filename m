@@ -1,64 +1,61 @@
-From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Thu, 23 Jan 2014 10:33:42 +0100
-Subject: [Buildroot] [PATCH] lua: fix compilation with Blackfin FLAT
-In-Reply-To: <87ob33d8x3.fsf@dell.be.48ers.dk>
-References: <1390389214-9768-1-git-send-email-francois.perrad@gadz.org>
- <87ob33d8x3.fsf@dell.be.48ers.dk>
-Message-ID: <CAB0FRste2wME45HZCXaCrVD3zB=bJ8mSB6b3wSk5VTQvs8eycQ@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 23 Jan 2014 12:30:41 +0100
+Subject: [Buildroot] [PATCH] tcpreplay: cross-compile with tcpdump
+	support
+In-Reply-To: <1390468034-7430-1-git-send-email-judge.packham@gmail.com> (Chris
+ Packham's message of "Thu, 23 Jan 2014 22:07:14 +1300")
+References: <87txcvb13p.fsf@dell.be.48ers.dk>
+ <1390468034-7430-1-git-send-email-judge.packham@gmail.com>
+Message-ID: <87ppnjaqam.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2014/1/22 Peter Korsgaard <jacmet@uclibc.org>:
->>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
->
->  > the dlfcn interface is not available with flat memory model
->  > see http://autobuild.buildroot.net/results/b41/b4146bf821d59f694546f6e3a341394cc8fa43ce/
->
->  > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
->  > ---
->  >  package/lua/lua.mk |   12 ++++++++----
->  >  1 file changed, 8 insertions(+), 4 deletions(-)
->
->  > diff --git a/package/lua/lua.mk b/package/lua/lua.mk
->  > index 2c867f6..b263070 100644
->  > --- a/package/lua/lua.mk
->  > +++ b/package/lua/lua.mk
->  > @@ -15,7 +15,6 @@ LUA_LICENSE = MIT
->  >  LUA_LICENSE_FILES = COPYRIGHT
->
->  >  LUA_CFLAGS = -Wall -fPIC
->  > -LUA_MYLIBS += -ldl
->
->  >  ifeq ($(BR2_PACKAGE_LUA_5_2),y)
->  >  LUA_CFLAGS += -DLUA_COMPAT_ALL
->  > @@ -24,17 +23,22 @@ LUA_CFLAGS += -D_FILE_OFFSET_BITS=32
->  >  endif
->  >  endif
->
->  > +ifneq ($(BR2_BINFMT_FLAT),y)
->  > +    LUA_CFLAGS += -DLUA_USE_DLOPEN
->  > +    LUA_MYLIBS += -ldl
->  > +endif
->
-> But BINFMT_FLAT imply BR2_PREFER_STATIC_LIB. I guess we should do this
-> whenever BR2_PREFER_STATIC_LIB is enabled, right?
+>>>>> "Chris" == Chris Packham <judge.packham@gmail.com> writes:
 
-No, the condition BR2_PREFER_STATIC_LIB is too large.
-The tarball Lua contains no Configure script, my patch behaves like
-the detection of the presence of the functions dlopen/dlclose/dlsym in
-a Configure script.
-The purpose of BR2_PREFER_STATIC_LIB as described in its help message
-is very different.
+ > If tcpdump is enabled set ac_cv_path_tcpdump_path so that verbose output
+ > is enabled on the target.
 
-Fran?ois
+ > Signed-off-by: Chris Packham <judge.packham@gmail.com>
+ > ---
+ > Hi,
 
->
-> --
-> Bye, Peter Korsgaard
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ > This should get verbose support working if the tcpdump package is selected.
+ > This may also fix some of the build errors (if they set BR2_PACKAGE_TCPDUMP=y)
+ > but the real fix will come from upstream.
+
+ >  package/tcpreplay/tcpreplay.mk | 6 ++++++
+ >  1 file changed, 6 insertions(+)
+
+ > diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
+ > index 0939c6c..a2cd16e 100644
+ > --- a/package/tcpreplay/tcpreplay.mk
+ > +++ b/package/tcpreplay/tcpreplay.mk
+ > @@ -18,4 +18,10 @@ TCPREPLAY_DEPENDENCIES = libpcap
+ >  TCPREPLAY_LIBS = -lpcap $(if $(BR2_PACKAGE_LIBUSB),-lusb-1.0)
+ >  TCPREPLAY_CONF_ENV += ac_cv_search_pcap_close='$(TCPREPLAY_LIBS)'
+ 
+ > +ifeq ($(BR2_PACKAGE_TCPDUMP),y)
+ > +TCPREPLAY_CONF_ENV += ac_cv_path_tcpdump_path=/usr/sbin/tcpdump
+
+The problem here is that the configure script checks if /usr/bin/tcpdump
+(on the build machine) is executable, and otherwise errors out - So this
+breaks if you try to build it on a machine without tcpdump.
+
+The configure script needs to be changed to not do this test when cross
+compiling (or only warn).
+
+ > +else
+ > +TCPREPLAY_CONF_ENV += ac_cv_path_tcpdump_path=no
+ > +endif
+ > +
+ >  $(eval $(autotools-package))
+ > -- 
+ > 1.8.4.rc2
+
+
+
+-- 
+Bye, Peter Korsgaard
