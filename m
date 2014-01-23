@@ -1,30 +1,30 @@
-From: Przemyslaw Wrzos <przemyslaw.wrzos@calyptech.com>
-Date: Thu, 23 Jan 2014 14:43:22 +1100
-Subject: [Buildroot] Patchwork oldest patches cleanup #6 (deadline
-	February 2)
-In-Reply-To: <CAAXf6LXxqFjgbv17WsqhT71pp2oncS+bvx4MsEfJuKTqisASoA@mail.gmail.com>
-References: <CAAXf6LX2yqbapp6GBuN5qoT1R93CGD3NCLguY8fQhFoApJz2uw@mail.gmail.com>	<000601cf1654$07ca5c00$175f1400$@calyptech.com>
- <CAAXf6LXxqFjgbv17WsqhT71pp2oncS+bvx4MsEfJuKTqisASoA@mail.gmail.com>
-Message-ID: <001201cf17ed$43e65410$cbb2fc30$@calyptech.com>
+From: Bernd Kuhls <berndkuhls@hotmail.com>
+Date: Thu, 23 Jan 2014 06:58:20 +0100
+Subject: [Buildroot] [PATCH 1/2] package/ffmpeg2: new package
+References: <cover.1390242867.git.yann.morin.1998@free.fr>
+ <d4f3847e403c1e5c4e8733f75bbfccce6e0b4975.1390242867.git.yann.morin.1998@free.fr>
+ <el80raxhff.ln2@ID-313208.user.individual.net>
+ <20140120212701.GC3421@free.fr> <20140122223320.GD3592@free.fr>
+ <8738kfd40w.fsf@dell.be.48ers.dk>
+Message-ID: <skn6raxead.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Peter Korsgaard <jacmet@uclibc.org> wrote in
+news:8738kfd40w.fsf at dell.be.48ers.dk: 
 
-On Tue, 21 Jan 2014 at 18:46:04, Thomas De Schampheleire wrote:
+> If not, I would simply say that ffmpeg 2.x is the latest and greatest of
+> ffmpeg, so ffmpeg.mk should build 2.x (and we shouldn't have a
+> ffmpeg2.mk)
 
-> If you have time to resubmit your patch to the list, I think that
-> would be best. It will be back at the top of the list, encouraging
-> review and eventually integration. You could add a note below the
-> '---' line stating that this patch was part of patchwork cleanup #6.
-> 
-> Thanks!
-> Thomas
+Hi,
 
-No problem, I've resubmitted the patch (also CC'ed you on that e-mail).
+atm xbmc gotham is incompatible with ffmpeg 2.x, therefore I sent ffmpeg 
+1.2.5 for inclusion in buildroot.
 
-Cheers,
-Przemyslaw Wrzos
+@Yann: Does omxplayer also work with ffmpeg 1.2.5?
+
+Regards, Bernd
