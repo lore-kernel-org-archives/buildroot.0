@@ -1,37 +1,81 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Thu, 23 Jan 2014 19:47:53 +0100
-Subject: [Buildroot] [PATCH 1/2] package/ffmpeg2: new package
-References: <cover.1390242867.git.yann.morin.1998@free.fr>
- <d4f3847e403c1e5c4e8733f75bbfccce6e0b4975.1390242867.git.yann.morin.1998@free.fr>
- <el80raxhff.ln2@ID-313208.user.individual.net>
- <20140120212701.GC3421@free.fr> <20140122223320.GD3592@free.fr>
- <8738kfd40w.fsf@dell.be.48ers.dk>
- <skn6raxead.ln2@ID-313208.user.individual.net>
- <20140123175214.GA3446@free.fr>
-Message-ID: <pn48raxrjo.ln2@ID-313208.user.individual.net>
+From: Martin Bark <martin@barkynet.com>
+Date: Thu, 23 Jan 2014 20:08:57 +0000
+Subject: [Buildroot] [PATCH] tcpreplay: cross-compile with tcpdump
+	support
+In-Reply-To: <87ppnjaqam.fsf@dell.be.48ers.dk>
+References: <87txcvb13p.fsf@dell.be.48ers.dk>	<1390468034-7430-1-git-send-email-judge.packham@gmail.com>
+ <87ppnjaqam.fsf@dell.be.48ers.dk>
+Message-ID: <52E176D9.6040101@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote in 
-news:20140123175214.GA3446 at free.fr:
 
-Hi,
+Peter, Chris,
 
-> Do you know of another reason why Gotham can't build with latest ffmpeg2
-> (that is, ffmpeg 2.1.3 or ffmpeg master)?
+On 23/01/14 11:30, Peter Korsgaard wrote:
+>>>>>> "Chris" == Chris Packham <judge.packham@gmail.com> writes:
+>
+>   > If tcpdump is enabled set ac_cv_path_tcpdump_path so that verbose output
+>   > is enabled on the target.
+>
+>   > Signed-off-by: Chris Packham <judge.packham@gmail.com>
+>   > ---
+>   > Hi,
+>
+>   > This should get verbose support working if the tcpdump package is selected.
+>   > This may also fix some of the build errors (if they set BR2_PACKAGE_TCPDUMP=y)
+>   > but the real fix will come from upstream.
+>
+>   >  package/tcpreplay/tcpreplay.mk | 6 ++++++
+>   >  1 file changed, 6 insertions(+)
+>
+>   > diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
+>   > index 0939c6c..a2cd16e 100644
+>   > --- a/package/tcpreplay/tcpreplay.mk
+>   > +++ b/package/tcpreplay/tcpreplay.mk
+>   > @@ -18,4 +18,10 @@ TCPREPLAY_DEPENDENCIES = libpcap
+>   >  TCPREPLAY_LIBS = -lpcap $(if $(BR2_PACKAGE_LIBUSB),-lusb-1.0)
+>   >  TCPREPLAY_CONF_ENV += ac_cv_search_pcap_close='$(TCPREPLAY_LIBS)'
+>
+>   > +ifeq ($(BR2_PACKAGE_TCPDUMP),y)
+>   > +TCPREPLAY_CONF_ENV += ac_cv_path_tcpdump_path=/usr/sbin/tcpdump
+>
+> The problem here is that the configure script checks if /usr/bin/tcpdump
+> (on the build machine) is executable, and otherwise errors out - So this
+> breaks if you try to build it on a machine without tcpdump.
 
-building gotham with ffmpeg git master is not the problem but last time I 
-tried during runtime I had sound problems:
-http://forum.xbmc.org/showthread.php?tid=180859&pid=1578887#pid1578887
+I think the patch is actually OK.  Looking at the configure script when 
+ac_cv_path_tcpdump_path is set it does not check if the executable 
+exists.  It only checks when using the --with-tcpdump option.
 
-Downgrading to ffmpeg 1.2.x, copying OpenELEC here, fixed the problem.
-I still did not find the time to test the patch I mentioned on the xbmc forum 
-though, maybe this weekend I find some time for this...
+I tested the patch and choose tcpdump and tcpreplay with no 
+/usr/sbin/tcpdump on the host.  The code builds and I see in the 
+configure output the lines
 
-Btw, work seems to have started to support ffmpeg2 in xbmc:
-https://github.com/FernetMenta/xbmc/commits/ffmpeg2
+checking for tcpdump... (cached) /usr/sbin/tcpdump
 
-Regards, Bernd
+and
+
+tcpdump binary path:        /usr/sbin/tcpdump
+
+So i think this patch will work.
+
+Thanks
+
+>
+> The configure script needs to be changed to not do this test when cross
+> compiling (or only warn).
+>
+>   > +else
+>   > +TCPREPLAY_CONF_ENV += ac_cv_path_tcpdump_path=no
+>   > +endif
+>   > +
+>   >  $(eval $(autotools-package))
+>   > --
+>   > 1.8.4.rc2
+>
+>
+>
