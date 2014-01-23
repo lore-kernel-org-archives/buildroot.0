@@ -1,61 +1,43 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 23 Jan 2014 12:30:41 +0100
-Subject: [Buildroot] [PATCH] tcpreplay: cross-compile with tcpdump
-	support
-In-Reply-To: <1390468034-7430-1-git-send-email-judge.packham@gmail.com> (Chris
- Packham's message of "Thu, 23 Jan 2014 22:07:14 +1300")
-References: <87txcvb13p.fsf@dell.be.48ers.dk>
- <1390468034-7430-1-git-send-email-judge.packham@gmail.com>
-Message-ID: <87ppnjaqam.fsf@dell.be.48ers.dk>
+Date: Thu, 23 Jan 2014 12:33:59 +0100
+Subject: [Buildroot] [PATCH] lua: fix compilation with Blackfin FLAT
+In-Reply-To: <CAB0FRste2wME45HZCXaCrVD3zB=bJ8mSB6b3wSk5VTQvs8eycQ@mail.gmail.com>
+ (=?utf-8?Q?=22Fran=C3=A7ois?= Perrad"'s message of "Thu, 23 Jan 2014
+ 10:33:42 +0100")
+References: <1390389214-9768-1-git-send-email-francois.perrad@gadz.org>
+ <87ob33d8x3.fsf@dell.be.48ers.dk>
+ <CAB0FRste2wME45HZCXaCrVD3zB=bJ8mSB6b3wSk5VTQvs8eycQ@mail.gmail.com>
+Message-ID: <87lhy7aq54.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Chris" == Chris Packham <judge.packham@gmail.com> writes:
+>>>>> "Fran?ois" == Fran?ois Perrad <francois.perrad@gadz.org> writes:
 
- > If tcpdump is enabled set ac_cv_path_tcpdump_path so that verbose output
- > is enabled on the target.
+Hi,
 
- > Signed-off-by: Chris Packham <judge.packham@gmail.com>
- > ---
- > Hi,
+ >> But BINFMT_FLAT imply BR2_PREFER_STATIC_LIB. I guess we should do this
+ >> whenever BR2_PREFER_STATIC_LIB is enabled, right?
 
- > This should get verbose support working if the tcpdump package is selected.
- > This may also fix some of the build errors (if they set BR2_PACKAGE_TCPDUMP=y)
- > but the real fix will come from upstream.
+ > No, the condition BR2_PREFER_STATIC_LIB is too large.
+ > The tarball Lua contains no Configure script, my patch behaves like
+ > the detection of the presence of the functions dlopen/dlclose/dlsym in
+ > a Configure script.
+ > The purpose of BR2_PREFER_STATIC_LIB as described in its help message
+ > is very different.
 
- >  package/tcpreplay/tcpreplay.mk | 6 ++++++
- >  1 file changed, 6 insertions(+)
+Well, I wouldn't call it "very different". The idea is to not use shared
+libraries when PREFER_STATIC_LIB is enabled, so also not
+dlopen/dlclose/dlsym.
 
- > diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
- > index 0939c6c..a2cd16e 100644
- > --- a/package/tcpreplay/tcpreplay.mk
- > +++ b/package/tcpreplay/tcpreplay.mk
- > @@ -18,4 +18,10 @@ TCPREPLAY_DEPENDENCIES = libpcap
- >  TCPREPLAY_LIBS = -lpcap $(if $(BR2_PACKAGE_LIBUSB),-lusb-1.0)
- >  TCPREPLAY_CONF_ENV += ac_cv_search_pcap_close='$(TCPREPLAY_LIBS)'
- 
- > +ifeq ($(BR2_PACKAGE_TCPDUMP),y)
- > +TCPREPLAY_CONF_ENV += ac_cv_path_tcpdump_path=/usr/sbin/tcpdump
-
-The problem here is that the configure script checks if /usr/bin/tcpdump
-(on the build machine) is executable, and otherwise errors out - So this
-breaks if you try to build it on a machine without tcpdump.
-
-The configure script needs to be changed to not do this test when cross
-compiling (or only warn).
-
- > +else
- > +TCPREPLAY_CONF_ENV += ac_cv_path_tcpdump_path=no
- > +endif
- > +
- >  $(eval $(autotools-package))
- > -- 
- > 1.8.4.rc2
-
-
+What you perhaps mean is that there is a difference between
+architectures (or variants) where we select BR2_PREFER_STATIC_LIB
+because they cannot support shared libraries (and hence have no
+dlopen/dlclose/dlsym), and other situations where the USER just desides
+that they don't want shared libraries, even if the architecture could
+support it.
 
 -- 
 Bye, Peter Korsgaard
