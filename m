@@ -1,58 +1,39 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 23 Jan 2014 18:52:14 +0100
-Subject: [Buildroot] [PATCH 1/2] package/ffmpeg2: new package
-In-Reply-To: <skn6raxead.ln2@ID-313208.user.individual.net>
-References: <cover.1390242867.git.yann.morin.1998@free.fr>
- <d4f3847e403c1e5c4e8733f75bbfccce6e0b4975.1390242867.git.yann.morin.1998@free.fr>
- <el80raxhff.ln2@ID-313208.user.individual.net>
- <20140120212701.GC3421@free.fr> <20140122223320.GD3592@free.fr>
- <8738kfd40w.fsf@dell.be.48ers.dk>
- <skn6raxead.ln2@ID-313208.user.individual.net>
-Message-ID: <20140123175214.GA3446@free.fr>
+Date: Thu, 23 Jan 2014 19:15:04 +0100
+Subject: [Buildroot] [git commit] arch: pass cpu option instead of tune
+ option on ARM
+In-Reply-To: <CACmBeS0dY9NiAPJCTzSQGSH_zx71HN00MJ6Xk0_jD8DjyDwBRw@mail.gmail.com>
+References: <20131226222002.C88A59C1E4@busybox.osuosl.org>
+ <CACmBeS0dY9NiAPJCTzSQGSH_zx71HN00MJ6Xk0_jD8DjyDwBRw@mail.gmail.com>
+Message-ID: <20140123181504.GB3446@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Jonas, All,
 
-On 2014-01-23 06:58 +0100, Bernd Kuhls spake thusly:
-> Peter Korsgaard <jacmet@uclibc.org> wrote in
-> news:8738kfd40w.fsf at dell.be.48ers.dk: 
+On 2014-01-23 16:31 +0100, Jonas Jensen spake thusly:
+> Moving from snapshot 20131213 to 20140123 I noticed a warning that
+> wasn't there before:
 > 
-> > If not, I would simply say that ffmpeg 2.x is the latest and greatest of
-> > ffmpeg, so ffmpeg.mk should build 2.x (and we shouldn't have a
-> > ffmpeg2.mk)
+> "warning: switch -mcpu=fa526 conflicts with -march=armv4 switch
+> [enabled by default]"
 > 
-> atm xbmc gotham is incompatible with ffmpeg 2.x, therefore I sent ffmpeg 
-> 1.2.5 for inclusion in buildroot.
+> That's where I started digging and found this commit.
+> 
+> In cases where -mcpu is set, buildroot doesn't actually need to set
+> -march, correct?
 
-I've discussed with a guy that built XBMC Gotham (next release, from git
-tree) with ffmpeg2. Here's what he said:
-  - Gotham and ffmpeg 1.x      : builds and runs OK
-  - Gotham and ffmpeg 2.0.x    : Builds and runs OK
-  - Gotham and ffmpeg 2.1.{0,1}: builds OK, fails at runtime (broken VDPAU)
-  - Gotham and ffpmeg 2.1.{2,3}: builds and runs OK
-  - Gotham and ffmpeg master   : builds and runs OK
+Can you check you have this commit in your tree:
+    2c1dc32: toolchain/external: fix wrapper by not passing conflicting flags
 
-He also pointed me to this bug report:
-    https://trac.ffmpeg.org/ticket/3133
-and this comment stating it's been fixed:
-    https://trac.ffmpeg.org/ticket/3133#comment:81
+http://git.buildroot.org/buildroot/commit/toolchain/toolchain-external/ext-toolchain-wrapper.c?id=2c1dc32647eb308126b0ae80a91988059d39aa7b
 
-Since we're adding ffmpeg 2.1.3, we should be able to build Gotham with
-our ffmpeg2 version.
+This one should solve your issue.
 
-Do you know of another reason why Gotham can't build with latest ffmpeg2
-(that is, ffmpeg 2.1.3 or ffmpeg master)?
-
-But even then, I'd favour keeping ffmpeg as 1.x, and add ffmpeg 2.x as
-ffmpeg2. Unles Peter has a stong opinion against.
-
-> @Yann: Does omxplayer also work with ffmpeg 1.2.5?
-
-As I briefly answered this morning, no, they do require ffmpeg 2.1+.
+If not, can you share your .config, so we can try to reproduce?
 
 Regards,
 Yann E. MORIN.
