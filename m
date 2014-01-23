@@ -1,70 +1,75 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Thu, 23 Jan 2014 15:00:02 +0100
-Subject: [Buildroot] [PATCH] libnftnl: add JSON and XML parsing support
-Message-ID: <1390485602-5766-1-git-send-email-yegorslists@googlemail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 23 Jan 2014 15:06:08 +0100
+Subject: [Buildroot] [PATCH] python: fix to ensure libpython is stripped
+In-Reply-To: <1390448438-13114-1-git-send-email-przemyslaw.wrzos@calyptech.com>
+References: <1390448438-13114-1-git-send-email-przemyslaw.wrzos@calyptech.com>
+Message-ID: <CAAXf6LV1vHUAEDGdCmMZ0nC-XX3x9QSZOWnAZbNS=rG=0bGnFA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+On Thu, Jan 23, 2014 at 4:40 AM, Przemyslaw Wrzos
+<przemyslaw.wrzos@calyptech.com> wrote:
+> The python and python3 builds mark libpython as read-only which
+> prevents it from being stripped out correctly for the target.
+>
+> Signed-off-by: Przemyslaw Wrzos <przemyslaw.wrzos@calyptech.com>
+> ---
+>  package/python/python.mk   | 9 +++++++++
+>  package/python3/python3.mk | 9 +++++++++
+>  2 files changed, 18 insertions(+)
+>
+>  NOTE: Resubmitting as part of patchwork cleanup #6.
+>
+> diff --git a/package/python/python.mk b/package/python/python.mk
+> index 6a6aaac..69662c3 100644
+> --- a/package/python/python.mk
+> +++ b/package/python/python.mk
+> @@ -162,6 +162,15 @@ endef
+>
+>  PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_REMOVE_USELESS_FILES
+>
+> +#
+> +# Make sure libpython gets stripped out on target
+> +#
+> +define PYTHON_ENSURE_LIBPYTHON_STRIPPED
+> +       chmod u+w $(TARGET_DIR)/usr/lib/libpython$(PYTHON_VERSION_MAJOR)*.so
+> +endef
+> +
+> +PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_ENSURE_LIBPYTHON_STRIPPED
+> +
+>  PYTHON_AUTORECONF = YES
+>
+>  $(eval $(autotools-package))
+> diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+> index b5e9689..6cbe772 100644
+> --- a/package/python3/python3.mk
+> +++ b/package/python3/python3.mk
+> @@ -149,6 +149,15 @@ endef
+>
+>  PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_REMOVE_USELESS_FILES
+>
+> +#
+> +# Make sure libpython gets stripped out on target
+> +#
+> +define PYTHON3_ENSURE_LIBPYTHON_STRIPPED
+> +       chmod u+w $(TARGET_DIR)/usr/lib/libpython$(PYTHON3_VERSION_MAJOR)*.so
+> +endef
+> +
+> +PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_ENSURE_LIBPYTHON_STRIPPED
+> +
+>  PYTHON3_AUTORECONF = YES
+>
+>  define PYTHON3_INSTALL_SYMLINK
+> --
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/libnftnl/Config.in   |   16 ++++++++++++++++
- package/libnftnl/libnftnl.mk |   14 ++++++++++++++
- 2 files changed, 30 insertions(+), 0 deletions(-)
+Acked-by: Thomas De Schampheleire <thomas.de_schampheleire@alcatel-lucent.com>
+Tested-by: Thomas De Schampheleire <thomas.de_schampheleire@alcatel-lucent.com>
+(tested with python2 only)
 
-diff --git a/package/libnftnl/Config.in b/package/libnftnl/Config.in
-index 66d0513..75ca519 100644
---- a/package/libnftnl/Config.in
-+++ b/package/libnftnl/Config.in
-@@ -13,6 +13,22 @@ config BR2_PACKAGE_LIBNFTNL
- 
- 	  http://netfilter.org/projects/libnftnl/index.html
- 
-+if BR2_PACKAGE_LIBNFTNL
-+
-+config BR2_PACKAGE_LIBNFTNL_JSON
-+	bool "enable JSON support"
-+	select BR2_PACKAGE_JANSSON
-+	help
-+	  Enable JSON parsing support
-+
-+config BR2_PACKAGE_LIBNFTNL_XML
-+	bool "enable XML support"
-+	select BR2_PACKAGE_MXML
-+	help
-+	  Enable XML parsing support
-+
-+endif
-+
- comment "libnftnl needs a toolchain w/ threads, IPv6, largefile"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INET_IPV6 || \
- 		!BR2_LARGEFILE
-diff --git a/package/libnftnl/libnftnl.mk b/package/libnftnl/libnftnl.mk
-index 5eba0aa..0aecf12 100644
---- a/package/libnftnl/libnftnl.mk
-+++ b/package/libnftnl/libnftnl.mk
-@@ -12,4 +12,18 @@ LIBNFTNL_LICENSE_FILES = COPYING
- LIBNFTNL_INSTALL_STAGING = YES
- LIBNFTNL_DEPENDENCIES = host-pkgconf libmnl
- 
-+ifeq ($(BR2_PACKAGE_LIBNFTNL_JSON),y)
-+LIBNFTNL_CONF_OPT += --with-json-parsing
-+LIBNFTNL_DEPENDENCIES += jansson
-+else
-+LIBNFTNL_CONF_OPT += --without-json-parsing
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBNFTNL_XML),y)
-+LIBNFTNL_CONF_OPT += --with-xml-parsing
-+LIBNFTNL_DEPENDENCIES += mxml
-+else
-+LIBNFTNL_CONF_OPT += --without-xml-parsing
-+endif
-+
- $(eval $(autotools-package))
--- 
-1.7.7
+Note: the library will remain writable, but this doesn't look like a
+big problem to me...
+
+By the way: nice find! Saves about 4MB on Python 2!
