@@ -1,57 +1,122 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Thu, 23 Jan 2014 09:28:33 +0100
-Subject: [Buildroot] [PATCH 4/4] luarocks: allow to work with host-luajit
-In-Reply-To: <1390465713-12600-1-git-send-email-francois.perrad@gadz.org>
-References: <1390465713-12600-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1390465713-12600-4-git-send-email-francois.perrad@gadz.org>
+From: Jeremy Rosen <jeremy.rosen@openwide.fr>
+Date: Thu, 23 Jan 2014 09:30:00 +0100 (CET)
+Subject: [Buildroot] Post build script issue
+In-Reply-To: <CAHKzcEOSork9JxSZWsef6m1wmPrZ2z1jEQqaig=LFkysgzqvNg@mail.gmail.com>
+Message-ID: <1088543382.4633672.1390465800734.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+I always set my script setup in buildroot to absolute paths using
+global variables.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/luainterpreter/luainterpreter.mk |    4 ++++
- package/luarocks/luarocks.mk             |    4 ++--
- 2 files changed, 6 insertions(+), 2 deletions(-)
+depending on where you put your script, you probably want to set it 
+to $(TOPDIR)/foo.sh (TOPDIR is the buildroot directory or
+$(BR2_EXTERNAL)/foo.sh if you use BR2_EXTERNAL. There are a couple 
+more variables like that, but I don't know them. Just check the 
+documentation.
 
-diff --git a/package/luainterpreter/luainterpreter.mk b/package/luainterpreter/luainterpreter.mk
-index c37d621..d5b95db 100644
---- a/package/luainterpreter/luainterpreter.mk
-+++ b/package/luainterpreter/luainterpreter.mk
-@@ -5,8 +5,12 @@
- #############################################################
- 
- LUAINTERPRETER_SOURCE =
-+HOST_LUAINTERPRETER_SOURCE =
- LUAINTERPRETER_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_LUA_INTERPRETER))
- 
- LUAINTERPRETER_ABIVER = $(call qstrip,$(BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION))
- 
- $(eval $(generic-package))
-+$(eval $(host-generic-package))
-+
-+LUA_RUN = $(HOST_DIR)/usr/bin/$(call qstrip,$(BR2_PACKAGE_PROVIDES_LUA_INTERPRETER))
-diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
-index 88ab22a..1e56bc9 100644
---- a/package/luarocks/luarocks.mk
-+++ b/package/luarocks/luarocks.mk
-@@ -9,7 +9,7 @@ LUAROCKS_SITE = http://luarocks.org/releases/
- LUAROCKS_LICENSE = MIT
- LUAROCKS_LICENSE_FILES = COPYING
- 
--HOST_LUAROCKS_DEPENDENCIES = host-lua luainterpreter
-+HOST_LUAROCKS_DEPENDENCIES = host-luainterpreter luainterpreter
- 
- LUAROCKS_CONFIG_DIR  = $(HOST_DIR)/usr/etc/luarocks
- LUAROCKS_CONFIG_FILE = $(LUAROCKS_CONFIG_DIR)/config-$(LUAINTERPRETER_ABIVER).lua
-@@ -42,4 +42,4 @@ endef
- $(eval $(host-generic-package))
- 
- LUAROCKS_RUN = LUA_PATH="$(HOST_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/?.lua" \
--	$(HOST_DIR)/usr/bin/lua $(HOST_DIR)/usr/bin/luarocks
-+	$(LUA_RUN) $(HOST_DIR)/usr/bin/luarocks
--- 
-1.7.9.5
+Having a relative path to CWD seems like a bad idea when you can
+use these variables to have a dinamically expanded absolute path...
+
+Cordialement 
+
+J?r?my Rosen 
++33 (0)1 42 68 28 04
+
+fight key loggers : write some perl using vim 
+
+
+Open Wide Ingenierie
+
+23, rue Daviel
+75012 Paris - France
+www.openwide.fr
+
+
+
+
+
+----- Mail original -----
+> 
+> 
+> Hi,
+> 
+> 
+> Recently, I've tried to use post-script feature and found an issue,
+> 
+> 
+> I created foo.sh with 755 mode and configured buildroot to use this
+> post-script. However, make failed with the message:
+> 
+> 
+> >>> Executing post-image script foo.sh
+> 
+> 
+> /bin/bash: foo.sh: command not found
+> 
+> 
+> It's because post-script is called in Makefile just by the name
+> assuming that the . directory is in your PATH.
+> 
+> 
+> 
+> target-post-image:
+> @$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_ IMAGE _SCRIPT)), \
+> $(call MESSAGE,"Executing post-image script $(s)"); \
+> ---->>> $(USER_HOOKS_EXTRA_ENV) $(s) $(BINARIES_DIR) $(call
+> qstrip,$(BR2_ROOTFS_POST_ SCRIP T_ARGS))$(sep))
+> 
+> 
+> 
+> 
+> Therefore, I added '.' dir to my PATH and ran make again. Again I got
+> an error.
+> 
+> 
+> "You seem to have the current working directory in your PATH
+> environment variable. This doesn't work.
+> 
+> 
+> make: *** [core-dependencies] Error 1"
+> 
+> 
+> How does it work for you?
+> 
+> 
+> Don't you think the Makefile should call the script this way:
+> 
+> 
+> 
+> - $(USER_HOOKS_EXTRA_ENV) $(s) $(TARGET_DIR) $(call
+> qstrip,$(BR2_ROOTFS_POST_ SCRIP T_ARGS))$(sep))
+> + $(USER_HOOKS_EXTRA_ENV) ./$(s) $(TARGET_DIR) $(call
+> qstrip,$(BR2_ROOTFS_POST_ SCRIP T_ARGS))$(sep))
+> 
+> 
+> 
+> 
+> Let me know I will prepare a patch.
+> 
+> 
+> Thanks,
+> /Waldek
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
