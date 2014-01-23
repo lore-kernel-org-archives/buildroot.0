@@ -1,54 +1,63 @@
-From: Waldemar Rymarkiewicz <waldemar.rymarkiewicz@gmail.com>
-Date: Thu, 23 Jan 2014 09:23:24 +0100
-Subject: [Buildroot] Post build script issue
-Message-ID: <CAHKzcEOSork9JxSZWsef6m1wmPrZ2z1jEQqaig=LFkysgzqvNg@mail.gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Thu, 23 Jan 2014 09:28:30 +0100
+Subject: [Buildroot] [PATCH 1/4] luajit: refactor without dont-strip.patch
+Message-ID: <1390465713-12600-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+the variable TARGET_STRIP does the job
 
-Recently, I've tried to use post-script feature and found an issue,
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/luajit/luajit-03-dont-strip.patch |   23 -----------------------
+ package/luajit/luajit.mk                  |    2 +-
+ 2 files changed, 1 insertion(+), 24 deletions(-)
+ delete mode 100644 package/luajit/luajit-03-dont-strip.patch
 
-I created foo.sh with 755 mode and configured buildroot to use this
-post-script. However, make failed with the message:
-
->>>   Executing post-image script foo.sh
-/bin/bash: foo.sh: command not found
-
-It's because post-script is called in Makefile just by the name assuming
-that the . directory is in your PATH.
-
- target-post-image:
- @$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
- $(call MESSAGE,"Executing post-image script $(s)"); \
----->>> $(USER_HOOKS_EXTRA_ENV) $(s) $(BINARIES_DIR) $(call
-qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
-
-
-Therefore, I added '.' dir to my PATH and ran make again. Again I got an
-error.
-
-"You seem to have the current working directory in your PATH environment
-variable. This doesn't work.
-make: *** [core-dependencies] Error 1"
-
- How does it work for you?
-
-Don't you think the Makefile should call the script this way:
-
--               $(USER_HOOKS_EXTRA_ENV) $(s) $(TARGET_DIR) $(call
-qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
-+               $(USER_HOOKS_EXTRA_ENV) ./$(s) $(TARGET_DIR) $(call
-qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
-
-
-Let me know I will prepare a patch.
-
-Thanks,
-/Waldek
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140123/9750fd68/attachment.html>
+diff --git a/package/luajit/luajit-03-dont-strip.patch b/package/luajit/luajit-03-dont-strip.patch
+deleted file mode 100644
+index 66bdadf..0000000
+--- a/package/luajit/luajit-03-dont-strip.patch
++++ /dev/null
+@@ -1,23 +0,0 @@
+-Don't strip the library and binary
+-
+-This allows Buildroot to do it if needed, but only if needed.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Index: b/src/Makefile
+-===================================================================
+---- a/src/Makefile
+-+++ b/src/Makefile
+-@@ -665,12 +665,10 @@
+- $(LUAJIT_SO): $(LJVMCORE_O)
+- 	$(E) "DYNLINK   $@"
+- 	$(Q)$(TARGET_LD) $(TARGET_ASHLDFLAGS) -o $@ $(LJVMCORE_DYNO) $(TARGET_ALIBS)
+--	$(Q)$(TARGET_STRIP) $@
+- 
+- $(LUAJIT_T): $(TARGET_O) $(LUAJIT_O) $(TARGET_DEP)
+- 	$(E) "LINK      $@"
+- 	$(Q)$(TARGET_LD) $(TARGET_ALDFLAGS) -o $@ $(LUAJIT_O) -lluajit -L. $(TARGET_ALIBS)
+--	$(Q)$(TARGET_STRIP) $@
+- 	$(E) "OK        Successfully built LuaJIT"
+- 
+- ##############################################################################
+diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
+index 529d3c2..186b3fd 100644
+--- a/package/luajit/luajit.mk
++++ b/package/luajit/luajit.mk
+@@ -37,7 +37,7 @@ define LUAJIT_BUILD_CMDS
+ 		DYNAMIC_CC="$(TARGET_CC) -fPIC" \
+ 		TARGET_LD="$(TARGET_CC)" \
+ 		TARGET_AR="$(TARGET_AR) rcus" \
+-		TARGET_STRIP="$(TARGET_STRIP)" \
++		TARGET_STRIP=@: \
+ 		TARGET_CFLAGS="$(TARGET_CFLAGS)" \
+ 		TARGET_LDFLAGS="$(TARGET_LDFLAGS)" \
+ 		HOST_CC="$(LUAJIT_HOST_CC)" \
+-- 
+1.7.9.5
