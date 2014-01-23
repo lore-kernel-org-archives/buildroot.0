@@ -1,39 +1,43 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 23 Jan 2014 11:53:52 +0200
-Subject: [Buildroot] [PATCH] sqlcipher: fix build for xtensa
-Message-ID: <7bfe4579b836ff4734d77ddaca7caaeb80c050c3.1390470832.git.baruch@tkos.co.il>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 23 Jan 2014 07:21:15 -0300
+Subject: [Buildroot] [PATCH] busybox 1.22.1: add upstream iplink fix
+Message-ID: <1390472475-26328-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The sqlcipher package generates libraries that are too large for the xtensa
-default placement of literals in a dedicated section. Use
--mtext-section-literal to place literals in the text section.
-
-Fixes:
-http://autobuild.buildroot.net/results/921/92116c2837e4c449919e7a0ab9aebd6abb1cbaf1/
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/sqlcipher/sqlcipher.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ .../busybox/1.22.1/0004-busybox-1.22.1-iplink.patch   | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+ create mode 100644 package/busybox/1.22.1/0004-busybox-1.22.1-iplink.patch
 
-diff --git a/package/sqlcipher/sqlcipher.mk b/package/sqlcipher/sqlcipher.mk
-index 6130870bba1f..ace5ce8f55c8 100644
---- a/package/sqlcipher/sqlcipher.mk
-+++ b/package/sqlcipher/sqlcipher.mk
-@@ -32,6 +32,10 @@ ifeq ($(BR2_PACKAGE_SQLCIPHER_STAT3),y)
- SQLCIPHER_CFLAGS += -DSQLITE_ENABLE_STAT3
- endif
- 
-+ifeq ($(BR2_xtensa),y)
-+SQLCIPHER_CFLAGS += -mtext-section-literals
-+endif
-+
- ifeq ($(BR2_PACKAGE_SQLCIPHER_READLINE),y)
- SQLCIPHER_DEPENDENCIES += ncurses readline
- SQLCIPHER_CONF_OPT += --with-readline-inc="-I$(STAGING_DIR)/usr/include"
+diff --git a/package/busybox/1.22.1/0004-busybox-1.22.1-iplink.patch b/package/busybox/1.22.1/0004-busybox-1.22.1-iplink.patch
+new file mode 100644
+index 0000000..dbd76c5
+--- /dev/null
++++ b/package/busybox/1.22.1/0004-busybox-1.22.1-iplink.patch
+@@ -0,0 +1,19 @@
++--- busybox-1.22.1/networking/libiproute/iplink.c
+++++ busybox-1.22.1-iplink/networking/libiproute/iplink.c
++@@ -31,6 +31,16 @@
++ #ifndef IFLA_LINKINFO
++ # define IFLA_LINKINFO 18
++ # define IFLA_INFO_KIND 1
+++# define IFLA_INFO_DATA 2
+++#endif
+++
+++#ifndef IFLA_VLAN_MAX
+++# define IFLA_VLAN_ID 1
+++# define IFLA_VLAN_FLAGS 2
+++struct ifla_vlan_flags {
+++	uint32_t	flags;
+++	uint32_t	mask;
+++};
++ #endif
++ 
++ /* taken from linux/sockios.h */
 -- 
-1.8.5.2
+1.8.3.2
