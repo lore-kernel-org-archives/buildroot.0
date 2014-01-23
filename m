@@ -1,42 +1,66 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Thu, 23 Jan 2014 18:02:56 +0100
-Subject: [Buildroot] python Gobject
-In-Reply-To: <CAGzWX_Jgdzctc_=-9XBg4Bw__KtdNwF3MChWvG4mi6XVNFUEhQ@mail.gmail.com>
-References: <CAAs3wMgAbEnReJ-XW_QnQ=kAU6G7cwzss7yUMytcmHMRYMsjnw@mail.gmail.com>
- <20140117113153.GB10730@pc-eric>
- <CAAs3wMh5xwOK_bEDVM1JMJvw6vYYL2frZYxTc_4ehyLK2sj++g@mail.gmail.com>
- <20140117154452.GC10730@pc-eric>
- <1390290077263-60414.post@n4.nabble.com>
- <20140121173657.GA11605@pc-eric>
- <1390420630566-60535.post@n4.nabble.com>
- <20140123134942.GA10856@pc-eric>
- <CAGzWX_Jgdzctc_=-9XBg4Bw__KtdNwF3MChWvG4mi6XVNFUEhQ@mail.gmail.com>
-Message-ID: <20140123170253.GB10856@pc-eric>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 23 Jan 2014 18:52:14 +0100
+Subject: [Buildroot] [PATCH 1/2] package/ffmpeg2: new package
+In-Reply-To: <skn6raxead.ln2@ID-313208.user.individual.net>
+References: <cover.1390242867.git.yann.morin.1998@free.fr>
+ <d4f3847e403c1e5c4e8733f75bbfccce6e0b4975.1390242867.git.yann.morin.1998@free.fr>
+ <el80raxhff.ln2@ID-313208.user.individual.net>
+ <20140120212701.GC3421@free.fr> <20140122223320.GD3592@free.fr>
+ <8738kfd40w.fsf@dell.be.48ers.dk>
+ <skn6raxead.ln2@ID-313208.user.individual.net>
+Message-ID: <20140123175214.GA3446@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jan 23, 2014 at 03:27:32PM +0100, Samuel Buffet wrote:
+Bernd, All,
 
-I poked my nose in your build/python-pygobject-2.28.6/config.log. The
-configure script of pygobject complains about not having found Python headers
-because it fails to compile a test program:
+On 2014-01-23 06:58 +0100, Bernd Kuhls spake thusly:
+> Peter Korsgaard <jacmet@uclibc.org> wrote in
+> news:8738kfd40w.fsf at dell.be.48ers.dk: 
+> 
+> > If not, I would simply say that ffmpeg 2.x is the latest and greatest of
+> > ffmpeg, so ffmpeg.mk should build 2.x (and we shouldn't have a
+> > ffmpeg2.mk)
+> 
+> atm xbmc gotham is incompatible with ffmpeg 2.x, therefore I sent ffmpeg 
+> 1.2.5 for inclusion in buildroot.
 
-> configure:14934: checking for headers required to compile python extensions
-> configure:14954: /home/toto/Documents/homeproject/buildroot/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-cpp -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I/home/toto/Documents/homeproject/buildroot/output/host/usr/include/python2.7 -I/home/toto/Documents/homeproject/buildroot/output/host/usr/include/python2.7 conftest.c
-> In file included from /home/toto/Documents/homeproject/buildroot/output/host/usr/include/python2.7/Python.h:58:0,
->                  from conftest.c:26:
-> /home/toto/Documents/homeproject/buildroot/output/host/usr/include/python2.7/pyport.h:849:2: error: #error "LONG_BIT definition appears wrong for platform (bad gcc/glibc config?)."
-> [...]
-> configure:14959: result: not found
-> configure:14961: error: could not find Python headers
+I've discussed with a guy that built XBMC Gotham (next release, from git
+tree) with ffmpeg2. Here's what he said:
+  - Gotham and ffmpeg 1.x      : builds and runs OK
+  - Gotham and ffmpeg 2.0.x    : Builds and runs OK
+  - Gotham and ffmpeg 2.1.{0,1}: builds OK, fails at runtime (broken VDPAU)
+  - Gotham and ffpmeg 2.1.{2,3}: builds and runs OK
+  - Gotham and ffmpeg master   : builds and runs OK
 
-Are you building a 32-bit ARM guest on a 64-bit host machine?
-I dug into the mailing list and found this discussion, which seems to be
-related to this problem:
-http://lists.busybox.net/pipermail/buildroot/2011-August/045038.html.
+He also pointed me to this bug report:
+    https://trac.ffmpeg.org/ticket/3133
+and this comment stating it's been fixed:
+    https://trac.ffmpeg.org/ticket/3133#comment:81
 
-Best regards,
-ELB
+Since we're adding ffmpeg 2.1.3, we should be able to build Gotham with
+our ffmpeg2 version.
+
+Do you know of another reason why Gotham can't build with latest ffmpeg2
+(that is, ffmpeg 2.1.3 or ffmpeg master)?
+
+But even then, I'd favour keeping ffmpeg as 1.x, and add ffmpeg 2.x as
+ffmpeg2. Unles Peter has a stong opinion against.
+
+> @Yann: Does omxplayer also work with ffmpeg 1.2.5?
+
+As I briefly answered this morning, no, they do require ffmpeg 2.1+.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
