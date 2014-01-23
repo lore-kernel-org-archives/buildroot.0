@@ -1,75 +1,62 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 23 Jan 2014 15:06:08 +0100
-Subject: [Buildroot] [PATCH] python: fix to ensure libpython is stripped
-In-Reply-To: <1390448438-13114-1-git-send-email-przemyslaw.wrzos@calyptech.com>
-References: <1390448438-13114-1-git-send-email-przemyslaw.wrzos@calyptech.com>
-Message-ID: <CAAXf6LV1vHUAEDGdCmMZ0nC-XX3x9QSZOWnAZbNS=rG=0bGnFA@mail.gmail.com>
+Date: Thu, 23 Jan 2014 15:06:48 +0100
+Subject: [Buildroot] Patchwork oldest patches cleanup #6 (deadline
+	February 2)
+In-Reply-To: <CAJJ6jxvu=r8wn=LbLYtXW-Omyv4jwTLQPE5RuFHh9eYS9N82Vg@mail.gmail.com>
+References: <CAAXf6LX2yqbapp6GBuN5qoT1R93CGD3NCLguY8fQhFoApJz2uw@mail.gmail.com>
+ <CAJJ6jxvu=r8wn=LbLYtXW-Omyv4jwTLQPE5RuFHh9eYS9N82Vg@mail.gmail.com>
+Message-ID: <CAAXf6LV0fASF2jcra1-vo6nr40=XyDzxsD=QK+NfkpkU4wRe_A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jan 23, 2014 at 4:40 AM, Przemyslaw Wrzos
-<przemyslaw.wrzos@calyptech.com> wrote:
-> The python and python3 builds mark libpython as read-only which
-> prevents it from being stripped out correctly for the target.
->
-> Signed-off-by: Przemyslaw Wrzos <przemyslaw.wrzos@calyptech.com>
-> ---
->  package/python/python.mk   | 9 +++++++++
->  package/python3/python3.mk | 9 +++++++++
->  2 files changed, 18 insertions(+)
->
->  NOTE: Resubmitting as part of patchwork cleanup #6.
->
-> diff --git a/package/python/python.mk b/package/python/python.mk
-> index 6a6aaac..69662c3 100644
-> --- a/package/python/python.mk
-> +++ b/package/python/python.mk
-> @@ -162,6 +162,15 @@ endef
->
->  PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_REMOVE_USELESS_FILES
->
-> +#
-> +# Make sure libpython gets stripped out on target
-> +#
-> +define PYTHON_ENSURE_LIBPYTHON_STRIPPED
-> +       chmod u+w $(TARGET_DIR)/usr/lib/libpython$(PYTHON_VERSION_MAJOR)*.so
-> +endef
-> +
-> +PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_ENSURE_LIBPYTHON_STRIPPED
-> +
->  PYTHON_AUTORECONF = YES
->
->  $(eval $(autotools-package))
-> diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-> index b5e9689..6cbe772 100644
-> --- a/package/python3/python3.mk
-> +++ b/package/python3/python3.mk
-> @@ -149,6 +149,15 @@ endef
->
->  PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_REMOVE_USELESS_FILES
->
-> +#
-> +# Make sure libpython gets stripped out on target
-> +#
-> +define PYTHON3_ENSURE_LIBPYTHON_STRIPPED
-> +       chmod u+w $(TARGET_DIR)/usr/lib/libpython$(PYTHON3_VERSION_MAJOR)*.so
-> +endef
-> +
-> +PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_ENSURE_LIBPYTHON_STRIPPED
-> +
->  PYTHON3_AUTORECONF = YES
->
->  define PYTHON3_INSTALL_SYMLINK
-> --
+Hi Steve,
 
-Acked-by: Thomas De Schampheleire <thomas.de_schampheleire@alcatel-lucent.com>
-Tested-by: Thomas De Schampheleire <thomas.de_schampheleire@alcatel-lucent.com>
-(tested with python2 only)
+On Wed, Jan 22, 2014 at 11:10 PM, Steve Calfee <stevecalfee@gmail.com> wrote:
+> On Mon, Jan 20, 2014 at 1:06 PM, Thomas De Schampheleire
+> <patrickdepinguin@gmail.com> wrote:
+>> All,
+>>
+>> Here is session 6 of the patchwork cleanup. For those who haven't
+>> followed previous sessions, here is a quick recap: every session we'll
+>> be posting the list of the 10 oldest patches, with the original patch
+>> contributors in copy. During two weeks, we have the opportunity to
+>> discuss the patch, whether it is still necessary or not, how it should
+>> be changed to be merged.
+>>
+>> In particular, I'm interested in knowing if the original contributor is
+>> still interested by the patch, or if someone else is interested in
+>> adopting the patch and sending an updated version, or if the patch no
+>> longer makes sense due to other changes made in Buildroot.
+>>
+>> All patches that have not received any comment or attention before the
+>> deadline will be removed from patchwork. This is aggressive, but we have
+>> many 'dead' patches sitting in patchwork, and this cannot work.
+>>
+>> Deadline for this session is February 2 (FOSDEM + Buildroot developer days!).
+>>
+> <snip>
+>> minimal dockstar setup
+>> Steve Calfee <stevecalfee@gmail.com>
+>> http://patchwork.ozlabs.org/patch/217639
+>>
+>
+> I guess you might as well drop the patch. At the time before rpi, the
+> $30 retail dockstar was the cheapest linux computer you could buy. I
+> thought others might be interested, but have received no comments, so
+> don't bother with this.
+>
+> It still builds and works fine, but with later kernels beyond 3.6.8 (I
+> think) they changed the kernel for device tree, and that broke my
+> uboot. Changing uboot is a very dangerous thing, risking bricking the
+> dockstar, so I have stopped at that kernel for now. Still a nice NAS
+> for home, though.
+>
 
-Note: the library will remain writable, but this doesn't look like a
-big problem to me...
+Ok, thanks for the feedback.
+I'll mark it as such in patchwork...
 
-By the way: nice find! Saves about 4MB on Python 2!
+Best regards,
+Thomas
