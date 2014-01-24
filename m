@@ -1,70 +1,54 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 24 Jan 2014 01:08:13 +0100
-Subject: [Buildroot] [PATCH 04/10] pkg-cmake.mk: build shared library
- when	!BR2_PREFER_STATIC_LIB
-In-Reply-To: <1390073027-14239-5-git-send-email-s.martin49@gmail.com>
-References: <1390073027-14239-1-git-send-email-s.martin49@gmail.com>
- <1390073027-14239-5-git-send-email-s.martin49@gmail.com>
-Message-ID: <20140124000813.GC3446@free.fr>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Thu, 23 Jan 2014 21:32:08 -0500
+Subject: [Buildroot] [PATCH 1/1] Makefile: move skeleton overlay
+	installations before strip step
+Message-ID: <1390530729-1830-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Smauel, All,
+Nothing prevents the skeleton overlays from having pre-built
+executables or libraries in them.  Therefore, we should install
+the overlays prior to stripping, so that any such pre-built stuff
+gets stripped too.
 
-On 2014-01-18 20:23 +0100, Samuel Martin spake thusly:
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> ---
->  package/pkg-cmake.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-> index 463cd63..aedd1fc 100644
-> --- a/package/pkg-cmake.mk
-> +++ b/package/pkg-cmake.mk
-> @@ -64,6 +64,7 @@ define $(2)_CONFIGURE_CMDS
->  	$$($$(PKG)_CONF_ENV) $(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
->  		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
->  		-DCMAKE_INSTALL_PREFIX="/usr" \
-> +		-DBUILD_SHARED_LIBS=$(if $(BR2_PREFER_STATIC_LIB),OFF,ON) \
->  		$$($$(PKG)_CONF_OPT) \
->  	)
->  endef
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+---
+ Makefile |   13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-This change breaks the rpi-userland build.
-
-It is not obvious that the build is broken, since the rpi-userland
-package itself still seems to build fine, but packages that use it (eg.
-omxplayer that I'm integrating) now fail to build.
-
-To reproduce (recipe untested, may need some tweaking, adjust
-accordingly):
-
-    git checkout master
-    git pull git at gitorious.org:buildroot/buildroot.git yem/omxplayer
-    make menuconfig
-        -> arm, arm1176jzf-s, EABIhf, vfpv2
-        -> Target packages -> Audio and video applications -> omxplayer
-    make
-    # Coffee/tea/beer/...
-    # watch it fail
-    make clean
-    git revert 9fa7f2b  # pkg-cmake.mk: build shared library when !BR2_PREFER_STATIC_LIB
-    make
-    # Coffee/tea/beer/...
-    # It builds. Yeah!
-
-Thanks to Maxime for finding the culprit!
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/Makefile b/Makefile
+index 9dfb1e0..9235c31 100644
+--- a/Makefile
++++ b/Makefile
+@@ -513,6 +513,13 @@ ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
+ 	find $(TARGET_DIR)/usr/lib/ -name '*.py' -print0 | xargs -0 rm -f
+ endif
+ 	rm -rf $(TARGET_DIR)/usr/lib/luarocks
++
++	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
++		$(call MESSAGE,"Copying overlay $(d)"); \
++		rsync -a $(RSYNC_VCS_EXCLUSIONS) \
++			--exclude .empty --exclude '*~' \
++			$(d)/ $(TARGET_DIR)$(sep))
++
+ 	$(STRIP_FIND_CMD) | xargs $(STRIPCMD) 2>/dev/null || true
+ 	if test -d $(TARGET_DIR)/lib/modules; then \
+ 		find $(TARGET_DIR)/lib/modules -type f -name '*.ko' | \
+@@ -545,12 +552,6 @@ endif
+ 		echo "PRETTY_NAME=\"Buildroot $(BR2_VERSION)\"" \
+ 	) >  $(TARGET_DIR)/etc/os-release
+ 
+-	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
+-		$(call MESSAGE,"Copying overlay $(d)"); \
+-		rsync -a $(RSYNC_VCS_EXCLUSIONS) \
+-			--exclude .empty --exclude '*~' \
+-			$(d)/ $(TARGET_DIR)$(sep))
+-
+ 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
+ 		$(call MESSAGE,"Executing post-build script $(s)"); \
+ 		$(USER_HOOKS_EXTRA_ENV) $(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.9.5
