@@ -1,34 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 24 Jan 2014 09:06:26 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-01-23
-In-Reply-To: <20140124073009.DF0461010C8@stock.ovh.net> (Thomas Petazzoni's
- message of "Fri, 24 Jan 2014 08:30:09 +0100 (CET)")
-References: <20140124073009.DF0461010C8@stock.ovh.net>
-Message-ID: <87vbx9ajnh.fsf@dell.be.48ers.dk>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Fri, 24 Jan 2014 11:46:22 +0100
+Subject: [Buildroot] [PATCH] can-utils: bump version
+Message-ID: <1390560382-12486-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
- > Detail of failures
- > ===================
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/can-utils/can-utils.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- >    powerpc |                    gtest-1.7.0 | NOK | http://autobuild.buildroot.net/results/5c6e58c51b2a14a7f23d296f771a76096b80362a/
- >       i686 |                    gtest-1.7.0 | NOK | http://autobuild.buildroot.net/results/bde777d343e9c4884272893d0da3b113dcc75e3a/
- >        arm |                    gtest-1.7.0 | NOK | http://autobuild.buildroot.net/results/20cbf90749672607cb277c676a45d2c0c3965fa0/
- >     x86_64 |                    gtest-1.7.0 | NOK | http://autobuild.buildroot.net/results/1e610142e72676bd8d13aa8e87829b492c714257/
- >       i686 |                    gtest-1.7.0 | NOK | http://autobuild.buildroot.net/results/e5b54b716fb2371014b4f7ac79287bea6d4b03de/
- >       i686 |                    gtest-1.7.0 | NOK | http://autobuild.buildroot.net/results/b1e9bae22b3e0b91dccfd034864c4a5c7848f41c/
- >   mips64el |                    gtest-1.7.0 | NOK | http://autobuild.buildroot.net/results/89a29d1f597dbc12a6fc8eb079133a84952fc612/
- >     mipsel |                    gtest-1.7.0 | NOK | http://autobuild.buildroot.net/results/9f891b201e4e9db4a67868ecadb46bd8e95e9d41/
- >     x86_64 |                    gtest-1.7.0 | NOK | http://autobuild.buildroot.net/results/ce02a951d5751a35b7669d46deec0534e7ddf427/
-
-It looks like these are likely to be caused by the cmake infrastructure
-change. Samuel, care to take a look?
-
+diff --git a/package/can-utils/can-utils.mk b/package/can-utils/can-utils.mk
+index 743fe7c..44713cf 100644
+--- a/package/can-utils/can-utils.mk
++++ b/package/can-utils/can-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CAN_UTILS_VERSION = 16c970d40e6c19dde705bad4751bab1a3a4f3a0d
++CAN_UTILS_VERSION = 111f8d3acf6f6b30bf208fd9c98399c5fb9d29de
+ CAN_UTILS_SITE = git://gitorious.org/linux-can/can-utils.git
+ CAN_UTILS_AUTORECONF = YES
+ 
 -- 
-Bye, Peter Korsgaard
+1.7.7
