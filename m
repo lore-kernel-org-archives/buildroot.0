@@ -1,40 +1,39 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Fri, 24 Jan 2014 19:27:01 +0100
-Subject: [Buildroot] python Gobject
-In-Reply-To: <20140123170253.GB10856@pc-eric>
-References: <CAAs3wMgAbEnReJ-XW_QnQ=kAU6G7cwzss7yUMytcmHMRYMsjnw@mail.gmail.com>
- <20140117113153.GB10730@pc-eric>
- <CAAs3wMh5xwOK_bEDVM1JMJvw6vYYL2frZYxTc_4ehyLK2sj++g@mail.gmail.com>
- <20140117154452.GC10730@pc-eric>
- <1390290077263-60414.post@n4.nabble.com>
- <20140121173657.GA11605@pc-eric>
- <1390420630566-60535.post@n4.nabble.com>
- <20140123134942.GA10856@pc-eric>
- <CAGzWX_Jgdzctc_=-9XBg4Bw__KtdNwF3MChWvG4mi6XVNFUEhQ@mail.gmail.com>
- <20140123170253.GB10856@pc-eric>
-Message-ID: <20140124182659.GB30974@pc-eric>
+From: Marcelo Gutierrez <kuyurix@gmail.com>
+Date: Fri, 24 Jan 2014 17:20:50 -0200
+Subject: [Buildroot] [PATCH v9] espeak: new package
+Message-ID: <CA+kK6WsfbPVJbZ02tdsOGw6Sag09C5M1JYZaRv9QXPYxz+E=FQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jan 23, 2014 at 06:02:56PM +0100, Eric Le Bihan wrote:
-> I dug into the mailing list and found this discussion, which seems to be
-> related to this problem:
-> http://lists.busybox.net/pipermail/buildroot/2011-August/045038.html.
-I've also found this interesting presentation about Python and
-cross-compilation: http://whatschrisdoing.com/blog/talks/PyConTalk2012.pdf.
+Arnaud, All,
 
-The author points out that cross-compiling Python extensions like
-python-gobject, that do not rely on distutils, is likely to fail, because they
-rely on the _host_ python-config to get the path to Python headers. In our
-case, we end up with headers for a 64-bit machine
-(host/usr/bin/include/python2.7) instead of the ones for the 32-bit target
-(target/usr/include/python2.7).
+I tested this patch on BeagleBone Black and works fine but I got the
+following warning messages when use "alsa via portaudio"
 
-I'll patch the autotools files in the modules of the PyGtk stack to handle
-this properly.
+(snd_pcm_open_noupdate) Unknown PCM cards.pcm.rear
+> (snd_pcm_open_noupdate) Unknown PCM cards.pcm.center_lfe
+> (snd_pcm_open_noupdate) Unknown PCM cards.pcm.side
+>
 
-Best regards,
-ELB
+The solution is:
+
+/usr/share/alsa/alsa.conf
+
+   change the line "pcm.rear cards.pcm.rear"
+             to "pcm.rear cards.pcm.default"
+
+   change the line "pcm.center_lfe cards.pcm.center_lfe"
+             to "pcm.center_lfe cards.pcm.default"
+
+   change the line "pcm.side cards.pcm.side"
+             to "pcm.side cards.pcm.default"
+
+Good job, Arnaud
+
+Tested-by: Marcelo Gutierrez <kuyurix@gmail.com>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140124/275d1e66/attachment.html>
