@@ -1,32 +1,25 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Fri, 24 Jan 2014 11:46:22 +0100
-Subject: [Buildroot] [PATCH] can-utils: bump version
-Message-ID: <1390560382-12486-1-git-send-email-yegorslists@googlemail.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Fri, 24 Jan 2014 12:02:37 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-01-12
+In-Reply-To: <20140113073008.CB34D1014D2@stock.ovh.net>
+References: <20140113073008.CB34D1014D2@stock.ovh.net>
+Message-ID: <CAHkwnC-XeUvDtJ8+-FGY3hc0+2mJfTdx4ZJ4xXi8wcf7S8SycA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+On Mon, Jan 13, 2014 at 8:30 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+<snip>
+>        sh4 |                  lvm2-2.02.103 | NOK | http://autobuild.buildroot.net/results/5f766a8269e5ce43b7e0f7478e9fad618b41beb6/
+<snip>
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/can-utils/can-utils.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+I've sent a patch to fix it:
+http://patchwork.ozlabs.org/patch/312469/
 
-diff --git a/package/can-utils/can-utils.mk b/package/can-utils/can-utils.mk
-index 743fe7c..44713cf 100644
---- a/package/can-utils/can-utils.mk
-+++ b/package/can-utils/can-utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CAN_UTILS_VERSION = 16c970d40e6c19dde705bad4751bab1a3a4f3a0d
-+CAN_UTILS_VERSION = 111f8d3acf6f6b30bf208fd9c98399c5fb9d29de
- CAN_UTILS_SITE = git://gitorious.org/linux-can/can-utils.git
- CAN_UTILS_AUTORECONF = YES
- 
+Regards
 -- 
-1.7.7
+Fabio Porcedda
