@@ -1,39 +1,71 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Fri, 24 Jan 2014 22:34:21 +0100
-Subject: [Buildroot] [PATCH 1/1] openpowerlink: force static library build
-Message-ID: <1390599261-30736-1-git-send-email-romain.naour@openwide.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 25 Jan 2014 00:15:14 +0100
+Subject: [Buildroot] [PATCH] package/tmux: new package
+Message-ID: <1390605314-14452-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There is no shared lib in openpowerlink,
-so force static lib to build libpowerlink.a
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Fixes:
-http://autobuild.buildroot.net/results/b33/b33008d260c95bedc52bed48f191f76843612ef9/build-end.log
-http://autobuild.buildroot.net/results/c46/c464bdfb8edaaf69d49ade92ef9cc6f45cc73362/build-end.log
-
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/openpowerlink/openpowerlink.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/Config.in      |  3 +++
+ package/tmux/Config.in |  9 +++++++++
+ package/tmux/tmux.mk   | 13 +++++++++++++
+ 3 files changed, 25 insertions(+)
+ create mode 100644 package/tmux/Config.in
+ create mode 100644 package/tmux/tmux.mk
 
-diff --git a/package/openpowerlink/openpowerlink.mk b/package/openpowerlink/openpowerlink.mk
-index 3a60478..0800a05 100644
---- a/package/openpowerlink/openpowerlink.mk
-+++ b/package/openpowerlink/openpowerlink.mk
-@@ -22,6 +22,10 @@ endif
- 
- OPENPOWERLINK_CONF_OPT = -DCMAKE_SYSTEM_PROCESSOR=$(OPENPOWERLINK_ARCH)
- 
-+# There is no shared lib in openpowerlink, 
-+# so force static lib to build libpowerlink.a
-+OPENPOWERLINK_CONF_OPT += -DBUILD_SHARED_LIBS=OFF
+diff --git a/package/Config.in b/package/Config.in
+index 397cc11..fd95673 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -994,6 +994,9 @@ source "package/screen/Config.in"
+ source "package/sudo/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/time/Config.in"
++endif
++source "package/tmux/Config.in"
++if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/which/Config.in"
+ endif
+ source "package/xmlstarlet/Config.in"
+diff --git a/package/tmux/Config.in b/package/tmux/Config.in
+new file mode 100644
+index 0000000..831d119
+--- /dev/null
++++ b/package/tmux/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_TMUX
++	bool "tmux"
++	select BR2_PACKAGE_LIBEVENT
++	select BR2_PACKAGE_NCURSES
++	help
++	  tmux is a terminal multiplexer, it enables a number of terminals
++	  (or windows) to be accessed and controlled from a single terminal.
 +
- ifeq ($(BR2_ENABLE_DEBUG),y)
- OPENPOWERLINK_CONF_OPT += -DCMAKE_BUILD_TYPE=Debug
- else
++	  http://tmux.sourceforge.net/
+diff --git a/package/tmux/tmux.mk b/package/tmux/tmux.mk
+new file mode 100644
+index 0000000..0a10452
+--- /dev/null
++++ b/package/tmux/tmux.mk
+@@ -0,0 +1,13 @@
++###############################################################################
++#
++# tmux
++#
++###############################################################################
++
++TMUX_VERSION = 1.8
++TMUX_SITE = http://downloads.sourceforge.net/tmux
++TMUX_LICENSE = BSD
++TMUX_LICENSE_FILES = COPYING
++TMUX_DEPENDENCIES = libevent ncurses host-pkgconf
++
++$(eval $(autotools-package))
 -- 
-1.8.5.3
+1.8.1.2
