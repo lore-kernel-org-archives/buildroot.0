@@ -1,7 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 24 Jan 2014 20:56:19 +0100
-Subject: [Buildroot] [PATCH 0/3] Add ffmpeg-2 and omxplayer
-Message-ID: <cover.1390593263.git.yann.morin.1998@free.fr>
+Date: Fri, 24 Jan 2014 20:56:21 +0100
+Subject: [Buildroot] [PATCH 1/3] package/rpi-userland: fix fall-out after
+	cmake infra change
+In-Reply-To: <cover.1390593263.git.yann.morin.1998@free.fr>
+References: <cover.1390593263.git.yann.morin.1998@free.fr>
+Message-ID: <f1e089f08a99fa89b5c7facdc5fc320f1e6c4cb4.1390593263.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,45 +13,30 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Hello All!
+Cset 9fa7f2b (pkg-cmake.mk: build shared library when !BR2_PREFER_STATIC_LIB)
+broke rpi-userland.
 
-This series introduces OMXplayer, an optimised video application, specially
-written for the Raspberry Pi, which allows decoding video using hardware
-acceleration.
+Force not building shared libs for rpi-userland, since they are broken.
 
-With OMXplayer, it is posible to decode h264 1080p30 with as low as 20%
-CPU usage (where gst is not able to, and tops at ~40% CPU for 720p30).
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+ package/rpi-userland/rpi-userland.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-OMXplayer can play local files, as well as rtmp streams.
-
-Regards,
-Yann E. MORIN.
-
-
-----------------------------------------------------------------
-Yann E. MORIN (3):
-      package/rpi-userland: fix fall-out after cmake infra change
-      package/ffmpeg2: new package
-      package/omxplayer: new package
-
- package/Config.in                                  |   2 +
- package/ffmpeg2/Config.in                          | 235 ++++++++++++++++++
- package/ffmpeg2/ffmpeg2.mk                         | 274 +++++++++++++++++++++
- package/omxplayer/Config.in                        |  31 +++
- .../omxplayer-0000-clean-up-Makefile.include.patch |  38 +++
- package/omxplayer/omxplayer.mk                     |  44 ++++
- package/rpi-userland/rpi-userland.mk               |   2 +-
- 7 files changed, 625 insertions(+), 1 deletion(-)
- create mode 100644 package/ffmpeg2/Config.in
- create mode 100644 package/ffmpeg2/ffmpeg2.mk
- create mode 100644 package/omxplayer/Config.in
- create mode 100644 package/omxplayer/omxplayer-0000-clean-up-Makefile.include.patch
- create mode 100644 package/omxplayer/omxplayer.mk
-
+diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
+index 35eaf24..223b645 100644
+--- a/package/rpi-userland/rpi-userland.mk
++++ b/package/rpi-userland/rpi-userland.mk
+@@ -9,7 +9,7 @@ RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
+ RPI_USERLAND_LICENSE = BSD-3c
+ RPI_USERLAND_LICENSE_FILES = LICENCE
+ RPI_USERLAND_INSTALL_STAGING = YES
+-RPI_USERLAND_CONF_OPT = -DVMCS_INSTALL_PREFIX=/usr
++RPI_USERLAND_CONF_OPT = -DVMCS_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS=OFF
+ 
+ define RPI_USERLAND_POST_TARGET_CLEANUP
+     rm -Rf $(TARGET_DIR)/usr/src
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.1.2
