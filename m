@@ -1,88 +1,58 @@
-From: =?UTF-8?q?Arnaud=20R=C3=A9billout?= <rebillout@syscom.ch>
-Date: Fri, 24 Jan 2014 16:07:55 +0100
-Subject: [Buildroot] [PATCH] lftp: bump to 4.4.15 and remove cross-compile
-	patch.
-Message-ID: <1390576075-16900-1-git-send-email-rebillout@syscom.ch>
+From: Andrew Ruder <andrew.ruder@elecsyscorp.com>
+Date: Fri, 24 Jan 2014 09:11:19 -0600
+Subject: [Buildroot] [PATCH] gcc 4.8.2: arm fixes for stack corruption
+Message-ID: <20140124151119.GA27232@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The patch has been accepted upstream. See:
-http://www.mail-archive.com/lftp-devel%40uniyar.ac.ru/msg01841.html
-
-Signed-off-by: Arnaud R?billout <rebillout@syscom.ch>
+This seems to especially affect the kernel, but in an
+interrupt-heavy system, this fixes a bug that can cause frequent
+NULL pointer dereference crashes on ARM systems.
 ---
- ..._fallocate-m4-check-for-cross-compilation.patch | 46 ----------------------
- package/lftp/lftp.mk                               |  2 +-
- 2 files changed, 1 insertion(+), 47 deletions(-)
- delete mode 100644 package/lftp/0001-Fix-posix_fallocate-m4-check-for-cross-compilation.patch
+ .../4.8.2/842-gcc-4.8.2-Fix-PR-target-58854.patch  | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+ create mode 100644 package/gcc/4.8.2/842-gcc-4.8.2-Fix-PR-target-58854.patch
 
-diff --git a/package/lftp/0001-Fix-posix_fallocate-m4-check-for-cross-compilation.patch b/package/lftp/0001-Fix-posix_fallocate-m4-check-for-cross-compilation.patch
-deleted file mode 100644
-index 66f8a80..0000000
---- a/package/lftp/0001-Fix-posix_fallocate-m4-check-for-cross-compilation.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--From 450ed0f38159a9944460ecff65793fe6de206df4 Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Arnaud=20R=C3=A9billout?= <rebillout@syscom.ch>
--Date: Mon, 25 Nov 2013 11:03:59 +0100
--Subject: [PATCH] Fix posix_fallocate m4 check for cross-compilation.
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--If we're cross-compiling, we can't test if the code run, we can only
--test that it compiles and links. If it does, assume posix_fallocate
--works, because cross-compilation for AIX or old glibc is unlikely.
--
--Signed-off-by: Arnaud R?billout <rebillout@syscom.ch>
-----
-- m4/lftp.m4 | 15 +++++++++++++++
-- 1 file changed, 15 insertions(+)
--
--diff --git a/m4/lftp.m4 b/m4/lftp.m4
--index 6d7ad9c..b38364d 100644
----- a/m4/lftp.m4
--+++ b/m4/lftp.m4
--@@ -271,6 +271,21 @@ AC_DEFUN([LFTP_POSIX_FALLOCATE_CHECK],[
--        i_cv_posix_fallocate_works=yes
--      ], [
--        i_cv_posix_fallocate_works=no
--+     ], [
--+       dnl * Cross-compilation: we can only test if the code compiles and links.
--+       dnl * If it does, assume that it works, because cross-compilation for AIX or old glibc is unlikely.
--+       AC_CACHE_VAL([i_cv_posix_fallocate_works],[
--+         AC_LINK_IFELSE([
--+           #include <fcntl.h>
--+       	   int main() {
--+             posix_fallocate(0, 0, 0);
--+           }
--+         ], [
--+           i_cv_posix_fallocate_works=yes
--+         ], [
--+           i_cv_posix_fallocate_works=no
--+         ])
--+       ])
--      ])
--    ])
--    if test x$i_cv_posix_fallocate_works = xyes; then
---- 
--1.8.4.4
--
-diff --git a/package/lftp/lftp.mk b/package/lftp/lftp.mk
-index faf9f37..0b00594 100644
---- a/package/lftp/lftp.mk
-+++ b/package/lftp/lftp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LFTP_VERSION = 4.4.10
-+LFTP_VERSION = 4.4.15
- LFTP_SITE    = http://lftp.yar.ru/ftp
- LFTP_LICENSE = GPLv3+
- LFTP_LICENSE_FILES = COPYING
+diff --git a/package/gcc/4.8.2/842-gcc-4.8.2-Fix-PR-target-58854.patch b/package/gcc/4.8.2/842-gcc-4.8.2-Fix-PR-target-58854.patch
+new file mode 100644
+index 0000000..4927930
+--- /dev/null
++++ b/package/gcc/4.8.2/842-gcc-4.8.2-Fix-PR-target-58854.patch
+@@ -0,0 +1,32 @@
++From 9a228f68817f79bbd1d295b8e6fcaed25c47ee8f Mon Sep 17 00:00:00 2001
++From: ramana <ramana@138bc75d-0d04-0410-961f-82ee72b054a4>
++Date: Wed, 30 Oct 2013 10:54:04 +0000
++Subject: [PATCH] Fix PR target/58854
++
++2013-10-30  Ramana Radhakrishnan  <ramana.radhakrishnan@arm.com>
++
++	PR target/58854
++	* config/arm/arm.c (arm_expand_epilogue_apcs_frame): Emit blockage.
++
++
++git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/trunk at 204203 138bc75d-0d04-0410-961f-82ee72b054a4
++---
++ (omitted from this patch) gcc/ChangeLog        |    5 +++++
++ gcc/config/arm/arm.c |    1 +
++ 2 files changed, 6 insertions(+), 0 deletions(-)
++
++diff --git a/gcc/config/arm/arm.c b/gcc/config/arm/arm.c
++index 212a4bc..23dfc0e 100644
++--- a/gcc/config/arm/arm.c
+++++ b/gcc/config/arm/arm.c
++@@ -26547,6 +26547,7 @@ arm_expand_epilogue_apcs_frame (bool really_return)
++   num_regs = bit_count (saved_regs_mask);
++   if ((offsets->outgoing_args != (1 + num_regs)) || cfun->calls_alloca)
++     {
+++      emit_insn (gen_blockage ());
++       /* Unwind the stack to just below the saved registers.  */
++       emit_insn (gen_addsi3 (stack_pointer_rtx,
++                              hard_frame_pointer_rtx,
++-- 
++1.7.1
++
 -- 
-1.8.5.3
+1.8.5.2
