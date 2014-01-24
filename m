@@ -1,58 +1,52 @@
-From: Andrew Ruder <andrew.ruder@elecsyscorp.com>
-Date: Fri, 24 Jan 2014 09:11:19 -0600
-Subject: [Buildroot] [PATCH] gcc 4.8.2: arm fixes for stack corruption
-Message-ID: <20140124151119.GA27232@gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Fri, 24 Jan 2014 16:24:24 +0100
+Subject: [Buildroot] [PATCH] gtest: force static library build
+Message-ID: <1390577064-16525-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This seems to especially affect the kernel, but in an
-interrupt-heavy system, this fixes a bug that can cause frequent
-NULL pointer dereference crashes on ARM systems.
----
- .../4.8.2/842-gcc-4.8.2-Fix-PR-target-58854.patch  | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
- create mode 100644 package/gcc/4.8.2/842-gcc-4.8.2-Fix-PR-target-58854.patch
+While it seems possible to build gtest as a shared library, using it
+in other projects requires to set some specific configuration flags
+in these projects for correctly linking against the shared version
+of the gtest library.
 
-diff --git a/package/gcc/4.8.2/842-gcc-4.8.2-Fix-PR-target-58854.patch b/package/gcc/4.8.2/842-gcc-4.8.2-Fix-PR-target-58854.patch
-new file mode 100644
-index 0000000..4927930
---- /dev/null
-+++ b/package/gcc/4.8.2/842-gcc-4.8.2-Fix-PR-target-58854.patch
-@@ -0,0 +1,32 @@
-+From 9a228f68817f79bbd1d295b8e6fcaed25c47ee8f Mon Sep 17 00:00:00 2001
-+From: ramana <ramana@138bc75d-0d04-0410-961f-82ee72b054a4>
-+Date: Wed, 30 Oct 2013 10:54:04 +0000
-+Subject: [PATCH] Fix PR target/58854
+So, to avoid bothering many projects and keep things as they were so
+far, we just force gtest to be built as a static library.
+
+Fixes:
+  http://autobuild.buildroot.net/results/20cbf90749672607cb277c676a45d2c0c3965fa0/
+  http://autobuild.buildroot.net/results/5c6e58c51b2a14a7f23d296f771a76096b80362a/
+  http://autobuild.buildroot.net/results/bde777d343e9c4884272893d0da3b113dcc75e3a/
+  http://autobuild.buildroot.net/results/20cbf90749672607cb277c676a45d2c0c3965fa0/
+  http://autobuild.buildroot.net/results/89a29d1f597dbc12a6fc8eb079133a84952fc612/
+
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+---
+ package/gtest/gtest.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/package/gtest/gtest.mk b/package/gtest/gtest.mk
+index e661d73..c7b2cf0 100644
+--- a/package/gtest/gtest.mk
++++ b/package/gtest/gtest.mk
+@@ -12,6 +12,15 @@ GTEST_INSTALL_TARGET = NO
+ GTEST_LICENSE = BSD-3c
+ GTEST_LICENSE_FILES = LICENSE
+ 
++# While it is possible to build gtest as shared library, using this gtest shared
++# library requires to set some special configure option in the project using
++# gtest.
++# So, force to build gtest as a static library.
++#
++# For further details, refer to the explaination given in the README file from
++# the gtest sources.
++GTEST_CONF_OPT = -DBUILD_SHARED_LIBS=OFF
 +
-+2013-10-30  Ramana Radhakrishnan  <ramana.radhakrishnan@arm.com>
-+
-+	PR target/58854
-+	* config/arm/arm.c (arm_expand_epilogue_apcs_frame): Emit blockage.
-+
-+
-+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/trunk at 204203 138bc75d-0d04-0410-961f-82ee72b054a4
-+---
-+ (omitted from this patch) gcc/ChangeLog        |    5 +++++
-+ gcc/config/arm/arm.c |    1 +
-+ 2 files changed, 6 insertions(+), 0 deletions(-)
-+
-+diff --git a/gcc/config/arm/arm.c b/gcc/config/arm/arm.c
-+index 212a4bc..23dfc0e 100644
-+--- a/gcc/config/arm/arm.c
-++++ b/gcc/config/arm/arm.c
-+@@ -26547,6 +26547,7 @@ arm_expand_epilogue_apcs_frame (bool really_return)
-+   num_regs = bit_count (saved_regs_mask);
-+   if ((offsets->outgoing_args != (1 + num_regs)) || cfun->calls_alloca)
-+     {
-++      emit_insn (gen_blockage ());
-+       /* Unwind the stack to just below the saved registers.  */
-+       emit_insn (gen_addsi3 (stack_pointer_rtx,
-+                              hard_frame_pointer_rtx,
-+-- 
-+1.7.1
-+
+ define GTEST_EXTRACT_CMDS
+ 	unzip $(DL_DIR)/$(GTEST_SOURCE) -d $(BUILD_DIR)
+ endef
 -- 
-1.8.5.2
+1.8.5.3
