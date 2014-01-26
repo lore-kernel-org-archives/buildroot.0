@@ -1,105 +1,180 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Sun, 26 Jan 2014 22:43:11 +0100
-Subject: [Buildroot] [PATCH] uboot-tools: Allow users to use uboot's
-	sources
-In-Reply-To: <CAGduivwtd5SeEOSi6NNCegk7L7oem0+dF9eqkvoGtYk1_xODVw@mail.gmail.com>
-References: <1390696553-4163-1-git-send-email-maxime.hadjinlian@gmail.com>
- <52E530D5.20405@lucaceresoli.net>
- <CAGduivwtd5SeEOSi6NNCegk7L7oem0+dF9eqkvoGtYk1_xODVw@mail.gmail.com>
-Message-ID: <52E5816F.9080102@lucaceresoli.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 26 Jan 2014 23:08:41 +0100
+Subject: [Buildroot] [PATCH] Rename TAR_OPTIONS to BUILDROOT_TAR_OPTIONS
+	to avoid conflict with GNU tar.
+In-Reply-To: <878uu3pw4z.fsf@spindle.srvr.nix> (nix@esperi.org.uk's message of
+ "Sat, 25 Jan 2014 21:52:12 +0000")
+References: <878uu3pw4z.fsf@spindle.srvr.nix>
+Message-ID: <8738ka1jme.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Maxime,
+>>>>> "Nix" == Nix  <nix@esperi.org.uk> writes:
 
-Maxime Hadjinlian wrote:
-> On Sun, Jan 26, 2014 at 4:59 PM, Luca Ceresoli <luca@lucaceresoli.net> wrote:
->> Hi Maxime,
-> Hi Luca
->>
->>
->> Maxime Hadjinlian wrote:
->>>
->>> If the user has specified a custom U-Boot repository, he may also want
->>> to use it for U-Boot tools.
->>>
->>> This could be usefull in two identified use case:
->>>     - User want the same version for U-Boot tools and U-Boot
->>>     - User has modified U-Boot tools in his U-Boot repository
->>>
->>> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
->>
->>
->> I ACK the idea, but there are a few changes I would make to your patch,
->> see below.
+Hi,
 
-...
+ > GNU tar > 1.13.17 interprets TAR_OPTIONS as an environment variable
+ > containing options to be prepended to the set on the command line.
 
->>> b/package/uboot-tools/uboot-tools.mk
->>> index 398ce8b..367d067 100644
->>> --- a/package/uboot-tools/uboot-tools.mk
->>> +++ b/package/uboot-tools/uboot-tools.mk
->>> @@ -10,6 +10,15 @@ UBOOT_TOOLS_SITE    = ftp://ftp.denx.de/pub/u-boot
->>>    UBOOT_TOOLS_LICENSE = GPLv2+
->>>    UBOOT_TOOLS_LICENSE_FILES = Licenses/gpl-2.0.txt
->>>
->>> +ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_UBOOT_SOURCE),y)
->>> +       UBOOT_TOOLS_VERSION = $(call qstrip,$(BR2_TARGET_UBOOT_VERSION))
->>> +       UBOOT_TOOLS_SOURCE  = $(UBOOT_SOURCE)
->>> +       UBOOT_TOOLS_SITE    = $(UBOOT_SITE)
->>
->>
->> You are overriding the previously-defined options. I find an
->> if/then/else construct much cleaner:
->>
->> ifneq ($(BR2_PACKAGE_UBOOT_TOOLS_UBOOT_SOURCE),y)
->> ...use upstream sources... (current code)
->> else
->> ...use sources for the uboot package...
->> endif
->>
-> I'd like to have a few more opinions on that, after seeing the code in
-> the form if/then/else, I find it awkward as it would be (as far as I
-> know) the only package, where you don't find the SOURCE/SITE variable
-> defined at the top of the file.
-> So I am not sure about this.
+ > This causes considerable trouble here, where it is set to -xf by default,
+ > since -xf causes whatever argument follows to be interpreted as a filename,
+ > even if it is e.g. --strip-components=1.  This tends to cause spurious
+ > "Multiple archive files require '-M' option" errors which are very hard
+ > to track down, since nothing is visibly wrong with the command, and
+ > repeating it outside of make works perfectly well.
 
-Very few packages define their SOURCE/SITE variables conditionally:
-linux, boot/ubot, boot/barebox, maybe a few more. These all are key
-components for every embedded Linux system and are often used in a
-modified form on real products, so they deserve this additional
-flexibility.
+ > Fix by avoiding this risky variable name.
 
-All of them have an ifeq / else ifeq / [else ifeq /...] else / endif
-construct in their .mk files to handle the various possibilities.
-I suggest you take one of them as an example.
+ > Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+ > ---
+ >  Makefile                                           | 2 +-
+ >  package/cvs/cvs.mk                                 | 2 +-
+ >  package/gcc/gcc.mk                                 | 2 +-
+ >  package/lsof/lsof.mk                               | 4 ++--
+ >  package/perl/perl.mk                               | 2 +-
+ >  package/pkg-generic.mk                             | 2 +-
+ >  toolchain/toolchain-external/toolchain-external.mk | 6 +++---
+ >  7 files changed, 10 insertions(+), 10 deletions(-)
 
-Going a step ahead, to be more uniform with these packages, you may use
-a choice construct to allow choosing between two alternatives.
-Example (modified version of the code in barebox.mk):
+ > (Sent directly to the listed maintainer: I'm not subscribed to the
+ > buildroot list yet and it's awfully high volume...)
 
-choice
-         prompt "version"
-         help
-           Select the specific uboot-tools version you want to use
+ > I can't really understand how buildroot works for anyone, given this bug.
+ > I'm sure it must, but, how? Is everyone using a tar <=1.13? Surely not,
+ > it's fourteen years old...
 
-config BR2_PACKAGE_UBOOT_TOOLS_LATEST_VERSION
-         bool "Use a recent upstream version"
+Hmm, I'm certainly not:
 
-config BR2_PACKAGE_UBOOT_TOOLS_USE_UBOOT_VERSION
-         bool "Use the same sources of the uboot package"
+tar --version
+tar (GNU tar) 1.26
+Copyright (C) 2011 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
 
-endchoice
+Written by John Gilmore and Jay Fenlason.
 
-This has the advantage that adding a third possibility would be
-simply a matter of adding another choice, without having to rework
-the whole thing and having to take care of backward compatibility.
 
-But this may be overengineering for the relatively simple uboot-tools
-package.
+But this should only be an issue if TAR_OPTIONS are exported to the
+environment, which it isn't:
+
+git grep export | grep -c TAR_OPTIONS
+0
+
+Do you perhaps have a local patch which exports it?
+
+
+
+ > diff --git a/Makefile b/Makefile
+ > index 9dfb1e0..c66a471 100644
+ > --- a/Makefile
+ > +++ b/Makefile
+ > @@ -299,7 +299,7 @@ KERNEL_ARCH:=$(shell echo "$(ARCH)" | sed -e "s/-.*//" \
+ >  ZCAT:=$(call qstrip,$(BR2_ZCAT))
+ >  BZCAT:=$(call qstrip,$(BR2_BZCAT))
+ >  XZCAT:=$(call qstrip,$(BR2_XZCAT))
+ > -TAR_OPTIONS=$(call qstrip,$(BR2_TAR_OPTIONS)) -xf
+ > +BUILDROOT_TAR_OPTIONS=$(call qstrip,$(BR2_TAR_OPTIONS)) -xf
+ 
+ >  # packages compiled for the host go here
+ >  HOST_DIR:=$(call qstrip,$(BR2_HOST_DIR))
+ > diff --git a/package/cvs/cvs.mk b/package/cvs/cvs.mk
+ > index d2a1033..92d44b9 100644
+ > --- a/package/cvs/cvs.mk
+ > +++ b/package/cvs/cvs.mk
+ > @@ -25,7 +25,7 @@ endif
+ >  CVS_CONF_OPT = $(CVS_CONFIGURE_ARGS)
+ 
+ >  define CVS_BZIP_UNPACK
+ > -	$(BZCAT) $(@D)/cvs-$(CVS_VERSION).tar.bz2 | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+ > +	$(BZCAT) $(@D)/cvs-$(CVS_VERSION).tar.bz2 | tar -C $(BUILD_DIR) $(BUILDROOT_TAR_OPTIONS) -
+ >  	rm -f $(@D)/cvs-$(CVS_VERSION).tar.bz2
+ >  endef
+ 
+ > diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+ > index 236297d..0a8679b 100644
+ > --- a/package/gcc/gcc.mk
+ > +++ b/package/gcc/gcc.mk
+ > @@ -70,7 +70,7 @@ define HOST_GCC_EXTRACT_CMDS
+ >  		--exclude='libgo/*' \
+ >  		--exclude='gcc/testsuite/*' \
+ >  		--exclude='libstdc++-v3/testsuite/*' \
+ > -		$(TAR_OPTIONS) -
+ > +		$(BUILDROOT_TAR_OPTIONS) -
+ >  	mkdir -p $(@D)/libstdc++-v3/testsuite/
+ >  	echo "all:" > $(@D)/libstdc++-v3/testsuite/Makefile.in
+ >  	echo "install:" >> $(@D)/libstdc++-v3/testsuite/Makefile.in
+ > diff --git a/package/lsof/lsof.mk b/package/lsof/lsof.mk
+ > index f4b1b4c..d6c0ec2 100644
+ > --- a/package/lsof/lsof.mk
+ > +++ b/package/lsof/lsof.mk
+ > @@ -42,8 +42,8 @@ endif
+ >  # The .tar.bz2 contains another .tar, which contains the source code.
+ >  define LSOF_EXTRACT_CMDS
+ >          $(call suitable-extractor,$(LSOF_SOURCE)) $(DL_DIR)/$(LSOF_SOURCE) | \
+ > -                $(TAR) -O $(TAR_OPTIONS) - lsof_$(LSOF_VERSION)/lsof_$(LSOF_VERSION)_src.tar | \
+ > -        $(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(LSOF_DIR) $(TAR_OPTIONS) -
+ > +                $(TAR) -O $(BUILDROOT_TAR_OPTIONS) - lsof_$(LSOF_VERSION)/lsof_$(LSOF_VERSION)_src.tar | \
+ > +        $(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(LSOF_DIR) $(BUILDROOT_TAR_OPTIONS) -
+ >  endef
+ 
+ >  define LSOF_CONFIGURE_CMDS
+ > diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+ > index ec94e4f..a6770f2 100644
+ > --- a/package/perl/perl.mk
+ > +++ b/package/perl/perl.mk
+ > @@ -31,7 +31,7 @@ PERL_POST_DOWNLOAD_HOOKS += PERL_CROSS_DOWNLOAD
+ 
+ >  define PERL_CROSS_EXTRACT
+ >  	$(call suitable-extractor,$(PERL_CROSS_SOURCE)) $(DL_DIR)/$(PERL_CROSS_SOURCE) | \
+ > -	$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
+ > +	$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(BUILDROOT_TAR_OPTIONS) -
+ >  endef
+ >  PERL_POST_EXTRACT_HOOKS += PERL_CROSS_EXTRACT
+ 
+ > diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+ > index 1b99c2a..794b2e2 100644
+ > --- a/package/pkg-generic.mk
+ > +++ b/package/pkg-generic.mk
+ > @@ -377,7 +377,7 @@ $(2)_TARGET_DIRCLEAN =		$$($(2)_DIR)/.stamp_dircleaned
+ >  # default extract command
+ >  $(2)_EXTRACT_CMDS ?= \
+ >  	$$(if $$($(2)_SOURCE),$$(INFLATE$$(suffix $$($(2)_SOURCE))) $(DL_DIR)/$$($(2)_SOURCE) | \
+ > -	$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $$($(2)_DIR) $(TAR_OPTIONS) -)
+ > +	$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $$($(2)_DIR) $(BUILDROOT_TAR_OPTIONS) -)
+ 
+ >  # post-steps hooks
+ >  $(2)_POST_DOWNLOAD_HOOKS        ?=
+ > diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+ > index a7bfafc..616bec5 100644
+ > --- a/toolchain/toolchain-external/toolchain-external.mk
+ > +++ b/toolchain/toolchain-external/toolchain-external.mk
+ > @@ -377,16 +377,16 @@ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1)$(BR2_TOOLCHAIN_EXTERNAL_
+ >  define TOOLCHAIN_EXTERNAL_EXTRACT_CMDS
+ >  	mkdir -p $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)
+ >  	$(call suitable-extractor,$(TOOLCHAIN_EXTERNAL_SOURCE)) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE) | \
+ > -		$(TAR) $(TAR_STRIP_COMPONENTS)=3 --hard-dereference -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
+ > +		$(TAR) $(TAR_STRIP_COMPONENTS)=3 --hard-dereference -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(BUILDROOT_TAR_OPTIONS) -
+ >  	$(call suitable-extractor,$(TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS)) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS) | \
+ > -		$(TAR) $(TAR_STRIP_COMPONENTS)=3 --hard-dereference -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
+ > +		$(TAR) $(TAR_STRIP_COMPONENTS)=3 --hard-dereference -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(BUILDROOT_TAR_OPTIONS) -
+ >  endef
+ >  else ifneq ($(TOOLCHAIN_EXTERNAL_SOURCE),)
+ >  # Normal handling of toolchain tarball extraction.
+ >  define TOOLCHAIN_EXTERNAL_EXTRACT_CMDS
+ >  	mkdir -p $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)
+ >  	$(call suitable-extractor,$(TOOLCHAIN_EXTERNAL_SOURCE)) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE) | \
+ > -		$(TAR) $(TAR_STRIP_COMPONENTS)=1 --exclude='usr/lib/locale/*' -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
+ > +		$(TAR) $(TAR_STRIP_COMPONENTS)=1 --exclude='usr/lib/locale/*' -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(BUILDROOT_TAR_OPTIONS) -
+ >  	$(TOOLCHAIN_EXTERNAL_FIXUP_CMDS)
+ >  endef
+ >  endif
+ > -- 
+ > 1.8.5.2.169.ge058798
+
 
 -- 
-Luca
+Bye, Peter Korsgaard
