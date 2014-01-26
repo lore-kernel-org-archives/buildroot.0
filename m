@@ -1,36 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Jan 2014 14:53:42 +0100
-Subject: [Buildroot] [PATCH 1/3] Makefile: use absolute paths to
- BR2_EXTERNAL
-In-Reply-To: <44e6c31931f55e79eec713be1a202f2c170667b7.1390424303.git.yann.morin.1998@free.fr>
-References: <cover.1390424302.git.yann.morin.1998@free.fr>
- <44e6c31931f55e79eec713be1a202f2c170667b7.1390424303.git.yann.morin.1998@free.fr>
-Message-ID: <20140126145342.4c5ccc4e@skate>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 26 Jan 2014 14:56:23 +0100
+Subject: [Buildroot] [PATCH 0/2] linux: do not always depend on host-lzop
+Message-ID: <cover.1390744549.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-On Wed, 22 Jan 2014 21:59:34 +0100, Yann E. MORIN wrote:
+Hello All!
 
-> +is interpreted relative to the main Buildroot source directory, not
-> +the Buildroot output directory. Using relative paths can lead to various
-> +broken setups, and thus is highly discouraged in favour of using
-> +absolute paths.
+Here is a small series that makes Linux not always depend on host-lzop.
 
-In this patch and in patch 3/3, I don't quite agree with the strong
-suggestion to use absolute paths. I personally find the usage of
-absolute paths ugly, and prefer to have in the manual an explanation on
-how the paths are interpreted, so that the users can understand how to
-properly use either relative paths or absolute paths as they prefer.
+Regards,
+Yann E. MORIN.
 
-To me, a tool that strongly suggests to use absolute paths is broken.
 
-Thomas
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      packages infra: add function to get a Kconfig option
+      linux: only depend on host-lzop if needed
+
+ linux/linux.mk       | 6 +++++-
+ package/pkg-utils.mk | 6 ++++++
+ 2 files changed, 11 insertions(+), 1 deletion(-)
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
