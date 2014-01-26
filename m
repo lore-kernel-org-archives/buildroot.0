@@ -1,55 +1,33 @@
-From: Marco Trapanese <marcotrapanese@gmail.com>
-Date: Sun, 26 Jan 2014 13:07:40 +0100
-Subject: [Buildroot] full rebuild and errors
-Message-ID: <52E4FA8C.7060109@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 26 Jan 2014 09:33:13 -0300
+Subject: [Buildroot] [PATCH] linux-headers: bump 3.{10, 12}.x stable versions
+Message-ID: <1390739593-12572-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-I successfully compiled buildroot for Raspberry Pi following this guide:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-https://github.com/albertd/buildroot-rpi
-
-I had a problem with some applications (btw it was: EGL Error : Could 
-not create the egl surface: error = 0x300b) and I read some users were 
-able to solve just rebuilding buildroot.
-Thus, I issued:
-
-make cleanall
-
-as stated in the documentation. But this time I get the following errors:
-
-/home/mark/dev/buildroot-rpi/output/host/usr/bin/ccache /usr/bin/gcc 
--std=gnu99   -O2 -I/home/mark/dev/buildroot-rpi/output/host/usr/include 
--L/home/mark/dev/buildroot-rpi/output/host/lib 
--L/home/mark/dev/buildroot-rpi/output/host/usr/lib 
--Wl,-rpath,/home/mark/dev/buildroot-rpi/output/host/usr/lib -o m4 m4.o 
-builtin.o debug.o eval.o format.o freeze.o input.o macro.o output.o 
-path.o symtab.o ../lib/libm4.a
-m4.o: In function `main':
-m4.c:(.text.startup+0x260): undefined reference to `version_etc'
-m4.c:(.text.startup+0x3ef): undefined reference to 
-`emit_bug_reporting_address'
-collect2: error: ld returned 1 exit status
-make[3]: *** [m4] Error 1
-make[3]: Leaving directory 
-`/home/mark/dev/buildroot-rpi/output/build/host-m4-1.4.16/src'
-make[2]: *** [all-recursive] Error 1
-make[2]: Leaving directory 
-`/home/mark/dev/buildroot-rpi/output/build/host-m4-1.4.16'
-make[1]: *** [all] Error 2
-make[1]: Leaving directory 
-`/home/mark/dev/buildroot-rpi/output/build/host-m4-1.4.16'
-make: *** 
-[/home/mark/dev/buildroot-rpi/output/build/host-m4-1.4.16/.stamp_built] 
-Error 2
-
-
-Google doesn't help me on this.
-Do you have any idea why this happens?
-
-Thanks
-Mark
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 0e4143c..618c928 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -92,9 +92,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
+ 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
+ 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
+-	default "3.10.27"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.28"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+-	default "3.12.8"	if BR2_KERNEL_HEADERS_3_12
++	default "3.12.9"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.13"		if BR2_KERNEL_HEADERS_3_13
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+-- 
+1.8.3.2
