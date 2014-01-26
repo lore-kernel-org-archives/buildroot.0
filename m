@@ -1,33 +1,36 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 26 Jan 2014 09:33:13 -0300
-Subject: [Buildroot] [PATCH] linux-headers: bump 3.{10, 12}.x stable versions
-Message-ID: <1390739593-12572-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 26 Jan 2014 14:53:42 +0100
+Subject: [Buildroot] [PATCH 1/3] Makefile: use absolute paths to
+ BR2_EXTERNAL
+In-Reply-To: <44e6c31931f55e79eec713be1a202f2c170667b7.1390424303.git.yann.morin.1998@free.fr>
+References: <cover.1390424302.git.yann.morin.1998@free.fr>
+ <44e6c31931f55e79eec713be1a202f2c170667b7.1390424303.git.yann.morin.1998@free.fr>
+Message-ID: <20140126145342.4c5ccc4e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Dear Yann E. MORIN,
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 0e4143c..618c928 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -92,9 +92,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
- 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
- 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
--	default "3.10.27"	if BR2_KERNEL_HEADERS_3_10
-+	default "3.10.28"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
--	default "3.12.8"	if BR2_KERNEL_HEADERS_3_12
-+	default "3.12.9"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.13"		if BR2_KERNEL_HEADERS_3_13
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+On Wed, 22 Jan 2014 21:59:34 +0100, Yann E. MORIN wrote:
+
+> +is interpreted relative to the main Buildroot source directory, not
+> +the Buildroot output directory. Using relative paths can lead to various
+> +broken setups, and thus is highly discouraged in favour of using
+> +absolute paths.
+
+In this patch and in patch 3/3, I don't quite agree with the strong
+suggestion to use absolute paths. I personally find the usage of
+absolute paths ugly, and prefer to have in the manual an explanation on
+how the paths are interpreted, so that the users can understand how to
+properly use either relative paths or absolute paths as they prefer.
+
+To me, a tool that strongly suggests to use absolute paths is broken.
+
+Thomas
 -- 
-1.8.3.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
