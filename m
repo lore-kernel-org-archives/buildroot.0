@@ -1,11 +1,13 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 26 Jan 2014 11:28:26 +0100
-Subject: [Buildroot] [PATCH 3/3] package/omxplayer: new package
-In-Reply-To: <CAAXf6LUT5+t=L6CBTM48S8eAK5yKi=e8-JMXaaPnsWzGKU-q4A@mail.gmail.com>
-References: <cover.1390593263.git.yann.morin.1998@free.fr>
- <bba0db27fca5c16bb8903f9197aae390a2c46e01.1390593263.git.yann.morin.1998@free.fr>
- <CAAXf6LUT5+t=L6CBTM48S8eAK5yKi=e8-JMXaaPnsWzGKU-q4A@mail.gmail.com>
-Message-ID: <20140126102825.GA3517@free.fr>
+Date: Sun, 26 Jan 2014 11:30:13 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2014-01-08
+In-Reply-To: <20140126073746.17723e9c@skate>
+References: <20140109073009.A1897100CCB@stock.ovh.net>
+ <20140109191427.GB3713@free.fr> <20140110072938.27628d13@skate>
+ <20140111231717.GD3391@free.fr> <52D4E04B.7020700@mind.be>
+ <20140126073746.17723e9c@skate>
+Message-ID: <20140126103013.GB3517@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,18 +16,20 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On 2014-01-25 21:39 +0100, Thomas De Schampheleire spake thusly:
-> Op 24-jan.-2014 20:56 schreef "Yann E. MORIN" <yann.morin.1998@free.fr>:
-> > +OMXPLAYER_VERSION       = f666a5dfbec36e2af7cd965558ac8643c86277a6
-> > +OMXPLAYER_SITE          = git://github.com/popcornmix/omxplayer.git
+On 2014-01-26 07:37 +0100, Thomas Petazzoni spake thusly:
+> On Tue, 14 Jan 2014 07:59:23 +0100, Arnout Vandecappelle wrote:
+> > > I really don't know what is best to do. I think I'll do the above and
+> > > try to get the patch upstreamed. Let's see what hey think about it.
+> > 
+> >   What should definitely be upstreamable, is to add a cache variable for 
+> > this option. Then we can set the cache variable from buildroot like we do 
+> > for so many other things already.
 > 
-> Any specific reason why you're using the git protocol and not the github
-> helper (https)?
+> Yes, that is usually the right solution for this type of problem. It
+> allows to tell configure that we know what we're doing :-)
 
-The only reason is that I initially wrote this patch before the github
-helper existed, and that I forgot to switch.
-
-Thanks!
+Yes. This has been upstreamed now (albeit slightly differently from the
+patch we carry in Buildroot).
 
 Regards,
 Yann E. MORIN.
