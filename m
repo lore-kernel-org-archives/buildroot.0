@@ -1,36 +1,82 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Jan 2014 20:57:10 +0100
-Subject: [Buildroot] [git commit] linux-headers: bump 3.{10,
-	12}.x stable versions
-Message-ID: <20140126202758.F22ED9C630@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 26 Jan 2014 21:33:07 +0100
+Subject: [Buildroot] [PATCH 1/2] packages infra: add function to get a
+	Kconfig option
+In-Reply-To: <87wqhm1pg3.fsf@dell.be.48ers.dk>
+References: <cover.1390744549.git.yann.morin.1998@free.fr>
+ <b68b4ce8c5017701344c6f32a993de7d3e26802b.1390744549.git.yann.morin.1998@free.fr>
+ <87wqhm1pg3.fsf@dell.be.48ers.dk>
+Message-ID: <20140126203307.GD1752@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=18ed49e4d536dab482847592512113abd76a30e1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Peter, All,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/linux-headers/Config.in.host |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+On 2014-01-26 21:02 +0100, Peter Korsgaard spake thusly:
+>  > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>  > We so far have no mean to get the value from a Kconfig option from the
+>  > .config file of a package (eg. linux, busybox...).
+> 
+>  > Add a new function that returns the unmangled value of an option.
+>  > It expect two arguments:
+>  >   - the Kconfig option name (complete, with leading CONFIG if necessary)
+>  >   - the .config file to get it from
+> 
+>  > Note that, if the Kconfig option is a string, the returned value will
+>  > contain the leading and trailing double-quotes.
+> 
+>  > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>  > ---
+>  >  package/pkg-utils.mk | 6 ++++++
+>  >  1 file changed, 6 insertions(+)
+> 
+>  > diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+>  > index 851575c..2f70acc 100644
+>  > --- a/package/pkg-utils.mk
+>  > +++ b/package/pkg-utils.mk
+>  > @@ -52,6 +52,12 @@ define KCONFIG_DISABLE_OPT
+>  >  	echo "# $(1) is not set" >> $(2)
+>  >  endef
+>  
+>  > +# Note: we do not indent this, since we want to avoid any leading
+>  > +# space or tabs when calling this function
+>  > +define KCONFIG_GET_OPT
+>  > +$(shell sed -e "/\\<$(1)\\>=\\(.*\\)$$/!d; s//\\1/" $(2))
+> 
+> Should this perhaps use $(SED)?
+> 
+> Sorry, I'm probably missing something, but I don't right away see why we
+> don't just use:
+> 
+> $(SED) -n 's/^$(1)=//p' $(2)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 0e4143c..618c928 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -92,9 +92,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
- 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
- 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
--	default "3.10.27"	if BR2_KERNEL_HEADERS_3_10
-+	default "3.10.28"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
--	default "3.12.8"	if BR2_KERNEL_HEADERS_3_12
-+	default "3.12.9"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.13"		if BR2_KERNEL_HEADERS_3_13
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+Oh, I also forgot: we use $(shell ...) because we want to call this from
+inside make conditionals, like I did in the followup patch to check if
+CONFIG_KERNEL_LZO was set or not.
+
+If we do not use $(shell ...), then the expansion of KCONFIG_GET_OPT is
+used, and we'd get something like:
+
+ifeq (sed 'blabla' config-file,y)
+...
+endif
+
+which is not really of any help, is it? ;-)
+
+(Not usre if your question was about use of $(shell ...) or about the
+sed expression itself. I can certinly use your alternate sed expression
+if you prefer, of course.)
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
