@@ -1,7 +1,7 @@
 From: Marco Trapanese <marcotrapanese@gmail.com>
-Date: Sun, 26 Jan 2014 13:07:34 +0100
-Subject: [Buildroot] full rebuild and errors:
-Message-ID: <52E4FA86.7030906@gmail.com>
+Date: Sun, 26 Jan 2014 13:07:40 +0100
+Subject: [Buildroot] full rebuild and errors
+Message-ID: <52E4FA8C.7060109@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
