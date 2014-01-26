@@ -1,25 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 26 Jan 2014 22:04:20 +0100
-Subject: [Buildroot] [PATCH 1/1] gtest: fix shared building
-In-Reply-To: <1390602996-16836-1-git-send-email-kuyurix@gmail.com> ("Marcelo
- =?utf-8?Q?Guti=C3=A9rrez=22's?= message of "Fri, 24 Jan 2014 22:36:36
- +0000")
-References: <1390602996-16836-1-git-send-email-kuyurix@gmail.com>
-Message-ID: <877g9m1mln.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 26 Jan 2014 22:03:24 +0100
+Subject: [Buildroot] [git commit] openpowerlink: force static library build
+Message-ID: <20140126210518.A0A9B9C582@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Marcelo" == Marcelo Guti?rrez <kuyurix@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=a74767181387b168f6370899af964a1678b0a8cf
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > When BR2_PREFER_STATIC_LIB is not selected there is no libgtest.a library.
- > fixes:
- > http://autobuild.buildroot.net/results/0d5/0d54439e7a722680f1988deb035a0236a18fb41c/build-end.log
+There is no shared lib in openpowerlink,
+so force static lib to build libpowerlink.a
 
-Thanks, but I've applied Samuel's patch to simply force static linking
-instead.
+Fixes:
+http://autobuild.buildroot.net/results/b33/b33008d260c95bedc52bed48f191f76843612ef9/build-end.log
+http://autobuild.buildroot.net/results/c46/c464bdfb8edaaf69d49ade92ef9cc6f45cc73362/build-end.log
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/openpowerlink/openpowerlink.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+diff --git a/package/openpowerlink/openpowerlink.mk b/package/openpowerlink/openpowerlink.mk
+index 3a60478..37a06e5 100644
+--- a/package/openpowerlink/openpowerlink.mk
++++ b/package/openpowerlink/openpowerlink.mk
+@@ -22,6 +22,10 @@ endif
+ 
+ OPENPOWERLINK_CONF_OPT = -DCMAKE_SYSTEM_PROCESSOR=$(OPENPOWERLINK_ARCH)
+ 
++# There is no shared lib in openpowerlink,
++# so force static lib to build libpowerlink.a
++OPENPOWERLINK_CONF_OPT += -DBUILD_SHARED_LIBS=OFF
++
+ ifeq ($(BR2_ENABLE_DEBUG),y)
+ OPENPOWERLINK_CONF_OPT += -DCMAKE_BUILD_TYPE=Debug
+ else
