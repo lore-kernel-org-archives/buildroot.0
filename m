@@ -1,82 +1,56 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 26 Jan 2014 21:33:07 +0100
-Subject: [Buildroot] [PATCH 1/2] packages infra: add function to get a
-	Kconfig option
-In-Reply-To: <87wqhm1pg3.fsf@dell.be.48ers.dk>
-References: <cover.1390744549.git.yann.morin.1998@free.fr>
- <b68b4ce8c5017701344c6f32a993de7d3e26802b.1390744549.git.yann.morin.1998@free.fr>
- <87wqhm1pg3.fsf@dell.be.48ers.dk>
-Message-ID: <20140126203307.GD1752@free.fr>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun, 26 Jan 2014 21:35:26 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-01-23
+In-Reply-To: <87vbx9ajnh.fsf@dell.be.48ers.dk>
+References: <20140124073009.DF0461010C8@stock.ovh.net>
+ <87vbx9ajnh.fsf@dell.be.48ers.dk>
+Message-ID: <CAHXCMMLCsuLQZNKdvQ=VcC2_wLm67mF2gWDqRF21HCzq6F1dHQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Peter,
 
-On 2014-01-26 21:02 +0100, Peter Korsgaard spake thusly:
->  > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
->  > We so far have no mean to get the value from a Kconfig option from the
->  > .config file of a package (eg. linux, busybox...).
-> 
->  > Add a new function that returns the unmangled value of an option.
->  > It expect two arguments:
->  >   - the Kconfig option name (complete, with leading CONFIG if necessary)
->  >   - the .config file to get it from
-> 
->  > Note that, if the Kconfig option is a string, the returned value will
->  > contain the leading and trailing double-quotes.
-> 
->  > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->  > ---
->  >  package/pkg-utils.mk | 6 ++++++
->  >  1 file changed, 6 insertions(+)
-> 
->  > diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
->  > index 851575c..2f70acc 100644
->  > --- a/package/pkg-utils.mk
->  > +++ b/package/pkg-utils.mk
->  > @@ -52,6 +52,12 @@ define KCONFIG_DISABLE_OPT
->  >  	echo "# $(1) is not set" >> $(2)
->  >  endef
->  
->  > +# Note: we do not indent this, since we want to avoid any leading
->  > +# space or tabs when calling this function
->  > +define KCONFIG_GET_OPT
->  > +$(shell sed -e "/\\<$(1)\\>=\\(.*\\)$$/!d; s//\\1/" $(2))
-> 
-> Should this perhaps use $(SED)?
-> 
-> Sorry, I'm probably missing something, but I don't right away see why we
-> don't just use:
-> 
-> $(SED) -n 's/^$(1)=//p' $(2)
+2014-01-24 Peter Korsgaard <jacmet@uclibc.org>
 
-Oh, I also forgot: we use $(shell ...) because we want to call this from
-inside make conditionals, like I did in the followup patch to check if
-CONFIG_KERNEL_LZO was set or not.
-
-If we do not use $(shell ...), then the expansion of KCONFIG_GET_OPT is
-used, and we'd get something like:
-
-ifeq (sed 'blabla' config-file,y)
-...
-endif
-
-which is not really of any help, is it? ;-)
-
-(Not usre if your question was about use of $(shell ...) or about the
-sed expression itself. I can certinly use your alternate sed expression
-if you prefer, of course.)
+> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> writes:
+>
+>  > Detail of failures
+>  > ===================
+>
+>  >    powerpc |                    gtest-1.7.0 | NOK |
+> http://autobuild.buildroot.net/results/5c6e58c51b2a14a7f23d296f771a76096b80362a/
+>  >       i686 |                    gtest-1.7.0 | NOK |
+> http://autobuild.buildroot.net/results/bde777d343e9c4884272893d0da3b113dcc75e3a/
+>  >        arm |                    gtest-1.7.0 | NOK |
+> http://autobuild.buildroot.net/results/20cbf90749672607cb277c676a45d2c0c3965fa0/
+>  >     x86_64 |                    gtest-1.7.0 | NOK |
+> http://autobuild.buildroot.net/results/1e610142e72676bd8d13aa8e87829b492c714257/
+>  >       i686 |                    gtest-1.7.0 | NOK |
+> http://autobuild.buildroot.net/results/e5b54b716fb2371014b4f7ac79287bea6d4b03de/
+>  >       i686 |                    gtest-1.7.0 | NOK |
+> http://autobuild.buildroot.net/results/b1e9bae22b3e0b91dccfd034864c4a5c7848f41c/
+>  >   mips64el |                    gtest-1.7.0 | NOK |
+> http://autobuild.buildroot.net/results/89a29d1f597dbc12a6fc8eb079133a84952fc612/
+>  >     mipsel |                    gtest-1.7.0 | NOK |
+> http://autobuild.buildroot.net/results/9f891b201e4e9db4a67868ecadb46bd8e95e9d41/
+>  >     x86_64 |                    gtest-1.7.0 | NOK |
+> http://autobuild.buildroot.net/results/ce02a951d5751a35b7669d46deec0534e7ddf427/
+>
+> It looks like these are likely to be caused by the cmake infrastructure
+> change. Samuel, care to take a look?
+>
+Of course. :)
+Here is the fix: http://patchwork.ozlabs.org/patch/313929/
 
 Regards,
-Yann E. MORIN.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Samuel
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140126/9acff8a4/attachment.html>
