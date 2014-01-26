@@ -1,39 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Jan 2014 23:16:55 +0100
-Subject: [Buildroot] [git commit] poco: fix nios2 fenv build failure
-Message-ID: <20140126222223.B98BA9C650@busybox.osuosl.org>
+Date: Sun, 26 Jan 2014 23:39:07 +0100
+Subject: [Buildroot] [PATCH] Rename TAR_OPTIONS to BUILDROOT_TAR_OPTIONS
+	to avoid conflict with GNU tar.
+In-Reply-To: <87ob2ymkxn.fsf@spindle.srvr.nix> (nix@esperi.org.uk's message of
+ "Sun, 26 Jan 2014 22:34:44 +0000")
+References: <878uu3pw4z.fsf@spindle.srvr.nix>
+ <8738ka1jme.fsf@dell.be.48ers.dk> <87ob2ymkxn.fsf@spindle.srvr.nix>
+Message-ID: <87mwiiz7uc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b392a24adbe18ac9848bcbfbec15d8c5add7affc
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Nix" == Nix  <nix@esperi.org.uk> writes:
 
-Disable FP environment on nios2.
+ > On 26 Jan 2014, Peter Korsgaard verbalised:
+ >> But this should only be an issue if TAR_OPTIONS are exported to the
+ >> environment, which it isn't:
+ >> 
+ >> git grep export | grep -c TAR_OPTIONS
+ >> 0
+ >> 
+ >> Do you perhaps have a local patch which exports it?
 
-Fixes:
-http://autobuild.buildroot.net/results/3ce/3ce9d6dc5c4e8fceebaa461e5085da7f33fda8a1/
+ > Ah, that explains it! I have TAR_OPTIONS set (to --wildcard) in my
+ > /etc/environment, which means it lands in make's environment and causes
+ > make to update the environment variable when the local makefile variable
+ > of the same name is set. Since this export is actually recommended in
+ > tar's NEWS and near the top of appendix A in the tar info docs, I
+ > suspect a good few 'old hands' used to the old wildcarding GNU tar
+ > behaviour might have it set.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/poco/poco.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ > So an alternative (much smaller) patch is to keep the variable name the
+ > same, but explicitly unexport it, to keep the local environment from
+ > torpedoing things like this. (Presumably we never want the local
+ > buildroot TAR_OPTIONS to propagate into the environment like this.)
 
-diff --git a/package/poco/poco.mk b/package/poco/poco.mk
-index 9ee2d61..251fcc1 100644
---- a/package/poco/poco.mk
-+++ b/package/poco/poco.mk
-@@ -34,8 +34,8 @@ ifeq ($(LIBC),uclibc)
- POCO_CONF_OPT += --no-fpenvironment --no-wstring
- endif
- 
--# sh4a is missing FE_DOWNWARD and FE_UPWARD in its fenv.h
--ifeq ($(BR2_sh4a),y)
-+# architectures missing some FE_* in their fenv.h
-+ifeq ($(BR2_sh4a)$(BR2_nios2),y)
- POCO_CONF_OPT += --no-fpenvironment
- endif
- 
+Indeed, and likewise we don't want a user's custom TAR_OPTIONS to affect
+the behaviour of Buildroot, so we should just unexport it like we do for
+E.G. GREP_OPTIONS.
+
+Care to send a patch doing that? Thanks.
+
+-- 
+Bye, Peter Korsgaard 
