@@ -1,32 +1,30 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun, 26 Jan 2014 15:00:47 +0100
-Subject: [Buildroot] [PATCH] libcurl: Add rtmp support
-Message-ID: <1390744847-28910-1-git-send-email-maxime.hadjinlian@gmail.com>
+From: sambuff <samuel.buffet@gmail.com>
+Date: Sun, 26 Jan 2014 06:19:29 -0800 (PST)
+Subject: [Buildroot] python Gobject
+In-Reply-To: <20140124182659.GB30974@pc-eric>
+References: <CAAs3wMgAbEnReJ-XW_QnQ=kAU6G7cwzss7yUMytcmHMRYMsjnw@mail.gmail.com>
+ <20140117113153.GB10730@pc-eric>
+ <CAAs3wMh5xwOK_bEDVM1JMJvw6vYYL2frZYxTc_4ehyLK2sj++g@mail.gmail.com>
+ <20140117154452.GC10730@pc-eric> <1390290077263-60414.post@n4.nabble.com>
+ <20140121173657.GA11605@pc-eric> <1390420630566-60535.post@n4.nabble.com>
+ <20140123170253.GB10856@pc-eric> <20140124182659.GB30974@pc-eric>
+Message-ID: <1390745969170-60687.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Cc: Bernd Kuhls <berndkuhls@hotmail.com>
----
- package/libcurl/libcurl.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Hello Eric,
 
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 8b8c6c0..5285995 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -9,7 +9,8 @@ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
- LIBCURL_SITE = http://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
- 	$(if $(BR2_PACKAGE_ZLIB),zlib) \
--	$(if $(BR2_PACKAGE_LIBIDN),libidn)
-+	$(if $(BR2_PACKAGE_LIBIDN),libidn) \
-+	$(if $(BR2_PACKAGE_RTMPDUMP),rtmpdump)
- LIBCURL_LICENSE = ICS
- LIBCURL_LICENSE_FILES = COPYING
- LIBCURL_INSTALL_STAGING = YES
--- 
-1.8.5.2
+Just FYI I've build your gobject package successfully on a 32-bit host so
+you're last point was totally right.
+
+Thanks
+Sam-
+
+
+
+--
+View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/python-Gobject-tp60199p60687.html
+Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
