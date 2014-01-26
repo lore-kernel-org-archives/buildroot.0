@@ -1,43 +1,55 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 26 Jan 2014 11:30:13 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-01-08
-In-Reply-To: <20140126073746.17723e9c@skate>
-References: <20140109073009.A1897100CCB@stock.ovh.net>
- <20140109191427.GB3713@free.fr> <20140110072938.27628d13@skate>
- <20140111231717.GD3391@free.fr> <52D4E04B.7020700@mind.be>
- <20140126073746.17723e9c@skate>
-Message-ID: <20140126103013.GB3517@free.fr>
+From: Marco Trapanese <marcotrapanese@gmail.com>
+Date: Sun, 26 Jan 2014 13:07:34 +0100
+Subject: [Buildroot] full rebuild and errors:
+Message-ID: <52E4FA86.7030906@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello,
+I successfully compiled buildroot for Raspberry Pi following this guide:
 
-On 2014-01-26 07:37 +0100, Thomas Petazzoni spake thusly:
-> On Tue, 14 Jan 2014 07:59:23 +0100, Arnout Vandecappelle wrote:
-> > > I really don't know what is best to do. I think I'll do the above and
-> > > try to get the patch upstreamed. Let's see what hey think about it.
-> > 
-> >   What should definitely be upstreamable, is to add a cache variable for 
-> > this option. Then we can set the cache variable from buildroot like we do 
-> > for so many other things already.
-> 
-> Yes, that is usually the right solution for this type of problem. It
-> allows to tell configure that we know what we're doing :-)
+https://github.com/albertd/buildroot-rpi
 
-Yes. This has been upstreamed now (albeit slightly differently from the
-patch we carry in Buildroot).
+I had a problem with some applications (btw it was: EGL Error : Could 
+not create the egl surface: error = 0x300b) and I read some users were 
+able to solve just rebuilding buildroot.
+Thus, I issued:
 
-Regards,
-Yann E. MORIN.
+make cleanall
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+as stated in the documentation. But this time I get the following errors:
+
+/home/mark/dev/buildroot-rpi/output/host/usr/bin/ccache /usr/bin/gcc 
+-std=gnu99   -O2 -I/home/mark/dev/buildroot-rpi/output/host/usr/include 
+-L/home/mark/dev/buildroot-rpi/output/host/lib 
+-L/home/mark/dev/buildroot-rpi/output/host/usr/lib 
+-Wl,-rpath,/home/mark/dev/buildroot-rpi/output/host/usr/lib -o m4 m4.o 
+builtin.o debug.o eval.o format.o freeze.o input.o macro.o output.o 
+path.o symtab.o ../lib/libm4.a
+m4.o: In function `main':
+m4.c:(.text.startup+0x260): undefined reference to `version_etc'
+m4.c:(.text.startup+0x3ef): undefined reference to 
+`emit_bug_reporting_address'
+collect2: error: ld returned 1 exit status
+make[3]: *** [m4] Error 1
+make[3]: Leaving directory 
+`/home/mark/dev/buildroot-rpi/output/build/host-m4-1.4.16/src'
+make[2]: *** [all-recursive] Error 1
+make[2]: Leaving directory 
+`/home/mark/dev/buildroot-rpi/output/build/host-m4-1.4.16'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory 
+`/home/mark/dev/buildroot-rpi/output/build/host-m4-1.4.16'
+make: *** 
+[/home/mark/dev/buildroot-rpi/output/build/host-m4-1.4.16/.stamp_built] 
+Error 2
+
+
+Google doesn't help me on this.
+Do you have any idea why this happens?
+
+Thanks
+Mark
