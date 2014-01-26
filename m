@@ -1,54 +1,61 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Jan 2014 21:58:45 +0100
-Subject: [Buildroot] [git commit] gtest: force static library build
-Message-ID: <20140126210518.9718E9C64D@busybox.osuosl.org>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sun, 26 Jan 2014 22:38:56 +0100
+Subject: [Buildroot] [PATCH v4 0/5] Introducing XBMC
+Message-ID: <1390772341-6790-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=34924f620d7151d8f1d4f5561c754cdd63ab10b5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi all,
 
-While it seems possible to build gtest as a shared library, using it
-in other projects requires to set some specific configuration flags
-in these projects for correctly linking against the shared version
-of the gtest library.
+This is a new version (trimmed down), to the series of patch introducing XBMC.
+A few changes has been made to libenca, where I merged the patch from Bernd
+Kuhls (http://patchwork.ozlabs.org/patch/312284/).
+And also XBMC, where I have reworked the init script, and added one for systemd.
 
-So, to avoid bothering many projects and keep things as they were so
-far, we just force gtest to be built as a static library.
+As always, I wait for your reviews and comments !
 
-Fixes:
-  http://autobuild.buildroot.net/results/20cbf90749672607cb277c676a45d2c0c3965fa0/
-  http://autobuild.buildroot.net/results/5c6e58c51b2a14a7f23d296f771a76096b80362a/
-  http://autobuild.buildroot.net/results/bde777d343e9c4884272893d0da3b113dcc75e3a/
-  http://autobuild.buildroot.net/results/20cbf90749672607cb277c676a45d2c0c3965fa0/
-  http://autobuild.buildroot.net/results/89a29d1f597dbc12a6fc8eb079133a84952fc612/
+Maxime Hadjinlian (5):
+  sdl: add host version
+  sdl_image: add host version
+  libenca: new package
+  libass: new package
+  xbmc: new package
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gtest/gtest.mk |    9 +++++++++
- 1 files changed, 9 insertions(+), 0 deletions(-)
+ package/Config.in                                  |   3 +
+ package/libass/Config.in                           |  11 ++
+ package/libass/libass.mk                           |  14 ++
+ package/libenca/Config.in                          |   7 +
+ .../libenca/libenca-000-do-not-build-tools.patch   |  44 +++++
+ .../libenca-001-fix-installation-error.patch       |  44 +++++
+ ...benca-002-remove-prefix-hack-in-configure.patch |  33 ++++
+ package/libenca/libenca-003-iconv.patch            |  15 ++
+ package/libenca/libenca.mk                         |  33 ++++
+ package/sdl/sdl.mk                                 |   2 +
+ package/sdl_image/sdl_image.mk                     |  11 ++
+ package/xbmc/Config.in                             | 202 +++++++++++++++++++++
+ package/xbmc/S50xbmc                               |  41 +++++
+ package/xbmc/xbmc-0001-Fixup-include-path.patch    |  79 ++++++++
+ .../xbmc-0002-RaspberryPi-Default-Settings.patch   | 167 +++++++++++++++++
+ package/xbmc/xbmc.mk                               | 176 ++++++++++++++++++
+ package/xbmc/xbmc.service                          |  12 ++
+ 17 files changed, 894 insertions(+)
+ create mode 100644 package/libass/Config.in
+ create mode 100644 package/libass/libass.mk
+ create mode 100644 package/libenca/Config.in
+ create mode 100644 package/libenca/libenca-000-do-not-build-tools.patch
+ create mode 100644 package/libenca/libenca-001-fix-installation-error.patch
+ create mode 100644 package/libenca/libenca-002-remove-prefix-hack-in-configure.patch
+ create mode 100644 package/libenca/libenca-003-iconv.patch
+ create mode 100644 package/libenca/libenca.mk
+ create mode 100644 package/xbmc/Config.in
+ create mode 100755 package/xbmc/S50xbmc
+ create mode 100644 package/xbmc/xbmc-0001-Fixup-include-path.patch
+ create mode 100644 package/xbmc/xbmc-0002-RaspberryPi-Default-Settings.patch
+ create mode 100644 package/xbmc/xbmc.mk
+ create mode 100644 package/xbmc/xbmc.service
 
-diff --git a/package/gtest/gtest.mk b/package/gtest/gtest.mk
-index e661d73..c7b2cf0 100644
---- a/package/gtest/gtest.mk
-+++ b/package/gtest/gtest.mk
-@@ -12,6 +12,15 @@ GTEST_INSTALL_TARGET = NO
- GTEST_LICENSE = BSD-3c
- GTEST_LICENSE_FILES = LICENSE
- 
-+# While it is possible to build gtest as shared library, using this gtest shared
-+# library requires to set some special configure option in the project using
-+# gtest.
-+# So, force to build gtest as a static library.
-+#
-+# For further details, refer to the explaination given in the README file from
-+# the gtest sources.
-+GTEST_CONF_OPT = -DBUILD_SHARED_LIBS=OFF
-+
- define GTEST_EXTRACT_CMDS
- 	unzip $(DL_DIR)/$(GTEST_SOURCE) -d $(BUILD_DIR)
- endef
+--
+1.8.5.2
