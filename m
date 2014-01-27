@@ -1,88 +1,43 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 27 Jan 2014 18:16:12 +0100
-Subject: [Buildroot] full rebuild and errors
-In-Reply-To: <52E4FA8C.7060109@gmail.com>
-References: <52E4FA8C.7060109@gmail.com>
-Message-ID: <52E6945C.40202@mind.be>
+Date: Mon, 27 Jan 2014 18:18:59 +0100
+Subject: [Buildroot] [PATCH 1/3] Makefile: use absolute paths to
+	BR2_EXTERNAL
+In-Reply-To: <20140126145342.4c5ccc4e@skate>
+References: <cover.1390424302.git.yann.morin.1998@free.fr>
+ <44e6c31931f55e79eec713be1a202f2c170667b7.1390424303.git.yann.morin.1998@free.fr>
+ <20140126145342.4c5ccc4e@skate>
+Message-ID: <52E69503.60101@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 26/01/14 13:07, Marco Trapanese wrote:
-> Hello,
-> I successfully compiled buildroot for Raspberry Pi following this guide:
+On 26/01/14 14:53, Thomas Petazzoni wrote:
+> Dear Yann E. MORIN,
 >
-> https://github.com/albertd/buildroot-rpi
+> On Wed, 22 Jan 2014 21:59:34 +0100, Yann E. MORIN wrote:
 >
-> I had a problem with some applications (btw it was: EGL Error : Could not
-> create the egl surface: error = 0x300b) and I read some users were able
-> to solve just rebuilding buildroot.
-> Thus, I issued:
+>> +is interpreted relative to the main Buildroot source directory, not
+>> +the Buildroot output directory. Using relative paths can lead to various
+>> +broken setups, and thus is highly discouraged in favour of using
+>> +absolute paths.
 >
-> make cleanall
-
-  I guess you mean
-
-make clean all
-
-?
-
+> In this patch and in patch 3/3, I don't quite agree with the strong
+> suggestion to use absolute paths. I personally find the usage of
+> absolute paths ugly, and prefer to have in the manual an explanation on
+> how the paths are interpreted, so that the users can understand how to
+> properly use either relative paths or absolute paths as they prefer.
 >
-> as stated in the documentation. But this time I get the following errors:
->
-> /home/mark/dev/buildroot-rpi/output/host/usr/bin/ccache /usr/bin/gcc
-> -std=gnu99   -O2 -I/home/mark/dev/buildroot-rpi/output/host/usr/include
-> -L/home/mark/dev/buildroot-rpi/output/host/lib
-> -L/home/mark/dev/buildroot-rpi/output/host/usr/lib
-> -Wl,-rpath,/home/mark/dev/buildroot-rpi/output/host/usr/lib -o m4 m4.o
-> builtin.o debug.o eval.o format.o freeze.o input.o macro.o output.o
-> path.o symtab.o ../lib/libm4.a
-> m4.o: In function `main':
-> m4.c:(.text.startup+0x260): undefined reference to `version_etc'
-> m4.c:(.text.startup+0x3ef): undefined reference to
-> `emit_bug_reporting_address'
+> To me, a tool that strongly suggests to use absolute paths is broken.
 
-  This smells like it could be a ccache issue. Is it possible that you 
-had a major upgrade to your compiler since the first time you made a build?
++1
 
-  Can you try with
-
-make clean all BR2_CCACHE=
-
-(or just edit your config to disable ccache).
-
+  I have never used anything except relative paths for O= (and I use O= 
+all the time :-).
 
   Regards,
   Arnout
-
-> collect2: error: ld returned 1 exit status
-> make[3]: *** [m4] Error 1
-> make[3]: Leaving directory
-> `/home/mark/dev/buildroot-rpi/output/build/host-m4-1.4.16/src'
-> make[2]: *** [all-recursive] Error 1
-> make[2]: Leaving directory
-> `/home/mark/dev/buildroot-rpi/output/build/host-m4-1.4.16'
-> make[1]: *** [all] Error 2
-> make[1]: Leaving directory
-> `/home/mark/dev/buildroot-rpi/output/build/host-m4-1.4.16'
-> make: ***
-> [/home/mark/dev/buildroot-rpi/output/build/host-m4-1.4.16/.stamp_built]
-> Error 2
->
->
-> Google doesn't help me on this.
-> Do you have any idea why this happens?
->
-> Thanks
-> Mark
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
 
 
 -- 
