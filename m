@@ -1,44 +1,30 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 27 Jan 2014 23:23:34 +0100
-Subject: [Buildroot] i686-buildroot-linux-gnu-as  does not work
-In-Reply-To: <1848702296.4768001.1390826907232.JavaMail.root@openwide.fr>
-References: <1848702296.4768001.1390826907232.JavaMail.root@openwide.fr>
-Message-ID: <52E6DC66.6040105@mind.be>
+From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
+Date: Mon, 27 Jan 2014 23:23:53 +0100
+Subject: [Buildroot] [PATCH 1/1] Prefer 'command -v' over 'which' (for
+	portability)
+In-Reply-To: <CAEYzJUGtztOs38E_L0kbQWfLuA+NQ0Etvfq=9N_pKT6E15O+YQ@mail.gmail.com>
+References: <1390659116-18865-1-git-send-email-bjorn.forsman@gmail.com>
+ <52E608A0.3000305@mind.be>
+ <CAEYzJUGtztOs38E_L0kbQWfLuA+NQ0Etvfq=9N_pKT6E15O+YQ@mail.gmail.com>
+Message-ID: <CAEYzJUH462gRUtsUxghQfwgq986NcfD8nkQ-TQggtB2dBEOHfQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 27/01/14 13:48, Romain Naour wrote:
-> I meant that usually in buildroot, Makefile's variables are overwritten in foo.mk
+On 27 January 2014 21:13, Bj?rn Forsman <bjorn.forsman@gmail.com> wrote:
+> On 27 January 2014 08:20, Arnout Vandecappelle <arnout@mind.be> wrote:
+> [...]
+>>  There are also instances of which in manual.mk and toolchain-external.mk.
 >
-> I removed my patch and added AS="$(TARGET_CC) -c" in infozip.mk
+> Oh, I missed those. Thanks.
 >
-> $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) AS="$(TARGET_CC) -c" -f unix/Makefile generic
+>>  With those removed, I wonder if it is even necessary to have which
+>> installed at all? Could you test that with a largish config?
 >
-> infozip compiles fine by doing that.
+> Testing a "raspberrypi_defconfig" build now without any "which"
+> (removed the check for "which" check in dependencies.sh too).
 
-  Actually there's a deeper cause I'm afraid...
-
-  The make command calls unix/configure to find out some things about the 
-platform, but the configure script sets CPP to /usr/bin/cpp or /lib/cpp 
-if either of these exist. But those host tools obviously have the wrong 
-predefined symbols, so the configure script will test if it is possible 
-to use assembly for the host, not for the target...
-
-  I think there are two possible "right" solutions:
-
-1. fix unix/configure;
-2. bypass unix/configure by using the generic_gcc target instead.
-
-  Regards,
-  Arnout
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+"make raspberrypi_defconfig && make" works (build completed) with no
+"which" at all.
