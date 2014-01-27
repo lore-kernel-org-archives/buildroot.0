@@ -1,104 +1,33 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 27 Jan 2014 18:45:59 +0100
-Subject: [Buildroot] [PATCH] uboot-tools: Allow users to use uboot's
-	sources
-In-Reply-To: <1390696553-4163-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1390696553-4163-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <52E69B57.9090103@mind.be>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 27 Jan 2014 22:45:18 +0100
+Subject: [Buildroot] [PATCH] lvm2: fix static building when
+	BR2_PREFER_STATIC_LIB is used
+In-Reply-To: <1390207114-2808-1-git-send-email-fabio.porcedda@gmail.com>
+ (Fabio Porcedda's message of "Mon, 20 Jan 2014 09:38:34 +0100")
+References: <1390207114-2808-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <8761p5nlox.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 26/01/14 01:35, Maxime Hadjinlian wrote:
-> If the user has specified a custom U-Boot repository, he may also want
-> to use it for U-Boot tools.
->
-> This could be usefull in two identified use case:
->    - User want the same version for U-Boot tools and U-Boot
->    - User has modified U-Boot tools in his U-Boot repository
->
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> ---
->   package/uboot-tools/Config.in      | 10 ++++++++++
->   package/uboot-tools/uboot-tools.mk |  9 +++++++++
->   2 files changed, 19 insertions(+)
->
-> diff --git a/package/uboot-tools/Config.in b/package/uboot-tools/Config.in
-> index 7c8f17c..3742b0e 100644
-> --- a/package/uboot-tools/Config.in
-> +++ b/package/uboot-tools/Config.in
-> @@ -7,6 +7,16 @@ config BR2_PACKAGE_UBOOT_TOOLS
->
->   if BR2_PACKAGE_UBOOT_TOOLS
->
-> +if BR2_TARGET_UBOOT
-> +
-> +config BR2_PACKAGE_UBOOT_TOOLS_UBOOT_SOURCE
-> +	bool "Use the same repository as U-Boot ?"
-> +	help
-> +	  Select this to use the same repository specified for U-Boot. Otherwise,
-> +	  the upstream sources will be used.
+>>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
 
-  As I explain in a separate mail, I think this option is unnecessary.
+ > To fix static building:
+ > - Add "--enable-static_link" to the configure options.
+ > - Because the shared executables don't build with
+ >   BR2_PREFER_STATIC_LIB add a patch to disable it.
 
-> +
-> +endif
-> +
->   config BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE
->   	bool "mkimage"
->   	help
-> diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-> index 398ce8b..367d067 100644
-> --- a/package/uboot-tools/uboot-tools.mk
-> +++ b/package/uboot-tools/uboot-tools.mk
-> @@ -10,6 +10,15 @@ UBOOT_TOOLS_SITE    = ftp://ftp.denx.de/pub/u-boot
->   UBOOT_TOOLS_LICENSE = GPLv2+
->   UBOOT_TOOLS_LICENSE_FILES = Licenses/gpl-2.0.txt
->
-> +ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_UBOOT_SOURCE),y)
-> +	UBOOT_TOOLS_VERSION = $(call qstrip,$(BR2_TARGET_UBOOT_VERSION))
-> +	UBOOT_TOOLS_SOURCE  = $(UBOOT_SOURCE)
-> +	UBOOT_TOOLS_SITE    = $(UBOOT_SITE)
-> +ifeq ($(UBOOT_SITE_METHOD),)
-> +	UBOOT_TOOL_SITE_METHOD = $(UBOOT_SITE_METHOD)
-> +endif
+ > Fixes:
+ > http://autobuild.buildroot.net/results/b0b/b0b386969459dda9c294f1ccb4927ca225fa6bdd/
 
-  I think UBOOT_LICENSE and UBOOT_LICENSE_FILES should also be taken 
-over. Especially the LICENSE_FILES (i.e. empty), otherwise legal-info 
-will break.
+Thanks. Has this patch been submitted upstream?
 
-
-  Does this actually work if it doesn't come from an official tarball? I 
-think the UBOOT_TOOLS_SOURCE variable will evaluate to empty at the time 
-it is ifndef'd in pkg-generic.mk, so it will be set to the default 
-<pkg>-<version>.tar.gz. So anything that doesn't happen to be in this 
-format (e.g. a custom tarball) will not work AFAICS. This is probably 
-also the reason why you use BR2_TARGET_UBOOT_VERSION instead of simply 
-UBOOT_VERSION.
-
-  In other words, something like this isn't reliable, because it depends 
-on the order of inclusion of the .mk files. I think this is actually a 
-problem with the buildroot infrastructure: ideally, it should _not_ 
-depend on the order of inclusion.
-
-
-  Regards,
-  Arnout
-
-> +endif
-> +
->   define UBOOT_TOOLS_BUILD_CMDS
->   	$(MAKE) -C $(@D) 			\
->   		HOSTCC="$(TARGET_CC)"		\
->
+ > Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+ > ---
+ >  ...le-static_link-disable-building-of-shared.patch | 75 ++++++++++++++++++++++
 
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Bye, Peter Korsgaard
