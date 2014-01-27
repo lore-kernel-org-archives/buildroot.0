@@ -1,32 +1,44 @@
-From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Mon, 27 Jan 2014 15:51:46 -0600
-Subject: [Buildroot] [PATCH v2] gcc: change to tagged release
-In-Reply-To: <1390859507-31670-1-git-send-email-spenser@gillilanding.com>
-References: <1390859507-31670-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <1390859507-31670-10-git-send-email-spenser@gillilanding.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 27 Jan 2014 23:23:34 +0100
+Subject: [Buildroot] i686-buildroot-linux-gnu-as  does not work
+In-Reply-To: <1848702296.4768001.1390826907232.JavaMail.root@openwide.fr>
+References: <1848702296.4768001.1390826907232.JavaMail.root@openwide.fr>
+Message-ID: <52E6DC66.6040105@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
----
- package/gcc/gcc.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 27/01/14 13:48, Romain Naour wrote:
+> I meant that usually in buildroot, Makefile's variables are overwritten in foo.mk
+>
+> I removed my patch and added AS="$(TARGET_CC) -c" in infozip.mk
+>
+> $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) AS="$(TARGET_CC) -c" -f unix/Makefile generic
+>
+> infozip compiles fine by doing that.
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index dd99604..427f9b3 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -24,7 +24,7 @@ GCC_VERSION = 7466697995233cc3aab5b9427bf843e3c7fabd80
- GCC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,gcc,$(GCC_VERSION))
- GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
- else ifeq ($(findstring git,$(GCC_VERSION))$(BR2_microblaze),gity)
--GCC_VERSION = b93bb009e021aba64dd4b8cdb0bbc5a176c55543
-+GCC_VERSION = xsdk_2013.4
- GCC_SITE = $(call github,Xilinx,gcc,$(GCC_VERSION))
- GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
- else
+  Actually there's a deeper cause I'm afraid...
+
+  The make command calls unix/configure to find out some things about the 
+platform, but the configure script sets CPP to /usr/bin/cpp or /lib/cpp 
+if either of these exist. But those host tools obviously have the wrong 
+predefined symbols, so the configure script will test if it is possible 
+to use assembly for the host, not for the target...
+
+  I think there are two possible "right" solutions:
+
+1. fix unix/configure;
+2. bypass unix/configure by using the generic_gcc target instead.
+
+  Regards,
+  Arnout
+
 -- 
-1.8.3.2
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
