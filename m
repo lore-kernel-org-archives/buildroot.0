@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Jan 2014 21:34:36 +0100
-Subject: [Buildroot] [PATCH v2 0/6] PATH cleanup
-In-Reply-To: <1390074102-15686-1-git-send-email-s.martin49@gmail.com>
+Date: Mon, 27 Jan 2014 21:35:57 +0100
+Subject: [Buildroot] [PATCH v2 3/6] *.mk: replace (TARGET|HOST)_PATH by
+ BR2_PATH
+In-Reply-To: <1390074102-15686-2-git-send-email-s.martin49@gmail.com>
 References: <1390074102-15686-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <20140127213436.5b9164d8@skate>
+ <1390074102-15686-2-git-send-email-s.martin49@gmail.com>
+Message-ID: <20140127213557.23be21c9@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +14,18 @@ To: buildroot@busybox.net
 
 Dear Samuel Martin,
 
-On Sat, 18 Jan 2014 20:41:39 +0100, Samuel Martin wrote:
+On Sat, 18 Jan 2014 20:41:40 +0100, Samuel Martin wrote:
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-> Note that I've re-posted the following patches because they are unchanged
-> and still apply properly on master:
+Please give a proper commit log for this patch, as well as for PATCH
+5/6.
 
-Please always post complete patch series, even if some of the patches
-haven't changed. It's very confusing to receive partial patch series,
-and it also makes things confusing to handle in patchwork.
+I have already asked multiple times to do this, and you continue to
+send patches without a proper commit log. A good rule of thumb is that
+*all* commits should always have a non-empty commit log. The commit
+title is very often insufficient to explain *why* the commit is made.
 
-Thanks!
+Thanks,
 
 Thomas
 -- 
