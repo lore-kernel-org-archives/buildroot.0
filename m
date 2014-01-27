@@ -1,60 +1,68 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Jan 2014 09:17:36 +0100
-Subject: [Buildroot] [git commit] gcc 4.8.2: arm fixes for stack corruption
-Message-ID: <20140127084947.E59669C16F@busybox.osuosl.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 27 Jan 2014 10:19:04 +0100
+Subject: [Buildroot] [PATCH 1/1] Prefer 'command -v' over 'which' (for
+	portability)
+In-Reply-To: <1390659116-18865-1-git-send-email-bjorn.forsman@gmail.com>
+References: <1390659116-18865-1-git-send-email-bjorn.forsman@gmail.com>
+Message-ID: <CAHXCMMKE-WDNCTQ82uuEM5n=t4Ua=qTDTTaBxQ7=wVgiBejd0w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c443c2be1768ebbdcb76c55d0a08fd7c983488c8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Bj?rn, all,
 
-This seems to especially affect the kernel, but in an
-interrupt-heavy system, this fixes a bug that can cause frequent
-NULL pointer dereference crashes on ARM systems.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../4.8.2/842-gcc-4.8.2-Fix-PR-target-58854.patch  |   32 ++++++++++++++++++++
- 1 files changed, 32 insertions(+), 0 deletions(-)
+2014-01-25 Bj?rn Forsman <bjorn.forsman@gmail.com>
 
-diff --git a/package/gcc/4.8.2/842-gcc-4.8.2-Fix-PR-target-58854.patch b/package/gcc/4.8.2/842-gcc-4.8.2-Fix-PR-target-58854.patch
-new file mode 100644
-index 0000000..4927930
---- /dev/null
-+++ b/package/gcc/4.8.2/842-gcc-4.8.2-Fix-PR-target-58854.patch
-@@ -0,0 +1,32 @@
-+From 9a228f68817f79bbd1d295b8e6fcaed25c47ee8f Mon Sep 17 00:00:00 2001
-+From: ramana <ramana@138bc75d-0d04-0410-961f-82ee72b054a4>
-+Date: Wed, 30 Oct 2013 10:54:04 +0000
-+Subject: [PATCH] Fix PR target/58854
-+
-+2013-10-30  Ramana Radhakrishnan  <ramana.radhakrishnan@arm.com>
-+
-+	PR target/58854
-+	* config/arm/arm.c (arm_expand_epilogue_apcs_frame): Emit blockage.
-+
-+
-+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/trunk at 204203 138bc75d-0d04-0410-961f-82ee72b054a4
-+---
-+ (omitted from this patch) gcc/ChangeLog        |    5 +++++
-+ gcc/config/arm/arm.c |    1 +
-+ 2 files changed, 6 insertions(+), 0 deletions(-)
-+
-+diff --git a/gcc/config/arm/arm.c b/gcc/config/arm/arm.c
-+index 212a4bc..23dfc0e 100644
-+--- a/gcc/config/arm/arm.c
-++++ b/gcc/config/arm/arm.c
-+@@ -26547,6 +26547,7 @@ arm_expand_epilogue_apcs_frame (bool really_return)
-+   num_regs = bit_count (saved_regs_mask);
-+   if ((offsets->outgoing_args != (1 + num_regs)) || cfun->calls_alloca)
-+     {
-++      emit_insn (gen_blockage ());
-+       /* Unwind the stack to just below the saved registers.  */
-+       emit_insn (gen_addsi3 (stack_pointer_rtx,
-+                              hard_frame_pointer_rtx,
-+-- 
-+1.7.1
-+
+> 'command -v' is defined by POSIX (and is available "everywhere"),
+> 'which' is not.
+>
+> This is improves user experience when 'which' isn't installed so that
+> there won't be error messages about missing 'which' *before* the
+> Buildroot dependency check is run.
+>
+> Current behaviour:
+>
+>   $ make
+>   /bin/sh: which: command not found
+>   /bin/sh: which: command not found
+>   /bin/sh: which: command not found
+>   /bin/sh: which: command not found
+>   /bin/sh: which: command not found
+>   /bin/sh: which: command not found
+>   /bin/sh: which: command not found
+>   /bin/sh: which: command not found
+>   /bin/sh: which: command not found
+>   /bin/sh: which: command not found
+>   /bin/sh: which: command not found
+>   /bin/sh: which: command not found
+>   /bin/sh: which: command not found
+>   /bin/sh: which: command not found
+>   /bin/sh: which: command not found
+>   /bin/sh: which: command not found
+>   support/dependencies/check-host-tar.sh: line 5: which: command not found
+>   support/dependencies/check-host-tar.sh: line 7: which: command not found
+>   /home/bfo/buildroot/support/dependencies/dependencies.sh: line 56:
+>   which: command not found
+>
+>   You must install 'which' on your build machine
+>   make: *** [core-dependencies] Error 1
+>
+
+"command -v" seems not playing very well with aliases:
+
+$ command -v make
+alias make='~/.config/ctafconf/bin/colorwarper make'
+$ which make
+/usr/bin/make
+
+
+Regards,
+
+-- 
+Samuel
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140127/51ea7d8c/attachment.html>
