@@ -1,42 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 27 Jan 2014 15:26:21 +0100
-Subject: [Buildroot] [PATCH] tcpreplay: cross-compile with tcpdump
-	support
-In-Reply-To: <CAFOYHZA-wWx2ET2ibXNukvVX0rrsnK85H7+X+YR9oD=0WqNm1A@mail.gmail.com>
- (Chris Packham's message of "Fri, 24 Jan 2014 11:47:46 +1300")
-References: <87txcvb13p.fsf@dell.be.48ers.dk>
- <1390468034-7430-1-git-send-email-judge.packham@gmail.com>
- <87ppnjaqam.fsf@dell.be.48ers.dk> <52E176D9.6040101@barkynet.com>
- <87zjmm9yhp.fsf@dell.be.48ers.dk>
- <CAFOYHZA-wWx2ET2ibXNukvVX0rrsnK85H7+X+YR9oD=0WqNm1A@mail.gmail.com>
-Message-ID: <8761p5zek2.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 27 Jan 2014 17:00:22 +0100
+Subject: [Buildroot] [git commit] rtmpdump: fix CFLAGS/LDFLAGS
+Message-ID: <20140127161129.636E59C4DE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Chris" == Chris Packham <judge.packham@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=8e467ce2a7d305e30454aa60fac75ed1b026eee3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+The rtmpdump makefile looks at XCFLAGS/XLDFLAGS for additional flags,
+so use those instead of completely overriding the flags.
 
- >> > So i think this patch will work.
- >> 
- >> Ups, you're right - Sorry.
- >> 
- >> Committed patch, thanks.
- >> 
+Fixes http://autobuild.buildroot.net/results/190/1902a6613e5fc9656842fbcbd5731ac871d7ef59/
 
- > Thanks. I was about to say the same thing.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/rtmpdump/rtmpdump.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
- > On the build error front are we concerned about the failures? I
- > haven't heard anything from upstream yet. We probably want to move to
- > tcpreplay 4.0.2 before the buildroot 2014.02 release.
-
-Yes, I got tired of the autobuilder issues, so I've added your patch
-from the pull request.
-
-A patch to bump the version would be good as well, thank.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/rtmpdump/rtmpdump.mk b/package/rtmpdump/rtmpdump.mk
+index 81fb83f..7ef9ff4 100644
+--- a/package/rtmpdump/rtmpdump.mk
++++ b/package/rtmpdump/rtmpdump.mk
+@@ -33,8 +33,8 @@ endif
+ define RTMPDUMP_BUILD_CMDS
+ 	$(MAKE) CRYPTO=$(RTMPDUMP_CRYPTO) \
+ 		prefix=/usr \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		CFLAGS="$(RTMPDUMP_CFLAGS)" \
++		XCFLAGS="$(RTMPDUMP_CFLAGS)" \
++		XLDFLAGS="$(TARGET_CFLAGS)" \
+ 		CROSS_COMPILE="$(TARGET_CROSS)" \
+ 		-C $(@D)/librtmp
+ endef
