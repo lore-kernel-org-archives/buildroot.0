@@ -1,51 +1,41 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 27 Jan 2014 09:10:46 +0100
-Subject: [Buildroot] [PATCH 1/2] package/ffmpeg2: new package
-In-Reply-To: <CAAXf6LXbFyZg57qNevJG6_0MWRvtr0msenSOHT-7uv0rXdCcLA@mail.gmail.com>
-References: <cover.1390242867.git.yann.morin.1998@free.fr>
- <d4f3847e403c1e5c4e8733f75bbfccce6e0b4975.1390242867.git.yann.morin.1998@free.fr>
- <el80raxhff.ln2@ID-313208.user.individual.net>
- <CAAXf6LXbFyZg57qNevJG6_0MWRvtr0msenSOHT-7uv0rXdCcLA@mail.gmail.com>
-Message-ID: <CAAXf6LVcjdkZdGjecXGXxFmV7iWogd_DWOJjB_sZLHRfCpLnug@mail.gmail.com>
+Date: Mon, 27 Jan 2014 09:11:19 +0100
+Subject: [Buildroot] Patchwork oldest patches cleanup #4 (deadline
+	January 5)
+In-Reply-To: <CAKu+J91ABSiwc7onQf1-KCPH14-9s+Frqorm0mMaJkwpW5pkNg@mail.gmail.com>
+References: <CAAXf6LWFAfs_i_NjBbD3RZ=Y0RDKftzwj-_8xKuqyYA=69PNsw@mail.gmail.com>
+ <CAAXf6LVVi6d=xRjsqW8eSMAf1CpKyU-qUTQ2dbfCPU=EF__jcA@mail.gmail.com>
+ <20140106130503.2df2a9ef@skate>
+ <CAAXf6LUnqAYQZoQ9-npV0nyDezec__sfnZrvYJY0PouNujE3HQ@mail.gmail.com>
+ <CAKu+J9340tMY2TfLwfJdh8Et=5ASJgxf4B4n_MYW0Z8u+yTbZg@mail.gmail.com>
+ <CAAXf6LXHSES8Xv5PP6fAL5d9rGZWV2MFwe6MoGQsyj4aZx0ybw@mail.gmail.com>
+ <CAAXf6LXEKQP07Sfxd+7kJrw74uM94GR_WTF5_zOezus-9kcm7Q@mail.gmail.com>
+ <CAKu+J91ABSiwc7onQf1-KCPH14-9s+Frqorm0mMaJkwpW5pkNg@mail.gmail.com>
+Message-ID: <CAAXf6LXFrda7_PbA==_uoC5hi4wYrD5WET5Tk8HTeNdXk=tY=g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd,
+Hi Bogdan,
 
-On Mon, Jan 20, 2014 at 9:25 PM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> Hi Bernd,
+On Sat, Jan 25, 2014 at 12:50 PM, Bogdan Radulescu <bogdan@nimblex.net> wrote:
+> Hello guys,
 >
-> On Mon, Jan 20, 2014 at 8:05 PM, Bernd Kuhls <berndkuhls@hotmail.com> wrote:
-> [..]
->>
->> this is not true anymore:
->>
->> gst-ffmpeg: Use internal libav instead of external ffmpeg:
->> http://git.buildroot.net/buildroot/commit/?id=
->> 6ea49a23df3fa950e253bf704188e87a583a8ba4
+> Unfortunately I am not using buildroot at the moment and it would probably
+> be a while until I would be able to test and rebase this.
+> It would be great if you could have a look at my old patches and see what
+> can be reused from it.
 >
->
-> In fact, there is another patch in patchwork by Bogdan Radulescu that
-> removes gst-ffmpeg entirely in favor of gst-libav:
-> http://patchwork.ozlabs.org/patch/207431/
->
-> The conclusion from patchwork cleanup session #4 was that this patch
-> is still relevant. It seems that your patch (that has been included in
-> buildroot already) addresses the same problem, but in a different way.
->
-> It would be great if you and Bogdan could review the patch mentioned
-> above in the light of the current buildroot version, and assess which
-> parts of this patch still need to be applied, if any. For example, the
-> patch removes gst-dsp and gst-omapfb from gstreamer, but that was for
-> gstreamer1 and this is already addressed in current buildroot.
+> What was wrong with http://patchwork.ozlabs.org/patch/207431/ ?
 
-Bogdan indicated that he does not have time shortly to look into the
-differences with his patch.
-Could you have a look maybe?
 
-Thanks,
+I don't think it's a question of what would have been wrong with that patch.
+It's just that another developer submitted a different patch,
+seemingly addressing the same problem, and probably not realizing that
+a year back you already wrote a patch that was still sitting in
+patchwork.
+
+Best regards,
 Thomas
