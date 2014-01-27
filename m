@@ -1,67 +1,79 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 27 Jan 2014 08:20:00 +0100
-Subject: [Buildroot] [PATCH 1/1] Prefer 'command -v' over 'which' (for
- portability)
-In-Reply-To: <1390659116-18865-1-git-send-email-bjorn.forsman@gmail.com>
-References: <1390659116-18865-1-git-send-email-bjorn.forsman@gmail.com>
-Message-ID: <52E608A0.3000305@mind.be>
+Date: Mon, 27 Jan 2014 07:53:59 +0100
+Subject: [Buildroot] Post build script issue
+In-Reply-To: <CAHKzcEOSork9JxSZWsef6m1wmPrZ2z1jEQqaig=LFkysgzqvNg@mail.gmail.com>
+References: <CAHKzcEOSork9JxSZWsef6m1wmPrZ2z1jEQqaig=LFkysgzqvNg@mail.gmail.com>
+Message-ID: <52E60287.7020305@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 25/01/14 15:11, Bj?rn Forsman wrote:
-> 'command -v' is defined by POSIX (and is available "everywhere"),
-> 'which' is not.
+On 23/01/14 09:23, Waldemar Rymarkiewicz wrote:
+> Hi,
 >
-> This is improves user experience when 'which' isn't installed so that
-> there won't be error messages about missing 'which'*before*  the
-> Buildroot dependency check is run.
+> Recently, I've tried to use post-script feature and found an issue,
 >
-> Current behaviour:
+> I created foo.sh with 755 mode and configured buildroot to use this
+> post-script. However, make failed with the message:
 >
->    $ make
->    /bin/sh: which: command not found
->    /bin/sh: which: command not found
->    /bin/sh: which: command not found
->    /bin/sh: which: command not found
->    /bin/sh: which: command not found
->    /bin/sh: which: command not found
->    /bin/sh: which: command not found
->    /bin/sh: which: command not found
->    /bin/sh: which: command not found
->    /bin/sh: which: command not found
->    /bin/sh: which: command not found
->    /bin/sh: which: command not found
->    /bin/sh: which: command not found
->    /bin/sh: which: command not found
->    /bin/sh: which: command not found
->    /bin/sh: which: command not found
->    support/dependencies/check-host-tar.sh: line 5: which: command not found
->    support/dependencies/check-host-tar.sh: line 7: which: command not found
->    /home/bfo/buildroot/support/dependencies/dependencies.sh: line 56:
->    which: command not found
+>  >>>   Executing post-image script foo.sh
+> /bin/bash: foo.sh: command not found
 >
->    You must install 'which' on your build machine
->    make: *** [core-dependencies] Error 1
+> It's because post-script is called in Makefile just by the name assuming
+> that the . directory is in your PATH.
 >
-> New behaviour:
+> target-post-image:
+> @$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
+> $(call MESSAGE,"Executing post-image script $(s)"); \
+> ---->>> $(USER_HOOKS_EXTRA_ENV) $(s) $(BINARIES_DIR) $(call
+> qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
 >
->    $ make
 >
->    You must install 'which' on your build machine
->    make: *** [core-dependencies] Error 1
+> Therefore, I added '.' dir to my PATH and ran make again. Again I got an
+> error.
 >
-> Signed-off-by: Bj?rn Forsman<bjorn.forsman@gmail.com>
+> "You seem to have the current working directory in your PATH environment
+> variable. This doesn't work.
+> make: *** [core-dependencies] Error 1"
+>
+> How does it work for you?
+>
+> Don't you think the Makefile should call the script this way:
+>
+> -               $(USER_HOOKS_EXTRA_ENV) $(s) $(TARGET_DIR) $(call
+> qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+> +               $(USER_HOOKS_EXTRA_ENV) ./$(s) $(TARGET_DIR) $(call
+> qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
 
-  There are also instances of which in manual.mk and toolchain-external.mk.
-
-  With those removed, I wonder if it is even necessary to have which 
-installed at all? Could you test that with a largish config?
+  ./$(s) is a bad idea since it will break the case when the script is an 
+absolute path. But maybe $(abspath $(s)) works?
 
   Regards,
   Arnout
+
+
+>
+>
+> Let me know I will prepare a patch.
+>
+> Thanks,
+> /Waldek
+>
+>
+>
+>
+>
+>
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
