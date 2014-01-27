@@ -1,145 +1,272 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Jan 2014 08:30:09 +0100 (CET)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-01-26
-Message-ID: <20140127073009.0F610101784@stock.ovh.net>
+From: =?UTF-8?B?0JrQuNGA0LjQu9C7INCb0YPRhtC10L3QutC+?= <lucenko_kirill@mail.ru>
+Date: Mon, 27 Jan 2014 11:37:57 +0400
+Subject: [Buildroot]
+ =?utf-8?q?i686-buildroot-linux-gnu-as__does_not_work?=
+In-Reply-To: <1390764781.939450469@f31.i.mail.ru>
+References: <1390645407.666601332@f346.i.mail.ru> <52E54212.8090100@gmail.com>
+ <1390764781.939450469@f31.i.mail.ru>
+Message-ID: <1390808277.846425310@f271.i.mail.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2014-01-26
-===============================
+ It is output of make bellow. I think it might be helpful.?i686-buildroot-linux-gnu-as set as DEFAULT_ASSEMBLER:
 
-        success : 53 
-       failures : 86 
-       timeouts : 0  
-          TOTAL : 139
+$ make
+>>> infozip 30 Building
+/usr/bin/make -j9 
+PATH="//.../BuildRoot/output/host/bin:/.../BuildRoot/output/host/usr/bin:/.../BuildRoot/output/host/usr/sbin/:/usr/lib/lightdm/lightdm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games" 
+AR="/.../BuildRoot/output/host/usr/bin/i686-buildroot-linux-gnu-ar" 
+AS="/.../BuildRoot/output/host/usr/bin/i686-buildroot-linux-gnu-as" 
+LD="/.../BuildRoot/output/host/usr/bin/i686-buildroot-linux-gnu-ld" 
+NM="/.../BuildRoot/output/host/usr/bin/i686-buildroot-linux-gnu-nm" 
+CC="/.../BuildRoot/output/host/usr/bin/i686-buildroot-linux-gnu-gcc" 
+GCC="/.../BuildRoot/output/host/usr/bin/i686-buildroot-linux-gnu-gcc" 
+CPP="/.../BuildRoot/output/host/usr/bin/i686-buildroot-linux-gnu-cpp" 
+CXX="/.../BuildRoot/output/host/usr/bin/i686-buildroot-linux-gnu-g++" 
+FC="/.../BuildRoot/output/host/usr/bin/i686-buildroot-linux-gnu-gfortran" 
+RANLIB="/.../BuildRoot/output/host/usr/bin/i686-buildroot-linux-gnu-ranlib" 
+READELF="/.../BuildRoot/output/host/usr/bin/i686-buildroot-linux-gnu-readelf" STRIP="/home/kirill/NIR/repos/project/examples/buildroot-2013.11/output/host/usr/bin/i686-buildroot-linux-gnu-strip" 
+OBJCOPY="/.../BuildRoot/output/host/usr/bin/i686-buildroot-linux-gnu-objcopy" 
+OBJDUMP="/.../BuildRoot/output/host/usr/bin/i686-buildroot-linux-gnu-objdump" 
+AR_FOR_BUILD="/usr/bin/ar" 
+AS_FOR_BUILD="/usr/bin/as" 
+CC_FOR_BUILD="/usr/bin/gcc" 
+GCC_FOR_BUILD="/usr/bin/gcc" 
+CXX_FOR_BUILD="/usr/bin/g++" 
+FC_FOR_BUILD="/usr/bin/ld" 
+LD_FOR_BUILD="/usr/bin/ld" 
+CPPFLAGS_FOR_BUILD="-I/.../BuildRoot/output/host/usr/include" 
+CFLAGS_FOR_BUILD="-O2 -I/.../BuildRoot/output/host/usr/include" 
+CXXFLAGS_FOR_BUILD="-O2 -I/.../BuildRoot/output/host/usr/include" 
+LDFLAGS_FOR_BUILD="-L/.../BuildRoot/output/host/lib -L/home/kirill/NIR/repos/project/examples/buildroot-2013.11/output/host/usr/lib -Wl,-rpath,/home/kirill/NIR/repos/project/examples/buildroot-2013.11/output/host/usr/lib" 
+FCFLAGS_FOR_BUILD="" 
+DEFAULT_ASSEMBLER="/.../BuildRoot/output/host/usr/bin/i686-buildroot-linux-gnu-as"
+DEFAULT_LINKER="/.../BuildRoot/output/host/usr/bin/i686-buildroot-linux-gnu-ld" 
+CPPFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64" 
+CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -pipe -O2 " 
+CXXFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -pipe -O2 " 
+LDFLAGS="" 
+FCFLAGS="" 
+PKG_CONFIG="/.../BuildRoot/output/host/usr/bin/pkg-config" 
+PERLLIB="/.../BuildRoot/output/host/usr/lib/perl" 
+STAGING_DIR="/.../BuildRoot/output/host/usr/i686-buildroot-linux-gnu/sysroot" 
+-C /.../BuildRoot/output/build/infozip-30 -f unix/Makefile generic
+make[1]: Entering directory `/.../BuildRoot/output/build/infozip-30'
+eval /usr/bin/make -f unix/Makefile zips `cat flags`
+make[2]: Entering directory `/.../BuildRoot/output/build/infozip-30'
+/usr/bin/cpp match.S > _match.s
+/usr/bin/cpp crc_i386.S > _crc_i386.s
+/.../BuildRoot/output/host/usr/bin/i686-buildroot-linux-gnu-as _match.s
+/.../BuildRoot/output/host/usr/bin/i686-buildroot-linux-gnu-as _crc_i386.s
+mv _crc_i386.o crc_i386.o
+mv: mv _match.o match.o
+cannot stat `_crc_i386.o': No such file or directory
+make[2]: *** [crc_i386.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+mv: cannot stat `_match.o': No such file or directory
+make[2]: *** [match.o] Error 1
+make[2]: Leaving directory `/home/kirill/NIR/repos/project/examples/buildroot-2013.11/output/build/infozip-30'
+make[1]: *** [generic] Error 2
+make[1]: Leaving directory `/home/kirill/NIR/repos/project/examples/buildroot-2013.11/output/build/infozip-30'
+make: *** [/home/kirill/NIR/repos/project/examples/buildroot-2013.11/output/build/infozip-30/.stamp_built] Error 2
 
-Classification of failures by reason
-====================================
 
-               tcpreplay-4.0.0 | 22
-                   gtest-1.7.0 | 14
-              pcsc-lite-1.8.10 | 4 
-          sane-backends-1.0.22 | 4 
-                    mpd-0.18.7 | 4 
-                     vlc-2.1.2 | 4 
-                 libhid-0.2.16 | 3 
-rtmpdump-e0056c51cc1710c9a4... | 3 
-                     gdb-7.5.1 | 2 
-                  iozone-3_414 | 2 
-          enlightenment-0.17.3 | 2 
-                   open2300-12 | 2 
-                 pixman-0.30.0 | 2 
-                libnftnl-1.0.0 | 2 
-                 qt5base-5.2.0 | 1 
-                  ltrace-0.7.3 | 1 
-                  weston-1.3.0 | 1 
-                 dropwatch-1.4 | 1 
-         openpowerlink-V1.08.4 | 1 
-                    sdl-1.2.15 | 1 
-                 netsnmp-5.7.2 | 1 
-                  nettle-2.7.1 | 1 
-                aiccu-20070115 | 1 
-                      icu-51.2 | 1 
-                  libeet-1.7.7 | 1 
-               alsa-lib-1.0.26 | 1 
-                  thrift-0.9.1 | 1 
-                 libevas-1.7.7 | 1 
-knock-7ce33cd553800f48f16b3... | 1 
-czmq-b5730c5f8290a611fd3b92... | 1 
-
-Detail of failures
-===================
-
-     nios2 |                 aiccu-20070115 | NOK | http://autobuild.buildroot.net/results/751b295730fd8257c27f17bf49377a162575c996/
-      bfin |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/2809ede1c007f0ac3b4e5ab55cc0468e1741591c/
-      bfin | czmq-b5730c5f8290a611fd3b92... | NOK | http://autobuild.buildroot.net/results/690104ba81e096cae8ae4afe3979b352217ea63d/
-microblaze |                  dropwatch-1.4 | NOK | http://autobuild.buildroot.net/results/a02ee74b8980a61ed7d6c59cd4779dd5bf77ed19/
-   powerpc |           enlightenment-0.17.3 | NOK | http://autobuild.buildroot.net/results/8b1cb409c30f533b3da2a490bd95f995f1a11e60/
-   powerpc |           enlightenment-0.17.3 | NOK | http://autobuild.buildroot.net/results/285c94d9f5cb42c37f774bcbfbe3ece181279413/
-microblaze |                      gdb-7.5.1 | NOK | http://autobuild.buildroot.net/results/1c65229c86aab7edbaf77f521535bbc68f9c620b/
-microblaze |                      gdb-7.5.1 | NOK | http://autobuild.buildroot.net/results/eb96b2f22720ad75ad54a095399a4ca1b3e95ac0/
-  mips64el |                    gtest-1.7.0 | NOK | http://autobuild.buildroot.net/results/368be502a6580e42404a67e310f106e025a2390e/
-      i686 |                    gtest-1.7.0 | NOK | http://autobuild.buildroot.net/results/92520f09c47ca3918031ee082b889b6a717e8495/
-    mipsel |                    gtest-1.7.0 | NOK | http://autobuild.buildroot.net/results/bbdddaf796c301a20723da1b002a4539e725db0c/
-    xtensa |                    gtest-1.7.0 | NOK | http://autobuild.buildroot.net/results/ca99e11e9a35c217057d1d9642061ff9b3ce65a7/
-    x86_64 |                    gtest-1.7.0 | NOK | http://autobuild.buildroot.net/results/134c77f97964ba35491db7019bfdab202b69003d/
-  mips64el |                    gtest-1.7.0 | NOK | http://autobuild.buildroot.net/results/4b1ef47b3ae061cd6967f48ccf4b1f1685b0bf9f/
-  mips64el |                    gtest-1.7.0 | NOK | http://autobuild.buildroot.net/results/f0d1cbfee9acbdc5ad0d69cfe7358173f21918b1/
-  mips64el |                    gtest-1.7.0 | NOK | http://autobuild.buildroot.net/results/302c794b84c238eab21b807afee416cf1217a41e/
-      i686 |                    gtest-1.7.0 | NOK | http://autobuild.buildroot.net/results/4a3c0ce713a4c674328a05b05d177fda3ea99931/
-    xtensa |                    gtest-1.7.0 | NOK | http://autobuild.buildroot.net/results/a16d5f3b555a9de5588cc83e6cbf9c245e172eba/
-    x86_64 |                    gtest-1.7.0 | NOK | http://autobuild.buildroot.net/results/53fa90e6df17ae332b2a2506a4d2ae009a618731/
-       arm |                    gtest-1.7.0 | NOK | http://autobuild.buildroot.net/results/478da030fb8c3a21a8870747f9404531764eb03e/
-   powerpc |                    gtest-1.7.0 | NOK | http://autobuild.buildroot.net/results/581dcc94b4aa5230e5f6ae68e94b0173e781f113/
-   aarch64 |                    gtest-1.7.0 | NOK | http://autobuild.buildroot.net/results/6621b6b3f6be5d99c1fe4fe7bbe55e55bcaa3923/
-      bfin |                       icu-51.2 | NOK | http://autobuild.buildroot.net/results/54bc4b8f53f16ba3f7d26a79fa27694e540f67f3/
-       arm |                   iozone-3_414 | NOK | http://autobuild.buildroot.net/results/700653c4e6d566f4422bf4b48ed242d728e67cd9/
-       arm |                   iozone-3_414 | NOK | http://autobuild.buildroot.net/results/acae352c44c3c18f747e9c5a8e6879d8e29dfe25/
-   powerpc | knock-7ce33cd553800f48f16b3... | NOK | http://autobuild.buildroot.net/results/7515498d9fd92c7249b5dabe3ddc176bebfd19d1/
-      bfin |                   libeet-1.7.7 | NOK | http://autobuild.buildroot.net/results/eb07b656f520855869bbc6c5ea2c16fa8fe785b3/
-       arm |                  libevas-1.7.7 | NOK | http://autobuild.buildroot.net/results/e3ad730d2b94c439680e5d67041229ce35156da9/
-       arm |                  libhid-0.2.16 | NOK | http://autobuild.buildroot.net/results/2714641cf70b283eac3be1f288ce1d4513fc1a57/
-  mips64el |                  libhid-0.2.16 | NOK | http://autobuild.buildroot.net/results/faea109c662c501efc379515eddc3e959ce5a4c5/
-       arm |                  libhid-0.2.16 | NOK | http://autobuild.buildroot.net/results/36a8dc95418814f485b09cac610f9ef11ad2e232/
-   powerpc |                 libnftnl-1.0.0 | NOK | http://autobuild.buildroot.net/results/893f01cbbe973cc2a635c7527809eb98d75897fa/
-   powerpc |                 libnftnl-1.0.0 | NOK | http://autobuild.buildroot.net/results/104d4f14db25ea02f603e862c2354ba2c3107198/
-   powerpc |                   ltrace-0.7.3 | NOK | http://autobuild.buildroot.net/results/4062a0c6293718b5d4d2cf1d39a0f7c2924f7f15/
-       arm |                     mpd-0.18.7 | NOK | http://autobuild.buildroot.net/results/350a1d38ddf1bb8e68dadf9265425afb5203d2db/
-      i686 |                     mpd-0.18.7 | NOK | http://autobuild.buildroot.net/results/c06b2b362f4fc6afa9928869082ab78739ccb846/
-    x86_64 |                     mpd-0.18.7 | NOK | http://autobuild.buildroot.net/results/71ea9562de5d04647c25f10a4f6d8e5c375a08c1/
-   powerpc |                     mpd-0.18.7 | NOK | http://autobuild.buildroot.net/results/33996faece5375f4baeb4672edfc46e5c1b91690/
-      i686 |                  netsnmp-5.7.2 | NOK | http://autobuild.buildroot.net/results/b601f3ef7c62e9b6aefda89640bec665c98af9dc/
-      i686 |                   nettle-2.7.1 | NOK | http://autobuild.buildroot.net/results/3c0ba8a65a045fc89ec66e70986e7e5939e4162e/
-    mipsel |                    open2300-12 | NOK | http://autobuild.buildroot.net/results/35c71f4f0131107ad2cfdd4a2740adfc4b0b0733/
-  mips64el |                    open2300-12 | NOK | http://autobuild.buildroot.net/results/05fa2cfbff43bd402230b1db2453716a4de9df69/
-    x86_64 |          openpowerlink-V1.08.4 | NOK | http://autobuild.buildroot.net/results/6dec062a0498b56fd9564d1344f9e58f2e8a9255/
-   aarch64 |               pcsc-lite-1.8.10 | NOK | http://autobuild.buildroot.net/results/072a59c8be24a7b2de02e1b7b5f16be16129e153/
-   powerpc |               pcsc-lite-1.8.10 | NOK | http://autobuild.buildroot.net/results/d86e3d07eeed3b755d4f1b07c7fc9ba6c9640f58/
-    x86_64 |               pcsc-lite-1.8.10 | NOK | http://autobuild.buildroot.net/results/8fbd78d44303a289d651fd43e5be5b571ee0dc24/
-       sh4 |               pcsc-lite-1.8.10 | NOK | http://autobuild.buildroot.net/results/58803aa9e3af2eba6caf236e8d87e22eb665584c/
-microblaze |                  pixman-0.30.0 | NOK | http://autobuild.buildroot.net/results/0b0371d1d0c60909296ee7eacf6e91f80827f0d5/
-microblaze |                  pixman-0.30.0 | NOK | http://autobuild.buildroot.net/results/3a15524d03e59161f26d6d67aefa97b487acb223/
-       arm |                  qt5base-5.2.0 | NOK | http://autobuild.buildroot.net/results/a56e0c1d906d128eb56bb0b92124628af97610e7/
-    mipsel | rtmpdump-e0056c51cc1710c9a4... | NOK | http://autobuild.buildroot.net/results/1902a6613e5fc9656842fbcbd5731ac871d7ef59/
-   powerpc | rtmpdump-e0056c51cc1710c9a4... | NOK | http://autobuild.buildroot.net/results/58f88bead5ee9d382bf22ab8b04f5d1456c32ba6/
-   powerpc | rtmpdump-e0056c51cc1710c9a4... | NOK | http://autobuild.buildroot.net/results/dea1e7bd0ceaf0aa402aa3d2d741b4314c2e61b0/
-    x86_64 |           sane-backends-1.0.22 | NOK | http://autobuild.buildroot.net/results/1934dc604787bcd3f0a15ea5de2ff02c10a60a51/
-       arm |           sane-backends-1.0.22 | NOK | http://autobuild.buildroot.net/results/4a2c6f4993a67b0724c415eba01725f0a507c55a/
-   powerpc |           sane-backends-1.0.22 | NOK | http://autobuild.buildroot.net/results/d3cf9d0e5b647dc8ab2396f5a88f3f4d34933256/
-     avr32 |           sane-backends-1.0.22 | NOK | http://autobuild.buildroot.net/results/2bd228db7c238e8a801028477b26cee2651f2552/
-    mipsel |                     sdl-1.2.15 | NOK | http://autobuild.buildroot.net/results/03bac11bd2469e8b27eb64ad6b0148fd42a1508d/
-microblaze |                tcpreplay-4.0.0 | NOK | http://autobuild.buildroot.net/results/93e991aed80999a6096a6120f4e73fdc120ae149/
-   powerpc |                tcpreplay-4.0.0 | NOK | http://autobuild.buildroot.net/results/f901a4f02b3bc7d986c8fa3bb08f5bd561d67274/
-   powerpc |                tcpreplay-4.0.0 | NOK | http://autobuild.buildroot.net/results/1f5898d8c622f8ddeecbb3411f2697162de60989/
-      i686 |                tcpreplay-4.0.0 | NOK | http://autobuild.buildroot.net/results/230e5ac3cafe4b8cb1477ccef364397a8ba2f516/
-   powerpc |                tcpreplay-4.0.0 | NOK | http://autobuild.buildroot.net/results/d168c06b3529bbd41e7dd10f22ae02ebe11a8ce9/
-      i686 |                tcpreplay-4.0.0 | NOK | http://autobuild.buildroot.net/results/039586ac3b537cbdf420a0ab76bf4111cfc5b9aa/
-   powerpc |                tcpreplay-4.0.0 | NOK | http://autobuild.buildroot.net/results/b8abe0fed77f7b577e7c2f0239bfee95df120833/
-       arm |                tcpreplay-4.0.0 | NOK | http://autobuild.buildroot.net/results/e2230192f8454dd86c129dc04063d84c1dc69344/
-      i686 |                tcpreplay-4.0.0 | NOK | http://autobuild.buildroot.net/results/82847a9b1142c9b22848ffab94b0cde32cf18896/
-       arm |                tcpreplay-4.0.0 | NOK | http://autobuild.buildroot.net/results/a6a908f77391e69cc3bc77878651c9686d9d8c36/
-       arm |                tcpreplay-4.0.0 | NOK | http://autobuild.buildroot.net/results/f5d312b1ff3f31788f41b83b67f7e9b8b75ceda6/
-      i686 |                tcpreplay-4.0.0 | NOK | http://autobuild.buildroot.net/results/2cb41691d2902d04e378264cb464dcedb9b77ce4/
-   powerpc |                tcpreplay-4.0.0 | NOK | http://autobuild.buildroot.net/results/0344267c34cbc2ac5c67dd35fcf2b696681cea8b/
-   powerpc |                tcpreplay-4.0.0 | NOK | http://autobuild.buildroot.net/results/2238815f3970e0f77ee61d7cd9704583f3a89a41/
-    x86_64 |                tcpreplay-4.0.0 | NOK | http://autobuild.buildroot.net/results/154663ff42c0ff5f72ef43e16293c22820596e6f/
-       sh4 |                tcpreplay-4.0.0 | NOK | http://autobuild.buildroot.net/results/f95d188a004ad39a32e709acad8277635da890a5/
-  mips64el |                tcpreplay-4.0.0 | NOK | http://autobuild.buildroot.net/results/e7a532fbd2f299b4e03ba0c8d06c410e4a134645/
-   powerpc |                tcpreplay-4.0.0 | NOK | http://autobuild.buildroot.net/results/ecf55d70a3a7e37dd8225cc65c396cc5d8c1dcac/
-   powerpc |                tcpreplay-4.0.0 | NOK | http://autobuild.buildroot.net/results/92ca53e6c5d715b55dbad38dd66f6d3d372abcd6/
-     avr32 |                tcpreplay-4.0.0 | NOK | http://autobuild.buildroot.net/results/65f30bdd367fb19cf62faf7d4ea07690d5ec7747/
-       arm |                tcpreplay-4.0.0 | NOK | http://autobuild.buildroot.net/results/3647f228b82d2ebb348b3b94ff60e1fcfb10cdce/
-      i686 |                tcpreplay-4.0.0 | NOK | http://autobuild.buildroot.net/results/8316c1713c0a8da1a5026d46119e4d5912e1d79a/
-     avr32 |                   thrift-0.9.1 | NOK | http://autobuild.buildroot.net/results/236f80d1184f5a815a126549d35f12ee09a4e448/
-   powerpc |                      vlc-2.1.2 | NOK | http://autobuild.buildroot.net/results/6b99ae99c0498b7053f4b089bbd92a65c528066f/
-microblaze |                      vlc-2.1.2 | NOK | http://autobuild.buildroot.net/results/4508e79deb2ecdbabe3c6e4e340e49e839700f0e/
-       arm |                      vlc-2.1.2 | NOK | http://autobuild.buildroot.net/results/54dc8963c0a51bd7ae4a6703d67250f7055092d3/
-      sh4a |                      vlc-2.1.2 | NOK | http://autobuild.buildroot.net/results/fa13df62c0c6c2674da7b2bc962938bcc3594673/
-      i686 |                   weston-1.3.0 | NOK | http://autobuild.buildroot.net/results/7820da0fcdb52993aded7ba1802f89e5a794245c/
+???????????, 26 ?????? 2014, 23:33 +04:00 ?? ?????? ??????? <lucenko_kirill@mail.ru>:
+>Hi, Alexander,
+>Thank you for responding!
+>I use latest 2013.11 version of BuildRoot. I've downloaded it from this page on official site:  http://buildroot.uclibc.org/download.html
+>It is the content of my defconfig file:
+>
+>BR2_x86_core2=y
+>BR2_DEFCONFIG="$(CONFIG_DIR)/defconfig"
+>BR2_DEPRECATED=y
+>BR2_OPTIMIZE_2=y
+>BR2_KERNEL_HEADERS_VERSION=y
+>BR2_DEFAULT_KERNEL_VERSION="3.10.20"
+>BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+>BR2_GCC_VERSION_4_8_X=y
+>BR2_TOOLCHAIN_BUILDROOT_CXX=y
+>BR2_GCC_ENABLE_OPENMP=y
+>BR2_PACKAGE_HOST_GDB=y
+>BR2_ENABLE_LOCALE_PURGE=y
+>BR2_ENABLE_LOCALE_WHITELIST="C en_US"
+>BR2_ECLIPSE_REGISTER=y
+>BR2_TARGET_GENERIC_HOSTNAME="box"
+>BR2_TARGET_GENERIC_ISSUE="Welcome to Box"
+>BR2_INIT_SYSV=y
+>BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV=y
+>BR2_TARGET_GENERIC_ROOT_PASSWD="rfhfcbr"
+># BR2_TARGET_GENERIC_GETTY is not set
+>BR2_ROOTFS_OVERLAY="my_root/"
+>BR2_LINUX_KERNEL=y
+>BR2_LINUX_KERNEL_SAME_AS_HEADERS=y
+>BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="my_config"
+>BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
+>BR2_PACKAGE_GZIP=y
+>BR2_PACKAGE_INFOZIP=y
+>BR2_PACKAGE_XZ=y
+>BR2_PACKAGE_LSOF=y
+>BR2_PACKAGE_COREUTILS=y
+>BR2_PACKAGE_FINDUTILS=y
+>BR2_PACKAGE_GAWK=y
+>BR2_PACKAGE_GREP=y
+>BR2_PACKAGE_SED=y
+>BR2_PACKAGE_TAR=y
+>BR2_PACKAGE_E2FSPROGS=y
+>BR2_PACKAGE_E2FSPROGS_RESIZE2FS=y
+>BR2_PACKAGE_MAKEDEVS=y
+>BR2_PACKAGE_NTFS_3G=y
+>BR2_PACKAGE_NTFS_3G_NTFSPROGS=y
+>BR2_PACKAGE_XFSPROGS=y
+>BR2_PACKAGE_QT=y
+>BR2_PACKAGE_QT_LICENSE_APPROVED=y
+># BR2_PACKAGE_QT_GUI_MODULE is not set
+>BR2_PACKAGE_LINUX_FIRMWARE=y
+>BR2_PACKAGE_HDPARM=y
+>BR2_PACKAGE_HWDATA=y
+>BR2_PACKAGE_I2C_TOOLS=y
+>BR2_PACKAGE_IOSTAT=y
+>BR2_PACKAGE_LM_SENSORS=y
+>BR2_PACKAGE_LM_SENSORS_SENSORS_DETECT=y
+>BR2_PACKAGE_LSHW=y
+>BR2_PACKAGE_LSUIO=y
+>BR2_PACKAGE_MDADM=y
+>BR2_PACKAGE_MEMTESTER=y
+>BR2_PACKAGE_PCIUTILS=y
+>BR2_PACKAGE_SDPARM=y
+>BR2_PACKAGE_SETSERIAL=y
+>BR2_PACKAGE_SMARTMONTOOLS=y
+>BR2_PACKAGE_USBUTILS=y
+>BR2_PACKAGE_ALSA_LIB=y
+>BR2_PACKAGE_LIBVORBIS=y
+>BR2_PACKAGE_LIBARCHIVE=y
+>BR2_PACKAGE_LZO=y
+>BR2_PACKAGE_OPENSSL_ENGINES=y
+>BR2_PACKAGE_SQLITE_READLINE=y
+>BR2_PACKAGE_SQLITE_STAT3=y
+>BR2_PACKAGE_SQLITE_ENABLE_FTS3=y
+>BR2_PACKAGE_SQLITE_ENABLE_UNLOCK_NOTIFY=y
+>BR2_PACKAGE_GAMIN=y
+>BR2_PACKAGE_LIBCONFIG=y
+>BR2_PACKAGE_LIBCONFUSE=y
+>BR2_PACKAGE_LIBFUSE=y
+>BR2_PACKAGE_LIBLOCKFILE=y
+>BR2_PACKAGE_LIBSYSFS=y
+>BR2_PACKAGE_LOCKDEV=y
+>BR2_PACKAGE_LIBSERIAL=y
+>BR2_PACKAGE_LIBUSB_COMPAT=y
+>BR2_PACKAGE_EXPAT=y
+>BR2_PACKAGE_LIBXMLPP=y
+>BR2_PACKAGE_NEON_SSL=y
+>BR2_PACKAGE_NEON_LIBXML2=y
+>BR2_PACKAGE_OMNIORB=y
+>BR2_PACKAGE_BOOST=y
+>BR2_PACKAGE_BOOST_DATE_TIME=y
+>BR2_PACKAGE_BOOST_FILESYSTEM=y
+>BR2_PACKAGE_BOOST_IOSTREAMS=y
+>BR2_PACKAGE_BOOST_MATH=y
+>BR2_PACKAGE_BOOST_MPI=y
+>BR2_PACKAGE_BOOST_SYSTEM=y
+>BR2_PACKAGE_BOOST_THREAD=y
+>BR2_PACKAGE_ELFUTILS=y
+>BR2_PACKAGE_ELFUTILS_PROGS=y
+>BR2_PACKAGE_FFTW=y
+>BR2_PACKAGE_LIBBSD=y
+>BR2_PACKAGE_LIBCAP=y
+>BR2_PACKAGE_LIBELF=y
+>BR2_PACKAGE_LOG4CXX=y
+>BR2_PACKAGE_MPC=y
+>BR2_PACKAGE_PROTOBUF_C=y
+>BR2_PACKAGE_TZDATA=y
+>BR2_PACKAGE_NCURSES_TARGET_PANEL=y
+>BR2_PACKAGE_NCURSES_TARGET_FORM=y
+>BR2_PACKAGE_NCURSES_TARGET_MENU=y
+>BR2_PACKAGE_PCRE=y
+>BR2_PACKAGE_PCRE_16=y
+>BR2_PACKAGE_PCRE_32=y
+>BR2_PACKAGE_POPT=y
+>BR2_PACKAGE_SLANG=y
+>BR2_PACKAGE_ARPTABLES=y
+>BR2_PACKAGE_BRIDGE_UTILS=y
+>BR2_PACKAGE_DHCPCD=y
+>BR2_PACKAGE_DROPBEAR=y
+>BR2_PACKAGE_DROPBEAR_DISABLE_REVERSEDNS=y
+># BR2_PACKAGE_DROPBEAR_SMALL is not set
+>BR2_PACKAGE_ETHTOOL=y
+>BR2_PACKAGE_IPTABLES=y
+>BR2_PACKAGE_IPUTILS=y
+>BR2_PACKAGE_IW=y
+>BR2_PACKAGE_NETCAT=y
+>BR2_PACKAGE_NETKITTELNET=y
+>BR2_PACKAGE_NTP=y
+>BR2_PACKAGE_NTP_NTPDATE=y
+>BR2_PACKAGE_OPENSSH=y
+>BR2_PACKAGE_SER2NET=y
+>BR2_PACKAGE_TCPDUMP=y
+>BR2_PACKAGE_TCPDUMP_SMB=y
+>BR2_PACKAGE_TFTPD=y
+>BR2_PACKAGE_VSFTPD=y
+>BR2_PACKAGE_WGET=y
+>BR2_PACKAGE_XINETD=y
+>BR2_PACKAGE_BASH=y
+>BR2_PACKAGE_DIALOG=y
+>BR2_PACKAGE_FILE=y
+>BR2_PACKAGE_SCREEN=y
+>BR2_PACKAGE_SUDO=y
+>BR2_PACKAGE_TIME=y
+>BR2_PACKAGE_XMLSTARLET=y
+>BR2_PACKAGE_HTOP=y
+>BR2_PACKAGE_PROCPS=y
+>BR2_PACKAGE_PSMISC=y
+>BR2_PACKAGE_UTIL_LINUX_BINARIES=y
+>BR2_PACKAGE_UTIL_LINUX_AGETTY=y
+>BR2_PACKAGE_UTIL_LINUX_FSCK=y
+>BR2_PACKAGE_UTIL_LINUX_KILL=y
+>BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS=y
+>BR2_PACKAGE_UTIL_LINUX_MOUNT=y
+>BR2_PACKAGE_UTIL_LINUX_RESET=y
+>BR2_PACKAGE_LESS=y
+>BR2_PACKAGE_VIM=y
+>BR2_TARGET_ROOTFS_CPIO_BZIP2=y
+>BR2_TARGET_ROOTFS_EXT2=y
+>BR2_TARGET_ROOTFS_INITRAMFS=y
+>BR2_TARGET_ROOTFS_TAR_BZIP2=y ?
+>
+>
+>???????????, 26 ?????? 2014, 19:12 +02:00 ?? Alexander Lukichev <alexander.lukichev@gmail.com>:
+>>Hi Kirill,
+>>
+>>01/25/2014 12:23 PM, ?????? ??????? wrote:
+>>> I have got very strange error during building of BuildRoot project.
+>>> It happens after running following commands in
+>>> /.../BuildRoot/output/build/infozip-30 directory:
+>>
+>>??Could you please send your Buildroot config file attached or pasted
+>>into the message text as defconfig? You can produce defconfig by
+>>
+>>make savedefconfig BR2_DEFCONFIG=<path-to-defconfig>
+>>
+>>??What Buildroot release / commit id do you use?
+>>
+>>-- 
+>>Best regards,
+>>??Alexander Lukichev
+>
+>
+>-- 
+>?????? ???????
+>_______________________________________________
+>buildroot mailing list
+>buildroot at busybox.net
+>http://lists.busybox.net/mailman/listinfo/buildroot
 
 
 -- 
-http://autobuild.buildroot.net
+?????? ???????
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140127/8ab188a2/attachment.html>
