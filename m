@@ -1,61 +1,23 @@
-From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
-Date: Mon, 27 Jan 2014 22:09:08 +0100
-Subject: [Buildroot] [PATCH 1/1] Prefer 'command -v' over 'which' (for
-	portability)
-In-Reply-To: <CAAXf6LU+oBr5novWFFJc1DOeopzAMb1aLbA5nah--2kQWYi4wA@mail.gmail.com>
-References: <1390659116-18865-1-git-send-email-bjorn.forsman@gmail.com>
- <CAHXCMMKE-WDNCTQ82uuEM5n=t4Ua=qTDTTaBxQ7=wVgiBejd0w@mail.gmail.com>
- <CAEYzJUEZMqJS=tOtd8n2dPAnsSm1XW7Fr0VqocboOE5VwGzqgQ@mail.gmail.com>
- <CAAXf6LU+oBr5novWFFJc1DOeopzAMb1aLbA5nah--2kQWYi4wA@mail.gmail.com>
-Message-ID: <CAEYzJUEhyggR3+gOc5TnaciNYpOrNwgjkrSapSBwRZu41E0okQ@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 27 Jan 2014 22:18:09 +0100
+Subject: [Buildroot] [PATCH] libnftnl: add JSON and XML parsing support
+In-Reply-To: <1390485602-5766-1-git-send-email-yegorslists@googlemail.com>
+ (yegorslists@googlemail.com's message of "Thu, 23 Jan 2014 15:00:02
+ +0100")
+References: <1390485602-5766-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <87a9ehnmy6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 27 January 2014 21:32, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> On Mon, Jan 27, 2014 at 9:01 PM, Bj?rn Forsman <bjorn.forsman@gmail.com> wrote:
->> On 27 January 2014 10:19, Samuel Martin <s.martin49@gmail.com> wrote:
->>> Bj?rn, all,
->>
->> [...]
->>
->>> "command -v" seems not playing very well with aliases:
->>>
->>> $ command -v make
->>> alias make='~/.config/ctafconf/bin/colorwarper make'
->>> $ which make
->>> /usr/bin/make
->>
->> Ah, correct.
->>
->> There is "type -P" which is more like "which" in that regard, but the
->> "-P" option doesn't seem to be specified by POSIX. For example, "type
->> -P which" fails in dash.
->>
->> Instead of an alias, you could write a one-liner shell wrapper? I tend
->> to prefer wrappers over aliases anyway, because of issues like these;
->> aliases sometimes behave differently than proper commands.
->
-> Why I also think this is saner than aliases, we cannot dictate this
-> principle to all buildroot users, so buildroot cannot rely on aliases
-> not being used...
+>>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
 
-In the example above, "which" finds the /usr/bin/make binary and
-ignores the alias. So what do you propose that Buildroot should
-support?
+ > From: Yegor Yefremov <yegorslists@googlemail.com>
+ > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-The way I see it we have three options:
+Committed, thanks.
 
-1) Allow aliases but silently ignore them (current behaviour)
-2) Allow aliases and handle them properly (requires some changes)
-3) Disallow aliases (and suggest wrappers?)
-
-If we apply this s/which/command -v/ patch I think we can still obtain
-the current behaviour by just running "unalias" for each core
-dependency.
-
-Best regards,
-Bj?rn Forsman
+-- 
+Bye, Peter Korsgaard
