@@ -1,35 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Jan 2014 14:51:40 +0100
-Subject: [Buildroot] [git commit] vorbis-tools: fix libm linking issue
-Message-ID: <20140127135230.655D49C684@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 27 Jan 2014 15:11:31 +0100
+Subject: [Buildroot] [PATCH 1/1] Makefile: move skeleton overlay
+	installations before strip step
+In-Reply-To: <52E6063B.1060700@mind.be> (Arnout Vandecappelle's message of
+ "Mon, 27 Jan 2014 08:09:47 +0100")
+References: <1390530729-1830-1-git-send-email-danomimanchego123@gmail.com>
+ <52E6063B.1060700@mind.be>
+Message-ID: <87a9ehzf8s.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b304ff7f7db8018db70374d738371cf20848e194
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Fixes http://autobuild.buildroot.net/results/d48/d488dc5e1d684124e7367dac00ba2fb8c7b1b876/
+ > On 24/01/14 03:32, Danomi Manchego wrote:
+ >> Nothing prevents the skeleton overlays from having pre-built
 
-ogg123 calls math functions but forgets to link with libm.
+ >  Small nit: it's not a skeleton overlay, but a rootfs overlay (I first
+ > thought you were talking about the skeleton, which is copied _before_
+ > the build).
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/vorbis-tools/vorbis-tools.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ >> executables or libraries in them.  Therefore, we should install
+ >> the overlays prior to stripping, so that any such pre-built stuff
+ >> gets stripped too.
 
-diff --git a/package/vorbis-tools/vorbis-tools.mk b/package/vorbis-tools/vorbis-tools.mk
-index 464081e..506f8b9 100644
---- a/package/vorbis-tools/vorbis-tools.mk
-+++ b/package/vorbis-tools/vorbis-tools.mk
-@@ -10,6 +10,8 @@ VORBIS_TOOLS_LICENSE = GPLv2
- VORBIS_TOOLS_LICENSE_FILES = COPYING
- VORBIS_TOOLS_DEPENDENCIES = libao libogg libvorbis libcurl
- VORBIS_TOOLS_CONF_OPT = --program-transform-name=''
-+# ogg123 calls math functions but forgets to link with libm
-+VORBIS_TOOLS_CONF_ENV = LIBS=-lm
- 
- ifeq ($(BR2_PACKAGE_FLAC),y)
- VORBIS_TOOLS_DEPENDENCIES += flac
+ >  I'm not sure if I agree with this change. I like the current
+ > situation where the rootfs-overlay is really copied verbatim and you
+ > can trust it. If there are binaries in there, we can assume that the
+ > user has the cross-compiler available to strip them if he wants that.
+
+I agree. As it is now the user has full control, which is IMHO nice.
+
+-- 
+Bye, Peter Korsgaard
