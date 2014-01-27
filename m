@@ -1,70 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Jan 2014 22:11:38 +0100
-Subject: [Buildroot] [git commit] libnftnl: add JSON and XML parsing support
-Message-ID: <20140127214537.D2B469C696@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 27 Jan 2014 22:48:46 +0100
+Subject: [Buildroot] [PATCH 1/2] packages infra: add function to get a
+ Kconfig option
+In-Reply-To: <b68b4ce8c5017701344c6f32a993de7d3e26802b.1390744549.git.yann.morin.1998@free.fr>
+References: <cover.1390744549.git.yann.morin.1998@free.fr>
+ <b68b4ce8c5017701344c6f32a993de7d3e26802b.1390744549.git.yann.morin.1998@free.fr>
+Message-ID: <52E6D43E.306@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=44092444554ab65c721cfdc35f3558dcafebb082
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 26/01/14 14:56, Yann E. MORIN wrote:
+> +# Note: we do not indent this, since we want to avoid any leading
+> +# space or tabs when calling this function
+> +define KCONFIG_GET_OPT
+> +$(shell sed -e "/\\<$(1)\\>=\\(.*\\)$$/!d; s//\\1/" $(2))
+> +endef
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libnftnl/Config.in   |   16 ++++++++++++++++
- package/libnftnl/libnftnl.mk |   14 ++++++++++++++
- 2 files changed, 30 insertions(+), 0 deletions(-)
+  There's no need to define this with 'define', you can do with a normal 
+assignment, like we do for the UPPERCASE macro.
 
-diff --git a/package/libnftnl/Config.in b/package/libnftnl/Config.in
-index 66d0513..75ca519 100644
---- a/package/libnftnl/Config.in
-+++ b/package/libnftnl/Config.in
-@@ -13,6 +13,22 @@ config BR2_PACKAGE_LIBNFTNL
- 
- 	  http://netfilter.org/projects/libnftnl/index.html
- 
-+if BR2_PACKAGE_LIBNFTNL
-+
-+config BR2_PACKAGE_LIBNFTNL_JSON
-+	bool "enable JSON support"
-+	select BR2_PACKAGE_JANSSON
-+	help
-+	  Enable JSON parsing support
-+
-+config BR2_PACKAGE_LIBNFTNL_XML
-+	bool "enable XML support"
-+	select BR2_PACKAGE_MXML
-+	help
-+	  Enable XML parsing support
-+
-+endif
-+
- comment "libnftnl needs a toolchain w/ threads, IPv6, largefile"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INET_IPV6 || \
- 		!BR2_LARGEFILE
-diff --git a/package/libnftnl/libnftnl.mk b/package/libnftnl/libnftnl.mk
-index 5eba0aa..0aecf12 100644
---- a/package/libnftnl/libnftnl.mk
-+++ b/package/libnftnl/libnftnl.mk
-@@ -12,4 +12,18 @@ LIBNFTNL_LICENSE_FILES = COPYING
- LIBNFTNL_INSTALL_STAGING = YES
- LIBNFTNL_DEPENDENCIES = host-pkgconf libmnl
- 
-+ifeq ($(BR2_PACKAGE_LIBNFTNL_JSON),y)
-+LIBNFTNL_CONF_OPT += --with-json-parsing
-+LIBNFTNL_DEPENDENCIES += jansson
-+else
-+LIBNFTNL_CONF_OPT += --without-json-parsing
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBNFTNL_XML),y)
-+LIBNFTNL_CONF_OPT += --with-xml-parsing
-+LIBNFTNL_DEPENDENCIES += mxml
-+else
-+LIBNFTNL_CONF_OPT += --without-xml-parsing
-+endif
-+
- $(eval $(autotools-package))
+KCONFIG_GET_OPT = $(shell sed -e ...)
+
+  Regards,
+  Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
