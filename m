@@ -1,41 +1,44 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 27 Jan 2014 18:26:01 +0100
-Subject: [Buildroot] [PATCH 1/3] Makefile: use absolute paths to
-	BR2_EXTERNAL
-In-Reply-To: <44e6c31931f55e79eec713be1a202f2c170667b7.1390424303.git.yann.morin.1998@free.fr>
-References: <cover.1390424302.git.yann.morin.1998@free.fr>
- <44e6c31931f55e79eec713be1a202f2c170667b7.1390424303.git.yann.morin.1998@free.fr>
-Message-ID: <52E696A9.5070700@mind.be>
+Date: Mon, 27 Jan 2014 18:34:16 +0100
+Subject: [Buildroot] [PATCH] uboot-tools: Allow users to use uboot's
+	sources
+In-Reply-To: <52E5816F.9080102@lucaceresoli.net>
+References: <1390696553-4163-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <52E530D5.20405@lucaceresoli.net>
+ <CAGduivwtd5SeEOSi6NNCegk7L7oem0+dF9eqkvoGtYk1_xODVw@mail.gmail.com>
+ <52E5816F.9080102@lucaceresoli.net>
+Message-ID: <52E69898.2080805@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 22/01/14 21:59, Yann E. MORIN wrote:
-> +  _BR2_EXTERNAL = $(shell cd $(BR2_EXTERNAL) >/dev/null 2>&1 && pwd)
-> +  ifeq ($(_BR2_EXTERNAL),)
-> +    ifeq ($(patsubst /%,/,$(BR2_EXTERNAL)),/)
-> +      $(error BR2_EXTERNAL='$(BR2_EXTERNAL)' does not exist)
-> +    else
-> +      $(error BR2_EXTERNAL='$(BR2_EXTERNAL)' does not exist, relatively to $(TOPDIR))
+On 26/01/14 22:43, Luca Ceresoli wrote:
+> Going a step ahead, to be more uniform with these packages, you may use
+> a choice construct to allow choosing between two alternatives.
+> Example (modified version of the code in barebox.mk):
+>
+> choice
+>          prompt "version"
+>          help
+>            Select the specific uboot-tools version you want to use
+>
+> config BR2_PACKAGE_UBOOT_TOOLS_LATEST_VERSION
+>          bool "Use a recent upstream version"
+>
+> config BR2_PACKAGE_UBOOT_TOOLS_USE_UBOOT_VERSION
+>          bool "Use the same sources of the uboot package"
+>
+> endchoice
 
-  I don't think the limited explanation "relatively to $(TOPDIR)" 
-warrants the additional complexity of patsubsting stuff.
+  Actually, I don't even see the need to ask the user anything. If we are 
+building U-Boot, I don't see why we would ever want to use the U-Boot 
+tools from upstream - that just adds a risk of incompatibility between 
+the two.
 
-> +    endif
-> +  endif
-> +  BR2_EXTERNAL := $(_BR2_EXTERNAL)
-
-  AFAICS there is no need to have a separate _BR2_EXTERNAL, since we'll 
-anyway error out if it is empty.
-
-  So, I'd propose:
-
-override BR2_EXTERNAL := $(shell cd $(BR2_EXTERNAL) >/dev/null 2>&1 && pwd)
-ifeq ($(BR2_EXTERNAL),)
-	$(error BR2_EXTERNAL directory '$(BR2_EXTERNAL)' does not exist)
-endif
+  So I would propose to remove the BR2_PACKAGE_UBOOT_TOOLS_UBOOT_SOURCE 
+option, and instead make it conditional on BR2_TARGET_UBOOT.
 
 
   Regards,
