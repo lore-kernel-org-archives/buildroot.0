@@ -1,24 +1,25 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 27 Jan 2014 17:34:23 +0100
-Subject: [Buildroot] [PATCH] rtmpdump: fix build with selected crypto
-In-Reply-To: <1390663608-1481-1-git-send-email-maxime.hadjinlian@gmail.com>
- (Maxime Hadjinlian's message of "Sat, 25 Jan 2014 16:26:48 +0100")
-References: <1390663608-1481-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <87y521o034.fsf@dell.be.48ers.dk>
+From: Mau Z <zmau1962@gmail.com>
+Date: Mon, 27 Jan 2014 20:24:19 +0200
+Subject: [Buildroot] How to add openGL library ?
+Message-ID: <CAPFcPTLna9_Z3A+DTHNH18u8GUSzPTBJjOTiO5kaxf6wgGw1ag@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
+Hi!
 
- > After the patch 42ed108013082c6836673aabe8d6258f9e7a490f, the defaut
- > crypto engine became GNUTLS, this made the build failed as the CFLAGS
- > variable where not correctly passed to the Makefile.
+I am using buildroot 11.2013.
+I have an application which uses the i7 GPU via openGL. The system itself
+does not have a display.
+I am unable find how do I include openGL.
 
-Thanks, but I took a closer look at the makefile and rewrote rtmpdump.mk
-to use XCFLAGS / XLDFLAGS instead.
+Any advice ?
 
--- 
-Bye, Peter Korsgaard
+
+Thanks
+Mau
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140127/607821e0/attachment.html>
