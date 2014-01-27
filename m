@@ -1,68 +1,35 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Mon, 27 Jan 2014 13:48:27 +0100 (CET)
-Subject: [Buildroot] i686-buildroot-linux-gnu-as  does not work
-In-Reply-To: <52E64765.5010803@gmail.com>
-Message-ID: <1848702296.4768001.1390826907232.JavaMail.root@openwide.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 27 Jan 2014 14:51:40 +0100
+Subject: [Buildroot] [git commit] vorbis-tools: fix libm linking issue
+Message-ID: <20140127135230.655D49C684@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Alexander,
+commit: http://git.buildroot.net/buildroot/commit/?id=b304ff7f7db8018db70374d738371cf20848e194
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
------ Mail original -----
-| De: "Alexander Lukichev" <alexander.lukichev@gmail.com>
-| ?: "Romain Naour" <romain.naour@openwide.fr>
-| Cc: "?????? ???????" <lucenko_kirill@mail.ru>, buildroot at busybox.net
-| Envoy?: Lundi 27 Janvier 2014 12:47:49
-| Objet: Re: [Buildroot] i686-buildroot-linux-gnu-as  does not work
-| 
-| Hi Romain, Kirill,
-| 
-| On 01/27/2014 12:59 PM, Romain Naour wrote:
-| > I had the same problem with infozip and I fixed this error by
-| > patching unix/Makefile like this:
-| (...)
-| > match.o: match.S
-| >   $(CPP) match.S > _match.s
-| > - $(AS) _match.s
-| > - mv _match.o match.o
-| > - rm -f _match.s
-| > + $(AS) _match.s -o match.o
-| (...)
-| > (Ok, this patch is really weird...)
-| Why?
-| 
-| To me it seems that $(AS) should not be expected to output by default
-| to <basename>.o, as is
-| apparently expected in the infozip's unix/Makefile. GNU as outputs to
-| a.out by default.
-| 
-| If I build the package in my host environment, it picks "$(CC) -c" as
-| the value for $(AS) and
-| works OK but when called from Buildroot, the value for $(AS) is set
-| to invoke the toolchain's
-| as directly, and the output of it goes to a.out.
-| 
-| Am I totally wrong in believing that your patch is the right way to
-| produce match.o rather
-| than original way of doing it?
+Fixes http://autobuild.buildroot.net/results/d48/d488dc5e1d684124e7367dac00ba2fb8c7b1b876/
 
-Sorry,
-I meant that usually in buildroot, Makefile's variables are overwritten in foo.mk
+ogg123 calls math functions but forgets to link with libm.
 
-I removed my patch and added AS="$(TARGET_CC) -c" in infozip.mk
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/vorbis-tools/vorbis-tools.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) AS="$(TARGET_CC) -c" -f unix/Makefile generic
-
-infozip compiles fine by doing that.
-
-Best regards,
-Romain Naour
-
-| 
-| --
-| Best regards,
-|   Alexander Lukichev
-| 
+diff --git a/package/vorbis-tools/vorbis-tools.mk b/package/vorbis-tools/vorbis-tools.mk
+index 464081e..506f8b9 100644
+--- a/package/vorbis-tools/vorbis-tools.mk
++++ b/package/vorbis-tools/vorbis-tools.mk
+@@ -10,6 +10,8 @@ VORBIS_TOOLS_LICENSE = GPLv2
+ VORBIS_TOOLS_LICENSE_FILES = COPYING
+ VORBIS_TOOLS_DEPENDENCIES = libao libogg libvorbis libcurl
+ VORBIS_TOOLS_CONF_OPT = --program-transform-name=''
++# ogg123 calls math functions but forgets to link with libm
++VORBIS_TOOLS_CONF_ENV = LIBS=-lm
+ 
+ ifeq ($(BR2_PACKAGE_FLAC),y)
+ VORBIS_TOOLS_DEPENDENCIES += flac
