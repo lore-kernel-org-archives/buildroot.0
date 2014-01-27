@@ -1,75 +1,32 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 27 Jan 2014 22:51:57 +0100
-Subject: [Buildroot] [PATCH 2/2] linux: only depend on host-lzop if
-	needed
-In-Reply-To: <1d22a1ff0f39a4b4e8fe4186cf9696a44a01e20f.1390744549.git.yann.morin.1998@free.fr>
-References: <cover.1390744549.git.yann.morin.1998@free.fr>
- <1d22a1ff0f39a4b4e8fe4186cf9696a44a01e20f.1390744549.git.yann.morin.1998@free.fr>
-Message-ID: <52E6D4FD.8030605@mind.be>
+From: Spenser Gilliland <spenser@gillilanding.com>
+Date: Mon, 27 Jan 2014 15:51:45 -0600
+Subject: [Buildroot] [PATCH v2] binutils: change to tagged release
+In-Reply-To: <1390859507-31670-1-git-send-email-spenser@gillilanding.com>
+References: <1390859507-31670-1-git-send-email-spenser@gillilanding.com>
+Message-ID: <1390859507-31670-9-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 26/01/14 14:56, Yann E. MORIN wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
->
-> There is no reason to always depend on host-lzop, even when the kernel
-> compression is not LZO.
->
-> Since LZO is not the default compression option in the kernel (and there
-> is not sign that will change in the foreseeable future), it will always
-> appear in a condif file, whether it is a complete config file or it is
-> only a defconfig.
->
-> So, only depend on host-lzop if the LZO compression is enabled in the
-> kernel config file (either the defconfig or the custom config file).
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->   linux/linux.mk | 6 +++++-
->   1 file changed, 5 insertions(+), 1 deletion(-)
->
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index ab25fe9..f34bea1 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -38,7 +38,7 @@ endif
->   LINUX_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
->
->   LINUX_INSTALL_IMAGES = YES
-> -LINUX_DEPENDENCIES  += host-kmod host-lzop
-> +LINUX_DEPENDENCIES  += host-kmod
->
->   ifeq ($(BR2_LINUX_KERNEL_UBOOT_IMAGE),y)
->   	LINUX_DEPENDENCIES += host-uboot-tools
-> @@ -163,6 +163,10 @@ else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
->   KERNEL_SOURCE_CONFIG = $(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE)
->   endif
->
-> +ifeq ($(call KCONFIG_GET_OPT,CONFIG_KERNEL_LZO,$(call qstrip,$(KERNEL_SOURCE_CONFIG))),y)
+Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+---
+ package/binutils/binutils.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-  I would be nicer if the qstrip would move to the definition of 
-KERNEL_SOURCE_CONFIG a few lines higher. It's already there in one 
-condition, but not in the other.
-
-  Regards,
-  Arnout
-
-> +LINUX_DEPENDENCIES += host-lzop
-> +endif
-> +
->   define LINUX_CONFIGURE_CMDS
->   	cp $(KERNEL_SOURCE_CONFIG) $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
->   	$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) buildroot_defconfig
->
-
-
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index fada72a..19eddd2 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -30,7 +30,7 @@ BINUTILS_SOURCE = binutils-$(BINUTILS_VERSION).tar.gz
+ BINUTILS_FROM_GIT = y
+ endif
+ ifeq ($(findstring git,$(BINUTILS_VERSION))$(BR2_microblaze),gity)
+-BINUTILS_VERSION = 8351467c933d277ebea0c8d99ad2b65b5f7b6bc2
++BINUTILS_VERSION = xsdk_2013.4
+ BINUTILS_SITE = $(call github,Xilinx,binutils,$(BINUTILS_VERSION))
+ BINUTILS_SOURCE = binutils-$(BINUTILS_VERSION).tar.gz
+ BINUTILS_FROM_GIT = y
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.8.3.2
