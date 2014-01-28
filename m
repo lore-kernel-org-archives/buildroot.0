@@ -1,32 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jan 2014 23:14:37 +0100
-Subject: [Buildroot] [PATCH 2/2] linux: only depend on host-lzop if
- needed
-In-Reply-To: <1d22a1ff0f39a4b4e8fe4186cf9696a44a01e20f.1390744549.git.yann.morin.1998@free.fr>
-References: <cover.1390744549.git.yann.morin.1998@free.fr>
- <1d22a1ff0f39a4b4e8fe4186cf9696a44a01e20f.1390744549.git.yann.morin.1998@free.fr>
-Message-ID: <20140128231437.22b6a7ee@skate>
+Date: Tue, 28 Jan 2014 23:15:34 +0100
+Subject: [Buildroot] [PATCH] Run post scripts referenced by relative
+ paths
+In-Reply-To: <CAHKzcEN7NvA9XAiFEAZ9xpjp16YQYzNX2sucbmQ4ps_yRZrScA@mail.gmail.com>
+References: <1390904090-27934-1-git-send-email-waldemar.rymarkiewicz@gmail.com>
+ <CAGduivzPCzuKsvy2HWuxdv9E5wVzdWvgdosNCBfQsenmmeZihA@mail.gmail.com>
+ <CAHKzcEM_-gWUPe_cSYQCoUtgywMwmi8Wkjyy25UqgMGSRQto8A@mail.gmail.com>
+ <20140128183202.GC3466@free.fr> <20140128224133.3a145dd0@skate>
+ <CAHKzcEN7NvA9XAiFEAZ9xpjp16YQYzNX2sucbmQ4ps_yRZrScA@mail.gmail.com>
+Message-ID: <20140128231534.42dbd2e0@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Waldemar Rymarkiewicz,
 
-On Sun, 26 Jan 2014 14:56:27 +0100, Yann E. MORIN wrote:
+On Tue, 28 Jan 2014 23:06:05 +0100, Waldemar Rymarkiewicz wrote:
 
-> +ifeq ($(call KCONFIG_GET_OPT,CONFIG_KERNEL_LZO,$(call qstrip,$(KERNEL_SOURCE_CONFIG))),y)
-> +LINUX_DEPENDENCIES += host-lzop
-> +endif
+> The point was that neither manual nor menuconfig help explains how a
+> script should be referenced. By full path, relative or what. In my
+> case the easiest way was  just to put  "a space-separated list of
+> scripts" as per help message and it does not work. For someone who is
+> not dealing with buildroot frequently it can be an issue. Of course
+> you can always use ./your_script, but still it's not explained
+> anywhere. Abspath will fix it and it costs nothing, but I understand
+> your way of thinking.
 
-Do this works reliably? KERNEL_SOURCE_CONFIG typically points to a
-minimal defconfig file (say arch/arm/configs/mvebu_defconfig). So if
-CONFIG_KERNEL_LZO is the default choice for the kernel, it will not
-appear in the defconfig, and therefore the piece of code above will not
-realize that we need host-lzop, because the test is done before "make
-mvebu_defconfig" is executed and turns it back into a full
-configuration file.
+Your patches to the documentation and/or the help text of the
+problematic Config.in options would definitely be welcome!
+
+Thanks!
 
 Thomas
 -- 
