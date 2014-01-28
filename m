@@ -1,31 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 28 Jan 2014 23:01:31 +0100
-Subject: [Buildroot] [PATCH] packge/pkg-cmake: disable colouring the
-	output
-In-Reply-To: <1390757822-17485-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Sun, 26 Jan 2014 18:37:02 +0100")
-References: <1390757822-17485-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87ppnbzryc.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 28 Jan 2014 23:05:58 +0100
+Subject: [Buildroot] [PATCH 3/6] php-zmq: new package
+In-Reply-To: <1390944391-3892-3-git-send-email-gustavo@zacarias.com.ar>
+References: <1390944391-3892-1-git-send-email-gustavo@zacarias.com.ar>
+ <1390944391-3892-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140128230558.157ee3eb@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Dear Gustavo Zacarias,
 
- > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > cmake is the only build-system we support that does colour its output,
+On Tue, 28 Jan 2014 18:26:28 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/Config.in          | 10 ++++++++++
+>  package/php-zmq/Config.in  | 17 +++++++++++++++++
+>  package/php-zmq/php-zmq.mk | 25 +++++++++++++++++++++++++
+>  3 files changed, 52 insertions(+)
+>  create mode 100644 package/php-zmq/Config.in
+>  create mode 100644 package/php-zmq/php-zmq.mk
 
- > Also, since parallel builds generates intermixed output lines, it makes
- > for ugly-looking output.
+Just curious, how many potential PHP packages could we add? The build
+logic for the four packages you submitted looks highly similar, maybe
+it calls a php-package infrastructure?
 
- > Just disable cmake colouring globally.
+The only "difficulty" is that it would have to inherit from
+autotools-package, which itself already inherits from generic-package.
+So it would be the first package infrastructure to inherit from a
+package infra that already inherits from generic-package. I'm sure it
+can work, but it might raise issues with some missing quoting.
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Samuel Martin <s.martin49@gmail.com>
-
-Committed, thanks.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
