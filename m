@@ -1,40 +1,73 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 28 Jan 2014 23:54:00 +0100
-Subject: [Buildroot] [git commit] package/rpi-userland: fix fall-out after
-	cmake infra change
-Message-ID: <20140128225523.18FAA9C6BB@busybox.osuosl.org>
+From: Spenser Gilliland <spenser@gillilanding.com>
+Date: Tue, 28 Jan 2014 17:34:35 -0600
+Subject: [Buildroot] [PATCH v2] gcc: coexist upstream with vendor git
+ releases for mb and arc
+In-Reply-To: <52E7EAB5.9000909@mind.be>
+References: <1390859507-31670-1-git-send-email-spenser@gillilanding.com>
+ <52E7EAB5.9000909@mind.be>
+Message-ID: <CAEBucnAjAfvf650pA5css455D2TRwNteNhYzoo1pqkGy2cPPDA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5e3b1f31b3f82e3b163567f10d7131c9d649a2cf
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>  Can you explain this is bit better? I don't see the advantage at the
+> moment...
 
-Cset 9fa7f2b (pkg-cmake.mk: build shared library when !BR2_PREFER_STATIC_LIB)
-broke rpi-userland.
+The advantage of this approach is that as soon as upstream gcc
+supports the microblaze or arc architecture, the only change required
+is to remove depends on !BR2_microblaze or !BR2_arc for that release.
 
-Force not building shared libs for rpi-userland, since they are broken.
+>  After this patch, the version is sometimes set in Config.in.host and
+> sometimes in gcc.mk. I really don't like that...
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Samuel Martin <s.martin49@gmail.com>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/rpi-userland/rpi-userland.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+I understand.  See below for a possible fix.  Let me know if you think
+this is better.
 
-diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
-index 35eaf24..223b645 100644
---- a/package/rpi-userland/rpi-userland.mk
-+++ b/package/rpi-userland/rpi-userland.mk
-@@ -9,7 +9,7 @@ RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
- RPI_USERLAND_LICENSE = BSD-3c
- RPI_USERLAND_LICENSE_FILES = LICENCE
- RPI_USERLAND_INSTALL_STAGING = YES
--RPI_USERLAND_CONF_OPT = -DVMCS_INSTALL_PREFIX=/usr
-+RPI_USERLAND_CONF_OPT = -DVMCS_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS=OFF
- 
- define RPI_USERLAND_POST_TARGET_CLEANUP
-     rm -Rf $(TARGET_DIR)/usr/src
+>> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+>> ---
+>>   package/gcc/gcc.mk         | 6 ++++--
+>>   1 files changed, 2 insertions(+), 2 deletions(-)
+>>
+>>   config BR2_EXTRA_GCC_CONFIG_OPTIONS
+>> diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+>> index 236297d..dd99604 100644
+>> --- a/package/gcc/gcc.mk
+>> +++ b/package/gcc/gcc.mk
+>> @@ -19,10 +19,12 @@ ifneq ($(GCC_SNAP_DATE),)
+>>   GCC_SITE = ftp://gcc.gnu.org/pub/gcc/snapshots/$(GCC_SNAP_DATE)/
+>>   else ifeq ($(findstring avr32,$(GCC_VERSION)),avr32)
+>>   GCC_SITE = ftp://www.at91.com/pub/buildroot/
+>> -else ifeq ($(BR2_arc),y)
+>> +else ifeq ($(findstring git,$(GCC_VERSION))$(BR2_arc),gity)
+
+instead of above do something like
+
+-else ifeq ($(BR2_arc),y)
++else ifeq (BR2_GCC_VERSION_4_8_ARC,y)
+
+>>   GCC_SITE = $(call
+>> github,foss-for-synopsys-dwc-arc-processors,gcc,$(GCC_VERSION))
+>>   GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
+>> -else ifeq ($(BR2_microblaze),y)
+>> +else ifeq ($(findstring git,$(GCC_VERSION))$(BR2_microblaze),gity)
+
+and instead of the above possibly
+
+-else ifeq ($(BR2_arc),y)
++else ifeq (BR2_GCC_VERSION_4_9_MICROBLAZE,y)
+
+>>   GCC_SITE = $(call github,Xilinx,gcc,$(GCC_VERSION))
+>>   GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
+>>   else
+
+Also, updating the AVR32 code to work in the same manner would probably be best.
+
+Thanks,
+Spenser
+
+-- 
+Spenser Gilliland
+Computer Engineer
+Doctoral Candidate
