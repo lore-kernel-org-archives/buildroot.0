@@ -1,30 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jan 2014 23:22:29 +0100
-Subject: [Buildroot] [PATCH 3/3] package/weston: bump to 1.4.0
-In-Reply-To: <a7009e9d1e3e546472a44efe39059af6338e49d5.1390947201.git.yann.morin.1998@free.fr>
-References: <cover.1390947201.git.yann.morin.1998@free.fr>
- <a7009e9d1e3e546472a44efe39059af6338e49d5.1390947201.git.yann.morin.1998@free.fr>
-Message-ID: <20140128232229.72633460@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 28 Jan 2014 19:24:11 -0300
+Subject: [Buildroot] [PATCH] libusb: disable udev support for host variant
+Message-ID: <1390947851-11705-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+There's no guarantee that udev with development files is present in the
+host, so disable it. Fixes:
+http://autobuild.buildroot.net/results/7bb/7bbf6ec25250dea96503253ac468adfef77a9010/
 
-On Tue, 28 Jan 2014 23:14:20 +0100, Yann E. MORIN wrote:
->  WESTON_CONF_OPT = \
-> +	--with-dtddir=$(TARGET_DIR)/usr/share/wayland \
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libusb/libusb.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-wayland is also installed in staging, so I believe it would make more
-sense to point to the staging directory here, no?
-
-Is this DTD stuff needed at runtime? If not, maybe it can be removed
-from the target directory altogether?
-
-Thomas
+diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
+index a595a12..ffb39ba 100644
+--- a/package/libusb/libusb.mk
++++ b/package/libusb/libusb.mk
+@@ -8,6 +8,7 @@ LIBUSB_VERSION_MAJOR = 1.0
+ LIBUSB_VERSION = $(LIBUSB_VERSION_MAJOR).18
+ LIBUSB_SOURCE = libusb-$(LIBUSB_VERSION).tar.bz2
+ LIBUSB_SITE = http://downloads.sourceforge.net/project/libusb/libusb-$(LIBUSB_VERSION_MAJOR)/libusb-$(LIBUSB_VERSION)
++HOST_LIBUSB_CONF_OPT = --disable-udev
+ LIBUSB_LICENSE = LGPLv2.1+
+ LIBUSB_LICENSE_FILES = COPYING
+ LIBUSB_DEPENDENCIES = host-pkgconf
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.3.2
