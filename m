@@ -1,95 +1,53 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 28 Jan 2014 08:04:28 +0100
-Subject: [Buildroot] [PATCH 1/1] ntp: add systemd unit file for ntpd
-In-Reply-To: <1390874405-25944-1-git-send-email-vsergeev@kumunetworks.com>
-References: <1390874405-25944-1-git-send-email-vsergeev@kumunetworks.com>
-Message-ID: <52E7567C.90607@mind.be>
+Date: Tue, 28 Jan 2014 08:13:35 +0100
+Subject: [Buildroot] [PATCH 1/1] skeleton: add systemd network.service
+ unit
+In-Reply-To: <CAPyrzo0q7Y3Tf1LOaCe4LK78a7sZrVdToLfnzp4Tc4kow=-nKA@mail.gmail.com>
+References: <1388713112-4686-1-git-send-email-vsergeev@kumunetworks.com>
+ <20140103201333.7f4edd47@skate>
+ <CAPyrzo0q7Y3Tf1LOaCe4LK78a7sZrVdToLfnzp4Tc4kow=-nKA@mail.gmail.com>
+Message-ID: <52E7589F.7060301@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 28/01/14 03:00, Ivan Sergeev wrote:
-> Signed-off-by: Ivan Sergeev <vsergeev@kumunetworks.com>
-
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-> ---
->   package/ntp/ntp.mk       | 13 ++++++++++++-
->   package/ntp/ntpd.service | 11 +++++++++++
->   2 files changed, 23 insertions(+), 1 deletion(-)
->   create mode 100644 package/ntp/ntpd.service
+On 03/01/14 20:41, Ivan Sergeev wrote:
+> Currently, it seems that the /etc/init.d scripts are copied over blindly
+> from the target skeleton to the target even if systemd (and not busybox)
+> is the chosen init system. Moving forward, having both busybox and
+> systemd init files in the skeleton, like this patch would have, will
+> always clutter /etc/ with some unused init files in the target system,
+> since only one init system will be active.
 >
-> diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-> index 40d8e4f..fe64a21 100644
-> --- a/package/ntp/ntp.mk
-> +++ b/package/ntp/ntp.mk
-> @@ -52,13 +52,24 @@ NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_TICKADJ) += util/tickadj
->   define NTP_INSTALL_TARGET_CMDS
->   	$(if $(BR2_PACKAGE_NTP_NTPD), install -m 755 $(@D)/ntpd/ntpd $(TARGET_DIR)/usr/sbin/ntpd)
->   	test -z "$(NTP_INSTALL_FILES_y)" || install -m 755 $(addprefix $(@D)/,$(NTP_INSTALL_FILES_y)) $(TARGET_DIR)/usr/bin/
-> -	$(if $(BR2_PACKAGE_NTP_NTPD), install -m 755 package/ntp/S49ntp $(TARGET_DIR)/etc/init.d/S49ntp)
->   	@if [ ! -f $(TARGET_DIR)/etc/default/ntpd ]; then \
->   		install -m 755 -d $(TARGET_DIR)/etc/default ; \
->   		install -m 644 package/ntp/ntpd.etc.default $(TARGET_DIR)/etc/default/ntpd ; \
->   	fi
->   endef
->
-> +ifeq ($(BR2_PACKAGE_NTP_NTPD),y)
-> +define NTP_INSTALL_INIT_SYSV
-> +	$(INSTALL) -D -m 755 package/ntp/S49ntp $(TARGET_DIR)/etc/init.d/S49ntp
-> +endef
-> +
-> +define NTP_INSTALL_INIT_SYSTEMD
-> +	$(INSTALL) -D -m 644 package/ntp/ntpd.service $(TARGET_DIR)/etc/systemd/system/ntpd.service
-> +	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-> +	ln -fs ../ntpd.service $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/ntpd.service
+> Should such init files be conditional targets in system/system.mk
+> ?  Or should S40network be owned and copied over by
+> package/busybox, and network.service be owned and copied over by
+> package/systemd, instead of having them included statically in the target
+> skeleton?
 
-  This patch makes me wonder about two things.
+  I completely agree that the way it is done now is far from ideal.
 
-1. The 3 packages that currently install unit files all have this mkdir 
--p of multi-user.target.wants. Shouldn't that be done by the core 
-infrastructure as part of the skeleton?
+  I think the best way to work with this would be to:
 
-2. For sysv-init, we use /etc/init.d directly instead of the usual 
-/etc/rcX.d with symlinks to init.d. Shouldn't we do something similar for 
-systemd, i.e. put the unit files directly in multi-user.target.wants and 
-begone with the symlinks?
+- remove the contents of the init.d directory from the skeleton;
 
-  Both of these suggestions are obviously not part of this patch, but 
-rather separate cleanup work, since they affect dropbear, lighttpd and 
-openssh as well.
+- create a new skeleton fragment system/skeleton-init-sysv that contains 
+etc/init.d;
+
+- create a new skeleton fragment system/skeleton-init-systemd that 
+contains whatever support files are needed by systemd (currently nothing, 
+but your patch would add the networking unit file);
+
+- copy the correct skeleton fragment as part of the .root target, but 
+only if the default skeleton was selected - with a custom skeleton, it's 
+up to the user to provide the right systemd/init.d;
+
 
 
   Regards,
   Arnout
-
-> +endef
-> +endif
-> +
->   NTP_POST_PATCH_HOOKS += NTP_PATCH_FIXUPS
->
->   $(eval $(autotools-package))
-> diff --git a/package/ntp/ntpd.service b/package/ntp/ntpd.service
-> new file mode 100644
-> index 0000000..7964c53
-> --- /dev/null
-> +++ b/package/ntp/ntpd.service
-> @@ -0,0 +1,11 @@
-> +[Unit]
-> +Description=Network Time Service
-> +After=network.target
-> +
-> +[Service]
-> +Type=forking
-> +PIDFile=/run/ntpd.pid
-> +ExecStart=/usr/sbin/ntpd -g -p /run/ntpd.pid
-> +
-> +[Install]
-> +WantedBy=multi-user.target
->
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
