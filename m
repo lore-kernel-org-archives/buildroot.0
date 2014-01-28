@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 28 Jan 2014 16:20:04 -0300
-Subject: [Buildroot] [PATCH] radvd: bump to version 1.9.8
-Message-ID: <1390936804-9847-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 28 Jan 2014 16:20:26 -0300
+Subject: [Buildroot] [PATCH] ethtool: bump to version 3.13
+Message-ID: <1390936826-10022-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,21 +10,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/radvd/radvd.mk | 2 +-
+ package/ethtool/ethtool.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
-index 22ab9f9..9057a08 100644
---- a/package/radvd/radvd.mk
-+++ b/package/radvd/radvd.mk
+diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
+index 32b39e8..a6158ba 100644
+--- a/package/ethtool/ethtool.mk
++++ b/package/ethtool/ethtool.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RADVD_VERSION = 1.9.7
-+RADVD_VERSION = 1.9.8
- RADVD_SOURCE = radvd-$(RADVD_VERSION).tar.xz
- RADVD_SITE = http://www.litech.org/radvd/dist
- RADVD_DEPENDENCIES = host-bison flex libdaemon host-flex host-pkgconf
+-ETHTOOL_VERSION = 3.12.1
++ETHTOOL_VERSION = 3.13
+ ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
+ ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
+ ETHTOOL_LICENSE = GPLv2
 -- 
 1.8.3.2
