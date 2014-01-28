@@ -1,21 +1,30 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 28 Jan 2014 20:18:21 +0100
-Subject: [Buildroot] [PATCH] iw: bump to version 3.14
-In-Reply-To: <1390933319-22126-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 28 Jan 2014 15:21:59 -0300")
-References: <1390933319-22126-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87iot33og2.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 28 Jan 2014 16:20:04 -0300
+Subject: [Buildroot] [PATCH] radvd: bump to version 1.9.8
+Message-ID: <1390936804-9847-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/radvd/radvd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-
-Committed, thanks.
-
+diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
+index 22ab9f9..9057a08 100644
+--- a/package/radvd/radvd.mk
++++ b/package/radvd/radvd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RADVD_VERSION = 1.9.7
++RADVD_VERSION = 1.9.8
+ RADVD_SOURCE = radvd-$(RADVD_VERSION).tar.xz
+ RADVD_SITE = http://www.litech.org/radvd/dist
+ RADVD_DEPENDENCIES = host-bison flex libdaemon host-flex host-pkgconf
 -- 
-Bye, Peter Korsgaard
+1.8.3.2
