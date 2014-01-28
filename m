@@ -1,33 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 28 Jan 2014 22:56:52 +0100
-Subject: [Buildroot] [PATCH 3/5] linux: ensure buildroot_defconfig is
-	writable
-In-Reply-To: <f5a33ad538e2632b1a6517d7f2fa5e3a35909713.1390939719.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Tue, 28 Jan 2014 21:11:23 +0100")
-References: <cover.1390939719.git.yann.morin.1998@free.fr>
- <f5a33ad538e2632b1a6517d7f2fa5e3a35909713.1390939719.git.yann.morin.1998@free.fr>
-Message-ID: <8738k722jf.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 28 Jan 2014 22:57:31 +0100
+Subject: [Buildroot] [PATCH 1/3] toolchain-external: Fix EABIhf check
+In-Reply-To: <1389687696-4824-1-git-send-email-stefan.sorensen@spectralink.com>
+References: <1389687696-4824-1-git-send-email-stefan.sorensen@spectralink.com>
+Message-ID: <20140128225731.103edf8a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Dear Stefan S?rensen,
 
- > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > If $(KERNEL_SOURCE_CONFIG) is read-only (eg. because Buildroot's source
- > dir is), the rm of $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig will
- > either fail, or prompt the user, both of which we want to avoid.
+On Tue, 14 Jan 2014 09:21:34 +0100, Stefan S?rensen wrote:
+> Currently the check for EABI/EABIhf toolchains looks for the
+> Tag_ABI_VFP_args attribute in the crt1.o file which gcc adds
+> in a EABIhw toolchain. The crt1.o is however often not compiled
+> from c but assembler, and will then always failt he EABIhf check.
 
- > Make it writable by using $(INSTALL).
+Do you have details about this? Because the crt1.o trick was actually
+tested by me on several toolchains, and it was indeed working.
 
- > Fixes: #4363
- > Signed-off-by: Nathan Lynch <ntl@pobox.com>
- > [yann.morin.1998 at free.fr: use $(INSTALL) instead of cp, don't 'rm -f']
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> +	TEMP_C_FILE=`mktemp --tmpdir --suffix=.c`; \
+> +	touch $${TEMP_C_FILE}; \
+> +	$${__CROSS_CC} -c -o $${TEMP_C_FILE}.o $${TEMP_C_FILE}; \
 
-Committed, thanks.
+If all you need is build an empty source file, then you do not even
+need to create a temporary .c file:
 
+	gcc -x c -c -o toto.o /dev/null
+
+Best regards,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
