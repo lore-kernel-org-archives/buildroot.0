@@ -1,36 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 28 Jan 2014 22:46:22 +0100
-Subject: [Buildroot] [git commit] php: security bump to version 5.5.8
-Message-ID: <20140128214755.6C83B9C6AC@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 28 Jan 2014 22:54:33 +0100
+Subject: [Buildroot] [PATCH 1/5] target: ensure target/ dir is writable
+In-Reply-To: <4b79710686ef3bcec64579d677de9a027788b74f.1390939719.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Tue, 28 Jan 2014 21:11:21 +0100")
+References: <cover.1390939719.git.yann.morin.1998@free.fr>
+ <4b79710686ef3bcec64579d677de9a027788b74f.1390939719.git.yann.morin.1998@free.fr>
+Message-ID: <87bnyv22na.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d8fd2b3ed65e5d98fc817ed55e7494f484744e14
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Fixes CVE-2013-6712.
-Note that there's no xz format tarball for 5.5.8.
+ > From: Nathan Lynch <ntl@pobox.com>
+ > If the source target skeleton is read-only (eg. because Buildroot's
+ > source dir is), modifications to the output target (such as creating
+ > /etc/hostname and /etc/issue) fail.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/php/php.mk |    3 +--
- 1 files changed, 1 insertions(+), 2 deletions(-)
+ > (This can happen if the Buildroot source dir is NFS-mounted read-only
+ > to be shared between different machines, for example).
 
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 54d6e05..de02f4b 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,8 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 5.5.7
--PHP_SOURCE = php-$(PHP_VERSION).tar.xz
-+PHP_VERSION = 5.5.8
- PHP_SITE = http://www.php.net/distributions
- PHP_INSTALL_STAGING = YES
- PHP_INSTALL_STAGING_OPT = INSTALL_ROOT=$(STAGING_DIR) install
+ > Signed-off-by: Nathan Lynch <ntl@pobox.com>
+ > [yann.morin.1998 at free.fr: we use rsync now, not cp; --chmod=Du+w
+ >  suggested by Arnout; clarify commit log]
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Arnout Vandecappelle <arnout@mind.be>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
