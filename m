@@ -1,56 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 28 Jan 2014 22:57:52 +0100
-Subject: [Buildroot] [git commit] fs: ensure $(TARGET_DIR_WARNING_FILE) is
+Date: Tue, 28 Jan 2014 22:56:17 +0100
+Subject: [Buildroot] [git commit] linux: ensure buildroot_defconfig is
 	writable
-Message-ID: <20140128215820.C96D79C6AC@busybox.osuosl.org>
+Message-ID: <20140128215820.B4D289C6AC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=984524fda1f8260e258421f6676d522591f025da
+commit: http://git.buildroot.net/buildroot/commit/?id=0a541c8f244971a45396bfa4c371444204ed4a2c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-If the Buildroot tree is read-only, then $(TARGET_DIR_WARNING_FILE) is
-copied read-only into target/ but we may want to remove it during the
-build process.
+If $(KERNEL_SOURCE_CONFIG) is read-only (eg. because Buildroot's source
+dir is), the rm of $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig will
+either fail, or prompt the user, both of which we want to avoid.
 
-This poses no real problem, since target/ itself is guaranteed to be
-writable, but for good measure, force $(TARGET_DIR_WARNING_FILE) to be
-writable itself.
+Make it writable by using $(INSTALL).
 
-Reported-by: Danomi Manchego <danomimanchego123@gmail.com>
+Fixes: #4363
+Signed-off-by: Nathan Lynch <ntl@pobox.com>
+[yann.morin.1998 at free.fr: use $(INSTALL) instead of cp, don't 'rm -f']
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Makefile     |    2 +-
- fs/common.mk |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ linux/linux.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index d8a8dad..dc57cf4 100644
---- a/Makefile
-+++ b/Makefile
-@@ -475,7 +475,7 @@ $(BUILD_DIR)/.root:
- 	rsync -a $(RSYNC_VCS_EXCLUSIONS) \
- 		--chmod=Du+w --exclude .empty --exclude '*~' \
- 		$(TARGET_SKELETON)/ $(TARGET_DIR)/
--	cp support/misc/target-dir-warning.txt $(TARGET_DIR_WARNING_FILE)
-+	$(INSTALL) -m 0644 support/misc/target-dir-warning.txt $(TARGET_DIR_WARNING_FILE)
- 	@ln -snf lib $(TARGET_DIR)/$(LIB_SYMLINK)
- 	@mkdir -p $(TARGET_DIR)/usr
- 	@ln -snf lib $(TARGET_DIR)/usr/$(LIB_SYMLINK)
-diff --git a/fs/common.mk b/fs/common.mk
-index 9f32620..30e7524 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -83,7 +83,7 @@ endif
- 	echo "$$(ROOTFS_$(2)_CMD)" >> $$(FAKEROOT_SCRIPT)
- 	chmod a+x $$(FAKEROOT_SCRIPT)
- 	$$(HOST_DIR)/usr/bin/fakeroot -- $$(FAKEROOT_SCRIPT)
--	cp support/misc/target-dir-warning.txt $$(TARGET_DIR_WARNING_FILE)
-+	$(INSTALL) -m 0644 support/misc/target-dir-warning.txt $$(TARGET_DIR_WARNING_FILE)
- 	- at rm -f $$(FAKEROOT_SCRIPT) $$(FULL_DEVICE_TABLE)
- ifneq ($$(ROOTFS_$(2)_COMPRESS_CMD),)
- 	$$(ROOTFS_$(2)_COMPRESS_CMD) $$@ > $$@$$(ROOTFS_$(2)_COMPRESS_EXT)
+diff --git a/linux/linux.mk b/linux/linux.mk
+index ab25fe9..62033d2 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -164,7 +164,7 @@ KERNEL_SOURCE_CONFIG = $(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE)
+ endif
+ 
+ define LINUX_CONFIGURE_CMDS
+-	cp $(KERNEL_SOURCE_CONFIG) $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
++	$(INSTALL) -m 0644 $(KERNEL_SOURCE_CONFIG) $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
+ 	$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) buildroot_defconfig
+ 	rm $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
+ 	$(if $(BR2_arm)$(BR2_armeb),
