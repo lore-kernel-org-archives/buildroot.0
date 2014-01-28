@@ -1,32 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jan 2014 22:16:53 +0100
-Subject: [Buildroot] [git commit] minidlna: fix static linking
-In-Reply-To: <20140108082945.20CF58DE52@busybox.osuosl.org>
-References: <20140108082945.20CF58DE52@busybox.osuosl.org>
-Message-ID: <20140128221653.6fc8974b@skate>
+Date: Tue, 28 Jan 2014 22:18:10 +0100
+Subject: [Buildroot] [PATCH 1/2] perl: bump to version 5.18.2
+In-Reply-To: <CAB0FRsu6-ccW0Fp5_zOaJeJWYyQhZzmF_XsqoEeH_kbbCBwodQ@mail.gmail.com>
+References: <1389184048-21247-1-git-send-email-francois.perrad@gadz.org>
+ <878uuqnokt.fsf@dell.be.48ers.dk>
+ <CAB0FRsu6-ccW0Fp5_zOaJeJWYyQhZzmF_XsqoEeH_kbbCBwodQ@mail.gmail.com>
+Message-ID: <20140128221810.79ad08ec@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+Dear Fran?ois Perrad,
 
-On Wed, 8 Jan 2014 09:00:11 +0100, Peter Korsgaard wrote:
+On Thu, 9 Jan 2014 09:14:20 +0100, Fran?ois Perrad wrote:
 
-> -# static build is broken w.r.t libgcc_s
-> +ifeq ($(BR2_PREFER_STATIC_LIB),y)
-> +# the configure script / Makefile forgets to link with some of the dependent
-> +# libraries breaking static linking, so help it along
-> +MINIDLNA_CONF_ENV = \
-> +	LIBS='-lavformat -lavcodec -lavutil -logg -lz -lpthread -lm'
-> +else
+> what do you think about the serie : pkg-perl infra V3 ?
 
-I know we're doing this in a bunch of cases, but I believe we should
-rather fix the package itself, rather than encoding into the
-Buildroot .mk file the list of libraries to link with. Because if
-libogg or libavutil becomes unnecessary in a future version of
-minidlna, we may not notice, and still link needlessly against them.
+I think we should discuss it during the Buildroot meeting next week
+(Monday/Tuesday). Would you be available for a discussion through
+Google Hangout maybe (requires a webcam and a Google account) ?
+
+Best regards,
 
 Thomas
 -- 
