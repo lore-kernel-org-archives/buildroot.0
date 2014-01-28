@@ -1,68 +1,50 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Mon, 27 Jan 2014 19:31:32 -0500
-Subject: [Buildroot] [PATCH 1/5] target: ensure target/ dir is writable
-In-Reply-To: <09e0a585c589ccd09d3f85436af4193fb3e1a177.1384454667.git.yann.morin.1998@free.fr>
-References: <cover.1384454667.git.yann.morin.1998@free.fr>
- <09e0a585c589ccd09d3f85436af4193fb3e1a177.1384454667.git.yann.morin.1998@free.fr>
-Message-ID: <CANxTyt46Sx2m6szFYmHgPmX4vR7ocvwjCEwPdbANNDRE7BJqNg@mail.gmail.com>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Mon, 27 Jan 2014 19:42:55 -0500
+Subject: [Buildroot] [PATCH] erlang: bump version to R16B03-1
+Message-ID: <1390869775-13612-1-git-send-email-fhunleth@troodon-software.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, Nathan,
+OTP R16B03-1 is a service release which corrects a few issues found in
+the R16B03 release. The corrections are:
 
-On Thu, Nov 14, 2013 at 1:46 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> From: Nathan Lynch <ntl@pobox.com>
->
-> If the source target skeleton is read-only (eg. because Buildroot's
-> source dir is), modifications to the output target (such as creating
-> /etc/hostname and /etc/issue) fail.
->
-> (This can happen if the Buildroot source dir is NFS-mounted read-only
-> to be shared between different machines, for example).
->
-> Signed-off-by: Nathan Lynch <ntl@pobox.com>
-> [yann.morin.1998 at free.fr: we use rsync now, not cp; --chmod=Du+w
->  suggested by Arnout; clarify commit log]
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> ---
->  Makefile | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/Makefile b/Makefile
-> index c7a0a6d..b2b962c 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -433,7 +433,7 @@ RSYNC_VCS_EXCLUSIONS = \
->  $(BUILD_DIR)/.root:
->         mkdir -p $(TARGET_DIR)
->         rsync -a $(RSYNC_VCS_EXCLUSIONS) \
-> -               --exclude .empty --exclude '*~' \
-> +               --chmod=Du+w --exclude .empty --exclude '*~' \
->                 $(TARGET_SKELETON)/ $(TARGET_DIR)/
->         cp support/misc/target-dir-warning.txt $(TARGET_DIR_WARNING_FILE)
->         @ln -snf lib $(TARGET_DIR)/$(LIB_SYMLINK)
-> @@ -508,7 +508,7 @@ endif
->         @$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
->                 $(call MESSAGE,"Copying overlay $(d)"); \
->                 rsync -a $(RSYNC_VCS_EXCLUSIONS) \
-> -                       --exclude .empty --exclude '*~' \
-> +                       --chmod=Du+w --exclude .empty --exclude '*~' \
->                         $(d)/ $(TARGET_DIR)$(sep))
->
->         @$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
-> --
-> 1.8.1.2
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ - The ODBC application was missing in the prebuilt Windows installers
+ - 3 corrections in the SSL application:
+   - Add missing validation of the server_name_indication option and test for
+     its explicit use.
+   - Elliptic curve selection in server mode now properly selects a curve
+     suggested by the client, if possible.
+   - The server did not indicate support for secure renegotiation during TLS
+     extension handling.
+ - In the syntax tools application a bug was introduced which broke
+   reverting of local funs. This is now corrected (thanks to Anthony
+   Ramine)
+ - wx - Solved a problem which caused the debugger to crash when closing a
+   window. Fixed static linking on Mac.
+ - xmerl - Fixed a problem in the SAX-parser when the header of the next
+   document was appearing in the buffer when using the
+   xmerl_sax_parser:stream/2 function.
 
-What happened to this series (5 patches fixing issues with RO tree)?
-I don't see these patches in Patchwork - did they get rejected?
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+---
+ package/erlang/erlang.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Danomi -
+diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
+index 18ceb7b..1572731 100644
+--- a/package/erlang/erlang.mk
++++ b/package/erlang/erlang.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ERLANG_VERSION = R16B03
++ERLANG_VERSION = R16B03-1
+ ERLANG_SITE = http://www.erlang.org/download
+ ERLANG_SOURCE = otp_src_$(ERLANG_VERSION).tar.gz
+ ERLANG_DEPENDENCIES = host-erlang
+-- 
+1.8.3.2
