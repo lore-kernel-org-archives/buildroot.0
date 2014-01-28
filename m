@@ -1,60 +1,54 @@
-From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Tue, 28 Jan 2014 14:20:58 +0100
-Subject: [Buildroot] [PATCH 1/1] skeleton: add systemd network.service
- unit
-In-Reply-To: <CAGduivw+HOQRDN18=xrM_AwqT3YtoM7BwmcaNRDb0VFVaQM9eQ@mail.gmail.com>
-References: <1388713112-4686-1-git-send-email-vsergeev@kumunetworks.com>
- <20140103201333.7f4edd47@skate>
- <CAPyrzo0q7Y3Tf1LOaCe4LK78a7sZrVdToLfnzp4Tc4kow=-nKA@mail.gmail.com>
- <52E7589F.7060301@mind.be>
- <CAGduivw+HOQRDN18=xrM_AwqT3YtoM7BwmcaNRDb0VFVaQM9eQ@mail.gmail.com>
-Message-ID: <20140128132058.GD3867@lukather>
+From: =?ISO-8859-1?Q?Ezequiel_Garc=EDa?= <ezequiel@vanguardiasur.com.ar>
+Date: Tue, 28 Jan 2014 11:53:49 -0200
+Subject: [Buildroot] [PATCH 2/2] mtd: Allow to select the host variant
+In-Reply-To: <CAAXf6LXpeBr30NU4upeotjoQ8UR-WLbraXGFDCT9K8rbJTUO3A@mail.gmail.com>
+References: <1390909161-2496-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+ <1390909161-2496-2-git-send-email-ezequiel@vanguardiasur.com.ar>
+ <CAAXf6LXpeBr30NU4upeotjoQ8UR-WLbraXGFDCT9K8rbJTUO3A@mail.gmail.com>
+Message-ID: <CAAEAJfDEd=B6Kpm683jLkOn7hqp+GG+5HMqE4ftZn3CfDd80XA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jan 28, 2014 at 09:25:20AM +0100, Maxime Hadjinlian wrote:
-> I would even like to go even further, as I have noticed that a lot of
-> the defined LIBFOO_INSTALL_INIT_SYSTEMD and LIBFOO_INSTALL_INIT_SYSV
-> almost always do the exact same stuff.
-> I would like for the infrastructure to take care of this, if no
-> function is defined, and a .service or S\d{0,2}*, then we should take
-> it and install it.
-> 
-> In that case, any particular requirements, the package define a
-> function, other than that, it's taken care of and we avoid duplicate
-> code in all the packages.
+On 28 January 2014 09:26, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+> On Tue, Jan 28, 2014 at 12:39 PM, Ezequiel Garcia
+> <ezequiel@vanguardiasur.com.ar> wrote:
+>> If any of the post-image scripts wants to create mtd/ubi images,
+>> we need to expose an option for mtd-tools to be user-selectable.
+>>
+>> Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+>> ---
+>>  package/Config.in.host     | 1 +
+>>  package/mtd/Config.in.host | 6 ++++++
+>>  2 files changed, 7 insertions(+)
+>>  create mode 100644 package/mtd/Config.in.host
+>>
+>> diff --git a/package/Config.in.host b/package/Config.in.host
+>> index 34e84bf..f2fe2c2 100644
+>> --- a/package/Config.in.host
+>> +++ b/package/Config.in.host
+>> @@ -8,6 +8,7 @@ source "package/genimage/Config.in.host"
+>>  source "package/genpart/Config.in.host"
+>>  source "package/lpc3250loader/Config.in.host"
+>>  source "package/mtools/Config.in.host"
+>> +source "package/mtd/Config.in.host"
+>
+> This should be above mtools.
+>
 
-Actually, there's two main issues that prevents this in the systemd
-case, and are why we did it that way:
-  - the multi-user-wants thing is actually comparable to the sysvinit
-    runlevels. Some packages might want to set their units to other
-    targets than multi-user (for example, graphical applications are
-    likely to go in the graphical target, not the multi-user one)
-  - Some units also takes "variables" from the created link names. For
-    example, when you want to run getty, you just have a single getty
-    unit, and the device to run getty on is set in the link name to
-    that unit (so you'd end up with a link in multi-user.target.wants
-    that will be getty.ttyS0.service, linking to
-    /etc/systemd/system/getty.service).
+Doh, yes of course. Can it be fixed when it's picked or should I send
+another one?
 
-At the time, we thought that in the systemd case, the easiest would be
-to simply write down the 2-3 commands we need to setup the unit,
-instead of having to give a whole bunch of variables. And we did the
-same for sysvinit scripts, for consistency.
+> [..]
+>
+> Other than this one comment:
+> Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Maxime
+Thanks,
 
 -- 
-Maxime Ripard, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 836 bytes
-Desc: Digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140128/bad2adac/attachment.asc>
+Ezequiel Garc?a, VanguardiaSur
+www.vanguardiasur.com.ar
