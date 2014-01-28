@@ -1,36 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jan 2014 22:25:48 +0100
-Subject: [Buildroot] [PATCH 1/2] uclibc: add a missing function member
- to siginfo.h
-In-Reply-To: <52CFC72A.3010907@imgtec.com>
-References: <1389202364-19387-1-git-send-email-Vincent.Riera@imgtec.com>
- <20140109104043.02d07109@skate> <52CE6FE5.9070305@imgtec.com>
- <20140110153615.34044994@skate> <52CFC72A.3010907@imgtec.com>
-Message-ID: <20140128222548.1eee4176@skate>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 28 Jan 2014 22:26:03 +0100
+Subject: [Buildroot] [git commit] package/tzdata: install a default
+ localtime
+In-Reply-To: <52CF4270.4000707@free-electrons.com>
+References: <20140109205952.2AAEA9C413@busybox.osuosl.org>
+ <20140110072223.5bb42cc1@skate>
+ <52CF4270.4000707@free-electrons.com>
+Message-ID: <20140128212603.GE3466@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Alexandre, All,
 
-On Fri, 10 Jan 2014 10:10:50 +0000, Vicente Olivert Riera wrote:
+On 2014-01-10 01:44 +0100, Alexandre Belloni spake thusly:
+> On 10/01/2014 00:22, Thomas Petazzoni wrote:
+> > Dear Peter Korsgaard,
+> > 
+> > On Thu, 9 Jan 2014 21:23:05 +0100, Peter Korsgaard wrote:
+> >> commit: http://git.buildroot.net/buildroot/commit/?id=f96e4d7f348ce1b7b53763f102bbedb1ef6a1991
+> >> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> >>
+> >> Add an option to install a default localtime.
+> >>
+> >> since tzdata only makes sense for (e)glibc, we don't care
+> >> that we install timezone files that uClibc can't understand.
+> >>
+> >> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> > 
+> > I know I should have raised my voice earlier, but I'm not entirely sure
+> > about this one. Instead of having this as a tzdata specific option, I'd
+> > very much prefer to have a "System configuration" option that allows to
+> > set the default time zone, and which works for both glibc and uClibc.
+> > 
+> > Alexandre Belloni has posted some patches some time ago around time
+> > zone handling with uClibc, it would have be great to have a better
+> > integration here.
+> > 
+> 
+> Yeah, it is still on my todo list. I'm trying to get the timezone
+> specification generated automatically but it requires some host packages
+> and I still didn't take the time to do that correctly.
 
-> So I understand that your suggestion is to not apply uClibc patches in 
-> Buildroot anymore and just disable the packages (the ones that are 
-> failing) for the affected uClibc versions, and keep them enabled when 
-> the uClibc daily snapshot is selected. Am I right?
+Ping? What's your status on this?
 
-This would be my preferred solution yes. This way, people would
-probably realize how broken the uClibc release process is, and would
-maybe be encouraged to work with upstream.
+Since I'm interested in that as well, do you want to push your branch
+somewhere, so I can pull from it and complete the missing bits?
 
-I've added this topic as a discussion item for the upcoming Buildroot
-Developers meeting.
+Regards,
+Yann E. MORIN.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
