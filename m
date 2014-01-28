@@ -1,40 +1,72 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Mon, 27 Jan 2014 21:16:55 -0500
-Subject: [Buildroot] [PATCH 1/1] Makefile: move skeleton overlay
- installations before strip step
-In-Reply-To: <87a9ehzf8s.fsf@dell.be.48ers.dk>
-References: <1390530729-1830-1-git-send-email-danomimanchego123@gmail.com>
- <52E6063B.1060700@mind.be> <87a9ehzf8s.fsf@dell.be.48ers.dk>
-Message-ID: <CANxTyt5PstHkJ6aPuHZ1uXPD7LJwp69vG5m9oGVK7UbezGetgg@mail.gmail.com>
+From: Ivan Sergeev <vsergeev@kumunetworks.com>
+Date: Mon, 27 Jan 2014 17:54:57 -0800
+Subject: [Buildroot] [PATCH 1/1] systemd: add network unit file
+In-Reply-To: <CAPyrzo0q7Y3Tf1LOaCe4LK78a7sZrVdToLfnzp4Tc4kow=-nKA@mail.gmail.com>
+References: <CAPyrzo0q7Y3Tf1LOaCe4LK78a7sZrVdToLfnzp4Tc4kow=-nKA@mail.gmail.com>
+Message-ID: <1390874097-25597-1-git-send-email-vsergeev@kumunetworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jan 27, 2014 at 9:11 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
->
->  > On 24/01/14 03:32, Danomi Manchego wrote:
->  >> Nothing prevents the skeleton overlays from having pre-built
->
->  >  Small nit: it's not a skeleton overlay, but a rootfs overlay (I first
->  > thought you were talking about the skeleton, which is copied _before_
->  > the build).
->
->  >> executables or libraries in them.  Therefore, we should install
->  >> the overlays prior to stripping, so that any such pre-built stuff
->  >> gets stripped too.
->
->  >  I'm not sure if I agree with this change. I like the current
->  > situation where the rootfs-overlay is really copied verbatim and you
->  > can trust it. If there are binaries in there, we can assume that the
->  > user has the cross-compiler available to strip them if he wants that.
->
-> I agree. As it is now the user has full control, which is IMHO nice.
+Add and enable a systemd unit file to bring up or down network with ifup /
+ifdown, analogous to the skeleton/etc/init.d/S40network init script.
 
-Okay, I can see that it might be expected that rootfs overlay content
-should be transferred as-is, I suppose.  Let's consider this patch
-retracted, then.
+Signed-off-by: Ivan Sergeev <vsergeev@kumunetworks.com>
+---
+ package/systemd/network.service | 21 +++++++++++++++++++++
+ package/systemd/systemd.mk      |  9 +++++++++
+ 2 files changed, 30 insertions(+)
+ create mode 100644 package/systemd/network.service
 
-Danomi -
+diff --git a/package/systemd/network.service b/package/systemd/network.service
+new file mode 100644
+index 0000000..0d77bb8
+--- /dev/null
++++ b/package/systemd/network.service
+@@ -0,0 +1,21 @@
++[Unit]
++Description=Network Connectivity
++Wants=network.target
++Before=network.target
++
++[Service]
++Type=oneshot
++RemainAfterExit=yes
++
++# lo is brought up earlier, which will cause the upcoming "ifup -a" to fail
++# with exit code 1, due to an "ip: RTNETLINK answers: File exists" error during
++# its "ip addr add ..." command, subsequently causing this unit to fail even
++# though it is a benign error. Flushing the lo address with the command below
++# before ifup prevents this failure.
++ExecStart=/sbin/ip addr flush dev lo
++
++ExecStart=/sbin/ifup -a
++ExecStop=/sbin/ifdown -a
++
++[Install]
++WantedBy=multi-user.target
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index a5dc8e5..a99c0da 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -72,7 +72,16 @@ define SYSTEMD_INSTALL_TTY_HOOK
+ 	ln -fs ../../../../usr/lib/systemd/system/serial-getty at .service $(TARGET_DIR)/etc/systemd/system/getty.target.wants/serial-getty@$(BR2_TARGET_GENERIC_GETTY_PORT).service
+ endef
+ 
++define SYSTEMD_INSTALL_NETWORK_HOOK
++	$(INSTALL) -D -m 644 package/systemd/network.service \
++		$(TARGET_DIR)/etc/systemd/system/network.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -fs ../network.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/network.service
++endef
++
+ SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
+ 	SYSTEMD_INSTALL_TTY_HOOK \
++	SYSTEMD_INSTALL_NETWORK_HOOK
+ 
+ $(eval $(autotools-package))
+-- 
+1.8.5.3
