@@ -1,45 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jan 2014 17:30:05 +0100
-Subject: [Buildroot] [PATCH 1/1] new package - generate iso with
- isolinux bootloader
-In-Reply-To: <1376644934-4302-1-git-send-email-jean.sorgemoel@laposte.net>
-References: <y> <1376644934-4302-1-git-send-email-jean.sorgemoel@laposte.net>
-Message-ID: <20140128173005.3beb329f@skate>
+Date: Tue, 28 Jan 2014 17:35:37 +0100
+Subject: [Buildroot] [PATCH] fs/ubi: add option to use custom volume
+ config file
+In-Reply-To: <CAAEAJfCF=36ET_QAO9fVZdcYRKcFUC96KChKbBO9W=KewL5cXA@mail.gmail.com>
+References: <1379215295-1805-1-git-send-email-danomimanchego123@gmail.com>
+ <20130915200014.5543b2a1@skate>
+ <CANxTyt4GZNTtACwf4W8OCKUBZLf7YfZ=pBM-6KGmgeaf8UCPLg@mail.gmail.com>
+ <20130915205310.06f8af50@skate>
+ <CANxTyt6uuGy0aYis_SG49KjXjoC=sMWMgTEytTMrhGXifimjYw@mail.gmail.com>
+ <20130915211647.6354ea34@skate>
+ <CAAEAJfCF=36ET_QAO9fVZdcYRKcFUC96KChKbBO9W=KewL5cXA@mail.gmail.com>
+Message-ID: <20140128173537.7a641a2d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear jean,
+Dear Ezequiel Garc?a,
 
-On Fri, 16 Aug 2013 11:22:14 +0200, jean wrote:
+On Mon, 27 Jan 2014 21:17:05 -0200, Ezequiel Garc?a wrote:
 
-> diff --git a/fs/isolinux/Config.in b/fs/isolinux/Config.in
-> new file mode 100644
-> index 0000000..8abe409
-> --- /dev/null
-> +++ b/fs/isolinux/Config.in
-> @@ -0,0 +1,182 @@
-> +## Menu ISO image with syslinux
-> +menu "iso image (isolinux bootloader - with initramfs)"
-> +config BR2_TARGET_ROOTFS_ISO_ISOLINUX
+> What's the status of this? It would be interesting to pick it up.
 
-I don't agree with the idea that this is introduced as a new filesystem
-type. I'm sorry, but "isolinux" is not a filesystem type, it's a
-bootloader.
+As Danomi said, a new version was posted at
+http://patchwork.ozlabs.org/patch/275088/. It is waiting for you to
+give your Tested-by about it :-)
 
-Instead, if you want to support ISO9660 images that use isolinux as the
-bootloader instead of Grub (as is currently supported in fs/iso9660),
-then you should expand fs/iso9660/ to support either Grub or isolinux
-as the bootloader. Probably with a Config.in "choice" in
-fs/iso9660/Config.in.
-
-This way, all your improvements such as offering options for Joliet,
-Rock Ridge support and so on will also benefit to the existing iso9660
-support.
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
