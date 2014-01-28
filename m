@@ -1,42 +1,44 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 28 Jan 2014 21:11:22 +0100
-Subject: [Buildroot] [PATCH 2/5] busybox: ensure $(BUSYBOX_BUILD_CONFIG) is
+Date: Tue, 28 Jan 2014 21:11:23 +0100
+Subject: [Buildroot] [PATCH 3/5] linux: ensure buildroot_defconfig is
 	writable
 In-Reply-To: <cover.1390939719.git.yann.morin.1998@free.fr>
 References: <cover.1390939719.git.yann.morin.1998@free.fr>
-Message-ID: <01fa1f7ad6024207eec43d9840894e602e3b06b4.1390939719.git.yann.morin.1998@free.fr>
+Message-ID: <f5a33ad538e2632b1a6517d7f2fa5e3a35909713.1390939719.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Nathan Lynch <ntl@pobox.com>
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-If $(BUSYBOX_CONFIG_FILE) is read-only (eg. because Buildroot's
-source dir is), the sed fixups to $(BUSYBOX_BUILD_CONFIG) fail.
+If $(KERNEL_SOURCE_CONFIG) is read-only (eg. because Buildroot's source
+dir is), the rm of $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig will
+either fail, or prompt the user, both of which we want to avoid.
+
+Make it writable by using $(INSTALL).
 
 Fixes: #4363
 Signed-off-by: Nathan Lynch <ntl@pobox.com>
-[yann.morin.1998 at free.fr: use $(INSTALL) instead of cp]
+[yann.morin.1998 at free.fr: use $(INSTALL) instead of cp, don't 'rm -f']
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/busybox/busybox.mk | 2 +-
+ linux/linux.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index f6f542e..948f3e4 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -135,7 +135,7 @@ endef
+diff --git a/linux/linux.mk b/linux/linux.mk
+index ab25fe9..62033d2 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -164,7 +164,7 @@ KERNEL_SOURCE_CONFIG = $(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE)
  endif
  
- define BUSYBOX_COPY_CONFIG
--	cp -f $(BUSYBOX_CONFIG_FILE) $(BUSYBOX_BUILD_CONFIG)
-+	$(INSTALL) -D -m 0644 $(BUSYBOX_CONFIG_FILE) $(BUSYBOX_BUILD_CONFIG)
- endef
- 
- # Disable shadow passwords support if unsupported by the C library
+ define LINUX_CONFIGURE_CMDS
+-	cp $(KERNEL_SOURCE_CONFIG) $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
++	$(INSTALL) -m 0644 $(KERNEL_SOURCE_CONFIG) $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
+ 	$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) buildroot_defconfig
+ 	rm $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
+ 	$(if $(BR2_arm)$(BR2_armeb),
 -- 
 1.8.1.2
