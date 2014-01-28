@@ -1,66 +1,88 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 28 Jan 2014 17:58:51 +0100
-Subject: [Buildroot] [PATCH] uboot-tools: Allow users to use uboot's
-	sources
-In-Reply-To: <CAAXf6LWTv2M+AsoXNkzckUzdZdLnPJL_d5TxvLiPK03VTm=dhA@mail.gmail.com>
-References: <1390696553-4163-1-git-send-email-maxime.hadjinlian@gmail.com>	<52E530D5.20405@lucaceresoli.net>	<CAGduivwtd5SeEOSi6NNCegk7L7oem0+dF9eqkvoGtYk1_xODVw@mail.gmail.com>	<52E5816F.9080102@lucaceresoli.net>	<52E69898.2080805@mind.be>
- <CAAXf6LWTv2M+AsoXNkzckUzdZdLnPJL_d5TxvLiPK03VTm=dhA@mail.gmail.com>
-Message-ID: <52E7E1CB.3090605@mind.be>
+Date: Tue, 28 Jan 2014 18:20:20 +0100
+Subject: [Buildroot] [PATCH 1/1] skeleton: add systemd network.service
+ unit
+In-Reply-To: <20140128132058.GD3867@lukather>
+References: <1388713112-4686-1-git-send-email-vsergeev@kumunetworks.com>
+ <20140103201333.7f4edd47@skate>
+ <CAPyrzo0q7Y3Tf1LOaCe4LK78a7sZrVdToLfnzp4Tc4kow=-nKA@mail.gmail.com>
+ <52E7589F.7060301@mind.be>
+ <CAGduivw+HOQRDN18=xrM_AwqT3YtoM7BwmcaNRDb0VFVaQM9eQ@mail.gmail.com>
+ <20140128132058.GD3867@lukather>
+Message-ID: <52E7E6D4.1020501@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 28/01/14 07:02, Thomas De Schampheleire wrote:
-> Hi Arnout,
+On 28/01/14 14:20, Maxime Ripard wrote:
+> On Tue, Jan 28, 2014 at 09:25:20AM +0100, Maxime Hadjinlian wrote:
+>> I would even like to go even further, as I have noticed that a lot of
+>> the defined LIBFOO_INSTALL_INIT_SYSTEMD and LIBFOO_INSTALL_INIT_SYSV
+>> almost always do the exact same stuff.
+>> I would like for the infrastructure to take care of this, if no
+>> function is defined, and a .service or S\d{0,2}*, then we should take
+>> it and install it.
+>>
+>> In that case, any particular requirements, the package define a
+>> function, other than that, it's taken care of and we avoid duplicate
+>> code in all the packages.
 >
-> Op 27-jan.-2014 22:28 schreef "Arnout Vandecappelle" <arnout@mind.be
-> <mailto:arnout@mind.be>>:
->  >
->  > On 26/01/14 22:43, Luca Ceresoli wrote:
->  >>
->  >> Going a step ahead, to be more uniform with these packages, you may use
->  >> a choice construct to allow choosing between two alternatives.
->  >> Example (modified version of the code in barebox.mk <http://barebox.mk>):
->  >>
->  >> choice
->  >>          prompt "version"
->  >>          help
->  >>            Select the specific uboot-tools version you want to use
->  >>
->  >> config BR2_PACKAGE_UBOOT_TOOLS_LATEST_VERSION
->  >>          bool "Use a recent upstream version"
->  >>
->  >> config BR2_PACKAGE_UBOOT_TOOLS_USE_UBOOT_VERSION
->  >>          bool "Use the same sources of the uboot package"
->  >>
->  >> endchoice
->  >
->  >
->  >  Actually, I don't even see the need to ask the user anything. If we
-> are building U-Boot, I don't see why we would ever want to use the U-Boot
-> tools from upstream - that just adds a risk of incompatibility between
-> the two.
->  >
->  >  So I would propose to remove the BR2_PACKAGE_UBOOT_TOOLS_UBOOT_SOURCE
-> option, and instead make it conditional on BR2_TARGET_UBOOT.
->
-> I don't agree here. Real life example: we are using vendor-provided
-> uboot, and want to set an env-image in our flash devices' factory image.
-> While this version of uboot clearly supports handling the env at a
-> specified location, it does not (yet) provide the mkenvimage tool.
-> In this case, we actually want a more recent uboot tools package that
-> does have mkenvimage. My conclusion is thus that we should provide the
-> choice.
+> Actually, there's two main issues that prevents this in the systemd
+> case, and are why we did it that way:
+>    - the multi-user-wants thing is actually comparable to the sysvinit
+>      runlevels. Some packages might want to set their units to other
+>      targets than multi-user (for example, graphical applications are
+>      likely to go in the graphical target, not the multi-user one)
 
-  OK. In that case, I prefer the choice over the bare option. Note that 
-Kconfig doesn't support help text on the choice itself, only on the 
-config entries. Also the default (_LATEST_VERSION) should be selected 
-explicitly.
+  I disagree with this one. Buildroot's defaults should support only a 
+single runlevel/target. That's how it's done for sysv init, and I'm very 
+happy with it: it's dead easy to see which scripts will be executed at 
+startup, you don't have to find out the runlevel etc. With systemd, 
+things can become even more complex (because there can be several 
+"targets" active at the same time IIRC), and I'd prefer to exclude this 
+complexity by default.
+
+  If a user requires several runlevels/targets, than most likely any 
+default that buildroot provide will not fit anyway, so the user will have 
+to manipulate things in their rootfs overlay or post-build script anyway. 
+Therefore, I think it is better for the user if the defaults are simple 
+and predictable.
+
+
+>    - Some units also takes "variables" from the created link names. For
+>      example, when you want to run getty, you just have a single getty
+>      unit, and the device to run getty on is set in the link name to
+>      that unit (so you'd end up with a link in multi-user.target.wants
+>      that will be getty.ttyS0.service, linking to
+>      /etc/systemd/system/getty.service).
+
+  That is one of the special cases that would be handled in a 
+post-install hook. But specifically for the getty case, it's not even 
+necessary because we start only a single getty in the default setup, so 
+we can directly install it to getty at ttyS0.service .
+
+
+> At the time, we thought that in the systemd case, the easiest would be
+> to simply write down the 2-3 commands we need to setup the unit,
+> instead of having to give a whole bunch of variables. And we did the
+> same for sysvinit scripts, for consistency.
+
+  I think at the time, we mainly thought that we didn't know yet if the 
+installation could be generalized. Now that we have a few packages that 
+install unit files, it's more clear that they always to the same.
+
+  Also, as far as I understand, the idea is not to add variables, but 
+rather to check for the existence of package/foo/*.service and install that.
+
 
   Regards,
   Arnout
+
+>
+> Maxime
+>
 
 
 -- 
