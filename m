@@ -1,52 +1,60 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 28 Jan 2014 14:11:03 +0100
-Subject: [Buildroot] [git commit] erlang: bump version to R16B03-1
-Message-ID: <20140128131206.22B6A9C6A8@busybox.osuosl.org>
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+Date: Tue, 28 Jan 2014 14:20:58 +0100
+Subject: [Buildroot] [PATCH 1/1] skeleton: add systemd network.service
+ unit
+In-Reply-To: <CAGduivw+HOQRDN18=xrM_AwqT3YtoM7BwmcaNRDb0VFVaQM9eQ@mail.gmail.com>
+References: <1388713112-4686-1-git-send-email-vsergeev@kumunetworks.com>
+ <20140103201333.7f4edd47@skate>
+ <CAPyrzo0q7Y3Tf1LOaCe4LK78a7sZrVdToLfnzp4Tc4kow=-nKA@mail.gmail.com>
+ <52E7589F.7060301@mind.be>
+ <CAGduivw+HOQRDN18=xrM_AwqT3YtoM7BwmcaNRDb0VFVaQM9eQ@mail.gmail.com>
+Message-ID: <20140128132058.GD3867@lukather>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=da18018b5f05f8109656ddb9d255721a320e2eac
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, Jan 28, 2014 at 09:25:20AM +0100, Maxime Hadjinlian wrote:
+> I would even like to go even further, as I have noticed that a lot of
+> the defined LIBFOO_INSTALL_INIT_SYSTEMD and LIBFOO_INSTALL_INIT_SYSV
+> almost always do the exact same stuff.
+> I would like for the infrastructure to take care of this, if no
+> function is defined, and a .service or S\d{0,2}*, then we should take
+> it and install it.
+> 
+> In that case, any particular requirements, the package define a
+> function, other than that, it's taken care of and we avoid duplicate
+> code in all the packages.
 
-OTP R16B03-1 is a service release which corrects a few issues found in
-the R16B03 release. The corrections are:
+Actually, there's two main issues that prevents this in the systemd
+case, and are why we did it that way:
+  - the multi-user-wants thing is actually comparable to the sysvinit
+    runlevels. Some packages might want to set their units to other
+    targets than multi-user (for example, graphical applications are
+    likely to go in the graphical target, not the multi-user one)
+  - Some units also takes "variables" from the created link names. For
+    example, when you want to run getty, you just have a single getty
+    unit, and the device to run getty on is set in the link name to
+    that unit (so you'd end up with a link in multi-user.target.wants
+    that will be getty.ttyS0.service, linking to
+    /etc/systemd/system/getty.service).
 
- - The ODBC application was missing in the prebuilt Windows installers
- - 3 corrections in the SSL application:
-   - Add missing validation of the server_name_indication option and test for
-     its explicit use.
-   - Elliptic curve selection in server mode now properly selects a curve
-     suggested by the client, if possible.
-   - The server did not indicate support for secure renegotiation during TLS
-     extension handling.
- - In the syntax tools application a bug was introduced which broke
-   reverting of local funs. This is now corrected (thanks to Anthony
-   Ramine)
- - wx - Solved a problem which caused the debugger to crash when closing a
-   window. Fixed static linking on Mac.
- - xmerl - Fixed a problem in the SAX-parser when the header of the next
-   document was appearing in the buffer when using the
-   xmerl_sax_parser:stream/2 function.
+At the time, we thought that in the systemd case, the easiest would be
+to simply write down the 2-3 commands we need to setup the unit,
+instead of having to give a whole bunch of variables. And we did the
+same for sysvinit scripts, for consistency.
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/erlang/erlang.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Maxime
 
-diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
-index 18ceb7b..1572731 100644
---- a/package/erlang/erlang.mk
-+++ b/package/erlang/erlang.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ERLANG_VERSION = R16B03
-+ERLANG_VERSION = R16B03-1
- ERLANG_SITE = http://www.erlang.org/download
- ERLANG_SOURCE = otp_src_$(ERLANG_VERSION).tar.gz
- ERLANG_DEPENDENCIES = host-erlang
+-- 
+Maxime Ripard, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 836 bytes
+Desc: Digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140128/bad2adac/attachment.asc>
