@@ -1,36 +1,130 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jan 2014 17:35:37 +0100
-Subject: [Buildroot] [PATCH] fs/ubi: add option to use custom volume
- config file
-In-Reply-To: <CAAEAJfCF=36ET_QAO9fVZdcYRKcFUC96KChKbBO9W=KewL5cXA@mail.gmail.com>
-References: <1379215295-1805-1-git-send-email-danomimanchego123@gmail.com>
- <20130915200014.5543b2a1@skate>
- <CANxTyt4GZNTtACwf4W8OCKUBZLf7YfZ=pBM-6KGmgeaf8UCPLg@mail.gmail.com>
- <20130915205310.06f8af50@skate>
- <CANxTyt6uuGy0aYis_SG49KjXjoC=sMWMgTEytTMrhGXifimjYw@mail.gmail.com>
- <20130915211647.6354ea34@skate>
- <CAAEAJfCF=36ET_QAO9fVZdcYRKcFUC96KChKbBO9W=KewL5cXA@mail.gmail.com>
-Message-ID: <20140128173537.7a641a2d@skate>
+From: julien.boibessot at free.fr <julien.boibessot@free.fr>
+Date: Tue, 28 Jan 2014 17:41:33 +0100
+Subject: [Buildroot] [PATCH v2] Add gpm (general purpose mouse) server
+	package
+Message-ID: <1390927293-7310-1-git-send-email-julien.boibessot@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ezequiel Garc?a,
+From: Julien Boibessot <julien.boibessot@armadeus.com>
 
-On Mon, 27 Jan 2014 21:17:05 -0200, Ezequiel Garc?a wrote:
+Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+ Changes since v1:
+ - 80x # in gpm.mk banner
+ - As recommanded by Romain:
+   * remove possible circular dependancy with ncurses
+   * don't allow package selection when BR2_PREFER_STATIC_LIB=y
+   * fixes headers PATH when gpm wants to build its dependancies rules
 
-> What's the status of this? It would be interesting to pick it up.
+ package/Config.in     |    1 +
+ package/gpm/Config.in |   24 +++++++++++++++++++++++
+ package/gpm/gpm.mk    |   50 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 75 insertions(+), 0 deletions(-)
+ create mode 100644 package/gpm/Config.in
+ create mode 100644 package/gpm/gpm.mk
 
-As Danomi said, a new version was posted at
-http://patchwork.ozlabs.org/patch/275088/. It is waiting for you to
-give your Tested-by about it :-)
-
-Thanks!
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index 78c0e06..d52c65e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -290,6 +290,7 @@ source "package/fmtools/Config.in"
+ source "package/freescale-imx/Config.in"
+ source "package/fxload/Config.in"
+ source "package/gadgetfs-test/Config.in"
++source "package/gpm/Config.in"
+ source "package/gpsd/Config.in"
+ source "package/gptfdisk/Config.in"
+ source "package/gvfs/Config.in"
+diff --git a/package/gpm/Config.in b/package/gpm/Config.in
+new file mode 100644
+index 0000000..d20e392
+--- /dev/null
++++ b/package/gpm/Config.in
+@@ -0,0 +1,24 @@
++config BR2_PACKAGE_GPM
++	bool "gpm mouse server"
++	depends on !BR2_PREFER_STATIC_LIB
++	help
++	  "gpm" means general purpose mouse (server) and provides mouse support
++	  for Linux virtual consoles.
++	  gpm-root (to draw menus in current virtual console; config file in
++	  /etc/gpm-root.conf) and disable-paste (to disable paste buffer for
++	  security reasons), will also be installed.
++
++	  http://www.nico.schottelius.org/software/gpm/
++
++if BR2_PACKAGE_GPM
++
++config BR2_PACKAGE_GPM_INSTALL_TEST_TOOLS
++	bool "install gpm test tools also"
++	help
++	  Install gpm test tools (get-versions, mev, hltest, mouse-test,
++	  display-buttons & display-coords).
++
++endif
++
++comment "gpm mouse server needs a toolchain w/ dynamic library"
++	depends on BR2_PREFER_STATIC_LIB
+diff --git a/package/gpm/gpm.mk b/package/gpm/gpm.mk
+new file mode 100644
+index 0000000..2b81e4b
+--- /dev/null
++++ b/package/gpm/gpm.mk
+@@ -0,0 +1,50 @@
++###############################################################################
++#
++# gpm
++#
++###############################################################################
++
++GPM_VERSION = 1.20.7
++GPM_SOURCE = gpm-$(GPM_VERSION).tar.bz2
++GPM_SITE = http://www.nico.schottelius.org/software/gpm/archives/
++GPM_LICENSE = GPLv2+
++GPM_LICENSE_FILES = COPYING
++GPM_INSTALL_STAGING = YES
++
++# if not already installed in staging dir, gpm Makefile may fail to find some
++# of the headers needed to generate build dependancies, the first time it is
++# built. CPPFLAGS is used to pass the right include PATH to dependancy rules.
++GPM_CONF_ENV = CPPFLAGS="$(TARGET_CPPFLAGS) -I$(@D)/src/headers/"
++
++# gpm and ncurses have a circular dependancy. As gpm function GPM_Wgetch() 
++# (requiring ncurses) is not recommanded for use by ncurses people themself and
++# as it's better to have gpm support in ncurses that the contrary, we force gpm
++# to not look after ncurses explicitly.
++# http://invisible-island.net/ncurses/ncurses.faq.html#using_gpm_lib
++GPM_CONF_OPT = --without-curses
++
++# To generate missing configure:
++define GPM_AUTOGEN_CALL
++	cd $(@D); ./autogen.sh
++endef
++
++GPM_PRE_CONFIGURE_HOOKS += GPM_AUTOGEN_CALL
++
++define GPM_REMOVE_TEST_TOOLS_FROM_TARGET
++	for tools in mev hltest mouse-test display-buttons \
++			get-versions display-coords; do \
++		rm -f $(TARGET_DIR)/usr/bin/$$tools ; \
++	done
++endef
++
++ifeq ($(BR2_PACKAGE_GPM_INSTALL_TEST_TOOLS),)
++GPM_POST_INSTALL_TARGET_HOOKS += GPM_REMOVE_TEST_TOOLS_FROM_TARGET
++endif
++
++define GPM_INSTALL_GPM_ROOT_CONF_ON_TARGET
++	$(INSTALL) -m 0644 -D $(@D)/conf/gpm-root.conf $(TARGET_DIR)/etc/
++endef
++
++GPM_POST_INSTALL_TARGET_HOOKS += GPM_INSTALL_GPM_ROOT_CONF_ON_TARGET
++
++$(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.5.4
