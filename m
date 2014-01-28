@@ -1,41 +1,50 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Tue, 28 Jan 2014 22:37:06 +1300
-Subject: [Buildroot] [PATCH] tcpreplay: Bump version to 4.0.2
-In-Reply-To: <8761p5zek2.fsf@dell.be.48ers.dk>
-References: <8761p5zek2.fsf@dell.be.48ers.dk>
-Message-ID: <1390901826-2954-1-git-send-email-judge.packham@gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 28 Jan 2014 11:12:37 +0100
+Subject: [Buildroot] [PATCH] lvm2: fix static building when
+	BR2_PREFER_STATIC_LIB is used
+In-Reply-To: <CAHkwnC-oqmBKoFOygQt3nBsMdNXQ6pUyvrKJkqkJcL5WRoAbSQ@mail.gmail.com>
+ (Fabio Porcedda's message of "Tue, 28 Jan 2014 10:15:40 +0100")
+References: <1390207114-2808-1-git-send-email-fabio.porcedda@gmail.com>
+ <8761p5nlox.fsf@dell.be.48ers.dk>
+ <CAHkwnC-oqmBKoFOygQt3nBsMdNXQ6pUyvrKJkqkJcL5WRoAbSQ@mail.gmail.com>
+Message-ID: <87bnyw5sa2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Chris Packham <judge.packham@gmail.com>
----
-On 28/01/14 03:26, Peter Korsgaard wrote:
-> 
-> A patch to bump the version would be good as well, thank.
-> 
+>>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
 
-Here you go. I've heard back from upstream, the maintainer is dealing with some
-family issues so the patch from my pull request will do for now. Build tested
-with/without BR2_PACKAGE_TCPDUMP.
+ > On Mon, Jan 27, 2014 at 10:45 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+ >>>>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
+ >> 
+ >> > To fix static building:
+ >> > - Add "--enable-static_link" to the configure options.
+ >> > - Because the shared executables don't build with
+ >> >   BR2_PREFER_STATIC_LIB add a patch to disable it.
+ >> 
+ >> > Fixes:
+ >> > http://autobuild.buildroot.net/results/b0b/b0b386969459dda9c294f1ccb4927ca225fa6bdd/
+ >> 
+ >> Thanks. Has this patch been submitted upstream?
 
- package/tcpreplay/tcpreplay.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Hi Peter,
+ > I've not submitted to upstream this patch.
+ > I think to be able to submit it to upstream it needs more work to be done.
+ > Unfortunately right now i don't have much free time to do that.
+ > IMHO there is a chance that upstream does not want to changes the
+ > behavior of lvm static building to suits buildroot.
 
-diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
-index a2cd16e..fdb42a5 100644
---- a/package/tcpreplay/tcpreplay.mk
-+++ b/package/tcpreplay/tcpreplay.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TCPREPLAY_VERSION = 4.0.0
-+TCPREPLAY_VERSION = 4.0.2
- TCPREPLAY_SITE = http://downloads.sourceforge.net/project/tcpreplay/tcpreplay/$(TCPREPLAY_VERSION)
- TCPREPLAY_LICENSE = GPLv3
- TCPREPLAY_LICENSE_FILES = docs/LICENSE
+Ok, in that case - Do we really want to support static linking of LVM2?
+We can also just make it depend on !BR2_PREFER_STATIC_LIB (and also
+adjust udisk).
+
+lvm2 is probably not often used in situations where static linking is
+critical, is it?
+
+I dislike adding feature patches to Buildroot if they cannot go
+upstream.
+
 -- 
-1.8.4.rc2
+Bye, Peter Korsgaard
