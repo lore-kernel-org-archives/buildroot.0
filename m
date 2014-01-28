@@ -1,40 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 28 Jan 2014 23:04:05 +0100
-Subject: [Buildroot] [git commit] package/pkg-cmake: disable colouring the
-	output
-Message-ID: <20140128221058.E64859C6AC@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 28 Jan 2014 19:11:55 -0300
+Subject: [Buildroot] [PATCH 3/6] php-zmq: new package
+In-Reply-To: <20140128230558.157ee3eb@skate>
+References: <1390944391-3892-1-git-send-email-gustavo@zacarias.com.ar>	<1390944391-3892-3-git-send-email-gustavo@zacarias.com.ar>
+ <20140128230558.157ee3eb@skate>
+Message-ID: <52E82B2B.5040705@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5d46789550173eaf1b355b3fd1d7b9b38ec204d2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 01/28/2014 07:05 PM, Thomas Petazzoni wrote:
 
-cmake is the only build-system we support that does colour its output,
+> Just curious, how many potential PHP packages could we add? The build
+> logic for the four packages you submitted looks highly similar, maybe
+> it calls a php-package infrastructure?
+> 
+> The only "difficulty" is that it would have to inherit from
+> autotools-package, which itself already inherits from generic-package.
+> So it would be the first package infrastructure to inherit from a
+> package infra that already inherits from generic-package. I'm sure it
+> can work, but it might raise issues with some missing quoting.
 
-Also, since parallel builds generates intermixed output lines, it makes
-for ugly-looking output.
-
-Just disable cmake colouring globally.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/pkg-cmake.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
-
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index aedd1fc..13be557 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -64,6 +64,7 @@ define $(2)_CONFIGURE_CMDS
- 	$$($$(PKG)_CONF_ENV) $(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
- 		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
- 		-DCMAKE_INSTALL_PREFIX="/usr" \
-+		-DCMAKE_COLOR_MAKEFILE=OFF \
- 		-DBUILD_SHARED_LIBS=$(if $(BR2_PREFER_STATIC_LIB),OFF,ON) \
- 		$$($$(PKG)_CONF_OPT) \
- 	)
+Not that many that are useful, many are abandonware, that being the
+reason i opted for the autotools infra with the tweak.
+PECL packages are compiled (these ones are), PEAR packages are normally
+interpreted so it's just a matter of just installing them.
+Arguably we could also enable PEAR installs in the target itself but i
+don't think it's the spirit of buildroot, like CPAN for perl.
+But we don't have any PEAR packages at the moment.
+Regards.
