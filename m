@@ -1,12 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jan 2014 22:13:39 +0100
-Subject: [Buildroot] [PATCH 3/5] package/tzdata: install a default
- localtime
-In-Reply-To: <8738kwc316.fsf@dell.be.48ers.dk>
-References: <cover.1389134731.git.yann.morin.1998@free.fr>
- <d33faa4dcebfdac0f304495fcdac3db1f31c791d.1389134731.git.yann.morin.1998@free.fr>
- <8738kwc316.fsf@dell.be.48ers.dk>
-Message-ID: <20140128221339.34b2ce7d@skate>
+Date: Tue, 28 Jan 2014 22:16:53 +0100
+Subject: [Buildroot] [git commit] minidlna: fix static linking
+In-Reply-To: <20140108082945.20CF58DE52@busybox.osuosl.org>
+References: <20140108082945.20CF58DE52@busybox.osuosl.org>
+Message-ID: <20140128221653.6fc8974b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,24 +12,21 @@ To: buildroot@busybox.net
 
 Dear Peter Korsgaard,
 
-On Thu, 09 Jan 2014 21:29:25 +0100, Peter Korsgaard wrote:
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
-> 
->  > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
->  > Add an option to install a default localtime.
-> 
->  > since tzdata only makes sense for (e)glibc, we don't care
->  > that we install timezone files that uClibc can't understand.
-> 
->  > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> Committed, thanks.
+On Wed, 8 Jan 2014 09:00:11 +0100, Peter Korsgaard wrote:
 
-I thought I said somewhere I was not happy with this patch, because it
-creates a different solution to set the timezone for eglibc and uClibc.
-We should instead strive to have an option under "System configuration"
-to define the timezone, and ensure it does the right thing for both
-uClibc and eglibc.
+> -# static build is broken w.r.t libgcc_s
+> +ifeq ($(BR2_PREFER_STATIC_LIB),y)
+> +# the configure script / Makefile forgets to link with some of the dependent
+> +# libraries breaking static linking, so help it along
+> +MINIDLNA_CONF_ENV = \
+> +	LIBS='-lavformat -lavcodec -lavutil -logg -lz -lpthread -lm'
+> +else
+
+I know we're doing this in a bunch of cases, but I believe we should
+rather fix the package itself, rather than encoding into the
+Buildroot .mk file the list of libraries to link with. Because if
+libogg or libavutil becomes unnecessary in a future version of
+minidlna, we may not notice, and still link needlessly against them.
 
 Thomas
 -- 
