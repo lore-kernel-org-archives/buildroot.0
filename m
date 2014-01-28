@@ -1,57 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jan 2014 18:33:40 +0100
-Subject: [Buildroot] Configuring the gpsd package
-In-Reply-To: <20140106155637.GA4503@tarshish>
-References: <858B5C1843112849BC285F6BF91A22640EB1B569@VF2WDEXMB1.verifone.com>
- <20140101162040.GJ4470@tarshish>
- <858B5C1843112849BC285F6BF91A22640EB1BADB@VF2WDEXMB1.verifone.com>
- <20140102080145.GL6589@tarshish>
- <858B5C1843112849BC285F6BF91A22640EB1BB09@VF2WDEXMB1.verifone.com>
- <20140102084544.GN6589@tarshish>
- <858B5C1843112849BC285F6BF91A22640EB1BBA1@VF2WDEXMB1.verifone.com>
- <20140102100454.GS6589@tarshish>
- <858B5C1843112849BC285F6BF91A22640EB1BBD1@VF2WDEXMB1.verifone.com>
- <858B5C1843112849BC285F6BF91A22640EB2B042@VF2WDEXMB1.verifone.com>
- <20140106155637.GA4503@tarshish>
-Message-ID: <20140128183340.410169ce@skate>
+Date: Tue, 28 Jan 2014 18:39:19 +0100
+Subject: [Buildroot] [PATCH v2] valgrind: bump to version 3.9.0
+In-Reply-To: <1388680480-58533-1-git-send-email-jezz@sysmic.org>
+References: <1388680480-58533-1-git-send-email-jezz@sysmic.org>
+Message-ID: <20140128183919.186508cf@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+Hello,
 
-On Mon, 6 Jan 2014 17:56:37 +0200, Baruch Siach wrote:
+On Thu,  2 Jan 2014 17:34:40 +0100, J?r?me Pouiller wrote:
 
-> > Anyway, I was able to run the gpsd and use the it in spite of probably not 
-> > having the two dependencies. My questions are:
-> > 1. What is the purpose of the two dependencies?
-> 
-> As the comment above the MMU dependency says, the gpsd code uses fork(). This 
-> system call is not available on non-MMU systems. The same goes for threads 
-> support. The package uses the pthreads API, and doesn't build without it.
-> 
-> > 2. How come I was able to use the daemon anyway?
-> 
-> Apparently you are using an external toolchain. When using an external 
-> toolchain you need to explicitly tell Buildroot whether you toolchain includes 
-> threading supports.
+> -VALGRIND_VERSION = 3.8.1
+> +VALGRIND_VERSION = 3.9.0
+>  VALGRIND_SITE    = http://valgrind.org/downloads/
+>  VALGRIND_SOURCE  = valgrind-$(VALGRIND_VERSION).tar.bz2
+>  VALGRIND_LICENSE = GPLv2 GFDLv1.2
 
-Correct, but Buildroot checks the selection the user has made in
-menuconfig against the real configuration of the toolchain, and if they
-don't match, the Buildroot build doesn't even start. Therefore, there
-is normally no way to do an incorrect configuration here.
-
-> As to MMU, for some reason this is option is disabled on your configuration, 
-> although clearly your target has MMU enabled.
-
-Where have you seen Gabi's .config ? I've gone through this thread
-again, and I haven't seen his .config.
-
-That being said, Gabi uses a 3+ years old Buildroot, and refuses to
-share his changes, so I must say that the incentive to provide some
-free support in such a situation is fairly low.
+One of the new features of Valgrind 3.9.0 is the addition of MIPS
+support. Maybe it would be good to enable Valgrind on these
+architectures. I'm adding Vincente and Markos in the Cc list, since
+they are our main MIPS contributors. They might probably be interested
+in doing this work, after testing on MIPS hardware.
 
 Best regards,
 
