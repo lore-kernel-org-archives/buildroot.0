@@ -1,35 +1,36 @@
-From: =?ISO-8859-1?Q?Ezequiel_Garc=EDa?= <ezequiel@vanguardiasur.com.ar>
-Date: Tue, 28 Jan 2014 14:59:43 -0200
-Subject: [Buildroot] [PATCH] fs/ubi: add option to use custom volume
- config file
-In-Reply-To: <20140128173537.7a641a2d@skate>
-References: <1379215295-1805-1-git-send-email-danomimanchego123@gmail.com>
- <20130915200014.5543b2a1@skate>
- <CANxTyt4GZNTtACwf4W8OCKUBZLf7YfZ=pBM-6KGmgeaf8UCPLg@mail.gmail.com>
- <20130915205310.06f8af50@skate>
- <CANxTyt6uuGy0aYis_SG49KjXjoC=sMWMgTEytTMrhGXifimjYw@mail.gmail.com>
- <20130915211647.6354ea34@skate>
- <CAAEAJfCF=36ET_QAO9fVZdcYRKcFUC96KChKbBO9W=KewL5cXA@mail.gmail.com>
- <20140128173537.7a641a2d@skate>
-Message-ID: <CAAEAJfC9jRy+Jdva+DABQ3An7+NVpU857e8sM3o6rYi40A7hYg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 28 Jan 2014 18:00:18 +0100
+Subject: [Buildroot] Patchwork oldest patches cleanup #4 (deadline
+ January 5)
+In-Reply-To: <CAAXf6LX66a699zwPQ2E1qQc3xjuWk9eUE7Pp4RLrG=nZKfn8Zw@mail.gmail.com>
+References: <CAAXf6LWFAfs_i_NjBbD3RZ=Y0RDKftzwj-_8xKuqyYA=69PNsw@mail.gmail.com>
+ <CAAXf6LVVi6d=xRjsqW8eSMAf1CpKyU-qUTQ2dbfCPU=EF__jcA@mail.gmail.com>
+ <20140106130503.2df2a9ef@skate>
+ <CAAXf6LUnqAYQZoQ9-npV0nyDezec__sfnZrvYJY0PouNujE3HQ@mail.gmail.com>
+ <CAAXf6LX66a699zwPQ2E1qQc3xjuWk9eUE7Pp4RLrG=nZKfn8Zw@mail.gmail.com>
+Message-ID: <20140128180018.5de8c1fb@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 28 January 2014 13:35, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> On Mon, 27 Jan 2014 21:17:05 -0200, Ezequiel Garc?a wrote:
->
->> What's the status of this? It would be interesting to pick it up.
->
-> As Danomi said, a new version was posted at
-> http://patchwork.ozlabs.org/patch/275088/. It is waiting for you to
-> give your Tested-by about it :-)
->
+Dear Thomas De Schampheleire,
 
-Sure, I will.
+On Mon, 20 Jan 2014 16:58:03 +0100, Thomas De Schampheleire wrote:
+
+> > Specifically for libatomic_ops: it seems there is a github repo now:
+> > https://github.com/ivmai/libatomic_ops/
+> > where a 7.4.0 version is available. What about going that route then?
+> > Are you, or someone else, interested in taking this delegation?
+> 
+> Any further feedback on this?
+
+You can probably assign this patch to me, so that I take care of
+bumping libatomic_ops in the future.
+
+Thomas
 -- 
-Ezequiel Garc?a, VanguardiaSur
-www.vanguardiasur.com.ar
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
