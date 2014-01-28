@@ -1,26 +1,33 @@
-From: Waldemar Rymarkiewicz <waldemar.rymarkiewicz@gmail.com>
-Date: Tue, 28 Jan 2014 11:18:06 +0100
-Subject: [Buildroot] Post build script issue
-In-Reply-To: <52E60287.7020305@mind.be>
-References: <CAHKzcEOSork9JxSZWsef6m1wmPrZ2z1jEQqaig=LFkysgzqvNg@mail.gmail.com>
- <52E60287.7020305@mind.be>
-Message-ID: <CAHKzcEOqAXbwMAkkAvH=H6DD2qBq2fQgQ4UX3bELabrFfJLd3g@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 28 Jan 2014 11:28:10 +0100
+Subject: [Buildroot] [PATCH] tcpreplay: Bump version to 4.0.2
+In-Reply-To: <1390901826-2954-1-git-send-email-judge.packham@gmail.com> (Chris
+ Packham's message of "Tue, 28 Jan 2014 22:37:06 +1300")
+References: <8761p5zek2.fsf@dell.be.48ers.dk>
+ <1390901826-2954-1-git-send-email-judge.packham@gmail.com>
+Message-ID: <871tzs5rk5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Chris" == Chris Packham <judge.packham@gmail.com> writes:
 
-On 27 January 2014 07:53, Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
->  ./$(s) is a bad idea since it will break the case when the script is an absolute path. But maybe $(abspath $(s)) works?
->
+ > Signed-off-by: Chris Packham <judge.packham@gmail.com>
+ > ---
+ > On 28/01/14 03:26, Peter Korsgaard wrote:
+ >> 
+ >> A patch to bump the version would be good as well, thank.
+ >> 
 
-Right it will brake full path case. Anyway abspath works seamlessly
-with full and relative paths, so sending a patch.
+Committed, thanks.
 
-Thanks,
-/Waldek
+ > Here you go. I've heard back from upstream, the maintainer is dealing with some
+ > family issues so the patch from my pull request will do for now. Build tested
+ > with/without BR2_PACKAGE_TCPDUMP.
+
+Ok, thanks.
+
+-- 
+Bye, Peter Korsgaard
