@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 28 Jan 2014 21:58:43 +0100
-Subject: [Buildroot] [PATCH] ethtool: bump to version 3.13
-In-Reply-To: <1390936826-10022-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 28 Jan 2014 16:20:26 -0300")
-References: <1390936826-10022-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <8761p33jss.fsf@dell.be.48ers.dk>
+Date: Tue, 28 Jan 2014 22:00:15 +0100
+Subject: [Buildroot] [PATCH 1/2] libusb: bump to version 1.0.18
+In-Reply-To: <1390939896-6908-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 28 Jan 2014 17:11:35 -0300")
+References: <1390939896-6908-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <871tzr3jq8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,7 +15,7 @@ To: buildroot@busybox.net
 
  > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Committed, thanks.
+Committed both, thanks.
 
 -- 
 Bye, Peter Korsgaard
