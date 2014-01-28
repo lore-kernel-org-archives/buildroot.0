@@ -1,114 +1,98 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 28 Jan 2014 18:26:27 -0300
-Subject: [Buildroot] [PATCH 2/6] php: fix for external extensions
+Date: Tue, 28 Jan 2014 18:26:28 -0300
+Subject: [Buildroot] [PATCH 3/6] php-zmq: new package
 In-Reply-To: <1390944391-3892-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1390944391-3892-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1390944391-3892-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1390944391-3892-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adjust phpize and php-config to make them work for cross-compiled
-external extensions.
-While at it also fix dl* issues that prevent said extensions from
-loading.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/php/php-02-dlopen.patch | 25 +++++++++++++++++++++++++
- package/php/php.mk              | 25 ++++++++++++++++++++++---
- 2 files changed, 47 insertions(+), 3 deletions(-)
- create mode 100644 package/php/php-02-dlopen.patch
+ package/Config.in          | 10 ++++++++++
+ package/php-zmq/Config.in  | 17 +++++++++++++++++
+ package/php-zmq/php-zmq.mk | 25 +++++++++++++++++++++++++
+ 3 files changed, 52 insertions(+)
+ create mode 100644 package/php-zmq/Config.in
+ create mode 100644 package/php-zmq/php-zmq.mk
 
-diff --git a/package/php/php-02-dlopen.patch b/package/php/php-02-dlopen.patch
-new file mode 100644
-index 0000000..1dd009f
---- /dev/null
-+++ b/package/php/php-02-dlopen.patch
-@@ -0,0 +1,25 @@
-+PHP can't be AUTORECONF with any modern autotools and the dl tests are
-+pretty bad for cross-compilation, so just kill the needed ac_cv value unsets
-+so they can flow through from the package makefile.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura php-5.5.8.orig/configure php-5.5.8/configure
-+--- php-5.5.8.orig/configure	2014-01-28 17:41:33.943851727 -0300
-++++ php-5.5.8/configure	2014-01-28 17:42:53.785493795 -0300
-+@@ -16985,7 +16985,6 @@
-+ 
-+ 
-+ 
-+-  unset ac_cv_func_dlopen
-+   unset ac_cv_func___dlopen
-+   unset found
-+ 
-+@@ -17013,7 +17012,6 @@
-+ 
-+     *)
-+ 
-+-  unset ac_cv_lib_dl_dlopen
-+   unset ac_cv_lib_dl___dlopen
-+   unset found
-+   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for dlopen in -ldl" >&5
-diff --git a/package/php/php.mk b/package/php/php.mk
-index de02f4b..2f6280f 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -19,15 +19,25 @@ PHP_CONF_OPT =  --mandir=/usr/share/man \
- 		--with-config-file-path=/etc \
- 		--localstatedir=/var \
- 		--disable-rpath
-+PHP_CONF_ENV = EXTRA_LIBS="$(PHP_EXTRA_LIBS)"
-+
- ifeq ($(BR2_ENDIAN),"BIG")
--PHP_CONF_ENV = ac_cv_c_bigendian_php=yes
-+PHP_CONF_ENV += ac_cv_c_bigendian_php=yes
- else
--PHP_CONF_ENV = ac_cv_c_bigendian_php=no
-+PHP_CONF_ENV += ac_cv_c_bigendian_php=no
+diff --git a/package/Config.in b/package/Config.in
+index f4c1c17..5c91d9a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -395,6 +395,16 @@ source "package/cpanminus/Config.in"
+ endmenu
  endif
- PHP_CONFIG_SCRIPTS = php-config
- 
- PHP_CFLAGS = $(TARGET_CFLAGS)
- 
-+# We need to force dl "detection"
-+ifeq ($(BR2_PREFER_STATIC_LIB),)
-+PHP_CONF_ENV += ac_cv_func_dlopen=yes ac_cv_lib_dl_dlopen=yes
-+PHP_EXTRA_LIBS += -ldl
-+else
-+PHP_CONF_ENV += ac_cv_func_dlopen=no ac_cv_lib_dl_dlopen=no
+ source "package/php/Config.in"
++if BR2_PACKAGE_PHP
++if !BR2_PREFER_STATIC_LIB
++menu "External php extensions"
++source "package/php-zmq/Config.in"
++endmenu
 +endif
++if BR2_PREFER_STATIC_LIB
++comment "External PHP extensions need a toolchain w/ dynamic library"
++endif
++endif
+ source "package/python/Config.in"
+ if BR2_PACKAGE_PYTHON
+ menu "external python modules"
+diff --git a/package/php-zmq/Config.in b/package/php-zmq/Config.in
+new file mode 100644
+index 0000000..f32b5a3
+--- /dev/null
++++ b/package/php-zmq/Config.in
+@@ -0,0 +1,17 @@
++comment "php-zmq needs a toolchain w/ C++, IPv6, largefile, wchar, threads"
++	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_INET_IPV6 && BR2_LARGEFILE \
++		&& BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
 +
- # Workaround for non-IPv6 uClibc toolchain
- ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
- ifneq ($(BR2_INET_IPV6),y)
-@@ -116,7 +126,7 @@ ifeq ($(BR2_PACKAGE_PHP_EXT_INTL),y)
- 	# The intl module is implemented in C++, but PHP fails to use
- 	# g++ as the compiler for the final link. As a workaround,
- 	# tell it to link libstdc++.
--	PHP_CONF_ENV += EXTRA_LIBS="-lstdc++"
-+	PHP_EXTRA_LIBS + = -lstdc++
- endif
- 
- ifeq ($(BR2_PACKAGE_PHP_EXT_GMP),y)
-@@ -200,6 +210,15 @@ ifeq ($(BR2_PACKAGE_PHP_EXT_SNMP),y)
- 	PHP_DEPENDENCIES += netsnmp
- endif
- 
-+define PHP_EXTENSIONS_FIXUP
-+	$(SED) "/prefix/ s:/usr:$(STAGING_DIR)/usr:" \
-+		$(STAGING_DIR)/usr/bin/phpize
-+	$(SED) "/extension_dir/ s:/usr:$(TARGET_DIR)/usr:" \
-+		$(STAGING_DIR)/usr/bin/php-config
++config BR2_PACKAGE_PHP_ZMQ
++	bool "php-zmq"
++	depends on BR2_PACKAGE_PHP
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_INET_IPV6
++	depends on BR2_LARGEFILE # util-linux
++	depends on BR2_USE_WCHAR # util-linux
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_ZEROMQ
++	help
++	  ZeroMQ messaging bindings for PHP
++
++	  http://pecl.php.net/package/zmq
+diff --git a/package/php-zmq/php-zmq.mk b/package/php-zmq/php-zmq.mk
+new file mode 100644
+index 0000000..2b48a63
+--- /dev/null
++++ b/package/php-zmq/php-zmq.mk
+@@ -0,0 +1,25 @@
++################################################################################
++#
++# php-zmq
++#
++################################################################################
++
++PHP_ZMQ_VERSION = 1.1.2
++PHP_ZMQ_SOURCE = zmq-$(PHP_ZMQ_VERSION).tgz
++PHP_ZMQ_SITE = http://pecl.php.net/get
++# phpize does the autoconf magic
++PHP_ZMQ_DEPENDENCIES = php zeromq host-autoconf host-pkgconf
++PHP_ZMQ_CONF_OPT = --with-php-config=$(STAGING_DIR)/usr/bin/php-config
++PHP_ZMQ_LICENSE = BSD-3c
++PHP_ZMQ_LICENSE_FILES = LICENSE
++
++define PHP_ZMQ_PHPIZE
++	(cd $(@D); \
++		PHP_AUTOCONF=$(HOST_DIR)/usr/bin/autoconf \
++		PHP_AUTOHEADER=$(HOST_DIR)/usr/bin/autoheader \
++		$(STAGING_DIR)/usr/bin/phpize)
 +endef
 +
-+PHP_POST_INSTALL_TARGET_HOOKS += PHP_EXTENSIONS_FIXUP
++PHP_ZMQ_PRE_CONFIGURE_HOOKS += PHP_ZMQ_PHPIZE
 +
- define PHP_INSTALL_FIXUP
- 	rm -rf $(TARGET_DIR)/usr/lib/php
- 	rm -f $(TARGET_DIR)/usr/bin/phpize
++$(eval $(autotools-package))
 -- 
 1.8.3.2
