@@ -1,119 +1,68 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 28 Jan 2014 19:50:14 +0100
-Subject: [Buildroot] [PATCH v2] Add gpm (general purpose mouse) server
- package
-In-Reply-To: <1390927293-7310-1-git-send-email-julien.boibessot@free.fr>
-References: <1390927293-7310-1-git-send-email-julien.boibessot@free.fr>
-Message-ID: <20140128185013.GD3466@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 28 Jan 2014 19:52:59 +0100
+Subject: [Buildroot] [PATCH] ZNC: new package
+In-Reply-To: <1388876370-3441-1-git-send-email-cedric.chepied@gmail.com>
+References: <1388876370-3441-1-git-send-email-cedric.chepied@gmail.com>
+Message-ID: <20140128195259.73158fe4@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Julien, All,
+Dear C?dric Ch?pied,
 
-On 2014-01-28 17:41 +0100, julien.boibessot at free.fr spake thusly:
-> From: Julien Boibessot <julien.boibessot@armadeus.com>
+On Sat,  4 Jan 2014 23:59:30 +0100, C?dric Ch?pied wrote:
+> ZNC is an IRC bouncer.
+> It is available in menu "Networking applications"
+> ---
+>  package/Config.in     |  1 +
+>  package/znc/Config.in |  6 ++++++
+>  package/znc/znc.mk    | 22 ++++++++++++++++++++++
+>  3 files changed, 29 insertions(+)
+>  create mode 100644 package/znc/Config.in
+>  create mode 100644 package/znc/znc.mk
 > 
-> Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-[--SNIP--]
-> diff --git a/package/gpm/gpm.mk b/package/gpm/gpm.mk
+> diff --git a/package/Config.in b/package/Config.in
+> index 35de506..925a6bf 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -936,6 +936,7 @@ source "package/wpa_supplicant/Config.in"
+>  source "package/wvdial/Config.in"
+>  source "package/xinetd/Config.in"
+>  source "package/xl2tp/Config.in"
+> +source "package/znc/Config.in"
+>  
+>  endmenu
+>  
+> diff --git a/package/znc/Config.in b/package/znc/Config.in
 > new file mode 100644
-> index 0000000..2b81e4b
+> index 0000000..ef5db26
 > --- /dev/null
-> +++ b/package/gpm/gpm.mk
-> @@ -0,0 +1,50 @@
-> +###############################################################################
-> +#
-> +# gpm
-> +#
-> +###############################################################################
-> +
-> +GPM_VERSION = 1.20.7
-> +GPM_SOURCE = gpm-$(GPM_VERSION).tar.bz2
-> +GPM_SITE = http://www.nico.schottelius.org/software/gpm/archives/
-> +GPM_LICENSE = GPLv2+
-> +GPM_LICENSE_FILES = COPYING
-> +GPM_INSTALL_STAGING = YES
-> +
-> +# if not already installed in staging dir, gpm Makefile may fail to find some
-> +# of the headers needed to generate build dependancies, the first time it is
+> +++ b/package/znc/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_ZNC
+> +       bool "znc"
+> +       select BR2_PACKAGE_OPENSSL
+> +       select BR2_PACKAGE_PERL
+> +       help
+> +         Advanced IRC bouncer
 
--> dependencies
+We generally want the URL of the project here in the help text. See
+what we do for all other packages.
 
-> +# built. CPPFLAGS is used to pass the right include PATH to dependancy rules.
+Looking at the configure.ac from ZNC, it seems like the OpenSSL and
+Perl support is optional, and can be disabled using --disable-openssl
+and --disable-perl. It would probably be a good idea to use these to
+make these dependencies optional.
 
--> lower-case 'path' (it's not about the PATH environment variable).
--> dependency
+Also, your znc.mk should have ZNC_LICENSE and ZNC_LICENSE_FILES
+defined. Look at the Buildroot manual for details about these.
 
-> +GPM_CONF_ENV = CPPFLAGS="$(TARGET_CPPFLAGS) -I$(@D)/src/headers/"
-> +
-> +# gpm and ncurses have a circular dependancy. As gpm function GPM_Wgetch() 
+Thanks for your contribution!
 
--> dependency
-
-Yes. I have been beaten by this in the past. Sigh... :-/
-
-> +# (requiring ncurses) is not recommanded for use by ncurses people themself and
-
--> recommended
--> themselves
-
-> +# as it's better to have gpm support in ncurses that the contrary, we force gpm
-> +# to not look after ncurses explicitly.
-> +# http://invisible-island.net/ncurses/ncurses.faq.html#using_gpm_lib
-
-Oh, good to know! :-)
-
-> +GPM_CONF_OPT = --without-curses
-> +
-> +# To generate missing configure:
-> +define GPM_AUTOGEN_CALL
-> +	cd $(@D); ./autogen.sh
-> +endef
-> +GPM_PRE_CONFIGURE_HOOKS += GPM_AUTOGEN_CALL
-
-I'd prefer we only generate the configure.ac file, and call our
-autoreconf:
-
-    GPM_VERSION = 1.20.7
-    GPM_SOURCE = gpm-$(GPM_VERSION).tar.bz2
-    GPM_HOME = http://www.nico.schottelius.org/software/gpm/
-    GPM_SITE = $(GPM_HOME)/archives
-    define GPM_GENERATE_CONFIGURE_AC
-    	(printf "AC_INIT([gpm],[%s],[%s])\n" "$(GPM_VERSION)" "$(GPM_HOME)";  \
-         printf "releasedate=%s\n" $(shell grep '^[[:digit:]]' $(@D)doc/changelog | head -n1 | cut -d: -f2)
-         printf "release=%s\n" "$(GPM_VERSION)"
-         cat $(@D)/configure.ac.footer
-        ) >$(@D)/configure.ac
-    endef
-    GPM_POST_PATCH_HOOKS += GPM_GENERATE_CONFIGURE_AC
-    GPM_AUTORECONF = YES
-
-> +
-> +define GPM_REMOVE_TEST_TOOLS_FROM_TARGET
-> +	for tools in mev hltest mouse-test display-buttons \
-> +			get-versions display-coords; do \
-> +		rm -f $(TARGET_DIR)/usr/bin/$$tools ; \
-> +	done
-> +endef
-
-We usually piut the function definition in the corresponding ifeq-block,
-the one below for gpm:
-
-> +ifeq ($(BR2_PACKAGE_GPM_INSTALL_TEST_TOOLS),)
-> +GPM_POST_INSTALL_TARGET_HOOKS += GPM_REMOVE_TEST_TOOLS_FROM_TARGET
-> +endif
-
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
