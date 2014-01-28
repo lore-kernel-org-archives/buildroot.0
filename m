@@ -1,58 +1,34 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Tue, 28 Jan 2014 11:37:59 +0100
+From: Waldemar Rymarkiewicz <waldemar.rymarkiewicz@gmail.com>
+Date: Tue, 28 Jan 2014 11:50:30 +0100
 Subject: [Buildroot] [PATCH] Run post scripts referenced by relative
 	paths
-In-Reply-To: <1390904090-27934-1-git-send-email-waldemar.rymarkiewicz@gmail.com>
+In-Reply-To: <CAGduivzPCzuKsvy2HWuxdv9E5wVzdWvgdosNCBfQsenmmeZihA@mail.gmail.com>
 References: <1390904090-27934-1-git-send-email-waldemar.rymarkiewicz@gmail.com>
-Message-ID: <CAGduivzPCzuKsvy2HWuxdv9E5wVzdWvgdosNCBfQsenmmeZihA@mail.gmail.com>
+ <CAGduivzPCzuKsvy2HWuxdv9E5wVzdWvgdosNCBfQsenmmeZihA@mail.gmail.com>
+Message-ID: <CAHKzcEM_-gWUPe_cSYQCoUtgywMwmi8Wkjyy25UqgMGSRQto8A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Waldemar, all
+Hi
 
-On Tue, Jan 28, 2014 at 11:14 AM, Waldemar Rymarkiewicz
-<waldemar.rymarkiewicz@gmail.com> wrote:
-> This fix will let to run post scripts seamlessly while are referenced by
-> relative paths. Scripts referenced by full path still works.
->
-> Signed-off-by: Waldemar Rymarkiewicz <waldemar.rymarkiewicz@gmail.com>
-> ---
->  Makefile | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/Makefile b/Makefile
-> index 067458b..ef7f4c2 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -554,7 +554,7 @@ endif
->
->         @$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
->                 $(call MESSAGE,"Executing post-build script $(s)"); \
-> -               $(USER_HOOKS_EXTRA_ENV) $(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
-> +               $(USER_HOOKS_EXTRA_ENV) $(abspath $(s)) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
->
->  ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
->  LOCALE_WHITELIST=$(BUILD_DIR)/locales.nopurge
-> @@ -600,7 +600,7 @@ endif
->  target-post-image:
->         @$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
->                 $(call MESSAGE,"Executing post-image script $(s)"); \
-> -               $(USER_HOOKS_EXTRA_ENV) $(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
-> +               $(USER_HOOKS_EXTRA_ENV) $(abspath $(s)) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
->
->  toolchain-eclipse-register:
->         ./support/scripts/eclipse-register-toolchain `readlink -f $(O)` $(notdir $(TARGET_CROSS)) $(BR2_ARCH)
-> --
-> 1.8.3.2
->
-I am not sure I fully get your patch, what is wrong with putting
-path/to/my_script.sh ? You don't have to specify the full path, a
-relative path works well.
+>>
+> I am not sure I fully get your patch, what is wrong with putting
+> path/to/my_script.sh ? You don't have to specify the full path, a
+> relative path works well.
 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Nothing is wrong to put full path to your scripts. Just a matter of
+what you prefer.
+
+Try to put script file in buildroot directory and set the post script
+variable  using just the name of the script. I does not work for me
+and I'm pretty sure it does not work for you as well. This is simply
+how Makefile calls the scripts.
+
+This patch is just addition to run post scripts referenced by relative
+paths as well, nothing more.
+
+Thanks,
+/Waldek
