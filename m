@@ -1,42 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 28 Jan 2014 22:56:17 +0100
-Subject: [Buildroot] [git commit] linux: ensure buildroot_defconfig is
-	writable
-Message-ID: <20140128215820.B4D289C6AC@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 28 Jan 2014 22:58:47 +0100
+Subject: [Buildroot] [PATCH 1/2] rings: add the version major variable
+In-Reply-To: <1389695458-19578-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+References: <1389695458-19578-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <20140128225847.35ae8d12@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0a541c8f244971a45396bfa4c371444204ed4a2c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Jerzy Grzegorek,
 
-If $(KERNEL_SOURCE_CONFIG) is read-only (eg. because Buildroot's source
-dir is), the rm of $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig will
-either fail, or prompt the user, both of which we want to avoid.
+On Tue, 14 Jan 2014 11:30:57 +0100, Jerzy Grzegorek wrote:
+> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+> ---
+>  package/rings/rings.mk |    3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/rings/rings.mk b/package/rings/rings.mk
+> index d052f5d..2876162 100644
+> --- a/package/rings/rings.mk
+> +++ b/package/rings/rings.mk
+> @@ -4,7 +4,8 @@
+>  #
+>  ################################################################################
+>  
+> -RINGS_VERSION = 1.3.0-1
+> +RINGS_VERSION_MAJOR = 1.3.0
+> +RINGS_VERSION = $(RINGS_VERSION_MAJOR)-1
+>  RINGS_SUBDIR  = rings-v_1_3_0
+>  RINGS_LICENSE = MIT
 
-Make it writable by using $(INSTALL).
+While I agree with <foo>_VERSION_MAJOR, when <foo>_VERSION_MAJOR is
+used in more than one place, I don't necessarily think it is needed
+when it is used in only one place, <foo>_VERSION.
 
-Fixes: #4363
-Signed-off-by: Nathan Lynch <ntl@pobox.com>
-[yann.morin.1998 at free.fr: use $(INSTALL) instead of cp, don't 'rm -f']
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/linux.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/linux/linux.mk b/linux/linux.mk
-index ab25fe9..62033d2 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -164,7 +164,7 @@ KERNEL_SOURCE_CONFIG = $(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE)
- endif
- 
- define LINUX_CONFIGURE_CMDS
--	cp $(KERNEL_SOURCE_CONFIG) $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
-+	$(INSTALL) -m 0644 $(KERNEL_SOURCE_CONFIG) $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
- 	$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) buildroot_defconfig
- 	rm $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
- 	$(if $(BR2_arm)$(BR2_armeb),
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
