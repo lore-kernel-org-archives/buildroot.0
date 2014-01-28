@@ -1,40 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 28 Jan 2014 22:55:55 +0100
-Subject: [Buildroot] [git commit] busybox: ensure $(BUSYBOX_BUILD_CONFIG) is
+Date: Tue, 28 Jan 2014 22:57:52 +0100
+Subject: [Buildroot] [git commit] fs: ensure $(TARGET_DIR_WARNING_FILE) is
 	writable
-Message-ID: <20140128215820.A71519C582@busybox.osuosl.org>
+Message-ID: <20140128215820.C96D79C6AC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9b659b815bbb747590f64f57066b36b938946353
+commit: http://git.buildroot.net/buildroot/commit/?id=984524fda1f8260e258421f6676d522591f025da
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-If $(BUSYBOX_CONFIG_FILE) is read-only (eg. because Buildroot's
-source dir is), the sed fixups to $(BUSYBOX_BUILD_CONFIG) fail.
+If the Buildroot tree is read-only, then $(TARGET_DIR_WARNING_FILE) is
+copied read-only into target/ but we may want to remove it during the
+build process.
 
-Fixes: #4363
-Signed-off-by: Nathan Lynch <ntl@pobox.com>
-[yann.morin.1998 at free.fr: use $(INSTALL) instead of cp]
+This poses no real problem, since target/ itself is guaranteed to be
+writable, but for good measure, force $(TARGET_DIR_WARNING_FILE) to be
+writable itself.
+
+Reported-by: Danomi Manchego <danomimanchego123@gmail.com>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/busybox/busybox.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ Makefile     |    2 +-
+ fs/common.mk |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index f6f542e..948f3e4 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -135,7 +135,7 @@ endef
- endif
- 
- define BUSYBOX_COPY_CONFIG
--	cp -f $(BUSYBOX_CONFIG_FILE) $(BUSYBOX_BUILD_CONFIG)
-+	$(INSTALL) -D -m 0644 $(BUSYBOX_CONFIG_FILE) $(BUSYBOX_BUILD_CONFIG)
- endef
- 
- # Disable shadow passwords support if unsupported by the C library
+diff --git a/Makefile b/Makefile
+index d8a8dad..dc57cf4 100644
+--- a/Makefile
++++ b/Makefile
+@@ -475,7 +475,7 @@ $(BUILD_DIR)/.root:
+ 	rsync -a $(RSYNC_VCS_EXCLUSIONS) \
+ 		--chmod=Du+w --exclude .empty --exclude '*~' \
+ 		$(TARGET_SKELETON)/ $(TARGET_DIR)/
+-	cp support/misc/target-dir-warning.txt $(TARGET_DIR_WARNING_FILE)
++	$(INSTALL) -m 0644 support/misc/target-dir-warning.txt $(TARGET_DIR_WARNING_FILE)
+ 	@ln -snf lib $(TARGET_DIR)/$(LIB_SYMLINK)
+ 	@mkdir -p $(TARGET_DIR)/usr
+ 	@ln -snf lib $(TARGET_DIR)/usr/$(LIB_SYMLINK)
+diff --git a/fs/common.mk b/fs/common.mk
+index 9f32620..30e7524 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -83,7 +83,7 @@ endif
+ 	echo "$$(ROOTFS_$(2)_CMD)" >> $$(FAKEROOT_SCRIPT)
+ 	chmod a+x $$(FAKEROOT_SCRIPT)
+ 	$$(HOST_DIR)/usr/bin/fakeroot -- $$(FAKEROOT_SCRIPT)
+-	cp support/misc/target-dir-warning.txt $$(TARGET_DIR_WARNING_FILE)
++	$(INSTALL) -m 0644 support/misc/target-dir-warning.txt $$(TARGET_DIR_WARNING_FILE)
+ 	- at rm -f $$(FAKEROOT_SCRIPT) $$(FULL_DEVICE_TABLE)
+ ifneq ($$(ROOTFS_$(2)_COMPRESS_CMD),)
+ 	$$(ROOTFS_$(2)_COMPRESS_CMD) $$@ > $$@$$(ROOTFS_$(2)_COMPRESS_EXT)
