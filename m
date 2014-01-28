@@ -1,32 +1,58 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 28 Jan 2014 11:27:43 +0100
-Subject: [Buildroot] [git commit] tcpreplay: Bump version to 4.0.2
-Message-ID: <20140128102844.39CDC9C6A5@busybox.osuosl.org>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Tue, 28 Jan 2014 11:37:59 +0100
+Subject: [Buildroot] [PATCH] Run post scripts referenced by relative
+	paths
+In-Reply-To: <1390904090-27934-1-git-send-email-waldemar.rymarkiewicz@gmail.com>
+References: <1390904090-27934-1-git-send-email-waldemar.rymarkiewicz@gmail.com>
+Message-ID: <CAGduivzPCzuKsvy2HWuxdv9E5wVzdWvgdosNCBfQsenmmeZihA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a2ff491db36c613fbc84e3bf065d42d94399c086
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Waldemar, all
 
-Signed-off-by: Chris Packham <judge.packham@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/tcpreplay/tcpreplay.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Tue, Jan 28, 2014 at 11:14 AM, Waldemar Rymarkiewicz
+<waldemar.rymarkiewicz@gmail.com> wrote:
+> This fix will let to run post scripts seamlessly while are referenced by
+> relative paths. Scripts referenced by full path still works.
+>
+> Signed-off-by: Waldemar Rymarkiewicz <waldemar.rymarkiewicz@gmail.com>
+> ---
+>  Makefile | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/Makefile b/Makefile
+> index 067458b..ef7f4c2 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -554,7 +554,7 @@ endif
+>
+>         @$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
+>                 $(call MESSAGE,"Executing post-build script $(s)"); \
+> -               $(USER_HOOKS_EXTRA_ENV) $(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+> +               $(USER_HOOKS_EXTRA_ENV) $(abspath $(s)) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+>
+>  ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
+>  LOCALE_WHITELIST=$(BUILD_DIR)/locales.nopurge
+> @@ -600,7 +600,7 @@ endif
+>  target-post-image:
+>         @$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
+>                 $(call MESSAGE,"Executing post-image script $(s)"); \
+> -               $(USER_HOOKS_EXTRA_ENV) $(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+> +               $(USER_HOOKS_EXTRA_ENV) $(abspath $(s)) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+>
+>  toolchain-eclipse-register:
+>         ./support/scripts/eclipse-register-toolchain `readlink -f $(O)` $(notdir $(TARGET_CROSS)) $(BR2_ARCH)
+> --
+> 1.8.3.2
+>
+I am not sure I fully get your patch, what is wrong with putting
+path/to/my_script.sh ? You don't have to specify the full path, a
+relative path works well.
 
-diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
-index a2cd16e..fdb42a5 100644
---- a/package/tcpreplay/tcpreplay.mk
-+++ b/package/tcpreplay/tcpreplay.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TCPREPLAY_VERSION = 4.0.0
-+TCPREPLAY_VERSION = 4.0.2
- TCPREPLAY_SITE = http://downloads.sourceforge.net/project/tcpreplay/tcpreplay/$(TCPREPLAY_VERSION)
- TCPREPLAY_LICENSE = GPLv3
- TCPREPLAY_LICENSE_FILES = docs/LICENSE
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
