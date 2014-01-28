@@ -1,51 +1,33 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 28 Jan 2014 19:32:02 +0100
-Subject: [Buildroot] [PATCH] Run post scripts referenced by relative
-	paths
-In-Reply-To: <CAHKzcEM_-gWUPe_cSYQCoUtgywMwmi8Wkjyy25UqgMGSRQto8A@mail.gmail.com>
-References: <1390904090-27934-1-git-send-email-waldemar.rymarkiewicz@gmail.com>
- <CAGduivzPCzuKsvy2HWuxdv9E5wVzdWvgdosNCBfQsenmmeZihA@mail.gmail.com>
- <CAHKzcEM_-gWUPe_cSYQCoUtgywMwmi8Wkjyy25UqgMGSRQto8A@mail.gmail.com>
-Message-ID: <20140128183202.GC3466@free.fr>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Tue, 28 Jan 2014 13:37:16 -0500
+Subject: [Buildroot] [PATCH 1/5] target: ensure target/ dir is writable
+In-Reply-To: <20140128182503.GB3466@free.fr>
+References: <cover.1384454667.git.yann.morin.1998@free.fr>
+ <09e0a585c589ccd09d3f85436af4193fb3e1a177.1384454667.git.yann.morin.1998@free.fr>
+ <CANxTyt46Sx2m6szFYmHgPmX4vR7ocvwjCEwPdbANNDRE7BJqNg@mail.gmail.com>
+ <20140128182503.GB3466@free.fr>
+Message-ID: <CANxTyt5nnb7PPQ-HbFHi=15Ckrg7LfX8RcPs+QxuP--YKf2Jiw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Waldemar, All,
+On Tue, Jan 28, 2014 at 1:25 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>> What happened to this series (5 patches fixing issues with RO tree)?
+>> I don't see these patches in Patchwork - did they get rejected?
+>
+> No, I just marked them as "Changes requested" since there were some
+> comments about them.
 
-On 2014-01-28 11:50 +0100, Waldemar Rymarkiewicz spake thusly:
-> > I am not sure I fully get your patch, what is wrong with putting
-> > path/to/my_script.sh ? You don't have to specify the full path, a
-> > relative path works well.
-> 
-> Nothing is wrong to put full path to your scripts. Just a matter of
-> what you prefer.
-> 
-> Try to put script file in buildroot directory and set the post script
-> variable  using just the name of the script. I does not work for me
-> and I'm pretty sure it does not work for you as well. This is simply
-> how Makefile calls the scripts.
-> 
-> This patch is just addition to run post scripts referenced by relative
-> paths as well, nothing more.
+Apologies - I didn't realize the patchwork view filtered by state - I
+see them, now that I changed the filter setting.
 
-Why don't you just set:
-  BR2_ROOTFS_POST_BUILD_SCRIPT="./my-script ./my-second-script"
+> I still have them in my tree, I just need to refresh them, apply the
+> requested changes, and resubmit.
+>
+> One can do so much in a day... ;-)
 
-(Ditto for BR2_ROOTFS_POST_IMAGE_SCRIPT.)
+Understood, thanks.
 
-I'd say, we don't need that change. I prefer the user be explixit about
-what he intends to do, rather than Buildroot guessing.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Danomi -
