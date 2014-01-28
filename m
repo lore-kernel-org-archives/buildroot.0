@@ -1,58 +1,94 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 28 Jan 2014 21:11:25 +0100
-Subject: [Buildroot] [PATCH 5/5] fs: ensure $(TARGET_DIR_WARNING_FILE) is
-	writable
-In-Reply-To: <cover.1390939719.git.yann.morin.1998@free.fr>
-References: <cover.1390939719.git.yann.morin.1998@free.fr>
-Message-ID: <be9f56b1fa250b4860de767e4c118980796732d8.1390939719.git.yann.morin.1998@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 28 Jan 2014 17:11:35 -0300
+Subject: [Buildroot] [PATCH 1/2] libusb: bump to version 1.0.18
+Message-ID: <1390939896-6908-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-If the Buildroot tree is read-only, then $(TARGET_DIR_WARNING_FILE) is
-copied read-only into target/ but we may want to remove it during the
-build process.
-
-This poses no real problem, since target/ itself is guaranteed to be
-writable, but for good measure, force $(TARGET_DIR_WARNING_FILE) to be
-writable itself.
-
-Reported-by: Danomi Manchego <danomimanchego123@gmail.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- Makefile     | 2 +-
- fs/common.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libusb/Config.in               |  2 +-
+ package/libusb/libusb-01-uclinux.patch | 30 ------------------------------
+ package/libusb/libusb.mk               |  8 +++++++-
+ 3 files changed, 8 insertions(+), 32 deletions(-)
+ delete mode 100644 package/libusb/libusb-01-uclinux.patch
 
-diff --git a/Makefile b/Makefile
-index d8a8dad..dc57cf4 100644
---- a/Makefile
-+++ b/Makefile
-@@ -475,7 +475,7 @@ $(BUILD_DIR)/.root:
- 	rsync -a $(RSYNC_VCS_EXCLUSIONS) \
- 		--chmod=Du+w --exclude .empty --exclude '*~' \
- 		$(TARGET_SKELETON)/ $(TARGET_DIR)/
--	cp support/misc/target-dir-warning.txt $(TARGET_DIR_WARNING_FILE)
-+	$(INSTALL) -m 0644 support/misc/target-dir-warning.txt $(TARGET_DIR_WARNING_FILE)
- 	@ln -snf lib $(TARGET_DIR)/$(LIB_SYMLINK)
- 	@mkdir -p $(TARGET_DIR)/usr
- 	@ln -snf lib $(TARGET_DIR)/usr/$(LIB_SYMLINK)
-diff --git a/fs/common.mk b/fs/common.mk
-index 9f32620..30e7524 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -83,7 +83,7 @@ endif
- 	echo "$$(ROOTFS_$(2)_CMD)" >> $$(FAKEROOT_SCRIPT)
- 	chmod a+x $$(FAKEROOT_SCRIPT)
- 	$$(HOST_DIR)/usr/bin/fakeroot -- $$(FAKEROOT_SCRIPT)
--	cp support/misc/target-dir-warning.txt $$(TARGET_DIR_WARNING_FILE)
-+	$(INSTALL) -m 0644 support/misc/target-dir-warning.txt $$(TARGET_DIR_WARNING_FILE)
- 	- at rm -f $$(FAKEROOT_SCRIPT) $$(FULL_DEVICE_TABLE)
- ifneq ($$(ROOTFS_$(2)_COMPRESS_CMD),)
- 	$$(ROOTFS_$(2)_COMPRESS_CMD) $$@ > $$@$$(ROOTFS_$(2)_COMPRESS_EXT)
+diff --git a/package/libusb/Config.in b/package/libusb/Config.in
+index 2c2b8ce..5238588 100644
+--- a/package/libusb/Config.in
++++ b/package/libusb/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_LIBUSB
+ 	help
+ 	  Userspace library for accessing USB devices
+ 
+-	  http://libusb.sourceforge.net/
++	  http://libusb.info/
+ 
+ comment "libusb needs a toolchain w/ threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libusb/libusb-01-uclinux.patch b/package/libusb/libusb-01-uclinux.patch
+deleted file mode 100644
+index cbf48a7..0000000
+--- a/package/libusb/libusb-01-uclinux.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-*-uclinux* is valid in the tuple for linux, it's used for flat binaries
+-for example.
+-Patch both configure* for consistency and to avoid an unnecessary autoreconf.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura libusb-1.0.9.orig/configure libusb-1.0.9/configure
+---- libusb-1.0.9.orig/configure	2013-09-03 10:13:52.212301259 -0300
+-+++ libusb-1.0.9/configure	2013-09-03 10:19:08.443669386 -0300
+-@@ -11093,7 +11093,7 @@
+- { $as_echo "$as_me:${as_lineno-$LINENO}: checking operating system" >&5
+- $as_echo_n "checking operating system... " >&6; }
+- case $host in
+--*-linux*)
+-+*-linux* | *-uclinux*)
+- 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: Linux" >&5
+- $as_echo "Linux" >&6; }
+- 	backend="linux"
+-diff -Nura libusb-1.0.9.orig/configure.ac libusb-1.0.9/configure.ac
+---- libusb-1.0.9.orig/configure.ac	2013-09-03 10:13:52.212301259 -0300
+-+++ libusb-1.0.9/configure.ac	2013-09-03 10:19:00.573411346 -0300
+-@@ -46,7 +46,7 @@
+- 
+- AC_MSG_CHECKING([operating system])
+- case $host in
+--*-linux*)
+-+*-linux* | *-uclinux*)
+- 	AC_MSG_RESULT([Linux])
+- 	backend="linux"
+- 	;;
+diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
+index 99f571c..a595a12 100644
+--- a/package/libusb/libusb.mk
++++ b/package/libusb/libusb.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBUSB_VERSION_MAJOR = 1.0
+-LIBUSB_VERSION = $(LIBUSB_VERSION_MAJOR).9
++LIBUSB_VERSION = $(LIBUSB_VERSION_MAJOR).18
+ LIBUSB_SOURCE = libusb-$(LIBUSB_VERSION).tar.bz2
+ LIBUSB_SITE = http://downloads.sourceforge.net/project/libusb/libusb-$(LIBUSB_VERSION_MAJOR)/libusb-$(LIBUSB_VERSION)
+ LIBUSB_LICENSE = LGPLv2.1+
+@@ -17,5 +17,11 @@ ifeq ($(BR2_avr32),y)
+ LIBUSB_CONF_OPT += --disable-timerfd
+ endif
+ 
++ifeq ($(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV),y)
++LIBUSB_DEPENDENCIES += udev
++else
++LIBUSB_CONF_OPT += --disable-udev
++endif
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
-1.8.1.2
+1.8.3.2
