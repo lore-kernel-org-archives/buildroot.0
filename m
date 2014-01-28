@@ -1,50 +1,42 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 28 Jan 2014 11:12:37 +0100
-Subject: [Buildroot] [PATCH] lvm2: fix static building when
-	BR2_PREFER_STATIC_LIB is used
-In-Reply-To: <CAHkwnC-oqmBKoFOygQt3nBsMdNXQ6pUyvrKJkqkJcL5WRoAbSQ@mail.gmail.com>
- (Fabio Porcedda's message of "Tue, 28 Jan 2014 10:15:40 +0100")
-References: <1390207114-2808-1-git-send-email-fabio.porcedda@gmail.com>
- <8761p5nlox.fsf@dell.be.48ers.dk>
- <CAHkwnC-oqmBKoFOygQt3nBsMdNXQ6pUyvrKJkqkJcL5WRoAbSQ@mail.gmail.com>
-Message-ID: <87bnyw5sa2.fsf@dell.be.48ers.dk>
+From: Waldemar Rymarkiewicz <waldemar.rymarkiewicz@gmail.com>
+Date: Tue, 28 Jan 2014 11:14:50 +0100
+Subject: [Buildroot] [PATCH] Run post scripts referenced by relative paths
+Message-ID: <1390904090-27934-1-git-send-email-waldemar.rymarkiewicz@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
+This fix will let to run post scripts seamlessly while are referenced by
+relative paths. Scripts referenced by full path still works.
 
- > On Mon, Jan 27, 2014 at 10:45 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
- >>>>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
- >> 
- >> > To fix static building:
- >> > - Add "--enable-static_link" to the configure options.
- >> > - Because the shared executables don't build with
- >> >   BR2_PREFER_STATIC_LIB add a patch to disable it.
- >> 
- >> > Fixes:
- >> > http://autobuild.buildroot.net/results/b0b/b0b386969459dda9c294f1ccb4927ca225fa6bdd/
- >> 
- >> Thanks. Has this patch been submitted upstream?
+Signed-off-by: Waldemar Rymarkiewicz <waldemar.rymarkiewicz@gmail.com>
+---
+ Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- > Hi Peter,
- > I've not submitted to upstream this patch.
- > I think to be able to submit it to upstream it needs more work to be done.
- > Unfortunately right now i don't have much free time to do that.
- > IMHO there is a chance that upstream does not want to changes the
- > behavior of lvm static building to suits buildroot.
-
-Ok, in that case - Do we really want to support static linking of LVM2?
-We can also just make it depend on !BR2_PREFER_STATIC_LIB (and also
-adjust udisk).
-
-lvm2 is probably not often used in situations where static linking is
-critical, is it?
-
-I dislike adding feature patches to Buildroot if they cannot go
-upstream.
-
+diff --git a/Makefile b/Makefile
+index 067458b..ef7f4c2 100644
+--- a/Makefile
++++ b/Makefile
+@@ -554,7 +554,7 @@ endif
+ 
+ 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
+ 		$(call MESSAGE,"Executing post-build script $(s)"); \
+-		$(USER_HOOKS_EXTRA_ENV) $(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
++		$(USER_HOOKS_EXTRA_ENV) $(abspath $(s)) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+ 
+ ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
+ LOCALE_WHITELIST=$(BUILD_DIR)/locales.nopurge
+@@ -600,7 +600,7 @@ endif
+ target-post-image:
+ 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
+ 		$(call MESSAGE,"Executing post-image script $(s)"); \
+-		$(USER_HOOKS_EXTRA_ENV) $(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
++		$(USER_HOOKS_EXTRA_ENV) $(abspath $(s)) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+ 
+ toolchain-eclipse-register:
+ 	./support/scripts/eclipse-register-toolchain `readlink -f $(O)` $(notdir $(TARGET_CROSS)) $(BR2_ARCH)
 -- 
-Bye, Peter Korsgaard
+1.8.3.2
