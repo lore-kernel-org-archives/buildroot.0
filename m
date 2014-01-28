@@ -1,29 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jan 2014 22:54:48 +0100
-Subject: [Buildroot] [PATCH 2/2] mpd: bump to version 0.18.7
-In-Reply-To: <1389651438-13529-2-git-send-email-gustavo@zacarias.com.ar>
-References: <1389651438-13529-1-git-send-email-gustavo@zacarias.com.ar>
- <1389651438-13529-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140128225448.3aa40140@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 28 Jan 2014 22:56:04 +0100
+Subject: [Buildroot] [PATCH 2/5] busybox: ensure $(BUSYBOX_BUILD_CONFIG)
+	is writable
+In-Reply-To: <01fa1f7ad6024207eec43d9840894e602e3b06b4.1390939719.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Tue, 28 Jan 2014 21:11:22 +0100")
+References: <cover.1390939719.git.yann.morin.1998@free.fr>
+ <01fa1f7ad6024207eec43d9840894e602e3b06b4.1390939719.git.yann.morin.1998@free.fr>
+Message-ID: <877g9j22kr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-On Mon, 13 Jan 2014 19:17:18 -0300, Gustavo Zacarias wrote:
+ > From: Nathan Lynch <ntl@pobox.com>
+ > If $(BUSYBOX_CONFIG_FILE) is read-only (eg. because Buildroot's
+ > source dir is), the sed fixups to $(BUSYBOX_BUILD_CONFIG) fail.
 
-> +	depends on !(BR2_avr32 || BR2_sparc) # gcc too old
+ > Fixes: #4363
+ > Signed-off-by: Nathan Lynch <ntl@pobox.com>
+ > [yann.morin.1998 at free.fr: use $(INSTALL) instead of cp]
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Arnout Vandecappelle <arnout@mind.be>
 
-Shouldn't we test on the GCC version here instead? There may very well
-be modern SPARC toolchains, for example.
+Committed, thanks.
 
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
