@@ -1,32 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 28 Jan 2014 22:19:44 +0100
-Subject: [Buildroot] [git commit] ethtool: bump to version 3.13
-Message-ID: <20140128212010.AC3F09C6AC@busybox.osuosl.org>
+Date: Tue, 28 Jan 2014 22:21:01 +0100
+Subject: [Buildroot] [git commit] minidlna: fix static linking
+In-Reply-To: <20140128221653.6fc8974b@skate> (Thomas Petazzoni's message of
+ "Tue, 28 Jan 2014 22:16:53 +0100")
+References: <20140108082945.20CF58DE52@busybox.osuosl.org>
+ <20140128221653.6fc8974b@skate>
+Message-ID: <87sis72476.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1a71a270e1ad261c3c38b86b7976c3b1fe0722a7
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ethtool/ethtool.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ > Dear Peter Korsgaard,
+ > On Wed, 8 Jan 2014 09:00:11 +0100, Peter Korsgaard wrote:
 
-diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
-index 32b39e8..a6158ba 100644
---- a/package/ethtool/ethtool.mk
-+++ b/package/ethtool/ethtool.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ETHTOOL_VERSION = 3.12.1
-+ETHTOOL_VERSION = 3.13
- ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
- ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
- ETHTOOL_LICENSE = GPLv2
+ >> -# static build is broken w.r.t libgcc_s
+ >> +ifeq ($(BR2_PREFER_STATIC_LIB),y)
+ >> +# the configure script / Makefile forgets to link with some of the dependent
+ >> +# libraries breaking static linking, so help it along
+ >> +MINIDLNA_CONF_ENV = \
+ >> +	LIBS='-lavformat -lavcodec -lavutil -logg -lz -lpthread -lm'
+ >> +else
+
+ > I know we're doing this in a bunch of cases, but I believe we should
+ > rather fix the package itself, rather than encoding into the
+ > Buildroot .mk file the list of libraries to link with. Because if
+ > libogg or libavutil becomes unnecessary in a future version of
+ > minidlna, we may not notice, and still link needlessly against them.
+
+True. Patches are welcome ;)
+
+-- 
+Bye, Peter Korsgaard 
