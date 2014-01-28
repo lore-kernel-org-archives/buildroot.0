@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 28 Jan 2014 21:58:38 +0100
-Subject: [Buildroot] [PATCH] radvd: bump to version 1.9.8
-In-Reply-To: <1390936804-9847-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 28 Jan 2014 16:20:04 -0300")
-References: <1390936804-9847-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87a9ef3jsx.fsf@dell.be.48ers.dk>
+Date: Tue, 28 Jan 2014 21:58:43 +0100
+Subject: [Buildroot] [PATCH] ethtool: bump to version 3.13
+In-Reply-To: <1390936826-10022-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 28 Jan 2014 16:20:26 -0300")
+References: <1390936826-10022-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <8761p33jss.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
