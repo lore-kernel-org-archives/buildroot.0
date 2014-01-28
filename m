@@ -1,70 +1,83 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Tue, 28 Jan 2014 09:17:19 +0100
-Subject: [Buildroot] [PATCH] uboot-tools: Allow users to use uboot's
-	sources
-In-Reply-To: <CAAXf6LWTv2M+AsoXNkzckUzdZdLnPJL_d5TxvLiPK03VTm=dhA@mail.gmail.com>
-References: <1390696553-4163-1-git-send-email-maxime.hadjinlian@gmail.com>
- <52E530D5.20405@lucaceresoli.net>
- <CAGduivwtd5SeEOSi6NNCegk7L7oem0+dF9eqkvoGtYk1_xODVw@mail.gmail.com>
- <52E5816F.9080102@lucaceresoli.net> <52E69898.2080805@mind.be>
- <CAAXf6LWTv2M+AsoXNkzckUzdZdLnPJL_d5TxvLiPK03VTm=dhA@mail.gmail.com>
-Message-ID: <CAGduivwEMRX9G5Fo7m0ai4zYcrL0D1VDzm3mUgKDcLDs=tXsjw@mail.gmail.com>
+Date: Tue, 28 Jan 2014 09:25:20 +0100
+Subject: [Buildroot] [PATCH 1/1] skeleton: add systemd network.service
+	unit
+In-Reply-To: <52E7589F.7060301@mind.be>
+References: <1388713112-4686-1-git-send-email-vsergeev@kumunetworks.com>
+ <20140103201333.7f4edd47@skate>
+ <CAPyrzo0q7Y3Tf1LOaCe4LK78a7sZrVdToLfnzp4Tc4kow=-nKA@mail.gmail.com>
+ <52E7589F.7060301@mind.be>
+Message-ID: <CAGduivw+HOQRDN18=xrM_AwqT3YtoM7BwmcaNRDb0VFVaQM9eQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Hi all
 
-On Tue, Jan 28, 2014 at 7:02 AM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> Hi Arnout,
->
-> Op 27-jan.-2014 22:28 schreef "Arnout Vandecappelle" <arnout@mind.be>:
->
->
+On Tue, Jan 28, 2014 at 8:13 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 03/01/14 20:41, Ivan Sergeev wrote:
 >>
->> On 26/01/14 22:43, Luca Ceresoli wrote:
->>>
->>> Going a step ahead, to be more uniform with these packages, you may use
->>> a choice construct to allow choosing between two alternatives.
->>> Example (modified version of the code in barebox.mk):
->>>
->>> choice
->>>          prompt "version"
->>>          help
->>>            Select the specific uboot-tools version you want to use
->>>
->>> config BR2_PACKAGE_UBOOT_TOOLS_LATEST_VERSION
->>>          bool "Use a recent upstream version"
->>>
->>> config BR2_PACKAGE_UBOOT_TOOLS_USE_UBOOT_VERSION
->>>          bool "Use the same sources of the uboot package"
->>>
->>> endchoice
+>> Currently, it seems that the /etc/init.d scripts are copied over blindly
+>> from the target skeleton to the target even if systemd (and not busybox)
+>> is the chosen init system. Moving forward, having both busybox and
+>> systemd init files in the skeleton, like this patch would have, will
+>> always clutter /etc/ with some unused init files in the target system,
+>> since only one init system will be active.
 >>
->>
->>  Actually, I don't even see the need to ask the user anything. If we are
->> building U-Boot, I don't see why we would ever want to use the U-Boot tools
->> from upstream - that just adds a risk of incompatibility between the two.
->>
->>  So I would propose to remove the BR2_PACKAGE_UBOOT_TOOLS_UBOOT_SOURCE
->> option, and instead make it conditional on BR2_TARGET_UBOOT.
+>> Should such init files be conditional targets in system/system.mk
+>> ?  Or should S40network be owned and copied over by
+>> package/busybox, and network.service be owned and copied over by
+>> package/systemd, instead of having them included statically in the target
+>> skeleton?
 >
-> I don't agree here. Real life example: we are using vendor-provided uboot,
-> and want to set an env-image in our flash devices' factory image. While this
-> version of uboot clearly supports handling the env at a specified location,
-> it does not (yet) provide the mkenvimage tool.
-> In this case, we actually want a more recent uboot tools package that does
-> have mkenvimage. My conclusion is thus that we should provide the choice.
 >
-I agree with Thomas here, as this has already happen to me too. I
-think the user's choice is the best option we could offer.
-I will do more testing regarding the different type of version one can
-use for u-boot. And as you said, Arnout, the order of inclusions, was
-the reason behind the uses of BR2_TARGET_UBOOT_VERSION.
-I will test and resend with Luca's proposition to make the whole
-UBOOT_TOOLS_SOURCE part of an if/then/else structure.
-> Best regards,
-> Thomas
+>  I completely agree that the way it is done now is far from ideal.
+>
+>  I think the best way to work with this would be to:
+>
+> - remove the contents of the init.d directory from the skeleton;
+>
+> - create a new skeleton fragment system/skeleton-init-sysv that contains
+> etc/init.d;
+>
+> - create a new skeleton fragment system/skeleton-init-systemd that contains
+> whatever support files are needed by systemd (currently nothing, but your
+> patch would add the networking unit file);
+>
+> - copy the correct skeleton fragment as part of the .root target, but only
+> if the default skeleton was selected - with a custom skeleton, it's up to
+> the user to provide the right systemd/init.d;
+I  agree with you and as a matter of fact, I had already started
+working on a patch that implement exactly this.
+
+I would even like to go even further, as I have noticed that a lot of
+the defined LIBFOO_INSTALL_INIT_SYSTEMD and LIBFOO_INSTALL_INIT_SYSV
+almost always do the exact same stuff.
+I would like for the infrastructure to take care of this, if no
+function is defined, and a .service or S\d{0,2}*, then we should take
+it and install it.
+
+In that case, any particular requirements, the package define a
+function, other than that, it's taken care of and we avoid duplicate
+code in all the packages.
+
+>
+>
+>
+>  Regards,
+>  Arnout
+>
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
