@@ -1,63 +1,54 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 28 Jan 2014 21:11:20 +0100
-Subject: [Buildroot] [PATCH 0/5 v3] Ensure files we modify are writable
-Message-ID: <cover.1390939719.git.yann.morin.1998@free.fr>
+Date: Tue, 28 Jan 2014 21:11:21 +0100
+Subject: [Buildroot] [PATCH 1/5] target: ensure target/ dir is writable
+In-Reply-To: <cover.1390939719.git.yann.morin.1998@free.fr>
+References: <cover.1390939719.git.yann.morin.1998@free.fr>
+Message-ID: <4b79710686ef3bcec64579d677de9a027788b74f.1390939719.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+From: Nathan Lynch <ntl@pobox.com>
 
-Hello All!
+If the source target skeleton is read-only (eg. because Buildroot's
+source dir is), modifications to the output target (such as creating
+/etc/hostname and /etc/issue) fail.
 
-This series ensures that target/ and our copies of the .config files are
-writeable.
+(This can happen if the Buildroot source dir is NFS-mounted read-only
+to be shared between different machines, for example).
 
-In case the Buildroot tree is RO (eg. shared via a read-only NFS mount),
-target/ would end-up read-only, which is a bit awkward, since we won't be
-able to add files in there. Ditto for the busybox', uClibc's, and Linux'
-.config files, since we need to tweak them with sed.
+Signed-off-by: Nathan Lynch <ntl@pobox.com>
+[yann.morin.1998 at free.fr: we use rsync now, not cp; --chmod=Du+w
+ suggested by Arnout; clarify commit log]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+---
+ Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I've had this locally for some time now, grabbed from some patches in
-patchwork. A previous submission of this series has been marked as
-"Changes Requested", but there's no trace of it in the ML, so I'm just
-re-spinning them as-is for further comments.
-
-
-Changes v2 -> v3:
-  - small nit and typoes (Danomi, Thomas)
-                                                                                                                                                                                      ?
-Changes v1 -> v2:                                                                                                                                                                     ?
-  - add three other files to the list  (Danomi)                                                                                                                                       ?
-
-
-Regards,
-Yann E. MORIN.
-
-
-----------------------------------------------------------------
-Nathan Lynch (2):
-      target: ensure target/ dir is writable
-      busybox: ensure $(BUSYBOX_BUILD_CONFIG) is writable
-
-Yann E. MORIN (3):
-      linux: ensure buildroot_defconfig is writable
-      package/uClibc: ensure .config is writable
-      fs: ensure $(TARGET_DIR_WARNING_FILE) is writable
-
- Makefile                   | 6 +++---
- fs/common.mk               | 2 +-
- linux/linux.mk             | 2 +-
- package/busybox/busybox.mk | 2 +-
- package/uclibc/uclibc.mk   | 2 +-
- 5 files changed, 7 insertions(+), 7 deletions(-)
-
+diff --git a/Makefile b/Makefile
+index 067458b..d8a8dad 100644
+--- a/Makefile
++++ b/Makefile
+@@ -473,7 +473,7 @@ RSYNC_VCS_EXCLUSIONS = \
+ $(BUILD_DIR)/.root:
+ 	mkdir -p $(TARGET_DIR)
+ 	rsync -a $(RSYNC_VCS_EXCLUSIONS) \
+-		--exclude .empty --exclude '*~' \
++		--chmod=Du+w --exclude .empty --exclude '*~' \
+ 		$(TARGET_SKELETON)/ $(TARGET_DIR)/
+ 	cp support/misc/target-dir-warning.txt $(TARGET_DIR_WARNING_FILE)
+ 	@ln -snf lib $(TARGET_DIR)/$(LIB_SYMLINK)
+@@ -549,7 +549,7 @@ endif
+ 	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
+ 		$(call MESSAGE,"Copying overlay $(d)"); \
+ 		rsync -a $(RSYNC_VCS_EXCLUSIONS) \
+-			--exclude .empty --exclude '*~' \
++			--chmod=Du+w --exclude .empty --exclude '*~' \
+ 			$(d)/ $(TARGET_DIR)$(sep))
+ 
+ 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.1.2
