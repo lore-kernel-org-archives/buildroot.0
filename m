@@ -1,28 +1,37 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Tue, 28 Jan 2014 09:42:30 +0100
-Subject: [Buildroot] python Gobject
-In-Reply-To: <1390745969170-60687.post@n4.nabble.com>
-References: <CAAs3wMgAbEnReJ-XW_QnQ=kAU6G7cwzss7yUMytcmHMRYMsjnw@mail.gmail.com>
- <20140117113153.GB10730@pc-eric>
- <CAAs3wMh5xwOK_bEDVM1JMJvw6vYYL2frZYxTc_4ehyLK2sj++g@mail.gmail.com>
- <20140117154452.GC10730@pc-eric>
- <1390290077263-60414.post@n4.nabble.com>
- <20140121173657.GA11605@pc-eric>
- <1390420630566-60535.post@n4.nabble.com>
- <20140123170253.GB10856@pc-eric> <20140124182659.GB30974@pc-eric>
- <1390745969170-60687.post@n4.nabble.com>
-Message-ID: <20140128084229.GA30106@pc-eric>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Tue, 28 Jan 2014 10:15:40 +0100
+Subject: [Buildroot] [PATCH] lvm2: fix static building when
+	BR2_PREFER_STATIC_LIB is used
+In-Reply-To: <8761p5nlox.fsf@dell.be.48ers.dk>
+References: <1390207114-2808-1-git-send-email-fabio.porcedda@gmail.com>
+ <8761p5nlox.fsf@dell.be.48ers.dk>
+Message-ID: <CAHkwnC-oqmBKoFOygQt3nBsMdNXQ6pUyvrKJkqkJcL5WRoAbSQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Just FYI I've build your gobject package successfully on a 32-bit host so
-> you're last point was totally right.
-I've found a x86_64 machine to perform tests. I've patched the configure.ac
-files of the packages so that the path to the Python headers can be overriden
-from Buildroot Makefiles. The fix is available in my branch.
+On Mon, Jan 27, 2014 at 10:45 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
+>
+>  > To fix static building:
+>  > - Add "--enable-static_link" to the configure options.
+>  > - Because the shared executables don't build with
+>  >   BR2_PREFER_STATIC_LIB add a patch to disable it.
+>
+>  > Fixes:
+>  > http://autobuild.buildroot.net/results/b0b/b0b386969459dda9c294f1ccb4927ca225fa6bdd/
+>
+> Thanks. Has this patch been submitted upstream?
 
-Best regards,
-ELB
+Hi Peter,
+I've not submitted to upstream this patch.
+I think to be able to submit it to upstream it needs more work to be done.
+Unfortunately right now i don't have much free time to do that.
+IMHO there is a chance that upstream does not want to changes the
+behavior of lvm static building to suits buildroot.
+
+Best regards
+-- 
+Fabio Porcedda
