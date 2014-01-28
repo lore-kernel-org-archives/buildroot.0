@@ -1,68 +1,124 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jan 2014 19:52:59 +0100
-Subject: [Buildroot] [PATCH] ZNC: new package
-In-Reply-To: <1388876370-3441-1-git-send-email-cedric.chepied@gmail.com>
-References: <1388876370-3441-1-git-send-email-cedric.chepied@gmail.com>
-Message-ID: <20140128195259.73158fe4@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 28 Jan 2014 19:58:07 +0100
+Subject: [Buildroot] [PATCH v4 3/5] libenca: new package
+In-Reply-To: <1390772341-6790-4-git-send-email-maxime.hadjinlian@gmail.com>
+ (Maxime Hadjinlian's message of "Sun, 26 Jan 2014 22:38:59 +0100")
+References: <1390772341-6790-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <1390772341-6790-4-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <87r47s2atc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear C?dric Ch?pied,
+>>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
 
-On Sat,  4 Jan 2014 23:59:30 +0100, C?dric Ch?pied wrote:
-> ZNC is an IRC bouncer.
-> It is available in menu "Networking applications"
-> ---
->  package/Config.in     |  1 +
->  package/znc/Config.in |  6 ++++++
->  package/znc/znc.mk    | 22 ++++++++++++++++++++++
->  3 files changed, 29 insertions(+)
->  create mode 100644 package/znc/Config.in
->  create mode 100644 package/znc/znc.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 35de506..925a6bf 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -936,6 +936,7 @@ source "package/wpa_supplicant/Config.in"
->  source "package/wvdial/Config.in"
->  source "package/xinetd/Config.in"
->  source "package/xl2tp/Config.in"
-> +source "package/znc/Config.in"
->  
->  endmenu
->  
-> diff --git a/package/znc/Config.in b/package/znc/Config.in
-> new file mode 100644
-> index 0000000..ef5db26
-> --- /dev/null
-> +++ b/package/znc/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_ZNC
-> +       bool "znc"
-> +       select BR2_PACKAGE_OPENSSL
-> +       select BR2_PACKAGE_PERL
-> +       help
-> +         Advanced IRC bouncer
+ > Extremely Naive Charset Analyser.
+ > This package was originally found at : https://github.com/huceke/buildroot-rbp
+ > By gimli <ebsi4711@gmail.com>
 
-We generally want the URL of the project here in the help text. See
-what we do for all other packages.
+ > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+ > Cc: gimli <ebsi4711@gmail.com>
+ > Cc: Bernd Kuhls <berndkuhls@hotmail.com>
+ > ---
+ > Changes v3 --> v4:
+ >   - Add support for libiconv (Patch from Bernd Kuhls)
+ > Changes v2 --> v3:
+ >   - Bump libenca to 1.15 (1.9 was 4 years ago)
+ >   - Rework the whole libenca.mk file
+ >   - Switch source to github
+ >   - New patch against Makefile.am and do AUTORECONF (Thomas Petazzoni,
+ >     Yann E. Morin)
+ >   - Remove the uses of prefix by adding a patch which removes a hack in
+ >     the configure.ac (Yann E. Morin)
+ > Changes v1 --> v2:
+ >   - Rename patch files (Thomas Petazzoni)
+ >   - Fix header of the mk files (Thomas Petazzoni)
+ >   - Fix indent (Thomas Petazzoni)
+ >   - Put LIBENCA_CONF_ENV on one line (Thomas Petazzoni)
+ > ---
+ >  package/Config.in                                  |  1 +
+ >  package/libenca/Config.in                          |  7 ++++
+ >  .../libenca/libenca-000-do-not-build-tools.patch   | 44 ++++++++++++++++++++++
+ >  .../libenca-001-fix-installation-error.patch       | 44 ++++++++++++++++++++++
+ >  ...benca-002-remove-prefix-hack-in-configure.patch | 33 ++++++++++++++++
+ >  package/libenca/libenca-003-iconv.patch            | 15 ++++++++
+ >  package/libenca/libenca.mk                         | 33 ++++++++++++++++
+ >  7 files changed, 177 insertions(+)
+ >  create mode 100644 package/libenca/Config.in
+ >  create mode 100644 package/libenca/libenca-000-do-not-build-tools.patch
+ >  create mode 100644 package/libenca/libenca-001-fix-installation-error.patch
+ >  create mode 100644 package/libenca/libenca-002-remove-prefix-hack-in-configure.patch
+ >  create mode 100644 package/libenca/libenca-003-iconv.patch
+ >  create mode 100644 package/libenca/libenca.mk
 
-Looking at the configure.ac from ZNC, it seems like the OpenSSL and
-Perl support is optional, and can be disabled using --disable-openssl
-and --disable-perl. It would probably be a good idea to use these to
-make these dependencies optional.
+ > diff --git a/package/Config.in b/package/Config.in
+ > index 397cc11..677f01e 100644
+ > --- a/package/Config.in
+ > +++ b/package/Config.in
+ > @@ -773,6 +773,7 @@ menu "Text and terminal handling"
+ >  source "package/enchant/Config.in"
+ >  source "package/icu/Config.in"
+ >  source "package/libedit/Config.in"
+ > +source "package/libenca/Config.in"
+ >  source "package/libfribidi/Config.in"
+ >  source "package/libiconv/Config.in"
+ >  source "package/linenoise/Config.in"
+ > diff --git a/package/libenca/Config.in b/package/libenca/Config.in
+ > new file mode 100644
+ > index 0000000..58217dc
+ > --- /dev/null
+ > +++ b/package/libenca/Config.in
+ > @@ -0,0 +1,7 @@
+ > +config BR2_PACKAGE_LIBENCA
+ > +	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
 
-Also, your znc.mk should have ZNC_LICENSE and ZNC_LICENSE_FILES
-defined. Look at the Buildroot manual for details about these.
+A quick test shows that locale / libiconv actually isn't
+needed. Configure warns if they aren't available, but it does build.
 
-Thanks for your contribution!
+ > +	bool "libenca"
+ > +	help
+ > +	  Extremely Naive Charset Analyser
+ > +
+ > +	  http://cihar.com/software/enca/
+ > diff --git a/package/libenca/libenca-000-do-not-build-tools.patch b/package/libenca/libenca-000-do-not-build-tools.patch
+ > new file mode 100644
+ > index 0000000..83db61b
+ > --- /dev/null
+ > +++ b/package/libenca/libenca-000-do-not-build-tools.patch
+ > @@ -0,0 +1,44 @@
+ > +From be1fe3e057ccb90fd476bf855f19ecbe97bf4e1e Mon Sep 17 00:00:00 2001
+ > +From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+ > +Date: Wed, 15 Jan 2014 00:18:34 +0100
+ > +Subject: [PATCH 1/3] Do not build tools
+ > +
+ > +We don't want to build tools using buildroot because there is currently no
+ > +support for cross compile.
+ > +And we need to execute make_hash (which seems to be the only things that get
+ > +compiled in tools) to create encodings.h which will later be used during the
+ > +build process.
+ > +Thus, we disable the build of the tools, and we do ourselves using a
+ > +POST_CONFIGURE_HOOKS.
 
-Thomas
+As long as we build make_hash in advance, the make file won't try to
+rebuild it so we don't actually need this patch.
+
+
+ > +define LIBENCA_MAKE_HOST_TOOL
+ > +	cd $(@D)/tools && sed -e 's/^#define \([A-Z0-9_]*\) \(.*\)/@\1@ \2/' \
+ > +		-e 's/"//g' \
+ > +		-e 's/NULL$$//' \
+ > +		-e 's/ /\//' \
+ > +		-e 's/^\(.*\)$$/s\/\1\//' \
+ > +		../iconvenc.h >encodings.sed
+ > +	cd $(@D)/tools && $(HOSTCC) -o make_hash make_hash.c
+ > +	cd $(@D)/tools && sed -f encodings.sed ./encodings.dat | ./make_hash >encodings.h
+
+It would be good to use HOST_CFLAGS / HOST_LDFLAGS as well. We might as
+well use util/Makefile instead of hardcoding all these steps.
+
+Committed with those changes, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
