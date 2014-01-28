@@ -1,41 +1,33 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 28 Jan 2014 13:26:13 +0100
-Subject: [Buildroot] [PATCH 2/2] mtd: Allow to select the host variant
-In-Reply-To: <1390909161-2496-2-git-send-email-ezequiel@vanguardiasur.com.ar>
-References: <1390909161-2496-1-git-send-email-ezequiel@vanguardiasur.com.ar>
- <1390909161-2496-2-git-send-email-ezequiel@vanguardiasur.com.ar>
-Message-ID: <CAAXf6LXpeBr30NU4upeotjoQ8UR-WLbraXGFDCT9K8rbJTUO3A@mail.gmail.com>
+From: Mischa Jonker <Mischa.Jonker@synopsys.com>
+Date: Tue, 28 Jan 2014 14:10:40 +0100
+Subject: [Buildroot] [PATCH 1/2] perf: Add support for Linux 3.13
+Message-ID: <1390914640-18160-1-git-send-email-mjonker@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jan 28, 2014 at 12:39 PM, Ezequiel Garcia
-<ezequiel@vanguardiasur.com.ar> wrote:
-> If any of the post-image scripts wants to create mtd/ubi images,
-> we need to expose an option for mtd-tools to be user-selectable.
->
-> Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-> ---
->  package/Config.in.host     | 1 +
->  package/mtd/Config.in.host | 6 ++++++
->  2 files changed, 7 insertions(+)
->  create mode 100644 package/mtd/Config.in.host
->
-> diff --git a/package/Config.in.host b/package/Config.in.host
-> index 34e84bf..f2fe2c2 100644
-> --- a/package/Config.in.host
-> +++ b/package/Config.in.host
-> @@ -8,6 +8,7 @@ source "package/genimage/Config.in.host"
->  source "package/genpart/Config.in.host"
->  source "package/lpc3250loader/Config.in.host"
->  source "package/mtools/Config.in.host"
-> +source "package/mtd/Config.in.host"
+The Makefile has been renamed to Makefile.perf; so now we check
+both Makefiles to support 3.7 - 3.12 and 3.13 - beyond.
 
-This should be above mtools.
+Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
+---
+ package/perf/perf.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-[..]
-
-Other than this one comment:
-Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+diff --git a/package/perf/perf.mk b/package/perf/perf.mk
+index d7898d0..ffe18bc 100644
+--- a/package/perf/perf.mk
++++ b/package/perf/perf.mk
+@@ -35,7 +35,7 @@ define PERF_BUILD_CMDS
+ 		exit 1 ; \
+ 	fi
+ 	$(Q)if test "$(BR2_PACKAGE_ELFUTILS)" = "" ; then \
+-		if ! grep -q NO_LIBELF $(LINUX_DIR)/tools/perf/Makefile ; then \
++		if ! grep -q NO_LIBELF $(LINUX_DIR)/tools/perf/Makefile $(LINUX_DIR)/tools/perf/Makefile.perf ; then \
+ 			echo "The perf tool in your kernel cannot be built without libelf." ; \
+ 			echo "Either upgrade your kernel to >= 3.7, or enable the elfutils package." ; \
+ 			exit 1 ; \
+-- 
+1.7.9.5
