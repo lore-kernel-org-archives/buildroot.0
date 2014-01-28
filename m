@@ -1,124 +1,139 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 28 Jan 2014 19:58:07 +0100
-Subject: [Buildroot] [PATCH v4 3/5] libenca: new package
-In-Reply-To: <1390772341-6790-4-git-send-email-maxime.hadjinlian@gmail.com>
- (Maxime Hadjinlian's message of "Sun, 26 Jan 2014 22:38:59 +0100")
-References: <1390772341-6790-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1390772341-6790-4-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <87r47s2atc.fsf@dell.be.48ers.dk>
+From: Ivan Sergeev <vsergeev@kumunetworks.com>
+Date: Tue, 28 Jan 2014 11:04:44 -0800
+Subject: [Buildroot] [PATCH 1/1] ntp: add systemd unit file for ntpd
+In-Reply-To: <52E7567C.90607@mind.be>
+References: <1390874405-25944-1-git-send-email-vsergeev@kumunetworks.com>
+ <52E7567C.90607@mind.be>
+Message-ID: <CAPyrzo1V2=hHi-zuZpjMXguLkHevyNm658B_E0-cpH2pOWo2vQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
+Hello Arnout,
 
- > Extremely Naive Charset Analyser.
- > This package was originally found at : https://github.com/huceke/buildroot-rbp
- > By gimli <ebsi4711@gmail.com>
+1. Yup, I believe so, but it's currently not in place in the skeleton. I
+think some of the proposed solutions in the network.service thread would
+address this.
 
- > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
- > Cc: gimli <ebsi4711@gmail.com>
- > Cc: Bernd Kuhls <berndkuhls@hotmail.com>
- > ---
- > Changes v3 --> v4:
- >   - Add support for libiconv (Patch from Bernd Kuhls)
- > Changes v2 --> v3:
- >   - Bump libenca to 1.15 (1.9 was 4 years ago)
- >   - Rework the whole libenca.mk file
- >   - Switch source to github
- >   - New patch against Makefile.am and do AUTORECONF (Thomas Petazzoni,
- >     Yann E. Morin)
- >   - Remove the uses of prefix by adding a patch which removes a hack in
- >     the configure.ac (Yann E. Morin)
- > Changes v1 --> v2:
- >   - Rename patch files (Thomas Petazzoni)
- >   - Fix header of the mk files (Thomas Petazzoni)
- >   - Fix indent (Thomas Petazzoni)
- >   - Put LIBENCA_CONF_ENV on one line (Thomas Petazzoni)
- > ---
- >  package/Config.in                                  |  1 +
- >  package/libenca/Config.in                          |  7 ++++
- >  .../libenca/libenca-000-do-not-build-tools.patch   | 44 ++++++++++++++++++++++
- >  .../libenca-001-fix-installation-error.patch       | 44 ++++++++++++++++++++++
- >  ...benca-002-remove-prefix-hack-in-configure.patch | 33 ++++++++++++++++
- >  package/libenca/libenca-003-iconv.patch            | 15 ++++++++
- >  package/libenca/libenca.mk                         | 33 ++++++++++++++++
- >  7 files changed, 177 insertions(+)
- >  create mode 100644 package/libenca/Config.in
- >  create mode 100644 package/libenca/libenca-000-do-not-build-tools.patch
- >  create mode 100644 package/libenca/libenca-001-fix-installation-error.patch
- >  create mode 100644 package/libenca/libenca-002-remove-prefix-hack-in-configure.patch
- >  create mode 100644 package/libenca/libenca-003-iconv.patch
- >  create mode 100644 package/libenca/libenca.mk
+2. The symlink into multi-user.target.wants "enables" the service, so that
+when systemd needs to reach the multi-user target (which it does when it
+boots up), it will run the service. Later, running "systemctl disable" on
+the service would remove the symlink, so it isn't run automatically for
+that target. So the symlink facilitates enabling/disabling the service for
+a given target, but the service file itself should live in
+/etc/systemd/system.
 
- > diff --git a/package/Config.in b/package/Config.in
- > index 397cc11..677f01e 100644
- > --- a/package/Config.in
- > +++ b/package/Config.in
- > @@ -773,6 +773,7 @@ menu "Text and terminal handling"
- >  source "package/enchant/Config.in"
- >  source "package/icu/Config.in"
- >  source "package/libedit/Config.in"
- > +source "package/libenca/Config.in"
- >  source "package/libfribidi/Config.in"
- >  source "package/libiconv/Config.in"
- >  source "package/linenoise/Config.in"
- > diff --git a/package/libenca/Config.in b/package/libenca/Config.in
- > new file mode 100644
- > index 0000000..58217dc
- > --- /dev/null
- > +++ b/package/libenca/Config.in
- > @@ -0,0 +1,7 @@
- > +config BR2_PACKAGE_LIBENCA
- > +	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
-
-A quick test shows that locale / libiconv actually isn't
-needed. Configure warns if they aren't available, but it does build.
-
- > +	bool "libenca"
- > +	help
- > +	  Extremely Naive Charset Analyser
- > +
- > +	  http://cihar.com/software/enca/
- > diff --git a/package/libenca/libenca-000-do-not-build-tools.patch b/package/libenca/libenca-000-do-not-build-tools.patch
- > new file mode 100644
- > index 0000000..83db61b
- > --- /dev/null
- > +++ b/package/libenca/libenca-000-do-not-build-tools.patch
- > @@ -0,0 +1,44 @@
- > +From be1fe3e057ccb90fd476bf855f19ecbe97bf4e1e Mon Sep 17 00:00:00 2001
- > +From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
- > +Date: Wed, 15 Jan 2014 00:18:34 +0100
- > +Subject: [PATCH 1/3] Do not build tools
- > +
- > +We don't want to build tools using buildroot because there is currently no
- > +support for cross compile.
- > +And we need to execute make_hash (which seems to be the only things that get
- > +compiled in tools) to create encodings.h which will later be used during the
- > +build process.
- > +Thus, we disable the build of the tools, and we do ourselves using a
- > +POST_CONFIGURE_HOOKS.
-
-As long as we build make_hash in advance, the make file won't try to
-rebuild it so we don't actually need this patch.
+Thanks,
+~vsergeev
+Ivan Sergeev
 
 
- > +define LIBENCA_MAKE_HOST_TOOL
- > +	cd $(@D)/tools && sed -e 's/^#define \([A-Z0-9_]*\) \(.*\)/@\1@ \2/' \
- > +		-e 's/"//g' \
- > +		-e 's/NULL$$//' \
- > +		-e 's/ /\//' \
- > +		-e 's/^\(.*\)$$/s\/\1\//' \
- > +		../iconvenc.h >encodings.sed
- > +	cd $(@D)/tools && $(HOSTCC) -o make_hash make_hash.c
- > +	cd $(@D)/tools && sed -f encodings.sed ./encodings.dat | ./make_hash >encodings.h
+On Mon, Jan 27, 2014 at 11:04 PM, Arnout Vandecappelle <arnout@mind.be>wrote:
 
-It would be good to use HOST_CFLAGS / HOST_LDFLAGS as well. We might as
-well use util/Makefile instead of hardcoding all these steps.
-
-Committed with those changes, thanks.
-
--- 
-Bye, Peter Korsgaard
+> On 28/01/14 03:00, Ivan Sergeev wrote:
+>
+>> Signed-off-by: Ivan Sergeev <vsergeev@kumunetworks.com>
+>>
+>
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>
+>
+>  ---
+>>   package/ntp/ntp.mk       | 13 ++++++++++++-
+>>   package/ntp/ntpd.service | 11 +++++++++++
+>>   2 files changed, 23 insertions(+), 1 deletion(-)
+>>   create mode 100644 package/ntp/ntpd.service
+>>
+>> diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+>> index 40d8e4f..fe64a21 100644
+>> --- a/package/ntp/ntp.mk
+>> +++ b/package/ntp/ntp.mk
+>> @@ -52,13 +52,24 @@ NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_TICKADJ) +=
+>> util/tickadj
+>>   define NTP_INSTALL_TARGET_CMDS
+>>         $(if $(BR2_PACKAGE_NTP_NTPD), install -m 755 $(@D)/ntpd/ntpd
+>> $(TARGET_DIR)/usr/sbin/ntpd)
+>>         test -z "$(NTP_INSTALL_FILES_y)" || install -m 755 $(addprefix
+>> $(@D)/,$(NTP_INSTALL_FILES_y)) $(TARGET_DIR)/usr/bin/
+>> -       $(if $(BR2_PACKAGE_NTP_NTPD), install -m 755 package/ntp/S49ntp
+>> $(TARGET_DIR)/etc/init.d/S49ntp)
+>>         @if [ ! -f $(TARGET_DIR)/etc/default/ntpd ]; then \
+>>                 install -m 755 -d $(TARGET_DIR)/etc/default ; \
+>>                 install -m 644 package/ntp/ntpd.etc.default
+>> $(TARGET_DIR)/etc/default/ntpd ; \
+>>         fi
+>>   endef
+>>
+>> +ifeq ($(BR2_PACKAGE_NTP_NTPD),y)
+>> +define NTP_INSTALL_INIT_SYSV
+>> +       $(INSTALL) -D -m 755 package/ntp/S49ntp $(TARGET_DIR)/etc/init.d/
+>> S49ntp
+>> +endef
+>> +
+>> +define NTP_INSTALL_INIT_SYSTEMD
+>> +       $(INSTALL) -D -m 644 package/ntp/ntpd.service
+>> $(TARGET_DIR)/etc/systemd/system/ntpd.service
+>> +       mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+>> +       ln -fs ../ntpd.service $(TARGET_DIR)/etc/systemd/
+>> system/multi-user.target.wants/ntpd.service
+>>
+>
+>  This patch makes me wonder about two things.
+>
+> 1. The 3 packages that currently install unit files all have this mkdir -p
+> of multi-user.target.wants. Shouldn't that be done by the core
+> infrastructure as part of the skeleton?
+>
+> 2. For sysv-init, we use /etc/init.d directly instead of the usual
+> /etc/rcX.d with symlinks to init.d. Shouldn't we do something similar for
+> systemd, i.e. put the unit files directly in multi-user.target.wants and
+> begone with the symlinks?
+>
+>  Both of these suggestions are obviously not part of this patch, but
+> rather separate cleanup work, since they affect dropbear, lighttpd and
+> openssh as well.
+>
+>
+>  Regards,
+>  Arnout
+>
+>
+>  +endef
+>> +endif
+>> +
+>>   NTP_POST_PATCH_HOOKS += NTP_PATCH_FIXUPS
+>>
+>>   $(eval $(autotools-package))
+>> diff --git a/package/ntp/ntpd.service b/package/ntp/ntpd.service
+>> new file mode 100644
+>> index 0000000..7964c53
+>> --- /dev/null
+>> +++ b/package/ntp/ntpd.service
+>> @@ -0,0 +1,11 @@
+>> +[Unit]
+>> +Description=Network Time Service
+>> +After=network.target
+>> +
+>> +[Service]
+>> +Type=forking
+>> +PIDFile=/run/ntpd.pid
+>> +ExecStart=/usr/sbin/ntpd -g -p /run/ntpd.pid
+>> +
+>> +[Install]
+>> +WantedBy=multi-user.target
+>>
+>>
+>
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140128/8dc98066/attachment.html>
