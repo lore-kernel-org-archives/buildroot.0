@@ -1,66 +1,40 @@
-From: Ivan Sergeev <vsergeev@kumunetworks.com>
-Date: Mon, 27 Jan 2014 18:00:05 -0800
-Subject: [Buildroot] [PATCH 1/1] ntp: add systemd unit file for ntpd
-Message-ID: <1390874405-25944-1-git-send-email-vsergeev@kumunetworks.com>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Mon, 27 Jan 2014 21:16:55 -0500
+Subject: [Buildroot] [PATCH 1/1] Makefile: move skeleton overlay
+ installations before strip step
+In-Reply-To: <87a9ehzf8s.fsf@dell.be.48ers.dk>
+References: <1390530729-1830-1-git-send-email-danomimanchego123@gmail.com>
+ <52E6063B.1060700@mind.be> <87a9ehzf8s.fsf@dell.be.48ers.dk>
+Message-ID: <CANxTyt5PstHkJ6aPuHZ1uXPD7LJwp69vG5m9oGVK7UbezGetgg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ivan Sergeev <vsergeev@kumunetworks.com>
----
- package/ntp/ntp.mk       | 13 ++++++++++++-
- package/ntp/ntpd.service | 11 +++++++++++
- 2 files changed, 23 insertions(+), 1 deletion(-)
- create mode 100644 package/ntp/ntpd.service
+On Mon, Jan 27, 2014 at 9:11 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>
+>  > On 24/01/14 03:32, Danomi Manchego wrote:
+>  >> Nothing prevents the skeleton overlays from having pre-built
+>
+>  >  Small nit: it's not a skeleton overlay, but a rootfs overlay (I first
+>  > thought you were talking about the skeleton, which is copied _before_
+>  > the build).
+>
+>  >> executables or libraries in them.  Therefore, we should install
+>  >> the overlays prior to stripping, so that any such pre-built stuff
+>  >> gets stripped too.
+>
+>  >  I'm not sure if I agree with this change. I like the current
+>  > situation where the rootfs-overlay is really copied verbatim and you
+>  > can trust it. If there are binaries in there, we can assume that the
+>  > user has the cross-compiler available to strip them if he wants that.
+>
+> I agree. As it is now the user has full control, which is IMHO nice.
 
-diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index 40d8e4f..fe64a21 100644
---- a/package/ntp/ntp.mk
-+++ b/package/ntp/ntp.mk
-@@ -52,13 +52,24 @@ NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_TICKADJ) += util/tickadj
- define NTP_INSTALL_TARGET_CMDS
- 	$(if $(BR2_PACKAGE_NTP_NTPD), install -m 755 $(@D)/ntpd/ntpd $(TARGET_DIR)/usr/sbin/ntpd)
- 	test -z "$(NTP_INSTALL_FILES_y)" || install -m 755 $(addprefix $(@D)/,$(NTP_INSTALL_FILES_y)) $(TARGET_DIR)/usr/bin/
--	$(if $(BR2_PACKAGE_NTP_NTPD), install -m 755 package/ntp/S49ntp $(TARGET_DIR)/etc/init.d/S49ntp)
- 	@if [ ! -f $(TARGET_DIR)/etc/default/ntpd ]; then \
- 		install -m 755 -d $(TARGET_DIR)/etc/default ; \
- 		install -m 644 package/ntp/ntpd.etc.default $(TARGET_DIR)/etc/default/ntpd ; \
- 	fi
- endef
- 
-+ifeq ($(BR2_PACKAGE_NTP_NTPD),y)
-+define NTP_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 755 package/ntp/S49ntp $(TARGET_DIR)/etc/init.d/S49ntp
-+endef
-+
-+define NTP_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/ntp/ntpd.service $(TARGET_DIR)/etc/systemd/system/ntpd.service
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -fs ../ntpd.service $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/ntpd.service
-+endef
-+endif
-+
- NTP_POST_PATCH_HOOKS += NTP_PATCH_FIXUPS
- 
- $(eval $(autotools-package))
-diff --git a/package/ntp/ntpd.service b/package/ntp/ntpd.service
-new file mode 100644
-index 0000000..7964c53
---- /dev/null
-+++ b/package/ntp/ntpd.service
-@@ -0,0 +1,11 @@
-+[Unit]
-+Description=Network Time Service
-+After=network.target
-+
-+[Service]
-+Type=forking
-+PIDFile=/run/ntpd.pid
-+ExecStart=/usr/sbin/ntpd -g -p /run/ntpd.pid
-+
-+[Install]
-+WantedBy=multi-user.target
--- 
-1.8.5.3
+Okay, I can see that it might be expected that rootfs overlay content
+should be transferred as-is, I suppose.  Let's consider this patch
+retracted, then.
+
+Danomi -
