@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 28 Jan 2014 18:26:30 -0300
-Subject: [Buildroot] [PATCH 5/6] php-ssh2: new package
+Date: Tue, 28 Jan 2014 18:26:31 -0300
+Subject: [Buildroot] [PATCH 6/6] php-imagick: new package
 In-Reply-To: <1390944391-3892-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1390944391-3892-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1390944391-3892-5-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1390944391-3892-6-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,69 +12,69 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Config.in            |  1 +
- package/php-ssh2/Config.in   |  8 ++++++++
- package/php-ssh2/php-ssh2.mk | 26 ++++++++++++++++++++++++++
+ package/Config.in                  |  1 +
+ package/php-imagick/Config.in      |  8 ++++++++
+ package/php-imagick/php-imagick.mk | 26 ++++++++++++++++++++++++++
  3 files changed, 35 insertions(+)
- create mode 100644 package/php-ssh2/Config.in
- create mode 100644 package/php-ssh2/php-ssh2.mk
+ create mode 100644 package/php-imagick/Config.in
+ create mode 100644 package/php-imagick/php-imagick.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index ffe11bb..7878b53 100644
+index 7878b53..a4b9ce3 100644
 --- a/package/Config.in
 +++ b/package/Config.in
 @@ -398,6 +398,7 @@ source "package/php/Config.in"
  if BR2_PACKAGE_PHP
  if !BR2_PREFER_STATIC_LIB
  menu "External php extensions"
-+source "package/php-ssh2/Config.in"
++source "package/php-imagick/Config.in"
+ source "package/php-ssh2/Config.in"
  source "package/php-yaml/Config.in"
  source "package/php-zmq/Config.in"
- endmenu
-diff --git a/package/php-ssh2/Config.in b/package/php-ssh2/Config.in
+diff --git a/package/php-imagick/Config.in b/package/php-imagick/Config.in
 new file mode 100644
-index 0000000..b457900
+index 0000000..1d55fcc
 --- /dev/null
-+++ b/package/php-ssh2/Config.in
++++ b/package/php-imagick/Config.in
 @@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PHP_SSH2
-+	bool "php-ssh2"
++config BR2_PACKAGE_PHP_IMAGICK
++	bool "php-imagick"
 +	depends on BR2_PACKAGE_PHP
-+	select BR2_PACKAGE_LIBSSH2
++	select BR2_PACKAGE_IMAGEMAGICK
 +	help
-+	  PHP bindings for the libssh2 library.
++	  PHP wrapper to the ImageMagick library.
 +
-+	  http://pecl.php.net/package/ssh2
-diff --git a/package/php-ssh2/php-ssh2.mk b/package/php-ssh2/php-ssh2.mk
++	  http://pecl.php.net/package/imagick
+diff --git a/package/php-imagick/php-imagick.mk b/package/php-imagick/php-imagick.mk
 new file mode 100644
-index 0000000..f2067a4
+index 0000000..148d519
 --- /dev/null
-+++ b/package/php-ssh2/php-ssh2.mk
++++ b/package/php-imagick/php-imagick.mk
 @@ -0,0 +1,26 @@
 +################################################################################
 +#
-+# php-ssh2
++# php-imagick
 +#
 +################################################################################
 +
-+PHP_SSH2_VERSION = 0.12
-+PHP_SSH2_SOURCE = ssh2-$(PHP_SSH2_VERSION).tgz
-+PHP_SSH2_SITE = http://pecl.php.net/get
-+PHP_SSH2_CONF_OPT = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
-+	--with-ssh2=$(STAGING_DIR)/usr
++PHP_IMAGICK_VERSION = 3.1.2
++PHP_IMAGICK_SOURCE = imagick-$(PHP_IMAGICK_VERSION).tgz
++PHP_IMAGICK_SITE = http://pecl.php.net/get
++PHP_IMAGICK_CONF_OPT = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
++	--with-imagick=$(STAGING_DIR)/usr
 +# phpize does the autoconf magic
-+PHP_SSH2_DEPENDENCIES = libssh2 php host-autoconf
-+PHP_SSH2_LICENSE = PHP
-+PHP_SSH2_LICENSE_FILES = LICENSE
++PHP_IMAGICK_DEPENDENCIES = imagemagick php host-autoconf
++PHP_IMAGICK_LICENSE = PHP
++PHP_IMAGICK_LICENSE_FILES = LICENSE
 +
-+define PHP_SSH2_PHPIZE
++define PHP_IMAGICK_PHPIZE
 +	(cd $(@D); \
 +		PHP_AUTOCONF=$(HOST_DIR)/usr/bin/autoconf \
 +		PHP_AUTOHEADER=$(HOST_DIR)/usr/bin/autoheader \
 +		$(STAGING_DIR)/usr/bin/phpize)
 +endef
 +
-+PHP_SSH2_PRE_CONFIGURE_HOOKS += PHP_SSH2_PHPIZE
++PHP_IMAGICK_PRE_CONFIGURE_HOOKS += PHP_IMAGICK_PHPIZE
 +
 +$(eval $(autotools-package))
 -- 
