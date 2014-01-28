@@ -1,77 +1,70 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 28 Jan 2014 18:36:53 +0100
-Subject: [Buildroot] [PATCH v2] gcc: coexist upstream with vendor git
- releases for mb and arc
-In-Reply-To: <1390859507-31670-1-git-send-email-spenser@gillilanding.com>
-References: <1390859507-31670-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <52E7EAB5.9000909@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 28 Jan 2014 22:33:54 +0100
+Subject: [Buildroot] [PATCH] Revert "package/tzdata: install a default
+	localtime"
+Message-ID: <1390944834-23639-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 27/01/14 22:51, Spenser Gilliland wrote:
-> This patch makes it easier to have both upstream gcc and vendor patch series
-> for microblaze and arc.
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-  Can you explain this is bit better? I don't see the advantage at the 
-moment...
+This reverts commit f96e4d7f348ce1b7b53763f102bbedb1ef6a1991.
 
-  After this patch, the version is sometimes set in Config.in.host and 
-sometimes in gcc.mk. I really don't like that...
+As suggested by Thomas, we need to find a single solution that is
+valid for both (e)glibc and uClibc.
 
-  Regards,
-  Arnout
+There is work on-going by Alexandre, so just revert this for now.
 
->
-> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
-> ---
->   package/gcc/Config.in.host | 4 ++--
->   package/gcc/gcc.mk         | 6 ++++--
->   2 files changed, 6 insertions(+), 4 deletions(-)
->
-> diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-> index 186ba80..044cd0f 100644
-> --- a/package/gcc/Config.in.host
-> +++ b/package/gcc/Config.in.host
-> @@ -96,8 +96,8 @@ config BR2_GCC_VERSION
->   	default "4.6.4"     if BR2_GCC_VERSION_4_6_X
->   	default "4.7.3"     if BR2_GCC_VERSION_4_7_X
->   	default "4.8.2"     if BR2_GCC_VERSION_4_8_X
-> -	default "7466697995233cc3aab5b9427bf843e3c7fabd80" if BR2_GCC_VERSION_4_8_ARC
-> -	default "b93bb009e021aba64dd4b8cdb0bbc5a176c55543" if BR2_GCC_VERSION_4_9_MICROBLAZE
-> +	default "arc-git"   if BR2_GCC_VERSION_4_8_ARC
-> +	default "mb-git"   if BR2_GCC_VERSION_4_9_MICROBLAZE
->   	default BR2_GCC_SNAP_DATE if BR2_GCC_VERSION_SNAP
->
->   config BR2_EXTRA_GCC_CONFIG_OPTIONS
-> diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-> index 236297d..dd99604 100644
-> --- a/package/gcc/gcc.mk
-> +++ b/package/gcc/gcc.mk
-> @@ -19,10 +19,12 @@ ifneq ($(GCC_SNAP_DATE),)
->   GCC_SITE = ftp://gcc.gnu.org/pub/gcc/snapshots/$(GCC_SNAP_DATE)/
->   else ifeq ($(findstring avr32,$(GCC_VERSION)),avr32)
->   GCC_SITE = ftp://www.at91.com/pub/buildroot/
-> -else ifeq ($(BR2_arc),y)
-> +else ifeq ($(findstring git,$(GCC_VERSION))$(BR2_arc),gity)
-> +GCC_VERSION = 7466697995233cc3aab5b9427bf843e3c7fabd80
->   GCC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,gcc,$(GCC_VERSION))
->   GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
-> -else ifeq ($(BR2_microblaze),y)
-> +else ifeq ($(findstring git,$(GCC_VERSION))$(BR2_microblaze),gity)
-> +GCC_VERSION = b93bb009e021aba64dd4b8cdb0bbc5a176c55543
->   GCC_SITE = $(call github,Xilinx,gcc,$(GCC_VERSION))
->   GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
->   else
->
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+---
+ package/tzdata/Config.in | 10 ----------
+ package/tzdata/tzdata.mk |  8 +-------
+ 2 files changed, 1 insertion(+), 17 deletions(-)
 
-
+diff --git a/package/tzdata/Config.in b/package/tzdata/Config.in
+index c0ede1f..1be6814 100644
+--- a/package/tzdata/Config.in
++++ b/package/tzdata/Config.in
+@@ -23,14 +23,4 @@ config BR2_PACKAGE_TZDATA_ZONELIST
+ 	  The full list is the list of files in the time zone database source,
+ 	  not including the build and .tab files.
+ 
+-config BR2_PACKAGE_TZDATA_LOCALTIME
+-	string "default local time"
+-	help
+-	  The time zone to install as the default local time, expressed as a
+-	  tzdata location, such as:
+-	    GMT, Europe/Paris, America/New_York, Pacific/Wallis...
+-
+-	  If empty, no local time will be set, and the dates will be
+-	  expressed in UTC.
+-
+ endif
+diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
+index 74263e1..1cb5b3f 100644
+--- a/package/tzdata/tzdata.mk
++++ b/package/tzdata/tzdata.mk
+@@ -39,14 +39,8 @@ define TZDATA_INSTALL_TARGET_CMDS
+ 	cp -a $(@D)/_output/* $(TARGET_DIR)/usr/share/zoneinfo
+ 	cd $(TARGET_DIR)/usr/share/zoneinfo;    \
+ 	for zone in posix/*; do                 \
+-	    ln -sfn "$${zone}" "$${zone##*/}";  \
++	    ln -sfn "$${zone}" "$${zone##*/}";    \
+ 	done
+-	if [ -n "$(BR2_PACKAGE_TZDATA_LOCALTIME)" ]; then                   \
+-	    cd $(TARGET_DIR)/etc;                                           \
+-	    ln -sf ../usr/share/zoneinfo/$(BR2_PACKAGE_TZDATA_LOCALTIME)    \
+-	           localtime;                                               \
+-	    echo "$(BR2_PACKAGE_TZDATA_LOCALTIME)" >timezone;               \
+-	fi
+ endef
+ 
+ $(eval $(generic-package))
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.8.1.2
