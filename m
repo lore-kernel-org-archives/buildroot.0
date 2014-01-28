@@ -1,59 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jan 2014 17:27:05 +0100
-Subject: [Buildroot] [PATCH v2 1/1] update package isolinux bootloader -
- simplify code
-In-Reply-To: <1389745445-8884-1-git-send-email-jean.sorgemoel@laposte.net>
-References: <1376644934-4302-1-git-send-email-jean.sorgemoel@laposte.net>
- <1389745445-8884-1-git-send-email-jean.sorgemoel@laposte.net>
-Message-ID: <20140128172705.1e1ee088@skate>
+Date: Tue, 28 Jan 2014 17:30:05 +0100
+Subject: [Buildroot] [PATCH 1/1] new package - generate iso with
+ isolinux bootloader
+In-Reply-To: <1376644934-4302-1-git-send-email-jean.sorgemoel@laposte.net>
+References: <y> <1376644934-4302-1-git-send-email-jean.sorgemoel@laposte.net>
+Message-ID: <20140128173005.3beb329f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear jean.sorgemoel at laposte.net,
+Dear jean,
 
-On Wed, 15 Jan 2014 01:24:05 +0100, jean.sorgemoel at laposte.net wrote:
-> From: jean <jean.sorgemoel@laposte.net>
-> 
-> 
-> Signed-off-by: jean <jean.sorgemoel@laposte.net>
+On Fri, 16 Aug 2013 11:22:14 +0200, jean wrote:
 
-Please add a commit log with details, explaining what the patch is
-doing.
+> diff --git a/fs/isolinux/Config.in b/fs/isolinux/Config.in
+> new file mode 100644
+> index 0000000..8abe409
+> --- /dev/null
+> +++ b/fs/isolinux/Config.in
+> @@ -0,0 +1,182 @@
+> +## Menu ISO image with syslinux
+> +menu "iso image (isolinux bootloader - with initramfs)"
+> +config BR2_TARGET_ROOTFS_ISO_ISOLINUX
 
-> ---
-> After Arnout's remark, (sorry, I read last month), I updated this module. 
-> Goal : use other method to generate iso (and I think it's work fine)
-> File : fs/isolinux/Config.in
-> 1/ I suppress redundant comment
-> 2/ Suppress menu and use conditional (replace 'depends on' by 'if/endif')
-> 3/ Modify comment
-> 4/ suppress option (keyboard, ...)
-> 5/ replace 8 x space by tabulation
-> File : fs/isolinux/isolinux.mk
-> 5/ suppress extension 'BR2_'
-> 7/ use variable 'ISOLINUX_DIR'
-> 8/ suppress keyboard option
-> 9/ I can't use command '$(INSTALL) -D' beacause I don't define filenames (I keep old code)
-> 10/ Hide command genisoimage (with option $@)
-> 
->  fs/Config.in             |    2 +-
->  fs/isolinux/Config.in    |  210 ++++++++++----------------------------------
->  fs/isolinux/bootmsg.txt  |    4 +
->  fs/isolinux/isolinux.cfg |    7 ++
->  fs/isolinux/isolinux.mk  |  219 ++++++----------------------------------------
->  5 files changed, 87 insertions(+), 355 deletions(-)
->  create mode 100644 fs/isolinux/bootmsg.txt
->  create mode 100644 fs/isolinux/isolinux.cfg
+I don't agree with the idea that this is introduced as a new filesystem
+type. I'm sorry, but "isolinux" is not a filesystem type, it's a
+bootloader.
 
-You did your patch incorrectly: what you're sending here are the
-differences between your v1 and your v2. What we need is a single patch
-that contains all of your changes.
+Instead, if you want to support ISO9660 images that use isolinux as the
+bootloader instead of Grub (as is currently supported in fs/iso9660),
+then you should expand fs/iso9660/ to support either Grub or isolinux
+as the bootloader. Probably with a Config.in "choice" in
+fs/iso9660/Config.in.
 
-You need to squash your v2 changes into the original patch, to make
-only one patch that adds the isolinux stuff.
+This way, all your improvements such as offering options for Joliet,
+Rock Ridge support and so on will also benefit to the existing iso9660
+support.
+
+Best regards,
 
 Thomas
 -- 
