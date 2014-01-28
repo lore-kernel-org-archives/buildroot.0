@@ -1,33 +1,51 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 28 Jan 2014 19:11:55 -0300
-Subject: [Buildroot] [PATCH 3/6] php-zmq: new package
-In-Reply-To: <20140128230558.157ee3eb@skate>
-References: <1390944391-3892-1-git-send-email-gustavo@zacarias.com.ar>	<1390944391-3892-3-git-send-email-gustavo@zacarias.com.ar>
- <20140128230558.157ee3eb@skate>
-Message-ID: <52E82B2B.5040705@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 28 Jan 2014 23:14:17 +0100
+Subject: [Buildroot] [PATCH 0/3] wayland+weston: bump to 1.4.0
+Message-ID: <cover.1390947201.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/28/2014 07:05 PM, Thomas Petazzoni wrote:
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-> Just curious, how many potential PHP packages could we add? The build
-> logic for the four packages you submitted looks highly similar, maybe
-> it calls a php-package infrastructure?
-> 
-> The only "difficulty" is that it would have to inherit from
-> autotools-package, which itself already inherits from generic-package.
-> So it would be the first package infrastructure to inherit from a
-> package infra that already inherits from generic-package. I'm sure it
-> can work, but it might raise issues with some missing quoting.
+Hello All!
 
-Not that many that are useful, many are abandonware, that being the
-reason i opted for the autotools infra with the tweak.
-PECL packages are compiled (these ones are), PEAR packages are normally
-interpreted so it's just a matter of just installing them.
-Arguably we could also enable PEAR installs in the target itself but i
-don't think it's the spirit of buildroot, like CPAN for perl.
-But we don't have any PEAR packages at the moment.
-Regards.
+Here is a small series that bumps wayland and weston to the latest and
+greatest 1.4.0.
+
+Note that the weston's rpi-backend is currently broken, so it is marked
+accordingly.
+
+Regards,
+Yann E. MORIN.
+
+
+----------------------------------------------------------------
+Yann E. MORIN (3):
+      package/wayland: bump to 1.4.0
+      package/wayland: build a host variant
+      package/weston: bump to 1.4.0
+
+ package/wayland/wayland.mk                         | 23 ++++---
+ package/weston/Config.in                           |  1 +
+ ...eston-0000-dont-leak-fd-on-launcher-error.patch | 77 ----------------------
+ .../weston-0001-enable-build-without-libdrm.patch  | 45 -------------
+ ...on-0002-fbdev-fix-compilation-without-EGL.patch | 29 --------
+ package/weston/weston-0003-dont-build-tests.patch  | 15 ++---
+ ...weston-0004-fbdev-open-launcher-only-once.patch | 46 -------------
+ package/weston/weston.mk                           |  3 +-
+ 8 files changed, 23 insertions(+), 216 deletions(-)
+ delete mode 100644 package/weston/weston-0000-dont-leak-fd-on-launcher-error.patch
+ delete mode 100644 package/weston/weston-0001-enable-build-without-libdrm.patch
+ delete mode 100644 package/weston/weston-0002-fbdev-fix-compilation-without-EGL.patch
+ delete mode 100644 package/weston/weston-0004-fbdev-open-launcher-only-once.patch
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
