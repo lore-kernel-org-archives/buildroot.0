@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jan 2014 23:16:12 +0100
-Subject: [Buildroot] [PATCH 2/2] mpd: bump to version 0.18.7
-In-Reply-To: <52E82ADB.8050405@zacarias.com.ar>
-References: <1389651438-13529-1-git-send-email-gustavo@zacarias.com.ar>
- <1389651438-13529-2-git-send-email-gustavo@zacarias.com.ar>
- <20140128225448.3aa40140@skate> <52E82ADB.8050405@zacarias.com.ar>
-Message-ID: <20140128231612.323eb476@skate>
+Date: Tue, 28 Jan 2014 23:16:53 +0100
+Subject: [Buildroot] [PATCH 3/6] php-zmq: new package
+In-Reply-To: <52E82B2B.5040705@zacarias.com.ar>
+References: <1390944391-3892-1-git-send-email-gustavo@zacarias.com.ar>
+ <1390944391-3892-3-git-send-email-gustavo@zacarias.com.ar>
+ <20140128230558.157ee3eb@skate> <52E82B2B.5040705@zacarias.com.ar>
+Message-ID: <20140128231653.503d0114@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,24 +14,30 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Tue, 28 Jan 2014 19:10:35 -0300, Gustavo Zacarias wrote:
+On Tue, 28 Jan 2014 19:11:55 -0300, Gustavo Zacarias wrote:
 
-> >> +	depends on !(BR2_avr32 || BR2_sparc) # gcc too old
+> > Just curious, how many potential PHP packages could we add? The build
+> > logic for the four packages you submitted looks highly similar, maybe
+> > it calls a php-package infrastructure?
 > > 
-> > Shouldn't we test on the GCC version here instead? There may very well
-> > be modern SPARC toolchains, for example.
+> > The only "difficulty" is that it would have to inherit from
+> > autotools-package, which itself already inherits from generic-package.
+> > So it would be the first package infrastructure to inherit from a
+> > package infra that already inherits from generic-package. I'm sure it
+> > can work, but it might raise issues with some missing quoting.
 > 
-> Probably, but currently we can't check that in external toolchains.
-> It was a compromise, for LEON (basically the only embedded SPARC out
-> there) we're stuck with gcc <= 4.4.x and mpd requires >= 4.6.x
-> The other option for running SPARC is very old Sun hardware which i
-> don't think anybody really cares about these days.
-> Removing the condition will leads to somewhat clear errors when building
-> mpd (it does an #error check in the source).
+> Not that many that are useful, many are abandonware, that being the
+> reason i opted for the autotools infra with the tweak.
+> PECL packages are compiled (these ones are), PEAR packages are normally
+> interpreted so it's just a matter of just installing them.
+> Arguably we could also enable PEAR installs in the target itself but i
+> don't think it's the spirit of buildroot, like CPAN for perl.
+> But we don't have any PEAR packages at the moment.
 
-Aah, right. Those external toolchains are really a pain, I'm wondering
-who is the crazy guy insisting on having support for that in
-Buildroot :)
+Ok. Then I guess we should go ahead with what you proposed, and only
+introduce a PHP package infra if we get over 10 PHP packages or so.
+
+Thanks!
 
 Thomas
 -- 
