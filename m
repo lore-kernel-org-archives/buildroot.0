@@ -1,37 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 28 Jan 2014 22:56:40 +0100
-Subject: [Buildroot] [git commit] package/uClibc: ensure .config is writable
-Message-ID: <20140128215820.BF4659C6AC@busybox.osuosl.org>
+Date: Tue, 28 Jan 2014 22:55:55 +0100
+Subject: [Buildroot] [git commit] busybox: ensure $(BUSYBOX_BUILD_CONFIG) is
+	writable
+Message-ID: <20140128215820.A71519C582@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bbb1e7ae218701b74c88ee8d1f9fde7c763df54e
+commit: http://git.buildroot.net/buildroot/commit/?id=9b659b815bbb747590f64f57066b36b938946353
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-If $(UCLIBC_CONFIG_FILE) is read-only (eg. because Buildroot's
-source dir is), the sed fixups to .config fail.
+If $(BUSYBOX_CONFIG_FILE) is read-only (eg. because Buildroot's
+source dir is), the sed fixups to $(BUSYBOX_BUILD_CONFIG) fail.
 
+Fixes: #4363
 Signed-off-by: Nathan Lynch <ntl@pobox.com>
 [yann.morin.1998 at free.fr: use $(INSTALL) instead of cp]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/uclibc/uclibc.mk |    2 +-
+ package/busybox/busybox.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 1978bbd..7df9721 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -414,7 +414,7 @@ UCLIBC_MAKE_FLAGS = \
- 	HOSTCC="$(HOSTCC)"
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index f6f542e..948f3e4 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -135,7 +135,7 @@ endef
+ endif
  
- define UCLIBC_SETUP_DOT_CONFIG
--	cp -f $(UCLIBC_CONFIG_FILE) $(@D)/.config
-+	$(INSTALL) -m 0644 $(UCLIBC_CONFIG_FILE) $(@D)/.config
- 	$(call UCLIBC_OPT_SET,CROSS_COMPILER_PREFIX,"$(TARGET_CROSS)",$(@D))
- 	$(call UCLIBC_OPT_SET,TARGET_$(UCLIBC_TARGET_ARCH),y,$(@D))
- 	$(call UCLIBC_OPT_SET,TARGET_ARCH,"$(UCLIBC_TARGET_ARCH)",$(@D))
+ define BUSYBOX_COPY_CONFIG
+-	cp -f $(BUSYBOX_CONFIG_FILE) $(BUSYBOX_BUILD_CONFIG)
++	$(INSTALL) -D -m 0644 $(BUSYBOX_CONFIG_FILE) $(BUSYBOX_BUILD_CONFIG)
+ endef
+ 
+ # Disable shadow passwords support if unsupported by the C library
