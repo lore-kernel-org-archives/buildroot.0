@@ -1,28 +1,40 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 28 Jan 2014 19:10:35 -0300
-Subject: [Buildroot] [PATCH 2/2] mpd: bump to version 0.18.7
-In-Reply-To: <20140128225448.3aa40140@skate>
-References: <1389651438-13529-1-git-send-email-gustavo@zacarias.com.ar>	<1389651438-13529-2-git-send-email-gustavo@zacarias.com.ar>
- <20140128225448.3aa40140@skate>
-Message-ID: <52E82ADB.8050405@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 28 Jan 2014 23:04:05 +0100
+Subject: [Buildroot] [git commit] package/pkg-cmake: disable colouring the
+	output
+Message-ID: <20140128221058.E64859C6AC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/28/2014 06:54 PM, Thomas Petazzoni wrote:
+commit: http://git.buildroot.net/buildroot/commit/?id=5d46789550173eaf1b355b3fd1d7b9b38ec204d2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
->> +	depends on !(BR2_avr32 || BR2_sparc) # gcc too old
-> 
-> Shouldn't we test on the GCC version here instead? There may very well
-> be modern SPARC toolchains, for example.
+cmake is the only build-system we support that does colour its output,
 
-Probably, but currently we can't check that in external toolchains.
-It was a compromise, for LEON (basically the only embedded SPARC out
-there) we're stuck with gcc <= 4.4.x and mpd requires >= 4.6.x
-The other option for running SPARC is very old Sun hardware which i
-don't think anybody really cares about these days.
-Removing the condition will leads to somewhat clear errors when building
-mpd (it does an #error check in the source).
-Regards.
+Also, since parallel builds generates intermixed output lines, it makes
+for ugly-looking output.
+
+Just disable cmake colouring globally.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/pkg-cmake.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index aedd1fc..13be557 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -64,6 +64,7 @@ define $(2)_CONFIGURE_CMDS
+ 	$$($$(PKG)_CONF_ENV) $(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
+ 		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
+ 		-DCMAKE_INSTALL_PREFIX="/usr" \
++		-DCMAKE_COLOR_MAKEFILE=OFF \
+ 		-DBUILD_SHARED_LIBS=$(if $(BR2_PREFER_STATIC_LIB),OFF,ON) \
+ 		$$($$(PKG)_CONF_OPT) \
+ 	)
