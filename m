@@ -1,34 +1,29 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 28 Jan 2014 22:54:33 +0100
-Subject: [Buildroot] [PATCH 1/5] target: ensure target/ dir is writable
-In-Reply-To: <4b79710686ef3bcec64579d677de9a027788b74f.1390939719.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Tue, 28 Jan 2014 21:11:21 +0100")
-References: <cover.1390939719.git.yann.morin.1998@free.fr>
- <4b79710686ef3bcec64579d677de9a027788b74f.1390939719.git.yann.morin.1998@free.fr>
-Message-ID: <87bnyv22na.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 28 Jan 2014 22:54:48 +0100
+Subject: [Buildroot] [PATCH 2/2] mpd: bump to version 0.18.7
+In-Reply-To: <1389651438-13529-2-git-send-email-gustavo@zacarias.com.ar>
+References: <1389651438-13529-1-git-send-email-gustavo@zacarias.com.ar>
+ <1389651438-13529-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140128225448.3aa40140@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Dear Gustavo Zacarias,
 
- > From: Nathan Lynch <ntl@pobox.com>
- > If the source target skeleton is read-only (eg. because Buildroot's
- > source dir is), modifications to the output target (such as creating
- > /etc/hostname and /etc/issue) fail.
+On Mon, 13 Jan 2014 19:17:18 -0300, Gustavo Zacarias wrote:
 
- > (This can happen if the Buildroot source dir is NFS-mounted read-only
- > to be shared between different machines, for example).
+> +	depends on !(BR2_avr32 || BR2_sparc) # gcc too old
 
- > Signed-off-by: Nathan Lynch <ntl@pobox.com>
- > [yann.morin.1998 at free.fr: we use rsync now, not cp; --chmod=Du+w
- >  suggested by Arnout; clarify commit log]
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Arnout Vandecappelle <arnout@mind.be>
+Shouldn't we test on the GCC version here instead? There may very well
+be modern SPARC toolchains, for example.
 
-Committed, thanks.
+Thanks!
 
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
