@@ -1,46 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jan 2014 23:16:53 +0100
-Subject: [Buildroot] [PATCH 3/6] php-zmq: new package
-In-Reply-To: <52E82B2B.5040705@zacarias.com.ar>
-References: <1390944391-3892-1-git-send-email-gustavo@zacarias.com.ar>
- <1390944391-3892-3-git-send-email-gustavo@zacarias.com.ar>
- <20140128230558.157ee3eb@skate> <52E82B2B.5040705@zacarias.com.ar>
-Message-ID: <20140128231653.503d0114@skate>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 28 Jan 2014 23:17:26 +0100
+Subject: [Buildroot] [PATCH] Run post scripts referenced by relative
+	paths
+In-Reply-To: <CAHKzcEN7NvA9XAiFEAZ9xpjp16YQYzNX2sucbmQ4ps_yRZrScA@mail.gmail.com>
+References: <1390904090-27934-1-git-send-email-waldemar.rymarkiewicz@gmail.com>
+ <CAGduivzPCzuKsvy2HWuxdv9E5wVzdWvgdosNCBfQsenmmeZihA@mail.gmail.com>
+ <CAHKzcEM_-gWUPe_cSYQCoUtgywMwmi8Wkjyy25UqgMGSRQto8A@mail.gmail.com>
+ <20140128183202.GC3466@free.fr> <20140128224133.3a145dd0@skate>
+ <CAHKzcEN7NvA9XAiFEAZ9xpjp16YQYzNX2sucbmQ4ps_yRZrScA@mail.gmail.com>
+Message-ID: <20140128221726.GF3466@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Waldemar, All,
 
-On Tue, 28 Jan 2014 19:11:55 -0300, Gustavo Zacarias wrote:
+On 2014-01-28 23:06 +0100, Waldemar Rymarkiewicz spake thusly:
+> > On Tue, 28 Jan 2014 19:32:02 +0100, Yann E. MORIN wrote:
+> >> Why don't you just set:
+> >>   BR2_ROOTFS_POST_BUILD_SCRIPT="./my-script ./my-second-script"
+> >> (Ditto for BR2_ROOTFS_POST_IMAGE_SCRIPT.
+> >>
+> >> I'd say, we don't need that change. I prefer the user be explixit about
+> >> what he intends to do, rather than Buildroot guessing.
 
-> > Just curious, how many potential PHP packages could we add? The build
-> > logic for the four packages you submitted looks highly similar, maybe
-> > it calls a php-package infrastructure?
-> > 
-> > The only "difficulty" is that it would have to inherit from
-> > autotools-package, which itself already inherits from generic-package.
-> > So it would be the first package infrastructure to inherit from a
-> > package infra that already inherits from generic-package. I'm sure it
-> > can work, but it might raise issues with some missing quoting.
+> Let's leave it as it is now then.
 > 
-> Not that many that are useful, many are abandonware, that being the
-> reason i opted for the autotools infra with the tweak.
-> PECL packages are compiled (these ones are), PEAR packages are normally
-> interpreted so it's just a matter of just installing them.
-> Arguably we could also enable PEAR installs in the target itself but i
-> don't think it's the spirit of buildroot, like CPAN for perl.
-> But we don't have any PEAR packages at the moment.
+> The point was that neither manual nor menuconfig help explains how a
+> script should be referenced. By full path, relative or what. In my
+> case the easiest way was  just to put  "a space-separated list of
+> scripts" as per help message and it does not work. For someone who is
+> not dealing with buildroot frequently it can be an issue. Of course
+> you can always use ./your_script, but still it's not explained
+> anywhere. Abspath will fix it and it costs nothing, but I understand
+> your way of thinking.
 
-Ok. Then I guess we should go ahead with what you proposed, and only
-introduce a PHP package infra if we get over 10 PHP packages or so.
+Ah, but then we are ready to accept a patch to the manual to fix this! ;-)
+The manual is located in docs/manual/ in your buildroot tree, FYI.
 
-Thanks!
+Your comment is prefectly valid, indeed, but would better be solved by
+fixing the manual instead.
 
-Thomas
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
