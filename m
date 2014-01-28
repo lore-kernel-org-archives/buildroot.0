@@ -1,33 +1,34 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 28 Jan 2014 19:24:11 -0300
-Subject: [Buildroot] [PATCH] libusb: disable udev support for host variant
-Message-ID: <1390947851-11705-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 28 Jan 2014 23:24:47 +0100
+Subject: [Buildroot] [PATCH 2/2] linux: only depend on host-lzop if
+	needed
+In-Reply-To: <20140128232019.6136bcaf@skate> (Thomas Petazzoni's message of
+ "Tue, 28 Jan 2014 23:20:19 +0100")
+References: <cover.1390744549.git.yann.morin.1998@free.fr>
+ <1d22a1ff0f39a4b4e8fe4186cf9696a44a01e20f.1390744549.git.yann.morin.1998@free.fr>
+ <20140128231437.22b6a7ee@skate> <87ha8nzr7n.fsf@dell.be.48ers.dk>
+ <20140128232019.6136bcaf@skate>
+Message-ID: <87d2jbzqvk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There's no guarantee that udev with development files is present in the
-host, so disable it. Fixes:
-http://autobuild.buildroot.net/results/7bb/7bbf6ec25250dea96503253ac468adfef77a9010/
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libusb/libusb.mk | 1 +
- 1 file changed, 1 insertion(+)
+ >> So I believe the answer is yes, it will work.
 
-diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
-index a595a12..ffb39ba 100644
---- a/package/libusb/libusb.mk
-+++ b/package/libusb/libusb.mk
-@@ -8,6 +8,7 @@ LIBUSB_VERSION_MAJOR = 1.0
- LIBUSB_VERSION = $(LIBUSB_VERSION_MAJOR).18
- LIBUSB_SOURCE = libusb-$(LIBUSB_VERSION).tar.bz2
- LIBUSB_SITE = http://downloads.sourceforge.net/project/libusb/libusb-$(LIBUSB_VERSION_MAJOR)/libusb-$(LIBUSB_VERSION)
-+HOST_LIBUSB_CONF_OPT = --disable-udev
- LIBUSB_LICENSE = LGPLv2.1+
- LIBUSB_LICENSE_FILES = COPYING
- LIBUSB_DEPENDENCIES = host-pkgconf
+ > Ok, thanks, I missed that. I believe it's a little bit fragile to rely
+ > on the assumption that it will not become the default, but since the
+ > breakage will be very clear if this ever changes, I think Yann's
+ > proposal is a good compromise. I was also annoyed by host-lzop always
+ > being built, even if useless. Seemed like Buildroot was turning into
+ > this other build system that builds gazillions of useless
+ > dependencies :)
+
+Indeed. We do have a problem with the initramfs stuff though as I
+pointed out.
+
 -- 
-1.8.3.2
+Bye, Peter Korsgaard
