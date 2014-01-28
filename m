@@ -1,34 +1,68 @@
-From: Waldemar Rymarkiewicz <waldemar.rymarkiewicz@gmail.com>
-Date: Tue, 28 Jan 2014 11:50:30 +0100
-Subject: [Buildroot] [PATCH] Run post scripts referenced by relative
-	paths
-In-Reply-To: <CAGduivzPCzuKsvy2HWuxdv9E5wVzdWvgdosNCBfQsenmmeZihA@mail.gmail.com>
-References: <1390904090-27934-1-git-send-email-waldemar.rymarkiewicz@gmail.com>
- <CAGduivzPCzuKsvy2HWuxdv9E5wVzdWvgdosNCBfQsenmmeZihA@mail.gmail.com>
-Message-ID: <CAHKzcEM_-gWUPe_cSYQCoUtgywMwmi8Wkjyy25UqgMGSRQto8A@mail.gmail.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Tue, 28 Jan 2014 11:55:08 +0100
+Subject: [Buildroot] [PATCH] uboot-tools: Allow users to use uboot's
+	sources
+In-Reply-To: <CAAXf6LWTv2M+AsoXNkzckUzdZdLnPJL_d5TxvLiPK03VTm=dhA@mail.gmail.com>
+References: <1390696553-4163-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <52E530D5.20405@lucaceresoli.net>
+ <CAGduivwtd5SeEOSi6NNCegk7L7oem0+dF9eqkvoGtYk1_xODVw@mail.gmail.com>
+ <52E5816F.9080102@lucaceresoli.net> <52E69898.2080805@mind.be>
+ <CAAXf6LWTv2M+AsoXNkzckUzdZdLnPJL_d5TxvLiPK03VTm=dhA@mail.gmail.com>
+Message-ID: <52E78C8C.1070807@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+Hi Thomas,
 
->>
-> I am not sure I fully get your patch, what is wrong with putting
-> path/to/my_script.sh ? You don't have to specify the full path, a
-> relative path works well.
+Thomas De Schampheleire wrote:
+> Hi Arnout,
+>
+> Op 27-jan.-2014 22:28 schreef "Arnout Vandecappelle" <arnout@mind.be
+> <mailto:arnout@mind.be>>:
+>  >
+>  > On 26/01/14 22:43, Luca Ceresoli wrote:
+>  >>
+>  >> Going a step ahead, to be more uniform with these packages, you may use
+>  >> a choice construct to allow choosing between two alternatives.
+>  >> Example (modified version of the code in barebox.mk
+> <http://barebox.mk>):
+>  >>
+>  >> choice
+>  >>          prompt "version"
+>  >>          help
+>  >>            Select the specific uboot-tools version you want to use
+>  >>
+>  >> config BR2_PACKAGE_UBOOT_TOOLS_LATEST_VERSION
+>  >>          bool "Use a recent upstream version"
+>  >>
+>  >> config BR2_PACKAGE_UBOOT_TOOLS_USE_UBOOT_VERSION
+>  >>          bool "Use the same sources of the uboot package"
+>  >>
+>  >> endchoice
+>  >
+>  >
+>  >  Actually, I don't even see the need to ask the user anything. If we
+> are building U-Boot, I don't see why we would ever want to use the
+> U-Boot tools from upstream - that just adds a risk of incompatibility
+> between the two.
+>  >
+>  >  So I would propose to remove the
+> BR2_PACKAGE_UBOOT_TOOLS_UBOOT_SOURCE option, and instead make it
+> conditional on BR2_TARGET_UBOOT.
+>
+> I don't agree here. Real life example: we are using vendor-provided
+> uboot, and want to set an env-image in our flash devices' factory image.
+> While this version of uboot clearly supports handling the env at a
+> specified location, it does not (yet) provide the mkenvimage tool.
+> In this case, we actually want a more recent uboot tools package that
+> does have mkenvimage. My conclusion is thus that we should provide the
+> choice.
 
-Nothing is wrong to put full path to your scripts. Just a matter of
-what you prefer.
+And here's the counterexample! So, yes, I agree we should provide a
+choice.
 
-Try to put script file in buildroot directory and set the post script
-variable  using just the name of the script. I does not work for me
-and I'm pretty sure it does not work for you as well. This is simply
-how Makefile calls the scripts.
-
-This patch is just addition to run post scripts referenced by relative
-paths as well, nothing more.
-
-Thanks,
-/Waldek
+-- 
+Luca
