@@ -1,88 +1,66 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 28 Jan 2014 18:20:20 +0100
-Subject: [Buildroot] [PATCH 1/1] skeleton: add systemd network.service
- unit
-In-Reply-To: <20140128132058.GD3867@lukather>
-References: <1388713112-4686-1-git-send-email-vsergeev@kumunetworks.com>
- <20140103201333.7f4edd47@skate>
- <CAPyrzo0q7Y3Tf1LOaCe4LK78a7sZrVdToLfnzp4Tc4kow=-nKA@mail.gmail.com>
- <52E7589F.7060301@mind.be>
- <CAGduivw+HOQRDN18=xrM_AwqT3YtoM7BwmcaNRDb0VFVaQM9eQ@mail.gmail.com>
- <20140128132058.GD3867@lukather>
-Message-ID: <52E7E6D4.1020501@mind.be>
+Date: Tue, 28 Jan 2014 18:33:24 +0100
+Subject: [Buildroot] [PATCH 1/1] new package - generate iso with
+ isolinux bootloader
+In-Reply-To: <20140128172502.171b2f84@skate>
+References: <y>	<1376644934-4302-1-git-send-email-jean.sorgemoel@laposte.net>	<5213ECA4.9030405@mind.be>
+ <20140128172502.171b2f84@skate>
+Message-ID: <52E7E9E4.20400@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 28/01/14 14:20, Maxime Ripard wrote:
-> On Tue, Jan 28, 2014 at 09:25:20AM +0100, Maxime Hadjinlian wrote:
->> I would even like to go even further, as I have noticed that a lot of
->> the defined LIBFOO_INSTALL_INIT_SYSTEMD and LIBFOO_INSTALL_INIT_SYSV
->> almost always do the exact same stuff.
->> I would like for the infrastructure to take care of this, if no
->> function is defined, and a .service or S\d{0,2}*, then we should take
->> it and install it.
->>
->> In that case, any particular requirements, the package define a
->> function, other than that, it's taken care of and we avoid duplicate
->> code in all the packages.
+On 28/01/14 17:25, Thomas Petazzoni wrote:
+> Dear Arnout Vandecappelle,
 >
-> Actually, there's two main issues that prevents this in the systemd
-> case, and are why we did it that way:
->    - the multi-user-wants thing is actually comparable to the sysvinit
->      runlevels. Some packages might want to set their units to other
->      targets than multi-user (for example, graphical applications are
->      likely to go in the graphical target, not the multi-user one)
+> On Wed, 21 Aug 2013 00:24:36 +0200, Arnout Vandecappelle wrote:
+>
+>>    First a generic comment. Is there any reason not to simply replace the
+>> iso9660 filesystem? That one is currently using grub as a bootloader, but
+>> it doesn't work very well. So I think this patch is very valuable to get
+>> the iso9660 filesystem working properly again. But as it is now, it is
+>> too complex to be included in buildroot. See my comments below.
+>
+> What doesn't work with the current iso9660 filesystem support that is
+> grub based? I've tested it recently, and it was working. I've even
+> pushed a few improvements to it.
 
-  I disagree with this one. Buildroot's defaults should support only a 
-single runlevel/target. That's how it's done for sysv init, and I'm very 
-happy with it: it's dead easy to see which scripts will be executed at 
-startup, you don't have to find out the runlevel etc. With systemd, 
-things can become even more complex (because there can be several 
-"targets" active at the same time IIRC), and I'd prefer to exclude this 
-complexity by default.
+  To be honest it has been a couple of years since I tried it, and I 
+don't remember exactly. Here are a few issues that I can think of now.
 
-  If a user requires several runlevels/targets, than most likely any 
-default that buildroot provide will not fit anyway, so the user will have 
-to manipulate things in their rootfs overlay or post-build script anyway. 
-Therefore, I think it is better for the user if the defaults are simple 
-and predictable.
+* It doesn't actually build a rootfs, but rather a bootable image.
 
+* grub has issues cross-compiling between x86_64 and i386 - but your 
+recent patches may have fixed that.
 
->    - Some units also takes "variables" from the created link names. For
->      example, when you want to run getty, you just have a single getty
->      unit, and the device to run getty on is set in the link name to
->      that unit (so you'd end up with a link in multi-user.target.wants
->      that will be getty.ttyS0.service, linking to
->      /etc/systemd/system/getty.service).
+* Bug#6092 (closed now, but not at the time I posted it).
 
-  That is one of the special cases that would be handled in a 
-post-install hook. But specifically for the getty case, it's not even 
-necessary because we start only a single getty in the default setup, so 
-we can directly install it to getty at ttyS0.service .
+* The issue that grub was built without iso support (fixed now, but not 
+at the time I posted it).
+
+  Possibly iso9660 is working reliably by now.
 
 
-> At the time, we thought that in the systemd case, the easiest would be
-> to simply write down the 2-3 commands we need to setup the unit,
-> instead of having to give a whole bunch of variables. And we did the
-> same for sysvinit scripts, for consistency.
+>>    A second generic comment is about the choice of booting with an
+>> initramfs. Why not boot with a (rockridge) iso9660 rootfs? Clearly it
+>> puts a bit more strain on the kernel config since iso9660 as well as the
+>> bus drivers (sata, usb) have to be linked in, but I think that would be a
+>> much nicer solution. This type of image containing the actual rootfs in a
+>> different format should really be generated by a post-image script
+>> instead of a filesystem target. Can the rest of the list give their opinion?
+>
+> I don't think that ISO9660 supports symbolic links, ownership,
+> permissions, device files and all these Unix filesystem features that
+> are typically needed to use a given filesystem type as a Linux root
+> filesystem.
 
-  I think at the time, we mainly thought that we didn't know yet if the 
-installation could be generalized. Now that we have a few packages that 
-install unit files, it's more clear that they always to the same.
-
-  Also, as far as I understand, the idea is not to add variables, but 
-rather to check for the existence of package/foo/*.service and install that.
+  That's what RockRidge is for.
 
 
   Regards,
   Arnout
-
->
-> Maxime
->
 
 
 -- 
