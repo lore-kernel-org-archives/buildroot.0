@@ -1,33 +1,46 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Tue, 28 Jan 2014 13:37:16 -0500
-Subject: [Buildroot] [PATCH 1/5] target: ensure target/ dir is writable
-In-Reply-To: <20140128182503.GB3466@free.fr>
-References: <cover.1384454667.git.yann.morin.1998@free.fr>
- <09e0a585c589ccd09d3f85436af4193fb3e1a177.1384454667.git.yann.morin.1998@free.fr>
- <CANxTyt46Sx2m6szFYmHgPmX4vR7ocvwjCEwPdbANNDRE7BJqNg@mail.gmail.com>
- <20140128182503.GB3466@free.fr>
-Message-ID: <CANxTyt5nnb7PPQ-HbFHi=15Ckrg7LfX8RcPs+QxuP--YKf2Jiw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 28 Jan 2014 19:38:53 +0100
+Subject: [Buildroot] [PATCH v2] cwiid: new package
+In-Reply-To: <1388689257-31068-1-git-send-email-s.martin49@gmail.com>
+References: <1388689257-31068-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <20140128193853.5ab63cf1@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jan 28, 2014 at 1:25 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->> What happened to this series (5 patches fixing issues with RO tree)?
->> I don't see these patches in Patchwork - did they get rejected?
->
-> No, I just marked them as "Changes requested" since there were some
-> comments about them.
+Dear Samuel Martin,
 
-Apologies - I didn't realize the patchwork view filtered by state - I
-see them, now that I changed the filter setting.
+On Thu,  2 Jan 2014 20:00:57 +0100, Samuel Martin wrote:
 
-> I still have them in my tree, I just need to refresh them, apply the
-> requested changes, and resubmit.
->
-> One can do so much in a day... ;-)
+> +if BR2_PACKAGE_CWIID
+> +config BR2_PACKAGE_CWIID_WMGUI
+> +	bool "wmgui"
+> +	depends on BR2_PACKAGE_XORG7 # libgtk2
+> +	depends on BR2_USE_WCHAR # libgtk2 -> libglib2
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libgtk2 -> libglib2
+> +	depends on BR2_USE_MMU # libgtk2 -> libglib2
+> +	depends on BR2_INSTALL_LIBSTDCPP # libgtk2 -> pango
+> +	select BR2_PACKAGE_LIBGLIB2
+> +	select BR2_PACKAGE_LIBGTK2
+> +endif
 
-Understood, thanks.
+> +ifeq ($(BR2_PACKAGE_CWIID_WMGUI),y)
+> +CWIID_DEPENDENCIES += libgtk2 libglib2
+> +CWIID_CONF_OPT += --enable-wmgui
+> +else
+> +CWIID_CONF_OPT += --disable-wmgui
+> +endif
 
-Danomi -
+That's a very minor nitpick, but libgtk2 strongly requires libglib2, so
+selecting and depending on both isn't very useful. Having the select
+and dependency on gtk2 would probably have been sufficient, IMO.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
