@@ -1,40 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jan 2014 22:28:10 +0100
-Subject: [Buildroot] [git commit] minidlna: fix static linking
-In-Reply-To: <87sis72476.fsf@dell.be.48ers.dk>
-References: <20140108082945.20CF58DE52@busybox.osuosl.org>
- <20140128221653.6fc8974b@skate> <87sis72476.fsf@dell.be.48ers.dk>
-Message-ID: <20140128222810.301bb174@skate>
+Date: Tue, 28 Jan 2014 22:29:12 +0100
+Subject: [Buildroot] [PATCH 3/3] libdrm: bump to version 2.4.51
+In-Reply-To: <7298qaxr6i.ln2@ID-313208.user.individual.net>
+References: <BLU0-SMTP17825B248554C9C7DA4F813D9B10@phx.gbl>
+ <7298qaxr6i.ln2@ID-313208.user.individual.net>
+Message-ID: <20140128222912.0f5e0434@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+Dear Bernd Kuhls,
 
-On Tue, 28 Jan 2014 22:21:01 +0100, Peter Korsgaard wrote:
-
->  >> -# static build is broken w.r.t libgcc_s
->  >> +ifeq ($(BR2_PREFER_STATIC_LIB),y)
->  >> +# the configure script / Makefile forgets to link with some of the dependent
->  >> +# libraries breaking static linking, so help it along
->  >> +MINIDLNA_CONF_ENV = \
->  >> +	LIBS='-lavformat -lavcodec -lavutil -logg -lz -lpthread -lm'
->  >> +else
+On Sat, 11 Jan 2014 17:45:28 +0100, Bernd Kuhls wrote:
+> Bernd Kuhls <berndkuhls@hotmail.com> wrote in
+> news:BLU0-SMTP17825B248554C9C7DA4F813D9B10 at phx.gbl: 
 > 
->  > I know we're doing this in a bunch of cases, but I believe we should
->  > rather fix the package itself, rather than encoding into the
->  > Buildroot .mk file the list of libraries to link with. Because if
->  > libogg or libavutil becomes unnecessary in a future version of
->  > minidlna, we may not notice, and still link needlessly against them.
+> > 
+> > Signed-off-by: Bernd Kuhls
+> > <berndkuhls@hotmail.com> ---
+> >  package/libdrm/libdrm.mk |    2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> True. Patches are welcome ;)
+> Tested-by: Bernd Kuhls <berndkuhls@hotmail.com>
 
-Well. When the static linking requires such weirdness to fix upstream
-breakage, and nobody cares about linking statically the package, then
-marking it as depends on !BR2_PREFER_STATIC_LIB is probably a better
-solution.
+Sending a Tested-by on your own patch is a bit useless: if you're
+sending a patch, we do expect that you tested it. Tested-by, Acked-by
+and Reviewed-by tags are useful when provided by other developers on
+your patches, or provided by you on patches sent by other developers.
+
+Thanks!
 
 Thomas
 -- 
