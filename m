@@ -1,143 +1,48 @@
-From: Praveen kumar Vattipalli <praveen.v@phytec.in>
-Date: Tue, 28 Jan 2014 17:01:38 +0530
-Subject: [Buildroot] [PATCH] defconfig for Phytec Cosmic-AM335x Board
-Message-ID: <1390908698-7256-1-git-send-email-praveen.v@phytec.in>
+From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date: Tue, 28 Jan 2014 08:39:21 -0300
+Subject: [Buildroot] [PATCH 2/2] mtd: Allow to select the host variant
+In-Reply-To: <1390909161-2496-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+References: <1390909161-2496-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+Message-ID: <1390909161-2496-2-git-send-email-ezequiel@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Praveen Kumar Vattipalli <praveen.v@phytec.in>
----
- board/cosmic-am335x/readme.txt         |   54 ++++++++++++++++++++++++++++++
- configs/phytec_cosmic_am335x_defconfig |   57 ++++++++++++++++++++++++++++++++
- 2 files changed, 111 insertions(+)
- create mode 100644 board/cosmic-am335x/readme.txt
- create mode 100644 configs/phytec_cosmic_am335x_defconfig
+If any of the post-image scripts wants to create mtd/ubi images,
+we need to expose an option for mtd-tools to be user-selectable.
 
-diff --git a/board/cosmic-am335x/readme.txt b/board/cosmic-am335x/readme.txt
+Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+---
+ package/Config.in.host     | 1 +
+ package/mtd/Config.in.host | 6 ++++++
+ 2 files changed, 7 insertions(+)
+ create mode 100644 package/mtd/Config.in.host
+
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 34e84bf..f2fe2c2 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -8,6 +8,7 @@ source "package/genimage/Config.in.host"
+ source "package/genpart/Config.in.host"
+ source "package/lpc3250loader/Config.in.host"
+ source "package/mtools/Config.in.host"
++source "package/mtd/Config.in.host"
+ source "package/omap-u-boot-utils/Config.in.host"
+ source "package/openocd/Config.in.host"
+ source "package/parted/Config.in.host"
+diff --git a/package/mtd/Config.in.host b/package/mtd/Config.in.host
 new file mode 100644
-index 0000000..62fd238
+index 0000000..3752266
 --- /dev/null
-+++ b/board/cosmic-am335x/readme.txt
-@@ -0,0 +1,54 @@
-+Phytec Cosmic-AM335x Board.
++++ b/package/mtd/Config.in.host
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_HOST_MTD
++	bool "host mtd, jffs2 and ubi/ubifs tools"
++	help
++	  Build mtd, jffs2 and ubi/ubifs tools
 +
-+How to build it
-+===============
-+
-+Configure Buildroot
-+-------------------
-+
-+The pcm051lb_defconfig configuration is a default configuration for Phytec Cosmic-AM335x Board.
-+
-+  $ make phytec_cosmic_am335x_defconfig
-+
-+Build the rootfs
-+----------------
-+You may now build your rootfs with:
-+
-+  $ make
-+
-+This may take a long time. In this process it download some pakages,you need internet Connections.
-+
-+Result of the build
-+-------------------
-+
-+After building, you should obtain this tree:
-+
-+	output/images/
-+		+-- rootfs.tar
-+		+-- barebox.bin
-+		+-- uImage
-+
-+To boot the board you need MLO (primary bootloader) so download from below link
-+ftp://ftp.phytec.de/pub/Products/India/Cosmic-AM335x/Linux/PD13.0.0/images/MLO
-+
-+Prepare you SDCard
-+==================
-+
-+For more information, download manual
-+
-+	ftp://ftp.phytec.de/pub/Products/India/Cosmic-AM335x/Linux/doc/Cosmic-AM335x%20System%20Development%20User%20Manual.pdf
-+
-+Install the binaries to the SDCard
-+----------------------------------
-+
-+		cp MLO /media/boot
-+	output/images/
-+		cp barebox.bin uImage /media/boot
-+		tar -xvf rootfs.tar -C /media/rootfs
-+
-+Finish
-+======
-+
-+Unmount all the partitions And eject your SDcard from your computer.
-+
-+Insert the SDcard into your cosmic, and power it up. Your new system should come up, now.
-diff --git a/configs/phytec_cosmic_am335x_defconfig b/configs/phytec_cosmic_am335x_defconfig
-new file mode 100644
-index 0000000..94ba4ba
---- /dev/null
-+++ b/configs/phytec_cosmic_am335x_defconfig
-@@ -0,0 +1,57 @@
-+BR2_arm=y
-+BR2_cortex_a8=y
-+BR2_ARM_SOFT_FLOAT=y
-+BR2_JLEVEL=4
-+BR2_DEPRECATED=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-+BR2_TOOLCHAIN_EXTERNAL_URL="ftp://ftp.phytec.de/pub/Products/India/Cosmic-AM335x/Linux/PD13.0.0/tools/toolchain/arm-cortexa8-linux-gnueabi.tar.bz2"
-+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="arm-cortexa8-linux-gnueabi"
-+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-+BR2_TOOLCHAIN_EXTERNAL_CXX=y
-+BR2_TARGET_GENERIC_HOSTNAME="Cosmic-AM335x"
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyO0"
-+BR2_TARGET_GENERIC_GETTY_TERM=""
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="ftp://ftp.phytec.de/pub/Products/India/Cosmic-AM335x/Linux/PD13.0.0/src/linux/linux-3.2.tar.bz2"
-+BR2_LINUX_KERNEL_DEFCONFIG="pcm051lb"
-+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-+BR2_PACKAGE_TAR=y
-+BR2_PACKAGE_FBGRAB=y
-+BR2_PACKAGE_FBSET=y
-+BR2_PACKAGE_FB_TEST_APP=y
-+BR2_PACKAGE_FBV=y
-+BR2_PACKAGE_EVTEST=y
-+BR2_PACKAGE_I2C_TOOLS=y
-+BR2_PACKAGE_LZO=y
-+BR2_PACKAGE_LIBGPGME=y
-+BR2_PACKAGE_TSLIB=y
-+BR2_PACKAGE_LIBXML2=y
-+BR2_PACKAGE_NCURSES_TARGET_PANEL=y
-+BR2_PACKAGE_NCURSES_TARGET_FORM=y
-+BR2_PACKAGE_NCURSES_TARGET_MENU=y
-+BR2_PACKAGE_CAN_UTILS=y
-+BR2_PACKAGE_DHCP=y
-+BR2_PACKAGE_DHCP_SERVER=y
-+BR2_PACKAGE_DHCP_SERVER_DELAYED_ACK=y
-+BR2_PACKAGE_DHCP_CLIENT=y
-+BR2_PACKAGE_ETHTOOL=y
-+BR2_PACKAGE_IPERF=y
-+BR2_PACKAGE_IPROUTE2=y
-+BR2_PACKAGE_OPENSSH=y
-+BR2_PACKAGE_WGET=y
-+BR2_PACKAGE_IPKG=y
-+BR2_PACKAGE_OPKG=y
-+BR2_PACKAGE_RPM=y
-+BR2_PACKAGE_BASH=y
-+BR2_PACKAGE_DASH=y
-+BR2_PACKAGE_FILE=y
-+BR2_PACKAGE_TIME=y
-+BR2_PACKAGE_WHICH=y
-+BR2_TARGET_BAREBOX=y
-+BR2_TARGET_BAREBOX_CUSTOM_TARBALL=y
-+BR2_TARGET_BAREBOX_CUSTOM_TARBALL_LOCATION="ftp://ftp.phytec.de/pub/Products/India/Cosmic-AM335x/Linux/PD13.0.0/src/bootloaders/barebox/barebox-2013.07.0.tar.bz2"
-+BR2_TARGET_BAREBOX_BOARD_DEFCONFIG="pcm051lb"
++	  http://www.linux-mtd.infradead.org/
 -- 
-1.7.9.5
+1.8.1.5
