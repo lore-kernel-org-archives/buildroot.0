@@ -1,52 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 28 Jan 2014 22:51:47 +0100
-Subject: [Buildroot] [git commit] target: ensure target/ dir is writable
-Message-ID: <20140128215820.9C2039C6AC@busybox.osuosl.org>
+Date: Tue, 28 Jan 2014 22:56:40 +0100
+Subject: [Buildroot] [git commit] package/uClibc: ensure .config is writable
+Message-ID: <20140128215820.BF4659C6AC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5f52d7a8bd659664849cb4c58d7d791f129de8ce
+commit: http://git.buildroot.net/buildroot/commit/?id=bbb1e7ae218701b74c88ee8d1f9fde7c763df54e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-If the source target skeleton is read-only (eg. because Buildroot's
-source dir is), modifications to the output target (such as creating
-/etc/hostname and /etc/issue) fail.
-
-(This can happen if the Buildroot source dir is NFS-mounted read-only
-to be shared between different machines, for example).
+If $(UCLIBC_CONFIG_FILE) is read-only (eg. because Buildroot's
+source dir is), the sed fixups to .config fail.
 
 Signed-off-by: Nathan Lynch <ntl@pobox.com>
-[yann.morin.1998 at free.fr: we use rsync now, not cp; --chmod=Du+w
- suggested by Arnout; clarify commit log]
+[yann.morin.1998 at free.fr: use $(INSTALL) instead of cp]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Makefile |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/uclibc/uclibc.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 067458b..d8a8dad 100644
---- a/Makefile
-+++ b/Makefile
-@@ -473,7 +473,7 @@ RSYNC_VCS_EXCLUSIONS = \
- $(BUILD_DIR)/.root:
- 	mkdir -p $(TARGET_DIR)
- 	rsync -a $(RSYNC_VCS_EXCLUSIONS) \
--		--exclude .empty --exclude '*~' \
-+		--chmod=Du+w --exclude .empty --exclude '*~' \
- 		$(TARGET_SKELETON)/ $(TARGET_DIR)/
- 	cp support/misc/target-dir-warning.txt $(TARGET_DIR_WARNING_FILE)
- 	@ln -snf lib $(TARGET_DIR)/$(LIB_SYMLINK)
-@@ -549,7 +549,7 @@ endif
- 	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
- 		$(call MESSAGE,"Copying overlay $(d)"); \
- 		rsync -a $(RSYNC_VCS_EXCLUSIONS) \
--			--exclude .empty --exclude '*~' \
-+			--chmod=Du+w --exclude .empty --exclude '*~' \
- 			$(d)/ $(TARGET_DIR)$(sep))
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 1978bbd..7df9721 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -414,7 +414,7 @@ UCLIBC_MAKE_FLAGS = \
+ 	HOSTCC="$(HOSTCC)"
  
- 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
+ define UCLIBC_SETUP_DOT_CONFIG
+-	cp -f $(UCLIBC_CONFIG_FILE) $(@D)/.config
++	$(INSTALL) -m 0644 $(UCLIBC_CONFIG_FILE) $(@D)/.config
+ 	$(call UCLIBC_OPT_SET,CROSS_COMPILER_PREFIX,"$(TARGET_CROSS)",$(@D))
+ 	$(call UCLIBC_OPT_SET,TARGET_$(UCLIBC_TARGET_ARCH),y,$(@D))
+ 	$(call UCLIBC_OPT_SET,TARGET_ARCH,"$(UCLIBC_TARGET_ARCH)",$(@D))
