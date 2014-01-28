@@ -1,72 +1,59 @@
-From: Ivan Sergeev <vsergeev@kumunetworks.com>
-Date: Mon, 27 Jan 2014 17:54:57 -0800
-Subject: [Buildroot] [PATCH 1/1] systemd: add network unit file
-In-Reply-To: <CAPyrzo0q7Y3Tf1LOaCe4LK78a7sZrVdToLfnzp4Tc4kow=-nKA@mail.gmail.com>
-References: <CAPyrzo0q7Y3Tf1LOaCe4LK78a7sZrVdToLfnzp4Tc4kow=-nKA@mail.gmail.com>
-Message-ID: <1390874097-25597-1-git-send-email-vsergeev@kumunetworks.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 28 Jan 2014 07:02:56 +0100
+Subject: [Buildroot] [PATCH] uboot-tools: Allow users to use uboot's
+	sources
+In-Reply-To: <52E69898.2080805@mind.be>
+References: <1390696553-4163-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <52E530D5.20405@lucaceresoli.net>
+ <CAGduivwtd5SeEOSi6NNCegk7L7oem0+dF9eqkvoGtYk1_xODVw@mail.gmail.com>
+ <52E5816F.9080102@lucaceresoli.net> <52E69898.2080805@mind.be>
+Message-ID: <CAAXf6LWTv2M+AsoXNkzckUzdZdLnPJL_d5TxvLiPK03VTm=dhA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add and enable a systemd unit file to bring up or down network with ifup /
-ifdown, analogous to the skeleton/etc/init.d/S40network init script.
+Hi Arnout,
 
-Signed-off-by: Ivan Sergeev <vsergeev@kumunetworks.com>
----
- package/systemd/network.service | 21 +++++++++++++++++++++
- package/systemd/systemd.mk      |  9 +++++++++
- 2 files changed, 30 insertions(+)
- create mode 100644 package/systemd/network.service
+Op 27-jan.-2014 22:28 schreef "Arnout Vandecappelle" <arnout@mind.be>:
+>
+> On 26/01/14 22:43, Luca Ceresoli wrote:
+>>
+>> Going a step ahead, to be more uniform with these packages, you may use
+>> a choice construct to allow choosing between two alternatives.
+>> Example (modified version of the code in barebox.mk):
+>>
+>> choice
+>>          prompt "version"
+>>          help
+>>            Select the specific uboot-tools version you want to use
+>>
+>> config BR2_PACKAGE_UBOOT_TOOLS_LATEST_VERSION
+>>          bool "Use a recent upstream version"
+>>
+>> config BR2_PACKAGE_UBOOT_TOOLS_USE_UBOOT_VERSION
+>>          bool "Use the same sources of the uboot package"
+>>
+>> endchoice
+>
+>
+>  Actually, I don't even see the need to ask the user anything. If we are
+building U-Boot, I don't see why we would ever want to use the U-Boot tools
+from upstream - that just adds a risk of incompatibility between the two.
+>
+>  So I would propose to remove the BR2_PACKAGE_UBOOT_TOOLS_UBOOT_SOURCE
+option, and instead make it conditional on BR2_TARGET_UBOOT.
 
-diff --git a/package/systemd/network.service b/package/systemd/network.service
-new file mode 100644
-index 0000000..0d77bb8
---- /dev/null
-+++ b/package/systemd/network.service
-@@ -0,0 +1,21 @@
-+[Unit]
-+Description=Network Connectivity
-+Wants=network.target
-+Before=network.target
-+
-+[Service]
-+Type=oneshot
-+RemainAfterExit=yes
-+
-+# lo is brought up earlier, which will cause the upcoming "ifup -a" to fail
-+# with exit code 1, due to an "ip: RTNETLINK answers: File exists" error during
-+# its "ip addr add ..." command, subsequently causing this unit to fail even
-+# though it is a benign error. Flushing the lo address with the command below
-+# before ifup prevents this failure.
-+ExecStart=/sbin/ip addr flush dev lo
-+
-+ExecStart=/sbin/ifup -a
-+ExecStop=/sbin/ifdown -a
-+
-+[Install]
-+WantedBy=multi-user.target
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index a5dc8e5..a99c0da 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -72,7 +72,16 @@ define SYSTEMD_INSTALL_TTY_HOOK
- 	ln -fs ../../../../usr/lib/systemd/system/serial-getty at .service $(TARGET_DIR)/etc/systemd/system/getty.target.wants/serial-getty@$(BR2_TARGET_GENERIC_GETTY_PORT).service
- endef
- 
-+define SYSTEMD_INSTALL_NETWORK_HOOK
-+	$(INSTALL) -D -m 644 package/systemd/network.service \
-+		$(TARGET_DIR)/etc/systemd/system/network.service
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -fs ../network.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/network.service
-+endef
-+
- SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
- 	SYSTEMD_INSTALL_TTY_HOOK \
-+	SYSTEMD_INSTALL_NETWORK_HOOK
- 
- $(eval $(autotools-package))
--- 
-1.8.5.3
+I don't agree here. Real life example: we are using vendor-provided uboot,
+and want to set an env-image in our flash devices' factory image. While
+this version of uboot clearly supports handling the env at a specified
+location, it does not (yet) provide the mkenvimage tool.
+In this case, we actually want a more recent uboot tools package that does
+have mkenvimage. My conclusion is thus that we should provide the choice.
+
+Best regards,
+Thomas
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140128/335d2afb/attachment.html>
