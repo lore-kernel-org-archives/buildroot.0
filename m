@@ -1,43 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jan 2014 22:58:47 +0100
-Subject: [Buildroot] [PATCH 1/2] rings: add the version major variable
-In-Reply-To: <1389695458-19578-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1389695458-19578-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <20140128225847.35ae8d12@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 28 Jan 2014 23:01:31 +0100
+Subject: [Buildroot] [PATCH] packge/pkg-cmake: disable colouring the
+	output
+In-Reply-To: <1390757822-17485-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Sun, 26 Jan 2014 18:37:02 +0100")
+References: <1390757822-17485-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87ppnbzryc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jerzy Grzegorek,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-On Tue, 14 Jan 2014 11:30:57 +0100, Jerzy Grzegorek wrote:
-> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-> ---
->  package/rings/rings.mk |    3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/rings/rings.mk b/package/rings/rings.mk
-> index d052f5d..2876162 100644
-> --- a/package/rings/rings.mk
-> +++ b/package/rings/rings.mk
-> @@ -4,7 +4,8 @@
->  #
->  ################################################################################
->  
-> -RINGS_VERSION = 1.3.0-1
-> +RINGS_VERSION_MAJOR = 1.3.0
-> +RINGS_VERSION = $(RINGS_VERSION_MAJOR)-1
->  RINGS_SUBDIR  = rings-v_1_3_0
->  RINGS_LICENSE = MIT
+ > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > cmake is the only build-system we support that does colour its output,
 
-While I agree with <foo>_VERSION_MAJOR, when <foo>_VERSION_MAJOR is
-used in more than one place, I don't necessarily think it is needed
-when it is used in only one place, <foo>_VERSION.
+ > Also, since parallel builds generates intermixed output lines, it makes
+ > for ugly-looking output.
 
-Thomas
+ > Just disable cmake colouring globally.
+
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Samuel Martin <s.martin49@gmail.com>
+
+Committed, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
