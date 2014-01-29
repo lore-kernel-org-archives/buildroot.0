@@ -1,73 +1,116 @@
-From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Tue, 28 Jan 2014 17:34:35 -0600
-Subject: [Buildroot] [PATCH v2] gcc: coexist upstream with vendor git
- releases for mb and arc
-In-Reply-To: <52E7EAB5.9000909@mind.be>
-References: <1390859507-31670-1-git-send-email-spenser@gillilanding.com>
- <52E7EAB5.9000909@mind.be>
-Message-ID: <CAEBucnAjAfvf650pA5css455D2TRwNteNhYzoo1pqkGy2cPPDA@mail.gmail.com>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Tue, 28 Jan 2014 23:54:00 -0500
+Subject: [Buildroot] [PATCH v3 1/1] fs/ubi: add option to use custom ubinize
+	config file
+Message-ID: <1390971240-1436-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->  Can you explain this is bit better? I don't see the advantage at the
-> moment...
+By default, the UBI FS target creates a ubinize configuration
+file on-the-fly, for a single volume.  Add an option to specify
+a custom config file.
 
-The advantage of this approach is that as soon as upstream gcc
-supports the microblaze or arc architecture, the only change required
-is to remove depends on !BR2_microblaze or !BR2_arc for that release.
+E.g., one might want to deploy a system with a volume for the
+built ubifs image, a volume for a future upgrade image, and a
+volume for user data.
 
->  After this patch, the version is sometimes set in Config.in.host and
-> sometimes in gcc.mk. I really don't like that...
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 
-I understand.  See below for a possible fix.  Let me know if you think
-this is better.
+---
 
->> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
->> ---
->>   package/gcc/gcc.mk         | 6 ++++--
->>   1 files changed, 2 insertions(+), 2 deletions(-)
->>
->>   config BR2_EXTRA_GCC_CONFIG_OPTIONS
->> diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
->> index 236297d..dd99604 100644
->> --- a/package/gcc/gcc.mk
->> +++ b/package/gcc/gcc.mk
->> @@ -19,10 +19,12 @@ ifneq ($(GCC_SNAP_DATE),)
->>   GCC_SITE = ftp://gcc.gnu.org/pub/gcc/snapshots/$(GCC_SNAP_DATE)/
->>   else ifeq ($(findstring avr32,$(GCC_VERSION)),avr32)
->>   GCC_SITE = ftp://www.at91.com/pub/buildroot/
->> -else ifeq ($(BR2_arc),y)
->> +else ifeq ($(findstring git,$(GCC_VERSION))$(BR2_arc),gity)
+v2 -> v3:
+Change "cp" to "$(INSTALL) -m 0644", in case $(UBINIZE_CONFIG_FILE_PATH)
+is read-only; this is in keeping with the recently committed patch
+series that address issues with read-only buildroot trees.
 
-instead of above do something like
+v1 -> v2:
+Amplify help text in Config.in
+Move location of temporary config file to $(BUILD_DIR)
+Use sed to replace BR2_ROOTFS_UBIFS_PATH in cfg with ubifs image path
+Use BR2_ROOTFS_UBIFS_PATH in default config file to simplify config file treatment.
+---
+ fs/ubifs/Config.in   |   20 ++++++++++++++++++++
+ fs/ubifs/ubi.mk      |   17 +++++++++++------
+ fs/ubifs/ubinize.cfg |    1 +
+ 3 files changed, 32 insertions(+), 6 deletions(-)
 
--else ifeq ($(BR2_arc),y)
-+else ifeq (BR2_GCC_VERSION_4_8_ARC,y)
-
->>   GCC_SITE = $(call
->> github,foss-for-synopsys-dwc-arc-processors,gcc,$(GCC_VERSION))
->>   GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
->> -else ifeq ($(BR2_microblaze),y)
->> +else ifeq ($(findstring git,$(GCC_VERSION))$(BR2_microblaze),gity)
-
-and instead of the above possibly
-
--else ifeq ($(BR2_arc),y)
-+else ifeq (BR2_GCC_VERSION_4_9_MICROBLAZE,y)
-
->>   GCC_SITE = $(call github,Xilinx,gcc,$(GCC_VERSION))
->>   GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
->>   else
-
-Also, updating the AVR32 code to work in the same manner would probably be best.
-
-Thanks,
-Spenser
-
+diff --git a/fs/ubifs/Config.in b/fs/ubifs/Config.in
+index 70ea81e..ff604c5 100644
+--- a/fs/ubifs/Config.in
++++ b/fs/ubifs/Config.in
+@@ -119,6 +119,26 @@ config BR2_TARGET_ROOTFS_UBI_SUBSIZE
+ 	  The value provided here is passed to the -s/--sub-page-size
+ 	  option of ubinize.
+ 
++config BR2_TARGET_ROOTFS_UBI_USE_CUSTOM_CONFIG
++	bool "Use custom config file"
++	help
++	  Select this option to use a custom ubinize configuration file,
++	  rather than the default configuration used by Buildroot (which
++	  defines a single dynamic volume marked as auto-resize).  Passing
++	  a custom ubinize configuration file allows you to create several
++	  volumes, specify volume types, etc.
++
++	  As a convenience, buildroot replaces the string
++	  "BR2_ROOTFS_UBIFS_PATH" with the path to the built ubifs file.
++	  So the volume defined for the root filesystem can specify the
++	  image path as:  image=BR2_ROOTFS_UBIFS_PATH
++
++config BR2_TARGET_ROOTFS_UBI_CUSTOM_CONFIG_FILE
++	string "Configuration file path"
++	depends on BR2_TARGET_ROOTFS_UBI_USE_CUSTOM_CONFIG
++	help
++	  Path to the ubinize configuration file.
++
+ config BR2_TARGET_ROOTFS_UBI_OPTS
+ 	string "Additional ubinize options"
+ 	help
+diff --git a/fs/ubifs/ubi.mk b/fs/ubifs/ubi.mk
+index 08c952c..aba3bea 100644
+--- a/fs/ubifs/ubi.mk
++++ b/fs/ubifs/ubi.mk
+@@ -1,6 +1,6 @@
+ ################################################################################
+ #
+-# Embed the ubifs image into an ubi one
++# Embed the ubifs image into an ubi image
+ #
+ ################################################################################
+ 
+@@ -14,12 +14,17 @@ UBI_UBINIZE_OPTS += $(call qstrip,$(BR2_TARGET_ROOTFS_UBI_OPTS))
+ 
+ ROOTFS_UBI_DEPENDENCIES = rootfs-ubifs
+ 
++ifeq ($(BR2_TARGET_ROOTFS_UBI_USE_CUSTOM_CONFIG),y)
++UBINIZE_CONFIG_FILE_PATH = $(call qstrip,$(BR2_TARGET_ROOTFS_UBI_CUSTOM_CONFIG_FILE))
++else
++UBINIZE_CONFIG_FILE_PATH = fs/ubifs/ubinize.cfg
++endif
++
+ define ROOTFS_UBI_CMD
+-	cp fs/ubifs/ubinize.cfg . ;\
+-	echo "image=$@fs" \
+-		>> ./ubinize.cfg ;\
+-	$(HOST_DIR)/usr/sbin/ubinize -o $@ $(UBI_UBINIZE_OPTS) ubinize.cfg ;\
+-	rm ubinize.cfg
++	$(INSTALL) -m 0644 $(UBINIZE_CONFIG_FILE_PATH) $(BUILD_DIR)/ubinize.cfg ;\
++	$(SED) 's;BR2_ROOTFS_UBIFS_PATH;$@fs;' $(BUILD_DIR)/ubinize.cfg ;\
++	$(HOST_DIR)/usr/sbin/ubinize -o $@ $(UBI_UBINIZE_OPTS) $(BUILD_DIR)/ubinize.cfg ;\
++	rm $(BUILD_DIR)/ubinize.cfg
+ endef
+ 
+ $(eval $(call ROOTFS_TARGET,ubi))
+diff --git a/fs/ubifs/ubinize.cfg b/fs/ubifs/ubinize.cfg
+index 6515271..b0aace7 100644
+--- a/fs/ubifs/ubinize.cfg
++++ b/fs/ubifs/ubinize.cfg
+@@ -5,3 +5,4 @@ vol_type=dynamic
+ vol_name=rootfs
+ vol_alignment=1
+ vol_flags=autoresize
++image=BR2_ROOTFS_UBIFS_PATH
 -- 
-Spenser Gilliland
-Computer Engineer
-Doctoral Candidate
+1.7.9.5
