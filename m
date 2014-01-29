@@ -1,26 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Jan 2014 09:21:17 +0100
-Subject: [Buildroot] generating the map file
-In-Reply-To: <OF622178ED.DD9A35DB-ON85257C62.00673408-85257C62.006749F5@LocalDomain>
-References: <OF622178ED.DD9A35DB-ON85257C62.00673408-85257C62.006749F5@LocalDomain>
-Message-ID: <20140129092117.3e643656@skate>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Wed, 29 Jan 2014 09:22:17 +0100
+Subject: [Buildroot] [PATCH] mxml: bump to 2.8
+Message-ID: <1390983737-25899-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Naitik Amin,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-On Thu, 16 Jan 2014 13:48:10 -0500, Naitik Amin wrote:
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/mxml/mxml.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-> Can someone provide inputs on how to generate the .map file for the entire 
-> build (from buildroot).
-
-Can you give more details about what is the .map file?
-
-Thomas
+diff --git a/package/mxml/mxml.mk b/package/mxml/mxml.mk
+index 0658e4b..94a6c07 100644
+--- a/package/mxml/mxml.mk
++++ b/package/mxml/mxml.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MXML_VERSION = 2.7
++MXML_VERSION = 2.8
+ MXML_SITE = http://www.msweet.org/files/project3
+ MXML_LICENSE = LGPLv2+ with exceptions
+ MXML_LICENSE_FILES = COPYING
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.7
