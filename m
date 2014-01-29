@@ -1,45 +1,93 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 29 Jan 2014 10:50:54 +0100
-Subject: [Buildroot] [git commit] vlc: add libass support
-Message-ID: <20140129095112.207D39C6D7@busybox.osuosl.org>
+From: Mau Z <zmau1962@gmail.com>
+Date: Wed, 29 Jan 2014 12:06:15 +0200
+Subject: [Buildroot] How to add openGL library ?
+In-Reply-To: <CAPFcPT+E_NF7fZCFfnPaDhbGYYo038bBuSJcZPMBoVH=JCAerw@mail.gmail.com>
+References: <CAPFcPTLna9_Z3A+DTHNH18u8GUSzPTBJjOTiO5kaxf6wgGw1ag@mail.gmail.com>
+ <CAPFcPT+E_NF7fZCFfnPaDhbGYYo038bBuSJcZPMBoVH=JCAerw@mail.gmail.com>
+Message-ID: <CAPFcPTLyvfSYifFNQjWXggqLSE75-kyZw7ejmUDj=B=hcL1EOA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e7d309cba02df66ebfe0b9ddd46e26458465125d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Bernd,
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/vlc/vlc.mk |    8 +++++++-
- 1 files changed, 7 insertions(+), 1 deletions(-)
 
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 458fe1c..73b378c 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -21,7 +21,6 @@ VLC_CONF_OPT += \
- 	--disable-quicksync \
- 	--disable-fluidsynth \
- 	--disable-zvbi \
--	--disable-libass \
- 	--disable-kate \
- 	--disable-caca \
- 	--disable-jack \
-@@ -100,6 +99,13 @@ else
- VLC_CONF_OPT += --disable-opus
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBASS),y)
-+VLC_CONF_OPT += --enable-libass
-+VLC_DEPENDENCIES += libass
-+else
-+VLC_CONF_OPT += --disable-libass
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
- VLC_CONF_OPT += --enable-libgcrypt
- VLC_DEPENDENCIES += libgcrypt
+Thanks for answering.
+
+Mesa3d is probably good.
+
+
+I have no idea as to how to implement the patch that you had sent me  :-(
+
+I am working with buildroot 2013.11
+
+BTW, eventually it would have to be built with the external toolchain
+(Sourcery CodeBench).
+
+
+
+Thanks
+
+Mau
+
+========================================================================
+
+>* My system is Intel i7 based.
+*>* As mentioned above, I need openGL in order to access the GPU.
+*
+Hi,
+
+does Mesa3D meet your
+requirements?http://www.phoronix.com/scan.php?page=news_item&px=MTQ4MzI
+
+If yes, have a look at this patch:http://patchwork.ozlabs.org/patch/309540/
+
+Regards, Bernd
+
+
+
+
+On Mon, Jan 27, 2014 at 8:36 PM, Mau Z <zmau1962@gmail.com> wrote:
+
+> Hi again,
+>
+> Looking at the following link I understand that I need to give some more
+> information  (http://free-electrons.com/blog/buildroot-2013-05/).
+>
+> My system is Intel i7 based.
+> As mentioned above, I need openGL in order to access the GPU.
+> I understand that it does not exist for this platform. Correct ?
+>
+> Thomas Petazzoni says "We intend to add more in the future, but we also
+> welcome contributions in this area".
+> What should I do in order to have support for this platform ?    When it
+> is over I will ask how do I make the contribution.
+>
+>
+> Thanks
+> Mau
+>
+>
+>
+> On Mon, Jan 27, 2014 at 8:24 PM, Mau Z <zmau1962@gmail.com> wrote:
+>
+>> Hi!
+>>
+>> I am using buildroot 11.2013.
+>> I have an application which uses the i7 GPU via openGL. The system itself
+>> does not have a display.
+>> I am unable find how do I include openGL.
+>>
+>> Any advice ?
+>>
+>>
+>> Thanks
+>> Mau
+>>
+>>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140129/74c02bc9/attachment.html>
