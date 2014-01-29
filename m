@@ -1,66 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 29 Jan 2014 21:40:28 +0100
-Subject: [Buildroot] [git commit] sg3_utils: bump to version 1.37
-Message-ID: <20140129204558.C911C9C166@busybox.osuosl.org>
+Date: Wed, 29 Jan 2014 21:42:49 +0100
+Subject: [Buildroot] [git commit] rng-tools: argp-standalone required for
+	uclibc toolchains only
+Message-ID: <20140129204559.02DA19C6DA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6cde69fa64a25aa4a9bd76a3d8bc2d778cf191b0
+commit: http://git.buildroot.net/buildroot/commit/?id=f6305d135ea422342a5eedce2e268508a6df0968
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sg3_utils/sg3_utils.mk |   19 ++++++++++++++-----
- 1 files changed, 14 insertions(+), 5 deletions(-)
+ package/rng-tools/Config.in    |    2 +-
+ package/rng-tools/rng-tools.mk |    2 ++
+ 2 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/sg3_utils/sg3_utils.mk b/package/sg3_utils/sg3_utils.mk
-index 8bb79b5..be86bd7 100644
---- a/package/sg3_utils/sg3_utils.mk
-+++ b/package/sg3_utils/sg3_utils.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/rng-tools/Config.in b/package/rng-tools/Config.in
+index e6dcf9d..c50a8c0 100644
+--- a/package/rng-tools/Config.in
++++ b/package/rng-tools/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_RNG_TOOLS
+ 	bool "rng-tools"
+-	select BR2_PACKAGE_ARGP_STANDALONE
++	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC
+ 	help
+ 	  Daemon to use hardware random number generators.
  
--SG3_UTILS_VERSION = 1.34
-+SG3_UTILS_VERSION = 1.37
- SG3_UTILS_SOURCE = sg3_utils-$(SG3_UTILS_VERSION).tar.xz
--SG3_UTILS_SITE    = http://sg.danny.cz/sg/p/
-+SG3_UTILS_SITE  = http://sg.danny.cz/sg/p/
- SG3_UTILS_LICENSE = BSD-3c
- # utils progs are GPLv2+ licenced
- ifeq ($(BR2_PACKAGE_SG3_UTILS_PROGS),y)
-@@ -20,7 +20,8 @@ SG3_UTILS_INSTALL_STAGING = YES
- ifeq ($(BR2_PACKAGE_SG3_UTILS_PROGS),)
- define SG3_UTILS_REMOVE_PROGS
- 	for prog in \
--		dd decode_sense emc_trespass format get_config \
-+		compare_and_write copy_results dd decode_sense \
-+		emc_trespass format get_config \
- 		get_lba_status ident inq logs luns map26 \
- 		map sgm_dd modes opcodes sgp_dd persist prevent \
- 		raw rbuf rdac read readcap read_block_limits \
-@@ -29,10 +30,18 @@ define SG3_UTILS_REMOVE_PROGS
- 		sat_identify sat_phy_event sat_set_features scan \
- 		senddiag ses start stpg sync test_rwbuf turs \
- 		unmap verify vpd write_buffer write_long \
--		write_same wr_mode ; do \
-+		write_same wr_mode xcopy; do \
- 		$(RM) $(TARGET_DIR)/usr/bin/sg_$${prog} ; \
- 	done
--	$(RM) $(TARGET_DIR)/usr/bin/sginfo
-+	for prog in \
-+		logging_level mandat readcap ready satl start stop \
-+		temperature; do \
-+		$(RM) $(TARGET_DIR)/usr/bin/scsi_$${prog} ; \
-+	done
-+	for prog in \
-+		sginfo sgm_dd sgp_dd; do \
-+		$(RM) $(TARGET_DIR)/usr/bin/$${prog}; \
-+	done
- endef
+diff --git a/package/rng-tools/rng-tools.mk b/package/rng-tools/rng-tools.mk
+index ae0bf14..56858e7 100644
+--- a/package/rng-tools/rng-tools.mk
++++ b/package/rng-tools/rng-tools.mk
+@@ -6,8 +6,10 @@
  
- SG3_UTILS_POST_INSTALL_TARGET_HOOKS += SG3_UTILS_REMOVE_PROGS
+ RNG_TOOLS_VERSION = 4
+ RNG_TOOLS_SITE = http://downloads.sourceforge.net/project/gkernel/rng-tools/$(RNG_TOOLS_VERSION)
++ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+ RNG_TOOLS_CONF_ENV = LIBS="-largp"
+ RNG_TOOLS_DEPENDENCIES = argp-standalone
++endif
+ RNG_TOOLS_LICENSE = GPLv2
+ RNG_TOOLS_LICENSE_FILES = COPYING
+ 
