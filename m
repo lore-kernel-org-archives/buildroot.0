@@ -1,45 +1,36 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Wed, 29 Jan 2014 09:25:53 +0000
-Subject: [Buildroot] [PATCH] vlc: add libass support
-Message-ID: <1390987553-5131-1-git-send-email-spdawson@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 29 Jan 2014 10:06:26 +0100
+Subject: [Buildroot] [git commit] libsocketcan: add license information and
+	fix formatting
+Message-ID: <20140129093105.B434C9C6D7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+commit: http://git.buildroot.net/buildroot/commit/?id=3bc4c064d22298f540830d94aaa87ef99bd3f9a2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/vlc/vlc.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/libsocketcan/libsocketcan.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 458fe1c..73b378c 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -21,7 +21,6 @@ VLC_CONF_OPT += \
- 	--disable-quicksync \
- 	--disable-fluidsynth \
- 	--disable-zvbi \
--	--disable-libass \
- 	--disable-kate \
- 	--disable-caca \
- 	--disable-jack \
-@@ -100,6 +99,13 @@ else
- VLC_CONF_OPT += --disable-opus
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBASS),y)
-+VLC_CONF_OPT += --enable-libass
-+VLC_DEPENDENCIES += libass
-+else
-+VLC_CONF_OPT += --disable-libass
-+endif
+diff --git a/package/libsocketcan/libsocketcan.mk b/package/libsocketcan/libsocketcan.mk
+index 141e2d7..bc12bdb 100644
+--- a/package/libsocketcan/libsocketcan.mk
++++ b/package/libsocketcan/libsocketcan.mk
+@@ -3,9 +3,11 @@
+ # libsocketcan
+ #
+ ################################################################################
 +
- ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
- VLC_CONF_OPT += --enable-libgcrypt
- VLC_DEPENDENCIES += libgcrypt
--- 
-1.8.3.2
+ LIBSOCKETCAN_VERSION = 0.0.9
+ LIBSOCKETCAN_SITE = http://www.pengutronix.de/software/libsocketcan/download/
+ LIBSOCKETCAN_SOURCE = libsocketcan-$(LIBSOCKETCAN_VERSION).tar.bz2
+ LIBSOCKETCAN_INSTALL_STAGING = YES
++LIBSOCKETCAN_LICENSE = LGPLv2.1+
+ 
+ $(eval $(autotools-package))
