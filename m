@@ -1,41 +1,30 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 29 Jan 2014 12:06:55 +0100
-Subject: [Buildroot] [PATCH] defconfig for Phytec Cosmic-AM335x Board
-In-Reply-To: <52E8B383.5050406@mind.be> (Arnout Vandecappelle's message of
- "Wed, 29 Jan 2014 08:53:39 +0100")
-References: <1390908698-7256-1-git-send-email-praveen.v@phytec.in>
- <87lhxzzrj3.fsf@dell.be.48ers.dk> <52E8B383.5050406@mind.be>
-Message-ID: <87ha8nvygg.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 29 Jan 2014 10:01:59 -0300
+Subject: [Buildroot] [PATCH] collectd: bump to version 5.4.1
+Message-ID: <1391000519-8533-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/collectd/collectd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Hi,
-
- >> > +To boot the board you need MLO (primary bootloader) so download from below link
- >> > +ftp://ftp.phytec.de/pub/Products/India/Cosmic-AM335x/Linux/PD13.0.0/images/MLO
- >> 
- >> Hmm, can't we build MLO ourselves?
-
- >  The patch that makes that possible in barebox was just rejected in
- > patchwork...
-
-Ahh, ok. I don't personally use barebox, but if people need this then
-presumably the patch can be resurrected.
-
- >> > +BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
- >> > +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="ftp://ftp.phytec.de/pub/Products/India/Cosmic-AM335x/Linux/PD13.0.0/src/linux/linux-3.2.tar.bz2"
- >> 
- >> No mainline support?
-
- >  3.2 so still using board files...
-
-Yeah. I don't think there's much need to stay at 3.2 for am335x nowadays
-though.
-
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index b133b73..e1fc104 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-COLLECTD_VERSION = 5.4.0
++COLLECTD_VERSION = 5.4.1
+ COLLECTD_SITE = http://collectd.org/files
+ COLLECTD_MAKE_OPT = LDFLAGS="$(TARGET_LDFLAGS) -lm"
+ COLLECTD_CONF_ENV = ac_cv_lib_yajl_yajl_alloc=yes
 -- 
-Bye, Peter Korsgaard
+1.8.3.2
