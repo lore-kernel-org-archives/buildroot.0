@@ -1,37 +1,55 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 29 Jan 2014 08:14:09 +0100
-Subject: [Buildroot] full rebuild and errors
-In-Reply-To: <20140128230904.1f01a5dc@skate>
-References: <52E4FA8C.7060109@gmail.com> <52E6945C.40202@mind.be>
- <52E8120F.7080805@gmail.com> <20140128230904.1f01a5dc@skate>
-Message-ID: <52E8AA41.1020709@mind.be>
+Date: Wed, 29 Jan 2014 08:53:39 +0100
+Subject: [Buildroot] [PATCH] defconfig for Phytec Cosmic-AM335x Board
+In-Reply-To: <87lhxzzrj3.fsf@dell.be.48ers.dk>
+References: <1390908698-7256-1-git-send-email-praveen.v@phytec.in>
+ <87lhxzzrj3.fsf@dell.be.48ers.dk>
+Message-ID: <52E8B383.5050406@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 28/01/14 23:09, Thomas Petazzoni wrote:
-> Dear Marco Trapanese,
+On 28/01/14 23:10, Peter Korsgaard wrote:
+>>>>>> "Praveen" == Praveen kumar Vattipalli <praveen.v@phytec.in> writes:
+[snip]
+>   > +
+>   > +Result of the build
+>   > +-------------------
+>   > +
+>   > +After building, you should obtain this tree:
+>   > +
+>   > +	output/images/
+>   > +		+-- rootfs.tar
+>   > +		+-- barebox.bin
+>   > +		+-- uImage
+>   > +
+>   > +To boot the board you need MLO (primary bootloader) so download from below link
+>   > +ftp://ftp.phytec.de/pub/Products/India/Cosmic-AM335x/Linux/PD13.0.0/images/MLO
 >
-> On Tue, 28 Jan 2014 21:24:47 +0100, Marco Trapanese wrote:
->
->> Yeah! It did the trick!
->> I can't imagine it was a ccache problem because I deleted the whole
->> directory and cloned again the repository from scratch - I thought it
->> should reset anything to the initial state, my fault!
->
-> No, it doesn't. The cache of ccache is located in
-> ~/.buildroot-ccache/, because the intent of ccache is precisely to be
-> able to re-use the cache contents across complete rebuilds, and even
-> across multiple clones of Buildroot.
+> Hmm, can't we build MLO ourselves?
 
-  But this is yet another proof that it doesn't work very well. And this 
-one really worries me, because it's a host build that failed.
+  The patch that makes that possible in barebox was just rejected in 
+patchwork...
 
-  Marco, can you try to remember exactly what was different between the 
-first and second build? Was it the same buildroot source, the same 
-buildroot config, etc.?
+[snip]
+>   > +BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="arm-cortexa8-linux-gnueabi"
+>   > +BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+>   > +BR2_TOOLCHAIN_EXTERNAL_CXX=y
+>   > +BR2_TARGET_GENERIC_HOSTNAME="Cosmic-AM335x"
+>   > +BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV=y
+>   > +BR2_TARGET_GENERIC_GETTY_PORT="ttyO0"
+>   > +BR2_TARGET_GENERIC_GETTY_TERM=""
+>   > +BR2_LINUX_KERNEL=y
+>   > +BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+>   > +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="ftp://ftp.phytec.de/pub/Products/India/Cosmic-AM335x/Linux/PD13.0.0/src/linux/linux-3.2.tar.bz2"
+>
+> No mainline support?
+
+  3.2 so still using board files...
+
+[snip]
 
   Regards,
   Arnout
