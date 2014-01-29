@@ -1,41 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 29 Jan 2014 21:41:46 +0100
-Subject: [Buildroot] [git commit] linux-headers: bump 3.{4,
-	13}.x stable versions
-Message-ID: <20140129204558.D7A739C6DA@busybox.osuosl.org>
+Date: Wed, 29 Jan 2014 21:44:00 +0100
+Subject: [Buildroot] [git commit] libcurl: security bump to version 7.35.0
+Message-ID: <20140129204559.1216E9C166@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a7598d586baad2606abc27468b5d592165ab07d6
+commit: http://git.buildroot.net/buildroot/commit/?id=8abdd5fa3e0728dace216741f410db08156730f5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fixes CVE-2014-0015.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/libcurl/libcurl.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 618c928..859b71f 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -86,7 +86,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
- 	default "3.2.54"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
--	default "3.4.77"	if BR2_KERNEL_HEADERS_3_4
-+	default "3.4.78"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
- 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
- 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
-@@ -95,6 +95,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.10.28"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
- 	default "3.12.9"	if BR2_KERNEL_HEADERS_3_12
--	default "3.13"		if BR2_KERNEL_HEADERS_3_13
-+	default "3.13.1"	if BR2_KERNEL_HEADERS_3_13
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 5285995..458dfb6 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCURL_VERSION = 7.34.0
++LIBCURL_VERSION = 7.35.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
+ LIBCURL_SITE = http://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
