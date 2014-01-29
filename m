@@ -1,34 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 29 Jan 2014 21:44:00 +0100
-Subject: [Buildroot] [git commit] libcurl: security bump to version 7.35.0
-Message-ID: <20140129204559.1216E9C166@busybox.osuosl.org>
+Date: Wed, 29 Jan 2014 21:42:09 +0100
+Subject: [Buildroot] [git commit] rtmpdump: bump version
+Message-ID: <20140129204558.F07049C6DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8abdd5fa3e0728dace216741f410db08156730f5
+commit: http://git.buildroot.net/buildroot/commit/?id=0e48a4efdf2ce74e5a445e6854a38ae87060ada7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2014-0015.
+Rtmpdump was not compatible with BR's version of PolarSSL, the bump
+fixes that.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Fixes:
+http://autobuild.buildroot.net/results/55bda4076af031db9778d97f9ddc5c6b14de17ce
+http://autobuild.buildroot.net/results/9ba2f8ecb0a73cc7e625faf713ad4161202b2293
+http://autobuild.buildroot.net/results/4e1988f049fa97574da54e5097e5ef1668c2687c
+http://autobuild.buildroot.net/results/02a15ad5211a1e620002c442ce256147d9b9ee88
+
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcurl/libcurl.mk |    2 +-
+ package/rtmpdump/rtmpdump.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 5285995..458dfb6 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
+diff --git a/package/rtmpdump/rtmpdump.mk b/package/rtmpdump/rtmpdump.mk
+index 4f9d247..e836cb6 100644
+--- a/package/rtmpdump/rtmpdump.mk
++++ b/package/rtmpdump/rtmpdump.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBCURL_VERSION = 7.34.0
-+LIBCURL_VERSION = 7.35.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
- LIBCURL_SITE = http://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+-RTMPDUMP_VERSION = e0056c51cc1710c9a44d2a2c4e2f344fa9cabcf4
++RTMPDUMP_VERSION = dc76f0a8461e6c8f1277eba58eae201b2dc1d06a
+ RTMPDUMP_SITE = git://git.ffmpeg.org/rtmpdump
+ RTMPDUMP_INSTALL_STAGING = YES
+ # Note that rtmpdump is GPLv2 but librtmp has its own license and since we only
