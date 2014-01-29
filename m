@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 29 Jan 2014 17:01:32 -0300
-Subject: [Buildroot] [PATCH] mtr: new package
-Message-ID: <1391025692-23567-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 29 Jan 2014 17:03:44 -0300
+Subject: [Buildroot] [PATCHv2] mtr: new package
+Message-ID: <1391025824-23694-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -46,15 +46,15 @@ index 0000000..842d6ca
 +	  http://www.bitwizard.nl/mtr/
 diff --git a/package/mtr/mtr.mk b/package/mtr/mtr.mk
 new file mode 100644
-index 0000000..72f0d57
+index 0000000..a96bf0c
 --- /dev/null
 +++ b/package/mtr/mtr.mk
 @@ -0,0 +1,24 @@
-+#############################################################
++################################################################################
 +#
 +# mtr
 +#
-+#############################################################
++################################################################################
 +
 +MTR_VERSION = 0.85
 +MTR_SITE = ftp://ftp.bitwizard.nl/mtr
