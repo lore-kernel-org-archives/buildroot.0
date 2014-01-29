@@ -1,66 +1,37 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 29 Jan 2014 08:02:55 +0100
-Subject: [Buildroot] [PATCH v2 1/1] update package isolinux bootloader -
- simplify code
-In-Reply-To: <20140128172705.1e1ee088@skate>
-References: <1376644934-4302-1-git-send-email-jean.sorgemoel@laposte.net>
- <1389745445-8884-1-git-send-email-jean.sorgemoel@laposte.net>
- <20140128172705.1e1ee088@skate>
-Message-ID: <52E8A79F.4060005@mind.be>
+Date: Wed, 29 Jan 2014 08:14:09 +0100
+Subject: [Buildroot] full rebuild and errors
+In-Reply-To: <20140128230904.1f01a5dc@skate>
+References: <52E4FA8C.7060109@gmail.com> <52E6945C.40202@mind.be>
+ <52E8120F.7080805@gmail.com> <20140128230904.1f01a5dc@skate>
+Message-ID: <52E8AA41.1020709@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 28/01/14 17:27, Thomas Petazzoni wrote:
-> Dear jean.sorgemoel at laposte.net,
+On 28/01/14 23:09, Thomas Petazzoni wrote:
+> Dear Marco Trapanese,
 >
-> On Wed, 15 Jan 2014 01:24:05 +0100, jean.sorgemoel at laposte.net wrote:
->> From: jean <jean.sorgemoel@laposte.net>
->>
->>
->> Signed-off-by: jean <jean.sorgemoel@laposte.net>
+> On Tue, 28 Jan 2014 21:24:47 +0100, Marco Trapanese wrote:
 >
-> Please add a commit log with details, explaining what the patch is
-> doing.
+>> Yeah! It did the trick!
+>> I can't imagine it was a ccache problem because I deleted the whole
+>> directory and cloned again the repository from scratch - I thought it
+>> should reset anything to the initial state, my fault!
 >
->> ---
->> After Arnout's remark, (sorry, I read last month), I updated this module.
->> Goal : use other method to generate iso (and I think it's work fine)
->> File : fs/isolinux/Config.in
->> 1/ I suppress redundant comment
->> 2/ Suppress menu and use conditional (replace 'depends on' by 'if/endif')
->> 3/ Modify comment
->> 4/ suppress option (keyboard, ...)
->> 5/ replace 8 x space by tabulation
->> File : fs/isolinux/isolinux.mk
->> 5/ suppress extension 'BR2_'
->> 7/ use variable 'ISOLINUX_DIR'
->> 8/ suppress keyboard option
->> 9/ I can't use command '$(INSTALL) -D' beacause I don't define filenames (I keep old code)
->> 10/ Hide command genisoimage (with option $@)
->>
->>   fs/Config.in             |    2 +-
->>   fs/isolinux/Config.in    |  210 ++++++++++----------------------------------
->>   fs/isolinux/bootmsg.txt  |    4 +
->>   fs/isolinux/isolinux.cfg |    7 ++
->>   fs/isolinux/isolinux.mk  |  219 ++++++----------------------------------------
->>   5 files changed, 87 insertions(+), 355 deletions(-)
->>   create mode 100644 fs/isolinux/bootmsg.txt
->>   create mode 100644 fs/isolinux/isolinux.cfg
->
-> You did your patch incorrectly: what you're sending here are the
-> differences between your v1 and your v2. What we need is a single patch
-> that contains all of your changes.
->
-> You need to squash your v2 changes into the original patch, to make
-> only one patch that adds the isolinux stuff.
+> No, it doesn't. The cache of ccache is located in
+> ~/.buildroot-ccache/, because the intent of ccache is precisely to be
+> able to re-use the cache contents across complete rebuilds, and even
+> across multiple clones of Buildroot.
 
-  Also, this version doesn't yet address one of the main comments that 
-both Thomas and I have: you shouldn't create a new filesystem type, but 
-instead you should modify the existing iso9660 support and add an option 
-to it to use isolinux instead of grub.
+  But this is yet another proof that it doesn't work very well. And this 
+one really worries me, because it's a host build that failed.
+
+  Marco, can you try to remember exactly what was different between the 
+first and second build? Was it the same buildroot source, the same 
+buildroot config, etc.?
 
   Regards,
   Arnout
