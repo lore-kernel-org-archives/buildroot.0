@@ -1,55 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 29 Jan 2014 21:59:47 +0100
-Subject: [Buildroot] [PATCH] Config: default BR2_PACKAGE_OVERRIDE_FILE
- to $(CONFIG_DIR)/local.mk
-In-Reply-To: <CAAXf6LUBuatdDGREG1xKXE0XVdjJ067tNfXC+=_-O9g2fTD5OQ@mail.gmail.com>
-References: <1391020967-19043-1-git-send-email-yann.morin.1998@free.fr>
- <CAAXf6LUBuatdDGREG1xKXE0XVdjJ067tNfXC+=_-O9g2fTD5OQ@mail.gmail.com>
-Message-ID: <20140129205947.GB3397@free.fr>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Wed, 29 Jan 2014 22:33:07 +0100
+Subject: [Buildroot] [PATCH] libusb: do not depend on host-udev for host
+	variant
+Message-ID: <1391031187-3897-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Commit 25926af5 disabled udev support for the host variant, but forgot to
+remove it from the (implicit) host dependencies.
 
-On 2014-01-29 21:45 +0100, Thomas De Schampheleire spake thusly:
-> Op 29-jan.-2014 19:43 schreef "Yann E. MORIN" <yann.morin.1998@free.fr>:
-> >
-> > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> >
-> > The current default for BR2_PACKAGE_OVERRIDE_FILE points to:
-> >     $(TOPDIR)/local.mk
-> >
-> > This works well for in-tree builds, but is not very useful for
-> > out-of-tree builds, when the Buildroot source tree may be shared for
-> > different concurrent builds.
-> >
-> > Also, it seems to be more sensible to have local.mk alognside
-> > the .config file.
-> >
-> > Hence, change the default for BR2_PACKAGE_OVERRIDE_FILE to point to:
-> >     $(CONFIG_DIR)/local.mk
-> 
-> ... which in the default case equals TOPDIR, right? (Would be nice to
-> clarify in the commit message)
+Also reordered things to keep the HOST_* definitions together.
 
-Oh, yes. I intended to write that part, but was absorbed by the very
-nice fumet of the dinner being cooked at the time I wrote the commit
-log.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/libusb/libusb.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-I plead guilty for having been disturbed by my nostrils, and my stomach!
-
-I'll respin with that added. Thank you! :-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
+index ffb39ba..a8ff74c 100644
+--- a/package/libusb/libusb.mk
++++ b/package/libusb/libusb.mk
+@@ -8,12 +8,15 @@ LIBUSB_VERSION_MAJOR = 1.0
+ LIBUSB_VERSION = $(LIBUSB_VERSION_MAJOR).18
+ LIBUSB_SOURCE = libusb-$(LIBUSB_VERSION).tar.bz2
+ LIBUSB_SITE = http://downloads.sourceforge.net/project/libusb/libusb-$(LIBUSB_VERSION_MAJOR)/libusb-$(LIBUSB_VERSION)
+-HOST_LIBUSB_CONF_OPT = --disable-udev
+ LIBUSB_LICENSE = LGPLv2.1+
+ LIBUSB_LICENSE_FILES = COPYING
+ LIBUSB_DEPENDENCIES = host-pkgconf
+ LIBUSB_INSTALL_STAGING = YES
+ 
++# Avoid the discovery of udev for the host variant
++HOST_LIBUSB_CONF_OPT = --disable-udev
++HOST_LIBUSB_DEPENDENCIES = host-pkgconf
++
+ ifeq ($(BR2_avr32),y)
+ LIBUSB_CONF_OPT += --disable-timerfd
+ endif
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.5.3
