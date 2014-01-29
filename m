@@ -1,39 +1,113 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Jan 2014 09:26:16 +0100
-Subject: [Buildroot] command line regular expression substitution fails
-In-Reply-To: <52E8A467.5070703@mind.be>
-References: <52CC7292.306@alcatel-lucent.com>
- <CAOkaJuVFmrrfda=vG-+06vJp7_jJvhnCAzJy8RJKZ8BxE6XKWA@mail.gmail.com>
- <52CD5340.2090200@alcatel-lucent.com>
- <CAOkaJuVGa4_Et8TL80MEsh8sN1mseKvQ4OZ9RzxSouytbZFUFQ@mail.gmail.com>
- <52CF0287.8010505@alcatel-lucent.com>
- <20140128221002.157e8b71@skate> <52E8A467.5070703@mind.be>
-Message-ID: <20140129092616.7207a8e9@skate>
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+Date: Wed, 29 Jan 2014 09:26:12 +0100
+Subject: [Buildroot] [PATCH 1/1] skeleton: add systemd network.service
+ unit
+In-Reply-To: <52E7E6D4.1020501@mind.be>
+References: <1388713112-4686-1-git-send-email-vsergeev@kumunetworks.com>
+ <20140103201333.7f4edd47@skate>
+ <CAPyrzo0q7Y3Tf1LOaCe4LK78a7sZrVdToLfnzp4Tc4kow=-nKA@mail.gmail.com>
+ <52E7589F.7060301@mind.be>
+ <CAGduivw+HOQRDN18=xrM_AwqT3YtoM7BwmcaNRDb0VFVaQM9eQ@mail.gmail.com>
+ <20140128132058.GD3867@lukather> <52E7E6D4.1020501@mind.be>
+Message-ID: <20140129082612.GM3867@lukather>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
 
-On Wed, 29 Jan 2014 07:49:11 +0100, Arnout Vandecappelle wrote:
 
-> > No, A8 and A9 are not the same from a floating point perspective.
+On Tue, Jan 28, 2014 at 06:20:20PM +0100, Arnout Vandecappelle wrote:
+> On 28/01/14 14:20, Maxime Ripard wrote:
+> >On Tue, Jan 28, 2014 at 09:25:20AM +0100, Maxime Hadjinlian wrote:
+> >>I would even like to go even further, as I have noticed that a lot of
+> >>the defined LIBFOO_INSTALL_INIT_SYSTEMD and LIBFOO_INSTALL_INIT_SYSV
+> >>almost always do the exact same stuff.
+> >>I would like for the infrastructure to take care of this, if no
+> >>function is defined, and a .service or S\d{0,2}*, then we should take
+> >>it and install it.
+> >>
+> >>In that case, any particular requirements, the package define a
+> >>function, other than that, it's taken care of and we avoid duplicate
+> >>code in all the packages.
 > >
-> > As visible in
-> > http://git.buildroot.net/buildroot/tree/arch/Config.in.arm#n91, NEON
-> > and VFPv3 is mandatory on Cortex-A8, but optional on Cortex-A9.
+> >Actually, there's two main issues that prevents this in the systemd
+> >case, and are why we did it that way:
+> >   - the multi-user-wants thing is actually comparable to the sysvinit
+> >     runlevels. Some packages might want to set their units to other
+> >     targets than multi-user (for example, graphical applications are
+> >     likely to go in the graphical target, not the multi-user one)
 > 
->   Yeah, but in that sense, Cortex-A9 is a subset or Cortex-A8 so if the 
-> A8 code works, the A9 code should work as well - which is exactly the 
-> reverse of what Ed saw.
+>  I disagree with this one. Buildroot's defaults should support only
+> a single runlevel/target. That's how it's done for sysv init, and
 
-Right. I must say I haven't followed all what Ed reported, I merely
-replied on the question about A8/A9 floating point equivalence.
+Hmm, afaik, it's not done at all in the sysvinit case, because the
+default sysvinit we use most of the time (busybox's) doesn't handle
+the runlevel at all. It's not really the same story there.
 
-Thomas
+> I'm very happy with it: it's dead easy to see which scripts will be
+> executed at startup, you don't have to find out the runlevel etc.
+> With systemd, things can become even more complex (because there can
+> be several "targets" active at the same time IIRC), and I'd prefer
+> to exclude this complexity by default.
+> 
+>  If a user requires several runlevels/targets, than most likely any
+> default that buildroot provide will not fit anyway, so the user will
+> have to manipulate things in their rootfs overlay or post-build
+> script anyway. Therefore, I think it is better for the user if the
+> defaults are simple and predictable.
+> 
+> 
+> >   - Some units also takes "variables" from the created link names. For
+> >     example, when you want to run getty, you just have a single getty
+> >     unit, and the device to run getty on is set in the link name to
+> >     that unit (so you'd end up with a link in multi-user.target.wants
+> >     that will be getty.ttyS0.service, linking to
+> >     /etc/systemd/system/getty.service).
+> 
+>  That is one of the special cases that would be handled in a
+> post-install hook. But specifically for the getty case, it's not
+> even necessary because we start only a single getty in the default
+> setup, so we can directly install it to getty at ttyS0.service .
+
+Which won't work if you don't have a different tty to export a shell
+on, but yes, I get your point.
+
+> >At the time, we thought that in the systemd case, the easiest would be
+> >to simply write down the 2-3 commands we need to setup the unit,
+> >instead of having to give a whole bunch of variables. And we did the
+> >same for sysvinit scripts, for consistency.
+> 
+>  I think at the time, we mainly thought that we didn't know yet if
+> the installation could be generalized. Now that we have a few
+> packages that install unit files, it's more clear that they always
+> to the same.
+
+We have *three* packages with systemd units in current master. I
+hardly see how you can generalize something out of 3 (similar)
+samples.
+
+>  Also, as far as I understand, the idea is not to add variables, but
+> rather to check for the existence of package/foo/*.service and
+> install that.
+
+This also doesn't cover the case anymore where a package would ship
+together with the source code a systemd unit file. I expect it to be
+more and more common, and it's something that we will want to use most
+of the time, and not duplicate the unit file in the buildroot package
+itself.
+
+Maxime
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
+Maxime Ripard, Free Electrons
 Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 836 bytes
+Desc: Digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140129/07705c21/attachment.asc>
