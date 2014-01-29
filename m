@@ -1,42 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Jan 2014 16:08:20 +0100
-Subject: [Buildroot] Buildroot Developers Meeting: remote participation?
-	list of topics?
-Message-ID: <20140129160820.66f13569@skate>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Wed, 29 Jan 2014 19:15:04 +0100
+Subject: [Buildroot] [PATCH] rtmpdump: bump version
+Message-ID: <1391019304-14024-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Rtmpdump was not compatible with BR's version of PolarSSL, the bump
+fixes that.
 
-As most of you probably know, the next Buildroot Developers Meeting
-will take place next week, on Monday and Tuesday in Brussels, Belgium,
-right after FOSDEM. So far, we have 10 participants, amongst which 3
-will be participating for the first time to this meeting.
+Fixes:
+http://autobuild.buildroot.net/results/55bda4076af031db9778d97f9ddc5c6b14de17ce
+http://autobuild.buildroot.net/results/9ba2f8ecb0a73cc7e625faf713ad4161202b2293
+http://autobuild.buildroot.net/results/4e1988f049fa97574da54e5097e5ef1668c2687c
+http://autobuild.buildroot.net/results/02a15ad5211a1e620002c442ce256147d9b9ee88
 
-If you happen to be interested by the meeting, do not hesitate to
-contact me, we can still arrange for additional seats.
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+ package/rtmpdump/rtmpdump.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-In preparation for this meeting, it would be nice if people (not the
-participants, but other Buildroot developers, contributors and users)
-could:
-
- * Let me know if they would be interested in remote participating to
-   the meeting. At the last meeting, we used Google Hangout to allow
-   remote participants to follow the discussions. If people are
-   interested, we can do the same this time (remember to send me your
-   Google account address).
-
- * Add to the list of topics to be discussed the things they think the
-   core Buildroot developers should look at during this meeting. See
-   http://elinux.org/Buildroot:DeveloperDaysFOSDEM2014#List_of_topics_to_discuss.
-
-Thanks a lot!
-
-Thomas
+diff --git a/package/rtmpdump/rtmpdump.mk b/package/rtmpdump/rtmpdump.mk
+index 4f9d247..e836cb6 100644
+--- a/package/rtmpdump/rtmpdump.mk
++++ b/package/rtmpdump/rtmpdump.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RTMPDUMP_VERSION = e0056c51cc1710c9a44d2a2c4e2f344fa9cabcf4
++RTMPDUMP_VERSION = dc76f0a8461e6c8f1277eba58eae201b2dc1d06a
+ RTMPDUMP_SITE = git://git.ffmpeg.org/rtmpdump
+ RTMPDUMP_INSTALL_STAGING = YES
+ # Note that rtmpdump is GPLv2 but librtmp has its own license and since we only
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.5.3
