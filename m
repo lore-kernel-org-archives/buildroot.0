@@ -1,8 +1,7 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 29 Jan 2014 22:48:24 +0100
-Subject: [Buildroot] [PATCH] Config: default BR2_PACKAGE_OVERRIDE_FILE to
-	$(CONFIG_DIR)/local.mk
-Message-ID: <1391032104-18150-1-git-send-email-yann.morin.1998@free.fr>
+Date: Wed, 29 Jan 2014 23:07:58 +0100
+Subject: [Buildroot] [PATCH 0/3 v2] wayland+weston: bump to 1.4.0
+Message-ID: <cover.1391033178.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,40 +10,45 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-The current default for BR2_PACKAGE_OVERRIDE_FILE points to:
-    $(TOPDIR)/local.mk
+Hello All!
 
-This works well for in-tree builds, but is not very useful for
-out-of-tree builds, when the Buildroot source tree may be shared for
-different concurrent builds.
+Here is a small series that bumps wayland and weston to the latest and
+greatest 1.4.0
 
-Also, it seems to be more sensible to have local.mk alognside
-the .config file.
+Note that the weston's rpi-backend is currently broken, so it is marked
+accordingly.
 
-Hence, change the default for BR2_PACKAGE_OVERRIDE_FILE to point to:
-    $(CONFIG_DIR)/local.mk
+Changes v1 -> v2:
+  - remove wayland's DTD from target/  (Thomas)
 
-Note that this does not change the current behaviour for in-tree
-builds, since in that case $(CONFIG_DIR) == $(TOPDIR).
+Regards,
+Yann E. MORIN.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
----
- Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Config.in b/Config.in
-index 7ec7c2a..f8d6e23 100644
---- a/Config.in
-+++ b/Config.in
-@@ -488,7 +488,7 @@ config BR2_HAVE_DOCUMENTATION
- 
- config BR2_PACKAGE_OVERRIDE_FILE
- 	string "location of a package override file"
--	default "$(TOPDIR)/local.mk"
-+	default "$(CONFIG_DIR)/local.mk"
- 	help
- 	  A package override file is a short makefile that contains
- 	  variable definitions of the form <pkg>_OVERRIDE_SRCDIR,
+----------------------------------------------------------------
+Yann E. MORIN (3):
+      package/wayland: bump to 1.4.0
+      package/wayland: build a host variant
+      package/weston: bump to 1.4.0
+
+ package/wayland/wayland.mk                         | 27 +++++---
+ package/weston/Config.in                           |  1 +
+ ...eston-0000-dont-leak-fd-on-launcher-error.patch | 77 ----------------------
+ .../weston-0001-enable-build-without-libdrm.patch  | 45 -------------
+ ...on-0002-fbdev-fix-compilation-without-EGL.patch | 29 --------
+ package/weston/weston-0003-dont-build-tests.patch  | 15 ++---
+ ...weston-0004-fbdev-open-launcher-only-once.patch | 46 -------------
+ package/weston/weston.mk                           |  3 +-
+ 8 files changed, 28 insertions(+), 215 deletions(-)
+ delete mode 100644 package/weston/weston-0000-dont-leak-fd-on-launcher-error.patch
+ delete mode 100644 package/weston/weston-0001-enable-build-without-libdrm.patch
+ delete mode 100644 package/weston/weston-0002-fbdev-fix-compilation-without-EGL.patch
+ delete mode 100644 package/weston/weston-0004-fbdev-open-launcher-only-once.patch
+
 -- 
-1.8.1.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
