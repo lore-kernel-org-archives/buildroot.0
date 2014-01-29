@@ -1,36 +1,23 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Wed, 29 Jan 2014 09:36:26 +0100
-Subject: [Buildroot] [PATCH] libsocketcan: add license information and fix
-	formatting
-Message-ID: <1390984586-30571-1-git-send-email-yegorslists@googlemail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 29 Jan 2014 09:37:21 +0100
+Subject: [Buildroot] [PATCH] mxml: bump to 2.8
+In-Reply-To: <1390983737-25899-1-git-send-email-yegorslists@googlemail.com>
+ (yegorslists@googlemail.com's message of "Wed, 29 Jan 2014 09:22:17
+ +0100")
+References: <1390983737-25899-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <87a9efxjy6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+>>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/libsocketcan/libsocketcan.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ > From: Yegor Yefremov <yegorslists@googlemail.com>
+ > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-diff --git a/package/libsocketcan/libsocketcan.mk b/package/libsocketcan/libsocketcan.mk
-index 141e2d7..bc12bdb 100644
---- a/package/libsocketcan/libsocketcan.mk
-+++ b/package/libsocketcan/libsocketcan.mk
-@@ -3,9 +3,11 @@
- # libsocketcan
- #
- ################################################################################
-+
- LIBSOCKETCAN_VERSION = 0.0.9
- LIBSOCKETCAN_SITE = http://www.pengutronix.de/software/libsocketcan/download/
- LIBSOCKETCAN_SOURCE = libsocketcan-$(LIBSOCKETCAN_VERSION).tar.bz2
- LIBSOCKETCAN_INSTALL_STAGING = YES
-+LIBSOCKETCAN_LICENSE = LGPLv2.1+
- 
- $(eval $(autotools-package))
+Committed, thanks.
+
 -- 
-1.7.7
+Bye, Peter Korsgaard
