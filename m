@@ -1,44 +1,27 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 29 Jan 2014 22:33:07 +0100
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 29 Jan 2014 22:37:08 +0100
 Subject: [Buildroot] [PATCH] libusb: do not depend on host-udev for host
 	variant
-Message-ID: <1391031187-3897-1-git-send-email-arnout@mind.be>
+In-Reply-To: <1391031187-3897-1-git-send-email-arnout@mind.be> (Arnout
+ Vandecappelle's message of "Wed, 29 Jan 2014 22:33:07 +0100")
+References: <1391031187-3897-1-git-send-email-arnout@mind.be>
+Message-ID: <871tzqv5a3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 25926af5 disabled udev support for the host variant, but forgot to
-remove it from the (implicit) host dependencies.
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-Also reordered things to keep the HOST_* definitions together.
+ > Commit 25926af5 disabled udev support for the host variant, but forgot to
+ > remove it from the (implicit) host dependencies.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/libusb/libusb.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ > Also reordered things to keep the HOST_* definitions together.
 
-diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
-index ffb39ba..a8ff74c 100644
---- a/package/libusb/libusb.mk
-+++ b/package/libusb/libusb.mk
-@@ -8,12 +8,15 @@ LIBUSB_VERSION_MAJOR = 1.0
- LIBUSB_VERSION = $(LIBUSB_VERSION_MAJOR).18
- LIBUSB_SOURCE = libusb-$(LIBUSB_VERSION).tar.bz2
- LIBUSB_SITE = http://downloads.sourceforge.net/project/libusb/libusb-$(LIBUSB_VERSION_MAJOR)/libusb-$(LIBUSB_VERSION)
--HOST_LIBUSB_CONF_OPT = --disable-udev
- LIBUSB_LICENSE = LGPLv2.1+
- LIBUSB_LICENSE_FILES = COPYING
- LIBUSB_DEPENDENCIES = host-pkgconf
- LIBUSB_INSTALL_STAGING = YES
- 
-+# Avoid the discovery of udev for the host variant
-+HOST_LIBUSB_CONF_OPT = --disable-udev
-+HOST_LIBUSB_DEPENDENCIES = host-pkgconf
-+
- ifeq ($(BR2_avr32),y)
- LIBUSB_CONF_OPT += --disable-timerfd
- endif
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+Committed, thanks.
+
 -- 
-1.8.5.3
+Bye, Peter Korsgaard
