@@ -1,31 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Jan 2014 10:19:46 +0100
-Subject: [Buildroot] [PATCH v4 1/5] sdl: add host version
-In-Reply-To: <CAGduivwvb92qcbTwvQK13iiT2pd_ZF8_cTUM9ooAtAP9SeLe0A@mail.gmail.com>
-References: <1390772341-6790-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1390772341-6790-2-git-send-email-maxime.hadjinlian@gmail.com>
- <20140128230748.65a61e66@skate>
- <CAGduivwvb92qcbTwvQK13iiT2pd_ZF8_cTUM9ooAtAP9SeLe0A@mail.gmail.com>
-Message-ID: <20140129101946.52ce51b9@skate>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Wed, 29 Jan 2014 09:25:53 +0000
+Subject: [Buildroot] [PATCH] vlc: add libass support
+Message-ID: <1390987553-5131-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxime Hadjinlian,
+From: Simon Dawson <spdawson@gmail.com>
 
-On Wed, 29 Jan 2014 10:16:52 +0100, Maxime Hadjinlian wrote:
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ package/vlc/vlc.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-> This is needed by TexturePacker which is a host tool, that is used to
-> pack the various images (jpeg and png) found in XBMC's GUI (Since it
-> supports themes), it will generate a XBT file, wich will be read by
-> XBMC on the target to depack and display the GUI.
-
-Ok, thanks! It answers my curiosity question :)
-
-Thomas
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index 458fe1c..73b378c 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -21,7 +21,6 @@ VLC_CONF_OPT += \
+ 	--disable-quicksync \
+ 	--disable-fluidsynth \
+ 	--disable-zvbi \
+-	--disable-libass \
+ 	--disable-kate \
+ 	--disable-caca \
+ 	--disable-jack \
+@@ -100,6 +99,13 @@ else
+ VLC_CONF_OPT += --disable-opus
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBASS),y)
++VLC_CONF_OPT += --enable-libass
++VLC_DEPENDENCIES += libass
++else
++VLC_CONF_OPT += --disable-libass
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
+ VLC_CONF_OPT += --enable-libgcrypt
+ VLC_DEPENDENCIES += libgcrypt
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.3.2
