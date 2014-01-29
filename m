@@ -1,37 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Jan 2014 08:40:43 +0100
-Subject: [Buildroot] Configuring the gpsd package
-In-Reply-To: <858B5C1843112849BC285F6BF91A22640EB329A5@VF2WDEXMB1.verifone.com>
-References: <858B5C1843112849BC285F6BF91A22640EB1BADB@VF2WDEXMB1.verifone.com>
- <20140102080145.GL6589@tarshish>
- <858B5C1843112849BC285F6BF91A22640EB1BB09@VF2WDEXMB1.verifone.com>
- <20140102084544.GN6589@tarshish>
- <858B5C1843112849BC285F6BF91A22640EB1BBA1@VF2WDEXMB1.verifone.com>
- <20140102100454.GS6589@tarshish>
- <858B5C1843112849BC285F6BF91A22640EB1BBD1@VF2WDEXMB1.verifone.com>
- <858B5C1843112849BC285F6BF91A22640EB2B042@VF2WDEXMB1.verifone.com>
- <20140106155637.GA4503@tarshish> <20140128183340.410169ce@skate>
- <20140128190725.GD5596@tarshish> <20140128204214.72bfe227@skate>
- <858B5C1843112849BC285F6BF91A22640EB329A5@VF2WDEXMB1.verifone.com>
-Message-ID: <20140129084043.74f60588@skate>
+Date: Wed, 29 Jan 2014 09:00:28 +0100
+Subject: [Buildroot] [PATCH 1/1] gst-ffmpeg: Use internal libav instead
+ of external ffmpeg
+In-Reply-To: <87lhyht3mx.fsf@dell.be.48ers.dk>
+References: <BLU0-SMTP442A9DE801569E9B4917C36D9BE0@phx.gbl>
+ <87lhyht3mx.fsf@dell.be.48ers.dk>
+Message-ID: <20140129090028.01079137@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gabi Kelemen,
+Dear Peter Korsgaard,
 
-On Wed, 29 Jan 2014 07:31:53 +0000, Gabi Kelemen wrote:
+On Wed, 15 Jan 2014 21:02:30 +0100, Peter Korsgaard wrote:
 
-> Currently it seems to work, I am able to build and the gpsd works well.
-> After ignoring both dependencies: BR2_USE_MMU , BR2_TOOLCHAIN_HAS_THREADS, the package was successfully built and I was able to see and check it under menuconfig.
+>  > +GST_FFMPEG_CONF_OPT = --with-ffmpeg-extra-configure="--cross-prefix=$(TARGET_CROSS)"
+> 
+> It seems like we atleast also need to pass --target-os=linux, otherwise
+> configure fails:
 
-Ignoring dependencies seems completely wrong, but again since you're
-using a really old Buildroot version, and you don't want to share your
-changes and details, there's no much we can do to help you.
-
-Best regards,
+Then if you pass --target-os=linux, probably the
+gst-ffmpeg-uclibc.patch added by Bernd is no longer necessary?
 
 Thomas
 -- 
