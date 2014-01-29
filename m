@@ -1,37 +1,39 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Wed, 29 Jan 2014 10:09:14 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-01-28
-In-Reply-To: <87eh3rxk03.fsf@dell.be.48ers.dk>
-References: <20140129073009.4D1A1100E8C@stock.ovh.net>
- <87eh3rxk03.fsf@dell.be.48ers.dk>
-Message-ID: <CAGduivz36YbBj++Fe8oyQK2qpTsu_q8ZfquAZcuQU8WYG_MKGA@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 29 Jan 2014 10:09:34 +0100
+Subject: [Buildroot] [PATCH 1/1] skeleton: add systemd network.service
+	unit
+In-Reply-To: <20140129082612.GM3867@lukather> (Maxime Ripard's message of
+ "Wed, 29 Jan 2014 09:26:12 +0100")
+References: <1388713112-4686-1-git-send-email-vsergeev@kumunetworks.com>
+ <20140103201333.7f4edd47@skate>
+ <CAPyrzo0q7Y3Tf1LOaCe4LK78a7sZrVdToLfnzp4Tc4kow=-nKA@mail.gmail.com>
+ <52E7589F.7060301@mind.be>
+ <CAGduivw+HOQRDN18=xrM_AwqT3YtoM7BwmcaNRDb0VFVaQM9eQ@mail.gmail.com>
+ <20140128132058.GD3867@lukather> <52E7E6D4.1020501@mind.be>
+ <20140129082612.GM3867@lukather>
+Message-ID: <871tzrxigh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jan 29, 2014 at 9:36 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
->
->  > Build statistics for 2014-01-28
->  > ===============================
->
->  >         success : 77
->  >        failures : 47
->  >        timeouts : 3
->  >           TOTAL : 127
->
->  >       i686 | rtmpdump-e0056c51cc1710c9a4... | NOK | http://autobuild.buildroot.net/results/55bda4076af031db9778d97f9ddc5c6b14de17ce/
->  >        arm | rtmpdump-e0056c51cc1710c9a4... | NOK | http://autobuild.buildroot.net/results/9ba2f8ecb0a73cc7e625faf713ad4161202b2293/
->  >       i686 | rtmpdump-e0056c51cc1710c9a4... | NOK | http://autobuild.buildroot.net/results/4e1988f049fa97574da54e5097e5ef1668c2687c/
->  >        arm | rtmpdump-e0056c51cc1710c9a4... | NOK | http://autobuild.buildroot.net/results/02a15ad5211a1e620002c442ce256147d9b9ee88/
->
-> Maxime, these are all because rtmpdump isn't compatible with our version
-> of polarssl. It looks like it is fixed in upstream rtmpdump git. Could
-> you give it a test and send a patch to bump the git revision?
-Yes, I saw the results this morning. I will look at it tonight and send a patch.
->
-> --
-> Bye, Peter Korsgaard
+>>>>> "Maxime" == Maxime Ripard <maxime.ripard@free-electrons.com> writes:
+
+Hi,
+
+ >> Also, as far as I understand, the idea is not to add variables, but
+ >> rather to check for the existence of package/foo/*.service and
+ >> install that.
+
+ > This also doesn't cover the case anymore where a package would ship
+ > together with the source code a systemd unit file. I expect it to be
+ > more and more common, and it's something that we will want to use most
+ > of the time, and not duplicate the unit file in the buildroot package
+ > itself.
+
+Good point. I would certainly not want us to write our own service files
+if upstream provides a workable one.
+
+-- 
+Bye, Peter Korsgaard
