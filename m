@@ -1,48 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 29 Jan 2014 21:42:49 +0100
-Subject: [Buildroot] [git commit] rng-tools: argp-standalone required for
-	uclibc toolchains only
-Message-ID: <20140129204559.02DA19C6DA@busybox.osuosl.org>
+Date: Wed, 29 Jan 2014 21:41:48 +0100
+Subject: [Buildroot] [git commit] linux: bump to version 3.13.1
+Message-ID: <20140129204558.E168B9C6E1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f6305d135ea422342a5eedce2e268508a6df0968
+commit: http://git.buildroot.net/buildroot/commit/?id=8c63b64d5d10a1947197aef85dc2793606251fb2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rng-tools/Config.in    |    2 +-
- package/rng-tools/rng-tools.mk |    2 ++
- 2 files changed, 3 insertions(+), 1 deletions(-)
+ linux/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rng-tools/Config.in b/package/rng-tools/Config.in
-index e6dcf9d..c50a8c0 100644
---- a/package/rng-tools/Config.in
-+++ b/package/rng-tools/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_RNG_TOOLS
- 	bool "rng-tools"
--	select BR2_PACKAGE_ARGP_STANDALONE
-+	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC
- 	help
- 	  Daemon to use hardware random number generators.
+diff --git a/linux/Config.in b/linux/Config.in
+index be619d3..91d4d71 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -21,7 +21,7 @@ choice
+ 	prompt "Kernel version"
  
-diff --git a/package/rng-tools/rng-tools.mk b/package/rng-tools/rng-tools.mk
-index ae0bf14..56858e7 100644
---- a/package/rng-tools/rng-tools.mk
-+++ b/package/rng-tools/rng-tools.mk
-@@ -6,8 +6,10 @@
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "3.13"
++	bool "3.13.1"
  
- RNG_TOOLS_VERSION = 4
- RNG_TOOLS_SITE = http://downloads.sourceforge.net/project/gkernel/rng-tools/$(RNG_TOOLS_VERSION)
-+ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
- RNG_TOOLS_CONF_ENV = LIBS="-largp"
- RNG_TOOLS_DEPENDENCIES = argp-standalone
-+endif
- RNG_TOOLS_LICENSE = GPLv2
- RNG_TOOLS_LICENSE_FILES = COPYING
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -92,7 +92,7 @@ endif
  
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "3.13" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "3.13.1" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
