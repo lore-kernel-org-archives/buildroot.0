@@ -1,42 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Jan 2014 16:03:34 +0100
-Subject: [Buildroot] [PATCH v3] Add gpm (general purpose mouse) server
- package
-In-Reply-To: <1391000525-5179-1-git-send-email-julien.boibessot@free.fr>
-References: <1391000525-5179-1-git-send-email-julien.boibessot@free.fr>
-Message-ID: <20140129160334.0c50847b@skate>
+Date: Wed, 29 Jan 2014 16:08:20 +0100
+Subject: [Buildroot] Buildroot Developers Meeting: remote participation?
+	list of topics?
+Message-ID: <20140129160820.66f13569@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Julien,
+Hello,
 
-On Wed, 29 Jan 2014 14:02:05 +0100, julien.boibessot at free.fr wrote:
+As most of you probably know, the next Buildroot Developers Meeting
+will take place next week, on Monday and Tuesday in Brussels, Belgium,
+right after FOSDEM. So far, we have 10 participants, amongst which 3
+will be participating for the first time to this meeting.
 
-> diff --git a/package/gpm/Config.in b/package/gpm/Config.in
-> new file mode 100644
-> index 0000000..d20e392
-> --- /dev/null
-> +++ b/package/gpm/Config.in
-> @@ -0,0 +1,24 @@
-> +config BR2_PACKAGE_GPM
-> +	bool "gpm mouse server"
+If you happen to be interested by the meeting, do not hesitate to
+contact me, we can still arrange for additional seats.
 
-I believe we normally don't describe what the component is in its short
-description. It should just be the name, i.e "gpm", unless the name of
-the project is really "gpm mouse server".
+In preparation for this meeting, it would be nice if people (not the
+participants, but other Buildroot developers, contributors and users)
+could:
 
-> +config BR2_PACKAGE_GPM_INSTALL_TEST_TOOLS
-> +	bool "install gpm test tools also"
+ * Let me know if they would be interested in remote participating to
+   the meeting. At the last meeting, we used Google Hangout to allow
+   remote participants to follow the discussions. If people are
+   interested, we can do the same this time (remember to send me your
+   Google account address).
 
-Why do we have "also" here ? This should probably just be:
+ * Add to the list of topics to be discussed the things they think the
+   core Buildroot developers should look at during this meeting. See
+   http://elinux.org/Buildroot:DeveloperDaysFOSDEM2014#List_of_topics_to_discuss.
 
-	bool "install test tools"
-
-there is no need to repeat "gpm", because this option is automatically
-shown "under" the gpm option.
+Thanks a lot!
 
 Thomas
 -- 
