@@ -1,49 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Jan 2014 09:25:20 +0100
-Subject: [Buildroot] [PATCH 1/1] new package - generate iso with
- isolinux bootloader
-In-Reply-To: <52E8A720.1010801@mind.be>
-References: <y> <1376644934-4302-1-git-send-email-jean.sorgemoel@laposte.net>
- <5213ECA4.9030405@mind.be> <20140128172502.171b2f84@skate>
- <52E7E9E4.20400@mind.be> <20140128223929.3101c67a@skate>
- <52E8A720.1010801@mind.be>
-Message-ID: <20140129092520.4ea8141e@skate>
+Date: Wed, 29 Jan 2014 09:26:16 +0100
+Subject: [Buildroot] command line regular expression substitution fails
+In-Reply-To: <52E8A467.5070703@mind.be>
+References: <52CC7292.306@alcatel-lucent.com>
+ <CAOkaJuVFmrrfda=vG-+06vJp7_jJvhnCAzJy8RJKZ8BxE6XKWA@mail.gmail.com>
+ <52CD5340.2090200@alcatel-lucent.com>
+ <CAOkaJuVGa4_Et8TL80MEsh8sN1mseKvQ4OZ9RzxSouytbZFUFQ@mail.gmail.com>
+ <52CF0287.8010505@alcatel-lucent.com>
+ <20140128221002.157e8b71@skate> <52E8A467.5070703@mind.be>
+Message-ID: <20140129092616.7207a8e9@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, Jean,
+Dear Arnout Vandecappelle,
 
-On Wed, 29 Jan 2014 08:00:48 +0100, Arnout Vandecappelle wrote:
+On Wed, 29 Jan 2014 07:49:11 +0100, Arnout Vandecappelle wrote:
 
-> > Aaah, interesting, I didn't know that. So it would probably make a lot
-> > of sense to improve the ISO9660 support to:
+> > No, A8 and A9 are not the same from a floating point perspective.
 > >
-> >   * Generate just an ISO9660 root filesystem image by default
-> >
-> >   * Optionally, make it bootable using either Grub or isolinux
-> >
-> >   * Optionally, replace the ISO9660 root filesystem by an initramfs
+> > As visible in
+> > http://git.buildroot.net/buildroot/tree/arch/Config.in.arm#n91, NEON
+> > and VFPv3 is mandatory on Cortex-A8, but optional on Cortex-A9.
 > 
->   The third one fits better in the genimages approach IMHO. The second 
-> one as well - except that that is not possible, once the iso image is 
-> created you can't make it bootable anymore. So yes, I think that would 
-> really improve the iso9660 support.
+>   Yeah, but in that sense, Cortex-A9 is a subset or Cortex-A8 so if the 
+> A8 code works, the A9 code should work as well - which is exactly the 
+> reverse of what Ed saw.
 
-I agree.
-
->   However, I would also be happy with a patch that simply adds an option 
-> to use isolinux instead of grub for the current iso9660 infrastructure.
-
-Yes, this would be interesting regardless of the other possible
-improvements discussed above.
-
-Bottomline: Jean, if you could add the possibility of using isolinux as
-part of the existing fs/iso9660 stuff, that would be great.
-
-Thanks a lot!
+Right. I must say I haven't followed all what Ed reported, I merely
+replied on the question about A8/A9 floating point equivalence.
 
 Thomas
 -- 
