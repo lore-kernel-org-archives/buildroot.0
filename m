@@ -1,42 +1,88 @@
-From: Eric =?ISO-8859-1?B?QuluYXJk?= <eric@eukrea.com>
-Date: Thu, 30 Jan 2014 15:07:59 +0100
-Subject: [Buildroot] jffs2 errors on ubifs rootfs
-In-Reply-To: <CAB+dmji48fxFuUPJrq7EhL4QC+Amw4ZiNRe=oiBArPeCPPw-Ow@mail.gmail.com>
-References: <CAB+dmji48fxFuUPJrq7EhL4QC+Amw4ZiNRe=oiBArPeCPPw-Ow@mail.gmail.com>
-Message-ID: <20140130150759.138aae27@e6520eb>
+From: Jeremy Rosen <jeremy.rosen@openwide.fr>
+Date: Thu, 30 Jan 2014 15:10:03 +0100 (CET)
+Subject: [Buildroot] Project layout : where to put the .config files
+In-Reply-To: <20140130075406.3782cb77@core2quad.morethan.org>
+Message-ID: <780030598.4903299.1391091002877.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Emmanuel,
 
-Le Thu, 30 Jan 2014 10:08:40 +0000,
-Kaspar Emanuel <kaspar.emanuel@gmail.com> a ?crit :
+> 
+> > I would gladly submit my projet to upstream too, but once again
+> > buildroot (so far) only takes minimal configuration to set up
+> > boards, not complete projects.
+> >
+> 
+> Agreed on that point -
+> 
+> Buildroot is only a project component, one that builds a
+> populated, root file system.
+> 
+> So far in the evolution of Buildroot, the other project
+> components required to fully define a project have been
+> user supplied.
+> 
+> It has never been a complete project build system.
+> 
+> Which is the use case that you want to consider.
+> One that certainly deserves conversation.
 
-> Hey,
-> 
-> I am trying to boot a Buildroot generated .ubi rootfs on a Karo TX53
-> SoM [1]. I am seeing a lot of jffs2 errors even though the rootfs is
-> ubifs ubi image. The errors look like this:
-> 
-> jffs2: jffs2_scan_eraseblock(): Magic bitmask 0x1985 not found at
-> 0x00000000: 0x0527 instead
-> 
-> There are a lot of these. Full log is attached. I can boot Karo's ubi
-> rootfs without seeing these errors, using the same kernel and dtb. I
-> boot the kernel with these arguments:
-> 
-> rootfstype=ubifs ubi.mtd=3,512 root=ubi0:rootfs
-> 
-> I have have made sure the ubifs LEBs, min i/o size and the ubi image
-> erase block and sub-page size etc. are all set correcty in Buildroot.
-> The rootfs _does_ actually seem to mount correctly and I can login,
-> but I just don't get where these jffs2 errors could be coming from.
-> 
-your rootfs mounts fine (VFS: Mounted root (ubifs filesystem) readonly
-on device 0:12.), the jffs2 log comes after : aren't you trying to mount
-a jffs2 filesystem in an initscript or in fstab ?
+yup, I like the way you present it.
 
-Eric
+you can have a look at the project I mentionned above,
+with post-install scripts and overlays I am able to 
+make a complete project managed with buildroot, that's
+why I focused on the .config aspect which is the part
+I am not entirely happy with
+
+
+> 
+> If my summary above is even close to an understanding
+> of the use case you are proposing, then - - -
+> 
+> Prior to your question of "where to put the .config files?",
+> I think there is a higher level question:
+> "How to support project definition files?"
+> 
+
+the Makefile in my project fills that role (iiuc 
+what you mean) it is where I define where I want my buildfiles
+to go (by defining O=) and where I want my config files to go
+(by defining BR2_EXTERNAL and BR2_DEFCONFIG)
+
+> I.E: To make Buildroot the central control point for the
+> other components that make up a complete project.
+> 
+> Perhaps a: BR_EXTERNAL/sub-tree ?
+> Perhaps a: BR_PROJECT tree ?
+> 
+> Keeping in mind that we do not want to upset the world
+> of users that use Buildroot commercially.
+> 
+
+yes, but i'm pretty sure most of us would be glad to have a 
+"clean way" to do a complete project under buildroot
+
+
+> For instance:
+> The subject of "are the .config files 'required public' files?"
+> The current set-up leaves that answer to the end user with
+> commands that will include them in the 'public' buildroot tree.
+> 
+
+I'm not sure what you mean here... I'm mainly thinking in term
+of project organisation. if the .config is considered derived 
+from buildroot then the exact position doesn't matter. I have
+to make it public, and usually in another way than by upstreaming
+since this is a complete project and not a board defconfig...
+
+
+> Mike
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
