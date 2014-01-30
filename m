@@ -1,30 +1,21 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Thu, 30 Jan 2014 09:49:50 +0100
-Subject: [Buildroot] [PATCH 1/1] imagemagick: bump to version 6.8.8-4
-Message-ID: <1391071790-24017-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 30 Jan 2014 09:58:13 +0100
+Subject: [Buildroot] [PATCH 1/1] jasper: fix license typo
+In-Reply-To: <1391071692-23853-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+ (Jerzy Grzegorek's message of "Thu, 30 Jan 2014 09:48:11 +0100")
+References: <1391071692-23853-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <87wqhhu9qy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
----
- package/imagemagick/imagemagick.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>> "Jerzy" == Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net> writes:
 
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 3fb97f7..c1e17c7 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IMAGEMAGICK_VERSION = 6.8.8-2
-+IMAGEMAGICK_VERSION = 6.8.8-4
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- # The official ImageMagick site only keeps the latest versions
- # available, which is annoying. Use an alternate site that keeps all
+ > Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+
+Committed, thanks.
+
 -- 
-1.7.9.5
+Bye, Peter Korsgaard
