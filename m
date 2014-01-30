@@ -1,82 +1,35 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 30 Jan 2014 20:18:03 +0100
-Subject: [Buildroot] [PATCH] web: announce meeting,
- and add Mind as sponsor
-In-Reply-To: <1391108730-6708-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1391108730-6708-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20140130191803.GB7072@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 30 Jan 2014 20:20:18 +0100
+Subject: [Buildroot] [PATCH 1/1] gst-ffmpeg: Use internal libav instead
+ of external ffmpeg
+In-Reply-To: <g4unrax5d3.ln2@ID-313208.user.individual.net>
+References: <BLU0-SMTP442A9DE801569E9B4917C36D9BE0@phx.gbl>
+ <87lhyht3mx.fsf@dell.be.48ers.dk> <20140129090028.01079137@skate>
+ <g4unrax5d3.ln2@ID-313208.user.individual.net>
+Message-ID: <20140130202018.2ebce66c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Dear Bernd Kuhls,
 
-On 2014-01-30 20:05 +0100, Thomas Petazzoni spake thusly:
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  docs/news.html     | 19 +++++++++++++++++++
->  docs/sponsors.html |  6 ++++++
->  2 files changed, 25 insertions(+)
+On Wed, 29 Jan 2014 19:33:20 +0100, Bernd Kuhls wrote:
+
+> v2 of my patch was committed to git:
+> http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/74563
 > 
-> diff --git a/docs/news.html b/docs/news.html
-> index b3bba8b..3427368 100644
-> --- a/docs/news.html
-> +++ b/docs/news.html
-> @@ -5,6 +5,25 @@
->  <p>
->  
->  <ul>
-> +  <li><b>30 January 2014 -- Upcoming Buildroot Developers meeting</b>
-> +
-> +    <p>The upcoming Buildroot Developers meeting will take place in
-> +    Brussels on February, 3rd and 4th, after
-> +    the <a href="http://www.fosdem.org">FOSDEM</a>
-> +    conference. Additional details about the meeting can be found on
-> +    the
-> +    corresponding <a href="http://elinux.org/Buildroot:DeveloperDaysFOSDEM2014">wiki
-> +	page</a>.</p>
-> +
-> +    <p>Persons not able to join the meeting in Brussels can
-> +    participate remotely using Google Hangout. Simply give your Google
-> +      address to <code>thomas.petazzoni at free-electrons.com</code>.</p>
-> +
-> +    <p>This meeting is sponsored
-> +    by <a href="http://www.google.com">Google</a> (for the meeting
-> +    room) and <a href="http://www.mind.be">Mind</a> (for the
-> +    dinner). Thanks to our sponsors!</p>
-> +
->    <li><b>30 November 2013 -- 2013.11 released</b>
->  
->      <p>The stable 2013.11 release is out - Thanks to everyone
-> diff --git a/docs/sponsors.html b/docs/sponsors.html
-> index a048b1d..281b269 100644
-> --- a/docs/sponsors.html
-> +++ b/docs/sponsors.html
-> @@ -7,6 +7,12 @@ various companies, that we would like to thank below:</p>
->  
->  <ul>
->  
-> +  <li><a href="http://www.mind.be">Mind</a>, for sponsoring the dinner
-> +  of the FOSDEM 2014 Developers meeting in Brussels, Belgium. Mind
-> +  (www.mind.be) is the Embedded Software division of Essensium, which
-> +  provides consultancy and services specifically in the field of Linux
-> +  and Open Source SW for Embedded Systems.</li>
-> +
->    <li><a href="http://www.google.com">Google</a>, for providing all
->    the logistics for the FOSDEM 2013 and FOSDEM 2014 Developer Days in
->    Brussels, Belgium.</li>
+> Changes v1 -> v2:
+> - replaced gst-ffmpeg-uclibc.patch with configure option --target-os=linux 
+> (Peter)
+> 
+> gst-ffmpeg-uclibc.patch was never added to git.
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Ok, thanks for the confirmation!
 
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
