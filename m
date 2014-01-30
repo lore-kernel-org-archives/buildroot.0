@@ -1,18 +1,18 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 30 Jan 2014 21:38:51 +0100
-Subject: [Buildroot] [PATCH v3 4/6] infra: remove unused {TARGET,
-	HOST}_PATH definition
+Date: Thu, 30 Jan 2014 21:38:52 +0100
+Subject: [Buildroot] [PATCH v3 5/6] pkg-cmake.mk: add PATH in the configure
+	command environment
 In-Reply-To: <1391114333-28001-1-git-send-email-s.martin49@gmail.com>
 References: <1391114333-28001-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1391114333-28001-5-git-send-email-s.martin49@gmail.com>
+Message-ID: <1391114333-28001-6-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since the variables TARGET_PATH and HOST_PATH are not used anymore,
-let's remove them.
+Because BR2_PATH is not exported in the environment beforehand running
+cmake, it is necessary to add it on the cmake configure command.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
@@ -23,31 +23,34 @@ changes v2 -> v3:
 
 changes v1 -> v2:
 - rebase
----
- package/Makefile.in | 4 ----
- 1 file changed, 4 deletions(-)
+- remove explicit PATH=... in configure commands in pkg-autotools.mk
+  because it is already added via *_CONFIGURE_OPTS (ThomasP), and
+  reword the commit message.
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index bf6efe1..a313745 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -144,9 +144,6 @@ else
- TARGET_CROSS=$(HOST_DIR)/usr/bin/$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))-
- endif
- 
--# Quotes are needed for spaces et al in path components.
--TARGET_PATH = $(BR2_PATH)
--
- # Define TARGET_xx variables for all common binutils/gcc
- TARGET_AR       = $(TARGET_CROSS)ar
- TARGET_AS       = $(TARGET_CROSS)as
-@@ -200,7 +197,6 @@ HOST_CFLAGS   ?= -O2
- HOST_CFLAGS   += $(HOST_CPPFLAGS)
- HOST_CXXFLAGS += $(HOST_CFLAGS)
- HOST_LDFLAGS  += -L$(HOST_DIR)/lib -L$(HOST_DIR)/usr/lib -Wl,-rpath,$(HOST_DIR)/usr/lib
--HOST_PATH = $(BR2_PATH)
- 
- # hostcc version as an integer - E.G. 4.3.2 => 432
- HOSTCC_VERSION:=$(shell $(HOSTCC_NOCCACHE) --version | \
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+---
+ package/pkg-cmake.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index 13be557..16d9920 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -61,6 +61,7 @@ ifeq ($(5),target)
+ define $(2)_CONFIGURE_CMDS
+ 	(cd $$($$(PKG)_BUILDDIR) && \
+ 	rm -f CMakeCache.txt && \
++	PATH=$(BR2_PATH) \
+ 	$$($$(PKG)_CONF_ENV) $(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
+ 		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
+ 		-DCMAKE_INSTALL_PREFIX="/usr" \
+@@ -75,6 +76,7 @@ else
+ define $(2)_CONFIGURE_CMDS
+ 	(cd $$($$(PKG)_BUILDDIR) && \
+ 	rm -f CMakeCache.txt && \
++	PATH=$(BR2_PATH) \
+ 	$(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
+ 		-DCMAKE_INSTALL_SO_NO_EXE=0 \
+ 		-DCMAKE_FIND_ROOT_PATH="$$(HOST_DIR)" \
 -- 
 1.8.5.3
