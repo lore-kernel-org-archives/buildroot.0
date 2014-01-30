@@ -1,36 +1,75 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 30 Jan 2014 10:51:20 -0300
-Subject: [Buildroot] udev and serial port
-In-Reply-To: <52EA5785.5050507@gmail.com>
-References: <52E4FA8C.7060109@gmail.com>	<52E6945C.40202@mind.be>	<52E8120F.7080805@gmail.com>	<20140128230904.1f01a5dc@skate>	<52E8AA41.1020709@mind.be>
- <20140129093013.5ca63190@skate> <52E8DB08.8060107@mind.be>
- <52EA5785.5050507@gmail.com>
-Message-ID: <52EA58D8.8070103@zacarias.com.ar>
+From: Jeroen De Wachter <jeroen.de.wachter@telenet.be>
+Date: Thu, 30 Jan 2014 14:52:23 +0100 (CET)
+Subject: [Buildroot] [PATCH] Added menu entry to build squashfs host tools
+	separately
+Message-ID: <2146187109.45390160.1391089943313.JavaMail.root@telenet.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/30/2014 10:45 AM, Marco Trapanese wrote:
+Before, the squashfs tools for host were only built when a squashfs
+root filesystem image was generated.
 
-> Hello,
-> in my buildroot environment I have udev enabled. I need to connect some
-> UART-to-USB converter based upon FTDI chip (I added the libftdi in the
-> config).
-> 
-> When I plug-in the converter to my target dmesg see the new hardware but
-> I can't see any /dev/ttyUSB device.
-> 
-> Do I need to add something other in the configuration?
-> Where should I search information about this "how-to"?
-> 
-> Thanks
-> Marco
+If the squashfs image is selected, it automatically selects the
+squahsfs host tools as well. Consequently, I've removed
+host-squashfs from ROOTFS_SQUASHFS_DEPENDENCIES.
+---
+ fs/squashfs/Config.in           |    1 +
+ fs/squashfs/squashfs.mk         |    2 --
+ package/Config.in.host          |    1 +
+ package/squashfs/Config.in.host |    6 ++++++
+ 4 files changed, 8 insertions(+), 2 deletions(-)
+ create mode 100644 package/squashfs/Config.in.host
 
-Hi.
-libftdi is for direct access to FTDI chips from applications.
-This is used for GPIO, bitbanging, SPI and other purposes.
-What you want is to enable the CONFIG_USB_SERIAL_FTDI_SIO knob in your
-linux kernel config.
-Regards.
+diff --git a/fs/squashfs/Config.in b/fs/squashfs/Config.in
+index 817909d..e788e61 100644
+--- a/fs/squashfs/Config.in
++++ b/fs/squashfs/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_TARGET_ROOTFS_SQUASHFS
+        bool "squashfs root filesystem"
++       select BR2_PACKAGE_HOST_SQUASHFS
+        help
+          Build a squashfs root filesystem
+
+diff --git a/fs/squashfs/squashfs.mk b/fs/squashfs/squashfs.mk
+index eb5fc3e..b5ece9d 100644
+--- a/fs/squashfs/squashfs.mk
++++ b/fs/squashfs/squashfs.mk
+@@ -4,8 +4,6 @@
+ #
+ ################################################################################
+
+-ROOTFS_SQUASHFS_DEPENDENCIES = host-squashfs
+-
+ ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_LZO),y)
+ ROOTFS_SQUASHFS_ARGS += -comp lzo
+ else
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 34e84bf..71597bf 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -12,6 +12,7 @@ source "package/omap-u-boot-utils/Config.in.host"
+ source "package/openocd/Config.in.host"
+ source "package/parted/Config.in.host"
+ source "package/sam-ba/Config.in.host"
++source "package/squashfs/Config.in.host"
+ source "package/sunxi-tools/Config.in.host"
+ source "package/uboot-tools/Config.in.host"
+
+diff --git a/package/squashfs/Config.in.host b/package/squashfs/Config.in.host
+new file mode 100644
+index 0000000..b353374
+--- /dev/null
++++ b/package/squashfs/Config.in.host
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_HOST_SQUASHFS
++       bool "host squashfs"
++       help
++         Tools to generate SquashFS filesystems.
++
++         http://squashfs.sourceforge.net/
+--
+1.7.1
