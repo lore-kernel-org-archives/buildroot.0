@@ -1,56 +1,50 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 30 Jan 2014 21:38:52 +0100
-Subject: [Buildroot] [PATCH v3 5/6] pkg-cmake.mk: add PATH in the configure
-	command environment
+Date: Thu, 30 Jan 2014 21:38:53 +0100
+Subject: [Buildroot] [PATCH v3 6/6] Makefile: export PATH
 In-Reply-To: <1391114333-28001-1-git-send-email-s.martin49@gmail.com>
 References: <1391114333-28001-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1391114333-28001-6-git-send-email-s.martin49@gmail.com>
+Message-ID: <1391114333-28001-7-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Because BR2_PATH is not exported in the environment beforehand running
-cmake, it is necessary to add it on the cmake configure command.
+This can be useful for:
+- package using custom build system that are not aware that the host
+  tree is in $(O)/host/;
+- post-{build,image} scripts, in case some host-tools were specifically
+  built to be used by these scripts.
+
+Note that, this patch only exports the PATH variables; cleaning up
+all the explicit PATH declarations leading some commands could be done
+in a followup patch.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
 ---
 changes v2 -> v3:
 - rebase
-- no one-line commit log (ThomasP)
+- extend commit log
 
 changes v1 -> v2:
 - rebase
-- remove explicit PATH=... in configure commands in pkg-autotools.mk
-  because it is already added via *_CONFIGURE_OPTS (ThomasP), and
-  reword the commit message.
-
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+- extend commit message
 ---
- package/pkg-cmake.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ Makefile | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index 13be557..16d9920 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -61,6 +61,7 @@ ifeq ($(5),target)
- define $(2)_CONFIGURE_CMDS
- 	(cd $$($$(PKG)_BUILDDIR) && \
- 	rm -f CMakeCache.txt && \
-+	PATH=$(BR2_PATH) \
- 	$$($$(PKG)_CONF_ENV) $(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
- 		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
- 		-DCMAKE_INSTALL_PREFIX="/usr" \
-@@ -75,6 +76,7 @@ else
- define $(2)_CONFIGURE_CMDS
- 	(cd $$($$(PKG)_BUILDDIR) && \
- 	rm -f CMakeCache.txt && \
-+	PATH=$(BR2_PATH) \
- 	$(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
- 		-DCMAKE_INSTALL_SO_NO_EXE=0 \
- 		-DCMAKE_FIND_ROOT_PATH="$$(HOST_DIR)" \
+diff --git a/Makefile b/Makefile
+index 5e8cfd8..fa33bc0 100644
+--- a/Makefile
++++ b/Makefile
+@@ -333,6 +333,7 @@ export STAGING_DIR
+ export HOST_DIR
+ export BINARIES_DIR
+ export BASE_DIR
++export PATH:=$(BR2_PATH)
+ 
+ ################################################################################
+ #
 -- 
 1.8.5.3
