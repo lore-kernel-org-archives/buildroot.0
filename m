@@ -1,36 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Jan 2014 11:27:57 +0100
-Subject: [Buildroot] Support for gummiboot
-In-Reply-To: <20140130104426.10687e47@grp-cvubrugier.lacie.com>
-References: <20140130104426.10687e47@grp-cvubrugier.lacie.com>
-Message-ID: <20140130112757.247cd3e0@skate>
+From: Jeremy Rosen <jeremy.rosen@openwide.fr>
+Date: Thu, 30 Jan 2014 11:42:46 +0100 (CET)
+Subject: [Buildroot] Project layout : where to put the .config files
+In-Reply-To: <CAAXf6LVcyT1O41enwqPrWLuY0Mz8yO2Wn8kX=3NviVWEHtw7Dg@mail.gmail.com>
+Message-ID: <1837704479.4894137.1391078566256.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Christophe Vu-Brugier,
+Thomas, All
 
-On Thu, 30 Jan 2014 10:44:26 +0100, Christophe Vu-Brugier wrote:
-
-> In november, you sent a set of patches named "Improvements to x86
-> bootloaders, and x86 boards support":
 > 
->   http://lists.busybox.net/pipermail/buildroot/2013-November/082351.html
+> I find it a strange strategy to put .config in git: this is why we
+> have the configs/ directory, and a target 'make savedefconfig' to
+> store the .config configuration in a defconfig file. If you don't
+> like
+> defconfigs, you can still copy .config directly in the configs/
+> subdirectory.
 > 
-> It seems that only your patches for GRUB were merged. I am interested in
-> adding the Gummiboot UEFI boot manager to Buildroot.
+> Best regards,
+> Thomas
 > 
-> Would you mind if I resend an updated version of your patches for
-> Gummiboot (with proper attribution)?
 
-Not at all, please do!
+This is my own little project I am building here it is not a new
+board I am trying to support. I have been bitten multiple times 
+by .config not being saved until I do a savedefconfig. savedefconfig
+should not be a "my change are good let's validate" step. That's 
+what git commit is for.
 
-Thanks,
+Defconfigs are a great way to define templates for a board and
+distribute them with buildroot, but when you are building a final
+product they are not the right tool. 
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+In particular the fact that you have to do a savedefconfig before 
+any git commit is very error prone. moreover savedefconfig won't
+warn you if defconfig has been modified by a pull and will overwrite
+it.
+
+This is even worse for the kernel/busybox case where the config
+files are hidden in output/build/xxx/.config
