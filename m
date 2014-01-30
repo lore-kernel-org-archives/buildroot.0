@@ -1,34 +1,30 @@
-From: blunderer at blunderer.org <blunderer@blunderer.org>
-Date: Thu, 30 Jan 2014 14:52:45 -0800
-Subject: [Buildroot] [PATCH 2/2] libroxml: bump version to 2.3.0
-In-Reply-To: <1391122365-5347-1-git-send-email-blunderer@blunderer.org>
-References: <1391122365-5347-1-git-send-email-blunderer@blunderer.org>
-Message-ID: <1391122365-5347-2-git-send-email-blunderer@blunderer.org>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Thu, 30 Jan 2014 23:55:52 +0100
+Subject: [Buildroot] [PATCH] ModemManager: bump to 1.2.0
+Message-ID: <1391122552-26756-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Tristan Lelong <tristan.lelong@blunderer.org>
-
-Signed-off-by: Tristan Lelong <tristan.lelong@blunderer.org>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/libroxml/libroxml.mk | 2 +-
+ package/modem-manager/modem-manager.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libroxml/libroxml.mk b/package/libroxml/libroxml.mk
-index 8a1c653..fac94b5 100644
---- a/package/libroxml/libroxml.mk
-+++ b/package/libroxml/libroxml.mk
+diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+index 248b770..a2d046d 100644
+--- a/package/modem-manager/modem-manager.mk
++++ b/package/modem-manager/modem-manager.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBROXML_VERSION = 2.2.3
-+LIBROXML_VERSION = 2.3.0
- LIBROXML_SITE = http://download.libroxml.net/pool/v2.x/
- LIBROXML_INSTALL_STAGING = YES
- LIBROXML_LICENSE = LGPLv2.1+
+-MODEM_MANAGER_VERSION = 1.0.0
++MODEM_MANAGER_VERSION = 1.2.0
+ MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
+ MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager/
+ MODEM_MANAGER_LICENSE = GPLv2+ (programs, plugins), LGPLv2+ (libmm-glib)
 -- 
-618FE3EF
+1.8.1.2
