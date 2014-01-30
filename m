@@ -1,20 +1,147 @@
-From: Kaspar Emanuel <kaspar.emanuel@gmail.com>
-Date: Thu, 30 Jan 2014 14:42:38 +0000
-Subject: [Buildroot] jffs2 errors on ubifs rootfs
-In-Reply-To: <20140130150759.138aae27@e6520eb>
-References: <CAB+dmji48fxFuUPJrq7EhL4QC+Amw4ZiNRe=oiBArPeCPPw-Ow@mail.gmail.com>
- <20140130150759.138aae27@e6520eb>
-Message-ID: <CAB+dmjihqGRaPSw-n-aeZ5wuJhR_mKHekaBDxWbwL13P6aBf9g@mail.gmail.com>
+From: ludovic.desroches at atmel.com <ludovic.desroches@atmel.com>
+Date: Thu, 30 Jan 2014 15:55:26 +0100
+Subject: [Buildroot] [PATCH] defconfigs: add sama5d3 support
+Message-ID: <1391093726-7569-1-git-send-email-ludovic.desroches@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 30 January 2014 14:07, Eric B?nard <eric@eukrea.com> wrote:
-> your rootfs mounts fine (VFS: Mounted root (ubifs filesystem) readonly
-> on device 0:12.), the jffs2 log comes after : aren't you trying to mount
-> a jffs2 filesystem in an initscript or in fstab ?
+From: Ludovic Desroches <ludovic.desroches@atmel.com>
 
-Yep, that was it. There was a mount squirreled away somewhere in some
-init script (not fstab, I did check that before).  Thanks!
+Defconfig file for boards based on sama5d3x devices.
+
+Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
+---
+
+Hi,
+
+This is a basic defconf file for sama5d3 devices. at91boostrap, u-boot, linux
+stuff will come later.
+
+From the top of my head Alexandre Belloni told me that some flags have to be
+added for hardware floating point use. It was on a previous version when
+hard floating has been introduced. Is it still true or does selecting EABIHF is
+enough?
+
+Regards
+
+Ludovic
+
+ configs/sama5d3_defconfig |  104 +++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 104 insertions(+)
+ create mode 100644 configs/sama5d3_defconfig
+
+diff --git a/configs/sama5d3_defconfig b/configs/sama5d3_defconfig
+new file mode 100644
+index 0000000..d54e76d
+--- /dev/null
++++ b/configs/sama5d3_defconfig
+@@ -0,0 +1,104 @@
++BR2_arm=y
++BR2_cortex_a5=y
++BR2_ARM_EABIHF=y
++BR2_ARM_FPU_VFPV4D16=y
++BR2_ARM_INSTRUCTIONS_THUMB2=y
++BR2_TOOLCHAIN_EXTERNAL=y
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV=y
++BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.20.x.config"
++BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++BR2_PACKAGE_ALSA_UTILS=y
++BR2_PACKAGE_ALSA_UTILS_ALSACONF=y
++BR2_PACKAGE_ALSA_UTILS_AMIXER=y
++BR2_PACKAGE_ALSA_UTILS_APLAY=y
++BR2_PACKAGE_ALSA_UTILS_SPEAKER_TEST=y
++BR2_PACKAGE_FFMPEG=y
++BR2_PACKAGE_FFMPEG_GPL=y
++BR2_PACKAGE_FFMPEG_NONFREE=y
++BR2_PACKAGE_FFMPEG_POSTPROC=y
++BR2_PACKAGE_GSTREAMER=y
++BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_VIDEORATE=y
++BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_ALSA=y
++BR2_PACKAGE_GST_PLUGINS_GOOD=y
++BR2_PACKAGE_GST_PLUGINS_GOOD_JPEG=y
++BR2_PACKAGE_GST_PLUGINS_GOOD_PNG=y
++BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_VIDEOFILTER=y
++BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_V4L2=y
++BR2_PACKAGE_GST_PLUGINS_BAD=y
++BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_COLORSPACE=y
++BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_MPEGDEMUX=y
++BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_MPEGTSDEMUX=y
++BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_VIDEOFILTERS=y
++BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DIRECTFB=y
++BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FBDEV=y
++BR2_PACKAGE_GST_PLUGINS_UGLY=y
++BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_MPEG2DEC=y
++BR2_PACKAGE_GST_FFMPEG=y
++BR2_PACKAGE_MPG123=y
++BR2_PACKAGE_MPLAYER=y
++BR2_PACKAGE_BZIP2=y
++BR2_PACKAGE_GZIP=y
++BR2_PACKAGE_XZ=y
++BR2_PACKAGE_MEMSTAT=y
++BR2_PACKAGE_NETPERF=y
++BR2_PACKAGE_STRACE=y
++BR2_PACKAGE_TAR=y
++BR2_PACKAGE_MTD=y
++BR2_PACKAGE_MTD_FLASH_OTP_DUMP=y
++BR2_PACKAGE_MTD_FLASH_OTP_INFO=y
++BR2_PACKAGE_MTD_MKFSJFFS2=y
++BR2_PACKAGE_FBV=y
++BR2_PACKAGE_QT=y
++BR2_PACKAGE_DEVMEM2=y
++BR2_PACKAGE_EEPROG=y
++BR2_PACKAGE_EVTEST=y
++BR2_PACKAGE_I2C_TOOLS=y
++BR2_PACKAGE_IOSTAT=y
++BR2_PACKAGE_LM_SENSORS=y
++BR2_PACKAGE_RNG_TOOLS=y
++BR2_PACKAGE_SETSERIAL=y
++BR2_PACKAGE_STATSERIAL=y
++BR2_PACKAGE_USBUTILS=y
++BR2_PACKAGE_USBUTILS_ZLIB=y
++BR2_PACKAGE_PYTHON=y
++BR2_PACKAGE_PYTHON_CURSES=y
++BR2_PACKAGE_PYTHON_READLINE=y
++BR2_PACKAGE_PYTHON_NETIFACES=y
++BR2_PACKAGE_PYTHON_SERIAL=y
++BR2_PACKAGE_PYTHON_SETUPTOOLS=y
++BR2_PACKAGE_SQLITE=y
++BR2_PACKAGE_ZXING=y
++BR2_PACKAGE_ARGP_STANDALONE=y
++BR2_PACKAGE_BRIDGE_UTILS=y
++BR2_PACKAGE_CAN_UTILS=y
++BR2_PACKAGE_DROPBEAR=y
++BR2_PACKAGE_EBTABLES=y
++BR2_PACKAGE_ETHTOOL=y
++BR2_PACKAGE_IPERF=y
++BR2_PACKAGE_IPROUTE2=y
++BR2_PACKAGE_IPTABLES=y
++BR2_PACKAGE_IW=y
++BR2_PACKAGE_LRZSZ=y
++BR2_PACKAGE_MACCHANGER=y
++BR2_PACKAGE_MII_DIAG=y
++BR2_PACKAGE_OPENSSH=y
++BR2_PACKAGE_PORTMAP=y
++BR2_PACKAGE_TCPDUMP=y
++BR2_PACKAGE_WIRELESS_TOOLS=y
++BR2_PACKAGE_WPA_SUPPLICANT=y
++BR2_PACKAGE_WPA_SUPPLICANT_EAP=y
++BR2_PACKAGE_WPA_SUPPLICANT_CLI=y
++BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
++BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT=y
++BR2_PACKAGE_WPA_SUPPLICANT_WPS=y
++BR2_PACKAGE_BASH=y
++BR2_PACKAGE_FILE=y
++BR2_PACKAGE_CPULOAD=y
++BR2_PACKAGE_VIM=y
++BR2_TARGET_ROOTFS_CPIO=y
++BR2_TARGET_ROOTFS_JFFS2=y
++BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_2K_128K=y
++BR2_TARGET_ROOTFS_UBIFS=y
++BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x1f000
++BR2_TARGET_ROOTFS_UBI=y
++BR2_TARGET_ROOTFS_UBI_SUBSIZE=2048
+-- 
+1.7.9.5
