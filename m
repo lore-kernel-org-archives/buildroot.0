@@ -1,40 +1,66 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 30 Jan 2014 21:38:47 +0100
-Subject: [Buildroot] [PATCH v3 0/6] PATH cleanup
-Message-ID: <1391114333-28001-1-git-send-email-s.martin49@gmail.com>
+Date: Thu, 30 Jan 2014 21:38:48 +0100
+Subject: [Buildroot] [PATCH v3 1/6] Makefile: introduce BR2_PATH
+In-Reply-To: <1391114333-28001-1-git-send-email-s.martin49@gmail.com>
+References: <1391114333-28001-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <1391114333-28001-2-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Since the HOST_PATH and TARGET_PATH variables almost contain the same
+things, let's factorize this in a single BR2_PATH.
 
-Here is the 3rd round of the PATH cleanup series.
-In this round, there is no change, but rebasing on top of master and
-commit log rewording/enhancement.
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-Yours,
-Samuel
+---
+changes v2 -> v3:
+- rebase
 
+changes v1 -> v2:
+- rebase
+---
+ Makefile            | 3 +++
+ package/Makefile.in | 4 ++--
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-Samuel Martin (6):
-  Makefile: introduce BR2_PATH
-  Makefile: add $(HOST_DIR)/sbin to BR2_PATH
-  *.mk: replace (TARGET|HOST)_PATH by BR2_PATH
-  infra: remove unused {TARGET,HOST}_PATH definition
-  pkg-cmake.mk: add PATH in the configure command environment
-  Makefile: export PATH
-
- Makefile                 |  4 ++++
- fs/ext2/ext2.mk          |  2 +-
- package/Makefile.in      | 12 ++++--------
- package/bustle/bustle.mk |  2 +-
- package/libhid/libhid.mk |  2 +-
- package/pkg-cmake.mk     |  2 ++
- package/pkg-python.mk    |  8 ++++----
- package/sdl/sdl.mk       |  2 +-
- 8 files changed, 18 insertions(+), 16 deletions(-)
-
---
+diff --git a/Makefile b/Makefile
+index dc57cf4..0d638ce 100644
+--- a/Makefile
++++ b/Makefile
+@@ -305,6 +305,9 @@ TAR_OPTIONS=$(call qstrip,$(BR2_TAR_OPTIONS)) -xf
+ # packages compiled for the host go here
+ HOST_DIR:=$(call qstrip,$(BR2_HOST_DIR))
+ 
++# Set BR2_PATH (including host bindirs)
++BR2_PATH:="$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(HOST_DIR)/usr/sbin/:$(PATH)"
++
+ # locales to generate
+ GENERATE_LOCALE=$(call qstrip,$(BR2_GENERATE_LOCALE))
+ 
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 2e433fd..a940f54 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -145,7 +145,7 @@ TARGET_CROSS=$(HOST_DIR)/usr/bin/$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))
+ endif
+ 
+ # Quotes are needed for spaces et al in path components.
+-TARGET_PATH="$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(HOST_DIR)/usr/sbin/:$(PATH)"
++TARGET_PATH = $(BR2_PATH)
+ 
+ # Define TARGET_xx variables for all common binutils/gcc
+ TARGET_AR       = $(TARGET_CROSS)ar
+@@ -200,7 +200,7 @@ HOST_CFLAGS   ?= -O2
+ HOST_CFLAGS   += $(HOST_CPPFLAGS)
+ HOST_CXXFLAGS += $(HOST_CFLAGS)
+ HOST_LDFLAGS  += -L$(HOST_DIR)/lib -L$(HOST_DIR)/usr/lib -Wl,-rpath,$(HOST_DIR)/usr/lib
+-HOST_PATH=$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(PATH)
++HOST_PATH = $(BR2_PATH)
+ 
+ # hostcc version as an integer - E.G. 4.3.2 => 432
+ HOSTCC_VERSION:=$(shell $(HOSTCC_NOCCACHE) --version | \
+-- 
 1.8.5.3
