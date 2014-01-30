@@ -1,58 +1,91 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Jan 2014 22:07:22 +0100
-Subject: [Buildroot] [PATCH 2/2] Update MySQL client package
-In-Reply-To: <20140119115124.GA3387@free.fr>
-References: <CA+kK6Wt+nNbrUuOp1Ymq0KzRZfG5CAZQAa+9KK6w=S0mV+D16Q@mail.gmail.com>
- <20140119115124.GA3387@free.fr>
-Message-ID: <20140130220722.142e4aa1@skate>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 30 Jan 2014 22:07:18 +0100
+Subject: [Buildroot] [PATCH 2/3] package/wayland: build a host variant
+In-Reply-To: <cover.1391115898.git.yann.morin.1998@free.fr>
+References: <cover.1391115898.git.yann.morin.1998@free.fr>
+Message-ID: <4223a7f2ec2191d6e4a5d9d0eaf10da486dd43a9.1391115898.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-On Sun, 19 Jan 2014 12:51:24 +0100, Yann E. MORIN wrote:
+Starting with 1.4.0, weston requires wayland-scanner to build its DT
+So far, we got away with just hand-building wayland-scanner, and made
+that available in HOST_DIR/usr/bin
 
-> >         depends on BR2_USE_MMU
-> >         depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-> > +
-> > +if BR2_PACKAGE_MYSQL
-> > +
-> > +config BR2_PACKAGE_MYSQL_CLIENT
-> > +        bool "MySQL client"
-> > +
-> > +config BR2_PACKAGE_MYSQL_CLIENT_SERVER
-> > +       bool "MySQL server"
-> > +
-> > +endif
-> 
-> What if neither the client nor the server is selected? Does that make
-> sense? If not, then always build the client (as we currently do), and
-> make the server an option (as you did in your previous patch).
+But now, weston also requires wayland's DTD, which we did not care of
+in our dirty little hack.
 
-I would suggest:
+So, the best solution is to just build a host-variant of wayland, so
+we get both wayland-scanner, and the DTD.
 
-config BR2_PACKAGE_MYSQL
-	bool "mysql"
-	select BR2_PACKAGE_MYSQL_CLIENT if !BR2_PACKAGE_MYSQL_SERVER
+But then, we do not build the target wayland-scanner (he, wayland tries
+to run it at build time...). So it is a matter of just tweaking a little
+bit the host .pc file (which weston uses to find wayland-scanner, sigh...)
+and fake it as a target .pc file.
 
-if BR2_PACKAGE_MYSQL
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 
-config BR2_PACKAGE_MYSQL_CLIENT
-	bool "client"
+---
+Chnages v2->v3:
+  - remove host depednencies (inherited from target's)  (Arnout)
+  - fix wayland-scanner.pc  (Arnout)
+  - cleanup comments  (Arnout)
 
-config BR2_PACKAGE_MYSQL_SERVER
-	bool "server"
+Changes v1->V2
+  - remove DTD on target  (Thomas)
+---
+ package/wayland/wayland.mk | 29 +++++++++++++++++------------
+ 1 file changed, 17 insertions(+), 12 deletions(-)
 
-endif
-
-This way, we guarantee that at least either the client or the server
-are enabled.
-
-Thomas
+diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
+index a823d2b..3ab94ca 100644
+--- a/package/wayland/wayland.mk
++++ b/package/wayland/wayland.mk
+@@ -11,22 +11,27 @@ WAYLAND_LICENSE = MIT
+ WAYLAND_LICENSE_FILES = COPYING
+ 
+ WAYLAND_INSTALL_STAGING = YES
+-WAYLAND_DEPENDENCIES = libffi host-pkgconf expat host-expat
++WAYLAND_DEPENDENCIES = libffi host-pkgconf host-wayland expat
+ 
+-# wayland needs a wayland-scanner program to generate some of its
+-# source code. By default, it builds it with CC, so it doesn't work with
+-# cross-compilation. Therefore, we build it manually, and tell wayland
+-# that the tool is already available.
++# wayland-scanner is only needed for building, not on the target
+ WAYLAND_CONF_OPT = --disable-scanner
+ 
+-define WAYLAND_BUILD_SCANNER
+-	(cd $(@D)/src/; \
+-		$(HOSTCC) $(HOST_CFLAGS) $(HOST_LDFLAGS) \
+-			-o wayland-scanner scanner.c wayland-util.c -lexpat; \
+-	 	$(INSTALL) -m 0755 -D wayland-scanner \
+-			$(HOST_DIR)/usr/bin/wayland-scanner)
++# We must provide a specialy-crafted wayland-scanner .pc file
++# which we vampirise and adapt from the host-wayland copy
++define WAYLAND_SCANNER_PC
++	$(INSTALL) -m 0644 -D $(HOST_DIR)/usr/share/pkgconfig/wayland-scanner.pc \
++	              $(STAGING_DIR)/usr/lib/pkgconfig/wayland-scanner.pc
++	$(SED) 's:^prefix=.*:prefix=/usr:' \
++	    -e 's:^wayland_scanner=.*:wayland_scanner=$(HOST_DIR)/usr/bin/wayland-scanner:' \
++	    $(STAGING_DIR)/usr/lib/pkgconfig/wayland-scanner.pc
+ endef
++WAYLAND_POST_INSTALL_STAGING_HOOKS += WAYLAND_SCANNER_PC
+ 
+-WAYLAND_POST_CONFIGURE_HOOKS += WAYLAND_BUILD_SCANNER
++# Remove the DTD from the target, it's not needed at runtime
++define WAYLAND_TARGET_CLEANUP
++	rm -rf $(TARGET_DIR)/usr/share/wayland
++endef
++WAYLAND_POST_INSTALL_TARGET_HOOKS += WAYLAND_TARGET_CLEANUP
+ 
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.1.2
