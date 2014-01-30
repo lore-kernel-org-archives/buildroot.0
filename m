@@ -1,29 +1,77 @@
-From: Marco Trapanese <marcotrapanese@gmail.com>
-Date: Thu, 30 Jan 2014 15:16:07 +0100
-Subject: [Buildroot] udev and serial port
-In-Reply-To: <52EA58D8.8070103@zacarias.com.ar>
-References: <52E4FA8C.7060109@gmail.com>	<52E6945C.40202@mind.be>	<52E8120F.7080805@gmail.com>	<20140128230904.1f01a5dc@skate>	<52E8AA41.1020709@mind.be>
- <20140129093013.5ca63190@skate> <52E8DB08.8060107@mind.be>
- <52EA5785.5050507@gmail.com> <52EA58D8.8070103@zacarias.com.ar>
-Message-ID: <52EA5EA7.3010305@gmail.com>
+From: Mike Zick <minimod@morethan.org>
+Date: Thu, 30 Jan 2014 08:42:13 -0600
+Subject: [Buildroot] Project layout : where to put the .config files
+In-Reply-To: <780030598.4903299.1391091002877.JavaMail.root@openwide.fr>
+References: <20140130075406.3782cb77@core2quad.morethan.org>
+ <780030598.4903299.1391091002877.JavaMail.root@openwide.fr>
+Message-ID: <20140130084213.2dcae4c9@core2quad.morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Il 30/01/2014 14:51, Gustavo Zacarias ha scritto:
-> Hi. libftdi is for direct access to FTDI chips from applications. This 
-> is used for GPIO, bitbanging, SPI and other purposes. What you want is 
-> to enable the CONFIG_USB_SERIAL_FTDI_SIO knob in your linux kernel 
-> config. Regards. 
+On Thu, 30 Jan 2014 15:10:03 +0100 (CET)
+Jeremy Rosen <jeremy.rosen@openwide.fr> wrote:
 
-My board/arm/rpi/linux.config have not such an item.
-I see:
+> > I.E: To make Buildroot the central control point for the
+> > other components that make up a complete project.
+> > 
+> > Perhaps a: BR_EXTERNAL/sub-tree ?
+> > Perhaps a: BR_PROJECT tree ?
+> > 
+> > Keeping in mind that we do not want to upset the world
+> > of users that use Buildroot commercially.
+> >   
+> 
+> yes, but i'm pretty sure most of us would be glad to have a 
+> "clean way" to do a complete project under buildroot
+> 
 
-# CONFIG_USB_SERIAL is not set
+Ah, another point of agreement then.
 
-which I think I should turn on.
-I can add by myself CONFIG_USB_SERIAL_FTDI_SIO=y?
+The current "put them in 'public' tree and move if required"
+and the current "put them in the 'private' tree and move if
+required" is becoming a bit messy.
 
-Marco
+So without trying to answer my own questions above -
+
+Start with adding some infra-structure for 'project related'
+files; and
+Then using that to support the collection of .config files.
+
+That would be of general use to the Buildroot system and
+consistent with the "keep it clean, keep it simple" objective.
+
+The end-user could still decide on the 'ship/don't ship' question
+by including the 'project related' stuff or not.
+
+It could also help answer the question of: "BR provides hooks
+to external scripting - but where do I put them in an organized
+manner?"
+
+> 
+> > For instance:
+> > The subject of "are the .config files 'required public' files?"
+> > The current set-up leaves that answer to the end user with
+> > commands that will include them in the 'public' buildroot tree.
+> >   
+> 
+> I'm not sure what you mean here... I'm mainly thinking in term
+> of project organisation. if the .config is considered derived 
+> from buildroot then the exact position doesn't matter. I have
+> to make it public, and usually in another way than by upstreaming
+> since this is a complete project and not a board defconfig...
+> 
+
+There has already been (years ago) a Buildroot fork from those
+that wanted it to become a complete project system.
+
+So just providing the basic organizational infra-structure is
+probably a good idea now.
+
+- - - -
+
+Let us pause here for others to comment.
+
+Mike
