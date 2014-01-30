@@ -1,35 +1,24 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Jan 2014 20:20:18 +0100
-Subject: [Buildroot] [PATCH 1/1] gst-ffmpeg: Use internal libav instead
- of external ffmpeg
-In-Reply-To: <g4unrax5d3.ln2@ID-313208.user.individual.net>
-References: <BLU0-SMTP442A9DE801569E9B4917C36D9BE0@phx.gbl>
- <87lhyht3mx.fsf@dell.be.48ers.dk> <20140129090028.01079137@skate>
- <g4unrax5d3.ln2@ID-313208.user.individual.net>
-Message-ID: <20140130202018.2ebce66c@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 30 Jan 2014 16:25:40 -0300
+Subject: [Buildroot] powerpc64 support
+In-Reply-To: <52EAA6E8.7000805@coloradoengineeringinc.com>
+References: <52EA95DB.70504@coloradoengineeringinc.com>
+ <52EA9EE2.80807@zacarias.com.ar>
+ <52EAA6E8.7000805@coloradoengineeringinc.com>
+Message-ID: <52EAA734.6030909@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+On 01/30/2014 04:24 PM, Danny Gale wrote:
 
-On Wed, 29 Jan 2014 19:33:20 +0100, Bernd Kuhls wrote:
-
-> v2 of my patch was committed to git:
-> http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/74563
+> Gustavo,
 > 
-> Changes v1 -> v2:
-> - replaced gst-ffmpeg-uclibc.patch with configure option --target-os=linux 
-> (Peter)
-> 
-> gst-ffmpeg-uclibc.patch was never added to git.
+> Thanks for getting back to me so quickly. Would it be preferred to add
+> to Config.in.powerpc, or create Config.in.powerpc64?
 
-Ok, thanks for the confirmation!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+We prefer it in the same file like it's done for mips, x86 and other
+architectures that have 32/64 bit variants.
+Regards.
