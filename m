@@ -1,22 +1,28 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 30 Jan 2014 14:03:37 -0300
-Subject: [Buildroot] [PATCH 2/6] php: fix for external extensions
-In-Reply-To: <87k3dhtod4.fsf@dell.be.48ers.dk>
-References: <1390944391-3892-1-git-send-email-gustavo@zacarias.com.ar>	<1390944391-3892-2-git-send-email-gustavo@zacarias.com.ar>	<87ob2ttpro.fsf@dell.be.48ers.dk>
- <52EA7AC5.7040905@zacarias.com.ar> <87k3dhtod4.fsf@dell.be.48ers.dk>
-Message-ID: <52EA85E9.4060109@zacarias.com.ar>
+From: Marco Trapanese <marcotrapanese@gmail.com>
+Date: Thu, 30 Jan 2014 18:19:07 +0100
+Subject: [Buildroot] udev and serial port
+In-Reply-To: <52EA5EA7.3010305@gmail.com>
+References: <52E4FA8C.7060109@gmail.com>	<52E6945C.40202@mind.be>	<52E8120F.7080805@gmail.com>	<20140128230904.1f01a5dc@skate>	<52E8AA41.1020709@mind.be>
+ <20140129093013.5ca63190@skate> <52E8DB08.8060107@mind.be>
+ <52EA5785.5050507@gmail.com> <52EA58D8.8070103@zacarias.com.ar>
+ <52EA5EA7.3010305@gmail.com>
+Message-ID: <52EA898B.1050103@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/30/2014 01:40 PM, Peter Korsgaard wrote:
+Il 30/01/2014 15:16, Marco Trapanese ha scritto:
+> # CONFIG_USB_SERIAL is not set
+>
+> which I think I should turn on.
+> I can add by myself CONFIG_USB_SERIAL_FTDI_SIO=y?
 
-> Ok - So to conclude, we need the manual php-config change, but the
-> phpize change can be done with PHP_CONFIG_SCRIPTS?
 
-It works... for now... i'm a bit wary of doing so since it's just casual
-that it works with _CONFIG_SCRIPTS without it being a config script, if
-upstream changes things in a newer php version it may break.
-Regards.
+Don't worry, I found the entries using make linux-menuconfig (I had to 
+disable again the ccache to show the menu).
+
+Now it's compiling...
+Thanks
+Marco
