@@ -1,13 +1,11 @@
 From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Wed, 29 Jan 2014 19:25:17 -0600
-Subject: [Buildroot] [PATCH v2] gcc: coexist upstream with vendor git
- releases for mb and arc
-In-Reply-To: <52E96B5C.3050701@mind.be>
-References: <1390859507-31670-1-git-send-email-spenser@gillilanding.com>
- <52E7EAB5.9000909@mind.be>
- <CAEBucnAjAfvf650pA5css455D2TRwNteNhYzoo1pqkGy2cPPDA@mail.gmail.com>
- <52E96B5C.3050701@mind.be>
-Message-ID: <CAEBucnCgtOv5ozqOLgcTu4+H7S2RR=o1JKrMekYskTP7cTnd2g@mail.gmail.com>
+Date: Wed, 29 Jan 2014 19:29:19 -0600
+Subject: [Buildroot] [PATCH] gdb: move version selection from gdb.mk to
+	Config.in.host
+In-Reply-To: <1391031881-19546-1-git-send-email-arnout@mind.be>
+References: <52E9752E.2020602@mind.be>
+ <1391031881-19546-1-git-send-email-arnout@mind.be>
+Message-ID: <CAEBucnBK9_LfVm6AHzvHcub31mew-OXk04L7XW4KeZcCBq3h8w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,114 +14,81 @@ To: buildroot@busybox.net
 
 Arnout,
 
-On Wed, Jan 29, 2014 at 2:58 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 29/01/14 00:34, Spenser Gilliland wrote:
->>>
->>>   Can you explain this is bit better? I don't see the advantage at the
->>> moment...
->>
->>
->> The advantage of this approach is that as soon as upstream gcc
->> supports the microblaze or arc architecture, the only change required
->> is to remove depends on !BR2_microblaze or !BR2_arc for that release.
+> This avoids duplication of the version selection between these two files.
 >
+> Cc: Spenser Gilliland <spenser@gillilanding.com>
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+> Warning: I have not really tested this!
 >
->  OK, but then there is no need to do this before upstream gcc does support
-> it, right?
-
-Your right.
-
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+>  package/gdb/Config.in.host | 14 +++++++++-----
+>  package/gdb/gdb.mk         | 14 --------------
+>  2 files changed, 9 insertions(+), 19 deletions(-)
 >
->>
->>>   After this patch, the version is sometimes set in Config.in.host and
->>> sometimes in gcc.mk. I really don't like that...
->>
->>
->> I understand.  See below for a possible fix.  Let me know if you think
->> this is better.
->>
->>>> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
->>>> ---
->>>>    package/gcc/gcc.mk         | 6 ++++--
->>>>    1 files changed, 2 insertions(+), 2 deletions(-)
->>>>
->>>>    config BR2_EXTRA_GCC_CONFIG_OPTIONS
->>>> diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
->>>> index 236297d..dd99604 100644
->>>> --- a/package/gcc/gcc.mk
->>>> +++ b/package/gcc/gcc.mk
->>>> @@ -19,10 +19,12 @@ ifneq ($(GCC_SNAP_DATE),)
->>>>    GCC_SITE = ftp://gcc.gnu.org/pub/gcc/snapshots/$(GCC_SNAP_DATE)/
->>>>    else ifeq ($(findstring avr32,$(GCC_VERSION)),avr32)
->>>>    GCC_SITE = ftp://www.at91.com/pub/buildroot/
->>>> -else ifeq ($(BR2_arc),y)
->>>> +else ifeq ($(findstring git,$(GCC_VERSION))$(BR2_arc),gity)
->>
->>
->> instead of above do something like
->>
->> -else ifeq ($(BR2_arc),y)
->> +else ifeq (BR2_GCC_VERSION_4_8_ARC,y)
+> diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+> index d5e7814..9c0c78c 100644
+> --- a/package/gdb/Config.in.host
+> +++ b/package/gdb/Config.in.host
+> @@ -51,15 +51,19 @@ choice
 >
+>  endchoice
 >
->  That would be better, yes. Although, now it becomes very obvious that the
-> symbol name is wrong, because it's not actually version 4.8...
-
-I'll update the symbol name to better reflect the purpose.
-
+> +endif
+> +
+> +# If cross-gdb is not enabled, the latest working version is chosen.
+>  config BR2_GDB_VERSION
+>         string
+> -       default "6.6a"     if BR2_GDB_VERSION_6_6
+> -       default "6.7.1-avr32-2.1.5" if BR2_GDB_VERSION_6_7_1_AVR32_2_1_5
+> +       depends on BR2_PACKAGE_GDB || BR2_PACKAGE_HOST_GDB
+> +       default "6.6a"     if BR2_GDB_VERSION_6_6 || \
+> +                             (!BR2_PACKAGE_HOST_GDB && BR2_bfin)
+> +       default "6.7.1-avr32-2.1.5" if BR2_GDB_VERSION_6_7_1_AVR32_2_1_5 || \
+> +                                   (!BR2_PACKAGE_HOST_GDB && BR2_avr32)
+>         default "7.2a"     if BR2_GDB_VERSION_7_2
+>         default "7.3.1"    if BR2_GDB_VERSION_7_3
+>         default "7.4.1"    if BR2_GDB_VERSION_7_4
+> -       default "7.5.1"    if BR2_GDB_VERSION_7_5
+> +       default "7.5.1"    if BR2_GDB_VERSION_7_5 || !BR2_PACKAGE_HOST_GDB
+>         default "f25a1952afd054205f9471e449c1f7ca5b271b7c" if BR2_arc
+>         default "6be65fb56ea6694a9260733a536a023a1e2d4d57" if BR2_microblaze
+> -
+> -endif
+> diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+> index d06b61b..69fb3ba 100644
+> --- a/package/gdb/gdb.mk
+> +++ b/package/gdb/gdb.mk
+> @@ -7,20 +7,6 @@
+>  GDB_VERSION = $(call qstrip,$(BR2_GDB_VERSION))
+>  GDB_SITE    = $(BR2_GNU_MIRROR)/gdb
 >
->>
->>>>    GCC_SITE = $(call
->>>> github,foss-for-synopsys-dwc-arc-processors,gcc,$(GCC_VERSION))
->>>>    GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
->>>> -else ifeq ($(BR2_microblaze),y)
->>>> +else ifeq ($(findstring git,$(GCC_VERSION))$(BR2_microblaze),gity)
->>
->>
->> and instead of the above possibly
->>
->> -else ifeq ($(BR2_arc),y)
->> +else ifeq (BR2_GCC_VERSION_4_9_MICROBLAZE,y)
->>
->>>>    GCC_SITE = $(call github,Xilinx,gcc,$(GCC_VERSION))
->>>>    GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
->>>>    else
->>
->>
->> Also, updating the AVR32 code to work in the same manner would probably be
->> best.
->
->
->  But there will never be an upstream avr32...
-
-Yes, but it would make the rules in the file more consistant.  The
-following is what I am suggesting.
-
-ifneq ($(GCC_SNAP_DATE),)
-GCC_SITE = ftp://gcc.gnu.org/pub/gcc/snapshots/$(GCC_SNAP_DATE)/
-- else ifeq ($(findstring avr32,$(GCC_VERSION)),avr32)
-+ else ifeq ($(BR2_GCC_VERSION_4_2_2_AVR32_2_1_5),y)
-GCC_SITE = ftp://www.at91.com/pub/buildroot/
-
->
->  Regards,
->  Arnout
->
->>
->> Thanks,
->> Spenser
->>
->
->
+> -# When no version is defined, it means that cross-gdb for the host has
+> -# not been enabled, and we will only build gdbserver or gdb for the
+> -# target. In this case, use the latest available version
+> -# automatically.
+> -ifeq ($(GDB_VERSION),)
+> -ifeq ($(BR2_bfin),y)
+> -GDB_VERSION = 6.6a
+> -else ifeq ($(BR2_avr32),y)
+> -GDB_VERSION = 6.7.1-avr32-2.1.5
+> -else
+> -GDB_VERSION = 7.5.1
+> -endif
+> -endif
+> -
+>  ifeq ($(BR2_arc),y)
+>  GDB_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,gdb,$(GDB_VERSION))
+>  GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
 > --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+> 1.8.5.3
+>
 
+This seems like a much better approach.  I'll run it through some
+tests and get back to you.
 
+Spenser
 
 -- 
 Spenser Gilliland
