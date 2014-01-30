@@ -1,57 +1,60 @@
 From: Mike Zick <minimod@morethan.org>
-Date: Thu, 30 Jan 2014 07:54:06 -0600
-Subject: [Buildroot] Project layout : where to put the .config files
-In-Reply-To: <123658967.4899331.1391085271159.JavaMail.root@openwide.fr>
-References: <20140130053948.48587221@core2quad.morethan.org>
- <123658967.4899331.1391085271159.JavaMail.root@openwide.fr>
-Message-ID: <20140130075406.3782cb77@core2quad.morethan.org>
+Date: Thu, 30 Jan 2014 08:07:02 -0600
+Subject: [Buildroot] [PATCH v4 1/1] ljsyscall: new package
+In-Reply-To: <CANxTyt72FdGiCJ3zJO8JBB49DzLb4cE=YoiMiY-tBpn+T3azUA@mail.gmail.com>
+References: <1389928225-1845-1-git-send-email-danomimanchego123@gmail.com>
+ <CAB0FRssiXxvgpOb4xUuCRr+PPQKF4PYvKCHgcPZ0jAF7JLGLqA@mail.gmail.com>
+ <CANxTyt72FdGiCJ3zJO8JBB49DzLb4cE=YoiMiY-tBpn+T3azUA@mail.gmail.com>
+Message-ID: <20140130080702.12041a96@core2quad.morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 30 Jan 2014 13:34:31 +0100 (CET)
-Jeremy Rosen <jeremy.rosen@openwide.fr> wrote:
+On Thu, 30 Jan 2014 08:34:05 -0500
+Danomi Manchego <danomimanchego123@gmail.com> wrote:
 
-> I would gladly submit my projet to upstream too, but once again 
-> buildroot (so far) only takes minimal configuration to set up
-> boards, not complete projects.
->
+> Fran?ois,
+> 
+> On Thu, Jan 30, 2014 at 6:46 AM, Fran?ois Perrad
+> <francois.perrad@gadz.org> wrote:
+> >> +LJSYSCALL_TARGET_DIR =
+> >> $(TARGET_DIR)/usr/share/luajit-$(LUAJIT_VERSION)  
+> >
+> > Danomi,
+> >
+> > I think that the right destination is :
+> >     LJSYSCALL_TARGET_DIR =
+> > $(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)
+> >
+> > 1) ljsyscall is designed for LuaJIT and PUC Lua + luaffi  
+> 
+> Looking through the README.md sections that mention Lua, it seems like
+> the ability to work with non-LuaJIT is not a priority.  E.g., "It now
+> runs again with luaffi under standard Lua 5.2 (and probably 5.1,
+> untested)."  ("Runs again" makes it sound like it worked for while,
+> lost compatibility, and maybe works again - does not inspire
+> confidence.)  Besides, buildroot does not [currently] have luaffi.  So
+> I don't think the Lua case is currently an option for a
+> buildroot-generated system.
+> 
 
-Agreed on that point -
+Ah, but it easily could.
 
-Buildroot is only a project component, one that builds a 
-populated, root file system.
+I have used Lua Alien with 5.1 -
+http://alien.luaforge.net/
 
-So far in the evolution of Buildroot, the other project
-components required to fully define a project have been
-user supplied.
+Which requires libffi -
+https://sourceware.org/libffi/
 
-It has never been a complete project build system.
+My particular use-case was to interface with binary blobs.
 
-Which is the use case that you want to consider.
-One that certainly deserves conversation.
+I have not built them with Buildroot, but outside of Buildroot.
+So I do not have a BR patch handy to add them.
 
-If my summary above is even close to an understanding
-of the use case you are proposing, then - - -
-
-Prior to your question of "where to put the .config files?",
-I think there is a higher level question:
-"How to support project definition files?"
-
-I.E: To make Buildroot the central control point for the
-other components that make up a complete project.
-
-Perhaps a: BR_EXTERNAL/sub-tree ?
-Perhaps a: BR_PROJECT tree ?
-
-Keeping in mind that we do not want to upset the world
-of users that use Buildroot commercially.
-
-For instance:
-The subject of "are the .config files 'required public' files?"
-The current set-up leaves that answer to the end user with
-commands that will include them in the 'public' buildroot tree.
+They required a bit of tweaking library pathnames to support 
+a multi-lib (desktop) layout but it should be possible to deal 
+with them inside of BR.
 
 Mike
