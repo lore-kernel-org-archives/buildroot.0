@@ -1,53 +1,48 @@
-From: Marco Trapanese <marcotrapanese@gmail.com>
-Date: Fri, 31 Jan 2014 09:45:17 +0100
-Subject: [Buildroot] Wrong installation path?
-Message-ID: <52EB629D.2030707@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 31 Jan 2014 10:08:12 +0100
+Subject: [Buildroot] [PATCH v3 1/6] Makefile: introduce BR2_PATH
+In-Reply-To: <1114084693.4927201.1391157688997.JavaMail.root@openwide.fr>
+References: <20140131092519.787a1f4d@skate>
+ <1114084693.4927201.1391157688997.JavaMail.root@openwide.fr>
+Message-ID: <20140131100812.439cd650@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-I'm trying to get lirc works on my buildroot environment. Looking at 
-package/lirc/src I see the S70lircd script has a lot of hardcoded paths, 
-i.e.:
+Dear Jeremy Rosen,
 
-if [ -f /etc/lirc/hardware.conf ];then
-         . /etc/lirc/hardware.conf
-fi
+On Fri, 31 Jan 2014 09:41:29 +0100 (CET), Jeremy Rosen wrote:
 
-if [ ! -f /etc/lirc/lircd.conf ] || grep -q "^#UNCONFIGURED" 
-/etc/lirc/lircd.conf; then
-         if [ "$1" = "start" ]; then
+> > I am wondering about the name BR2_PATH. Normally, BR2_<something> is
+> > used for variables coming from Kconfig options. Introducing the
+> > BR2_PATH variable, which doesn't come from a Kconfig option seems to
+> > violate this unwritten rule.
+> 
+> as a side note, BR2_EXTERNAL also violates that rule...
+> 
+> BR2_EXTERNAL is still an unreleased feature so if this rule becomes
+> official there is still time to rename...
 
+BR2_EXTERNAL *is* a Kconfig option. See the main Config.in:
 
-The lirc.mk instead contains the following:
+config BR2_EXTERNAL
+        string
+        option env="BR2_EXTERNAL"
 
-define LIRC_INSTALL_TARGET_SCRIPTS
-         mkdir -p $(TARGET_DIR)/etc/init.d
-         $(INSTALL) -m 0755 package/lirc/src/S70lircd 
-$(TARGET_DIR)/etc/init.d/
-         $(INSTALL) -m 0755 package/lirc/src/hardware.conf 
-$(TARGET_DIR)/etc/
-         $(INSTALL) -m 0755 package/lirc/src/lircd.conf $(TARGET_DIR)/etc/
-endef
+The fact that we're passing it on the command line rather than defining
+it within menuconfig/xconfig is solely due to the fact that its value
+needs to be known before starting menuconfig/xconfig, because
+BR2_EXTERNAL is used to know which Config.in file to include.
 
+So no, BR2_EXTERNAL doesn't violate this rule :-)
 
-In my opinion the destination directory should be $(TARGET_DIR)/etc/lirc/
-Is there any reason why /lirc/ is missing? I mean: I am sure that the 
-package has worked for those who have uploaded.
+Also, BR2_EXTERNAL is really an externally visible variable, while
+BR2_PATH is a purely internal variable of Buildroot.
 
-
-The second question is more generic. I can't still understand when I 
-have to learn about buildroot and  when about the specific package.
-For example, the lirc documentation says I should find a /dev/lirc 
-device if I'm using udev.
-But on my target (which has udev!) there is no such a device.
-
-Where should I look at? How to know if I missed something in the 
-buildroot/kernel configuration or just in the package (lirc) 
-configuration files?
-
-Thanks
-Marco
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
