@@ -1,44 +1,23 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 31 Jan 2014 09:33:47 +0100
-Subject: [Buildroot] [PATCH v3 6/6] Makefile: export PATH
-In-Reply-To: <1391114333-28001-7-git-send-email-s.martin49@gmail.com>
-References: <1391114333-28001-1-git-send-email-s.martin49@gmail.com>
- <1391114333-28001-7-git-send-email-s.martin49@gmail.com>
-Message-ID: <20140131093347.5c3bcbae@skate>
+From: Jeremy Rosen <jeremy.rosen@openwide.fr>
+Date: Fri, 31 Jan 2014 09:41:29 +0100 (CET)
+Subject: [Buildroot] [PATCH v3 1/6] Makefile: introduce BR2_PATH
+In-Reply-To: <20140131092519.787a1f4d@skate>
+Message-ID: <1114084693.4927201.1391157688997.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
 
-On Thu, 30 Jan 2014 21:38:53 +0100, Samuel Martin wrote:
-> This can be useful for:
-> - package using custom build system that are not aware that the host
->   tree is in $(O)/host/;
-> - post-{build,image} scripts, in case some host-tools were specifically
->   built to be used by these scripts.
 > 
-> Note that, this patch only exports the PATH variables; cleaning up
-> all the explicit PATH declarations leading some commands could be done
-> in a followup patch.
+> I am wondering about the name BR2_PATH. Normally, BR2_<something> is
+> used for variables coming from Kconfig options. Introducing the
+> BR2_PATH variable, which doesn't come from a Kconfig option seems to
+> violate this unwritten rule.
+> 
 
-So with this patch, passing PATH in all the package infrastructures
-(cmake, autotools, python) becomes unnecessary?
+as a side note, BR2_EXTERNAL also violates that rule...
 
-I must say I am not entirely sure we want to globally export PATH.
-Packages using custom build system should use TARGET_MAKE_ENV and
-HOST_MAKE_ENV, post-build and post-image script have HOST_DIR defined
-in their environment I believe.
-
-But this is not a strong opinion, I'd just like to see
-arguments/opinions from others on this specific change (the other
-changes in the series, I'm happy with them on the principle, they are
-just a few remaining details to sort out).
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+BR2_EXTERNAL is still an unreleased feature so if this rule becomes
+official there is still time to rename...
