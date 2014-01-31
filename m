@@ -1,52 +1,46 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 31 Jan 2014 15:31:38 +0000 (UTC)
-Subject: [Buildroot] [Bug 6818] New: toolchainfile.cmake has absolut path
-	references
-Message-ID: <bug-6818-163@https.bugs.busybox.net/>
+From: Danny Gale <Daniel.Gale@coloradoengineeringinc.com>
+Date: Fri, 31 Jan 2014 10:05:59 -0700
+Subject: [Buildroot] Error building with external toolchain
+Message-ID: <52EBD7F7.8010504@coloradoengineeringinc.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6818
+Hi all,
 
-           Summary: toolchainfile.cmake has absolut path references
-           Product: buildroot
-           Version: unspecified
-          Platform: All
-        OS/Version: Linux
-            Status: NEW
-          Severity: enhancement
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: u.strempel at googlemail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+I'm having some trouble getting buildroot to import my external 
+toolchain properly. The output is:
 
+ >>> toolchain undefined Extracting
+ >>> toolchain undefined Patching
+ >>> toolchain-external undefined Extracting
+ >>> toolchain-external undefined Patching
+ >>> toolchain-external undefined Configuring
+ >>> toolchain-external undefined Building
+ >>> toolchain-external undefined Installing to staging directory
+ >>> toolchain-external undefined Copying external toolchain libraries 
+to target...
+make[1]: *** 
+[/home/dgale/Documents/system_build/bld/start.buildroot-2013.11/output/build/toolchain-external-undefined/.stamp_staging_installed] 
+Error 255
+make[1]: Leaving directory 
+`/home/dgale/Documents/system_build/bld/start.buildroot-2013.11'
+make: *** [.buildroot] Error 2
 
-On build process of buildroot the toolchainfile.cmake is created, but with
-wrong absolut path.
-When shareing the toolchain or move the folder you get problems this path
-settings.
-i.e. 
-set(CMAKE_C_COMPILER
-/home/dev/Buildroot/../Toolchain/arm-toolchain//usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc)
-set(CMAKE_CXX_COMPILER
-/home/dev/Buildroot/../Toolchain/arm-toolchain//usr/bin/arm-buildroot-linux-uclibcgnueabi-g++)
+I have been unable to get make to output any useful error messages here, 
+even using the -d flag.
 
-A workarround for cmake files is
-- get the path of the toolchainfile.cmake
-And set the the variables.
+This error shows release 2013.11, but there are similar problems with 
+the latest git snapshot.
 
-get_filename_component(CMAKE_TOOLCHAIN_PATH ${CMAKE_CURRENT_LIST_FILE} PATH)
-set(CMAKE_C_COMPILER
-${CMAKE_TOOLCHAIN_PATH}/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc)
-set(CMAKE_CXX_COMPILER
-${CMAKE_TOOLCHAIN_PATH}/usr/bin/arm-buildroot-linux-uclibcgnueabi-g++)
+What is the problem here? Has anybody run into this before? I should 
+mention that the toolchain being imported is 64-bit. This is NOT an 
+issue using an equivalent toolchain at 32-bits. The 64-bit toolchain, 
+however, doesn't support multilib.
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+What will be required to get buildroot working with the 64-bit toolchain?
+
+Thanks,
+Danny
