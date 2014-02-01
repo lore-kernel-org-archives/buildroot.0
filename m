@@ -1,37 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Feb 2014 09:45:37 +0100
-Subject: [Buildroot] [PATCH] libroxml: bump version to 2.3.0
-In-Reply-To: <1391189802-5284-1-git-send-email-blunderer@blunderer.org>
-References: <1391189802-5284-1-git-send-email-blunderer@blunderer.org>
-Message-ID: <20140201094537.69fb978d@skate>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat,  1 Feb 2014 08:50:14 +0000 (UTC)
+Subject: [Buildroot] [Bug 6830] Qt5: no fonts are installed
+In-Reply-To: <bug-6830-163@https.bugs.busybox.net/>
+References: <bug-6830-163@https.bugs.busybox.net/>
+Message-ID: <20140201085014.6062A9C727@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=6830
 
-On Fri, 31 Jan 2014 09:36:42 -0800, blunderer at blunderer.org wrote:
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2014-02-01 08:50:14 UTC ---
+Interesting. We do have some code that should install fonts to the target
+directory, when Qt has installed them to the staging directory. From
+qt5base.mk:
 
-> -LIBROXML_VERSION = 2.2.3
-> +LIBROXML_VERSION = 2.3.0
->  LIBROXML_SITE = http://download.libroxml.net/pool/v2.x/
->  LIBROXML_INSTALL_STAGING = YES
-> +LIBROXML_LICENSE = LGPLv2.1+
+define QT5BASE_INSTALL_TARGET_FONTS
+        if [ -d $(STAGING_DIR)/usr/lib/fonts/ ] ; then \
+                mkdir -p $(TARGET_DIR)/usr/lib/fonts ; \
+                cp -dpfr $(STAGING_DIR)/usr/lib/fonts/*
+$(TARGET_DIR)/usr/lib/fonts ; \
+        fi
+endef
 
-Maybe we want to indicate the static linking exception, something like:
+So maybe the specific configuration you're using does not install fonts to the
+staging directory.
 
-LIBROXML_LICENSE = LGPLv2.1+ with static link exception
+Can you post your Buildroot .config file?
 
-Maybe you also want to disable the build of the documentation and the
-tests? I see that there are configuration options available for these
-in your configure.ac.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
