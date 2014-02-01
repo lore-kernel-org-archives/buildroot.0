@@ -1,36 +1,92 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Sat,  1 Feb 2014 12:46:58 +0000
-Subject: [Buildroot] [PATCH 1/1] axel: fixed package download issue
-Message-ID: <1391258818-19350-1-git-send-email-martin@barkynet.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 1 Feb 2014 12:07:24 +0100
+Subject: [Buildroot] [git commit] gnutls: bump to 3.2.9
+Message-ID: <20140201124728.7BED29C6A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch updates axel.mk to download axel v2.4 from snapshot.debian.org.
-The download from alioth.debian.org is currently broken resulting in a
-malformed axel.2.4.tar.gz being downloaded and the build failing.  The
-package is available instead from snapshot.debian.org.
+commit: http://git.buildroot.net/buildroot/commit/?id=1bb77c7578f269f0a254bc581ebc9276f24e10db
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
+gnutls-01-gettime.patch was applied upstream, AUTORECONF is no longer
+necessary.
+
+The GNUTLS_LIBREGEX_CHECK_FIX didn't actually work before, because it was
+overwritten by the autoreconf. It looks like things still work without
+regex. However, this patch reinstates the regex support by setting
+libopts_cv_with_libregex=yes in the environment.
+
+Fixes http://autobuild.buildroot.net/results/b22/b22f2caa79f371c625939b65a88a2073382c5288
+(failure in libvncserver) because gnutls.so is now properly linked with -lrt.
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/axel/axel.mk |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/gnutls/gnutls-01-gettime.patch |   25 -------------------------
+ package/gnutls/gnutls.mk               |   10 ++--------
+ 2 files changed, 2 insertions(+), 33 deletions(-)
 
-diff --git a/package/axel/axel.mk b/package/axel/axel.mk
-index a83001f..d448dbb 100644
---- a/package/axel/axel.mk
-+++ b/package/axel/axel.mk
-@@ -5,7 +5,8 @@
+diff --git a/package/gnutls/gnutls-01-gettime.patch b/package/gnutls/gnutls-01-gettime.patch
+deleted file mode 100644
+index e230199..0000000
+--- a/package/gnutls/gnutls-01-gettime.patch
++++ /dev/null
+@@ -1,25 +0,0 @@
+-From b9dee5a0afec0f78343863048d6564021416e65a Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Thu, 26 Dec 2013 13:09:34 -0300
+-Subject: [PATCH] Add LIB_CLOCK_GETTIME to crywrap
+-
+-It's used indirectly thus causing build breakage on versions of glibc
+-where it's defined in librt rather than libc directly.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+- src/crywrap/Makefile.am | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/src/crywrap/Makefile.am b/src/crywrap/Makefile.am
+-index ca41259..d86ca55 100644
+---- a/src/crywrap/Makefile.am
+-+++ b/src/crywrap/Makefile.am
+-@@ -29,3 +29,4 @@ bin_PROGRAMS = crywrap
+- 
+- crywrap_SOURCES = crywrap.c primes.h crywrap.h
+- crywrap_LDADD = ../../lib/libgnutls.la $(LIBIDN_LIBS) #../../gl/libgnu.la 
+-+crywrap_LDADD += $(LIB_CLOCK_GETTIME)
+--- 
+-1.8.3.2
+-
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 1d49757..a9483a3 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -5,11 +5,9 @@
  ################################################################################
  
- AXEL_VERSION = 2.4
--AXEL_SITE = https://alioth.debian.org/frs/download.php/file/3015
-+AXEL_SOURCE = axel_$(AXEL_VERSION).orig.tar.gz
-+AXEL_SITE = http://snapshot.debian.org/archive/debian/20090429T154100Z/pool/main/a/axel
- AXEL_LICENSE = GPLv2+
- AXEL_LICENSE_FILES = COPYING
+ GNUTLS_VERSION_MAJOR = 3.2
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).8
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).9
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+-# gettime patch
+-GNUTLS_AUTORECONF = YES
+ GNUTLS_LICENSE = GPLv3+ LGPLv2.1+
+ GNUTLS_LICENSE_FILES = COPYING COPYING.LESSER
+ GNUTLS_DEPENDENCIES = host-pkgconf nettle pcre \
+@@ -35,11 +33,7 @@ GNUTLS_CONF_OPT += $(if $(BR2_TOOLCHAIN_HAS_THREADS),--with-libpthread-prefix=$(
  
--- 
-1.7.9.5
+ # gnutls needs libregex, but pcre can be used too
+ # The check isn't cross-compile friendly
+-define GNUTLS_LIBREGEX_CHECK_FIX
+-	$(SED) 's/libopts_cv_with_libregex=no/libopts_cv_with_libregex=yes/g;'\
+-		$(@D)/configure
+-endef
+-GNUTLS_PRE_CONFIGURE_HOOKS += GNUTLS_LIBREGEX_CHECK_FIX
++GNUTLS_CONF_ENV += libopts_cv_with_libregex=yes
+ GNUTLS_CONF_OPT += --with-regex-header=pcreposix.h \
+ 	--with-libregex-cflags="`$(PKG_CONFIG_HOST_BINARY) libpcreposix --cflags`" \
+ 	--with-libregex-libs="`$(PKG_CONFIG_HOST_BINARY) libpcreposix --libs`"
