@@ -1,32 +1,36 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Sat, 1 Feb 2014 13:44:07 +0100
-Subject: [Buildroot] [PATCH 1/1] xdriver_xf86-video-intel: Bump version to
-	2.99.908
-Message-ID: <BLU0-SMTP4FB1B3DDE32E6A2FEC757D9A90@phx.gbl>
+From: Martin Bark <martin@barkynet.com>
+Date: Sat,  1 Feb 2014 12:46:58 +0000
+Subject: [Buildroot] [PATCH 1/1] axel: fixed package download issue
+Message-ID: <1391258818-19350-1-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This patch updates axel.mk to download axel v2.4 from snapshot.debian.org.
+The download from alioth.debian.org is currently broken resulting in a
+malformed axel.2.4.tar.gz being downloaded and the build failing.  The
+package is available instead from snapshot.debian.org.
 
-Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
+Signed-off-by: Martin Bark <martin@barkynet.com>
 ---
- .../xdriver_xf86-video-intel.mk                    |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/axel/axel.mk |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-index 332de54..5b35b76 100644
---- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-+++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/axel/axel.mk b/package/axel/axel.mk
+index a83001f..d448dbb 100644
+--- a/package/axel/axel.mk
++++ b/package/axel/axel.mk
+@@ -5,7 +5,8 @@
  ################################################################################
  
--XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.907
-+XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.908
- XDRIVER_XF86_VIDEO_INTEL_SOURCE = xf86-video-intel-$(XDRIVER_XF86_VIDEO_INTEL_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_INTEL_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_INTEL_LICENSE = MIT
+ AXEL_VERSION = 2.4
+-AXEL_SITE = https://alioth.debian.org/frs/download.php/file/3015
++AXEL_SOURCE = axel_$(AXEL_VERSION).orig.tar.gz
++AXEL_SITE = http://snapshot.debian.org/archive/debian/20090429T154100Z/pool/main/a/axel
+ AXEL_LICENSE = GPLv2+
+ AXEL_LICENSE_FILES = COPYING
+ 
 -- 
 1.7.9.5
