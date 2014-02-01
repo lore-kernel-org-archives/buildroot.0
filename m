@@ -1,32 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 1 Feb 2014 16:28:37 +0100
-Subject: [Buildroot] [git commit] ModemManager: bump to 1.2.0
-Message-ID: <20140201190033.0CBC79C731@busybox.osuosl.org>
+From: Bernd Kuhls <berndkuhls@hotmail.com>
+Date: Sat, 1 Feb 2014 20:46:40 +0100
+Subject: [Buildroot] [PATCH 1/1] xdriver_xf86-video-intel: Bump version to
+	2.99.909
+Message-ID: <BLU0-SMTP2238EC1574A159215295888D9A90@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1dc2e9a8317c132b4ec9cc7e714511ab61297722
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
 ---
- package/modem-manager/modem-manager.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ .../xdriver_xf86-video-intel.mk                    |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-index 248b770..a2d046d 100644
---- a/package/modem-manager/modem-manager.mk
-+++ b/package/modem-manager/modem-manager.mk
+diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
+index 332de54..02d92bf 100644
+--- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
++++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MODEM_MANAGER_VERSION = 1.0.0
-+MODEM_MANAGER_VERSION = 1.2.0
- MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
- MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager/
- MODEM_MANAGER_LICENSE = GPLv2+ (programs, plugins), LGPLv2+ (libmm-glib)
+-XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.907
++XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.909
+ XDRIVER_XF86_VIDEO_INTEL_SOURCE = xf86-video-intel-$(XDRIVER_XF86_VIDEO_INTEL_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_INTEL_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_INTEL_LICENSE = MIT
+-- 
+1.7.9.5
