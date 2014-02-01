@@ -1,59 +1,109 @@
-From: Tristan Lelong <blunderer@blunderer.org>
-Date: Sat, 1 Feb 2014 14:30:44 -0800
-Subject: [Buildroot] [PATCH] libroxml: bump version to 2.3.0
-In-Reply-To: <20140201094537.69fb978d@skate>
-References: <1391189802-5284-1-git-send-email-blunderer@blunderer.org>
- <20140201094537.69fb978d@skate>
-Message-ID: <CAJb9USVBcJexbz3hcNCOpHTJpM6rD1dsEnDXKwtUp2PT-a0z=Q@mail.gmail.com>
+From: Marcelo Gutierrez <kuyurix@gmail.com>
+Date: Sat, 1 Feb 2014 21:02:43 -0200
+Subject: [Buildroot] [PATCH 2/2] Update MySQL client package
+In-Reply-To: <20140130220722.142e4aa1@skate>
+References: <CA+kK6Wt+nNbrUuOp1Ymq0KzRZfG5CAZQAa+9KK6w=S0mV+D16Q@mail.gmail.com>
+ <20140119115124.GA3387@free.fr> <20140130220722.142e4aa1@skate>
+Message-ID: <CA+kK6WsY9=VWC_hQuifT2ZnBXdaO=cvGUx1gwwFvtrT3u-ZvHA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I will add this linking exception.
+Hi Thomas, all
 
-Regarding Documentation and tests, this is disabled by default, so we
-shouldn't need anymore configuration option.
+This is the new Config.in file:
 
-I'll resend the corrected patch.
+config BR2_PACKAGE_MYSQL
+        bool "mysql"
+        depends on BR2_INSTALL_LIBSTDCPP
+        depends on BR2_USE_MMU # fork()
+        depends on BR2_TOOLCHAIN_HAS_THREADS
+        select BR2_PACKAGE_MYSQL_CLIENT  if !BR2_PACKAGE_MYSQL_SERVER
+        select BR2_PACKAGE_NCURSES
+        select BR2_PACKAGE_READLINE
+        help
+          The MySQL Open Source Database System
 
-Thanks
+          http://www.mysql.com/
+
+comment "MySQL needs a toolchain w/ C++, threads"
+        depends on BR2_USE_MMU
+        depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
 
 
-2014-02-01 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+if BR2_PACKAGE_MYSQL_CLIENT
 
-> Hello,
+config BR2_PACKAGE_MYSQL_CLIENT
+       bool "client"
+       help
+          Install the MySQL client on the target.
+
+config BR2_PACKAGE_MYSQL_SERVER
+        bool "server"
+        help
+          Install the MySQL server on the target.
+
+endif
+
+
+But I'm getting this issue:
+
+$ make menuconfig
+package/mysql/Config.in:1:error: recursive dependency detected!
+package/mysql/Config.in:1:      symbol BR2_PACKAGE_MYSQL is selected
+by BR2_PACKAGE_MYSQL_CLIENT
+package/mysql/Config.in:21:     symbol BR2_PACKAGE_MYSQL_CLIENT is
+selected by BR2_PACKAGE_MYSQL
+
+Best,
+Marcelo
+
+
+2014-01-30 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+> Dear Yann E. MORIN,
 >
-> On Fri, 31 Jan 2014 09:36:42 -0800, blunderer at blunderer.org wrote:
+> On Sun, 19 Jan 2014 12:51:24 +0100, Yann E. MORIN wrote:
 >
-> > -LIBROXML_VERSION = 2.2.3
-> > +LIBROXML_VERSION = 2.3.0
-> >  LIBROXML_SITE = http://download.libroxml.net/pool/v2.x/
-> >  LIBROXML_INSTALL_STAGING = YES
-> > +LIBROXML_LICENSE = LGPLv2.1+
+>> >         depends on BR2_USE_MMU
+>> >         depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+>> > +
+>> > +if BR2_PACKAGE_MYSQL
+>> > +
+>> > +config BR2_PACKAGE_MYSQL_CLIENT
+>> > +        bool "MySQL client"
+>> > +
+>> > +config BR2_PACKAGE_MYSQL_CLIENT_SERVER
+>> > +       bool "MySQL server"
+>> > +
+>> > +endif
+>>
+>> What if neither the client nor the server is selected? Does that make
+>> sense? If not, then always build the client (as we currently do), and
+>> make the server an option (as you did in your previous patch).
 >
-> Maybe we want to indicate the static linking exception, something like:
+> I would suggest:
 >
-> LIBROXML_LICENSE = LGPLv2.1+ with static link exception
+> config BR2_PACKAGE_MYSQL
+>         bool "mysql"
+>         select BR2_PACKAGE_MYSQL_CLIENT if !BR2_PACKAGE_MYSQL_SERVER
 >
-> Maybe you also want to disable the build of the documentation and the
-> tests? I see that there are configuration options available for these
-> in your configure.ac.
+> if BR2_PACKAGE_MYSQL
 >
-> Thanks!
+> config BR2_PACKAGE_MYSQL_CLIENT
+>         bool "client"
+>
+> config BR2_PACKAGE_MYSQL_SERVER
+>         bool "server"
+>
+> endif
+>
+> This way, we guarantee that at least either the client or the server
+> are enabled.
 >
 > Thomas
 > --
 > Thomas Petazzoni, CTO, Free Electrons
 > Embedded Linux, Kernel and Android engineering
 > http://free-electrons.com
->
-
-
-
--- 
-618FE3EF
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140201/343f21d8/attachment.html>
