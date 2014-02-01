@@ -1,7 +1,9 @@
 From: Christophe Vu-Brugier <cvubrugier@yahoo.fr>
-Date: Sat,  1 Feb 2014 19:53:56 +0100
-Subject: [Buildroot] [PATCH v3 1/2] gnu-efi: new package
-Message-ID: <1391280837-1928-1-git-send-email-cvubrugier@yahoo.fr>
+Date: Sat,  1 Feb 2014 19:53:57 +0100
+Subject: [Buildroot] [PATCH v3 2/2] gummiboot: new package
+In-Reply-To: <1391280837-1928-1-git-send-email-cvubrugier@yahoo.fr>
+References: <1391280837-1928-1-git-send-email-cvubrugier@yahoo.fr>
+Message-ID: <1391280837-1928-2-git-send-email-cvubrugier@yahoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,254 +15,157 @@ From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Christophe Vu-Brugier <cvubrugier@yahoo.fr>
 ---
-Changes v2 -> v3
+Changes v2 -> v3:
   - depends on BR2_i386 || BR2_x86_64
-Changes v1 -> v2
-  - apply patches from Yocto to fix silent make failures
+Changes v1 -> v2:
+  - bump version: 38 -> 43
+  - remove options not supported by ./configure: --disable-shared --enable-static
+  - add --disable-manpages to configure
+  - fix typo: s/GUMMIBOOT_IMG_ARCH/GUMMIBOOT_IMGARCH/
 ---
- package/Config.in                                  |  1 +
- package/gnu-efi/Config.in                          | 22 +++++++++
- .../gnu-efi/gnu-efi-01-use-override-cflags.patch   | 53 ++++++++++++++++++++++
- .../gnu-efi-02-parallel-make-archives.patch        | 48 ++++++++++++++++++++
- package/gnu-efi/gnu-efi-03-parallel-make.patch     | 22 +++++++++
- package/gnu-efi/gnu-efi.mk                         | 44 ++++++++++++++++++
- 6 files changed, 190 insertions(+)
- create mode 100644 package/gnu-efi/Config.in
- create mode 100644 package/gnu-efi/gnu-efi-01-use-override-cflags.patch
- create mode 100644 package/gnu-efi/gnu-efi-02-parallel-make-archives.patch
- create mode 100644 package/gnu-efi/gnu-efi-03-parallel-make.patch
- create mode 100644 package/gnu-efi/gnu-efi.mk
+ boot/Config.in                |  1 +
+ boot/gummiboot/Config.in      | 47 +++++++++++++++++++++++++++++++++++++++++++
+ boot/gummiboot/buildroot.conf |  4 ++++
+ boot/gummiboot/gummiboot.mk   | 44 ++++++++++++++++++++++++++++++++++++++++
+ boot/gummiboot/loader.conf    |  2 ++
+ 5 files changed, 98 insertions(+)
+ create mode 100644 boot/gummiboot/Config.in
+ create mode 100644 boot/gummiboot/buildroot.conf
+ create mode 100644 boot/gummiboot/gummiboot.mk
+ create mode 100644 boot/gummiboot/loader.conf
 
-diff --git a/package/Config.in b/package/Config.in
-index 631d8b2..618bfa1 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -569,6 +569,7 @@ endmenu
- menu "Hardware handling"
- source "package/ccid/Config.in"
- source "package/dtc/Config.in"
-+source "package/gnu-efi/Config.in"
- source "package/lcdapi/Config.in"
- source "package/libaio/Config.in"
- source "package/libatasmart/Config.in"
-diff --git a/package/gnu-efi/Config.in b/package/gnu-efi/Config.in
+diff --git a/boot/Config.in b/boot/Config.in
+index d23c761..3094be1 100644
+--- a/boot/Config.in
++++ b/boot/Config.in
+@@ -6,6 +6,7 @@ source "boot/at91dataflashboot/Config.in"
+ source "boot/barebox/Config.in"
+ source "boot/boot-wrapper-aarch64/Config.in"
+ source "boot/grub/Config.in"
++source "boot/gummiboot/Config.in"
+ source "boot/lpc32xxcdl/Config.in"
+ source "boot/mxs-bootlets/Config.in"
+ source "boot/syslinux/Config.in"
+diff --git a/boot/gummiboot/Config.in b/boot/gummiboot/Config.in
 new file mode 100644
-index 0000000..f9f4c95
+index 0000000..9ea4f51
 --- /dev/null
-+++ b/package/gnu-efi/Config.in
-@@ -0,0 +1,22 @@
-+config BR2_PACKAGE_GNU_EFI
-+	bool "gnu-efi"
++++ b/boot/gummiboot/Config.in
+@@ -0,0 +1,47 @@
++config BR2_TARGET_GUMMIBOOT
++	bool "gummiboot"
 +	depends on BR2_i386 || BR2_x86_64
++	select BR2_PACKAGE_GNU_EFI
++	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
 +	help
-+	  Develop EFI applications for IA-64 (IPF), IA-32 (x86), and
-+	  x86_64 platforms using the GNU toolchain and the EFI
-+	  development environment.
++	  gummiboot is a simple UEFI boot manager which executes
++	  configured EFI images. The default entry is selected by a
++	  configured pattern (glob) or an on-screen menu.
 +
-+	  http://gnu-efi.sourceforge.net/
++	  gummiboot operates on the EFI System Partition (ESP)
++	  only. Configuration file fragments, kernels, initrds, other
++	  EFI images need to reside on the ESP. Linux kernels need to
++	  be built with CONFIG_EFI_STUB to be able to be directly
++	  executed as an EFI image.
 +
-+if BR2_PACKAGE_GNU_EFI
++	  See the Grub2 help text for details on preparing an EFI
++	  capable disk image using Gummiboot: the instructions are
++	  exactly the same, except that the Gummiboot configuration
++	  files will be located in /loader/ inside the EFI partition.
 +
-+# Packages using gnu-efi will select whether they want ia32 or
-+# x86-64. If two different packages make different choices, the build
-+# will error out.
-+config BR2_PACKAGE_GNU_EFI_IA32
-+	bool
++	  http://freedesktop.org/wiki/Software/gummiboot/
 +
-+config BR2_PACKAGE_GNU_EFI_X64
-+	bool
++if BR2_TARGET_GUMMIBOOT
 +
-+endif # BR2_PACKAGE_GNU_EFI
-diff --git a/package/gnu-efi/gnu-efi-01-use-override-cflags.patch b/package/gnu-efi/gnu-efi-01-use-override-cflags.patch
++choice
++	prompt "Target"
++
++config BR2_TARGET_GUMMIBOOT_I386
++	bool "i386"
++	select BR2_PACKAGE_GNU_EFI_IA32
++	# We unfortunately can't easily build gummiboot 32 bits when
++	# the selected target architecture is x86-64
++	depends on BR2_i386
++
++comment "32 bits gummiboot is only available for i386"
++	depends on BR2_x86_64
++
++config BR2_TARGET_GUMMIBOOT_X86_64
++	bool "x86-64"
++	select BR2_PACKAGE_GNU_EFI_X64
++	depends on BR2_x86_64
++
++endchoice
++
++endif # BR2_TARGET_GUMMIBOOT
+diff --git a/boot/gummiboot/buildroot.conf b/boot/gummiboot/buildroot.conf
 new file mode 100644
-index 0000000..07c3a9f
+index 0000000..8a6f02e
 --- /dev/null
-+++ b/package/gnu-efi/gnu-efi-01-use-override-cflags.patch
-@@ -0,0 +1,53 @@
-+Allow CFLAGS/CPPFLAGS to be completed from the environment
-+
-+Buildroot passes its own CPPFLAGS and CFLAGS in the environment, so
-+the CFLAGS += and CPPFLAGS += statements in gnu-efi Makefile have no
-+effect. Change these to override <VARIABLE> += so that they extend the
-+flags passed by Buildroot.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/Make.defaults
-+===================================================================
-+--- a/Make.defaults
-++++ b/Make.defaults
-+@@ -83,25 +83,25 @@
-+                                && [ $(GCCMINOR) -ge "7" ] ) ) \
-+                         && echo 1)
-+ ifeq ($(GCCNEWENOUGH),1)
-+-  CPPFLAGS += -DGNU_EFI_USE_MS_ABI -maccumulate-outgoing-args --std=c11
-++  override CPPFLAGS += -DGNU_EFI_USE_MS_ABI -maccumulate-outgoing-args --std=c11
-+ endif
-+ 
-+ # Arch-specific compilation flags
-+-CPPFLAGS += -DCONFIG_$(ARCH)
-++override CPPFLAGS += -DCONFIG_$(ARCH)
-+ 
-+ ifeq ($(ARCH),ia64)
-+-  CFLAGS += -mfixed-range=f32-f127
-++  override CFLAGS += -mfixed-range=f32-f127
-+ endif
-+ 
-+ ifeq ($(ARCH),ia32)
-+-  CFLAGS += -mno-mmx -mno-sse
-++  override CFLAGS += -mno-mmx -mno-sse
-+   ifeq ($(HOSTARCH),x86_64)
-+     ARCH3264 = -m32
-+   endif
-+ endif
-+ 
-+ ifeq ($(ARCH),x86_64)
-+-  CFLAGS += -mno-red-zone -mno-mmx -mno-sse
-++  override CFLAGS += -mno-red-zone -mno-mmx -mno-sse
-+   ifeq ($(HOSTARCH),ia32)
-+     ARCH3264 = -m64
-+   endif
-+@@ -110,7 +110,7 @@
-+ # Generic compilation flags
-+ INCDIR  += -I$(SRCDIR) -I$(TOPDIR)/inc -I$(TOPDIR)/inc/$(ARCH) \
-+            -I$(TOPDIR)/inc/protocol
-+-CFLAGS  += $(ARCH3264) -O2 -fpic -Wall -fshort-wchar -fno-strict-aliasing \
-++override CFLAGS  += $(ARCH3264) -O2 -fpic -Wall -fshort-wchar -fno-strict-aliasing \
-+            -fno-merge-constants -ffreestanding -fno-stack-protector       \
-+            -fno-stack-check
-+ ASFLAGS += $(ARCH3264)
-diff --git a/package/gnu-efi/gnu-efi-02-parallel-make-archives.patch b/package/gnu-efi/gnu-efi-02-parallel-make-archives.patch
++++ b/boot/gummiboot/buildroot.conf
+@@ -0,0 +1,4 @@
++title	Buildroot
++version	1
++linux	/bzImage
++options	console=ttyS0 root=/dev/sda2
+diff --git a/boot/gummiboot/gummiboot.mk b/boot/gummiboot/gummiboot.mk
 new file mode 100644
-index 0000000..e5b47c1
+index 0000000..d57ba6d
 --- /dev/null
-+++ b/package/gnu-efi/gnu-efi-02-parallel-make-archives.patch
-@@ -0,0 +1,48 @@
-+Fix parallel make failure for archives
-+
-+Upstream-Status: Pending
-+
-+The lib and gnuefi makefiles were using the lib.a() form which compiles
-+and ar's as a pair instead of compiling all and then ar'ing which can
-+parallelize better. This was resulting in build failures on larger values
-+of -j.
-+
-+See http://www.chemie.fu-berlin.de/chemnet/use/info/make/make_toc.html#TOC105
-+for details.
-+
-+Signed-off-by: Saul Wold <sgw@linux.intel.com>
-+Signed-off-by: Darren Hart <dvhart@linux.intel.com>
-+---
-+---
-+ gnuefi/Makefile |    3 ++-
-+ lib/Makefile    |    3 ++-
-+ 2 files changed, 4 insertions(+), 2 deletions(-)
-+
-+Index: gnu-efi-3.0/lib/Makefile
-+===================================================================
-+--- gnu-efi-3.0.orig/lib/Makefile
-++++ gnu-efi-3.0/lib/Makefile
-+@@ -66,7 +66,8 @@ all: libsubdirs libefi.a
-+ libsubdirs:
-+ 	for sdir in $(SUBDIRS); do mkdir -p $$sdir; done
-+ 
-+-libefi.a: $(patsubst %,libefi.a(%),$(OBJS))
-++libefi.a: $(OBJS)
-++	$(AR) rv $@ $(OBJS)
-+ 
-+ clean:
-+ 	rm -f libefi.a *~ $(OBJS) */*.o
-+Index: gnu-efi-3.0/gnuefi/Makefile
-+===================================================================
-+--- gnu-efi-3.0.orig/gnuefi/Makefile
-++++ gnu-efi-3.0/gnuefi/Makefile
-+@@ -51,7 +51,8 @@ TARGETS	= crt0-efi-$(ARCH).o libgnuefi.a
-+ 
-+ all:	$(TARGETS)
-+ 
-+-libgnuefi.a: $(patsubst %,libgnuefi.a(%),$(OBJS))
-++libgnuefi.a: $(OBJS)
-++	$(AR) rv $@ $(OBJS)
-+ 
-+ clean:
-+ 	rm -f $(TARGETS) *~ *.o $(OBJS)
-diff --git a/package/gnu-efi/gnu-efi-03-parallel-make.patch b/package/gnu-efi/gnu-efi-03-parallel-make.patch
-new file mode 100644
-index 0000000..27c94e8
---- /dev/null
-+++ b/package/gnu-efi/gnu-efi-03-parallel-make.patch
-@@ -0,0 +1,22 @@
-+Fix parallel make failure
-+
-+Upstream-Status: Submitted [Maintainer directly]
-+
-+Add a missing dependency which resulted in a race leading to failure
-+on larger values of -j.
-+
-+Signed-off-by: Darren Hart <dvhart@linux.intel.com>
-+
-+Index: gnu-efi-3.0/Makefile
-+===================================================================
-+--- gnu-efi-3.0.orig/Makefile
-++++ gnu-efi-3.0/Makefile
-+@@ -42,6 +42,8 @@ include $(SRCDIR)/Make.defaults
-+ 
-+ SUBDIRS = lib gnuefi inc apps
-+ 
-++gnuefi: lib
-++
-+ all:	check_gcc $(SUBDIRS)
-+ 
-+ $(SUBDIRS):
-diff --git a/package/gnu-efi/gnu-efi.mk b/package/gnu-efi/gnu-efi.mk
-new file mode 100644
-index 0000000..8f5c01b
---- /dev/null
-+++ b/package/gnu-efi/gnu-efi.mk
++++ b/boot/gummiboot/gummiboot.mk
 @@ -0,0 +1,44 @@
 +################################################################################
 +#
-+# gnu-efi
++# gummiboot
 +#
 +################################################################################
 +
-+GNU_EFI_VERSION = 3.0u
-+GNU_EFI_SOURCE = gnu-efi_$(GNU_EFI_VERSION).orig.tar.gz
-+GNU_EFI_SITE = http://downloads.sourceforge.net/project/gnu-efi/
-+GNU_EFI_INSTALL_STAGING = YES
-+GNU_EFI_LICENSE = GPLv2+ (gnuefi), BSD (efilib)
-+GNU_EFI_LICENSE_FILES = debian/copyright
++GUMMIBOOT_SITE = git://anongit.freedesktop.org/gummiboot
++GUMMIBOOT_VERSION = 43
++GUMMIBOOT_LICENSE = LGPLv2.1+
++GUMMIBOOT_LICENSE_FILES = LICENSE
 +
-+ifeq ($(BR2_PACKAGE_GNU_EFI_IA32)$(BR2_PACKAGE_GNU_EFI_X64),yy)
-+$(error "Building gnu-efi for both ia32 and x86-64 is not possible")
++# The git archive does not have the autoconf/automake stuff generated.
++GUMMIBOOT_AUTORECONF = YES
++GUMMIBOOT_DEPENDENCIES = gnu-efi host-pkgconf util-linux
++GUMMIBOOT_INSTALL_TARGET = NO
++GUMMIBOOT_INSTALL_IMAGES = YES
++
++ifeq ($(BR2_TARGET_GUMMIBOOT_I386),y)
++GUMMIBOOT_TARGET = i386
++GUMMIBOOT_IMGARCH = ia32
++else
++GUMMIBOOT_TARGET = x86_64
++GUMMIBOOT_IMGARCH = x64
 +endif
 +
-+ifeq ($(BR2_PACKAGE_GNU_EFI_IA32),y)
-+GNU_EFI_PLATFORM=ia32
-+else ifeq ($(BR2_PACKAGE_GNU_EFI_X64),y)
-+GNU_EFI_PLATFORM=x86_64
-+endif
++GUMMIBOOT_CONF_OPT = \
++	--host=$(GUMMIBOOT_TARGET) \
++	--with-efi-libdir=$(STAGING_DIR)/usr/lib \
++	--with-efi-ldsdir=$(STAGING_DIR)/usr/lib \
++	--with-efi-includedir=$(STAGING_DIR)/usr/include \
++	--disable-manpages
 +
-+define GNU_EFI_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		$(TARGET_CONFIGURE_OPTS) \
-+		ARCH=$(GNU_EFI_PLATFORM)
++define GUMMIBOOT_INSTALL_IMAGES_CMDS
++	$(INSTALL) -D -m 0644 $(@D)/gummiboot$(GUMMIBOOT_IMGARCH).efi \
++		$(BINARIES_DIR)/efi-part/EFI/BOOT/boot$(GUMMIBOOT_IMGARCH).efi
++	echo "boot$(GUMMIBOOT_IMGARCH).efi" > \
++		$(BINARIES_DIR)/efi-part/startup.nsh
++	$(INSTALL) -D -m 0644 boot/gummiboot/loader.conf \
++		$(BINARIES_DIR)/efi-part/loader/loader.conf
++	$(INSTALL) -D -m 0644 boot/gummiboot/buildroot.conf \
++		$(BINARIES_DIR)/efi-part/loader/entries/buildroot.conf
 +endef
 +
-+define GNU_EFI_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		$(TARGET_CONFIGURE_OPTS) \
-+		INSTALLROOT=$(TARGET_DIR) \
-+		PREFIX=/usr ARCH=$(GNU_EFI_PLATFORM) install
-+endef
-+
-+define GNU_EFI_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		$(TARGET_CONFIGURE_OPTS) \
-+		INSTALLROOT=$(STAGING_DIR) \
-+		PREFIX=/usr ARCH=$(GNU_EFI_PLATFORM) install
-+endef
-+
-+$(eval $(generic-package))
++$(eval $(autotools-package))
+diff --git a/boot/gummiboot/loader.conf b/boot/gummiboot/loader.conf
+new file mode 100644
+index 0000000..93b77b8
+--- /dev/null
++++ b/boot/gummiboot/loader.conf
+@@ -0,0 +1,2 @@
++timeout 3
++default buildroot
 -- 
 1.9.rc1
