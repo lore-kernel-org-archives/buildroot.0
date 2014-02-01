@@ -1,32 +1,62 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Sat, 1 Feb 2014 20:46:40 +0100
-Subject: [Buildroot] [PATCH 1/1] xdriver_xf86-video-intel: Bump version to
-	2.99.909
-Message-ID: <BLU0-SMTP2238EC1574A159215295888D9A90@phx.gbl>
+From: Martin Bark <martin@barkynet.com>
+Date: Sat,  1 Feb 2014 21:03:01 +0000
+Subject: [Buildroot] [PATCH 1/1] zxing: don't select libiconv
+Message-ID: <1391288581-17748-1-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The zxing package currently selects libiconv when locale support is not
+available in the toolchain.  This patch stops the zxing package selecting
+libiconv.  The zxing package now uses uses libiconv if it's available
+otherwise iconv support is disabled in zxing.
 
-Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
+Signed-off-by: Martin Bark <martin@barkynet.com>
 ---
- .../xdriver_xf86-video-intel.mk                    |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/zxing/Config.in |    1 -
+ package/zxing/zxing.mk  |    8 +++++++-
+ 2 files changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-index 332de54..02d92bf 100644
---- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-+++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/zxing/Config.in b/package/zxing/Config.in
+index b69dfc9..1e04635 100644
+--- a/package/zxing/Config.in
++++ b/package/zxing/Config.in
+@@ -4,7 +4,6 @@ comment "zxing needs a toolchain w/ C++"
+ config BR2_PACKAGE_ZXING
+ 	bool "zxing"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	help
+ 	  ZXing (pronounced "zebra crossing") is an open-source,
+ 	  multi-format 1D/2D barcode image processing library
+diff --git a/package/zxing/zxing.mk b/package/zxing/zxing.mk
+index 367a84f..5942167 100644
+--- a/package/zxing/zxing.mk
++++ b/package/zxing/zxing.mk
+@@ -12,7 +12,13 @@ ZXING_LICENSE_FILES = COPYING
+ ZXING_INSTALL_STAGING = YES
  
--XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.907
-+XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.909
- XDRIVER_XF86_VIDEO_INTEL_SOURCE = xf86-video-intel-$(XDRIVER_XF86_VIDEO_INTEL_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_INTEL_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_INTEL_LICENSE = MIT
+ ifneq ($(BR2_ENABLE_LOCALE),y)
++ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ ZXING_DEPENDENCIES += libiconv
++else
++# There is no locale support in the toolchain and libiconv
++# is not available so disable iconv support in zxing
++ZING_MAKE_OPT=CXXFLAGS+="-DNO_ICONV"
++endif
+ endif
+ 
+ define ZXING_EXTRACT_CMDS
+@@ -20,7 +26,7 @@ define ZXING_EXTRACT_CMDS
+ endef
+ 
+ define ZXING_BUILD_CMDS
+-	$(MAKE) -C $(@D)/cpp/core/src $(TARGET_CONFIGURE_OPTS)
++	$(MAKE) -C $(@D)/cpp/core/src $(TARGET_CONFIGURE_OPTS) $(ZING_MAKE_OPT)
+ endef
+ 
+ define ZXING_INSTALL_STAGING_CMDS
 -- 
 1.7.9.5
