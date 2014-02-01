@@ -1,64 +1,59 @@
-From: jean.sorgemoel at laposte.net <jean.sorgemoel@laposte.net>
-Date: Sat, 01 Feb 2014 22:33:20 +0100
-Subject: [Buildroot] [PATCH 1/1] new package - generate iso with
- isolinux bootloader
-In-Reply-To: <20140129092520.4ea8141e@skate>
-References: <y>	<1376644934-4302-1-git-send-email-jean.sorgemoel@laposte.net>	<5213ECA4.9030405@mind.be>	<20140128172502.171b2f84@skate>	<52E7E9E4.20400@mind.be>	<20140128223929.3101c67a@skate>	<52E8A720.1010801@mind.be>
- <20140129092520.4ea8141e@skate>
-Message-ID: <52ED6820.8030300@laposte.net>
+From: Tristan Lelong <blunderer@blunderer.org>
+Date: Sat, 1 Feb 2014 14:30:44 -0800
+Subject: [Buildroot] [PATCH] libroxml: bump version to 2.3.0
+In-Reply-To: <20140201094537.69fb978d@skate>
+References: <1391189802-5284-1-git-send-email-blunderer@blunderer.org>
+ <20140201094537.69fb978d@skate>
+Message-ID: <CAJb9USVBcJexbz3hcNCOpHTJpM6rD1dsEnDXKwtUp2PT-a0z=Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Arnout,
+I will add this linking exception.
 
-I sent new patch to include your comment.
-I modify iso9660 module (add choice to select grub or isolinux)
+Regarding Documentation and tests, this is disabled by default, so we
+shouldn't need anymore configuration option.
 
-I'm not happy with my code.
-For each image we use different filename:
-      rootfs.iso9660 for grub
-      rootfs.isolinux.iso9660 for isolinux
-The code is similar but we have each difference on dependency (and other 
-but not important)
+I'll resend the corrected patch.
 
-I'm not sure understand optional initramfs (because it's not easy to see 
-if option activated) but I implement same method of old module iso9660 
-(with grub)
+Thanks
 
-Thanks for your remark (and your time)
 
-Regards,
-Jean
+2014-02-01 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
 
-> Arnout, Jean,
+> Hello,
 >
-> On Wed, 29 Jan 2014 08:00:48 +0100, Arnout Vandecappelle wrote:
+> On Fri, 31 Jan 2014 09:36:42 -0800, blunderer at blunderer.org wrote:
 >
->>> Aaah, interesting, I didn't know that. So it would probably make a lot
->>> of sense to improve the ISO9660 support to:
->>>
->>>    * Generate just an ISO9660 root filesystem image by default
->>>
->>>    * Optionally, make it bootable using either Grub or isolinux
->>>
->>>    * Optionally, replace the ISO9660 root filesystem by an initramfs
->>    The third one fits better in the genimages approach IMHO. The second
->> one as well - except that that is not possible, once the iso image is
->> created you can't make it bootable anymore. So yes, I think that would
->> really improve the iso9660 support.
-> I agree.
+> > -LIBROXML_VERSION = 2.2.3
+> > +LIBROXML_VERSION = 2.3.0
+> >  LIBROXML_SITE = http://download.libroxml.net/pool/v2.x/
+> >  LIBROXML_INSTALL_STAGING = YES
+> > +LIBROXML_LICENSE = LGPLv2.1+
 >
->>    However, I would also be happy with a patch that simply adds an option
->> to use isolinux instead of grub for the current iso9660 infrastructure.
-> Yes, this would be interesting regardless of the other possible
-> improvements discussed above.
+> Maybe we want to indicate the static linking exception, something like:
 >
-> Bottomline: Jean, if you could add the possibility of using isolinux as
-> part of the existing fs/iso9660 stuff, that would be great.
+> LIBROXML_LICENSE = LGPLv2.1+ with static link exception
 >
-> Thanks a lot!
+> Maybe you also want to disable the build of the documentation and the
+> tests? I see that there are configuration options available for these
+> in your configure.ac.
+>
+> Thanks!
 >
 > Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
+
+
+
+-- 
+618FE3EF
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140201/343f21d8/attachment.html>
