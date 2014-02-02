@@ -1,35 +1,61 @@
-From: Alexander Lukichev <alexander.lukichev@gmail.com>
-Date: Sun, 2 Feb 2014 20:40:24 +0200
-Subject: [Buildroot] [PATCH 2/3] infozip: fix cross-compilation issues
-In-Reply-To: <1391120128-8375-1-git-send-email-romain.naour@openwide.fr>
-References: <1391120128-8375-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <CAAHaz6Gu=hK8VaLx8fBxZ6i1X533bPgU_Sp0gWzJO8LBpbRaSw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 02 Feb 2014 20:50:37 +0100
+Subject: [Buildroot] [git commit] package/joe: Add package for the JOE
+	editor
+In-Reply-To: <20140202171004.44f5d381@skate> (Thomas Petazzoni's message of
+ "Sun, 2 Feb 2014 17:10:04 +0100")
+References: <20140202144314.AB1249C730@busybox.osuosl.org>
+ <20140202171004.44f5d381@skate>
+Message-ID: <874n4hqooi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Naour, all,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
+ > Dear Peter Korsgaard,
+ > On Sun, 2 Feb 2014 15:42:46 +0100, Peter Korsgaard wrote:
 
-2014-01-31 Romain Naour <romain.naour@openwide.fr>:
-(...)
+ >> +JOE_VERSION = 3.7
+ >> +JOE_SITE = http://downloads.sourceforge.net/project/joe-editor/JOE%20sources/joe-$(JOE_VERSION)
+ >> +JOE_LICENSE = GPLv1+
+ >> +JOE_LICENSE_FILES = COPYING
 
-> +Signed-off-by: Romain Naour <romain.naour@openwide.fr>
->
-(...)
+ > Is this really GPLv1+ ? It is indeed GPLv1, but I'm wondering about the
+ > "+", as I haven't seen any indication in the code about this.
 
-> +-CFLAGS = -O2 $(CFLAGS_NOOPT)
-> ++CFLAGS ?= -02 $(CFLAGS_NOOPT)
->
+grep -rls 'any later'                                           ~/source/buildroot/output/build/joe-3.7
+mouse.h
+config.sub
+mouse.c
+COPYING
+missing
+depcomp
+config.guess
 
-Excuse me, is it -02 that's meant here?
+It also fits with what Debian has listed in /usr/share/doc/joe/copyright:
 
+This is the Debian prepackaged version of joe. This package was previously
+maintained by Christian Linhart, Michael Meskes and Dale Scheetz.
+Current maintainer is Josip Rodin <joy-packages@debian.org>.
 
---
-Best regards,
-  Alexander Lukichev
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140202/65a1a5ab/attachment.html>
+Original sources can be found at http://joe-editor.sourceforge.net/
+
+   Copyright (C) 1992, 1995 Joseph H. Allen
+   Portions Copyright (C) 2001 Marek 'Marx' Grac
+
+   JOE is free software; you can redistribute it and/or modify it under the
+   terms of the GNU General Public License as published by the Free Software
+   Foundation; either version 1, or (at your option) any later version.
+
+   JOE is distributed in the hope that it will be useful, but WITHOUT ANY
+   WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+   FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+   details.
+
+So I think it's OK.
+
+-- 
+Peter Korsgaard 
