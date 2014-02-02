@@ -1,24 +1,74 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 2 Feb 2014 17:51:22 +0100
-Subject: [Buildroot] [git commit] gst1-libav: new package
-In-Reply-To: <87d2j5r3xt.fsf@dell.be.48ers.dk>
-References: <20140201124728.6D5269C6A2@busybox.osuosl.org>
- <CAAXf6LVSH0EDVR3x34TeMehYd2dJG0r8jX9jgUb=BoJwob2Hpg@mail.gmail.com>
- <87d2j5r3xt.fsf@dell.be.48ers.dk>
-Message-ID: <CAAXf6LWuMN-bz=52b=gqNn4aD=ana4GM7e0QgPkBZ8oBimKkwg@mail.gmail.com>
+From: Bernd Kuhls <berndkuhls@hotmail.com>
+Date: Sun, 02 Feb 2014 17:51:43 +0100
+Subject: [Buildroot] [PATCH 1/3] gnupg: depend on libiconv if appropriate
+References: <BLU0-SMTP112B1A733C43DA19ABF8DF9D9CE0@phx.gbl>
+Message-ID: <vl92saxilm.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Bernd Kuhls <berndkuhls@hotmail.com> wrote in
+news:BLU0-SMTP112B1A733C43DA19ABF8DF9D9CE0 at phx.gbl: 
 
->Well, as I pointed out I don't see why largefile is needed (and it
->builds without it), but I haven't actually done any runtime testing.
+> -GNUPG_DEPENDENCIES = zlib ncurses
+> +GNUPG_DEPENDENCIES = zlib ncurses $(if
+> $(BR2_PACKAGE_LIBICONV),libiconv) 
 
-Where did you point this out? Did you reply on the original patch? I
-don't see any reply in my mail box.
+Hi,
 
-Thanks,
-Thomas
+this a follow-up for Thomas? question:
+http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/75233
+
+Today I tested the necessity of my patch without a custom uClibc
+configuration file, only with this defconfig applied to a current git 
+checkout:
+
+BR2_JLEVEL=8
+BR2_ENABLE_DEBUG=y
+BR2_OPTIMIZE_2=y
+BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
+BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+BR2_PTHREAD_DEBUG=y
+# BR2_UCLIBC_INSTALL_UTILS is not set
+BR2_BINUTILS_VERSION_2_23_2=y
+BR2_GCC_VERSION_4_8_X=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_PACKAGE_HOST_GDB=y
+BR2_PACKAGE_GETTEXT=y
+BR2_PACKAGE_LIBICONV=y
+BR2_PACKAGE_GNUPG=y
+
+Building these targets in the following order
+
+- toolchain
+- libiconv
+- gnupg
+
+results in a gpg binary linked to libiconv
+
+$ /home/fli4l/buildroot/output/host/usr/bin/i586-buildroot-linux-uclibc-
+readelf -a /home/fli4l/buildroot/output/target/usr/bin/gpg | grep NEEDED
+ 0x00000001 (NEEDED)                     Shared library: [libiconv.so.2]
+ 0x00000001 (NEEDED)                     Shared library: [libz.so.1]
+ 0x00000001 (NEEDED)                     Shared library: [libgcc_s.so.1]
+ 0x00000001 (NEEDED)                     Shared library: [libc.so.0]
+
+Removing
+
+BR2_PACKAGE_GETTEXT=y
+BR2_PACKAGE_LIBICONV=y
+
+from defconfig results in this gpg binary:
+
+/home/fli4l/buildroot/output/host/usr/bin/i586-buildroot-linux-uclibc-
+readelf -a /home/fli4l/buildroot/output/target/usr/bin/gpg | grep NEEDED
+ 0x00000001 (NEEDED)                     Shared library: [libz.so.1]
+ 0x00000001 (NEEDED)                     Shared library: [libgcc_s.so.1]
+ 0x00000001 (NEEDED)                     Shared library: [libc.so.0]
+
+I hope this proves why my patches are necessary.
+
+Regards, Bernd
