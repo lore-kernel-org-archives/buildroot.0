@@ -1,34 +1,46 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Sun, 2 Feb 2014 22:15:22 +0100
-Subject: [Buildroot] Advice on new board support
-Message-ID: <CA+TH9VmdX0iai204KWOjHk4ANqAPr8G00GMRpYJcGf++aAnkbQ@mail.gmail.com>
+From: Alan Ott <alan@signal11.us>
+Date: Sun, 02 Feb 2014 16:45:23 -0500
+Subject: [Buildroot] [PATCH] package/joe: Add package for the JOE editor
+In-Reply-To: <878uttr303.fsf@dell.be.48ers.dk>
+References: <1391301769-28263-1-git-send-email-alan@signal11.us>
+ <878uttr303.fsf@dell.be.48ers.dk>
+Message-ID: <52EEBC73.9030709@signal11.us>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi guys,
+On 02/02/2014 09:41 AM, Peter Korsgaard wrote:
+>>>>>> "Alan" == Alan Ott <alan@signal11.us> writes:
+>   > JOE is an easy-to-use, full-screen, terminal-based text editor.
+>   > http://joe-editor.sf.net
+>
+> Thanks, see below for a few comments.
+>
+> You forgot to add it to package/Config.in
 
-I'm preparing a patch for the Ariag25 SOM and its Terra carrier board
-from http://acmesystems.it.
-I made a working and minimal configuration for Ariag25 SOM in which I
-enabled nothing more than a basic booting system.
+Oops.
 
-For Terra, on the contrary, I'm building a more complex configuration
-with dhcp, python and various other software, because Terra is a
-carried board for rapid prototyping and the fairly basic configuration
-of the plain simple Ariag25 is pretty useless on that.
+>
+> We do have ncurses in buildroot, so it should enable support for it if
+> ncurses is enabled.
 
-I'm aiming for the inclusion of both configurations, but I think the
-Terra one is really too big to be in configs. Right now I created a
-board/acmesystems/ariag25 folder and placed the configuration there.
+What you have is fine, but it's worth mentioning that curses support 
+doesn't actually help joe anymore. If you grep through the joe source, 
+it only includes ncurses in one file, and doesn't actually use anything 
+out of it. The resulting binary even from a "use curses" build doesn't 
+actually even link to the ncurses library (it's optimized out by the 
+linker).
 
-Is this the best way to get the patch accepted?
+> I did a test build for uClibc and I see it uses the XSI math bessel
+> functions which are not enabled for default, so I added a patch to
+> disable those if needed.
 
-Thank you in advance!
+Awesome!
 
-Angelo
+> Committed with these issues fixed, thanks.
 
--- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+Thanks for the fixup and commit, and for all your work on Buildroot.
+
+Alan.
