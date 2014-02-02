@@ -1,39 +1,24 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 2 Feb 2014 22:59:30 +0100
-Subject: [Buildroot] [git commit] libsoc: bump to 0.6
-Message-ID: <20140202215948.23D0A9C757@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 02 Feb 2014 23:03:14 +0100
+Subject: [Buildroot] [PATCH 1/2] mtd: Add a more verbose menu text
+In-Reply-To: <1390909161-2496-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+ (Ezequiel Garcia's message of "Tue, 28 Jan 2014 08:39:20 -0300")
+References: <1390909161-2496-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+Message-ID: <87vbwxnpel.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f7f39ccc9f17e23b98c68850ae2ff7b8f5de1af0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Ezequiel" == Ezequiel Garcia <ezequiel@vanguardiasur.com.ar> writes:
 
-Add --disable-debug to unset default DEBUG option.
+ > mtd-utils also contain ubi/ubifs tools, so let's add it to the menu option.
+ > Also, add an URL to stick to the help message standard.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libsoc/libsoc.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ > Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 
-diff --git a/package/libsoc/libsoc.mk b/package/libsoc/libsoc.mk
-index 3e9ce97..09aee35 100644
---- a/package/libsoc/libsoc.mk
-+++ b/package/libsoc/libsoc.mk
-@@ -4,11 +4,12 @@
- #
- ################################################################################
- 
--LIBSOC_VERSION = 0.5
-+LIBSOC_VERSION = 0.6
- LIBSOC_SITE = $(call github,jackmitch,libsoc,$(LIBSOC_VERSION))
- LIBSOC_LICENSE = LGPLv2.1
- LIBSOC_LICENSE_FILES = COPYING
- LIBSOC_AUTORECONF = YES
- LIBSOC_INSTALL_STAGING = YES
-+LIBSOC_CONF_OPT = --disable-debug
- 
- $(eval $(autotools-package))
+Committed both, thanks.
+
+-- 
+Bye, Peter Korsgaard
