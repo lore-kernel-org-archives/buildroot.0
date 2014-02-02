@@ -1,35 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 02 Feb 2014 21:16:17 +0100
-Subject: [Buildroot] [PATCH 2/3] infozip: fix cross-compilation issues
-In-Reply-To: <CAAHaz6Gu=hK8VaLx8fBxZ6i1X533bPgU_Sp0gWzJO8LBpbRaSw@mail.gmail.com>
- (Alexander Lukichev's message of "Sun, 2 Feb 2014 20:40:24 +0200")
-References: <1391120128-8375-1-git-send-email-romain.naour@openwide.fr>
- <CAAHaz6Gu=hK8VaLx8fBxZ6i1X533bPgU_Sp0gWzJO8LBpbRaSw@mail.gmail.com>
-Message-ID: <87ob2pp8xa.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 2 Feb 2014 21:21:19 +0100
+Subject: [Buildroot] [git commit] infozip: fix optimization level in
+	Makefile patch
+Message-ID: <20140202202242.0FDF49C6D2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexander" == Alexander Lukichev <alexander.lukichev@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=fc95ad82e11e9a97131884574de78afc2918cffc
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hello Naour, all,
- > 2014-01-31 Romain Naour <romain.naour@openwide.fr>:
- > (...)
+Noop in Buildroot as we override CFLAGS, but cleaner.
 
- >     +Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Reported-by: Alexander Lukichev <alexander.lukichev@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../infozip-0001-configure-fix-cross-build.patch   |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- > (...)
-
- >     +-CFLAGS = -O2 $(CFLAGS_NOOPT)
- >     ++CFLAGS ?= -02 $(CFLAGS_NOOPT)
-
-
- > Excuse me, is it -02 that's meant here?
-
-Good catch. Actually in the context of Buildroot we don't want the
-package to hardcode the optimization level, so I will simply drop it.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/infozip/infozip-0001-configure-fix-cross-build.patch b/package/infozip/infozip-0001-configure-fix-cross-build.patch
+index 275effd..0b939b3 100644
+--- a/package/infozip/infozip-0001-configure-fix-cross-build.patch
++++ b/package/infozip/infozip-0001-configure-fix-cross-build.patch
+@@ -31,7 +31,7 @@ index abd0c44..8388c74 100644
+  #   LFLAGS2   flags after obj file list (libraries, etc)
+  CFLAGS_NOOPT = -I. -DUNIX $(LOCAL_ZIP)
+ -CFLAGS = -O2 $(CFLAGS_NOOPT)
+-+CFLAGS ?= -02 $(CFLAGS_NOOPT)
+++CFLAGS ?= -O2 $(CFLAGS_NOOPT)
+  LFLAGS1 =
+  LFLAGS2 = -s
+  
