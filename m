@@ -1,39 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 2 Feb 2014 12:12:12 +0100
-Subject: [Buildroot] [PATCH] ljlinenoise: new package
-In-Reply-To: <1391251950-19923-1-git-send-email-francois.perrad@gadz.org>
-References: <1391251950-19923-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20140202121212.5f9702b0@skate>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun, 2 Feb 2014 12:14:35 +0100
+Subject: [Buildroot] Patch for toolchainfile.cmake absolut path
+	references
+In-Reply-To: <52ECDB01.5070306@googlemail.com>
+References: <52ECDB01.5070306@googlemail.com>
+Message-ID: <CAHXCMM+3EFDcnL-K5FzuDw1Xs-eThD_yJ4rEP1L7HopmqhMpug@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+Hi Uwe,
 
-On Sat,  1 Feb 2014 11:52:30 +0100, Francois Perrad wrote:
+On Sat, Feb 1, 2014 at 12:31 PM, Uwe Strempel <u.strempel@googlemail.com>wrote:
 
-> diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
-> index 88ab22a..86e57d2 100644
-> --- a/package/luarocks/luarocks.mk
-> +++ b/package/luarocks/luarocks.mk
-> @@ -37,6 +37,7 @@ define HOST_LUAROCKS_INSTALL_CMDS
->  	echo "external_deps_dirs = { [[$(STAGING_DIR)/usr]] }"  >> $(LUAROCKS_CONFIG_FILE)
->  	echo "gcc_rpath = false"                                >> $(LUAROCKS_CONFIG_FILE)
->  	echo "rocks_trees = { [[$(TARGET_DIR)/usr]] }"          >> $(LUAROCKS_CONFIG_FILE)
-> +	echo "wrap_bin_scripts = false"                         >> $(LUAROCKS_CONFIG_FILE)
->  endef
->  
->  $(eval $(host-generic-package))
+> Hi,
+> I've build a patch for BUG #6818
+>
+> FIrst, thanks for your contribution, but please consider a patch using git,
+and send it to the mailing list using 'git send-email' (see
+http://www.buildroot.org/downloads/manual/manual.html#_contributing_to_buildroot
+),
+this is the way Buildroot community works.
 
-I believe it would be better to have this as part of a separate commit,
-so that it comes with a proper description.
+Anyway, I looked at the patch.
 
-Thanks!
 
-Thomas
+> On build process of buildroot the toolchainfile.cmake is created, but
+> with wrong absolut path.
+> When shareing the toolchain or move the folder you get problems this
+> path settings.
+>
+> A workarround for cmake files is
+> - get the path of the toolchainfile.cmake and set the the variables.
+>
+>
+I found the part touching the package/Makefile.in a bit confusing.
+The idea of what has to be done in the toolchainfile.cmake is good, though
+I think you miss some $-escaping...
+
+
+Regards,
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Samuel
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140202/dfb329ae/attachment.html>
