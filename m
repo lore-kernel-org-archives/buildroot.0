@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 02 Feb 2014 13:11:20 +0100
-Subject: [Buildroot] [PATCH 5 of 9] alsa-lib: automatically enable python
+Date: Sun, 02 Feb 2014 13:11:21 +0100
+Subject: [Buildroot] [PATCH 6 of 9] libdnet: automatically enable python
  bindings if python is enabled
 In-Reply-To: <patchbomb.1391343075@argentina>
 References: <patchbomb.1391343075@argentina>
-Message-ID: <31daed037a4dabdb6466.1391343080@argentina>
+Message-ID: <6531e80fd63bde5839ec.1391343081@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -21,38 +21,39 @@ original explicit symbol enabled.
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
- package/alsa-lib/Config.in   |  9 ---------
- package/alsa-lib/alsa-lib.mk |  2 +-
- 2 files changed, 1 insertions(+), 10 deletions(-)
+ package/libdnet/Config.in  |  13 -------------
+ package/libdnet/libdnet.mk |   2 +-
+ 2 files changed, 1 insertions(+), 14 deletions(-)
 
-diff --git a/package/alsa-lib/Config.in b/package/alsa-lib/Config.in
---- a/package/alsa-lib/Config.in
-+++ b/package/alsa-lib/Config.in
-@@ -20,15 +20,6 @@ comment "alsa-lib needs a toolchain w/ t
+diff --git a/package/libdnet/Config.in b/package/libdnet/Config.in
+--- a/package/libdnet/Config.in
++++ b/package/libdnet/Config.in
+@@ -4,16 +4,3 @@ config BR2_PACKAGE_LIBDNET
+ 	  libdnet - simplified interface to low-level networking routines.
  
- if BR2_PACKAGE_ALSA_LIB
- 
--config BR2_PACKAGE_ALSA_LIB_PYTHON
--	bool "Python support for alsa-lib"
+ 	  http://libdnet.sourceforge.net/
+-
+-if BR2_PACKAGE_LIBDNET
+-
+-config BR2_PACKAGE_LIBDNET_PYTHON
+-	bool "libdnet python module"
 -	depends on BR2_PACKAGE_PYTHON
 -	help
--	  Add python support for alsa-lib.
--	  Python will be built and libpython will be installed
--	  in the target directory
--	  http://www.alsa-project.org/
+-	  dnet module for python
 -
- menu "ALSA lib selection"
+-comment "dnet module for python requires python package"
+-	depends on !BR2_PACKAGE_PYTHON
+-
+-endif
+diff --git a/package/libdnet/libdnet.mk b/package/libdnet/libdnet.mk
+--- a/package/libdnet/libdnet.mk
++++ b/package/libdnet/libdnet.mk
+@@ -14,7 +14,7 @@ LIBDNET_CONF_OPT = \
+ 	--with-gnu-ld \
+ 	--with-check=no
  
- config BR2_PACKAGE_ALSA_LIB_DEVDIR
-diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
---- a/package/alsa-lib/alsa-lib.mk
-+++ b/package/alsa-lib/alsa-lib.mk
-@@ -57,7 +57,7 @@ ifeq ($(BR2_avr32),y)
- ALSA_LIB_CFLAGS += -DAVR32_INLINE_BUG
- endif
- 
--ifeq ($(BR2_PACKAGE_ALSA_LIB_PYTHON),y)
+-ifneq ($(BR2_PACKAGE_LIBDNET_PYTHON),)
 +ifeq ($(BR2_PACKAGE_PYTHON),y)
- ALSA_LIB_CONF_OPT += \
- 	--with-pythonlibs=-lpython$(PYTHON_VERSION_MAJOR) \
- 	--with-pythonincludes=$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)
+ LIBDNET_DEPENDENCIES = python
+ LIBDNET_CONF_OPT += --with-python
+ LIBDNET_MAKE_OPT = PYINCDIR=$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR) PYLIBDIR=$(STAGING_DIR)/usr/lib
