@@ -1,49 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 2 Feb 2014 23:02:19 +0100
-Subject: [Buildroot] [git commit] mtd: Allow to select the host variant
-Message-ID: <20140202220324.F175D9BB4C@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 02 Feb 2014 23:05:37 +0100
+Subject: [Buildroot] [PATCH 1/2] perf: Add support for Linux 3.13
+In-Reply-To: <1390914640-18160-1-git-send-email-mjonker@synopsys.com> (Mischa
+ Jonker's message of "Tue, 28 Jan 2014 14:10:40 +0100")
+References: <1390914640-18160-1-git-send-email-mjonker@synopsys.com>
+Message-ID: <87r47lnpam.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5d5b468345d52c0e5888667a2287d11f7f598a5f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Mischa" == Mischa Jonker <Mischa.Jonker@synopsys.com> writes:
 
-If any of the post-image scripts wants to create mtd/ubi images,
-we need to expose an option for mtd-tools to be user-selectable.
+ > The Makefile has been renamed to Makefile.perf; so now we check
+ > both Makefiles to support 3.7 - 3.12 and 3.13 - beyond.
 
-[Peter: fix include order]
-Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/Config.in.host     |    1 +
- package/mtd/Config.in.host |    6 ++++++
- 2 files changed, 7 insertions(+), 0 deletions(-)
+ > Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
+ > ---
+ >  package/perf/perf.mk |    2 +-
+ >  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 34e84bf..685a8b8 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -7,6 +7,7 @@ source "package/genext2fs/Config.in.host"
- source "package/genimage/Config.in.host"
- source "package/genpart/Config.in.host"
- source "package/lpc3250loader/Config.in.host"
-+source "package/mtd/Config.in.host"
- source "package/mtools/Config.in.host"
- source "package/omap-u-boot-utils/Config.in.host"
- source "package/openocd/Config.in.host"
-diff --git a/package/mtd/Config.in.host b/package/mtd/Config.in.host
-new file mode 100644
-index 0000000..3752266
---- /dev/null
-+++ b/package/mtd/Config.in.host
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_HOST_MTD
-+	bool "host mtd, jffs2 and ubi/ubifs tools"
-+	help
-+	  Build mtd, jffs2 and ubi/ubifs tools
-+
-+	  http://www.linux-mtd.infradead.org/
+ > diff --git a/package/perf/perf.mk b/package/perf/perf.mk
+ > index d7898d0..ffe18bc 100644
+ > --- a/package/perf/perf.mk
+ > +++ b/package/perf/perf.mk
+ > @@ -35,7 +35,7 @@ define PERF_BUILD_CMDS
+ >  		exit 1 ; \
+ >  	fi
+ >  	$(Q)if test "$(BR2_PACKAGE_ELFUTILS)" = "" ; then \
+ > -		if ! grep -q NO_LIBELF $(LINUX_DIR)/tools/perf/Makefile ; then \
+ > +		if ! grep -q NO_LIBELF $(LINUX_DIR)/tools/perf/Makefile $(LINUX_DIR)/tools/perf/Makefile.perf ; then \
+
+Hmm, does that really work? I would expect grep to error out when either
+Makefile or Makefile.perf isn't available.
+
+What about simply checking Makefile* instead?
+
+-- 
+Bye, Peter Korsgaard
