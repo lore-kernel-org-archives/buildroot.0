@@ -1,40 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 2 Feb 2014 11:05:08 +0100
-Subject: [Buildroot] [PATCH] libroxml: bump version to 2.3.0
-In-Reply-To: <CAJb9USVBcJexbz3hcNCOpHTJpM6rD1dsEnDXKwtUp2PT-a0z=Q@mail.gmail.com>
-References: <1391189802-5284-1-git-send-email-blunderer@blunderer.org>
- <20140201094537.69fb978d@skate>
- <CAJb9USVBcJexbz3hcNCOpHTJpM6rD1dsEnDXKwtUp2PT-a0z=Q@mail.gmail.com>
-Message-ID: <20140202110508.266bd6f2@skate>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 2 Feb 2014 11:16:39 +0100
+Subject: [Buildroot] [PATCH 1/3] Makefile: use absolute paths to
+ BR2_EXTERNAL
+In-Reply-To: <20140126145342.4c5ccc4e@skate>
+References: <cover.1390424302.git.yann.morin.1998@free.fr>
+ <44e6c31931f55e79eec713be1a202f2c170667b7.1390424303.git.yann.morin.1998@free.fr>
+ <20140126145342.4c5ccc4e@skate>
+Message-ID: <20140202101639.GA3331@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Tristan Lelong,
-
-On Sat, 1 Feb 2014 14:30:44 -0800, Tristan Lelong wrote:
-> I will add this linking exception.
+On 2014-01-26 14:53 +0100, Thomas Petazzoni spake thusly:
+> Dear Yann E. MORIN,
 > 
-> Regarding Documentation and tests, this is disabled by default, so we
-> shouldn't need anymore configuration option.
+> On Wed, 22 Jan 2014 21:59:34 +0100, Yann E. MORIN wrote:
+> 
+> > +is interpreted relative to the main Buildroot source directory, not
+> > +the Buildroot output directory. Using relative paths can lead to various
+> > +broken setups, and thus is highly discouraged in favour of using
+> > +absolute paths.
+> 
+> In this patch and in patch 3/3, I don't quite agree with the strong
+> suggestion to use absolute paths. I personally find the usage of
+> absolute paths ugly, and prefer to have in the manual an explanation on
+> how the paths are interpreted, so that the users can understand how to
+> properly use either relative paths or absolute paths as they prefer.
+> 
+> To me, a tool that strongly suggests to use absolute paths is broken.
 
-Ok.
+I am a bit unsure how to handle this situation.
 
-> I'll resend the corrected patch.
+On the one hand, I agree with you that not supporting relative paths
+would be bad. We should work seemlessly with relative paths.
 
-Peter has merged your patch, and he has added the static link exception
-indication to the license info. So you don't need to send a corrected
-patch.
+On the other hand, the way we handle relative paths is counter-intuitive,
+since they are interpreted relative to the Buildroot top-dir, not to the
+current directory [*], which is baiscally the way virtually all other
+programs handles relative paths, which makes it weird to a new-comer (or
+even to long-timers, I have to admit).
 
-See
-http://git.buildroot.net/buildroot/commit/package/libroxml?id=267edbf9aa24faa688bcc6785ffb8d50059195f8
+Also, I personnally don't much care what we do or do not usggest either
+way. I'm just trying to avoid the easy pitfalls.
 
-Thanks!
+[*] Note that this is not our fault, but make's, since that the way make
+behaves. I checked the dicumentation, and there is no way to get back
+the CWD make was run from.
 
-Thomas
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
