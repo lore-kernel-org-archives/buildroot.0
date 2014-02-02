@@ -1,35 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 2 Feb 2014 09:10:52 +0100
-Subject: [Buildroot] [PATCH 1/1] axel: fixed package download issue
-In-Reply-To: <1391258818-19350-1-git-send-email-martin@barkynet.com>
-References: <1391258818-19350-1-git-send-email-martin@barkynet.com>
-Message-ID: <20140202091052.64e36322@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 02 Feb 2014 10:28:20 +0100
+Subject: [Buildroot] [PATCH 1/3] infozip: fix $(AS) behavior
+In-Reply-To: <1391120098-8325-1-git-send-email-romain.naour@openwide.fr>
+ (Romain Naour's message of "Thu, 30 Jan 2014 23:14:58 +0100")
+References: <1391120098-8325-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <87y51trhhn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Martin Bark,
+>>>>> "Romain" == Romain Naour <romain.naour@openwide.fr> writes:
 
-On Sat,  1 Feb 2014 12:46:58 +0000, Martin Bark wrote:
-> This patch updates axel.mk to download axel v2.4 from snapshot.debian.org.
-> The download from alioth.debian.org is currently broken resulting in a
-> malformed axel.2.4.tar.gz being downloaded and the build failing.  The
-> package is available instead from snapshot.debian.org.
-> 
-> Signed-off-by: Martin Bark <martin@barkynet.com>
+ > infozip's Makefile expect $(AS) to output by default to <basename>.o
+ > but when called from Buildroot, the value for $(AS) is set
+ > to to invoke the toolchain's $(AS) directly, and the output of it
+ > goes to a.out.
 
-As I explained, this problem is not specific to Axel, but to all
-package that download from Alioth. So I believe it would be better to
-have one single patch that changes all the Alioth URLs to other URLs,
-so that we can revert that single patch later on once Alioth is working
-again.
+ > So, define $(AS) with $(CC -c)
 
-Best regards,
+ > Reported-by: ?????? ??????? <lucenko_kirill@mail.ru>
+ > Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 
-Thomas
+Committed, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
