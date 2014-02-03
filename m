@@ -1,35 +1,31 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 3 Feb 2014 10:15:44 +0100
-Subject: [Buildroot] Patchwork oldest patches cleanup #4 (deadline
-	January 5)
-In-Reply-To: <20140128180018.5de8c1fb@skate>
-References: <CAAXf6LWFAfs_i_NjBbD3RZ=Y0RDKftzwj-_8xKuqyYA=69PNsw@mail.gmail.com>
- <CAAXf6LVVi6d=xRjsqW8eSMAf1CpKyU-qUTQ2dbfCPU=EF__jcA@mail.gmail.com>
- <20140106130503.2df2a9ef@skate>
- <CAAXf6LUnqAYQZoQ9-npV0nyDezec__sfnZrvYJY0PouNujE3HQ@mail.gmail.com>
- <CAAXf6LX66a699zwPQ2E1qQc3xjuWk9eUE7Pp4RLrG=nZKfn8Zw@mail.gmail.com>
- <20140128180018.5de8c1fb@skate>
-Message-ID: <CAAXf6LWPTJJ84m_bvjoWtSYKtmzYPUrbdK_uqWbuAyP00mH7=A@mail.gmail.com>
+From: Alexander Lukichev <alexander.lukichev@gmail.com>
+Date: Mon, 03 Feb 2014 11:26:20 +0200
+Subject: [Buildroot] [PATCH 2/3] infozip: fix cross-compilation issues
+In-Reply-To: <87ob2pp8xa.fsf@dell.be.48ers.dk>
+References: <1391120128-8375-1-git-send-email-romain.naour@openwide.fr>
+ <CAAHaz6Gu=hK8VaLx8fBxZ6i1X533bPgU_Sp0gWzJO8LBpbRaSw@mail.gmail.com>
+ <87ob2pp8xa.fsf@dell.be.48ers.dk>
+Message-ID: <52EF60BC.4040600@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jan 28, 2014 at 6:00 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Thomas De Schampheleire,
->
-> On Mon, 20 Jan 2014 16:58:03 +0100, Thomas De Schampheleire wrote:
->
->> > Specifically for libatomic_ops: it seems there is a github repo now:
->> > https://github.com/ivmai/libatomic_ops/
->> > where a 7.4.0 version is available. What about going that route then?
->> > Are you, or someone else, interested in taking this delegation?
->>
->> Any further feedback on this?
->
-> You can probably assign this patch to me, so that I take care of
-> bumping libatomic_ops in the future.
+Hi Peter, Romain, all,
 
-Ok, thanks. I delegated the patch to you now...
+On 02/02/2014 10:16 PM, Peter Korsgaard wrote:
+>>>>>> "Alexander" == Alexander Lukichev <alexander.lukichev@gmail.com> writes:
+>  >     +-CFLAGS = -O2 $(CFLAGS_NOOPT)
+>  >     ++CFLAGS ?= -02 $(CFLAGS_NOOPT)
+>  > Excuse me, is it -02 that's meant here?
+> Good catch. Actually in the context of Buildroot we don't want the
+> package to hardcode the optimization level, so I will simply drop it.
+
+Just out of curiosity, I have not seen an -0<N> gcc optimization
+flag (as opposed to -O<N>, zero vs. a big O). Is it somewhere on
+gcc manual?
+
+--
+Best regards,
+  Alexander Lukichev
