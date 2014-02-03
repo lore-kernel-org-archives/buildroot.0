@@ -1,76 +1,95 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Feb 2014 22:02:32 +0100
-Subject: [Buildroot] [PATCH v11 0/8] Add support for top-level parallel
- make
-In-Reply-To: <1389348368-2509-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1389348368-2509-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <20140203220232.4b228965@skate>
+From: Ryan Barnett <ryanbarnett3@gmail.com>
+Date: Mon,  3 Feb 2014 22:22:53 +0100
+Subject: [Buildroot] [PATCH 1/1] Fix alioth.debian URLs that are broken
+Message-ID: <1391462573-13068-1-git-send-email-rjbarnet@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fabio Porcedda,
+Inspired by a patch from Martin Bark <martin@barkynet.com>, this fixes
+autobuild issues related to packages not downloading from alioth.debian
+URLs. This patches is meant to be "temporary" until the URLs are fixed
+by debain.
 
-On Fri, 10 Jan 2014 11:06:00 +0100, Fabio Porcedda wrote:
+Fixes:
+  http://autobuild.buildroot.org/results/8c3/8c34649a7f98f60f14cff8b32fa2f8e82b1afeb6
+  http://autobuild.buildroot.org/results/7e3/7e34e73e40fdb0e04bd63fa889f9bc14f7e30536
 
-> this is a patch set for adding support for top-level parallel make in
-> buildroot, the common problem scattered in buildroot's top-level
-> makefiles is that in the rules it relies on the order of evaluation of
-> the prerequisites, to be able to use top-level parallel make instead
-> of reling on the left to right ordering of evaluation of the
-> prerequisites we must add an explicit rule to describe the
-> dependencies.
+Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+---
+ package/axel/axel.mk                   | 2 +-
+ package/libhid/libhid.mk               | 2 +-
+ package/ltrace/ltrace.mk               | 2 +-
+ package/minicom/minicom.mk             | 2 +-
+ package/sane-backends/sane-backends.mk | 2 +-
+ 5 files changed, 5 insertions(+), 5 deletions(-)
 
-We have discussed your patch series today at the Buildroot meeting,
-Peter and I had a look at it. Our plan is to merge it right after
-2014.02-rc1 is released, into the -next branch, which means that it
-will be part of the 2014.05 release.
+diff --git a/package/axel/axel.mk b/package/axel/axel.mk
+index a83001f..ea97d75 100644
+--- a/package/axel/axel.mk
++++ b/package/axel/axel.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
 
-That said, there are two changes that we would like to be made, but
-they can be made as follow-up patches:
+ AXEL_VERSION = 2.4
+-AXEL_SITE = https://alioth.debian.org/frs/download.php/file/3015
++AXEL_SITE = http://sources.buildroot.net/
+ AXEL_LICENSE = GPLv2+
+ AXEL_LICENSE_FILES = COPYING
 
- * Guarantee that the staging installation is always done before the
-   target installation. Specifically for the uclibc and glibc package,
-   you've added something like:
+diff --git a/package/libhid/libhid.mk b/package/libhid/libhid.mk
+index 97aab5d..1b9b895 100644
+--- a/package/libhid/libhid.mk
++++ b/package/libhid/libhid.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
 
-+# The uclibc-install-target use files from uclibc-install-staging
-+$(UCLIBC_TARGET_INSTALL_TARGET): $(UCLIBC_TARGET_INSTALL_STAGING)
+ LIBHID_VERSION = 0.2.16
+-LIBHID_SITE = http://alioth.debian.org/frs/download.php/file/1958
++LIBHID_SITE = http://sources.buildroot.net/
+ LIBHID_DEPENDENCIES = libusb-compat libusb
+ LIBHID_INSTALL_STAGING = YES
+ LIBHID_AUTORECONF = YES
+diff --git a/package/ltrace/ltrace.mk b/package/ltrace/ltrace.mk
+index b42c252..99c1af6 100644
+--- a/package/ltrace/ltrace.mk
++++ b/package/ltrace/ltrace.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
 
-   The problem is that uclibc and glibc are by far not the only
-   packages to make this assumption. There are many packages who
-   install everything to staging, and then pick whatever they need from
-   the staging directory to install things to the target directory. The
-   qt and qt5 packages come to mind, but there are many more.
-   Therefore, we would like these steps to be serialized for each
-   package: first staging installation, then target installation.
+ LTRACE_VERSION = 0.7.3
+-LTRACE_SITE = http://alioth.debian.org/frs/download.php/file/3947
++LTRACE_SITE = http://sources.buildroot.net/
+ LTRACE_SOURCE = ltrace-$(LTRACE_VERSION).tar.bz2
+ LTRACE_DEPENDENCIES = libelf
+ LTRACE_CONF_OPT = --disable-werror
+diff --git a/package/minicom/minicom.mk b/package/minicom/minicom.mk
+index e0a7cee..d72a40d 100644
+--- a/package/minicom/minicom.mk
++++ b/package/minicom/minicom.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
 
- * Also, in glibc and uClibc, you're doing:
+ MINICOM_VERSION = 2.7
+-MINICOM_SITE = http://alioth.debian.org/frs/download.php/file/3977/
++MINICOM_SITE = http://sources.buildroot.net/
+ MINICOM_LICENSE = GPLv2+
+ MINICOM_LICENSE_FILES = COPYING
 
--# Before uClibc is built, we must have the second stage cross-compiler
--uclibc-build: host-gcc-intermediate
+diff --git a/package/sane-backends/sane-backends.mk b/package/sane-backends/sane-backends.mk
+index e2adc1a..52c5aa7 100644
+--- a/package/sane-backends/sane-backends.mk
++++ b/package/sane-backends/sane-backends.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
 
-+# Before uClibc is built, we must have the second stage cross-compiler
-+$(UCLIBC_TARGET_BUILD): | host-gcc-intermediate
+ SANE_BACKENDS_VERSION = 1.0.22
+-SANE_BACKENDS_SITE = https://alioth.debian.org/frs/download.php/file/3503
++SANE_BACKENDS_SITE = http://sources.buildroot.net/
+ SANE_BACKENDS_CONFIG_SCRIPTS = sane-config
 
-   But I believe there are a few other tricky cases where the
-   dependencies are "non-standard". I'm thinking of at least:
-
-    - linux/linux-ext-rtai.mk, which does not depends on rtai, but
-      rtai-patch. Not sure that's problematic in this case, but I was
-      wondering.
-
-    - The linux/linux.mk mechanism to rebuild the kernel image after
-      the initramfs image has been produced.
-
-Can you cook follow-up patches for the first issue, and maybe
-review/investigate the second issue if applicable?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+ ifeq ($(BR2_PACKAGE_LIBUSB),y)
+--
+1.8.3.2
