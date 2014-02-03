@@ -1,61 +1,37 @@
-From: Danny Gale <Daniel.Gale@coloradoengineeringinc.com>
-Date: Mon, 03 Feb 2014 12:50:34 -0700
-Subject: [Buildroot] Error building with external toolchain
-In-Reply-To: <20140203193701.5775f5d5@skate>
-References: <52EBD7F7.8010504@coloradoengineeringinc.com>	<20140201094246.20d7dc22@skate>	<52EFD674.7060800@coloradoengineeringinc.com>
- <20140203193701.5775f5d5@skate>
-Message-ID: <52EFF30A.6070905@coloradoengineeringinc.com>
+From: kuyurix at gmail.com <kuyurix@gmail.com>
+Date: Mon,  3 Feb 2014 17:51:19 +0000
+Subject: [Buildroot] [PATCH 2/2] mysql: disable debugging option
+Message-ID: <52efff31.0902ec0a.7f04.45f7@mx.google.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Here's an RPM of the toolchain to run on x86-64 host that will install 
-to /opt/start64TC (54 MB download)
+From: Marcelo Guti?rrez <kuyurix@gmail.com>
 
-http://www.sendspace.com/file/rtvitd
+it is not necessary to use $(ENABLE_DEBUG) with "--without-server" option.
 
-Thanks,
-Danny
+BTW, the value of "ENABLE_DEBUG" is empty.
 
-On 02/03/2014 11:37 AM, Thomas Petazzoni wrote:
-> Dear Danny Gale,
->
-> On Mon, 03 Feb 2014 10:48:36 -0700, Danny Gale wrote:
->
->>> Aren't you running with "make -j<something>" by any chance?
->> I'm running make with a single thread (-j1) to pinpoint this error.
->>
->> The external toolchain was built on an x86_64 host by Crosstool-NG
->> 1.19.0 for a powerpc64-e6500 target. I've attached the config file for
->> ct-ng.
-> Ok. Can you put up online a tarball of this toolchain?
->
-> We don't have powerpc64 support in Buildroot, so maybe some minor
-> changes in the external toolchain logic are needed.
->
->> I was able to go through the buildroot source and follow it through: the
->> .stamp_staging_installed target calls $($(PKG)_INSTALL_STAGING_CMDS),
->> with PKG=TOOLCHAIN_EXTERNAL. TOOLCHAIN_EXTERNAL_INSTALL_STAGING_COMMANDS
->> in ./toolchain/toolchain-external/toolchain-external.mk calls
->> TOOLCHAIN_EXTERNAL_INSTALL_CORE in that same file. The message "Copying
->> external toolchain libraries to target..." is there, though I don't
->> understand why it fails at that point.
-> Correct. All the external toolchain logic is in
-> toolchain/toolchain-external/toolchain-external.mk.
->
->> It seems I was mistaken -- the 32-bit version of the toolchain doesn't
->> seem to import either. A different 32-bit toolchain (for the powerpc 440
->> core) does import, however. So there seems to be something wrong with my
->> toolchain configuration. I suspect RPC support to be the culprit.
->>>> What will be required to get buildroot working with the 64-bit toolchain?
->>> When you're talking about 32 bits or 64 bits, are you talking about the
->>> bitness for the host architecture, or the target architecture?
->> The target. The host is an x86_64. The target is a 64-bit powerpc (e6500
->> core)
-> Again, if you can sure the toolchain tarball, I could do some testing.
->
-> Thanks!
->
-> Thomas
+Signed-off-by: Marcelo Guti?rrez <kuyurix@gmail.com>
+---
+ package/mysql/mysql.mk |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/package/mysql/mysql.mk b/package/mysql/mysql.mk
+index 9b22c2d..53daa3f 100644
+--- a/package/mysql/mysql.mk
++++ b/package/mysql/mysql.mk
+@@ -31,8 +31,7 @@ MYSQL_CONF_OPT = \
+ 	--without-libedit \
+ 	--without-readline \
+ 	--with-low-memory \
+-	--enable-thread-safe-client \
+-	$(ENABLE_DEBUG)
++	--enable-thread-safe-client
+ 
+ define MYSQL_REMOVE_TEST_PROGS
+ 	rm -rf $(TARGET_DIR)/usr/mysql-test $(TARGET_DIR)/usr/sql-bench
+-- 
+1.7.10.4
