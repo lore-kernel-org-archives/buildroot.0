@@ -1,76 +1,33 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Mon,  3 Feb 2014 12:07:37 +0100
-Subject: [Buildroot] [V2 2/2] ljlinenoise: new package
-In-Reply-To: <1391425657-30915-1-git-send-email-francois.perrad@gadz.org>
-References: <1391425657-30915-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1391425657-30915-2-git-send-email-francois.perrad@gadz.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 3 Feb 2014 12:26:10 +0100
+Subject: [Buildroot] [PATCH] Added menu entry to build squashfs host
+ tools separately
+In-Reply-To: <2146187109.45390160.1391089943313.JavaMail.root@telenet.be>
+References: <2146187109.45390160.1391089943313.JavaMail.root@telenet.be>
+Message-ID: <20140203112610.GB3651@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Jeroen, All,
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/Config.in                  |    1 +
- package/ljlinenoise/Config.in      |   15 +++++++++++++++
- package/ljlinenoise/ljlinenoise.mk |   13 +++++++++++++
- 3 files changed, 29 insertions(+)
- create mode 100644 package/ljlinenoise/Config.in
- create mode 100644 package/ljlinenoise/ljlinenoise.mk
+On 2014-01-30 14:52 +0100, Jeroen De Wachter spake thusly:
+> Before, the squashfs tools for host were only built when a squashfs
+> root filesystem image was generated.
 
-diff --git a/package/Config.in b/package/Config.in
-index 93d23cb..c757c68 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -370,6 +370,7 @@ source "package/cgilua/Config.in"
- source "package/copas/Config.in"
- source "package/coxpcall/Config.in"
- source "package/lbase64/Config.in"
-+source "package/ljlinenoise/Config.in"
- source "package/ljsyscall/Config.in"
- source "package/lua-cjson/Config.in"
- source "package/lua-ev/Config.in"
-diff --git a/package/ljlinenoise/Config.in b/package/ljlinenoise/Config.in
-new file mode 100644
-index 0000000..3d2af35
---- /dev/null
-+++ b/package/ljlinenoise/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_LJLINENOISE
-+	bool "ljlinenoise"
-+	select BR2_PACKAGE_LJSYSCALL
-+	# ljsyscall is specifically for LuaJIT, not Lua.
-+	depends on BR2_PACKAGE_LUAJIT
-+	# ljsyscall is only available for some target architectures
-+	depends on BR2_i386 || BR2_x86_64 || BR2_powerpc || BR2_arm || BR2_armeb
-+	help
-+	  ljlinenoise is a pure LuaJIT port of linenoise,
-+	  a small alternative to readline and libedit.
-+
-+	  http://fperrad.github.io/ljlinenoise/
-+
-+comment "ljlinenoise needs LuaJIT"
-+	depends on !BR2_PACKAGE_LUAJIT && (BR2_i386 || BR2_x86_64 || BR2_powerpc || BR2_arm || BR2_armeb)
-diff --git a/package/ljlinenoise/ljlinenoise.mk b/package/ljlinenoise/ljlinenoise.mk
-new file mode 100644
-index 0000000..69f6130
---- /dev/null
-+++ b/package/ljlinenoise/ljlinenoise.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# ljlinenoise
-+#
-+################################################################################
-+
-+LJLINENOISE_VERSION_UPSTREAM = 0.1.1
-+LJLINENOISE_VERSION = $(LJLINENOISE_VERSION_UPSTREAM)-1
-+LJLINENOISE_SUBDIR  = ljlinenoise-$(LJLINENOISE_VERSION_UPSTREAM)
-+LJLINENOISE_LICENSE = MIT
-+LJLINENOISE_LICENSE_FILES = $(LJLINENOISE_SUBDIR)/COPYRIGHT
-+
-+$(eval $(luarocks-package))
+We already have such a patch to that effect (and only about showing it
+in the menuconfig) waiting in the patchwork:
+    http://patchwork.ozlabs.org/patch/306629/
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.7.9.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
