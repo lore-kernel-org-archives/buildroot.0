@@ -1,82 +1,62 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Mon, 3 Feb 2014 23:01:57 +0100
-Subject: [Buildroot] [PATCH v2] uboot-tools: Allow users to use uboot's
-	sources
-In-Reply-To: <20140203225829.67dae85b@skate>
-References: <1391385955-13166-1-git-send-email-maxime.hadjinlian@gmail.com>
- <20140203225829.67dae85b@skate>
-Message-ID: <CAGduivzyTAPQDOhf8jHAjJEqcNwBBu3P-UJ-m1qWBB9+m_cF7Q@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 3 Feb 2014 23:04:17 +0100
+Subject: [Buildroot] [V2 2/2] ljlinenoise: new package
+In-Reply-To: <20140203225608.4593b632@skate>
+References: <1391425657-30915-1-git-send-email-francois.perrad@gadz.org>
+ <1391425657-30915-2-git-send-email-francois.perrad@gadz.org>
+ <20140203202630.GB3264@free.fr> <20140203225608.4593b632@skate>
+Message-ID: <20140203220417.GD3264@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Feb 3, 2014 at 10:58 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Maxime Hadjinlian,
->
-> On Mon,  3 Feb 2014 01:05:55 +0100, Maxime Hadjinlian wrote:
->
->> diff --git a/package/uboot-tools/Config.in b/package/uboot-tools/Config.in
->> index 7c8f17c..29580dd 100644
->> --- a/package/uboot-tools/Config.in
->> +++ b/package/uboot-tools/Config.in
->> @@ -7,6 +7,24 @@ config BR2_PACKAGE_UBOOT_TOOLS
->>
->>  if BR2_PACKAGE_UBOOT_TOOLS
->>
->> +if BR2_TARGET_UBOOT
->> +
->> +choice
->> +     prompt "version"
->> +     default BR2_PACKAGE_UBOOT_TOOLS_LATEST_VERSION
->> +     help
->> +       Select the specific uboot-tools version you want to use
->> +
->> +config BR2_PACKAGE_UBOOT_TOOLS_LATEST_VERSION
->> +     bool "Use latest upstream version"
->> +
->> +config BR2_PACKAGE_UBOOT_TOOLS_USE_UBOOT_VERSION
->> +     bool "Use the same version as the uboot package"
->
-> Shouldn't this option only be available if the U-Boot package has been
-> enabled in the configuration?
-It is already in this patch.
->
->> +ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_USE_UBOOT_VERSION),y)
->> +# We have to use the BR2_TARGET_UBOOT_VERSION because of the order of inclusion
->> +# of the mk files.
->> +UBOOT_TOOLS_VERSION = $(call qstrip,$(BR2_TARGET_UBOOT_VERSION))
->
-> That's more of a question for Arnout, but does the order of .mk files
-> inclusion matter since we're using '=' and not ':=' ?
-Arnout will confirm (or not, if I misunderstood) with much more
-detail, but I found that the inclusion did matter, even with the use
-of '='.
->
->> +UBOOT_TOOLS_SOURCE = $(UBOOT_SOURCE)
->> +UBOOT_TOOLS_SITE = $(UBOOT_SITE)
->> +ifneq ($(UBOOT_SITE_METHOD),)
->> +UBOOT_TOOL_SITE_METHOD = $(UBOOT_SITE_METHOD)
->> +endif
->> +UBOOT_TOOLS_LICENSE = $(UBOOT_LICENSE)
->> +UBOOT_TOOLS_LICENSE_FILES = $(UBOOT_LICENSE_FILES)
->> +else
->>  UBOOT_TOOLS_VERSION = 2014.01
->> -UBOOT_TOOLS_SOURCE  = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
->> -UBOOT_TOOLS_SITE    = ftp://ftp.denx.de/pub/u-boot
->> +UBOOT_TOOLS_SOURCE = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
->> +UBOOT_TOOLS_SITE = ftp://ftp.denx.de/pub/u-boot
->>  UBOOT_TOOLS_LICENSE = GPLv2+
->>  UBOOT_TOOLS_LICENSE_FILES = Licenses/gpl-2.0.txt
->> +endif
->>
->>  define UBOOT_TOOLS_BUILD_CMDS
->>       $(MAKE) -C $(@D)                        \
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+Thomas, Fran?ois, All,
+
+On 2014-02-03 22:56 +0100, Thomas Petazzoni spake thusly:
+> On Mon, 3 Feb 2014 21:26:31 +0100, Yann E. MORIN wrote:
+> 
+> > > diff --git a/package/ljlinenoise/Config.in b/package/ljlinenoise/Config.in
+> > > new file mode 100644
+> > > index 0000000..3d2af35
+> > > --- /dev/null
+> > > +++ b/package/ljlinenoise/Config.in
+> > > @@ -0,0 +1,15 @@
+> > > +config BR2_PACKAGE_LJLINENOISE
+> > > +	bool "ljlinenoise"
+> > > +	select BR2_PACKAGE_LJSYSCALL
+> > > +	# ljsyscall is specifically for LuaJIT, not Lua.
+> > > +	depends on BR2_PACKAGE_LUAJIT
+> > > +	# ljsyscall is only available for some target architectures
+> > > +	depends on BR2_i386 || BR2_x86_64 || BR2_powerpc || BR2_arm || BR2_armeb
+> > 
+> > No need for the comment, it is obvious from the dependency itself that
+> > ljlinenoise only works on these architectures.
+> 
+> Hum, really? These dependencies are inherited from ljsyscall, which is
+> selected by this package. In such a situation, we normally do something
+> like:
+> 
+> 	select BR2_PACKAGE_LIBGLIB2
+> 	depends on BR2_USE_WCHAR # libglib2
+> 
+> so having the same comment mentioned here makes sense, IMO, as it helps
+> understanding where the architecture dependency is coming from.
+
+OK, my bad, I misread 'ljlinenoise' when 'ljsyscall' was properly
+written.
+
+Forget what I said about this. Sorry for the noise.
+As Thomas said, just post-fix the depends with  '# ljsyscall'.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
