@@ -1,32 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Feb 2014 18:29:52 +0100
-Subject: [Buildroot] New contact for ARC support in Buildroot
-In-Reply-To: <39A54937CC95F24AA2F794E2D2B66B1356C60FC1@de02wembxa.internal.synopsys.com>
-References: <E6BF041E97966E4DB955F0DF883AD2D685F4084F@de02wembxa.internal.synopsys.com>
- <20140201084053.3d9c0903@skate>
- <39A54937CC95F24AA2F794E2D2B66B1356C60FC1@de02wembxa.internal.synopsys.com>
-Message-ID: <20140203182952.36fe046c@skate>
+Date: Mon, 3 Feb 2014 19:37:01 +0100
+Subject: [Buildroot] Error building with external toolchain
+In-Reply-To: <52EFD674.7060800@coloradoengineeringinc.com>
+References: <52EBD7F7.8010504@coloradoengineeringinc.com>
+ <20140201094246.20d7dc22@skate>
+ <52EFD674.7060800@coloradoengineeringinc.com>
+Message-ID: <20140203193701.5775f5d5@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Anton Kolesov,
+Dear Danny Gale,
 
-Welcome in the Buildroot community! Glad to see a new contributor
-taking care of the ARC support.
+On Mon, 03 Feb 2014 10:48:36 -0700, Danny Gale wrote:
 
-On Mon, 3 Feb 2014 08:46:32 +0000, Anton Kolesov wrote:
-
-> Probably mailbot removed my email from the original mail.
+> > Aren't you running with "make -j<something>" by any chance?
+> I'm running make with a single thread (-j1) to pinpoint this error.
 > 
-> Autobuilder failures should be sent to arc-buildroot at synopsys.com as they are already.
+> The external toolchain was built on an x86_64 host by Crosstool-NG 
+> 1.19.0 for a powerpc64-e6500 target. I've attached the config file for 
+> ct-ng.
 
-This is absolutely correct, and I forgot about that. I just checked,
-and indeed the daily e-mail messages are being sent to this address.
+Ok. Can you put up online a tarball of this toolchain?
 
-Thanks a lot!
+We don't have powerpc64 support in Buildroot, so maybe some minor
+changes in the external toolchain logic are needed.
+
+> I was able to go through the buildroot source and follow it through: the 
+> .stamp_staging_installed target calls $($(PKG)_INSTALL_STAGING_CMDS), 
+> with PKG=TOOLCHAIN_EXTERNAL. TOOLCHAIN_EXTERNAL_INSTALL_STAGING_COMMANDS 
+> in ./toolchain/toolchain-external/toolchain-external.mk calls 
+> TOOLCHAIN_EXTERNAL_INSTALL_CORE in that same file. The message "Copying 
+> external toolchain libraries to target..." is there, though I don't 
+> understand why it fails at that point.
+
+Correct. All the external toolchain logic is in
+toolchain/toolchain-external/toolchain-external.mk.
+
+> It seems I was mistaken -- the 32-bit version of the toolchain doesn't 
+> seem to import either. A different 32-bit toolchain (for the powerpc 440 
+> core) does import, however. So there seems to be something wrong with my 
+> toolchain configuration. I suspect RPC support to be the culprit.
+> >>
+> >> What will be required to get buildroot working with the 64-bit toolchain?
+> > When you're talking about 32 bits or 64 bits, are you talking about the
+> > bitness for the host architecture, or the target architecture?
+> The target. The host is an x86_64. The target is a 64-bit powerpc (e6500 
+> core)
+
+Again, if you can sure the toolchain tarball, I could do some testing.
+
+Thanks!
 
 Thomas
 -- 
