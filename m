@@ -1,37 +1,35 @@
-From: arnaud aujon <arnaud.aujon@gmail.com>
-Date: Mon, 3 Feb 2014 09:52:29 +0100
-Subject: [Buildroot] More work on a package updates checking tool
-In-Reply-To: <20140202121951.3619d2cf@skate>
-References: <CACjG4BJuyTZ=Fbgmt=qiNs+qn1pQt0R6xV+MCw_5CKbc+XFZqg@mail.gmail.com>
- <20131219180239.5a5c6771@skate>
- <CACjG4BKCDV4yqOfjfdnFnPErvGYJtbBraqRvj5H8oPSu-1PYhA@mail.gmail.com>
- <20140202121951.3619d2cf@skate>
-Message-ID: <CACjG4B+DJSmnY9m_7u4w8cr4NCE61R7SBRQ1G5yecphFoBdpbA@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 3 Feb 2014 10:15:44 +0100
+Subject: [Buildroot] Patchwork oldest patches cleanup #4 (deadline
+	January 5)
+In-Reply-To: <20140128180018.5de8c1fb@skate>
+References: <CAAXf6LWFAfs_i_NjBbD3RZ=Y0RDKftzwj-_8xKuqyYA=69PNsw@mail.gmail.com>
+ <CAAXf6LVVi6d=xRjsqW8eSMAf1CpKyU-qUTQ2dbfCPU=EF__jcA@mail.gmail.com>
+ <20140106130503.2df2a9ef@skate>
+ <CAAXf6LUnqAYQZoQ9-npV0nyDezec__sfnZrvYJY0PouNujE3HQ@mail.gmail.com>
+ <CAAXf6LX66a699zwPQ2E1qQc3xjuWk9eUE7Pp4RLrG=nZKfn8Zw@mail.gmail.com>
+ <20140128180018.5de8c1fb@skate>
+Message-ID: <CAAXf6LWPTJJ84m_bvjoWtSYKtmzYPUrbdK_uqWbuAyP00mH7=A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-
-
-> Do you have any news about this work? It would be really useful to have
-> this to replace http://autobuild.buildroot.org/stats/, and have the
-> very useful informations of which packages might be upgraded to a newer
-> upstream version.
+On Tue, Jan 28, 2014 at 6:00 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Thomas De Schampheleire,
 >
-> Have you had some time to work on this? Any progress?
+> On Mon, 20 Jan 2014 16:58:03 +0100, Thomas De Schampheleire wrote:
 >
+>> > Specifically for libatomic_ops: it seems there is a github repo now:
+>> > https://github.com/ivmai/libatomic_ops/
+>> > where a 7.4.0 version is available. What about going that route then?
+>> > Are you, or someone else, interested in taking this delegation?
+>>
+>> Any further feedback on this?
+>
+> You can probably assign this patch to me, so that I take care of
+> bumping libatomic_ops in the future.
 
-I'm still working on it, I spent some time rewriting it in a more pythonic
-way.
-There is still some clean up to do but I will be able to provide a version
-pretty soon.
-
-Regards,
-
-Arnaud
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140203/fa4b9563/attachment.html>
+Ok, thanks. I delegated the patch to you now...
