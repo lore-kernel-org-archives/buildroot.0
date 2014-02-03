@@ -1,29 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Feb 2014 18:27:00 +0100
-Subject: [Buildroot] More work on a package updates checking tool
-In-Reply-To: <CACjG4B+DJSmnY9m_7u4w8cr4NCE61R7SBRQ1G5yecphFoBdpbA@mail.gmail.com>
-References: <CACjG4BJuyTZ=Fbgmt=qiNs+qn1pQt0R6xV+MCw_5CKbc+XFZqg@mail.gmail.com>
- <20131219180239.5a5c6771@skate>
- <CACjG4BKCDV4yqOfjfdnFnPErvGYJtbBraqRvj5H8oPSu-1PYhA@mail.gmail.com>
- <20140202121951.3619d2cf@skate>
- <CACjG4B+DJSmnY9m_7u4w8cr4NCE61R7SBRQ1G5yecphFoBdpbA@mail.gmail.com>
-Message-ID: <20140203182700.7233d1d5@skate>
+Date: Mon, 3 Feb 2014 18:29:52 +0100
+Subject: [Buildroot] New contact for ARC support in Buildroot
+In-Reply-To: <39A54937CC95F24AA2F794E2D2B66B1356C60FC1@de02wembxa.internal.synopsys.com>
+References: <E6BF041E97966E4DB955F0DF883AD2D685F4084F@de02wembxa.internal.synopsys.com>
+ <20140201084053.3d9c0903@skate>
+ <39A54937CC95F24AA2F794E2D2B66B1356C60FC1@de02wembxa.internal.synopsys.com>
+Message-ID: <20140203182952.36fe046c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear arnaud aujon,
+Dear Anton Kolesov,
 
-On Mon, 3 Feb 2014 09:52:29 +0100, arnaud aujon wrote:
+Welcome in the Buildroot community! Glad to see a new contributor
+taking care of the ARC support.
 
-> I'm still working on it, I spent some time rewriting it in a more pythonic
-> way.
-> There is still some clean up to do but I will be able to provide a version
-> pretty soon.
+On Mon, 3 Feb 2014 08:46:32 +0000, Anton Kolesov wrote:
 
-Excellent, thanks! Looking forward to it!
+> Probably mailbot removed my email from the original mail.
+> 
+> Autobuilder failures should be sent to arc-buildroot at synopsys.com as they are already.
+
+This is absolutely correct, and I forgot about that. I just checked,
+and indeed the daily e-mail messages are being sent to this address.
+
+Thanks a lot!
 
 Thomas
 -- 
