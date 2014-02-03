@@ -1,24 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 03 Feb 2014 09:37:03 +0100
-Subject: [Buildroot] [PATCH] openssh: bump to version 6.5p1
-In-Reply-To: <1391392888-13726-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Sun, 2 Feb 2014 23:01:28 -0300")
-References: <1391392888-13726-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <8761owoamo.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 3 Feb 2014 09:23:21 +0100
+Subject: [Buildroot] [git commit] package/rpi-firmware: bump for misc
+	enhancements and fixes
+Message-ID: <20140203083859.2658D9C76C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=2ff133bbb20aea479b91470e105e26487e8486db
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Convert the ever growing drop-SUSv3-legacy patch to a sed expression.
- > Modify the initscript to create ed25519 server key.
+Fixes for h264 video deocding, audio playback and cec.
+Some improvements in HDMI output management.
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/rpi-firmware/rpi-firmware.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index 5d2c0cf..99faa5b 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RPI_FIRMWARE_VERSION = 940dc3b5ea0a001096c5fbb2d483a961d42fe85c
++RPI_FIRMWARE_VERSION = 98e3be3a7e0ec7d4a86e8edb2177bd8e2bb8728f
+ RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
+ RPI_FIRMWARE_LICENSE = BSD-3c
+ RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
