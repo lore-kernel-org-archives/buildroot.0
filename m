@@ -1,27 +1,30 @@
-From: vmalkani <vmalkani@gmail.com>
-Date: Mon, 3 Feb 2014 11:11:17 -0800 (PST)
-Subject: [Buildroot] automated building of Opkg repository
-In-Reply-To: <1391454473-6735-1-git-send-email-vmalkani@gmail.com>
-References: <1391454473-6735-1-git-send-email-vmalkani@gmail.com>
-Message-ID: <1391454677012-61317.post@n4.nabble.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 3 Feb 2014 21:16:13 +0100
+Subject: [Buildroot] [V2 1/2] luarocks: never wraps script
+In-Reply-To: <1391425657-30915-1-git-send-email-francois.perrad@gadz.org>
+References: <1391425657-30915-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20140203201613.GA3264@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Franc?ois, All,
 
-I updated the patch to work with Description and Version correctly (These
-were causing compilation errors).
-In addition, I updated the patch to apply cleanly to pre-generic.mk
-I'm not sure if this is the correct process so I hope this is the correct
-way to do it.
+On 2014-02-03 12:07 +0100, Francois Perrad spake thusly:
+> the wrapper introduces some HOST_DIR paths on target
 
-Vinay
+Can you explain a bit more in details what this wrapper is, and why we
+do not want it (besides the fact it uses HOST_DIR paths on the target)?
 
+Regards,
+Yann E. MORIN.
 
-
---
-View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/automated-building-of-Opkg-repository-tp61315p61317.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
