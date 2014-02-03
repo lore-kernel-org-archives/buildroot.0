@@ -1,30 +1,354 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 3 Feb 2014 21:16:13 +0100
-Subject: [Buildroot] [V2 1/2] luarocks: never wraps script
-In-Reply-To: <1391425657-30915-1-git-send-email-francois.perrad@gadz.org>
-References: <1391425657-30915-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20140203201613.GA3264@free.fr>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Mon,  3 Feb 2014 21:24:07 +0100
+Subject: [Buildroot] [PATCH] dependencies.sh: cleanup dependencies.sh
+Message-ID: <1391459047-23665-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Franc?ois, All,
+Cleanup mixed indents and remove commented lines.
 
-On 2014-02-03 12:07 +0100, Francois Perrad spake thusly:
-> the wrapper introduces some HOST_DIR paths on target
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+ support/dependencies/dependencies.sh | 214 +++++++++++++++++------------------
+ 1 file changed, 107 insertions(+), 107 deletions(-)
 
-Can you explain a bit more in details what this wrapper is, and why we
-do not want it (besides the fact it uses HOST_DIR paths on the target)?
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index 47d4d10..06386e6 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -1,199 +1,199 @@
+ #!/bin/sh
+ # vi: set sw=4 ts=4:
+-#set -x
+ 
+ export LC_ALL=C
+ 
+ # Verify that grep works
+ echo "WORKS" | grep "WORKS" >/dev/null 2>&1
+ if test $? != 0 ; then
+-	echo
+-	echo "grep doesn't work"
+-	exit 1
++echo
++echo "grep doesn't work"
++exit 1
+ fi
+ 
+ # sanity check for CWD in LD_LIBRARY_PATH
+ # try not to rely on egrep..
+ if test -n "$LD_LIBRARY_PATH" ; then
+-	echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | grep ':\.:' >/dev/null 2>&1 ||
+-	echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | grep 'TRiGGER_start\.:' >/dev/null 2>&1 ||
+-	echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | grep ':\.TRiGGER_end' >/dev/null 2>&1 ||
+-	echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | grep 'TRiGGER_start\.TRiGGER_end' >/dev/null 2>&1
+-	if test $? = 0; then
+-		echo
+-		echo "You seem to have the current working directory in your"
+-		echo "LD_LIBRARY_PATH environment variable. This doesn't work."
+-		exit 1;
+-	fi
++echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | grep ':\.:' >/dev/null 2>&1 ||
++echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | grep 'TRiGGER_start\.:' >/dev/null 2>&1 ||
++echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | grep ':\.TRiGGER_end' >/dev/null 2>&1 ||
++echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | grep 'TRiGGER_start\.TRiGGER_end' >/dev/null 2>&1
++if test $? = 0; then
++echo
++echo "You seem to have the current working directory in your"
++echo "LD_LIBRARY_PATH environment variable. This doesn't work."
++exit 1;
++fi
+ fi;
+ 
+ # sanity check for CWD in PATH. Having the current working directory
+ # in the PATH makes the toolchain build process break.
+ # try not to rely on egrep..
+ if test -n "$PATH" ; then
+-	echo TRiGGER_start"$PATH"TRiGGER_end | grep ':\.:' >/dev/null 2>&1 ||
+-	echo TRiGGER_start"$PATH"TRiGGER_end | grep 'TRiGGER_start\.:' >/dev/null 2>&1 ||
+-	echo TRiGGER_start"$PATH"TRiGGER_end | grep ':\.TRiGGER_end' >/dev/null 2>&1 ||
+-	echo TRiGGER_start"$PATH"TRiGGER_end | grep 'TRiGGER_start\.TRiGGER_end' >/dev/null 2>&1
+-	if test $? = 0; then
+-		echo
+-		echo "You seem to have the current working directory in your"
+-		echo "PATH environment variable. This doesn't work."
+-		exit 1;
+-	fi
++echo TRiGGER_start"$PATH"TRiGGER_end | grep ':\.:' >/dev/null 2>&1 ||
++echo TRiGGER_start"$PATH"TRiGGER_end | grep 'TRiGGER_start\.:' >/dev/null 2>&1 ||
++echo TRiGGER_start"$PATH"TRiGGER_end | grep ':\.TRiGGER_end' >/dev/null 2>&1 ||
++echo TRiGGER_start"$PATH"TRiGGER_end | grep 'TRiGGER_start\.TRiGGER_end' >/dev/null 2>&1
++if test $? = 0; then
++echo
++echo "You seem to have the current working directory in your"
++echo "PATH environment variable. This doesn't work."
++exit 1;
++fi
+ fi;
+ 
+ if test -n "$PERL_MM_OPT" ; then
+-    echo
+-    echo "You have PERL_MM_OPT defined because Perl local::lib"
+-    echo "is installed on your system. Please unset this variable"
+-    echo "before starting Buildroot, otherwise the compilation of"
+-    echo "Perl related packages will fail"
+-    exit 1
++echo
++echo "You have PERL_MM_OPT defined because Perl local::lib"
++echo "is installed on your system. Please unset this variable"
++echo "before starting Buildroot, otherwise the compilation of"
++echo "Perl related packages will fail"
++exit 1
+ fi
+ 
+ # Verify that which is installed
+ if ! which which > /dev/null ; then
+-	echo
+-	echo "You must install 'which' on your build machine";
+-	exit 1;
++echo
++echo "You must install 'which' on your build machine";
++exit 1;
+ fi;
+ 
+ if ! which sed > /dev/null ; then
+-	echo
+-	echo "You must install 'sed' on your build machine"
+-	exit 1
++echo
++echo "You must install 'sed' on your build machine"
++exit 1
+ fi
+ 
+ # Check make
+ MAKE=$(which make 2> /dev/null)
+ if [ -z "$MAKE" ] ; then
+-	echo
+-	echo "You must install 'make' on your build machine";
+-	exit 1;
++echo
++echo "You must install 'make' on your build machine";
++exit 1;
+ fi;
+ MAKE_VERSION=$($MAKE --version 2>&1 | sed -e 's/^.* \([0-9\.]\)/\1/g' -e 's/[-\ ].*//g' -e '1q')
+ if [ -z "$MAKE_VERSION" ] ; then
+-	echo
+-	echo "You must install 'make' on your build machine";
+-	exit 1;
++echo
++echo "You must install 'make' on your build machine";
++exit 1;
+ fi;
+ MAKE_MAJOR=$(echo $MAKE_VERSION | sed -e "s/\..*//g")
+ MAKE_MINOR=$(echo $MAKE_VERSION | sed -e "s/^$MAKE_MAJOR\.//g" -e "s/\..*//g" -e "s/[a-zA-Z].*//g")
+ if [ $MAKE_MAJOR -lt 3 ] || [ $MAKE_MAJOR -eq 3 -a $MAKE_MINOR -lt 81 ] ; then
+-	echo
+-	echo "You have make '$MAKE_VERSION' installed.  GNU make >=3.81 is required"
+-	exit 1;
++echo
++echo "You have make '$MAKE_VERSION' installed.  GNU make >=3.81 is required"
++exit 1;
+ fi;
+ 
+ # Check host gcc
+ COMPILER=$(which $HOSTCC_NOCCACHE 2> /dev/null)
+ if [ -z "$COMPILER" ] ; then
+-	COMPILER=$(which cc 2> /dev/null)
++COMPILER=$(which cc 2> /dev/null)
+ fi;
+ if [ -z "$COMPILER" ] ; then
+-	echo
+-	echo "You must install 'gcc' on your build machine";
+-	exit 1;
++echo
++echo "You must install 'gcc' on your build machine";
++exit 1;
+ fi;
+ 
+ COMPILER_VERSION=$($COMPILER -v 2>&1 | sed -n '/^gcc version/p' |
+ 	sed -e 's/^gcc version \([0-9\.]\)/\1/g' -e 's/[-\ ].*//g' -e '1q')
+ if [ -z "$COMPILER_VERSION" ] ; then
+-	echo
+-	echo "You must install 'gcc' on your build machine";
+-	exit 1;
++echo
++echo "You must install 'gcc' on your build machine";
++exit 1;
+ fi;
+ COMPILER_MAJOR=$(echo $COMPILER_VERSION | sed -e "s/\..*//g")
+ COMPILER_MINOR=$(echo $COMPILER_VERSION | sed -e "s/^$COMPILER_MAJOR\.//g" -e "s/\..*//g")
+ if [ $COMPILER_MAJOR -lt 3 -o $COMPILER_MAJOR -eq 2 -a $COMPILER_MINOR -lt 95 ] ; then
+-	echo
+-	echo "You have gcc '$COMPILER_VERSION' installed.  gcc >= 2.95 is required"
+-	exit 1;
++echo
++echo "You have gcc '$COMPILER_VERSION' installed.  gcc >= 2.95 is required"
++exit 1;
+ fi;
+ 
+ # check for host CXX
+ CXXCOMPILER=$(which $HOSTCXX_NOCCACHE 2> /dev/null)
+ if [ -z "$CXXCOMPILER" ] ; then
+-	CXXCOMPILER=$(which c++ 2> /dev/null)
++CXXCOMPILER=$(which c++ 2> /dev/null)
+ fi
++
+ if [ -z "$CXXCOMPILER" ] ; then
+-	echo
+-	echo "You may have to install 'g++' on your build machine"
+-	#exit 1
++echo
++echo "You may have to install 'g++' on your build machine"
+ fi
++
+ if [ ! -z "$CXXCOMPILER" ] ; then
+-	CXXCOMPILER_VERSION=$($CXXCOMPILER -v 2>&1 | sed -n '/^gcc version/p' |
+-		sed -e 's/^gcc version \([0-9\.]\)/\1/g' -e 's/[-\ ].*//g' -e '1q')
+-	if [ -z "$CXXCOMPILER_VERSION" ] ; then
+-		echo
+-		echo "You may have to install 'g++' on your build machine"
+-	fi
++CXXCOMPILER_VERSION=$($CXXCOMPILER -v 2>&1 | sed -n '/^gcc version/p' |
++	sed -e 's/^gcc version \([0-9\.]\)/\1/g' -e 's/[-\ ].*//g' -e '1q')
++if [ -z "$CXXCOMPILER_VERSION" ] ; then
++echo
++echo "You may have to install 'g++' on your build machine"
++fi
+ 
+-	CXXCOMPILER_MAJOR=$(echo $CXXCOMPILER_VERSION | sed -e "s/\..*//g")
+-	CXXCOMPILER_MINOR=$(echo $CXXCOMPILER_VERSION | sed -e "s/^$CXXCOMPILER_MAJOR\.//g" -e "s/\..*//g")
+-	if [ $CXXCOMPILER_MAJOR -lt 3 -o $CXXCOMPILER_MAJOR -eq 2 -a $CXXCOMPILER_MINOR -lt 95 ] ; then
+-		echo
+-		echo "You have g++ '$CXXCOMPILER_VERSION' installed.  g++ >= 2.95 is required"
+-		exit 1
+-	fi
++CXXCOMPILER_MAJOR=$(echo $CXXCOMPILER_VERSION | sed -e "s/\..*//g")
++CXXCOMPILER_MINOR=$(echo $CXXCOMPILER_VERSION | sed -e "s/^$CXXCOMPILER_MAJOR\.//g" -e "s/\..*//g")
++if [ $CXXCOMPILER_MAJOR -lt 3 -o $CXXCOMPILER_MAJOR -eq 2 -a $CXXCOMPILER_MINOR -lt 95 ] ; then
++echo
++echo "You have g++ '$CXXCOMPILER_VERSION' installed.  g++ >= 2.95 is required"
++exit 1
++fi
+ fi
+ 
+ # Check bash
+ if ! $SHELL --version 2>&1 | grep -q '^GNU bash'; then
+-	echo
+-	echo "You must install 'bash' on your build machine";
+-	exit 1;
++echo
++echo "You must install 'bash' on your build machine";
++exit 1;
+ fi;
+ 
+ # Check that a few mandatory programs are installed
+ missing_progs="no"
+ for prog in patch perl tar wget cpio python unzip rsync bc ${DL_TOOLS} ; do
+-    if ! which $prog > /dev/null ; then
++	if ! which $prog > /dev/null ; then
+ 	echo "You must install '$prog' on your build machine";
+ 	missing_progs="yes"
+ 	if test $prog = "svn" ; then
+-	    echo "  svn is usually part of the subversion package in your distribution"
++	echo "  svn is usually part of the subversion package in your distribution"
+ 	elif test $prog = "hg" ; then
+-            echo "  hg is usually part of the mercurial package in your distribution"
++	echo "  hg is usually part of the mercurial package in your distribution"
+ 	elif test $prog = "zcat" ; then
+-            echo "  zcat is usually part of the gzip package in your distribution"
++	echo "  zcat is usually part of the gzip package in your distribution"
+ 	elif test $prog = "bzcat" ; then
+-            echo "  bzcat is usually part of the bzip2 package in your distribution"
++	echo "  bzcat is usually part of the bzip2 package in your distribution"
++	fi
+ 	fi
+-    fi
+ done
+ 
+ if test "${missing_progs}" = "yes" ; then
+-    exit 1
++exit 1
+ fi
+ 
+ if grep ^BR2_TOOLCHAIN_BUILDROOT=y $BUILDROOT_CONFIG > /dev/null && \
+-   grep ^BR2_ENABLE_LOCALE=y       $BUILDROOT_CONFIG > /dev/null ; then
+-   if ! which locale > /dev/null ; then
+-       echo
+-       echo "You need locale support on your build machine to build a toolchain supporting locales"
+-       exit 1 ;
+-   fi
+-   if ! locale -a | grep -q -i utf8$ ; then
+-       echo
+-       echo "You need at least one UTF8 locale to build a toolchain supporting locales"
+-       exit 1 ;
+-   fi
++	grep ^BR2_ENABLE_LOCALE=y       $BUILDROOT_CONFIG > /dev/null ; then
++	if ! which locale > /dev/null ; then
++	echo
++	echo "You need locale support on your build machine to build a toolchain supporting locales"
++	exit 1 ;
++	fi
++	if ! locale -a | grep -q -i utf8$ ; then
++	echo
++	echo "You need at least one UTF8 locale to build a toolchain supporting locales"
++	exit 1 ;
++	fi
+ fi
+ 
+ if grep -q ^BR2_PACKAGE_CLASSPATH=y $BUILDROOT_CONFIG ; then
+-    for prog in javac jar; do
+-	if ! which $prog > /dev/null ; then
+-	    echo >&2
+-	    echo "You must install '$prog' on your build machine" >&2
+-	    exit 1
+-	fi
+-    done
++	for prog in javac jar; do
++		if ! which $prog > /dev/null ; then
++		echo >&2
++		echo "You must install '$prog' on your build machine" >&2
++		exit 1
++		fi
++	done
+ fi
+ 
+ if grep -q ^BR2_HOSTARCH_NEEDS_IA32_LIBS=y $BUILDROOT_CONFIG ; then
+-    if test ! -f /lib/ld-linux.so.2 ; then
++	if test ! -f /lib/ld-linux.so.2 ; then
+ 	echo
+ 	echo "Your Buildroot configuration uses pre-built tools for the x86 architecture,"
+ 	echo "but your build machine uses the x86-64 architecture without the 32 bits compatibility"
+@@ -203,23 +203,23 @@ if grep -q ^BR2_HOSTARCH_NEEDS_IA32_LIBS=y $BUILDROOT_CONFIG ; then
+ 	echo "For other distributions, refer to the documentation on how to install the 32 bits"
+ 	echo "compatibility libraries."
+ 	exit 1
+-    fi
++	fi
+ fi
+ 
+ if grep -q ^BR2_HOSTARCH_NEEDS_IA32_COMPILER=y $BUILDROOT_CONFIG ; then
+-    if ! echo "int main(void) {}" | gcc -m32 -x c - ; then
++	if ! echo "int main(void) {}" | gcc -m32 -x c - ; then
+ 	echo
+ 	echo "Your Buildroot configuration needs a compiler capable of building 32 bits binaries."
+ 	echo "If you're running a Debian/Ubuntu distribution, install the gcc-multilib package."
+ 	echo "For other distributions, refer to their documentation."
+ 	exit 1
+-    fi
++	fi
+ fi
+ 
+ # Check that the Perl installation is complete enough to build
+ # host-autoconf.
+ if ! perl  -e "require Data::Dumper" > /dev/null 2>&1 ; then
+-    echo "Your Perl installation is not complete enough, at least Data::Dumper is missing."
+-    echo "On Debian/Ubuntu distributions, install the 'perl' package."
+-    exit 1
++echo "Your Perl installation is not complete enough, at least Data::Dumper is missing."
++echo "On Debian/Ubuntu distributions, install the 'perl' package."
++exit 1
+ fi
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.5.3
