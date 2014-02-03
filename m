@@ -1,54 +1,56 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 3 Feb 2014 15:53:20 +0100
-Subject: [Buildroot] [PATCH 1/5] package/squashfs: add selection for the
- host variant
-In-Reply-To: <16461e02c3651b590f4552c74b964c8f3afeb75b.1388768519.git.yann.morin.1998@free.fr>
-References: <cover.1388768519.git.yann.morin.1998@free.fr>
- <16461e02c3651b590f4552c74b964c8f3afeb75b.1388768519.git.yann.morin.1998@free.fr>
-Message-ID: <CAAXf6LUfS6PNp-KnRmWg2y_HqXpALW7jRuXHqJdakTH+xxMfmw@mail.gmail.com>
+From: Alan Ott <alan@signal11.us>
+Date: Mon, 03 Feb 2014 11:27:03 -0500
+Subject: [Buildroot] [PATCH] package/joe: Add package for the JOE editor
+In-Reply-To: <874n4hp47i.fsf@dell.be.48ers.dk>
+References: <1391301769-28263-1-git-send-email-alan@signal11.us>	<878uttr303.fsf@dell.be.48ers.dk>
+ <52EEBC73.9030709@signal11.us> <874n4hp47i.fsf@dell.be.48ers.dk>
+Message-ID: <52EFC357.5000407@signal11.us>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jan 3, 2014 at 6:19 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On 02/02/2014 04:58 PM, Peter Korsgaard wrote:
+>>>>>> "Alan" == Alan Ott <alan@signal11.us> writes:
+>   >> We do have ncurses in buildroot, so it should enable support for it if
+>   >> ncurses is enabled.
 >
-> If any of the post-image scripts wants to handle squashfs filesystems,
-> we need to expose an option for squashfs-tools to be user-selectable.
+>   > What you have is fine, but it's worth mentioning that curses support
+>   > doesn't actually help joe anymore. If you grep through the joe source,
+>   > it only includes ncurses in one file, and doesn't actually use
+>   > anything out of it. The resulting binary even from a "use curses"
+>   > build doesn't actually even link to the ncurses library (it's
+>   > optimized out by the linker).
 >
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Ryan Barnett <rjbarnet@rockwellcollins.com>
-> ---
->  package/Config.in.host          | 1 +
->  package/squashfs/Config.in.host | 6 ++++++
->  2 files changed, 7 insertions(+)
->  create mode 100644 package/squashfs/Config.in.host
->
-> diff --git a/package/Config.in.host b/package/Config.in.host
-> index 34e84bf..71597bf 100644
-> --- a/package/Config.in.host
-> +++ b/package/Config.in.host
-> @@ -12,6 +12,7 @@ source "package/omap-u-boot-utils/Config.in.host"
->  source "package/openocd/Config.in.host"
->  source "package/parted/Config.in.host"
->  source "package/sam-ba/Config.in.host"
-> +source "package/squashfs/Config.in.host"
->  source "package/sunxi-tools/Config.in.host"
->  source "package/uboot-tools/Config.in.host"
->
-> diff --git a/package/squashfs/Config.in.host b/package/squashfs/Config.in.host
-> new file mode 100644
-> index 0000000..b353374
-> --- /dev/null
-> +++ b/package/squashfs/Config.in.host
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_HOST_SQUASHFS
-> +       bool "host squashfs"
-> +       help
-> +         Tools to generate SquashFS filesystems.
-> +
-> +         http://squashfs.sourceforge.net/
+> Ok, it would have been good to mention that in a comment.
 
-Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Hi Peter,
+
+Sorry about that. :(
+
+>   I only did a
+> test build to ensure that configure detected it and the final executable
+> ended up getting linked with it, which was the case:
+>
+> ./output/host/usr/bin/arm-linux-readelf -a output/target/usr/bin/joe | \
+>      grep NEEDED
+>   0x00000001 (NEEDED)                     Shared library: [libm.so.0]
+>   0x00000001 (NEEDED)                     Shared library: [libncurses.so.5]
+>   0x00000001 (NEEDED)                     Shared library: [libutil.so.0]
+>   0x00000001 (NEEDED)                     Shared library: [libc.so.0]
+
+Strange. It doesn't do that on x86:
+
+alan at ato:~/work/joe-3.7$ readelf -a joe |grep NEEDED
+  0x0000000000000001 (NEEDED)             Shared library: [libm.so.6]
+  0x0000000000000001 (NEEDED)             Shared library: [libtinfo.so.5]
+  0x0000000000000001 (NEEDED)             Shared library: [libutil.so.1]
+  0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
+
+And I even checked the link step with make V=1:
+     gcc  -g -O2   -o joe ... -lm -lncurses -lutil
+
+If you want me to change it from the way it is, let me know.
+
+Alan.
