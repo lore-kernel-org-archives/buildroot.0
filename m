@@ -1,68 +1,132 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 3 Feb 2014 10:43:36 +0100
-Subject: [Buildroot] Patchwork oldest patches cleanup #5 (deadline
-	January 19)
-In-Reply-To: <20140128205632.7b5c3100@skate>
-References: <CAAXf6LVcK-fx059K=tetV=NY78amOHczPkbVxkO1pKAuvDCwtA@mail.gmail.com>
- <CAAXf6LVhGnZrVy7bTPjWa+xjbHtKrHU6pFE8aVmAmjbEB_X46w@mail.gmail.com>
- <20140128205632.7b5c3100@skate>
-Message-ID: <CAAXf6LVtP8tC5R4N+P4cz1Cus3WNSuh_zch5umdhAicDigMQaw@mail.gmail.com>
+Date: Mon, 3 Feb 2014 10:52:02 +0100
+Subject: [Buildroot] Patchwork oldest patches cleanup #6 (deadline
+	February 2)
+In-Reply-To: <CAAXf6LUaNvW9586TuAZYg0GorCj_7nmguwynWhT1nFqY_tbxnw@mail.gmail.com>
+References: <CAAXf6LX2yqbapp6GBuN5qoT1R93CGD3NCLguY8fQhFoApJz2uw@mail.gmail.com>
+ <CAAXf6LUaNvW9586TuAZYg0GorCj_7nmguwynWhT1nFqY_tbxnw@mail.gmail.com>
+Message-ID: <CAAXf6LX_yoV8EiwmuOwbLOTw7vZE2D2-dvQD4PPA3d8eCpYynw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+All,
 
-Sorry for the late reply.
-
-On Tue, Jan 28, 2014 at 8:56 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Thomas De Schampheleire,
->
-> On Mon, 20 Jan 2014 21:58:52 +0100, Thomas De Schampheleire wrote:
->
->> > [RFC,1/2] barebox: Build barebox in separate directory.
->> > Marek Belisko <marek.belisko@open-nandra.com>
->> > http://patchwork.ozlabs.org/patch/207942
->> >
->> > [RFC,2/2] barebox: Add possibility to build also barebox xloader (MLO).
->> > Marek Belisko <marek.belisko@open-nandra.com>
->> > http://patchwork.ozlabs.org/patch/207943
+On Mon, Jan 27, 2014 at 9:07 PM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+[..]
 >>
->> No feedback. I would tend to reject these two patches, unless someone
->> still pops up and wants to adopt these patches. They introduce a
->> second build of barebox: one for the standard barebox, and another one
->> for the xloader. In fact, the only real difference seems to be that
->> both builds use a separate config file.
+>> Here is session 6 of the patchwork cleanup. For those who haven't
+>> followed previous sessions, here is a quick recap: every session we'll
+>> be posting the list of the 10 oldest patches, with the original patch
+>> contributors in copy. During two weeks, we have the opportunity to
+>> discuss the patch, whether it is still necessary or not, how it should
+>> be changed to be merged.
+>>
+>> In particular, I'm interested in knowing if the original contributor is
+>> still interested by the patch, or if someone else is interested in
+>> adopting the patch and sending an updated version, or if the patch no
+>> longer makes sense due to other changes made in Buildroot.
+>>
+>> All patches that have not received any comment or attention before the
+>> deadline will be removed from patchwork. This is aggressive, but we have
+>> many 'dead' patches sitting in patchwork, and this cannot work.
+>>
+>> Deadline for this session is February 2 (FOSDEM + Buildroot developer days!).
+>>
+>> Below are the 11 oldest patches (obtained with a slightly modified
+>> version of pwclient):
+>> [ pwclient list -s New -n 21 ] (and skip Delegated patches)
+>>
+>> (Note: temporarily increased amount to 11 to include the entire python
+>> patch series)
 >
-> In fact, there is a real problem that these patches from Marek are
-> trying to solve. Contrary to U-Boot with which a single build produces
-> both the first stage bootloader (SPL) and the second stage bootloader
-> (which is compatible with how Buildroot builds U-Boot), Barebox needs
-> two completely separate builds in this case. This means that currently,
-> Buildroot is unable, for some platforms, to generate both the first
-> stage and the second stage Barebox bootloaders.
+> Here is an intermediate overview:
+
+Here is the final conclusion of this cleanup session:
+
 >
-> Unfortunately, I don't really see a very clean solution to this
-> problem.
+>>
+>>
+>> Update dmraid from 1.0.0-rc15 to 1.0.0-rc16-3.
+>> Antony Vennard <arv@vx9.co.uk>
+>> http://patchwork.ozlabs.org/patch/213230
 >
+> No feedback yet.
 
-One way to do this is two create two separate packages using the same
-sources: one package that builds the standard barebox, the other one
-to build the xloader. This is comparable to how we have u-boot and
-u-boot-tools, I'd say: two packages using the 'same' sources, to build
-two separate things.
+No feedback, but I'm keeping this patch as the version bump is
+supposedly fixing a problem.
+Adopters of this patch are welcome!
 
-This is certainly one of the easier solutions.
-To avoid duplicating the .mk file too much, we could do something
-similar to what you did for gcc: one common .mk file, and a
-subdirectory for each actual package.
+>
+>>
+>> Linux: enable local Linux tarball in config
+>> Stephan Hoffmann <sho@relinux.de>
+>> http://patchwork.ozlabs.org/patch/217204
+>
+> Patch not needed, problem can be solved by prefixing URL with file://.
+>
+>>
+>> minimal dockstar setup
+>> Steve Calfee <stevecalfee@gmail.com>
+>> http://patchwork.ozlabs.org/patch/217639
+>
+> Rejected as per feedback of Steve.
+>
+>>
+>> scripts: xorg-release: handle case when version needs downgrade
+>> Nicolas Dechesne <ndec13@gmail.com>
+>> http://patchwork.ozlabs.org/patch/218109
+>
+> No feedback yet.
 
-What do you think of that?
+No feedback, we'll discuss this on the developer days today or tomorrow...
 
-To avoid us forgetting this patch, then, I'll delegate it to me.
+>
+>>
+>> [v2] configs: at91sam9260eknf: new configuration for Atmel AT91SAM9260-EK
+>> Fabio Porcedda <fabio.porcedda@gmail.com>
+>> http://patchwork.ozlabs.org/patch/218928
+>
+> Superseded patch.
+>
+>>
+>> [1/1] python: fix to ensure libpython is stripped
+>> Przemyslaw Wrzos <przemyslaw.wrzos@calyptech.com>
+>> http://patchwork.ozlabs.org/patch/220024
+>
+> Resubmitted and thus superseded.
+>
+>>
+>> [v4,1/5] Python menu reorganization
+>> kpa_info at yahoo.fr
+>> http://patchwork.ozlabs.org/patch/220706
+>>
+>> [v4,2/5] Add python3 config directory simlink
+>> kpa_info at yahoo.fr
+>> http://patchwork.ozlabs.org/patch/220707
+>>
+>> [v4,3/5] Add PYTHON variable to ease the support of both version
+>> kpa_info at yahoo.fr
+>> http://patchwork.ozlabs.org/patch/220705
+>>
+>> [v4,4/5] python-bottle: Convert package to be used with python2 or python3
+>> kpa_info at yahoo.fr
+>> http://patchwork.ozlabs.org/patch/220708
+>>
+>> [v4,5/5] python-serial: Convert package to be used with python2 or python3
+>> kpa_info at yahoo.fr
+>> http://patchwork.ozlabs.org/patch/220709
+>
+> No feedback on the above yet.
 
-Thanks,
+No feedback, but I don't think we want to throw these patches away. In
+the meantime I'll mark them as delegated to me. Hopefully we can
+discuss this on the buildroot developer days too.
+
+Thanks all!
+
+Best regards,
 Thomas
