@@ -1,36 +1,79 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Feb 2014 22:33:29 +0100
-Subject: [Buildroot] [PATCH v2] libnspr: add microblaze support
-In-Reply-To: <1390859507-31670-5-git-send-email-spenser@gillilanding.com>
-References: <1390859507-31670-1-git-send-email-spenser@gillilanding.com>
- <1390859507-31670-5-git-send-email-spenser@gillilanding.com>
-Message-ID: <20140203223329.234d8b62@skate>
+From: Ryan Wilkins <ryan@deadfrog.net>
+Date: Mon, 3 Feb 2014 16:37:17 -0500
+Subject: [Buildroot] [PATCH v2 1/1] Add new package: biosdevname
+Message-ID: <0F64ADC7-47A8-4E72-90E7-2F5A9E0F32B8@deadfrog.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Spenser Gilliland,
+Signed-off-by: Ryan Wilkins <ryan@deadfrog.net>
+---
+v2: incorporated comments from Arnout
+---
+ package/Config.in                  |    1 +
+ package/biosdevname/Config.in      |   13 +++++++++++++
+ package/biosdevname/biosdevname.mk |   15 +++++++++++++++
+ 3 files changed, 29 insertions(+)
+ create mode 100644 package/biosdevname/Config.in
+ create mode 100644 package/biosdevname/biosdevname.mk
 
-On Mon, 27 Jan 2014 15:51:41 -0600, Spenser Gilliland wrote:
-> fixes autobuild failures
-> 
-> http://autobuild.buildroot.net/results/493/4932900522e87da84a47fbf2d796c2fbb3f7e741/build-end.log
-> 
-> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
-> ---
->  package/libnspr/libnspr-0001-nios2.patch      | 71 +++++++++++++++++++++++++
->  package/libnspr/libnspr-0002-microblaze.patch | 76 +++++++++++++++++++++++++++
->  package/libnspr/libnspr-nios2.patch           | 71 -------------------------
->  3 files changed, 147 insertions(+), 71 deletions(-)
->  create mode 100644 package/libnspr/libnspr-0001-nios2.patch
->  create mode 100644 package/libnspr/libnspr-0002-microblaze.patch
->  delete mode 100644 package/libnspr/libnspr-nios2.patch
-
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
+diff --git a/package/Config.in b/package/Config.in
+index 93d23cb..d2aeab8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -265,6 +265,7 @@ endmenu
+ source "package/a10disp/Config.in"
+ source "package/acpid/Config.in"
+ source "package/avrdude/Config.in"
++source "package/biosdevname/Config.in"
+ source "package/cdrkit/Config.in"
+ source "package/cryptsetup/Config.in"
+ source "package/cwiid/Config.in"
+diff --git a/package/biosdevname/Config.in b/package/biosdevname/Config.in
+new file mode 100644
+index 0000000..17a9aa4
+--- /dev/null
++++ b/package/biosdevname/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_BIOSDEVNAME
++	bool "biosdevname"
++	depends on (BR2_i386 || BR2_x86_64) && BR2_PACKAGE_UDEV
++	select BR2_PACKAGE_PCIUTILS
++	help
++	  Biosdevname is a udev helper that looks at various BIOS tables to
++	  figure out what the actual hardware names are for Ethernet ports
++	  and renames the ports accordingly.  This has the advantage of
++	  always referring to the same port regardless of system or
++	  hardware changes that might otherwise alter the typical ethX
++	  naming.
++
++	  http://linux.dell.com/biosdevname/
+diff --git a/package/biosdevname/biosdevname.mk b/package/biosdevname/biosdevname.mk
+new file mode 100644
+index 0000000..be1c6af
+--- /dev/null
++++ b/package/biosdevname/biosdevname.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# biosdevname
++#
++################################################################################
++
++BIOSDEVNAME_VERSION = 0.4.1
++BIOSDEVNAME_SITE = http://linux.dell.com/biosdevname/biosdevname-$(BIOSDEVNAME_VERSION)
++BIOSDEVNAME_LICENSE = GPL
++BIOSDEVNAME_LICENSE_FILES = COPYING
++BIOSDEVNAME_INSTALL_TARGET = YES
++BIOSDEVNAME_CONF_OPT = --exec-prefix=/
++BIOSDEVNAME_DEPENDENCIES = pciutils
++
++$(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.9.5
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140203/62744f58/attachment.html>
