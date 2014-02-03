@@ -1,75 +1,61 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 3 Feb 2014 21:26:31 +0100
-Subject: [Buildroot] [V2 2/2] ljlinenoise: new package
-In-Reply-To: <1391425657-30915-2-git-send-email-francois.perrad@gadz.org>
-References: <1391425657-30915-1-git-send-email-francois.perrad@gadz.org>
- <1391425657-30915-2-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20140203202630.GB3264@free.fr>
+From: Danny Gale <Daniel.Gale@coloradoengineeringinc.com>
+Date: Mon, 03 Feb 2014 12:50:34 -0700
+Subject: [Buildroot] Error building with external toolchain
+In-Reply-To: <20140203193701.5775f5d5@skate>
+References: <52EBD7F7.8010504@coloradoengineeringinc.com>	<20140201094246.20d7dc22@skate>	<52EFD674.7060800@coloradoengineeringinc.com>
+ <20140203193701.5775f5d5@skate>
+Message-ID: <52EFF30A.6070905@coloradoengineeringinc.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fran?ois, All,
+Here's an RPM of the toolchain to run on x86-64 host that will install 
+to /opt/start64TC (54 MB download)
 
-A few nit-picks below...
+http://www.sendspace.com/file/rtvitd
 
-On 2014-02-03 12:07 +0100, Francois Perrad spake thusly:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-[--SNIP--]
-> diff --git a/package/ljlinenoise/Config.in b/package/ljlinenoise/Config.in
-> new file mode 100644
-> index 0000000..3d2af35
-> --- /dev/null
-> +++ b/package/ljlinenoise/Config.in
-> @@ -0,0 +1,15 @@
-> +config BR2_PACKAGE_LJLINENOISE
-> +	bool "ljlinenoise"
-> +	select BR2_PACKAGE_LJSYSCALL
-> +	# ljsyscall is specifically for LuaJIT, not Lua.
-> +	depends on BR2_PACKAGE_LUAJIT
-> +	# ljsyscall is only available for some target architectures
-> +	depends on BR2_i386 || BR2_x86_64 || BR2_powerpc || BR2_arm || BR2_armeb
+Thanks,
+Danny
 
-No need for the comment, it is obvious from the dependency itself that
-ljlinenoise only works on these architectures.
-
-However, it's maybe worth a comment in the commit log.
-
-> +	help
-> +	  ljlinenoise is a pure LuaJIT port of linenoise,
-> +	  a small alternative to readline and libedit.
-> +
-> +	  http://fperrad.github.io/ljlinenoise/
-> +
-> +comment "ljlinenoise needs LuaJIT"
-> +	depends on !BR2_PACKAGE_LUAJIT && (BR2_i386 || BR2_x86_64 || BR2_powerpc || BR2_arm || BR2_armeb)
-> diff --git a/package/ljlinenoise/ljlinenoise.mk b/package/ljlinenoise/ljlinenoise.mk
-> new file mode 100644
-> index 0000000..69f6130
-> --- /dev/null
-> +++ b/package/ljlinenoise/ljlinenoise.mk
-> @@ -0,0 +1,13 @@
-> +################################################################################
-> +#
-> +# ljlinenoise
-> +#
-> +################################################################################
-> +
-> +LJLINENOISE_VERSION_UPSTREAM = 0.1.1
-> +LJLINENOISE_VERSION = $(LJLINENOISE_VERSION_UPSTREAM)-1
-> +LJLINENOISE_SUBDIR  = ljlinenoise-$(LJLINENOISE_VERSION_UPSTREAM)
-                     ^^
-Very small nit-pick: only one space in front of the '=' sing.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+On 02/03/2014 11:37 AM, Thomas Petazzoni wrote:
+> Dear Danny Gale,
+>
+> On Mon, 03 Feb 2014 10:48:36 -0700, Danny Gale wrote:
+>
+>>> Aren't you running with "make -j<something>" by any chance?
+>> I'm running make with a single thread (-j1) to pinpoint this error.
+>>
+>> The external toolchain was built on an x86_64 host by Crosstool-NG
+>> 1.19.0 for a powerpc64-e6500 target. I've attached the config file for
+>> ct-ng.
+> Ok. Can you put up online a tarball of this toolchain?
+>
+> We don't have powerpc64 support in Buildroot, so maybe some minor
+> changes in the external toolchain logic are needed.
+>
+>> I was able to go through the buildroot source and follow it through: the
+>> .stamp_staging_installed target calls $($(PKG)_INSTALL_STAGING_CMDS),
+>> with PKG=TOOLCHAIN_EXTERNAL. TOOLCHAIN_EXTERNAL_INSTALL_STAGING_COMMANDS
+>> in ./toolchain/toolchain-external/toolchain-external.mk calls
+>> TOOLCHAIN_EXTERNAL_INSTALL_CORE in that same file. The message "Copying
+>> external toolchain libraries to target..." is there, though I don't
+>> understand why it fails at that point.
+> Correct. All the external toolchain logic is in
+> toolchain/toolchain-external/toolchain-external.mk.
+>
+>> It seems I was mistaken -- the 32-bit version of the toolchain doesn't
+>> seem to import either. A different 32-bit toolchain (for the powerpc 440
+>> core) does import, however. So there seems to be something wrong with my
+>> toolchain configuration. I suspect RPC support to be the culprit.
+>>>> What will be required to get buildroot working with the 64-bit toolchain?
+>>> When you're talking about 32 bits or 64 bits, are you talking about the
+>>> bitness for the host architecture, or the target architecture?
+>> The target. The host is an x86_64. The target is a 64-bit powerpc (e6500
+>> core)
+> Again, if you can sure the toolchain tarball, I could do some testing.
+>
+> Thanks!
+>
+> Thomas
