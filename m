@@ -1,261 +1,76 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 3 Feb 2014 21:51:19 +0100
-Subject: [Buildroot] [PATCH v6 2/5] eudev: new package.
-In-Reply-To: <1389627907-7821-3-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1389627907-7821-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1389627907-7821-3-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <CAAXf6LW+ovMqDRAJ0A2g8+81c4CSnHyZs5YTyPQoMs9aMg-j4g@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 3 Feb 2014 22:02:32 +0100
+Subject: [Buildroot] [PATCH v11 0/8] Add support for top-level parallel
+ make
+In-Reply-To: <1389348368-2509-1-git-send-email-fabio.porcedda@gmail.com>
+References: <1389348368-2509-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <20140203220232.4b228965@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Eric,
+Dear Fabio Porcedda,
 
-On Mon, Jan 13, 2014 at 4:45 PM, Eric Le Bihan
-<eric.le.bihan.dev@free.fr> wrote:
-> eudev is a userspace device management daemon. It is a standalone
-> version, independent from systemd. It is a fork maintained by Gentoo.
->
-> Features:
->
->  - No extra configuration options are available: Gudev is build if
->    libglib2 is selected.
->  - No dependency on hwdata as the package uses its own hardware
->    database (as does systemd).
->
-> eudev 1.3 is in sync with systemd v207.
->
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> ---
->  linux/linux.mk                  |    2 +-
->  package/Config.in               |    1 +
->  package/eudev/Config.in         |   37 ++++++++++++++++++++++++++++++
->  package/{udev => eudev}/S10udev |    2 +-
->  package/eudev/eudev.mk          |   48 +++++++++++++++++++++++++++++++++++++++
->  system/Config.in                |   15 ++++++++++++
->  6 files changed, 103 insertions(+), 2 deletions(-)
->  create mode 100644 package/eudev/Config.in
->  copy package/{udev => eudev}/S10udev (98%)
->  create mode 100644 package/eudev/eudev.mk
+On Fri, 10 Jan 2014 11:06:00 +0100, Fabio Porcedda wrote:
 
-We are targeting to integrate your patches Very Soon Now... (jay!)
-Below are a number of minor comments that should be fixed before that, though.
+> this is a patch set for adding support for top-level parallel make in
+> buildroot, the common problem scattered in buildroot's top-level
+> makefiles is that in the rules it relies on the order of evaluation of
+> the prerequisites, to be able to use top-level parallel make instead
+> of reling on the left to right ordering of evaluation of the
+> prerequisites we must add an explicit rule to describe the
+> dependencies.
 
->
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index ab25fe9..17365a0 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -185,7 +185,7 @@ define LINUX_CONFIGURE_CMDS
->                 $(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(@D)/.config))
->         $(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),
->                 $(call KCONFIG_SET_OPT,CONFIG_UEVENT_HELPER_PATH,\"/sbin/mdev\",$(@D)/.config))
-> -       $(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV),
-> +       $(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV),
+We have discussed your patch series today at the Buildroot meeting,
+Peter and I had a look at it. Our plan is to merge it right after
+2014.02-rc1 is released, into the -next branch, which means that it
+will be part of the 2014.05 release.
 
-To be correct, this change should not be in this patch like that: udev
-still exists, so the above should actually duplicate the
-enable-inotify line for both udev ?nd eudev, right?
+That said, there are two changes that we would like to be made, but
+they can be made as follow-up patches:
 
->                 $(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER,$(@D)/.config))
->         $(if $(BR2_PACKAGE_KTAP),
->                 $(call KCONFIG_ENABLE_OPT,CONFIG_DEBUG_FS,$(@D)/.config)
-> diff --git a/package/Config.in b/package/Config.in
-> index aac6f02..e37b33c 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -279,6 +279,7 @@ source "package/dmraid/Config.in"
->  source "package/dvb-apps/Config.in"
->  source "package/dvbsnoop/Config.in"
->  source "package/eeprog/Config.in"
-> +source "package/eudev/Config.in"
->  source "package/evemu/Config.in"
->  source "package/evtest/Config.in"
->  source "package/fan-ctrl/Config.in"
-> diff --git a/package/eudev/Config.in b/package/eudev/Config.in
-> new file mode 100644
-> index 0000000..b3462d5
-> --- /dev/null
-> +++ b/package/eudev/Config.in
-> @@ -0,0 +1,37 @@
-> +config BR2_PACKAGE_EUDEV
-> +       bool "eudev"
-> +       depends on !BR2_avr32 # no epoll_create1
-> +       depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
-> +       depends on BR2_LARGEFILE # util-linux
-> +       depends on BR2_USE_WCHAR # util-linux
-> +       depends on !BR2_PREFER_STATIC_LIB # kmod
-> +       select BR2_PACKAGE_UTIL_LINUX
-> +       select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-> +       select BR2_PACKAGE_KMOD
-> +       help
-> +         Userspace device daemon. This is a standalone version,
-> +         independent of systemd. It is a fork maintained by Gentoo.
-> +
-> +         eudev requires a Linux kernel >= 2.6.34: it relies on devtmpfs
-> +         and inotify.
-> +
-> +         http://github.com/gentoo/eudev/
-> +
-> +if BR2_PACKAGE_EUDEV
-> +
-> +config BR2_PACKAGE_EUDEV_RULES_GEN
-> +       bool "enable rules generator"
-> +       help
-> +         Enable persistant rules generator
+ * Guarantee that the staging installation is always done before the
+   target installation. Specifically for the uclibc and glibc package,
+   you've added something like:
 
-persistent
++# The uclibc-install-target use files from uclibc-install-staging
++$(UCLIBC_TARGET_INSTALL_TARGET): $(UCLIBC_TARGET_INSTALL_STAGING)
 
-(in fact: this same problem is present in the current package/udev/Config.in)
+   The problem is that uclibc and glibc are by far not the only
+   packages to make this assumption. There are many packages who
+   install everything to staging, and then pick whatever they need from
+   the staging directory to install things to the target directory. The
+   qt and qt5 packages come to mind, but there are many more.
+   Therefore, we would like these steps to be serialized for each
+   package: first staging installation, then target installation.
 
-> +
-> +endif
-> +
-> +comment "eudev needs /dev management set to eudev"
-> +       depends on !BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
+ * Also, in glibc and uClibc, you're doing:
 
-This string should be:
-"eudev needs eudev /dev management"
-in analogy with the udev comment, as specified in:
-http://nightly.buildroot.org/manual.html#_literal_config_in_literal_file
+-# Before uClibc is built, we must have the second stage cross-compiler
+-uclibc-build: host-gcc-intermediate
 
-> +
-> +comment "eudev needs a toolchain w/ largefile, wchar"
-> +       depends on !(BR2_LARGEFILE && BR2_USE_WCHAR)
-> +
-> +comment "eudev needs a toolchain w/ dynamic library"
-> +       depends on BR2_avr32
-> +       depends on BR2_PREFER_STATIC_LIB
++# Before uClibc is built, we must have the second stage cross-compiler
++$(UCLIBC_TARGET_BUILD): | host-gcc-intermediate
 
-These three comments should be merged into one comment. This unified
-comment should depend on !BR2_avr32 (common base dependency, see
-manual). Have a look at the current package/udev/Config.in file.
+   But I believe there are a few other tricky cases where the
+   dependencies are "non-standard". I'm thinking of at least:
 
-> diff --git a/package/udev/S10udev b/package/eudev/S10udev
-> similarity index 98%
-> copy from package/udev/S10udev
-> copy to package/eudev/S10udev
-> index 2c7b7e9..e4d28a2 100755
-> --- a/package/udev/S10udev
-> +++ b/package/eudev/S10udev
-> @@ -17,7 +17,7 @@
->  #
->
->  # Check for missing binaries
-> -UDEV_BIN=/lib/udev/udevd
-> +UDEV_BIN=/sbin/udevd
->  test -x $UDEV_BIN || exit 5
->
->  # Check for config file and read it
-> diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-> new file mode 100644
-> index 0000000..aac37e7
-> --- /dev/null
-> +++ b/package/eudev/eudev.mk
-> @@ -0,0 +1,48 @@
-> +################################################################################
-> +#
-> +# eudev
-> +#
-> +################################################################################
-> +
-> +EUDEV_VERSION         = 1.3
-> +EUDEV_SITE            = https://github.com/gentoo/eudev/archive/
-> +EUDEV_SOURCE          = v$(EUDEV_VERSION).tar.gz
+    - linux/linux-ext-rtai.mk, which does not depends on rtai, but
+      rtai-patch. Not sure that's problematic in this case, but I was
+      wondering.
 
-This should be replaced by the new github helper.
+    - The linux/linux.mk mechanism to rebuild the kernel image after
+      the initramfs image has been produced.
 
-> +EUDEV_LICENSE         = GPLv2+
+Can you cook follow-up patches for the first issue, and maybe
+review/investigate the second issue if applicable?
 
-The eudev package also contains libudev, gudev, that seem to be
-LGPLv2.1+, so the above license statement should be expanded with some
-more detail (if possible indicating which parts are GPL and which are
-LGPL).
+Thanks a lot!
 
-> +EUDEV_LICENSE_FILES   = COPYING
-
-Even though eudev has LGPL components, there is no COPYING.LIB (or
-equivalent) file. Ideally, this should be discussed with the eudev
-maintainers...
-
-> +EUDEV_INSTALL_STAGING = YES
-> +EUDEV_AUTORECONF      = YES
-
-Please don't align the = signs in .mk files (it used to be in the
-manual but I removed that :) )
-
-> +
-> +# mq_getattr is in librt
-> +EUDEV_CONF_ENV += LIBS=-lrt
-> +
-> +EUDEV_CONF_OPT =               \
-> +       --sbindir=/sbin         \
-> +       --with-rootlibdir=/lib  \
-> +       --libexecdir=/lib       \
-> +       --with-firmware-path=/lib/firmware      \
-> +       --disable-introspection                 \
-> +       --enable-split-usr                      \
-> +       --enable-libkmod
-> +
-> +EUDEV_DEPENDENCIES = host-gperf host-pkgconf util-linux kmod
-> +
-> +ifeq ($(BR2_PACKAGE_EUDEV_RULES_GEN),y)
-> +EUDEV_CONF_OPT += --enable-rule_generator
-> +endif
-> +
-> +ifeq ($(BR2_LARGEFILE),)
-> +EUDEV_CONF_OPT += --disable-largefile
-> +endif
-
-I don't think this check is needed: it is done by default in the
-autotools infrastructure (see package/Makefile.in)
-
-> +
-> +ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
-> +EUDEV_CONF_OPT += --enable-gudev
-> +EUDEV_DEPENDENCIES += libglib2
-> +else
-> +EUDEV_CONF_OPT += --disable-gudev
-> +endif
-> +
-> +define EUDEV_INSTALL_INIT_SYSV
-> +       $(INSTALL) -m 0755 package/eudev/S10udev $(TARGET_DIR)/etc/init.d/S10udev
-> +endef
-> +
-> +$(eval $(autotools-package))
-> diff --git a/system/Config.in b/system/Config.in
-> index 8288335..7f4d851 100644
-> --- a/system/Config.in
-> +++ b/system/Config.in
-> @@ -136,6 +136,21 @@ comment "udev doesn't work with 'prefer static libraries'"
->         depends on !BR2_avr32 # udev
->         depends on BR2_PREFER_STATIC_LIB
->
-> +config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
-> +       bool "Dynamic using eudev"
-> +       depends on !BR2_avr32 # eudev
-> +       depends on BR2_LARGEFILE
-> +       depends on BR2_USE_WCHAR
-> +       depends on !BR2_PREFER_STATIC_LIB
-> +       select BR2_PACKAGE_EUDEV
-> +
-> +comment "eudev needs a toolchain w/ largefile, wchar"
-> +       depends on !(BR2_LARGEFILE && BR2_USE_WCHAR)
-> +
-> +comment "eudev needs a toolchain w/ dynamic library"
-> +       depends on BR2_avr32 # eudev
-> +       depends on BR2_PREFER_STATIC_LIB
-
-Same comments about the 'comment's here: merge into one, and the avr32
-should be negated.
-
-> +
->  endchoice
->
->  config BR2_ROOTFS_DEVICE_TABLE
-> --
-
-Best regards,
 Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
