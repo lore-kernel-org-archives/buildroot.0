@@ -1,20 +1,24 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 03 Feb 2014 09:23:44 +0100
-Subject: [Buildroot] [PATCH 1/1] mysql: bump to version 5.1.73
-In-Reply-To: <1391374329-2675-1-git-send-email-kuyurix@gmail.com> ("Marcelo
- =?utf-8?Q?Guti=C3=A9rrez=22's?= message of "Sun, 2 Feb 2014 20:52:09
- +0000")
-References: <1391374329-2675-1-git-send-email-kuyurix@gmail.com>
-Message-ID: <87mwi8ob8v.fsf@dell.be.48ers.dk>
+Date: Mon, 03 Feb 2014 09:23:51 +0100
+Subject: [Buildroot] [PATCH] package/rpi-firmware: bump for misc
+	enhancements and fixes
+In-Reply-To: <1391389637-14849-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Mon, 3 Feb 2014 02:07:17 +0100")
+References: <1391389637-14849-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87ioswob8o.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Marcelo" == Marcelo Guti?rrez <kuyurix@gmail.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Signed-off-by: Marcelo Guti?rrez <kuyurix@gmail.com>
+ > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Fixes for h264 video deocding, audio playback and cec.
+ > Some improvements in HDMI output management.
+
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Committed, thanks.
 
