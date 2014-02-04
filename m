@@ -1,60 +1,47 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 04 Feb 2014 18:55:43 +0100
-Subject: [Buildroot] [PATCH 4 of 4 v2] infra: remove unused helper
- function pkgparentdir
-In-Reply-To: <1ed04f399fb1b71847c1.1391530916@argentina>
-References: <patchbomb.1391530912@argentina>
- <1ed04f399fb1b71847c1.1391530916@argentina>
-Message-ID: <52F1299F.7070406@mind.be>
+From: Spenser Gilliland <spenser@gillilanding.com>
+Date: Tue, 4 Feb 2014 14:08:30 -0600
+Subject: [Buildroot] [PATCH v12 10/11] libav: add new package
+In-Reply-To: <20140204175421.2a7310a6@skate>
+References: <1371766066-676-1-git-send-email-spenser@gillilanding.com>
+ <1371766066-676-11-git-send-email-spenser@gillilanding.com>
+ <20140204175421.2a7310a6@skate>
+Message-ID: <CAEBucnB3on_sd6ChWyC+AjTtBHOCWAMw2P79CJrj3thA5=QLng@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/02/14 17:21, Thomas De Schampheleire wrote:
-> Thanks to the previous patches, no-one is using pkgparentdir anymore, so
-> remove it.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> 
-> ---
->  package/pkg-utils.mk |  1 -
->  1 files changed, 0 insertions(+), 1 deletions(-)
-> 
-> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-> --- a/package/pkg-utils.mk
-> +++ b/package/pkg-utils.mk
-> @@ -60,7 +60,6 @@ endef
->  # package, for which the package directory is an empty string.
->  pkgdir       = $(dir $(lastword $(MAKEFILE_LIST)))
->  pkgname      = $(lastword $(subst /, ,$(call pkgdir)))
-> -pkgparentdir = $(patsubst %$(call pkgname)/,%,$(call pkgdir))
+Thomas,
 
- The comment above mentions pkgdir but that should actually have been
-pkgparentdir (it's the reason that pkgparentdir uses patsubst instead of
-the usual $(dir ...)). Basically, the last sentence of the comment can be
-removed.
+> It's been a while, but this patch is actually the last one of your
+> patch series that hasn't been applied in one form or another. You
+> originally created this patch as a dependency of gst-libav, but in the
+> mean time, a different gst1-libav package was added, which uses the
+> internal copy of libav in the GStreamer plugin sources, as recommended
+> by upstream.
+>
+> Therefore, are you interested in pursuing the effort around this patch?
 
- Regards,
- Arnout
+Sure, I'll give it a look and see if we can keep it alive.
 
+>
+> Also, do you know if libav conflicts with ffmpeg in terms of installed
+> files? Is it a drop-in replacement for ffmpeg or something different?
 
->  
->  # Define extractors for different archive suffixes
->  INFLATE.bz2  = $(BZCAT)
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> 
+Can't remember off the top of my head.  I'll look into it.
 
+> Please let us know what your intentions are around this patch: as you
+> can imagine we are trying to clean up the patchwork from the oldest
+> patches.
+
+Yes, some of my patches are nearing the end of the queue.  I'll be
+sure to get all of them cleaned up and resubmitted.
+
+Thanks,
+Spenser
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Spenser Gilliland
+Computer Engineer
+Doctoral Candidate
