@@ -1,34 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Feb 2014 15:25:21 +0100
-Subject: [Buildroot] [git commit] VLC needs QT_GUI_MODULE and not just QT
-Message-ID: <20140204142939.CDF9F9C211@busybox.osuosl.org>
+Date: Tue, 4 Feb 2014 15:25:52 +0100
+Subject: [Buildroot] [git commit] uclibc: fix sh2a option definition
+Message-ID: <20140204142939.D9F049C211@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cd3de018d7a26cee1179452c1d326cf17aaac60d
+commit: http://git.buildroot.net/buildroot/commit/?id=26cdb3568c6d7a9c6e9bf7910751e31719f148a5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-fixes http://autobuild.buildroot.net/results/78d/78df2d86394d7637db88dac5d1e3c7b4a27af293/
+The uClibc options for sh2a is SH2A, not SHA2, and this value should
+be used for sh2a, not sh2.
 
-Signed-off-by: J??r??my Rosen <jeremy.rosen@openwide.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/vlc/vlc.mk |    2 +-
+ package/uclibc/Config.in |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 73b378c..b39c6c7 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -204,7 +204,7 @@ else
- VLC_CONF_OPT += --disable-lua
- endif
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index 079a15c..77756e3 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -240,7 +240,7 @@ config BR2_UCLIBC_MIPS_ISA
+ config BR2_UCLIBC_SH_TYPE
+ 	string
+ 	depends on BR2_UCLIBC_TARGET_ARCH = "sh"
+-	default SHA2 if BR2_sh2
++	default SH2A if BR2_sh2a
+ 	default SH3  if BR2_sh3 || BR2_sh3eb
+ 	default SH4  if BR2_sh4 || BR2_sh4eb
  
--ifeq ($(BR2_PACKAGE_QT),y)
-+ifeq ($(BR2_PACKAGE_QT_GUI_MODULE),y)
- VLC_CONF_OPT += --enable-qt
- VLC_DEPENDENCIES += qt
- else
