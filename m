@@ -1,279 +1,103 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  4 Feb 2014 09:03:04 -0300
-Subject: [Buildroot] [PATCH] libyaml: add security patches for CVE-2013-6393
-Message-ID: <1391515384-16596-1-git-send-email-gustavo@zacarias.com.ar>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Tue, 4 Feb 2014 13:10:32 +0100
+Subject: [Buildroot] [PATCH v6 3/5] udev: convert to virtual package.
+In-Reply-To: <CAAXf6LXUD2hAt+_0JUyXHgwOGqHVwe4J7-AkekopnR-LixKOAg@mail.gmail.com>
+References: <1389627907-7821-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <1389627907-7821-4-git-send-email-eric.le.bihan.dev@free.fr>
+ <CAAXf6LXUD2hAt+_0JUyXHgwOGqHVwe4J7-AkekopnR-LixKOAg@mail.gmail.com>
+Message-ID: <20140204121030.GA8125@pc-eric>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- .../libyaml-0001-indent-column-overflow-v2.patch   | 176 +++++++++++++++++++++
- .../libyaml/libyaml-0002-node-id-hardening.patch   |  35 ++++
- package/libyaml/libyaml-0003-string-overflow.patch |  28 ++++
- 3 files changed, 239 insertions(+)
- create mode 100644 package/libyaml/libyaml-0001-indent-column-overflow-v2.patch
- create mode 100644 package/libyaml/libyaml-0002-node-id-hardening.patch
- create mode 100644 package/libyaml/libyaml-0003-string-overflow.patch
+Thomas, All,
 
-diff --git a/package/libyaml/libyaml-0001-indent-column-overflow-v2.patch b/package/libyaml/libyaml-0001-indent-column-overflow-v2.patch
-new file mode 100644
-index 0000000..4bee5c2
---- /dev/null
-+++ b/package/libyaml/libyaml-0001-indent-column-overflow-v2.patch
-@@ -0,0 +1,176 @@
-+Description: CVE-2013-6393: yaml_parser-{un,}roll-indent: fix int overflow in column argument
-+ This expands upon the original indent column overflow patch from
-+ comment #12.
-+ .
-+ The default parser indention is represented as an indention of -1.
-+ The original patch only modified the type of the column parameter to
-+ the roll/unroll functions, changing it from int to size_t to guard
-+ against integer overflow.  However, there are code paths that call
-+ yaml_parser_unroll_indent with a column of -1 in order to reset the
-+ parser back to the initial indention.  Since the column is now of
-+ type size_t and thus unsigned, passing a column value of -1 caused
-+ the column to underflow in this case.
-+ .
-+ This new patch modifies the roll/unroll functions to handle the -1
-+ indent as a special case.  In addition, it adds a new function,
-+ yaml_parser_reset_indent.  It is nearly an exact copy of
-+ yaml_parser_unroll_indent, except it does not take a column
-+ parameter.  Instead it unrolls to a literal -1 indention, which does
-+ not suffer from the underflow.
-+ .
-+ Code paths that previously called yaml_parser_unroll_indent with a
-+ column of -1 are updated to call the new yaml_parser_reset_indent
-+ function instead.
-+ .
-+ With this patch instead of the original:
-+ .
-+ - `make check` still passes
-+ .
-+ - The reproducer script completes successfully with exit code 0
-+ .
-+ - The issue raised by John Haxby has been corrected and exits with SUCCESS
-+Origin: https://bugzilla.redhat.com/show_bug.cgi?id=1033990
-+Bug-RedHat: https://bugzilla.redhat.com/show_bug.cgi?id=1033990
-+Bug-Debian: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=737076
-+Last-Update: 2014-01-29
-+---
-+# HG changeset patch
-+# User John Eckersberg <jeckersb@redhat.com>
-+# Date 1390870108 18000
-+#      Mon Jan 27 19:48:28 2014 -0500
-+# Node ID 7179aa474f31e73834adda26b77bfc25bfe5143d
-+# Parent  3e6507fa0c26d20c09f8f468f2bd04aa2fd1b5b5
-+yaml_parser-{un,}roll-indent: fix int overflow in column argument
-+
-+diff -r 3e6507fa0c26 -r 7179aa474f31 src/scanner.c
-+--- a/src/scanner.c	Mon Dec 24 03:51:32 2012 +0000
-++++ b/src/scanner.c	Mon Jan 27 19:48:28 2014 -0500
-+@@ -615,11 +615,14 @@
-+  */
-+ 
-+ static int
-+-yaml_parser_roll_indent(yaml_parser_t *parser, int column,
-++yaml_parser_roll_indent(yaml_parser_t *parser, size_t column,
-+         int number, yaml_token_type_t type, yaml_mark_t mark);
-+ 
-+ static int
-+-yaml_parser_unroll_indent(yaml_parser_t *parser, int column);
-++yaml_parser_unroll_indent(yaml_parser_t *parser, size_t column);
-++
-++static int
-++yaml_parser_reset_indent(yaml_parser_t *parser);
-+ 
-+ /*
-+  * Token fetchers.
-+@@ -1206,7 +1209,7 @@
-+  */
-+ 
-+ static int
-+-yaml_parser_roll_indent(yaml_parser_t *parser, int column,
-++yaml_parser_roll_indent(yaml_parser_t *parser, size_t column,
-+         int number, yaml_token_type_t type, yaml_mark_t mark)
-+ {
-+     yaml_token_t token;
-+@@ -1216,7 +1219,7 @@
-+     if (parser->flow_level)
-+         return 1;
-+ 
-+-    if (parser->indent < column)
-++    if (parser->indent == -1 || parser->indent < column)
-+     {
-+         /*
-+          * Push the current indentation level to the stack and set the new
-+@@ -1254,7 +1257,7 @@
-+ 
-+ 
-+ static int
-+-yaml_parser_unroll_indent(yaml_parser_t *parser, int column)
-++yaml_parser_unroll_indent(yaml_parser_t *parser, size_t column)
-+ {
-+     yaml_token_t token;
-+ 
-+@@ -1263,6 +1266,15 @@
-+     if (parser->flow_level)
-+         return 1;
-+ 
-++    /*
-++     * column is unsigned and parser->indent is signed, so if
-++     * parser->indent is less than zero the conditional in the while
-++     * loop below is incorrect.  Guard against that.
-++     */
-++    
-++    if (parser->indent < 0)
-++        return 1;
-++
-+     /* Loop through the intendation levels in the stack. */
-+ 
-+     while (parser->indent > column)
-+@@ -1283,6 +1295,41 @@
-+ }
-+ 
-+ /*
-++ * Pop indentation levels from the indents stack until the current
-++ * level resets to -1.  For each intendation level, append the
-++ * BLOCK-END token.
-++ */
-++
-++static int
-++yaml_parser_reset_indent(yaml_parser_t *parser)
-++{
-++    yaml_token_t token;
-++
-++    /* In the flow context, do nothing. */
-++
-++    if (parser->flow_level)
-++        return 1;
-++
-++    /* Loop through the intendation levels in the stack. */
-++
-++    while (parser->indent > -1)
-++    {
-++        /* Create a token and append it to the queue. */
-++
-++        TOKEN_INIT(token, YAML_BLOCK_END_TOKEN, parser->mark, parser->mark);
-++
-++        if (!ENQUEUE(parser, parser->tokens, token))
-++            return 0;
-++
-++        /* Pop the indentation level. */
-++
-++        parser->indent = POP(parser, parser->indents);
-++    }
-++
-++    return 1;
-++}
-++
-++/*
-+  * Initialize the scanner and produce the STREAM-START token.
-+  */
-+ 
-+@@ -1338,7 +1385,7 @@
-+ 
-+     /* Reset the indentation level. */
-+ 
-+-    if (!yaml_parser_unroll_indent(parser, -1))
-++    if (!yaml_parser_reset_indent(parser))
-+         return 0;
-+ 
-+     /* Reset simple keys. */
-+@@ -1369,7 +1416,7 @@
-+ 
-+     /* Reset the indentation level. */
-+ 
-+-    if (!yaml_parser_unroll_indent(parser, -1))
-++    if (!yaml_parser_reset_indent(parser))
-+         return 0;
-+ 
-+     /* Reset simple keys. */
-+@@ -1407,7 +1454,7 @@
-+ 
-+     /* Reset the indentation level. */
-+ 
-+-    if (!yaml_parser_unroll_indent(parser, -1))
-++    if (!yaml_parser_reset_indent(parser))
-+         return 0;
-+ 
-+     /* Reset simple keys. */
-diff --git a/package/libyaml/libyaml-0002-node-id-hardening.patch b/package/libyaml/libyaml-0002-node-id-hardening.patch
-new file mode 100644
-index 0000000..53b8aa8
---- /dev/null
-+++ b/package/libyaml/libyaml-0002-node-id-hardening.patch
-@@ -0,0 +1,35 @@
-+Description: CVE-2013-6393: yaml_stack_extend: guard against integer overflow
-+ This is a hardening patch also from Florian Weimer
-+ <fweimer@redhat.com>.  It is not required to fix this CVE however it
-+ improves the robustness of the code against future issues by avoiding
-+ large node ID's in a central place.
-+Origin: https://bugzilla.redhat.com/show_bug.cgi?id=1033990
-+Bug-RedHat: https://bugzilla.redhat.com/show_bug.cgi?id=1033990
-+Bug-Debian: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=737076
-+Last-Update: 2014-01-29
-+---
-+# HG changeset patch
-+# User Florian Weimer <fweimer@redhat.com>
-+# Date 1389274355 -3600
-+#      Thu Jan 09 14:32:35 2014 +0100
-+# Node ID 034d7a91581ac930e5958683f1a06f41e96d24a2
-+# Parent  a54d7af707f25dc298a7be60fd152001d2b3035b
-+yaml_stack_extend: guard against integer overflow
-+
-+diff --git a/src/api.c b/src/api.c
-+--- a/src/api.c
-++++ b/src/api.c
-+@@ -117,7 +117,12 @@
-+ YAML_DECLARE(int)
-+ yaml_stack_extend(void **start, void **top, void **end)
-+ {
-+-    void *new_start = yaml_realloc(*start, ((char *)*end - (char *)*start)*2);
-++    void *new_start;
-++
-++    if ((char *)*end - (char *)*start >= INT_MAX / 2)
-++	return 0;
-++
-++    new_start = yaml_realloc(*start, ((char *)*end - (char *)*start)*2);
-+ 
-+     if (!new_start) return 0;
-+ 
-diff --git a/package/libyaml/libyaml-0003-string-overflow.patch b/package/libyaml/libyaml-0003-string-overflow.patch
-new file mode 100644
-index 0000000..e740e65
---- /dev/null
-+++ b/package/libyaml/libyaml-0003-string-overflow.patch
-@@ -0,0 +1,28 @@
-+Description: CVE-2013-6393: yaml_parser_scan_tag_uri: fix int overflow leading to buffer overflow
-+ This is a proposed patch from Florian Weimer <fweimer@redhat.com> for
-+ the string overflow issue. It has been ack'd by upstream.
-+Origin: https://bugzilla.redhat.com/show_bug.cgi?id=1033990
-+Bug-RedHat: https://bugzilla.redhat.com/show_bug.cgi?id=1033990
-+Bug-Debian: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=737076
-+Last-Update: 2014-01-29
-+---
-+# HG changeset patch
-+# User Florian Weimer <fweimer@redhat.com>
-+# Date 1389273500 -3600
-+#      Thu Jan 09 14:18:20 2014 +0100
-+# Node ID a54d7af707f25dc298a7be60fd152001d2b3035b
-+# Parent  3e6507fa0c26d20c09f8f468f2bd04aa2fd1b5b5
-+yaml_parser_scan_tag_uri: fix int overflow leading to buffer overflow
-+
-+diff --git a/src/scanner.c b/src/scanner.c
-+--- a/src/scanner.c
-++++ b/src/scanner.c
-+@@ -2574,7 +2574,7 @@
-+ 
-+     /* Resize the string to include the head. */
-+ 
-+-    while (string.end - string.start <= (int)length) {
-++    while ((size_t)(string.end - string.start) <= length) {
-+         if (!yaml_string_extend(&string.start, &string.pointer, &string.end)) {
-+             parser->error = YAML_MEMORY_ERROR;
-+             goto error;
--- 
-1.8.3.2
+On Mon, Feb 03, 2014 at 10:41:03PM +0100, Thomas De Schampheleire wrote:
+
+> > --- a/package/systemd/Config.in
+> > +++ b/package/systemd/Config.in
+> > @@ -1,6 +1,6 @@
+> >  config BR2_PACKAGE_SYSTEMD
+> >         bool "systemd"
+> > -       depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
+> > +       depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
+> >         depends on BR2_INET_IPV6
+> >         depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
+> >         depends on BR2_USE_MMU # dbus
+> > @@ -18,7 +18,7 @@ config BR2_PACKAGE_SYSTEMD
+> >
+> >           http://freedesktop.org/wiki/Software/systemd
+> >
+> > -comment "systemd needs udev /dev management and a toolchain w/ IPv6, threads"
+> > +comment "systemd needs eudev /dev management and a toolchain w/ IPv6, threads"
+> >         depends on BR2_USE_MMU
+> > -       depends on !BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV || !BR2_INET_IPV6 || \
+> > +       depends on !BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV || !BR2_INET_IPV6 || \\
+> >                 !BR2_TOOLCHAIN_HAS_THREADS
+>
+> These changes are odd: you indicate here that systemd is depending on
+> eudev, while eudev is precisely an alternative provider of udev than
+> systemd. So:
+>
+>        udev
+>        /   \
+> systemd     eudev
+>
+> and there is no direct relation between systemd and eudev. In the next
+> patch, you replace this again with BR2_INIT_SYSTEMD, which makes sense
+> again, but the transition is odd.
+
+At this stage, the version of systemd in Buildroot is still v44, which does
+not provide udev, but needs it. As the previous patch introduced eudev and
+this one removes BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV, the dependency on
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV ensures systemd will be installed
+with a udev implementation.
+
+> Directly related to this, we question the need to rename
+> BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV to
+> BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV. First of all, the symbol
+> BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV is already existing in users'
+> defconfig. Removing it requires the addition of a new legacy symbol
+> (not only for BR2_PACKAGE_UDEV, which you already added, but also for
+> the DEVICE_CREATION_DYNAMIC one).
+> Users that previously selected udev, should be moved to eudev, rather
+> than systemd. Our suggestion is to keep the existing
+> BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV symbol to indicate the eudev
+> choice, rendering the massive rename in the previous patch unneeded,
+> removing the above odd systemd transition, and avoiding the need for
+> legacy handling. What do you think of that?
+
+I find it odd that some packages depend on
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV whereas others depend on
+BR2_PACKAGE_UDEV. To me, both symbols are interpreted as "the package needs a
+udev daemon to talk to at runtime" (whether via D-Bus or libudev). So I
+replaced both with BR2_PACKAGE_HAS_UDEV to be homogeneous. It is true that if
+a package depends on BR2_PACKAGE_HAS_UDEV, it is not explicitly said if it is
+a runtime or a build dependency. But, AFAIK, programs that want to communicate
+with the udev daemon do it via libudev/libgudev, so we end up with a build
+dependency.
+
+In system/Config.in, I removed BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV because
+I want the user to understand the change: he/she should not think of 'udev' as
+a package, but as a feature which, at this stage, is only available via eudev.
+I could have kept BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV and have it select
+BR2_PACKAGE_EUDEV, but I've found it confusing.
+
+But I should have added BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV in
+Config.in.legacy to migrate to BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV.
+
+In the end, the user selects BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV, which
+selects BR2_PACKAGE_EUDEV, which in turn selects BR2_PACKAGE_HAS_UDEV. All the
+packages depending on it are now available.
+
+> Maybe you could add a comment in udev/Config.in and udev/udev.mk
+> clarifying that this is now a virtual package.
+Yes, indeed!
+
+> > -comment "udisks needs udev /dev management and a toolchain w/ wchar, threads"
+> > +comment "udisks needs udev /dev mgmnt, toolchain w/ wchar, threads"
+>
+> This string is not as it is described in the manual. Why did you change it?
+It was truncated on a 80x24 terminal.
