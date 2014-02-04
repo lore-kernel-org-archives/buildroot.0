@@ -1,35 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Feb 2014 09:49:38 +0100
-Subject: [Buildroot] [git commit] binutils: whitespace cleanup
-Message-ID: <20140204085348.2B9199C77F@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 04 Feb 2014 09:55:33 +0100
+Subject: [Buildroot] [pkg-perl infra V3 00/12] a package infrastructure
+ for Perl/CPAN modules
+In-Reply-To: <52F0A9B5.1070900@mind.be>
+References: <1385198749-6249-1-git-send-email-francois.perrad@gadz.org>
+ <52F0A9B5.1070900@mind.be>
+Message-ID: <52F0AB05.9080705@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8cc853eb10b3ecbdc4bd683205650e05b776e609
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 04/02/14 09:49, Arnout Vandecappelle wrote:
+>  libxml-libxml-perl fails to build with:
+> 
+> make[2]: *** No rule to make target `pure_all'.  Stop.
+> 
 
-Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/binutils/Config.in.host |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ Looks like the error actually was:
 
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index a8e1e45..49b857e 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -10,8 +10,8 @@ choice
- 	  Select the version of binutils you wish to use.
- 
- 	config BR2_BINUTILS_VERSION_2_18_AVR32_1_0_1
--	       depends on BR2_avr32
--	       bool "binutils 2.18-avr32-1.0.1"
-+		depends on BR2_avr32
-+		bool "binutils 2.18-avr32-1.0.1"
- 
- 	config BR2_BINUTILS_VERSION_2_20_1
- 		depends on !BR2_avr32
+Checking for ability to link against libxml2...libxml2, zlib, and/or the
+Math library (-lm) have not been found.
+Try setting LIBS and INC values on the command line
+
+ So another problem is that configure failures are not detected. If you
+can find a solution for that, that would be great.
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
