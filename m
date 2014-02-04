@@ -1,46 +1,82 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Feb 2014 09:06:27 +0100
-Subject: [Buildroot] [PATCH 2/2] mysql: disable debugging option
-In-Reply-To: <CA+kK6WueuafTab1brxw-DakS7JBFM8hMgfoDtm9Z_-PTsv_xuw@mail.gmail.com>
-References: <52efff31.0902ec0a.7f04.45f7@mx.google.com>
- <20140203225237.6c503ed7@skate>
- <CA+kK6WueuafTab1brxw-DakS7JBFM8hMgfoDtm9Z_-PTsv_xuw@mail.gmail.com>
-Message-ID: <20140204090627.6c705a85@skate>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Tue, 4 Feb 2014 09:32:19 +0100
+Subject: [Buildroot] [PATCH v11 0/8] Add support for top-level parallel
+	make
+In-Reply-To: <20140203220232.4b228965@skate>
+References: <1389348368-2509-1-git-send-email-fabio.porcedda@gmail.com>
+ <20140203220232.4b228965@skate>
+Message-ID: <CAHkwnC9aATYxpSJo2ScPrG-zN10tD1SO5Kt7K0HnVsTiCXRktA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Marcelo Gutierrez,
+On Mon, Feb 3, 2014 at 10:02 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Fabio Porcedda,
+>
+> On Fri, 10 Jan 2014 11:06:00 +0100, Fabio Porcedda wrote:
+>
+>> this is a patch set for adding support for top-level parallel make in
+>> buildroot, the common problem scattered in buildroot's top-level
+>> makefiles is that in the rules it relies on the order of evaluation of
+>> the prerequisites, to be able to use top-level parallel make instead
+>> of reling on the left to right ordering of evaluation of the
+>> prerequisites we must add an explicit rule to describe the
+>> dependencies.
+>
+> We have discussed your patch series today at the Buildroot meeting,
+> Peter and I had a look at it. Our plan is to merge it right after
+> 2014.02-rc1 is released, into the -next branch, which means that it
+> will be part of the 2014.05 release.
 
-On Mon, 3 Feb 2014 21:03:10 -0200, Marcelo Gutierrez wrote:
+That's great.
 
-> When you use --without-server option, there is no debugging log, because
-> will work only when MySQL server is enabled.
-> 
-> MySQL 5.1 Reference Manual:
-> http://dev.mysql.com/doc/refman/5.1/en/debugging-server.html
+> That said, there are two changes that we would like to be made, but
+> they can be made as follow-up patches:
+>
+>  * Guarantee that the staging installation is always done before the
+>    target installation. Specifically for the uclibc and glibc package,
+>    you've added something like:
+>
+> +# The uclibc-install-target use files from uclibc-install-staging
+> +$(UCLIBC_TARGET_INSTALL_TARGET): $(UCLIBC_TARGET_INSTALL_STAGING)
+>
+>    The problem is that uclibc and glibc are by far not the only
+>    packages to make this assumption. There are many packages who
+>    install everything to staging, and then pick whatever they need from
+>    the staging directory to install things to the target directory. The
+>    qt and qt5 packages come to mind, but there are many more.
+>    Therefore, we would like these steps to be serialized for each
+>    package: first staging installation, then target installation.
 
-Ok.
+Ok, i will send a patch to do that.
 
-> No, not necessarily. ENABLE_DEBUG is a global variable that contains
-> > --enable-debug if BR2_ENABLE_DEBUG is enabled, or is empty otherwise.
-> > See: http://git.buildroot.net/buildroot/tree/package/Makefile.in#n357.
-> >
-> 
-> To configure MySQL with debugging code, we need to use the
-> --with-debugoption. But right now we only compile MySQL client, so
-> that option it's not
-> necessary.
+>  * Also, in glibc and uClibc, you're doing:
+>
+> -# Before uClibc is built, we must have the second stage cross-compiler
+> -uclibc-build: host-gcc-intermediate
+>
+> +# Before uClibc is built, we must have the second stage cross-compiler
+> +$(UCLIBC_TARGET_BUILD): | host-gcc-intermediate
+>
+>    But I believe there are a few other tricky cases where the
+>    dependencies are "non-standard". I'm thinking of at least:
+>
+>     - linux/linux-ext-rtai.mk, which does not depends on rtai, but
+>       rtai-patch. Not sure that's problematic in this case, but I was
+>       wondering.
+>
+>     - The linux/linux.mk mechanism to rebuild the kernel image after
+>       the initramfs image has been produced.
+>
+> Can you cook follow-up patches for the first issue, and maybe
+> review/investigate the second issue if applicable?
 
-Ok. Can you resend your patch with an updated commit log that explains
-this?
+Ok, i will send a patch for the first issue and i will investigate
+the second issue.
 
-Thanks!
-
-Thomas
+Thanks and best regards
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Fabio Porcedda
