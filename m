@@ -1,62 +1,32 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Tue, 4 Feb 2014 09:55:00 +0000
-Subject: [Buildroot] [PATCH] vlc: new package
-In-Reply-To: <20140204104031.30100cc9@skate>
-References: <1363687526-8469-1-git-send-email-abrodkin@synopsys.com>
- <20140204104031.30100cc9@skate>
-Message-ID: <1391507699.2357.50.camel@abrodkin-8560l.internal.synopsys.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 04 Feb 2014 10:57:57 +0100
+Subject: [Buildroot] [pkg-perl infra V3 00/12] a package infrastructure
+ for Perl/CPAN modules
+In-Reply-To: <52F0A9B5.1070900@mind.be>
+References: <1385198749-6249-1-git-send-email-francois.perrad@gadz.org>
+ <52F0A9B5.1070900@mind.be>
+Message-ID: <52F0B9A5.5070704@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+On 04/02/14 09:49, Arnout Vandecappelle wrote:
+>  First of all, it took a bit of effort to rebase on current master; if
+> you continue with this series, you can start with pulling it from
+> git at gitorious.org:buildroot/buildroot.git branch perl-fixup
 
-On Tue, 2014-02-04 at 10:40 +0100, Thomas Petazzoni wrote:
-> Dear Alexey Brodkin,
-> 
-> On Tue, 19 Mar 2013 14:05:26 +0400, Alexey Brodkin wrote:
-> > From: Alexey Brodkin <alexey.brodkin@synopsys.com>
-> > 
-> > Based on "[PATCHv6] vlc: New package" found here http://patchwork.ozlabs.org/patch/171335/
-> > 
-> > Signed-off-by: Ismael Luceno <ismael.luceno@gmail.com>
-> > Signed-off-by: Alexey Brodkin <alexey.brodkin@synopsys.com>
-> > ---
-> >  package/multimedia/Config.in                  |    1 +
-> >  package/multimedia/vlc/Config.in              |  305 ++++++++++++++++++++
-> >  package/multimedia/vlc/vlc-uclibc-fixes.patch |   27 ++
-> >  package/multimedia/vlc/vlc.mk                 |  372 +++++++++++++++++++++++++
-> >  4 files changed, 705 insertions(+)
-> >  create mode 100644 package/multimedia/vlc/Config.in
-> >  create mode 100644 package/multimedia/vlc/vlc-uclibc-fixes.patch
-> >  create mode 100644 package/multimedia/vlc/vlc.mk
-> 
-> We have merged a separate proposal to introduce VLC recently, see:
-> http://git.buildroot.net/buildroot/tree/package/vlc/.
-> 
-> It does not include as many features as the patch you were proposing,
-> but your patch was introducing so many configuration options at once
-> that it was a bit hard to do some good testing of it. Therefore, we've
-> merged something slightly simpler, and we invite you do send follow-up
-> patches to improve what we have now to support the additional features
-> that you think are missing.
-> 
-> Thanks a lot for your contribution, and sorry for the time it took to
-> get a VLC package merged.
-> 
+ It looks like I screwed up the rebase a bit, and the BR2_CPAN_MIRROR
+moved from patch 2/12 to patch 7/12. Can you fix that when you repost?
 
-This is a very good news - VLC was missign from buildroot for so long
-and now it's there.
+ Regards,
+ Arnout
 
-Frankly these days I don't [need to] use VLC on embedded devices so I
-don't really have any requirements for any extra configurability of VLC
-in buildroot.
-
-As soon as I face any lacking option I'll submit a new patch.
-
-Thank you guys so much for driving development of U-Boot!
-
-Regards,
-Alexey
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
