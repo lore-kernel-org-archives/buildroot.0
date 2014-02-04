@@ -1,55 +1,31 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 4 Feb 2014 12:31:50 +0100
-Subject: [Buildroot] [pkg-perl infra V3 11/12] libnet-ssleay-perl: new
- package
-In-Reply-To: <1385198749-6249-12-git-send-email-francois.perrad@gadz.org>
-References: <1385198749-6249-1-git-send-email-francois.perrad@gadz.org>
- <1385198749-6249-12-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20140204113150.GH3454@free.fr>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue,  4 Feb 2014 12:46:18 +0100
+Subject: [Buildroot] [PATCH 1/2] dbus: bump version to 1.6.8
+Message-ID: <1391514379-7431-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fran?ois, All,
+Cc: Gary Coulbourne <bear@bears.org>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+---
+ package/dbus/dbus.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 2013-11-23 10:25 +0100, Francois Perrad spake thusly:
-> (depends on openssl)
-
-Not needed in the commit log.
-
-> diff --git a/package/cpan/libnet-ssleay-perl/libnet-ssleay-perl.mk b/package/cpan/libnet-ssleay-perl/libnet-ssleay-perl.mk
-> new file mode 100644
-> index 0000000..e067511
-> --- /dev/null
-> +++ b/package/cpan/libnet-ssleay-perl/libnet-ssleay-perl.mk
-> @@ -0,0 +1,16 @@
-> +################################################################################
-> +#
-> +# libnet-ssleay-perl
-> +#
-> +################################################################################
-> +
-> +LIBNET_SSLEAY_PERL_VERSION = 1.53
-> +LIBNET_SSLEAY_PERL_AUTHOR = MIKEM
-> +LIBNET_SSLEAY_PERL_SOURCE = Net-SSLeay-$(LIBNET_SSLEAY_PERL_VERSION).tar.gz
-> +LIBNET_SSLEAY_PERL_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MI/MIKEM/
-> +LIBNET_SSLEAY_PERL_DEPENDENCIES = perl openssl
-> +HOST_LIBNET_SSLEAY_PERL_DEPENDENCIES = host-openssl
-> +LIBNET_SSLEAY_PERL_LICENSE = ssleay
-
-Missing _LICENSE_FILES.
-
-> +$(eval $(perl-package))
-> +$(eval $(host-perl-package))
-
-Do we need the host variant?
-
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index 560f63e..74e2041 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DBUS_VERSION = 1.4.26
++DBUS_VERSION = 1.6.8
+ DBUS_SITE = http://dbus.freedesktop.org/releases/dbus
+ DBUS_LICENSE = AFLv2.1 GPLv2+
+ DBUS_LICENSE_FILES = COPYING
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.5.3
