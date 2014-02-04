@@ -1,34 +1,37 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 04 Feb 2014 10:01:23 +0100
-Subject: [Buildroot] [PATCH 2/3] infozip: fix cross-compilation issues
-In-Reply-To: <52EF60BC.4040600@gmail.com> (Alexander Lukichev's message of
- "Mon, 03 Feb 2014 11:26:20 +0200")
-References: <1391120128-8375-1-git-send-email-romain.naour@openwide.fr>
- <CAAHaz6Gu=hK8VaLx8fBxZ6i1X533bPgU_Sp0gWzJO8LBpbRaSw@mail.gmail.com>
- <87ob2pp8xa.fsf@dell.be.48ers.dk> <52EF60BC.4040600@gmail.com>
-Message-ID: <877g9bmeu4.fsf@dell.be.48ers.dk>
+Date: Tue, 04 Feb 2014 10:02:59 +0100
+Subject: [Buildroot] [PATCH] mmc-utils: Fix 64-bit values redefinition
+In-Reply-To: <1391075946-30850-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Thu, 30 Jan 2014 09:59:06 +0000")
+References: <1391075946-30850-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <8738jzmerg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexander" == Alexander Lukichev <alexander.lukichev@gmail.com> writes:
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
- > Hi Peter, Romain, all,
- > On 02/02/2014 10:16 PM, Peter Korsgaard wrote:
- >>>>>>> "Alexander" == Alexander Lukichev <alexander.lukichev@gmail.com> writes:
- >> >     +-CFLAGS = -O2 $(CFLAGS_NOOPT)
- >> >     ++CFLAGS ?= -02 $(CFLAGS_NOOPT)
- >> > Excuse me, is it -02 that's meant here?
- >> Good catch. Actually in the context of Buildroot we don't want the
- >> package to hardcode the optimization level, so I will simply drop it.
+ > Some toolchains include asm-generic/int-l64.h from their asm/types.h
+ > file for certain 64-bit architectures. This causes a conflict between
+ > types like this one:
 
- > Just out of curiosity, I have not seen an -0<N> gcc optimization
- > flag (as opposed to -O<N>, zero vs. a big O). Is it somewhere on
- > gcc manual?
+ > asm-generic/int-l64.h:28:25: error: conflicting types for '__s64'
+ >  typedef __signed__ long __s64;
+ >              ^
+ > In file included from mmc.h:17:0,
+ >          from mmc_cmds.c:30:
+ > asm-generic/int-ll64.h:29:44: note: previous declaration of '__s64' was
+ > here
+ >  __extension__ typedef __signed__ long long __s64;
 
-No, I believe the 0 vs O was just a typo.
+ > This patch has been submitted upstream.
+
+Did you hear back? I see nothing has changed in the git repo for quite
+some time.
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
