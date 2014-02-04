@@ -1,82 +1,36 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Tue, 4 Feb 2014 09:32:19 +0100
-Subject: [Buildroot] [PATCH v11 0/8] Add support for top-level parallel
-	make
-In-Reply-To: <20140203220232.4b228965@skate>
-References: <1389348368-2509-1-git-send-email-fabio.porcedda@gmail.com>
- <20140203220232.4b228965@skate>
-Message-ID: <CAHkwnC9aATYxpSJo2ScPrG-zN10tD1SO5Kt7K0HnVsTiCXRktA@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 4 Feb 2014 09:33:34 +0100
+Subject: [Buildroot] [pkg-perl infra V2 01/12] perl: new infrastructure
+In-Reply-To: <CAB0FRstukYZJUcCt2LQr5fNK1+Myute57wMMkNcbB0uC4ieozQ@mail.gmail.com>
+References: <1385037319-2456-1-git-send-email-francois.perrad@gadz.org>
+ <20140203214513.GC3264@free.fr>
+ <CAB0FRstukYZJUcCt2LQr5fNK1+Myute57wMMkNcbB0uC4ieozQ@mail.gmail.com>
+Message-ID: <20140204083334.GA3454@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Feb 3, 2014 at 10:02 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Fabio Porcedda,
->
-> On Fri, 10 Jan 2014 11:06:00 +0100, Fabio Porcedda wrote:
->
->> this is a patch set for adding support for top-level parallel make in
->> buildroot, the common problem scattered in buildroot's top-level
->> makefiles is that in the rules it relies on the order of evaluation of
->> the prerequisites, to be able to use top-level parallel make instead
->> of reling on the left to right ordering of evaluation of the
->> prerequisites we must add an explicit rule to describe the
->> dependencies.
->
-> We have discussed your patch series today at the Buildroot meeting,
-> Peter and I had a look at it. Our plan is to merge it right after
-> 2014.02-rc1 is released, into the -next branch, which means that it
-> will be part of the 2014.05 release.
+Fran?ois, Arnout, All,
 
-That's great.
+On 2014-02-04 08:29 +0100, Fran?ois Perrad spake thusly:
+> 2014-02-03 Yann E. MORIN <yann.morin.1998@free.fr>:
+> > We'll continue the review tomorrow for the rest of the series.
+> I am afraid that you review the V2 series instead of V3.
 
-> That said, there are two changes that we would like to be made, but
-> they can be made as follow-up patches:
->
->  * Guarantee that the staging installation is always done before the
->    target installation. Specifically for the uclibc and glibc package,
->    you've added something like:
->
-> +# The uclibc-install-target use files from uclibc-install-staging
-> +$(UCLIBC_TARGET_INSTALL_TARGET): $(UCLIBC_TARGET_INSTALL_STAGING)
->
->    The problem is that uclibc and glibc are by far not the only
->    packages to make this assumption. There are many packages who
->    install everything to staging, and then pick whatever they need from
->    the staging directory to install things to the target directory. The
->    qt and qt5 packages come to mind, but there are many more.
->    Therefore, we would like these steps to be serialized for each
->    package: first staging installation, then target installation.
+In fact, I did review (and apply to my tree) v3, I just choose the wrong
+version when replying.
 
-Ok, i will send a patch to do that.
+So, as far as I can see, our comments still stand for v3.
 
->  * Also, in glibc and uClibc, you're doing:
->
-> -# Before uClibc is built, we must have the second stage cross-compiler
-> -uclibc-build: host-gcc-intermediate
->
-> +# Before uClibc is built, we must have the second stage cross-compiler
-> +$(UCLIBC_TARGET_BUILD): | host-gcc-intermediate
->
->    But I believe there are a few other tricky cases where the
->    dependencies are "non-standard". I'm thinking of at least:
->
->     - linux/linux-ext-rtai.mk, which does not depends on rtai, but
->       rtai-patch. Not sure that's problematic in this case, but I was
->       wondering.
->
->     - The linux/linux.mk mechanism to rebuild the kernel image after
->       the initramfs image has been produced.
->
-> Can you cook follow-up patches for the first issue, and maybe
-> review/investigate the second issue if applicable?
+Regards,
+Yann E. MORIN.
 
-Ok, i will send a patch for the first issue and i will investigate
-the second issue.
-
-Thanks and best regards
 -- 
-Fabio Porcedda
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
