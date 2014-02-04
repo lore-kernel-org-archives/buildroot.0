@@ -1,47 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 04 Feb 2014 15:18:56 +0100
-Subject: [Buildroot] [PATCH] pkg-download: make sure git downloads fail
-	for unknown versions
-In-Reply-To: <1391521016-6990-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 4 Feb 2014 14:36:56 +0100")
-References: <1391521016-6990-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <874n4f6jvz.fsf@dell.be.48ers.dk>
+From: Ryan Barnett <ryanbarnett3@gmail.com>
+Date: Tue,  4 Feb 2014 15:18:47 +0100
+Subject: [Buildroot] [PATCH 1/1] libxmlpp: need BR2_USE_MMU dependancy
+Message-ID: <1391523527-13858-1-git-send-email-rjbarnet@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Fixes:
+  http://autobuild.buildroot.org/results/d4d/d4d10ddccf4f53087e2012a36fd80808f7dc7cc5/
 
- > The current git download helper creates the tarball by doing:
- >     git archive <version> | gzip -c > <tarball>
+Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+---
+ package/libxmlpp/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
- > Unfortunately, even if "git archive" fails and returns a non-zero
- > error code, gzip ignores that, compresses nothing, and returns success
- > (zero error code). The consequence of this behavior is that when the
- > git version provided in the package is incorrect, we are not failing
- > during the download step, but later on when trying to extract the
- > tarball (which was incorrectly created as a result of the failing git
- > archive).
-
- > To fix this, we change the tarball creation logic to:
-
- >    git archive -o <tarball>.tmp <version> &&
- >    gzip -c <tarball>.tmp > <tarball> &&
- >    rm -f <tarball>.tmp
-
- > If the build is interrupted during the "gzip" command, we may leave
- > the .tmp file behind us, but this also happens with wget downloads,
- > and is generally not considered a problem, since this temporary file
- > will be overwritten next time we attempt to do download this package.
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-
-This could probably be handled without a temporary file using bash's
-pipefail support, but as we're planning on moving the download helpers
-to seperate shell scripts .. - Committed, thanks.
-
+diff --git a/package/libxmlpp/Config.in b/package/libxmlpp/Config.in
+index 77723a8..69bd220 100644
+--- a/package/libxmlpp/Config.in
++++ b/package/libxmlpp/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_LIBXMLPP
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR # glibmm -> libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glibmm -> libglib2
++	depends on BR2_USE_MMU # glibmm -> libglib2
+ 	help
+ 	  libxml++ is a C++ wrapper for the libxml XML parser library.
+ 
 -- 
-Bye, Peter Korsgaard
+1.8.3.2
