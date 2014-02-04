@@ -1,32 +1,48 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 04 Feb 2014 11:08:40 +0100
-Subject: [Buildroot] [PATCH v3] Added local directory as soure of kernel
-	code
-In-Reply-To: <1361642610-4356-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Sat, 23 Feb 2013 19:03:30 +0100")
-References: <51290409.4080004@mind.be>
- <1361642610-4356-1-git-send-email-arnout@mind.be>
-Message-ID: <87ppn3dwbb.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 04 Feb 2014 11:11:56 +0100
+Subject: [Buildroot] [PATCH 1/3] gnupg: depend on libiconv if appropriate
+In-Reply-To: <52F0BA01.5020806@mind.be>
+References: <BLU0-SMTP112B1A733C43DA19ABF8DF9D9CE0@phx.gbl>
+ <52F0BA01.5020806@mind.be>
+Message-ID: <52F0BCEC.6000905@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+On 04/02/14 10:59, Arnout Vandecappelle wrote:
+> On 30/12/13 18:57, Bernd Kuhls wrote:
+>>
+>> Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
+> 
+> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> 
+>  Ideally, the explanation that you put in the follow-up message should be
+> in the commit log, but OK.
 
- > From: Rafal Fabich <rafal.fabich@gmail.com>
- > Add the option to use a local directory as the source for
- > building the Linux kernel, which can be useful during
- > kernel development.
+ Actually, Bernd, to make our life easier, could you repost your
+iconv-related patches (including the one in xorg) with the following inj
+the commit message:
 
- > Signed-off-by: Rafal Fabich <rafal.fabich@gmail.com>
- > Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- > Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- > ---
- > Changes v3: Refreshed against master [Arnout]
+If iconv is built before this package, this package will link against it;
+if it is built after this package, it will not be linked against it. To
+make the build reproducible, make sure that iconv is always built before
+this package.
 
-Committed, thanks.
 
+ (You can replace "this package" with "gnupg" etc. as appropriate, of
+course.)
+
+
+ Thanks a lot!
+
+ Regards,
+ Arnout
 -- 
-Bye, Peter Korsgaard
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
