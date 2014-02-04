@@ -1,162 +1,279 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Feb 2014 15:27:31 +0100
-Subject: [Buildroot] [git commit] icu: detect and add compiler symbol prefix
-	to the assembly code
-Message-ID: <20140204142940.0A56F9C211@busybox.osuosl.org>
+Date: Tue, 4 Feb 2014 15:26:14 +0100
+Subject: [Buildroot] [git commit] libyaml: add security patches for
+	CVE-2013-6393
+Message-ID: <20140204142939.E66159C211@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=170d526e91ae5249647e60d5b845468aa6c561c0
+commit: http://git.buildroot.net/buildroot/commit/?id=83209f9f6c7e2e82ef9c4328384439b6228cc4ff
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Some compilers, such as the Blackfin GNU compiler, prefix a character to any
-C symbol in generated assembly code. If any assembly symbol is invoked
-from C code, it needs to be prefixed as well.
-
-Note: since autoreconf doesn't work with this package because automake
-isn't used.
-
-Fixes:
-  http://autobuild.buildroot.net/results/c40a22814b405de2c5c75139cfc393c863ed4b81/
-
-[Ryan: add information about why patching configure is ok]
-[Ryan: add renaming of patches to be consistent with standard]
-
-Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
-Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ... icu-001-dont-build-static-dynamic-twice.patch} |    0
- ...tch => icu-002-workaround-toolchain-bugs.patch} |    0
- .../icu-003-detect-compiler-symbol-prefix.patch    |  112 ++++++++++++++++++++
- 3 files changed, 112 insertions(+), 0 deletions(-)
+ .../libyaml-0001-indent-column-overflow-v2.patch   |  176 ++++++++++++++++++++
+ .../libyaml/libyaml-0002-node-id-hardening.patch   |   35 ++++
+ package/libyaml/libyaml-0003-string-overflow.patch |   28 +++
+ 3 files changed, 239 insertions(+), 0 deletions(-)
 
-diff --git a/package/icu/icu-dont-build-static-dynamic-twice.patch b/package/icu/icu-001-dont-build-static-dynamic-twice.patch
-similarity index 100%
-rename from package/icu/icu-dont-build-static-dynamic-twice.patch
-rename to package/icu/icu-001-dont-build-static-dynamic-twice.patch
-diff --git a/package/icu/icu-workaround-toolchain-bugs.patch b/package/icu/icu-002-workaround-toolchain-bugs.patch
-similarity index 100%
-rename from package/icu/icu-workaround-toolchain-bugs.patch
-rename to package/icu/icu-002-workaround-toolchain-bugs.patch
-diff --git a/package/icu/icu-003-detect-compiler-symbol-prefix.patch b/package/icu/icu-003-detect-compiler-symbol-prefix.patch
+diff --git a/package/libyaml/libyaml-0001-indent-column-overflow-v2.patch b/package/libyaml/libyaml-0001-indent-column-overflow-v2.patch
 new file mode 100644
-index 0000000..bfc985f
+index 0000000..4bee5c2
 --- /dev/null
-+++ b/package/icu/icu-003-detect-compiler-symbol-prefix.patch
-@@ -0,0 +1,112 @@
-+detect and add compiler symbol prefix to the assembly code
++++ b/package/libyaml/libyaml-0001-indent-column-overflow-v2.patch
+@@ -0,0 +1,176 @@
++Description: CVE-2013-6393: yaml_parser-{un,}roll-indent: fix int overflow in column argument
++ This expands upon the original indent column overflow patch from
++ comment #12.
++ .
++ The default parser indention is represented as an indention of -1.
++ The original patch only modified the type of the column parameter to
++ the roll/unroll functions, changing it from int to size_t to guard
++ against integer overflow.  However, there are code paths that call
++ yaml_parser_unroll_indent with a column of -1 in order to reset the
++ parser back to the initial indention.  Since the column is now of
++ type size_t and thus unsigned, passing a column value of -1 caused
++ the column to underflow in this case.
++ .
++ This new patch modifies the roll/unroll functions to handle the -1
++ indent as a special case.  In addition, it adds a new function,
++ yaml_parser_reset_indent.  It is nearly an exact copy of
++ yaml_parser_unroll_indent, except it does not take a column
++ parameter.  Instead it unrolls to a literal -1 indention, which does
++ not suffer from the underflow.
++ .
++ Code paths that previously called yaml_parser_unroll_indent with a
++ column of -1 are updated to call the new yaml_parser_reset_indent
++ function instead.
++ .
++ With this patch instead of the original:
++ .
++ - `make check` still passes
++ .
++ - The reproducer script completes successfully with exit code 0
++ .
++ - The issue raised by John Haxby has been corrected and exits with SUCCESS
++Origin: https://bugzilla.redhat.com/show_bug.cgi?id=1033990
++Bug-RedHat: https://bugzilla.redhat.com/show_bug.cgi?id=1033990
++Bug-Debian: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=737076
++Last-Update: 2014-01-29
++---
++# HG changeset patch
++# User John Eckersberg <jeckersb@redhat.com>
++# Date 1390870108 18000
++#      Mon Jan 27 19:48:28 2014 -0500
++# Node ID 7179aa474f31e73834adda26b77bfc25bfe5143d
++# Parent  3e6507fa0c26d20c09f8f468f2bd04aa2fd1b5b5
++yaml_parser-{un,}roll-indent: fix int overflow in column argument
 +
-+Some compiler, such as Blackfin GNU compiler, prefix a charater to any
-+C symbol in generated assembly code. If any assembly symbol is invoked
-+from C code, it needs to be prefixed as well.
++diff -r 3e6507fa0c26 -r 7179aa474f31 src/scanner.c
++--- a/src/scanner.c	Mon Dec 24 03:51:32 2012 +0000
+++++ b/src/scanner.c	Mon Jan 27 19:48:28 2014 -0500
++@@ -615,11 +615,14 @@
++  */
++ 
++ static int
++-yaml_parser_roll_indent(yaml_parser_t *parser, int column,
+++yaml_parser_roll_indent(yaml_parser_t *parser, size_t column,
++         int number, yaml_token_type_t type, yaml_mark_t mark);
++ 
++ static int
++-yaml_parser_unroll_indent(yaml_parser_t *parser, int column);
+++yaml_parser_unroll_indent(yaml_parser_t *parser, size_t column);
+++
+++static int
+++yaml_parser_reset_indent(yaml_parser_t *parser);
++ 
++ /*
++  * Token fetchers.
++@@ -1206,7 +1209,7 @@
++  */
++ 
++ static int
++-yaml_parser_roll_indent(yaml_parser_t *parser, int column,
+++yaml_parser_roll_indent(yaml_parser_t *parser, size_t column,
++         int number, yaml_token_type_t type, yaml_mark_t mark)
++ {
++     yaml_token_t token;
++@@ -1216,7 +1219,7 @@
++     if (parser->flow_level)
++         return 1;
++ 
++-    if (parser->indent < column)
+++    if (parser->indent == -1 || parser->indent < column)
++     {
++         /*
++          * Push the current indentation level to the stack and set the new
++@@ -1254,7 +1257,7 @@
++ 
++ 
++ static int
++-yaml_parser_unroll_indent(yaml_parser_t *parser, int column)
+++yaml_parser_unroll_indent(yaml_parser_t *parser, size_t column)
++ {
++     yaml_token_t token;
++ 
++@@ -1263,6 +1266,15 @@
++     if (parser->flow_level)
++         return 1;
++ 
+++    /*
+++     * column is unsigned and parser->indent is signed, so if
+++     * parser->indent is less than zero the conditional in the while
+++     * loop below is incorrect.  Guard against that.
+++     */
+++    
+++    if (parser->indent < 0)
+++        return 1;
+++
++     /* Loop through the intendation levels in the stack. */
++ 
++     while (parser->indent > column)
++@@ -1283,6 +1295,41 @@
++ }
++ 
++ /*
+++ * Pop indentation levels from the indents stack until the current
+++ * level resets to -1.  For each intendation level, append the
+++ * BLOCK-END token.
+++ */
+++
+++static int
+++yaml_parser_reset_indent(yaml_parser_t *parser)
+++{
+++    yaml_token_t token;
+++
+++    /* In the flow context, do nothing. */
+++
+++    if (parser->flow_level)
+++        return 1;
+++
+++    /* Loop through the intendation levels in the stack. */
+++
+++    while (parser->indent > -1)
+++    {
+++        /* Create a token and append it to the queue. */
+++
+++        TOKEN_INIT(token, YAML_BLOCK_END_TOKEN, parser->mark, parser->mark);
+++
+++        if (!ENQUEUE(parser, parser->tokens, token))
+++            return 0;
+++
+++        /* Pop the indentation level. */
+++
+++        parser->indent = POP(parser, parser->indents);
+++    }
+++
+++    return 1;
+++}
+++
+++/*
++  * Initialize the scanner and produce the STREAM-START token.
++  */
++ 
++@@ -1338,7 +1385,7 @@
++ 
++     /* Reset the indentation level. */
++ 
++-    if (!yaml_parser_unroll_indent(parser, -1))
+++    if (!yaml_parser_reset_indent(parser))
++         return 0;
++ 
++     /* Reset simple keys. */
++@@ -1369,7 +1416,7 @@
++ 
++     /* Reset the indentation level. */
++ 
++-    if (!yaml_parser_unroll_indent(parser, -1))
+++    if (!yaml_parser_reset_indent(parser))
++         return 0;
++ 
++     /* Reset simple keys. */
++@@ -1407,7 +1454,7 @@
++ 
++     /* Reset the indentation level. */
++ 
++-    if (!yaml_parser_unroll_indent(parser, -1))
+++    if (!yaml_parser_reset_indent(parser))
++         return 0;
++ 
++     /* Reset simple keys. */
+diff --git a/package/libyaml/libyaml-0002-node-id-hardening.patch b/package/libyaml/libyaml-0002-node-id-hardening.patch
+new file mode 100644
+index 0000000..53b8aa8
+--- /dev/null
++++ b/package/libyaml/libyaml-0002-node-id-hardening.patch
+@@ -0,0 +1,35 @@
++Description: CVE-2013-6393: yaml_stack_extend: guard against integer overflow
++ This is a hardening patch also from Florian Weimer
++ <fweimer@redhat.com>.  It is not required to fix this CVE however it
++ improves the robustness of the code against future issues by avoiding
++ large node ID's in a central place.
++Origin: https://bugzilla.redhat.com/show_bug.cgi?id=1033990
++Bug-RedHat: https://bugzilla.redhat.com/show_bug.cgi?id=1033990
++Bug-Debian: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=737076
++Last-Update: 2014-01-29
++---
++# HG changeset patch
++# User Florian Weimer <fweimer@redhat.com>
++# Date 1389274355 -3600
++#      Thu Jan 09 14:32:35 2014 +0100
++# Node ID 034d7a91581ac930e5958683f1a06f41e96d24a2
++# Parent  a54d7af707f25dc298a7be60fd152001d2b3035b
++yaml_stack_extend: guard against integer overflow
 +
-+Note: since autoreconf doesn't work with this package because automake
-+isn't support
++diff --git a/src/api.c b/src/api.c
++--- a/src/api.c
+++++ b/src/api.c
++@@ -117,7 +117,12 @@
++ YAML_DECLARE(int)
++ yaml_stack_extend(void **start, void **top, void **end)
++ {
++-    void *new_start = yaml_realloc(*start, ((char *)*end - (char *)*start)*2);
+++    void *new_start;
+++
+++    if ((char *)*end - (char *)*start >= INT_MAX / 2)
+++	return 0;
+++
+++    new_start = yaml_realloc(*start, ((char *)*end - (char *)*start)*2);
++ 
++     if (!new_start) return 0;
++ 
+diff --git a/package/libyaml/libyaml-0003-string-overflow.patch b/package/libyaml/libyaml-0003-string-overflow.patch
+new file mode 100644
+index 0000000..e740e65
+--- /dev/null
++++ b/package/libyaml/libyaml-0003-string-overflow.patch
+@@ -0,0 +1,28 @@
++Description: CVE-2013-6393: yaml_parser_scan_tag_uri: fix int overflow leading to buffer overflow
++ This is a proposed patch from Florian Weimer <fweimer@redhat.com> for
++ the string overflow issue. It has been ack'd by upstream.
++Origin: https://bugzilla.redhat.com/show_bug.cgi?id=1033990
++Bug-RedHat: https://bugzilla.redhat.com/show_bug.cgi?id=1033990
++Bug-Debian: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=737076
++Last-Update: 2014-01-29
++---
++# HG changeset patch
++# User Florian Weimer <fweimer@redhat.com>
++# Date 1389273500 -3600
++#      Thu Jan 09 14:18:20 2014 +0100
++# Node ID a54d7af707f25dc298a7be60fd152001d2b3035b
++# Parent  3e6507fa0c26d20c09f8f468f2bd04aa2fd1b5b5
++yaml_parser_scan_tag_uri: fix int overflow leading to buffer overflow
 +
-+[Ryan: add information about why patching configure is ok]
-+
-+Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
-+Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
-+
-+--- icu-51.2/source/configure	2014-01-06 17:13:20.907249812 +0800
-++++ icu-51.2.bak/source/configure	2014-01-06 17:12:57.335248659 +0800
-+@@ -612,6 +612,7 @@
-+ ICUDATA_CHAR
-+ SAMPLES_TRUE
-+ TESTS_TRUE
-++SYMBOL_PREFIX
-+ ICULIBSUFFIXCNAME
-+ U_HAVE_LIB_SUFFIX
-+ ICULIBSUFFIX
-+@@ -7226,7 +7227,16 @@
-+     U_HAVE_LIB_SUFFIX=0
-+ fi
-+
-++# Check compiler generated symbol profix
-++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for symbol prefix" >&5
-++$as_echo "checking for symbol prefix... " >&6; }
-++    SYMBOL_PREFIX=`echo "PREFIX=__USER_LABEL_PREFIX__" \
-++                  | ${CPP-${CC-gcc} -E} - 2>&1 \
-++                  | ${EGREP-grep} "^PREFIX=" \
-++                  | sed -e "s:^PREFIX=::" -e "s:__USER_LABEL_PREFIX__::"`
-+
-++    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SYMBOL_PREFIX" >&5
-++$as_echo "$SYMBOL_PREFIX" >&6; }
-+
-+ # Enable/disable tests
-+ # Check whether --enable-tests was given.
-+--- icu-51.2/source/extra/uconv/Makefile.in	2014-01-06 17:47:13.991347946 +0800
-++++ icu-51.2.bak/source/extra/uconv/Makefile.in	2014-01-06 17:48:01.571355282 +0800
-+@@ -57,7 +57,7 @@
-+ ## Static mode
-+ ifeq ($(UCONVMSG_MODE),static)
-+ DEFS += -DUCONVMSG_LINK=$(MSGNAME)
-+-UCONVMSG_LIB = $(RESDIR)/$(LIBPREFIX)$(STATIC_PREFIX_WHEN_USED)$(MSGNAME).$(A)
-++UCONVMSG_LIB = $(RESDIR)/$(LIBPREFIX)$(STATIC_PREFIX_WHEN_USED)@SYMBOL_PREFIX@$(MSGNAME).$(A)
-+ LIBS += $(UCONVMSG_LIB)
-+ PKGMODE=static
-+ INSTALLTO=$(libdir)
-+@@ -151,7 +151,7 @@
-+ endif
-+
-+ $(UCONVMSG_LIB): $(RESFILES) $(RESDIR)/$(RESDIR).lst pkgdata.inc
-+-	$(INVOKE) $(PKGDATA_INVOKE_OPTS) $(TOOLBINDIR)/pkgdata -p $(MSGNAME) $(PKGDATA_OPTS) -m $(PKGMODE) -s $(RESDIR) -d $(RESDIR) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
-++	$(INVOKE) $(PKGDATA_INVOKE_OPTS) $(TOOLBINDIR)/pkgdata -p @SYMBOL_PREFIX@$(MSGNAME) $(PKGDATA_OPTS) -m $(PKGMODE) -s $(RESDIR) -d $(RESDIR) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
-+
-+ $(RESDIR)/$(RESDIR).lst: Makefile $(srcdir)/resfiles.mk
-+ 	@-$(RMV) $@
-+--- icu-51.2/source/data/Makefile.in	2014-01-06 19:00:28.879570005 +0800
-++++ icu-51.2.bak/source/data/Makefile.in	2014-01-06 19:00:07.891570170 +0800
-+@@ -175,13 +175,13 @@
-+ packagedata: icupkg.inc $(PKGDATA_LIST) build-local
-+ ifneq ($(ENABLE_STATIC),)
-+ ifeq ($(PKGDATA_MODE),dll)
-+-	$(PKGDATA_INVOKE) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBSTATICNAME) -m static $(PKGDATA_VERSIONING) $(PKGDATA_LIST)
-++	$(PKGDATA_INVOKE) $(PKGDATA) -e @SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBSTATICNAME) -m static $(PKGDATA_VERSIONING) $(PKGDATA_LIST)
-+ endif
-+ endif
-+ ifneq ($(ICUDATA_SOURCE_IS_NATIVE_TARGET),YES)
-+-	$(PKGDATA_INVOKE) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p $(ICUDATA_NAME) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) $(PKGDATA_LIBNAME) $(PKGDATA_LIST)
-++	$(PKGDATA_INVOKE) $(PKGDATA) -e @SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p $(ICUDATA_NAME) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) $(PKGDATA_LIBNAME) $(PKGDATA_LIST)
-+ ifeq ($(OS390BATCH),1)
-+-	$(PKGDATA_INVOKE) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p $(ICUDATA_NAME) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) $(OS390_PDS_NAME) $(PKGDATA_LIST)
-++	$(PKGDATA_INVOKE) $(PKGDATA) -e @SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p $(ICUDATA_NAME) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) $(OS390_PDS_NAME) $(PKGDATA_LIST)
-+ endif
-+ else
-+ 	$(INSTALL_DATA) $(ICUDATA_SOURCE_ARCHIVE) $(OUTDIR)
-+@@ -203,11 +203,11 @@
-+ endif
-+ ifneq ($(ENABLE_STATIC),)
-+ ifeq ($(PKGDATA_MODE),dll)
-+-	$(PKGDATA_INVOKE) $(PKGDATA) -m static -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBSTATICNAME) $(PKGDATA_LIST) -I $(ICUPKGDATA_INSTALL_LIBDIR)
-++	$(PKGDATA_INVOKE) $(PKGDATA) -m static -e @SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBSTATICNAME) $(PKGDATA_LIST) -I $(ICUPKGDATA_INSTALL_LIBDIR)
-+ endif
-+ endif
-+ ifneq ($(ICUDATA_SOURCE_IS_NATIVE_TARGET),YES)
-+-	$(PKGDATA_INVOKE) $(PKGDATA) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBNAME) $(PKGDATA_LIST) -I $(ICUPKGDATA_INSTALL_DIR)
-++	$(PKGDATA_INVOKE) $(PKGDATA) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) -e @SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBNAME) $(PKGDATA_LIST) -I $(ICUPKGDATA_INSTALL_DIR)
-+ else
-+ 	$(INSTALL_DATA) $(ICUDATA_SOURCE_ARCHIVE) $(DESTDIR)$(ICUPKGDATA_DIR)
-+ endif
-+@@ -218,7 +218,7 @@
-+ #### 390 support
-+ install390: package390
-+ 	$(MKINSTALLDIRS) $(TMPDATADIR) $(DESTDIR)$(libdir)
-+-	$(INVOKE) $(PKGDATA) -s $(BUILDDIR)$(STUB_SUFFIX) -T $(OUTTMPDIR_390STUB) -p $(ICUDATA_NAME)$(STUB_SUFFIX) $(PKGDATA_LIBNAME)$(STUB_SUFFIX) -e $(ICUDATA_ENTRY_POINT) $(OS390LIST) -m dll $(PKGDATA_VERSIONING) -I $(DESTDIR)$(ICUPKGDATA_DIR)
-++	$(INVOKE) $(PKGDATA) -s $(BUILDDIR)$(STUB_SUFFIX) -T $(OUTTMPDIR_390STUB) -p $(ICUDATA_NAME)$(STUB_SUFFIX) $(PKGDATA_LIBNAME)$(STUB_SUFFIX) -e @SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) $(OS390LIST) -m dll $(PKGDATA_VERSIONING) -I $(DESTDIR)$(ICUPKGDATA_DIR)
-+ ifeq ($(PKGDATA_MODE),dll)
-+ 	$(INSTALL-L) $(ICUPKGDATA_OUTDIR)/$(FINAL_IMPORT_LIB) $(DESTDIR)$(ICUPKGDATA_DIR)/$(FINAL_IMPORT_LIB)
-+ endif
-+@@ -226,7 +226,7 @@
-+ #### $(LIB_ICUDATA_NAME)$(STUB_SUFFIX) is the subset data for batch mode
-+ package390: $(OUTTMPDIR)/icudata390.lst $(PKGDATA_LIST) ./icupkg.inc packagedata
-+ 	ln -s $(ICUDATA_NAME) $(OUTDIR)/build/$(ICUDATA_NAME)$(STUB_SUFFIX)
-+-	$(INVOKE) $(PKGDATA) -s $(BUILDDIR)$(STUB_SUFFIX) -T $(OUTTMPDIR_390STUB) -p $(ICUDATA_NAME)$(STUB_SUFFIX) $(PKGDATA_LIBNAME)$(STUB_SUFFIX) -e $(ICUDATA_ENTRY_POINT) $(OS390LIST) -m dll $(PKGDATA_VERSIONING)
-++	$(INVOKE) $(PKGDATA) -s $(BUILDDIR)$(STUB_SUFFIX) -T $(OUTTMPDIR_390STUB) -p $(ICUDATA_NAME)$(STUB_SUFFIX) $(PKGDATA_LIBNAME)$(STUB_SUFFIX) -e @SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) $(OS390LIST) -m dll $(PKGDATA_VERSIONING)
-+ 	cp $(ICUPKGDATA_OUTDIR)/$(LIB_ICUDATA_NAME)$(STUB_SUFFIX).$(SO) $(top_builddir)/stubdata/$(LIB_ICUDATA_NAME)$(STUB_SUFFIX).$(SO)
-+
-+
++diff --git a/src/scanner.c b/src/scanner.c
++--- a/src/scanner.c
+++++ b/src/scanner.c
++@@ -2574,7 +2574,7 @@
++ 
++     /* Resize the string to include the head. */
++ 
++-    while (string.end - string.start <= (int)length) {
+++    while ((size_t)(string.end - string.start) <= length) {
++         if (!yaml_string_extend(&string.start, &string.pointer, &string.end)) {
++             parser->error = YAML_MEMORY_ERROR;
++             goto error;
