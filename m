@@ -1,24 +1,25 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 04 Feb 2014 15:13:54 +0100
-Subject: [Buildroot] [PATCH] mtr: not available for avr32
-In-Reply-To: <1391521393-19781-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 4 Feb 2014 10:43:13 -0300")
-References: <1391521393-19781-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87d2j36k4d.fsf@dell.be.48ers.dk>
+Date: Tue, 04 Feb 2014 15:15:16 +0100
+Subject: [Buildroot] [PATCH] arch: remove incorrect condition for endian
+	definition on SuperH
+In-Reply-To: <1391523034-7624-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 4 Feb 2014 15:10:34 +0100")
+References: <1391523034-7624-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <878utr6k23.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > The uclibc version condition is accurate but doesn't cover external
- > toolchains, so also exclude for avr32 too which only has 0.9.31 enabled.
- > Fixes:
- > http://autobuild.buildroot.net/results/4ee/4eec6e29d0f2a46bbbe3a748e85bd06c3601b7c1/
+ > Probably due to some copy/paste mistake, Config.in.sh was defining
+ > BR2_ENDIAN to "LITTLE" when the architecture is BR2_x86_64. Due to the
+ > fact that Config.in.sh is never included when we are building for
+ > x86_64, this is a no-op, but is certainly good to clean up.
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Committed, thanks.
 
