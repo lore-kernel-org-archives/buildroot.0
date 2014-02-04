@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 04 Feb 2014 18:55:51 +0100
-Subject: [Buildroot] [PATCH 1 of 4 v2] infra: remove variable
-	FOO_DIR_PREFIX
-In-Reply-To: <6a46109dc43358a75adb.1391530913@argentina>
+Date: Tue, 04 Feb 2014 18:55:43 +0100
+Subject: [Buildroot] [PATCH 4 of 4 v2] infra: remove unused helper
+ function pkgparentdir
+In-Reply-To: <1ed04f399fb1b71847c1.1391530916@argentina>
 References: <patchbomb.1391530912@argentina>
- <6a46109dc43358a75adb.1391530913@argentina>
-Message-ID: <52F129A7.4040001@mind.be>
+ <1ed04f399fb1b71847c1.1391530916@argentina>
+Message-ID: <52F1299F.7070406@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,53 +13,36 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 04/02/14 17:21, Thomas De Schampheleire wrote:
-> Variable FOO_DIR_PREFIX in inner-generic-package isn't really needed. The
-> contents of this variable are 'package' for normal packages, 'boot' for
-> bootloaders, and 'linux' for the linux kernel.
-> When patching a package, all you need to know is the directory where
-> patches can reside, which is already returned by $(pkgdir). In order to be
-> able to use this variable outside of inner-generic-package, we introduce a
-> target-specific variable PKGDIR that equals to this $(pkgdir).
+> Thanks to the previous patches, no-one is using pkgparentdir anymore, so
+> remove it.
 > 
 > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
- (untested)
-
 > 
 > ---
->  package/pkg-generic.mk |  4 ++--
->  1 files changed, 2 insertions(+), 2 deletions(-)
+>  package/pkg-utils.mk |  1 -
+>  1 files changed, 0 insertions(+), 1 deletions(-)
 > 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -137,7 +137,7 @@ endif
->  #
->  # For BR2_GLOBAL_PATCH_DIR, only generate if it is defined
->  $(BUILD_DIR)/%/.stamp_patched: NAMEVER = $(RAWNAME)-$($(PKG)_VERSION)
-> -$(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS =  $($(PKG)_DIR_PREFIX)/$(RAWNAME)
-> +$(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS =  $(PKGDIR)
->  $(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS += $(addsuffix /$(RAWNAME),$(call qstrip,$(BR2_GLOBAL_PATCH_DIR)))
->  $(BUILD_DIR)/%/.stamp_patched:
->  	@$(call step_start,patch)
-> @@ -358,7 +358,6 @@ endif
->  $(2)_INSTALL_STAGING		?= NO
->  $(2)_INSTALL_IMAGES		?= NO
->  $(2)_INSTALL_TARGET		?= YES
-> -$(2)_DIR_PREFIX			= $(4)
+> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+> --- a/package/pkg-utils.mk
+> +++ b/package/pkg-utils.mk
+> @@ -60,7 +60,6 @@ endef
+>  # package, for which the package directory is an empty string.
+>  pkgdir       = $(dir $(lastword $(MAKEFILE_LIST)))
+>  pkgname      = $(lastword $(subst /, ,$(call pkgdir)))
+> -pkgparentdir = $(patsubst %$(call pkgname)/,%,$(call pkgdir))
+
+ The comment above mentions pkgdir but that should actually have been
+pkgparentdir (it's the reason that pkgparentdir uses patsubst instead of
+the usual $(dir ...)). Basically, the last sentence of the comment can be
+removed.
+
+ Regards,
+ Arnout
+
+
 >  
->  # define sub-target stamps
->  $(2)_TARGET_INSTALL_TARGET =	$$($(2)_DIR)/.stamp_target_installed
-> @@ -507,6 +506,7 @@ endif
->  $$($(2)_TARGET_RSYNC_SOURCE):		PKG=$(2)
->  $$($(2)_TARGET_PATCH):			PKG=$(2)
->  $$($(2)_TARGET_PATCH):			RAWNAME=$(patsubst host-%,%,$(1))
-> +$$($(2)_TARGET_PATCH):			PKGDIR=$(call pkgdir)
->  $$($(2)_TARGET_EXTRACT):		PKG=$(2)
->  $$($(2)_TARGET_SOURCE):			PKG=$(2)
->  $$($(2)_TARGET_DIRCLEAN):		PKG=$(2)
+>  # Define extractors for different archive suffixes
+>  INFLATE.bz2  = $(BZCAT)
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
