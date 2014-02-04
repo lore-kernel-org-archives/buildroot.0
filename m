@@ -1,21 +1,22 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 04 Feb 2014 15:25:37 +0100
-Subject: [Buildroot] [PATCH] VLC needs QT_GUI_MODULE and not just QT
-In-Reply-To: <1391523160-30939-1-git-send-email-jeremy.rosen@openwide.fr>
- (=?utf-8?B?IkrDqXLDqW15?= Rosen"'s message of "Tue, 4 Feb 2014 15:12:40
- +0100")
-References: <1391523160-30939-1-git-send-email-jeremy.rosen@openwide.fr>
-Message-ID: <87r47j550e.fsf@dell.be.48ers.dk>
+Date: Tue, 04 Feb 2014 15:25:55 +0100
+Subject: [Buildroot] [PATCH] uclibc: fix sh2a option definition
+In-Reply-To: <1391523503-7867-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 4 Feb 2014 15:18:23 +0100")
+References: <1391523503-7867-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87mwi754zw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?r?my" == J?r?my Rosen <jeremy.rosen@openwide.fr> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > fixes http://autobuild.buildroot.net/results/78d/78df2d86394d7637db88dac5d1e3c7b4a27af293/
- > Signed-off-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
+ > The uClibc options for sh2a is SH2A, not SHA2, and this value should
+ > be used for sh2a, not sh2.
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Committed, thanks.
 
