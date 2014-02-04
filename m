@@ -1,72 +1,34 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 4 Feb 2014 10:01:17 +0100
-Subject: [Buildroot] [pkg-perl infra V3 02/12] cpan: a home for Perl
- modules
-In-Reply-To: <1385198749-6249-3-git-send-email-francois.perrad@gadz.org>
-References: <1385198749-6249-1-git-send-email-francois.perrad@gadz.org>
- <1385198749-6249-3-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20140204090116.GC3454@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 04 Feb 2014 10:01:23 +0100
+Subject: [Buildroot] [PATCH 2/3] infozip: fix cross-compilation issues
+In-Reply-To: <52EF60BC.4040600@gmail.com> (Alexander Lukichev's message of
+ "Mon, 03 Feb 2014 11:26:20 +0200")
+References: <1391120128-8375-1-git-send-email-romain.naour@openwide.fr>
+ <CAAHaz6Gu=hK8VaLx8fBxZ6i1X533bPgU_Sp0gWzJO8LBpbRaSw@mail.gmail.com>
+ <87ob2pp8xa.fsf@dell.be.48ers.dk> <52EF60BC.4040600@gmail.com>
+Message-ID: <877g9bmeu4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fran?ois, All,
+>>>>> "Alexander" == Alexander Lukichev <alexander.lukichev@gmail.com> writes:
 
-On 2013-11-23 10:25 +0100, Francois Perrad spake thusly:
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  Config.in            |    7 +++++++
->  package/Config.in    |    1 +
->  package/cpan/cpan.mk |    1 +
->  3 files changed, 9 insertions(+)
->  create mode 100644 package/cpan/Config.in
->  create mode 100644 package/cpan/cpan.mk
-> 
-> diff --git a/Config.in b/Config.in
-> index d87e0f0..1b4bf99 100644
-> --- a/Config.in
-> +++ b/Config.in
-> @@ -207,6 +207,13 @@ config BR2_DEBIAN_MIRROR
->  
->  endif
->  
-> +config BR2_CPAN_MIRROR
-> +	string "CPAN mirror"
-> +	default "http://search.cpan.org/CPAN"
-> +	help
-> +	  CPAN has multiple software mirrors scattered around the world.
-> +	  The following allows you to select your preferred mirror.
+ > Hi Peter, Romain, all,
+ > On 02/02/2014 10:16 PM, Peter Korsgaard wrote:
+ >>>>>>> "Alexander" == Alexander Lukichev <alexander.lukichev@gmail.com> writes:
+ >> >     +-CFLAGS = -O2 $(CFLAGS_NOOPT)
+ >> >     ++CFLAGS ?= -02 $(CFLAGS_NOOPT)
+ >> > Excuse me, is it -02 that's meant here?
+ >> Good catch. Actually in the context of Buildroot we don't want the
+ >> package to hardcode the optimization level, so I will simply drop it.
 
-"following" ? I know you duplicated the other entries, but it does not
-really make sense. What about:
+ > Just out of curiosity, I have not seen an -0<N> gcc optimization
+ > flag (as opposed to -O<N>, zero vs. a big O). Is it somewhere on
+ > gcc manual?
 
-    CPAN has multiple software mirrors scattered around the world.
-    This option allows you to select a mirror.
-
-    The list of mirrors is available at:
-        http://search.cpan.org/mirror
-
-> diff --git a/package/cpan/cpan.mk b/package/cpan/cpan.mk
-> new file mode 100644
-> index 0000000..764a156
-> --- /dev/null
-> +++ b/package/cpan/cpan.mk
-> @@ -0,0 +1 @@
-> +include package/cpan/*/*.mk
-
-This breaks since there is no cpan package yet.
-Just introiduce this one change when you add the first CPAN package.
-
-Regards,
-Yann E. MORIN.
+No, I believe the 0 vs O was just a typo.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
