@@ -1,279 +1,198 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Feb 2014 15:26:14 +0100
-Subject: [Buildroot] [git commit] libyaml: add security patches for
-	CVE-2013-6393
-Message-ID: <20140204142939.E66159C211@busybox.osuosl.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue,  4 Feb 2014 15:39:19 +0100
+Subject: [Buildroot] [PATCH] wpa_supplicant: rework .config file editing
+Message-ID: <1391524759-3371-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=83209f9f6c7e2e82ef9c4328384439b6228cc4ff
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Sven Neumann <s.neumann@raumfeld.com>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Do all substitutions on the .config file in a single sed command.
+Make the .config file editing a lot more readable. Based on ideas
+brought up by Arnout Vandecappelle on the mailing-list.
+
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ (build-test with all features enabled)
+[Samuel: rebase on head of master]
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- .../libyaml-0001-indent-column-overflow-v2.patch   |  176 ++++++++++++++++++++
- .../libyaml/libyaml-0002-node-id-hardening.patch   |   35 ++++
- package/libyaml/libyaml-0003-string-overflow.patch |   28 +++
- 3 files changed, 239 insertions(+), 0 deletions(-)
+ package/wpa_supplicant/wpa_supplicant.mk | 109 ++++++++++++-------------------
+ 1 file changed, 40 insertions(+), 69 deletions(-)
 
-diff --git a/package/libyaml/libyaml-0001-indent-column-overflow-v2.patch b/package/libyaml/libyaml-0001-indent-column-overflow-v2.patch
-new file mode 100644
-index 0000000..4bee5c2
---- /dev/null
-+++ b/package/libyaml/libyaml-0001-indent-column-overflow-v2.patch
-@@ -0,0 +1,176 @@
-+Description: CVE-2013-6393: yaml_parser-{un,}roll-indent: fix int overflow in column argument
-+ This expands upon the original indent column overflow patch from
-+ comment #12.
-+ .
-+ The default parser indention is represented as an indention of -1.
-+ The original patch only modified the type of the column parameter to
-+ the roll/unroll functions, changing it from int to size_t to guard
-+ against integer overflow.  However, there are code paths that call
-+ yaml_parser_unroll_indent with a column of -1 in order to reset the
-+ parser back to the initial indention.  Since the column is now of
-+ type size_t and thus unsigned, passing a column value of -1 caused
-+ the column to underflow in this case.
-+ .
-+ This new patch modifies the roll/unroll functions to handle the -1
-+ indent as a special case.  In addition, it adds a new function,
-+ yaml_parser_reset_indent.  It is nearly an exact copy of
-+ yaml_parser_unroll_indent, except it does not take a column
-+ parameter.  Instead it unrolls to a literal -1 indention, which does
-+ not suffer from the underflow.
-+ .
-+ Code paths that previously called yaml_parser_unroll_indent with a
-+ column of -1 are updated to call the new yaml_parser_reset_indent
-+ function instead.
-+ .
-+ With this patch instead of the original:
-+ .
-+ - `make check` still passes
-+ .
-+ - The reproducer script completes successfully with exit code 0
-+ .
-+ - The issue raised by John Haxby has been corrected and exits with SUCCESS
-+Origin: https://bugzilla.redhat.com/show_bug.cgi?id=1033990
-+Bug-RedHat: https://bugzilla.redhat.com/show_bug.cgi?id=1033990
-+Bug-Debian: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=737076
-+Last-Update: 2014-01-29
-+---
-+# HG changeset patch
-+# User John Eckersberg <jeckersb@redhat.com>
-+# Date 1390870108 18000
-+#      Mon Jan 27 19:48:28 2014 -0500
-+# Node ID 7179aa474f31e73834adda26b77bfc25bfe5143d
-+# Parent  3e6507fa0c26d20c09f8f468f2bd04aa2fd1b5b5
-+yaml_parser-{un,}roll-indent: fix int overflow in column argument
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index 920f96a..d2b21c2 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -15,63 +15,57 @@ WPA_SUPPLICANT_DBUS_NEW_SERVICE = fi.w1.wpa_supplicant1
+ WPA_SUPPLICANT_CFLAGS = $(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/libnl3/
+ WPA_SUPPLICANT_LDFLAGS = $(TARGET_LDFLAGS)
+ 
++WPA_SUPPLICANT_CONFIG_EDITS =
 +
-+diff -r 3e6507fa0c26 -r 7179aa474f31 src/scanner.c
-+--- a/src/scanner.c	Mon Dec 24 03:51:32 2012 +0000
-++++ b/src/scanner.c	Mon Jan 27 19:48:28 2014 -0500
-+@@ -615,11 +615,14 @@
-+  */
-+ 
-+ static int
-+-yaml_parser_roll_indent(yaml_parser_t *parser, int column,
-++yaml_parser_roll_indent(yaml_parser_t *parser, size_t column,
-+         int number, yaml_token_type_t type, yaml_mark_t mark);
-+ 
-+ static int
-+-yaml_parser_unroll_indent(yaml_parser_t *parser, int column);
-++yaml_parser_unroll_indent(yaml_parser_t *parser, size_t column);
-++
-++static int
-++yaml_parser_reset_indent(yaml_parser_t *parser);
-+ 
-+ /*
-+  * Token fetchers.
-+@@ -1206,7 +1209,7 @@
-+  */
-+ 
-+ static int
-+-yaml_parser_roll_indent(yaml_parser_t *parser, int column,
-++yaml_parser_roll_indent(yaml_parser_t *parser, size_t column,
-+         int number, yaml_token_type_t type, yaml_mark_t mark)
-+ {
-+     yaml_token_t token;
-+@@ -1216,7 +1219,7 @@
-+     if (parser->flow_level)
-+         return 1;
-+ 
-+-    if (parser->indent < column)
-++    if (parser->indent == -1 || parser->indent < column)
-+     {
-+         /*
-+          * Push the current indentation level to the stack and set the new
-+@@ -1254,7 +1257,7 @@
-+ 
-+ 
-+ static int
-+-yaml_parser_unroll_indent(yaml_parser_t *parser, int column)
-++yaml_parser_unroll_indent(yaml_parser_t *parser, size_t column)
-+ {
-+     yaml_token_t token;
-+ 
-+@@ -1263,6 +1266,15 @@
-+     if (parser->flow_level)
-+         return 1;
-+ 
-++    /*
-++     * column is unsigned and parser->indent is signed, so if
-++     * parser->indent is less than zero the conditional in the while
-++     * loop below is incorrect.  Guard against that.
-++     */
-++    
-++    if (parser->indent < 0)
-++        return 1;
-++
-+     /* Loop through the intendation levels in the stack. */
-+ 
-+     while (parser->indent > column)
-+@@ -1283,6 +1295,41 @@
-+ }
-+ 
-+ /*
-++ * Pop indentation levels from the indents stack until the current
-++ * level resets to -1.  For each intendation level, append the
-++ * BLOCK-END token.
-++ */
-++
-++static int
-++yaml_parser_reset_indent(yaml_parser_t *parser)
-++{
-++    yaml_token_t token;
-++
-++    /* In the flow context, do nothing. */
-++
-++    if (parser->flow_level)
-++        return 1;
-++
-++    /* Loop through the intendation levels in the stack. */
-++
-++    while (parser->indent > -1)
-++    {
-++        /* Create a token and append it to the queue. */
-++
-++        TOKEN_INIT(token, YAML_BLOCK_END_TOKEN, parser->mark, parser->mark);
-++
-++        if (!ENQUEUE(parser, parser->tokens, token))
-++            return 0;
-++
-++        /* Pop the indentation level. */
-++
-++        parser->indent = POP(parser, parser->indents);
-++    }
-++
-++    return 1;
-++}
-++
-++/*
-+  * Initialize the scanner and produce the STREAM-START token.
-+  */
-+ 
-+@@ -1338,7 +1385,7 @@
-+ 
-+     /* Reset the indentation level. */
-+ 
-+-    if (!yaml_parser_unroll_indent(parser, -1))
-++    if (!yaml_parser_reset_indent(parser))
-+         return 0;
-+ 
-+     /* Reset simple keys. */
-+@@ -1369,7 +1416,7 @@
-+ 
-+     /* Reset the indentation level. */
-+ 
-+-    if (!yaml_parser_unroll_indent(parser, -1))
-++    if (!yaml_parser_reset_indent(parser))
-+         return 0;
-+ 
-+     /* Reset simple keys. */
-+@@ -1407,7 +1454,7 @@
-+ 
-+     /* Reset the indentation level. */
-+ 
-+-    if (!yaml_parser_unroll_indent(parser, -1))
-++    if (!yaml_parser_reset_indent(parser))
-+         return 0;
-+ 
-+     /* Reset simple keys. */
-diff --git a/package/libyaml/libyaml-0002-node-id-hardening.patch b/package/libyaml/libyaml-0002-node-id-hardening.patch
-new file mode 100644
-index 0000000..53b8aa8
---- /dev/null
-+++ b/package/libyaml/libyaml-0002-node-id-hardening.patch
-@@ -0,0 +1,35 @@
-+Description: CVE-2013-6393: yaml_stack_extend: guard against integer overflow
-+ This is a hardening patch also from Florian Weimer
-+ <fweimer@redhat.com>.  It is not required to fix this CVE however it
-+ improves the robustness of the code against future issues by avoiding
-+ large node ID's in a central place.
-+Origin: https://bugzilla.redhat.com/show_bug.cgi?id=1033990
-+Bug-RedHat: https://bugzilla.redhat.com/show_bug.cgi?id=1033990
-+Bug-Debian: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=737076
-+Last-Update: 2014-01-29
-+---
-+# HG changeset patch
-+# User Florian Weimer <fweimer@redhat.com>
-+# Date 1389274355 -3600
-+#      Thu Jan 09 14:32:35 2014 +0100
-+# Node ID 034d7a91581ac930e5958683f1a06f41e96d24a2
-+# Parent  a54d7af707f25dc298a7be60fd152001d2b3035b
-+yaml_stack_extend: guard against integer overflow
++WPA_SUPPLICANT_CONFIG_SET =
 +
-+diff --git a/src/api.c b/src/api.c
-+--- a/src/api.c
-++++ b/src/api.c
-+@@ -117,7 +117,12 @@
-+ YAML_DECLARE(int)
-+ yaml_stack_extend(void **start, void **top, void **end)
-+ {
-+-    void *new_start = yaml_realloc(*start, ((char *)*end - (char *)*start)*2);
-++    void *new_start;
-++
-++    if ((char *)*end - (char *)*start >= INT_MAX / 2)
-++	return 0;
-++
-++    new_start = yaml_realloc(*start, ((char *)*end - (char *)*start)*2);
-+ 
-+     if (!new_start) return 0;
-+ 
-diff --git a/package/libyaml/libyaml-0003-string-overflow.patch b/package/libyaml/libyaml-0003-string-overflow.patch
-new file mode 100644
-index 0000000..e740e65
---- /dev/null
-+++ b/package/libyaml/libyaml-0003-string-overflow.patch
-@@ -0,0 +1,28 @@
-+Description: CVE-2013-6393: yaml_parser_scan_tag_uri: fix int overflow leading to buffer overflow
-+ This is a proposed patch from Florian Weimer <fweimer@redhat.com> for
-+ the string overflow issue. It has been ack'd by upstream.
-+Origin: https://bugzilla.redhat.com/show_bug.cgi?id=1033990
-+Bug-RedHat: https://bugzilla.redhat.com/show_bug.cgi?id=1033990
-+Bug-Debian: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=737076
-+Last-Update: 2014-01-29
-+---
-+# HG changeset patch
-+# User Florian Weimer <fweimer@redhat.com>
-+# Date 1389273500 -3600
-+#      Thu Jan 09 14:18:20 2014 +0100
-+# Node ID a54d7af707f25dc298a7be60fd152001d2b3035b
-+# Parent  3e6507fa0c26d20c09f8f468f2bd04aa2fd1b5b5
-+yaml_parser_scan_tag_uri: fix int overflow leading to buffer overflow
++WPA_SUPPLICANT_CONFIG_ENABLE = \
++	CONFIG_IEEE80211N	\
++	CONFIG_IEEE80211R	\
++	CONFIG_INTERWORKING	\
++	CONFIG_DELAYED_MIC	\
++	CONFIG_INTERNAL_LIBTOMMATH
 +
-+diff --git a/src/scanner.c b/src/scanner.c
-+--- a/src/scanner.c
-++++ b/src/scanner.c
-+@@ -2574,7 +2574,7 @@
-+ 
-+     /* Resize the string to include the head. */
-+ 
-+-    while (string.end - string.start <= (int)length) {
-++    while ((size_t)(string.end - string.start) <= length) {
-+         if (!yaml_string_extend(&string.start, &string.pointer, &string.end)) {
-+             parser->error = YAML_MEMORY_ERROR;
-+             goto error;
++WPA_SUPPLICANT_CONFIG_DISABLE = \
++	CONFIG_DRIVER_ATMEL	\
++	CONFIG_SMARTCARD
++
+ ifeq ($(BR2_PACKAGE_LIBNL),y)
+ 	WPA_SUPPLICANT_DEPENDENCIES += libnl
+-define WPA_SUPPLICANT_LIBNL_CONFIG
+-	echo 'CONFIG_LIBNL32=y' >>$(WPA_SUPPLICANT_CONFIG)
+-endef
++	WPA_SUPPLICANT_CONFIG_SET += CONFIG_LIBNL32
+ else
+-define WPA_SUPPLICANT_LIBNL_CONFIG
+-	$(SED) 's/^\(CONFIG_DRIVER_NL80211.*\)/#\1/' $(WPA_SUPPLICANT_CONFIG)
+-endef
++	WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_DRIVER_NL80211
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_EAP),y)
+-define WPA_SUPPLICANT_EAP_CONFIG
+-	$(SED) 's/\(#\)\(CONFIG_EAP_AKA.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
+-	$(SED) 's/\(#\)\(CONFIG_EAP_FAST.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
+-	$(SED) 's/\(#\)\(CONFIG_EAP_GPSK.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
+-	$(SED) 's/\(#\)\(CONFIG_EAP_IKEV2.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
+-	$(SED) 's/\(#\)\(CONFIG_EAP_PAX.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
+-	$(SED) 's/\(#\)\(CONFIG_EAP_PSK.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
+-	$(SED) 's/\(#\)\(CONFIG_EAP_SAKE.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
+-	$(SED) 's/\(#\)\(CONFIG_EAP_SIM.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
+-	$(SED) 's/\(#\)\(CONFIG_EAP_TNC.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
+-	$(SED) 's/\(#\)\(CONFIG_TLSV1.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
+-endef
++	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_EAP_AKA		\
++					CONFIG_EAP_FAST		\
++					CONFIG_EAP_GPSK 	\
++					CONFIG_EAP_IKEV2	\
++					CONFIG_EAP_PAX		\
++					CONFIG_EAP_PSK		\
++					CONFIG_EAP_SAKE		\
++					CONFIG_EAP_SIM		\
++					CONFIG_EAP_TNC
+ else
+-define WPA_SUPPLICANT_EAP_CONFIG
+-	$(SED) 's/^\(CONFIG_EAP.*\)/#\1/' $(WPA_SUPPLICANT_CONFIG)
+-endef
++	WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_EAP
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT),y)
+-define WPA_SUPPLICANT_AP_CONFIG
+-	echo 'CONFIG_AP=y' >>$(WPA_SUPPLICANT_CONFIG)
+-endef
++	WPA_SUPPLICANT_CONFIG_SET += CONFIG_AP
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_WPS),y)
+-define WPA_SUPPLICANT_WPS_CONFIG
+-	$(SED) 's/\(#\)\(CONFIG_WPS.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
+-endef
++	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_WPS
+ endif
+ 
+-define WPA_SUPPLICANT_LIBTOMMATH_CONFIG
+-	$(SED) 's/\(#\)\(CONFIG_INTERNAL_LIBTOMMATH.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
+-endef
+-
+ # Try to use openssl if it's already available
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ 	WPA_SUPPLICANT_DEPENDENCIES += openssl
+-define WPA_SUPPLICANT_TLS_CONFIG
+-	$(SED) 's/\(#\)\(CONFIG_TLS=openssl\)/\2/' $(WPA_SUPPLICANT_CONFIG)
+-	$(SED) 's/\(#\)\(CONFIG_EAP_PWD.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
+-endef
++	WPA_SUPPLICANT_CONFIG_EDITS += 's/\#\(CONFIG_TLS=openssl\)/\1/'
++	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_EAP_PWD
+ else
+-define WPA_SUPPLICANT_TLS_CONFIG
+-	$(SED) 's/\(#\)\(CONFIG_TLS=\).*/\2internal/' $(WPA_SUPPLICANT_CONFIG)
+-endef
++	WPA_SUPPLICANT_CONFIG_EDITS += 's/\#\(CONFIG_TLS=\).*/\1internal/'
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_DBUS),y)
+@@ -81,9 +75,7 @@ ifeq ($(BR2_PACKAGE_DBUS),y)
+ 		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig"
+ 
+ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS_OLD),y)
+-define WPA_SUPPLICANT_DBUS_OLD_CONFIG
+-	$(SED) 's/\(#\)\(CONFIG_CTRL_IFACE_DBUS=\)/\2/' $(WPA_SUPPLICANT_CONFIG)
+-endef
++	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_CTRL_IFACE_DBUS=
+ define WPA_SUPPLICANT_INSTALL_DBUS_OLD
+ 	$(INSTALL) -D \
+ 	  $(@D)/wpa_supplicant/dbus/$(WPA_SUPPLICANT_DBUS_OLD_SERVICE).service \
+@@ -92,9 +84,7 @@ endef
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS_NEW),y)
+-define WPA_SUPPLICANT_DBUS_NEW_CONFIG
+-	$(SED) 's/\(#\)\(CONFIG_CTRL_IFACE_DBUS_NEW=\)/\2/' $(WPA_SUPPLICANT_CONFIG)
+-endef
++	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_CTRL_IFACE_DBUS_NEW
+ define WPA_SUPPLICANT_INSTALL_DBUS_NEW
+ 	$(INSTALL) -D \
+ 	  $(@D)/wpa_supplicant/dbus/$(WPA_SUPPLICANT_DBUS_NEW_SERVICE).service \
+@@ -103,17 +93,9 @@ endef
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS_INTROSPECTION),y)
+-define WPA_SUPPLICANT_DBUS_INTROSPECTION_CONFIG
+-	$(SED) 's/\(#\)\(CONFIG_CTRL_IFACE_DBUS_INTRO=\)/\2/' $(WPA_SUPPLICANT_CONFIG)
+-endef
++	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_CTRL_IFACE_DBUS_INTRO
+ endif
+ 
+-define WPA_SUPPLICANT_DBUS_CONFIG
+-	$(WPA_SUPPLICANT_DBUS_OLD_CONFIG)
+-	$(WPA_SUPPLICANT_DBUS_NEW_CONFIG)
+-	$(WPA_SUPPLICANT_DBUS_INTROSPECTION_CONFIG)
+-endef
+-
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DEBUG_SYSLOG),y)
+@@ -124,22 +106,11 @@ endif
+ 
+ define WPA_SUPPLICANT_CONFIGURE_CMDS
+ 	cp $(@D)/wpa_supplicant/defconfig $(WPA_SUPPLICANT_CONFIG)
+-	$(SED) 's/\(#\)\(CONFIG_HS20.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
+-	$(SED) 's/\(#\)\(CONFIG_IEEE80211N.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
+-	$(SED) 's/\(#\)\(CONFIG_IEEE80211R.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
+-	$(SED) 's/\(#\)\(CONFIG_IEEE80211W.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
+-	$(SED) 's/\(#\)\(CONFIG_INTERWORKING.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
+-	$(SED) 's/\(#\)\(CONFIG_DELAYED_MIC.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
+-	$(SED) 's/\(CONFIG_DRIVER_ATMEL\)/#\1/' $(WPA_SUPPLICANT_CONFIG)
+-	$(SED) 's/\(CONFIG_SMARTCARD\)/#\1/' $(WPA_SUPPLICANT_CONFIG)
+-	$(WPA_SUPPLICANT_LIBTOMMATH_CONFIG)
+-	$(WPA_SUPPLICANT_TLS_CONFIG)
+-	$(WPA_SUPPLICANT_EAP_CONFIG)
+-	$(WPA_SUPPLICANT_WPS_CONFIG)
+-	$(WPA_SUPPLICANT_LIBNL_CONFIG)
+-	$(WPA_SUPPLICANT_DBUS_CONFIG)
+-	$(WPA_SUPPLICANT_AP_CONFIG)
+-	$(WPA_SUPPLICANT_DEBUG_CONFIG)
++	sed -i $(patsubst %,-e 's/^\(%\)/#\1/',$(WPA_SUPPLICANT_CONFIG_DISABLE)) \
++	       $(patsubst %,-e 's/^#\(%\)/\1/',$(WPA_SUPPLICANT_CONFIG_ENABLE)) \
++	       $(patsubst %,-e '1i%=y',$(WPA_SUPPLICANT_CONFIG_SET)) \
++	       $(patsubst %,-e %,$(WPA_SUPPLICANT_CONFIG_EDITS)) \
++	       $(WPA_SUPPLICANT_CONFIG)
+ endef
+ 
+ define WPA_SUPPLICANT_BUILD_CMDS
+-- 
+1.8.5.3
