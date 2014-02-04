@@ -1,49 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Feb 2014 17:54:21 +0100
-Subject: [Buildroot] [PATCH v12 10/11] libav: add new package
-In-Reply-To: <1371766066-676-11-git-send-email-spenser@gillilanding.com>
-References: <1371766066-676-1-git-send-email-spenser@gillilanding.com>
- <1371766066-676-11-git-send-email-spenser@gillilanding.com>
-Message-ID: <20140204175421.2a7310a6@skate>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 04 Feb 2014 17:54:46 +0100
+Subject: [Buildroot] [PATCH] Makefile: change rsync used in overlays to
+	always transfer files
+In-Reply-To: <CANxTyt6-oLow34LPXLGWki6P3iK5gk0VtqOGtT9LSjYTTNeKJg@mail.gmail.com>
+ (Danomi Manchego's message of "Tue, 4 Feb 2014 11:49:05 -0500")
+References: <1370655822-2668-1-git-send-email-danomimanchego123@gmail.com>
+ <CACXmVibcZ=4o_Lv=mP5L5QXgWLqDc1X=4n8SLYP62DfuJJpp4A@mail.gmail.com>
+ <CANxTyt6-oLow34LPXLGWki6P3iK5gk0VtqOGtT9LSjYTTNeKJg@mail.gmail.com>
+Message-ID: <87siry4y3t.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Spenser Gilliland,
+>>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
 
-On Thu, 20 Jun 2013 17:07:45 -0500, Spenser Gilliland wrote:
-> 
-> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
-> ---
->  package/multimedia/Config.in       |    1 +
->  package/multimedia/libav/Config.in |  158 ++++++++++++++++++++++++++++
->  package/multimedia/libav/libav.mk  |  200 ++++++++++++++++++++++++++++++++++++
->  3 files changed, 359 insertions(+)
->  create mode 100644 package/multimedia/libav/Config.in
->  create mode 100644 package/multimedia/libav/libav.mk
+ > Peter,
+ > On Tue, Feb 4, 2014 at 11:31 AM, Peter Korsgaard <jacmet@sunsite.dk> wrote:
+ >> Committed with -I changed to --ignore-times as it is a bit more
+ >> obvious what the option does.
 
-It's been a while, but this patch is actually the last one of your
-patch series that hasn't been applied in one form or another. You
-originally created this patch as a dependency of gst-libav, but in the
-mean time, a different gst1-libav package was added, which uses the
-internal copy of libav in the GStreamer plugin sources, as recommended
-by upstream.
+ > Using "--ignore-times" is fine with me - but the problem still exists.
+ > You added the option to the skeleton install's rsync, but not to the
+ > overlay install's rsync, around line 551 of Makefile.  (So, you can
+ > still demonstrate the issue using the AAA/BBB overlays example that I
+ > mentioned in my original submittal.)  Can you add the --ignore-times
+ > to the second rsync?
 
-Therefore, are you interested in pursuing the effort around this patch?
+Argh, crap - I forgot the 2nd instance when I fixed up the merge
+conflict. I'll fix it now.
 
-Also, do you know if libav conflicts with ffmpeg in terms of installed
-files? Is it a drop-in replacement for ffmpeg or something different?
-
-Please let us know what your intentions are around this patch: as you
-can imagine we are trying to clean up the patchwork from the oldest
-patches.
-
-Thanks a lot!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
