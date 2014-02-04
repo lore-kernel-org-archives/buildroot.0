@@ -1,9 +1,9 @@
 From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Tue, 4 Feb 2014 19:15:20 +0100
-Subject: [Buildroot] [PATCH v2 2/7] libdrm: Remove dependency towards X11
+Date: Tue, 4 Feb 2014 19:15:21 +0100
+Subject: [Buildroot] [PATCH v2 3/7] libdrm: bump to version 2.4.52
 In-Reply-To: <1391537725-15894-1-git-send-email-berndkuhls@hotmail.com>
 References: <1391537725-15894-1-git-send-email-berndkuhls@hotmail.com>
-Message-ID: <BLU0-SMTP338F1C8C0E0E7FD631BCFC0D9AA0@phx.gbl>
+Message-ID: <BLU0-SMTP299ADEC0294DF6BF6186D06D9AA0@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,63 +12,23 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
 ---
-v4: rebased v3
-v3: rebased v2
-v2: http://patchwork.ozlabs.org/patch/304116/ (Paul Cercueil)
-v1: http://patchwork.ozlabs.org/patch/278297/ (Spenser Gilliland)
+v2: bump to version 2.4.52
 
- package/libdrm/Config.in |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/libdrm/libdrm.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libdrm/Config.in b/package/libdrm/Config.in
-index 4d7646b..e382a3a 100644
---- a/package/libdrm/Config.in
-+++ b/package/libdrm/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_LIBDRM
- 	bool "libdrm"
- 	select BR2_PACKAGE_LIBPTHREAD_STUBS
--	depends on BR2_PACKAGE_XORG7
- 	depends on BR2_LARGEFILE
- 	help
- 	  Direct Rendering Manager
-@@ -14,6 +13,7 @@ menu "DRM Drivers"
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index dd08af1..54d5bcd 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_LIBDRM_INTEL
- 	bool "intel"
-+	depends on BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_LIBATOMIC_OPS
- 	select BR2_PACKAGE_XLIB_LIBPCIACCESS
- 	depends on BR2_i386 || BR2_x86_64
-@@ -22,6 +22,7 @@ config BR2_PACKAGE_LIBDRM_INTEL
- 
- config BR2_PACKAGE_LIBDRM_RADEON
- 	bool "radeon"
-+	depends on BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_LIBATOMIC_OPS
- 	select BR2_PACKAGE_XLIB_LIBPCIACCESS
- 	depends on BR2_i386 || BR2_x86_64
-@@ -30,6 +31,7 @@ config BR2_PACKAGE_LIBDRM_RADEON
- 
- config BR2_PACKAGE_LIBDRM_NOUVEAU
- 	bool "nouveau"
-+	depends on BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_XLIB_LIBPCIACCESS
- 	depends on BR2_i386 || BR2_x86_64
- 	help
-@@ -37,6 +39,7 @@ config BR2_PACKAGE_LIBDRM_NOUVEAU
- 
- config BR2_PACKAGE_LIBDRM_VMWGFX
- 	bool "vmwgfx"
-+	depends on BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_XLIB_LIBPCIACCESS
- 	depends on BR2_i386 || BR2_x86_64
- 	help
-@@ -65,5 +68,4 @@ endmenu
- endif
- 
- comment "libdrm needs a toolchain w/ largefile"
--	depends on BR2_PACKAGE_XORG7
- 	depends on !BR2_LARGEFILE
+-LIBDRM_VERSION = 2.4.46
++LIBDRM_VERSION = 2.4.52
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+ LIBDRM_SITE = http://dri.freedesktop.org/libdrm/
+ LIBDRM_LICENSE = MIT
 -- 
 1.7.9.5
