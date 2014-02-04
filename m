@@ -1,47 +1,46 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 04 Feb 2014 10:27:14 +0100
-Subject: [Buildroot] [PATCH v3 2/2] gummiboot: new package
-In-Reply-To: <1391280837-1928-2-git-send-email-cvubrugier@yahoo.fr>
-References: <1391280837-1928-1-git-send-email-cvubrugier@yahoo.fr>
- <1391280837-1928-2-git-send-email-cvubrugier@yahoo.fr>
-Message-ID: <52F0B272.8020701@mind.be>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 04 Feb 2014 10:32:35 +0100
+Subject: [Buildroot] [PATCH] scripts: xorg-release: handle case when
+	version needs downgrade
+In-Reply-To: <1391505976-13477-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 4 Feb 2014 10:26:16 +0100")
+References: <1391505976-13477-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87d2j3i5os.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/02/14 19:53, Christophe Vu-Brugier wrote:
-[snip]
-> +config BR2_TARGET_GUMMIBOOT_I386
-> +	bool "i386"
-> +	select BR2_PACKAGE_GNU_EFI_IA32
-> +	# We unfortunately can't easily build gummiboot 32 bits when
-> +	# the selected target architecture is x86-64
-> +	depends on BR2_i386
-> +
-> +comment "32 bits gummiboot is only available for i386"
-> +	depends on BR2_x86_64
-> +
-> +config BR2_TARGET_GUMMIBOOT_X86_64
-> +	bool "x86-64"
-> +	select BR2_PACKAGE_GNU_EFI_X64
-> +	depends on BR2_x86_64
-> +
-> +endchoice
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- This choice always has only one option, so why does it exist?
+ > From: Nicolas Dechesne <ndec13@gmail.com>
+ > the initial implementation assumes that when a version found in
+ > buildroot is different from the one in the X11 release, it
+ > requires an upgrade. even though this is most likely the case, it
+ > could be a downgrade too, and it's probably worth highlighting
+ > such cases when it (rarely) happens.
 
+ > LooseVersion from distutils is doing the low level job of sorting
+ > version numbers represented in strings...
 
- Regards,
- Arnout
+ > [Thomas & Thomas:
 
-[snip]
+ >   - do not count packages more recent in Buildroot than in the latest
+ >     X.org release as to be downgraded. If we have more recent version,
+ >     it's generally for a good reason, so we want to keep them as
+ >     is. Such packages are counted as "nothing to do", but for
+ >     information, we indicate that there are "More recent"
+
+ >   - also remove the "nothing to do" action indicator. It used to be a
+ >     simple dash, which was not really useful.
+ > ]
+
+ > Signed-off-by: Nicolas Dechesne <ndec13@gmail.com>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+
+Committed, thanks.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Bye, Peter Korsgaard
