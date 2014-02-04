@@ -1,37 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 04 Feb 2014 15:28:37 +0100
-Subject: [Buildroot] [PATCH v2 1/1] icu: detect and add compiler symbol
-	prefix to the assembly code
-In-Reply-To: <1391519206-17889-1-git-send-email-rjbarnet@rockwellcollins.com>
- (Ryan Barnett's message of "Tue, 4 Feb 2014 14:06:46 +0100")
-References: <1391519206-17889-1-git-send-email-rjbarnet@rockwellcollins.com>
-Message-ID: <8761ov54ve.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 4 Feb 2014 15:24:53 +0100
+Subject: [Buildroot] [git commit] libxmlpp: need BR2_USE_MMU dependancy
+Message-ID: <20140204142939.C0C699C7C7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ryan" == Ryan Barnett <ryanbarnett3@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=cc6e4c4a32761f298442568ba7590a611ec6501a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: Sonic Zhang <sonic.zhang@analog.com>
- > Some compiler, such as Blackfin GNU compiler, prefix a charater to any
- > C symbol in generated assembly code. If any assembly symbol is invoked
- > from C code, it needs to be prefixed as well.
+Fixes:
+  http://autobuild.buildroot.org/results/d4d/d4d10ddccf4f53087e2012a36fd80808f7dc7cc5/
 
- > Note: since autoreconf doesn't work with this package because automake
- > isn't support
+Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libxmlpp/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
- > Fixes:
- >   http://autobuild.buildroot.net/results/c40a22814b405de2c5c75139cfc393c863ed4b81/
-
- > [Ryan: add information about why patching configure is ok]
- > [Ryan: add renaming of patches to be consistent with standard]
-
- > Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
- > Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libxmlpp/Config.in b/package/libxmlpp/Config.in
+index 77723a8..69bd220 100644
+--- a/package/libxmlpp/Config.in
++++ b/package/libxmlpp/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_LIBXMLPP
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR # glibmm -> libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glibmm -> libglib2
++	depends on BR2_USE_MMU # glibmm -> libglib2
+ 	help
+ 	  libxml++ is a C++ wrapper for the libxml XML parser library.
+ 
