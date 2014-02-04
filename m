@@ -1,42 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Feb 2014 17:57:43 +0100
-Subject: [Buildroot] [git commit] elf2flt: change source site
-Message-ID: <20140204170050.02C849C7D5@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 04 Feb 2014 18:10:26 +0100
+Subject: [Buildroot] [PATCH] Strip *.so* and not only executable files
+In-Reply-To: <1391528178-2115-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 4 Feb 2014 16:36:18 +0100")
+References: <1391528178-2115-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87k3da4xdp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=92f551abecd2323d992145973b1dbde85aa030c9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-The CVS repository for this package is no longer available. So
-changing the repository to be a mirror git repository.
+ > Our current stripping strategy requires that shared libraries have the
+ > executable permission. However, this is by far not something
+ > recognized as a standard behavior: Debian/Ubuntu distributions for
+ > example do not have executable permissions on their
+ > libraries. Therefore, pushing to upstream packages fixes that add the
+ > executable permissions is not easy.
 
-Fixes:
-  http://autobuild.buildroot.net/results/779/77997fd75282c355f6270b92371c161c9457d1dd
+ > As a result, this commit improves the stripping logic so that it not
+ > only strips the files that are executable, but also the ones that
+ > match '*.so*', which should match both the shared libraries and the
+ > dlopen()'able plugins, as long as they have a .so extension.
 
-Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/elf2flt/elf2flt.mk |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ > Thanks to this addition, a number of manual "chmod +x" done by various
+ > packages can be removed.
 
-diff --git a/package/elf2flt/elf2flt.mk b/package/elf2flt/elf2flt.mk
-index ce40f8d..6f54fb2 100644
---- a/package/elf2flt/elf2flt.mk
-+++ b/package/elf2flt/elf2flt.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--ELF2FLT_VERSION = 20130904
--ELF2FLT_SITE = cvs://cvs.uclinux.org:/var/cvs
--ELF2FLT_SITE_METHOD = cvs
-+ELF2FLT_VERSION = 21c6a41885ad544763ccd19883c1353f3b0b7a47
-+ELF2FLT_SITE = git://wh0rd.org/elf2flt.git
-+ELF2FLT_SITE_METHOD = git
- ELF2FLT_LICENSE = GPLv2+
- ELF2FLT_LICENSE_FILES = LICENSE.TXT
- 
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
