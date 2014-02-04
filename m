@@ -1,46 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Feb 2014 11:22:08 +0100
-Subject: [Buildroot] [git commit] package/util-linux: add a host variant
-Message-ID: <20140204102556.D70BD9C79B@busybox.osuosl.org>
+Date: Tue, 4 Feb 2014 11:24:04 +0100
+Subject: [Buildroot] [git commit] gnupg: depend on libiconv if appropriate
+Message-ID: <20140204102557.754E69C73B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ebeb21d0296df1e4dfe43cdec478043f44aa1916
+commit: http://git.buildroot.net/buildroot/commit/?id=1e7602327a318540cb92efd14b8cb092a4ab19bd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+If iconv is built before gnupg, this package will link against it; if it is
+built after this package, it will not be linked against it.  To make the
+build reproducible, make sure that iconv is always built before this
+package.
+
+Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in.host            |    1 +
- package/util-linux/Config.in.host |    8 ++++++++
- 2 files changed, 9 insertions(+), 0 deletions(-)
+ package/gnupg/gnupg.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 685a8b8..599ab9e 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -15,5 +15,6 @@ source "package/parted/Config.in.host"
- source "package/sam-ba/Config.in.host"
- source "package/sunxi-tools/Config.in.host"
- source "package/uboot-tools/Config.in.host"
-+source "package/util-linux/Config.in.host"
+diff --git a/package/gnupg/gnupg.mk b/package/gnupg/gnupg.mk
+index 39a37d0..c334ac6 100644
+--- a/package/gnupg/gnupg.mk
++++ b/package/gnupg/gnupg.mk
+@@ -9,7 +9,7 @@ GNUPG_SOURCE = gnupg-$(GNUPG_VERSION).tar.bz2
+ GNUPG_SITE = ftp://ftp.gnupg.org/gcrypt/gnupg
+ GNUPG_LICENSE = GPLv3+
+ GNUPG_LICENSE_FILES = COPYING
+-GNUPG_DEPENDENCIES = zlib ncurses
++GNUPG_DEPENDENCIES = zlib ncurses $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ GNUPG_CONF_ENV = ac_cv_sys_symbol_underscore=no
+ GNUPG_CONF_OPT = --disable-rpath --enable-minimal --disable-regex
  
- endmenu
-diff --git a/package/util-linux/Config.in.host b/package/util-linux/Config.in.host
-new file mode 100644
-index 0000000..f73dc43
---- /dev/null
-+++ b/package/util-linux/Config.in.host
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_HOST_UTIL_LINUX
-+	bool "host util-linux"
-+	help
-+	  Various useful/essential linux libraries and utilities.
-+
-+	  Things like mkfs, mkswap, swapon, fdisk, mount, dmesg, etc...
-+
-+	  http://www.kernel.org/pub/linux/utils/util-linux/
