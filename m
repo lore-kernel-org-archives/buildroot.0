@@ -1,46 +1,39 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 04 Feb 2014 10:08:04 +0100
-Subject: [Buildroot] buildroot(busybox) problem with ccache during
- rtai-4.0-test2 compiling.
-In-Reply-To: <CAEqQue1m_d_ouJMoHqzjyvWawHFry_1C9S39E=1AeyJqFD6R9Q@mail.gmail.com>
-References: <CAEqQue1sX4nntqoAS-Rynro_8GDkD7hAUd+_CTHDXft_Z0U=CA@mail.gmail.com>
- <20140130200821.2c0559d8@skate>
- <CAEqQue1tHGgSoRZ10S1onLNVoWVTB5wvtHEZoNSsH6rqz-808g@mail.gmail.com>
- <20140131090444.725c88d4@skate>
- <CAEqQue1m_d_ouJMoHqzjyvWawHFry_1C9S39E=1AeyJqFD6R9Q@mail.gmail.com>
-Message-ID: <52F0ADF4.8080509@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 4 Feb 2014 10:13:49 +0100
+Subject: [Buildroot] [pkg-perl infra V3 03/12] scancpan: a new script
+In-Reply-To: <1385198749-6249-4-git-send-email-francois.perrad@gadz.org>
+References: <1385198749-6249-1-git-send-email-francois.perrad@gadz.org>
+ <1385198749-6249-4-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20140204091349.GD3454@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 31/01/14 12:09, servo gmrt wrote:
-> I am trying to build integrated linux-kernal, rootfs, and rtai, 
-> 
-> To complie rtai, I enabled rtai and patch location in .config file. Other
-> than that I have not made any changes in any of the buildroot files.
-> 
-> Is there any changes I should make in buoldroot before buliding RTAI ?
+Fran?ois, All,
 
- The RTAI version we have in buildroot is RTAI 3.8.1. So if you are
-building RTAI 4.0, it means you are using a fork. So either you have to
-contact the maintainer of your fork, or you have to give us the patches
-that were applied in order to use RTAI 4.0.
+On 2013-11-23 10:25 +0100, Francois Perrad spake thusly:
+> which populates the directory package/cpan
 
- Regards,
- Arnout
+I think this would deserve a bit more explanations, here and in the
+cover letter.
 
-> 
-> Thanks & Regards,
-> B.Thiyagarajan
-> 
+For example, it is not obvious what this script does, and what it is
+for, and what the expected result is.
 
+Note that I am reviewing the patches in sequence, so this may become
+obvious in the following patches, but still, I think we do want the
+explanations explicitly with this patch, so we do not need to infer it
+from the following changes...
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
