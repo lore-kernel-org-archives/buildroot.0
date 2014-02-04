@@ -1,111 +1,82 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Tue,  4 Feb 2014 10:25:58 +0100
-Subject: [Buildroot] [PATCH 2/2] iucode-tools: new package
-In-Reply-To: <1391505958-17221-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1391505958-17221-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <1391505958-17221-2-git-send-email-maxime.hadjinlian@gmail.com>
+Date: Tue,  4 Feb 2014 10:25:57 +0100
+Subject: [Buildroot] [PATCH 1/2] intel-microcode: new package
+Message-ID: <1391505958-17221-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-iucode_tool is a program to manipulate Intel? X86 and X86-64 processor
-microcode collections, and to use the kernel facilities to upgrade the
-microcode on Intel system processors.
+The intel microcode is a proprietary package which provides a data file
+used to correct processors errors.
 It was originally sent by Richard Braun <rbraun@sceen.net>
 
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Cc: Richard Braun <rbraun@sceen.net>
 ---
- package/Config.in                  |  1 +
- package/iucode-tool/Config.in      |  8 ++++++++
- package/iucode-tool/S00iucode-tool | 23 +++++++++++++++++++++++
- package/iucode-tool/iucode-tool.mk | 19 +++++++++++++++++++
- 4 files changed, 51 insertions(+)
- create mode 100644 package/iucode-tool/Config.in
- create mode 100644 package/iucode-tool/S00iucode-tool
- create mode 100644 package/iucode-tool/iucode-tool.mk
+ package/Config.in                          |  1 +
+ package/intel-microcode/Config.in          |  7 +++++++
+ package/intel-microcode/intel-microcode.mk | 25 +++++++++++++++++++++++++
+ 3 files changed, 33 insertions(+)
+ create mode 100644 package/intel-microcode/Config.in
+ create mode 100644 package/intel-microcode/intel-microcode.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index e452c1e..ee2a68e 100644
+index 93d23cb..e452c1e 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -304,6 +304,7 @@ source "package/input-tools/Config.in"
- source "package/intel-microcode/Config.in"
+@@ -301,6 +301,7 @@ source "package/hwdata/Config.in"
+ source "package/i2c-tools/Config.in"
+ source "package/input-event-daemon/Config.in"
+ source "package/input-tools/Config.in"
++source "package/intel-microcode/Config.in"
  source "package/iostat/Config.in"
  source "package/irda-utils/Config.in"
-+source "package/iucode-tool/Config.in"
  source "package/kbd/Config.in"
- source "package/lcdproc/Config.in"
- source "package/lm-sensors/Config.in"
-diff --git a/package/iucode-tool/Config.in b/package/iucode-tool/Config.in
+diff --git a/package/intel-microcode/Config.in b/package/intel-microcode/Config.in
 new file mode 100644
-index 0000000..a9670ce
+index 0000000..495ebd7
 --- /dev/null
-+++ b/package/iucode-tool/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_IUCODE_TOOL
-+	bool "iucode-tool"
++++ b/package/intel-microcode/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_INTEL_MICROCODE
++	bool "intel-microcode"
 +	depends on BR2_x86_64 || BR2_i386
-+	select BR2_PACKAGE_INTEL_MICROCODE
 +	help
-+	  Intel processor microcode tool
-+
-+	  http://packages.debian.org/source/sid/iucode-tool
-diff --git a/package/iucode-tool/S00iucode-tool b/package/iucode-tool/S00iucode-tool
++	  This package provides an Intel microcode data file that can be
++	  used to correct processor errors. The iucode-tool package and
++	  proper kernel support are required to upload the microcode.
+diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
 new file mode 100644
-index 0000000..0c1e409
+index 0000000..c6cf51d
 --- /dev/null
-+++ b/package/iucode-tool/S00iucode-tool
-@@ -0,0 +1,23 @@
-+#!/bin/sh
-+#
-+# Upload microcode into the processor.
-+#
-+
-+microcode_file="/usr/share/misc/intel-microcode.dat"
-+
-+case "$1" in
-+  start)
-+	echo "Starting iucode-tool:"
-+	/usr/sbin/iucode_tool -k $microcode_file
-+	echo "done"
-+	;;
-+  stop)
-+	;;
-+  restart|reload)
-+	;;
-+  *)
-+	echo "Usage: $0 {start|stop|restart}"
-+	exit 1
-+esac
-+
-+exit $?
-diff --git a/package/iucode-tool/iucode-tool.mk b/package/iucode-tool/iucode-tool.mk
-new file mode 100644
-index 0000000..2d52b16
---- /dev/null
-+++ b/package/iucode-tool/iucode-tool.mk
-@@ -0,0 +1,19 @@
++++ b/package/intel-microcode/intel-microcode.mk
+@@ -0,0 +1,25 @@
 +################################################################################
 +#
-+# iucode-tool
++# intel-microcode
 +#
 +################################################################################
 +
-+IUCODE_TOOL_VERSION = v1.0.1
-+IUCODE_TOOL_SITE = git://git.debian.org/users/hmh/iucode-tool.git
-+IUCODE_TOOL_AUTORECONF = YES
-+IUCODE_TOOL_LICENSE = GPLv2+
-+IUCODE_TOOL_LICENSE_FILES = COPYING
++INTEL_MICROCODE_VERSION = 20140122
++INTEL_MICROCODE_SOURCE = microcode-$(INTEL_MICROCODE_VERSION).tgz
++INTEL_MICROCODE_SITE = http://downloadmirror.intel.com/23574/eng
++INTEL_MICROCODE_LICENSE = PROPRIETARY
++INTEL_MICROCODE_REDISTRIBUTE = NO
 +
-+define IUCODE_TOOL_INSTALL_INIT_SYSV
-+	[ -f $(TARGET_DIR)/etc/init.d/S00iucode-tool ] || \
-+		$(INSTALL) -D -m 0755 package/iucode-tool/S00iucode-tool \
-+			$(TARGET_DIR)/etc/init.d/S00iucode-tool
++# N.B. Don't strip any path components during extraction.
++define INTEL_MICROCODE_EXTRACT_CMDS
++	gzip -d -c $(DL_DIR)/$(INTEL_MICROCODE_SOURCE) | \
++	tar --strip-components=0 -C $(@D) -xf -
++	head -n 33 $(@D)/microcode.dat > $(@D)/license.txt
 +endef
 +
-+$(eval $(autotools-package))
++define INTEL_MICROCODE_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0644 $(@D)/microcode.dat \
++		$(TARGET_DIR)/usr/share/misc/intel-microcode.dat
++endef
++
++$(eval $(generic-package))
 -- 
 1.8.5.3
