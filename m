@@ -1,76 +1,58 @@
-From: Ludovic Desroches <ludovic.desroches@atmel.com>
-Date: Tue, 4 Feb 2014 14:21:17 +0100
-Subject: [Buildroot] [PATCH] defconfigs: add sama5d3 support
-In-Reply-To: <87zjm7cae2.fsf@dell.be.48ers.dk>
-References: <1391093726-7569-1-git-send-email-ludovic.desroches@atmel.com>
- <87y51rl01m.fsf@dell.be.48ers.dk>
- <20140204112654.GD30185@ldesroches-Latitude-E6320>
- <87zjm7cae2.fsf@dell.be.48ers.dk>
-Message-ID: <20140204132117.GE30185@ldesroches-Latitude-E6320>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue,  4 Feb 2014 14:36:56 +0100
+Subject: [Buildroot] [PATCH] pkg-download: make sure git downloads fail for
+	unknown versions
+Message-ID: <1391521016-6990-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Feb 04, 2014 at 01:47:33PM +0100, Peter Korsgaard wrote:
-> >>>>> "Ludovic" == Ludovic Desroches <ludovic.desroches@atmel.com> writes:
-> 
->  >> Care to send such a minimal defconfig with comments instead?
-> 
->  > Sorry, not sure to have understood, you mean I have to put extra packages I
->  > want as comments.
-> 
-> No, please take a look at our other defconfigs (E.G. nitrogen6x):
+The current git download helper creates the tarball by doing:
 
-I had a look but I didn't understand what you mean by comments. So ok,
-those kind of comments.
+    git archive <version> | gzip -c > <tarball>
 
-> 
-> # architecture
-> BR2_arm=y
-> BR2_cortex_a9=y
-> 
-> # system
-> BR2_TARGET_GENERIC_GETTY=y
-> BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
-> BR2_ROOTFS_POST_BUILD_SCRIPT="board/boundarydevices/nitrogen6x/post-build.sh"
-> 
-> # filesystem
-> BR2_TARGET_ROOTFS_EXT2=y
-> BR2_TARGET_ROOTFS_EXT2_2r1=y
-> 
-> # bootloader
-> BR2_TARGET_UBOOT=y
-> BR2_TARGET_UBOOT_BOARDNAME="nitrogen6q"
-> BR2_TARGET_UBOOT_FORMAT_IMX=y
-> BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-> BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-boot-imx6/tarball/4034391/u-boot-4034391.tar.gz"
-> 
-> # kernel
-> BR2_LINUX_KERNEL=y
-> BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/linux-imx6/tarball/5809938/linux-imx6-5809938.tar.gz"
-> BR2_LINUX_KERNEL_DEFCONFIG="nitrogen6x"
-> BR2_LINUX_KERNEL_INSTALL_TARGET=y
-> 
-> 
-> It doesn't enable any usecase specific packages, just the needed
-> arch/getty/linux/bootloader configuration to start working from.
-> 
+Unfortunately, even if "git archive" fails and returns a non-zero
+error code, gzip ignores that, compresses nothing, and returns success
+(zero error code). The consequence of this behavior is that when the
+git version provided in the package is incorrect, we are not failing
+during the download step, but later on when trying to extract the
+tarball (which was incorrectly created as a result of the failing git
+archive).
 
-I understand this point of view and I am fine with it. But my concern is
-that some customers want something working out of the box. For instance,
-we often use devmem2 for debugging purpose or other tools such as
-i2c-tools. It is easier for us to have it in a defconfig file.
+To fix this, we change the tarball creation logic to:
 
-I am not trying to convince you to take this defconfig as is! Just to
-know if there is a way to provide specific packages? If not, it will be
-provided only in our buildroot-at91 repository. I am also fine with
-this, if the customer wants something out of the box then he'll have to
-use our repository. Otherwise he could use buildroot one.
+   git archive -o <tarball>.tmp <version> &&
+   gzip -c <tarball>.tmp > <tarball> &&
+   rm -f <tarball>.tmp
 
+If the build is interrupted during the "gzip" command, we may leave
+the .tmp file behind us, but this also happens with wget downloads,
+and is generally not considered a problem, since this temporary file
+will be overwritten next time we attempt to do download this package.
 
-Regards
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+---
+ package/pkg-download.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Ludovic
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index c00689b..2641d4e 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -91,8 +91,9 @@ define DOWNLOAD_GIT
+ 	  (echo "Doing full clone" && \
+ 	   $(GIT) clone --bare $($(PKG)_SITE) $($(PKG)_BASE_NAME))) && \
+ 	pushd $($(PKG)_BASE_NAME) > /dev/null && \
+-	$(GIT) archive --format=tar --prefix=$($(PKG)_BASE_NAME)/ $($(PKG)_DL_VERSION) | \
+-		gzip -c > $(DL_DIR)/$($(PKG)_SOURCE) && \
++	$(GIT) archive --format=tar --prefix=$($(PKG)_BASE_NAME)/ -o $(DL_DIR)/.$($(PKG)_SOURCE).tmp $($(PKG)_DL_VERSION) && \
++	gzip -c $(DL_DIR)/.$($(PKG)_SOURCE).tmp > $(DL_DIR)/$($(PKG)_SOURCE) && \
++	rm -f $(DL_DIR)/.$($(PKG)_SOURCE).tmp && \
+ 	popd > /dev/null && \
+ 	rm -rf $($(PKG)_DL_DIR) && \
+ 	popd > /dev/null)
+-- 
+1.8.3.2
