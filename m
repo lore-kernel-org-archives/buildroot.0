@@ -1,35 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Feb 2014 15:25:52 +0100
-Subject: [Buildroot] [git commit] uclibc: fix sh2a option definition
-Message-ID: <20140204142939.D9F049C211@busybox.osuosl.org>
+Date: Tue, 4 Feb 2014 15:27:04 +0100
+Subject: [Buildroot] [git commit] mpg132: bump to version 1.18.0
+Message-ID: <20140204142939.F2AF89C211@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=26cdb3568c6d7a9c6e9bf7910751e31719f148a5
+commit: http://git.buildroot.net/buildroot/commit/?id=f628dc41ab30df314c872a69ebb2e255e340c22a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The uClibc options for sh2a is SH2A, not SHA2, and this value should
-be used for sh2a, not sh2.
+Fixes a couple of buffer overflows so it should be considered as a
+security bump (no CVEs though).
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/uclibc/Config.in |    2 +-
+ package/mpg123/mpg123.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index 079a15c..77756e3 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -240,7 +240,7 @@ config BR2_UCLIBC_MIPS_ISA
- config BR2_UCLIBC_SH_TYPE
- 	string
- 	depends on BR2_UCLIBC_TARGET_ARCH = "sh"
--	default SHA2 if BR2_sh2
-+	default SH2A if BR2_sh2a
- 	default SH3  if BR2_sh3 || BR2_sh3eb
- 	default SH4  if BR2_sh4 || BR2_sh4eb
+diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
+index 70d3ed6..a950813 100644
+--- a/package/mpg123/mpg123.mk
++++ b/package/mpg123/mpg123.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-MPG123_VERSION = 1.17.0
++MPG123_VERSION = 1.18.0
+ MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
+ MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
+ MPG123_CONF_OPT = --disable-lfs-alias
