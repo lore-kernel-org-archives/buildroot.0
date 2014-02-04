@@ -1,35 +1,33 @@
 From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Rosen?= <jeremy.rosen@openwide.fr>
-Date: Tue,  4 Feb 2014 15:12:28 +0100
-Subject: [Buildroot] [PATCH] filter BR2_DEFCONFIG out of defconfig files
-Message-ID: <1391523148-30887-1-git-send-email-jeremy.rosen@openwide.fr>
+Date: Tue,  4 Feb 2014 15:12:40 +0100
+Subject: [Buildroot] [PATCH] VLC needs QT_GUI_MODULE and not just QT
+Message-ID: <1391523160-30939-1-git-send-email-jeremy.rosen@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When it is set, BR2_DEFCONFIG is saved like any config variable.
-However, at this point it is a completely expanded, absolute path
-It is not a good idea to save absolute paths in defconfig files
-moreover it makes little sense to save the defconfig location
-within the defconfig
+fixes http://autobuild.buildroot.net/results/78d/78df2d86394d7637db88dac5d1e3c7b4a27af293/
+
 
 Signed-off-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
 ---
- Makefile | 1 +
- 1 file changed, 1 insertion(+)
+ package/vlc/vlc.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Makefile b/Makefile
-index 4a675d4..f63a058 100644
---- a/Makefile
-+++ b/Makefile
-@@ -772,6 +772,7 @@ savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 	@$(COMMON_CONFIG_ENV) $< \
- 		--savedefconfig=$(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig) \
- 		$(CONFIG_CONFIG_IN)
-+	sed -i '/^BR2_DEFCONFIG=/d' $(DEFCONFIG)
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index 73b378c..b39c6c7 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -204,7 +204,7 @@ else
+ VLC_CONF_OPT += --disable-lua
+ endif
  
- # check if download URLs are outdated
- source-check:
+-ifeq ($(BR2_PACKAGE_QT),y)
++ifeq ($(BR2_PACKAGE_QT_GUI_MODULE),y)
+ VLC_CONF_OPT += --enable-qt
+ VLC_DEPENDENCIES += qt
+ else
 -- 
 1.8.5.3
