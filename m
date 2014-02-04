@@ -1,35 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 04 Feb 2014 17:54:46 +0100
-Subject: [Buildroot] [PATCH] Makefile: change rsync used in overlays to
-	always transfer files
-In-Reply-To: <CANxTyt6-oLow34LPXLGWki6P3iK5gk0VtqOGtT9LSjYTTNeKJg@mail.gmail.com>
- (Danomi Manchego's message of "Tue, 4 Feb 2014 11:49:05 -0500")
-References: <1370655822-2668-1-git-send-email-danomimanchego123@gmail.com>
- <CACXmVibcZ=4o_Lv=mP5L5QXgWLqDc1X=4n8SLYP62DfuJJpp4A@mail.gmail.com>
- <CANxTyt6-oLow34LPXLGWki6P3iK5gk0VtqOGtT9LSjYTTNeKJg@mail.gmail.com>
-Message-ID: <87siry4y3t.fsf@dell.be.48ers.dk>
+Date: Tue, 4 Feb 2014 17:56:04 +0100
+Subject: [Buildroot] [git commit] Makefile: also use ignore-times argument
+	to rsync when copying rootfs overlays
+Message-ID: <20140204165635.14DE69C7D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=99e82b0d4c6d8f10560a8dd5377b244b344963ea
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Peter,
- > On Tue, Feb 4, 2014 at 11:31 AM, Peter Korsgaard <jacmet@sunsite.dk> wrote:
- >> Committed with -I changed to --ignore-times as it is a bit more
- >> obvious what the option does.
+Missed from previous patch.
 
- > Using "--ignore-times" is fine with me - but the problem still exists.
- > You added the option to the skeleton install's rsync, but not to the
- > overlay install's rsync, around line 551 of Makefile.  (So, you can
- > still demonstrate the issue using the AAA/BBB overlays example that I
- > mentioned in my original submittal.)  Can you add the --ignore-times
- > to the second rsync?
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ Makefile |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Argh, crap - I forgot the 2nd instance when I fixed up the merge
-conflict. I'll fix it now.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/Makefile b/Makefile
+index 9775397..dec0694 100644
+--- a/Makefile
++++ b/Makefile
+@@ -548,7 +548,7 @@ endif
+ 
+ 	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
+ 		$(call MESSAGE,"Copying overlay $(d)"); \
+-		rsync -a $(RSYNC_VCS_EXCLUSIONS) \
++		rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
+ 			--chmod=Du+w --exclude .empty --exclude '*~' \
+ 			$(d)/ $(TARGET_DIR)$(sep))
+ 
