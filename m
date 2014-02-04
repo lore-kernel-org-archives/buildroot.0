@@ -1,53 +1,75 @@
-From: Ludovic Desroches <ludovic.desroches@atmel.com>
-Date: Tue, 4 Feb 2014 21:33:26 +0100
-Subject: [Buildroot] [PATCH] defconfigs: add sama5d3 support
-In-Reply-To: <52F11B35.7000707@mind.be>
-References: <1391093726-7569-1-git-send-email-ludovic.desroches@atmel.com>
- <87y51rl01m.fsf@dell.be.48ers.dk>
- <20140204112654.GD30185@ldesroches-Latitude-E6320>
- <87zjm7cae2.fsf@dell.be.48ers.dk>
- <20140204132117.GE30185@ldesroches-Latitude-E6320>
- <87zjm75533.fsf@dell.be.48ers.dk> <52F11B35.7000707@mind.be>
-Message-ID: <20140204203326.GB21958@ldesroches-Latitude-E6320>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue, 4 Feb 2014 22:06:54 +0100
+Subject: [Buildroot] [PATCH 1/1] Added patch fixing absolute path in
+	toolchainfile.cmake
+In-Reply-To: <1391536551-57608-1-git-send-email-u.strempel@googlemail.com>
+References: <1391536551-57608-1-git-send-email-u.strempel@googlemail.com>
+Message-ID: <CAHXCMM+S+XdF=MsHcVFMMs2ZWwK2Mb229s-YcDz9NsKNWkfPtQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Feb 04, 2014 at 05:54:13PM +0100, Arnout Vandecappelle wrote:
-> On 04/02/14 15:24, Peter Korsgaard wrote:
-> >>>>>> "Ludovic" == Ludovic Desroches <ludovic.desroches@atmel.com> writes:
-> > 
-> > Hi,
-> > 
-> >  > I understand this point of view and I am fine with it. But my concern
-> >  > is that some customers want something working out of the box. For
-> >  > instance, we often use devmem2 for debugging purpose or other tools
-> >  > such as i2c-tools. It is easier for us to have it in a defconfig
-> >  > file.
-> > 
-> >  > I am not trying to convince you to take this defconfig as is! Just to
-> >  > know if there is a way to provide specific packages? If not, it will
-> >  > be provided only in our buildroot-at91 repository. I am also fine
-> >  > with this, if the customer wants something out of the box then he'll
-> >  > have to use our repository. Otherwise he could use buildroot one.
-> > 
-> > I understand. We're been discussing something like this a few times
-> > (E.G. full blown "demo" defconfigs), but for now I prefer to keep the
-> > variant in buildroot minimal.
-> 
->  However, we are OK with a minimal and a demo variant. So you can submit
-> one patch that builds a minimal config in configs/sama5d3_defconfig, and
-> a second patch that adds a demo defconfig in
-> configs/sama5d3_demo_multimedia_defconfig (it looks like you mainly add
-> multimedia packages, hence the name I chose, but you can take something
-> else of course).
-> 
+Hi Uwe,
 
-Once other components would be ready, I'll send a minimal defconfig and
-a demo defconfig then I let you choose if you want to take both or not.
 
-Regards
+On Tue, Feb 4, 2014 at 6:55 PM, Uwe Strempel <u.strempel@googlemail.com>
+wrote:
+>
+> On build process of buildroot the toolchainfile.cmake is created, but
+with wrong absolut path.
+> When shareing the toolchain or move the folder you get problems this path
+settings.
+>
+> A workarround for cmake files is
+> - get the path of the toolchainfile.cmake and set the the variables.
+> see BUG #6818
+>
+> Signed-off-by: Uwe Strempel <u.strempel@googlemail.com>
+> ---
+>  package/Makefile.in  |  5 +++++
+>  package/pkg-cmake.mk | 11 ++++++-----
+>>
+>>  2 files changed, 11 insertions(+), 5 deletions(-)
+>
+>
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index 2e433fd..aa86fca 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -140,8 +140,10 @@ endif
+>
+>  ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+>  TARGET_CROSS=$(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-
+> +TARGET_CROSS_WITHOUT_HOST_DIR=/usr/bin/$(GNU_TARGET_NAME)-
+>  else
+>  TARGET_CROSS=$(HOST_DIR)/usr/bin/$(call
+qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))-
+> +TARGET_CROSS_WITHOUT_HOST_DIR=/usr/bin/$(call
+qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))-
+>  endif
+>
+>  # Quotes are needed for spaces et al in path components.
+> @@ -164,6 +166,9 @@ TARGET_OBJDUMP  = $(TARGET_CROSS)objdump
+>  TARGET_CC_NOCCACHE  := $(TARGET_CC)
+>  TARGET_CXX_NOCCACHE := $(TARGET_CXX)
+>
+> +TARGET_CC_NOCCACHE_WITHOUT_HOST_DIR  :=
+$(TARGET_CROSS_WITHOUT_HOST_DIR)gcc
+> +TARGET_CXX_NOCCACHE_WITHOUT_HOST_DIR :=
+ $(TARGET_CROSS_WITHOUT_HOST_DIR)g++
+> +
 
-Ludovic
+Are these new variables really needed at the make level?
+Cannot all of this be done in the toolchainfile.cmake generation
+(e.g.: http://lists.busybox.net/pipermail/buildroot/2012-May/053770.html)?
+
+
+Regards,
+
+--
+Samuel
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140204/7ba3fb69/attachment.html>
