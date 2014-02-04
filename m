@@ -1,62 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Feb 2014 15:06:46 +0100
-Subject: [Buildroot] [git commit] Rename BUILDROOT_LIBC to BR_LIBC
-Message-ID: <20140204140813.A6A2E9C7BF@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue,  4 Feb 2014 15:10:34 +0100
+Subject: [Buildroot] [PATCH] arch: remove incorrect condition for endian
+	definition on SuperH
+Message-ID: <1391523034-7624-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=de13e31a165268e030018bb6d168637303a65802
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Probably due to some copy/paste mistake, Config.in.sh was defining
+BR2_ENDIAN to "LITTLE" when the architecture is BR2_x86_64. Due to the
+fact that Config.in.sh is never included when we are building for
+x86_64, this is a no-op, but is certainly good to clean up.
 
-No functional change, but internal variables should be name BR_foo, not
-BUILDROOT_foo (I think ..).
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gcc/gcc-final/gcc-final.mk                 |    2 +-
- package/gcc/gcc-intermediate/gcc-intermediate.mk   |    2 +-
- .../toolchain-buildroot/toolchain-buildroot.mk     |    2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ arch/Config.in.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index 49de481..47b30da 100644
---- a/package/gcc/gcc-final/gcc-final.mk
-+++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -10,7 +10,7 @@ GCC_FINAL_SOURCE  = $(GCC_SOURCE)
+diff --git a/arch/Config.in.sh b/arch/Config.in.sh
+index cf70fd5..10d4ef6 100644
+--- a/arch/Config.in.sh
++++ b/arch/Config.in.sh
+@@ -36,6 +36,6 @@ config BR2_ARCH
  
- HOST_GCC_FINAL_DEPENDENCIES = \
- 	$(HOST_GCC_COMMON_DEPENDENCIES) \
--	$(BUILDROOT_LIBC)
-+	$(BR_LIBC)
- 
- HOST_GCC_FINAL_EXTRACT_CMDS = $(HOST_GCC_EXTRACT_CMDS)
- 
-diff --git a/package/gcc/gcc-intermediate/gcc-intermediate.mk b/package/gcc/gcc-intermediate/gcc-intermediate.mk
-index f47e4be..2105cec 100644
---- a/package/gcc/gcc-intermediate/gcc-intermediate.mk
-+++ b/package/gcc/gcc-intermediate/gcc-intermediate.mk
-@@ -10,7 +10,7 @@ GCC_INTERMEDIATE_SOURCE  = $(GCC_SOURCE)
- 
- HOST_GCC_INTERMEDIATE_DEPENDENCIES = \
- 	$(HOST_GCC_COMMON_DEPENDENCIES) \
--	$(BUILDROOT_LIBC)-configure
-+	$(BR_LIBC)-configure
- 
- HOST_GCC_INTERMEDIATE_EXTRACT_CMDS = $(HOST_GCC_EXTRACT_CMDS)
- 
-diff --git a/toolchain/toolchain-buildroot/toolchain-buildroot.mk b/toolchain/toolchain-buildroot/toolchain-buildroot.mk
-index f1f07a9..2b5028c 100644
---- a/toolchain/toolchain-buildroot/toolchain-buildroot.mk
-+++ b/toolchain/toolchain-buildroot/toolchain-buildroot.mk
-@@ -6,7 +6,7 @@
- 
- TOOLCHAIN_BUILDROOT_SOURCE =
- 
--BUILDROOT_LIBC = $(call qstrip,$(BR2_TOOLCHAIN_BUILDROOT_LIBC))
-+BR_LIBC = $(call qstrip,$(BR2_TOOLCHAIN_BUILDROOT_LIBC))
- 
- # Triggering the build of the host-gcc-final will automatically do the
- # build of binutils, uClibc, kernel headers and all the intermediate
+ config BR2_ENDIAN
+ 	default "LITTLE"	if BR2_sh3 || BR2_sh4 || BR2_sh4a || \
+-				   BR2_x86_64 || BR2_sh64
++				   BR2_sh64
+ 	default "BIG"		if BR2_sh2 || BR2_sh2a || BR2_sh3eb || \
+ 				   BR2_sh4eb || BR2_sh4aeb
+-- 
+1.8.3.2
