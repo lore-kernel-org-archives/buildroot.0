@@ -1,27 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 04 Feb 2014 15:15:16 +0100
-Subject: [Buildroot] [PATCH] arch: remove incorrect condition for endian
-	definition on SuperH
-In-Reply-To: <1391523034-7624-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 4 Feb 2014 15:10:34 +0100")
-References: <1391523034-7624-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <878utr6k23.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue,  4 Feb 2014 15:18:23 +0100
+Subject: [Buildroot] [PATCH] uclibc: fix sh2a option definition
+Message-ID: <1391523503-7867-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+The uClibc options for sh2a is SH2A, not SHA2, and this value should
+be used for sh2a, not sh2.
 
- > Probably due to some copy/paste mistake, Config.in.sh was defining
- > BR2_ENDIAN to "LITTLE" when the architecture is BR2_x86_64. Due to the
- > fact that Config.in.sh is never included when we are building for
- > x86_64, this is a no-op, but is certainly good to clean up.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/uclibc/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed, thanks.
-
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index 079a15c..77756e3 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -240,7 +240,7 @@ config BR2_UCLIBC_MIPS_ISA
+ config BR2_UCLIBC_SH_TYPE
+ 	string
+ 	depends on BR2_UCLIBC_TARGET_ARCH = "sh"
+-	default SHA2 if BR2_sh2
++	default SH2A if BR2_sh2a
+ 	default SH3  if BR2_sh3 || BR2_sh3eb
+ 	default SH4  if BR2_sh4 || BR2_sh4eb
+ 
 -- 
-Bye, Peter Korsgaard
+1.8.3.2
