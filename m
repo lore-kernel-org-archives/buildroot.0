@@ -1,61 +1,85 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Feb 2014 11:34:02 +0100
-Subject: [Buildroot] [PATCH 1/1] Fix the syslogd initscript pidfile
- handling - Fix name to pidfile - Enable CONFIG_FEATURE_PIDFILE
-In-Reply-To: <1364485286-24497-1-git-send-email-arved@arved.at>
-References: <1364485286-24497-1-git-send-email-arved@arved.at>
-Message-ID: <20140204113402.79cd0af4@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 04 Feb 2014 11:55:18 +0100
+Subject: [Buildroot] [PATCH 1/2] intel-microcode: new package
+In-Reply-To: <1391505958-17221-1-git-send-email-maxime.hadjinlian@gmail.com>
+ (Maxime Hadjinlian's message of "Tue, 4 Feb 2014 10:25:57 +0100")
+References: <1391505958-17221-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <874n4fdu5l.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
 
-On Thu, 28 Mar 2013 16:41:26 +0100, arved at arved.at wrote:
-> From: Tilman Keskin?z <arved@arved.at>
-> 
-> 
-> Signed-off-by: Tilman Keskin?z <arved@arved.at>
-> ---
->  package/busybox/S01logging            |    4 ++--
->  package/busybox/busybox-1.20.x.config |    2 +-
->  package/busybox/busybox-1.21.x.config |    2 +-
->  3 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/busybox/S01logging b/package/busybox/S01logging
-> index edece39..37a2c11 100644
-> --- a/package/busybox/S01logging
-> +++ b/package/busybox/S01logging
-> @@ -6,13 +6,13 @@
->  case "$1" in
->    start)
->  	echo -n "Starting logging: "
-> -	start-stop-daemon -S -q -p /var/run/syslog.pid --exec /sbin/syslogd -- -m 0
-> +	start-stop-daemon -S -q -p /var/run/syslogd.pid --exec /sbin/syslogd -- -m 0
->  	start-stop-daemon -S -q -p /var/run/klogd.pid --exec /sbin/klogd
->  	echo "OK"
+ > The intel microcode is a proprietary package which provides a data file
+ > used to correct processors errors.
+ > It was originally sent by Richard Braun <rbraun@sceen.net>
 
-Sorry for taking so long to get back to you about this. We are doing
-some cleanup in patchwork and are currently looking at old patches.
+ > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+ > Cc: Richard Braun <rbraun@sceen.net>
+ > ---
+ >  package/Config.in                          |  1 +
+ >  package/intel-microcode/Config.in          |  7 +++++++
+ >  package/intel-microcode/intel-microcode.mk | 25 +++++++++++++++++++++++++
+ >  3 files changed, 33 insertions(+)
+ >  create mode 100644 package/intel-microcode/Config.in
+ >  create mode 100644 package/intel-microcode/intel-microcode.mk
 
-In the end, the problem you mentioned was resolved by adding the '-m'
-option when calling start-stop-daemon, which means that
-start-stop-daemon is now responsible for creating the PID file. This
-was implemented in:
+ > diff --git a/package/Config.in b/package/Config.in
+ > index 93d23cb..e452c1e 100644
+ > --- a/package/Config.in
+ > +++ b/package/Config.in
+ > @@ -301,6 +301,7 @@ source "package/hwdata/Config.in"
+ >  source "package/i2c-tools/Config.in"
+ >  source "package/input-event-daemon/Config.in"
+ >  source "package/input-tools/Config.in"
+ > +source "package/intel-microcode/Config.in"
+ >  source "package/iostat/Config.in"
+ >  source "package/irda-utils/Config.in"
+ >  source "package/kbd/Config.in"
+ > diff --git a/package/intel-microcode/Config.in b/package/intel-microcode/Config.in
+ > new file mode 100644
+ > index 0000000..495ebd7
+ > --- /dev/null
+ > +++ b/package/intel-microcode/Config.in
+ > @@ -0,0 +1,7 @@
+ > +config BR2_PACKAGE_INTEL_MICROCODE
+ > +	bool "intel-microcode"
+ > +	depends on BR2_x86_64 || BR2_i386
+ > +	help
+ > +	  This package provides an Intel microcode data file that can be
+ > +	  used to correct processor errors. The iucode-tool package and
+ > +	  proper kernel support are required to upload the microcode.
+ > diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
+ > new file mode 100644
+ > index 0000000..c6cf51d
+ > --- /dev/null
+ > +++ b/package/intel-microcode/intel-microcode.mk
+ > @@ -0,0 +1,25 @@
+ > +################################################################################
+ > +#
+ > +# intel-microcode
+ > +#
+ > +################################################################################
+ > +
+ > +INTEL_MICROCODE_VERSION = 20140122
+ > +INTEL_MICROCODE_SOURCE = microcode-$(INTEL_MICROCODE_VERSION).tgz
+ > +INTEL_MICROCODE_SITE = http://downloadmirror.intel.com/23574/eng
+ > +INTEL_MICROCODE_LICENSE = PROPRIETARY
+ > +INTEL_MICROCODE_REDISTRIBUTE = NO
+ > +
+ > +# N.B. Don't strip any path components during extraction.
+ > +define INTEL_MICROCODE_EXTRACT_CMDS
+ > +	gzip -d -c $(DL_DIR)/$(INTEL_MICROCODE_SOURCE) | \
+ > +	tar --strip-components=0 -C $(@D) -xf -
+ > +	head -n 33 $(@D)/microcode.dat > $(@D)/license.txt
 
- http://git.buildroot.net/buildroot/commit/package/busybox?id=fc6b5e4411992f05ab45dac90be01ade8279e000
+We should also set INTEL_MICROCODE_LICENSE_FILES, otherwise it doesn't
+make much sense to create it.
 
-The part changing the path to the PID file was fixed by a patch from
-you:
+Committed with that fixed, thanks.
 
- http://git.buildroot.net/buildroot/commit/package/busybox?id=1b22957a2c8cb79024f811618f4d09f191d88a6f
-
-Thanks for your contributions, and sorry for the long delay!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
