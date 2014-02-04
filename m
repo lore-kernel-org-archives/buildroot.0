@@ -1,36 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Feb 2014 22:46:07 +0100
-Subject: [Buildroot] [git commit] libsigsegv: disable for xtensa
-Message-ID: <20140204214638.7D3648C62C@busybox.osuosl.org>
+From: Martin Bark <martin@barkynet.com>
+Date: Tue,  4 Feb 2014 22:10:23 +0000
+Subject: [Buildroot] [PATCH 1/1] dependencies.sh: stop stray a.out being
+	created for ia32 compiler test
+Message-ID: <1391551823-1216-1-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=868c6cebe4cfa87178188e0bfde0a48135a6f814
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+If the grub package is selected it also selects
+BR2_HOSTARCH_NEEDS_IA32_COMPILER.  This triggers a test in dependencies.sh
+to verify the host compiler can build 32 bit executables.  Currently this
+test does not set any output for the compiler which causes a stray a.out
+to be create outside the output directory.  This patch sets the compiler
+output to /dev/null so no a.out is created but the test is still performed.
 
-The xtensa uClibc port does not provide the ucontext.h context manipulation
-routines that libsigsegv needs.
-
-Fixes:
-http://autobuild.buildroot.net/results/06d/06d091f2ea8d08a900dd7304bab5eeeeb85f7353/
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Martin Bark <martin@barkynet.com>
 ---
- package/libsigsegv/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ support/dependencies/dependencies.sh |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libsigsegv/Config.in b/package/libsigsegv/Config.in
-index c46bb92..563ca27 100644
---- a/package/libsigsegv/Config.in
-+++ b/package/libsigsegv/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBSIGSEGV
- 	bool "libsigsegv"
-+	depends on !BR2_xtensa
- 	help
- 	  Library for handling page faults in user mode.
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index 47d4d10..0e22ba0 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -207,7 +207,7 @@ if grep -q ^BR2_HOSTARCH_NEEDS_IA32_LIBS=y $BUILDROOT_CONFIG ; then
+ fi
  
+ if grep -q ^BR2_HOSTARCH_NEEDS_IA32_COMPILER=y $BUILDROOT_CONFIG ; then
+-    if ! echo "int main(void) {}" | gcc -m32 -x c - ; then
++    if ! echo "int main(void) {}" | gcc -m32 -x c - -o /dev/null ; then
+ 	echo
+ 	echo "Your Buildroot configuration needs a compiler capable of building 32 bits binaries."
+ 	echo "If you're running a Debian/Ubuntu distribution, install the gcc-multilib package."
+-- 
+1.7.9.5
