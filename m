@@ -1,36 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Feb 2014 15:13:35 +0100
-Subject: [Buildroot] [git commit] mtr: not available for avr32
-Message-ID: <20140204141913.5B7939C7C7@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 04 Feb 2014 15:24:00 +0100
+Subject: [Buildroot] [PATCH] defconfigs: add sama5d3 support
+In-Reply-To: <20140204132117.GE30185@ldesroches-Latitude-E6320> (Ludovic
+ Desroches's message of "Tue, 4 Feb 2014 14:21:17 +0100")
+References: <1391093726-7569-1-git-send-email-ludovic.desroches@atmel.com>
+ <87y51rl01m.fsf@dell.be.48ers.dk>
+ <20140204112654.GD30185@ldesroches-Latitude-E6320>
+ <87zjm7cae2.fsf@dell.be.48ers.dk>
+ <20140204132117.GE30185@ldesroches-Latitude-E6320>
+Message-ID: <87zjm75533.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0c535e15fae24b8cd9ea6a3537168e9bc59547f1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Ludovic" == Ludovic Desroches <ludovic.desroches@atmel.com> writes:
 
-The uclibc version condition is accurate but doesn't cover external
-toolchains, so also exclude for avr32 too which only has 0.9.31 enabled.
-Fixes:
-http://autobuild.buildroot.net/results/4ee/4eec6e29d0f2a46bbbe3a748e85bd06c3601b7c1/
+Hi,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mtr/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ > I understand this point of view and I am fine with it. But my concern
+ > is that some customers want something working out of the box. For
+ > instance, we often use devmem2 for debugging purpose or other tools
+ > such as i2c-tools. It is easier for us to have it in a defconfig
+ > file.
 
-diff --git a/package/mtr/Config.in b/package/mtr/Config.in
-index 842d6ca..7e5ad90 100644
---- a/package/mtr/Config.in
-+++ b/package/mtr/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_MTR
- 	bool "mtr"
- 	# res_mkquery() only available in 0.9.33+
- 	depends on !BR2_UCLIBC_VERSION_0_9_31 && !BR2_UCLIBC_VERSION_0_9_32
-+	depends on !BR2_avr32
- 	help
- 	  mtr combines the functionality of the 'traceroute' and 'ping'
- 	  programs in a single network diagnostic tool.
+ > I am not trying to convince you to take this defconfig as is! Just to
+ > know if there is a way to provide specific packages? If not, it will
+ > be provided only in our buildroot-at91 repository. I am also fine
+ > with this, if the customer wants something out of the box then he'll
+ > have to use our repository. Otherwise he could use buildroot one.
+
+I understand. We're been discussing something like this a few times
+(E.G. full blown "demo" defconfigs), but for now I prefer to keep the
+variant in buildroot minimal.
+
+-- 
+Bye, Peter Korsgaard
