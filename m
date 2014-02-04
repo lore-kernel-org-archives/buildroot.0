@@ -1,26 +1,27 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 04 Feb 2014 10:22:16 +0100
-Subject: [Buildroot] [PATCH 2/2] Makefile: Add /usr/lib/locale to
-	target-purgelocales
-In-Reply-To: <1349204631-21077-3-git-send-email-gvaxon@gmail.com> (Valentine
- Barshak's message of "Tue, 2 Oct 2012 23:03:51 +0400")
-References: <1349204631-21077-1-git-send-email-gvaxon@gmail.com>
- <1349204631-21077-3-git-send-email-gvaxon@gmail.com>
-Message-ID: <87lhxri65z.fsf@dell.be.48ers.dk>
+Date: Tue, 04 Feb 2014 10:22:43 +0100
+Subject: [Buildroot] [PATCH] gpm: fixes build error when makeinfo is not
+	installed on host
+In-Reply-To: <1391425110-16238-1-git-send-email-julien.boibessot@free.fr>
+ (julien boibessot's message of "Mon, 3 Feb 2014 11:58:30 +0100")
+References: <1391425110-16238-1-git-send-email-julien.boibessot@free.fr>
+Message-ID: <87ha8fi658.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Valentine" == Valentine Barshak <gvaxon@gmail.com> writes:
+>>>>> "julien" == julien boibessot <julien.boibessot@free.fr> writes:
 
-Hi,
+ > From: Julien Boibessot <julien.boibessot@armadeus.com>
+ > Tested with: make gpm MAKEINFO=no
+ > Should fix http://autobuild.buildroot.net/results/fbf/fbf42eac7cf09b2f3fc93fa2134ddefcb1beea2f/build-end.log
+ > Thanks to Romain Naour for pointing out the problem.
 
- > Some packages install locales to /usr/lib/locale.
- > Parse and purge unneeded ones there too.
+ > Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
 
-Sorry for the delay - Commited, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
