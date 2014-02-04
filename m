@@ -1,59 +1,39 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Tue, 04 Feb 2014 20:51:09 +0100
-Subject: [Buildroot] [PATCH 1/2] package/ffmpeg2: new package
-References: <cover.1390242867.git.yann.morin.1998@free.fr>
- <d4f3847e403c1e5c4e8733f75bbfccce6e0b4975.1390242867.git.yann.morin.1998@free.fr>
- <el80raxhff.ln2@ID-313208.user.individual.net>
- <20140120212701.GC3421@free.fr> <20140122223320.GD3592@free.fr>
- <8738kfd40w.fsf@dell.be.48ers.dk>
- <skn6raxead.ln2@ID-313208.user.individual.net>
-Message-ID: <dus7saxm8k.ln2@ID-313208.user.individual.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 4 Feb 2014 21:02:58 +0100
+Subject: [Buildroot] [PATCH 1 of 4 v2] infra: remove variable
+ FOO_DIR_PREFIX
+In-Reply-To: <6a46109dc43358a75adb.1391530913@argentina>
+References: <patchbomb.1391530912@argentina>
+ <6a46109dc43358a75adb.1391530913@argentina>
+Message-ID: <20140204200258.GA3404@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd Kuhls <berndkuhls@hotmail.com> wrote in 
-news:skn6raxead.ln2 at ID-313208.user.individual.net:
+Maxime, All,
 
-> atm xbmc gotham is incompatible with ffmpeg 2.x, therefore I sent ffmpeg 
-> 1.2.5 for inclusion in buildroot.
+On 2014-02-04 17:21 +0100, Thomas De Schampheleire spake thusly:
+> Variable FOO_DIR_PREFIX in inner-generic-package isn't really needed. The
+> contents of this variable are 'package' for normal packages, 'boot' for
+> bootloaders, and 'linux' for the linux kernel.
+> When patching a package, all you need to know is the directory where
+> patches can reside, which is already returned by $(pkgdir). In order to be
+> able to use this variable outside of inner-generic-package, we introduce a
+> target-specific variable PKGDIR that equals to this $(pkgdir).
 
-Hi,
+Maxime, I guess that's the variable we needed, and were desparately
+looking for in the tree, when hacking spidermonkey during our wayback
+trip from Brussels! :-)
 
-xbmc devs are aiming to support ffmpeg 2.x after Gotham release, a repo 
-containing the necessary code is already present:
-http://forum.xbmc.org/showthread.php?tid=165707&pid=1618520#pid1618520
+Regards,
+Yann E. MORIN.
 
-I am currently testing this code, first results look good. Because of this 
-I think buildroot does not need to stick to ffmpeg 1.x, it can go forward 
-to include ffmpeg 2.1.3 if other deps permit it.
-
-FTR and only for test purposes here is the diff I am using, which includes 
-some xbmc specific patches:
-
---- 29494.org/src/fbr/buildroot/package/ffmpeg/ffmpeg.mk 2014-02-03 
-20:43:20.000000000 +0100
-+++ 29494/src/fbr/buildroot/package/ffmpeg/ffmpeg.mk 2014-02-03 
-21:11:14.325528814 +0100
-@@ -4,9 +4,12 @@
- #
- 
-###########################################################################
-#####
-.
--FFMPEG_VERSION = 1.2.5
--FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.bz2
--FFMPEG_SITE = http://ffmpeg.org/releases
-+FFMPEG_VERSION = 11086c540305ffb208e6fc17d301db989d3c4151
-+FFMPEG_SITE = git://github.com/FernetMenta/FFmpeg.git
-+
-+#FFMPEG_VERSION = 1.2.5
-+#FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.bz2
-+#FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
-.
- FFMPEG_LICENSE = LGPLv2.1+, libjpeg license
-
-Regards, Bernd
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
