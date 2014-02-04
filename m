@@ -1,78 +1,49 @@
-From: Uwe Strempel <u.strempel@googlemail.com>
-Date: Tue,  4 Feb 2014 18:55:51 +0100
-Subject: [Buildroot] [PATCH 1/1] Added patch fixing absolute path in
-	toolchainfile.cmake
-Message-ID: <1391536551-57608-1-git-send-email-u.strempel@googlemail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue,  4 Feb 2014 15:01:09 -0300
+Subject: [Buildroot] [PATCH] iucode-tools: requires argp_standalone with
+	uclibc toolchains
+Message-ID: <1391536869-3937-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On build process of buildroot the toolchainfile.cmake is created, but with wrong absolut path.
-When shareing the toolchain or move the folder you get problems this path settings.
+Fixes:
+http://autobuild.buildroot.net/results/3fc/3fc0b3f356efdebae4f7597a16d0d67f8bc4b76d/
 
-A workarround for cmake files is
-- get the path of the toolchainfile.cmake and set the the variables.
-see BUG #6818
-
-Signed-off-by: Uwe Strempel <u.strempel@googlemail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Makefile.in  |  5 +++++
- package/pkg-cmake.mk | 11 ++++++-----
- 2 files changed, 11 insertions(+), 5 deletions(-)
+ package/iucode-tool/Config.in      | 1 +
+ package/iucode-tool/iucode-tool.mk | 4 ++++
+ 2 files changed, 5 insertions(+)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 2e433fd..aa86fca 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -140,8 +140,10 @@ endif
+diff --git a/package/iucode-tool/Config.in b/package/iucode-tool/Config.in
+index 19e2254..8f90350 100644
+--- a/package/iucode-tool/Config.in
++++ b/package/iucode-tool/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_IUCODE_TOOL
+ 	bool "iucode-tool"
+ 	depends on BR2_x86_64 || BR2_i386
+ 	select BR2_PACKAGE_INTEL_MICROCODE
++	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC
+ 	help
+ 	  Intel processor microcode tool
  
- ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
- TARGET_CROSS=$(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-
-+TARGET_CROSS_WITHOUT_HOST_DIR=/usr/bin/$(GNU_TARGET_NAME)-
- else
- TARGET_CROSS=$(HOST_DIR)/usr/bin/$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))-
-+TARGET_CROSS_WITHOUT_HOST_DIR=/usr/bin/$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))-
- endif
+diff --git a/package/iucode-tool/iucode-tool.mk b/package/iucode-tool/iucode-tool.mk
+index 2d52b16..3124c73 100644
+--- a/package/iucode-tool/iucode-tool.mk
++++ b/package/iucode-tool/iucode-tool.mk
+@@ -6,6 +6,10 @@
  
- # Quotes are needed for spaces et al in path components.
-@@ -164,6 +166,9 @@ TARGET_OBJDUMP  = $(TARGET_CROSS)objdump
- TARGET_CC_NOCCACHE  := $(TARGET_CC)
- TARGET_CXX_NOCCACHE := $(TARGET_CXX)
- 
-+TARGET_CC_NOCCACHE_WITHOUT_HOST_DIR  := $(TARGET_CROSS_WITHOUT_HOST_DIR)gcc
-+TARGET_CXX_NOCCACHE_WITHOUT_HOST_DIR :=  $(TARGET_CROSS_WITHOUT_HOST_DIR)g++
-+
- ifeq ($(BR2_CCACHE),y)
- TARGET_CC  := $(CCACHE) $(TARGET_CC)
- TARGET_CXX := $(CCACHE) $(TARGET_CXX)
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index 13be557..3f5389f 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -160,16 +160,17 @@ host-cmake-package = $(call inner-cmake-package,host-$(call pkgname),$(call UPPE
- $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
- 	@mkdir -p $(@D)
- 	@echo -en "\
-+	get_filename_component(CMAKE_TOOLCHAIN_PATH \$${CMAKE_CURRENT_LIST_FILE} PATH)\n\
- 	set(CMAKE_SYSTEM_NAME Linux)\n\
--	set(CMAKE_C_COMPILER $(TARGET_CC_NOCCACHE))\n\
--	set(CMAKE_CXX_COMPILER $(TARGET_CXX_NOCCACHE))\n\
-+	set(CMAKE_C_COMPILER \"\$${CMAKE_TOOLCHAIN_PATH}/$(TARGET_CC_NOCCACHE_WITHOUT_HOST_DIR)\")\n\
-+	set(CMAKE_CXX_COMPILER \"\$${CMAKE_TOOLCHAIN_PATH}/$(TARGET_CXX_NOCCACHE_WITHOUT_HOST_DIR)\")\n\
- 	set(CMAKE_C_FLAGS \"\$${CMAKE_C_FLAGS} $(TARGET_CFLAGS)\" CACHE STRING \"Buildroot CFLAGS\" FORCE)\n\
- 	set(CMAKE_CXX_FLAGS \"\$${CMAKE_CXX_FLAGS} $(TARGET_CXXFLAGS)\" CACHE STRING \"Buildroot CXXFLAGS\" FORCE)\n\
- 	set(CMAKE_INSTALL_SO_NO_EXE 0)\n\
--	set(CMAKE_PROGRAM_PATH \"$(HOST_DIR)/usr/bin\")\n\
--	set(CMAKE_FIND_ROOT_PATH \"$(STAGING_DIR)\")\n\
-+	set(CMAKE_PROGRAM_PATH \"\$${CMAKE_TOOLCHAIN_PATH}/usr/bin\")\n\
-+	set(CMAKE_FIND_ROOT_PATH \"\$${CMAKE_TOOLCHAIN_PATH}/${STAGING_SUBDIR}\")\n\
- 	set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)\n\
- 	set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)\n\
- 	set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)\n\
--	set(ENV{PKG_CONFIG_SYSROOT_DIR} \"$(STAGING_DIR)\")\n\
-+	set(ENV{PKG_CONFIG_SYSROOT_DIR} \"\$${CMAKE_TOOLCHAIN_PATH}/${STAGING_SUBDIR}\")\n\
- 	" > $@
+ IUCODE_TOOL_VERSION = v1.0.1
+ IUCODE_TOOL_SITE = git://git.debian.org/users/hmh/iucode-tool.git
++ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
++IUCODE_TOOL_CONF_ENV = LIBS="-largp"
++IUCODE_TOOL_DEPENDENCIES = argp-standalone
++endif
+ IUCODE_TOOL_AUTORECONF = YES
+ IUCODE_TOOL_LICENSE = GPLv2+
+ IUCODE_TOOL_LICENSE_FILES = COPYING
 -- 
-1.8.3.4 (Apple Git-47)
+1.8.3.2
