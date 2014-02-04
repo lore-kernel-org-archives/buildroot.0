@@ -1,108 +1,97 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Feb 2014 09:45:59 +0100
-Subject: [Buildroot] [git commit] CHANGES: update with recent changes
-Message-ID: <20140204085344.ED7A89C786@busybox.osuosl.org>
+Date: Tue, 4 Feb 2014 09:48:48 +0100
+Subject: [Buildroot] [git commit] Fix alioth.debian URLs that are broken
+Message-ID: <20140204085346.2AD309C748@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=51a2caf912e24c064561c54533ba0e221b7a6f09
+commit: http://git.buildroot.net/buildroot/commit/?id=01d92e1c386b81a026199b66799c921a4a2e220c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Inspired by a patch from Martin Bark <martin@barkynet.com>, this fixes
+autobuild issues related to packages not downloading from alioth.debian
+URLs. This patches is meant to be "temporary" until the URLs are fixed
+by debian.
+
+Fixes:
+  http://autobuild.buildroot.org/results/8c3/8c34649a7f98f60f14cff8b32fa2f8e82b1afeb6
+  http://autobuild.buildroot.org/results/7e3/7e34e73e40fdb0e04bd63fa889f9bc14f7e30536
+
+Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- CHANGES |   82 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 files changed, 82 insertions(+), 0 deletions(-)
+ package/axel/axel.mk                   |    2 +-
+ package/libhid/libhid.mk               |    2 +-
+ package/ltrace/ltrace.mk               |    2 +-
+ package/minicom/minicom.mk             |    2 +-
+ package/sane-backends/sane-backends.mk |    2 +-
+ 5 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index d75d8b1..8b5395e 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,85 @@
-+2014.02, Not yet released:
-+
-+	Fixes all over the tree and new features.
-+
-+	Updated/fixed packages: aiccu, alsa-lib, alsa-utils, aumix,
-+	autoconf, automake, barebox, bellagio, berkeleydb, binutils,
-+	bison, blackbox, bluez_utils, boost, bustle, busybox, cairo,
-+	can-utils, ccache, ccid, cgilua, cifs-utils, civetweb, cmake,
-+	collectd, connman, copas, coreutils, coxpcall, cppzmq, cramfs,
-+	crda, cryptodev-linux, cryptsetup, cups, czmq, dhcpcd,
-+	dhcpdump, dialog, dnsmasq, dosfstools, dropbear, dropwatch,
-+	dtc, duma, dvb-apps, e2fsprogs, eglibc, eigen, erlang,
-+	ethtool, f2fs-tools, ffmpeg, file, filemq, fio, flashrom,
-+	flex, fluxbox, fontconfig freerdp, freetype, gadgetfs-test,
-+	gawk, gcc, gdb, gdbm, gettext, git, glibc, gnupg, gnutls,
-+	gob2, gpsd, grep, grub, gst-ffmpeg, gst-plugins-good,
-+	gst1-plugins-bad, gst1-plugins-base, gst1-plugins-good,
-+	gst1-plugins-ugly, gstreamer, gstreamer1, gtest, iftop,
-+	imagemagick, inadyn, infozip, iozone, iproute2, iptables, iw,
-+	jpeg, jq, kmod, knock, lbase64, lcdapi, lftp, libcdaudio,
-+	libcgi, libcgicc, libcuefile, libcurl, libdmtx, libdrm,
-+	libdvdnav, libdvdread, libegl, libevent, libexif, libfcgi,
-+	libfreefare, libgles, libglib2, libllcp, libmicrohttpd,
-+	libmpd, libnfc, libnl, libnss, libopenmax, libopenvg, libpcap,
-+	libpfm4, libplayer, libpng, libqmi, libreplaygain, libroxml,
-+	libsamplerate, libsexy, libsigsegv, libsndfile, libsoc,
-+	libtasn1, libtpl, libusb, libusb-compat, libvorbis, libxcb,
-+	libxml2, lighttpd, linknx, linux-firmware, linux-pam, live555,
-+	lm_sensors, lmbench, lockdev, logrotate, lrzsz, ltrace, lua,
-+	lua-ev, lua-msgpack-native, luabitop, luaexpat, luaexpatutils,
-+	luafilesystem, luajit, luaposix, luarocks, luasec, luasocket,
-+	luasql-sqlite3, m4, matchbox, mdadm, minicom, mongrel2, mpc,
-+	mpd, mpg123, mplayer, mtd, mysql, lvm2, mxml, ncurses, ne10,
-+	neard, neardal, netsnmp, netstat-nat, network-manager, nodejs,
-+	numactl, ofone, ola, olsr, omniorb, opencv, openpowerlink,
-+	openssh, openssl, openvpn, oprofile, opus, opus-tools, orbit,
-+	p11-kit, parted, pcre, pcsc-lite, perl, php, poco, poppler,
-+	powervr, protobuf-c, psplash, python, python-bottle,
-+	python-{crc16,distutilscross,dpkt,id3,ipy,m2crypto,mad,meld},
-+	python-{netifaces,nfc,protobuf,pygame,pyparsing,pyro,pyzmq},
-+	python-{serial,setuptools}, qt, qt5base, qt5connectivity,
-+	qt5declarative, qt5graphicaleffects, qt5jsbackend,
-+	qt5multimedia, qt5quick1, qt5quickcontrols, qt5script,
-+	qt5webkit, radvd, redis, rings, rng-tools, rpi-firmware,
-+	rpi-userland, rt-tests, sam-ba, samba, sawman, sconeserver,
-+	scons, sdl, sg3_utils, snappy, snmppp, socketcand, spice,
-+	spice-protocol, sqlcipher, sqlite, squid, sshfs, strace,
-+	subversion, sunxi-mali, supervisor, sysklogd, sysprof,
-+	sysstat, systemd, sysvinit, taglib, tar, tcpdump, ti-gfx,
-+	ti-utils, tinymembench, tn5250, trace-cmd, transmission,
-+	tvheadend, tzdata, zxing, uboot, uboot-tools, uclibc, udev,
-+	ulogd, urg, usb_modeswitch_data, util-linux, vala, valgrind,
-+	vorbis-tools, wavpack, wayland, weston, wget, wireless-regdb,
-+	wireshark, wpa_supplicant, wsapi, xavante, xapp_xdpyinfo,
-+	xapp_xrandr, xcb-proto, xdriver_xf86-video-intel, xenomai,
-+	xkeyboard-config, xl2tp, xlib_lib{FS,SM,X11},
-+	xlib_libX{au,aw,composite,cursor,damage,ext,fixes,font,i},
-+	xlib_libX{inerama,mu,pm,randr,render,res,t,tst,v,xf86dga},
-+	xlib_libXxf86vm, xlib_libdmx, xlib_libfontenc,
-+	xlib_libpciaccess, xlib_xtrans, xproto_dri2proto,
-+	xproto_{glproto,inputproto,presentproto,randrproto,videoproto},
-+	xproto_xextproto, xproto_xproto, xutil_util-macros,
-+	xutil_makedepend, zic, zmqpp, zxing, zsh, zyre
-+
-+	New packages: apitrace, avrdude, c-ares, ca-certificates,
-+	cwiid, dbus-cpp, evemu, fping, fswebcam, gpm, gst1-libav,
-+	haveged, jasper, joe, ktap, lbreakout2, libass, libbluray,
-+	libcdio, libenca, libevdev, libmbim, libmodplug, libnfs,
-+	libnftnl, libplist, libshairplay, libsocketcan, ljsyscall,
-+	log4cplus, ltris, luainterpreter, minidlna, mmc-utils,
-+	modemmanager, mtr, net-tools, python-configobj, python-dialog,
-+	python-json-schema-validator, python-keyring, python-msgpack,
-+	python-posix-ipc, python-pyasn, python-pycrypto,
-+	python-pysnmp, python-pysnmp-apps, python-pysnmp-mibs,
-+	python-pyusb, python-simplejson, python-tornado,
-+	python-versiontools, rtmpdump, rtptools, smcroute, smstools3,
-+	tcpreplay, thrift, ti-uim, tinyxml, tmux, vlc, wmctrl,
-+	xconsole
-+
-+	Removed packages: lzma, netkitbase, netkittelnet, pkg-config,
-+	squashfs3, ttcp
-+
- 2013.11, Released November 30th, 2013:
+diff --git a/package/axel/axel.mk b/package/axel/axel.mk
+index a83001f..ea97d75 100644
+--- a/package/axel/axel.mk
++++ b/package/axel/axel.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- 	Minor fixes.
+ AXEL_VERSION = 2.4
+-AXEL_SITE = https://alioth.debian.org/frs/download.php/file/3015
++AXEL_SITE = http://sources.buildroot.net/
+ AXEL_LICENSE = GPLv2+
+ AXEL_LICENSE_FILES = COPYING
+ 
+diff --git a/package/libhid/libhid.mk b/package/libhid/libhid.mk
+index 97aab5d..1b9b895 100644
+--- a/package/libhid/libhid.mk
++++ b/package/libhid/libhid.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBHID_VERSION = 0.2.16
+-LIBHID_SITE = http://alioth.debian.org/frs/download.php/file/1958
++LIBHID_SITE = http://sources.buildroot.net/
+ LIBHID_DEPENDENCIES = libusb-compat libusb
+ LIBHID_INSTALL_STAGING = YES
+ LIBHID_AUTORECONF = YES
+diff --git a/package/ltrace/ltrace.mk b/package/ltrace/ltrace.mk
+index b42c252..99c1af6 100644
+--- a/package/ltrace/ltrace.mk
++++ b/package/ltrace/ltrace.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LTRACE_VERSION = 0.7.3
+-LTRACE_SITE = http://alioth.debian.org/frs/download.php/file/3947
++LTRACE_SITE = http://sources.buildroot.net/
+ LTRACE_SOURCE = ltrace-$(LTRACE_VERSION).tar.bz2
+ LTRACE_DEPENDENCIES = libelf
+ LTRACE_CONF_OPT = --disable-werror
+diff --git a/package/minicom/minicom.mk b/package/minicom/minicom.mk
+index e0a7cee..d72a40d 100644
+--- a/package/minicom/minicom.mk
++++ b/package/minicom/minicom.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MINICOM_VERSION = 2.7
+-MINICOM_SITE = http://alioth.debian.org/frs/download.php/file/3977/
++MINICOM_SITE = http://sources.buildroot.net/
+ MINICOM_LICENSE = GPLv2+
+ MINICOM_LICENSE_FILES = COPYING
+ 
+diff --git a/package/sane-backends/sane-backends.mk b/package/sane-backends/sane-backends.mk
+index e2adc1a..52c5aa7 100644
+--- a/package/sane-backends/sane-backends.mk
++++ b/package/sane-backends/sane-backends.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ SANE_BACKENDS_VERSION = 1.0.22
+-SANE_BACKENDS_SITE = https://alioth.debian.org/frs/download.php/file/3503
++SANE_BACKENDS_SITE = http://sources.buildroot.net/
+ SANE_BACKENDS_CONFIG_SCRIPTS = sane-config
+ 
+ ifeq ($(BR2_PACKAGE_LIBUSB),y)
