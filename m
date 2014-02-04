@@ -1,44 +1,26 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Feb 2014 10:19:09 +0100
-Subject: [Buildroot] [git commit] gpm: fixes build error when makeinfo is
-	not installed on host
-Message-ID: <20140204091934.EE7959C784@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 04 Feb 2014 10:22:16 +0100
+Subject: [Buildroot] [PATCH 2/2] Makefile: Add /usr/lib/locale to
+	target-purgelocales
+In-Reply-To: <1349204631-21077-3-git-send-email-gvaxon@gmail.com> (Valentine
+ Barshak's message of "Tue, 2 Oct 2012 23:03:51 +0400")
+References: <1349204631-21077-1-git-send-email-gvaxon@gmail.com>
+ <1349204631-21077-3-git-send-email-gvaxon@gmail.com>
+Message-ID: <87lhxri65z.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=45f756ee9e215e267351c4870cf3507a3d4e36f8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Valentine" == Valentine Barshak <gvaxon@gmail.com> writes:
 
-Tested with: make gpm MAKEINFO=no
-Should fix http://autobuild.buildroot.net/results/fbf/fbf42eac7cf09b2f3fc93fa2134ddefcb1beea2f/build-end.log
-Thanks to Romain Naour for pointing out the problem.
+Hi,
 
-Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gpm/gpm.mk |    9 +++++++++
- 1 files changed, 9 insertions(+), 0 deletions(-)
+ > Some packages install locales to /usr/lib/locale.
+ > Parse and purge unneeded ones there too.
 
-diff --git a/package/gpm/gpm.mk b/package/gpm/gpm.mk
-index 6fd5a3f..296966a 100644
---- a/package/gpm/gpm.mk
-+++ b/package/gpm/gpm.mk
-@@ -32,6 +32,15 @@ GPM_POST_PATCH_HOOKS += GPM_RUN_AUTOGEN
- 
- GPM_DEPENDENCIES += host-automake host-autoconf host-libtool
- 
-+# gpm tries to build/install .info doc even if makeinfo isn't installed on the
-+# host, so we have to disable global doc installation to prevent autobuild
-+# errors.
-+define GPM_DISABLE_DOC_INSTALL
-+	$(SED) 's/SUBDIRS = src doc contrib/SUBDIRS = src contrib/' \
-+		$(@D)/Makefile.in
-+endef
-+GPM_POST_PATCH_HOOKS += GPM_DISABLE_DOC_INSTALL
-+
- ifeq ($(BR2_PACKAGE_GPM_INSTALL_TEST_TOOLS),)
- define GPM_REMOVE_TEST_TOOLS_FROM_TARGET
- 	for tools in mev hltest mouse-test display-buttons \
+Sorry for the delay - Commited, thanks.
+
+-- 
+Bye, Peter Korsgaard
