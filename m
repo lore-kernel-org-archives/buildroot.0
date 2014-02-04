@@ -1,58 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Feb 2014 14:36:56 +0100
-Subject: [Buildroot] [PATCH] pkg-download: make sure git downloads fail for
-	unknown versions
-Message-ID: <1391521016-6990-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Tue, 4 Feb 2014 14:40:27 +0100
+Subject: [Buildroot] [PATCH v2 1/1] icu: detect and add compiler symbol
+ prefix to the assembly code
+In-Reply-To: <1391519206-17889-1-git-send-email-rjbarnet@rockwellcollins.com>
+References: <1391519206-17889-1-git-send-email-rjbarnet@rockwellcollins.com>
+Message-ID: <20140204144027.39148ffb@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The current git download helper creates the tarball by doing:
+Dear Ryan Barnett,
 
-    git archive <version> | gzip -c > <tarball>
+On Tue,  4 Feb 2014 14:06:46 +0100, Ryan Barnett wrote:
+> From: Sonic Zhang <sonic.zhang@analog.com>
+> 
+> Some compiler, such as Blackfin GNU compiler, prefix a charater to any
 
-Unfortunately, even if "git archive" fails and returns a non-zero
-error code, gzip ignores that, compresses nothing, and returns success
-(zero error code). The consequence of this behavior is that when the
-git version provided in the package is incorrect, we are not failing
-during the download step, but later on when trying to extract the
-tarball (which was incorrectly created as a result of the failing git
-archive).
+charater -> character
 
-To fix this, we change the tarball creation logic to:
+> C symbol in generated assembly code. If any assembly symbol is invoked
+> from C code, it needs to be prefixed as well.
+> 
+> Note: since autoreconf doesn't work with this package because automake
+> isn't support
 
-   git archive -o <tarball>.tmp <version> &&
-   gzip -c <tarball>.tmp > <tarball> &&
-   rm -f <tarball>.tmp
+"isn't support" ?
 
-If the build is interrupted during the "gzip" command, we may leave
-the .tmp file behind us, but this also happens with wget downloads,
-and is generally not considered a problem, since this temporary file
-will be overwritten next time we attempt to do download this package.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
----
- package/pkg-download.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index c00689b..2641d4e 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -91,8 +91,9 @@ define DOWNLOAD_GIT
- 	  (echo "Doing full clone" && \
- 	   $(GIT) clone --bare $($(PKG)_SITE) $($(PKG)_BASE_NAME))) && \
- 	pushd $($(PKG)_BASE_NAME) > /dev/null && \
--	$(GIT) archive --format=tar --prefix=$($(PKG)_BASE_NAME)/ $($(PKG)_DL_VERSION) | \
--		gzip -c > $(DL_DIR)/$($(PKG)_SOURCE) && \
-+	$(GIT) archive --format=tar --prefix=$($(PKG)_BASE_NAME)/ -o $(DL_DIR)/.$($(PKG)_SOURCE).tmp $($(PKG)_DL_VERSION) && \
-+	gzip -c $(DL_DIR)/.$($(PKG)_SOURCE).tmp > $(DL_DIR)/$($(PKG)_SOURCE) && \
-+	rm -f $(DL_DIR)/.$($(PKG)_SOURCE).tmp && \
- 	popd > /dev/null && \
- 	rm -rf $($(PKG)_DL_DIR) && \
- 	popd > /dev/null)
+Thomas
 -- 
-1.8.3.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
