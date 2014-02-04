@@ -1,39 +1,35 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 04 Feb 2014 14:45:19 +0100
-Subject: [Buildroot] Mysql: $(ENABLE_DEBUG) is unset
-In-Reply-To: <CA+kK6WujspDnZ_nc_j=mbVopwbeqaM1B0_Noi2c6+2s9kQVMzw@mail.gmail.com>
-References: <CA+kK6WsurjJPB1wzACqx1bNO1GYBRK+u1DAPZXfKCQoNVYiJEA@mail.gmail.com>
- <CA+kK6WujspDnZ_nc_j=mbVopwbeqaM1B0_Noi2c6+2s9kQVMzw@mail.gmail.com>
-Message-ID: <52F0EEEF.5060205@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 4 Feb 2014 14:44:48 +0100
+Subject: [Buildroot] [git commit] udpcast: drop stat64 handling
+Message-ID: <20140204134635.9FD4B9C7BF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/02/14 17:45, Marcelo Gutierrez wrote:
-> Ther are two possible solution:
-> 
-> 1) Remove $(ENABLE_DEBUG) option
-> 
-> 2) Change Config.in: add option to compile MySQL with debug support
+commit: http://git.buildroot.net/buildroot/commit/?id=d254925623a2c16c148fc3c8676d9bade2729349
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- We have a global BR2_ENABLE_DEBUG that should be used. It already
-automatically --enable-debug to configure, but mysql calls it
---with-debug. So, the patch should remove $(ENABLE_DEBUG) and replace it
-with something like
+udpcast was checking the (non-existing) BR_LARGEFILE variable to know if it
+should enable stat64 or not, but the package itself depends on largefile
+support and more importantly, configure doesn't look at this variable at
+all, so we can just drop it.
 
-MYSQL_CONF_OPT += $(if $(BR2_ENABLE_DEBUG),--with-debug)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/udpcast/udpcast.mk |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
- Can you try this and post a patch if it works?
-
- Regards,
- Arnout
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+diff --git a/package/udpcast/udpcast.mk b/package/udpcast/udpcast.mk
+index 8c22130..786a88e 100644
+--- a/package/udpcast/udpcast.mk
++++ b/package/udpcast/udpcast.mk
+@@ -6,7 +6,6 @@
+ 
+ UDPCAST_VERSION = 20120424
+ UDPCAST_SITE = http://www.udpcast.linux.lu/download
+-UDPCAST_CONF_ENV = $(if $(BR_LARGEFILE),ac_cv_type_stat64=yes,ac_cv_type_stat64=no)
+ UDPCAST_DEPENDENCIES = host-m4
+ 
+ define UDPCAST_REMOVE_UDP_SENDER
