@@ -1,124 +1,118 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Tue,  4 Feb 2014 11:06:04 +0100
-Subject: [Buildroot] [PATCH 2/3] dmraid: bump version
+Date: Tue,  4 Feb 2014 11:06:05 +0100
+Subject: [Buildroot] [PATCH 3/3] dmraid: Update init script
 In-Reply-To: <1391508365-30961-1-git-send-email-maxime.hadjinlian@gmail.com>
 References: <1391508365-30961-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <1391508365-30961-2-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <1391508365-30961-3-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-dmraid rc15 does not support later Intel Software RAID (isw)
-chipsets correctly. Updating dmraid to a later edition
-fixes this issue.
-
-Also cleanup and remove now useless patch.
+Fixes init script to uses current FOO_INSTALL_INIT_SYSV hooks.
 
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Cc: Antony Vennard <arv@vx9.co.uk>
 ---
- package/dmraid/dmraid-fix-make-remove.patch     | 22 ----------------------
- package/dmraid/dmraid.mk                        |  4 ++--
- package/dmraid/dmraid.patch                     | 20 --------------------
- package/dmraid/dmraid_library-linking-fix.patch | 15 ---------------
- 4 files changed, 2 insertions(+), 59 deletions(-)
- delete mode 100644 package/dmraid/dmraid-fix-make-remove.patch
- delete mode 100644 package/dmraid/dmraid.patch
- delete mode 100644 package/dmraid/dmraid_library-linking-fix.patch
+ package/dmraid/S20dmraid   | 31 +++++++++++++++++++++++++++++++
+ package/dmraid/dmraid.init | 31 -------------------------------
+ package/dmraid/dmraid.mk   |  8 ++++----
+ 3 files changed, 35 insertions(+), 35 deletions(-)
+ create mode 100644 package/dmraid/S20dmraid
+ delete mode 100644 package/dmraid/dmraid.init
 
-diff --git a/package/dmraid/dmraid-fix-make-remove.patch b/package/dmraid/dmraid-fix-make-remove.patch
+diff --git a/package/dmraid/S20dmraid b/package/dmraid/S20dmraid
+new file mode 100644
+index 0000000..fd2ad9e
+--- /dev/null
++++ b/package/dmraid/S20dmraid
+@@ -0,0 +1,31 @@
++#!/bin/sh
++
++set -e
++
++[ -x /usr/sbin/dmraid ] || exit 0
++
++# try to load module in case that hasn't been done yet
++modprobe dm-mod >/dev/null 2>&1
++
++case "$1" in
++	start|"")
++		echo "Setting up DMRAID devices..."
++		/usr/sbin/dmraid --activate yes --ignorelocking --verbose
++		;;
++
++	stop)
++		echo "Shutting down DMRAID devices... "
++		/usr/sbin/dmraid --activate no --ignorelocking --verbose
++		;;
++
++	restart|force-reload)
++		$0 stop
++		sleep 1
++		$0 start
++		;;
++
++	*)
++		echo "Usage: dmraid {start|stop|restart|force-reload}"
++		exit 1
++		;;
++esac
+diff --git a/package/dmraid/dmraid.init b/package/dmraid/dmraid.init
 deleted file mode 100644
-index 0d6ae75..0000000
---- a/package/dmraid/dmraid-fix-make-remove.patch
+index fd2ad9e..0000000
+--- a/package/dmraid/dmraid.init
 +++ /dev/null
-@@ -1,22 +0,0 @@
--[PATCH]: dmraid: fix make remove for header files
+@@ -1,31 +0,0 @@
+-#!/bin/sh
 -
--prefix/include/dmraid is not empty, so we need rm -rf
+-set -e
 -
--Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-----
-- 1.0.0.rc15/include/Makefile.in |    2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
+-[ -x /usr/sbin/dmraid ] || exit 0
 -
--Index: dmraid/1.0.0.rc15/include/Makefile.in
--===================================================================
----- dmraid.orig/1.0.0.rc15/include/Makefile.in
--+++ dmraid/1.0.0.rc15/include/Makefile.in
--@@ -24,7 +24,7 @@ install: install_dmraid_headers
-- 
-- remove_dmraid_headers:
-- 	@echo "Removing $(HEADERS) from $(includedir)/dmraid"
---	rm -f $(includedir)/dmraid
--+	rm -rf $(includedir)/dmraid
-- 
-- remove:        remove_dmraid_headers
-- 
+-# try to load module in case that hasn't been done yet
+-modprobe dm-mod >/dev/null 2>&1
+-
+-case "$1" in
+-	start|"")
+-		echo "Setting up DMRAID devices..."
+-		/usr/sbin/dmraid --activate yes --ignorelocking --verbose
+-		;;
+-
+-	stop)
+-		echo "Shutting down DMRAID devices... "
+-		/usr/sbin/dmraid --activate no --ignorelocking --verbose
+-		;;
+-
+-	restart|force-reload)
+-		$0 stop
+-		sleep 1
+-		$0 start
+-		;;
+-
+-	*)
+-		echo "Usage: dmraid {start|stop|restart|force-reload}"
+-		exit 1
+-		;;
+-esac
 diff --git a/package/dmraid/dmraid.mk b/package/dmraid/dmraid.mk
-index 067df0b..089e33a 100644
+index 089e33a..412c903 100644
 --- a/package/dmraid/dmraid.mk
 +++ b/package/dmraid/dmraid.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
+@@ -15,10 +15,10 @@ DMRAID_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
  
--DMRAID_VERSION = 1.0.0.rc15
-+DMRAID_VERSION = 1.0.0.rc16-3
- DMRAID_SOURCE = dmraid-$(DMRAID_VERSION).tar.bz2
- DMRAID_SITE = http://people.redhat.com/~heinzm/sw/dmraid/src
--DMRAID_SUBDIR = $(DMRAID_VERSION)
-+DMRAID_SUBDIR = $(DMRAID_VERSION)/dmraid
- # lib and tools race with parallel make
- DMRAID_MAKE = $(MAKE1)
- DMRAID_INSTALL_STAGING = YES
-diff --git a/package/dmraid/dmraid.patch b/package/dmraid/dmraid.patch
-deleted file mode 100644
-index fbe2894..0000000
---- a/package/dmraid/dmraid.patch
-+++ /dev/null
-@@ -1,20 +0,0 @@
----- a/1.0.0.rc15/lib/device/scan.c.orig	2008-06-20 09:32:05.000000000 -0500
--+++ b/1.0.0.rc15/lib/device/scan.c	2008-12-01 17:15:25.000000000 -0600
--@@ -69,7 +69,7 @@
-- 	static char *ret = NULL, *sysfs_mp;
-- 
-- 	if (!(sysfs_mp = find_sysfs_mp(lc)))
---		LOG_ERR(lc, NULL, "finding sysfs mount point");
--+		{ log_notice(lc, "finding sysfs mount point"); return NULL; }
-- 
-- 	if ((ret = dbg_malloc(strlen(sysfs_mp) + strlen(path) + 1)))
-- 		sprintf(ret, "%s%s", sysfs_mp, path);
--@@ -315,7 +315,7 @@
-- 	} else {
-- 		sysfs = 0;
-- 		path = (char *) _PATH_DEV;
---		log_print(lc, "carrying on with %s", path);
--+		log_notice(lc, "carrying on with %s", path);
-- 	}
-- 
-- 	if (!(d = opendir(path))) {
-diff --git a/package/dmraid/dmraid_library-linking-fix.patch b/package/dmraid/dmraid_library-linking-fix.patch
-deleted file mode 100644
-index a1c33c7..0000000
---- a/package/dmraid/dmraid_library-linking-fix.patch
-+++ /dev/null
-@@ -1,15 +0,0 @@
--Why on earth are we trying to link against the libdir in DESTDIR?
+ DMRAID_DEPENDENCIES = lvm2
+ 
+-define DMRAID_INSTALL_INITSCRIPT
+-	$(INSTALL) -m 0755 package/dmraid/dmraid.init $(TARGET_DIR)/etc/init.d/S20dmraid
++define DMRAID_INSTALL_INIT_SYSV
++    [ -f $(TARGET_DIR)/etc/init.d/S20dmraid ] || \
++        $(INSTALL) -D -m 0755 package/dmraid/S20dmraid \
++            $(TARGET_DIR)/etc/init.d/S20dmraid
+ endef
+ 
+-DMRAID_POST_INSTALL_TARGET_HOOKS += DMRAID_INSTALL_INITSCRIPT
 -
--Signed-Off-By: Nigel Kukard  <nkukard@lbsd.net>
--diff -ur dmraid_vanilla/1.0.0.rc15/tools/Makefile.in dmraid_library-linking-fix/1.0.0.rc15/tools/Makefile.in
----- dmraid_vanilla/1.0.0.rc15/tools/Makefile.in	2008-09-17 13:24:00.000000000 +0000
--+++ dmraid_library-linking-fix/1.0.0.rc15/tools/Makefile.in	2009-06-01 10:50:52.000000000 +0000
--@@ -56,7 +56,7 @@
-- 
-- dmraid:	$(OBJECTS) $(top_srcdir)/lib/libdmraid.a
-- 	$(CC) -o $@ $(OBJECTS) $(LDFLAGS) -L$(top_srcdir)/lib \
---	      -L$(DESTDIR)$(libdir) $(DMRAIDLIBS) $(LIBS) 
--+	      $(DMRAIDLIBS) $(LIBS) 
-- 
-- install_dmraid_tools: $(TARGETS)
-- 	@echo "Installing $(TARGETS) in $(sbindir)"; \
+ $(eval $(autotools-package))
 -- 
 1.8.5.3
