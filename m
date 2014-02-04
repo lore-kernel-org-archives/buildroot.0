@@ -1,42 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Feb 2014 17:23:04 +0100
-Subject: [Buildroot] [git commit] Makefile: change rsync used in overlays to
-	always transfer files
-Message-ID: <20140204163209.5C8979C7D4@busybox.osuosl.org>
+From: Ryan Barnett <ryanbarnett3@gmail.com>
+Date: Tue,  4 Feb 2014 17:32:13 +0100
+Subject: [Buildroot] [PATCH 1/1] elf2flt: change source site
+Message-ID: <1391531533-28500-1-git-send-email-rjbarnet@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2f865405c9215071a3031f2a2b89db9ec686342d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The CVS repository for this package is no longer available. So
+changing the repository to be a mirror git repository.
 
-If two files with the same relative paths exist in multiple overlay
-skeletons, and they have the same modification time and size, then rsync
-might not copy the later file on top of the earlier file.  This patch fixes
-this by adding the -I option to the rsync commands used in the overlay
-skeleton file installations.  ("man rsync" indicates that this option turns
-off the file-size/mod-date "quick check" behavior, causing all files to be
-updated - more like the cp commands that we had originally.)
+Fixes:
+  http://autobuild.buildroot.net/results/779/77997fd75282c355f6270b92371c161c9457d1dd
 
-[Peter: use --ignore-times to make it obvious what the option does]
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
 ---
- Makefile |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Peter - could you please add the old source to sources.buildroot.net
+for legacy support?
 
-diff --git a/Makefile b/Makefile
-index 4a675d4..9775397 100644
---- a/Makefile
-+++ b/Makefile
-@@ -472,7 +472,7 @@ RSYNC_VCS_EXCLUSIONS = \
+http://www.zacarias.com.ar/src/elf2flt-20130904.tar.gz
+Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+---
+ package/elf2flt/elf2flt.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/elf2flt/elf2flt.mk b/package/elf2flt/elf2flt.mk
+index ce40f8d..6f54fb2 100644
+--- a/package/elf2flt/elf2flt.mk
++++ b/package/elf2flt/elf2flt.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- $(BUILD_DIR)/.root:
- 	mkdir -p $(TARGET_DIR)
--	rsync -a $(RSYNC_VCS_EXCLUSIONS) \
-+	rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
- 		--chmod=Du+w --exclude .empty --exclude '*~' \
- 		$(TARGET_SKELETON)/ $(TARGET_DIR)/
- 	$(INSTALL) -m 0644 support/misc/target-dir-warning.txt $(TARGET_DIR_WARNING_FILE)
+-ELF2FLT_VERSION = 20130904
+-ELF2FLT_SITE = cvs://cvs.uclinux.org:/var/cvs
+-ELF2FLT_SITE_METHOD = cvs
++ELF2FLT_VERSION = 21c6a41885ad544763ccd19883c1353f3b0b7a47
++ELF2FLT_SITE = git://wh0rd.org/elf2flt.git
++ELF2FLT_SITE_METHOD = git
+ ELF2FLT_LICENSE = GPLv2+
+ ELF2FLT_LICENSE_FILES = LICENSE.TXT
+ 
+-- 
+1.8.3.2
