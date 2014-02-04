@@ -1,38 +1,78 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Feb 2014 18:09:14 +0100
-Subject: [Buildroot] [git commit] gnutls: fix libz autodetection failure
-Message-ID: <20140204171056.23BA29C7D4@busybox.osuosl.org>
+From: Uwe Strempel <u.strempel@googlemail.com>
+Date: Tue,  4 Feb 2014 18:55:51 +0100
+Subject: [Buildroot] [PATCH 1/1] Added patch fixing absolute path in
+	toolchainfile.cmake
+Message-ID: <1391536551-57608-1-git-send-email-u.strempel@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dcd0b3cc7b585835a9f4fb76264919946456dcaf
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On build process of buildroot the toolchainfile.cmake is created, but with wrong absolut path.
+When shareing the toolchain or move the folder you get problems this path settings.
 
-The configure script finds libz in the distribution libraries, which causes
-zlib support to be dropped from the cross-compiled GnuTLS.
+A workarround for cmake files is
+- get the path of the toolchainfile.cmake and set the the variables.
+see BUG #6818
 
-Signed-off-by: Antoine Pierlot-Garcin <antoine@bokbox.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Uwe Strempel <u.strempel@googlemail.com>
 ---
- package/gnutls/gnutls.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/Makefile.in  |  5 +++++
+ package/pkg-cmake.mk | 11 ++++++-----
+ 2 files changed, 11 insertions(+), 5 deletions(-)
 
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 73b525d..c0bd778 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -28,8 +28,9 @@ GNUTLS_CONF_ENV = gl_cv_socket_ipv6=$(if $(BR2_INET_IPV6),yes,no) \
- 	gl_cv_func_gettimeofday_clobber=no
- GNUTLS_INSTALL_STAGING = YES
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 2e433fd..aa86fca 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -140,8 +140,10 @@ endif
  
--# libpthread autodetection poisons the linkpath
-+# libpthread and libz autodetection poison the linkpath
- GNUTLS_CONF_OPT += $(if $(BR2_TOOLCHAIN_HAS_THREADS),--with-libpthread-prefix=$(STAGING_DIR)/usr)
-+GNUTLS_CONF_OPT += $(if $(BR2_PACKAGE_ZLIB),--with-libz-prefix=$(STAGING_DIR)/usr)
+ ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+ TARGET_CROSS=$(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-
++TARGET_CROSS_WITHOUT_HOST_DIR=/usr/bin/$(GNU_TARGET_NAME)-
+ else
+ TARGET_CROSS=$(HOST_DIR)/usr/bin/$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))-
++TARGET_CROSS_WITHOUT_HOST_DIR=/usr/bin/$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))-
+ endif
  
- # gnutls needs libregex, but pcre can be used too
- # The check isn't cross-compile friendly
+ # Quotes are needed for spaces et al in path components.
+@@ -164,6 +166,9 @@ TARGET_OBJDUMP  = $(TARGET_CROSS)objdump
+ TARGET_CC_NOCCACHE  := $(TARGET_CC)
+ TARGET_CXX_NOCCACHE := $(TARGET_CXX)
+ 
++TARGET_CC_NOCCACHE_WITHOUT_HOST_DIR  := $(TARGET_CROSS_WITHOUT_HOST_DIR)gcc
++TARGET_CXX_NOCCACHE_WITHOUT_HOST_DIR :=  $(TARGET_CROSS_WITHOUT_HOST_DIR)g++
++
+ ifeq ($(BR2_CCACHE),y)
+ TARGET_CC  := $(CCACHE) $(TARGET_CC)
+ TARGET_CXX := $(CCACHE) $(TARGET_CXX)
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index 13be557..3f5389f 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -160,16 +160,17 @@ host-cmake-package = $(call inner-cmake-package,host-$(call pkgname),$(call UPPE
+ $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
+ 	@mkdir -p $(@D)
+ 	@echo -en "\
++	get_filename_component(CMAKE_TOOLCHAIN_PATH \$${CMAKE_CURRENT_LIST_FILE} PATH)\n\
+ 	set(CMAKE_SYSTEM_NAME Linux)\n\
+-	set(CMAKE_C_COMPILER $(TARGET_CC_NOCCACHE))\n\
+-	set(CMAKE_CXX_COMPILER $(TARGET_CXX_NOCCACHE))\n\
++	set(CMAKE_C_COMPILER \"\$${CMAKE_TOOLCHAIN_PATH}/$(TARGET_CC_NOCCACHE_WITHOUT_HOST_DIR)\")\n\
++	set(CMAKE_CXX_COMPILER \"\$${CMAKE_TOOLCHAIN_PATH}/$(TARGET_CXX_NOCCACHE_WITHOUT_HOST_DIR)\")\n\
+ 	set(CMAKE_C_FLAGS \"\$${CMAKE_C_FLAGS} $(TARGET_CFLAGS)\" CACHE STRING \"Buildroot CFLAGS\" FORCE)\n\
+ 	set(CMAKE_CXX_FLAGS \"\$${CMAKE_CXX_FLAGS} $(TARGET_CXXFLAGS)\" CACHE STRING \"Buildroot CXXFLAGS\" FORCE)\n\
+ 	set(CMAKE_INSTALL_SO_NO_EXE 0)\n\
+-	set(CMAKE_PROGRAM_PATH \"$(HOST_DIR)/usr/bin\")\n\
+-	set(CMAKE_FIND_ROOT_PATH \"$(STAGING_DIR)\")\n\
++	set(CMAKE_PROGRAM_PATH \"\$${CMAKE_TOOLCHAIN_PATH}/usr/bin\")\n\
++	set(CMAKE_FIND_ROOT_PATH \"\$${CMAKE_TOOLCHAIN_PATH}/${STAGING_SUBDIR}\")\n\
+ 	set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)\n\
+ 	set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)\n\
+ 	set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)\n\
+-	set(ENV{PKG_CONFIG_SYSROOT_DIR} \"$(STAGING_DIR)\")\n\
++	set(ENV{PKG_CONFIG_SYSROOT_DIR} \"\$${CMAKE_TOOLCHAIN_PATH}/${STAGING_SUBDIR}\")\n\
+ 	" > $@
+-- 
+1.8.3.4 (Apple Git-47)
