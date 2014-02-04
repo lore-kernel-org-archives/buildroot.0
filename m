@@ -1,36 +1,58 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 04 Feb 2014 12:10:11 +0100
-Subject: [Buildroot] [PATCH] openssh: bump to version 6.5p1
-In-Reply-To: <1391392888-13726-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1391392888-13726-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <52F0CA93.5040009@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 4 Feb 2014 12:11:40 +0100
+Subject: [Buildroot] [pkg-perl infra V3 10/12] libcurses-perl: new
+	package
+In-Reply-To: <1385198749-6249-11-git-send-email-francois.perrad@gadz.org>
+References: <1385198749-6249-1-git-send-email-francois.perrad@gadz.org>
+ <1385198749-6249-11-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20140204111140.GG3454@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Gustavo,
+Fran?ois, All,
 
-On 03/02/14 03:01, Gustavo Zacarias wrote:
-> Convert the ever growing drop-SUSv3-legacy patch to a sed expression.
+On 2013-11-23 10:25 +0100, Francois Perrad spake thusly:
+> (depends on ncurses)
 
- Since bzero is clearly deprecated even on xBSD, perhaps upstream can be
-nudged to accept a patch that replaces it with memset?
+Not needed in the commit message.
 
- Regards,
- Arnout
+[--SNIP--]
+> diff --git a/package/cpan/libcurses-perl/libcurses-perl.mk b/package/cpan/libcurses-perl/libcurses-perl.mk
+> new file mode 100644
+> index 0000000..81ba645
+> --- /dev/null
+> +++ b/package/cpan/libcurses-perl/libcurses-perl.mk
+> @@ -0,0 +1,15 @@
+> +################################################################################
+> +#
+> +# libcurses-perl
+> +#
+> +################################################################################
+> +
+> +LIBCURSES_PERL_VERSION = 1.28
+> +LIBCURSES_PERL_AUTHOR = GIRAFFED
+> +LIBCURSES_PERL_SOURCE = Curses-$(LIBCURSES_PERL_VERSION).tgz
+> +LIBCURSES_PERL_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GI/GIRAFFED/
+> +LIBCURSES_PERL_DEPENDENCIES = perl ncurses
+> +HOST_LIBCURSES_PERL_DEPENDENCIES = host-ncurses
 
+Missing _LICENSE and _LICENSE_FILES.
 
-> Modify the initscript to create ed25519 server key.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-[snip]
+> +$(eval $(perl-package))
+> +$(eval $(host-perl-package))
+
+Do we need the host variant?
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
