@@ -1,56 +1,49 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 04 Feb 2014 17:54:13 +0100
-Subject: [Buildroot] [PATCH] defconfigs: add sama5d3 support
-In-Reply-To: <87zjm75533.fsf@dell.be.48ers.dk>
-References: <1391093726-7569-1-git-send-email-ludovic.desroches@atmel.com>
- <87y51rl01m.fsf@dell.be.48ers.dk>
- <20140204112654.GD30185@ldesroches-Latitude-E6320>
- <87zjm7cae2.fsf@dell.be.48ers.dk>
- <20140204132117.GE30185@ldesroches-Latitude-E6320>
- <87zjm75533.fsf@dell.be.48ers.dk>
-Message-ID: <52F11B35.7000707@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 4 Feb 2014 17:54:21 +0100
+Subject: [Buildroot] [PATCH v12 10/11] libav: add new package
+In-Reply-To: <1371766066-676-11-git-send-email-spenser@gillilanding.com>
+References: <1371766066-676-1-git-send-email-spenser@gillilanding.com>
+ <1371766066-676-11-git-send-email-spenser@gillilanding.com>
+Message-ID: <20140204175421.2a7310a6@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/02/14 15:24, Peter Korsgaard wrote:
->>>>>> "Ludovic" == Ludovic Desroches <ludovic.desroches@atmel.com> writes:
-> 
-> Hi,
-> 
->  > I understand this point of view and I am fine with it. But my concern
->  > is that some customers want something working out of the box. For
->  > instance, we often use devmem2 for debugging purpose or other tools
->  > such as i2c-tools. It is easier for us to have it in a defconfig
->  > file.
-> 
->  > I am not trying to convince you to take this defconfig as is! Just to
->  > know if there is a way to provide specific packages? If not, it will
->  > be provided only in our buildroot-at91 repository. I am also fine
->  > with this, if the customer wants something out of the box then he'll
->  > have to use our repository. Otherwise he could use buildroot one.
-> 
-> I understand. We're been discussing something like this a few times
-> (E.G. full blown "demo" defconfigs), but for now I prefer to keep the
-> variant in buildroot minimal.
+Dear Spenser Gilliland,
 
- However, we are OK with a minimal and a demo variant. So you can submit
-one patch that builds a minimal config in configs/sama5d3_defconfig, and
-a second patch that adds a demo defconfig in
-configs/sama5d3_demo_multimedia_defconfig (it looks like you mainly add
-multimedia packages, hence the name I chose, but you can take something
-else of course).
+On Thu, 20 Jun 2013 17:07:45 -0500, Spenser Gilliland wrote:
+> 
+> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+> ---
+>  package/multimedia/Config.in       |    1 +
+>  package/multimedia/libav/Config.in |  158 ++++++++++++++++++++++++++++
+>  package/multimedia/libav/libav.mk  |  200 ++++++++++++++++++++++++++++++++++++
+>  3 files changed, 359 insertions(+)
+>  create mode 100644 package/multimedia/libav/Config.in
+>  create mode 100644 package/multimedia/libav/libav.mk
 
- Regards,
- Arnout
+It's been a while, but this patch is actually the last one of your
+patch series that hasn't been applied in one form or another. You
+originally created this patch as a dependency of gst-libav, but in the
+mean time, a different gst1-libav package was added, which uses the
+internal copy of libav in the GStreamer plugin sources, as recommended
+by upstream.
 
+Therefore, are you interested in pursuing the effort around this patch?
 
+Also, do you know if libav conflicts with ffmpeg in terms of installed
+files? Is it a drop-in replacement for ffmpeg or something different?
+
+Please let us know what your intentions are around this patch: as you
+can imagine we are trying to clean up the patchwork from the oldest
+patches.
+
+Thanks a lot!
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
