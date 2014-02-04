@@ -1,33 +1,26 @@
-From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Rosen?= <jeremy.rosen@openwide.fr>
-Date: Tue,  4 Feb 2014 15:12:40 +0100
-Subject: [Buildroot] [PATCH] VLC needs QT_GUI_MODULE and not just QT
-Message-ID: <1391523160-30939-1-git-send-email-jeremy.rosen@openwide.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 04 Feb 2014 15:13:54 +0100
+Subject: [Buildroot] [PATCH] mtr: not available for avr32
+In-Reply-To: <1391521393-19781-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 4 Feb 2014 10:43:13 -0300")
+References: <1391521393-19781-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87d2j36k4d.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-fixes http://autobuild.buildroot.net/results/78d/78df2d86394d7637db88dac5d1e3c7b4a27af293/
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
+ > The uclibc version condition is accurate but doesn't cover external
+ > toolchains, so also exclude for avr32 too which only has 0.9.31 enabled.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/4ee/4eec6e29d0f2a46bbbe3a748e85bd06c3601b7c1/
 
-Signed-off-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
----
- package/vlc/vlc.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 73b378c..b39c6c7 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -204,7 +204,7 @@ else
- VLC_CONF_OPT += --disable-lua
- endif
- 
--ifeq ($(BR2_PACKAGE_QT),y)
-+ifeq ($(BR2_PACKAGE_QT_GUI_MODULE),y)
- VLC_CONF_OPT += --enable-qt
- VLC_DEPENDENCIES += qt
- else
+Committed, thanks.
+
 -- 
-1.8.5.3
+Bye, Peter Korsgaard
