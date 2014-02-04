@@ -1,32 +1,64 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Feb 2014 11:11:17 +0100
-Subject: [Buildroot] [git commit] libupnp : bump version to 1.6.19
-Message-ID: <20140204101607.928629C6D2@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 04 Feb 2014 11:16:40 +0100
+Subject: [Buildroot] [PATCH 1/1] package/util-linux: add a host variant
+In-Reply-To: <1391361752-2112-1-git-send-email-danomimanchego123@gmail.com>
+References: <1391361752-2112-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <52F0BE08.6040508@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=474f1bb9c7ecf6e5c6e8536e18beb986e3cba056
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 02/02/14 18:22, Danomi Manchego wrote:
+> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 
-Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libupnp/libupnp.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-diff --git a/package/libupnp/libupnp.mk b/package/libupnp/libupnp.mk
-index b98b9f4..48233b6 100644
---- a/package/libupnp/libupnp.mk
-+++ b/package/libupnp/libupnp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBUPNP_VERSION = 1.6.18
-+LIBUPNP_VERSION = 1.6.19
- LIBUPNP_SOURCE = libupnp-$(LIBUPNP_VERSION).tar.bz2
- LIBUPNP_SITE = http://downloads.sourceforge.net/project/pupnp/pupnp/libUPnP%20$(LIBUPNP_VERSION)
- LIBUPNP_CONF_ENV = ac_cv_lib_compat_ftime=no
+> 
+> ---
+> 
+> This was useful to us, to get reproducable versions of host
+> utils for post-build scripts - so maybe it will be useful
+> to others as well.
+> ---
+>  package/Config.in.host            |    1 +
+>  package/util-linux/Config.in.host |    8 ++++++++
+>  2 files changed, 9 insertions(+)
+>  create mode 100644 package/util-linux/Config.in.host
+> 
+> diff --git a/package/Config.in.host b/package/Config.in.host
+> index 34e84bf..41c0071 100644
+> --- a/package/Config.in.host
+> +++ b/package/Config.in.host
+> @@ -14,5 +14,6 @@ source "package/parted/Config.in.host"
+>  source "package/sam-ba/Config.in.host"
+>  source "package/sunxi-tools/Config.in.host"
+>  source "package/uboot-tools/Config.in.host"
+> +source "package/util-linux/Config.in.host"
+>  
+>  endmenu
+> diff --git a/package/util-linux/Config.in.host b/package/util-linux/Config.in.host
+> new file mode 100644
+> index 0000000..f73dc43
+> --- /dev/null
+> +++ b/package/util-linux/Config.in.host
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_HOST_UTIL_LINUX
+> +	bool "host util-linux"
+> +	help
+> +	  Various useful/essential linux libraries and utilities.
+> +
+> +	  Things like mkfs, mkswap, swapon, fdisk, mount, dmesg, etc...
+> +
+> +	  http://www.kernel.org/pub/linux/utils/util-linux/
+> 
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
