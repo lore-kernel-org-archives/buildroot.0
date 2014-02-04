@@ -1,46 +1,112 @@
-From: Ryan Barnett <ryanbarnett3@gmail.com>
-Date: Tue,  4 Feb 2014 17:32:13 +0100
-Subject: [Buildroot] [PATCH 1/1] elf2flt: change source site
-Message-ID: <1391531533-28500-1-git-send-email-rjbarnet@rockwellcollins.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue,  4 Feb 2014 17:43:39 +0100
+Subject: [Buildroot] [PATCH] Make BR2_DEFCONFIG a hidden option in Config.in
+Message-ID: <1391532219-24589-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The CVS repository for this package is no longer available. So
-changing the repository to be a mirror git repository.
+The manual says that BR2_DEFCONFIG can be set on the command line or in
+the configuration menu. However, the use case for setting it from the
+menu was somewhat vague to say the least. So make it a hidden option.
 
-Fixes:
-  http://autobuild.buildroot.net/results/779/77997fd75282c355f6270b92371c161c9457d1dd
+With this change, it is no longer needed to do special quoting when
+passing BR2_DEFCONFIG through the environment.
 
-Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Also, in some cases (not clear how) it was possible that the value
+of BR2_DEFCONFIG did end up in the saved defconfig. When it is a hidden
+option, it is never saved.
+
+Since for hidden options, Kconfig discards whatever is already stored
+in the .config file when it is run, we always have to pass the correct
+value in the environment. Therefore, all the *config targets can no
+longer be in noconfig_targets. This makes 'make menuconfig' and friends
+a bit slower.
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
-Peter - could you please add the old source to sources.buildroot.net
-for legacy support?
+I wonder if the noconfig_targets hack makes any sense at all...
 
-http://www.zacarias.com.ar/src/elf2flt-20130904.tar.gz
-Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/elf2flt/elf2flt.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ Config.in                       | 6 ++----
+ Makefile                        | 9 ++-------
+ docs/manual/customize-store.txt | 9 ++++-----
+ 3 files changed, 8 insertions(+), 16 deletions(-)
 
-diff --git a/package/elf2flt/elf2flt.mk b/package/elf2flt/elf2flt.mk
-index ce40f8d..6f54fb2 100644
---- a/package/elf2flt/elf2flt.mk
-+++ b/package/elf2flt/elf2flt.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/Config.in b/Config.in
+index 1dc1ffe..d6d5c0a 100644
+--- a/Config.in
++++ b/Config.in
+@@ -109,17 +109,15 @@ config BR2_TAR_OPTIONS
  
--ELF2FLT_VERSION = 20130904
--ELF2FLT_SITE = cvs://cvs.uclinux.org:/var/cvs
--ELF2FLT_SITE_METHOD = cvs
-+ELF2FLT_VERSION = 21c6a41885ad544763ccd19883c1353f3b0b7a47
-+ELF2FLT_SITE = git://wh0rd.org/elf2flt.git
-+ELF2FLT_SITE_METHOD = git
- ELF2FLT_LICENSE = GPLv2+
- ELF2FLT_LICENSE_FILES = LICENSE.TXT
+ endmenu
  
++# This has to be a separate config option so BR2_DEFCONFIG is saved in .config.
+ config BR2_DEFCONFIG_FROM_ENV
+ 	string
+ 	option env="BR2_DEFCONFIG"
+ 
+ config BR2_DEFCONFIG
+-	string "Location to save buildroot config"
++	string
+ 	default BR2_DEFCONFIG_FROM_ENV if BR2_DEFCONFIG_FROM_ENV != ""
+ 	default "$(CONFIG_DIR)/defconfig"
+-	help
+-	  When running 'make savedefconfig', the defconfig file will be saved
+-	  in this location.
+ 
+ config BR2_DL_DIR
+ 	string "Download dir"
+diff --git a/Makefile b/Makefile
+index da3e148..ec359e3 100644
+--- a/Makefile
++++ b/Makefile
+@@ -55,10 +55,7 @@ DATE:=$(shell date +%Y%m%d)
+ # Need to export it, so it can be got from environment in children (eg. mconf)
+ export BR2_VERSION_FULL:=$(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setlocalversion)
+ 
+-noconfig_targets:=menuconfig nconfig gconfig xconfig config oldconfig randconfig \
+-	defconfig %_defconfig allyesconfig allnoconfig silentoldconfig release \
+-	randpackageconfig allyespackageconfig allnopackageconfig \
+-	source-check print-version olddefconfig
++noconfig_targets = release source-check print-version
+ 
+ # Strip quotes and then whitespaces
+ qstrip=$(strip $(subst ",,$(1)))
+@@ -678,10 +675,8 @@ $(BUILD_DIR)/buildroot-config/%onf:
+ 
+ DEFCONFIG = $(call qstrip,$(BR2_DEFCONFIG))
+ 
+-# We don't want to fully expand BR2_DEFCONFIG here, so Kconfig will
+-# recognize that if it's still at its default $(CONFIG_DIR)/defconfig
+ COMMON_CONFIG_ENV = \
+-	BR2_DEFCONFIG='$(call qstrip,$(value BR2_DEFCONFIG))' \
++	BR2_DEFCONFIG="$(DEFCONFIG)" \
+ 	KCONFIG_AUTOCONFIG=$(BUILD_DIR)/buildroot-config/auto.conf \
+ 	KCONFIG_AUTOHEADER=$(BUILD_DIR)/buildroot-config/autoconf.h \
+ 	KCONFIG_TRISTATE=$(BUILD_DIR)/buildroot-config/tristate.config \
+diff --git a/docs/manual/customize-store.txt b/docs/manual/customize-store.txt
+index 8fb5b57..e880803 100644
+--- a/docs/manual/customize-store.txt
++++ b/docs/manual/customize-store.txt
+@@ -28,11 +28,10 @@ following command: +make savedefconfig+.
+ 
+ This strips the buildroot configuration down by removing configuration
+ options that are at their default value. The result is stored in a file
+-called +defconfig+.  If you want to save it in another place, change
+-the +BR2_DEFCONFIG+ option, or call make with +make savedefconfig
+-BR2_DEFCONFIG=<path-to-defconfig>+.  The usual place is
+-+configs/<boardname>_defconfig+. The configuration can then be rebuilt by
+-running +make <boardname>_defconfig+.
++called +defconfig+.  If you want to save it in another place, call make
++with +make savedefconfig BR2_DEFCONFIG=<path-to-defconfig>+.  The usual
++place is +configs/<boardname>_defconfig+. The configuration can then be
++rebuilt by running +make <boardname>_defconfig+.
+ 
+ Alternatively, you can copy the file to any other place and rebuild with
+ +make defconfig BR2_DEFCONFIG=<path-to-defconfig-file>+.
 -- 
-1.8.3.2
+1.9.rc1
