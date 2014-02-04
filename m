@@ -1,34 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Feb 2014 17:56:04 +0100
-Subject: [Buildroot] [git commit] Makefile: also use ignore-times argument
-	to rsync when copying rootfs overlays
-Message-ID: <20140204165635.14DE69C7D4@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 04 Feb 2014 17:58:58 +0100
+Subject: [Buildroot] [PATCH 1/1] gnutls: fix libz autodetection failure
+In-Reply-To: <1391525863-22787-1-git-send-email-antoine@bokbox.com>
+References: <1391525863-22787-1-git-send-email-antoine@bokbox.com>
+Message-ID: <52F11C52.3010407@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=99e82b0d4c6d8f10560a8dd5377b244b344963ea
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 04/02/14 15:57, Antoine Pierlot-Garcin wrote:
+> The configure script finds libz in the distribution libraries, which causes
+> zlib support to be dropped from the cross-compiled GnuTLS.
+> 
+> Signed-off-by: Antoine Pierlot-Garcin <antoine@bokbox.com>
 
-Missed from previous patch.
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- Makefile |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ I had noticed the -L/usr/lib in one of the link commands but didn't
+worry about it at the time :-)
 
-diff --git a/Makefile b/Makefile
-index 9775397..dec0694 100644
---- a/Makefile
-+++ b/Makefile
-@@ -548,7 +548,7 @@ endif
- 
- 	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
- 		$(call MESSAGE,"Copying overlay $(d)"); \
--		rsync -a $(RSYNC_VCS_EXCLUSIONS) \
-+		rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
- 			--chmod=Du+w --exclude .empty --exclude '*~' \
- 			$(d)/ $(TARGET_DIR)$(sep))
- 
+ Regards,
+ Arnout
+
+> ---
+>  package/gnutls/gnutls.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+> index 73b525d..c0bd778 100644
+> --- a/package/gnutls/gnutls.mk
+> +++ b/package/gnutls/gnutls.mk
+> @@ -28,8 +28,9 @@ GNUTLS_CONF_ENV = gl_cv_socket_ipv6=$(if $(BR2_INET_IPV6),yes,no) \
+>  	gl_cv_func_gettimeofday_clobber=no
+>  GNUTLS_INSTALL_STAGING = YES
+>  
+> -# libpthread autodetection poisons the linkpath
+> +# libpthread and libz autodetection poison the linkpath
+>  GNUTLS_CONF_OPT += $(if $(BR2_TOOLCHAIN_HAS_THREADS),--with-libpthread-prefix=$(STAGING_DIR)/usr)
+> +GNUTLS_CONF_OPT += $(if $(BR2_PACKAGE_ZLIB),--with-libz-prefix=$(STAGING_DIR)/usr)
+>  
+>  # gnutls needs libregex, but pcre can be used too
+>  # The check isn't cross-compile friendly
+> 
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
