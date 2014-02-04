@@ -1,34 +1,39 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  4 Feb 2014 10:43:13 -0300
-Subject: [Buildroot] [PATCH] mtr: not available for avr32
-Message-ID: <1391521393-19781-1-git-send-email-gustavo@zacarias.com.ar>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 04 Feb 2014 14:45:19 +0100
+Subject: [Buildroot] Mysql: $(ENABLE_DEBUG) is unset
+In-Reply-To: <CA+kK6WujspDnZ_nc_j=mbVopwbeqaM1B0_Noi2c6+2s9kQVMzw@mail.gmail.com>
+References: <CA+kK6WsurjJPB1wzACqx1bNO1GYBRK+u1DAPZXfKCQoNVYiJEA@mail.gmail.com>
+ <CA+kK6WujspDnZ_nc_j=mbVopwbeqaM1B0_Noi2c6+2s9kQVMzw@mail.gmail.com>
+Message-ID: <52F0EEEF.5060205@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The uclibc version condition is accurate but doesn't cover external
-toolchains, so also exclude for avr32 too which only has 0.9.31 enabled.
-Fixes:
-http://autobuild.buildroot.net/results/4ee/4eec6e29d0f2a46bbbe3a748e85bd06c3601b7c1/
+On 03/02/14 17:45, Marcelo Gutierrez wrote:
+> Ther are two possible solution:
+> 
+> 1) Remove $(ENABLE_DEBUG) option
+> 
+> 2) Change Config.in: add option to compile MySQL with debug support
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/mtr/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ We have a global BR2_ENABLE_DEBUG that should be used. It already
+automatically --enable-debug to configure, but mysql calls it
+--with-debug. So, the patch should remove $(ENABLE_DEBUG) and replace it
+with something like
 
-diff --git a/package/mtr/Config.in b/package/mtr/Config.in
-index 842d6ca..7e5ad90 100644
---- a/package/mtr/Config.in
-+++ b/package/mtr/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_MTR
- 	bool "mtr"
- 	# res_mkquery() only available in 0.9.33+
- 	depends on !BR2_UCLIBC_VERSION_0_9_31 && !BR2_UCLIBC_VERSION_0_9_32
-+	depends on !BR2_avr32
- 	help
- 	  mtr combines the functionality of the 'traceroute' and 'ping'
- 	  programs in a single network diagnostic tool.
+MYSQL_CONF_OPT += $(if $(BR2_ENABLE_DEBUG),--with-debug)
+
+ Can you try this and post a patch if it works?
+
+ Regards,
+ Arnout
+
 -- 
-1.8.3.2
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
