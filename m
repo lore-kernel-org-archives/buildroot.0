@@ -1,24 +1,24 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Tue, 04 Feb 2014 19:59:11 +0100
-Subject: [Buildroot] [PATCH v2 0/7] xorg: Finally bump
-	xserver_xorg-server version to 1.15.0
-References: <BLU0-SMTP312752521437BEBE7FAC87CD9AA0@phx.gbl>
-Message-ID: <vsp7sax2jk.ln2@ID-313208.user.individual.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 04 Feb 2014 20:00:27 +0100
+Subject: [Buildroot] [PATCH 1/1] gnutls: fix libz autodetection failure
+In-Reply-To: <1391525863-22787-1-git-send-email-antoine@bokbox.com> (Antoine
+ Pierlot-Garcin's message of "Tue, 4 Feb 2014 15:57:43 +0100")
+References: <1391525863-22787-1-git-send-email-antoine@bokbox.com>
+Message-ID: <87a9e64sac.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd Kuhls <berndkuhls@hotmail.com> wrote in
-news:BLU0-SMTP312752521437BEBE7FAC87CD9AA0 at phx.gbl: 
+>>>>> "Antoine" == Antoine Pierlot-Garcin <antoine@bokbox.com> writes:
 
-> These patches depend on each other to bump xserver_xorg-server to
-> 1.15.0: 
+ > The configure script finds libz in the distribution libraries, which causes
+ > zlib support to be dropped from the cross-compiled GnuTLS.
 
-Hi,
+ > Signed-off-by: Antoine Pierlot-Garcin <antoine@bokbox.com>
 
-use the bundle http://patchwork.ozlabs.org/bundle/bkuhls/xorg/ for easier 
-testing.
+Committed, thanks.
 
-Regards, Bernd
+-- 
+Bye, Peter Korsgaard
