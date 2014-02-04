@@ -1,39 +1,36 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 4 Feb 2014 10:13:49 +0100
-Subject: [Buildroot] [pkg-perl infra V3 03/12] scancpan: a new script
-In-Reply-To: <1385198749-6249-4-git-send-email-francois.perrad@gadz.org>
-References: <1385198749-6249-1-git-send-email-francois.perrad@gadz.org>
- <1385198749-6249-4-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20140204091349.GD3454@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 4 Feb 2014 10:15:57 +0100
+Subject: [Buildroot] [git commit] Makefile: Add /usr/lib/locale to
+	target-purgelocales
+Message-ID: <20140204091934.8332A9C72F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fran?ois, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=d66538b34ac735f279d3c21d83e790acc83745a1
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2013-11-23 10:25 +0100, Francois Perrad spake thusly:
-> which populates the directory package/cpan
+Some packages install locales to /usr/lib/locale.
+Parse and purge unneeded ones there too.
 
-I think this would deserve a bit more explanations, here and in the
-cover letter.
+Signed-off-by: Valentine Barshak <gvaxon@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ Makefile |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-For example, it is not obvious what this script does, and what it is
-for, and what the expected result is.
-
-Note that I am reviewing the patches in sequence, so this may become
-obvious in the following patches, but still, I think we do want the
-explanations explicitly with this patch, so we do not need to infer it
-from the following changes...
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/Makefile b/Makefile
+index dc57cf4..4a675d4 100644
+--- a/Makefile
++++ b/Makefile
+@@ -564,7 +564,7 @@ target-purgelocales:
+ 	rm -f $(LOCALE_WHITELIST)
+ 	for i in $(LOCALE_NOPURGE); do echo $$i >> $(LOCALE_WHITELIST); done
+ 
+-	for dir in $(wildcard $(addprefix $(TARGET_DIR),/usr/share/locale /usr/share/X11/locale /usr/man /usr/share/man)); \
++	for dir in $(wildcard $(addprefix $(TARGET_DIR),/usr/share/locale /usr/share/X11/locale /usr/man /usr/share/man /usr/lib/locale)); \
+ 	do \
+ 		for lang in $$(cd $$dir; ls .|grep -v man); \
+ 		do \
