@@ -1,27 +1,46 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 04 Feb 2014 10:57:57 +0100
-Subject: [Buildroot] [pkg-perl infra V3 00/12] a package infrastructure
- for Perl/CPAN modules
-In-Reply-To: <52F0A9B5.1070900@mind.be>
-References: <1385198749-6249-1-git-send-email-francois.perrad@gadz.org>
- <52F0A9B5.1070900@mind.be>
-Message-ID: <52F0B9A5.5070704@mind.be>
+Date: Tue, 04 Feb 2014 10:59:29 +0100
+Subject: [Buildroot] [PATCH 1/3] gnupg: depend on libiconv if appropriate
+In-Reply-To: <BLU0-SMTP112B1A733C43DA19ABF8DF9D9CE0@phx.gbl>
+References: <BLU0-SMTP112B1A733C43DA19ABF8DF9D9CE0@phx.gbl>
+Message-ID: <52F0BA01.5020806@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/02/14 09:49, Arnout Vandecappelle wrote:
->  First of all, it took a bit of effort to rebase on current master; if
-> you continue with this series, you can start with pulling it from
-> git at gitorious.org:buildroot/buildroot.git branch perl-fixup
+On 30/12/13 18:57, Bernd Kuhls wrote:
+> 
+> Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
 
- It looks like I screwed up the rebase a bit, and the BR2_CPAN_MIRROR
-moved from patch 2/12 to patch 7/12. Can you fix that when you repost?
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+ Ideally, the explanation that you put in the follow-up message should be
+in the commit log, but OK.
 
  Regards,
  Arnout
+
+> ---
+>  package/gnupg/gnupg.mk |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/gnupg/gnupg.mk b/package/gnupg/gnupg.mk
+> index 39a37d0..c334ac6 100644
+> --- a/package/gnupg/gnupg.mk
+> +++ b/package/gnupg/gnupg.mk
+> @@ -9,7 +9,7 @@ GNUPG_SOURCE = gnupg-$(GNUPG_VERSION).tar.bz2
+>  GNUPG_SITE = ftp://ftp.gnupg.org/gcrypt/gnupg
+>  GNUPG_LICENSE = GPLv3+
+>  GNUPG_LICENSE_FILES = COPYING
+> -GNUPG_DEPENDENCIES = zlib ncurses
+> +GNUPG_DEPENDENCIES = zlib ncurses $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+>  GNUPG_CONF_ENV = ac_cv_sys_symbol_underscore=no
+>  GNUPG_CONF_OPT = --disable-rpath --enable-minimal --disable-regex
+>  
+> 
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
