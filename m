@@ -1,55 +1,55 @@
-From: Ludovic Desroches <ludovic.desroches@atmel.com>
-Date: Tue, 4 Feb 2014 12:26:54 +0100
-Subject: [Buildroot] [PATCH] defconfigs: add sama5d3 support
-In-Reply-To: <87y51rl01m.fsf@dell.be.48ers.dk>
-References: <1391093726-7569-1-git-send-email-ludovic.desroches@atmel.com>
- <87y51rl01m.fsf@dell.be.48ers.dk>
-Message-ID: <20140204112654.GD30185@ldesroches-Latitude-E6320>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 4 Feb 2014 12:31:50 +0100
+Subject: [Buildroot] [pkg-perl infra V3 11/12] libnet-ssleay-perl: new
+ package
+In-Reply-To: <1385198749-6249-12-git-send-email-francois.perrad@gadz.org>
+References: <1385198749-6249-1-git-send-email-francois.perrad@gadz.org>
+ <1385198749-6249-12-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20140204113150.GH3454@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Fran?ois, All,
 
-On Tue, Feb 04, 2014 at 10:06:13AM +0100, Peter Korsgaard wrote:
-> >>>>>   <ludovic.desroches@atmel.com> writes:
-> 
->  > From: Ludovic Desroches <ludovic.desroches@atmel.com>
->  > Defconfig file for boards based on sama5d3x devices.
-> 
->  > Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
->  > ---
-> 
->  > Hi,
-> 
->  > This is a basic defconf file for sama5d3 devices. at91boostrap, u-boot, linux
->  > stuff will come later.
-> 
-> Thanks, but we prefer our defconfigs to just be the minimal needed to
-> configure buildroot for the hardware (arch/variant, bootloader, kernel)
-> - E.G. something like configs/nitrogen6x_defconfig
+On 2013-11-23 10:25 +0100, Francois Perrad spake thusly:
+> (depends on openssl)
 
-Ok
+Not needed in the commit log.
 
-> 
-> Care to send such a minimal defconfig with comments instead?
+> diff --git a/package/cpan/libnet-ssleay-perl/libnet-ssleay-perl.mk b/package/cpan/libnet-ssleay-perl/libnet-ssleay-perl.mk
+> new file mode 100644
+> index 0000000..e067511
+> --- /dev/null
+> +++ b/package/cpan/libnet-ssleay-perl/libnet-ssleay-perl.mk
+> @@ -0,0 +1,16 @@
+> +################################################################################
+> +#
+> +# libnet-ssleay-perl
+> +#
+> +################################################################################
+> +
+> +LIBNET_SSLEAY_PERL_VERSION = 1.53
+> +LIBNET_SSLEAY_PERL_AUTHOR = MIKEM
+> +LIBNET_SSLEAY_PERL_SOURCE = Net-SSLeay-$(LIBNET_SSLEAY_PERL_VERSION).tar.gz
+> +LIBNET_SSLEAY_PERL_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MI/MIKEM/
+> +LIBNET_SSLEAY_PERL_DEPENDENCIES = perl openssl
+> +HOST_LIBNET_SSLEAY_PERL_DEPENDENCIES = host-openssl
+> +LIBNET_SSLEAY_PERL_LICENSE = ssleay
 
-Sorry, not sure to have understood, you mean I have to put extra packages I
-want as comments.
+Missing _LICENSE_FILES.
 
-> 
->  >> From the top of my head Alexandre Belloni told me that some flags have to be
->  > added for hardware floating point use. It was on a previous version when
->  > hard floating has been introduced. Is it still true or does selecting EABIHF is
->  > enough?
-> 
-> Selecting EABIHF should afaik be enough.
-> 
-> -- 
-> Bye, Peter Korsgaard
+> +$(eval $(perl-package))
+> +$(eval $(host-perl-package))
 
-Regards
+Do we need the host variant?
 
-Ludovic
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
