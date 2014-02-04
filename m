@@ -1,22 +1,20 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 04 Feb 2014 15:25:55 +0100
-Subject: [Buildroot] [PATCH] uclibc: fix sh2a option definition
-In-Reply-To: <1391523503-7867-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 4 Feb 2014 15:18:23 +0100")
-References: <1391523503-7867-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87mwi754zw.fsf@dell.be.48ers.dk>
+Date: Tue, 04 Feb 2014 15:26:50 +0100
+Subject: [Buildroot] [PATCH] libyaml: add security patches for
+	CVE-2013-6393
+In-Reply-To: <1391515384-16596-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 4 Feb 2014 09:03:04 -0300")
+References: <1391515384-16596-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87iosv54yd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > The uClibc options for sh2a is SH2A, not SHA2, and this value should
- > be used for sh2a, not sh2.
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
 Committed, thanks.
 
