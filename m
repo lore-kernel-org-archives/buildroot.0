@@ -1,51 +1,36 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 04 Feb 2014 10:59:29 +0100
-Subject: [Buildroot] [PATCH 1/3] gnupg: depend on libiconv if appropriate
-In-Reply-To: <BLU0-SMTP112B1A733C43DA19ABF8DF9D9CE0@phx.gbl>
-References: <BLU0-SMTP112B1A733C43DA19ABF8DF9D9CE0@phx.gbl>
-Message-ID: <52F0BA01.5020806@mind.be>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Tue,  4 Feb 2014 11:06:03 +0100
+Subject: [Buildroot] [PATCH 1/3] lvm2: Enable cmdlib and dmeventd
+Message-ID: <1391508365-30961-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 30/12/13 18:57, Bernd Kuhls wrote:
-> 
-> Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
+In order to use a newer dmraid, the lvm2 package needs
+to be compiled with --enable-cmdlib --enable-dmeventd, which
+dmraid can then invoke on boot.
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: Antony Vennard <arv@vx9.co.uk>
+---
+ package/lvm2/lvm2.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
- Ideally, the explanation that you put in the follow-up message should be
-in the commit log, but OK.
-
- Regards,
- Arnout
-
-> ---
->  package/gnupg/gnupg.mk |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/gnupg/gnupg.mk b/package/gnupg/gnupg.mk
-> index 39a37d0..c334ac6 100644
-> --- a/package/gnupg/gnupg.mk
-> +++ b/package/gnupg/gnupg.mk
-> @@ -9,7 +9,7 @@ GNUPG_SOURCE = gnupg-$(GNUPG_VERSION).tar.bz2
->  GNUPG_SITE = ftp://ftp.gnupg.org/gcrypt/gnupg
->  GNUPG_LICENSE = GPLv3+
->  GNUPG_LICENSE_FILES = COPYING
-> -GNUPG_DEPENDENCIES = zlib ncurses
-> +GNUPG_DEPENDENCIES = zlib ncurses $(if $(BR2_PACKAGE_LIBICONV),libiconv)
->  GNUPG_CONF_ENV = ac_cv_sys_symbol_underscore=no
->  GNUPG_CONF_OPT = --disable-rpath --enable-minimal --disable-regex
->  
-> 
-
-
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index 6566b32..0183e05 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -13,7 +13,8 @@ LVM2_LICENSE_FILES = COPYING COPYING.LIB
+ 
+ # Make sure that binaries and libraries are installed with write
+ # permissions for the owner.
+-LVM2_CONF_OPT += --enable-write_install --enable-pkgconfig
++LVM2_CONF_OPT += --enable-write_install --enable-pkgconfig \
++				 --enable-cmdlib --enable-dmeventd
+ 
+ # LVM2 uses autoconf, but not automake, and the build system does not
+ # take into account the CC passed at configure time.
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.8.5.3
