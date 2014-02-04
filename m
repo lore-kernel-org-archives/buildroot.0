@@ -1,84 +1,141 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Feb 2014 11:55:30 +0100
-Subject: [Buildroot] [git commit] intel-microcode: new package
-Message-ID: <20140204105545.A4C249C7C4@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 4 Feb 2014 11:57:40 +0100
+Subject: [Buildroot] [pkg-perl infra V3 09/12] manual: adding packages
+ perl
+In-Reply-To: <1385198749-6249-10-git-send-email-francois.perrad@gadz.org>
+References: <1385198749-6249-1-git-send-email-francois.perrad@gadz.org>
+ <1385198749-6249-10-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20140204105740.GF3454@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ee8f0ecfbcd0deb2f02a7f2dbd9e94af9ad4d8fe
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fran?ois, All,
 
-The intel microcode is a proprietary package which provides a data file
-used to correct processors errors.
-It was originally sent by Richard Braun <rbraun@sceen.net>
+On 2013-11-23 10:25 +0100, Francois Perrad spake thusly:
+> diff --git a/docs/manual/adding-packages-perl.txt b/docs/manual/adding-packages-perl.txt
+> new file mode 100644
+> index 0000000..4efc53a
+> --- /dev/null
+> +++ b/docs/manual/adding-packages-perl.txt
+> @@ -0,0 +1,91 @@
+> +// -*- mode:doc; -*-
+> +// vim: set syntax=asciidoc:
+> +
+> +Infrastructure for Perl/CPAN packages
+> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> +
+> +[[perl-package-tutorial]]
+> +
+> ++perl-package+ tutorial
+> +^^^^^^^^^^^^^^^^^^^^^^^
+> +
+> +First, let's see how to NOT write a +.mk+ file for a Perl/CPAN package,
+> +with an example :
 
-[Peter: set _LICENSE_FILES]
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Cc: Richard Braun <rbraun@sceen.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/Config.in                          |    1 +
- package/intel-microcode/Config.in          |    7 +++++++
- package/intel-microcode/intel-microcode.mk |   26 ++++++++++++++++++++++++++
- 3 files changed, 34 insertions(+), 0 deletions(-)
+I don't really like the way you introduce this by stating "how NOT to [...]".
 
-diff --git a/package/Config.in b/package/Config.in
-index 93d23cb..e452c1e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -301,6 +301,7 @@ source "package/hwdata/Config.in"
- source "package/i2c-tools/Config.in"
- source "package/input-event-daemon/Config.in"
- source "package/input-tools/Config.in"
-+source "package/intel-microcode/Config.in"
- source "package/iostat/Config.in"
- source "package/irda-utils/Config.in"
- source "package/kbd/Config.in"
-diff --git a/package/intel-microcode/Config.in b/package/intel-microcode/Config.in
-new file mode 100644
-index 0000000..495ebd7
---- /dev/null
-+++ b/package/intel-microcode/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_INTEL_MICROCODE
-+	bool "intel-microcode"
-+	depends on BR2_x86_64 || BR2_i386
-+	help
-+	  This package provides an Intel microcode data file that can be
-+	  used to correct processor errors. The iucode-tool package and
-+	  proper kernel support are required to upload the microcode.
-diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
-new file mode 100644
-index 0000000..bae953d
---- /dev/null
-+++ b/package/intel-microcode/intel-microcode.mk
-@@ -0,0 +1,26 @@
-+################################################################################
-+#
-+# intel-microcode
-+#
-+################################################################################
-+
-+INTEL_MICROCODE_VERSION = 20140122
-+INTEL_MICROCODE_SOURCE = microcode-$(INTEL_MICROCODE_VERSION).tgz
-+INTEL_MICROCODE_SITE = http://downloadmirror.intel.com/23574/eng
-+INTEL_MICROCODE_LICENSE = PROPRIETARY
-+INTEL_MICROCODE_LICENSE_FILES = license.txt
-+INTEL_MICROCODE_REDISTRIBUTE = NO
-+
-+# N.B. Don't strip any path components during extraction.
-+define INTEL_MICROCODE_EXTRACT_CMDS
-+	gzip -d -c $(DL_DIR)/$(INTEL_MICROCODE_SOURCE) | \
-+	tar --strip-components=0 -C $(@D) -xf -
-+	head -n 33 $(@D)/microcode.dat > $(@D)/license.txt
-+endef
-+
-+define INTEL_MICROCODE_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0644 $(@D)/microcode.dat \
-+		$(TARGET_DIR)/usr/share/misc/intel-microcode.dat
-+endef
-+
-+$(eval $(generic-package))
+I would prefer that you straight from the start state that they are
+generated files, and still describe all the entries later. Maybe
+something like:
+
+    ---8<---
+    The +.mk+ files for perl packages are generated files, by running
+    the script +support/scripts/scancpan+ fron Buildroot's top
+    directory:
+
+    ---
+    support/scripts/scancpan foo-bar
+    ---
+
+    In most cases, this script will generate a correct +.mk+ file,
+    but in some cases (eg. when adding a native C dependency), manual
+    editing might be needed.
+
+    Here is how a +.mk+ for a perl package might look like:
+    ---8<---
+
+... and then continue with the standard layout below:
+
+> +------------------------
+> +01: ################################################################################
+> +02: #
+> +03: # libfoo-bar-perl
+> +04: #
+> +05: ################################################################################
+> +06:
+> +07: LIBFOO_BAR_PERL_VERSION = 0.02
+> +08: LIBFOO_BAR_PERL_AUTHOR = MONGERS
+
+There is no reason to include/introduce _AUTHORS, since;
+  - your perl-infra does even use it
+  - no other pkg-infra does it
+  - the legal-info does not use it
+
+> +09: LIBFOO_BAR_PERL_SOURCE = Foo-$(LIBFOO_BAR_PERL_VERSION).tar.gz
+> +10: LIBFOO_BAR_PERL_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MO/MONGER/
+> +11: LIBFOO_BAR_PERL_DEPENDENCIES = perl libstrictures-perl
+> +12: HOST_LIBFOO_BAR_PERL_DEPENDENCIES = host-libstrictures-perl
+> +13: LIBFOO_BAR_PERL_LICENSE = perl_5
+> +14:
+> +15: $(eval $(perl-package))
+> +16: $(eval $(host-perl-package))
+
+How does the scancpan script decide to emit target and/or host variants?
+
+> +------------------------
+> +
+> +In fact, this file and the Config.in are written by running
+> +the script +supports/scripts/scancpan Foo-Bar+ in the +TOPDIR+ directory.
+> +This script creates packages for all required Perl/CPAN dependencies.
+> +All theses generated files are stored in the +package/cpan+ directory.
+> +In very specific case, this Makefile must be modified, for example : for
+> +adding a C native dependency.
+
+This hunk should be included in the general description, above.
+
+> +The Perl/CPAN modules are fine-grained, the number of module grows quickly
+> +over 100. So, only modified files will be stored in the Buildroot repository,
+> +all others can be regenerated by +scancpan+.
+
+After discussing this at the Developpers' Day, we come to the conclusion
+that, since it is needed to manually tweak some of the +.mk+ files, we
+do prefer that all be committed in the tree, even if they are 100%
+automatically generated.
+
+> +[[perl-package-reference]]
+> +
+> ++perl-package+ reference
+> +^^^^^^^^^^^^^^^^^^^^^^^^
+> +
+> +This infrastructure handles various Perl build systems :
+> ++ExtUtils-MakeMaker+, +Module-Build+ and +Module-Build-Tiny+.
+
+From wht I could see in patch 1, you only added two buildsystems:
+Build.PL and Makefile.PL, while the sentence above implies there are
+three. Did I miss anything?
+
+> +The main macro of the Perl/CPAN package infrastructure is
+
+Since you here mix perl and cpan, I wonder if the best name for this
+infra is perl or cpan.
+
+For example, the luarocks infra we recently added is called 'luarocks',
+as per the repository of lua paclage, not 'lua' as per the language
+name.
+
+So maybe we should call this perl infdra cpan instead. Any comment
+against that?
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
