@@ -1,41 +1,46 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 04 Feb 2014 10:06:13 +0100
-Subject: [Buildroot] [PATCH] defconfigs: add sama5d3 support
-In-Reply-To: <1391093726-7569-1-git-send-email-ludovic.desroches@atmel.com>
- (ludovic desroches's message of "Thu, 30 Jan 2014 15:55:26 +0100")
-References: <1391093726-7569-1-git-send-email-ludovic.desroches@atmel.com>
-Message-ID: <87y51rl01m.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 04 Feb 2014 10:08:04 +0100
+Subject: [Buildroot] buildroot(busybox) problem with ccache during
+ rtai-4.0-test2 compiling.
+In-Reply-To: <CAEqQue1m_d_ouJMoHqzjyvWawHFry_1C9S39E=1AeyJqFD6R9Q@mail.gmail.com>
+References: <CAEqQue1sX4nntqoAS-Rynro_8GDkD7hAUd+_CTHDXft_Z0U=CA@mail.gmail.com>
+ <20140130200821.2c0559d8@skate>
+ <CAEqQue1tHGgSoRZ10S1onLNVoWVTB5wvtHEZoNSsH6rqz-808g@mail.gmail.com>
+ <20140131090444.725c88d4@skate>
+ <CAEqQue1m_d_ouJMoHqzjyvWawHFry_1C9S39E=1AeyJqFD6R9Q@mail.gmail.com>
+Message-ID: <52F0ADF4.8080509@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>>   <ludovic.desroches@atmel.com> writes:
+On 31/01/14 12:09, servo gmrt wrote:
+> I am trying to build integrated linux-kernal, rootfs, and rtai, 
+> 
+> To complie rtai, I enabled rtai and patch location in .config file. Other
+> than that I have not made any changes in any of the buildroot files.
+> 
+> Is there any changes I should make in buoldroot before buliding RTAI ?
 
- > From: Ludovic Desroches <ludovic.desroches@atmel.com>
- > Defconfig file for boards based on sama5d3x devices.
+ The RTAI version we have in buildroot is RTAI 3.8.1. So if you are
+building RTAI 4.0, it means you are using a fork. So either you have to
+contact the maintainer of your fork, or you have to give us the patches
+that were applied in order to use RTAI 4.0.
 
- > Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
- > ---
+ Regards,
+ Arnout
 
- > Hi,
+> 
+> Thanks & Regards,
+> B.Thiyagarajan
+> 
 
- > This is a basic defconf file for sama5d3 devices. at91boostrap, u-boot, linux
- > stuff will come later.
-
-Thanks, but we prefer our defconfigs to just be the minimal needed to
-configure buildroot for the hardware (arch/variant, bootloader, kernel)
-- E.G. something like configs/nitrogen6x_defconfig
-
-Care to send such a minimal defconfig with comments instead?
-
- >> From the top of my head Alexandre Belloni told me that some flags have to be
- > added for hardware floating point use. It was on a previous version when
- > hard floating has been introduced. Is it still true or does selecting EABIHF is
- > enough?
-
-Selecting EABIHF should afaik be enough.
 
 -- 
-Bye, Peter Korsgaard
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
