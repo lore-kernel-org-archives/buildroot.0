@@ -1,80 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Feb 2014 10:26:16 +0100
-Subject: [Buildroot] [PATCH] scripts: xorg-release: handle case when version
-	needs downgrade
-Message-ID: <1391505976-13477-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 4 Feb 2014 09:27:13 +0000
+Subject: [Buildroot] [PATCH] mmc-utils: Fix 64-bit values redefinition
+In-Reply-To: <8738jzmerg.fsf@dell.be.48ers.dk>
+References: <1391075946-30850-1-git-send-email-Vincent.Riera@imgtec.com>
+ <8738jzmerg.fsf@dell.be.48ers.dk>
+Message-ID: <52F0B271.1000401@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Nicolas Dechesne <ndec13@gmail.com>
+On 02/04/2014 09:02 AM, Peter Korsgaard wrote:
+>>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+>
+>   > Some toolchains include asm-generic/int-l64.h from their asm/types.h
+>   > file for certain 64-bit architectures. This causes a conflict between
+>   > types like this one:
+>
+>   > asm-generic/int-l64.h:28:25: error: conflicting types for '__s64'
+>   >  typedef __signed__ long __s64;
+>   >              ^
+>   > In file included from mmc.h:17:0,
+>   >          from mmc_cmds.c:30:
+>   > asm-generic/int-ll64.h:29:44: note: previous declaration of '__s64' was
+>   > here
+>   >  __extension__ typedef __signed__ long long __s64;
+>
+>   > This patch has been submitted upstream.
+>
+> Did you hear back? I see nothing has changed in the git repo for quite
+> some time.
+>
+> Committed, thanks.
+>
 
-the initial implementation assumes that when a version found in
-buildroot is different from the one in the X11 release, it
-requires an upgrade. even though this is most likely the case, it
-could be a downgrade too, and it's probably worth highlighting
-such cases when it (rarely) happens.
+No, unfortunately I haven't received any reply from them.
 
-LooseVersion from distutils is doing the low level job of sorting
-version numbers represented in strings...
-
-[Thomas & Thomas:
-
-  - do not count packages more recent in Buildroot than in the latest
-    X.org release as to be downgraded. If we have more recent version,
-    it's generally for a good reason, so we want to keep them as
-    is. Such packages are counted as "nothing to do", but for
-    information, we indicate that there are "More recent"
-
-  - also remove the "nothing to do" action indicator. It used to be a
-    simple dash, which was not really useful.
-]
-
-Signed-off-by: Nicolas Dechesne <ndec13@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
----
- support/scripts/xorg-release | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
-
-diff --git a/support/scripts/xorg-release b/support/scripts/xorg-release
-index 70ba41c..a4f090d 100755
---- a/support/scripts/xorg-release
-+++ b/support/scripts/xorg-release
-@@ -9,6 +9,7 @@ import BeautifulSoup
- import re
- import os
- import urllib
-+from distutils.version import LooseVersion
- 
- # This can be customized
- XORG_VERSION = "X11R7.7"
-@@ -147,17 +148,20 @@ def show_summary(packages):
-             xorg_version = "N/A"
-             action = "Remove from Buildroot"
-             remove_pkgs += 1
--        # For now, we assume that if a package version is different,
--        # it's because an upgrade is needed.
--        elif pkg[XORG_VERSION_KEY] != pkg[BR_VERSION_KEY]:
-+        elif LooseVersion(pkg[XORG_VERSION_KEY]) > LooseVersion(pkg[BR_VERSION_KEY]):
-             br_version = pkg[BR_VERSION_KEY]
-             xorg_version = pkg[XORG_VERSION_KEY]
-             action = "Upgrade"
-             upgrade_pkgs += 1
-+        elif LooseVersion(pkg[XORG_VERSION_KEY]) < LooseVersion(pkg[BR_VERSION_KEY]):
-+            br_version = pkg[BR_VERSION_KEY]
-+            xorg_version = pkg[XORG_VERSION_KEY]
-+            action = "More recent"
-+            nothing_todo_pkgs += 1
-         else:
-             br_version = pkg[BR_VERSION_KEY]
-             xorg_version = pkg[XORG_VERSION_KEY]
--            action = "-"
-+            action = ""
-             nothing_todo_pkgs += 1
- 
-         print FORMAT_STRING % (pkgname, br_version.center(15), xorg_version.center(15), action)
 -- 
-1.8.3.2
+Vincent
