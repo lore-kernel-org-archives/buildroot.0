@@ -1,145 +1,43 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue,  4 Feb 2014 16:18:51 +0100
-Subject: [Buildroot] [PATCH 2/3] infra: replace BUILDROOT_DL_DIR with
-	BR2_DL_DIR.
-In-Reply-To: <1391527132-20103-1-git-send-email-arnout@mind.be>
-References: <1391527132-20103-1-git-send-email-arnout@mind.be>
-Message-ID: <1391527132-20103-2-git-send-email-arnout@mind.be>
+From: =?UTF-8?q?Marcelo=20Guti=C3=A9rrez?= <kuyurix@gmail.com>
+Date: Tue,  4 Feb 2014 12:28:29 +0000
+Subject: [Buildroot] [PATCH 1/1] mysql: disable debugging option
+Message-ID: <1391516909-2700-1-git-send-email-kuyurix@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-To make the naming consistent (all user-visible options should be
-prefixed BR2_).
+When we use --without-server option, there is no debugging log, 
+because will work only when MySQL server is enabled.
 
-An entry is added to Makefile.legacy to warn users who have set
-BUILDROOT_DL_DIR but not BR2_DL_DIR.
+MySQL 5.1 Reference Manual:
+http://dev.mysql.com/doc/refman/5.1/en/debugging-server.html
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ENABLE_DEBUG is a global variable that contains --enable-debug and
+to configure MySQL with debugging code, we need to use 
+the --with-debug option. But right now we only compile MySQL client, 
+so that option it's not necessary.
+
+
+Signed-off-by: Marcelo Guti?rrez <kuyurix@gmail.com>
 ---
- Config.in                         |  2 +-
- Makefile                          |  7 +++++++
- Makefile.legacy                   | 16 ++++++++++++++++
- docs/manual/common-usage.txt      |  2 +-
- docs/manual/download-location.txt |  8 ++++----
- package/pkg-download.mk           |  9 ++-------
- 6 files changed, 31 insertions(+), 13 deletions(-)
+ package/mysql/mysql.mk |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index 7ec7c2a..1dc1ffe 100644
---- a/Config.in
-+++ b/Config.in
-@@ -126,7 +126,7 @@ config BR2_DL_DIR
- 	default "$(TOPDIR)/dl"
- 	help
- 	  Directory to store all the source files that we need to fetch.
--	  If the Linux shell environment has defined the BUILDROOT_DL_DIR
-+	  If the Linux shell environment has defined the BR2_DL_DIR
- 	  environment variable, then this overrides this configuration item.
+diff --git a/package/mysql/mysql.mk b/package/mysql/mysql.mk
+index 9b22c2d..53daa3f 100644
+--- a/package/mysql/mysql.mk
++++ b/package/mysql/mysql.mk
+@@ -31,8 +31,7 @@ MYSQL_CONF_OPT = \
+ 	--without-libedit \
+ 	--without-readline \
+ 	--with-low-memory \
+-	--enable-thread-safe-client \
+-	$(ENABLE_DEBUG)
++	--enable-thread-safe-client
  
- 	  The default is $(TOPDIR)/dl
-diff --git a/Makefile b/Makefile
-index 15d110e..a3fc0db 100644
---- a/Makefile
-+++ b/Makefile
-@@ -121,6 +121,13 @@ else
-   $(shell echo BR2_EXTERNAL ?= $(BR2_EXTERNAL) > $(BR2_EXTERNAL_FILE))
- endif
- 
-+# To make sure the the environment variable overrides the .config option,
-+# set this before including .config.
-+ifneq ($(BR2_DL_DIR),)
-+DL_DIR := $(BR2_DL_DIR)
-+endif
-+
-+
- # Need that early, before we scan packages
- # Avoids doing the $(or...) everytime
- BR2_GRAPH_OUT := $(or $(GRAPH_OUT),pdf)
-diff --git a/Makefile.legacy b/Makefile.legacy
-index e0b7ec2..4954398 100644
---- a/Makefile.legacy
-+++ b/Makefile.legacy
-@@ -13,6 +13,22 @@ $(error "You have legacy configuration in your .config! Please check your config
- endif
- 
- #
-+# Legacy options from 2014.02
-+#
-+
-+# The BUILDROOT_DL_DIR environment variable was renamed by BR2_DL_DIR. We
-+# want to detect someone using the old variable, _except_ if also the new
-+# variable was set. By the time we get here, however, we no longer have
-+# access to the BR2_DL_DIR environment variable (because it has been overridden
-+# by the .config inclusion). However, the environment variable (if defined) was
-+# saved in DL_DIR, so we can use that.
-+ifneq ($(BUILDROOT_DL_DIR),)
-+ifneq ($(BUILDROOT_DL_DIR),$(DL_DIR))
-+$(error "The BUILDROOT_DL_DIR environment variable was renamed to BR2_DL_DIR.")
-+endif
-+endif
-+
-+#
- # Legacy options from 2012.08
- #
- 
-diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
-index 1d15c05..127060d 100644
---- a/docs/manual/common-usage.txt
-+++ b/docs/manual/common-usage.txt
-@@ -80,7 +80,7 @@ to +make+ or set in the environment:
-   configuration interface, so through the Buildroot +.config+ file; this
-   is the recommended way of setting it.
-   +
--* +BUILDROOT_DL_DIR+ to override the directory in which
-+* +BR2_DL_DIR+ to override the directory in which
-   Buildroot stores/retrieves downloaded files
-   +
-   Note that the Buildroot download directory can also be set from the
-diff --git a/docs/manual/download-location.txt b/docs/manual/download-location.txt
-index 4aa8cea..21055c1 100644
---- a/docs/manual/download-location.txt
-+++ b/docs/manual/download-location.txt
-@@ -13,14 +13,14 @@ filesystem with exactly the same versions.
- 
- If you maintain several Buildroot trees, it might be better to have a
- shared download location. This can be achieved by pointing the
--+BUILDROOT_DL_DIR+ environment variable to a directory.  If this is
-++BR2_DL_DIR+ environment variable to a directory.  If this is
- set, then the value of +BR2_DL_DIR+ in the Buildroot configuration is
- overridden. The following line should be added to +<~/.bashrc>+.
- 
- -----------------
-- $ export BUILDROOT_DL_DIR <shared download location>
-+ $ export BR2_DL_DIR <shared download location>
- -----------------
- 
- The download location can also be set in the +.config+ file, with the
--+BR2_DL_DIR+ option. This value is overridden by the +BUILDROOT_DL_DIR+
--environment variable.
-++BR2_DL_DIR+ option. Unlike most options in the .config file, this value 
-+is overridden by the +BR2_DL_DIR+ environment variable.
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 2641d4e..84598d5 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -23,13 +23,8 @@ LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
- # external-deps target.
- DL_MODE=DOWNLOAD
- 
--# Override BR2_DL_DIR if shell variable defined
--ifneq ($(BUILDROOT_DL_DIR),)
--DL_DIR := $(BUILDROOT_DL_DIR)
--else
--DL_DIR := $(call qstrip,$(BR2_DL_DIR))
--endif
--
-+# DL_DIR may have been set already from the environment
-+DL_DIR ?= $(call qstrip,$(BR2_DL_DIR))
- ifeq ($(DL_DIR),)
- DL_DIR := $(TOPDIR)/dl
- endif
+ define MYSQL_REMOVE_TEST_PROGS
+ 	rm -rf $(TARGET_DIR)/usr/mysql-test $(TARGET_DIR)/usr/sql-bench
 -- 
-1.9.rc1
+1.7.10.4
