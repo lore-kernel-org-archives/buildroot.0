@@ -1,39 +1,72 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 04 Feb 2014 09:55:33 +0100
-Subject: [Buildroot] [pkg-perl infra V3 00/12] a package infrastructure
- for Perl/CPAN modules
-In-Reply-To: <52F0A9B5.1070900@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 4 Feb 2014 10:01:17 +0100
+Subject: [Buildroot] [pkg-perl infra V3 02/12] cpan: a home for Perl
+ modules
+In-Reply-To: <1385198749-6249-3-git-send-email-francois.perrad@gadz.org>
 References: <1385198749-6249-1-git-send-email-francois.perrad@gadz.org>
- <52F0A9B5.1070900@mind.be>
-Message-ID: <52F0AB05.9080705@mind.be>
+ <1385198749-6249-3-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20140204090116.GC3454@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/02/14 09:49, Arnout Vandecappelle wrote:
->  libxml-libxml-perl fails to build with:
+Fran?ois, All,
+
+On 2013-11-23 10:25 +0100, Francois Perrad spake thusly:
 > 
-> make[2]: *** No rule to make target `pure_all'.  Stop.
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  Config.in            |    7 +++++++
+>  package/Config.in    |    1 +
+>  package/cpan/cpan.mk |    1 +
+>  3 files changed, 9 insertions(+)
+>  create mode 100644 package/cpan/Config.in
+>  create mode 100644 package/cpan/cpan.mk
 > 
+> diff --git a/Config.in b/Config.in
+> index d87e0f0..1b4bf99 100644
+> --- a/Config.in
+> +++ b/Config.in
+> @@ -207,6 +207,13 @@ config BR2_DEBIAN_MIRROR
+>  
+>  endif
+>  
+> +config BR2_CPAN_MIRROR
+> +	string "CPAN mirror"
+> +	default "http://search.cpan.org/CPAN"
+> +	help
+> +	  CPAN has multiple software mirrors scattered around the world.
+> +	  The following allows you to select your preferred mirror.
 
- Looks like the error actually was:
+"following" ? I know you duplicated the other entries, but it does not
+really make sense. What about:
 
-Checking for ability to link against libxml2...libxml2, zlib, and/or the
-Math library (-lm) have not been found.
-Try setting LIBS and INC values on the command line
+    CPAN has multiple software mirrors scattered around the world.
+    This option allows you to select a mirror.
 
- So another problem is that configure failures are not detected. If you
-can find a solution for that, that would be great.
+    The list of mirrors is available at:
+        http://search.cpan.org/mirror
 
- Regards,
- Arnout
+> diff --git a/package/cpan/cpan.mk b/package/cpan/cpan.mk
+> new file mode 100644
+> index 0000000..764a156
+> --- /dev/null
+> +++ b/package/cpan/cpan.mk
+> @@ -0,0 +1 @@
+> +include package/cpan/*/*.mk
+
+This breaks since there is no cpan package yet.
+Just introiduce this one change when you add the first CPAN package.
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
