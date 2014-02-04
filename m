@@ -1,97 +1,85 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Feb 2014 09:48:48 +0100
-Subject: [Buildroot] [git commit] Fix alioth.debian URLs that are broken
-Message-ID: <20140204085346.2AD309C748@busybox.osuosl.org>
+Date: Tue, 4 Feb 2014 09:51:11 +0100
+Subject: [Buildroot] [git commit] libnspr: add microblaze support
+Message-ID: <20140204085346.D30349C783@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=01d92e1c386b81a026199b66799c921a4a2e220c
+commit: http://git.buildroot.net/buildroot/commit/?id=443af537d29912ac868531e0c4078e91cb1d6c39
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Inspired by a patch from Martin Bark <martin@barkynet.com>, this fixes
-autobuild issues related to packages not downloading from alioth.debian
-URLs. This patches is meant to be "temporary" until the URLs are fixed
-by debian.
+fixes autobuild failures
 
-Fixes:
-  http://autobuild.buildroot.org/results/8c3/8c34649a7f98f60f14cff8b32fa2f8e82b1afeb6
-  http://autobuild.buildroot.org/results/7e3/7e34e73e40fdb0e04bd63fa889f9bc14f7e30536
+http://autobuild.buildroot.net/results/493/4932900522e87da84a47fbf2d796c2fbb3f7e741/build-end.log
 
-Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/axel/axel.mk                   |    2 +-
- package/libhid/libhid.mk               |    2 +-
- package/ltrace/ltrace.mk               |    2 +-
- package/minicom/minicom.mk             |    2 +-
- package/sane-backends/sane-backends.mk |    2 +-
- 5 files changed, 5 insertions(+), 5 deletions(-)
+ ...ibnspr-nios2.patch => libnspr-0001-nios2.patch} |    0
+ ...r-nios2.patch => libnspr-0002-microblaze.patch} |   25 ++++++++++++--------
+ 2 files changed, 15 insertions(+), 10 deletions(-)
 
-diff --git a/package/axel/axel.mk b/package/axel/axel.mk
-index a83001f..ea97d75 100644
---- a/package/axel/axel.mk
-+++ b/package/axel/axel.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/libnspr/libnspr-nios2.patch b/package/libnspr/libnspr-0001-nios2.patch
+similarity index 100%
+copy from package/libnspr/libnspr-nios2.patch
+copy to package/libnspr/libnspr-0001-nios2.patch
+diff --git a/package/libnspr/libnspr-nios2.patch b/package/libnspr/libnspr-0002-microblaze.patch
+similarity index 77%
+rename from package/libnspr/libnspr-nios2.patch
+rename to package/libnspr/libnspr-0002-microblaze.patch
+index cffb2ef..93a0be5 100644
+--- a/package/libnspr/libnspr-nios2.patch
++++ b/package/libnspr/libnspr-0002-microblaze.patch
+@@ -1,18 +1,23 @@
+-Add Nios-II support
++Add Microblaze support
  
- AXEL_VERSION = 2.4
--AXEL_SITE = https://alioth.debian.org/frs/download.php/file/3015
-+AXEL_SITE = http://sources.buildroot.net/
- AXEL_LICENSE = GPLv2+
- AXEL_LICENSE_FILES = COPYING
+-Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
++Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
  
-diff --git a/package/libhid/libhid.mk b/package/libhid/libhid.mk
-index 97aab5d..1b9b895 100644
---- a/package/libhid/libhid.mk
-+++ b/package/libhid/libhid.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBHID_VERSION = 0.2.16
--LIBHID_SITE = http://alioth.debian.org/frs/download.php/file/1958
-+LIBHID_SITE = http://sources.buildroot.net/
- LIBHID_DEPENDENCIES = libusb-compat libusb
- LIBHID_INSTALL_STAGING = YES
- LIBHID_AUTORECONF = YES
-diff --git a/package/ltrace/ltrace.mk b/package/ltrace/ltrace.mk
-index b42c252..99c1af6 100644
---- a/package/ltrace/ltrace.mk
-+++ b/package/ltrace/ltrace.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LTRACE_VERSION = 0.7.3
--LTRACE_SITE = http://alioth.debian.org/frs/download.php/file/3947
-+LTRACE_SITE = http://sources.buildroot.net/
- LTRACE_SOURCE = ltrace-$(LTRACE_VERSION).tar.bz2
- LTRACE_DEPENDENCIES = libelf
- LTRACE_CONF_OPT = --disable-werror
-diff --git a/package/minicom/minicom.mk b/package/minicom/minicom.mk
-index e0a7cee..d72a40d 100644
---- a/package/minicom/minicom.mk
-+++ b/package/minicom/minicom.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- MINICOM_VERSION = 2.7
--MINICOM_SITE = http://alioth.debian.org/frs/download.php/file/3977/
-+MINICOM_SITE = http://sources.buildroot.net/
- MINICOM_LICENSE = GPLv2+
- MINICOM_LICENSE_FILES = COPYING
- 
-diff --git a/package/sane-backends/sane-backends.mk b/package/sane-backends/sane-backends.mk
-index e2adc1a..52c5aa7 100644
---- a/package/sane-backends/sane-backends.mk
-+++ b/package/sane-backends/sane-backends.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- SANE_BACKENDS_VERSION = 1.0.22
--SANE_BACKENDS_SITE = https://alioth.debian.org/frs/download.php/file/3503
-+SANE_BACKENDS_SITE = http://sources.buildroot.net/
- SANE_BACKENDS_CONFIG_SCRIPTS = sane-config
- 
- ifeq ($(BR2_PACKAGE_LIBUSB),y)
+ diff -Naur libnspr-4.9.6-ori/mozilla/nsprpub/pr/include/md/_linux.cfg libnspr-4.9.6/mozilla/nsprpub/pr/include/md/_linux.cfg
+ --- libnspr-4.9.6-ori/mozilla/nsprpub/pr/include/md/_linux.cfg	2013-11-10 21:15:04.556139100 -0300
+ +++ libnspr-4.9.6/mozilla/nsprpub/pr/include/md/_linux.cfg	2013-11-10 21:15:29.332138283 -0300
+-@@ -914,6 +914,51 @@
++@@ -914,6 +914,56 @@
+  #define PR_BYTES_PER_WORD_LOG2   2
+  #define PR_BYTES_PER_DWORD_LOG2  3
+  
+-+#elif defined(nios2)
+++#elif defined(__microblaze__)
+ +
+++#if defined(__BIG_ENDIAN__)
+++#define IS_BIG_ENDIAN 1
+++#undef  IS_LITTLE_ENDIAN
+++#else
+ +#define IS_LITTLE_ENDIAN 1
+ +#undef  IS_BIG_ENDIAN
+++#endif
+ +
+ +#define PR_BYTES_PER_BYTE   1
+ +#define PR_BYTES_PER_SHORT  2
+@@ -58,14 +63,14 @@ diff -Naur libnspr-4.9.6-ori/mozilla/nsprpub/pr/include/md/_linux.cfg libnspr-4.
+  
+  #error "Unknown CPU architecture"
+ diff -Naur libnspr-4.9.6-ori/mozilla/nsprpub/pr/include/md/_linux.h libnspr-4.9.6/mozilla/nsprpub/pr/include/md/_linux.h
+---- libnspr-4.9.6-ori/mozilla/nsprpub/pr/include/md/_linux.h	2013-11-10 21:15:04.556139100 -0300
+-+++ libnspr-4.9.6/mozilla/nsprpub/pr/include/md/_linux.h	2013-11-10 21:15:33.245138154 -0300
++--- libnspr-4.9.6.orig/mozilla/nsprpub/pr/include/md/_linux.h	2014-01-10 14:39:20.674107805 -0600
+++++ libnspr-4.9.6/mozilla/nsprpub/pr/include/md/_linux.h	2014-01-10 14:44:04.442112985 -0600
+ @@ -55,6 +55,8 @@
+  #define _PR_SI_ARCHITECTURE "avr32"
+  #elif defined(__m32r__)
+  #define _PR_SI_ARCHITECTURE "m32r"
+-+#elif defined(nios2)
+-+#define _PR_SI_ARCHITECTURE "nios2"
+++#elif defined(__microblaze__)
+++#define _PR_SI_ARCHITECTURE "microblaze"
++ #elif defined(nios2)
++ #define _PR_SI_ARCHITECTURE "nios2"
+  #else
+- #error "Unknown CPU architecture"
+- #endif
