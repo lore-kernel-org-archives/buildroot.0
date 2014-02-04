@@ -1,55 +1,33 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 04 Feb 2014 17:58:58 +0100
-Subject: [Buildroot] [PATCH 1/1] gnutls: fix libz autodetection failure
-In-Reply-To: <1391525863-22787-1-git-send-email-antoine@bokbox.com>
-References: <1391525863-22787-1-git-send-email-antoine@bokbox.com>
-Message-ID: <52F11C52.3010407@mind.be>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 04 Feb 2014 17:59:50 +0100
+Subject: [Buildroot] [PATCH 1/1] elf2flt: change source site
+In-Reply-To: <1391531533-28500-1-git-send-email-rjbarnet@rockwellcollins.com>
+ (Ryan Barnett's message of "Tue, 4 Feb 2014 17:32:13 +0100")
+References: <1391531533-28500-1-git-send-email-rjbarnet@rockwellcollins.com>
+Message-ID: <87ob2m4xvd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/02/14 15:57, Antoine Pierlot-Garcin wrote:
-> The configure script finds libz in the distribution libraries, which causes
-> zlib support to be dropped from the cross-compiled GnuTLS.
-> 
-> Signed-off-by: Antoine Pierlot-Garcin <antoine@bokbox.com>
+>>>>> "Ryan" == Ryan Barnett <ryanbarnett3@gmail.com> writes:
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > The CVS repository for this package is no longer available. So
+ > changing the repository to be a mirror git repository.
 
- I had noticed the -L/usr/lib in one of the link commands but didn't
-worry about it at the time :-)
+ > Fixes:
+ >   http://autobuild.buildroot.net/results/779/77997fd75282c355f6270b92371c161c9457d1dd
 
- Regards,
- Arnout
+ > Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
 
-> ---
->  package/gnutls/gnutls.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-> index 73b525d..c0bd778 100644
-> --- a/package/gnutls/gnutls.mk
-> +++ b/package/gnutls/gnutls.mk
-> @@ -28,8 +28,9 @@ GNUTLS_CONF_ENV = gl_cv_socket_ipv6=$(if $(BR2_INET_IPV6),yes,no) \
->  	gl_cv_func_gettimeofday_clobber=no
->  GNUTLS_INSTALL_STAGING = YES
->  
-> -# libpthread autodetection poisons the linkpath
-> +# libpthread and libz autodetection poison the linkpath
->  GNUTLS_CONF_OPT += $(if $(BR2_TOOLCHAIN_HAS_THREADS),--with-libpthread-prefix=$(STAGING_DIR)/usr)
-> +GNUTLS_CONF_OPT += $(if $(BR2_PACKAGE_ZLIB),--with-libz-prefix=$(STAGING_DIR)/usr)
->  
->  # gnutls needs libregex, but pcre can be used too
->  # The check isn't cross-compile friendly
-> 
+Committed, thanks.
 
+ > ---
+ > Peter - could you please add the old source to sources.buildroot.net
+ > for legacy support?
+
+Sure, done.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Bye, Peter Korsgaard
