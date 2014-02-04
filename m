@@ -1,39 +1,71 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 4 Feb 2014 21:02:58 +0100
-Subject: [Buildroot] [PATCH 1 of 4 v2] infra: remove variable
- FOO_DIR_PREFIX
-In-Reply-To: <6a46109dc43358a75adb.1391530913@argentina>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 04 Feb 2014 18:46:33 +0100
+Subject: [Buildroot] [PATCH 2 of 4 v2] infra: remove usage of 4th
+ parameter to inner-generic-package
+In-Reply-To: <7a542b87fe6e904a88f6.1391530914@argentina>
 References: <patchbomb.1391530912@argentina>
- <6a46109dc43358a75adb.1391530913@argentina>
-Message-ID: <20140204200258.GA3404@free.fr>
+ <7a542b87fe6e904a88f6.1391530914@argentina>
+Message-ID: <52F12779.7000008@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Maxime, All,
+On 04/02/14 17:21, Thomas De Schampheleire wrote:
+> In preparation of the removal of the 4th parameter to inner-generic-package
+> and the pkgparentdir helper function, this patch removes the direct usage of
+> this 4th parameter. The remaining usage
+> ifeq ($(4),boot/)
+> can become
+> $(filter boot/%,$(call pkgdir))
+> instead (and similar for toolchain).
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> 
+> ---
+>  package/pkg-generic.mk |  4 ++--
+>  1 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -516,9 +516,9 @@ endif
+>  # kernel case, the bootloaders case, and the normal packages case.
+>  ifeq ($(1),linux)
+>  $(2)_KCONFIG_VAR = BR2_LINUX_KERNEL
+> -else ifeq ($(4),boot/)
+> +else ifneq ($(filter boot/%,$(call pkgdir)),)
 
-On 2014-02-04 17:21 +0100, Thomas De Schampheleire spake thusly:
-> Variable FOO_DIR_PREFIX in inner-generic-package isn't really needed. The
-> contents of this variable are 'package' for normal packages, 'boot' for
-> bootloaders, and 'linux' for the linux kernel.
-> When patching a package, all you need to know is the directory where
-> patches can reside, which is already returned by $(pkgdir). In order to be
-> able to use this variable outside of inner-generic-package, we introduce a
-> target-specific variable PKGDIR that equals to this $(pkgdir).
+ AFAICS the call is redundant here.
 
-Maxime, I guess that's the variable we needed, and were desparately
-looking for in the tree, when hacking spidermonkey during our wayback
-trip from Brussels! :-)
+ Yes, I know it's there in the pkgname definition, but there's no need to
+repeate past mistakes :-)
 
-Regards,
-Yann E. MORIN.
+ (The call construct is only needed for macros that take arguments. It's
+another example of make insanity...)
+
+ Regards,
+ Arnout
+
+>  $(2)_KCONFIG_VAR = BR2_TARGET_$(2)
+> -else ifeq ($(4),toolchain/)
+> +else ifneq ($(filter toolchain/%,$(call pkgdir)),)
+>  $(2)_KCONFIG_VAR = BR2_$(2)
+>  else
+>  $(2)_KCONFIG_VAR = BR2_PACKAGE_$(2)
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> 
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
