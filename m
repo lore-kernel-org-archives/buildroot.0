@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 04 Feb 2014 18:46:33 +0100
-Subject: [Buildroot] [PATCH 2 of 4 v2] infra: remove usage of 4th
- parameter to inner-generic-package
-In-Reply-To: <7a542b87fe6e904a88f6.1391530914@argentina>
+Date: Tue, 04 Feb 2014 18:55:51 +0100
+Subject: [Buildroot] [PATCH 1 of 4 v2] infra: remove variable
+	FOO_DIR_PREFIX
+In-Reply-To: <6a46109dc43358a75adb.1391530913@argentina>
 References: <patchbomb.1391530912@argentina>
- <7a542b87fe6e904a88f6.1391530914@argentina>
-Message-ID: <52F12779.7000008@mind.be>
+ <6a46109dc43358a75adb.1391530913@argentina>
+Message-ID: <52F129A7.4040001@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,15 +13,20 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 04/02/14 17:21, Thomas De Schampheleire wrote:
-> In preparation of the removal of the 4th parameter to inner-generic-package
-> and the pkgparentdir helper function, this patch removes the direct usage of
-> this 4th parameter. The remaining usage
-> ifeq ($(4),boot/)
-> can become
-> $(filter boot/%,$(call pkgdir))
-> instead (and similar for toolchain).
+> Variable FOO_DIR_PREFIX in inner-generic-package isn't really needed. The
+> contents of this variable are 'package' for normal packages, 'boot' for
+> bootloaders, and 'linux' for the linux kernel.
+> When patching a package, all you need to know is the directory where
+> patches can reside, which is already returned by $(pkgdir). In order to be
+> able to use this variable outside of inner-generic-package, we introduce a
+> target-specific variable PKGDIR that equals to this $(pkgdir).
 > 
 > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+ (untested)
+
 > 
 > ---
 >  package/pkg-generic.mk |  4 ++--
@@ -30,30 +35,31 @@ On 04/02/14 17:21, Thomas De Schampheleire wrote:
 > diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
 > --- a/package/pkg-generic.mk
 > +++ b/package/pkg-generic.mk
-> @@ -516,9 +516,9 @@ endif
->  # kernel case, the bootloaders case, and the normal packages case.
->  ifeq ($(1),linux)
->  $(2)_KCONFIG_VAR = BR2_LINUX_KERNEL
-> -else ifeq ($(4),boot/)
-> +else ifneq ($(filter boot/%,$(call pkgdir)),)
-
- AFAICS the call is redundant here.
-
- Yes, I know it's there in the pkgname definition, but there's no need to
-repeate past mistakes :-)
-
- (The call construct is only needed for macros that take arguments. It's
-another example of make insanity...)
-
- Regards,
- Arnout
-
->  $(2)_KCONFIG_VAR = BR2_TARGET_$(2)
-> -else ifeq ($(4),toolchain/)
-> +else ifneq ($(filter toolchain/%,$(call pkgdir)),)
->  $(2)_KCONFIG_VAR = BR2_$(2)
->  else
->  $(2)_KCONFIG_VAR = BR2_PACKAGE_$(2)
+> @@ -137,7 +137,7 @@ endif
+>  #
+>  # For BR2_GLOBAL_PATCH_DIR, only generate if it is defined
+>  $(BUILD_DIR)/%/.stamp_patched: NAMEVER = $(RAWNAME)-$($(PKG)_VERSION)
+> -$(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS =  $($(PKG)_DIR_PREFIX)/$(RAWNAME)
+> +$(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS =  $(PKGDIR)
+>  $(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS += $(addsuffix /$(RAWNAME),$(call qstrip,$(BR2_GLOBAL_PATCH_DIR)))
+>  $(BUILD_DIR)/%/.stamp_patched:
+>  	@$(call step_start,patch)
+> @@ -358,7 +358,6 @@ endif
+>  $(2)_INSTALL_STAGING		?= NO
+>  $(2)_INSTALL_IMAGES		?= NO
+>  $(2)_INSTALL_TARGET		?= YES
+> -$(2)_DIR_PREFIX			= $(4)
+>  
+>  # define sub-target stamps
+>  $(2)_TARGET_INSTALL_TARGET =	$$($(2)_DIR)/.stamp_target_installed
+> @@ -507,6 +506,7 @@ endif
+>  $$($(2)_TARGET_RSYNC_SOURCE):		PKG=$(2)
+>  $$($(2)_TARGET_PATCH):			PKG=$(2)
+>  $$($(2)_TARGET_PATCH):			RAWNAME=$(patsubst host-%,%,$(1))
+> +$$($(2)_TARGET_PATCH):			PKGDIR=$(call pkgdir)
+>  $$($(2)_TARGET_EXTRACT):		PKG=$(2)
+>  $$($(2)_TARGET_SOURCE):			PKG=$(2)
+>  $$($(2)_TARGET_DIRCLEAN):		PKG=$(2)
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
