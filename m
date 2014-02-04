@@ -1,10 +1,9 @@
 From: jean.sorgemoel at laposte.net <jean.sorgemoel@laposte.net>
-Date: Wed,  5 Feb 2014 00:49:20 +0100
-Subject: [Buildroot] [PATCH v4 2/2] add bootloader option for iso9660
-	filesystem image (isolinux)
-In-Reply-To: <1391557760-22893-1-git-send-email-jean.sorgemoel@laposte.net>
-References: <1391557760-22893-1-git-send-email-jean.sorgemoel@laposte.net>
-Message-ID: <1391557760-22893-2-git-send-email-jean.sorgemoel@laposte.net>
+Date: Wed,  5 Feb 2014 00:49:19 +0100
+Subject: [Buildroot] [PATCH v4 1/2] add option for iso9660 filesystem image
+In-Reply-To: <1376644934-4302-1-git-send-email-jean.sorgemoel@laposte.net>
+References: <1376644934-4302-1-git-send-email-jean.sorgemoel@laposte.net>
+Message-ID: <1391557760-22893-1-git-send-email-jean.sorgemoel@laposte.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,176 +12,166 @@ To: buildroot@busybox.net
 
 From: jean <jean.sorgemoel@laposte.net>
 
-default generate iso with grub bootloader
-you can select isolinux bootloader
-
 detail : (module fs/iso9660)
-  option to select bootloader (grub/isolinux)
-  can use initramfs (if activate), also cpio (like initrd)
+  option to copy file(s) on iso
+  option to create iso with long filenames (Joliet format)
+  option to create iso with POSIX file system (file mode, uid, gid, ...)
+  define volume label
+  define parameter input charset (for genisoimage)
 
 Signed-off-by: jean <jean.sorgemoel@laposte.net>
 ---
- fs/iso9660/Config.in    |   47 ++++++++++++++++++++++++++++++++++++++++++++---
- fs/iso9660/bootmsg.txt  |    4 ++++
- fs/iso9660/iso9660.mk   |   26 ++++++++++++++++++++++++--
- fs/iso9660/isolinux.cfg |   10 ++++++++++
- 4 files changed, 82 insertions(+), 5 deletions(-)
- create mode 100644 fs/iso9660/bootmsg.txt
- create mode 100644 fs/iso9660/isolinux.cfg
+ fs/iso9660/Config.in  |   46 ++++++++++++++++++++++++++++++++++++-
+ fs/iso9660/iso9660.mk |   61 +++++++++++++++++++++++++++++++++++++------------
+ 2 files changed, 92 insertions(+), 15 deletions(-)
 
 diff --git a/fs/iso9660/Config.in b/fs/iso9660/Config.in
-index 9faa93f..f2b9d2f 100644
+index 50b4377..9faa93f 100644
 --- a/fs/iso9660/Config.in
 +++ b/fs/iso9660/Config.in
-@@ -1,14 +1,37 @@
- config BR2_TARGET_ROOTFS_ISO9660
- 	bool "iso image"
-+	select BR2_TARGET_ROOTFS_CPIO
- 	depends on (BR2_i386 || BR2_x86_64)
- 	depends on BR2_LINUX_KERNEL
--	select BR2_TARGET_ROOTFS_CPIO
--	select BR2_TARGET_GRUB
--	select BR2_TARGET_GRUB_FS_ISO9660
+@@ -8,10 +8,54 @@ config BR2_TARGET_ROOTFS_ISO9660
  	help
  	  Build a bootable iso9660 image
  
- if BR2_TARGET_ROOTFS_ISO9660
-+choice
-+	prompt "Bootloader"
-+	default BR2_TARGET_ROOTFS_ISO9660_GRUB
-+	help
-+	  Select the bootloader that should be used for the bootable
-+	  ISO9660 image.
++if BR2_TARGET_ROOTFS_ISO9660
 +
-+config BR2_TARGET_ROOTFS_ISO9660_GRUB
-+	bool "grub"
-+	select BR2_TARGET_GRUB
-+	select BR2_TARGET_GRUB_FS_ISO9660
-+	help
-+	  Use the Grub bootloader for the bootable ISO9660 image.
-+
-+config BR2_TARGET_ROOTFS_ISO9660_ISOLINUX
-+	bool "isolinux"
-+	select BR2_TARGET_SYSLINUX
-+	select BR2_TARGET_SYSLINUX_ISOLINUX
-+	help
-+	  Use the Isolinux bootloader from the syslinux project as the
-+	  ISO9660 bootable image bootloader.
-+
-+endchoice
-+
-+if BR2_TARGET_ROOTFS_ISO9660_GRUB
- 
  config BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU
  	string "Boot menu.lst file"
-@@ -17,6 +40,24 @@ config BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU
- 	  Grub configuration
- 	  Define menu, commands and options for grub
+-	depends on BR2_TARGET_ROOTFS_ISO9660
+ 	default "fs/iso9660/menu.lst"
++	help
++	  Grub configuration
++	  Define menu, commands and options for grub
++
++config BR2_TARGET_ROOTFS_ISO9660_EXTRA_FILES
++	string "Extra files copy on image"
++	default ""
++	help
++	  list of file (binary or other) copy directly on iso
++	  (separate by space, target directory 'extra')
++	  ex. :
++	    $(SYSLINUX_BUILDDIR)com32/hdt/hdt.c32
++	    $(SYSLINUX_BUILDDIR)com32/modules/reboot.c32
++
++config BR2_TARGET_ROOTFS_ISO9660_JOLIET
++	bool "Create iso with Joliet format (long filenames)"
++	help
++	  Generate iso image with Joliet directory records.
++	  Use Unicode and each path component can be up 64
++	  Unicode characters long.
++
++config BR2_TARGET_ROOTFS_ISO9660_ROCK_RIDGE
++	bool "Create iso with Rock Ridge extensions (POSIX Filesystem)"
++	default y
++	help
++	  Generate iso image with Rock Ridge directory information,
++	  POSIX file system (file mode, uid, gid, ...)
++
++config BR2_TARGET_ROOTFS_ISO9660_NAME
++	string "Volume label"
++	default "buildroot"
++	help
++	  cdrom name
++
++config BR2_TARGET_ROOTFS_ISO9660_INPUT_CHARSET
++	string "Define parameter input charset (genisoimage)"
++	default "iso8859-15"
++	help
++	  Defines the local character set you are using on your
++	  machine.
++	  (see program genisoimage : genisoimage -input-charset help)
++
++endif # BR2_TARGET_ROOTFS_ISO9660
  
-+endif # BR2_TARGET_ROOTFS_ISO9660_GRUB
-+
-+if BR2_TARGET_ROOTFS_ISO9660_ISOLINUX
-+
-+config BR2_TARGET_ROOTFS_ISO9660_ISOLINUX_BOOT_MESSAGE
-+	string "Boot message"
-+	default "fs/iso9660/bootmsg.txt"
-+	help
-+	  Displays this filename on the screen at boot time
-+
-+config BR2_TARGET_ROOTFS_ISO9660_ISOLINUX_CONFIG_FILE
-+	string "Configuration file"
-+	default "fs/iso9660/isolinux.cfg"
-+	help
-+	  This file define all options to start isolinux
-+
-+endif # BR2_TARGET_ROOTFS_ISO9660_ISOLINUX
-+
- config BR2_TARGET_ROOTFS_ISO9660_EXTRA_FILES
- 	string "Extra files copy on image"
- 	default ""
-diff --git a/fs/iso9660/bootmsg.txt b/fs/iso9660/bootmsg.txt
-new file mode 100644
-index 0000000..e67951b
---- /dev/null
-+++ b/fs/iso9660/bootmsg.txt
-@@ -0,0 +1,4 @@
-+Buildroot isolinux boot
-+  buildroot) launch linux
-+  harddrive) Hard Drive (first partition)
-+
+ comment "iso image needs a Linux kernel to be built"
+ 	depends on BR2_i386 || BR2_x86_64
 diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
-index 2f20f5b..66fd1ee 100644
+index a6a9c95..2f20f5b 100644
 --- a/fs/iso9660/iso9660.mk
 +++ b/fs/iso9660/iso9660.mk
-@@ -12,14 +12,29 @@ ISO9660_BOOT_MENU := $(call qstrip,$(BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU))
- ISO9660_TARGET_DIR_EXTRA = $(ISO9660_TARGET_DIR)/extra
- ISO9660_LIST_EXTRA = $(call qstrip,$(BR2_TARGET_ROOTFS_ISO9660_EXTRA_FILES))
+@@ -9,32 +9,57 @@
  
-+ifeq ($(BR2_TARGET_ROOTFS_ISO9660_GRUB),y)
-+BOOTLOADER_PACKAGE = grub
- BOOTLOADER_BIN = $(GRUB_DIR)/stage2/stage2_eltorito
- BOOTLOADER_DIR = $(ISO9660_TARGET_DIR)/boot/grub/
- BOOTLOADER_SRC_CFG = $(ISO9660_BOOT_MENU)
- BOOTLOADER_DST_CFG = $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
- KERNEL_DST = $(ISO9660_TARGET_DIR)/kernel
- ELTORITO_BOOT = boot/grub/stage2_eltorito
-+INITRD_SED_CMD = '/initrd/d'
-+endif
+ ISO9660_TARGET_DIR = $(BUILD_DIR)/iso9660
+ ISO9660_BOOT_MENU := $(call qstrip,$(BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU))
++ISO9660_TARGET_DIR_EXTRA = $(ISO9660_TARGET_DIR)/extra
++ISO9660_LIST_EXTRA = $(call qstrip,$(BR2_TARGET_ROOTFS_ISO9660_EXTRA_FILES))
 +
-+ifeq ($(BR2_TARGET_ROOTFS_ISO9660_ISOLINUX),y)
-+BOOTLOADER_PACKAGE = syslinux
-+BOOTLOADER_BIN = $(BINARIES_DIR)/isolinux.bin
-+BOOTLOADER_DIR = $(ISO9660_TARGET_DIR)
-+BOOTLOADER_SRC_CFG = $(BR2_TARGET_ROOTFS_ISO9660_ISOLINUX_CONFIG_FILE)
-+BOOTLOADER_DST_CFG = $(ISO9660_TARGET_DIR)/isolinux.cfg
-+KERNEL_DST = $(ISO9660_TARGET_DIR)/bzImage
-+ELTORITO_BOOT = isolinux.bin
-+INITRD_SED_CMD = '/INITRD/d'
-+endif
++BOOTLOADER_BIN = $(GRUB_DIR)/stage2/stage2_eltorito
++BOOTLOADER_DIR = $(ISO9660_TARGET_DIR)/boot/grub/
++BOOTLOADER_SRC_CFG = $(ISO9660_BOOT_MENU)
++BOOTLOADER_DST_CFG = $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
++KERNEL_DST = $(ISO9660_TARGET_DIR)/kernel
++ELTORITO_BOOT = boot/grub/stage2_eltorito
  
--$(BINARIES_DIR)/rootfs.iso9660: host-cdrkit host-fakeroot linux rootfs-cpio grub
-+$(BINARIES_DIR)/rootfs.iso9660: host-cdrkit host-fakeroot linux rootfs-cpio $(BOOTLOADER_PACKAGE)
+ $(BINARIES_DIR)/rootfs.iso9660: host-cdrkit host-fakeroot linux rootfs-cpio grub
  	@$(call MESSAGE,"Generating root filesystem image rootfs.iso9660")
- 	@mkdir -p $(ISO9660_TARGET_DIR)
- 	@mkdir -p $(BOOTLOADER_DIR)
-@@ -29,14 +44,21 @@ $(BINARIES_DIR)/rootfs.iso9660: host-cdrkit host-fakeroot linux rootfs-cpio grub
- 	@cp $(BOOTLOADER_SRC_CFG) $(BOOTLOADER_DST_CFG)
- 	@cp $(LINUX_IMAGE_PATH) $(KERNEL_DST)
- 
-+ifeq ($(BR2_TARGET_ROOTFS_ISO9660_GRUB),y)
+-	mkdir -p $(ISO9660_TARGET_DIR)
+-	mkdir -p $(ISO9660_TARGET_DIR)/boot/grub
+-	cp $(GRUB_DIR)/stage2/stage2_eltorito $(ISO9660_TARGET_DIR)/boot/grub/
+-	cp $(ISO9660_BOOT_MENU) $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
++	@mkdir -p $(ISO9660_TARGET_DIR)
++	@mkdir -p $(BOOTLOADER_DIR)
++	@mkdir -p $(ISO9660_TARGET_DIR_EXTRA)
++
++	@cp $(BOOTLOADER_BIN) $(BOOTLOADER_DIR)
++	@cp $(BOOTLOADER_SRC_CFG) $(BOOTLOADER_DST_CFG)
++	@cp $(LINUX_IMAGE_PATH) $(KERNEL_DST)
++
  ifeq ($(BR2_TARGET_GRUB_SPLASH),)
- 	@$(SED) '/^splashimage/d' $(BOOTLOADER_DST_CFG)
+-	$(SED) '/^splashimage/d' $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
++	@$(SED) '/^splashimage/d' $(BOOTLOADER_DST_CFG)
  else
- 	@cp boot/grub/splash.xpm.gz $(ISO9660_TARGET_DIR)/
- endif # BR2_TARGET_GRUB_SPLASH
-+endif # BR2_TARGET_ROOTFS_ISO9660_GRUB
+-	cp boot/grub/splash.xpm.gz $(ISO9660_TARGET_DIR)/
+-endif
+-	cp $(LINUX_IMAGE_PATH) $(ISO9660_TARGET_DIR)/kernel
++	@cp boot/grub/splash.xpm.gz $(ISO9660_TARGET_DIR)/
++endif # BR2_TARGET_GRUB_SPLASH
 +
-+ifeq ($(BR2_TARGET_ROOTFS_ISO9660_ISOLINUX),y)
-+	@cp $(BR2_TARGET_ROOTFS_ISO9660_ISOLINUX_BOOT_MESSAGE) \
-+		$(ISO9660_TARGET_DIR)
-+endif
- 
  ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
--	@$(SED) '/initrd/d'  $(BOOTLOADER_DST_CFG)
-+	@$(SED) $(INITRD_SED_CMD)  $(BOOTLOADER_DST_CFG)
+-	$(SED) '/initrd/d'  $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
++	@$(SED) '/initrd/d'  $(BOOTLOADER_DST_CFG)
  else
- 	@cp $(BINARIES_DIR)/rootfs.cpio$(ROOTFS_CPIO_COMPRESS_EXT) \
- 		$(ISO9660_TARGET_DIR)/initrd
-diff --git a/fs/iso9660/isolinux.cfg b/fs/iso9660/isolinux.cfg
-new file mode 100644
-index 0000000..f4887e4
---- /dev/null
-+++ b/fs/iso9660/isolinux.cfg
-@@ -0,0 +1,10 @@
-+display bootmsg.txt
-+default buildroot
-+timeout 20
-+prompt 1
-+LABEL buildroot
-+  KERNEL bzImage
-+  INITRD initrd
+-	cp $(BINARIES_DIR)/rootfs.cpio$(ROOTFS_CPIO_COMPRESS_EXT) $(ISO9660_TARGET_DIR)/initrd
+-endif
++	@cp $(BINARIES_DIR)/rootfs.cpio$(ROOTFS_CPIO_COMPRESS_EXT) \
++		$(ISO9660_TARGET_DIR)/initrd
++endif # BR2_TARGET_ROOTFS_INITRAMFS
 +
-+LABEL harddrive
-+  LOCALBOOT 0x80
++	@$(foreach file, $(ISO9660_LIST_EXTRA), \
++		cp $(file) $(ISO9660_TARGET_DIR_EXTRA)/ ; )
++
+ 	# Use fakeroot to pretend all target binaries are owned by root
+ 	rm -f $(FAKEROOT_SCRIPT)
+ 	echo "chown -R 0:0 $(ISO9660_TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
+ 	# Use fakeroot so mkisofs believes the previous fakery
+-	echo "$(HOST_DIR)/usr/bin/genisoimage -R -b boot/grub/stage2_eltorito -no-emul-boot " \
+-		"-boot-load-size 4 -boot-info-table -o $@ $(ISO9660_TARGET_DIR)" \
++	echo "$(HOST_DIR)/usr/bin/genisoimage " \
++		"$(GENISOIMAGE_OPTS) " \
++		"-b $(ELTORITO_BOOT) " \
++		"-no-emul-boot " \
++		"-boot-load-size 4 " \
++		"-boot-info-table " \
++		"-input-charset $(BR2_TARGET_ROOTFS_ISO9660_INPUT_CHARSET) " \
++		"-V $(BR2_TARGET_ROOTFS_ISO9660_NAME) " \
++		"-o $@ $(ISO9660_TARGET_DIR)" \
+ 		>> $(FAKEROOT_SCRIPT)
+-	chmod a+x $(FAKEROOT_SCRIPT)
++	@chmod a+x $(FAKEROOT_SCRIPT)
+ 	$(HOST_DIR)/usr/bin/fakeroot -- $(FAKEROOT_SCRIPT)
+ 	- at rm -f $(FAKEROOT_SCRIPT)
+ 	- at rm -rf $(ISO9660_TARGET_DIR)
+@@ -49,3 +74,11 @@ rootfs-iso9660: $(BINARIES_DIR)/rootfs.iso9660
+ ifeq ($(BR2_TARGET_ROOTFS_ISO9660),y)
+ TARGETS += rootfs-iso9660
+ endif
++
++ifeq ($(BR2_TARGET_ROOTFS_ISO9660_JOLIET),y)
++GENISOIMAGE_OPTS += -J
++endif
++
++ifeq ($(BR2_TARGET_ROOTFS_ISO9660_ROCK_RIDGE),y)
++GENISOIMAGE_OPTS += -R
++endif
 -- 
 1.7.10.4
