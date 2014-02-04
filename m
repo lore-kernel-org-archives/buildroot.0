@@ -1,46 +1,74 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 04 Feb 2014 10:32:35 +0100
-Subject: [Buildroot] [PATCH] scripts: xorg-release: handle case when
-	version needs downgrade
-In-Reply-To: <1391505976-13477-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 4 Feb 2014 10:26:16 +0100")
-References: <1391505976-13477-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87d2j3i5os.fsf@dell.be.48ers.dk>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 4 Feb 2014 10:34:22 +0100
+Subject: [Buildroot] Patchwork oldest patches cleanup #5 (deadline
+	January 19)
+In-Reply-To: <CAAXf6LVtP8tC5R4N+P4cz1Cus3WNSuh_zch5umdhAicDigMQaw@mail.gmail.com>
+References: <CAAXf6LVcK-fx059K=tetV=NY78amOHczPkbVxkO1pKAuvDCwtA@mail.gmail.com>
+ <CAAXf6LVhGnZrVy7bTPjWa+xjbHtKrHU6pFE8aVmAmjbEB_X46w@mail.gmail.com>
+ <20140128205632.7b5c3100@skate>
+ <CAAXf6LVtP8tC5R4N+P4cz1Cus3WNSuh_zch5umdhAicDigMQaw@mail.gmail.com>
+Message-ID: <CAAXf6LX6k9xvk=cNWYUCjE59V4g2Xy=s99jxWfUkoX00Em0Uww@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+On Mon, Feb 3, 2014 at 10:43 AM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+> Hi Thomas,
+>
+> Sorry for the late reply.
+>
+> On Tue, Jan 28, 2014 at 8:56 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Dear Thomas De Schampheleire,
+>>
+>> On Mon, 20 Jan 2014 21:58:52 +0100, Thomas De Schampheleire wrote:
+>>
+>>> > [RFC,1/2] barebox: Build barebox in separate directory.
+>>> > Marek Belisko <marek.belisko@open-nandra.com>
+>>> > http://patchwork.ozlabs.org/patch/207942
+>>> >
+>>> > [RFC,2/2] barebox: Add possibility to build also barebox xloader (MLO).
+>>> > Marek Belisko <marek.belisko@open-nandra.com>
+>>> > http://patchwork.ozlabs.org/patch/207943
+>>>
+>>> No feedback. I would tend to reject these two patches, unless someone
+>>> still pops up and wants to adopt these patches. They introduce a
+>>> second build of barebox: one for the standard barebox, and another one
+>>> for the xloader. In fact, the only real difference seems to be that
+>>> both builds use a separate config file.
+>>
+>> In fact, there is a real problem that these patches from Marek are
+>> trying to solve. Contrary to U-Boot with which a single build produces
+>> both the first stage bootloader (SPL) and the second stage bootloader
+>> (which is compatible with how Buildroot builds U-Boot), Barebox needs
+>> two completely separate builds in this case. This means that currently,
+>> Buildroot is unable, for some platforms, to generate both the first
+>> stage and the second stage Barebox bootloaders.
+>>
+>> Unfortunately, I don't really see a very clean solution to this
+>> problem.
+>>
+>
+> One way to do this is two create two separate packages using the same
+> sources: one package that builds the standard barebox, the other one
+> to build the xloader. This is comparable to how we have u-boot and
+> u-boot-tools, I'd say: two packages using the 'same' sources, to build
+> two separate things.
+>
+> This is certainly one of the easier solutions.
+> To avoid duplicating the .mk file too much, we could do something
+> similar to what you did for gcc: one common .mk file, and a
+> subdirectory for each actual package.
+>
 
- > From: Nicolas Dechesne <ndec13@gmail.com>
- > the initial implementation assumes that when a version found in
- > buildroot is different from the one in the X11 release, it
- > requires an upgrade. even though this is most likely the case, it
- > could be a downgrade too, and it's probably worth highlighting
- > such cases when it (rarely) happens.
+Just a quick follow-up: ThomasP and I prototyped this idea, and added
+it as a todo item:
+http://elinux.org/Buildroot#Packages
 
- > LooseVersion from distutils is doing the low level job of sorting
- > version numbers represented in strings...
+Feel free to help and implement this, and send a patch!
 
- > [Thomas & Thomas:
-
- >   - do not count packages more recent in Buildroot than in the latest
- >     X.org release as to be downgraded. If we have more recent version,
- >     it's generally for a good reason, so we want to keep them as
- >     is. Such packages are counted as "nothing to do", but for
- >     information, we indicate that there are "More recent"
-
- >   - also remove the "nothing to do" action indicator. It used to be a
- >     simple dash, which was not really useful.
- > ]
-
- > Signed-off-by: Nicolas Dechesne <ndec13@gmail.com>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+Thanks,
+Thomas
