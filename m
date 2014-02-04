@@ -1,39 +1,108 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 04 Feb 2014 09:52:24 +0100
-Subject: [Buildroot] [PATCH v2] libnspr: add microblaze support
-In-Reply-To: <20140203223329.234d8b62@skate> (Thomas Petazzoni's message of
- "Mon, 3 Feb 2014 22:33:29 +0100")
-References: <1390859507-31670-1-git-send-email-spenser@gillilanding.com>
- <1390859507-31670-5-git-send-email-spenser@gillilanding.com>
- <20140203223329.234d8b62@skate>
-Message-ID: <87bnynmf93.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 4 Feb 2014 09:45:59 +0100
+Subject: [Buildroot] [git commit] CHANGES: update with recent changes
+Message-ID: <20140204085344.ED7A89C786@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=51a2caf912e24c064561c54533ba0e221b7a6f09
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Dear Spenser Gilliland,
- > On Mon, 27 Jan 2014 15:51:41 -0600, Spenser Gilliland wrote:
- >> fixes autobuild failures
- >> 
- >> http://autobuild.buildroot.net/results/493/4932900522e87da84a47fbf2d796c2fbb3f7e741/build-end.log
- >> 
- >> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
- >> ---
- >> package/libnspr/libnspr-0001-nios2.patch      | 71 +++++++++++++++++++++++++
- >> package/libnspr/libnspr-0002-microblaze.patch | 76 +++++++++++++++++++++++++++
- >> package/libnspr/libnspr-nios2.patch           | 71 -------------------------
- >> 3 files changed, 147 insertions(+), 71 deletions(-)
- >> create mode 100644 package/libnspr/libnspr-0001-nios2.patch
- >> create mode 100644 package/libnspr/libnspr-0002-microblaze.patch
- >> delete mode 100644 package/libnspr/libnspr-nios2.patch
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES |   82 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 82 insertions(+), 0 deletions(-)
 
- > Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/CHANGES b/CHANGES
+index d75d8b1..8b5395e 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,85 @@
++2014.02, Not yet released:
++
++	Fixes all over the tree and new features.
++
++	Updated/fixed packages: aiccu, alsa-lib, alsa-utils, aumix,
++	autoconf, automake, barebox, bellagio, berkeleydb, binutils,
++	bison, blackbox, bluez_utils, boost, bustle, busybox, cairo,
++	can-utils, ccache, ccid, cgilua, cifs-utils, civetweb, cmake,
++	collectd, connman, copas, coreutils, coxpcall, cppzmq, cramfs,
++	crda, cryptodev-linux, cryptsetup, cups, czmq, dhcpcd,
++	dhcpdump, dialog, dnsmasq, dosfstools, dropbear, dropwatch,
++	dtc, duma, dvb-apps, e2fsprogs, eglibc, eigen, erlang,
++	ethtool, f2fs-tools, ffmpeg, file, filemq, fio, flashrom,
++	flex, fluxbox, fontconfig freerdp, freetype, gadgetfs-test,
++	gawk, gcc, gdb, gdbm, gettext, git, glibc, gnupg, gnutls,
++	gob2, gpsd, grep, grub, gst-ffmpeg, gst-plugins-good,
++	gst1-plugins-bad, gst1-plugins-base, gst1-plugins-good,
++	gst1-plugins-ugly, gstreamer, gstreamer1, gtest, iftop,
++	imagemagick, inadyn, infozip, iozone, iproute2, iptables, iw,
++	jpeg, jq, kmod, knock, lbase64, lcdapi, lftp, libcdaudio,
++	libcgi, libcgicc, libcuefile, libcurl, libdmtx, libdrm,
++	libdvdnav, libdvdread, libegl, libevent, libexif, libfcgi,
++	libfreefare, libgles, libglib2, libllcp, libmicrohttpd,
++	libmpd, libnfc, libnl, libnss, libopenmax, libopenvg, libpcap,
++	libpfm4, libplayer, libpng, libqmi, libreplaygain, libroxml,
++	libsamplerate, libsexy, libsigsegv, libsndfile, libsoc,
++	libtasn1, libtpl, libusb, libusb-compat, libvorbis, libxcb,
++	libxml2, lighttpd, linknx, linux-firmware, linux-pam, live555,
++	lm_sensors, lmbench, lockdev, logrotate, lrzsz, ltrace, lua,
++	lua-ev, lua-msgpack-native, luabitop, luaexpat, luaexpatutils,
++	luafilesystem, luajit, luaposix, luarocks, luasec, luasocket,
++	luasql-sqlite3, m4, matchbox, mdadm, minicom, mongrel2, mpc,
++	mpd, mpg123, mplayer, mtd, mysql, lvm2, mxml, ncurses, ne10,
++	neard, neardal, netsnmp, netstat-nat, network-manager, nodejs,
++	numactl, ofone, ola, olsr, omniorb, opencv, openpowerlink,
++	openssh, openssl, openvpn, oprofile, opus, opus-tools, orbit,
++	p11-kit, parted, pcre, pcsc-lite, perl, php, poco, poppler,
++	powervr, protobuf-c, psplash, python, python-bottle,
++	python-{crc16,distutilscross,dpkt,id3,ipy,m2crypto,mad,meld},
++	python-{netifaces,nfc,protobuf,pygame,pyparsing,pyro,pyzmq},
++	python-{serial,setuptools}, qt, qt5base, qt5connectivity,
++	qt5declarative, qt5graphicaleffects, qt5jsbackend,
++	qt5multimedia, qt5quick1, qt5quickcontrols, qt5script,
++	qt5webkit, radvd, redis, rings, rng-tools, rpi-firmware,
++	rpi-userland, rt-tests, sam-ba, samba, sawman, sconeserver,
++	scons, sdl, sg3_utils, snappy, snmppp, socketcand, spice,
++	spice-protocol, sqlcipher, sqlite, squid, sshfs, strace,
++	subversion, sunxi-mali, supervisor, sysklogd, sysprof,
++	sysstat, systemd, sysvinit, taglib, tar, tcpdump, ti-gfx,
++	ti-utils, tinymembench, tn5250, trace-cmd, transmission,
++	tvheadend, tzdata, zxing, uboot, uboot-tools, uclibc, udev,
++	ulogd, urg, usb_modeswitch_data, util-linux, vala, valgrind,
++	vorbis-tools, wavpack, wayland, weston, wget, wireless-regdb,
++	wireshark, wpa_supplicant, wsapi, xavante, xapp_xdpyinfo,
++	xapp_xrandr, xcb-proto, xdriver_xf86-video-intel, xenomai,
++	xkeyboard-config, xl2tp, xlib_lib{FS,SM,X11},
++	xlib_libX{au,aw,composite,cursor,damage,ext,fixes,font,i},
++	xlib_libX{inerama,mu,pm,randr,render,res,t,tst,v,xf86dga},
++	xlib_libXxf86vm, xlib_libdmx, xlib_libfontenc,
++	xlib_libpciaccess, xlib_xtrans, xproto_dri2proto,
++	xproto_{glproto,inputproto,presentproto,randrproto,videoproto},
++	xproto_xextproto, xproto_xproto, xutil_util-macros,
++	xutil_makedepend, zic, zmqpp, zxing, zsh, zyre
++
++	New packages: apitrace, avrdude, c-ares, ca-certificates,
++	cwiid, dbus-cpp, evemu, fping, fswebcam, gpm, gst1-libav,
++	haveged, jasper, joe, ktap, lbreakout2, libass, libbluray,
++	libcdio, libenca, libevdev, libmbim, libmodplug, libnfs,
++	libnftnl, libplist, libshairplay, libsocketcan, ljsyscall,
++	log4cplus, ltris, luainterpreter, minidlna, mmc-utils,
++	modemmanager, mtr, net-tools, python-configobj, python-dialog,
++	python-json-schema-validator, python-keyring, python-msgpack,
++	python-posix-ipc, python-pyasn, python-pycrypto,
++	python-pysnmp, python-pysnmp-apps, python-pysnmp-mibs,
++	python-pyusb, python-simplejson, python-tornado,
++	python-versiontools, rtmpdump, rtptools, smcroute, smstools3,
++	tcpreplay, thrift, ti-uim, tinyxml, tmux, vlc, wmctrl,
++	xconsole
++
++	Removed packages: lzma, netkitbase, netkittelnet, pkg-config,
++	squashfs3, ttcp
++
+ 2013.11, Released November 30th, 2013:
+ 
+ 	Minor fixes.
