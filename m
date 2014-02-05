@@ -1,69 +1,59 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 05 Feb 2014 14:51:00 +0100
-Subject: [Buildroot] [PATCH 8 of 8 v2] infra: remove separate definition of
- DISABLE_DOCUMENTATION
-In-Reply-To: <patchbomb.1391608252@argentina>
-References: <patchbomb.1391608252@argentina>
-Message-ID: <2c0482e0d65779af52cf.1391608260@argentina>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Wed,  5 Feb 2014 14:52:51 +0100
+Subject: [Buildroot] [pkg-perl infra V4 0/9] a package infrastructure for
+	Perl/CPAN modules
+Message-ID: <1391608380-23240-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since we now always disable documentation on target, there is no need to
-have a separate variable DISABLE_DOCUMENTATION anymore.
+Full refactor after the review at BR developer days.
 
-Suggested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+ - new convention : package/perl-<pkgname> instead of package/cpan/lib<pkgname>-perl
 
----
-v2: new patch
+Francois Perrad (9):
+  pkg-perl: refactor and rename PERL5LIB
+  pkg-perl: new infrastructure
+  scancpan: a new script
+  host-perl-xml-parser: rename and refactor with perl infrastructure
+  host-perl-module-build: new package
+  perl: remove useless patch
+  manual: adding packages perl
+  cpanminus: remove it
+  qemu: add a Config.in.host
 
-Note: I'm not 100% convinced by this patch, but I post it to ignite the
-discussion. The advantage of the separate variable is the grouping of the
-options. Without it, it is not so clear that --with-fop is related to
-documentation, unless you already know what fop is. Also, there is no clear
-place to put the comment regarding passing multiple options, so I just
-removed it (losing some information).
-Both problems could be solved by keeping the variable but moving it to
-autotools.mk, but this is then no longer consistent with the other
-DISABLE_xxx variables.
+ Config.in                                        |   10 +
+ docs/manual/adding-packages-perl.txt             |  110 ++++
+ docs/manual/adding-packages.txt                  |    2 +
+ package/Config.in                                |    2 -
+ package/Config.in.host                           |    1 +
+ package/Makefile.in                              |   13 +-
+ package/cpanminus/Config.in                      |   40 --
+ package/cpanminus/cpanminus.mk                   |   47 --
+ package/intltool/intltool.mk                     |    5 +-
+ package/libxml-parser-perl/Config.in             |   10 -
+ package/libxml-parser-perl/libxml-parser-perl.mk |   35 --
+ package/metacity/metacity.mk                     |    2 +-
+ package/perl-module-build/perl-module-build.mk   |   12 +
+ package/perl-xml-parser/perl-xml-parser.mk       |   16 +
+ package/perl/perl-fix-Module-Build.patch         |   16 -
+ package/pkg-perl.mk                              |  198 ++++++
+ package/qemu/Config.in.host                      |   10 +
+ support/scripts/scancpan                         |  694 ++++++++++++++++++++++
+ 18 files changed, 1065 insertions(+), 158 deletions(-)
+ create mode 100644 docs/manual/adding-packages-perl.txt
+ delete mode 100644 package/cpanminus/Config.in
+ delete mode 100644 package/cpanminus/cpanminus.mk
+ delete mode 100644 package/libxml-parser-perl/Config.in
+ delete mode 100644 package/libxml-parser-perl/libxml-parser-perl.mk
+ create mode 100644 package/perl-module-build/perl-module-build.mk
+ create mode 100644 package/perl-xml-parser/perl-xml-parser.mk
+ delete mode 100644 package/perl/perl-fix-Module-Build.patch
+ create mode 100644 package/pkg-perl.mk
+ create mode 100644 package/qemu/Config.in.host
+ create mode 100755 support/scripts/scancpan
 
-diff --git a/package/Makefile.in b/package/Makefile.in
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -332,16 +332,6 @@ ifneq ($(BR2_LARGEFILE),y)
- DISABLE_LARGEFILE= --disable-largefile
- endif
- 
--# The configure option varies, but since unknown options are ignored
--# we can pass all of them.
--DISABLE_DOCUMENTATION = \
--	--disable-gtk-doc \
--	--disable-doc \
--	--disable-docs \
--	--disable-documentation \
--	--with-xmlto=no \
--	--with-fop=no
--
- ifeq ($(BR2_INET_IPV6),y)
- DISABLE_IPV6= --enable-ipv6
- else
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -110,7 +110,12 @@ define $(2)_CONFIGURE_CMDS
- 		--exec-prefix=/usr \
- 		--sysconfdir=/etc \
- 		--program-prefix="" \
--		$$(DISABLE_DOCUMENTATION) \
-+		--disable-gtk-doc \
-+		--disable-doc \
-+		--disable-docs \
-+		--disable-documentation \
-+		--with-xmlto=no \
-+		--with-fop=no
- 		$$(DISABLE_NLS) \
- 		$$(DISABLE_LARGEFILE) \
- 		$$(DISABLE_IPV6) \
+-- 
+1.7.9.5
