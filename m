@@ -1,35 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 05 Feb 2014 08:49:08 +0100
-Subject: [Buildroot] Broken pread() on ARM
-In-Reply-To: <CAKgsxVSJAW73vXdkKQFLZOYp3qzZm9qwF5+p0NUtUUSnzsFZtQ@mail.gmail.com>
- (Justin Maggard's message of "Tue, 4 Feb 2014 16:21:01 -0800")
-References: <CAKgsxVRjJoJfk1UkXA4kMnt+TxtSfHgduyPjeF8gmrZTxFOvGw@mail.gmail.com>
- <CAKgsxVSJAW73vXdkKQFLZOYp3qzZm9qwF5+p0NUtUUSnzsFZtQ@mail.gmail.com>
-Message-ID: <87siry2e4r.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 05 Feb 2014 08:51:30 +0100
+Subject: [Buildroot] nios2: to strace or to !strace
+In-Reply-To: <CAAEAJfBELMmNx6=6uwu_ozD6N0PsKNvTK-YRNj7bo5EPbbGhwA@mail.gmail.com>
+ ("Ezequiel =?utf-8?Q?Garc=C3=ADa=22's?= message of "Tue, 4 Feb 2014
+ 21:42:42 -0200")
+References: <CAAEAJfDK4_XyJz-4e24Y83G7sCNBizA-c2vcHXf=JOxVKjp8AA@mail.gmail.com>
+ <CAAEAJfBELMmNx6=6uwu_ozD6N0PsKNvTK-YRNj7bo5EPbbGhwA@mail.gmail.com>
+Message-ID: <87ha8e2e0t.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Justin" == Justin Maggard <jmaggard10@gmail.com> writes:
+>>>>> "Ezequiel" == Ezequiel Garc?a <ezequiel@vanguardiasur.com.ar> writes:
 
-Hi,
+ > On 4 February 2014 18:23, Ezequiel Garc?a <ezequiel@vanguardiasur.com.ar> wrote:
+ > [..]
+ >> 
+ >> So the strace people seem a bit reluctant [2] to take the nios2
+ >> support, and suggested
+ >> to wait until the kernel support is upstreamed.
+ >> 
 
- > Okay, it looks like some of the pread/pwrite changes that have made
- > their way into the uClibc 0.9.33 branch fail to consider some
- > architectures.  I have made a rather odd-looking change locally that
- > makes it work for me on my ARM platform, which uses _syscall6() for
- > pread() and pread64() if __UCLIBC_TRUNCATE64_HAS_4_ARGS__ is defined.
- > Would that be worth sending to the list, or would it be better to fix
- > it some other way?
+ > As usual, spoke too soon: we're still discussing about supporting
+ > this on strace upstream.
 
-The best approach would be to get it fixed in uClibc git (and preferably
-to get them to finally release 0.9.33.3).
+Yes, I see ;)
 
-This particular issue also fixed on the uClibc master branch (E.G. what
-should become 0.9.34) - But when I had a look at it, it didn't seem
-trivial to backport.
+Lets wait and see what you and the strace guys decide.
 
 -- 
-Bye, Peter Korsgaard
+Bye, Peter Korsgaard 
