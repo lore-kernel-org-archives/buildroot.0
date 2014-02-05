@@ -1,28 +1,30 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 5 Feb 2014 11:49:08 +0000
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-02-04
-In-Reply-To: <20140205073010.8762B101A86@stock.ovh.net>
-References: <20140205073010.8762B101A86@stock.ovh.net>
-Message-ID: <52F22534.6030403@imgtec.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 5 Feb 2014 12:54:08 +0100
+Subject: [Buildroot] [PATCH] filter BR2_DEFCONFIG out of defconfig files
+In-Reply-To: <1391523148-30887-1-git-send-email-jeremy.rosen@openwide.fr>
+References: <1391523148-30887-1-git-send-email-jeremy.rosen@openwide.fr>
+Message-ID: <CAAXf6LVM939GcFkXA6UkifUEs9H6sQnKgDqW8uBHQD3_JK0-OA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/05/2014 07:30 AM, Thomas Petazzoni wrote:
-> Classification of failures by reason
-> ====================================
->                    bcusdk-0.0.5 | 1
+Hi,
 
-> Detail of failures
-> ===================
->      mipsel |                   bcusdk-0.0.5 | NOK | http://autobuild.buildroot.net/results/32ad17192194171a4b9b5334731d32a323e2b007/
+On Tue, Feb 4, 2014 at 3:12 PM, J?r?my Rosen <jeremy.rosen@openwide.fr> wrote:
+> When it is set, BR2_DEFCONFIG is saved like any config variable.
+> However, at this point it is a completely expanded, absolute path
+> It is not a good idea to save absolute paths in defconfig files
+> moreover it makes little sense to save the defconfig location
+> within the defconfig
 
-This failure is *not* present when using the internal BR toolchain. 
-Perhaps the "br-mipsel-o32-full-2013.11-rc2.tar.bz2" toolchain should be 
-upgraded.
+The entire BR2_DEFCONFIG mechanism has never done what I expected.
+What I want is that 'make savedefconfig' (or a similar command) saves
+the configuration back to where it originated from. BR2_DEFCONFIG does
+more or less that, but only if you set the configuration initially
+with 'make defconfig BR2_DEFCONFIG=...' instead of the normal 'make
+xxxx_defconfig'. Isn't this possible to achieve?
 
--- 
-Vincent
+Best regards,
+Thomas
