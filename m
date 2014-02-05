@@ -1,44 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 5 Feb 2014 12:10:10 +0100
-Subject: [Buildroot] [git commit] infra: remove usage of 4th parameter to
-	inner-generic-package
-Message-ID: <20140205123039.9E3039C783@busybox.osuosl.org>
+Date: Wed, 5 Feb 2014 12:10:44 +0100
+Subject: [Buildroot] [git commit] infra: remove unused helper function
+	pkgparentdir
+Message-ID: <20140205123039.B23BF9C7D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ac57c640c6e2d605f25d150bdede17f6f94edd76
+commit: http://git.buildroot.net/buildroot/commit/?id=582af5884ff98f292b4f15f8379e6bb9004f5c51
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In preparation of the removal of the 4th parameter to inner-generic-package
-and the pkgparentdir helper function, this patch removes the direct usage of
-this 4th parameter. The remaining usage
-ifeq ($(4),boot/)
-can become
-$(filter boot/%,$(pkgdir))
-instead (and similar for toolchain).
+Thanks to the previous patches, no-one is using pkgparentdir anymore, so
+remove it.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-generic.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/pkg-utils.mk |    5 +----
+ 1 files changed, 1 insertions(+), 4 deletions(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index e04a93e..5778c5c 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -516,9 +516,9 @@ $$($(2)_TARGET_DIRCLEAN):		PKG=$(2)
- # kernel case, the bootloaders case, and the normal packages case.
- ifeq ($(1),linux)
- $(2)_KCONFIG_VAR = BR2_LINUX_KERNEL
--else ifeq ($(4),boot/)
-+else ifneq ($(filter boot/%,$(pkgdir)),)
- $(2)_KCONFIG_VAR = BR2_TARGET_$(2)
--else ifeq ($(4),toolchain/)
-+else ifneq ($(filter toolchain/%,$(pkgdir)),)
- $(2)_KCONFIG_VAR = BR2_$(2)
- else
- $(2)_KCONFIG_VAR = BR2_PACKAGE_$(2)
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index 51dd738..91a1981 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -55,12 +55,9 @@ endef
+ # Helper functions to determine the name of a package and its
+ # directory from its makefile directory, using the $(MAKEFILE_LIST)
+ # variable provided by make. This is used by the *TARGETS macros to
+-# automagically find where the package is located. Note that the
+-# pkgdir macro is carefully written to handle the case of the Linux
+-# package, for which the package directory is an empty string.
++# automagically find where the package is located.
+ pkgdir       = $(dir $(lastword $(MAKEFILE_LIST)))
+ pkgname      = $(lastword $(subst /, ,$(pkgdir)))
+-pkgparentdir = $(patsubst %$(pkgname)/,%,$(pkgdir))
+ 
+ # Define extractors for different archive suffixes
+ INFLATE.bz2  = $(BZCAT)
