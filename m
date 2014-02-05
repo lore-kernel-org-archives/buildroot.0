@@ -1,127 +1,69 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 05 Feb 2014 14:50:59 +0100
-Subject: [Buildroot] [PATCH 7 of 8 v2] kernel-headers: remove deprecated
- versions 3.1, 3.3, 3.5
+Date: Wed, 05 Feb 2014 14:51:00 +0100
+Subject: [Buildroot] [PATCH 8 of 8 v2] infra: remove separate definition of
+ DISABLE_DOCUMENTATION
 In-Reply-To: <patchbomb.1391608252@argentina>
 References: <patchbomb.1391608252@argentina>
-Message-ID: <db89333313976d299c34.1391608259@argentina>
+Message-ID: <2c0482e0d65779af52cf.1391608260@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Linux kernel headers versions 3.1, 3.3, and 3.5 have been deprecated
-since 2013.02 and thus can be removed in 2014.02.
-For legacy handling, we automatically select versions 3.2, 3.4, and 3.6,
-respectively.
+Since we now always disable documentation on target, there is no need to
+have a separate variable DISABLE_DOCUMENTATION anymore.
 
-Additionally, this patch removes the now unused symbol
-BR2_DEPRECATED_SINCE_2013_02.
-
+Suggested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
-v2: no changes
+v2: new patch
 
- Config.in                            |   4 ----
- Config.in.legacy                     |  30 ++++++++++++++++++++++++++++++
- package/linux-headers/Config.in.host |  15 ---------------
- 3 files changed, 30 insertions(+), 19 deletions(-)
+Note: I'm not 100% convinced by this patch, but I post it to ignite the
+discussion. The advantage of the separate variable is the grouping of the
+options. Without it, it is not so clear that --with-fop is related to
+documentation, unless you already know what fop is. Also, there is no clear
+place to put the comment regarding passing multiple options, so I just
+removed it (losing some information).
+Both problems could be solved by keeping the variable but moving it to
+autotools.mk, but this is then no longer consistent with the other
+DISABLE_xxx variables.
 
-diff --git a/Config.in b/Config.in
---- a/Config.in
-+++ b/Config.in
-@@ -264,10 +264,6 @@ config BR2_DEPRECATED
+diff --git a/package/Makefile.in b/package/Makefile.in
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -332,16 +332,6 @@ ifneq ($(BR2_LARGEFILE),y)
+ DISABLE_LARGEFILE= --disable-largefile
+ endif
  
- if BR2_DEPRECATED
- 
--config BR2_DEPRECATED_SINCE_2013_02
--	bool
--	default y
+-# The configure option varies, but since unknown options are ignored
+-# we can pass all of them.
+-DISABLE_DOCUMENTATION = \
+-	--disable-gtk-doc \
+-	--disable-doc \
+-	--disable-docs \
+-	--disable-documentation \
+-	--with-xmlto=no \
+-	--with-fop=no
 -
- config BR2_DEPRECATED_SINCE_2013_05
- 	bool
- 	default y
-diff --git a/Config.in.legacy b/Config.in.legacy
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -101,6 +101,36 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2014.02"
- 
-+config BR2_KERNEL_HEADERS_3_1
-+	bool "kernel headers version 3.1.x are no longer supported"
-+	select BR2_KERNEL_HEADERS_3_2
-+	select BR2_LEGACY
-+	help
-+	  Version 3.1.x of the Linux kernel headers have been deprecated
-+	  for more than four buildroot releases and are now removed.
-+	  As an alternative, version 3.2.x of the headers have been
-+	  automatically selected in your configuration.
-+
-+config BR2_KERNEL_HEADERS_3_3
-+	bool "kernel headers version 3.3.x are no longer supported"
-+	select BR2_KERNEL_HEADERS_3_4
-+	select BR2_LEGACY
-+	help
-+	  Version 3.3.x of the Linux kernel headers have been deprecated
-+	  for more than four buildroot releases and are now removed.
-+	  As an alternative, version 3.4.x of the headers have been
-+	  automatically selected in your configuration.
-+
-+config BR2_KERNEL_HEADERS_3_5
-+	bool "kernel headers version 3.5.x are no longer supported"
-+	select BR2_KERNEL_HEADERS_3_6
-+	select BR2_LEGACY
-+	help
-+	  Version 3.5.x of the Linux kernel headers have been deprecated
-+	  for more than four buildroot releases and are now removed.
-+	  As an alternative, version 3.6.x of the headers have been
-+	  automatically selected in your configuration.
-+
- config BR2_GDB_VERSION_7_2
- 	bool "gdb 7.2.x is no longer supported"
- 	select BR2_GDB_VERSION_7_5
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -18,26 +18,14 @@ choice
- 		bool "Linux 3.0.x kernel headers"
- 		depends on !BR2_arc
- 
--	config BR2_KERNEL_HEADERS_3_1
--		bool "Linux 3.1.x kernel headers"
--		depends on BR2_DEPRECATED_SINCE_2013_02 && !BR2_arc
--
- 	config BR2_KERNEL_HEADERS_3_2
- 		bool "Linux 3.2.x kernel headers"
- 		depends on !BR2_arc
- 
--	config BR2_KERNEL_HEADERS_3_3
--		bool "Linux 3.3.x kernel headers"
--		depends on BR2_DEPRECATED_SINCE_2013_02 && !BR2_arc
--
- 	config BR2_KERNEL_HEADERS_3_4
- 		bool "Linux 3.4.x kernel headers"
- 		depends on !BR2_arc
- 
--	config BR2_KERNEL_HEADERS_3_5
--		bool "Linux 3.5.x kernel headers"
--		depends on BR2_DEPRECATED_SINCE_2013_02 && !BR2_arc
--
- 	config BR2_KERNEL_HEADERS_3_6
- 		bool "Linux 3.6.x kernel headers"
- 		depends on BR2_DEPRECATED_SINCE_2013_05 && !BR2_arc
-@@ -83,11 +71,8 @@ config BR2_DEFAULT_KERNEL_VERSION
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
--	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
- 	default "3.2.54"	if BR2_KERNEL_HEADERS_3_2
--	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
- 	default "3.4.78"	if BR2_KERNEL_HEADERS_3_4
--	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
- 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
- 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
- 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
+ ifeq ($(BR2_INET_IPV6),y)
+ DISABLE_IPV6= --enable-ipv6
+ else
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -110,7 +110,12 @@ define $(2)_CONFIGURE_CMDS
+ 		--exec-prefix=/usr \
+ 		--sysconfdir=/etc \
+ 		--program-prefix="" \
+-		$$(DISABLE_DOCUMENTATION) \
++		--disable-gtk-doc \
++		--disable-doc \
++		--disable-docs \
++		--disable-documentation \
++		--with-xmlto=no \
++		--with-fop=no
+ 		$$(DISABLE_NLS) \
+ 		$$(DISABLE_LARGEFILE) \
+ 		$$(DISABLE_IPV6) \
