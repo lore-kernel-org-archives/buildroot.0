@@ -1,38 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 06 Feb 2014 00:00:22 +0100
-Subject: [Buildroot] [PATCH] dependencies.sh: cleanup dependencies.sh
-In-Reply-To: <CAGduivzutuoD1mhfg6Oxo1DYKz+C+kak62Q0c=g_v7TehC3vuA@mail.gmail.com>
- (Maxime Hadjinlian's message of "Tue, 4 Feb 2014 23:35:23 +0100")
-References: <1391459047-23665-1-git-send-email-maxime.hadjinlian@gmail.com>
- <52F1132F.1050008@lucaceresoli.net>
- <CAGduivzutuoD1mhfg6Oxo1DYKz+C+kak62Q0c=g_v7TehC3vuA@mail.gmail.com>
-Message-ID: <87vbwtyxkp.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 5 Feb 2014 23:58:04 +0100
+Subject: [Buildroot] [git commit] dependencies.sh: stop stray a.out being
+	created for ia32 compiler test
+Message-ID: <20140205230101.0D2FD9C819@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=2e8dd9563dbb39b74b0c628295a671ab81e6182b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- >> Are you really suggesting we should remove all nesting? Well, I guess
- >> there's been a problem with the e-mail or something...
+If the grub package is selected it also selects
+BR2_HOSTARCH_NEEDS_IA32_COMPILER.  This triggers a test in dependencies.sh
+to verify the host compiler can build 32 bit executables.  Currently this
+test does not set any output for the compiler which causes a stray a.out
+to be create outside the output directory.  This patch sets the compiler
+output to /dev/null so no a.out is created but the test is still performed.
 
- > Well, I asked Peter before doing this, the file contained mixed indents. We
- > thought it would be nice to have a consistent indent with the Mk files.
+Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ support/dependencies/dependencies.sh |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- > But if we find we don't want that because it removes clarity in the code. I can
- > perfectly resend with only the space/tab fixed.
-
- > I really don't have a strong opinion on this one. Thomas Petazzoni and Yann E.
- > Morin also found it disturbing.
- > Peter what is your decision ?
-
-Sorry, I think I misunderstood you when you asked. I thought you
-referred to indentation with a tab like make, not to drop all
-indentation.
-
-I would prefer to keep it like it is now, just with consistent indentation.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index 47d4d10..0e22ba0 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -207,7 +207,7 @@ if grep -q ^BR2_HOSTARCH_NEEDS_IA32_LIBS=y $BUILDROOT_CONFIG ; then
+ fi
+ 
+ if grep -q ^BR2_HOSTARCH_NEEDS_IA32_COMPILER=y $BUILDROOT_CONFIG ; then
+-    if ! echo "int main(void) {}" | gcc -m32 -x c - ; then
++    if ! echo "int main(void) {}" | gcc -m32 -x c - -o /dev/null ; then
+ 	echo
+ 	echo "Your Buildroot configuration needs a compiler capable of building 32 bits binaries."
+ 	echo "If you're running a Debian/Ubuntu distribution, install the gcc-multilib package."
