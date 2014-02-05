@@ -1,46 +1,53 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 05 Feb 2014 23:43:40 +0100
+Date: Wed, 05 Feb 2014 23:46:45 +0100
 Subject: [Buildroot] [PATCH] filter BR2_DEFCONFIG out of defconfig files
-In-Reply-To: <1391523148-30887-1-git-send-email-jeremy.rosen@openwide.fr>
+In-Reply-To: <CAAXf6LVM939GcFkXA6UkifUEs9H6sQnKgDqW8uBHQD3_JK0-OA@mail.gmail.com>
 References: <1391523148-30887-1-git-send-email-jeremy.rosen@openwide.fr>
-Message-ID: <52F2BE9C.1060204@mind.be>
+ <CAAXf6LVM939GcFkXA6UkifUEs9H6sQnKgDqW8uBHQD3_JK0-OA@mail.gmail.com>
+Message-ID: <52F2BF55.3050200@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/02/14 15:12, J?r?my Rosen wrote:
-> When it is set, BR2_DEFCONFIG is saved like any config variable.
-> However, at this point it is a completely expanded, absolute path
-> It is not a good idea to save absolute paths in defconfig files
-> moreover it makes little sense to save the defconfig location
-> within the defconfig
+On 05/02/14 12:54, Thomas De Schampheleire wrote:
+> Hi,
 > 
-> Signed-off-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
+> On Tue, Feb 4, 2014 at 3:12 PM, J?r?my Rosen <jeremy.rosen@openwide.fr> wrote:
+>> When it is set, BR2_DEFCONFIG is saved like any config variable.
+>> However, at this point it is a completely expanded, absolute path
+>> It is not a good idea to save absolute paths in defconfig files
+>> moreover it makes little sense to save the defconfig location
+>> within the defconfig
+> 
+> The entire BR2_DEFCONFIG mechanism has never done what I expected.
+> What I want is that 'make savedefconfig' (or a similar command) saves
+> the configuration back to where it originated from. BR2_DEFCONFIG does
+> more or less that, but only if you set the configuration initially
+> with 'make defconfig BR2_DEFCONFIG=...' instead of the normal 'make
+> xxxx_defconfig'. Isn't this possible to achieve?
 
- Jeremy, I guess this patch is superseded by mine?
+ Sure, quite easily. However, is that really what we want?
+
+
+make rpi_defconfig
+add some packages
+test test test
+add more packages
+test test test
+make savedefconfig
+
+Oops I've just overwritten rpi_defconfig.
+
+
+ It's probably what you want when using BR2_EXTERNAL, but not when using
+a buildroot defconfig. Unless, of course, you don't use BR2_EXTERNAL but
+add directly to the buildroot directory...
+
 
  Regards,
  Arnout
-
-> ---
->  Makefile | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Makefile b/Makefile
-> index 4a675d4..f63a058 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -772,6 +772,7 @@ savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
->  	@$(COMMON_CONFIG_ENV) $< \
->  		--savedefconfig=$(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig) \
->  		$(CONFIG_CONFIG_IN)
-> +	sed -i '/^BR2_DEFCONFIG=/d' $(DEFCONFIG)
->  
->  # check if download URLs are outdated
->  source-check:
-> 
 
 
 -- 
