@@ -1,32 +1,28 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 5 Feb 2014 11:56:03 +0100
-Subject: [Buildroot] Report of the Buildroot Developer Meeting at FOSDEM
-	2014
-In-Reply-To: <52F171F3.5020807@mind.be>
-References: <52F171F3.5020807@mind.be>
-Message-ID: <CAAXf6LUkHAzy7UUwVDye_0J1Ux5eOohf0jMAFmgyyjtZbzTKUQ@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 05 Feb 2014 12:06:43 +0100
+Subject: [Buildroot] [PATCH] arch: remove sh2, sh3 and sh3eb support
+In-Reply-To: <1391523934-8394-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 4 Feb 2014 15:25:34 +0100")
+References: <1391523934-8394-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87ppn124zg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Wed, Feb 5, 2014 at 12:04 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
->  Hi all,
->
->  I've finished the report of the Buildroot Developer Meeting that was
-> held the last two days in conjunction with FOSDEM. You can find it at
-> http://elinux.org/Buildroot:DeveloperDaysFOSDEM2014 .
->
->  For the attendants, can you please all check the Summary section if my
-> conclusions are correct?
+ > This patch removes the sh2, sh3 and sh3eb support, because the user
+ > base is inexistent, and the Linux support for these architectures is
+ > poor. The sh2a support is preserved, because at least one user
+ > expressed interest in this architecture, and is actually using it:
 
-Summary section seems correct. I haven't read the entire report
-though, that will take some more time...
+ >   http://lists.busybox.net/pipermail/buildroot/2013-April/070399.html
 
-Thanks for your hard work on this!
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Best regards,
-Thomas
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
