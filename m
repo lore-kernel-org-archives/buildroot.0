@@ -1,56 +1,130 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 05 Feb 2014 11:50:06 +0100
-Subject: [Buildroot] [PATCH 0 of 7] Remove remaining deprecated packages for
-	2014.02
-Message-ID: <patchbomb.1391597406@argentina>
+Date: Wed, 05 Feb 2014 11:50:07 +0100
+Subject: [Buildroot] [PATCH 1 of 7] xstroke: remove deprecated package
+In-Reply-To: <patchbomb.1391597406@argentina>
+References: <patchbomb.1391597406@argentina>
+Message-ID: <b712c25d9a2b396e3976.1391597407@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-This patch series removes all deprecated packages/features that we are
-allowed to remove for 2014.02 (deprecated since 2013.02 or earlier).
+xstroke has been deprecated since 2013.02 and thus can be removed in
+2014.02.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
- Config.in                                              |  18 --
- Config.in.legacy                                       |  86 ++++++++++++++
- Makefile                                               |   2 -
- package/Config.in                                      |   4 -
- package/Makefile.in                                    |   2 -
- package/autoconf/Config.in                             |  10 -
- package/autoconf/autoconf.mk                           |   6 -
- package/automake/Config.in                             |  11 -
- package/automake/automake.mk                           |   3 -
- package/avahi/avahi.mk                                 |   2 +-
- package/berkeleydb/berkeleydb.mk                       |   4 -
- package/ccache/Config.in                               |  12 -
- package/ccache/ccache.mk                               |   1 -
- package/enlightenment/enlightenment.mk                 |   2 -
- package/ffmpeg/ffmpeg.mk                               |   2 +-
- package/gdb/Config.in.host                             |  12 -
- package/hdparm/hdparm.mk                               |   7 -
- package/kmod/kmod.mk                                   |   5 +-
- package/libbsd/libbsd.mk                               |   6 -
- package/linux-headers/Config.in.host                   |  15 --
- package/logsurfer/logsurfer.mk                         |  13 --
- package/ncurses/ncurses.mk                             |   2 +-
- package/netsnmp/netsnmp.mk                             |   4 +-
- package/opencv/opencv.mk                               |   4 +-
- package/perl/perl.mk                                   |   4 -
- package/pppd/pppd.mk                                   |  10 -
- package/pulseaudio/pulseaudio.mk                       |   2 +-
- package/python-pygame/python-pygame.mk                 |   2 -
- package/samba/samba.mk                                 |   2 -
- package/udisks/udisks.mk                               |   3 +-
- package/vala/vala.mk                                   |  10 +-
- package/vim/vim.mk                                     |   2 -
- package/x11r7/xproto_xcmiscproto/xproto_xcmiscproto.mk |   2 +-
- package/x11r7/xproto_xextproto/xproto_xextproto.mk     |   2 +-
- package/xstroke/Config.in                              |  14 --
- package/xstroke/xstroke-fix-link-issues.patch          |  35 -----
- package/xstroke/xstroke.mk                             |  13 --
- 37 files changed, 98 insertions(+), 236 deletions(-)
+ Config.in.legacy                              |   7 ++++
+ package/Config.in                             |   1 -
+ package/xstroke/Config.in                     |  14 ---------
+ package/xstroke/xstroke-fix-link-issues.patch |  35 -----------------------
+ package/xstroke/xstroke.mk                    |  13 --------
+ 5 files changed, 7 insertions(+), 63 deletions(-)
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -101,6 +101,13 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2014.02"
+ 
++config BR2_PACKAGE_XSTROKE
++	bool "xstroke has been removed"
++	select BR2_LEGACY
++	help
++	  The 'xstroke' package has been removed since it has been
++	  deprecated for more than four buildroot releases.
++
+ config BR2_PACKAGE_LZMA
+ 	bool "lzma target package has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -235,7 +235,6 @@ source "package/torsmo/Config.in"
+ source "package/wmctrl/Config.in"
+ source "package/x11vnc/Config.in"
+ source "package/xscreensaver/Config.in"
+-source "package/xstroke/Config.in"
+ source "package/xterm/Config.in"
+ source "package/xvkbd/Config.in"
+ 
+diff --git a/package/xstroke/Config.in b/package/xstroke/Config.in
+deleted file mode 100644
+--- a/package/xstroke/Config.in
++++ /dev/null
+@@ -1,14 +0,0 @@
+-config BR2_PACKAGE_XSTROKE
+-	bool "xstroke"
+-	depends on BR2_PACKAGE_XORG7
+-	# dead upstream, probably not many users
+-	depends on BR2_DEPRECATED_SINCE_2013_02
+-	select BR2_PACKAGE_XLIB_LIBXFT
+-	select BR2_PACKAGE_XLIB_LIBXTST
+-	select BR2_PACKAGE_XLIB_LIBXPM
+-	select BR2_PACKAGE_XLIB_LIBXRENDER
+-	select BR2_PACKAGE_XLIB_LIBXEXT
+-	help
+-	  Handwriting recognition for X
+-
+-	  http://mirror.egtvedt.no/avr32linux.org/twiki/pub/Main/XStroke
+diff --git a/package/xstroke/xstroke-fix-link-issues.patch b/package/xstroke/xstroke-fix-link-issues.patch
+deleted file mode 100644
+--- a/package/xstroke/xstroke-fix-link-issues.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-Fix link issues by linking against all needed libraries
+-
+-Since gcc 4.6, all libraries that are directly used must be explicitly
+-passed on the command line. In the case of xstroke, linking against
+-Xrender, Xext and dl was missing. For the first two, they are added
+-through addition PKG_CHECK_MODULES() checks, for the latter, it is
+-added next to -lm and -lpthread in Makefile.am.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Index: b/Makefile.am
+-===================================================================
+---- a/Makefile.am
+-+++ b/Makefile.am
+-@@ -40,7 +40,7 @@
+- BUILT_SOURCES = rec_parse.h rec_lex.h rec_lex.c
+- AM_YFLAGS = -d
+- 
+--xstroke_LDADD = @XSTROKE_LIBS@ -lm -lpthread $(X_LIBS) -lXpm -lXtst
+-+xstroke_LDADD = @XSTROKE_LIBS@ -ldl -lm -lpthread $(X_LIBS) -lXpm -lXtst
+- AM_CFLAGS = @XSTROKE_CFLAGS@ -DXSTROKE_CONF_DIR='"$(sysconfdir)/xstroke"' $(X_CFLAGS)
+- 
+- EXTRA_DIST = xstroke_active.xpm xstroke_inactive.xpm etc/alphabet
+-Index: b/configure.ac
+-===================================================================
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -26,7 +26,7 @@
+- AC_CHECK_FUNCS([gettimeofday localtime_r])
+- 
+- AC_PATH_XTRA
+--PKG_CHECK_MODULES(XSTROKE, xft)
+-+PKG_CHECK_MODULES(XSTROKE, [xft xrender xext])
+- 
+- AC_CONFIG_FILES([Makefile])
+- AC_OUTPUT
+diff --git a/package/xstroke/xstroke.mk b/package/xstroke/xstroke.mk
+deleted file mode 100644
+--- a/package/xstroke/xstroke.mk
++++ /dev/null
+@@ -1,13 +0,0 @@
+-################################################################################
+-#
+-# xstroke
+-#
+-################################################################################
+-
+-XSTROKE_VERSION = 0.6
+-XSTROKE_SITE = http://mirror.egtvedt.no/avr32linux.org/twiki/pub/Main/XStroke
+-
+-XSTROKE_DEPENDENCIES = xlib_libXft xlib_libXtst xlib_libXpm xlib_libXrender xlib_libXext
+-XSTROKE_AUTORECONF = YES
+-
+-$(eval $(autotools-package))
