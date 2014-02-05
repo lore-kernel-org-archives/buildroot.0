@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 05 Feb 2014 07:56:38 +0100
-Subject: [Buildroot] [PATCH v2 2/7] libdrm: Remove dependency towards X11
-In-Reply-To: <BLU0-SMTP338F1C8C0E0E7FD631BCFC0D9AA0@phx.gbl>
+Date: Wed, 05 Feb 2014 07:59:40 +0100
+Subject: [Buildroot] [PATCH v2 4/7] mesa3d: pull out from x11
+In-Reply-To: <BLU0-SMTP224311C980B3CDE2A4B1CB4D9AA0@phx.gbl>
 References: <1391537725-15894-1-git-send-email-berndkuhls@hotmail.com>
- <BLU0-SMTP338F1C8C0E0E7FD631BCFC0D9AA0@phx.gbl>
-Message-ID: <52F1E0A6.2060409@mind.be>
+ <BLU0-SMTP224311C980B3CDE2A4B1CB4D9AA0@phx.gbl>
+Message-ID: <52F1E15C.6070307@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,82 +14,67 @@ To: buildroot@busybox.net
 On 04/02/14 19:15, Bernd Kuhls wrote:
 > Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
 > ---
-> v4: rebased v3
-> v3: rebased v2
-> v2: http://patchwork.ozlabs.org/patch/304116/ (Paul Cercueil)
-> v1: http://patchwork.ozlabs.org/patch/278297/ (Spenser Gilliland)
+> v2: rebased v1
+> v1: rebased Spenser Gilliland?s patch:
+>     http://patchwork.ozlabs.org/patch/278302/
 
- Oh, something I forgot to mention in the previous patch as well: you
-should keep the Signed-off-by of the two previous authors, so they get
-their due credit (which is required since they published their patches
-under GPL).
-
- Otherwise looks good to me, but one more remark below.
+ Again, retain the original SoB.
 
 > 
->  package/libdrm/Config.in |    6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+>  package/Config.in                                  |    1 +
+>  package/{x11r7 => }/mesa3d/Config.in               |    0
+>  .../{x11r7 => }/mesa3d/mesa3d-uclibc-locale.patch  |    0
+>  package/{x11r7 => }/mesa3d/mesa3d.mk               |    0
+>  package/x11r7/Config.in                            |    1 -
+>  5 files changed, 1 insertion(+), 1 deletion(-)
+>  rename package/{x11r7 => }/mesa3d/Config.in (100%)
+>  rename package/{x11r7 => }/mesa3d/mesa3d-uclibc-locale.patch (100%)
+>  rename package/{x11r7 => }/mesa3d/mesa3d.mk (100%)
 > 
-> diff --git a/package/libdrm/Config.in b/package/libdrm/Config.in
-> index 4d7646b..e382a3a 100644
-> --- a/package/libdrm/Config.in
-> +++ b/package/libdrm/Config.in
-> @@ -1,7 +1,6 @@
->  config BR2_PACKAGE_LIBDRM
->  	bool "libdrm"
->  	select BR2_PACKAGE_LIBPTHREAD_STUBS
-> -	depends on BR2_PACKAGE_XORG7
->  	depends on BR2_LARGEFILE
->  	help
->  	  Direct Rendering Manager
-> @@ -14,6 +13,7 @@ menu "DRM Drivers"
->  
->  config BR2_PACKAGE_LIBDRM_INTEL
->  	bool "intel"
-> +	depends on BR2_PACKAGE_XORG7
->  	select BR2_PACKAGE_LIBATOMIC_OPS
->  	select BR2_PACKAGE_XLIB_LIBPCIACCESS
->  	depends on BR2_i386 || BR2_x86_64
-> @@ -22,6 +22,7 @@ config BR2_PACKAGE_LIBDRM_INTEL
->  
->  config BR2_PACKAGE_LIBDRM_RADEON
->  	bool "radeon"
-> +	depends on BR2_PACKAGE_XORG7
->  	select BR2_PACKAGE_LIBATOMIC_OPS
->  	select BR2_PACKAGE_XLIB_LIBPCIACCESS
->  	depends on BR2_i386 || BR2_x86_64
-> @@ -30,6 +31,7 @@ config BR2_PACKAGE_LIBDRM_RADEON
->  
->  config BR2_PACKAGE_LIBDRM_NOUVEAU
->  	bool "nouveau"
-> +	depends on BR2_PACKAGE_XORG7
->  	select BR2_PACKAGE_XLIB_LIBPCIACCESS
->  	depends on BR2_i386 || BR2_x86_64
->  	help
-> @@ -37,6 +39,7 @@ config BR2_PACKAGE_LIBDRM_NOUVEAU
->  
->  config BR2_PACKAGE_LIBDRM_VMWGFX
->  	bool "vmwgfx"
-> +	depends on BR2_PACKAGE_XORG7
->  	select BR2_PACKAGE_XLIB_LIBPCIACCESS
->  	depends on BR2_i386 || BR2_x86_64
->  	help
+> diff --git a/package/Config.in b/package/Config.in
+> index f4903ba..3baf5eb 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -314,6 +314,7 @@ source "package/lvm2/Config.in"
+>  source "package/mdadm/Config.in"
+>  source "package/media-ctl/Config.in"
+>  source "package/memtester/Config.in"
+> +source "package/mesa3d/Config.in"
 
- So only the three experimental ARM drivers work without Xorg?
+ Maybe this was commented on before, but: Hardware handling? Doesn't it
+fit better in either Graphic libraries or Libraries/Graphic?
 
- Not for this patch, but does libdrm do anything useful when no driver is
-selected? Shouldn't it have a dependency on x86 || arm so that at least
-one driver can be selected?
 
  Regards,
  Arnout
 
-> @@ -65,5 +68,4 @@ endmenu
->  endif
->  
->  comment "libdrm needs a toolchain w/ largefile"
-> -	depends on BR2_PACKAGE_XORG7
->  	depends on !BR2_LARGEFILE
+>  source "package/minicom/Config.in"
+>  source "package/nanocom/Config.in"
+>  source "package/neard/Config.in"
+> diff --git a/package/x11r7/mesa3d/Config.in b/package/mesa3d/Config.in
+> similarity index 100%
+> rename from package/x11r7/mesa3d/Config.in
+> rename to package/mesa3d/Config.in
+> diff --git a/package/x11r7/mesa3d/mesa3d-uclibc-locale.patch b/package/mesa3d/mesa3d-uclibc-locale.patch
+> similarity index 100%
+> rename from package/x11r7/mesa3d/mesa3d-uclibc-locale.patch
+> rename to package/mesa3d/mesa3d-uclibc-locale.patch
+> diff --git a/package/x11r7/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+> similarity index 100%
+> rename from package/x11r7/mesa3d/mesa3d.mk
+> rename to package/mesa3d/mesa3d.mk
+> diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
+> index 5ef118b..458d09f 100644
+> --- a/package/x11r7/Config.in
+> +++ b/package/x11r7/Config.in
+> @@ -15,7 +15,6 @@ if BR2_PACKAGE_XORG7
+>  	endmenu
+>  	menu "X11R7 Libraries"
+>  		source package/x11r7/libxcb/Config.in
+> -		source package/x11r7/mesa3d/Config.in
+>  		source package/x11r7/xcb-util/Config.in
+>  		source package/x11r7/xcb-util-image/Config.in
+>  		source package/x11r7/xcb-util-keysyms/Config.in
 > 
 
 
