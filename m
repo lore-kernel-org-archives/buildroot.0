@@ -1,69 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Feb 2014 14:34:11 +0100
-Subject: [Buildroot] [PATCH 4 of 7] packages: remove support for
- documentation on target
-In-Reply-To: <CAAXf6LVJTnL67SZ0pSAahtndP_dPCkOHRjFd7bSydwkh__EqJQ@mail.gmail.com>
-References: <patchbomb.1391597406@argentina>
- <ab1e96c7872d5567b2a4.1391597410@argentina>
- <20140205134957.463211f6@skate>
- <CAAXf6LV0DwSccqT8Ur7p=NXn70FFka212O4t9pBbsS6t1VmuOQ@mail.gmail.com>
- <20140205141626.654ac08a@skate>
- <CAAXf6LVJTnL67SZ0pSAahtndP_dPCkOHRjFd7bSydwkh__EqJQ@mail.gmail.com>
-Message-ID: <20140205143411.0b6a023d@skate>
+From: Anton Kolesov <Anton.Kolesov@synopsys.com>
+Date: Wed, 5 Feb 2014 13:50:49 +0000
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2014-02-04
+In-Reply-To: <20140205073010.8762B101A86@stock.ovh.net>
+References: <20140205073010.8762B101A86@stock.ovh.net>
+Message-ID: <39A54937CC95F24AA2F794E2D2B66B1356C636FF@de02wembxa.internal.synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Hi Thomas,
 
-On Wed, 5 Feb 2014 14:28:48 +0100, Thomas De Schampheleire wrote:
+>        arc |                audiofile-0.3.6 | NOK |
+> http://autobuild.buildroot.net/results/d88d608e656ee3df374e857a817f0e7f
+> 0e296814/
 
-> Looking at this file, I don't know if your suggestion makes sense.
-> Here is part of the original file:
-> 
-> -----------------------------------
-> KMOD_VERSION = 16
-> KMOD_SOURCE = kmod-$(KMOD_VERSION).tar.xz
-> KMOD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kmod/
-> KMOD_INSTALL_STAGING = YES
-> KMOD_DEPENDENCIES = host-pkgconf
-> HOST_KMOD_DEPENDENCIES = host-pkgconf
-> 
-> # license info for libkmod only, conditionally add more below
-> KMOD_LICENSE = LGPLv2.1+
-> KMOD_LICENSE_FILES = libkmod/COPYING
-> 
-> # static linking not supported, see
-> # https://git.kernel.org/cgit/utils/kernel/kmod/kmod.git/commit/?id=b7016153ec8
-> KMOD_CONF_OPT = --disable-static --enable-shared
-> 
-> # manpages not installed and needs xsltproc
-> HOST_KMOD_CONF_OPT = --disable-manpages
-> KMOD_CONF_OPT += --disable-manpages
-> 
-> ifeq ($(BR2_PACKAGE_ZLIB),y)
-> KMOD_DEPENDENCIES += zlib
-> KMOD_CONF_OPT += --with-zlib
-> endif
-> 
-> ifeq ($(BR2_PACKAGE_XZ),y)
-> KMOD_DEPENDENCIES += xz
-> KMOD_CONF_OPT += --with-xz
-> endif
-> ------------------------------------
-> 
-> I can certainly put the two manpage-related lines above the static
-> linking, but this is just a move in the file, right?
+This one happens because of:
+1) libtool adds libstdc++.la to the dependency_libs
+2) Because of patch 0a4bd19f Buildroot sets LDFLAGS to --static, instead of -static. libtool doesn?t understand the former and passes it to GCC as is.
+3) However because libstdc++.la is in the list of dependencies and libtool doesn't know that linking is static it resolves libstdc++.la to the libstdc++.so instead of libstdc++.a.
+4) So GCC is called with an option --static, but with  shared library as an argument as well, so linker exits with an error.
 
-You're right, I agree my suggestion doesn't make much sense. Just keep
-your patch as it was, it is good.
+Passing -static to libtool instead of --static resolves the issue for me: libstdc++ is resolved to shared object by libtool, but static flag is not passed to the gcc as well. Using -all-static also helps, as it ensures that everything that is passed to gcc is static, including libstdc++. 
 
-Sorry for the noise :/
+I'm not a libtool expert, so I don't know why would it add libstdc++ to the list of dependencies, should it be there? It doesn?t happen for me when I'm not cross-compiling, so I'm not sure if it is libtool that shouldn't add libstdc++ to list (maybe there is something specific about ARC gcc?) or is that Buildroot should be more sensible to what arguments it is passing to gcc or libtool.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Anton Kolesov
