@@ -1,51 +1,36 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Wed,  5 Feb 2014 14:53:00 +0100
-Subject: [Buildroot] [pkg-perl infra V4 9/9] qemu: add a Config.in.host
-In-Reply-To: <1391608380-23240-1-git-send-email-francois.perrad@gadz.org>
-References: <1391608380-23240-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1391608380-23240-10-git-send-email-francois.perrad@gadz.org>
+From: Jeremy Rosen <jeremy.rosen@openwide.fr>
+Date: Wed, 5 Feb 2014 16:22:43 +0100 (CET)
+Subject: [Buildroot] [PATCH 3/3] infra: replace BUILDROOT_CONFIG with
+ BR2_CONFIG.
+In-Reply-To: <2096745862.5053649.1391592298155.JavaMail.root@openwide.fr>
+Message-ID: <82899192.5073088.1391613763374.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-after the removal of cpanminus
+oh, and by the way
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/Config.in.host      |    1 +
- package/qemu/Config.in.host |   10 ++++++++++
- 2 files changed, 11 insertions(+)
- create mode 100644 package/qemu/Config.in.host
-
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 599ab9e..ca047e3 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -12,6 +12,7 @@ source "package/mtools/Config.in.host"
- source "package/omap-u-boot-utils/Config.in.host"
- source "package/openocd/Config.in.host"
- source "package/parted/Config.in.host"
-+source "package/qemu/Config.in.host"
- source "package/sam-ba/Config.in.host"
- source "package/sunxi-tools/Config.in.host"
- source "package/uboot-tools/Config.in.host"
-diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
-new file mode 100644
-index 0000000..cfab922
---- /dev/null
-+++ b/package/qemu/Config.in.host
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_HOST_QEMU
-+	bool "host qemu"
-+	help
-+	  QEMU is a generic and open source machine emulator and virtualizer.
-+
-+	  In user mode emulation, QEMU runs single cross-compiled programs.
-+	  Fast cross-compilation and cross-debugging are the main targets
-+	  for user-mode emulation.
-+
-+	  http://qemu.org/
--- 
-1.7.9.5
+Tested-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
+> 
+> > > 
+> > > which is adapted from the mkusers script... and it failed
+> > > silently.
+> > 
+> >  Really silently? sed should complain on stderr that the file
+> >  doesn't
+> > exist, but indeed the script will continue with an empty
+> > BR2_RASPAUDIO_PAACCESS variable.
+> > 
+> 
+> I missed the message in the build log, but indeed, sed did print an
+>  error with the usefull variable content on stderr
+> 
+> so this works as expected and is a case of "this is the best we can
+> do" since we can't proactively check the scripts...
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
