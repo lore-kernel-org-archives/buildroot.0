@@ -1,52 +1,36 @@
-From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Wed, 5 Feb 2014 20:48:01 +0100
-Subject: [Buildroot] [pkg-perl infra V4 9/9] qemu: add a Config.in.host
-In-Reply-To: <20140205170456.2440f114@skate>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 5 Feb 2014 20:48:18 +0100
+Subject: [Buildroot] [pkg-perl infra V4 1/9] pkg-perl: refactor and
+ rename PERL5LIB
+In-Reply-To: <CAB0FRsu9SYR5z6Sw3LApXVV1K+onF7eT0yNGnebr4G1pTvEJHw@mail.gmail.com>
 References: <1391608380-23240-1-git-send-email-francois.perrad@gadz.org>
- <1391608380-23240-10-git-send-email-francois.perrad@gadz.org>
- <20140205170456.2440f114@skate>
-Message-ID: <CAB0FRsswiwUhbho2EU-kTh1ASYYvq+_wHFtojKvfwUL92c85+g@mail.gmail.com>
+ <1391608380-23240-2-git-send-email-francois.perrad@gadz.org>
+ <20140205165500.676cac50@skate>
+ <CAB0FRsu9SYR5z6Sw3LApXVV1K+onF7eT0yNGnebr4G1pTvEJHw@mail.gmail.com>
+Message-ID: <20140205204818.530415bc@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2014-02-05 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
-> Dear Francois Perrad,
->
-> On Wed,  5 Feb 2014 14:53:00 +0100, Francois Perrad wrote:
->> after the removal of cpanminus
->>
->> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
->> ---
->>  package/Config.in.host      |    1 +
->>  package/qemu/Config.in.host |   10 ++++++++++
->>  2 files changed, 11 insertions(+)
->>  create mode 100644 package/qemu/Config.in.host
->
-> I'm not sure this should be part of the Perl patch series. At the
-> meeting, I think we all agreed that building the Qemu user-mode
-> emulation for the host is not useful as it cannot work properly.
-> Instead the qemu package should build the system-mode emulation for the
-> host, which is something that Gustavo proposed some time ago.
->
-> So I'd say to leave Qemu on the side for now, and focus on the Perl
-> side of things in this patch series.
->
+Dear Fran?ois Perrad,
 
-Frank Hunleth needs it.
-See http://lists.busybox.net/pipermail/buildroot/2013-December/084131.html
-& http://patchwork.ozlabs.org/patch/299014/
+On Wed, 5 Feb 2014 20:44:54 +0100, Fran?ois Perrad wrote:
 
-Fran?ois
+> > I think it was requested in a previous review: the commit log should
+> > indicate *why* PERL5LIB should be used instead of PERLLIB.
+> 
+> The official Perl documentation refers only to PERL5LIB.
+> PERLLIB is obsolete, we don't need to be compatible with Perl4.
 
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Thanks for the explanation, but please include it in the commit log for
+the next revision of your perl infrastructure patch series.
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
