@@ -1,55 +1,102 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 05 Feb 2014 13:52:55 +0100
-Subject: [Buildroot] [PATCH v6 3/5] udev: convert to virtual package.
-In-Reply-To: <CAAXf6LUbj5qTnNy7EHEsRhsNwaHk8yX8N=Ja9UFUM2EhOf=qNQ@mail.gmail.com>
- (Thomas De Schampheleire's message of "Wed, 5 Feb 2014 13:31:14
- +0100")
-References: <1389627907-7821-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1389627907-7821-4-git-send-email-eric.le.bihan.dev@free.fr>
- <CAAXf6LXUD2hAt+_0JUyXHgwOGqHVwe4J7-AkekopnR-LixKOAg@mail.gmail.com>
- <20140204121030.GA8125@pc-eric>
- <CAAXf6LUbj5qTnNy7EHEsRhsNwaHk8yX8N=Ja9UFUM2EhOf=qNQ@mail.gmail.com>
-Message-ID: <87d2j1202g.fsf@dell.be.48ers.dk>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 5 Feb 2014 14:10:09 +0100
+Subject: [Buildroot] [PATCH 4 of 7] packages: remove support for
+ documentation on target
+In-Reply-To: <20140205134957.463211f6@skate>
+References: <patchbomb.1391597406@argentina>
+ <ab1e96c7872d5567b2a4.1391597410@argentina>
+ <20140205134957.463211f6@skate>
+Message-ID: <CAAXf6LV0DwSccqT8Ur7p=NXn70FFka212O4t9pBbsS6t1VmuOQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+Hi Thomas,
 
-Hi,
+On Wed, Feb 5, 2014 at 1:49 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Thomas De Schampheleire,
+>
+> On Wed, 05 Feb 2014 11:50:10 +0100, Thomas De Schampheleire wrote:
+>
+>> diff --git a/package/Makefile.in b/package/Makefile.in
+>> --- a/package/Makefile.in
+>> +++ b/package/Makefile.in
+>> @@ -332,7 +332,6 @@ ifneq ($(BR2_LARGEFILE),y)
+>>  DISABLE_LARGEFILE= --disable-largefile
+>>  endif
+>>
+>> -ifneq ($(BR2_HAVE_DOCUMENTATION),y)
+>>  # The configure option varies, but since unknown options are ignored
+>>  # we can pass all of them.
+>>  DISABLE_DOCUMENTATION = \
+>> @@ -342,7 +341,6 @@ DISABLE_DOCUMENTATION = \
+>>       --disable-documentation \
+>>       --with-xmlto=no \
+>>       --with-fop=no
+>> -endif
+>
+> So the DISABLE_DOCUMENTATION variable now always has the same value,
+> and is only used in pkg-autotools.mk in one place. So I believe it
+> makes sense to remove this variable altogether, and simply pass all the
+> appropriate --<something> options directly in the <pkg>_CONFIGURE_CMDS
+> of pkg-autotools.mk.
 
- >> I find it odd that some packages depend on
- >> BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV whereas others depend on
- >> BR2_PACKAGE_UDEV. To me, both symbols are interpreted as "the package needs a
- >> udev daemon to talk to at runtime" (whether via D-Bus or libudev). So I
- >> replaced both with BR2_PACKAGE_HAS_UDEV to be homogeneous. It is true that if
- >> a package depends on BR2_PACKAGE_HAS_UDEV, it is not explicitly said if it is
- >> a runtime or a build dependency. But, AFAIK, programs that want to communicate
- >> with the udev daemon do it via libudev/libgudev, so we end up with a build
- >> dependency.
- >> 
- >> In system/Config.in, I removed BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV because
- >> I want the user to understand the change: he/she should not think of 'udev' as
- >> a package, but as a feature which, at this stage, is only available via eudev.
- >> I could have kept BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV and have it select
- >> BR2_PACKAGE_EUDEV, but I've found it confusing.
- >> 
- >> But I should have added BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV in
- >> Config.in.legacy to migrate to BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV.
- >> 
- >> In the end, the user selects BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV, which
- >> selects BR2_PACKAGE_EUDEV, which in turn selects BR2_PACKAGE_HAS_UDEV. All the
- >> packages depending on it are now available.
+OK.
+By the way, I added on my own todo list that we should try to expand
+the automatically passed options, for example:
+--disable-manpages --disable-man-pages --disable-manuals etc. as some
+of them are used in several packages...
 
- > Based on your additional input, and rechecking the changes, I
- > understand your reasoning and accept it.
- > You still should add the legacy symbol, though.
+>
+>
+>> diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
+>> --- a/package/kmod/kmod.mk
+>> +++ b/package/kmod/kmod.mk
+>> @@ -19,12 +19,9 @@ KMOD_LICENSE_FILES = libkmod/COPYING
+>>  # https://git.kernel.org/cgit/utils/kernel/kmod/kmod.git/commit/?id=b7016153ec8
+>>  KMOD_CONF_OPT = --disable-static --enable-shared
+>>
+>> -# manpages not installed to host and needs xsltproc
+>> +# manpages not installed and needs xsltproc
+>>  HOST_KMOD_CONF_OPT = --disable-manpages
+>> -
+>> -ifneq ($(BR2_HAVE_DOCUMENTATION),y)
+>>  KMOD_CONF_OPT += --disable-manpages
+>> -endif
+>
+> Then merge this KMOD_CONF_OPT += line with the existing KMOD_CONF_OPT
+> line above.
 
- > Peter, what about you?
+I did not do that because the --disable-static --enable-shared setting
+is accompanied with a comment:
+# static linking not supported, see
+# https://git.kernel.org/cgit/utils/kernel/kmod/kmod.git/commit/?id=b7016153ec8
+KMOD_CONF_OPT = --disable-static --enable-shared
 
-With the legacy handling added I'm fine with the rename.
+and I felt that adding --disable-manpages here would be confusing.
+With this extra info, what is your position?
 
--- 
-Bye, Peter Korsgaard
+>
+>> diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
+>> --- a/package/netsnmp/netsnmp.mk
+>> +++ b/package/netsnmp/netsnmp.mk
+>> @@ -44,9 +44,7 @@ else
+>>  endif
+>>
+>>  # Docs
+>> -ifneq ($(BR2_HAVE_DOCUMENTATION),y)
+>> -     NETSNMP_CONF_OPT += --disable-manuals
+>> -endif
+>> +NETSNMP_CONF_OPT += --disable-manuals
+>
+> Ditto here. Now that it is no longer conditional, you can add
+> --disable-manuals to the already existing NETSNMP_CONF_OPT
+> unconditional definition.
+
+Here I agree, I will change it.
+
+Best regards,
+Thomas
