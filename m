@@ -1,140 +1,32 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 5 Feb 2014 13:31:14 +0100
-Subject: [Buildroot] [PATCH v6 3/5] udev: convert to virtual package.
-In-Reply-To: <20140204121030.GA8125@pc-eric>
-References: <1389627907-7821-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1389627907-7821-4-git-send-email-eric.le.bihan.dev@free.fr>
- <CAAXf6LXUD2hAt+_0JUyXHgwOGqHVwe4J7-AkekopnR-LixKOAg@mail.gmail.com>
- <20140204121030.GA8125@pc-eric>
-Message-ID: <CAAXf6LUbj5qTnNy7EHEsRhsNwaHk8yX8N=Ja9UFUM2EhOf=qNQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 5 Feb 2014 13:41:18 +0100
+Subject: [Buildroot] [git commit] gpm: needs bison
+Message-ID: <20140205124146.216F39C808@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Eric,
+commit: http://git.buildroot.net/buildroot/commit/?id=85e904ba437ab0cec47849b392b57abd7a4265a1
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, Feb 4, 2014 at 1:10 PM, Eric Le Bihan <eric.le.bihan.dev@free.fr> wrote:
-> Thomas, All,
->
-> On Mon, Feb 03, 2014 at 10:41:03PM +0100, Thomas De Schampheleire wrote:
->
->> > --- a/package/systemd/Config.in
->> > +++ b/package/systemd/Config.in
->> > @@ -1,6 +1,6 @@
->> >  config BR2_PACKAGE_SYSTEMD
->> >         bool "systemd"
->> > -       depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
->> > +       depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
->> >         depends on BR2_INET_IPV6
->> >         depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
->> >         depends on BR2_USE_MMU # dbus
->> > @@ -18,7 +18,7 @@ config BR2_PACKAGE_SYSTEMD
->> >
->> >           http://freedesktop.org/wiki/Software/systemd
->> >
->> > -comment "systemd needs udev /dev management and a toolchain w/ IPv6, threads"
->> > +comment "systemd needs eudev /dev management and a toolchain w/ IPv6, threads"
->> >         depends on BR2_USE_MMU
->> > -       depends on !BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV || !BR2_INET_IPV6 || \
->> > +       depends on !BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV || !BR2_INET_IPV6 || \\
->> >                 !BR2_TOOLCHAIN_HAS_THREADS
->>
->> These changes are odd: you indicate here that systemd is depending on
->> eudev, while eudev is precisely an alternative provider of udev than
->> systemd. So:
->>
->>        udev
->>        /   \
->> systemd     eudev
->>
->> and there is no direct relation between systemd and eudev. In the next
->> patch, you replace this again with BR2_INIT_SYSTEMD, which makes sense
->> again, but the transition is odd.
->
-> At this stage, the version of systemd in Buildroot is still v44, which does
-> not provide udev, but needs it. As the previous patch introduced eudev and
-> this one removes BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV, the dependency on
-> BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV ensures systemd will be installed
-> with a udev implementation.
+Fixes http://autobuild.buildroot.net/results/a4b/a4b473ae0a97fe79dbc30e6603f029f946c011fe/
 
-Ok, understood.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gpm/gpm.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
->
->> Directly related to this, we question the need to rename
->> BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV to
->> BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV. First of all, the symbol
->> BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV is already existing in users'
->> defconfig. Removing it requires the addition of a new legacy symbol
->> (not only for BR2_PACKAGE_UDEV, which you already added, but also for
->> the DEVICE_CREATION_DYNAMIC one).
->> Users that previously selected udev, should be moved to eudev, rather
->> than systemd. Our suggestion is to keep the existing
->> BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV symbol to indicate the eudev
->> choice, rendering the massive rename in the previous patch unneeded,
->> removing the above odd systemd transition, and avoiding the need for
->> legacy handling. What do you think of that?
->
-> I find it odd that some packages depend on
-> BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV whereas others depend on
-> BR2_PACKAGE_UDEV. To me, both symbols are interpreted as "the package needs a
-> udev daemon to talk to at runtime" (whether via D-Bus or libudev). So I
-> replaced both with BR2_PACKAGE_HAS_UDEV to be homogeneous. It is true that if
-> a package depends on BR2_PACKAGE_HAS_UDEV, it is not explicitly said if it is
-> a runtime or a build dependency. But, AFAIK, programs that want to communicate
-> with the udev daemon do it via libudev/libgudev, so we end up with a build
-> dependency.
->
-> In system/Config.in, I removed BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV because
-> I want the user to understand the change: he/she should not think of 'udev' as
-> a package, but as a feature which, at this stage, is only available via eudev.
-> I could have kept BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV and have it select
-> BR2_PACKAGE_EUDEV, but I've found it confusing.
->
-> But I should have added BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV in
-> Config.in.legacy to migrate to BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV.
->
-> In the end, the user selects BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV, which
-> selects BR2_PACKAGE_EUDEV, which in turn selects BR2_PACKAGE_HAS_UDEV. All the
-> packages depending on it are now available.
-
-Based on your additional input, and rechecking the changes, I
-understand your reasoning and accept it.
-You still should add the legacy symbol, though.
-
-Peter, what about you?
-
->
->> Maybe you could add a comment in udev/Config.in and udev/udev.mk
->> clarifying that this is now a virtual package.
-> Yes, indeed!
->
->> > -comment "udisks needs udev /dev management and a toolchain w/ wchar, threads"
->> > +comment "udisks needs udev /dev mgmnt, toolchain w/ wchar, threads"
->>
->> This string is not as it is described in the manual. Why did you change it?
-> It was truncated on a 80x24 terminal.
-
-In the past I have done extensive efforts in unifying all comments in
-our Config files, and described the unified syntax in the manual. We
-tried using 'short' strings so they would fit on a 80 char terminal.
-For packages that have many dependencies, it is true that some words
-may not necessarily fit.
-In this case, we could decide to split the comment in two: one for the
-/dev management and one for the toolchain options. Both comments
-should depend on the common options (!avr32 and mmu).
-
-So:
-comment "udisks needs udev /dev management
-        depends on !BR2_avr32
-        depends on BR2_USE_MMU
-        depends on !BR2_PACKAGE_HAS_UDEV
-
-comment "udisks needs a toolchain w/ wchar, threads"
-        depends on !BR2_avr32
-        depends on BR2_USE_MMU
-        depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-
-Best regards,
-Thomas
+diff --git a/package/gpm/gpm.mk b/package/gpm/gpm.mk
+index 58fab00..85fdad6 100644
+--- a/package/gpm/gpm.mk
++++ b/package/gpm/gpm.mk
+@@ -10,6 +10,7 @@ GPM_SITE = http://www.nico.schottelius.org/software/gpm/archives/
+ GPM_LICENSE = GPLv2+
+ GPM_LICENSE_FILES = COPYING
+ GPM_INSTALL_STAGING = YES
++GPM_DEPENDENCIES = host-bison
+ 
+ # if not already installed in staging dir, gpm Makefile may fail to find some
+ # of the headers needed to generate build dependencies, the first time it is
