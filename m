@@ -1,60 +1,51 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Wed, 05 Feb 2014 19:19:40 +0100
-Subject: [Buildroot] [PATCH v2 2/7] libdrm: Remove dependency towards X11
-References: <1391537725-15894-1-git-send-email-berndkuhls@hotmail.com>
- <BLU0-SMTP338F1C8C0E0E7FD631BCFC0D9AA0@phx.gbl> <52F1E0A6.2060409@mind.be>
-Message-ID: <subasaxs7f.ln2@ID-313208.user.individual.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 5 Feb 2014 19:22:46 +0100
+Subject: [Buildroot] [PATCH] filter BR2_DEFCONFIG out of defconfig files
+In-Reply-To: <1391523148-30887-1-git-send-email-jeremy.rosen@openwide.fr>
+References: <1391523148-30887-1-git-send-email-jeremy.rosen@openwide.fr>
+Message-ID: <20140205182246.GA19446@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+J?r?my, All,
 
-Arnout Vandecappelle <arnout@mind.be> wrote in
-news:52F1E0A6.2060409 at mind.be: 
+On 2014-02-04 15:12 +0100, J?r?my Rosen spake thusly:
+> When it is set, BR2_DEFCONFIG is saved like any config variable.
+> However, at this point it is a completely expanded, absolute path
+> It is not a good idea to save absolute paths in defconfig files
+> moreover it makes little sense to save the defconfig location
+> within the defconfig
+> 
+> Signed-off-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
+> ---
+>  Makefile | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Makefile b/Makefile
+> index 4a675d4..f63a058 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -772,6 +772,7 @@ savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+>  	@$(COMMON_CONFIG_ENV) $< \
+>  		--savedefconfig=$(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig) \
+>  		$(CONFIG_CONFIG_IN)
+> +	sed -i '/^BR2_DEFCONFIG=/d' $(DEFCONFIG)
 
->  So only the three experimental ARM drivers work without Xorg?
+Should be:
+    $(SED) '/blabla/'
 
-taking a closer look at the required dependencies it seems Xorg is only 
-needed for the Intel driver
+$(SED) already contains -i
 
-libdrm 2.4.52 will be compiled with:
+Regards,
+Yann E. MORIN.
 
-  libkms         yes
-  Intel API      no
-  vmwgfx API     yes
-  Radeon API     yes
-  Nouveau API    yes
-  OMAP API       yes
-  EXYNOS API     yes
-  Freedreno API  yes
-
-When enabling the Intel API at least xlib_libpciaccess is needed:
-
-checking for PCIACCESS... no
-configure: error: Package requirements (pciaccess >= 0.10) were not met:
-
-This is inline with what the LFS team writes:
-http://www.linuxfromscratch.org/blfs/view/svn/x/libdrm.html
-
->  Not for this patch, but does libdrm do anything useful when no driver
->  is selected?
-
-Honestly I do not know, but technically configure does not complain:
-
-libdrm 2.4.52 will be compiled with:
-
-  libkms         no
-  Intel API      no
-  vmwgfx API     no
-  Radeon API     no
-  Nouveau API    no
-  OMAP API       no
-  EXYNOS API     no
-  Freedreno API  no
-
-I will repost the patch containing fewer dependencies.
-
-Regards, Bernd
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
