@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Feb 2014 16:58:26 +0100
-Subject: [Buildroot] [pkg-perl infra V4 4/9] host-perl-xml-parser:
- rename and refactor with perl infrastructure
-In-Reply-To: <1391608380-23240-5-git-send-email-francois.perrad@gadz.org>
+Date: Wed, 5 Feb 2014 17:03:09 +0100
+Subject: [Buildroot] [pkg-perl infra V4 6/9] perl: remove useless patch
+In-Reply-To: <1391608380-23240-7-git-send-email-francois.perrad@gadz.org>
 References: <1391608380-23240-1-git-send-email-francois.perrad@gadz.org>
- <1391608380-23240-5-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20140205165826.69eacd79@skate>
+ <1391608380-23240-7-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20140205170309.3a7da08e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,36 +13,25 @@ To: buildroot@busybox.net
 
 Dear Francois Perrad,
 
-On Wed,  5 Feb 2014 14:52:55 +0100, Francois Perrad wrote:
-> note: only the host variant is used
+On Wed,  5 Feb 2014 14:52:57 +0100, Francois Perrad wrote:
+> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/perl/perl-fix-Module-Build.patch |   16 ----------------
+>  1 file changed, 16 deletions(-)
+>  delete mode 100644 package/perl/perl-fix-Module-Build.patch
 
-It would be good to have much more verbose commit logs. Something such
-as:
+It would be good to indicate in the commit log why the patch was
+useless.
 
-"""
-Even though libxml-parser-perl had a Config.in file with an option to
-enable it on the target, this option was hidden by a dependency on
-BR2_HOST_ONLY. So in practice, it was not possible to enable
-libxml-parser-perl on the target. This allows us to rename
-libxml-parser-perl to perl-xml-parser to follow the new naming
-convention of Perl packages, without having to introduce
-Config.in.legacy material.
+Sorry to bother you so much about commit logs, but they are *really*
+important. I can't tell you the number of times I look at the git
+commit logs in the history of Buildroot to understand why such or such
+choice was made. So I really want to have good commit logs, and a
+commit log such as "remove useless patch" is not a good commit log, as
+it doesn't explain *why* the change was made.
 
-In addition to this rename, the package is converted to use the newly
-introduced Perl package infrastructure.
-
-"""
-
-> +HOST_LIBXML_PARSER_PERL_CONF_OPT += EXPATLIBPATH=$(HOST_DIR)/usr/lib
-> +HOST_LIBXML_PARSER_PERL_CONF_OPT += EXPATINCPATH=$(HOST_DIR)/usr/include
-
-We normally do:
-
-HOST_LIBXML_PARSER_PERL_CONF_OPT = \
-	EXPATLIBPATH=$(HOST_DIR)/usr/lib \
-	EXPATINCPATH=$(HOST_DIR)/usr/include
-
-Thanks,
+Thanks!
 
 Thomas
 -- 
