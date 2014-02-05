@@ -1,30 +1,61 @@
-From: Anton Kolesov <Anton.Kolesov@synopsys.com>
-Date: Wed, 5 Feb 2014 13:50:49 +0000
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-02-04
-In-Reply-To: <20140205073010.8762B101A86@stock.ovh.net>
-References: <20140205073010.8762B101A86@stock.ovh.net>
-Message-ID: <39A54937CC95F24AA2F794E2D2B66B1356C636FF@de02wembxa.internal.synopsys.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 05 Feb 2014 14:50:52 +0100
+Subject: [Buildroot] [PATCH 0 of 8 v2] Remove remaining deprecated packages
+	for 2014.02
+Message-ID: <patchbomb.1391608252@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
 
->        arc |                audiofile-0.3.6 | NOK |
-> http://autobuild.buildroot.net/results/d88d608e656ee3df374e857a817f0e7f
-> 0e296814/
+This patch series removes all deprecated packages/features that we are
+allowed to remove for 2014.02 (deprecated since 2013.02 or earlier).
 
-This one happens because of:
-1) libtool adds libstdc++.la to the dependency_libs
-2) Because of patch 0a4bd19f Buildroot sets LDFLAGS to --static, instead of -static. libtool doesn?t understand the former and passes it to GCC as is.
-3) However because libstdc++.la is in the list of dependencies and libtool doesn't know that linking is static it resolves libstdc++.la to the libstdc++.so instead of libstdc++.a.
-4) So GCC is called with an option --static, but with  shared library as an argument as well, so linker exits with an error.
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Passing -static to libtool instead of --static resolves the issue for me: libstdc++ is resolved to shared object by libtool, but static flag is not passed to the gcc as well. Using -all-static also helps, as it ensures that everything that is passed to gcc is static, including libstdc++. 
+---
+v2:
+- update BR2_HAVE_DOCUMENTATION patch with comments from ThomasP.
+- new tentative patch removing DISABLE_DOCUMENTATION
 
-I'm not a libtool expert, so I don't know why would it add libstdc++ to the list of dependencies, should it be there? It doesn?t happen for me when I'm not cross-compiling, so I'm not sure if it is libtool that shouldn't add libstdc++ to list (maybe there is something specific about ARC gcc?) or is that Buildroot should be more sensible to what arguments it is passing to gcc or libtool.
-
-Anton Kolesov
+ Config.in                                              |  18 --
+ Config.in.legacy                                       |  86 ++++++++++++++
+ Makefile                                               |   2 -
+ package/Config.in                                      |   4 -
+ package/Makefile.in                                    |  12 -
+ package/autoconf/Config.in                             |  10 -
+ package/autoconf/autoconf.mk                           |   6 -
+ package/automake/Config.in                             |  11 -
+ package/automake/automake.mk                           |   3 -
+ package/avahi/avahi.mk                                 |   2 +-
+ package/berkeleydb/berkeleydb.mk                       |   4 -
+ package/ccache/Config.in                               |  12 -
+ package/ccache/ccache.mk                               |   1 -
+ package/enlightenment/enlightenment.mk                 |   2 -
+ package/ffmpeg/ffmpeg.mk                               |   2 +-
+ package/gdb/Config.in.host                             |  12 -
+ package/hdparm/hdparm.mk                               |   7 -
+ package/kmod/kmod.mk                                   |  10 +-
+ package/libbsd/libbsd.mk                               |   6 -
+ package/linux-headers/Config.in.host                   |  15 --
+ package/logsurfer/logsurfer.mk                         |  13 --
+ package/ncurses/ncurses.mk                             |   2 +-
+ package/netsnmp/netsnmp.mk                             |   7 +-
+ package/opencv/opencv.mk                               |   4 +-
+ package/perl/perl.mk                                   |   4 -
+ package/pkg-autotools.mk                               |   7 +-
+ package/pppd/pppd.mk                                   |  10 -
+ package/pulseaudio/pulseaudio.mk                       |   2 +-
+ package/python-pygame/python-pygame.mk                 |   2 -
+ package/samba/samba.mk                                 |   2 -
+ package/udisks/udisks.mk                               |   3 +-
+ package/vala/vala.mk                                   |  10 +-
+ package/vim/vim.mk                                     |   2 -
+ package/x11r7/xproto_xcmiscproto/xproto_xcmiscproto.mk |   2 +-
+ package/x11r7/xproto_xextproto/xproto_xextproto.mk     |   2 +-
+ package/xstroke/Config.in                              |  14 --
+ package/xstroke/xstroke-fix-link-issues.patch          |  35 -----
+ package/xstroke/xstroke.mk                             |  13 --
+ 38 files changed, 108 insertions(+), 251 deletions(-)
