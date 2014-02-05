@@ -1,42 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Feb 2014 20:51:42 +0100
-Subject: [Buildroot] [pkg-perl infra V4 6/9] perl: remove useless patch
-In-Reply-To: <CAB0FRss0MorGHCXKpq19nouNctZmUCRMQih7KnR3-Mf26GC0hw@mail.gmail.com>
-References: <1391608380-23240-1-git-send-email-francois.perrad@gadz.org>
- <1391608380-23240-7-git-send-email-francois.perrad@gadz.org>
- <20140205170309.3a7da08e@skate>
- <CAB0FRss0MorGHCXKpq19nouNctZmUCRMQih7KnR3-Mf26GC0hw@mail.gmail.com>
-Message-ID: <20140205205142.4212e305@skate>
+From: Bernd Kuhls <berndkuhls@hotmail.com>
+Date: Wed, 05 Feb 2014 21:35:55 +0100
+Subject: [Buildroot] [PATCH v2 2/7] libdrm: Remove dependency towards X11
+References: <1391537725-15894-1-git-send-email-berndkuhls@hotmail.com>
+ <BLU0-SMTP338F1C8C0E0E7FD631BCFC0D9AA0@phx.gbl> <52F1E0A6.2060409@mind.be>
+Message-ID: <bujasaxkfi.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fran?ois Perrad,
+Arnout Vandecappelle <arnout@mind.be> wrote in
+news:52F1E0A6.2060409 at mind.be: 
 
-On Wed, 5 Feb 2014 20:46:46 +0100, Fran?ois Perrad wrote:
+> On 04/02/14 19:15, Bernd Kuhls wrote:
+>> Signed-off-by: Bernd Kuhls
+>> <berndkuhls@hotmail.com> ---
+>> v4: rebased v3
+>> v3: rebased v2
+>> v2: http://patchwork.ozlabs.org/patch/304116/ (Paul Cercueil)
+>> v1: http://patchwork.ozlabs.org/patch/278297/ (Spenser Gilliland)
 
-> >>  package/perl/perl-fix-Module-Build.patch |   16 ----------------
-> >>  1 file changed, 16 deletions(-)
-> >>  delete mode 100644 package/perl/perl-fix-Module-Build.patch
-> >
-> > It would be good to indicate in the commit log why the patch was
-> > useless.
-> 
-> The Perl infrastructure uses a host version of Module-Build
-> (see previous commit "host-perl-module-build: new package").
-> The target version is never used.
+Hi,
 
-Ok, but the relation with the removal of this patch still isn't very
-clear.
+Arnout Vandecappelle <arnout@mind.be> wrote in
+news:52F1E733.3030005 at mind.be: 
 
-And the entire explanation should be part of the commit log :-)
+>  This removes the following implicit dependencies (from XORG7):
+>         depends on BR2_USE_WCHAR
+>         depends on BR2_TOOLCHAIN_HAS_THREADS
+>         depends on !BR2_PREFER_STATIC_LIB # dlopen in xlib_libX11
+>  Are you sure they are no longer needed? Actually, the same is true for
+> the libdrm patch that removes the XORG7 dependency.
 
-Thanks!
+I tested a locally revised libdrm patch; using this defconfig
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+BR2_x86_pentium_mmx=y
+BR2_ENABLE_DEBUG=y
+BR2_OPTIMIZE_2=y
+BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
+# BR2_UCLIBC_INSTALL_UTILS is not set
+BR2_BINUTILS_VERSION_2_23_2=y
+BR2_GCC_VERSION_4_8_X=y
+BR2_PACKAGE_LIBDRM=y
+BR2_PACKAGE_LIBDRM_RADEON=y
+BR2_PACKAGE_LIBDRM_NOUVEAU=y
+BR2_PACKAGE_LIBDRM_VMWGFX=y
+
+and compiled libdrm (w/o Intel API) even without BR2_PACKAGE_LIBATOMIC_OPS 
+and without BR2_PACKAGE_XLIB_LIBPCIACCESS, so USE_WCHAR, 
+TOOLCHAIN_HAS_THREADS and !BR2_PREFER_STATIC_LIB do not seem to be 
+necessary for libdrm at all.
+
+Regards, Bernd
