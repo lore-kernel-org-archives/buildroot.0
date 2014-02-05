@@ -1,57 +1,153 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 5 Feb 2014 12:10:00 +0100
-Subject: [Buildroot] [git commit] infra: remove variable FOO_DIR_PREFIX
-Message-ID: <20140205123039.8EAE59C783@busybox.osuosl.org>
+Date: Wed, 5 Feb 2014 12:05:58 +0100
+Subject: [Buildroot] [git commit] arch: remove sh2, sh3 and sh3eb support
+Message-ID: <20140205123039.633999C809@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=604d261fb05ba1cc43a9630c3ce944c54ebb97b6
+commit: http://git.buildroot.net/buildroot/commit/?id=e543f5a10488b020bb4ccb03e6de0e455c64841a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Variable FOO_DIR_PREFIX in inner-generic-package isn't really needed. The
-contents of this variable are 'package' for normal packages, 'boot' for
-bootloaders, and 'linux' for the linux kernel.
-When patching a package, all you need to know is the directory where
-patches can reside, which is already returned by $(pkgdir). In order to be
-able to use this variable outside of inner-generic-package, we introduce a
-target-specific variable PKGDIR that equals to this $(pkgdir).
+This patch removes the sh2, sh3 and sh3eb support, because the user
+base is inexistent, and the Linux support for these architectures is
+poor. The sh2a support is preserved, because at least one user
+expressed interest in this architecture, and is actually using it:
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+  http://lists.busybox.net/pipermail/buildroot/2013-April/070399.html
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-generic.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ Config.in.legacy          |   18 ++++++++++++++++++
+ arch/Config.in.sh         |   15 ++-------------
+ package/kexec/Config.in   |    2 +-
+ package/mplayer/Config.in |    2 +-
+ package/qemu/qemu.mk      |    3 ---
+ package/uclibc/Config.in  |    1 -
+ 6 files changed, 22 insertions(+), 19 deletions(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index eea530f..e04a93e 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -137,7 +137,7 @@ endif
- #
- # For BR2_GLOBAL_PATCH_DIR, only generate if it is defined
- $(BUILD_DIR)/%/.stamp_patched: NAMEVER = $(RAWNAME)-$($(PKG)_VERSION)
--$(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS =  $($(PKG)_DIR_PREFIX)/$(RAWNAME)
-+$(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS =  $(PKGDIR)
- $(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS += $(addsuffix /$(RAWNAME),$(call qstrip,$(BR2_GLOBAL_PATCH_DIR)))
- $(BUILD_DIR)/%/.stamp_patched:
- 	@$(call step_start,patch)
-@@ -358,7 +358,6 @@ $(2)_DEPENDENCIES ?= $(filter-out $(1),$(patsubst host-host-%,host-%,$(addprefix
- $(2)_INSTALL_STAGING		?= NO
- $(2)_INSTALL_IMAGES		?= NO
- $(2)_INSTALL_TARGET		?= YES
--$(2)_DIR_PREFIX			= $(4)
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 8918184..2fe9cf9 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -101,6 +101,24 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2014.02"
  
- # define sub-target stamps
- $(2)_TARGET_INSTALL_TARGET =	$$($(2)_DIR)/.stamp_target_installed
-@@ -507,6 +506,7 @@ $$($(2)_TARGET_RSYNC_SOURCE):		SRCDIR=$$($(2)_OVERRIDE_SRCDIR)
- $$($(2)_TARGET_RSYNC_SOURCE):		PKG=$(2)
- $$($(2)_TARGET_PATCH):			PKG=$(2)
- $$($(2)_TARGET_PATCH):			RAWNAME=$(patsubst host-%,%,$(1))
-+$$($(2)_TARGET_PATCH):			PKGDIR=$(pkgdir)
- $$($(2)_TARGET_EXTRACT):		PKG=$(2)
- $$($(2)_TARGET_SOURCE):			PKG=$(2)
- $$($(2)_TARGET_DIRCLEAN):		PKG=$(2)
++config BR2_sh2
++	bool "sh2 support removed"
++	help
++	  Due to an inexistent user base and generally poor Linux
++	  support, the support for the SH2 architecture was removed.
++
++config BR2_sh3
++	bool "sh3 support removed"
++	help
++	  Due to an inexistent user base and generally poor Linux
++	  support, the support for the SH3 architecture was removed.
++
++config BR2_sh3eb
++	bool "sh3eb support removed"
++	help
++	  Due to an inexistent user base and generally poor Linux
++	  support, the support for the SH3eb architecture was removed.
++
+ config BR2_PACKAGE_LZMA
+ 	bool "lzma target package has been removed"
+ 	select BR2_LEGACY
+diff --git a/arch/Config.in.sh b/arch/Config.in.sh
+index 10d4ef6..1bdea37 100644
+--- a/arch/Config.in.sh
++++ b/arch/Config.in.sh
+@@ -5,14 +5,8 @@ choice
+ 	help
+ 	  Specific CPU variant to use
+ 
+-config BR2_sh2
+-	bool "sh2 (SH2 big endian)"
+ config BR2_sh2a
+ 	bool "sh2a (SH2A big endian)"
+-config BR2_sh3
+-	bool "sh3 (SH3 little endian)"
+-config BR2_sh3eb
+-	bool "sh3eb (SH3 big endian)"
+ config BR2_sh4
+ 	bool "sh4 (SH4 little endian)"
+ config BR2_sh4eb
+@@ -24,10 +18,7 @@ config BR2_sh4aeb
+ endchoice
+ 
+ config BR2_ARCH
+-	default "sh2"		if BR2_sh2
+ 	default "sh2a"		if BR2_sh2a
+-	default "sh3"		if BR2_sh3
+-	default "sh3eb"		if BR2_sh3eb
+ 	default "sh4"		if BR2_sh4
+ 	default "sh4eb"		if BR2_sh4eb
+ 	default "sh4a"		if BR2_sh4a
+@@ -35,7 +26,5 @@ config BR2_ARCH
+ 	default "sh64"		if BR2_sh64
+ 
+ config BR2_ENDIAN
+-	default "LITTLE"	if BR2_sh3 || BR2_sh4 || BR2_sh4a || \
+-				   BR2_sh64
+-	default "BIG"		if BR2_sh2 || BR2_sh2a || BR2_sh3eb || \
+-				   BR2_sh4eb || BR2_sh4aeb
++	default "LITTLE"	if BR2_sh4 || BR2_sh4a || BR2_sh64
++	default "BIG"		if BR2_sh2a || BR2_sh4eb || BR2_sh4aeb
+diff --git a/package/kexec/Config.in b/package/kexec/Config.in
+index 955a5f4..0139c17 100644
+--- a/package/kexec/Config.in
++++ b/package/kexec/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_KEXEC
+ 	bool "kexec"
+ 	depends on BR2_i386 || BR2_x86_64 || BR2_arm || BR2_armeb || \
+ 		BR2_mips || BR2_mips64 || BR2_mipsel || BR2_mips64el || \
+-		BR2_powerpc || BR2_sh4 || BR2_sh4a || BR2_sh3
++		BR2_powerpc || BR2_sh4 || BR2_sh4a
+ 	help
+ 	  Kexec is a user space utiltity for loading another kernel
+ 	  and asking the currently running kernel to do something with it.
+diff --git a/package/mplayer/Config.in b/package/mplayer/Config.in
+index c8f1480..ae273e4 100644
+--- a/package/mplayer/Config.in
++++ b/package/mplayer/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_MPLAYER
+ 	bool "mplayer"
+ 	# Those architectures are not supported by MPlayer
+-	depends on !(BR2_sh2 || BR2_sh2a || BR2_sh4a || BR2_sh4aeb \
++	depends on !(BR2_sh2a || BR2_sh4a || BR2_sh4aeb \
+ 			|| BR2_microblaze || BR2_aarch64 || BR2_nios2)
+ 	# Broken support for <ARMv5
+ 	depends on !(BR2_arm7tdmi || BR2_arm720t || BR2_arm920t \
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index a89bf7d..093ae64 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -36,10 +36,7 @@ HOST_QEMU_DEPENDENCIES = host-pkgconf host-zlib host-libglib2 host-pixman
+ #       mips64          ?
+ #       mips64el        ?
+ #       powerpc         ppc
+-#       sh2             not supported
+ #       sh2a            not supported
+-#       sh3             not supported
+-#       sh3eb           not supported
+ #       sh4             sh4
+ #       sh4eb           sh4eb
+ #       sh4a            ?
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index 77756e3..0565ee9 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -241,7 +241,6 @@ config BR2_UCLIBC_SH_TYPE
+ 	string
+ 	depends on BR2_UCLIBC_TARGET_ARCH = "sh"
+ 	default SH2A if BR2_sh2a
+-	default SH3  if BR2_sh3 || BR2_sh3eb
+ 	default SH4  if BR2_sh4 || BR2_sh4eb
+ 
+ config BR2_UCLIBC_SPARC_TYPE
