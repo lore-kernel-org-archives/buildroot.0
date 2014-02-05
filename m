@@ -1,88 +1,96 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 05 Feb 2014 07:50:01 +0100
-Subject: [Buildroot] [PATCH v2 1/7] xlib_libpthread-stubs: Rename
- package to libpthread-stubs
-In-Reply-To: <BLU0-SMTP252A62005B331CE016C8EE7D9AA0@phx.gbl>
+Date: Wed, 05 Feb 2014 07:56:38 +0100
+Subject: [Buildroot] [PATCH v2 2/7] libdrm: Remove dependency towards X11
+In-Reply-To: <BLU0-SMTP338F1C8C0E0E7FD631BCFC0D9AA0@phx.gbl>
 References: <1391537725-15894-1-git-send-email-berndkuhls@hotmail.com>
- <BLU0-SMTP252A62005B331CE016C8EE7D9AA0@phx.gbl>
-Message-ID: <52F1DF19.6070200@mind.be>
+ <BLU0-SMTP338F1C8C0E0E7FD631BCFC0D9AA0@phx.gbl>
+Message-ID: <52F1E0A6.2060409@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Bernd,
-
- Sorry I didn't review this earlier - but keep up the good work!
-
 On 04/02/14 19:15, Bernd Kuhls wrote:
 > Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
 > ---
 > v4: rebased v3
 > v3: rebased v2
->     libdrm: rename to libpthread-stubs as well for bisectability
-> v2: http://patchwork.ozlabs.org/patch/304117/ (Paul Cercueil)
-> v1: http://patchwork.ozlabs.org/patch/278296/ (Spenser Gilliland)
+> v2: http://patchwork.ozlabs.org/patch/304116/ (Paul Cercueil)
+> v1: http://patchwork.ozlabs.org/patch/278297/ (Spenser Gilliland)
+
+ Oh, something I forgot to mention in the previous patch as well: you
+should keep the Signed-off-by of the two previous authors, so they get
+their due credit (which is required since they published their patches
+under GPL).
+
+ Otherwise looks good to me, but one more remark below.
+
 > 
->  Config.in.legacy                                   |   15 ++++++++++++---
->  package/Config.in                                  |    1 +
->  package/libdrm/Config.in                           |    2 +-
->  package/libdrm/libdrm.mk                           |    2 +-
->  .../Config.in                                      |    2 +-
->  package/libpthread-stubs/libpthread-stubs.mk       |   20 ++++++++++++++++++++
->  package/x11r7/Config.in                            |    1 -
->  package/x11r7/libxcb/Config.in                     |    2 +-
->  package/x11r7/libxcb/libxcb.mk                     |    2 +-
->  .../xlib_libpthread-stubs/xlib_libpthread-stubs.mk |   20 --------------------
->  10 files changed, 38 insertions(+), 29 deletions(-)
->  rename package/{x11r7/xlib_libpthread-stubs => libpthread-stubs}/Config.in (88%)
->  create mode 100644 package/libpthread-stubs/libpthread-stubs.mk
->  delete mode 100644 package/x11r7/xlib_libpthread-stubs/xlib_libpthread-stubs.mk
+>  package/libdrm/Config.in |    6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 > 
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index 8918184..87c0b5f 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -464,11 +464,20 @@ config BR2_PACKAGE_XSERVER_tinyx
->  config BR2_PACKAGE_PTHREAD_STUBS
->  	bool "pthread-stubs option has been renamed"
->  	select BR2_LEGACY
-> -	select BR2_PACKAGE_XLIB_LIBPTHREAD_STUBS
+> diff --git a/package/libdrm/Config.in b/package/libdrm/Config.in
+> index 4d7646b..e382a3a 100644
+> --- a/package/libdrm/Config.in
+> +++ b/package/libdrm/Config.in
+> @@ -1,7 +1,6 @@
+>  config BR2_PACKAGE_LIBDRM
+>  	bool "libdrm"
+>  	select BR2_PACKAGE_LIBPTHREAD_STUBS
 > -	depends on BR2_PACKAGE_XORG7
-> +	select BR2_PACKAGE_LIBPTHREAD_STUBS
+>  	depends on BR2_LARGEFILE
 >  	help
->  	  For consistency reason, the pthread-stubs package has been
-> -	  renamed to xlib_libpthread-stubs.
-> +	  renamed to libpthread-stubs.
+>  	  Direct Rendering Manager
+> @@ -14,6 +13,7 @@ menu "DRM Drivers"
+>  
+>  config BR2_PACKAGE_LIBDRM_INTEL
+>  	bool "intel"
+> +	depends on BR2_PACKAGE_XORG7
+>  	select BR2_PACKAGE_LIBATOMIC_OPS
+>  	select BR2_PACKAGE_XLIB_LIBPCIACCESS
+>  	depends on BR2_i386 || BR2_x86_64
+> @@ -22,6 +22,7 @@ config BR2_PACKAGE_LIBDRM_INTEL
+>  
+>  config BR2_PACKAGE_LIBDRM_RADEON
+>  	bool "radeon"
+> +	depends on BR2_PACKAGE_XORG7
+>  	select BR2_PACKAGE_LIBATOMIC_OPS
+>  	select BR2_PACKAGE_XLIB_LIBPCIACCESS
+>  	depends on BR2_i386 || BR2_x86_64
+> @@ -30,6 +31,7 @@ config BR2_PACKAGE_LIBDRM_RADEON
+>  
+>  config BR2_PACKAGE_LIBDRM_NOUVEAU
+>  	bool "nouveau"
+> +	depends on BR2_PACKAGE_XORG7
+>  	select BR2_PACKAGE_XLIB_LIBPCIACCESS
+>  	depends on BR2_i386 || BR2_x86_64
+>  	help
+> @@ -37,6 +39,7 @@ config BR2_PACKAGE_LIBDRM_NOUVEAU
+>  
+>  config BR2_PACKAGE_LIBDRM_VMWGFX
+>  	bool "vmwgfx"
+> +	depends on BR2_PACKAGE_XORG7
+>  	select BR2_PACKAGE_XLIB_LIBPCIACCESS
+>  	depends on BR2_i386 || BR2_x86_64
+>  	help
 
- Wow, so we rename this thing twice in just over a year... How good are
-we! :-)
+ So only the three experimental ARM drivers work without Xorg?
 
-> +
-> +config BR2_PACKAGE_XLIB_LIBPTHREAD_STUBS
-
- This should go in the 2014.02 section, otherwise it may be removed again
-way too early.
-
- Otherwise looks good to me, so perhaps Peter can fix this up while
-committing.
+ Not for this patch, but does libdrm do anything useful when no driver is
+selected? Shouldn't it have a dependency on x86 || arm so that at least
+one driver can be selected?
 
  Regards,
  Arnout
 
-> +	bool "xlib-libpthread-stubs option has been renamed"
-> +	depends on BR2_PACKAGE_XORG7
-> +	select BR2_LEGACY
-> +	select BR2_PACKAGE_LIBPTHREAD_STUBS
-> +	help
-> +	  The pthread stubs do not depend on X11 nor Xlib. Thus the
-> +	  package has been renamed
-> +	  BR2_PACKAGE_LIBPTHREAD_STUBS
+> @@ -65,5 +68,4 @@ endmenu
+>  endif
 >  
->  ###############################################################################
->  comment "Legacy options removed in 2012.08"
-[snip]
+>  comment "libdrm needs a toolchain w/ largefile"
+> -	depends on BR2_PACKAGE_XORG7
+>  	depends on !BR2_LARGEFILE
+> 
 
 
 -- 
