@@ -1,299 +1,140 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 5 Feb 2014 12:10:35 +0100
-Subject: [Buildroot] [git commit] infra: remove unused 4th parameter to
-	package infrastructures (pkgparentdir)
-Message-ID: <20140205123039.A9E2D9C7D3@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 5 Feb 2014 13:31:14 +0100
+Subject: [Buildroot] [PATCH v6 3/5] udev: convert to virtual package.
+In-Reply-To: <20140204121030.GA8125@pc-eric>
+References: <1389627907-7821-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <1389627907-7821-4-git-send-email-eric.le.bihan.dev@free.fr>
+ <CAAXf6LXUD2hAt+_0JUyXHgwOGqHVwe4J7-AkekopnR-LixKOAg@mail.gmail.com>
+ <20140204121030.GA8125@pc-eric>
+Message-ID: <CAAXf6LUbj5qTnNy7EHEsRhsNwaHk8yX8N=Ja9UFUM2EhOf=qNQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=26aef889f1df32d5a15cd70f6b1e316ebb830cb7
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Eric,
 
-The fourth parameter to inner-generic-package is no longer used. Removing
-this parameters requires renaming all usages of $(5) to $(4), and updating
-the calls to inner-generic-package (and equivalent for the other package
-infrastructures).
+On Tue, Feb 4, 2014 at 1:10 PM, Eric Le Bihan <eric.le.bihan.dev@free.fr> wrote:
+> Thomas, All,
+>
+> On Mon, Feb 03, 2014 at 10:41:03PM +0100, Thomas De Schampheleire wrote:
+>
+>> > --- a/package/systemd/Config.in
+>> > +++ b/package/systemd/Config.in
+>> > @@ -1,6 +1,6 @@
+>> >  config BR2_PACKAGE_SYSTEMD
+>> >         bool "systemd"
+>> > -       depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
+>> > +       depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
+>> >         depends on BR2_INET_IPV6
+>> >         depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
+>> >         depends on BR2_USE_MMU # dbus
+>> > @@ -18,7 +18,7 @@ config BR2_PACKAGE_SYSTEMD
+>> >
+>> >           http://freedesktop.org/wiki/Software/systemd
+>> >
+>> > -comment "systemd needs udev /dev management and a toolchain w/ IPv6, threads"
+>> > +comment "systemd needs eudev /dev management and a toolchain w/ IPv6, threads"
+>> >         depends on BR2_USE_MMU
+>> > -       depends on !BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV || !BR2_INET_IPV6 || \
+>> > +       depends on !BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV || !BR2_INET_IPV6 || \\
+>> >                 !BR2_TOOLCHAIN_HAS_THREADS
+>>
+>> These changes are odd: you indicate here that systemd is depending on
+>> eudev, while eudev is precisely an alternative provider of udev than
+>> systemd. So:
+>>
+>>        udev
+>>        /   \
+>> systemd     eudev
+>>
+>> and there is no direct relation between systemd and eudev. In the next
+>> patch, you replace this again with BR2_INIT_SYSTEMD, which makes sense
+>> again, but the transition is odd.
+>
+> At this stage, the version of systemd in Buildroot is still v44, which does
+> not provide udev, but needs it. As the previous patch introduced eudev and
+> this one removes BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV, the dependency on
+> BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV ensures systemd will be installed
+> with a udev implementation.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/pkg-autotools.mk |   13 ++++++-------
- package/pkg-cmake.mk     |   13 ++++++-------
- package/pkg-generic.mk   |   21 ++++++++++-----------
- package/pkg-luarocks.mk  |    7 +++----
- package/pkg-python.mk    |   17 ++++++++---------
- 5 files changed, 33 insertions(+), 38 deletions(-)
+Ok, understood.
 
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index 0ddfc6b..cfbdc27 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -48,8 +48,7 @@ endef
- #             for host packages
- #  argument 3 is the uppercase package name, without the HOST_ prefix
- #             for host packages
--#  argument 4 is the package directory prefix
--#  argument 5 is the type (target or host)
-+#  argument 4 is the type (target or host)
- ################################################################################
- 
- define inner-autotools-package
-@@ -94,7 +93,7 @@ $(2)_INSTALL_TARGET_OPT		?= DESTDIR=$$(TARGET_DIR)  install
- # packages.
- #
- ifndef $(2)_CONFIGURE_CMDS
--ifeq ($(5),target)
-+ifeq ($(4),target)
- 
- # Configure package for target
- define $(2)_CONFIGURE_CMDS
-@@ -220,7 +219,7 @@ endif
- # file.
- #
- ifndef $(2)_BUILD_CMDS
--ifeq ($(5),target)
-+ifeq ($(4),target)
- define $(2)_BUILD_CMDS
- 	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) -C $$($$(PKG)_SRCDIR)
- endef
-@@ -267,7 +266,7 @@ endif
- 
- # Call the generic package infrastructure to generate the necessary
- # make targets
--$(call inner-generic-package,$(1),$(2),$(3),$(4),$(5))
-+$(call inner-generic-package,$(1),$(2),$(3),$(4))
- 
- endef
- 
-@@ -275,5 +274,5 @@ endef
- # autotools-package -- the target generator macro for autotools packages
- ################################################################################
- 
--autotools-package = $(call inner-autotools-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),$(pkgparentdir),target)
--host-autotools-package = $(call inner-autotools-package,host-$(pkgname),$(call UPPERCASE,host-$(pkgname)),$(call UPPERCASE,$(pkgname)),$(pkgparentdir),host)
-+autotools-package = $(call inner-autotools-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
-+host-autotools-package = $(call inner-autotools-package,host-$(pkgname),$(call UPPERCASE,host-$(pkgname)),$(call UPPERCASE,$(pkgname)),host)
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index 36283f0..dbe0d97 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -31,8 +31,7 @@
- #             for host packages
- #  argument 3 is the uppercase package name, without the HOST_ prefix
- #             for host packages
--#  argument 4 is the package directory prefix
--#  argument 5 is the type (target or host)
-+#  argument 4 is the type (target or host)
- ################################################################################
- 
- define inner-cmake-package
-@@ -55,7 +54,7 @@ $(2)_BUILDDIR			= $$($(2)_SRCDIR)
- # packages.
- #
- ifndef $(2)_CONFIGURE_CMDS
--ifeq ($(5),target)
-+ifeq ($(4),target)
- 
- # Configure package for target
- define $(2)_CONFIGURE_CMDS
-@@ -99,7 +98,7 @@ $(2)_DEPENDENCIES += host-cmake
- # file.
- #
- ifndef $(2)_BUILD_CMDS
--ifeq ($(5),target)
-+ifeq ($(4),target)
- define $(2)_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) -C $$($$(PKG)_BUILDDIR)
- endef
-@@ -142,7 +141,7 @@ endif
- 
- # Call the generic package infrastructure to generate the necessary
- # make targets
--$(call inner-generic-package,$(1),$(2),$(3),$(4),$(5))
-+$(call inner-generic-package,$(1),$(2),$(3),$(4))
- 
- endef
- 
-@@ -150,8 +149,8 @@ endef
- # cmake-package -- the target generator macro for CMake packages
- ################################################################################
- 
--cmake-package = $(call inner-cmake-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),$(pkgparentdir),target)
--host-cmake-package = $(call inner-cmake-package,host-$(pkgname),$(call UPPERCASE,host-$(pkgname)),$(call UPPERCASE,$(pkgname)),$(pkgparentdir),host)
-+cmake-package = $(call inner-cmake-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
-+host-cmake-package = $(call inner-cmake-package,host-$(pkgname),$(call UPPERCASE,host-$(pkgname)),$(call UPPERCASE,$(pkgname)),host)
- 
- ################################################################################
- # Generation of the CMake toolchain file
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 5778c5c..555c3c2 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -241,8 +241,7 @@ $(BUILD_DIR)/%/.stamp_dircleaned:
- #             for host packages
- #  argument 3 is the uppercase package name, without the HOST_ prefix
- #             for host packages
--#  argument 4 is the package directory prefix
--#  argument 5 is the type (target or host)
-+#  argument 4 is the type (target or host)
- ################################################################################
- 
- define inner-generic-package
-@@ -254,7 +253,7 @@ define inner-generic-package
- # these informations have only to be specified once, for both the
- # target and host packages of a given .mk file.
- 
--$(2)_TYPE                       =  $(5)
-+$(2)_TYPE                       =  $(4)
- $(2)_NAME			=  $(1)
- $(2)_RAWNAME			=  $(patsubst host-%,%,$(1))
- 
-@@ -534,7 +533,7 @@ ifeq ($$($(2)_REDISTRIBUTE),YES)
- ifneq ($$($(2)_SITE_METHOD),local)
- ifneq ($$($(2)_SITE_METHOD),override)
- # Packages that have a tarball need it downloaded and extracted beforehand
--$(1)-legal-info: $(1)-extract $(REDIST_SOURCES_DIR_$(call UPPERCASE,$(5)))
-+$(1)-legal-info: $(1)-extract $(REDIST_SOURCES_DIR_$(call UPPERCASE,$(4)))
- $(2)_MANIFEST_TARBALL = $$($(2)_SOURCE)
- endif
- endif
-@@ -558,23 +557,23 @@ else
- 
- # Save license files if defined
- ifeq ($(call qstrip,$$($(2)_LICENSE_FILES)),)
--	@$(call legal-license-nofiles,$$($(2)_RAWNAME),$(call UPPERCASE,$(5)))
-+	@$(call legal-license-nofiles,$$($(2)_RAWNAME),$(call UPPERCASE,$(4)))
- 	@$(call legal-warning-pkg,$$($(2)_RAWNAME),cannot save license ($(2)_LICENSE_FILES not defined))
- else
- # Double dollar signs are really needed here, to catch host packages
- # without explicit HOST_FOO_LICENSE_FILES assignment, also in case they
- # have multiple license files.
--	@$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$($(2)_RAWNAME),$$(F),$$($(2)_DIR)/$$(F),$(call UPPERCASE,$(5)))$$(sep))
-+	@$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$($(2)_RAWNAME),$$(F),$$($(2)_DIR)/$$(F),$(call UPPERCASE,$(4)))$$(sep))
- endif # license files
- 
- ifeq ($$($(2)_REDISTRIBUTE),YES)
- # Copy the source tarball (just hardlink if possible)
--	@cp -l $(DL_DIR)/$$($(2)_SOURCE) $(REDIST_SOURCES_DIR_$(call UPPERCASE,$(5))) 2>/dev/null || \
--	   cp $(DL_DIR)/$$($(2)_SOURCE) $(REDIST_SOURCES_DIR_$(call UPPERCASE,$(5)))
-+	@cp -l $(DL_DIR)/$$($(2)_SOURCE) $(REDIST_SOURCES_DIR_$(call UPPERCASE,$(4))) 2>/dev/null || \
-+	   cp $(DL_DIR)/$$($(2)_SOURCE) $(REDIST_SOURCES_DIR_$(call UPPERCASE,$(4)))
- endif # redistribute
- 
- endif # other packages
--	@$(call legal-manifest,$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_LICENSE),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_MANIFEST_TARBALL),$(call UPPERCASE,$(5)))
-+	@$(call legal-manifest,$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_LICENSE),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_MANIFEST_TARBALL),$(call UPPERCASE,$(4)))
- endif # ifneq ($(call qstrip,$$($(2)_SOURCE)),)
- 	$(foreach hook,$($(2)_POST_LEGAL_INFO_HOOKS),$(call $(hook))$(sep))
- 
-@@ -617,8 +616,8 @@ endef # inner-generic-package
- ################################################################################
- 
- # In the case of target packages, keep the package name "pkg"
--generic-package = $(call inner-generic-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),$(pkgparentdir),target)
-+generic-package = $(call inner-generic-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
- # In the case of host packages, turn the package name "pkg" into "host-pkg"
--host-generic-package = $(call inner-generic-package,host-$(pkgname),$(call UPPERCASE,host-$(pkgname)),$(call UPPERCASE,$(pkgname)),$(pkgparentdir),host)
-+host-generic-package = $(call inner-generic-package,host-$(pkgname),$(call UPPERCASE,host-$(pkgname)),$(call UPPERCASE,$(pkgname)),host)
- 
- # :mode=makefile:
-diff --git a/package/pkg-luarocks.mk b/package/pkg-luarocks.mk
-index fdd26c7..bdda022 100644
---- a/package/pkg-luarocks.mk
-+++ b/package/pkg-luarocks.mk
-@@ -28,8 +28,7 @@
- #             for host packages
- #  argument 3 is the uppercase package name, without the HOST_ prefix
- #             for host packages
--#  argument 4 is the package directory prefix
--#  argument 5 is the type (target or host)
-+#  argument 4 is the type (target or host)
- ################################################################################
- 
- define inner-luarocks-package
-@@ -70,7 +69,7 @@ endif
- 
- # Call the generic package infrastructure to generate the necessary
- # make targets
--$(call inner-generic-package,$(1),$(2),$(3),$(4),$(5))
-+$(call inner-generic-package,$(1),$(2),$(3),$(4))
- 
- endef
- 
-@@ -78,5 +77,5 @@ endef
- # luarocks-package -- the target generator macro for LuaRocks packages
- ################################################################################
- 
--luarocks-package = $(call inner-luarocks-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),$(pkgparentdir),target)
-+luarocks-package = $(call inner-luarocks-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
- # host-luarocks-package not supported
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index 9cfd820..9b3c97a 100644
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -80,8 +80,7 @@ HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPT = \
- #             for host packages
- #  argument 3 is the uppercase package name, without the HOST_ prefix
- #             for host packages
--#  argument 4 is the package directory prefix
--#  argument 5 is the type (target or host)
-+#  argument 4 is the type (target or host)
- ################################################################################
- 
- define inner-python-package
-@@ -103,7 +102,7 @@ endif
- 
- # Distutils
- ifeq ($$($(2)_SETUP_TYPE),distutils)
--ifeq ($(5),target)
-+ifeq ($(4),target)
- $(2)_BASE_ENV         = $$(PKG_PYTHON_DISTUTILS_ENV)
- $(2)_BASE_BUILD_TGT   = build
- $(2)_BASE_BUILD_OPT   = $$(PKG_PYTHON_DISTUTILS_BUILD_OPT)
-@@ -116,7 +115,7 @@ $(2)_BASE_INSTALL_OPT = $$(HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPT)
- endif
- # Setuptools
- else ifeq ($$($(2)_SETUP_TYPE),setuptools)
--ifeq ($(5),target)
-+ifeq ($(4),target)
- $(2)_BASE_ENV         = $$(PKG_PYTHON_SETUPTOOLS_ENV)
- $(2)_BASE_BUILD_TGT   = build -x
- $(2)_BASE_BUILD_OPT   =
-@@ -149,7 +148,7 @@ $(2)_DEPENDENCIES ?= $(filter-out host-python host-python-setuptools host-python
- # runtime) and the python interpreter on the host (for
- # compilation). However, host packages only need the python
- # interpreter on the host.
--ifeq ($(5),target)
-+ifeq ($(4),target)
- $(2)_DEPENDENCIES += host-python python
- else
- $(2)_DEPENDENCIES += host-python
-@@ -164,7 +163,7 @@ endif
- ifeq ($$($(2)_SETUP_TYPE),setuptools)
- ifneq ($(2),HOST_PYTHON_SETUPTOOLS)
- $(2)_DEPENDENCIES += host-python-setuptools
--ifeq ($(5),target)
-+ifeq ($(4),target)
- $(2)_DEPENDENCIES += host-python-distutilscross
- endif
- endif
-@@ -212,7 +211,7 @@ endif
- 
- # Call the generic package infrastructure to generate the necessary
- # make targets
--$(call inner-generic-package,$(1),$(2),$(3),$(4),$(5))
-+$(call inner-generic-package,$(1),$(2),$(3),$(4))
- 
- endef
- 
-@@ -220,5 +219,5 @@ endef
- # python-package -- the target generator macro for Python packages
- ################################################################################
- 
--python-package = $(call inner-python-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),$(pkgparentdir),target)
--host-python-package = $(call inner-python-package,host-$(pkgname),$(call UPPERCASE,host-$(pkgname)),$(call UPPERCASE,$(pkgname)),$(pkgparentdir),host)
-+python-package = $(call inner-python-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
-+host-python-package = $(call inner-python-package,host-$(pkgname),$(call UPPERCASE,host-$(pkgname)),$(call UPPERCASE,$(pkgname)),host)
+>
+>> Directly related to this, we question the need to rename
+>> BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV to
+>> BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV. First of all, the symbol
+>> BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV is already existing in users'
+>> defconfig. Removing it requires the addition of a new legacy symbol
+>> (not only for BR2_PACKAGE_UDEV, which you already added, but also for
+>> the DEVICE_CREATION_DYNAMIC one).
+>> Users that previously selected udev, should be moved to eudev, rather
+>> than systemd. Our suggestion is to keep the existing
+>> BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV symbol to indicate the eudev
+>> choice, rendering the massive rename in the previous patch unneeded,
+>> removing the above odd systemd transition, and avoiding the need for
+>> legacy handling. What do you think of that?
+>
+> I find it odd that some packages depend on
+> BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV whereas others depend on
+> BR2_PACKAGE_UDEV. To me, both symbols are interpreted as "the package needs a
+> udev daemon to talk to at runtime" (whether via D-Bus or libudev). So I
+> replaced both with BR2_PACKAGE_HAS_UDEV to be homogeneous. It is true that if
+> a package depends on BR2_PACKAGE_HAS_UDEV, it is not explicitly said if it is
+> a runtime or a build dependency. But, AFAIK, programs that want to communicate
+> with the udev daemon do it via libudev/libgudev, so we end up with a build
+> dependency.
+>
+> In system/Config.in, I removed BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV because
+> I want the user to understand the change: he/she should not think of 'udev' as
+> a package, but as a feature which, at this stage, is only available via eudev.
+> I could have kept BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV and have it select
+> BR2_PACKAGE_EUDEV, but I've found it confusing.
+>
+> But I should have added BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV in
+> Config.in.legacy to migrate to BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV.
+>
+> In the end, the user selects BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV, which
+> selects BR2_PACKAGE_EUDEV, which in turn selects BR2_PACKAGE_HAS_UDEV. All the
+> packages depending on it are now available.
+
+Based on your additional input, and rechecking the changes, I
+understand your reasoning and accept it.
+You still should add the legacy symbol, though.
+
+Peter, what about you?
+
+>
+>> Maybe you could add a comment in udev/Config.in and udev/udev.mk
+>> clarifying that this is now a virtual package.
+> Yes, indeed!
+>
+>> > -comment "udisks needs udev /dev management and a toolchain w/ wchar, threads"
+>> > +comment "udisks needs udev /dev mgmnt, toolchain w/ wchar, threads"
+>>
+>> This string is not as it is described in the manual. Why did you change it?
+> It was truncated on a 80x24 terminal.
+
+In the past I have done extensive efforts in unifying all comments in
+our Config files, and described the unified syntax in the manual. We
+tried using 'short' strings so they would fit on a 80 char terminal.
+For packages that have many dependencies, it is true that some words
+may not necessarily fit.
+In this case, we could decide to split the comment in two: one for the
+/dev management and one for the toolchain options. Both comments
+should depend on the common options (!avr32 and mmu).
+
+So:
+comment "udisks needs udev /dev management
+        depends on !BR2_avr32
+        depends on BR2_USE_MMU
+        depends on !BR2_PACKAGE_HAS_UDEV
+
+comment "udisks needs a toolchain w/ wchar, threads"
+        depends on !BR2_avr32
+        depends on BR2_USE_MMU
+        depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+
+Best regards,
+Thomas
