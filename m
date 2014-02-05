@@ -1,61 +1,93 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 05 Feb 2014 14:50:52 +0100
-Subject: [Buildroot] [PATCH 0 of 8 v2] Remove remaining deprecated packages
-	for 2014.02
-Message-ID: <patchbomb.1391608252@argentina>
+Date: Wed, 05 Feb 2014 14:50:54 +0100
+Subject: [Buildroot] [PATCH 2 of 8 v2] autoconf: remove deprecated target
+	package
+In-Reply-To: <patchbomb.1391608252@argentina>
+References: <patchbomb.1391608252@argentina>
+Message-ID: <a72b91ee0a7c6c8833d7.1391608254@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-This patch series removes all deprecated packages/features that we are
-allowed to remove for 2014.02 (deprecated since 2013.02 or earlier).
+The autoconf support on target has been deprecated for more than four
+buildroot releases and thus can be removed. This doesn't change anything
+about the host autoconf support.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
-v2:
-- update BR2_HAVE_DOCUMENTATION patch with comments from ThomasP.
-- new tentative patch removing DISABLE_DOCUMENTATION
+v2: no changes
 
- Config.in                                              |  18 --
- Config.in.legacy                                       |  86 ++++++++++++++
- Makefile                                               |   2 -
- package/Config.in                                      |   4 -
- package/Makefile.in                                    |  12 -
- package/autoconf/Config.in                             |  10 -
- package/autoconf/autoconf.mk                           |   6 -
- package/automake/Config.in                             |  11 -
- package/automake/automake.mk                           |   3 -
- package/avahi/avahi.mk                                 |   2 +-
- package/berkeleydb/berkeleydb.mk                       |   4 -
- package/ccache/Config.in                               |  12 -
- package/ccache/ccache.mk                               |   1 -
- package/enlightenment/enlightenment.mk                 |   2 -
- package/ffmpeg/ffmpeg.mk                               |   2 +-
- package/gdb/Config.in.host                             |  12 -
- package/hdparm/hdparm.mk                               |   7 -
- package/kmod/kmod.mk                                   |  10 +-
- package/libbsd/libbsd.mk                               |   6 -
- package/linux-headers/Config.in.host                   |  15 --
- package/logsurfer/logsurfer.mk                         |  13 --
- package/ncurses/ncurses.mk                             |   2 +-
- package/netsnmp/netsnmp.mk                             |   7 +-
- package/opencv/opencv.mk                               |   4 +-
- package/perl/perl.mk                                   |   4 -
- package/pkg-autotools.mk                               |   7 +-
- package/pppd/pppd.mk                                   |  10 -
- package/pulseaudio/pulseaudio.mk                       |   2 +-
- package/python-pygame/python-pygame.mk                 |   2 -
- package/samba/samba.mk                                 |   2 -
- package/udisks/udisks.mk                               |   3 +-
- package/vala/vala.mk                                   |  10 +-
- package/vim/vim.mk                                     |   2 -
- package/x11r7/xproto_xcmiscproto/xproto_xcmiscproto.mk |   2 +-
- package/x11r7/xproto_xextproto/xproto_xextproto.mk     |   2 +-
- package/xstroke/Config.in                              |  14 --
- package/xstroke/xstroke-fix-link-issues.patch          |  35 -----
- package/xstroke/xstroke.mk                             |  13 --
- 38 files changed, 108 insertions(+), 251 deletions(-)
+ Config.in.legacy             |   8 ++++++++
+ package/Config.in            |   1 -
+ package/autoconf/Config.in   |  10 ----------
+ package/autoconf/autoconf.mk |   6 ------
+ 4 files changed, 8 insertions(+), 17 deletions(-)
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -101,6 +101,14 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2014.02"
+ 
++config BR2_PACKAGE_AUTOCONF
++	bool "autoconf target package has been removed"
++	select BR2_LEGACY
++	help
++	  The 'autoconf' target package has been removed since it has been
++	  deprecated for more than four buildroot releases.
++	  Note: the host autoconf still exists.
++
+ config BR2_PACKAGE_XSTROKE
+ 	bool "xstroke has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -81,7 +81,6 @@ source "package/whetstone/Config.in"
+ endmenu
+ 
+ menu "Development tools"
+-source "package/autoconf/Config.in"
+ source "package/automake/Config.in"
+ source "package/binutils/Config.in"
+ source "package/bison/Config.in"
+diff --git a/package/autoconf/Config.in b/package/autoconf/Config.in
+deleted file mode 100644
+--- a/package/autoconf/Config.in
++++ /dev/null
+@@ -1,10 +0,0 @@
+-config BR2_PACKAGE_AUTOCONF
+-	bool "autoconf"
+-	# We no longer support a toolchain on the target
+-	depends on BR2_DEPRECATED_SINCE_2012_11
+-	select BR2_PACKAGE_PERL
+-	help
+-	  Extensible program for developing configure scripts.  These
+-	  scripts handle all the mundane system/feature detection.
+-
+-	  http://www.gnu.org/software/autoconf/
+diff --git a/package/autoconf/autoconf.mk b/package/autoconf/autoconf.mk
+--- a/package/autoconf/autoconf.mk
++++ b/package/autoconf/autoconf.mk
+@@ -11,17 +11,11 @@ AUTOCONF_SITE = $(BR2_GNU_MIRROR)/autoco
+ AUTOCONF_LICENSE = GPLv3+ with exceptions
+ AUTOCONF_LICENSE_FILES = COPYINGv3 COPYING.EXCEPTION
+ 
+-AUTOCONF_CONF_ENV = EMACS="no" ac_cv_path_M4=$(HOST_DIR)/usr/bin/m4 \
+-		    ac_cv_prog_gnu_m4_gnu=no
+-
+-AUTOCONF_DEPENDENCIES = host-m4 perl
+-
+ HOST_AUTOCONF_CONF_ENV = EMACS="no" ac_cv_path_M4=$(HOST_DIR)/usr/bin/m4 \
+ 			ac_cv_prog_gnu_m4_gnu=no
+ 
+ HOST_AUTOCONF_DEPENDENCIES = host-m4 host-libtool
+ 
+-$(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+ 
+ # variables used by other packages
