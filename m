@@ -1,152 +1,127 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 05 Feb 2014 18:36:41 +0100
-Subject: [Buildroot] [PATCH v2] uboot-tools: Allow users to use uboot's
- sources
-In-Reply-To: <CAGduivzyTAPQDOhf8jHAjJEqcNwBBu3P-UJ-m1qWBB9+m_cF7Q@mail.gmail.com>
-References: <1391385955-13166-1-git-send-email-maxime.hadjinlian@gmail.com>
- <20140203225829.67dae85b@skate>
- <CAGduivzyTAPQDOhf8jHAjJEqcNwBBu3P-UJ-m1qWBB9+m_cF7Q@mail.gmail.com>
-Message-ID: <52F276A9.8060906@mind.be>
+Date: Wed, 05 Feb 2014 18:41:34 +0100
+Subject: [Buildroot] [git commit] CHANGES: update with recent changes
+In-Reply-To: <20140204085344.ED7A89C786@busybox.osuosl.org>
+References: <20140204085344.ED7A89C786@busybox.osuosl.org>
+Message-ID: <52F277CE.7040605@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/02/14 23:01, Maxime Hadjinlian wrote:
-> On Mon, Feb 3, 2014 at 10:58 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> Dear Maxime Hadjinlian,
->>
->> On Mon,  3 Feb 2014 01:05:55 +0100, Maxime Hadjinlian wrote:
->>
->>> diff --git a/package/uboot-tools/Config.in b/package/uboot-tools/Config.in
->>> index 7c8f17c..29580dd 100644
->>> --- a/package/uboot-tools/Config.in
->>> +++ b/package/uboot-tools/Config.in
->>> @@ -7,6 +7,24 @@ config BR2_PACKAGE_UBOOT_TOOLS
->>>
->>>  if BR2_PACKAGE_UBOOT_TOOLS
->>>
->>> +if BR2_TARGET_UBOOT
->>> +
->>> +choice
->>> +     prompt "version"
->>> +     default BR2_PACKAGE_UBOOT_TOOLS_LATEST_VERSION
->>> +     help
->>> +       Select the specific uboot-tools version you want to use
->>> +
->>> +config BR2_PACKAGE_UBOOT_TOOLS_LATEST_VERSION
->>> +     bool "Use latest upstream version"
->>> +
->>> +config BR2_PACKAGE_UBOOT_TOOLS_USE_UBOOT_VERSION
->>> +     bool "Use the same version as the uboot package"
->>
->> Shouldn't this option only be available if the U-Boot package has been
->> enabled in the configuration?
-> It is already in this patch.
->>
->>> +ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_USE_UBOOT_VERSION),y)
->>> +# We have to use the BR2_TARGET_UBOOT_VERSION because of the order of inclusion
->>> +# of the mk files.
->>> +UBOOT_TOOLS_VERSION = $(call qstrip,$(BR2_TARGET_UBOOT_VERSION))
->>
->> That's more of a question for Arnout, but does the order of .mk files
->> inclusion matter since we're using '=' and not ':=' ?
-> Arnout will confirm (or not, if I misunderstood) with much more
-> detail, but I found that the inclusion did matter, even with the use
-> of '='.
+On 04/02/14 09:45, Peter Korsgaard wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=51a2caf912e24c064561c54533ba0e221b7a6f09
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  CHANGES |   82 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+>  1 files changed, 82 insertions(+), 0 deletions(-)
+> 
+> diff --git a/CHANGES b/CHANGES
+> index d75d8b1..8b5395e 100644
+> --- a/CHANGES
+> +++ b/CHANGES
+> @@ -1,3 +1,85 @@
+> +2014.02, Not yet released:
+> +
+> +	Fixes all over the tree and new features.
 
- Indeed it does. The _VERSION is evaluated in generic-package and set to
-'undefined' if it is empty. Since UBOOT_VERSION is only assigned later,
-when uboot.mk is included, UBOOT_TOOLS_VERSION is empty at the time it is
-evaluated. So it would always be undefined.
-
->>
->>> +UBOOT_TOOLS_SOURCE = $(UBOOT_SOURCE)
-
- This statement is useless, for the same reason that you cannot use
-UBOOT_TOOLS_VERSION = $(UBOOT_VERSION). In generic-package,
-UBOOT_TOOLS_SOURCE is evaluated to be empty so it will be set to the
-default $$($(2)_RAWNAME)-$$($(2)_VERSION).tar.gz. The default is OK in
-most cases, however, that's why you didn't notice.
-
->>> +UBOOT_TOOLS_SITE = $(UBOOT_SITE)
->>> +ifneq ($(UBOOT_SITE_METHOD),)
-
- Since UBOOT_SITE_METHOD is not defined yet, this condition will never be
-used.
-
->>> +UBOOT_TOOL_SITE_METHOD = $(UBOOT_SITE_METHOD)
->>> +endif
->>> +UBOOT_TOOLS_LICENSE = $(UBOOT_LICENSE)
-
- This one happens to work because generic-package uses a ?= for this one.
-However, it will _not_ work for host-uboot-tools, because there an ifdef
-is used.
-
-
- As you can see, all of this is extremely fragile. In essence, you need
-to repeat all the logic from uboot.mk to derive these variables - or you
-have to check really really carefully if it works in all cases, for both
-uboot-tools and host-uboot-tools.
-
- Bottom line: I don't think this is the way to do it. I mentioned it
-briefly in the developer days: there should be infrastructural support
-for a shared-source package like this, so that the problem can be solved
-fundamentally and it never depends on the order of evaluation, and it
-doesn't break when a ?= in the package-generic is replaced with an ifndef.
-
- The generic structure of the shared source support would be something
-like this:
-
-if shared source
-
- assign VERSION, SOURCE, SITE, SITE_METHOD, LICENSE, LICENSE_FILES
-according to the base package (with ?= so the derived package can still
-override it).
-
-else
-
- use the current way of assigning these variables
-
-endif
-
- There are some more manipulations required. E.g., the legal-info
-infrastructure makes very heavy use of conditions, so that has to be
-rewritten as shell conditions.
-
-
- Have fun with that :-)
-
+ We should probably mention the renaming of BUILDROOT_CONFIG explicitly.
+And also all of the newly deprecated things and legacy symbols should be
+mentioned.
 
  Regards,
  Arnout
 
-
->>> +UBOOT_TOOLS_LICENSE_FILES = $(UBOOT_LICENSE_FILES)
->>> +else
->>>  UBOOT_TOOLS_VERSION = 2014.01
->>> -UBOOT_TOOLS_SOURCE  = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
->>> -UBOOT_TOOLS_SITE    = ftp://ftp.denx.de/pub/u-boot
->>> +UBOOT_TOOLS_SOURCE = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
->>> +UBOOT_TOOLS_SITE = ftp://ftp.denx.de/pub/u-boot
->>>  UBOOT_TOOLS_LICENSE = GPLv2+
->>>  UBOOT_TOOLS_LICENSE_FILES = Licenses/gpl-2.0.txt
->>> +endif
->>>
->>>  define UBOOT_TOOLS_BUILD_CMDS
->>>       $(MAKE) -C $(@D)                        \
->>
->> Thomas
->> --
->> Thomas Petazzoni, CTO, Free Electrons
->> Embedded Linux, Kernel and Android engineering
->> http://free-electrons.com
+> +
+> +	Updated/fixed packages: aiccu, alsa-lib, alsa-utils, aumix,
+> +	autoconf, automake, barebox, bellagio, berkeleydb, binutils,
+> +	bison, blackbox, bluez_utils, boost, bustle, busybox, cairo,
+> +	can-utils, ccache, ccid, cgilua, cifs-utils, civetweb, cmake,
+> +	collectd, connman, copas, coreutils, coxpcall, cppzmq, cramfs,
+> +	crda, cryptodev-linux, cryptsetup, cups, czmq, dhcpcd,
+> +	dhcpdump, dialog, dnsmasq, dosfstools, dropbear, dropwatch,
+> +	dtc, duma, dvb-apps, e2fsprogs, eglibc, eigen, erlang,
+> +	ethtool, f2fs-tools, ffmpeg, file, filemq, fio, flashrom,
+> +	flex, fluxbox, fontconfig freerdp, freetype, gadgetfs-test,
+> +	gawk, gcc, gdb, gdbm, gettext, git, glibc, gnupg, gnutls,
+> +	gob2, gpsd, grep, grub, gst-ffmpeg, gst-plugins-good,
+> +	gst1-plugins-bad, gst1-plugins-base, gst1-plugins-good,
+> +	gst1-plugins-ugly, gstreamer, gstreamer1, gtest, iftop,
+> +	imagemagick, inadyn, infozip, iozone, iproute2, iptables, iw,
+> +	jpeg, jq, kmod, knock, lbase64, lcdapi, lftp, libcdaudio,
+> +	libcgi, libcgicc, libcuefile, libcurl, libdmtx, libdrm,
+> +	libdvdnav, libdvdread, libegl, libevent, libexif, libfcgi,
+> +	libfreefare, libgles, libglib2, libllcp, libmicrohttpd,
+> +	libmpd, libnfc, libnl, libnss, libopenmax, libopenvg, libpcap,
+> +	libpfm4, libplayer, libpng, libqmi, libreplaygain, libroxml,
+> +	libsamplerate, libsexy, libsigsegv, libsndfile, libsoc,
+> +	libtasn1, libtpl, libusb, libusb-compat, libvorbis, libxcb,
+> +	libxml2, lighttpd, linknx, linux-firmware, linux-pam, live555,
+> +	lm_sensors, lmbench, lockdev, logrotate, lrzsz, ltrace, lua,
+> +	lua-ev, lua-msgpack-native, luabitop, luaexpat, luaexpatutils,
+> +	luafilesystem, luajit, luaposix, luarocks, luasec, luasocket,
+> +	luasql-sqlite3, m4, matchbox, mdadm, minicom, mongrel2, mpc,
+> +	mpd, mpg123, mplayer, mtd, mysql, lvm2, mxml, ncurses, ne10,
+> +	neard, neardal, netsnmp, netstat-nat, network-manager, nodejs,
+> +	numactl, ofone, ola, olsr, omniorb, opencv, openpowerlink,
+> +	openssh, openssl, openvpn, oprofile, opus, opus-tools, orbit,
+> +	p11-kit, parted, pcre, pcsc-lite, perl, php, poco, poppler,
+> +	powervr, protobuf-c, psplash, python, python-bottle,
+> +	python-{crc16,distutilscross,dpkt,id3,ipy,m2crypto,mad,meld},
+> +	python-{netifaces,nfc,protobuf,pygame,pyparsing,pyro,pyzmq},
+> +	python-{serial,setuptools}, qt, qt5base, qt5connectivity,
+> +	qt5declarative, qt5graphicaleffects, qt5jsbackend,
+> +	qt5multimedia, qt5quick1, qt5quickcontrols, qt5script,
+> +	qt5webkit, radvd, redis, rings, rng-tools, rpi-firmware,
+> +	rpi-userland, rt-tests, sam-ba, samba, sawman, sconeserver,
+> +	scons, sdl, sg3_utils, snappy, snmppp, socketcand, spice,
+> +	spice-protocol, sqlcipher, sqlite, squid, sshfs, strace,
+> +	subversion, sunxi-mali, supervisor, sysklogd, sysprof,
+> +	sysstat, systemd, sysvinit, taglib, tar, tcpdump, ti-gfx,
+> +	ti-utils, tinymembench, tn5250, trace-cmd, transmission,
+> +	tvheadend, tzdata, zxing, uboot, uboot-tools, uclibc, udev,
+> +	ulogd, urg, usb_modeswitch_data, util-linux, vala, valgrind,
+> +	vorbis-tools, wavpack, wayland, weston, wget, wireless-regdb,
+> +	wireshark, wpa_supplicant, wsapi, xavante, xapp_xdpyinfo,
+> +	xapp_xrandr, xcb-proto, xdriver_xf86-video-intel, xenomai,
+> +	xkeyboard-config, xl2tp, xlib_lib{FS,SM,X11},
+> +	xlib_libX{au,aw,composite,cursor,damage,ext,fixes,font,i},
+> +	xlib_libX{inerama,mu,pm,randr,render,res,t,tst,v,xf86dga},
+> +	xlib_libXxf86vm, xlib_libdmx, xlib_libfontenc,
+> +	xlib_libpciaccess, xlib_xtrans, xproto_dri2proto,
+> +	xproto_{glproto,inputproto,presentproto,randrproto,videoproto},
+> +	xproto_xextproto, xproto_xproto, xutil_util-macros,
+> +	xutil_makedepend, zic, zmqpp, zxing, zsh, zyre
+> +
+> +	New packages: apitrace, avrdude, c-ares, ca-certificates,
+> +	cwiid, dbus-cpp, evemu, fping, fswebcam, gpm, gst1-libav,
+> +	haveged, jasper, joe, ktap, lbreakout2, libass, libbluray,
+> +	libcdio, libenca, libevdev, libmbim, libmodplug, libnfs,
+> +	libnftnl, libplist, libshairplay, libsocketcan, ljsyscall,
+> +	log4cplus, ltris, luainterpreter, minidlna, mmc-utils,
+> +	modemmanager, mtr, net-tools, python-configobj, python-dialog,
+> +	python-json-schema-validator, python-keyring, python-msgpack,
+> +	python-posix-ipc, python-pyasn, python-pycrypto,
+> +	python-pysnmp, python-pysnmp-apps, python-pysnmp-mibs,
+> +	python-pyusb, python-simplejson, python-tornado,
+> +	python-versiontools, rtmpdump, rtptools, smcroute, smstools3,
+> +	tcpreplay, thrift, ti-uim, tinyxml, tmux, vlc, wmctrl,
+> +	xconsole
+> +
+> +	Removed packages: lzma, netkitbase, netkittelnet, pkg-config,
+> +	squashfs3, ttcp
+> +
+>  2013.11, Released November 30th, 2013:
+>  
+>  	Minor fixes.
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 > 
 
 
