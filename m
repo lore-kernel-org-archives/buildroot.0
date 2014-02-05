@@ -1,39 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Feb 2014 17:04:56 +0100
-Subject: [Buildroot] [pkg-perl infra V4 9/9] qemu: add a Config.in.host
-In-Reply-To: <1391608380-23240-10-git-send-email-francois.perrad@gadz.org>
-References: <1391608380-23240-1-git-send-email-francois.perrad@gadz.org>
- <1391608380-23240-10-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20140205170456.2440f114@skate>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Wed, 5 Feb 2014 17:14:32 +0100
+Subject: [Buildroot] Report of the Buildroot Developer Meeting at FOSDEM
+	2014
+In-Reply-To: <CAAXf6LUkHAzy7UUwVDye_0J1Ux5eOohf0jMAFmgyyjtZbzTKUQ@mail.gmail.com>
+References: <52F171F3.5020807@mind.be>
+ <CAAXf6LUkHAzy7UUwVDye_0J1Ux5eOohf0jMAFmgyyjtZbzTKUQ@mail.gmail.com>
+Message-ID: <CAHXCMML1s7GLbuM6W-hQPY8znVmaT7L0Dsvuz2xZ3v_YRuipvw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+Hi Arnout, all,
 
-On Wed,  5 Feb 2014 14:53:00 +0100, Francois Perrad wrote:
-> after the removal of cpanminus
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/Config.in.host      |    1 +
->  package/qemu/Config.in.host |   10 ++++++++++
->  2 files changed, 11 insertions(+)
->  create mode 100644 package/qemu/Config.in.host
 
-I'm not sure this should be part of the Perl patch series. At the
-meeting, I think we all agreed that building the Qemu user-mode
-emulation for the host is not useful as it cannot work properly.
-Instead the qemu package should build the system-mode emulation for the
-host, which is something that Gustavo proposed some time ago.
+On Wed, Feb 5, 2014 at 11:56 AM, Thomas De Schampheleire <
+patrickdepinguin@gmail.com> wrote:
+>
+> Hi Arnout,
+>
+> On Wed, Feb 5, 2014 at 12:04 AM, Arnout Vandecappelle <arnout@mind.be>
+wrote:
+> >  Hi all,
+> >
+> >  I've finished the report of the Buildroot Developer Meeting that was
+> > held the last two days in conjunction with FOSDEM. You can find it at
+> > http://elinux.org/Buildroot:DeveloperDaysFOSDEM2014 .
 
-So I'd say to leave Qemu on the side for now, and focus on the Perl
-side of things in this patch series.
+Thanks a lot for writing it down this quickly.! :)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+>
+> >
+> >  For the attendants, can you please all check the Summary section if my
+> > conclusions are correct?
+
+It looks good to me.
+
+
+Regards,
+
+--
+Samuel
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140205/a0aa034b/attachment.html>
