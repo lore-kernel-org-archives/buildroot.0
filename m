@@ -1,41 +1,111 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 05 Feb 2014 10:44:04 +0100
-Subject: [Buildroot] [PATCH 5 of 5 v3] infra: remove unused helper function
-	pkgparentdir
-In-Reply-To: <patchbomb.1391593439@argentina>
-References: <patchbomb.1391593439@argentina>
-Message-ID: <980a8e31ce0f4027a589.1391593444@argentina>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Wed, 05 Feb 2014 10:53:26 +0100
+Subject: [Buildroot] [PATCH] libatomic_ops: Update repository and bump
+ version
+In-Reply-To: <1391513105-26434-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1391513105-26434-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <52F20A16.4040308@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks to the previous patches, no-one is using pkgparentdir anymore, so
-remove it.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Hi Maxime,
 
----
-v3: rebase, update comment (Arnout)
+> Change the download source to a Github repository which is more recent.
+> This patch also bump libatomic_ops version and remove a patch that is
+> now upstream.
+>
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> ---
+>   .../libatomic_ops-nothread-build-failure-fix.patch | 41 ----------------------
+>   package/libatomic_ops/libatomic_ops.mk             |  7 ++--
+>   2 files changed, 4 insertions(+), 44 deletions(-)
+>   delete mode 100644 package/libatomic_ops/libatomic_ops-nothread-build-failure-fix.patch
+>
+> diff --git a/package/libatomic_ops/libatomic_ops-nothread-build-failure-fix.patch b/package/libatomic_ops/libatomic_ops-nothread-build-failure-fix.patch
+> deleted file mode 100644
+> index cc14b1e..0000000
+> --- a/package/libatomic_ops/libatomic_ops-nothread-build-failure-fix.patch
+> +++ /dev/null
+> @@ -1,41 +0,0 @@
+> -From 7e940ce34ff4de254d460344f1a1a486a14fb045 Mon Sep 17 00:00:00 2001
+> -From: Gilles Talis <gilles.talis@gmail.com>
+> -Date: Wed, 22 May 2013 16:21:26 -0700
+> -Subject: [PATCH] Fix build failure seen when using toolchain without threads support
+> -
+> -Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+> ----
+> - src/atomic_ops.c |    4 ++++
+> - 1 files changed, 4 insertions(+), 0 deletions(-)
+> -
+> -diff --git a/src/atomic_ops.c b/src/atomic_ops.c
+> -index b6731a2..5769643 100644
+> ---- a/src/atomic_ops.c
+> -+++ b/src/atomic_ops.c
+> -@@ -48,7 +48,9 @@
+> -
+> - #undef AO_REQUIRE_CAS
+> -
+> -+#if defined(AO_USE_PTHREAD_DEFS)
+> - #include <pthread.h>
+> -+#endif
+> -
+> - #ifndef AO_USE_NO_SIGNALS
+> - # include <signal.h>
+> -@@ -72,11 +74,13 @@
+> - # include "atomic_ops/sysdeps/standard_ao_double_t.h"
+> - #endif
+> -
+> -+#if defined(AO_USE_PTHREAD_DEFS)
+> - /*
+> -  * Lock for pthreads-based implementation.
+> -  */
+> -
+> - pthread_mutex_t AO_pt_lock = PTHREAD_MUTEX_INITIALIZER;
+> -+#endif
+> -
+> - /*
+> -  * Out of line compare-and-swap emulation based on test and set.
+> ---
+> -1.7.4.1
+> -
+> diff --git a/package/libatomic_ops/libatomic_ops.mk b/package/libatomic_ops/libatomic_ops.mk
+> index fbe250c..3a38bb4 100644
+> --- a/package/libatomic_ops/libatomic_ops.mk
+> +++ b/package/libatomic_ops/libatomic_ops.mk
+> @@ -4,8 +4,9 @@
+>   #
+>   ################################################################################
+>   
+> -LIBATOMIC_OPS_VERSION = 7.2
+> -LIBATOMIC_OPS_SITE = http://www.hpl.hp.com/research/linux/atomic_ops/download
+> +LIBATOMIC_OPS_VERSION = 7_4_0
+> +LIBATOMIC_OPS_SITE = $(call github,ivmai,libatomic_ops,libatomic_ops-$(LIBATOMIC_OPS_VERSION))
 
- package/pkg-utils.mk |  5 +----
- 1 files changed, 1 insertions(+), 4 deletions(-)
+The libatomic_ops version is : libatomic_ops-7_4_0 , so it should be
 
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -55,12 +55,9 @@ endef
- # Helper functions to determine the name of a package and its
- # directory from its makefile directory, using the $(MAKEFILE_LIST)
- # variable provided by make. This is used by the *TARGETS macros to
--# automagically find where the package is located. Note that the
--# pkgdir macro is carefully written to handle the case of the Linux
--# package, for which the package directory is an empty string.
-+# automagically find where the package is located.
- pkgdir       = $(dir $(lastword $(MAKEFILE_LIST)))
- pkgname      = $(lastword $(subst /, ,$(pkgdir)))
--pkgparentdir = $(patsubst %$(pkgname)/,%,$(pkgdir))
- 
- # Define extractors for different archive suffixes
- INFLATE.bz2  = $(BZCAT)
+LIBATOMIC_OPS_VERSION = libatomic_ops-7_4_0
+LIBATOMIC_OPS_SITE = $(call github,ivmai,libatomic_ops,$(LIBATOMIC_OPS_VERSION))
+
+Please, take a look at e.g. libcec.mk
+
+Regards,
+Jerzy
+
+
+> +LIBATOMIC_OPS_AUTORECONF = YES
+>   
+>   # From doc/LICENSING.txt: "Our intent is to make it easy to use
+>   # libatomic_ops, in both free and proprietary software.  Hence most
+> @@ -14,7 +15,7 @@ LIBATOMIC_OPS_SITE = http://www.hpl.hp.com/research/linux/atomic_ops/download
+>   # by the GNU General Public License. These are put into a separate
+>   # library, libatomic_ops_gpl.a."
+>   LIBATOMIC_OPS_LICENSE = MIT (main library) / GPLv2+ (gpl extension)
+> -LIBATOMIC_OPS_LICENSE_FILES = doc/LICENSING.txt doc/COPYING
+> +LIBATOMIC_OPS_LICENSE_FILES = doc/LICENSING.txt COPYING
+>   
+>   LIBATOMIC_OPS_INSTALL_STAGING = YES
+>   
