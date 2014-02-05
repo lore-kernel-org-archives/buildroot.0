@@ -1,59 +1,82 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Wed,  5 Feb 2014 14:52:51 +0100
-Subject: [Buildroot] [pkg-perl infra V4 0/9] a package infrastructure for
-	Perl/CPAN modules
-Message-ID: <1391608380-23240-1-git-send-email-francois.perrad@gadz.org>
+Date: Wed,  5 Feb 2014 14:52:52 +0100
+Subject: [Buildroot] [pkg-perl infra V4 1/9] pkg-perl: refactor and rename
+	PERL5LIB
+In-Reply-To: <1391608380-23240-1-git-send-email-francois.perrad@gadz.org>
+References: <1391608380-23240-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1391608380-23240-2-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Full refactor after the review at BR developer days.
 
- - new convention : package/perl-<pkgname> instead of package/cpan/lib<pkgname>-perl
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/Makefile.in          |   11 +++++++----
+ package/intltool/intltool.mk |    3 +--
+ 2 files changed, 8 insertions(+), 6 deletions(-)
 
-Francois Perrad (9):
-  pkg-perl: refactor and rename PERL5LIB
-  pkg-perl: new infrastructure
-  scancpan: a new script
-  host-perl-xml-parser: rename and refactor with perl infrastructure
-  host-perl-module-build: new package
-  perl: remove useless patch
-  manual: adding packages perl
-  cpanminus: remove it
-  qemu: add a Config.in.host
-
- Config.in                                        |   10 +
- docs/manual/adding-packages-perl.txt             |  110 ++++
- docs/manual/adding-packages.txt                  |    2 +
- package/Config.in                                |    2 -
- package/Config.in.host                           |    1 +
- package/Makefile.in                              |   13 +-
- package/cpanminus/Config.in                      |   40 --
- package/cpanminus/cpanminus.mk                   |   47 --
- package/intltool/intltool.mk                     |    5 +-
- package/libxml-parser-perl/Config.in             |   10 -
- package/libxml-parser-perl/libxml-parser-perl.mk |   35 --
- package/metacity/metacity.mk                     |    2 +-
- package/perl-module-build/perl-module-build.mk   |   12 +
- package/perl-xml-parser/perl-xml-parser.mk       |   16 +
- package/perl/perl-fix-Module-Build.patch         |   16 -
- package/pkg-perl.mk                              |  198 ++++++
- package/qemu/Config.in.host                      |   10 +
- support/scripts/scancpan                         |  694 ++++++++++++++++++++++
- 18 files changed, 1065 insertions(+), 158 deletions(-)
- create mode 100644 docs/manual/adding-packages-perl.txt
- delete mode 100644 package/cpanminus/Config.in
- delete mode 100644 package/cpanminus/cpanminus.mk
- delete mode 100644 package/libxml-parser-perl/Config.in
- delete mode 100644 package/libxml-parser-perl/libxml-parser-perl.mk
- create mode 100644 package/perl-module-build/perl-module-build.mk
- create mode 100644 package/perl-xml-parser/perl-xml-parser.mk
- delete mode 100644 package/perl/perl-fix-Module-Build.patch
- create mode 100644 package/pkg-perl.mk
- create mode 100644 package/qemu/Config.in.host
- create mode 100755 support/scripts/scancpan
-
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 2e433fd..d0b1cfd 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -206,6 +206,8 @@ HOST_PATH=$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(PATH)
+ HOSTCC_VERSION:=$(shell $(HOSTCC_NOCCACHE) --version | \
+ 	sed -n 's/^.* \([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)[ ]*.*$$/\1\2\3/p')
+ 
++HOST_PERL5LIB = $(HOST_DIR)/usr/lib/perl
++
+ TARGET_CONFIGURE_OPTS=PATH=$(TARGET_PATH) \
+ 		AR="$(TARGET_AR)" \
+ 		AS="$(TARGET_AS)" \
+@@ -241,11 +243,12 @@ TARGET_CONFIGURE_OPTS=PATH=$(TARGET_PATH) \
+ 		LDFLAGS="$(TARGET_LDFLAGS)" \
+ 		FCFLAGS="$(TARGET_FCFLAGS)" \
+ 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+-		PERLLIB="$(HOST_DIR)/usr/lib/perl" \
++		PERL5LIB=$(HOST_PERL5LIB) \
+ 		STAGING_DIR="$(STAGING_DIR)"
+ 
+ TARGET_MAKE_ENV=PATH=$(TARGET_PATH) \
+-		PERLLIB="$(HOST_DIR)/usr/lib/perl"
++		PERL5LIB=$(HOST_PERL5LIB)
++
+ 
+ HOST_CONFIGURE_OPTS=PATH=$(HOST_PATH) \
+ 		AR="$(HOSTAR)" \
+@@ -267,7 +270,7 @@ HOST_CONFIGURE_OPTS=PATH=$(HOST_PATH) \
+ 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+ 		PKG_CONFIG_SYSROOT_DIR="/" \
+ 		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig:$(HOST_DIR)/usr/share/pkgconfig" \
+-		PERLLIB="$(HOST_DIR)/usr/lib/perl" \
++		PERL5LIB=$(HOST_PERL5LIB) \
+ 		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)"
+ 
+ HOST_MAKE_ENV=PATH=$(HOST_PATH) \
+@@ -275,7 +278,7 @@ HOST_MAKE_ENV=PATH=$(HOST_PATH) \
+ 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+ 		PKG_CONFIG_SYSROOT_DIR="/" \
+ 		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig" \
+-		PERLLIB="$(HOST_DIR)/usr/lib/perl"
++		PERL5LIB=$(HOST_PERL5LIB)
+ 
+ # This extra environment we can not export ourselves (eg. because some
+ # packages use that variable internally, eg. uboot), so we have to
+diff --git a/package/intltool/intltool.mk b/package/intltool/intltool.mk
+index b2418fe..4235606 100644
+--- a/package/intltool/intltool.mk
++++ b/package/intltool/intltool.mk
+@@ -10,8 +10,7 @@ INTLTOOL_LICENSE = GPLv2+
+ INTLTOOL_LICENSE_FILES = COPYING
+ 
+ HOST_INTLTOOL_DEPENDENCIES = host-gettext host-libxml-parser-perl
+-HOST_INTLTOOL_CONF_OPT = \
+-  PERLLIB=$(HOST_DIR)/usr/lib/perl
++HOST_INTLTOOL_CONF_ENV = PERL5LIB=$(HOST_PERL5LIB)
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
 1.7.9.5
