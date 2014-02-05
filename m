@@ -1,106 +1,109 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 05 Feb 2014 22:03:31 +0100
-Subject: [Buildroot] [PATCH] dependencies.sh: cleanup dependencies.sh
-In-Reply-To: <CAGduivzutuoD1mhfg6Oxo1DYKz+C+kak62Q0c=g_v7TehC3vuA@mail.gmail.com>
-References: <1391459047-23665-1-git-send-email-maxime.hadjinlian@gmail.com>
- <52F1132F.1050008@lucaceresoli.net>
- <CAGduivzutuoD1mhfg6Oxo1DYKz+C+kak62Q0c=g_v7TehC3vuA@mail.gmail.com>
-Message-ID: <52F2A723.8090401@mind.be>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Wed,  5 Feb 2014 22:09:22 +0100
+Subject: [Buildroot] [PATCH] open2300: fix build failure
+Message-ID: <1391634562-1680-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/02/14 23:35, Maxime Hadjinlian wrote:
-> 
-> On 4 Feb 2014 17:20, "Luca Ceresoli" <luca@lucaceresoli.net
-> <mailto:luca@lucaceresoli.net>> wrote:
->>
->> Hi Maxime,
-> Hi Luca,
->>
->>
->> Maxime Hadjinlian wrote:
->>>
->>> Cleanup mixed indents and remove commented lines.
->>>
->>> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com
-> <mailto:maxime.hadjinlian@gmail.com>>
->>> ---
->>>   support/dependencies/dependencies.sh | 214
-> +++++++++++++++++------------------
->>>   1 file changed, 107 insertions(+), 107 deletions(-)
->>>
->>> diff --git a/support/dependencies/dependencies.sh
-> b/support/dependencies/dependencies.sh
->>> index 47d4d10..06386e6 100755
->>> --- a/support/dependencies/dependencies.sh
->>> +++ b/support/dependencies/dependencies.sh
->>> @@ -1,199 +1,199 @@
->>>   #!/bin/sh
->>>   # vi: set sw=4 ts=4:
->>> -#set -x
->>>
->>>   export LC_ALL=C
->>>
->>>   # Verify that grep works
->>>   echo "WORKS" | grep "WORKS" >/dev/null 2>&1
->>>   if test $? != 0 ; then
->>> -       echo
->>> -       echo "grep doesn't work"
->>> -       exit 1
->>> +echo
->>> +echo "grep doesn't work"
->>> +exit 1
->>>   fi
->>
->>
->> Are you really suggesting we should remove all nesting? Well, I guess
->> there's been a problem with the e-mail or something...
-> Well, I asked Peter before doing this, the file contained mixed indents.
-> We thought it would be nice to have a consistent indent with the Mk files.
+This patch fixes the open2300's build-system, which is a handwritten
+Makefile, by removing the hard-coded include and library locations and
+making them pointing to the systroot.
 
- dependencies.sh is not a .mk file...
+Fixes:
+  http://autobuild.buildroot.org/results/072/0724ffa1355f5564b1fcd9d6e3c9ff2162d20f44/build-end.log
 
- For .mk files it makes some sense not to indent:
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+---
+ package/open2300/open2300-0001-fix-makefile.patch | 52 +++++++++++++++++++++++
+ package/open2300/open2300.mk                      |  7 ++-
+ 2 files changed, 58 insertions(+), 1 deletion(-)
+ create mode 100644 package/open2300/open2300-0001-fix-makefile.patch
 
-- conditions are very rarely nested;
-
-- indentation is already used to indicate commands within a rule;
-
-- it's convenient to have all rules and variable names aligned at column 0.
-
- For scripts, we do have indentation, but not consistently (sometimes
-tab, sometimes 4 spaces). IMHO it _should_ be tab.
-
- Regards,
- Arnout
-
-> 
-> But if we find we don't want that because it removes clarity in the code.
-> I can perfectly resend with only the space/tab fixed.
-> 
-> I really don't have a strong opinion on this one. Thomas Petazzoni and
-> Yann E. Morin also found it disturbing.
-> Peter what is your decision ?
->>
->> --
->> Luca
-> 
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-
-
+diff --git a/package/open2300/open2300-0001-fix-makefile.patch b/package/open2300/open2300-0001-fix-makefile.patch
+new file mode 100644
+index 0000000..5398d08
+--- /dev/null
++++ b/package/open2300/open2300-0001-fix-makefile.patch
+@@ -0,0 +1,52 @@
++From faca6c375cbb528f3f34333b3858492f4564da81 Mon Sep 17 00:00:00 2001
++From: Samuel Martin <s.martin49@gmail.com>
++Date: Wed, 5 Feb 2014 21:52:20 +0100
++Subject: [PATCH] fix makefile
++
++- allow to extend CFLAGS and CC_LDFLAGS
++- remove hard-coded include dirs. and lib. dirs. (which pointed to some
++  location in the host system)
++
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++---
++ Makefile | 10 +++++-----
++ 1 file changed, 5 insertions(+), 5 deletions(-)
++
++diff --git a/Makefile b/Makefile
++index 92a2cc0..6b461ef 100755
++--- a/Makefile
+++++ b/Makefile
++@@ -37,9 +37,9 @@ MYSQLHISTLOGOBJ = mysqlhistlog2300.o rw2300.o linux2300.o win2300.o
++ 
++ VERSION = 1.11
++ 
++-CFLAGS = -Wall -O3 -DVERSION=\"$(VERSION)\"
++-CC_LDFLAGS = -lm
++-CC_WINFLAG = 
+++CFLAGS += -Wall -O3 -DVERSION=\"$(VERSION)\"
+++CC_LDFLAGS += -lm
+++CC_WINFLAG =
++ # For Windows - comment the two line above and un-comment the two lines below.
++ #CC_LDFLAGS = -lm -lwsock32
++ #CC_WINFLAG = -mwindows
++@@ -80,7 +80,7 @@ xml2300 : $(XMLOBJ)
++ 	$(CC) $(CFLAGS) -o $@ $(XMLOBJ) $(CC_LDFLAGS) $(CC_WINFLAG)
++ 
++ mysql2300:
++-	$(CC) $(CFLAGS) -o mysql2300 mysql2300.c rw2300.c linux2300.c $(CC_LDFLAGS) $(CC_WINFLAG) -I/usr/include/mysql -L/usr/lib/mysql -lmysqlclient
+++	$(CC) $(CFLAGS) -o mysql2300 mysql2300.c rw2300.c linux2300.c $(CC_LDFLAGS) $(CC_WINFLAG)
++ 
++ pgsql2300: $(PGSQLOBJ)
++ 	$(CC) $(CFLAGS) -o $@ $(PGSQLOBJ) $(CC_LDFLAGS) $(CC_WINFLAG) -I/usr/include/pgsql -L/usr/lib/pgsql -lpq
++@@ -95,7 +95,7 @@ minmax2300: $(MINMAXOBJ)
++ 	$(CC) $(CFLAGS) -o $@ $(MINMAXOBJ) $(CC_LDFLAGS) $(CC_WINFLAG)
++ 	
++ mysqlhistlog2300 :
++-	$(CC) $(CFLAGS) -o mysqlhistlog2300 mysqlhistlog2300.c rw2300.c linux2300.c $(CC_LDFLAGS) $(CC_WINFLAG) -I/usr/include/mysql -L/usr/lib/mysql -lmysqlclient
+++	$(CC) $(CFLAGS) -o mysqlhistlog2300 mysqlhistlog2300.c rw2300.c linux2300.c $(CC_LDFLAGS) $(CC_WINFLAG)
++ 
++ 
++ install:
++-- 
++1.8.5.3
++
+diff --git a/package/open2300/open2300.mk b/package/open2300/open2300.mk
+index e9f1cf5..3e718d9 100644
+--- a/package/open2300/open2300.mk
++++ b/package/open2300/open2300.mk
+@@ -10,14 +10,19 @@ OPEN2300_VERSION     = 12
+ 
+ OPEN2300_BINS = open2300 dump2300 log2300 fetch2300 wu2300 cw2300 history2300 \
+ 		histlog2300 bin2300 xml2300 light2300 interval2300 minmax2300
++OPEN2300_CFLAGS = $(TARGET_CFLAGS)
++OPEN2300_LDFLAGS = $(TARGET_LDFLAGS)
+ 
+ ifeq ($(BR2_PACKAGE_MYSQL),y)
+ 	OPEN2300_DEPENDENCIES += mysql
+ 	OPEN2300_BINS         += mysql2300 mysqlhistlog2300
++	OPEN2300_CFLAGS       += -I$(STAGING_DIR)/usr/include/mysql
++	OPEN2300_LDFLAGS      += -L$(STAGING_DIR)/usr/lib/mysql -lmysqlclient
+ endif
+ 
+ define OPEN2300_BUILD_CMDS
+-	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) $(OPEN2300_BINS)
++	CFLAGS="$(OPEN2300_CFLAGS)" CC_LDFLAGS="$(OPEN2300_LDFLAGS)" \
++		$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) $(OPEN2300_BINS)
+ endef
+ 
+ define OPEN2300_INSTALL_TARGET_CMDS
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.8.5.3
