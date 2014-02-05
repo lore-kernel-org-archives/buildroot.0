@@ -1,74 +1,92 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 05 Feb 2014 21:52:51 +0100
-Subject: [Buildroot] Undo [PATCH v2] Mark MIPS I, II,
-	III and IV as deprecated
-In-Reply-To: <52F1B282.1040106@gentoo.org>
-References: <52F1B282.1040106@gentoo.org>
-Message-ID: <52F2A4A3.4080602@mind.be>
+Date: Wed, 05 Feb 2014 22:03:31 +0100
+Subject: [Buildroot] [PATCH] dependencies.sh: cleanup dependencies.sh
+In-Reply-To: <CAGduivzutuoD1mhfg6Oxo1DYKz+C+kak62Q0c=g_v7TehC3vuA@mail.gmail.com>
+References: <1391459047-23665-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <52F1132F.1050008@lucaceresoli.net>
+ <CAGduivzutuoD1mhfg6Oxo1DYKz+C+kak62Q0c=g_v7TehC3vuA@mail.gmail.com>
+Message-ID: <52F2A723.8090401@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/02/14 04:39, Joshua Kinard wrote:
-> Per this thread/patch here:
-> http://lists.busybox.net/pipermail/buildroot/2013-November/082976.html
+On 04/02/14 23:35, Maxime Hadjinlian wrote:
 > 
-> I'd like to point out that these CPU ISAs are not completely "deprecated"
-> nor rare.  Well, MIPS-I and MIPS-II might be "rare", but MIPS-III and
-> MIPS-IV are the minimum required ISAs for old SGI systems, which are most
-> plentiful on eBay.  Gentoo and Debian support Indy, Indigo2, and O2-based
-> systems, most of which need MIPS-IV (the R4x00 Indy's and I2's need MIPS-III
-> at a minimum).
-> 
-> I've been looking at buildroot as a way to quickly generate a working root
-> filesystem for netboot images, but I ran into a side-effect of this patch
-> when building 'attr':
-> 
-> /usr/space/buildroot/buildroot-2013.11/output/host/usr/lib/gcc/mips-buildroot-linux-uclibc/4.8.2/../../../../mips-buildroot-linux-uclibc/bin/ld:
-> /tmp/ccHuCGCg.o: linking mips:8000 module with previous mips:isa32 modules
-> 
-> /usr/space/buildroot/buildroot-2013.11/output/host/usr/lib/gcc/mips-buildroot-linux-uclibc/4.8.2/../../../../mips-buildroot-linux-uclibc/bin/ld:
-> failed to merge target specific data of file /tmp/ccHuCGCg.o
-> 
-> I was passing '-march=mips4' to the build, which resulted in the error.
-> After finding this patch, activating BR2_DEPRECATED, and selecting "mips
-> iv", the build completed fine.
-> 
-> Does deprecation imply removal at some point in the future?  I'd argue in
-> favour of keeping them around, but either restricting them to a
-> machine-specific build (such as creating a sub-family for SGI systems and
-> setting them there), and keeping the new defaults for mips/mipsel at
-> mips32/mips64 ISAs.
+> On 4 Feb 2014 17:20, "Luca Ceresoli" <luca@lucaceresoli.net
+> <mailto:luca@lucaceresoli.net>> wrote:
+>>
+>> Hi Maxime,
+> Hi Luca,
+>>
+>>
+>> Maxime Hadjinlian wrote:
+>>>
+>>> Cleanup mixed indents and remove commented lines.
+>>>
+>>> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com
+> <mailto:maxime.hadjinlian@gmail.com>>
+>>> ---
+>>>   support/dependencies/dependencies.sh | 214
+> +++++++++++++++++------------------
+>>>   1 file changed, 107 insertions(+), 107 deletions(-)
+>>>
+>>> diff --git a/support/dependencies/dependencies.sh
+> b/support/dependencies/dependencies.sh
+>>> index 47d4d10..06386e6 100755
+>>> --- a/support/dependencies/dependencies.sh
+>>> +++ b/support/dependencies/dependencies.sh
+>>> @@ -1,199 +1,199 @@
+>>>   #!/bin/sh
+>>>   # vi: set sw=4 ts=4:
+>>> -#set -x
+>>>
+>>>   export LC_ALL=C
+>>>
+>>>   # Verify that grep works
+>>>   echo "WORKS" | grep "WORKS" >/dev/null 2>&1
+>>>   if test $? != 0 ; then
+>>> -       echo
+>>> -       echo "grep doesn't work"
+>>> -       exit 1
+>>> +echo
+>>> +echo "grep doesn't work"
+>>> +exit 1
+>>>   fi
+>>
+>>
+>> Are you really suggesting we should remove all nesting? Well, I guess
+>> there's been a problem with the e-mail or something...
+> Well, I asked Peter before doing this, the file contained mixed indents.
+> We thought it would be nice to have a consistent indent with the Mk files.
 
- The reason that we mark it as deprecated is to indicate that we intend
-to remove it, but to give people the chance to react on it. If you are
-interested in keeping this architecture alive and to provide patches for
-it, then we can un-deprecate it.
+ dependencies.sh is not a .mk file...
 
- To continue maintaining this architecture, we need someone who:
+ For .mk files it makes some sense not to indent:
 
-- can suggest a few good toolchain defconfigs to be used in the autobuilders;
+- conditions are very rarely nested;
 
-- can provide patches for autobuilder failures;
+- indentation is already used to indicate commands within a rule;
 
-- can occasionally do run-time testing on real hardware to check if it
-actually works.
+- it's convenient to have all rules and variable names aligned at column 0.
 
- So, Joshua, are you game?
-
- If yes, please provide a patch that removes the deprecation for MIPS III
-and IV, and try if you actually build and run a useful system. It's
-probably also a good idea if you can immediately run-time test some of
-the tricky packages (libffi, libglib2, python, perl, lua).
-
+ For scripts, we do have indentation, but not consistently (sometimes
+tab, sometimes 4 spaces). IMHO it _should_ be tab.
 
  Regards,
  Arnout
 
 > 
-> Thanks!,
+> But if we find we don't want that because it removes clarity in the code.
+> I can perfectly resend with only the space/tab fixed.
+> 
+> I really don't have a strong opinion on this one. Thomas Petazzoni and
+> Yann E. Morin also found it disturbing.
+> Peter what is your decision ?
+>>
+>> --
+>> Luca
 > 
 > 
 > 
@@ -86,11 +104,3 @@ Essensium/Mind                                http://www.mind.be
 G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
 LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
 GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 880 bytes
-Desc: OpenPGP digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140205/dba3efe5/attachment.asc>
