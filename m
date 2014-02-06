@@ -1,44 +1,111 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 6 Feb 2014 23:04:51 +0100
-Subject: [Buildroot] [git commit] linux-headers: bump 3.{4, 10, 12,
-	13}.x stable versions
-Message-ID: <20140206221408.7CF199C839@busybox.osuosl.org>
+Date: Thu, 6 Feb 2014 23:12:56 +0100
+Subject: [Buildroot] [git commit] open2300: fix build failure
+Message-ID: <20140206221408.9FD679C7C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c2e932e2dd1b8f800d12fbfa478cfb24425ae1b6
+commit: http://git.buildroot.net/buildroot/commit/?id=a8b1d7c8cc20f32edf47c95a673b74cf36643fc3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+This patch fixes the open2300's build-system, which is a handwritten
+Makefile, by removing the hard-coded include and library locations and
+making them pointing to the systroot.
+
+Fixes:
+  http://autobuild.buildroot.org/results/072/0724ffa1355f5564b1fcd9d6e3c9ff2162d20f44/build-end.log
+
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+ package/open2300/open2300-0001-fix-makefile.patch |   52 +++++++++++++++++++++
+ package/open2300/open2300.mk                      |    8 +++-
+ 2 files changed, 59 insertions(+), 1 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 859b71f..65cf70c 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -86,15 +86,15 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
- 	default "3.2.54"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
--	default "3.4.78"	if BR2_KERNEL_HEADERS_3_4
-+	default "3.4.79"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
- 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
- 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
- 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
- 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
--	default "3.10.28"	if BR2_KERNEL_HEADERS_3_10
-+	default "3.10.29"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
--	default "3.12.9"	if BR2_KERNEL_HEADERS_3_12
--	default "3.13.1"	if BR2_KERNEL_HEADERS_3_13
-+	default "3.12.10"	if BR2_KERNEL_HEADERS_3_12
-+	default "3.13.2"	if BR2_KERNEL_HEADERS_3_13
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/open2300/open2300-0001-fix-makefile.patch b/package/open2300/open2300-0001-fix-makefile.patch
+new file mode 100644
+index 0000000..c3bb252
+--- /dev/null
++++ b/package/open2300/open2300-0001-fix-makefile.patch
+@@ -0,0 +1,52 @@
++From b0a1f12349bee43040a889c7e74873cfb253b9d8 Mon Sep 17 00:00:00 2001
++From: Samuel Martin <s.martin49@gmail.com>
++Date: Thu, 6 Feb 2014 21:42:50 +0100
++Subject: [PATCH] fix makefile
++
++- allow to extend CFLAGS and CC_LDFLAGS
++- remove hard-coded include dirs. and lib. dirs. (which pointed to some
++  location in the host system)
++
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++---
++ Makefile | 10 +++++-----
++ 1 file changed, 5 insertions(+), 5 deletions(-)
++
++diff --git a/Makefile b/Makefile
++index 92a2cc0..1b54175 100755
++--- a/Makefile
+++++ b/Makefile
++@@ -37,9 +37,9 @@ MYSQLHISTLOGOBJ = mysqlhistlog2300.o rw2300.o linux2300.o win2300.o
++ 
++ VERSION = 1.11
++ 
++-CFLAGS = -Wall -O3 -DVERSION=\"$(VERSION)\"
++-CC_LDFLAGS = -lm
++-CC_WINFLAG = 
+++override CFLAGS += -Wall -O3 -DVERSION=\"$(VERSION)\"
+++override CC_LDFLAGS += -lm
+++CC_WINFLAG =
++ # For Windows - comment the two line above and un-comment the two lines below.
++ #CC_LDFLAGS = -lm -lwsock32
++ #CC_WINFLAG = -mwindows
++@@ -80,7 +80,7 @@ xml2300 : $(XMLOBJ)
++ 	$(CC) $(CFLAGS) -o $@ $(XMLOBJ) $(CC_LDFLAGS) $(CC_WINFLAG)
++ 
++ mysql2300:
++-	$(CC) $(CFLAGS) -o mysql2300 mysql2300.c rw2300.c linux2300.c $(CC_LDFLAGS) $(CC_WINFLAG) -I/usr/include/mysql -L/usr/lib/mysql -lmysqlclient
+++	$(CC) $(CFLAGS) -o mysql2300 mysql2300.c rw2300.c linux2300.c $(CC_LDFLAGS) $(CC_WINFLAG)
++ 
++ pgsql2300: $(PGSQLOBJ)
++ 	$(CC) $(CFLAGS) -o $@ $(PGSQLOBJ) $(CC_LDFLAGS) $(CC_WINFLAG) -I/usr/include/pgsql -L/usr/lib/pgsql -lpq
++@@ -95,7 +95,7 @@ minmax2300: $(MINMAXOBJ)
++ 	$(CC) $(CFLAGS) -o $@ $(MINMAXOBJ) $(CC_LDFLAGS) $(CC_WINFLAG)
++ 	
++ mysqlhistlog2300 :
++-	$(CC) $(CFLAGS) -o mysqlhistlog2300 mysqlhistlog2300.c rw2300.c linux2300.c $(CC_LDFLAGS) $(CC_WINFLAG) -I/usr/include/mysql -L/usr/lib/mysql -lmysqlclient
+++	$(CC) $(CFLAGS) -o mysqlhistlog2300 mysqlhistlog2300.c rw2300.c linux2300.c $(CC_LDFLAGS) $(CC_WINFLAG)
++ 
++ 
++ install:
++-- 
++1.8.5.3
++
+diff --git a/package/open2300/open2300.mk b/package/open2300/open2300.mk
+index e9f1cf5..a89c9a2 100644
+--- a/package/open2300/open2300.mk
++++ b/package/open2300/open2300.mk
+@@ -10,14 +10,20 @@ OPEN2300_VERSION     = 12
+ 
+ OPEN2300_BINS = open2300 dump2300 log2300 fetch2300 wu2300 cw2300 history2300 \
+ 		histlog2300 bin2300 xml2300 light2300 interval2300 minmax2300
++OPEN2300_CFLAGS = $(TARGET_CFLAGS)
++OPEN2300_LDFLAGS = $(TARGET_LDFLAGS)
+ 
+ ifeq ($(BR2_PACKAGE_MYSQL),y)
+ 	OPEN2300_DEPENDENCIES += mysql
+ 	OPEN2300_BINS         += mysql2300 mysqlhistlog2300
++	OPEN2300_CFLAGS       += -I$(STAGING_DIR)/usr/include/mysql
++	OPEN2300_LDFLAGS      += -L$(STAGING_DIR)/usr/lib/mysql -lmysqlclient
+ endif
+ 
+ define OPEN2300_BUILD_CMDS
+-	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) $(OPEN2300_BINS)
++	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" \
++		CFLAGS="$(OPEN2300_CFLAGS)" CC_LDFLAGS="$(OPEN2300_LDFLAGS)" \
++		-C $(@D) $(OPEN2300_BINS)
+ endef
+ 
+ define OPEN2300_INSTALL_TARGET_CMDS
