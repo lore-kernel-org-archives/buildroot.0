@@ -1,68 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 6 Feb 2014 23:16:48 +0100
-Subject: [Buildroot] [git commit] Revert "opencv: cleanup depends and
-	comments"
-Message-ID: <20140206221717.9F0819C817@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 06 Feb 2014 23:19:59 +0100
+Subject: [Buildroot] [PATCH 4 of 7] packages: remove support for
+	documentation on target
+In-Reply-To: <20140206124015.752dfa3f@skate> (Thomas Petazzoni's message of
+ "Thu, 6 Feb 2014 12:40:15 +0100")
+References: <patchbomb.1391597406@argentina>
+ <ab1e96c7872d5567b2a4.1391597410@argentina>
+ <20140205134957.463211f6@skate>
+ <CAAXf6LV0DwSccqT8Ur7p=NXn70FFka212O4t9pBbsS6t1VmuOQ@mail.gmail.com>
+ <20140205141626.654ac08a@skate> <52F2AB5A.8000006@mind.be>
+ <20140206093724.52c0fb0f@skate> <52F36363.5060004@mind.be>
+ <CAAXf6LXdTpmHf+k7ui+mADC9k--1a2_hqb5vEzmBcPkRRpX4FQ@mail.gmail.com>
+ <20140206124015.752dfa3f@skate>
+Message-ID: <87r47flw8g.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b83d57211be83314374cb09adb25b8f2d37ff3df
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-This reverts commit 5f7cbb264ec21f75320ad8518d27f4c605c825f8.
+ > I don't really come to the same conclusion. Arnout said to not add more
+ > things to the global CONF_OPT.
 
-Buildroot policy is to keep the dependencies / comments for sub options in
-case the package in the future no longer has those dependencies.
+ > The existing options in DISABLE_DOCUMENTATION are already part of the
+ > CONF_OPT, so having a small refactoring that removes
+ > DISABLE_DOCUMENTATION and makes it part of the global CONF_OPT doesn't
+ > change anything in terms of removing those global options and moving
+ > them to a per-package solution.
 
-See http://lists.busybox.net/pipermail/buildroot/2014-February/088523.html
-for details.
+Agreed.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/opencv/Config.in |   12 ++++++++++--
- 1 files changed, 10 insertions(+), 2 deletions(-)
-
-diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index dfdd93a..ccde5cb 100644
---- a/package/opencv/Config.in
-+++ b/package/opencv/Config.in
-@@ -140,13 +140,20 @@ comment "ffmpeg support needs a toolchain w/ largefile, IPv6"
- 
- config BR2_PACKAGE_OPENCV_WITH_GSTREAMER
- 	bool "gstreamer support"
-+	depends on BR2_USE_WCHAR # gstreamer -> libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # gstreamer -> libglib2
- 	select BR2_PACKAGE_GSTREAMER
- 	select BR2_PACKAGE_GST_PLUGINS_BASE
- 	select BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_APP
- 
-+comment "gstreamer support needs a toolchain w/ wchar, threads"
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+
- config BR2_PACKAGE_OPENCV_WITH_GTK
- 	bool "gtk support"
- 	depends on BR2_PACKAGE_XORG7
-+	depends on BR2_USE_WCHAR # libgtk2 -> libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libgtk2 -> libglib2
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_LIBGTK2
- 
-@@ -181,12 +188,13 @@ config BR2_PACKAGE_OPENCV_WITH_TIFF
- config BR2_PACKAGE_OPENCV_WITH_V4L
- 	bool "v4l support"
- 	depends on BR2_LARGEFILE
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_LIBV4L
- 	help
- 	  Enable Video 4 Linux support.
- 
--comment "v4l support needs a toolchain w/ largefile"
--	depends on !BR2_LARGEFILE
-+comment "v4l support needs a toolchain w/ largefile, threads"
-+	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
- 
- comment "Install options"
- 
+-- 
+Bye, Peter Korsgaard
