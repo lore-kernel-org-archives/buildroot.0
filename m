@@ -1,100 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 6 Feb 2014 23:07:15 +0100
-Subject: [Buildroot] [git commit] package/weston: un-break the rpi-compositor
-Message-ID: <20140206221408.840AC9C817@busybox.osuosl.org>
+Date: Thu, 6 Feb 2014 23:04:51 +0100
+Subject: [Buildroot] [git commit] linux-headers: bump 3.{4, 10, 12,
+	13}.x stable versions
+Message-ID: <20140206221408.7CF199C839@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2e66e26aa6bfa336fceb838918f3a88e0b21899d
+commit: http://git.buildroot.net/buildroot/commit/?id=c2e932e2dd1b8f800d12fbfa478cfb24425ae1b6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The rpi-compositor was broken with the 1.4.0 release,
-but we now have a fix from upstream.
-
-Add this patch, and remove the 'depends on BROKEN'.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/weston/Config.in                           |    1 -
- ...0-compositor-rpi-fix-input-initialization.patch |   57 ++++++++++++++++++++
- 2 files changed, 57 insertions(+), 1 deletions(-)
+ package/linux-headers/Config.in.host |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index 1ab3c2f..247efc8 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -41,7 +41,6 @@ comment "RPi compositor needs a toolchain w/ C++, largefile, threads"
- 
- config BR2_PACKAGE_WESTON_RPI
- 	bool "RPi compositor"
--	depends on BROKEN                       # rpi-backend broken in 1.4.0
- 	depends on BR2_arm                      # rpi-userland
- 	depends on BR2_INSTALL_LIBSTDCPP        # rpi-userland
- 	depends on BR2_LARGEFILE                # rpi-userland
-diff --git a/package/weston/weston-0000-compositor-rpi-fix-input-initialization.patch b/package/weston/weston-0000-compositor-rpi-fix-input-initialization.patch
-new file mode 100644
-index 0000000..8722d07
---- /dev/null
-+++ b/package/weston/weston-0000-compositor-rpi-fix-input-initialization.patch
-@@ -0,0 +1,57 @@
-+commit bf539e39c15e9a4ef4479d03c52263a3f020ef4a
-+Author: Emilio Pozuelo Monfort <emilio.pozuelo@collabora.co.uk>
-+Date:   Mon Feb 3 16:57:27 2014 +0100
-+
-+    compositor-rpi: Fix input initialization
-+    
-+    The input initialization code assumes the outputs have already
-+    been initialized; thus create the outputs first. This fixes a
-+    segfault upon startup. It is also what the drm and fbdev backends
-+    do.
-+
-+diff --git a/src/compositor-rpi.c b/src/compositor-rpi.c
-+index 399090d..e7c0e0d 100644
-+--- a/src/compositor-rpi.c
-++++ b/src/compositor-rpi.c
-+@@ -527,13 +527,6 @@ rpi_compositor_create(struct wl_display *display, int *argc, char *argv[],
-+ 	weston_log("Dispmanx planes are %s buffered.\n",
-+ 		   compositor->single_buffer ? "single" : "double");
-+ 
-+-	if (udev_input_init(&compositor->input,
-+-			    &compositor->base,
-+-			    compositor->udev, "seat0") != 0) {
-+-		weston_log("Failed to initialize udev input.\n");
-+-		goto out_launcher;
-+-	}
-+-
-+ 	for (key = KEY_F1; key < KEY_F9; key++)
-+ 		weston_compositor_add_key_binding(&compositor->base, key,
-+ 						  MODIFIER_CTRL | MODIFIER_ALT,
-+@@ -549,19 +542,23 @@ rpi_compositor_create(struct wl_display *display, int *argc, char *argv[],
-+ 	bcm_host_init();
-+ 
-+ 	if (rpi_renderer_create(&compositor->base, &param->renderer) < 0)
-+-		goto out_udev_input;
-++		goto out_launcher;
-+ 
-+ 	if (rpi_output_create(compositor, param->output_transform) < 0)
-+ 		goto out_renderer;
-+ 
-++	if (udev_input_init(&compositor->input,
-++			    &compositor->base,
-++			    compositor->udev, "seat0") != 0) {
-++		weston_log("Failed to initialize udev input.\n");
-++		goto out_renderer;
-++	}
-++
-+ 	return &compositor->base;
-+ 
-+ out_renderer:
-+ 	compositor->base.renderer->destroy(&compositor->base);
-+ 
-+-out_udev_input:
-+-	udev_input_destroy(&compositor->input);
-+-
-+ out_launcher:
-+ 	weston_launcher_destroy(compositor->base.launcher);
-+ 
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 859b71f..65cf70c 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -86,15 +86,15 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+ 	default "3.2.54"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.78"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.79"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
+ 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
+ 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
+ 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
+ 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
+-	default "3.10.28"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.29"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+-	default "3.12.9"	if BR2_KERNEL_HEADERS_3_12
+-	default "3.13.1"	if BR2_KERNEL_HEADERS_3_13
++	default "3.12.10"	if BR2_KERNEL_HEADERS_3_12
++	default "3.13.2"	if BR2_KERNEL_HEADERS_3_13
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
