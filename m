@@ -1,50 +1,50 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 06 Feb 2014 22:21:03 +0100
-Subject: [Buildroot] autobuild.buildroot.org site improvement
-In-Reply-To: <20140206215835.537252b7@skate>
-References: <20140206215835.537252b7@skate>
-Message-ID: <52F3FCBF.10301@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 6 Feb 2014 22:32:26 +0100
+Subject: [Buildroot] [PATCH v3 3/4] beaglebone: update to latest U-Boot
+In-Reply-To: <1391717684-4244-4-git-send-email-anders@chargestorm.se>
+References: <1391717684-4244-1-git-send-email-anders@chargestorm.se>
+ <1391717684-4244-4-git-send-email-anders@chargestorm.se>
+Message-ID: <20140206223226.3cc86ccc@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/02/14 21:58, Thomas Petazzoni wrote:
-> Hello,
-> 
-> It was requested during the Buildroot meeting, and Ryan reminded me
-> about it right now, so I took five minutes to implement it: filtering
-> of autobuilder results by failed package.
-> 
-> See:
-> 
->   http://autobuild.buildroot.org/?reason=vlc-2.1.2
+Dear Anders Darander,
 
- Nice!
-
- Small remark: the Next> link is wrong. And the total as well.
-
-
- Regards,
- Arnout
-
+On Thu, 6 Feb 2014 21:14:43 +0100, Anders Darander wrote:
+> Update to the default version of U-Boot, at this time 2013.10.
 > 
-> It only shows failures, because the autobuilder is not able to find out
-> whether vlc-2.1.2 was built successfully as part of other builds. We
-> could do this only if the user provides the corresponding Kconfig
-> option.
+> Tested with an old uEnv.txt (i.e. using uImage) and with the
+> currently prefered zImage.
 > 
-> Best regards,
+> Signed-off-by: Anders Darander <anders@chargestorm.se>
+> ---
+>  configs/beaglebone_defconfig | 2 --
+>  1 file changed, 2 deletions(-)
 > 
-> Thomas
-> 
+> diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
+> index 490bed5..6fa8226 100644
+> --- a/configs/beaglebone_defconfig
+> +++ b/configs/beaglebone_defconfig
+> @@ -21,8 +21,6 @@ BR2_DEFAULT_KERNEL_VERSION="3.12.9"
+>  # bootloader
+>  BR2_TARGET_UBOOT=y
+>  BR2_TARGET_UBOOT_BOARDNAME="am335x_evm"
+> -BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+> -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2013.04"
 
+You should keep these lines and just change it to "2013.10".
 
+The reason is that if you remove these lines, then what the defconfig
+means is "use whatever default version Buildroot has". This is not the
+behavior what we want for defconfig, since we want them to be
+reproducible, as we have no guarantee that newer U-Boot versions will
+continue to work for a given platform.
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
