@@ -1,111 +1,81 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 6 Feb 2014 23:12:56 +0100
-Subject: [Buildroot] [git commit] open2300: fix build failure
-Message-ID: <20140206221408.9FD679C7C4@busybox.osuosl.org>
+Date: Thu, 6 Feb 2014 23:05:03 +0100
+Subject: [Buildroot] [git commit] mmc-utils: fix linux headers issue before
+	3-4
+Message-ID: <20140206221408.81C349C7C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a8b1d7c8cc20f32edf47c95a673b74cf36643fc3
+commit: http://git.buildroot.net/buildroot/commit/?id=7122e6a7f47124f735a3851b92ba74ac98959741
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch fixes the open2300's build-system, which is a handwritten
-Makefile, by removing the hard-coded include and library locations and
-making them pointing to the systroot.
+With toolchains that include linux kernel headers before the 3.4 kernel,
+an issue exists with linux/mmc/ioctl.h in that it doesn't include
+linux/types.h.
+
+Merged the patch with an existing patch for mmc-utils as it modifies
+the same file and fixes similar issues. Also updated the patch to
+conform to the buildroot patch naming standard.
 
 Fixes:
-  http://autobuild.buildroot.org/results/072/0724ffa1355f5564b1fcd9d6e3c9ff2162d20f44/build-end.log
+  http://autobuild.buildroot.net/results/828/828c7a686736710c4fcb152230d0fa6b5f4d6ad3
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/open2300/open2300-0001-fix-makefile.patch |   52 +++++++++++++++++++++
- package/open2300/open2300.mk                      |    8 +++-
- 2 files changed, 59 insertions(+), 1 deletions(-)
+ ...atch => mmc-utils-001-fix-mmc-h-includes.patch} |   17 +++++++++--------
+ 1 files changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/package/open2300/open2300-0001-fix-makefile.patch b/package/open2300/open2300-0001-fix-makefile.patch
-new file mode 100644
-index 0000000..c3bb252
---- /dev/null
-+++ b/package/open2300/open2300-0001-fix-makefile.patch
-@@ -0,0 +1,52 @@
-+From b0a1f12349bee43040a889c7e74873cfb253b9d8 Mon Sep 17 00:00:00 2001
-+From: Samuel Martin <s.martin49@gmail.com>
-+Date: Thu, 6 Feb 2014 21:42:50 +0100
-+Subject: [PATCH] fix makefile
-+
-+- allow to extend CFLAGS and CC_LDFLAGS
-+- remove hard-coded include dirs. and lib. dirs. (which pointed to some
-+  location in the host system)
-+
-+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-+---
-+ Makefile | 10 +++++-----
-+ 1 file changed, 5 insertions(+), 5 deletions(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 92a2cc0..1b54175 100755
-+--- a/Makefile
-++++ b/Makefile
-+@@ -37,9 +37,9 @@ MYSQLHISTLOGOBJ = mysqlhistlog2300.o rw2300.o linux2300.o win2300.o
-+ 
-+ VERSION = 1.11
-+ 
-+-CFLAGS = -Wall -O3 -DVERSION=\"$(VERSION)\"
-+-CC_LDFLAGS = -lm
-+-CC_WINFLAG = 
-++override CFLAGS += -Wall -O3 -DVERSION=\"$(VERSION)\"
-++override CC_LDFLAGS += -lm
-++CC_WINFLAG =
-+ # For Windows - comment the two line above and un-comment the two lines below.
-+ #CC_LDFLAGS = -lm -lwsock32
-+ #CC_WINFLAG = -mwindows
-+@@ -80,7 +80,7 @@ xml2300 : $(XMLOBJ)
-+ 	$(CC) $(CFLAGS) -o $@ $(XMLOBJ) $(CC_LDFLAGS) $(CC_WINFLAG)
-+ 
-+ mysql2300:
-+-	$(CC) $(CFLAGS) -o mysql2300 mysql2300.c rw2300.c linux2300.c $(CC_LDFLAGS) $(CC_WINFLAG) -I/usr/include/mysql -L/usr/lib/mysql -lmysqlclient
-++	$(CC) $(CFLAGS) -o mysql2300 mysql2300.c rw2300.c linux2300.c $(CC_LDFLAGS) $(CC_WINFLAG)
-+ 
-+ pgsql2300: $(PGSQLOBJ)
-+ 	$(CC) $(CFLAGS) -o $@ $(PGSQLOBJ) $(CC_LDFLAGS) $(CC_WINFLAG) -I/usr/include/pgsql -L/usr/lib/pgsql -lpq
-+@@ -95,7 +95,7 @@ minmax2300: $(MINMAXOBJ)
-+ 	$(CC) $(CFLAGS) -o $@ $(MINMAXOBJ) $(CC_LDFLAGS) $(CC_WINFLAG)
-+ 	
-+ mysqlhistlog2300 :
-+-	$(CC) $(CFLAGS) -o mysqlhistlog2300 mysqlhistlog2300.c rw2300.c linux2300.c $(CC_LDFLAGS) $(CC_WINFLAG) -I/usr/include/mysql -L/usr/lib/mysql -lmysqlclient
-++	$(CC) $(CFLAGS) -o mysqlhistlog2300 mysqlhistlog2300.c rw2300.c linux2300.c $(CC_LDFLAGS) $(CC_WINFLAG)
-+ 
-+ 
-+ install:
-+-- 
-+1.8.5.3
-+
-diff --git a/package/open2300/open2300.mk b/package/open2300/open2300.mk
-index e9f1cf5..a89c9a2 100644
---- a/package/open2300/open2300.mk
-+++ b/package/open2300/open2300.mk
-@@ -10,14 +10,20 @@ OPEN2300_VERSION     = 12
+diff --git a/package/mmc-utils/0001-mmc-utils-Fix-64-bit-values-redefinition.patch b/package/mmc-utils/mmc-utils-001-fix-mmc-h-includes.patch
+similarity index 79%
+rename from package/mmc-utils/0001-mmc-utils-Fix-64-bit-values-redefinition.patch
+rename to package/mmc-utils/mmc-utils-001-fix-mmc-h-includes.patch
+index 07dc742..8d0b2eb 100644
+--- a/package/mmc-utils/0001-mmc-utils-Fix-64-bit-values-redefinition.patch
++++ b/package/mmc-utils/mmc-utils-001-fix-mmc-h-includes.patch
+@@ -1,4 +1,4 @@
+-mmc-utils: Fix 64-bit values redefinition
++mmc-utils: fix mmc.h includes
  
- OPEN2300_BINS = open2300 dump2300 log2300 fetch2300 wu2300 cw2300 history2300 \
- 		histlog2300 bin2300 xml2300 light2300 interval2300 minmax2300
-+OPEN2300_CFLAGS = $(TARGET_CFLAGS)
-+OPEN2300_LDFLAGS = $(TARGET_LDFLAGS)
+ Some toolchains include asm-generic/int-l64.h from their asm/types.h
+ file for certain 64-bit architectures. This causes a conflict between
+@@ -13,28 +13,29 @@ asm-generic/int-ll64.h:29:44: note: previous declaration of '__s64' was
+ here
+  __extension__ typedef __signed__ long long __s64;
  
- ifeq ($(BR2_PACKAGE_MYSQL),y)
- 	OPEN2300_DEPENDENCIES += mysql
- 	OPEN2300_BINS         += mysql2300 mysqlhistlog2300
-+	OPEN2300_CFLAGS       += -I$(STAGING_DIR)/usr/include/mysql
-+	OPEN2300_LDFLAGS      += -L$(STAGING_DIR)/usr/lib/mysql -lmysqlclient
- endif
++[Ryan: added include of linux/types.h because mmc/ioctl.h does not
++       include it in kernel version before 3.4]
++
+ Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+ ---
+  mmc.h |    4 +++-
+  1 files changed, 3 insertions(+), 1 deletions(-)
+-
+ diff --git a/mmc.h b/mmc.h
+ index 9871d62..2d54ec5 100644
+ --- a/mmc.h
+ +++ b/mmc.h
+-@@ -14,9 +14,11 @@
++@@ -14,9 +14,12 @@
+   * Boston, MA 021110-1307, USA.
+   */
+- 
++
+ -#include <asm-generic/int-ll64.h>
+++#include <linux/types.h>
+  #include <linux/mmc/ioctl.h>
+  #include <stdio.h>
+ +#ifndef _ASM_GENERIC_INT_L64_H
+ +#include <asm-generic/int-ll64.h>
+ +#endif
+- 
++
+  #define CHECK(expr, msg, err_stmt) { if (expr) { fprintf(stderr, msg); err_stmt; } }
+- 
+--- 
+-1.7.1
  
- define OPEN2300_BUILD_CMDS
--	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) $(OPEN2300_BINS)
-+	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" \
-+		CFLAGS="$(OPEN2300_CFLAGS)" CC_LDFLAGS="$(OPEN2300_LDFLAGS)" \
-+		-C $(@D) $(OPEN2300_BINS)
- endef
- 
- define OPEN2300_INSTALL_TARGET_CMDS
