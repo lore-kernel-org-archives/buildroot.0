@@ -1,50 +1,140 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Feb 2014 22:32:26 +0100
-Subject: [Buildroot] [PATCH v3 3/4] beaglebone: update to latest U-Boot
-In-Reply-To: <1391717684-4244-4-git-send-email-anders@chargestorm.se>
-References: <1391717684-4244-1-git-send-email-anders@chargestorm.se>
- <1391717684-4244-4-git-send-email-anders@chargestorm.se>
-Message-ID: <20140206223226.3cc86ccc@skate>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 06 Feb 2014 22:37:39 +0100
+Subject: [Buildroot] [pkg-perl infra V4 9/9] qemu: add a Config.in.host
+In-Reply-To: <CA+-urNTFqp3geYA4ScNjccrFEAEJB6O___EztSQpWpiprOiYCg@mail.gmail.com>
+References: <1391608380-23240-1-git-send-email-francois.perrad@gadz.org>	<1391608380-23240-10-git-send-email-francois.perrad@gadz.org>	<20140205170456.2440f114@skate>	<CAB0FRsswiwUhbho2EU-kTh1ASYYvq+_wHFtojKvfwUL92c85+g@mail.gmail.com>	<52F3C359.9040705@mind.be>
+ <CA+-urNTFqp3geYA4ScNjccrFEAEJB6O___EztSQpWpiprOiYCg@mail.gmail.com>
+Message-ID: <52F400A3.9050707@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Anders Darander,
-
-On Thu, 6 Feb 2014 21:14:43 +0100, Anders Darander wrote:
-> Update to the default version of U-Boot, at this time 2013.10.
+On 06/02/14 21:46, Frank Hunleth wrote:
+> Hi Arnout and all,
 > 
-> Tested with an old uEnv.txt (i.e. using uImage) and with the
-> currently prefered zImage.
+> On Thu, Feb 6, 2014 at 12:16 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>>
+>> On 05/02/14 20:48, Fran?ois Perrad wrote:
+>>> 2014-02-05 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+>>>>> Dear Francois Perrad,
+>>>>>
+>>>>> On Wed,  5 Feb 2014 14:53:00 +0100, Francois Perrad wrote:
+>>>>>>> after the removal of cpanminus
+>>>>>>>
+>>>>>>> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+>>>>>>> ---
+>>>>>>>  package/Config.in.host      |    1 +
+>>>>>>>  package/qemu/Config.in.host |   10 ++++++++++
+>>>>>>>  2 files changed, 11 insertions(+)
+>>>>>>>  create mode 100644 package/qemu/Config.in.host
+>>>>>
+>>>>> I'm not sure this should be part of the Perl patch series. At the
+>>>>> meeting, I think we all agreed that building the Qemu user-mode
+>>>>> emulation for the host is not useful as it cannot work properly.
+>>>>> Instead the qemu package should build the system-mode emulation for the
+>>>>> host, which is something that Gustavo proposed some time ago.
+>>>>>
+>>>>> So I'd say to leave Qemu on the side for now, and focus on the Perl
+>>>>> side of things in this patch series.
+>>>>>
+>>> Frank Hunleth needs it.
+>>> See http://lists.busybox.net/pipermail/buildroot/2013-December/084131.html
+>>> & http://patchwork.ozlabs.org/patch/299014/
 > 
-> Signed-off-by: Anders Darander <anders@chargestorm.se>
-> ---
->  configs/beaglebone_defconfig | 2 --
->  1 file changed, 2 deletions(-)
+> That's true. I do use it for regression tests that I run against a few
+> really large data sets. The data set is too large to run on the
+> target.
 > 
-> diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
-> index 490bed5..6fa8226 100644
-> --- a/configs/beaglebone_defconfig
-> +++ b/configs/beaglebone_defconfig
-> @@ -21,8 +21,6 @@ BR2_DEFAULT_KERNEL_VERSION="3.12.9"
->  # bootloader
->  BR2_TARGET_UBOOT=y
->  BR2_TARGET_UBOOT_BOARDNAME="am335x_evm"
-> -BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2013.04"
+>>  It's true that qemu-user would be nice to have, but unless we can find a
+>> way to guarantee that it works, I'm also against keeping it. When the
+>> kernel version is inconsistent, it can really break in hard to debug ways.
+> 
+> The processing that I do is algorithmic so I assume that I'm not
+> running into the kernel version issue. I'm not sure that I understand
+> the versioning issue, though. Should I be concerned?
 
-You should keep these lines and just change it to "2013.10".
+ The problem is that qemu handles system calls by passing them to the
+host kernel. If the application or library is making a system call that
+doesn't exist (yet) on the host's kernel, then the application will fail.
+I believe glibc checks for it at startup, so it will error out
+immediately, but I don't think uClibc does such a check.
 
-The reason is that if you remove these lines, then what the defconfig
-means is "use whatever default version Buildroot has". This is not the
-behavior what we want for defconfig, since we want them to be
-reproducible, as we have no guarantee that newer U-Boot versions will
-continue to work for a given platform.
+ In addition, there may be issues with the way syscall arguments are
+passed when the host and target arch are different, but it's possible
+that qemu handles that.
 
-Thomas
+> 
+> Also, I'd happily switch to running the regression tests using
+> system-mode, but qemu-user is just really convenient since I run the
+> tests against the same binaries that run on the target. 
+
+ You can still use the binaries; only in system mode you need a kernel
+and full userspace as well. But it's perfectly possible to boot
+qemu-system with an initramfs (cpio) rootfs, and point init to
+/usr/bin/mytests.
+
+
+> Just out of
+> curiosity, are there any other ways that people run regression tests?
+> 
+> The final point that I'd make is that using qemu-user is the only way
+> that I know of to compile Erlang bytecode to the target's machine
+> code. E.g. I use qemu-user to run the cross-compiled Erlang compiler
+> which then can be used to turn Erlang source code into machine code
+> for the target. Normally interpreted Erlang bytecode works plenty
+> fast, but it would be nice to get a performance boost. I haven't tried
+> submitting a patch for this, since I know that the prerequisite
+> qemu-user patch isn't a favorite. Do any other interpreted languages
+> have this problem and if so, how have they solved it?
+> 
+> Given the opinions here, it sounds like the qemu-user issue is either
+> really hard or impossible to fix. I'd rather not waste anyone's time,
+> but if there were any ideas or someone just needed help finishing them
+> up or testing them, I'd offer some of my time to assist.
+
+ The problem to be fixed is to detect that the host's kernel is
+compatible with the target's kernel headers. You can do that by checking
+linux/version.h in the cross-compiler with uname -r on the host.
+
+
+ Regards,
+ Arnout
+
+
+> 
+> Thanks,
+> Frank
+> 
+> p.s. I have no opinion on including/excluding this patch with the Perl
+> series, so feel free to defer this aspect of the thread to a more
+> convenient time.
+>>
+>>  Regards,
+>>  Arnout
+>>
+>> --
+>> Arnout Vandecappelle                          arnout at mind be
+>> Senior Embedded Software Architect            +32-16-286500
+>> Essensium/Mind                                http://www.mind.be
+>> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+>> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+>> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> 
+> 
+> 
+
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
