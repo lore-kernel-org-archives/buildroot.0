@@ -1,37 +1,73 @@
 From: Anders Darander <anders@chargestorm.se>
-Date: Thu, 6 Feb 2014 21:14:43 +0100
-Subject: [Buildroot] [PATCH v3 3/4] beaglebone: update to latest U-Boot
+Date: Thu, 6 Feb 2014 21:14:42 +0100
+Subject: [Buildroot] [PATCH v3 2/4] am33x-cm3: update to latest version
 In-Reply-To: <1391717684-4244-1-git-send-email-anders@chargestorm.se>
 References: <1391717684-4244-1-git-send-email-anders@chargestorm.se>
-Message-ID: <1391717684-4244-4-git-send-email-anders@chargestorm.se>
+Message-ID: <1391717684-4244-3-git-send-email-anders@chargestorm.se>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update to the default version of U-Boot, at this time 2013.10.
+This goes hand-in-hand with the kernel update.
+The version is taken from meta-ti.
 
-Tested with an old uEnv.txt (i.e. using uImage) and with the
-currently prefered zImage.
+The new kernel version, 3.12, requires a newer PM FW.
+
+This should correspond to v05.00.00.02, though that tag
+has not been pushed...
 
 Signed-off-by: Anders Darander <anders@chargestorm.se>
 ---
- configs/beaglebone_defconfig | 2 --
- 1 file changed, 2 deletions(-)
+ package/am33x-cm3/am33x-cm3-0001-fix-makefile.patch | 16 ++++++++++------
+ package/am33x-cm3/am33x-cm3.mk                      |  3 ++-
+ 2 files changed, 12 insertions(+), 7 deletions(-)
 
-diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
-index 490bed5..6fa8226 100644
---- a/configs/beaglebone_defconfig
-+++ b/configs/beaglebone_defconfig
-@@ -21,8 +21,6 @@ BR2_DEFAULT_KERNEL_VERSION="3.12.9"
- # bootloader
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="am335x_evm"
--BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2013.04"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="MLO"
+diff --git a/package/am33x-cm3/am33x-cm3-0001-fix-makefile.patch b/package/am33x-cm3/am33x-cm3-0001-fix-makefile.patch
+index 77ba11c..f3cdb5e 100644
+--- a/package/am33x-cm3/am33x-cm3-0001-fix-makefile.patch
++++ b/package/am33x-cm3/am33x-cm3-0001-fix-makefile.patch
+@@ -11,16 +11,20 @@ Fix this by explicitly indicating -march=armv7-m.
+ 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ 
++Updated the patch to the latest version of the Makefile
++
++Signed-off-by: Anders Darander <anders@chargestorm.se>
++
+ Index: b/Makefile
+ ===================================================================
+ --- a/Makefile
+ +++ b/Makefile
+-@@ -13,7 +13,7 @@
++@@ -13,7 +13,7 @@ SRCDIR = src
+  BINDIR = bin
+  
+  INCLUDES = $(SRCDIR)/include
+--CFLAGS =-mcpu=cortex-m3 -mthumb -nostdlib -Wall -g -I$(INCLUDES)
+-+CFLAGS =-march=armv7-m -mcpu=cortex-m3 -mthumb -nostdlib -Wall -g -I$(INCLUDES)
+- LDFLAGS =-nostartfiles -fno-exceptions -Tfirmware.ld
+- 
+- EXECUTABLE=am335x-pm-firmware.elf
++-CFLAGS =-mcpu=cortex-m3 -mthumb -nostdlib -Wall -Wundef \
+++CFLAGS =-march=armv7-m -mcpu=cortex-m3 -mthumb -nostdlib -Wall -Wundef \
++ 	-Werror-implicit-function-declaration -Wstrict-prototypes \
++ 	-Wdeclaration-after-statement -fno-delete-null-pointer-checks \
++ 	-Wempty-body -fno-strict-overflow  -g -I$(INCLUDES) -O2
+diff --git a/package/am33x-cm3/am33x-cm3.mk b/package/am33x-cm3/am33x-cm3.mk
+index 929c4a5..01cb9a0 100644
+--- a/package/am33x-cm3/am33x-cm3.mk
++++ b/package/am33x-cm3/am33x-cm3.mk
+@@ -4,7 +4,8 @@
+ #
+ ################################################################################
+ 
+-AM33X_CM3_VERSION = AM335xPSP_04.06.00.10-rc1
++# This should correpsond to v05.00.00.02
++AM33X_CM3_VERSION = 11107db2f1e9e58ee75d4fe9cc38423c9a6e4365
+ AM33X_CM3_SITE = http://arago-project.org/git/projects/am33x-cm3.git
+ AM33X_CM3_SITE_METHOD = git
+ AM33X_CM3_LICENSE = TI Publicly Available Software License
 -- 
 1.9.rc1
