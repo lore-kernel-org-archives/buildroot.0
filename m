@@ -1,38 +1,52 @@
-From: Axel Lin <axel.lin@ingics.com>
-Date: Thu, 06 Feb 2014 20:06:27 +0800
-Subject: [Buildroot] [PATCH] snmppp: bump to version 3.3.3
-Message-ID: <1391688387.362.5.camel@phoenix>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 6 Feb 2014 13:15:10 +0100
+Subject: [Buildroot] [PATCH 4 of 7] packages: remove support for
+ documentation on target
+In-Reply-To: <20140206124015.752dfa3f@skate>
+References: <patchbomb.1391597406@argentina>
+ <ab1e96c7872d5567b2a4.1391597410@argentina>
+ <20140205134957.463211f6@skate>
+ <CAAXf6LV0DwSccqT8Ur7p=NXn70FFka212O4t9pBbsS6t1VmuOQ@mail.gmail.com>
+ <20140205141626.654ac08a@skate> <52F2AB5A.8000006@mind.be>
+ <20140206093724.52c0fb0f@skate> <52F36363.5060004@mind.be>
+ <CAAXf6LXdTpmHf+k7ui+mADC9k--1a2_hqb5vEzmBcPkRRpX4FQ@mail.gmail.com>
+ <20140206124015.752dfa3f@skate>
+Message-ID: <CAAXf6LVtS=N7DhSA0ZmJOU0AsK1_H62b8wZODfQM=azROUJsmg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changes snmp++v3.3.3
-====================
+On Thu, Feb 6, 2014 at 12:40 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Thomas De Schampheleire,
+>
+> On Thu, 6 Feb 2014 12:34:00 +0100, Thomas De Schampheleire wrote:
+>
+>> >  But of course that's a large change, since all 846 autotools packages
+>> > would have to be checked...
+>> >
+>> >  So let's start with not adding anything to the global CONF_OPT :-)
+>>
+>> With this conclusion, I'd say we mark the last patch as Rejected (the
+>> one removing the separate DISABLE_DOCUMENTATION variable).
+>
+> I don't really come to the same conclusion. Arnout said to not add more
+> things to the global CONF_OPT.
+>
+> The existing options in DISABLE_DOCUMENTATION are already part of the
+> CONF_OPT, so having a small refactoring that removes
+> DISABLE_DOCUMENTATION and makes it part of the global CONF_OPT doesn't
+> change anything in terms of removing those global options and moving
+> them to a per-package solution.
 
-- Fixed: [APP-30] SNMP++ cannot BER decode Oids starting with 2 and
-  with second sub-identifier >39 correctly.
-- Fixed: [APP-31] SNMP++ does not encode Oids starting with 2 and
-  second sub-ID greater than 47 correctly.
+My reasoning was that if we are going to migrate the global options to
+per-package options, then it is not needed to change anything about
+this now. Maybe this is too swift a conclusion...
 
-Signed-off-by: Axel Lin <axel.lin@ingics.com>
----
- package/snmppp/snmppp.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I have no very strong opinion about the last patch, so feel free to
+apply or reject it.
 
-diff --git a/package/snmppp/snmppp.mk b/package/snmppp/snmppp.mk
-index eb1b7b9..2cae093 100644
---- a/package/snmppp/snmppp.mk
-+++ b/package/snmppp/snmppp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SNMPPP_VERSION = 3.3.2
-+SNMPPP_VERSION = 3.3.3
- SNMPPP_SOURCE = snmp++$(SNMPPP_VERSION).tar.gz
- SNMPPP_SITE = http://www.agentpp.com
- SNMPPP_DEPENDENCIES = openssl host-pkgconf
--- 
-1.8.1.2
+Best regards,
+Thomas
