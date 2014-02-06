@@ -1,55 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Feb 2014 10:05:23 +0100
-Subject: [Buildroot] [PATCH] open2300: fix build failure
-In-Reply-To: <1391634562-1680-1-git-send-email-s.martin49@gmail.com>
-References: <1391634562-1680-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <20140206100523.34e8247b@skate>
+Date: Thu, 6 Feb 2014 10:08:19 +0100
+Subject: [Buildroot] [RFC PATCH] Add OpenTyrian package (SDL game)
+In-Reply-To: <52F2BE4F.3080600@mind.be>
+References: <1391624243-10898-1-git-send-email-julien.boibessot@free.fr>
+ <52F2BE4F.3080600@mind.be>
+Message-ID: <20140206100819.11d566f5@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+Dear Arnout Vandecappelle,
 
-On Wed,  5 Feb 2014 22:09:22 +0100, Samuel Martin wrote:
+On Wed, 05 Feb 2014 23:42:23 +0100, Arnout Vandecappelle wrote:
 
-> +- allow to extend CFLAGS and CC_LDFLAGS
+> > +OPENTYRIAN_DATA = tyrian21.zip
+> > +OPENTYRIAN_DATA_SITE = http://sites.google.com/a/camanis.net/opentyrian/tyrian/
+> 
+>  Why not simply http://www.camanis.net/opentyrian/tyrian21.zip ?
+> 
+> > +
+> > +define OPENTYRIAN_DOWNLOAD_DATA
+> > +	@$(call MESSAGE,Downloading data)
+> > +#	@$(call DOWNLOAD,$(OPENTYRIAN_DATA_SITE),$(OPENTYRIAN_DATA)) << doesn't work !!
+> 
+>  DOWNLOAD expects the full URL as the first argument. The optional second
+> argument exists for cases where the local file should be different than
+> the base of the URL (e.g. if it contains question marks or other madness).
 
-[...]
+As I've replied separately, packages should not directly use the
+DOWNLOAD macro, I believe.
 
-> +-CFLAGS = -Wall -O3 -DVERSION=\"$(VERSION)\"
-> +-CC_LDFLAGS = -lm
-> +-CC_WINFLAG = 
-> ++CFLAGS += -Wall -O3 -DVERSION=\"$(VERSION)\"
-> ++CC_LDFLAGS += -lm
-> ++CC_WINFLAG =
+> > +define OPENTYRIAN_BUILD_CMDS
+> > +        $(MAKE) PLATFORM=UNIX \
+> > +		CC="$(TARGET_CC)" \
+> > +		STRIP="$(STRIPCMD) $(STRIP_STRIP_UNNEEDED)" \
+> 
+>  Everything in target is already stripped automatically at the end, so
+> it's usually not needed to pass this.
 
-This doesn't allow to extend CFLAGS if the CFLAGS is passed on the
-right hand side of the "make" call.
-
-I.e, with your patch, if you do:
-
-	make CFLAGS=-something
-
-Then the CFLAGS will only contain "-something", not "-something -Wall
--O3 -DVERSION...". However, with your patch, it works if you do:
-
-	CFLAGS=-something make
-
-In Buildroot, we indeed often do $(TARGET_CONFIGURE_OPTS) $(MAKE),
-which means CFLAGS is passed on the left side of make. But this
-specific package does not do this:
-
-	$(MAKE) CC=... LD=... -C $(@D)
-
-So it doesn't pass CFLAGS, so there is no problem for now, but if it
-started to pass CFLAGS on the right side of make, then your patch
-wouldn't work.
-
-Instead, if you want it to work in all cases, it should be:
-
-override CFLAGS += -Wall -O3 ...
+Except if the package does its own stripping, and defaults to the host
+strip to do this. In this case, we can either pass STRIP=/bin/true, or
+pass the real STRIP value.
 
 Thomas
 -- 
