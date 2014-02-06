@@ -1,57 +1,39 @@
-From: Ryan Barnett <ryanbarnett3@gmail.com>
-Date: Thu,  6 Feb 2014 23:56:57 +0100
-Subject: [Buildroot] [PATCH 2/2] gpsd: disable for microblaze arch
-In-Reply-To: <1391727417-12293-1-git-send-email-rjbarnet@rockwellcollins.com>
-References: <1391727417-12293-1-git-send-email-rjbarnet@rockwellcollins.com>
-Message-ID: <1391727417-12293-2-git-send-email-rjbarnet@rockwellcollins.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 7 Feb 2014 00:04:45 +0100
+Subject: [Buildroot] Google Summer of Code 2014: ideas, students?
+Message-ID: <20140207000445.2203a61f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gpsd will fail on an internal compiler error for the microblaze
-architecture so disabling it on that architecture.
+Hello,
 
-Fixes:
-  http://autobuild.buildroot.org/results/42d/42da870722f24e4202d8265597771a0449e74cfd
+This year, the Buildroot project will again apply as an organization to
+participate to the Google Summer of Code 2014. I am currently going
+through the process to get this done.
 
-Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
----
- package/gpsd/Config.in        | 2 ++
- package/sconeserver/Config.in | 1 +
- 2 files changed, 3 insertions(+)
+In order to get things started, I have created the following page:
 
-diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
-index 5954e77..ee47836 100644
---- a/package/gpsd/Config.in
-+++ b/package/gpsd/Config.in
-@@ -1,12 +1,14 @@
- comment "gpsd needs a toolchain w/ threads"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_microblaze
- 
- config BR2_PACKAGE_GPSD
- 	bool "gpsd"
- 	# Uses fork()
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_microblaze
- 	help
- 	  gpsd is a service daemon that monitors one or more GPSes or AIS
- 	  receivers attached to a host computer through serial or USB ports,
-diff --git a/package/sconeserver/Config.in b/package/sconeserver/Config.in
-index 1dc41d2..ccb9c00 100644
---- a/package/sconeserver/Config.in
-+++ b/package/sconeserver/Config.in
-@@ -67,6 +67,7 @@ config BR2_PACKAGE_SCONESERVER_LOCATION
- 	bool "location"
- 	depends on BR2_USE_MMU # gpsd
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # gpsd
-+	depends on !BR2_microblaze # gpsd
- 	select BR2_PACKAGE_GPSD
- 	help
- 	  Location module for Sconeserver
+  http://elinux.org/Buildroot:GSoC2014Ideas
+
+which lists the two project ideas we mentioned during the last
+Buildroot developers meeting in Brussels.
+
+We are now looking for:
+
+ * Students interested in working on these ideas during the summer, in
+   the context of the Google Summer of Code. Do not hesitate to get in
+   touch with us if you're interested!
+
+ * People having other ideas to propose, and possibly willing to mentor
+   students to work on these ideas.
+
+Best regards,
+
+Thomas
 -- 
-1.8.3.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
