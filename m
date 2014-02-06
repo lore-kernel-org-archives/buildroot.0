@@ -1,112 +1,86 @@
-From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Thu, 6 Feb 2014 12:30:07 +0100
-Subject: [Buildroot] [pkg-perl infra V4 1/9] pkg-perl: refactor and
-	rename PERL5LIB
-In-Reply-To: <52F32BCB.1010901@mind.be>
-References: <1391608380-23240-1-git-send-email-francois.perrad@gadz.org>
- <1391608380-23240-2-git-send-email-francois.perrad@gadz.org>
- <52F32BCB.1010901@mind.be>
-Message-ID: <CAB0FRstNqey7fwvOHhvatOGhNSSbJg=-aNTZd9JJ+cMYGTfhbg@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 6 Feb 2014 12:34:00 +0100
+Subject: [Buildroot] [PATCH 4 of 7] packages: remove support for
+ documentation on target
+In-Reply-To: <52F36363.5060004@mind.be>
+References: <patchbomb.1391597406@argentina>
+ <ab1e96c7872d5567b2a4.1391597410@argentina>
+ <20140205134957.463211f6@skate>
+ <CAAXf6LV0DwSccqT8Ur7p=NXn70FFka212O4t9pBbsS6t1VmuOQ@mail.gmail.com>
+ <20140205141626.654ac08a@skate> <52F2AB5A.8000006@mind.be>
+ <20140206093724.52c0fb0f@skate> <52F36363.5060004@mind.be>
+Message-ID: <CAAXf6LXdTpmHf+k7ui+mADC9k--1a2_hqb5vEzmBcPkRRpX4FQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2014-02-06 7:29 GMT+01:00 Arnout Vandecappelle <arnout@mind.be>:
-> On 05/02/14 14:52, Francois Perrad wrote:
+On Thu, Feb 6, 2014 at 11:26 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 06/02/14 09:37, Thomas Petazzoni wrote:
+>> Dear Arnout Vandecappelle,
 >>
->> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
->> ---
->>  package/Makefile.in          |   11 +++++++----
->>  package/intltool/intltool.mk |    3 +--
->>  2 files changed, 8 insertions(+), 6 deletions(-)
+>> On Wed, 05 Feb 2014 22:21:30 +0100, Arnout Vandecappelle wrote:
 >>
->> diff --git a/package/Makefile.in b/package/Makefile.in
->> index 2e433fd..d0b1cfd 100644
->> --- a/package/Makefile.in
->> +++ b/package/Makefile.in
->> @@ -206,6 +206,8 @@ HOST_PATH=$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(PATH)
->>  HOSTCC_VERSION:=$(shell $(HOSTCC_NOCCACHE) --version | \
->>       sed -n 's/^.* \([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)[ ]*.*$$/\1\2\3/p')
+>>>> WARNING: options --disable-foo --enable-bar unsupported
+>>>>
+>>>> If you have gazillions of options that are unsupported, then you may
+>>>> very well miss an option passed by your .mk file on which you made a
+>>>> typo, for example.
+>>>>
+>>>> So having a long list of options to disable documentation is not
+>>>> something that I personally like that much, but I believe Arnout does
+>>>> not share the same opinion :)
+>>>
+>>>  I have a mixed opinion about this...
+>>>
+>>>  I do think that the configure options should ideally be as exact as
+>>> possible. However, documentation is something that is wont to cause hard
+>>> to track build failures
 >>
->> +HOST_PERL5LIB = $(HOST_DIR)/usr/lib/perl
->> +
->>  TARGET_CONFIGURE_OPTS=PATH=$(TARGET_PATH) \
->>               AR="$(TARGET_AR)" \
->>               AS="$(TARGET_AS)" \
->> @@ -241,11 +243,12 @@ TARGET_CONFIGURE_OPTS=PATH=$(TARGET_PATH) \
->>               LDFLAGS="$(TARGET_LDFLAGS)" \
->>               FCFLAGS="$(TARGET_FCFLAGS)" \
->>               PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
->> -             PERLLIB="$(HOST_DIR)/usr/lib/perl" \
->> +             PERL5LIB=$(HOST_PERL5LIB) \
->>               STAGING_DIR="$(STAGING_DIR)"
+>> Not sure what you meant here. Will those build failures be hard to
+>> track, or *not* hard to track ?
 >>
->>  TARGET_MAKE_ENV=PATH=$(TARGET_PATH) \
->> -             PERLLIB="$(HOST_DIR)/usr/lib/perl"
->> +             PERL5LIB=$(HOST_PERL5LIB)
->> +
->>
->>  HOST_CONFIGURE_OPTS=PATH=$(HOST_PATH) \
->>               AR="$(HOSTAR)" \
->> @@ -267,7 +270,7 @@ HOST_CONFIGURE_OPTS=PATH=$(HOST_PATH) \
->>               PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
->>               PKG_CONFIG_SYSROOT_DIR="/" \
->>               PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig:$(HOST_DIR)/usr/share/pkgconfig" \
->> -             PERLLIB="$(HOST_DIR)/usr/lib/perl" \
->> +             PERL5LIB=$(HOST_PERL5LIB) \
->>               LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)"
->>
->>  HOST_MAKE_ENV=PATH=$(HOST_PATH) \
->> @@ -275,7 +278,7 @@ HOST_MAKE_ENV=PATH=$(HOST_PATH) \
->>               PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
->>               PKG_CONFIG_SYSROOT_DIR="/" \
->>               PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig" \
->> -             PERLLIB="$(HOST_DIR)/usr/lib/perl"
->> +             PERL5LIB=$(HOST_PERL5LIB)
->>
->>  # This extra environment we can not export ourselves (eg. because some
->>  # packages use that variable internally, eg. uboot), so we have to
->> diff --git a/package/intltool/intltool.mk b/package/intltool/intltool.mk
->> index b2418fe..4235606 100644
->> --- a/package/intltool/intltool.mk
->> +++ b/package/intltool/intltool.mk
->> @@ -10,8 +10,7 @@ INTLTOOL_LICENSE = GPLv2+
->>  INTLTOOL_LICENSE_FILES = COPYING
->>
->>  HOST_INTLTOOL_DEPENDENCIES = host-gettext host-libxml-parser-perl
->> -HOST_INTLTOOL_CONF_OPT = \
->> -  PERLLIB=$(HOST_DIR)/usr/lib/perl
->> +HOST_INTLTOOL_CONF_ENV = PERL5LIB=$(HOST_PERL5LIB)
+>> Remember that the Free Electrons autobuilder builds run in a chroot
+>> that has only the minimal hard dependencies required by Buildroot. This
+>> typically allows us to catch invisible dependencies on asciidoc or
+>> other documentation utilities.
 >
->  Can't this one just be removed, since it's already in HOST_CONFIGURE_OPTS?
+>  Yes, and this is exactly the problem. On the autobuilders, autotools
+> will detect that asciidoc is missing and will not build documentation. On
+> a user's machine, however, autotools will detect that asciidoc is present
+> and use it, but then /usr/bin/asciidoc will try to use host-python
+> instead of /usr/bin/python and fails because of some missing modules.
+>
+>>
+>>> , e.g. trying to run system asciidoc with host
+>>> python, or system makeinfo with host-perl. So if we remove it from the
+>>> defaults, then we should make sure that _all_ autotools packages disable
+>>> their documentation.
+>>
+>> Indeed.
+>>
+>>>  Hm, now I think about that, it would actually be a good idea to do
+>>> that... We currently still miss some of these cases because we assume
+>>> --disable-documentation works, but if we make a habit of paying attention
+>>> to it, then there is less risk of this happening.
+>>
+>> So your conclusion is that instead of passing those options globally,
+>> we should pass them in a per-package basis, so that we remember to
+>> always verify that the documentation disabling has been done?
+>
+>  Exactly.
+>
+>  But of course that's a large change, since all 846 autotools packages
+> would have to be checked...
+>
+>  So let's start with not adding anything to the global CONF_OPT :-)
+>
 
-You are right, there is a duplication.
+With this conclusion, I'd say we mark the last patch as Rejected (the
+one removing the separate DISABLE_DOCUMENTATION variable).
 
-Fran?ois
+What about the other patches? Good to proceed?
 
->
->  If so, indicate this explicitly in your commit message please.
->
->
->  Regards,
->  Arnout
->
->>
->>  $(eval $(autotools-package))
->>  $(eval $(host-autotools-package))
->>
->
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Thanks,
+Thomas
