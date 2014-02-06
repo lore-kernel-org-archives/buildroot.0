@@ -1,22 +1,33 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 06 Feb 2014 23:06:04 +0100
-Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{4, 10, 12,
-	13}.x stable versions
-In-Reply-To: <1391722748-21098-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 6 Feb 2014 18:39:07 -0300")
-References: <1391722748-21098-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87lhxnnbg3.fsf@dell.be.48ers.dk>
+Date: Thu, 06 Feb 2014 23:06:11 +0100
+Subject: [Buildroot] [PATCH 1/1] mmc-utils: fix linux headers issue
+	before 3-4
+In-Reply-To: <1391723722-7567-1-git-send-email-rjbarnet@rockwellcollins.com>
+ (Ryan Barnett's message of "Thu, 6 Feb 2014 22:55:22 +0100")
+References: <1391723722-7567-1-git-send-email-rjbarnet@rockwellcollins.com>
+Message-ID: <87ha8bnbfw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Ryan" == Ryan Barnett <ryanbarnett3@gmail.com> writes:
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > With toolchains that include linux kernel headers before the 3.4 kernel,
+ > an issue exists with linux/mmc/ioctl.h in that it doesn't include
+ > linux/types.h.
 
-Committed both, thanks.
+ > Merged the patch with an existing patch for mmc-utils as it modifies
+ > the same file and fixes similar issues. Also updated the patch to
+ > conform to the buildroot patch naming standard.
+
+ > Fixes:
+ >   http://autobuild.buildroot.net/results/828/828c7a686736710c4fcb152230d0fa6b5f4d6ad3
+
+ > Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
