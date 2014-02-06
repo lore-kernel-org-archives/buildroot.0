@@ -1,73 +1,32 @@
 From: Anders Darander <anders@chargestorm.se>
-Date: Thu, 6 Feb 2014 21:14:42 +0100
-Subject: [Buildroot] [PATCH v3 2/4] am33x-cm3: update to latest version
+Date: Thu, 6 Feb 2014 21:14:44 +0100
+Subject: [Buildroot] [PATCH v3 4/4] beaglebone: change to zImage
 In-Reply-To: <1391717684-4244-1-git-send-email-anders@chargestorm.se>
 References: <1391717684-4244-1-git-send-email-anders@chargestorm.se>
-Message-ID: <1391717684-4244-3-git-send-email-anders@chargestorm.se>
+Message-ID: <1391717684-4244-5-git-send-email-anders@chargestorm.se>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This goes hand-in-hand with the kernel update.
-The version is taken from meta-ti.
-
-The new kernel version, 3.12, requires a newer PM FW.
-
-This should correspond to v05.00.00.02, though that tag
-has not been pushed...
+The default U-Boot configuration is now to use a zImage instead of uImage.
 
 Signed-off-by: Anders Darander <anders@chargestorm.se>
 ---
- package/am33x-cm3/am33x-cm3-0001-fix-makefile.patch | 16 ++++++++++------
- package/am33x-cm3/am33x-cm3.mk                      |  3 ++-
- 2 files changed, 12 insertions(+), 7 deletions(-)
+ configs/beaglebone_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/am33x-cm3/am33x-cm3-0001-fix-makefile.patch b/package/am33x-cm3/am33x-cm3-0001-fix-makefile.patch
-index 77ba11c..f3cdb5e 100644
---- a/package/am33x-cm3/am33x-cm3-0001-fix-makefile.patch
-+++ b/package/am33x-cm3/am33x-cm3-0001-fix-makefile.patch
-@@ -11,16 +11,20 @@ Fix this by explicitly indicating -march=armv7-m.
- 
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- 
-+Updated the patch to the latest version of the Makefile
-+
-+Signed-off-by: Anders Darander <anders@chargestorm.se>
-+
- Index: b/Makefile
- ===================================================================
- --- a/Makefile
- +++ b/Makefile
--@@ -13,7 +13,7 @@
-+@@ -13,7 +13,7 @@ SRCDIR = src
-  BINDIR = bin
-  
-  INCLUDES = $(SRCDIR)/include
---CFLAGS =-mcpu=cortex-m3 -mthumb -nostdlib -Wall -g -I$(INCLUDES)
--+CFLAGS =-march=armv7-m -mcpu=cortex-m3 -mthumb -nostdlib -Wall -g -I$(INCLUDES)
-- LDFLAGS =-nostartfiles -fno-exceptions -Tfirmware.ld
-- 
-- EXECUTABLE=am335x-pm-firmware.elf
-+-CFLAGS =-mcpu=cortex-m3 -mthumb -nostdlib -Wall -Wundef \
-++CFLAGS =-march=armv7-m -mcpu=cortex-m3 -mthumb -nostdlib -Wall -Wundef \
-+ 	-Werror-implicit-function-declaration -Wstrict-prototypes \
-+ 	-Wdeclaration-after-statement -fno-delete-null-pointer-checks \
-+ 	-Wempty-body -fno-strict-overflow  -g -I$(INCLUDES) -O2
-diff --git a/package/am33x-cm3/am33x-cm3.mk b/package/am33x-cm3/am33x-cm3.mk
-index 929c4a5..01cb9a0 100644
---- a/package/am33x-cm3/am33x-cm3.mk
-+++ b/package/am33x-cm3/am33x-cm3.mk
-@@ -4,7 +4,8 @@
- #
- ################################################################################
- 
--AM33X_CM3_VERSION = AM335xPSP_04.06.00.10-rc1
-+# This should correpsond to v05.00.00.02
-+AM33X_CM3_VERSION = 11107db2f1e9e58ee75d4fe9cc38423c9a6e4365
- AM33X_CM3_SITE = http://arago-project.org/git/projects/am33x-cm3.git
- AM33X_CM3_SITE_METHOD = git
- AM33X_CM3_LICENSE = TI Publicly Available Software License
+diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
+index 6fa8226..062d711 100644
+--- a/configs/beaglebone_defconfig
++++ b/configs/beaglebone_defconfig
+@@ -32,5 +32,6 @@ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.ti.com/ti-linux-kernel/ti-linux-kern
+ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="a4daf45088f752ed6b33239026518fc3d1bce2bc"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/beaglebone/linux-3.12.config"
++BR2_LINUX_KERNEL_ZIMAGE=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-bone"
 -- 
 1.9.rc1
