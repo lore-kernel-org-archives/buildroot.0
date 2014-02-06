@@ -1,34 +1,21 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  6 Feb 2014 13:01:13 +0000 (UTC)
-Subject: [Buildroot] [Bug 6860] New: Qt5: add qt5tools
-Message-ID: <bug-6860-163@https.bugs.busybox.net/>
+Date: Thu,  6 Feb 2014 13:21:28 +0000 (UTC)
+Subject: [Buildroot] [Bug 6854] Update to Qt 5.2.1
+In-Reply-To: <bug-6854-163@https.bugs.busybox.net/>
+References: <bug-6854-163@https.bugs.busybox.net/>
+Message-ID: <20140206132128.ECA059C817@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6860
+https://bugs.busybox.net/show_bug.cgi?id=6854
 
-           Summary: Qt5: add qt5tools
-           Product: buildroot
-           Version: 2014.02
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: syntheticpp at gmx.net
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
-
-
-qttools is needed when translation files must be processed on the host (they
-are tools like uic or moc, but now in qttools).
-
-libQt5Help.so and libQt5UiTools.a are build for the target.
+--- Comment #1 from syntheticpp at gmx.net 2014-02-06 13:21:28 UTC ---
+Created attachment 5222
+  --> https://bugs.busybox.net/attachment.cgi?id=5222
+Update to 5.2.1
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
