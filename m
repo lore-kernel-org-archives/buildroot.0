@@ -1,41 +1,30 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  6 Feb 2014 18:39:08 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: bump to version 3.13.2
-In-Reply-To: <1391722748-21098-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1391722748-21098-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1391722748-21098-2-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 6 Feb 2014 22:42:21 +0100
+Subject: [Buildroot] autobuild.buildroot.org site improvement
+In-Reply-To: <52F3FCBF.10301@mind.be>
+References: <20140206215835.537252b7@skate>
+	<52F3FCBF.10301@mind.be>
+Message-ID: <20140206224221.7e02a99d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Dear Arnout Vandecappelle,
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 0fdc194..ea78097 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.13.1"
-+	bool "3.13.2"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -104,7 +104,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.13.1" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.13.2" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+On Thu, 06 Feb 2014 22:21:03 +0100, Arnout Vandecappelle wrote:
+
+>  Small remark: the Next> link is wrong. And the total as well.
+
+They were already wrong for arch filtering, or status filtering. So
+let's say that having a working Next> field is a possible future
+improvement.
+
+Patches to the ugly PHP code are welcome :)
+
+Thomas
 -- 
-1.8.3.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
