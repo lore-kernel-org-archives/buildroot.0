@@ -1,23 +1,41 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  6 Feb 2014 15:36:35 +0000 (UTC)
-Subject: [Buildroot] [Bug 6854] Update to Qt 5.2.1
-In-Reply-To: <bug-6854-163@https.bugs.busybox.net/>
-References: <bug-6854-163@https.bugs.busybox.net/>
-Message-ID: <20140206153635.998C49C837@busybox.osuosl.org>
+From: Peter Kuemmel <syntheticpp@gmx.net>
+Date: Thu, 6 Feb 2014 16:44:28 +0100 (CET)
+Subject: [Buildroot] [PATCH 1/2] Qt5: update to 5.2.1
+In-Reply-To: <20140206162743.2ae6f50e@skate>
+References: <trinity-66f5431b-92f8-44b8-9cb0-1f564a6cda9f-1391694043383@3capp-gmx-bs23>, 
+ <20140206162743.2ae6f50e@skate>
+Message-ID: <trinity-829bfcdd-24ed-4dd3-997e-5290eda10ee5-1391701468476@3capp-gmx-bs23>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6854
+> Von: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+> 
+> As explained in the documentation, could you use "git send-email" to
 
---- Comment #4 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2014-02-06 15:36:35 UTC ---
-Yes, I believe we talked about Gerrit in the past, but the majority, if not all
-of the core developers as well as the maintainer, very much prefer a mailing
-list based review, rather than having to use a web-based tool to do reviews.
+Sorry, I thought using send-email is just optional.
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+So someone else interested should put it into the queue,
+but don't use my signed-off patches.
+
+The qttools patch needs a change:
+
++	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Help.so.* $(TARGET_DIR)/usr/lib
++	cp -dpf $(STAGING_DIR)/usr/lib/libQt5CLucene.so.* $(TARGET_DIR)/usr/lib
+
+Thanks,
+Peter
+
+> send your patches? For the moment, they are sent as attached files,
+> which is very unpractical for review.
+> 
+> Thanks a lot for these contributions!
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+> 
