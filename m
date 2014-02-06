@@ -1,25 +1,23 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Feb 2014 16:35:08 +0100
-Subject: [Buildroot] [PATCH 1/1] uclibc/Config.in: indentation cleanup
-In-Reply-To: <1391695582-30821-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1391695582-30821-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <20140206163508.09170b71@skate>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu,  6 Feb 2014 15:36:35 +0000 (UTC)
+Subject: [Buildroot] [Bug 6854] Update to Qt 5.2.1
+In-Reply-To: <bug-6854-163@https.bugs.busybox.net/>
+References: <bug-6854-163@https.bugs.busybox.net/>
+Message-ID: <20140206153635.998C49C837@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jerzy Grzegorek,
+https://bugs.busybox.net/show_bug.cgi?id=6854
 
-On Thu,  6 Feb 2014 15:06:22 +0100, Jerzy Grzegorek wrote:
-> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-> ---
->  package/uclibc/Config.in |    6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+--- Comment #4 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2014-02-06 15:36:35 UTC ---
+Yes, I believe we talked about Gerrit in the past, but the majority, if not all
+of the core developers as well as the maintainer, very much prefer a mailing
+list based review, rather than having to use a web-based tool to do reviews.
 
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
