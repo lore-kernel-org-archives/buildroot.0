@@ -1,32 +1,46 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Thu, 6 Feb 2014 20:25:40 +0100
-Subject: [Buildroot] [PATCH v4 3/3] libdrm: bump to version 2.4.52
-In-Reply-To: <1391714740-1495-1-git-send-email-berndkuhls@hotmail.com>
-References: <1391714740-1495-1-git-send-email-berndkuhls@hotmail.com>
-Message-ID: <BLU0-SMTP130FF1AD7A42F99DA40DD0FD9940@phx.gbl>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 06 Feb 2014 18:11:04 +0100
+Subject: [Buildroot] Why can't I see any effects by different rootfs
+ compression methods ??
+In-Reply-To: <52F361B10200004600049F5D@gwia2.rz.hs-offenburg.de>
+References: <52F361B10200004600049F5D@gwia2.rz.hs-offenburg.de>
+Message-ID: <52F3C228.2080002@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
----
- package/libdrm/libdrm.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 06/02/14 10:19, Frank Ihle wrote:
+> Hi,
+> 
+> I'm using Buildroot to generate a uImage with a kernel, which in the end
+> starts busybox. I tried the different compression modes (kernel
+> compression, built-in initramfs compression and the rootfs compression).
+> The first 2 options worked quiet well but when it comes to apply
+> different compression methodes (e.g. LZMA, bzip2) on  rootfs in make
+> menuconfig nothing changes, neither size nor decompress time.
+> 
+> Why is it like that ? And how can I extract files of the generated
+> uImage, so that i can see what really has been compressed ?
 
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index cecb382..5d109de 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBDRM_VERSION = 2.4.46
-+LIBDRM_VERSION = 2.4.52
- LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
- LIBDRM_SITE = http://dri.freedesktop.org/libdrm/
- LIBDRM_LICENSE = MIT
+ The rootfs compression only affects the rootfs image that is generated
+in output/images, not the initramfs that is linked into the kernel. The
+latter is purely controlled by kernel options (which you did).
+
+ Note that built-in initramfs compression is pointless, because it will
+be compressed again with the kernel compression method - and that usually
+increases the size rather than decreasing it.
+
+
+ Regards,
+ Arnout
+
+
 -- 
-1.7.9.5
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
