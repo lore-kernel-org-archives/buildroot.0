@@ -1,49 +1,16 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 06 Feb 2014 14:33:07 +0100
-Subject: [Buildroot] [PATCH 4 of 7] packages: remove support for
- documentation on target
-In-Reply-To: <20140206124015.752dfa3f@skate>
-References: <patchbomb.1391597406@argentina>	<ab1e96c7872d5567b2a4.1391597410@argentina>	<20140205134957.463211f6@skate>	<CAAXf6LV0DwSccqT8Ur7p=NXn70FFka212O4t9pBbsS6t1VmuOQ@mail.gmail.com>	<20140205141626.654ac08a@skate>	<52F2AB5A.8000006@mind.be>	<20140206093724.52c0fb0f@skate>	<52F36363.5060004@mind.be>	<CAAXf6LXdTpmHf+k7ui+mADC9k--1a2_hqb5vEzmBcPkRRpX4FQ@mail.gmail.com>
- <20140206124015.752dfa3f@skate>
-Message-ID: <52F38F13.8090505@mind.be>
+From: Peter Kuemmel <syntheticpp@gmx.net>
+Date: Thu, 6 Feb 2014 14:40:43 +0100 (CET)
+Subject: [Buildroot] [PATCH 1/2] Qt5: update to 5.2.1
+Message-ID: <trinity-66f5431b-92f8-44b8-9cb0-1f564a6cda9f-1391694043383@3capp-gmx-bs23>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/02/14 12:40, Thomas Petazzoni wrote:
-> Dear Thomas De Schampheleire,
-> 
-> On Thu, 6 Feb 2014 12:34:00 +0100, Thomas De Schampheleire wrote:
-> 
->>>  But of course that's a large change, since all 846 autotools packages
->>> would have to be checked...
->>>
->>>  So let's start with not adding anything to the global CONF_OPT :-)
->>
->> With this conclusion, I'd say we mark the last patch as Rejected (the
->> one removing the separate DISABLE_DOCUMENTATION variable).
-> 
-> I don't really come to the same conclusion. Arnout said to not add more
-> things to the global CONF_OPT.
-> 
-> The existing options in DISABLE_DOCUMENTATION are already part of the
-> CONF_OPT, so having a small refactoring that removes
-> DISABLE_DOCUMENTATION and makes it part of the global CONF_OPT doesn't
-> change anything in terms of removing those global options and moving
-> them to a per-package solution.
-
- Exactly.
-
- Regards,
- Arnout
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+A non-text attachment was scrubbed...
+Name: 0001-Qt5-update-to-5.2.1.patch
+Type: text/x-patch
+Size: 12461 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140206/de78f509/attachment.bin>
