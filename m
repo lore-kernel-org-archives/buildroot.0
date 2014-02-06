@@ -1,80 +1,83 @@
-From: Ryan Barnett <ryanbarnett3@gmail.com>
-Date: Thu,  6 Feb 2014 22:55:22 +0100
-Subject: [Buildroot] [PATCH 1/1] mmc-utils: fix linux headers issue before
-	3-4
-Message-ID: <1391723722-7567-1-git-send-email-rjbarnet@rockwellcollins.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu,  6 Feb 2014 23:04:45 +0100
+Subject: [Buildroot] [PATCH] zedboard: add Avnet Zedboard support.
+Message-ID: <1391724285-23135-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With toolchains that include linux kernel headers before the 3.4 kernel,
-an issue exists with linux/mmc/ioctl.h in that it doesn't include
-linux/types.h.
+From: Spenser Gilliland <spenser@gillilanding.com>
 
-Merged the patch with an existing patch for mmc-utils as it modifies
-the same file and fixes similar issues. Also updated the patch to
-conform to the buildroot patch naming standard.
+[Thomas: update to recent Buildroot which had renamed several
+Config.in options, lock down kernel headers version]
 
-Fixes:
-  http://autobuild.buildroot.net/results/828/828c7a686736710c4fcb152230d0fa6b5f4d6ad3
-
-Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...ion.patch => mmc-utils-001-fix-mmc-h-includes.patch} | 17 +++++++++--------
- 1 file changed, 9 insertions(+), 8 deletions(-)
- rename package/mmc-utils/{0001-mmc-utils-Fix-64-bit-values-redefinition.patch => mmc-utils-001-fix-mmc-h-includes.patch} (79%)
+ board/avnet/zedboard/readme.txt | 13 +++++++++++++
+ configs/zedboard_defconfig      | 32 ++++++++++++++++++++++++++++++++
+ 2 files changed, 45 insertions(+)
+ create mode 100644 board/avnet/zedboard/readme.txt
+ create mode 100644 configs/zedboard_defconfig
 
-diff --git a/package/mmc-utils/0001-mmc-utils-Fix-64-bit-values-redefinition.patch b/package/mmc-utils/mmc-utils-001-fix-mmc-h-includes.patch
-similarity index 79%
-rename from package/mmc-utils/0001-mmc-utils-Fix-64-bit-values-redefinition.patch
-rename to package/mmc-utils/mmc-utils-001-fix-mmc-h-includes.patch
-index 07dc742..8d0b2eb 100644
---- a/package/mmc-utils/0001-mmc-utils-Fix-64-bit-values-redefinition.patch
-+++ b/package/mmc-utils/mmc-utils-001-fix-mmc-h-includes.patch
-@@ -1,4 +1,4 @@
--mmc-utils: Fix 64-bit values redefinition
-+mmc-utils: fix mmc.h includes
- 
- Some toolchains include asm-generic/int-l64.h from their asm/types.h
- file for certain 64-bit architectures. This causes a conflict between
-@@ -13,28 +13,29 @@ asm-generic/int-ll64.h:29:44: note: previous declaration of '__s64' was
- here
-  __extension__ typedef __signed__ long long __s64;
- 
-+[Ryan: added include of linux/types.h because mmc/ioctl.h does not
-+       include it in kernel version before 3.4]
+diff --git a/board/avnet/zedboard/readme.txt b/board/avnet/zedboard/readme.txt
+new file mode 100644
+index 0000000..b869066
+--- /dev/null
++++ b/board/avnet/zedboard/readme.txt
+@@ -0,0 +1,13 @@
++This is the buildroot board support for the Avnet Zedboard. The Zedboard is
++a development board based on the Xilinx Zynq-7000 based All-Programmable
++System-On-Chip.
 +
- Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
- ---
-  mmc.h |    4 +++-
-  1 files changed, 3 insertions(+), 1 deletions(-)
--
- diff --git a/mmc.h b/mmc.h
- index 9871d62..2d54ec5 100644
- --- a/mmc.h
- +++ b/mmc.h
--@@ -14,9 +14,11 @@
-+@@ -14,9 +14,12 @@
-   * Boston, MA 021110-1307, USA.
-   */
-- 
++Zedboard information including schematics, reference designs, and manuals are
++available from http://www.zedboard.org .
 +
- -#include <asm-generic/int-ll64.h>
-++#include <linux/types.h>
-  #include <linux/mmc/ioctl.h>
-  #include <stdio.h>
- +#ifndef _ASM_GENERIC_INT_L64_H
- +#include <asm-generic/int-ll64.h>
- +#endif
-- 
++To boot the Zedboard using a buildroot generated image copy the following files
++to the sdcard:
++	zynq-zed.dtb -> devicetree.dtb
++	rootfs.cpio.gz.uboot -> uramdisk.image.gz
++	uImage -> uImage
 +
-  #define CHECK(expr, msg, err_stmt) { if (expr) { fprintf(stderr, msg); err_stmt; } }
-- 
---- 
--1.7.1
- 
+diff --git a/configs/zedboard_defconfig b/configs/zedboard_defconfig
+new file mode 100644
+index 0000000..2a67fdd
+--- /dev/null
++++ b/configs/zedboard_defconfig
+@@ -0,0 +1,32 @@
++BR2_arm=y
++BR2_cortex_a9=y
++BR2_ARM_ENABLE_NEON=y
++
++# Lock to 3.8 headers as the kernel is based off 3.8
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="3.8"
++
++BR2_TARGET_GENERIC_GETTY_PORT="ttyPS0"
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/Xilinx/linux-xlnx.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v14.5"
++BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
++BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="zynq-zed"
++
++# Root filesystem
++BR2_TARGET_ROOTFS_CPIO=y
++BR2_TARGET_ROOTFS_CPIO_GZIP=y
++BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
++
++# Bootloader
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="zynq_zed"
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/Xilinx/u-boot-xlnx.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xilinx-v14.5"
++BR2_TARGET_UBOOT_FORMAT_ELF=y
 -- 
 1.8.3.2
