@@ -1,40 +1,30 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 6 Feb 2014 00:18:17 +0100
-Subject: [Buildroot] [PATCH] filter BR2_DEFCONFIG out of defconfig files
-In-Reply-To: <52F2BF55.3050200@mind.be>
-References: <1391523148-30887-1-git-send-email-jeremy.rosen@openwide.fr>
- <CAAXf6LVM939GcFkXA6UkifUEs9H6sQnKgDqW8uBHQD3_JK0-OA@mail.gmail.com>
- <52F2BF55.3050200@mind.be>
-Message-ID: <20140205231817.GB19446@free.fr>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu,  6 Feb 2014 08:17:56 +0200
+Subject: [Buildroot] [PATCH] kexec: bump to 2.0.5
+Message-ID: <c1975468b376a79f74134a4c49b4b0a5fd43caa5.1391667476.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/kexec/kexec.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 2014-02-05 23:46 +0100, Arnout Vandecappelle spake thusly:
-> make rpi_defconfig
-> add some packages
-> test test test
-> add more packages
-> test test test
-> make savedefconfig
-> 
-> Oops I've just overwritten rpi_defconfig.
-
-Oh no! Not rpi_defconfig!
-
-Sorry, couldn't resist... ;-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
+index 6ddf43510248..b16787c8a796 100644
+--- a/package/kexec/kexec.mk
++++ b/package/kexec/kexec.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KEXEC_VERSION = 2.0.4
++KEXEC_VERSION = 2.0.5
+ KEXEC_SOURCE = kexec-tools-$(KEXEC_VERSION).tar.xz
+ KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kexec
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.5.3
