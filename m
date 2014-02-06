@@ -1,45 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Feb 2014 12:40:15 +0100
-Subject: [Buildroot] [PATCH 4 of 7] packages: remove support for
- documentation on target
-In-Reply-To: <CAAXf6LXdTpmHf+k7ui+mADC9k--1a2_hqb5vEzmBcPkRRpX4FQ@mail.gmail.com>
-References: <patchbomb.1391597406@argentina>
- <ab1e96c7872d5567b2a4.1391597410@argentina>
- <20140205134957.463211f6@skate>
- <CAAXf6LV0DwSccqT8Ur7p=NXn70FFka212O4t9pBbsS6t1VmuOQ@mail.gmail.com>
- <20140205141626.654ac08a@skate> <52F2AB5A.8000006@mind.be>
- <20140206093724.52c0fb0f@skate> <52F36363.5060004@mind.be>
- <CAAXf6LXdTpmHf+k7ui+mADC9k--1a2_hqb5vEzmBcPkRRpX4FQ@mail.gmail.com>
-Message-ID: <20140206124015.752dfa3f@skate>
+From: Axel Lin <axel.lin@ingics.com>
+Date: Thu, 06 Feb 2014 19:50:01 +0800
+Subject: [Buildroot] [PATCH 1/2] usb_modeswitch: bump to version 2.1.0
+Message-ID: <1391687401.362.0.camel@phoenix>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Version 2.1.0, 2014/01/28
+    ATTENTION: -I flag meaning reversed, default is to skip SCSI inquiry;
+    introduction of StandardEject, replacing many MessageContents with the
+    same function, reducing size of device config files, and always including
+    the 'Allow Medium Removal' before ejecting (thanks to Lars Melin for
+    the idea); fix in "bulk_read", removing bogus CSW request (report from
+    "Sonya at zte")
 
-On Thu, 6 Feb 2014 12:34:00 +0100, Thomas De Schampheleire wrote:
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
+---
+ package/usb_modeswitch/usb_modeswitch.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> >  But of course that's a large change, since all 846 autotools packages
-> > would have to be checked...
-> >
-> >  So let's start with not adding anything to the global CONF_OPT :-)
-> 
-> With this conclusion, I'd say we mark the last patch as Rejected (the
-> one removing the separate DISABLE_DOCUMENTATION variable).
-
-I don't really come to the same conclusion. Arnout said to not add more
-things to the global CONF_OPT.
-
-The existing options in DISABLE_DOCUMENTATION are already part of the
-CONF_OPT, so having a small refactoring that removes
-DISABLE_DOCUMENTATION and makes it part of the global CONF_OPT doesn't
-change anything in terms of removing those global options and moving
-them to a per-package solution.
-
-Thomas
+diff --git a/package/usb_modeswitch/usb_modeswitch.mk b/package/usb_modeswitch/usb_modeswitch.mk
+index 87afe9f..5d3bace 100644
+--- a/package/usb_modeswitch/usb_modeswitch.mk
++++ b/package/usb_modeswitch/usb_modeswitch.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-USB_MODESWITCH_VERSION = 2.0.1
++USB_MODESWITCH_VERSION = 2.1.0
+ USB_MODESWITCH_SOURCE = usb-modeswitch-$(USB_MODESWITCH_VERSION).tar.bz2
+ USB_MODESWITCH_SITE = http://www.draisberghof.de/usb_modeswitch
+ USB_MODESWITCH_DEPENDENCIES = libusb
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.1.2
