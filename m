@@ -1,16 +1,16 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  6 Feb 2014 12:53:39 +0000 (UTC)
-Subject: [Buildroot] [Bug 6854] New: Update to Qt 5.2.1
-Message-ID: <bug-6854-163@https.bugs.busybox.net/>
+Date: Thu,  6 Feb 2014 13:01:13 +0000 (UTC)
+Subject: [Buildroot] [Bug 6860] New: Qt5: add qt5tools
+Message-ID: <bug-6860-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6854
+https://bugs.busybox.net/show_bug.cgi?id=6860
 
-           Summary: Update to Qt 5.2.1
+           Summary: Qt5: add qt5tools
            Product: buildroot
            Version: 2014.02
           Platform: PC
@@ -25,8 +25,10 @@ https://bugs.busybox.net/show_bug.cgi?id=6854
    Estimated Hours: 0.0
 
 
-Also adds a patch which missed 5.2.1 and is needed for cmake projects for
-non-opengl systems.
+qttools is needed when translation files must be processed on the host (they
+are tools like uic or moc, but now in qttools).
+
+libQt5Help.so and libQt5UiTools.a are build for the target.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
