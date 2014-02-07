@@ -1,51 +1,63 @@
-From: Johannes Morgenroth <morgenroth@ibr.cs.tu-bs.de>
-Date: Fri, 07 Feb 2014 16:59:41 +0100
-Subject: [Buildroot] SIGSEGV in __pthread_initialize_minimal_internal ()
-In-Reply-To: <52F3B2BC.3000904@ibr.cs.tu-bs.de>
-References: <52F3B2BC.3000904@ibr.cs.tu-bs.de>
-Message-ID: <52F502ED.6000902@ibr.cs.tu-bs.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 7 Feb 2014 17:43:55 +0100
+Subject: [Buildroot] Antw: build speedup possible?
+In-Reply-To: <CAHkwnC-pAGs0DCu80X3_AQgrsxcOO82GMY7NwmegxT6V0_kwJw@mail.gmail.com>
+References: <52F49E9D.2020506@andin.de>
+ <52F4AEC7020000460004A4EE@gwia2.rz.hs-offenburg.de>
+ <CAHXCMMJD_i9aQtFkxWD_tPbpdJd_-Gv_zkC0KxnEtRoQO=7Vug@mail.gmail.com>
+ <CAHkwnC_B8RRAXBOGjjpr2X7CbZpVTnsDx8QoLEPfaieEoSd4gA@mail.gmail.com>
+ <20140207162934.01acfe5a@skate>
+ <CAHkwnC-pAGs0DCu80X3_AQgrsxcOO82GMY7NwmegxT6V0_kwJw@mail.gmail.com>
+Message-ID: <20140207174355.383b6bb3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I do not know why, but disabling SSP (stack protection) allows to
-generate working binaries again.
-Maybe now anyone can tell me why that is an issue?
+Dear Fabio Porcedda,
 
-Kind regards,
-Johannes Morgenroth
+On Fri, 7 Feb 2014 16:54:20 +0100, Fabio Porcedda wrote:
 
+> > And in practice, how do you achieve this? When building in parallel,
+> > how do you record the fact that the test for libfoo in package A
+> > configure script was run before or after the installation of libfoo in
+> > the global sysroot? It's not only about recording the order of the
+> > build of the package: it's knowing whether each specific test of a
+> > configure script was run before or after the corresponding library was
+> > installed in the global sysroot.
+> 
+> Well i admit i haven't thought about that corner case, I don't know an
+> easy solution for that.
 
+IMO this is not a corner case, this is precisely the problem we have
+been pointing out since the beginning when mixing a global sysroot with
+top-level parallelization.
 
-Am 06.02.2014 17:05, schrieb Johannes Morgenroth:
-> $ gdb --args ./output/build/ibrdtnd-0.10.2/src/dtnd
-> GNU gdb (GDB) 7.6.1-ubuntu
-> Copyright (C) 2013 Free Software Foundation, Inc.
-> License GPLv3+: GNU GPL version 3 or later
-> <http://gnu.org/licenses/gpl.html>
-> This is free software: you are free to change and redistribute it.
-> There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
-> and "show warranty" for details.
-> This GDB was configured as "x86_64-linux-gnu".
-> For bug reporting instructions, please see:
-> <http://www.gnu.org/software/gdb/bugs/>...
-> Reading symbols from ./output/build/ibrdtnd-0.10.2/src/dtnd...done.
-> (gdb) r
-> Starting program: ./output/build/ibrdtnd-0.10.2/src/dtnd
->
-> Program received signal SIGSEGV, Segmentation fault.
-> 0x082b81f1 in __pthread_initialize_minimal_internal ()
-> (gdb) bt
-> #0  0x082b81f1 in __pthread_initialize_minimal_internal ()
-> #1  0x08408797 in __uClibc_init ()
-> #2  0x08408939 in __uClibc_main ()
-> #3  0x08049111 in _start ()
-> (gdb)
+> > I think we should really not minimize the support problem that
+> > parallelization without per-package sysroot is going to cause.
+> 
+> My suggestion was based on the assumption that there is a way to
+> reproduce the exact build order.
+> But if that is not true i agree with you.
 
+I don't really see how to reproduce the exact build order, so the
+support problem will be here. That's really why I have been a bit
+skeptical and resistant to this patch series from the very beginning. I
+am obviously very interested in ways to reduce the build time. But
+doing that at the expense of reliability is not a good idea in my
+opinion, as users will face spurious failures that we will not be able
+to reproduce and fix.
 
+If we want to get this to the next level, someone need to experiment
+with per-package sysroot. Of course, this would be a long experiment,
+without necessarily at the end the guarantee that we will accept it,
+because it may be too complex to match Buildroot simplicity principle.
+
+Best regards,
+
+Thomas
 -- 
-Johannes Morgenroth     Institut fuer Betriebssysteme und Rechnerverbund
-Tel.: +49-531-391-3249                           Muehlenpfordtstrasse 23
-Fax.: +49-531-391-5936      TU Braunschweig         D-38106 Braunschweig
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
