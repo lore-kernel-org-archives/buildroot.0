@@ -1,11 +1,11 @@
 From: Anders Darander <anders@chargestorm.se>
-Date: Fri, 7 Feb 2014 06:59:57 +0100
-Subject: [Buildroot] [PATCH v3 4/4] beaglebone: change to zImage
-In-Reply-To: <CALq67GBCrOGh_yxzjqcVXtUzoox=AEJaYJL27_UObB8qVMNyow@mail.gmail.com>
+Date: Fri, 7 Feb 2014 07:03:30 +0100
+Subject: [Buildroot] [PATCH v3 3/4] beaglebone: update to latest U-Boot
+In-Reply-To: <20140206223226.3cc86ccc@skate>
 References: <1391717684-4244-1-git-send-email-anders@chargestorm.se>
- <1391717684-4244-5-git-send-email-anders@chargestorm.se>
- <CALq67GBCrOGh_yxzjqcVXtUzoox=AEJaYJL27_UObB8qVMNyow@mail.gmail.com>
-Message-ID: <046952e3-d76e-400b-916b-a8fbd069a03b@email.android.com>
+ <1391717684-4244-4-git-send-email-anders@chargestorm.se>
+ <20140206223226.3cc86ccc@skate>
+Message-ID: <b2a7fb30-6353-4eb6-8f88-37675e3e86a2@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,42 +14,48 @@ To: buildroot@busybox.net
 
 Hi, 
 
-On 6 February 2014 23:05:39 CET, Ryan Barnett <ryanbarnett3@gmail.com> wrote:
->Anders, All,
+On 6 February 2014 22:32:26 CET, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+>Dear Anders Darander,
 >
->On Thu, Feb 6, 2014 at 9:14 PM, Anders Darander <anders@chargestorm.se>
->wrote:
->> The default U-Boot configuration is now to use a zImage instead of
->uImage.
->>
+>On Thu, 6 Feb 2014 21:14:43 +0100, Anders Darander wrote:
+>> Update to the default version of U-Boot, at this time 2013.10.
+>> 
+>> Tested with an old uEnv.txt (i.e. using uImage) and with the
+>> currently prefered zImage.
+>> 
 >> Signed-off-by: Anders Darander <anders@chargestorm.se>
 >> ---
->>  configs/beaglebone_defconfig | 1 +
->>  1 file changed, 1 insertion(+)
->>
+>>  configs/beaglebone_defconfig | 2 --
+>>  1 file changed, 2 deletions(-)
+>> 
 >> diff --git a/configs/beaglebone_defconfig
 >b/configs/beaglebone_defconfig
->> index 6fa8226..062d711 100644
+>> index 490bed5..6fa8226 100644
 >> --- a/configs/beaglebone_defconfig
 >> +++ b/configs/beaglebone_defconfig
->> @@ -32,5 +32,6 @@
->BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.ti.com/ti-linux-kernel/ti-linux-kern
->> 
->BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="a4daf45088f752ed6b33239026518fc3d1bce2bc"
->>  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
->> 
->BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/beaglebone/linux-3.12.config"
->> +BR2_LINUX_KERNEL_ZIMAGE=y
+>> @@ -21,8 +21,6 @@ BR2_DEFAULT_KERNEL_VERSION="3.12.9"
+>>  # bootloader
+>>  BR2_TARGET_UBOOT=y
+>>  BR2_TARGET_UBOOT_BOARDNAME="am335x_evm"
+>> -BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+>> -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2013.04"
 >
->I would suggest merging this change with your previous patch -
->"beaglebone: update to latest U-Boot" - because the upgrading of
->u-boot is what is causing the change to zImage.
+>You should keep these lines and just change it to "2013.10".
+>
+>The reason is that if you remove these lines, then what the defconfig
+>means is "use whatever default version Buildroot has". This is not the
+>behavior what we want for defconfig, since we want them to be
+>reproducible, as we have no guarantee that newer U-Boot versions will
+>continue to work for a given platform.
 
-What do other dev's think about this? It doesn't really matter to me if I squash then or not. 
+I really knew this...
 
-My reasoning was that of you kept the old U-Boot environment, the new U-Boot works with a uImage. That's basically why I kept it as separate patches. 
+I'll respin the patches, likely on Monday morning. Hopefully I can also change the am33x-cm3 patch back to use a git tag instead oh a SHA1 then, at least of TI pushes that tag. 
+
+Do you have any comment on Ryan's suggestion to squash the change to zImage into this patch? 
 
 Cheers, 
 Anders 
+
 -- 
 ChargeStorm AB / eStorm 
