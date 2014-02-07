@@ -1,47 +1,73 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 07 Feb 2014 10:56:59 +0100
-Subject: [Buildroot] Broken pread() on ARM
-In-Reply-To: <CAKgsxVTJ+eYtOPxqe0CfxY+zfB8jNvCkJE8qD-tvQ42+VUZ=0Q@mail.gmail.com>
- (Justin Maggard's message of "Thu, 6 Feb 2014 17:54:18 -0800")
-References: <CAKgsxVRjJoJfk1UkXA4kMnt+TxtSfHgduyPjeF8gmrZTxFOvGw@mail.gmail.com>
- <CAKgsxVSJAW73vXdkKQFLZOYp3qzZm9qwF5+p0NUtUUSnzsFZtQ@mail.gmail.com>
- <87siry2e4r.fsf@dell.be.48ers.dk>
- <CAKgsxVTJ+eYtOPxqe0CfxY+zfB8jNvCkJE8qD-tvQ42+VUZ=0Q@mail.gmail.com>
-Message-ID: <87txcb6yac.fsf@dell.be.48ers.dk>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 07 Feb 2014 11:16:05 +0100
+Subject: [Buildroot] [PATCH] host python/python3: conditionally disable
+	unicodedata
+Message-ID: <e06b104c5f166c541741.1391768165@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Justin" == Justin Maggard <jmaggard10@gmail.com> writes:
+The host python always had --disable-unicodedata, regardless of the
+corresponding configuration option BR2_PACKAGE_PYTHON_UNICODEDATA.
+Since the host python is used to byte-compile python modules, this meant
+that such modules could not contain unicode strings. For example, following
+statement in a python module:
+    print u"\N{SOLIDUS}"
 
-Hi,
+would cause the byte-compilation to fail with message:
+    SyntaxError: ("(unicode error) \\N escapes not supported (can't load
+    unicodedata module)",
 
- > Thanks for your answer.  A workable backport doesn't look all that
- > difficult -- just a bit ugly.  I submitted a kinda-sort backport at
- > http://lists.uclibc.org/pipermail/uclibc/2014-February/048220.html .
+Instead, conditionally disable unicodedata based on
+BR2_PACKAGE_PYTHON_UNICODEDATA, also for the host python.
 
-Yes, I saw. With all the uClibc mess (especially as we also support
-external uClibc based toolchains) I really prefer to not add any more
-patches if possible.
+This fixes bug #6542 (https://bugs.busybox.net/show_bug.cgi?id=6542)
 
- > But I can't argue with just reverting those patches in the next
- > busybox.  I never had a problem with the old pread/pwrite emulation in
- > the first place.
+Reported-by: Gernot Vormayr <gvormayr@gmail.com>
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-No, it only triggers in rare cases. Afaik the issue is about locking
-between the lseek and read/write, so it should only be an issue if you
-have an application doing pread/pwrite from multiple threads with the
-same file descriptor.
+---
+ package/python/python.mk   |  2 +-
+ package/python3/python3.mk |  2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-git gc was apparently such a case.
-
-
- > Hopefully uClibc 0.9.33.3 doesn't get released with this problem
- > though.
-
-Lets hope not.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/python/python.mk b/package/python/python.mk
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -26,7 +26,6 @@ HOST_PYTHON_CONF_OPT += 	\
+ 	--disable-curses	\
+ 	--disable-codecs-cjk	\
+ 	--disable-nis		\
+-	--disable-unicodedata	\
+ 	--disable-dbm		\
+ 	--disable-gdbm		\
+ 	--disable-bsddb		\
+@@ -100,6 +99,7 @@ endif
+ 
+ ifneq ($(BR2_PACKAGE_PYTHON_UNICODEDATA),y)
+ PYTHON_CONF_OPT += --disable-unicodedata
++HOST_PYTHON_CONF_OPT += --disable-unicodedata
+ endif
+ 
+ # Default is UCS2 w/o a conf opt
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -23,7 +23,6 @@ HOST_PYTHON3_CONF_OPT += 	\
+ 	--disable-curses	\
+ 	--disable-codecs-cjk	\
+ 	--disable-nis		\
+-	--disable-unicodedata	\
+ 	--disable-test-modules	\
+ 	--disable-idle3
+ 
+@@ -88,6 +87,7 @@ endif
+ 
+ ifneq ($(BR2_PACKAGE_PYTHON3_UNICODEDATA),y)
+ PYTHON3_CONF_OPT += --disable-unicodedata
++HOST_PYTHON3_CONF_OPT += --disable-unicodedata
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_PYTHON3_BZIP2),y)
