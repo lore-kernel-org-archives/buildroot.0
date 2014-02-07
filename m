@@ -1,53 +1,103 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 07 Feb 2014 22:05:19 +0100
-Subject: [Buildroot] [PATCH] linux: don't automatically set
-	uevent_helper with mdev /dev management
-In-Reply-To: <CAAXf6LV=o61iJVycRW-+4boS08=Ar39-uxgUqj6XoqcbzSHmrA@mail.gmail.com>
- (Thomas De Schampheleire's message of "Fri, 7 Feb 2014 22:00:48
- +0100")
-References: <769563a34e142e85ec4c.1391761259@argentina>
- <87wqh6640h.fsf@dell.be.48ers.dk>
- <CAAXf6LV=o61iJVycRW-+4boS08=Ar39-uxgUqj6XoqcbzSHmrA@mail.gmail.com>
-Message-ID: <87ob2i63cg.fsf@dell.be.48ers.dk>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Fri, 7 Feb 2014 22:14:33 +0100
+Subject: [Buildroot] [PATCH v7 2/4] udev: convert to virtual package.
+In-Reply-To: <CAAXf6LWN2F6YhoVHu3w-TcWnqBQ4G_gdV652xBD0kGbopfafWw@mail.gmail.com>
+References: <1391779295-19140-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <1391779295-19140-3-git-send-email-eric.le.bihan.dev@free.fr>
+ <CAAXf6LWN2F6YhoVHu3w-TcWnqBQ4G_gdV652xBD0kGbopfafWw@mail.gmail.com>
+Message-ID: <20140207211433.GA7580@milhouse>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+Hi!
 
-Hi,
+On Fri, Feb 07, 2014 at 09:17:08PM +0100, Thomas De Schampheleire wrote:
 
- >> Hmm, but the the coldplug handling with 'mdev -s' afaik doesn't handle
- >> module or firmware loading, so those features will break from this.
+> > diff --git a/Config.in.legacy b/Config.in.legacy
+> > index 2fe9cf9..6d594c6 100644
+> > --- a/Config.in.legacy
+> > +++ b/Config.in.legacy
+> > @@ -101,6 +101,61 @@ endif
+> >  ###############################################################################
+> >  comment "Legacy options removed in 2014.02"
+> >
+> > +config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
+> > +       bool "/dev management by udev removed"
+> > +       select BR2_LEGACY
+> > +       help
+> > +         The 'udev' package has been converted to a virtual package.
+> > +         There is currently one provider for this feature: 'eudev'.
+> > +
+> > +         Therefore, you must choose 'Dynamic using eudev' in the
+> > +         '/dev management' menu to get the same behaviour as in your
+> > +          old configuration.
+> > +
+> > +         You must also check the packages depending on 'udev' are still
+> > +         selected.
+>
+> Is there a particular reason why you don't automatically select the
+> suggested alternative?
+> This will make the transition easier for users...
 
- > Isn't this handled by the installation of the hotplug helper from
- > S10mdev, after which mdev -s is run?
+That's what I did on first try. BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV was
+selected. But I ended up facing a limit of kconfig: this boolean symbol is
+used in a choice/endchoice ("/dev management"), which prevents its value from
+being recalculated when it is selected from Config.in.legacy.
 
-Yes, if the events happen after that line, but not if they happen
-before.
+For example, if BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV=y in
+test_udev_legacy_defconfig and we perform:
 
- > I.e. everything that happened before S10mdev is caught by 'mdev -s'
- > and everything after is handled by the hotplug helper, right?
+  $ make test_udev_legacy_defconfig
 
-No, mdev -s only scans /sys for devices and create the corresponding
-device nodes (already done by devtmpfs) and execute whatever commands
-you have defined, it afaik doesn't handle module load or firmware requests.
+output/.config will contain:
 
+  # BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV is not set
+  BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
 
- >> I would be interested in knowing why hotplug is so much slower than
- >> coldplug. Do you have any idea about how many times mdev gets executed
- >> during bootup?
- >> 
+The default choice is selected. I discussed this issue on IRC with Yann E.
+Morin last evening, but there is no workaround... So I chose to remove the
+automatic selection of the new symbol and add detailed instructions.
 
- > No, I don't know. I do know that on one particular arm-based single
- > core system, the time to enter userspace increased from 2 seconds to
- > 10 seconds due to this hotplug helper.
+> > diff --git a/package/libatasmart/Config.in b/package/libatasmart/Config.in
+> > index a3e44f8..534e7c1 100644
+> > --- a/package/libatasmart/Config.in
+> > +++ b/package/libatasmart/Config.in
+> > @@ -1,6 +1,6 @@
+> >  config BR2_PACKAGE_LIBATASMART
+> >         bool "libatasmart"
+> > -       depends on BR2_PACKAGE_UDEV # libudev is configure dependency
+> > +       depends on BR2_PACKAGE_HAS_UDEV # libudev is configure dependency
+> >         help
+> >           The libatasmart package is a disk reporting library.
+> >           It only supports a subset of the ATA S.M.A.R.T. functionality.
+> > @@ -8,4 +8,4 @@ config BR2_PACKAGE_LIBATASMART
+> >           http://www.linuxfromscratch.org/blfs/view/svn/general/libatasmart.html
+> >
+> >  comment "libatasmart requires udev to be enabled"
+> > -       depends on !BR2_PACKAGE_UDEV
+> > +       depends on !BR2_PACKAGE_HAS_UDEV
+>
+> Finally we should also line up all the udev comments, but this can be
+> done in a separate patch.
+I will gladly do it.
 
-Funky. I personally have never used mdev, but that sounds pretty
-extreme.
+> > +         udev is now a virtual package.
+> > +         Packages requiring udevd at run time or libudev/gudev at build time
+> > +         should select it.
+>
+> Does it make sense to adding a help option on a hidden option? Can the
+> user ever make it visible?
 
+The end user using the menu will not see it, but I added it for the user who
+sometimes looks at the sources, as a kind of comment. When ThomasP suggested
+to convert udev as a virtual package, I looked at opengl.mk hoping to find
+information but found none... Maybe it would be better to add a section on how
+to add virtual package and how to use it in the manual.
 
--- 
-Bye, Peter Korsgaard
+Thanks for your review.
+
+Best regards,
+ELB
