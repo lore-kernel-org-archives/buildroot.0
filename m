@@ -1,92 +1,78 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri, 7 Feb 2014 23:29:38 +0100
-Subject: [Buildroot] [PATCH 4/4] samba4: new package
-In-Reply-To: <1391806354-32698-5-git-send-email-gustavo@zacarias.com.ar>
-References: <1391806354-32698-1-git-send-email-gustavo@zacarias.com.ar>
- <1391806354-32698-5-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <CAHXCMM+20-NKLye=6rhg1p2toLjSsY-KkOWu+fQTUVucwJ8UPw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 7 Feb 2014 23:56:12 +0100
+Subject: [Buildroot] [PATCH v7 2/4] udev: convert to virtual package.
+In-Reply-To: <20140207211433.GA7580@milhouse>
+References: <1391779295-19140-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <1391779295-19140-3-git-send-email-eric.le.bihan.dev@free.fr>
+ <CAAXf6LWN2F6YhoVHu3w-TcWnqBQ4G_gdV652xBD0kGbopfafWw@mail.gmail.com>
+ <20140207211433.GA7580@milhouse>
+Message-ID: <20140207225612.GF3510@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gustavo,
+?ric, Thomas, All,
 
-It would be great if you could repeat here some of the explanations about samba4
-given in the cover letter, so they will appear in the commit log.
+On 2014-02-07 22:14 +0100, Eric Le Bihan spake thusly:
+> On Fri, Feb 07, 2014 at 09:17:08PM +0100, Thomas De Schampheleire wrote:
+> 
+> > > diff --git a/Config.in.legacy b/Config.in.legacy
+> > > index 2fe9cf9..6d594c6 100644
+> > > --- a/Config.in.legacy
+> > > +++ b/Config.in.legacy
+> > > @@ -101,6 +101,61 @@ endif
+> > >  ###############################################################################
+> > >  comment "Legacy options removed in 2014.02"
+> > >
+> > > +config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
+> > > +       bool "/dev management by udev removed"
+> > > +       select BR2_LEGACY
+> > > +       help
+> > > +         The 'udev' package has been converted to a virtual package.
+> > > +         There is currently one provider for this feature: 'eudev'.
+> > > +
+> > > +         Therefore, you must choose 'Dynamic using eudev' in the
+> > > +         '/dev management' menu to get the same behaviour as in your
+> > > +          old configuration.
+> > > +
+> > > +         You must also check the packages depending on 'udev' are still
+> > > +         selected.
+> >
+> > Is there a particular reason why you don't automatically select the
+> > suggested alternative?
+> > This will make the transition easier for users...
+> 
+> That's what I did on first try. BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV was
+> selected. But I ended up facing a limit of kconfig: this boolean symbol is
+> used in a choice/endchoice ("/dev management"), which prevents its value from
+> being recalculated when it is selected from Config.in.legacy.
+> 
+> For example, if BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV=y in
+> test_udev_legacy_defconfig and we perform:
+> 
+>   $ make test_udev_legacy_defconfig
+> 
+> output/.config will contain:
+> 
+>   # BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV is not set
+>   BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
+> 
+> The default choice is selected. I discussed this issue on IRC with Yann E.
+> Morin last evening, but there is no workaround... So I chose to remove the
+> automatic selection of the new symbol and add detailed instructions.
 
-On Fri, Feb 7, 2014 at 9:52 PM, Gustavo Zacarias
-<gustavo@zacarias.com.ar> wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/samba/Config.in                            |  19 ++++
->  package/samba/samba4/S91smb                        |  56 +++++++++++
->  package/samba/samba4/arm-cache.txt                 |  65 ++++++++++++
->  package/samba/samba4/powerpc-cache.txt             |  65 ++++++++++++
->  ...-0001-build-don-t-execute-tests-summary.c.patch |  67 +++++++++++++
->  ...ld-don-t-execute-statfs-and-f_fsid-checks.patch |  31 ++++++
->  ...003-build-find-FILE_OFFSET_BITS-via-array.patch |  54 ++++++++++
->  ...uild-allow-some-python-variable-overrides.patch |  45 +++++++++
->  ...amba4-0005-builtin-heimdal-external-tools.patch |  42 ++++++++
->  package/samba/samba4/samba4.mk                     | 111 +++++++++++++++++++++
->  10 files changed, 555 insertions(+)
->  create mode 100644 package/samba/samba4/S91smb
->  create mode 100644 package/samba/samba4/arm-cache.txt
->  create mode 100644 package/samba/samba4/powerpc-cache.txt
->  create mode 100644 package/samba/samba4/samba4-0001-build-don-t-execute-tests-summary.c.patch
->  create mode 100644 package/samba/samba4/samba4-0002-build-don-t-execute-statfs-and-f_fsid-checks.patch
->  create mode 100644 package/samba/samba4/samba4-0003-build-find-FILE_OFFSET_BITS-via-array.patch
->  create mode 100644 package/samba/samba4/samba4-0004-build-allow-some-python-variable-overrides.patch
->  create mode 100644 package/samba/samba4/samba4-0005-builtin-heimdal-external-tools.patch
->  create mode 100644 package/samba/samba4/samba4.mk
->
-> diff --git a/package/samba/Config.in b/package/samba/Config.in
-> index d11401f..e037dd9 100644
-> --- a/package/samba/Config.in
-> +++ b/package/samba/Config.in
-> @@ -25,8 +25,27 @@ choice
->         help
->           The well-tested legacy branch.
->
-> +       config BR2_PACKAGE_SAMBA4
-> +       bool "4.1.x"
-
-Indentation is weird here, no?
-
-> +       depends on BR2_INET_IPV6
-> +       depends on BR2_USE_WCHAR # e2fsprogs
-> +       depends on BR2_LARGEFILE
-
-Does not samba4 depend on !BR2_PREFER_STATIC_LIB too?
-Last time I try to build/link statically a waf project (libtalloc
-which is under the
-samba umbrella IIRC), it was impossible because of waf build-system. :-/
-
-> +       # Supported architectures only limited by the cached answers
-> +       depends on BR2_arm || BR2_powerpc
-> +       select BR2_PACKAGE_E2FSPROGS
-> +       select BR2_PACKAGE_POPT
-> +       select BR2_PACKAGE_PYTHON
-> +       select BR2_PACKAGE_ZLIB
-> +       help
-> +         The new branch with support for the SMB3 protocol.
-> +
->  endchoice
->
->  endif
->
->  source "package/samba/samba3/Config.in"
-> +
-> +comment "samba4 needs a toolchain w/ IPv6, wchar, largfile, threads"
-> +       depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE || \
-> +               !BR2_USE_WCHAR || !BR2_INET_IPV6
-> +       depends on BR2_USE_MMU
-
-[...]
+Indeed. The explanation above (a shorter one, at least) should have been
+part of the commit log.
 
 Regards,
-
+Yann E. MORIN.
 
 -- 
-Samuel
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
