@@ -1,128 +1,31 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 7 Feb 2014 11:33:03 +0100
-Subject: [Buildroot] [PATCH v3 1/1] fs/ubi: add option to use custom
- ubinize config file
-In-Reply-To: <1390971240-1436-1-git-send-email-danomimanchego123@gmail.com>
-References: <1390971240-1436-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <CAAXf6LXL2kpsdZfWvGNudwMhgB3-y9ep1iX_QUc6AotB_EMVdw@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri,  7 Feb 2014 08:41:03 -0300
+Subject: [Buildroot] [PATCH] joe: needs mmu
+Message-ID: <1391773263-11779-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jan 29, 2014 at 5:54 AM, Danomi Manchego
-<danomimanchego123@gmail.com> wrote:
-> By default, the UBI FS target creates a ubinize configuration
-> file on-the-fly, for a single volume.  Add an option to specify
-> a custom config file.
->
-> E.g., one might want to deploy a system with a volume for the
-> built ubifs image, a volume for a future upgrade image, and a
-> volume for user data.
->
-> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
->
-> ---
->
-> v2 -> v3:
-> Change "cp" to "$(INSTALL) -m 0644", in case $(UBINIZE_CONFIG_FILE_PATH)
-> is read-only; this is in keeping with the recently committed patch
-> series that address issues with read-only buildroot trees.
->
-> v1 -> v2:
-> Amplify help text in Config.in
-> Move location of temporary config file to $(BUILD_DIR)
-> Use sed to replace BR2_ROOTFS_UBIFS_PATH in cfg with ubifs image path
-> Use BR2_ROOTFS_UBIFS_PATH in default config file to simplify config file treatment.
-> ---
->  fs/ubifs/Config.in   |   20 ++++++++++++++++++++
->  fs/ubifs/ubi.mk      |   17 +++++++++++------
->  fs/ubifs/ubinize.cfg |    1 +
->  3 files changed, 32 insertions(+), 6 deletions(-)
->
-> diff --git a/fs/ubifs/Config.in b/fs/ubifs/Config.in
-> index 70ea81e..ff604c5 100644
-> --- a/fs/ubifs/Config.in
-> +++ b/fs/ubifs/Config.in
-> @@ -119,6 +119,26 @@ config BR2_TARGET_ROOTFS_UBI_SUBSIZE
->           The value provided here is passed to the -s/--sub-page-size
->           option of ubinize.
->
-> +config BR2_TARGET_ROOTFS_UBI_USE_CUSTOM_CONFIG
-> +       bool "Use custom config file"
-> +       help
-> +         Select this option to use a custom ubinize configuration file,
-> +         rather than the default configuration used by Buildroot (which
-> +         defines a single dynamic volume marked as auto-resize).  Passing
-> +         a custom ubinize configuration file allows you to create several
-> +         volumes, specify volume types, etc.
-> +
-> +         As a convenience, buildroot replaces the string
-> +         "BR2_ROOTFS_UBIFS_PATH" with the path to the built ubifs file.
-> +         So the volume defined for the root filesystem can specify the
-> +         image path as:  image=BR2_ROOTFS_UBIFS_PATH
-> +
-> +config BR2_TARGET_ROOTFS_UBI_CUSTOM_CONFIG_FILE
-> +       string "Configuration file path"
-> +       depends on BR2_TARGET_ROOTFS_UBI_USE_CUSTOM_CONFIG
-> +       help
-> +         Path to the ubinize configuration file.
-> +
->  config BR2_TARGET_ROOTFS_UBI_OPTS
->         string "Additional ubinize options"
->         help
-> diff --git a/fs/ubifs/ubi.mk b/fs/ubifs/ubi.mk
-> index 08c952c..aba3bea 100644
-> --- a/fs/ubifs/ubi.mk
-> +++ b/fs/ubifs/ubi.mk
-> @@ -1,6 +1,6 @@
->  ################################################################################
->  #
-> -# Embed the ubifs image into an ubi one
-> +# Embed the ubifs image into an ubi image
->  #
->  ################################################################################
->
-> @@ -14,12 +14,17 @@ UBI_UBINIZE_OPTS += $(call qstrip,$(BR2_TARGET_ROOTFS_UBI_OPTS))
->
->  ROOTFS_UBI_DEPENDENCIES = rootfs-ubifs
->
-> +ifeq ($(BR2_TARGET_ROOTFS_UBI_USE_CUSTOM_CONFIG),y)
-> +UBINIZE_CONFIG_FILE_PATH = $(call qstrip,$(BR2_TARGET_ROOTFS_UBI_CUSTOM_CONFIG_FILE))
-> +else
-> +UBINIZE_CONFIG_FILE_PATH = fs/ubifs/ubinize.cfg
-> +endif
-> +
->  define ROOTFS_UBI_CMD
-> -       cp fs/ubifs/ubinize.cfg . ;\
-> -       echo "image=$@fs" \
-> -               >> ./ubinize.cfg ;\
-> -       $(HOST_DIR)/usr/sbin/ubinize -o $@ $(UBI_UBINIZE_OPTS) ubinize.cfg ;\
-> -       rm ubinize.cfg
-> +       $(INSTALL) -m 0644 $(UBINIZE_CONFIG_FILE_PATH) $(BUILD_DIR)/ubinize.cfg ;\
-> +       $(SED) 's;BR2_ROOTFS_UBIFS_PATH;$@fs;' $(BUILD_DIR)/ubinize.cfg ;\
-> +       $(HOST_DIR)/usr/sbin/ubinize -o $@ $(UBI_UBINIZE_OPTS) $(BUILD_DIR)/ubinize.cfg ;\
-> +       rm $(BUILD_DIR)/ubinize.cfg
->  endef
->
->  $(eval $(call ROOTFS_TARGET,ubi))
-> diff --git a/fs/ubifs/ubinize.cfg b/fs/ubifs/ubinize.cfg
-> index 6515271..b0aace7 100644
-> --- a/fs/ubifs/ubinize.cfg
-> +++ b/fs/ubifs/ubinize.cfg
-> @@ -5,3 +5,4 @@ vol_type=dynamic
->  vol_name=rootfs
->  vol_alignment=1
->  vol_flags=autoresize
-> +image=BR2_ROOTFS_UBIFS_PATH
-> --
+Fixes:
+http://autobuild.buildroot.net/results/f92/f920c85244afffe38497459753bf005946001d0d/
 
-Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/joe/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-Note that this patch would also fix bug #5780
-(https://bugs.busybox.net/show_bug.cgi?id=5780).
-If there are no blocking comments, I would propose to still merge it in 2014.02.
-
-Best regards,
-Thomas
+diff --git a/package/joe/Config.in b/package/joe/Config.in
+index e15b0f2..7b3df82 100644
+--- a/package/joe/Config.in
++++ b/package/joe/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_JOE
+ 	bool "joe"
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  Joe's Own Editor
+ 
+-- 
+1.8.3.2
