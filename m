@@ -1,43 +1,72 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 7 Feb 2014 21:41:33 +0100
-Subject: [Buildroot] [pkg-perl infra V5 5/8] host-perl-module-build: new
-	package
-In-Reply-To: <1391763337-30660-6-git-send-email-francois.perrad@gadz.org>
+Date: Fri, 7 Feb 2014 21:49:33 +0100
+Subject: [Buildroot] [pkg-perl infra V5 7/8] manual: adding packages perl
+In-Reply-To: <1391763337-30660-8-git-send-email-francois.perrad@gadz.org>
 References: <1391763337-30660-1-git-send-email-francois.perrad@gadz.org>
- <1391763337-30660-6-git-send-email-francois.perrad@gadz.org>
-Message-ID: <CAAXf6LUAi92h2dkS8-s_3p2Rrp3GVBJVuYks_iLNWg9CR5u8Vw@mail.gmail.com>
+ <1391763337-30660-8-git-send-email-francois.perrad@gadz.org>
+Message-ID: <CAAXf6LUo+6h9HF8C+S9wgcqzL=Zjjz4BqtA2nj-xMcxmRzA=mg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Francois,
+
 On Fri, Feb 7, 2014 at 9:55 AM, Francois Perrad <fperrad@gmail.com> wrote:
-> the version coming with host-perl is too old
 >
 > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 > ---
->  package/perl-module-build/perl-module-build.mk |   12 ++++++++++++
->  1 file changed, 12 insertions(+)
->  create mode 100644 package/perl-module-build/perl-module-build.mk
+>  docs/manual/adding-packages-perl.txt |  110 ++++++++++++++++++++++++++++++++++
+>  docs/manual/adding-packages.txt      |    2 +
+>  2 files changed, 112 insertions(+)
+>  create mode 100644 docs/manual/adding-packages-perl.txt
 >
-> diff --git a/package/perl-module-build/perl-module-build.mk b/package/perl-module-build/perl-module-build.mk
+> diff --git a/docs/manual/adding-packages-perl.txt b/docs/manual/adding-packages-perl.txt
 > new file mode 100644
-> index 0000000..c726c2a
+> index 0000000..1e48df9
 > --- /dev/null
-> +++ b/package/perl-module-build/perl-module-build.mk
-> @@ -0,0 +1,12 @@
-> +################################################################################
-> +#
-> +# perl-module-build
-> +#
-> +################################################################################
+> +++ b/docs/manual/adding-packages-perl.txt
+> @@ -0,0 +1,110 @@
+> +// -*- mode:doc; -*-
+> +// vim: set syntax=asciidoc:
 > +
-> +PERL_MODULE_BUILD_VERSION = 0.4204
-> +PERL_MODULE_BUILD_SOURCE = Module-Build-$(PERL_MODULE_BUILD_VERSION).tar.gz
-> +PERL_MODULE_BUILD_SITE = $(BR2_CPAN_MIRROR)/authors/id/L/LE/LEONT/
-> +PERL_MODULE_BUILD_LICENSE = perl_5
+> +Infrastructure for Perl/CPAN packages
+> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 > +
-> +$(eval $(host-perl-package))
+> +[[perl-package-tutorial]]
+> +
+> ++perl-package+ tutorial
+> +^^^^^^^^^^^^^^^^^^^^^^^
+> +
+> +First, let's see how to write a +.mk+ file for a Perl/CPAN package,
+> +with an example :
+> +
+> +------------------------
+> +01: ################################################################################
+> +02: #
+> +03: # perl-foo-bar
+> +04: #
+> +05: ################################################################################
+> +06:
+> +07: PERL_FOO_BAR_VERSION = 0.02
+> +08: PERL_FOO_BAR_SOURCE = Foo-Bar-$(PERL_FOO_BAR_VERSION).tar.gz
+> +09: PERL_FOO_BAR_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MO/MONGER/
+> +10: PERL_FOO_BAR_DEPENDENCIES = perl-strictures
+> +11: PERL_FOO_BAR_LICENSE = perl_5
+> +12: PERL_FOO_BAR_LICENSE_FILES = LICENSE
 
+Is 'perl_5' an actual license? Is it different than the Artistic License?
+SPDX specifies an 'Artistic-1.0-Perl':
+http://spdx.org/licenses/Artistic-1.0-Perl
+
+Is this the same license?
+In that case, I would prefer to use that identifier in the manual and
+all packages using this. Additionally, the list of identifiers in
+buildroot could be updated with that identifier too.
+
+Other than that:
 Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+
+Thanks,
+Thomas
