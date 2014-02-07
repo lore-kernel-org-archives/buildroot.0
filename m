@@ -1,60 +1,32 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 7 Feb 2014 09:02:45 +0100
-Subject: [Buildroot] Call for autobuild fixing for 2014.02
-Message-ID: <CAAXf6LUeXhtUXqjg0eJ845bF2eMd7WBXC_e5AAN0PUa3=svDTg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 7 Feb 2014 09:03:53 +0100
+Subject: [Buildroot] [PATCH v3 4/4] beaglebone: change to zImage
+In-Reply-To: <046952e3-d76e-400b-916b-a8fbd069a03b@email.android.com>
+References: <1391717684-4244-1-git-send-email-anders@chargestorm.se>
+ <1391717684-4244-5-git-send-email-anders@chargestorm.se>
+ <CALq67GBCrOGh_yxzjqcVXtUzoox=AEJaYJL27_UObB8qVMNyow@mail.gmail.com>
+ <046952e3-d76e-400b-916b-a8fbd069a03b@email.android.com>
+Message-ID: <20140207090353.384bd1f4@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Dear Anders Darander,
 
-At the end of this month, buildroot-2014.02 will be released. In accordance
-with our standard 3-month release cycle, this last month is all about
-stabilization: bug fixing, autobuild fixing, etc.
+On Fri, 7 Feb 2014 06:59:57 +0100, Anders Darander wrote:
 
-Last release cycle (2013.11) several developers put an increased effort in the
-last month for this stabilization, and it has definitely made a great impact.
-The number of autobuild failures significantly decreased during this time. This
-release, we can even do better!
-Looking at the current statistics, we are having 50-60% succeeding autobuilds,
-which we should certainly increase towards 70-80%!
+> What do other dev's think about this? It doesn't really matter to me if I squash then or not. 
+> 
+> My reasoning was that of you kept the old U-Boot environment, the new U-Boot works with a uImage. That's basically why I kept it as separate patches. 
 
-Therefore, I would like to request all developers to temporarily stop creating
-new features, adding new packages, etc. during the rest of this month, and
-focus entirely on fixing autobuild problems (or other problems) instead.
-
-There are several ways in which you can help: - Send brief analysis mails based
-on the autobuild results (sent daily by Thomas Petazzoni). This analysis mails
-typically contain for each reported failure: a copy/paste of the relevant part
-of the build log, and optionally a suggested resolution. These mails help other
-developers in selecting a problem they will fix, and avoids duplicate effort.
-
-- Fixing actual autobuild problems. To fix a problem, you would start by
-downloading the defconfig from the autobuild site, apply it in a fresh
-repository, probably set a good value for BR2_DL_DIR, and run 'make' to see if
-you can reproduce the problem. Once you can reproduce it, you can analyze in
-more detail and create a fix.  Depending on the problem, you can attempt some
-shortcuts. For example instead of building everything, you can request to build
-one particular package (foo) by running 'make toolchain foo'. If the problem is
-caused only by the overall configuration and foo itself (not by a missing
-dependency) this faster build would also show the problem. Remember: it's
-crucial that you can first reproduce the problem (with or without shortcut).
-Otherwise you may 'fix' something that is not broken.  If you want to fix a
-particular problem but get stuck, don't hesitate in sending your findings to
-the list. Other developers can try to help you.
-
-- Testing fixes sent by other developers. This involves similar steps as fixing
-the problem itself: first verify that you can reproduce the problem, then apply
-the fix and verify that the problem is gone. If all this is successful, then
-please respond on the fix with a Tested-by: tag.  This will help the maintainer
-in knowing which patches to apply.
-
-- Analyzing and if needed fixing bug reports. Open buildroot bugs are at:
-https://bugs.busybox.net/buglist.cgi?bug_status=__open__&content=&product=buildroot&query_format=specific&order=bug_id%20DESC&query_based_on=
-
-
-Thanks a lot,
+Hum, I believe that's a good point. Then maybe for "clarity" it's
+better to keep them separate. This way, an user looking through the
+changes on the beaglebone_defconfig will more likely see this change.
 
 Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
