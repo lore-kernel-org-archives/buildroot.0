@@ -1,1009 +1,659 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  7 Feb 2014 17:52:33 -0300
-Subject: [Buildroot] [PATCH 3/4] samba: convert to choice package
+Date: Fri,  7 Feb 2014 17:52:34 -0300
+Subject: [Buildroot] [PATCH 4/4] samba4: new package
 In-Reply-To: <1391806354-32698-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1391806354-32698-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1391806354-32698-4-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1391806354-32698-5-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Convert the classic samba package to a choice and move it to samba3 in
-preparation for the samba4 package.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/samba/Config.in                            | 274 ++-------------------
- package/samba/samba.mk                             | 179 +-------------
- package/samba/{ => samba3}/Config.in               |  99 +++-----
- package/samba/{ => samba3}/S91smb                  |   0
- .../samba3-0001-fix-smbd-libs-avahi.patch}         |   0
- .../samba3-0002-getaddrinfo.patch}                 |   0
- package/samba/samba3/samba3.mk                     | 181 ++++++++++++++
- package/samba/{ => samba3}/simple.conf             |   0
- 8 files changed, 240 insertions(+), 493 deletions(-)
- copy package/samba/{ => samba3}/Config.in (67%)
- rename package/samba/{ => samba3}/S91smb (100%)
- rename package/samba/{samba-fix-smbd-libs-avahi.patch => samba3/samba3-0001-fix-smbd-libs-avahi.patch} (100%)
- rename package/samba/{samba-getaddrinfo.patch => samba3/samba3-0002-getaddrinfo.patch} (100%)
- create mode 100644 package/samba/samba3/samba3.mk
- rename package/samba/{ => samba3}/simple.conf (100%)
+ package/samba/Config.in                            |  19 ++++
+ package/samba/samba4/S91smb                        |  56 +++++++++++
+ package/samba/samba4/arm-cache.txt                 |  65 ++++++++++++
+ package/samba/samba4/powerpc-cache.txt             |  65 ++++++++++++
+ ...-0001-build-don-t-execute-tests-summary.c.patch |  67 +++++++++++++
+ ...ld-don-t-execute-statfs-and-f_fsid-checks.patch |  31 ++++++
+ ...003-build-find-FILE_OFFSET_BITS-via-array.patch |  54 ++++++++++
+ ...uild-allow-some-python-variable-overrides.patch |  45 +++++++++
+ ...amba4-0005-builtin-heimdal-external-tools.patch |  42 ++++++++
+ package/samba/samba4/samba4.mk                     | 111 +++++++++++++++++++++
+ 10 files changed, 555 insertions(+)
+ create mode 100644 package/samba/samba4/S91smb
+ create mode 100644 package/samba/samba4/arm-cache.txt
+ create mode 100644 package/samba/samba4/powerpc-cache.txt
+ create mode 100644 package/samba/samba4/samba4-0001-build-don-t-execute-tests-summary.c.patch
+ create mode 100644 package/samba/samba4/samba4-0002-build-don-t-execute-statfs-and-f_fsid-checks.patch
+ create mode 100644 package/samba/samba4/samba4-0003-build-find-FILE_OFFSET_BITS-via-array.patch
+ create mode 100644 package/samba/samba4/samba4-0004-build-allow-some-python-variable-overrides.patch
+ create mode 100644 package/samba/samba4/samba4-0005-builtin-heimdal-external-tools.patch
+ create mode 100644 package/samba/samba4/samba4.mk
 
 diff --git a/package/samba/Config.in b/package/samba/Config.in
-index 1469075..d11401f 100644
+index d11401f..e037dd9 100644
 --- a/package/samba/Config.in
 +++ b/package/samba/Config.in
-@@ -1,270 +1,32 @@
-+comment "samba needs a toolchain w/ threads"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
- config BR2_PACKAGE_SAMBA
- 	bool "samba"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
--	select BR2_PACKAGE_POPT
+@@ -25,8 +25,27 @@ choice
  	help
--	  Provides print services to all manner of SMB/CIFS clients,
--	  including the numerous versions of Microsoft Windows
--	  operating systems.
--
--	  http://www.samba.org/
--
--	  NOTE: A complete Samba install takes over 50MB of space,
--		so choose only the components you need.
--
--comment "samba needs a toolchain w/ threads"
--	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	  Provides secure, stable and fast file and print services
-+	  for all clients using the SMB/CIFS protocol, such as all versions
-+	  of DOS and Windows, OS/2, Linux and many others.
+ 	  The well-tested legacy branch.
  
- if BR2_PACKAGE_SAMBA
- 
--config BR2_PACKAGE_SAMBA_MAX_DEBUGLEVEL
--	int "Maximum level of compiled-in debug messages"
--	range -1 10000
--	default -1
--	help
--	  Define the level of compiled-in debug messages.
--	  This allows for big space savings, -1 being the lowest (none).
--
--config BR2_PACKAGE_SAMBA_LIBICONV
--	bool "extended encodings (libiconv)"
--	depends on !BR2_ENABLE_LOCALE
--	select BR2_PACKAGE_LIBICONV
--	help
--	  Include libiconv support for extended conversion of filename
--	  enconding. Samba has built-in support for UTF-8, ISO-8859-1
--	  and ASCII, so this is only required if you want to support
--	  other encodings.
--
--menu "Samba tools selection"
--
--config BR2_PACKAGE_SAMBA_EVENTLOGADM
--	bool "eventlogadm"
--	default y
--	help
--	  Write Eventlog records to a tdb or perform other eventlog functions
--
--config BR2_PACKAGE_SAMBA_FINDSMB
--	bool "findsmb"
--	default y
--	depends on BR2_PACKAGE_SAMBA_SMBCLIENT
--	depends on BR2_PACKAGE_SAMBA_NMBLOOKUP
--	depends on BR2_PACKAGE_PERL
--	help
--	  Script to browse network
--
--comment "findsmb       - disabled (requires nmblookup, smbclient and perl)"
--	depends on !BR2_PACKAGE_SAMBA_SMBCLIENT || !BR2_PACKAGE_SAMBA_NMBLOOKUP || !BR2_PACKAGE_PERL
--
--config BR2_PACKAGE_SAMBA_NET
--	bool "net"
--	default y
--	help
--	  Distributed SMB/CIFS Server Management Utility
--
--config BR2_PACKAGE_SAMBA_NMBD
--	bool "nmbd"
--	default y
--	help
--	  NetBIOS name server to provide NetBIOS over IP naming services
--	  to clients
--
--config BR2_PACKAGE_SAMBA_NMBLOOKUP
--	bool "nmblookup"
--	default y
--	help
--	  Query NetBIOS names and map them to IP addresses in a network
--	  using NetBIOS over TCP/IP queries
--
--config BR2_PACKAGE_SAMBA_NTLM_AUTH
--	bool "ntlm_auth"
--	default y
--	help
--	  Helper utility that authenticates users using NT/LM authentication
--
--config BR2_PACKAGE_SAMBA_PDBEDIT
--	bool "pdbedit"
--	default y
--	help
--	  Manage the SAM database (Database of Samba Users)
--
--config BR2_PACKAGE_SAMBA_PROFILES
--	bool "profiles"
--	default y
--	help
--	  Utility that reports and changes SIDs in Windows NT registry files
--
--config BR2_PACKAGE_SAMBA_RPCCLIENT
--	bool "rpcclient"
--	select BR2_PACKAGE_READLINE
--	default y
-+choice
-+	prompt "Samba version"
-+	default BR2_PACKAGE_SAMBA3
- 	help
--	  Tool for executing client side MS-RPC functions using RPC
--	  calls from a UNIX workstation.
-+	  Select the desired samba version.
- 
--config BR2_PACKAGE_SAMBA_SMBCACLS
--	bool "smbcacls"
--	default y
--	help
--	  Set or get ACLs on an NT file or directory names
--
--config BR2_PACKAGE_SAMBA_SMBCLIENT
--	bool "smbclient"
--	select BR2_PACKAGE_READLINE
--	default y
--	help
--	  ftp-like client to access SMB/CIFS resources on servers
--
--config BR2_PACKAGE_SAMBA_SMBCONTROL
--	bool "smbcontrol"
--	default y
--	help
--	  Send messages to smbd, nmbd or winbindd processes
--
--config BR2_PACKAGE_SAMBA_SMBCQUOTAS
--	bool "smbcquotas"
--	default y
--	help
--	  Set or get QUOTAs of NTFS 5 shares
--
--config BR2_PACKAGE_SAMBA_SMBD
--	bool "smbd"
--	default y
--	help
--	  The server daemon that provides filesharing and printing services
--
--config BR2_PACKAGE_SAMBA_SMBGET
--	bool "smbget"
--	default y
--	help
--	  wget-like utility for download files over SMB
--
--config BR2_PACKAGE_SAMBA_SMBLDBTOOLS
--	bool "smbldbtools"
--	default y
--	help
--	  ldbadd ldbdel ldbedit ldbmodify ldbrename ldbsearch tools
--
--config BR2_PACKAGE_SAMBA_SMBPASSWD
--	bool "smbpasswd"
--	default y
--	help
--	  Change a user's SMB passwd
--
--config BR2_PACKAGE_SAMBA_SMBSHARESEC
--	bool "smbsharesec"
--	default y
--	help
--	  Manipulate share permissions on SMB file shares
--
--config BR2_PACKAGE_SAMBA_SMBSPOOL
--	bool "smbspool"
--	default y
--	help
--	  Send a print file to an SMB printer
--
--config BR2_PACKAGE_SAMBA_SMBSTATUS
--	bool "smbstatus"
--	default y
--	help
--	  Report on current Samba connections
--
--config BR2_PACKAGE_SAMBA_SMBTREE
--	bool "smbtree"
--	default y
--	help
--	  A text based smb network browser
--
--config BR2_PACKAGE_SAMBA_SWAT
--	bool "swat"
--	default y
--	help
--	  Samba Web Administration Tool
--
--config BR2_PACKAGE_SAMBA_SMBTA_UTIL
--	bool "smbta-util"
--	default y
--	help
--	  Tool to ease the configuration of the vfs_smb_traffic_analyzer
--	  module regarding data encryption.
--
--config BR2_PACKAGE_SAMBA_SMBTAR
--	bool "smbtar"
--	default y
--	depends on BR2_PACKAGE_SAMBA_SMBCLIENT
--	help
--	  tar-like script that wraps smbclient
--
--comment "smbtar        - disabled (requires smbclient)"
--	depends on !BR2_PACKAGE_SAMBA_SMBCLIENT
--
--config BR2_PACKAGE_SAMBA_TDB
--	bool "tdb"
--	default y
--	help
--	  Tools to operate on the .tdb database files
--
--config BR2_PACKAGE_SAMBA_TESTPARM
--	bool "testparm"
--	default y
--	help
--	  Check an smb.conf configuration file for internal correctness
--
--config BR2_PACKAGE_SAMBA_WINBINDD
--	bool "winbindd"
--	default y
--	help
--	  Name Service Switch daemon for resolving names from NT servers
--
--config BR2_PACKAGE_SAMBA_WBINFO
--	bool "wbinfo"
--	default y
--	depends on BR2_PACKAGE_SAMBA_WINBINDD
--	help
--	  Query information from winbind daemon
--
--endmenu
--
--
--menu "Samba libraries selection"
--
--config BR2_PACKAGE_SAMBA_LIBSMBCLIENT
--	bool "libsmbclient"
--	help
--	  libsmbclient is a library toolset that permits applications
--	  to manipulate CIFS/SMB network resources using many of the
--	  standards POSIX functions available for manipulating local
--	  files.
--
--endmenu
--
--
--menu "Samba support selection"
--
--config BR2_PACKAGE_SAMBA_AVAHI
--	bool "support avahi"
--	default y
--	depends on BR2_PACKAGE_AVAHI_DAEMON
--	depends on BR2_USE_MMU # dbus
--	select BR2_PACKAGE_DBUS
--	help
--	  Include support for avahi
--
--comment "support avahi - disabled (requires avahi-daemon)"
--	depends on BR2_USE_MMU
--	depends on !BR2_PACKAGE_AVAHI_DAEMON
--
--config BR2_PACKAGE_SAMBA_GAMIN
--	bool "support gamin"
--	default y
--	depends on BR2_PACKAGE_GAMIN
-+	config BR2_PACKAGE_SAMBA3
-+	bool "3.6.x"
++	config BR2_PACKAGE_SAMBA4
++	bool "4.1.x"
++	depends on BR2_INET_IPV6
++	depends on BR2_USE_WCHAR # e2fsprogs
++	depends on BR2_LARGEFILE
++	# Supported architectures only limited by the cached answers
++	depends on BR2_arm || BR2_powerpc
++	select BR2_PACKAGE_E2FSPROGS
 +	select BR2_PACKAGE_POPT
- 	help
--	  Include support for gamin
-+	  The well-tested legacy branch.
- 
--comment "support gamin - disabled (requires gamin)"
--	depends on !BR2_PACKAGE_GAMIN
--
--endmenu
-+endchoice
++	select BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_ZLIB
++	help
++	  The new branch with support for the SMB3 protocol.
++
+ endchoice
  
  endif
+ 
+ source "package/samba/samba3/Config.in"
 +
-+source "package/samba/samba3/Config.in"
-diff --git a/package/samba/samba.mk b/package/samba/samba.mk
-index a7b452c..33a0660 100644
---- a/package/samba/samba.mk
-+++ b/package/samba/samba.mk
-@@ -1,178 +1 @@
--################################################################################
--#
--# samba
--#
--################################################################################
--
--SAMBA_VERSION = 3.6.22
--SAMBA_SITE = http://ftp.samba.org/pub/samba/stable
--SAMBA_SUBDIR = source3
--SAMBA_INSTALL_STAGING = YES
--SAMBA_LICENSE = GPLv3+
--SAMBA_LICENSE_FILES = COPYING
--
--SAMBA_DEPENDENCIES = popt \
--	$(if $(BR2_PACKAGE_SAMBA_RPCCLIENT),readline) \
--	$(if $(BR2_PACKAGE_SAMBA_SMBCLIENT),readline) \
--	$(if $(BR2_PACKAGE_SAMBA_AVAHI),avahi) \
--	$(if $(BR2_PACKAGE_SAMBA_GAMIN),gamin)
--
--SAMBA_CONF_ENV = \
--	ac_cv_file__proc_sys_kernel_core_pattern=yes \
--	samba_cv_HAVE_GETTIMEOFDAY_TZ=yes \
--	samba_cv_USE_SETREUID=yes \
--	samba_cv_HAVE_KERNEL_OPLOCKS_LINUX=yes \
--	samba_cv_HAVE_IFACE_IFCONF=yes \
--	samba_cv_HAVE_MMAP=yes \
--	samba_cv_HAVE_FCNTL_LOCK=yes \
--	samba_cv_HAVE_SECURE_MKSTEMP=yes \
--	samba_cv_CC_NEGATIVE_ENUM_VALUES=yes \
--	samba_cv_fpie=no \
--	libreplace_cv_HAVE_IPV6=$(if $(BR2_INET_IPV6),yes,no) \
--	$(if $(BR2_PACKAGE_SAMBA_AVAHI),AVAHI_LIBS=-pthread)
--
--SAMBA_CONF_OPT = \
--	--localstatedir=/var \
--	--with-piddir=/var/run \
--	--with-lockdir=/var/lock \
--	--with-logfilebase=/var/log \
--	--with-configdir=/etc/samba \
--	--with-privatedir=/etc/samba \
--	\
--	--disable-cups \
--	--enable-shared-libs \
--	--disable-pie \
--	--disable-relro \
--	--disable-dnssd \
--	\
--	$(if $(BR2_PACKAGE_SAMBA_AVAHI),--enable-avahi,--disable-avahi) \
--	$(if $(BR2_PACKAGE_SAMBA_GAMIN),--enable-fam,--disable-fam) \
--	$(if $(BR2_PACKAGE_SAMBA_SWAT),--enable-swat,--disable-swat) \
--	\
--	--without-cluster-support \
--	--without-dnsupdate \
--	--with-sys-quotas \
--	--without-ads \
--	--without-ldap \
--	--with-included-iniparser \
--	\
--	$(if $(BR2_PACKAGE_SAMBA_RPCCLIENT),--with-readline=$(STAGING_DIR)) \
--	$(if $(BR2_PACKAGE_SAMBA_SMBCLIENT),--with-readline=$(STAGING_DIR)) \
--	$(if $(BR2_PACKAGE_SAMBA_WINBINDD),--with-winbind,--without-winbind)
--
--SAMBA_INSTALL_TARGET_OPT = \
--	DESTDIR=$(TARGET_DIR) -C $(SAMBA_DIR)/$(SAMBA_SUBDIR) \
--	installlibs installservers installbin installscripts \
--	$(if $(BR2_PACKAGE_SAMBA_SWAT),installswat)
--
--# binaries to keep
--SAMBA_BINTARGETS_y = \
--	usr/sbin/smbd \
--	usr/lib/libtalloc.so \
--	usr/lib/libtdb.so
--
--# binaries to remove
--SAMBA_BINTARGETS_ = \
--	usr/lib/libnetapi.so* \
--	usr/lib/libsmbsharemodes.so*
--
--# binaries to keep or remove
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_EVENTLOGADM) += usr/bin/eventlogadm
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_NET) += usr/bin/net
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_NMBD) += usr/sbin/nmbd
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_NMBLOOKUP) += usr/bin/nmblookup
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_NTLM_AUTH) += usr/bin/ntlm_auth
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_PDBEDIT) += usr/bin/pdbedit
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_PROFILES) += usr/bin/profiles
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_RPCCLIENT) += usr/bin/rpcclient
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBCACLS) += usr/bin/smbcacls
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBCLIENT) += usr/bin/smbclient
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBCONTROL) += usr/bin/smbcontrol
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBCQUOTAS) += usr/bin/smbcquotas
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBD) += usr/sbin/smbd
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBGET) += usr/bin/smbget
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBLDBTOOLS) += usr/bin/ldbadd
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBLDBTOOLS) += usr/bin/ldbdel
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBLDBTOOLS) += usr/bin/ldbedit
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBLDBTOOLS) += usr/bin/ldbmodify
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBLDBTOOLS) += usr/bin/ldbrename
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBLDBTOOLS) += usr/bin/ldbsearch
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBPASSWD) += usr/bin/smbpasswd
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBSHARESEC) += usr/bin/sharesec
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBSPOOL) += usr/bin/smbspool
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBSTATUS) += usr/bin/smbstatus
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBTA_UTIL) += usr/bin/smbta-util
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBTREE) += usr/bin/smbtree
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SWAT) += usr/sbin/swat
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_TDB) += usr/bin/tdbbackup
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_TDB) += usr/bin/tdbdump
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_TDB) += usr/bin/tdbtool
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_TESTPARM) += usr/bin/testparm
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_WINBINDD) += usr/sbin/winbindd
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_WBINFO) += usr/bin/wbinfo
--
--# libraries to keep or remove
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_WINBINDD) += usr/lib/libwbclient.so*
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_LIBSMBCLIENT) += usr/lib/libsmbclient.so*
--
--# non-binaries to remove
--SAMBA_TXTTARGETS_ = \
--	usr/include/libsmbclient.h \
--	usr/include/netapi.h \
--	usr/include/smb_share_modes.h \
--	usr/include/talloc.h \
--	usr/include/tdb.h \
--	usr/include/wbclient.h
--
--# non-binaries to keep or remove
--SAMBA_TXTTARGETS_$(BR2_PACKAGE_SAMBA_FINDSMB) += usr/bin/findsmb
--SAMBA_TXTTARGETS_$(BR2_PACKAGE_SAMBA_SMBTAR) += usr/bin/smbtar
--
--define SAMBA_REMOVE_UNNEEDED_BINARIES
--	rm -f $(addprefix $(TARGET_DIR)/, $(SAMBA_BINTARGETS_))
--	rm -f $(addprefix $(TARGET_DIR)/, $(SAMBA_TXTTARGETS_))
--endef
--
--SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_REMOVE_UNNEEDED_BINARIES
--
--define SAMBA_REMOVE_SWAT_DOCUMENTATION
--	# Remove the documentation
--	rm -rf $(TARGET_DIR)/usr/swat/help/manpages
--	rm -rf $(TARGET_DIR)/usr/swat/help/Samba3*
--	rm -rf $(TARGET_DIR)/usr/swat/using_samba/
--	# Removing the welcome.html file will make swat default to
--	# welcome-no-samba-doc.html
--	rm -rf $(TARGET_DIR)/usr/swat/help/welcome.html
--endef
--
--# --with-libiconv="" is to avoid detecting host libiconv and build failure
--ifeq ($(BR2_PACKAGE_SAMBA_LIBICONV),y)
--SAMBA_DEPENDENCIES += libiconv
--SAMBA_CONF_OPT += --with-libiconv=$(STAGING_DIR)
--else
--SAMBA_CONF_OPT += --with-libiconv=""
--endif
--
--# Compiled debug messages by level
--SAMBA_CONF_OPT += CFLAGS="$(TARGET_CFLAGS) -DMAX_DEBUG_LEVEL=$(BR2_PACKAGE_SAMBA_MAX_DEBUGLEVEL)"
--
--ifeq ($(BR2_PACKAGE_SAMBA_SWAT),y)
--ifneq ($(BR2_HAVE_DOCUMENTATION),y)
--SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_REMOVE_SWAT_DOCUMENTATION
--endif
--endif
--
--define SAMBA_INSTALL_INITSCRIPTS_CONFIG
--	# install start/stop script
--	@if [ ! -f $(TARGET_DIR)/etc/init.d/S91smb ]; then \
--		$(INSTALL) -m 0755 -D package/samba/S91smb $(TARGET_DIR)/etc/init.d/S91smb; \
--	fi
--	# install config
--	@if [ ! -f $(TARGET_DIR)/etc/samba/smb.conf ]; then \
--		$(INSTALL) -m 0755 -D package/samba/simple.conf $(TARGET_DIR)/etc/samba/smb.conf; \
--	fi
--endef
--
--SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_INSTALL_INITSCRIPTS_CONFIG
--
--$(eval $(autotools-package))
-+include $(sort $(wildcard package/samba/*/*.mk))
-diff --git a/package/samba/Config.in b/package/samba/samba3/Config.in
-similarity index 67%
-copy from package/samba/Config.in
-copy to package/samba/samba3/Config.in
-index 1469075..74a60a3 100644
---- a/package/samba/Config.in
-+++ b/package/samba/samba3/Config.in
-@@ -1,25 +1,6 @@
--config BR2_PACKAGE_SAMBA
--	bool "samba"
--	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_USE_MMU # fork()
--	select BR2_PACKAGE_POPT
--	help
--	  Provides print services to all manner of SMB/CIFS clients,
--	  including the numerous versions of Microsoft Windows
--	  operating systems.
--
--	  http://www.samba.org/
--
--	  NOTE: A complete Samba install takes over 50MB of space,
--		so choose only the components you need.
--
--comment "samba needs a toolchain w/ threads"
--	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
--
--if BR2_PACKAGE_SAMBA
-+if BR2_PACKAGE_SAMBA3
- 
--config BR2_PACKAGE_SAMBA_MAX_DEBUGLEVEL
-+config BR2_PACKAGE_SAMBA3_MAX_DEBUGLEVEL
- 	int "Maximum level of compiled-in debug messages"
- 	range -1 10000
- 	default -1
-@@ -27,7 +8,7 @@ config BR2_PACKAGE_SAMBA_MAX_DEBUGLEVEL
- 	  Define the level of compiled-in debug messages.
- 	  This allows for big space savings, -1 being the lowest (none).
- 
--config BR2_PACKAGE_SAMBA_LIBICONV
-+config BR2_PACKAGE_SAMBA3_LIBICONV
- 	bool "extended encodings (libiconv)"
- 	depends on !BR2_ENABLE_LOCALE
- 	select BR2_PACKAGE_LIBICONV
-@@ -39,63 +20,63 @@ config BR2_PACKAGE_SAMBA_LIBICONV
- 
- menu "Samba tools selection"
- 
--config BR2_PACKAGE_SAMBA_EVENTLOGADM
-+config BR2_PACKAGE_SAMBA3_EVENTLOGADM
- 	bool "eventlogadm"
- 	default y
- 	help
- 	  Write Eventlog records to a tdb or perform other eventlog functions
- 
--config BR2_PACKAGE_SAMBA_FINDSMB
-+config BR2_PACKAGE_SAMBA3_FINDSMB
- 	bool "findsmb"
- 	default y
--	depends on BR2_PACKAGE_SAMBA_SMBCLIENT
--	depends on BR2_PACKAGE_SAMBA_NMBLOOKUP
-+	depends on BR2_PACKAGE_SAMBA3_SMBCLIENT
-+	depends on BR2_PACKAGE_SAMBA3_NMBLOOKUP
- 	depends on BR2_PACKAGE_PERL
- 	help
- 	  Script to browse network
- 
- comment "findsmb       - disabled (requires nmblookup, smbclient and perl)"
--	depends on !BR2_PACKAGE_SAMBA_SMBCLIENT || !BR2_PACKAGE_SAMBA_NMBLOOKUP || !BR2_PACKAGE_PERL
-+	depends on !BR2_PACKAGE_SAMBA3_SMBCLIENT || !BR2_PACKAGE_SAMBA3_NMBLOOKUP || !BR2_PACKAGE_PERL
- 
--config BR2_PACKAGE_SAMBA_NET
-+config BR2_PACKAGE_SAMBA3_NET
- 	bool "net"
- 	default y
- 	help
- 	  Distributed SMB/CIFS Server Management Utility
- 
--config BR2_PACKAGE_SAMBA_NMBD
-+config BR2_PACKAGE_SAMBA3_NMBD
- 	bool "nmbd"
- 	default y
- 	help
- 	  NetBIOS name server to provide NetBIOS over IP naming services
- 	  to clients
- 
--config BR2_PACKAGE_SAMBA_NMBLOOKUP
-+config BR2_PACKAGE_SAMBA3_NMBLOOKUP
- 	bool "nmblookup"
- 	default y
- 	help
- 	  Query NetBIOS names and map them to IP addresses in a network
- 	  using NetBIOS over TCP/IP queries
- 
--config BR2_PACKAGE_SAMBA_NTLM_AUTH
-+config BR2_PACKAGE_SAMBA3_NTLM_AUTH
- 	bool "ntlm_auth"
- 	default y
- 	help
- 	  Helper utility that authenticates users using NT/LM authentication
- 
--config BR2_PACKAGE_SAMBA_PDBEDIT
-+config BR2_PACKAGE_SAMBA3_PDBEDIT
- 	bool "pdbedit"
- 	default y
- 	help
- 	  Manage the SAM database (Database of Samba Users)
- 
--config BR2_PACKAGE_SAMBA_PROFILES
-+config BR2_PACKAGE_SAMBA3_PROFILES
- 	bool "profiles"
- 	default y
- 	help
- 	  Utility that reports and changes SIDs in Windows NT registry files
- 
--config BR2_PACKAGE_SAMBA_RPCCLIENT
-+config BR2_PACKAGE_SAMBA3_RPCCLIENT
- 	bool "rpcclient"
- 	select BR2_PACKAGE_READLINE
- 	default y
-@@ -103,124 +84,124 @@ config BR2_PACKAGE_SAMBA_RPCCLIENT
- 	  Tool for executing client side MS-RPC functions using RPC
- 	  calls from a UNIX workstation.
- 
--config BR2_PACKAGE_SAMBA_SMBCACLS
-+config BR2_PACKAGE_SAMBA3_SMBCACLS
- 	bool "smbcacls"
- 	default y
- 	help
- 	  Set or get ACLs on an NT file or directory names
- 
--config BR2_PACKAGE_SAMBA_SMBCLIENT
-+config BR2_PACKAGE_SAMBA3_SMBCLIENT
- 	bool "smbclient"
- 	select BR2_PACKAGE_READLINE
- 	default y
- 	help
- 	  ftp-like client to access SMB/CIFS resources on servers
- 
--config BR2_PACKAGE_SAMBA_SMBCONTROL
-+config BR2_PACKAGE_SAMBA3_SMBCONTROL
- 	bool "smbcontrol"
- 	default y
- 	help
- 	  Send messages to smbd, nmbd or winbindd processes
- 
--config BR2_PACKAGE_SAMBA_SMBCQUOTAS
-+config BR2_PACKAGE_SAMBA3_SMBCQUOTAS
- 	bool "smbcquotas"
- 	default y
- 	help
- 	  Set or get QUOTAs of NTFS 5 shares
- 
--config BR2_PACKAGE_SAMBA_SMBD
-+config BR2_PACKAGE_SAMBA3_SMBD
- 	bool "smbd"
- 	default y
- 	help
- 	  The server daemon that provides filesharing and printing services
- 
--config BR2_PACKAGE_SAMBA_SMBGET
-+config BR2_PACKAGE_SAMBA3_SMBGET
- 	bool "smbget"
- 	default y
- 	help
- 	  wget-like utility for download files over SMB
- 
--config BR2_PACKAGE_SAMBA_SMBLDBTOOLS
-+config BR2_PACKAGE_SAMBA3_SMBLDBTOOLS
- 	bool "smbldbtools"
- 	default y
- 	help
- 	  ldbadd ldbdel ldbedit ldbmodify ldbrename ldbsearch tools
- 
--config BR2_PACKAGE_SAMBA_SMBPASSWD
-+config BR2_PACKAGE_SAMBA3_SMBPASSWD
- 	bool "smbpasswd"
- 	default y
- 	help
- 	  Change a user's SMB passwd
- 
--config BR2_PACKAGE_SAMBA_SMBSHARESEC
-+config BR2_PACKAGE_SAMBA3_SMBSHARESEC
- 	bool "smbsharesec"
- 	default y
- 	help
- 	  Manipulate share permissions on SMB file shares
- 
--config BR2_PACKAGE_SAMBA_SMBSPOOL
-+config BR2_PACKAGE_SAMBA3_SMBSPOOL
- 	bool "smbspool"
- 	default y
- 	help
- 	  Send a print file to an SMB printer
- 
--config BR2_PACKAGE_SAMBA_SMBSTATUS
-+config BR2_PACKAGE_SAMBA3_SMBSTATUS
- 	bool "smbstatus"
- 	default y
- 	help
- 	  Report on current Samba connections
- 
--config BR2_PACKAGE_SAMBA_SMBTREE
-+config BR2_PACKAGE_SAMBA3_SMBTREE
- 	bool "smbtree"
- 	default y
- 	help
- 	  A text based smb network browser
- 
--config BR2_PACKAGE_SAMBA_SWAT
-+config BR2_PACKAGE_SAMBA3_SWAT
- 	bool "swat"
- 	default y
- 	help
- 	  Samba Web Administration Tool
- 
--config BR2_PACKAGE_SAMBA_SMBTA_UTIL
-+config BR2_PACKAGE_SAMBA3_SMBTA_UTIL
- 	bool "smbta-util"
- 	default y
- 	help
- 	  Tool to ease the configuration of the vfs_smb_traffic_analyzer
- 	  module regarding data encryption.
- 
--config BR2_PACKAGE_SAMBA_SMBTAR
-+config BR2_PACKAGE_SAMBA3_SMBTAR
- 	bool "smbtar"
- 	default y
--	depends on BR2_PACKAGE_SAMBA_SMBCLIENT
-+	depends on BR2_PACKAGE_SAMBA3_SMBCLIENT
- 	help
- 	  tar-like script that wraps smbclient
- 
- comment "smbtar        - disabled (requires smbclient)"
--	depends on !BR2_PACKAGE_SAMBA_SMBCLIENT
-+	depends on !BR2_PACKAGE_SAMBA3_SMBCLIENT
- 
--config BR2_PACKAGE_SAMBA_TDB
-+config BR2_PACKAGE_SAMBA3_TDB
- 	bool "tdb"
- 	default y
- 	help
- 	  Tools to operate on the .tdb database files
- 
--config BR2_PACKAGE_SAMBA_TESTPARM
-+config BR2_PACKAGE_SAMBA3_TESTPARM
- 	bool "testparm"
- 	default y
- 	help
- 	  Check an smb.conf configuration file for internal correctness
- 
--config BR2_PACKAGE_SAMBA_WINBINDD
-+config BR2_PACKAGE_SAMBA3_WINBINDD
- 	bool "winbindd"
- 	default y
- 	help
- 	  Name Service Switch daemon for resolving names from NT servers
- 
--config BR2_PACKAGE_SAMBA_WBINFO
-+config BR2_PACKAGE_SAMBA3_WBINFO
- 	bool "wbinfo"
- 	default y
--	depends on BR2_PACKAGE_SAMBA_WINBINDD
-+	depends on BR2_PACKAGE_SAMBA3_WINBINDD
- 	help
- 	  Query information from winbind daemon
- 
-@@ -229,7 +210,7 @@ endmenu
- 
- menu "Samba libraries selection"
- 
--config BR2_PACKAGE_SAMBA_LIBSMBCLIENT
-+config BR2_PACKAGE_SAMBA3_LIBSMBCLIENT
- 	bool "libsmbclient"
- 	help
- 	  libsmbclient is a library toolset that permits applications
-@@ -242,7 +223,7 @@ endmenu
- 
- menu "Samba support selection"
- 
--config BR2_PACKAGE_SAMBA_AVAHI
-+config BR2_PACKAGE_SAMBA3_AVAHI
- 	bool "support avahi"
- 	default y
- 	depends on BR2_PACKAGE_AVAHI_DAEMON
-@@ -255,7 +236,7 @@ comment "support avahi - disabled (requires avahi-daemon)"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_PACKAGE_AVAHI_DAEMON
- 
--config BR2_PACKAGE_SAMBA_GAMIN
-+config BR2_PACKAGE_SAMBA3_GAMIN
- 	bool "support gamin"
- 	default y
- 	depends on BR2_PACKAGE_GAMIN
-diff --git a/package/samba/S91smb b/package/samba/samba3/S91smb
-similarity index 100%
-rename from package/samba/S91smb
-rename to package/samba/samba3/S91smb
-diff --git a/package/samba/samba-fix-smbd-libs-avahi.patch b/package/samba/samba3/samba3-0001-fix-smbd-libs-avahi.patch
-similarity index 100%
-rename from package/samba/samba-fix-smbd-libs-avahi.patch
-rename to package/samba/samba3/samba3-0001-fix-smbd-libs-avahi.patch
-diff --git a/package/samba/samba-getaddrinfo.patch b/package/samba/samba3/samba3-0002-getaddrinfo.patch
-similarity index 100%
-rename from package/samba/samba-getaddrinfo.patch
-rename to package/samba/samba3/samba3-0002-getaddrinfo.patch
-diff --git a/package/samba/samba3/samba3.mk b/package/samba/samba3/samba3.mk
++comment "samba4 needs a toolchain w/ IPv6, wchar, largfile, threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE || \
++		!BR2_USE_WCHAR || !BR2_INET_IPV6
++	depends on BR2_USE_MMU
+diff --git a/package/samba/samba4/S91smb b/package/samba/samba4/S91smb
 new file mode 100644
-index 0000000..673d737
+index 0000000..0cd0057
 --- /dev/null
-+++ b/package/samba/samba3/samba3.mk
-@@ -0,0 +1,181 @@
++++ b/package/samba/samba4/S91smb
+@@ -0,0 +1,56 @@
++#!/bin/sh
++
++[ -f /etc/samba/smb.conf ] || exit 0
++
++mkdir -p /var/log/samba
++
++start() {
++	echo -n "Starting SMB services: "
++	smbd -D
++	[ $? == 0 ] && echo "OK" || echo "FAIL"
++
++	echo -n "Starting NMB services: "
++	nmbd -D
++	[ $? == 0 ] && echo "OK" || echo "FAIL"
++}
++
++stop() {
++	echo -n "Shutting down SMB services: "
++	kill -9 `pidof smbd`
++	[ $? == 0 ] && echo "OK" || echo "FAIL"
++
++	echo -n "Shutting down NMB services: "
++	kill -9 `pidof nmbd`
++	[ $? == 0 ] && echo "OK" || echo "FAIL"
++}
++
++restart() {
++	stop
++	start
++}
++
++reload() {
++        echo -n "Reloading smb.conf file: "
++	kill -HUP `pidof smbd`
++	[ $? == 0 ] && echo "OK" || echo "FAIL"
++}
++
++case "$1" in
++  start)
++  	start
++	;;
++  stop)
++  	stop
++	;;
++  restart)
++  	restart
++	;;
++  reload)
++  	reload
++	;;
++  *)
++	echo "Usage: $0 {start|stop|restart|reload}"
++	exit 1
++esac
++
++exit $?
+diff --git a/package/samba/samba4/arm-cache.txt b/package/samba/samba4/arm-cache.txt
+new file mode 100644
+index 0000000..70b19e3
+--- /dev/null
++++ b/package/samba/samba4/arm-cache.txt
+@@ -0,0 +1,65 @@
++Checking simple C program: OK
++rpath library support: OK
++-Wl,--version-script support: OK
++Checking getconf LFS_CFLAGS: NO
++Checking for large file support without additional flags: OK
++Checking for -D_LARGE_FILES: OK
++Checking correct behavior of strtoll: NO
++Checking for working strptime: OK
++Checking for C99 vsnprintf: OK
++Checking for HAVE_SHARED_MMAP: OK
++Checking for HAVE_MREMAP: OK
++Checking for HAVE_INCOHERENT_MMAP: NO
++Checking for HAVE_SECURE_MKSTEMP: OK
++Checking for HAVE_IFACE_GETIFADDRS: OK
++Checking for HAVE_LITTLE_ENDIAN - runtime: OK
++Checking for HAVE_BIG_ENDIAN - runtime: NO
++Checking for kernel change notify support: OK
++Checking for Linux kernel oplocks: OK
++Checking for kernel share modes: OK
++Checking whether blkcnt_t is 32 bit: NO
++Checking whether blkcnt_t is 64 bit: OK
++Checking if can we convert from CP850 to UCS-2LE: OK
++Checking if can we convert from UTF-8 to UCS-2LE: OK
++Checking whether we can use Linux thread-specific credentials with 32-bit system calls: OK
++Checking whether we can use Linux thread-specific credentials: OK
++Checking whether setreuid is available: OK
++Checking whether setresuid is available: OK
++Checking whether seteuid is available: OK
++Checking whether fcntl locking is available: OK
++Checking for the maximum value of the 'time_t' type: OK
++Checking whether the realpath function allows a NULL argument: OK
++Checking whether POSIX capabilities are available: OK
++Checking for ftruncate extend: OK
++getcwd takes a NULL argument: OK
++Checking uname sysname type: "Linux"
++Checking uname machine type: "arm"
++Checking uname release type: "3.0.0"
++Checking uname version type: "#1 Tue Nov 1 12:34:56 UTC 2013"
++Checking for WORDS_BIGENDIAN: NO
++Checking size of bool: "1"
++Checking size of char: "1"
++Checking size of int: "4"
++Checking size of long long: "8"
++Checking size of long: "4"
++Checking size of short: "2"
++Checking size of size_t: "4"
++Checking size of ssize_t: "4"
++Checking size of int8_t: "1"
++Checking size of uint8_t: "1"
++Checking size of int16_t: "2"
++Checking size of uint16_t: "2"
++Checking size of int32_t: "4"
++Checking size of uint32_t: "4"
++Checking size of int64_t: "8"
++Checking size of uint64_t: "8"
++Checking size of void*: "4"
++Checking size of off_t: "8"
++Checking size of dev_t: "8"
++Checking size of ino_t: "8"
++Checking size of time_t: "4"
++Checking size of ((struct utmp *)NULL)->ut_line: "32"
++Checking value of NSIG: "65"
++Checking value of _NSIG: "65"
++Checking value of SIGRTMAX: "64"
++Checking value of SIGRTMIN: "34"
+diff --git a/package/samba/samba4/powerpc-cache.txt b/package/samba/samba4/powerpc-cache.txt
+new file mode 100644
+index 0000000..2872d1d
+--- /dev/null
++++ b/package/samba/samba4/powerpc-cache.txt
+@@ -0,0 +1,65 @@
++Checking simple C program: OK
++rpath library support: OK
++-Wl,--version-script support: OK
++Checking getconf LFS_CFLAGS: NO
++Checking for large file support without additional flags: OK
++Checking for -D_LARGE_FILES: OK
++Checking correct behavior of strtoll: NO
++Checking for working strptime: OK
++Checking for C99 vsnprintf: OK
++Checking for HAVE_SHARED_MMAP: OK
++Checking for HAVE_MREMAP: OK
++Checking for HAVE_INCOHERENT_MMAP: NO
++Checking for HAVE_SECURE_MKSTEMP: OK
++Checking for HAVE_IFACE_GETIFADDRS: OK
++Checking for HAVE_LITTLE_ENDIAN - runtime: NO
++Checking for HAVE_BIG_ENDIAN - runtime: OK
++Checking for kernel change notify support: OK
++Checking for Linux kernel oplocks: OK
++Checking for kernel share modes: OK
++Checking whether blkcnt_t is 32 bit: NO
++Checking whether blkcnt_t is 64 bit: OK
++Checking if can we convert from CP850 to UCS-2LE: OK
++Checking if can we convert from UTF-8 to UCS-2LE: OK
++Checking whether we can use Linux thread-specific credentials with 32-bit system calls: OK
++Checking whether we can use Linux thread-specific credentials: OK
++Checking whether setreuid is available: OK
++Checking whether setresuid is available: OK
++Checking whether seteuid is available: OK
++Checking whether fcntl locking is available: OK
++Checking for the maximum value of the 'time_t' type: OK
++Checking whether the realpath function allows a NULL argument: OK
++Checking whether POSIX capabilities are available: OK
++Checking for ftruncate extend: OK
++getcwd takes a NULL argument: OK
++Checking uname sysname type: "Linux"
++Checking uname machine type: "powerpc"
++Checking uname release type: "3.0.0"
++Checking uname version type: "#1 Tue Nov 1 12:34:56 UTC 2013"
++Checking for WORDS_BIGENDIAN: OK
++Checking size of bool: "1"
++Checking size of char: "1"
++Checking size of int: "4"
++Checking size of long long: "8"
++Checking size of long: "4"
++Checking size of short: "2"
++Checking size of size_t: "4"
++Checking size of ssize_t: "4"
++Checking size of int8_t: "1"
++Checking size of uint8_t: "1"
++Checking size of int16_t: "2"
++Checking size of uint16_t: "2"
++Checking size of int32_t: "4"
++Checking size of uint32_t: "4"
++Checking size of int64_t: "8"
++Checking size of uint64_t: "8"
++Checking size of void*: "4"
++Checking size of off_t: "8"
++Checking size of dev_t: "8"
++Checking size of ino_t: "8"
++Checking size of time_t: "4"
++Checking size of ((struct utmp *)NULL)->ut_line: "32"
++Checking value of NSIG: "65"
++Checking value of _NSIG: "65"
++Checking value of SIGRTMAX: "64"
++Checking value of SIGRTMIN: "34"
+diff --git a/package/samba/samba4/samba4-0001-build-don-t-execute-tests-summary.c.patch b/package/samba/samba4/samba4-0001-build-don-t-execute-tests-summary.c.patch
+new file mode 100644
+index 0000000..ee9a46f
+--- /dev/null
++++ b/package/samba/samba4/samba4-0001-build-don-t-execute-tests-summary.c.patch
+@@ -0,0 +1,67 @@
++From 960d710ee5410a5c03815a5ce6837203be00d218 Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Thu, 30 Jan 2014 11:14:27 -0300
++Subject: [PATCH 1/3] build: don't execute tests/summary.c
++
++tests/summary.c will never be able to be executed when cross compiling.
++Use #error and #warning directives to fail or warn accordingly when
++compiling it.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ tests/summary.c | 14 +++++---------
++ wscript         |  1 -
++ 2 files changed, 5 insertions(+), 10 deletions(-)
++
++diff --git a/tests/summary.c b/tests/summary.c
++index 27f7d4d..0843ee2 100644
++--- a/tests/summary.c
+++++ b/tests/summary.c
++@@ -5,27 +5,23 @@ void exit(int);
++ int main()
++ {
++ #if !defined(HAVE_FCNTL_LOCK)
++-	printf("ERROR: No locking available. Running Samba would be unsafe\n");
++-	exit(1);
+++#error "ERROR: No locking available. Running Samba would be unsafe"
++ #endif
++ 
++ #if !(defined(HAVE_IFACE_GETIFADDRS) || defined(HAVE_IFACE_IFCONF) || defined(HAVE_IFACE_IFREQ) || defined(HAVE_IFACE_AIX))
++-	printf("WARNING: No automated network interface determination\n");
+++#warning "WARNING: No automated network interface determination"
++ #endif
++ 
++ #if !(defined(USE_SETEUID) || defined(USE_SETREUID) || defined(USE_SETRESUID) || defined(USE_SETUIDX) || defined(USE_LINUX_THREAD_CREDENTIALS))
++-	printf("ERROR: no seteuid method available\n");
++-	exit(1);
+++#error "ERROR: no seteuid method available"
++ #endif
++ 
++ #if !(defined(STAT_STATVFS) || defined(STAT_STATFS3_OSF1) || defined(STAT_STATFS2_BSIZE) || defined(STAT_STATFS4) || defined(STAT_STATFS2_FSIZE) || defined(STAT_STATFS2_FS_DATA))
++-	printf("ERROR: No disk free routine!\n");
++-	exit(1);
+++#error "ERROR: No disk free routine!"
++ #endif
++ 
++ #if !((defined(HAVE_RANDOM) || defined(HAVE_RAND)) && (defined(HAVE_SRANDOM) || defined(HAVE_SRAND)))
++-    printf("ERROR: No random or srandom routine!\n");
++-    exit(1);
+++#error "ERROR: No random or srandom routine!"
++ #endif
++ 
++ 	exit(0);
++diff --git a/wscript b/wscript
++index 47b7b50..26431a4 100644
++--- a/wscript
+++++ b/wscript
++@@ -170,7 +170,6 @@ def configure(conf):
++     if not conf.CHECK_CODE('#include "tests/summary.c"',
++                            define='SUMMARY_PASSES',
++                            addmain=False,
++-                           execute=True,
++                            msg='Checking configure summary'):
++         raise Utils.WafError('configure summary failed')
++     
++-- 
++1.8.3.2
++
+diff --git a/package/samba/samba4/samba4-0002-build-don-t-execute-statfs-and-f_fsid-checks.patch b/package/samba/samba4/samba4-0002-build-don-t-execute-statfs-and-f_fsid-checks.patch
+new file mode 100644
+index 0000000..ea8ead8
+--- /dev/null
++++ b/package/samba/samba4/samba4-0002-build-don-t-execute-statfs-and-f_fsid-checks.patch
+@@ -0,0 +1,31 @@
++From 3c16a171c008b584ed427988dde73c1d9a9de4ad Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Mon, 20 Jan 2014 10:17:19 -0300
++Subject: [PATCH 2/3] build: don't execute statfs and f_fsid checks
++
++There's no need to execute the statfs and statfs.f_fsid checks, the
++return value is of no consequence since it's undefined in some
++platforms and prevents cross-compiling.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ source3/wscript | 3 +--
++ 1 file changed, 1 insertion(+), 2 deletions(-)
++
++diff --git a/source3/wscript b/source3/wscript
++index 501707b..2d0a62e 100644
++--- a/source3/wscript
+++++ b/source3/wscript
++@@ -468,8 +468,7 @@ return acl_get_perm_np(permset_d, perm);
++     conf.CHECK_CODE('struct statfs fsd; fsid_t fsid = fsd.f_fsid; return statfs(".", &fsd);',
++                     'HAVE_STATFS_F_FSID',
++                     msg="vfs_fileid: checking for statfs() and struct statfs.f_fsid",
++-                    headers='sys/types.h sys/statfs.h',
++-                    execute=True)
+++                    headers='sys/types.h sys/statfs.h')
++ 
++     if conf.CONFIG_SET('HAVE_FALLOCATE'):
++         conf.CHECK_CODE('''
++-- 
++1.8.3.2
++
+diff --git a/package/samba/samba4/samba4-0003-build-find-FILE_OFFSET_BITS-via-array.patch b/package/samba/samba4/samba4-0003-build-find-FILE_OFFSET_BITS-via-array.patch
+new file mode 100644
+index 0000000..49875eb
+--- /dev/null
++++ b/package/samba/samba4/samba4-0003-build-find-FILE_OFFSET_BITS-via-array.patch
+@@ -0,0 +1,54 @@
++From 16d88e7813a7739c070a7a1cf6388fd4f236fd99 Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Fri, 31 Jan 2014 06:45:18 -0300
++Subject: [PATCHv2] build: find FILE_OFFSET_BITS via array
++
++This makes cross-compiling happy, use a trick similar to autoconf's
++AC_CHECK_SIZEOF macro.
++Basically we make an array:
++
++static int array[1 - 2 * !(((long int)(sizeof(off_t))) < 8)];
++
++This gives -1 multiplied by the negation of the condition
++(sizeof(off_t) < 8) cast to a long int.
++So if the condition is true it gives array[(-1 * 0)] (remember the
++condition is cast and negated) thus passing a build test with a 0-sized
++array.
++If it's false it gives array[(-1 * 1)] thus failing with a
++negative-sized array.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ lib/ccan/wscript | 11 +++++++----
++ 1 file changed, 7 insertions(+), 4 deletions(-)
++
++diff --git a/lib/ccan/wscript b/lib/ccan/wscript
++index 59b8205..81039d0 100644
++--- a/lib/ccan/wscript
+++++ b/lib/ccan/wscript
++@@ -127,15 +127,18 @@ def configure(conf):
++     # Only check for FILE_OFFSET_BITS=64 if off_t is normally small:
++     # use raw routines because wrappers include previous _GNU_SOURCE
++     # or _FILE_OFFSET_BITS defines.
+++    # The math for these tests is:
+++    # array[-1 * !((int)(condition)) ] (condition is true) = array[0] = builds
+++    # array[-1 * !((int)(condition)) ] (condition is false) = array[-1] = fails
++     conf.check(fragment="""#include <sys/types.h>
++-               int main(void) { return !(sizeof(off_t) < 8); }""",
++-               execute=True, msg='Checking for small off_t',
+++               int main(void) { static int test_array[1 - 2 * !(((long int)(sizeof(off_t))) < 8)]; }""",
+++               msg='Checking for small off_t',
++                define_name='SMALL_OFF_T')
++     # Unreliable return value above, hence use define.
++     if conf.CONFIG_SET('SMALL_OFF_T'):
++         conf.check(fragment="""#include <sys/types.h>
++-                   int main(void) { return !(sizeof(off_t) >= 8); }""",
++-                   execute=True, msg='Checking for -D_FILE_OFFSET_BITS=64',
+++		   int main(void) { static int test_array[1 - 2 * !(((long int)(sizeof(off_t))) >= 8)]; }""",
+++                   msg='Checking for -D_FILE_OFFSET_BITS=64',
++                    ccflags='-D_FILE_OFFSET_BITS=64',
++                    define_name='HAVE_FILE_OFFSET_BITS')
++ 
++-- 
++1.8.3.2
++
+diff --git a/package/samba/samba4/samba4-0004-build-allow-some-python-variable-overrides.patch b/package/samba/samba4/samba4-0004-build-allow-some-python-variable-overrides.patch
+new file mode 100644
+index 0000000..21e6b78
+--- /dev/null
++++ b/package/samba/samba4/samba4-0004-build-allow-some-python-variable-overrides.patch
+@@ -0,0 +1,45 @@
++From fdbdf04a9ab3f3a204e95106c4f8f6729d0bab1a Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Tue, 4 Feb 2014 14:11:52 -0300
++Subject: [PATCH] build: allow some python variable overrides
++
++The python variables (settings) are fetched from a running python
++interpreter which usually isn't the target one when cross compiling,
++hence libraries and flags aren't the same and can pollute the target
++build.
++Allow some of these variables to be redefined via environment variables
++in order to aid cross-compiling.
++According to testing python_LDFLAGS and python_LIBDIR should be enough.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ buildtools/wafadmin/Tools/python.py | 13 +++++++++++++
++ 1 file changed, 13 insertions(+)
++
++diff --git a/buildtools/wafadmin/Tools/python.py b/buildtools/wafadmin/Tools/python.py
++index ab1e817..35c61c2 100644
++--- a/buildtools/wafadmin/Tools/python.py
+++++ b/buildtools/wafadmin/Tools/python.py
++@@ -193,6 +193,19 @@ MACOSX_DEPLOYMENT_TARGET = %r
++ """ % (python, python_prefix, python_SO, python_SYSLIBS, python_LDFLAGS, python_SHLIBS,
++ 	python_LIBDIR, python_LIBPL, INCLUDEPY, Py_ENABLE_SHARED, python_MACOSX_DEPLOYMENT_TARGET))
++ 
+++	# Allow some python overrides from env vars for cross-compiling
+++	os_env = dict(os.environ)
+++
+++	override_python_LDFLAGS = os_env.get('python_LDFLAGS', None)
+++	if override_python_LDFLAGS is not None:
+++		conf.log.write("python_LDFLAGS override from environment = %r\n" % (override_python_LDFLAGS))
+++		python_LDFLAGS = override_python_LDFLAGS
+++
+++	override_python_LIBDIR = os_env.get('python_LIBDIR', None)
+++	if override_python_LIBDIR is not None:
+++		conf.log.write("python_LIBDIR override from environment = %r\n" % (override_python_LIBDIR))
+++		python_LIBDIR = override_python_LIBDIR
+++
++ 	if python_MACOSX_DEPLOYMENT_TARGET:
++ 		conf.env['MACOSX_DEPLOYMENT_TARGET'] = python_MACOSX_DEPLOYMENT_TARGET
++ 		conf.environ['MACOSX_DEPLOYMENT_TARGET'] = python_MACOSX_DEPLOYMENT_TARGET
++-- 
++1.8.3.2
++
+diff --git a/package/samba/samba4/samba4-0005-builtin-heimdal-external-tools.patch b/package/samba/samba4/samba4-0005-builtin-heimdal-external-tools.patch
+new file mode 100644
+index 0000000..bf0a715
+--- /dev/null
++++ b/package/samba/samba4/samba4-0005-builtin-heimdal-external-tools.patch
+@@ -0,0 +1,42 @@
++Force external asn1_compile and compile_et binaries.
++At the moment the samba bundled heimdal fails to build the tools for the host
++when cross-compiling, and it can't link to an external heimdal either.
++
++Status: working with samba upstream on a proper way to cross-compile
++the bundled heimdal.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nura samba-4.1.3.orig/source4/heimdal_build/wscript_build samba-4.1.3.heimdal.cross/source4/heimdal_build/wscript_build
++--- samba-4.1.3.orig/source4/heimdal_build/wscript_build	2013-12-12 16:45:46.951965484 -0300
+++++ samba-4.1.3.heimdal.cross/source4/heimdal_build/wscript_build	2013-12-18 22:01:24.323429945 -0300
++@@ -925,6 +925,8 @@
++         install=False
++     )
++     bld.env['ASN1_COMPILE'] = os.path.join(bld.env['BUILD_DIRECTORY'], 'asn1_compile')
+++else:
+++    bld.env['ASN1_COMPILE'] = 'asn1_compile'
++ 
++ 
++ if not bld.CONFIG_SET('USING_SYSTEM_COMPILE_ET'):
++@@ -939,6 +941,8 @@
++         install=False
++         )
++     bld.env['COMPILE_ET'] = os.path.join(bld.env['BUILD_DIRECTORY'], 'compile_et')
+++else:
+++    bld.env['COMPILE_ET'] = 'compile_et'
++ 
++ HEIMDAL_BINARY('samba4kinit',
++     'kuser/kinit.c',
++diff -Nura samba-4.1.3.orig/source4/heimdal_build/wscript_configure samba-4.1.3.heimdal.cross/source4/heimdal_build/wscript_configure
++--- samba-4.1.3.orig/source4/heimdal_build/wscript_configure	2013-12-12 16:45:46.951965484 -0300
+++++ samba-4.1.3.heimdal.cross/source4/heimdal_build/wscript_configure	2013-12-18 21:55:08.813653187 -0300
++@@ -162,6 +162,8 @@
++ conf.define('HAVE_KRB5_PRINCIPAL_GET_NUM_COMP', 1)
++ conf.define('HAVE_GSSAPI_GSSAPI_SPNEGO_H', 1)
++ conf.define('HAVE_FLAGS_IN_KRB5_CREDS', 1)
+++conf.define('USING_SYSTEM_ASN1_COMPILE', 1)
+++conf.define('USING_SYSTEM_COMPILE_ET', 1)
++ 
++ heimdal_includedirs = []
++ heimdal_libdirs = []
+diff --git a/package/samba/samba4/samba4.mk b/package/samba/samba4/samba4.mk
+new file mode 100644
+index 0000000..994f24b
+--- /dev/null
++++ b/package/samba/samba4/samba4.mk
+@@ -0,0 +1,111 @@
 +################################################################################
 +#
-+# samba3
++# samba4
 +#
 +################################################################################
 +
-+SAMBA3_VERSION = 3.6.22
-+SAMBA3_SITE = http://ftp.samba.org/pub/samba/stable
-+SAMBA3_SOURCE = samba-$(SAMBA3_VERSION).tar.gz
-+SAMBA3_SUBDIR = source3
-+SAMBA3_INSTALL_STAGING = YES
-+SAMBA3_LICENSE = GPLv3+
-+SAMBA3_LICENSE_FILES = COPYING
++SAMBA4_VERSION = 4.1.4
++SAMBA4_SITE = http://ftp.samba.org/pub/samba/stable
++SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
++SAMBA4_LICENSE = GPLv3+
++SAMBA4_LICENSE_FILES = COPYING
++SAMBA4_DEPENDENCIES = host-e2fsprogs host-heimdal e2fsprogs popt python zlib \
++	$(if $(BR2_PACKAGE_LIBCAP),libcap)
 +
-+SAMBA3_DEPENDENCIES = popt \
-+	$(if $(BR2_PACKAGE_SAMBA3_RPCCLIENT),readline) \
-+	$(if $(BR2_PACKAGE_SAMBA3_SMBCLIENT),readline) \
-+	$(if $(BR2_PACKAGE_SAMBA3_AVAHI),avahi) \
-+	$(if $(BR2_PACKAGE_SAMBA3_GAMIN),gamin)
-+
-+SAMBA3_CONF_ENV = \
-+	ac_cv_file__proc_sys_kernel_core_pattern=yes \
-+	samba_cv_HAVE_GETTIMEOFDAY_TZ=yes \
-+	samba_cv_USE_SETREUID=yes \
-+	samba_cv_HAVE_KERNEL_OPLOCKS_LINUX=yes \
-+	samba_cv_HAVE_IFACE_IFCONF=yes \
-+	samba_cv_HAVE_MMAP=yes \
-+	samba_cv_HAVE_FCNTL_LOCK=yes \
-+	samba_cv_HAVE_SECURE_MKSTEMP=yes \
-+	samba_cv_CC_NEGATIVE_ENUM_VALUES=yes \
-+	samba_cv_fpie=no \
-+	libreplace_cv_HAVE_IPV6=$(if $(BR2_INET_IPV6),yes,no) \
-+	$(if $(BR2_PACKAGE_SAMBA3_AVAHI),AVAHI_LIBS=-pthread)
-+
-+SAMBA3_CONF_OPT = \
-+	--localstatedir=/var \
-+	--with-piddir=/var/run \
-+	--with-lockdir=/var/lock \
-+	--with-logfilebase=/var/log \
-+	--with-configdir=/etc/samba \
-+	--with-privatedir=/etc/samba \
-+	\
-+	--disable-cups \
-+	--enable-shared-libs \
-+	--disable-pie \
-+	--disable-relro \
-+	--disable-dnssd \
-+	\
-+	$(if $(BR2_PACKAGE_SAMBA3_AVAHI),--enable-avahi,--disable-avahi) \
-+	$(if $(BR2_PACKAGE_SAMBA3_GAMIN),--enable-fam,--disable-fam) \
-+	$(if $(BR2_PACKAGE_SAMBA3_SWAT),--enable-swat,--disable-swat) \
-+	\
-+	--without-cluster-support \
-+	--without-dnsupdate \
-+	--with-sys-quotas \
-+	--without-ads \
-+	--without-ldap \
-+	--with-included-iniparser \
-+	\
-+	$(if $(BR2_PACKAGE_SAMBA3_RPCCLIENT),--with-readline=$(STAGING_DIR)) \
-+	$(if $(BR2_PACKAGE_SAMBA3_SMBCLIENT),--with-readline=$(STAGING_DIR)) \
-+	$(if $(BR2_PACKAGE_SAMBA3_WINBINDD),--with-winbind,--without-winbind)
-+
-+SAMBA3_INSTALL_TARGET_OPT = \
-+	DESTDIR=$(TARGET_DIR) -C $(SAMBA3_DIR)/$(SAMBA3_SUBDIR) \
-+	installlibs installservers installbin installscripts \
-+	$(if $(BR2_PACKAGE_SAMBA3_SWAT),installswat)
-+
-+# binaries to keep
-+SAMBA3_BINTARGETS_y = \
-+	usr/sbin/smbd \
-+	usr/lib/libtalloc.so \
-+	usr/lib/libtdb.so
-+
-+# binaries to remove
-+SAMBA3_BINTARGETS_ = \
-+	usr/lib/libnetapi.so* \
-+	usr/lib/libsmbsharemodes.so*
-+
-+# binaries to keep or remove
-+SAMBA3_BINTARGETS_$(BR2_PACKAGE_SAMBA3_EVENTLOGADM) += usr/bin/eventlogadm
-+SAMBA3_BINTARGETS_$(BR2_PACKAGE_SAMBA3_NET) += usr/bin/net
-+SAMBA3_BINTARGETS_$(BR2_PACKAGE_SAMBA3_NMBD) += usr/sbin/nmbd
-+SAMBA3_BINTARGETS_$(BR2_PACKAGE_SAMBA3_NMBLOOKUP) += usr/bin/nmblookup
-+SAMBA3_BINTARGETS_$(BR2_PACKAGE_SAMBA3_NTLM_AUTH) += usr/bin/ntlm_auth
-+SAMBA3_BINTARGETS_$(BR2_PACKAGE_SAMBA3_PDBEDIT) += usr/bin/pdbedit
-+SAMBA3_BINTARGETS_$(BR2_PACKAGE_SAMBA3_PROFILES) += usr/bin/profiles
-+SAMBA3_BINTARGETS_$(BR2_PACKAGE_SAMBA3_RPCCLIENT) += usr/bin/rpcclient
-+SAMBA3_BINTARGETS_$(BR2_PACKAGE_SAMBA3_SMBCACLS) += usr/bin/smbcacls
-+SAMBA3_BINTARGETS_$(BR2_PACKAGE_SAMBA3_SMBCLIENT) += usr/bin/smbclient
-+SAMBA3_BINTARGETS_$(BR2_PACKAGE_SAMBA3_SMBCONTROL) += usr/bin/smbcontrol
-+SAMBA3_BINTARGETS_$(BR2_PACKAGE_SAMBA3_SMBCQUOTAS) += usr/bin/smbcquotas
-+SAMBA3_BINTARGETS_$(BR2_PACKAGE_SAMBA3_SMBD) += usr/sbin/smbd
-+SAMBA3_BINTARGETS_$(BR2_PACKAGE_SAMBA3_SMBGET) += usr/bin/smbget
-+SAMBA3_BINTARGETS_$(BR2_PACKAGE_SAMBA3_SMBLDBTOOLS) += usr/bin/ldbadd
-+SAMBA3_BINTARGETS_$(BR2_PACKAGE_SAMBA3_SMBLDBTOOLS) += usr/bin/ldbdel
-+SAMBA3_BINTARGETS_$(BR2_PACKAGE_SAMBA3_SMBLDBTOOLS) += usr/bin/ldbedit
-+SAMBA3_BINTARGETS_$(BR2_PACKAGE_SAMBA3_SMBLDBTOOLS) += usr/bin/ldbmodify
-+SAMBA3_BINTARGETS_$(BR2_PACKAGE_SAMBA3_SMBLDBTOOLS) += usr/bin/ldbrename
-+SAMBA3_BINTARGETS_$(BR2_PACKAGE_SAMBA3_SMBLDBTOOLS) += usr/bin/ldbsearch
-+SAMBA3_BINTARGETS_$(BR2_PACKAGE_SAMBA3_SMBPASSWD) += usr/bin/smbpasswd
-+SAMBA3_BINTARGETS_$(BR2_PACKAGE_SAMBA3_SMBSHARESEC) += usr/bin/sharesec
-+SAMBA3_BINTARGETS_$(BR2_PACKAGE_SAMBA3_SMBSPOOL) += usr/bin/smbspool
-+SAMBA3_BINTARGETS_$(BR2_PACKAGE_SAMBA3_SMBSTATUS) += usr/bin/smbstatus
-+SAMBA3_BINTARGETS_$(BR2_PACKAGE_SAMBA3_SMBTA_UTIL) += usr/bin/smbta-util
-+SAMBA3_BINTARGETS_$(BR2_PACKAGE_SAMBA3_SMBTREE) += usr/bin/smbtree
-+SAMBA3_BINTARGETS_$(BR2_PACKAGE_SAMBA3_SWAT) += usr/sbin/swat
-+SAMBA3_BINTARGETS_$(BR2_PACKAGE_SAMBA3_TDB) += usr/bin/tdbbackup
-+SAMBA3_BINTARGETS_$(BR2_PACKAGE_SAMBA3_TDB) += usr/bin/tdbdump
-+SAMBA3_BINTARGETS_$(BR2_PACKAGE_SAMBA3_TDB) += usr/bin/tdbtool
-+SAMBA3_BINTARGETS_$(BR2_PACKAGE_SAMBA3_TESTPARM) += usr/bin/testparm
-+SAMBA3_BINTARGETS_$(BR2_PACKAGE_SAMBA3_WINBINDD) += usr/sbin/winbindd
-+SAMBA3_BINTARGETS_$(BR2_PACKAGE_SAMBA3_WBINFO) += usr/bin/wbinfo
-+
-+# libraries to keep or remove
-+SAMBA3_BINTARGETS_$(BR2_PACKAGE_SAMBA3_WINBINDD) += usr/lib/libwbclient.so*
-+SAMBA3_BINTARGETS_$(BR2_PACKAGE_SAMBA3_LIBSMBCLIENT) += usr/lib/libsmbclient.so*
-+
-+# non-binaries to remove
-+SAMBA3_TXTTARGETS_ = \
-+	usr/include/libsmbclient.h \
-+	usr/include/netapi.h \
-+	usr/include/smb_share_modes.h \
-+	usr/include/talloc.h \
-+	usr/include/tdb.h \
-+	usr/include/wbclient.h
-+
-+# non-binaries to keep or remove
-+SAMBA3_TXTTARGETS_$(BR2_PACKAGE_SAMBA3_FINDSMB) += usr/bin/findsmb
-+SAMBA3_TXTTARGETS_$(BR2_PACKAGE_SAMBA3_SMBTAR) += usr/bin/smbtar
-+
-+define SAMBA3_REMOVE_UNNEEDED_BINARIES
-+	rm -f $(addprefix $(TARGET_DIR)/, $(SAMBA3_BINTARGETS_))
-+	rm -f $(addprefix $(TARGET_DIR)/, $(SAMBA3_TXTTARGETS_))
-+endef
-+
-+SAMBA3_POST_INSTALL_TARGET_HOOKS += SAMBA3_REMOVE_UNNEEDED_BINARIES
-+
-+define SAMBA3_REMOVE_SWAT_DOCUMENTATION
-+	# Remove the documentation
-+	rm -rf $(TARGET_DIR)/usr/swat/help/manpages
-+	rm -rf $(TARGET_DIR)/usr/swat/help/Samba3*
-+	rm -rf $(TARGET_DIR)/usr/swat/using_samba/
-+	# Removing the welcome.html file will make swat default to
-+	# welcome-no-samba-doc.html
-+	rm -rf $(TARGET_DIR)/usr/swat/help/welcome.html
-+endef
-+
-+# --with-libiconv="" is to avoid detecting host libiconv and build failure
-+ifeq ($(BR2_PACKAGE_SAMBA3_LIBICONV),y)
-+SAMBA3_DEPENDENCIES += libiconv
-+SAMBA3_CONF_OPT += --with-libiconv=$(STAGING_DIR)
++ifeq ($(BR2_PACKAGE_ACL),y)
++	SAMBA4_CONF_OPT += --with-acl-support
++	SAMBA4_DEPENDENCIES += acl
 +else
-+SAMBA3_CONF_OPT += --with-libiconv=""
++	SAMBA4_CONF_OPT += --without-acl-support
 +endif
 +
-+# Compiled debug messages by level
-+SAMBA3_CONF_OPT += CFLAGS="$(TARGET_CFLAGS) -DMAX_DEBUG_LEVEL=$(BR2_PACKAGE_SAMBA3_MAX_DEBUGLEVEL)"
-+
-+ifeq ($(BR2_PACKAGE_SAMBA3_SWAT),y)
-+ifneq ($(BR2_HAVE_DOCUMENTATION),y)
-+SAMBA3_POST_INSTALL_TARGET_HOOKS += SAMBA3_REMOVE_SWAT_DOCUMENTATION
-+endif
++ifeq ($(BR2_PACKAGE_LIBAIO),y)
++	SAMBA4_CONF_OPT += --with-aio-support
++	SAMBA4_DEPENDENCIES += libaio
++else
++	SAMBA4_CONF_OPT += --without-aio-support
 +endif
 +
-+define SAMBA3_INSTALL_INITSCRIPTS_CONFIG
-+	# install start/stop script
-+	@if [ ! -f $(TARGET_DIR)/etc/init.d/S91smb ]; then \
-+		$(INSTALL) -m 0755 -D package/samba/samba3/S91smb \
-+			$(TARGET_DIR)/etc/init.d/S91smb; \
-+	fi
-+	# install config
-+	@if [ ! -f $(TARGET_DIR)/etc/samba/smb.conf ]; then \
-+		$(INSTALL) -m 0755 -D package/samba/samba3/simple.conf \
-+			$(TARGET_DIR)/etc/samba/smb.conf; \
-+	fi
++ifeq ($(BR2_PACKAGE_DBUS)$(BR2_PACKAGE_AVAHI_DAEMON),yy)
++	SAMBA4_CONF_OPT += --enable-avahi
++	SAMBA4_DEPENDENCIES += avahi
++else
++	SAMBA4_CONF_OPT += --disable-avahi
++endif
++
++ifeq ($(BR2_PACKAGE_GAMIN),y)
++	SAMBA4_CONF_OPT += --with-fam
++	SAMBA4_DEPENDENCIES += gamin
++else
++	SAMBA4_CONF_OPT += --without-fam
++endif
++
++ifeq ($(BR2_PACKAGE_GETTEXT),)
++	SAMBA4_DEPDENDENCIES += --without-gettext
++endif
++
++ifeq ($(BR2_PACKAGE_GNUTLS),y)
++	SAMBA4_CONF_OPT += --enable-gnutls
++	SAMBA4_DEPENDENCIES += gnutls
++else
++	SAMBA4_CONF_OPT += --disable-gnutls
++endif
++
++ifeq ($(BR2_PACKAGE_NCURSES_TARGET_FORM)$(BR2_PACKAGE_NCURSES_TARGET_MENU)$(BR2_PACKAGE_NCURSES_TARGET_PANEL),yyy)
++	SAMBA4_DEPENDENCIES += ncurses
++else
++	SAMBA4_CONF_OPT += --without-regedit
++endif
++
++define SAMBA4_CONFIGURE_CMDS
++	cp package/samba/samba4/$(call qstrip,$(BR2_ARCH))-cache.txt $(@D)/cache.txt;
++	(cd $(@D); \
++		PYTHON_CONFIG="$(STAGING_DIR)/usr/bin/python-config" \
++		python_LDFLAGS="" \
++		python_LIBDIR="" \
++		$(TARGET_CONFIGURE_OPTS) \
++		./buildtools/bin/waf configure \
++			--prefix=/usr \
++			--sysconfdir=/etc \
++			--localstatedir=/var \
++			--with-libiconv=$(STAGING_DIR)/usr \
++			--enable-fhs \
++			--cross-compile \
++			--cross-answers=$(@D)/cache.txt \
++			--hostcc=gcc \
++			--disable-rpath \
++			--disable-rpath-install \
++			--disable-cups \
++			--disable-iprint \
++			--without-pam \
++			--without-dmapi \
++			--without-gettext \
++			--disable-glusterfs \
++			--without-ldap \
++			--without-cluster-support \
++			--without-ads \
++			$(SAMBA4_CONF_OPT) \
++	)
 +endef
 +
-+SAMBA3_POST_INSTALL_TARGET_HOOKS += SAMBA3_INSTALL_INITSCRIPTS_CONFIG
++define SAMBA4_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
++endef
 +
-+$(eval $(autotools-package))
-diff --git a/package/samba/simple.conf b/package/samba/samba3/simple.conf
-similarity index 100%
-rename from package/samba/simple.conf
-rename to package/samba/samba3/simple.conf
++define SAMBA4_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
++endef
++
++define SAMBA4_INSTALL_INIT_SYSV
++	$(INSTALL) -m 0755 -D package/samba/samba4/S91smb \
++		$(TARGET_DIR)/etc/init.d/S91smb
++endef
++
++# uClibc-based builds don't like libtalloc in /usr/lib/samba
++define SAMBA4_MOVE_TALLOC
++	mv -f $(TARGET_DIR)/usr/lib/samba/libtalloc* $(TARGET_DIR)/usr/lib
++endef
++
++SAMBA4_POST_INSTALL_TARGET_HOOKS += SAMBA4_MOVE_TALLOC
++
++$(eval $(generic-package))
 -- 
 1.8.3.2
