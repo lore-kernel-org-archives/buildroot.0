@@ -1,38 +1,35 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 7 Feb 2014 19:09:35 +0100
-Subject: [Buildroot] [RFC PATCH] Add OpenTyrian package (SDL game)
-In-Reply-To: <52F51544.2060005@free.fr>
-References: <1391624243-10898-1-git-send-email-julien.boibessot@free.fr>
- <52F2BE4F.3080600@mind.be> <52F51544.2060005@free.fr>
-Message-ID: <20140207180934.GB3510@free.fr>
+Date: Fri, 7 Feb 2014 19:11:14 +0100
+Subject: [Buildroot] [PATCH] linux: don't automatically set
+ uevent_helper with mdev /dev management
+In-Reply-To: <769563a34e142e85ec4c.1391761259@argentina>
+References: <769563a34e142e85ec4c.1391761259@argentina>
+Message-ID: <20140207181114.GC3510@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Beno?t, All,
+Thomas, All,
 
-On 2014-02-07 18:17 +0100, Julien Boibessot spake thusly:
-[--SNIP--]
-> >> +		SDL_CONFIG="$(STAGING_DIR)/usr/bin/sdl-config" \
-> >> +		LDFLAGS="-lm" \
-> >> +		WITH_NETWORK="$(OPENTYRIAN_NETWORK)" \
-> >> +		-C $(@D) release
-> >> +endef
-> >> +
-> >> +define OPENTYRIAN_INSTALL_TARGET_CMDS
-> >> +	$(INSTALL) -D -m 0755 $(@D)/opentyrian $(TARGET_DIR)/usr/games/opentyrian
-> >  We prefer to install everything in /usr/bin.
+On 2014-02-07 09:20 +0100, Thomas De Schampheleire spake thusly:
+> When mdev /dev management is chosen in the buildroot configuration, the
+> Linux configuration is updated automatically to set option
+> CONFIG_UEVENT_HELPER_PATH to "/sbin/mdev". However, the help text of this
+> option explicitly recommends not setting this option due to large
+> performance impact during boot (experienced first hand by the reporter ?nd
+> author).
 > 
-> prboom & rubix packages already explicitly install everything in
-> /usr/games/... What should I do ?
+> The mdev startup script S10mdev already sets the helper during userspace
+> boot, which will make sure mdev is working correctly.
+> 
+> Fixes bug #6596: https://bugs.busybox.net/show_bug.cgi?id=6596
+> 
+> Reported-by: Andreas Koop <andreas.koop@zf.com>
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Send a patch so they install in /usr instead? ;-)
-
-Those are packages that went in a loooong time ago, even before Peter
-took over maintainership, so they might not follow the current
-conventions.
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
