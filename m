@@ -1,22 +1,34 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  7 Feb 2014 08:43:42 +0000 (UTC)
-Subject: [Buildroot] [Bug 6596] Slow bootup if mdev is chosen
-In-Reply-To: <bug-6596-163@https.bugs.busybox.net/>
-References: <bug-6596-163@https.bugs.busybox.net/>
-Message-ID: <20140207084342.839A49C8AF@busybox.osuosl.org>
+From: Ryan Barnett <ryanbarnett3@gmail.com>
+Date: Fri, 7 Feb 2014 09:45:50 +0100
+Subject: [Buildroot] [PATCH v3 4/4] beaglebone: change to zImage
+In-Reply-To: <046952e3-d76e-400b-916b-a8fbd069a03b@email.android.com>
+References: <1391717684-4244-1-git-send-email-anders@chargestorm.se>
+ <1391717684-4244-5-git-send-email-anders@chargestorm.se>
+ <CALq67GBCrOGh_yxzjqcVXtUzoox=AEJaYJL27_UObB8qVMNyow@mail.gmail.com>
+ <046952e3-d76e-400b-916b-a8fbd069a03b@email.android.com>
+Message-ID: <CALq67GDcAe-RwdeihtmOJC_jSWcHxDJYJvEGGwmpYLZOTsmqUA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6596
+Anders,
 
---- Comment #2 from Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> 2014-02-07 08:43:41 UTC ---
-Patch sent to the mailing list, awaiting integration, after which this bug can
-be closed...
+On Fri, Feb 7, 2014 at 6:59 AM, Anders Darander <anders@chargestorm.se> wrote:
+>
+> What do other dev's think about this? It doesn't really matter to me if
+> I squash then or not.
+>
+> My reasoning was that of you kept the old U-Boot environment, the
+> new U-Boot works with a uImage. That's basically why I kept it as
+> separate patches.
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+My original thinking was since the default U-Boot environment (in the
+board file) was being changed to use zImage with version bump, you
+should change the kernel image to be zImage in the same patch. I did
+not think of this use case when I quickly looked over this change. So
+I'm OK with keeping this separate.
+
+Thanks,
+-Ryan
