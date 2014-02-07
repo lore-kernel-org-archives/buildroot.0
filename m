@@ -1,48 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Feb 2014 09:01:59 +0100
-Subject: [Buildroot] [PATCH] zedboard: add Avnet Zedboard support.
-In-Reply-To: <CAEBucnCGPO1aHe8o0HctLgW2saX3havxJBSf42A4hO2tSJk_+A@mail.gmail.com>
-References: <1391724285-23135-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <878utnnb8s.fsf@dell.be.48ers.dk>
- <CAEBucnCGPO1aHe8o0HctLgW2saX3havxJBSf42A4hO2tSJk_+A@mail.gmail.com>
-Message-ID: <20140207090159.41b96ed3@skate>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 7 Feb 2014 09:02:45 +0100
+Subject: [Buildroot] Call for autobuild fixing for 2014.02
+Message-ID: <CAAXf6LUeXhtUXqjg0eJ845bF2eMd7WBXC_e5AAN0PUa3=svDTg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Spenser Gilliland,
+All,
 
-On Thu, 6 Feb 2014 16:28:03 -0600, Spenser Gilliland wrote:
+At the end of this month, buildroot-2014.02 will be released. In accordance
+with our standard 3-month release cycle, this last month is all about
+stabilization: bug fixing, autobuild fixing, etc.
 
-> > What about u-boot?
-> 
-> Building u-boot for the zed board is not difficult the problem is the
-> convoluted wrapper which requires the XIlinx tools in order to install
-> it.  I can add directions to the readme.
-> 
-> The basic process is.
-> 
-> source <path/to/xilinx/settings.sh>
-> cat <<EOF > boot.bif
-> {
->    [bootloader]<path/to/fsbl.elf>
->    <path/to/system.bit>
->    <path/to/uboot.elf>
-> }
-> bootgen -image boot.bif -o i BOOT.BIN
-> 
-> This file then needs to be placed on the SD Card.
+Last release cycle (2013.11) several developers put an increased effort in the
+last month for this stabilization, and it has definitely made a great impact.
+The number of autobuild failures significantly decreased during this time. This
+release, we can even do better!
+Looking at the current statistics, we are having 50-60% succeeding autobuilds,
+which we should certainly increase towards 70-80%!
 
-Since we're building u-boot, I believe it makes sense to indicate in
-the README how to use it. Could you send a followup patch, now that the
-initial board support has been merged?
+Therefore, I would like to request all developers to temporarily stop creating
+new features, adding new packages, etc. during the rest of this month, and
+focus entirely on fixing autobuild problems (or other problems) instead.
 
-Thanks!
+There are several ways in which you can help: - Send brief analysis mails based
+on the autobuild results (sent daily by Thomas Petazzoni). This analysis mails
+typically contain for each reported failure: a copy/paste of the relevant part
+of the build log, and optionally a suggested resolution. These mails help other
+developers in selecting a problem they will fix, and avoids duplicate effort.
+
+- Fixing actual autobuild problems. To fix a problem, you would start by
+downloading the defconfig from the autobuild site, apply it in a fresh
+repository, probably set a good value for BR2_DL_DIR, and run 'make' to see if
+you can reproduce the problem. Once you can reproduce it, you can analyze in
+more detail and create a fix.  Depending on the problem, you can attempt some
+shortcuts. For example instead of building everything, you can request to build
+one particular package (foo) by running 'make toolchain foo'. If the problem is
+caused only by the overall configuration and foo itself (not by a missing
+dependency) this faster build would also show the problem. Remember: it's
+crucial that you can first reproduce the problem (with or without shortcut).
+Otherwise you may 'fix' something that is not broken.  If you want to fix a
+particular problem but get stuck, don't hesitate in sending your findings to
+the list. Other developers can try to help you.
+
+- Testing fixes sent by other developers. This involves similar steps as fixing
+the problem itself: first verify that you can reproduce the problem, then apply
+the fix and verify that the problem is gone. If all this is successful, then
+please respond on the fix with a Tested-by: tag.  This will help the maintainer
+in knowing which patches to apply.
+
+- Analyzing and if needed fixing bug reports. Open buildroot bugs are at:
+https://bugs.busybox.net/buglist.cgi?bug_status=__open__&content=&product=buildroot&query_format=specific&order=bug_id%20DESC&query_based_on=
+
+
+Thanks a lot,
 
 Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
