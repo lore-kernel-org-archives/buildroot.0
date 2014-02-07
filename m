@@ -1,26 +1,28 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  7 Feb 2014 08:39:14 +0000 (UTC)
-Subject: [Buildroot] [Bug 6770] openssl 1.0.1f fails with ccache
-In-Reply-To: <bug-6770-163@https.bugs.busybox.net/>
-References: <bug-6770-163@https.bugs.busybox.net/>
-Message-ID: <20140207083914.AC5F89C8AF@busybox.osuosl.org>
+Date: Fri,  7 Feb 2014 08:40:57 +0000 (UTC)
+Subject: [Buildroot] [Bug 6764] Support for kernel signed modules
+In-Reply-To: <bug-6764-163@https.bugs.busybox.net/>
+References: <bug-6764-163@https.bugs.busybox.net/>
+Message-ID: <20140207084057.9D0959C8B6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6770
+https://bugs.busybox.net/show_bug.cgi?id=6764
 
-Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> changed:
+--- Comment #3 from Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> 2014-02-07 08:40:52 UTC ---
+Hi Cassiano, 
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|ASSIGNED                    |RESOLVED
-         Resolution|                            |FIXED
+Do you mind sending your patch to the mailing list?
+This will facilitate review and discussion on the patch, and finally
+integration in buildroot itself.
+You will need to be subscribed to the list, though.
+http://www.buildroot.org/lists.html
 
---- Comment #6 from Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> 2014-02-07 08:39:14 UTC ---
-Patch sent by Gustavo has been accepted now. Problem solved.
+Thanks in advance!
+Thomas
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
