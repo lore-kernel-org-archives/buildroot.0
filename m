@@ -1,33 +1,29 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 7 Feb 2014 15:16:00 +0100
-Subject: [Buildroot] [git commit] joe: needs mmu
-Message-ID: <20140207142114.D98279A86D@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri,  7 Feb 2014 14:32:34 +0000 (UTC)
+Subject: [Buildroot] [Bug 6848] Qt5: no text shown in simple QWidget /
+	frame-buffer setup
+In-Reply-To: <bug-6848-163@https.bugs.busybox.net/>
+References: <bug-6848-163@https.bugs.busybox.net/>
+Message-ID: <20140207143234.21CA79C8C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2d91c689686069244ac2e8dc4f6defa2d8e1732f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=6848
 
-Fixes:
-http://autobuild.buildroot.net/results/f92/f920c85244afffe38497459753bf005946001d0d/
+syntheticpp at gmx.net changed:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/joe/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |WORKSFORME
 
-diff --git a/package/joe/Config.in b/package/joe/Config.in
-index e15b0f2..7b3df82 100644
---- a/package/joe/Config.in
-+++ b/package/joe/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_JOE
- 	bool "joe"
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  Joe's Own Editor
- 
+--- Comment #2 from syntheticpp at gmx.net 2014-02-07 14:32:33 UTC ---
+After a complete rebuild and using Qt 5.2.1 the problem is gone.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
