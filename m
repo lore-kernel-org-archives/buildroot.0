@@ -1,34 +1,27 @@
-From: Ryan Barnett <ryanbarnett3@gmail.com>
-Date: Fri, 7 Feb 2014 09:45:50 +0100
-Subject: [Buildroot] [PATCH v3 4/4] beaglebone: change to zImage
-In-Reply-To: <046952e3-d76e-400b-916b-a8fbd069a03b@email.android.com>
-References: <1391717684-4244-1-git-send-email-anders@chargestorm.se>
- <1391717684-4244-5-git-send-email-anders@chargestorm.se>
- <CALq67GBCrOGh_yxzjqcVXtUzoox=AEJaYJL27_UObB8qVMNyow@mail.gmail.com>
- <046952e3-d76e-400b-916b-a8fbd069a03b@email.android.com>
-Message-ID: <CALq67GDcAe-RwdeihtmOJC_jSWcHxDJYJvEGGwmpYLZOTsmqUA@mail.gmail.com>
+From: Andreas Naumann <dev@andin.de>
+Date: Fri, 07 Feb 2014 09:51:41 +0100
+Subject: [Buildroot]  build speedup possible?
+Message-ID: <52F49E9D.2020506@andin.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Anders,
+Hi guys,
 
-On Fri, Feb 7, 2014 at 6:59 AM, Anders Darander <anders@chargestorm.se> wrote:
->
-> What do other dev's think about this? It doesn't really matter to me if
-> I squash then or not.
->
-> My reasoning was that of you kept the old U-Boot environment, the
-> new U-Boot works with a uImage. That's basically why I kept it as
-> separate patches.
+First of all kudos again for this very good tool! I'm using it almsot 
+daily and am stoked about the functionality but simple usage at the same 
+time.
+Now one issue with build systems is always build time. It seems the 
+speed is not impacted much by just spending more horsepower (cpu cores). 
+When looking at the load I see very frequently that just one core is 
+busy with one package, especially during the configure step. Some 
+packages themselves are build with just one core, I guess we cant do 
+very much about that.
+However, why are independent packages not build in parallel? Are the 
+dependencies too complex to make this work? Thanks for any insight!
 
-My original thinking was since the default U-Boot environment (in the
-board file) was being changed to use zImage with version bump, you
-should change the kernel image to be zImage in the same patch. I did
-not think of this use case when I quickly looked over this change. So
-I'm OK with keeping this separate.
 
-Thanks,
--Ryan
+cheers,
+Andreas
