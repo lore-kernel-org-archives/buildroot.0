@@ -1,32 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Feb 2014 09:03:53 +0100
-Subject: [Buildroot] [PATCH v3 4/4] beaglebone: change to zImage
-In-Reply-To: <046952e3-d76e-400b-916b-a8fbd069a03b@email.android.com>
-References: <1391717684-4244-1-git-send-email-anders@chargestorm.se>
- <1391717684-4244-5-git-send-email-anders@chargestorm.se>
- <CALq67GBCrOGh_yxzjqcVXtUzoox=AEJaYJL27_UObB8qVMNyow@mail.gmail.com>
- <046952e3-d76e-400b-916b-a8fbd069a03b@email.android.com>
-Message-ID: <20140207090353.384bd1f4@skate>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri,  7 Feb 2014 08:10:36 +0000 (UTC)
+Subject: [Buildroot] [Bug 6722] Usage of $($(PKG)_DIR_PREFIX) is an issue
+ with linux package
+In-Reply-To: <bug-6722-163@https.bugs.busybox.net/>
+References: <bug-6722-163@https.bugs.busybox.net/>
+Message-ID: <20140207081036.AF97B9C8AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Anders Darander,
+https://bugs.busybox.net/show_bug.cgi?id=6722
 
-On Fri, 7 Feb 2014 06:59:57 +0100, Anders Darander wrote:
+Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> changed:
 
-> What do other dev's think about this? It doesn't really matter to me if I squash then or not. 
-> 
-> My reasoning was that of you kept the old U-Boot environment, the new U-Boot works with a uImage. That's basically why I kept it as separate patches. 
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
-Hum, I believe that's a good point. Then maybe for "clarity" it's
-better to keep them separate. This way, an user looking through the
-changes on the beaglebone_defconfig will more likely see this change.
+--- Comment #13 from Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> 2014-02-07 08:10:34 UTC ---
+This problem is solved in 2014.02.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
