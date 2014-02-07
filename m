@@ -1,10 +1,10 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri, 7 Feb 2014 22:30:15 +0100
-Subject: [Buildroot] [PATCH v7 2/4] udev: convert to virtual package.
-In-Reply-To: <1391779295-19140-3-git-send-email-eric.le.bihan.dev@free.fr>
+Date: Fri, 7 Feb 2014 23:00:00 +0100
+Subject: [Buildroot] [PATCH v7 3/4] systemd: bump to v207.
+In-Reply-To: <1391779295-19140-4-git-send-email-eric.le.bihan.dev@free.fr>
 References: <1391779295-19140-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1391779295-19140-3-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <CAHXCMMJ6aOmS+BN9vXNNeC1UBym6SbzZoHdX4eFa37CmsWWo1w@mail.gmail.com>
+ <1391779295-19140-4-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <CAHXCMM+rLYDjzBcixCHhXeu0A3jFMBxEEsGRaD-0D2KnLe8GyA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,242 +17,142 @@ On Fri, Feb 7, 2014 at 2:21 PM, Eric Le Bihan <eric.le.bihan.dev@free.fr> wrote:
 
 [...]
 
-> diff --git a/package/modem-manager/Config.in b/package/modem-manager/Config.in
-> index e157ca8..fe60850 100644
-> --- a/package/modem-manager/Config.in
-> +++ b/package/modem-manager/Config.in
-> @@ -1,6 +1,6 @@
->  config BR2_PACKAGE_MODEM_MANAGER
->         bool "modemmanager"
-> -       depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
-> +       depends on BR2_PACKAGE_HAS_UDEV
->         select BR2_PACKAGE_DBUS
+> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+> index 500e623..e3ea433 100644
+> --- a/package/systemd/Config.in
+> +++ b/package/systemd/Config.in
+> @@ -1,11 +1,21 @@
+>  config BR2_PACKAGE_SYSTEMD
+>         bool "systemd"
+> -       depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
+> +       depends on BR2_INIT_SYSTEMD
+> +       depends on !BR2_avr32 # no epoll_create1
+> +       depends on BR2_LARGEFILE # util-linux
+> +       depends on BR2_USE_WCHAR # util-linux
 >         depends on BR2_INET_IPV6
->         depends on BR2_LARGEFILE # acl
-> @@ -8,8 +8,6 @@ config BR2_PACKAGE_MODEM_MANAGER
->         depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
+> +       depends on !BR2_PREFER_STATIC_LIB # kmod
+>         depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
 >         depends on BR2_USE_MMU # dbus
->         select BR2_PACKAGE_DBUS_GLIB
-> -       select BR2_PACKAGE_UDEV
-> -       select BR2_PACKAGE_UDEV_ALL_EXTRAS
-
-When removing BR2_PACKAGE_UDEV_ALL_EXTRAS, you should certainly
-replace it by the
-"select ..." statements done in the BR2_PACKAGE_UDEV_ALL_EXTRAS
-symbol, ie: acl and libglib2 (if I understood correctly hwdata is no
-longer needed).
-
-
->         help
->           ModemManager is a DBus-activated daemon which controls mobile
->           broadband (2G/3G/4G) devices and connections.
-> @@ -33,4 +31,4 @@ endif
->
->  comment "modemmanager needs udev /dev management and a toolchain w/ largefile, wchar, threads, IPv6"
->         depends on !BR2_INET_IPV6 || !BR2_LARGEFILE || !BR2_USE_WCHAR || \
-> -               !BR2_TOOLCHAIN_HAS_THREADS || !BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
-> +               !BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_HAS_UDEV
-> diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
-> index a194433..a4eeeaf 100644
-> --- a/package/network-manager/Config.in
-> +++ b/package/network-manager/Config.in
-> @@ -1,16 +1,14 @@
->  config BR2_PACKAGE_NETWORK_MANAGER
->         bool "NetworkManager"
->         depends on !BR2_avr32 # udev
-> -       depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
-> -       select BR2_PACKAGE_DBUS
->         depends on BR2_INET_IPV6
->         depends on BR2_LARGEFILE # acl
->         depends on BR2_USE_WCHAR # libglib2 and gnutls
->         depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
->         depends on BR2_USE_MMU # dbus
-> +       depends on BR2_PACKAGE_HAS_UDEV
-> +       select BR2_PACKAGE_DBUS
->         select BR2_PACKAGE_DBUS_GLIB
-> -       select BR2_PACKAGE_UDEV
-> -       select BR2_PACKAGE_UDEV_ALL_EXTRAS
-
-ditto (select acl and libglib2)
-
->         select BR2_PACKAGE_GNUTLS
->         select BR2_PACKAGE_LIBGCRYPT
->         select BR2_PACKAGE_LIBNL
-> @@ -33,4 +31,4 @@ comment "NetworkManager needs udev /dev management and a toolchain w/ IPv6, larg
->         depends on BR2_USE_MMU
->         depends on !BR2_INET_IPV6 || !BR2_LARGEFILE || !BR2_USE_WCHAR || \
->                 !BR2_TOOLCHAIN_HAS_THREADS || \
-> -               !BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
-> +               !BR2_PACKAGE_HAS_UDEV
-
-[...]
-
-> diff --git a/package/udev/Config.in b/package/udev/Config.in
-> index 7aa79c4..5cd4051 100644
-> --- a/package/udev/Config.in
-> +++ b/package/udev/Config.in
-> @@ -1,47 +1,6 @@
-> -config BR2_PACKAGE_UDEV
-> -       bool "udev"
-> -       depends on !BR2_avr32 # no epoll_create1
-> -       depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
-> -       depends on BR2_LARGEFILE # util-linux
-> -       depends on BR2_USE_WCHAR # util-linux
-> -       depends on !BR2_PREFER_STATIC_LIB # kmod
-> -       select BR2_PACKAGE_UTIL_LINUX
-> -       select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-> -       select BR2_PACKAGE_KMOD
-> +config BR2_PACKAGE_HAS_UDEV
-> +       bool
->         help
-> -         Userspace device daemon.
-> -
-> -         udev requires a Linux kernel >= 2.6.34: it relies on devtmpfs
-> -         and inotify.
-> -
-> -         ftp://ftp.kernel.org/pub/linux/utils/kernel/hotplug/
-> -
-> -if BR2_PACKAGE_UDEV
-> -
-> -config BR2_PACKAGE_UDEV_RULES_GEN
-> -       bool "enable rules generator"
-> -       help
-> -         Enable persistant rules generator
-> -
-> -config BR2_PACKAGE_UDEV_ALL_EXTRAS
-> -       bool "enable all extras"
-> -       select BR2_PACKAGE_ACL
-> -       select BR2_PACKAGE_HWDATA
-> -       select BR2_PACKAGE_LIBGLIB2
-> -       depends on BR2_USE_WCHAR # libglib2
-> -       depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-> -       depends on BR2_USE_MMU # libglib2
-> -       help
-> -         Enable all extras with external dependencies like
-> -         libacl, hwdata and libglib2
-> -
-> -comment "enabling all extras needs a toolchain w/ wchar, threads"
-> -       depends on BR2_USE_MMU
-> -       depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-> -
-> -endif
-> -
-> -comment "udev needs udev /dev management and a toolchain w/ largefile, wchar, dynamic library"
-> -       depends on !BR2_avr32
-> -       depends on !BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV || \
-> -               !BR2_LARGEFILE || !BR2_USE_WCHAR || BR2_PREFER_STATIC_LIB
-> +         udev is now a virtual package.
-> +         Packages requiring udevd at run time or libudev/gudev at build time
-> +         should select it.
-
-I'm not sure a help message is very useful for a hidden symbol, but
-anyway it does not hurt ;-)
-
-> diff --git a/package/udev/udev.mk b/package/udev/udev.mk
-> index db86850..d274246 100644
-> --- a/package/udev/udev.mk
-> +++ b/package/udev/udev.mk
-> @@ -4,48 +4,17 @@
->  #
->  ################################################################################
->
-> -UDEV_VERSION = 182
-> -UDEV_SOURCE = udev-$(UDEV_VERSION).tar.xz
-> -UDEV_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/hotplug/
-> -UDEV_LICENSE = GPLv2+
-> -UDEV_LICENSE_FILES = COPYING
-> -UDEV_INSTALL_STAGING = YES
-> +UDEV_SOURCE =
->
-> -# mq_getattr is in librt
-> -UDEV_CONF_ENV += LIBS=-lrt
-> -
-> -UDEV_CONF_OPT =                        \
-> -       --sbindir=/sbin         \
-> -       --with-rootlibdir=/lib  \
-> -       --libexecdir=/lib       \
-> -       --with-usb-ids-path=/usr/share/hwdata/usb.ids   \
-> -       --with-pci-ids-path=/usr/share/hwdata/pci.ids   \
-> -       --with-firmware-path=/lib/firmware              \
-> -       --disable-introspection
-> -
-> -UDEV_DEPENDENCIES = host-gperf host-pkgconf util-linux kmod
-> -
-> -ifeq ($(BR2_PACKAGE_UDEV_RULES_GEN),y)
-> -UDEV_CONF_OPT += --enable-rule_generator
-> -endif
-> -
-> -ifeq ($(BR2_PACKAGE_UDEV_ALL_EXTRAS),y)
-> -UDEV_DEPENDENCIES += acl hwdata libglib2
-> -UDEV_CONF_OPT +=               \
-> -       --enable-udev_acl
-> -else
-> -UDEV_CONF_OPT +=               \
-> -       --disable-gudev
-> +ifeq ($(BR2_PACKAGE_EUDEV),y)
-> +UDEV_DEPENDENCIES += eudev
->  endif
->
-> -ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-> -       UDEV_CONF_OPT += --with-systemdsystemunitdir=/lib/systemd/system/
-> -endif
-> -
-> -define UDEV_INSTALL_INITSCRIPT
-> -       $(INSTALL) -m 0755 package/udev/S10udev $(TARGET_DIR)/etc/init.d/S10udev
-> +ifeq ($(UDEV_DEPENDENCIES),)
-> +define UDEV_CONFIGURE_CMDS
-> +       echo "No Udev implementation selected. Configuration error."
-> +       exit 1
->  endef
-
-The error can be raised here using the make primitive:
-
-$(error No Udev implementation selected. Configuration error.)
-
-> +endif
->
-> -UDEV_POST_INSTALL_TARGET_HOOKS += UDEV_INSTALL_INITSCRIPT
-> -
-> -$(eval $(autotools-package))
-> +$(eval $(generic-package))
-> diff --git a/package/udisks/Config.in b/package/udisks/Config.in
-> index e9539a3..d560b6c 100644
-> --- a/package/udisks/Config.in
-> +++ b/package/udisks/Config.in
-> @@ -1,11 +1,9 @@
->  config BR2_PACKAGE_UDISKS
->         bool "udisks"
->         depends on !BR2_avr32 # udev
-> -       depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
-> +       depends on BR2_PACKAGE_HAS_UDEV
->         depends on BR2_TOOLCHAIN_HAS_THREADS # dbus-glib -> glib2
->         depends on BR2_USE_MMU # lvm2
-> -       select BR2_PACKAGE_UDEV
-> -       select BR2_PACKAGE_UDEV_ALL_EXTRAS
-
-ditto (select acl and libglib2)
-
+> +       select BR2_PACKAGE_HAS_UDEV
 >         select BR2_PACKAGE_DBUS
->         select BR2_PACKAGE_DBUS_GLIB
->         depends on BR2_USE_WCHAR # dbus-glib -> glib2
-> @@ -36,8 +34,12 @@ config BR2_PACKAGE_UDISKS_LVM2
+>         select BR2_PACKAGE_LIBCAP
+> +       select BR2_PACKAGE_UTIL_LINUX
+> +       select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+> +       select BR2_PACKAGE_KMOD
+> +       select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # kmod-tools
+> +       select BR2_PACKAGE_KMOD_TOOLS
+>         help
+>           systemd is a system and service manager for Linux, compatible with
+>           SysV and LSB init scripts. systemd provides aggressive parallelization
+> @@ -16,9 +26,36 @@ config BR2_PACKAGE_SYSTEMD
+>           elaborate transactional dependency-based service control logic.
+>           It can work as a drop-in replacement for sysvinit.
 >
->  endif
->
-> -comment "udisks needs udev /dev management and a toolchain w/ wchar, threads"
-> +comment "udisks needs udev /dev management"
->         depends on !BR2_avr32
->         depends on BR2_USE_MMU
-> -       depends on !BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV || \
-> -               !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-> +       depends on !BR2_PACKAGE_HAS_UDEV
+> +         Systemd requires a Linux kernel >= 3.0, with inotify, devtmpfs,
+> +         tmpfs vfs and tmpfs POSIX ACL enabled.
+
+Linux >= 3.0, really? IIRC systemd requires devtmpfs (available for a long
+time), and cgroup which has been available since linux-2.6.36 (though the
+patch to make them available on older kernel is easy to backport on older
+kernel).
+
 > +
-> +comment "udisks needs a toolchain w/ wchar, threads"
-> +       depends on !BR2_avr32
-> +       depends on BR2_USE_MMU
-> +       depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+> +         Systemd also provides udev, the userspace device daemon.
+> +
+> +         The selection of other packages will enable some features:
+> +
+> +         - libglib2 package will add support for gudev.
+> +         - acl package will add support for multi-seat.
+> +
+>           http://freedesktop.org/wiki/Software/systemd
+>
+> -comment "systemd needs eudev /dev management and a toolchain w/ IPv6, threads"
+> -       depends on BR2_USE_MMU
+> -       depends on !BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV || !BR2_INET_IPV6 || \\
+> -               !BR2_TOOLCHAIN_HAS_THREADS
+> +if BR2_PACKAGE_SYSTEMD
+> +
+> +config BR2_PACKAGE_SYSTEMD_ALL_EXTRAS
+> +       bool "enable all extras"
+> +       select BR2_PACKAGE_XZ
+> +       select BR2_PACKAGE_LIBGCRYPT
+> +       help
+> +         Enable extra features for Systemd: journal compression and
+> +         signing.
+> +
+> +config BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY
+> +       bool "HTTP server for journal events"
+> +       select BR2_PACKAGE_LIBMICROHTTPD
+> +       help
+> +         systemd-journal-gatewayd serves journal events over the
+> +         network. Clients must connect using HTTP. The server
+> +         listens on port 19531 by default.
+> +
+> +         http://www.freedesktop.org/software/systemd/man/systemd-journal-gatewayd.service.html
+> +
+> +endif
 
 [...]
+
+> diff --git a/system/Config.in b/system/Config.in
+> index 34726b0..30d8efe 100644
+> --- a/system/Config.in
+> +++ b/system/Config.in
+> @@ -87,20 +87,19 @@ config BR2_INIT_SYSV
+>
+>  config BR2_INIT_SYSTEMD
+>         bool "systemd"
+> +       depends on !BR2_avr32 # no epoll_create1
+> +       depends on BR2_TOOLCHAIN_USES_GLIBC
+>         depends on BR2_LARGEFILE
+>         depends on BR2_USE_WCHAR
+>         depends on BR2_INET_IPV6
+> -       depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
+>         depends on BR2_TOOLCHAIN_HAS_THREADS
+> +       depends on BR2_TOOLCHAIN_HAS_SSP
+>         depends on BR2_USE_MMU
+> -       select BR2_PACKAGE_DBUS
+> +       depends on !BR2_PREFER_STATIC_LIB
+>         select BR2_PACKAGE_SYSTEMD
+
+How does this play with kconfig?
+Does not kconfig complain about some circular dependencies here, because
+you have BR2_INIT_SYSTEMD selecting BR2_PACAKGE_SYSTEMD, while
+BR2_PACKAGE_SYSTEMD depends on BR2_INIT_SYSTEMD?
+
+>
+> -comment 'systemd needs eudev /dev management and a toolchain w/ largefile, wchar, IPv6, threads'
+> -       depends on BR2_USE_MMU
+> -       depends on !(BR2_LARGEFILE && BR2_USE_WCHAR && \
+> -                    BR2_INET_IPV6 && BR2_TOOLCHAIN_HAS_THREADS && \
+> -                    BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV)
+> +comment 'systemd needs an (e)glibc toolchain'
+> +       depends on !BR2_TOOLCHAIN_USES_GLIBC
+>
+>  config BR2_INIT_NONE
+>         bool "None"
+> @@ -108,7 +107,7 @@ config BR2_INIT_NONE
+>  endchoice
+>
+>  choice
+> -       prompt "/dev management"
+> +       prompt "/dev management" if !BR2_INIT_SYSTEMD
+>         default BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS
+>
+>  config BR2_ROOTFS_DEVICE_CREATION_STATIC
+> @@ -135,6 +134,9 @@ comment "eudev needs a toolchain w/ largefile, wchar, dynamic library"
+>
+>  endchoice
+>
+> +comment "/dev management using udev (from systemd)"
+> +       depends on BR2_INIT_SYSTEMD
+> +
+>  config BR2_ROOTFS_DEVICE_TABLE
+>         string "Path to the permission tables"
+>         default "system/device_table.txt"
+> --
+> 1.7.9.5
+>
 
 Regards,
 
