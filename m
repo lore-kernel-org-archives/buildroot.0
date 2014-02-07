@@ -1,103 +1,76 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Fri, 7 Feb 2014 22:14:33 +0100
-Subject: [Buildroot] [PATCH v7 2/4] udev: convert to virtual package.
-In-Reply-To: <CAAXf6LWN2F6YhoVHu3w-TcWnqBQ4G_gdV652xBD0kGbopfafWw@mail.gmail.com>
-References: <1391779295-19140-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1391779295-19140-3-git-send-email-eric.le.bihan.dev@free.fr>
- <CAAXf6LWN2F6YhoVHu3w-TcWnqBQ4G_gdV652xBD0kGbopfafWw@mail.gmail.com>
-Message-ID: <20140207211433.GA7580@milhouse>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 7 Feb 2014 22:16:13 +0100
+Subject: [Buildroot] [PATCH] linux: don't automatically set
+ uevent_helper with mdev /dev management
+In-Reply-To: <87ob2i63cg.fsf@dell.be.48ers.dk>
+References: <769563a34e142e85ec4c.1391761259@argentina>
+ <87wqh6640h.fsf@dell.be.48ers.dk>
+ <CAAXf6LV=o61iJVycRW-+4boS08=Ar39-uxgUqj6XoqcbzSHmrA@mail.gmail.com>
+ <87ob2i63cg.fsf@dell.be.48ers.dk>
+Message-ID: <CAAXf6LWNtuuivOXDhqMbK+3kh6t1vBHCOmU1D-9+PJqi_wjLjw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+Hi Peter,
 
-On Fri, Feb 07, 2014 at 09:17:08PM +0100, Thomas De Schampheleire wrote:
-
-> > diff --git a/Config.in.legacy b/Config.in.legacy
-> > index 2fe9cf9..6d594c6 100644
-> > --- a/Config.in.legacy
-> > +++ b/Config.in.legacy
-> > @@ -101,6 +101,61 @@ endif
-> >  ###############################################################################
-> >  comment "Legacy options removed in 2014.02"
-> >
-> > +config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
-> > +       bool "/dev management by udev removed"
-> > +       select BR2_LEGACY
-> > +       help
-> > +         The 'udev' package has been converted to a virtual package.
-> > +         There is currently one provider for this feature: 'eudev'.
-> > +
-> > +         Therefore, you must choose 'Dynamic using eudev' in the
-> > +         '/dev management' menu to get the same behaviour as in your
-> > +          old configuration.
-> > +
-> > +         You must also check the packages depending on 'udev' are still
-> > +         selected.
+On Fri, Feb 7, 2014 at 10:05 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 >
-> Is there a particular reason why you don't automatically select the
-> suggested alternative?
-> This will make the transition easier for users...
-
-That's what I did on first try. BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV was
-selected. But I ended up facing a limit of kconfig: this boolean symbol is
-used in a choice/endchoice ("/dev management"), which prevents its value from
-being recalculated when it is selected from Config.in.legacy.
-
-For example, if BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV=y in
-test_udev_legacy_defconfig and we perform:
-
-  $ make test_udev_legacy_defconfig
-
-output/.config will contain:
-
-  # BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV is not set
-  BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
-
-The default choice is selected. I discussed this issue on IRC with Yann E.
-Morin last evening, but there is no workaround... So I chose to remove the
-automatic selection of the new symbol and add detailed instructions.
-
-> > diff --git a/package/libatasmart/Config.in b/package/libatasmart/Config.in
-> > index a3e44f8..534e7c1 100644
-> > --- a/package/libatasmart/Config.in
-> > +++ b/package/libatasmart/Config.in
-> > @@ -1,6 +1,6 @@
-> >  config BR2_PACKAGE_LIBATASMART
-> >         bool "libatasmart"
-> > -       depends on BR2_PACKAGE_UDEV # libudev is configure dependency
-> > +       depends on BR2_PACKAGE_HAS_UDEV # libudev is configure dependency
-> >         help
-> >           The libatasmart package is a disk reporting library.
-> >           It only supports a subset of the ATA S.M.A.R.T. functionality.
-> > @@ -8,4 +8,4 @@ config BR2_PACKAGE_LIBATASMART
-> >           http://www.linuxfromscratch.org/blfs/view/svn/general/libatasmart.html
-> >
-> >  comment "libatasmart requires udev to be enabled"
-> > -       depends on !BR2_PACKAGE_UDEV
-> > +       depends on !BR2_PACKAGE_HAS_UDEV
+> Hi,
 >
-> Finally we should also line up all the udev comments, but this can be
-> done in a separate patch.
-I will gladly do it.
-
-> > +         udev is now a virtual package.
-> > +         Packages requiring udevd at run time or libudev/gudev at build time
-> > +         should select it.
+>  >> Hmm, but the the coldplug handling with 'mdev -s' afaik doesn't handle
+>  >> module or firmware loading, so those features will break from this.
 >
-> Does it make sense to adding a help option on a hidden option? Can the
-> user ever make it visible?
+>  > Isn't this handled by the installation of the hotplug helper from
+>  > S10mdev, after which mdev -s is run?
+>
+> Yes, if the events happen after that line, but not if they happen
+> before.
+>
+>  > I.e. everything that happened before S10mdev is caught by 'mdev -s'
+>  > and everything after is handled by the hotplug helper, right?
+>
+> No, mdev -s only scans /sys for devices and create the corresponding
+> device nodes (already done by devtmpfs) and execute whatever commands
+> you have defined, it afaik doesn't handle module load or firmware requests.
 
-The end user using the menu will not see it, but I added it for the user who
-sometimes looks at the sources, as a kind of comment. When ThomasP suggested
-to convert udev as a virtual package, I looked at opengl.mk hoping to find
-information but found none... Maybe it would be better to add a section on how
-to add virtual package and how to use it in the manual.
+When you say 'module load', the only relevant consequence of that is
+the creation of nodes in /sys that may need corresponding entries in
+/dev right? So this is covered by the S10mdev script, as far as I see.
+What else would happen in 'module load' that mdev does not cover?
 
-Thanks for your review.
+I'm not familiar enough with firmware requests to talk about that.
+
+However, the kernel configuration says: "This should not be used
+today, because usual systems create many events at bootup or device
+discovery in a very short time frame. One forked process per event can
+create so many processes that it creates a high system load, or on
+smaller systems it is known to create out-of-memory situations during
+bootup."
+
+So then I wonder, how is it supposed to work for module load and
+firmware loading if you can't use this option. Or put another way: are
+you sure we need to set the uevent_helper_path for that?
+
+>
+>
+>  >> I would be interested in knowing why hotplug is so much slower than
+>  >> coldplug. Do you have any idea about how many times mdev gets executed
+>  >> during bootup?
+>  >>
+>
+>  > No, I don't know. I do know that on one particular arm-based single
+>  > core system, the time to enter userspace increased from 2 seconds to
+>  > 10 seconds due to this hotplug helper.
+>
+> Funky. I personally have never used mdev, but that sounds pretty
+> extreme.
+
+It's a large increase yes, but it's what we measured.
+Another system (4-core powerpc) had about 1-2 seconds increase.
 
 Best regards,
-ELB
+Thomas
