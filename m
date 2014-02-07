@@ -1,54 +1,62 @@
-From: Anton Kolesov <Anton.Kolesov@synopsys.com>
-Date: Fri, 7 Feb 2014 14:00:39 +0000
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <20140207135324.4c7cbe3f@skate>
-References: <20140207073009.C5A85100E3A@stock.ovh.net>
- <20140207135324.4c7cbe3f@skate>
-Message-ID: <39A54937CC95F24AA2F794E2D2B66B1356C64BD3@de02wembxa.internal.synopsys.com>
+From: Mike Zick <minimod@morethan.org>
+Date: Fri, 7 Feb 2014 08:14:30 -0600
+Subject: [Buildroot] Antw: Re: Why can't I see any effects by different
+ rootfs compression methods ??
+In-Reply-To: <52F4A423.1060102@mind.be>
+References: <52F361B10200004600049F5D@gwia2.rz.hs-offenburg.de>
+ <52F3C228.2080002@mind.be>
+ <52F495EA020000460004A4C6@gwia2.rz.hs-offenburg.de>
+ <52F4A423.1060102@mind.be>
+Message-ID: <20140207081430.72c3955e@core2quad.morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+On Fri, 07 Feb 2014 10:15:15 +0100
+Arnout Vandecappelle <arnout@mind.be> wrote:
 
+>  An initrd/initramfs is normally passed by the bootloader to the
+> kernel as part of the boot arguments. On your PC, for instance,
+> you'll see in /boot:
 > 
-> >        arc |              dmraid-1.0.0.rc15 | NOK |
-> http://autobuild.buildroot.net/results/ef6a0e2d382ae202bb8f0e9fc9f5e48c9
-> 0119faf/
+> initrd.img-3.12-1-amd64
+> vmlinuz-3.12-1-amd64
 > 
-> Internal compiler error. Ryan has sent a patch to disable the dmraid
-> build on ARC for now, but it would be good if the ARC team could have a
-> look at this. Cc'ing Anton.
+>  As an extra option, the kernel has the feature that you can link the
+> initramfs directly into the kernel - which has the advantage that you
+> only need to manage a single image instead of two.
+>
 
-We have two compiler patches internally which resolve several failures in autobuild. I'm waiting for compiler engineer to merge those patches into main branch, so I can update commit referenced in Buildroot. I expect this to happen next week.
+Leaving the choice to the final implementor of the system can be
+important.
 
-> 
-> >        arc |                  libpfm4-4.3.0 | NOK |
-> http://autobuild.buildroot.net/results/59cefaba9d382f0de17b5dccb2d88fc74
-> d36f520/
-> 
-> task.c: In function 'read_groups':
-> task.c:110:5: error: format '%zd' expects argument of type 'signed size_t', but
-> argument 4 has type 'ssize_t' [-Werror=format=]
->      evt, new_sz, ret);
->      ^
-> cc1: all warnings being treated as errors
-> make[2]: *** [task.o] Error 1
-> 
->  -> We should build this package without treating warning as error.
+Linking the initramfs (or older initrd format) into the kernel binary
+makes its contents subject to the kernel's (viral) GPLv2.
 
-However variables of type "signed size_t" cannot be declared (at least for ARC) so there is a misinformation from GCC, and on the same test case GCC for x86_64 doesn't emit a warning at all, while ARC emits. Both GCC's are version 4.8. So it seems to be something ARC-specific. I've filed an internal bug report to investigate. Though I also have no objections if this package will be compiled without -Werror.
+Keeping the kernel and the file system as separate files stops the
+viral spread of the GPL license from the kernel to the file system.
 
-Anton Kolesov
+When the initial file system contains proprietary code, an important
+point to keep in mind.
 
+Another point arises in the case of the GPLv3 -
+If the initial file system is statically linked into the kernel, it
+becomes much more difficult to replace a GPLv3 binary in the file
+system for the end user (or even for the vendor) without re-building
+the kernel.
 
-> 
-> Thanks for your help!
-> 
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+- - - -
+
+Two everyday common instances:
+
+Google Android: Their "bootloader image" (their terms) carries the
+kernel and the initial file system as two binary images.
+
+Amazon Kindle (the e-ink models): Their u-boot loaded kernel image
+has the initial file system statically linked with the kernel.
+(and contains what Amazon considers proprietary code, which they
+do not release, but that is off-topic here).
+
+Mike
