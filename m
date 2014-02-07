@@ -1,50 +1,61 @@
-From: =?ISO-8859-1?Q?Ezequiel_Garc=EDa?= <ezequiel@vanguardiasur.com.ar>
-Date: Fri, 7 Feb 2014 13:19:49 -0200
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <20140207161407.375d1d43@skate>
-References: <20140207073009.C5A85100E3A@stock.ovh.net>
- <20140207135324.4c7cbe3f@skate>
- <CAAEAJfAOUEyLD=UqWwjQ9gQZrFtSshk496M_8hnYmz=tN-cGNw@mail.gmail.com>
- <20140207155511.7ad8ec55@skate>
- <CAAEAJfAU4iwiFCAdyYgHx7G6iH_31C=jDO7MtXodvCdy1H-GnQ@mail.gmail.com>
- <20140207161407.375d1d43@skate>
-Message-ID: <CAAEAJfA0Os3YxtzgfzfpKpwJNSgu=df3FfK7HbuEveAV_RqVig@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 7 Feb 2014 16:29:34 +0100
+Subject: [Buildroot] Antw: build speedup possible?
+In-Reply-To: <CAHkwnC_B8RRAXBOGjjpr2X7CbZpVTnsDx8QoLEPfaieEoSd4gA@mail.gmail.com>
+References: <52F49E9D.2020506@andin.de>
+ <52F4AEC7020000460004A4EE@gwia2.rz.hs-offenburg.de>
+ <CAHXCMMJD_i9aQtFkxWD_tPbpdJd_-Gv_zkC0KxnEtRoQO=7Vug@mail.gmail.com>
+ <CAHkwnC_B8RRAXBOGjjpr2X7CbZpVTnsDx8QoLEPfaieEoSd4gA@mail.gmail.com>
+Message-ID: <20140207162934.01acfe5a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 7 February 2014 12:14, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Ezequiel Garc?a,
->
-> On Fri, 7 Feb 2014 13:07:22 -0200, Ezequiel Garc?a wrote:
->
->> Old nios2 kernel ports does not have setns system call. I've confirmed
->> at least v3.7 (the one I use on production stuff) lacks setns. Latest
->> v3.12 (development kernel) *does* support setns.
->>
->> I guess the toolchain people just set it to be unimplemented.
->>
->> Want a patch masking lxc package on nios2?
->
-> If indeed most nios2 kernels do not support the setns system call,
-> that's probably the best solution. Moreover, I would say it's fairly
-> unlikely that people would use nios2 to do Linux Containers, no?
->
+Dear Fabio Porcedda,
 
-You can bet on that any day.
+On Fri, 7 Feb 2014 15:48:35 +0100, Fabio Porcedda wrote:
 
-> Be sure to indicate above the dependency why it was added:
->
->         # nios2 kernels do not provide the setns syscall
->         depends on !BR2_nios2
->
-> Thanks!
->
+> The build can be reproduced even when building packages in parallel,
+> we just need to record the order of the steps and replay that order if
+> needed.
 
-Sure.
+And in practice, how do you achieve this? When building in parallel,
+how do you record the fact that the test for libfoo in package A
+configure script was run before or after the installation of libfoo in
+the global sysroot? It's not only about recording the order of the
+build of the package: it's knowing whether each specific test of a
+configure script was run before or after the corresponding library was
+installed in the global sysroot.
+
+> The sysroot copy is needed only to be sure that even if some package
+> has an unspecified optional dependency it generates every time the
+> same binary.
+
+Which is *the* very important thing. So saying it's needed "only to be
+sure" is quite minimizing the very important consequence of parallel
+build with a global sysroot, IMO.
+
+> I think that at least when doing development it will be useful to
+> build packages in parallel.
+> Maybe it will be best to avoid building packages in parallel just for releases.
+
+I don't agree.
+
+I do a lot of support on #buildroot, and I would *hate* to have people
+coming up with bug reports that are not reproducible because they
+depend on the specific scheduling of the build. I really don't want new
+comers to use this feature and then come back with bug reports that are
+basically unfixable because they cannot be reproduced.
+
+I think we should really not minimize the support problem that
+parallelization without per-package sysroot is going to cause.
+
+Best regards,
+
+Thomas
 -- 
-Ezequiel Garc?a, VanguardiaSur
-www.vanguardiasur.com.ar
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
