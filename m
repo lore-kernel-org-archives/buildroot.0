@@ -1,73 +1,66 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 07 Feb 2014 11:16:05 +0100
-Subject: [Buildroot] [PATCH] host python/python3: conditionally disable
-	unicodedata
-Message-ID: <e06b104c5f166c541741.1391768165@argentina>
+Date: Fri, 07 Feb 2014 11:16:28 +0100
+Subject: [Buildroot] [PATCH] apply-patches.sh: make scan_patchdir work
+	recursively
+Message-ID: <f1b0803ef9dea3b4f376.1391768188@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The host python always had --disable-unicodedata, regardless of the
-corresponding configuration option BR2_PACKAGE_PYTHON_UNICODEDATA.
-Since the host python is used to byte-compile python modules, this meant
-that such modules could not contain unicode strings. For example, following
-statement in a python module:
-    print u"\N{SOLIDUS}"
+scan_patchdir is called recursively. For this to work properly, the
+variable path which is set to $1 at the very beginning must be local not
+global.
 
-would cause the byte-compilation to fail with message:
-    SyntaxError: ("(unicode error) \\N escapes not supported (can't load
-    unicodedata module)",
+A test case is to set BR2_GLOBAL_PATCH_DIR to 'mypatches' and having the
+following tree in the buildroot root:
 
-Instead, conditionally disable unicodedata based on
-BR2_PACKAGE_PYTHON_UNICODEDATA, also for the host python.
+$ find mypatches/
+mypatches/
+mypatches/busybox
+mypatches/busybox/subdir.patch
+mypatches/busybox/subdir.patch/busybox-0001-abc.patch
+mypatches/busybox/busybox-0002-def.patch
+mypatches/busybox/asubdir.patch
+mypatches/busybox/asubdir.patch/busybox-0003-xyz.patch
 
-This fixes bug #6542 (https://bugs.busybox.net/show_bug.cgi?id=6542)
+When running 'make busybox-dirclean busybox-patch' originally, you'd get:
 
-Reported-by: Gernot Vormayr <gvormayr@gmail.com>
+    Applying busybox-0003-xyz.patch using patch:
+
+    Applying busybox-0002-def.patch using patch:
+    Error: missing patch file
+    mypatches/busybox/asubdir.patch/busybox-0002-def.patch
+
+While with this fix:
+
+    Applying busybox-0003-xyz.patch using patch:
+
+    Applying busybox-0002-def.patch using patch:
+
+    Applying busybox-0001-abc.patch using patch:
+
+
+This fixes bug #6434 (https://bugs.busybox.net/show_bug.cgi?id=6434)
+
+Signed-off-by: Daniel Mentz <daniel@exxm.de>
+[Thomas: update commit message with test case]
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
- package/python/python.mk   |  2 +-
- package/python3/python3.mk |  2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ support/scripts/apply-patches.sh |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python/python.mk b/package/python/python.mk
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -26,7 +26,6 @@ HOST_PYTHON_CONF_OPT += 	\
- 	--disable-curses	\
- 	--disable-codecs-cjk	\
- 	--disable-nis		\
--	--disable-unicodedata	\
- 	--disable-dbm		\
- 	--disable-gdbm		\
- 	--disable-bsddb		\
-@@ -100,6 +99,7 @@ endif
+diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
+--- a/support/scripts/apply-patches.sh
++++ b/support/scripts/apply-patches.sh
+@@ -92,7 +92,7 @@ function apply_patch {
+ }
  
- ifneq ($(BR2_PACKAGE_PYTHON_UNICODEDATA),y)
- PYTHON_CONF_OPT += --disable-unicodedata
-+HOST_PYTHON_CONF_OPT += --disable-unicodedata
- endif
+ function scan_patchdir {
+-    path=$1
++    local path=$1
+     shift 1
+     patches=${@-*}
  
- # Default is UCS2 w/o a conf opt
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -23,7 +23,6 @@ HOST_PYTHON3_CONF_OPT += 	\
- 	--disable-curses	\
- 	--disable-codecs-cjk	\
- 	--disable-nis		\
--	--disable-unicodedata	\
- 	--disable-test-modules	\
- 	--disable-idle3
- 
-@@ -88,6 +87,7 @@ endif
- 
- ifneq ($(BR2_PACKAGE_PYTHON3_UNICODEDATA),y)
- PYTHON3_CONF_OPT += --disable-unicodedata
-+HOST_PYTHON3_CONF_OPT += --disable-unicodedata
- endif
- 
- ifeq ($(BR2_PACKAGE_PYTHON3_BZIP2),y)
