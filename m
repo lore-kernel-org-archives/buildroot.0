@@ -1,23 +1,29 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 07 Feb 2014 21:35:43 +0100
-Subject: [Buildroot] [PATCH 1/1] defconfigs: zedboard add info about
-	uboot installation
-In-Reply-To: <1391795312-19282-1-git-send-email-spenser@gillilanding.com>
- (Spenser Gilliland's message of "Fri, 7 Feb 2014 11:48:32 -0600")
-References: <1391795312-19282-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <871tze7ja8.fsf@dell.be.48ers.dk>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 7 Feb 2014 21:36:38 +0100
+Subject: [Buildroot] [pkg-perl infra V5 4/8] host-perl-xml-parser:
+ rename and refactor with perl infrastructure
+In-Reply-To: <1391763337-30660-5-git-send-email-francois.perrad@gadz.org>
+References: <1391763337-30660-1-git-send-email-francois.perrad@gadz.org>
+ <1391763337-30660-5-git-send-email-francois.perrad@gadz.org>
+Message-ID: <CAAXf6LXiOa2LKx870LqJr-Z2YkvqnUOhRwuZERhLPNLpnAUMmg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Spenser" == Spenser Gilliland <spenser@gillilanding.com> writes:
+On Fri, Feb 7, 2014 at 9:55 AM, Francois Perrad <fperrad@gmail.com> wrote:
+> Even though libxml-parser-perl had a Config.in file with an option to
+> enable it on the target, this option was hidden by a dependency on
+> BR2_HOST_ONLY. So in practice, it was not possible to enable
+> libxml-parser-perl on the target. This allows us to rename
+> libxml-parser-perl to perl-xml-parser to follow the new naming
+> convention of Perl packages, without having to introduce
+> Config.in.legacy material.
+>
+> In addition to this rename, the package is converted to use the newly
+> introduced Perl package infrastructure.
+>
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
- > Add info about how to install a custom uboot on the zedboard.
- > Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
