@@ -1,81 +1,91 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri, 7 Feb 2014 23:04:22 +0100
-Subject: [Buildroot] [PATCH v7 4/4] manual: update /dev management
-	section.
-In-Reply-To: <CAAXf6LXEPmPs5ZxK_wc16wLF_g7GNqBdvWPGZNsQuJFNSYiaAw@mail.gmail.com>
-References: <1391779295-19140-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1391779295-19140-5-git-send-email-eric.le.bihan.dev@free.fr>
- <CAAXf6LXEPmPs5ZxK_wc16wLF_g7GNqBdvWPGZNsQuJFNSYiaAw@mail.gmail.com>
-Message-ID: <CAHXCMM+T3EE-EfuXKqB0GGOtFoS1ZUB-J3oZiSL1JS+tLiUm7w@mail.gmail.com>
+Date: Fri, 7 Feb 2014 23:20:28 +0100
+Subject: [Buildroot] [PATCH 3/4] samba: convert to choice package
+In-Reply-To: <1391806354-32698-4-git-send-email-gustavo@zacarias.com.ar>
+References: <1391806354-32698-1-git-send-email-gustavo@zacarias.com.ar>
+ <1391806354-32698-4-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <CAHXCMMJWZ_9zuR0npRzv=uE2nVdUAGZ7uF3vv7B6rBvmQo7PyQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Feb 7, 2014 at 9:26 PM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> On Fri, Feb 7, 2014 at 2:21 PM, Eric Le Bihan <eric.le.bihan.dev@free.fr> wrote:
->> This patch updates the /dev management section in the manual with information
->> about eudev, which replaces udev.
->>
->> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
->> ---
->>  docs/manual/configure.txt |   20 +++++++++++---------
->>  1 file changed, 11 insertions(+), 9 deletions(-)
->>
->> diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
->> index 89df3d9..9b8135a 100644
->> --- a/docs/manual/configure.txt
->> +++ b/docs/manual/configure.txt
->> @@ -216,7 +216,7 @@ x86_64 target, you have to generate a cross-compilation toolchain with
->>  Buildroot or crosstool-NG.
->>
->>  If you want to generate a custom toolchain for your project, that can
->> -be used as an external toolchain in Buildroot, our recommandation is
->> +be used as an external toolchain in Buildroot, our recommendation is
->>  definitely to build it with http://crosstool-ng.org[crosstool-NG]. We
->>  recommend to build the toolchain separately from Buildroot, and then
->>  _import_ it in Buildroot using the external toolchain backend.
->> @@ -310,22 +310,24 @@ different solutions to handle the +/dev+ directory :
->>     about +mdev+ and the syntax of its configuration file, see
->>     http://git.busybox.net/busybox/tree/docs/mdev.txt.
->>
->> - * The fourth solution is *Dynamic using udev*. This method also
->> + * The fourth solution is *Dynamic using eudev*. This method also
->>     relies on the _devtmpfs_ virtual filesystem detailed above, but
->> -   adds the +udev+ userspace daemon on top of it. +udev+ is a daemon
->> +   adds the +eudev+ userspace daemon on top of it. +eudev+ is a daemon
->>     that runs in the background, and gets called by the kernel when a
->>     device gets added or removed from the system. It is a more
->> -   heavyweight solution than +mdev+, but provides higher flexibility
->> -   and is sometimes mandatory for some system components (systemd for
->> -   example). +udev+ is the mechanism used in most desktop Linux
->> -   distributions. For more details about +udev+, see
->> -   http://en.wikipedia.org/wiki/Udev.
->> +   heavyweight solution than +mdev+, but provides higher flexibility.
->> +   +eudev+ is a standalone version of +udev+, the original userspace
->> +   daemon used in most desktop Linux distributions, which is now part
->> +   of Systemd. For more details, see http://en.wikipedia.org/wiki/Udev.
->>
->> -The Buildroot developers recommandation is to start with the *Dynamic
->> +The Buildroot developers recommendation is to start with the *Dynamic
->>  using devtmpfs only* solution, until you have the need for userspace
->>  to be notified when devices are added/removed, or if firmwares are
->>  needed, in which case *Dynamic using mdev* is usually a good solution.
->>
->> +Note that if +systemd+ is chosen as init system, /dev management will
->> +be performed by the +udev+ program provided by +systemd+.
->> +
->>  init system
->>  ~~~~~~~~~~~
->>
->
-> Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Hi Gustavo,
 
-Acked-by: Samuel Martin <s.martin49@gmail.com>
+On Fri, Feb 7, 2014 at 9:52 PM, Gustavo Zacarias
+<gustavo@zacarias.com.ar> wrote:
+
+[...]
+
+> diff --git a/package/samba/Config.in b/package/samba/Config.in
+> index 1469075..d11401f 100644
+> --- a/package/samba/Config.in
+> +++ b/package/samba/Config.in
+> @@ -1,270 +1,32 @@
+> +comment "samba needs a toolchain w/ threads"
+> +       depends on BR2_USE_MMU
+> +       depends on !BR2_TOOLCHAIN_HAS_THREADS
+> +
+>  config BR2_PACKAGE_SAMBA
+>         bool "samba"
+>         depends on BR2_TOOLCHAIN_HAS_THREADS
+>         depends on BR2_USE_MMU # fork()
+> -       select BR2_PACKAGE_POPT
+>         help
+> -         Provides print services to all manner of SMB/CIFS clients,
+> -         including the numerous versions of Microsoft Windows
+> -         operating systems.
+> -
+> -         http://www.samba.org/
+> -
+> -         NOTE: A complete Samba install takes over 50MB of space,
+> -               so choose only the components you need.
+> -
+> -comment "samba needs a toolchain w/ threads"
+> -       depends on BR2_USE_MMU
+> -       depends on !BR2_TOOLCHAIN_HAS_THREADS
+> +         Provides secure, stable and fast file and print services
+> +         for all clients using the SMB/CIFS protocol, such as all versions
+> +         of DOS and Windows, OS/2, Linux and many others.
+>
+>  if BR2_PACKAGE_SAMBA
+>
+
+[...]
+
+> +choice
+> +       prompt "Samba version"
+> +       default BR2_PACKAGE_SAMBA3
+>         help
+> -         Tool for executing client side MS-RPC functions using RPC
+> -         calls from a UNIX workstation.
+> +         Select the desired samba version.
+>
+
+[...]
+
+> +       config BR2_PACKAGE_SAMBA3
+> +       bool "3.6.x"
+
+Indentation is weird here, no?
+
+> +       select BR2_PACKAGE_POPT
+>         help
+> -         Include support for gamin
+> +         The well-tested legacy branch.
+>
+> -comment "support gamin - disabled (requires gamin)"
+> -       depends on !BR2_PACKAGE_GAMIN
+> -
+> -endmenu
+> +endchoice
+>
+>  endif
+
 
 Regards,
+
 
 -- 
 Samuel
