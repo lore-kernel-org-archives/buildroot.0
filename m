@@ -1,45 +1,52 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 7 Feb 2014 21:35:34 +0100
-Subject: [Buildroot] [git commit] defconfigs: zedboard add info about uboot
-	installation
-Message-ID: <20140207205819.5C8029C808@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 7 Feb 2014 22:00:48 +0100
+Subject: [Buildroot] [PATCH] linux: don't automatically set
+ uevent_helper with mdev /dev management
+In-Reply-To: <87wqh6640h.fsf@dell.be.48ers.dk>
+References: <769563a34e142e85ec4c.1391761259@argentina>
+ <87wqh6640h.fsf@dell.be.48ers.dk>
+Message-ID: <CAAXf6LV=o61iJVycRW-+4boS08=Ar39-uxgUqj6XoqcbzSHmrA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=acb457e7505d7c2a2c870b331604ba80d26518fc
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Peter Korsgaard <jacmet@uclibc.org> schreef:
+>>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+>
+> > When mdev /dev management is chosen in the buildroot configuration, the
+> > Linux configuration is updated automatically to set option
+> > CONFIG_UEVENT_HELPER_PATH to "/sbin/mdev". However, the help text of this
+> > option explicitly recommends not setting this option due to large
+> > performance impact during boot (experienced first hand by the reporter ?nd
+> > author).
+>
+> > The mdev startup script S10mdev already sets the helper during userspace
+> > boot, which will make sure mdev is working correctly.
+>
+> > Fixes bug #6596: https://bugs.busybox.net/show_bug.cgi?id=6596
+>
+> > Reported-by: Andreas Koop <andreas.koop@zf.com>
+> > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>
+>Hmm, but the the coldplug handling with 'mdev -s' afaik doesn't handle
+>module or firmware loading, so those features will break from this.
 
-Add info about how to install a custom uboot on the zedboard.
+Isn't this handled by the installation of the hotplug helper from
+S10mdev, after which mdev -s is run?
+I.e. everything that happened before S10mdev is caught by 'mdev -s'
+and everything after is handled by the hotplug helper, right?
 
-Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- board/avnet/zedboard/readme.txt |   15 +++++++++++++++
- 1 files changed, 15 insertions(+), 0 deletions(-)
+>
+>I would be interested in knowing why hotplug is so much slower than
+>coldplug. Do you have any idea about how many times mdev gets executed
+>during bootup?
+>
 
-diff --git a/board/avnet/zedboard/readme.txt b/board/avnet/zedboard/readme.txt
-index b869066..6b6df36 100644
---- a/board/avnet/zedboard/readme.txt
-+++ b/board/avnet/zedboard/readme.txt
-@@ -11,3 +11,18 @@ to the sdcard:
- 	rootfs.cpio.gz.uboot -> uramdisk.image.gz
- 	uImage -> uImage
- 
-+Uboot Support
-+-------------
-+
-+Uboot is installed in a wrapper file called BOOT.BIN located on the root of
-+the SD card.  To create the BOOT.BIN file do the following.
-+
-+source <path/to/xilinx/settings.sh>
-+cat <<EOF > boot.bif
-+{
-+   [bootloader]<path/to/fsbl.elf>
-+   <path/to/system.bit>
-+   <path/to/uboot.elf>
-+}
-+EOF
-+bootgen -image boot.bif -o i BOOT.BIN
+No, I don't know. I do know that on one particular arm-based single
+core system, the time to enter userspace increased from 2 seconds to
+10 seconds due to this hotplug helper.
+
+Best regards,
+Thomas
