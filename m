@@ -1,29 +1,42 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  7 Feb 2014 08:10:36 +0000 (UTC)
-Subject: [Buildroot] [Bug 6722] Usage of $($(PKG)_DIR_PREFIX) is an issue
- with linux package
-In-Reply-To: <bug-6722-163@https.bugs.busybox.net/>
-References: <bug-6722-163@https.bugs.busybox.net/>
-Message-ID: <20140207081036.AF97B9C8AF@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 07 Feb 2014 09:20:59 +0100
+Subject: [Buildroot] [PATCH] linux: don't automatically set uevent_helper
+ with mdev /dev management
+Message-ID: <769563a34e142e85ec4c.1391761259@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6722
+When mdev /dev management is chosen in the buildroot configuration, the
+Linux configuration is updated automatically to set option
+CONFIG_UEVENT_HELPER_PATH to "/sbin/mdev". However, the help text of this
+option explicitly recommends not setting this option due to large
+performance impact during boot (experienced first hand by the reporter ?nd
+author).
 
-Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> changed:
+The mdev startup script S10mdev already sets the helper during userspace
+boot, which will make sure mdev is working correctly.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+Fixes bug #6596: https://bugs.busybox.net/show_bug.cgi?id=6596
 
---- Comment #13 from Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> 2014-02-07 08:10:34 UTC ---
-This problem is solved in 2014.02.
+Reported-by: Andreas Koop <andreas.koop@zf.com>
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+---
+ linux/linux.mk |  2 --
+ 1 files changed, 0 insertions(+), 2 deletions(-)
+
+diff --git a/linux/linux.mk b/linux/linux.mk
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -186,8 +186,6 @@ define LINUX_CONFIGURE_CMDS
+ 	$(if $(BR2_ROOTFS_DEVICE_CREATION_STATIC),,
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS,$(@D)/.config)
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(@D)/.config))
+-	$(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),
+-		$(call KCONFIG_SET_OPT,CONFIG_UEVENT_HELPER_PATH,\"/sbin/mdev\",$(@D)/.config))
+ 	$(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER,$(@D)/.config))
+ 	$(if $(BR2_PACKAGE_KTAP),
