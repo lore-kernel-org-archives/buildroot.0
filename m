@@ -1,158 +1,79 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri, 7 Feb 2014 23:00:00 +0100
-Subject: [Buildroot] [PATCH v7 3/4] systemd: bump to v207.
-In-Reply-To: <1391779295-19140-4-git-send-email-eric.le.bihan.dev@free.fr>
+Date: Fri, 7 Feb 2014 23:04:22 +0100
+Subject: [Buildroot] [PATCH v7 4/4] manual: update /dev management
+	section.
+In-Reply-To: <CAAXf6LXEPmPs5ZxK_wc16wLF_g7GNqBdvWPGZNsQuJFNSYiaAw@mail.gmail.com>
 References: <1391779295-19140-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1391779295-19140-4-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <CAHXCMM+rLYDjzBcixCHhXeu0A3jFMBxEEsGRaD-0D2KnLe8GyA@mail.gmail.com>
+ <1391779295-19140-5-git-send-email-eric.le.bihan.dev@free.fr>
+ <CAAXf6LXEPmPs5ZxK_wc16wLF_g7GNqBdvWPGZNsQuJFNSYiaAw@mail.gmail.com>
+Message-ID: <CAHXCMM+T3EE-EfuXKqB0GGOtFoS1ZUB-J3oZiSL1JS+tLiUm7w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Eric,
+On Fri, Feb 7, 2014 at 9:26 PM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+> On Fri, Feb 7, 2014 at 2:21 PM, Eric Le Bihan <eric.le.bihan.dev@free.fr> wrote:
+>> This patch updates the /dev management section in the manual with information
+>> about eudev, which replaces udev.
+>>
+>> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+>> ---
+>>  docs/manual/configure.txt |   20 +++++++++++---------
+>>  1 file changed, 11 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
+>> index 89df3d9..9b8135a 100644
+>> --- a/docs/manual/configure.txt
+>> +++ b/docs/manual/configure.txt
+>> @@ -216,7 +216,7 @@ x86_64 target, you have to generate a cross-compilation toolchain with
+>>  Buildroot or crosstool-NG.
+>>
+>>  If you want to generate a custom toolchain for your project, that can
+>> -be used as an external toolchain in Buildroot, our recommandation is
+>> +be used as an external toolchain in Buildroot, our recommendation is
+>>  definitely to build it with http://crosstool-ng.org[crosstool-NG]. We
+>>  recommend to build the toolchain separately from Buildroot, and then
+>>  _import_ it in Buildroot using the external toolchain backend.
+>> @@ -310,22 +310,24 @@ different solutions to handle the +/dev+ directory :
+>>     about +mdev+ and the syntax of its configuration file, see
+>>     http://git.busybox.net/busybox/tree/docs/mdev.txt.
+>>
+>> - * The fourth solution is *Dynamic using udev*. This method also
+>> + * The fourth solution is *Dynamic using eudev*. This method also
+>>     relies on the _devtmpfs_ virtual filesystem detailed above, but
+>> -   adds the +udev+ userspace daemon on top of it. +udev+ is a daemon
+>> +   adds the +eudev+ userspace daemon on top of it. +eudev+ is a daemon
+>>     that runs in the background, and gets called by the kernel when a
+>>     device gets added or removed from the system. It is a more
+>> -   heavyweight solution than +mdev+, but provides higher flexibility
+>> -   and is sometimes mandatory for some system components (systemd for
+>> -   example). +udev+ is the mechanism used in most desktop Linux
+>> -   distributions. For more details about +udev+, see
+>> -   http://en.wikipedia.org/wiki/Udev.
+>> +   heavyweight solution than +mdev+, but provides higher flexibility.
+>> +   +eudev+ is a standalone version of +udev+, the original userspace
+>> +   daemon used in most desktop Linux distributions, which is now part
+>> +   of Systemd. For more details, see http://en.wikipedia.org/wiki/Udev.
+>>
+>> -The Buildroot developers recommandation is to start with the *Dynamic
+>> +The Buildroot developers recommendation is to start with the *Dynamic
+>>  using devtmpfs only* solution, until you have the need for userspace
+>>  to be notified when devices are added/removed, or if firmwares are
+>>  needed, in which case *Dynamic using mdev* is usually a good solution.
+>>
+>> +Note that if +systemd+ is chosen as init system, /dev management will
+>> +be performed by the +udev+ program provided by +systemd+.
+>> +
+>>  init system
+>>  ~~~~~~~~~~~
+>>
+>
+> Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-On Fri, Feb 7, 2014 at 2:21 PM, Eric Le Bihan <eric.le.bihan.dev@free.fr> wrote:
-
-[...]
-
-> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-> index 500e623..e3ea433 100644
-> --- a/package/systemd/Config.in
-> +++ b/package/systemd/Config.in
-> @@ -1,11 +1,21 @@
->  config BR2_PACKAGE_SYSTEMD
->         bool "systemd"
-> -       depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
-> +       depends on BR2_INIT_SYSTEMD
-> +       depends on !BR2_avr32 # no epoll_create1
-> +       depends on BR2_LARGEFILE # util-linux
-> +       depends on BR2_USE_WCHAR # util-linux
->         depends on BR2_INET_IPV6
-> +       depends on !BR2_PREFER_STATIC_LIB # kmod
->         depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
->         depends on BR2_USE_MMU # dbus
-> +       select BR2_PACKAGE_HAS_UDEV
->         select BR2_PACKAGE_DBUS
->         select BR2_PACKAGE_LIBCAP
-> +       select BR2_PACKAGE_UTIL_LINUX
-> +       select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-> +       select BR2_PACKAGE_KMOD
-> +       select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # kmod-tools
-> +       select BR2_PACKAGE_KMOD_TOOLS
->         help
->           systemd is a system and service manager for Linux, compatible with
->           SysV and LSB init scripts. systemd provides aggressive parallelization
-> @@ -16,9 +26,36 @@ config BR2_PACKAGE_SYSTEMD
->           elaborate transactional dependency-based service control logic.
->           It can work as a drop-in replacement for sysvinit.
->
-> +         Systemd requires a Linux kernel >= 3.0, with inotify, devtmpfs,
-> +         tmpfs vfs and tmpfs POSIX ACL enabled.
-
-Linux >= 3.0, really? IIRC systemd requires devtmpfs (available for a long
-time), and cgroup which has been available since linux-2.6.36 (though the
-patch to make them available on older kernel is easy to backport on older
-kernel).
-
-> +
-> +         Systemd also provides udev, the userspace device daemon.
-> +
-> +         The selection of other packages will enable some features:
-> +
-> +         - libglib2 package will add support for gudev.
-> +         - acl package will add support for multi-seat.
-> +
->           http://freedesktop.org/wiki/Software/systemd
->
-> -comment "systemd needs eudev /dev management and a toolchain w/ IPv6, threads"
-> -       depends on BR2_USE_MMU
-> -       depends on !BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV || !BR2_INET_IPV6 || \\
-> -               !BR2_TOOLCHAIN_HAS_THREADS
-> +if BR2_PACKAGE_SYSTEMD
-> +
-> +config BR2_PACKAGE_SYSTEMD_ALL_EXTRAS
-> +       bool "enable all extras"
-> +       select BR2_PACKAGE_XZ
-> +       select BR2_PACKAGE_LIBGCRYPT
-> +       help
-> +         Enable extra features for Systemd: journal compression and
-> +         signing.
-> +
-> +config BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY
-> +       bool "HTTP server for journal events"
-> +       select BR2_PACKAGE_LIBMICROHTTPD
-> +       help
-> +         systemd-journal-gatewayd serves journal events over the
-> +         network. Clients must connect using HTTP. The server
-> +         listens on port 19531 by default.
-> +
-> +         http://www.freedesktop.org/software/systemd/man/systemd-journal-gatewayd.service.html
-> +
-> +endif
-
-[...]
-
-> diff --git a/system/Config.in b/system/Config.in
-> index 34726b0..30d8efe 100644
-> --- a/system/Config.in
-> +++ b/system/Config.in
-> @@ -87,20 +87,19 @@ config BR2_INIT_SYSV
->
->  config BR2_INIT_SYSTEMD
->         bool "systemd"
-> +       depends on !BR2_avr32 # no epoll_create1
-> +       depends on BR2_TOOLCHAIN_USES_GLIBC
->         depends on BR2_LARGEFILE
->         depends on BR2_USE_WCHAR
->         depends on BR2_INET_IPV6
-> -       depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
->         depends on BR2_TOOLCHAIN_HAS_THREADS
-> +       depends on BR2_TOOLCHAIN_HAS_SSP
->         depends on BR2_USE_MMU
-> -       select BR2_PACKAGE_DBUS
-> +       depends on !BR2_PREFER_STATIC_LIB
->         select BR2_PACKAGE_SYSTEMD
-
-How does this play with kconfig?
-Does not kconfig complain about some circular dependencies here, because
-you have BR2_INIT_SYSTEMD selecting BR2_PACAKGE_SYSTEMD, while
-BR2_PACKAGE_SYSTEMD depends on BR2_INIT_SYSTEMD?
-
->
-> -comment 'systemd needs eudev /dev management and a toolchain w/ largefile, wchar, IPv6, threads'
-> -       depends on BR2_USE_MMU
-> -       depends on !(BR2_LARGEFILE && BR2_USE_WCHAR && \
-> -                    BR2_INET_IPV6 && BR2_TOOLCHAIN_HAS_THREADS && \
-> -                    BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV)
-> +comment 'systemd needs an (e)glibc toolchain'
-> +       depends on !BR2_TOOLCHAIN_USES_GLIBC
->
->  config BR2_INIT_NONE
->         bool "None"
-> @@ -108,7 +107,7 @@ config BR2_INIT_NONE
->  endchoice
->
->  choice
-> -       prompt "/dev management"
-> +       prompt "/dev management" if !BR2_INIT_SYSTEMD
->         default BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS
->
->  config BR2_ROOTFS_DEVICE_CREATION_STATIC
-> @@ -135,6 +134,9 @@ comment "eudev needs a toolchain w/ largefile, wchar, dynamic library"
->
->  endchoice
->
-> +comment "/dev management using udev (from systemd)"
-> +       depends on BR2_INIT_SYSTEMD
-> +
->  config BR2_ROOTFS_DEVICE_TABLE
->         string "Path to the permission tables"
->         default "system/device_table.txt"
-> --
-> 1.7.9.5
->
+Acked-by: Samuel Martin <s.martin49@gmail.com>
 
 Regards,
 
