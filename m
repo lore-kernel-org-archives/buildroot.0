@@ -1,44 +1,55 @@
-From: Justin Maggard <jmaggard10@gmail.com>
-Date: Thu, 6 Feb 2014 17:54:18 -0800
-Subject: [Buildroot] Broken pread() on ARM
-In-Reply-To: <87siry2e4r.fsf@dell.be.48ers.dk>
-References: <CAKgsxVRjJoJfk1UkXA4kMnt+TxtSfHgduyPjeF8gmrZTxFOvGw@mail.gmail.com>
- <CAKgsxVSJAW73vXdkKQFLZOYp3qzZm9qwF5+p0NUtUUSnzsFZtQ@mail.gmail.com>
- <87siry2e4r.fsf@dell.be.48ers.dk>
-Message-ID: <CAKgsxVTJ+eYtOPxqe0CfxY+zfB8jNvCkJE8qD-tvQ42+VUZ=0Q@mail.gmail.com>
+From: Anders Darander <anders@chargestorm.se>
+Date: Fri, 7 Feb 2014 06:59:57 +0100
+Subject: [Buildroot] [PATCH v3 4/4] beaglebone: change to zImage
+In-Reply-To: <CALq67GBCrOGh_yxzjqcVXtUzoox=AEJaYJL27_UObB8qVMNyow@mail.gmail.com>
+References: <1391717684-4244-1-git-send-email-anders@chargestorm.se>
+ <1391717684-4244-5-git-send-email-anders@chargestorm.se>
+ <CALq67GBCrOGh_yxzjqcVXtUzoox=AEJaYJL27_UObB8qVMNyow@mail.gmail.com>
+Message-ID: <046952e3-d76e-400b-916b-a8fbd069a03b@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Feb 4, 2014 at 11:49 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Justin" == Justin Maggard <jmaggard10@gmail.com> writes:
->
-> Hi,
->
->  > Okay, it looks like some of the pread/pwrite changes that have made
->  > their way into the uClibc 0.9.33 branch fail to consider some
->  > architectures.  I have made a rather odd-looking change locally that
->  > makes it work for me on my ARM platform, which uses _syscall6() for
->  > pread() and pread64() if __UCLIBC_TRUNCATE64_HAS_4_ARGS__ is defined.
->  > Would that be worth sending to the list, or would it be better to fix
->  > it some other way?
->
-> The best approach would be to get it fixed in uClibc git (and preferably
-> to get them to finally release 0.9.33.3).
->
-> This particular issue also fixed on the uClibc master branch (E.G. what
-> should become 0.9.34) - But when I had a look at it, it didn't seem
-> trivial to backport.
->
+Hi, 
 
-Thanks for your answer.  A workable backport doesn't look all that
-difficult -- just a bit ugly.  I submitted a kinda-sort backport at
-http://lists.uclibc.org/pipermail/uclibc/2014-February/048220.html .
-But I can't argue with just reverting those patches in the next
-busybox.  I never had a problem with the old pread/pwrite emulation in
-the first place.  Hopefully uClibc 0.9.33.3 doesn't get released with
-this problem though.
+On 6 February 2014 23:05:39 CET, Ryan Barnett <ryanbarnett3@gmail.com> wrote:
+>Anders, All,
+>
+>On Thu, Feb 6, 2014 at 9:14 PM, Anders Darander <anders@chargestorm.se>
+>wrote:
+>> The default U-Boot configuration is now to use a zImage instead of
+>uImage.
+>>
+>> Signed-off-by: Anders Darander <anders@chargestorm.se>
+>> ---
+>>  configs/beaglebone_defconfig | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/configs/beaglebone_defconfig
+>b/configs/beaglebone_defconfig
+>> index 6fa8226..062d711 100644
+>> --- a/configs/beaglebone_defconfig
+>> +++ b/configs/beaglebone_defconfig
+>> @@ -32,5 +32,6 @@
+>BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.ti.com/ti-linux-kernel/ti-linux-kern
+>> 
+>BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="a4daf45088f752ed6b33239026518fc3d1bce2bc"
+>>  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>> 
+>BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/beaglebone/linux-3.12.config"
+>> +BR2_LINUX_KERNEL_ZIMAGE=y
+>
+>I would suggest merging this change with your previous patch -
+>"beaglebone: update to latest U-Boot" - because the upgrading of
+>u-boot is what is causing the change to zImage.
 
--Justin
+What do other dev's think about this? It doesn't really matter to me if I squash then or not. 
+
+My reasoning was that of you kept the old U-Boot environment, the new U-Boot works with a uImage. That's basically why I kept it as separate patches. 
+
+Cheers, 
+Anders 
+-- 
+ChargeStorm AB / eStorm 
