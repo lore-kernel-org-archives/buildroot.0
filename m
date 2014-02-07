@@ -1,133 +1,102 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 7 Feb 2014 21:33:26 +0100
-Subject: [Buildroot] [pkg-perl infra V5 2/8] pkg-perl: new infrastructure
-In-Reply-To: <1391763337-30660-3-git-send-email-francois.perrad@gadz.org>
-References: <1391763337-30660-1-git-send-email-francois.perrad@gadz.org>
- <1391763337-30660-3-git-send-email-francois.perrad@gadz.org>
-Message-ID: <CAAXf6LUHf6TPAc00-Kd35qUnkRK6q3Fu3Aa07rqWkc7CJ7Qfzw@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 07 Feb 2014 21:34:34 +0100
+Subject: [Buildroot] [PATCH v7 0/4] udev is now provided by systemd or
+ eudev
+In-Reply-To: <1391779295-19140-1-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1391779295-19140-1-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <52F5435A.3080700@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Francois,
+On 07/02/14 14:21, Eric Le Bihan wrote:
+> This series converts udev to a virtual package, either provided by systemd or
+> eudev.
+> 
+> Starting with version 183, udev has been merged into systemd. This forces the
+> use of systemd as the init system if /dev is to be dynamically managed by
+> udev. eudev is a fork of udev, maintained by Gentoo, but isolated from
+> systemd, so it can be used with any init system.
+> 
+> Systemd has been bumped to v207 and a new eudev package has been added.
+> Version 1.3 of eudev is in sync with systemd v207.
+> 
+> The bump of systemd to v207 also introduces new options, like the activation
+> of the journal gateway.
+> 
+> In the end:
+> 
+>   - if systemd is selected as init system, the /dev management will handled by
+>     udev. No other choice possible.
+>   - if busybox or SysV is chosen, the user can choose to manage /dev
+>     statically, or dynamically using mdev or eudev.
 
-On Fri, Feb 7, 2014 at 9:55 AM, Francois Perrad <fperrad@gmail.com> wrote:
->
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  Config.in           |   10 +++
->  package/Makefile.in |    4 +-
->  package/pkg-perl.mk |  198 +++++++++++++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 211 insertions(+), 1 deletion(-)
->  create mode 100644 package/pkg-perl.mk
->
-> diff --git a/Config.in b/Config.in
-> index 7ec7c2a..678fe8d 100644
-> --- a/Config.in
-> +++ b/Config.in
-> @@ -225,6 +225,16 @@ config BR2_LUAROCKS_MIRROR
->
->           See http://luarocks.org
->
-> +config BR2_CPAN_MIRROR
-> +       string "CPAN mirror"
-> +       default "http://search.cpan.org/CPAN"
-> +       help
-> +         CPAN has multiple software mirrors scattered around the world.
-> +         This option allows you to select a mirror.
-> +
-> +         The list of mirrors is available at:
-> +         http://search.cpan.org/mirror
-> +
+ Hi Eric,
 
-For users not familiar with Perl, this option in a general buildroot
-menu is confusing: "What the heck is CPAN?".
-I would suggest to add a reference to Perl here, for example in the
-title: "CPAN mirror (perl packages)"
-and in the help text: "CPAN (Comprehensive Perl Archive Network) is a
-repository of perl packages. It has multiple ... "
+ I'm very happy with this patch series, it really cleans things up a lot.
+I first had some reservations about how the choices were organised in the
+menus, but after trying out a few things it turns out to work pretty well.
+
+ I do agree with the comments Thomas has made, though. However, I
+wouldn't want to stop this series to go into 2014.02-rc1, so I propose
+that Peter still merges it for the release and that these small things
+are fixed in follow-up patches.
+
+ I have one more remark about the way the udev virtual package is
+implemented. We found out for the opengl packages that there is a better
+way to do it, something like:
+
+udev/Config.in:
+
+config BR2_PACKAGE_HAS_UDEV
+        bool
+
+config BR2_PACKAGE_PROVIDES_UDEV
+        depends on BR2_PACKAGE_HAS_UDEV
+        string
 
 
->  endmenu
->
->  config BR2_JLEVEL
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index d0b1cfd..41f73cb 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -206,7 +206,8 @@ HOST_PATH=$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(PATH)
->  HOSTCC_VERSION:=$(shell $(HOSTCC_NOCCACHE) --version | \
->         sed -n 's/^.* \([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)[ ]*.*$$/\1\2\3/p')
->
-> -HOST_PERL5LIB = $(HOST_DIR)/usr/lib/perl
-> +HOST_PERL_ARCHNAME := $(shell perl -MConfig -e "print Config->{archname}")
-> +HOST_PERL5LIB = $(HOST_DIR)/usr/lib/perl5/$(HOST_PERL_ARCHNAME):$(HOST_DIR)/usr/lib/perl5
->
->  TARGET_CONFIGURE_OPTS=PATH=$(TARGET_PATH) \
->                 AR="$(TARGET_AR)" \
-> @@ -376,4 +377,5 @@ include package/pkg-autotools.mk
->  include package/pkg-cmake.mk
->  include package/pkg-luarocks.mk
->  include package/pkg-python.mk
-> +include package/pkg-perl.mk
->  include package/pkg-generic.mk
-> diff --git a/package/pkg-perl.mk b/package/pkg-perl.mk
-> new file mode 100644
-> index 0000000..bf9fddf
-> --- /dev/null
-> +++ b/package/pkg-perl.mk
-> @@ -0,0 +1,198 @@
-> +################################################################################
-> +# Perl package infrastructure
-> +#
-> +# This file implements an infrastructure that eases development of
-> +# package .mk files for Perl packages.
-> +#
-> +# See the Buildroot documentation for details on the usage of this
-> +# infrastructure
-> +#
-> +# In terms of implementation, this perl infrastructure requires
-> +# the .mk file to only specify metadata information about the
-> +# package: name, version, download URL, etc.
-> +#
-> +# We still allow the package .mk file to override what the different
-> +# steps are doing, if needed. For example, if <PKG>_BUILD_CMDS is
-> +# already defined, it is used as the list of commands to perform to
-> +# build the package, instead of the default perl behaviour. The
-> +# package can also define some post operation hooks.
-> +#
-> +################################################################################
-> +
-> +PKG_PERL_ARCHNAME      = $(ARCH)-linux
-> +
-> +################################################################################
-> +# inner-perl-package -- defines how the configuration, compilation and
-> +# installation of a perl package should be done, implements a
-> +# few hooks to tune the build process for perl specifities and
-> +# calls the generic package infrastructure to generate the necessary
-> +# make targets
-> +#
-> +#  argument 1 is the lowercase package name
-> +#  argument 2 is the uppercase package name, including an HOST_ prefix
-> +#             for host packages
-> +#  argument 3 is the uppercase package name, without the HOST_ prefix
-> +#             for host packages
-> +#  argument 4 is the type (target or host)
-> +################################################################################
-> +
-> +define inner-perl-package
-> +
-> +$(2)_CONF_OPT                  ?=
-> +$(2)_BUILD_OPT                 ?=
-> +$(2)_INSTALL_OPT               ?=
-> +$(2)_INSTALL_TARGET_OPT                ?=
+udev/udev.mk:
 
-The indentation here is a bit odd. In fact it's not needed to align
-here, so I'd suggest to remove the extraneous spaces...
+UDEV_SRC =
+UDEV_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_UDEV))
 
-[..]
+ifeq ($(UDEV_DEPENDENCIES),)
+define UDEV_CONFIGURE_CMDS
+        echo "No Udev implementation selected. Configuration error."
+        exit 1
+endef
+endif
 
-Best regards,
-Thomas
+
+eudev/Config.in:
+
+...
+if BR2_PACKAGE_EUDEV
+config BR2_PACKAGE_PROVIDES_UDEV
+	default "eudev"
+endif
+
+
+
+ That moves all the provider logic to the provider itself, which for
+instance makes it possible for BR2_EXTERNAL to provide an alternative
+udev implementation (e.g. a different udev version, which could be _very_
+relevant).
+
+
+ I repeat, though: this can be done as a follow-up patch.
+
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
