@@ -1,34 +1,44 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  7 Feb 2014 12:55:56 +0000 (UTC)
-Subject: [Buildroot] [Bug 5774] Not able to build ALSA-Utils for static build
-In-Reply-To: <bug-5774-163@https.bugs.busybox.net/>
-References: <bug-5774-163@https.bugs.busybox.net/>
-Message-ID: <20140207125556.AA4249C8B6@busybox.osuosl.org>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Fri, 7 Feb 2014 13:57:24 +0100
+Subject: [Buildroot] [PATCH v11 2/8] package: add toolchain dependency
+	to every target package
+In-Reply-To: <1389348368-2509-3-git-send-email-fabio.porcedda@gmail.com>
+References: <1389348368-2509-1-git-send-email-fabio.porcedda@gmail.com>
+ <1389348368-2509-3-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <CAHkwnC-9nzZE1_w95wr_LuCWfyaTgie-P1=Gu0jHH69TKx0umA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5774
+On Fri, Jan 10, 2014 at 11:06 AM, Fabio Porcedda
+<fabio.porcedda@gmail.com> wrote:
+<snip>
+> -
+> -$(2)_DEPENDENCIES ?= $(filter-out $(1),$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
+> +# When a target package is a toolchain dependency set this variable to
+> +# 'NO' so the 'toolchain' dependency is not added to prevent a circular
+> +# dependency
+> +$(2)_ADD_TOOLCHAIN_DEPENDENCY  ?= YES
+>
+> +$(2)_DEPENDENCIES ?= $(filter-out  host-toolchain $(1),\
+> +       $(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
+> +ifeq ($(5),target)
 
---- Comment #1 from Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> 2014-02-07 12:55:56 UTC ---
-Hi, 
+This line should be changed to:
 
-Could you provide a config file that exhibits the problem?
+ifeq ($(4),target)
 
-FYI, a similar problem was reported on alsa-lib on the alsa mailing list a
-while back. A patch was then added to alsa-lib upstream to add --with-dl /
-without-dl switches to the configure script:
-http://www.spinics.net/lists/alsa-devel/msg06454.html
+After the recently merged commit 26aef889f1df32d5a15cd70f6b1e316ebb830cb7
+(infra: remove unused 4th parameter to package infrastructures (pkgparentdir))
+the $(4) must be used instead of $(5).
 
-In any case, the patch attached to this bug report is not ok: it would remove
--ldl unconditionally, even if shared libraries were requested.
+Do you prefer that i send a fixed patch series or  i send a new commit
+to fix that?
+Which solution do you prefer?
+If you prefer i can send a new version today.
+I just don't want to delay anymore the merge of this patch series.
 
-Thanks,
-Thomas
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Best regards
+Fabio Porcedda
