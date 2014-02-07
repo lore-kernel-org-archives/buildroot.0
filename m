@@ -1,10 +1,10 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri, 7 Feb 2014 23:20:28 +0100
-Subject: [Buildroot] [PATCH 3/4] samba: convert to choice package
-In-Reply-To: <1391806354-32698-4-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri, 7 Feb 2014 23:29:38 +0100
+Subject: [Buildroot] [PATCH 4/4] samba4: new package
+In-Reply-To: <1391806354-32698-5-git-send-email-gustavo@zacarias.com.ar>
 References: <1391806354-32698-1-git-send-email-gustavo@zacarias.com.ar>
- <1391806354-32698-4-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <CAHXCMMJWZ_9zuR0npRzv=uE2nVdUAGZ7uF3vv7B6rBvmQo7PyQ@mail.gmail.com>
+ <1391806354-32698-5-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <CAHXCMM+20-NKLye=6rhg1p2toLjSsY-KkOWu+fQTUVucwJ8UPw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,76 +13,77 @@ To: buildroot@busybox.net
 
 Hi Gustavo,
 
+It would be great if you could repeat here some of the explanations about samba4
+given in the cover letter, so they will appear in the commit log.
+
 On Fri, Feb 7, 2014 at 9:52 PM, Gustavo Zacarias
 <gustavo@zacarias.com.ar> wrote:
-
-[...]
-
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/samba/Config.in                            |  19 ++++
+>  package/samba/samba4/S91smb                        |  56 +++++++++++
+>  package/samba/samba4/arm-cache.txt                 |  65 ++++++++++++
+>  package/samba/samba4/powerpc-cache.txt             |  65 ++++++++++++
+>  ...-0001-build-don-t-execute-tests-summary.c.patch |  67 +++++++++++++
+>  ...ld-don-t-execute-statfs-and-f_fsid-checks.patch |  31 ++++++
+>  ...003-build-find-FILE_OFFSET_BITS-via-array.patch |  54 ++++++++++
+>  ...uild-allow-some-python-variable-overrides.patch |  45 +++++++++
+>  ...amba4-0005-builtin-heimdal-external-tools.patch |  42 ++++++++
+>  package/samba/samba4/samba4.mk                     | 111 +++++++++++++++++++++
+>  10 files changed, 555 insertions(+)
+>  create mode 100644 package/samba/samba4/S91smb
+>  create mode 100644 package/samba/samba4/arm-cache.txt
+>  create mode 100644 package/samba/samba4/powerpc-cache.txt
+>  create mode 100644 package/samba/samba4/samba4-0001-build-don-t-execute-tests-summary.c.patch
+>  create mode 100644 package/samba/samba4/samba4-0002-build-don-t-execute-statfs-and-f_fsid-checks.patch
+>  create mode 100644 package/samba/samba4/samba4-0003-build-find-FILE_OFFSET_BITS-via-array.patch
+>  create mode 100644 package/samba/samba4/samba4-0004-build-allow-some-python-variable-overrides.patch
+>  create mode 100644 package/samba/samba4/samba4-0005-builtin-heimdal-external-tools.patch
+>  create mode 100644 package/samba/samba4/samba4.mk
+>
 > diff --git a/package/samba/Config.in b/package/samba/Config.in
-> index 1469075..d11401f 100644
+> index d11401f..e037dd9 100644
 > --- a/package/samba/Config.in
 > +++ b/package/samba/Config.in
-> @@ -1,270 +1,32 @@
-> +comment "samba needs a toolchain w/ threads"
-> +       depends on BR2_USE_MMU
-> +       depends on !BR2_TOOLCHAIN_HAS_THREADS
-> +
->  config BR2_PACKAGE_SAMBA
->         bool "samba"
->         depends on BR2_TOOLCHAIN_HAS_THREADS
->         depends on BR2_USE_MMU # fork()
-> -       select BR2_PACKAGE_POPT
+> @@ -25,8 +25,27 @@ choice
 >         help
-> -         Provides print services to all manner of SMB/CIFS clients,
-> -         including the numerous versions of Microsoft Windows
-> -         operating systems.
-> -
-> -         http://www.samba.org/
-> -
-> -         NOTE: A complete Samba install takes over 50MB of space,
-> -               so choose only the components you need.
-> -
-> -comment "samba needs a toolchain w/ threads"
-> -       depends on BR2_USE_MMU
-> -       depends on !BR2_TOOLCHAIN_HAS_THREADS
-> +         Provides secure, stable and fast file and print services
-> +         for all clients using the SMB/CIFS protocol, such as all versions
-> +         of DOS and Windows, OS/2, Linux and many others.
+>           The well-tested legacy branch.
 >
->  if BR2_PACKAGE_SAMBA
->
-
-[...]
-
-> +choice
-> +       prompt "Samba version"
-> +       default BR2_PACKAGE_SAMBA3
->         help
-> -         Tool for executing client side MS-RPC functions using RPC
-> -         calls from a UNIX workstation.
-> +         Select the desired samba version.
->
-
-[...]
-
-> +       config BR2_PACKAGE_SAMBA3
-> +       bool "3.6.x"
+> +       config BR2_PACKAGE_SAMBA4
+> +       bool "4.1.x"
 
 Indentation is weird here, no?
 
+> +       depends on BR2_INET_IPV6
+> +       depends on BR2_USE_WCHAR # e2fsprogs
+> +       depends on BR2_LARGEFILE
+
+Does not samba4 depend on !BR2_PREFER_STATIC_LIB too?
+Last time I try to build/link statically a waf project (libtalloc
+which is under the
+samba umbrella IIRC), it was impossible because of waf build-system. :-/
+
+> +       # Supported architectures only limited by the cached answers
+> +       depends on BR2_arm || BR2_powerpc
+> +       select BR2_PACKAGE_E2FSPROGS
 > +       select BR2_PACKAGE_POPT
->         help
-> -         Include support for gamin
-> +         The well-tested legacy branch.
->
-> -comment "support gamin - disabled (requires gamin)"
-> -       depends on !BR2_PACKAGE_GAMIN
-> -
-> -endmenu
-> +endchoice
+> +       select BR2_PACKAGE_PYTHON
+> +       select BR2_PACKAGE_ZLIB
+> +       help
+> +         The new branch with support for the SMB3 protocol.
+> +
+>  endchoice
 >
 >  endif
+>
+>  source "package/samba/samba3/Config.in"
+> +
+> +comment "samba4 needs a toolchain w/ IPv6, wchar, largfile, threads"
+> +       depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE || \
+> +               !BR2_USE_WCHAR || !BR2_INET_IPV6
+> +       depends on BR2_USE_MMU
 
+[...]
 
 Regards,
 
