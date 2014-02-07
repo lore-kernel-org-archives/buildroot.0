@@ -1,39 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Feb 2014 09:00:58 +0100
-Subject: [Buildroot] [PATCH 1/2] dmraid: disable on ARC arch
-In-Reply-To: <1391727417-12293-1-git-send-email-rjbarnet@rockwellcollins.com>
-References: <1391727417-12293-1-git-send-email-rjbarnet@rockwellcollins.com>
-Message-ID: <20140207090058.75ced0b6@skate>
+Date: Fri, 7 Feb 2014 09:01:59 +0100
+Subject: [Buildroot] [PATCH] zedboard: add Avnet Zedboard support.
+In-Reply-To: <CAEBucnCGPO1aHe8o0HctLgW2saX3havxJBSf42A4hO2tSJk_+A@mail.gmail.com>
+References: <1391724285-23135-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <878utnnb8s.fsf@dell.be.48ers.dk>
+ <CAEBucnCGPO1aHe8o0HctLgW2saX3havxJBSf42A4hO2tSJk_+A@mail.gmail.com>
+Message-ID: <20140207090159.41b96ed3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ryan Barnett,
+Dear Spenser Gilliland,
 
-On Thu,  6 Feb 2014 23:56:56 +0100, Ryan Barnett wrote:
+On Thu, 6 Feb 2014 16:28:03 -0600, Spenser Gilliland wrote:
 
-> diff --git a/package/dmraid/Config.in b/package/dmraid/Config.in
-> index 028b46c..2f0c5b4 100644
-> --- a/package/dmraid/Config.in
-> +++ b/package/dmraid/Config.in
-> @@ -2,6 +2,7 @@ config BR2_PACKAGE_DMRAID
->  	bool "dmraid"
->  	depends on BR2_LARGEFILE
->  	depends on BR2_USE_MMU # lvm2
-> +	depends on !BR2_arc
+> > What about u-boot?
+> 
+> Building u-boot for the zed board is not difficult the problem is the
+> convoluted wrapper which requires the XIlinx tools in order to install
+> it.  I can add directions to the readme.
+> 
+> The basic process is.
+> 
+> source <path/to/xilinx/settings.sh>
+> cat <<EOF > boot.bif
+> {
+>    [bootloader]<path/to/fsbl.elf>
+>    <path/to/system.bit>
+>    <path/to/uboot.elf>
+> }
+> bootgen -image boot.bif -o i BOOT.BIN
+> 
+> This file then needs to be placed on the SD Card.
 
-I believe it would be good to have a comment above this line that says
-why it's disabled. Maybe something like:
-
-	# causes an internal compiler error on ARC
-
-Ditto for the gpsd issue on Microblaze.
-
-And maybe Cc the ARC and Microblaze "maintainers" : Anton Kolesov
-<Anton.Kolesov@synopsys.com> for ARC, and Spenser Gilliland
-<spenser@gillilanding.com> for Microblaze.
+Since we're building u-boot, I believe it makes sense to indicate in
+the README how to use it. Could you send a followup patch, now that the
+initial board support has been merged?
 
 Thanks!
 
