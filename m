@@ -1,42 +1,43 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 07 Feb 2014 09:20:59 +0100
-Subject: [Buildroot] [PATCH] linux: don't automatically set uevent_helper
- with mdev /dev management
-Message-ID: <769563a34e142e85ec4c.1391761259@argentina>
+From: Johannes Morgenroth <morgenroth@ibr.cs.tu-bs.de>
+Date: Fri, 07 Feb 2014 09:21:31 +0100
+Subject: [Buildroot] SIGSEGV in __pthread_initialize_minimal_internal ()
+In-Reply-To: <52F3F866.5000701@mind.be>
+References: <52F3B2BC.3000904@ibr.cs.tu-bs.de> <52F3F866.5000701@mind.be>
+Message-ID: <52F4978B.8040707@ibr.cs.tu-bs.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When mdev /dev management is chosen in the buildroot configuration, the
-Linux configuration is updated automatically to set option
-CONFIG_UEVENT_HELPER_PATH to "/sbin/mdev". However, the help text of this
-option explicitly recommends not setting this option due to large
-performance impact during boot (experienced first hand by the reporter ?nd
-author).
+Hello Arnout,
 
-The mdev startup script S10mdev already sets the helper during userspace
-boot, which will make sure mdev is working correctly.
+thank you for the response.
 
-Fixes bug #6596: https://bugs.busybox.net/show_bug.cgi?id=6596
+Am 06.02.2014 22:02, schrieb Arnout Vandecappelle:
+>  You're trying to use the cross-compiled binary directly on your host.
+> This may work by accident, but may not work as well. In this particular
+> case, I suspect it may be an issue with kernel headers: the cross-build
+> is using 3.13.x while your host is probably running an earlier kernel.
+>
+>  Try running it under a system qemu so you have the corresponding kernel,
+> or build the toolchain with kernel headers corresponding to your host.
+>
+>  Regards,
+>  Arnout
 
-Reported-by: Andreas Koop <andreas.koop@zf.com>
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+The binary is compiled using and for x86. Thus, starting on the same
+system should work and actually it had worked with older releases (at
+least with 2012.02). I could not test the kernel issue you mentioned
+because the system runs a 3.8 and buildroot only support older or newer
+one. I tried both 3.2 and 3.13, none of them had worked. However, I do
+not understand why a statically linked binary should depend on the
+system kernel it runs on. Also this was never an issue with release 2012.02.
 
----
- linux/linux.mk |  2 --
- 1 files changed, 0 insertions(+), 2 deletions(-)
+Kind regards,
+Johannes Morgenroth
 
-diff --git a/linux/linux.mk b/linux/linux.mk
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -186,8 +186,6 @@ define LINUX_CONFIGURE_CMDS
- 	$(if $(BR2_ROOTFS_DEVICE_CREATION_STATIC),,
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS,$(@D)/.config)
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(@D)/.config))
--	$(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),
--		$(call KCONFIG_SET_OPT,CONFIG_UEVENT_HELPER_PATH,\"/sbin/mdev\",$(@D)/.config))
- 	$(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER,$(@D)/.config))
- 	$(if $(BR2_PACKAGE_KTAP),
+-- 
+Johannes Morgenroth     Institut fuer Betriebssysteme und Rechnerverbund
+Tel.: +49-531-391-3249                           Muehlenpfordtstrasse 23
+Fax.: +49-531-391-5936      TU Braunschweig         D-38106 Braunschweig
