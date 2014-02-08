@@ -1,7 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Sat,  8 Feb 2014 17:04:02 +0100
-Subject: [Buildroot] [PATCH 0/4 v2] BR2_EXTERNAL, O: misc fixes and docs
-Message-ID: <cover.1391875274.git.yann.morin.1998@free.fr>
+Subject: [Buildroot] [PATCH 1/4] manual: $(BR2_EXTERNAL)/{Config.in,
+	external.mk} are mandatory
+In-Reply-To: <cover.1391875274.git.yann.morin.1998@free.fr>
+References: <cover.1391875274.git.yann.morin.1998@free.fr>
+Message-ID: <bcd0434786c4e0a874036a9b49825f62d44291fd.1391875274.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,40 +13,28 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Hello All!
+The manual is a bit vague about whether Config.in and external.mk
+are mandatory or optional.
 
-Here is a small series that fixes use of relative paths in BR2_EXTERNAL
-and documents the limitations in the manual for BR2_EXTERNAL and O.
+Make it explicit in the manual that they are mandatory.
 
+Reported-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ docs/manual/customize-outside-br.txt | 1 +
+ 1 file changed, 1 insertion(+)
 
-Changes v1 -> v2:
-  - don't discourage relative paths, just properly document them  (Thomas,
-    Arnout)
-  - fix overriding BR2_EXTERNAL  (J?r?my)
-  - simplify error message when BR2_EXTERNAL is not found  (Arnout)
-  - document that $(O) is created
-
-
-Regards,
-Yann E. MORIN.
-
-
-----------------------------------------------------------------
-Yann E. MORIN (4):
-      manual: $(BR2_EXTERNAL)/{Config.in,external.mk} are mandatory
-      Makefile: internally use absolute paths to BR2_EXTERNAL
-      manual: switch BR2_EXTERNAL examples to use absolute paths
-      manual: add explanations on limitations about using O=...
-
- Makefile                             |  5 +++++
- docs/manual/common-usage.txt         | 12 +++++++++---
- docs/manual/customize-outside-br.txt | 11 ++++++-----
- 3 files changed, 20 insertions(+), 8 deletions(-)
-
+diff --git a/docs/manual/customize-outside-br.txt b/docs/manual/customize-outside-br.txt
+index 19257e6..585eedf 100644
+--- a/docs/manual/customize-outside-br.txt
++++ b/docs/manual/customize-outside-br.txt
+@@ -83,6 +83,7 @@ Or disable the usage of external definitions:
+    logic. Buildroot automatically includes +BR2_EXTERNAL/Config.in+ to
+    make it appear in the top-level configuration menu, and includes
+    +BR2_EXTERNAL/external.mk+ with the rest of the makefile logic.
++   Providing those two files is mandatory, but they can be empty.
+ +
+ The main usage of this is to store package recipes. The recommended
+    way to do this is to write a +BR2_EXTERNAL/Config.in+ that looks
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.1.2
