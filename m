@@ -1,69 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 8 Feb 2014 22:26:16 +0100
-Subject: [Buildroot] [git commit] apply-patches.sh: make scan_patchdir work
-	recursively
-Message-ID: <20140208212825.A7E559C8B5@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 08 Feb 2014 22:43:50 +0100
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <52F4DEB6.3040703@zacarias.com.ar> (Gustavo Zacarias's message of
+ "Fri, 07 Feb 2014 10:25:10 -0300")
+References: <20140207073009.C5A85100E3A@stock.ovh.net>
+ <20140207135324.4c7cbe3f@skate> <52F4DEB6.3040703@zacarias.com.ar>
+Message-ID: <87txc946w9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=14cdf705c678d1ddb9705ea577a42b6b647f96c7
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-scan_patchdir is called recursively. For this to work properly, the
-variable path which is set to $1 at the very beginning must be local not
-global.
+Hi,
 
-A test case is to set BR2_GLOBAL_PATCH_DIR to 'mypatches' and having the
-following tree in the buildroot root:
+ >> Missing setns() on CodeSourcery toolchain. Since util-linux is really
+ >> needed for many packages, it would be good to find a fix that doesn't
+ >> involve disabling util-linux completely.
+ >> 
+ >> checking for syscall setns... no
+ >> configure: WARNING: Unable to detect syscall setns.
+ >> configure: error: nsenter selected but setns syscall not found
+ >> make: *** [/home/test/test/3/output/build/util-linux-2.23.2/.stamp_configured] Error 1
+ >> 
+ >> Gustavo, an idea?
 
-$ find mypatches/
-mypatches/
-mypatches/busybox
-mypatches/busybox/subdir.patch
-mypatches/busybox/subdir.patch/busybox-0001-abc.patch
-mypatches/busybox/busybox-0002-def.patch
-mypatches/busybox/asubdir.patch
-mypatches/busybox/asubdir.patch/busybox-0003-xyz.patch
+ > Yes, blame commit 9f91d79601da42516752318beecfd080dc05aac9
+ > Before it was an option util-linux decided if it was appropiate to build
+ > it according to setns() being available, now we may be forcing it when
+ > the syscall may simply be unavailable (like this toolchain).
+ > We can do a ton of toolchain kludges or just revert, i'd prefer the
+ > second option since it's not like a super-common command (actually most
+ > distros don't have it yet because it's pretty new for util-linux).
+ > Regards.
 
-When running 'make busybox-dirclean busybox-patch' originally, you'd get:
+Hmm, looking closer at the issue I think I agree. Without the explicit
+option nsenter automatically gets built if possible. Nsenter is very
+small compared to the rest of util-linux (~20KB), and people can always
+remove it in a post-build script if they really care.
 
-    Applying busybox-0003-xyz.patch using patch:
-
-    Applying busybox-0002-def.patch using patch:
-    Error: missing patch file
-    mypatches/busybox/asubdir.patch/busybox-0002-def.patch
-
-While with this fix:
-
-    Applying busybox-0003-xyz.patch using patch:
-
-    Applying busybox-0002-def.patch using patch:
-
-    Applying busybox-0001-abc.patch using patch:
-
-This fixes bug #6434 (https://bugs.busybox.net/show_bug.cgi?id=6434)
-
-Signed-off-by: Daniel Mentz <daniel@exxm.de>
-[Thomas: update commit message with test case]
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- support/scripts/apply-patches.sh |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-index ff72b45..37f2d81 100755
---- a/support/scripts/apply-patches.sh
-+++ b/support/scripts/apply-patches.sh
-@@ -92,7 +92,7 @@ function apply_patch {
- }
- 
- function scan_patchdir {
--    path=$1
-+    local path=$1
-     shift 1
-     patches=${@-*}
- 
+-- 
+Bye, Peter Korsgaard
