@@ -1,44 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 8 Feb 2014 22:51:10 +0100
-Subject: [Buildroot] [git commit] dmraid: disable on ARC arch
-Message-ID: <20140208215953.253639C8FC@busybox.osuosl.org>
+Date: Sat, 8 Feb 2014 22:53:41 +0100
+Subject: [Buildroot] [git commit] gpsd: disable for microblaze arch
+Message-ID: <20140208215953.2C5619C81A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=262a4c0bf7fb64d632ae6d40c22a62380c0af65f
+commit: http://git.buildroot.net/buildroot/commit/?id=d517415bcda380336f4a27bf248cef4d81791c9e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The ARC compiler has an internal failure while compiling this package
-so disable this package for this architecture.
+gpsd will fail on an internal compiler error for the microblaze
+architecture so disabling it on that architecture.
 
 Fixes:
-  http://autobuild.buildroot.net/results/ef6/ef6a0e2d382ae202bb8f0e9fc9f5e48c90119faf
+  http://autobuild.buildroot.org/results/42d/42da870722f24e4202d8265597771a0449e74cfd
 
 [Peter: add comment explaining why]
 Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dmraid/Config.in |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/gpsd/Config.in        |    3 +++
+ package/sconeserver/Config.in |    1 +
+ 2 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/dmraid/Config.in b/package/dmraid/Config.in
-index 028b46c..bfdd89b 100644
---- a/package/dmraid/Config.in
-+++ b/package/dmraid/Config.in
-@@ -2,6 +2,8 @@ config BR2_PACKAGE_DMRAID
- 	bool "dmraid"
- 	depends on BR2_LARGEFILE
- 	depends on BR2_USE_MMU # lvm2
-+	# triggers gcc ice
-+	depends on !BR2_arc
- 	select BR2_PACKAGE_LVM2
- 	help
- 	  dmraid discovers, activates, deactivates and displays properties
-@@ -13,3 +15,4 @@ config BR2_PACKAGE_DMRAID
- comment "dmraid needs a toolchain w/ largefile"
+diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
+index 5954e77..00a8a13 100644
+--- a/package/gpsd/Config.in
++++ b/package/gpsd/Config.in
+@@ -1,12 +1,15 @@
+ comment "gpsd needs a toolchain w/ threads"
  	depends on BR2_USE_MMU
- 	depends on !BR2_LARGEFILE
-+	depends on !BR2_arc
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_microblaze
+ 
+ config BR2_PACKAGE_GPSD
+ 	bool "gpsd"
+ 	# Uses fork()
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	# triggers gcc ice
++	depends on !BR2_microblaze
+ 	help
+ 	  gpsd is a service daemon that monitors one or more GPSes or AIS
+ 	  receivers attached to a host computer through serial or USB ports,
+diff --git a/package/sconeserver/Config.in b/package/sconeserver/Config.in
+index 1dc41d2..ccb9c00 100644
+--- a/package/sconeserver/Config.in
++++ b/package/sconeserver/Config.in
+@@ -67,6 +67,7 @@ config BR2_PACKAGE_SCONESERVER_LOCATION
+ 	bool "location"
+ 	depends on BR2_USE_MMU # gpsd
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # gpsd
++	depends on !BR2_microblaze # gpsd
+ 	select BR2_PACKAGE_GPSD
+ 	help
+ 	  Location module for Sconeserver
