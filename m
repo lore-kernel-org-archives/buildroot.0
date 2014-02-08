@@ -1,30 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 08 Feb 2014 22:19:18 +0100
-Subject: [Buildroot] [PATCH 1/4] manual: $(BR2_EXTERNAL)/{Config.in,
-	external.mk} are mandatory
-In-Reply-To: <bcd0434786c4e0a874036a9b49825f62d44291fd.1391875274.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Sat, 8 Feb 2014 17:04:02 +0100")
-References: <cover.1391875274.git.yann.morin.1998@free.fr>
- <bcd0434786c4e0a874036a9b49825f62d44291fd.1391875274.git.yann.morin.1998@free.fr>
-Message-ID: <8738jt5mll.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 8 Feb 2014 22:09:19 +0100
+Subject: [Buildroot] [git commit] vlc: fix sdl support
+Message-ID: <20140208212129.E19FA9C5AE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=35667caad8630212da6c0b8457a6e3628c9f8bb6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > The manual is a bit vague about whether Config.in and external.mk
- > are mandatory or optional.
+sdl video output module includes xlib headers, so it requires
+xlib_libx11 to be available.
 
- > Make it explicit in the manual that they are mandatory.
+Fixes:
+  http://autobuild.buildroot.org/results/d41/d41d2f36a4384289e300a3cf91d51960df9fab00/build-end.log
 
- > Reported-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[Peter: check for SDL X11 backend instead]
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/vlc/vlc.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index 65aab36..b184de3 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -224,7 +224,7 @@ else
+ VLC_CONF_OPT += --disable-qt
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_SDL),y)
++ifeq ($(BR2_PACKAGE_SDL_X11),y)
+ VLC_CONF_OPT += --enable-sdl
+ VLC_DEPENDENCIES += sdl
+ else
