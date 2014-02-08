@@ -1,41 +1,49 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat,  8 Feb 2014 15:34:55 +0100
-Subject: [Buildroot] [PATCH v1 6/6] vlc: enable altivec support only when
-	appropriate
-In-Reply-To: <1391870095-3738-1-git-send-email-s.martin49@gmail.com>
-References: <1391870095-3738-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1391870095-3738-7-git-send-email-s.martin49@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat,  8 Feb 2014 17:04:02 +0100
+Subject: [Buildroot] [PATCH 0/4 v2] BR2_EXTERNAL, O: misc fixes and docs
+Message-ID: <cover.1391875274.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All PowerPC CPUs do not support altivec instruction set; so enable its
-support only when the sub-architecture support it.
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
----
- package/vlc/vlc.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+Hello All!
 
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 871373e..a0c8513 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -32,6 +32,13 @@ VLC_CONF_OPT += \
- 	--disable-vsxu \
- 	--disable-mtp
- 
-+# Set powerpc altivec appropriately
-+ifeq ($(BR2_powerpc_7400)$(BR2_powerpc_7450)$(BR2_powerpc_970),y)
-+VCL_CONF_OPT += --enable-altivec
-+else
-+VLC_CONF_OPT += --disable-altivec
-+endif
-+
- ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
- VLC_CONF_OPT += --enable-alsa
- VLC_DEPENDENCIES += alsa-lib
+Here is a small series that fixes use of relative paths in BR2_EXTERNAL
+and documents the limitations in the manual for BR2_EXTERNAL and O.
+
+
+Changes v1 -> v2:
+  - don't discourage relative paths, just properly document them  (Thomas,
+    Arnout)
+  - fix overriding BR2_EXTERNAL  (J?r?my)
+  - simplify error message when BR2_EXTERNAL is not found  (Arnout)
+  - document that $(O) is created
+
+
+Regards,
+Yann E. MORIN.
+
+
+----------------------------------------------------------------
+Yann E. MORIN (4):
+      manual: $(BR2_EXTERNAL)/{Config.in,external.mk} are mandatory
+      Makefile: internally use absolute paths to BR2_EXTERNAL
+      manual: switch BR2_EXTERNAL examples to use absolute paths
+      manual: add explanations on limitations about using O=...
+
+ Makefile                             |  5 +++++
+ docs/manual/common-usage.txt         | 12 +++++++++---
+ docs/manual/customize-outside-br.txt | 11 ++++++-----
+ 3 files changed, 20 insertions(+), 8 deletions(-)
+
 -- 
-1.8.5.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
