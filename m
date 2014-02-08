@@ -1,46 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 8 Feb 2014 22:04:16 +0100
-Subject: [Buildroot] [git commit] vlc: fix live555 support
-Message-ID: <20140208212129.CE6789C5AE@busybox.osuosl.org>
+Date: Sat, 8 Feb 2014 22:09:42 +0100
+Subject: [Buildroot] [git commit] vlc: enable altivec support only when
+	appropriate
+Message-ID: <20140208212129.ED7359C8B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=833bc901d633a0cefec51efd32b7967a0877df8a
+commit: http://git.buildroot.net/buildroot/commit/?id=8c2534c50cbd82bcb18dca4f22835a7b461d4083
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-vlc looks for a *.pc file which is not provided by the live555 package.
-So, instead, we explicitly set the LIVE555_CFLAGS and LIVE555_LIBS
-variables.
-
-Fixes:
-  http://autobuild.buildroot.org/results/b59/b5972ecad4e5004dc23a2366066ce45346994f58/build-end.log
+All PowerPC CPUs do not support altivec instruction set; so enable its
+support only when the sub-architecture support it.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/vlc/vlc.mk |    9 +++++++++
- 1 files changed, 9 insertions(+), 0 deletions(-)
+ package/vlc/vlc.mk |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
 
 diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 1027151..feee82d 100644
+index b184de3..2730f07 100644
 --- a/package/vlc/vlc.mk
 +++ b/package/vlc/vlc.mk
-@@ -194,6 +194,15 @@ endif
- ifeq ($(BR2_PACKAGE_LIVE555),y)
- VLC_CONF_OPT += --enable-live555
- VLC_DEPENDENCIES += live555
-+VLC_CONF_ENV = \
-+	LIVE555_CFLAGS="\
-+		-I$(STAGING_DIR)/usr/include/live \
-+		-I$(STAGING_DIR)/usr/include/live/BasicUsageEnvironment \
-+		-I$(STAGING_DIR)/usr/include/live/groupsock \
-+		-I$(STAGING_DIR)/usr/include/live/liveMedia \
-+		-I$(STAGING_DIR)/usr/include/live/UsageEnvironment \
-+		" \
-+	LIVE555_LIBS="-L$(STAGING_DIR)/usr/lib -lliveMedia"
- else
- VLC_CONF_OPT += --disable-live555
- endif
+@@ -32,6 +32,13 @@ VLC_CONF_OPT += \
+ 	--disable-vsxu \
+ 	--disable-mtp
+ 
++# Set powerpc altivec appropriately
++ifeq ($(BR2_powerpc_7400)$(BR2_powerpc_7450)$(BR2_powerpc_970),y)
++VCL_CONF_OPT += --enable-altivec
++else
++VLC_CONF_OPT += --disable-altivec
++endif
++
+ ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
+ VLC_CONF_OPT += --enable-alsa
+ VLC_DEPENDENCIES += alsa-lib
