@@ -1,87 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 8 Feb 2014 23:33:43 +0100
-Subject: [Buildroot] [git commit] ccache: remove deprecated target package
-Message-ID: <20140208224725.64A4B9B985@busybox.osuosl.org>
+Date: Sat, 8 Feb 2014 23:44:48 +0100
+Subject: [Buildroot] [git commit] infra: remove separate definition of
+	DISABLE_DOCUMENTATION
+Message-ID: <20140208224725.7F24C9B985@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=831624c4c45f7bbd08c4edd0d110ad60babd67b0
+commit: http://git.buildroot.net/buildroot/commit/?id=e20df632c4cd717061ae8176a5c34181c671baee
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The ccache target package has been deprecated since 2013.02 and thus can be
-removed in 2014.02. This does not change anything about host ccache (used
-for speeding up builds).
+Since we now always disable documentation on target, there is no need to
+have a separate variable DISABLE_DOCUMENTATION anymore.
 
+Suggested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy         |    8 ++++++++
- package/Config.in        |    1 -
- package/ccache/Config.in |   12 ------------
- package/ccache/ccache.mk |    1 -
- 4 files changed, 8 insertions(+), 14 deletions(-)
+ package/Makefile.in      |   10 ----------
+ package/pkg-autotools.mk |    7 ++++++-
+ 2 files changed, 6 insertions(+), 11 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 893df6d..a417046 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -119,6 +119,14 @@ config BR2_sh3eb
- 	  Due to an inexistent user base and generally poor Linux
- 	  support, the support for the SH3eb architecture was removed.
+diff --git a/package/Makefile.in b/package/Makefile.in
+index a8f5650..9d0e7d6 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -332,16 +332,6 @@ ifneq ($(BR2_LARGEFILE),y)
+ DISABLE_LARGEFILE= --disable-largefile
+ endif
  
-+config BR2_PACKAGE_CCACHE
-+	bool "ccache target package has been removed"
-+	select BR2_LEGACY
-+	help
-+	  The 'ccache' target package has been removed since it has been
-+	  deprecated for more than four buildroot releases.
-+	  Note: using ccache for speeding up builds is still supported.
-+
- config BR2_HAVE_DOCUMENTATION
- 	bool "support for documentation on target has been removed"
- 	select BR2_LEGACY
-diff --git a/package/Config.in b/package/Config.in
-index 2d74cf2..6c3e769 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -85,7 +85,6 @@ source "package/binutils/Config.in"
- source "package/bison/Config.in"
- source "package/bsdiff/Config.in"
- source "package/bustle/Config.in"
--source "package/ccache/Config.in"
- source "package/cvs/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/diffutils/Config.in"
-diff --git a/package/ccache/Config.in b/package/ccache/Config.in
-deleted file mode 100644
-index 28d9468..0000000
---- a/package/ccache/Config.in
-+++ /dev/null
-@@ -1,12 +0,0 @@
--config BR2_PACKAGE_CCACHE
--	bool "ccache"
--	# needs fork()
--	depends on BR2_USE_MMU
--	# We no longer support a toolchain on the target
--	depends on BR2_DEPRECATED_SINCE_2013_02
--	help
--	  ccache is a compiler cache. It speeds up recompilation by
--	  caching previous compilations and detecting when the same
--	  compilation is being done again
+-# The configure option varies, but since unknown options are ignored
+-# we can pass all of them.
+-DISABLE_DOCUMENTATION = \
+-	--disable-gtk-doc \
+-	--disable-doc \
+-	--disable-docs \
+-	--disable-documentation \
+-	--with-xmlto=no \
+-	--with-fop=no
 -
--	  http://ccache.samba.org
-diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
-index 40485d1..c2c9731 100644
---- a/package/ccache/ccache.mk
-+++ b/package/ccache/ccache.mk
-@@ -38,7 +38,6 @@ endef
- HOST_CCACHE_POST_CONFIGURE_HOOKS += \
- 	HOST_CCACHE_PATCH_CONFIGURATION
- 
--$(eval $(autotools-package))
- $(eval $(host-autotools-package))
- 
- ifeq ($(BR2_CCACHE),y)
+ ifeq ($(BR2_INET_IPV6),y)
+ DISABLE_IPV6= --enable-ipv6
+ else
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index cfbdc27..6f52335 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -109,7 +109,12 @@ define $(2)_CONFIGURE_CMDS
+ 		--exec-prefix=/usr \
+ 		--sysconfdir=/etc \
+ 		--program-prefix="" \
+-		$$(DISABLE_DOCUMENTATION) \
++		--disable-gtk-doc \
++		--disable-doc \
++		--disable-docs \
++		--disable-documentation \
++		--with-xmlto=no \
++		--with-fop=no
+ 		$$(DISABLE_NLS) \
+ 		$$(DISABLE_LARGEFILE) \
+ 		$$(DISABLE_IPV6) \
