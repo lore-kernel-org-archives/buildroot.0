@@ -1,10 +1,7 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  8 Feb 2014 17:04:05 +0100
-Subject: [Buildroot] [PATCH 4/4] manual: add explanations on limitations
-	about using O=...
-In-Reply-To: <cover.1391875274.git.yann.morin.1998@free.fr>
-References: <cover.1391875274.git.yann.morin.1998@free.fr>
-Message-ID: <a232af8aeef7d8c4909514620125b1b0dfe7ed72.1391875274.git.yann.morin.1998@free.fr>
+Date: Sat,  8 Feb 2014 17:26:03 +0100
+Subject: [Buildroot] [PATCH 0/3 v2] linux: do not always depend on host-lzop
+Message-ID: <cover.1391876537.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,56 +10,38 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Using a relative path for O=... has limitations, since it is interpreted
-relative to the Buildroot tree, and thus may lead to unexpected results.
+Hello All!
 
-For example, running this:
-    make -C buildroot O=my-O
+Here is a small series that makes Linux not always depend on host-lzop,
+and also cleans up a little bit the linux.mk.
 
-will not create my-O in the current working directory, but as a
-sub-directory of the Buildroot tree, here in buildroot/my-O
 
-Explain this in the manual (as is similarly done for BR2_EXTERNAL).
-Also add a note that $(O) will be created if missing.
+Changes v1 -> v2:
+  - use simpler sed expression  (Peter)
+  - don't use 'define' to define the function  (Arnout)
+  - initrd and initramfs may also require lzo  (Peter)
+  - move qstrip to the initial assignment  (Arnout)
+  - check the linux config file exists  (Peter)
 
-Also change O=.. and -C .. to O=<...> and -C <...> to make it explicit
-this is an ellipse, not a relative path.
 
-Reported-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- docs/manual/common-usage.txt | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+Regards,
+Yann E. MORIN.
 
-diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
-index 1d15c05..5e3d71d 100644
---- a/docs/manual/common-usage.txt
-+++ b/docs/manual/common-usage.txt
-@@ -40,7 +40,13 @@ Or:
-  $ cd /tmp/build; make O=$PWD -C path/to/buildroot
- --------------------
- 
--All the output files will be located under +/tmp/build+.
-+All the output files will be located under +/tmp/build+. If the +O+
-+path does not exist, Buildroot will create it.
-+
-+*Note:* the +O+ path can be either an absolute or a relative path, but if it's
-+passed as a relative path, it is important to note that it is interpreted
-+relative to the main Buildroot source directory, *not* the current working
-+directory.
- 
- When using out-of-tree builds, the Buildroot +.config+ and temporary
- files are also stored in the output directory. This means that you can
-@@ -48,8 +54,8 @@ safely run multiple builds in parallel using the same source tree as
- long as they use unique output directories.
- 
- For ease of use, Buildroot generates a Makefile wrapper in the output
--directory - so after the first run, you no longer need to pass +O=..+
--and +-C ..+, simply run (in the output directory):
-+directory - so after the first run, you no longer need to pass +O=<...>+
-+and +-C <...>+, simply run (in the output directory):
- 
- --------------------
-  $ make <target>
+
+----------------------------------------------------------------
+Yann E. MORIN (3):
+      packages infra: add function to get a Kconfig option
+      linux: only depend on host-lzop if needed
+      linux: check the configuration file exists
+
+ linux/linux.mk       | 15 +++++++++++++--
+ package/pkg-utils.mk |  2 ++
+ 2 files changed, 15 insertions(+), 2 deletions(-)
+
 -- 
-1.8.1.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
