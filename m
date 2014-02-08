@@ -1,41 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 8 Feb 2014 22:02:59 +0100
-Subject: [Buildroot] [git commit] vlc: fix svg support
-Message-ID: <20140208212129.B5E7C9C5AE@busybox.osuosl.org>
+Date: Sat, 8 Feb 2014 22:04:16 +0100
+Subject: [Buildroot] [git commit] vlc: fix live555 support
+Message-ID: <20140208212129.CE6789C5AE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4d58ca1b4833138d67f7eec2a9fd395240c79fab
+commit: http://git.buildroot.net/buildroot/commit/?id=833bc901d633a0cefec51efd32b7967a0877df8a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In vlc, svg support is done using librsvg, not libsvg.
+vlc looks for a *.pc file which is not provided by the live555 package.
+So, instead, we explicitly set the LIVE555_CFLAGS and LIVE555_LIBS
+variables.
 
 Fixes:
-  http://autobuild.buildroot.org/results/344/344af6e756a5f2c1ee515a355ae5b288401c4c71/build-end.log
-  http://autobuild.buildroot.org/results/19f/19f1450ed5453aa666bc7aae2e965ad81e5f845d/build-end.log
+  http://autobuild.buildroot.org/results/b59/b5972ecad4e5004dc23a2366066ce45346994f58/build-end.log
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/vlc/vlc.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/vlc/vlc.mk |    9 +++++++++
+ 1 files changed, 9 insertions(+), 0 deletions(-)
 
 diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index b39c6c7..5c10275 100644
+index 1027151..feee82d 100644
 --- a/package/vlc/vlc.mk
 +++ b/package/vlc/vlc.mk
-@@ -141,9 +141,9 @@ else
- VLC_CONF_OPT += --disable-png
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBSVG),y)
-+ifeq ($(BR2_PACKAGE_LIBRSVG),y)
- VLC_CONF_OPT += --enable-svg
--VLC_DEPENDENCIES += libsvg
-+VLC_DEPENDENCIES += librsvg
+@@ -194,6 +194,15 @@ endif
+ ifeq ($(BR2_PACKAGE_LIVE555),y)
+ VLC_CONF_OPT += --enable-live555
+ VLC_DEPENDENCIES += live555
++VLC_CONF_ENV = \
++	LIVE555_CFLAGS="\
++		-I$(STAGING_DIR)/usr/include/live \
++		-I$(STAGING_DIR)/usr/include/live/BasicUsageEnvironment \
++		-I$(STAGING_DIR)/usr/include/live/groupsock \
++		-I$(STAGING_DIR)/usr/include/live/liveMedia \
++		-I$(STAGING_DIR)/usr/include/live/UsageEnvironment \
++		" \
++	LIVE555_LIBS="-L$(STAGING_DIR)/usr/lib -lliveMedia"
  else
- VLC_CONF_OPT += --disable-svg
+ VLC_CONF_OPT += --disable-live555
  endif
