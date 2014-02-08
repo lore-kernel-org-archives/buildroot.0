@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  8 Feb 2014 17:04:03 +0100
-Subject: [Buildroot] [PATCH 2/4] Makefile: internally use absolute paths to
-	BR2_EXTERNAL
+Date: Sat,  8 Feb 2014 17:04:05 +0100
+Subject: [Buildroot] [PATCH 4/4] manual: add explanations on limitations
+	about using O=...
 In-Reply-To: <cover.1391875274.git.yann.morin.1998@free.fr>
 References: <cover.1391875274.git.yann.morin.1998@free.fr>
-Message-ID: <df6b7b6e0b78cfd12d073e85bfe30866e3db4b4c.1391875274.git.yann.morin.1998@free.fr>
+Message-ID: <a232af8aeef7d8c4909514620125b1b0dfe7ed72.1391875274.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,44 +13,56 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Using a relative path for BR2_EXTERNAL, and using an external defconfig,
-such as in (from a Buildroot top-dir):
-    make O=.. BR2_EXTERNAL=.. foo_defconfig
+Using a relative path for O=... has limitations, since it is interpreted
+relative to the Buildroot tree, and thus may lead to unexpected results.
 
-is broken. It is unclear why the %_defconfig rule recurses in that case.
+For example, running this:
+    make -C buildroot O=my-O
 
-This patch internaly makes BR2_EXTERNAL canonical (ie. makes it an absolute
-path), and checks the directory exists.
+will not create my-O in the current working directory, but as a
+sub-directory of the Buildroot tree, here in buildroot/my-O
+
+Explain this in the manual (as is similarly done for BR2_EXTERNAL).
+Also add a note that $(O) will be created if missing.
+
+Also change O=.. and -C .. to O=<...> and -C <...> to make it explicit
+this is an ellipse, not a relative path.
 
 Reported-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
-Cc: Romain Naour <romain.naour@openwide.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-
 ---
-Changes v1->v2:
-  - fix override BR2_EXTERNAL  (J?r?my)
-  - only one error message  (Arnout)
----
- Makefile | 5 +++++
- 1 file changed, 5 insertions(+)
+ docs/manual/common-usage.txt | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index fceb2e8..142c78f 100644
---- a/Makefile
-+++ b/Makefile
-@@ -118,6 +118,11 @@ ifeq ($(BR2_EXTERNAL),)
-   override BR2_EXTERNAL = support/dummy-external
-   $(shell rm -f $(BR2_EXTERNAL_FILE))
- else
-+  _BR2_EXTERNAL = $(shell cd $(BR2_EXTERNAL) >/dev/null 2>&1 && pwd)
-+  ifeq ($(_BR2_EXTERNAL),)
-+    $(error BR2_EXTERNAL='$(BR2_EXTERNAL)' does not exist, relatively to $(TOPDIR))
-+  endif
-+  override BR2_EXTERNAL := $(_BR2_EXTERNAL)
-   $(shell echo BR2_EXTERNAL ?= $(BR2_EXTERNAL) > $(BR2_EXTERNAL_FILE))
- endif
+diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
+index 1d15c05..5e3d71d 100644
+--- a/docs/manual/common-usage.txt
++++ b/docs/manual/common-usage.txt
+@@ -40,7 +40,13 @@ Or:
+  $ cd /tmp/build; make O=$PWD -C path/to/buildroot
+ --------------------
  
+-All the output files will be located under +/tmp/build+.
++All the output files will be located under +/tmp/build+. If the +O+
++path does not exist, Buildroot will create it.
++
++*Note:* the +O+ path can be either an absolute or a relative path, but if it's
++passed as a relative path, it is important to note that it is interpreted
++relative to the main Buildroot source directory, *not* the current working
++directory.
+ 
+ When using out-of-tree builds, the Buildroot +.config+ and temporary
+ files are also stored in the output directory. This means that you can
+@@ -48,8 +54,8 @@ safely run multiple builds in parallel using the same source tree as
+ long as they use unique output directories.
+ 
+ For ease of use, Buildroot generates a Makefile wrapper in the output
+-directory - so after the first run, you no longer need to pass +O=..+
+-and +-C ..+, simply run (in the output directory):
++directory - so after the first run, you no longer need to pass +O=<...>+
++and +-C <...>+, simply run (in the output directory):
+ 
+ --------------------
+  $ make <target>
 -- 
 1.8.1.2
