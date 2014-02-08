@@ -1,129 +1,95 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 8 Feb 2014 23:43:24 +0100
-Subject: [Buildroot] [git commit] kernel-headers: remove deprecated versions
-	3.1, 3.3, 3.5
-Message-ID: <20140208224725.767599B985@busybox.osuosl.org>
+Date: Sat, 8 Feb 2014 23:29:11 +0100
+Subject: [Buildroot] [git commit] automake: remove deprecated target package
+Message-ID: <20140208224725.458D79C901@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=334dca61ad4ed431a10f388635b596bce2030e2f
+commit: http://git.buildroot.net/buildroot/commit/?id=f75245d9d0f291dc040162ec759ac88e206a69c6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The Linux kernel headers versions 3.1, 3.3, and 3.5 have been deprecated
-since 2013.02 and thus can be removed in 2014.02.
-For legacy handling, we automatically select versions 3.2, 3.4, and 3.6,
-respectively.
-
-Additionally, this patch removes the now unused symbol
-BR2_DEPRECATED_SINCE_2013_02.
+The automake support on target has been deprecated for more than four
+buildroot releases and thus can be removed. This doesn't change anything
+about the host automake support.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in                            |    4 ----
- Config.in.legacy                     |   30 ++++++++++++++++++++++++++++++
- package/linux-headers/Config.in.host |   15 ---------------
- 3 files changed, 30 insertions(+), 19 deletions(-)
+ Config.in.legacy             |    8 ++++++++
+ package/Config.in            |    1 -
+ package/automake/Config.in   |   11 -----------
+ package/automake/automake.mk |    3 ---
+ 4 files changed, 8 insertions(+), 15 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index fcf70eb..67fbcd5 100644
---- a/Config.in
-+++ b/Config.in
-@@ -264,10 +264,6 @@ config BR2_DEPRECATED
- 
- if BR2_DEPRECATED
- 
--config BR2_DEPRECATED_SINCE_2013_02
--	bool
--	default y
--
- config BR2_DEPRECATED_SINCE_2013_05
- 	bool
- 	default y
 diff --git a/Config.in.legacy b/Config.in.legacy
-index fe91ecb..4424e31 100644
+index ef81da3..8199441 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -119,6 +119,36 @@ config BR2_sh3eb
+@@ -119,6 +119,14 @@ config BR2_sh3eb
  	  Due to an inexistent user base and generally poor Linux
  	  support, the support for the SH3eb architecture was removed.
  
-+config BR2_KERNEL_HEADERS_3_1
-+	bool "kernel headers version 3.1.x are no longer supported"
-+	select BR2_KERNEL_HEADERS_3_2
++config BR2_PACKAGE_AUTOMAKE
++	bool "automake target package has been removed"
 +	select BR2_LEGACY
 +	help
-+	  Version 3.1.x of the Linux kernel headers have been deprecated
-+	  for more than four buildroot releases and are now removed.
-+	  As an alternative, version 3.2.x of the headers have been
-+	  automatically selected in your configuration.
++	  The 'automake' target package has been removed since it has been
++	  deprecated for more than four buildroot releases.
++	  Note: the host automake still exists.
 +
-+config BR2_KERNEL_HEADERS_3_3
-+	bool "kernel headers version 3.3.x are no longer supported"
-+	select BR2_KERNEL_HEADERS_3_4
-+	select BR2_LEGACY
-+	help
-+	  Version 3.3.x of the Linux kernel headers have been deprecated
-+	  for more than four buildroot releases and are now removed.
-+	  As an alternative, version 3.4.x of the headers have been
-+	  automatically selected in your configuration.
-+
-+config BR2_KERNEL_HEADERS_3_5
-+	bool "kernel headers version 3.5.x are no longer supported"
-+	select BR2_KERNEL_HEADERS_3_6
-+	select BR2_LEGACY
-+	help
-+	  Version 3.5.x of the Linux kernel headers have been deprecated
-+	  for more than four buildroot releases and are now removed.
-+	  As an alternative, version 3.6.x of the headers have been
-+	  automatically selected in your configuration.
-+
- config BR2_GDB_VERSION_7_2
- 	bool "gdb 7.2.x is no longer supported"
- 	select BR2_GDB_VERSION_7_5
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 65cf70c..ea104f5 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -18,26 +18,14 @@ choice
- 		bool "Linux 3.0.x kernel headers"
- 		depends on !BR2_arc
+ config BR2_PACKAGE_AUTOCONF
+ 	bool "autoconf target package has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+index d3896e4..2d74cf2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -81,7 +81,6 @@ source "package/whetstone/Config.in"
+ endmenu
  
--	config BR2_KERNEL_HEADERS_3_1
--		bool "Linux 3.1.x kernel headers"
--		depends on BR2_DEPRECATED_SINCE_2013_02 && !BR2_arc
+ menu "Development tools"
+-source "package/automake/Config.in"
+ source "package/binutils/Config.in"
+ source "package/bison/Config.in"
+ source "package/bsdiff/Config.in"
+diff --git a/package/automake/Config.in b/package/automake/Config.in
+deleted file mode 100644
+index ed5060e..0000000
+--- a/package/automake/Config.in
++++ /dev/null
+@@ -1,11 +0,0 @@
+-config BR2_PACKAGE_AUTOMAKE
+-	bool "automake"
+-	# We no longer support a toolchain on the target
+-	depends on BR2_DEPRECATED_SINCE_2012_11
+-	select BR2_PACKAGE_AUTOCONF
+-	select BR2_PACKAGE_PERL
+-	help
+-	  Tool for automatically generating Makefile's for input to
+-	  configure scripts (made by autoconf).
 -
- 	config BR2_KERNEL_HEADERS_3_2
- 		bool "Linux 3.2.x kernel headers"
- 		depends on !BR2_arc
+-	  http://www.gnu.org/software/automake/
+diff --git a/package/automake/automake.mk b/package/automake/automake.mk
+index fc661c1..8d7e291 100644
+--- a/package/automake/automake.mk
++++ b/package/automake/automake.mk
+@@ -10,8 +10,6 @@ AUTOMAKE_SITE = $(BR2_GNU_MIRROR)/automake
+ AUTOMAKE_LICENSE = GPLv2+
+ AUTOMAKE_LICENSE_FILES = COPYING
  
--	config BR2_KERNEL_HEADERS_3_3
--		bool "Linux 3.3.x kernel headers"
--		depends on BR2_DEPRECATED_SINCE_2013_02 && !BR2_arc
+-AUTOMAKE_DEPENDENCIES = host-autoconf autoconf perl
 -
- 	config BR2_KERNEL_HEADERS_3_4
- 		bool "Linux 3.4.x kernel headers"
- 		depends on !BR2_arc
+ HOST_AUTOMAKE_DEPENDENCIES = host-autoconf
  
--	config BR2_KERNEL_HEADERS_3_5
--		bool "Linux 3.5.x kernel headers"
--		depends on BR2_DEPRECATED_SINCE_2013_02 && !BR2_arc
--
- 	config BR2_KERNEL_HEADERS_3_6
- 		bool "Linux 3.6.x kernel headers"
- 		depends on BR2_DEPRECATED_SINCE_2013_05 && !BR2_arc
-@@ -83,11 +71,8 @@ config BR2_DEFAULT_KERNEL_VERSION
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
--	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
- 	default "3.2.54"	if BR2_KERNEL_HEADERS_3_2
--	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
- 	default "3.4.79"	if BR2_KERNEL_HEADERS_3_4
--	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
- 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
- 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
- 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
+ define GTK_DOC_M4_INSTALL
+@@ -26,7 +24,6 @@ endef
+ HOST_AUTOMAKE_POST_INSTALL_HOOKS += GTK_DOC_M4_INSTALL
+ HOST_AUTOMAKE_POST_INSTALL_HOOKS += HOST_AUTOMAKE_MAKE_ACLOCAL
+ 
+-$(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+ 
+ # variables used by other packages
