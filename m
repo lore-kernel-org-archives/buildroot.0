@@ -1,95 +1,84 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 8 Feb 2014 23:26:42 +0100
-Subject: [Buildroot] [git commit] autoconf: remove deprecated target package
-Message-ID: <20140208224725.3D6D59B985@busybox.osuosl.org>
+Date: Sat, 8 Feb 2014 23:39:05 +0100
+Subject: [Buildroot] [git commit] gdb: remove deprecated versions 7.2.x and
+	7.3.x
+Message-ID: <20140208224725.6E9149B985@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e7af2ac609828b0adb99eee5aeb937b8bd176682
+commit: http://git.buildroot.net/buildroot/commit/?id=348060f9603d7515ee92a52b9332375080ed231c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The autoconf support on target has been deprecated for more than four
-buildroot releases and thus can be removed. This doesn't change anything
-about the host autoconf support.
+Gdb versions 7.2.x and 7.3.x have been deprecated since 2013.02 and thus can
+be removed in 2014.02.
+For legacy handling, version 7.5.x is automatically selected.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy             |    8 ++++++++
- package/Config.in            |    1 -
- package/autoconf/Config.in   |   10 ----------
- package/autoconf/autoconf.mk |    6 ------
- 4 files changed, 8 insertions(+), 17 deletions(-)
+ Config.in.legacy           |   18 ++++++++++++++++++
+ package/gdb/Config.in.host |   12 ------------
+ 2 files changed, 18 insertions(+), 12 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 09e1287..ef81da3 100644
+index a417046..fe91ecb 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -119,6 +119,14 @@ config BR2_sh3eb
+@@ -119,6 +119,24 @@ config BR2_sh3eb
  	  Due to an inexistent user base and generally poor Linux
  	  support, the support for the SH3eb architecture was removed.
  
-+config BR2_PACKAGE_AUTOCONF
-+	bool "autoconf target package has been removed"
++config BR2_GDB_VERSION_7_2
++	bool "gdb 7.2.x is no longer supported"
++	select BR2_GDB_VERSION_7_5
 +	select BR2_LEGACY
 +	help
-+	  The 'autoconf' target package has been removed since it has been
-+	  deprecated for more than four buildroot releases.
-+	  Note: the host autoconf still exists.
++	  Version 7.2.x of gdb has been deprecated for more than four
++	  buildroot releases and is now removed. As an alternative, gdb
++	  7.5.x has been automatically selected in your configuration.
 +
- config BR2_PACKAGE_XSTROKE
- 	bool "xstroke has been removed"
++config BR2_GDB_VERSION_7_3
++	bool "gdb 7.3.x is no longer supported"
++	select BR2_GDB_VERSION_7_5
++	select BR2_LEGACY
++	help
++	  Version 7.3.x of gdb has been deprecated for more than four
++	  buildroot releases and is now removed. As an alternative, gdb
++	  7.5.x has been automatically selected in your configuration.
++
+ config BR2_PACKAGE_CCACHE
+ 	bool "ccache target package has been removed"
  	select BR2_LEGACY
-diff --git a/package/Config.in b/package/Config.in
-index 5c558d5..d3896e4 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -81,7 +81,6 @@ source "package/whetstone/Config.in"
- endmenu
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index 9c0c78c..9c77028 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -31,16 +31,6 @@ choice
+ 		depends on BR2_avr32
+ 		bool "gdb 6.7.1-avr32-2.1.5"
  
- menu "Development tools"
--source "package/autoconf/Config.in"
- source "package/automake/Config.in"
- source "package/binutils/Config.in"
- source "package/bison/Config.in"
-diff --git a/package/autoconf/Config.in b/package/autoconf/Config.in
-deleted file mode 100644
-index 27f24e4..0000000
---- a/package/autoconf/Config.in
-+++ /dev/null
-@@ -1,10 +0,0 @@
--config BR2_PACKAGE_AUTOCONF
--	bool "autoconf"
--	# We no longer support a toolchain on the target
--	depends on BR2_DEPRECATED_SINCE_2012_11
--	select BR2_PACKAGE_PERL
--	help
--	  Extensible program for developing configure scripts.  These
--	  scripts handle all the mundane system/feature detection.
+-	config BR2_GDB_VERSION_7_2
+-		bool "gdb 7.2.x"
+-		depends on !BR2_bfin
+-		depends on BR2_DEPRECATED_SINCE_2013_02
 -
--	  http://www.gnu.org/software/autoconf/
-diff --git a/package/autoconf/autoconf.mk b/package/autoconf/autoconf.mk
-index e70aa39..027f7ac 100644
---- a/package/autoconf/autoconf.mk
-+++ b/package/autoconf/autoconf.mk
-@@ -11,17 +11,11 @@ AUTOCONF_SITE = $(BR2_GNU_MIRROR)/autoconf
- AUTOCONF_LICENSE = GPLv3+ with exceptions
- AUTOCONF_LICENSE_FILES = COPYINGv3 COPYING.EXCEPTION
- 
--AUTOCONF_CONF_ENV = EMACS="no" ac_cv_path_M4=$(HOST_DIR)/usr/bin/m4 \
--		    ac_cv_prog_gnu_m4_gnu=no
+-	config BR2_GDB_VERSION_7_3
+-		bool "gdb 7.3.x"
+-		depends on !BR2_bfin
+-		depends on BR2_DEPRECATED_SINCE_2013_02
 -
--AUTOCONF_DEPENDENCIES = host-m4 perl
--
- HOST_AUTOCONF_CONF_ENV = EMACS="no" ac_cv_path_M4=$(HOST_DIR)/usr/bin/m4 \
- 			ac_cv_prog_gnu_m4_gnu=no
- 
- HOST_AUTOCONF_DEPENDENCIES = host-m4 host-libtool
- 
--$(eval $(autotools-package))
- $(eval $(host-autotools-package))
- 
- # variables used by other packages
+ 	config BR2_GDB_VERSION_7_4
+ 		bool "gdb 7.4.x"
+ 		depends on !BR2_bfin
+@@ -61,8 +51,6 @@ config BR2_GDB_VERSION
+ 	                      (!BR2_PACKAGE_HOST_GDB && BR2_bfin)
+ 	default "6.7.1-avr32-2.1.5" if BR2_GDB_VERSION_6_7_1_AVR32_2_1_5 || \
+                                    (!BR2_PACKAGE_HOST_GDB && BR2_avr32)
+-	default "7.2a"     if BR2_GDB_VERSION_7_2
+-	default "7.3.1"    if BR2_GDB_VERSION_7_3
+ 	default "7.4.1"    if BR2_GDB_VERSION_7_4
+ 	default "7.5.1"    if BR2_GDB_VERSION_7_5 || !BR2_PACKAGE_HOST_GDB
+ 	default "f25a1952afd054205f9471e449c1f7ca5b271b7c" if BR2_arc
