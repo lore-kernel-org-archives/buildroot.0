@@ -1,32 +1,41 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat,  8 Feb 2014 15:34:49 +0100
-Subject: [Buildroot] [PATCH v1 0/6] vlc: autobuilder fixes
-Message-ID: <1391870095-3738-1-git-send-email-s.martin49@gmail.com>
+Date: Sat,  8 Feb 2014 15:34:50 +0100
+Subject: [Buildroot] [PATCH v1 1/6] vlc: fix svg support
+In-Reply-To: <1391870095-3738-1-git-send-email-s.martin49@gmail.com>
+References: <1391870095-3738-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <1391870095-3738-2-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+In vlc, svg support is done using librsvg, not libsvg.
 
-Here is a series that fixes a couple of aubuilder failures because of vlc.
+Fixes:
+  http://autobuild.buildroot.org/results/344/344af6e756a5f2c1ee515a355ae5b288401c4c71/build-end.log
+  http://autobuild.buildroot.org/results/19f/19f1450ed5453aa666bc7aae2e965ad81e5f845d/build-end.log
 
-Yours,
-Samuel
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+---
+ package/vlc/vlc.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Samuel Martin (6):
-  vlc: fix svg support
-  vlc: fix bonjour support
-  vlc: fix live555 support
-  vlc: fix libgcrypt support
-  vlc: fix sdl support
-  vlc: enable altivec support only when appropriate
-
- ...ac-add-check-for-libgcrypt-config-program.patch | 43 ++++++++++++++++++++++
- package/vlc/vlc.mk                                 | 32 +++++++++++++---
- 2 files changed, 69 insertions(+), 6 deletions(-)
- create mode 100644 package/vlc/vlc-0002-configure.ac-add-check-for-libgcrypt-config-program.patch
-
---
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index b39c6c7..5c10275 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -141,9 +141,9 @@ else
+ VLC_CONF_OPT += --disable-png
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBSVG),y)
++ifeq ($(BR2_PACKAGE_LIBRSVG),y)
+ VLC_CONF_OPT += --enable-svg
+-VLC_DEPENDENCIES += libsvg
++VLC_DEPENDENCIES += librsvg
+ else
+ VLC_CONF_OPT += --disable-svg
+ endif
+-- 
 1.8.5.4
