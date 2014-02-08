@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  8 Feb 2014 17:26:04 +0100
-Subject: [Buildroot] [PATCH 1/3] packages infra: add function to get a
-	Kconfig option
+Date: Sat,  8 Feb 2014 17:26:05 +0100
+Subject: [Buildroot] [PATCH 2/3] linux: only depend on host-lzop if needed
 In-Reply-To: <cover.1391876537.git.yann.morin.1998@free.fr>
 References: <cover.1391876537.git.yann.morin.1998@free.fr>
-Message-ID: <9668e99e32d7b8a9d27b7556e0ca7d409e0c4bf0.1391876537.git.yann.morin.1998@free.fr>
+Message-ID: <5a709a1b48e38bf5cc9c7aeaa45a6a4fe5813d6e.1391876537.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,44 +12,58 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-We so far have no mean to get the value from a Kconfig option from the
-.config file of a package (eg. linux, busybox...).
+There is no reason to always depend on host-lzop, even when the kernel
+compression is not LZO.
 
-Add a new function that returns the unmangled value of an option.
-It expect two arguments:
-  - the Kconfig option name (complete, with leading CONFIG if necessary)
-  - the .config file to get it from
+Since LZO is not the default compression option in the kernel (and there
+is not sign that will change in the foreseeable future), it will always
+appear in a config file, whether it is a complete config file or it is
+only a defconfig.
 
-Note that, if the Kconfig option is a string, the returned value will
-contain the leading and trailing double-quotes.
+So, only depend on host-lzop if the LZO compression is enabled in the
+kernel config file (either the defconfig or the custom config file).
+This includes:
+  - kernel compression itself
+  - initrd compression
+  - initramfs compression
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
-Cc: Arnout Vandecappelle <arnout@mind.be>
 
 ---
 Changes v1 -> v2:
-  - use simpler sed expression  (Peter)
-  - use simple assignment, not a define  (Arnout)
-
-Note: when we have the Kconfig's 'config' script, we can revisit this
-to use 'config' instead of our own sed hack.
+  - also select if initrd or initramfs compression is lzo  (Peter)
 ---
- package/pkg-utils.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ linux/linux.mk | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index 91a1981..99fefe6 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -52,6 +52,8 @@ define KCONFIG_DISABLE_OPT
- 	echo "# $(1) is not set" >> $(2)
- endef
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 1a81f77..e8c007d 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -41,7 +41,7 @@ endif
+ LINUX_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
  
-+KCONFIG_GET_OPT = $(shell sed -e 's/^$(1)=//p' $(2))
+ LINUX_INSTALL_IMAGES = YES
+-LINUX_DEPENDENCIES  += host-kmod host-lzop
++LINUX_DEPENDENCIES  += host-kmod
+ 
+ ifeq ($(BR2_LINUX_KERNEL_UBOOT_IMAGE),y)
+ 	LINUX_DEPENDENCIES += host-uboot-tools
+@@ -163,7 +163,14 @@ LINUX_POST_PATCH_HOOKS += LINUX_APPLY_PATCHES
+ ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
+ KERNEL_SOURCE_CONFIG = $(KERNEL_ARCH_PATH)/configs/$(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))_defconfig
+ else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
+-KERNEL_SOURCE_CONFIG = $(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE)
++KERNEL_SOURCE_CONFIG = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE))
++endif
 +
- # Helper functions to determine the name of a package and its
- # directory from its makefile directory, using the $(MAKEFILE_LIST)
- # variable provided by make. This is used by the *TARGETS macros to
++ifeq ($(call KCONFIG_GET_OPT,CONFIG_KERNEL_LZO,$(KERNEL_SOURCE_CONFIG)),y)
++LINUX_DEPENDENCIES += host-lzop
++endif
++ifeq ($(call KCONFIG_GET_OPT,CONFIG_RD_LZO,$(KERNEL_SOURCE_CONFIG)),y)
++LINUX_DEPENDENCIES += host-lzop
+ endif
+ 
+ define LINUX_CONFIGURE_CMDS
 -- 
 1.8.1.2
