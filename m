@@ -1,32 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 9 Feb 2014 01:00:22 +0100
-Subject: [Buildroot] [git commit] pkg-autotools: fixup pkg_CONFIGURE_CMDS
-	after DISABLE_DOCUMENTATION removal
-Message-ID: <20140209000138.2BD6C9C8DB@busybox.osuosl.org>
+From: Axel Lin <axel.lin@ingics.com>
+Date: Sun, 09 Feb 2014 10:48:52 +0800
+Subject: [Buildroot] [PATCH] f2fs-tools: bump to version 1.3.0
+Message-ID: <1391914132.17493.1.camel@phoenix>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4e0cd2e289e5e20a1989d05337a754752c8d5738
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This version includes:
+ - add f2fstat tool
+ - critical bug fix on nat bitmaps
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
 ---
- package/pkg-autotools.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/f2fs-tools/f2fs-tools.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index 6f52335..5f6c31d 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -114,7 +114,7 @@ define $(2)_CONFIGURE_CMDS
- 		--disable-docs \
- 		--disable-documentation \
- 		--with-xmlto=no \
--		--with-fop=no
-+		--with-fop=no \
- 		$$(DISABLE_NLS) \
- 		$$(DISABLE_LARGEFILE) \
- 		$$(DISABLE_IPV6) \
+diff --git a/package/f2fs-tools/f2fs-tools.mk b/package/f2fs-tools/f2fs-tools.mk
+index cffd4cb..2045e05 100644
+--- a/package/f2fs-tools/f2fs-tools.mk
++++ b/package/f2fs-tools/f2fs-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-F2FS_TOOLS_VERSION = 576cb469e73b9342f1d10ba5d0428bbce22cbc3b
++F2FS_TOOLS_VERSION = 858c4039c85f7c00c57925902985701b1e083555
+ F2FS_TOOLS_SITE = http://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git
+ F2FS_TOOLS_SITE_METHOD = git
+ F2FS_TOOLS_CONF_ENV = ac_cv_file__git=no
+-- 
+1.8.1.2
