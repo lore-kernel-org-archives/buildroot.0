@@ -1,53 +1,36 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 09 Feb 2014 10:11:06 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 09 Feb 2014 10:17:05 +0100
 Subject: [Buildroot] [git commit] kmod: really pass --disable-manpages
-In-Reply-To: <20140209083628.E9C0D9C8B1@busybox.osuosl.org>
+In-Reply-To: <7291a6ec-9696-4801-936d-fdab0d43bcdf@email.android.com> (Thomas
+ De Schampheleire's message of "Sun, 09 Feb 2014 10:11:06 +0100")
 References: <20140209083628.E9C0D9C8B1@busybox.osuosl.org>
-Message-ID: <7291a6ec-9696-4801-936d-fdab0d43bcdf@email.android.com>
+ <7291a6ec-9696-4801-936d-fdab0d43bcdf@email.android.com>
+Message-ID: <87ob2g3asu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter Korsgaard <peter@korsgaard.com> schreef:
->commit: http://git.buildroot.net/buildroot/commit/?id=674fd4f83464a1449a0db8bb4e2584b7b6f6a051
->branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->
->The line below overwrites KMOD_CONF_OPT, so move the --disable-manpages
->options below.
->
->Fixes http://autobuild.buildroot.net/results/842/842131307c171e1bc5a1e918996d53b00ddb1be3/
->
->Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
->---
-> package/kmod/kmod.mk |    6 +++---
-> 1 files changed, 3 insertions(+), 3 deletions(-)
->
->diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
->index f819d0e..f79a492 100644
->--- a/package/kmod/kmod.mk
->+++ b/package/kmod/kmod.mk
->@@ -15,13 +15,13 @@ HOST_KMOD_DEPENDENCIES = host-pkgconf
-> KMOD_LICENSE = LGPLv2.1+
-> KMOD_LICENSE_FILES = libkmod/COPYING
-> 
->-KMOD_CONF_OPT += --disable-manpages
->-HOST_KMOD_CONF_OPT = --disable-manpages
->-
-> # static linking not supported, see
-> # https://git.kernel.org/cgit/utils/kernel/kmod/kmod.git/commit/?id=b7016153ec8
-> KMOD_CONF_OPT = --disable-static --enable-shared
-> 
->+KMOD_CONF_OPT += --disable-manpages
->+HOST_KMOD_CONF_OPT = --disable-manpages
->+
-> ifeq ($(BR2_PACKAGE_ZLIB),y)
-> KMOD_DEPENDENCIES += zlib
-> KMOD_CONF_OPT += --with-zlib
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
-Aargh, another oops, sorry.
-Isn't it safer to always use += for this type of variables?
+Hi,
 
-Best regards,
-Thomas
+ >> +KMOD_CONF_OPT += --disable-manpages
+ >> +HOST_KMOD_CONF_OPT = --disable-manpages
+ >> +
+ >> ifeq ($(BR2_PACKAGE_ZLIB),y)
+ >> KMOD_DEPENDENCIES += zlib
+ >> KMOD_CONF_OPT += --with-zlib
+
+ > Aargh, another oops, sorry.
+
+No problem, that's why we have the autobuilders ;)
+
+ > Isn't it safer to always use += for this type of variables?
+
+Yes it is, but we typically don't do it for the first(/single)
+assignment.
+
+-- 
+Bye, Peter Korsgaard 
