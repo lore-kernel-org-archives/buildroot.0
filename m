@@ -1,50 +1,29 @@
-From: jeffball59 at gmail.com <jeffball59@gmail.com>
-Date: Sun,  9 Feb 2014 16:10:44 -0500
-Subject: [Buildroot] [PATCH 1/1] Modified the documentation on customizing a
-	rootfs to be less ambiguous
-In-Reply-To: <y>
-References: <y>
-Message-ID: <1391980244-8855-1-git-send-email-jeffball59@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun,  9 Feb 2014 21:23:36 +0000 (UTC)
+Subject: [Buildroot] [Bug 4363] Make sure that copied linux and busybox
+ defconfig are writable before modifying
+In-Reply-To: <bug-4363-163@https.bugs.busybox.net/>
+References: <bug-4363-163@https.bugs.busybox.net/>
+Message-ID: <20140209212336.CA9B69A547@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Jeff Stewart <jeffball59@gmail.com>
+https://bugs.busybox.net/show_bug.cgi?id=4363
 
-While reading the documentation I was a little confused over the recommended
-method for customizing the target file system.  After sorting it out in the
-IRC channel, I modified the documentation to be a little less ambiguous.
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-Signed-off-by: Jeff Stewart <jeffball59@gmail.com>
----
- docs/manual/customize-rootfs.txt |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
-diff --git a/docs/manual/customize-rootfs.txt b/docs/manual/customize-rootfs.txt
-index 2cbae99..c23b1af 100644
---- a/docs/manual/customize-rootfs.txt
-+++ b/docs/manual/customize-rootfs.txt
-@@ -23,7 +23,7 @@ there are a few ways to customize the resulting target filesystem.
-   over the target filesystem after it has been built.  Set
-   +BR2_ROOTFS_OVERLAY+ to the top of the tree.  +.git+, +.svn+, +.hg+
-   directories, +.empty+ files and files ending with +~+ are excluded.
--  _Among these first 3 methods, this one should be preferred_.
-+  _Among the customization methods, this one should be preferred_.
- 
- * In the Buildroot configuration, you can specify the paths to one or
-   more *post-build scripts*. These scripts are called in the given order,
-@@ -56,8 +56,8 @@ there are a few ways to customize the resulting target filesystem.
-   installation. Note that this method is *not recommended*, as it
-   duplicates the entire skeleton, which prevents from taking advantage
-   of the fixes or improvements brought to the default Buildroot
--  skeleton. The recommended method is to use the _post-build scripts_
--  mechanism described in the previous item.
-+  skeleton. The _post-build scripts_ mechanism described in the previous
-+  item is recommend over this mechanism.
- 
- Note also that you can use the *post-image scripts*
- if you want to perform some specific actions 'after' all
+--- Comment #7 from Peter Korsgaard <jacmet@uclibc.org> 2014-02-09 21:23:35 UTC ---
+Fixed by Yann in git (984524fda1f8260e258421f6676d522591f025da and parents)
+
 -- 
-1.7.10.4
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
