@@ -1,32 +1,36 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun,  9 Feb 2014 14:04:27 +0100
-Subject: [Buildroot] [PATCH 1/1] trace-cmd: needs mmu
-Message-ID: <1391951067-17304-1-git-send-email-romain.naour@openwide.fr>
+From: =?UTF-8?B?Q8OpZHJpYyBDaMOpcGllZA==?= <cedric.chepied@gmail.com>
+Date: Sun, 09 Feb 2014 14:39:31 +0100
+Subject: [Buildroot] [PATCH] ZNC: new package
+In-Reply-To: <20140128195259.73158fe4@skate>
+References: <1388876370-3441-1-git-send-email-cedric.chepied@gmail.com>
+ <20140128195259.73158fe4@skate>
+Message-ID: <52f78515.2f24b40a.5600.ffffd4a7@mx.google.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/0b7/0b73c684b3d7edcd818cb113fda534e552028d58/build-end.log
+Dear Thomas,
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
- package/trace-cmd/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+At Tue, 28 Jan 2014 19:52:59 +0100,
+Thomas Petazzoni wrote:
+> Looking at the configure.ac from ZNC, it seems like the OpenSSL and
+> Perl support is optional, and can be disabled using --disable-openssl
+> and --disable-perl. It would probably be a good idea to use these to
+> make these dependencies optional.
 
-diff --git a/package/trace-cmd/Config.in b/package/trace-cmd/Config.in
-index d48e0fd..9d454e4 100644
---- a/package/trace-cmd/Config.in
-+++ b/package/trace-cmd/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_TRACE_CMD
- 	depends on BR2_LARGEFILE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_avr32 # AVR32 does not have TLS support
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  Command line reader for ftrace.
- 
+When I try to enable perl, configure fails. It uses the perl executable to
+generate LDFLAGS but it does that with "my" executable (/usr/bin/perl) and then
+tries to link with /usr/lib/perl5/core_perl/CORE/libperl.so which of course
+fails.
+
+For python, configure programs can use ./output/host/usr/bin/python2.7 but I
+can't find the same for perl. I only find perl compiled for my target.
+
+How can I fix this?
+
+Regards,
 -- 
-1.8.5.3
+C?dric Ch?pied
+<cedric.chepied@gmail.com>
