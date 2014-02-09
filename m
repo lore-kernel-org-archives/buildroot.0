@@ -1,36 +1,30 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 09 Feb 2014 10:17:05 +0100
-Subject: [Buildroot] [git commit] kmod: really pass --disable-manpages
-In-Reply-To: <7291a6ec-9696-4801-936d-fdab0d43bcdf@email.android.com> (Thomas
- De Schampheleire's message of "Sun, 09 Feb 2014 10:11:06 +0100")
-References: <20140209083628.E9C0D9C8B1@busybox.osuosl.org>
- <7291a6ec-9696-4801-936d-fdab0d43bcdf@email.android.com>
-Message-ID: <87ob2g3asu.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 09 Feb 2014 11:03:59 +0100
+Subject: [Buildroot] [PATCH 2/3] infra: replace BUILDROOT_DL_DIR with
+	BR2_DL_DIR.
+In-Reply-To: <1391527132-20103-2-git-send-email-arnout@mind.be> (Arnout
+ Vandecappelle's message of "Tue, 4 Feb 2014 16:18:51 +0100")
+References: <1391527132-20103-1-git-send-email-arnout@mind.be>
+ <1391527132-20103-2-git-send-email-arnout@mind.be>
+Message-ID: <87k3d438mo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-Hi,
+ > To make the naming consistent (all user-visible options should be
+ > prefixed BR2_).
 
- >> +KMOD_CONF_OPT += --disable-manpages
- >> +HOST_KMOD_CONF_OPT = --disable-manpages
- >> +
- >> ifeq ($(BR2_PACKAGE_ZLIB),y)
- >> KMOD_DEPENDENCIES += zlib
- >> KMOD_CONF_OPT += --with-zlib
+ > An entry is added to Makefile.legacy to warn users who have set
+ > BUILDROOT_DL_DIR but not BR2_DL_DIR.
 
- > Aargh, another oops, sorry.
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-No problem, that's why we have the autobuilders ;)
-
- > Isn't it safer to always use += for this type of variables?
-
-Yes it is, but we typically don't do it for the first(/single)
-assignment.
+Committed, thanks. Lets hope Thomas' has updated his autobuilder script
+to also set BR2_DL_DIR.
 
 -- 
-Bye, Peter Korsgaard 
+Bye, Peter Korsgaard
