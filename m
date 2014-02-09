@@ -1,43 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 9 Feb 2014 16:41:24 +0100
-Subject: [Buildroot] [git commit] vlc: fix glx support
-Message-ID: <20140209154256.AE8209C8FF@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 09 Feb 2014 17:00:39 +0100
+Subject: [Buildroot] [PATCH 3/3] infra: replace BUILDROOT_CONFIG with
+	BR2_CONFIG.
+In-Reply-To: <1391527132-20103-3-git-send-email-arnout@mind.be> (Arnout
+ Vandecappelle's message of "Tue, 4 Feb 2014 16:18:52 +0100")
+References: <1391527132-20103-1-git-send-email-arnout@mind.be>
+ <1391527132-20103-3-git-send-email-arnout@mind.be>
+Message-ID: <87y51k1djs.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4b79dfc94ec68ef8b66c5f505fe1a08ef378ac64
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-glx support is provided by the mesa3d package; so, enable it only when
-mesa3d is part of the package selection.
+ > To make the naming consistent (all user-visible options should be
+ > prefixed with BR2_).
 
-Fixes:
-  http://autobuild.buildroot.org/results/9b4/9b46021ea0064850ce8f1adcb5455d6da5bff459/build-end.log
+ > An entry is added to Makefile.legacy to warn users who have set
+ > BUILDROOT_CONFIG but not BR2_CONFIG.
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/vlc/vlc.mk |    7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
+ > Still export BUILDROOT_CONFIG but pointing to some phony value, to
+ > make sure that scripts that still use it fail in a predictable way.
 
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 2730f07..fd49040 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -101,6 +101,13 @@ else
- VLC_CONF_OPT += --disable-flac
- endif
- 
-+ifeq ($(BR2_PACKAGE_MESA3D),y)
-+VLC_CONF_OPT += --enable-glx
-+VLC_DEPENDENCIES += mesa3d
-+else
-+VLC_CONF_OPT += --disable-glx
-+endif
-+
- ifeq ($(BR2_PACKAGE_OPUS),y)
- VLC_CONF_OPT += --enable-opus
- VLC_DEPENDENCIES += opus
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
