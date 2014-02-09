@@ -1,39 +1,50 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun,  9 Feb 2014 19:10:41 +0000 (UTC)
-Subject: [Buildroot] [Bug 6866] Ambiguous recommended method for customizing
- the generated target filesystem in Manual
-In-Reply-To: <bug-6866-163@https.bugs.busybox.net/>
-References: <bug-6866-163@https.bugs.busybox.net/>
-Message-ID: <20140209191041.E0E399B985@busybox.osuosl.org>
+From: jeffball59 at gmail.com <jeffball59@gmail.com>
+Date: Sun,  9 Feb 2014 16:10:44 -0500
+Subject: [Buildroot] [PATCH 1/1] Modified the documentation on customizing a
+	rootfs to be less ambiguous
+In-Reply-To: <y>
+References: <y>
+Message-ID: <1391980244-8855-1-git-send-email-jeffball59@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6866
+From: Jeff Stewart <jeffball59@gmail.com>
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+While reading the documentation I was a little confused over the recommended
+method for customizing the target file system.  After sorting it out in the
+IRC channel, I modified the documentation to be a little less ambiguous.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-                 CC|                            |yann.morin.1998 at free.fr
-         Resolution|                            |INVALID
+Signed-off-by: Jeff Stewart <jeffball59@gmail.com>
+---
+ docs/manual/customize-rootfs.txt |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- Comment #1 from Yann E. MORIN <yann.morin.1998@free.fr> 2014-02-09 19:10:41 UTC ---
-Jeff, 
-
-Thnaks for your suggestion.
-
-However (as seen on IRC), we do not use the bugtracker for patch submission.
-
-Therefore, I'm closing this bug report.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/docs/manual/customize-rootfs.txt b/docs/manual/customize-rootfs.txt
+index 2cbae99..c23b1af 100644
+--- a/docs/manual/customize-rootfs.txt
++++ b/docs/manual/customize-rootfs.txt
+@@ -23,7 +23,7 @@ there are a few ways to customize the resulting target filesystem.
+   over the target filesystem after it has been built.  Set
+   +BR2_ROOTFS_OVERLAY+ to the top of the tree.  +.git+, +.svn+, +.hg+
+   directories, +.empty+ files and files ending with +~+ are excluded.
+-  _Among these first 3 methods, this one should be preferred_.
++  _Among the customization methods, this one should be preferred_.
+ 
+ * In the Buildroot configuration, you can specify the paths to one or
+   more *post-build scripts*. These scripts are called in the given order,
+@@ -56,8 +56,8 @@ there are a few ways to customize the resulting target filesystem.
+   installation. Note that this method is *not recommended*, as it
+   duplicates the entire skeleton, which prevents from taking advantage
+   of the fixes or improvements brought to the default Buildroot
+-  skeleton. The recommended method is to use the _post-build scripts_
+-  mechanism described in the previous item.
++  skeleton. The _post-build scripts_ mechanism described in the previous
++  item is recommend over this mechanism.
+ 
+ Note also that you can use the *post-image scripts*
+ if you want to perform some specific actions 'after' all
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.10.4
