@@ -1,28 +1,27 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun,  9 Feb 2014 22:17:00 +0000 (UTC)
-Subject: [Buildroot] [Bug 6596] Slow bootup if mdev is chosen
-In-Reply-To: <bug-6596-163@https.bugs.busybox.net/>
-References: <bug-6596-163@https.bugs.busybox.net/>
-Message-ID: <20140209221700.A53249C93A@busybox.osuosl.org>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Mon, 10 Feb 2014 00:02:02 +0100
+Subject: [Buildroot] custom kernel tarball does not use the path.
+Message-ID: <20945F1C02CA42F18AD8B241C4EEE215@JohanW7>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6596
+  
+Hi
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+In my config file I have the custom kernel path set to :
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|ASSIGNED                    |RESOLVED
-         Resolution|                            |FIXED
+$(TOPDIR)/board/karo/linux-3.13.0-RC7.tar.bz2
 
---- Comment #3 from Peter Korsgaard <jacmet@uclibc.org> 2014-02-09 22:17:00 UTC ---
-Committed in git (05e2e35715d104e9dd67b4013d9b16a47b8eb3c0), thanks
+But when building :
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+bzcat /home/johan/dl/linux-3.13.0-RC7.tar.bz2 | tar --strip-components=1 -C /home/buildroot12git/output/build/linux-custom  -xf -
+bzcat: Can't open input file /home/johan/dl/linux-3.13.0-RC7.tar.bz2: No such file or directory.
+tar: This does not look like a tar archive
+tar: Exiting with failure status due to previous errors
+
+It looks like buildroot does not use the full path of the specified file.
+
+Regards Johan
