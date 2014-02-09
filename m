@@ -1,36 +1,24 @@
-From: =?UTF-8?B?Q8OpZHJpYyBDaMOpcGllZA==?= <cedric.chepied@gmail.com>
-Date: Sun, 09 Feb 2014 14:39:31 +0100
-Subject: [Buildroot] [PATCH] ZNC: new package
-In-Reply-To: <20140128195259.73158fe4@skate>
-References: <1388876370-3441-1-git-send-email-cedric.chepied@gmail.com>
- <20140128195259.73158fe4@skate>
-Message-ID: <52f78515.2f24b40a.5600.ffffd4a7@mx.google.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 09 Feb 2014 16:39:50 +0100
+Subject: [Buildroot] [PATCH 1/1] trace-cmd: needs mmu
+In-Reply-To: <1391951067-17304-1-git-send-email-romain.naour@openwide.fr>
+ (Romain Naour's message of "Sun, 9 Feb 2014 14:04:27 +0100")
+References: <1391951067-17304-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <87bnyg2t2x.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+>>>>> "Romain" == Romain Naour <romain.naour@openwide.fr> writes:
 
-At Tue, 28 Jan 2014 19:52:59 +0100,
-Thomas Petazzoni wrote:
-> Looking at the configure.ac from ZNC, it seems like the OpenSSL and
-> Perl support is optional, and can be disabled using --disable-openssl
-> and --disable-perl. It would probably be a good idea to use these to
-> make these dependencies optional.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/0b7/0b73c684b3d7edcd818cb113fda534e552028d58/build-end.log
 
-When I try to enable perl, configure fails. It uses the perl executable to
-generate LDFLAGS but it does that with "my" executable (/usr/bin/perl) and then
-tries to link with /usr/lib/perl5/core_perl/CORE/libperl.so which of course
-fails.
+ > Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 
-For python, configure programs can use ./output/host/usr/bin/python2.7 but I
-can't find the same for perl. I only find perl compiled for my target.
+Committed, thanks.
 
-How can I fix this?
-
-Regards,
 -- 
-C?dric Ch?pied
-<cedric.chepied@gmail.com>
+Bye, Peter Korsgaard
