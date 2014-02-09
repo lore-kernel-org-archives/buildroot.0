@@ -1,9 +1,7 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun,  9 Feb 2014 13:47:12 +0100
-Subject: [Buildroot] [PATCH 4/4] vlc: fix typo when setting VLC_CONF_ENV
-In-Reply-To: <1391950032-5312-1-git-send-email-s.martin49@gmail.com>
-References: <1391950032-5312-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1391950032-5312-5-git-send-email-s.martin49@gmail.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sun,  9 Feb 2014 14:04:27 +0100
+Subject: [Buildroot] [PATCH 1/1] trace-cmd: needs mmu
+Message-ID: <1391951067-17304-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,25 +9,24 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Fixes:
-  http://autobuild.buildroot.org/results/917/917c26656557d50f869639162ec7e9d0f3399824/build-end.log
+http://autobuild.buildroot.net/results/0b7/0b73c684b3d7edcd818cb113fda534e552028d58/build-end.log
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- package/vlc/vlc.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/trace-cmd/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index fd49040..f235ff8 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -211,7 +211,7 @@ endif
- ifeq ($(BR2_PACKAGE_LIVE555),y)
- VLC_CONF_OPT += --enable-live555
- VLC_DEPENDENCIES += live555
--VLC_CONF_ENV = \
-+VLC_CONF_ENV += \
- 	LIVE555_CFLAGS="\
- 		-I$(STAGING_DIR)/usr/include/live \
- 		-I$(STAGING_DIR)/usr/include/live/BasicUsageEnvironment \
+diff --git a/package/trace-cmd/Config.in b/package/trace-cmd/Config.in
+index d48e0fd..9d454e4 100644
+--- a/package/trace-cmd/Config.in
++++ b/package/trace-cmd/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_TRACE_CMD
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_avr32 # AVR32 does not have TLS support
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  Command line reader for ftrace.
+ 
 -- 
-1.8.5.4
+1.8.5.3
