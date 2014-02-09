@@ -1,18 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 09 Feb 2014 22:52:30 +0100
+Date: Sun, 09 Feb 2014 22:53:09 +0100
 Subject: [Buildroot] [PATCH] linux: don't automatically set
 	uevent_helper with mdev /dev management
-In-Reply-To: <CAAXf6LU1YT7Ypua=Frs0gSikDLJ_E-sWaKPn4BMY0Mz2sUHOWg@mail.gmail.com>
- (Thomas De Schampheleire's message of "Sat, 8 Feb 2014 22:06:50
- +0100")
+In-Reply-To: <769563a34e142e85ec4c.1391761259@argentina> (Thomas De
+ Schampheleire's message of "Fri, 07 Feb 2014 09:20:59 +0100")
 References: <769563a34e142e85ec4c.1391761259@argentina>
- <87wqh6640h.fsf@dell.be.48ers.dk>
- <CAAXf6LV=o61iJVycRW-+4boS08=Ar39-uxgUqj6XoqcbzSHmrA@mail.gmail.com>
- <87ob2i63cg.fsf@dell.be.48ers.dk>
- <CAAXf6LWNtuuivOXDhqMbK+3kh6t1vBHCOmU1D-9+PJqi_wjLjw@mail.gmail.com>
- <87k3d55nw8.fsf@dell.be.48ers.dk>
- <CAAXf6LU1YT7Ypua=Frs0gSikDLJ_E-sWaKPn4BMY0Mz2sUHOWg@mail.gmail.com>
-Message-ID: <87mwi00x9d.fsf@dell.be.48ers.dk>
+Message-ID: <87ioso0x8a.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -21,21 +14,22 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
-Hi,
+ > When mdev /dev management is chosen in the buildroot configuration, the
+ > Linux configuration is updated automatically to set option
+ > CONFIG_UEVENT_HELPER_PATH to "/sbin/mdev". However, the help text of this
+ > option explicitly recommends not setting this option due to large
+ > performance impact during boot (experienced first hand by the reporter ?nd
+ > author).
 
- > Thanks for the clarifications and test.
- > An alternative is to provide an option in buildroot to select the
- > behavior: either the current behavior (install mdev as hotplug helper
- > by setting the kernel config) or the proposed behavior in this patch
- > by removing that.
- > Then every project can make its own tradeoff...
+ > The mdev startup script S10mdev already sets the helper during userspace
+ > boot, which will make sure mdev is working correctly.
 
- > What do you think of that?
+ > Fixes bug #6596: https://bugs.busybox.net/show_bug.cgi?id=6596
 
-I don't like it. We had several people report the issue, so I think the
-best way forward is to apply your patch. If people want the extra
-features of mdev-from-bootup they can always tweak their kernel config
-to set it.
+ > Reported-by: Andreas Koop <andreas.koop@zf.com>
+ > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
