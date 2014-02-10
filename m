@@ -1,54 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 10 Feb 2014 09:31:58 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-02-07
-In-Reply-To: <20140208124907.GA3442@free.fr>
-References: <20140208073009.5C3E6100CDC@stock.ovh.net>
- <20140208124907.GA3442@free.fr>
-Message-ID: <20140210093158.1dc26780@skate>
+From: Anders Darander <anders@chargestorm.se>
+Date: Mon, 10 Feb 2014 09:39:56 +0100
+Subject: [Buildroot] [PATCH v4 0/4]  beaglebone: u-boot and kernel updates
+Message-ID: <1392021600-32293-1-git-send-email-anders@chargestorm.se>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
 
-On Sat, 8 Feb 2014 13:49:07 +0100, Yann E. MORIN wrote:
+Hi,
 
-> On 2014-02-08 08:30 +0100, Thomas Petazzoni spake thusly:
-> > Build statistics for 2014-02-07
-> >        arm |          dvb-apps-be76da69f250 | NOK | http://autobuild.buildroot.net/results/310e355f2f601801e4500b9d3e714d3883e7aa32/
-> >        arm |          dvb-apps-be76da69f250 | NOK | http://autobuild.buildroot.net/results/90e1a2e3e428e6c3fe5b51668ab92c139f176260/
-> 
-> Too old toolchain:
->   - SYS_TURBO was introduced in linux 3.2
->   - SYS_DVBC_ANNEX_A in linux 3.2
->   - SYS_DVBC_ANNEX_C and DTV_ENUM_DELSYS in linux 3.3
+This patch series upgrades the kernel for the BeagleBone to 3.12.
 
-The too old toolchain in question is Linaro 2013.11, i.e a fairly
-recent Linaro toolchain. I believe kernel 3.2/3.3 are not that old for
-embedded products, and we should support toolchains that have such old
-kernel headers.
+The 3.12 kernel is taken from TI's own repo, and the actual branch/commit used
+is the latest  used in their own BSP (see meta-ti for OpenEmbedded / Yocto).
 
-> >    powerpc |                w_scan-20130331 | NOK | http://autobuild.buildroot.net/results/549564293607c959fa09e12510bb2aaa79f4f479/
-> 
-> Too old toolchain, as usual.
+I've tried to keep the defconfig as close to the 3.8 version as possible. Though, 
+it's quite likely that some added configuration could have been removed.
 
-This one I agree is old. The question is: how do I exclude this package
-from being built. Should we introduce hidden Config.in bools for kernel
-header versions, so that the packages that need at least the kernel
-headers from kernel X.Y are not visible if you have a too old
-toolchain? Those bools would be set by linux-headers/Config.in for the
-internal backend, automatically set for the well-known external
-toolchains, and a custom choice for special external toolchains.
+It's only been tested on a BeagleBone White, using my usual NFS-root setup.
 
-Thoughts?
+The PM FW in am33x-cm3 has been update to keep it in sync with the kernel.
+The revision used is taken from meta-ti.
 
-Best regards,
+There's also an update to the latest U-Boot, and as a followup to that patch,
+a change to zImage instead of uImage. (As that's the current default in 
+U-Boot).
 
-Thomas
+Cheers,
+Anders
+
+Changelog: 
+v3 -> v4: 
+	* Explicitly set U-Boot version.
+	* Updated Linux kernel to a 3.12.10-based SHA1. 
+
+v2 -> v3:
+	* Update the kernel and am33x-pm to the latest sha1's.
+
+v1 -> v2: 
+	* update the git sha1 to the latest applied to the meta-ti repo. 
+
+Anders Darander (4):
+  beaglebone: update to TI 3.12 kernel
+  am33x-cm3: update to latest version
+  beaglebone: update to latest U-Boot
+  beaglebone: change to zImage
+
+ .../{linux-3.8.config => linux-3.12.config}        | 104 ++++++++++++++-------
+ configs/beaglebone_defconfig                       |   9 +-
+ .../am33x-cm3/am33x-cm3-0001-fix-makefile.patch    |  16 ++--
+ package/am33x-cm3/am33x-cm3.mk                     |   3 +-
+ 4 files changed, 89 insertions(+), 43 deletions(-)
+ rename board/beaglebone/{linux-3.8.config => linux-3.12.config} (68%)
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.0.rc3
