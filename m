@@ -1,78 +1,83 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 10 Feb 2014 18:31:37 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-02-07
-In-Reply-To: <20140210093158.1dc26780@skate>
-References: <20140208073009.5C3E6100CDC@stock.ovh.net>
- <20140208124907.GA3442@free.fr> <20140210093158.1dc26780@skate>
-Message-ID: <20140210173137.GA5239@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 10 Feb 2014 18:43:46 +0100
+Subject: [Buildroot] [PATCH] glibc: add 2.19 as a supported version
+Message-ID: <1392054226-20285-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+glibc 2.19 has been released recently
+(https://sourceware.org/ml/libc-alpha/2014-02/msg00224.html). This
+commit allows to build a toolchain with this new version. In order to
+allow this, we add a version selection that did not exist for
+glibc. We default to 2.18, which was the only supported version until
+now, and add an option for 2.19.
 
-On 2014-02-10 09:31 +0100, Thomas Petazzoni spake thusly:
-> On Sat, 8 Feb 2014 13:49:07 +0100, Yann E. MORIN wrote:
-> 
-> > On 2014-02-08 08:30 +0100, Thomas Petazzoni spake thusly:
-> > > Build statistics for 2014-02-07
-> > >        arm |          dvb-apps-be76da69f250 | NOK | http://autobuild.buildroot.net/results/310e355f2f601801e4500b9d3e714d3883e7aa32/
-> > >        arm |          dvb-apps-be76da69f250 | NOK | http://autobuild.buildroot.net/results/90e1a2e3e428e6c3fe5b51668ab92c139f176260/
-> > 
-> > Too old toolchain:
-> >   - SYS_TURBO was introduced in linux 3.2
-> >   - SYS_DVBC_ANNEX_A in linux 3.2
-> >   - SYS_DVBC_ANNEX_C and DTV_ENUM_DELSYS in linux 3.3
-> 
-> The too old toolchain in question is Linaro 2013.11, i.e a fairly
-> recent Linaro toolchain. I believe kernel 3.2/3.3 are not that old for
-> embedded products, and we should support toolchains that have such old
-> kernel headers.
+For microblaze, which uses a specific glibc version, the version
+selection choice is not displayed.
 
-Sorry, I should have said: kernel-headers too old.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/glibc/Config.in                 | 21 +++++++++++++++++++++
+ package/glibc/glibc.mk                  |  2 +-
+ toolchain/toolchain-buildroot/Config.in |  2 +-
+ 3 files changed, 23 insertions(+), 2 deletions(-)
+ create mode 100644 package/glibc/Config.in
 
-That toolchain is using headers from Linux 3.1.1, which are too old to
-have the required defines (since they appeared in 3.3).
-
-So, same issue, just a different phrasing.
-
-> > >    powerpc |                w_scan-20130331 | NOK | http://autobuild.buildroot.net/results/549564293607c959fa09e12510bb2aaa79f4f479/
-> > 
-> > Too old toolchain, as usual.
-> 
-> This one I agree is old. The question is: how do I exclude this package
-> from being built. Should we introduce hidden Config.in bools for kernel
-> header versions, so that the packages that need at least the kernel
-> headers from kernel X.Y are not visible if you have a too old
-> toolchain? Those bools would be set by linux-headers/Config.in for the
-> internal backend, automatically set for the well-known external
-> toolchains, and a custom choice for special external toolchains.
-> 
-> Thoughts?
-
-Something like:
-
-    config BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
-        bool
-
-    config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_11
-        select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
-
-    config BR2_PACKAGE_DVB_APPS
-        depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
-
-And so on for all the headers version of interest?
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+new file mode 100644
+index 0000000..a92b5ea
+--- /dev/null
++++ b/package/glibc/Config.in
+@@ -0,0 +1,21 @@
++if BR2_TOOLCHAIN_BUILDROOT_GLIBC
++
++choice
++	prompt "glibc version"
++	default BR2_GLIBC_VERSION_2_18
++	# Architectures supported in mainline glibc
++	depends on BR2_arm    || BR2_armeb    || BR2_aarch64 || \
++		   BR2_i386   || BR2_mips     || BR2_mipsel  || \
++		   BR2_mips64 || BR2_mips64el || BR2_powerpc || \
++		   BR2_sh     || BR2_sh64     || BR2_sparc   || \
++		   BR2_x86_64
++
++config BR2_GLIBC_VERSION_2_18
++       bool "2.18"
++
++config BR2_GLIBC_VERSION_2_19
++       bool "2.19"
++
++endchoice
++
++endif
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 96de02a..89eaaf6 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -21,7 +21,7 @@ GLIBC_SITE = http://downloads.yoctoproject.org/releases/eglibc/
+ GLIBC_SOURCE = eglibc-$(GLIBC_VERSION).tar.bz2
+ GLIBC_SRC_SUBDIR = libc
+ else
+-GLIBC_VERSION = 2.18
++GLIBC_VERSION = $(if $(BR2_GLIBC_VERSION_2_19),2.19,2.18)
+ GLIBC_SITE = $(BR2_GNU_MIRROR)/libc
+ GLIBC_SOURCE = glibc-$(GLIBC_VERSION).tar.xz
+ GLIBC_SRC_SUBDIR = .
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index cd88889..eb5ee46 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -70,7 +70,7 @@ config BR2_TOOLCHAIN_BUILDROOT_LIBC
+ 	default "glibc"  if BR2_TOOLCHAIN_BUILDROOT_GLIBC
+ 
+ source "package/uclibc/Config.in"
+-
++source "package/glibc/Config.in"
+ source "package/binutils/Config.in.host"
+ source "package/gcc/Config.in.host"
+ source "package/elf2flt/Config.in.host"
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.3.2
