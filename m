@@ -1,24 +1,37 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 10 Feb 2014 18:07:07 +0000 (UTC)
-Subject: [Buildroot] [Bug 325] New package: ratpoison
-In-Reply-To: <bug-325-163@https.bugs.busybox.net/>
-References: <bug-325-163@https.bugs.busybox.net/>
-Message-ID: <20140210180707.35F899C952@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 10 Feb 2014 19:22:27 +0100
+Subject: [Buildroot] [PATCH v4 1/4] beaglebone: update to TI 3.12 kernel
+In-Reply-To: <1392021600-32293-2-git-send-email-anders@chargestorm.se>
+References: <1392021600-32293-1-git-send-email-anders@chargestorm.se>
+ <1392021600-32293-2-git-send-email-anders@chargestorm.se>
+Message-ID: <20140210192227.4a4deee2@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=325
+Dear Anders Darander,
 
-Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> changed:
+On Mon, 10 Feb 2014 09:39:57 +0100, Anders Darander wrote:
+> Git repo version is taken from meta-ti.
+> It's a 3.12.10 kernel with TI's own patches on top.
+> 
+> The defconfig has been kept rather close to our old defconfig.
+> The kernel has been boot-tested using an NFS-root.
+> 
+> Apart from the kernel change, the linux headers has also been
+> updated from 3.8.12 to 3.12.10.
+> 
+> Signed-off-by: Anders Darander <anders@chargestorm.se>
+> ---
+>  .../{linux-3.8.config => linux-3.12.config}        | 104 ++++++++++++++-------
+>  configs/beaglebone_defconfig                       |   6 +-
+>  2 files changed, 75 insertions(+), 35 deletions(-)
+>  rename board/beaglebone/{linux-3.8.config => linux-3.12.config} (68%)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-            Summary|New package ratpoison       |New package: ratpoison
-
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
