@@ -1,38 +1,25 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 10 Feb 2014 16:10:41 +0100
+Date: Mon, 10 Feb 2014 16:12:35 +0100
 Subject: [Buildroot] Bugs cleanup (input requested)
-In-Reply-To: <CAGduivw8=tvBiMUw-hLYVQ+OBt1bj639BACgwi-NHqyh_HUaAA@mail.gmail.com>
+In-Reply-To: <20140210154305.0db0bb01@skate>
 References: <CAAXf6LX719WwMSZUGShzANA22z0g+zo5hYNbFYwfHG3ZEGBioQ@mail.gmail.com>
- <CAGduivw8=tvBiMUw-hLYVQ+OBt1bj639BACgwi-NHqyh_HUaAA@mail.gmail.com>
-Message-ID: <CAAXf6LV9dm5JDb6HjSsSyhLBYxLYBGyG=UsevfFAKH6efdZq7Q@mail.gmail.com>
+ <20140210154305.0db0bb01@skate>
+Message-ID: <CAAXf6LUyPWqRLyMiQTuV137R4v8jRMnqNg_r5p1zgHMyB=+F-A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Maxime,
+Hi Maxime, Danomi, Thomas,
 
-On Mon, Feb 10, 2014 at 1:02 PM, Maxime Hadjinlian
-<maxime.hadjinlian@gmail.com> wrote:
-> Hi all,
->
-> On Mon, Feb 10, 2014 at 11:21 AM, Thomas De Schampheleire
-> <patrickdepinguin@gmail.com> wrote:
->> All,
->>
->> I have been looking at some bugs / enhancement requests this weekend.
->>
->> *For the entries proposing new packages*, I have updated the todo
->> list. Feel free to adopt these patches (but please wait until next
->> release cycle): http://elinux.org/Buildroot#Packages
->
-> We should organize and specify clearly who is working on what, to
-> avoid work done twice. In the bug tracker, it can be assigned to the
-> person wanting to adopt this one, other than that. The wiki should be
-> edited or a mail sent to the mailing.
+On Mon, Feb 10, 2014 at 3:43 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+[..]
+> *Finally, for some entries we need to make a decision on how to
+> proceed*. I am listing these entries below:
 
-I fully agree.
+Thanks for your feedback, I will update the bugs accordingly.
 
 Best regards,
 Thomas
