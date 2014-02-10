@@ -1,35 +1,47 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 10 Feb 2014 21:29:59 +0100
-Subject: [Buildroot] [PATCH] glibc: add 2.19 as a supported version
-In-Reply-To: <1392054226-20285-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1392054226-20285-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <52F936C7.4040300@mind.be>
+Date: Mon, 10 Feb 2014 21:51:28 +0100
+Subject: [Buildroot] [pkg-perl infra V6 9/9] perl: remove
+	PERL_INSTALL_TARGET_GOALS
+In-Reply-To: <1392034997-12394-10-git-send-email-francois.perrad@gadz.org>
+References: <1392034997-12394-1-git-send-email-francois.perrad@gadz.org>
+ <1392034997-12394-10-git-send-email-francois.perrad@gadz.org>
+Message-ID: <52F93BD0.20102@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/10/14 18:43, Thomas Petazzoni wrote:
-> glibc 2.19 has been released recently
-> (https://sourceware.org/ml/libc-alpha/2014-02/msg00224.html). This
-> commit allows to build a toolchain with this new version. In order to
-> allow this, we add a version selection that did not exist for
-> glibc. We default to 2.18, which was the only supported version until
-> now, and add an option for 2.19.
+On 02/10/14 13:23, Francois Perrad wrote:
+> useless since previous commit (removal of BR2_HAVE_DOCUMENTATION)
+> see http://git.buildroot.net/buildroot/diff/package/perl/perl.mk?id=7164a32632d14cb83698ddec45e84ad2f3252e9e
+> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
- How useful is it to offer a choice for the libc version?
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- For uClibc it makes a tiny bit of sense because you may have custom
-patches or a custom config, which you don't want to port when going to a
-new buildroot version. But I don't think that's a very good reason to
-begin with.
+> ---
+>  package/perl/perl.mk |    4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+> index 5ede81b..51aeb14 100644
+> --- a/package/perl/perl.mk
+> +++ b/package/perl/perl.mk
+> @@ -90,10 +90,8 @@ define PERL_INSTALL_STAGING_CMDS
+>  	$(MAKE1) -C $(@D) DESTDIR="$(STAGING_DIR)" install.perl
+>  endef
+>  
+> -PERL_INSTALL_TARGET_GOALS = install.perl
+> -
+>  define PERL_INSTALL_TARGET_CMDS
+> -	$(MAKE1) -C $(@D) DESTDIR="$(TARGET_DIR)" $(PERL_INSTALL_TARGET_GOALS)
+> +	$(MAKE1) -C $(@D) DESTDIR="$(TARGET_DIR)" install.perl
+>  endef
+>  
+>  $(eval $(generic-package))
+> 
 
- For glibc, however, I really don't see a reason to keep multiple versions.
-
-
- Regards,
- Arnout
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
