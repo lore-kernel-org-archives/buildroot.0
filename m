@@ -1,70 +1,118 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Mon, 10 Feb 2014 14:44:15 +0100
-Subject: [Buildroot] [PATCH v7 0/4] udev is now provided by systemd or
- eudev
-In-Reply-To: <52F5435A.3080700@mind.be>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 10 Feb 2014 14:44:27 +0100
+Subject: [Buildroot] [PATCH v7 3/4] systemd: bump to v207.
+In-Reply-To: <20140210132657.GC22843@pc-eric>
 References: <1391779295-19140-1-git-send-email-eric.le.bihan.dev@free.fr>
- <52F5435A.3080700@mind.be>
-Message-ID: <20140210134415.GD22843@pc-eric>
+ <1391779295-19140-4-git-send-email-eric.le.bihan.dev@free.fr>
+ <CAHXCMM+rLYDjzBcixCHhXeu0A3jFMBxEEsGRaD-0D2KnLe8GyA@mail.gmail.com>
+ <20140210132657.GC22843@pc-eric>
+Message-ID: <CAHXCMM+g-jsmYA6JVpiqVfb+FMwsT6WL96xpikX=xCrtkS7g9w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+Eric,
 
-On Fri, Feb 07, 2014 at 09:34:34PM +0100, Arnout Vandecappelle wrote:
+On Mon, Feb 10, 2014 at 2:26 PM, Eric Le Bihan
+<eric.le.bihan.dev@free.fr> wrote:
+> Samuel, all,
 >
->  I have one more remark about the way the udev virtual package is
-> implemented. We found out for the opengl packages that there is a better
-> way to do it, something like:
+> On Fri, Feb 07, 2014 at 11:00:00PM +0100, Samuel Martin wrote:
+>> > +         Systemd requires a Linux kernel >= 3.0, with inotify, devtmpfs,
+>> > +         tmpfs vfs and tmpfs POSIX ACL enabled.
+>>
+>> Linux >= 3.0, really? IIRC systemd requires devtmpfs (available for a long
+>> time), and cgroup which has been available since linux-2.6.36 (though the
+>> patch to make them available on older kernel is easy to backport on older
+>> kernel).
+> I set the restriction to "Linux >= 3.0" as it is the one mentioned in the
+> README file of systemd. Linux 3.0 introduced the cgroup.procs file, needed by
+> systemd v207.
 >
-> udev/Config.in:
+> What should the help menu contain? Should it be only the minimum version
+> required with its reason, or the full list of features needed?
 >
-> config BR2_PACKAGE_HAS_UDEV
->         bool
+> The README file contains a list of the kernel configuration options that are
+> needed to run systemd:
 >
-> config BR2_PACKAGE_PROVIDES_UDEV
->         depends on BR2_PACKAGE_HAS_UDEV
->         string
+> - CONFIG_DEVTMPFS
+> - CONFIG_CGROUPS
+> - CONFIG_INOTIFY_USER
+> - CONFIG_SIGNALFD
+> - CONFIG_TIMERFD
+> - CONFIG_EPOLL
+> - CONFIG_NET
+> - CONFIG_SYSFS
+> - CONFIG_PROC_FS
+> - CONFIG_FHANDLE
 >
+> Others are strongly recommended:
 >
-> udev/udev.mk:
+>  - CONFIG_IPV6
+>  - CONFIG_AUTOFS4_FS
+>  - CONFIG_TMPFS_POSIX_ACL
+>  - CONFIG_TMPFS_XATTR
+>  - CONFIG_SECCOMP
 >
-> UDEV_SRC =
-> UDEV_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_UDEV))
+> The LINUX_CONFIGURE_CMDS in linux/linux.mk forces some kernel options for some
+> packages. Should I add all the ones previously listed for systemd?
 >
-> ifeq ($(UDEV_DEPENDENCIES),)
-> define UDEV_CONFIGURE_CMDS
->         echo "No Udev implementation selected. Configuration error."
->         exit 1
-> endef
-> endif
+> I'm in favor of setting the help text to:
 >
->
-> eudev/Config.in:
->
-> ...
-> if BR2_PACKAGE_EUDEV
-> config BR2_PACKAGE_PROVIDES_UDEV
-> 	default "eudev"
-> endif
->
->
->
->  That moves all the provider logic to the provider itself, which for
-> instance makes it possible for BR2_EXTERNAL to provide an alternative
-> udev implementation (e.g. a different udev version, which could be _very_
-> relevant).
->
->
->  I repeat, though: this can be done as a follow-up patch.
-Yes, the word 'provides' is more explicit. I'll put this in a follow-up patch.
-If this is the definitive way of implementing a virtual package, shouldn't it
-be added to docs/manual/adding-packages-tips.txt?
+>   Systemd requires a Linux kernel >= 3.0.
 
-Thanks for the review.
+Anyway, Buildroot only offers linux >=3.12, and 3.0 is old enough to
+keep it like this. ;)
 
-Best regards,
-ELB
+>
+>   The following features will be enabled in the Linux kernel:
+>   devtmpfs, cgroups, [...]
+>
+> So the end user is informed and will have a working configuration out of the
+> box.
+
+Indeed, you can look at the help message for lttng-modules for example
+(having the actual symbol name may be good imho).
+BTW, to be consistent, imho, we should automatically enable all the
+mandatory kernel options (like Buildroot already does for a couple of
+them).
+
+>
+>> > diff --git a/system/Config.in b/system/Config.in
+>> > index 34726b0..30d8efe 100644
+>> > --- a/system/Config.in
+>> > +++ b/system/Config.in
+>> > @@ -87,20 +87,19 @@ config BR2_INIT_SYSV
+>> >
+>> >  config BR2_INIT_SYSTEMD
+>> >         bool "systemd"
+>> > +       depends on !BR2_avr32 # no epoll_create1
+>> > +       depends on BR2_TOOLCHAIN_USES_GLIBC
+>> >         depends on BR2_LARGEFILE
+>> >         depends on BR2_USE_WCHAR
+>> >         depends on BR2_INET_IPV6
+>> > -       depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
+>> >         depends on BR2_TOOLCHAIN_HAS_THREADS
+>> > +       depends on BR2_TOOLCHAIN_HAS_SSP
+>> >         depends on BR2_USE_MMU
+>> > -       select BR2_PACKAGE_DBUS
+>> > +       depends on !BR2_PREFER_STATIC_LIB
+>> >         select BR2_PACKAGE_SYSTEMD
+>>
+>> How does this play with kconfig?
+>> Does not kconfig complain about some circular dependencies here, because
+>> you have BR2_INIT_SYSTEMD selecting BR2_PACAKGE_SYSTEMD, while
+>> BR2_PACKAGE_SYSTEMD depends on BR2_INIT_SYSTEMD?
+> I do not get any error from kconfig. I used the same trick to hide the
+> systemv package when 'SysV' is not chosen as init system. I do not know if it
+> is a bug or a feature of kconfig :)
+
+If no bug is trigger, it's nice; otherwise... we'll report it to the
+kconfig maintainer :P
+
+Regards,
+
+-- 
+Samuel
