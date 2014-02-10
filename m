@@ -1,26 +1,31 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 10 Feb 2014 08:07:26 +0100
-Subject: [Buildroot] [pkg-perl infra V5 1/8] host-perl: refactor and
- rename PERL5LIB
-In-Reply-To: <1391763337-30660-2-git-send-email-francois.perrad@gadz.org>
-References: <1391763337-30660-1-git-send-email-francois.perrad@gadz.org>
- <1391763337-30660-2-git-send-email-francois.perrad@gadz.org>
-Message-ID: <52F87AAE.5090700@mind.be>
+Date: Mon, 10 Feb 2014 07:48:37 +0100
+Subject: [Buildroot] [PATCH 3/4] samba: convert to choice package
+In-Reply-To: <1391806354-32698-4-git-send-email-gustavo@zacarias.com.ar>
+References: <1391806354-32698-1-git-send-email-gustavo@zacarias.com.ar>
+ <1391806354-32698-4-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <52F87645.8000708@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/07/14 09:55, Francois Perrad wrote:
-> The official Perl documentation refers only to PERL5LIB.
-> PERLLIB is obsolete, we don't need to be compatible with Perl4.
+On 02/07/14 21:52, Gustavo Zacarias wrote:
+> Convert the classic samba package to a choice and move it to samba3 in
+> preparation for the samba4 package.
 > 
-> HOST_INTLTOOL_CONF_OPT is useless because HOST_CONFIGURE_OPTS already contains PERL5LIB.
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ I don't like this rename. Why not keep the old samba package and add
+samba4 to it? If side-by-side installation is not possible, make samba4
+depend on !samba, like is done for qt5.
+
+ If you do keep this rename, there are a few things you forgot:
+
+- gvfs has a condition on BR2_PACKAGE_SAMBA_LIBSMBCLIENT;
+
+- you need legacy options for all the samba suboptions.
 
 
  Regards,
