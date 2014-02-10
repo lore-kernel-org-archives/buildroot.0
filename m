@@ -1,37 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 10 Feb 2014 17:48:58 +0100
-Subject: [Buildroot] Bugs cleanup (input requested)
-In-Reply-To: <CAAXf6LWzDBwN=U=7U9yK7oQPhq2+c=C6ZHmrK_kiy-3hOAu2BA@mail.gmail.com>
-References: <CAAXf6LX719WwMSZUGShzANA22z0g+zo5hYNbFYwfHG3ZEGBioQ@mail.gmail.com>
- <20140210154305.0db0bb01@skate>
- <CAAXf6LWzDBwN=U=7U9yK7oQPhq2+c=C6ZHmrK_kiy-3hOAu2BA@mail.gmail.com>
-Message-ID: <20140210174858.62e72709@skate>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Mon, 10 Feb 2014 18:15:06 +0100
+Subject: [Buildroot] custom kernel tarball does not use the path.
+In-Reply-To: <d181bde1-9238-4bdc-bf2f-139e3d15746c@email.android.com>
+References: <20945F1C02CA42F18AD8B241C4EEE215@JohanW7>
+ <d181bde1-9238-4bdc-bf2f-139e3d15746c@email.android.com>
+Message-ID: <D5029D5D4676497A8F830ED2869198B6@JohanW7>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+ 
+Hi Thomas
 
-On Mon, 10 Feb 2014 16:20:10 +0100, Thomas De Schampheleire wrote:
+-----Oorspronkelijk bericht-----
+Van: Thomas De Schampheleire [mailto:patrickdepinguin at gmail.com] 
+Verzonden: maandag 10 februari 2014 7:18
+Aan: Sagaert Johan; buildroot at busybox.net
+Onderwerp: Re: [Buildroot] custom kernel tarball does not use the path.
 
-> > For these bug reports, did you change them to another state?
-> 
-> Not yet. I see that several already are in state 'enhancement', prio P5.
-> 
-> What about additionally 'assigning' them to a mailing address that
-> reflects that these are packages? Currently unassigned bugs are
-> assigned to 'unassigned at buildroot.uclibc.org'. Is this a real e-mail
-> address or not? What about we assign 'new package' entries to
-> 'unassigned-newpkg at buildroot.uclibc.org' instead?
+Hi Johan,
 
-What would this be useful for? I believe we should either find people
-willing to "adopt" those packages and do the remaining work needed to
-get them merge, or close the bugs.
+Sagaert Johan <sagaert.johan@skynet.be> schreef:
+>  
+>Hi
+>
+>In my config file I have the custom kernel path set to :
+>
+>$(TOPDIR)/board/karo/linux-3.13.0-RC7.tar.bz2
 
+Can you show exactly how this is assigned in the .config file? Are you using file:// ?
+
+> No just using $(TOPDIR)/board/karo/linux-3.13.0-RC7.tar.bz2
+> I tried again by using the file:// prefixing the path. That works.
+> I failed to use the file:// url spec.
+
+Regards  Johan 
+
+
+And did you already try 'make linux-dirclean' so as to force a new download? Buildroot should copy the file from the specified
+location to the dl dir, and then extract from there...
+
+Best regards,
 Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
