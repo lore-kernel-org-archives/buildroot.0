@@ -1,52 +1,46 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 10 Feb 2014 21:51:28 +0100
-Subject: [Buildroot] [pkg-perl infra V6 9/9] perl: remove
-	PERL_INSTALL_TARGET_GOALS
-In-Reply-To: <1392034997-12394-10-git-send-email-francois.perrad@gadz.org>
-References: <1392034997-12394-1-git-send-email-francois.perrad@gadz.org>
- <1392034997-12394-10-git-send-email-francois.perrad@gadz.org>
-Message-ID: <52F93BD0.20102@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 10 Feb 2014 22:59:04 +0100
+Subject: [Buildroot] [PATCH] Makefile.legacy: fix recursive invocation
+ with BUILDROOT_DL_DIR and _CONFIG
+In-Reply-To: <1392068935-25510-1-git-send-email-arnout@mind.be>
+References: <1392068935-25510-1-git-send-email-arnout@mind.be>
+Message-ID: <20140210215904.GF5239@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/10/14 13:23, Francois Perrad wrote:
-> useless since previous commit (removal of BR2_HAVE_DOCUMENTATION)
-> see http://git.buildroot.net/buildroot/diff/package/perl/perl.mk?id=7164a32632d14cb83698ddec45e84ad2f3252e9e
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Arnout, All,
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-> ---
->  package/perl/perl.mk |    4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+On 2014-02-10 22:48 +0100, Arnout Vandecappelle (Essensium/Mind) spake thusly:
+> The legacy support for the old BUILDROOT_DL_DIR and BUILDROOT_CONFIG
+> breaks down when make is invoked recursively - which is done in a few
+> cases, e.g. silentoldconfig, external-defs, ... These targets always
+> give a legacy error.
 > 
-> diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-> index 5ede81b..51aeb14 100644
-> --- a/package/perl/perl.mk
-> +++ b/package/perl/perl.mk
-> @@ -90,10 +90,8 @@ define PERL_INSTALL_STAGING_CMDS
->  	$(MAKE1) -C $(@D) DESTDIR="$(STAGING_DIR)" install.perl
->  endef
->  
-> -PERL_INSTALL_TARGET_GOALS = install.perl
-> -
->  define PERL_INSTALL_TARGET_CMDS
-> -	$(MAKE1) -C $(@D) DESTDIR="$(TARGET_DIR)" $(PERL_INSTALL_TARGET_GOALS)
-> +	$(MAKE1) -C $(@D) DESTDIR="$(TARGET_DIR)" install.perl
->  endef
->  
->  $(eval $(generic-package))
+> For BUILDROOT_DL_DIR, this is fixed by making sure that the original
+> value of BR2_DL_DIR taken from the environment is also exported again.
 > 
+> For BUILDROOT_CONFIG, this is fixed with an additional comparison of
+> the environment variable's value with the fake value that we introduce
+> ourselves.
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Fixes (at least):
+    make graph-depends
+    make PKG-graph-depends
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
