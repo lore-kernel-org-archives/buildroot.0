@@ -1,31 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 10 Feb 2014 16:38:29 +0100
-Subject: [Buildroot] buildroot mailing list @buildroot.org
-In-Reply-To: <CAAXf6LVSY55FAH_F1iJyYVDFkBJVd3aVsU7+WspPXX=1B67KRA@mail.gmail.com>
- (Thomas De Schampheleire's message of "Mon, 10 Feb 2014 16:20:50
- +0100")
-References: <CAAXf6LWdw8YROumrrbyMOhV=O+cy8u=qKGJK1PENBLRo3ZCgpQ@mail.gmail.com>
- <CAAXf6LWK7ddP-rCgdFxp5UNg_ZL9kcDotGPBhCx++B-HdT0KAQ@mail.gmail.com>
- <871u18olpb.fsf@dell.be.48ers.dk>
- <CAAXf6LVSY55FAH_F1iJyYVDFkBJVd3aVsU7+WspPXX=1B67KRA@mail.gmail.com>
-Message-ID: <87d2ivyo3u.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 10 Feb 2014 17:48:58 +0100
+Subject: [Buildroot] Bugs cleanup (input requested)
+In-Reply-To: <CAAXf6LWzDBwN=U=7U9yK7oQPhq2+c=C6ZHmrK_kiy-3hOAu2BA@mail.gmail.com>
+References: <CAAXf6LX719WwMSZUGShzANA22z0g+zo5hYNbFYwfHG3ZEGBioQ@mail.gmail.com>
+ <20140210154305.0db0bb01@skate>
+ <CAAXf6LWzDBwN=U=7U9yK7oQPhq2+c=C6ZHmrK_kiy-3hOAu2BA@mail.gmail.com>
+Message-ID: <20140210174858.62e72709@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+Dear Thomas De Schampheleire,
 
-Hi,
+On Mon, 10 Feb 2014 16:20:10 +0100, Thomas De Schampheleire wrote:
 
- >> Sorry, busy with getting everything done before the holidays, I'll ping
- >> the osuosl.org guys about it.
+> > For these bug reports, did you change them to another state?
+> 
+> Not yet. I see that several already are in state 'enhancement', prio P5.
+> 
+> What about additionally 'assigning' them to a mailing address that
+> reflects that these are packages? Currently unassigned bugs are
+> assigned to 'unassigned at buildroot.uclibc.org'. Is this a real e-mail
+> address or not? What about we assign 'new package' entries to
+> 'unassigned-newpkg at buildroot.uclibc.org' instead?
 
- > Did you get any response about this?
+What would this be useful for? I believe we should either find people
+willing to "adopt" those packages and do the remaining work needed to
+get them merge, or close the bugs.
 
-I'm afraid I forgot about this one. I've configured MX records and
-mailed the osuosl.org admins now.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
