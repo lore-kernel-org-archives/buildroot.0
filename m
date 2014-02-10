@@ -1,46 +1,134 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 10 Feb 2014 08:05:29 +0100
-Subject: [Buildroot] buildroot(busybox) problem with ccache during
- rtai-4.0-test2 compiling.
-In-Reply-To: <CAEqQue2LWkRXk6xDW=znSzenJ41kGeRNc_uGj0bOM0ChhkEKeQ@mail.gmail.com>
-References: <CAEqQue1sX4nntqoAS-Rynro_8GDkD7hAUd+_CTHDXft_Z0U=CA@mail.gmail.com>	<20140130200821.2c0559d8@skate>	<CAEqQue1tHGgSoRZ10S1onLNVoWVTB5wvtHEZoNSsH6rqz-808g@mail.gmail.com>	<20140131090444.725c88d4@skate>	<CAEqQue1m_d_ouJMoHqzjyvWawHFry_1C9S39E=1AeyJqFD6R9Q@mail.gmail.com>	<52F0ADF4.8080509@mind.be>
- <CAEqQue2LWkRXk6xDW=znSzenJ41kGeRNc_uGj0bOM0ChhkEKeQ@mail.gmail.com>
-Message-ID: <52F87A39.5020209@mind.be>
+Date: Mon, 10 Feb 2014 08:16:15 +0100
+Subject: [Buildroot] [pkg-perl infra V5 2/8] pkg-perl: new infrastructure
+In-Reply-To: <1391763337-30660-3-git-send-email-francois.perrad@gadz.org>
+References: <1391763337-30660-1-git-send-email-francois.perrad@gadz.org>
+ <1391763337-30660-3-git-send-email-francois.perrad@gadz.org>
+Message-ID: <52F87CBF.4030205@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/08/14 14:19, servo gmrt wrote:
-> Dear Arnout,
+On 02/07/14 09:55, Francois Perrad wrote:
 > 
->      Herewith I am attaching the changes I made in the buildroot, to
-> compile the rtai-4.0.
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  Config.in           |   10 +++
+>  package/Makefile.in |    4 +-
+>  package/pkg-perl.mk |  198 +++++++++++++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 211 insertions(+), 1 deletion(-)
+>  create mode 100644 package/pkg-perl.mk
 > 
->     I took the 02-08-2014 daily snapshot from buildroot download repository.
-> 
->     I used the following command to generate the patch,
-> 
->       "diff -uprN working-dir original-source-dir"
-> 
->     Is above command sufficient or do I need to add any flags along with
-> diff command.
+> diff --git a/Config.in b/Config.in
+> index 7ec7c2a..678fe8d 100644
+> --- a/Config.in
+> +++ b/Config.in
+> @@ -225,6 +225,16 @@ config BR2_LUAROCKS_MIRROR
+>  
+>  	  See http://luarocks.org
+>  
+> +config BR2_CPAN_MIRROR
+> +	string "CPAN mirror"
+> +	default "http://search.cpan.org/CPAN"
+> +	help
+> +	  CPAN has multiple software mirrors scattered around the world.
+> +	  This option allows you to select a mirror.
+> +
+> +	  The list of mirrors is available at:
+> +	  http://search.cpan.org/mirror
+> +
+>  endmenu
+>  
+>  config BR2_JLEVEL
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index d0b1cfd..41f73cb 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -206,7 +206,8 @@ HOST_PATH=$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(PATH)
+>  HOSTCC_VERSION:=$(shell $(HOSTCC_NOCCACHE) --version | \
+>  	sed -n 's/^.* \([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)[ ]*.*$$/\1\2\3/p')
+>  
+> -HOST_PERL5LIB = $(HOST_DIR)/usr/lib/perl
+> +HOST_PERL_ARCHNAME := $(shell perl -MConfig -e "print Config->{archname}")
+> +HOST_PERL5LIB = $(HOST_DIR)/usr/lib/perl5/$(HOST_PERL_ARCHNAME):$(HOST_DIR)/usr/lib/perl5
+>  
+>  TARGET_CONFIGURE_OPTS=PATH=$(TARGET_PATH) \
+>  		AR="$(TARGET_AR)" \
+> @@ -376,4 +377,5 @@ include package/pkg-autotools.mk
+>  include package/pkg-cmake.mk
+>  include package/pkg-luarocks.mk
+>  include package/pkg-python.mk
+> +include package/pkg-perl.mk
 
+ perl comes before python.
 
- So you just bumped the version number to 4.0. Clearly, that is not enough.
+>  include package/pkg-generic.mk
+> diff --git a/package/pkg-perl.mk b/package/pkg-perl.mk
+> new file mode 100644
+> index 0000000..bf9fddf
+> --- /dev/null
+> +++ b/package/pkg-perl.mk
+> @@ -0,0 +1,198 @@
+> +################################################################################
+> +# Perl package infrastructure
+> +#
+> +# This file implements an infrastructure that eases development of
+> +# package .mk files for Perl packages.
+> +#
+> +# See the Buildroot documentation for details on the usage of this
+> +# infrastructure
+> +#
+> +# In terms of implementation, this perl infrastructure requires
+> +# the .mk file to only specify metadata information about the
+> +# package: name, version, download URL, etc.
+> +#
+> +# We still allow the package .mk file to override what the different
+> +# steps are doing, if needed. For example, if <PKG>_BUILD_CMDS is
+> +# already defined, it is used as the list of commands to perform to
+> +# build the package, instead of the default perl behaviour. The
+> +# package can also define some post operation hooks.
+> +#
+> +################################################################################
+> +
+> +PKG_PERL_ARCHNAME	= $(ARCH)-linux
 
- As Thomas mentioned in his first reply: it's a problem with missing
-quotes around $(CC) in one of the scripts used by rtai - most likely the
-configure script itself. You can try to fix it there. Or you can disable
-ccache (and do a 'make rtai-dirclean'), which will probably get you further.
+ This one should just be PERL_ARCHNAME.
 
- There is a reasonable chance, however, that you'll encounter other
-problems along the way.
+ However, I don't think it's very relevant to define this variable. Just
+use $(ARCH)-linux directly.
+
+> +
+> +################################################################################
+> +# inner-perl-package -- defines how the configuration, compilation and
+> +# installation of a perl package should be done, implements a
+> +# few hooks to tune the build process for perl specifities and
+> +# calls the generic package infrastructure to generate the necessary
+> +# make targets
+> +#
+> +#  argument 1 is the lowercase package name
+> +#  argument 2 is the uppercase package name, including an HOST_ prefix
+> +#             for host packages
+> +#  argument 3 is the uppercase package name, without the HOST_ prefix
+> +#             for host packages
+> +#  argument 4 is the type (target or host)
+> +################################################################################
+> +
+> +define inner-perl-package
+> +
+> +$(2)_CONF_OPT			?=
+> +$(2)_BUILD_OPT			?=
+> +$(2)_INSTALL_OPT		?=
+> +$(2)_INSTALL_TARGET_OPT		?=
+
+ As I wrote in my last review: you can just remove these, they're useless.
 
 
  Regards,
  Arnout
+
+[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
