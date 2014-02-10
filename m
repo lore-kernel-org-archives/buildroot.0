@@ -1,51 +1,52 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 10 Feb 2014 12:33:06 +0100
-Subject: [Buildroot] [PATCH] libtorrent: disable on ARC arch
-In-Reply-To: <1392031674-30031-1-git-send-email-anton.kolesov@synopsys.com>
-References: <1392031674-30031-1-git-send-email-anton.kolesov@synopsys.com>
-Message-ID: <CAAXf6LWF4yj4E26ynNoP2EMhCkD3fin7Z9Coqoj9M26ZD3LxaQ@mail.gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 10 Feb 2014 12:53:30 +0100
+Subject: [Buildroot] [PATCH 10/10] hostapd: fix static build failure
+In-Reply-To: <20140118200524.GF23411@free.fr>
+References: <1390073027-14239-1-git-send-email-s.martin49@gmail.com>
+ <1390073027-14239-11-git-send-email-s.martin49@gmail.com>
+ <20140118200524.GF23411@free.fr>
+Message-ID: <CAHXCMMJqWkT-3+StwS=ttW1+cN2Qa0-9vrx_kN0n18kkLheLMg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Anton,
-
-On Mon, Feb 10, 2014 at 12:27 PM, Anton Kolesov
-<anton.kolesov@synopsys.com> wrote:
-> Libtorrent has dependencies on atomic operations. However ARC GCC doesn't
-> implement those at the moment so package should be disabled.
+On Sat, Jan 18, 2014 at 9:05 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Samuel, All,
 >
-> This fixes:
-> http://autobuild.buildroot.net/results/51414e22c8ea47c38df20d864526a370c5a895d7/
+> On 2014-01-18 20:23 +0100, Samuel Martin spake thusly:
+>> When building statically hostapd with openssl support, it is necessary
+>> to add -lz to LIBS to avoid undefined symbols when linking against
+>> libcrypto.a.
+>>
+>> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 >
-> Signed-off-by: Anton Kolesov <anton.kolesov@synopsys.com>
-> ---
->  package/libtorrent/Config.in | 2 ++
->  1 file changed, 2 insertions(+)
+> Shouldn't we fix openssl's libcrypto.pc instead?
+> Adding -lz to Libs.private should do the trick, I guess, no?
 >
-> diff --git a/package/libtorrent/Config.in b/package/libtorrent/Config.in
-> index a7e358d..6c8d09d 100644
-> --- a/package/libtorrent/Config.in
-> +++ b/package/libtorrent/Config.in
-> @@ -2,6 +2,8 @@ config BR2_PACKAGE_LIBTORRENT
->         bool "libtorrent"
->         depends on BR2_INSTALL_LIBSTDCPP
->         depends on BR2_TOOLCHAIN_HAS_THREADS
-> +        # ARC GCC doesn't support atomic instructions required by this lib
-> +        depends on !BR2_arc
->         select BR2_PACKAGE_LIBSIGC
->         help
->           BitTorrent library written in C++ for *nix
 
-This extra 'depends on' should be repeated on the comment about
-toolchain options below, so that this comment is only visible when the
-actual package is visible.
-Have a look at http://buildroot.uclibc.org/downloads/manual/manual.html#dependencies-target-toolchain-options
+Well, both openssl and hostapd use custom build-system (ie.
+handwritten configure script and makefiles)...
+What a pity! :-(
 
-(Note: you don't have to repeat the "# ARG GCC doesn't support ..." on
-the comment)
+- on the openssl side:
+when building the static library, the libcrypto.pc is wrong because of
+what Yann points out (no -lz in Libs.private);
 
-Best regards,
-Thomas
+- on the hostapd side:
+they just don't care/check about linking against the static library of
+libcrypto, they just only add -lcrypto to the ldflags.
+
+So, the right fix would be fixing the *.pc generation in openssl and
+call pkg-config to set the cflags and ldflags in hostapd but add a
+host-pkgconf dependency.
+OTOH, the quickest fix is this patch...
+
+Any input about the preferred way to fix it is welcome.
+
+
+Regards,
+
+-- 
+Samuel
