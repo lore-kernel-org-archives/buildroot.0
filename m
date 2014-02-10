@@ -1,28 +1,39 @@
-From: Christophe Vu-Brugier <cvubrugier@yahoo.fr>
-Date: Mon, 10 Feb 2014 16:01:49 +0100
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 10 Feb 2014 16:05:27 +0100
 Subject: [Buildroot] [PATCH 0/4] Samba4 package
-In-Reply-To: <20140210133432.385f9658@skate>
+In-Reply-To: <20140210160149.1ade2c69@grp-cvubrugier.lacie.com>
 References: <1391806354-32698-1-git-send-email-gustavo@zacarias.com.ar>
  <20140208153054.09d6ed51@trantor> <20140210133432.385f9658@skate>
-Message-ID: <20140210160149.1ade2c69@grp-cvubrugier.lacie.com>
+ <20140210160149.1ade2c69@grp-cvubrugier.lacie.com>
+Message-ID: <20140210160527.4d7c8821@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+Dear Christophe Vu-Brugier,
 
-On Mon, 10 Feb 2014 13:34:32 +0100, Thomas Petazzoni wrote :
-> Can you share your cross answers file for x86-64 ? Gustavo patches only
-> support ARM and PowerPC, so it would be great to also support x86-64.
+On Mon, 10 Feb 2014 16:01:49 +0100, Christophe Vu-Brugier wrote:
 
-I sent the patch to the list, but not as a reply to Gustavo Zacarias'
-patchset. The subject of the mail that contains the patch is:
+> On Mon, 10 Feb 2014 13:34:32 +0100, Thomas Petazzoni wrote :
+> > Can you share your cross answers file for x86-64 ? Gustavo patches only
+> > support ARM and PowerPC, so it would be great to also support x86-64.
+> 
+> I sent the patch to the list, but not as a reply to Gustavo Zacarias'
+> patchset. The subject of the mail that contains the patch is:
+> 
+>   [PATCH] samba4: add cross answers for x86_64
 
-  [PATCH] samba4: add cross answers for x86_64
+Yep, sorry. Seen your patch after sending mine. As usual, this is a
+problem with my somewhat FIFO policy when handling the backlog of
+e-mail: I might make a comment that has already been fixed or addressed
+in a future version of the patch series.
 
-Best regards,
+Thanks!
 
+Thomas
 -- 
-Christophe Vu-Brugier
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
