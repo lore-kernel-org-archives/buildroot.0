@@ -1,38 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 10 Feb 2014 13:26:10 +0100
-Subject: [Buildroot] [git commit] gpsd: disable for microblaze arch
-In-Reply-To: <20140208215953.2C5619C81A@busybox.osuosl.org>
-References: <20140208215953.2C5619C81A@busybox.osuosl.org>
-Message-ID: <20140210132610.76d31ad6@skate>
+Date: Mon, 10 Feb 2014 13:33:54 +0100
+Subject: [Buildroot] [PATCH 3/4] samba: convert to choice package
+In-Reply-To: <52F87645.8000708@mind.be>
+References: <1391806354-32698-1-git-send-email-gustavo@zacarias.com.ar>
+ <1391806354-32698-4-git-send-email-gustavo@zacarias.com.ar>
+ <52F87645.8000708@mind.be>
+Message-ID: <20140210133354.09a2fc57@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ryan, Peter,
+Arnout, Gustavo,
 
-On Sat, 8 Feb 2014 22:53:41 +0100, Peter Korsgaard wrote:
-> commit: http://git.buildroot.net/buildroot/commit/?id=d517415bcda380336f4a27bf248cef4d81791c9e
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 10 Feb 2014 07:48:37 +0100, Arnout Vandecappelle wrote:
+> On 02/07/14 21:52, Gustavo Zacarias wrote:
+> > Convert the classic samba package to a choice and move it to samba3 in
+> > preparation for the samba4 package.
+> > 
+> > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > 
-> gpsd will fail on an internal compiler error for the microblaze
-> architecture so disabling it on that architecture.
-> 
-> Fixes:
->   http://autobuild.buildroot.org/results/42d/42da870722f24e4202d8265597771a0449e74cfd
-> 
-> [Peter: add comment explaining why]
-> Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+>  I don't like this rename. Why not keep the old samba package and add
+> samba4 to it? If side-by-side installation is not possible, make samba4
+> depend on !samba, like is done for qt5.
 
-I believe we should add a bug tracker entry for this issue and the
-dmraid on ARC issue, assigned to Spenser (for the gpsd/microblaze
-issue) and Anton (for the ARC/dmraid issue). I'd like to make sure we
-keep track of them as they will no longer appear in the autobuilder
-results. This will remind Spenser and Anton to do something about them.
+Yes, I would also prefer to keep the Samba package named as it is
+today, and introduce Samba 4.x as a separate package, without touching
+the existing Samba 3.x support (except maybe changing the short
+description, and adding the depends on !samba as suggested by Arnout).
 
-Thanks!
+Best regards,
 
 Thomas
 -- 
