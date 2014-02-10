@@ -1,88 +1,58 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 10 Feb 2014 18:06:31 +0100
-Subject: [Buildroot] [PATCH] qemu: add host/target Linux version check
-In-Reply-To: <1391896471-28299-1-git-send-email-fhunleth@troodon-software.com>
-References: <1391896471-28299-1-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <52F90717.6010103@mind.be>
+Date: Mon, 10 Feb 2014 18:16:19 +0100
+Subject: [Buildroot] [PATCH 1/1] Modified the documentation on
+ customizing a rootfs to be less ambiguous
+In-Reply-To: <1391980244-8855-1-git-send-email-jeffball59@gmail.com>
+References: <y> <1391980244-8855-1-git-send-email-jeffball59@gmail.com>
+Message-ID: <52F90963.4060801@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/08/14 22:54, Frank Hunleth wrote:
-> Raise an error if the host is using an older kernel than the target.
-> Since qemu-user passes emulated system calls to the host kernel,
-> this prevents usage of qemu-user in situations where those system
-> calls will fail.
+On 02/09/14 22:10, jeffball59 at gmail.com wrote:
+> From: Jeff Stewart <jeffball59@gmail.com>
 > 
-> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
-
- Thanks Frank!
-
+> While reading the documentation I was a little confused over the recommended
+> method for customizing the target file system.  After sorting it out in the
+> IRC channel, I modified the documentation to be a little less ambiguous.
+> 
+> Signed-off-by: Jeff Stewart <jeffball59@gmail.com>
 > ---
->  package/qemu/qemu.mk | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
+>  docs/manual/customize-rootfs.txt |    6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-> index 093ae64..bd6f555 100644
-> --- a/package/qemu/qemu.mk
-> +++ b/package/qemu/qemu.mk
-> @@ -74,6 +74,24 @@ define HOST_QEMU_CONFIGURE_CMDS
->  	)
->  endef
+> diff --git a/docs/manual/customize-rootfs.txt b/docs/manual/customize-rootfs.txt
+> index 2cbae99..c23b1af 100644
+> --- a/docs/manual/customize-rootfs.txt
+> +++ b/docs/manual/customize-rootfs.txt
+> @@ -23,7 +23,7 @@ there are a few ways to customize the resulting target filesystem.
+>    over the target filesystem after it has been built.  Set
+>    +BR2_ROOTFS_OVERLAY+ to the top of the tree.  +.git+, +.svn+, +.hg+
+>    directories, +.empty+ files and files ending with +~+ are excluded.
+> -  _Among these first 3 methods, this one should be preferred_.
+> +  _Among the customization methods, this one should be preferred_.
 >  
-> +define HOST_QEMU_LINUX_VERSION_CHECK
+>  * In the Buildroot configuration, you can specify the paths to one or
+>    more *post-build scripts*. These scripts are called in the given order,
+> @@ -56,8 +56,8 @@ there are a few ways to customize the resulting target filesystem.
+>    installation. Note that this method is *not recommended*, as it
+>    duplicates the entire skeleton, which prevents from taking advantage
+>    of the fixes or improvements brought to the default Buildroot
+> -  skeleton. The recommended method is to use the _post-build scripts_
+> -  mechanism described in the previous item.
+> +  skeleton. The _post-build scripts_ mechanism described in the previous
 
- Just to be sure, I'd start with a
-
-	test `uname -s` = Linux
-
-(some people try to run buildroot on *BSDs, with varying degrees of success).
-
-> +	host_version_parts=`uname -r | sed 's/\-.*//g' | sed 's/\./ /g'` ;\
-> +	host_version_code=0 ;\
-> +	multiplier=65536 ;\
-> +	for host_version_part in $$host_version_parts; do \
-> +		host_version_code=`echo "$$host_version_code + $$host_version_part * $$multiplier" | bc` ;\
-> +		multiplier=`echo "$$multiplier / 256" | bc` ;\
-
- Even though we do put bc in our dependencies, I'd prefer to avoid
-relying on it - not many people know it. Instead, I'd use either bash's
-let builtin, or POSIX-compliant expr.
-
-> +	done ;\
-> +	target_version_code=`grep LINUX_VERSION_CODE $(STAGING_DIR)/usr/include/linux/version.h | awk '{print $$3}'` ;\
-
- You can do the grep inside the awk:
-
-awk '/LINUX_VERSION_CODE/ {print $$3}' .../version.h
-
-
-
- Since it is possible to build host-qemu without building anything for
-the target, you can't rely on version.h being present already. To make
-sure it is there, add toolchain to the HOST_QEMU_DEPENDENCIES.
-
-> +	if test $$host_version_code -lt $$target_version_code ; then \
-> +		echo "Refusing to install qemu-user since the target Linux version is newer" ;\
-> +		echo "than the host's. Missing system calls will fail." ;\
-> +		exit 1 ;\
-> +	fi
-> +endef
-> +
-> +HOST_QEMU_POST_BUILD_HOOKS += HOST_QEMU_LINUX_VERSION_CHECK
-
- I think a pre-configure hook is more appropriate.
-
+ Actually it's the ROOTFS_OVERLAY that should be recommended.
 
  Regards,
  Arnout
 
-> +
->  $(eval $(host-autotools-package))
+> +  item is recommend over this mechanism.
 >  
->  # variable used by other packages
+>  Note also that you can use the *post-image scripts*
+>  if you want to perform some specific actions 'after' all
 > 
 
 
