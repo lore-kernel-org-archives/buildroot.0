@@ -1,52 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 10 Feb 2014 16:07:12 +0100
-Subject: [Buildroot] [git commit] madplay: fixes build when toolchain has
-	locale support
-Message-ID: <20140210150743.0642F9C3C7@busybox.osuosl.org>
+Date: Mon, 10 Feb 2014 15:41:57 +0100
+Subject: [Buildroot] [git commit] libtorrent: disable on ARC arch
+Message-ID: <20140210150742.DA52A9C951@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=35cb43b9d82d9bc1e90a2ed23d21fab357acd873
+commit: http://git.buildroot.net/buildroot/commit/?id=4a36923ce78426c95bdb857e87968e6fd664c3f6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Otherwise build fails in intl/relocatable.c with:
-./relocatable.c: In function 'libintl_relocate':
-./relocatable.c:402:40: error: 'INSTALLPREFIX' undeclared (first use in this function)
-./relocatable.c:402:40: note: each undeclared identifier is reported only once for each function it appears in
+Libtorrent has dependencies on atomic operations. However ARC GCC doesn't
+implement those at the moment so package should be disabled. Rtorrent
+depends on libtorrent.
 
-[Peter: drop redundant 'else' part]
-Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+This fixes:
+http://autobuild.buildroot.net/results/51414e22c8ea47c38df20d864526a370c5a895d7/
+
+Signed-off-by: Anton Kolesov <anton.kolesov@synopsys.com>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/madplay/Config.in  |    1 +
- package/madplay/madplay.mk |    2 +-
- 2 files changed, 2 insertions(+), 1 deletions(-)
+ package/libtorrent/Config.in |    3 +++
+ package/rtorrent/Config.in   |    3 +++
+ 2 files changed, 6 insertions(+), 0 deletions(-)
 
-diff --git a/package/madplay/Config.in b/package/madplay/Config.in
-index 3baeaa0..d83fac6 100644
---- a/package/madplay/Config.in
-+++ b/package/madplay/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_MADPLAY
- 	bool "madplay"
- 	select BR2_PACKAGE_LIBMAD
- 	select BR2_PACKAGE_LIBID3TAG
-+	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+diff --git a/package/libtorrent/Config.in b/package/libtorrent/Config.in
+index a7e358d..a21bf95 100644
+--- a/package/libtorrent/Config.in
++++ b/package/libtorrent/Config.in
+@@ -2,6 +2,8 @@ config BR2_PACKAGE_LIBTORRENT
+ 	bool "libtorrent"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	# ARC GCC doesn't support atomic instructions required by this lib
++	depends on !BR2_arc
+ 	select BR2_PACKAGE_LIBSIGC
  	help
- 	  Command-line front-end to libmad, a high-quality MPEG audio decoder.
- 	  It currently supports MPEG-1 and the MPEG-2 extension to lower
-diff --git a/package/madplay/madplay.mk b/package/madplay/madplay.mk
-index 35aa651..3f68dff 100644
---- a/package/madplay/madplay.mk
-+++ b/package/madplay/madplay.mk
-@@ -9,7 +9,7 @@ MADPLAY_SITE = http://downloads.sourceforge.net/project/mad/madplay/$(MADPLAY_VE
- MADPLAY_LICENSE = GPLv2+
- MADPLAY_LICENSE_FILES = COPYING COPYRIGHT
- MADPLAY_LIBTOOL_PATCH = NO
--MADPLAY_DEPENDENCIES = libmad libid3tag
-+MADPLAY_DEPENDENCIES = libmad libid3tag $(if $(BR2_PACKAGE_GETTEXT),gettext)
+ 	  BitTorrent library written in C++ for *nix
+@@ -10,3 +12,4 @@ config BR2_PACKAGE_LIBTORRENT
  
- # Check if ALSA is built, then we should configure after alsa-lib so
- # ./configure can find alsa-lib.
+ comment "libtorrent needs a toolchain w/ C++, threads"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_arc
+diff --git a/package/rtorrent/Config.in b/package/rtorrent/Config.in
+index 0f39a92..fa81cde 100644
+--- a/package/rtorrent/Config.in
++++ b/package/rtorrent/Config.in
+@@ -4,6 +4,8 @@ config BR2_PACKAGE_RTORRENT
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
++	# ARC GCC doesn't support atomic instructions required by libtorrent
++	depends on !BR2_arc
+ 	select BR2_PACKAGE_LIBCURL
+ 	select BR2_PACKAGE_LIBSIGC
+ 	select BR2_PACKAGE_LIBTORRENT
+@@ -17,3 +19,4 @@ config BR2_PACKAGE_RTORRENT
+ comment "rtorrent needs a toolchain w/ C++, threads, wchar"
+ 	depends on BR2_USE_MMU
+ 	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
++	depends on !BR2_arc
