@@ -1,74 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 10 Feb 2014 19:42:43 +0100
-Subject: [Buildroot] [git commit] am33x-cm3: update to latest version
-Message-ID: <20140210184610.598839C74E@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 10 Feb 2014 19:56:32 +0100
+Subject: [Buildroot] [pkg-perl infra V5 8/8] cpanminus: remove it
+In-Reply-To: <20140210192916.669fb580@skate>
+References: <1391763337-30660-1-git-send-email-francois.perrad@gadz.org>
+ <1391763337-30660-9-git-send-email-francois.perrad@gadz.org>
+ <CAAXf6LXwZXeYiHrUyoG6Nuga2fi4P-Rsy+0mph-PtKbcB=v_fA@mail.gmail.com>
+ <CAB0FRsvVCz71SAY=_5jev+eDjChszCVX00eQ4oa_DEYH2YcbCA@mail.gmail.com>
+ <20140210192916.669fb580@skate>
+Message-ID: <cc01dbe9-70c2-4a35-90df-1722f8341af5@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4d2b96aae38c2a5bd789c62ebb412365bd958ff2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> schreef:
+>Dear Fran?ois Perrad,
+>
+>On Sat, 8 Feb 2014 09:18:08 +0100, Fran?ois Perrad wrote:
+>> 2014-02-07 21:50 GMT+01:00 Thomas De Schampheleire <patrickdepinguin@gmail.com>:
+>> > Hi Fran?ois,
+>> >
+>> > On Fri, Feb 7, 2014 at 9:55 AM, Francois Perrad <fperrad@gmail.com> wrote:
+>> >> cpanminus was marked as broken, now it becomes useless with the Perl infrastructure.
+>> >>
+>> >> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+>> >> ---
+>> >>  package/Config.in              |    1 -
+>> >>  package/cpanminus/Config.in    |   40 ----------------------------------
+>> >>  package/cpanminus/cpanminus.mk |   47 ----------------------------------------
+>> >>  3 files changed, 88 deletions(-)
+>> >>  delete mode 100644 package/cpanminus/Config.in
+>> >>  delete mode 100644 package/cpanminus/cpanminus.mk
+>> >>
+>> >
+>> > Shouldn't we add an entry in Config.in.legacy for the removed symbol?
+>> >
+>> 
+>> Perhaps, we could do an exception.
+>> The log of package/cpanminus/Config.in contains only 2 entries :
+>> *     cpanminus: mark as broken    Thomas Petazzoni    2012-11-16
+>> *     cpanminus: new package    Francois Perrad    2012-11-03
+>
+>I agree with Fran?ois. cpanminus was marked as broken very quickly
+>after it was introduced, and broken packages cannot be selected in
+>menuconfig. cpanminus has never been selectable in any Buildroot
+>stable release, so there is no need to keep compatibility.
+>
 
-This goes hand-in-hand with the kernel update.
-The version is taken from meta-ti.
-
-The new kernel version, 3.12, requires a newer PM FW.
-
-This should correspond to v05.00.00.02, though that tag
-has not been pushed...
-
-Signed-off-by: Anders Darander <anders@chargestorm.se>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../am33x-cm3/am33x-cm3-0001-fix-makefile.patch    |   16 ++++++++++------
- package/am33x-cm3/am33x-cm3.mk                     |    3 ++-
- 2 files changed, 12 insertions(+), 7 deletions(-)
-
-diff --git a/package/am33x-cm3/am33x-cm3-0001-fix-makefile.patch b/package/am33x-cm3/am33x-cm3-0001-fix-makefile.patch
-index 77ba11c..f3cdb5e 100644
---- a/package/am33x-cm3/am33x-cm3-0001-fix-makefile.patch
-+++ b/package/am33x-cm3/am33x-cm3-0001-fix-makefile.patch
-@@ -11,16 +11,20 @@ Fix this by explicitly indicating -march=armv7-m.
- 
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- 
-+Updated the patch to the latest version of the Makefile
-+
-+Signed-off-by: Anders Darander <anders@chargestorm.se>
-+
- Index: b/Makefile
- ===================================================================
- --- a/Makefile
- +++ b/Makefile
--@@ -13,7 +13,7 @@
-+@@ -13,7 +13,7 @@ SRCDIR = src
-  BINDIR = bin
-  
-  INCLUDES = $(SRCDIR)/include
---CFLAGS =-mcpu=cortex-m3 -mthumb -nostdlib -Wall -g -I$(INCLUDES)
--+CFLAGS =-march=armv7-m -mcpu=cortex-m3 -mthumb -nostdlib -Wall -g -I$(INCLUDES)
-- LDFLAGS =-nostartfiles -fno-exceptions -Tfirmware.ld
-- 
-- EXECUTABLE=am335x-pm-firmware.elf
-+-CFLAGS =-mcpu=cortex-m3 -mthumb -nostdlib -Wall -Wundef \
-++CFLAGS =-march=armv7-m -mcpu=cortex-m3 -mthumb -nostdlib -Wall -Wundef \
-+ 	-Werror-implicit-function-declaration -Wstrict-prototypes \
-+ 	-Wdeclaration-after-statement -fno-delete-null-pointer-checks \
-+ 	-Wempty-body -fno-strict-overflow  -g -I$(INCLUDES) -O2
-diff --git a/package/am33x-cm3/am33x-cm3.mk b/package/am33x-cm3/am33x-cm3.mk
-index 929c4a5..01cb9a0 100644
---- a/package/am33x-cm3/am33x-cm3.mk
-+++ b/package/am33x-cm3/am33x-cm3.mk
-@@ -4,7 +4,8 @@
- #
- ################################################################################
- 
--AM33X_CM3_VERSION = AM335xPSP_04.06.00.10-rc1
-+# This should correpsond to v05.00.00.02
-+AM33X_CM3_VERSION = 11107db2f1e9e58ee75d4fe9cc38423c9a6e4365
- AM33X_CM3_SITE = http://arago-project.org/git/projects/am33x-cm3.git
- AM33X_CM3_SITE_METHOD = git
- AM33X_CM3_LICENSE = TI Publicly Available Software License
+That's ok for me too...
