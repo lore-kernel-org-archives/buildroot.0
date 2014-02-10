@@ -1,36 +1,54 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 10 Feb 2014 22:05:59 +0100
-Subject: [Buildroot] [git commit] configs/raspberrypi: remove packages not
-	strictly required
-Message-ID: <20140210210706.1507A9C488@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 10 Feb 2014 22:27:21 +0100
+Subject: [Buildroot] =?utf-8?q?Next_Buildroot_Developers_Meeting=3A_Octobe?=
+ =?utf-8?q?r_11-12_in_D=C3=BCsseldorf?=
+Message-ID: <20140210222721.09e556f5@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=66245d03cc7d539c30eacdd1b2eef2ae5314b68a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-rpi-userland and libcoffi are not strictly required to boot up the
-Raspberry Pi, so remove them from the defconfig.
+I know this is really early, but it would be cool if as many people as
+possible could join, so we're announcing today the dates and location of
+the next Buildroot Developers Meeting.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- configs/raspberrypi_defconfig |    2 --
- 1 files changed, 0 insertions(+), 2 deletions(-)
+It will be help on Saturday 11th and Sunday 12th October 2014 in
+D?sseldorf, Germany.
 
-diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
-index b334b0a..2d1cc34 100644
---- a/configs/raspberrypi_defconfig
-+++ b/configs/raspberrypi_defconfig
-@@ -7,8 +7,6 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
- BR2_TARGET_GENERIC_GETTY_PORT="tty1"
- 
- BR2_PACKAGE_RPI_FIRMWARE=y
--BR2_PACKAGE_RPI_USERLAND=y
--BR2_PACKAGE_LIBCOFI=y
- 
- # Lock to 3.10 headers as the RPi kernel is based off the 3.10 branch
- BR2_KERNEL_HEADERS_VERSION=y
+The date and location were quite obviously chosen to be right before
+the Embedded Linux Conference Europe, taking place between October, 13th
+and 15th in D?sseldorf. Since there are other conferences, such as Linux
+Plumbers, running up to October, 17th, the WE *before* the Embedded
+Linux Conference Europe looked like the best option.
+
+I would really like to encourage all Buildroot contributors and
+developers to join the meeting and the Embedded Linux Conference
+Europe. I can guarantee that such 5 days of intense interaction with
+other embedded Linux developers is very valuable, and if you plan
+sufficiently ahead of time, you can probably convince your management
+to send you there! Do not hesitate to contact me privately if you need
+more details about this event or ELCE to convince your management :-)
+
+Also, we are looking for companies willing to sponsor the Buildroot
+Developers Meeting. The budget is in the 250-500 EUR range, so it's
+fairly cheap for most companies, but allows us to cover the cost of the
+meeting room, and optionally the Saturday dinner for the participants.
+
+Some links:
+
+ * Buildroot Developers Meeting,
+   http://elinux.org/Buildroot:DeveloperDaysELCE2014
+
+ * Embedded Linux Conference Europe
+   https://events.linuxfoundation.org/events/embedded-linux-conference-europe
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
