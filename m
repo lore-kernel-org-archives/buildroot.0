@@ -1,41 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 10 Feb 2014 09:59:49 +0100
-Subject: [Buildroot] [git commit] barebox: bump to version 2014.02.0
-Message-ID: <20140210090145.0765C9C952@busybox.osuosl.org>
+From: julien.boibessot at free.fr <julien.boibessot@free.fr>
+Date: Mon, 10 Feb 2014 11:17:48 +0100
+Subject: [Buildroot] [PATCH] madplay: fixes build when toolchain has locale
+	support
+Message-ID: <1392027468-319-1-git-send-email-julien.boibessot@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1b9913e6643495ce3ba9b62dbe05ab2f8c7a478d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Julien Boibessot <julien.boibessot@armadeus.com>
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Otherwise build fails in intl/relocatable.c with:
+./relocatable.c: In function 'libintl_relocate':
+./relocatable.c:402:40: error: 'INSTALLPREFIX' undeclared (first use in this function)
+./relocatable.c:402:40: note: each undeclared identifier is reported only once for each function it appears in
+
+Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
 ---
- boot/barebox/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/madplay/Config.in  |    1 +
+ package/madplay/madplay.mk |    6 ++++++
+ 2 files changed, 7 insertions(+), 0 deletions(-)
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index 7db6a98..e6db9c3 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
+diff --git a/package/madplay/Config.in b/package/madplay/Config.in
+index 3baeaa0..d83fac6 100644
+--- a/package/madplay/Config.in
++++ b/package/madplay/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_MADPLAY
+ 	bool "madplay"
+ 	select BR2_PACKAGE_LIBMAD
+ 	select BR2_PACKAGE_LIBID3TAG
++	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	help
+ 	  Command-line front-end to libmad, a high-quality MPEG audio decoder.
+ 	  It currently supports MPEG-1 and the MPEG-2 extension to lower
+diff --git a/package/madplay/madplay.mk b/package/madplay/madplay.mk
+index 35aa651..79d57de 100644
+--- a/package/madplay/madplay.mk
++++ b/package/madplay/madplay.mk
+@@ -11,6 +11,12 @@ MADPLAY_LICENSE_FILES = COPYING COPYRIGHT
+ MADPLAY_LIBTOOL_PATCH = NO
+ MADPLAY_DEPENDENCIES = libmad libid3tag
  
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2014.01.0"
-+	bool "2014.02.0"
- 
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2014.01.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2014.02.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
++ifeq ($(BR2_PACKAGE_GETTEXT),y)
++MADPLAY_DEPENDENCIES += gettext
++else
++MADPLAY_CONF_OPT += --disable-nls
++endif
++
+ # Check if ALSA is built, then we should configure after alsa-lib so
+ # ./configure can find alsa-lib.
+ ifeq ($(BR2_PACKAGE_MADPLAY_ALSA),y)
+-- 
+1.7.5.4
