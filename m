@@ -1,59 +1,45 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 10 Feb 2014 18:16:19 +0100
-Subject: [Buildroot] [PATCH 1/1] Modified the documentation on
- customizing a rootfs to be less ambiguous
-In-Reply-To: <1391980244-8855-1-git-send-email-jeffball59@gmail.com>
-References: <y> <1391980244-8855-1-git-send-email-jeffball59@gmail.com>
-Message-ID: <52F90963.4060801@mind.be>
+Date: Mon, 10 Feb 2014 18:10:52 +0100
+Subject: [Buildroot] [git commit] kmod: really pass --disable-manpages
+In-Reply-To: <87ob2g3asu.fsf@dell.be.48ers.dk>
+References: <20140209083628.E9C0D9C8B1@busybox.osuosl.org>
+ <7291a6ec-9696-4801-936d-fdab0d43bcdf@email.android.com>
+ <87ob2g3asu.fsf@dell.be.48ers.dk>
+Message-ID: <52F9081C.9050707@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/09/14 22:10, jeffball59 at gmail.com wrote:
-> From: Jeff Stewart <jeffball59@gmail.com>
+On 02/09/14 10:17, Peter Korsgaard wrote:
+>>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 > 
-> While reading the documentation I was a little confused over the recommended
-> method for customizing the target file system.  After sorting it out in the
-> IRC channel, I modified the documentation to be a little less ambiguous.
+> Hi,
 > 
-> Signed-off-by: Jeff Stewart <jeffball59@gmail.com>
-> ---
->  docs/manual/customize-rootfs.txt |    6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  >> +KMOD_CONF_OPT += --disable-manpages
+>  >> +HOST_KMOD_CONF_OPT = --disable-manpages
+>  >> +
+>  >> ifeq ($(BR2_PACKAGE_ZLIB),y)
+>  >> KMOD_DEPENDENCIES += zlib
+>  >> KMOD_CONF_OPT += --with-zlib
 > 
-> diff --git a/docs/manual/customize-rootfs.txt b/docs/manual/customize-rootfs.txt
-> index 2cbae99..c23b1af 100644
-> --- a/docs/manual/customize-rootfs.txt
-> +++ b/docs/manual/customize-rootfs.txt
-> @@ -23,7 +23,7 @@ there are a few ways to customize the resulting target filesystem.
->    over the target filesystem after it has been built.  Set
->    +BR2_ROOTFS_OVERLAY+ to the top of the tree.  +.git+, +.svn+, +.hg+
->    directories, +.empty+ files and files ending with +~+ are excluded.
-> -  _Among these first 3 methods, this one should be preferred_.
-> +  _Among the customization methods, this one should be preferred_.
->  
->  * In the Buildroot configuration, you can specify the paths to one or
->    more *post-build scripts*. These scripts are called in the given order,
-> @@ -56,8 +56,8 @@ there are a few ways to customize the resulting target filesystem.
->    installation. Note that this method is *not recommended*, as it
->    duplicates the entire skeleton, which prevents from taking advantage
->    of the fixes or improvements brought to the default Buildroot
-> -  skeleton. The recommended method is to use the _post-build scripts_
-> -  mechanism described in the previous item.
-> +  skeleton. The _post-build scripts_ mechanism described in the previous
+>  > Aargh, another oops, sorry.
+> 
+> No problem, that's why we have the autobuilders ;)
+> 
+>  > Isn't it safer to always use += for this type of variables?
+> 
+> Yes it is, but we typically don't do it for the first(/single)
+> assignment.
 
- Actually it's the ROOTFS_OVERLAY that should be recommended.
+ I think it would be a good idea to make it a habit to use += even for
+the first/single assignment. It's pretty easy to make this kind of
+mistake, and it's difficult to catch in review because you usually don't
+see the whole file.
 
  Regards,
  Arnout
-
-> +  item is recommend over this mechanism.
->  
->  Note also that you can use the *post-image scripts*
->  if you want to perform some specific actions 'after' all
-> 
 
 
 -- 
