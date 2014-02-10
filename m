@@ -1,39 +1,41 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 10 Feb 2014 13:23:16 +0100
-Subject: [Buildroot] [pkg-perl infra V6 9/9] perl: remove
-	PERL_INSTALL_TARGET_GOALS
-In-Reply-To: <1392034997-12394-1-git-send-email-francois.perrad@gadz.org>
-References: <1392034997-12394-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1392034997-12394-10-git-send-email-francois.perrad@gadz.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 10 Feb 2014 13:26:10 +0100
+Subject: [Buildroot] [git commit] gpsd: disable for microblaze arch
+In-Reply-To: <20140208215953.2C5619C81A@busybox.osuosl.org>
+References: <20140208215953.2C5619C81A@busybox.osuosl.org>
+Message-ID: <20140210132610.76d31ad6@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-useless since previous commit (removal of BR2_HAVE_DOCUMENTATION)
-see http://git.buildroot.net/buildroot/diff/package/perl/perl.mk?id=7164a32632d14cb83698ddec45e84ad2f3252e9e
+Ryan, Peter,
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/perl/perl.mk |    4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+On Sat, 8 Feb 2014 22:53:41 +0100, Peter Korsgaard wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=d517415bcda380336f4a27bf248cef4d81791c9e
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> 
+> gpsd will fail on an internal compiler error for the microblaze
+> architecture so disabling it on that architecture.
+> 
+> Fixes:
+>   http://autobuild.buildroot.org/results/42d/42da870722f24e4202d8265597771a0449e74cfd
+> 
+> [Peter: add comment explaining why]
+> Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 5ede81b..51aeb14 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -90,10 +90,8 @@ define PERL_INSTALL_STAGING_CMDS
- 	$(MAKE1) -C $(@D) DESTDIR="$(STAGING_DIR)" install.perl
- endef
- 
--PERL_INSTALL_TARGET_GOALS = install.perl
--
- define PERL_INSTALL_TARGET_CMDS
--	$(MAKE1) -C $(@D) DESTDIR="$(TARGET_DIR)" $(PERL_INSTALL_TARGET_GOALS)
-+	$(MAKE1) -C $(@D) DESTDIR="$(TARGET_DIR)" install.perl
- endef
- 
- $(eval $(generic-package))
+I believe we should add a bug tracker entry for this issue and the
+dmraid on ARC issue, assigned to Spenser (for the gpsd/microblaze
+issue) and Anton (for the ARC/dmraid issue). I'd like to make sure we
+keep track of them as they will no longer appear in the autobuilder
+results. This will remind Spenser and Anton to do something about them.
+
+Thanks!
+
+Thomas
 -- 
-1.7.9.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
