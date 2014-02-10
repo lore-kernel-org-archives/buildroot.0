@@ -1,36 +1,79 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 10 Feb 2014 22:37:12 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-02-09
-In-Reply-To: <20140210073010.EB93B100ECC@stock.ovh.net>
-References: <20140210073010.EB93B100ECC@stock.ovh.net>
-Message-ID: <20140210223712.05044b5a@skate>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Mon, 10 Feb 2014 22:48:55 +0100
+Subject: [Buildroot] [PATCH] Makefile.legacy: fix recursive invocation with
+	BUILDROOT_DL_DIR and _CONFIG
+Message-ID: <1392068935-25510-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The legacy support for the old BUILDROOT_DL_DIR and BUILDROOT_CONFIG
+breaks down when make is invoked recursively - which is done in a few
+cases, e.g. silentoldconfig, external-defs, ... These targets always
+give a legacy error.
 
-On Mon, 10 Feb 2014 08:30:10 +0100 (CET), Thomas Petazzoni wrote:
+For BUILDROOT_DL_DIR, this is fixed by making sure that the original
+value of BR2_DL_DIR taken from the environment is also exported again.
 
-> Classification of failures by reason
-> ====================================
-> 
-> Makefile.legacy:27: *** "Th... | 994
+For BUILDROOT_CONFIG, this is fixed with an additional comparison of
+the environment variable's value with the fake value that we introduce
+ourselves.
 
-This problem is now fixed, and I've removed all the bogus results from
-the autobuilder database, so that tomorrow results should look fine.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ Makefile.legacy         | 10 +++++++---
+ package/pkg-download.mk |  5 +++++
+ 2 files changed, 12 insertions(+), 3 deletions(-)
 
-Sorry for the mess, but I wasn't around this week-end, and I didn't had
-the time to fix the test infrastructure before the BUILDROOT_DL_DIR ->
-BR2_DL_DIR patch was merged.
-
-Best regards,
-
-Thomas
+diff --git a/Makefile.legacy b/Makefile.legacy
+index ea18bc6..764cfcd 100644
+--- a/Makefile.legacy
++++ b/Makefile.legacy
+@@ -28,16 +28,20 @@ $(error "The BUILDROOT_DL_DIR environment variable was renamed to BR2_DL_DIR.")
+ endif
+ endif
+ 
++# If a script is using the deprecated BUILDROOT_CONFIG, make sure it fails.
++# Add some directories in front just in case someone used dirname on it.
++BUILDROOT_CONFIG_FAKE = /tmp/deprecated/The-BUILDROOT_CONFIG-environment-variable-was-renamed-to-BR2_CONFIG
++
+ # Similar to above for BUILDROOT_CONFIG, but here we have no .config equivalent.
+ ifneq ($(BUILDROOT_CONFIG),)
+ ifneq ($(BUILDROOT_CONFIG),$(BR2_CONFIG))
++ifneq ($(BUILDROOT_CONFIG),$(BUILDROOT_CONFIG_FAKE))
+ $(error "The BUILDROOT_CONFIG environment variable was renamed to BR2_CONFIG.")
+ endif
+ endif
++endif
+ 
+-# If a script is using the deprecated BUILDROOT_CONFIG, make sure it fails.
+-# Add some directories in front just in case someone used dirname on it.
+-BUILDROOT_CONFIG = /tmp/deprecated/The-BUILDROOT_CONFIG-environment-variable-was-renamed-to-BR2_CONFIG
++BUILDROOT_CONFIG = $(BUILDROOT_CONFIG_FAKE)
+ export BUILDROOT_CONFIG
+ 
+ #
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index 84598d5..6d4cbcd 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -24,10 +24,15 @@ LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
+ DL_MODE=DOWNLOAD
+ 
+ # DL_DIR may have been set already from the environment
++ifeq ($(origin DL_DIR),undefined)
+ DL_DIR ?= $(call qstrip,$(BR2_DL_DIR))
+ ifeq ($(DL_DIR),)
+ DL_DIR := $(TOPDIR)/dl
+ endif
++else
++# Restore the BR2_DL_DIR that was overridden by the .config file
++BR2_DL_DIR = $(DL_DIR)
++endif
+ 
+ # ensure it exists and a absolute path
+ DL_DIR := $(shell mkdir -p $(DL_DIR) && cd $(DL_DIR) >/dev/null && pwd)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.rc1
