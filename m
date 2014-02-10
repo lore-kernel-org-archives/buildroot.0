@@ -1,39 +1,76 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 10 Feb 2014 16:05:27 +0100
-Subject: [Buildroot] [PATCH 0/4] Samba4 package
-In-Reply-To: <20140210160149.1ade2c69@grp-cvubrugier.lacie.com>
-References: <1391806354-32698-1-git-send-email-gustavo@zacarias.com.ar>
- <20140208153054.09d6ed51@trantor> <20140210133432.385f9658@skate>
- <20140210160149.1ade2c69@grp-cvubrugier.lacie.com>
-Message-ID: <20140210160527.4d7c8821@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 10 Feb 2014 16:07:05 +0100
+Subject: [Buildroot] [PATCH] madplay: fixes build when toolchain has
+	locale support
+In-Reply-To: <1392027468-319-1-git-send-email-julien.boibessot@free.fr>
+ (julien boibessot's message of "Mon, 10 Feb 2014 11:17:48 +0100")
+References: <1392027468-319-1-git-send-email-julien.boibessot@free.fr>
+Message-ID: <87ppmvypk6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Christophe Vu-Brugier,
+>>>>> "julien" == julien boibessot <julien.boibessot@free.fr> writes:
 
-On Mon, 10 Feb 2014 16:01:49 +0100, Christophe Vu-Brugier wrote:
+ > From: Julien Boibessot <julien.boibessot@armadeus.com>
+ > Otherwise build fails in intl/relocatable.c with:
+ > ./relocatable.c: In function 'libintl_relocate':
+ > ./relocatable.c:402:40: error: 'INSTALLPREFIX' undeclared (first use in this function)
+ > ./relocatable.c:402:40: note: each undeclared identifier is reported only once for each function it appears in
 
-> On Mon, 10 Feb 2014 13:34:32 +0100, Thomas Petazzoni wrote :
-> > Can you share your cross answers file for x86-64 ? Gustavo patches only
-> > support ARM and PowerPC, so it would be great to also support x86-64.
-> 
-> I sent the patch to the list, but not as a reply to Gustavo Zacarias'
-> patchset. The subject of the mail that contains the patch is:
-> 
->   [PATCH] samba4: add cross answers for x86_64
+ > Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+ > ---
+ >  package/madplay/Config.in  |    1 +
+ >  package/madplay/madplay.mk |    6 ++++++
+ >  2 files changed, 7 insertions(+), 0 deletions(-)
 
-Yep, sorry. Seen your patch after sending mine. As usual, this is a
-problem with my somewhat FIFO policy when handling the backlog of
-e-mail: I might make a comment that has already been fixed or addressed
-in a future version of the patch series.
+ > diff --git a/package/madplay/Config.in b/package/madplay/Config.in
+ > index 3baeaa0..d83fac6 100644
+ > --- a/package/madplay/Config.in
+ > +++ b/package/madplay/Config.in
+ > @@ -2,6 +2,7 @@ config BR2_PACKAGE_MADPLAY
+ >  	bool "madplay"
+ >  	select BR2_PACKAGE_LIBMAD
+ >  	select BR2_PACKAGE_LIBID3TAG
+ > +	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ >  	help
+ >  	  Command-line front-end to libmad, a high-quality MPEG audio decoder.
+ >  	  It currently supports MPEG-1 and the MPEG-2 extension to lower
+ > diff --git a/package/madplay/madplay.mk b/package/madplay/madplay.mk
+ > index 35aa651..79d57de 100644
+ > --- a/package/madplay/madplay.mk
+ > +++ b/package/madplay/madplay.mk
+ > @@ -11,6 +11,12 @@ MADPLAY_LICENSE_FILES = COPYING COPYRIGHT
+ >  MADPLAY_LIBTOOL_PATCH = NO
+ >  MADPLAY_DEPENDENCIES = libmad libid3tag
+ 
+ > +ifeq ($(BR2_PACKAGE_GETTEXT),y)
+ > +MADPLAY_DEPENDENCIES += gettext
+ > +else
+ > +MADPLAY_CONF_OPT += --disable-nls
+ > +endif
 
-Thanks!
+The 'else' part is not needed as we already pass --disable-nls in the
+!locale case, and toolchains with locale support but not defining
+BR2_NEEDS_GETTEXT_IF_LOCALE (E.G. glibc) support the gettext
+functionality.
 
-Thomas
+Committed with that fixed, thanks.
+
+ > +
+ >  # Check if ALSA is built, then we should configure after alsa-lib so
+ >  # ./configure can find alsa-lib.
+ >  ifeq ($(BR2_PACKAGE_MADPLAY_ALSA),y)
+ > -- 
+ > 1.7.5.4
+
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot at busybox.net
+ > http://lists.busybox.net/mailman/listinfo/buildroot
+
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
