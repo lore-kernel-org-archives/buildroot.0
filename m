@@ -1,43 +1,88 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 10 Feb 2014 23:41:17 +0100
-Subject: [Buildroot] [PATCH] glibc: add 2.19 as a supported version
-In-Reply-To: <52F936C7.4040300@mind.be>
-References: <1392054226-20285-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <52F936C7.4040300@mind.be>
-Message-ID: <20140210234117.352533a5@skate>
+Date: Tue, 11 Feb 2014 00:28:01 +0100
+Subject: [Buildroot] [RFC PATCH] toolchain-external: instrument wrapper to
+	warn about unsafe paths
+Message-ID: <1392074881-12508-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+The CodeSourcery toolchains have a very interesting feature: they warn
+the user when an unsafe header or library path is used, i.e a path
+that will lead host headers or libraries to leak into the build.
 
-On Mon, 10 Feb 2014 21:29:59 +0100, Arnout Vandecappelle wrote:
+This commit adds a similar functionality into our external toolchain
+wrapper, so that it can be used with all external toolchains, and can
+also be tuned as needed. By default, the external toolchain wrapper
+now gives warnings such as:
 
->  How useful is it to offer a choice for the libc version?
-> 
->  For uClibc it makes a tiny bit of sense because you may have custom
-> patches or a custom config, which you don't want to port when going to a
-> new buildroot version. But I don't think that's a very good reason to
-> begin with.
-> 
->  For glibc, however, I really don't see a reason to keep multiple versions.
+  WARNING: unsafe header/library path used in cross-compilation: '-I /usr/foo'
+  WARNING: unsafe header/library path used in cross-compilation: '-L /usr/bleh'
 
-My plan was to offer no more than two versions: N-1 and N, so that we
-can add N, and give it some testing before having all users move
-immediately from N-1 to N. This is pretty much what we do with gcc,
-binutils and gdb as well. I believe the toolchain components are quite
-critical, that's why we're a bit more conservative with these than with
-the other components.
+but the compilation continues successfully. One can then easily grep
+in his build log to search for occurences of this message.
 
-Do we have a reason to keep multiple versions for binutils, gcc and
-gdb, but not for glibc?
+Optionally, if BR_PARANOID_WRAPPER is defined in the environment, the
+external wrapper will instead error out and abort the compilation. We
+could then one day imagine setting this BR_PARANOID_WRAPPER in the
+autobuilders.
 
-Best regards,
+A similar change could be made to the internal toolchain backend
+either by making it use a wrapper like the external toolchain one, or
+by adding some patches to gcc, by borrowing the changes made by the
+CodeSourcery people.
 
-Thomas
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../toolchain-external/ext-toolchain-wrapper.c     | 27 ++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+
+diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+index 81c6ed1..c8dcad5 100644
+--- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
++++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+@@ -77,6 +77,7 @@ int main(int argc, char **argv)
+ 	char *progpath = argv[0];
+ 	char *basename;
+ 	char *env_debug;
++	char *paranoid_wrapper;
+ 	int ret, i, count = 0, debug;
+ 
+ 	/* Calculate the relative paths */
+@@ -178,6 +179,32 @@ int main(int argc, char **argv)
+ 	}
+ #endif /* ARCH || TUNE || CPU */
+ 
++	paranoid_wrapper = getenv("BR_PARANOID_WRAPPER");
++
++	/* Check for unsafe library and header paths */
++	for (i = 1; i < argc; i++) {
++		if (!strncmp(argv[i], "-I/usr", strlen("-I/usr")) ||
++		    !strncmp(argv[i], "-L/usr", strlen("-L/usr"))) {
++			fprintf(stderr, "%s: unsafe header/library path used in cross-compilation: '%s'\n",
++				paranoid_wrapper ? "ERROR" : "WARNING", argv[i]);
++			if (paranoid_wrapper)
++				exit(1);
++			continue;
++		}
++
++		if (!strcmp(argv[i], "-L") || !strcmp(argv[i], "-I")) {
++			if (i == argc)
++				continue;
++			if (!strncmp(argv[i+1], "/usr", strlen("/usr"))) {
++				fprintf(stderr, "%s: unsafe header/library path used in cross-compilation: '%s %s'\n",
++					paranoid_wrapper ? "ERROR" : "WARNING", argv[i], argv[i + 1]);
++				if (paranoid_wrapper)
++					exit(1);
++				continue;
++			}
++		}
++	}
++
+ 	/* append forward args */
+ 	memcpy(cur, &argv[1], sizeof(char *) * (argc - 1));
+ 	cur += argc - 1;
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.3.2
