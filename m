@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 10 Feb 2014 22:59:04 +0100
+Date: Mon, 10 Feb 2014 23:09:47 +0100
 Subject: [Buildroot] [PATCH] Makefile.legacy: fix recursive invocation
  with BUILDROOT_DL_DIR and _CONFIG
 In-Reply-To: <1392068935-25510-1-git-send-email-arnout@mind.be>
 References: <1392068935-25510-1-git-send-email-arnout@mind.be>
-Message-ID: <20140210215904.GF5239@free.fr>
+Message-ID: <20140210220947.GG5239@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -28,11 +28,24 @@ On 2014-02-10 22:48 +0100, Arnout Vandecappelle (Essensium/Mind) spake thusly:
 > 
 > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+I gave my Tested-by earlier (and I am *not* withdrawing it) since I
+think this is a valid stop-gap fix which should go before -rc1 is cut.
 
-Fixes (at least):
-    make graph-depends
-    make PKG-graph-depends
+However, I wonder how appropriate this implementation is. I am not really
+convinced by this hack (although I can't see a better alternative).
+
+Another solution (which I do not like much, either) would be to enclose
+these checks in:
+
+    ifeq ($(ALREADY_IN_BUILDROOT),)
+    blabla legacy stuff blabla
+    endif
+
+and at the end of the main Makefile, add:
+
+    export ALREADY_IN_BUILDROOT=y
+
+But, this is hacky too, and I'm not fond of it either.
 
 Regards,
 Yann E. MORIN.
