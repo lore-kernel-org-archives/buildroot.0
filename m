@@ -1,48 +1,34 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 10 Feb 2014 18:55:44 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-02-07
-In-Reply-To: <20140210185116.290b0d86@skate>
-References: <20140208073009.5C3E6100CDC@stock.ovh.net>
- <20140208124907.GA3442@free.fr> <20140210093158.1dc26780@skate>
- <20140210173137.GA5239@free.fr>
- <CAAXf6LWUZNKCK8b-K5yGygqv165FaLZdwOVhL4OPDz5jY-YrFQ@mail.gmail.com>
- <20140210185116.290b0d86@skate>
-Message-ID: <20140210175544.GC5239@free.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 10 Feb 2014 17:56:42 +0000 (UTC)
+Subject: [Buildroot] [Bug 3811] Added auto-mount for USB and SD Card (mdev)
+	(for 2011.05)
+In-Reply-To: <bug-3811-163@https.bugs.busybox.net/>
+References: <bug-3811-163@https.bugs.busybox.net/>
+Message-ID: <20140210175642.AC1059C94A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas?, All,
+https://bugs.busybox.net/show_bug.cgi?id=3811
 
-On 2014-02-10 18:51 +0100, Thomas Petazzoni spake thusly:
-> On Mon, 10 Feb 2014 18:44:21 +0100, Thomas De Schampheleire wrote:
-> 
-> > So suppose we need to be able to check on 2_6_3, 3_0 and 3_1, the
-> > linaro symbol would become:
-> >      config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_11
-> >          select BR2_TOOLCHAIN_HEADERS_AT_LEAST_2_6_3
-> >          select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-> >          select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
-> > 
-> > right?
-> 
-> No. BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1 would already
-> select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0, which selects 2.6.39 and so
-> on.
+Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> changed:
 
-Exactly. And we would only have the headers version we're interested in,
-not every single one of them (I guess).
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |WONTFIX
 
-Regards,
-Yann E. MORIN.
+--- Comment #2 from Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> 2014-02-10 17:56:42 UTC ---
+Other buildroot developers agree that this patch is very project specific and
+should not be applied to mainline buildroot.
+
+Please consider using a post-build script or rootfs overlay to achieve the same
+effect. See the buildroot manual for more information:
+http://buildroot.uclibc.org/downloads/manual/manual.html#_customization
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
