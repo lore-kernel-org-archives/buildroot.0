@@ -1,23 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 10 Feb 2014 19:43:49 +0100
-Subject: [Buildroot] [PATCH v4 4/4] beaglebone: change to zImage
-In-Reply-To: <1392021600-32293-5-git-send-email-anders@chargestorm.se> (Anders
- Darander's message of "Mon, 10 Feb 2014 09:40:00 +0100")
-References: <1392021600-32293-1-git-send-email-anders@chargestorm.se>
- <1392021600-32293-5-git-send-email-anders@chargestorm.se>
-Message-ID: <87vbwmyfiy.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 10 Feb 2014 19:42:50 +0100
+Subject: [Buildroot] [git commit] beaglebone: update to latest U-Boot
+Message-ID: <20140210184610.5FEF29C74E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Anders" == Anders Darander <anders@chargestorm.se> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=4c3144475e6e632d4504658075ed1f7120bacd9d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > The default U-Boot configuration is now to use a zImage instead of uImage.
- > Signed-off-by: Anders Darander <anders@chargestorm.se>
+Update to the default version of U-Boot, at this time 2013.10.
 
-Committed, thanks.
+Tested with an old uEnv.txt (i.e. using uImage) and with the
+currently prefered zImage.
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Anders Darander <anders@chargestorm.se>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/beaglebone_defconfig |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
+index bd8f745..4e60e3f 100644
+--- a/configs/beaglebone_defconfig
++++ b/configs/beaglebone_defconfig
+@@ -22,7 +22,7 @@ BR2_DEFAULT_KERNEL_VERSION="3.12.10"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="am335x_evm"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2013.04"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2013.10"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="MLO"
