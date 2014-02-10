@@ -1,46 +1,51 @@
-From: Andreas Naumann <dev@andin.de>
-Date: Mon, 10 Feb 2014 12:31:08 +0100
-Subject: [Buildroot] Antw: build speedup possible?
-In-Reply-To: <20140207174355.383b6bb3@skate>
-References: <52F49E9D.2020506@andin.de>
- <52F4AEC7020000460004A4EE@gwia2.rz.hs-offenburg.de>
- <CAHXCMMJD_i9aQtFkxWD_tPbpdJd_-Gv_zkC0KxnEtRoQO=7Vug@mail.gmail.com>
- <CAHkwnC_B8RRAXBOGjjpr2X7CbZpVTnsDx8QoLEPfaieEoSd4gA@mail.gmail.com>
- <20140207162934.01acfe5a@skate>
- <CAHkwnC-pAGs0DCu80X3_AQgrsxcOO82GMY7NwmegxT6V0_kwJw@mail.gmail.com>
- <20140207174355.383b6bb3@skate>
-Message-ID: <52F8B87C.4070201@andin.de>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 10 Feb 2014 12:33:06 +0100
+Subject: [Buildroot] [PATCH] libtorrent: disable on ARC arch
+In-Reply-To: <1392031674-30031-1-git-send-email-anton.kolesov@synopsys.com>
+References: <1392031674-30031-1-git-send-email-anton.kolesov@synopsys.com>
+Message-ID: <CAAXf6LWF4yj4E26ynNoP2EMhCkD3fin7Z9Coqoj9M26ZD3LxaQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi Anton,
 
-Am 07.02.2014 17:43, schrieb Thomas Petazzoni:
-
+On Mon, Feb 10, 2014 at 12:27 PM, Anton Kolesov
+<anton.kolesov@synopsys.com> wrote:
+> Libtorrent has dependencies on atomic operations. However ARC GCC doesn't
+> implement those at the moment so package should be disabled.
 >
-> If we want to get this to the next level, someone need to experiment
-> with per-package sysroot. Of course, this would be a long experiment,
-> without necessarily at the end the guarantee that we will accept it,
-> because it may be too complex to match Buildroot simplicity principle.
+> This fixes:
+> http://autobuild.buildroot.net/results/51414e22c8ea47c38df20d864526a370c5a895d7/
 >
-
-as I said, we have hacked br to a per-package sysroot in the past. This 
-was in order to create isolated ipkgs and did its job. Even if we dont 
-solve any of the dependency issues with that, it could be a starting 
-point. If this is of  interest I can try to go further with it.
-
-And for the depency issue, how does OE solve it?
-
-
-cheers,
-Andreas
-
-
-
-> Best regards,
+> Signed-off-by: Anton Kolesov <anton.kolesov@synopsys.com>
+> ---
+>  package/libtorrent/Config.in | 2 ++
+>  1 file changed, 2 insertions(+)
 >
-> Thomas
->
+> diff --git a/package/libtorrent/Config.in b/package/libtorrent/Config.in
+> index a7e358d..6c8d09d 100644
+> --- a/package/libtorrent/Config.in
+> +++ b/package/libtorrent/Config.in
+> @@ -2,6 +2,8 @@ config BR2_PACKAGE_LIBTORRENT
+>         bool "libtorrent"
+>         depends on BR2_INSTALL_LIBSTDCPP
+>         depends on BR2_TOOLCHAIN_HAS_THREADS
+> +        # ARC GCC doesn't support atomic instructions required by this lib
+> +        depends on !BR2_arc
+>         select BR2_PACKAGE_LIBSIGC
+>         help
+>           BitTorrent library written in C++ for *nix
+
+This extra 'depends on' should be repeated on the comment about
+toolchain options below, so that this comment is only visible when the
+actual package is visible.
+Have a look at http://buildroot.uclibc.org/downloads/manual/manual.html#dependencies-target-toolchain-options
+
+(Note: you don't have to repeat the "# ARG GCC doesn't support ..." on
+the comment)
+
+Best regards,
+Thomas
