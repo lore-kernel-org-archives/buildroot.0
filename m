@@ -1,46 +1,78 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Mon, 10 Feb 2014 18:15:06 +0100
-Subject: [Buildroot] custom kernel tarball does not use the path.
-In-Reply-To: <d181bde1-9238-4bdc-bf2f-139e3d15746c@email.android.com>
-References: <20945F1C02CA42F18AD8B241C4EEE215@JohanW7>
- <d181bde1-9238-4bdc-bf2f-139e3d15746c@email.android.com>
-Message-ID: <D5029D5D4676497A8F830ED2869198B6@JohanW7>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 10 Feb 2014 18:31:37 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2014-02-07
+In-Reply-To: <20140210093158.1dc26780@skate>
+References: <20140208073009.5C3E6100CDC@stock.ovh.net>
+ <20140208124907.GA3442@free.fr> <20140210093158.1dc26780@skate>
+Message-ID: <20140210173137.GA5239@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- 
-Hi Thomas
+Thomas, All,
 
------Oorspronkelijk bericht-----
-Van: Thomas De Schampheleire [mailto:patrickdepinguin at gmail.com] 
-Verzonden: maandag 10 februari 2014 7:18
-Aan: Sagaert Johan; buildroot at busybox.net
-Onderwerp: Re: [Buildroot] custom kernel tarball does not use the path.
+On 2014-02-10 09:31 +0100, Thomas Petazzoni spake thusly:
+> On Sat, 8 Feb 2014 13:49:07 +0100, Yann E. MORIN wrote:
+> 
+> > On 2014-02-08 08:30 +0100, Thomas Petazzoni spake thusly:
+> > > Build statistics for 2014-02-07
+> > >        arm |          dvb-apps-be76da69f250 | NOK | http://autobuild.buildroot.net/results/310e355f2f601801e4500b9d3e714d3883e7aa32/
+> > >        arm |          dvb-apps-be76da69f250 | NOK | http://autobuild.buildroot.net/results/90e1a2e3e428e6c3fe5b51668ab92c139f176260/
+> > 
+> > Too old toolchain:
+> >   - SYS_TURBO was introduced in linux 3.2
+> >   - SYS_DVBC_ANNEX_A in linux 3.2
+> >   - SYS_DVBC_ANNEX_C and DTV_ENUM_DELSYS in linux 3.3
+> 
+> The too old toolchain in question is Linaro 2013.11, i.e a fairly
+> recent Linaro toolchain. I believe kernel 3.2/3.3 are not that old for
+> embedded products, and we should support toolchains that have such old
+> kernel headers.
 
-Hi Johan,
+Sorry, I should have said: kernel-headers too old.
 
-Sagaert Johan <sagaert.johan@skynet.be> schreef:
->  
->Hi
->
->In my config file I have the custom kernel path set to :
->
->$(TOPDIR)/board/karo/linux-3.13.0-RC7.tar.bz2
+That toolchain is using headers from Linux 3.1.1, which are too old to
+have the required defines (since they appeared in 3.3).
 
-Can you show exactly how this is assigned in the .config file? Are you using file:// ?
+So, same issue, just a different phrasing.
 
-> No just using $(TOPDIR)/board/karo/linux-3.13.0-RC7.tar.bz2
-> I tried again by using the file:// prefixing the path. That works.
-> I failed to use the file:// url spec.
+> > >    powerpc |                w_scan-20130331 | NOK | http://autobuild.buildroot.net/results/549564293607c959fa09e12510bb2aaa79f4f479/
+> > 
+> > Too old toolchain, as usual.
+> 
+> This one I agree is old. The question is: how do I exclude this package
+> from being built. Should we introduce hidden Config.in bools for kernel
+> header versions, so that the packages that need at least the kernel
+> headers from kernel X.Y are not visible if you have a too old
+> toolchain? Those bools would be set by linux-headers/Config.in for the
+> internal backend, automatically set for the well-known external
+> toolchains, and a custom choice for special external toolchains.
+> 
+> Thoughts?
 
-Regards  Johan 
+Something like:
 
+    config BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
+        bool
 
-And did you already try 'make linux-dirclean' so as to force a new download? Buildroot should copy the file from the specified
-location to the dl dir, and then extract from there...
+    config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_11
+        select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
 
-Best regards,
-Thomas
+    config BR2_PACKAGE_DVB_APPS
+        depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
+
+And so on for all the headers version of interest?
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
