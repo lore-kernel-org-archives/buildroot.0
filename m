@@ -1,94 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 11 Feb 2014 10:36:56 +0100
-Subject: [Buildroot] [git commit] sdl: fix autoreconf timing issue
-Message-ID: <20140211093849.833EE9C8A0@busybox.osuosl.org>
+Date: Tue, 11 Feb 2014 10:34:45 +0100
+Subject: [Buildroot] [git commit] libsigsegv: disable for ARC
+Message-ID: <20140211093849.488FF9C979@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8a66ebabffe4fa965c2530488016512a32cc4d3d
+commit: http://git.buildroot.net/buildroot/commit/?id=ff163385ec2a0bf7ab17f37dbdf8241dff240f31
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Context:
-The autobuilders were failing on the symbol _XData32 being in conflicts.
-A patch had been added to SDL to add a check to the configure.in
+Fixes http://autobuild.buildroot.net/results/5cd/5cd051937a9471f7fb47363e868cb4b61d788d75/build-end.log
 
-Problem:
-Sometimes, the build would fail, because of an _XData32 symbol being in
-conflicts eventhrough the patch was here.
+The ARC uClibc port doesn't provide ucontext_i.sym file required to enable
+context manipulation routines that libsigsegv needs.
 
-What was happening:
-Following the classic buildroot workflow:
-   - Extract
-   - [...]
-   - Apply 001 patch, which touches configure.in AND configure
-   - Apply 002 patch, which touches configure.in
-   - Invoke autogen.sh
-   - [...]
-
-Right before running autogen.sh, we have configure.in which is more
-recent than configure, which is fine.
-We then, execute autogen.sh which, basically, runs autoconf.
-
-If your machine was lighty loaded, the time difference between
-configure.in and configure was really tiny (ms order), which seems to be
-neglected by autoconf.
-The results was that the configure was *NOT* generated. And our second
-patch was not taken into account.
-
-If your machine was under heavy load, the time difference between the
-two files would have been greater and then *maybe* picked up by
-autoconf. And then the configure file was re-generated.
-
-When the 0001 patch was introduced, SDL package did *NOT* run it's
-autogen.sh, which is why it touches also the configure.
-This came later, causing this behavior.
-
-Fixes:
-  http://autobuild.buildroot.net/results/d1c/d1c36f634dbf6b6e5d18444c2a23dfd129202b80/
-
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Anton Kolesov <anton.kolesov@synopsys.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../sdl/sdl-0001-use-correct-directfb-config.patch |   19 ++-----------------
- 1 files changed, 2 insertions(+), 17 deletions(-)
+ package/libsigsegv/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/sdl/sdl-0001-use-correct-directfb-config.patch b/package/sdl/sdl-0001-use-correct-directfb-config.patch
-index 2250790..ef671a1 100644
---- a/package/sdl/sdl-0001-use-correct-directfb-config.patch
-+++ b/package/sdl/sdl-0001-use-correct-directfb-config.patch
-@@ -4,13 +4,10 @@ The configure script has just checked for the correct directfb-config
- script, so also use it for the version check instead of whatever
- might be in the path.
+diff --git a/package/libsigsegv/Config.in b/package/libsigsegv/Config.in
+index 563ca27..4890552 100644
+--- a/package/libsigsegv/Config.in
++++ b/package/libsigsegv/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LIBSIGSEGV
+ 	bool "libsigsegv"
+ 	depends on !BR2_xtensa
++	depends on !BR2_arc # no ucontext_i.sym file
+ 	help
+ 	  Library for handling page faults in user mode.
  
--Also patch the generated configure, as it doesn't cleanly autoreconf.
--
- Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
- ---
-- configure    |    2 +-
-  configure.in |    2 +-
-- 2 files changed, 2 insertions(+), 2 deletions(-)
-+ 1 files changed, 1 insertions(+), 1 deletions(-)
- 
- Index: SDL-1.2.15/configure.in
- ===================================================================
-@@ -25,16 +22,4 @@ Index: SDL-1.2.15/configure.in
-              HAVE_VERSION=`expr $1 \* 10000 + $2 \* 100 + $3`
-              if test $HAVE_VERSION -ge $NEED_VERSION; then
-                  DIRECTFB_CFLAGS=`$DIRECTFBCONFIG --cflags`
--Index: SDL-1.2.15/configure
--===================================================================
----- SDL-1.2.15.orig/configure
--+++ SDL-1.2.15/configure
--@@ -24958,7 +24958,7 @@
--         else
--             set -- `echo $DIRECTFB_REQUIRED_VERSION | sed 's/\./ /g'`
--             NEED_VERSION=`expr $1 \* 10000 + $2 \* 100 + $3`
---            set -- `directfb-config --version | sed 's/\./ /g'`
--+            set -- `$DIRECTFBCONFIG --version | sed 's/\./ /g'`
--             HAVE_VERSION=`expr $1 \* 10000 + $2 \* 100 + $3`
--             if test $HAVE_VERSION -ge $NEED_VERSION; then
--                 DIRECTFB_CFLAGS=`$DIRECTFBCONFIG --cflags`
-+
