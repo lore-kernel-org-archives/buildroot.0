@@ -1,11 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 11 Feb 2014 18:53:30 +0100
-Subject: [Buildroot] [RFC PATCH] toolchain-external: instrument wrapper
- to warn about unsafe paths
-In-Reply-To: <20140211091855.00e6c483@skate>
-References: <1392074881-12508-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <20140211003326.GH5239@free.fr> <20140211091855.00e6c483@skate>
-Message-ID: <20140211175330.GA3411@free.fr>
+Date: Tue, 11 Feb 2014 19:01:23 +0100
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20140211101015.1b282bd3@skate>
+References: <20140211073008.EC16B101035@stock.ovh.net>
+ <20140211101015.1b282bd3@skate>
+Message-ID: <20140211180123.GB3411@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,96 +13,35 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On 2014-02-11 09:18 +0100, Thomas Petazzoni spake thusly:
-> On Tue, 11 Feb 2014 01:33:27 +0100, Yann E. MORIN wrote:
+On 2014-02-11 10:10 +0100, Thomas Petazzoni spake thusly:
+> On Tue, 11 Feb 2014 08:30:08 +0100 (CET), Thomas Petazzoni wrote:
+[--SNIP--]
+> >      avr32 |                 elfutils-0.155 | NOK | http://autobuild.buildroot.net/results/7bf7f9c786a3199e29d0dc38c4878cb6bf9c26dc/
 > 
-> > > Optionally, if BR_PARANOID_WRAPPER is defined in the environment, the
-> > > external wrapper will instead error out and abort the compilation. We
-> > > could then one day imagine setting this BR_PARANOID_WRAPPER in the
-> > > autobuilders.
-> > 
-> > I think I'd prefer we do as for BR_DEBUG_WRAPPER:
-> >     BR2_PARANOID_WRAPPER undefined or empty: nothing
-> >     BR2_PARANOID_WRAPPER=WARNING           : warning
-> >     BR2_PARANOID_WRAPPER=ERROR             : error out
+> ../libdwfl/libdwfl_pic.a(find-debuginfo.os): In function `find_debuginfo_in_path':
+> find-debuginfo.c:(.text+0x3e6): undefined reference to `canonicalize_file_name'
+> ../libdwfl/libdwfl_pic.a(dwfl_build_id_find_elf.os): In function `__libdwfl_open_by_build_id':
+> dwfl_build_id_find_elf.c:(.text+0x1a8): undefined reference to `canonicalize_file_name'
+
+I already looked at that one: the toolchain is using uClibc 0.9.31, and
+canonicalize_file_name is missing in that version (it only appeared in
+0.9.32, IIRC).
+
+> >        arm |                      nut-2.6.5 | NOK | http://autobuild.buildroot.net/results/0ddd856bcbec2db0500791fd428ba053d6e4fa1b/
 > 
-> Sure, I don't have any particular feeling about this. However, I would
-> maybe like to have this feature enabled as the warning level by default.
-
-Probably sane, indeed.
-
-> > Side-note: BR_DEBUG_WRAPPER should probably be renamed to
-> > BR2_DEBUG_WRAPPER, to follow the newly-stated naming scheme, no?
+> libusb compatibility issue?
 > 
-> If I understood the newly-stated naming scheme, yes, I believe you're
-> right, it should be renamed BR2_DEBUG_WRAPPER.
+> scan_usb.c:34:29: error: unknown type name 'usb_dev_handle'
+> scan_usb.c:38:41: error: unknown type name 'usb_dev_handle'
+> scan_usb.c:41:1: error: unknown type name 'usb_dev_handle'
+> scan_usb.c:41:48: warning: 'struct usb_device' declared inside parameter list [enabled by default]
+> scan_usb.c:41:48: warning: its scope is only this definition or declaration, which is probably not what you want [enabled by default]
+> scan_usb.c: In function 'nutscan_load_usb_library':
+> scan_usb.c:67:22: error: 'nut_usb_close' undeclared (first use in this function)
 
-Ok, will cook a patch.
-
-> > > A similar change could be made to the internal toolchain backend
-> > > either by making it use a wrapper like the external toolchain one, or
-> > > by adding some patches to gcc, by borrowing the changes made by the
-> > > CodeSourcery people.
-> > 
-> > Maybe it would be best to not duplicate this, and always use the
-> > wrapper, even for the internal backend?
-> 
-> Which is exactly one of the two solutions I proposed in the paragraph
-> you're quoting :-)
-
-And I was just expressing my preference. ;-)
-
-> > > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > > ---
-> > >  .../toolchain-external/ext-toolchain-wrapper.c     | 27 ++++++++++++++++++++++
-> > >  1 file changed, 27 insertions(+)
-> > > 
-> > > diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-> > > index 81c6ed1..c8dcad5 100644
-> > > --- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
-> > > +++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-> > > @@ -77,6 +77,7 @@ int main(int argc, char **argv)
-> > >  	char *progpath = argv[0];
-> > >  	char *basename;
-> > >  	char *env_debug;
-> > > +	char *paranoid_wrapper;
-> > >  	int ret, i, count = 0, debug;
-> > >  
-> > >  	/* Calculate the relative paths */
-> > > @@ -178,6 +179,32 @@ int main(int argc, char **argv)
-> > >  	}
-> > >  #endif /* ARCH || TUNE || CPU */
-> > >  
-> > > +	paranoid_wrapper = getenv("BR_PARANOID_WRAPPER");
-> > > +
-> > > +	/* Check for unsafe library and header paths */
-> > > +	for (i = 1; i < argc; i++) {
-> > > +		if (!strncmp(argv[i], "-I/usr", strlen("-I/usr")) ||
-> > > +		    !strncmp(argv[i], "-L/usr", strlen("-L/usr"))) {
-
-Don't we also want to check -L/lib as well?
-
-> > No need for strncmp: you're comparing to a constant, so it will not
-> > overflow.
-> 
-> I need strncmp here: I want to match only the first characters of
-> argv[i]. I.e, the above condition should match:
-> 
-> 	-I/usr/bar
-> 	-L/usr/local/foo
-> 	-I/usr/include/mysql
-> 
-> etc. If I use strcmp(), it is going to compare the entire string, and
-> -I/usr/include/mysql is not the same as -I/usr.
-
-Doh, righto-right. I should not review patches so late in the night...
-
-> > Also, using strlen on an argument of strncmp is flawed to begin with.
-> 
-> Weird, a certain Yann E. Morin did exactly this in
-> http://git.buildroot.net/buildroot/commit/toolchain/toolchain-external/ext-toolchain-wrapper.c?id=2c1dc32647eb308126b0ae80a91988059d39aa7b :-)
-
-Hehe! ;-)
+I tried to reproduce it here, but it builds fine (in a squeeze-32
+chroot, with almost nothing installed except the Buildroot
+dependencies).
 
 Regards,
 Yann E. MORIN.
