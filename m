@@ -1,40 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 11 Feb 2014 16:47:50 +0100
-Subject: [Buildroot] [PATCH] sdl: fix autoreconf timing issue
-In-Reply-To: <1392109955-742-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1392109955-742-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20140211164750.0e57be5c@skate>
+From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Tue, 11 Feb 2014 18:02:28 +0100
+Subject: [Buildroot] [pkg-perl infra V7 4/6] host-perl-module-build: new
+	package
+In-Reply-To: <CAAXf6LXMYYH=8M7-ztOPqrv_2jVvg=8AFVOmQtBu9m92iqajtw@mail.gmail.com>
+References: <1392116205-12810-1-git-send-email-francois.perrad@gadz.org>
+ <1392116205-12810-5-git-send-email-francois.perrad@gadz.org>
+ <CAAXf6LXMYYH=8M7-ztOPqrv_2jVvg=8AFVOmQtBu9m92iqajtw@mail.gmail.com>
+Message-ID: <CAB0FRsu+MtbbdmuuQ=0Rd4UHor2tMJytVpNXOiWBt2Kj-7gaSA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxime Hadjinlian,
+2014-02-11 13:04 GMT+01:00 Thomas De Schampheleire <patrickdepinguin@gmail.com>:
+> Hi Francois,
+>
+> On Tue, Feb 11, 2014 at 11:56 AM, Francois Perrad <fperrad@gmail.com> wrote:
+>> the version coming with host-perl is too old
+>>
+>> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+>> ---
+>>  package/perl-module-build/perl-module-build.mk |   12 ++++++++++++
+>>  1 file changed, 12 insertions(+)
+>>  create mode 100644 package/perl-module-build/perl-module-build.mk
+>>
+>
+> Did this patch change compared to v5?
 
-On Tue, 11 Feb 2014 10:12:35 +0100, Maxime Hadjinlian wrote:
+Yes, license updated.
 
-> If your machine was under heavy load, the time difference between the
-> two files would have been greater and then *maybe* picked up by
-> autoconf. And then the configure file was re-generated.
-> 
-> When the 0001 patch was introduced, SDL package did *NOT* run it's
-> autogen.sh, which is why it touches also the configure.
-> This came later, causing this behavior.
-> 
-> Fixes:
->   http://autobuild.buildroot.net/results/d1c/d1c36f634dbf6b6e5d18444c2a23dfd129202b80/
-> 
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Fran?ois
 
-Wow, amazing problem. Thanks a lot for getting to the bottom of it. The
-solution is indeed simple, but the investigation definitely wasn't
-(I've followed your conversation with Yann on IRC yesterday evening,
-and I remember quickly discussing the issue with you during the
-Buildroot Developer Days). Congrats!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> I already provided a Reviewed-by tag on v5 of this patch.
+> When sending new iterations of patches, please copy along the tags
+> (Reviewed-by/Acked-by/Tested-by) you received on previous iterations
+> if the patch did not change. This avoids duplicate efforts, and helps
+> the maintainer in assessing how much review this patch already had.
+>
+> Thanks,
+> Thomas
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
