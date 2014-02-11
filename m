@@ -1,94 +1,31 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 11 Feb 2014 21:23:03 +0100
-Subject: [Buildroot] [PATCH] trivial: update buildroot e-mail address to
- buildroot@buildroot.org
-Message-ID: <5dc9b6320a27725abc62.1392150183@argentina>
+Date: Tue, 11 Feb 2014 21:52:48 +0100
+Subject: [Buildroot] Bugs cleanup (input requested)
+In-Reply-To: <52F938E7.8010101@mind.be>
+References: <CAAXf6LX719WwMSZUGShzANA22z0g+zo5hYNbFYwfHG3ZEGBioQ@mail.gmail.com>
+ <20140210154305.0db0bb01@skate> <52F938E7.8010101@mind.be>
+Message-ID: <CAAXf6LWB466or8Ysfdu33_=BtRZqBtCibU1oKaz-sBQ9T_pW+g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As the e-mail address buildroot at buildroot.org is now enabled, update the
-e-mail addresses in the source tree from @uclibc.org and @busybox.net to our
-own proper domain.
+Hi Arnout,
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+On Mon, Feb 10, 2014 at 9:39 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+[..]
+>
+>  It is true that their use case should be solved with the legal-info
+> infrastructure - and if that doesn't work for them, it should be fixed there.
+>
+>  However, the patch is still valid for a different reason: it makes
+> things more consistent. We use $$ almost everywhere within
+> generic-package, so ideally it should be done there as well.
 
----
- Makefile                                                 |  2 +-
- docs/README                                              |  2 +-
- docs/copyright.txt                                       |  2 +-
- docs/footer.html                                         |  2 +-
- docs/manual/contribute.txt                               |  2 +-
- package/x11r7/xserver_xorg-server/xserver_xorg-server.mk |  2 +-
- 6 files changed, 6 insertions(+), 6 deletions(-)
+As I said in the original mail, I'm open to this change.
+Would you like to adopt the patch and send it to the list to give it a
+chance to be integrated?
 
-diff --git a/Makefile b/Makefile
---- a/Makefile
-+++ b/Makefile
-@@ -1,7 +1,7 @@
- # Makefile for buildroot
- #
- # Copyright (C) 1999-2005 by Erik Andersen <andersen@codepoet.org>
--# Copyright (C) 2006-2014 by the Buildroot developers <buildroot@uclibc.org>
-+# Copyright (C) 2006-2014 by the Buildroot developers <buildroot@buildroot.org>
- #
- # This program is free software; you can redistribute it and/or modify
- # it under the terms of the GNU General Public License as published by
-diff --git a/docs/README b/docs/README
---- a/docs/README
-+++ b/docs/README
-@@ -56,4 +56,4 @@ use menuconfig of certain packages. This
- $ make HOSTCC=gcc-4.3 busybox-menuconfig
- 
- Please feed suggestions, bug reports, insults, and bribes back to the
--buildroot mailing list: buildroot at uclibc.org
-+buildroot mailing list: buildroot at buildroot.org
-diff --git a/docs/copyright.txt b/docs/copyright.txt
---- a/docs/copyright.txt
-+++ b/docs/copyright.txt
-@@ -25,6 +25,6 @@ HAS BEEN ADVISED OF THE POSSIBILITY OF S
- 
- You have been warned.
- 
--You can contact the webmaster at <buildroot@uclibc.org> if you have some sort
-+You can contact the webmaster at <buildroot@buildroot.org> if you have some sort
- of problem with this.
- 
-diff --git a/docs/footer.html b/docs/footer.html
---- a/docs/footer.html
-+++ b/docs/footer.html
-@@ -14,7 +14,7 @@
- 	<br>
- 	Mail all comments, insults, suggestions and bribes to
- 	<br>
--	The Buildroot developers <A HREF="mailto:buildroot@uclibc.org">buildroot at uclibc.org</A><BR>
-+	The Buildroot developers <A HREF="mailto:buildroot@buildroot.org">buildroot at buildroot.org</A><BR>
-     </font>
- 
-   </body>
-diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
---- a/docs/manual/contribute.txt
-+++ b/docs/manual/contribute.txt
-@@ -48,7 +48,7 @@ before submitting them using your favori
- Lastly, send/submit your patch set to the Buildroot mailing list:
- 
- ---------------------
--$ git send-email --to buildroot at busybox.net outgoing/*
-+$ git send-email --to buildroot at buildroot.org outgoing/*
- ---------------------
- 
- Note that +git+ should be configured to use your mail account.
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -57,7 +57,7 @@ XSERVER_XORG_SERVER_DEPENDENCIES = 	\
- 
- XSERVER_XORG_SERVER_CONF_OPT = --disable-config-hal \
- 		--disable-xnest --disable-xephyr --disable-dmx \
--		--with-builder-addr=buildroot at uclibc.org \
-+		--with-builder-addr=buildroot at buildroot.org \
- 		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/pixman-1" \
- 		--with-fontdir=/usr/share/fonts/X11/ --localstatedir=/var \
- 		--$(if $(BR2_PACKAGE_XSERVER_XORG_SERVER_XVFB),en,dis)able-xvfb
+Thanks,
+Thomas
