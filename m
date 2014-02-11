@@ -1,31 +1,24 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 11 Feb 2014 19:01:41 +0100
-Subject: [Buildroot] [git commit branch/next] connman: bump version
-Message-ID: <20140211180207.DAC2B9C988@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 11 Feb 2014 19:29:50 +0100
+Subject: [Buildroot] [PATCH] iozone: needs thread support in toolchain
+In-Reply-To: <1392138951-13421-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 11 Feb 2014 18:15:51 +0100")
+References: <1392138951-13421-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87d2itv6xt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fe795f551216940460960c418cd1311341745b74
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/connman/connman.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ > Fixes:
+ >   http://autobuild.buildroot.org/results/2a3/2a33d2c7535a9d867d76dd5cf05e1bcc3f5cdc38//
 
-diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index e0ae7a6..27fe72e 100644
---- a/package/connman/connman.mk
-+++ b/package/connman/connman.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CONNMAN_VERSION = 1.19
-+CONNMAN_VERSION = 1.21
- CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
- CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman/
- CONNMAN_DEPENDENCIES = libglib2 dbus iptables gnutls
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
