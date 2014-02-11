@@ -1,171 +1,54 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 11 Feb 2014 08:17:38 +0100
-Subject: [Buildroot] [pkg-perl infra V6 7/9] manual: adding packages perl
-In-Reply-To: <1392034997-12394-8-git-send-email-francois.perrad@gadz.org>
-References: <1392034997-12394-1-git-send-email-francois.perrad@gadz.org>
- <1392034997-12394-8-git-send-email-francois.perrad@gadz.org>
-Message-ID: <52F9CE92.1040209@mind.be>
+Date: Tue, 11 Feb 2014 08:18:25 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-02-07
+In-Reply-To: <20140210210752.641364a8@skate>
+References: <20140208073009.5C3E6100CDC@stock.ovh.net>	<20140208124907.GA3442@free.fr>	<20140210093158.1dc26780@skate>	<CAAXf6LVr18TkjCX_APQOabr6idsUMCRgrqxTL69yHO=2XJSugA@mail.gmail.com>	<52F90EE4.1060103@mind.be>
+ <20140210210752.641364a8@skate>
+Message-ID: <52F9CEC1.2030200@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/10/14 13:23, Francois Perrad wrote:
+On 02/10/14 21:07, Thomas Petazzoni wrote:
+> Dear Arnout Vandecappelle,
 > 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  docs/manual/adding-packages-perl.txt |  110 ++++++++++++++++++++++++++++++++++
->  docs/manual/adding-packages.txt      |    2 +
->  2 files changed, 112 insertions(+)
->  create mode 100644 docs/manual/adding-packages-perl.txt
+> On Mon, 10 Feb 2014 18:39:48 +0100, Arnout Vandecappelle wrote:
 > 
-> diff --git a/docs/manual/adding-packages-perl.txt b/docs/manual/adding-packages-perl.txt
-> new file mode 100644
-> index 0000000..1e48df9
-> --- /dev/null
-> +++ b/docs/manual/adding-packages-perl.txt
-> @@ -0,0 +1,110 @@
-> +// -*- mode:doc; -*-
-> +// vim: set syntax=asciidoc:
-> +
-> +Infrastructure for Perl/CPAN packages
-> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> +
-> +[[perl-package-tutorial]]
-> +
-> ++perl-package+ tutorial
-> +^^^^^^^^^^^^^^^^^^^^^^^
-> +
-> +First, let's see how to write a +.mk+ file for a Perl/CPAN package,
-> +with an example :
-> +
-> +------------------------
-> +01: ################################################################################
-> +02: #
-> +03: # perl-foo-bar
-> +04: #
-> +05: ################################################################################
-> +06:
-> +07: PERL_FOO_BAR_VERSION = 0.02
-> +08: PERL_FOO_BAR_SOURCE = Foo-Bar-$(PERL_FOO_BAR_VERSION).tar.gz
-> +09: PERL_FOO_BAR_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MO/MONGER/
-> +10: PERL_FOO_BAR_DEPENDENCIES = perl-strictures
-> +11: PERL_FOO_BAR_LICENSE = perl_5
+>>>> This one I agree is old. The question is: how do I exclude this package
+>>>> from being built. Should we introduce hidden Config.in bools for kernel
+>>>> header versions, so that the packages that need at least the kernel
+>>>> headers from kernel X.Y are not visible if you have a too old
+>>>> toolchain? Those bools would be set by linux-headers/Config.in for the
+>>>> internal backend, automatically set for the well-known external
+>>>> toolchains, and a custom choice for special external toolchains.
+>>>
+>>> I think we should indeed implement a mechanism to restrict packages
+>>> based on kernel headers.
+>>> There have been many packages that require recent kernel headers, and
+>>> it is not feasible to fix all these packages individually. Forcing the
+>>> user to update their kernel headers or toolchain is not unreasonable,
+>>> and otherwise they are always welcome to propose a patch for a
+>>> particular package, or discuss the matter upstream.
+>>>
+>>> The solution you propose seems a good idea to me and not too complex.
+>>
+>>  I had also thought about this option already. However, I expect the "not
+>> too complex" is not entirely true: you probably want symbols from
+>> something like 2.6.36 up to 3.13... Hm, that's just 20 symbols, maybe not
+>> so bad after all. However, for custom external toolchains and for custom
+>> kernel headers, all of these have to be made visible as well, so that
+>> adds another 20 symbols...
+> 
+> True, but I don't really see another solution that solves the problem
+> at hand...
 
- Should be "Artistic or GPLv1+"
-
-> +12: PERL_FOO_BAR_LICENSE_FILES = LICENSE
-> +13:
-> +14: $(eval $(perl-package))
-> +------------------------
-> +
-> +On line 7, we declare the version of the package.
-> +
-> +On line 8 and 9, we declare the name of the tarball and the location
-> +of the tarball on a CPAN server. Buildroot will automatically download
-> +the tarball from this location.
-> +
-> +On line 10, we declare our dependencies, so that they are built
-> +before the build process of our package starts.
-> +
-> +On line 11 and 12, we give licensing details about the package (its
-> +license on line 11, and the file containing the license text on line
-> +12).
-> +
-> +Finally, on line 14, we invoke the +perl-package+ macro that
-> +generates all the Makefile rules that actually allow the package to be
-> +built.
-> +
-> +Most of these data could be retrieved from https://metacpan.org/.
-> +So, this file and the Config.in could be generated by running
-> +the script +supports/scripts/scancpan Foo-Bar+ in the +TOPDIR+ directory
-> +(or in the +BR2_EXTERNAL+ directory).
-> +This script recursively creates packages for all required Perl/CPAN
-> +dependencies.
-> +
-> +[[perl-package-reference]]
-> +
-> ++perl-package+ reference
-> +^^^^^^^^^^^^^^^^^^^^^^^^
-> +
-> +As a policy, packages that provide Perl/CPAN modules should all be
-> +named +perl-<something>+ in Buildroot.
-> +
-> +This infrastructure handles various Perl build systems :
-> ++ExtUtils-MakeMaker+, +Module-Build+ and +Module-Build-Tiny+.
-> ++Build.PL+ is always prefered when a package provides a +Makefile.PL+
-
- preferred
-
-> +and a +Build.PL+.
-> +
-> +The main macro of the Perl/CPAN package infrastructure is
-> ++perl-package+. It is similar to the +generic-package+ macro. The ability to
-> +have target and host packages is also available, with the
-> ++host-perl-package+ macro.
-> +
-> +Just like the generic infrastructure, the Perl/CPAN infrastructure
-> +works by defining a number of variables before calling the
-> ++perl-package+ macro.
-> +
-> +First, all the package metadata information variables that exist in the
-> +generic infrastructure also exist in the Perl/CPAN infrastructure:
-> ++PERL_FOO_VERSION+, +PERL_FOO_SOURCE+,
-> ++PERL_FOO_PATCH+, +PERL_FOO_SITE+,
-> ++PERL_FOO_SUBDIR+, +PERL_FOO_DEPENDENCIES+,
-> ++PERL_FOO_INSTALL_TARGET+.
-> +
-> +Note that:
-> +
-> + * Setting +PERL_FOO_INSTALL_STAGING+ to +YES+ has no effect (unless
-> +   a +PERL_FOO_INSTALL_STAGING_CMDS+ variable is defined), since
-> +   Perl modules generally don't need to be installed to the
-> +   +staging+ directory.
-
-Note that setting +PERL_FOO_INSTALL_STAGING+ to +YES+ has no effect
-unless a +PERL_FOO_INSTALL_STAGING_CMDS+ variable is defined. The perl
-infrastructure doesn't define this since Perl modules generally don't
-need to be installed to the +staging+ directory.
-
+ Neither do I.
 
  Regards,
  Arnout
-
-> +
-> +A few additional variables, specific to the Perl/CPAN infrastructure,
-> +can also be defined. Many of them are only useful in very specific
-> +cases, typical packages will therefore only use a few of them.
-> +
-> +* +PERL_FOO_CONF_OPT+, to specify additional configure
-> +  options to pass to the +perl Makefile.PL+ or +perl Build.PL+.
-> +  By default, empty.
-> +
-> +* +PERL_FOO_BUILD_OPT+, to specify additional options to
-> +  pass to +make pure_all+ or +perl Build build+ in the build step.
-> +  By default, empty.
-> +
-> +* +PERL_FOO_INSTALL_TARGET_OPT+, to specify additional options to
-> +  pass to +make pure_install+ or +perl Build install+ in the install step.
-> +  By default, empty.
-> +
-> +* +HOST_PERL_FOO_INSTALL_OPT+, to specify additional options to
-> +  pass to +make pure_install+ or +perl Build install+ in the install step.
-> +  By default, empty.
-> diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
-> index cc86529..745e33a 100644
-> --- a/docs/manual/adding-packages.txt
-> +++ b/docs/manual/adding-packages.txt
-> @@ -22,6 +22,8 @@ include::adding-packages-python.txt[]
->  
->  include::adding-packages-luarocks.txt[]
->  
-> +include::adding-packages-perl.txt[]
-> +
->  include::adding-packages-hooks.txt[]
->  
->  include::adding-packages-gettext.txt[]
-> 
 
 
 -- 
