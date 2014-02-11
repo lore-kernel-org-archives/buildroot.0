@@ -1,46 +1,33 @@
-From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Tue, 11 Feb 2014 18:02:28 +0100
-Subject: [Buildroot] [pkg-perl infra V7 4/6] host-perl-module-build: new
-	package
-In-Reply-To: <CAAXf6LXMYYH=8M7-ztOPqrv_2jVvg=8AFVOmQtBu9m92iqajtw@mail.gmail.com>
-References: <1392116205-12810-1-git-send-email-francois.perrad@gadz.org>
- <1392116205-12810-5-git-send-email-francois.perrad@gadz.org>
- <CAAXf6LXMYYH=8M7-ztOPqrv_2jVvg=8AFVOmQtBu9m92iqajtw@mail.gmail.com>
-Message-ID: <CAB0FRsu+MtbbdmuuQ=0Rd4UHor2tMJytVpNXOiWBt2Kj-7gaSA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 11 Feb 2014 18:15:51 +0100
+Subject: [Buildroot] [PATCH] iozone: needs thread support in toolchain
+Message-ID: <1392138951-13421-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2014-02-11 13:04 GMT+01:00 Thomas De Schampheleire <patrickdepinguin@gmail.com>:
-> Hi Francois,
->
-> On Tue, Feb 11, 2014 at 11:56 AM, Francois Perrad <fperrad@gmail.com> wrote:
->> the version coming with host-perl is too old
->>
->> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
->> ---
->>  package/perl-module-build/perl-module-build.mk |   12 ++++++++++++
->>  1 file changed, 12 insertions(+)
->>  create mode 100644 package/perl-module-build/perl-module-build.mk
->>
->
-> Did this patch change compared to v5?
+Fixes:
 
-Yes, license updated.
+  http://autobuild.buildroot.org/results/2a3/2a33d2c7535a9d867d76dd5cf05e1bcc3f5cdc38//
 
-Fran?ois
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/iozone/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-> I already provided a Reviewed-by tag on v5 of this patch.
-> When sending new iterations of patches, please copy along the tags
-> (Reviewed-by/Acked-by/Tested-by) you received on previous iterations
-> if the patch did not change. This avoids duplicate efforts, and helps
-> the maintainer in assessing how much review this patch already had.
->
-> Thanks,
-> Thomas
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/iozone/Config.in b/package/iozone/Config.in
+index 26d4daa..8cf50b1 100644
+--- a/package/iozone/Config.in
++++ b/package/iozone/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_IOZONE
+ 	bool "iozone"
+ 	depends on BR2_USE_MMU # fork()
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  IOzone is a filesystem benchmark tool.
+ 	  The benchmark generates and measures a variety of file operations
+-- 
+1.8.3.2
