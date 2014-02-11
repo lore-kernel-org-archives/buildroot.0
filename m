@@ -1,91 +1,108 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 11 Feb 2014 16:25:21 +0200
-Subject: [Buildroot] [PATCH 2/3] coreutils: fix build against uclibc snapshot
+Date: Tue, 11 Feb 2014 16:25:22 +0200
+Subject: [Buildroot] [PATCH 3/3] gcc: xtensa: fix __builtin_frame_address
+	use with shared libgcc
 In-Reply-To: <cover.1392128329.git.baruch@tkos.co.il>
 References: <cover.1392128329.git.baruch@tkos.co.il>
-Message-ID: <5d62445fcadab4f283d0e1868bd2481d9c40856a.1392128329.git.baruch@tkos.co.il>
+Message-ID: <55f56cc35e7fbbd83488b13936bcdcdde519119c.1392128329.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-uClibc development version adds support for POSIX spawn routines. However,
-unlike glibc these routines are in librt. This breaks gnulib autoconf
-detection. Teach gnulib autoconf to look for POSIX spawn in librt.
+The xtensa port uses __xtensa_libgcc_window_spill in libgcc to implement
+__builtin_frame_address. This symbol is local/hidden in libgcc. This is not a
+problem when linking against static libgcc. But g++ defaults to
+-shared-libgcc, thus breaking link against C++ shared libraries that are using
+__builtin_frame_address as follows:
+
+ld: test: hidden symbol `__xtensa_libgcc_window_spill' in .../libgcc.a(lib2funcs.o) is referenced by DSO
+
+Add upstream patches that make libgcc_s.so a linker script that links in
+unresolved symbols from the static libgcc, similar to the ARM and PowerPC
+ports.
 
 Fixes:
-http://autobuild.buildroot.net/results/246/246b3778a1a646afd1c8b9c17b4579fb5a27120e/
+http://autobuild.buildroot.net/results/e2d/e2d1a763fa86b8575e2e48e6d73c018175f43e7c/
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/coreutils/coreutils-01-spawn-uclibc.patch | 43 +++++++++++++++++++++++
- package/coreutils/coreutils.mk                    |  3 ++
- 2 files changed, 46 insertions(+)
- create mode 100644 package/coreutils/coreutils-01-spawn-uclibc.patch
+ .../4.7.3/850-xtensa-libgcc-linker-script.patch    | 29 ++++++++++++++++++++++
+ .../4.8.2/850-xtensa-libgcc-linker-script.patch    | 29 ++++++++++++++++++++++
+ 2 files changed, 58 insertions(+)
+ create mode 100644 package/gcc/4.7.3/850-xtensa-libgcc-linker-script.patch
+ create mode 100644 package/gcc/4.8.2/850-xtensa-libgcc-linker-script.patch
 
-diff --git a/package/coreutils/coreutils-01-spawn-uclibc.patch b/package/coreutils/coreutils-01-spawn-uclibc.patch
+diff --git a/package/gcc/4.7.3/850-xtensa-libgcc-linker-script.patch b/package/gcc/4.7.3/850-xtensa-libgcc-linker-script.patch
 new file mode 100644
-index 000000000000..47609b75bc08
+index 000000000000..6ffa897863fd
 --- /dev/null
-+++ b/package/coreutils/coreutils-01-spawn-uclibc.patch
-@@ -0,0 +1,43 @@
-+From 71cf16e435bf5db64abcf81a9dc6dc36ce37d58d Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?P=C3=A1draig=20Brady?= <P@draigBrady.com>
-+Date: Tue, 14 Jan 2014 16:59:07 +0000
-+Subject: [PATCH] spawn: fix link error on uclibc
++++ b/package/gcc/4.7.3/850-xtensa-libgcc-linker-script.patch
+@@ -0,0 +1,29 @@
++From a89db366b98fffc61b20074e658c7285fb302776 Mon Sep 17 00:00:00 2001
++Message-Id: <a89db366b98fffc61b20074e658c7285fb302776.1392126646.git.baruch@tkos.co.il>
++From: sterling <sterling@138bc75d-0d04-0410-961f-82ee72b054a4>
++Date: Tue, 21 Jan 2014 19:29:23 +0000
++Subject: [PATCH] 2014-01-21  Baruch Siach <barch@tkos.co.il>
 +
-+* m4/spawn_h.m4 (gl_HAVE_POSIX_SPAWN): use AC_SEARCH_LIBS,
-+to incorporate -lrt if needed (on uclibc for example).
-+* modules/posix_spawn: Reference the substituted LIB.
++	* config.host (tmake_file): add t-slibgcc-libgcc for xtensa*-*-linux*.
 +
-+Patch status: suggested by gnulib maintainer
-+(http://article.gmane.org/gmane.comp.lib.gnulib.bugs/33610), not in upstream
-+gnulib yet
++Patch status: upstream (4.7 branch commit r206898)
 +
-+This issue should be fixed in coreutils version 2.23.
-+
-+Sign-off-by: Baruch Siach <baruch@tkos.co.il>
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 +---
 +
-+diff --git a/m4/spawn_h.m4 b/m4/spawn_h.m4
-+index 87fe122..3eb835c 100644
-+--- a/m4/spawn_h.m4
-++++ b/m4/spawn_h.m4
-+@@ -64,7 +64,15 @@ AC_DEFUN([gl_HAVE_POSIX_SPAWN],
-+   dnl once only, before all statements that occur in other macros.
-+   AC_REQUIRE([gl_SPAWN_H_DEFAULTS])
-+ 
-+-  AC_CHECK_FUNCS_ONCE([posix_spawn])
-++  LIB_POSIX_SPAWN=
-++  AC_SUBST([LIB_POSIX_SPAWN])
-++  gl_saved_libs=$LIBS
-++    AC_SEARCH_LIBS([posix_spawn], [rt],
-++                   [test "$ac_cv_search_posix_spawn" = "none required" ||
-++                    LIB_POSIX_SPAWN=$ac_cv_search_posix_spawn])
-++    AC_CHECK_FUNCS([posix_spawn])
-++  LIBS=$gl_saved_libs
-++
-+   if test $ac_cv_func_posix_spawn != yes; then
-+     HAVE_POSIX_SPAWN=0
-+   fi
-+ 
++diff --git a/libgcc/config.host b/libgcc/config.host
++index e18e1d25021d..a6f7c450d702 100644
++--- a/libgcc/config.host
+++++ b/libgcc/config.host
++@@ -1127,7 +1127,7 @@ xtensa*-*-elf*)
++ 	extra_parts="$extra_parts crti.o crtn.o"
++ 	;;
++ xtensa*-*-linux*)
++-	tmake_file="$tmake_file xtensa/t-xtensa xtensa/t-linux"
+++	tmake_file="$tmake_file xtensa/t-xtensa xtensa/t-linux t-slibgcc-libgcc"
++ 	md_unwind_header=xtensa/linux-unwind.h
++ 	;;
++ am33_2.0-*-linux*)
 +-- 
-+1.7.7.6
++1.8.5.3
 +
-diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-index e0e9d80b3989..72087523f413 100644
---- a/package/coreutils/coreutils.mk
-+++ b/package/coreutils/coreutils.mk
-@@ -10,6 +10,9 @@ COREUTILS_SOURCE = coreutils-$(COREUTILS_VERSION).tar.xz
- COREUTILS_LICENSE = GPLv3+
- COREUTILS_LICENSE_FILES = COPYING
- 
-+# patching gnulib .m4 file
-+COREUTILS_AUTORECONF = YES
+diff --git a/package/gcc/4.8.2/850-xtensa-libgcc-linker-script.patch b/package/gcc/4.8.2/850-xtensa-libgcc-linker-script.patch
+new file mode 100644
+index 000000000000..378445da3904
+--- /dev/null
++++ b/package/gcc/4.8.2/850-xtensa-libgcc-linker-script.patch
+@@ -0,0 +1,29 @@
++From 7c722c07a0781e4279f643650bc528422c80ce5e Mon Sep 17 00:00:00 2001
++Message-Id: <7c722c07a0781e4279f643650bc528422c80ce5e.1392126765.git.baruch@tkos.co.il>
++From: sterling <sterling@138bc75d-0d04-0410-961f-82ee72b054a4>
++Date: Tue, 21 Jan 2014 19:50:02 +0000
++Subject: [PATCH] 2014-01-21  Baruch Siach <barch@tkos.co.il>
 +
- # If both coreutils and busybox are selected, make certain coreutils
- # wins the fight over who gets to have their utils actually installed.
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
++	* config.host (tmake_file): add t-slibgcc-libgcc for xtensa*-*-linux*.
++
++Patch status: upstream (4.8 branch commit r206905)
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++
++diff --git a/libgcc/config.host b/libgcc/config.host
++index ee16d60e34a6..302aa6135211 100644
++--- a/libgcc/config.host
+++++ b/libgcc/config.host
++@@ -1102,7 +1102,7 @@ xtensa*-*-elf*)
++ 	extra_parts="$extra_parts crti.o crtn.o"
++ 	;;
++ xtensa*-*-linux*)
++-	tmake_file="$tmake_file xtensa/t-xtensa xtensa/t-linux"
+++	tmake_file="$tmake_file xtensa/t-xtensa xtensa/t-linux t-slibgcc-libgcc"
++ 	md_unwind_header=xtensa/linux-unwind.h
++ 	;;
++ am33_2.0-*-linux*)
++-- 
++1.8.5.3
++
 -- 
 1.8.5.3
