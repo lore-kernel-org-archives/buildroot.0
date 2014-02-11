@@ -1,38 +1,25 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 11 Feb 2014 08:21:40 +0200
-Subject: [Buildroot] [RFC PATCH] toolchain-external: instrument wrapper
- to warn about unsafe paths
-In-Reply-To: <1392074881-12508-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1392074881-12508-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20140211062140.GE5170@tarshish>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 11 Feb 2014 08:04:45 +0100
+Subject: [Buildroot] [PATCH 2/2] jpeg-turbo: fix "jpegtran" spelling in
+	target-install hook
+In-Reply-To: <1392084458-1915-1-git-send-email-danomimanchego123@gmail.com>
+ (Danomi Manchego's message of "Mon, 10 Feb 2014 21:07:38 -0500")
+References: <1392084458-1915-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <8761omxh82.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+>>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
 
-On Tue, Feb 11, 2014 at 12:28:01AM +0100, Thomas Petazzoni wrote:
-> The CodeSourcery toolchains have a very interesting feature: they warn
-> the user when an unsafe header or library path is used, i.e a path
-> that will lead host headers or libraries to leak into the build.
-> 
-> This commit adds a similar functionality into our external toolchain
-> wrapper, so that it can be used with all external toolchains, and can
-> also be tuned as needed. By default, the external toolchain wrapper
-> now gives warnings such as:
-> 
->   WARNING: unsafe header/library path used in cross-compilation: '-I /usr/foo'
->   WARNING: unsafe header/library path used in cross-compilation: '-L /usr/bleh'
+ > Use correct bin name so that JPEG_TURBO_REMOVE_USELESS_TOOLS fixup
+ > actually removes it.
 
-I'd mention that this makes Buildroot builds under /usr even more problematic. 
-I thought this limitation appears in the documentation, but I can't find it 
-there now.
+ > Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 
-baruch
+Committed, thanks.
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Bye, Peter Korsgaard
