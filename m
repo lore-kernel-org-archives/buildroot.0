@@ -1,38 +1,29 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 11 Feb 2014 10:35:20 +0100
-Subject: [Buildroot] [PATCH] libsigsegv: disable for ARC
-In-Reply-To: <1392110352-29340-1-git-send-email-anton.kolesov@synopsys.com>
- (Anton Kolesov's message of "Tue, 11 Feb 2014 13:19:12 +0400")
-References: <1392110352-29340-1-git-send-email-anton.kolesov@synopsys.com>
-Message-ID: <878utivvon.fsf@dell.be.48ers.dk>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 11 Feb 2014 10:36:37 +0100
+Subject: [Buildroot] [support.osuosl.org #23564] @buildroot.org /
+ @buildroot.net for Buildroot mailing list
+In-Reply-To: <87wqh2w2i0.fsf@dell.be.48ers.dk>
+References: <RT-Ticket-23564@osuosl.org> <87ha87yo5g.fsf@dell.be.48ers.dk>
+ <rt-4.0.4-11603-1392084726-547.23564-6-0@osuosl.org>
+ <87wqh2w2i0.fsf@dell.be.48ers.dk>
+Message-ID: <CAAXf6LV0D8deuibr0diyJJh+96i2VMQJOhuV6KnwrXXXKG-fgA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Anton" == Anton Kolesov <anton.kolesov@synopsys.com> writes:
+On Tue, Feb 11, 2014 at 8:08 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>>> "Justin" == Justin Dugger via RT <support@osuosl.org> writes:
+>
+>  > Hi,
+>  > I believe I've configured our relays to forward mail from those domains on. Please give it a test and see if I've done so correctly though!
+>
+> Ok, lets test..
 
- > The ARC uClibc port doesn't provide ucontext_i.sym file required to enable
- > context manipulation routines that libsigsegv needs.
+Works great, thanks!
 
- > Signed-off-by: Anton Kolesov <anton.kolesov@synopsys.com>
- > ---
- >  package/libsigsegv/Config.in | 1 +
- >  1 file changed, 1 insertion(+)
-
- > diff --git a/package/libsigsegv/Config.in b/package/libsigsegv/Config.in
- > index 563ca27..4abb2a4 100644
- > --- a/package/libsigsegv/Config.in
- > +++ b/package/libsigsegv/Config.in
- > @@ -1,6 +1,7 @@
- >  config BR2_PACKAGE_LIBSIGSEGV
- >  	bool "libsigsegv"
- >  	depends on !BR2_xtensa
- > +	depends on !BR2_arc
-
-Committed with a comment explaining why and a link to the autobuilder
-failure added, thanks.
-
--- 
-Bye, Peter Korsgaard
+So from now on, buildroot at buildroot.org is a valid e-mail address of
+the mailing list.
+I add to my todo list to update the references to this e-mail address
+in the source tree. I will send a patch for that later...
