@@ -1,24 +1,30 @@
-From: Jeremy Rosen <jeremy.rosen@openwide.fr>
-Date: Tue, 11 Feb 2014 15:03:13 +0100 (CET)
-Subject: [Buildroot] Antw: Re: Antw: Re: Antw: Re: How to get the kernel
- to mount a rootfs without an initramfs ??
-In-Reply-To: <52FA3919020000460004A883@gwia2.rz.hs-offenburg.de>
-Message-ID: <548043547.5283604.1392127393366.JavaMail.root@openwide.fr>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 11 Feb 2014 16:25:19 +0200
+Subject: [Buildroot] [PATCH 0/3] xtensa autobuild fixes
+Message-ID: <cover.1392128329.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This series fixes a few xtensa specific build failures reported by the 
+autobuild machine.
 
-> 
-> Well I'll try, but why then is the initramfs working? the only files
-> i got on a sd is the boot.bin, u-boot.bin and kernel.bin (with
-> initramfs) and I'm using this on a SD card as it came from the
-> factory and it's working. I'll try the trick with partition the sd
-> card now, let's see if that helps.
-> 
+Baruch Siach (3):
+  gst1-libav: fix build for xtensa
+  coreutils: fix build against uclibc snapshot
+  gcc: xtensa: fix __builtin_frame_address use with shared libgcc
 
-if you got files on the SD then your SD is partitioned and has a single
-FAT partition. I'm not sure where you put your squash fs... as an image
-file on the SD card (i.e on the FAT partition of the SD card )
+ package/coreutils/coreutils-01-spawn-uclibc.patch  | 43 ++++++++++++++++++++++
+ package/coreutils/coreutils.mk                     |  3 ++
+ .../4.7.3/850-xtensa-libgcc-linker-script.patch    | 29 +++++++++++++++
+ .../4.8.2/850-xtensa-libgcc-linker-script.patch    | 29 +++++++++++++++
+ package/gstreamer1/gst1-libav/gst1-libav.mk        |  8 ++++
+ 5 files changed, 112 insertions(+)
+ create mode 100644 package/coreutils/coreutils-01-spawn-uclibc.patch
+ create mode 100644 package/gcc/4.7.3/850-xtensa-libgcc-linker-script.patch
+ create mode 100644 package/gcc/4.8.2/850-xtensa-libgcc-linker-script.patch
+
+-- 
+1.8.5.3
