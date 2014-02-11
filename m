@@ -1,300 +1,151 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Tue, 11 Feb 2014 11:56:41 +0100
-Subject: [Buildroot] [pkg-perl infra V7 2/6] scancpan: a new script
+Date: Tue, 11 Feb 2014 11:56:44 +0100
+Subject: [Buildroot] [pkg-perl infra V7 5/6] manual: adding packages perl
 In-Reply-To: <1392116205-12810-1-git-send-email-francois.perrad@gadz.org>
 References: <1392116205-12810-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1392116205-12810-3-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1392116205-12810-6-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-which creates Perl/CPAN package files
-
-The 2 dependencies will be installed by the Perl infrastructure.
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- .../perl-metacpan-api-tiny.mk                      |   12 +
- .../perl-module-corelist/perl-module-corelist.mk   |   13 ++
- support/scripts/scancpan                           |  229 ++++++++++++++++++++
- 3 files changed, 254 insertions(+)
- create mode 100644 package/perl-metacpan-api-tiny/perl-metacpan-api-tiny.mk
- create mode 100644 package/perl-module-corelist/perl-module-corelist.mk
- create mode 100755 support/scripts/scancpan
+ docs/manual/adding-packages-perl.txt |  110 ++++++++++++++++++++++++++++++++++
+ docs/manual/adding-packages.txt      |    2 +
+ 2 files changed, 112 insertions(+)
+ create mode 100644 docs/manual/adding-packages-perl.txt
 
-diff --git a/package/perl-metacpan-api-tiny/perl-metacpan-api-tiny.mk b/package/perl-metacpan-api-tiny/perl-metacpan-api-tiny.mk
+diff --git a/docs/manual/adding-packages-perl.txt b/docs/manual/adding-packages-perl.txt
 new file mode 100644
-index 0000000..c94835e
+index 0000000..b272232
 --- /dev/null
-+++ b/package/perl-metacpan-api-tiny/perl-metacpan-api-tiny.mk
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# perl-metacpan-api-tiny
-+#
-+################################################################################
++++ b/docs/manual/adding-packages-perl.txt
+@@ -0,0 +1,110 @@
++// -*- mode:doc; -*-
++// vim: set syntax=asciidoc:
 +
-+PERL_METACPAN_API_TINY_VERSION = 1.131730
-+PERL_METACPAN_API_TINY_SOURCE = MetaCPAN-API-Tiny-$(PERL_METACPAN_API_TINY_VERSION).tar.gz
-+PERL_METACPAN_API_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/N/NP/NPEREZ/
-+PERL_METACPAN_API_TINY_LICENSE = Artistic or GPLv1+
++Infrastructure for Perl/CPAN packages
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 +
-+$(eval $(host-perl-package))
-diff --git a/package/perl-module-corelist/perl-module-corelist.mk b/package/perl-module-corelist/perl-module-corelist.mk
-new file mode 100644
-index 0000000..c0f773b
---- /dev/null
-+++ b/package/perl-module-corelist/perl-module-corelist.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# perl-module-corelist
-+#
-+################################################################################
++[[perl-package-tutorial]]
 +
-+# aligned with Perl 5.18.2
-+PERL_MODULE_CORELIST_VERSION = 3.03
-+PERL_MODULE_CORELIST_SOURCE = Module-CoreList-$(PERL_MODULE_CORELIST_VERSION).tar.gz
-+PERL_MODULE_CORELIST_SITE = $(BR2_CPAN_MIRROR)/authors/id/B/BI/BINGOS/
-+PERL_MODULE_CORELIST_LICENSE = Artistic or GPLv1+
+++perl-package+ tutorial
++^^^^^^^^^^^^^^^^^^^^^^^
 +
-+$(eval $(host-perl-package))
-diff --git a/support/scripts/scancpan b/support/scripts/scancpan
-new file mode 100755
-index 0000000..63a8885
---- /dev/null
-+++ b/support/scripts/scancpan
-@@ -0,0 +1,229 @@
-+#!/usr/bin/env perl
++First, let's see how to write a +.mk+ file for a Perl/CPAN package,
++with an example :
 +
-+use 5.010;
-+use strict;
-+use warnings;
-+use Fatal qw(open close);
++------------------------
++01: ################################################################################
++02: #
++03: # perl-foo-bar
++04: #
++05: ################################################################################
++06:
++07: PERL_FOO_BAR_VERSION = 0.02
++08: PERL_FOO_BAR_SOURCE = Foo-Bar-$(PERL_FOO_BAR_VERSION).tar.gz
++09: PERL_FOO_BAR_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MO/MONGER/
++10: PERL_FOO_BAR_DEPENDENCIES = perl-strictures
++11: PERL_FOO_BAR_LICENSE = Artistic or GPLv1+
++12: PERL_FOO_BAR_LICENSE_FILES = LICENSE
++13:
++14: $(eval $(perl-package))
++------------------------
 +
-+use Getopt::Long;
-+use Pod::Usage;
-+use File::Basename;
-+use Module::CoreList;
-+use MetaCPAN::API::Tiny;
++On line 7, we declare the version of the package.
 +
-+my ($help, $man, $quiet, $force, $recommend);
-+GetOptions( 'help|?' => \$help,
-+            'man' => \$man,
-+            'quiet|q' => \$quiet,
-+            'force|f' => \$force,
-+            'recommend' => \$recommend
-+) or pod2usage(-exitval => 1);
-+pod2usage(-exitval => 0) if $help;
-+pod2usage(-exitval => 0, -verbose => 2) if $man;
-+pod2usage(-exitval => 1) if scalar @ARGV == 0;
++On line 8 and 9, we declare the name of the tarball and the location
++of the tarball on a CPAN server. Buildroot will automatically download
++the tarball from this location.
 +
-+my %dist;
-+my %deps_build;
-+my %deps_runtime;
-+my $mcpan = MetaCPAN::API::Tiny->new();
++On line 10, we declare our dependencies, so that they are built
++before the build process of our package starts.
 +
-+sub fetch {
-+    my $name = shift;
-+    unless ($dist{$name}) {
-+        say qq{fetch ${name}} unless $quiet;
-+        my $result = $mcpan->release( distribution => $name );
-+        $dist{$name} = $result;
-+        my @deps_build = ();
-+        my @deps_runtime = ();
-+        my $mb;
-+        foreach my $dep (@{$result->{dependency}}) {
-+            my $modname = ${$dep}{module};
-+            $mb = 1 if $modname eq q{Module::Build};
-+            next if $modname eq q{perl};
-+            next if $modname =~ m|^Alien|;
-+            next if $modname =~ m|^Win32|;
-+            next if Module::CoreList::is_core( $modname, undef, q{5.018002} );
-+            next if ${$dep}{phase} eq q{develop};
-+            next if ${$dep}{phase} eq q{test};
-+            next if !$recommend && ${$dep}{relationship} ne q{requires};
-+            my $distname = $mcpan->module( $modname )->{distribution};
-+            if (${$dep}{phase} eq q{runtime}) {
-+                push @deps_runtime, $distname;
-+            }
-+            else { # configure, build
-+                push @deps_build, $distname;
-+            }
-+            fetch( $distname );
-+        }
-+        unshift @deps_build, q{Module-Build} if $mb;
-+        $deps_build{$name} = \@deps_build;
-+        $deps_runtime{$name} = \@deps_runtime;
-+    }
-+    return;
-+}
++On line 11 and 12, we give licensing details about the package (its
++license on line 11, and the file containing the license text on line
++12).
 +
-+foreach my $distname (@ARGV) {
-+    fetch( $distname );
-+}
-+say scalar keys %dist, q{ packages fetched.} unless $quiet;
++Finally, on line 14, we invoke the +perl-package+ macro that
++generates all the Makefile rules that actually allow the package to be
++built.
 +
-+sub fsname {
-+    my $name = shift;
-+    return q{perl-} . lc $name;
-+}
++Most of these data could be retrieved from https://metacpan.org/.
++So, this file and the Config.in could be generated by running
++the script +supports/scripts/scancpan Foo-Bar+ in the +TOPDIR+ directory
++(or in the +BR2_EXTERNAL+ directory).
++This script recursively creates packages for all required Perl/CPAN
++dependencies.
 +
-+sub brname {
-+    my $name = shift;
-+    $name =~ s|-|_|g;
-+    return uc $name;
-+}
++[[perl-package-reference]]
 +
-+while (my ($distname, $dist) = each %dist) {
-+    my $fsname = fsname( $distname );
-+    my $dirname = q{package/} . $fsname;
-+    my $cfgname = $dirname . q{/Config.in};
-+    my $mkname = $dirname . q{/} . $fsname . q{.mk};
-+    my $brname = brname( $fsname );
-+    mkdir $dirname unless -d $dirname;
-+    if ($force || !-f $cfgname) {
-+        my $abstract = $dist->{abstract};
-+        say qq{write ${cfgname}} unless $quiet;
-+        open my $fh, q{>}, $cfgname;
-+        say {$fh} qq{config BR2_PACKAGE_${brname}};
-+        say {$fh} qq{\tbool "${fsname}"};
-+        foreach my $dep (@{$deps_runtime{$distname}}) {
-+            my $brdep = brname( fsname( $dep ) );
-+            say {$fh} qq{\tselect BR2_PACKAGE_${brdep}};
-+        }
-+        say {$fh} qq{\thelp} if $abstract;
-+        say {$fh} qq{\t  ${abstract}} if $abstract;
-+        say {$fh} qq{};
-+        close $fh;
-+    }
-+    if ($force || !-f $mkname) {
-+        my $version = $dist->{version};
-+        my $site = dirname( $dist->{download_url} );
-+        my($scheme, $auth, $path) = $dist->{download_url} =~ m|(?:([^:/?#]+):)?(?://([^/?#]*))?([^?#]*)|;
-+        my($filename, $directories, $suffix) = fileparse( $path, q{tar.gz}, q{tgz} );
-+        my $dependencies = join q{ }, map( { q{host-} . fsname( $_ ); } @{$deps_build{$distname}} ),
-+                                      map( { fsname( $_ ); } @{$deps_runtime{$distname}} );
-+        my $host_dependencies = join q{ }, map { q{host-} . fsname( $_ ); } @{$deps_build{$distname}},
-+                                                                            @{$deps_runtime{$distname}};
-+        my $license = ref $dist->{license} eq 'ARRAY'
-+                    ? join q{ or }, @{$dist->{license}}
-+                    : $dist->{license};
-+        $license = q{Artistic or GPLv1+} if $license eq q{perl_5};
-+        say qq{write ${mkname}} unless $quiet;
-+        open my $fh, q{>}, $mkname;
-+        say {$fh} qq{################################################################################};
-+        say {$fh} qq{#};
-+        say {$fh} qq{# ${fsname}};
-+        say {$fh} qq{#};
-+        say {$fh} qq{################################################################################};
-+        say {$fh} qq{};
-+        say {$fh} qq{${brname}_VERSION = ${version}};
-+        say {$fh} qq{${brname}_SOURCE = ${distname}-\$(${brname}_VERSION).${suffix}};
-+        say {$fh} qq{${brname}_SITE = \$(BR2_CPAN_MIRROR)${directories}};
-+        say {$fh} qq{${brname}_DEPENDENCIES = perl ${dependencies}};
-+        say {$fh} qq{#HOST_${brname}_DEPENDENCIES = ${host_dependencies}};
-+        say {$fh} qq{${brname}_LICENSE = ${license}} if $license && $license ne q{unknown};
-+        say {$fh} qq{};
-+        say {$fh} qq{\$(eval \$(perl-package))};
-+        say {$fh} qq{#\$(eval \$(host-perl-package))};
-+        close $fh;
-+    }
-+}
+++perl-package+ reference
++^^^^^^^^^^^^^^^^^^^^^^^^
 +
-+my %pkg;
-+my $cfgname = q{package/Config.in};
-+if (-f $cfgname) {
-+    open my $fh, q{<}, $cfgname;
-+    while (<$fh>) {
-+        chomp;
-+        $pkg{$_} = 1 if m|package/perl-|;
-+    }
-+    close $fh;
-+}
++As a policy, packages that provide Perl/CPAN modules should all be
++named +perl-<something>+ in Buildroot.
 +
-+foreach my $distname (sort keys %dist) {
-+    my $fsname = fsname( $distname );
-+    $pkg{qq{source "package/${fsname}/Config.in"}} = 1;
-+}
++This infrastructure handles various Perl build systems :
+++ExtUtils-MakeMaker+, +Module-Build+ and +Module-Build-Tiny+.
+++Build.PL+ is always prefered when a package provides a +Makefile.PL+
++and a +Build.PL+.
 +
-+say qq{${cfgname} must contains the following lines:};
-+say join qq{\n}, sort keys %pkg;
++The main macro of the Perl/CPAN package infrastructure is
+++perl-package+. It is similar to the +generic-package+ macro. The ability to
++have target and host packages is also available, with the
+++host-perl-package+ macro.
 +
-+__END__
++Just like the generic infrastructure, the Perl/CPAN infrastructure
++works by defining a number of variables before calling the
+++perl-package+ macro.
 +
-+=head1 NAME
++First, all the package metadata information variables that exist in the
++generic infrastructure also exist in the Perl/CPAN infrastructure:
+++PERL_FOO_VERSION+, +PERL_FOO_SOURCE+,
+++PERL_FOO_PATCH+, +PERL_FOO_SITE+,
+++PERL_FOO_SUBDIR+, +PERL_FOO_DEPENDENCIES+,
+++PERL_FOO_INSTALL_TARGET+.
 +
-+support/scripts/scancpan Try-Tiny Moo
++Note that:
 +
-+=head1 SYNOPSIS
++ * Setting +PERL_FOO_INSTALL_STAGING+ to +YES+ has no effect (unless
++   a +PERL_FOO_INSTALL_STAGING_CMDS+ variable is defined), since
++   Perl modules generally don't need to be installed to the
++   +staging+ directory.
 +
-+make host-perl-metacpan-api-tiny host-perl-module-corelist # install dependencies
++A few additional variables, specific to the Perl/CPAN infrastructure,
++can also be defined. Many of them are only useful in very specific
++cases, typical packages will therefore only use a few of them.
 +
-+export PERL5LIB=$(HOST_DIR)/usr/lib/perl5 # allows to find dependencies
-+supports/scripts/scancpan [options] [distname ...]
++* +PERL_FOO_CONF_OPT+, to specify additional configure
++  options to pass to the +perl Makefile.PL+ or +perl Build.PL+.
++  By default, empty.
 +
-+ Options:
-+   -help
-+   -man
-+   -quiet
-+   -force
-+   -recommend
++* +PERL_FOO_BUILD_OPT+, to specify additional options to
++  pass to +make pure_all+ or +perl Build build+ in the build step.
++  By default, empty.
 +
-+=head1 OPTIONS
++* +PERL_FOO_INSTALL_TARGET_OPT+, to specify additional options to
++  pass to +make pure_install+ or +perl Build install+ in the install step.
++  By default, empty.
 +
-+=over 8
++* +HOST_PERL_FOO_INSTALL_OPT+, to specify additional options to
++  pass to +make pure_install+ or +perl Build install+ in the install step.
++  By default, empty.
+diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
+index cc86529..745e33a 100644
+--- a/docs/manual/adding-packages.txt
++++ b/docs/manual/adding-packages.txt
+@@ -22,6 +22,8 @@ include::adding-packages-python.txt[]
+ 
+ include::adding-packages-luarocks.txt[]
+ 
++include::adding-packages-perl.txt[]
 +
-+=item B<-help>
-+
-+Print a brief help message and exits.
-+
-+=item B<-man>
-+
-+Prints the manual page and exits.
-+
-+=item B<-quiet>
-+
-+Executes without output
-+
-+=item B<-force>
-+
-+Forces the overwritting of existing files.
-+
-+=item B<-recommend>
-+
-+Adds I<recommended> dependencies.
-+
-+=back
-+
-+=head1 DESCRIPTION
-+
-+This script creates the BR package files for all Perl/CPAN
-+distributions required by all distname. These data are fetched from
-+https://metacpan.org/.
-+
-+See the Buildroot documentation for details on the usage of the Perl
-+infrastructure.
-+
-+=head1 LICENSE
-+
-+Copyright (C) 2013-2014 by Francois Perrad <francois.perrad@gadz.org>
-+
-+This program is free software; you can redistribute it and/or modify
-+it under the terms of the GNU General Public License as published by
-+the Free Software Foundation; either version 2 of the License, or
-+(at your option) any later version.
-+
-+This program is distributed in the hope that it will be useful,
-+but WITHOUT ANY WARRANTY; without even the implied warranty of
-+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-+General Public License for more details.
-+
-+You should have received a copy of the GNU General Public License
-+along with this program; if not, write to the Free Software
-+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
-+
-+=cut
+ include::adding-packages-hooks.txt[]
+ 
+ include::adding-packages-gettext.txt[]
 -- 
 1.7.9.5
