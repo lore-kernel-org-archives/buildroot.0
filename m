@@ -1,36 +1,60 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 11 Feb 2014 10:34:45 +0100
-Subject: [Buildroot] [git commit] libsigsegv: disable for ARC
-Message-ID: <20140211093849.488FF9C979@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 11 Feb 2014 10:41:09 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-02-10
+In-Reply-To: <CAAXf6LXK9PSuRVE+aOyTbX6C1L01NS1Xjiu0PJyk-KX-jX_pzQ@mail.gmail.com>
+References: <20140211073008.EC16B101035@stock.ovh.net>
+ <CAAXf6LXK9PSuRVE+aOyTbX6C1L01NS1Xjiu0PJyk-KX-jX_pzQ@mail.gmail.com>
+Message-ID: <CAAXf6LU9neYzPs7tMb1sUZFv0vdTc5pOiBd_vBFvadC=WfAX+A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ff163385ec2a0bf7ab17f37dbdf8241dff240f31
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, Feb 11, 2014 at 10:38 AM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+> On Tue, Feb 11, 2014 at 8:30 AM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Build statistics for 2014-02-10
+>> ===============================
+>>
+>>         success : 72
+>>        failures : 22
+>>        timeouts : 0
+>>           TOTAL : 94
+>>
+>> Classification of failures by reason
+>> ====================================
+>>
+>> Makefile.legacy:12: *** "Yo... | 6
+>>                 elfutils-0.155 | 1
+>>             gst-ffmpeg-0.10.13 | 1
+>>                       icu-51.2 | 1
+>>  [8G (0 [0m [30m [47m (0 [0... | 1
+>>   toolchain-external-undefined | 1
+>>                  rpcbind-0.2.0 | 1
+>>                   thrift-0.9.1 | 1
+>>                 minidlna-1.1.1 | 1
+>> mmc-utils-11f2ceabc4ad3f0dd... | 1
+>>                   nettle-2.7.1 | 1
+>>                     systemd-44 | 1
+>>                  libevas-1.7.7 | 1
+>>                 coreutils-8.21 | 1
+>>                audiofile-0.3.6 | 1
+>>                      nut-2.6.5 | 1
+>>                      gd-2.0.35 | 1
+>>
+>> Detail of failures
+>> ===================
+>>
+>>       mips |  [8G (0 [0m [30m [47m (0 [0... | NOK | http://autobuild.buildroot.net/results/f3fd767dccd8c993ec68d75c7be8a16ada5d2f08/
+>
+> Euh, what happened here?
+>
+>
+> Other than that, it's great to see so few errors!
+>
 
-Fixes http://autobuild.buildroot.net/results/5cd/5cd051937a9471f7fb47363e868cb4b61d788d75/build-end.log
-
-The ARC uClibc port doesn't provide ucontext_i.sym file required to enable
-context manipulation routines that libsigsegv needs.
-
-Signed-off-by: Anton Kolesov <anton.kolesov@synopsys.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libsigsegv/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
-
-diff --git a/package/libsigsegv/Config.in b/package/libsigsegv/Config.in
-index 563ca27..4890552 100644
---- a/package/libsigsegv/Config.in
-+++ b/package/libsigsegv/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LIBSIGSEGV
- 	bool "libsigsegv"
- 	depends on !BR2_xtensa
-+	depends on !BR2_arc # no ucontext_i.sym file
- 	help
- 	  Library for handling page faults in user mode.
- 
+I see you already sent an analysis mail in a separate thread, so this
+mail can be ignored...
