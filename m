@@ -1,64 +1,69 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 11 Feb 2014 09:01:11 +0100
-Subject: [Buildroot] [PATCH] Makefile.legacy: fix recursive invocation
- with BUILDROOT_DL_DIR and _CONFIG
-In-Reply-To: <20140210220947.GG5239@free.fr>
-References: <1392068935-25510-1-git-send-email-arnout@mind.be>
- <20140210220947.GG5239@free.fr>
-Message-ID: <52F9D8C7.7070900@mind.be>
+Date: Tue, 11 Feb 2014 09:05:36 +0100
+Subject: [Buildroot] [PATCH] glibc: add 2.19 as a supported version
+In-Reply-To: <20140210234117.352533a5@skate>
+References: <1392054226-20285-1-git-send-email-thomas.petazzoni@free-electrons.com>	<52F936C7.4040300@mind.be>
+ <20140210234117.352533a5@skate>
+Message-ID: <52F9D9D0.8090409@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/10/14 23:09, Yann E. MORIN wrote:
-> Arnout, All,
+On 02/10/14 23:41, Thomas Petazzoni wrote:
+> Dear Arnout Vandecappelle,
 > 
-> On 2014-02-10 22:48 +0100, Arnout Vandecappelle (Essensium/Mind) spake thusly:
->> The legacy support for the old BUILDROOT_DL_DIR and BUILDROOT_CONFIG
->> breaks down when make is invoked recursively - which is done in a few
->> cases, e.g. silentoldconfig, external-defs, ... These targets always
->> give a legacy error.
+> On Mon, 10 Feb 2014 21:29:59 +0100, Arnout Vandecappelle wrote:
+> 
+>>  How useful is it to offer a choice for the libc version?
 >>
->> For BUILDROOT_DL_DIR, this is fixed by making sure that the original
->> value of BR2_DL_DIR taken from the environment is also exported again.
+>>  For uClibc it makes a tiny bit of sense because you may have custom
+>> patches or a custom config, which you don't want to port when going to a
+>> new buildroot version. But I don't think that's a very good reason to
+>> begin with.
 >>
->> For BUILDROOT_CONFIG, this is fixed with an additional comparison of
->> the environment variable's value with the fake value that we introduce
->> ourselves.
->>
->> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>>  For glibc, however, I really don't see a reason to keep multiple versions.
 > 
-> I gave my Tested-by earlier (and I am *not* withdrawing it) since I
-> think this is a valid stop-gap fix which should go before -rc1 is cut.
-> 
-> However, I wonder how appropriate this implementation is. I am not really
-> convinced by this hack (although I can't see a better alternative).
-> 
-> Another solution (which I do not like much, either) would be to enclose
-> these checks in:
-> 
->     ifeq ($(ALREADY_IN_BUILDROOT),)
->     blabla legacy stuff blabla
->     endif
-> 
-> and at the end of the main Makefile, add:
-> 
->     export ALREADY_IN_BUILDROOT=y
-> 
-> But, this is hacky too, and I'm not fond of it either.
+> My plan was to offer no more than two versions: N-1 and N, so that we
+> can add N, and give it some testing before having all users move
 
- Yeah, it's not really an improvement.
+ I don't think there will be a lot of testing happening there...
 
- We could also just throw away those legacy checks.
+> immediately from N-1 to N. This is pretty much what we do with gcc,
+> binutils and gdb as well. I believe the toolchain components are quite
+> critical, that's why we're a bit more conservative with these than with
+> the other components.
+> 
+> Do we have a reason to keep multiple versions for binutils, gcc and
+> gdb, but not for glibc?
+
+ No, I don't think we have a reason to keep multiple versions for
+binutils, gdb, and also busybox BTW.
+
+ For gcc it's a bit more appropriate. I have seen (proprietary) packages
+that fail to build with a different gcc version - usually because of
+-Werror and different warnings in -Wall.
+
+
+ Having multiple versions also means that you need:
+
+- multiple autobuilder instances (preferably for all architectures) to
+cover both versions;
+
+- legacy stuff for the old versions;
+
+- a deprecation path for the old versions.
+
+ So it's really quite a bit of overhead for IMHO limited advantage.
 
  Regards,
  Arnout
 
 > 
-> Regards,
-> Yann E. MORIN.
+> Best regards,
+> 
+> Thomas
 > 
 
 
