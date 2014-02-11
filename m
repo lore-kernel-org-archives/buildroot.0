@@ -1,37 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 11 Feb 2014 13:43:37 +0100
-Subject: [Buildroot] [git commit branch/next] f2fs-tools: bump to version
-	1.3.0
-Message-ID: <20140211124611.4D1AC9C97E@busybox.osuosl.org>
+Date: Tue, 11 Feb 2014 13:44:16 +0100
+Subject: [Buildroot] [git commit branch/next] usb_modeswitch: bump to
+	version 2.1.0
+Message-ID: <20140211124611.602D59B6E8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=00e71ee64408c6c226f458e80d6e444e94009814
+commit: http://git.buildroot.net/buildroot/commit/?id=de32f1e129fcdfbff56e916a52ee218b7fbd0d7e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This version includes:
- - add f2fstat tool
- - critical bug fix on nat bitmaps
+Version 2.1.0, 2014/01/28
+    ATTENTION: -I flag meaning reversed, default is to skip SCSI inquiry;
+    introduction of StandardEject, replacing many MessageContents with the
+    same function, reducing size of device config files, and always including
+    the 'Allow Medium Removal' before ejecting (thanks to Lars Melin for
+    the idea); fix in "bulk_read", removing bogus CSW request (report from
+    "Sonya at zte")
 
 Signed-off-by: Axel Lin <axel.lin@ingics.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/f2fs-tools/f2fs-tools.mk |    2 +-
+ package/usb_modeswitch/usb_modeswitch.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/f2fs-tools/f2fs-tools.mk b/package/f2fs-tools/f2fs-tools.mk
-index cffd4cb..2045e05 100644
---- a/package/f2fs-tools/f2fs-tools.mk
-+++ b/package/f2fs-tools/f2fs-tools.mk
+diff --git a/package/usb_modeswitch/usb_modeswitch.mk b/package/usb_modeswitch/usb_modeswitch.mk
+index 87afe9f..5d3bace 100644
+--- a/package/usb_modeswitch/usb_modeswitch.mk
++++ b/package/usb_modeswitch/usb_modeswitch.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--F2FS_TOOLS_VERSION = 576cb469e73b9342f1d10ba5d0428bbce22cbc3b
-+F2FS_TOOLS_VERSION = 858c4039c85f7c00c57925902985701b1e083555
- F2FS_TOOLS_SITE = http://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git
- F2FS_TOOLS_SITE_METHOD = git
- F2FS_TOOLS_CONF_ENV = ac_cv_file__git=no
+-USB_MODESWITCH_VERSION = 2.0.1
++USB_MODESWITCH_VERSION = 2.1.0
+ USB_MODESWITCH_SOURCE = usb-modeswitch-$(USB_MODESWITCH_VERSION).tar.bz2
+ USB_MODESWITCH_SITE = http://www.draisberghof.de/usb_modeswitch
+ USB_MODESWITCH_DEPENDENCIES = libusb
