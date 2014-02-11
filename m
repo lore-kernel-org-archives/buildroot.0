@@ -1,43 +1,55 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 11 Feb 2014 09:19:15 +0100
-Subject: [Buildroot] [PATCH] glibc: add 2.19 as a supported version
-In-Reply-To: <52F9D9D0.8090409@mind.be> (Arnout Vandecappelle's message of
- "Tue, 11 Feb 2014 09:05:36 +0100")
-References: <1392054226-20285-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <52F936C7.4040300@mind.be> <20140210234117.352533a5@skate>
- <52F9D9D0.8090409@mind.be>
-Message-ID: <87ha86vz7g.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 11 Feb 2014 09:24:53 +0100
+Subject: [Buildroot] [RFC PATCH] toolchain-external: instrument wrapper
+ to warn about unsafe paths
+In-Reply-To: <20140211062140.GE5170@tarshish>
+References: <1392074881-12508-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20140211062140.GE5170@tarshish>
+Message-ID: <20140211092453.431aa101@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+Dear Baruch Siach,
 
-Hi,
+On Tue, 11 Feb 2014 08:21:40 +0200, Baruch Siach wrote:
 
- >>> For glibc, however, I really don't see a reason to keep multiple versions.
- >> 
- >> My plan was to offer no more than two versions: N-1 and N, so that we
- >> can add N, and give it some testing before having all users move
+> On Tue, Feb 11, 2014 at 12:28:01AM +0100, Thomas Petazzoni wrote:
+> > The CodeSourcery toolchains have a very interesting feature: they warn
+> > the user when an unsafe header or library path is used, i.e a path
+> > that will lead host headers or libraries to leak into the build.
+> > 
+> > This commit adds a similar functionality into our external toolchain
+> > wrapper, so that it can be used with all external toolchains, and can
+> > also be tuned as needed. By default, the external toolchain wrapper
+> > now gives warnings such as:
+> > 
+> >   WARNING: unsafe header/library path used in cross-compilation: '-I /usr/foo'
+> >   WARNING: unsafe header/library path used in cross-compilation: '-L /usr/bleh'
+> 
+> I'd mention that this makes Buildroot builds under /usr even more problematic. 
 
- >  I don't think there will be a lot of testing happening there...
+Yes, this is true. Technically speaking, testing for -I/usr or -L/usr
+is not the ideal way to achieve this. The ideal way would be to look if
+only headers/libraries from the toolchain sysroot, and from the package
+source tree are used. But this is fairly hard to achieve,
+unfortunately. I am open to suggestions on how to achieve this.
 
-Why not?
+But in any case, this mechanism will have to have a mechanism to be
+entirely disabled.
 
- >  No, I don't think we have a reason to keep multiple versions for
- > binutils, gdb, and also busybox BTW.
+> I thought this limitation appears in the documentation, but I can't find it 
+> there now.
 
-I'm certainly open to limit the number of options, but completely
-removing them right away is imho too much.
+I don't think it's written in the documentation, but we have a bug
+report for it, at https://bugs.busybox.net/show_bug.cgi?id=5750.
 
- >  For gcc it's a bit more appropriate. I have seen (proprietary) packages
- > that fail to build with a different gcc version - usually because of
- > -Werror and different warnings in -Wall.
+Best regards,
 
-Another example is older Linux kernels (E.G. for projects stuck with a
-non-mainline BSP).
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
