@@ -1,33 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 11 Feb 2014 15:36:19 +0100
-Subject: [Buildroot] [git commit] docs/news.html: add 2014.02-rc1
-	announcement link
-Message-ID: <20140211143649.91F459C987@busybox.osuosl.org>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Tue, 11 Feb 2014 16:23:59 +0100
+Subject: [Buildroot] Build error from time to time
+Message-ID: <AFACE42542AE499CA9403FAD6805F21A@JohanW7>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=41ca57cb74dbde1520cb396067975638e91b14c5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/news.html |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
-
-diff --git a/docs/news.html b/docs/news.html
-index e473ba0..03a2a8c 100644
---- a/docs/news.html
-+++ b/docs/news.html
-@@ -10,7 +10,8 @@
-     <p>We have a new release candidate! Lots of changes all over the
-     tree, see the <a
-     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2014.02-rc1">CHANGES</a>
--    file for details.</p>
-+    file for details, and read the
-+    <a href="http://lists.busybox.net/pipermail/buildroot/2014-February/089055.html">announcement</a>.</p>
  
-     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
-     <a href="/downloads/buildroot-2014.02-rc1.tar.bz2">2014.02-rc1
+Hi
+
+Sometimes I get this error, if I then run make again after removing the nettle-2.7.1 build directory
+It rebuilds nettle and the build ends without errors.
+Could this be caused by the ccache ?
+
+(I had run make clean before I started the new build.)
+
+
+ic -MT ecc-modq.o -MD -MP -MF ecc-modq.o.d -fpic -c ecc-modq.c \
+	&& true
+/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc -I.
+-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -DHAVE_CONFIG_H -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64  -pipe -Os  -Wno-pointer-sign -Wall -W   -Wmissing-prototypes -Wmissing-declarations -Wstrict-prototypes
+-Wpointer-arith -Wbad-function-cast -Wnested-externs -fpic -MT ecc-generic-redc.o -MD -MP -MF ecc-generic-redc.o.d -fpic -c
+ecc-generic-redc.c \
+	&& true
+/usr/bin/make eccdata
+make[3]: Entering directory `/home/buildroot12git/output/build/nettle-2.7.1'
+Makefile:595: ecc-generic-modq.o.d: No such file or directory
+/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc -I.
+-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -DHAVE_CONFIG_H -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64  -pipe -Os  -Wno-pointer-sign -Wall -W   -Wmissing-prototypes -Wmissing-declarations -Wstrict-prototypes
+-Wpointer-arith -Wbad-function-cast -Wnested-externs -fpic -MT ecc-size.o -MD -MP -MF ecc-size.o.d -fpic -c ecc-size.c \
+	&& true
+make[3]: *** No rule to make target `ecc-generic-modq.o.d'.  Stop.
+make[3]: Leaving directory `/home/buildroot12git/output/build/nettle-2.7.1'
+make[2]: *** [eccdata.stamp] Error 2
+make[2]: *** Waiting for unfinished jobs....
+make[2]: Leaving directory `/home/buildroot12git/output/build/nettle-2.7.1'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory `/home/buildroot12git/output/build/nettle-2.7.1'
+make: *** [/home/buildroot12git/output/build/nettle-2.7.1/.stamp_built] Error 2
+
+Regards 
+Sagaert Johan
