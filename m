@@ -1,122 +1,97 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 11 Feb 2014 12:56:43 +0100
-Subject: [Buildroot] [pkg-perl infra V7 2/6] scancpan: a new script
-In-Reply-To: <1392116205-12810-3-git-send-email-francois.perrad@gadz.org>
-References: <1392116205-12810-1-git-send-email-francois.perrad@gadz.org>
- <1392116205-12810-3-git-send-email-francois.perrad@gadz.org>
-Message-ID: <CAAXf6LXvBESQ8-50Wi2o_xcn712SZQUGvhyakq7ukYHJVuYAgA@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 11 Feb 2014 08:57:05 -0300
+Subject: [Buildroot] [PATCHv2 0/4] Samba4 package
+Message-ID: <1392119829-31535-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Francois,
+Changes for v2:
+depend on !BR2_PACKAGE_SAMBA as recommended by Arnout & Thomas.
+Add comments to samba4 package as mentioned by Samuel Martin.
+Make the samba(3) description useful and rename patches.
 
-On Tue, Feb 11, 2014 at 11:56 AM, Francois Perrad <fperrad@gmail.com> wrote:
-> which creates Perl/CPAN package files
->
-> The 2 dependencies will be installed by the Perl infrastructure.
->
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
-[..]
-> diff --git a/support/scripts/scancpan b/support/scripts/scancpan
-> new file mode 100755
-> index 0000000..63a8885
-> --- /dev/null
-> +++ b/support/scripts/scancpan
-[..]
-> +
-> +my %pkg;
-> +my $cfgname = q{package/Config.in};
-> +if (-f $cfgname) {
-> +    open my $fh, q{<}, $cfgname;
-> +    while (<$fh>) {
-> +        chomp;
-> +        $pkg{$_} = 1 if m|package/perl-|;
-> +    }
-> +    close $fh;
-> +}
-> +
-> +foreach my $distname (sort keys %dist) {
-> +    my $fsname = fsname( $distname );
-> +    $pkg{qq{source "package/${fsname}/Config.in"}} = 1;
-> +}
-> +
-> +say qq{${cfgname} must contains the following lines:};
+This patchset adds a samba 4.1.x package to buildroot.
 
-must contain
+Samba 4.1.x uses the waf build system which isn't very cross-compile
+friendly, and also some tests are formulated in a way that isn't
+cross-build friendly either by needing to run them.
 
-> +say join qq{\n}, sort keys %pkg;
-> +
-> +__END__
-> +
-> +=head1 NAME
-> +
-> +support/scripts/scancpan Try-Tiny Moo
-> +
-> +=head1 SYNOPSIS
-> +
-> +make host-perl-metacpan-api-tiny host-perl-module-corelist # install dependencies
-> +
-> +export PERL5LIB=$(HOST_DIR)/usr/lib/perl5 # allows to find dependencies
-> +supports/scripts/scancpan [options] [distname ...]
-> +
-> + Options:
-> +   -help
-> +   -man
-> +   -quiet
-> +   -force
-> +   -recommend
-> +
-> +=head1 OPTIONS
-> +
-> +=over 8
-> +
-> +=item B<-help>
-> +
-> +Print a brief help message and exits.
+For this reason the samba4 build system includes a way to define
+answers for many of the tests, but this support isn't complete
+and some tests still want to be executed.
 
-Prints
+Samba 3.6.x is being kept because 4.1.x has a bigger footprint, changes
+usage in some tools (swat has been dropped for example), has more
+toolchain dependencies and there may be validation issues for users
+as well.
+Samba 4.1.x also requires a proper answers file for each architecture,
+and at the moment i've only tested for ARM and PowerPC so only those
+architectures are supported to begin with. To add support for another
+architecture basically copy one of the cache files to the proper name,
+enable it in Config.in and adjust endianess and all of the "size of"
+answers. I'm in the process of automating the sizeof and endianess
+answers within the samba build system to make them cross friendly
+to simplify the answers file to just one generic linux variant.
+The 3.6.x branch is still security supported for the forseeable future.
 
-> +
-> +=item B<-man>
-> +
-> +Prints the manual page and exits.
-> +
-> +=item B<-quiet>
-> +
-> +Executes without output
-> +
-> +=item B<-force>
-> +
-> +Forces the overwritting of existing files.
+I'm currently working with samba upstream to solve many of these
+issues but this will probably happen with the yet unreleased
+4.2 branch only.
 
-overwriting
+The python patch is a backport from the 3.4 branch to avoid using
+a runtime python for python-config (a pure shell implementation).
 
-> +
-> +=item B<-recommend>
-> +
-> +Adds I<recommended> dependencies.
-> +
-> +=back
-> +
-> +=head1 DESCRIPTION
-> +
-> +This script creates the BR package files for all Perl/CPAN
+Heimdal patches are all upstream.
 
-I would write 'buildroot' instead of BR
 
-> +distributions required by all distname. These data are fetched from
+Gustavo Zacarias (4):
+  python: fixup python-config script
+  heimdal: new package
+  samba4: new package
+  samba: update description and rename patches
 
-To me this sentence sounds odd: "This script creates the buildroot
-package files for all Perl/CPAN distributions required by all
-distname." The 'distname' is the package(s) that the user supplies as
-argument to the script. But what are these 'distributions' you
-mention?
-Also, 'by all distname' should either be 'by all distnames' but maybe
-better: 'by all specified packages'.
+ package/Config.in                                  |   1 +
+ .../heimdal/heimdal-0001-add-roken-h-process.patch | 195 ++++++++++++++++++++
+ package/heimdal/heimdal-0002-use-Getopt-Std.patch  |  30 +++
+ package/heimdal/heimdal-0003-vendor.patch          |  19 ++
+ package/heimdal/heimdal-0004-compile_et.patch      |  28 +++
+ package/heimdal/heimdal.mk                         |  30 +++
+ .../python/python-2.7-017-fix-python-config.patch  | 205 +++++++++++++++++++++
+ package/samba/Config.in                            |   6 +-
+ ....patch => samba-0001-fix-smbd-libs-avahi.patch} |   0
+ ...addrinfo.patch => samba-0002-getaddrinfo.patch} |   0
+ package/samba4/Config.in                           |  24 +++
+ package/samba4/S91smb                              |  56 ++++++
+ package/samba4/arm-cache.txt                       |  65 +++++++
+ package/samba4/powerpc-cache.txt                   |  65 +++++++
+ ...-0001-build-don-t-execute-tests-summary.c.patch |  67 +++++++
+ ...ld-don-t-execute-statfs-and-f_fsid-checks.patch |  31 ++++
+ ...003-build-find-FILE_OFFSET_BITS-via-array.patch |  54 ++++++
+ ...uild-allow-some-python-variable-overrides.patch |  45 +++++
+ ...amba4-0005-builtin-heimdal-external-tools.patch |  42 +++++
+ package/samba4/samba4.mk                           | 111 +++++++++++
+ 20 files changed, 1071 insertions(+), 3 deletions(-)
+ create mode 100644 package/heimdal/heimdal-0001-add-roken-h-process.patch
+ create mode 100644 package/heimdal/heimdal-0002-use-Getopt-Std.patch
+ create mode 100644 package/heimdal/heimdal-0003-vendor.patch
+ create mode 100644 package/heimdal/heimdal-0004-compile_et.patch
+ create mode 100644 package/heimdal/heimdal.mk
+ create mode 100644 package/python/python-2.7-017-fix-python-config.patch
+ rename package/samba/{samba-fix-smbd-libs-avahi.patch => samba-0001-fix-smbd-libs-avahi.patch} (100%)
+ rename package/samba/{samba-getaddrinfo.patch => samba-0002-getaddrinfo.patch} (100%)
+ create mode 100644 package/samba4/Config.in
+ create mode 100644 package/samba4/S91smb
+ create mode 100644 package/samba4/arm-cache.txt
+ create mode 100644 package/samba4/powerpc-cache.txt
+ create mode 100644 package/samba4/samba4-0001-build-don-t-execute-tests-summary.c.patch
+ create mode 100644 package/samba4/samba4-0002-build-don-t-execute-statfs-and-f_fsid-checks.patch
+ create mode 100644 package/samba4/samba4-0003-build-find-FILE_OFFSET_BITS-via-array.patch
+ create mode 100644 package/samba4/samba4-0004-build-allow-some-python-variable-overrides.patch
+ create mode 100644 package/samba4/samba4-0005-builtin-heimdal-external-tools.patch
+ create mode 100644 package/samba4/samba4.mk
 
-Best regards,
-Thomas
+-- 
+1.8.3.2
