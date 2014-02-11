@@ -1,26 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 11 Feb 2014 13:44:58 +0100
-Subject: [Buildroot] [PATCH] f2fs-tools: bump to version 1.3.0
-In-Reply-To: <1391914132.17493.1.camel@phoenix> (Axel Lin's message of "Sun,
- 09 Feb 2014 10:48:52 +0800")
-References: <1391914132.17493.1.camel@phoenix>
-Message-ID: <87k3d1vmwl.fsf@dell.be.48ers.dk>
+Date: Tue, 11 Feb 2014 13:43:37 +0100
+Subject: [Buildroot] [git commit branch/next] f2fs-tools: bump to version
+	1.3.0
+Message-ID: <20140211124611.4D1AC9C97E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Axel" == Axel Lin <axel.lin@ingics.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=00e71ee64408c6c226f458e80d6e444e94009814
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > This version includes:
- >  - add f2fstat tool
- >  - critical bug fix on nat bitmaps
+This version includes:
+ - add f2fstat tool
+ - critical bug fix on nat bitmaps
 
- > Signed-off-by: Axel Lin <axel.lin@ingics.com>
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/f2fs-tools/f2fs-tools.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed to next, thanks.
-
--- 
-Venlig hilsen,
-Peter Korsgaard 
+diff --git a/package/f2fs-tools/f2fs-tools.mk b/package/f2fs-tools/f2fs-tools.mk
+index cffd4cb..2045e05 100644
+--- a/package/f2fs-tools/f2fs-tools.mk
++++ b/package/f2fs-tools/f2fs-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-F2FS_TOOLS_VERSION = 576cb469e73b9342f1d10ba5d0428bbce22cbc3b
++F2FS_TOOLS_VERSION = 858c4039c85f7c00c57925902985701b1e083555
+ F2FS_TOOLS_SITE = http://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git
+ F2FS_TOOLS_SITE_METHOD = git
+ F2FS_TOOLS_CONF_ENV = ac_cv_file__git=no
