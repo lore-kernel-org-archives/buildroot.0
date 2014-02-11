@@ -1,238 +1,364 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 11 Feb 2014 08:57:06 -0300
-Subject: [Buildroot] [PATCHv2 1/4] python: fixup python-config script
+Date: Tue, 11 Feb 2014 08:57:07 -0300
+Subject: [Buildroot] [PATCHv2 2/4] heimdal: new package
 In-Reply-To: <1392119829-31535-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1392119829-31535-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1392119829-31535-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1392119829-31535-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-
-The original version uses sysconfig from the python interpreter
-(normally host-python) which isn't really suited to provide information
-of the target python.
-Use the pure shell preprocessed backport from the upcoming python 3.4
+host-heimdal is required for samba 4.1.x since it can't (yet) link
+with an external heimdal implementation and can't cross-compile the
+internal tools.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- .../python/python-2.7-017-fix-python-config.patch  | 205 +++++++++++++++++++++
- 1 file changed, 205 insertions(+)
- create mode 100644 package/python/python-2.7-017-fix-python-config.patch
+ .../heimdal/heimdal-0001-add-roken-h-process.patch | 195 +++++++++++++++++++++
+ package/heimdal/heimdal-0002-use-Getopt-Std.patch  |  30 ++++
+ package/heimdal/heimdal-0003-vendor.patch          |  19 ++
+ package/heimdal/heimdal-0004-compile_et.patch      |  28 +++
+ package/heimdal/heimdal.mk                         |  30 ++++
+ 5 files changed, 302 insertions(+)
+ create mode 100644 package/heimdal/heimdal-0001-add-roken-h-process.patch
+ create mode 100644 package/heimdal/heimdal-0002-use-Getopt-Std.patch
+ create mode 100644 package/heimdal/heimdal-0003-vendor.patch
+ create mode 100644 package/heimdal/heimdal-0004-compile_et.patch
+ create mode 100644 package/heimdal/heimdal.mk
 
-diff --git a/package/python/python-2.7-017-fix-python-config.patch b/package/python/python-2.7-017-fix-python-config.patch
+diff --git a/package/heimdal/heimdal-0001-add-roken-h-process.patch b/package/heimdal/heimdal-0001-add-roken-h-process.patch
 new file mode 100644
-index 0000000..7f923b9
+index 0000000..b8fbd2a
 --- /dev/null
-+++ b/package/python/python-2.7-017-fix-python-config.patch
-@@ -0,0 +1,205 @@
-+Add a backport of http://bugs.python.org/issue16235 so we can use
-+python-config for cross builds.
-+This basically replaces the python version of python-config with a pure-shell
-+version that's already preprocessed when installed and doesn't depend
-+on the sysconfig import that usually leads to bad data/results.
++++ b/package/heimdal/heimdal-0001-add-roken-h-process.patch
+@@ -0,0 +1,195 @@
++Add roken-h-process.pl from:
++https://raw.github.com/heimdal/heimdal/master/cf/roken-h-process.pl
++It's required for cross-compiling and missing from release tarballs:
++http://kerberos.996246.n3.nabble.com/Missing-roken-h-process-pl-when-cross-compiling-v1-5-2-td38806.html
 +
 +Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 +
-+diff -Nura Python-2.7.3.orig/configure.in Python-2.7.3/configure.in
-+--- Python-2.7.3.orig/configure.in	2013-12-13 14:43:39.793541435 -0300
-++++ Python-2.7.3/configure.in	2013-12-13 17:52:54.759489901 -0300
-+@@ -764,6 +764,7 @@
-+ 
-+ # Other platforms follow
-+ if test $enable_shared = "yes"; then
-++  PY_ENABLE_SHARED=1
-+   AC_DEFINE(Py_ENABLE_SHARED, 1, [Defined if Python is built as a shared library.])
-+   case $ac_sys_system in
-+     BeOS*)
-+@@ -824,6 +825,7 @@
-+ 
-+   esac
-+ else # shared is disabled
-++  PY_ENABLE_SHARED=0
-+   case $ac_sys_system in
-+     CYGWIN*)
-+           BLDLIBRARY='$(LIBRARY)'
-+@@ -1747,6 +1749,9 @@
-+ AC_SUBST(BLDSHARED)
-+ AC_SUBST(CCSHARED)
-+ AC_SUBST(LINKFORSHARED)
-++AC_SUBST(PY_ENABLE_SHARED)
-++LIBPL="${prefix}/lib/python${VERSION}/config"
-++AC_SUBST(LIBPL)
-+ # SO is the extension of shared libraries `(including the dot!)
-+ # -- usually .so, .sl on HP-UX, .dll on Cygwin
-+ AC_MSG_CHECKING(SO)
-+@@ -4320,7 +4325,7 @@
-+ AC_MSG_RESULT(done)
-+ 
-+ # generate output files
-+-AC_CONFIG_FILES(Makefile.pre Modules/Setup.config Misc/python.pc)
-++AC_CONFIG_FILES(Makefile.pre Modules/Setup.config Misc/python.pc Misc/python-config.sh)
-+ AC_CONFIG_FILES([Modules/ld_so_aix], [chmod +x Modules/ld_so_aix])
-+ AC_OUTPUT
-+ 
-+diff -Nura Python-2.7.3.orig/Makefile.pre.in Python-2.7.3/Makefile.pre.in
-+--- Python-2.7.3.orig/Makefile.pre.in	2013-12-13 14:43:39.401528527 -0300
-++++ Python-2.7.3/Makefile.pre.in	2013-12-12 15:15:34.828640321 -0300
-+@@ -152,7 +152,7 @@
-+ SUBDIRSTOO=	Include Lib Misc Demo
-+ 
-+ # Files and directories to be distributed
-+-CONFIGFILES=	configure configure.in acconfig.h pyconfig.h.in Makefile.pre.in
-++CONFIGFILES=	configure configure.in acconfig.h pyconfig.h.in Makefile.pre.in Misc/python-config.sh
-+ DISTFILES=	README ChangeLog $(CONFIGFILES)
-+ DISTDIRS=	$(SUBDIRS) $(SUBDIRSTOO) Ext-dummy
-+ DIST=		$(DISTFILES) $(DISTDIRS)
-+@@ -366,7 +366,7 @@
-+ 
-+ # Default target
-+ all:		build_all
-+-build_all:	$(BUILDPYTHON) oldsharedmods sharedmods gdbhooks
-++build_all:	$(BUILDPYTHON) oldsharedmods sharedmods gdbhooks python-config
-+ 
-+ # Compile a binary with gcc profile guided optimization.
-+ profile-opt:
-+@@ -969,10 +969,12 @@
-+ 	export EXE; EXE="$(BUILDEXE)"; \
-+ 	cd $(srcdir)/Lib/$(PLATDIR); $(RUNSHARED) ./regen
-+ 
-+-python-config: $(srcdir)/Misc/python-config.in
-++python-config: $(srcdir)/Misc/python-config.in Misc/python-config.sh
-+ 	# Substitution happens here, as the completely-expanded BINDIR
-+ 	# is not available in configure
-+-	sed -e "s, at EXENAME@,$(BINDIR)/python$(VERSION)$(EXE)," < $(srcdir)/Misc/python-config.in >python-config
-++	sed -e "s, at EXENAME@,$(BINDIR)/python$(VERSION)$(EXE)," < $(srcdir)/Misc/python-config.in >python-config.py
-++	# Replace makefile compat. variable references with shell script compat. ones; $(VAR) -> ${VAR}
-++	sed -e 's,\$$(\([A-Za-z0-9_]*\)),\$$\{\1\},g' Misc/python-config.sh >python-config
-+ 
-+ # Install the include files
-+ INCLDIRSTOMAKE=$(INCLUDEDIR) $(CONFINCLUDEDIR) $(INCLUDEPY) $(CONFINCLUDEPY)
-+@@ -1031,7 +1033,7 @@
-+ 	$(INSTALL_SCRIPT) $(srcdir)/Modules/makesetup $(DESTDIR)$(LIBPL)/makesetup
-+ 	$(INSTALL_SCRIPT) $(srcdir)/install-sh $(DESTDIR)$(LIBPL)/install-sh
-+ 	$(INSTALL_SCRIPT) python-config $(DESTDIR)$(BINDIR)/python$(VERSION)-config
-+-	rm python-config
-++	$(INSTALL_SCRIPT) python-config.py $(DESTDIR)$(LIBPL)/python-config.py
-+ 	@if [ -s Modules/python.exp -a \
-+ 		"`echo $(MACHDEP) | sed 's/^\(...\).*/\1/'`" = "aix" ]; then \
-+ 		echo; echo "Installing support files for building shared extension modules on AIX:"; \
-+@@ -1206,6 +1208,7 @@
-+ 		config.cache config.log pyconfig.h Modules/config.c
-+ 	-rm -rf build platform
-+ 	-rm -rf $(PYTHONFRAMEWORKDIR)
-++	-rm -f python-config.py python-config
-+ 
-+ # Make things extra clean, before making a distribution:
-+ # remove all generated files, even Makefile[.pre]
-+diff -Nura Python-2.7.3.orig/Misc/python-config.sh.in Python-2.7.3/Misc/python-config.sh.in
-+--- Python-2.7.3.orig/Misc/python-config.sh.in	1969-12-31 21:00:00.000000000 -0300
-++++ Python-2.7.3/Misc/python-config.sh.in	2013-12-13 17:53:07.752918023 -0300
-+@@ -0,0 +1,102 @@
-++#!/bin/sh
++diff -Nura heimdal-1.5.3.orig/cf/roken-h-process.pl heimdal-1.5.3/cf/roken-h-process.pl
++--- heimdal-1.5.3.orig/cf/roken-h-process.pl	1969-12-31 21:00:00.000000000 -0300
+++++ heimdal-1.5.3/cf/roken-h-process.pl	2013-12-18 11:32:38.157625167 -0300
++@@ -0,0 +1,184 @@
+++#!/usr/bin/perl
 ++
-++exit_with_usage ()
-++{
-++	echo "Usage: $0 --prefix|--exec-prefix|--includes|--libs|--cflags|--ldflags|--extension-suffix|--help|--configdir"
-++	exit $1
+++require 'getopts.pl';
+++
+++my $debug = 0;
+++
+++Getopts('dc:p:o:') || die "foo";
+++
+++if ($opt_d) {
+++    $debug = 1;
 ++}
 ++
-++if [ "$1" = "" ] ; then
-++	exit_with_usage 1
-++fi
+++die "missing arg" if (!defined $opt_c || !defined $opt_p || !defined $opt_o);
 ++
-++# Returns the actual prefix where this script was installed to.
-++installed_prefix ()
-++{
-++	RESULT=$(dirname $(cd $(dirname "$1") && pwd -P))
-++	if which readlink >/dev/null 2>&1 ; then
-++	RESULT=$(readlink -f "$RESULT")
-++	fi
-++	echo $RESULT
+++my %defines;
+++my $IN;
+++my $OUT;
+++
+++print "parse config.h\n" if ($debug);
+++
+++open IN, $opt_c || die "failed open ${opt_c}";
+++
+++my @nesting;
+++
+++push @nesting, 1;
+++
+++while (<IN>) {
+++    if (m/\s*#ifdef\s+(.*)/) {
+++	my $var = $1;
+++	if (defined $defines{$var}) {
+++	    push @nesting, 1;
+++	} else {
+++	    push @nesting, 0;
+++	}
+++	next;
+++    } elsif (m/\s*#ifndef\s+(.*)/) {
+++	my $var = $1;
+++	if (defined $defines{$var}) {
+++	    push @nesting, 0;
+++	} else {
+++	    push @nesting, 1;
+++	}
+++	next;
+++    } elsif (m/\s*#else/) {
+++	my $var = pop @nesting;
+++	$var = !$var;
+++	push @nesting, $var;
+++	next;
+++    } elsif ($nesting[$#nesting] and m/\s*#define\s+(\w+)\s+(\S+)/) {
+++	my $res = $2;
+++	$res = 1 if (!defined $res);
+++	$defines{$1} = $res;
+++    }
 ++}
 ++
-++prefix_build="@prefix@"
-++prefix_real=$(installed_prefix "$0")
+++close IN;
 ++
-++# Use sed to fix paths from their built to locations to their installed to locations.
-++prefix=$(echo "$prefix_build" | sed "s#$prefix_build#$prefix_real#")
-++exec_prefix_build="@exec_prefix@"
-++exec_prefix=$(echo "$exec_prefix_build" | sed "s#$exec_prefix_build#$prefix_real#")
-++includedir=$(echo "@includedir@")
-++libdir=$(echo "@libdir@" | sed "s#$prefix_build#$prefix_real#")
-++CFLAGS=$(echo "@CFLAGS@" | sed "s#$prefix_build#$prefix_real#")
-++VERSION="@VERSION@"
-++LIBM="@LIBM@"
-++LIBC="@LIBC@"
-++SYSLIBS="$LIBM $LIBC"
-++LIBS="@LIBS@ $SYSLIBS -lpython${VERSION}"
-++BASECFLAGS="@BASECFLAGS@"
-++LDLIBRARY="@LDLIBRARY@"
-++LINKFORSHARED="@LINKFORSHARED@"
-++OPT="@OPT@"
-++PY_ENABLE_SHARED="@PY_ENABLE_SHARED@"
-++LDVERSION="@LDVERSION@"
-++LIBDEST=${prefix}/lib/python${VERSION}
-++LIBPL=$(echo "@LIBPL@" | sed "s#$prefix_build#$prefix_real#")
-++SO="@SO@"
-++PYTHONFRAMEWORK="@PYTHONFRAMEWORK@"
-++INCDIR="-I$includedir/python${VERSION}"
-++PLATINCDIR="-I$includedir/python${VERSION}"
+++if ($debug) {
+++    foreach my $i (keys %defines) {
+++	print "k: $i v: $defines{$i}\n";
+++    }
+++}
 ++
-++# Scan for --help or unknown argument.
-++for ARG in $*
-++do
-++	case $ARG in
-++	--help)
-++		exit_with_usage 0
-++	;;
-++	--prefix|--exec-prefix|--includes|--libs|--cflags|--ldflags|--extension-suffix|--abiflags|--configdir)
-++	;;
-++	*)
-++		exit_with_usage 1
-++	;;
-++esac
-++done
+++open IN, "$opt_p" || die "failed open ${opt_p}";
+++open OUT, ">$opt_o" || die "failed open ${opt_o}";
 ++
-++for ARG in "$@"
-++do
-++	case "$ARG" in
-++	--prefix)
-++		echo "$prefix"
-++	;;
-++	--exec-prefix)
-++		echo "$exec_prefix"
-++	;;
-++	--includes)
-++		 echo "$INCDIR $PLATINCDIR"
-++	;;
-++	--cflags)
-++		echo "$INCDIR $PLATINCDIR $BASECFLAGS $CFLAGS $OPT"
-++	;;
-++	--libs)
-++		echo "$LIBS"
-++	;;
-++	--ldflags)
-++		LINKFORSHAREDUSED=
-++		if [ -z "$PYTHONFRAMEWORK" ] ; then
-++			LINKFORSHAREDUSED=$LINKFORSHARED
-++		fi
-++		LIBPLUSED=
-++		if [ "$PY_ENABLE_SHARED" = "0" ] ; then
-++			LIBPLUSED="-L$LIBPL"
-++		fi
-++		echo "$LIBPLUSED -L$libdir $LIBS $LINKFORSHAREDUSED"
-++	;;
-++	--extension-suffix)
-++		echo "$SO"
-++	;;
-++	--configdir)
-++		echo "$LIBPL"
-++	;;
-++esac
-++done
+++print "parse roken.h.in\n" if ($debug);
+++
+++print OUT "/* This is an OS dependent, generated file */\n";
+++print OUT "\n";
+++print OUT "\n";
+++print OUT "#ifndef __ROKEN_H__\n";
+++print OUT "#define __ROKEN_H__\n";
+++print OUT "\n";
+++
+++ at nesting = (1);
+++
+++while (<IN>) {
+++    if (m/\s*#ifdef\s+(.*)/) {
+++	my $var = $1;
+++	if (defined $defines{$var}) {
+++	    push @nesting, 1;
+++	} else {
+++	    push @nesting, 0;
+++	}
+++	next;
+++    } elsif (m/\s*#ifndef\s+(.*)/) {
+++	my $var = $1;
+++	if (defined $defines{$var}) {
+++	    push @nesting, 0;
+++	} else {
+++	    push @nesting, 1;
+++	}
+++	next;
+++    } elsif (m/\s*#if\s+(.*)/) {
+++	my $res = parse_if($1);
+++	print "line = $res: $1\n" if ($debug);
+++	push @nesting, $res;
+++	next;
+++    } elsif (m/\s*#elif\s+(.*)/) {
+++	my $res = pop @nesting;
+++	if ($res gt 0) {
+++	    $res = -1;
+++	} else {
+++	    my $res = parse_if($1);
+++	}
+++	push @nesting, $res;
+++	next;
+++    } elsif (m/\s*#else/) {
+++	my $var = pop @nesting;
+++	$var = !$var;
+++	push @nesting, $var;
+++	next;
+++    } elsif (m/\s*#endif/) {
+++	pop @nesting;
+++	next;
+++    }
+++    print "line: $_\n"  if ($debug);
+++    print "nesting dep $#{nesting}\n"  if ($debug);
+++    my $i = 0, $t = 1;
+++    while ($i le $#nesting) {
+++	$t = 0 if ($nesting[$i] le 0);
+++	print "nesting $i val $nesting[$i] -> $t\n" if ($debug);
+++	$i++;
+++    }
+++    if ($t) {
+++	print OUT;
+++    }
+++}
+++
+++print OUT "\n";
+++print OUT "#endif /* __ROKEN_H__ */\n";
+++
+++
+++close IN;
+++
+++exit 0;
+++
+++sub parse_if
+++{
+++    my ($neg, $var);
+++
+++    $_ = shift;
+++
+++    if (m/^\s*$/) {
+++	print "end $_\n" if ($debug);
+++	return 1;
+++    } elsif (m/^([^&]+)\&\&(.*)$/) {
+++	print "$1 and $2\n" if ($debug);
+++	return parse_if($1) and parse_if($2);
+++    } elsif (m/^\(([^&]+)\&\&(.*)$/) {
+++	print "$1 and $2\n" if ($debug);
+++	return parse_if($1) and parse_if($2);
+++    } elsif (m/^([^\|]+)\|\|(.*)$/) {
+++	print "$1 or $2\n" if ($debug);
+++	return parse_if($1) or parse_if($2);
+++    } elsif (m/^\s*(\!)?\s*defined\((\w+)\)/) {
+++	($neg, $var) = ($1, $2);
+++	print "def: ${neg}-defined(${var})\n" if ($debug);
+++	my $res = defined $defines{$var};
+++	if ($neg eq "!") {
+++	    if ($res) {
+++		$res = 0;
+++	    } else {
+++		$res = 1;
+++	    }
+++	}
+++	print "res: $res\n" if ($debug);
+++	return $res;
+++    } elsif (m/^\s*(\!)?(\w+)/) {
+++	($neg, $var) = ($1, $2);
+++	print "var: $neg $var\n" if ($debug);
+++	my $res;
+++	if (defined $defines{$var}) {
+++	    $res = $defines{$var};
+++	} else {
+++	    $res = 0;
+++	}
+++	$res = ! $res if ($neg =~ m/!/);
+++	print "res: $res\n" if ($debug);
+++	return $res;
+++    }
+++    die "failed parse: $_\n";
+++}
+diff --git a/package/heimdal/heimdal-0002-use-Getopt-Std.patch b/package/heimdal/heimdal-0002-use-Getopt-Std.patch
+new file mode 100644
+index 0000000..134b888
+--- /dev/null
++++ b/package/heimdal/heimdal-0002-use-Getopt-Std.patch
+@@ -0,0 +1,30 @@
++From 6080c0b229c6e332d7dd609d9435ac9baeeea443 Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Thu, 30 Jan 2014 16:33:02 -0300
++Subject: [PATCH] roken-h-process: use Getopt::Std, getopts.pl is deprecated
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ cf/roken-h-process.pl | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/cf/roken-h-process.pl b/cf/roken-h-process.pl
++index 153a35c..72d3bd3 100644
++--- a/cf/roken-h-process.pl
+++++ b/cf/roken-h-process.pl
++@@ -1,10 +1,10 @@
++ #!/usr/bin/perl
++ 
++-require 'getopts.pl';
+++use Getopt::Std;
++ 
++ my $debug = 0;
++ 
++-Getopts('dc:p:o:') || die "foo";
+++getopts('dc:p:o:') || die "foo";
++ 
++ if ($opt_d) {
++     $debug = 1;
++-- 
++1.8.3.2
++
+diff --git a/package/heimdal/heimdal-0003-vendor.patch b/package/heimdal/heimdal-0003-vendor.patch
+new file mode 100644
+index 0000000..1ccd629
+--- /dev/null
++++ b/package/heimdal/heimdal-0003-vendor.patch
+@@ -0,0 +1,19 @@
++Add --vendor option to krb5-config, required by samba 4.
++Status: Backport from upstream git.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nura heimdal-1.5.3.orig/tools/krb5-config.in heimdal-1.5.3.vendor/tools/krb5-config.in
++--- heimdal-1.5.3.orig/tools/krb5-config.in	2012-12-09 19:06:44.000000000 -0300
+++++ heimdal-1.5.3.vendor/tools/krb5-config.in	2013-12-18 15:49:45.283986300 -0300
++@@ -50,6 +50,10 @@
++     do_usage=yes
++     usage_exit=0
++     ;;
+++  --vendor)
+++    echo "Heimdal";
+++    exit 0
+++    ;;
++   --version)
++     echo "@PACKAGE@ @VERSION@"
++     exit 0
+diff --git a/package/heimdal/heimdal-0004-compile_et.patch b/package/heimdal/heimdal-0004-compile_et.patch
+new file mode 100644
+index 0000000..6bdec6f
+--- /dev/null
++++ b/package/heimdal/heimdal-0004-compile_et.patch
+@@ -0,0 +1,28 @@
++Use compile_et from e2fsprogs rather than building the native and useless one
++from heimdal.
++
++Idea from:
++http://comments.gmane.org/gmane.comp.encryption.kerberos.heimdal.general/6572
++
++Status: Backport from upstream git.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nura heimdal-1.5.3.orig/cf/check-compile-et.m4 heimdal-1.5.3.et/cf/check-compile-et.m4
++--- heimdal-1.5.3.orig/cf/check-compile-et.m4	2012-12-09 19:06:44.000000000 -0300
+++++ heimdal-1.5.3.et/cf/check-compile-et.m4	2013-12-18 14:20:04.025925879 -0300
++@@ -3,12 +3,12 @@
++ dnl CHECK_COMPILE_ET
++ AC_DEFUN([CHECK_COMPILE_ET], [
++ 
++-AC_CHECK_PROG(COMPILE_ET, compile_et, [compile_et])
+++AC_CHECK_PROG(COMPILE_ET, compile_et, [compile_et], [no])
++ 
++ krb_cv_compile_et="no"
++ krb_cv_com_err_need_r=""
++ krb_cv_compile_et_cross=no
++-if test "${COMPILE_ET}" = "compile_et"; then
+++if test "$COMPILE_ET" != "no"; then
++ 
++ dnl We have compile_et.  Now let's see if it supports `prefix' and `index'.
++ AC_MSG_CHECKING(whether compile_et has the features we need)
+diff --git a/package/heimdal/heimdal.mk b/package/heimdal/heimdal.mk
+new file mode 100644
+index 0000000..c73b33e
+--- /dev/null
++++ b/package/heimdal/heimdal.mk
+@@ -0,0 +1,30 @@
++################################################################################
++#
++# heimdal
++#
++################################################################################
++
++HEIMDAL_VERSION = 1.5.3
++HEIMDAL_SITE = http://www.h5l.org/dist/src
++HEIMDAL_DEPENDENCIES = host-e2fsprogs host-pkgconf
++HEIMDAL_INSTALL_STAGING = YES
++# static because of -fPIC issues with e2fsprogs on x86_64 host
++HOST_HEIMDAL_CONF_OPT = --with-x=no --disable-shared --enable-static
++HOST_HEIMDAL_CONF_ENV = MAKEINFO=true
++HEIMDAL_MAKE = $(MAKE1)
++# For heimdal-0004-compile_et.patch
++HEIMDAL_AUTORECONF = YES
++HEIMDAL_LICENSE = BSD-3c
++HEIMDAL_LICENSE_FILES = LICENSE
++
++# We need asn1_compile in the PATH for samba4
++define HOST_HEIMDAL_MAKE_SYMLINK
++	ln -sf $(HOST_DIR)/usr/libexec/heimdal/asn1_compile \
++		$(HOST_DIR)/usr/bin/asn1_compile
++	ln -sf $(HOST_DIR)/usr/bin/compile_et \
++		$(HOST_DIR)/usr/libexec/heimdal/compile_et
++endef
++
++HOST_HEIMDAL_POST_INSTALL_HOOKS += HOST_HEIMDAL_MAKE_SYMLINK
++
++$(eval $(host-autotools-package))
 -- 
 1.8.3.2
