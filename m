@@ -1,54 +1,65 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 11 Feb 2014 08:18:25 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-02-07
-In-Reply-To: <20140210210752.641364a8@skate>
-References: <20140208073009.5C3E6100CDC@stock.ovh.net>	<20140208124907.GA3442@free.fr>	<20140210093158.1dc26780@skate>	<CAAXf6LVr18TkjCX_APQOabr6idsUMCRgrqxTL69yHO=2XJSugA@mail.gmail.com>	<52F90EE4.1060103@mind.be>
- <20140210210752.641364a8@skate>
-Message-ID: <52F9CEC1.2030200@mind.be>
+Date: Tue, 11 Feb 2014 09:01:11 +0100
+Subject: [Buildroot] [PATCH] Makefile.legacy: fix recursive invocation
+ with BUILDROOT_DL_DIR and _CONFIG
+In-Reply-To: <20140210220947.GG5239@free.fr>
+References: <1392068935-25510-1-git-send-email-arnout@mind.be>
+ <20140210220947.GG5239@free.fr>
+Message-ID: <52F9D8C7.7070900@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/10/14 21:07, Thomas Petazzoni wrote:
-> Dear Arnout Vandecappelle,
+On 02/10/14 23:09, Yann E. MORIN wrote:
+> Arnout, All,
 > 
-> On Mon, 10 Feb 2014 18:39:48 +0100, Arnout Vandecappelle wrote:
-> 
->>>> This one I agree is old. The question is: how do I exclude this package
->>>> from being built. Should we introduce hidden Config.in bools for kernel
->>>> header versions, so that the packages that need at least the kernel
->>>> headers from kernel X.Y are not visible if you have a too old
->>>> toolchain? Those bools would be set by linux-headers/Config.in for the
->>>> internal backend, automatically set for the well-known external
->>>> toolchains, and a custom choice for special external toolchains.
->>>
->>> I think we should indeed implement a mechanism to restrict packages
->>> based on kernel headers.
->>> There have been many packages that require recent kernel headers, and
->>> it is not feasible to fix all these packages individually. Forcing the
->>> user to update their kernel headers or toolchain is not unreasonable,
->>> and otherwise they are always welcome to propose a patch for a
->>> particular package, or discuss the matter upstream.
->>>
->>> The solution you propose seems a good idea to me and not too complex.
+> On 2014-02-10 22:48 +0100, Arnout Vandecappelle (Essensium/Mind) spake thusly:
+>> The legacy support for the old BUILDROOT_DL_DIR and BUILDROOT_CONFIG
+>> breaks down when make is invoked recursively - which is done in a few
+>> cases, e.g. silentoldconfig, external-defs, ... These targets always
+>> give a legacy error.
 >>
->>  I had also thought about this option already. However, I expect the "not
->> too complex" is not entirely true: you probably want symbols from
->> something like 2.6.36 up to 3.13... Hm, that's just 20 symbols, maybe not
->> so bad after all. However, for custom external toolchains and for custom
->> kernel headers, all of these have to be made visible as well, so that
->> adds another 20 symbols...
+>> For BUILDROOT_DL_DIR, this is fixed by making sure that the original
+>> value of BR2_DL_DIR taken from the environment is also exported again.
+>>
+>> For BUILDROOT_CONFIG, this is fixed with an additional comparison of
+>> the environment variable's value with the fake value that we introduce
+>> ourselves.
+>>
+>> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 > 
-> True, but I don't really see another solution that solves the problem
-> at hand...
+> I gave my Tested-by earlier (and I am *not* withdrawing it) since I
+> think this is a valid stop-gap fix which should go before -rc1 is cut.
+> 
+> However, I wonder how appropriate this implementation is. I am not really
+> convinced by this hack (although I can't see a better alternative).
+> 
+> Another solution (which I do not like much, either) would be to enclose
+> these checks in:
+> 
+>     ifeq ($(ALREADY_IN_BUILDROOT),)
+>     blabla legacy stuff blabla
+>     endif
+> 
+> and at the end of the main Makefile, add:
+> 
+>     export ALREADY_IN_BUILDROOT=y
+> 
+> But, this is hacky too, and I'm not fond of it either.
 
- Neither do I.
+ Yeah, it's not really an improvement.
+
+ We could also just throw away those legacy checks.
 
  Regards,
  Arnout
+
+> 
+> Regards,
+> Yann E. MORIN.
+> 
 
 
 -- 
