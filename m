@@ -1,55 +1,43 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 11 Feb 2014 21:58:54 +0100
-Subject: [Buildroot] Analysis of bug #5030: busybox built fails if we use an
- override src dir BUSYBOX_OVERRIDE_SRCDIR and that dir does not contain
- .config
-Message-ID: <CAAXf6LWUf7Jj78OuZOWOX4=N5PU0XwY872k2aK2-75JMj25JRg@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 11 Feb 2014 21:05:59 +0000 (UTC)
+Subject: [Buildroot] [Bug 5420] Dbus and /var/run management
+In-Reply-To: <bug-5420-163@https.bugs.busybox.net/>
+References: <bug-5420-163@https.bugs.busybox.net/>
+Message-ID: <20140211210559.65D099C98F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+https://bugs.busybox.net/show_bug.cgi?id=5420
 
-Bug #5030 "busybox built fails if we use an override src dir
-BUSYBOX_OVERRIDE_SRCDIR and that dir does not contain .config"
-https://bugs.busybox.net/show_bug.cgi?id=5030
+--- Comment #1 from Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> 2014-02-11 21:05:58 UTC ---
+Hi Vincent, 
 
-The bug is about the fact that the config file for busybox is copied
-from the extract step, which is not used when you have an
-OVERRIDE_SRCDIR. The submitter proposes to use a pre-configure hook
-instead.
+Do you still experience this bug with a recent buildroot version (2013.11 or
+git)?
+If so, can you clarify a bit more?
 
-Triggered by this, I compared the situation of the other components
-using .config files: uclibc and the kernel. My analysis (and questions
-to buildroot developers) are in the bug report, copy pasted below for
-your convenience. If we can reach a conclusion then this bug can be
-fixed too.
+In buildroot, when you use the default target skeleton, /var/run is indeed a
+symbolic link to /tmp.
 
------
-A question to buildroot developers: what do we do with this patch? The
-different components using .config files all handle it differently:
+And the S30dbus script does indeed:
+# Create needed directories.
+[ -d /var/run/dbus ] || mkdir -p /var/run/dbus
+[ -d /var/lock/subsys ] || mkdir -p /var/lock/subsys
+[ -d /tmp/dbus ] || mkdir -p /tmp/dbus
 
-busybox copies its .config from the post-extract hook.
-linux copies its .config in the configure_cmds.
-uclibc copies its .config from the post-patch hook.
+However, I don't understand how both conflict with each other. The creation of
+/var/run/dbus will actually result in /tmp/dbus, which should be fine.
 
-The busybox behavior allows a user to change .config, then re-run the configure
-step and keep the user's changes.
-For linux this is not true: if you change your config and re-run the configure
-step, your changes are lost. If you change your .config and expect to keep the
-changes, you can only rebuild, not reconfigure.
+So maybe I don't fully understand the problem you experience. Please clarify.
 
-This patch proposes to line-up busybox more with how the linux kernel handles
-it.
+Note that the patch you propose is not correct in my opinion: removing the
+entire /var/run directory during the building of dbus, may remove files created
+by other packages, which is not the intended behavior.
 
-This raises the question: what do we want, what should the behavior be?
-
-Personally, I haven't had a big problem with the linux way, and thus would
-accept the principle of this patch. But I don't have a very strong opinion on
-this...
------
-
-Thanks for your input,
-Thomas
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
