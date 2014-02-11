@@ -1,31 +1,55 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 11 Feb 2014 21:52:48 +0100
-Subject: [Buildroot] Bugs cleanup (input requested)
-In-Reply-To: <52F938E7.8010101@mind.be>
-References: <CAAXf6LX719WwMSZUGShzANA22z0g+zo5hYNbFYwfHG3ZEGBioQ@mail.gmail.com>
- <20140210154305.0db0bb01@skate> <52F938E7.8010101@mind.be>
-Message-ID: <CAAXf6LWB466or8Ysfdu33_=BtRZqBtCibU1oKaz-sBQ9T_pW+g@mail.gmail.com>
+Date: Tue, 11 Feb 2014 21:58:54 +0100
+Subject: [Buildroot] Analysis of bug #5030: busybox built fails if we use an
+ override src dir BUSYBOX_OVERRIDE_SRCDIR and that dir does not contain
+ .config
+Message-ID: <CAAXf6LWUf7Jj78OuZOWOX4=N5PU0XwY872k2aK2-75JMj25JRg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Hi,
 
-On Mon, Feb 10, 2014 at 9:39 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-[..]
->
->  It is true that their use case should be solved with the legal-info
-> infrastructure - and if that doesn't work for them, it should be fixed there.
->
->  However, the patch is still valid for a different reason: it makes
-> things more consistent. We use $$ almost everywhere within
-> generic-package, so ideally it should be done there as well.
+Bug #5030 "busybox built fails if we use an override src dir
+BUSYBOX_OVERRIDE_SRCDIR and that dir does not contain .config"
+https://bugs.busybox.net/show_bug.cgi?id=5030
 
-As I said in the original mail, I'm open to this change.
-Would you like to adopt the patch and send it to the list to give it a
-chance to be integrated?
+The bug is about the fact that the config file for busybox is copied
+from the extract step, which is not used when you have an
+OVERRIDE_SRCDIR. The submitter proposes to use a pre-configure hook
+instead.
 
-Thanks,
+Triggered by this, I compared the situation of the other components
+using .config files: uclibc and the kernel. My analysis (and questions
+to buildroot developers) are in the bug report, copy pasted below for
+your convenience. If we can reach a conclusion then this bug can be
+fixed too.
+
+-----
+A question to buildroot developers: what do we do with this patch? The
+different components using .config files all handle it differently:
+
+busybox copies its .config from the post-extract hook.
+linux copies its .config in the configure_cmds.
+uclibc copies its .config from the post-patch hook.
+
+The busybox behavior allows a user to change .config, then re-run the configure
+step and keep the user's changes.
+For linux this is not true: if you change your config and re-run the configure
+step, your changes are lost. If you change your .config and expect to keep the
+changes, you can only rebuild, not reconfigure.
+
+This patch proposes to line-up busybox more with how the linux kernel handles
+it.
+
+This raises the question: what do we want, what should the behavior be?
+
+Personally, I haven't had a big problem with the linux way, and thus would
+accept the principle of this patch. But I don't have a very strong opinion on
+this...
+-----
+
+Thanks for your input,
 Thomas
