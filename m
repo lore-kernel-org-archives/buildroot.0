@@ -1,82 +1,86 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 11 Feb 2014 08:14:57 +0100
-Subject: [Buildroot] [git commit] Makefile.legacy: fix recursive invocation
-	with BUILDROOT_DL_DIR and _CONFIG
-Message-ID: <20140211082559.2BD9A9C969@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 11 Feb 2014 09:32:21 +0100
+Subject: [Buildroot] Supporting multiple versions of toolchain components?
+In-Reply-To: <52F9D9D0.8090409@mind.be>
+References: <1392054226-20285-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <52F936C7.4040300@mind.be> <20140210234117.352533a5@skate>
+ <52F9D9D0.8090409@mind.be>
+Message-ID: <20140211093221.28248844@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=af97c94b70eee6388f1902864ec248e2817323be
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Arnout Vandecappelle,
 
-The legacy support for the old BUILDROOT_DL_DIR and BUILDROOT_CONFIG
-breaks down when make is invoked recursively - which is done in a few
-cases, e.g. silentoldconfig, external-defs, ... These targets always
-give a legacy error.
+(Renaming the thread topic to attract readers!)
 
-For BUILDROOT_DL_DIR, this is fixed by making sure that the original
-value of BR2_DL_DIR taken from the environment is also exported again.
+On Tue, 11 Feb 2014 09:05:36 +0100, Arnout Vandecappelle wrote:
 
-For BUILDROOT_CONFIG, this is fixed with an additional comparison of
-the environment variable's value with the fake value that we introduce
-ourselves.
+> > My plan was to offer no more than two versions: N-1 and N, so that we
+> > can add N, and give it some testing before having all users move
+> 
+>  I don't think there will be a lot of testing happening there...
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- Makefile.legacy         |   10 +++++++---
- package/pkg-download.mk |    5 +++++
- 2 files changed, 12 insertions(+), 3 deletions(-)
+That is indeed true, but I'm pretty sure some advanced users test the
+latest versions of the various components.
 
-diff --git a/Makefile.legacy b/Makefile.legacy
-index ea18bc6..764cfcd 100644
---- a/Makefile.legacy
-+++ b/Makefile.legacy
-@@ -28,16 +28,20 @@ $(error "The BUILDROOT_DL_DIR environment variable was renamed to BR2_DL_DIR.")
- endif
- endif
- 
-+# If a script is using the deprecated BUILDROOT_CONFIG, make sure it fails.
-+# Add some directories in front just in case someone used dirname on it.
-+BUILDROOT_CONFIG_FAKE = /tmp/deprecated/The-BUILDROOT_CONFIG-environment-variable-was-renamed-to-BR2_CONFIG
-+
- # Similar to above for BUILDROOT_CONFIG, but here we have no .config equivalent.
- ifneq ($(BUILDROOT_CONFIG),)
- ifneq ($(BUILDROOT_CONFIG),$(BR2_CONFIG))
-+ifneq ($(BUILDROOT_CONFIG),$(BUILDROOT_CONFIG_FAKE))
- $(error "The BUILDROOT_CONFIG environment variable was renamed to BR2_CONFIG.")
- endif
- endif
-+endif
- 
--# If a script is using the deprecated BUILDROOT_CONFIG, make sure it fails.
--# Add some directories in front just in case someone used dirname on it.
--BUILDROOT_CONFIG = /tmp/deprecated/The-BUILDROOT_CONFIG-environment-variable-was-renamed-to-BR2_CONFIG
-+BUILDROOT_CONFIG = $(BUILDROOT_CONFIG_FAKE)
- export BUILDROOT_CONFIG
- 
- #
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 84598d5..6d4cbcd 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -24,10 +24,15 @@ LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
- DL_MODE=DOWNLOAD
- 
- # DL_DIR may have been set already from the environment
-+ifeq ($(origin DL_DIR),undefined)
- DL_DIR ?= $(call qstrip,$(BR2_DL_DIR))
- ifeq ($(DL_DIR),)
- DL_DIR := $(TOPDIR)/dl
- endif
-+else
-+# Restore the BR2_DL_DIR that was overridden by the .config file
-+BR2_DL_DIR = $(DL_DIR)
-+endif
- 
- # ensure it exists and a absolute path
- DL_DIR := $(shell mkdir -p $(DL_DIR) && cd $(DL_DIR) >/dev/null && pwd)
+> > Do we have a reason to keep multiple versions for binutils, gcc and
+> > gdb, but not for glibc?
+> 
+>  No, I don't think we have a reason to keep multiple versions for
+> binutils, gdb, and also busybox BTW.
+
+Having multiple versions of busybox seems clearly useless to me. For
+the other ones, my opinion is more balanced.
+
+But switching to only one version for binutils, gcc and gdb would
+certainly be a change from the Buildroot tradition. Not saying whether
+this is good or bad, but it's clearly moving away from what we have
+been doing for a long time.
+
+>  For gcc it's a bit more appropriate. I have seen (proprietary) packages
+> that fail to build with a different gcc version - usually because of
+> -Werror and different warnings in -Wall.
+
+Or also because of things like:
+http://git.buildroot.net/buildroot/commit/package/gcc?id=c443c2be1768ebbdcb76c55d0a08fd7c983488c8.
+And because very often, the .0 of a gcc release is broken on some
+architectures.
+
+>  Having multiple versions also means that you need:
+> 
+> - multiple autobuilder instances (preferably for all architectures) to
+> cover both versions;
+
+That's not true. A single autobuilder instance can work on as many
+toolchain configurations as you want. My autobuilder instance chooses
+randomly between the configurations at
+http://autobuild.buildroot.org/toolchains/configs/free-electrons/.
+
+> - legacy stuff for the old versions;
+
+Right.
+
+> - a deprecation path for the old versions.
+
+I don't really see why. For all packages, we're just bumping. For
+gcc/binutils/gdb/uClibc, we're keeping older versions around a little
+bit longer. Provided with have the Config.in.legacy safety net, I don't
+see why we should go through a deprecation path for those old versions,
+while we aggressively bump all other packages without any deprecation.
+
+>  So it's really quite a bit of overhead for IMHO limited advantage.
+
+Again, I believe what you're proposing is a fairly radical move from
+the Buildroot tradition. So we need to get some consensus or decision
+here.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
