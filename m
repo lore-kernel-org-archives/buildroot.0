@@ -1,47 +1,73 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Tue, 11 Feb 2014 16:23:59 +0100
-Subject: [Buildroot] Build error from time to time
-Message-ID: <AFACE42542AE499CA9403FAD6805F21A@JohanW7>
+From: Jeremy Rosen <jeremy.rosen@openwide.fr>
+Date: Tue, 11 Feb 2014 16:37:01 +0100 (CET)
+Subject: [Buildroot] Antw: Re: Antw: Re: Antw: Re: Antw: Re: How to get
+ the kernel to mount a rootfs without an initramfs ??
+In-Reply-To: <52FA4A13020000460004A8A4@gwia2.rz.hs-offenburg.de>
+Message-ID: <1990298190.5287992.1392133021402.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- 
-Hi
-
-Sometimes I get this error, if I then run make again after removing the nettle-2.7.1 build directory
-It rebuilds nettle and the build ends without errors.
-Could this be caused by the ccache ?
-
-(I had run make clean before I started the new build.)
 
 
-ic -MT ecc-modq.o -MD -MP -MF ecc-modq.o.d -fpic -c ecc-modq.c \
-	&& true
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc -I.
--D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -DHAVE_CONFIG_H -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64  -pipe -Os  -Wno-pointer-sign -Wall -W   -Wmissing-prototypes -Wmissing-declarations -Wstrict-prototypes
--Wpointer-arith -Wbad-function-cast -Wnested-externs -fpic -MT ecc-generic-redc.o -MD -MP -MF ecc-generic-redc.o.d -fpic -c
-ecc-generic-redc.c \
-	&& true
-/usr/bin/make eccdata
-make[3]: Entering directory `/home/buildroot12git/output/build/nettle-2.7.1'
-Makefile:595: ecc-generic-modq.o.d: No such file or directory
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc -I.
--D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -DHAVE_CONFIG_H -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64  -pipe -Os  -Wno-pointer-sign -Wall -W   -Wmissing-prototypes -Wmissing-declarations -Wstrict-prototypes
--Wpointer-arith -Wbad-function-cast -Wnested-externs -fpic -MT ecc-size.o -MD -MP -MF ecc-size.o.d -fpic -c ecc-size.c \
-	&& true
-make[3]: *** No rule to make target `ecc-generic-modq.o.d'.  Stop.
-make[3]: Leaving directory `/home/buildroot12git/output/build/nettle-2.7.1'
-make[2]: *** [eccdata.stamp] Error 2
-make[2]: *** Waiting for unfinished jobs....
-make[2]: Leaving directory `/home/buildroot12git/output/build/nettle-2.7.1'
-make[1]: *** [all] Error 2
-make[1]: Leaving directory `/home/buildroot12git/output/build/nettle-2.7.1'
-make: *** [/home/buildroot12git/output/build/nettle-2.7.1/.stamp_built] Error 2
+Please stop mailing me directly, people on the mailing list are
+knowledgeable and probably able to help. There is no reason to
+move to a private conversation
 
-Regards 
-Sagaert Johan
+> >if you got files on the SD then your SD is partitioned and has a
+> >single
+> >FAT partition. I'm not sure where you put your squash fs... as an
+> >image
+> >file on the SD card (i.e on the FAT partition of the SD card )
+> 
+> well I created a 1 primary partition with fdisk and put all the
+> images on the SD.
+
+yes, but is it a FAT partition ?
+
+> When I was booting U-Boot told me "Wrong Image
+> Format for bootm command" and "ERROR: can't get kernel image!"
+
+bootm it to boot from memory, you load the kernel image in memory,
+you load somehow the kernel to RAM and give the address where it 
+has been loaded to U-Boot. Do you do that step ? it's not automated
+
+I don't know if U-Boot is able to boot directly from a SD-Card
+
+> - I
+> guess he couldn't read a thing. Then I deleted the partition again
+> (table was empty) and put all the files on the SD,
+
+how can you put multiple files on a SD that is not partitionned ? or
+at least formated into some type of filesystem ?
+
+how do you create your SD, could you give me the precise command you
+use ?
+
+> booted the system
+> and the same kernel panic as usual appeared - so what I see now is
+> that he's got a problem with reading from a partitioned SD.
+> 
+
+i'm not convinced that's the problem, but as I said it depends what
+you are really doing with the SD and your explanation so far hasn't
+allowed me to understand that.
+
+> Right now I'm a bit clueless. But what I believe is, when it is only
+> able to boot from mmcblk0 instead of mmcblk0p1 then it should
+> actually be able to run the squashfs from mmcblk0 too, right ?
+> 
+
+no. if you formated mmcblk0 as a squashfs then it should be able to 
+use it as root, but that's probably not the case since it does find
+the kernel. My guess is that you formated mmcblok0 as a FAT filesystem
+and that your firmware somehow finds the kernel there. However the
+squashfs is here as a file, not as a partition. I don't know how you
+tell Linux to use a file on a FAT partition as a rootfs. I don't 
+know if it is even possible.
+
+logically, you need two partitions, a FAT partition with your kernel
+and a squashfs partition with your root filesystem. I'm not sure what
+you are doing, but that's not it...
