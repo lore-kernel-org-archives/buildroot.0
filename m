@@ -1,25 +1,21 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 12 Feb 2014 20:27:58 +0100
-Subject: [Buildroot] [PATCH] package/elfutils: disable for avr32
-In-Reply-To: <1392226443-10660-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Wed, 12 Feb 2014 18:34:03 +0100")
-References: <1392226443-10660-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87ob2crv0h.fsf@dell.be.48ers.dk>
+Date: Wed, 12 Feb 2014 20:31:06 +0100
+Subject: [Buildroot] [PATCH] lxc: needs setns system call,
+	disable on nios2
+In-Reply-To: <1392229709-3915-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+ (Ezequiel Garcia's message of "Wed, 12 Feb 2014 15:28:29 -0300")
+References: <1392229709-3915-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+Message-ID: <87k3d0ruv9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Ezequiel" == Ezequiel Garcia <ezequiel@vanguardiasur.com.ar> writes:
 
- > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Disable elfutils for avr32, because:
- >   - elfutils uses canonicalize_file_name, which came after uClibc-0.9.31.
- >   - avr32 uses a toolchain with uClibc-0.9.31
-
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Fixes http://autobuild.buildroot.net/results/f59/f592a011321429426be81bd1ecf664ad9a2c0161/
+ > Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 
 Committed, thanks.
 
