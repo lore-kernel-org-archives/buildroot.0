@@ -1,50 +1,34 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Wed, 12 Feb 2014 10:19:10 +0100
-Subject: [Buildroot] [PATCH v12 6/7] Makefile: update comment about
-	top-level parallel Makefile
+Date: Wed, 12 Feb 2014 10:19:11 +0100
+Subject: [Buildroot] [PATCH v12 7/7] sdl: add support for top-level parallel
+	make
 In-Reply-To: <1392196751-23485-1-git-send-email-fabio.porcedda@gmail.com>
 References: <1392196751-23485-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1392196751-23485-7-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <1392196751-23485-8-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-After the latest patches top-level parallel Makefile is working but
-there is still an issue when a package has an unspecified optional
-dependency so change the comment to explain that.
+Add host-autoconf as a dependency of the sdl-patch target because is
+used by it.
 
 Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 ---
- Makefile | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+ package/sdl/sdl.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/Makefile b/Makefile
-index c89107a..ddb1f6a 100644
---- a/Makefile
-+++ b/Makefile
-@@ -42,7 +42,20 @@ export HOSTARCH := $(shell uname -m | \
- 	    -e s/macppc/powerpc/\
- 	    -e s/sh.*/sh/)
+diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
+index ba5fbca..701022b 100644
+--- a/package/sdl/sdl.mk
++++ b/package/sdl/sdl.mk
+@@ -80,3 +80,6 @@ endef
+ SDL_POST_INSTALL_STAGING_HOOKS += SDL_FIXUP_SDL_CONFIG
  
--# This top-level Makefile can *not* be executed in parallel
-+# Parallel execution of this Makefile is disabled because it changes
-+# the packages building order, that can be a problem for two reasons:
-+# - If a package has an unspecified optional dependency and that
-+#   dependency is present when the package is built, it is used,
-+#   otherwise it isn't (but compilation happily proceeds) so the end
-+#   result will differ if the order is swapped due to parallel
-+#   building.
-+# - Also changing the building order can be a problem if two packages
-+#   manipulate the same file in the target directory.
-+#
-+# Taking into account the above considerations, if you still want to execute
-+# this top-level Makefile in parallel comment the ".NOTPARALLEL" line and
-+# build using the following command:
-+#	make BR2_JLEVEL= -j$((`getconf _NPROCESSORS_ONLN`+1))
- .NOTPARALLEL:
- 
- # absolute path
+ $(eval $(autotools-package))
++
++# autoconf is used in the sdl-patch target
++$(SDL_TARGET_PATCH): | host-autoconf
 -- 
 1.8.5.4
