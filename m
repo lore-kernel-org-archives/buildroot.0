@@ -1,46 +1,37 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Wed, 12 Feb 2014 13:51:23 +0100
-Subject: [Buildroot] [PATCH] sdl: fix autoreconf timing issue
-In-Reply-To: <20140211164750.0e57be5c@skate>
-References: <1392109955-742-1-git-send-email-maxime.hadjinlian@gmail.com>
- <20140211164750.0e57be5c@skate>
-Message-ID: <CAGduivx8PfvfCRpfS15TN7eD_pTZpi=Sn2do2tb__X97xazfaw@mail.gmail.com>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Wed, 12 Feb 2014 10:30:03 -0500
+Subject: [Buildroot] Build error from time to time
+In-Reply-To: <52FB1E5F.1000305@mind.be>
+References: <AFACE42542AE499CA9403FAD6805F21A@JohanW7>
+ <52FB1E5F.1000305@mind.be>
+Message-ID: <CANxTyt52zqEJk=tbSW7Mc6J369kqRBNUaqSat3q_sAh+2_WecA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Feb 11, 2014 at 4:47 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Maxime Hadjinlian,
+On Wed, Feb 12, 2014 at 2:10 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 11/02/14 16:23, Sagaert Johan wrote:
+>  Took me a while to find it, but it looks like a parallel build issue in
+> nettle combined with ccache. In the configure step, all the *.d files are
+> created as empty files. These files are included unconditionally in the
+> Makefile, so you get an error if they don't exist. Unfortunately, ccache
+> does an unlink() just before creating the new file, so there is a tiny
+> window of time where the file doesn't exist. It looks like you have a
+> filesystem where this window is relatively large (NFS?), which is why you
+> see the problem and others don't.
 >
-> On Tue, 11 Feb 2014 10:12:35 +0100, Maxime Hadjinlian wrote:
+>  This is a tough nut to crack fundamentally.
 >
->> If your machine was under heavy load, the time difference between the
->> two files would have been greater and then *maybe* picked up by
->> autoconf. And then the configure file was re-generated.
->>
->> When the 0001 patch was introduced, SDL package did *NOT* run it's
->> autogen.sh, which is why it touches also the configure.
->> This came later, causing this behavior.
->>
->> Fixes:
->>   http://autobuild.buildroot.net/results/d1c/d1c36f634dbf6b6e5d18444c2a23dfd129202b80/
->>
->> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> * You could say that nettle's behaviour of including empty dependency
+> files is bad. To overcome that, a - can be added in front of the include.
 >
-> Wow, amazing problem. Thanks a lot for getting to the bottom of it. The
-> solution is indeed simple, but the investigation definitely wasn't
-> (I've followed your conversation with Yann on IRC yesterday evening,
-> and I remember quickly discussing the issue with you during the
-> Buildroot Developer Days). Congrats!
-Thank you.
-A huge thanks to Yann E. Morin too as he put me on the right track and
-I stupidly forgot to add him as Cc: :/.
+> * You can say the behaviour of ccache is bad. The unlink could be removed
+> there, except in the case of CCACHE_HARDLINK because it is not possible
+> to create a hardlink to an existing file.
 >
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+>  Any suggestions on how to proceed?
+
+Would forcing non-parallel build (MAKE1) get around this issue?
+Danomi -
