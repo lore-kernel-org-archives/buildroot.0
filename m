@@ -1,29 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 12 Feb 2014 09:39:14 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-02-11
-In-Reply-To: <CAHkwnC-iFrY2BXRCWzE6DhLEBt90c9vfmT76ofUKk=eJg4Ox7w@mail.gmail.com>
-References: <20140212073007.B3242100CEB@stock.ovh.net>
- <CAHkwnC-iFrY2BXRCWzE6DhLEBt90c9vfmT76ofUKk=eJg4Ox7w@mail.gmail.com>
-Message-ID: <20140212093914.69646118@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 12 Feb 2014 09:41:39 +0100
+Subject: [Buildroot] [PATCH] coreutils: correct next version in patch
+	description
+In-Reply-To: <62cd52a8b8954b9f87c1b56b46a5cbde53623358.1392192970.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Wed, 12 Feb 2014 10:16:10 +0200")
+References: <62cd52a8b8954b9f87c1b56b46a5cbde53623358.1392192970.git.baruch@tkos.co.il>
+Message-ID: <87r478u3i4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fabio Porcedda,
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-On Wed, 12 Feb 2014 09:36:40 +0100, Fabio Porcedda wrote:
+ > The patch that commit a728e2fe35 (coreutils: fix build against uclibc
+ > snapshot) adds mentions the wrong coreutils version in its description.
 
-> >     xtensa |                  lvm2-2.02.103 | NOK | http://autobuild.buildroot.net/results/2c6b9fdfffe81042d7606893d1ff006f9e6c4296/
-> 
-> I will send the updated patch  to disable static building for lvm2.
+ > Also fix the sign-of tag while at it.
 
-Is it fundamentally unable to do static linking?
+Ups - Committed, thanks.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
