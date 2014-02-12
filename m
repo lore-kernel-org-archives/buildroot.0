@@ -1,78 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 12 Feb 2014 10:29:58 +0100
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <87iosku1n0.fsf@dell.be.48ers.dk>
+Date: Wed, 12 Feb 2014 10:37:57 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2014-02-11
+In-Reply-To: <CAKAx1cgjrtv9DxtETOTaR=BwpOGJ0A3HNVG+ciQGDbYh-serxg@mail.gmail.com>
 References: <20140212073007.B3242100CEB@stock.ovh.net>
- <20140212093245.49e2b6ac@skate> <87iosku1n0.fsf@dell.be.48ers.dk>
-Message-ID: <20140212102958.343a7ba8@skate>
+ <CAKAx1cgjrtv9DxtETOTaR=BwpOGJ0A3HNVG+ciQGDbYh-serxg@mail.gmail.com>
+Message-ID: <20140212103757.1f0431da@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+Dear Lionel Orry,
 
-On Wed, 12 Feb 2014 10:21:55 +0100, Peter Korsgaard wrote:
-
->  >> aarch64 |                   libv4l-0.8.9 | NOK | http://autobuild.buildroot.net/results/6635f7149cd0f5192d49276b2cc3edc5be3b5868/
+On Wed, 12 Feb 2014 09:57:55 +0100, Lionel Orry wrote:
+> Hi,
 > 
->  > Ah, yes. I have the beginning of a patch that bumps libv4l, which
->  > solves this problem. But it is not a straightforward bump since libv4l
->  > has changed quite a bit (more tools available, for example).
+> On Wed, Feb 12, 2014 at 8:30 AM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+> > <snip>
+> >    powerpc |           enlightenment-0.17.3 | NOK | http://autobuild.buildroot.net/results/314694709b3a2d812c18acc70e374b3bc2fbedbd/
 > 
-> Nice, care to send a patch? I had a quick look at updating it (and
-> probably renaming to v4l-utils) last week as I could use some of the new
-> features, but ran out of time.
-
-Yeah, just need a bit of time. Many patch sets in progress at the same
-time :)
-
->  > What should we do in the mean time?
+> This is due to non-existent PTRACE_GETSIGINFO in sys/ptrace.h from
+> used powerpc uclibc. I noticed this patch for v0.9.31:
+> http://git.buildroot.net/buildroot/diff/?id=d8de970bae3744fe830e96a1ae0c4aff6ce47ba1
+> I don't know which uclibc version is used, but more recent ones
+> upstream do not include this fix, see for example
+> http://git.uclibc.org/uClibc/tree/libc/sysdeps/linux/powerpc/sys/ptrace.h
 > 
-> If you say just mark it as !BR2_aarch64 for 2014.02.
+> I'm not sure about the right fix but it seems there's a problem with
+> the provided sys/ptrace.h file for powerpc arch in uclibc. That's as
+> far as I can go, I rarely use uclibc unfortunately.
 
-Ok, will send a patch.
+The toolchain is using uClibc 0.9.33.2 + the uClibc patches that we had
+back in the 2013.11-rc2 release.
 
->  >> bfin |                     orc-0.4.18 | NOK | http://autobuild.buildroot.net/results/dd64c2aed5291b6c083f061709d6179150440a7e/
-> 
->  > configure: error: no code allocation backend
->  > make: *** [/home/test/test/3/output/build/orc-0.4.18/.stamp_configured] Error 1
-> 
-> Looks like it should be !BR2_bfin.
+We have a uclibc-0020-update-ptrace.h-to-latest-from-glibc.patch that
+updates ptrace.h, but it seems like powerpc doesn't use the common
+ptrace.h, but its own version, and this version hasn't been updated in
+uClibc master.
 
-Not sure if it's BR2_bfin or !MMU. What we have is:
+Comparing the uClibc powerpc ptrace.h with the one in glibc indeed
+shows a significant number of differences, including the addition of
+PTRACE_SETSIGINFO. Someone should cook a patch that syncs up the
+powerpc ptrace.h of uClibc with the one from glibc.
 
-case "${host_os}" in
-  nobody_is_using_this_currently)
-    AC_DEFINE(HAVE_CODEMEM_MALLOC, 1, [Use malloc to allocate code for execution])
-    ;;
-  mingw*|pw32*|cygwin*)
-    AC_DEFINE(HAVE_CODEMEM_VIRTUALALLOC, 1, [Use VirtualAlloc to allocate code for execution])
-    ;;
-  linux*|darwin*|solaris*|netbsd*|freebsd*|openbsd*|kfreebsd*|dragonfly*|gnu*)
-    AC_DEFINE(HAVE_CODEMEM_MMAP, 1, [Use mmap to allocate code for execution])
-    ;;
-  *)
-    AC_ERROR([no code allocation backend])
-    ;;
-esac
-
-So when the host is uclinux (such as on !MMU platforms), nothing
-matches. Which seems to match the fact that it needs a proper mmap() to
-operate. So I believe it's really a "depends BR2_USE_MMU" that we need
-here.
-
->  >> x86_64 |                   thrift-0.9.1 | NOK | http://autobuild.buildroot.net/results/23caf6deef3cbd8fd6b150e133d493d26d16d80b/
-> 
->  > Same as yesterday:
-> 
->  > /home/test/test/2/output/host/usr/x86_64-buildroot-linux-uclibc/sysroot/usr/include/boost/cstdint.hpp:314:42: error:                 typedef boost::ulong_long_type boost::uint64_t
->  > src/thrift/transport/TSSLSocket.cpp:351:1: error: 'uint64_t' does not name a type
-> 
-> Boost version compatibility issue?
-
-Don't know :)
+Best regards,
 
 Thomas
 -- 
