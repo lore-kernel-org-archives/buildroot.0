@@ -1,42 +1,88 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 12 Feb 2014 18:32:31 +0100
-Subject: [Buildroot] [pkg-perl infra V9 3/6] host-perl-xml-parser:
- rename and refactor with perl infrastructure
-In-Reply-To: <1392192871-426-4-git-send-email-francois.perrad@gadz.org>
-References: <1392192871-426-1-git-send-email-francois.perrad@gadz.org>
- <1392192871-426-4-git-send-email-francois.perrad@gadz.org>
-Message-ID: <52FBB02F.5050203@mind.be>
+Date: Wed, 12 Feb 2014 18:37:20 +0100
+Subject: [Buildroot] Supporting multiple versions of toolchain
+	components?
+In-Reply-To: <20140212090324.4cb9fe84@skate>
+References: <1392054226-20285-1-git-send-email-thomas.petazzoni@free-electrons.com>	<52F936C7.4040300@mind.be>	<20140210234117.352533a5@skate>	<52F9D9D0.8090409@mind.be>	<20140211093221.28248844@skate>	<52FA5AD8.4040506@mind.be>
+ <20140212090324.4cb9fe84@skate>
+Message-ID: <52FBB150.3000306@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/02/14 09:14, Francois Perrad wrote:
-> Even though libxml-parser-perl had a Config.in file with an option to
-> enable it on the target, this option was hidden by a dependency on
-> BR2_HOST_ONLY. So in practice, it was not possible to enable
-> libxml-parser-perl on the target. This allows us to rename
-> libxml-parser-perl to perl-xml-parser to follow the new naming
-> convention of Perl packages, without having to introduce
-> Config.in.legacy material.
+On 12/02/14 09:03, Thomas Petazzoni wrote:
+> Dear Arnout Vandecappelle,
 > 
-> In addition to this rename, the package is converted to use the newly
-> introduced Perl package infrastructure.
+> On Tue, 11 Feb 2014 18:16:08 +0100, Arnout Vandecappelle wrote:
 > 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>>> That is indeed true, but I'm pretty sure some advanced users test the
+>>> latest versions of the various components.
+>>
+>>  Do you sometimes do run-time tests of internal glibc toolchain builds?
+> 
+> Obviously before sending the patch that adds 2.19, I did do a run-time
+> test of a minimal ARM glibc+Busybox system in Qemu. The amount of
+> testing is minimal, but at least it boots all the way to userspace.
 
- Note that this one (and the following one) does not depend on the
-scancpan script, so it can go in immediately (in -next).
+ Yes, but will you do more runtime experiments with glibc 2.19 in the
+next 6 months? Probably not, because you simply don't need it.
 
- Francois, in your next iteration you should probably move patch #6 to
-the beginning and patch #2 to the end, so they are sorted in order of
-merge priority.
+[snip]
+>>  But I didn't realize that the autobuilder test package configurations,
+>> not glibc issues, and the packages will fail with either version of
+>> glibc. So you're right, this point is moot.
+> 
+> Your point is not entirely moot. C library headers will be different
+> between glibc 2.18 and 2.19, so you could imagine having package build
+> failures specific to a given version of glibc. This is typically what
+> we have with uClibc (and which was discussed at length during the
+> latest meeting), where we have multiple versions of uClibc that don't
+> behave the same as they don't offer the same features. However, the
+> amount of application-visible changes between glibc 2.18 and 2.19 is
+> probably a lot smaller, but maybe not inexistent.
+
+ I think about one third of our autobuilder configurations use an
+(e)glibc-based toolchain, with varying versions, and AFAIK we've never
+seen a failure on one glibc version but not on others. So I think we can
+safely say it is close to non-existent.
+
+> 
+>>  So it's just the additional complexity of having the choice, duplicating
+>> the patches (none for glibc 2.19), and carrying the legacy. I guess
+>> that's not too bad.
+> 
+> Yes.
+> 
+>>> Again, I believe what you're proposing is a fairly radical move from
+>>> the Buildroot tradition. So we need to get some consensus or decision
+>>> here.
+>>
+>>  Note that I'm not immediately advocating for removing the multiple
+>> version support where we have it already. Rather, I propose to not add
+>> more multiversion packages.
+> 
+> I certainly agree with you on this. I would propose to:
+> 
+>  1/ Remove the multiversion selection on Busybox, because I don't
+>     really see why we have this specifically for Busybox.
+> 
+>  2/ Keep a maximum number of three gcc, binutils, gdb and C library
+>     versions. Like: the latest one, the N-1 (default), and the N-2.
+
+ OK!
+
 
  Regards,
  Arnout
+
+> 
+> Best regards,
+> 
+> Thomas
+> 
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
