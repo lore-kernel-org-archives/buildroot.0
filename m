@@ -1,32 +1,132 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 12 Feb 2014 10:14:57 +0100
-Subject: [Buildroot] [git commit] boost: test module uses fork()
-Message-ID: <20140212091613.871929C99C@busybox.osuosl.org>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Wed, 12 Feb 2014 10:19:04 +0100
+Subject: [Buildroot] [PATCH v12 0/7] Add support for top-level parallel make
+Message-ID: <1392196751-23485-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e00ee4c83524977dbffe157a5a6b8a9bddae5f5c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi all,
+this is a patch set for adding support for top-level parallel make in
+buildroot, the common problem scattered in buildroot's top-level
+makefiles is that in the rules it relies on the order of evaluation of
+the prerequisites, to be able to use top-level parallel make instead
+of reling on the left to right ordering of evaluation of the
+prerequisites we must add an explicit rule to describe the
+dependencies.
 
-Fixes http://autobuild.buildroot.net/results/17dd7946631354d59336259d5f31aa899e3599b8/
+With this patch set the top-level parallel make seems to works fine,
+example:
+	make clean
+	make BR2_JLEVEL= -j$((`getconf _NPROCESSORS_ONLN` + 1))
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/boost/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+Before to try it remeber to remove the ".NOTPARALLEL" line.
 
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index 515b2cd..68c3909 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -77,6 +77,7 @@ config BR2_PACKAGE_BOOST_SYSTEM
- 
- config BR2_PACKAGE_BOOST_TEST
- 	bool "boost-test"
-+	depends on BR2_USE_MMU # fork()
- 
- config BR2_PACKAGE_BOOST_THREAD
- 	bool "boost-thread"
+On my quad core system the building time for the first 220 defconfig lines of
+the option "allpackageyesconfig" is 45m vs 24m.
+
+I've tested the qemu_x86_defconfig.
+
+I will test futrher the top-level parallel make feature for building
+all the packages so expect some other patches to improve this feature.
+
+Thank you for all reviews and in particular Arnout.
+
+Best regards
+Fabio Porcedda
+
+v12:
+ - Fixed a typo in the 1th patch
+ - Fixed a typo in the 2th patch
+ - Improved 3patch adding:
+   $$($(2)_TARGET_INSTALL_TARGET): $$($(2)_TARGET_INSTALL_STAGING)
+   so removed patch for uclibc and glibc because now they are useless
+ - Improved the 4th patch adding an explicit dependency:
+   	 $(TARGETS_ROOTFS): target-finalize
+   and
+	 $(TARGETS): dirs prepare dependencies
+ - Added a new patch for the sdl package
+v11:
+ - Rebased over master
+ - Added support for pythone framework in the second patch.
+ - Changed comment on the latest patch.
+v10:
+ - Added Acked-by: Arnout Vandecappelle on the first two patches
+ - Improved descption and text of the last patch
+ - Rebased over master
+v9:
+ - Added Acked-by: Arnout Vandecappelle on some patches.
+ - Changed the patches contents and descriptions following advices of Arnout
+   - 1th patch: fixed to support ccache & sstrip
+   - 2th patch: added pkg-cmake.mk
+   - 2th patch: splitted ifeq
+   - 3th patch: improved description
+   - 3th patch: does not use %_BUILD_DEPENDENCIES anymore
+   - 3th patch: added a comment about "|"
+   - 4th patch: added a comment
+   - 5th patch: added a comment
+   - 6th patch: 
+ - 2th patch: fixed a comment
+ - 8th patch: now it change only the comment
+v8:
+ - rebased over master
+ - added patche for for base dependency
+ - added patche for for glibc package
+ - added patche for for uclibc package
+ - removed patch already merged
+ - changed some descriptions
+ - modified the patch for toolchain dependency to prevent circular dependency
+v7:
+ - add the latest patch
+ - add to the first patch the <pkgname>_TOOLCHAIN variable
+ - improve the fifth patch
+v6:
+ - added the fifth patch
+ - updated the fourth patch adding the install targets
+ - updated the second patch to remove TARGETS_ALL
+v5:
+ - added the fourth patch
+ - fixed some typos
+ - rewrited the second patch to use only $$($(2)_TARGET_*) in the rules
+ - add support for top-level parallel make for the glibc package
+v4:
+ - rebased over master
+ - add Acked-by: Thomas Petazzoni on the third patch
+ - changed the orderd of the patches
+v3:
+ - add back the patch "package: add toolchain dependency to
+    inner-generic-package" because now is working fine.
+ - add Acked-by: Arnout Vandecappelle to the third patch.
+ - reworked the second patch following Arnout suggestions.
+v2:
+ - remove patch "package: add toolchain dependency to inner-generic-package"
+   because was not working fine against recent toolchain changes.
+
+Fabio Porcedda (7):
+  package: add base dependency to every package
+  package: add toolchain dependency to every target package
+  package: add support for top-level parallel make
+  Makefile: add support for top-level parallel make
+  package: enable jobserver for recursive make
+  Makefile: update comment about top-level parallel Makefile
+  sdl: add support for top-level parallel make
+
+ Makefile                                           | 40 ++++++++-----
+ fs/common.mk                                       |  4 +-
+ package/glibc/glibc.mk                             |  9 ++-
+ package/linux-headers/linux-headers.mk             |  3 +
+ package/pkg-autotools.mk                           |  3 +-
+ package/pkg-cmake.mk                               |  2 +-
+ package/pkg-generic.mk                             | 69 ++++++++++++++--------
+ package/pkg-python.mk                              |  2 +-
+ package/sdl/sdl.mk                                 |  3 +
+ package/uclibc/uclibc.mk                           |  9 ++-
+ .../toolchain-buildroot/toolchain-buildroot.mk     |  2 +
+ toolchain/toolchain-external/toolchain-external.mk |  2 +
+ toolchain/toolchain/toolchain.mk                   |  4 +-
+ 13 files changed, 103 insertions(+), 49 deletions(-)
+
+-- 
+1.8.5.4
