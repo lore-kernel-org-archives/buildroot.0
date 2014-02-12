@@ -1,102 +1,66 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 12 Feb 2014 20:39:15 +0100
-Subject: [Buildroot] [git commit] trivial: update buildroot e-mail address
-	to buildroot@buildroot.org
-Message-ID: <20140212194407.93BBC9C9BA@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 12 Feb 2014 20:57:21 +0100
+Subject: [Buildroot] [PATCH] Add OpenTyrian package (SDL game)
+In-Reply-To: <1392108199-14612-1-git-send-email-julien.boibessot@free.fr>
+ (julien boibessot's message of "Tue, 11 Feb 2014 09:43:19 +0100")
+References: <1392108199-14612-1-git-send-email-julien.boibessot@free.fr>
+Message-ID: <87y51gqf32.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2f78767bb84a5c536a7fc3129b9460acada7426e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "julien" == julien boibessot <julien.boibessot@free.fr> writes:
 
-As the e-mail address buildroot at buildroot.org is now enabled, update the
-e-mail addresses in the source tree from @uclibc.org and @busybox.net to our
-own proper domain.
+ > From: Julien Boibessot <julien.boibessot@armadeus.com>
+ > Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+ > ---
+ >  Changes since RFC:
+ >  - Took Arnout & Thomas comments into account:
+ >    * installation of executable in /usr/bin instead of /usr/games
+ >    * removing of double BR2_PACKAGE_SDL_NET
+ >    * usage of /bin/true for STRIP
+ >    * lowercase for .mk banner
+ >    * creation of a dedicated package for game data
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- Makefile                                           |    1 +
- docs/README                                        |    2 +-
- docs/copyright.txt                                 |    2 +-
- docs/footer.html                                   |    2 +-
- docs/manual/contribute.txt                         |    2 +-
- .../xserver_xorg-server/xserver_xorg-server.mk     |    2 +-
- 6 files changed, 6 insertions(+), 5 deletions(-)
+ >  package/Config.in                          |    2 +
+ >  package/opentyrian-data/Config.in          |    8 ++++++
+ >  package/opentyrian-data/opentyrian-data.mk |   23 +++++++++++++++++
+ >  package/opentyrian/Config.in               |   24 ++++++++++++++++++
+ >  package/opentyrian/opentyrian.mk           |   36 ++++++++++++++++++++++++++++
+ >  5 files changed, 93 insertions(+), 0 deletions(-)
+ >  create mode 100644 package/opentyrian-data/Config.in
+ >  create mode 100644 package/opentyrian-data/opentyrian-data.mk
+ >  create mode 100644 package/opentyrian/Config.in
+ >  create mode 100644 package/opentyrian/opentyrian.mk
 
-diff --git a/Makefile b/Makefile
-index 9929e7e..8226111 100644
---- a/Makefile
-+++ b/Makefile
-@@ -2,6 +2,7 @@
- #
- # Copyright (C) 1999-2005 by Erik Andersen <andersen@codepoet.org>
- # Copyright (C) 2006-2014 by the Buildroot developers <buildroot@uclibc.org>
-+# Copyright (C) 2014 by the Buildroot developers <buildroot@buildroot.org>
- #
- # This program is free software; you can redistribute it and/or modify
- # it under the terms of the GNU General Public License as published by
-diff --git a/docs/README b/docs/README
-index 974adeb..944347d 100644
---- a/docs/README
-+++ b/docs/README
-@@ -56,4 +56,4 @@ $ make HOSTCC=gcc-4.3 uclibc-menuconfig
- $ make HOSTCC=gcc-4.3 busybox-menuconfig
- 
- Please feed suggestions, bug reports, insults, and bribes back to the
--buildroot mailing list: buildroot at uclibc.org
-+buildroot mailing list: buildroot at buildroot.org
-diff --git a/docs/copyright.txt b/docs/copyright.txt
-index 4617d8e..0939b74 100644
---- a/docs/copyright.txt
-+++ b/docs/copyright.txt
-@@ -25,6 +25,6 @@ HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
- 
- You have been warned.
- 
--You can contact the webmaster at <buildroot@uclibc.org> if you have some sort
-+You can contact the webmaster at <buildroot@buildroot.org> if you have some sort
- of problem with this.
- 
-diff --git a/docs/footer.html b/docs/footer.html
-index 9cc1e19..d3b239b 100644
---- a/docs/footer.html
-+++ b/docs/footer.html
-@@ -14,7 +14,7 @@
- 	<br>
- 	Mail all comments, insults, suggestions and bribes to
- 	<br>
--	The Buildroot developers <A HREF="mailto:buildroot@uclibc.org">buildroot at uclibc.org</A><BR>
-+	The Buildroot developers <A HREF="mailto:buildroot@buildroot.org">buildroot at buildroot.org</A><BR>
-     </font>
- 
-   </body>
-diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-index 201685c..5602335 100644
---- a/docs/manual/contribute.txt
-+++ b/docs/manual/contribute.txt
-@@ -48,7 +48,7 @@ before submitting them using your favorite text editor.
- Lastly, send/submit your patch set to the Buildroot mailing list:
- 
- ---------------------
--$ git send-email --to buildroot at busybox.net outgoing/*
-+$ git send-email --to buildroot at buildroot.org outgoing/*
- ---------------------
- 
- Note that +git+ should be configured to use your mail account.
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 4089aab..7d13702 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -57,7 +57,7 @@ XSERVER_XORG_SERVER_DEPENDENCIES = 	\
- 
- XSERVER_XORG_SERVER_CONF_OPT = --disable-config-hal \
- 		--disable-xnest --disable-xephyr --disable-dmx \
--		--with-builder-addr=buildroot at uclibc.org \
-+		--with-builder-addr=buildroot at buildroot.org \
- 		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/pixman-1" \
- 		--with-fontdir=/usr/share/fonts/X11/ --localstatedir=/var \
- 		--$(if $(BR2_PACKAGE_XSERVER_XORG_SERVER_XVFB),en,dis)able-xvfb
+ > diff --git a/package/Config.in b/package/Config.in
+ > index 631d8b2..c89f303 100644
+ > --- a/package/Config.in
+ > +++ b/package/Config.in
+ > @@ -159,6 +159,8 @@ source "package/doom-wad/Config.in"
+ >  source "package/gnuchess/Config.in"
+ >  source "package/lbreakout2/Config.in"
+ >  source "package/ltris/Config.in"
+ > +source "package/opentyrian/Config.in"
+ > +source "package/opentyrian-data/Config.in"
+ >  source "package/prboom/Config.in"
+ >  source "package/rubix/Config.in"
+ >  endmenu
+ > diff --git a/package/opentyrian-data/Config.in b/package/opentyrian-data/Config.in
+ > new file mode 100644
+ > index 0000000..ee3d8be
+ > --- /dev/null
+ > +++ b/package/opentyrian-data/Config.in
+ > @@ -0,0 +1,8 @@
+ > +config BR2_PACKAGE_OPENTYRIAN_DATA
+ > +	bool "OpenTyrian data"
+ > +	help
+
+I don't think it makes much sense for people to select opentyrian-data
+without opentyrian, so I've added a 'depends on BR2_PACKAGE_OPENTYRIAN'
+and committed to next, thanks.
+
+-- 
+Bye, Peter Korsgaard
