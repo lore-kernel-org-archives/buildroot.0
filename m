@@ -1,13 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 12 Feb 2014 20:40:17 +0100
+Date: Wed, 12 Feb 2014 20:43:56 +0100
 Subject: [Buildroot] [PATCH v2] trivial: update buildroot e-mail address
 	to buildroot@buildroot.org
-In-Reply-To: <00bed52c-b1b5-47bc-be14-4693e12b255c@email.android.com> (Thomas
- De Schampheleire's message of "Wed, 12 Feb 2014 18:55:02 +0100")
+In-Reply-To: <dc1e2107ca0e341b43c4.1392224097@argentina> (Thomas De
+ Schampheleire's message of "Wed, 12 Feb 2014 17:54:57 +0100")
 References: <dc1e2107ca0e341b43c4.1392224097@argentina>
- <20140212113431.2f4d2099@core2quad.morethan.org>
- <00bed52c-b1b5-47bc-be14-4693e12b255c@email.android.com>
-Message-ID: <87bnycrufy.fsf@dell.be.48ers.dk>
+Message-ID: <8738joru9v.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,18 +14,16 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
- >> To be consistent -
- >> How about changing the mailing system e-mail references also?
- >> 
- >> Currently shown as: 
- >> Sender: buildroot-bounces at busybox.net
- >> 
- >> Message Footer: buildroot at busybox.net
+ > As the e-mail address buildroot at buildroot.org is now enabled, update the
+ > e-mail addresses in the source tree from @uclibc.org and @busybox.net to our
+ > own proper domain.
 
- > Good idea!
- > Peter, is this something you could do?
+ > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Yes, I'll ask the osuosl.org guys.
+ > ---
+ > v2: keep original address in Makefile
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
