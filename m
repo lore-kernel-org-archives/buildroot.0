@@ -1,105 +1,101 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 12 Feb 2014 11:55:06 +0100
-Subject: [Buildroot] Analysis of bug #5030: busybox built fails if we
- use an override src dir BUSYBOX_OVERRIDE_SRCDIR and that dir does not
- contain .config
-In-Reply-To: <20140212115118.71cc1154@skate>
-References: <CAAXf6LWUf7Jj78OuZOWOX4=N5PU0XwY872k2aK2-75JMj25JRg@mail.gmail.com>
- <20140212092118.66cb9514@skate>
- <CAAXf6LXauh9AM15fgOC8L8jdfL5nG+zQtuFCjX1A9dasBpanXg@mail.gmail.com>
- <20140212115118.71cc1154@skate>
-Message-ID: <CAAXf6LVADN6CwMA-dtHk3WCYemROMXwPrCntuka9s0nBj2DVkA@mail.gmail.com>
+Date: Wed, 12 Feb 2014 12:19:14 +0100
+Subject: [Buildroot] [PATCH] alsa-lib: dlmisc: Add a fake dl lib head
+ file when dl lib is not supported by the toolchain
+In-Reply-To: <1385364193-23750-1-git-send-email-Sonic.adi@gmail.com>
+References: <1385364193-23750-1-git-send-email-Sonic.adi@gmail.com>
+Message-ID: <CAAXf6LVPjWAwoNunTzEsR3KE4WO1UnA201dvn7Du-Z_de-72og@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+On Mon, Nov 25, 2013 at 8:23 AM,  <sonic.adi@gmail.com> wrote:
+> From: Sonic Zhang <sonic.zhang@analog.com>
+>
+> The FLAT GNU toolchain doesn't include the dlfcn.h header file.
+>
+> Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
+> ---
+>  package/alsa-lib/alsa-lib-003-dlmisc.patch |   59 ++++++++++++++++++++++++++++
+>  1 file changed, 59 insertions(+)
+>  create mode 100644 package/alsa-lib/alsa-lib-003-dlmisc.patch
+>
+> diff --git a/package/alsa-lib/alsa-lib-003-dlmisc.patch b/package/alsa-lib/alsa-lib-003-dlmisc.patch
+> new file mode 100644
+> index 0000000..612fa5a
+> --- /dev/null
+> +++ b/package/alsa-lib/alsa-lib-003-dlmisc.patch
+> @@ -0,0 +1,59 @@
+> +alsa-lib: dlmisc: Add a fake dl lib head file when dl lib is not supported by the toolchain.
+> +
+> +The FLAT GNU toolchain doesn't include the dlfcn.h header file.
+> +
+> +--- alsa-lib-1.0.26/src/mixer/simple_abst.c    2012-09-06 16:55:14.000000000 +0800
+> ++++ alsa-lib-1.0.26.bak/src/mixer/simple_abst.c        2013-11-25 14:53:07.739275843 +0800
+> +@@ -34,7 +34,11 @@
+> + #include <fcntl.h>
+> + #include <sys/ioctl.h>
+> + #include <math.h>
+> ++#ifdef HAVE_LIBDL
+> + #include <dlfcn.h>
+> ++#else
+> ++#include <dlmisc.h>
+> ++#endif
+> + #include "config.h"
+> + #include "asoundlib.h"
+> + #include "mixer_simple.h"
+> +--- alsa-lib-1.0.26/modules/mixer/simple/sbasedl.c     2012-09-06 16:55:14.000000000 +0800
+> ++++ alsa-lib-1.0.26.bak/modules/mixer/simple/sbasedl.c 2013-11-25 14:53:40.871279553 +0800
+> +@@ -27,7 +27,11 @@
+> + #include <fcntl.h>
+> + #include <sys/ioctl.h>
+> + #include <math.h>
+> ++#ifdef HAVE_LIBDL
+> + #include <dlfcn.h>
+> ++#else
+> ++#include <dlmisc.h>
+> ++#endif
+> + #include "config.h"
+> + #include "asoundlib.h"
+> + #include "mixer_abst.h"
+> +--- /dev/null  2013-11-25 21:32:41.194714253 +0800
+> ++++ alsa-lib-1.0.26.bak/include/dlmisc.h       2013-11-25 15:03:11.031307047 +0800
+> +@@ -0,0 +1,24 @@
+> ++/*
+> ++ *   This library is free software; you can redistribute it and/or modify
+> ++ *   it under the terms of the GNU Lesser General Public License as
+> ++ *   published by the Free Software Foundation; either version 2.1 of
+> ++ *   the License, or (at your option) any later version.
+> ++ *
+> ++ *   This program is distributed in the hope that it will be useful,
+> ++ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+> ++ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+> ++ *   GNU Lesser General Public License for more details.
+> ++ *
+> ++ *   You should have received a copy of the GNU Lesser General Public
+> ++ *   License along with this library; if not, write to the Free Software
+> ++ *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+> ++ *
+> ++ */
+> ++
+> ++#ifndef __ALSA_DLMISC_H
+> ++#define __ALSA_DLMISC_H
+> ++
+> ++#define RTLD_NOW      0x00002
+> ++#define RTLD_GLOBAL   0x00100
+> ++
+> ++#endif
+> --
+> 1.7.9.5
 
-On Wed, Feb 12, 2014 at 11:51 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Thomas De Schampheleire,
->
-> On Wed, 12 Feb 2014 11:41:29 +0100, Thomas De Schampheleire wrote:
->
->> > But what would you change the .config and then re-run the configure
->> > step? The configure is all about *producing* the .config, so making a
->> > change to the .config, and then re-running the configure step seems
->> > weird to me.
->>
->> I don't necessarily feel that the 'configure' step is about producing
->> the .config. To me, the configure step is about configuring busybox,
->> based on the .config. So for me, the .config is input to the configure
->> step, not output.
->
-> Well, in some sense the configure step is just "some step you do before
-> building", and generating the .config thing typically falls in this
-> category.
->
->> > We have had for quite a while this comment in busybox.mk, which I never
->> > really understood:
->> >
->> > # We do this here to avoid busting a modified .config in configure
->> > BUSYBOX_POST_EXTRACT_HOOKS += BUSYBOX_COPY_CONFIG
->> >
->> > But we have the busybox-{menuconfig,xconfig} targets that allow to
->> > adjust the configuration, and they only remove the "built" and
->> > "target_installed" stamp files, which means after doing "make
->> > busybox-menuconfig", if you run "make", the configure step of busybox
->> > isn't re-executed, so the configuration changes you made are properly
->> > taken into account and preserved.
->>
->> One may also edit .config manually, without running any of the *config commands.
->
-> And then you simply run "make busybox-rebuild", and that's it.
->
->> Note by the way that the bug report is submitted from the context of
->> the OVERRIDE_SRCDIR mechanism. Here there is no .config created at
->> all, so it is not about editing it.
->
-> There would be a .config created is the .config creation was done in
-> the "configure" step and not in the extract step.
+Tested-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+(compile-tested on a Blackfin FLAT configuration)
 
-Yes, agreed, and this is what the patch is proposing.
-So I think we're on the same page :)
+This patch fixes
+http://autobuild.buildroot.net/results/706/7069e1f43cbed745d65f7dd9904a3fff034530ac.
+(Peter: maybe you should add this link to the commit message)
 
->
->> >> For linux this is not true: if you change your config and re-run the configure
->> >> step, your changes are lost. If you change your .config and expect to keep the
->> >> changes, you can only rebuild, not reconfigure.
->> >>
->> >> This patch proposes to line-up busybox more with how the linux kernel handles
->> >> it.
->> >>
->> >> This raises the question: what do we want, what should the behavior be?
->> >>
->> >> Personally, I haven't had a big problem with the linux way, and thus would
->> >> accept the principle of this patch. But I don't have a very strong opinion on
->> >> this...
->> >
->> > I also accept the principle of this patch.
->> >
->> > As a side note, this behavior of busybox.mk was also problematic when
->> > trying to implement out of tree build for packages, because .config is
->> > inherently part of the *build* directory, but the build directory
->> > doesn't exist yet during the extract step: it is only created at the
->> > beginning of the configure step. So my out-of-tree patch set contains:
->> >
->> > -# We do this here to avoid busting a modified .config in configure
->> > -BUSYBOX_POST_EXTRACT_HOOKS += BUSYBOX_COPY_CONFIG
->> > -
->> >  define BUSYBOX_CONFIGURE_CMDS
->> > +       $(BUSYBOX_COPY_CONFIG)
->> >
->>
->> Then maybe we should apply exactly this change, and not the proposed
->> one that uses a hook?
->> Additionally, we should then also make this change in uclibc, right?
->
-> Yes. But I would like to hear Peter's opinion on this.
-
-Peter, what do you think?
-
-Thanks,
+Best regards,
 Thomas
