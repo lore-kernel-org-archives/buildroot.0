@@ -1,40 +1,38 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Wed, 12 Feb 2014 09:43:29 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-02-11
-In-Reply-To: <20140212093914.69646118@skate>
-References: <20140212073007.B3242100CEB@stock.ovh.net>
- <CAHkwnC-iFrY2BXRCWzE6DhLEBt90c9vfmT76ofUKk=eJg4Ox7w@mail.gmail.com>
- <20140212093914.69646118@skate>
-Message-ID: <CAHkwnC9CQ_eoH6cxRR_XV0UuLADmmo8eRG1numsVjbMQnS8DHQ@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 12 Feb 2014 09:43:59 +0100
+Subject: [Buildroot] Supporting multiple versions of toolchain
+	components?
+In-Reply-To: <20140212090324.4cb9fe84@skate> (Thomas Petazzoni's message of
+ "Wed, 12 Feb 2014 09:03:24 +0100")
+References: <1392054226-20285-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <52F936C7.4040300@mind.be> <20140210234117.352533a5@skate>
+ <52F9D9D0.8090409@mind.be> <20140211093221.28248844@skate>
+ <52FA5AD8.4040506@mind.be> <20140212090324.4cb9fe84@skate>
+Message-ID: <87mwhwu3e8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Feb 12, 2014 at 9:39 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Fabio Porcedda,
->
-> On Wed, 12 Feb 2014 09:36:40 +0100, Fabio Porcedda wrote:
->
->> >     xtensa |                  lvm2-2.02.103 | NOK | http://autobuild.buildroot.net/results/2c6b9fdfffe81042d7606893d1ff006f9e6c4296/
->>
->> I will send the updated patch  to disable static building for lvm2.
->
-> Is it fundamentally unable to do static linking?
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-No, it can be fixed, i've already sent a patch for that:
-http://patchwork.ozlabs.org/patch/312469/
-The patch is to disable shared building and effectively use the static binaries.
+ >> Note that I'm not immediately advocating for removing the multiple
+ >> version support where we have it already. Rather, I propose to not add
+ >> more multiversion packages.
 
-But the patch was not sent upstream because it needs more work to be
-able to sent upstream so Peter suggested to just disable static
-building.
+ > I certainly agree with you on this. I would propose to:
 
-Both solutions are fine for me.
+ >  1/ Remove the multiversion selection on Busybox, because I don't
+ >     really see why we have this specifically for Busybox.
 
-Best regards
+ >  2/ Keep a maximum number of three gcc, binutils, gdb and C library
+ >     versions. Like: the latest one, the N-1 (default), and the N-2.
+
+Sounds good to me. Let's also do the same for kernel headers. We still
+need to keep the arch specific versions though.
+
+Will you send patches or should I do it myself?
+
 -- 
-Fabio Porcedda
+Bye, Peter Korsgaard
