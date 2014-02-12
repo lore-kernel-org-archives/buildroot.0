@@ -1,38 +1,30 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 12 Feb 2014 18:34:03 +0100
-Subject: [Buildroot] [PATCH] package/elfutils: disable for avr32
-Message-ID: <1392226443-10660-1-git-send-email-yann.morin.1998@free.fr>
+From: Mike Zick <minimod@morethan.org>
+Date: Wed, 12 Feb 2014 11:34:31 -0600
+Subject: [Buildroot] [PATCH v2] trivial: update buildroot e-mail address
+ to buildroot@buildroot.org
+In-Reply-To: <dc1e2107ca0e341b43c4.1392224097@argentina>
+References: <dc1e2107ca0e341b43c4.1392224097@argentina>
+Message-ID: <20140212113431.2f4d2099@core2quad.morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On Wed, 12 Feb 2014 17:54:57 +0100
+Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
 
-Disable elfutils for avr32, because:
-  - elfutils uses canonicalize_file_name, which came after uClibc-0.9.31.
-  - avr32 uses a toolchain with uClibc-0.9.31
+> As the e-mail address buildroot at buildroot.org is now enabled, update
+> the e-mail addresses in the source tree from @uclibc.org and
+> @busybox.net to our own proper domain.
+> 
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/elfutils/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
+To be consistent -
+How about changing the mailing system e-mail references also?
 
-diff --git a/package/elfutils/Config.in b/package/elfutils/Config.in
-index 47cd63d..588c29d 100644
---- a/package/elfutils/Config.in
-+++ b/package/elfutils/Config.in
-@@ -7,6 +7,9 @@ config BR2_PACKAGE_ELFUTILS
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
- 	depends on BR2_LARGEFILE
- 	depends on BR2_USE_WCHAR
-+	# canonicalize_file_name() not available on uClibc 0.9.31, used
-+	# only for AVR32
-+	depends on !BR2_avr32
- 	help
- 	  Libraries/utilities to handle ELF objects (drop in
- 	  replacement for libelf).
--- 
-1.8.1.2
+Currently shown as: 
+Sender: buildroot-bounces at busybox.net
+
+Message Footer: buildroot at busybox.net
+
+Mike
