@@ -1,33 +1,64 @@
-From: Frank Ihle <frank.ihle@hs-offenburg.de>
-Date: Wed, 12 Feb 2014 09:05:44 +0100
-Subject: [Buildroot] Antw: Re: Antw: Re: Antw: Re: How to get the kernel to
- mount a rootfs without an initramfs ??
-In-Reply-To: <52FA5E23.3090109@mind.be>
-References: <1102199395.5272670.1392112422985.JavaMail.root@openwide.fr>
- <52FA5E23.3090109@mind.be>
-Message-ID: <52FB3968020000460004A91A@gwia2.rz.hs-offenburg.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 12 Feb 2014 09:06:59 +0100
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20140211180123.GB3411@free.fr>
+References: <20140211073008.EC16B101035@stock.ovh.net>
+ <20140211101015.1b282bd3@skate> <20140211180123.GB3411@free.fr>
+Message-ID: <20140212090659.15291b2b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->Actually this sounds like you have no mmc driver in your kernel.
+Dear Yann E. MORIN,
 
-I'm using the defconfig where 
+On Tue, 11 Feb 2014 19:01:23 +0100, Yann E. MORIN wrote:
 
-in make linux-menuconfig is selected the following:
+> On 2014-02-11 10:10 +0100, Thomas Petazzoni spake thusly:
+> > On Tue, 11 Feb 2014 08:30:08 +0100 (CET), Thomas Petazzoni wrote:
+> [--SNIP--]
+> > >      avr32 |                 elfutils-0.155 | NOK | http://autobuild.buildroot.net/results/7bf7f9c786a3199e29d0dc38c4878cb6bf9c26dc/
+> > 
+> > ../libdwfl/libdwfl_pic.a(find-debuginfo.os): In function `find_debuginfo_in_path':
+> > find-debuginfo.c:(.text+0x3e6): undefined reference to `canonicalize_file_name'
+> > ../libdwfl/libdwfl_pic.a(dwfl_build_id_find_elf.os): In function `__libdwfl_open_by_build_id':
+> > dwfl_build_id_find_elf.c:(.text+0x1a8): undefined reference to `canonicalize_file_name'
+> 
+> I already looked at that one: the toolchain is using uClibc 0.9.31, and
+> canonicalize_file_name is missing in that version (it only appeared in
+> 0.9.32, IIRC).
 
-+Device Drivers
- <*> MMC/SD/SDIO card support
-+ + <*> MMC block device driver
-+ + <*> MMC host test driver
-+ + <*> Atmel SD/MMC Driver (Atmel Multimedia Card Interface support)
-+ + [ * ] Atmel MCI DMA support (Exp.)
+So we need:
 
-well but now, that you mention it, it's weired. When I do a bootable image with this settings but with initramfs and busybox as init system then I should be able to see which devices are detected, right? So If I do ls /dev/ mmcblk or sdb isn't even in the list, is that a normal behaviour?
+	# canonicalize_file_name() not available on uClibc 0.9.31, used
+	# only for AVR32
+	depends on !BR2_avr32
 
+> > >        arm |                      nut-2.6.5 | NOK | http://autobuild.buildroot.net/results/0ddd856bcbec2db0500791fd428ba053d6e4fa1b/
+> > 
+> > libusb compatibility issue?
+> > 
+> > scan_usb.c:34:29: error: unknown type name 'usb_dev_handle'
+> > scan_usb.c:38:41: error: unknown type name 'usb_dev_handle'
+> > scan_usb.c:41:1: error: unknown type name 'usb_dev_handle'
+> > scan_usb.c:41:48: warning: 'struct usb_device' declared inside parameter list [enabled by default]
+> > scan_usb.c:41:48: warning: its scope is only this definition or declaration, which is probably not what you want [enabled by default]
+> > scan_usb.c: In function 'nutscan_load_usb_library':
+> > scan_usb.c:67:22: error: 'nut_usb_close' undeclared (first use in this function)
+> 
+> I tried to reproduce it here, but it builds fine (in a squeeze-32
+> chroot, with almost nothing installed except the Buildroot
+> dependencies).
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140212/c5dfdfc5/attachment.html>
+Error occurred on gcc10, where tests are not running in a clean chroot,
+but in an environment with lots of headers/libraries installed. I'll do
+a test build on gcc10, to see what host stuff causes this mis-detection.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
