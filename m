@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 12 Feb 2014 19:10:25 +0100
-Subject: [Buildroot] [PATCH V4 1/2] i.MX: Use FREESCALE_IMX_SITE for
- Freescale packages
-In-Reply-To: <1381287931-7070-2-git-send-email-eric.nelson@boundarydevices.com>
+Date: Wed, 12 Feb 2014 19:23:48 +0100
+Subject: [Buildroot] [PATCH V4 2/2] i.MX: Update versions to match
+ latest Freescale release
+In-Reply-To: <1381287931-7070-3-git-send-email-eric.nelson@boundarydevices.com>
 References: <1381287931-7070-1-git-send-email-eric.nelson@boundarydevices.com>
- <1381287931-7070-2-git-send-email-eric.nelson@boundarydevices.com>
-Message-ID: <20140212181025.GA17804@free.fr>
+ <1381287931-7070-3-git-send-email-eric.nelson@boundarydevices.com>
+Message-ID: <20140212182348.GB17804@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,18 +15,39 @@ To: buildroot@busybox.net
 Eric, All,
 
 On 2013-10-08 20:05 -0700, Eric Nelson spake thusly:
-> This patch consolidates the URLs for various Freescale-supplied
-> packages to use FREESCALE_IMX_SITE.
-> 
 > Signed-off-by: Eric Nelson <eric.nelson@boundarydevices.com>
+[--SNIP--]
+> diff --git a/package/freescale-imx/freescale-imx.mk b/package/freescale-imx/freescale-imx.mk
+> index 0dd5629..39ffa8a 100644
+> --- a/package/freescale-imx/freescale-imx.mk
+> +++ b/package/freescale-imx/freescale-imx.mk
+> @@ -4,9 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -FREESCALE_IMX_VERSION = 1.1.0
+> -
+> -# No official download site from freescale, just this mirror
+> -FREESCALE_IMX_SITE   = http://download.ossystems.com.br/bsp/freescale/source
+> +FREESCALE_IMX_VERSION = 3.5.7-1.0.0
+> +FREESCALE_IMX_SITE    = http://www.freescale.com/lgfiles/NMG/MAD/YOCTO/
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+It looks like this site is no longer valid. The webpage states:
 
-Also, I believe Thomas Petazzoni already provided his own revewed-by
-tag for your v3:
-    http://patchwork.ozlabs.org/patch/280899/
+    The system is currently unavailable.
 
-Peter, I guess this is good for -next.
+And trying to retrieve any tarball from there result in a 404:
+
+    $ wget 'http://www.freescale.com/lgfiles/NMG/MAD/YOCTO/gpu-viv-bin-mx6q-3.5.7-1.0.0.bin'
+    HTTP request sent, awaiting response... 404 Not Found
+
+While the previous 'mirror' still works, and has all the referenced
+tarballs.
+
+So, maybe keep the mirror for now?
+
+Otherwise, I was about to send such a bump-patch. You beat me to it (by
+a large margin, at that!).
 
 Regards,
 Yann E. MORIN.
