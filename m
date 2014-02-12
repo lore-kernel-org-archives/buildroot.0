@@ -1,56 +1,47 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 12 Feb 2014 17:56:20 +0100
-Subject: [Buildroot] [PATCHv2 4/4] samba: update description and rename
- patches
-In-Reply-To: <1392119829-31535-5-git-send-email-gustavo@zacarias.com.ar>
-References: <1392119829-31535-1-git-send-email-gustavo@zacarias.com.ar>
- <1392119829-31535-5-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <52FBA7B4.5060001@mind.be>
+Date: Wed, 12 Feb 2014 17:58:49 +0100
+Subject: [Buildroot] Antw: Re: Antw: Re: Antw: Re: How to get the kernel
+ to mount a rootfs without an initramfs ??
+In-Reply-To: <52FB3968020000460004A91A@gwia2.rz.hs-offenburg.de>
+References: <1102199395.5272670.1392112422985.JavaMail.root@openwide.fr>
+ <52FA5E23.3090109@mind.be>
+ <52FB3968020000460004A91A@gwia2.rz.hs-offenburg.de>
+Message-ID: <52FBA849.3060101@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/02/14 12:57, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-> ---
->  package/samba/Config.in                                             | 6 +++---
->  ...x-smbd-libs-avahi.patch => samba-0001-fix-smbd-libs-avahi.patch} | 0
->  .../samba/{samba-getaddrinfo.patch => samba-0002-getaddrinfo.patch} | 0
->  3 files changed, 3 insertions(+), 3 deletions(-)
->  rename package/samba/{samba-fix-smbd-libs-avahi.patch => samba-0001-fix-smbd-libs-avahi.patch} (100%)
->  rename package/samba/{samba-getaddrinfo.patch => samba-0002-getaddrinfo.patch} (100%)
+On 12/02/14 09:05, Frank Ihle wrote:
+>>Actually this sounds like you have no mmc driver in your kernel.
 > 
-> diff --git a/package/samba/Config.in b/package/samba/Config.in
-> index 1469075..c5b7e48 100644
-> --- a/package/samba/Config.in
-> +++ b/package/samba/Config.in
-> @@ -4,9 +4,9 @@ config BR2_PACKAGE_SAMBA
->  	depends on BR2_USE_MMU # fork()
->  	select BR2_PACKAGE_POPT
->  	help
-> -	  Provides print services to all manner of SMB/CIFS clients,
-> -	  including the numerous versions of Microsoft Windows
-> -	  operating systems.
-> +	  Provides secure, stable and fast file and print services
-> +	  for all clients using the SMB/CIFS protocol, such as all
-> +	  versions of DOS, Windows, OS/2, Linux and many others.
->  
->  	  http://www.samba.org/
->  
-> diff --git a/package/samba/samba-fix-smbd-libs-avahi.patch b/package/samba/samba-0001-fix-smbd-libs-avahi.patch
-> similarity index 100%
-> rename from package/samba/samba-fix-smbd-libs-avahi.patch
-> rename to package/samba/samba-0001-fix-smbd-libs-avahi.patch
-> diff --git a/package/samba/samba-getaddrinfo.patch b/package/samba/samba-0002-getaddrinfo.patch
-> similarity index 100%
-> rename from package/samba/samba-getaddrinfo.patch
-> rename to package/samba/samba-0002-getaddrinfo.patch
+> I'm using the defconfig where
 > 
+> in make linux-menuconfig is selected the following:
+> 
+> +Device Drivers
+>  <*> MMC/SD/SDIO card support
+> + + <*> MMC block device driver
+> + + <*> MMC host test driver
+> + + <*> Atmel SD/MMC Driver (Atmel Multimedia Card Interface support)
+> + + [ * ] Atmel MCI DMA support (Exp.)
+> 
+> well but now, that you mention it, it's weired. When I do a bootable
+> image with this settings but with initramfs and busybox as init system
+> then I should be able to see which devices are detected, right? So If I
+> do ls /dev/ mmcblk or sdb isn't even in the list, is that a normal behaviour?
+
+ No, it's not.
+
+ The platform bindings may be missing in your board file.
+
+ Which board are you building for? A standard board or a custom one? In
+the latter case, you should check with your kernel developer where to
+find the MMC device.
+
+ Regards,
+ Arnout
 
 
 -- 
