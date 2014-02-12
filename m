@@ -1,48 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 12 Feb 2014 13:47:16 +0100
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <CAAXf6LV6FZJ_KdxjEZ83550vM4V8n-zaRfieZJusfdKVYxyOAg@mail.gmail.com>
-References: <20140212073007.B3242100CEB@stock.ovh.net>
- <20140212093245.49e2b6ac@skate>
- <CAAXf6LXjfkZ=3_fFPowo3k2HHyUkSpiHnOfGG=HS=0icjYBXhA@mail.gmail.com>
- <20140212104745.61ea39bd@skate>
- <CAAXf6LUDUyWxQ_cf2+TapCcSoB0=HRs2_413MH_FCXN56C3R_Q@mail.gmail.com>
- <CAAXf6LXTF0XKg-pBGKhDmxV+VPULPSxhJm84UnfzUH=kGa3MNA@mail.gmail.com>
- <CAAXf6LVVkFtkFiL-9AD918JTeTPf4zgUf=RQsp4XZUOBVUaTDQ@mail.gmail.com>
- <20140212133153.7995b73a@skate>
- <CAAXf6LV6FZJ_KdxjEZ83550vM4V8n-zaRfieZJusfdKVYxyOAg@mail.gmail.com>
-Message-ID: <20140212134716.523aa19f@skate>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Wed, 12 Feb 2014 13:51:23 +0100
+Subject: [Buildroot] [PATCH] sdl: fix autoreconf timing issue
+In-Reply-To: <20140211164750.0e57be5c@skate>
+References: <1392109955-742-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <20140211164750.0e57be5c@skate>
+Message-ID: <CAGduivx8PfvfCRpfS15TN7eD_pTZpi=Sn2do2tb__X97xazfaw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
-
-On Wed, 12 Feb 2014 13:44:05 +0100, Thomas De Schampheleire wrote:
-
-> In alsa-utils, configure.in contains the following line:
-> AM_PATH_ALSA(1.0.24)
-> 
-> This macro is defined in aclocal.m4, and I want to change that,
-> because this is where the -ldl is added unconditionally.
-> 
-> So, if aclocal uses configure.in to generate aclocal.m4, the real
-> definition of AM_PATH_ALSA must be somewhere else (outside the
-> alsa-utils sources).
-> 
-> So how to change the AM_PATH_ALSA ?
-
-AM_PATH_ALSA is defined in the alsa-lib source code, utils/alsa.m4. So
-when we install alsa-lib, it should also install alsa.m4
-in $(STAGING_DIR)/usr/share/aclocal, so that when the autoreconf of
-alsa-utils is done, it finds it.
-
-BTW, what about joining #buildroot on IRC to do live discussion ? :-)
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+On Tue, Feb 11, 2014 at 4:47 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Maxime Hadjinlian,
+>
+> On Tue, 11 Feb 2014 10:12:35 +0100, Maxime Hadjinlian wrote:
+>
+>> If your machine was under heavy load, the time difference between the
+>> two files would have been greater and then *maybe* picked up by
+>> autoconf. And then the configure file was re-generated.
+>>
+>> When the 0001 patch was introduced, SDL package did *NOT* run it's
+>> autogen.sh, which is why it touches also the configure.
+>> This came later, causing this behavior.
+>>
+>> Fixes:
+>>   http://autobuild.buildroot.net/results/d1c/d1c36f634dbf6b6e5d18444c2a23dfd129202b80/
+>>
+>> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+>
+> Wow, amazing problem. Thanks a lot for getting to the bottom of it. The
+> solution is indeed simple, but the investigation definitely wasn't
+> (I've followed your conversation with Yann on IRC yesterday evening,
+> and I remember quickly discussing the issue with you during the
+> Buildroot Developer Days). Congrats!
+Thank you.
+A huge thanks to Yann E. Morin too as he put me on the right track and
+I stupidly forgot to add him as Cc: :/.
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
