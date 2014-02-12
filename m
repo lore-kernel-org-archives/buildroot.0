@@ -1,77 +1,53 @@
-From: Eric Nelson <eric.nelson@boundarydevices.com>
-Date: Wed, 12 Feb 2014 13:20:02 -0700
-Subject: [Buildroot] [PATCH V4 2/2] i.MX: Update versions to match
- latest Freescale release
-In-Reply-To: <52FBC72D.3090706@boundarydevices.com>
-References: <1381287931-7070-1-git-send-email-eric.nelson@boundarydevices.com>
- <1381287931-7070-3-git-send-email-eric.nelson@boundarydevices.com>
- <20140212190351.GD17804@free.fr> <52FBC72D.3090706@boundarydevices.com>
-Message-ID: <52FBD772.40900@boundarydevices.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Wed, 12 Feb 2014 21:58:28 +0100
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20140212090659.15291b2b@skate>
+References: <20140211073008.EC16B101035@stock.ovh.net>
+ <20140211101015.1b282bd3@skate> <20140211180123.GB3411@free.fr>
+ <20140212090659.15291b2b@skate>
+Message-ID: <52FBE074.4070005@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+Hi Tomas, Yann,
 
-On 02/12/2014 12:10 PM, Eric Nelson wrote:
-> Hi Yann,
+>>>>         arm |                      nut-2.6.5 | NOK | http://autobuild.buildroot.net/results/0ddd856bcbec2db0500791fd428ba053d6e4fa1b/
+>>> libusb compatibility issue?
+>>>
+>>> scan_usb.c:34:29: error: unknown type name 'usb_dev_handle'
+>>> scan_usb.c:38:41: error: unknown type name 'usb_dev_handle'
+>>> scan_usb.c:41:1: error: unknown type name 'usb_dev_handle'
+>>> scan_usb.c:41:48: warning: 'struct usb_device' declared inside parameter list [enabled by default]
+>>> scan_usb.c:41:48: warning: its scope is only this definition or declaration, which is probably not what you want [enabled by default]
+>>> scan_usb.c: In function 'nutscan_load_usb_library':
+>>> scan_usb.c:67:22: error: 'nut_usb_close' undeclared (first use in this function)
+>> I tried to reproduce it here, but it builds fine (in a squeeze-32
+>> chroot, with almost nothing installed except the Buildroot
+>> dependencies).
+> Error occurred on gcc10, where tests are not running in a clean chroot,
+> but in an environment with lots of headers/libraries installed. I'll do
+> a test build on gcc10, to see what host stuff causes this mis-detection.
 >
-> On 02/12/2014 12:03 PM, Yann E. MORIN wrote:
->> Eric, All,
->>
->> A (hopefully!) better review this time...
->>
->> On 2013-10-08 20:05 -0700, Eric Nelson spake thusly:
->>> Signed-off-by: Eric Nelson <eric.nelson@boundarydevices.com>
- >>>
- >>> [--SNIP--]
- >>>
->>> +# The archive is a shell-self-extractor of a bzipped tar. It happens
->>> +# to extract in the correct directory (imx-lib-x.y.z)
->>> +# The --force makes sure it doesn't fail if the source dir already
->>> exists.
->>> +# The --auto-accept skips the license check - not needed for us
->>> +# because we have legal-info
->>> +# Since there's a EULA in the bin file, extract it to
->>> imx-lib-x.y.z/EULA
->>> +#
->>> +define IMX_LIB_EXTRACT_CMDS
->>> +    awk 'BEGIN      { start=0; } \
->>> +         /^EOEULA/  { start = 0; } \
->>> +                    { if (start) print; } \
->>> +         /<<EOEULA/ { start=1; }'\
->>> +        $(DL_DIR)/$(IMX_LIB_SOURCE) > $(@D)/EULA
->>> +    cd $(BUILD_DIR); \
->>> +    sh $(DL_DIR)/$(IMX_LIB_SOURCE) --force --auto-accept
->>> +endef
->>
->>      $ make imx-lib-extract
->>      [...]
->>      Unpacking file mkdir: cannot create directory ?imx-lib-3.5.7-1.0.0?:
->>      File exists
->>
->> This is only a warning, but still: maybe extract the EULA _after_
->> unpacking the archive?
->>
+> Thanks!
 >
-> Sure. I'll re-work.
->
+> Thomas
+I also tried to reproduce this build failure recently, but nut builds 
+fine for me too.
+Have you found somethingon gcc10 ?
 
-Re-arranging these commands doesn't get rid of the warning.
+I don't think it's related but libhal.h is present on the autobuilder's log
+"checking for libhal.h... yes"
 
-It appears that the directory is created by the bit of
-structure using IMX_LIB_EXTRACT_CMDS, and the warning
-message is from a 'mkdir' embedded within the self-extracting
-package.
+Maybe add --without-hal in nut.mk ?
 
-I could 'rm' the directory inside IMX_LIB_EXTRACT_CMDS,
-but it's not clear that this is the right thing to do.
+Can you provide a complete build log with configure step ?
 
-Please let me know your thoughts on the matter.
-
-Regards,
-
-
-Eric
+I hope it can help...
+Best regards,
+Romain Naour
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140212/c05c4aa9/attachment.html>
