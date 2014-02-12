@@ -1,30 +1,40 @@
-From: Mike Zick <minimod@morethan.org>
-Date: Wed, 12 Feb 2014 11:34:31 -0600
-Subject: [Buildroot] [PATCH v2] trivial: update buildroot e-mail address
- to buildroot@buildroot.org
-In-Reply-To: <dc1e2107ca0e341b43c4.1392224097@argentina>
-References: <dc1e2107ca0e341b43c4.1392224097@argentina>
-Message-ID: <20140212113431.2f4d2099@core2quad.morethan.org>
+From: Eric Nelson <eric.nelson@boundarydevices.com>
+Date: Wed, 12 Feb 2014 10:43:43 -0700
+Subject: [Buildroot] Re-post: Freescale i.MX updates
+In-Reply-To: <52E548F3.5000605@boundarydevices.com>
+References: <52E548F3.5000605@boundarydevices.com>
+Message-ID: <52FBB2CF.10705@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 12 Feb 2014 17:54:57 +0100
-Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
+Hi all,
 
-> As the e-mail address buildroot at buildroot.org is now enabled, update
-> the e-mail addresses in the source tree from @uclibc.org and
-> @busybox.net to our own proper domain.
-> 
+On 01/26/2014 10:42 AM, Eric Nelson wrote:
+> Hi Thomas and Arnout,
+>
+> I think these two patches got lost during the flurry of activity
+> back in October:
+>      http://patchwork.ozlabs.org/patch/281707/
+>      http://patchwork.ozlabs.org/patch/281706/
+>
+> I think I covered Arnout's concerns from the V3 patch set:
+>      http://patchwork.ozlabs.org/patch/280900/
+>
+> Let me know if you need anything. The patches apply
+> on the current head.
+>
 
-To be consistent -
-How about changing the mailing system e-mail references also?
+Here's my best (and only) Ben Stein impression:
 
-Currently shown as: 
-Sender: buildroot-bounces at busybox.net
+	Anyone, anyone?
 
-Message Footer: buildroot at busybox.net
+Buildroot is now several versions behind with i.MX
+releases.
 
-Mike
+Please advise,
+
+
+Eric
