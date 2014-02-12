@@ -1,10 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 12 Feb 2014 07:36:53 +0100
-Subject: [Buildroot] [pkg-perl infra V8 5/6] manual: adding packages perl
-In-Reply-To: <1392139307-29635-6-git-send-email-francois.perrad@gadz.org>
+Date: Wed, 12 Feb 2014 07:30:48 +0100
+Subject: [Buildroot] [pkg-perl infra V8 4/6] host-perl-module-build: new
+ package
+In-Reply-To: <1392139307-29635-5-git-send-email-francois.perrad@gadz.org>
 References: <1392139307-29635-1-git-send-email-francois.perrad@gadz.org>
- <1392139307-29635-6-git-send-email-francois.perrad@gadz.org>
-Message-ID: <52FB1685.6030409@mind.be>
+ <1392139307-29635-5-git-send-email-francois.perrad@gadz.org>
+Message-ID: <52FB1518.2070209@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,28 +13,39 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 11/02/14 18:21, Francois Perrad wrote:
-> +Note that:
+> the version coming with host-perl is too old
+> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+> ---
+>  package/perl-module-build/perl-module-build.mk |   12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+>  create mode 100644 package/perl-module-build/perl-module-build.mk
+> 
+> diff --git a/package/perl-module-build/perl-module-build.mk b/package/perl-module-build/perl-module-build.mk
+> new file mode 100644
+> index 0000000..a95278d
+> --- /dev/null
+> +++ b/package/perl-module-build/perl-module-build.mk
+> @@ -0,0 +1,12 @@
+> +################################################################################
+> +#
+> +# perl-module-build
+> +#
+> +################################################################################
 > +
-> + * Setting +PERL_FOO_INSTALL_STAGING+ to +YES+ has no effect (unless
-> +   a +PERL_FOO_INSTALL_STAGING_CMDS+ variable is defined), since
-> +   Perl modules generally don't need to be installed to the
-> +   +staging+ directory.
+> +PERL_MODULE_BUILD_VERSION = 0.4204
+> +PERL_MODULE_BUILD_SOURCE = Module-Build-$(PERL_MODULE_BUILD_VERSION).tar.gz
+> +PERL_MODULE_BUILD_SITE = $(BR2_CPAN_MIRROR)/authors/id/L/LE/LEONT/
+> +PERL_MODULE_BUILD_LICENSE = Artistic or GPLv1+
 > +
-
- With only one bullet point, the bullet list is pointless. Also I think
-the formulation of the explanation is not very clear. I proposed this
-alternative in reply to v6:
-
-Note that setting +PERL_FOO_INSTALL_STAGING+ to +YES+ has no effect
-unless a +PERL_FOO_INSTALL_STAGING_CMDS+ variable is defined. The perl
-infrastructure doesn't define these commands since Perl modules generally
-don't need to be installed to the +staging+ directory.
+> +$(eval $(host-perl-package))
+> 
 
 
- Otherwise, looks good to me.
-
- Regards,
- Arnout
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
