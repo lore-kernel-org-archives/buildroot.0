@@ -1,50 +1,33 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 12 Feb 2014 07:30:48 +0100
-Subject: [Buildroot] [pkg-perl infra V8 4/6] host-perl-module-build: new
- package
-In-Reply-To: <1392139307-29635-5-git-send-email-francois.perrad@gadz.org>
-References: <1392139307-29635-1-git-send-email-francois.perrad@gadz.org>
- <1392139307-29635-5-git-send-email-francois.perrad@gadz.org>
-Message-ID: <52FB1518.2070209@mind.be>
+Date: Wed, 12 Feb 2014 08:16:00 +0100
+Subject: [Buildroot] [PATCH] Add OpenTyrian package (SDL game)
+In-Reply-To: <1392108199-14612-1-git-send-email-julien.boibessot@free.fr>
+References: <1392108199-14612-1-git-send-email-julien.boibessot@free.fr>
+Message-ID: <52FB1FB0.1050901@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/02/14 18:21, Francois Perrad wrote:
-> the version coming with host-perl is too old
+On 11/02/14 09:43, julien.boibessot at free.fr wrote:
+> From: Julien Boibessot <julien.boibessot@armadeus.com>
 > 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-> ---
->  package/perl-module-build/perl-module-build.mk |   12 ++++++++++++
->  1 file changed, 12 insertions(+)
->  create mode 100644 package/perl-module-build/perl-module-build.mk
 > 
-> diff --git a/package/perl-module-build/perl-module-build.mk b/package/perl-module-build/perl-module-build.mk
-> new file mode 100644
-> index 0000000..a95278d
-> --- /dev/null
-> +++ b/package/perl-module-build/perl-module-build.mk
-> @@ -0,0 +1,12 @@
-> +################################################################################
-> +#
-> +# perl-module-build
-> +#
-> +################################################################################
-> +
-> +PERL_MODULE_BUILD_VERSION = 0.4204
-> +PERL_MODULE_BUILD_SOURCE = Module-Build-$(PERL_MODULE_BUILD_VERSION).tar.gz
-> +PERL_MODULE_BUILD_SITE = $(BR2_CPAN_MIRROR)/authors/id/L/LE/LEONT/
-> +PERL_MODULE_BUILD_LICENSE = Artistic or GPLv1+
-> +
-> +$(eval $(host-perl-package))
-> 
+> Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
 
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+ (untested)
+
+ Normally there should be two separate patches for the two packages, but
+I think it's OK to go in as it is.
+
+ BTW, please submit revised patches with --subject-prefix='PATCH v2' even
+if the first revision was an RFC.
+
+ Regards,
+ Arnout
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
