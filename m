@@ -1,102 +1,70 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 12 Feb 2014 17:55:44 +0100
-Subject: [Buildroot] [PATCH 4 of 4] alsa-utils: fix build on no-mmu targets
+Date: Wed, 12 Feb 2014 17:55:43 +0100
+Subject: [Buildroot] [PATCH 3 of 4] alsa-lib: add patch to remove hardcoded
+	-ldl
 In-Reply-To: <patchbomb.1392224140@argentina>
 References: <patchbomb.1392224140@argentina>
-Message-ID: <fba13b278df3df6a3fc7.1392224144@argentina>
+Message-ID: <ecd6e8e847491a413a97.1392224143@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-alsa-utils uses fork, which doesn't work on targets without mmu, such as
-Blackfin. Apply a patch by the Blackfin developers to fix this.
+The AM_PATH_ALSA macro in utils/alsa.m4 unconditionally uses -ldl. This
+breaks compilation of alsa-utils (and probably other packages using this
+macro) for targets that do not support dynamic loading, such as for
+Blackfin FLAT binaries.
+
+This patch updates the macro to check if dlopen is available, and use that
+result to conditionally add -ldl to the list of libraries.
 
 Fixes
-http://autobuild.buildroot.org/results/9f8/9f8e572c9f1c677155cc7d1828371bcf572ff878
+http://autobuild.buildroot.org/results/de2/de286880973be956f6c504aa9a758171d6f49674/build-end.log
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
- package/alsa-utils/alsa-utils-0001-no-mmu.patch |  61 ++++++++++++++++++++
- package/alsa-utils/alsa-utils.mk                |   1 +
- 2 files changed, 62 insertions(+), 0 deletions(-)
+ package/alsa-lib/alsa-lib-0004-conditional-enabling-of-libdl-in-m4.patch |  35 ++++++++++
+ 1 files changed, 35 insertions(+), 0 deletions(-)
 
-diff --git a/package/alsa-utils/alsa-utils-0001-no-mmu.patch b/package/alsa-utils/alsa-utils-0001-no-mmu.patch
+diff --git a/package/alsa-lib/alsa-lib-0004-conditional-enabling-of-libdl-in-m4.patch b/package/alsa-lib/alsa-lib-0004-conditional-enabling-of-libdl-in-m4.patch
 new file mode 100644
 --- /dev/null
-+++ b/package/alsa-utils/alsa-utils-0001-no-mmu.patch
-@@ -0,0 +1,61 @@
-+Signed-off-by: Aaron Wu <Aaron.wu@analog.com>
++++ b/package/alsa-lib/alsa-lib-0004-conditional-enabling-of-libdl-in-m4.patch
+@@ -0,0 +1,35 @@
++alsa-lib: conditionally enable libdl in AM_PATH_ALSA m4 macro
 +
-+Add no-mmu support for alsa-utils mainly for Blackfin
++The AM_PATH_ALSA macro in utils/alsa.m4 unconditionally uses -ldl. This
++breaks compilation of alsa-utils (and probably other packages using this
++macro) for targets that do not support dynamic loading, such as for
++Blackfin FLAT binaries.
++
++This patch updates the macro to check if dlopen is available, and use that
++result to conditionally add -ldl to the list of libraries.
++
++Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
++
 +---
-+ alsactl/init_utils_run.c |    4 ++++
-+ alsaloop/alsaloop.c      |    8 ++++++++
-+ configure.in             |    1 +
-+ 3 files changed, 13 insertions(+)
 +
-+diff --git a/alsactl/init_utils_run.c b/alsactl/init_utils_run.c
-+--- a/alsactl/init_utils_run.c
-++++ b/alsactl/init_utils_run.c
-+@@ -89,7 +89,11 @@ int run_program0(struct space *space,
-+ 		argv[0] = program;
-+ 	}
++diff --git a/utils/alsa.m4 b/utils/alsa.m4
++--- a/utils/alsa.m4
+++++ b/utils/alsa.m4
++@@ -44,6 +44,8 @@ if test "$alsa_inc_prefix" != "" ; then
++ fi
++ AC_MSG_RESULT($ALSA_CFLAGS)
 + 
-++	#ifdef HAVE_FORK
-+ 	pid = fork();
-++	#else
-++	pid = vfork();
-++	#endif
-+ 	switch(pid) {
-+ 	case 0:
-+ 		/* child closes parent ends of pipes */
-+diff --git a/alsaloop/alsaloop.c b/alsaloop/alsaloop.c
-+--- a/alsaloop/alsaloop.c
-++++ b/alsaloop/alsaloop.c
-+@@ -850,14 +850,22 @@ int main(int argc, char *argv[])
-+ 			logit(LOG_CRIT, "daemon() failed: %s\n", strerror(errno));
-+ 			exit(EXIT_FAILURE);
-+ 		}
-++		#ifdef HAVE_FORK
-+ 		i = fork();
-++		#else
-++		i = vfork();
-++		#endif
-+ 		if (i < 0) {
-+ 			logit(LOG_CRIT, "fork() failed: %s\n", strerror(errno));
-+ 			exit(EXIT_FAILURE);
-+ 		}
-+ 		if (i > 0) {
-+ 			/* wait(&i); */
-++			#ifdef HAVE_FORK
-+ 			exit(EXIT_SUCCESS);
-++			#else
-++			_exit(EXIT_SUCCESS);
-++			#endif
-+ 		}
-+ 	}
-+ 
-+diff --git a/configure.in b/configure.in
-+--- a/configure.in
-++++ b/configure.in
-+@@ -23,6 +23,7 @@ then
-+   AC_MSG_RESULT($CC)
+++AC_CHECK_LIB(c, dlopen, LIBDL="", [AC_CHECK_LIB(dl, dlopen, LIBDL="-ldl")])
+++
++ dnl add any special lib dirs
++ AC_MSG_CHECKING(for ALSA LDFLAGS)
++ if test "$alsa_prefix" != "" ; then
++@@ -52,7 +54,7 @@ if test "$alsa_prefix" != "" ; then
 + fi
 + 
-++AC_CHECK_FUNC([fork])
-+ AC_PROG_CC
-+ dnl AC_PROG_CXX
-+ AC_PROG_INSTALL
-diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
---- a/package/alsa-utils/alsa-utils.mk
-+++ b/package/alsa-utils/alsa-utils.mk
-@@ -9,6 +9,7 @@ ALSA_UTILS_SOURCE = alsa-utils-$(ALSA_UT
- ALSA_UTILS_SITE = http://alsa.cybermirror.org/utils
- ALSA_UTILS_LICENSE = GPLv2
- ALSA_UTILS_LICENSE_FILES = COPYING
-+ALSA_UTILS_AUTORECONF = YES
- ALSA_UTILS_INSTALL_STAGING = YES
- ALSA_UTILS_DEPENDENCIES = host-gettext host-pkgconf alsa-lib \
- 	$(if $(BR2_PACKAGE_NCURSES),ncurses)
++ dnl add the alsa library
++-ALSA_LIBS="$ALSA_LIBS -lasound -lm -ldl -lpthread"
+++ALSA_LIBS="$ALSA_LIBS -lasound -lm $LIBDL -lpthread"
++ LIBS="$ALSA_LIBS $LIBS"
++ AC_MSG_RESULT($ALSA_LIBS)
++ 
