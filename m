@@ -1,57 +1,116 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 12 Feb 2014 11:15:04 +0100
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <87a9dwu08c.fsf@dell.be.48ers.dk>
-References: <20140212073007.B3242100CEB@stock.ovh.net>
- <20140212093245.49e2b6ac@skate> <87iosku1n0.fsf@dell.be.48ers.dk>
- <20140212102958.343a7ba8@skate> <87eh38u0u3.fsf@dell.be.48ers.dk>
- <20140212104501.49d25561@skate> <87a9dwu08c.fsf@dell.be.48ers.dk>
-Message-ID: <20140212111504.4d867f1d@skate>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 12 Feb 2014 11:41:29 +0100
+Subject: [Buildroot] Analysis of bug #5030: busybox built fails if we
+ use an override src dir BUSYBOX_OVERRIDE_SRCDIR and that dir does not
+ contain .config
+In-Reply-To: <20140212092118.66cb9514@skate>
+References: <CAAXf6LWUf7Jj78OuZOWOX4=N5PU0XwY872k2aK2-75JMj25JRg@mail.gmail.com>
+ <20140212092118.66cb9514@skate>
+Message-ID: <CAAXf6LXauh9AM15fgOC8L8jdfL5nG+zQtuFCjX1A9dasBpanXg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+Hi Thomas,
 
-On Wed, 12 Feb 2014 10:52:19 +0100, Peter Korsgaard wrote:
+On Wed, Feb 12, 2014 at 9:21 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Thomas De Schampheleire,
+>
+> On Tue, 11 Feb 2014 21:58:54 +0100, Thomas De Schampheleire wrote:
+>
+>> Bug #5030 "busybox built fails if we use an override src dir
+>> BUSYBOX_OVERRIDE_SRCDIR and that dir does not contain .config"
+>> https://bugs.busybox.net/show_bug.cgi?id=5030
+>>
+>> The bug is about the fact that the config file for busybox is copied
+>> from the extract step, which is not used when you have an
+>> OVERRIDE_SRCDIR. The submitter proposes to use a pre-configure hook
+>> instead.
+>>
+>> Triggered by this, I compared the situation of the other components
+>> using .config files: uclibc and the kernel. My analysis (and questions
+>> to buildroot developers) are in the bug report, copy pasted below for
+>> your convenience. If we can reach a conclusion then this bug can be
+>> fixed too.
+>>
+>> -----
+>> A question to buildroot developers: what do we do with this patch? The
+>> different components using .config files all handle it differently:
+>>
+>> busybox copies its .config from the post-extract hook.
+>> linux copies its .config in the configure_cmds.
+>> uclibc copies its .config from the post-patch hook.
+>>
+>> The busybox behavior allows a user to change .config, then re-run the configure
+>> step and keep the user's changes.
+>
+> But what would you change the .config and then re-run the configure
+> step? The configure is all about *producing* the .config, so making a
+> change to the .config, and then re-running the configure step seems
+> weird to me.
 
->  >> But orc is a JIT code generator, and from the source code it seems it
->  >> only handles ARM/PowerPC/x86.
-> 
->  > True. Odd that their configure script doesn't bail out after checking
->  > the target architecture.
-> 
->  > Things worth mentioning:
-> 
->  >  * They have a newer 0.4.17 version that has MIPS support, as well as
->  >    PowerPC64 support.
-> 
-> Ehh, we currently use 0.4.18 (which doesn't seem to match their git tree
-> and doesn't have a RELEASE file)?
+I don't necessarily feel that the 'configure' step is about producing
+the .config. To me, the configure step is about configuring busybox,
+based on the .config. So for me, the .config is input to the configure
+step, not output.
 
-Ah, I was looking in my dl directory, and it only had 0.4.16. Seems
-like I haven't built something with Orc since a while :)
+But as I said, I don't think we need to support this case.
 
->  >  * Their README suggest a way of reducing the size of the library that
->  >    we are not using:
-> 
->  > """
->  >    A: For embedded users, the --enable-backend configure option can
->  >    be used to disable irrelvant targets.  Compiled with only one target
->  >    (SSE), the library size is about 150 kB uncompressed, or 48 kB
->  >    compressed.  The goal was to keep the uncompressed size under
->  >    about 100 kB (but that failed!).  A typical build with all targets
->  >    and the full ABI is around 350 kB.
->  > """
-> 
-> Ahh yes, that could be good to use.
+>
+> We have had for quite a while this comment in busybox.mk, which I never
+> really understood:
+>
+> # We do this here to avoid busting a modified .config in configure
+> BUSYBOX_POST_EXTRACT_HOOKS += BUSYBOX_COPY_CONFIG
+>
+> But we have the busybox-{menuconfig,xconfig} targets that allow to
+> adjust the configuration, and they only remove the "built" and
+> "target_installed" stamp files, which means after doing "make
+> busybox-menuconfig", if you run "make", the configure step of busybox
+> isn't re-executed, so the configuration changes you made are properly
+> taken into account and preserved.
 
-Indeed.
+One may also edit .config manually, without running any of the *config commands.
+Note by the way that the bug report is submitted from the context of
+the OVERRIDE_SRCDIR mechanism. Here there is no .config created at
+all, so it is not about editing it.
 
+
+>
+>> For linux this is not true: if you change your config and re-run the configure
+>> step, your changes are lost. If you change your .config and expect to keep the
+>> changes, you can only rebuild, not reconfigure.
+>>
+>> This patch proposes to line-up busybox more with how the linux kernel handles
+>> it.
+>>
+>> This raises the question: what do we want, what should the behavior be?
+>>
+>> Personally, I haven't had a big problem with the linux way, and thus would
+>> accept the principle of this patch. But I don't have a very strong opinion on
+>> this...
+>
+> I also accept the principle of this patch.
+>
+> As a side note, this behavior of busybox.mk was also problematic when
+> trying to implement out of tree build for packages, because .config is
+> inherently part of the *build* directory, but the build directory
+> doesn't exist yet during the extract step: it is only created at the
+> beginning of the configure step. So my out-of-tree patch set contains:
+>
+> -# We do this here to avoid busting a modified .config in configure
+> -BUSYBOX_POST_EXTRACT_HOOKS += BUSYBOX_COPY_CONFIG
+> -
+>  define BUSYBOX_CONFIGURE_CMDS
+> +       $(BUSYBOX_COPY_CONFIG)
+>
+
+Then maybe we should apply exactly this change, and not the proposed
+one that uses a hook?
+Additionally, we should then also make this change in uclibc, right?
+
+Thanks,
 Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
