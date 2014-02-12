@@ -1,23 +1,29 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 12 Feb 2014 20:31:06 +0100
-Subject: [Buildroot] [PATCH] lxc: needs setns system call,
-	disable on nios2
-In-Reply-To: <1392229709-3915-1-git-send-email-ezequiel@vanguardiasur.com.ar>
- (Ezequiel Garcia's message of "Wed, 12 Feb 2014 15:28:29 -0300")
-References: <1392229709-3915-1-git-send-email-ezequiel@vanguardiasur.com.ar>
-Message-ID: <87k3d0ruv9.fsf@dell.be.48ers.dk>
+Date: Wed, 12 Feb 2014 20:34:42 +0100
+Subject: [Buildroot] Re-post: Freescale i.MX updates
+In-Reply-To: <52FBB2CF.10705@boundarydevices.com> (Eric Nelson's message of
+ "Wed, 12 Feb 2014 10:43:43 -0700")
+References: <52E548F3.5000605@boundarydevices.com>
+ <52FBB2CF.10705@boundarydevices.com>
+Message-ID: <87fvnorup9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ezequiel" == Ezequiel Garcia <ezequiel@vanguardiasur.com.ar> writes:
+>>>>> "Eric" == Eric Nelson <eric.nelson@boundarydevices.com> writes:
 
- > Fixes http://autobuild.buildroot.net/results/f59/f592a011321429426be81bd1ecf664ad9a2c0161/
- > Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 
-Committed, thanks.
+ > Here's my best (and only) Ben Stein impression:
+
+ > 	Anyone, anyone?
+
+ > Buildroot is now several versions behind with i.MX
+ > releases.
+
+Sorry - I'm afraid I forgot about your series in the fosdem/dev days/rc1
+rush. I'll make sure to handle your v5 as fast as I can.
 
 -- 
 Bye, Peter Korsgaard
