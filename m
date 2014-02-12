@@ -1,42 +1,30 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 12 Feb 2014 09:41:17 +0100
-Subject: [Buildroot] [git commit] coreutils: correct next version in patch
-	description
-Message-ID: <20140212084614.9C34D9C9A4@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 12 Feb 2014 08:52:58 +0000 (UTC)
+Subject: [Buildroot] [Bug 5624] When building directfb,
+ BR2_TARGET_LDFLAGS not used by libtool
+In-Reply-To: <bug-5624-163@https.bugs.busybox.net/>
+References: <bug-5624-163@https.bugs.busybox.net/>
+Message-ID: <20140212085258.AA8A19C9A5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=48c9548ce796186fa15632fe474198e980e41220
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=5624
 
-The patch that commit a728e2fe35 (coreutils: fix build against uclibc
-snapshot) adds mentions the wrong coreutils version in its description.
+Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> changed:
 
-Also fix the sign-of tag while at it.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/coreutils/coreutils-01-spawn-uclibc.patch |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+--- Comment #7 from Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> 2014-02-12 08:52:56 UTC ---
+This problem has been fixed with commit
+7e9264956bb5693bc49274ee0b42ffb4c869e23f in buildroot 2013.11.
 
-diff --git a/package/coreutils/coreutils-01-spawn-uclibc.patch b/package/coreutils/coreutils-01-spawn-uclibc.patch
-index 47609b7..a67921b 100644
---- a/package/coreutils/coreutils-01-spawn-uclibc.patch
-+++ b/package/coreutils/coreutils-01-spawn-uclibc.patch
-@@ -11,9 +11,9 @@ Patch status: suggested by gnulib maintainer
- (http://article.gmane.org/gmane.comp.lib.gnulib.bugs/33610), not in upstream
- gnulib yet
- 
--This issue should be fixed in coreutils version 2.23.
-+This issue should be fixed in coreutils version 8.23.
- 
--Sign-off-by: Baruch Siach <baruch@tkos.co.il>
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
- ---
- 
- diff --git a/m4/spawn_h.m4 b/m4/spawn_h.m4
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
