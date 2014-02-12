@@ -1,53 +1,54 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Wed, 12 Feb 2014 21:58:28 +0100
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <20140212090659.15291b2b@skate>
-References: <20140211073008.EC16B101035@stock.ovh.net>
- <20140211101015.1b282bd3@skate> <20140211180123.GB3411@free.fr>
- <20140212090659.15291b2b@skate>
-Message-ID: <52FBE074.4070005@openwide.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 12 Feb 2014 17:49:21 +0100
+Subject: [Buildroot] Build error from time to time
+In-Reply-To: <CANxTyt52zqEJk=tbSW7Mc6J369kqRBNUaqSat3q_sAh+2_WecA@mail.gmail.com>
+References: <AFACE42542AE499CA9403FAD6805F21A@JohanW7>	<52FB1E5F.1000305@mind.be>
+ <CANxTyt52zqEJk=tbSW7Mc6J369kqRBNUaqSat3q_sAh+2_WecA@mail.gmail.com>
+Message-ID: <52FBA611.2000402@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Tomas, Yann,
+On 12/02/14 16:30, Danomi Manchego wrote:
+> On Wed, Feb 12, 2014 at 2:10 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>> On 11/02/14 16:23, Sagaert Johan wrote:
+>>  Took me a while to find it, but it looks like a parallel build issue in
+>> nettle combined with ccache. In the configure step, all the *.d files are
+>> created as empty files. These files are included unconditionally in the
+>> Makefile, so you get an error if they don't exist. Unfortunately, ccache
+>> does an unlink() just before creating the new file, so there is a tiny
+>> window of time where the file doesn't exist. It looks like you have a
+>> filesystem where this window is relatively large (NFS?), which is why you
+>> see the problem and others don't.
+>>
+>>  This is a tough nut to crack fundamentally.
+>>
+>> * You could say that nettle's behaviour of including empty dependency
+>> files is bad. To overcome that, a - can be added in front of the include.
+>>
+>> * You can say the behaviour of ccache is bad. The unlink could be removed
+>> there, except in the case of CCACHE_HARDLINK because it is not possible
+>> to create a hardlink to an existing file.
+>>
+>>  Any suggestions on how to proceed?
+> 
+> Would forcing non-parallel build (MAKE1) get around this issue?
 
->>>>         arm |                      nut-2.6.5 | NOK | http://autobuild.buildroot.net/results/0ddd856bcbec2db0500791fd428ba053d6e4fa1b/
->>> libusb compatibility issue?
->>>
->>> scan_usb.c:34:29: error: unknown type name 'usb_dev_handle'
->>> scan_usb.c:38:41: error: unknown type name 'usb_dev_handle'
->>> scan_usb.c:41:1: error: unknown type name 'usb_dev_handle'
->>> scan_usb.c:41:48: warning: 'struct usb_device' declared inside parameter list [enabled by default]
->>> scan_usb.c:41:48: warning: its scope is only this definition or declaration, which is probably not what you want [enabled by default]
->>> scan_usb.c: In function 'nutscan_load_usb_library':
->>> scan_usb.c:67:22: error: 'nut_usb_close' undeclared (first use in this function)
->> I tried to reproduce it here, but it builds fine (in a squeeze-32
->> chroot, with almost nothing installed except the Buildroot
->> dependencies).
-> Error occurred on gcc10, where tests are not running in a clean chroot,
-> but in an environment with lots of headers/libraries installed. I'll do
-> a test build on gcc10, to see what host stuff causes this mis-detection.
->
-> Thanks!
->
-> Thomas
-I also tried to reproduce this build failure recently, but nut builds 
-fine for me too.
-Have you found somethingon gcc10 ?
+ Yes, but that would be a pity since nettle is fairly large.
 
-I don't think it's related but libhal.h is present on the autobuilder's log
-"checking for libhal.h... yes"
+ Regards,
+ Arnout
 
-Maybe add --without-hal in nut.mk ?
+> Danomi -
+> 
 
-Can you provide a complete build log with configure step ?
 
-I hope it can help...
-Best regards,
-Romain Naour
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140212/c05c4aa9/attachment.html>
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
