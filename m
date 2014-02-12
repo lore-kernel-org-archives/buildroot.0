@@ -1,38 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 12 Feb 2014 20:27:13 +0100
-Subject: [Buildroot] [git commit] package/elfutils: disable for avr32
-Message-ID: <20140212193505.C43199C9BA@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 12 Feb 2014 20:40:17 +0100
+Subject: [Buildroot] [PATCH v2] trivial: update buildroot e-mail address
+	to buildroot@buildroot.org
+In-Reply-To: <00bed52c-b1b5-47bc-be14-4693e12b255c@email.android.com> (Thomas
+ De Schampheleire's message of "Wed, 12 Feb 2014 18:55:02 +0100")
+References: <dc1e2107ca0e341b43c4.1392224097@argentina>
+ <20140212113431.2f4d2099@core2quad.morethan.org>
+ <00bed52c-b1b5-47bc-be14-4693e12b255c@email.android.com>
+Message-ID: <87bnycrufy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=15ec3de799d7cf7373173dfc2bc7213fa0f6c183
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
-Disable elfutils for avr32, because:
-  - elfutils uses canonicalize_file_name, which came after uClibc-0.9.31.
-  - avr32 uses a toolchain with uClibc-0.9.31
+ >> To be consistent -
+ >> How about changing the mailing system e-mail references also?
+ >> 
+ >> Currently shown as: 
+ >> Sender: buildroot-bounces at busybox.net
+ >> 
+ >> Message Footer: buildroot at busybox.net
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/elfutils/Config.in |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ > Good idea!
+ > Peter, is this something you could do?
 
-diff --git a/package/elfutils/Config.in b/package/elfutils/Config.in
-index 47cd63d..588c29d 100644
---- a/package/elfutils/Config.in
-+++ b/package/elfutils/Config.in
-@@ -7,6 +7,9 @@ config BR2_PACKAGE_ELFUTILS
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
- 	depends on BR2_LARGEFILE
- 	depends on BR2_USE_WCHAR
-+	# canonicalize_file_name() not available on uClibc 0.9.31, used
-+	# only for AVR32
-+	depends on !BR2_avr32
- 	help
- 	  Libraries/utilities to handle ELF objects (drop in
- 	  replacement for libelf).
+Yes, I'll ask the osuosl.org guys.
+
+-- 
+Bye, Peter Korsgaard
