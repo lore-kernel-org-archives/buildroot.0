@@ -1,33 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Feb 2014 22:13:29 +0100
-Subject: [Buildroot] [git commit branch/next] uclibc: arc: bump to git
-	commit f37101d
-Message-ID: <20140213212143.AA9279C9DF@busybox.osuosl.org>
+From: kuyurix at gmail.com <kuyurix@gmail.com>
+Date: Thu, 13 Feb 2014 18:38:33 +0000
+Subject: [Buildroot] [PATCH 1/1] ti-gfx: bump to version 5_01_00_01
+Message-ID: <52fd38fd.870eec0a.7f7f.13a5@mx.google.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3fd6918b8b73163a354a93e0d46a7799934314d2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+From: Marcelo Gutierrez <kuyurix@gmail.com>
 
-Signed-off-by: Anton Kolesov <anton.kolesov@synopsys.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Signed-off-by: Marcelo Gutierrez <kuyurix@gmail.com>
 ---
- package/uclibc/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/ti-gfx/ti-gfx.mk |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index f5543cc..860e410 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -42,7 +42,7 @@ config BR2_UCLIBC_VERSION_STRING
- 	default 0.9.31.1	if BR2_UCLIBC_VERSION_0_9_31
- 	default 0.9.32.1	if BR2_UCLIBC_VERSION_0_9_32
- 	default 0.9.33.2	if BR2_UCLIBC_VERSION_0_9_33
--	default "9f0f466d3b17181ce88be36ce24a775774fe686c" if BR2_arc
-+	default "f37101d94284c692ee9b23bc72ef38b9473cd316" if BR2_arc
- 	default "7bf35c8b7d4a1f97174eb49f47f33946b282114c" if BR2_UCLIBC_VERSION_XTENSA_GIT
- 	default BR2_USE_UCLIBC_SNAPSHOT	if BR2_UCLIBC_VERSION_SNAPSHOT
+diff --git a/package/ti-gfx/ti-gfx.mk b/package/ti-gfx/ti-gfx.mk
+index a94f00d..5ea6b92 100644
+--- a/package/ti-gfx/ti-gfx.mk
++++ b/package/ti-gfx/ti-gfx.mk
+@@ -4,13 +4,13 @@
+ #
+ ################################################################################
  
+-TI_GFX_VERSION = 4_09_00_01
+-TI_GFX_SO_VERSION = 1.9.2188537
++TI_GFX_VERSION = 5_01_00_01
++TI_GFX_SO_VERSION = 1.10.2359475
+ 
+ ifeq ($(BR2_ARM_EABIHF),y)
+-TI_GFX_SOURCE = Graphics_SDK_setuplinux_$(TI_GFX_VERSION)_hardfp_minimal_demos.bin
++TI_GFX_SOURCE = Graphics_SDK_setuplinux_hardfp_$(TI_GFX_VERSION).bin
+ else
+-TI_GFX_SOURCE = Graphics_SDK_setuplinux_$(TI_GFX_VERSION)_minimal_demos.bin
++TI_GFX_SOURCE = Graphics_SDK_setuplinux_softfp_$(TI_GFX_VERSION).bin
+ endif
+ 
+ TI_GFX_SITE = http://downloads.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/gfxsdk/$(TI_GFX_VERSION)/exports/
+-- 
+1.7.9.5
