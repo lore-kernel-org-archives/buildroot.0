@@ -1,7 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 13 Feb 2014 11:26:36 +0000 (UTC)
-Subject: [Buildroot] [Bug 6872] New: gpsd: disabled on microblaze
-Message-ID: <bug-6872-163@https.bugs.busybox.net/>
+Date: Thu, 13 Feb 2014 11:32:27 +0000 (UTC)
+Subject: [Buildroot] [Bug 6872] gpsd: disabled on microblaze
+In-Reply-To: <bug-6872-163@https.bugs.busybox.net/>
+References: <bug-6872-163@https.bugs.busybox.net/>
+Message-ID: <20140213113228.1B0959C9DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,24 +12,9 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=6872
 
-           Summary: gpsd: disabled on microblaze
-           Product: buildroot
-           Version: unspecified
-          Platform: All
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: rjbarnet at rockwellcollins.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
-
-
-The gpsd package is disabled due to an internal compiler error for the
-microblaze architecture. The compiler issues should be fixed but for now it is
-just disabled.
+--- Comment #1 from Ryan Barnett <rjbarnet@rockwellcollins.com> 2014-02-13 11:32:27 UTC ---
+The following commit disabled it:
+http://git.buildroot.net/buildroot/commit/?id=d517415bcda380336f4a27bf248cef4d81791c9e
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
