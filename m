@@ -1,32 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 13 Feb 2014 22:59:18 +0100
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <52FD365B.1020504@openwide.fr>
-References: <20140211073008.EC16B101035@stock.ovh.net>
- <20140211101015.1b282bd3@skate> <20140211180123.GB3411@free.fr>
- <20140212090659.15291b2b@skate> <52FBE074.4070005@openwide.fr>
- <20140213122942.31ce862c@skate> <20140213195405.3f28464d@skate>
- <52FD365B.1020504@openwide.fr>
-Message-ID: <20140213225918.2e6d5de9@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 13 Feb 2014 23:01:16 +0100
+Subject: [Buildroot] [PATCH] glibc: add 2.19 as a supported version
+In-Reply-To: <1392054226-20285-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Mon, 10 Feb 2014 18:43:46 +0100")
+References: <1392054226-20285-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87zjluoeoj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Thu, 13 Feb 2014 22:17:15 +0100, Romain Naour wrote:
+ > glibc 2.19 has been released recently
+ > (https://sourceware.org/ml/libc-alpha/2014-02/msg00224.html). This
+ > commit allows to build a toolchain with this new version. In order to
+ > allow this, we add a version selection that did not exist for
+ > glibc. We default to 2.18, which was the only supported version until
+ > now, and add an option for 2.19.
 
-> Thanks for testing and for the log.
-> 
-> Ok, I'll send a patch to disable parallel builds.
+ > For microblaze, which uses a specific glibc version, the version
+ > selection choice is not displayed.
 
-It'd be nicer to actually understand the parallel build problem and fix
-it :-)
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Thomas
+Committed to next, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
