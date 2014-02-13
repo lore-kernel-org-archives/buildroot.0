@@ -1,47 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 13 Feb 2014 23:36:25 +0100
-Subject: [Buildroot] Buildroot 2014.02-rc1 released
-In-Reply-To: <87sirpvn7f.fsf@dell.be.48ers.dk>
-References: <87sirpvn7f.fsf@dell.be.48ers.dk>
-Message-ID: <20140213233625.0515088b@skate>
+From: Marcelo Gutierrez <kuyurix@gmail.com>
+Date: Thu, 13 Feb 2014 20:50:54 -0200
+Subject: [Buildroot] [PATCH 1/1] ti-gfx: bump to version 5_01_00_01
+In-Reply-To: <CAEBucnAUUP3==KSjx_uXZpcjfk9KNwOQqhQ0Eb-hu2+J7wfcKQ@mail.gmail.com>
+References: <52fd38fd.870eec0a.7f7f.13a5@mx.google.com>
+ <CAEBucnAUUP3==KSjx_uXZpcjfk9KNwOQqhQ0Eb-hu2+J7wfcKQ@mail.gmail.com>
+Message-ID: <CA+kK6Ws34CaJSSsk1cjg1=OKUXpoURarO9d9sTS8CGO7dXqNtQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+Hi Spenser,
 
-On Tue, 11 Feb 2014 13:38:28 +0100, Peter Korsgaard wrote:
+Please see the following site.  The 5_01_00_01 version is not a
+> supported version; it is of alpha quality and has several
+> deficiencies.
+>
+>
+> http://tigraphics.blogspot.com/2013/11/4q-2013-linux-graphics-sdk-release.html
+>
 
-> Of noteworthy new features we have:
-> 
->  - Support for external packages/defconfigs (BR2_EXTERNAL). See user
->    manual for details.
-> 
->  - Cleanup of environment variable names for consistency. The download
->    directory location override (BUILDROOT_DL_DIR) is now called
->    BR2_DL_DIR. Likewise the name of the current .config is renamed from
->    BUILDROOT_CONFIG to BR2_CONFIG. Please update your post build scripts
->    if you use this!
-> 
->  - Toolchains: uClibc pread/pwrite fixes, GCC stack corruption on ARM
->    fix, updated Linaro and Sourcery Codebench external toolchains.
->    Internal toolchain support for Microblaze.
-> 
->  - Python package infrastructure support. See user manual for details.
 
-I believe another very important feature is also the Luarocks package
-infrastructure. You're mentioning luarocks amongst the new package
-below, but I believe it would be good to highlight the fact that
-luarocks is not just a new package: it is a whole new package
-infrastructure that makes it easier to add Lua packages in Buildroot.
-Maybe something to be added in the final release e-mail :)
+I've tested Graphics SDK 5_01_00_01 and run great!
+This is the release note:
+http://processors.wiki.ti.com/index.php/RN_5_01_00_01
 
-Best regards,
+The link that you've sent is about 5_00_00_01_alpha version and maybe that
+version got several issues.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+On the other hand, a feature in this release(5_01_00_01) is " 3.12 kernel
+support"  and if you take a look this commit "beaglebone: update to TI 3.12
+kernel"
+
+http://git.buildroot.net/buildroot/commit/configs?id=1ca56e4e159cd5dd44cd3aba997396d49f22ecda
+
+The new update to TI 3.12 will not work with the actual version
+"TI_GFX_VERSION = 4_09_00_01"
+
+Regards,
+Marcelo
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140213/fcc55e88/attachment.html>
