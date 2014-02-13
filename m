@@ -1,31 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Feb 2014 13:34:12 -0000
-Subject: [Buildroot] [git commit] gst1-plugins-base: bump version
-Message-ID: <20140228133410.7479A9BA7B@busybox.osuosl.org>
+Date: Thu, 13 Feb 2014 23:18:41 +0100
+Subject: [Buildroot] [git commit] dbus: ensure dbus user is created
+Message-ID: <20140228133412.4A0289BBF9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1037a447c340e4b1cbabfc9f597537c2bd34c922
+commit: http://git.buildroot.net/buildroot/commit/?id=55d1c953dc17a13e848951da88f45c673eafdda9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Since we are changing the default dbus user, make sure this user is
+consistently created.
+
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../gst1-plugins-base/gst1-plugins-base.mk         |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/dbus/dbus.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-index 4cb8463..72e4514 100644
---- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-+++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index 74e2041..e8b3da7 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -30,6 +30,10 @@ DBUS_CONF_OPT = --with-dbus-user=dbus \
+ 		--with-system-socket=/var/run/dbus/system_bus_socket \
+ 		--with-system-pid-file=/var/run/messagebus.pid
  
--GST1_PLUGINS_BASE_VERSION = 1.2.2
-+GST1_PLUGINS_BASE_VERSION = 1.2.3
- GST1_PLUGINS_BASE_SOURCE = gst-plugins-base-$(GST1_PLUGINS_BASE_VERSION).tar.xz
- GST1_PLUGINS_BASE_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-base
- GST1_PLUGINS_BASE_INSTALL_STAGING = YES
++define DBUS_USERS
++	dbus -1 dbus -1 * /var/run/dbus - dbus DBus messagebus user
++endef
++
+ ifeq ($(BR2_PREFER_STATIC_LIB),y)
+ DBUS_CONF_OPT += LIBS='-lpthread'
+ endif
