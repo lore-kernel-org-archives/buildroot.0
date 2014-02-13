@@ -1,36 +1,56 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 13 Feb 2014 22:38:39 +0100
-Subject: [Buildroot] [PATCH 2/2] nut: disable parallel builds
-In-Reply-To: <1392326275-25992-2-git-send-email-romain.naour@openwide.fr>
-References: <1392326275-25992-1-git-send-email-romain.naour@openwide.fr>
- <1392326275-25992-2-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20140213213839.GB3259@free.fr>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Thu, 13 Feb 2014 22:54:48 +0100
+Subject: [Buildroot] [PATCHv1 12/26] python3: add config directory
+ symbolic link
+In-Reply-To: <1392324555-29246-13-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1392324555-29246-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1392324555-29246-13-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CAHXCMMLXGoNU0qhUE=_MqBPia0eQOfhH41N1Tv6=4wvnL_2SDQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+Hi Thomas,
 
-On 2014-02-13 22:17 +0100, Romain Naour spake thusly:
-> The build system has a race condition causing build failure,
-> so ensure make -j1 is used.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/0dd/0ddd856bcbec2db0500791fd428ba053d6e4fa1b/build-end.log
-> 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+On Thu, Feb 13, 2014 at 9:49 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> From: "kpa_info at yahoo.fr" <kpa_info@yahoo.fr>
+>
+> When using host python to install an external module, the setup tool
+> look for some files in python3.3/config/. The python3 package config
+> directory is called config-3.3m. This is why we need to alias config
+> to config-3.3m.
+>
+> [Thomas: use PYTHON3_VERSION_MAJOR instead of hardcoding 3.3, update
+> commit title.]
+>
+> Signed-off-by: Patrick Gerber <kpa_info@yahoo.fr>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  package/python3/python3.mk | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
+>
+> diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+> index ba72e75..d98ca38 100644
+> --- a/package/python3/python3.mk
+> +++ b/package/python3/python3.mk
+> @@ -163,7 +163,16 @@ define HOST_PYTHON3_INSTALL_SYMLINK
+>         ln -fs python3 $(HOST_DIR)/usr/bin/python
+>  endef
+>
+> -HOST_PYTHON3_POST_INSTALL_HOOKS += HOST_PYTHON3_INSTALL_SYMLINK
+> +# Alias the python<version>/config-<version>m to python<version>/config
+> +# This is needed when installing an external python module, because
+> +# the setup is looking for files in python<version>/config/
+> +define HOST_PYTHON3_INSTALL_CONFIG_SYMLINK
+> +       ln -fs config-$(PYTHON3_VERSION_MAJOR)m $(HOST_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOE)config
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+s/PYTHON3_VERSION_MAJOE/PYTHON3_VERSION_MAJOR/
 
 Regards,
-Yann E. MORIN.
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Samuel
