@@ -1,49 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 13 Feb 2014 14:55:26 +0100
-Subject: [Buildroot] [PATCH 2/6] docs/manual: indicate how to handle
- BR2_TOOLCHAIN_HAS_THREADS_NPTL
-In-Reply-To: <CAAXf6LWGG+8+EW9vVNMpVuYftFsOD23MmEy7ZJpBUv_3y2GMdQ@mail.gmail.com>
-References: <1392297727-17627-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1392297727-17627-3-git-send-email-thomas.petazzoni@free-electrons.com>
- <CAAXf6LWGG+8+EW9vVNMpVuYftFsOD23MmEy7ZJpBUv_3y2GMdQ@mail.gmail.com>
-Message-ID: <20140213145526.59af1147@skate>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 13 Feb 2014 13:56:38 +0000 (UTC)
+Subject: [Buildroot] [Bug 6776] systemd error: static declaration of
+ 'execvpe' follows non-static declaration (uClibc)
+In-Reply-To: <bug-6776-163@https.bugs.busybox.net/>
+References: <bug-6776-163@https.bugs.busybox.net/>
+Message-ID: <20140213135638.C7D539C9DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+https://bugs.busybox.net/show_bug.cgi?id=6776
 
-On Thu, 13 Feb 2014 14:46:00 +0100, Thomas De Schampheleire wrote:
+Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> changed:
 
-> >  * thread support
-> >  ** Dependency symbol: +BR2_TOOLCHAIN_HAS_THREADS+
-> > -** Comment string: +threads+
-> > +** Comment string: +threads+ (unless +BR2_TOOLCHAIN_HAS_THREADS_NPTL+
-> > +   is also needed, in which case, specifying only +NPTL threads+ is
-> > +   sufficient)
-> > +
-> > +* NPTL thread support
-> > +** Dependency symbol: +BR2_TOOLCHAIN_HAS_THREADS_NPTL+
-> > +** Comment string: +NPTL threads+
-> >
-> >  * RPC support
-> >  ** Dependency symbol: +BR2_TOOLCHAIN_HAS_NATIVE_RPC+
-> 
-> Should we maybe use 'NPTL' rather than 'NPTL threads' to make the
-> string shorter? (we want to fit in 80chars).
-> It's true that it's a bit more cryptic, but so is RPC, wchar, etc.
-> The biggest point is that a user can go to the Toolchain menu and
-> recognize a string that matches, in this case the keyword NPTL.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+            Summary|systemd error: static       |systemd error: static
+                   |declaration of 'execvpe'    |declaration of 'execvpe'
+                   |follows non-static          |follows non-static
+                   |declaration                 |declaration (uClibc)
 
-Fine with me. I'll adjust that in the v2, but I'll wait a little bit
-more for other comments, if any :)
+--- Comment #2 from Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> 2014-02-13 13:56:38 UTC ---
+In the upcoming systemd patches by Eric Le Bihan, systemd is no longer
+available for uClibc, following an upstream viewpoint.
 
-Thanks for the review!
+So, when these patches are merged, this bug can be closed.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
