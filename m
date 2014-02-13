@@ -1,141 +1,82 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Thu, 13 Feb 2014 10:13:46 +0100
-Subject: [Buildroot] [PATCH v12 3/7] package: add support for top-level
-	parallel make
-In-Reply-To: <52FC6D26.6030309@mind.be>
-References: <1392196751-23485-1-git-send-email-fabio.porcedda@gmail.com>
- <1392196751-23485-4-git-send-email-fabio.porcedda@gmail.com>
- <52FC6D26.6030309@mind.be>
-Message-ID: <CAHkwnC8ouwgFspmA+OHVNrxF91G4DaS1ZStQ=X+cBM==ZKk9nQ@mail.gmail.com>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Thu, 13 Feb 2014 10:14:36 +0100
+Subject: [Buildroot] How to get the kernel to mount a rootfs without an
+	initramfs ?? (2)
+In-Reply-To: <52FC9329020000460004A9FA@gwia2.rz.hs-offenburg.de>
+References: <52FC9329020000460004A9FA@gwia2.rz.hs-offenburg.de>
+Message-ID: <BE10932E4AAB41FDBE0775843DCAF88A@JohanW7>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Feb 13, 2014 at 7:58 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 12/02/14 10:19, Fabio Porcedda wrote:
->> To be able to use top-level parallel make we must not depend in a rule
->> on the order of evaluation of the prerequisites, so instead of relying
->> on the left to right ordering of evaluation of the prerequisites add
->> an explicit rule to describe the dependencies.
->>
->> We cannot use the pattern rules because they must have the same
->> dependency for every package, but we need to change the dependencies
->> depending on $(2)_OVERRIDE_SRCDIR variable value, so we must use a
->> more flexible way like $(2)_TARGET_% variables.
->>
->> So add explicit dependencies for the following stamp files:
->>   $(2)_TARGET_EXTRACT
->>   $(2)_TARGET_PATCH
->>   $(2)_TARGET_CONFIGURE
->>   $(2)_TARGET_BUILD
->>   $(2)_TARGET_INSTALL_STAGING
->>   $(2)_TARGET_INSTALL_TARGET
->>   $(2)_TARGET_INSTALL_IMAGES
->>   $(2)_TARGET_INSTALL_HOST
->>
->> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
->> ---
-> [snip]
->> -$(1)-build:          $(1)-configure \
->> -                     $$($(2)_TARGET_BUILD)
->> +$$($(2)_TARGET_INSTALL_TARGET) $$($(2)_TARGET_INSTALL_STAGING) \
->> +$$($(2)_TARGET_INSTALL_IMAGES) $$($(2)_TARGET_INSTALL_HOST): \
->> +     $$($(2)_TARGET_BUILD)
->
->  I'd prefer to see these on separate lines:
->
-> $$($(2)_TARGET_INSTALL_TARGET): $$($(2)_TARGET_BUILD)
-> $$($(2)_TARGET_INSTALL_STAGING): $$($(2)_TARGET_BUILD)
-> ...
->
->  And also I'd prefer them close to the corresponding $(1)-install target.
+Hi
+ 
+Try adding rootwait on the kernel cmd line, not sure if it is needed in case of bootining from sd
+but I had to add this before when booting from an USB device.
+rootwait gives the kernel time to finisch the USB initialisation.
+Why not simply make an ext2 filesystem and partition on your sd card?
 
-Ok, like this?
-
-ifeq ($$($(2)_INSTALL_TARGET),YES)
-$(1)-install-target:    $$($(2)_TARGET_INSTALL_TARGET)
-else
-$(1)-install-target:
-endif
-$$($(2)_TARGET_INSTALL_TARGET): $$($(2)_TARGET_BUILD)
-
->  By the way, for these it would actually be possible to put them in the
-> pattern rule, because they don't depend on OVERRIDE_SRCDIR, right? But I
-> guess we said a long time ago that it would be better to do it
-> symmetrical for all targets.
-
-Yes we said exactly that, i've already sent a patch with asymmetrical
-targets that was rejected.
-
->
->> +
->> +$(1)-build:          $$($(2)_TARGET_BUILD)
->> +$$($(2)_TARGET_BUILD):       $$($(2)_TARGET_CONFIGURE)
->> +
->> +# The symbol "|" specify a order-only-prerequisite, this is needed for
->> +# phony requisites to avoid rebuilding every time the target.
->
->  Possible improvement of the explanation:
->
-> Since $(2)_DEPENDENCIES are phony targets, they are always "newer" than
-> $(2)_TARGET_CONFIGURE. This would force the configure step (and therefore
-> the other steps as well) to be re-executed with every invocation of make.
-> Therefore, make $(2)_DEPENDENCIES an order-only dependency by using |.
+Regards Johan
 
 
-Ok
+________________________________
 
->> +
->> +$(1)-configure:                      $$($(2)_TARGET_CONFIGURE)
->> +$$($(2)_TARGET_CONFIGURE):   | $$($(2)_DEPENDENCIES)
->>
->>  $$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dirs prepare
->>  ifeq ($(filter $(1),$(DEPENDENCIES_HOST_PREREQ)),)
->> @@ -449,13 +458,13 @@ ifeq ($$($(2)_OVERRIDE_SRCDIR),)
->>  #  extract
->>  #  patch
->>  #  configure
->> -$(1)-configure:              $(1)-patch $(1)-depends \
->> -                     $$($(2)_TARGET_CONFIGURE)
->> +$$($(2)_TARGET_CONFIGURE):   $$($(2)_TARGET_PATCH)
->>
->> -$(1)-patch:          $(1)-extract $$($(2)_TARGET_PATCH)
->> +$(1)-patch:          $$($(2)_TARGET_PATCH)
->> +$$($(2)_TARGET_PATCH):       $$($(2)_TARGET_EXTRACT)
->>
->> -$(1)-extract:                $(1)-source \
->> -                     $$($(2)_TARGET_EXTRACT)
->> +$(1)-extract:                        $$($(2)_TARGET_EXTRACT)
->> +$$($(2)_TARGET_EXTRACT):     $$($(2)_TARGET_SOURCE)
->>
->>  $(1)-depends:                $$($(2)_DEPENDENCIES)
->
->  Since _CONFIGURE now explicitly depends on _DEPENDENCIES, the -depends
-> target has become redundant, so you can remove it.
+Van: buildroot-bounces at busybox.net [mailto:buildroot-bounces at busybox.net] Namens Frank Ihle
+Verzonden: donderdag 13 februari 2014 9:41
+Aan: buildroot at busybox.net
+Onderwerp: [Buildroot] How to get the kernel to mount a rootfs without an initramfs ?? (2)
 
-Well, it's fine for me, but what if somebody want just to be sure that
-all the dependencies are satisfied without
-downloading/patching/configuring  the package?
-Do you think it's not a real or important enough use case?
 
->>
->> @@ -465,10 +474,9 @@ else
->>  #  source, by rsyncing
->>  #  depends
->>  #  configure
->> -$(1)-configure:              $(1)-depends \
->> -                     $$($(2)_TARGET_CONFIGURE)
->> +$$($(2)_TARGET_CONFIGURE):   $$($(2)_TARGET_RSYNC)
->>
->> -$(1)-depends:                $(1)-rsync $$($(2)_DEPENDENCIES)
->> +$(1)-depends:                $$($(2)_DEPENDENCIES)
->
->  Here as well.
->
-<snip>
+Hi everyone,
 
-Thanks
--- 
-Fabio Porcedda
+I already encountered you with this problem and is yet not solved, but it was split up so here is some kind of a summary of what had
+happened, I hope someone knows the solution:
+
+
+
+I'm using an embedded board ARM9 SAM9G25 which I want to boot from SD Card. When I build a linux kernel with a built-in rootfs
+(initramfs) then it's working as it should. Now I want to separate kernel from rootfs and I generated an rootfs.squashfs.
+
+The kernel command line is now
+console=ttyAT0,115200 root=/dev/mmcblk0 ro rootfstype=squashfs
+
+When I then boot my system the following kernel panic occurs:
+
+VFS: Cannot open root device "mmcblk0" or unknown-block(0,0)
+Please append a correct "root=" boot option; here are the available partitions:
+Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(0,0)
+
+I believe that partitioning doesn't lead to the solution, since booting with the same settings but with an initramfs is possible.
+
+I found out that when booting with the initramfs image, when I do an ls /dev neither mmcblk nor sdb is listed.
+
+After hitting dmesg following interesting lines appear:
+
+mmc0: clock 0Hz busmode 1 powermode 0 cs 0 Vdd 0 width 0 timing 0
+atmel_mci atmel_mci.0: Atmel MCI controller at 0xf0008000 irq 12, 1 slots
+mmc_host mmc0: card is not present
+mmc1: clock 0Hz busmode 1 powermode 0 cs 0 Vdd 0 width 0 timing 0
+atmel_mci atmel_mci.1: Atmel MCI controller at 0xf000c000 irq 26, 1 slots
+mmc_host mmc1: card is not present
+
+(Yes the card is in the slot ;)
+
+So what I think happens now is, that U-Boot can read the SD device but the kernel don't ( since an initramfs is bootable, a single
+kernel can be loaded too but the rootfs, opened from kernel, cannot be found). In make linux menuconfig I already enabled
+
+Device Drivers
+<*> MMC/SD/SDIO card support
++ + <*> MMC block device driver
++ + <*> MMC host test driver
++ + <*> Atmel SD/MMC Driver (Atmel Multimedia Card Interface support)
++ + [ * ] Atmel MCI DMA support (Exp.)
++ + <M> Secure Digital Host Controller Interface support
+
+but still with this setting it seems that the kernel is not able to use the SD device. I'm a bit clueless at this point, can someone
+give me a hint?
+
+Kind regards
+
+Frank
