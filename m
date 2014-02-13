@@ -1,71 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 13 Feb 2014 21:49:05 +0100
-Subject: [Buildroot] [PATCHv1 16/26] package: add python3 support in the
-	package infrastructure
+Date: Thu, 13 Feb 2014 21:49:09 +0100
+Subject: [Buildroot] [PATCHv1 20/26] python,
+	python3: fix to ensure libpython is stripped
 In-Reply-To: <1392324555-29246-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1392324555-29246-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1392324555-29246-17-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1392324555-29246-21-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit improves the Python package infrastructure to allow Python
-packages to be built with Python 3. The changes are fairly simple:
+From: Przemyslaw Wrzos <przemyslaw.wrzos@calyptech.com>
 
- * Use either PYTHON_PATH or PYTHON3_PATH as the PYTHONPATH depending
-   on which Python is used.
+The python and python3 builds mark libpython as read-only which
+prevents it from being stripped out correctly for the target.
 
- * Depend on host-python or host-python3 and python or python3
-   depending on which Python is used.
-
+Signed-off-by: Przemyslaw Wrzos <przemyslaw.wrzos@calyptech.com>
+Acked-by: Thomas De Schampheleire <thomas.de_schampheleire@alcatel-lucent.com>
+Tested-by: Thomas De Schampheleire <thomas.de_schampheleire@alcatel-lucent.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-python.mk | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ package/python/python.mk   | 9 +++++++++
+ package/python3/python3.mk | 9 +++++++++
+ 2 files changed, 18 insertions(+)
 
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index c4bbb37..a265862 100644
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -27,7 +27,7 @@ PKG_PYTHON_DISTUTILS_ENV = \
- 	CFLAGS="$(TARGET_CFLAGS)" \
- 	LDFLAGS="$(TARGET_LDFLAGS)" \
- 	LDSHARED="$(TARGET_CROSS)gcc -shared" \
--	PYTHONPATH="$(PYTHON_PATH)" \
-+	PYTHONPATH="$(if $(BR2_PACKAGE_PYTHON3),$(PYTHON3_PATH),$(PYTHON_PATH))" \
- 	_python_sysroot=$(STAGING_DIR) \
- 	_python_prefix=/usr \
- 	_python_exec_prefix=/usr
-@@ -48,7 +48,7 @@ HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPT = \
- # Target setuptools-based packages
- PKG_PYTHON_SETUPTOOLS_ENV = \
- 	PATH="$(TARGET_PATH)" \
--	PYTHONPATH="$(PYTHON_PATH)" \
-+	PYTHONPATH="$(if $(BR2_PACKAGE_PYTHON3),$(PYTHON3_PATH),$(PYTHON_PATH))" \
- 	_python_sysroot=$(STAGING_DIR) \
- 	_python_prefix=/usr \
- 	_python_exec_prefix=/usr
-@@ -138,16 +138,16 @@ endif
- # depending on the package characteristics, and shouldn't be derived
- # automatically from the dependencies of the corresponding target
- # package.
--$(2)_DEPENDENCIES ?= $(filter-out host-python host-python-setuptools $(1),$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
-+$(2)_DEPENDENCIES ?= $(filter-out host-python host-python3 host-python-setuptools $(1),$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
+diff --git a/package/python/python.mk b/package/python/python.mk
+index 3b0a4dd..94765cb 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -160,6 +160,15 @@ endef
  
- # Target packages need both the python interpreter on the target (for
- # runtime) and the python interpreter on the host (for
- # compilation). However, host packages only need the python
- # interpreter on the host.
- ifeq ($(4),target)
--$(2)_DEPENDENCIES += host-python python
-+$(2)_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON3),host-python3 python3,host-python python)
- else
--$(2)_DEPENDENCIES += host-python
-+$(2)_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python)
- endif
+ PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_REMOVE_USELESS_FILES
  
- # Setuptools based packages will need host-python-setuptools (both
++#
++# Make sure libpython gets stripped out on target
++#
++define PYTHON_ENSURE_LIBPYTHON_STRIPPED
++	chmod u+w $(TARGET_DIR)/usr/lib/libpython$(PYTHON_VERSION_MAJOR)*.so
++endef
++
++PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_ENSURE_LIBPYTHON_STRIPPED
++
+ PYTHON_AUTORECONF = YES
+ 
+ # Provided to other packages
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 62642c8..2d9d1f2 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -131,6 +131,15 @@ endef
+ 
+ PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_REMOVE_USELESS_FILES
+ 
++#
++# Make sure libpython gets stripped out on target
++#
++define PYTHON3_ENSURE_LIBPYTHON_STRIPPED
++	chmod u+w $(TARGET_DIR)/usr/lib/libpython$(PYTHON3_VERSION_MAJOR)*.so
++endef
++
++PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_ENSURE_LIBPYTHON_STRIPPED
++
+ PYTHON3_AUTORECONF = YES
+ 
+ define PYTHON3_INSTALL_SYMLINK
 -- 
 1.8.3.2
