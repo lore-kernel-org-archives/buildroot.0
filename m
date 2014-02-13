@@ -1,38 +1,37 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 13 Feb 2014 12:26:08 +0000 (UTC)
-Subject: [Buildroot] [Bug 5852] [2012.11] usb_modeswitch should depends of
- "BR2_PACKAGE_TCL_SHLIB_ONLY is not set"
-In-Reply-To: <bug-5852-163@https.bugs.busybox.net/>
-References: <bug-5852-163@https.bugs.busybox.net/>
-Message-ID: <20140213122608.93F509C9D8@busybox.osuosl.org>
+From: Anton Kolesov <anton.kolesov@synopsys.com>
+Date: Thu, 13 Feb 2014 16:41:44 +0400
+Subject: [Buildroot] [PATCH 1/2] gcc: arc: bump to git commit c6227bc
+Message-ID: <1392295308-12937-1-git-send-email-anton.kolesov@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5852
+This fixes two issues: one segmentation fault in GCC and one invalid code
+generation. Those fix numerous autobuild failures, including:
+http://autobuild.buildroot.net/results/715/7158a2a19da6bfa950125a951a39061ccaa73101/
+http://autobuild.buildroot.net/results/9d4/9d4fbcb91cf76e01c833d70c401c0828ad37631a/
+http://autobuild.buildroot.net/results/ef6/ef6a0e2d382ae202bb8f0e9fc9f5e48c90119faf/
+http://autobuild.buildroot.net/results/276/27692619efee482cded56967017f260bd30eefe7/
 
-Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> changed:
+Signed-off-by: Anton Kolesov <anton.kolesov@synopsys.com>
+---
+ package/gcc/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
-
---- Comment #1 from Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> 2014-02-13 12:26:08 UTC ---
-The creation of the tcl symlink has been added with commit
-8d0413fd370f47014287976f195dc745b95e49d3 (part of buildroot 2013.08).
-
-The other problem that you describe, being that usb_modeswitch should not be
-selectable when BR2_PACKAGE_TCL_SHLIB_ONLY is set, is covered with commit
-d3e4db4e34927bff16c2ef06033304a068f46292 (also part of buildroot 2013.08).
-
-Therefore, I am closing this bug as Resolved.
-Please reopen if the problem persists, in which case you should provide more
-information.
-
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 7bd1eb3..4fd8ec9 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -96,7 +96,7 @@ config BR2_GCC_VERSION
+ 	default "4.6.4"     if BR2_GCC_VERSION_4_6_X
+ 	default "4.7.3"     if BR2_GCC_VERSION_4_7_X
+ 	default "4.8.2"     if BR2_GCC_VERSION_4_8_X
+-	default "7466697995233cc3aab5b9427bf843e3c7fabd80" if BR2_GCC_VERSION_4_8_ARC
++	default "c6227bc154124e270f15793deddfa3fe18f7db54" if BR2_GCC_VERSION_4_8_ARC
+ 	default "b93bb009e021aba64dd4b8cdb0bbc5a176c55543" if BR2_GCC_VERSION_4_9_MICROBLAZE
+ 	default BR2_GCC_SNAP_DATE if BR2_GCC_VERSION_SNAP
+ 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.8.4.1
