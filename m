@@ -1,20 +1,36 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 13 Feb 2014 11:32:27 +0000 (UTC)
-Subject: [Buildroot] [Bug 6872] gpsd: disabled on microblaze
-In-Reply-To: <bug-6872-163@https.bugs.busybox.net/>
-References: <bug-6872-163@https.bugs.busybox.net/>
-Message-ID: <20140213113228.1B0959C9DF@busybox.osuosl.org>
+Date: Thu, 13 Feb 2014 11:33:41 +0000 (UTC)
+Subject: [Buildroot] [Bug 6878] New: dmraid: disabled on ARC
+Message-ID: <bug-6878-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6872
+https://bugs.busybox.net/show_bug.cgi?id=6878
 
---- Comment #1 from Ryan Barnett <rjbarnet@rockwellcollins.com> 2014-02-13 11:32:27 UTC ---
-The following commit disabled it:
-http://git.buildroot.net/buildroot/commit/?id=d517415bcda380336f4a27bf248cef4d81791c9e
+           Summary: dmraid: disabled on ARC
+           Product: buildroot
+           Version: unspecified
+          Platform: All
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: rjbarnet at rockwellcollins.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
+
+
+The dmraid package is disabled on the ARC architecture due to an internal
+compiler issue. The compiler issue should be fixed but for now just disabling
+it. 
+
+The following commit disabled dmraid on ARC:
+http://git.buildroot.net/buildroot/commit/?id=262a4c0bf7fb64d632ae6d40c22a62380c0af65f
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
