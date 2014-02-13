@@ -1,54 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 13 Feb 2014 22:12:44 +0100
-Subject: [Buildroot] [PATCH 1/3] python-setuptools: bumped version to 0.8
-In-Reply-To: <1374316034-31973-1-git-send-email-rohfledev@gmail.com>
-References: <1374316034-31973-1-git-send-email-rohfledev@gmail.com>
-Message-ID: <20140213221244.117882f0@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 13 Feb 2014 22:13:50 +0100
+Subject: [Buildroot] [PATCH 1/2] gcc: arc: bump to git commit c6227bc
+In-Reply-To: <1392295308-12937-1-git-send-email-anton.kolesov@synopsys.com>
+ (Anton Kolesov's message of "Thu, 13 Feb 2014 16:41:44 +0400")
+References: <1392295308-12937-1-git-send-email-anton.kolesov@synopsys.com>
+Message-ID: <87sirmpvg1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Rohan Fletcher,
+>>>>> "Anton" == Anton Kolesov <anton.kolesov@synopsys.com> writes:
 
-On Sat, 20 Jul 2013 22:27:12 +1200, Rohan Fletcher wrote:
-> 
-> Signed-off-by: Rohan Fletcher <rohfledev@gmail.com>
-> ---
->  package/python-setuptools/python-setuptools.mk | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+ > This fixes two issues: one segmentation fault in GCC and one invalid code
+ > generation. Those fix numerous autobuild failures, including:
+ > http://autobuild.buildroot.net/results/715/7158a2a19da6bfa950125a951a39061ccaa73101/
+ > http://autobuild.buildroot.net/results/9d4/9d4fbcb91cf76e01c833d70c401c0828ad37631a/
+ > http://autobuild.buildroot.net/results/ef6/ef6a0e2d382ae202bb8f0e9fc9f5e48c90119faf/
+ > http://autobuild.buildroot.net/results/276/27692619efee482cded56967017f260bd30eefe7/
 
-I have integrated this patch (after adjusting it to bump to the latest
-setuptools version) into a patch series that I posted at:
+ > Signed-off-by: Anton Kolesov <anton.kolesov@synopsys.com>
 
-  http://patchwork.ozlabs.org/patch/260435/
+Committed to next, thanks.
 
-However, regarding your patches 2/3 and 3/3, we discussed during the
-Buildroot Developers Meeting, and the general opinion is that we don't
-really like tools such as "pip", because they completely circumvent the
-Buildroot logic, which has a number of drawbacks:
-
- * It does not take care of native dependencies, and quite a few Python
-   modules have such dependencies.
-
- * It does not go through the Buildroot download infrastructure, which
-   means that "make external-deps", "make source" do not work for the
-   Python modules downloaded by pip.
-
- * It does not integrate with the Buildroot licensing infrastructure,
-   which makes it more complicated to maintain an up-to-date list of
-   the components installed in the generated system.
-
-For Perl, Fran?ois Perrad has written a script that given a Perl CPAN
-package creates all the necessary Buildroot packages. Such an approach
-was accepted by the Buildroot developers, and maybe we should look at
-having something similar for Python modules.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
