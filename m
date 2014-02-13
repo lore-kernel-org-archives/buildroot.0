@@ -1,37 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 13 Feb 2014 21:48:50 +0100
-Subject: [Buildroot] [PATCHv1 01/26] python: expose PYTHON_PATH
+Date: Thu, 13 Feb 2014 21:48:57 +0100
+Subject: [Buildroot] [PATCHv1 08/26] python-distutilscross: remove package
+	that is no longer needed
 In-Reply-To: <1392324555-29246-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1392324555-29246-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1392324555-29246-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1392324555-29246-9-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As a preparation to make the Python infrastructure support both Python
-and Python 3, as well as the bump of Python 2 and 3, we need the
-Python package to expose the Python module path in a variable called
-PYTHON_PATH. It will be used by the following commits.
+Thanks to the previous commit that makes distutilscross unecessary for
+setuptools packages, the host-distutilscross package can now be
+removed. There is no need for any Config.in.legacy handling, since
+there is no target variant, or visible Config.in option for
+host-distutilscross.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python/python.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/python-distutilscross/python-distutilscross.mk | 12 ------------
+ 1 file changed, 12 deletions(-)
+ delete mode 100644 package/python-distutilscross/python-distutilscross.mk
 
-diff --git a/package/python/python.mk b/package/python/python.mk
-index 6187d66..f2e48c4 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -167,5 +167,8 @@ PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_REMOVE_USELESS_FILES
- 
- PYTHON_AUTORECONF = YES
- 
-+# Provided to other packages
-+PYTHON_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+diff --git a/package/python-distutilscross/python-distutilscross.mk b/package/python-distutilscross/python-distutilscross.mk
+deleted file mode 100644
+index cfe2811..0000000
+--- a/package/python-distutilscross/python-distutilscross.mk
++++ /dev/null
+@@ -1,12 +0,0 @@
+-################################################################################
+-#
+-# python-distutilscross
+-#
+-################################################################################
+-
+-PYTHON_DISTUTILSCROSS_VERSION = 0.1
+-PYTHON_DISTUTILSCROSS_SOURCE  = distutilscross-$(PYTHON_DISTUTILSCROSS_VERSION).tar.gz
+-PYTHON_DISTUTILSCROSS_SITE    = http://pypi.python.org/packages/source/d/distutilscross
+-PYTHON_DISTUTILSCROSS_SETUP_TYPE = setuptools
+-
+-$(eval $(host-python-package))
 -- 
 1.8.3.2
