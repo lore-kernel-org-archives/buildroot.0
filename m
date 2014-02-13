@@ -1,9 +1,9 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Thu, 13 Feb 2014 23:59:51 +0100
-Subject: [Buildroot] [PATCH v5 2/5] sdl: add host version
+Date: Thu, 13 Feb 2014 23:59:52 +0100
+Subject: [Buildroot] [PATCH v5 3/5] sdl_image: add host version
 In-Reply-To: <1392332394-27935-1-git-send-email-maxime.hadjinlian@gmail.com>
 References: <1392332394-27935-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <1392332394-27935-3-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <1392332394-27935-4-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -22,24 +22,27 @@ Changes v2 -> v3:
 Changes v1 -> v2:
   - None
 ---
- package/sdl/sdl.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/sdl_image/sdl_image.mk | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
-index ba5fbca..0972acb 100644
---- a/package/sdl/sdl.mk
-+++ b/package/sdl/sdl.mk
-@@ -18,6 +18,7 @@ define SDL_RUN_AUTOGEN
- endef
+diff --git a/package/sdl_image/sdl_image.mk b/package/sdl_image/sdl_image.mk
+index ba9751d..05b9a1f 100644
+--- a/package/sdl_image/sdl_image.mk
++++ b/package/sdl_image/sdl_image.mk
+@@ -38,4 +38,15 @@ SDL_IMAGE_DEPENDENCIES = sdl \
+ 	$(if $(BR2_PACKAGE_SDL_IMAGE_TIFF),tiff) \
+ 	$(if $(BR2_PACKAGE_SDL_IMAGE_WEBP),webp)
  
- SDL_POST_PATCH_HOOKS += SDL_RUN_AUTOGEN
-+HOST_SDL_POST_PATCH_HOOKS += SDL_RUN_AUTOGEN
- SDL_DEPENDENCIES += host-automake host-autoconf host-libtool
- 
- 
-@@ -80,3 +81,4 @@ endef
- SDL_POST_INSTALL_STAGING_HOOKS += SDL_FIXUP_SDL_CONFIG
- 
++HOST_SDL_IMAGE_CONF_OPT = --with-sdl-prefix=$(HOST_DIR)/usr \
++                --with-sdl-exec-prefix=$(HOST_DIR)/usr \
++                --disable-sdltest \
++                --disable-static \
++                --disable-jpg-shared \
++                --disable-png-shared \
++                --disable-tif-shared \
++
++HOST_SDL_IMAGE_DEPENDENCIES = host-libjpeg host-libpng host-sdl
++
  $(eval $(autotools-package))
 +$(eval $(host-autotools-package))
 -- 
