@@ -1,36 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 15 Feb 2014 08:21:50 +0100
-Subject: [Buildroot] [git commit] systemd: fix sed line in "sanitize path in
-	units" hook
-Message-ID: <20140228133413.8A04E9BBF9@busybox.osuosl.org>
+Date: Thu, 13 Feb 2014 22:13:21 +0100
+Subject: [Buildroot] [git commit] binutils: arc: Bump to git commit a934fe5
+Message-ID: <20140228133411.D3B219BBF9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fc075564085ed1ebaf19847bd6ea078ff8b992d6
+commit: http://git.buildroot.net/buildroot/commit/?id=a14988b7312a8c50da42c263dbf5f137ae004853
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The expanded SED variable already contains -e, so the extra -e was being
-interpreted as the sed command and causing sed to fail.
-
-Signed-off-by: Ivan Sergeev <vsergeev@kumunetworks.com>
+Signed-off-by: Anton Kolesov <anton.kolesov@synopsys.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/systemd/systemd.mk |    2 +-
+ package/binutils/Config.in.host |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 9086045..36ef704 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -103,7 +103,7 @@ endef
- 
- define SYSTEMD_SANITIZE_PATH_IN_UNITS
- 	find $(TARGET_DIR)/lib/systemd/system -name '*.service' \
--		-exec $(SED) -e 's,$(HOST_DIR),,g' {} \;
-+		-exec $(SED) 's,$(HOST_DIR),,g' {} \;
- endef
- 
- SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index 49b857e..58738e8 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -49,7 +49,7 @@ endchoice
+ config BR2_BINUTILS_VERSION
+ 	string
+ 	default "2.18-avr32-1.0.1" if BR2_BINUTILS_VERSION_2_18_AVR32_1_0_1
+-	default "0c824ba511fa9b028220eb3c39b566af89ac9dda" if BR2_arc
++	default "a934fe50786aa0dc0fb5da4754e7e07591c9cd8e" if BR2_arc
+ 	default "8351467c933d277ebea0c8d99ad2b65b5f7b6bc2" if BR2_microblaze
+ 	default "2.20.1"	if BR2_BINUTILS_VERSION_2_20_1
+ 	default "2.21"		if BR2_BINUTILS_VERSION_2_21
