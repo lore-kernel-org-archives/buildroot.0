@@ -1,10 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 13 Feb 2014 22:13:50 +0100
-Subject: [Buildroot] [PATCH 1/2] gcc: arc: bump to git commit c6227bc
-In-Reply-To: <1392295308-12937-1-git-send-email-anton.kolesov@synopsys.com>
- (Anton Kolesov's message of "Thu, 13 Feb 2014 16:41:44 +0400")
+Date: Thu, 13 Feb 2014 22:14:04 +0100
+Subject: [Buildroot] [PATCH 2/2] Revert "dmraid: disable on ARC arch"
+In-Reply-To: <1392295308-12937-2-git-send-email-anton.kolesov@synopsys.com>
+ (Anton Kolesov's message of "Thu, 13 Feb 2014 16:41:45 +0400")
 References: <1392295308-12937-1-git-send-email-anton.kolesov@synopsys.com>
-Message-ID: <87sirmpvg1.fsf@dell.be.48ers.dk>
+ <1392295308-12937-2-git-send-email-anton.kolesov@synopsys.com>
+Message-ID: <87ob2apvfn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,12 +14,9 @@ To: buildroot@busybox.net
 
 >>>>> "Anton" == Anton Kolesov <anton.kolesov@synopsys.com> writes:
 
- > This fixes two issues: one segmentation fault in GCC and one invalid code
- > generation. Those fix numerous autobuild failures, including:
- > http://autobuild.buildroot.net/results/715/7158a2a19da6bfa950125a951a39061ccaa73101/
- > http://autobuild.buildroot.net/results/9d4/9d4fbcb91cf76e01c833d70c401c0828ad37631a/
- > http://autobuild.buildroot.net/results/ef6/ef6a0e2d382ae202bb8f0e9fc9f5e48c90119faf/
- > http://autobuild.buildroot.net/results/276/27692619efee482cded56967017f260bd30eefe7/
+ > This reverts commit 262a4c0bf7fb64d632ae6d40c22a62380c0af65f.
+ > Compiler error has been fixed, and building this package doesn't cause an
+ > ICE anymore.
 
  > Signed-off-by: Anton Kolesov <anton.kolesov@synopsys.com>
 
