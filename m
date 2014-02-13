@@ -1,78 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 13 Feb 2014 21:48:56 +0100
-Subject: [Buildroot] [PATCHv1 07/26] pkg-python: no longer use
-	distutilscross for setuptools
+Date: Thu, 13 Feb 2014 21:48:50 +0100
+Subject: [Buildroot] [PATCHv1 01/26] python: expose PYTHON_PATH
 In-Reply-To: <1392324555-29246-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1392324555-29246-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1392324555-29246-8-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1392324555-29246-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks to the bump of Python 2.x, distutilscross is no longer needed
-to achieve cross-compilation for setuptools packages. The host Python
-2.x interpreter can be tricked into using the target compiler thanks
-to pointing it to a different sysconfigdata module, which is achieved
-using PYTHON_PATH.
+As a preparation to make the Python infrastructure support both Python
+and Python 3, as well as the bump of Python 2 and 3, we need the
+Python package to expose the Python module path in a variable called
+PYTHON_PATH. It will be used by the following commits.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-python.mk | 21 ++++++++-------------
- 1 file changed, 8 insertions(+), 13 deletions(-)
+ package/python/python.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index 9c8767f..c4bbb37 100644
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -114,7 +114,7 @@ endif
- else ifeq ($$($(2)_SETUP_TYPE),setuptools)
- ifeq ($(4),target)
- $(2)_BASE_ENV         = $$(PKG_PYTHON_SETUPTOOLS_ENV)
--$(2)_BASE_BUILD_TGT   = build -x
-+$(2)_BASE_BUILD_TGT   = build
- $(2)_BASE_BUILD_OPT   =
- $(2)_BASE_INSTALL_OPT = $$(PKG_PYTHON_SETUPTOOLS_INSTALL_OPT)
- else
-@@ -133,13 +133,12 @@ endif
- # front of the dependencies.
- #
- # However it must be repeated from inner-generic-package, as we need
--# to exclude the python, host-python, host-python-setuptools and
--# host-distutilscross packages, which are added below in the list of
--# dependencies depending on the package characteristics, and shouldn't
--# be derived automatically from the dependencies of the corresponding
--# target package. For example, target packages need
--# host-python-distutilscross, but not host packages.
--$(2)_DEPENDENCIES ?= $(filter-out host-python host-python-setuptools host-python-distutilscross $(1),$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
-+# to exclude the python, host-python and host-python-setuptools
-+# packages, which are added below in the list of dependencies
-+# depending on the package characteristics, and shouldn't be derived
-+# automatically from the dependencies of the corresponding target
-+# package.
-+$(2)_DEPENDENCIES ?= $(filter-out host-python host-python-setuptools $(1),$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
+diff --git a/package/python/python.mk b/package/python/python.mk
+index 6187d66..f2e48c4 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -167,5 +167,8 @@ PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_REMOVE_USELESS_FILES
  
- # Target packages need both the python interpreter on the target (for
- # runtime) and the python interpreter on the host (for
-@@ -152,17 +151,13 @@ $(2)_DEPENDENCIES += host-python
- endif
+ PYTHON_AUTORECONF = YES
  
- # Setuptools based packages will need host-python-setuptools (both
--# host and target) and host-python-distutilscross (only target
--# packages). We need to have a special exclusion for the
-+# host and target). We need to have a special exclusion for the
- # host-setuptools package itself: it is setuptools-based, but
- # shouldn't depend on host-setuptools (because it would otherwise
- # depend on itself!).
- ifeq ($$($(2)_SETUP_TYPE),setuptools)
- ifneq ($(2),HOST_PYTHON_SETUPTOOLS)
- $(2)_DEPENDENCIES += host-python-setuptools
--ifeq ($(4),target)
--$(2)_DEPENDENCIES += host-python-distutilscross
--endif
- endif
- endif
- 
++# Provided to other packages
++PYTHON_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
 1.8.3.2
