@@ -1,48 +1,94 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Thu, 13 Feb 2014 23:59:49 +0100
-Subject: [Buildroot] [PATCH v5 0/5] Introducing XBMC
-Message-ID: <1392332394-27935-1-git-send-email-maxime.hadjinlian@gmail.com>
+Date: Thu, 13 Feb 2014 23:59:50 +0100
+Subject: [Buildroot] [PATCH v5 1/5] sdl: fix autoreconf timing issue
+In-Reply-To: <1392332394-27935-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1392332394-27935-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <1392332394-27935-2-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Context:
+The autobuilders were failing on the symbol _XData32 being in conflicts.
+A patch had been added to SDL to add a check to the configure.in
 
-This is a new version of the series of patch introducing XBMC.
-A new one appeared, which add the dependencies of Java on the host machine for
-XBMC.
-Also, the $(MAKE1) for XBMC has been removed. After doing a loop of 50 builds
-and no trouble so far to report, I assumed it was safe, at least for now.
+Problem:
+Sometimes, the build would fail, because of an _XData32 symbol being in
+conflicts eventhrough the patch was here.
 
-As always, I wait for your reviews and comments !
+What was happening:
+Following the classic buildroot workflow:
+   - Extract
+   - [...]
+   - Apply 001 patch, which touches configure.in AND configure
+   - Apply 002 patch, which touches configure.in
+   - Invoke autogen.sh
+   - [...]
 
-Maxime Hadjinlian (5):
-  sdl: fix autoreconf timing issue
-  sdl: add host version
-  sdl_image: add host version
-  dependencies.sh: XBMC needs java on the host
-  xbmc: new package
+Right before running autogen.sh, we have configure.in which is more
+recent than configure, which is fine.
+We then, execute autogen.sh which, basically, runs autoconf.
 
- package/Config.in                                  |   1 +
- .../sdl/sdl-0001-use-correct-directfb-config.patch |  19 +-
- package/sdl/sdl.mk                                 |   2 +
- package/sdl_image/sdl_image.mk                     |  11 ++
- package/xbmc/Config.in                             | 202 +++++++++++++++++++++
- package/xbmc/S50xbmc                               |  41 +++++
- package/xbmc/xbmc-0001-Fixup-include-path.patch    |  79 ++++++++
- .../xbmc-0002-RaspberryPi-Default-Settings.patch   | 167 +++++++++++++++++
- package/xbmc/xbmc.mk                               | 175 ++++++++++++++++++
- package/xbmc/xbmc.service                          |  12 ++
- support/dependencies/dependencies.sh               |  10 +
- 11 files changed, 702 insertions(+), 17 deletions(-)
- create mode 100644 package/xbmc/Config.in
- create mode 100755 package/xbmc/S50xbmc
- create mode 100644 package/xbmc/xbmc-0001-Fixup-include-path.patch
- create mode 100644 package/xbmc/xbmc-0002-RaspberryPi-Default-Settings.patch
- create mode 100644 package/xbmc/xbmc.mk
- create mode 100644 package/xbmc/xbmc.service
+If your machine was lighty loaded, the time difference between
+configure.in and configure was really tiny (ms order), which seems to be
+neglected by autoconf.
+The results was that the configure was *NOT* generated. And our second
+patch was taken into account.
 
---
+If your machine was under heavy load, the time difference between the
+two files would have been greater and then *maybe* picked up by
+autoconf. And then the configure file was re-generated.
+
+When the 0001 patch was introduced, SDL package did *NOT* run it's
+autogen.sh, which is why it touches also the configure.
+This came later, causing this behavior.
+
+Fixes:
+  http://autobuild.buildroot.net/results/d1c/d1c36f634dbf6b6e5d18444c2a23dfd129202b80/
+
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+ .../sdl/sdl-0001-use-correct-directfb-config.patch    | 19 ++-----------------
+ 1 file changed, 2 insertions(+), 17 deletions(-)
+
+diff --git a/package/sdl/sdl-0001-use-correct-directfb-config.patch b/package/sdl/sdl-0001-use-correct-directfb-config.patch
+index 2250790..ef671a1 100644
+--- a/package/sdl/sdl-0001-use-correct-directfb-config.patch
++++ b/package/sdl/sdl-0001-use-correct-directfb-config.patch
+@@ -4,13 +4,10 @@ The configure script has just checked for the correct directfb-config
+ script, so also use it for the version check instead of whatever
+ might be in the path.
+ 
+-Also patch the generated configure, as it doesn't cleanly autoreconf.
+-
+ Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+ ---
+- configure    |    2 +-
+  configure.in |    2 +-
+- 2 files changed, 2 insertions(+), 2 deletions(-)
++ 1 files changed, 1 insertions(+), 1 deletions(-)
+ 
+ Index: SDL-1.2.15/configure.in
+ ===================================================================
+@@ -25,16 +22,4 @@ Index: SDL-1.2.15/configure.in
+              HAVE_VERSION=`expr $1 \* 10000 + $2 \* 100 + $3`
+              if test $HAVE_VERSION -ge $NEED_VERSION; then
+                  DIRECTFB_CFLAGS=`$DIRECTFBCONFIG --cflags`
+-Index: SDL-1.2.15/configure
+-===================================================================
+---- SDL-1.2.15.orig/configure
+-+++ SDL-1.2.15/configure
+-@@ -24958,7 +24958,7 @@
+-         else
+-             set -- `echo $DIRECTFB_REQUIRED_VERSION | sed 's/\./ /g'`
+-             NEED_VERSION=`expr $1 \* 10000 + $2 \* 100 + $3`
+--            set -- `directfb-config --version | sed 's/\./ /g'`
+-+            set -- `$DIRECTFBCONFIG --version | sed 's/\./ /g'`
+-             HAVE_VERSION=`expr $1 \* 10000 + $2 \* 100 + $3`
+-             if test $HAVE_VERSION -ge $NEED_VERSION; then
+-                 DIRECTFB_CFLAGS=`$DIRECTFBCONFIG --cflags`
++
+-- 
 1.8.5.3
