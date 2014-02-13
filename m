@@ -1,58 +1,122 @@
-From: =?UTF-8?q?Marcelo=20Guti=C3=A9rrez?= <kuyurix@gmail.com>
-Date: Wed, 12 Feb 2014 22:39:34 +0000
-Subject: [Buildroot] [PATCH 2/2] package/mysql: fix debugging options
-In-Reply-To: <1392244774-15356-1-git-send-email-kuyurix@gmail.com>
-References: <1392244774-15356-1-git-send-email-kuyurix@gmail.com>
-Message-ID: <1392244774-15356-2-git-send-email-kuyurix@gmail.com>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Wed, 12 Feb 2014 20:43:50 -0500
+Subject: [Buildroot] [PATCH] am335x-pru-package: new package
+Message-ID: <1392255830-27810-1-git-send-email-fhunleth@troodon-software.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Marcelo Gutierrez <kuyurix@gmail.com>
+am335x-pru-package provides an assembler and program loader for Texas
+Instrument's AM335x programmable real-time units.
 
-The usual --{en,dis}able-debug passed by the infrastructure are not
-recognised by mysql's ./configure, as it uses unusual options.
-
-Also, debugging is only meaningfull to the server, not the client.
-
-Signed-off-by: Marcelo Gutierrez (UTN/FRH) <kuyurix@gmail.com>
-[yann.morin.1998 at free.fr: actually add the options, move in server if-block]
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
 ---
- package/mysql/mysql.mk |   11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ package/Config.in                                |  1 +
+ package/Config.in.host                           |  1 +
+ package/am335x-pru-package/Config.in             |  7 +++++
+ package/am335x-pru-package/Config.in.host        |  7 +++++
+ package/am335x-pru-package/am335x-pru-package.mk | 40 ++++++++++++++++++++++++
+ 5 files changed, 56 insertions(+)
+ create mode 100644 package/am335x-pru-package/Config.in
+ create mode 100644 package/am335x-pru-package/Config.in.host
+ create mode 100644 package/am335x-pru-package/am335x-pru-package.mk
 
-diff --git a/package/mysql/mysql.mk b/package/mysql/mysql.mk
-index 27afc9f..95b30b7 100644
---- a/package/mysql/mysql.mk
-+++ b/package/mysql/mysql.mk
-@@ -30,8 +30,7 @@ MYSQL_CONF_OPT = \
- 	--without-libedit \
- 	--without-readline \
- 	--with-low-memory \
--	--enable-thread-safe-client \
--	$(ENABLE_DEBUG)
-+	--enable-thread-safe-client
+diff --git a/package/Config.in b/package/Config.in
+index fca61d6..71bd2d1 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -260,6 +260,7 @@ source "package/zd1211-firmware/Config.in"
+ endmenu
+ source "package/a10disp/Config.in"
+ source "package/acpid/Config.in"
++source "package/am335x-pru-package/Config.in"
+ source "package/avrdude/Config.in"
+ source "package/cdrkit/Config.in"
+ source "package/cryptsetup/Config.in"
+diff --git a/package/Config.in.host b/package/Config.in.host
+index ac6091f..a364f4e 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -1,5 +1,6 @@
+ menu "Host utilities"
  
- ifeq ($(BR2_PACKAGE_MYSQL_SERVER),y)
- MYSQL_DEPENDENCIES += host-mysql host-bison
-@@ -57,6 +56,14 @@ MYSQL_CONF_OPT += \
- 	--without-plugin-innodb_plugin \
- 	--without-plugin-ndbcluster
- 
-+# Debugging is only available for the server, so no need for
-+# this if-block outside of the server if-block
-+ifeq ($(BR2_ENABLE_DEBUG),y)
-+MYSQL_CONF_OPT += --with-debug=full
-+else
-+MYSQL_CONF_OPT += --without-debug
-+endif
++source "package/am335x-pru-package/Config.in.host"
+ source "package/dfu-util/Config.in.host"
+ source "package/dosfstools/Config.in.host"
+ source "package/e2fsprogs/Config.in.host"
+diff --git a/package/am335x-pru-package/Config.in b/package/am335x-pru-package/Config.in
+new file mode 100644
+index 0000000..66d7773
+--- /dev/null
++++ b/package/am335x-pru-package/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_AM335X_PRU_PACKAGE
++	bool "am335x-pru-package"
++	depends on BR2_arm # only relevant for TI am335x
++	help
++	  TI AM335X PRU program loader
 +
- define HOST_MYSQL_BUILD_CMDS
- 	$(MAKE) -C $(@D)/include my_config.h
- 	$(MAKE) -C $(@D)/mysys libmysys.a
++	  https://github.com/beagleboard/am335x_pru_package
+diff --git a/package/am335x-pru-package/Config.in.host b/package/am335x-pru-package/Config.in.host
+new file mode 100644
+index 0000000..283128e
+--- /dev/null
++++ b/package/am335x-pru-package/Config.in.host
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_HOST_AM335X_PRU_PACKAGE
++	bool "host am335x-pru-package"
++	depends on BR2_arm # only relevant for TI am335x
++	help
++	  TI AM335X PRU assembler (pasm)
++
++	  https://github.com/beagleboard/am335x_pru_package
+diff --git a/package/am335x-pru-package/am335x-pru-package.mk b/package/am335x-pru-package/am335x-pru-package.mk
+new file mode 100644
+index 0000000..f70e679
+--- /dev/null
++++ b/package/am335x-pru-package/am335x-pru-package.mk
+@@ -0,0 +1,40 @@
++################################################################################
++#
++# am335x-pru-package
++#
++################################################################################
++
++AM335X_PRU_PACKAGE_VERSION = f46d8cb564f492740ccd33a03e8368ee4ecc83ae
++AM335X_PRU_PACKAGE_SITE = $(call github,beagleboard,am335x_pru_package,$(AM335X_PRU_PACKAGE_VERSION))
++AM335X_PRU_PACKAGE_LICENSE = BSD-3c
++AM335X_PRU_PACKAGE_LICENSE_FILES = pru_sw/utils/LICENCE.txt
++AM335X_PRU_PACKAGE_DEPENDENCIES = host-am335x-pru-package
++AM335X_PRU_PACKAGE_INSTALL_STAGING = YES
++
++define AM335X_PRU_PACKAGE_BUILD_CMDS
++	$(MAKE) CROSS_COMPILE="$(TARGET_CROSS)" \
++		-C $(@D)/pru_sw/app_loader/interface all
++endef
++
++define AM335X_PRU_PACKAGE_INSTALL_STAGING_CMDS
++	$(MAKE1) PREFIX="$(STAGING_DIR)/usr" \
++		-C $(@D)/pru_sw/app_loader/interface install
++endef
++
++define AM335X_PRU_PACKAGE_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 -D $(@D)/pru_sw/app_loader/lib/libprussdrv.so \
++		$(TARGET_DIR)/usr/lib
++endef
++
++define HOST_AM335X_PRU_PACKAGE_BUILD_CMDS
++	cd $(@D)/pru_sw/utils/pasm_source && \
++		$(HOSTCC) -Wall -D_UNIX_ pasm.c pasmpp.c pasmexp.c pasmop.c \
++			pasmdot.c pasmstruct.c pasmmacro.c -o ../pasm
++endef
++
++define HOST_AM335X_PRU_PACKAGE_INSTALL_CMDS
++	$(INSTALL) -m 0755 -D $(@D)/pru_sw/utils/pasm $(HOST_DIR)/usr/bin/pasm
++endef
++
++$(eval $(generic-package))
++$(eval $(host-generic-package))
 -- 
-1.7.9.5
+1.8.3.2
