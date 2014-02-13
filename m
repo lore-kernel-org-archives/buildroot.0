@@ -1,53 +1,113 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 13 Feb 2014 08:46:17 +0100
-Subject: [Buildroot] [pkg-perl infra V9 4/6] host-perl-module-build: new
- package
-In-Reply-To: <CAB0FRstzeL8mhTEHTaZ_ebVbG4cc1a_kXiHHqtVN8wNTXS2_fQ@mail.gmail.com>
-References: <1392192871-426-1-git-send-email-francois.perrad@gadz.org>	<1392192871-426-5-git-send-email-francois.perrad@gadz.org>	<52FBF400.4010109@mind.be>
- <CAB0FRstzeL8mhTEHTaZ_ebVbG4cc1a_kXiHHqtVN8wNTXS2_fQ@mail.gmail.com>
-Message-ID: <52FC7849.4020206@mind.be>
+From: Peter Kuemmel <syntheticpp@gmx.net>
+Date: Thu, 13 Feb 2014 09:11:57 +0100
+Subject: [Buildroot] Problem with starting TI Graphics
+Message-ID: <trinity-96c3bbe4-4de2-4d94-a868-2ca9c13f130e-1392279117507@3capp-gmx-bs38>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 13/02/14 01:32, Fran?ois Perrad wrote:
-> 2014-02-12 23:21 GMT+01:00 Arnout Vandecappelle <arnout@mind.be>:
->> On 12/02/14 09:14, Francois Perrad wrote:
->>> the version coming with host-perl is too old
->>
->>  That depends on the host's perl of course :-)
->>
-> 
-> Some Perl packages depend on very recent versions of Module-Build
-> which are not yet shipped with a stable perl version.
-> But the cpan client is able to update Module-Build as pre-requirement.
-> On Buildroot, we must install the latest Module-Build.
+Hi, 
+I have problems with the package ti-gfx.
 
- OK.
+Setup uses a buildroot compiler with eabihf enabled.
+All goes fine until TI's pvrsrvctl gets called:
 
- If you would need to send yet another version of the series, can you
-include this piece of text in the commit message?
+#pvrsrvctl
+/usr/bin/pvrsrvctl: line 1: syntax error: unexpected word (expecting ")")
 
- Regards,
- Arnout
+# strace pvrsrvctl
+execve("/usr/bin/pvrsrvctl", ["pvrsrvctl"], [/* 16 vars */]) = -1 ENOEXEC (Exec format error)
+write(2, "strace: exec: Exec format error\n", 32strace: exec: Exec format error
+) = 32
+exit_group(1)                           = ?
++++ exited with 1 +++
 
-> 
-> Fran?ois
-> 
->>>
->>> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
->>> Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->>
->> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+But no problems with the modules
+# lsmod
+Module                  Size  Used by    Not tainted
+bufferclass_ti          4734  0
+omaplfb                10298  0
+pvrsrvkm              157244  2 bufferclass_ti,omaplfb
 
-[snip]
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+First I thought it is ABI-problem so I configured the system until they match,
+see below, but this didn't help.
+
+Could it be a mis-match in the eglibc version?
+
+# LD_TRACE_LOADED_OBJECTS=1 /usr/bin/pvrsrvctl
+        libc.so.6 => /lib/libc.so.6 (0x401dc000)
+        /lib/ld-linux-armhf.so.3 (0x40094000)
+
+Many thanks for any hints!
+
+Peter
+
+
+$ readelf -A /share/rootfs/usr/lib/pvr_drv.so
+Attribute Section: aeabi
+File Attributes
+  Tag_CPU_name: "7-A"
+  Tag_CPU_arch: v7
+  Tag_CPU_arch_profile: Application
+  Tag_ARM_ISA_use: Yes
+  Tag_THUMB_ISA_use: Thumb-2
+  Tag_FP_arch: VFPv3
+  Tag_Advanced_SIMD_arch: NEONv1
+  Tag_ABI_PCS_wchar_t: 4
+  Tag_ABI_FP_denormal: Needed
+  Tag_ABI_FP_exceptions: Needed
+  Tag_ABI_FP_number_model: IEEE 754
+  Tag_ABI_align_needed: 8-byte
+  Tag_ABI_align_preserved: 8-byte, except leaf SP
+  Tag_ABI_enum_size: int
+  Tag_ABI_HardFP_use: SP and DP
+  Tag_ABI_VFP_args: VFP registers
+  Tag_ABI_optimization_goals: Aggressive Speed
+  Tag_CPU_unaligned_access: v6
+  Tag_DIV_use: Not allowed
+
+ $ readelf -A /share/rootfs/usr/bin/pvrsrvctl 
+Attribute Section: aeabi
+File Attributes
+  Tag_CPU_name: "7-A"
+  Tag_CPU_arch: v7
+  Tag_CPU_arch_profile: Application
+  Tag_ARM_ISA_use: Yes
+  Tag_THUMB_ISA_use: Thumb-2
+  Tag_FP_arch: VFPv3
+  Tag_Advanced_SIMD_arch: NEONv1
+  Tag_ABI_PCS_wchar_t: 4
+  Tag_ABI_FP_denormal: Needed
+  Tag_ABI_FP_exceptions: Needed
+  Tag_ABI_FP_number_model: IEEE 754
+  Tag_ABI_align_needed: 8-byte
+  Tag_ABI_align_preserved: 8-byte, except leaf SP
+  Tag_ABI_enum_size: int
+  Tag_ABI_HardFP_use: SP and DP
+  Tag_ABI_VFP_args: VFP registers
+  Tag_CPU_unaligned_access: v6
+  Tag_DIV_use: Not allowed
+
+Attribute Section: aeabi
+File Attributes
+  Tag_CPU_name: "7-A"
+  Tag_CPU_arch: v7
+  Tag_CPU_arch_profile: Application
+  Tag_ARM_ISA_use: Yes
+  Tag_THUMB_ISA_use: Thumb-2
+  Tag_FP_arch: VFPv3
+  Tag_ABI_PCS_wchar_t: 4
+  Tag_ABI_FP_rounding: Needed
+  Tag_ABI_FP_denormal: Needed
+  Tag_ABI_FP_exceptions: Needed
+  Tag_ABI_FP_number_model: IEEE 754
+  Tag_ABI_align_needed: 8-byte
+  Tag_ABI_align_preserved: 8-byte, except leaf SP
+  Tag_ABI_enum_size: int
+  Tag_ABI_HardFP_use: SP and DP
+  Tag_ABI_VFP_args: VFP registers
+  Tag_CPU_unaligned_access: v6
+  Tag_Virtualization_use: TrustZone
