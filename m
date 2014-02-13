@@ -1,147 +1,48 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 13 Feb 2014 07:58:46 +0100
-Subject: [Buildroot] [PATCH v12 3/7] package: add support for top-level
-	parallel make
-In-Reply-To: <1392196751-23485-4-git-send-email-fabio.porcedda@gmail.com>
-References: <1392196751-23485-1-git-send-email-fabio.porcedda@gmail.com>
- <1392196751-23485-4-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <52FC6D26.6030309@mind.be>
+Date: Thu, 13 Feb 2014 08:46:17 +0100
+Subject: [Buildroot] [pkg-perl infra V9 4/6] host-perl-module-build: new
+ package
+In-Reply-To: <CAB0FRstzeL8mhTEHTaZ_ebVbG4cc1a_kXiHHqtVN8wNTXS2_fQ@mail.gmail.com>
+References: <1392192871-426-1-git-send-email-francois.perrad@gadz.org>	<1392192871-426-5-git-send-email-francois.perrad@gadz.org>	<52FBF400.4010109@mind.be>
+ <CAB0FRstzeL8mhTEHTaZ_ebVbG4cc1a_kXiHHqtVN8wNTXS2_fQ@mail.gmail.com>
+Message-ID: <52FC7849.4020206@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/02/14 10:19, Fabio Porcedda wrote:
-> To be able to use top-level parallel make we must not depend in a rule
-> on the order of evaluation of the prerequisites, so instead of relying
-> on the left to right ordering of evaluation of the prerequisites add
-> an explicit rule to describe the dependencies.
+On 13/02/14 01:32, Fran?ois Perrad wrote:
+> 2014-02-12 23:21 GMT+01:00 Arnout Vandecappelle <arnout@mind.be>:
+>> On 12/02/14 09:14, Francois Perrad wrote:
+>>> the version coming with host-perl is too old
+>>
+>>  That depends on the host's perl of course :-)
+>>
 > 
-> We cannot use the pattern rules because they must have the same
-> dependency for every package, but we need to change the dependencies
-> depending on $(2)_OVERRIDE_SRCDIR variable value, so we must use a
-> more flexible way like $(2)_TARGET_% variables.
-> 
-> So add explicit dependencies for the following stamp files:
->   $(2)_TARGET_EXTRACT
->   $(2)_TARGET_PATCH
->   $(2)_TARGET_CONFIGURE
->   $(2)_TARGET_BUILD
->   $(2)_TARGET_INSTALL_STAGING
->   $(2)_TARGET_INSTALL_TARGET
->   $(2)_TARGET_INSTALL_IMAGES
->   $(2)_TARGET_INSTALL_HOST
-> 
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-> ---
-[snip]
-> -$(1)-build:		$(1)-configure \
-> -			$$($(2)_TARGET_BUILD)
-> +$$($(2)_TARGET_INSTALL_TARGET) $$($(2)_TARGET_INSTALL_STAGING) \
-> +$$($(2)_TARGET_INSTALL_IMAGES) $$($(2)_TARGET_INSTALL_HOST): \
-> +	$$($(2)_TARGET_BUILD)
+> Some Perl packages depend on very recent versions of Module-Build
+> which are not yet shipped with a stable perl version.
+> But the cpan client is able to update Module-Build as pre-requirement.
+> On Buildroot, we must install the latest Module-Build.
 
- I'd prefer to see these on separate lines:
+ OK.
 
-$$($(2)_TARGET_INSTALL_TARGET): $$($(2)_TARGET_BUILD)
-$$($(2)_TARGET_INSTALL_STAGING): $$($(2)_TARGET_BUILD)
-...
-
- And also I'd prefer them close to the corresponding $(1)-install target.
-
- By the way, for these it would actually be possible to put them in the
-pattern rule, because they don't depend on OVERRIDE_SRCDIR, right? But I
-guess we said a long time ago that it would be better to do it
-symmetrical for all targets.
-
-
-> +
-> +$(1)-build:		$$($(2)_TARGET_BUILD)
-> +$$($(2)_TARGET_BUILD):	$$($(2)_TARGET_CONFIGURE)
-> +
-> +# The symbol "|" specify a order-only-prerequisite, this is needed for
-> +# phony requisites to avoid rebuilding every time the target.
-
- Possible improvement of the explanation:
-
-Since $(2)_DEPENDENCIES are phony targets, they are always "newer" than
-$(2)_TARGET_CONFIGURE. This would force the configure step (and therefore
-the other steps as well) to be re-executed with every invocation of make.
-Therefore, make $(2)_DEPENDENCIES an order-only dependency by using |.
-
-> +
-> +$(1)-configure:			$$($(2)_TARGET_CONFIGURE)
-> +$$($(2)_TARGET_CONFIGURE):	| $$($(2)_DEPENDENCIES)
->  
->  $$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dirs prepare
->  ifeq ($(filter $(1),$(DEPENDENCIES_HOST_PREREQ)),)
-> @@ -449,13 +458,13 @@ ifeq ($$($(2)_OVERRIDE_SRCDIR),)
->  #  extract
->  #  patch
->  #  configure
-> -$(1)-configure:		$(1)-patch $(1)-depends \
-> -			$$($(2)_TARGET_CONFIGURE)
-> +$$($(2)_TARGET_CONFIGURE):	$$($(2)_TARGET_PATCH)
->  
-> -$(1)-patch:		$(1)-extract $$($(2)_TARGET_PATCH)
-> +$(1)-patch:		$$($(2)_TARGET_PATCH)
-> +$$($(2)_TARGET_PATCH):	$$($(2)_TARGET_EXTRACT)
->  
-> -$(1)-extract:		$(1)-source \
-> -			$$($(2)_TARGET_EXTRACT)
-> +$(1)-extract:			$$($(2)_TARGET_EXTRACT)
-> +$$($(2)_TARGET_EXTRACT):	$$($(2)_TARGET_SOURCE)
->  
->  $(1)-depends:		$$($(2)_DEPENDENCIES)
-
- Since _CONFIGURE now explicitly depends on _DEPENDENCIES, the -depends
-target has become redundant, so you can remove it.
-
->  
-> @@ -465,10 +474,9 @@ else
->  #  source, by rsyncing
->  #  depends
->  #  configure
-> -$(1)-configure:		$(1)-depends \
-> -			$$($(2)_TARGET_CONFIGURE)
-> +$$($(2)_TARGET_CONFIGURE):	$$($(2)_TARGET_RSYNC)
->  
-> -$(1)-depends:		$(1)-rsync $$($(2)_DEPENDENCIES)
-> +$(1)-depends:		$$($(2)_DEPENDENCIES)
-
- Here as well.
-
+ If you would need to send yet another version of the series, can you
+include this piece of text in the commit message?
 
  Regards,
  Arnout
 
->  
->  $(1)-patch:		$(1)-rsync
->  $(1)-extract:		$(1)-rsync
-> diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-> index ea1c694..4860c58 100644
-> --- a/package/uclibc/uclibc.mk
-> +++ b/package/uclibc/uclibc.mk
-> @@ -29,9 +29,6 @@ UCLIBC_ADD_TOOLCHAIN_DEPENDENCY = NO
->  # cross-compiler and the kernel headers
->  UCLIBC_DEPENDENCIES = host-gcc-initial linux-headers
->  
-> -# Before uClibc is built, we must have the second stage cross-compiler
-> -uclibc-build: host-gcc-intermediate
-> -
->  # specifying UCLIBC_CONFIG_FILE on the command-line overrides the .config
->  # setting.
->  ifndef UCLIBC_CONFIG_FILE
-> @@ -556,3 +553,6 @@ uclibc-menuconfig: dirs uclibc-patch
->  	rm -f $(UCLIBC_DIR)/.stamp_{configured,built,target_installed,staging_installed}
->  
->  $(eval $(generic-package))
-> +
-> +# Before uClibc is built, we must have the second stage cross-compiler
-> +$(UCLIBC_TARGET_BUILD): | host-gcc-intermediate
 > 
+> Fran?ois
+> 
+>>>
+>>> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+>>> Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>>
+>> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
+[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
