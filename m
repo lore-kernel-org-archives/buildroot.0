@@ -1,45 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 13 Feb 2014 10:30:56 +0100
-Subject: [Buildroot] [PATCH] host python/python3: conditionally disable
- unicodedata
-In-Reply-To: <CAAXf6LXfA8rir0O_49wy6Y5ur55k_U7P=88OsJB3JsVTwUzYPA@mail.gmail.com>
-References: <e06b104c5f166c541741.1391768165@argentina>
- <20140207112819.2fab19a3@skate>
- <CAAXf6LXfA8rir0O_49wy6Y5ur55k_U7P=88OsJB3JsVTwUzYPA@mail.gmail.com>
-Message-ID: <20140213103056.3ad2c056@skate>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 13 Feb 2014 11:26:36 +0000 (UTC)
+Subject: [Buildroot] [Bug 6872] New: gpsd: disabled on microblaze
+Message-ID: <bug-6872-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+https://bugs.busybox.net/show_bug.cgi?id=6872
 
-On Thu, 13 Feb 2014 10:15:14 +0100, Thomas De Schampheleire wrote:
+           Summary: gpsd: disabled on microblaze
+           Product: buildroot
+           Version: unspecified
+          Platform: All
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: rjbarnet at rockwellcollins.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-> >> would cause the byte-compilation to fail with message:
-> >>     SyntaxError: ("(unicode error) \\N escapes not supported (can't load
-> >>     unicodedata module)",
-> >>
-> >> Instead, conditionally disable unicodedata based on
-> >> BR2_PACKAGE_PYTHON_UNICODEDATA, also for the host python.
-> >>
-> >> This fixes bug #6542 (https://bugs.busybox.net/show_bug.cgi?id=6542)
-> >>
-> >> Reported-by: Gernot Vormayr <gvormayr@gmail.com>
-> >> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> >
-> > For information, my upcoming patch series that bumps Python uses
-> > --enable-unicodedata unconditionally for the host python, because
-> > recent versions of python-setuptools need unicodedata.
-> >
-> 
-> I think this patch should still be part of 2014.02.
 
-I agree.
+The gpsd package is disabled due to an internal compiler error for the
+microblaze architecture. The compiler issues should be fixed but for now it is
+just disabled.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
