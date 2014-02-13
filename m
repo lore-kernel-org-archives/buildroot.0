@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 13 Feb 2014 21:49:15 +0100
-Subject: [Buildroot] [PATCHv1 26/26] python-pysnmp{, -apps,
-	-mibs}: allow to build with Python 3
+Date: Thu, 13 Feb 2014 21:49:13 +0100
+Subject: [Buildroot] [PATCHv1 24/26] python-pyasn: allow to build with
+	Python 3
 In-Reply-To: <1392324555-29246-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1392324555-29246-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1392324555-29246-27-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1392324555-29246-25-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,46 +13,20 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-pysnmp-apps/Config.in | 2 +-
- package/python-pysnmp-mibs/Config.in | 2 +-
- package/python-pysnmp/Config.in      | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-pyasn/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python-pysnmp-apps/Config.in b/package/python-pysnmp-apps/Config.in
-index 304e812..8edd04c 100644
---- a/package/python-pysnmp-apps/Config.in
-+++ b/package/python-pysnmp-apps/Config.in
+diff --git a/package/python-pyasn/Config.in b/package/python-pyasn/Config.in
+index 13095f9..eca53db 100644
+--- a/package/python-pyasn/Config.in
++++ b/package/python-pyasn/Config.in
 @@ -1,6 +1,6 @@
- config BR2_PACKAGE_PYTHON_PYSNMP_APPS
- 	bool "python-pysnmp-apps"
+ config BR2_PACKAGE_PYTHON_PYASN
+ 	bool "python-pyasn"
 -	depends on BR2_PACKAGE_PYTHON
 +	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
- 	select BR2_PACKAGE_PYTHON_PYSNMP
- 	depends on BR2_INSTALL_LIBSTDCPP # pysnmp -> pyasn
+ 	depends on BR2_INSTALL_LIBSTDCPP
  	help
-diff --git a/package/python-pysnmp-mibs/Config.in b/package/python-pysnmp-mibs/Config.in
-index 90ec933..cc03676 100644
---- a/package/python-pysnmp-mibs/Config.in
-+++ b/package/python-pysnmp-mibs/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_PYTHON_PYSNMP_MIBS
- 	bool "python-pysnmp-mibs"
--	depends on BR2_PACKAGE_PYTHON
-+	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
- 	select BR2_PACKAGE_PYTHON_PYSNMP
- 	depends on BR2_INSTALL_LIBSTDCPP # pysnmp -> pyasn
- 	help
-diff --git a/package/python-pysnmp/Config.in b/package/python-pysnmp/Config.in
-index d5f90ed..6cf18ee 100644
---- a/package/python-pysnmp/Config.in
-+++ b/package/python-pysnmp/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_PYTHON_PYSNMP
- 	bool "python-pysnmp"
--	depends on BR2_PACKAGE_PYTHON
-+	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
- 	depends on BR2_INSTALL_LIBSTDCPP # pyasn
- 	select BR2_PACKAGE_PYTHON_PYASN
- 	select BR2_PACKAGE_PYTHON_PYCRYPTO
+ 	  PyASN is a Python extension module that enables you to
 -- 
 1.8.3.2
