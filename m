@@ -1,59 +1,199 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 13 Feb 2014 00:59:53 +0100
-Subject: [Buildroot] [PATCH V4 2/2] i.MX: Update versions to match
- latest Freescale release
-In-Reply-To: <52FC0980.8010003@boundarydevices.com>
-References: <1381287931-7070-1-git-send-email-eric.nelson@boundarydevices.com>
- <1381287931-7070-3-git-send-email-eric.nelson@boundarydevices.com>
- <20140212190351.GD17804@free.fr>
- <52FBC72D.3090706@boundarydevices.com>
- <52FBD772.40900@boundarydevices.com> <52FBEE79.9070901@mind.be>
- <20140212161518.75ac8839@core2quad.morethan.org>
- <52FBFBD6.1070609@boundarydevices.com>
- <52FC0980.8010003@boundarydevices.com>
-Message-ID: <20140212235952.GG17804@free.fr>
+From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Thu, 13 Feb 2014 01:20:54 +0100
+Subject: [Buildroot] [UNSURE]Re: [pkg-perl infra V9 2/6] scancpan: a new
+	script
+In-Reply-To: <52FBAF60.20604@mind.be>
+References: <1392192871-426-1-git-send-email-francois.perrad@gadz.org>
+ <1392192871-426-3-git-send-email-francois.perrad@gadz.org>
+ <52FBAF60.20604@mind.be>
+Message-ID: <CAB0FRsttgXJX2SaMQtL14DAtmt+MZ=EWQ9K_SofHQ5xHo48gHw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Eric, All,
+2014-02-12 18:29 GMT+01:00 Arnout Vandecappelle <arnout@mind.be>:
+>  Hi Francois,
+>
+>  Sorry to keep on iterating on this...
+>
+> On 12/02/14 09:14, Francois Perrad wrote:
+>> which creates Perl/CPAN package files
+>>
+>> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+>> ---
+> [snip]
+>> +
+>> +
+>> +use 5.018;      # same major version as target perl
+>
+>  I'm not really a perl expert, but doesn't this mean that the script will
+> not run if your system's perl is older than 5.018? That probably excludes
+> most LTS distros... Not that I have a big issue with that because not
+> many users will actually run this script. And if you have only tested it
+> with 5.018 (like I did), then it's probably best to keep it at that version.
+>
 
-On 2014-02-12 16:53 -0700, Eric Nelson spake thusly:
-> >On 02/12/2014 03:15 PM, Mike Zick wrote:
-> >>Perhaps alias "mkdir" to "mkdir -p" for the duration of the commands?
-> 
-> I can't figure out how to get an alias to be effective in the middle of
-> this:
-> 
-> (cd $(BUILD_DIR); \
-> 	sh $(DL_DIR)/$(GPU_VIV_BIN_MX6Q_SOURCE) --force --auto-accept)
+For example, my host is an Ubuntu 12.04 LTS which comes with perl 5.14.2.
+`scancpan` cannot run with this system host perl.
 
-An alias won't work, as aliases are not passed in the environment.
+     $ support/scripts/scancpan
+     Perl v5.18.0 required--this is only v5.14.2, stopped at
+support/scripts/scancpan line 474.
+     BEGIN failed--compilation aborted at support/scripts/scancpan line 474.
 
-So, while the shell executing the '(.....)' commands will have an mkdir
-alias, the shell that runs the self-extractor 'sh $(DL_DIR)/....' will
-not have that alias.
+perlbrew allows to install another Perl version in your $HOME.
+see http://search.cpan.org/~gugod/App-perlbrew-0.67/
 
-You can try it easily:
-    (1)$ alias toto='echo TOTO'
-    (1)$ toto
-    TOTO
-    (1)$ /bin/sh
-    (2)$ toto
-    toto: command not found
-    (2)$ exit
-    (1)$ toto
-    TOTO
+     $ perlbrew install perl-5.18.2
+     $ perlbrew list
+     perl-5.18.2
+     $ perlbrew switch perl-5.18.2
+     $ which perl
+     /home/user/perl5/perlbrew/perls/perl-5.18.2/bin/perl
 
-Regards,
-Yann E. MORIN.
+After that, perl-5.18.2 is my host perl and I can use `scancpan`.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Fran?ois.
+
+>  I am certain that this clause does not solve the issue I tried to point
+> out in my previous review. We want the generated packages to include all
+> the host-packages that are needed for building on a system that can use
+> buildroot.
+>
+>  Bottom line: what I'm saying here is for follow-up patches, it is OK to
+> go in as is. Except for the next remark:
+>
+>
+> [snip]
+>> +    if ($force || !-f $cfgname) {
+>> +        my $abstract = $dist->{abstract};
+>> +        say qq{write ${cfgname}} unless $quiet;
+>> +        open my $fh, q{>}, $cfgname;
+>> +        say {$fh} qq{config BR2_PACKAGE_${brname}};
+>> +        say {$fh} qq{\tbool "${fsname}"};
+>> +        foreach my $dep (@{$deps_runtime{$distname}}) {
+>> +            my $brdep = brname( fsname( $dep ) );
+>> +            say {$fh} qq{\tselect BR2_PACKAGE_${brdep}};
+>> +        }
+>> +        say {$fh} qq{\thelp} if $abstract;
+>> +        say {$fh} qq{\t  ${abstract}} if $abstract;
+>> +        say {$fh} qq{};
+>
+>  Doesn't this create a spurious empty line at the end of the file? Or is
+> it needed to add a newline after the abstract?
+>
+>
+> [snip]
+>> +=head1 NAME
+>> +
+>> +support/scripts/scancpan Try-Tiny Moo
+>> +
+>> +=head1 SYNOPSIS
+>> +
+>> +curl -kL http://install.perlbrew.pl | bash
+>> +
+>> +perlbrew install perl-5.18.2
+>
+>  This is not correct I think...
+>
+>> +
+>> +supports/scripts/scancpan [options] [distname ...]
+>> +
+>> + Options:
+>> +   -help
+>> +   -man
+>> +   -quiet
+>> +   -force
+>> +   -recommend
+>> +
+> [snip]
+>> +=head1 DESCRIPTION
+>> +
+>> +This script creates the Buildroot package files for all Perl/CPAN
+>> +distributions required by all specified distnames. These data are
+>> +fetched from https://metacpan.org/.
+>
+>  Hm, not very clear I think. How about:
+>
+> ---
+> This script creates templates of the Buildroot package files for all the
+> Perl/CPAN distributions required by the specified distnames. The
+> dependencies and metadata are fetched from https://metacpan.org/.
+>
+> After running this script, it is necessary to check the generated files.
+> You have to manually enable the host- version if you need it. You have to
+> manually add the license files (FOO_LICENSE_FILES variable). For
+> distributions that link against a target library, you have to add the
+> buildroot package name for that library to the DEPENDENCIES variable.
+> ---
+>
+>> +
+>> +See the Buildroot documentation for details on the usage of the Perl
+>> +infrastructure.
+>> +
+>> +The major version of the host perl must be aligned on the target one,
+>> +in order to work with the right CoreList data.
+>
+>  Right! I didn't think of that.
+>
+>  So to overcome the 'use 5.018;' limitation, we should fatpack in the
+> CoreList module. However, it's 467K so maybe it should be downloaded
+> instead...
+>
+>  Anyway, for sure this issue is for a follow-up patch.
+>
+>
+>  Regards,
+>  Arnout
+>
+>
+>> +
+>> +=head1 LICENSE
+>> +
+>> +Copyright (C) 2013-2014 by Francois Perrad <francois.perrad@gadz.org>
+>> +
+>> +This program is free software; you can redistribute it and/or modify
+>> +it under the terms of the GNU General Public License as published by
+>> +the Free Software Foundation; either version 2 of the License, or
+>> +(at your option) any later version.
+>> +
+>> +This program is distributed in the hope that it will be useful,
+>> +but WITHOUT ANY WARRANTY; without even the implied warranty of
+>> +MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+>> +General Public License for more details.
+>> +
+>> +You should have received a copy of the GNU General Public License
+>> +along with this program; if not, write to the Free Software
+>> +Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+>> +
+>> +This script is a part of Buildroot.
+>> +
+>> +This script requires the module C<MetaCPAN::API::Tiny> (version 1.131730)
+>> +which was included at the beginning of this file by the tool C<fatpack>.
+>> +
+>> +See L<http://search.cpan.org/~nperez/MetaCPAN-API-Tiny-1.131730/>.
+>> +
+>> +See L<http://search.cpan.org/search?query=App-FatPacker&mode=dist>.
+>> +
+>> +These both libraries are free software and may be distributed under the same
+>> +terms as perl itself.
+>> +
+>> +And perl may be distributed under the terms of Artistic v1 or GPL v1 license.
+>> +
+>> +=cut
+>>
+>
+>
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
