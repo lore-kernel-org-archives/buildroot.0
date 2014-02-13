@@ -1,45 +1,78 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 13 Feb 2014 21:48:55 +0100
-Subject: [Buildroot] [PATCHv1 06/26] core: remove .py/.pyc for Python
+Date: Thu, 13 Feb 2014 21:48:56 +0100
+Subject: [Buildroot] [PATCHv1 07/26] pkg-python: no longer use
+	distutilscross for setuptools
 In-Reply-To: <1392324555-29246-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1392324555-29246-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1392324555-29246-7-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1392324555-29246-8-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The main Buildroot Makefile was removing *.py or *.pyc if Python 2 was
-enabled, but for Python 3, this action was taken care of by a post
-install target hook of python3.mk, which means it wouldn't work with
-external modules (the .py/.pyc removal would be done before external
-Python modules are installed).
-
-We fix this by making the global *.py/*.pyc removal in the main
-Makefile work for both Python 2 and Python 3.
+Thanks to the bump of Python 2.x, distutilscross is no longer needed
+to achieve cross-compilation for setuptools packages. The host Python
+2.x interpreter can be tricked into using the target compiler thanks
+to pointing it to a different sysconfigdata module, which is achieved
+using PYTHON_PATH.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/pkg-python.mk | 21 ++++++++-------------
+ 1 file changed, 8 insertions(+), 13 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 8226111..f7ed264 100644
---- a/Makefile
-+++ b/Makefile
-@@ -513,10 +513,10 @@ endif
- 	rm -rf $(TARGET_DIR)/usr/doc $(TARGET_DIR)/usr/share/doc
- 	rm -rf $(TARGET_DIR)/usr/share/gtk-doc
- 	-rmdir $(TARGET_DIR)/usr/share 2>/dev/null
--ifeq ($(BR2_PACKAGE_PYTHON_PY_ONLY),y)
-+ifeq ($(BR2_PACKAGE_PYTHON_PY_ONLY)$(BR2_PACKAGE_PYTHON3_PY_ONLY),y)
- 	find $(TARGET_DIR)/usr/lib/ -name '*.pyc' -print0 | xargs -0 rm -f
+diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+index 9c8767f..c4bbb37 100644
+--- a/package/pkg-python.mk
++++ b/package/pkg-python.mk
+@@ -114,7 +114,7 @@ endif
+ else ifeq ($$($(2)_SETUP_TYPE),setuptools)
+ ifeq ($(4),target)
+ $(2)_BASE_ENV         = $$(PKG_PYTHON_SETUPTOOLS_ENV)
+-$(2)_BASE_BUILD_TGT   = build -x
++$(2)_BASE_BUILD_TGT   = build
+ $(2)_BASE_BUILD_OPT   =
+ $(2)_BASE_INSTALL_OPT = $$(PKG_PYTHON_SETUPTOOLS_INSTALL_OPT)
+ else
+@@ -133,13 +133,12 @@ endif
+ # front of the dependencies.
+ #
+ # However it must be repeated from inner-generic-package, as we need
+-# to exclude the python, host-python, host-python-setuptools and
+-# host-distutilscross packages, which are added below in the list of
+-# dependencies depending on the package characteristics, and shouldn't
+-# be derived automatically from the dependencies of the corresponding
+-# target package. For example, target packages need
+-# host-python-distutilscross, but not host packages.
+-$(2)_DEPENDENCIES ?= $(filter-out host-python host-python-setuptools host-python-distutilscross $(1),$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
++# to exclude the python, host-python and host-python-setuptools
++# packages, which are added below in the list of dependencies
++# depending on the package characteristics, and shouldn't be derived
++# automatically from the dependencies of the corresponding target
++# package.
++$(2)_DEPENDENCIES ?= $(filter-out host-python host-python-setuptools $(1),$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
+ 
+ # Target packages need both the python interpreter on the target (for
+ # runtime) and the python interpreter on the host (for
+@@ -152,17 +151,13 @@ $(2)_DEPENDENCIES += host-python
  endif
--ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
-+ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY)$(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
- 	find $(TARGET_DIR)/usr/lib/ -name '*.py' -print0 | xargs -0 rm -f
+ 
+ # Setuptools based packages will need host-python-setuptools (both
+-# host and target) and host-python-distutilscross (only target
+-# packages). We need to have a special exclusion for the
++# host and target). We need to have a special exclusion for the
+ # host-setuptools package itself: it is setuptools-based, but
+ # shouldn't depend on host-setuptools (because it would otherwise
+ # depend on itself!).
+ ifeq ($$($(2)_SETUP_TYPE),setuptools)
+ ifneq ($(2),HOST_PYTHON_SETUPTOOLS)
+ $(2)_DEPENDENCIES += host-python-setuptools
+-ifeq ($(4),target)
+-$(2)_DEPENDENCIES += host-python-distutilscross
+-endif
  endif
- 	rm -rf $(TARGET_DIR)/usr/lib/luarocks
+ endif
+ 
 -- 
 1.8.3.2
