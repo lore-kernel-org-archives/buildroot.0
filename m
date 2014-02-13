@@ -1,52 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 13 Feb 2014 12:29:42 +0100
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <52FBE074.4070005@openwide.fr>
-References: <20140211073008.EC16B101035@stock.ovh.net>
- <20140211101015.1b282bd3@skate> <20140211180123.GB3411@free.fr>
- <20140212090659.15291b2b@skate> <52FBE074.4070005@openwide.fr>
-Message-ID: <20140213122942.31ce862c@skate>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 13 Feb 2014 12:26:08 +0000 (UTC)
+Subject: [Buildroot] [Bug 5852] [2012.11] usb_modeswitch should depends of
+ "BR2_PACKAGE_TCL_SHLIB_ONLY is not set"
+In-Reply-To: <bug-5852-163@https.bugs.busybox.net/>
+References: <bug-5852-163@https.bugs.busybox.net/>
+Message-ID: <20140213122608.93F509C9D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+https://bugs.busybox.net/show_bug.cgi?id=5852
 
-On Wed, 12 Feb 2014 21:58:28 +0100, Romain Naour wrote:
+Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> changed:
 
-> I also tried to reproduce this build failure recently, but nut builds 
-> fine for me too.
-> Have you found somethingon gcc10 ?
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
-No, I've tried to reproduce it, but the exact configuration that caused
-the build failure in the autobuilders doesn't fail for me.
+--- Comment #1 from Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> 2014-02-13 12:26:08 UTC ---
+The creation of the tcl symlink has been added with commit
+8d0413fd370f47014287976f195dc745b95e49d3 (part of buildroot 2013.08).
 
-> I don't think it's related but libhal.h is present on the autobuilder's log
-> "checking for libhal.h... yes"
-> 
-> Maybe add --without-hal in nut.mk ?
+The other problem that you describe, being that usb_modeswitch should not be
+selectable when BR2_PACKAGE_TCL_SHLIB_ONLY is set, is covered with commit
+d3e4db4e34927bff16c2ef06033304a068f46292 (also part of buildroot 2013.08).
 
-That would certainly be a good idea, but I have a successful build with
-the configuration of the autobuilder. So I'm suspecting a parallel
-build problem maybe, but so far I've attempted maybe builds of nut, and
-none of them failed. I've started a loop that builds nut repeatedly and
-aborts if the build has failed. Hopefully the issue will pop up.
+Therefore, I am closing this bug as Resolved.
+Please reopen if the problem persists, in which case you should provide more
+information.
 
-> Can you provide a complete build log with configure step ?
-
-Sure, see the attached log file.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: logfile2
-Type: application/octet-stream
-Size: 303269 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140213/58e5cdb5/attachment-0001.obj>
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
