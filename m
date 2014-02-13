@@ -1,54 +1,71 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 13 Feb 2014 21:49:06 +0100
-Subject: [Buildroot] [PATCHv1 17/26] package: allow Python packages with
-	Python3
+Date: Thu, 13 Feb 2014 21:49:05 +0100
+Subject: [Buildroot] [PATCHv1 16/26] package: add python3 support in the
+	package infrastructure
 In-Reply-To: <1392324555-29246-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1392324555-29246-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1392324555-29246-18-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1392324555-29246-17-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Until now, Python external modules were only visible when Python 2.x
-was selected. With this commit, we now source all the Config.in files
-of Python external modules, as soon as one of the two Python
-interpreters is enabled.
+This commit improves the Python package infrastructure to allow Python
+packages to be built with Python 3. The changes are fairly simple:
 
-Since all Python external modules have a "depends on
-BR2_PACKAGE_PYTHON" in their Config.in, this commit in practice does
-not allow to enable any Python external module. However, thanks to
-this, we can progressively and safely enable more and more Python
-external modules to build with Python 3, by simply changing their
-dependency to "depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3".
+ * Use either PYTHON_PATH or PYTHON3_PATH as the PYTHONPATH depending
+   on which Python is used.
+
+ * Depend on host-python or host-python3 and python or python3
+   depending on which Python is used.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/pkg-python.mk | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index fca61d6..fe2acf9 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -395,7 +395,8 @@ endmenu
+diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+index c4bbb37..a265862 100644
+--- a/package/pkg-python.mk
++++ b/package/pkg-python.mk
+@@ -27,7 +27,7 @@ PKG_PYTHON_DISTUTILS_ENV = \
+ 	CFLAGS="$(TARGET_CFLAGS)" \
+ 	LDFLAGS="$(TARGET_LDFLAGS)" \
+ 	LDSHARED="$(TARGET_CROSS)gcc -shared" \
+-	PYTHONPATH="$(PYTHON_PATH)" \
++	PYTHONPATH="$(if $(BR2_PACKAGE_PYTHON3),$(PYTHON3_PATH),$(PYTHON_PATH))" \
+ 	_python_sysroot=$(STAGING_DIR) \
+ 	_python_prefix=/usr \
+ 	_python_exec_prefix=/usr
+@@ -48,7 +48,7 @@ HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPT = \
+ # Target setuptools-based packages
+ PKG_PYTHON_SETUPTOOLS_ENV = \
+ 	PATH="$(TARGET_PATH)" \
+-	PYTHONPATH="$(PYTHON_PATH)" \
++	PYTHONPATH="$(if $(BR2_PACKAGE_PYTHON3),$(PYTHON3_PATH),$(PYTHON_PATH))" \
+ 	_python_sysroot=$(STAGING_DIR) \
+ 	_python_prefix=/usr \
+ 	_python_exec_prefix=/usr
+@@ -138,16 +138,16 @@ endif
+ # depending on the package characteristics, and shouldn't be derived
+ # automatically from the dependencies of the corresponding target
+ # package.
+-$(2)_DEPENDENCIES ?= $(filter-out host-python host-python-setuptools $(1),$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
++$(2)_DEPENDENCIES ?= $(filter-out host-python host-python3 host-python-setuptools $(1),$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
+ 
+ # Target packages need both the python interpreter on the target (for
+ # runtime) and the python interpreter on the host (for
+ # compilation). However, host packages only need the python
+ # interpreter on the host.
+ ifeq ($(4),target)
+-$(2)_DEPENDENCIES += host-python python
++$(2)_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON3),host-python3 python3,host-python python)
+ else
+-$(2)_DEPENDENCIES += host-python
++$(2)_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python)
  endif
- source "package/php/Config.in"
- source "package/python/Config.in"
--if BR2_PACKAGE_PYTHON
-+source "package/python3/Config.in"
-+if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
- menu "external python modules"
- source "package/python-bottle/Config.in"
- source "package/python-configobj/Config.in"
-@@ -431,7 +432,6 @@ source "package/python-tornado/Config.in"
- source "package/python-versiontools/Config.in"
- endmenu
- endif
--source "package/python3/Config.in"
- source "package/ruby/Config.in"
- source "package/tcl/Config.in"
- if BR2_PACKAGE_TCL
+ 
+ # Setuptools based packages will need host-python-setuptools (both
 -- 
 1.8.3.2
