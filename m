@@ -1,52 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 13 Feb 2014 23:18:24 +0100
-Subject: [Buildroot] [PATCH 1/3] python-setuptools: bumped version to 0.8
-In-Reply-To: <20140213221244.117882f0@skate>
-References: <1374316034-31973-1-git-send-email-rohfledev@gmail.com>
- <20140213221244.117882f0@skate>
-Message-ID: <20140213231824.7e1e44d4@skate>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Thu, 13 Feb 2014 23:26:40 +0100
+Subject: [Buildroot] [PATCH 1/2] nut: disable hal
+In-Reply-To: <20140213213800.GA3259@free.fr>
+References: <1392326275-25992-1-git-send-email-romain.naour@openwide.fr>
+ <20140213213800.GA3259@free.fr>
+Message-ID: <52FD46A0.8020706@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Rohan, all,
+Hi Yann, Peter, All,
 
-On Thu, 13 Feb 2014 22:12:44 +0100, Thomas Petazzoni wrote:
+Le 13/02/2014 22:38, Yann E. MORIN a ?crit :
+> Romain, All,
+>
+> On 2014-02-13 22:17 +0100, Romain Naour spake thusly:
+>> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+>> ---
+>>   package/nut/nut.mk | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/package/nut/nut.mk b/package/nut/nut.mk
+>> index 04b2b41..47367e1 100644
+>> --- a/package/nut/nut.mk
+>> +++ b/package/nut/nut.mk
+>> @@ -85,4 +85,6 @@ else
+>>   NUT_CONF_OPT += --without-ssl
+>>   endif
+>>   
+>> +NUT_CONF_OPT += --without-hal
+> I don't care much where this ends up, but we already have a NUT_CONF_OPT
+> at the top of the file, so maybe it;d be better to move it there.
+>
+> Regards,
+> Yann E. MORIN.
+>
+I was preparing the v2 patch.
+Thanks Peter :)
 
-> For Perl, Fran?ois Perrad has written a script that given a Perl CPAN
-> package creates all the necessary Buildroot packages. Such an approach
-> was accepted by the Buildroot developers, and maybe we should look at
-> having something similar for Python modules.
-
-I just tried this idea, see the attached (ugly) script.
-
-Unfortunately, there are quite a few limitations:
-
-  - The script is currently not able to guess the <pkg>_SETUP_TYPE,
-    i.e whether the package should be built with distutils or
-    setuptools.
-
-  - The Pypi informations seem to very limited. A number of packages
-    don't even give the URL of their tarball, the licensing
-    informations are incomplete, there is no reference to the file
-    containing the license text, etc.
-
-If anyone wants to pursue this experimentation, feel free to pick up
-the script and improve it.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Romain
 -------------- next part --------------
-A non-text attachment was scrubbed...
-Name: pypi-gen-packages
-Type: application/octet-stream
-Size: 3380 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140213/f94dc71b/attachment.obj>
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140213/5f4d1ab3/attachment.html>
