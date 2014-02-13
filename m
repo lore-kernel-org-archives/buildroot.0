@@ -1,46 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 13 Feb 2014 21:49:02 +0100
-Subject: [Buildroot] [PATCHv1 13/26] python3: use proper
-	PYTHON3_VERSION_MAJOR instead of harcoding 3.3
+Date: Thu, 13 Feb 2014 21:49:04 +0100
+Subject: [Buildroot] [PATCHv1 15/26] python3: provide a PYTHON3_PATH
 In-Reply-To: <1392324555-29246-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1392324555-29246-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1392324555-29246-14-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1392324555-29246-16-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some parts of python3.mk were hardcoding the 3.3 version as the major
-version, which does not work for Python 3.4 and other future
-versions. Instead, use the existing PYTHON3_VERSION_MAJOR.
+The Python package infrastructure will need the Python 3 package to
+provide a PYTHON3_PATH environment variable in order to build
+third-party Python modules.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python3/python3.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/python3/python3.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index d98ca38..477bdfb 100644
+index 232862a..8bf9518 100644
 --- a/package/python3/python3.mk
 +++ b/package/python3/python3.mk
-@@ -127,7 +127,7 @@ PYTHON3_MAKE_ENV = \
- # trouble for cross compilation
- define PYTHON3_FIXUP_LIBDIR
- 	$(SED) 's|^LIBDIR=.*|LIBDIR= $(STAGING_DIR)/usr/lib|' \
--	   $(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/config-3.3m/Makefile
-+	   $(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/config-$(PYTHON3_VERSION_MAJOR)m/Makefile
- endef
+@@ -156,5 +156,8 @@ HOST_PYTHON3_POST_INSTALL_HOOKS += \
+ 	HOST_PYTHON3_INSTALL_SYMLINK \
+ 	HOST_PYTHON3_INSTALL_CONFIG_SYMLINK
  
- PYTHON3_POST_INSTALL_STAGING_HOOKS += PYTHON3_FIXUP_LIBDIR
-@@ -141,7 +141,7 @@ define PYTHON3_REMOVE_USELESS_FILES
- 	rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR)m-config
- 	rm -f $(TARGET_DIR)/usr/bin/python3-config
- 	rm -f $(TARGET_DIR)/usr/bin/smtpd.py.3
--	for i in `find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/config-3.3m/ \
-+	for i in `find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/config-$(PYTHON3_VERSION_MAJOR)m/ \
- 		-type f -not -name pyconfig.h -a -not -name Makefile` ; do \
- 		rm -f $$i ; \
- 	done
++# Provided to other packages
++PYTHON3_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/sysconfigdata/:$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
 1.8.3.2
