@@ -1,49 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 13 Feb 2014 14:22:07 +0100
-Subject: [Buildroot] [PATCH 6/6] qt5: needs NPTL threads
+From: Mike Zick <minimod@morethan.org>
+Date: Thu, 13 Feb 2014 07:46:17 -0600
+Subject: [Buildroot] [PATCH 0/6] Add toolchain knob for NPTL
 In-Reply-To: <1392297727-17627-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1392297727-17627-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1392297727-17627-7-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20140213074617.283682ce@core2quad.morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
+On Thu, 13 Feb 2014 14:22:01 +0100
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-  http://autobuild.buildroot.org/results/70b/70b77e7a5b292e3fcbcf8cab4651c48220f2bd17/
+> We have a growing number of packages that need pthread functions only
+> available when the NPTL implementation is used. But at the same time,
+> we have several architectures (AVR32, ARC, Blackfin and Xtensa) that
+> don't support NPTL.
+> 
+> This set of commits adds a new hidden toolchain config knob named
+> BR2_TOOLCHAIN_HAS_THREADS_NPTL, and uses it in four packages: three
+> were already having special conditions to more-or-less detect the
+> availability of NPTL, and one package (qt5) which fixes an autobuilder
+> failure.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/qt5/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+*NIT* :
 
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index b62a810..597dbd1 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -6,10 +6,10 @@ config BR2_PACKAGE_QT5_JSCORE_AVAILABLE
- 	depends on !(BR2_arm7tdmi || BR2_arm720t || BR2_arm920t || BR2_arm922t || BR2_fa526)
- 	default y
- 
--comment "Qt5 needs a toolchain w/ wchar, IPv6, threads, C++"
-+comment "Qt5 needs a toolchain w/ wchar, IPv6, NPTL threads, C++"
- 	depends on !BR2_PACKAGE_QT
- 	depends on !BR2_avr32
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 
- menuconfig BR2_PACKAGE_QT5
- 	bool "Qt5"
-@@ -17,7 +17,7 @@ menuconfig BR2_PACKAGE_QT5
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_INET_IPV6
--	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on !BR2_PACKAGE_QT
- 	help
- 	  This option enables the Qt5 framework. Sub-options allow to
--- 
-1.8.3.2
+With the line length limitations, shouldn't variable names be kept to
+less than 1/2 the line length limits?  ;)
+
+Rhetorical:
+Can a toolchain **without threads** support NPTL ?
+
+With the above considerations, perhaps the knob could be:
+BR2_TOOLCHAIN_NPTL
+
+- - - -
+
+Sorry for the noise, mind is not fully in-gear this morning.
+Mike
