@@ -1,42 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 13 Feb 2014 22:07:09 +0100
-Subject: [Buildroot] [PATCH v4 0/5] Python 3, simple,
- external package support
-In-Reply-To: <1360922412-32559-1-git-send-email-kpa_info@yahoo.fr>
-References: <1360922412-32559-1-git-send-email-kpa_info@yahoo.fr>
-Message-ID: <20140213220709.200e22e2@skate>
+Date: Thu, 13 Feb 2014 22:08:54 +0100
+Subject: [Buildroot] [PATCH] python: fix to ensure libpython is stripped
+In-Reply-To: <1390448438-13114-1-git-send-email-przemyslaw.wrzos@calyptech.com>
+References: <1390448438-13114-1-git-send-email-przemyslaw.wrzos@calyptech.com>
+Message-ID: <20140213220854.0db94a08@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Patrick Gerber,
+Dear Przemyslaw Wrzos,
 
-On Fri, 15 Feb 2013 11:00:07 +0100, Patrick Gerber wrote:
-> This patch series refactor python support in buildroot to enable the 
-> use of external package with both; python2 and python3. The packages
-> python-bottle and python-serial have been adapted as examples.
+On Thu, 23 Jan 2014 14:40:38 +1100, Przemyslaw Wrzos wrote:
+> The python and python3 builds mark libpython as read-only which
+> prevents it from being stripped out correctly for the target.
 > 
-> To support others external package more work is needed as they are
-> based on python setuptools. It's no more supported by python3 and
-> should be replaced by "Distribute". This should be done in another
-> patch series.
+> Signed-off-by: Przemyslaw Wrzos <przemyslaw.wrzos@calyptech.com>
+> ---
+>  package/python/python.mk   | 9 +++++++++
+>  package/python3/python3.mk | 9 +++++++++
+>  2 files changed, 18 insertions(+)
+> 
+>  NOTE: Resubmitting as part of patchwork cleanup #6.
 
-It's been a very long time (one year), but I have sent a patch series
-that bumps Python 2.x and 3.x to their latest version, and adds the
-possibility of building Python external modules with Python 3.
+I have integrated this patch into the large set of Python patches I've
+posted at
+http://lists.busybox.net/pipermail/buildroot/2014-February/089309.html.
 
-If you have some time, I would definitely be interested by receiving
-comments, and testing reports. For details, see:
-
-  http://lists.busybox.net/pipermail/buildroot/2014-February/089309.html
-
-The code is available at:
-
-  http://git.free-electrons.com/users/thomas-petazzoni/buildroot/log/?h=python3-pkg
-
-Thanks!
+However, I agree with Thomas De Schampheleire that this specific patch
+should be merged for 2014.02, as it fixes a real problem, and gives a
+nice size reduction.
 
 Thomas
 -- 
