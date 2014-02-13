@@ -1,63 +1,53 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 13 Feb 2014 22:04:59 +0100
-Subject: [Buildroot] [PATCH] systemd: fix build with uClibc toolchains
-In-Reply-To: <1392243180-23730-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Wed, 12 Feb 2014 23:13:00 +0100")
-References: <1392243180-23730-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87wqgypvus.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 13 Feb 2014 21:49:01 +0100
+Subject: [Buildroot] [PATCHv1 12/26] python3: add config directory symbolic
+	link
+In-Reply-To: <1392324555-29246-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1392324555-29246-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1392324555-29246-13-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+From: "kpa_info@yahoo.fr" <kpa_info@yahoo.fr>
 
- > Currently, the build of systemd is broken with the internal toolchain
- > backend, because we have uClibc patches that add support for
- > execvpe(), but we also have a patch for systemd that adds execvpe(),
- > which was added when the internal uClibc didn't support execvpe().
+When using host python to install an external module, the setup tool
+look for some files in python3.3/config/. The python3 package config
+directory is called config-3.3m. This is why we need to alias config
+to config-3.3m.
 
- > However, simply dropping the patch is not a solution, as it would
- > break the build of systemd with any other uClibc than the ones built
- > with Buildroot. For example, a Crosstool-NG uClibc toolchain would
- > fail.
+[Thomas: use PYTHON3_VERSION_MAJOR instead of hardcoding 3.3, update
+commit title.]
 
- > Beyond this execvpe() problem, there are also other problems that
- > prevented systemd from being built with unpatched uClibc.
+Signed-off-by: Patrick Gerber <kpa_info@yahoo.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/python3/python3.mk | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
- > This patch does the following:
-
- >  * Add sequence numbers of systemd patches.
- >  * Regenerate them to avoid fuzz.
- >  * Improve the uClibc compatibility patch so that it:
- >    - Detects whether execvpe() is available or not, and if not
- >      available provide an implementation.
- >    - Detects if dup3() is available or not, and if not available
- >      provide an implementation.
- >    - Detects if MSG_CMSG_CLOEXEC is defined or not, and if not, define
- >      it to the appropriate value.
-
- > This has been tested with uClibc internal toolchain, uClibc external
- > toolchain built with Buildroot, uClibc external toolchain built with
- > Crosstool-NG, and glibc external toolchain.
-
- > Fixes bug #6776.
-
- > Fixes:
-
- >   http://autobuild.buildroot.org/results/591/591c6055430da334bd1e46e7d01497add45da837/build-end.log
- >   http://autobuild.buildroot.org/results/e58/e5851939d2837d4e35a4c1d9ca6df3c93ed5a34b/build-end.log
- >   http://autobuild.buildroot.org/results/92e/92e4c40c69a3feb4046b2fe5a0d8c69d5a44a157/build-end.log
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- > ---
- > Obviously, this patch is for the master branch. On the next branch,
- > systemd has been bumped to a much newer version of systemd, which is
- > now restricted to glibc. I however believe that it is worth having
- > systemd-44 working in 2014.02.
-
-Committed, thanks.
-
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index ba72e75..d98ca38 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -163,7 +163,16 @@ define HOST_PYTHON3_INSTALL_SYMLINK
+ 	ln -fs python3 $(HOST_DIR)/usr/bin/python
+ endef
+ 
+-HOST_PYTHON3_POST_INSTALL_HOOKS += HOST_PYTHON3_INSTALL_SYMLINK
++# Alias the python<version>/config-<version>m to python<version>/config
++# This is needed when installing an external python module, because
++# the setup is looking for files in python<version>/config/
++define HOST_PYTHON3_INSTALL_CONFIG_SYMLINK
++	ln -fs config-$(PYTHON3_VERSION_MAJOR)m $(HOST_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOE)config
++endef
++
++HOST_PYTHON3_POST_INSTALL_HOOKS += \
++	HOST_PYTHON3_INSTALL_SYMLINK \
++	HOST_PYTHON3_INSTALL_CONFIG_SYMLINK
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
-Bye, Peter Korsgaard
+1.8.3.2
