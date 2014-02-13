@@ -1,56 +1,32 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 13 Feb 2014 22:54:48 +0100
-Subject: [Buildroot] [PATCHv1 12/26] python3: add config directory
- symbolic link
-In-Reply-To: <1392324555-29246-13-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1392324555-29246-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1392324555-29246-13-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAHXCMMLXGoNU0qhUE=_MqBPia0eQOfhH41N1Tv6=4wvnL_2SDQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 13 Feb 2014 22:59:18 +0100
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <52FD365B.1020504@openwide.fr>
+References: <20140211073008.EC16B101035@stock.ovh.net>
+ <20140211101015.1b282bd3@skate> <20140211180123.GB3411@free.fr>
+ <20140212090659.15291b2b@skate> <52FBE074.4070005@openwide.fr>
+ <20140213122942.31ce862c@skate> <20140213195405.3f28464d@skate>
+ <52FD365B.1020504@openwide.fr>
+Message-ID: <20140213225918.2e6d5de9@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Dear Romain Naour,
 
-On Thu, Feb 13, 2014 at 9:49 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> From: "kpa_info at yahoo.fr" <kpa_info@yahoo.fr>
->
-> When using host python to install an external module, the setup tool
-> look for some files in python3.3/config/. The python3 package config
-> directory is called config-3.3m. This is why we need to alias config
-> to config-3.3m.
->
-> [Thomas: use PYTHON3_VERSION_MAJOR instead of hardcoding 3.3, update
-> commit title.]
->
-> Signed-off-by: Patrick Gerber <kpa_info@yahoo.fr>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/python3/python3.mk | 11 ++++++++++-
->  1 file changed, 10 insertions(+), 1 deletion(-)
->
-> diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-> index ba72e75..d98ca38 100644
-> --- a/package/python3/python3.mk
-> +++ b/package/python3/python3.mk
-> @@ -163,7 +163,16 @@ define HOST_PYTHON3_INSTALL_SYMLINK
->         ln -fs python3 $(HOST_DIR)/usr/bin/python
->  endef
->
-> -HOST_PYTHON3_POST_INSTALL_HOOKS += HOST_PYTHON3_INSTALL_SYMLINK
-> +# Alias the python<version>/config-<version>m to python<version>/config
-> +# This is needed when installing an external python module, because
-> +# the setup is looking for files in python<version>/config/
-> +define HOST_PYTHON3_INSTALL_CONFIG_SYMLINK
-> +       ln -fs config-$(PYTHON3_VERSION_MAJOR)m $(HOST_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOE)config
+On Thu, 13 Feb 2014 22:17:15 +0100, Romain Naour wrote:
 
-s/PYTHON3_VERSION_MAJOE/PYTHON3_VERSION_MAJOR/
+> Thanks for testing and for the log.
+> 
+> Ok, I'll send a patch to disable parallel builds.
 
-Regards,
+It'd be nicer to actually understand the parallel build problem and fix
+it :-)
 
-
+Thomas
 -- 
-Samuel
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
