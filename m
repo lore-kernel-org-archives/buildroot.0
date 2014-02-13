@@ -1,48 +1,52 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 13 Feb 2014 12:34:45 +0100
-Subject: [Buildroot] [PATCH 2 of 2] uclibc: copy config file from configure
-	iso patch step
-In-Reply-To: <patchbomb.1392291283@argentina>
-References: <patchbomb.1392291283@argentina>
-Message-ID: <99638f32b4ac5349460c.1392291285@argentina>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 13 Feb 2014 12:29:42 +0100
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <52FBE074.4070005@openwide.fr>
+References: <20140211073008.EC16B101035@stock.ovh.net>
+ <20140211101015.1b282bd3@skate> <20140211180123.GB3411@free.fr>
+ <20140212090659.15291b2b@skate> <52FBE074.4070005@openwide.fr>
+Message-ID: <20140213122942.31ce862c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The three typical packages that use .config files in buildroot copy the
-config file at different times in the build process:
+Dear Romain Naour,
 
-    busybox copies its .config from the post-extract hook.
-    linux copies its .config in the configure_cmds.
-    uclibc copies its .config from the post-patch hook.
+On Wed, 12 Feb 2014 21:58:28 +0100, Romain Naour wrote:
 
-Copying the .config file from the configure step is the only way to properly
-support an OVERRIDE_SRCDIR that does not yet have the .config file, because
-the extract and patch steps are skipped in that case.
+> I also tried to reproduce this build failure recently, but nut builds 
+> fine for me too.
+> Have you found somethingon gcc10 ?
 
-In a previous patch, the situation was already fixed for busybox. This patch
-applies the same fix to uclibc: copy the config file from the configure
-step, as linux is doing.
+No, I've tried to reproduce it, but the exact configuration that caused
+the build failure in the autobuilders doesn't fail for me.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> I don't think it's related but libhal.h is present on the autobuilder's log
+> "checking for libhal.h... yes"
+> 
+> Maybe add --without-hal in nut.mk ?
 
----
- package/uclibc/uclibc.mk |  3 +--
- 1 files changed, 1 insertions(+), 2 deletions(-)
+That would certainly be a good idea, but I have a successful build with
+the configuration of the autobuilder. So I'm suspecting a parallel
+build problem maybe, but so far I've attempted maybe builds of nut, and
+none of them failed. I've started a loop that builds nut repeatedly and
+aborts if the build has failed. Hopefully the issue will pop up.
 
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -453,9 +453,8 @@ define UCLIBC_SETUP_DOT_CONFIG
- 		oldconfig
- endef
- 
--UCLIBC_POST_PATCH_HOOKS += UCLIBC_SETUP_DOT_CONFIG
--
- define UCLIBC_CONFIGURE_CMDS
-+	$(UCLIBC_SETUP_DOT_CONFIG)
- 	$(MAKE1) -C $(UCLIBC_DIR) \
- 		$(UCLIBC_MAKE_FLAGS) \
- 		PREFIX=$(STAGING_DIR) \
+> Can you provide a complete build log with configure step ?
+
+Sure, see the attached log file.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: logfile2
+Type: application/octet-stream
+Size: 303269 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140213/58e5cdb5/attachment-0001.obj>
