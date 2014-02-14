@@ -1,10 +1,12 @@
 From: Peter Kuemmel <syntheticpp@gmx.net>
-Date: Fri, 14 Feb 2014 11:24:06 +0100
-Subject: [Buildroot] Problem with starting TI Graphics
-In-Reply-To: <CA+kK6WuqEOYcgypxbDJ8Hs5Jy3JXpuGaQPb9Qgp0+nsjDz1k5g@mail.gmail.com>
-References: <trinity-96c3bbe4-4de2-4d94-a868-2ca9c13f130e-1392279117507@3capp-gmx-bs38>, 
- <CA+kK6WuqEOYcgypxbDJ8Hs5Jy3JXpuGaQPb9Qgp0+nsjDz1k5g@mail.gmail.com>
-Message-ID: <trinity-c25b0db0-54b6-4f8c-977a-023518dc467a-1392373446805@3capp-gmx-bs16>
+Date: Fri, 14 Feb 2014 12:03:47 +0100
+Subject: [Buildroot] [PATCH 1/1] ti-gfx: bump to version 5_01_00_01
+In-Reply-To: <trinity-1946d258-c976-4ab8-8bd0-b43588728ea6-1392371833737@3capp-gmx-bs31>
+References: <52fd38fd.870eec0a.7f7f.13a5@mx.google.com>
+ <CAEBucnAUUP3==KSjx_uXZpcjfk9KNwOQqhQ0Eb-hu2+J7wfcKQ@mail.gmail.com>,
+ <CA+kK6Ws34CaJSSsk1cjg1=OKUXpoURarO9d9sTS8CGO7dXqNtQ@mail.gmail.com>,
+ <trinity-1946d258-c976-4ab8-8bd0-b43588728ea6-1392371833737@3capp-gmx-bs31>
+Message-ID: <trinity-3b023d3c-da74-4988-b5b0-903e733840ee-1392375827799@3capp-gmx-bs16>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,4 +14,4 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140214/06103641/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140214/8e7a6171/attachment.html>
