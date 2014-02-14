@@ -1,85 +1,139 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 17 Feb 2014 10:16:27 +0100
-Subject: [Buildroot] [git commit] package: add vo-aacenc (aac encoder)
-Message-ID: <20140228133413.A1FF59BBF9@busybox.osuosl.org>
+Date: Fri, 14 Feb 2014 21:15:48 +0100
+Subject: [Buildroot] [git commit] i.MX: Use FREESCALE_IMX_SITE for Freescale
+	packages
+Message-ID: <20140228133413.2004C9BA7B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0510e34783b871c68273479e0f5ba7295c11339d
+commit: http://git.buildroot.net/buildroot/commit/?id=0fa180aa8a0638c25a851f82658e88fbd954e5cd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+This patch consolidates the URLs for various Freescale-supplied
+packages to use FREESCALE_IMX_SITE.
+
+Signed-off-by: Eric Nelson <eric.nelson@boundarydevices.com>
+Reviewed-by: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in              |    1 +
- package/vo-aacenc/Config.in    |    9 +++++++++
- package/vo-aacenc/vo-aacenc.mk |   32 ++++++++++++++++++++++++++++++++
- 3 files changed, 42 insertions(+), 0 deletions(-)
+ package/freescale-imx/firmware-imx/firmware-imx.mk |    2 +-
+ package/freescale-imx/freescale-imx.mk             |    2 +-
+ .../gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk           |    2 +-
+ package/freescale-imx/imx-lib/imx-lib.mk           |    2 +-
+ .../gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk   |    3 +--
+ package/libfslcodec/libfslcodec.mk                 |    3 +--
+ package/libfslparser/libfslparser.mk               |    3 +--
+ package/libfslvpuwrap/libfslvpuwrap.mk             |    3 +--
+ 8 files changed, 8 insertions(+), 12 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index b8b2f4e..cb2d31b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -483,6 +483,7 @@ source "package/portaudio/Config.in"
- source "package/speex/Config.in"
- source "package/taglib/Config.in"
- source "package/tremor/Config.in"
-+source "package/vo-aacenc/Config.in"
- source "package/webrtc-audio-processing/Config.in"
- endmenu
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+index d9fcb89..d26b31c 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
++++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-diff --git a/package/vo-aacenc/Config.in b/package/vo-aacenc/Config.in
-new file mode 100644
-index 0000000..b5487dc
---- /dev/null
-+++ b/package/vo-aacenc/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_VO_AACENC
-+	bool "vo-aacenc"
-+	help
-+	  This library contains an encoder implementation of the
-+	  Advanced Audio Coding (AAC) audio codec. The library is
-+	  based on a codec implementation by VisualOn as part of the
-+	  Stagefright framework from the Google Android project.
-+
-+	  http://sourceforge.net/projects/opencore-amr/
-diff --git a/package/vo-aacenc/vo-aacenc.mk b/package/vo-aacenc/vo-aacenc.mk
-new file mode 100644
-index 0000000..8f01c34
---- /dev/null
-+++ b/package/vo-aacenc/vo-aacenc.mk
-@@ -0,0 +1,32 @@
-+################################################################################
-+#
-+# vo-aacenc
-+#
-+################################################################################
-+
-+VO_AACENC_VERSION = 0.1.3
-+VO_AACENC_SITE = http://downloads.sourceforge.net/project/opencore-amr/vo-aacenc
-+VO_AACENC_LICENSE = Apache-2.0
-+VO_AACENC_LICENSE_FILES = COPYING
-+VO_AACENC_INSTALL_STAGING = YES
-+
-+# arm specific asm optimizations
-+ifeq ($(BR2_arm),y)
-+
-+ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
-+VO_AACENC_CONF_OPT += --enable-armv7neon
-+# mfpu=neon needed to assemble neon code
-+VO_AACENC_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -mfpu=neon"
-+else
-+VO_AACENC_CONF_OPT += --disable-armv7neon
-+
-+ifeq ($(BR2_arm7tdmi)$(BR2_arm720t)$(BR2_arm920t)$(BR2_arm922t)$(BR2_strongarm)$(BR2_fa526),)
-+VO_AACENC_CONF_OPT += --enable-armv5e
-+else
-+VO_AACENC_CONF_OPT += --disable-armv5e
-+endif
-+
-+endif # !neon
-+endif # arm
-+
-+$(eval $(autotools-package))
+ FIRMWARE_IMX_VERSION = $(FREESCALE_IMX_VERSION)
+-FIRMWARE_IMX_SITE = $(FREESCALE_IMX_MIRROR_SITE)
++FIRMWARE_IMX_SITE = $(FREESCALE_IMX_SITE)
+ FIRMWARE_IMX_SOURCE = firmware-imx-$(FIRMWARE_IMX_VERSION).bin
+ FIRMWARE_IMX_LICENSE = Freescale Semiconductor Software License Agreement, \
+ 	Atheros license (ath6k)
+diff --git a/package/freescale-imx/freescale-imx.mk b/package/freescale-imx/freescale-imx.mk
+index d35a62e..0dd5629 100644
+--- a/package/freescale-imx/freescale-imx.mk
++++ b/package/freescale-imx/freescale-imx.mk
+@@ -7,6 +7,6 @@
+ FREESCALE_IMX_VERSION = 1.1.0
+ 
+ # No official download site from freescale, just this mirror
+-FREESCALE_IMX_MIRROR_SITE   = http://download.ossystems.com.br/bsp/freescale/source
++FREESCALE_IMX_SITE   = http://download.ossystems.com.br/bsp/freescale/source
+ 
+ include $(sort $(wildcard package/freescale-imx/*/*.mk))
+diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
+index c48d108..8e979ee 100644
+--- a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
++++ b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ GPU_VIV_BIN_MX6Q_VERSION = $(FREESCALE_IMX_VERSION)
+-GPU_VIV_BIN_MX6Q_SITE    = $(FREESCALE_IMX_MIRROR_SITE)
++GPU_VIV_BIN_MX6Q_SITE    = $(FREESCALE_IMX_SITE)
+ GPU_VIV_BIN_MX6Q_SOURCE  = gpu-viv-bin-mx6q-$(GPU_VIV_BIN_MX6Q_VERSION).bin
+ 
+ GPU_VIV_BIN_MX6Q_INSTALL_STAGING = YES
+diff --git a/package/freescale-imx/imx-lib/imx-lib.mk b/package/freescale-imx/imx-lib/imx-lib.mk
+index bd7e174..e1a68ef 100644
+--- a/package/freescale-imx/imx-lib/imx-lib.mk
++++ b/package/freescale-imx/imx-lib/imx-lib.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ IMX_LIB_VERSION = $(FREESCALE_IMX_VERSION)
+-IMX_LIB_SITE    = $(FREESCALE_IMX_MIRROR_SITE)
++IMX_LIB_SITE    = $(FREESCALE_IMX_SITE)
+ IMX_LIB_LICENSE = LGPLv2.1+
+ # No license file included
+ 
+diff --git a/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
+index ccdb521..4437875 100644
+--- a/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
++++ b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
+@@ -5,8 +5,7 @@
+ ################################################################################
+ 
+ GST_FSL_PLUGINS_VERSION = 3.0.1
+-# No official download site from freescale, just this mirror
+-GST_FSL_PLUGINS_SITE = http://download.ossystems.com.br/bsp/freescale/source
++GST_FSL_PLUGINS_SITE = $(FREESCALE_IMX_SITE)
+ 
+ # Most is LGPLv2+, but some sources are copied from upstream and are
+ # LGPLv2.1+, which essentially makes it LGPLv2.1+
+diff --git a/package/libfslcodec/libfslcodec.mk b/package/libfslcodec/libfslcodec.mk
+index c18332a..ad1cc63 100644
+--- a/package/libfslcodec/libfslcodec.mk
++++ b/package/libfslcodec/libfslcodec.mk
+@@ -5,8 +5,7 @@
+ ################################################################################
+ 
+ LIBFSLCODEC_VERSION = 3.0.1
+-# No official download site from freescale, just this mirror
+-LIBFSLCODEC_SITE = http://download.ossystems.com.br/bsp/freescale/source
++LIBFSLCODEC_SITE = $(FREESCALE_IMX_SITE)
+ LIBFSLCODEC_SOURCE = libfslcodec-$(LIBFSLCODEC_VERSION).bin
+ LIBFSLCODEC_LICENSE = Freescale Semiconductor Software License Agreement, BSD-3c (flac, ogg headers)
+ LIBFSLCODEC_LICENSE_FILES = EULA EULA.txt
+diff --git a/package/libfslparser/libfslparser.mk b/package/libfslparser/libfslparser.mk
+index 3e27a6a..3aab3a7 100644
+--- a/package/libfslparser/libfslparser.mk
++++ b/package/libfslparser/libfslparser.mk
+@@ -5,8 +5,7 @@
+ ################################################################################
+ 
+ LIBFSLPARSER_VERSION = 3.0.1
+-# No official download site from freescale, just this mirror
+-LIBFSLPARSER_SITE = http://download.ossystems.com.br/bsp/freescale/source
++LIBFSLPARSER_SITE = $(FREESCALE_IMX_SITE)
+ LIBFSLPARSER_SOURCE = libfslparser-$(LIBFSLPARSER_VERSION).bin
+ LIBFSLPARSER_LICENSE = Freescale Semiconductor Software License Agreement
+ LIBFSLPARSER_LICENSE_FILES = EULA EULA.txt
+diff --git a/package/libfslvpuwrap/libfslvpuwrap.mk b/package/libfslvpuwrap/libfslvpuwrap.mk
+index 1bc7129..346a20a 100644
+--- a/package/libfslvpuwrap/libfslvpuwrap.mk
++++ b/package/libfslvpuwrap/libfslvpuwrap.mk
+@@ -5,8 +5,7 @@
+ ################################################################################
+ 
+ LIBFSLVPUWRAP_VERSION = 1.0.17
+-# No official download site from freescale, just this mirror
+-LIBFSLVPUWRAP_SITE = http://download.ossystems.com.br/bsp/freescale/source
++LIBFSLVPUWRAP_SITE = $(FREESCALE_IMX_SITE)
+ LIBFSLVPUWRAP_LICENSE = Freescale Semiconductor Software License Agreement
+ LIBFSLVPUWRAP_LICENSE_FILES = EULA.txt
+ LIBFSLVPUWRAP_REDISTRIBUTE = NO
