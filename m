@@ -1,28 +1,50 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 14 Feb 2014 21:37:38 +0100
-Subject: [Buildroot] [PATCH 0 of 2] busybox/uclibc: copy config file
-	from configure step
-In-Reply-To: <patchbomb.1392291283@argentina> (Thomas De Schampheleire's
- message of "Thu, 13 Feb 2014 12:34:43 +0100")
-References: <patchbomb.1392291283@argentina>
-Message-ID: <87r475l9bh.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 14 Feb 2014 21:36:51 +0100
+Subject: [Buildroot] [git commit] uclibc: copy config file from configure
+	iso patch step
+Message-ID: <20140214203758.ECCF99A896@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=a25df76b39863e5d1a4e927696bf83055e8ce244
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > This patch series changes busybox and uclibc to copy the .config file from
- > the configure step, and not earlier (patch or extract step). This fixes the
- > usage of OVERRIDE_SRCDIR with these packages.
+The three typical packages that use .config files in buildroot copy the
+config file at different times in the build process:
 
- > This was reported for busybox in bug #5030.
+    busybox copies its .config from the post-extract hook.
+    linux copies its .config in the configure_cmds.
+    uclibc copies its .config from the post-patch hook.
 
- > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Copying the .config file from the configure step is the only way to properly
+support an OVERRIDE_SRCDIR that does not yet have the .config file, because
+the extract and patch steps are skipped in that case.
 
-Committed series, thanks.
+In a previous patch, the situation was already fixed for busybox. This patch
+applies the same fix to uclibc: copy the config file from the configure
+step, as linux is doing.
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/uclibc/uclibc.mk |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
+
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 7df9721..8497b46 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -453,9 +453,8 @@ define UCLIBC_SETUP_DOT_CONFIG
+ 		oldconfig
+ endef
+ 
+-UCLIBC_POST_PATCH_HOOKS += UCLIBC_SETUP_DOT_CONFIG
+-
+ define UCLIBC_CONFIGURE_CMDS
++	$(UCLIBC_SETUP_DOT_CONFIG)
+ 	$(MAKE1) -C $(UCLIBC_DIR) \
+ 		$(UCLIBC_MAKE_FLAGS) \
+ 		PREFIX=$(STAGING_DIR) \
