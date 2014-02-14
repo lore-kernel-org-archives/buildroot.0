@@ -1,33 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 18 Feb 2014 22:50:17 +0100
-Subject: [Buildroot] [git commit] python3: make it exclusive from python
-Message-ID: <20140228133414.228159BA7B@busybox.osuosl.org>
+Date: Fri, 14 Feb 2014 21:40:38 +0100
+Subject: [Buildroot] [git commit] pkg-python: use the newly defined
+	PYTHON_PATH variable
+Message-ID: <20140228133413.447F39BBF9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=eebbd2d91935c4a87a51c19c5bd9a37e1f703483
+commit: http://git.buildroot.net/buildroot/commit/?id=fa50b8eee17600d328ad661d17252c7f7cc3dac4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In Buildroot, we do not support installing both Python 2.x and Python
-3.x on the target.
+Now that the Python package exposes its PYTHON_PATH variable, we can
+use it in the package infrastructure. This prepares both the upcoming
+bump of Python 2.x, and the introduction of Python 3 support in the
+Python package infrastructure.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python3/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/pkg-python.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/python3/Config.in b/package/python3/Config.in
-index 6580cfd..12928f6 100644
---- a/package/python3/Config.in
-+++ b/package/python3/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON3
- 	bool "python3"
-+	depends on !BR2_PACKAGE_PYTHON
- 	depends on BR2_USE_WCHAR
- 	# uses fork()
- 	depends on BR2_USE_MMU
+diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+index f33980a..65c9b4a 100644
+--- a/package/pkg-python.mk
++++ b/package/pkg-python.mk
+@@ -48,7 +48,7 @@ HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPT = \
+ # Target setuptools-based packages
+ PKG_PYTHON_SETUPTOOLS_ENV = \
+ 	PATH="$(TARGET_PATH)" \
+-	PYTHONPATH="$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
++	PYTHONPATH="$(PYTHON_PATH)" \
+ 	PYTHONXCPREFIX="$(STAGING_DIR)/usr/" \
+ 	CROSS_COMPILING=yes \
+ 	_python_sysroot=$(STAGING_DIR) \
