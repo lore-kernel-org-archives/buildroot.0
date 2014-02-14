@@ -1,10 +1,10 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Fri, 14 Feb 2014 10:55:05 +0100
-Subject: [Buildroot] [PATCH v13 3/7] package: add support for top-level
+Date: Fri, 14 Feb 2014 10:55:06 +0100
+Subject: [Buildroot] [PATCH v13 4/7] Makefile: add support for top-level
 	parallel make
 In-Reply-To: <1392371709-26662-1-git-send-email-fabio.porcedda@gmail.com>
 References: <1392371709-26662-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1392371709-26662-4-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <1392371709-26662-5-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,161 +12,118 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 To be able to use top-level parallel make we must not depend in a rule
-on the order of evaluation of the prerequisites, so instead of relying
-on the left to right ordering of evaluation of the prerequisites add
-an explicit rule to describe the dependencies.
+on the order of evaluation of the prerequisites, so instead of relyng on
+the left to right ordering of evaluation of the prerequisites add an
+explicit rule to describe the dependencies.
 
-We cannot use the pattern rules because they must have the same
-dependency for every package, but we need to change the dependencies
-depending on $(2)_OVERRIDE_SRCDIR variable value, so we must use a
-more flexible way like $(2)_TARGET_% variables.
-
-So add explicit dependencies for the following stamp files:
-  $(2)_TARGET_EXTRACT
-  $(2)_TARGET_PATCH
-  $(2)_TARGET_CONFIGURE
-  $(2)_TARGET_BUILD
-  $(2)_TARGET_INSTALL_STAGING
-  $(2)_TARGET_INSTALL_TARGET
-  $(2)_TARGET_INSTALL_IMAGES
-  $(2)_TARGET_INSTALL_HOST
+Add explicit rules to describe the following dependency chain:
+$(TARGETS) -> target-finalize -> rootfs-* -> target-post-image
 
 Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/glibc/glibc.mk   |  6 +++---
- package/pkg-generic.mk   | 45 ++++++++++++++++++++++++++++-----------------
- package/uclibc/uclibc.mk |  6 +++---
- 3 files changed, 34 insertions(+), 23 deletions(-)
+ Makefile     | 21 ++++++++++++---------
+ fs/common.mk |  4 ++--
+ 2 files changed, 14 insertions(+), 11 deletions(-)
 
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index f50b459..6579f46 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -38,9 +38,6 @@ GLIBC_ADD_TOOLCHAIN_DEPENDENCY = NO
- # cross-compiler and the kernel headers
- GLIBC_DEPENDENCIES = host-gcc-initial linux-headers host-gawk
+diff --git a/Makefile b/Makefile
+index 8e65bc7..c89107a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -377,8 +377,6 @@ include system/system.mk
  
--# Before (e)glibc is built, we must have the second stage cross-compiler
--glibc-build: host-gcc-intermediate
+ include $(BR2_EXTERNAL)/external.mk
+ 
+-TARGETS+=target-finalize
 -
- GLIBC_SUBDIR = build
+ ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
+ TARGETS+=target-purgelocales
+ endif
+@@ -395,8 +393,6 @@ endif
  
- GLIBC_INSTALL_STAGING = YES
-@@ -142,3 +139,6 @@ define GLIBC_INSTALL_TARGET_CMDS
+ include fs/common.mk
+ 
+-TARGETS+=target-post-image
+-
+ TARGETS_SOURCE:=$(patsubst %,%-source,$(TARGETS) $(BASE_TARGETS))
+ TARGETS_DIRCLEAN:=$(patsubst %,%-dirclean,$(TARGETS))
+ 
+@@ -429,11 +425,16 @@ $(BUILD_DIR)/buildroot-config/auto.conf: $(BR2_CONFIG)
+ 
+ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
+ 
+-world: $(TARGETS)
++# Add base dependencies to all targets even on those not based on the
++# package framework.
++$(TARGETS): dirs prepare dependencies
++
++world: target-post-image
+ 
+ .PHONY: all world toolchain dirs clean distclean source outputmakefile \
+ 	legal-info legal-info-prepare legal-info-clean printvars \
+-	$(BASE_TARGETS) $(TARGETS) \
++	target-finalize target-post-image \
++	$(BASE_TARGETS) $(TARGETS) $(TARGETS_ROOTFS) \
+ 	$(TARGETS_DIRCLEAN) $(TARGETS_SOURCE) $(TARGETS_LEGAL_INFO) \
+ 	$(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
+ 	$(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR)
+@@ -493,7 +494,7 @@ endif
+ STRIP_FIND_CMD += -type f \( -perm /111 -o -name '*.so*' \)
+ STRIP_FIND_CMD += -not \( $(call findfileclauses,libpthread*.so* $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print
+ 
+-target-finalize:
++target-finalize: $(TARGETS)
+ 	rm -rf $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/share/aclocal \
+ 		$(TARGET_DIR)/usr/lib/pkgconfig $(TARGET_DIR)/usr/share/pkgconfig \
+ 		$(TARGET_DIR)/usr/lib/cmake $(TARGET_DIR)/usr/share/cmake
+@@ -520,6 +521,8 @@ endif
+ 		find $(TARGET_DIR)/lib/modules -type f -name '*.ko' | \
+ 		xargs -r $(KSTRIPCMD); fi
+ 
++$(TARGETS_ROOTFS): target-finalize
++
+ # See http://sourceware.org/gdb/wiki/FAQ, "GDB does not see any threads
+ # besides the one in which crash occurred; or SIGTRAP kills my program when
+ # I set a breakpoint"
+@@ -598,7 +601,7 @@ target-generatelocales: host-localedef
+ 	done
+ endif
+ 
+-target-post-image:
++target-post-image: $(TARGETS_ROOTFS)
+ 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
+ 		$(call MESSAGE,"Executing post-image script $(s)"); \
+ 		$(USER_HOOKS_EXTRA_ENV) $(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+@@ -635,7 +638,7 @@ legal-info: dirs legal-info-clean legal-info-prepare $(TARGETS_LEGAL_INFO) \
+ 	@rm -f $(LEGAL_WARNINGS)
+ 
+ show-targets:
+-	@echo $(TARGETS)
++	@echo $(TARGETS) $(TARGETS_ROOTFS)
+ 
+ graph-build: $(O)/build/build-time.log
+ 	@install -d $(O)/graphs
+diff --git a/fs/common.mk b/fs/common.mk
+index 30e7524..d95c26b 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -64,7 +64,7 @@ ROOTFS_$(2)_COMPRESS_EXT = .xz
+ ROOTFS_$(2)_COMPRESS_CMD = $$(XZ) -9 -C crc32 -c
+ endif
+ 
+-$$(BINARIES_DIR)/rootfs.$(1): $$(ROOTFS_$(2)_DEPENDENCIES)
++$$(BINARIES_DIR)/rootfs.$(1): target-finalize $$(ROOTFS_$(2)_DEPENDENCIES)
+ 	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
+ 	$$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),$$(call $$(hook))$$(sep))
+ 	rm -f $$(FAKEROOT_SCRIPT)
+@@ -95,7 +95,7 @@ rootfs-$(1)-show-depends:
+ rootfs-$(1): $$(BINARIES_DIR)/rootfs.$(1) $$(ROOTFS_$(2)_POST_TARGETS)
+ 
+ ifeq ($$(BR2_TARGET_ROOTFS_$(2)),y)
+-TARGETS += rootfs-$(1)
++TARGETS_ROOTFS += rootfs-$(1)
+ endif
  endef
  
- $(eval $(autotools-package))
-+
-+# Before (e)glibc is built, we must have the second stage cross-compiler
-+$(GLIBC_TARGET_BUILD): | host-gcc-intermediate
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index b135b14..fec16b0 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -412,30 +412,42 @@ $(1)-install:		$(1)-install-staging $(1)-install-target $(1)-install-images
- endif
- 
- ifeq ($$($(2)_INSTALL_TARGET),YES)
--$(1)-install-target:	$(1)-build \
--			$$($(2)_TARGET_INSTALL_TARGET)
-+$(1)-install-target:		$$($(2)_TARGET_INSTALL_TARGET)
-+$$($(2)_TARGET_INSTALL_TARGET):	$$($(2)_TARGET_BUILD)
- else
- $(1)-install-target:
- endif
- 
- ifeq ($$($(2)_INSTALL_STAGING),YES)
--$(1)-install-staging:	$(1)-build \
--			$$($(2)_TARGET_INSTALL_STAGING)
-+$(1)-install-staging:			$$($(2)_TARGET_INSTALL_STAGING)
-+$$($(2)_TARGET_INSTALL_STAGING):	$$($(2)_TARGET_BUILD)
-+# Some packages use install-staging stuff for install-target
-+$$($(2)_TARGET_INSTALL_TARGET):		$$($(2)_TARGET_INSTALL_STAGING)
- else
- $(1)-install-staging:
- endif
- 
- ifeq ($$($(2)_INSTALL_IMAGES),YES)
--$(1)-install-images:	$(1)-build \
--			$$($(2)_TARGET_INSTALL_IMAGES)
-+$(1)-install-images:		$$($(2)_TARGET_INSTALL_IMAGES)
-+$$($(2)_TARGET_INSTALL_IMAGES):	$$($(2)_TARGET_BUILD)
- else
- $(1)-install-images:
- endif
- 
--$(1)-install-host:      $(1)-build $$($(2)_TARGET_INSTALL_HOST)
-+$(1)-install-host:      	$$($(2)_TARGET_INSTALL_HOST)
-+$$($(2)_TARGET_INSTALL_HOST):	$$($(2)_TARGET_BUILD)
- 
--$(1)-build:		$(1)-configure \
--			$$($(2)_TARGET_BUILD)
-+$(1)-build:		$$($(2)_TARGET_BUILD)
-+$$($(2)_TARGET_BUILD):	$$($(2)_TARGET_CONFIGURE)
-+
-+# Since $(2)_DEPENDENCIES are phony targets, they are always "newer"
-+# than $(2)_TARGET_CONFIGURE. This would force the configure step (and
-+# therefore the other steps as well) to be re-executed with every
-+# invocation of make.  Therefore, make $(2)_DEPENDENCIES an order-only
-+# dependency by using |.
-+
-+$(1)-configure:			$$($(2)_TARGET_CONFIGURE)
-+$$($(2)_TARGET_CONFIGURE):	| $$($(2)_DEPENDENCIES)
- 
- $$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dirs prepare
- ifeq ($(filter $(1),$(DEPENDENCIES_HOST_PREREQ)),)
-@@ -449,13 +461,13 @@ ifeq ($$($(2)_OVERRIDE_SRCDIR),)
- #  extract
- #  patch
- #  configure
--$(1)-configure:		$(1)-patch $(1)-depends \
--			$$($(2)_TARGET_CONFIGURE)
-+$$($(2)_TARGET_CONFIGURE):	$$($(2)_TARGET_PATCH)
- 
--$(1)-patch:		$(1)-extract $$($(2)_TARGET_PATCH)
-+$(1)-patch:		$$($(2)_TARGET_PATCH)
-+$$($(2)_TARGET_PATCH):	$$($(2)_TARGET_EXTRACT)
- 
--$(1)-extract:		$(1)-source \
--			$$($(2)_TARGET_EXTRACT)
-+$(1)-extract:			$$($(2)_TARGET_EXTRACT)
-+$$($(2)_TARGET_EXTRACT):	$$($(2)_TARGET_SOURCE)
- 
- $(1)-depends:		$$($(2)_DEPENDENCIES)
- 
-@@ -465,10 +477,9 @@ else
- #  source, by rsyncing
- #  depends
- #  configure
--$(1)-configure:		$(1)-depends \
--			$$($(2)_TARGET_CONFIGURE)
-+$$($(2)_TARGET_CONFIGURE):	$$($(2)_TARGET_RSYNC)
- 
--$(1)-depends:		$(1)-rsync $$($(2)_DEPENDENCIES)
-+$(1)-depends:		$$($(2)_DEPENDENCIES)
- 
- $(1)-patch:		$(1)-rsync
- $(1)-extract:		$(1)-rsync
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index ea1c694..4860c58 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -29,9 +29,6 @@ UCLIBC_ADD_TOOLCHAIN_DEPENDENCY = NO
- # cross-compiler and the kernel headers
- UCLIBC_DEPENDENCIES = host-gcc-initial linux-headers
- 
--# Before uClibc is built, we must have the second stage cross-compiler
--uclibc-build: host-gcc-intermediate
--
- # specifying UCLIBC_CONFIG_FILE on the command-line overrides the .config
- # setting.
- ifndef UCLIBC_CONFIG_FILE
-@@ -556,3 +553,6 @@ uclibc-menuconfig: dirs uclibc-patch
- 	rm -f $(UCLIBC_DIR)/.stamp_{configured,built,target_installed,staging_installed}
- 
- $(eval $(generic-package))
-+
-+# Before uClibc is built, we must have the second stage cross-compiler
-+$(UCLIBC_TARGET_BUILD): | host-gcc-intermediate
 -- 
 1.8.5.2
