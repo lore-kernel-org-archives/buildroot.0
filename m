@@ -1,114 +1,307 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Fri, 14 Feb 2014 16:11:13 +0100
-Subject: [Buildroot] [PATCH v2 1/1] manual: add virtual package tutorial.
-Message-ID: <1392390673-30343-1-git-send-email-eric.le.bihan.dev@free.fr>
+From: =?UTF-8?q?Peter=20K=C3=BCmmel?= <syntheticpp@gmx.net>
+Date: Fri, 14 Feb 2014 16:12:03 +0100
+Subject: [Buildroot] [PATCH 1/1] Qt5: update to 5.2.1
+Message-ID: <1392390723-21621-1-git-send-email-syntheticpp@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The 'Tips and Tricks' section now features instructions about how to add a
-virtual package.
+Removed patches are now part of the 5.2.1 release.
 
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Signed-off-by: Peter K?mmel <syntheticpp@gmx.net>
 ---
-Changes v1 -> v2:
-  - correct grammar errors (reported by ThomasDS).
----
- docs/manual/adding-packages-tips.txt |   83 ++++++++++++++++++++++++++++++++++
- 1 file changed, 83 insertions(+)
+ package/qt5/qt5.mk                                 |   2 +-
+ .../qt5base-0001-Fix-build-MIPS64-bigendian.patch  |  51 -------
+ ...-detect-posix_fallocate-at-configure-time.patch | 167 ---------------------
+ ...kit-0002-Fix-QtWebKit-build-on-ARM-softfp.patch |  35 -----
+ 4 files changed, 1 insertion(+), 254 deletions(-)
+ delete mode 100644 package/qt5/qt5base/qt5base-0001-Fix-build-MIPS64-bigendian.patch
+ delete mode 100644 package/qt5/qt5base/qt5base-0007-detect-posix_fallocate-at-configure-time.patch
+ delete mode 100644 package/qt5/qt5webkit/qt5webkit-0002-Fix-QtWebKit-build-on-ARM-softfp.patch
 
-diff --git a/docs/manual/adding-packages-tips.txt b/docs/manual/adding-packages-tips.txt
-index 73c25be..5992860 100644
---- a/docs/manual/adding-packages-tips.txt
-+++ b/docs/manual/adding-packages-tips.txt
-@@ -55,3 +55,86 @@ FOO_SITE = $(call github,<user>,<package>,$(FOO_VERSION))
-   Buildroot (e.g.: +foo-f6fb6654af62045239caed5950bc6c7971965e60.tar.gz+),
-   so it is not necessary to specify it in the +.mk+ file.
- - When using a commit ID as version, you should use the full 40 hex characters.
-+
-+[[virtual-package-tutorial]]
-+How to add a virtual package
-+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-+
-+In Buildroot, a virtual package is a package whose functionalities are
-+provided by one or more packages, referred to as 'providers'.
-+
-+For example, 'OpenGL ES' is an API for 2D and 3D graphics on embedded systems.
-+The implementation of this API is different for the 'Allwinner Tech Sunxi' and
-+the 'Texas Instruments OMAP35xx' plaftorms. So +libgles+ will be a virtual
-+package and +sunxi-mali+ and +ti-gfx+ will be the providers.
-+
-+.Virtual package +Config.in+ file
-+=================================
-+The +Config.in+ file of virtual package 'foo' should contain:
-+
-+---------------------------
-+01: config BR2_PACKAGE_HAS_FOO
-+02:	bool
-+03:
-+04: config BR2_PACKAGE_PROVIDES_FOO
-+05:	depends on BR2_PACKAGE_HAS_FOO
-+06:	string
-+---------------------------
-+=================================
-+
-+On line 1, we declare the option +BR2_PACKAGE_HAS_FOO+, which will be selected
-+by the provider. On line 4, we declare the option +BR2_PACKAGE_PROVIDES_FOO+
-+whose value will be set to the name of the provider, by the provider.
-+
-+.Virtual package +*.mk+ file
-+============================
-+The Makefile +package/foo/foo.mk+ should contain:
-+
-+---------------------------
-+01: ################################################################################
-+02: #
-+03: # foo
-+04: #
-+05: ################################################################################
-+06:
-+07: FOO_SOURCE =
-+08: FOO_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_FOO))
-+09:
-+10: ifeq ($(FOO_DEPENDENCIES),)
-+11: define FOO_CONFIGURE_CMDS
-+12:	$(error No Foo implementation selected. Configuration error)
-+13:	exit 1
-+14: endef
-+15: endif
-+---------------------------
-+============================
-+
-+The Makefile is quite small as it will only check if a provider for the
-+virtual package has been selected.
-+
-+.Provider +Config.in+ file
-+==========================
-+The +Config.in+ file of the package 'libbaz', which provides the functionalities
-+of 'foo', should contain:
-+
-+---------------------------
-+01: config BR2_PACKAGE_LIBBAZ
-+02:	bool "libbaz"
-+03:	select BR2_PACKAGE_HAS_FOO
-+04:	help
-+05:	  This is a comment that explains what libbaz is.
-+06:
-+07:	  http://bazsoftware.org/libbaz/
-+08:
-+09: if BR2_PACKAGE_LIBBAZ
-+10: config BR2_PACKAGE_PROVIDES_FOO
-+11:	default "libbaz"
-+12: endif
-+---------------------------
-+==========================
-+
-+On line 3, we select +BR2_PACKAGE_HAS_FOO+, and on line 11, we set the value
-+of +BR2_PACKAGE_PROVIDES_FOO+ to the name of the provider, but only if it is
-+selected.
-+
-+No modifications to +package/libbaz/libbaz.mk+ are required.
+diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
+index 6b05334..0ce6cf5 100644
+--- a/package/qt5/qt5.mk
++++ b/package/qt5/qt5.mk
+@@ -1,5 +1,5 @@
+ QT5_VERSION_MAJOR = 5.2
+-QT5_VERSION = $(QT5_VERSION_MAJOR).0
++QT5_VERSION = $(QT5_VERSION_MAJOR).1
+ QT5_SITE = http://download.qt-project.org/official_releases/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules/
+ include $(sort $(wildcard package/qt5/*/*.mk))
+ 
+diff --git a/package/qt5/qt5base/qt5base-0001-Fix-build-MIPS64-bigendian.patch b/package/qt5/qt5base/qt5base-0001-Fix-build-MIPS64-bigendian.patch
+deleted file mode 100644
+index 00dcd48..0000000
+--- a/package/qt5/qt5base/qt5base-0001-Fix-build-MIPS64-bigendian.patch
++++ /dev/null
+@@ -1,51 +0,0 @@
+-qt5base: Fix build error on 64bit BigEndian platforms
+-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+-
+-From cea101bd10cc158b97d5fbf45b33dad9b649c08b Mon Sep 17 00:00:00 2001
+-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+-Date: Mon, 2 Dec 2013 13:59:34 +0000
+-Subject: [PATCH] qtbase: Fix build error on 64bit BigEndian platforms
+-
+-The functions fromBytesToWord() and fromWordToBytes() are called when
+-building on 64bit BigEndian platforms. It fails because those
+-functions are disabled on the source code. Enabling those functions for
+-64bit BigEndian platforms fixes the problem.
+-
+-Task-number: QTBUG-35228
+-
+-Change-Id: I5ccacd4fb5051df05f67c8da879b3a9e49953861
+-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+-Reviewed-by: Giuseppe D'Angelo <giuseppe.dangelo@kdab.com>
+-Reviewed-by: Richard J. Moore <rich@kde.org>
+----
+- src/3rdparty/sha3/KeccakF-1600-opt64.c | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+- mode change 100755 => 100644 src/3rdparty/sha3/KeccakF-1600-opt64.c
+-
+-diff --git a/src/3rdparty/sha3/KeccakF-1600-opt64.c b/src/3rdparty/sha3/KeccakF-1600-opt64.c
+-old mode 100755
+-new mode 100644
+-index 7bd442e..a547bb5
+---- a/src/3rdparty/sha3/KeccakF-1600-opt64.c
+-+++ b/src/3rdparty/sha3/KeccakF-1600-opt64.c
+-@@ -328,7 +328,7 @@ static void KeccakPermutation(unsigned char *state)
+-     KeccakPermutationOnWords((UINT64*)state);
+- }
+- 
+--#if 0 // Unused in the Qt configuration
+-+#if (PLATFORM_BYTE_ORDER == IS_BIG_ENDIAN)
+- static void fromBytesToWord(UINT64 *word, const UINT8 *bytes)
+- {
+-     unsigned int i;
+-@@ -449,7 +449,7 @@ static void KeccakAbsorb(unsigned char *state, const unsigned char *data, unsign
+- #endif
+- }
+- 
+--#if 0 // Unused in the Qt configuration
+-+#if (PLATFORM_BYTE_ORDER == IS_BIG_ENDIAN)
+- static void fromWordToBytes(UINT8 *bytes, const UINT64 word)
+- {
+-     unsigned int i;
+--- 
+-1.8.5.1
+-
+diff --git a/package/qt5/qt5base/qt5base-0007-detect-posix_fallocate-at-configure-time.patch b/package/qt5/qt5base/qt5base-0007-detect-posix_fallocate-at-configure-time.patch
+deleted file mode 100644
+index b0011f6..0000000
+--- a/package/qt5/qt5base/qt5base-0007-detect-posix_fallocate-at-configure-time.patch
++++ /dev/null
+@@ -1,167 +0,0 @@
+-From 46e632e2555b6b8abe6b8d8ad7d255e27c128e25 Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?Fatih=20A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
+-Date: Mon, 11 Nov 2013 17:04:46 +0200
+-Subject: [PATCH] Detect posix_fallocate at configure time
+-
+-Testing feature macros is not enough for uclibc. Fixes build of the built-in
+-sqlite3 with uclibc <= 0.9.33.2. Later versions will have posix_fallocate().
+-
+-Change-Id: I918a52777ac63624635802221effc6b86fa2269c
+-Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
+-Reported-Upstream: https://codereview.qt-project.org/70935
+----
+- .../unix/posix_fallocate/posix_fallocate.cpp       | 53 ++++++++++++++++++++++
+- .../unix/posix_fallocate/posix_fallocate.pro       |  2 +
+- configure                                          | 14 ++++++
+- src/3rdparty/sqlite.pri                            |  1 +
+- src/3rdparty/sqlite/sqlite3.c                      |  7 ---
+- 5 files changed, 70 insertions(+), 7 deletions(-)
+- create mode 100644 config.tests/unix/posix_fallocate/posix_fallocate.cpp
+- create mode 100644 config.tests/unix/posix_fallocate/posix_fallocate.pro
+-
+-diff --git a/config.tests/unix/posix_fallocate/posix_fallocate.cpp b/config.tests/unix/posix_fallocate/posix_fallocate.cpp
+-new file mode 100644
+-index 0000000..5acd45a
+---- /dev/null
+-+++ b/config.tests/unix/posix_fallocate/posix_fallocate.cpp
+-@@ -0,0 +1,53 @@
+-+/****************************************************************************
+-+**
+-+** Copyright (C) 2013 Digia Plc and/or its subsidiary(-ies).
+-+** Contact: http://www.qt-project.org/legal
+-+**
+-+** This file is part of the config.tests of the Qt Toolkit.
+-+**
+-+** $QT_BEGIN_LICENSE:LGPL$
+-+** Commercial License Usage
+-+** Licensees holding valid commercial Qt licenses may use this file in
+-+** accordance with the commercial license agreement provided with the
+-+** Software or, alternatively, in accordance with the terms contained in
+-+** a written agreement between you and Digia.  For licensing terms and
+-+** conditions see http://qt.digia.com/licensing.  For further information
+-+** use the contact form at http://qt.digia.com/contact-us.
+-+**
+-+** GNU Lesser General Public License Usage
+-+** Alternatively, this file may be used under the terms of the GNU Lesser
+-+** General Public License version 2.1 as published by the Free Software
+-+** Foundation and appearing in the file LICENSE.LGPL included in the
+-+** packaging of this file.  Please review the following information to
+-+** ensure the GNU Lesser General Public License version 2.1 requirements
+-+** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+-+**
+-+** In addition, as a special exception, Digia gives you certain additional
+-+** rights.  These rights are described in the Digia Qt LGPL Exception
+-+** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+-+**
+-+** GNU General Public License Usage
+-+** Alternatively, this file may be used under the terms of the GNU
+-+** General Public License version 3.0 as published by the Free Software
+-+** Foundation and appearing in the file LICENSE.GPL included in the
+-+** packaging of this file.  Please review the following information to
+-+** ensure the GNU General Public License version 3.0 requirements will be
+-+** met: http://www.gnu.org/copyleft/gpl.html.
+-+**
+-+**
+-+** $QT_END_LICENSE$
+-+**
+-+****************************************************************************/
+-+
+-+#include <fcntl.h>
+-+
+-+int main(int, char **)
+-+{
+-+#if _XOPEN_SOURCE >= 600 || _POSIX_C_SOURCE >= 200112L
+-+    return ::posix_fallocate(0, 0, 0);
+-+#else
+-+#  error posix_fallocate not available
+-+    // MIPSpro doesn't understand #error, so force a compiler error
+-+    force_compiler_error = true;
+-+#endif
+-+}
+-diff --git a/config.tests/unix/posix_fallocate/posix_fallocate.pro b/config.tests/unix/posix_fallocate/posix_fallocate.pro
+-new file mode 100644
+-index 0000000..f01b15f
+---- /dev/null
+-+++ b/config.tests/unix/posix_fallocate/posix_fallocate.pro
+-@@ -0,0 +1,2 @@
+-+SOURCES = posix_fallocate.cpp
+-+CONFIG -= qt dylib
+-diff --git a/configure b/configure
+-index 81e2a93..b67ed89 100755
+---- a/configure
+-+++ b/configure
+-@@ -968,6 +968,7 @@ CFG_MIPS_DSP=auto
+- CFG_MIPS_DSPR2=auto
+- CFG_CLOCK_GETTIME=auto
+- CFG_CLOCK_MONOTONIC=auto
+-+CFG_POSIX_FALLOCATE=auto
+- CFG_MREMAP=auto
+- CFG_GETADDRINFO=auto
+- CFG_IPV6IFNAME=auto
+-@@ -5653,6 +5654,15 @@ elif [ "$CFG_CLOCK_GETTIME" = "no" ]; then
+-     CFG_CLOCK_MONOTONIC=no
+- fi
+- 
+-+# detect posix_fallocate
+-+if [ "$CFG_POSIX_FALLOCATE" = "auto" ]; then
+-+    if compileTest unix/posix_fallocate "posix_fallocate"; then
+-+        CFG_POSIX_FALLOCATE=yes
+-+    else
+-+        CFG_POSIX_FALLOCATE=no
+-+    fi
+-+fi
+-+
+- # detect mremap
+- if [ "$CFG_MREMAP" = "auto" ]; then
+-     if compileTest unix/mremap "mremap"; then
+-@@ -5970,6 +5980,9 @@ fi
+- if [ "$CFG_CLOCK_MONOTONIC" = "yes" ]; then
+-     QT_CONFIG="$QT_CONFIG clock-monotonic"
+- fi
+-+if [ "$CFG_POSIX_FALLOCATE" = "yes" ]; then
+-+    QT_CONFIG="$QT_CONFIG posix_fallocate"
+-+fi
+- if [ "$CFG_MREMAP" = "yes" ]; then
+-     QT_CONFIG="$QT_CONFIG mremap"
+- fi
+-@@ -6449,6 +6462,7 @@ QMakeVar set sql-plugins "$SQL_PLUGINS"
+- [ "$CFG_GLIB" != "yes" ]     && QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_GLIB"
+- [ "$CFG_QGTKSTYLE" != "yes" ] && QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_STYLE_GTK"
+- [ "$CFG_CLOCK_MONOTONIC" = "no" ] && QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_CLOCK_MONOTONIC"
+-+[ "$CFG_POSIX_FALLOCATE" = "no" ] && QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_POSIX_FALLOCATE"
+- [ "$CFG_MREMAP" = "no" ]     && QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_MREMAP"
+- [ "$CFG_GETADDRINFO" = "no" ]&& QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_GETADDRINFO"
+- [ "$CFG_IPV6IFNAME" = "no" ] && QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_IPV6IFNAME"
+-diff --git a/src/3rdparty/sqlite.pri b/src/3rdparty/sqlite.pri
+-index 58d4ddd..072502c 100644
+---- a/src/3rdparty/sqlite.pri
+-+++ b/src/3rdparty/sqlite.pri
+-@@ -1,6 +1,7 @@
+- CONFIG(release, debug|release):DEFINES *= NDEBUG
+- DEFINES += SQLITE_OMIT_LOAD_EXTENSION SQLITE_OMIT_COMPLETE SQLITE_ENABLE_FTS3 SQLITE_ENABLE_FTS3_PARENTHESIS SQLITE_ENABLE_RTREE
+- !contains(CONFIG, largefile):DEFINES += SQLITE_DISABLE_LFS
+-+contains(QT_CONFIG, posix_fallocate):DEFINES += HAVE_POSIX_FALLOCATE=1
+- winrt: DEFINES += SQLITE_OS_WINRT
+- INCLUDEPATH +=  $$PWD/sqlite
+- SOURCES +=      $$PWD/sqlite/sqlite3.c
+-diff --git a/src/3rdparty/sqlite/sqlite3.c b/src/3rdparty/sqlite/sqlite3.c
+-index 03fa649..1ae9be2 100644
+---- a/src/3rdparty/sqlite/sqlite3.c
+-+++ b/src/3rdparty/sqlite/sqlite3.c
+-@@ -22935,13 +22935,6 @@ SQLITE_PRIVATE const char *sqlite3OpcodeName(int i){
+- */
+- #if SQLITE_OS_UNIX              /* This file is used on unix only */
+- 
+--/* Use posix_fallocate() if it is available
+--*/
+--#if !defined(HAVE_POSIX_FALLOCATE) \
+--      && (_XOPEN_SOURCE >= 600 || _POSIX_C_SOURCE >= 200112L)
+--# define HAVE_POSIX_FALLOCATE 1
+--#endif
 --
-1.7.9.5
+- /*
+- ** There are various methods for file locking used for concurrency
+- ** control:
+--- 
+-1.8.4.rc3
+-
+diff --git a/package/qt5/qt5webkit/qt5webkit-0002-Fix-QtWebKit-build-on-ARM-softfp.patch b/package/qt5/qt5webkit/qt5webkit-0002-Fix-QtWebKit-build-on-ARM-softfp.patch
+deleted file mode 100644
+index edbfb90..0000000
+--- a/package/qt5/qt5webkit/qt5webkit-0002-Fix-QtWebKit-build-on-ARM-softfp.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From 8a716a29721d900069d82878c45cf87a356adba3 Mon Sep 17 00:00:00 2001
+-From: Allan Sandfeld Jensen <allan.jensen@digia.com>
+-Date: Tue, 17 Dec 2013 12:26:58 +0100
+-Subject: [PATCH] Fix QtWebKit build on ARM softfp
+-
+-The low level interpreter depends on hardfp, so we need to disable it
+-when builing on ARM targets with softfp.
+-
+-Task-number: QTBUG-35681
+-Change-Id: I8aaef546b92182a87cc7116ac452d8725de6a7db
+-Reviewed-by: Jocelyn Turcotte <jocelyn.turcotte@digia.com>
+-Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
+----
+- Source/WTF/wtf/Platform.h | 5 +++++
+- 1 file changed, 5 insertions(+)
+-
+-diff --git a/Source/WTF/wtf/Platform.h b/Source/WTF/wtf/Platform.h
+-index 3a9b509..cddc210 100644
+---- a/Source/WTF/wtf/Platform.h
+-+++ b/Source/WTF/wtf/Platform.h
+-@@ -771,6 +771,11 @@
+- #define ENABLE_LLINT 0
+- #endif
+- 
+-+/* LLINT on ARM depends on an FPU */
+-+#if !defined(ENABLE_LLINT) && CPU(ARM) && !CPU(ARM_HARDFP)
+-+#define ENABLE_LLINT 0
+-+#endif
+-+
+- /* On some of the platforms where we have a JIT, we want to also have the 
+-    low-level interpreter. */
+- #if !defined(ENABLE_LLINT) \
+--- 
+-1.8.5.1
+-
+-- 
+1.8.3.2
