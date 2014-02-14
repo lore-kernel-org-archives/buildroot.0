@@ -1,45 +1,59 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Fri, 14 Feb 2014 14:46:55 +0100
-Subject: [Buildroot] [PATCH v13 7/7] sdl: add support for top-level
-	parallel make
-In-Reply-To: <1392371709-26662-8-git-send-email-fabio.porcedda@gmail.com>
-References: <1392371709-26662-1-git-send-email-fabio.porcedda@gmail.com>
- <1392371709-26662-8-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <CAGduivxVTtgVf4sxtqCGXrL4SvZ1f2fdEcxd=aV0QMRYokBUqA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 14 Feb 2014 15:13:50 +0100
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <39A54937CC95F24AA2F794E2D2B66B1356C692F6@de02wembxa.internal.synopsys.com>
+References: <20140214073009.1D7E6102637@stock.ovh.net>
+ <20140214101241.27857b9e@skate>
+ <39A54937CC95F24AA2F794E2D2B66B1356C692F6@de02wembxa.internal.synopsys.com>
+Message-ID: <20140214151350.54cb66c5@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabio, all
-On Fri, Feb 14, 2014 at 10:55 AM, Fabio Porcedda
-<fabio.porcedda@gmail.com> wrote:
-> To be sure that host-autoconf dependency is already built move the
-> call to autogen.sh from SDL_POST_PATCH_HOOKS to SDL_PRE_CONFIGURE_HOOKS.
->
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-> ---
->  package/sdl/sdl.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
-> index ba5fbca..cf3366d 100644
-> --- a/package/sdl/sdl.mk
-> +++ b/package/sdl/sdl.mk
-> @@ -17,7 +17,7 @@ define SDL_RUN_AUTOGEN
->         cd $(@D) && PATH=$(HOST_PATH) ./autogen.sh
->  endef
->
-> -SDL_POST_PATCH_HOOKS += SDL_RUN_AUTOGEN
-> +SDL_PRE_CONFIGURE_HOOKS += SDL_RUN_AUTOGEN
->  SDL_DEPENDENCIES += host-automake host-autoconf host-libtool
->
->
-> --
-> 1.8.5.2
->
-I agree with Thomas, it make much more sense in this hook.
-I will then resend my patch adding the host variant of sdl.
+Dear Anton Kolesov,
 
-Acked-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+On Fri, 14 Feb 2014 10:23:00 +0000, Anton Kolesov wrote:
+
+> > >        arc |            imagemagick-6.8.8-4 | NOK |
+> > http://autobuild.buildroot.net/results/97ec0c366c24bd03fe4c26851e8729a4d
+> > 8eaf4d0/
+> > 
+> > Internal compiler error. Anton, would you mind checking if your recent
+> > bump of the ARC toolchain components solves this compiler problem?
+> 
+> No, that hasn't fixed yet. I've opened bug report for this error, but no ETA. Should I disable affected packages for ARC until solution will be ready?
+
+Yes, please.
+
+> > >        arc |                  libxml2-2.9.1 | NOK |
+> > http://autobuild.buildroot.net/results/4abdea83c6915aa02b6dc55c9a9dd964
+> > ba70ac4b/
+> > 
+> > Another internal compiler error. Anton, same thing, is that fixed by your
+> > recent bump?
+> 
+> Yes, it passes for me with the "next" branch.
+
+Argh. So libxml2 doesn't build at all on master. This is pretty
+annoying, because this package has a fairly large number of reverse
+dependencies, so marking all of them "depends on !BR2_arc" to avoid
+build problems occurring on master is going to be annoying.
+
+I was discussing this morning with better whether he should have merged
+your ARC toolchain components bump to master instead of next. He merged
+in next to be on the safe side, but the consequence is that we have a
+good number of packages that don't build for ARC in master, causing
+autobuilder failures, that we know are solved in next.
+
+Oh well, I guess it's just a matter of waiting for the release at the
+end of the month, and get next merged into master.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
