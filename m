@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 14 Feb 2014 21:36:51 +0100
-Subject: [Buildroot] [git commit] uclibc: copy config file from configure
-	iso patch step
-Message-ID: <20140214203758.ECCF99A896@busybox.osuosl.org>
+Date: Fri, 14 Feb 2014 21:36:37 +0100
+Subject: [Buildroot] [git commit] busybox: copy config file from configure
+	iso extract step
+Message-ID: <20140214203758.DBA139CA1A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a25df76b39863e5d1a4e927696bf83055e8ce244
+commit: http://git.buildroot.net/buildroot/commit/?id=eedfc7121cf5b9a8dee8546c85b3bd36e9a743a4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 The three typical packages that use .config files in buildroot copy the
@@ -23,28 +23,47 @@ Copying the .config file from the configure step is the only way to properly
 support an OVERRIDE_SRCDIR that does not yet have the .config file, because
 the extract and patch steps are skipped in that case.
 
-In a previous patch, the situation was already fixed for busybox. This patch
-applies the same fix to uclibc: copy the config file from the configure
-step, as linux is doing.
+For example, when setting a BUSYBOX_OVERRIDE_SRCDIR to a cleanly extracted
+busybox tarball:
+
+$ make busybox-dirclean busybox
+rm -Rf [..]/output/build/busybox-custom
+>>> busybox custom Syncing from source dir
+>>> /home/tdescham/repo/contrib/busybox-1.21.1
+rsync -au --exclude .svn --exclude .git --exclude .hg --exclude .bzr
+            --exclude CVS /home/tdescham/repo/contrib/busybox-1.21.1/
+            [..]/output/build/busybox-custom
+>>> busybox custom Configuring
+/bin/sed -i -e "/\\<CONFIG_NOMMU\\>/d"
+                            [..]/output/build/busybox-custom/.config
+/bin/sed: can't read [..]/output/build/busybox-custom/.config:
+                                            No such file or directory
+make: *** [[..]/output/build/busybox-custom/.stamp_configured] Error 2
+
+This patch modifies busybox.mk to copy the config file from the configure
+step instead, as linux is doing, and fixing the described scenario.
+
+This fixes bug #5030: https://bugs.busybox.net/show_bug.cgi?id=5030
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/uclibc/uclibc.mk |    3 +--
- 1 files changed, 1 insertions(+), 2 deletions(-)
+ package/busybox/busybox.mk |    4 +---
+ 1 files changed, 1 insertions(+), 3 deletions(-)
 
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 7df9721..8497b46 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -453,9 +453,8 @@ define UCLIBC_SETUP_DOT_CONFIG
- 		oldconfig
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 2a8e616..793ffb9 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -180,10 +180,8 @@ define BUSYBOX_INSTALL_WATCHDOG_SCRIPT
  endef
+ endif
  
--UCLIBC_POST_PATCH_HOOKS += UCLIBC_SETUP_DOT_CONFIG
+-# We do this here to avoid busting a modified .config in configure
+-BUSYBOX_POST_EXTRACT_HOOKS += BUSYBOX_COPY_CONFIG
 -
- define UCLIBC_CONFIGURE_CMDS
-+	$(UCLIBC_SETUP_DOT_CONFIG)
- 	$(MAKE1) -C $(UCLIBC_DIR) \
- 		$(UCLIBC_MAKE_FLAGS) \
- 		PREFIX=$(STAGING_DIR) \
+ define BUSYBOX_CONFIGURE_CMDS
++	$(BUSYBOX_COPY_CONFIG)
+ 	$(BUSYBOX_SET_MMU)
+ 	$(BUSYBOX_SET_LARGEFILE)
+ 	$(BUSYBOX_SET_IPV6)
