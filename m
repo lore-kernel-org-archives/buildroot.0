@@ -1,36 +1,16 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Fri, 14 Feb 2014 10:55:09 +0100
-Subject: [Buildroot] [PATCH v13 7/7] sdl: add support for top-level parallel
-	make
-In-Reply-To: <1392371709-26662-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1392371709-26662-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1392371709-26662-8-git-send-email-fabio.porcedda@gmail.com>
+From: Peter Kuemmel <syntheticpp@gmx.net>
+Date: Fri, 14 Feb 2014 10:57:13 +0100
+Subject: [Buildroot] [PATCH 1/1] ti-gfx: bump to version 5_01_00_01
+In-Reply-To: <CA+kK6Ws34CaJSSsk1cjg1=OKUXpoURarO9d9sTS8CGO7dXqNtQ@mail.gmail.com>
+References: <52fd38fd.870eec0a.7f7f.13a5@mx.google.com>
+ <CAEBucnAUUP3==KSjx_uXZpcjfk9KNwOQqhQ0Eb-hu2+J7wfcKQ@mail.gmail.com>,
+ <CA+kK6Ws34CaJSSsk1cjg1=OKUXpoURarO9d9sTS8CGO7dXqNtQ@mail.gmail.com>
+Message-ID: <trinity-1946d258-c976-4ab8-8bd0-b43588728ea6-1392371833737@3capp-gmx-bs31>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-To be sure that host-autoconf dependency is already built move the
-call to autogen.sh from SDL_POST_PATCH_HOOKS to SDL_PRE_CONFIGURE_HOOKS.
-
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
----
- package/sdl/sdl.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
-index ba5fbca..cf3366d 100644
---- a/package/sdl/sdl.mk
-+++ b/package/sdl/sdl.mk
-@@ -17,7 +17,7 @@ define SDL_RUN_AUTOGEN
- 	cd $(@D) && PATH=$(HOST_PATH) ./autogen.sh
- endef
- 
--SDL_POST_PATCH_HOOKS += SDL_RUN_AUTOGEN
-+SDL_PRE_CONFIGURE_HOOKS += SDL_RUN_AUTOGEN
- SDL_DEPENDENCIES += host-automake host-autoconf host-libtool
- 
- 
--- 
-1.8.5.2
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140214/73c8ecdd/attachment.html>
