@@ -1,91 +1,126 @@
-From: Marcelo Gutierrez <kuyurix@gmail.com>
-Date: Fri, 14 Feb 2014 14:02:58 -0200
-Subject: [Buildroot] [PATCH 1/1] ti-gfx: bump to version 5_01_00_01
-In-Reply-To: <trinity-3b023d3c-da74-4988-b5b0-903e733840ee-1392375827799@3capp-gmx-bs16>
-References: <52fd38fd.870eec0a.7f7f.13a5@mx.google.com>
- <CAEBucnAUUP3==KSjx_uXZpcjfk9KNwOQqhQ0Eb-hu2+J7wfcKQ@mail.gmail.com>
- <CA+kK6Ws34CaJSSsk1cjg1=OKUXpoURarO9d9sTS8CGO7dXqNtQ@mail.gmail.com>
- <trinity-1946d258-c976-4ab8-8bd0-b43588728ea6-1392371833737@3capp-gmx-bs31>
- <trinity-3b023d3c-da74-4988-b5b0-903e733840ee-1392375827799@3capp-gmx-bs16>
-Message-ID: <CA+kK6WvnKsgiAeb3XZZ+vM=Xp2KHPOLu9Q2BKXJ5_jMahamQpQ@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 14 Feb 2014 17:08:58 +0100
+Subject: [Buildroot] [git commit] libtool: Apply upstream patch to set
+ correct linkage on MIPS64
+In-Reply-To: <20131130080744.58B489BE78@busybox.osuosl.org>
+References: <20131130080744.58B489BE78@busybox.osuosl.org>
+Message-ID: <52FE3F9A.6090806@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+On 30/11/13 09:03, Peter Korsgaard wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=4268d3967e2d691c151d6b5629e4051deb077b9a
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> 
+> This libtool change ensures that ld uses the right machine emulation file,
+> which will allow to fix several MIPS64 n64 link failures, such as the one
+> currently visible on the libiscsi package.  Packages affected by this
+> problem will have to use <pkg>_AUTORECONF = YES to benefit from this libtool
+> fix, until they are fixed upstream.
+> 
+> Acked-by: Markos Chandras <markos.chandras@imgtec.com>
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  .../libtool/libtool-0001-mips64-n64-linking.patch  |   47 ++++++++++++++++++++
+>  1 files changed, 47 insertions(+), 0 deletions(-)
+> 
+> diff --git a/package/libtool/libtool-0001-mips64-n64-linking.patch b/package/libtool/libtool-0001-mips64-n64-linking.patch
+> new file mode 100644
+> index 0000000..ef9084d
+> --- /dev/null
+> +++ b/package/libtool/libtool-0001-mips64-n64-linking.patch
+> @@ -0,0 +1,47 @@
+> +sets correct linker ABI flags on MIPS64
+> +http://git.savannah.gnu.org/cgit/libtool.git/commit/?id=5f7f7d9615bf650cf99d581a33b3e18357f79951
+> +
+> +Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> +
+> +diff -ru libtool-2.4.2.orig/libltdl/m4/libtool.m4 libtool-2.4.2/libltdl/m4/libtool.m4
+> +--- libtool-2.4.2.orig/libltdl/m4/libtool.m4	2013-11-11 11:44:30.419396295 +0000
+> ++++ libtool-2.4.2/libltdl/m4/libtool.m4	2013-11-11 11:44:07.055032308 +0000
 
-I'm using hardfloat:
+ Hi all,
 
-$readelf -A output/target/bin/busybox
-Attribute Section: aeabi
-File Attributes
-  Tag_CPU_name: "7-A"
-  Tag_CPU_arch: v7
-  Tag_CPU_arch_profile: Application
-  Tag_ARM_ISA_use: Yes
-  Tag_THUMB_ISA_use: Thumb-2
-  Tag_FP_arch: VFPv3
-  Tag_Advanced_SIMD_arch: NEONv1
-  Tag_ABI_PCS_wchar_t: 4
-  Tag_ABI_FP_rounding: Needed
-  Tag_ABI_FP_denormal: Needed
-  Tag_ABI_FP_exceptions: Needed
-  Tag_ABI_FP_number_model: IEEE 754
-  Tag_ABI_align_needed: 8-byte
-  Tag_ABI_align_preserved: 8-byte, except leaf SP
-  Tag_ABI_enum_size: int
-  Tag_ABI_HardFP_use: SP and DP
-  Tag_ABI_VFP_args: VFP registers
-  Tag_CPU_unaligned_access: v6
-  Tag_Virtualization_use: TrustZone
+ This patch triggers a funny problem on Fedora 10; I'd like some feedback
+on how to solve it.
 
-$readelf -A pvrsrvctl
-Attribute Section: aeabi
-File Attributes
-  Tag_CPU_name: "7-A"
-  Tag_CPU_arch: v7
-  Tag_CPU_arch_profile: Application
-  Tag_ARM_ISA_use: Yes
-  Tag_THUMB_ISA_use: Thumb-2
-  Tag_FP_arch: VFPv3-D16
-  Tag_ABI_PCS_wchar_t: 4
-  Tag_ABI_FP_denormal: Needed
-  Tag_ABI_FP_exceptions: Needed
-  Tag_ABI_FP_number_model: IEEE 754
-  Tag_ABI_align_needed: 8-byte
-  Tag_ABI_align_preserved: 8-byte, except leaf SP
-  Tag_ABI_enum_size: int
-  Tag_ABI_HardFP_use: SP and DP
-  Tag_ABI_VFP_args: VFP registers
-  Tag_CPU_unaligned_access: v6
-  Tag_DIV_use: Not allowed
+ Due to this patch, the Makefile will try to run automake, aclocal and
+autoconf, because all of these depend on the libtool.m4 file.
 
-I tested 5_01_00_01 version on BBB.
+ On most hosts, this will result in the following (output edited for
+clarity):
 
->[   15.008605] CPU: 0    Tainted: G        W    (3.0.50-vallon #1)
+./libltdl/config/missing --run aclocal-1.11 -I libltdl/m4
+./missing: line 52: aclocal-1.11: command not found
+WARNING: `aclocal-1.11' is missing on your system.  You should only need
+it if
+         you modified `acinclude.m4' or `configure.ac'.  You might want
+         to install the `Automake' and `Perl' packages.  Grab them from
+         any GNU archive site.
+./libltdl/config/missing --run automake-1.11 --gnu
+/./libltdl/config/missing: line 52: automake-1.11: command not found
+WARNING: `automake-1.11' is missing on your system.  You should only need
+it if
+         you modified `Makefile.am', `acinclude.m4' or `configure.ac'.
+         You might want to install the `Automake' and `Perl' packages.
+         Grab them from any GNU archive site.
+./libltdl/config/missing --run autoconf
+aclocal.m4:16: warning: this file was generated for autoconf 2.68.
+You have another version of autoconf.  It may work, but is not guaranteed to.
+If you have problems, you may need to regenerate the build system entirely.
+To do so, use the procedure documented by the package, typically
+`autoreconf'.
+/bin/sh ./config.status --recheck
+...
 
-Your kernel version is 3.0.50 and that could be the issue.
+ I.e., aclocal and automake fail because the 1.11 version is hardcoded in
+Makefile.in. autoconf complains about the old aclocal but continues to
+build configure, and configure is re-run.
 
-The release notes contain this instruction:
->Pre-requisites
->
->Kernel(Linux PSP) versions supported or used for validation
->
->Only the following devices have been tested & details below -
->
->AM335x & AM43x -
->
->Tree: git://git.ti.com/ti-linux-kernel/ti-linux-kernel.git
->Branch: ti-linux-3.12.y
->commit - dfea149efb32485f17bb7440eb326549c8f647e2, tag - ti2013.12.00
->
->NOTE-
->1.Ensure the reset controller driver is enabled in kernel menuconfig if not enabled by default as below-
->CONFIG_ARCH_HAS_RESET_CONTROLLER=y
->CONFIG_RESET_CONTROLLER=y
->CONFIG_RESET_TI=y
+ This is of course not nice, but not a big deal either.
 
-Regards,
-Marcelo
+
+ However, Fedora 10 does have automake 1.11, and you get this:
+
+./libltdl/config/missing --run automake-1.11 --gnu
+configure.ac:130: require Automake 1.11.1, but have 1.11
+make[2]: *** [Makefile.in] Error 1
+
+ I.e., if fails because configure.ac wants automake 1.11.1.
+
+
+ Normally we would solve these issues by setting LIBTOOL_AUTORECONF=YES,
+since we've modified the autotools input files. However, that won't work
+for host-libtool because AUTORECONF adds a dependency on host-libtool...
+
+
+ But in this case, the changes to the m4 file are only relevant for the
+installed libtool, not during build. So my proposal is to manually apply
+this patch on the installed host/usr/share/aclocal/libtool.m4 instead of
+in the patch step. That way, make will not try to run aclocal, automake
+and autoconf because libtool.m4 is not newer than the generated files.
+
+
+ What do you think?
+
+ Vicente, can you confirm that this patch is only needed on the installed
+libtool.m4, not during build?
+
+
+ Regards,
+ Arnout
+
+
+[snip]
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
