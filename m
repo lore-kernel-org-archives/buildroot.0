@@ -1,37 +1,84 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 14 Feb 2014 21:40:29 +0100
-Subject: [Buildroot] [git commit branch/next] python: expose PYTHON_PATH
-Message-ID: <20140214210327.5B3979CA1B@busybox.osuosl.org>
+From: Martin Bark <martin@barkynet.com>
+Date: Fri, 14 Feb 2014 22:41:20 +0000
+Subject: [Buildroot] [PATCH v5 0/5] Introducing XBMC
+In-Reply-To: <1392332394-27935-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1392332394-27935-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <52FE9B90.9090609@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=64b4fa7b256ff9d1f2bf9a2f7e50fd5c9b9ef8bf
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-As a preparation to make the Python infrastructure support both Python
-and Python 3, as well as the bump of Python 2 and 3, we need the
-Python package to expose the Python module path in a variable called
-PYTHON_PATH. It will be used by the following commits.
+Maxime,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python/python.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+I just tried out you patch set.  Initially i tried a simple defconfig as 
+follows and this failed when configuring xbmc
 
-diff --git a/package/python/python.mk b/package/python/python.mk
-index 6187d66..f2e48c4 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -167,5 +167,8 @@ PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_REMOVE_USELESS_FILES
- 
- PYTHON_AUTORECONF = YES
- 
-+# Provided to other packages
-+PYTHON_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+BR2_arm=y
+BR2_arm1176jzf_s=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_PACKAGE_XBMC=y
+BR2_PACKAGE_RPI_USERLAND=y
+
+The xmbc configure script was moaning about missing dependencies.  To 
+get the code to build I?m the end i had to enable the following:
+
+BR2_PACKAGE_XBMC_FLAC=y
+BR2_PACKAGE_XBMC_LIBASS=y
+BR2_PACKAGE_XBMC_LIBSAMPLERATE=y
+BR2_PACKAGE_XBMC_MAD=y
+BR2_PACKAGE_XBMC_VORBIS=y
+
+Perhaps you could check these option, maybe they need to be selected by 
+default.
+
+Thanks
+
+
+On 13/02/14 22:59, Maxime Hadjinlian wrote:
+> Hi all,
+>
+> This is a new version of the series of patch introducing XBMC.
+> A new one appeared, which add the dependencies of Java on the host machine for
+> XBMC.
+> Also, the $(MAKE1) for XBMC has been removed. After doing a loop of 50 builds
+> and no trouble so far to report, I assumed it was safe, at least for now.
+>
+> As always, I wait for your reviews and comments !
+>
+> Maxime Hadjinlian (5):
+>    sdl: fix autoreconf timing issue
+>    sdl: add host version
+>    sdl_image: add host version
+>    dependencies.sh: XBMC needs java on the host
+>    xbmc: new package
+>
+>   package/Config.in                                  |   1 +
+>   .../sdl/sdl-0001-use-correct-directfb-config.patch |  19 +-
+>   package/sdl/sdl.mk                                 |   2 +
+>   package/sdl_image/sdl_image.mk                     |  11 ++
+>   package/xbmc/Config.in                             | 202 +++++++++++++++++++++
+>   package/xbmc/S50xbmc                               |  41 +++++
+>   package/xbmc/xbmc-0001-Fixup-include-path.patch    |  79 ++++++++
+>   .../xbmc-0002-RaspberryPi-Default-Settings.patch   | 167 +++++++++++++++++
+>   package/xbmc/xbmc.mk                               | 175 ++++++++++++++++++
+>   package/xbmc/xbmc.service                          |  12 ++
+>   support/dependencies/dependencies.sh               |  10 +
+>   11 files changed, 702 insertions(+), 17 deletions(-)
+>   create mode 100644 package/xbmc/Config.in
+>   create mode 100755 package/xbmc/S50xbmc
+>   create mode 100644 package/xbmc/xbmc-0001-Fixup-include-path.patch
+>   create mode 100644 package/xbmc/xbmc-0002-RaspberryPi-Default-Settings.patch
+>   create mode 100644 package/xbmc/xbmc.mk
+>   create mode 100644 package/xbmc/xbmc.service
+>
+> --
+> 1.8.5.3
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
