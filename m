@@ -1,45 +1,54 @@
-From: Eric Nelson <eric.nelson@boundarydevices.com>
-Date: Fri, 14 Feb 2014 08:18:57 -0700
-Subject: [Buildroot] [PATCH V5 3/3] i.MX: use temp directory for
-	Freescale self-extractors
-In-Reply-To: <20140214092504.63c32cfc@skate>
-References: <1392337580-16568-1-git-send-email-eric.nelson@boundarydevices.com>	<1392337580-16568-4-git-send-email-eric.nelson@boundarydevices.com>
- <20140214092504.63c32cfc@skate>
-Message-ID: <52FE33E1.6010102@boundarydevices.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 14 Feb 2014 16:19:23 +0100
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <87k3cxn4c7.fsf@dell.be.48ers.dk>
+References: <20140214073009.1D7E6102637@stock.ovh.net>
+ <20140214101241.27857b9e@skate>
+ <39A54937CC95F24AA2F794E2D2B66B1356C692F6@de02wembxa.internal.synopsys.com>
+ <20140214151350.54cb66c5@skate> <87k3cxn4c7.fsf@dell.be.48ers.dk>
+Message-ID: <20140214161923.09e10c0f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks Thomas,
+Dear Peter Korsgaard,
 
-On 02/14/2014 01:25 AM, Thomas Petazzoni wrote:
-> Dear Eric Nelson,
->
-> On Thu, 13 Feb 2014 17:26:20 -0700, Eric Nelson wrote:
->
->> +		sh $(DL_DIR)/$(GPU_VIV_BIN_MX6Q_SOURCE) --force --auto-accept ; \
->> +		mv $(GPU_VIV_BIN_MX6Q_EXTRACT)/* ./ ; \
->> +		rm -rf $(GPU_VIV_BIN_MX6Q_EXTRACT)/)
->
-> I must say I would prefer if there was no slash at the end here, so
-> that if the GPU_VIV_BIN_MX6Q_EXTRACT variable is empty (for example due
-> to a bug in the package, or due to changes being made to the package
-> that make it non-working) it doesn't do a rm -rf /.
->
-Good catch.
+On Fri, 14 Feb 2014 15:42:16 +0100, Peter Korsgaard wrote:
 
-> I'd go even further: if the directory is empty, then is a simple
-> "rmdir" should do the trick, and is a lot less disastrous than a "rm
-> -rf" should something go wrong with the argument that is passed.
->
-Yep.
+>  > Argh. So libxml2 doesn't build at all on master. This is pretty
+>  > annoying, because this package has a fairly large number of reverse
+>  > dependencies, so marking all of them "depends on !BR2_arc" to avoid
+>  > build problems occurring on master is going to be annoying.
+> 
+>  > I was discussing this morning with better whether he should have merged
+> 
+> s/better/Peter/ ;)
 
-I do think this is moot though. Yann had another option
-that I'll try to follow.
+Oops, sorry!
 
-Regards,
+Fortunately I have this automatic thing "Dear <foo>", which gets your
+name right whenever I reply to you :-)
 
+>  > your ARC toolchain components bump to master instead of next. He merged
+>  > in next to be on the safe side, but the consequence is that we have a
+>  > good number of packages that don't build for ARC in master, causing
+>  > autobuilder failures, that we know are solved in next.
+> 
+>  > Oh well, I guess it's just a matter of waiting for the release at the
+>  > end of the month, and get next merged into master.
+> 
+> As I said on IRC, if we think arc will be in a better state with those
+> bumps cherry picked to master instead, then that's fine for me as well.
 
-Eric
+Anton, what is your confidence with this bump of the toolchain
+components? Should we merge it for 2014.02 ?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
