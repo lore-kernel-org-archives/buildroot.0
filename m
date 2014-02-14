@@ -1,44 +1,31 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 14 Feb 2014 21:57:39 +0100
-Subject: [Buildroot] [PATCH] jimtcl: don't attempt to handle ccache
-	internally
-Message-ID: <16d2a46cd18e6ae4f931.1392411459@argentina>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 14 Feb 2014 21:58:53 +0100
+Subject: [Buildroot] [PATCHv1 03/26] pkg-python: also pass PYTHONPATH
+	when building distutils packages
+In-Reply-To: <1392324555-29246-4-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Thu, 13 Feb 2014 21:48:52 +0100")
+References: <1392324555-29246-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1392324555-29246-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87eh35l8c2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-jimtcl tries to use 'ccache' (a non-buildroot host version) which may not
-exist on the host system. If ccache is enabled in buildroot, the compiler
-used by jimtcl is:
-ccache <buildroot>/.../ccache <buildroot>/.../<tuple>-gcc
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-If ccache is not present on the host, this results in the build error:
+ > With the upcoming bump of Python 2.x, it will become important that
+ > the PYTHONPATH is passed whenever we build third-party packages, be
+ > they using the distutils build mechanism, or the setuptools build
+ > mechanism. This is because passing PYTHONPATH is what will allow
+ > Python to find a special Python module that contains all the
+ > compiler/library/headers definitions that are relevant when
+ > cross-compiling.
 
-ccache <buildroot>/.../ccache <buildroot>/.../<tuple>-gcc
--D_GNU_SOURCE -Wall  -I. -fpic -pipe -Os    -c -o jim-subcmd.o jim-subcmd.c
-make[1]: ccache: Command not found
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-This patch passes 'CCACHE=none' to the 'configure' script, disabling the
-internal handling of ccache, so that ccache can be transparently passed
-through CC.
+Committed to next, thanks.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-
----
- package/jimtcl/jimtcl.mk |  2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
---- a/package/jimtcl/jimtcl.mk
-+++ b/package/jimtcl/jimtcl.mk
-@@ -38,7 +38,7 @@ endif
- 
- define JIMTCL_CONFIGURE_CMDS
- 	(cd $(@D); \
--		$(TARGET_CONFIGURE_OPTS) \
-+		$(TARGET_CONFIGURE_OPTS) CCACHE=none \
- 		./configure --prefix=/usr \
- 		$(JIMTCL_SHARED) \
- 	)
+-- 
+Bye, Peter Korsgaard
