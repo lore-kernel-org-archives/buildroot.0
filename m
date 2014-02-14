@@ -1,34 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 14 Feb 2014 21:23:45 +0100
-Subject: [Buildroot] [PATCH v13 0/7] Add support for top-level parallel
-	make
-In-Reply-To: <CAAXf6LVKsGPsEB19myfj_BvDaW8BKz=Rd3gW-4iX12O+L1XThA@mail.gmail.com>
- (Thomas De Schampheleire's message of "Fri, 14 Feb 2014 21:15:06
- +0100")
-References: <1392371709-26662-1-git-send-email-fabio.porcedda@gmail.com>
- <87d2ipmp3l.fsf@dell.be.48ers.dk>
- <CAAXf6LVKsGPsEB19myfj_BvDaW8BKz=Rd3gW-4iX12O+L1XThA@mail.gmail.com>
-Message-ID: <87vbwhl9ym.fsf@dell.be.48ers.dk>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 14 Feb 2014 21:32:13 +0100
+Subject: [Buildroot] [PATCH 0 of 2] busybox/uclibc: copy config file
+	from configure step
+In-Reply-To: <patchbomb.1392291283@argentina>
+References: <patchbomb.1392291283@argentina>
+Message-ID: <CAAXf6LX+iohwjJW3yPzenrLqwni1d9tG4YWu_4Wse7FeOip6YQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+On Thu, Feb 13, 2014 at 12:34 PM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+>
+> This patch series changes busybox and uclibc to copy the .config file from
+> the configure step, and not earlier (patch or extract step). This fixes the
+> usage of OVERRIDE_SRCDIR with these packages.
+>
+> This was reported for busybox in bug #5030.
+>
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>
+> ---
+>  package/busybox/busybox.mk |  4 +---
+>  package/uclibc/uclibc.mk   |  3 +--
+>  2 files changed, 2 insertions(+), 5 deletions(-)
 
- >> > v13:
- >> >  - Modified the "package: add support for top-level parallel make"
- >> >    patch, improved a comment and spliting the $$($(2)_TARGET_BUILD)
- >> >    dependency as suggested by Arnout.
- >> >  - Modified the sdl patch to use SDL_PRE_CONFIGURE_HOOKS as suggested
- >> >    by Thomas P.
- >> 
- >> Committed series to next, thanks for your persistence!
+Ping... I think this could still be applied in 2014.02, as it fixes a
+bug and simply lines up three packages.
 
- > A bottle of champagne, please!
-
-;) It fits today, doesn't it?
-
--- 
-Bye, Peter Korsgaard
+Thanks,
+Thomas
