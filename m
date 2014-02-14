@@ -1,29 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 14 Feb 2014 10:13:25 +0100
-Subject: [Buildroot] Buildroot 2014.02-rc1 released
-In-Reply-To: <CAAXf6LWrLq=6T-OSpnc1a60gceV+ZgObv+2hqKoYR82DMG3wrA@mail.gmail.com>
- (Thomas De Schampheleire's message of "Fri, 14 Feb 2014 08:50:56
- +0100")
-References: <87sirpvn7f.fsf@dell.be.48ers.dk> <20140213233625.0515088b@skate>
- <87a9dunngi.fsf@dell.be.48ers.dk>
- <CAAXf6LWrLq=6T-OSpnc1a60gceV+ZgObv+2hqKoYR82DMG3wrA@mail.gmail.com>
-Message-ID: <8761oinjka.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 14 Feb 2014 10:19:40 +0100
+Subject: [Buildroot] [PATCH] docs/web: give a little bit more exposure to
+	our Google+ page
+Message-ID: <1392369580-3975-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+Add a small icon that links the Buildroot home page to our Google+
+page.
 
-Hi,
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ docs/header.html | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
- >> Sure, I'll do that.
-
- > Additionally, could you also add a ranking of the autobuild fixers,
- > similar to the review/acks ?
-
-I will try. I cannot think of an easy oneliner for it though. Any ideas?
-
+diff --git a/docs/header.html b/docs/header.html
+index b987d85..625c079 100644
+--- a/docs/header.html
++++ b/docs/header.html
+@@ -57,7 +57,9 @@
+     <br><a href="http://autobuild.buildroot.org">Autobuilder</a>
+     <br><a href="http://patchwork.buildroot.org">Patchwork</a>
+     <br><a href="/sponsors.html">Sponsors</a>
+-
++    <br><a href="https://plus.google.com/100084591154899263420?prsrc=3" rel="publisher" target="_top" style="text-decoration:none;">
++      <img src="https://ssl.gstatic.com/images/icons/gplus-32.png" alt="Google+" style="border:0;width:32px;height:32px;"/>
++    </a>
+ </td>
+ 
+ 
 -- 
-Bye, Peter Korsgaard 
+1.8.3.2
