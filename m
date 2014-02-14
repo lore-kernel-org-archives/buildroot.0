@@ -1,84 +1,43 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Fri, 14 Feb 2014 22:41:20 +0000
-Subject: [Buildroot] [PATCH v5 0/5] Introducing XBMC
-In-Reply-To: <1392332394-27935-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1392332394-27935-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <52FE9B90.9090609@barkynet.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Fri, 14 Feb 2014 23:52:49 +0100
+Subject: [Buildroot] [PATCH v13 0/7] Add support for top-level parallel
+	make
+In-Reply-To: <87vbwhl9ym.fsf@dell.be.48ers.dk>
+References: <1392371709-26662-1-git-send-email-fabio.porcedda@gmail.com>
+ <87d2ipmp3l.fsf@dell.be.48ers.dk>
+ <CAAXf6LVKsGPsEB19myfj_BvDaW8BKz=Rd3gW-4iX12O+L1XThA@mail.gmail.com>
+ <87vbwhl9ym.fsf@dell.be.48ers.dk>
+Message-ID: <CAHkwnC_KHZ7oK6mCof+Xq36kmPT_G_q1dpNFBXfpSFfY5KQ7ug@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-Maxime,
-
-I just tried out you patch set.  Initially i tried a simple defconfig as 
-follows and this failed when configuring xbmc
-
-BR2_arm=y
-BR2_arm1176jzf_s=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_PACKAGE_XBMC=y
-BR2_PACKAGE_RPI_USERLAND=y
-
-The xmbc configure script was moaning about missing dependencies.  To 
-get the code to build I?m the end i had to enable the following:
-
-BR2_PACKAGE_XBMC_FLAC=y
-BR2_PACKAGE_XBMC_LIBASS=y
-BR2_PACKAGE_XBMC_LIBSAMPLERATE=y
-BR2_PACKAGE_XBMC_MAD=y
-BR2_PACKAGE_XBMC_VORBIS=y
-
-Perhaps you could check these option, maybe they need to be selected by 
-default.
-
-Thanks
-
-
-On 13/02/14 22:59, Maxime Hadjinlian wrote:
-> Hi all,
+On Fri, Feb 14, 2014 at 9:23 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 >
-> This is a new version of the series of patch introducing XBMC.
-> A new one appeared, which add the dependencies of Java on the host machine for
-> XBMC.
-> Also, the $(MAKE1) for XBMC has been removed. After doing a loop of 50 builds
-> and no trouble so far to report, I assumed it was safe, at least for now.
+>  >> > v13:
+>  >> >  - Modified the "package: add support for top-level parallel make"
+>  >> >    patch, improved a comment and spliting the $$($(2)_TARGET_BUILD)
+>  >> >    dependency as suggested by Arnout.
+>  >> >  - Modified the sdl patch to use SDL_PRE_CONFIGURE_HOOKS as suggested
+>  >> >    by Thomas P.
+>  >>
+>  >> Committed series to next, thanks for your persistence!
 >
-> As always, I wait for your reviews and comments !
+>  > A bottle of champagne, please!
 >
-> Maxime Hadjinlian (5):
->    sdl: fix autoreconf timing issue
->    sdl: add host version
->    sdl_image: add host version
->    dependencies.sh: XBMC needs java on the host
->    xbmc: new package
->
->   package/Config.in                                  |   1 +
->   .../sdl/sdl-0001-use-correct-directfb-config.patch |  19 +-
->   package/sdl/sdl.mk                                 |   2 +
->   package/sdl_image/sdl_image.mk                     |  11 ++
->   package/xbmc/Config.in                             | 202 +++++++++++++++++++++
->   package/xbmc/S50xbmc                               |  41 +++++
->   package/xbmc/xbmc-0001-Fixup-include-path.patch    |  79 ++++++++
->   .../xbmc-0002-RaspberryPi-Default-Settings.patch   | 167 +++++++++++++++++
->   package/xbmc/xbmc.mk                               | 175 ++++++++++++++++++
->   package/xbmc/xbmc.service                          |  12 ++
->   support/dependencies/dependencies.sh               |  10 +
->   11 files changed, 702 insertions(+), 17 deletions(-)
->   create mode 100644 package/xbmc/Config.in
->   create mode 100755 package/xbmc/S50xbmc
->   create mode 100644 package/xbmc/xbmc-0001-Fixup-include-path.patch
->   create mode 100644 package/xbmc/xbmc-0002-RaspberryPi-Default-Settings.patch
->   create mode 100644 package/xbmc/xbmc.mk
->   create mode 100644 package/xbmc/xbmc.service
->
-> --
-> 1.8.5.3
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+> ;) It fits today, doesn't it?
+
+Yeah it fits.
+
+It was finally merged, that's great!
+I was losing hope!
+My first patch about this feature was sent in April 2013, ten months ago...
+
+I will do more testing, so except more patches to improve the support.
+
+Regards
+-- 
+Fabio Porcedda
