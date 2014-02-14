@@ -1,50 +1,71 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 14 Feb 2014 21:10:03 +0100
-Subject: [Buildroot] [git commit branch/next] Makefile: update comment about
-	top-level parallel Makefile
-Message-ID: <20140214201153.8D5AD9C9A4@busybox.osuosl.org>
+From: Eric Nelson <eric.nelson@boundarydevices.com>
+Date: Fri, 14 Feb 2014 13:11:58 -0700
+Subject: [Buildroot] [PATCH V5 3/3] i.MX: use temp directory for
+	Freescale self-extractors
+In-Reply-To: <20140214190352.GA3428@free.fr>
+References: <1392337580-16568-1-git-send-email-eric.nelson@boundarydevices.com>
+ <1392337580-16568-4-git-send-email-eric.nelson@boundarydevices.com>
+ <20140214190352.GA3428@free.fr>
+Message-ID: <52FE788E.1020408@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2afb23a70270657a9887e35ffa0af4c248ae0b25
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Thanks Yann,
 
-After the latest patches top-level parallel Makefile is working but
-there is still an issue when a package has an unspecified optional
-dependency so change the comment to explain that.
+On 02/14/2014 12:03 PM, Yann E. MORIN wrote:
+> Eric, All,
+>
+> On 2014-02-13 17:26 -0700, Eric Nelson spake thusly:
+>> The Freescale packages imx-lib, libfslcodec, libfslparser, and libfslvpuwrap
+>> are each bundled as self-extracting tar-balls that contain a shell script
+>> and a EULA in their package headers.
+>>
+>> These self-extractors also contain a command to create the destination
+>> directory using "mkdir" (no -p) prior to extraction.
+>>
+>> Since we want to place the output into the build directory, which has already
+>> been created at the time of extraction, this causes a warning message
+>> from "mkdir".
+>>
+>> This patch changes things so that each package is extracted first into a
+>> sub-directory, and the content is moved into the eventual build directory.
+>
+> In fact, I was not clear in my previous reply: as your testing shows,
+> and as Arnout suggested, we can well leave with this warning.
+>
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- Makefile |   15 ++++++++++++++-
- 1 files changed, 14 insertions(+), 1 deletions(-)
+That works for me.
 
-diff --git a/Makefile b/Makefile
-index c89107a..ddb1f6a 100644
---- a/Makefile
-+++ b/Makefile
-@@ -42,7 +42,20 @@ export HOSTARCH := $(shell uname -m | \
- 	    -e s/macppc/powerpc/\
- 	    -e s/sh.*/sh/)
- 
--# This top-level Makefile can *not* be executed in parallel
-+# Parallel execution of this Makefile is disabled because it changes
-+# the packages building order, that can be a problem for two reasons:
-+# - If a package has an unspecified optional dependency and that
-+#   dependency is present when the package is built, it is used,
-+#   otherwise it isn't (but compilation happily proceeds) so the end
-+#   result will differ if the order is swapped due to parallel
-+#   building.
-+# - Also changing the building order can be a problem if two packages
-+#   manipulate the same file in the target directory.
-+#
-+# Taking into account the above considerations, if you still want to execute
-+# this top-level Makefile in parallel comment the ".NOTPARALLEL" line and
-+# build using the following command:
-+#	make BR2_JLEVEL= -j$((`getconf _NPROCESSORS_ONLN`+1))
- .NOTPARALLEL:
- 
- # absolute path
+> So, to make it clear this time: I don;t think we should try to play it
+> smart with this whole directory mess: the archives do extract in a
+> properly-named directory, so lets just accept the little warning.
+>
+Cool.
+
+I have contacted Freescale to see if we can at least get "mkdir -p" into
+the next release, and hopefully also address the awk-wardness of
+extracting the EULA.
+
+> The changes introduced by this patch, although not too complex, are not
+> trivial either.
+>
+
+Agreed. This is a lot of change for a couple of small warnings.
+
+> I suggest we just drop this patch, unless Peter really wants it.
+>
+
++1
+
+> Sorry I was not explicit enough in my previous mail. Thank you for
+> staying with us all along the journey! :-)
+
+I'm glad to help.
+
+Regards,
+
+
+Eric
