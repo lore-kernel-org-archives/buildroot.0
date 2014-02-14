@@ -1,56 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 14 Feb 2014 21:11:26 +0100
-Subject: [Buildroot] [PATCH v13 0/7] Add support for top-level parallel
-	make
-In-Reply-To: <1392371709-26662-1-git-send-email-fabio.porcedda@gmail.com>
- (Fabio Porcedda's message of "Fri, 14 Feb 2014 10:55:02 +0100")
-References: <1392371709-26662-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <87d2ipmp3l.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 14 Feb 2014 21:10:27 +0100
+Subject: [Buildroot] [git commit branch/next] sdl: add support for top-level
+	parallel make
+Message-ID: <20140214201153.9466A9CA03@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=f75b5de9f6f473a257c607e97419a2338d57333c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > Hi all,
- > this is a patch set for adding support for top-level parallel make in
- > buildroot, the common problem scattered in buildroot's top-level
- > makefiles is that in the rules it relies on the order of evaluation of
- > the prerequisites, to be able to use top-level parallel make instead
- > of reling on the left to right ordering of evaluation of the
- > prerequisites we must add an explicit rule to describe the
- > dependencies.
+To be sure that host-autoconf dependency is already built move the
+call to autogen.sh from SDL_POST_PATCH_HOOKS to SDL_PRE_CONFIGURE_HOOKS.
 
- > With this patch set the top-level parallel make seems to works fine,
- > example:
- > 	make clean
- > 	make BR2_JLEVEL= -j$((`getconf _NPROCESSORS_ONLN` + 1))
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Acked-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/sdl/sdl.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- > Before to try it remeber to remove the ".NOTPARALLEL" line.
-
- > On my quad core system the building time for the first 220 defconfig lines of
- > the option "allpackageyesconfig" is 45m vs 24m.
-
- > I've tested the qemu_x86_defconfig.
-
- > I will test futrher the top-level parallel make feature for building
- > all the packages so expect some other patches to improve this feature.
-
- > Thank you for all reviews and in particular Arnout.
-
- > Best regards
- > Fabio Porcedda
-
- > v13:
- >  - Modified the "package: add support for top-level parallel make"
- >    patch, improved a comment and spliting the $$($(2)_TARGET_BUILD)
- >    dependency as suggested by Arnout.
- >  - Modified the sdl patch to use SDL_PRE_CONFIGURE_HOOKS as suggested
- >    by Thomas P.
-
-Committed series to next, thanks for your persistence!
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
+index ba5fbca..cf3366d 100644
+--- a/package/sdl/sdl.mk
++++ b/package/sdl/sdl.mk
+@@ -17,7 +17,7 @@ define SDL_RUN_AUTOGEN
+ 	cd $(@D) && PATH=$(HOST_PATH) ./autogen.sh
+ endef
+ 
+-SDL_POST_PATCH_HOOKS += SDL_RUN_AUTOGEN
++SDL_PRE_CONFIGURE_HOOKS += SDL_RUN_AUTOGEN
+ SDL_DEPENDENCIES += host-automake host-autoconf host-libtool
+ 
+ 
