@@ -1,30 +1,55 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 14 Feb 2014 22:03:02 +0100
-Subject: [Buildroot] [PATCHv1 07/26] pkg-python: no longer use
-	distutilscross for setuptools
-In-Reply-To: <1392324555-29246-8-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Thu, 13 Feb 2014 21:48:56 +0100")
-References: <1392324555-29246-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1392324555-29246-8-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87wqgxjtkp.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 14 Feb 2014 21:50:59 +0100
+Subject: [Buildroot] [git commit branch/next] pkg-python: simplifications
+	after the Python 2.x bump
+Message-ID: <20140214210327.ADD629CA1B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=6f8c85569739492ffc8c3b1e04b4ae007e5cb02a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > Thanks to the bump of Python 2.x, distutilscross is no longer needed
- > to achieve cross-compilation for setuptools packages. The host Python
- > 2.x interpreter can be tricked into using the target compiler thanks
- > to pointing it to a different sysconfigdata module, which is achieved
- > using PYTHON_PATH.
+Thanks to the Python 2.x bump, it is no longer needed to pass
+PYTHONCPREFIX, and CROSS_COMPILING when building third-party Python
+modules.
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/pkg-python.mk |    6 +-----
+ 1 files changed, 1 insertions(+), 5 deletions(-)
 
-This no longer applies after Fabio's parallel make series. Could you
-please rebase and send a v2?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+index c423f7a..a862895 100644
+--- a/package/pkg-python.mk
++++ b/package/pkg-python.mk
+@@ -27,7 +27,6 @@ PKG_PYTHON_DISTUTILS_ENV = \
+ 	CFLAGS="$(TARGET_CFLAGS)" \
+ 	LDFLAGS="$(TARGET_LDFLAGS)" \
+ 	LDSHARED="$(TARGET_CROSS)gcc -shared" \
+-	CROSS_COMPILING=yes \
+ 	PYTHONPATH="$(PYTHON_PATH)" \
+ 	_python_sysroot=$(STAGING_DIR) \
+ 	_python_prefix=/usr \
+@@ -50,8 +49,6 @@ HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPT = \
+ PKG_PYTHON_SETUPTOOLS_ENV = \
+ 	PATH="$(TARGET_PATH)" \
+ 	PYTHONPATH="$(PYTHON_PATH)" \
+-	PYTHONXCPREFIX="$(STAGING_DIR)/usr/" \
+-	CROSS_COMPILING=yes \
+ 	_python_sysroot=$(STAGING_DIR) \
+ 	_python_prefix=/usr \
+ 	_python_exec_prefix=/usr
+@@ -64,8 +61,7 @@ PKG_PYTHON_SETUPTOOLS_INSTALL_OPT = \
+ 
+ # Host setuptools-based packages
+ HOST_PKG_PYTHON_SETUPTOOLS_ENV = \
+-	PATH="$(HOST_PATH)" \
+-	PYTHONXCPREFIX="$(HOST_DIR)/usr/"
++	PATH="$(HOST_PATH)"
+ 
+ HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPT = \
+ 	--prefix=$(HOST_DIR)/usr
