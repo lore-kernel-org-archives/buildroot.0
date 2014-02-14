@@ -1,36 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 14 Feb 2014 10:19:40 +0100
-Subject: [Buildroot] [PATCH] docs/web: give a little bit more exposure to
-	our Google+ page
-Message-ID: <1392369580-3975-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Fri, 14 Feb 2014 10:22:10 +0100
+Subject: [Buildroot] Buildroot 2014.02-rc1 released
+In-Reply-To: <8761oinjka.fsf@dell.be.48ers.dk>
+References: <87sirpvn7f.fsf@dell.be.48ers.dk> <20140213233625.0515088b@skate>
+ <87a9dunngi.fsf@dell.be.48ers.dk>
+ <CAAXf6LWrLq=6T-OSpnc1a60gceV+ZgObv+2hqKoYR82DMG3wrA@mail.gmail.com>
+ <8761oinjka.fsf@dell.be.48ers.dk>
+Message-ID: <20140214102210.7996f285@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a small icon that links the Buildroot home page to our Google+
-page.
+Dear Peter Korsgaard,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- docs/header.html | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+On Fri, 14 Feb 2014 10:13:25 +0100, Peter Korsgaard wrote:
 
-diff --git a/docs/header.html b/docs/header.html
-index b987d85..625c079 100644
---- a/docs/header.html
-+++ b/docs/header.html
-@@ -57,7 +57,9 @@
-     <br><a href="http://autobuild.buildroot.org">Autobuilder</a>
-     <br><a href="http://patchwork.buildroot.org">Patchwork</a>
-     <br><a href="/sponsors.html">Sponsors</a>
--
-+    <br><a href="https://plus.google.com/100084591154899263420?prsrc=3" rel="publisher" target="_top" style="text-decoration:none;">
-+      <img src="https://ssl.gstatic.com/images/icons/gplus-32.png" alt="Google+" style="border:0;width:32px;height:32px;"/>
-+    </a>
- </td>
- 
- 
+>  >> Sure, I'll do that.
+> 
+>  > Additionally, could you also add a ranking of the autobuild fixers,
+>  > similar to the review/acks ?
+> 
+> I will try. I cannot think of an easy oneliner for it though. Any ideas?
+
+See
+http://lists.busybox.net/pipermail/buildroot/2013-December/083785.html.
+
+Thomas
 -- 
-1.8.3.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
