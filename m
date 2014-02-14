@@ -1,154 +1,186 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Feb 2014 13:34:12 -0000
-Subject: [Buildroot] [git commit] Add OpenTyrian package (SDL game)
-Message-ID: <20140228133411.460EC9BBF9@busybox.osuosl.org>
+Date: Fri, 14 Feb 2014 21:16:52 +0100
+Subject: [Buildroot] [git commit] i.MX: Update versions to match latest
+	Freescale release
+Message-ID: <20140228133413.3155E9BA7B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9b8ffcd8f25cede33bcd2dc81ef8682c2acb0b97
+commit: http://git.buildroot.net/buildroot/commit/?id=b0b72591d74c1a84b8c1b2e1990a2fe1dfe8c4ab
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: hide -data package if opentyrian isn't enabled]
-Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Eric Nelson <eric.nelson@boundarydevices.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in                          |    2 +
- package/opentyrian-data/Config.in          |    9 +++++++
- package/opentyrian-data/opentyrian-data.mk |   23 +++++++++++++++++
- package/opentyrian/Config.in               |   24 ++++++++++++++++++
- package/opentyrian/opentyrian.mk           |   36 ++++++++++++++++++++++++++++
- 5 files changed, 94 insertions(+), 0 deletions(-)
+ package/freescale-imx/freescale-imx.mk             |    6 +---
+ .../gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk           |    6 ++++-
+ package/freescale-imx/imx-lib/imx-lib.mk           |   22 +++++++++++++++++-
+ .../gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk   |    2 +-
+ package/libfslcodec/libfslcodec.mk                 |    2 +-
+ package/libfslparser/libfslparser.mk               |    5 +++-
+ package/libfslvpuwrap/libfslvpuwrap.mk             |   23 ++++++++++++++++++-
+ 7 files changed, 54 insertions(+), 12 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 19c9c4b..c323711 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -156,6 +156,8 @@ source "package/doom-wad/Config.in"
- source "package/gnuchess/Config.in"
- source "package/lbreakout2/Config.in"
- source "package/ltris/Config.in"
-+source "package/opentyrian/Config.in"
-+source "package/opentyrian-data/Config.in"
- source "package/prboom/Config.in"
- source "package/rubix/Config.in"
- endmenu
-diff --git a/package/opentyrian-data/Config.in b/package/opentyrian-data/Config.in
-new file mode 100644
-index 0000000..df25c21
---- /dev/null
-+++ b/package/opentyrian-data/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_OPENTYRIAN_DATA
-+	bool "OpenTyrian data"
-+	depends on BR2_PACKAGE_OPENTYRIAN
-+	help
-+	  Data files to use with OpenTyrian game. Currently only the original
-+	  Tyrian 2.1 data files, that have been released as Freeware in 2004,
-+	  are compatible.
-+
-+	  http://code.google.com/p/opentyrian/wiki/FAQ
-diff --git a/package/opentyrian-data/opentyrian-data.mk b/package/opentyrian-data/opentyrian-data.mk
-new file mode 100644
-index 0000000..75fa3d9
---- /dev/null
-+++ b/package/opentyrian-data/opentyrian-data.mk
-@@ -0,0 +1,23 @@
-+###############################################################################
-+#
-+# opentyrian-data
-+#
-+###############################################################################
-+
-+OPENTYRIAN_DATA_VERSION = 2.1
-+OPENTYRIAN_DATA_SITE = http://www.camanis.net/opentyrian/
-+OPENTYRIAN_DATA_SOURCE = tyrian21.zip
-+OPENTYRIAN_DATA_LICENSE = Freeware
-+
-+define OPENTYRIAN_DATA_EXTRACT_CMDS
-+	unzip -d $(@D) $(DL_DIR)/$(OPENTYRIAN_DATA_SOURCE)
-+endef
-+
-+define OPENTYRIAN_DATA_INSTALL_TARGET_CMDS
-+	mkdir -p $(TARGET_DIR)/usr/share/opentyrian/data/
-+	cp $(@D)/tyrian21/* $(TARGET_DIR)/usr/share/opentyrian/data/
-+	rm -f $(TARGET_DIR)/usr/share/opentyrian/data/*.doc
-+	rm -f $(TARGET_DIR)/usr/share/opentyrian/data/*.exe
-+endef
-+
-+$(eval $(generic-package))
-diff --git a/package/opentyrian/Config.in b/package/opentyrian/Config.in
-new file mode 100644
-index 0000000..3ebcf08
---- /dev/null
-+++ b/package/opentyrian/Config.in
-@@ -0,0 +1,24 @@
-+config BR2_PACKAGE_OPENTYRIAN
-+	bool "OpenTyrian"
-+	select BR2_PACKAGE_SDL
-+	select BR2_PACKAGE_OPENTYRIAN_DATA
-+	help
-+	  OpenTyrian is a port of the DOS shoot-em-up Tyrian. It uses SDL,
-+	  making it easily cross-platform.
-+	  It requires the original data files to run.
-+	  A display with minimum 640x480 resolution and a keyboard are needed
-+	  to play the game.
-+	  If you want some sound, activate ALSA with OSS emulation.
-+
-+	  http://code.google.com/p/opentyrian/
-+
-+if BR2_PACKAGE_OPENTYRIAN
-+
-+config BR2_PACKAGE_OPENTYRIAN_NET
-+	bool "network support"
-+	default y
-+	select BR2_PACKAGE_SDL_NET
-+	help
-+	  Activates network support in OpenTyrian. Will add SDL_net.
-+
-+endif
-diff --git a/package/opentyrian/opentyrian.mk b/package/opentyrian/opentyrian.mk
-new file mode 100644
-index 0000000..80465a3
---- /dev/null
-+++ b/package/opentyrian/opentyrian.mk
-@@ -0,0 +1,36 @@
-+###############################################################################
-+#
-+# opentyrian
-+#
-+###############################################################################
-+
-+OPENTYRIAN_VERSION = 2.1.20130907
-+OPENTYRIAN_SITE = http://www.camanis.net/opentyrian/releases/
-+OPENTYRIAN_SOURCE = opentyrian-$(OPENTYRIAN_VERSION)-src.tar.gz
-+OPENTYRIAN_LICENSE = GPLv2+
-+OPENTYRIAN_LICENSE_FILES = COPYING
-+
-+OPENTYRIAN_DEPENDENCIES = sdl
-+
-+ifeq ($(BR2_PACKAGE_OPENTYRIAN_NET),y)
-+OPENTYRIAN_DEPENDENCIES += sdl_net
-+OPENTYRIAN_NETWORK = true
+diff --git a/package/freescale-imx/freescale-imx.mk b/package/freescale-imx/freescale-imx.mk
+index 0dd5629..39ffa8a 100644
+--- a/package/freescale-imx/freescale-imx.mk
++++ b/package/freescale-imx/freescale-imx.mk
+@@ -4,9 +4,7 @@
+ #
+ ################################################################################
+ 
+-FREESCALE_IMX_VERSION = 1.1.0
+-
+-# No official download site from freescale, just this mirror
+-FREESCALE_IMX_SITE   = http://download.ossystems.com.br/bsp/freescale/source
++FREESCALE_IMX_VERSION = 3.5.7-1.0.0
++FREESCALE_IMX_SITE    = http://www.freescale.com/lgfiles/NMG/MAD/YOCTO/
+ 
+ include $(sort $(wildcard package/freescale-imx/*/*.mk))
+diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
+index 8e979ee..e799fd2 100644
+--- a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
++++ b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
+@@ -4,7 +4,11 @@
+ #
+ ################################################################################
+ 
+-GPU_VIV_BIN_MX6Q_VERSION = $(FREESCALE_IMX_VERSION)
++ifeq ($(BR2_ARM_EABIHF),y)
++GPU_VIV_BIN_MX6Q_VERSION = $(FREESCALE_IMX_VERSION)-hfp
 +else
-+OPENTYRIAN_NETWORK = false
++GPU_VIV_BIN_MX6Q_VERSION = $(FREESCALE_IMX_VERSION)-sfp
 +endif
-+
-+define OPENTYRIAN_BUILD_CMDS
-+        $(MAKE) PLATFORM=UNIX \
-+		CC="$(TARGET_CC)" \
-+		STRIP="/bin/true" \
-+		SDL_CONFIG="$(STAGING_DIR)/usr/bin/sdl-config" \
-+		LDFLAGS="-lm" \
-+		WITH_NETWORK="$(OPENTYRIAN_NETWORK)" \
-+		-C $(@D) release
+ GPU_VIV_BIN_MX6Q_SITE    = $(FREESCALE_IMX_SITE)
+ GPU_VIV_BIN_MX6Q_SOURCE  = gpu-viv-bin-mx6q-$(GPU_VIV_BIN_MX6Q_VERSION).bin
+ 
+diff --git a/package/freescale-imx/imx-lib/imx-lib.mk b/package/freescale-imx/imx-lib/imx-lib.mk
+index e1a68ef..4f605d7 100644
+--- a/package/freescale-imx/imx-lib/imx-lib.mk
++++ b/package/freescale-imx/imx-lib/imx-lib.mk
+@@ -6,8 +6,9 @@
+ 
+ IMX_LIB_VERSION = $(FREESCALE_IMX_VERSION)
+ IMX_LIB_SITE    = $(FREESCALE_IMX_SITE)
+-IMX_LIB_LICENSE = LGPLv2.1+
+-# No license file included
++IMX_LIB_LICENSE = Freescale License (vpu), LGPLv2.1+ (the rest)
++IMX_LIB_LICENSE_FILES = EULA
++IMX_LIB_SOURCE = imx-lib-$(IMX_LIB_VERSION).bin
+ 
+ IMX_LIB_INSTALL_STAGING = YES
+ 
+@@ -25,6 +26,23 @@ IMX_LIB_MAKE_ENV = \
+ 	PLATFORM=$(BR2_PACKAGE_IMX_LIB_PLATFORM) \
+ 	INCLUDE="$(IMX_LIB_INCLUDE)"
+ 
++# The archive is a shell-self-extractor of a bzipped tar. It happens
++# to extract in the correct directory (imx-lib-x.y.z)
++# The --force makes sure it doesn't fail if the source dir already exists.
++# The --auto-accept skips the license check - not needed for us
++# because we have legal-info
++# Since there's a EULA in the bin file, extract it to imx-lib-x.y.z/EULA
++#
++define IMX_LIB_EXTRACT_CMDS
++	awk 'BEGIN      { start=0; } \
++	     /^EOEULA/  { start = 0; } \
++	                { if (start) print; } \
++	     /<<EOEULA/ { start=1; }'\
++	    $(DL_DIR)/$(IMX_LIB_SOURCE) > $(@D)/EULA
++	cd $(BUILD_DIR); \
++	sh $(DL_DIR)/$(IMX_LIB_SOURCE) --force --auto-accept
 +endef
 +
-+define OPENTYRIAN_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/opentyrian $(TARGET_DIR)/usr/bin/opentyrian
+ define IMX_LIB_BUILD_CMDS
+ 	$(IMX_LIB_MAKE_ENV) $(MAKE1) -C $(@D)
+ endef
+diff --git a/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
+index 4437875..9ec92d8 100644
+--- a/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
++++ b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GST_FSL_PLUGINS_VERSION = 3.0.1
++GST_FSL_PLUGINS_VERSION = $(FREESCALE_IMX_VERSION)
+ GST_FSL_PLUGINS_SITE = $(FREESCALE_IMX_SITE)
+ 
+ # Most is LGPLv2+, but some sources are copied from upstream and are
+diff --git a/package/libfslcodec/libfslcodec.mk b/package/libfslcodec/libfslcodec.mk
+index ad1cc63..d52158c 100644
+--- a/package/libfslcodec/libfslcodec.mk
++++ b/package/libfslcodec/libfslcodec.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBFSLCODEC_VERSION = 3.0.1
++LIBFSLCODEC_VERSION = $(FREESCALE_IMX_VERSION)
+ LIBFSLCODEC_SITE = $(FREESCALE_IMX_SITE)
+ LIBFSLCODEC_SOURCE = libfslcodec-$(LIBFSLCODEC_VERSION).bin
+ LIBFSLCODEC_LICENSE = Freescale Semiconductor Software License Agreement, BSD-3c (flac, ogg headers)
+diff --git a/package/libfslparser/libfslparser.mk b/package/libfslparser/libfslparser.mk
+index 3aab3a7..0d92e02 100644
+--- a/package/libfslparser/libfslparser.mk
++++ b/package/libfslparser/libfslparser.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBFSLPARSER_VERSION = 3.0.1
++LIBFSLPARSER_VERSION = $(FREESCALE_IMX_VERSION)
+ LIBFSLPARSER_SITE = $(FREESCALE_IMX_SITE)
+ LIBFSLPARSER_SOURCE = libfslparser-$(LIBFSLPARSER_VERSION).bin
+ LIBFSLPARSER_LICENSE = Freescale Semiconductor Software License Agreement
+@@ -36,4 +36,7 @@ endef
+ # The Makefile installs several versions of the libraries, but we only
+ # need one of them, depending on the platform.
+ 
++# without AUTORECONF, configure fails to find install-sh.
++LIBFSLPARSER_AUTORECONF = YES
++
+ $(eval $(autotools-package))
+diff --git a/package/libfslvpuwrap/libfslvpuwrap.mk b/package/libfslvpuwrap/libfslvpuwrap.mk
+index 346a20a..75c9887 100644
+--- a/package/libfslvpuwrap/libfslvpuwrap.mk
++++ b/package/libfslvpuwrap/libfslvpuwrap.mk
+@@ -4,14 +4,33 @@
+ #
+ ################################################################################
+ 
+-LIBFSLVPUWRAP_VERSION = 1.0.17
++LIBFSLVPUWRAP_VERSION = $(FREESCALE_IMX_VERSION)
+ LIBFSLVPUWRAP_SITE = $(FREESCALE_IMX_SITE)
++LIBFSLVPUWRAP_SOURCE = libfslvpuwrap-$(LIBFSLVPUWRAP_VERSION).bin
+ LIBFSLVPUWRAP_LICENSE = Freescale Semiconductor Software License Agreement
+-LIBFSLVPUWRAP_LICENSE_FILES = EULA.txt
++# N.B.: the content of the two license files is different
++LIBFSLVPUWRAP_LICENSE_FILES = EULA EULA.txt
+ LIBFSLVPUWRAP_REDISTRIBUTE = NO
+ 
+ LIBFSLVPUWRAP_INSTALL_STAGING = YES
+ 
+ LIBFSLVPUWRAP_DEPENDENCIES += imx-lib
+ 
++# The archive is a shell-self-extractor of a bzipped tar. It happens
++# to extract in the correct directory (libfslvpuwrap-x.y.z)
++# The --force makes sure it doesn't fail if the source dir already exists.
++# The --auto-accept skips the license check - not needed for us
++# because we have legal-info
++# Since the EULA in the bin file differs from the one in the tar file,
++# extract the one from the bin file as well.
++define LIBFSLVPUWRAP_EXTRACT_CMDS
++	awk 'BEGIN      { start=0; } \
++	     /^EOEULA/  { start = 0; } \
++	                { if (start) print; } \
++	     /<<EOEULA/ { start=1; }'\
++	    $(DL_DIR)/$(LIBFSLVPUWRAP_SOURCE) > $(@D)/EULA
++	cd $(BUILD_DIR); \
++	sh $(DL_DIR)/$(LIBFSLVPUWRAP_SOURCE) --force --auto-accept
 +endef
 +
-+$(eval $(generic-package))
+ $(eval $(autotools-package))
