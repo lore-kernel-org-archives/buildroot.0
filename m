@@ -1,33 +1,46 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 14 Feb 2014 08:50:56 +0100
-Subject: [Buildroot] Buildroot 2014.02-rc1 released
-In-Reply-To: <87a9dunngi.fsf@dell.be.48ers.dk>
-References: <87sirpvn7f.fsf@dell.be.48ers.dk> <20140213233625.0515088b@skate>
- <87a9dunngi.fsf@dell.be.48ers.dk>
-Message-ID: <CAAXf6LWrLq=6T-OSpnc1a60gceV+ZgObv+2hqKoYR82DMG3wrA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 14 Feb 2014 09:17:59 +0100
+Subject: [Buildroot] [PATCH] python: fix to ensure libpython is stripped
+In-Reply-To: <006301cf291a$d2064af0$7612e0d0$@calyptech.com>
+References: <1390448438-13114-1-git-send-email-przemyslaw.wrzos@calyptech.com>
+ <20140213220854.0db94a08@skate>
+ <006301cf291a$d2064af0$7612e0d0$@calyptech.com>
+Message-ID: <20140214091759.08e6d83c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Feb 14, 2014 at 8:49 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
->>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
->
-> Hi,
->
->  > I believe another very important feature is also the Luarocks package
->  > infrastructure. You're mentioning luarocks amongst the new package
->  > below, but I believe it would be good to highlight the fact that
->  > luarocks is not just a new package: it is a whole new package
->  > infrastructure that makes it easier to add Lua packages in Buildroot.
->  > Maybe something to be added in the final release e-mail :)
->
-> Sure, I'll do that.
->
+Dear Przemyslaw Wrzos,
 
-Additionally, could you also add a ranking of the autobuild fixers,
-similar to the review/acks ?
+On Fri, 14 Feb 2014 11:22:18 +1100, Przemyslaw Wrzos wrote:
 
-Thanks,
+> > On Thu, 23 Jan 2014 14:40:38 +1100, Przemyslaw Wrzos wrote:
+> >> The python and python3 builds mark libpython as read-only which
+> >> prevents it from being stripped out correctly for the target.
+> >> 
+> >> Signed-off-by: Przemyslaw Wrzos <przemyslaw.wrzos@calyptech.com>
+> > 
+> > I have integrated this patch into the large set of Python patches I've
+> > posted at
+> > http://lists.busybox.net/pipermail/buildroot/2014-February/089309.html.
+> > 
+> > However, I agree with Thomas De Schampheleire that this specific patch
+> > should be merged for 2014.02, as it fixes a real problem, and gives a
+> > nice size reduction.
+> > 
+> > Thomas
+> 
+> That makes sense. I assume you don't need anything from me at this point.
+
+Nope, at this point your patch is in the queue, it should be handled at
+some point :-)
+
+Thanks!
+
 Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
