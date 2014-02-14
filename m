@@ -1,139 +1,172 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 14 Feb 2014 21:15:48 +0100
-Subject: [Buildroot] [git commit] i.MX: Use FREESCALE_IMX_SITE for Freescale
-	packages
-Message-ID: <20140228133413.2004C9BA7B@busybox.osuosl.org>
+Date: Fri, 14 Feb 2014 21:08:45 +0100
+Subject: [Buildroot] [git commit] package: add support for top-level
+	parallel make
+Message-ID: <20140228133412.B16169BA7B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0fa180aa8a0638c25a851f82658e88fbd954e5cd
+commit: http://git.buildroot.net/buildroot/commit/?id=6c5c08b854e4490697076ae3c5a9c587d8672c63
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch consolidates the URLs for various Freescale-supplied
-packages to use FREESCALE_IMX_SITE.
+To be able to use top-level parallel make we must not depend in a rule
+on the order of evaluation of the prerequisites, so instead of relying
+on the left to right ordering of evaluation of the prerequisites add
+an explicit rule to describe the dependencies.
 
-Signed-off-by: Eric Nelson <eric.nelson@boundarydevices.com>
-Reviewed-by: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+We cannot use the pattern rules because they must have the same
+dependency for every package, but we need to change the dependencies
+depending on $(2)_OVERRIDE_SRCDIR variable value, so we must use a
+more flexible way like $(2)_TARGET_% variables.
+
+So add explicit dependencies for the following stamp files:
+  $(2)_TARGET_EXTRACT
+  $(2)_TARGET_PATCH
+  $(2)_TARGET_CONFIGURE
+  $(2)_TARGET_BUILD
+  $(2)_TARGET_INSTALL_STAGING
+  $(2)_TARGET_INSTALL_TARGET
+  $(2)_TARGET_INSTALL_IMAGES
+  $(2)_TARGET_INSTALL_HOST
+
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/freescale-imx/firmware-imx/firmware-imx.mk |    2 +-
- package/freescale-imx/freescale-imx.mk             |    2 +-
- .../gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk           |    2 +-
- package/freescale-imx/imx-lib/imx-lib.mk           |    2 +-
- .../gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk   |    3 +--
- package/libfslcodec/libfslcodec.mk                 |    3 +--
- package/libfslparser/libfslparser.mk               |    3 +--
- package/libfslvpuwrap/libfslvpuwrap.mk             |    3 +--
- 8 files changed, 8 insertions(+), 12 deletions(-)
+ package/glibc/glibc.mk   |    6 +++---
+ package/pkg-generic.mk   |   45 ++++++++++++++++++++++++++++-----------------
+ package/uclibc/uclibc.mk |    6 +++---
+ 3 files changed, 34 insertions(+), 23 deletions(-)
 
-diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
-index d9fcb89..d26b31c 100644
---- a/package/freescale-imx/firmware-imx/firmware-imx.mk
-+++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index f50b459..6579f46 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -38,9 +38,6 @@ GLIBC_ADD_TOOLCHAIN_DEPENDENCY = NO
+ # cross-compiler and the kernel headers
+ GLIBC_DEPENDENCIES = host-gcc-initial linux-headers host-gawk
  
- FIRMWARE_IMX_VERSION = $(FREESCALE_IMX_VERSION)
--FIRMWARE_IMX_SITE = $(FREESCALE_IMX_MIRROR_SITE)
-+FIRMWARE_IMX_SITE = $(FREESCALE_IMX_SITE)
- FIRMWARE_IMX_SOURCE = firmware-imx-$(FIRMWARE_IMX_VERSION).bin
- FIRMWARE_IMX_LICENSE = Freescale Semiconductor Software License Agreement, \
- 	Atheros license (ath6k)
-diff --git a/package/freescale-imx/freescale-imx.mk b/package/freescale-imx/freescale-imx.mk
-index d35a62e..0dd5629 100644
---- a/package/freescale-imx/freescale-imx.mk
-+++ b/package/freescale-imx/freescale-imx.mk
-@@ -7,6 +7,6 @@
- FREESCALE_IMX_VERSION = 1.1.0
+-# Before (e)glibc is built, we must have the second stage cross-compiler
+-glibc-build: host-gcc-intermediate
+-
+ GLIBC_SUBDIR = build
  
- # No official download site from freescale, just this mirror
--FREESCALE_IMX_MIRROR_SITE   = http://download.ossystems.com.br/bsp/freescale/source
-+FREESCALE_IMX_SITE   = http://download.ossystems.com.br/bsp/freescale/source
+ GLIBC_INSTALL_STAGING = YES
+@@ -142,3 +139,6 @@ define GLIBC_INSTALL_TARGET_CMDS
+ endef
  
- include $(sort $(wildcard package/freescale-imx/*/*.mk))
-diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
-index c48d108..8e979ee 100644
---- a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
-+++ b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+ $(eval $(autotools-package))
++
++# Before (e)glibc is built, we must have the second stage cross-compiler
++$(GLIBC_TARGET_BUILD): | host-gcc-intermediate
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index b135b14..fec16b0 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -412,30 +412,42 @@ $(1)-install:		$(1)-install-staging $(1)-install-target $(1)-install-images
+ endif
  
- GPU_VIV_BIN_MX6Q_VERSION = $(FREESCALE_IMX_VERSION)
--GPU_VIV_BIN_MX6Q_SITE    = $(FREESCALE_IMX_MIRROR_SITE)
-+GPU_VIV_BIN_MX6Q_SITE    = $(FREESCALE_IMX_SITE)
- GPU_VIV_BIN_MX6Q_SOURCE  = gpu-viv-bin-mx6q-$(GPU_VIV_BIN_MX6Q_VERSION).bin
+ ifeq ($$($(2)_INSTALL_TARGET),YES)
+-$(1)-install-target:	$(1)-build \
+-			$$($(2)_TARGET_INSTALL_TARGET)
++$(1)-install-target:		$$($(2)_TARGET_INSTALL_TARGET)
++$$($(2)_TARGET_INSTALL_TARGET):	$$($(2)_TARGET_BUILD)
+ else
+ $(1)-install-target:
+ endif
  
- GPU_VIV_BIN_MX6Q_INSTALL_STAGING = YES
-diff --git a/package/freescale-imx/imx-lib/imx-lib.mk b/package/freescale-imx/imx-lib/imx-lib.mk
-index bd7e174..e1a68ef 100644
---- a/package/freescale-imx/imx-lib/imx-lib.mk
-+++ b/package/freescale-imx/imx-lib/imx-lib.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+ ifeq ($$($(2)_INSTALL_STAGING),YES)
+-$(1)-install-staging:	$(1)-build \
+-			$$($(2)_TARGET_INSTALL_STAGING)
++$(1)-install-staging:			$$($(2)_TARGET_INSTALL_STAGING)
++$$($(2)_TARGET_INSTALL_STAGING):	$$($(2)_TARGET_BUILD)
++# Some packages use install-staging stuff for install-target
++$$($(2)_TARGET_INSTALL_TARGET):		$$($(2)_TARGET_INSTALL_STAGING)
+ else
+ $(1)-install-staging:
+ endif
  
- IMX_LIB_VERSION = $(FREESCALE_IMX_VERSION)
--IMX_LIB_SITE    = $(FREESCALE_IMX_MIRROR_SITE)
-+IMX_LIB_SITE    = $(FREESCALE_IMX_SITE)
- IMX_LIB_LICENSE = LGPLv2.1+
- # No license file included
+ ifeq ($$($(2)_INSTALL_IMAGES),YES)
+-$(1)-install-images:	$(1)-build \
+-			$$($(2)_TARGET_INSTALL_IMAGES)
++$(1)-install-images:		$$($(2)_TARGET_INSTALL_IMAGES)
++$$($(2)_TARGET_INSTALL_IMAGES):	$$($(2)_TARGET_BUILD)
+ else
+ $(1)-install-images:
+ endif
  
-diff --git a/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
-index ccdb521..4437875 100644
---- a/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
-+++ b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
-@@ -5,8 +5,7 @@
- ################################################################################
+-$(1)-install-host:      $(1)-build $$($(2)_TARGET_INSTALL_HOST)
++$(1)-install-host:      	$$($(2)_TARGET_INSTALL_HOST)
++$$($(2)_TARGET_INSTALL_HOST):	$$($(2)_TARGET_BUILD)
  
- GST_FSL_PLUGINS_VERSION = 3.0.1
--# No official download site from freescale, just this mirror
--GST_FSL_PLUGINS_SITE = http://download.ossystems.com.br/bsp/freescale/source
-+GST_FSL_PLUGINS_SITE = $(FREESCALE_IMX_SITE)
+-$(1)-build:		$(1)-configure \
+-			$$($(2)_TARGET_BUILD)
++$(1)-build:		$$($(2)_TARGET_BUILD)
++$$($(2)_TARGET_BUILD):	$$($(2)_TARGET_CONFIGURE)
++
++# Since $(2)_DEPENDENCIES are phony targets, they are always "newer"
++# than $(2)_TARGET_CONFIGURE. This would force the configure step (and
++# therefore the other steps as well) to be re-executed with every
++# invocation of make.  Therefore, make $(2)_DEPENDENCIES an order-only
++# dependency by using |.
++
++$(1)-configure:			$$($(2)_TARGET_CONFIGURE)
++$$($(2)_TARGET_CONFIGURE):	| $$($(2)_DEPENDENCIES)
  
- # Most is LGPLv2+, but some sources are copied from upstream and are
- # LGPLv2.1+, which essentially makes it LGPLv2.1+
-diff --git a/package/libfslcodec/libfslcodec.mk b/package/libfslcodec/libfslcodec.mk
-index c18332a..ad1cc63 100644
---- a/package/libfslcodec/libfslcodec.mk
-+++ b/package/libfslcodec/libfslcodec.mk
-@@ -5,8 +5,7 @@
- ################################################################################
+ $$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dirs prepare
+ ifeq ($(filter $(1),$(DEPENDENCIES_HOST_PREREQ)),)
+@@ -449,13 +461,13 @@ ifeq ($$($(2)_OVERRIDE_SRCDIR),)
+ #  extract
+ #  patch
+ #  configure
+-$(1)-configure:		$(1)-patch $(1)-depends \
+-			$$($(2)_TARGET_CONFIGURE)
++$$($(2)_TARGET_CONFIGURE):	$$($(2)_TARGET_PATCH)
  
- LIBFSLCODEC_VERSION = 3.0.1
--# No official download site from freescale, just this mirror
--LIBFSLCODEC_SITE = http://download.ossystems.com.br/bsp/freescale/source
-+LIBFSLCODEC_SITE = $(FREESCALE_IMX_SITE)
- LIBFSLCODEC_SOURCE = libfslcodec-$(LIBFSLCODEC_VERSION).bin
- LIBFSLCODEC_LICENSE = Freescale Semiconductor Software License Agreement, BSD-3c (flac, ogg headers)
- LIBFSLCODEC_LICENSE_FILES = EULA EULA.txt
-diff --git a/package/libfslparser/libfslparser.mk b/package/libfslparser/libfslparser.mk
-index 3e27a6a..3aab3a7 100644
---- a/package/libfslparser/libfslparser.mk
-+++ b/package/libfslparser/libfslparser.mk
-@@ -5,8 +5,7 @@
- ################################################################################
+-$(1)-patch:		$(1)-extract $$($(2)_TARGET_PATCH)
++$(1)-patch:		$$($(2)_TARGET_PATCH)
++$$($(2)_TARGET_PATCH):	$$($(2)_TARGET_EXTRACT)
  
- LIBFSLPARSER_VERSION = 3.0.1
--# No official download site from freescale, just this mirror
--LIBFSLPARSER_SITE = http://download.ossystems.com.br/bsp/freescale/source
-+LIBFSLPARSER_SITE = $(FREESCALE_IMX_SITE)
- LIBFSLPARSER_SOURCE = libfslparser-$(LIBFSLPARSER_VERSION).bin
- LIBFSLPARSER_LICENSE = Freescale Semiconductor Software License Agreement
- LIBFSLPARSER_LICENSE_FILES = EULA EULA.txt
-diff --git a/package/libfslvpuwrap/libfslvpuwrap.mk b/package/libfslvpuwrap/libfslvpuwrap.mk
-index 1bc7129..346a20a 100644
---- a/package/libfslvpuwrap/libfslvpuwrap.mk
-+++ b/package/libfslvpuwrap/libfslvpuwrap.mk
-@@ -5,8 +5,7 @@
- ################################################################################
+-$(1)-extract:		$(1)-source \
+-			$$($(2)_TARGET_EXTRACT)
++$(1)-extract:			$$($(2)_TARGET_EXTRACT)
++$$($(2)_TARGET_EXTRACT):	$$($(2)_TARGET_SOURCE)
  
- LIBFSLVPUWRAP_VERSION = 1.0.17
--# No official download site from freescale, just this mirror
--LIBFSLVPUWRAP_SITE = http://download.ossystems.com.br/bsp/freescale/source
-+LIBFSLVPUWRAP_SITE = $(FREESCALE_IMX_SITE)
- LIBFSLVPUWRAP_LICENSE = Freescale Semiconductor Software License Agreement
- LIBFSLVPUWRAP_LICENSE_FILES = EULA.txt
- LIBFSLVPUWRAP_REDISTRIBUTE = NO
+ $(1)-depends:		$$($(2)_DEPENDENCIES)
+ 
+@@ -465,10 +477,9 @@ else
+ #  source, by rsyncing
+ #  depends
+ #  configure
+-$(1)-configure:		$(1)-depends \
+-			$$($(2)_TARGET_CONFIGURE)
++$$($(2)_TARGET_CONFIGURE):	$$($(2)_TARGET_RSYNC)
+ 
+-$(1)-depends:		$(1)-rsync $$($(2)_DEPENDENCIES)
++$(1)-depends:		$$($(2)_DEPENDENCIES)
+ 
+ $(1)-patch:		$(1)-rsync
+ $(1)-extract:		$(1)-rsync
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index ea1c694..4860c58 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -29,9 +29,6 @@ UCLIBC_ADD_TOOLCHAIN_DEPENDENCY = NO
+ # cross-compiler and the kernel headers
+ UCLIBC_DEPENDENCIES = host-gcc-initial linux-headers
+ 
+-# Before uClibc is built, we must have the second stage cross-compiler
+-uclibc-build: host-gcc-intermediate
+-
+ # specifying UCLIBC_CONFIG_FILE on the command-line overrides the .config
+ # setting.
+ ifndef UCLIBC_CONFIG_FILE
+@@ -556,3 +553,6 @@ uclibc-menuconfig: dirs uclibc-patch
+ 	rm -f $(UCLIBC_DIR)/.stamp_{configured,built,target_installed,staging_installed}
+ 
+ $(eval $(generic-package))
++
++# Before uClibc is built, we must have the second stage cross-compiler
++$(UCLIBC_TARGET_BUILD): | host-gcc-intermediate
