@@ -1,38 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 14 Feb 2014 13:40:50 +0100
-Subject: [Buildroot] [git commit] docs/web: give a little bit more exposure
-	to our Google+ page
-Message-ID: <20140214124324.BBBFD9CA02@busybox.osuosl.org>
+From: Mike Zick <minimod@morethan.org>
+Date: Fri, 14 Feb 2014 06:51:55 -0600
+Subject: [Buildroot] [PATCH v5 4/5] dependencies.sh: XBMC needs java on
+ the host
+In-Reply-To: <20140214093930.02727f8e@skate>
+References: <1392332394-27935-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <1392332394-27935-5-git-send-email-maxime.hadjinlian@gmail.com>
+ <20140214093930.02727f8e@skate>
+Message-ID: <20140214065155.4c287dac@core2quad.morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4ea812ea481db6abdba9d703bd81d96e975f6eef
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 14 Feb 2014 09:39:30 +0100
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-Add a small icon that links the Buildroot home page to our Google+
-page.
+> Dear Maxime Hadjinlian,
+> 
+> On Thu, 13 Feb 2014 23:59:53 +0100, Maxime Hadjinlian wrote:
+> 
+> > +if grep -q ^BR2_PACKAGE_XBMC=y $BUILDROOT_CONFIG ; then
+> > +	for prog in java; do
+> 
+> Since you're checking for only one program, there's no point in having
+> a loop here. Just do:
+> 
+> 	if ! which java > /dev/null ; then
+>
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/header.html |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+Wasn't there a patch this development session that replaced
+the use of "which" with a standards compliant command?
 
-diff --git a/docs/header.html b/docs/header.html
-index b987d85..625c079 100644
---- a/docs/header.html
-+++ b/docs/header.html
-@@ -57,7 +57,9 @@
-     <br><a href="http://autobuild.buildroot.org">Autobuilder</a>
-     <br><a href="http://patchwork.buildroot.org">Patchwork</a>
-     <br><a href="/sponsors.html">Sponsors</a>
--
-+    <br><a href="https://plus.google.com/100084591154899263420?prsrc=3" rel="publisher" target="_top" style="text-decoration:none;">
-+      <img src="https://ssl.gstatic.com/images/icons/gplus-32.png" alt="Google+" style="border:0;width:32px;height:32px;"/>
-+    </a>
- </td>
- 
- 
+Mike
+> 
+> Thanks,
+> 
+> Thomas
