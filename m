@@ -1,60 +1,65 @@
-From: William Welch <bvwelch@gmail.com>
-Date: Sat, 15 Feb 2014 05:04:09 -0600
-Subject: [Buildroot] no linux console output for 2014.02-rc1 microblaze
- using internal buildroot toolchain
-In-Reply-To: <87ha80k5p8.fsf@dell.be.48ers.dk>
-References: <CAPALihNZkxiyex7OkQzUQhQU4s-Lxo_N4GmOpTsK-o0qY4nh2Q@mail.gmail.com>
- <87ha80k5p8.fsf@dell.be.48ers.dk>
-Message-ID: <CAPALihMx=hBSY=3W-YPa0_Lc7hQ3ze3sZQzy9ZfKYRRWCGvVcA@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 15 Feb 2014 12:44:18 +0100
+Subject: [Buildroot] [PATCH 1/1] Prefer 'command -v' over 'which' (for
+ portability)
+In-Reply-To: <52E7543D.9010103@mind.be>
+References: <1390659116-18865-1-git-send-email-bjorn.forsman@gmail.com>
+ <CAHXCMMKE-WDNCTQ82uuEM5n=t4Ua=qTDTTaBxQ7=wVgiBejd0w@mail.gmail.com>
+ <52E7543D.9010103@mind.be>
+Message-ID: <20140215114418.GA5291@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Feb 15, 2014 at 4:53 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+Arnout, All,
 
-> >>>>> "William" == William Welch <bvwelch@gmail.com> writes:
->
->  > Greetings,
->  > I have used buildroot, successfully, on this microblaze design for the
-> past
->  > year or so.  For example, buildroot 2013.11 works fine.
->
->  > I was glad to hear that 2014.02-rc1 has an internal toolchain for
-> Microblaze.
->  > However, my first attempt to use it failed.
->
->  > I realize that not getting any kernel console output can be due to any
-> number
->  > of mistakes in configuring the kernel, but when I switch to an external
->  > toolchain -- gcc 4.6.4 20120924 prerelease crosstool-NG 1.18.0 -- the
-> kernel
->  > works fine.
->
->  > I can certainly continue to use the external toolchain for my work,
->  > but if there is interest in tracking down this issue, some hints as
->  > to the best way to proceed would be welcome.
->
-> No output at all? That sounds bad. We're certainly interested in people
-> using the internal toolchain. I've added Spenser to this mail as he did
-> the microblaze work.
->
+Jumping back into this old thread, after it was referenced by Maxime in
+his XBMC series...
 
-Right, nothing on the console. I have CONFIG_EARLY_PRINTK=y as well.  The
-board is the SP605 from Avnet, and I use the Xilinx XMD tool to load
-simpleImage into the fpga.
+On 2014-01-28 07:54 +0100, Arnout Vandecappelle spake thusly:
+> On 27/01/14 10:19, Samuel Martin wrote:
+> >"command -v" seems not playing very well with aliases:
+> >
+> >$ command -v make
+> >alias make='~/.config/ctafconf/bin/colorwarper make'
+> >$ which make
+> >/usr/bin/make
+> 
+>  I don't think your .profile gets executed when running a shell script, so
+> the alias will not be set. Bash does use BASH_ENV to specify a startup
+> script, so perhaps we should unexport that.
 
-William
+Here is a little test I did:
 
+    $ cat Makefile
+    all:
+        echo "'$${buz}'"
+        foo
 
+    $ cat /tmp/foo.env
+    buz="BUZ"
+    echo BAR
+    alias foo='echo FOO'
 
->
-> Spenser, any ideas?
->
-> --
-> Bye, Peter Korsgaard
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140215/254f5ec1/attachment.html>
+    $ BASH_ENV=/tmp/foo.env ENV=/tmp/foo.env make
+    echo "'${buz}'"
+    ''
+    foo
+    make: foo: Command not found
+    make: *** [all] Error 127
+
+So, it looks like neither BASH_ENV nor ENV are parsed (ENV is for when
+bash is invoked in POSIX mode).
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
