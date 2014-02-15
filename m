@@ -1,42 +1,33 @@
-From: Peter Kuemmel <syntheticpp@gmx.net>
-Date: Sat, 15 Feb 2014 10:19:17 +0100
-Subject: [Buildroot] enable eglfs
-In-Reply-To: <CAAXf6LVZ2i6XhV+3uVV86ru=adVjS9NkC1S873+wbL+-0VtUng@mail.gmail.com>
-References: <52FF0E04.6030800@gmail.com>,
- <CAAXf6LVZ2i6XhV+3uVV86ru=adVjS9NkC1S873+wbL+-0VtUng@mail.gmail.com>
-Message-ID: <trinity-1adbe988-4720-49e0-bac8-44452d6d42f5-1392455957094@3capp-gmx-bs31>
+From: William Welch <bvwelch@gmail.com>
+Date: Sat, 15 Feb 2014 04:37:12 -0600
+Subject: [Buildroot] no linux console output for 2014.02-rc1 microblaze
+ using internal buildroot toolchain
+Message-ID: <CAPALihNZkxiyex7OkQzUQhQU4s-Lxo_N4GmOpTsK-o0qY4nh2Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- 
-> You need to enable a provider of opengl. In your case, you need
-> rpi-userland, but in general these are the current choices:
+Greetings,
 
-In the menu -> Target packages -> Hardware handling -> rpi-userland
+I have used buildroot, successfully, on this microblaze design for the past
+year or so.  For example, buildroot 2013.11 works fine.
 
-> 
-> grep -rn 'select BR2_PACKAGE_HAS_OPENGL_' package/
-> package/freescale-imx/gpu-viv-bin-mx6q/Config.in:7:     select
-> BR2_PACKAGE_HAS_OPENGL_EGL
-> package/freescale-imx/gpu-viv-bin-mx6q/Config.in:8:     select
-> BR2_PACKAGE_HAS_OPENGL_ES
-> package/ti-gfx/Config.in:3:     select BR2_PACKAGE_HAS_OPENGL_EGL
-> package/ti-gfx/Config.in:4:     select BR2_PACKAGE_HAS_OPENGL_ES
-> package/rpi-userland/Config.in:7:       select BR2_PACKAGE_HAS_OPENGL_EGL
-> package/rpi-userland/Config.in:8:       select BR2_PACKAGE_HAS_OPENGL_ES
-> package/sunxi-mali/Config.in:3: select BR2_PACKAGE_HAS_OPENGL_EGL
-> package/sunxi-mali/Config.in:4: select BR2_PACKAGE_HAS_OPENGL_ES
-> 
-> To know which symbol to grep for, I looked at the help of the comment
-> you mentioned, to see what it depended on.
-> 
-> Best regards,
-> Thomas
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+
+I was glad to hear that 2014.02-rc1 has an internal toolchain for
+Microblaze. However, my first attempt to use it failed.
+
+I realize that not getting any kernel console output can be due to any
+number of mistakes in configuring the kernel, but when I switch to an
+external toolchain -- gcc 4.6.4 20120924 prerelease crosstool-NG 1.18.0 --
+the kernel works fine.
+
+I can certainly continue to use the external toolchain for my work, but if
+there is interest in tracking down this issue, some hints as to the best
+way to proceed would be welcome.
+
+William
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140215/80c8167d/attachment.html>
