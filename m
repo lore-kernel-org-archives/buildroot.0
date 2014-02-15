@@ -1,62 +1,74 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 15 Feb 2014 23:13:23 +0100
-Subject: [Buildroot] [PATCH 2/2] opencv: always enable opencv_core module
-	when opencv is enabled
-In-Reply-To: <1392502403-19701-1-git-send-email-s.martin49@gmail.com>
-References: <1392502403-19701-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1392502403-19701-3-git-send-email-s.martin49@gmail.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sun, 16 Feb 2014 00:57:47 +0100
+Subject: [Buildroot] [PATCH 1/2] imagemagick: disable documentation
+Message-ID: <1392508668-27561-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It does not make much sense enabling opencv without its core module.
+There is no options to disable the documentation,
+so remove it directly in Makefile.am
 
-This configuration leads to build nothing (since all modules depend on
-the core one), but install the configuration files (*.pc and *.cmake)
-anyway.
-
-This absurd situation may break the build-system of other packages
-that would correctly find the *.pc (but does not check for the modules
-they actually use), but would not build because of missing headers and
-libraries.
-
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- package/opencv/Config.in | 6 ------
- package/opencv/opencv.mk | 2 +-
- 2 files changed, 1 insertion(+), 7 deletions(-)
+ .../imagemagick/imagemagick-02-disable-doc.patch   | 47 ++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
+ create mode 100644 package/imagemagick/imagemagick-02-disable-doc.patch
 
-diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index ccde5cb..217243d 100644
---- a/package/opencv/Config.in
-+++ b/package/opencv/Config.in
-@@ -26,12 +26,6 @@ config BR2_PACKAGE_OPENCV_LIB_CONTRIB
- 	help
- 	  Include opencv_contrib module into the OpenCV build.
- 
--config BR2_PACKAGE_OPENCV_LIB_CORE
--	bool "core"
--	default y
--	help
--	  Include opencv_core module into the OpenCV build.
--
- config BR2_PACKAGE_OPENCV_LIB_FEATURES2D
- 	bool "features2d"
- 	default y
-diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
-index 732bc0c..42f9b0a 100644
---- a/package/opencv/opencv.mk
-+++ b/package/opencv/opencv.mk
-@@ -34,7 +34,7 @@ OPENCV_CONF_OPT += \
- 	-DBUILD_opencv_androidcamera=OFF                                        \
- 	-DBUILD_opencv_calib3d=$(if $(BR2_PACKAGE_OPENCV_LIB_CALIB3D),ON,OFF)   \
- 	-DBUILD_opencv_contrib=$(if $(BR2_PACKAGE_OPENCV_LIB_CONTRIB),ON,OFF)   \
--	-DBUILD_opencv_core=$(if $(BR2_PACKAGE_OPENCV_LIB_CORE),ON,OFF)         \
-+	-DBUILD_opencv_core=ON                                                  \
- 	-DBUILD_opencv_features2d=$(if $(BR2_PACKAGE_OPENCV_LIB_FEATURES2D),ON,OFF) \
- 	-DBUILD_opencv_flann=$(if $(BR2_PACKAGE_OPENCV_LIB_FLANN),ON,OFF)       \
- 	-DBUILD_opencv_gpu=$(if $(BR2_PACKAGE_OPENCV_LIB_GPU),ON,OFF)           \
+diff --git a/package/imagemagick/imagemagick-02-disable-doc.patch b/package/imagemagick/imagemagick-02-disable-doc.patch
+new file mode 100644
+index 0000000..b4ffec4
+--- /dev/null
++++ b/package/imagemagick/imagemagick-02-disable-doc.patch
+@@ -0,0 +1,47 @@
++imagemagick: disable doc
++
++There is no options to disable the documentation,
++so remove it directly in Makefile.am
++
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++---
++ Makefile.am | 13 +++----------
++ 1 file changed, 3 insertions(+), 10 deletions(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index c74a870..813c65e 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -157,18 +157,11 @@ pkgconfig_DATA = \
++ 	cp -f $^ $@
++ 
++ # Manual pages to install
++-man_MANS = \
++-	$(MAGICK_MANS) \
++-	$(WAND_MANS) \
++-	$(MAGICKPP_MANS) \
++-	$(UTILITIES_MANS)
+++man_MANS = 
++ 
++ # Architecture independent data files installed in the package's data directory
++ docdir = $(DOCUMENTATION_PATH)
++-doc_DATA = \
++-	LICENSE \
++-	ChangeLog \
++-	NEWS.txt
+++doc_DATA = 
++ 
++ if MAINTAINER_MODE
++ MAINTAINER_TARGETS = \
++@@ -236,7 +229,7 @@ pkgdocdir = $(DOCUMENTATION_PATH)
++ DOCDIRSDOXYGEN = www/api/MagickCore www/api/MagickWand
++ DOCDIRSMANUAL = images images/patterns www www/api www/source www/Magick++
++ DOCDIRS= $(DOCDIRSMANUAL) $(DOCDIRSDOXYGEN)
++-HTML_INSTALL_DATA_TARGETS = install-data-html
+++HTML_INSTALL_DATA_TARGETS = 
++ install-data-html:
++ 	$(mkinstalldirs) $(DESTDIR)$(pkgdocdir)
++ 	$(INSTALL_DATA) $(srcdir)/index.html $(DESTDIR)$(pkgdocdir)
++-- 
++1.8.5.3
++
 -- 
-1.8.5.4
+1.8.5.3
