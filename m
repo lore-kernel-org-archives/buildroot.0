@@ -1,56 +1,62 @@
-From: Frank Bergmann <bergmann@rosho.de>
-Date: Sat, 15 Feb 2014 18:29:49 +0100
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <CAAEAJfBHZ_4hSWN+boCRCvxJbFC1+T_WN=Dv3oVM2yz0z=t5JQ@mail.gmail.com>
+From: Frank Bergmann <frank@frajasalo.de>
+Date: Sat, 15 Feb 2014 19:52:01 +0100
+Subject: [Buildroot] [PATCH 1/1] e2fsprogs: fix missing fallocate64() on
+	nios2
+In-Reply-To: <52FFA40D.1040100@rosho.de>
 References: <20140214073009.1D7E6102637@stock.ovh.net>
  <20140214101241.27857b9e@skate>
  <CAAEAJfBHZ_4hSWN+boCRCvxJbFC1+T_WN=Dv3oVM2yz0z=t5JQ@mail.gmail.com>
-Message-ID: <52FFA40D.1040100@rosho.de>
+ <52FFA40D.1040100@rosho.de>
+Message-ID: <52FFB751.1090903@frajasalo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Nios2 is currently missing the fallocate64 system call. Because of
+compiling the e2fsprogs package with _FILE_OFFSET_BITS=64 the fallocate
+call is replaced by fallocate64 by the glibc. Therefor fallocate is
+entirely disbaled while configuring the package.
 
-On 14.02.2014 14:15, Ezequiel Garc?a wrote:
->>>       nios2 |               e2fsprogs-1.42.9 | NOK | http://autobuild.buildroot.net/results/70a47bd7392560cbc1c64769c8357c0b4c91ca3b/
->>
->> Another missing syscall on NIOS II ? Ezequiel ?
->>
->> ../lib/libext2fs.so: undefined reference to `fallocate64'
->> collect2: error: ld returned 1 exit status
->>
->
-> Ah, yes. We have lots of packages failing with this issue. I think
-> it's some issue
-> with the toolchain. fallocate64 is not a system call (only fallocate
-> exists, AFAICS),
-> so this should be some libc issue.
->
-> Anybody knows better? Who implements fallocate64? What can we do to fix this
-> in Buildroot (using an external toolchain)?
+e4defrag have to be disabled because it declares the fallocate64 but
+the library have its own defined.
 
-No, sorry. But after dig a little bit:
-e2fsprogs using
+It fixes an autobuilder issue:
+http://autobuild.buildroot.org/results/70a/70a47bd7392560cbc1c64769c8357c0b4c91ca3b/
 
-   _FILE_OFFSET_BITS=64
+Signed-off-by: Frank Bergmann <frank@frajasalo.de>
+---
+  package/e2fsprogs/Config.in    | 2 +-
+  package/e2fsprogs/e2fsprogs.mk | 3 ++-
+  2 files changed, 3 insertions(+), 2 deletions(-)
 
-while compiling the source. In this case the fallocate system call will 
-be silently replaced by fallocate64 (see: 
-https://lists.debian.org/debian-glibc/2010/02/msg00088.html). But 
-fallocate64 is unfortunately not available on nios2 toolchain at the moment.
+diff --git a/package/e2fsprogs/Config.in b/package/e2fsprogs/Config.in
+index 7775e94..1e87aef 100644
+--- a/package/e2fsprogs/Config.in
++++ b/package/e2fsprogs/Config.in
+@@ -49,7 +49,7 @@ config BR2_PACKAGE_E2FSPROGS_E2UNDO
 
-The only solution that works appears to be completely disable the 
-fallocate system call(s) by providing
+  config BR2_PACKAGE_E2FSPROGS_E4DEFRAG
+         bool "e4defrag"
+-       depends on !BR2_avr32 # fallocate not implemented
++       depends on !BR2_avr32 && !BR2_nios2 # fallocate not implemented
 
-   ac_cv_func_fallocate=no
+  config BR2_PACKAGE_E2FSPROGS_FILEFRAG
+         bool "filefrag"
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index 2eb59f5..310f549 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -23,7 +23,8 @@ E2FSPROGS_CONF_OPT = \
+         --disable-libuuid \
+         --enable-fsck \
+         --disable-e2initrd-helper \
+-       --disable-testio-debug
++       --disable-testio-debug \
++       $(if $(BR2_nios2),ac_cv_func_fallocate=no,)
 
-to the configure script. The effect in e2fsprogs will be that 
-unix_discard() in ext2fs/unix_io.c will return with the "UNIMPLEMENTED" 
-return code. I'm not sure for the moment if the whole packages or only a 
-couple of functions gets unusable with this.
+  E2FSPROGS_DEPENDENCIES = host-pkgconf util-linux
 
-With regards,
-Frank Bergmann.
+-- 
+1.8.3.1
