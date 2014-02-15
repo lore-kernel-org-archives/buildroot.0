@@ -1,85 +1,76 @@
-From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
-Date: Sat, 15 Feb 2014 14:29:17 +0100
-Subject: [Buildroot] [PATCH 1/1] Prefer 'command -v' over 'which' (for
-	portability)
-In-Reply-To: <20140215114418.GA5291@free.fr>
-References: <1390659116-18865-1-git-send-email-bjorn.forsman@gmail.com>
- <CAHXCMMKE-WDNCTQ82uuEM5n=t4Ua=qTDTTaBxQ7=wVgiBejd0w@mail.gmail.com>
- <52E7543D.9010103@mind.be> <20140215114418.GA5291@free.fr>
-Message-ID: <CAEYzJUHrCVAKM0mz8xiATprFQPZnBvXjJiUa59V3-gSgREeg+Q@mail.gmail.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sat, 15 Feb 2014 15:06:29 +0100
+Subject: [Buildroot] [PATCH 1/1] ncftp: fix cross-compilation issues
+In-Reply-To: <20140214095330.5b632ac0@skate>
+References: <1392342348-28066-1-git-send-email-romain.naour@openwide.fr>
+ <20140214095330.5b632ac0@skate>
+Message-ID: <52FF7465.7090004@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 15 February 2014 12:44, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Arnout, All,
+Hi Thomas, All,
+
+Le 14/02/2014 09:53, Thomas Petazzoni a ?crit :
+> Dear Romain Naour,
 >
-> Jumping back into this old thread, after it was referenced by Maxime in
-> his XBMC series...
->
-> On 2014-01-28 07:54 +0100, Arnout Vandecappelle spake thusly:
->> On 27/01/14 10:19, Samuel Martin wrote:
->> >"command -v" seems not playing very well with aliases:
->> >
->> >$ command -v make
->> >alias make='~/.config/ctafconf/bin/colorwarper make'
->> >$ which make
->> >/usr/bin/make
+> On Fri, 14 Feb 2014 02:45:48 +0100, Romain Naour wrote:
+>> ncftp is unable to find ncurses library installed by ncurses package.
+>> So ncftpbookmarks is not build and install fails.
 >>
->>  I don't think your .profile gets executed when running a shell script, so
->> the alias will not be set. Bash does use BASH_ENV to specify a startup
->> script, so perhaps we should unexport that.
+>> If ncurses is installed on the host machine then ncftp find it
+>> and build ncftpbookmarks.
+>>
+>> To avoid that, we need to remove the cross-compilation test in
+>> configure script and set ac_cv_prog_cc_cross=yes in ncftp.mk
+> Can you expand a bit on the relation between ac_cv_prog_cc_cross=yes,
+> and this story about ncurses? I don't quite see the connection between
+> the two.
+
+Sure, it was (very) late and I was not very clear in my explanations, sorry.
+
+So, the problem is that the configure script assumes that it is doing 
+native
+compilation due to a false result of the cross-compilation test.
+
+In this case an additional test is performed and fails if ncurses is not 
+installed on the host machine.
+(test #line 5893 "configure")
+This test is skipped for cross-compilation.
+
+This has resulted that the ncurses library support is disabled beneath 
+the feet of ncftp's package.
+Thus ncftpbootmarks is not build and install fails.
+
+> That being said, I agree that the cross-compilation test is stupid: it
+> builds a program, and tries to run it. If it runs, then the configure
+> script concludes that we're doing native compilation, if it doesn't
+> run, we're doing cross-compilation. Except that of course when you're
+> building x86 or x86-64 on x86-64 and both the target and host use
+> glibc, the program may very well run.
 >
-> Here is a little test I did:
+> Now, maybe we could simply patch the configure script to use something
+> like what all other configure scripts are doing:
 >
->     $ cat Makefile
->     all:
->         echo "'$${buz}'"
->         foo
+> cross_compiling=no
 >
->     $ cat /tmp/foo.env
->     buz="BUZ"
->     echo BAR
->     alias foo='echo FOO'
->
->     $ BASH_ENV=/tmp/foo.env ENV=/tmp/foo.env make
->     echo "'${buz}'"
->     ''
->     foo
->     make: foo: Command not found
->     make: *** [all] Error 127
->
-> So, it looks like neither BASH_ENV nor ENV are parsed (ENV is for when
-> bash is invoked in POSIX mode).
-
-I just want to mention an interesting corner case in handing of
-$(shell ...) in gnu make, something I just now became aware of.
-
-The (weird) thing is that this works:
-
-$(shell command -v sed || echo sed)    # WORKS
-
-while this does not:
-
-$(shell command -v sed)    # FAILS
-
-The reason for this behaviour (from stackoverflow,
-http://stackoverflow.com/questions/12989869/calling-command-v-find-from-gnu-makefile):
-
-----
-Judging from a quick look at job.c in GNU make's sources, it attempts
-to avoid launching a shell when it can, i.e. when the command line is
-simple enough (of the form cmd args, without redirection, compound
-commands, etc.) and the shell is the default one. The issue is then
-that command is a built-in and does not have an associated executable,
-hence the error message from make. It does not occur when you have >
-/dev/null as make considers the command as too complicated and leaves
-it tosh to launch it.
-----
-
-So, is this OK for merge now?
+> if test "x$host_alias" != x; then
+>    if test "x$build_alias" = x; then
+>      cross_compiling=maybe
+>      $as_echo "$as_me: WARNING: If you wanted to set the --build type, don't use --host.
+>      If a cross compiler is detected then cross compile mode will be used." >&2
+>    elif test "x$build_alias" != "x$host_alias"; then
+>      cross_compiling=yes
+>    fi
+> fi
+Ok, thanks !
+I will rework my patch to do thatbut since we're cross-compiling,
+should I take into account the "maybe" case ?
 
 Best regards,
-Bj?rn Forsman
+Romain Naour
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140215/4a726d69/attachment.html>
