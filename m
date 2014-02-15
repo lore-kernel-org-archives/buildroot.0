@@ -1,36 +1,48 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 15 Feb 2014 08:40:23 +0100
-Subject: [Buildroot] [PATCH v13 0/7] Add support for top-level parallel
-	make
-In-Reply-To: <CAHkwnC_KHZ7oK6mCof+Xq36kmPT_G_q1dpNFBXfpSFfY5KQ7ug@mail.gmail.com>
- (Fabio Porcedda's message of "Fri, 14 Feb 2014 23:52:49 +0100")
-References: <1392371709-26662-1-git-send-email-fabio.porcedda@gmail.com>
- <87d2ipmp3l.fsf@dell.be.48ers.dk>
- <CAAXf6LVKsGPsEB19myfj_BvDaW8BKz=Rd3gW-4iX12O+L1XThA@mail.gmail.com>
- <87vbwhl9ym.fsf@dell.be.48ers.dk>
- <CAHkwnC_KHZ7oK6mCof+Xq36kmPT_G_q1dpNFBXfpSFfY5KQ7ug@mail.gmail.com>
-Message-ID: <87ob28kemw.fsf@dell.be.48ers.dk>
+From: Frank Bergmann <bergmann@rosho.de>
+Date: Sat, 15 Feb 2014 08:27:26 +0100
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <CAAEAJfBHZ_4hSWN+boCRCvxJbFC1+T_WN=Dv3oVM2yz0z=t5JQ@mail.gmail.com>
+References: <20140214073009.1D7E6102637@stock.ovh.net>
+ <20140214101241.27857b9e@skate>
+ <CAAEAJfBHZ_4hSWN+boCRCvxJbFC1+T_WN=Dv3oVM2yz0z=t5JQ@mail.gmail.com>
+Message-ID: <52FF16DE.90809@rosho.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
+Hello,
 
-Hi,
+On 14.02.2014 14:15, Ezequiel Garc?a wrote:
+> On 14 February 2014 06:12, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>>>       nios2 |                     crda-1.1.3 | NOK | http://autobuild.buildroot.net/results/780c3388e408ae6479e824711b1c02fdbd34bef4/
+>>
+>> No idea what this error means. Ezequiel ?
+>>
+>> /home/test/test/2/output/host/opt/ext-toolchain/bin/../lib/gcc/nios2-linux-gnu/4.7.3/../../../../nios2-linux-gnu/bin/ld: /home/test/test/2/output/host/usr/nios2-buildroot-linux-gnu/sysroot/usr/lib/crt1.o: undefined reference to symbol '_gp'
+>> /home/test/test/2/output/host/opt/ext-toolchain/bin/../lib/gcc/nios2-linux-gnu/4.7.3/../../../../nios2-linux-gnu/bin/ld: note: '_gp' is defined in DSO /home/test/test/2/output/host/usr/nios2-buildroot-linux-gnu/sysroot/usr/lib/libgpg-error.so.0 so try adding it to the linker command line
+>>
+>
+> As Peter said, some issue with the compiler. This is too much for me :-)
 
- > Yeah it fits.
+What about the hint the linker gives in the line after the error ?
+Link the binary with the additional LDFLAG '-lgpg-error' build the 
+binary (but I have not run-time tested the result). This is also the 
+advise from libgcrypt:
 
- > It was finally merged, that's great!
- > I was losing hope!
- > My first patch about this feature was sent in April 2013, ten months ago...
+   $> libgcrypt-config --libs
+   -lgcrypt -ldl -lgpg-error
 
-Yes, I know. I also just went back to look. Sorry it took this long..
+I guess this is an unlucky accident: libgpg-error exports a 
+symbol/function named '_gp' that could lead one to think it's about the 
+global pointer from the nios2.
 
- > I will do more testing, so except more patches to improve the support.
+> Adding nios2 support in the internal toolchain is on my (increasingly
+> long) TODO list.
 
-Thanks!
+That's fine. Is there a public repository for early testing ?
 
--- 
-Bye, Peter Korsgaard
+With regards,
+Frank Bergmann.
