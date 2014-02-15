@@ -1,9 +1,9 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sat, 15 Feb 2014 08:03:48 +0100
-Subject: [Buildroot] adding support for a new board
-In-Reply-To: <52FF012D.3090807@gmail.com>
-References: <52FF012D.3090807@gmail.com>
-Message-ID: <CAAXf6LXc-4KOLhTkuVF4mQoGieJtjerfAcDLeRiqZrh62VwVMw@mail.gmail.com>
+Date: Sat, 15 Feb 2014 08:15:07 +0100
+Subject: [Buildroot] enable eglfs
+In-Reply-To: <52FF0E04.6030800@gmail.com>
+References: <52FF0E04.6030800@gmail.com>
+Message-ID: <CAAXf6LVZ2i6XhV+3uVV86ru=adVjS9NkC1S873+wbL+-0VtUng@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,63 +12,34 @@ To: buildroot@busybox.net
 
 Hi Marco,
 
-On Sat, Feb 15, 2014 at 6:54 AM, Marco Trapanese
+On Sat, Feb 15, 2014 at 7:49 AM, Marco Trapanese
 <marcotrapanese@gmail.com> wrote:
 > Hello,
-> I'm reading through the documentation how to add a support for a board.
-> In particular I need to run buildroot on this board:
+> I'm trying to add the Qt5/webkit support to the raspberryrpi_defconfig.
+> In the ncurses configuration window I see this message:
 >
-> http://www.advantech.com/products/1-2JKBYZ/ARK-1120F/mod_4be6fe03-9aa1-4097-a9b1-8977a7a49289.aspx
+> "eglfs backend available if OpenGLES and EGL are enabled"
 >
-> The buildroot documentation says: "[...] create a normal Buildroot
-> configuration that builds a basic system for the hardware: toolchain,
-> kernel, bootloader, filesystem and a simple Busybox-only userspace. "
->
-> Is there any step-by-step tutorial to help during the configuration of
-> mandatory parameters?
-> I'm not sure which ones I should check and what information I need to know
-> how to set them.
->
+> I searched for OpenGLES symbol (F8) but it found nothing. I don't understand
+> how to enable the OpenGLES and EGL in order to allow the eglfs backend.
 
+You need to enable a provider of opengl. In your case, you need
+rpi-userland, but in general these are the current choices:
 
-I don't really know of some step-by-step tutorial, but here are some hints:
+grep -rn 'select BR2_PACKAGE_HAS_OPENGL_' package/
+package/freescale-imx/gpu-viv-bin-mx6q/Config.in:7:     select
+BR2_PACKAGE_HAS_OPENGL_EGL
+package/freescale-imx/gpu-viv-bin-mx6q/Config.in:8:     select
+BR2_PACKAGE_HAS_OPENGL_ES
+package/ti-gfx/Config.in:3:     select BR2_PACKAGE_HAS_OPENGL_EGL
+package/ti-gfx/Config.in:4:     select BR2_PACKAGE_HAS_OPENGL_ES
+package/rpi-userland/Config.in:7:       select BR2_PACKAGE_HAS_OPENGL_EGL
+package/rpi-userland/Config.in:8:       select BR2_PACKAGE_HAS_OPENGL_ES
+package/sunxi-mali/Config.in:3: select BR2_PACKAGE_HAS_OPENGL_EGL
+package/sunxi-mali/Config.in:4: select BR2_PACKAGE_HAS_OPENGL_ES
 
-Google for this board, chances are that other people have already
-brought it up, so unless you want the learning experience, you could
-benefit from their work.
+To know which symbol to grep for, I looked at the help of the comment
+you mentioned, to see what it depended on.
 
-Take it in steps, focus on one thing at the time. It doesn't make
-sense to tweak the busybox configuration if you don't yet know if the
-kernel will boot.
-
-If you already have a system that boots (with the shipped
-bootloader/kernel etc) you could start by focusing on building the
-kernel. The bootloader step can be tricky depending on the board, and
-if you don't even get past that it is very discouraging. So if you can
-keep the current working bootloader at first, you can try using your
-custom buildroot-built kernel.
-
-It's important to gather some details: what SoC is on the board (name,
-codename) and what is the exact CPU type inside of it. This is
-information you will need for both the toolchain, buildroot and kernel
-configuration.
-
-If you already have a booting kernel, you may be able to extract its
-configuration file from any of these places:
-- software distribution shipped with the product or on the official website
-- zcat /proc/config.gz on the target system
-- extracting it offline from a linux kernel image (there is a script
-in the linux kernel scripts directory, something with ikconfig.
-- reading the boot log to try and identify the needed components. Do
-realize that the shipped kernel may be much bigger that really needed.
-
-The second and third method depend on the fact that the kernel is
-configured with support for IKCONFIG, which may not be the case.
-
-
-Once you have a booting kernel, my suggestion would be to proceed with
-userland initialization, but you may of course also choose to do the
-bootloader first.
-
-Good luck,
+Best regards,
 Thomas
