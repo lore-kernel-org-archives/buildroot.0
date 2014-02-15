@@ -1,36 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 15 Feb 2014 17:05:43 +0100
-Subject: [Buildroot] [git commit] imagemagick: needs mmu
-Message-ID: <20140215161045.371C09CA46@busybox.osuosl.org>
+From: =?UTF-8?q?Marcelo=20Guti=C3=A9rrez?= <kuyurix@gmail.com>
+Date: Sat, 15 Feb 2014 13:45:52 -0300
+Subject: [Buildroot] [PATCH 1/1] beaglebone: add DT for BeagleBone Black
+Message-ID: <1392482752-4749-1-git-send-email-kuyurix@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e158dbf0bd50ea7f17d53fee23fccffc5c99c9fd
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The devicetree data for BeagleBone Black is the am335x?boneblack.dts file
+(includes "am33xx.dtsi" and "am335x-bone-common.dtsi")
 
-Fixes:
-http://autobuild.buildroot.net/results/d2f/d2f673b71f771ab5a6435805e39338fd023f04c8/build-end.log
+BeagleBone White uses the am335x-bone.dts file.
 
-The complete log file says:
-libMagickCore-6.Q16.so: undefined reference to `_fork'
-
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Marcelo Guti?rrez <kuyurix@gmail.com>
 ---
- package/imagemagick/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ configs/beaglebone_defconfig |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/imagemagick/Config.in b/package/imagemagick/Config.in
-index e66ded0..1bd04a9 100644
---- a/package/imagemagick/Config.in
-+++ b/package/imagemagick/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_IMAGEMAGICK
- 	bool "imagemagick"
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  ImageMagick(R) is a software suite to create, edit, and compose
- 	  bitmap images. It can read, convert and write images in a variety of
+diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
+index 2996336..15220ed 100644
+--- a/configs/beaglebone_defconfig
++++ b/configs/beaglebone_defconfig
+@@ -36,4 +36,4 @@ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/beaglebone/linux-3.12.config"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-bone"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-bone am335x-boneblack"
+-- 
+1.7.10.4
