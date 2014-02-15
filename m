@@ -1,34 +1,27 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 15 Feb 2014 16:52:11 +0100
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 15 Feb 2014 17:05:57 +0100
 Subject: [Buildroot] [PATCH 1/1] imagemagick: needs mmu
-Message-ID: <1392479531-22613-1-git-send-email-romain.naour@openwide.fr>
+In-Reply-To: <1392479531-22613-1-git-send-email-romain.naour@openwide.fr>
+ (Romain Naour's message of "Sat, 15 Feb 2014 16:52:11 +0100")
+References: <1392479531-22613-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <87d2iojr8a.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/d2f/d2f673b71f771ab5a6435805e39338fd023f04c8/build-end.log
+>>>>> "Romain" == Romain Naour <romain.naour@openwide.fr> writes:
 
-The complete log file says:
-libMagickCore-6.Q16.so: undefined reference to `_fork'
+ > Fixes:
+ > http://autobuild.buildroot.net/results/d2f/d2f673b71f771ab5a6435805e39338fd023f04c8/build-end.log
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
- package/imagemagick/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ > The complete log file says:
+ > libMagickCore-6.Q16.so: undefined reference to `_fork'
 
-diff --git a/package/imagemagick/Config.in b/package/imagemagick/Config.in
-index e66ded0..1bd04a9 100644
---- a/package/imagemagick/Config.in
-+++ b/package/imagemagick/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_IMAGEMAGICK
- 	bool "imagemagick"
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  ImageMagick(R) is a software suite to create, edit, and compose
- 	  bitmap images. It can read, convert and write images in a variety of
+ > Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+
+Committed, thanks.
+
 -- 
-1.8.5.3
+Bye, Peter Korsgaard
