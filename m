@@ -1,49 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 15 Feb 2014 11:49:36 +0100
-Subject: [Buildroot] [git commit] collectd: fix static linking
-Message-ID: <20140215105025.CE7E29CA42@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 15 Feb 2014 11:53:23 +0100
+Subject: [Buildroot] no linux console output for 2014.02-rc1 microblaze
+	using internal buildroot toolchain
+In-Reply-To: <CAPALihNZkxiyex7OkQzUQhQU4s-Lxo_N4GmOpTsK-o0qY4nh2Q@mail.gmail.com>
+ (William Welch's message of "Sat, 15 Feb 2014 04:37:12 -0600")
+References: <CAPALihNZkxiyex7OkQzUQhQU4s-Lxo_N4GmOpTsK-o0qY4nh2Q@mail.gmail.com>
+Message-ID: <87ha80k5p8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7341eb827656208690ef7f65bd50196e6e1b05f7
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "William" == William Welch <bvwelch@gmail.com> writes:
 
-collectd-tg indirectly uses pthread, but forgets to link with -pthread.
+ > Greetings,
+ > I have used buildroot, successfully, on this microblaze design for the past
+ > year or so.? For example, buildroot 2013.11 works fine.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/collectd/collectd.mk |   11 ++++++++++-
- 1 files changed, 10 insertions(+), 1 deletions(-)
+ > I was glad to hear that 2014.02-rc1 has an internal toolchain for Microblaze.
+ > However, my first attempt to use it failed.
 
-diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-index e1fc104..84e17cd 100644
---- a/package/collectd/collectd.mk
-+++ b/package/collectd/collectd.mk
-@@ -6,7 +6,6 @@
- 
- COLLECTD_VERSION = 5.4.1
- COLLECTD_SITE = http://collectd.org/files
--COLLECTD_MAKE_OPT = LDFLAGS="$(TARGET_LDFLAGS) -lm"
- COLLECTD_CONF_ENV = ac_cv_lib_yajl_yajl_alloc=yes
- COLLECTD_INSTALL_STAGING = YES
- COLLECTD_LICENSE = GPLv2 LGPLv2.1
-@@ -22,6 +21,16 @@ COLLECTD_PLUGINS_DISABLE = amqp apple_sensors aquaero ascent dbi email \
- 		tokyotyrant uuid varnish vserver write_mongodb write_redis \
- 		xmms zfs_arc
- 
-+COLLECTD_LDFLAGS = $(TARGET_LDFLAGS) -lm
-+
-+ifeq ($(BR2_PREFER_STATIC_LIB),y)
-+# collectd-tg indirectly needs pthread but doesn't link with -pthread,
-+# causing static linker errors
-+COLLECTD_LDFLAGS += -lpthread
-+endif
-+
-+COLLECTD_CONF_ENV += LDFLAGS="$(COLLECTD_LDFLAGS)"
-+
- COLLECTD_CONF_OPT += --with-nan-emulation --with-fp-layout=nothing \
- 	--localstatedir=/var --with-perl-bindings=no \
- 	$(foreach p, $(COLLECTD_PLUGINS_DISABLE), --disable-$(p)) \
+ > I realize that not getting any kernel console output can be due to any number
+ > of mistakes in configuring the kernel, but when I switch to an external
+ > toolchain -- gcc 4.6.4 20120924 prerelease crosstool-NG 1.18.0 -- the kernel
+ > works fine.?
+
+ > I can certainly continue to use the external toolchain for my work,
+ > but if there is interest in tracking down this issue, some hints as
+ > to the best way to proceed would be welcome.
+
+No output at all? That sounds bad. We're certainly interested in people
+using the internal toolchain. I've added Spenser to this mail as he did
+the microblaze work.
+
+Spenser, any ideas?
+
+-- 
+Bye, Peter Korsgaard
