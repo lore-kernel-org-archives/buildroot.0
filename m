@@ -1,48 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 15 Feb 2014 17:09:17 +0100
-Subject: [Buildroot] [git commit] jimtcl: don't attempt to handle ccache
-	internally
-Message-ID: <20140215161045.3F7CA7FDC2@busybox.osuosl.org>
+Date: Sat, 15 Feb 2014 17:05:43 +0100
+Subject: [Buildroot] [git commit] imagemagick: needs mmu
+Message-ID: <20140215161045.371C09CA46@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=40f7068f11bdb9c80b8c39cd992fdddd889a12dd
+commit: http://git.buildroot.net/buildroot/commit/?id=e158dbf0bd50ea7f17d53fee23fccffc5c99c9fd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-jimtcl tries to use 'ccache' (a non-buildroot host version) which may not
-exist on the host system. If ccache is enabled in buildroot, the compiler
-used by jimtcl is:
-ccache <buildroot>/.../ccache <buildroot>/.../<tuple>-gcc
+Fixes:
+http://autobuild.buildroot.net/results/d2f/d2f673b71f771ab5a6435805e39338fd023f04c8/build-end.log
 
-If ccache is not present on the host, this results in the build error:
+The complete log file says:
+libMagickCore-6.Q16.so: undefined reference to `_fork'
 
-ccache <buildroot>/.../ccache <buildroot>/.../<tuple>-gcc
--D_GNU_SOURCE -Wall  -I. -fpic -pipe -Os    -c -o jim-subcmd.o jim-subcmd.c
-make[1]: ccache: Command not found
-
-This patch passes 'CCACHE=none' to the 'configure' script, disabling the
-internal handling of ccache, so that ccache can be transparently passed
-through CC.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/jimtcl/jimtcl.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/imagemagick/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
-index 53cddf9..1f2ea82 100644
---- a/package/jimtcl/jimtcl.mk
-+++ b/package/jimtcl/jimtcl.mk
-@@ -38,7 +38,7 @@ endif
- 
- define JIMTCL_CONFIGURE_CMDS
- 	(cd $(@D); \
--		$(TARGET_CONFIGURE_OPTS) \
-+		$(TARGET_CONFIGURE_OPTS) CCACHE=none \
- 		./configure --prefix=/usr \
- 		$(JIMTCL_SHARED) \
- 	)
+diff --git a/package/imagemagick/Config.in b/package/imagemagick/Config.in
+index e66ded0..1bd04a9 100644
+--- a/package/imagemagick/Config.in
++++ b/package/imagemagick/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_IMAGEMAGICK
+ 	bool "imagemagick"
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  ImageMagick(R) is a software suite to create, edit, and compose
+ 	  bitmap images. It can read, convert and write images in a variety of
