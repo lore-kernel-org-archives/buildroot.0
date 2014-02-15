@@ -1,32 +1,56 @@
-From: =?UTF-8?q?Marcelo=20Guti=C3=A9rrez?= <kuyurix@gmail.com>
-Date: Sat, 15 Feb 2014 13:45:52 -0300
-Subject: [Buildroot] [PATCH 1/1] beaglebone: add DT for BeagleBone Black
-Message-ID: <1392482752-4749-1-git-send-email-kuyurix@gmail.com>
+From: Frank Bergmann <bergmann@rosho.de>
+Date: Sat, 15 Feb 2014 18:29:49 +0100
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <CAAEAJfBHZ_4hSWN+boCRCvxJbFC1+T_WN=Dv3oVM2yz0z=t5JQ@mail.gmail.com>
+References: <20140214073009.1D7E6102637@stock.ovh.net>
+ <20140214101241.27857b9e@skate>
+ <CAAEAJfBHZ_4hSWN+boCRCvxJbFC1+T_WN=Dv3oVM2yz0z=t5JQ@mail.gmail.com>
+Message-ID: <52FFA40D.1040100@rosho.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The devicetree data for BeagleBone Black is the am335x?boneblack.dts file
-(includes "am33xx.dtsi" and "am335x-bone-common.dtsi")
+Hello,
 
-BeagleBone White uses the am335x-bone.dts file.
+On 14.02.2014 14:15, Ezequiel Garc?a wrote:
+>>>       nios2 |               e2fsprogs-1.42.9 | NOK | http://autobuild.buildroot.net/results/70a47bd7392560cbc1c64769c8357c0b4c91ca3b/
+>>
+>> Another missing syscall on NIOS II ? Ezequiel ?
+>>
+>> ../lib/libext2fs.so: undefined reference to `fallocate64'
+>> collect2: error: ld returned 1 exit status
+>>
+>
+> Ah, yes. We have lots of packages failing with this issue. I think
+> it's some issue
+> with the toolchain. fallocate64 is not a system call (only fallocate
+> exists, AFAICS),
+> so this should be some libc issue.
+>
+> Anybody knows better? Who implements fallocate64? What can we do to fix this
+> in Buildroot (using an external toolchain)?
 
-Signed-off-by: Marcelo Guti?rrez <kuyurix@gmail.com>
----
- configs/beaglebone_defconfig |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+No, sorry. But after dig a little bit:
+e2fsprogs using
 
-diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
-index 2996336..15220ed 100644
---- a/configs/beaglebone_defconfig
-+++ b/configs/beaglebone_defconfig
-@@ -36,4 +36,4 @@ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/beaglebone/linux-3.12.config"
- BR2_LINUX_KERNEL_ZIMAGE=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-bone"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-bone am335x-boneblack"
--- 
-1.7.10.4
+   _FILE_OFFSET_BITS=64
+
+while compiling the source. In this case the fallocate system call will 
+be silently replaced by fallocate64 (see: 
+https://lists.debian.org/debian-glibc/2010/02/msg00088.html). But 
+fallocate64 is unfortunately not available on nios2 toolchain at the moment.
+
+The only solution that works appears to be completely disable the 
+fallocate system call(s) by providing
+
+   ac_cv_func_fallocate=no
+
+to the configure script. The effect in e2fsprogs will be that 
+unix_discard() in ext2fs/unix_io.c will return with the "UNIMPLEMENTED" 
+return code. I'm not sure for the moment if the whole packages or only a 
+couple of functions gets unusable with this.
+
+With regards,
+Frank Bergmann.
