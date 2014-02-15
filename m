@@ -1,58 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 14 Feb 2014 21:08:19 +0100
-Subject: [Buildroot] [git commit] package: add base dependency to every
-	package
-Message-ID: <20140228133412.5C88C9BBF9@busybox.osuosl.org>
+Date: Sat, 15 Feb 2014 08:21:50 +0100
+Subject: [Buildroot] [git commit] systemd: fix sed line in "sanitize path in
+	units" hook
+Message-ID: <20140228133413.8A04E9BBF9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6f13130ac9a1a5eebfccbd8c9f04a6ec3f5ceba2
+commit: http://git.buildroot.net/buildroot/commit/?id=fc075564085ed1ebaf19847bd6ea078ff8b992d6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Move "dependencies" "dirs" "prepare" dependencies from "toolchain" to
-every package.
-This way we can build correctly every package right after the clean
-stage.
-As example with this commit we can build successfully the glibc right
-after the clean stage:
-	make clean glibc
+The expanded SED variable already contains -e, so the extra -e was being
+interpreted as the sed command and causing sed to fail.
 
-This is also a step forward supporting top-level parallel make.
-
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Ivan Sergeev <vsergeev@kumunetworks.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-generic.mk           |    5 +++++
- toolchain/toolchain/toolchain.mk |    2 +-
- 2 files changed, 6 insertions(+), 1 deletions(-)
+ package/systemd/systemd.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 555c3c2..e5b04ff 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -427,6 +427,11 @@ $(1)-install-host:      $(1)-build $$($(2)_TARGET_INSTALL_HOST)
- $(1)-build:		$(1)-configure \
- 			$$($(2)_TARGET_BUILD)
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 9086045..36ef704 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -103,7 +103,7 @@ endef
  
-+$$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dirs prepare
-+ifeq ($(filter $(1),$(DEPENDENCIES_HOST_PREREQ)),)
-+$$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dependencies
-+endif
-+
- ifeq ($$($(2)_OVERRIDE_SRCDIR),)
- # In the normal case (no package override), the sequence of steps is
- #  source, by downloading
-diff --git a/toolchain/toolchain/toolchain.mk b/toolchain/toolchain/toolchain.mk
-index 1152e25..8559ac9 100644
---- a/toolchain/toolchain/toolchain.mk
-+++ b/toolchain/toolchain/toolchain.mk
-@@ -14,4 +14,4 @@ endif
+ define SYSTEMD_SANITIZE_PATH_IN_UNITS
+ 	find $(TARGET_DIR)/lib/systemd/system -name '*.service' \
+-		-exec $(SED) -e 's,$(HOST_DIR),,g' {} \;
++		-exec $(SED) 's,$(HOST_DIR),,g' {} \;
+ endef
  
- $(eval $(generic-package))
- 
--toolchain-source: prepare dirs dependencies $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake
-+toolchain: $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake
+ SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
