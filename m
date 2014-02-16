@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 Feb 2014 18:27:23 +0100
-Subject: [Buildroot] [PATCH 04/10] toolchain/external: add choice to select
-	'AT_LEAST_XXX' header version
+Date: Sun, 16 Feb 2014 18:27:26 +0100
+Subject: [Buildroot] [PATCH 07/10] package/w_scan: requires kernel headers
+	>= 3.0
 In-Reply-To: <cover.1392571021.git.yann.morin.1998@free.fr>
 References: <cover.1392571021.git.yann.morin.1998@free.fr>
-Message-ID: <74d76e7816e2de0eccb9a24acd0b768c22078dfa.1392571021.git.yann.morin.1998@free.fr>
+Message-ID: <dc7c8c02dc68236e21071392a4ef87e6f3d4d700.1392571021.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,104 +13,29 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Select the appropriate BR2_TOOLCHAIN_HEADERS_AT_LEAST_XXX options for the
-external, custom toolchain backend.
+It needs DVB API version 5.3 or later, introduced in linux 3.0.
 
-We try to be conservative here, and default to kernel headers 2.6.x.
+Fixes:
+    http://autobuild.buildroot.net/results/6e7/6e7c691099a8f3eef4fc84860ceb1a94f25873eb
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 ---
- toolchain/toolchain-external/Config-headers.in | 65 ++++++++++++++++++++++++++
- toolchain/toolchain-external/Config.in         |  2 +
- 2 files changed, 67 insertions(+)
- create mode 100644 toolchain/toolchain-external/Config-headers.in
+ package/w_scan/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/toolchain/toolchain-external/Config-headers.in b/toolchain/toolchain-external/Config-headers.in
-new file mode 100644
-index 0000000..60ac384
---- /dev/null
-+++ b/toolchain/toolchain-external/Config-headers.in
-@@ -0,0 +1,65 @@
-+choice
-+	bool "External toolchain kernel headers"
-+	depends on BR2_TOOLCHAIN_EXTERNAL_CUSTOM
-+	default BR2_TOOLCHAIN_EXTERNAL_HEADERS_REALLY_OLD
+diff --git a/package/w_scan/Config.in b/package/w_scan/Config.in
+index 4487b0a..02cb2c3 100644
+--- a/package/w_scan/Config.in
++++ b/package/w_scan/Config.in
+@@ -1,5 +1,9 @@
++comment "w_scan needs a toolchain w/ headers >= 3.0"
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
 +
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_13
-+	bool "3.13"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_12
-+	bool "3.12"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_11
-+	bool "3.11"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10
-+	bool "3.10"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_9
-+	bool "3.9"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_8
-+	bool "3.8"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_7
-+	bool "3.7"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_6
-+	bool "3.6"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_6
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_5
-+	bool "3.5"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_4
-+	bool "3.4"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_3
-+	bool "3.3"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_2
-+	bool "3.2"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_1
-+	bool "3.1"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_0
-+	bool "3.0"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_REALLY_OLD
-+	bool "2.6.x"
-+
-+endchoice
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index f02f89b..3dd1c10 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -912,6 +912,8 @@ config BR2_TOOLCHAIN_EXTERNAL_MUSL
- 
- if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
- 
-+source "toolchain/toolchain-external/Config-headers.in"
-+
- choice
- 	prompt "External toolchain C library"
- 	default BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
+ config BR2_PACKAGE_W_SCAN
+ 	bool "w_scan"
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	help
+ 	  w_scan is a small command line utility used to perform frequency
 -- 
 1.8.1.2
