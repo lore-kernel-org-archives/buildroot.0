@@ -1,56 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Feb 2014 21:02:34 +0100
-Subject: [Buildroot] [git commit] vlc: needs dependency on host-lua if Lua
-	is selected
-Message-ID: <20140216200826.B63E99CA45@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 16 Feb 2014 21:08:54 +0100
+Subject: [Buildroot] [PATCH 04/10] toolchain/external: add choice to
+	select 'AT_LEAST_XXX' header version
+In-Reply-To: <74d76e7816e2de0eccb9a24acd0b768c22078dfa.1392571021.git.yann.morin.1998@free.fr>
+References: <cover.1392571021.git.yann.morin.1998@free.fr>
+ <74d76e7816e2de0eccb9a24acd0b768c22078dfa.1392571021.git.yann.morin.1998@free.fr>
+Message-ID: <8fdcf8b3-c275-4250-be9c-11bcf4feaa11@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c72cb08cb1b57d272205ce49d324c55d98c9a91f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+"Yann E. MORIN" <yann.morin.1998@free.fr> schreef:
+>From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>
+>Select the appropriate BR2_TOOLCHAIN_HEADERS_AT_LEAST_XXX options for the
+>external, custom toolchain backend.
+>
+>We try to be conservative here, and default to kernel headers 2.6.x.
+>
+>Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>Cc: Arnout Vandecappelle <arnout@mind.be>
+>Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+>---
+> toolchain/toolchain-external/Config-headers.in | 65 ++++++++++++++++++++++++++
+> toolchain/toolchain-external/Config.in         |  2 +
+> 2 files changed, 67 insertions(+)
+> create mode 100644 toolchain/toolchain-external/Config-headers.in
+>
+>diff --git a/toolchain/toolchain-external/Config-headers.in b/toolchain/toolchain-external/Config-headers.in
+>new file mode 100644
+>index 0000000..60ac384
+>--- /dev/null
+>+++ b/toolchain/toolchain-external/Config-headers.in
+>@@ -0,0 +1,65 @@
+>+choice
+>+	bool "External toolchain kernel headers"
+>+	depends on BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+>+	default BR2_TOOLCHAIN_EXTERNAL_HEADERS_REALLY_OLD
+>+
 
-If Lua support is requested in VLC, its configure script tries to find the
-luac byte compiler, which fails if host-lua is not yet built.
+Shouldn't there be a help text explaining what this is used for, so as to remove confusion about the fact that the kernel header version was already chosen when the toolchain was built?
 
-This can be easily reproduced by setting a minimal config with vlc and Lua
-enabled, and running: 'make clean toolchain vlc'. Final output is:
-
-checking for LUA... no
-configure: WARNING: Package lua5.2 was not found in the pkg-config search path.
-Perhaps you should add the directory containing `lua5.2.pc'
-to the PKG_CONFIG_PATH environment variable
-No package 'lua5.2' found, trying lua 5.1 instead
-checking for LUA... no
-configure: WARNING: Package lua5.1 was not found in the pkg-config search path.
-Perhaps you should add the directory containing `lua5.1.pc'
-to the PKG_CONFIG_PATH environment variable
-No package 'lua5.1' found, trying lua >= 5.1 instead
-checking for LUA... yes
-checking for luac... no
-configure: error: Could not find the LUA byte compiler.
-make: *** [<buildroot>/output/build/vlc-2.1.2/.stamp_configured] Error 1
-
-Fix this problem by setting host-lua as a dependency to vlc.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/vlc/vlc.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index f235ff8..6169514 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -226,7 +226,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_LUA),y)
- VLC_CONF_OPT += --enable-lua
--VLC_DEPENDENCIES += lua
-+VLC_DEPENDENCIES += lua host-lua
- else
- VLC_CONF_OPT += --disable-lua
- endif
+Best regards,
+Thomas
