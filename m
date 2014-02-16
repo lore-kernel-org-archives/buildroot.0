@@ -1,63 +1,106 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 16 Feb 2014 22:59:56 +0100
-Subject: [Buildroot] [PATCH 03/11] opencv: add jasper support
+Date: Sun, 16 Feb 2014 22:59:57 +0100
+Subject: [Buildroot] [PATCH 04/11] opencv: add Qt5 support
 In-Reply-To: <1392588004-13317-1-git-send-email-s.martin49@gmail.com>
 References: <1392588004-13317-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1392588004-13317-4-git-send-email-s.martin49@gmail.com>
+Message-ID: <1392588004-13317-5-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Starting with the 2.4.6 release, OpenCV supports both Qt4 and Qt5,
+but only one can be enable at the same time.
+
+Since Buildroot does not support Qt4/Qt5 co-existence, we keep the Qt
+support knob as a boolean, but make it depend on BR2_PACKAGE_QT or
+BR2_PACKAGE_QT5, and automatically uses the enabled one.
+
+Note that we usually use 'select ...' to express the dependencies
+between packages, but in this case, we cannot since the Qt4/Qt5
+co-existence exclusion is not handled by a simple choice, but by a
+dependency. This makes impossible using 'select ...' for the Qt
+support knob without triggering a circular dependency at the kconfig
+level.
+
+Besides, we already use 'depends on ...' to express the dependencies
+with some "big" packages (like xorg or libgtk2). qt or qt5* packages
+are fairly big. So, I don't think it will hurt that much to use a
+'depends on ...' statement in this case.
+
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/opencv/Config.in | 6 ++++++
- package/opencv/opencv.mk | 8 +++++++-
- 2 files changed, 13 insertions(+), 1 deletion(-)
+ package/opencv/Config.in | 41 ++++++++++++++++++++++++++++++++---------
+ package/opencv/opencv.mk |  4 ++--
+ 2 files changed, 34 insertions(+), 11 deletions(-)
 
 diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index 2acbe19..73f03e1 100644
+index 73f03e1..b6192dc 100644
 --- a/package/opencv/Config.in
 +++ b/package/opencv/Config.in
-@@ -158,6 +158,12 @@ config BR2_PACKAGE_OPENCV_WITH_GTK
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_LIBGTK2
+@@ -177,15 +177,38 @@ config BR2_PACKAGE_OPENCV_WITH_PNG
+ 	  Use shared libpng from the target system.
  
-+config BR2_PACKAGE_OPENCV_WITH_JASPER
-+	bool "jasper (jpeg 2000) support"
-+	select BR2_PACKAGE_JASPER
+ config BR2_PACKAGE_OPENCV_WITH_QT
+-	bool "qt4 backend support"
+-	depends on !BR2_avr32 # qt
+-	select BR2_PACKAGE_QT
+-	select BR2_PACKAGE_QT_STL
+-	select BR2_PACKAGE_QT_GUI_MODULE if BR2_PACKAGE_OPENCV_LIB_HIGHGUI
+-	select BR2_PACKAGE_QT_TEST       if BR2_PACKAGE_OPENCV_LIB_HIGHGUI
+-	default y
+-	help
+-	  Use Qt with QtTest module and STL support
++	bool "qt support"
++	depends on (BR2_PACKAGE_QT && !BR2_avr32) || \
++		(BR2_PACKAGE_QT5 && BR2_USE_MMU && BR2_INET_IPV6 && \
++		BR2_TOOLCHAIN_HAS_THREADS)
++	select BR2_PACKAGE_QT_STL             if BR2_PACKAGE_QT
++	select BR2_PACKAGE_QT_GUI_MODULE      if BR2_PACKAGE_QT && \
++	                                          BR2_PACKAGE_OPENCV_LIB_HIGHGUI
++	select BR2_PACKAGE_QT_TEST            if BR2_PACKAGE_QT && \
++	                                          BR2_PACKAGE_OPENCV_LIB_HIGHGUI
++	select BR2_PACKAGE_QT5BASE            if BR2_PACKAGE_QT5
++	select BR2_PACKAGE_QT5BASE_CONCURRENT if BR2_PACKAGE_QT5
++	select BR2_PACKAGE_QT5BASE_TEST       if BR2_PACKAGE_QT5
++	select BR2_PACKAGE_QT5BASE_GUI        if BR2_PACKAGE_QT5
++	select BR2_PACKAGE_QT5BASE_WIDGETS    if BR2_PACKAGE_QT5
 +	help
-+	  Use shared libjasper from the target system.
++	  Enable Qt support for OpenCV.
 +
- config BR2_PACKAGE_OPENCV_WITH_JPEG
- 	bool "jpeg support"
- 	select BR2_PACKAGE_JPEG
++	  If Qt4 is already enabled, then use Qt4 with QtTest module and STL
++	  support.
++
++	  If Qt5 is already enabled, then use Qt5 with the following components:
++	  base, concurrent, test, gui and widgets.
++
++if !BR2_PACKAGE_QT && !BR2_PACKAGE_QT5
++comment "qt support with Qt4 needs qt"
++
++comment "qt support with Qt5 needs qt5"
++	depends on BR2_USE_MMU && BR2_INET_IPV6 && BR2_TOOLCHAIN_HAS_THREADS
++
++comment "qt support with Qt5 needs a toolchain w/ wchar, IPv6, theads"
++	depends on !BR2_USE_MMU || !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS
++endif
+ 
+ config BR2_PACKAGE_OPENCV_WITH_TIFF
+ 	bool "tiff support"
 diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
-index fb56769..ff11f1c 100644
+index ff11f1c..51255aa 100644
 --- a/package/opencv/opencv.mk
 +++ b/package/opencv/opencv.mk
-@@ -149,7 +149,6 @@ OPENCV_CONF_OPT += \
- 	-DWITH_1394=OFF           \
- 	-DWITH_EIGEN=OFF          \
- 	-DWITH_IMAGEIO=OFF        \
--	-DWITH_JASPER=OFF         \
- 	-DWITH_OPENCL=OFF         \
- 	-DWITH_OPENEXR=OFF        \
- 	-DWITH_OPENGL=OFF         \
-@@ -181,6 +180,13 @@ else
- OPENCV_CONF_OPT += -DWITH_GTK=OFF
+@@ -202,8 +202,8 @@ OPENCV_CONF_OPT += -DWITH_PNG=OFF
  endif
  
-+ifeq ($(BR2_PACKAGE_OPENCV_WITH_JASPER),y)
-+OPENCV_CONF_OPT += -DWITH_JASPER=ON
-+OPENCV_DEPENDENCIES += jasper
-+else
-+OPENCV_CONF_OPT += -DWITH_JASPER=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_OPENCV_WITH_JPEG),y)
- OPENCV_CONF_OPT += -DWITH_JPEG=ON
- OPENCV_DEPENDENCIES += jpeg
+ ifeq ($(BR2_PACKAGE_OPENCV_WITH_QT),y)
+-OPENCV_CONF_OPT += -DWITH_QT=4
+-OPENCV_DEPENDENCIES += qt
++OPENCV_CONF_OPT += -DWITH_QT=$(if $(BR2_PACKAGE_QT),4,5)
++OPENCV_DEPENDENCIES += $(if $(BR2_PACKAGE_QT),qt,qt5base)
+ else
+ OPENCV_CONF_OPT += -DWITH_QT=OFF
+ endif
 -- 
 1.8.5.4
