@@ -1,70 +1,52 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 16 Feb 2014 18:57:47 +0100
-Subject: [Buildroot] [PATCH] pkg-cmake: use -fPIC
-In-Reply-To: <CAB0FRssgk2v7opwOtx0NQJAV0dRpfah-Evw63V9r+gV4d_gmfQ@mail.gmail.com>
-References: <1392545101-26953-1-git-send-email-francois.perrad@gadz.org>
- <CAHXCMMJC6k66QKHMmW8gHLvxJic2cAy2Xv52P2X41daS+Z18aQ@mail.gmail.com>
- <CAB0FRssgk2v7opwOtx0NQJAV0dRpfah-Evw63V9r+gV4d_gmfQ@mail.gmail.com>
-Message-ID: <CAHXCMMKzoEVgu-DNRb4G=ZTQBG8n=WAtO-phSuWJA3+KAkQ0MA@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 16 Feb 2014 19:32:42 +0100
+Subject: [Buildroot] [PATCH] vlc: needs dependency on host-lua if Lua is
+	selected
+Message-ID: <a785bb569d9872bd7cc8.1392575562@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Francois,
+If Lua support is requested in VLC, its configure script tries to find the
+luac byte compiler, which fails if host-lua is not yet built.
 
-On Sun, Feb 16, 2014 at 5:29 PM, Fran?ois Perrad
-<francois.perrad@gadz.org> wrote:
-> 2014-02-16 11:51 GMT+01:00 Samuel Martin <s.martin49@gmail.com>:
->> Hi Francois,
->>
->> On Sun, Feb 16, 2014 at 11:05 AM, Francois Perrad <fperrad@gmail.com> wrote:
->>> fix build for lua-ev
->>> http://autobuild.buildroot.org/results/730/7303fffa6075d02289b6fdb12a1debdf0dd7d6f1//build-end.log
-[...]
->>
->> Usually, PIC properties is set at the cmake target level, but this
->> property is driven by the global variable
->> CMAKE_POSITION_INDEPENDENT_CODE (see:
->> http://www.cmake.org/cmake/help/v2.8.12/cmake.html#prop_tgt:POSITION_INDEPENDENT_CODE)
->>
->> I would prefer using this variable, it should not break anything if
->> some projects set this property otherwise.
->>
->
-> You are right, my patch is too invasive.
->
-> BUILD_SHARED_LIBS is correctly set in pkg-cmake.mk by :
->      -DBUILD_SHARED_LIBS=$(if $(BR2_PREFER_STATIC_LIB),OFF,ON)
->
-> And the CMakeLists.txt of lua-ev contains :
->      ADD_LIBRARY(cmod_ev MODULE lua_ev.c)
->
-> The CMake documentation (see
-> http://www.cmake.org/cmake/help/v2.8.12/cmake.html#command:add_library)
->  said :
->       "For SHARED and MODULE libraries the POSITION_INDEPENDENT_CODE
-> target property is set to TRUE automatically."
->
-> So, I don't know what to do.
+This can be easily reproduced by setting a minimal config with vlc and Lua
+enabled, and running: 'make clean toolchain vlc'. Final output is:
 
-Looking carefully at the culprit build config you point above, it
-appears BR2_PREFER_STATIC_LIB is not set, so in that case it makes
-sense (to me) to set CMAKE_POSITION_INDEPENDENT_CODE.
+checking for LUA... no
+configure: WARNING: Package lua5.2 was not found in the pkg-config search path.
+Perhaps you should add the directory containing `lua5.2.pc'
+to the PKG_CONFIG_PATH environment variable
+No package 'lua5.2' found, trying lua 5.1 instead
+checking for LUA... no
+configure: WARNING: Package lua5.1 was not found in the pkg-config search path.
+Perhaps you should add the directory containing `lua5.1.pc'
+to the PKG_CONFIG_PATH environment variable
+No package 'lua5.1' found, trying lua >= 5.1 instead
+checking for LUA... yes
+checking for luac... no
+configure: error: Could not find the LUA byte compiler.
+make: *** [<buildroot>/output/build/vlc-2.1.2/.stamp_configured] Error 1
 
-Because when static libraries are built in such a configuration, they
-can be used to built shared ones, so it's better if the *.a has been
-built with -fPIC.
+Fix this problem by setting host-lua as a dependency to vlc.
 
-So, I tend to think that we could add to the configure options of the
-cmake infra:
-  -DCMAKE_POSITION_INDEPENDENT_CODE=$(if $(BR2_PREFER_STATIC_LIB),OFF,ON)
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-but this needs more investigations and tests.
+---
+ package/vlc/vlc.mk |  2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-
-Regards,
-
--- 
-Samuel
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -226,7 +226,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_LUA),y)
+ VLC_CONF_OPT += --enable-lua
+-VLC_DEPENDENCIES += lua
++VLC_DEPENDENCIES += lua host-lua
+ else
+ VLC_CONF_OPT += --disable-lua
+ endif
