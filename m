@@ -1,49 +1,58 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 Feb 2014 18:27:28 +0100
-Subject: [Buildroot] [PATCH 09/10] package/tvheadend: requires kernel
-	headers >= 3.2
+Date: Sun, 16 Feb 2014 18:36:38 +0100
+Subject: [Buildroot] [PATCH 0/10] Add dependency on kernel headers
 In-Reply-To: <cover.1392571021.git.yann.morin.1998@free.fr>
 References: <cover.1392571021.git.yann.morin.1998@free.fr>
-Message-ID: <875c6d6da61061d98ebc961f64c94a0174d70ba2.1392571021.git.yann.morin.1998@free.fr>
+Message-ID: <20140216173638.GA3417@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Hello All!
 
-tvheadend requires SYS_TURBO, introduced in linux 3.2.
+On 2014-02-16 18:27 +0100, Yann E. MORIN spake thusly:
+> This series introduces infrastructure for packages to depend on the
+> required version of kernel headers.
+> 
+> It follows the proposal made on the list:
+>     http://lists.busybox.net/pipermail/buildroot/2014-February/088924.html
+> 
+> The basic idea is to add a symbol for each kernel header version, and
+> have toolchains select the appropriate symbol, and packages depend on the
+> appropriate symbol.
+> 
+> In this series:
+> 
+>   - such symbols are added for all kernel headers >= 3.0;
+> 
+>   - the internal toochain backend selects the appropriate symbol
+>     without user-visible changes;
+> 
+>   - the predefined external toolchains select the appropriate symbols
+>     without user-visible changes; those using kernel headers older than
+>     3.0, select nothing, and a comment is added to state so;
+> 
+>   - for the custom external toolchain, a new choice is shown to the
+>     user, to select the appropriate kernel headers version;
+> 
+>   - five packages are converted to take advantage of this.
 
-Fixes:
-    http://autobuild.buildroot.net/results/4df/4df8cd85e0287910567df81c0394b2914570e98a
+There is one thing this series does not do: ensure the selection is
+correct, by way of a new 'check_headers_version' herlper in
+toolchain/helpers.mk.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/tvheadend/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+This can be added later, or in a second iteration of the series, if need
+be.
 
-diff --git a/package/tvheadend/Config.in b/package/tvheadend/Config.in
-index da60f83..4f8baae 100644
---- a/package/tvheadend/Config.in
-+++ b/package/tvheadend/Config.in
-@@ -1,7 +1,7 @@
--comment "tvheadend needs a toolchain w/ largefile, IPv6, threads"
-+comment "tvheadend needs a toolchain w/ largefile, IPv6, threads, headers >= 3.2"
- 	depends on !BR2_avr32 && !BR2_xtensa && !BR2_arc
- 	depends on !BR2_PTHREADS && !BR2_PTHREADS_OLD
--	depends on !BR2_LARGEFILE || !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_LARGEFILE || !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
- 
- config BR2_PACKAGE_TVHEADEND
- 	bool "tvheadend"
-@@ -17,6 +17,7 @@ config BR2_PACKAGE_TVHEADEND
- 	depends on !BR2_PTHREADS && !BR2_PTHREADS_OLD
- 	# no NPTL for these archs
- 	depends on !BR2_xtensa && !BR2_arc
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
- 	select BR2_PACKAGE_DVB_APPS
- 	select BR2_PACKAGE_OPENSSL
- 	help
+Regards,
+Yann E. MORIN.
+
 -- 
-1.8.1.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
