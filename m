@@ -1,49 +1,35 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 16 Feb 2014 10:14:21 +0100
-Subject: [Buildroot] [PATCH 1/2] vlc: explicitly disable opencv support
-In-Reply-To: <87zjlrii9l.fsf@dell.be.48ers.dk>
-References: <1392502403-19701-1-git-send-email-s.martin49@gmail.com>
- <1392502403-19701-2-git-send-email-s.martin49@gmail.com>
- <87zjlrii9l.fsf@dell.be.48ers.dk>
-Message-ID: <CAHXCMMLJQjNkeV1gWq=_Oi8bbFr=v6OenPSKii6Ne9k_nC2kLw@mail.gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sun, 16 Feb 2014 11:05:01 +0100
+Subject: [Buildroot] [PATCH] pkg-cmake: use -fPIC
+Message-ID: <1392545101-26953-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+fix build for lua-ev
+http://autobuild.buildroot.org/results/730/7303fffa6075d02289b6fdb12a1debdf0dd7d6f1//build-end.log
 
-On Sun, Feb 16, 2014 at 9:17 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
->
->  > vlc can use opencv in video filters, but it requires a couple of
->  > features enabled in opencv; so, simply force disabling opencv support.
->
->  > Note that vlc does includes the legacy opencv/cv.h header, which pulls a
->  > number of opencv's features (core, video, imgproc, ...).
->
-> Is this meant as a short term fix for 2014.02?
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/pkg-cmake.mk |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Yes, it is a short term fix for the 2014.02 release, also because I
-don't think vlc package was added to buildroot with opencv support in
-mind... ;-)
-
-I just need some time to find all opencv's features used/required by vlc.
-
-> Presumably the user CAN
-> enable the needed opencv option so it could work? - E.G. we could come
-> up with the needed test like:
->
-> ifeq ($(BR2_PACKAGE_OPENCV_FOO)$(BR2_PACKAGE_OPENCV_BLAH)...,yyy)
-> VLC_CONF_OPT += --with-opencv
-> VLC_DEPENDENCIES += opencv
-> else
-> VLC_CONF_OPT += --without-opencv
-> endif
->
-
-Regards,
-
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index dbe0d97..f0b8e62 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -162,8 +162,8 @@ $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
+ 	set(CMAKE_SYSTEM_NAME Linux)\n\
+ 	set(CMAKE_C_COMPILER $(TARGET_CC_NOCCACHE))\n\
+ 	set(CMAKE_CXX_COMPILER $(TARGET_CXX_NOCCACHE))\n\
+-	set(CMAKE_C_FLAGS \"\$${CMAKE_C_FLAGS} $(TARGET_CFLAGS)\" CACHE STRING \"Buildroot CFLAGS\" FORCE)\n\
+-	set(CMAKE_CXX_FLAGS \"\$${CMAKE_CXX_FLAGS} $(TARGET_CXXFLAGS)\" CACHE STRING \"Buildroot CXXFLAGS\" FORCE)\n\
++	set(CMAKE_C_FLAGS \"\$${CMAKE_C_FLAGS} $(TARGET_CFLAGS) -fPIC\" CACHE STRING \"Buildroot CFLAGS\" FORCE)\n\
++	set(CMAKE_CXX_FLAGS \"\$${CMAKE_CXX_FLAGS} $(TARGET_CXXFLAGS) -fPIC\" CACHE STRING \"Buildroot CXXFLAGS\" FORCE)\n\
+ 	set(CMAKE_INSTALL_SO_NO_EXE 0)\n\
+ 	set(CMAKE_PROGRAM_PATH \"$(HOST_DIR)/usr/bin\")\n\
+ 	set(CMAKE_FIND_ROOT_PATH \"$(STAGING_DIR)\")\n\
 -- 
-Samuel
+1.7.9.5
