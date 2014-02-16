@@ -1,62 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Feb 2014 09:17:57 +0100
-Subject: [Buildroot] [git commit] opencv: always enable opencv_core module
-	when opencv is enabled
-Message-ID: <20140216081846.10C1B9CA41@busybox.osuosl.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun, 16 Feb 2014 10:14:21 +0100
+Subject: [Buildroot] [PATCH 1/2] vlc: explicitly disable opencv support
+In-Reply-To: <87zjlrii9l.fsf@dell.be.48ers.dk>
+References: <1392502403-19701-1-git-send-email-s.martin49@gmail.com>
+ <1392502403-19701-2-git-send-email-s.martin49@gmail.com>
+ <87zjlrii9l.fsf@dell.be.48ers.dk>
+Message-ID: <CAHXCMMLJQjNkeV1gWq=_Oi8bbFr=v6OenPSKii6Ne9k_nC2kLw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e78d357551f3191fee7b6bcc18dfd8514819cafb
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Peter,
 
-It does not make much sense enabling opencv without its core module.
+On Sun, Feb 16, 2014 at 9:17 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
+>
+>  > vlc can use opencv in video filters, but it requires a couple of
+>  > features enabled in opencv; so, simply force disabling opencv support.
+>
+>  > Note that vlc does includes the legacy opencv/cv.h header, which pulls a
+>  > number of opencv's features (core, video, imgproc, ...).
+>
+> Is this meant as a short term fix for 2014.02?
 
-This configuration leads to build nothing (since all modules depend on
-the core one), but install the configuration files (*.pc and *.cmake)
-anyway.
+Yes, it is a short term fix for the 2014.02 release, also because I
+don't think vlc package was added to buildroot with opencv support in
+mind... ;-)
 
-This absurd situation may break the build-system of other packages
-that would correctly find the *.pc (but does not check for the modules
-they actually use), but would not build because of missing headers and
-libraries.
+I just need some time to find all opencv's features used/required by vlc.
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/opencv/Config.in |    6 ------
- package/opencv/opencv.mk |    2 +-
- 2 files changed, 1 insertions(+), 7 deletions(-)
+> Presumably the user CAN
+> enable the needed opencv option so it could work? - E.G. we could come
+> up with the needed test like:
+>
+> ifeq ($(BR2_PACKAGE_OPENCV_FOO)$(BR2_PACKAGE_OPENCV_BLAH)...,yyy)
+> VLC_CONF_OPT += --with-opencv
+> VLC_DEPENDENCIES += opencv
+> else
+> VLC_CONF_OPT += --without-opencv
+> endif
+>
 
-diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index ccde5cb..217243d 100644
---- a/package/opencv/Config.in
-+++ b/package/opencv/Config.in
-@@ -26,12 +26,6 @@ config BR2_PACKAGE_OPENCV_LIB_CONTRIB
- 	help
- 	  Include opencv_contrib module into the OpenCV build.
- 
--config BR2_PACKAGE_OPENCV_LIB_CORE
--	bool "core"
--	default y
--	help
--	  Include opencv_core module into the OpenCV build.
--
- config BR2_PACKAGE_OPENCV_LIB_FEATURES2D
- 	bool "features2d"
- 	default y
-diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
-index 732bc0c..42f9b0a 100644
---- a/package/opencv/opencv.mk
-+++ b/package/opencv/opencv.mk
-@@ -34,7 +34,7 @@ OPENCV_CONF_OPT += \
- 	-DBUILD_opencv_androidcamera=OFF                                        \
- 	-DBUILD_opencv_calib3d=$(if $(BR2_PACKAGE_OPENCV_LIB_CALIB3D),ON,OFF)   \
- 	-DBUILD_opencv_contrib=$(if $(BR2_PACKAGE_OPENCV_LIB_CONTRIB),ON,OFF)   \
--	-DBUILD_opencv_core=$(if $(BR2_PACKAGE_OPENCV_LIB_CORE),ON,OFF)         \
-+	-DBUILD_opencv_core=ON                                                  \
- 	-DBUILD_opencv_features2d=$(if $(BR2_PACKAGE_OPENCV_LIB_FEATURES2D),ON,OFF) \
- 	-DBUILD_opencv_flann=$(if $(BR2_PACKAGE_OPENCV_LIB_FLANN),ON,OFF)       \
- 	-DBUILD_opencv_gpu=$(if $(BR2_PACKAGE_OPENCV_LIB_GPU),ON,OFF)           \
+Regards,
+
+-- 
+Samuel
