@@ -1,33 +1,29 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun, 16 Feb 2014 00:57:48 +0100
-Subject: [Buildroot] [PATCH 2/2] imagemagick: use --without-bzlib when bzip2
-	is not selected
-In-Reply-To: <1392508668-27561-1-git-send-email-romain.naour@openwide.fr>
-References: <1392508668-27561-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1392508668-27561-2-git-send-email-romain.naour@openwide.fr>
+Date: Sun, 16 Feb 2014 01:00:33 +0100
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20140214101241.27857b9e@skate>
+References: <20140214073009.1D7E6102637@stock.ovh.net>
+ <20140214101241.27857b9e@skate>
+Message-ID: <52FFFFA1.7030109@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
- package/imagemagick/imagemagick.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi Thomas, All,
+>>        i686 |            imagemagick-6.8.8-4 | NOK | http://autobuild.buildroot.net/results/a9d35975c7699515350eb307712cd69b6d48e418/
+> Not enough backlog to see what the error is, unfortunately.
+>
+>
+It is impossible to disable documentation in Imagemagick because all 
+options like  --disable-gtk-doc, --disable-doc, --disable-docs and 
+--disable-documentation are not handled by configure script.
 
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index c1e17c7..4f2a65f 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -115,7 +115,7 @@ ifeq ($(BR2_PACKAGE_BZIP2),y)
- IMAGEMAGICK_CONF_OPT += --with-bzlib
- IMAGEMAGICK_DEPENDENCIES += bzip2
- else
--IMAGEMAGICK_CONF_OPT += --without-bzip2
-+IMAGEMAGICK_CONF_OPT += --without-bzlib
- endif
- 
- $(eval $(autotools-package))
--- 
-1.8.5.3
+It will be easier to understand what happens when the build fails if we 
+remove hard coded documentation from Makefiles.
+
+I just sent a patch for this.
+
+Best regards,
+Romain Naour
