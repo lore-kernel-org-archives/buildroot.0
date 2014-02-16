@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 Feb 2014 18:27:26 +0100
-Subject: [Buildroot] [PATCH 07/10] package/w_scan: requires kernel headers
+Date: Sun, 16 Feb 2014 18:27:27 +0100
+Subject: [Buildroot] [PATCH 08/10] package/weston: requires kernel headers
 	>= 3.0
 In-Reply-To: <cover.1392571021.git.yann.morin.1998@free.fr>
 References: <cover.1392571021.git.yann.morin.1998@free.fr>
-Message-ID: <dc7c8c02dc68236e21071392a4ef87e6f3d4d700.1392571021.git.yann.morin.1998@free.fr>
+Message-ID: <73c388b473087f946fa42adcf5b5731bd7a59cb6.1392571021.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,29 +13,39 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-It needs DVB API version 5.3 or later, introduced in linux 3.0.
+It needs K_OFF, introduced in 2.6.39.
+
+Since we do not have dependencies on kernel headers before 3.0,
+just depend on kernel headers 3.0.
 
 Fixes:
-    http://autobuild.buildroot.net/results/6e7/6e7c691099a8f3eef4fc84860ceb1a94f25873eb
+    http://autobuild.buildroot.net/results/aa5/aa54b1aaf0ac89531d7a1e7dd3900b35605ae3f5
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/w_scan/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/weston/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/w_scan/Config.in b/package/w_scan/Config.in
-index 4487b0a..02cb2c3 100644
---- a/package/w_scan/Config.in
-+++ b/package/w_scan/Config.in
-@@ -1,5 +1,9 @@
-+comment "w_scan needs a toolchain w/ headers >= 3.0"
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-+
- config BR2_PACKAGE_W_SCAN
- 	bool "w_scan"
+diff --git a/package/weston/Config.in b/package/weston/Config.in
+index 247efc8..c1e8a7b 100644
+--- a/package/weston/Config.in
++++ b/package/weston/Config.in
+@@ -1,6 +1,6 @@
+-comment "weston needs udev and a toolchain w/ threads"
++comment "weston needs udev and a toolchain w/ threads, headers >= 3.0"
+ 	depends on !BR2_avr32
+-	depends on !BR2_PACKAGE_UDEV || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_PACKAGE_UDEV || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+ 
+ config BR2_PACKAGE_WESTON
+ 	bool "weston"
+@@ -14,6 +14,7 @@ config BR2_PACKAGE_WESTON
+ 	depends on BR2_PACKAGE_UDEV
+ 	depends on !BR2_avr32 # wayland
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland
 +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	help
- 	  w_scan is a small command line utility used to perform frequency
+ 	# Runtime dependency
+ 	select BR2_PACKAGE_XKEYBOARD_CONFIG
+ 	# Make sure at least one compositor is selected.
 -- 
 1.8.1.2
