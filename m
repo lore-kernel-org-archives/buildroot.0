@@ -1,49 +1,33 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 Feb 2014 21:55:03 +0100
-Subject: [Buildroot] [PATCH 02/10] manual: document minimal kernel
-	headers dependency
-In-Reply-To: <bb5d811d-5b73-4d3d-b08a-93a1812e9bd0@email.android.com>
-References: <cover.1392571021.git.yann.morin.1998@free.fr>
- <1249b172ff1e3a651955941fe7da32d3644ad2ee.1392571021.git.yann.morin.1998@free.fr>
- <a26f6957-03a6-4d97-8b34-a6a2d0546d5f@email.android.com>
- <20140216204220.GC3417@free.fr>
- <bb5d811d-5b73-4d3d-b08a-93a1812e9bd0@email.android.com>
-Message-ID: <20140216205503.GE3417@free.fr>
+Date: Sun, 16 Feb 2014 21:57:27 +0100
+Subject: [Buildroot] [PATCH v6 4/4] xbmc: new package
+In-Reply-To: <f8ef4090-214d-48a3-ae77-b96a198a527a@email.android.com>
+References: <1392557273-3522-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <1392557273-3522-5-git-send-email-maxime.hadjinlian@gmail.com>
+ <f8ef4090-214d-48a3-ae77-b96a198a527a@email.android.com>
+Message-ID: <20140216205727.GF3417@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Amxime, All,
 
-On 2014-02-16 21:45 +0100, Thomas De Schampheleire spake thusly:
-> "Yann E. MORIN" <yann.morin.1998@free.fr> schreef:
-> >On 2014-02-16 21:03 +0100, Thomas De Schampheleire spake thusly:
-> >> "Yann E. MORIN" <yann.morin.1998@free.fr> schreef:
+On 2014-02-16 20:55 +0100, Thomas De Schampheleire spake thusly:
+> Maxime Hadjinlian <maxime.hadjinlian@gmail.com> schreef:
 [--SNIP--]
-> >> >+* Kernel headers
-> >> >+** Dependency synbol: +BR2_TOOLCHAIN_HEADERS_AT_LEAST_X_Y+, (replace
-> >> >+   +X_Y+ with the proper version, see +toolchain/toolchain-common.in+)
-> >> >+** Comment string: `headers >= X.Y` (replace +X.Y+ with the
-> >> >+   proper version)
-> >> 
-> >> Are these backticks?
-> >> Is there a specific reason you use this instead of single or double quotes?
-> >
-> >I just duplicated what wah done for C++, a few lines below.
-> >
-> >Lookign at the other comments, it looks like C++ is the only one using
-> >backticks, the others use the +blabla+ format.
-> >
-> >Will fix bot before submitting again.
+> >+config BR2_PACKAGE_XBMC_LIBSHAIRPLAY
+> >+	bool "libshairport"
+> >+	select BR2_PACKAGE_LIBSHAIRPLAY
+> >+	depends on BR2_INET_IPV6
+> >+	help
+> >+	  Enable shairport support.
+> >+	  Select this if you want to stream content from Apple device.
 > 
-> Ah now I understand again: the pluses in c++ required me to use backticks.
-> While giving the feedback to you I forgot this was asciidoc syntax, sorry.
-> Then it doesn't really matter...
+> an Apple device
 
-Well, I can just use +foo+ for the headers version, it makes it more
-in-line with the other comments, C++ is an exception.
+Or:  Apple devices.  (plural).
 
 Regards,
 Yann E. MORIN.
