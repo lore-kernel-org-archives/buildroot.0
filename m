@@ -1,78 +1,76 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 16 Feb 2014 22:59:53 +0100
-Subject: [Buildroot] [PATCH 00/11] Scientific libraries
-Message-ID: <1392588004-13317-1-git-send-email-s.martin49@gmail.com>
+Date: Sun, 16 Feb 2014 22:59:55 +0100
+Subject: [Buildroot] [PATCH 02/11] opencv: rework V4L/libv4l support
+In-Reply-To: <1392588004-13317-1-git-send-email-s.martin49@gmail.com>
+References: <1392588004-13317-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <1392588004-13317-3-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Starting with the 2.4.7 release, for V4L support, OpenCV does not
+requires a libv4l dependency for its V4L support.
 
+So, it now provides 2 distincts knobs for this: WITH_V4L and a new
+one: WITH_LIBV4L.
 
-Here is a series containing the bump of OpenCV and some new scientific
-packages, among these python Numpy.
+This patch takes advantage of this new knob and libv4l support is
+now automatically enabled if only the libv4l package is enabled.
 
-The OpenCV bump comes with a couple of refactoring and fixes (in
-OpenCV itself and some of its reverse-dependencies).
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+---
+ package/opencv/Config.in | 11 ++++++-----
+ package/opencv/opencv.mk | 10 +++++++---
+ 2 files changed, 13 insertions(+), 8 deletions(-)
 
-This series targets (and has been rebased on) the branch next, but
-prior to its integration, it also requires:
-- cherry-picking the following commit in then branch next:
-  commit e78d357551f3191fee7b6bcc18dfd8514819cab
-    opencv: always enable opencv_core module when opencv is enabled
-- and applying the following patches:
-  http://patchwork.ozlabs.org/patch/312315/
-  http://patchwork.ozlabs.org/patch/312316/
-
-
-Yours,
-Samuel
-
-
-Samuel Martin (11):
-  opencv: bump to version 2.4.8
-  opencv: rework V4L/libv4l support
-  opencv: add jasper support
-  opencv: add Qt5 support
-  clapack: new package
-  armadillo: new package
-  python-numpy: new package
-  python-numpy: add install-staging command
-  opencv: add python/numpy support
-  opencv: define modules inter-dependencies
-  vlc: add opencv support
-
- package/Config.in                                  |   3 +
- package/armadillo/Config.in                        |   9 ++
- package/armadillo/armadillo.mk                     |  15 ++
- package/clapack/Config.in                          |  18 +++
- ...ce-libf2c-to-be-built-as-a-static-library.patch |  32 +++++
- ...ake-test-build-sensitive-to-BUILD_TESTING.patch |  80 +++++++++++
- ...t-try-to-run-arithchk-when-cross-compilin.patch |  70 ++++++++++
- ...blas-add-library-and-header-install-rules.patch |  23 ++++
- ...pack-add-library-and-header-install-rules.patch |  24 ++++
- package/clapack/clapack.mk                         |  20 +++
- package/opencv/Config.in                           | 146 ++++++++++++++++----
- ...t-run-python-for-numpy-detection-when-cro.patch |  77 +++++++++++
- package/opencv/opencv.mk                           | 152 ++++++++++++++++-----
- package/python-numpy/Config.in                     |  14 ++
- package/python-numpy/python-numpy.mk               |  48 +++++++
- package/vlc/vlc.mk                                 |   7 +
- 16 files changed, 671 insertions(+), 67 deletions(-)
- create mode 100644 package/armadillo/Config.in
- create mode 100644 package/armadillo/armadillo.mk
- create mode 100644 package/clapack/Config.in
- create mode 100644 package/clapack/clapack-0001-cmake-force-libf2c-to-be-built-as-a-static-library.patch
- create mode 100644 package/clapack/clapack-0002-cmake-make-test-build-sensitive-to-BUILD_TESTING.patch
- create mode 100644 package/clapack/clapack-0003-cmake-do-not-try-to-run-arithchk-when-cross-compilin.patch
- create mode 100644 package/clapack/clapack-0004-cmake-blas-add-library-and-header-install-rules.patch
- create mode 100644 package/clapack/clapack-0005-cmake-lapack-add-library-and-header-install-rules.patch
- create mode 100644 package/clapack/clapack.mk
- create mode 100644 package/opencv/opencv-0001-cmake-do-not-run-python-for-numpy-detection-when-cro.patch
- create mode 100644 package/python-numpy/Config.in
- create mode 100644 package/python-numpy/python-numpy.mk
-
---
+diff --git a/package/opencv/Config.in b/package/opencv/Config.in
+index c3273fd..2acbe19 100644
+--- a/package/opencv/Config.in
++++ b/package/opencv/Config.in
+@@ -189,14 +189,15 @@ config BR2_PACKAGE_OPENCV_WITH_TIFF
+ 
+ config BR2_PACKAGE_OPENCV_WITH_V4L
+ 	bool "v4l support"
+-	depends on BR2_LARGEFILE
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_PACKAGE_LIBV4L
+ 	help
+ 	  Enable Video 4 Linux support.
+ 
+-comment "v4l support needs a toolchain w/ largefile, threads"
+-	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
++	  If the package libv4l is enabled, its support is automatically enabled.
++
++if BR2_PACKAGE_OPENCV_WITH_V4L && !(BR2_LARGEFILE && BR2_TOOLCHAIN_HAS_THREADS)
++comment "libv4l support will be disabled."
++comment "libv4l support needs a toolchain w/ largefile, threads"
++endif
+ 
+ comment "Install options"
+ 
+diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
+index 43aef62..fb56769 100644
+--- a/package/opencv/opencv.mk
++++ b/package/opencv/opencv.mk
+@@ -210,10 +210,14 @@ OPENCV_CONF_OPT += -DWITH_TIFF=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_OPENCV_WITH_V4L),y)
+-OPENCV_CONF_OPT += -DWITH_V4L=ON -DWITH_LIBV4L=ON
+-OPENCV_DEPENDENCIES += libv4l
++OPENCV_CONF_OPT += \
++	-DWITH_V4L=ON \
++	-DWITH_LIBV4L=$(if $(BR2_PACKAGE_LIBV4L),ON,OFF)
++OPENCV_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBV4L),libv4l)
+ else
+-OPENCV_CONF_OPT += -DWITH_V4L=OFF -DWITH_LIBV4L=OFF
++OPENCV_CONF_OPT += \
++	-DWITH_V4L=OFF \
++	-DWITH_LIBV4L=OFF
+ endif
+ 
+ # Installation hooks:
+-- 
 1.8.5.4
