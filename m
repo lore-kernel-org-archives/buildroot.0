@@ -1,49 +1,39 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 16 Feb 2014 11:51:02 +0100
-Subject: [Buildroot] [PATCH] pkg-cmake: use -fPIC
-In-Reply-To: <1392545101-26953-1-git-send-email-francois.perrad@gadz.org>
-References: <1392545101-26953-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <CAHXCMMJC6k66QKHMmW8gHLvxJic2cAy2Xv52P2X41daS+Z18aQ@mail.gmail.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sun, 16 Feb 2014 14:27:49 +0100
+Subject: [Buildroot] [PATCH v6 0/4] Introducing XBMC
+Message-ID: <1392557273-3522-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Francois,
+A new series, with some changes in the XBMC patch itself.
+Thanks to Martin Bark and Yann E. Morin for spotting my errors.
 
-On Sun, Feb 16, 2014 at 11:05 AM, Francois Perrad <fperrad@gmail.com> wrote:
-> fix build for lua-ev
-> http://autobuild.buildroot.org/results/730/7303fffa6075d02289b6fdb12a1debdf0dd7d6f1//build-end.log
->
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/pkg-cmake.mk |    4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-> index dbe0d97..f0b8e62 100644
-> --- a/package/pkg-cmake.mk
-> +++ b/package/pkg-cmake.mk
-> @@ -162,8 +162,8 @@ $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
->         set(CMAKE_SYSTEM_NAME Linux)\n\
->         set(CMAKE_C_COMPILER $(TARGET_CC_NOCCACHE))\n\
->         set(CMAKE_CXX_COMPILER $(TARGET_CXX_NOCCACHE))\n\
-> -       set(CMAKE_C_FLAGS \"\$${CMAKE_C_FLAGS} $(TARGET_CFLAGS)\" CACHE STRING \"Buildroot CFLAGS\" FORCE)\n\
-> -       set(CMAKE_CXX_FLAGS \"\$${CMAKE_CXX_FLAGS} $(TARGET_CXXFLAGS)\" CACHE STRING \"Buildroot CXXFLAGS\" FORCE)\n\
-> +       set(CMAKE_C_FLAGS \"\$${CMAKE_C_FLAGS} $(TARGET_CFLAGS) -fPIC\" CACHE STRING \"Buildroot CFLAGS\" FORCE)\n\
-> +       set(CMAKE_CXX_FLAGS \"\$${CMAKE_CXX_FLAGS} $(TARGET_CXXFLAGS) -fPIC\" CACHE STRING \"Buildroot CXXFLAGS\" FORCE)\n\
+Maxime Hadjinlian (4):
+  sdl: add host version
+  sdl_image: add host version
+  dependencies.sh: Introduce BR2_HOST_NEEDS_JAVA
+  xbmc: new package
 
-Usually, PIC properties is set at the cmake target level, but this
-property is driven by the global variable
-CMAKE_POSITION_INDEPENDENT_CODE (see:
-http://www.cmake.org/cmake/help/v2.8.12/cmake.html#prop_tgt:POSITION_INDEPENDENT_CODE)
+ package/Config.in                                  |   1 +
+ package/sdl/sdl.mk                                 |   2 +
+ package/sdl_image/sdl_image.mk                     |  11 ++
+ package/xbmc/Config.in                             | 166 ++++++++++++++++++++
+ package/xbmc/S50xbmc                               |  41 +++++
+ package/xbmc/xbmc-0001-Fixup-include-path.patch    |  79 ++++++++++
+ .../xbmc-0002-RaspberryPi-Default-Settings.patch   | 167 +++++++++++++++++++++
+ package/xbmc/xbmc.mk                               | 149 ++++++++++++++++++
+ package/xbmc/xbmc.service                          |  12 ++
+ support/dependencies/dependencies.sh               |   8 +
+ 10 files changed, 636 insertions(+)
+ create mode 100644 package/xbmc/Config.in
+ create mode 100755 package/xbmc/S50xbmc
+ create mode 100644 package/xbmc/xbmc-0001-Fixup-include-path.patch
+ create mode 100644 package/xbmc/xbmc-0002-RaspberryPi-Default-Settings.patch
+ create mode 100644 package/xbmc/xbmc.mk
+ create mode 100644 package/xbmc/xbmc.service
 
-I would prefer using this variable, it should not break anything if
-some projects set this property otherwise.
-
-Regards,
-
-
--- 
-Samuel
+--
+1.8.5.3
