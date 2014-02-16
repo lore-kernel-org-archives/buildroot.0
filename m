@@ -1,35 +1,57 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun, 16 Feb 2014 21:52:28 +0100
-Subject: [Buildroot] [PATCH v6 4/4] xbmc: new package
-In-Reply-To: <5301234F.8050309@trzebnica.net>
-References: <1392557273-3522-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1392557273-3522-5-git-send-email-maxime.hadjinlian@gmail.com>
- <5301234F.8050309@trzebnica.net>
-Message-ID: <CAGduivwT9OkAxvXFydr7QoqsG1OBQ8=-fxk6tQxbRpnKeo-a4A@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 16 Feb 2014 21:55:03 +0100
+Subject: [Buildroot] [PATCH 02/10] manual: document minimal kernel
+	headers dependency
+In-Reply-To: <bb5d811d-5b73-4d3d-b08a-93a1812e9bd0@email.android.com>
+References: <cover.1392571021.git.yann.morin.1998@free.fr>
+ <1249b172ff1e3a651955941fe7da32d3644ad2ee.1392571021.git.yann.morin.1998@free.fr>
+ <a26f6957-03a6-4d97-8b34-a6a2d0546d5f@email.android.com>
+ <20140216204220.GC3417@free.fr>
+ <bb5d811d-5b73-4d3d-b08a-93a1812e9bd0@email.android.com>
+Message-ID: <20140216205503.GE3417@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Jerzy, all
-On Sun, Feb 16, 2014 at 9:45 PM, Jerzy Grzegorek
-<jerzy.grzegorek@trzebnica.net> wrote:
->
-> Hi Maxime,
->
->
->> +       select BR2_PACKAGE_SQLITE
->> +       select BR2_PACKAGE_TAGLIB
->> +       select BR2_PACKAGE_TIFF
->> +       select BR2_PACKAGE_TIFF
->
->
-> Why two times?
->
-> Regards,
-> Jerzy
->
->
-Because of a copy-paste mistake :).
-Thanks for pointing that out.
+Thomas, All,
+
+On 2014-02-16 21:45 +0100, Thomas De Schampheleire spake thusly:
+> "Yann E. MORIN" <yann.morin.1998@free.fr> schreef:
+> >On 2014-02-16 21:03 +0100, Thomas De Schampheleire spake thusly:
+> >> "Yann E. MORIN" <yann.morin.1998@free.fr> schreef:
+[--SNIP--]
+> >> >+* Kernel headers
+> >> >+** Dependency synbol: +BR2_TOOLCHAIN_HEADERS_AT_LEAST_X_Y+, (replace
+> >> >+   +X_Y+ with the proper version, see +toolchain/toolchain-common.in+)
+> >> >+** Comment string: `headers >= X.Y` (replace +X.Y+ with the
+> >> >+   proper version)
+> >> 
+> >> Are these backticks?
+> >> Is there a specific reason you use this instead of single or double quotes?
+> >
+> >I just duplicated what wah done for C++, a few lines below.
+> >
+> >Lookign at the other comments, it looks like C++ is the only one using
+> >backticks, the others use the +blabla+ format.
+> >
+> >Will fix bot before submitting again.
+> 
+> Ah now I understand again: the pluses in c++ required me to use backticks.
+> While giving the feedback to you I forgot this was asciidoc syntax, sorry.
+> Then it doesn't really matter...
+
+Well, I can just use +foo+ for the headers version, it makes it more
+in-line with the other comments, C++ is an exception.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
