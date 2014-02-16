@@ -1,53 +1,62 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun, 16 Feb 2014 14:27:51 +0100
-Subject: [Buildroot] [PATCH v6 2/4] sdl_image: add host version
+Date: Sun, 16 Feb 2014 14:27:52 +0100
+Subject: [Buildroot] [PATCH v6 3/4] dependencies.sh: Introduce
+	BR2_HOST_NEEDS_JAVA
 In-Reply-To: <1392557273-3522-1-git-send-email-maxime.hadjinlian@gmail.com>
 References: <1392557273-3522-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <1392557273-3522-3-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <1392557273-3522-4-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Host version is needed to build xbmc
+XBMC needs Java on the host in order to build, because it  uses a
+code-generator which is build in two phases:
+In the first phase SWIG is used to parse C++ header files that define the API.
+SWIG outputs an XML file that contains a complete description of the structure
+of the API.
+In the second phase, the XML file is ingested by a Groovy (Java) program that
+then creates C++ code that forms the bridge to the scripting language (Python).
+
+The second phase is why we need java on the host.
+
+You can learn more at the XBMC's wiki:
+http://wiki.xbmc.org/index.php?title=Codegeneration#How_it_works
+
+In order to check that, this patch introduce this mechanism in
+dependencies.sh
 
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
 Changes v5 -> v6:
-  - None
-Changes v4 -> v5:
-  - None
-Changes v3 -> v4:
-  - None
-Changes v2 -> v3:
-  - None
-Changes v1 -> v2:
-  - None
+  - Remove useless loop (Thomas Petazzoni)
+  - Thanks to Martin Bark idea, change this patch to have a non package
+    specific variable.
+Changes v1 -> v5:
+  - Patch non existant before
 ---
- package/sdl_image/sdl_image.mk | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ support/dependencies/dependencies.sh | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/sdl_image/sdl_image.mk b/package/sdl_image/sdl_image.mk
-index ba9751d..05b9a1f 100644
---- a/package/sdl_image/sdl_image.mk
-+++ b/package/sdl_image/sdl_image.mk
-@@ -38,4 +38,15 @@ SDL_IMAGE_DEPENDENCIES = sdl \
- 	$(if $(BR2_PACKAGE_SDL_IMAGE_TIFF),tiff) \
- 	$(if $(BR2_PACKAGE_SDL_IMAGE_WEBP),webp)
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index 0e7e1fa..dd90bee 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -191,6 +191,14 @@ if grep -q ^BR2_PACKAGE_CLASSPATH=y $BR2_CONFIG ; then
+ 	done
+ fi
  
-+HOST_SDL_IMAGE_CONF_OPT = --with-sdl-prefix=$(HOST_DIR)/usr \
-+                --with-sdl-exec-prefix=$(HOST_DIR)/usr \
-+                --disable-sdltest \
-+                --disable-static \
-+                --disable-jpg-shared \
-+                --disable-png-shared \
-+                --disable-tif-shared \
++if grep -q ^BR2_HOST_NEEDS_JAVA=y $BUILDROOT_CONFIG ; then
++	if ! which java > /dev/null ; then
++		echo >&2
++		echo "You must install '$prog' on your build machine" >&2
++		exit 1
++	fi
++fi
 +
-+HOST_SDL_IMAGE_DEPENDENCIES = host-libjpeg host-libpng host-sdl
-+
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+ if grep -q ^BR2_HOSTARCH_NEEDS_IA32_LIBS=y $BR2_CONFIG ; then
+ 	if test ! -f /lib/ld-linux.so.2 ; then
+ 		echo
 -- 
 1.8.5.3
