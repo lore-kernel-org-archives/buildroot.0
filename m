@@ -1,45 +1,45 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 16 Feb 2014 21:02:44 +0100
-Subject: [Buildroot] [PATCH] vlc: needs dependency on host-lua if Lua is
-	selected
-In-Reply-To: <a785bb569d9872bd7cc8.1392575562@argentina> (Thomas De
- Schampheleire's message of "Sun, 16 Feb 2014 19:32:42 +0100")
-References: <a785bb569d9872bd7cc8.1392575562@argentina>
-Message-ID: <87r472j063.fsf@dell.be.48ers.dk>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 16 Feb 2014 21:03:55 +0100
+Subject: [Buildroot] [PATCH 02/10] manual: document minimal kernel
+	headers dependency
+In-Reply-To: <1249b172ff1e3a651955941fe7da32d3644ad2ee.1392571021.git.yann.morin.1998@free.fr>
+References: <cover.1392571021.git.yann.morin.1998@free.fr>
+ <1249b172ff1e3a651955941fe7da32d3644ad2ee.1392571021.git.yann.morin.1998@free.fr>
+Message-ID: <a26f6957-03a6-4d97-8b34-a6a2d0546d5f@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+"Yann E. MORIN" <yann.morin.1998@free.fr> schreef:
+>From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>
+>Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>Cc: Samuel Martin <s.martin49@gmail.com>
+>Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>Cc: Arnout Vandecappelle <arnout@mind.be>
+>Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+>---
+> docs/manual/adding-packages-directory.txt | 6 ++++++
+> 1 file changed, 6 insertions(+)
+>
+>diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+>index 754a145..1917823 100644
+>--- a/docs/manual/adding-packages-directory.txt
+>+++ b/docs/manual/adding-packages-directory.txt
+>@@ -218,6 +218,12 @@ use in the comment.
+> ** Dependency symbol: +BR2_USE_MMU+
+> ** Comment string: no comment to be added
+> 
+>+* Kernel headers
+>+** Dependency synbol: +BR2_TOOLCHAIN_HEADERS_AT_LEAST_X_Y+, (replace
+>+   +X_Y+ with the proper version, see +toolchain/toolchain-common.in+)
+>+** Comment string: `headers >= X.Y` (replace +X.Y+ with the
+>+   proper version)
 
- > If Lua support is requested in VLC, its configure script tries to find the
- > luac byte compiler, which fails if host-lua is not yet built.
+Are these backticks?
+Is there a specific reason you use this instead of single or double quotes?
 
- > This can be easily reproduced by setting a minimal config with vlc and Lua
- > enabled, and running: 'make clean toolchain vlc'. Final output is:
-
- > checking for LUA... no
- > configure: WARNING: Package lua5.2 was not found in the pkg-config search path.
- > Perhaps you should add the directory containing `lua5.2.pc'
- > to the PKG_CONFIG_PATH environment variable
- > No package 'lua5.2' found, trying lua 5.1 instead
- > checking for LUA... no
- > configure: WARNING: Package lua5.1 was not found in the pkg-config search path.
- > Perhaps you should add the directory containing `lua5.1.pc'
- > to the PKG_CONFIG_PATH environment variable
- > No package 'lua5.1' found, trying lua >= 5.1 instead
- > checking for LUA... yes
- > checking for luac... no
- > configure: error: Could not find the LUA byte compiler.
- > make: *** [<buildroot>/output/build/vlc-2.1.2/.stamp_configured] Error 1
-
- > Fix this problem by setting host-lua as a dependency to vlc.
-
- > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+Best regards,
+Thomas
