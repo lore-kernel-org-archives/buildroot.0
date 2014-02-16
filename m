@@ -1,11 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 16 Feb 2014 09:14:44 +0100
-Subject: [Buildroot] [PATCH 0/2] vlc autobuild fixes and opencv modules
-	mess?
-In-Reply-To: <1392502403-19701-1-git-send-email-s.martin49@gmail.com> (Samuel
- Martin's message of "Sat, 15 Feb 2014 23:13:21 +0100")
+Date: Sun, 16 Feb 2014 09:17:10 +0100
+Subject: [Buildroot] [PATCH 1/2] vlc: explicitly disable opencv support
+In-Reply-To: <1392502403-19701-2-git-send-email-s.martin49@gmail.com> (Samuel
+ Martin's message of "Sat, 15 Feb 2014 23:13:22 +0100")
 References: <1392502403-19701-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <874n3zjwy3.fsf@dell.be.48ers.dk>
+ <1392502403-19701-2-git-send-email-s.martin49@gmail.com>
+Message-ID: <87zjlrii9l.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,54 +14,54 @@ To: buildroot@busybox.net
 
 >>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
 
- > All,
- > Here is a fix for some vlc autobuilder failures (caused by opencv) and
- > a cleanup for opencv.
+ > vlc can use opencv in video filters, but it requires a couple of
+ > features enabled in opencv; so, simply force disabling opencv support.
 
- > That's all for the vlc fixes, now the opencv situation that I dug out
- > while I was investigating these failure, and on which I'd like to get
- > inputs from others developpers.
+ > Note that vlc does includes the legacy opencv/cv.h header, which pulls a
+ > number of opencv's features (core, video, imgproc, ...).
 
- > Along side this vlc fix, it appears the opencv situation is a bit
- > messy. Let me explain it.
+Is this meant as a short term fix for 2014.02? Presumably the user CAN
+enable the needed opencv option so it could work? - E.G. we could come
+up with the needed test like:
 
- > OpenCV allows to enable/disable the selection of modules (a.k.a.
- > opencv libraries). These modules depend one from the others; these
- > dependencies are already handled by the build-system (CMake).
+ifeq ($(BR2_PACKAGE_OPENCV_FOO)$(BR2_PACKAGE_OPENCV_BLAH)...,yyy)
+VLC_CONF_OPT += --with-opencv
+VLC_DEPENDENCIES += opencv
+else
+VLC_CONF_OPT += --without-opencv
+endif
 
- > However, the way we handle them in Buildroot can be improved.
- > wever
+ > Fixes:
+ >   http://autobuild.buildroot.org/results/39c/39c77ffb5a5599d0b09422433c747b2bac185c4f/
+ >   http://autobuild.buildroot.org/results/a79/a79b055da09e4d8ede263251df8461bc8a64569a/
 
- > The curreent situation:
- > For each opencv module, there is an option, so the corresponding cmake
- > config option is set accordingly:
+ > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+ > ---
+ >  package/vlc/vlc.mk | 3 ++-
+ >  1 file changed, 2 insertions(+), 1 deletion(-)
 
- > OPENCV_CONF_OPT += \
- >   -DBUILD_opencv_core=$(if $(BR2_PACKAGE_OPENCV_LIB_CORE),ON,OFF) \
- >   -DBUILD_opencv_video=$(if $(BR2_PACKAGE_OPENCV_LIB_VIDEO),ON,OFF) \
- >   ...
+ > diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+ > index f235ff8..db99a3b 100644
+ > --- a/package/vlc/vlc.mk
+ > +++ b/package/vlc/vlc.mk
+ > @@ -30,7 +30,8 @@ VLC_CONF_OPT += \
+ >  	--disable-goom \
+ >  	--disable-projectm \
+ >  	--disable-vsxu \
+ > -	--disable-mtp
+ > +	--disable-mtp \
+ > +	--without-opencv
+ 
+ >  # Set powerpc altivec appropriately
+ >  ifeq ($(BR2_powerpc_7400)$(BR2_powerpc_7450)$(BR2_powerpc_970),y)
+ > -- 
+ > 1.8.5.4
 
- > The thing is that a module (e.g. video) won't be built if it is enable
- > while one of its dependencies (e.g. core) is disabled.
- > CMake behaves like this because we force (too?) many options, and
- > CMake, which is aware the dependency relations, solves them this way.
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot at busybox.net
+ > http://lists.busybox.net/mailman/listinfo/buildroot
 
- > How can the situation be improved:
- > I see 2 ways to rework this:
-
- > 1) Replicate the modules' dependency relations in the Config.in.
- >   This will:
- >   - make the Config.in even more longer;
- >   - make the bump a bit less easy (need to check the dependencies);
- >   - copy in Buildroot some of the intelligence put in the package's
- >     build-system itself. :-/
-
-I don't really think we have any way around that. If people enable a
-certain opencv option in menuconfig they rightly expect it to get
-enabled without having to study the opencv build system to figure out
-what other options to enable.
-
-So this is my preference.
 
 -- 
 Bye, Peter Korsgaard
