@@ -1,212 +1,40 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 16 Feb 2014 23:00:03 +0100
-Subject: [Buildroot] [PATCH 10/11] opencv: define modules inter-dependencies
+Date: Sun, 16 Feb 2014 23:00:04 +0100
+Subject: [Buildroot] [PATCH 11/11] vlc: add opencv support
 In-Reply-To: <1392588004-13317-1-git-send-email-s.martin49@gmail.com>
 References: <1392588004-13317-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1392588004-13317-11-git-send-email-s.martin49@gmail.com>
+Message-ID: <1392588004-13317-12-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-OpenCV allows to enable/disable the selection of modules (a.k.a.
-opencv libraries). These modules depend one from the others; these
-dependencies are already handled by the build-system (CMake).
-
-However, the way we handled them in Buildroot was not really clean.
-For each opencv module, there is a kconfig option, but we forced the
-corresponding cmake config option without checking for module
-dependencies.
-
-This patch replicates the modules' dependency relations in the
-Config.in, so that the selection of the user will actually be built.
+opencv support for video filter in vlc requires a couple of opencv
+features to be enabled.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/opencv/Config.in | 75 ++++++++++++++++++++++++++++++++++++++----------
- 1 file changed, 60 insertions(+), 15 deletions(-)
+ package/vlc/vlc.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index be0b660..74c0a38 100644
---- a/package/opencv/Config.in
-+++ b/package/opencv/Config.in
-@@ -8,6 +8,8 @@ menuconfig BR2_PACKAGE_OPENCV
- 	  OpenCV (Open Source Computer Vision) is a library of programming
- 	  functions for real time computer vision.
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index ad7d9ff..14d6538 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -108,6 +108,13 @@ else
+ VLC_CONF_OPT += --disable-glx
+ endif
  
-+	  Note that the opencv_core module is automatically enabled.
++ifeq ($(BR2_PACKAGE_OPENCV_LIB_LEGACY)$(BR2_PACKAGE_OPENCV_LIB_OBJDETECT),yy)
++VCL_CONF_OPT += --with-opencv
++VLC_DEPENDENCIES += opencv
++else
++VLC_CONF_OPT += --without-opencv
++endif
 +
- 	  http://opencv.org/
- 
- if BR2_PACKAGE_OPENCV
-@@ -16,109 +18,152 @@ comment "OpenCV modules"
- 
- config BR2_PACKAGE_OPENCV_LIB_CALIB3D
- 	bool "calib3d"
--	default y
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-+	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
- 	help
- 	  Include opencv_calib3d module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_CONTRIB
- 	bool "contrib"
--	default y
-+	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
-+	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-+	select BR2_PACKAGE_OPENCV_LIB_ML
-+	select BR2_PACKAGE_OPENCV_LIB_OBJDETECT
-+	select BR2_PACKAGE_OPENCV_LIB_VIDEO
- 	help
- 	  Include opencv_contrib module into the OpenCV build.
- 
-+# opencv_core module is automatically enabled when OpenCV package is selected
-+
- config BR2_PACKAGE_OPENCV_LIB_FEATURES2D
- 	bool "features2d"
--	default y
-+	select BR2_PACKAGE_OPENCV_LIB_FLANN
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	help
- 	  Include opencv_features2d module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_FLANN
- 	bool "flann"
--	default y
-+	# opencv_core dependency is already enabled
- 	help
- 	  Include opencv_flann module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_GPU
- 	bool "gpu"
-+	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-+	select BR2_PACKAGE_OPENCV_LIB_LEGACY
-+	select BR2_PACKAGE_OPENCV_LIB_OBJDETECT
-+	select BR2_PACKAGE_OPENCV_LIB_PHOTO
-+	select BR2_PACKAGE_OPENCV_LIB_VIDEO
- 	help
- 	  Include opencv_gpu module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_HIGHGUI
- 	bool "highgui"
--	default y
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	help
- 	  Include opencv_highgui module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	bool "imgproc"
--	default y
-+	# opencv_core dependency is already enabled
- 	help
- 	  Include opencv_imgproc module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_LEGACY
- 	bool "legacy"
--	default y
-+	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
-+	select BR2_PACKAGE_OPENCV_LIB_ML
-+	select BR2_PACKAGE_OPENCV_LIB_VIDEO
- 	help
- 	  Include opencv_legacy module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_ML
- 	bool "ml (machine learning)"
--	default y
-+	# opencv_core dependency is already enabled
- 	help
- 	  Include opencv_ml module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_NONFREE
- 	bool "nonfree"
-+	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
-+	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	help
- 	  Include opencv_nonfree module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_OBJDETECT
- 	bool "objdetect"
--	default y
-+	# opencv_core dependency is already enabled
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	help
- 	  Include opencv_objdetect module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_PHOTO
- 	bool "photo"
--	default y
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	help
- 	  Include opencv_photo module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_PYTHON
- 	bool "python"
- 	depends on BR2_PACKAGE_PYTHON
-+	# opencv_core dependency is already enabled
-+	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
-+	select BR2_PACKAGE_OPENCV_LIB_CONTRIB
-+	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
-+	select BR2_PACKAGE_OPENCV_LIB_FLANN
-+	select BR2_PACKAGE_OPENCV_LIB_HIGHGUI
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-+	select BR2_PACKAGE_OPENCV_LIB_LEGACY
-+	select BR2_PACKAGE_OPENCV_LIB_ML
-+	select BR2_PACKAGE_OPENCV_LIB_OBJDETECT
-+	select BR2_PACKAGE_OPENCV_LIB_PHOTO
-+	select BR2_PACKAGE_OPENCV_LIB_VIDEO
- 	help
- 	  Include opencv_python module into the OpenCV build.
- 	  No python example is installed.
- 
- config BR2_PACKAGE_OPENCV_LIB_STITCHING
- 	bool "stitching"
--	default y
-+	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
-+	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-+	select BR2_PACKAGE_OPENCV_LIB_OBJDETECT
- 	help
- 	  Include opencv_stitching module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_SUPERRES
- 	bool "superres"
--	default y
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-+	select BR2_PACKAGE_OPENCV_LIB_VIDEO
- 	help
- 	  Include opencv_superres "super resolution" - module into the OpenCV
- 	  build.
- 
- config BR2_PACKAGE_OPENCV_LIB_TS
- 	bool "ts (touchscreen)"
--	default y
-+	# opencv_core dependency is already enabled
-+	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
- 	help
- 	  Include opencv_ts module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_VIDEO
- 	bool "video"
--	default y
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	help
- 	  Include opencv_video module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_VIDEOSTAB
- 	bool "videostab"
--	default y
-+	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
-+	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
-+	select BR2_PACKAGE_OPENCV_LIB_HIGHGUI
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-+	select BR2_PACKAGE_OPENCV_LIB_PHOTO
-+	select BR2_PACKAGE_OPENCV_LIB_VIDEO
- 	help
- 	  Include opencv_videostab module into the OpenCV build.
- 
+ ifeq ($(BR2_PACKAGE_OPUS),y)
+ VLC_CONF_OPT += --enable-opus
+ VLC_DEPENDENCIES += opus
 -- 
 1.8.5.4
