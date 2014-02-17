@@ -1,76 +1,39 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 17 Feb 2014 17:59:33 +0100
-Subject: [Buildroot] [PATCH 1/6] toolchain: introduce a toolchain knob
- for NPTL
-In-Reply-To: <20140217090354.1a2b5c73@skate>
-References: <1392297727-17627-1-git-send-email-thomas.petazzoni@free-electrons.com>	<1392297727-17627-2-git-send-email-thomas.petazzoni@free-electrons.com>	<5301B63A.5000304@mind.be>
- <20140217090354.1a2b5c73@skate>
-Message-ID: <53023FF5.7090703@mind.be>
+Date: Mon, 17 Feb 2014 18:08:54 +0100
+Subject: [Buildroot] [PATCH 1/1] Qt5: update to 5.2.1
+In-Reply-To: <20140214152948.424fd251@skate>
+References: <1392387539-20142-1-git-send-email-syntheticpp@gmx.net>
+ <20140214152948.424fd251@skate>
+Message-ID: <53024226.3070108@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/02/14 09:03, Thomas Petazzoni wrote:
-> Dear Arnout Vandecappelle,
+On 14/02/14 15:29, Thomas Petazzoni wrote:
+> Dear Peter K?mmel,
 > 
-> On Mon, 17 Feb 2014 08:11:54 +0100, Arnout Vandecappelle wrote:
+> On Fri, 14 Feb 2014 15:18:59 +0100, Peter K?mmel wrote:
+>> Signed-off-by: Peter K?mmel <syntheticpp@gmx.net>
+>> ---
+>>  package/qt5/qt5.mk                                 |   2 +-
+>>  .../qt5base-0001-Fix-build-MIPS64-bigendian.patch  |  51 -------
+>>  ...-detect-posix_fallocate-at-configure-time.patch | 167 ---------------------
+>>  ...kit-0002-Fix-QtWebKit-build-on-ARM-softfp.patch |  35 -----
+>>  4 files changed, 1 insertion(+), 254 deletions(-)
 > 
->>  I think there is very little reason left to use NPTL on archs that
-> 
-> I guess you wanted to say "to *NOT* use NPTL".
+> When bumping a package, if some patches are removed, please explain in
+> the commit log why they are removed. In this case, it would be good to
+> mention that they can all be removed because they have been merged
+> upstream.
 
- Good guess :-)
-
-> 
->> support it, isn't there? So I would first remove the option completely
->> for these architectures. That would also make adding a comment
->> unnecessary (since it becomes an architecture feature rather than a
->> toolchain option).
-> 
-> While I definitely agree for the internal toolchain backend, I don't
-> think this applies nicely with the external toolchain backend. We do
-> not control how the external toolchains are built, and it is perfectly
-> possible to build a non-NPTL toolchain on a NPTL-supported architecture
-> with Crosstool-NG for example.
-
- Yes, but we certainly don't support all of the possible toolchains that
-can be spat out by Crosstool-NG. At least, I don't think so...
-
-
-> That being said, our choice could simply be to not support these cases
-> at all, and check in the external toolchain backend that the toolchain
-> has NPTL support if the architecture is supposed to support it.
-
- ... therefore I'd be in favour of this approach.
-
-> 
-> However, this kind of strategy might fail quite quickly for "growing"
-> architectures. For example, ARC currently does not have NPTL support,
-> but since they appear to be quite active, maybe they will implement
-> NPTL support at some point. And at this moment we will have a range of
-> stable, well-tested toolchains that are non-NPTL, and the possibility
-> of building NPTL-capable, but not fully tested toolchains.
-
- But that's indeed a very good point that I didn't think of. Indeed, for
-these we'll want to support both NPTL and LinuxThreads, therefore we
-still need the comments.
-
- Taking that aspect into consideration, removing the LinuxThreads options
-is not bringing any real advantage. So forget I ever mentioned it :-)
-
+ If at all possible, add the upstream commit hashes as well. Or in this
+case, the Change-Id tags that are already there are sufficient since they
+can be grepped for in the logs.
 
  Regards,
  Arnout
-
-> 
-> Thoughts?
-> 
-> Best regards,
-> 
-> Thomas
-> 
 
 
 -- 
