@@ -1,44 +1,31 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 17 Feb 2014 11:36:50 +0100
-Subject: [Buildroot] [PATCH 02/29] ARC: [eznps] support OVERRIDE_SRCDIR
- feature for uclibc
-In-Reply-To: <20140217113219.5da02ed6@skate>
-References: <264C179F799EF24AB26D5319053335E80E59BD78A3@ezexch.ezchip.com>
- <20131223085236.4da230a4@skate>
- <884EA965490E3C4D8E66AEF41E980250060E6E@ezex10.ezchip.com>
- <20140217113219.5da02ed6@skate>
-Message-ID: <CAAXf6LU5jFOfQEA9xehYRe7HQP4S+Yc8xOeVZxWcd_i3k7vaqA@mail.gmail.com>
+Date: Mon, 17 Feb 2014 11:37:36 +0100
+Subject: [Buildroot] [PATCH 0 of 4] alsa-lib/alsa-utils autobuild fixes
+In-Reply-To: <patchbomb.1392224140@argentina>
+References: <patchbomb.1392224140@argentina>
+Message-ID: <CAAXf6LV+VHT_Qnk7Ex9qDxs7bATipt7uEQuaJyrhOdB7MVGa8A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Wed, Feb 12, 2014 at 5:55 PM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+> Hi,
+>
+> This series fixes the alsa-lib / alsa-utils autobuild failures, most notably
+> seen on Blackfin FLAT, but the alsa-utils problem was also seen on ARM.
+>
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>
+> ---
+>  package/alsa-lib/alsa-lib-avr32-bad-inline.patch                         |   0
+>  package/alsa-lib/alsa-lib-no-mmu.patch                                   |   0
+>  package/alsa-lib/alsa-lib-0003-dlmisc.patch                              |  59 +++++++++
+>  package/alsa-lib/alsa-lib-0004-conditional-enabling-of-libdl-in-m4.patch |  35 +++++
+>  package/alsa-utils/alsa-utils-0001-no-mmu.patch                          |  61 ++++++++++
+>  package/alsa-utils/alsa-utils.mk                                         |   1 +
+>  6 files changed, 156 insertions(+), 0 deletions(-)
 
-On Mon, Feb 17, 2014 at 11:32 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Noam Camus,
->
-> On Mon, 17 Feb 2014 08:10:17 +0000, Noam Camus wrote:
->
->> Is there anything I can do to help in applying those commits?
->>
->> Noam
->> Note: at the moment only one out of five was applied.
->
-> Yes, I believe you could resend them, rebased on top of the current
-> -next branch, in a patch series that only includes those patches (the
-> fact that you sent only 5 patches, but they were number <something>/29
-> was quite confusing).
->
-> Also, make sure each of your commits has a long enough commit log to
-> allow reviewers to understand what problem the commit is fixing, and
-> how the solution works.
-
-This specific patch 02/29 (uClibc .config) is at least partially
-addressed in the meantime, with commit
-http://git.buildroot.org/buildroot/commit/?id=a25df76b39863e5d1a4e927696bf83055e8ce244
-
-Best regards,
-Thomas
+Ping ?
