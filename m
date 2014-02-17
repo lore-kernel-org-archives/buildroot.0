@@ -1,172 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 14 Feb 2014 21:08:45 +0100
-Subject: [Buildroot] [git commit] package: add support for top-level
-	parallel make
-Message-ID: <20140228133412.B16169BA7B@busybox.osuosl.org>
+Date: Mon, 17 Feb 2014 11:04:18 +0100
+Subject: [Buildroot] [git commit] gst1-plugins-bad: add vo-aacenc option
+Message-ID: <20140228133413.BA0D09BBF9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6c5c08b854e4490697076ae3c5a9c587d8672c63
+commit: http://git.buildroot.net/buildroot/commit/?id=d413fd4c22e041b8afe94c34bf0f5d39206ea0e4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-To be able to use top-level parallel make we must not depend in a rule
-on the order of evaluation of the prerequisites, so instead of relying
-on the left to right ordering of evaluation of the prerequisites add
-an explicit rule to describe the dependencies.
-
-We cannot use the pattern rules because they must have the same
-dependency for every package, but we need to change the dependencies
-depending on $(2)_OVERRIDE_SRCDIR variable value, so we must use a
-more flexible way like $(2)_TARGET_% variables.
-
-So add explicit dependencies for the following stamp files:
-  $(2)_TARGET_EXTRACT
-  $(2)_TARGET_PATCH
-  $(2)_TARGET_CONFIGURE
-  $(2)_TARGET_BUILD
-  $(2)_TARGET_INSTALL_STAGING
-  $(2)_TARGET_INSTALL_TARGET
-  $(2)_TARGET_INSTALL_IMAGES
-  $(2)_TARGET_INSTALL_HOST
-
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/glibc/glibc.mk   |    6 +++---
- package/pkg-generic.mk   |   45 ++++++++++++++++++++++++++++-----------------
- package/uclibc/uclibc.mk |    6 +++---
- 3 files changed, 34 insertions(+), 23 deletions(-)
+ package/gstreamer1/gst1-plugins-bad/Config.in      |    4 ++++
+ .../gst1-plugins-bad/gst1-plugins-bad.mk           |    8 +++++++-
+ 2 files changed, 11 insertions(+), 1 deletions(-)
 
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index f50b459..6579f46 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -38,9 +38,6 @@ GLIBC_ADD_TOOLCHAIN_DEPENDENCY = NO
- # cross-compiler and the kernel headers
- GLIBC_DEPENDENCIES = host-gcc-initial linux-headers host-gawk
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index 407bf31..95d1f13 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -318,6 +318,10 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_APEXSINK
+ 	bool "apexsink"
+ 	select BR2_PACKAGE_OPENSSL
  
--# Before (e)glibc is built, we must have the second stage cross-compiler
--glibc-build: host-gcc-intermediate
--
- GLIBC_SUBDIR = build
- 
- GLIBC_INSTALL_STAGING = YES
-@@ -142,3 +139,6 @@ define GLIBC_INSTALL_TARGET_CMDS
- endef
- 
- $(eval $(autotools-package))
++config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VOAACENC
++	bool "voaacenc"
++	select BR2_PACKAGE_VO_AACENC
 +
-+# Before (e)glibc is built, we must have the second stage cross-compiler
-+$(GLIBC_TARGET_BUILD): | host-gcc-intermediate
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index b135b14..fec16b0 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -412,30 +412,42 @@ $(1)-install:		$(1)-install-staging $(1)-install-target $(1)-install-images
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_BZ2
+ 	bool "bz2"
+ 	select BR2_PACKAGE_BZIP2
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index 046f6bc..1ad76fe 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -41,7 +41,6 @@ GST1_PLUGINS_BAD_CONF_OPT += \
+ 	--disable-uvch264 \
+ 	--disable-assrender \
+ 	--disable-voamrwbenc \
+-	--disable-voaacenc \
+ 	--disable-chromaprint \
+ 	--disable-dash \
+ 	--disable-dc1394 \
+@@ -511,6 +510,13 @@ else
+ GST1_PLUGINS_BAD_CONF_OPT += --disable-apexsink
  endif
  
- ifeq ($$($(2)_INSTALL_TARGET),YES)
--$(1)-install-target:	$(1)-build \
--			$$($(2)_TARGET_INSTALL_TARGET)
-+$(1)-install-target:		$$($(2)_TARGET_INSTALL_TARGET)
-+$$($(2)_TARGET_INSTALL_TARGET):	$$($(2)_TARGET_BUILD)
- else
- $(1)-install-target:
- endif
- 
- ifeq ($$($(2)_INSTALL_STAGING),YES)
--$(1)-install-staging:	$(1)-build \
--			$$($(2)_TARGET_INSTALL_STAGING)
-+$(1)-install-staging:			$$($(2)_TARGET_INSTALL_STAGING)
-+$$($(2)_TARGET_INSTALL_STAGING):	$$($(2)_TARGET_BUILD)
-+# Some packages use install-staging stuff for install-target
-+$$($(2)_TARGET_INSTALL_TARGET):		$$($(2)_TARGET_INSTALL_STAGING)
- else
- $(1)-install-staging:
- endif
- 
- ifeq ($$($(2)_INSTALL_IMAGES),YES)
--$(1)-install-images:	$(1)-build \
--			$$($(2)_TARGET_INSTALL_IMAGES)
-+$(1)-install-images:		$$($(2)_TARGET_INSTALL_IMAGES)
-+$$($(2)_TARGET_INSTALL_IMAGES):	$$($(2)_TARGET_BUILD)
- else
- $(1)-install-images:
- endif
- 
--$(1)-install-host:      $(1)-build $$($(2)_TARGET_INSTALL_HOST)
-+$(1)-install-host:      	$$($(2)_TARGET_INSTALL_HOST)
-+$$($(2)_TARGET_INSTALL_HOST):	$$($(2)_TARGET_BUILD)
- 
--$(1)-build:		$(1)-configure \
--			$$($(2)_TARGET_BUILD)
-+$(1)-build:		$$($(2)_TARGET_BUILD)
-+$$($(2)_TARGET_BUILD):	$$($(2)_TARGET_CONFIGURE)
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VOAACENC),y)
++GST1_PLUGINS_BAD_CONF_OPT += --enable-voaacenc
++GST1_PLUGINS_BAD_DEPENDENCIES += vo-aacenc
++else
++GST1_PLUGINS_BAD_CONF_OPT += --disable-voaacenc
++endif
 +
-+# Since $(2)_DEPENDENCIES are phony targets, they are always "newer"
-+# than $(2)_TARGET_CONFIGURE. This would force the configure step (and
-+# therefore the other steps as well) to be re-executed with every
-+# invocation of make.  Therefore, make $(2)_DEPENDENCIES an order-only
-+# dependency by using |.
-+
-+$(1)-configure:			$$($(2)_TARGET_CONFIGURE)
-+$$($(2)_TARGET_CONFIGURE):	| $$($(2)_DEPENDENCIES)
- 
- $$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dirs prepare
- ifeq ($(filter $(1),$(DEPENDENCIES_HOST_PREREQ)),)
-@@ -449,13 +461,13 @@ ifeq ($$($(2)_OVERRIDE_SRCDIR),)
- #  extract
- #  patch
- #  configure
--$(1)-configure:		$(1)-patch $(1)-depends \
--			$$($(2)_TARGET_CONFIGURE)
-+$$($(2)_TARGET_CONFIGURE):	$$($(2)_TARGET_PATCH)
- 
--$(1)-patch:		$(1)-extract $$($(2)_TARGET_PATCH)
-+$(1)-patch:		$$($(2)_TARGET_PATCH)
-+$$($(2)_TARGET_PATCH):	$$($(2)_TARGET_EXTRACT)
- 
--$(1)-extract:		$(1)-source \
--			$$($(2)_TARGET_EXTRACT)
-+$(1)-extract:			$$($(2)_TARGET_EXTRACT)
-+$$($(2)_TARGET_EXTRACT):	$$($(2)_TARGET_SOURCE)
- 
- $(1)-depends:		$$($(2)_DEPENDENCIES)
- 
-@@ -465,10 +477,9 @@ else
- #  source, by rsyncing
- #  depends
- #  configure
--$(1)-configure:		$(1)-depends \
--			$$($(2)_TARGET_CONFIGURE)
-+$$($(2)_TARGET_CONFIGURE):	$$($(2)_TARGET_RSYNC)
- 
--$(1)-depends:		$(1)-rsync $$($(2)_DEPENDENCIES)
-+$(1)-depends:		$$($(2)_DEPENDENCIES)
- 
- $(1)-patch:		$(1)-rsync
- $(1)-extract:		$(1)-rsync
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index ea1c694..4860c58 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -29,9 +29,6 @@ UCLIBC_ADD_TOOLCHAIN_DEPENDENCY = NO
- # cross-compiler and the kernel headers
- UCLIBC_DEPENDENCIES = host-gcc-initial linux-headers
- 
--# Before uClibc is built, we must have the second stage cross-compiler
--uclibc-build: host-gcc-intermediate
--
- # specifying UCLIBC_CONFIG_FILE on the command-line overrides the .config
- # setting.
- ifndef UCLIBC_CONFIG_FILE
-@@ -556,3 +553,6 @@ uclibc-menuconfig: dirs uclibc-patch
- 	rm -f $(UCLIBC_DIR)/.stamp_{configured,built,target_installed,staging_installed}
- 
- $(eval $(generic-package))
-+
-+# Before uClibc is built, we must have the second stage cross-compiler
-+$(UCLIBC_TARGET_BUILD): | host-gcc-intermediate
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_BZ2),y)
+ GST1_PLUGINS_BAD_CONF_OPT += --enable-bz2
+ GST1_PLUGINS_BAD_DEPENDENCIES += bzip2
