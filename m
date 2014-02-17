@@ -1,229 +1,89 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 17 Feb 2014 08:02:47 +0100
-Subject: [Buildroot] [PATCH v4 2/2] add bootloader option for iso9660
- filesystem image (isolinux)
-In-Reply-To: <1391557760-22893-2-git-send-email-jean.sorgemoel@laposte.net>
-References: <1391557760-22893-1-git-send-email-jean.sorgemoel@laposte.net>
- <1391557760-22893-2-git-send-email-jean.sorgemoel@laposte.net>
-Message-ID: <5301B417.3030809@mind.be>
+Date: Mon, 17 Feb 2014 08:06:17 +0100
+Subject: [Buildroot] [PATCH 1/1] iso9660: Added support for overlay
+	directories
+In-Reply-To: <1391549148-31993-1-git-send-email-martin@barkynet.com>
+References: <1391549148-31993-1-git-send-email-martin@barkynet.com>
+Message-ID: <5301B4E9.60902@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Jean,
-
-On 05/02/14 00:49, jean.sorgemoel at laposte.net wrote:
-> From: jean <jean.sorgemoel@laposte.net>
+On 04/02/14 22:25, Martin Bark wrote:
+> This patch adds a variable BR2_TARGET_ROOTFS_ISO9660_OVERLAY that
+> is similar to BR2_ROOTFS_OVERLAY except the files are placed in the
+> iso9660 file system.
 > 
-> default generate iso with grub bootloader
-> you can select isolinux bootloader
-> 
-> detail : (module fs/iso9660)
->   option to select bootloader (grub/isolinux)
->   can use initramfs (if activate), also cpio (like initrd)
-> 
-> Signed-off-by: jean <jean.sorgemoel@laposte.net>
-> ---
->  fs/iso9660/Config.in    |   47 ++++++++++++++++++++++++++++++++++++++++++++---
->  fs/iso9660/bootmsg.txt  |    4 ++++
->  fs/iso9660/iso9660.mk   |   26 ++++++++++++++++++++++++--
->  fs/iso9660/isolinux.cfg |   10 ++++++++++
->  4 files changed, 82 insertions(+), 5 deletions(-)
->  create mode 100644 fs/iso9660/bootmsg.txt
->  create mode 100644 fs/iso9660/isolinux.cfg
-> 
-> diff --git a/fs/iso9660/Config.in b/fs/iso9660/Config.in
-> index 9faa93f..f2b9d2f 100644
-> --- a/fs/iso9660/Config.in
-> +++ b/fs/iso9660/Config.in
-> @@ -1,14 +1,37 @@
->  config BR2_TARGET_ROOTFS_ISO9660
->  	bool "iso image"
-> +	select BR2_TARGET_ROOTFS_CPIO
->  	depends on (BR2_i386 || BR2_x86_64)
->  	depends on BR2_LINUX_KERNEL
-> -	select BR2_TARGET_ROOTFS_CPIO
-> -	select BR2_TARGET_GRUB
-> -	select BR2_TARGET_GRUB_FS_ISO9660
->  	help
->  	  Build a bootable iso9660 image
->  
->  if BR2_TARGET_ROOTFS_ISO9660
-> +choice
-> +	prompt "Bootloader"
-> +	default BR2_TARGET_ROOTFS_ISO9660_GRUB
-> +	help
-> +	  Select the bootloader that should be used for the bootable
-> +	  ISO9660 image.
+> Signed-off-by: Martin Bark <martin@barkynet.com>
 
- Actually, Kconfig doesn't show help text associated with a choice. So
-this is pointless.
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-> +
-> +config BR2_TARGET_ROOTFS_ISO9660_GRUB
-> +	bool "grub"
-> +	select BR2_TARGET_GRUB
-> +	select BR2_TARGET_GRUB_FS_ISO9660
-> +	help
-> +	  Use the Grub bootloader for the bootable ISO9660 image.
-> +
-> +config BR2_TARGET_ROOTFS_ISO9660_ISOLINUX
-> +	bool "isolinux"
-> +	select BR2_TARGET_SYSLINUX
-> +	select BR2_TARGET_SYSLINUX_ISOLINUX
-> +	help
-> +	  Use the Isolinux bootloader from the syslinux project as the
-> +	  ISO9660 bootable image bootloader.
-> +
-> +endchoice
-> +
-> +if BR2_TARGET_ROOTFS_ISO9660_GRUB
->  
->  config BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU
->  	string "Boot menu.lst file"
-> @@ -17,6 +40,24 @@ config BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU
->  	  Grub configuration
->  	  Define menu, commands and options for grub
->  
-> +endif # BR2_TARGET_ROOTFS_ISO9660_GRUB
-> +
-> +if BR2_TARGET_ROOTFS_ISO9660_ISOLINUX
-> +
-> +config BR2_TARGET_ROOTFS_ISO9660_ISOLINUX_BOOT_MESSAGE
-> +	string "Boot message"
-> +	default "fs/iso9660/bootmsg.txt"
-> +	help
-> +	  Displays this filename on the screen at boot time
+ I haven't tried it but it looks obviously-correct.
 
- It's the contents of that file that is displayed, not the filename :-)
-
-> +
-> +config BR2_TARGET_ROOTFS_ISO9660_ISOLINUX_CONFIG_FILE
-> +	string "Configuration file"
-> +	default "fs/iso9660/isolinux.cfg"
-> +	help
-> +	  This file define all options to start isolinux
-
- defines
-
-> +
-> +endif # BR2_TARGET_ROOTFS_ISO9660_ISOLINUX
-> +
->  config BR2_TARGET_ROOTFS_ISO9660_EXTRA_FILES
->  	string "Extra files copy on image"
->  	default ""
-> diff --git a/fs/iso9660/bootmsg.txt b/fs/iso9660/bootmsg.txt
-> new file mode 100644
-> index 0000000..e67951b
-> --- /dev/null
-> +++ b/fs/iso9660/bootmsg.txt
-> @@ -0,0 +1,4 @@
-> +Buildroot isolinux boot
-> +  buildroot) launch linux
-
- Launch linux from the CD-ROM
-
-> +  harddrive) Hard Drive (first partition)
-> +
-> diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
-> index 2f20f5b..66fd1ee 100644
-> --- a/fs/iso9660/iso9660.mk
-> +++ b/fs/iso9660/iso9660.mk
-> @@ -12,14 +12,29 @@ ISO9660_BOOT_MENU := $(call qstrip,$(BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU))
->  ISO9660_TARGET_DIR_EXTRA = $(ISO9660_TARGET_DIR)/extra
->  ISO9660_LIST_EXTRA = $(call qstrip,$(BR2_TARGET_ROOTFS_ISO9660_EXTRA_FILES))
->  
-> +ifeq ($(BR2_TARGET_ROOTFS_ISO9660_GRUB),y)
-> +BOOTLOADER_PACKAGE = grub
->  BOOTLOADER_BIN = $(GRUB_DIR)/stage2/stage2_eltorito
->  BOOTLOADER_DIR = $(ISO9660_TARGET_DIR)/boot/grub/
->  BOOTLOADER_SRC_CFG = $(ISO9660_BOOT_MENU)
->  BOOTLOADER_DST_CFG = $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
->  KERNEL_DST = $(ISO9660_TARGET_DIR)/kernel
->  ELTORITO_BOOT = boot/grub/stage2_eltorito
-> +INITRD_SED_CMD = '/initrd/d'
-
- You can avoid this additional variable by using '/initrd\|INITRD/d'
-
-> +endif
-> +
-> +ifeq ($(BR2_TARGET_ROOTFS_ISO9660_ISOLINUX),y)
-> +BOOTLOADER_PACKAGE = syslinux
-> +BOOTLOADER_BIN = $(BINARIES_DIR)/isolinux.bin
-> +BOOTLOADER_DIR = $(ISO9660_TARGET_DIR)
-> +BOOTLOADER_SRC_CFG = $(BR2_TARGET_ROOTFS_ISO9660_ISOLINUX_CONFIG_FILE)
-> +BOOTLOADER_DST_CFG = $(ISO9660_TARGET_DIR)/isolinux.cfg
-> +KERNEL_DST = $(ISO9660_TARGET_DIR)/bzImage
-
- I see no reason to call it 'bzImage' for one bootloader and 'kernel' for
-another. Probably both of them should be called bzImage. Even better
-would be to use $(LINUX_IMAGE_NAME) but that requires an addition sed of
-the config file, and is pretty pointless since on x86 the only other
-option is vmlinux which AFAIK doesn't boot from either bootloader.
-
-> +ELTORITO_BOOT = isolinux.bin
-> +INITRD_SED_CMD = '/INITRD/d'
-> +endif
->  
-> -$(BINARIES_DIR)/rootfs.iso9660: host-cdrkit host-fakeroot linux rootfs-cpio grub
-> +$(BINARIES_DIR)/rootfs.iso9660: host-cdrkit host-fakeroot linux rootfs-cpio $(BOOTLOADER_PACKAGE)
->  	@$(call MESSAGE,"Generating root filesystem image rootfs.iso9660")
->  	@mkdir -p $(ISO9660_TARGET_DIR)
->  	@mkdir -p $(BOOTLOADER_DIR)
-> @@ -29,14 +44,21 @@ $(BINARIES_DIR)/rootfs.iso9660: host-cdrkit host-fakeroot linux rootfs-cpio grub
->  	@cp $(BOOTLOADER_SRC_CFG) $(BOOTLOADER_DST_CFG)
->  	@cp $(LINUX_IMAGE_PATH) $(KERNEL_DST)
->  
-> +ifeq ($(BR2_TARGET_ROOTFS_ISO9660_GRUB),y)
->  ifeq ($(BR2_TARGET_GRUB_SPLASH),)
->  	@$(SED) '/^splashimage/d' $(BOOTLOADER_DST_CFG)
->  else
->  	@cp boot/grub/splash.xpm.gz $(ISO9660_TARGET_DIR)/
->  endif # BR2_TARGET_GRUB_SPLASH
-> +endif # BR2_TARGET_ROOTFS_ISO9660_GRUB
-> +
-> +ifeq ($(BR2_TARGET_ROOTFS_ISO9660_ISOLINUX),y)
-> +	@cp $(BR2_TARGET_ROOTFS_ISO9660_ISOLINUX_BOOT_MESSAGE) \
-> +		$(ISO9660_TARGET_DIR)
-> +endif
->  
->  ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
-> -	@$(SED) '/initrd/d'  $(BOOTLOADER_DST_CFG)
-> +	@$(SED) $(INITRD_SED_CMD)  $(BOOTLOADER_DST_CFG)
-
- As I mentioned, here you can use '/initrd\|INITRD/d'
-
->  else
->  	@cp $(BINARIES_DIR)/rootfs.cpio$(ROOTFS_CPIO_COMPRESS_EXT) \
->  		$(ISO9660_TARGET_DIR)/initrd
-> diff --git a/fs/iso9660/isolinux.cfg b/fs/iso9660/isolinux.cfg
-> new file mode 100644
-> index 0000000..f4887e4
-> --- /dev/null
-> +++ b/fs/iso9660/isolinux.cfg
-> @@ -0,0 +1,10 @@
-> +display bootmsg.txt
-
- The bootmsg.txt is actually optional, right? Would it be possible to sed
-it out when the option is set to empty?
-
-> +default buildroot
-> +timeout 20
-
- For grub, we have a timeout of 10 seconds. I'd keep the same timeout.
+ Jean Sergemoel has a patch in the queue that does a similar thing (in
+addition to a few more changes). Jean, could you rebase your patches on
+top of this one? And, if possible, also test if this one works for you.
+If yes, add your Tested-by to this patch.
 
  Regards,
  Arnout
 
-> +prompt 1
-> +LABEL buildroot
-> +  KERNEL bzImage
-> +  INITRD initrd
+> ---
+>  fs/iso9660/Config.in  |   16 +++++++++++++++-
+>  fs/iso9660/iso9660.mk |    7 +++++++
+>  2 files changed, 22 insertions(+), 1 deletion(-)
+> 
+> diff --git a/fs/iso9660/Config.in b/fs/iso9660/Config.in
+> index 50b4377..f429b4f 100644
+> --- a/fs/iso9660/Config.in
+> +++ b/fs/iso9660/Config.in
+> @@ -8,11 +8,25 @@ config BR2_TARGET_ROOTFS_ISO9660
+>  	help
+>  	  Build a bootable iso9660 image
+>  
+> +if BR2_TARGET_ROOTFS_ISO9660
 > +
-> +LABEL harddrive
-> +  LOCALBOOT 0x80
+>  config BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU
+>  	string "Boot menu.lst file"
+> -	depends on BR2_TARGET_ROOTFS_ISO9660
+>  	default "fs/iso9660/menu.lst"
+>  
+> +config BR2_TARGET_ROOTFS_ISO9660_OVERLAY
+> +	string "iso9660 filesystem overlay directories"
+> +	default ""
+> +	help
+> +	  Specify a list of directories that are copied over the root of the
+> +	  iso filesystem after the build has finished and before it is
+> +	  packed into the iso filesystem image.
+> +
+> +	  They are copied as-is into the iso image, excluding files ending
+> +	  with ~ and .git, .svn and .hg directories.
+> +
+> +endif
+> +
+>  comment "iso image needs a Linux kernel to be built"
+>  	depends on BR2_i386 || BR2_x86_64
+>  	depends on !BR2_LINUX_KERNEL
+> diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+> index a6a9c95..1d0e5e0 100644
+> --- a/fs/iso9660/iso9660.mk
+> +++ b/fs/iso9660/iso9660.mk
+> @@ -27,6 +27,13 @@ ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
+>  else
+>  	cp $(BINARIES_DIR)/rootfs.cpio$(ROOTFS_CPIO_COMPRESS_EXT) $(ISO9660_TARGET_DIR)/initrd
+>  endif
+> +
+> +	@$(foreach d, $(call qstrip,$(BR2_TARGET_ROOTFS_ISO9660_OVERLAY)), \
+> +		$(call MESSAGE,"Copying iso9660 overlay $(d)"); \
+> +		rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
+> +			--chmod=Du+w --exclude .empty --exclude '*~' \
+> +			$(d)/ $(ISO9660_TARGET_DIR)$(sep))
+> +
+>  	# Use fakeroot to pretend all target binaries are owned by root
+>  	rm -f $(FAKEROOT_SCRIPT)
+>  	echo "chown -R 0:0 $(ISO9660_TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
 > 
 
 
