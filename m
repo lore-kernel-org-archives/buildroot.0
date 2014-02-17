@@ -1,50 +1,76 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Feb 2014 00:10:28 +0100
+Date: Tue, 18 Feb 2014 00:14:49 +0100
 Subject: [Buildroot] [PATCH 04/10] toolchain/external: add choice to
  select 'AT_LEAST_XXX' header version
-In-Reply-To: <20140217234923.3379fed1@skate>
-References: <cover.1392571021.git.yann.morin.1998@free.fr>	<74d76e7816e2de0eccb9a24acd0b768c22078dfa.1392571021.git.yann.morin.1998@free.fr>	<8fdcf8b3-c275-4250-be9c-11bcf4feaa11@email.android.com>	<20140216204721.GD3417@free.fr>	<CAAXf6LVOiOQ1jwWX4wT-NjB3gnE=YrroKMhjwsn9Cxa4F=9o5Q@mail.gmail.com>	<20140217113023.7e5a0845@skate>	<20140217180440.GB3411@free.fr>
- <20140217234923.3379fed1@skate>
-Message-ID: <530296E4.308@mind.be>
+In-Reply-To: <20140217230012.GD3411@free.fr>
+References: <cover.1392571021.git.yann.morin.1998@free.fr>
+ <74d76e7816e2de0eccb9a24acd0b768c22078dfa.1392571021.git.yann.morin.1998@free.fr>
+ <8fdcf8b3-c275-4250-be9c-11bcf4feaa11@email.android.com>
+ <530290F4.1060507@mind.be> <20140217230012.GD3411@free.fr>
+Message-ID: <530297E9.4090207@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/02/14 23:49, Thomas Petazzoni wrote:
-> Dear Yann E. MORIN,
+On 18/02/14 00:00, Yann E. MORIN wrote:
+> Arnout, All,
 > 
-> On Mon, 17 Feb 2014 19:04:40 +0100, Yann E. MORIN wrote:
-> 
->> Yes, I already added such a check later after sending the series. It
->> will be part of the next submission.
+> On 2014-02-17 23:45 +0100, Arnout Vandecappelle spake thusly:
+>> On 16/02/14 21:08, Thomas De Schampheleire wrote:
+>>> "Yann E. MORIN" <yann.morin.1998@free.fr> schreef:
+>>>> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>>>>
+>>>> Select the appropriate BR2_TOOLCHAIN_HEADERS_AT_LEAST_XXX options for the
+>>>> external, custom toolchain backend.
+>>>>
+>>>> We try to be conservative here, and default to kernel headers 2.6.x.
+>>>>
+>>>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>>>> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>>>> Cc: Arnout Vandecappelle <arnout@mind.be>
+>>>> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+>>>> ---
+>>>> toolchain/toolchain-external/Config-headers.in | 65 ++++++++++++++++++++++++++
+>>>> toolchain/toolchain-external/Config.in         |  2 +
+>>>> 2 files changed, 67 insertions(+)
+>>>> create mode 100644 toolchain/toolchain-external/Config-headers.in
+>>>>
+>>>> diff --git a/toolchain/toolchain-external/Config-headers.in b/toolchain/toolchain-external/Config-headers.in
+>>>> new file mode 100644
+>>>> index 0000000..60ac384
+>>>> --- /dev/null
+>>>> +++ b/toolchain/toolchain-external/Config-headers.in
+>>>> @@ -0,0 +1,65 @@
+>>>> +choice
+>>>> +	bool "External toolchain kernel headers"
+>>>> +	depends on BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+>>>> +	default BR2_TOOLCHAIN_EXTERNAL_HEADERS_REALLY_OLD
+>>>> +
+>>>
+>>> Shouldn't there be a help text explaining what this is used for, so as to remove confusion about the fact that the kernel header version was already chosen when the toolchain was built?
 >>
->> Basically, I check that the specified headers version is no more recent
->> than the one actually used in the toolchain.
+>>  Note, however, that you can't add help text to a choice. So the only
+>> option is to add the text to every choice option.
 > 
-> I think the specified headers version should match the one actually
-> used in the toolchain. Otherwise, the user may have messages such as
-> "package foo needs headers >= 3.3" even if he is using a toolchain with
-> kernel headers of kernel 3.6.
-> 
-> This behavior would also match what we currently do: if a toolchain has
-> thread support, but the user forgets to indicate in menuconfig that the
-> toolchain has thread support, then we abort with an error. Even if
-> technically speaking, we could simply continue, since building a
-> configuration with no thread support would work entirely fine with a
-> toolchain that has thread support.
+> Wrong. Just try... ;-)
 
- +1
+ Duh, I was so convinced of that... I think I've given that feedback in
+other reviews as well...
 
 
  Regards,
  Arnout
 
+
 > 
-> Best regards,
+>>  Ah, the limitations of Kconfig...
 > 
-> Thomas
+> You talking to me? You talking to me?  :-)
+> 
+> Regards,
+> Yann E. MORIN.
 > 
 
 
