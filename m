@@ -1,76 +1,71 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Feb 2014 00:01:22 +0100
-Subject: [Buildroot] [PATCH 1/1] manual/faq: add section about why no
- binary packages
-In-Reply-To: <CANxTyt5-j5636R=1KY5uNyvEDRHHwUNz76VaaeMjjK67Qw8OTw@mail.gmail.com>
-References: <cover.1392659250.git.yann.morin.1998@free.fr>
- <430595ea81c22aef392d3aec25cc93ef9af7bd47.1392659250.git.yann.morin.1998@free.fr>
- <CANxTyt68QiKO_qyqkUtQ5wHHtA8xuTk18uf6e9jatLZ-AK24UA@mail.gmail.com>
- <20140217213729.GC3411@free.fr>
- <CANxTyt5-j5636R=1KY5uNyvEDRHHwUNz76VaaeMjjK67Qw8OTw@mail.gmail.com>
-Message-ID: <530294C2.40400@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 18 Feb 2014 00:00:12 +0100
+Subject: [Buildroot] [PATCH 04/10] toolchain/external: add choice to
+ select 'AT_LEAST_XXX' header version
+In-Reply-To: <530290F4.1060507@mind.be>
+References: <cover.1392571021.git.yann.morin.1998@free.fr>
+ <74d76e7816e2de0eccb9a24acd0b768c22078dfa.1392571021.git.yann.morin.1998@free.fr>
+ <8fdcf8b3-c275-4250-be9c-11bcf4feaa11@email.android.com>
+ <530290F4.1060507@mind.be>
+Message-ID: <20140217230012.GD3411@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/02/14 23:48, Danomi Manchego wrote:
-> Yann,
+Arnout, All,
+
+On 2014-02-17 23:45 +0100, Arnout Vandecappelle spake thusly:
+> On 16/02/14 21:08, Thomas De Schampheleire wrote:
+> > "Yann E. MORIN" <yann.morin.1998@free.fr> schreef:
+> >> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> >>
+> >> Select the appropriate BR2_TOOLCHAIN_HEADERS_AT_LEAST_XXX options for the
+> >> external, custom toolchain backend.
+> >>
+> >> We try to be conservative here, and default to kernel headers 2.6.x.
+> >>
+> >> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> >> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> >> Cc: Arnout Vandecappelle <arnout@mind.be>
+> >> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> >> ---
+> >> toolchain/toolchain-external/Config-headers.in | 65 ++++++++++++++++++++++++++
+> >> toolchain/toolchain-external/Config.in         |  2 +
+> >> 2 files changed, 67 insertions(+)
+> >> create mode 100644 toolchain/toolchain-external/Config-headers.in
+> >>
+> >> diff --git a/toolchain/toolchain-external/Config-headers.in b/toolchain/toolchain-external/Config-headers.in
+> >> new file mode 100644
+> >> index 0000000..60ac384
+> >> --- /dev/null
+> >> +++ b/toolchain/toolchain-external/Config-headers.in
+> >> @@ -0,0 +1,65 @@
+> >> +choice
+> >> +	bool "External toolchain kernel headers"
+> >> +	depends on BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+> >> +	default BR2_TOOLCHAIN_EXTERNAL_HEADERS_REALLY_OLD
+> >> +
+> > 
+> > Shouldn't there be a help text explaining what this is used for, so as to remove confusion about the fact that the kernel header version was already chosen when the toolchain was built?
 > 
-> On Mon, Feb 17, 2014 at 4:37 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->> > Danomi, All,
->> >
->> > On 2014-02-17 15:21 -0500, Danomi Manchego spake thusly:
->>> >> Nit-picky writing editorial - no issue with the actual content ...
->> >
->> > Thank you!
->> >
->> > My answers below...
->> >
->>> >> On Mon, Feb 17, 2014 at 12:52 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->> > [--SNIP--]
->>>> >> > +[[faq-no-binary-packages]]
->>>> >> > +Why doesn't Buildroot generate binary packages (.deb, .ipkg...)?
->>>> >> > +----------------------------------------------------------------
->>>> >> > +
->>>> >> > +One feature that is often discussed on the Buildroot list, is the
->>> >>
->>> >>  no comma
->> >
->> > Fixed.
->> >
->>>> >> > +the general topic of "package management". To summarize, the idea
->>>> >> > +would be to add some tracking of which Buildroot package installs
->>>> >> > +what files, with the goals of:
->>>> >> > +
->>>> >> > + * Being able to remove files installed by a package when this package
->>>> >> > +   gets unselected from the menuconfig ;
->>> >>
->>> >> ; -> .
-> It seems strange to me that a bulleted list is also considered a
-> complete sentence.  I think of bulleted lists like an unsorted list of
-> items, as opposed to a numbered list where numbers have meaning.  But
-> it's your party, keep as you like.
+>  Note, however, that you can't add help text to a choice. So the only
+> option is to add the text to every choice option.
 
- If you have a colon in front of it and a semicolon at the end, then the
-sentence shouldn't be capitalized. So:
+Wrong. Just try... ;-)
 
-with the goals of:
+>  Ah, the limitations of Kconfig...
 
-* being able to remove files;
-* being able to do the other thing.
+You talking to me? You talking to me?  :-)
 
-
- Regards,
- Arnout
-
-[snip]
+Regards,
+Yann E. MORIN.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
