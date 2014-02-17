@@ -1,83 +1,66 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Feb 2014 00:14:49 +0100
-Subject: [Buildroot] [PATCH 04/10] toolchain/external: add choice to
- select 'AT_LEAST_XXX' header version
-In-Reply-To: <20140217230012.GD3411@free.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 18 Feb 2014 00:24:13 +0100
+Subject: [Buildroot] [PATCH 06/10] package/dvb-apps: requires kernel
+ headers >= 3.3
+In-Reply-To: <53029283.2050605@mind.be>
 References: <cover.1392571021.git.yann.morin.1998@free.fr>
- <74d76e7816e2de0eccb9a24acd0b768c22078dfa.1392571021.git.yann.morin.1998@free.fr>
- <8fdcf8b3-c275-4250-be9c-11bcf4feaa11@email.android.com>
- <530290F4.1060507@mind.be> <20140217230012.GD3411@free.fr>
-Message-ID: <530297E9.4090207@mind.be>
+ <21fff62b035accc9a65fb3dc547956de77c4e27d.1392571021.git.yann.morin.1998@free.fr>
+ <53029283.2050605@mind.be>
+Message-ID: <20140217232413.GE3411@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18/02/14 00:00, Yann E. MORIN wrote:
-> Arnout, All,
-> 
-> On 2014-02-17 23:45 +0100, Arnout Vandecappelle spake thusly:
->> On 16/02/14 21:08, Thomas De Schampheleire wrote:
->>> "Yann E. MORIN" <yann.morin.1998@free.fr> schreef:
->>>> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
->>>>
->>>> Select the appropriate BR2_TOOLCHAIN_HEADERS_AT_LEAST_XXX options for the
->>>> external, custom toolchain backend.
->>>>
->>>> We try to be conservative here, and default to kernel headers 2.6.x.
->>>>
->>>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->>>> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->>>> Cc: Arnout Vandecappelle <arnout@mind.be>
->>>> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
->>>> ---
->>>> toolchain/toolchain-external/Config-headers.in | 65 ++++++++++++++++++++++++++
->>>> toolchain/toolchain-external/Config.in         |  2 +
->>>> 2 files changed, 67 insertions(+)
->>>> create mode 100644 toolchain/toolchain-external/Config-headers.in
->>>>
->>>> diff --git a/toolchain/toolchain-external/Config-headers.in b/toolchain/toolchain-external/Config-headers.in
->>>> new file mode 100644
->>>> index 0000000..60ac384
->>>> --- /dev/null
->>>> +++ b/toolchain/toolchain-external/Config-headers.in
->>>> @@ -0,0 +1,65 @@
->>>> +choice
->>>> +	bool "External toolchain kernel headers"
->>>> +	depends on BR2_TOOLCHAIN_EXTERNAL_CUSTOM
->>>> +	default BR2_TOOLCHAIN_EXTERNAL_HEADERS_REALLY_OLD
->>>> +
->>>
->>> Shouldn't there be a help text explaining what this is used for, so as to remove confusion about the fact that the kernel header version was already chosen when the toolchain was built?
->>
->>  Note, however, that you can't add help text to a choice. So the only
->> option is to add the text to every choice option.
-> 
-> Wrong. Just try... ;-)
+Arnout, All,
 
- Duh, I was so convinced of that... I think I've given that feedback in
-other reviews as well...
-
-
- Regards,
- Arnout
-
-
+On 2014-02-17 23:51 +0100, Arnout Vandecappelle spake thusly:
+> On 16/02/14 18:27, Yann E. MORIN wrote:
+> > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > 
+> > dvb-apps requires linux kernel headers >= 3.3, for:
+> >     SYS_TURBO, SYS_DVBC_ANNEX_A      : introduced in 3.2
+> >     SYS_DVBC_ANNEX_C, DTV_ENUM_DELSYS: introduced in 3.3
+> > 
+> > Fixes:
+> >     http://autobuild.buildroot.net/results/a77/a7786dffa28e5472fbc9c8fe4ab302c84d7a3cb9
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > ---
+> >  package/dvb-apps/Config.in | 5 +++--
+> >  1 file changed, 3 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/package/dvb-apps/Config.in b/package/dvb-apps/Config.in
+> > index ba3ce45..ea0a12f 100644
+> > --- a/package/dvb-apps/Config.in
+> > +++ b/package/dvb-apps/Config.in
+> > @@ -8,13 +8,14 @@ config BR2_PACKAGE_DVB_APPS
+> >  
+> >  if BR2_PACKAGE_DVB_APPS
+> >  
+> > -comment "dvb-apps utils needs a toolchain w/ largefile, threads"
+> > -	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
+> > +comment "dvb-apps utils needs a toolchain w/ largefile, threads, headers >= 3.3"
 > 
->>  Ah, the limitations of Kconfig...
-> 
-> You talking to me? You talking to me?  :-)
-> 
-> Regards,
-> Yann E. MORIN.
-> 
+>  Note that on a 80-column display it already breaks off after threads.
+> How do we deal with that in general? Split over two comments, or ignore?
 
+I would not like to see multi-line comments.
+
+I am of the opinion that we do our best to work with small terminals,
+but do not be over-zealous on enforcing this.
+
+After all, we're in the third millenium, now. 80-char-wide terminals are
+so second millenium! :-)
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
