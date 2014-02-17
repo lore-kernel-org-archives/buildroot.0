@@ -1,42 +1,212 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 17 Feb 2014 23:47:19 +0100
-Subject: [Buildroot] [PATCH 05/10] toolchain/external: add choice to
- select 'AT_LEAST_XXX' header version
-In-Reply-To: <c5ba824bdc6dd9631a39cf3755a9ffecdf44deab.1392571021.git.yann.morin.1998@free.fr>
-References: <cover.1392571021.git.yann.morin.1998@free.fr>
- <c5ba824bdc6dd9631a39cf3755a9ffecdf44deab.1392571021.git.yann.morin.1998@free.fr>
-Message-ID: <53029177.3050006@mind.be>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Mon, 17 Feb 2014 17:48:20 -0500
+Subject: [Buildroot] [PATCH 1/1] manual/faq: add section about why no
+ binary packages
+In-Reply-To: <20140217213729.GC3411@free.fr>
+References: <cover.1392659250.git.yann.morin.1998@free.fr>
+ <430595ea81c22aef392d3aec25cc93ef9af7bd47.1392659250.git.yann.morin.1998@free.fr>
+ <CANxTyt68QiKO_qyqkUtQ5wHHtA8xuTk18uf6e9jatLZ-AK24UA@mail.gmail.com>
+ <20140217213729.GC3411@free.fr>
+Message-ID: <CANxTyt5-j5636R=1KY5uNyvEDRHHwUNz76VaaeMjjK67Qw8OTw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16/02/14 18:27, Yann E. MORIN wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> Select the appropriate BR2_TOOLCHAIN_HEADERS_AT_LEAST_XXX options for the
-> external, pre-defined toolchains.
-> 
-> Also annotate those toolchain with older-than-3.0 headers.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Yann,
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+On Mon, Feb 17, 2014 at 4:37 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Danomi, All,
+>
+> On 2014-02-17 15:21 -0500, Danomi Manchego spake thusly:
+>> Nit-picky writing editorial - no issue with the actual content ...
+>
+> Thank you!
+>
+> My answers below...
+>
+>> On Mon, Feb 17, 2014 at 12:52 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> [--SNIP--]
+>> > +[[faq-no-binary-packages]]
+>> > +Why doesn't Buildroot generate binary packages (.deb, .ipkg...)?
+>> > +----------------------------------------------------------------
+>> > +
+>> > +One feature that is often discussed on the Buildroot list, is the
+>>
+>>  no comma
+>
+> Fixed.
+>
+>> > +the general topic of "package management". To summarize, the idea
+>> > +would be to add some tracking of which Buildroot package installs
+>> > +what files, with the goals of:
+>> > +
+>> > + * Being able to remove files installed by a package when this package
+>> > +   gets unselected from the menuconfig ;
+>>
+>> ; -> .
 
+It seems strange to me that a bulleted list is also considered a
+complete sentence.  I think of bulleted lists like an unsorted list of
+items, as opposed to a numbered list where numbers have meaning.  But
+it's your party, keep as you like.
 
- Regards,
- Arnout
+>
+> I am not so sure: this is a list, and to me the second bullet-point is
+> included in that sentence.
+>
+>> > + * Ultimately, be able to generate binary packages (ipk or other
+>> > +   format) that can be installed on the target without re-generating a
+>> > +   new root filesystem image.
+>>
+>> There's some tense inconsistency here between the first point ("Being
+>> able to...") and the second ("be able to...")
+>
+> Fixed.
+>
+>> > +In general, most people think it is easy to do: just track which package
+>> > +installed what and remove it when the package is unselected. However, it
+>> > +is much more complicated than that:
+>> > +
+>> > + * It is not only about the +target/+ directory, but also the sysroot in
+>> > +   +host/usr/<tuple>/sysroot+ and the +host/+ directory itself. All files
+>> > +   installed in those directories by various packages must be tracked.
+>> > +
+>> > + * When a package is removed, it is not sufficient to remove just the
+>> > +   files it installed. One must also remove all its reverse
+>> > +   dependencies (i.e packages relying on it) and rebuild all those
+>> > +   packages. For example, package A depends optionally on the OpenSSL
+>> > +   library. Both are selected, and Buildroot is built. Package A is
+>> > +   built with crypto support using OpenSSL. Later on, OpenSSL gets
+>> > +   unselected from the configuration, but package A remains (since
+>>
+>> remains (since ,,, possible).  ->   remains.  (Since ... possible.)
+>
+> The phrase between parentheses is part of the previous sentence, so no
+> upper-case is needed for 'since'.
 
-[snip]
+I did not interpret the parenthetical content as part of the preceding
+sentence - rather it seems like a complete sentence on its own.
+Therefore, I thought that it should be apart from the first sentence,
+with the the period inside the parenthesis.  If the parenthetic
+content is really a part of the preceding sentence and does not stand
+alone, then I would think that the period should be outside of the
+parenthesis - as you originally had it.  But I won't press this point
+any further.
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Danomi -
+
+>
+> However, the english grammar rules dictate that the terminating punctuation
+> be inside the parentheses, not outside. Fixed.
+>
+>> > +   OpenSSL is an optional dependency, this is possible). If you just
+>> > +   remove the OpenSSL files, then the files installed by package A are
+>> > +   broken: they use a library that is no longer present on the
+>> > +   target. Technically, it is possible to do this (the prototype that
+>> > +   Lionel Landwerlin and Thomas Petazzoni have worked on started to do
+>> > +   this), but it is difficult and adds a fair bit of complexity.
+>>
+>> "a fair bit of" may be colloquial.  Maybe change to "a lot of"?
+>
+> Well, I like the turn of phrase, as it emphasises the fact that it is
+> not easy (see eg. http://www.merriam-webster.com/dictionary/fair
+> defintion 10b: moderately numerous, large, or significant).
+>
+>> > + * In addition to the previous problem, there is the case where the
+>> > +   optional dependency is not even known to Buildroot. For example,
+>> > +   package A in version 1.0 never used OpenSSL, but in version 2.0 it
+>> > +   automatically uses OpenSSL if available. If the Buildroot .mk file
+>> > +   hasn't been updated to take this into account, then package A will
+>> > +   not be part of the reverse dependencies of OpenSSL and will not be
+>> > +   removed and rebuilt when OpenSSL is removed. For sure, the .mk file
+>> > +   of package A should be fixed to mention this optional dependency,
+>> > +   but in the mean time, you can have non-reproducible behaviors.
+>> > +
+>> > + * The whole idea is also to allow changes in the menuconfig to be
+>>
+>> Too conversational:  "whole idea".  Maybe "idea" or "implied goal"?
+>
+> I've rephrased that to read:
+>     The request is to also allow changes in the menuconfig [...]
+>
+>> > +   applied on the output directory without having to rebuild
+>> > +   everything from scratch. However, this is very difficult to achieve
+>> > +   in a reliable way: what happens when the suboptions of a package
+>> > +   are changed (we would have to detect this, and rebuild the package
+>> > +   from scratch and potentially all its reverse dependencies), what
+>> > +   happens if toolchain options are changed, etc. At the moment, what
+>> > +   Buildroot does is clear and simple so its behaviour is very
+>> > +   reliable and it is easy to support users. If we start telling users
+>> > +   that the configuration changes done in menuconfig are applied after
+>>
+>> "If we start telling users that" may be too conversational.  Maybe "If
+>> we claim that"?
+>
+> I've rephrased that to read:
+>     If configuration changes done in menuconfig are applied after the
+>     next make [...]
+>
+>> > +   the next make, then it has to work correctly and properly in all
+>> > +   situations, and not have some bizarre corner cases. We fear bug
+>> > +   reports like "I have enabled package A, B and C, then ran make,
+>
+> I've rephrased "We fear bug reports like [...]" to read:
+>     The risk is to get bug reports like [...]
+>
+>> > +   then disabled package C and enabled package D and ran make, then
+>> > +   re-enabled package C and enabled package E and then there is a
+>> > +   build failure". Or worse "I did some configuration, then built,
+>> > +   then did some changes, built, some more changes, built, some more
+>> > +   changes, built, and now it fails, but I don't remember all the
+>> > +   changes I did and in which order". This will be impossible to
+>> > +   support.
+>> > +
+>> > +For all these reasons, the conclusion is that adding tracking of
+>> > +installed files to remove them when the package is unselected, or to
+>> > +generate a repository of binary packages, is something that is very
+>> > +hard to achieve reliably and will add a lot of complexity.
+>> > +
+>> > +On this matter, the Buildroot developpers make these position statements:
+>>
+>> developpers -> developers
+>
+> Fixed.
+>
+>> > + * Buildroot strives at making it easy to generate a root filesystem
+>>
+>> strives at making  ->  strives to make
+>
+> Fixed.
+>
+>> > +   (hence the name, by the way). That is what we want to make Buildroot
+>> > +   good at: building root filesystems.
+>> > +
+>> > + * Buildroot is not meant to be a distribution (or rather, a distribution
+>> > +   generator). It is the opinion of most Buildroot developers that this
+>> > +   is not a goal we should pursue. We believe that there are other tools
+>> > +   better suited to generate a distro than Buildroot is. For example,
+>>
+>> than Buildroot is.  ->  than Buildroot.
+>
+> In fact, not. This is a (double?) ellipsis of the adjectival clause
+> 'suited to generate a distro', ellipsis which stands for (the parts
+> between {} are the two ellipsises):
+>     [...], than Buildroot is {suited to {generate a distro}}.
+>
+> If there were no adjectival clause, we would write:
+>     There are other tools better than Buildroot.
+>
+> Thanks for the review!
+>
+> Regards,
+> Yann E. MORIN.
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
