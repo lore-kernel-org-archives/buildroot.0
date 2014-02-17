@@ -1,64 +1,66 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Mon, 17 Feb 2014 15:37:27 +0100
-Subject: [Buildroot] [PATCH 2/2] systemd: enable required kernel
-	features.
-In-Reply-To: <20140217115721.18895bbb@skate>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 17 Feb 2014 15:37:45 +0100
+Subject: [Buildroot] [PATCH 1/2] udev: update udev to new virtual
+ package infra.
+In-Reply-To: <20140217143311.GA4920@pc-eric>
 References: <1392632536-16714-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1392632536-16714-3-git-send-email-eric.le.bihan.dev@free.fr>
- <20140217115721.18895bbb@skate>
-Message-ID: <20140217143726.GB4920@pc-eric>
+ <1392632536-16714-2-git-send-email-eric.le.bihan.dev@free.fr>
+ <20140217114906.5b6aab4a@skate> <20140217143311.GA4920@pc-eric>
+Message-ID: <20140217153745.1e5683e9@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+Dear Eric Le Bihan,
 
-On Mon, Feb 17, 2014 at 11:57:21AM +0100, Thomas Petazzoni wrote:
-> Dear Eric Le Bihan,
->
-> On Mon, 17 Feb 2014 11:22:16 +0100, Eric Le Bihan wrote:
->
-> > diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-> > index eacc23c..716da2c 100644
-> > --- a/package/systemd/Config.in
-> > +++ b/package/systemd/Config.in
-> > @@ -26,8 +26,16 @@ config BR2_PACKAGE_SYSTEMD
-> >  	  elaborate transactional dependency-based service control logic.
-> >  	  It can work as a drop-in replacement for sysvinit.
+On Mon, 17 Feb 2014 15:33:13 +0100, Eric Le Bihan wrote:
+
+> > Why are we doing this check in UDEV_CONFIGURE_CMDS ? I believe we can
+> > simply do:
 > >
-> > -	  Systemd requires a Linux kernel >= 3.0, with inotify, devtmpfs,
-> > -	  tmpfs vfs and tmpfs POSIX ACL enabled.
-> > +	  Systemd requires a Linux kernel >= 3.0.
-> > +
-> > +	  The following features will be enabled in the kernel:
-> > +
-> > +	  - CONFIG_CGROUPS
-> > +	  - CONFIG_INOTIFY_USER
-> > +	  - CONFIG_FHANDLE
-> > +	  - CONFIG_AUTOFS4_FS
-> > +	  - CONFIG_TMPFS_POSIX_ACL
-> > +	  - CONFIG_TMPFS_XATTR
->
-> This formulation is not correct for people who build their kernel
-> outside of Buildroot (while the earlier formulation worked for both
-> situations).
->
-> What about something like:
->
-> 	  systemd requires the following options to be enabled in the
-> 	  kernel:
->
-> 	   - CONFIG_<foo>
-> 	   - CONFIG_<bar>
->
-> 	  These options will be automatically enabled by Buildroot if
-> 	  it is responsible for building the kernel. Otherwise, if you
-> 	  are building your kernel outside of Buildroot, make sure
-> 	  these options are enabled.
->
-Thanks for the suggestion. I'll add it (the more information, the better).
+> > ifeq ($(<foo>_DEPENDENCIES),)
+> > $(error No <foo> implementation selected)
+> > endif
+> I followed the example in package/opengl/libegl/libegl.mk, but I mixed the
+> Makefile control function $(error text...) and some Shell script without
+> thinking...
+> 
+> I will revert it to the pure shell version to be coherent.
 
-Best regards,
-ELB
+I guess you mean "to the pure make version", according to what you say
+below, right?
+
+> With the <foo>_CONFIGURE_CMDS method, we go through all the dummy steps, and
+> this is very verbose:
+> 
+>   >>> udev undefined Extracting
+>   >>> udev undefined Patching
+>   >>> udev undefined Configuring
+>   echo "No Udev implementation selected. Configuration error."
+>   No Udev implementation selected. Configuration error.
+>   exit 1
+>   make: *** [/home/eric/build/elebihan/demo-systemd/arm/build/udev-undefined/.stamp_configured] Erreur 1
+> 
+> With the pure Makefile version, the error message is clearer:
+> 
+>   package/udev/udev.mk:11: *** No Udev implementation selected. Configuration error. Stop.
+
+Yes, I believe this is better. And the message is given at the very
+beginning of the build, not when udev starts to be built, which is also
+nicer.
+
+> I find it better. If it suits everyone, I can propose a patch to convert all
+> the virtual packages to it and re-send my tutorial patch about virtual
+> package.
+
+That would be really great!
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
