@@ -1,54 +1,84 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 17 Feb 2014 09:03:54 +0100
-Subject: [Buildroot] [PATCH 1/6] toolchain: introduce a toolchain knob
- for NPTL
-In-Reply-To: <5301B63A.5000304@mind.be>
-References: <1392297727-17627-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1392297727-17627-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <5301B63A.5000304@mind.be>
-Message-ID: <20140217090354.1a2b5c73@skate>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 17 Feb 2014 09:07:29 +0100
+Subject: [Buildroot] [PATCH 04/10] toolchain/external: add choice to
+ select 'AT_LEAST_XXX' header version
+In-Reply-To: <20140216204721.GD3417@free.fr>
+References: <cover.1392571021.git.yann.morin.1998@free.fr>
+ <74d76e7816e2de0eccb9a24acd0b768c22078dfa.1392571021.git.yann.morin.1998@free.fr>
+ <8fdcf8b3-c275-4250-be9c-11bcf4feaa11@email.android.com>
+ <20140216204721.GD3417@free.fr>
+Message-ID: <CAAXf6LVOiOQ1jwWX4wT-NjB3gnE=YrroKMhjwsn9Cxa4F=9o5Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+On Sun, Feb 16, 2014 at 9:47 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Thomas, All,
+>
+> On 2014-02-16 21:08 +0100, Thomas De Schampheleire spake thusly:
+>> "Yann E. MORIN" <yann.morin.1998@free.fr> schreef:
+>> >From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>> >
+>> >Select the appropriate BR2_TOOLCHAIN_HEADERS_AT_LEAST_XXX options for the
+>> >external, custom toolchain backend.
+>> >
+>> >We try to be conservative here, and default to kernel headers 2.6.x.
+>> >
+>> >Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>> >Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>> >Cc: Arnout Vandecappelle <arnout@mind.be>
+>> >Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+>> >---
+>> > toolchain/toolchain-external/Config-headers.in | 65 ++++++++++++++++++++++++++
+>> > toolchain/toolchain-external/Config.in         |  2 +
+>> > 2 files changed, 67 insertions(+)
+>> > create mode 100644 toolchain/toolchain-external/Config-headers.in
+>> >
+>> >diff --git a/toolchain/toolchain-external/Config-headers.in b/toolchain/toolchain-external/Config-headers.in
+>> >new file mode 100644
+>> >index 0000000..60ac384
+>> >--- /dev/null
+>> >+++ b/toolchain/toolchain-external/Config-headers.in
+>> >@@ -0,0 +1,65 @@
+>> >+choice
+>> >+    bool "External toolchain kernel headers"
+>> >+    depends on BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+>> >+    default BR2_TOOLCHAIN_EXTERNAL_HEADERS_REALLY_OLD
+>> >+
+>>
+>> Shouldn't there be a help text explaining what this is used for, so as
+>> to remove confusion about the fact that the kernel header version was
+>> already chosen when the toolchain was built?
+>
+> I'm not sure I entirely grok your comment. This choice is only visible
+> for external toolchains, not for the internal backend, so there is not
+> two choices to set the kernel headers version.
 
-On Mon, 17 Feb 2014 08:11:54 +0100, Arnout Vandecappelle wrote:
+True, but suppose the user did make the externel toolchain himself,
+for example with crosstool-ng. While creating the toolchain, he did
+get the question of which headers to use already, so he/she may think
+'Huh? Why do I have to choose it again, and what will happen if I
+select a newer version here?"
 
->  I think there is very little reason left to use NPTL on archs that
+>
+> However, I can indeed add a help entry like that one:
+>
+>     help
+>       Set to the kernel headers version that were used to build
+>       the external toolchain.
+>
+>       This is used to hide/show some packages that have strict
+>       requirements on the version of kernel headers.
+>
+> What do you think about that? Does it answers your concerns?
 
-I guess you wanted to say "to *NOT* use NPTL".
-
-> support it, isn't there? So I would first remove the option completely
-> for these architectures. That would also make adding a comment
-> unnecessary (since it becomes an architecture feature rather than a
-> toolchain option).
-
-While I definitely agree for the internal toolchain backend, I don't
-think this applies nicely with the external toolchain backend. We do
-not control how the external toolchains are built, and it is perfectly
-possible to build a non-NPTL toolchain on a NPTL-supported architecture
-with Crosstool-NG for example.
-
-That being said, our choice could simply be to not support these cases
-at all, and check in the external toolchain backend that the toolchain
-has NPTL support if the architecture is supposed to support it.
-
-However, this kind of strategy might fail quite quickly for "growing"
-architectures. For example, ARC currently does not have NPTL support,
-but since they appear to be quite active, maybe they will implement
-NPTL support at some point. And at this moment we will have a range of
-stable, well-tested toolchains that are non-NPTL, and the possibility
-of building NPTL-capable, but not fully tested toolchains.
-
-Thoughts?
+Yes, thanks.
+Maybe you could also add that if the user is unsure about the exact
+version, it's 'safer' to specify an older version than a newer one.
+And maybe a way of determining the header version used in a toolchain,
+in case the user does not know it.
 
 Best regards,
-
 Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
