@@ -1,24 +1,51 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Mon, 17 Feb 2014 11:41:06 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-02-16
-In-Reply-To: <20140217073009.1BAB9101553@stock.ovh.net>
-References: <20140217073009.1BAB9101553@stock.ovh.net>
-Message-ID: <CAHkwnC9isNi5hT=j6nOPQnvur6S_o6sBMqm8jpyUPZ4m1iXQ9A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 17 Feb 2014 11:44:37 +0100
+Subject: [Buildroot] [PATCH 04/10] toolchain/external: add choice to
+ select 'AT_LEAST_XXX' header version
+In-Reply-To: <CAAXf6LVfv7WWYMykb_FC_BRJxkNxabOJRTPxh-m+vuJSH6rG=w@mail.gmail.com>
+References: <cover.1392571021.git.yann.morin.1998@free.fr>
+ <74d76e7816e2de0eccb9a24acd0b768c22078dfa.1392571021.git.yann.morin.1998@free.fr>
+ <8fdcf8b3-c275-4250-be9c-11bcf4feaa11@email.android.com>
+ <20140216204721.GD3417@free.fr>
+ <CAAXf6LVOiOQ1jwWX4wT-NjB3gnE=YrroKMhjwsn9Cxa4F=9o5Q@mail.gmail.com>
+ <20140217113023.7e5a0845@skate>
+ <CAAXf6LVfv7WWYMykb_FC_BRJxkNxabOJRTPxh-m+vuJSH6rG=w@mail.gmail.com>
+Message-ID: <20140217114437.06ee9758@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Feb 17, 2014 at 8:30 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Build statistics for 2014-02-16
-<snip>
->       i686 |            host-libxslt-1.1.28 | NOK | http://autobuild.buildroot.net/results/39202af201a74e4e173c21062ae268bbd1210231/
+Dear Thomas De Schampheleire,
 
-I will try to look into this.
+On Mon, 17 Feb 2014 11:32:14 +0100, Thomas De Schampheleire wrote:
 
-Regards
+> >> Maybe you could also add that if the user is unsure about the exact
+> >> version, it's 'safer' to specify an older version than a newer one.
+> >> And maybe a way of determining the header version used in a toolchain,
+> >> in case the user does not know it.
+> >
+> > We should simply have a check that ensures the selection is correct.
+> 
+> This was probably answered before, but if we can detect that the
+> selection is incorrect, why don't we set the right value
+> automatically?
+
+Because we need the values within Kconfig, to show/not show the
+different packages. And while we are in Kconfig, we cannot run commands
+to test the toolchain that has just been selected by the user. So we
+need to ask the user what his toolchain looks like, in order to have
+the correct dependencies for packages. And then at build time, we can
+check that the configuration selected for the toolchain actually
+matches the provided toolchain.
+
+This has already been discussed a million times I guess :-)
+
+Best regards,
+
+Thomas
 -- 
-Fabio Porcedda
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
