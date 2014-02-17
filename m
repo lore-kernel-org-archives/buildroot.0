@@ -1,61 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 17 Feb 2014 11:57:21 +0100
-Subject: [Buildroot] [PATCH 2/2] systemd: enable required kernel
- features.
-In-Reply-To: <1392632536-16714-3-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1392632536-16714-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1392632536-16714-3-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <20140217115721.18895bbb@skate>
+From: Mike Zick <minimod@morethan.org>
+Date: Mon, 17 Feb 2014 05:42:28 -0600
+Subject: [Buildroot] [PATCH 1/1] iso9660: Added support for overlay
+ directories
+In-Reply-To: <5301B4E9.60902@mind.be>
+References: <1391549148-31993-1-git-send-email-martin@barkynet.com>
+ <5301B4E9.60902@mind.be>
+Message-ID: <20140217054228.20297e71@core2quad.morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Eric Le Bihan,
+On Mon, 17 Feb 2014 08:06:17 +0100
+Arnout Vandecappelle <arnout@mind.be> wrote:
 
-On Mon, 17 Feb 2014 11:22:16 +0100, Eric Le Bihan wrote:
+> On 04/02/14 22:25, Martin Bark wrote:
+> > This patch adds a variable BR2_TARGET_ROOTFS_ISO9660_OVERLAY that
+> > is similar to BR2_ROOTFS_OVERLAY except the files are placed in the
+> > iso9660 file system.
+> > 
+>
 
-> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-> index eacc23c..716da2c 100644
-> --- a/package/systemd/Config.in
-> +++ b/package/systemd/Config.in
-> @@ -26,8 +26,16 @@ config BR2_PACKAGE_SYSTEMD
->  	  elaborate transactional dependency-based service control logic.
->  	  It can work as a drop-in replacement for sysvinit.
->  
-> -	  Systemd requires a Linux kernel >= 3.0, with inotify, devtmpfs,
-> -	  tmpfs vfs and tmpfs POSIX ACL enabled.
-> +	  Systemd requires a Linux kernel >= 3.0.
-> +
-> +	  The following features will be enabled in the kernel:
-> +
-> +	  - CONFIG_CGROUPS
-> +	  - CONFIG_INOTIFY_USER
-> +	  - CONFIG_FHANDLE
-> +	  - CONFIG_AUTOFS4_FS
-> +	  - CONFIG_TMPFS_POSIX_ACL
-> +	  - CONFIG_TMPFS_XATTR
+Since Buildroot only builds root filesystems for the target device,
+it would probably be safe to drop the "TARGET_" distinction from
+that variable name.
 
-This formulation is not correct for people who build their kernel
-outside of Buildroot (while the earlier formulation worked for both
-situations).
+Mike
 
-What about something like:
-
-	  systemd requires the following options to be enabled in the
-	  kernel:
-
-	   - CONFIG_<foo>
-	   - CONFIG_<bar>
-
-	  These options will be automatically enabled by Buildroot if
-	  it is responsible for building the kernel. Otherwise, if you
-	  are building your kernel outside of Buildroot, make sure
-	  these options are enabled.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> > Signed-off-by: Martin Bark <martin@barkynet.com>  
+> 
+> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> 
+>  I haven't tried it but it looks obviously-correct.
