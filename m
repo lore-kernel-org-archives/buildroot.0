@@ -1,44 +1,76 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 17 Feb 2014 23:57:06 +0100
-Subject: [Buildroot] [PATCH 1/6] toolchain: introduce a toolchain knob
- for NPTL
-In-Reply-To: <5302884F.9020402@mind.be>
-References: <1392297727-17627-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1392297727-17627-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <5302884F.9020402@mind.be>
-Message-ID: <20140217235706.3be4e482@skate>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 18 Feb 2014 00:01:22 +0100
+Subject: [Buildroot] [PATCH 1/1] manual/faq: add section about why no
+ binary packages
+In-Reply-To: <CANxTyt5-j5636R=1KY5uNyvEDRHHwUNz76VaaeMjjK67Qw8OTw@mail.gmail.com>
+References: <cover.1392659250.git.yann.morin.1998@free.fr>
+ <430595ea81c22aef392d3aec25cc93ef9af7bd47.1392659250.git.yann.morin.1998@free.fr>
+ <CANxTyt68QiKO_qyqkUtQ5wHHtA8xuTk18uf6e9jatLZ-AK24UA@mail.gmail.com>
+ <20140217213729.GC3411@free.fr>
+ <CANxTyt5-j5636R=1KY5uNyvEDRHHwUNz76VaaeMjjK67Qw8OTw@mail.gmail.com>
+Message-ID: <530294C2.40400@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
-
-On Mon, 17 Feb 2014 23:08:15 +0100, Arnout Vandecappelle wrote:
-> On 13/02/14 14:22, Thomas Petazzoni wrote:
-> > +config BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_NPTL
-> > +	bool "Toolchain has NPTL threads support?"
-> > +	depends on BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS
-> > +	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
-> > +	default y
-> > +	help
-> > +	  Select this option if your external toolchain uses the NPTL
-> > +	  (Native Posix Thread Library) implementation of Posix
-> > +	  threads. If you don't know, leave the default value,
-> > +	  Buildroot will tell you if it's correct or not.
+On 17/02/14 23:48, Danomi Manchego wrote:
+> Yann,
 > 
->  Where exactly does buildroot check if the external toolchain has NPTL?
+> On Mon, Feb 17, 2014 at 4:37 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>> > Danomi, All,
+>> >
+>> > On 2014-02-17 15:21 -0500, Danomi Manchego spake thusly:
+>>> >> Nit-picky writing editorial - no issue with the actual content ...
+>> >
+>> > Thank you!
+>> >
+>> > My answers below...
+>> >
+>>> >> On Mon, Feb 17, 2014 at 12:52 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>> > [--SNIP--]
+>>>> >> > +[[faq-no-binary-packages]]
+>>>> >> > +Why doesn't Buildroot generate binary packages (.deb, .ipkg...)?
+>>>> >> > +----------------------------------------------------------------
+>>>> >> > +
+>>>> >> > +One feature that is often discussed on the Buildroot list, is the
+>>> >>
+>>> >>  no comma
+>> >
+>> > Fixed.
+>> >
+>>>> >> > +the general topic of "package management". To summarize, the idea
+>>>> >> > +would be to add some tracking of which Buildroot package installs
+>>>> >> > +what files, with the goals of:
+>>>> >> > +
+>>>> >> > + * Being able to remove files installed by a package when this package
+>>>> >> > +   gets unselected from the menuconfig ;
+>>> >>
+>>> >> ; -> .
+> It seems strange to me that a bulleted list is also considered a
+> complete sentence.  I think of bulleted lists like an unsorted list of
+> items, as opposed to a numbered list where numbers have meaning.  But
+> it's your party, keep as you like.
 
-In the patch you're replying to, look at the chunk that modifies
-toolchain/helpers.mk:
+ If you have a colon in front of it and a semicolon at the end, then the
+sentence shouldn't be capitalized. So:
 
-+	$(call check_uclibc_feature,__UCLIBC_HAS_THREADS_NATIVE__,BR2_TOOLCHAIN_HAS_THREADS_NPTL,$${UCLIBC_CONFIG_FILE},NPTL thread support) ;\
+with the goals of:
 
-Thanks,
+* being able to remove files;
+* being able to do the other thing.
 
-Thomas
+
+ Regards,
+ Arnout
+
+[snip]
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
