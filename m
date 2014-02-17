@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 17 Feb 2014 11:49:06 +0100
-Subject: [Buildroot] [PATCH 1/2] udev: update udev to new virtual
- package infra.
-In-Reply-To: <1392632536-16714-2-git-send-email-eric.le.bihan.dev@free.fr>
+Date: Mon, 17 Feb 2014 11:57:21 +0100
+Subject: [Buildroot] [PATCH 2/2] systemd: enable required kernel
+ features.
+In-Reply-To: <1392632536-16714-3-git-send-email-eric.le.bihan.dev@free.fr>
 References: <1392632536-16714-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1392632536-16714-2-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <20140217114906.5b6aab4a@skate>
+ <1392632536-16714-3-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <20140217115721.18895bbb@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,33 +14,45 @@ To: buildroot@busybox.net
 
 Dear Eric Le Bihan,
 
-On Mon, 17 Feb 2014 11:22:15 +0100, Eric Le Bihan wrote:
+On Mon, 17 Feb 2014 11:22:16 +0100, Eric Le Bihan wrote:
 
-> -ifeq ($(BR2_PACKAGE_EUDEV),y)
-> -UDEV_DEPENDENCIES += eudev
-> -endif
-> -
-> -ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-> -UDEV_DEPENDENCIES += systemd
-> -endif
-> +UDEV_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_UDEV))
+> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+> index eacc23c..716da2c 100644
+> --- a/package/systemd/Config.in
+> +++ b/package/systemd/Config.in
+> @@ -26,8 +26,16 @@ config BR2_PACKAGE_SYSTEMD
+>  	  elaborate transactional dependency-based service control logic.
+>  	  It can work as a drop-in replacement for sysvinit.
 >  
->  ifeq ($(UDEV_DEPENDENCIES),)
->  define UDEV_CONFIGURE_CMDS
-> -	echo "No Udev implementation selected. Configuration error."
-> +	$(error No Udev implementation selected. Configuration error)
->  	exit 1
->  endef
->  endif
+> -	  Systemd requires a Linux kernel >= 3.0, with inotify, devtmpfs,
+> -	  tmpfs vfs and tmpfs POSIX ACL enabled.
+> +	  Systemd requires a Linux kernel >= 3.0.
+> +
+> +	  The following features will be enabled in the kernel:
+> +
+> +	  - CONFIG_CGROUPS
+> +	  - CONFIG_INOTIFY_USER
+> +	  - CONFIG_FHANDLE
+> +	  - CONFIG_AUTOFS4_FS
+> +	  - CONFIG_TMPFS_POSIX_ACL
+> +	  - CONFIG_TMPFS_XATTR
 
-Why are we doing this check in UDEV_CONFIGURE_CMDS ? I believe we can
-simply do:
+This formulation is not correct for people who build their kernel
+outside of Buildroot (while the earlier formulation worked for both
+situations).
 
-ifeq ($(<foo>_DEPENDENCIES),)
-$(error No <foo> implementation selected)
-endif
+What about something like:
 
-Best regards,
+	  systemd requires the following options to be enabled in the
+	  kernel:
+
+	   - CONFIG_<foo>
+	   - CONFIG_<bar>
+
+	  These options will be automatically enabled by Buildroot if
+	  it is responsible for building the kernel. Otherwise, if you
+	  are building your kernel outside of Buildroot, make sure
+	  these options are enabled.
 
 Thomas
 -- 
