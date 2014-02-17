@@ -1,79 +1,274 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 17 Feb 2014 08:30:08 +0100 (CET)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-02-16
-Message-ID: <20140217073009.1BAB9101553@stock.ovh.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 17 Feb 2014 07:47:40 +0100
+Subject: [Buildroot] [PATCH v4 1/2] add option for iso9660 filesystem
+ image
+In-Reply-To: <1391557760-22893-1-git-send-email-jean.sorgemoel@laposte.net>
+References: <1376644934-4302-1-git-send-email-jean.sorgemoel@laposte.net>
+ <1391557760-22893-1-git-send-email-jean.sorgemoel@laposte.net>
+Message-ID: <5301B08C.5010307@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2014-02-16
-===============================
+ Hi Jean,
 
-        success : 94 
-       failures : 27 
-       timeouts : 0  
-          TOTAL : 121
+ Thanks for your update! Sorry for the late response, the 2014.02 release
+is keeping us busy...
 
-Classification of failures by reason
-====================================
+ Your patch looks pretty good, even though I still have many (rather
+small) comments.
 
-                      icu-51.2 | 2 
-        ltp-testsuite-20130904 | 2 
-                     vlc-2.1.2 | 2 
-                  thrift-0.9.1 | 2 
-               qt5script-5.2.0 | 1 
-             iputils-s20121011 | 1 
-           xapp_bdftopcf-1.0.3 | 1 
-               alsa-lib-1.0.26 | 1 
-            gst-ffmpeg-0.10.13 | 1 
-           host-libxslt-1.1.28 | 1 
-                  libogg-1.3.0 | 1 
-                     php-5.5.8 | 1 
-              gst1-libav-1.2.2 | 1 
-                    fltk-1.3.2 | 1 
-                 mplayer-1.1.1 | 1 
-              e2fsprogs-1.42.9 | 1 
-                  python-2.7.3 | 1 
-             gstreamer-0.10.36 | 1 
-       gst1-plugins-base-1.2.2 | 1 
-              gstreamer1-1.2.2 | 1 
-                 qt5base-5.2.0 | 1 
-                aiccu-20070115 | 1 
-                    crda-1.1.3 | 1 
+On 05/02/14 00:49, jean.sorgemoel at laposte.net wrote:
+> From: jean <jean.sorgemoel@laposte.net>
+> 
+> detail : (module fs/iso9660)
+>   option to copy file(s) on iso
+>   option to create iso with long filenames (Joliet format)
+>   option to create iso with POSIX file system (file mode, uid, gid, ...)
+>   define volume label
+>   define parameter input charset (for genisoimage)
+> 
+> Signed-off-by: jean <jean.sorgemoel@laposte.net>
 
-Detail of failures
-===================
+ Please use your full name for Signed-off-by. Remember that Signed-off-by
+is a legal statement, so using anything other than your full real name is
+pointless.
 
-     avr32 |                 aiccu-20070115 | NOK | http://autobuild.buildroot.net/results/ee0bc10681e915257c0bc160c345c474ba1bd5df/
-      i686 |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/3f98efed297d3c6dde7aa0b3c55be779d76fa2df/
-     nios2 |                     crda-1.1.3 | NOK | http://autobuild.buildroot.net/results/15656ef0187b0a8db6c66fc7a7fcb58a99999fa1/
-      bfin |               e2fsprogs-1.42.9 | NOK | http://autobuild.buildroot.net/results/1f1b3962cf6326f893f7e39bd0c460d8ec5f9f7f/
-    x86_64 |                     fltk-1.3.2 | NOK | http://autobuild.buildroot.net/results/09ee0dc0c67e6e8d58bbd1de2ffa0c9c2cc2b972/
-    x86_64 |             gst-ffmpeg-0.10.13 | NOK | http://autobuild.buildroot.net/results/fdc3eabd63d0b15c47496e993443a6936a3de898/
-    x86_64 |               gst1-libav-1.2.2 | NOK | http://autobuild.buildroot.net/results/ec70885bfbb8f126116f885c3f5c0d30b06a42e6/
-   aarch64 |        gst1-plugins-base-1.2.2 | NOK | http://autobuild.buildroot.net/results/2fddb0ec74b5183f79a4a591bf9484b2cb37e26e/
-microblaze |              gstreamer-0.10.36 | NOK | http://autobuild.buildroot.net/results/b23129613f1849ba07ea9cddd83e43bd918a819b/
-microblaze |               gstreamer1-1.2.2 | NOK | http://autobuild.buildroot.net/results/70ba92b5673f5f14c2fab1b0ca7129f5f9e18637/
-      i686 |            host-libxslt-1.1.28 | NOK | http://autobuild.buildroot.net/results/39202af201a74e4e173c21062ae268bbd1210231/
-      bfin |                       icu-51.2 | NOK | http://autobuild.buildroot.net/results/f7baae3487e893e484c43b372cb54adf41591e64/
-      bfin |                       icu-51.2 | NOK | http://autobuild.buildroot.net/results/eb8e58afd53155d4edfbd3cb33b0eb76069476cd/
-     avr32 |              iputils-s20121011 | NOK | http://autobuild.buildroot.net/results/e9451cf467d7ae1cf878167be13dcfaa07d81e6f/
-       arc |                   libogg-1.3.0 | NOK | http://autobuild.buildroot.net/results/6529e52f1d48d618702231c6dafcdd34ec8603fd/
-  mips64el |         ltp-testsuite-20130904 | NOK | http://autobuild.buildroot.net/results/61e7650ac417e158ae78cc95ba724e68361a8a96/
-       arm |         ltp-testsuite-20130904 | NOK | http://autobuild.buildroot.net/results/827b6d6a4b8977d6ec26af371babafec344d7c8e/
-      bfin |                  mplayer-1.1.1 | NOK | http://autobuild.buildroot.net/results/109b7c9b575c7362c4982a908a1e3695e7590ebd/
-       arm |                      php-5.5.8 | NOK | http://autobuild.buildroot.net/results/e18eb3520725de2aa2fc6ad653000a29bb9d71ba/
-      i686 |                   python-2.7.3 | NOK | http://autobuild.buildroot.net/results/576d2159894425f8ee9447650c604b825c9ea32c/
-    xtensa |                  qt5base-5.2.0 | NOK | http://autobuild.buildroot.net/results/fa8c86d45128c478ca8426be34eb0bc1df9d58a7/
-       arm |                qt5script-5.2.0 | NOK | http://autobuild.buildroot.net/results/e85152c01d46946f53902115ec662044279eb72c/
-     avr32 |                   thrift-0.9.1 | NOK | http://autobuild.buildroot.net/results/f837440fdf8b3bddfc6cc548902a0453640fa6b4/
-    x86_64 |                   thrift-0.9.1 | NOK | http://autobuild.buildroot.net/results/ff7ab52c3965f9545c197f7552d3bc629b900886/
-       arm |                      vlc-2.1.2 | NOK | http://autobuild.buildroot.net/results/d18a6d3ec44cf254e20e934d84d41c613ff4c900/
-      mips |                      vlc-2.1.2 | NOK | http://autobuild.buildroot.net/results/6e0633294660f29fedfa205362b0b3169f4e2f4b/
-microblaze |            xapp_bdftopcf-1.0.3 | NOK | http://autobuild.buildroot.net/results/db37576b884dfc6b519839bc3b7364062de1feea/
+ In follow-up patches, please include a patch changelog, separated by ---
+from the commit message itself. Alternatively, you can include the
+changelog in a cover letter.
+
+> ---
+>  fs/iso9660/Config.in  |   46 ++++++++++++++++++++++++++++++++++++-
+>  fs/iso9660/iso9660.mk |   61 +++++++++++++++++++++++++++++++++++++------------
+>  2 files changed, 92 insertions(+), 15 deletions(-)
+> 
+> diff --git a/fs/iso9660/Config.in b/fs/iso9660/Config.in
+> index 50b4377..9faa93f 100644
+> --- a/fs/iso9660/Config.in
+> +++ b/fs/iso9660/Config.in
+> @@ -8,10 +8,54 @@ config BR2_TARGET_ROOTFS_ISO9660
+>  	help
+>  	  Build a bootable iso9660 image
+>  
+> +if BR2_TARGET_ROOTFS_ISO9660
+> +
+>  config BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU
+>  	string "Boot menu.lst file"
+> -	depends on BR2_TARGET_ROOTFS_ISO9660
+>  	default "fs/iso9660/menu.lst"
+> +	help
+> +	  Grub configuration
+> +	  Define menu, commands and options for grub
+> +
+> +config BR2_TARGET_ROOTFS_ISO9660_EXTRA_FILES
+> +	string "Extra files copy on image"
+> +	default ""
+> +	help
+> +	  list of file (binary or other) copy directly on iso
+> +	  (separate by space, target directory 'extra')
+> +	  ex. :
+> +	    $(SYSLINUX_BUILDDIR)com32/hdt/hdt.c32
+> +	    $(SYSLINUX_BUILDDIR)com32/modules/reboot.c32
+
+ Why limit this to files only, and why would you put it in the 'extra'
+directory? Better to use the approach of BR2_ROOTFS_OVERLAY. You can also
+reuse its help text:
+
+"""
+  Specify a list of directories that are copied over the iso9660
+  filesystem, next to the kernel and initrd images.
+
+  They are copied as-is into the iso9660 filesystem, excluding files
+  ending with ~ and .git, .svn and .hg directories.
+"""
+
+ The prompt would then be "iso9660 filesystem overlay directories".
+
+> +
+> +config BR2_TARGET_ROOTFS_ISO9660_JOLIET
+> +	bool "Create iso with Joliet format (long filenames)"
+> +	help
+> +	  Generate iso image with Joliet directory records.
+> +	  Use Unicode and each path component can be up 64
+> +	  Unicode characters long.
+> +
+> +config BR2_TARGET_ROOTFS_ISO9660_ROCK_RIDGE
+> +	bool "Create iso with Rock Ridge extensions (POSIX Filesystem)"
+
+ Filesystem -> filesystem
+
+> +	default y
+
+ Why default this to y? It was not y before and it's not needed for the
+default kernel+initrd layout.
+
+> +	help
+> +	  Generate iso image with Rock Ridge directory information,
+> +	  POSIX file system (file mode, uid, gid, ...)
+
+ ... directory information, which makes it a POSIX filesystem...
+
+> +
+> +config BR2_TARGET_ROOTFS_ISO9660_NAME
+> +	string "Volume label"
+> +	default "buildroot"
+
+ I think this should default to empty, like it was before.
+
+> +	help
+> +	  cdrom name
+> +
+> +config BR2_TARGET_ROOTFS_ISO9660_INPUT_CHARSET
+> +	string "Define parameter input charset (genisoimage)"
+> +	default "iso8859-15"
+> +	help
+> +	  Defines the local character set you are using on your
+> +	  machine.
+> +	  (see program genisoimage : genisoimage -input-charset help)
+
+ This description and its default don't seem appropriate to me.
+
+	string "Input filename character encoding"
+	default "utf8"
+	help
+	  The character encoding with which the names of the files that
+	  will be copied into the iso9660 filesystem are encoded. For the
+	  RockRidge directory, the same encoding will be used. For the
+	  Joliet directory, it will be converted to UTF-16.
+
+ However, I wonder how useful this option is. Why would you put files
+with non-ASCII characters in the name into the iso9660 filesystem? Also,
+does this make sense at all unless either RockRidge or Joliet is used?
+
+> +
+> +endif # BR2_TARGET_ROOTFS_ISO9660
+>  
+>  comment "iso image needs a Linux kernel to be built"
+>  	depends on BR2_i386 || BR2_x86_64
+> diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+> index a6a9c95..2f20f5b 100644
+> --- a/fs/iso9660/iso9660.mk
+> +++ b/fs/iso9660/iso9660.mk
+> @@ -9,32 +9,57 @@
+>  
+>  ISO9660_TARGET_DIR = $(BUILD_DIR)/iso9660
+>  ISO9660_BOOT_MENU := $(call qstrip,$(BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU))
+
+ Since you define BOOTLOADER_SRC_CFG below, this variable has become
+redundant.
+
+> +ISO9660_TARGET_DIR_EXTRA = $(ISO9660_TARGET_DIR)/extra
+
+ As I said, I don't see a reason to keep the extra/
+
+> +ISO9660_LIST_EXTRA = $(call qstrip,$(BR2_TARGET_ROOTFS_ISO9660_EXTRA_FILES))
+> +
+> +BOOTLOADER_BIN = $(GRUB_DIR)/stage2/stage2_eltorito
+> +BOOTLOADER_DIR = $(ISO9660_TARGET_DIR)/boot/grub/
+> +BOOTLOADER_SRC_CFG = $(ISO9660_BOOT_MENU)
+> +BOOTLOADER_DST_CFG = $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
+> +KERNEL_DST = $(ISO9660_TARGET_DIR)/kernel
+> +ELTORITO_BOOT = boot/grub/stage2_eltorito
+
+ All these variables should get an ISO9660_ prefix.
+
+>  
+>  $(BINARIES_DIR)/rootfs.iso9660: host-cdrkit host-fakeroot linux rootfs-cpio grub
+>  	@$(call MESSAGE,"Generating root filesystem image rootfs.iso9660")
+> -	mkdir -p $(ISO9660_TARGET_DIR)
+> -	mkdir -p $(ISO9660_TARGET_DIR)/boot/grub
+> -	cp $(GRUB_DIR)/stage2/stage2_eltorito $(ISO9660_TARGET_DIR)/boot/grub/
+> -	cp $(ISO9660_BOOT_MENU) $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
+> +	@mkdir -p $(ISO9660_TARGET_DIR)
+> +	@mkdir -p $(BOOTLOADER_DIR)
+> +	@mkdir -p $(ISO9660_TARGET_DIR_EXTRA)
+> +
+> +	@cp $(BOOTLOADER_BIN) $(BOOTLOADER_DIR)
+> +	@cp $(BOOTLOADER_SRC_CFG) $(BOOTLOADER_DST_CFG)
+> +	@cp $(LINUX_IMAGE_PATH) $(KERNEL_DST)
+> +
+>  ifeq ($(BR2_TARGET_GRUB_SPLASH),)
+> -	$(SED) '/^splashimage/d' $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
+> +	@$(SED) '/^splashimage/d' $(BOOTLOADER_DST_CFG)
+>  else
+> -	cp boot/grub/splash.xpm.gz $(ISO9660_TARGET_DIR)/
+> -endif
+> -	cp $(LINUX_IMAGE_PATH) $(ISO9660_TARGET_DIR)/kernel
+> +	@cp boot/grub/splash.xpm.gz $(ISO9660_TARGET_DIR)/
+> +endif # BR2_TARGET_GRUB_SPLASH
+> +
+>  ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
+> -	$(SED) '/initrd/d'  $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
+> +	@$(SED) '/initrd/d'  $(BOOTLOADER_DST_CFG)
+>  else
+> -	cp $(BINARIES_DIR)/rootfs.cpio$(ROOTFS_CPIO_COMPRESS_EXT) $(ISO9660_TARGET_DIR)/initrd
+> -endif
+> +	@cp $(BINARIES_DIR)/rootfs.cpio$(ROOTFS_CPIO_COMPRESS_EXT) \
+> +		$(ISO9660_TARGET_DIR)/initrd
+> +endif # BR2_TARGET_ROOTFS_INITRAMFS
+> +
+> +	@$(foreach file, $(ISO9660_LIST_EXTRA), \
+> +		cp $(file) $(ISO9660_TARGET_DIR_EXTRA)/ ; )
+
+ This should use rsync:
+
+        @$(foreach d, $(call qstrip,$(BR2_TARGET_ROOTFS_ISO9660_EXTRA)),\
+                $(call MESSAGE,"Copying overlay $(d)"); \
+                rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
+                        --chmod=Du+w --exclude .empty --exclude '*~' \
+                        $(d)/ $(ISO9660_TARGET_DIR)$(sep))
+
+> +
+>  	# Use fakeroot to pretend all target binaries are owned by root
+>  	rm -f $(FAKEROOT_SCRIPT)
+>  	echo "chown -R 0:0 $(ISO9660_TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
+>  	# Use fakeroot so mkisofs believes the previous fakery
+> -	echo "$(HOST_DIR)/usr/bin/genisoimage -R -b boot/grub/stage2_eltorito -no-emul-boot " \
+> -		"-boot-load-size 4 -boot-info-table -o $@ $(ISO9660_TARGET_DIR)" \
+> +	echo "$(HOST_DIR)/usr/bin/genisoimage " \
+> +		"$(GENISOIMAGE_OPTS) " \
+> +		"-b $(ELTORITO_BOOT) " \
+> +		"-no-emul-boot " \
+> +		"-boot-load-size 4 " \
+> +		"-boot-info-table " \
+> +		"-input-charset $(BR2_TARGET_ROOTFS_ISO9660_INPUT_CHARSET) " \
+> +		"-V $(BR2_TARGET_ROOTFS_ISO9660_NAME) " \
+
+ You need to qstrip the variable.
+
+
+ Regards,
+ Arnout
+
+> +		"-o $@ $(ISO9660_TARGET_DIR)" \
+>  		>> $(FAKEROOT_SCRIPT)
+> -	chmod a+x $(FAKEROOT_SCRIPT)
+> +	@chmod a+x $(FAKEROOT_SCRIPT)
+>  	$(HOST_DIR)/usr/bin/fakeroot -- $(FAKEROOT_SCRIPT)
+>  	- at rm -f $(FAKEROOT_SCRIPT)
+>  	- at rm -rf $(ISO9660_TARGET_DIR)
+> @@ -49,3 +74,11 @@ rootfs-iso9660: $(BINARIES_DIR)/rootfs.iso9660
+>  ifeq ($(BR2_TARGET_ROOTFS_ISO9660),y)
+>  TARGETS += rootfs-iso9660
+>  endif
+> +
+> +ifeq ($(BR2_TARGET_ROOTFS_ISO9660_JOLIET),y)
+> +GENISOIMAGE_OPTS += -J
+> +endif
+> +
+> +ifeq ($(BR2_TARGET_ROOTFS_ISO9660_ROCK_RIDGE),y)
+> +GENISOIMAGE_OPTS += -R
+> +endif
+> 
 
 
 -- 
-http://autobuild.buildroot.net
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
