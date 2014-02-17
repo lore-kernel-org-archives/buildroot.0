@@ -1,47 +1,53 @@
-From: Frank Ihle <frank.ihle@hs-offenburg.de>
-Date: Mon, 17 Feb 2014 09:23:43 +0100
-Subject: [Buildroot] Antw: Re: How to get the kernel to mount a rootfs
- without an initramfs ?? (2)
-In-Reply-To: <5301456B.7080504@mind.be>
-References: <52FC9329020000460004A9FA@gwia2.rz.hs-offenburg.de>
- <5301456B.7080504@mind.be>
-Message-ID: <5301D51F020000460004AC30@gwia2.rz.hs-offenburg.de>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 17 Feb 2014 10:51:03 +0100
+Subject: [Buildroot] [PATCH] qtuio: correct install-target/staging when Qt
+ library type is 'static'
+Message-ID: <2f31d28660bef7710aa8.1392630663@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I was thinking the same when I read those lines. But a bad sign may be 
-not the right word, when u-boot is able to handle the SD device. So the 
-kernel just isn't able to find what he actually should. Sadly my time is
- running short and I can't figure out right now what's the problem. 
-Thanks for the help so far.
+If BR2_PACKAGE_QT_STATIC is set, qtuio will not build a .so file, but .a.
+However, the custom INSTALL_TARGET_CMDS and INSTALL_STAGING_CMDS
+unconditionally attempted to copy the .so file.
 
-Kind Regards,
+This commit checks the requested Qt library type and copies the right
+library for each case, taking into account that the static .a file does not
+need to be copied to the target directory.
 
-Frank
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-> I'm not familiar with the Atmel MCI controller, but my gut feeling says
-> that all these zeroes are a bad sign.
->
- > As I said before: you should check the BSP for your board, there is
-> probably something wrong there.
-> 
- > For sure, this issue is not buildroot-related. It's purely kernel-related.
->
->
- > Regards,
- > Arnout
-> 
-> atmel_mci atmel_mci.0: Atmel MCI controller at 0xf0008000 irq 12, 1 slots
-> mmc_host mmc0: card is not present
-> mmc1: clock 0Hz busmode 1 powermode 0 cs 0 Vdd 0 width 0 timing 0
-> atmel_mci atmel_mci.1: Atmel MCI controller at 0xf000c000 irq 26, 1 slots
-> mmc_host mmc1: card is not present
-> 
-> (Yes the card is in the slot ;)
-> [snip]
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140217/08a57dbe/attachment.html>
+---
+ package/qtuio/qtuio.mk |  13 +++++++++++--
+ 1 files changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/package/qtuio/qtuio.mk b/package/qtuio/qtuio.mk
+--- a/package/qtuio/qtuio.mk
++++ b/package/qtuio/qtuio.mk
+@@ -51,13 +51,22 @@ define QTUIO_INSTALL_EXAMPLES
+ endef
+ endif
+ 
++ifeq ($(BR2_PACKAGE_QT_STATIC),y)
++QTUIO_LIBRARY = libqTUIO.a
++else
++QTUIO_LIBRARY = libqTUIO.so*
++define QTUIO_INSTALL_TARGET_LIBRARY
++	cp -dpf $(@D)/lib/$(QTUIO_LIBRARY) $(TARGET_DIR)/usr/lib
++endef
++endif
++
+ define QTUIO_INSTALL_TARGET_CMDS
+-	cp -dpf $(@D)/lib/libqTUIO.so* $(TARGET_DIR)/usr/lib
++	$(QTUIO_INSTALL_TARGET_LIBRARY)
+ 	$(QTUIO_INSTALL_EXAMPLES)
+ endef
+ 
+ define QTUIO_INSTALL_STAGING_CMDS
+-	cp -dpf $(@D)/lib/libqTUIO.so* $(STAGING_DIR)/usr/lib
++	cp -dpf $(@D)/lib/$(QTUIO_LIBRARY) $(STAGING_DIR)/usr/lib
+ endef
+ 
+ $(eval $(generic-package))
