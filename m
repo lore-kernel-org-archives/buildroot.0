@@ -1,56 +1,72 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 17 Feb 2014 13:02:37 +0100
-Subject: [Buildroot] [PATCH 1/1] iso9660: Added support for overlay
-	directories
-In-Reply-To: <20140217054228.20297e71@core2quad.morethan.org>
-References: <1391549148-31993-1-git-send-email-martin@barkynet.com>	<5301B4E9.60902@mind.be>
- <20140217054228.20297e71@core2quad.morethan.org>
-Message-ID: <5301FA5D.400@mind.be>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Mon, 17 Feb 2014 15:33:13 +0100
+Subject: [Buildroot] [PATCH 1/2] udev: update udev to new virtual
+ package infra.
+In-Reply-To: <20140217114906.5b6aab4a@skate>
+References: <1392632536-16714-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <1392632536-16714-2-git-send-email-eric.le.bihan.dev@free.fr>
+ <20140217114906.5b6aab4a@skate>
+Message-ID: <20140217143311.GA4920@pc-eric>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/02/14 12:42, Mike Zick wrote:
-> On Mon, 17 Feb 2014 08:06:17 +0100
-> Arnout Vandecappelle <arnout@mind.be> wrote:
-> 
->> On 04/02/14 22:25, Martin Bark wrote:
->>> This patch adds a variable BR2_TARGET_ROOTFS_ISO9660_OVERLAY that
->>> is similar to BR2_ROOTFS_OVERLAY except the files are placed in the
->>> iso9660 file system.
->>>
->>
-> 
-> Since Buildroot only builds root filesystems for the target device,
-> it would probably be safe to drop the "TARGET_" distinction from
-> that variable name.
+Hi!
 
- Agreed, but that should not be done in this patch. All the rootfs stuff
-is currently using the BR2_TARGET_ROOTFS_ prefix, so this patch should
-stick with that convention.
+On Mon, Feb 17, 2014 at 11:49:06AM +0100, Thomas Petazzoni wrote:
+> Dear Eric Le Bihan,
+>
+> On Mon, 17 Feb 2014 11:22:15 +0100, Eric Le Bihan wrote:
+>
+> > -ifeq ($(BR2_PACKAGE_EUDEV),y)
+> > -UDEV_DEPENDENCIES += eudev
+> > -endif
+> > -
+> > -ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+> > -UDEV_DEPENDENCIES += systemd
+> > -endif
+> > +UDEV_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_UDEV))
+> >
+> >  ifeq ($(UDEV_DEPENDENCIES),)
+> >  define UDEV_CONFIGURE_CMDS
+> > -	echo "No Udev implementation selected. Configuration error."
+> > +	$(error No Udev implementation selected. Configuration error)
+> >  	exit 1
+> >  endef
+> >  endif
+>
+> Why are we doing this check in UDEV_CONFIGURE_CMDS ? I believe we can
+> simply do:
+>
+> ifeq ($(<foo>_DEPENDENCIES),)
+> $(error No <foo> implementation selected)
+> endif
+I followed the example in package/opengl/libegl/libegl.mk, but I mixed the
+Makefile control function $(error text...) and some Shell script without
+thinking...
 
- Regards,
- Arnout
+I will revert it to the pure shell version to be coherent.
 
-> 
-> Mike
-> 
->>> Signed-off-by: Martin Bark <martin@barkynet.com>  
->>
->> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->>
->>  I haven't tried it but it looks obviously-correct.
-> 
-> 
-> 
+With the <foo>_CONFIGURE_CMDS method, we go through all the dummy steps, and
+this is very verbose:
 
+  >>> udev undefined Extracting
+  >>> udev undefined Patching
+  >>> udev undefined Configuring
+  echo "No Udev implementation selected. Configuration error."
+  No Udev implementation selected. Configuration error.
+  exit 1
+  make: *** [/home/eric/build/elebihan/demo-systemd/arm/build/udev-undefined/.stamp_configured] Erreur 1
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+With the pure Makefile version, the error message is clearer:
+
+  package/udev/udev.mk:11: *** No Udev implementation selected. Configuration error. Stop.
+
+I find it better. If it suits everyone, I can propose a patch to convert all
+the virtual packages to it and re-send my tutorial patch about virtual
+package.
+
+Best regards,
+ELB
