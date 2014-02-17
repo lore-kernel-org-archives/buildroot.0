@@ -1,42 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 17 Feb 2014 23:49:23 +0100
-Subject: [Buildroot] [PATCH 04/10] toolchain/external: add choice to
- select 'AT_LEAST_XXX' header version
-In-Reply-To: <20140217180440.GB3411@free.fr>
-References: <cover.1392571021.git.yann.morin.1998@free.fr>
- <74d76e7816e2de0eccb9a24acd0b768c22078dfa.1392571021.git.yann.morin.1998@free.fr>
- <8fdcf8b3-c275-4250-be9c-11bcf4feaa11@email.android.com>
- <20140216204721.GD3417@free.fr>
- <CAAXf6LVOiOQ1jwWX4wT-NjB3gnE=YrroKMhjwsn9Cxa4F=9o5Q@mail.gmail.com>
- <20140217113023.7e5a0845@skate> <20140217180440.GB3411@free.fr>
-Message-ID: <20140217234923.3379fed1@skate>
+Date: Mon, 17 Feb 2014 23:51:16 +0100
+Subject: [Buildroot] [PATCH 1/6] toolchain: introduce a toolchain knob
+ for NPTL
+In-Reply-To: <53023FF5.7090703@mind.be>
+References: <1392297727-17627-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1392297727-17627-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ <5301B63A.5000304@mind.be> <20140217090354.1a2b5c73@skate>
+ <53023FF5.7090703@mind.be>
+Message-ID: <20140217235116.50e59245@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Arnout Vandecappelle,
 
-On Mon, 17 Feb 2014 19:04:40 +0100, Yann E. MORIN wrote:
+On Mon, 17 Feb 2014 17:59:33 +0100, Arnout Vandecappelle wrote:
 
-> Yes, I already added such a check later after sending the series. It
-> will be part of the next submission.
+> >> support it, isn't there? So I would first remove the option completely
+> >> for these architectures. That would also make adding a comment
+> >> unnecessary (since it becomes an architecture feature rather than a
+> >> toolchain option).
+> > 
+> > While I definitely agree for the internal toolchain backend, I don't
+> > think this applies nicely with the external toolchain backend. We do
+> > not control how the external toolchains are built, and it is perfectly
+> > possible to build a non-NPTL toolchain on a NPTL-supported architecture
+> > with Crosstool-NG for example.
 > 
-> Basically, I check that the specified headers version is no more recent
-> than the one actually used in the toolchain.
+>  Yes, but we certainly don't support all of the possible toolchains that
+> can be spat out by Crosstool-NG. At least, I don't think so...
 
-I think the specified headers version should match the one actually
-used in the toolchain. Otherwise, the user may have messages such as
-"package foo needs headers >= 3.3" even if he is using a toolchain with
-kernel headers of kernel 3.6.
+We are supposed to support a good number of possible toolchains that
+Crosstool-NG generates, even though it's true that we do not support
+all the possible funky uClibc configurations that one could create with
+Crosstool-NG. We also don't support these in Buildroot, while we do
+ensure that the uClibc configuration matches the threading model
+selected in the Buildroot configuration.
 
-This behavior would also match what we currently do: if a toolchain has
-thread support, but the user forgets to indicate in menuconfig that the
-toolchain has thread support, then we abort with an error. Even if
-technically speaking, we could simply continue, since building a
-configuration with no thread support would work entirely fine with a
-toolchain that has thread support.
+> > However, this kind of strategy might fail quite quickly for "growing"
+> > architectures. For example, ARC currently does not have NPTL support,
+> > but since they appear to be quite active, maybe they will implement
+> > NPTL support at some point. And at this moment we will have a range of
+> > stable, well-tested toolchains that are non-NPTL, and the possibility
+> > of building NPTL-capable, but not fully tested toolchains.
+> 
+>  But that's indeed a very good point that I didn't think of. Indeed, for
+> these we'll want to support both NPTL and LinuxThreads, therefore we
+> still need the comments.
+> 
+>  Taking that aspect into consideration, removing the LinuxThreads options
+> is not bringing any real advantage. So forget I ever mentioned it :-)
+
+Ok, thanks for your feedback!
 
 Best regards,
 
