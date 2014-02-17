@@ -1,86 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 17 Feb 2014 10:16:27 +0100
-Subject: [Buildroot] [git commit branch/next] package: add vo-aacenc (aac
-	encoder)
-Message-ID: <20140217101407.212889CA6A@busybox.osuosl.org>
+Date: Mon, 17 Feb 2014 11:13:15 +0100
+Subject: [Buildroot] [git commit branch/next] gst1-plugins-bad: add
+	assrender option
+Message-ID: <20140217101407.66F3B9CA6A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0510e34783b871c68273479e0f5ba7295c11339d
+commit: http://git.buildroot.net/buildroot/commit/?id=8d3590d4b0141b00e2430db67fafb2546b56ec26
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in              |    1 +
- package/vo-aacenc/Config.in    |    9 +++++++++
- package/vo-aacenc/vo-aacenc.mk |   32 ++++++++++++++++++++++++++++++++
- 3 files changed, 42 insertions(+), 0 deletions(-)
+ package/gstreamer1/gst1-plugins-bad/Config.in      |    4 ++++
+ .../gst1-plugins-bad/gst1-plugins-bad.mk           |    8 +++++++-
+ 2 files changed, 11 insertions(+), 1 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index b8b2f4e..cb2d31b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -483,6 +483,7 @@ source "package/portaudio/Config.in"
- source "package/speex/Config.in"
- source "package/taglib/Config.in"
- source "package/tremor/Config.in"
-+source "package/vo-aacenc/Config.in"
- source "package/webrtc-audio-processing/Config.in"
- endmenu
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index 95d1f13..25be9ce 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -318,6 +318,10 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_APEXSINK
+ 	bool "apexsink"
+ 	select BR2_PACKAGE_OPENSSL
  
-diff --git a/package/vo-aacenc/Config.in b/package/vo-aacenc/Config.in
-new file mode 100644
-index 0000000..b5487dc
---- /dev/null
-+++ b/package/vo-aacenc/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_VO_AACENC
-+	bool "vo-aacenc"
-+	help
-+	  This library contains an encoder implementation of the
-+	  Advanced Audio Coding (AAC) audio codec. The library is
-+	  based on a codec implementation by VisualOn as part of the
-+	  Stagefright framework from the Google Android project.
++config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_ASSRENDER
++	bool "assrender"
++	select BR2_PACKAGE_LIBASS
 +
-+	  http://sourceforge.net/projects/opencore-amr/
-diff --git a/package/vo-aacenc/vo-aacenc.mk b/package/vo-aacenc/vo-aacenc.mk
-new file mode 100644
-index 0000000..8f01c34
---- /dev/null
-+++ b/package/vo-aacenc/vo-aacenc.mk
-@@ -0,0 +1,32 @@
-+################################################################################
-+#
-+# vo-aacenc
-+#
-+################################################################################
-+
-+VO_AACENC_VERSION = 0.1.3
-+VO_AACENC_SITE = http://downloads.sourceforge.net/project/opencore-amr/vo-aacenc
-+VO_AACENC_LICENSE = Apache-2.0
-+VO_AACENC_LICENSE_FILES = COPYING
-+VO_AACENC_INSTALL_STAGING = YES
-+
-+# arm specific asm optimizations
-+ifeq ($(BR2_arm),y)
-+
-+ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
-+VO_AACENC_CONF_OPT += --enable-armv7neon
-+# mfpu=neon needed to assemble neon code
-+VO_AACENC_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -mfpu=neon"
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VOAACENC
+ 	bool "voaacenc"
+ 	select BR2_PACKAGE_VO_AACENC
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index 1ad76fe..dbd0625 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -39,7 +39,6 @@ GST1_PLUGINS_BAD_CONF_OPT += \
+ 	--disable-mfc \
+ 	--disable-opensles \
+ 	--disable-uvch264 \
+-	--disable-assrender \
+ 	--disable-voamrwbenc \
+ 	--disable-chromaprint \
+ 	--disable-dash \
+@@ -510,6 +509,13 @@ else
+ GST1_PLUGINS_BAD_CONF_OPT += --disable-apexsink
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_ASSRENDER),y)
++GST1_PLUGINS_BAD_CONF_OPT += --enable-assrender
++GST1_PLUGINS_BAD_DEPENDENCIES += libass
 +else
-+VO_AACENC_CONF_OPT += --disable-armv7neon
-+
-+ifeq ($(BR2_arm7tdmi)$(BR2_arm720t)$(BR2_arm920t)$(BR2_arm922t)$(BR2_strongarm)$(BR2_fa526),)
-+VO_AACENC_CONF_OPT += --enable-armv5e
-+else
-+VO_AACENC_CONF_OPT += --disable-armv5e
++GST1_PLUGINS_BAD_CONF_OPT += --disable-assrender
 +endif
 +
-+endif # !neon
-+endif # arm
-+
-+$(eval $(autotools-package))
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VOAACENC),y)
+ GST1_PLUGINS_BAD_CONF_OPT += --enable-voaacenc
+ GST1_PLUGINS_BAD_DEPENDENCIES += vo-aacenc
