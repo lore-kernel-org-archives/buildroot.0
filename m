@@ -1,46 +1,51 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Feb 2014 00:09:27 +0100
-Subject: [Buildroot] [PATCH 1/6] toolchain: introduce a toolchain knob
- for NPTL
-In-Reply-To: <20140217235706.3be4e482@skate>
-References: <1392297727-17627-1-git-send-email-thomas.petazzoni@free-electrons.com>	<1392297727-17627-2-git-send-email-thomas.petazzoni@free-electrons.com>	<5302884F.9020402@mind.be>
- <20140217235706.3be4e482@skate>
-Message-ID: <530296A7.9050500@mind.be>
+Date: Tue, 18 Feb 2014 00:10:28 +0100
+Subject: [Buildroot] [PATCH 04/10] toolchain/external: add choice to
+ select 'AT_LEAST_XXX' header version
+In-Reply-To: <20140217234923.3379fed1@skate>
+References: <cover.1392571021.git.yann.morin.1998@free.fr>	<74d76e7816e2de0eccb9a24acd0b768c22078dfa.1392571021.git.yann.morin.1998@free.fr>	<8fdcf8b3-c275-4250-be9c-11bcf4feaa11@email.android.com>	<20140216204721.GD3417@free.fr>	<CAAXf6LVOiOQ1jwWX4wT-NjB3gnE=YrroKMhjwsn9Cxa4F=9o5Q@mail.gmail.com>	<20140217113023.7e5a0845@skate>	<20140217180440.GB3411@free.fr>
+ <20140217234923.3379fed1@skate>
+Message-ID: <530296E4.308@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/02/14 23:57, Thomas Petazzoni wrote:
-> Dear Arnout Vandecappelle,
+On 17/02/14 23:49, Thomas Petazzoni wrote:
+> Dear Yann E. MORIN,
 > 
-> On Mon, 17 Feb 2014 23:08:15 +0100, Arnout Vandecappelle wrote:
->> On 13/02/14 14:22, Thomas Petazzoni wrote:
->>> +config BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_NPTL
->>> +	bool "Toolchain has NPTL threads support?"
->>> +	depends on BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS
->>> +	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
->>> +	default y
->>> +	help
->>> +	  Select this option if your external toolchain uses the NPTL
->>> +	  (Native Posix Thread Library) implementation of Posix
->>> +	  threads. If you don't know, leave the default value,
->>> +	  Buildroot will tell you if it's correct or not.
+> On Mon, 17 Feb 2014 19:04:40 +0100, Yann E. MORIN wrote:
+> 
+>> Yes, I already added such a check later after sending the series. It
+>> will be part of the next submission.
 >>
->>  Where exactly does buildroot check if the external toolchain has NPTL?
+>> Basically, I check that the specified headers version is no more recent
+>> than the one actually used in the toolchain.
 > 
-> In the patch you're replying to, look at the chunk that modifies
-> toolchain/helpers.mk:
+> I think the specified headers version should match the one actually
+> used in the toolchain. Otherwise, the user may have messages such as
+> "package foo needs headers >= 3.3" even if he is using a toolchain with
+> kernel headers of kernel 3.6.
 > 
-> +	$(call check_uclibc_feature,__UCLIBC_HAS_THREADS_NATIVE__,BR2_TOOLCHAIN_HAS_THREADS_NPTL,$${UCLIBC_CONFIG_FILE},NPTL thread support) ;\
+> This behavior would also match what we currently do: if a toolchain has
+> thread support, but the user forgets to indicate in menuconfig that the
+> toolchain has thread support, then we abort with an error. Even if
+> technically speaking, we could simply continue, since building a
+> configuration with no thread support would work entirely fine with a
+> toolchain that has thread support.
 
- Damn, I looked for it three times and couldn't find it... Better get my
-eyes checked!
+ +1
 
 
  Regards,
  Arnout
+
+> 
+> Best regards,
+> 
+> Thomas
+> 
 
 
 -- 
