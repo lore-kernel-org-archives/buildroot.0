@@ -1,34 +1,54 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 17 Feb 2014 09:01:38 +0100
-Subject: [Buildroot] [git commit] beaglebone: add DT for BeagleBone Black
-Message-ID: <20140217080316.D54B39CA6E@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 17 Feb 2014 09:03:54 +0100
+Subject: [Buildroot] [PATCH 1/6] toolchain: introduce a toolchain knob
+ for NPTL
+In-Reply-To: <5301B63A.5000304@mind.be>
+References: <1392297727-17627-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1392297727-17627-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ <5301B63A.5000304@mind.be>
+Message-ID: <20140217090354.1a2b5c73@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=52aef8aebc114f6beb41134e0642e53e4de5ea2d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Arnout Vandecappelle,
 
-The devicetree data for BeagleBone Black is the am335x???boneblack.dts file
-(includes "am33xx.dtsi" and "am335x-bone-common.dtsi")
+On Mon, 17 Feb 2014 08:11:54 +0100, Arnout Vandecappelle wrote:
 
-BeagleBone White uses the am335x-bone.dts file.
+>  I think there is very little reason left to use NPTL on archs that
 
-Signed-off-by: Marcelo Guti??rrez <kuyurix@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- configs/beaglebone_defconfig |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+I guess you wanted to say "to *NOT* use NPTL".
 
-diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
-index 2996336..15220ed 100644
---- a/configs/beaglebone_defconfig
-+++ b/configs/beaglebone_defconfig
-@@ -36,4 +36,4 @@ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/beaglebone/linux-3.12.config"
- BR2_LINUX_KERNEL_ZIMAGE=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-bone"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-bone am335x-boneblack"
+> support it, isn't there? So I would first remove the option completely
+> for these architectures. That would also make adding a comment
+> unnecessary (since it becomes an architecture feature rather than a
+> toolchain option).
+
+While I definitely agree for the internal toolchain backend, I don't
+think this applies nicely with the external toolchain backend. We do
+not control how the external toolchains are built, and it is perfectly
+possible to build a non-NPTL toolchain on a NPTL-supported architecture
+with Crosstool-NG for example.
+
+That being said, our choice could simply be to not support these cases
+at all, and check in the external toolchain backend that the toolchain
+has NPTL support if the architecture is supposed to support it.
+
+However, this kind of strategy might fail quite quickly for "growing"
+architectures. For example, ARC currently does not have NPTL support,
+but since they appear to be quite active, maybe they will implement
+NPTL support at some point. And at this moment we will have a range of
+stable, well-tested toolchains that are non-NPTL, and the possibility
+of building NPTL-capable, but not fully tested toolchains.
+
+Thoughts?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
