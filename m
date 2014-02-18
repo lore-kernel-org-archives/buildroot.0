@@ -1,109 +1,122 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 18 Feb 2014 22:25:04 +0100
-Subject: [Buildroot] [PATCH 1/1] crda: fix build failure for nios2
-In-Reply-To: <530138C2.7010109@frajasalo.de> (Frank Bergmann's message of
- "Sun, 16 Feb 2014 23:16:34 +0100")
-References: <530138C2.7010109@frajasalo.de>
-Message-ID: <87wqgs3yhb.fsf@dell.be.48ers.dk>
+Date: Tue, 18 Feb 2014 22:40:27 +0100
+Subject: [Buildroot] [PATCH 4 of 4] alsa-utils: fix build on no-mmu
+	targets
+In-Reply-To: <CAAXf6LUU3E2gon--T888xHzF36QeyFv1hQ1SXMHW3FFgsq=yLA@mail.gmail.com>
+ (Thomas De Schampheleire's message of "Tue, 18 Feb 2014 14:47:45
+ +0100")
+References: <patchbomb.1392224140@argentina>
+ <fba13b278df3df6a3fc7.1392224144@argentina>
+ <8761ocwsvq.fsf@dell.be.48ers.dk>
+ <CAAXf6LUU3E2gon--T888xHzF36QeyFv1hQ1SXMHW3FFgsq=yLA@mail.gmail.com>
+Message-ID: <87sirg3xro.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Frank" == Frank Bergmann <frank@frajasalo.de> writes:
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
- > libgcrypt depends on libgpg-error and this isn't accounted for in
- > crda makefile, but it is in libgcrypt-config script (in the correct
- > order for linking), so set LDLIBS calling this script not only for
- > static linking.
+Hi,
 
- > Fixes http://autobuild.buildroot.org/results/156/15656ef0187b0a8db6c66fc7a7fcb58a99999fa1
+ > Hi Peter,
+ > On Tue, Feb 18, 2014 at 12:40 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+ >>>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+ >> 
+ >> > alsa-utils uses fork, which doesn't work on targets without mmu, such as
+ >> > Blackfin. Apply a patch by the Blackfin developers to fix this.
+ >> 
+ >> > Fixes
+ >> > http://autobuild.buildroot.org/results/9f8/9f8e572c9f1c677155cc7d1828371bcf572ff878
+ >> 
+ >> > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+ >> 
+ >> What is the upstream status of this?
 
-I know both Samuel and Thomas added their acks, but I still don't get
-how this can be a nios2 only thing.
+ > This has also been submitted without response:
+ > http://mailman.alsa-project.org/pipermail/alsa-devel/2013-December/069749.html
 
-On ARM, I don't see libgpg-error exporting such a symbol:
+:/
 
-./output/host/usr/bin/arm-linux-nm -D output/target/usr/lib/libgpg-error.so
-         w _ITM_deregisterTMCloneTable
-         w _ITM_registerTMCloneTable
-         w _Jv_RegisterClasses
-0000abf8 A __bss_end__
-0000abdc A __bss_start
-0000abdc A __bss_start__
-         w __cxa_finalize
-         w __deregister_frame_info
-0000abf8 A __end__
-         U __errno_location
-         U __glibc_strerror_r
-         w __register_frame_info
-0000abf8 A _bss_end__
-0000abdc A _edata
-0000abf8 A _end
-00000d20 T _fini
-000005fc T _init
-00000c14 T gpg_err_code_from_errno
-00000c90 T gpg_err_code_from_syserror
-00000bdc T gpg_err_code_to_errno
-00000844 T gpg_err_deinit
-0000068c T gpg_err_init
-00000848 T gpg_err_set_errno
-000008f8 T gpg_error_check_version
-00000a6c T gpg_strerror
-00000ac4 T gpg_strerror_r
-000009b8 T gpg_strsource
-         U memcpy
-         U strerror
-         U strlen
+ >> I would be a lot happier with a patch simply doing s/fork/vfork/. If
+ >> vfork is safe to use, we might as well use it everywhere - And if not,
+ >> we shouldn't do it on nommu either.
 
-I don't see crda explicitly accessing a _gp symbol:
+ > It's been done before in commits
+ > c2abc61d028b9e9cc602108ce1ad03942092bed2 and
+ > d4b074554faa9451630cde47eb8378a8b0803252.
+ > But it's far from pretty code, true.
 
-grep -rls gp output/build/crda-1.1.3
+My point is that if nommu follows a different code path than "normal"
+Linux (and upstream doesn't test on nommu), then it is bound to break
+sooner or later.
 
-And libgcrypt lists gpg-error as NEEDED, so the runtime linker should
-pull it in automatically without us having to explicitly link with it:
+ >> > +    switch(pid) {
+ >> > +    case 0:
+ >> > +            /* child closes parent ends of pipes */
+ >> 
+ >> I'm far from a vfork expert, but as parent and child shares stack, how
+ >> does it work with both calling close() on the pipes?
 
-./output/host/usr/bin/arm-linux-readelf -a output/target/usr/lib/libgcrypt.so|grep NEEDED
- 0x00000001 (NEEDED)                     Shared library: [libgpg-error.so.0]
- 0x00000001 (NEEDED)                     Shared library: [libc.so.0]
+ > I'm no vfork expert either, but, from the manpage of vfork:
 
-Are we sure we're not really just pampering over some kind of nios2
-binutils / ld issue?
+ >        vfork() differs from fork(2) in that the calling thread  is  sus?
+ >        pended  until  the  child terminates (either normally, by calling
+ >        _exit(2), or abnormally, after delivery of a fatal signal), or it
+ >        makes  a  call  to execve(2).  Until that point, the child shares
+ >        all memory with its parent, including the stack.  The child  must
+ >        not  return  from  the  current function or call exit(3), but may
+ >        call _exit(2).
+
+ >        As with fork(2), the child process created  by  vfork()  inherits
+ >        copies  of various of the caller's process attributes (e.g., file
+ >        descriptors, signal dispositions, and current working directory);
+ >        the  vfork()  call  differs  only in the treatment of the virtual
+ >        address space, as described above.
+
+Ahh yes, I forgot that the parent thread is stalled. Then the only
+difference is that the devnull variable gets assigned to, but as that is
+not accessed in the parent it shouldn't matter.
 
 
- > Signed-off-by: Frank Bergmann <frank@frajasalo.de>
- > ---
- >  package/crda/crda.mk |    6 +++---
- >  1 file changed, 3 insertions(+), 3 deletions(-)
+ > so the behavior of file descriptors seems the same as in fork.
+ > The child basically does:
+ >     setup input/output (pipes)
+ >     execv()
 
- > diff --git a/package/crda/crda.mk b/package/crda/crda.mk
- > index ce87d44..c7e9b2d 100644
- > --- a/package/crda/crda.mk
- > +++ b/package/crda/crda.mk
- > @@ -16,12 +16,12 @@ CRDA_LICENSE_FILES = LICENSE
- >  # And library order matters hence stick -lnl-3 first since it's appended
- >  # in the crda Makefiles as in NLLIBS+=-lnl-3 ... thus failing.
- >  #
- > -# libgcrypt needs -lgpg-error if linking statically, which is correctly
- > -# set by the libgcrypt-config script (and in the right order).
- >  ifeq ($(BR2_PREFER_STATIC_LIB),y)
- >  CRDA_NLLIBS += -lnl-3 -lm -lpthread
- > -CRDA_LDLIBS += `$(STAGING_DIR)/usr/bin/libgcrypt-config --libs`
- >  endif
- > +# libgcrypt needs -lgpg-error, which is correctly
- > +# set by the libgcrypt-config script (and in the right order).
- > +CRDA_LDLIBS += `$(STAGING_DIR)/usr/bin/libgcrypt-config --libs`
+ > The parent does:
+ >     setup input/output (pipes)
+ >     read output from child and store it
 
- >  define CRDA_BUILD_CMDS
- >         $(TARGET_CONFIGURE_OPTS) \
- > -- 
- > 1.7.10.4
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
+ > As the parent is blocked during the execution of the child, the child
+ > will first fill the pipe with its data, then exit, and only then the
+ > parent will read it. This is unlike the fork case where parent could
+ > start reading data while the child is writing into the pipe.
 
+The parent will actually get unblocked as soon as the child calls execv,
+but yes.
+
+ > The other introduction of fork in alsaloop/alsaloop.c is basically:
+ > if (daemonize) {
+ >     daemon();
+ >     fork();
+ >     if (parent) { exit() };
+ > }
+
+ > So the child is the only one doing actual work, there is no
+ > communication between parent and child.
+ > Also here, I believe the vfork change is acceptable...
+
+But does the parent ever get to run so it can exit to the shell while
+the child runs? I guess not.
+
+
+ > What should we do with your comment on the HAVE_FORK check?
+ > I'm not sure what upstream would think of either alternative...
+
+As I said above, I really dislike having a seperate (largely untested)
+codepath for !mmu if not absolutely needed.
 
 -- 
 Bye, Peter Korsgaard
