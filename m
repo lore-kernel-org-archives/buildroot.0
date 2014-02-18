@@ -1,61 +1,39 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Tue, 18 Feb 2014 17:41:17 +0100
-Subject: [Buildroot] [PATCH v7 3/4] infra: Introduce BR2_HOST_NEEDS_JAVA
-In-Reply-To: <20140218171846.6969c9a6@skate>
+Date: Tue, 18 Feb 2014 17:41:53 +0100
+Subject: [Buildroot] [PATCH v7 1/4] sdl: add host version
+In-Reply-To: <20140218171343.56bd9da1@skate>
 References: <1392680233-24585-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1392680233-24585-4-git-send-email-maxime.hadjinlian@gmail.com>
- <20140218171846.6969c9a6@skate>
-Message-ID: <CAGduivzSEpXbLOCvsnMHOdbidVBUfzgCH7QiVaQ5PSx24M-x4A@mail.gmail.com>
+ <1392680233-24585-2-git-send-email-maxime.hadjinlian@gmail.com>
+ <20140218171343.56bd9da1@skate>
+Message-ID: <CAGduivzHg1S23FNp-F9=CqvbCh4PijnfDrXjRTGxxFNJVsR5Ow@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, all
-On Tue, Feb 18, 2014 at 5:18 PM, Thomas Petazzoni
+On Tue, Feb 18, 2014 at 5:13 PM, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
 > Dear Maxime Hadjinlian,
 >
-> On Tue, 18 Feb 2014 00:37:12 +0100, Maxime Hadjinlian wrote:
->> XBMC needs Java on the host in order to build, because it  uses a
->> code-generator which is build in two phases:
->> In the first phase SWIG is used to parse C++ header files that define the API.
->> SWIG outputs an XML file that contains a complete description of the structure
->> of the API.
->> In the second phase, the XML file is ingested by a Groovy (Java) program that
->> then creates C++ code that forms the bridge to the scripting language (Python).
+> On Tue, 18 Feb 2014 00:37:10 +0100, Maxime Hadjinlian wrote:
+>
+>> diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
+>> index ba5fbca..bc48d35 100644
+>> --- a/package/sdl/sdl.mk
+>> +++ b/package/sdl/sdl.mk
+>> @@ -18,8 +18,9 @@ define SDL_RUN_AUTOGEN
+>>  endef
 >>
->> The second phase is why we need java on the host.
+>>  SDL_POST_PATCH_HOOKS += SDL_RUN_AUTOGEN
+>> -SDL_DEPENDENCIES += host-automake host-autoconf host-libtool
+>> +HOST_SDL_POST_PATCH_HOOKS += SDL_RUN_AUTOGEN
 >
-> People inventing such horrible code generation flows really have a
-> problem. They should probably talk to M-x doctor.
-What can I say ? :)
->
->> +# Hidden boolean selected by packages in need of Java in order to build
->> +# (example: xbmc)
->> +config BR2_HOST_NEEDS_JAVA
->> +     bool
->
-> Do we need a kconfig bool for this? We have the same situation for
-> classpath, and we haven't introduced a specific kconfig bool for it.
-Yes, I had two patches:
-  - One to introduce kconfig bool option for JAVAC and JAR
-  - The second to make classpath uses them and remove the specific in
-dependencies.sh
-
-It seems cleaner and if another package has the same needs, it's already there.
->
-> Moreover, I am not sure BR2_HOST_NEEDS_JAVA is the right name. It's not
-> really the host that needs Java, it's the compilation process that
-> requires a host Java. So BR2_NEEDS_HOST_JAVA is probably more
-> technically correct.
-True, I'll fix that.
->
-> Thanks,
+> This should be a pre-configure hook, as we discussed recently on the
+> list.
+Argh. Forgot to change this...will do !
 >
 > Thomas
-Thanks
 > --
 > Thomas Petazzoni, CTO, Free Electrons
 > Embedded Linux, Kernel and Android engineering
