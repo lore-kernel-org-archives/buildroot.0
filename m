@@ -1,12 +1,12 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 18 Feb 2014 14:14:37 +0100
-Subject: [Buildroot] [PATCH 2 of 4] alsa-lib: add a fake dlfcn.h header
- if dynamic load is not supported
-In-Reply-To: <87a9dowtgi.fsf@dell.be.48ers.dk>
+Date: Tue, 18 Feb 2014 14:47:45 +0100
+Subject: [Buildroot] [PATCH 4 of 4] alsa-utils: fix build on no-mmu
+	targets
+In-Reply-To: <8761ocwsvq.fsf@dell.be.48ers.dk>
 References: <patchbomb.1392224140@argentina>
- <2b373a4c038e8029fbfb.1392224142@argentina>
- <87a9dowtgi.fsf@dell.be.48ers.dk>
-Message-ID: <CAAXf6LVCBqSQ=W6xgYUVFJvm6VE+c0GfvVXEv31Ts30m6g0vtg@mail.gmail.com>
+ <fba13b278df3df6a3fc7.1392224144@argentina>
+ <8761ocwsvq.fsf@dell.be.48ers.dk>
+Message-ID: <CAAXf6LUU3E2gon--T888xHzF36QeyFv1hQ1SXMHW3FFgsq=yLA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,106 +15,133 @@ To: buildroot@busybox.net
 
 Hi Peter,
 
-Thanks for reviewing...
-
-On Tue, Feb 18, 2014 at 12:28 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+On Tue, Feb 18, 2014 at 12:40 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
 >>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 >
->  > The FLAT GNU toolchain doesn't include the dlfcn.h header file.
->  > Provide a fake header file dlmisc.h with enough declarations to make
->  > alsa-lib happy.
+>  > alsa-utils uses fork, which doesn't work on targets without mmu, such as
+>  > Blackfin. Apply a patch by the Blackfin developers to fix this.
 >
 >  > Fixes
->  > http://autobuild.buildroot.org/results/706/7069e1f43cbed745d65f7dd9904a3fff034530ac/build-end.log
+>  > http://autobuild.buildroot.org/results/9f8/9f8e572c9f1c677155cc7d1828371bcf572ff878
 >
->  > Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
->  > [Thomas: change sequence number from 003 to 0003, update commit message ]
 >  > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 >
->  > ---
->  >  package/alsa-lib/alsa-lib-0003-dlmisc.patch |  59 ++++++++++++++++++++++++
->  >  1 files changed, 59 insertions(+), 0 deletions(-)
+> What is the upstream status of this?
+
+This has also been submitted without response:
+http://mailman.alsa-project.org/pipermail/alsa-devel/2013-December/069749.html
+
 >
->  > diff --git a/package/alsa-lib/alsa-lib-0003-dlmisc.patch b/package/alsa-lib/alsa-lib-0003-dlmisc.patch
+>  > ---
+>  >  package/alsa-utils/alsa-utils-0001-no-mmu.patch |  61 ++++++++++++++++++++
+>  >  package/alsa-utils/alsa-utils.mk                |   1 +
+>  >  2 files changed, 62 insertions(+), 0 deletions(-)
+>
+>  > diff --git a/package/alsa-utils/alsa-utils-0001-no-mmu.patch b/package/alsa-utils/alsa-utils-0001-no-mmu.patch
 >  > new file mode 100644
 >  > --- /dev/null
->  > +++ b/package/alsa-lib/alsa-lib-0003-dlmisc.patch
->  > @@ -0,0 +1,59 @@
->  > +alsa-lib: dlmisc: Add a fake dl lib head file when dl lib is not supported by the toolchain.
+>  > +++ b/package/alsa-utils/alsa-utils-0001-no-mmu.patch
+>  > @@ -0,0 +1,61 @@
+>  > +Signed-off-by: Aaron Wu <Aaron.wu@analog.com>
 >  > +
->  > +The FLAT GNU toolchain doesn't include the dlfcn.h header file.
+>  > +Add no-mmu support for alsa-utils mainly for Blackfin
+>  > +---
+>  > + alsactl/init_utils_run.c |    4 ++++
+>  > + alsaloop/alsaloop.c      |    8 ++++++++
+>  > + configure.in             |    1 +
+>  > + 3 files changed, 13 insertions(+)
 >  > +
->  > +--- alsa-lib-1.0.26/src/mixer/simple_abst.c 2012-09-06 16:55:14.000000000 +0800
->  > ++++ alsa-lib-1.0.26.bak/src/mixer/simple_abst.c     2013-11-25 14:53:07.739275843 +0800
->  > +@@ -34,7 +34,11 @@
->  > + #include <fcntl.h>
->  > + #include <sys/ioctl.h>
->  > + #include <math.h>
->  > ++#ifdef HAVE_LIBDL
->  > + #include <dlfcn.h>
->  > ++#else
->  > ++#include <dlmisc.h>
+>  > +diff --git a/alsactl/init_utils_run.c b/alsactl/init_utils_run.c
+>  > +--- a/alsactl/init_utils_run.c
+>  > ++++ b/alsactl/init_utils_run.c
+>  > +@@ -89,7 +89,11 @@ int run_program0(struct space *space,
+>  > +            argv[0] = program;
+>  > +    }
+>  > +
+>  > ++   #ifdef HAVE_FORK
+>  > +    pid = fork();
+>  > ++   #else
+>  > ++   pid = vfork();
+>  > ++   #endif
 >
-> This is not a system header, so it should use #include "dlmisc.h".
+> I would be a lot happier with a patch simply doing s/fork/vfork/. If
+> vfork is safe to use, we might as well use it everywhere - And if not,
+> we shouldn't do it on nommu either.
 
-Correct, will fix.
-
->
-> What the the upstream status of this patch? We don't usually carry
-> feature patches in buildroot (besides backports).
-
-It was submitted by Sonic Zhang, but without response:
-http://mailman.alsa-project.org/pipermail/alsa-devel/2013-November/069218.html
-http://mailman.alsa-project.org/pipermail/alsa-devel/2013-December/069587.html
-
-I can try to resubmit it after the above change and see what happens...
+It's been done before in commits
+c2abc61d028b9e9cc602108ce1ad03942092bed2 and
+d4b074554faa9451630cde47eb8378a8b0803252.
+But it's far from pretty code, true.
 
 >
-> Are those two defines the only part of dlfcn.h used? If so, how about
-> protection the pieces of code using them with #ifdef HAVE_LIBDL instead?
+>
+>  > +    switch(pid) {
+>  > +    case 0:
+>  > +            /* child closes parent ends of pipes */
+>
+> I'm far from a vfork expert, but as parent and child shares stack, how
+> does it work with both calling close() on the pipes?
 
-Typical usage is:
-./src/mixer/simple_abst.c:82:   h = snd_dlopen(xlib, RTLD_NOW);
-./src/mixer/simple_abst.c:129:  h = snd_dlopen(xlib, RTLD_NOW|RTLD_GLOBAL);
+I'm no vfork expert either, but, from the manpage of vfork:
 
-where snd_dlopen is a wrapper:
+       vfork() differs from fork(2) in that the calling thread  is  sus?
+       pended  until  the  child terminates (either normally, by calling
+       _exit(2), or abnormally, after delivery of a fatal signal), or it
+       makes  a  call  to execve(2).  Until that point, the child shares
+       all memory with its parent, including the stack.  The child  must
+       not  return  from  the  current function or call exit(3), but may
+       call _exit(2).
 
-/**
- * \brief Opens a dynamic library - ALSA wrapper for \c dlopen.
- * \param name name of the library, similar to \c dlopen.
- * \param mode mode flags, similar to \c dlopen.
- * \return Library handle if successful, otherwise \c NULL.
- *
- * This function can emulate dynamic linking for the static build of
- * the alsa-lib library. In that case, \p name is set to \c NULL.
- */
-void *snd_dlopen(const char *name, int mode)
-{
-#ifndef PIC
-        if (name == NULL)
-                return &snd_dlsym_start;
-#else
-#ifdef HAVE_LIBDL
-        if (name == NULL) {
-                static const char * self = NULL;
-                if (self == NULL) {
-                        Dl_info dlinfo;
-                        if (dladdr(snd_dlopen, &dlinfo) > 0)
-                                self = dlinfo.dli_fname;
-                }
-                name = self;
-        }
-#endif
-#endif
-#ifdef HAVE_LIBDL
-        return dlopen(name, mode);
-#else
-        return NULL;
-#endif
+       As with fork(2), the child process created  by  vfork()  inherits
+       copies  of various of the caller's process attributes (e.g., file
+       descriptors, signal dispositions, and current working directory);
+       the  vfork()  call  differs  only in the treatment of the virtual
+       address space, as described above.
+
+
+so the behavior of file descriptors seems the same as in fork.
+The child basically does:
+    setup input/output (pipes)
+    execv()
+
+The parent does:
+    setup input/output (pipes)
+    read output from child and store it
+
+As the parent is blocked during the execution of the child, the child
+will first fill the pipe with its data, then exit, and only then the
+parent will read it. This is unlike the fork case where parent could
+start reading data while the child is writing into the pipe.
+
+This code (run_program) is executed when a PROGRAM directive is
+encountered in the alsactl configuration. From 'man alsactl_init':
+
+       PROGRAM
+           Execute external program. The key is true, if the program
+           returns without exit code zero. The whole event environment
+           is available to the executed program. The program's output
+           printed to stdout is available for the RESULT key.
+
+
+Based on this, and the code described above, it is not a problem that
+the parent is blocked during execution of the child, in run_program.
+I therefore think the vfork should work (untested).
+
+
+The other introduction of fork in alsaloop/alsaloop.c is basically:
+if (daemonize) {
+    daemon();
+    fork();
+    if (parent) { exit() };
 }
 
-Due to the special PIC exception, I don't think we can remove the call
-to snd_dlopen() entirely if !HAVE_LIBDL.
+So the child is the only one doing actual work, there is no
+communication between parent and child.
+Also here, I believe the vfork change is acceptable...
 
-Best regards,
+
+What should we do with your comment on the HAVE_FORK check?
+I'm not sure what upstream would think of either alternative...
+
+Thanks,
 Thomas
