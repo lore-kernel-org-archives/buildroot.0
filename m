@@ -1,68 +1,83 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 18 Feb 2014 22:13:36 +0100
-Subject: [Buildroot] [git commit] kexec: fix zImage probe
-Message-ID: <20140218211443.7A7929C97E@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 18 Feb 2014 22:19:37 +0100
+Subject: [Buildroot] [PATCH 1/1] e2fsprogs: fix missing fallocate64() on
+ nios2
+In-Reply-To: <52FFB751.1090903@frajasalo.de>
+References: <20140214073009.1D7E6102637@stock.ovh.net>
+ <20140214101241.27857b9e@skate>
+ <CAAEAJfBHZ_4hSWN+boCRCvxJbFC1+T_WN=Dv3oVM2yz0z=t5JQ@mail.gmail.com>
+ <52FFA40D.1040100@rosho.de> <52FFB751.1090903@frajasalo.de>
+Message-ID: <20140218221937.469b0b66@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a423ec1519dca2ee7e154c483b6b441c928b292e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Frank Bergmann,
 
-Add upstream patch to fix probe of zImage kernels.
+Please send your patches with "git send-email". Thunderbird has badly
+replaces the tabs by spaces.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...e-probe-function-return-value-checking-fi.patch |   41 ++++++++++++++++++++
- 1 files changed, 41 insertions(+), 0 deletions(-)
+On Sat, 15 Feb 2014 19:52:01 +0100, Frank Bergmann wrote:
+> Nios2 is currently missing the fallocate64 system call. Because of
+> compiling the e2fsprogs package with _FILE_OFFSET_BITS=64 the fallocate
+> call is replaced by fallocate64 by the glibc. Therefor fallocate is
+> entirely disbaled while configuring the package.
 
-diff --git a/package/kexec/kexec-0003-kernel-image-probe-function-return-value-checking-fi.patch b/package/kexec/kexec-0003-kernel-image-probe-function-return-value-checking-fi.patch
-new file mode 100644
-index 0000000..9866cab
---- /dev/null
-+++ b/package/kexec/kexec-0003-kernel-image-probe-function-return-value-checking-fi.patch
-@@ -0,0 +1,41 @@
-+From 507e210daf047a5ef98de680151ace745297d82e Mon Sep 17 00:00:00 2001
-+Message-Id: <507e210daf047a5ef98de680151ace745297d82e.1392728124.git.baruch@tkos.co.il>
-+From: Dave Young <dyoung@redhat.com>
-+Date: Thu, 6 Feb 2014 14:30:44 +0800
-+Subject: [PATCH] kernel image probe function return value checking fix
-+
-+Currently kexec will use the kernel image type when probe function return
-+value >=0. It looks odd, but previously it works. Since commit bf06cf2095
-+it does not work anymore.
-+
-+During my testing for arm zImage, in 2nd kernel the atags pointer and the
-+machine_id are not valid, I did a lot of debugging in kernel, finally I found
-+this is caused by a kexec tools bug instead.
-+
-+Because uImage will be probed before zImage, also the uImage probe return 1
-+instead of -1 since bf06cf2095, thus kexec will mistakenly think it is uImage.
-+
-+Fix this issue by regarding it's valid only when probe return 0.
-+
-+Signed-off-by: Dave Young <dyoung@redhat.com>
-+Signed-off-by: Simon Horman <horms@verge.net.au>
-+---
-+ kexec/kexec.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/kexec/kexec.c b/kexec/kexec.c
-+index f13e5124aacc..703d524836b4 100644
-+--- a/kexec/kexec.c
-++++ b/kexec/kexec.c
-+@@ -691,7 +691,7 @@ static int my_load(const char *type, int fileind, int argc, char **argv,
-+ 	}
-+ 	if (!type || guess_only) {
-+ 		for (i = 0; i < file_types; i++) {
-+-			if (file_type[i].probe(kernel_buf, kernel_size) >= 0)
-++			if (file_type[i].probe(kernel_buf, kernel_size) == 0)
-+ 				break;
-+ 		}
-+ 		if (i == file_types) {
-+-- 
-+1.8.5.3
-+
+Therefor -> Therefore
+disbaled -> disabled
+
+> 
+> e4defrag have to be disabled because it declares the fallocate64 but
+> the library have its own defined.
+
+Not sure I understand this part.
+
+> 
+> It fixes an autobuilder issue:
+> http://autobuild.buildroot.org/results/70a/70a47bd7392560cbc1c64769c8357c0b4c91ca3b/
+> 
+> Signed-off-by: Frank Bergmann <frank@frajasalo.de>
+> ---
+>   package/e2fsprogs/Config.in    | 2 +-
+>   package/e2fsprogs/e2fsprogs.mk | 3 ++-
+>   2 files changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/e2fsprogs/Config.in b/package/e2fsprogs/Config.in
+> index 7775e94..1e87aef 100644
+> --- a/package/e2fsprogs/Config.in
+> +++ b/package/e2fsprogs/Config.in
+> @@ -49,7 +49,7 @@ config BR2_PACKAGE_E2FSPROGS_E2UNDO
+> 
+>   config BR2_PACKAGE_E2FSPROGS_E4DEFRAG
+>          bool "e4defrag"
+> -       depends on !BR2_avr32 # fallocate not implemented
+> +       depends on !BR2_avr32 && !BR2_nios2 # fallocate not implemented
+> 
+>   config BR2_PACKAGE_E2FSPROGS_FILEFRAG
+>          bool "filefrag"
+> diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+> index 2eb59f5..310f549 100644
+> --- a/package/e2fsprogs/e2fsprogs.mk
+> +++ b/package/e2fsprogs/e2fsprogs.mk
+> @@ -23,7 +23,8 @@ E2FSPROGS_CONF_OPT = \
+>          --disable-libuuid \
+>          --enable-fsck \
+>          --disable-e2initrd-helper \
+> -       --disable-testio-debug
+> +       --disable-testio-debug \
+> +       $(if $(BR2_nios2),ac_cv_func_fallocate=no,)
+
+Such variables are normally passed in <pkg>_CONF_ENV. Also, in
+Config.in, the fallocate problem seems to also apply for AVR32, while
+you only pass ac_cv_func_fallocate=no for NIOS II here. Could you
+explain why?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
