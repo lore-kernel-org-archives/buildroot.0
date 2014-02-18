@@ -1,215 +1,96 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Tue, 18 Feb 2014 00:41:45 +0100
-Subject: [Buildroot] [PATCH 1/2] infra: Add PRE_*_HOOKS for every step
-In-Reply-To: <530285E6.1070306@mind.be>
-References: <1392334048-30321-1-git-send-email-maxime.hadjinlian@gmail.com>
- <530285E6.1070306@mind.be>
-Message-ID: <CAGduivyqRW+KWq0rjt17odQjjzeUrLe+DuAQ5BJC1Gnhr+W54w@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 18 Feb 2014 08:30:08 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-02-17
+Message-ID: <20140218073008.88E7010158A@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout, all
+Build statistics for 2014-02-17
+===============================
 
-On Mon, Feb 17, 2014 at 10:57 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 14/02/14 00:27, Maxime Hadjinlian wrote:
->> Add PRE_*_HOOKS to all the different steps through which a package may go.
->>
->> This will help avoid using POST_*_HOOKS to do tasks that should be done
->> in the PRE_*_HOOKS of the next step.
->> Otherwise, when the user would do a make foo-re<step>, this would not do
->> what was really intented, the POST_*_HOOK of the preceding step not
->> being executed.
->>
->> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
->> ---
->>  docs/manual/adding-packages-hooks.txt | 17 +++++++++++++++++
->>  package/pkg-generic.mk                | 22 ++++++++++++++++++++--
->>  2 files changed, 37 insertions(+), 2 deletions(-)
->>
->> diff --git a/docs/manual/adding-packages-hooks.txt b/docs/manual/adding-packages-hooks.txt
->> index d96c991..38d3e4a 100644
->> --- a/docs/manual/adding-packages-hooks.txt
->> +++ b/docs/manual/adding-packages-hooks.txt
->> @@ -14,17 +14,34 @@ of the package construction.
->>
->>  The following hook points are available:
->>
->> +* +LIBFOO_PRE_DOWNLOAD_HOOKS+
->>  * +LIBFOO_POST_DOWNLOAD_HOOKS+
->> +
->> +* +LIBFOO_PRE_EXTRACT_HOOKS+
->>  * +LIBFOO_POST_EXTRACT_HOOKS+
->> +
->> +* +LIBFOO_PRE_RSYNC_HOOKS+
->>  * +LIBFOO_POST_RSYNC_HOOKS+
->> +
->>  * +LIBFOO_PRE_PATCH_HOOKS+
->>  * +LIBFOO_POST_PATCH_HOOKS+
->> +
->>  * +LIBFOO_PRE_CONFIGURE_HOOKS+
->>  * +LIBFOO_POST_CONFIGURE_HOOKS+
->> +
->> +* +LIBFOO_PRE_BUILD_HOOKS+
->>  * +LIBFOO_POST_BUILD_HOOKS+
->> +
->> +* +LIBFOO_PRE_INSTALL_HOOKS+ (for host packages only)
->>  * +LIBFOO_POST_INSTALL_HOOKS+ (for host packages only)
->> +
->> +* +LIBFOO_PRE_INSTALL_STAGING_HOOKS+ (for target packages only)
->>  * +LIBFOO_POST_INSTALL_STAGING_HOOKS+ (for target packages only)
->> +
->> +* +LIBFOO_PRE_INSTALL_TARGET_HOOKS+ (for target packages only)
->>  * +LIBFOO_POST_INSTALL_TARGET_HOOKS+ (for target packages only)
->> +
->> +* +LIBFOO_PRE_LEGAL_INFO_HOOKS+
->>  * +LIBFOO_POST_LEGAL_INFO_HOOKS+
->>
->>  These variables are 'lists' of variable names containing actions to be
->> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
->> index 555c3c2..b6016d9 100644
->> --- a/package/pkg-generic.mk
->> +++ b/package/pkg-generic.mk
->> @@ -70,6 +70,7 @@ endif
->>
->>  # Retrieve the archive
->>  $(BUILD_DIR)/%/.stamp_downloaded:
->> +     $(foreach hook,$($(PKG)_PRE_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
->>  ifeq ($(DL_MODE),DOWNLOAD)
->
->  Actually, I think it's more appropriate that the message is printed
-> before the hooks, like in the patch step, and not after the hooks.
-Agreed, at least the users knows in which steps he is.
->
->  Note that that also means that the MESSAGE call should be removed from
-> AUTORECONF_HOOK - which is not ideal either... So I'm not 100% certain
-> about this.
-Maybe we don't have to make a rule about that and simply do, what
-seems to be best ?
->
->>  # Only show the download message if it isn't already downloaded
->>       $(Q)if test ! -e $(DL_DIR)/$($(PKG)_SOURCE); then \
->> @@ -100,6 +101,7 @@ endif
->>  # Unpack the archive
->>  $(BUILD_DIR)/%/.stamp_extracted:
->>       @$(call step_start,extract)
->> +     $(foreach hook,$($(PKG)_PRE_EXTRACT_HOOKS),$(call $(hook))$(sep))
->>       @$(call MESSAGE,"Extracting")
->>       $(Q)mkdir -p $(@D)
->>       $($(PKG)_EXTRACT_CMDS)
->> @@ -112,6 +114,7 @@ $(BUILD_DIR)/%/.stamp_extracted:
->>  # Rsync the source directory if the <pkg>_OVERRIDE_SRCDIR feature is
->>  # used.
->>  $(BUILD_DIR)/%/.stamp_rsynced:
->> +     $(foreach hook,$($(PKG)_PRE_RSYNC_HOOKS),$(call $(hook))$(sep))
->>       @$(call MESSAGE,"Syncing from source dir $(SRCDIR)")
->>       @test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ; exit 1)
->>       rsync -au $(RSYNC_VCS_EXCLUSIONS) $(SRCDIR)/ $(@D)
->> @@ -141,8 +144,8 @@ $(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS =  $(PKGDIR)
->>  $(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS += $(addsuffix /$(RAWNAME),$(call qstrip,$(BR2_GLOBAL_PATCH_DIR)))
->>  $(BUILD_DIR)/%/.stamp_patched:
->>       @$(call step_start,patch)
->> -     @$(call MESSAGE,"Patching")
->>       $(foreach hook,$($(PKG)_PRE_PATCH_HOOKS),$(call $(hook))$(sep))
->> +     @$(call MESSAGE,"Patching")
->>       $(foreach p,$($(PKG)_PATCH),support/scripts/apply-patches.sh $(@D) $(DL_DIR) $(notdir $(p))$(sep))
->>       $(Q)( \
->>       for D in $(PATCH_BASE_DIRS); do \
->> @@ -172,6 +175,7 @@ $(BUILD_DIR)/%/.stamp_configured:
->>  # Build
->>  $(BUILD_DIR)/%/.stamp_built::
->>       @$(call step_start,build)
->> +     $(foreach hook,$($(PKG)_PRE_BUILD_HOOKS),$(call $(hook))$(sep))
->>       @$(call MESSAGE,"Building")
->>       $($(PKG)_BUILD_CMDS)
->>       $(foreach hook,$($(PKG)_POST_BUILD_HOOKS),$(call $(hook))$(sep))
->> @@ -181,6 +185,7 @@ $(BUILD_DIR)/%/.stamp_built::
->>  # Install to host dir
->>  $(BUILD_DIR)/%/.stamp_host_installed:
->>       @$(call step_start,install-host)
->> +     $(foreach hook,$($(PKG)_PRE_INSTALL_HOOKS),$(call $(hook))$(sep))
->>       @$(call MESSAGE,"Installing to host directory")
->>       $($(PKG)_INSTALL_CMDS)
->>       $(foreach hook,$($(PKG)_POST_INSTALL_HOOKS),$(call $(hook))$(sep))
->> @@ -190,6 +195,7 @@ $(BUILD_DIR)/%/.stamp_host_installed:
->>  # Install to staging dir
->>  $(BUILD_DIR)/%/.stamp_staging_installed:
->>       @$(call step_start,install-staging)
->> +     $(foreach hook,$($(PKG)_PRE_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
->>       @$(call MESSAGE,"Installing to staging directory")
->>       $($(PKG)_INSTALL_STAGING_CMDS)
->>       $(foreach hook,$($(PKG)_POST_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
->> @@ -206,6 +212,7 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
->>  # Install to images dir
->>  $(BUILD_DIR)/%/.stamp_images_installed:
->>       @$(call step_start,install-image)
->> +     $(foreach hook,$($(PKG)_PRE_INSTALL_IMAGES_HOOKS),$(call $(hook))$(sep))
->>       @$(call MESSAGE,"Installing to images directory")
->>       $($(PKG)_INSTALL_IMAGES_CMDS)
->>       $(foreach hook,$($(PKG)_POST_INSTALL_IMAGES_HOOKS),$(call $(hook))$(sep))
->> @@ -215,6 +222,7 @@ $(BUILD_DIR)/%/.stamp_images_installed:
->>  # Install to target dir
->>  $(BUILD_DIR)/%/.stamp_target_installed:
->>       @$(call step_start,install-target)
->> +     $(foreach hook,$($(PKG)_PRE_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
->>       @$(call MESSAGE,"Installing to target")
->>       $(if $(BR2_INIT_SYSTEMD),\
->>               $($(PKG)_INSTALL_INIT_SYSTEMD))
->> @@ -377,19 +385,28 @@ $(2)_EXTRACT_CMDS ?= \
->>       $$(if $$($(2)_SOURCE),$$(INFLATE$$(suffix $$($(2)_SOURCE))) $(DL_DIR)/$$($(2)_SOURCE) | \
->>       $(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $$($(2)_DIR) $(TAR_OPTIONS) -)
->>
->> -# post-steps hooks
->> +# pre/post-steps hooks
->> +$(2)_PRE_DOWNLOAD_HOOKS        ?=
->>  $(2)_POST_DOWNLOAD_HOOKS        ?=
->> +$(2)_PRE_EXTRACT_HOOKS         ?=
->>  $(2)_POST_EXTRACT_HOOKS         ?=
->> +$(2)_PRE_RSYNC_HOOKS           ?=
->>  $(2)_POST_RSYNC_HOOKS           ?=
->>  $(2)_PRE_PATCH_HOOKS            ?=
->>  $(2)_POST_PATCH_HOOKS           ?=
->>  $(2)_PRE_CONFIGURE_HOOKS        ?=
->>  $(2)_POST_CONFIGURE_HOOKS       ?=
->> +$(2)_PRE_BUILD_HOOKS           ?=
->>  $(2)_POST_BUILD_HOOKS           ?=
->> +$(2)_PRE_INSTALL_HOOKS         ?=
->>  $(2)_POST_INSTALL_HOOKS         ?=
->> +$(2)_PRE_INSTALL_STAGING_HOOKS ?=
->>  $(2)_POST_INSTALL_STAGING_HOOKS ?=
->> +$(2)_PRE_INSTALL_TARGET_HOOKS  ?=
->>  $(2)_POST_INSTALL_TARGET_HOOKS  ?=
->> +$(2)_PRE_INSTALL_IMAGES_HOOKS  ?=
->>  $(2)_POST_INSTALL_IMAGES_HOOKS  ?=
->> +$(2)_PRE_LEGAL_INFO_HOOKS      ?=
->>  $(2)_POST_LEGAL_INFO_HOOKS      ?=
->>
->>  # human-friendly targets and target sequencing
->> @@ -545,6 +562,7 @@ $(1)-legal-info:
->>  # Packages without a source are assumed to be part of Buildroot, skip them.
->>  ifneq ($(call qstrip,$$($(2)_SOURCE)),)
->>
->> +     $(foreach hook,$($(2)_PRE_LEGAL_INFO_HOOKS),$(call $(hook))$(sep))
->
->  The POST_LEGAL_INFO_HOOKS are executed even if the condition is not
-> true, so the same should be done for the PRE_ hooks.
-Right ! Thanks, I will fix this.
->
->  Regards,
->  Arnout
->
->>  ifeq ($$($(2)_SITE_METHOD),local)
->>  # Packages without a tarball: don't save and warn
->>       @$(call legal-warning-pkg-savednothing,$$($(2)_RAWNAME),local)
->>
->
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+        success : 105
+       failures : 35 
+       timeouts : 1  
+          TOTAL : 141
+
+Classification of failures by reason
+====================================
+
+             alsa-utils-1.0.26 | 3 
+               audiofile-0.3.6 | 2 
+                 libevas-1.7.7 | 2 
+               alsa-lib-1.0.26 | 2 
+checking for pcap_setnonblo... | 1 
+              pcsc-lite-1.8.10 | 1 
+                 libxml2-2.9.1 | 1 
+                 cairo-1.12.10 | 1 
+                  dhcpcd-6.1.0 | 1 
+                    sdl-1.2.15 | 1 
+             iputils-s20121011 | 1 
+                     popt-1.16 | 1 
+               w_scan-20130331 | 1 
+                     gd-2.0.35 | 1 
+          enlightenment-0.17.3 | 1 
+                aiccu-20070115 | 1 
+                libnftnl-1.0.0 | 1 
+                elfutils-0.155 | 1 
+                  libv4l-0.8.9 | 1 
+                 qt5base-5.2.0 | 1 
+                     vlc-2.1.2 | 1 
+                  thrift-0.9.1 | 1 
+                     pv-1.4.12 | 1 
+                    mpd-0.18.7 | 1 
+        ltp-testsuite-20130904 | 1 
+         qt5connectivity-5.2.0 | 1 
+                 mplayer-1.1.1 | 1 
+lua-ev-458165bdfe0c6eadc788... | 1 
+                 webkit-1.11.5 | 1 
+             util-linux-2.23.2 | 1 
+        gst1-plugins-bad-1.2.2 | 1 
+
+Detail of failures
+===================
+
+     avr32 |                 aiccu-20070115 | NOK | http://autobuild.buildroot.net/results/3ca4e88c716fa145dfe59be403f947e9e9d6c704/
+   powerpc |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/46519740cb878fe92187f7e15cca5d17b8c209ff/
+    x86_64 |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/e97a37287f7290ccb254f804dea9bd2d4871ffd5/
+      bfin |              alsa-utils-1.0.26 | NOK | http://autobuild.buildroot.net/results/d4abcc530e3ff8f6fa6c869dcc8606363487037a/
+      bfin |              alsa-utils-1.0.26 | NOK | http://autobuild.buildroot.net/results/5060c77fcfb98c08332bba538a32863998832c7c/
+      bfin |              alsa-utils-1.0.26 | NOK | http://autobuild.buildroot.net/results/c0f3ff41bd7faf62642083f2d9af9bd598b3eed7/
+      i686 |                audiofile-0.3.6 | NOK | http://autobuild.buildroot.net/results/04822489cc173d1087c75ff55f68761f86eb62f4/
+    x86_64 |                audiofile-0.3.6 | NOK | http://autobuild.buildroot.net/results/401c3ccc2feb01fe19f6eb1dcf2d6fd688fa5f9a/
+      bfin |                  cairo-1.12.10 | NOK | http://autobuild.buildroot.net/results/7517f7a2cf979be30156ddb3a8ee0f6d9413b2db/
+    x86_64 | checking for pcap_setnonblo... | TIM | http://autobuild.buildroot.net/results/487b524d06550b9e00a7e372a663e79c501d4214/
+     nios2 |                   dhcpcd-6.1.0 | NOK | http://autobuild.buildroot.net/results/0e50643d89fffbf5b0a5ebbb9c348e0113b34c0a/
+       arm |                 elfutils-0.155 | NOK | http://autobuild.buildroot.net/results/92dd2822dbf8262d9f27f6fbf6b2e5be58aef3fb/
+   powerpc |           enlightenment-0.17.3 | NOK | http://autobuild.buildroot.net/results/58231ad78260c09a5518631ebb8048efcd478962/
+       arm |                      gd-2.0.35 | NOK | http://autobuild.buildroot.net/results/8fca3b25342c4ee60aa2d37eb9671b6e072f7c31/
+  mips64el |         gst1-plugins-bad-1.2.2 | NOK | http://autobuild.buildroot.net/results/b74751060ee1863513b9781a49a4a03d0b58b329/
+     avr32 |              iputils-s20121011 | NOK | http://autobuild.buildroot.net/results/af27993eba11bfcac922fe9435c7e5cdccfb6290/
+       arm |                  libevas-1.7.7 | NOK | http://autobuild.buildroot.net/results/eee1e7334958b78f65d9157b2bef430b0283992f/
+       arm |                  libevas-1.7.7 | NOK | http://autobuild.buildroot.net/results/5cd46148cd1bce5383aa32d7217fa491988715a2/
+   powerpc |                 libnftnl-1.0.0 | NOK | http://autobuild.buildroot.net/results/2075bed29f019a556bad7ff49f4ff224fa941750/
+   aarch64 |                   libv4l-0.8.9 | NOK | http://autobuild.buildroot.net/results/268d61a9f2a32646e4f4dd759bb65050b29713d5/
+       arc |                  libxml2-2.9.1 | NOK | http://autobuild.buildroot.net/results/1192472236e6219638e454e7a2505faf968472aa/
+  mips64el |         ltp-testsuite-20130904 | NOK | http://autobuild.buildroot.net/results/6e5a0234e901781383e23b063cb0bd7260ce0a79/
+    x86_64 | lua-ev-458165bdfe0c6eadc788... | NOK | http://autobuild.buildroot.net/results/ccdcd4af463f2aaa2ecc5d250d4fe0d634aeb04e/
+   powerpc |                     mpd-0.18.7 | NOK | http://autobuild.buildroot.net/results/5fd86ec6dbad8b2aac71faeb26c6f7ef689a9143/
+       arm |                  mplayer-1.1.1 | NOK | http://autobuild.buildroot.net/results/7cd8ce2bb7e41d167e9840f33a121c238da364c2/
+     avr32 |               pcsc-lite-1.8.10 | NOK | http://autobuild.buildroot.net/results/11998655a14a34b9d618b3bcef967d39d20f267a/
+      bfin |                      popt-1.16 | NOK | http://autobuild.buildroot.net/results/8e49b1039fff99d4ee9380e596b10008880e99ad/
+       arm |                      pv-1.4.12 | NOK | http://autobuild.buildroot.net/results/2396ba8ab1bc0a4581c43573e32863214c0a1c23/
+    xtensa |                  qt5base-5.2.0 | NOK | http://autobuild.buildroot.net/results/5e90ba56d3a95ebe7160c435a78eda4a4924940d/
+      sh4a |          qt5connectivity-5.2.0 | NOK | http://autobuild.buildroot.net/results/1431924acbbf4816dfe972b80d1cf068e110f788/
+   powerpc |                     sdl-1.2.15 | NOK | http://autobuild.buildroot.net/results/6357675654be8229f33fad5319240db322876a51/
+    x86_64 |                   thrift-0.9.1 | NOK | http://autobuild.buildroot.net/results/c1027198b5b75b67a2ee7944b36db026b46dff83/
+     nios2 |              util-linux-2.23.2 | NOK | http://autobuild.buildroot.net/results/5a7c5cd4cf843b5b1aead5387ba58196f8f30971/
+       arm |                      vlc-2.1.2 | NOK | http://autobuild.buildroot.net/results/5419abbe8892b92a78056f676d483301c083def0/
+   powerpc |                  webkit-1.11.5 | NOK | http://autobuild.buildroot.net/results/39ff80907971ee65d4a4c75a8dcf1796cf41abbf/
+   powerpc |                w_scan-20130331 | NOK | http://autobuild.buildroot.net/results/9c67b37b08d33a5f96d8ce427926756b127fed64/
+
+
+-- 
+http://autobuild.buildroot.net
