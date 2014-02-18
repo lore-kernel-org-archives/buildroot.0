@@ -1,127 +1,78 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Feb 2014 21:39:53 +0100
-Subject: [Buildroot] [PATCH v2 00/20] Python 2 and 3 bumps,
-	support for Python 3 external modules
-Message-ID: <1392756013-27757-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Tue, 18 Feb 2014 21:39:54 +0100
+Subject: [Buildroot] [PATCH v2 01/20] pkg-python: no longer use
+	distutilscross for setuptools
+In-Reply-To: <1392756013-27757-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1392756013-27757-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1392756013-27757-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thanks to the bump of Python 2.x, distutilscross is no longer needed
+to achieve cross-compilation for setuptools packages. The host Python
+2.x interpreter can be tricked into using the target compiler thanks
+to pointing it to a different sysconfigdata module, which is achieved
+using PYTHON_PATH.
 
-Here is a v2 of the patch set that does numerous Python support
-improvements. Changes since v1:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pkg-python.mk | 21 ++++++++-------------
+ 1 file changed, 8 insertions(+), 13 deletions(-)
 
- * Dropped patches that have been merged.
-
- * Rebased on top of the next branch, in order to resolve conflicts
-   with the parallel build support patches that were merged.
-
-Best regards,
-
-Thomas
-
-Przemyslaw Wrzos (1):
-  python, python3: fix to ensure libpython is stripped
-
-Rohan Fletcher (1):
-  python-setuptools: bump version to 2.1.2
-
-Thomas Petazzoni (17):
-  pkg-python: no longer use distutilscross for setuptools
-  python-distutilscross: remove package that is no longer needed
-  python3: removal of *.py/*.pyc is now done globally
-  python3: make it exclusive from python
-  python3: add python -> python3 symlink for the host variant
-  python3: use proper PYTHON3_VERSION_MAJOR instead of harcoding 3.3
-  python3: bump to 3.4.0rc1
-  python3: provide a PYTHON3_PATH
-  package: add python3 support in the package infrastructure
-  package: allow Python packages with Python3
-  python, python3: enable unicodedata for host-python, needed by
-    setuptools
-  python-pyasn: use the real upstream
-  python-bottle: allow to build with Python 3
-  python-serial: allow to build with Python 3
-  python-pyasn: allow to build with Python 3
-  python-pycrypto: allow to build with Python 3
-  python-pysnmp{,-apps,-mibs}: allow to build with Python 3
-
-kpa_info at yahoo.fr (1):
-  python3: add config directory symbolic link
-
- package/Config.in                                  |   4 +-
- package/pkg-python.mk                              |  29 ++--
- package/python-bottle/Config.in                    |   2 +-
- .../python-distutilscross/python-distutilscross.mk |  12 --
- package/python-pyasn/Config.in                     |   2 +-
- package/python-pyasn/python-pyasn.mk               |  12 +-
- package/python-pycrypto/Config.in                  |   2 +-
- package/python-pysnmp-apps/Config.in               |   2 +-
- package/python-pysnmp-mibs/Config.in               |   2 +-
- package/python-pysnmp/Config.in                    |   2 +-
- package/python-serial/Config.in                    |   2 +-
- package/python-setuptools/python-setuptools.mk     |  11 +-
- package/python/python.mk                           |  11 +-
- package/python3/Config.in                          |   1 +
- ...ython3-000-generate-sysconfigdata-buildir.patch | 158 ---------------------
- .../python3-001-remove-host-header-path.patch      |  36 +++++
- .../python3/python3-001-support-for-build.patch    |  68 ---------
- .../python3/python3-002-no-host-headers-libs.patch |  72 ----------
- ...thon3-002-properly-detect-if-python-build.patch |  23 +++
- .../python3/python3-003-staging-header-libs.patch  |  41 ------
- ...ython3-003-sysconfigdata-install-location.patch |  76 ++++++++++
- ...ython3-004-no-import-when-cross-compiling.patch |  27 ----
- ...he.patch => python3-004-old-stdlib-cache.patch} |  39 +++--
- .../python3-005-do-not-generate-pyo-files.patch    |  40 ------
- .../python3/python3-005-pyc-pyo-conditional.patch  |  60 ++++++++
- ...=> python3-006-cross-compile-getaddrinfo.patch} |   8 +-
- .../python3/python3-006-reread-environment.patch   |  63 --------
- .../python3-007-change-pyconfig-h-location.patch   |  76 ----------
- ....patch => python3-007-disable-extensions.patch} |  44 +++---
- ...008-distutils-sysconfig-use-sysconfigdata.patch |  58 ++++++++
- package/python3/python3-008-no-rpath.patch         |  51 -------
- .../python3-009-distutils-use-python-sysroot.patch |  57 ++++++++
- .../python3/python3-009-verbose-module-build.patch |  26 ----
- ...3-010-distutils-cross-compilation-support.patch |  71 ---------
- .../python3/python3-010-no-termcap-host-path.patch |  22 +++
- .../python3-100-optional-test-modules.patch        |  60 ++++----
- package/python3/python3-101-optional-pydoc.patch   |  46 +++---
- package/python3/python3-102-optional-2to3.patch    |  68 +++++----
- package/python3/python3-103-optional-sqlite.patch  |  53 ++++---
- package/python3/python3-104-optional-tk.patch      |  51 ++++---
- package/python3/python3-105-optional-curses.patch  |  30 ++--
- package/python3/python3-106-optional-expat.patch   |  36 ++---
- .../python3/python3-107-optional-codecs-cjk.patch  |   8 +-
- package/python3/python3-108-optional-nis.patch     |   8 +-
- .../python3/python3-109-optional-unicodedata.patch |   8 +-
- package/python3/python3-110-optional-idle.patch    |  39 +++--
- package/python3/python3.mk                         | 102 ++++++-------
- 47 files changed, 671 insertions(+), 1048 deletions(-)
- delete mode 100644 package/python-distutilscross/python-distutilscross.mk
- delete mode 100644 package/python3/python3-000-generate-sysconfigdata-buildir.patch
- create mode 100644 package/python3/python3-001-remove-host-header-path.patch
- delete mode 100644 package/python3/python3-001-support-for-build.patch
- delete mode 100644 package/python3/python3-002-no-host-headers-libs.patch
- create mode 100644 package/python3/python3-002-properly-detect-if-python-build.patch
- delete mode 100644 package/python3/python3-003-staging-header-libs.patch
- create mode 100644 package/python3/python3-003-sysconfigdata-install-location.patch
- delete mode 100644 package/python3/python3-004-no-import-when-cross-compiling.patch
- rename package/python3/{python3-112-old-stdlib-cache.patch => python3-004-old-stdlib-cache.patch} (61%)
- delete mode 100644 package/python3/python3-005-do-not-generate-pyo-files.patch
- create mode 100644 package/python3/python3-005-pyc-pyo-conditional.patch
- rename package/python3/{python3-011-cross-compile-getaddrinfo.patch => python3-006-cross-compile-getaddrinfo.patch} (81%)
- delete mode 100644 package/python3/python3-006-reread-environment.patch
- delete mode 100644 package/python3/python3-007-change-pyconfig-h-location.patch
- rename package/python3/{python3-012-disable-extensions.patch => python3-007-disable-extensions.patch} (78%)
- create mode 100644 package/python3/python3-008-distutils-sysconfig-use-sysconfigdata.patch
- delete mode 100644 package/python3/python3-008-no-rpath.patch
- create mode 100644 package/python3/python3-009-distutils-use-python-sysroot.patch
- delete mode 100644 package/python3/python3-009-verbose-module-build.patch
- delete mode 100644 package/python3/python3-010-distutils-cross-compilation-support.patch
- create mode 100644 package/python3/python3-010-no-termcap-host-path.patch
-
+diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+index a862895..11ad75d 100644
+--- a/package/pkg-python.mk
++++ b/package/pkg-python.mk
+@@ -114,7 +114,7 @@ endif
+ else ifeq ($$($(2)_SETUP_TYPE),setuptools)
+ ifeq ($(4),target)
+ $(2)_BASE_ENV         = $$(PKG_PYTHON_SETUPTOOLS_ENV)
+-$(2)_BASE_BUILD_TGT   = build -x
++$(2)_BASE_BUILD_TGT   = build
+ $(2)_BASE_BUILD_OPT   =
+ $(2)_BASE_INSTALL_OPT = $$(PKG_PYTHON_SETUPTOOLS_INSTALL_OPT)
+ else
+@@ -133,13 +133,12 @@ endif
+ # front of the dependencies.
+ #
+ # However it must be repeated from inner-generic-package, as we need
+-# to exclude the python, host-python, host-python-setuptools and
+-# host-distutilscross packages, which are added below in the list of
+-# dependencies depending on the package characteristics, and shouldn't
+-# be derived automatically from the dependencies of the corresponding
+-# target package. For example, target packages need
+-# host-python-distutilscross, but not host packages.
+-$(2)_DEPENDENCIES ?= $(filter-out host-python host-python-setuptools host-python-distutilscross host-toolchain $(1),$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
++# to exclude the python, host-python and host-python-setuptools
++# packages, which are added below in the list of dependencies
++# depending on the package characteristics, and shouldn't be derived
++# automatically from the dependencies of the corresponding target
++# package.
++$(2)_DEPENDENCIES ?= $(filter-out host-python host-python-setuptools host-toolchain $(1),$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
+ 
+ # Target packages need both the python interpreter on the target (for
+ # runtime) and the python interpreter on the host (for
+@@ -152,17 +151,13 @@ $(2)_DEPENDENCIES += host-python
+ endif
+ 
+ # Setuptools based packages will need host-python-setuptools (both
+-# host and target) and host-python-distutilscross (only target
+-# packages). We need to have a special exclusion for the
++# host and target). We need to have a special exclusion for the
+ # host-setuptools package itself: it is setuptools-based, but
+ # shouldn't depend on host-setuptools (because it would otherwise
+ # depend on itself!).
+ ifeq ($$($(2)_SETUP_TYPE),setuptools)
+ ifneq ($(2),HOST_PYTHON_SETUPTOOLS)
+ $(2)_DEPENDENCIES += host-python-setuptools
+-ifeq ($(4),target)
+-$(2)_DEPENDENCIES += host-python-distutilscross
+-endif
+ endif
+ endif
+ 
 -- 
 1.8.3.2
