@@ -1,49 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Feb 2014 22:09:04 +0100
-Subject: [Buildroot] [PATCH v2 6/6] qt5: needs NPTL threads
+Date: Tue, 18 Feb 2014 22:09:03 +0100
+Subject: [Buildroot] [PATCH v2 5/6] tvheadend: use
+	BR2_TOOLCHAIN_HAS_THREADS_NPTL
 In-Reply-To: <1392757744-29984-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1392757744-29984-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1392757744-29984-7-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1392757744-29984-6-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-
-  http://autobuild.buildroot.org/results/70b/70b77e7a5b292e3fcbcf8cab4651c48220f2bd17/
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qt5/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/tvheadend/Config.in | 12 +++---------
+ 1 file changed, 3 insertions(+), 9 deletions(-)
 
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index b62a810..5713c41 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -6,10 +6,10 @@ config BR2_PACKAGE_QT5_JSCORE_AVAILABLE
- 	depends on !(BR2_arm7tdmi || BR2_arm720t || BR2_arm920t || BR2_arm922t || BR2_fa526)
- 	default y
+diff --git a/package/tvheadend/Config.in b/package/tvheadend/Config.in
+index da60f83..74df825 100644
+--- a/package/tvheadend/Config.in
++++ b/package/tvheadend/Config.in
+@@ -1,22 +1,16 @@
+-comment "tvheadend needs a toolchain w/ largefile, IPv6, threads"
+-	depends on !BR2_avr32 && !BR2_xtensa && !BR2_arc
+-	depends on !BR2_PTHREADS && !BR2_PTHREADS_OLD
+-	depends on !BR2_LARGEFILE || !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS
++comment "tvheadend needs a toolchain w/ largefile, IPv6, NPTL"
++	depends on !BR2_LARGEFILE || !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS_NPTL
  
--comment "Qt5 needs a toolchain w/ wchar, IPv6, threads, C++"
-+comment "Qt5 needs a toolchain w/ wchar, IPv6, NPTL, C++"
- 	depends on !BR2_PACKAGE_QT
- 	depends on !BR2_avr32
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 
- menuconfig BR2_PACKAGE_QT5
- 	bool "Qt5"
-@@ -17,7 +17,7 @@ menuconfig BR2_PACKAGE_QT5
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_INET_IPV6
+ config BR2_PACKAGE_TVHEADEND
+ 	bool "tvheadend"
+ 	depends on BR2_LARGEFILE && BR2_INET_IPV6
 -	depends on BR2_TOOLCHAIN_HAS_THREADS
 +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on !BR2_PACKAGE_QT
+ 	# tvheadend requires an atomic_add operation. Either you have
+ 	# a gcc >= 4.3 toolchain and it uses the gcc intrinsics, or it
+ 	# has special code for x86, x86-64, PPC and ARM. So in the
+ 	# context of Buildroot, the only really problematic
+ 	# architecture is avr32, which uses gcc 4.2.
+ 	depends on !BR2_avr32
+-	# clock_nanosleep needs NPTL
+-	depends on !BR2_PTHREADS && !BR2_PTHREADS_OLD
+-	# no NPTL for these archs
+-	depends on !BR2_xtensa && !BR2_arc
+ 	select BR2_PACKAGE_DVB_APPS
+ 	select BR2_PACKAGE_OPENSSL
  	help
- 	  This option enables the Qt5 framework. Sub-options allow to
 -- 
 1.8.3.2
