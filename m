@@ -1,38 +1,114 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Feb 2014 12:02:09 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-02-16
-In-Reply-To: <CAHkwnC_jtTrBgwOt9u=qYfHs8VSPK_EBwGDmhzQOO5vouoUE9A@mail.gmail.com>
-References: <20140217073009.1BAB9101553@stock.ovh.net>
- <CAHkwnC9isNi5hT=j6nOPQnvur6S_o6sBMqm8jpyUPZ4m1iXQ9A@mail.gmail.com>
- <CAHkwnC_jtTrBgwOt9u=qYfHs8VSPK_EBwGDmhzQOO5vouoUE9A@mail.gmail.com>
-Message-ID: <20140218120209.71762c1a@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 18 Feb 2014 12:28:29 +0100
+Subject: [Buildroot] [PATCH 2 of 4] alsa-lib: add a fake dlfcn.h header
+	if dynamic load is not supported
+In-Reply-To: <2b373a4c038e8029fbfb.1392224142@argentina> (Thomas De
+ Schampheleire's message of "Wed, 12 Feb 2014 17:55:42 +0100")
+References: <patchbomb.1392224140@argentina>
+ <2b373a4c038e8029fbfb.1392224142@argentina>
+Message-ID: <87a9dowtgi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fabio Porcedda,
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
-On Tue, 18 Feb 2014 11:34:43 +0100, Fabio Porcedda wrote:
-> On Mon, Feb 17, 2014 at 11:41 AM, Fabio Porcedda
-> <fabio.porcedda@gmail.com> wrote:
-> > On Mon, Feb 17, 2014 at 8:30 AM, Thomas Petazzoni
-> > <thomas.petazzoni@free-electrons.com> wrote:
-> >> Build statistics for 2014-02-16
-> > <snip>
-> >>       i686 |            host-libxslt-1.1.28 | NOK | http://autobuild.buildroot.net/results/39202af201a74e4e173c21062ae268bbd1210231/
-> >
-> > I will try to look into this.
-> 
-> I'm unable to reproduce this build failure.
-> Is someone able to reproduce it?
+ > The FLAT GNU toolchain doesn't include the dlfcn.h header file.
+ > Provide a fake header file dlmisc.h with enough declarations to make
+ > alsa-lib happy.
 
-I believe it might be a parallel build issue.
+ > Fixes
+ > http://autobuild.buildroot.org/results/706/7069e1f43cbed745d65f7dd9904a3fff034530ac/build-end.log
 
-Thomas
+ > Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
+ > [Thomas: change sequence number from 003 to 0003, update commit message ]
+ > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+
+ > ---
+ >  package/alsa-lib/alsa-lib-0003-dlmisc.patch |  59 ++++++++++++++++++++++++
+ >  1 files changed, 59 insertions(+), 0 deletions(-)
+
+ > diff --git a/package/alsa-lib/alsa-lib-0003-dlmisc.patch b/package/alsa-lib/alsa-lib-0003-dlmisc.patch
+ > new file mode 100644
+ > --- /dev/null
+ > +++ b/package/alsa-lib/alsa-lib-0003-dlmisc.patch
+ > @@ -0,0 +1,59 @@
+ > +alsa-lib: dlmisc: Add a fake dl lib head file when dl lib is not supported by the toolchain.
+ > +
+ > +The FLAT GNU toolchain doesn't include the dlfcn.h header file.
+ > +
+ > +--- alsa-lib-1.0.26/src/mixer/simple_abst.c	2012-09-06 16:55:14.000000000 +0800
+ > ++++ alsa-lib-1.0.26.bak/src/mixer/simple_abst.c	2013-11-25 14:53:07.739275843 +0800
+ > +@@ -34,7 +34,11 @@
+ > + #include <fcntl.h>
+ > + #include <sys/ioctl.h>
+ > + #include <math.h>
+ > ++#ifdef HAVE_LIBDL
+ > + #include <dlfcn.h>
+ > ++#else
+ > ++#include <dlmisc.h>
+
+This is not a system header, so it should use #include "dlmisc.h".
+
+What the the upstream status of this patch? We don't usually carry
+feature patches in buildroot (besides backports).
+
+Are those two defines the only part of dlfcn.h used? If so, how about
+protection the pieces of code using them with #ifdef HAVE_LIBDL instead?
+
+
+ > ++#endif
+ > + #include "config.h"
+ > + #include "asoundlib.h"
+ > + #include "mixer_simple.h"
+ > +--- alsa-lib-1.0.26/modules/mixer/simple/sbasedl.c	2012-09-06 16:55:14.000000000 +0800
+ > ++++ alsa-lib-1.0.26.bak/modules/mixer/simple/sbasedl.c	2013-11-25 14:53:40.871279553 +0800
+ > +@@ -27,7 +27,11 @@
+ > + #include <fcntl.h>
+ > + #include <sys/ioctl.h>
+ > + #include <math.h>
+ > ++#ifdef HAVE_LIBDL
+ > + #include <dlfcn.h>
+ > ++#else
+ > ++#include <dlmisc.h>
+ > ++#endif
+ > + #include "config.h"
+ > + #include "asoundlib.h"
+ > + #include "mixer_abst.h"
+ > +--- /dev/null	2013-11-25 21:32:41.194714253 +0800
+ > ++++ alsa-lib-1.0.26.bak/include/dlmisc.h	2013-11-25 15:03:11.031307047 +0800
+ > +@@ -0,0 +1,24 @@
+ > ++/*
+ > ++ *   This library is free software; you can redistribute it and/or modify
+ > ++ *   it under the terms of the GNU Lesser General Public License as
+ > ++ *   published by the Free Software Foundation; either version 2.1 of
+ > ++ *   the License, or (at your option) any later version.
+ > ++ *
+ > ++ *   This program is distributed in the hope that it will be useful,
+ > ++ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ > ++ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ > ++ *   GNU Lesser General Public License for more details.
+ > ++ *
+ > ++ *   You should have received a copy of the GNU Lesser General Public
+ > ++ *   License along with this library; if not, write to the Free Software
+ > ++ *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+ > ++ *
+ > ++ */
+ > ++
+ > ++#ifndef __ALSA_DLMISC_H
+ > ++#define __ALSA_DLMISC_H
+ > ++
+ > ++#define RTLD_NOW	0x00002
+ > ++#define RTLD_GLOBAL	0x00100
+ > ++
+ > ++#endif
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot at busybox.net
+ > http://lists.busybox.net/mailman/listinfo/buildroot
+
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
