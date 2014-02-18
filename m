@@ -1,26 +1,58 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 18 Feb 2014 23:36:35 +0100
-Subject: [Buildroot] [PATCH v2 2/6] docs/manual: indicate how to handle
-	BR2_TOOLCHAIN_HAS_THREADS_NPTL
-In-Reply-To: <1392757744-29984-3-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1392757744-29984-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1392757744-29984-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAHXCMMJpfYs33repeuomc3_H5c+_FC9wDSrHvdwii_EXDyTTJA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 18 Feb 2014 23:59:50 +0100
+Subject: [Buildroot] [PATCH v2 1/1] ncftp: fix cross-compilation test
+In-Reply-To: <1392762712-29657-1-git-send-email-romain.naour@openwide.fr>
+References: <1392762712-29657-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20140218235950.6bc82d6e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, all,
+Dear Romain Naour,
 
-On Tue, Feb 18, 2014 at 10:09 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+On Tue, 18 Feb 2014 23:31:52 +0100, Romain Naour wrote:
+> The cross-compilation test is based on the ability to run
+> a test program on the host, which is wrong.
+> 
+> If it runs, then the configure script concludes
+> that we're doing native compilation,
+> if it doesn't run, we're doing cross-compilation.
+> 
+> Replace it with a more correct test.
+> 
+> Fixes
+> http://autobuild.buildroot.net/results/969/969a49ae97a50634ea846a82b9c360e4fb020ace/build-end.log
+> 
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> ---
+> v2:
+> Add a cross-compilation test suggested by Thomas Petazzoni.
 
-Acked-by: Samuel Martin <s.martin49@gmail.com>
+Can you instead test the following patch:
 
-Regards,
+diff --git a/package/ncftp/ncftp.mk b/package/ncftp/ncftp.mk
+index ff6c70a..c9068b7 100644
+--- a/package/ncftp/ncftp.mk
++++ b/package/ncftp/ncftp.mk
+@@ -11,6 +11,14 @@ NCFTP_TARGET_BINS = ncftp
+ NCFTP_LICENSE = Clarified Artistic License
+ NCFTP_LICENSE_FILES = doc/LICENSE.txt
+ 
++NCFTP_DEPENDENCIES = host-autoconf
++
++define NCFTP_RUN_AUTOCONF
++       (cd $(@D); $(HOST_DIR)/usr/bin/autoconf -I$(@D)/autoconf_local/)
++endef
++
++NCFTP_PRE_CONFIGURE_HOOKS += NCFTP_RUN_AUTOCONF
++
+ ifeq ($(BR2_PACKAGE_NCFTP_GET),y)
+        NCFTP_TARGET_BINS += ncftpget
+ endif
 
 -- 
-Samuel
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
