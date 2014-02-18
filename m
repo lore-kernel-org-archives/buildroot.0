@@ -1,62 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 19 Feb 2014 09:03:17 +0100
-Subject: [Buildroot] [PATCH v2 00/20] Python 2 and 3 bumps,
-	support for Python 3 external modules
-In-Reply-To: <1392756013-27757-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 18 Feb 2014 21:39:53 +0100")
-References: <1392756013-27757-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <877g8r34xm.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 18 Feb 2014 23:29:34 +0100
+Subject: [Buildroot] [git commit branch/next] python3: provide a PYTHON3_PATH
+Message-ID: <20140219080355.870A399B3D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=eb7667bf41d4ebb8a3de3c6bebdaadfa65ec775c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > Hello,
- > Here is a v2 of the patch set that does numerous Python support
- > improvements. Changes since v1:
+The Python package infrastructure will need the Python 3 package to
+provide a PYTHON3_PATH environment variable in order to build
+third-party Python modules.
 
- >  * Dropped patches that have been merged.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python3/python3.mk |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
- >  * Rebased on top of the next branch, in order to resolve conflicts
- >    with the parallel build support patches that were merged.
-
- > Best regards,
-
- > Thomas
-
- > Przemyslaw Wrzos (1):
- >   python, python3: fix to ensure libpython is stripped
-
- > Rohan Fletcher (1):
- >   python-setuptools: bump version to 2.1.2
-
- > Thomas Petazzoni (17):
- >   pkg-python: no longer use distutilscross for setuptools
- >   python-distutilscross: remove package that is no longer needed
- >   python3: removal of *.py/*.pyc is now done globally
- >   python3: make it exclusive from python
- >   python3: add python -> python3 symlink for the host variant
- >   python3: use proper PYTHON3_VERSION_MAJOR instead of harcoding 3.3
- >   python3: bump to 3.4.0rc1
- >   python3: provide a PYTHON3_PATH
- >   package: add python3 support in the package infrastructure
- >   package: allow Python packages with Python3
- >   python, python3: enable unicodedata for host-python, needed by
- >     setuptools
- >   python-pyasn: use the real upstream
- >   python-bottle: allow to build with Python 3
- >   python-serial: allow to build with Python 3
- >   python-pyasn: allow to build with Python 3
- >   python-pycrypto: allow to build with Python 3
- >   python-pysnmp{,-apps,-mibs}: allow to build with Python 3
-
- > kpa_info at yahoo.fr (1):
- >   python3: add config directory symbolic link
-
-Committed the rest of the series (except for patch 6) to next, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index ad9b989..1bf8500 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -147,5 +147,8 @@ endef
+ 
+ HOST_PYTHON3_POST_INSTALL_HOOKS += HOST_PYTHON3_INSTALL_SYMLINK
+ 
++# Provided to other packages
++PYTHON3_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/sysconfigdata/:$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
