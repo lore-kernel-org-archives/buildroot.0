@@ -1,58 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Feb 2014 21:40:13 +0100
-Subject: [Buildroot] [PATCH v2 20/20] python-pysnmp{, -apps,
-	-mibs}: allow to build with Python 3
-In-Reply-To: <1392756013-27757-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1392756013-27757-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1392756013-27757-21-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Tue, 18 Feb 2014 22:06:02 +0100
+Subject: [Buildroot] [PATCH 0/6] Add toolchain knob for NPTL
+In-Reply-To: <20140213074617.283682ce@core2quad.morethan.org>
+References: <1392297727-17627-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20140213074617.283682ce@core2quad.morethan.org>
+Message-ID: <20140218220602.563f48c3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/python-pysnmp-apps/Config.in | 2 +-
- package/python-pysnmp-mibs/Config.in | 2 +-
- package/python-pysnmp/Config.in      | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+Dear Mike Zick,
 
-diff --git a/package/python-pysnmp-apps/Config.in b/package/python-pysnmp-apps/Config.in
-index 304e812..8edd04c 100644
---- a/package/python-pysnmp-apps/Config.in
-+++ b/package/python-pysnmp-apps/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_PYTHON_PYSNMP_APPS
- 	bool "python-pysnmp-apps"
--	depends on BR2_PACKAGE_PYTHON
-+	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
- 	select BR2_PACKAGE_PYTHON_PYSNMP
- 	depends on BR2_INSTALL_LIBSTDCPP # pysnmp -> pyasn
- 	help
-diff --git a/package/python-pysnmp-mibs/Config.in b/package/python-pysnmp-mibs/Config.in
-index 90ec933..cc03676 100644
---- a/package/python-pysnmp-mibs/Config.in
-+++ b/package/python-pysnmp-mibs/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_PYTHON_PYSNMP_MIBS
- 	bool "python-pysnmp-mibs"
--	depends on BR2_PACKAGE_PYTHON
-+	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
- 	select BR2_PACKAGE_PYTHON_PYSNMP
- 	depends on BR2_INSTALL_LIBSTDCPP # pysnmp -> pyasn
- 	help
-diff --git a/package/python-pysnmp/Config.in b/package/python-pysnmp/Config.in
-index d5f90ed..6cf18ee 100644
---- a/package/python-pysnmp/Config.in
-+++ b/package/python-pysnmp/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_PYTHON_PYSNMP
- 	bool "python-pysnmp"
--	depends on BR2_PACKAGE_PYTHON
-+	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
- 	depends on BR2_INSTALL_LIBSTDCPP # pyasn
- 	select BR2_PACKAGE_PYTHON_PYASN
- 	select BR2_PACKAGE_PYTHON_PYCRYPTO
+On Thu, 13 Feb 2014 07:46:17 -0600, Mike Zick wrote:
+
+> With the line length limitations, shouldn't variable names be kept to
+> less than 1/2 the line length limits?  ;)
+
+BR2_TOOLCHAIN_HAS_THREADS_NPTL is only 30 characters, which is less
+than 1/2 the line length limit :)
+
+> Rhetorical:
+> Can a toolchain **without threads** support NPTL ?
+
+No, indeed not.
+
+> With the above considerations, perhaps the knob could be:
+> BR2_TOOLCHAIN_NPTL
+
+I don't like this, because it's not very expressive. I could reduce it
+to BR2_TOOLCHAIN_HAS_NPTL indeed, but I find
+BR2_TOOLCHAIN_HAS_THREADS_NPTL to be more expressive. Do others have
+different opinions?
+
+Thanks,
+
+Thomas
 -- 
-1.8.3.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
