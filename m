@@ -1,51 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 18 Feb 2014 22:50:04 +0100
-Subject: [Buildroot] [git commit] python3: removal of *.py/*.pyc is now done
-	globally
-Message-ID: <20140228133414.1578D9BA7B@busybox.osuosl.org>
+Date: Tue, 18 Feb 2014 23:21:34 +0100
+Subject: [Buildroot] [git commit] python3: use proper PYTHON3_VERSION_MAJOR
+	instead of harcoding 3.3
+Message-ID: <20140228133414.42A509BA7B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e424050cfcaa2d14e10746908778615434cd0a49
+commit: http://git.buildroot.net/buildroot/commit/?id=249778541b68c10156c6687e14888f6047556922
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Some parts of python3.mk were hardcoding the 3.3 version as the major
+version, which does not work for Python 3.4 and other future
+versions. Instead, use the existing PYTHON3_VERSION_MAJOR.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python3/python3.mk |   21 ---------------------
- 1 files changed, 0 insertions(+), 21 deletions(-)
+ package/python3/python3.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index b5e9689..d49fe48 100644
+index ba72e75..2773a12 100644
 --- a/package/python3/python3.mk
 +++ b/package/python3/python3.mk
-@@ -159,26 +159,5 @@ ifneq ($(BR2_PACKAGE_PYTHON),y)
- PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_INSTALL_SYMLINK
- endif
+@@ -127,7 +127,7 @@ PYTHON3_MAKE_ENV = \
+ # trouble for cross compilation
+ define PYTHON3_FIXUP_LIBDIR
+ 	$(SED) 's|^LIBDIR=.*|LIBDIR= $(STAGING_DIR)/usr/lib|' \
+-	   $(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/config-3.3m/Makefile
++	   $(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/config-$(PYTHON3_VERSION_MAJOR)m/Makefile
+ endef
  
--ifeq ($(BR2_PACKAGE_PYTHON3_PY_ONLY),y)
--define PYTHON3_REMOVE_MODULES_FILES
--	for i in `find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) \
--		 -name __pycache__` ; do \
--		rm -rf $$i ; \
--	done
--endef
--endif
--
--ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
--define PYTHON3_REMOVE_MODULES_FILES
--	for i in `find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) \
--		 -name *.py` ; do \
--		rm -f $$i ; \
--	done
--endef
--endif
--
--PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_REMOVE_MODULES_FILES
--
--
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+ PYTHON3_POST_INSTALL_STAGING_HOOKS += PYTHON3_FIXUP_LIBDIR
+@@ -141,7 +141,7 @@ define PYTHON3_REMOVE_USELESS_FILES
+ 	rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR)m-config
+ 	rm -f $(TARGET_DIR)/usr/bin/python3-config
+ 	rm -f $(TARGET_DIR)/usr/bin/smtpd.py.3
+-	for i in `find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/config-3.3m/ \
++	for i in `find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/config-$(PYTHON3_VERSION_MAJOR)m/ \
+ 		-type f -not -name pyconfig.h -a -not -name Makefile` ; do \
+ 		rm -f $$i ; \
+ 	done
