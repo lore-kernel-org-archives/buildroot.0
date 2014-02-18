@@ -1,73 +1,53 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Tue, 18 Feb 2014 16:50:55 +0100
-Subject: [Buildroot] [PATCH v5 5/5] xbmc: new package
-In-Reply-To: <53037F97.7040906@barkynet.com>
-References: <1392332394-27935-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1392332394-27935-6-git-send-email-maxime.hadjinlian@gmail.com>
- <52FE9FDE.4090102@barkynet.com>
- <CAGduivznzC=-rK3hspNjykR6a5MTpTR2oCWW=M=tN3jgsq13vA@mail.gmail.com>
- <53037F97.7040906@barkynet.com>
-Message-ID: <CAGduivzgBWnpmwoc7tB_MB94OXRKirY0nKqpi7hmnD6Qykw_sw@mail.gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue, 18 Feb 2014 16:55:38 +0100
+Subject: [Buildroot] [PATCH v4 7/7] Makefile: export PATH
+In-Reply-To: <20140218163756.0e495167@skate>
+References: <1392559113-5215-1-git-send-email-s.martin49@gmail.com>
+ <1392559113-5215-8-git-send-email-s.martin49@gmail.com>
+ <5302FE90.9070402@mind.be> <20140218163756.0e495167@skate>
+Message-ID: <CAHXCMMKD3N0rUz4fBQfM0gjhu-_RVWn+ae8DvcYkXpV-kxCLkQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Feb 18, 2014 at 4:43 PM, Martin Bark <martin@barkynet.com> wrote:
-> Maxime,
+Arnout, Thomas,
+
+On Tue, Feb 18, 2014 at 4:37 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Arnout Vandecappelle,
 >
-> Sorry for the late replay
->
->
-> On 14/02/14 23:51, Maxime Hadjinlian wrote:
->
-> -- snip --
->
->>>
->>>
->>>> diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
->>>> new file mode 100644
->>>> index 0000000..db43a9f
->>>> --- /dev/null
->>>> +++ b/package/xbmc/xbmc.mk
->>>> @@ -0,0 +1,175 @@
->>>>
->>>>
->>>> +################################################################################
->>>> +#
->>>> +# xbmc
->>>> +#
->>>>
->>>>
->>>> +################################################################################
->>>> +
->>>> +XBMC_VERSION = 12.3-Frodo
->>>> +XBMC_SITE = $(call github,xbmc,xbmc,$(XBMC_VERSION))
->>>> +XBMC_LICENSE = GPLv2
->>>> +XBMC_LICENSE_FILES = LICENSE.GPL
->>>> +XBMC_DEPENDENCIES = host-lzo host-sdl_image host-swig
->>>
->>>
->>>
->>> I think you need to add host-gperf, i had to add this for xmbc to
->>> compile.
+> On Tue, 18 Feb 2014 07:32:48 +0100, Arnout Vandecappelle wrote:
+>> On 16/02/14 14:58, Samuel Martin wrote:
+>> > This can be useful for:
+>> > - package using custom build system that are not aware that the host
+>> >   tree is in $(O)/host/;
+>> > - post-{build,image} scripts, in case some host-tools were specifically
+>> >   built to be used by these scripts.
 >>
->> host-gperf ? I never needed that, why should it be needed ?
+>>  This makes all the previous patches redundant, since the PATH=...
+>> invocations should be removed instead of renamed.
 >
+> Agreed. Samuel, you should make a choice:
 >
-> I just verified and xmbc does fails to build for me because i'm missing
-> gpref.  I checked and the configure script tests for gpref and errors if
-> it's missing.  The machine i'm building on does not have gperf installed.
-> Either adding host-gpref or patching configure.in to remove the tests for
-> gpref fixed this issue.  I think probably patching configure.in is a better
-> solution.
-Okay, I must have it on my system, that's why I never noticed. I'll
-add it to the dependency then.
-Why do you think patching the configure.in would be better ?
-It seems to me that it would add another patch to maintain, which
-would never go mainline, if they search for it in their configure,
-they must need it somehow.
+>  * Either you use BR_PATH, and we continue to pass PATH=$(BR_PATH)
+>    whenever the PATH is needed.
 >
-> Thanks
-Thank you
+>  * Or you simply directly export PATH with the right value, and remove
+>    all occurrences where we manually pass PATH=<something>.
+
+Ok.
+It was not clear whether the export would be accepted...
+So I followed the secure way, thinking that the PATH usage could be
+cleaned up later ;-)
+
+Anyway, now it's my call. :)
+Thanks for clarification.
+
+
+Regards,
+
+
+-- 
+Samuel
