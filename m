@@ -1,70 +1,160 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Tue, 18 Feb 2014 18:30:59 +0000
-Subject: [Buildroot] [PATCH v7 4/4] xbmc: new package
-In-Reply-To: <CAGduivyFw4z+UxWWj36kgZgvDDg6CnQ12zKH6QGtpZrLMBiaow@mail.gmail.com>
-References: <1392680233-24585-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1392680233-24585-5-git-send-email-maxime.hadjinlian@gmail.com>
- <20140218173828.5947589d@skate>
- <CAGduivyFw4z+UxWWj36kgZgvDDg6CnQ12zKH6QGtpZrLMBiaow@mail.gmail.com>
-Message-ID: <5303A6E3.8010209@barkynet.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue, 18 Feb 2014 21:14:33 +0100
+Subject: [Buildroot] [PATCH 1/1] manual/faq: add section about why no
+	binary packages
+In-Reply-To: <430595ea81c22aef392d3aec25cc93ef9af7bd47.1392659250.git.yann.morin.1998@free.fr>
+References: <cover.1392659250.git.yann.morin.1998@free.fr>
+ <430595ea81c22aef392d3aec25cc93ef9af7bd47.1392659250.git.yann.morin.1998@free.fr>
+Message-ID: <CAHXCMMJcJtu2teaOTB96t3S4u24gqxTzYYa7Qe9Lk=vV8Gg6uw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Maxime, Thomas,
+Hi Yann,
 
-On 18/02/14 17:02, Maxime Hadjinlian wrote:
-> Hi Thomas, all
-> On Tue, Feb 18, 2014 at 5:38 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> Dear Maxime Hadjinlian,
->>
->> On Tue, 18 Feb 2014 00:37:13 +0100, Maxime Hadjinlian wrote:
->>
->>> diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
->>> new file mode 100644
->>> index 0000000..23650ed
->>> --- /dev/null
->>> +++ b/package/xbmc/Config.in
->>> @@ -0,0 +1,165 @@
->>> +comment "xbmc requires an OpenGL-capable backend"
->>> +     depends on !(BR2_PACKAGE_HAS_OPENGL_EGL && BR2_PACKAGE_HAS_OPENGL_ES)
->>
->> I would make the comment more specific:
->>
->> comment "xbmc requires an OpenGL ES and EGL backend"
->>
->>> +# External toolchain are required because of a missing bitdefs.h
->>> +comment "xbmc needs an (e)glibc external toolchain w/ C++, wchar"
->>> +     depends on !(BR2_TOOLCHAIN_USES_GLIBC && BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR) || BR2_TOOLCHAIN_BUILDROOT
->>
->> This dependency does not make much sense to me. Your comment mentions
->> "external toolchain", but it is not reflected by the dependencies.
->> Moreover, we now have glibc/eglibc support in the internal backend, so
->> I don't really see how there could be a difference between internal and
->> external here. Additionally, if the C library is glibc or eglibc, then
->> you are guaranteed to have wchar support. So if what you need is
->> eglibc/glibc, then please do:
->>
->> comment "xbmc needs an (e)glibc toolchain w/ C++"
->>          depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_INSTALL_LIBSTDCPP
->>
-> The problem I had with internal toolchain, {X}libc was that, the
-> bitdefs.h is missing, and XBMC needs it.
-> I'll look at it another time as maybe my tests were not thorough enough.
+On Mon, Feb 17, 2014 at 6:52 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>
+> It comes up every now and then on the list, so better be prepared to
+> point at the manual, rather than rehash the same every time.
+>
+> Most of the chapter is a copy-paste of the report from the Buildroot
+> Developpers Day in Pragues, 2011-10-28:
+>     http://lists.busybox.net/pipermail/buildroot/2011-November/047229.html
+>
+> We consider the opinions expressed in that report to be still valid
+> now, two years later.
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Samuel Martin <s.martin49@gmail.com>
+> Cc: Peter Korsgaard <jacmet@uclibc.org>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> Cc: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  docs/manual/faq-troubleshooting.txt | 91 +++++++++++++++++++++++++++++++++++++
+>  1 file changed, 91 insertions(+)
+>
+> diff --git a/docs/manual/faq-troubleshooting.txt b/docs/manual/faq-troubleshooting.txt
+> index 4e0612b..636b3b6 100644
+> --- a/docs/manual/faq-troubleshooting.txt
+> +++ b/docs/manual/faq-troubleshooting.txt
+> @@ -111,3 +111,94 @@ directory as the new root, will most likely fail.
+>  If you want to run the target filesystem inside a chroot, or as an NFS
+>  root, then use the tarball image generated in +images/+ and extract it
+>  as root.
+> +
+> +[[faq-no-binary-packages]]
+> +Why doesn't Buildroot generate binary packages (.deb, .ipkg...)?
+> +----------------------------------------------------------------
+> +
+> +One feature that is often discussed on the Buildroot list, is the
+> +the general topic of "package management". To summarize, the idea
+> +would be to add some tracking of which Buildroot package installs
+> +what files, with the goals of:
+> +
+> + * Being able to remove files installed by a package when this package
+> +   gets unselected from the menuconfig ;
+> +
+> + * Ultimately, be able to generate binary packages (ipk or other
+> +   format) that can be installed on the target without re-generating a
+> +   new root filesystem image.
+> +
+> +In general, most people think it is easy to do: just track which package
+> +installed what and remove it when the package is unselected. However, it
+> +is much more complicated than that:
+> +
+> + * It is not only about the +target/+ directory, but also the sysroot in
+> +   +host/usr/<tuple>/sysroot+ and the +host/+ directory itself. All files
+> +   installed in those directories by various packages must be tracked.
+> +
+> + * When a package is removed, it is not sufficient to remove just the
+> +   files it installed. One must also remove all its reverse
+> +   dependencies (i.e packages relying on it) and rebuild all those
+> +   packages. For example, package A depends optionally on the OpenSSL
+> +   library. Both are selected, and Buildroot is built. Package A is
+> +   built with crypto support using OpenSSL. Later on, OpenSSL gets
+> +   unselected from the configuration, but package A remains (since
+> +   OpenSSL is an optional dependency, this is possible). If you just
+> +   remove the OpenSSL files, then the files installed by package A are
+> +   broken: they use a library that is no longer present on the
+> +   target. Technically, it is possible to do this (the prototype that
+> +   Lionel Landwerlin and Thomas Petazzoni have worked on started to do
+> +   this), but it is difficult and adds a fair bit of complexity.
+
+I'm a bit skeptical about mentioning the existence of such a prototype.
+People may start asking for these patches, which may obviously not
+apply anymore.
+I would just say that, though this is technically doable, it adds a
+lot of complexity to Buildroot, which goes against the simplicity we
+tend to keep.
+
+> +
+> + * In addition to the previous problem, there is the case where the
+> +   optional dependency is not even known to Buildroot. For example,
+> +   package A in version 1.0 never used OpenSSL, but in version 2.0 it
+> +   automatically uses OpenSSL if available. If the Buildroot .mk file
+> +   hasn't been updated to take this into account, then package A will
+> +   not be part of the reverse dependencies of OpenSSL and will not be
+> +   removed and rebuilt when OpenSSL is removed. For sure, the .mk file
+> +   of package A should be fixed to mention this optional dependency,
+> +   but in the mean time, you can have non-reproducible behaviors.
+> +
+> + * The whole idea is also to allow changes in the menuconfig to be
+> +   applied on the output directory without having to rebuild
+> +   everything from scratch. However, this is very difficult to achieve
+> +   in a reliable way: what happens when the suboptions of a package
+> +   are changed (we would have to detect this, and rebuild the package
+> +   from scratch and potentially all its reverse dependencies), what
+> +   happens if toolchain options are changed, etc. At the moment, what
+
+What should be done when the toolchain options are changed is already
+known and documented ;) :
+http://nightly.buildroot.org/manual.html#full-rebuild
+
+> +   Buildroot does is clear and simple so its behaviour is very
+> +   reliable and it is easy to support users. If we start telling users
+> +   that the configuration changes done in menuconfig are applied after
+> +   the next make, then it has to work correctly and properly in all
+> +   situations, and not have some bizarre corner cases. We fear bug
+> +   reports like "I have enabled package A, B and C, then ran make,
+> +   then disabled package C and enabled package D and ran make, then
+> +   re-enabled package C and enabled package E and then there is a
+> +   build failure". Or worse "I did some configuration, then built,
+> +   then did some changes, built, some more changes, built, some more
+> +   changes, built, and now it fails, but I don't remember all the
+> +   changes I did and in which order". This will be impossible to
+> +   support.
+> +
+> +For all these reasons, the conclusion is that adding tracking of
+> +installed files to remove them when the package is unselected, or to
+> +generate a repository of binary packages, is something that is very
+> +hard to achieve reliably and will add a lot of complexity.
+> +
+> +On this matter, the Buildroot developpers make these position statements:
+> +
+> + * Buildroot strives at making it easy to generate a root filesystem
+> +   (hence the name, by the way). That is what we want to make Buildroot
+> +   good at: building root filesystems.
+> +
+> + * Buildroot is not meant to be a distribution (or rather, a distribution
+> +   generator). It is the opinion of most Buildroot developers that this
+> +   is not a goal we should pursue. We believe that there are other tools
+> +   better suited to generate a distro than Buildroot is. For example,
+> +   http://openembedded.org/[Open Embedded], or https://openwrt.org/[openWRT],
+> +   are such tools.
+> +
+> + * We prefer to push Buildroot in a direction that makes it easy (or even
+> +   easier) to generate complete root filesystems. This is what makes
+> +   Buildroot stands out in the crowd (among other things, of course!).
+> --
+> 1.8.1.2
 >
 
-locally i tried this change and the following defconfig
+Regards,
 
-BR2_arm=y
-BR2_arm1176jzf_s=y
-BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PACKAGE_XBMC=y
-BR2_PACKAGE_RPI_USERLAND=y
-
-and it all built ok.  I also tried with eglibc and it build ok too.
-
-Thanks
+-- 
+Samuel
