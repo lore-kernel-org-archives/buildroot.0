@@ -1,45 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Feb 2014 21:39:55 +0100
-Subject: [Buildroot] [PATCH v2 02/20] python-distutilscross: remove package
-	that is no longer needed
+Date: Tue, 18 Feb 2014 21:39:57 +0100
+Subject: [Buildroot] [PATCH v2 04/20] python3: make it exclusive from python
 In-Reply-To: <1392756013-27757-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1392756013-27757-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1392756013-27757-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1392756013-27757-5-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks to the previous commit that makes distutilscross unecessary for
-setuptools packages, the host-distutilscross package can now be
-removed. There is no need for any Config.in.legacy handling, since
-there is no target variant, or visible Config.in option for
-host-distutilscross.
+In Buildroot, we do not support installing both Python 2.x and Python
+3.x on the target.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-distutilscross/python-distutilscross.mk | 12 ------------
- 1 file changed, 12 deletions(-)
- delete mode 100644 package/python-distutilscross/python-distutilscross.mk
+ package/python3/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/python-distutilscross/python-distutilscross.mk b/package/python-distutilscross/python-distutilscross.mk
-deleted file mode 100644
-index cfe2811..0000000
---- a/package/python-distutilscross/python-distutilscross.mk
-+++ /dev/null
-@@ -1,12 +0,0 @@
--################################################################################
--#
--# python-distutilscross
--#
--################################################################################
--
--PYTHON_DISTUTILSCROSS_VERSION = 0.1
--PYTHON_DISTUTILSCROSS_SOURCE  = distutilscross-$(PYTHON_DISTUTILSCROSS_VERSION).tar.gz
--PYTHON_DISTUTILSCROSS_SITE    = http://pypi.python.org/packages/source/d/distutilscross
--PYTHON_DISTUTILSCROSS_SETUP_TYPE = setuptools
--
--$(eval $(host-python-package))
+diff --git a/package/python3/Config.in b/package/python3/Config.in
+index 6580cfd..12928f6 100644
+--- a/package/python3/Config.in
++++ b/package/python3/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON3
+ 	bool "python3"
++	depends on !BR2_PACKAGE_PYTHON
+ 	depends on BR2_USE_WCHAR
+ 	# uses fork()
+ 	depends on BR2_USE_MMU
 -- 
 1.8.3.2
