@@ -1,65 +1,58 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Wed, 19 Feb 2014 00:18:42 +0100
-Subject: [Buildroot] [PATCH v2 1/1] ncftp: fix cross-compilation test
-In-Reply-To: <20140218235950.6bc82d6e@skate>
-References: <1392762712-29657-1-git-send-email-romain.naour@openwide.fr>
- <20140218235950.6bc82d6e@skate>
-Message-ID: <5303EA52.8030803@openwide.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 19 Feb 2014 00:26:43 +0100
+Subject: [Buildroot] Switching from uClibc to glibc as the default in
+	Buildroot?
+In-Reply-To: <20140218231759.GS184@brightrain.aerifal.cx>
+References: <20140218231447.524a1a20@skate>
+ <20140218231759.GS184@brightrain.aerifal.cx>
+Message-ID: <20140219002643.50795999@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Dear Rich Felker,
 
-Le 18/02/2014 23:59, Thomas Petazzoni a ?crit :
-> Dear Romain Naour,
->
-> On Tue, 18 Feb 2014 23:31:52 +0100, Romain Naour wrote:
->> The cross-compilation test is based on the ability to run
->> a test program on the host, which is wrong.
->>
->> If it runs, then the configure script concludes
->> that we're doing native compilation,
->> if it doesn't run, we're doing cross-compilation.
->>
->> Replace it with a more correct test.
->>
->> Fixes
->> http://autobuild.buildroot.net/results/969/969a49ae97a50634ea846a82b9c360e4fb020ace/build-end.log
->>
->> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
->> ---
->> v2:
->> Add a cross-compilation test suggested by Thomas Petazzoni.
-> Can you instead test the following patch:
->
-> diff --git a/package/ncftp/ncftp.mk b/package/ncftp/ncftp.mk
-> index ff6c70a..c9068b7 100644
-> --- a/package/ncftp/ncftp.mk
-> +++ b/package/ncftp/ncftp.mk
-> @@ -11,6 +11,14 @@ NCFTP_TARGET_BINS = ncftp
->   NCFTP_LICENSE = Clarified Artistic License
->   NCFTP_LICENSE_FILES = doc/LICENSE.txt
->   
-> +NCFTP_DEPENDENCIES = host-autoconf
-> +
-> +define NCFTP_RUN_AUTOCONF
-> +       (cd $(@D); $(HOST_DIR)/usr/bin/autoconf -I$(@D)/autoconf_local/)
-> +endef
-> +
-> +NCFTP_PRE_CONFIGURE_HOOKS += NCFTP_RUN_AUTOCONF
-> +
->   ifeq ($(BR2_PACKAGE_NCFTP_GET),y)
->          NCFTP_TARGET_BINS += ncftpget
->   endif
->
-Ok, it works.
-The configure script is regenerated correctly.
+On Tue, 18 Feb 2014 18:17:59 -0500, Rich Felker wrote:
 
-I had problems using NCFTP_AUTORECONF = YES
-what is the difference?
+> As maintainer of musl libc (http://www.musl-libc.org), I'd like to
+> suggest it as an alternative to switching to glibc. Obviously sticking
+> with uClibc as the default would probably be the least invasive for
+> your user base, but if that turns out not to be feasible, I think musl
+> might be a better fit for most Buildroot users. Both musl's small size
+> and strong robustness aims are attractive from an embedded
+> perspective. We are about to make a 1.0 release and have active
+> development plans following 1.0 as well.
+> 
+> musl's arch coverage is still considerably less than uClibc's or
+> glibc's, but the amount of work needed to add a port is also much
+> lower (less than 20 small mandatory port-specific files aside from
+> bits headers to match kernel/ABI-specific types) and we have an active
+> development community willing to help getting additional ports
+> integrated upstream. Right now we have i386, x86_64, arm(32),
+> mips(32), microblaze, and powerpc(32); I expect to also merge the
+> in-progress superh port before the next release.
 
-Thank you,
-Romain Naour
+Thanks a lot Rich for this proposal.
+
+In fact, I am myself interested in musl: I have already added the
+possibility of using external musl toolchains with Buildroot, and I
+have started to work on integrating musl support in the internal
+toolchain backend of Buildroot. So you can clearly expect musl to be
+fully supported by Buildroot in the coming months.
+
+Since we don't yet have this support in Buildroot, I believe it is too
+early to consider making musl the default C library. But I definitely
+want to see musl supported in Buildroot, in order to help make its
+usage more widespread.
+
+Do you intend to have support for non-MMU architectures in musl?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
