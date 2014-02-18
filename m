@@ -1,41 +1,92 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Feb 2014 00:28:49 +0100
-Subject: [Buildroot] [PATCH v2 1/1] ncftp: fix cross-compilation test
-In-Reply-To: <5303EA52.8030803@openwide.fr>
-References: <1392762712-29657-1-git-send-email-romain.naour@openwide.fr>
- <20140218235950.6bc82d6e@skate> <5303EA52.8030803@openwide.fr>
-Message-ID: <20140219002849.1afd4436@skate>
+Date: Wed, 19 Feb 2014 00:33:56 +0100
+Subject: [Buildroot] [PATCH v2 0/5] Various x86 bootloaders and board support
+Message-ID: <1392766441-2160-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+Hello,
 
-On Wed, 19 Feb 2014 00:18:42 +0100, Romain Naour wrote:
+This is the v2 of a patch series I sent a long time ago. Changes since
+v1:
 
-> Ok, it works.
-> The configure script is regenerated correctly.
+ * Dropped all patches that have been merged.
 
-Cool. Does it fix the original problem? I only quickly looked at the
-generated configure script to verify that the cross compiling test is
-correct, but I did not verify that the original problem was really
-solved.
+ * Confirmed that grub2 can be built with a pure target 64 bits
+   compiler, for both the 64 bits Grub2 and the 32 bits Grub2. This
+   answers Peter's question at
+   http://lists.busybox.net/pipermail/buildroot/2013-December/083682.html.
 
-> I had problems using NCFTP_AUTORECONF = YES
-> what is the difference?
+ * Integrated the changes made by Christophe Vu Brugier on gummiboot
+   and gnu-efi.
 
-ncftp is not fully autotools based: it uses autoconf, but not automake.
-And the autoconf invocation needs a special -I path to find the
-aclocal.m4, since it cannot be re-generated using aclocal, because it
-uses some funky m4 macros and I have no idea where are the original m4
-files with these macros.
+ * Added dependency on wchar and largefile for gummiboot, since
+   gummiboot selects util-linux.
 
-Best regards,
+ * Adjust the two boards defconfig to lock down the kernel headers
+   version to 3.8, since the kernel being built is derived from 3.8.
 
 Thomas
+
+Thomas Petazzoni (5):
+  grub2: add new package
+  gnu-efi: new package
+  gummiboot: new package
+  board: add support for the MinnowBoard
+  board: add support for the Fri2 board
+
+ board/fri2/grub.cfg                                |   6 +
+ board/fri2/linux-3.8.config                        | 336 +++++++++++++++++++++
+ board/fri2/post-build.sh                           |   2 +
+ board/fri2/readme.txt                              |  40 +++
+ board/minnowboard/grub.cfg                         |   6 +
+ board/minnowboard/linux-3.8.config                 | 172 +++++++++++
+ board/minnowboard/post-build.sh                    |   2 +
+ board/minnowboard/readme.txt                       |  40 +++
+ boot/Config.in                                     |   2 +
+ boot/grub2/Config.in                               | 120 ++++++++
+ boot/grub2/grub.cfg                                |   6 +
+ boot/grub2/grub2-remove-gets.patch                 |  21 ++
+ boot/grub2/grub2.mk                                |  88 ++++++
+ boot/gummiboot/Config.in                           |  28 ++
+ boot/gummiboot/buildroot.conf                      |   4 +
+ boot/gummiboot/gummiboot.mk                        |  42 +++
+ boot/gummiboot/loader.conf                         |   2 +
+ configs/fri2_defconfig                             |  23 ++
+ configs/minnowboard_defconfig                      |  23 ++
+ package/Config.in                                  |   1 +
+ package/gnu-efi/Config.in                          |   9 +
+ .../gnu-efi/gnu-efi-01-use-override-cflags.patch   |  53 ++++
+ .../gnu-efi-02-parallel-make-archives.patch        |  48 +++
+ package/gnu-efi/gnu-efi-03-parallel-make.patch     |  22 ++
+ package/gnu-efi/gnu-efi.mk                         |  40 +++
+ 25 files changed, 1136 insertions(+)
+ create mode 100644 board/fri2/grub.cfg
+ create mode 100644 board/fri2/linux-3.8.config
+ create mode 100755 board/fri2/post-build.sh
+ create mode 100644 board/fri2/readme.txt
+ create mode 100644 board/minnowboard/grub.cfg
+ create mode 100644 board/minnowboard/linux-3.8.config
+ create mode 100755 board/minnowboard/post-build.sh
+ create mode 100644 board/minnowboard/readme.txt
+ create mode 100644 boot/grub2/Config.in
+ create mode 100644 boot/grub2/grub.cfg
+ create mode 100644 boot/grub2/grub2-remove-gets.patch
+ create mode 100644 boot/grub2/grub2.mk
+ create mode 100644 boot/gummiboot/Config.in
+ create mode 100644 boot/gummiboot/buildroot.conf
+ create mode 100644 boot/gummiboot/gummiboot.mk
+ create mode 100644 boot/gummiboot/loader.conf
+ create mode 100644 configs/fri2_defconfig
+ create mode 100644 configs/minnowboard_defconfig
+ create mode 100644 package/gnu-efi/Config.in
+ create mode 100644 package/gnu-efi/gnu-efi-01-use-override-cflags.patch
+ create mode 100644 package/gnu-efi/gnu-efi-02-parallel-make-archives.patch
+ create mode 100644 package/gnu-efi/gnu-efi-03-parallel-make.patch
+ create mode 100644 package/gnu-efi/gnu-efi.mk
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.3.2
