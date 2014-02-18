@@ -1,87 +1,68 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 18 Feb 2014 22:11:40 +0100
-Subject: [Buildroot] [git commit] transmission: fix uTP enabled build with
-	ccache
-Message-ID: <20140218211443.673919CA8F@busybox.osuosl.org>
+Date: Tue, 18 Feb 2014 22:13:36 +0100
+Subject: [Buildroot] [git commit] kexec: fix zImage probe
+Message-ID: <20140218211443.7A7929C97E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3a0776b9d6ae327ce36e4d331a5f58b1851ea912
+commit: http://git.buildroot.net/buildroot/commit/?id=a423ec1519dca2ee7e154c483b6b441c928b292e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Transmission would incorrectly determine the C++ compiler when ccache is
-enabled, causing a build with uTP to fail at the configure step.
-This patch adds a patch against transmission, fixing the problem.
+Add upstream patch to fix probe of zImage kernels.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...transmission-02-fix-cxx-check-with-ccache.patch |   44 ++++++++++++++++++++
- package/transmission/transmission.mk               |    1 +
- 2 files changed, 45 insertions(+), 0 deletions(-)
+ ...e-probe-function-return-value-checking-fi.patch |   41 ++++++++++++++++++++
+ 1 files changed, 41 insertions(+), 0 deletions(-)
 
-diff --git a/package/transmission/transmission-02-fix-cxx-check-with-ccache.patch b/package/transmission/transmission-02-fix-cxx-check-with-ccache.patch
+diff --git a/package/kexec/kexec-0003-kernel-image-probe-function-return-value-checking-fi.patch b/package/kexec/kexec-0003-kernel-image-probe-function-return-value-checking-fi.patch
 new file mode 100644
-index 0000000..750bdb8
+index 0000000..9866cab
 --- /dev/null
-+++ b/package/transmission/transmission-02-fix-cxx-check-with-ccache.patch
-@@ -0,0 +1,44 @@
-+transmission: fix incorrect check of CXX when ccache is enabled
++++ b/package/kexec/kexec-0003-kernel-image-probe-function-return-value-checking-fi.patch
+@@ -0,0 +1,41 @@
++From 507e210daf047a5ef98de680151ace745297d82e Mon Sep 17 00:00:00 2001
++Message-Id: <507e210daf047a5ef98de680151ace745297d82e.1392728124.git.baruch@tkos.co.il>
++From: Dave Young <dyoung@redhat.com>
++Date: Thu, 6 Feb 2014 14:30:44 +0800
++Subject: [PATCH] kernel image probe function return value checking fix
 +
-+When ccache is enabled, the configure script is called with
-+CXX="/path/to/ccache /path/to/cxx". The AC_PROG_CXX correctly deals with
-+this, but the transmission-specific extra checks on CXX do not. It uses
-+AC_CHECK_PROG, which takes the first word of CXX (ccache) only.
++Currently kexec will use the kernel image type when probe function return
++value >=0. It looks odd, but previously it works. Since commit bf06cf2095
++it does not work anymore.
 +
-+This patch removes the seemingly unneeded extra checks, and additionally
-+replaces HAVE_CXX=yes/no with a direct check on CXX, as it is only used in
-+one place.
++During my testing for arm zImage, in 2nd kernel the atags pointer and the
++machine_id are not valid, I did a lot of debugging in kernel, finally I found
++this is caused by a kexec tools bug instead.
 +
-+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-+Upstream-status: submitted: https://trac.transmissionbt.com/ticket/5612
++Because uImage will be probed before zImage, also the uImage probe return 1
++instead of -1 since bf06cf2095, thus kexec will mistakenly think it is uImage.
 +
++Fix this issue by regarding it's valid only when probe return 0.
++
++Signed-off-by: Dave Young <dyoung@redhat.com>
++Signed-off-by: Simon Horman <horms@verge.net.au>
 +---
++ kexec/kexec.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/configure.ac b/configure.ac
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -69,15 +69,6 @@ AC_SUBST(LIBAPPINDICATOR_MINIMUM)
-+ 
-+ AC_PROG_CC
-+ AC_PROG_CXX
-+-if test "x$CXX" != "x"; then # CXX is set...
-+-  if test -f "$CXX"; then # maybe it's an absolute path passed in env variables...
-+-    AC_MSG_CHECKING([for $CXX])
-+-    HAVE_CXX="yes"
-+-    AC_MSG_RESULT([$HAVE_CXX])
-+-  else
-+-    AC_CHECK_PROG([HAVE_CXX],[$CXX],[yes],[no])
-+-  fi
-+-fi
-+ AC_C_INLINE
-+ if test "x$GCC" = "xyes" ; then
-+ 
-+@@ -216,7 +207,7 @@ AC_CHECK_LIB([rt],
-+ 
-+ AC_MSG_CHECKING([??TP])
-+ build_utp="no"
-+-if test "x$HAVE_CXX" = "xyes" ; then
-++if test "x$CXX" != "x" ; then
-+     have_utp="yes"
-+ else
-+     have_utp="no"
-diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
-index a08e7ef..4be223a 100644
---- a/package/transmission/transmission.mk
-+++ b/package/transmission/transmission.mk
-@@ -14,6 +14,7 @@ TRANSMISSION_DEPENDENCIES = \
- 	libevent \
- 	openssl \
- 	zlib
-+TRANSMISSION_AUTORECONF = YES
- 
- TRANSMISSION_CONF_OPT = \
- 	--disable-libnotify \
++diff --git a/kexec/kexec.c b/kexec/kexec.c
++index f13e5124aacc..703d524836b4 100644
++--- a/kexec/kexec.c
+++++ b/kexec/kexec.c
++@@ -691,7 +691,7 @@ static int my_load(const char *type, int fileind, int argc, char **argv,
++ 	}
++ 	if (!type || guess_only) {
++ 		for (i = 0; i < file_types; i++) {
++-			if (file_type[i].probe(kernel_buf, kernel_size) >= 0)
+++			if (file_type[i].probe(kernel_buf, kernel_size) == 0)
++ 				break;
++ 		}
++ 		if (i == file_types) {
++-- 
++1.8.5.3
++
