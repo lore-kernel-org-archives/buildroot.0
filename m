@@ -1,28 +1,67 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 18 Feb 2014 08:42:42 +0000 (UTC)
-Subject: [Buildroot] [Bug 6902] 12
-In-Reply-To: <bug-6902-163@https.bugs.busybox.net/>
-References: <bug-6902-163@https.bugs.busybox.net/>
-Message-ID: <20140218084244.C89719CA8C@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 18 Feb 2014 09:46:55 +0100
+Subject: [Buildroot] ipv6 and eglibc
+In-Reply-To: <53031C60.6020803@gmail.com>
+References: <53031C60.6020803@gmail.com>
+Message-ID: <20140218094655.27e2a040@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6902
+Dear Marco Trapanese,
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+On Tue, 18 Feb 2014 09:40:00 +0100, Marco Trapanese wrote:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|ASSIGNED                    |RESOLVED
-         Resolution|                            |INVALID
+> I'm trying to add the postgres package, starting with this hints:
+> 
+> http://www.slideshare.net/jerome42/create-lightweight-docker-containers-with-buildroot
+> 
+> I'm using the eglibc in order to enable the eglsf support for Qt5.
+> Postgresql requires the BR2_TOOLCHAIN_BUILDROOT_INET_IPV6.
+> 
+> Searching for this keyword I see this:
+> 
+> Symbol: BR2_TOOLCHAIN_BUILDROOT_INET_IPV6 [=n] ?
+> Type : boolean
+> Prompt: Enable IPv6 support
+> Location:
+> -> Toolchain
+> Defined at package/uclibc/Config.in:70
+> Depends on: BR2_TOOLCHAIN_BUILDROOT [=y] && 
+> BR2_TOOLCHAIN_BUILDROOT_UCLIBC [=n]
+> Selects: BR2_INET_IPV6 [=y] ?
+> 
+> I guess because I'm using eglibc instead of uclibc.
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2014-02-18 08:42:31 UTC ---
-This doesn't look like a Buildroot bug report.
+This is because what J?r?me (who happens to be my cousin) did was
+not completely correct (and I've Cc'ed J?r?me so he gets this
+feedback!).
 
+Having a dependency on BR2_TOOLCHAIN_BUILDROOT_INET_IPV6 in a package
+is incorrect, as it only works with the internal toolchain backend,
+when building uClibc toolchains.
+
+Instead, he should have read the great Buildroot documentation at
+http://buildroot.org/downloads/manual/manual.html#dependencies-target-toolchain-options :-)
+
+So, Marco, just modify the line:
+
+	depends on BR2_TOOLCHAIN_BUILDROOT_INET_IPV6
+
+by:
+
+	depends on BR2_INET_IPV6
+
+Also, please submit patches to add Postgresql support. Instead of
+having people following the not-completely correct tutorial of J?r?me,
+we would have Postgresql support in Buildroot itself.
+
+Thanks!
+
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
