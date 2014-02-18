@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Feb 2014 07:32:48 +0100
-Subject: [Buildroot] [PATCH v4 7/7] Makefile: export PATH
-In-Reply-To: <1392559113-5215-8-git-send-email-s.martin49@gmail.com>
+Date: Tue, 18 Feb 2014 07:25:33 +0100
+Subject: [Buildroot] [PATCH v4 2/7] Makefile: introduce BR_PATH
+In-Reply-To: <1392559113-5215-3-git-send-email-s.martin49@gmail.com>
 References: <1392559113-5215-1-git-send-email-s.martin49@gmail.com>
- <1392559113-5215-8-git-send-email-s.martin49@gmail.com>
-Message-ID: <5302FE90.9070402@mind.be>
+ <1392559113-5215-3-git-send-email-s.martin49@gmail.com>
+Message-ID: <5302FCDD.5090500@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,15 +12,8 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 16/02/14 14:58, Samuel Martin wrote:
-> This can be useful for:
-> - package using custom build system that are not aware that the host
->   tree is in $(O)/host/;
-> - post-{build,image} scripts, in case some host-tools were specifically
->   built to be used by these scripts.
-
- This makes all the previous patches redundant, since the PATH=...
-invocations should be removed instead of renamed.
-
+> Since the HOST_PATH and TARGET_PATH variables almost contain the same
+> things, let's factorize this in a single BR_PATH.
 > 
 > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 > 
@@ -31,36 +24,71 @@ invocations should be removed instead of renamed.
 > 
 > changes v2 -> v3:
 > - rebase
-> - extend commit loghanges v2 -> v3:
 > 
 > changes v1 -> v2:
-> - extend commit message
+> - rebase
 > ---
->  Makefile | 1 +
->  1 file changed, 1 insertion(+)
+>  Makefile            | 3 +++
+>  package/Makefile.in | 4 ++--
+>  2 files changed, 5 insertions(+), 2 deletions(-)
 > 
 > diff --git a/Makefile b/Makefile
-> index bb5b38e..ca2d721 100644
+> index 20aabd6..138e0ef 100644
 > --- a/Makefile
 > +++ b/Makefile
-> @@ -353,6 +353,7 @@ export STAGING_DIR
->  export HOST_DIR
->  export BINARIES_DIR
->  export BASE_DIR
-> +export PATH:=$(BR_PATH)
+> @@ -325,6 +325,9 @@ TAR_OPTIONS=$(call qstrip,$(BR2_TAR_OPTIONS)) -xf
+>  # packages compiled for the host go here
+>  HOST_DIR:=$(call qstrip,$(BR2_HOST_DIR))
+>  
+> +# Set BR_PATH (including host bindirs)
 
- With this change, the := in BR_PATH becomes essential. There should be a
-comment there to explain why. Also, the assignment to BR_PATH and to PATH
-should be right next to each other (the export can stay here, though).
+ This comment is redundant.
 
- And in fact, BR_PATH becomes completely redundant, it's sufficient to
-have a single PATH := ....:$(PATH)
+> +BR_PATH:="$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(HOST_DIR)/usr/sbin:$(PATH)"
+
+ Use = instead of := and put spaces around it.
+
+ Also, the quoting is really redundant. The original comment said "Quotes
+are needed for spaces et al in path components", but since that was only
+done for TARGET_PATH and not for HOST_PATH it didn't work in the first
+place. In addition, we also don't add quotes around the other uses of
+HOST_DIR etc., so it's just $(PATH) itself that we're protecting. If you
+do keep the quotes, at least copy the comment.
+
+
+> +
+>  # locales to generate
+>  GENERATE_LOCALE=$(call qstrip,$(BR2_GENERATE_LOCALE))
+>  
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index eea7043..15b7e3c 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -145,7 +145,7 @@ TARGET_CROSS=$(HOST_DIR)/usr/bin/$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))
+>  endif
+>  
+>  # Quotes are needed for spaces et al in path components.
+
+ This comment is no longer in the right place.
+
 
  Regards,
  Arnout
+
+> -TARGET_PATH="$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(HOST_DIR)/usr/sbin/:$(PATH)"
+> +TARGET_PATH = $(BR_PATH)
 >  
->  ################################################################################
->  #
+>  # Define TARGET_xx variables for all common binutils/gcc
+>  TARGET_AR       = $(TARGET_CROSS)ar
+> @@ -200,7 +200,7 @@ HOST_CFLAGS   ?= -O2
+>  HOST_CFLAGS   += $(HOST_CPPFLAGS)
+>  HOST_CXXFLAGS += $(HOST_CFLAGS)
+>  HOST_LDFLAGS  += -L$(HOST_DIR)/lib -L$(HOST_DIR)/usr/lib -Wl,-rpath,$(HOST_DIR)/usr/lib
+> -HOST_PATH=$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(PATH)
+> +HOST_PATH = $(BR_PATH)
+>  
+>  # hostcc version as an integer - E.G. 4.3.2 => 432
+>  HOSTCC_VERSION:=$(shell $(HOSTCC_NOCCACHE) --version | \
 > 
 
 
