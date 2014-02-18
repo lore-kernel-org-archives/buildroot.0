@@ -1,51 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 18 Feb 2014 22:50:04 +0100
-Subject: [Buildroot] [git commit branch/next] python3: removal of *.py/*.pyc
-	is now done globally
-Message-ID: <20140218220744.857E29CA01@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 18 Feb 2014 23:10:36 +0100
+Subject: [Buildroot] [PATCH] host python/python3: conditionally disable
+	unicodedata
+In-Reply-To: <CAAXf6LXp19PNK3PmsOEFCr_0ZccaR1+o67XbraJ43gnGW4inNg@mail.gmail.com>
+ (Thomas De Schampheleire's message of "Fri, 14 Feb 2014 21:41:04
+ +0100")
+References: <e06b104c5f166c541741.1391768165@argentina>
+ <20140207112819.2fab19a3@skate>
+ <CAAXf6LXfA8rir0O_49wy6Y5ur55k_U7P=88OsJB3JsVTwUzYPA@mail.gmail.com>
+ <20140213103056.3ad2c056@skate>
+ <CAAXf6LXp19PNK3PmsOEFCr_0ZccaR1+o67XbraJ43gnGW4inNg@mail.gmail.com>
+Message-ID: <87vbwc2hsz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e424050cfcaa2d14e10746908778615434cd0a49
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python3/python3.mk |   21 ---------------------
- 1 files changed, 0 insertions(+), 21 deletions(-)
+ >>> I think this patch should still be part of 2014.02.
+ >> 
+ >> I agree.
+ >> 
 
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index b5e9689..d49fe48 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -159,26 +159,5 @@ ifneq ($(BR2_PACKAGE_PYTHON),y)
- PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_INSTALL_SYMLINK
- endif
- 
--ifeq ($(BR2_PACKAGE_PYTHON3_PY_ONLY),y)
--define PYTHON3_REMOVE_MODULES_FILES
--	for i in `find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) \
--		 -name __pycache__` ; do \
--		rm -rf $$i ; \
--	done
--endef
--endif
--
--ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
--define PYTHON3_REMOVE_MODULES_FILES
--	for i in `find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) \
--		 -name *.py` ; do \
--		rm -f $$i ; \
--	done
--endef
--endif
--
--PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_REMOVE_MODULES_FILES
--
--
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+
+ > Peter, now that I have your attention, this one should be applied too
+ > :) (if you agree, of course)
+
+Ok ;)
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
