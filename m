@@ -1,36 +1,35 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Feb 2014 07:28:26 +0100
-Subject: [Buildroot] [PATCH v4 4/7] *.mk: replace (TARGET|HOST)_PATH by
- BR_PATH
-In-Reply-To: <1392559113-5215-5-git-send-email-s.martin49@gmail.com>
-References: <1392559113-5215-1-git-send-email-s.martin49@gmail.com>
- <1392559113-5215-5-git-send-email-s.martin49@gmail.com>
-Message-ID: <5302FD8A.3090207@mind.be>
+From: Marco Trapanese <marcotrapanese@gmail.com>
+Date: Tue, 18 Feb 2014 09:40:00 +0100
+Subject: [Buildroot] ipv6 and eglibc
+Message-ID: <53031C60.6020803@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16/02/14 14:58, Samuel Martin wrote:
-> Thanks to the 2 previous patches of the series, BR_PATH contains
-> all locations in which host-packages may install programs.
-> 
-> This patch replaces the occurrences TARGET_PATH and HOST_PATH with
-> BR_PATH, everywhere these variables are used in the *.mk files.
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Hello,
+I'm trying to add the postgres package, starting with this hints:
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+http://www.slideshare.net/jerome42/create-lightweight-docker-containers-with-buildroot
 
+I'm using the eglibc in order to enable the eglsf support for Qt5.
+Postgresql requires the BR2_TOOLCHAIN_BUILDROOT_INET_IPV6.
 
- Regards,
- Arnout
+Searching for this keyword I see this:
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Symbol: BR2_TOOLCHAIN_BUILDROOT_INET_IPV6 [=n] ?
+Type : boolean
+Prompt: Enable IPv6 support
+Location:
+-> Toolchain
+Defined at package/uclibc/Config.in:70
+Depends on: BR2_TOOLCHAIN_BUILDROOT [=y] && 
+BR2_TOOLCHAIN_BUILDROOT_UCLIBC [=n]
+Selects: BR2_INET_IPV6 [=y] ?
+
+I guess because I'm using eglibc instead of uclibc.
+
+I have no knowledge to decide what I should do now....
+Thank you for your support!
+Marco
