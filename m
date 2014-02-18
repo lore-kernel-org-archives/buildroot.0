@@ -1,46 +1,78 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 18 Feb 2014 23:21:34 +0100
-Subject: [Buildroot] [git commit] python3: use proper PYTHON3_VERSION_MAJOR
-	instead of harcoding 3.3
-Message-ID: <20140228133414.42A509BA7B@busybox.osuosl.org>
+Date: Tue, 18 Feb 2014 22:45:49 +0100
+Subject: [Buildroot] [git commit] pkg-python: no longer use distutilscross
+	for setuptools
+Message-ID: <20140228133413.DDCD79BBF9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=249778541b68c10156c6687e14888f6047556922
+commit: http://git.buildroot.net/buildroot/commit/?id=c7bf337ec56c4753d58de3e4c16f3f74e17d5001
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Some parts of python3.mk were hardcoding the 3.3 version as the major
-version, which does not work for Python 3.4 and other future
-versions. Instead, use the existing PYTHON3_VERSION_MAJOR.
+Thanks to the bump of Python 2.x, distutilscross is no longer needed
+to achieve cross-compilation for setuptools packages. The host Python
+2.x interpreter can be tricked into using the target compiler thanks
+to pointing it to a different sysconfigdata module, which is achieved
+using PYTHON_PATH.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python3/python3.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/pkg-python.mk |   21 ++++++++-------------
+ 1 files changed, 8 insertions(+), 13 deletions(-)
 
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index ba72e75..2773a12 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -127,7 +127,7 @@ PYTHON3_MAKE_ENV = \
- # trouble for cross compilation
- define PYTHON3_FIXUP_LIBDIR
- 	$(SED) 's|^LIBDIR=.*|LIBDIR= $(STAGING_DIR)/usr/lib|' \
--	   $(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/config-3.3m/Makefile
-+	   $(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/config-$(PYTHON3_VERSION_MAJOR)m/Makefile
- endef
+diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+index a862895..11ad75d 100644
+--- a/package/pkg-python.mk
++++ b/package/pkg-python.mk
+@@ -114,7 +114,7 @@ endif
+ else ifeq ($$($(2)_SETUP_TYPE),setuptools)
+ ifeq ($(4),target)
+ $(2)_BASE_ENV         = $$(PKG_PYTHON_SETUPTOOLS_ENV)
+-$(2)_BASE_BUILD_TGT   = build -x
++$(2)_BASE_BUILD_TGT   = build
+ $(2)_BASE_BUILD_OPT   =
+ $(2)_BASE_INSTALL_OPT = $$(PKG_PYTHON_SETUPTOOLS_INSTALL_OPT)
+ else
+@@ -133,13 +133,12 @@ endif
+ # front of the dependencies.
+ #
+ # However it must be repeated from inner-generic-package, as we need
+-# to exclude the python, host-python, host-python-setuptools and
+-# host-distutilscross packages, which are added below in the list of
+-# dependencies depending on the package characteristics, and shouldn't
+-# be derived automatically from the dependencies of the corresponding
+-# target package. For example, target packages need
+-# host-python-distutilscross, but not host packages.
+-$(2)_DEPENDENCIES ?= $(filter-out host-python host-python-setuptools host-python-distutilscross host-toolchain $(1),$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
++# to exclude the python, host-python and host-python-setuptools
++# packages, which are added below in the list of dependencies
++# depending on the package characteristics, and shouldn't be derived
++# automatically from the dependencies of the corresponding target
++# package.
++$(2)_DEPENDENCIES ?= $(filter-out host-python host-python-setuptools host-toolchain $(1),$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
  
- PYTHON3_POST_INSTALL_STAGING_HOOKS += PYTHON3_FIXUP_LIBDIR
-@@ -141,7 +141,7 @@ define PYTHON3_REMOVE_USELESS_FILES
- 	rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR)m-config
- 	rm -f $(TARGET_DIR)/usr/bin/python3-config
- 	rm -f $(TARGET_DIR)/usr/bin/smtpd.py.3
--	for i in `find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/config-3.3m/ \
-+	for i in `find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/config-$(PYTHON3_VERSION_MAJOR)m/ \
- 		-type f -not -name pyconfig.h -a -not -name Makefile` ; do \
- 		rm -f $$i ; \
- 	done
+ # Target packages need both the python interpreter on the target (for
+ # runtime) and the python interpreter on the host (for
+@@ -152,17 +151,13 @@ $(2)_DEPENDENCIES += host-python
+ endif
+ 
+ # Setuptools based packages will need host-python-setuptools (both
+-# host and target) and host-python-distutilscross (only target
+-# packages). We need to have a special exclusion for the
++# host and target). We need to have a special exclusion for the
+ # host-setuptools package itself: it is setuptools-based, but
+ # shouldn't depend on host-setuptools (because it would otherwise
+ # depend on itself!).
+ ifeq ($$($(2)_SETUP_TYPE),setuptools)
+ ifneq ($(2),HOST_PYTHON_SETUPTOOLS)
+ $(2)_DEPENDENCIES += host-python-setuptools
+-ifeq ($(4),target)
+-$(2)_DEPENDENCIES += host-python-distutilscross
+-endif
+ endif
+ endif
+ 
