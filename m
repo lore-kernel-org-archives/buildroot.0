@@ -1,42 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Feb 2014 16:37:56 +0100
-Subject: [Buildroot] [PATCH v4 7/7] Makefile: export PATH
-In-Reply-To: <5302FE90.9070402@mind.be>
-References: <1392559113-5215-1-git-send-email-s.martin49@gmail.com>
- <1392559113-5215-8-git-send-email-s.martin49@gmail.com>
- <5302FE90.9070402@mind.be>
-Message-ID: <20140218163756.0e495167@skate>
+From: Martin Bark <martin@barkynet.com>
+Date: Tue, 18 Feb 2014 15:43:19 +0000
+Subject: [Buildroot] [PATCH v5 5/5] xbmc: new package
+In-Reply-To: <CAGduivznzC=-rK3hspNjykR6a5MTpTR2oCWW=M=tN3jgsq13vA@mail.gmail.com>
+References: <1392332394-27935-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <1392332394-27935-6-git-send-email-maxime.hadjinlian@gmail.com>
+ <52FE9FDE.4090102@barkynet.com>
+ <CAGduivznzC=-rK3hspNjykR6a5MTpTR2oCWW=M=tN3jgsq13vA@mail.gmail.com>
+Message-ID: <53037F97.7040906@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+Maxime,
 
-On Tue, 18 Feb 2014 07:32:48 +0100, Arnout Vandecappelle wrote:
-> On 16/02/14 14:58, Samuel Martin wrote:
-> > This can be useful for:
-> > - package using custom build system that are not aware that the host
-> >   tree is in $(O)/host/;
-> > - post-{build,image} scripts, in case some host-tools were specifically
-> >   built to be used by these scripts.
-> 
->  This makes all the previous patches redundant, since the PATH=...
-> invocations should be removed instead of renamed.
+Sorry for the late replay
 
-Agreed. Samuel, you should make a choice:
+On 14/02/14 23:51, Maxime Hadjinlian wrote:
 
- * Either you use BR_PATH, and we continue to pass PATH=$(BR_PATH)
-   whenever the PATH is needed.
+-- snip --
 
- * Or you simply directly export PATH with the right value, and remove
-   all occurrences where we manually pass PATH=<something>.
+>>
+>>
+>>> diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
+>>> new file mode 100644
+>>> index 0000000..db43a9f
+>>> --- /dev/null
+>>> +++ b/package/xbmc/xbmc.mk
+>>> @@ -0,0 +1,175 @@
+>>>
+>>> +################################################################################
+>>> +#
+>>> +# xbmc
+>>> +#
+>>>
+>>> +################################################################################
+>>> +
+>>> +XBMC_VERSION = 12.3-Frodo
+>>> +XBMC_SITE = $(call github,xbmc,xbmc,$(XBMC_VERSION))
+>>> +XBMC_LICENSE = GPLv2
+>>> +XBMC_LICENSE_FILES = LICENSE.GPL
+>>> +XBMC_DEPENDENCIES = host-lzo host-sdl_image host-swig
+>>
+>>
+>> I think you need to add host-gperf, i had to add this for xmbc to compile.
+> host-gperf ? I never needed that, why should it be needed ?
 
-Thanks,
+I just verified and xmbc does fails to build for me because i'm missing 
+gpref.  I checked and the configure script tests for gpref and errors if 
+it's missing.  The machine i'm building on does not have gperf 
+installed.  Either adding host-gpref or patching configure.in to remove 
+the tests for gpref fixed this issue.  I think probably patching 
+configure.in is a better solution.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Thanks
