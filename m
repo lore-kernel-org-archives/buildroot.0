@@ -1,35 +1,28 @@
-From: Marco Trapanese <marcotrapanese@gmail.com>
-Date: Tue, 18 Feb 2014 09:40:00 +0100
-Subject: [Buildroot] ipv6 and eglibc
-Message-ID: <53031C60.6020803@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 18 Feb 2014 08:42:42 +0000 (UTC)
+Subject: [Buildroot] [Bug 6902] 12
+In-Reply-To: <bug-6902-163@https.bugs.busybox.net/>
+References: <bug-6902-163@https.bugs.busybox.net/>
+Message-ID: <20140218084244.C89719CA8C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-I'm trying to add the postgres package, starting with this hints:
+https://bugs.busybox.net/show_bug.cgi?id=6902
 
-http://www.slideshare.net/jerome42/create-lightweight-docker-containers-with-buildroot
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-I'm using the eglibc in order to enable the eglsf support for Qt5.
-Postgresql requires the BR2_TOOLCHAIN_BUILDROOT_INET_IPV6.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|ASSIGNED                    |RESOLVED
+         Resolution|                            |INVALID
 
-Searching for this keyword I see this:
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2014-02-18 08:42:31 UTC ---
+This doesn't look like a Buildroot bug report.
 
-Symbol: BR2_TOOLCHAIN_BUILDROOT_INET_IPV6 [=n] ?
-Type : boolean
-Prompt: Enable IPv6 support
-Location:
--> Toolchain
-Defined at package/uclibc/Config.in:70
-Depends on: BR2_TOOLCHAIN_BUILDROOT [=y] && 
-BR2_TOOLCHAIN_BUILDROOT_UCLIBC [=n]
-Selects: BR2_INET_IPV6 [=y] ?
-
-I guess because I'm using eglibc instead of uclibc.
-
-I have no knowledge to decide what I should do now....
-Thank you for your support!
-Marco
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
