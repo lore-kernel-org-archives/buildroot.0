@@ -1,53 +1,65 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Feb 2014 17:44:56 +0100
-Subject: [Buildroot] [PATCH v7 3/4] infra: Introduce BR2_HOST_NEEDS_JAVA
-In-Reply-To: <CAGduivzSEpXbLOCvsnMHOdbidVBUfzgCH7QiVaQ5PSx24M-x4A@mail.gmail.com>
+From: Martin Bark <martin@barkynet.com>
+Date: Tue, 18 Feb 2014 16:57:57 +0000
+Subject: [Buildroot] [PATCH v7 0/4] Introducing XBMC
+In-Reply-To: <1392680233-24585-1-git-send-email-maxime.hadjinlian@gmail.com>
 References: <1392680233-24585-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1392680233-24585-4-git-send-email-maxime.hadjinlian@gmail.com>
- <20140218171846.6969c9a6@skate>
- <CAGduivzSEpXbLOCvsnMHOdbidVBUfzgCH7QiVaQ5PSx24M-x4A@mail.gmail.com>
-Message-ID: <20140218174456.527aac52@skate>
+Message-ID: <53039115.5000409@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxime Hadjinlian,
+Maxime,
 
-On Tue, 18 Feb 2014 17:41:17 +0100, Maxime Hadjinlian wrote:
+I retested this v7 patch set using this minimal defconfig
 
-> >> +# Hidden boolean selected by packages in need of Java in order to build
-> >> +# (example: xbmc)
-> >> +config BR2_HOST_NEEDS_JAVA
-> >> +     bool
-> >
-> > Do we need a kconfig bool for this? We have the same situation for
-> > classpath, and we haven't introduced a specific kconfig bool for it.
-> Yes, I had two patches:
->   - One to introduce kconfig bool option for JAVAC and JAR
->   - The second to make classpath uses them and remove the specific in
-> dependencies.sh
-> 
-> It seems cleaner and if another package has the same needs, it's already there.
+BR2_arm=y
+BR2_arm1176jzf_s=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_PACKAGE_XBMC=y
+BR2_PACKAGE_RPI_USERLAND=y
 
-Right, but when it's needed for just one package, it's maybe not needed
-to have a generic solution. When it starts to be needed by a few
-packages, then it is time to refactor things and have a generic
-solution such as the one you propose.
+and i can confirm it now builds (once i add host-gperf to xbmc.mk).  I 
+also tested enabling all the xbmc options and that builds too.  I have 
+not tested it runs on the raspberry pi yet.
 
-But oh well, since you already wrote the code, I'm fine with it.
+Thanks
 
-> > Moreover, I am not sure BR2_HOST_NEEDS_JAVA is the right name. It's not
-> > really the host that needs Java, it's the compilation process that
-> > requires a host Java. So BR2_NEEDS_HOST_JAVA is probably more
-> > technically correct.
-> True, I'll fix that.
-
-Cool, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+On 17/02/14 23:37, Maxime Hadjinlian wrote:
+> Here we go again with a new round.
+> Again most of the changes are located within the XBMC patch.
+>
+> Maxime Hadjinlian (4):
+>    sdl: add host version
+>    sdl_image: add host version
+>    infra: Introduce BR2_HOST_NEEDS_JAVA
+>    xbmc: new package
+>
+>   Config.in                                          |   5 +
+>   package/Config.in                                  |   1 +
+>   package/sdl/sdl.mk                                 |   4 +-
+>   package/sdl_image/sdl_image.mk                     |  11 ++
+>   package/xbmc/Config.in                             | 165 ++++++++++++++++++++
+>   package/xbmc/S50xbmc                               |  41 +++++
+>   package/xbmc/xbmc-0001-Fixup-include-path.patch    |  81 ++++++++++
+>   .../xbmc-0002-RaspberryPi-Default-Settings.patch   | 168 +++++++++++++++++++++
+>   package/xbmc/xbmc.mk                               | 149 ++++++++++++++++++
+>   package/xbmc/xbmc.service                          |  12 ++
+>   support/dependencies/dependencies.sh               |   8 +
+>   11 files changed, 644 insertions(+), 1 deletion(-)
+>   create mode 100644 package/xbmc/Config.in
+>   create mode 100755 package/xbmc/S50xbmc
+>   create mode 100644 package/xbmc/xbmc-0001-Fixup-include-path.patch
+>   create mode 100644 package/xbmc/xbmc-0002-RaspberryPi-Default-Settings.patch
+>   create mode 100644 package/xbmc/xbmc.mk
+>   create mode 100644 package/xbmc/xbmc.service
+>
+> --
+> 1.8.5.3
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
