@@ -1,51 +1,71 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Feb 2014 21:55:46 +0100
-Subject: [Buildroot] [git commit] infra: Change BR2_HOST_NEEDS_JAVA name
-Message-ID: <20140228133415.498349BC4A@busybox.osuosl.org>
+Date: Wed, 19 Feb 2014 16:17:48 +0100
+Subject: [Buildroot] [git commit] infra: Introduce BR2_HOST_NEEDS_JAVA
+Message-ID: <20140228133415.38E959BC4A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0721c7133022d270e997c0c42ef044b48c5c5943
+commit: http://git.buildroot.net/buildroot/commit/?id=aac3d2b402fd2b8b91f125cf9314f4805b88f72a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Change BR2_HOST_NEEDS_JAVA to BR2_NEEDS_HOST_JAVA as it makes more
-sense.
-The host doesn't need Java but Buildroot needs the host to have
-Java in order to build the package that select this option.
+XBMC needs Java on the host in order to build, because it uses a
+code-generator which is built in two phases: In the first phase SWIG is used
+to parse C++ header files that define the API.  SWIG outputs an XML file
+that contains a complete description of the structure of the API.  In the
+second phase, the XML file is ingested by a Groovy (Java) program that then
+creates C++ code that forms the bridge to the scripting language (Python).
 
+The second phase is why we need java on the host.
+
+You can learn more at the XBMC's wiki:
+http://wiki.xbmc.org/index.php?title=Codegeneration#How_it_works
+
+In order to check that, this patch introduce this mechanism in
+dependencies.sh, and it also defines the variable in Config.in
+
+[Peter: fix error message]
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in                            |    2 +-
- support/dependencies/dependencies.sh |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ Config.in                            |    5 +++++
+ support/dependencies/dependencies.sh |    8 ++++++++
+ 2 files changed, 13 insertions(+), 0 deletions(-)
 
 diff --git a/Config.in b/Config.in
-index 8afd156..c5c8aa8 100644
+index bcfefc7..8afd156 100644
 --- a/Config.in
 +++ b/Config.in
-@@ -20,7 +20,7 @@ config BR2_EXTERNAL
+@@ -18,6 +18,11 @@ config BR2_EXTERNAL
+ 	string
+ 	option env="BR2_EXTERNAL"
  
- # Hidden boolean selected by packages in need of Java in order to build
- # (example: xbmc)
--config BR2_HOST_NEEDS_JAVA
-+config BR2_NEEDS_HOST_JAVA
- 	bool
- 
++# Hidden boolean selected by packages in need of Java in order to build
++# (example: xbmc)
++config BR2_HOST_NEEDS_JAVA
++	bool
++
  # Hidden boolean selected by pre-built packages for x86, when they
+ # need to run on x86-64 machines (example: pre-built external
+ # toolchains, binary tools like SAM-BA, etc.).
 diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index a965c68..a8261b3 100755
+index 0e7e1fa..a965c68 100755
 --- a/support/dependencies/dependencies.sh
 +++ b/support/dependencies/dependencies.sh
-@@ -191,7 +191,7 @@ if grep -q ^BR2_PACKAGE_CLASSPATH=y $BR2_CONFIG ; then
+@@ -191,6 +191,14 @@ if grep -q ^BR2_PACKAGE_CLASSPATH=y $BR2_CONFIG ; then
  	done
  fi
  
--if grep -q ^BR2_HOST_NEEDS_JAVA=y $BR2_CONFIG ; then
-+if grep -q ^BR2_NEEDS_HOST_JAVA=y $BR2_CONFIG ; then
- 	if ! which java > /dev/null ; then
- 		echo >&2
- 		echo "You must install 'java' on your build machine" >&2
++if grep -q ^BR2_HOST_NEEDS_JAVA=y $BR2_CONFIG ; then
++	if ! which java > /dev/null ; then
++		echo >&2
++		echo "You must install 'java' on your build machine" >&2
++		exit 1
++	fi
++fi
++
+ if grep -q ^BR2_HOSTARCH_NEEDS_IA32_LIBS=y $BR2_CONFIG ; then
+ 	if test ! -f /lib/ld-linux.so.2 ; then
+ 		echo
