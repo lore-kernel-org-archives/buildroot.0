@@ -1,53 +1,51 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Wed, 19 Feb 2014 13:10:44 +0100 (CET)
-Subject: [Buildroot] [PATCH v2 1/1] ncftp: fix cross-compilation test
-In-Reply-To: <20140219002849.1afd4436@skate>
-Message-ID: <1036423664.6634177.1392811844408.JavaMail.root@openwide.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 19 Feb 2014 14:19:30 +0100
+Subject: [Buildroot] Xtensa support ?
+In-Reply-To: <CAMo8Bf+gfdgfV+XFows8HmppvXdL=VWXGG_givbUNerep0zeHg@mail.gmail.com>
+References: <20140214073009.1D7E6102637@stock.ovh.net>
+ <20140214101241.27857b9e@skate> <20140215213124.GB4168@tarshish>
+ <20140218222215.12b84764@skate> <5303F9B4.60102@zankel.net>
+ <20140219090457.4816d674@skate>
+ <CAMo8Bf+gfdgfV+XFows8HmppvXdL=VWXGG_givbUNerep0zeHg@mail.gmail.com>
+Message-ID: <20140219141930.1579835c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Dear Max Filippov,
 
------ Mail original -----
-| De: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-| ?: "Romain Naour" <romain.naour@openwide.fr>
-| Cc: buildroot at busybox.net
-| Envoy?: Mercredi 19 F?vrier 2014 00:28:49
-| Objet: Re: [Buildroot] [PATCH v2 1/1] ncftp: fix cross-compilation test
-| 
-| Dear Romain Naour,
-| 
-| On Wed, 19 Feb 2014 00:18:42 +0100, Romain Naour wrote:
-| 
-| > Ok, it works.
-| > The configure script is regenerated correctly.
-| 
-| Cool. Does it fix the original problem? I only quickly looked at the
-| generated configure script to verify that the cross compiling test is
-| correct, but I did not verify that the original problem was really
-| solved.
+On Wed, 19 Feb 2014 14:46:28 +0400, Max Filippov wrote:
 
-This is what I meant by "it works".
-I tested in a Debian chroot where ncurses is not installed.
-So, the original problem is solved :)
+> On Wed, Feb 19, 2014 at 12:04 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+> >> Unfortunately, I have been really busy with another project and won't
+> >> have much time to look into it for another week or so.
+> >
+> > I am not really worried about the immediate future (i.e the coming
+> > week), but more in the mid to long term future.
+> >
+> >> Max has been working on Xtensa a lot, so maybe he can step in?
+> 
+> I think I can. I've been always using somewhat old buildroot version,
+> so need some time to get familiar with its current state.
 
-| 
-| > I had problems using NCFTP_AUTORECONF = YES
-| > what is the difference?
-| 
-| ncftp is not fully autotools based: it uses autoconf, but not
-| automake.
-| And the autoconf invocation needs a special -I path to find the
-| aclocal.m4, since it cannot be re-generated using aclocal, because it
-| uses some funky m4 macros and I have no idea where are the original
-| m4
-| files with these macros.
+Great!
 
-Thanks for your explanations, 
-I am not yet familiar with autotools but I progress :)
+> > We'll be definitely happy to receive contributions from Max. Max, do
+> > you want to receive a daily e-mail that lists the Xtensa build issues
+> > (no mail is sent when there are no Xtensa build issues during the day).
+> 
+> Yes, please.
 
-Best regards,
-Romain
+Done, you will receive the daily e-mail with Xtensa build failures
+starting tomorrow morning.
+
+Thanks for your participation!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
