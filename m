@@ -1,46 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Feb 2014 08:53:31 +0100
-Subject: [Buildroot] [git commit branch/next] python-setuptools: bump
-	version to 2.1.2
-Message-ID: <20140219080355.BC3C19CAA7@busybox.osuosl.org>
+Date: Wed, 19 Feb 2014 08:53:12 +0100
+Subject: [Buildroot] [git commit branch/next] python,
+	python3: enable unicodedata for host-python, needed by setuptools
+Message-ID: <20140219080355.A777F99B3D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e51f87b825819986613cff58038b797e9925b25d
+commit: http://git.buildroot.net/buildroot/commit/?id=73293e88c828c9bddc0b684a4603f86f70f8e876
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-[Thomas: bump to 2.1.2 instead of 0.8, remove comment that no longer
-made sense about setuptools being forked.]
+As we are going to bump setuptools to a much newer version, the host
+python needs to be built with support for unicodedata.
 
-Signed-off-by: Rohan Fletcher <rohfledev@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-setuptools/python-setuptools.mk |   11 +++--------
- 1 files changed, 3 insertions(+), 8 deletions(-)
+ package/python/python.mk   |    2 +-
+ package/python3/python3.mk |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
-index 13df448..48bf7c5 100644
---- a/package/python-setuptools/python-setuptools.mk
-+++ b/package/python-setuptools/python-setuptools.mk
-@@ -4,14 +4,9 @@
- #
- ################################################################################
- 
--# "distribute" is a fork of the unmaintained setuptools package. There
--# are plans to re-merge it into setuptools; if this happens, we can
--# switch back to it.
--# See http://pypi.python.org/packages/source/s/setuptools
--
--PYTHON_SETUPTOOLS_VERSION = 0.6.36
--PYTHON_SETUPTOOLS_SOURCE  = distribute-$(PYTHON_SETUPTOOLS_VERSION).tar.gz
--PYTHON_SETUPTOOLS_SITE    = http://pypi.python.org/packages/source/d/distribute
-+PYTHON_SETUPTOOLS_VERSION = 2.1.2
-+PYTHON_SETUPTOOLS_SOURCE  = setuptools-$(PYTHON_SETUPTOOLS_VERSION).tar.gz
-+PYTHON_SETUPTOOLS_SITE    = http://pypi.python.org/packages/source/s/setuptools
- PYTHON_SETUPTOOLS_SETUP_TYPE = setuptools
- 
- $(eval $(python-package))
+diff --git a/package/python/python.mk b/package/python/python.mk
+index 0469820..3b0a4dd 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -25,7 +25,7 @@ HOST_PYTHON_CONF_OPT += 	\
+ 	--disable-curses	\
+ 	--disable-codecs-cjk	\
+ 	--disable-nis		\
+-	--disable-unicodedata	\
++	--enable-unicodedata	\
+ 	--disable-dbm		\
+ 	--disable-gdbm		\
+ 	--disable-bsddb		\
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 1bf8500..13f53f4 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -25,7 +25,7 @@ HOST_PYTHON3_CONF_OPT += 	\
+ 	--disable-curses	\
+ 	--disable-codecs-cjk	\
+ 	--disable-nis		\
+-	--disable-unicodedata	\
++	--enable-unicodedata	\
+ 	--disable-test-modules	\
+ 	--disable-idle3		\
+ 	--disable-pyo-build
