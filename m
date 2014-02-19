@@ -1,66 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Feb 2014 11:09:55 +0100
-Subject: [Buildroot] [PATCH 1/3] mplayer: not available on bfin
-In-Reply-To: <1392803602-5566-2-git-send-email-fabio.porcedda@gmail.com>
-References: <1392803602-5566-1-git-send-email-fabio.porcedda@gmail.com>
- <1392803602-5566-2-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <20140219110955.41b0c690@skate>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Wed, 19 Feb 2014 13:10:44 +0100 (CET)
+Subject: [Buildroot] [PATCH v2 1/1] ncftp: fix cross-compilation test
+In-Reply-To: <20140219002849.1afd4436@skate>
+Message-ID: <1036423664.6634177.1392811844408.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fabio Porcedda,
+Hi Thomas,
 
-On Wed, 19 Feb 2014 10:53:20 +0100, Fabio Porcedda wrote:
-> Fixes:
-> http://autobuild.buildroot.net/results/109/109b7c9b575c7362c4982a908a1e3695e7590ebd/
-> 
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-> ---
->  package/libplayer/Config.in | 3 ++-
->  package/mplayer/Config.in   | 4 ++--
->  2 files changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/libplayer/Config.in b/package/libplayer/Config.in
-> index 113f650..84dad1d 100644
-> --- a/package/libplayer/Config.in
-> +++ b/package/libplayer/Config.in
-> @@ -13,7 +13,8 @@ if BR2_PACKAGE_LIBPLAYER
->  config BR2_PACKAGE_LIBPLAYER_MPLAYER
->  	bool "mplayer backend"
->  	# mplayer
-> -	depends on !BR2_sh4a && !BR2_sh4aeb && !BR2_microblaze && !BR2_aarch64
-> +	depends on !(BR2_bfin || BR2_sh4a || BR2_sh4aeb || BR2_microblaze || \
-> +		   BR2_aarch64)
->  	# mplayer
->  	depends on BR2_LARGEFILE
->  	# mplayer
-> diff --git a/package/mplayer/Config.in b/package/mplayer/Config.in
-> index ae273e4..f2b3620 100644
-> --- a/package/mplayer/Config.in
-> +++ b/package/mplayer/Config.in
-> @@ -1,7 +1,7 @@
->  config BR2_PACKAGE_MPLAYER
->  	bool "mplayer"
->  	# Those architectures are not supported by MPlayer
-> -	depends on !(BR2_sh2a || BR2_sh4a || BR2_sh4aeb \
-> +	depends on !(BR2_bfin || BR2_sh2a || BR2_sh4a || BR2_sh4aeb \
->  			|| BR2_microblaze || BR2_aarch64 || BR2_nios2)
+----- Mail original -----
+| De: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+| ?: "Romain Naour" <romain.naour@openwide.fr>
+| Cc: buildroot at busybox.net
+| Envoy?: Mercredi 19 F?vrier 2014 00:28:49
+| Objet: Re: [Buildroot] [PATCH v2 1/1] ncftp: fix cross-compilation test
+| 
+| Dear Romain Naour,
+| 
+| On Wed, 19 Feb 2014 00:18:42 +0100, Romain Naour wrote:
+| 
+| > Ok, it works.
+| > The configure script is regenerated correctly.
+| 
+| Cool. Does it fix the original problem? I only quickly looked at the
+| generated configure script to verify that the cross compiling test is
+| correct, but I did not verify that the original problem was really
+| solved.
 
-I believe it's time to switch to a different logic. What about:
+This is what I meant by "it works".
+I tested in a Debian chroot where ncurses is not installed.
+So, the original problem is solved :)
 
-config BR2_PACKAGE_MPLAYER_ARCH_SUPPORTS
-	bool
-	depends on <list of supported architectures>
+| 
+| > I had problems using NCFTP_AUTORECONF = YES
+| > what is the difference?
+| 
+| ncftp is not fully autotools based: it uses autoconf, but not
+| automake.
+| And the autoconf invocation needs a special -I path to find the
+| aclocal.m4, since it cannot be re-generated using aclocal, because it
+| uses some funky m4 macros and I have no idea where are the original
+| m4
+| files with these macros.
 
-and then use "depends on BR2_PACKAGE_MPLAYER_ARCH_SUPPORTS" / "depends
-on !BR2_PACKAGE_MPLAYER_ARCH_SUPPORTS" all over the place instead of
-duplicating the list of architectures everywhere.
+Thanks for your explanations, 
+I am not yet familiar with autotools but I progress :)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Best regards,
+Romain
