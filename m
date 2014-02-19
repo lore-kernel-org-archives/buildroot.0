@@ -1,38 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Feb 2014 19:27:49 +0100
-Subject: [Buildroot] adding nodejs to buildroot
-In-Reply-To: <2DD0B9C711CDFC45A3A266C78966CE7F4531FD06@G9W0750.americas.hpqcorp.net>
-References: <2DD0B9C711CDFC45A3A266C78966CE7F4531F64B@G9W0750.americas.hpqcorp.net>
- <20140219092723.112c19ab@skate>
- <2DD0B9C711CDFC45A3A266C78966CE7F4531FD06@G9W0750.americas.hpqcorp.net>
-Message-ID: <20140219192749.719929fa@skate>
+Date: Wed, 19 Feb 2014 19:57:55 +0100
+Subject: [Buildroot] [PATCH v2 2/5] gnu-efi: new package
+In-Reply-To: <20140219175338.GA3400@free.fr>
+References: <1392766441-2160-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1392766441-2160-3-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20140219175338.GA3400@free.fr>
+Message-ID: <20140219195755.1425c532@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Lee,
+Dear Yann E. MORIN,
 
-Please keep the list Cc'ed.
+On Wed, 19 Feb 2014 18:53:38 +0100, Yann E. MORIN wrote:
 
-On Wed, 19 Feb 2014 18:12:33 +0000, Jenkins, Lee (ISS Houston) wrote:
+> > +ifeq ($(BR2_i386),y)
+> > +GNU_EFI_PLATFORM=ia32
+> > +else ifeq ($(BR2_x86_64),y)
+> > +GNU_EFI_PLATFORM=x86_64
+> > +endif
+> 
+> Shouldn't we do like for grub: some EFI-BIOS on x86-64 machines might be
+> a 32-bit EFI-BIOS, in which case we'd want to build the 32-bit version
+> even if the target is 64-bit?
 
-> Thanks for the assist. With that information and a small patch to the build of host-python I was able to build node.
+No, because it doesn't work. Building gnu-efi 32 bits with a 64 bits
+toolchain fails.
 
-Cool!
+> > +define GNU_EFI_BUILD_CMDS
+> > +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+> > +		$(TARGET_CONFIGURE_OPTS) \
+> > +		ARCH=$(GNU_EFI_PLATFORM)
+> > +endef
+> > +
+> > +define GNU_EFI_INSTALL_TARGET_CMDS
+> > +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+> > +		$(TARGET_CONFIGURE_OPTS) \
+> > +		INSTALLROOT=$(TARGET_DIR) \
+> > +		PREFIX=/usr ARCH=$(GNU_EFI_PLATFORM) install
+> > +endef
+> > +
+> > +define GNU_EFI_INSTALL_STAGING_CMDS
+> > +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+> > +		$(TARGET_CONFIGURE_OPTS) \
+> > +		INSTALLROOT=$(STAGING_DIR) \
+> > +		PREFIX=/usr ARCH=$(GNU_EFI_PLATFORM) install
+> > +endef
+> 
+> Why install in target/ and staging/, and not in images/ ?
 
-> We have talked about upgrading our buildroot. Same old tradeoff convo of time/risk to upgrade vs. our looming deadline.
+Because gnu-efi is not a bootloader. gnu-efi is a set of header files
+and a small library to be linked into an EFI application. So installing
+it in images/ doesn't make any sense.
 
-Yes, indeed. Unfortunately, when calculating this tradeoff, a lot of
-people/companies forget that by not upgrading, they lose community
-support. And this support might prove to be very useful :)
+However, I agree that the installation to the target is useless, so I
+will remove it.
 
-> I could post my solution to the mailing list if you think it might be useful. I realize this wouldn't be an official patch, but it might help someone operating under similar constraints.
+> Also, this is used to build EFI applications, so I'd expect some host
+> tools to be built and isntalled, too. What am I missing?
 
-I don't know if it would be really useful, because it's unlikely that
-people having the same problem as you will find your patch amongst the
-myriad of patches that are being sent to the Buildroot mailing list :-)
+There are no host tools. As far as I understand, gnu-efi only contains
+runtime code, to be linked into an EFI application that will be
+executed on the target.
 
 Thomas
 -- 
