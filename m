@@ -1,67 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Feb 2014 08:53:59 +0100
-Subject: [Buildroot] [git commit branch/next] python,
-	python3: fix to ensure libpython is stripped
-Message-ID: <20140219080355.CBCB49CAA7@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 19 Feb 2014 09:04:57 +0100
+Subject: [Buildroot] Xtensa support ?
+In-Reply-To: <5303F9B4.60102@zankel.net>
+References: <20140214073009.1D7E6102637@stock.ovh.net>
+ <20140214101241.27857b9e@skate> <20140215213124.GB4168@tarshish>
+ <20140218222215.12b84764@skate> <5303F9B4.60102@zankel.net>
+Message-ID: <20140219090457.4816d674@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=99d930e65db24ac1ed5e768324154cc1f10e9eae
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Dear Chris Zankel,
 
-The python and python3 builds mark libpython as read-only which
-prevents it from being stripped out correctly for the target.
+On Tue, 18 Feb 2014 16:24:20 -0800, Chris Zankel wrote:
 
-Signed-off-by: Przemyslaw Wrzos <przemyslaw.wrzos@calyptech.com>
-Acked-by: Thomas De Schampheleire <thomas.de_schampheleire@alcatel-lucent.com>
-Tested-by: Thomas De Schampheleire <thomas.de_schampheleire@alcatel-lucent.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python/python.mk   |    9 +++++++++
- package/python3/python3.mk |    9 +++++++++
- 2 files changed, 18 insertions(+), 0 deletions(-)
+> Unfortunately, I have been really busy with another project and won't 
+> have much time to look into it for another week or so.
 
-diff --git a/package/python/python.mk b/package/python/python.mk
-index 3b0a4dd..94765cb 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -160,6 +160,15 @@ endef
- 
- PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_REMOVE_USELESS_FILES
- 
-+#
-+# Make sure libpython gets stripped out on target
-+#
-+define PYTHON_ENSURE_LIBPYTHON_STRIPPED
-+	chmod u+w $(TARGET_DIR)/usr/lib/libpython$(PYTHON_VERSION_MAJOR)*.so
-+endef
-+
-+PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_ENSURE_LIBPYTHON_STRIPPED
-+
- PYTHON_AUTORECONF = YES
- 
- # Provided to other packages
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 13f53f4..880b66e 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -131,6 +131,15 @@ endef
- 
- PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_REMOVE_USELESS_FILES
- 
-+#
-+# Make sure libpython gets stripped out on target
-+#
-+define PYTHON3_ENSURE_LIBPYTHON_STRIPPED
-+	chmod u+w $(TARGET_DIR)/usr/lib/libpython$(PYTHON3_VERSION_MAJOR)*.so
-+endef
-+
-+PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_ENSURE_LIBPYTHON_STRIPPED
-+
- PYTHON3_AUTORECONF = YES
- 
- define PYTHON3_INSTALL_SYMLINK
+I am not really worried about the immediate future (i.e the coming
+week), but more in the mid to long term future.
+
+> Max has been working on Xtensa a lot, so maybe he can step in?
+
+We'll be definitely happy to receive contributions from Max. Max, do
+you want to receive a daily e-mail that lists the Xtensa build issues
+(no mail is sent when there are no Xtensa build issues during the day).
+
+> If the autobuilder supports multiple recipients, it would be great if 
+> you could still keep me in that list, though.
+
+I can send the e-mail to as many recipients as I want, so I'll
+definitely keep you in the list.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
