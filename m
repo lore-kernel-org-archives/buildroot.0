@@ -1,51 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Feb 2014 09:27:23 +0100
-Subject: [Buildroot] adding nodejs to buildroot
-In-Reply-To: <2DD0B9C711CDFC45A3A266C78966CE7F4531F64B@G9W0750.americas.hpqcorp.net>
-References: <2DD0B9C711CDFC45A3A266C78966CE7F4531F64B@G9W0750.americas.hpqcorp.net>
-Message-ID: <20140219092723.112c19ab@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 19 Feb 2014 09:29:16 +0100
+Subject: [Buildroot] Switching from uClibc to glibc as the default in
+	Buildroot?
+In-Reply-To: <20140219091822.08d1a87e@skate> (Thomas Petazzoni's message of
+ "Wed, 19 Feb 2014 09:18:22 +0100")
+References: <20140218231447.524a1a20@skate>
+ <CAMKF1soCcLba_EacJLe7f9fM9=gFsTJYj0kaz6YzoXzEY1rx2A@mail.gmail.com>
+ <20140219091822.08d1a87e@skate>
+Message-ID: <8738jf33qb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jenkins, Lee (ISS Houston),
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Wed, 19 Feb 2014 00:38:16 +0000, Jenkins, Lee (ISS Houston) wrote:
+ > Dear Khem Raj,
+ > On Tue, 18 Feb 2014 16:23:11 -0800, Khem Raj wrote:
 
-> I tried to add package nodejs to an old BuildRoot : 2011.05
-> 
-> Here's how I added the package:
-> 1. I downloaded the nodejs package (Config.in, nodejs.mk, and nodejs...patch) from the latest buildroot into the buildroot/package/nodejs directory.
-> 2. I added an entry for nodejs in buildroot/packages/Config.in under "Interpreter languages and scripting"
-> 3. I ran "make menuconfig", selected the nodejs package (yes, it appeared in the right spot) and saved the configuration
-> 
-> But something is out of place because the make fails:
-> 
-> buildroot$ make nodejs
-> make: *** No rule to make target `nodejs'. Stop.
+ >> > To give you an idea, Buildroot currently has more than 50 patches on
+ >> > top of uClibc 0.9.33.2:
+ >> >
+ >> >   http://git.buildroot.net/buildroot/tree/package/uclibc/0.9.33.2/
+ >> 
+ >> Indeed, I see what you are saying here. In order to begin the process,
+ >> can you send a list of patches
+ >> that buildroot is carrying for inclusion into master.
 
-You need to replace the last lines of nodejs.mk by:
+ > Peter will confirm, but I believe that *all* our patches are backports
+ > from the 0.9.33 branch at http://git.uclibc.org/uClibc/log/?h=0.9.33.
+ > So there is no special fix in Buildroot that isn't already in mainline
+ > uClibc.
 
-$(eval $(call GENTARGETS,package,nodejs))
-$(eval $(call GENTARGETS,package,nodejs,host))
+That's the plan atleast. We normally don't carry any feature patches
+(besides backports), but I would need to check to 100% sure.
 
-However, there will most likely be a lot of other problems, as new
-packages often rely on new features of the package infrastructure. So
-you cannot simply take a package from a more recent version of
-Buildroot, drop it in a 3 years older Buildroot and expect things to
-work.
-
-What about upgrading your Buildroot instead? By using such an old
-version, you lose all the support that the community could give you,
-because we are not really interested in solving issues occurring with a
-3 years old Buildroot.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
