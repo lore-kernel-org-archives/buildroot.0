@@ -1,116 +1,241 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Feb 2014 23:07:06 +0100
-Subject: [Buildroot] [git commit] lvm2: disable static builds
-Message-ID: <20140219221148.4DA998DAB5@busybox.osuosl.org>
+Date: Wed, 19 Feb 2014 23:07:00 +0100
+Subject: [Buildroot] [git commit] thrift: fixes compilation issues
+Message-ID: <20140219221148.427459CAC2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6eb425891e18a489f115bb2cfdbb3f618bede29e
+commit: http://git.buildroot.net/buildroot/commit/?id=cc5b999cf69da758e5fbbc380ffbba8545c4319e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When BR2_PREFER_STATIC_LIB is defined it still try to build the shared
-executables and it fails.
+Apply upstreamed patches:
+https://issues.apache.org/jira/browse/THRIFT-2229
+https://issues.apache.org/jira/browse/THRIFT-2367
 
 Fixes:
-http://autobuild.buildroot.net/results/b0b/b0b386969459dda9c294f1ccb4927ca225fa6bdd/
+http://autobuild.buildroot.net/results/efb/efbbae54b5a16b26cac7fcc69ea99bb6f8661fe8/build-end.log
+http://autobuild.buildroot.net/results/f83/f837440fdf8b3bddfc6cc548902a0453640fa6b4/build-end.log
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+[Romain: patch 05 rebased on top of thrift-0.9.1]
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cryptsetup/Config.in |    5 +++--
- package/dmraid/Config.in     |    5 +++--
- package/lvm2/Config.in       |    5 +++--
- package/udisks/Config.in     |    6 ++++--
- 4 files changed, 13 insertions(+), 8 deletions(-)
+ .../thrift-04-failed-to-build-on-OSX-10.9-GM.patch |   88 +++++++++++++++
+ ...-05-stdlib-and-boost-both-define-uint64_t.patch |  112 ++++++++++++++++++++
+ 2 files changed, 200 insertions(+), 0 deletions(-)
 
-diff --git a/package/cryptsetup/Config.in b/package/cryptsetup/Config.in
-index 28073f4..9fbe74c 100644
---- a/package/cryptsetup/Config.in
-+++ b/package/cryptsetup/Config.in
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_CRYPTSETUP
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	depends on BR2_LARGEFILE # lvm2, util-linux
- 	depends on BR2_USE_MMU # lvm2
-+	depends on !BR2_PREFER_STATIC_LIB # lvm2
- 	depends on BR2_USE_WCHAR # util-linux
- 	help
- 	  This tool helps manipulate dm-crypt and luks partitions for
-@@ -14,6 +15,6 @@ config BR2_PACKAGE_CRYPTSETUP
- 
- 	  https://code.google.com/p/cryptsetup/
- 
--comment "cryptsetup needs a toolchain w/ largefile, wchar"
-+comment "cryptsetup needs a toolchain w/ largefile, wchar, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR
-+	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR  || BR2_PREFER_STATIC_LIB
-diff --git a/package/dmraid/Config.in b/package/dmraid/Config.in
-index bfdd89b..90aca29 100644
---- a/package/dmraid/Config.in
-+++ b/package/dmraid/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_DMRAID
- 	bool "dmraid"
- 	depends on BR2_LARGEFILE
- 	depends on BR2_USE_MMU # lvm2
-+	depends on !BR2_PREFER_STATIC_LIB # lvm2
- 	# triggers gcc ice
- 	depends on !BR2_arc
- 	select BR2_PACKAGE_LVM2
-@@ -12,7 +13,7 @@ config BR2_PACKAGE_DMRAID
- 	  dmraid uses the Linux device-mapper to create devices with
- 	  respective mappings for the ATARAID sets discovered.
- 
--comment "dmraid needs a toolchain w/ largefile"
-+comment "dmraid needs a toolchain w/ largefile, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_LARGEFILE
-+	depends on !BR2_LARGEFILE || BR2_PREFER_STATIC_LIB
- 	depends on !BR2_arc
-diff --git a/package/lvm2/Config.in b/package/lvm2/Config.in
-index 5d6209fc1..3f8a52d 100644
---- a/package/lvm2/Config.in
-+++ b/package/lvm2/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_LVM2
- 	bool "lvm2 & device mapper"
- 	depends on BR2_LARGEFILE
- 	depends on BR2_USE_MMU # needs fork()
-+	depends on !BR2_PREFER_STATIC_LIB # It fails to build statically
- 	help
- 	  This is LVM2, the rewrite of The Linux Logical Volume Manager.
- 	  LVM supports enterprise level volume management of disk and disk
-@@ -33,6 +34,6 @@ config BR2_PACKAGE_LVM2_APP_LIBRARY
- 
- endif
- 
--comment "lvm2 needs a toolchain w/ largefile"
-+comment "lvm2 needs a toolchain w/ largefile, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_LARGEFILE
-+	depends on !BR2_LARGEFILE || BR2_PREFER_STATIC_LIB
-diff --git a/package/udisks/Config.in b/package/udisks/Config.in
-index e9539a3..b398260 100644
---- a/package/udisks/Config.in
-+++ b/package/udisks/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_UDISKS
- 	depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus-glib -> glib2
- 	depends on BR2_USE_MMU # lvm2
-+	depends on !BR2_PREFER_STATIC_LIB # lvm2
- 	select BR2_PACKAGE_UDEV
- 	select BR2_PACKAGE_UDEV_ALL_EXTRAS
- 	select BR2_PACKAGE_DBUS
-@@ -36,8 +37,9 @@ config BR2_PACKAGE_UDISKS_LVM2
- 
- endif
- 
--comment "udisks needs udev /dev management and a toolchain w/ wchar, threads"
-+comment "udisks needs udev /dev management and a toolchain w/ wchar, threads, dynamic library"
- 	depends on !BR2_avr32
- 	depends on BR2_USE_MMU
- 	depends on !BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV || \
--		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS  || \
-+		BR2_PREFER_STATIC_LIB
+diff --git a/package/thrift/thrift-04-failed-to-build-on-OSX-10.9-GM.patch b/package/thrift/thrift-04-failed-to-build-on-OSX-10.9-GM.patch
+new file mode 100644
+index 0000000..8ff9def
+--- /dev/null
++++ b/package/thrift/thrift-04-failed-to-build-on-OSX-10.9-GM.patch
+@@ -0,0 +1,88 @@
++THRIFT-2229 thrift failed to build on OSX 10.9 GM
++
++---
++ compiler/cpp/src/thrifty.yy |  4 ++--
++ tutorial/cpp/CppClient.cpp  |  6 +++---
++ tutorial/cpp/CppServer.cpp  | 16 ++++++++--------
++ 3 files changed, 13 insertions(+), 13 deletions(-)
++ mode change 100644 => 100755 compiler/cpp/src/thrifty.yy
++
++diff --git a/compiler/cpp/src/thrifty.yy b/compiler/cpp/src/thrifty.yy
++old mode 100644
++new mode 100755
++index b543552..8814332
++--- a/compiler/cpp/src/thrifty.yy
+++++ b/compiler/cpp/src/thrifty.yy
++@@ -675,7 +675,7 @@ ConstValue:
++       $$ = new t_const_value();
++       $$->set_integer($1);
++       if (!g_allow_64bit_consts && ($1 < INT32_MIN || $1 > INT32_MAX)) {
++-        pwarning(1, "64-bit constant \"%"PRIi64"\" may not work in all languages.\n", $1);
+++        pwarning(1, "64-bit constant \"%" PRIi64"\" may not work in all languages.\n", $1);
++       }
++     }
++ | tok_dub_constant
++@@ -987,7 +987,7 @@ FieldIdentifier:
++              * warn if the user-specified negative value isn't what
++              * thrift would have auto-assigned.
++              */
++-            pwarning(1, "Nonpositive field key (%"PRIi64") differs from what would be "
+++            pwarning(1, "Nonpositive field key (%" PRIi64") differs from what would be "
++                      "auto-assigned by thrift (%d).\n", $1, y_field_val);
++           }
++           /*
++diff --git a/tutorial/cpp/CppClient.cpp b/tutorial/cpp/CppClient.cpp
++index ba71caa..b91df2e 100644
++--- a/tutorial/cpp/CppClient.cpp
+++++ b/tutorial/cpp/CppClient.cpp
++@@ -38,9 +38,9 @@ using namespace shared;
++ using namespace boost;
++ 
++ int main(int argc, char** argv) {
++-  shared_ptr<TTransport> socket(new TSocket("localhost", 9090));
++-  shared_ptr<TTransport> transport(new TBufferedTransport(socket));
++-  shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
+++  boost::shared_ptr<TTransport> socket(new TSocket("localhost", 9090));
+++  boost::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
+++  boost::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
++   CalculatorClient client(protocol);
++ 
++   try {
++diff --git a/tutorial/cpp/CppServer.cpp b/tutorial/cpp/CppServer.cpp
++index d0dbad9..f19258c 100644
++--- a/tutorial/cpp/CppServer.cpp
+++++ b/tutorial/cpp/CppServer.cpp
++@@ -113,11 +113,11 @@ protected:
++ 
++ int main(int argc, char **argv) {
++ 
++-  shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
++-  shared_ptr<CalculatorHandler> handler(new CalculatorHandler());
++-  shared_ptr<TProcessor> processor(new CalculatorProcessor(handler));
++-  shared_ptr<TServerTransport> serverTransport(new TServerSocket(9090));
++-  shared_ptr<TTransportFactory> transportFactory(new TBufferedTransportFactory());
+++  boost::shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
+++  boost::shared_ptr<CalculatorHandler> handler(new CalculatorHandler());
+++  boost::shared_ptr<TProcessor> processor(new CalculatorProcessor(handler));
+++  boost::shared_ptr<TServerTransport> serverTransport(new TServerSocket(9090));
+++  boost::shared_ptr<TTransportFactory> transportFactory(new TBufferedTransportFactory());
++ 
++   TSimpleServer server(processor,
++                        serverTransport,
++@@ -128,10 +128,10 @@ int main(int argc, char **argv) {
++   /**
++    * Or you could do one of these
++ 
++-  shared_ptr<ThreadManager> threadManager =
+++  boost::shared_ptr<ThreadManager> threadManager =
++     ThreadManager::newSimpleThreadManager(workerCount);
++-  shared_ptr<PosixThreadFactory> threadFactory =
++-    shared_ptr<PosixThreadFactory>(new PosixThreadFactory());
+++  boost::shared_ptr<PosixThreadFactory> threadFactory =
+++    boost::shared_ptr<PosixThreadFactory>(new PosixThreadFactory());
++   threadManager->threadFactory(threadFactory);
++   threadManager->start();
++   TThreadPoolServer server(processor,
++-- 
++1.8.5.3
++
+diff --git a/package/thrift/thrift-05-stdlib-and-boost-both-define-uint64_t.patch b/package/thrift/thrift-05-stdlib-and-boost-both-define-uint64_t.patch
+new file mode 100644
+index 0000000..70a5885
+--- /dev/null
++++ b/package/thrift/thrift-05-stdlib-and-boost-both-define-uint64_t.patch
+@@ -0,0 +1,112 @@
++THRIFT-2367 Build failure: stdlib and boost both define uint64_t
++
++Fix: remove "using namespace boost;"
++Patch: Roger Meier
++---
++ lib/cpp/src/thrift/transport/TSSLServerSocket.cpp | 8 +++-----
++ lib/cpp/src/thrift/transport/TSSLSocket.cpp       | 7 +++----
++ tutorial/cpp/CppClient.cpp                        | 2 --
++ tutorial/cpp/CppServer.cpp                        | 2 --
++ 4 files changed, 6 insertions(+), 13 deletions(-)
++
++diff --git a/lib/cpp/src/thrift/transport/TSSLServerSocket.cpp b/lib/cpp/src/thrift/transport/TSSLServerSocket.cpp
++index 4689e4a..df5ed75 100644
++--- a/lib/cpp/src/thrift/transport/TSSLServerSocket.cpp
+++++ b/lib/cpp/src/thrift/transport/TSSLServerSocket.cpp
++@@ -22,25 +22,23 @@
++ 
++ namespace apache { namespace thrift { namespace transport {
++ 
++-using namespace boost;
++-
++ /**
++  * SSL server socket implementation.
++  */
++ TSSLServerSocket::TSSLServerSocket(int port,
++-                                   shared_ptr<TSSLSocketFactory> factory):
+++                                   boost::shared_ptr<TSSLSocketFactory> factory):
++                                    TServerSocket(port), factory_(factory) {
++   factory_->server(true);
++ }
++ 
++ TSSLServerSocket::TSSLServerSocket(int port, int sendTimeout, int recvTimeout,
++-                                   shared_ptr<TSSLSocketFactory> factory):
+++                                   boost::shared_ptr<TSSLSocketFactory> factory):
++                                    TServerSocket(port, sendTimeout, recvTimeout),
++                                    factory_(factory) {
++   factory_->server(true);
++ }
++ 
++-shared_ptr<TSocket> TSSLServerSocket::createSocket(int client) {
+++boost::shared_ptr<TSocket> TSSLServerSocket::createSocket(int client) {
++   return factory_->createSocket(client);
++ }
++ 
++diff --git a/lib/cpp/src/thrift/transport/TSSLSocket.cpp b/lib/cpp/src/thrift/transport/TSSLSocket.cpp
++index 029c541..5029f74 100644
++--- a/lib/cpp/src/thrift/transport/TSSLSocket.cpp
+++++ b/lib/cpp/src/thrift/transport/TSSLSocket.cpp
++@@ -41,7 +41,6 @@
++ #define OPENSSL_VERSION_NO_THREAD_ID 0x10000000L
++ 
++ using namespace std;
++-using namespace boost;
++ using namespace apache::thrift::concurrency;
++ 
++ struct CRYPTO_dynlock_value {
++@@ -489,7 +488,7 @@ int TSSLSocketFactory::passwordCallback(char* password,
++   return length;
++ }
++ 
++-static shared_array<Mutex> mutexes;
+++static boost::shared_array<Mutex> mutexes;
++ 
++ static void callbackLocking(int mode, int n, const char*, int) {
++   if (mode & CRYPTO_LOCK) {
++@@ -533,7 +532,7 @@ void TSSLSocketFactory::initializeOpenSSL() {
++   SSL_library_init();
++   SSL_load_error_strings();
++   // static locking
++-  mutexes = shared_array<Mutex>(new Mutex[::CRYPTO_num_locks()]);
+++  mutexes = boost::shared_array<Mutex>(new Mutex[::CRYPTO_num_locks()]);
++   if (mutexes == NULL) {
++     throw TTransportException(TTransportException::INTERNAL_ERROR,
++           "initializeOpenSSL() failed, "
++@@ -591,7 +590,7 @@ void buildErrors(string& errors, int errno_copy) {
++     }
++   }
++   if (errors.empty()) {
++-    errors = "error code: " + lexical_cast<string>(errno_copy);
+++    errors = "error code: " + boost::lexical_cast<string>(errno_copy);
++   }
++ }
++ 
++diff --git a/tutorial/cpp/CppClient.cpp b/tutorial/cpp/CppClient.cpp
++index ba71caa..6db8db6 100644
++--- a/tutorial/cpp/CppClient.cpp
+++++ b/tutorial/cpp/CppClient.cpp
++@@ -35,8 +35,6 @@ using namespace apache::thrift::transport;
++ using namespace tutorial;
++ using namespace shared;
++ 
++-using namespace boost;
++-
++ int main(int argc, char** argv) {
++   shared_ptr<TTransport> socket(new TSocket("localhost", 9090));
++   shared_ptr<TTransport> transport(new TBufferedTransport(socket));
++diff --git a/tutorial/cpp/CppServer.cpp b/tutorial/cpp/CppServer.cpp
++index d0dbad9..d0bff32 100644
++--- a/tutorial/cpp/CppServer.cpp
+++++ b/tutorial/cpp/CppServer.cpp
++@@ -41,8 +41,6 @@ using namespace apache::thrift::server;
++ using namespace tutorial;
++ using namespace shared;
++ 
++-using namespace boost;
++-
++ class CalculatorHandler : public CalculatorIf {
++  public:
++   CalculatorHandler() {}
++-- 
++1.8.5.3
++
