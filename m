@@ -1,42 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Feb 2014 16:13:15 +0100
-Subject: [Buildroot] [git commit] sdl_image: add host version
-Message-ID: <20140228133415.2CBE29BA7B@busybox.osuosl.org>
+Date: Wed, 19 Feb 2014 08:53:31 +0100
+Subject: [Buildroot] [git commit] python-setuptools: bump version to 2.1.2
+Message-ID: <20140228133414.9994F9BA7B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e72b7a4e8c4b0bf1b5b268601de7990b54ee9a67
+commit: http://git.buildroot.net/buildroot/commit/?id=e51f87b825819986613cff58038b797e9925b25d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Host version is needed to build xbmc
+[Thomas: bump to 2.1.2 instead of 0.8, remove comment that no longer
+made sense about setuptools being forked.]
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Rohan Fletcher <rohfledev@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sdl_image/sdl_image.mk |   11 +++++++++++
- 1 files changed, 11 insertions(+), 0 deletions(-)
+ package/python-setuptools/python-setuptools.mk |   11 +++--------
+ 1 files changed, 3 insertions(+), 8 deletions(-)
 
-diff --git a/package/sdl_image/sdl_image.mk b/package/sdl_image/sdl_image.mk
-index ba9751d..05b9a1f 100644
---- a/package/sdl_image/sdl_image.mk
-+++ b/package/sdl_image/sdl_image.mk
-@@ -38,4 +38,15 @@ SDL_IMAGE_DEPENDENCIES = sdl \
- 	$(if $(BR2_PACKAGE_SDL_IMAGE_TIFF),tiff) \
- 	$(if $(BR2_PACKAGE_SDL_IMAGE_WEBP),webp)
+diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
+index 13df448..48bf7c5 100644
+--- a/package/python-setuptools/python-setuptools.mk
++++ b/package/python-setuptools/python-setuptools.mk
+@@ -4,14 +4,9 @@
+ #
+ ################################################################################
  
-+HOST_SDL_IMAGE_CONF_OPT = --with-sdl-prefix=$(HOST_DIR)/usr \
-+                --with-sdl-exec-prefix=$(HOST_DIR)/usr \
-+                --disable-sdltest \
-+                --disable-static \
-+                --disable-jpg-shared \
-+                --disable-png-shared \
-+                --disable-tif-shared \
-+
-+HOST_SDL_IMAGE_DEPENDENCIES = host-libjpeg host-libpng host-sdl
-+
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+-# "distribute" is a fork of the unmaintained setuptools package. There
+-# are plans to re-merge it into setuptools; if this happens, we can
+-# switch back to it.
+-# See http://pypi.python.org/packages/source/s/setuptools
+-
+-PYTHON_SETUPTOOLS_VERSION = 0.6.36
+-PYTHON_SETUPTOOLS_SOURCE  = distribute-$(PYTHON_SETUPTOOLS_VERSION).tar.gz
+-PYTHON_SETUPTOOLS_SITE    = http://pypi.python.org/packages/source/d/distribute
++PYTHON_SETUPTOOLS_VERSION = 2.1.2
++PYTHON_SETUPTOOLS_SOURCE  = setuptools-$(PYTHON_SETUPTOOLS_VERSION).tar.gz
++PYTHON_SETUPTOOLS_SITE    = http://pypi.python.org/packages/source/s/setuptools
+ PYTHON_SETUPTOOLS_SETUP_TYPE = setuptools
+ 
+ $(eval $(python-package))
