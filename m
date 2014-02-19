@@ -1,58 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Feb 2014 08:30:08 +0100 (CET)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-02-18
-Message-ID: <20140219073009.0A786101591@stock.ovh.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 19 Feb 2014 09:03:17 +0100
+Subject: [Buildroot] [PATCH v2 00/20] Python 2 and 3 bumps,
+	support for Python 3 external modules
+In-Reply-To: <1392756013-27757-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 18 Feb 2014 21:39:53 +0100")
+References: <1392756013-27757-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <877g8r34xm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2014-02-18
-===============================
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-        success : 97 
-       failures : 15 
-       timeouts : 1  
-          TOTAL : 113
+ > Hello,
+ > Here is a v2 of the patch set that does numerous Python support
+ > improvements. Changes since v1:
 
-Classification of failures by reason
-====================================
+ >  * Dropped patches that have been merged.
 
-                  thrift-0.9.1 | 2 
-               alsa-lib-1.0.26 | 2 
-        ltp-testsuite-20130904 | 2 
-                     pv-1.4.12 | 1 
-                       kmod-16 | 1 
-               w_scan-20130331 | 1 
-                  libogg-1.3.0 | 1 
-             alsa-utils-1.0.26 | 1 
-                 pixman-0.30.0 | 1 
-                 mplayer-1.1.1 | 1 
-zmqpp-36413487f05b165dfc82a... | 1 
-                 rt-tests-0.83 | 1 
-/home/test/test/2/output/ho... | 1 
+ >  * Rebased on top of the next branch, in order to resolve conflicts
+ >    with the parallel build support patches that were merged.
 
-Detail of failures
-===================
+ > Best regards,
 
-    x86_64 | /home/test/test/2/output/ho... | TIM | http://autobuild.buildroot.net/results/60e6faed75a4564b97a9d9a390345f35833db2ac/
-    x86_64 |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/71efa36a85d27cf6ae8c6a0dba9af7c299ed6db9/
-      i686 |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/90a5e97b0e2d2204ddec3acb7ea2636dc6de2d97/
-      bfin |              alsa-utils-1.0.26 | NOK | http://autobuild.buildroot.net/results/dc6bfe9a2b05f0622729764cdbcde5a53aec143a/
-    xtensa |                        kmod-16 | NOK | http://autobuild.buildroot.net/results/b028eaf22cebd33e4e7e67b6ee6c5be6d3f2ab51/
-       arc |                   libogg-1.3.0 | NOK | http://autobuild.buildroot.net/results/e00e50f7b16fddfdb7281ee6c9b8a87ac2f480c4/
-       arm |         ltp-testsuite-20130904 | NOK | http://autobuild.buildroot.net/results/d642fcebdd5a962744c61467511b6a63b4f36a80/
-  mips64el |         ltp-testsuite-20130904 | NOK | http://autobuild.buildroot.net/results/a718836439e11bad3719bd07cdf20c9b80b09a3e/
-    xtensa |                  mplayer-1.1.1 | NOK | http://autobuild.buildroot.net/results/9d2cf930d51274e119a98f63c06741bf2014ca64/
-microblaze |                  pixman-0.30.0 | NOK | http://autobuild.buildroot.net/results/4dbe7b0a7a98e13ec49b3afb1509da366d1cb672/
-      i686 |                      pv-1.4.12 | NOK | http://autobuild.buildroot.net/results/481589a8d005b602c4725c9734966801c90909c7/
-      bfin |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/ac95f73b2351d46d9a8c48caae7f6c3ea124e8bc/
-    x86_64 |                   thrift-0.9.1 | NOK | http://autobuild.buildroot.net/results/ff11e4727a26bc1e585361220e6ff919685788f2/
-    x86_64 |                   thrift-0.9.1 | NOK | http://autobuild.buildroot.net/results/efbbae54b5a16b26cac7fcc69ea99bb6f8661fe8/
-   powerpc |                w_scan-20130331 | NOK | http://autobuild.buildroot.net/results/edc8b090d779524581e801066a96f090d02d18f9/
-   powerpc | zmqpp-36413487f05b165dfc82a... | NOK | http://autobuild.buildroot.net/results/6c9dbd1af859d8820cecc90780d27faefd744067/
+ > Thomas
 
+ > Przemyslaw Wrzos (1):
+ >   python, python3: fix to ensure libpython is stripped
+
+ > Rohan Fletcher (1):
+ >   python-setuptools: bump version to 2.1.2
+
+ > Thomas Petazzoni (17):
+ >   pkg-python: no longer use distutilscross for setuptools
+ >   python-distutilscross: remove package that is no longer needed
+ >   python3: removal of *.py/*.pyc is now done globally
+ >   python3: make it exclusive from python
+ >   python3: add python -> python3 symlink for the host variant
+ >   python3: use proper PYTHON3_VERSION_MAJOR instead of harcoding 3.3
+ >   python3: bump to 3.4.0rc1
+ >   python3: provide a PYTHON3_PATH
+ >   package: add python3 support in the package infrastructure
+ >   package: allow Python packages with Python3
+ >   python, python3: enable unicodedata for host-python, needed by
+ >     setuptools
+ >   python-pyasn: use the real upstream
+ >   python-bottle: allow to build with Python 3
+ >   python-serial: allow to build with Python 3
+ >   python-pyasn: allow to build with Python 3
+ >   python-pycrypto: allow to build with Python 3
+ >   python-pysnmp{,-apps,-mibs}: allow to build with Python 3
+
+ > kpa_info at yahoo.fr (1):
+ >   python3: add config directory symbolic link
+
+Committed the rest of the series (except for patch 6) to next, thanks.
 
 -- 
-http://autobuild.buildroot.net
+Bye, Peter Korsgaard
