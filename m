@@ -1,51 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Feb 2014 14:19:30 +0100
-Subject: [Buildroot] Xtensa support ?
-In-Reply-To: <CAMo8Bf+gfdgfV+XFows8HmppvXdL=VWXGG_givbUNerep0zeHg@mail.gmail.com>
-References: <20140214073009.1D7E6102637@stock.ovh.net>
- <20140214101241.27857b9e@skate> <20140215213124.GB4168@tarshish>
- <20140218222215.12b84764@skate> <5303F9B4.60102@zankel.net>
- <20140219090457.4816d674@skate>
- <CAMo8Bf+gfdgfV+XFows8HmppvXdL=VWXGG_givbUNerep0zeHg@mail.gmail.com>
-Message-ID: <20140219141930.1579835c@skate>
+From: Mike Zick <minimod@morethan.org>
+Date: Wed, 19 Feb 2014 07:21:35 -0600
+Subject: [Buildroot] Switching from uClibc to glibc as the default in
+ Buildroot?
+In-Reply-To: <87y5171p19.fsf@dell.be.48ers.dk>
+References: <20140218231447.524a1a20@skate>
+ <CAMKF1soCcLba_EacJLe7f9fM9=gFsTJYj0kaz6YzoXzEY1rx2A@mail.gmail.com>
+ <fd7802bd-3f37-4d70-ad22-2e46fc452b4b@email.android.com>
+ <66DCE5C2-E7A6-4634-8C79-441DA9FC46FB@gmail.com>
+ <20140219092112.6f359a55@skate> <87y5171p19.fsf@dell.be.48ers.dk>
+Message-ID: <20140219072135.6eee6711@core2quad.morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Max Filippov,
+On Wed, 19 Feb 2014 09:32:02 +0100
+Peter Korsgaard <jacmet@uclibc.org> wrote:
 
-On Wed, 19 Feb 2014 14:46:28 +0400, Max Filippov wrote:
-
-> On Wed, Feb 19, 2014 at 12:04 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
-> >> Unfortunately, I have been really busy with another project and won't
-> >> have much time to look into it for another week or so.
-> >
-> > I am not really worried about the immediate future (i.e the coming
-> > week), but more in the mid to long term future.
-> >
-> >> Max has been working on Xtensa a lot, so maybe he can step in?
+> Inded. When Bernard suggested the same last year I did test and
+> reported issues, but never got any reply:
 > 
-> I think I can. I've been always using somewhat old buildroot version,
-> so need some time to get familiar with its current state.
+> http://lists.uclibc.org/pipermail/uclibc/2013-November/048093.html
+>
 
-Great!
+A mailing-list setup problem at uClibc?
 
-> > We'll be definitely happy to receive contributions from Max. Max, do
-> > you want to receive a daily e-mail that lists the Xtensa build issues
-> > (no mail is sent when there are no Xtensa build issues during the day).
-> 
-> Yes, please.
+Because following that thread shows your suggested change was
+applied.
 
-Done, you will receive the daily e-mail with Xtensa build failures
-starting tomorrow morning.
+So fixing up their mailing-list operation could become a separate
+subject thread.
 
-Thanks for your participation!
+Maybe something as simple as echoing the "[commit]" messages to
+their mailing list would fix this sort of communication lack.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Mike
