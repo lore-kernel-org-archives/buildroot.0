@@ -1,85 +1,51 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Wed, 19 Feb 2014 01:14:52 +0100
-Subject: [Buildroot] [PATCH v7 4/4] xbmc: new package
-In-Reply-To: <5303A6E3.8010209@barkynet.com>
-References: <1392680233-24585-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1392680233-24585-5-git-send-email-maxime.hadjinlian@gmail.com>
- <20140218173828.5947589d@skate>
- <CAGduivyFw4z+UxWWj36kgZgvDDg6CnQ12zKH6QGtpZrLMBiaow@mail.gmail.com>
- <5303A6E3.8010209@barkynet.com>
-Message-ID: <CAGduivzYVd3VFG3PDtPUJjLjtwaAMWydJbEZ6Yfyw6gwc4gLiA@mail.gmail.com>
+From: Chris Zankel <chris@zankel.net>
+Date: Tue, 18 Feb 2014 16:24:20 -0800
+Subject: [Buildroot] Xtensa support ?
+In-Reply-To: <20140218222215.12b84764@skate>
+References: <20140214073009.1D7E6102637@stock.ovh.net>
+ <20140214101241.27857b9e@skate> <20140215213124.GB4168@tarshish>
+ <20140218222215.12b84764@skate>
+Message-ID: <5303F9B4.60102@zankel.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Martin, all
-On Tue, Feb 18, 2014 at 7:30 PM, Martin Bark <martin@barkynet.com> wrote:
-> Maxime, Thomas,
++CC: Max
+
+Hi Thomas,
+
+Unfortunately, I have been really busy with another project and won't 
+have much time to look into it for another week or so. Max has been 
+working on Xtensa a lot, so maybe he can step in?
+
+If the autobuilder supports multiple recipients, it would be great if 
+you could still keep me in that list, though.
+
+Thanks,
+-Chris
+
+On 2/18/14, 1:22 PM, Thomas Petazzoni wrote:
+> Baruch,
 >
+> On Sat, 15 Feb 2014 23:31:24 +0200, Baruch Siach wrote:
 >
-> On 18/02/14 17:02, Maxime Hadjinlian wrote:
->>
->> Hi Thomas, all
->> On Tue, Feb 18, 2014 at 5:38 PM, Thomas Petazzoni
->> <thomas.petazzoni@free-electrons.com> wrote:
->>>
->>> Dear Maxime Hadjinlian,
->>>
->>> On Tue, 18 Feb 2014 00:37:13 +0100, Maxime Hadjinlian wrote:
->>>
->>>> diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
->>>> new file mode 100644
->>>> index 0000000..23650ed
->>>> --- /dev/null
->>>> +++ b/package/xbmc/Config.in
->>>> @@ -0,0 +1,165 @@
->>>> +comment "xbmc requires an OpenGL-capable backend"
->>>> +     depends on !(BR2_PACKAGE_HAS_OPENGL_EGL &&
->>>> BR2_PACKAGE_HAS_OPENGL_ES)
->>>
->>>
->>> I would make the comment more specific:
->>>
->>> comment "xbmc requires an OpenGL ES and EGL backend"
->>>
->>>> +# External toolchain are required because of a missing bitdefs.h
->>>> +comment "xbmc needs an (e)glibc external toolchain w/ C++, wchar"
->>>> +     depends on !(BR2_TOOLCHAIN_USES_GLIBC && BR2_INSTALL_LIBSTDCPP &&
->>>> BR2_USE_WCHAR) || BR2_TOOLCHAIN_BUILDROOT
->>>
->>>
->>> This dependency does not make much sense to me. Your comment mentions
->>> "external toolchain", but it is not reflected by the dependencies.
->>> Moreover, we now have glibc/eglibc support in the internal backend, so
->>> I don't really see how there could be a difference between internal and
->>> external here. Additionally, if the C library is glibc or eglibc, then
->>> you are guaranteed to have wchar support. So if what you need is
->>> eglibc/glibc, then please do:
->>>
->>> comment "xbmc needs an (e)glibc toolchain w/ C++"
->>>          depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_INSTALL_LIBSTDCPP
->>>
->> The problem I had with internal toolchain, {X}libc was that, the
->> bitdefs.h is missing, and XBMC needs it.
->> I'll look at it another time as maybe my tests were not thorough enough.
->>
+>> On Fri, Feb 14, 2014 at 10:12:41AM +0100, Thomas Petazzoni wrote:
+>>>>      xtensa |                        kmod-16 | NOK | http://autobuild.buildroot.net/results/ba205bcbb6898bee78f610883f3837930eda262c/
+>>> Binutils internal error. Baruch ?
+>> Xtensa Toolchain issues are out of scope for me at the moment I'm afraid.
+>> Sorry.
+> Argh, too bad. You have been very active in recent times in improving
+> the Xtensa support, and this was really nice.
 >
-> locally i tried this change and the following defconfig
+> The daily Xtensa autobuilder failures are sent to chris at zankel.net, but
+> Chris doesn't seem to be very active in fixing the issues. Chris, are
+> you still interested in Buildroot Xtensa support?
 >
-> BR2_arm=y
-> BR2_arm1176jzf_s=y
-> BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-> BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> BR2_PACKAGE_XBMC=y
-> BR2_PACKAGE_RPI_USERLAND=y
+> Are there other Xtensa users on the list? If so, please speak up, we
+> need you to continue improving the Xtensa Buildroot support.
 >
-> and it all built ok.  I also tried with eglibc and it build ok too.
+> Thanks,
 >
-> Thanks
-That's really nice to know. I'll do some tests on my own. But it would
-mean I could lift the restriction on using external toolchain to only
-using one with glibc/eglibc, when Gotham is ready we could lift this
-restriction altogether !
-Thanks a lot for testing this !
+> Thomas
