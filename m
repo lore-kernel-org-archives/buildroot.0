@@ -1,90 +1,44 @@
-From: Charles Manning <cdhmanning@gmail.com>
-Date: Thu, 20 Feb 2014 09:34:42 +1300
-Subject: [Buildroot] SoCkit support question?
-In-Reply-To: <179193548.492145.1392839402433.JavaMail.root@mail>
-References: <940580837.479152.1392839319094.JavaMail.root@mail>
- <179193548.492145.1392839402433.JavaMail.root@mail>
-Message-ID: <CAE21AQrNm0dqnUAaBRebhTwSRuPz0u4xC0j1h4yDJizDgZFS2A@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 19 Feb 2014 21:03:32 +0100
+Subject: [Buildroot] [git commit] linux-headers: bump 3.{2, 4, 10, 12,
+	13}.x stable versions
+Message-ID: <20140219203531.F176C9A547@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Feb 20, 2014 at 8:50 AM, S?bastien Bourdelin <
-sebastien.bourdelin@savoirfairelinux.com> wrote:
+commit: http://git.buildroot.net/buildroot/commit/?id=a8b2e426239516d82a5f699675947601979982a9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Hi,
->
-> I would like to submit the support for the SoCkit from Altera, but i have
-> some questions regarding the bootloader step and need some advices on the
-> best way to handle it.
->
-> The SoC combines a hard processing system (HPS) and an FPGA, so the board
-> design can change and the bootloader must provide a preloader.
->
-> This preloader is normally generated using the Altera tools (Quartus,
-> Qsys, bsp-editor) and results in source files defining the board that will
-> be used in a patched u-boot from rocketboard (rocketboard is altera i
-> guess).
-> For more informations on this step, please look at :
-> http://www.rocketboards.org/foswiki/Documentation/PreloaderUbootCustomization
->
-> Then the preloader must be sign using an other tool from Altera (mkpimage)
-> that comes with all the Altera dev environment.
-> Maxime Hadjinlian has done a fork of this tool in GO (
-> https://github.com/maximeh/mkpimage)
->
-> If i use the sources from the rocketboard repository (
-> http://git.rocketboards.org/?p=u-boot-socfpga.git;a=summary),
-> regardless the branch, the preloader generated doesn't work, even if i'm
-> signing it with the mkpimage tool from Altera (may be i'm missing something
-> here).
->
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/linux-headers/Config.in.host |   10 +++++-----
+ 1 files changed, 5 insertions(+), 5 deletions(-)
 
-Yes, many people have observed. this. There are some discussions going on
-in the rocketboard rfi mailing list on that too,
-
-If i use the Altera tools to generate my preloader using Qsys and an
-> example design from Altera, then use the result sources files that define
-> the u-boot/board/altera/socfpga/*, built u-boot and sign it with the
-> mkpimage from Altera then it works.
->
-
-
-Yesterday I posted a patch for uboot on the rocketboard RFI mailing list.
-http://lists.rocketboards.org/pipermail/rfi/2014-February/001281.html
-
-This patch adds a preloader signer (written in C) to the u-boot/tools as
-well as adding this to the Makefile to run automatically (like say the OMAP
-MLO signer does).
-
-I am also putting together some build-root recipes to copy the binary over
-(something like how the omap MLO is handled).
-
-
-
-> So my question is what the best way to provide the support for this board
-> in buildroot ?
->
-> Assuming I have not made mistake, if you want to provide support for the
-> bootloader of this board without using any tools from Altera, you must :
->
-> - Use the patched u-boot from rocketboard
-> - Define the board with a sample design, ie patch the sources in
-> u-boot/board/altera/socfpga/*
-> - Generate the bootloader (u-boot) and preloader (u-boot SPL)
-> - Sign the preloader with a fork to mkpimage tools (recode the mkpimage
-> from Maxim  Hadjinlian in C ?)
->
-> Another approach would be to consider that the end user must provide their
-> bootloader and flash it, the buildroot board config take care of building
-> only Linux and the rootfs.
->
-
-I think it is better to build the preloader from buildroot too.
-
--- Charles
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140220/420767bb/attachment.html>
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index ea104f5..c99210d 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -71,15 +71,15 @@ config BR2_DEFAULT_KERNEL_VERSION
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+-	default "3.2.54"	if BR2_KERNEL_HEADERS_3_2
+-	default "3.4.79"	if BR2_KERNEL_HEADERS_3_4
++	default "3.2.55"	if BR2_KERNEL_HEADERS_3_2
++	default "3.4.80"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
+ 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
+ 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
+ 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
+-	default "3.10.29"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.30"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+-	default "3.12.10"	if BR2_KERNEL_HEADERS_3_12
+-	default "3.13.2"	if BR2_KERNEL_HEADERS_3_13
++	default "3.12.11"	if BR2_KERNEL_HEADERS_3_12
++	default "3.13.3"	if BR2_KERNEL_HEADERS_3_13
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
