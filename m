@@ -1,52 +1,51 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 19 Feb 2014 16:14:47 +0100
-Subject: [Buildroot] [PATCH v7 2/4] sdl_image: add host version
-In-Reply-To: <20140218171156.414cb304@skate> (Thomas Petazzoni's message of
- "Tue, 18 Feb 2014 17:11:56 +0100")
+Date: Wed, 19 Feb 2014 16:19:19 +0100
+Subject: [Buildroot] [PATCH v7 3/4] infra: Introduce BR2_HOST_NEEDS_JAVA
+In-Reply-To: <1392680233-24585-4-git-send-email-maxime.hadjinlian@gmail.com>
+ (Maxime Hadjinlian's message of "Tue, 18 Feb 2014 00:37:12 +0100")
 References: <1392680233-24585-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1392680233-24585-3-git-send-email-maxime.hadjinlian@gmail.com>
- <20140218171156.414cb304@skate>
-Message-ID: <874n3v16e0.fsf@dell.be.48ers.dk>
+ <1392680233-24585-4-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <87vbwbyvt4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
 
- > Dear Maxime Hadjinlian,
- > On Tue, 18 Feb 2014 00:37:11 +0100, Maxime Hadjinlian wrote:
+ > XBMC needs Java on the host in order to build, because it  uses a
+ > code-generator which is build in two phases:
+ > In the first phase SWIG is used to parse C++ header files that define the API.
+ > SWIG outputs an XML file that contains a complete description of the structure
+ > of the API.
+ > In the second phase, the XML file is ingested by a Groovy (Java) program that
+ > then creates C++ code that forms the bridge to the scripting language (Python).
 
- >> diff --git a/package/sdl_image/sdl_image.mk b/package/sdl_image/sdl_image.mk
- >> index ba9751d..05b9a1f 100644
- >> --- a/package/sdl_image/sdl_image.mk
- >> +++ b/package/sdl_image/sdl_image.mk
- >> @@ -38,4 +38,15 @@ SDL_IMAGE_DEPENDENCIES = sdl \
- >> $(if $(BR2_PACKAGE_SDL_IMAGE_TIFF),tiff) \
- >> $(if $(BR2_PACKAGE_SDL_IMAGE_WEBP),webp)
- >> 
- >> +HOST_SDL_IMAGE_CONF_OPT = --with-sdl-prefix=$(HOST_DIR)/usr \
- >> +                --with-sdl-exec-prefix=$(HOST_DIR)/usr \
- >> +                --disable-sdltest \
- >> +                --disable-static \
- >> +                --disable-jpg-shared \
- >> +                --disable-png-shared \
- >> +                --disable-tif-shared \
+ > The second phase is why we need java on the host.
 
- > This is nitpicking, but we normally intend this with one tab, do not
- > have a backslash on the last line, and also intend the first line. So,
- > something like:
+ > You can learn more at the XBMC's wiki:
+ > http://wiki.xbmc.org/index.php?title=Codegeneration#How_it_works
 
- > HOST_SDL_IMAGE_CONF_OPT = \
- > 	--with-sdl-prefix=... \
- > 	--foo \
- > 	--bar \
- > 	--baz
+ > In order to check that, this patch introduce this mechanism in
+ > dependencies.sh
+ > It also defines the variable in Config.in
 
-True, but this atleast matches what is done just above for the target
-version. With that being said, a followup patch to cleanup both would be
-nice.
+The commit message is wrapped kind of strange.
+
+ > +++ b/support/dependencies/dependencies.sh
+ > @@ -191,6 +191,14 @@ if grep -q ^BR2_PACKAGE_CLASSPATH=y $BR2_CONFIG ; then
+ >  	done
+ >  fi
+ 
+ > +if grep -q ^BR2_HOST_NEEDS_JAVA=y $BR2_CONFIG ; then
+ > +	if ! which java > /dev/null ; then
+ > +		echo >&2
+ > +		echo "You must install '$prog' on your build machine" >&2
+
+And it should use 'java' instead of '$prog' here.
+
+Committed to next with that fixed, thanks.
 
 -- 
 Bye, Peter Korsgaard
