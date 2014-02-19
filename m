@@ -1,79 +1,48 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 19 Feb 2014 22:16:25 +0100
-Subject: [Buildroot] Open bug analysis
-In-Reply-To: <CAAXf6LWOJo8FPMgX=Hmk=u2QtJW6VS8JODnxK2HPfvLDuEWkgw@mail.gmail.com>
-References: <CAAXf6LUmkkW8RxfC8RjYTYRnFDJ+TbNOiKM+LyMBDHJu37ORZA@mail.gmail.com>
- <20140213195254.0b17b5bf@skate>
- <CAAXf6LVJwg4Xcjg1rMZvfgC8xi-9TJrV7faUknff630duLG_AQ@mail.gmail.com>
- <53024B08.1040709@mind.be>
- <CAAXf6LWOJo8FPMgX=Hmk=u2QtJW6VS8JODnxK2HPfvLDuEWkgw@mail.gmail.com>
-Message-ID: <53051F29.2000809@mind.be>
+Date: Wed, 19 Feb 2014 22:33:17 +0100
+Subject: [Buildroot] [PATCH v2 0/6] Add toolchain knob for NPTL
+In-Reply-To: <20140219214021.0f12db48@skate>
+References: <1392757744-29984-1-git-send-email-thomas.petazzoni@free-electrons.com>	<5304EDC0.4010001@mind.be>
+ <20140219214021.0f12db48@skate>
+Message-ID: <5305231D.7090206@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19/02/14 17:02, Thomas De Schampheleire wrote:
-> Hi,
+On 19/02/14 21:40, Thomas Petazzoni wrote:
+> Dear Arnout Vandecappelle,
 > 
-> On Mon, Feb 17, 2014 at 6:46 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> [..]
->>> As mentioned on IRC, I'm currently using a slightly modified version
->>> of the above .la fixing:
+> On Wed, 19 Feb 2014 18:45:36 +0100, Arnout Vandecappelle wrote:
+> 
+>>> We have a growing number of packages that need pthread functions only
+>>> available when the NPTL implementation is used. But at the same time,
+>>> we have several architectures (AVR32, ARC, Blackfin and Xtensa) that
+>>> don't support NPTL.
 >>>
->>> -               $$(SED) "s:\(['= ]\)/usr:\\1$(STAGING_DIR)/usr:g" $$$$i; \
->>> +               $$(SED) "s:\(['=
->>> ]\)/usr/lib:\\1$(STAGING_DIR)/usr/lib:g" $$$$i; \
->>> +               $$(SED) "s:\(['=
->>> ]\)/usr/local/lib:\\1$(STAGING_DIR)/usr/local/lib:g" $$$$i; \
->>>
->>> I.e. instead of searching for /usr/something, only search for /usr/lib
->>> as this is where all .la files are put.
->>> I actually don't think we need the /usr/local/lib line.
+>>> This set of commits adds a new hidden toolchain config knob named
+>>> BR2_TOOLCHAIN_HAS_THREADS_NPTL, and uses it in four packages: three
+>>> were already having special conditions to more-or-less detect the
+>>> availability of NPTL, and one package (qt5) which fixes an autobuilder
+>>> failure.
 >>
->>  Just brainstorming here, but I think a more complete solution could be
->> something like:
->>
->> $$(SED) -e "s:\(['= ]\)$(STAGING_DIR):\\1 at STAGING_DIR@:g" \
->>         -e "s:\(['= ]\)/usr:\\1$(STAGING_DIR)/usr:g" \
->>         -e "s:@STAGING_DIR@:$(STAGING_DIR):g" \
->>         $$$$i;
->>
+>>  You're missing a patch to docs/manual/adding-packages-directory.txt to
+>> standardize the comment.
 > 
-> I have yet to try this alternate proposal, but in the meantime I have
-> done several randpackage tests with the mentioned code, and this works
-> without problem apparently. I have changes in pkg-autotools.mk (fixup
-> of .la files), pkg-generic (fixup of .pc files), and qt5.
-> 
-> There is one wrong path that remains (but seems to cause no problem),
-> but this same problem is present in 'normal' buildroot builds outside
-> of /usr: several .la files contain strings of the form:
-> -L /path/to/buildroot/sysroot/path/to/buildroot/sysroot/usr/lib
-> 
-> I tracked down this issue: when asking pkgconf for the libs
-> corresponding to a certain dependency expression, it will add the
-> sysroot to those strings it thinks need it. This works fine when the
-> paths are /usr /usr/lib etc, but not in case the library dependency is
-> already a full path. For example, when gcrypt and gnutls are enabled,
-> libecore is compiled with: --with-libgcrypt-prefix=$(STAGING_DIR)/usr,
-> causing an absolute path to be present. This is later prefixed by
-> pkgconf with another instance of STAGING_DIR.
+> Did you miss PATCH 2/6 ?
 
- Seems to me that this should be solved in pkgconf itself, not by hacking
-the .la files...
+ What is it with this patch set, I keep missing things :-)
+
+ Sorry for the bother.
 
  Regards,
  Arnout
 
 > 
-> We could fix that by doing a SED on <staging>/<staging> too, and
-> replace it with just one <staging>. This would seem 'hacky' but
-> actually would fix incorrect paths.
+> Thanks for the review!
 > 
-> Best regards,
 > Thomas
-> 
 > 
 
 
