@@ -1,75 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Feb 2014 09:13:36 +0100
-Subject: [Buildroot] Switching from uClibc to glibc as the default in
-	Buildroot?
-In-Reply-To: <20140219024634.GT184@brightrain.aerifal.cx>
-References: <20140218231447.524a1a20@skate>
- <20140218231759.GS184@brightrain.aerifal.cx>
- <20140219002643.50795999@skate>
- <20140219024634.GT184@brightrain.aerifal.cx>
-Message-ID: <20140219091336.71fbd261@skate>
+From: Jonathan Ben Avraham <yba@tkos.co.il>
+Date: Wed, 19 Feb 2014 10:16:04 +0200 (IST)
+Subject: [Buildroot] Xtensa support ?
+In-Reply-To: <20140219090532.0c929b99@skate>
+References: <20140214073009.1D7E6102637@stock.ovh.net>
+ <20140214101241.27857b9e@skate> <20140215213124.GB4168@tarshish>
+ <20140218222215.12b84764@skate>
+ <alpine.DEB.2.02.1402190725410.7075@tavas.tkos.co.il>
+ <20140219090532.0c929b99@skate>
+Message-ID: <alpine.DEB.2.02.1402191013080.5299@tavas.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Rich Felker,
+On Wed, 19 Feb 2014, Thomas Petazzoni wrote:
 
-On Tue, 18 Feb 2014 21:46:34 -0500, Rich Felker wrote:
-
-> > In fact, I am myself interested in musl: I have already added the
-> > possibility of using external musl toolchains with Buildroot, and I
-> > have started to work on integrating musl support in the internal
-> > toolchain backend of Buildroot. So you can clearly expect musl to be
-> > fully supported by Buildroot in the coming months.
+> Date: Wed, 19 Feb 2014 09:05:32 +0100
+> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> To: Jonathan Ben Avraham <yba@tkos.co.il>
+> Cc: Baruch Siach <baruch@tkos.co.il>, buildroot at uclibc.org
+> Subject: Re: [Buildroot] Xtensa support ?
 > 
-> Great. If you haven't already seen them, the GCC patches at
-> http://musl.codu.org/ may be useful.
+> Dear Jonathan Ben Avraham,
+>
+> On Wed, 19 Feb 2014 07:26:14 +0200 (IST), Jonathan Ben Avraham wrote:
+>
+>> There is a chance that I can take over the Xtensa Buildroot support from
+>> Baruch. There is a budget issue and a ramp-up issue that I need to resolve
+>> first, but I believe that it's doable. I will let you know later in the
+>> day.
+>
+> Cool. Let me know when you have the answer. Also, let me know if you
+> want to receive daily e-mails about Xtensa autobuilder failures.
 
-I have definitely seen them, and used them already in the preliminary
-prototypes. I have even posted a bug report some time ago:
+Hi Thomas,
+Yes, please keep Baruch and I on the Xtensa autobuilder list. If Baruch 
+gives me his blessing for this effort then I intend to be in for the 
+long-term.
 
-  https://bitbucket.org/GregorR/musl-gcc-patches/issue/4/musl-gcc-patches-break-the-build-on
+  - yba (Jonathan)
 
-> This sounds reasonable. In this light, it might be good to hold off on
-> switching away from uClibc for a little longer. This would give some
-> time to evaluate what can be done to maintain uClibc support, and if
-> not, you would have a chance to evaluate musl in Buildroot to
-> determine whether musl or glibc might be a better choice for the new
-> default.
 
-This discussion about changing the default C library is definitely not
-something for which we expect to make a change in the immediate future.
-We're just looking at options, and trying to see what can be done to
-revive the uClibc project, which remains important at least to support
-non-MMU architectures.
+> Thanks!
+>
+> Thomas
+>
 
-> (BTW, if you do switch the default, do you have a plan for
-> how long uClibc support would be maintained as the non-default
-> option?)
-
-We haven't discussed this, but I believe we would in any case keep
-uClibc support around, even if it's no longer the default. Simply
-because there are several non-MMU architectures that we want to
-support, and only uClibc supports such architectures.
-
-> > Do you intend to have support for non-MMU architectures in musl?
-> 
-> At present there isn't a plan to, but we're not particularly opposed
-> to it either. The big questions are how invasive it would be and
-> whether we can provide full functionality in any reasonable way. The
-> answers to those questions wouldn't translate directly to a yes or no
-> but would be an important part of considerations. It would probably
-> help to have someone familiar with the technical aspects of supporting
-> non-MMU archs discuss it with us on our mailing list or IRC channel.
-
-Ok.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+  9590 8E58 D30D 1660 C349  673D B205 4FC4 B8F5 B7F9  ~. .~  Tk Open Systems
+=}------------- Jonathan Ben-Avraham -------------ooO--U--Ooo------------{=
+mailto:yba at tkos.co.il tel:+972.52.486.3386 http://tkos.co.il skype:benavrhm
