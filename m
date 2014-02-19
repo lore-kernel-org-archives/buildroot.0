@@ -1,31 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Feb 2014 09:01:49 +0100
-Subject: [Buildroot] [git commit] python-serial: allow to build with Python 3
-Message-ID: <20140228133414.DD1B69BA7B@busybox.osuosl.org>
+Date: Wed, 19 Feb 2014 09:02:07 +0100
+Subject: [Buildroot] [git commit] python-pycrypto: allow to build with
+	Python 3
+Message-ID: <20140228133415.018D89BA7B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2696d9c04528b88a53ddd70f1d625e2fca31a1f8
+commit: http://git.buildroot.net/buildroot/commit/?id=255d51f76c82110226bfd61315e3b890ca8d9f4d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-serial/Config.in |    2 +-
+ package/python-pycrypto/Config.in |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/python-serial/Config.in b/package/python-serial/Config.in
-index df26af1..72f5567 100644
---- a/package/python-serial/Config.in
-+++ b/package/python-serial/Config.in
+diff --git a/package/python-pycrypto/Config.in b/package/python-pycrypto/Config.in
+index 60a3446..fe545b5 100644
+--- a/package/python-pycrypto/Config.in
++++ b/package/python-pycrypto/Config.in
 @@ -1,6 +1,6 @@
- config BR2_PACKAGE_PYTHON_SERIAL
- 	bool "python-serial"
+ config BR2_PACKAGE_PYTHON_PYCRYPTO
+ 	bool "python-pycrypto"
 -	depends on BR2_PACKAGE_PYTHON
 +	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+ 	select BR2_PACKAGE_GMP
  	help
- 	  python-serial is a Python library to access serial ports.
- 
+ 	  PyCrypto is a collection of cryptographic algorithms and
