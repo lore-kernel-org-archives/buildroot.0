@@ -1,294 +1,297 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Feb 2014 23:28:04 +0100
-Subject: [Buildroot] [git commit branch/next] grub2: add new package
-Message-ID: <20140219223403.746A59CAC5@busybox.osuosl.org>
+Date: Wed, 19 Feb 2014 23:29:10 +0100
+Subject: [Buildroot] [git commit branch/next] board: add support for the
+	MinnowBoard
+Message-ID: <20140219223403.970B19CABE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c24fdb3680019d18f0cb7c02a90975ee9fe9613c
+commit: http://git.buildroot.net/buildroot/commit/?id=6104cc4f1067614f6daaaae4b436f2d8c834750c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/Config.in                     |    1 +
- boot/grub2/Config.in               |  120 ++++++++++++++++++++++++++++++++++++
- boot/grub2/grub.cfg                |    6 ++
- boot/grub2/grub2-remove-gets.patch |   21 ++++++
- boot/grub2/grub2.mk                |   88 ++++++++++++++++++++++++++
- 5 files changed, 236 insertions(+), 0 deletions(-)
+ board/minnowboard/grub.cfg         |    6 ++
+ board/minnowboard/linux-3.8.config |  172 ++++++++++++++++++++++++++++++++++++
+ board/minnowboard/post-build.sh    |    2 +
+ board/minnowboard/readme.txt       |   40 ++++++++
+ configs/minnowboard_defconfig      |   23 +++++
+ 5 files changed, 243 insertions(+), 0 deletions(-)
 
-diff --git a/boot/Config.in b/boot/Config.in
-index d23c761..c410d12 100644
---- a/boot/Config.in
-+++ b/boot/Config.in
-@@ -6,6 +6,7 @@ source "boot/at91dataflashboot/Config.in"
- source "boot/barebox/Config.in"
- source "boot/boot-wrapper-aarch64/Config.in"
- source "boot/grub/Config.in"
-+source "boot/grub2/Config.in"
- source "boot/lpc32xxcdl/Config.in"
- source "boot/mxs-bootlets/Config.in"
- source "boot/syslinux/Config.in"
-diff --git a/boot/grub2/Config.in b/boot/grub2/Config.in
+diff --git a/board/minnowboard/grub.cfg b/board/minnowboard/grub.cfg
 new file mode 100644
-index 0000000..e59626a
+index 0000000..33a0f4a
 --- /dev/null
-+++ b/boot/grub2/Config.in
-@@ -0,0 +1,120 @@
-+config BR2_TARGET_GRUB2
-+	bool "grub2"
-+	depends on BR2_i386 || BR2_x86_64
-+	help
-+	  GNU GRUB is a Multiboot boot loader. It was derived from
-+	  GRUB, the GRand Unified Bootloader, which was originally
-+	  designed and implemented by Erich Stefan Boleyn. GRUB 2 has
-+	  replaced what was formerly known as GRUB (i.e. version
-+	  0.9x), which has, in turn, become GRUB Legacy.
-+
-+	  Amongst others, GRUB2 offers EFI support, which GRUB Legacy
-+	  doesn't provide.
-+
-+	  Notes on using Grub2 for BIOS-based platforms
-+	  =============================================
-+
-+	  1. Create a disk image
-+	     dd if=/dev/zero of=disk.img bs=1M count=32
-+	  2. Partition it (either legacy or GPT style partitions work)
-+	     cfdisk disk.img
-+	      - Create one partition, type Linux, for the root
-+		filesystem. The only constraint is to make sure there
-+		is enough free space *before* the first partition to
-+		store Grub2. Leaving 1 MB of free space is safe.
-+	  3. Setup loop device and loop partitions
-+	     sudo losetup -f disk.img
-+	     sudo partx -a disk.img
-+	  4. Prepare the root partition
-+	     sudo mkfs.ext3 -L root /dev/loop0p1
-+	     sudo mount /dev/loop0p1 /mnt
-+	     sudo tar -C /mnt -xf output/images/rootfs.tar
-+	     sudo umount /mnt
-+	  5. Install Grub2
-+	     ./output/host/usr/sbin/grub-bios-setup \
-+			-b ./output/host/usr/lib/grub/i386-pc/boot.img \
-+			-c ./output/images/grub.img -d . /dev/loop0
-+	  6. Your disk.img is ready!
-+
-+	  To test your BIOS image in Qemu:
-+
-+	  qemu-system-{i386,x86-64} -hda disk.img
-+
-+	  Notes on using Grub2 for EFI-based platforms
-+	  ============================================
-+
-+	  1. Create a disk image
-+	     dd if=/dev/zero of=disk.img bs=1M count=32
-+	  2. Partition it with GPT partitions
-+	     cgdisk disk.img
-+	      - Create a first partition, type EF00, for the
-+		bootloader and kernel image
-+	      - Create a second partition, type 8300, for the root
-+		filesystem.
-+	  3. Setup loop device and loop partitions
-+	     sudo losetup -f disk.img
-+	     sudo partx -a /dev/loop0
-+	  4. Prepare the boot partition
-+	     sudo mkfs.vfat -n boot /dev/loop0p1
-+	     sudo mount /dev/loop0p1 /mnt
-+	     sudo cp -a output/images/efi-part/* /mnt/
-+	     sudo cp output/images/bzImage /mnt/
-+	     sudo umount /mnt
-+	  5. Prepare the root partition
-+	     sudo mkfs.ext3 -L root /dev/loop0p2
-+	     sudo mount /dev/loop0p2 /mnt
-+	     sudo tar -C /mnt -xf output/images/rootfs.tar
-+	     sudo umount /mnt
-+	  6  Cleanup loop device
-+	     sudo partx -d /dev/loop0
-+	     sudo losetup -d /dev/loop0
-+	  7. Your disk.img is ready!
-+
-+	  To test your EFI image in Qemu:
-+
-+	  1. Download the EFI BIOS for Qemu
-+	     Version IA32 or X64 depending on the chosen Grub2
-+	     platform (i386-efi vs. x86-64-efi)
-+	     http://sourceforge.net/projects/edk2/files/OVMF/
-+	  2. Extract, and rename OVMF.fd to bios.bin and
-+	     CirrusLogic5446.rom to vgabios-cirrus.bin.
-+	  3. qemu-system-{i386,x86-64} -L ovmf-dir/ -hda disk.img
-+          4. Make sure to pass pci=nocrs to the kernel command line,
-+             to workaround a bug in the EFI BIOS regarding the
-+             EFI framebuffer.
-+
-+	  http://www.gnu.org/software/grub/
-+
-+if BR2_TARGET_GRUB2
-+
-+choice
-+	prompt "Platform"
-+
-+config BR2_TARGET_GRUB2_I386_PC
-+	bool "i386-pc"
-+	help
-+	  Select this option if the platform you're targetting is a
-+	  x86 or x86-64 legacy BIOS based platform.
-+
-+config BR2_TARGET_GRUB2_I386_EFI
-+	bool "i386-efi"
-+	help
-+	  Select this option if the platform you're targetting has a
-+	  32 bits EFI BIOS. Note that some x86-64 platforms use a 32
-+	  bits EFI BIOS, and this option should be used in this case.
-+
-+config BR2_TARGET_GRUB2_X86_64_EFI
-+	bool "x86-64-efi"
-+	help
-+	  Select this option if the platform you're targetting has a
-+	  64 bits EFI BIOS.
-+
-+endchoice
-+
-+config BR2_TARGET_GRUB2_BUILTIN_MODULES
-+	string "builtin modules"
-+	default "boot linux ext2 fat part_msdos part_gpt normal biosdisk" if BR2_TARGET_GRUB2_I386_PC
-+	default "boot linux ext2 fat part_msdos part_gpt normal efi_gop" \
-+		if BR2_TARGET_GRUB2_I386_EFI || BR2_TARGET_GRUB2_X86_64_EFI
-+
-+endif # BR2_TARGET_GRUB2
-diff --git a/boot/grub2/grub.cfg b/boot/grub2/grub.cfg
-new file mode 100644
-index 0000000..9ea5281
---- /dev/null
-+++ b/boot/grub2/grub.cfg
++++ b/board/minnowboard/grub.cfg
 @@ -0,0 +1,6 @@
 +set default="0"
 +set timeout="5"
 +
 +menuentry "Buildroot" {
-+	linux /bzImage root=/dev/sda1 console=tty1
++	linux /bzImage root=/dev/mmcblk0p2 rootwait console=ttyPCH0,115200
 +}
-diff --git a/boot/grub2/grub2-remove-gets.patch b/boot/grub2/grub2-remove-gets.patch
+diff --git a/board/minnowboard/linux-3.8.config b/board/minnowboard/linux-3.8.config
 new file mode 100644
-index 0000000..0da71b3
+index 0000000..460aa2d
 --- /dev/null
-+++ b/boot/grub2/grub2-remove-gets.patch
-@@ -0,0 +1,21 @@
-+ISO C11 removes the specification of gets() from the C language, eglibc 2.16+ removed it
-+
-+Signed-off-by: Khem Raj <raj.khem@gmail.com>
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Upstream-Status: Pending
-+Index: grub-1.99/grub-core/gnulib/stdio.in.h
-+===================================================================
-+--- grub-1.99.orig/grub-core/gnulib/stdio.in.h	2010-12-01 06:45:43.000000000 -0800
-++++ grub-1.99/grub-core/gnulib/stdio.in.h	2012-07-04 12:25:02.057099107 -0700
-+@@ -140,8 +140,10 @@
-+ /* It is very rare that the developer ever has full control of stdin,
-+    so any use of gets warrants an unconditional warning.  Assume it is
-+    always declared, since it is required by C89.  */
-++#if defined gets
-+ #undef gets
-+ _GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");
-++#endif
-+ 
-+ #if @GNULIB_FOPEN@
-+ # if @REPLACE_FOPEN@
-diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
++++ b/board/minnowboard/linux-3.8.config
+@@ -0,0 +1,172 @@
++CONFIG_EXPERIMENTAL=y
++# CONFIG_LOCALVERSION_AUTO is not set
++CONFIG_SYSVIPC=y
++CONFIG_POSIX_MQUEUE=y
++CONFIG_NO_HZ=y
++CONFIG_HIGH_RES_TIMERS=y
++CONFIG_BSD_PROCESS_ACCT=y
++CONFIG_BSD_PROCESS_ACCT_V3=y
++CONFIG_RCU_FANOUT=32
++CONFIG_IKCONFIG=y
++CONFIG_IKCONFIG_PROC=y
++CONFIG_CGROUPS=y
++CONFIG_CGROUP_DEBUG=y
++CONFIG_CGROUP_FREEZER=y
++CONFIG_CGROUP_DEVICE=y
++CONFIG_CPUSETS=y
++CONFIG_CGROUP_CPUACCT=y
++CONFIG_RESOURCE_COUNTERS=y
++CONFIG_MEMCG=y
++CONFIG_MEMCG_SWAP=y
++CONFIG_MEMCG_KMEM=y
++CONFIG_CGROUP_SCHED=y
++CONFIG_RT_GROUP_SCHED=y
++CONFIG_BLK_CGROUP=y
++CONFIG_NAMESPACES=y
++CONFIG_BLK_DEV_INITRD=y
++CONFIG_EMBEDDED=y
++CONFIG_PROFILING=y
++CONFIG_OPROFILE=y
++CONFIG_KPROBES=y
++CONFIG_MODULES=y
++CONFIG_MODULE_UNLOAD=y
++CONFIG_PARTITION_ADVANCED=y
++CONFIG_SMP=y
++CONFIG_MATOM=y
++CONFIG_SCHED_SMT=y
++CONFIG_PREEMPT=y
++CONFIG_X86_REROUTE_FOR_BROKEN_BOOT_IRQS=y
++CONFIG_X86_CHECK_BIOS_CORRUPTION=y
++# CONFIG_MTRR_SANITIZER is not set
++CONFIG_EFI=y
++CONFIG_EFI_STUB=y
++CONFIG_HZ_1000=y
++CONFIG_PM_RUNTIME=y
++CONFIG_PM_DEBUG=y
++CONFIG_PM_ADVANCED_DEBUG=y
++CONFIG_CPU_FREQ=y
++CONFIG_CPU_FREQ_GOV_ONDEMAND=y
++CONFIG_X86_ACPI_CPUFREQ=y
++CONFIG_INTEL_IDLE=y
++CONFIG_PCI_MMCONFIG=y
++CONFIG_PCIEPORTBUS=y
++CONFIG_PCI_MSI=y
++CONFIG_HOTPLUG_PCI=y
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_UNIX=y
++CONFIG_XFRM_SUB_POLICY=y
++CONFIG_NET_KEY_MIGRATE=y
++CONFIG_INET=y
++CONFIG_IP_MULTICAST=y
++CONFIG_IP_ADVANCED_ROUTER=y
++CONFIG_IP_MULTIPLE_TABLES=y
++CONFIG_IP_ROUTE_MULTIPATH=y
++CONFIG_IP_ROUTE_VERBOSE=y
++CONFIG_IP_PNP=y
++CONFIG_IP_PNP_DHCP=y
++CONFIG_IP_PNP_BOOTP=y
++CONFIG_IP_PNP_RARP=y
++CONFIG_DEVTMPFS=y
++CONFIG_DEVTMPFS_MOUNT=y
++CONFIG_FW_LOADER=m
++CONFIG_BLK_DEV_LOOP=y
++CONFIG_BLK_DEV_CRYPTOLOOP=m
++CONFIG_BLK_DEV_RAM=y
++CONFIG_PCH_PHUB=m
++CONFIG_BLK_DEV_SD=y
++CONFIG_BLK_DEV_SR=y
++CONFIG_CHR_DEV_SG=y
++CONFIG_ATA=y
++CONFIG_SATA_AHCI=y
++CONFIG_NETDEVICES=y
++CONFIG_DUMMY=m
++CONFIG_NETCONSOLE=y
++CONFIG_TUN=m
++CONFIG_PCH_GBE=m
++CONFIG_INPUT_EVDEV=y
++# CONFIG_KEYBOARD_ATKBD is not set
++CONFIG_KEYBOARD_GPIO_POLLED=y
++# CONFIG_MOUSE_PS2 is not set
++# CONFIG_SERIO_I8042 is not set
++CONFIG_SERIAL_8250=y
++CONFIG_SERIAL_8250_CONSOLE=y
++CONFIG_SERIAL_PCH_UART=y
++CONFIG_SERIAL_PCH_UART_CONSOLE=y
++CONFIG_GEN_RTC=y
++CONFIG_GEN_RTC_X=y
++CONFIG_HPET=y
++CONFIG_I2C=y
++CONFIG_I2C_CHARDEV=m
++CONFIG_I2C_EG20T=m
++CONFIG_SPI=y
++CONFIG_SPI_GPIO=m
++CONFIG_SPI_TOPCLIFF_PCH=m
++CONFIG_SPI_SPIDEV=m
++CONFIG_GPIOLIB=y
++CONFIG_DEBUG_GPIO=y
++CONFIG_GPIO_SYSFS=y
++CONFIG_GPIO_GENERIC_PLATFORM=y
++CONFIG_GPIO_SCH=y
++CONFIG_GPIO_PCH=y
++CONFIG_WATCHDOG=y
++CONFIG_SOFT_WATCHDOG=m
++CONFIG_AGP=m
++CONFIG_DRM=m
++CONFIG_FB=y
++CONFIG_FB_EFI=y
++CONFIG_BACKLIGHT_LCD_SUPPORT=y
++CONFIG_BACKLIGHT_CLASS_DEVICE=y
++CONFIG_FRAMEBUFFER_CONSOLE=y
++CONFIG_FRAMEBUFFER_CONSOLE_DETECT_PRIMARY=y
++CONFIG_SOUND=m
++CONFIG_SND=m
++CONFIG_SND_HDA_INTEL=m
++CONFIG_USB=y
++CONFIG_USB_SUSPEND=y
++CONFIG_USB_EHCI_HCD=y
++CONFIG_USB_EHCI_ROOT_HUB_TT=y
++CONFIG_USB_OHCI_HCD=y
++CONFIG_USB_STORAGE=y
++CONFIG_USB_GADGET=m
++CONFIG_USB_EG20T=m
++CONFIG_MMC=y
++CONFIG_MMC_SDHCI=y
++CONFIG_MMC_SDHCI_PCI=y
++CONFIG_NEW_LEDS=y
++CONFIG_LEDS_CLASS=y
++CONFIG_LEDS_GPIO=y
++CONFIG_LEDS_TRIGGERS=y
++CONFIG_LEDS_TRIGGER_TIMER=y
++CONFIG_LEDS_TRIGGER_ONESHOT=y
++CONFIG_LEDS_TRIGGER_HEARTBEAT=y
++CONFIG_LEDS_TRIGGER_BACKLIGHT=y
++CONFIG_LEDS_TRIGGER_CPU=y
++CONFIG_LEDS_TRIGGER_GPIO=y
++CONFIG_LEDS_TRIGGER_DEFAULT_ON=y
++CONFIG_DMADEVICES=y
++CONFIG_PCH_DMA=y
++CONFIG_MINNOWBOARD=y
++CONFIG_MINNOWBOARD_GPIO=m
++CONFIG_MINNOWBOARD_KEYS=m
++CONFIG_EFI_VARS=y
++CONFIG_EXT4_FS=y
++CONFIG_EXT4_FS_POSIX_ACL=y
++CONFIG_EXT4_FS_SECURITY=y
++CONFIG_FANOTIFY=y
++CONFIG_FANOTIFY_ACCESS_PERMISSIONS=y
++CONFIG_ISO9660_FS=y
++CONFIG_MSDOS_FS=y
++CONFIG_VFAT_FS=y
++CONFIG_PROC_KCORE=y
++CONFIG_TMPFS=y
++CONFIG_TMPFS_POSIX_ACL=y
++CONFIG_CONFIGFS_FS=m
++CONFIG_NFS_FS=y
++CONFIG_NFS_V4=y
++CONFIG_ROOT_NFS=y
++CONFIG_PRINTK_TIME=y
++CONFIG_FRAME_WARN=1024
++CONFIG_TIMER_STATS=y
++CONFIG_LATENCYTOP=y
++CONFIG_BLK_DEV_IO_TRACE=y
+diff --git a/board/minnowboard/post-build.sh b/board/minnowboard/post-build.sh
+new file mode 100755
+index 0000000..e3f4a92
+--- /dev/null
++++ b/board/minnowboard/post-build.sh
+@@ -0,0 +1,2 @@
++#!/bin/sh
++cp board/minnowboard/grub.cfg ${BINARIES_DIR}/efi-part/EFI/BOOT/grub.cfg
+diff --git a/board/minnowboard/readme.txt b/board/minnowboard/readme.txt
 new file mode 100644
-index 0000000..5bb8884
+index 0000000..b62b677
 --- /dev/null
-+++ b/boot/grub2/grub2.mk
-@@ -0,0 +1,88 @@
-+################################################################################
-+#
-+# grub2
-+#
-+################################################################################
++++ b/board/minnowboard/readme.txt
+@@ -0,0 +1,40 @@
++Prepare the SD card for the Minnow Board
++========================================
 +
-+GRUB2_VERSION = 2.00
-+GRUB2_SITE = $(BR2_GNU_MIRROR)/grub/
-+GRUB2_SOURCE = grub-$(GRUB2_VERSION).tar.xz
-+GRUB2_LICENSE = GPLv3+
-+GRUB2_LICENSE_FILES = COPYING
-+GRUB2_DEPENDENCIES = host-bison host-flex
++ 1. Partition the SD card with a GPT partition table
 +
-+ifeq ($(BR2_TARGET_GRUB2_I386_PC),y)
-+GRUB2_IMAGE = $(BINARIES_DIR)/grub.img
-+GRUB2_CFG = $(TARGET_DIR)/boot/grub/grub.cfg
-+GRUB2_TUPLE = i386-pc
-+GRUB2_TARGET = i386
-+GRUB2_PLATFORM = pc
-+else ifeq ($(BR2_TARGET_GRUB2_I386_EFI),y)
-+GRUB2_IMAGE = $(BINARIES_DIR)/efi-part/EFI/BOOT/bootia32.efi
-+GRUB2_CFG = $(BINARIES_DIR)/efi-part/EFI/BOOT/grub.cfg
-+GRUB2_PREFIX = /EFI/BOOT
-+GRUB2_TUPLE = i386-efi
-+GRUB2_TARGET = i386
-+GRUB2_PLATFORM = efi
-+else ifeq ($(BR2_TARGET_GRUB2_X86_64_EFI),y)
-+GRUB2_IMAGE = $(BINARIES_DIR)/efi-part/EFI/BOOT/bootx64.efi
-+GRUB2_CFG = $(BINARIES_DIR)/efi-part/EFI/BOOT/grub.cfg
-+GRUB2_PREFIX = /EFI/BOOT
-+GRUB2_TUPLE = x86_64-efi
-+GRUB2_TARGET = x86_64
-+GRUB2_PLATFORM = efi
-+endif
++    sudo cgdisk /dev/mmcblk0
 +
-+GRUB2_BUILTIN_MODULES = $(call qstrip,$(BR2_TARGET_GRUB2_BUILTIN_MODULES))
++    Create two partitions:
 +
-+# Grub2 is kind of special: it considers CC, LD and so on to be the
-+# tools to build the native tools (i.e to be executed on the build
-+# machine), and uses TARGET_CC, TARGET_CFLAGS, TARGET_CPPFLAGS to
-+# build the bootloader itself.
++     a) First partition of a few dozens of megabytes, which will be
++        used to store the bootloader and the kernel image. Type must
++        be EF00 (EFI partition).
 +
-+GRUB2_CONF_ENV = \
-+	$(HOST_CONFIGURE_OPTS) \
-+	CPP="$(HOSTCC) -E" \
-+	TARGET_CC="$(TARGET_CC)" \
-+	TARGET_CFLAGS="$(TARGET_CFLAGS)" \
-+	TARGET_CPPFLAGS="$(TARGET_CPPFLAGS)"
++     b) Second partition of any size, which will be used to store the
++        root filesystem. Type must be 8300 (Linux filesystem)
 +
-+GRUB2_CONF_OPT = \
-+	--target=$(GRUB2_TARGET) \
-+	--with-platform=$(GRUB2_PLATFORM) \
-+	--disable-grub-mkfont \
-+	--enable-efiemu=no \
-+	--enable-liblzma=no \
-+	--enable-device-mapper=no \
-+	--enable-libzfs=no \
-+	--disable-werror
++ 2. Prepare the boot partition
 +
-+# We don't want all the native tools and Grub2 modules to be installed
-+# in the target. So we in fact install everything into the host
-+# directory, and the image generation process (below) will use the
-+# grub-mkimage tool and Grub2 modules from the host directory.
++    We will format it, mount it, copy the EFI data generated by
++    Buildroot, and the kernel image.
 +
-+GRUB2_INSTALL_TARGET_OPT = DESTDIR=$(HOST_DIR) install
++    sudo mkfs.vfat -F 32 -n boot /dev/mmcblk0p1
++    sudo mount /dev/mmcblk0p1 /mnt
++    sudo cp -a output/images/efi-part/* /mnt/
++    sudo cp output/images/bzImage /mnt/
++    sudo umount /mnt
 +
-+define GRUB2_IMAGE_INSTALLATION
-+	mkdir -p $(dir $(GRUB2_IMAGE))
-+	$(HOST_DIR)/usr/bin/grub-mkimage \
-+		-d $(HOST_DIR)/usr/lib/grub/$(GRUB2_TUPLE) \
-+		-O $(GRUB2_TUPLE) \
-+		-o $(GRUB2_IMAGE) \
-+		$(if $(GRUB2_PREFIX),-p $(GRUB2_PREFIX)) \
-+		$(GRUB2_BUILTIN_MODULES)
-+	mkdir -p $(dir $(GRUB2_CFG))
-+	$(INSTALL) -D -m 0644 boot/grub2/grub.cfg $(GRUB2_CFG)
-+endef
-+GRUB2_POST_INSTALL_TARGET_HOOKS += GRUB2_IMAGE_INSTALLATION
++ 3. Prepare the root partition
 +
-+ifeq ($(GRUB2_PLATFORM),efi)
-+define GRUB2_EFI_STARTUP_NSH
-+	echo $(notdir $(GRUB2_IMAGE)) > \
-+		$(BINARIES_DIR)/efi-part/startup.nsh
-+endef
-+GRUB2_POST_INSTALL_TARGET_HOOKS += GRUB2_EFI_STARTUP_NSH
-+endif
++    We will format it, mount it, and extract the root filesystem.
 +
-+$(eval $(autotools-package))
++    sudo mkfs.ext3 -L root /dev/mmcblk0p2
++    sudo mount /dev/mmcblk0p2 /mnt
++    sudo tar -C /mnt -xf output/images/rootfs.tar
++    sudo umount /mnt
++
++ 4. Enjoy
++
++Additional informations about this board can be found at
++http://www.minnowboard.org/.
+diff --git a/configs/minnowboard_defconfig b/configs/minnowboard_defconfig
+new file mode 100644
+index 0000000..5fdfd43
+--- /dev/null
++++ b/configs/minnowboard_defconfig
+@@ -0,0 +1,23 @@
++# Architecture
++BR2_x86_64=y
++BR2_x86_atom=y
++
++# Misc
++BR2_TARGET_GENERIC_GETTY_PORT="ttyPCH0"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/minnowboard/post-build.sh"
++
++# Lock to 3.8 headers
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="3.8"
++
++# Linux kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.yoctoproject.org/linux-yocto-3.8"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="ba1587b9b62c801d161897303aa6d22809485f9b"
++BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/minnowboard/linux-3.8.config"
++
++# Bootloader
++BR2_TARGET_GRUB2=y
++BR2_TARGET_GRUB2_I386_EFI=y
