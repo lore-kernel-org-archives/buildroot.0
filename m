@@ -1,64 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 19 Feb 2014 18:59:29 +0100
-Subject: [Buildroot] [PATCH v2 3/5] gummiboot: new package
-In-Reply-To: <1392766441-2160-4-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1392766441-2160-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1392766441-2160-4-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20140219175929.GB3400@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 19 Feb 2014 19:27:49 +0100
+Subject: [Buildroot] adding nodejs to buildroot
+In-Reply-To: <2DD0B9C711CDFC45A3A266C78966CE7F4531FD06@G9W0750.americas.hpqcorp.net>
+References: <2DD0B9C711CDFC45A3A266C78966CE7F4531F64B@G9W0750.americas.hpqcorp.net>
+ <20140219092723.112c19ab@skate>
+ <2DD0B9C711CDFC45A3A266C78966CE7F4531FD06@G9W0750.americas.hpqcorp.net>
+Message-ID: <20140219192749.719929fa@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Lee,
 
-On 2014-02-19 00:33 +0100, Thomas Petazzoni spake thusly:
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Signed-off-by: Christophe Vu-Brugier <cvubrugier@yahoo.fr>
-[--SNIP--]
-> --- /dev/null
-> +++ b/boot/gummiboot/gummiboot.mk
-> @@ -0,0 +1,42 @@
-> +################################################################################
-> +#
-> +# gummiboot
-> +#
-> +################################################################################
-> +
-> +GUMMIBOOT_SITE = git://anongit.freedesktop.org/gummiboot
-> +GUMMIBOOT_VERSION = 43
-> +GUMMIBOOT_LICENSE = LGPLv2.1+
-> +GUMMIBOOT_LICENSE_FILES = LICENSE
-> +
-> +# The git archive does not have the autoconf/automake stuff generated.
-> +GUMMIBOOT_AUTORECONF = YES
-> +GUMMIBOOT_DEPENDENCIES = gnu-efi host-pkgconf util-linux
+Please keep the list Cc'ed.
 
-Ah, gnu-efi is used here. That's why we need to install it in staging/
-and target/, right?
+On Wed, 19 Feb 2014 18:12:33 +0000, Jenkins, Lee (ISS Houston) wrote:
 
-Still, since this is a boot-related stuff, do we really need to have
-gnu-efi installed in target/ ?
+> Thanks for the assist. With that information and a small patch to the build of host-python I was able to build node.
 
-> +GUMMIBOOT_INSTALL_TARGET = NO
-> +GUMMIBOOT_INSTALL_IMAGES = YES
-> +
-> +ifeq ($(BR2_i386),y)
-> +GUMMIBOOT_IMGARCH = ia32
-> +else ifeq ($(BR2_x86_64),y)
-> +GUMMIBOOT_IMGARCH = x64
-> +endif
+Cool!
 
-Ditto: what about 32-bit EFI-BIOS on a 64-bit machine?
+> We have talked about upgrading our buildroot. Same old tradeoff convo of time/risk to upgrade vs. our looming deadline.
 
-Regards,
-Yann E. MORIN.
+Yes, indeed. Unfortunately, when calculating this tradeoff, a lot of
+people/companies forget that by not upgrading, they lose community
+support. And this support might prove to be very useful :)
 
+> I could post my solution to the mailing list if you think it might be useful. I realize this wouldn't be an official patch, but it might help someone operating under similar constraints.
+
+I don't know if it would be really useful, because it's unlikely that
+people having the same problem as you will find your patch amongst the
+myriad of patches that are being sent to the Buildroot mailing list :-)
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
