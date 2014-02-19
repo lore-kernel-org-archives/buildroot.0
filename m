@@ -1,55 +1,27 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 19 Feb 2014 22:33:17 +0100
-Subject: [Buildroot] [PATCH v2 0/6] Add toolchain knob for NPTL
-In-Reply-To: <20140219214021.0f12db48@skate>
-References: <1392757744-29984-1-git-send-email-thomas.petazzoni@free-electrons.com>	<5304EDC0.4010001@mind.be>
- <20140219214021.0f12db48@skate>
-Message-ID: <5305231D.7090206@mind.be>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 19 Feb 2014 23:07:23 +0100
+Subject: [Buildroot] [PATCH] lvm2: disable static builds
+In-Reply-To: <1392631126-15817-1-git-send-email-fabio.porcedda@gmail.com>
+ (Fabio Porcedda's message of "Mon, 17 Feb 2014 10:58:46 +0100")
+References: <1392631126-15817-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <87mwhmzrhg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19/02/14 21:40, Thomas Petazzoni wrote:
-> Dear Arnout Vandecappelle,
-> 
-> On Wed, 19 Feb 2014 18:45:36 +0100, Arnout Vandecappelle wrote:
-> 
->>> We have a growing number of packages that need pthread functions only
->>> available when the NPTL implementation is used. But at the same time,
->>> we have several architectures (AVR32, ARC, Blackfin and Xtensa) that
->>> don't support NPTL.
->>>
->>> This set of commits adds a new hidden toolchain config knob named
->>> BR2_TOOLCHAIN_HAS_THREADS_NPTL, and uses it in four packages: three
->>> were already having special conditions to more-or-less detect the
->>> availability of NPTL, and one package (qt5) which fixes an autobuilder
->>> failure.
->>
->>  You're missing a patch to docs/manual/adding-packages-directory.txt to
->> standardize the comment.
-> 
-> Did you miss PATCH 2/6 ?
+>>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
 
- What is it with this patch set, I keep missing things :-)
+ > When BR2_PREFER_STATIC_LIB is defined it still try to build the shared
+ > executables and it fails.
 
- Sorry for the bother.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/b0b/b0b386969459dda9c294f1ccb4927ca225fa6bdd/
 
- Regards,
- Arnout
+ > Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 
-> 
-> Thanks for the review!
-> 
-> Thomas
-> 
-
+Committed, thanks.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Bye, Peter Korsgaard
