@@ -1,198 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 25 Feb 2014 21:19:56 +0100
-Subject: [Buildroot] [git commit] wpa_supplicant: rework .config file editing
-Message-ID: <20140228133416.D8EEE9BBF9@busybox.osuosl.org>
+Date: Wed, 19 Feb 2014 08:53:12 +0100
+Subject: [Buildroot] [git commit] python,
+	python3: enable unicodedata for host-python, needed by setuptools
+Message-ID: <20140228133414.89F9B9BA7B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5cc2a89a45ddc34a5dbd863f924dfa12a8274395
+commit: http://git.buildroot.net/buildroot/commit/?id=73293e88c828c9bddc0b684a4603f86f70f8e876
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Do all substitutions on the .config file in a single sed command.
-Make the .config file editing a lot more readable. Based on ideas
-brought up by Arnout Vandecappelle on the mailing-list.
+As we are going to bump setuptools to a much newer version, the host
+python needs to be built with support for unicodedata.
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- (build-test with all features enabled)
-[Samuel: rebase on head of master]
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wpa_supplicant/wpa_supplicant.mk |  109 +++++++++++-------------------
- 1 files changed, 40 insertions(+), 69 deletions(-)
+ package/python/python.mk   |    2 +-
+ package/python3/python3.mk |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index 920f96a..d2b21c2 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -15,63 +15,57 @@ WPA_SUPPLICANT_DBUS_NEW_SERVICE = fi.w1.wpa_supplicant1
- WPA_SUPPLICANT_CFLAGS = $(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/libnl3/
- WPA_SUPPLICANT_LDFLAGS = $(TARGET_LDFLAGS)
- 
-+WPA_SUPPLICANT_CONFIG_EDITS =
-+
-+WPA_SUPPLICANT_CONFIG_SET =
-+
-+WPA_SUPPLICANT_CONFIG_ENABLE = \
-+	CONFIG_IEEE80211N	\
-+	CONFIG_IEEE80211R	\
-+	CONFIG_INTERWORKING	\
-+	CONFIG_DELAYED_MIC	\
-+	CONFIG_INTERNAL_LIBTOMMATH
-+
-+WPA_SUPPLICANT_CONFIG_DISABLE = \
-+	CONFIG_DRIVER_ATMEL	\
-+	CONFIG_SMARTCARD
-+
- ifeq ($(BR2_PACKAGE_LIBNL),y)
- 	WPA_SUPPLICANT_DEPENDENCIES += libnl
--define WPA_SUPPLICANT_LIBNL_CONFIG
--	echo 'CONFIG_LIBNL32=y' >>$(WPA_SUPPLICANT_CONFIG)
--endef
-+	WPA_SUPPLICANT_CONFIG_SET += CONFIG_LIBNL32
- else
--define WPA_SUPPLICANT_LIBNL_CONFIG
--	$(SED) 's/^\(CONFIG_DRIVER_NL80211.*\)/#\1/' $(WPA_SUPPLICANT_CONFIG)
--endef
-+	WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_DRIVER_NL80211
- endif
- 
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_EAP),y)
--define WPA_SUPPLICANT_EAP_CONFIG
--	$(SED) 's/\(#\)\(CONFIG_EAP_AKA.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/\(#\)\(CONFIG_EAP_FAST.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/\(#\)\(CONFIG_EAP_GPSK.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/\(#\)\(CONFIG_EAP_IKEV2.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/\(#\)\(CONFIG_EAP_PAX.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/\(#\)\(CONFIG_EAP_PSK.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/\(#\)\(CONFIG_EAP_SAKE.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/\(#\)\(CONFIG_EAP_SIM.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/\(#\)\(CONFIG_EAP_TNC.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/\(#\)\(CONFIG_TLSV1.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--endef
-+	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_EAP_AKA		\
-+					CONFIG_EAP_FAST		\
-+					CONFIG_EAP_GPSK 	\
-+					CONFIG_EAP_IKEV2	\
-+					CONFIG_EAP_PAX		\
-+					CONFIG_EAP_PSK		\
-+					CONFIG_EAP_SAKE		\
-+					CONFIG_EAP_SIM		\
-+					CONFIG_EAP_TNC
- else
--define WPA_SUPPLICANT_EAP_CONFIG
--	$(SED) 's/^\(CONFIG_EAP.*\)/#\1/' $(WPA_SUPPLICANT_CONFIG)
--endef
-+	WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_EAP
- endif
- 
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT),y)
--define WPA_SUPPLICANT_AP_CONFIG
--	echo 'CONFIG_AP=y' >>$(WPA_SUPPLICANT_CONFIG)
--endef
-+	WPA_SUPPLICANT_CONFIG_SET += CONFIG_AP
- endif
- 
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_WPS),y)
--define WPA_SUPPLICANT_WPS_CONFIG
--	$(SED) 's/\(#\)\(CONFIG_WPS.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--endef
-+	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_WPS
- endif
- 
--define WPA_SUPPLICANT_LIBTOMMATH_CONFIG
--	$(SED) 's/\(#\)\(CONFIG_INTERNAL_LIBTOMMATH.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--endef
--
- # Try to use openssl if it's already available
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- 	WPA_SUPPLICANT_DEPENDENCIES += openssl
--define WPA_SUPPLICANT_TLS_CONFIG
--	$(SED) 's/\(#\)\(CONFIG_TLS=openssl\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/\(#\)\(CONFIG_EAP_PWD.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--endef
-+	WPA_SUPPLICANT_CONFIG_EDITS += 's/\#\(CONFIG_TLS=openssl\)/\1/'
-+	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_EAP_PWD
- else
--define WPA_SUPPLICANT_TLS_CONFIG
--	$(SED) 's/\(#\)\(CONFIG_TLS=\).*/\2internal/' $(WPA_SUPPLICANT_CONFIG)
--endef
-+	WPA_SUPPLICANT_CONFIG_EDITS += 's/\#\(CONFIG_TLS=\).*/\1internal/'
- endif
- 
- ifeq ($(BR2_PACKAGE_DBUS),y)
-@@ -81,9 +75,7 @@ ifeq ($(BR2_PACKAGE_DBUS),y)
- 		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig"
- 
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS_OLD),y)
--define WPA_SUPPLICANT_DBUS_OLD_CONFIG
--	$(SED) 's/\(#\)\(CONFIG_CTRL_IFACE_DBUS=\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--endef
-+	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_CTRL_IFACE_DBUS=
- define WPA_SUPPLICANT_INSTALL_DBUS_OLD
- 	$(INSTALL) -D \
- 	  $(@D)/wpa_supplicant/dbus/$(WPA_SUPPLICANT_DBUS_OLD_SERVICE).service \
-@@ -92,9 +84,7 @@ endef
- endif
- 
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS_NEW),y)
--define WPA_SUPPLICANT_DBUS_NEW_CONFIG
--	$(SED) 's/\(#\)\(CONFIG_CTRL_IFACE_DBUS_NEW=\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--endef
-+	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_CTRL_IFACE_DBUS_NEW
- define WPA_SUPPLICANT_INSTALL_DBUS_NEW
- 	$(INSTALL) -D \
- 	  $(@D)/wpa_supplicant/dbus/$(WPA_SUPPLICANT_DBUS_NEW_SERVICE).service \
-@@ -103,17 +93,9 @@ endef
- endif
- 
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS_INTROSPECTION),y)
--define WPA_SUPPLICANT_DBUS_INTROSPECTION_CONFIG
--	$(SED) 's/\(#\)\(CONFIG_CTRL_IFACE_DBUS_INTRO=\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--endef
-+	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_CTRL_IFACE_DBUS_INTRO
- endif
- 
--define WPA_SUPPLICANT_DBUS_CONFIG
--	$(WPA_SUPPLICANT_DBUS_OLD_CONFIG)
--	$(WPA_SUPPLICANT_DBUS_NEW_CONFIG)
--	$(WPA_SUPPLICANT_DBUS_INTROSPECTION_CONFIG)
--endef
--
- endif
- 
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DEBUG_SYSLOG),y)
-@@ -124,22 +106,11 @@ endif
- 
- define WPA_SUPPLICANT_CONFIGURE_CMDS
- 	cp $(@D)/wpa_supplicant/defconfig $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/\(#\)\(CONFIG_HS20.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/\(#\)\(CONFIG_IEEE80211N.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/\(#\)\(CONFIG_IEEE80211R.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/\(#\)\(CONFIG_IEEE80211W.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/\(#\)\(CONFIG_INTERWORKING.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/\(#\)\(CONFIG_DELAYED_MIC.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/\(CONFIG_DRIVER_ATMEL\)/#\1/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/\(CONFIG_SMARTCARD\)/#\1/' $(WPA_SUPPLICANT_CONFIG)
--	$(WPA_SUPPLICANT_LIBTOMMATH_CONFIG)
--	$(WPA_SUPPLICANT_TLS_CONFIG)
--	$(WPA_SUPPLICANT_EAP_CONFIG)
--	$(WPA_SUPPLICANT_WPS_CONFIG)
--	$(WPA_SUPPLICANT_LIBNL_CONFIG)
--	$(WPA_SUPPLICANT_DBUS_CONFIG)
--	$(WPA_SUPPLICANT_AP_CONFIG)
--	$(WPA_SUPPLICANT_DEBUG_CONFIG)
-+	sed -i $(patsubst %,-e 's/^\(%\)/#\1/',$(WPA_SUPPLICANT_CONFIG_DISABLE)) \
-+	       $(patsubst %,-e 's/^#\(%\)/\1/',$(WPA_SUPPLICANT_CONFIG_ENABLE)) \
-+	       $(patsubst %,-e '1i%=y',$(WPA_SUPPLICANT_CONFIG_SET)) \
-+	       $(patsubst %,-e %,$(WPA_SUPPLICANT_CONFIG_EDITS)) \
-+	       $(WPA_SUPPLICANT_CONFIG)
- endef
- 
- define WPA_SUPPLICANT_BUILD_CMDS
+diff --git a/package/python/python.mk b/package/python/python.mk
+index 0469820..3b0a4dd 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -25,7 +25,7 @@ HOST_PYTHON_CONF_OPT += 	\
+ 	--disable-curses	\
+ 	--disable-codecs-cjk	\
+ 	--disable-nis		\
+-	--disable-unicodedata	\
++	--enable-unicodedata	\
+ 	--disable-dbm		\
+ 	--disable-gdbm		\
+ 	--disable-bsddb		\
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 1bf8500..13f53f4 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -25,7 +25,7 @@ HOST_PYTHON3_CONF_OPT += 	\
+ 	--disable-curses	\
+ 	--disable-codecs-cjk	\
+ 	--disable-nis		\
+-	--disable-unicodedata	\
++	--enable-unicodedata	\
+ 	--disable-test-modules	\
+ 	--disable-idle3		\
+ 	--disable-pyo-build
