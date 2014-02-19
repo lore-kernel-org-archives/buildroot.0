@@ -1,32 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Feb 2014 09:02:07 +0100
-Subject: [Buildroot] [git commit branch/next] python-pycrypto: allow to
-	build with Python 3
-Message-ID: <20140219080356.331B99CAA7@busybox.osuosl.org>
+Date: Wed, 19 Feb 2014 08:59:27 +0100
+Subject: [Buildroot] [git commit branch/next] python-pyasn: use the real
+	upstream
+Message-ID: <20140219080355.D61EC9CAA7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=255d51f76c82110226bfd61315e3b890ca8d9f4d
+commit: http://git.buildroot.net/buildroot/commit/?id=5aa4f71b51a3713d765b0e430fc34abecd0bea93
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+The https://code.google.com/p/pyasn/ project is not really the real
+upstream for PyASN, and at least not the upstream for the PyASN
+implementation recommended by the PySNMP developers.
+
+Instead, the real upstream is
+https://pypi.python.org/packages/source/p/pyasn1/, which has had much
+more regular releases than the other PyASN implementation.
+
+Therefore, we switch to using this implementation, as recommended by
+the PySNMP developers on http://pysnmp.sourceforge.net/download.html.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pycrypto/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/python-pyasn/python-pyasn.mk |   12 +++---------
+ 1 files changed, 3 insertions(+), 9 deletions(-)
 
-diff --git a/package/python-pycrypto/Config.in b/package/python-pycrypto/Config.in
-index 60a3446..fe545b5 100644
---- a/package/python-pycrypto/Config.in
-+++ b/package/python-pycrypto/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_PYTHON_PYCRYPTO
- 	bool "python-pycrypto"
--	depends on BR2_PACKAGE_PYTHON
-+	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
- 	select BR2_PACKAGE_GMP
- 	help
- 	  PyCrypto is a collection of cryptographic algorithms and
+diff --git a/package/python-pyasn/python-pyasn.mk b/package/python-pyasn/python-pyasn.mk
+index b007222..43fabe9 100644
+--- a/package/python-pyasn/python-pyasn.mk
++++ b/package/python-pyasn/python-pyasn.mk
+@@ -4,16 +4,10 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PYASN_VERSION = 1.2
+-PYTHON_PYASN_SOURCE = PyASN-$(PYTHON_PYASN_VERSION).zip
+-PYTHON_PYASN_SITE = https://pyasn.googlecode.com/files
++PYTHON_PYASN_VERSION = 0.17
++PYTHON_PYASN_SOURCE = pyasn1-$(PYTHON_PYASN_VERSION).tar.gz
++PYTHON_PYASN_SITE = https://pypi.python.org/packages/source/p/pyasn1/
+ PYTHON_PYASN_LICENSE = LGPLv3+ (pyasn.cpp), GPLv2+ (libgds)
+ PYTHON_PYASN_SETUP_TYPE = distutils
+ 
+-define PYTHON_PYASN_EXTRACT_CMDS
+-	unzip -d $(@D) $(DL_DIR)/$(PYTHON_PYASN_SOURCE)
+-	mv $(@D)/PyASN-$(PYTHON_PYASN_VERSION)/* $(@D)
+-	$(RM) -r $(@D)/PyASN-$(PYTHON_PYASN_VERSION)
+-endef
+-
+ $(eval $(python-package))
