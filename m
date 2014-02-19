@@ -1,47 +1,90 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 19 Feb 2014 18:45:36 +0100
-Subject: [Buildroot] [PATCH v2 0/6] Add toolchain knob for NPTL
-In-Reply-To: <1392757744-29984-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1392757744-29984-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <5304EDC0.4010001@mind.be>
+From: Charles Manning <cdhmanning@gmail.com>
+Date: Thu, 20 Feb 2014 09:34:42 +1300
+Subject: [Buildroot] SoCkit support question?
+In-Reply-To: <179193548.492145.1392839402433.JavaMail.root@mail>
+References: <940580837.479152.1392839319094.JavaMail.root@mail>
+ <179193548.492145.1392839402433.JavaMail.root@mail>
+Message-ID: <CAE21AQrNm0dqnUAaBRebhTwSRuPz0u4xC0j1h4yDJizDgZFS2A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18/02/14 22:08, Thomas Petazzoni wrote:
-> Hello,
-> 
-> This is v2 of the NPTL patch series. Changes since v1:
-> 
->  * Made the comment string "NPTL" instead of "NPTL threads", as
->    suggested by Thomas De Schampheleire.
-> 
->  * Rebased on top of the next branch.
-> 
-> Original cover letter:
-> 
-> We have a growing number of packages that need pthread functions only
-> available when the NPTL implementation is used. But at the same time,
-> we have several architectures (AVR32, ARC, Blackfin and Xtensa) that
-> don't support NPTL.
-> 
-> This set of commits adds a new hidden toolchain config knob named
-> BR2_TOOLCHAIN_HAS_THREADS_NPTL, and uses it in four packages: three
-> were already having special conditions to more-or-less detect the
-> availability of NPTL, and one package (qt5) which fixes an autobuilder
-> failure.
+On Thu, Feb 20, 2014 at 8:50 AM, S?bastien Bourdelin <
+sebastien.bourdelin@savoirfairelinux.com> wrote:
 
- You're missing a patch to docs/manual/adding-packages-directory.txt to
-standardize the comment.
+> Hi,
+>
+> I would like to submit the support for the SoCkit from Altera, but i have
+> some questions regarding the bootloader step and need some advices on the
+> best way to handle it.
+>
+> The SoC combines a hard processing system (HPS) and an FPGA, so the board
+> design can change and the bootloader must provide a preloader.
+>
+> This preloader is normally generated using the Altera tools (Quartus,
+> Qsys, bsp-editor) and results in source files defining the board that will
+> be used in a patched u-boot from rocketboard (rocketboard is altera i
+> guess).
+> For more informations on this step, please look at :
+> http://www.rocketboards.org/foswiki/Documentation/PreloaderUbootCustomization
+>
+> Then the preloader must be sign using an other tool from Altera (mkpimage)
+> that comes with all the Altera dev environment.
+> Maxime Hadjinlian has done a fork of this tool in GO (
+> https://github.com/maximeh/mkpimage)
+>
+> If i use the sources from the rocketboard repository (
+> http://git.rocketboards.org/?p=u-boot-socfpga.git;a=summary),
+> regardless the branch, the preloader generated doesn't work, even if i'm
+> signing it with the mkpimage tool from Altera (may be i'm missing something
+> here).
+>
 
- Regards,
- Arnout
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Yes, many people have observed. this. There are some discussions going on
+in the rocketboard rfi mailing list on that too,
+
+If i use the Altera tools to generate my preloader using Qsys and an
+> example design from Altera, then use the result sources files that define
+> the u-boot/board/altera/socfpga/*, built u-boot and sign it with the
+> mkpimage from Altera then it works.
+>
+
+
+Yesterday I posted a patch for uboot on the rocketboard RFI mailing list.
+http://lists.rocketboards.org/pipermail/rfi/2014-February/001281.html
+
+This patch adds a preloader signer (written in C) to the u-boot/tools as
+well as adding this to the Makefile to run automatically (like say the OMAP
+MLO signer does).
+
+I am also putting together some build-root recipes to copy the binary over
+(something like how the omap MLO is handled).
+
+
+
+> So my question is what the best way to provide the support for this board
+> in buildroot ?
+>
+> Assuming I have not made mistake, if you want to provide support for the
+> bootloader of this board without using any tools from Altera, you must :
+>
+> - Use the patched u-boot from rocketboard
+> - Define the board with a sample design, ie patch the sources in
+> u-boot/board/altera/socfpga/*
+> - Generate the bootloader (u-boot) and preloader (u-boot SPL)
+> - Sign the preloader with a fork to mkpimage tools (recode the mkpimage
+> from Maxim  Hadjinlian in C ?)
+>
+> Another approach would be to consider that the end user must provide their
+> bootloader and flash it, the buildroot board config take care of building
+> only Linux and the rootfs.
+>
+
+I think it is better to build the preloader from buildroot too.
+
+-- Charles
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140220/420767bb/attachment.html>
