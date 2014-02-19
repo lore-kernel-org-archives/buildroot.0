@@ -1,34 +1,52 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Feb 2014 11:00:29 +0100
-Subject: [Buildroot] [git commit] mplayer: remove sh2 support
-Message-ID: <20140219150025.102AA8D411@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 19 Feb 2014 16:12:15 +0100
+Subject: [Buildroot] [PATCH v7 1/4] sdl: add host version
+In-Reply-To: <1392680233-24585-2-git-send-email-maxime.hadjinlian@gmail.com>
+ (Maxime Hadjinlian's message of "Tue, 18 Feb 2014 00:37:10 +0100")
+References: <1392680233-24585-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <1392680233-24585-2-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <878ut716i8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=209b48ae2aff742e2dd131797d3229ed25b5a90c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
 
-Remove a leftover of the commit commit e543f5a10488b020bb4ccb03e6de0e455c64841a
-(arch: remove sh2, sh3 and sh3eb support).
+ > Host version is needed to build xbmc
+ > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+ > Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > ---
+ > Changes v6 -> v7:
+ >   - Add one empty line for clarity
+ > Changes v5 -> v6:
+ >   - None
+ > Changes v4 -> v5:
+ >   - None
+ > Changes v3 -> v4:
+ >   - None
+ > Changes v2 -> v3:
+ >   - None
+ > Changes v1 -> v2:
+ >   - None
+ > ---
+ >  package/sdl/sdl.mk | 4 +++-
+ >  1 file changed, 3 insertions(+), 1 deletion(-)
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mplayer/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/package/mplayer/Config.in b/package/mplayer/Config.in
-index f2b3620..cfe824d 100644
---- a/package/mplayer/Config.in
-+++ b/package/mplayer/Config.in
-@@ -29,6 +29,6 @@ config BR2_PACKAGE_MPLAYER_MENCODER
- endif
+ > diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
+ > index ba5fbca..bc48d35 100644
+ > --- a/package/sdl/sdl.mk
+ > +++ b/package/sdl/sdl.mk
+ > @@ -18,8 +18,9 @@ define SDL_RUN_AUTOGEN
+ >  endef
  
- comment "mplayer needs a toolchain w/ largefile"
--	depends on !(BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh4a || BR2_sh4aeb \
-+	depends on !(BR2_bfin || BR2_sh2a || BR2_sh4a || BR2_sh4aeb \
- 			|| BR2_microblaze || BR2_aarch64)
- 	depends on !BR2_LARGEFILE
+ >  SDL_POST_PATCH_HOOKS += SDL_RUN_AUTOGEN
+ > -SDL_DEPENDENCIES += host-automake host-autoconf host-libtool
+ > +HOST_SDL_POST_PATCH_HOOKS += SDL_RUN_AUTOGEN
+ 
+Committed to next with this fixed up to use PRE_CONFIGURE_HOOKS instead,
+thanks.
+
+-- 
+Bye, Peter Korsgaard
