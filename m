@@ -1,43 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Feb 2014 09:21:12 +0100
-Subject: [Buildroot] Switching from uClibc to glibc as the default in
-	Buildroot?
-In-Reply-To: <66DCE5C2-E7A6-4634-8C79-441DA9FC46FB@gmail.com>
-References: <20140218231447.524a1a20@skate>
- <CAMKF1soCcLba_EacJLe7f9fM9=gFsTJYj0kaz6YzoXzEY1rx2A@mail.gmail.com>
- <fd7802bd-3f37-4d70-ad22-2e46fc452b4b@email.android.com>
- <66DCE5C2-E7A6-4634-8C79-441DA9FC46FB@gmail.com>
-Message-ID: <20140219092112.6f359a55@skate>
+Date: Wed, 19 Feb 2014 09:22:55 +0100
+Subject: [Buildroot] Xtensa support ?
+In-Reply-To: <alpine.DEB.2.02.1402191013080.5299@tavas.tkos.co.il>
+References: <20140214073009.1D7E6102637@stock.ovh.net>
+ <20140214101241.27857b9e@skate> <20140215213124.GB4168@tarshish>
+ <20140218222215.12b84764@skate>
+ <alpine.DEB.2.02.1402190725410.7075@tavas.tkos.co.il>
+ <20140219090532.0c929b99@skate>
+ <alpine.DEB.2.02.1402191013080.5299@tavas.tkos.co.il>
+Message-ID: <20140219092255.14590b4b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Khem Raj,
+Dear Jonathan Ben Avraham,
 
-On Tue, 18 Feb 2014 18:43:41 -0800, Khem Raj wrote:
+On Wed, 19 Feb 2014 10:16:04 +0200 (IST), Jonathan Ben Avraham wrote:
 
-> > There are a great number of fixes since the last numbered release and I for one would greatly appreciate having at least a "testing" release with a bumped version number to use. Other than the ldso stat call problem I reported a couple of weeks ago, uClibc trunk has been working fairly well, and most bugs I run into are the typical growing pains of toolchain building from scratch rather than uClibc problems.
+> > Cool. Let me know when you have the answer. Also, let me know if you
+> > want to receive daily e-mails about Xtensa autobuilder failures.
 > 
-> so get going start testing git/master and report issues or successes you have.
-> help in testing it out, run uclibc test suites or any others you have setups for
+> Yes, please keep Baruch and I on the Xtensa autobuilder list.
 
-Please break the chicken-and-egg problem, and release 2014.02-rc1 right
-now, spit out a call for testing, and release 2014.02 at the end of the
-month. (Or pick any other date you want, those are just suggestions).
+Until now, Baruch was not receiving the daily Xtensa e-mails, only
+Chris Zankel. Should I add both Baruch and you?
 
-It's by creating rhythm and cadence in the release schedule that you
-will encourage people to test the release candidates and report bugs.
-Nobody wants to test a moving git/master.
+> If Baruch gives me his blessing for this effort then I intend to be in for the 
+> long-term.
 
-> > I don't think that a "Git release" is appropriate for these reasons. Besides, if you did tag a Git commit with a version number, there's also no reason not to put out a tarball to go with it, right?
-> 
-> it needs some work whereas with git you can download the tars from cgit, but not a big issue. We can release tar balls too.
+That would be great. We really need some contributors to maintain all
+these fairly specific architectures, so your help is definitely welcome
+here.
 
-As I said earlier, I believe tarballs are still useful today.
-
-Best regards,
+Thanks,
 
 Thomas
 -- 
