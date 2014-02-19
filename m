@@ -1,36 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 18 Feb 2014 23:29:34 +0100
-Subject: [Buildroot] [git commit] python3: provide a PYTHON3_PATH
-Message-ID: <20140228133414.6BD429BA7B@busybox.osuosl.org>
+Date: Wed, 19 Feb 2014 09:01:49 +0100
+Subject: [Buildroot] [git commit] python-serial: allow to build with Python 3
+Message-ID: <20140228133414.DD1B69BA7B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=eb7667bf41d4ebb8a3de3c6bebdaadfa65ec775c
+commit: http://git.buildroot.net/buildroot/commit/?id=2696d9c04528b88a53ddd70f1d625e2fca31a1f8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The Python package infrastructure will need the Python 3 package to
-provide a PYTHON3_PATH environment variable in order to build
-third-party Python modules.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python3/python3.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/python-serial/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index ad9b989..1bf8500 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -147,5 +147,8 @@ endef
+diff --git a/package/python-serial/Config.in b/package/python-serial/Config.in
+index df26af1..72f5567 100644
+--- a/package/python-serial/Config.in
++++ b/package/python-serial/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_PYTHON_SERIAL
+ 	bool "python-serial"
+-	depends on BR2_PACKAGE_PYTHON
++	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+ 	help
+ 	  python-serial is a Python library to access serial ports.
  
- HOST_PYTHON3_POST_INSTALL_HOOKS += HOST_PYTHON3_INSTALL_SYMLINK
- 
-+# Provided to other packages
-+PYTHON3_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/sysconfigdata/:$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
