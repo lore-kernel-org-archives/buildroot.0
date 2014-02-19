@@ -1,62 +1,58 @@
-From: Jonathan Ben Avraham <yba@tkos.co.il>
-Date: Wed, 19 Feb 2014 07:26:14 +0200 (IST)
-Subject: [Buildroot] Xtensa support ?
-In-Reply-To: <20140218222215.12b84764@skate>
-References: <20140214073009.1D7E6102637@stock.ovh.net>
- <20140214101241.27857b9e@skate> <20140215213124.GB4168@tarshish>
- <20140218222215.12b84764@skate>
-Message-ID: <alpine.DEB.2.02.1402190725410.7075@tavas.tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 19 Feb 2014 08:30:08 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-02-18
+Message-ID: <20140219073009.0A786101591@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 18 Feb 2014, Thomas Petazzoni wrote:
+Build statistics for 2014-02-18
+===============================
 
-> Date: Tue, 18 Feb 2014 22:22:15 +0100
-> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> To: Baruch Siach <baruch@tkos.co.il>
-> Cc: buildroot at uclibc.org
-> Subject: [Buildroot] Xtensa support ?
-> 
-> Baruch,
->
-> On Sat, 15 Feb 2014 23:31:24 +0200, Baruch Siach wrote:
->
->> On Fri, Feb 14, 2014 at 10:12:41AM +0100, Thomas Petazzoni wrote:
->>>>     xtensa |                        kmod-16 | NOK | http://autobuild.buildroot.net/results/ba205bcbb6898bee78f610883f3837930eda262c/
->>>
->>> Binutils internal error. Baruch ?
->>
->> Xtensa Toolchain issues are out of scope for me at the moment I'm afraid.
->> Sorry.
->
-> Argh, too bad. You have been very active in recent times in improving
-> the Xtensa support, and this was really nice.
->
-> The daily Xtensa autobuilder failures are sent to chris at zankel.net, but
-> Chris doesn't seem to be very active in fixing the issues. Chris, are
-> you still interested in Buildroot Xtensa support?
->
-> Are there other Xtensa users on the list? If so, please speak up, we
-> need you to continue improving the Xtensa Buildroot support.
->
-> Thanks,
->
-> Thomas
+        success : 97 
+       failures : 15 
+       timeouts : 1  
+          TOTAL : 113
 
-Hi Thomas,
-There is a chance that I can take over the Xtensa Buildroot support from
-Baruch. There is a budget issue and a ramp-up issue that I need to resolve
-first, but I believe that it's doable. I will let you know later in the
-day.
-Regards,
+Classification of failures by reason
+====================================
 
-  - yba
+                  thrift-0.9.1 | 2 
+               alsa-lib-1.0.26 | 2 
+        ltp-testsuite-20130904 | 2 
+                     pv-1.4.12 | 1 
+                       kmod-16 | 1 
+               w_scan-20130331 | 1 
+                  libogg-1.3.0 | 1 
+             alsa-utils-1.0.26 | 1 
+                 pixman-0.30.0 | 1 
+                 mplayer-1.1.1 | 1 
+zmqpp-36413487f05b165dfc82a... | 1 
+                 rt-tests-0.83 | 1 
+/home/test/test/2/output/ho... | 1 
+
+Detail of failures
+===================
+
+    x86_64 | /home/test/test/2/output/ho... | TIM | http://autobuild.buildroot.net/results/60e6faed75a4564b97a9d9a390345f35833db2ac/
+    x86_64 |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/71efa36a85d27cf6ae8c6a0dba9af7c299ed6db9/
+      i686 |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/90a5e97b0e2d2204ddec3acb7ea2636dc6de2d97/
+      bfin |              alsa-utils-1.0.26 | NOK | http://autobuild.buildroot.net/results/dc6bfe9a2b05f0622729764cdbcde5a53aec143a/
+    xtensa |                        kmod-16 | NOK | http://autobuild.buildroot.net/results/b028eaf22cebd33e4e7e67b6ee6c5be6d3f2ab51/
+       arc |                   libogg-1.3.0 | NOK | http://autobuild.buildroot.net/results/e00e50f7b16fddfdb7281ee6c9b8a87ac2f480c4/
+       arm |         ltp-testsuite-20130904 | NOK | http://autobuild.buildroot.net/results/d642fcebdd5a962744c61467511b6a63b4f36a80/
+  mips64el |         ltp-testsuite-20130904 | NOK | http://autobuild.buildroot.net/results/a718836439e11bad3719bd07cdf20c9b80b09a3e/
+    xtensa |                  mplayer-1.1.1 | NOK | http://autobuild.buildroot.net/results/9d2cf930d51274e119a98f63c06741bf2014ca64/
+microblaze |                  pixman-0.30.0 | NOK | http://autobuild.buildroot.net/results/4dbe7b0a7a98e13ec49b3afb1509da366d1cb672/
+      i686 |                      pv-1.4.12 | NOK | http://autobuild.buildroot.net/results/481589a8d005b602c4725c9734966801c90909c7/
+      bfin |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/ac95f73b2351d46d9a8c48caae7f6c3ea124e8bc/
+    x86_64 |                   thrift-0.9.1 | NOK | http://autobuild.buildroot.net/results/ff11e4727a26bc1e585361220e6ff919685788f2/
+    x86_64 |                   thrift-0.9.1 | NOK | http://autobuild.buildroot.net/results/efbbae54b5a16b26cac7fcc69ea99bb6f8661fe8/
+   powerpc |                w_scan-20130331 | NOK | http://autobuild.buildroot.net/results/edc8b090d779524581e801066a96f090d02d18f9/
+   powerpc | zmqpp-36413487f05b165dfc82a... | NOK | http://autobuild.buildroot.net/results/6c9dbd1af859d8820cecc90780d27faefd744067/
 
 
 -- 
-  9590 8E58 D30D 1660 C349  673D B205 4FC4 B8F5 B7F9  ~. .~  Tk Open Systems
-=}------------- Jonathan Ben-Avraham -------------ooO--U--Ooo------------{=
-mailto:yba at tkos.co.il tel:+972.52.486.3386 http://tkos.co.il skype:benavrhm
+http://autobuild.buildroot.net
