@@ -1,66 +1,85 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 19 Feb 2014 17:02:18 +0100
-Subject: [Buildroot] Open bug analysis
-In-Reply-To: <53024B08.1040709@mind.be>
-References: <CAAXf6LUmkkW8RxfC8RjYTYRnFDJ+TbNOiKM+LyMBDHJu37ORZA@mail.gmail.com>
- <20140213195254.0b17b5bf@skate>
- <CAAXf6LVJwg4Xcjg1rMZvfgC8xi-9TJrV7faUknff630duLG_AQ@mail.gmail.com>
- <53024B08.1040709@mind.be>
-Message-ID: <CAAXf6LWOJo8FPMgX=Hmk=u2QtJW6VS8JODnxK2HPfvLDuEWkgw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 19 Feb 2014 18:53:38 +0100
+Subject: [Buildroot] [PATCH v2 2/5] gnu-efi: new package
+In-Reply-To: <1392766441-2160-3-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1392766441-2160-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1392766441-2160-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20140219175338.GA3400@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Thomas, All,
 
-On Mon, Feb 17, 2014 at 6:46 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-[..]
->> As mentioned on IRC, I'm currently using a slightly modified version
->> of the above .la fixing:
->>
->> -               $$(SED) "s:\(['= ]\)/usr:\\1$(STAGING_DIR)/usr:g" $$$$i; \
->> +               $$(SED) "s:\(['=
->> ]\)/usr/lib:\\1$(STAGING_DIR)/usr/lib:g" $$$$i; \
->> +               $$(SED) "s:\(['=
->> ]\)/usr/local/lib:\\1$(STAGING_DIR)/usr/local/lib:g" $$$$i; \
->>
->> I.e. instead of searching for /usr/something, only search for /usr/lib
->> as this is where all .la files are put.
->> I actually don't think we need the /usr/local/lib line.
->
->  Just brainstorming here, but I think a more complete solution could be
-> something like:
->
-> $$(SED) -e "s:\(['= ]\)$(STAGING_DIR):\\1 at STAGING_DIR@:g" \
->         -e "s:\(['= ]\)/usr:\\1$(STAGING_DIR)/usr:g" \
->         -e "s:@STAGING_DIR@:$(STAGING_DIR):g" \
->         $$$$i;
->
+On 2014-02-19 00:33 +0100, Thomas Petazzoni spake thusly:
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Christophe Vu-Brugier <cvubrugier@yahoo.fr>
+[--SNIP--]
+> diff --git a/package/gnu-efi/gnu-efi.mk b/package/gnu-efi/gnu-efi.mk
+> new file mode 100644
+> index 0000000..28eb17e
+> --- /dev/null
+> +++ b/package/gnu-efi/gnu-efi.mk
+> @@ -0,0 +1,40 @@
+> +################################################################################
+> +#
+> +# gnu-efi
+> +#
+> +################################################################################
+> +
+> +GNU_EFI_VERSION = 3.0u
+> +GNU_EFI_SOURCE = gnu-efi_$(GNU_EFI_VERSION).orig.tar.gz
+> +GNU_EFI_SITE = http://downloads.sourceforge.net/project/gnu-efi/
+> +GNU_EFI_INSTALL_STAGING = YES
+> +GNU_EFI_LICENSE = GPLv2+ (gnuefi), BSD (efilib)
+> +GNU_EFI_LICENSE_FILES = debian/copyright
+> +
+> +ifeq ($(BR2_i386),y)
+> +GNU_EFI_PLATFORM=ia32
+> +else ifeq ($(BR2_x86_64),y)
+> +GNU_EFI_PLATFORM=x86_64
+> +endif
 
-I have yet to try this alternate proposal, but in the meantime I have
-done several randpackage tests with the mentioned code, and this works
-without problem apparently. I have changes in pkg-autotools.mk (fixup
-of .la files), pkg-generic (fixup of .pc files), and qt5.
+Shouldn't we do like for grub: some EFI-BIOS on x86-64 machines might be
+a 32-bit EFI-BIOS, in which case we'd want to build the 32-bit version
+even if the target is 64-bit?
 
-There is one wrong path that remains (but seems to cause no problem),
-but this same problem is present in 'normal' buildroot builds outside
-of /usr: several .la files contain strings of the form:
--L /path/to/buildroot/sysroot/path/to/buildroot/sysroot/usr/lib
+> +define GNU_EFI_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+> +		$(TARGET_CONFIGURE_OPTS) \
+> +		ARCH=$(GNU_EFI_PLATFORM)
+> +endef
+> +
+> +define GNU_EFI_INSTALL_TARGET_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+> +		$(TARGET_CONFIGURE_OPTS) \
+> +		INSTALLROOT=$(TARGET_DIR) \
+> +		PREFIX=/usr ARCH=$(GNU_EFI_PLATFORM) install
+> +endef
+> +
+> +define GNU_EFI_INSTALL_STAGING_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+> +		$(TARGET_CONFIGURE_OPTS) \
+> +		INSTALLROOT=$(STAGING_DIR) \
+> +		PREFIX=/usr ARCH=$(GNU_EFI_PLATFORM) install
+> +endef
 
-I tracked down this issue: when asking pkgconf for the libs
-corresponding to a certain dependency expression, it will add the
-sysroot to those strings it thinks need it. This works fine when the
-paths are /usr /usr/lib etc, but not in case the library dependency is
-already a full path. For example, when gcrypt and gnutls are enabled,
-libecore is compiled with: --with-libgcrypt-prefix=$(STAGING_DIR)/usr,
-causing an absolute path to be present. This is later prefixed by
-pkgconf with another instance of STAGING_DIR.
+Why install in target/ and staging/, and not in images/ ?
 
-We could fix that by doing a SED on <staging>/<staging> too, and
-replace it with just one <staging>. This would seem 'hacky' but
-actually would fix incorrect paths.
+Also, this is used to build EFI applications, so I'd expect some host
+tools to be built and isntalled, too. What am I missing?
 
-Best regards,
-Thomas
+(Hmm... Maybe I should look at the rest of the series...)
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
