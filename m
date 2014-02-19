@@ -1,38 +1,88 @@
-From: =?utf-8?Q?S=C3=A9bastien?= Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
-Date: Wed, 19 Feb 2014 14:50:02 -0500 (EST)
-Subject: [Buildroot] SoCkit support question?
-In-Reply-To: <940580837.479152.1392839319094.JavaMail.root@mail>
-Message-ID: <179193548.492145.1392839402433.JavaMail.root@mail>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 19 Feb 2014 18:43:41 +0100
+Subject: [Buildroot] [PATCH v2 3/6] rt-tests: use
+	BR2_TOOLCHAIN_HAS_THREADS_NPTL
+In-Reply-To: <1392757744-29984-4-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1392757744-29984-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1392757744-29984-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <5304ED4D.9020000@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On 18/02/14 22:09, Thomas Petazzoni wrote:
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-I would like to submit the support for the SoCkit from Altera, but i have some questions regarding the bootloader step and need some advices on the best way to handle it.
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-The SoC combines a hard processing system (HPS) and an FPGA, so the board design can change and the bootloader must provide a preloader.
+> ---
+>  package/rt-tests/Config.in | 12 +++---------
+>  1 file changed, 3 insertions(+), 9 deletions(-)
+> 
+> diff --git a/package/rt-tests/Config.in b/package/rt-tests/Config.in
+> index 58a88a8..461e6de 100644
+> --- a/package/rt-tests/Config.in
+> +++ b/package/rt-tests/Config.in
+> @@ -1,10 +1,6 @@
+>  config BR2_PACKAGE_RT_TESTS
+>  	bool "rt-tests"
+> -	depends on BR2_TOOLCHAIN_HAS_THREADS
+> -	# priority-inheritance mutex needs NPTL
+> -	depends on !BR2_PTHREADS && !BR2_PTHREADS_OLD
+> -	# no NPTL for these archs
+> -	depends on !BR2_avr32 && !BR2_xtensa && !BR2_arc
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+>  	help
+>  	  Set of utilities for testing the real-time behaviour of a
+>  	  Linux system.
+> @@ -23,7 +19,5 @@ config BR2_PACKAGE_RT_TESTS
+>  
+>  	  http://rt.wiki.kernel.org
+>  
+> -comment "rt-tests needs a toolchain w/ threads"
+> -	depends on !BR2_PTHREADS && !BR2_PTHREADS_OLD
+> -	depends on !BR2_avr32 && !BR2_xtensa && !BR2_arc
+> -	depends on !BR2_TOOLCHAIN_HAS_THREADS
+> +comment "rt-tests needs a toolchain w/ NPTL"
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+> 
 
-This preloader is normally generated using the Altera tools (Quartus, Qsys, bsp-editor) and results in source files defining the board that will be used in a patched u-boot from rocketboard (rocketboard is altera i guess).
-For more informations on this step, please look at : http://www.rocketboards.org/foswiki/Documentation/PreloaderUbootCustomization
+ Side-track: we normally only display comments in the case that the user
+can do something about it by changing the config options. So here, the
+comment should also depend on !BR2_bfin && !BR2_xtensa && ...
 
-Then the preloader must be sign using an other tool from Altera (mkpimage) that comes with all the Altera dev environment.
-Maxime Hadjinlian has done a fork of this tool in GO (https://github.com/maximeh/mkpimage)
+ But this is true for all the things that depend on (e)glibc as well...
 
-If i use the sources from the rocketboard repository (http://git.rocketboards.org/?p=u-boot-socfpga.git;a=summary),
-regardless the branch, the preloader generated doesn't work, even if i'm signing it with the mkpimage tool from Altera (may be i'm missing something here).
+ So the situation we have now is that on e.g. blackfin, there are a lot
+of packages that are hidden without comment, but also a lot that say that
+(e)glibc is required.
 
-If i use the Altera tools to generate my preloader using Qsys and an example design from Altera, then use the result sources files that define the u-boot/board/altera/socfpga/*, built u-boot and sign it with the mkpimage from Altera then it works.
+ To fix, we'd need a symbol like BR2_TOOLCHAIN_THREADS_NPTL_AVAILABLE
+(and similar for (e)glibc) to indicate if the architecture supports this
+feature to begin with.
 
-So my question is what the best way to provide the support for this board in buildroot ?
+ Hm, maybe this is not a side-track after all... Could something like
+that be part of this patch set? The same can be done later for (e)glibc
+as well.
 
-Assuming I have not made mistake, if you want to provide support for the bootloader of this board without using any tools from Altera, you must :
+ And another side-track within the side-track: I noticed while checking
+the comments for blackfin that I don't see any comments regarding
+!STATIC. That is because even on blackfin, BR2_PREFER_STATIC is an
+option... Thomas, you have that patch set to make three options for
+static vs. dynamic, so that patch set probably solves that issue as well,
+right? It would be good if you could extract the part that fixes the
+issue (i.e. adds something like _HAVE_DYNAMIC) and submit that on the
+short term.
 
-- Use the patched u-boot from rocketboard
-- Define the board with a sample design, ie patch the sources in u-boot/board/altera/socfpga/*
-- Generate the bootloader (u-boot) and preloader (u-boot SPL)
-- Sign the preloader with a fork to mkpimage tools (recode the mkpimage from Maxim  Hadjinlian in C ?)
+ Regards,
+ Arnout
 
-Another approach would be to consider that the end user must provide their bootloader and flash it, the buildroot board config take care of building only Linux and the rootfs.
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
