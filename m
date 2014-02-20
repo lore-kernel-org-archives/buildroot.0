@@ -1,148 +1,71 @@
-From: Charles Manning <cdhmanning@gmail.com>
-Date: Fri, 21 Feb 2014 11:24:02 +1300
-Subject: [Buildroot] SoCkit support question?
-In-Reply-To: <530673E3.9030506@savoirfairelinux.com>
-References: <940580837.479152.1392839319094.JavaMail.root@mail>
- <CAGduivymyJe+NLi=tsk1uCxit3ZOy=U8WxLjh=myR9MZGbL+ZQ@mail.gmail.com>
- <530673E3.9030506@savoirfairelinux.com>
-Message-ID: <201402211124.03017.manningc2@actrix.gen.nz>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 21 Feb 2014 00:04:50 +0100
+Subject: [Buildroot] [PATCH] coreutils: add gnulib patch to fix
+	librt/libthread link in static case
+Message-ID: <1392937490-19214-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Friday 21 February 2014 10:30:11 Sebastien Bourdelin wrote:
-> On 02/20/2014 04:08 AM, Maxime Hadjinlian wrote:
-> > Hi Charles, S?bastien, all
-> >
-> > On Wed, Feb 19, 2014 at 9:34 PM, Charles Manning <cdhmanning@gmail.com> 
-wrote:
-> >> On Thu, Feb 20, 2014 at 8:50 AM, S?bastien Bourdelin
-> >>
-> >> <sebastien.bourdelin@savoirfairelinux.com> wrote:
-> >>> Hi,
-> >>>
-> >>> I would like to submit the support for the SoCkit from Altera, but i
-> >>> have some questions regarding the bootloader step and need some advices
-> >>> on the best way to handle it.
-> >>>
-> >>> The SoC combines a hard processing system (HPS) and an FPGA, so the
-> >>> board design can change and the bootloader must provide a preloader.
-> >>>
-> >>> This preloader is normally generated using the Altera tools (Quartus,
-> >>> Qsys, bsp-editor) and results in source files defining the board that
-> >>> will be used in a patched u-boot from rocketboard (rocketboard is
-> >>> altera i guess).
-> >>> For more informations on this step, please look at :
-> >>> http://www.rocketboards.org/foswiki/Documentation/PreloaderUbootCustomi
-> >>>zation
-> >>>
-> >>> Then the preloader must be sign using an other tool from Altera
-> >>> (mkpimage) that comes with all the Altera dev environment.
-> >>> Maxime Hadjinlian has done a fork of this tool in GO
-> >>> (https://github.com/maximeh/mkpimage)
-> >>>
-> >>> If i use the sources from the rocketboard repository
-> >>> (http://git.rocketboards.org/?p=u-boot-socfpga.git;a=summary),
-> >>> regardless the branch, the preloader generated doesn't work, even if
-> >>> i'm signing it with the mkpimage tool from Altera (may be i'm missing
-> >>> something here).
-> >>
-> >> Yes, many people have observed. this. There are some discussions going
-> >> on in the rocketboard rfi mailing list on that too,
-> >>
-> >>> If i use the Altera tools to generate my preloader using Qsys and an
-> >>> example design from Altera, then use the result sources files that
-> >>> define the u-boot/board/altera/socfpga/*, built u-boot and sign it with
-> >>> the mkpimage from Altera then it works.
-> >
-> > The fact that it doesn't work out of the box with a really minimal
-> > configuration is a real PITA.
-> > As a matter of fact, I have heard that Altera is working on the 2nd
-> > version of theses boards, and it seems software and mainlining efforts
-> > has been pretty much put to a stop :/.
->
-> What i can do, is adding an u-boot patch for this board in buildroot
-> that will generate a working u-boot-spl based on the example design.
->
-> >> Yesterday I posted a patch for uboot on the rocketboard RFI mailing
-> >> list.
-> >> http://lists.rocketboards.org/pipermail/rfi/2014-February/001281.html
-> >>
-> >> This patch adds a preloader signer (written in C) to the u-boot/tools as
-> >> well as adding this to the Makefile to run automatically (like say the
-> >> OMAP MLO signer does).
-> >
-> > That's really nice ! I ment to do that but never took the time. With
-> > the documentation published it is easier to code this right.
-> > Well done !
-> > Try to push it over to the mainline U-Boot mailing list, that can
-> > interests them, I already offered my Go and another Python version of
-> > my mkpimage a while ago, but maybe your C version will raise more
-> > interests to them.
+coreutils was no building in the static link case with uClibc, due to
+binaries being linked with librt (for timer functions), but not with
+libpthread. However, librt uses functions from libpthread, so both
+must be specified. This lack of linking against libpthread was caused
+to a defiency in one of the gnulib m4 macro, for which we add a patch.
 
-I know people like python and Go, but it adds complexity to the whole of 
-u-boot building for little gain. All the existing tools are C and this signer 
-was trivial to do in C.
+Fixes:
 
-> >
-> >> I am also putting together some build-root recipes to copy the binary
-> >> over (something like how the omap MLO is handled).
-> >
-> > Obvious idea, could you put your branch online somewhere so S?bastien
-> > could work with you and so you don't do both the work :) ?
-> > I would be happy to help.
->
-> I'm not sure it will be necessary, until the Charles patchs are mainline
-> or at least in buildroot i could not use it.
-> I think we could just generate an un-sign preloader and let the end user
-> know that currently he has to sign it using the Altera tool or your tool
-> Maxime, then if the Charles patchs are accepted we could changed the
-> board config.
-> What do you think ?
->
-> >>> So my question is what the best way to provide the support for this
-> >>> board in buildroot ?
-> >>>
-> >>> Assuming I have not made mistake, if you want to provide support for
-> >>> the bootloader of this board without using any tools from Altera, you
-> >>> must :
-> >>>
-> >>> - Use the patched u-boot from rocketboard
-> >>> - Define the board with a sample design, ie patch the sources in
-> >>> u-boot/board/altera/socfpga/*
-> >>> - Generate the bootloader (u-boot) and preloader (u-boot SPL)
-> >>> - Sign the preloader with a fork to mkpimage tools (recode the mkpimage
-> >>> from Maxim  Hadjinlian in C ?)
-> >>>
-> >>> Another approach would be to consider that the end user must provide
-> >>> their bootloader and flash it, the buildroot board config take care of
-> >>> building only Linux and the rootfs.
-> >>
-> >> I think it is better to build the preloader from buildroot too.
-> >
-> > Ideally, it would be part of the uboot-tools packages.
-> > That's also a reason why it would be nice if the U-Boot Tools could be
-> > from the same sources as U-Boot, I had sent a patch regarding this
-> > issues, but I have to rework my idea to re send this.
+  http://autobuild.buildroot.org/results/bd4/bd4cc779b46e3837e3d6c43c97eaf42fdfc3a288/
 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../coreutils/coreutils-02-fix-timer-time-m4.patch | 36 ++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+ create mode 100644 package/coreutils/coreutils-02-fix-timer-time-m4.patch
 
-I have just sent my second patch for this to the u-boot list. They didn't like 
-my last one because it was standalone and not integrated into mkimage. They 
-might come back with some formatting stuff, but I think it will be mainlined 
-in a day or two.
-
-Once that is in place, it can be patched into the u-boot-socfpga tree and the 
-preloader is built and signed as part of a regular u-boot build. It just 
-needs a build-root copy step to copy it into output/images. I will be doing 
-that today.
-
-> >
-> >> -- Charles
-> >>
-> >>
-> >> _______________________________________________
-> >> buildroot mailing list
-> >> buildroot at busybox.net
-> >> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/coreutils/coreutils-02-fix-timer-time-m4.patch b/package/coreutils/coreutils-02-fix-timer-time-m4.patch
+new file mode 100644
+index 0000000..3b4d81b
+--- /dev/null
++++ b/package/coreutils/coreutils-02-fix-timer-time-m4.patch
+@@ -0,0 +1,36 @@
++Fix thread detection with uClibc in timer_time.m4
++
++The timer_time.m4 gl_TIMER_TIME function determines which libraries
++need to be linked to get access to the timer function, generally -lrt
++for Linux systems. On platforms where threads are used, librt
++typically uses thread functions from libpthread.
++
++However, the test to determine whether the platform has thread or not
++is incorrect: it assumes that if the C library is uClibc, then threads
++are not available. This is actually not true: uClibc has configurable
++thread support, and when thread support is available, librt calls
++libpthread functions.
++
++This is important when static linking is used, because otherwise only
++-lrt is used at link time, which fails because librt calls undefined
++thread functions. Both -lrt and -lpthread must be passed.
++
++This problem is fixed by making the uClibc thread detection a bit
++smarter, thanks to the usage of the __HAS_NO_THREADS__ macro defined
++in <bits/uClibc_config.h>, which itself is included by <features.h>.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/m4/timer_time.m4
++===================================================================
++--- a/m4/timer_time.m4
+++++ b/m4/timer_time.m4
++@@ -28,7 +28,7 @@
++ #include <features.h>
++ #ifdef __GNU_LIBRARY__
++  #if ((__GLIBC__ == 2 && __GLIBC_MINOR__ >= 2) || (__GLIBC__ > 2)) \
++-     && !defined __UCLIBC__
+++     && !(__UCLIBC__ && __HAS_NO_THREADS__)
++   Thread emulation available
++  #endif
++ #endif
+-- 
+1.8.3.2
