@@ -1,32 +1,33 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Thu, 20 Feb 2014 15:00:11 +0100
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 20 Feb 2014 15:00:18 +0100
 Subject: [Buildroot] Parallel make messes up post-build in -next
 In-Reply-To: <CAHkwnC-Pm8qE8beKmaJKkHsioOuGjWrgcM8oyxni2AuDChYF+Q@mail.gmail.com>
 References: <20140220095550.GA16493@pc-eric>
  <CAHkwnC-Pm8qE8beKmaJKkHsioOuGjWrgcM8oyxni2AuDChYF+Q@mail.gmail.com>
-Message-ID: <20140220140010.GB16493@pc-eric>
+Message-ID: <CAAXf6LVGJBDDYuMapT37LtwBnKTEe+LK==6T_YffAP6U8RnMkw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+Hi Fabio,
 
-On Thu, Feb 20, 2014 at 02:42:17PM +0100, Fabio Porcedda wrote:
+On Thu, Feb 20, 2014 at 2:42 PM, Fabio Porcedda
+<fabio.porcedda@gmail.com> wrote:
 > On Thu, Feb 20, 2014 at 10:55 AM, Eric Le Bihan
 > <eric.le.bihan.dev@free.fr> wrote:
-> > Hi!
-> >
-> > I am currently testing the -next branch and I've encountered the following
-> > problem: the copy of my overlay and the execution of my post-build script is
-> > now performed *after* the generation of my image.
-> >
-> > Reverting commit a24877586a566e052897e50e6a0c2f53cfb029f5, which adds support
-> > for top-level parallel make, fixes the issue.
-> >
-> > Has anyone else experienced this problem?
-> >
+>> Hi!
+>>
+>> I am currently testing the -next branch and I've encountered the following
+>> problem: the copy of my overlay and the execution of my post-build script is
+>> now performed *after* the generation of my image.
+>>
+>> Reverting commit a24877586a566e052897e50e6a0c2f53cfb029f5, which adds support
+>> for top-level parallel make, fixes the issue.
+>>
+>> Has anyone else experienced this problem?
+>>
 >
 > Can you try this patch?
 >
@@ -54,7 +55,8 @@ On Thu, Feb 20, 2014 at 02:42:17PM +0100, Fabio Porcedda wrote:
 >  # See http://sourceware.org/gdb/wiki/FAQ, "GDB does not see any threads
 >  # besides the one in which crash occurred; or SIGTRAP kills my program when
 >  # I set a breakpoint"
-The patch fixes the issue. Thank you very much!
+>
 
-Best regards,
-ELB
+
+Why do you think this would change anything?
+As far as I know, the order of the dependency expression does not matter...
