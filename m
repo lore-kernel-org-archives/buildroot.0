@@ -1,192 +1,76 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 19 Feb 2014 23:50:01 +0100
-Subject: [Buildroot] [PATCH v2 1/1] icu: detect and add compiler symbol
-	prefix to the assembly code
-In-Reply-To: <1391519206-17889-1-git-send-email-rjbarnet@rockwellcollins.com>
- (Ryan Barnett's message of "Tue, 4 Feb 2014 14:06:46 +0100")
-References: <1391519206-17889-1-git-send-email-rjbarnet@rockwellcollins.com>
-Message-ID: <87wqgqyaxy.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 20 Feb 2014 08:30:07 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-02-19
+Message-ID: <20140220073007.A2D9E100B89@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ryan" == Ryan Barnett <ryanbarnett3@gmail.com> writes:
+Build statistics for 2014-02-19
+===============================
 
- > From: Sonic Zhang <sonic.zhang@analog.com>
- > Some compiler, such as Blackfin GNU compiler, prefix a charater to any
- > C symbol in generated assembly code. If any assembly symbol is invoked
- > from C code, it needs to be prefixed as well.
+        success : 105
+       failures : 25 
+       timeouts : 0  
+          TOTAL : 130
 
- > Note: since autoreconf doesn't work with this package because automake
- > isn't support
+Classification of failures by reason
+====================================
 
- > Fixes:
- >   http://autobuild.buildroot.net/results/c40a22814b405de2c5c75139cfc393c863ed4b81/
+                 webkit-1.11.5 | 3 
+                 cairo-1.12.10 | 2 
+                    mpd-0.18.7 | 1 
+                  libv4l-0.8.9 | 1 
+                libsepol-2.1.9 | 1 
+             iputils-s20121011 | 1 
+                  avahi-0.6.31 | 1 
+                  libcdio-0.90 | 1 
+                     vlc-2.1.2 | 1 
+               alsa-lib-1.0.26 | 1 
+ne10-88c18f02199947b2c8b577... | 1 
+                 libxml2-2.9.1 | 1 
+                     pv-1.4.12 | 1 
+                      icu-51.2 | 1 
+         qt5connectivity-5.2.0 | 1 
+              dropbear-2014.63 | 1 
+                 libevas-1.7.7 | 1 
+                  gnupg-1.4.16 | 1 
+                  libogg-1.3.0 | 1 
+           host-libxslt-1.1.28 | 1 
+            libvncserver-0.9.9 | 1 
+                  opencv-2.4.2 | 1 
 
- > [Ryan: add information about why patching configure is ok]
- > [Ryan: add renaming of patches to be consistent with standard]
+Detail of failures
+===================
 
- > Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
- > Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
-
-We recently added this patch to icu for bfin symbol prefix, but from
-todays autobuilder I see that icu's configure script completely doesn't
-support uclinux (E.G. bfin):
-
-http://autobuild.buildroot.net/results/d11/d118b4f753ade63201758e1b14ca54d96ec77698/build-end.log
-
-What's going on here? Should I revert this patch and instead mark icu as
-unavailable on bfin?
-
-
-
-
-
- > ---
- >  ... icu-001-dont-build-static-dynamic-twice.patch} |   0
- >  ...tch => icu-002-workaround-toolchain-bugs.patch} |   0
- >  .../icu-003-detect-compiler-symbol-prefix.patch    | 112 +++++++++++++++++++++
- >  3 files changed, 112 insertions(+)
- >  rename package/icu/{icu-dont-build-static-dynamic-twice.patch => icu-001-dont-build-static-dynamic-twice.patch} (100%)
- >  rename package/icu/{icu-workaround-toolchain-bugs.patch => icu-002-workaround-toolchain-bugs.patch} (100%)
- >  create mode 100644 package/icu/icu-003-detect-compiler-symbol-prefix.patch
-
- > diff --git a/package/icu/icu-dont-build-static-dynamic-twice.patch b/package/icu/icu-001-dont-build-static-dynamic-twice.patch
- > similarity index 100%
- > rename from package/icu/icu-dont-build-static-dynamic-twice.patch
- > rename to package/icu/icu-001-dont-build-static-dynamic-twice.patch
- > diff --git a/package/icu/icu-workaround-toolchain-bugs.patch b/package/icu/icu-002-workaround-toolchain-bugs.patch
- > similarity index 100%
- > rename from package/icu/icu-workaround-toolchain-bugs.patch
- > rename to package/icu/icu-002-workaround-toolchain-bugs.patch
- > diff --git a/package/icu/icu-003-detect-compiler-symbol-prefix.patch b/package/icu/icu-003-detect-compiler-symbol-prefix.patch
- > new file mode 100644
- > index 0000000..bfc985f
- > --- /dev/null
- > +++ b/package/icu/icu-003-detect-compiler-symbol-prefix.patch
- > @@ -0,0 +1,112 @@
- > +detect and add compiler symbol prefix to the assembly code
- > +
- > +Some compiler, such as Blackfin GNU compiler, prefix a charater to any
- > +C symbol in generated assembly code. If any assembly symbol is invoked
- > +from C code, it needs to be prefixed as well.
- > +
- > +Note: since autoreconf doesn't work with this package because automake
- > +isn't support
- > +
- > +[Ryan: add information about why patching configure is ok]
- > +
- > +Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
- > +Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
- > +
- > +--- icu-51.2/source/configure	2014-01-06 17:13:20.907249812 +0800
- > ++++ icu-51.2.bak/source/configure	2014-01-06 17:12:57.335248659 +0800
- > +@@ -612,6 +612,7 @@
- > + ICUDATA_CHAR
- > + SAMPLES_TRUE
- > + TESTS_TRUE
- > ++SYMBOL_PREFIX
- > + ICULIBSUFFIXCNAME
- > + U_HAVE_LIB_SUFFIX
- > + ICULIBSUFFIX
- > +@@ -7226,7 +7227,16 @@
- > +     U_HAVE_LIB_SUFFIX=0
- > + fi
- > +
- > ++# Check compiler generated symbol profix
- > ++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for symbol prefix" >&5
- > ++$as_echo "checking for symbol prefix... " >&6; }
- > ++    SYMBOL_PREFIX=`echo "PREFIX=__USER_LABEL_PREFIX__" \
- > ++                  | ${CPP-${CC-gcc} -E} - 2>&1 \
- > ++                  | ${EGREP-grep} "^PREFIX=" \
- > ++                  | sed -e "s:^PREFIX=::" -e "s:__USER_LABEL_PREFIX__::"`
- > +
- > ++    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SYMBOL_PREFIX" >&5
- > ++$as_echo "$SYMBOL_PREFIX" >&6; }
- > +
- > + # Enable/disable tests
- > + # Check whether --enable-tests was given.
- > +--- icu-51.2/source/extra/uconv/Makefile.in	2014-01-06 17:47:13.991347946 +0800
- > ++++ icu-51.2.bak/source/extra/uconv/Makefile.in	2014-01-06 17:48:01.571355282 +0800
- > +@@ -57,7 +57,7 @@
- > + ## Static mode
- > + ifeq ($(UCONVMSG_MODE),static)
- > + DEFS += -DUCONVMSG_LINK=$(MSGNAME)
- > +-UCONVMSG_LIB = $(RESDIR)/$(LIBPREFIX)$(STATIC_PREFIX_WHEN_USED)$(MSGNAME).$(A)
- > ++UCONVMSG_LIB = $(RESDIR)/$(LIBPREFIX)$(STATIC_PREFIX_WHEN_USED)@SYMBOL_PREFIX@$(MSGNAME).$(A)
- > + LIBS += $(UCONVMSG_LIB)
- > + PKGMODE=static
- > + INSTALLTO=$(libdir)
- > +@@ -151,7 +151,7 @@
- > + endif
- > +
- > + $(UCONVMSG_LIB): $(RESFILES) $(RESDIR)/$(RESDIR).lst pkgdata.inc
- > +-	$(INVOKE) $(PKGDATA_INVOKE_OPTS) $(TOOLBINDIR)/pkgdata -p $(MSGNAME) $(PKGDATA_OPTS) -m $(PKGMODE) -s $(RESDIR) -d $(RESDIR) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
- > ++	$(INVOKE) $(PKGDATA_INVOKE_OPTS) $(TOOLBINDIR)/pkgdata -p @SYMBOL_PREFIX@$(MSGNAME) $(PKGDATA_OPTS) -m $(PKGMODE) -s $(RESDIR) -d $(RESDIR) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
- > +
- > + $(RESDIR)/$(RESDIR).lst: Makefile $(srcdir)/resfiles.mk
- > + 	@-$(RMV) $@
- > +--- icu-51.2/source/data/Makefile.in	2014-01-06 19:00:28.879570005 +0800
- > ++++ icu-51.2.bak/source/data/Makefile.in	2014-01-06 19:00:07.891570170 +0800
- > +@@ -175,13 +175,13 @@
- > + packagedata: icupkg.inc $(PKGDATA_LIST) build-local
- > + ifneq ($(ENABLE_STATIC),)
- > + ifeq ($(PKGDATA_MODE),dll)
- > +-	$(PKGDATA_INVOKE) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBSTATICNAME) -m static $(PKGDATA_VERSIONING) $(PKGDATA_LIST)
- > ++	$(PKGDATA_INVOKE) $(PKGDATA) -e @SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBSTATICNAME) -m static $(PKGDATA_VERSIONING) $(PKGDATA_LIST)
- > + endif
- > + endif
- > + ifneq ($(ICUDATA_SOURCE_IS_NATIVE_TARGET),YES)
- > +-	$(PKGDATA_INVOKE) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p $(ICUDATA_NAME) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) $(PKGDATA_LIBNAME) $(PKGDATA_LIST)
- > ++	$(PKGDATA_INVOKE) $(PKGDATA) -e @SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p $(ICUDATA_NAME) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) $(PKGDATA_LIBNAME) $(PKGDATA_LIST)
- > + ifeq ($(OS390BATCH),1)
- > +-	$(PKGDATA_INVOKE) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p $(ICUDATA_NAME) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) $(OS390_PDS_NAME) $(PKGDATA_LIST)
- > ++	$(PKGDATA_INVOKE) $(PKGDATA) -e @SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p $(ICUDATA_NAME) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) $(OS390_PDS_NAME) $(PKGDATA_LIST)
- > + endif
- > + else
- > + 	$(INSTALL_DATA) $(ICUDATA_SOURCE_ARCHIVE) $(OUTDIR)
- > +@@ -203,11 +203,11 @@
- > + endif
- > + ifneq ($(ENABLE_STATIC),)
- > + ifeq ($(PKGDATA_MODE),dll)
- > +-	$(PKGDATA_INVOKE) $(PKGDATA) -m static -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBSTATICNAME) $(PKGDATA_LIST) -I $(ICUPKGDATA_INSTALL_LIBDIR)
- > ++	$(PKGDATA_INVOKE) $(PKGDATA) -m static -e @SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBSTATICNAME) $(PKGDATA_LIST) -I $(ICUPKGDATA_INSTALL_LIBDIR)
- > + endif
- > + endif
- > + ifneq ($(ICUDATA_SOURCE_IS_NATIVE_TARGET),YES)
- > +-	$(PKGDATA_INVOKE) $(PKGDATA) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBNAME) $(PKGDATA_LIST) -I $(ICUPKGDATA_INSTALL_DIR)
- > ++	$(PKGDATA_INVOKE) $(PKGDATA) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) -e @SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBNAME) $(PKGDATA_LIST) -I $(ICUPKGDATA_INSTALL_DIR)
- > + else
- > + 	$(INSTALL_DATA) $(ICUDATA_SOURCE_ARCHIVE) $(DESTDIR)$(ICUPKGDATA_DIR)
- > + endif
- > +@@ -218,7 +218,7 @@
- > + #### 390 support
- > + install390: package390
- > + 	$(MKINSTALLDIRS) $(TMPDATADIR) $(DESTDIR)$(libdir)
- > +-	$(INVOKE) $(PKGDATA) -s $(BUILDDIR)$(STUB_SUFFIX) -T $(OUTTMPDIR_390STUB) -p $(ICUDATA_NAME)$(STUB_SUFFIX) $(PKGDATA_LIBNAME)$(STUB_SUFFIX) -e $(ICUDATA_ENTRY_POINT) $(OS390LIST) -m dll $(PKGDATA_VERSIONING) -I $(DESTDIR)$(ICUPKGDATA_DIR)
- > ++	$(INVOKE) $(PKGDATA) -s $(BUILDDIR)$(STUB_SUFFIX) -T $(OUTTMPDIR_390STUB) -p $(ICUDATA_NAME)$(STUB_SUFFIX) $(PKGDATA_LIBNAME)$(STUB_SUFFIX) -e @SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) $(OS390LIST) -m dll $(PKGDATA_VERSIONING) -I $(DESTDIR)$(ICUPKGDATA_DIR)
- > + ifeq ($(PKGDATA_MODE),dll)
- > + 	$(INSTALL-L) $(ICUPKGDATA_OUTDIR)/$(FINAL_IMPORT_LIB) $(DESTDIR)$(ICUPKGDATA_DIR)/$(FINAL_IMPORT_LIB)
- > + endif
- > +@@ -226,7 +226,7 @@
- > + #### $(LIB_ICUDATA_NAME)$(STUB_SUFFIX) is the subset data for batch mode
- > + package390: $(OUTTMPDIR)/icudata390.lst $(PKGDATA_LIST) ./icupkg.inc packagedata
- > + 	ln -s $(ICUDATA_NAME) $(OUTDIR)/build/$(ICUDATA_NAME)$(STUB_SUFFIX)
- > +-	$(INVOKE) $(PKGDATA) -s $(BUILDDIR)$(STUB_SUFFIX) -T $(OUTTMPDIR_390STUB) -p $(ICUDATA_NAME)$(STUB_SUFFIX) $(PKGDATA_LIBNAME)$(STUB_SUFFIX) -e $(ICUDATA_ENTRY_POINT) $(OS390LIST) -m dll $(PKGDATA_VERSIONING)
- > ++	$(INVOKE) $(PKGDATA) -s $(BUILDDIR)$(STUB_SUFFIX) -T $(OUTTMPDIR_390STUB) -p $(ICUDATA_NAME)$(STUB_SUFFIX) $(PKGDATA_LIBNAME)$(STUB_SUFFIX) -e @SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) $(OS390LIST) -m dll $(PKGDATA_VERSIONING)
- > + 	cp $(ICUPKGDATA_OUTDIR)/$(LIB_ICUDATA_NAME)$(STUB_SUFFIX).$(SO) $(top_builddir)/stubdata/$(LIB_ICUDATA_NAME)$(STUB_SUFFIX).$(SO)
- > +
- > +
- > --
- > 1.8.3.2
-
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
+       sh4 |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/2e4aecd9d3007cb3cb6cc7ca5abc064e3252034e/
+       arm |                   avahi-0.6.31 | NOK | http://autobuild.buildroot.net/results/5bfb3fd9fe61bef5f998dc5999ce2060c334662c/
+       arm |                  cairo-1.12.10 | NOK | http://autobuild.buildroot.net/results/5d082e04c32c9eacaa41035c1ea87205cf2adc7a/
+      bfin |                  cairo-1.12.10 | NOK | http://autobuild.buildroot.net/results/9e6a5f06fa5549073c4914151e8d7580b39983aa/
+      i686 |               dropbear-2014.63 | NOK | http://autobuild.buildroot.net/results/cf542a2d992d957c3e18a9584b48b15ca07e0fb4/
+       arc |                   gnupg-1.4.16 | NOK | http://autobuild.buildroot.net/results/e337bc7607c7fe6ddcda415f9b8ccc3138d664e1/
+      i686 |            host-libxslt-1.1.28 | NOK | http://autobuild.buildroot.net/results/6894d734f25b363c6b57f11daed6adaac764a5aa/
+      bfin |                       icu-51.2 | NOK | http://autobuild.buildroot.net/results/d118b4f753ade63201758e1b14ca54d96ec77698/
+     avr32 |              iputils-s20121011 | NOK | http://autobuild.buildroot.net/results/b81430120858ff739fccf9404602bbc31b62b369/
+      bfin |                   libcdio-0.90 | NOK | http://autobuild.buildroot.net/results/e91ae3c5ad11144b13a71020ece69fd71b750dc5/
+       arm |                  libevas-1.7.7 | NOK | http://autobuild.buildroot.net/results/feb64b117e915089256e31e30b8fa6beb8d5d998/
+       arc |                   libogg-1.3.0 | NOK | http://autobuild.buildroot.net/results/32168211dfe59d922aab5026294087f08ec17463/
+      bfin |                 libsepol-2.1.9 | NOK | http://autobuild.buildroot.net/results/30cb919d2bbf51bfdf0a83c618124d927d046a61/
+       arc |                   libv4l-0.8.9 | NOK | http://autobuild.buildroot.net/results/80d144f8c4f8f5864bbff84ec51ae658e75f6490/
+      bfin |             libvncserver-0.9.9 | NOK | http://autobuild.buildroot.net/results/30e6a879ab6d84df4688c3d29761522f68dad9fc/
+       arc |                  libxml2-2.9.1 | NOK | http://autobuild.buildroot.net/results/52dd6fab81f1f412c7e660a85cf158e70de04ddb/
+   powerpc |                     mpd-0.18.7 | NOK | http://autobuild.buildroot.net/results/d7169a1db6d07e92ef7d30e08e5b47edb0a6e1f3/
+       arm | ne10-88c18f02199947b2c8b577... | NOK | http://autobuild.buildroot.net/results/d27ea9ba673a58a2d484cc3e2f80139912224b93/
+       arm |                   opencv-2.4.2 | NOK | http://autobuild.buildroot.net/results/60182e186248e2459dd8307e4f946667f6f4f6d5/
+       arm |                      pv-1.4.12 | NOK | http://autobuild.buildroot.net/results/d30db79190f2cf8953751d55a5d34644f60daec4/
+      sh4a |          qt5connectivity-5.2.0 | NOK | http://autobuild.buildroot.net/results/299add08b0d96d37bccc599dc3945691a44ade37/
+    x86_64 |                      vlc-2.1.2 | NOK | http://autobuild.buildroot.net/results/8daa391d83bfb3af3ddac0a6fd60dd0c1b0ce067/
+       sh4 |                  webkit-1.11.5 | NOK | http://autobuild.buildroot.net/results/bfde4e44bc40189082ef281c576d278919ef55f8/
+      sh4a |                  webkit-1.11.5 | NOK | http://autobuild.buildroot.net/results/928a416b5beec9667985233a15e40364c53d08d0/
+       arm |                  webkit-1.11.5 | NOK | http://autobuild.buildroot.net/results/fdf8bc7660ac251792d0542d2729ea22753d3789/
 
 
 -- 
-Bye, Peter Korsgaard
+http://autobuild.buildroot.net
