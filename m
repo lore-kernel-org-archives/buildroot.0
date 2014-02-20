@@ -1,56 +1,82 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Feb 2014 22:50:42 +0100
-Subject: [Buildroot] [git commit] libsepol: really fix static library build
-Message-ID: <20140220215248.A846A9CAF6@busybox.osuosl.org>
+Date: Thu, 20 Feb 2014 22:52:05 +0100
+Subject: [Buildroot] [git commit] libv4l: fix build on AArch64
+Message-ID: <20140220215252.039259A547@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=777f3b56be9debbf75f5f08b5e3f2a86811e5fbc
+commit: http://git.buildroot.net/buildroot/commit/?id=045651e253be4ec20abbff0cd2678b88509cbb20
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In commit 52eeb04c7608b9675bd8c2d57d3a4d1373ee72ad ('libsepol: fix
-static-only library build') I forgot to git add the changes made to
-the libsepol.mk file itself. Those changes are needed to actually pass
-STATIC=<something> when building static libraries only.
+AArch64 does not implement the SYS_open system call, but only the
+SYS_openat system call, as should be done for all modern architectures
+merged into the Linux kernel. This causes problems when building
+libv4l 0.8.9, which are fixed by integrating an upstream patch,
+available in a more recent version of libv4l. Backporting the patch is
+preferred over bumping libv4l, as libv4l has a fairly large number of
+reverse dependencies, and we don't want to break anything that close
+to the release.
+
+Note that this commit also renames the existing libv4l-largefile.patch
+to libv4l-01-largefile.patch in order to comply with the Buildroot
+patch naming scheme, and guarantee the order in which patches are
+applied.
+
+Fixes:
+
+  http://autobuild.buildroot.org/results/ed6/ed66792e332ee0256a17f98cbe21dfcfe6e8743b/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libsepol/libsepol.mk |   12 +++++++++---
- 1 files changed, 9 insertions(+), 3 deletions(-)
+ ...l-largefile.patch => libv4l-01-largefile.patch} |    0
+ .../libv4l-02-use-openat-when-available.patch      |   34 ++++++++++++++++++++
+ 2 files changed, 34 insertions(+), 0 deletions(-)
 
-diff --git a/package/libsepol/libsepol.mk b/package/libsepol/libsepol.mk
-index c359cd7..19b193c 100644
---- a/package/libsepol/libsepol.mk
-+++ b/package/libsepol/libsepol.mk
-@@ -11,18 +11,24 @@ LIBSEPOL_LICENSE_FILES = COPYING
- 
- LIBSEPOL_INSTALL_STAGING = YES
- 
-+LIBSEPOL_MAKE_FLAGS = $(TARGET_CONFIGURE_OPTS)
+diff --git a/package/libv4l/libv4l-largefile.patch b/package/libv4l/libv4l-01-largefile.patch
+similarity index 100%
+rename from package/libv4l/libv4l-largefile.patch
+rename to package/libv4l/libv4l-01-largefile.patch
+diff --git a/package/libv4l/libv4l-02-use-openat-when-available.patch b/package/libv4l/libv4l-02-use-openat-when-available.patch
+new file mode 100644
+index 0000000..756733e
+--- /dev/null
++++ b/package/libv4l/libv4l-02-use-openat-when-available.patch
+@@ -0,0 +1,34 @@
++From: Riku Voipio <riku.voipio@linaro.org>
++Date: Tue, 22 Jan 2013 15:37:22 +0000 (-0300)
++Subject: v4l-utils: use openat when available
++X-Git-Tag: v4l-utils-0.9.4~61
++X-Git-Url: http://git.linuxtv.org
 +
-+ifeq ($(BR2_PREFER_STATIC_LIB),y)
-+LIBSEPOL_MAKE_FLAGS += STATIC=1
-+endif
++v4l-utils: use openat when available
 +
- define LIBSEPOL_BUILD_CMDS
- 	# DESTDIR is needed during the compile to compute library and
- 	# header paths.
--	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) DESTDIR=$(STAGING_DIR)
-+	$(MAKE) -C $(@D) $(LIBSEPOL_MAKE_FLAGS) DESTDIR=$(STAGING_DIR)
- endef
- 
- define LIBSEPOL_INSTALL_STAGING_CMDS
--	$(MAKE) -C $(@D) install $(TARGET_CONFIGURE_OPTS) DESTDIR=$(STAGING_DIR)
-+	$(MAKE) -C $(@D) install $(LIBSEPOL_MAKE_FLAGS) DESTDIR=$(STAGING_DIR)
- endef
- 
- define LIBSEPOL_INSTALL_TARGET_CMDS
--	$(MAKE) -C $(@D) install $(TARGET_CONFIGURE_OPTS) DESTDIR=$(TARGET_DIR)
-+	$(MAKE) -C $(@D) install $(LIBSEPOL_MAKE_FLAGS) DESTDIR=$(TARGET_DIR)
- endef
- 
- define HOST_LIBSEPOL_BUILD_CMDS
++New architectures such as 64-Bit arm build kernels without legacy
++system calls - Such as the the no-at system calls. Thus, use
++SYS_openat whenever it is available.
++
++Signed-off-by: Riku Voipio <riku.voipio@linaro.org>
++Signed-off-by: Mauro Carvalho Chehab <mchehab@redhat.com>
++---
++
++diff --git a/lib/libv4lconvert/libv4lsyscall-priv.h b/lib/libv4lconvert/libv4lsyscall-priv.h
++index 2dac49a..cdd38bc 100644
++--- a/lib/libv4lconvert/libv4lsyscall-priv.h
+++++ b/lib/libv4lconvert/libv4lsyscall-priv.h
++@@ -72,8 +72,13 @@ typedef off_t __off_t;
++ 
++ #ifndef CONFIG_SYS_WRAPPER
++ 
+++#ifdef SYS_openat
+++#define SYS_OPEN(file, oflag, mode) \
+++	syscall(SYS_openat, AT_FDCWD, (const char *)(file), (int)(oflag), (mode_t)(mode))
+++#else
++ #define SYS_OPEN(file, oflag, mode) \
++ 	syscall(SYS_open, (const char *)(file), (int)(oflag), (mode_t)(mode))
+++#endif
++ #define SYS_CLOSE(fd) \
++ 	syscall(SYS_close, (int)(fd))
++ #define SYS_IOCTL(fd, cmd, arg) \
