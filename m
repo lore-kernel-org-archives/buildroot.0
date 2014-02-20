@@ -1,71 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 Feb 2014 00:04:50 +0100
-Subject: [Buildroot] [PATCH] coreutils: add gnulib patch to fix
-	librt/libthread link in static case
-Message-ID: <1392937490-19214-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Fri, 21 Feb 2014 00:09:47 +0100
+Subject: [Buildroot] [PATCH] libtool: fix build on systems with
+	automake-1.11 (e.g. Fedora 10)
+Message-ID: <1392937787-23542-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-coreutils was no building in the static link case with uClibc, due to
-binaries being linked with librt (for timer functions), but not with
-libpthread. However, librt uses functions from libpthread, so both
-must be specified. This lack of linking against libpthread was caused
-to a defiency in one of the gnulib m4 macro, for which we add a patch.
+package/libtool/libtool-0001-mips64-n64-linking.patch touches an m4
+file, so applying it triggers a run of autoconf, automake, etc. This
+sometimes leads to build failures due to incompatible system autotools.
+This was observed on Fedora 10, which has automake 1.11 while the
+generated files that are included in the tarball require automake
+1.11.1.
 
-Fixes:
+We cannot simply set HOST_LIBTOOL_AUTORECONF = YES because that would
+create a circular dependency on host-libtool. Therefore, the patch
+patch is applied on the installed libtool.m4 instead of in the source
+tree. Then, it also needs to be renamed to something that doesn't
+match buildroot's patch convention so it doesn't get picked up
+automatically.
 
-  http://autobuild.buildroot.org/results/bd4/bd4cc779b46e3837e3d6c43c97eaf42fdfc3a288/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- .../coreutils/coreutils-02-fix-timer-time-m4.patch | 36 ++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
- create mode 100644 package/coreutils/coreutils-02-fix-timer-time-m4.patch
+ ....patch => libtool-mips64-n64-linking.post-install-patch} |  0
+ package/libtool/libtool.mk                                  | 13 +++++++++++++
+ 2 files changed, 13 insertions(+)
+ rename package/libtool/{libtool-0001-mips64-n64-linking.patch => libtool-mips64-n64-linking.post-install-patch} (100%)
 
-diff --git a/package/coreutils/coreutils-02-fix-timer-time-m4.patch b/package/coreutils/coreutils-02-fix-timer-time-m4.patch
-new file mode 100644
-index 0000000..3b4d81b
---- /dev/null
-+++ b/package/coreutils/coreutils-02-fix-timer-time-m4.patch
-@@ -0,0 +1,36 @@
-+Fix thread detection with uClibc in timer_time.m4
+diff --git a/package/libtool/libtool-0001-mips64-n64-linking.patch b/package/libtool/libtool-mips64-n64-linking.post-install-patch
+similarity index 100%
+rename from package/libtool/libtool-0001-mips64-n64-linking.patch
+rename to package/libtool/libtool-mips64-n64-linking.post-install-patch
+diff --git a/package/libtool/libtool.mk b/package/libtool/libtool.mk
+index 2f6ea7c..603f1f1 100644
+--- a/package/libtool/libtool.mk
++++ b/package/libtool/libtool.mk
+@@ -13,6 +13,19 @@ LIBTOOL_LICENSE_FILES = COPYING
+ 
+ HOST_LIBTOOL_LIBTOOL_PATCH = NO
+ 
++# libtool-mips64-n64-linking.post-install-patch is an upstream patch that
++# fixes MIPS64 n64 link failures. However, because the patch touches an m4
++# file, applying it triggers a run of autoconf, automake, etc. This sometimes
++# leads to build failures due to incompatible system autotools. We cannot
++# simply set HOST_LIBTOOL_AUTORECONF = YES because that would create a
++# circular dependency on host-libtool. Therefore, just apply the patch
++# directly on the installed file.
++define HOST_LIBTOOL_FIXUP_LIBTOOL_M4
++	patch $(HOST_DIR)/usr/share/aclocal/libtool.m4 < \
++		package/libtool/libtool-mips64-n64-linking.post-install-patch
++endef
++HOST_LIBTOOL_POST_INSTALL_HOOKS += HOST_LIBTOOL_FIXUP_LIBTOOL_M4
 +
-+The timer_time.m4 gl_TIMER_TIME function determines which libraries
-+need to be linked to get access to the timer function, generally -lrt
-+for Linux systems. On platforms where threads are used, librt
-+typically uses thread functions from libpthread.
-+
-+However, the test to determine whether the platform has thread or not
-+is incorrect: it assumes that if the C library is uClibc, then threads
-+are not available. This is actually not true: uClibc has configurable
-+thread support, and when thread support is available, librt calls
-+libpthread functions.
-+
-+This is important when static linking is used, because otherwise only
-+-lrt is used at link time, which fails because librt calls undefined
-+thread functions. Both -lrt and -lpthread must be passed.
-+
-+This problem is fixed by making the uClibc thread detection a bit
-+smarter, thanks to the usage of the __HAS_NO_THREADS__ macro defined
-+in <bits/uClibc_config.h>, which itself is included by <features.h>.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/m4/timer_time.m4
-+===================================================================
-+--- a/m4/timer_time.m4
-++++ b/m4/timer_time.m4
-+@@ -28,7 +28,7 @@
-+ #include <features.h>
-+ #ifdef __GNU_LIBRARY__
-+  #if ((__GLIBC__ == 2 && __GLIBC_MINOR__ >= 2) || (__GLIBC__ > 2)) \
-+-     && !defined __UCLIBC__
-++     && !(__UCLIBC__ && __HAS_NO_THREADS__)
-+   Thread emulation available
-+  #endif
-+ #endif
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+ 
 -- 
-1.8.3.2
+1.9.0
