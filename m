@@ -1,51 +1,139 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Feb 2014 19:21:49 +0100
-Subject: [Buildroot] [git commit branch/next] Makefile: fix target-finalize
-	rule
-Message-ID: <20140220182231.67E859CA9D@busybox.osuosl.org>
+Date: Thu, 20 Feb 2014 19:06:31 +0100
+Subject: [Buildroot] [git commit] icu: not available when BR2_BINFMT_FLAT is
+	used
+Message-ID: <20140220194858.D078D9CAF1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d4c0c642de85489a536e89d252ef6e19ecbbd6a4
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+commit: http://git.buildroot.net/buildroot/commit/?id=8797a8cb587634c907321ab6aa50ba5400392739
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix a bug introduced by the commit a24877586a566e052897e50e6a0c2f53cfb029f5
-(Makefile: add support for top-level parallel make).
+icu does not recognize 'uclinux' as a supported platform. While making
+it recognize uclinux is easy, there is another problem down the road:
+icu does very weird things to generate an ELF library containing
+static data (libicudata.a), and the generated library being ELF, it is
+not compatible with the FLAT binary format expected by uclinux
+platforms such as Blackfin in FLAT format.
 
-That commit put a new rule inside the target-finalize rule so it was
-erroneously splitted in two parts.
+Therefore, we simply disallow the selection of icu on FLAT
+platforms.
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Note that adding a dependency on BR2_BINFMT_ELF doesn't work, because
+BR2_BINFMT_FDPIC is considered to be separate (even if technically
+FDPIC is a derivative of ELF). That's why the dependency we're adding
+is "depends on !BR2_BINFMT_FLAT" and not "depends on BR2_BINFMT_ELF".
+
+Fixes:
+
+  http://autobuild.buildroot.org/results/b41/b415fed7fae4012bad7d8b53a481bd71bdab716f/build-end.log
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Makefile |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/beecrypt/Config.in    |    3 ++-
+ package/cppcms/Config.in      |    1 +
+ package/icu/Config.in         |    5 +++++
+ package/php/Config.ext        |    2 ++
+ package/qt5/qt5base/Config.in |    1 +
+ package/webkit/Config.in      |    1 +
+ 6 files changed, 12 insertions(+), 1 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 20aabd6..de568e3 100644
---- a/Makefile
-+++ b/Makefile
-@@ -507,6 +507,8 @@ endif
- STRIP_FIND_CMD += -type f \( -perm /111 -o -name '*.so*' \)
- STRIP_FIND_CMD += -not \( $(call findfileclauses,libpthread*.so* $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print
+diff --git a/package/beecrypt/Config.in b/package/beecrypt/Config.in
+index 033742c..8d63e5e 100644
+--- a/package/beecrypt/Config.in
++++ b/package/beecrypt/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_BEECRYPT
+ 	bool "beecrypt"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_ICU if BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR && \
+-	       !BR2_arc
++	       !BR2_arc && !BR2_BINFMT_FLAT
+ 	help
+ 	  Beecrypt is a general-purpose cryptography library.
  
-+$(TARGETS_ROOTFS): target-finalize
-+
- target-finalize: $(TARGETS)
- 	rm -rf $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/share/aclocal \
- 		$(TARGET_DIR)/usr/lib/pkgconfig $(TARGET_DIR)/usr/share/pkgconfig \
-@@ -534,8 +536,6 @@ endif
- 		find $(TARGET_DIR)/lib/modules -type f -name '*.ko' | \
- 		xargs -r $(KSTRIPCMD); fi
+@@ -13,4 +13,5 @@ comment "beecrypt needs a toolchain w/ threads"
  
--$(TARGETS_ROOTFS): target-finalize
--
- # See http://sourceware.org/gdb/wiki/FAQ, "GDB does not see any threads
- # besides the one in which crash occurred; or SIGTRAP kills my program when
- # I set a breakpoint"
+ comment "beecrypt C++ support needs a toolchain w/ wchar"
+ 	depends on !BR2_arc
++	depends on !BR2_BINFMT_FLAT
+ 	depends on BR2_INSTALL_LIBSTDCPP && !BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/cppcms/Config.in b/package/cppcms/Config.in
+index 2df83ba..c88ae1e 100644
+--- a/package/cppcms/Config.in
++++ b/package/cppcms/Config.in
+@@ -25,6 +25,7 @@ if BR2_PACKAGE_CPPCMS
+ config BR2_PACKAGE_CPPCMS_ICU
+ 	bool "enable icu support"
+ 	depends on !BR2_arc # icu -> atomic builtins
++	depends on !BR2_BINFMT_FLAT # icu
+ 	select BR2_PACKAGE_ICU
+ 	help
+ 	  Using ICU allows advanced localization features into CppCMS,
+diff --git a/package/icu/Config.in b/package/icu/Config.in
+index b736b43..9a27894 100644
+--- a/package/icu/Config.in
++++ b/package/icu/Config.in
+@@ -3,6 +3,10 @@ config BR2_PACKAGE_ICU
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	# icu does some funky things by generating by itself an ELF
++	# file, and it cannot easily be changed to generate FLAT
++	# format.
++	depends on !BR2_BINFMT_FLAT
+ 	depends on !BR2_arc # atomic builtins
+ 	help
+ 	  International Components for Unicode.
+@@ -11,5 +15,6 @@ config BR2_PACKAGE_ICU
+ 
+ comment "icu needs a toolchain w/ C++, wchar, threads"
+ 	depends on !BR2_arc
++	depends on !BR2_BINFMT_FLAT
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/php/Config.ext b/package/php/Config.ext
+index df02047..463334b 100644
+--- a/package/php/Config.ext
++++ b/package/php/Config.ext
+@@ -162,11 +162,13 @@ config BR2_PACKAGE_PHP_EXT_INTL
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
+ 	depends on !BR2_arc # icu -> atomic builtins
++	depends on !BR2_BINFMT_FLAT # icu
+ 	help
+ 	  Internationalization support
+ 
+ comment "intl support needs a toolchain w/ C++, wchar"
+ 	depends on !BR2_arc
++	depends on !BR2_BINFMT_FLAT
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
+ 
+ comment "Image processing"
+diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+index 2fca9d2..5c404d1 100644
+--- a/package/qt5/qt5base/Config.in
++++ b/package/qt5/qt5base/Config.in
+@@ -189,6 +189,7 @@ config BR2_PACKAGE_QT5BASE_ICU
+ 	bool "Enable ICU support"
+ 	select BR2_PACKAGE_ICU
+ 	depends on !BR2_arc # icu -> atomic builtins
++	depends on !BR2_BINFMT_FLAT # icu
+ 	help
+ 	  This option enables ICU support in Qt5. This is for example
+ 	  needed for Qt5Webkit.
+diff --git a/package/webkit/Config.in b/package/webkit/Config.in
+index daaec36..45f2058 100644
+--- a/package/webkit/Config.in
++++ b/package/webkit/Config.in
+@@ -13,6 +13,7 @@ config BR2_PACKAGE_WEBKIT
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # enchant -> libglib2
+ 	depends on BR2_PACKAGE_LIBGTK2
+ 	depends on BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
++	depends on !BR2_BINFMT_FLAT # icu
+ 	select BR2_PACKAGE_CAIRO_PNG
+ 	select BR2_PACKAGE_ENCHANT
+ 	select BR2_PACKAGE_HARFBUZZ
