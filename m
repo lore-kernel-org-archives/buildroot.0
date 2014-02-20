@@ -1,82 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Feb 2014 22:52:05 +0100
-Subject: [Buildroot] [git commit] libv4l: fix build on AArch64
-Message-ID: <20140220215252.039259A547@busybox.osuosl.org>
+From: Frank Bergmann <frank@frajasalo.de>
+Date: Thu, 20 Feb 2014 22:59:37 +0100
+Subject: [Buildroot] [PATCH v2 1/2] e2fsprogs: fix missing fallocate64() on
+	nios2
+Message-ID: <1392933578-2256-1-git-send-email-frank@frajasalo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=045651e253be4ec20abbff0cd2678b88509cbb20
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+(external) nios2 toolchain is currently missing the fallocate64 system
+call. Because of compiling the e2fsprogs package with _FILE_OFFSET_BITS=64,
+_LARGEFILE_SOURCE and _LARGEFILE64_SOURCE the fallocate call is replaced
+by fallocate64 by the glibc. Therefore fallocate is entirely disabled while
+configuring the package.
 
-AArch64 does not implement the SYS_open system call, but only the
-SYS_openat system call, as should be done for all modern architectures
-merged into the Linux kernel. This causes problems when building
-libv4l 0.8.9, which are fixed by integrating an upstream patch,
-available in a more recent version of libv4l. Backporting the patch is
-preferred over bumping libv4l, as libv4l has a fairly large number of
-reverse dependencies, and we don't want to break anything that close
-to the release.
+Fixes http://autobuild.buildroot.org/results/70a/70a47bd7392560cbc1c64769c8357c0b4c91ca3b/
 
-Note that this commit also renames the existing libv4l-largefile.patch
-to libv4l-01-largefile.patch in order to comply with the Buildroot
-patch naming scheme, and guarantee the order in which patches are
-applied.
-
-Fixes:
-
-  http://autobuild.buildroot.org/results/ed6/ed66792e332ee0256a17f98cbe21dfcfe6e8743b/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Frank Bergmann <frank@frajasalo.de>
 ---
- ...l-largefile.patch => libv4l-01-largefile.patch} |    0
- .../libv4l-02-use-openat-when-available.patch      |   34 ++++++++++++++++++++
- 2 files changed, 34 insertions(+), 0 deletions(-)
+ package/e2fsprogs/e2fsprogs.mk |    4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/libv4l/libv4l-largefile.patch b/package/libv4l/libv4l-01-largefile.patch
-similarity index 100%
-rename from package/libv4l/libv4l-largefile.patch
-rename to package/libv4l/libv4l-01-largefile.patch
-diff --git a/package/libv4l/libv4l-02-use-openat-when-available.patch b/package/libv4l/libv4l-02-use-openat-when-available.patch
-new file mode 100644
-index 0000000..756733e
---- /dev/null
-+++ b/package/libv4l/libv4l-02-use-openat-when-available.patch
-@@ -0,0 +1,34 @@
-+From: Riku Voipio <riku.voipio@linaro.org>
-+Date: Tue, 22 Jan 2013 15:37:22 +0000 (-0300)
-+Subject: v4l-utils: use openat when available
-+X-Git-Tag: v4l-utils-0.9.4~61
-+X-Git-Url: http://git.linuxtv.org
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index 2eb59f5..76e2d4e 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -25,6 +25,10 @@ E2FSPROGS_CONF_OPT = \
+ 	--disable-e2initrd-helper \
+ 	--disable-testio-debug
+ 
++ifeq ($(BR2_nios2),y)
++E2FSPROGS_CONF_ENV += ac_cv_func_fallocate=no
++endif
 +
-+v4l-utils: use openat when available
-+
-+New architectures such as 64-Bit arm build kernels without legacy
-+system calls - Such as the the no-at system calls. Thus, use
-+SYS_openat whenever it is available.
-+
-+Signed-off-by: Riku Voipio <riku.voipio@linaro.org>
-+Signed-off-by: Mauro Carvalho Chehab <mchehab@redhat.com>
-+---
-+
-+diff --git a/lib/libv4lconvert/libv4lsyscall-priv.h b/lib/libv4lconvert/libv4lsyscall-priv.h
-+index 2dac49a..cdd38bc 100644
-+--- a/lib/libv4lconvert/libv4lsyscall-priv.h
-++++ b/lib/libv4lconvert/libv4lsyscall-priv.h
-+@@ -72,8 +72,13 @@ typedef off_t __off_t;
-+ 
-+ #ifndef CONFIG_SYS_WRAPPER
-+ 
-++#ifdef SYS_openat
-++#define SYS_OPEN(file, oflag, mode) \
-++	syscall(SYS_openat, AT_FDCWD, (const char *)(file), (int)(oflag), (mode_t)(mode))
-++#else
-+ #define SYS_OPEN(file, oflag, mode) \
-+ 	syscall(SYS_open, (const char *)(file), (int)(oflag), (mode_t)(mode))
-++#endif
-+ #define SYS_CLOSE(fd) \
-+ 	syscall(SYS_close, (int)(fd))
-+ #define SYS_IOCTL(fd, cmd, arg) \
+ E2FSPROGS_DEPENDENCIES = host-pkgconf util-linux
+ 
+ E2FSPROGS_MAKE_OPT = \
+-- 
+1.7.10.4
