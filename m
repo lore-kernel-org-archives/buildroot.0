@@ -1,40 +1,56 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 20 Feb 2014 14:34:12 +0100
-Subject: [Buildroot] [PATCH 3/3] opencv: add missing indirect dependency
-	from gstreamer
-In-Reply-To: <1392903252-10253-1-git-send-email-arnout@mind.be>
-References: <1392903252-10253-1-git-send-email-arnout@mind.be>
-Message-ID: <1392903252-10253-3-git-send-email-arnout@mind.be>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Thu, 20 Feb 2014 14:42:17 +0100
+Subject: [Buildroot] Parallel make messes up post-build in -next
+In-Reply-To: <20140220095550.GA16493@pc-eric>
+References: <20140220095550.GA16493@pc-eric>
+Message-ID: <CAHkwnC-Pm8qE8beKmaJKkHsioOuGjWrgcM8oyxni2AuDChYF+Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/opencv/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+On Thu, Feb 20, 2014 at 10:55 AM, Eric Le Bihan
+<eric.le.bihan.dev@free.fr> wrote:
+> Hi!
+>
+> I am currently testing the -next branch and I've encountered the following
+> problem: the copy of my overlay and the execution of my post-build script is
+> now performed *after* the generation of my image.
+>
+> Reverting commit a24877586a566e052897e50e6a0c2f53cfb029f5, which adds support
+> for top-level parallel make, fixes the issue.
+>
+> Has anyone else experienced this problem?
+>
 
-diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index 217243d..9e952ca 100644
---- a/package/opencv/Config.in
-+++ b/package/opencv/Config.in
-@@ -134,6 +134,7 @@ comment "ffmpeg support needs a toolchain w/ largefile, IPv6"
- 
- config BR2_PACKAGE_OPENCV_WITH_GSTREAMER
- 	bool "gstreamer support"
-+	depends on BR2_USE_MMU # gstreamer -> libglib2
- 	depends on BR2_USE_WCHAR # gstreamer -> libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # gstreamer -> libglib2
- 	select BR2_PACKAGE_GSTREAMER
-@@ -141,6 +142,7 @@ config BR2_PACKAGE_OPENCV_WITH_GSTREAMER
- 	select BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_APP
- 
- comment "gstreamer support needs a toolchain w/ wchar, threads"
-+	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
- 
- config BR2_PACKAGE_OPENCV_WITH_GTK
+Can you try this patch?
+
+diff --git a/Makefile b/Makefile
+index 20aabd6..de568e3 100644
+--- a/Makefile
++++ b/Makefile
+@@ -507,6 +507,8 @@ endif
+ STRIP_FIND_CMD += -type f \( -perm /111 -o -name '*.so*' \)
+ STRIP_FIND_CMD += -not \( $(call findfileclauses,libpthread*.so*
+$(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print
+
++$(TARGETS_ROOTFS): target-finalize
++
+ target-finalize: $(TARGETS)
+        rm -rf $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/share/aclocal \
+                $(TARGET_DIR)/usr/lib/pkgconfig
+$(TARGET_DIR)/usr/share/pkgconfig \
+@@ -534,8 +536,6 @@ endif
+                find $(TARGET_DIR)/lib/modules -type f -name '*.ko' | \
+                xargs -r $(KSTRIPCMD); fi
+
+-$(TARGETS_ROOTFS): target-finalize
+-
+ # See http://sourceware.org/gdb/wiki/FAQ, "GDB does not see any threads
+ # besides the one in which crash occurred; or SIGTRAP kills my program when
+ # I set a breakpoint"
+
+Regards
 -- 
-1.9.rc1
+Fabio Porcedda
