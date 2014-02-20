@@ -1,8 +1,10 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 20 Feb 2014 14:34:10 +0100
-Subject: [Buildroot] [PATCH 1/3] xscreensaver: add missing indirect
-	dependencies from libgtk2
-Message-ID: <1392903252-10253-1-git-send-email-arnout@mind.be>
+Date: Thu, 20 Feb 2014 14:34:11 +0100
+Subject: [Buildroot] [PATCH 2/3] libplayer: add missing indirect dependency
+	from gstreamer
+In-Reply-To: <1392903252-10253-1-git-send-email-arnout@mind.be>
+References: <1392903252-10253-1-git-send-email-arnout@mind.be>
+Message-ID: <1392903252-10253-2-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,30 +13,24 @@ To: buildroot@busybox.net
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/xscreensaver/Config.in | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ package/libplayer/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/xscreensaver/Config.in b/package/xscreensaver/Config.in
-index 21a19d0..e2534a6 100644
---- a/package/xscreensaver/Config.in
-+++ b/package/xscreensaver/Config.in
-@@ -3,6 +3,8 @@ config BR2_PACKAGE_XSCREENSAVER
- 	depends on BR2_PACKAGE_XORG7
- 	depends on BR2_INSTALL_LIBSTDCPP # libgtk2->pango
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libgtk2->glib2
-+	depends on BR2_USE_WCHAR # libgtk2->glib2
-+	depends on BR2_USE_MMU # libgtk2->glib2
- 	select BR2_PACKAGE_LIBGTK2
- 	select BR2_PACKAGE_LIBGLADE
- 	select BR2_PACKAGE_JPEG
-@@ -18,6 +20,7 @@ config BR2_PACKAGE_XSCREENSAVER
+diff --git a/package/libplayer/Config.in b/package/libplayer/Config.in
+index c8271a1..be7e0f0 100644
+--- a/package/libplayer/Config.in
++++ b/package/libplayer/Config.in
+@@ -27,9 +27,11 @@ config BR2_PACKAGE_LIBPLAYER_GSTREAMER
+ 	bool "gstreamer backend"
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
++	depends on BR2_USE_MMU # glib2
+ 	select BR2_PACKAGE_GSTREAMER
  
- 	  http://www.jwz.org/xscreensaver/
- 
--comment "xscreensaver needs a toolchain w/ C++, threads"
-+comment "xscreensaver needs a toolchain w/ wchar, C++, threads"
- 	depends on BR2_PACKAGE_XORG7
+ comment "gstreamer backend needs a toolchain w/ wchar, threads"
 +	depends on BR2_USE_MMU
- 	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+ 
+ config BR2_PACKAGE_LIBPLAYER_PYTHON
 -- 
 1.9.rc1
