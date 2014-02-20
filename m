@@ -1,52 +1,46 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 20 Feb 2014 16:04:03 +0100
-Subject: [Buildroot] Parallel make messes up post-build in -next
-In-Reply-To: <530615B1.1000205@mind.be>
-References: <20140220095550.GA16493@pc-eric>
- <CAAXf6LXRsk=roB4ogDfjcHwPZKB2YCUraR34bV3qi72ewuvK1A@mail.gmail.com>
- <CAHkwnC-LRM1oVjxH1PNMHnB9x-H6C7QsO458t01TBtiFr2moOg@mail.gmail.com>
- <CAAXf6LWybp29EWQM6AsTPJ0r=PS1AYfU6ZmkYm3jEutxoZ8LEg@mail.gmail.com>
- <530615B1.1000205@mind.be>
-Message-ID: <CAAXf6LW5iCFe7nQRrJkdSnEqy2+v0_A61jbShMHZPCPY1LGOMA@mail.gmail.com>
+From: Andrew Barnes <andy@outsideglobe.com>
+Date: Thu, 20 Feb 2014 16:26:07 +0000
+Subject: [Buildroot] [PATCH 1/1] Updated package download address. Added
+	staging option so that applications that depend on rtai's
+	headers may be built by buildroot. Re-directed the include
+	dir to /usr/include/rtai.
+Message-ID: <1392913567-4146-1-git-send-email-andy@outsideglobe.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Feb 20, 2014 at 3:48 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 20/02/14 15:28, Thomas De Schampheleire wrote:
->> Hi Fabio,
->>
->> On Thu, Feb 20, 2014 at 3:13 PM, Fabio Porcedda
->> <fabio.porcedda@gmail.com> wrote:
->> [..]
->>>
->>> Yes, it's a thing to fix for proper parallel bulding support, it's on
->>> my todo list.
->>>
->>> The targets target-finalize, target-purgelocales,
->>> target-generatelocales, toolchain-eclipse-register can be executed in
->>> parallel after building the generic targets?
->>
->> Since you can select both purgelocales and generatelocales, I would
->> expect they need to be sequential: first purge then generate (as done
->> today).
->
->  True.
->
->> I'd also expect that target-finalize should be finished before
->> starting the locale stuff, as the post-build script or overlay may add
->> additional locale stuff that needs to be purged.
->
->  Hm, I would actually expect the reverse: whatever my post-build script
-> or overlay does should be final, and not be removed again by
-> purgelocales. But that is in fact not what happens at the moment.
+Signed-off-by: Andrew Barnes <andy@outsideglobe.com>
+---
+ package/rtai/rtai.mk | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-I also had the same doubt, but what I wrote is just to mimic the
-non-parallel behavior.
-The changing of the order of locale stuff and post-build is not
-related to the parallel build.
-
-Best regards,
-Thomas
+diff --git a/package/rtai/rtai.mk b/package/rtai/rtai.mk
+index c24fa41..72327b0 100644
+--- a/package/rtai/rtai.mk
++++ b/package/rtai/rtai.mk
+@@ -6,11 +6,20 @@
+ 
+ RTAI_VERSION = 3.8.1
+ RTAI_SOURCE  = rtai-$(RTAI_VERSION).tar.bz2
+-RTAI_SITE    = http://www.rtai.org/RTAI/
++RTAI_SITE    = https://www.rtai.org/userfiles/downloads/RTAI/
++RTAI_INSTALL_STAGING = YES
++
++# The <pkg>_CONFIG_SCRIPTS cannot apply here to the specificities of rtai-config
++define RTAI_POST_PATCH_FIXUP
++	(SED) 's%^staging=.*%staging=$(STAGING_DIR)%' $(STAGING_DIR)/usr/bin/rtai-config
++endef
++
++RTAI_POST_INSTALL_STAGING_HOOKS += RTAI_POST_PATCH_FIXUP
+ 
+ RTAI_DEPENDENCIES = linux
+ 
+ RTAI_CONF_OPT = \
++	--includedir=/usr/include/rtai \
+ 	--with-linux-dir=$(LINUX_DIR) 	\
+ 	--disable-leds		      	\
+ 	--disable-rtailab		\
+-- 
+1.8.5.3
