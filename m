@@ -1,145 +1,122 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Feb 2014 20:56:01 +0100
-Subject: [Buildroot] [git commit] manual/faq: add section about why no
-	binary packages
-Message-ID: <20140220211951.73A9B9CAE3@busybox.osuosl.org>
+From: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
+Date: Thu, 20 Feb 2014 16:30:11 -0500
+Subject: [Buildroot] SoCkit support question?
+In-Reply-To: <CAGduivymyJe+NLi=tsk1uCxit3ZOy=U8WxLjh=myR9MZGbL+ZQ@mail.gmail.com>
+References: <940580837.479152.1392839319094.JavaMail.root@mail>
+ <179193548.492145.1392839402433.JavaMail.root@mail>
+ <CAE21AQrNm0dqnUAaBRebhTwSRuPz0u4xC0j1h4yDJizDgZFS2A@mail.gmail.com>
+ <CAGduivymyJe+NLi=tsk1uCxit3ZOy=U8WxLjh=myR9MZGbL+ZQ@mail.gmail.com>
+Message-ID: <530673E3.9030506@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ffeda5e429225712b66e1c28e4d77dd50844568c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It comes up every now and then on the list, so better be prepared to
-point at the manual, rather than rehash the same every time.
-
-Most of the chapter is a copy-paste of the report from the Buildroot
-Developpers Day in Pragues, 2011-10-28:
-    http://lists.busybox.net/pipermail/buildroot/2011-November/047229.html
-
-We consider the opinions expressed in that report to be still valid
-now, two years later.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Samuel Martin <s.martin49@gmail.com>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: Baruch Siach <baruch@tkos.co.il>
-Cc: Danomi Manchego <danomimanchego123@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/manual/faq-troubleshooting.txt |  100 +++++++++++++++++++++++++++++++++++
- 1 files changed, 100 insertions(+), 0 deletions(-)
-
-diff --git a/docs/manual/faq-troubleshooting.txt b/docs/manual/faq-troubleshooting.txt
-index 4e0612b..4026e18 100644
---- a/docs/manual/faq-troubleshooting.txt
-+++ b/docs/manual/faq-troubleshooting.txt
-@@ -111,3 +111,103 @@ directory as the new root, will most likely fail.
- If you want to run the target filesystem inside a chroot, or as an NFS
- root, then use the tarball image generated in +images/+ and extract it
- as root.
-+
-+[[faq-no-binary-packages]]
-+Why doesn't Buildroot generate binary packages (.deb, .ipkg...)?
-+----------------------------------------------------------------
-+
-+One feature that is often discussed on the Buildroot list is the
-+the general topic of "package management". To summarize, the idea
-+would be to add some tracking of which Buildroot package installs
-+what files, with the goals of:
-+
-+ * being able to remove files installed by a package when this package
-+   gets unselected from the menuconfig;
-+
-+ * being able to generate binary packages (ipk or other format) that
-+   can be installed on the target without re-generating a new root
-+   filesystem image.
-+
-+In general, most people think it is easy to do: just track which package
-+installed what and remove it when the package is unselected. However, it
-+is much more complicated than that:
-+
-+ * It is not only about the +target/+ directory, but also the sysroot in
-+   +host/usr/<tuple>/sysroot+ and the +host/+ directory itself. All files
-+   installed in those directories by various packages must be tracked.
-+
-+ * When a package is unselected from the configuration, it is not
-+   sufficient to remove just the files it installed. One must also
-+   remove all its reverse dependencies (i.e packages relying on it)
-+   and rebuild all those packages. For example, package A depends
-+   optionally on the OpenSSL library. Both are selected, and Buildroot
-+   is built. Package A is built with crypto support using OpenSSL.
-+   Later on, OpenSSL gets unselected from the configuration, but
-+   package A remains (since OpenSSL is an optional dependency, this
-+   is possible.) If only OpenSSL files are removed, then the files
-+   installed by package A are broken: they use a library that is no
-+   longer present on the target. Although this is technically doable,
-+   it adds a lot of complexity to Buildroot, which goes against the
-+   simplicity we try to stick to.
-+
-+ * In addition to the previous problem, there is the case where the
-+   optional dependency is not even known to Buildroot. For example,
-+   package A in version 1.0 never used OpenSSL, but in version 2.0 it
-+   automatically uses OpenSSL if available. If the Buildroot .mk file
-+   hasn't been updated to take this into account, then package A will
-+   not be part of the reverse dependencies of OpenSSL and will not be
-+   removed and rebuilt when OpenSSL is removed. For sure, the .mk file
-+   of package A should be fixed to mention this optional dependency,
-+   but in the mean time, you can have non-reproducible behaviors.
-+
-+ * The request is to also allow changes in the menuconfig to be
-+   applied on the output directory without having to rebuild
-+   everything from scratch. However, this is very difficult to achieve
-+   in a reliable way: what happens when the suboptions of a package
-+   are changed (we would have to detect this, and rebuild the package
-+   from scratch and potentially all its reverse dependencies), what
-+   happens if toolchain options are changed, etc. At the moment, what
-+   Buildroot does is clear and simple so its behaviour is very
-+   reliable and it is easy to support users. If configuration changes
-+   done in menuconfig are applied after the next make, then it has to
-+   work correctly and properly in all situations, and not have some
-+   bizarre corner cases. The risk is to get bug reports like "I have
-+   enabled package A, B and C, then ran make, then disabled package
-+   C and enabled package D and ran make, then re-enabled package C
-+   and enabled package E and then there is a build failure". Or worse
-+   "I did some configuration, then built, then did some changes,
-+   built, some more changes, built, some more changes, built, and now
-+   it fails, but I don't remember all the changes I did and in which
-+   order". This will be impossible to support.
-+
-+For all these reasons, the conclusion is that adding tracking of
-+installed files to remove them when the package is unselected, or to
-+generate a repository of binary packages, is something that is very
-+hard to achieve reliably and will add a lot of complexity.
-+
-+On this matter, the Buildroot developers make this position statement:
-+
-+ * Buildroot strives to make it easy to generate a root filesystem (hence
-+   the name, by the way.) That is what we want to make Buildroot good at:
-+   building root filesystems.
-+
-+ * Buildroot is not meant to be a distribution (or rather, a distribution
-+   generator.) It is the opinion of most Buildroot developers that this
-+   is not a goal we should pursue. We believe that there are other tools
-+   better suited to generate a distro than Buildroot is. For example,
-+   http://openembedded.org/[Open Embedded], or https://openwrt.org/[openWRT],
-+   are such tools.
-+
-+ * We prefer to push Buildroot in a direction that makes it easy (or even
-+   easier) to generate complete root filesystems. This is what makes
-+   Buildroot stands out in the crowd (among other things, of course!)
-+
-+ * We believe that for most embedded Linux systems, binary packages are
-+   not necessary, and potentially harmful. When binary packages are
-+   used, it means that the system can be partially upgraded, which
-+   creates an enormous number of possible combinations of package
-+   versions that should be tested before doing the upgrade on the
-+   embedded device. On the other hand, by doing complete system
-+   upgrades by upgrading the entire root filesystem image at once,
-+   the image deployed to the embedded system is guaranteed to really
-+   be the one that has been tested and validated.
+On 02/20/2014 04:08 AM, Maxime Hadjinlian wrote:
+> Hi Charles, S?bastien, all
+>
+> On Wed, Feb 19, 2014 at 9:34 PM, Charles Manning <cdhmanning@gmail.com> wrote:
+>>
+>>
+>> On Thu, Feb 20, 2014 at 8:50 AM, S?bastien Bourdelin
+>> <sebastien.bourdelin@savoirfairelinux.com> wrote:
+>>> Hi,
+>>>
+>>> I would like to submit the support for the SoCkit from Altera, but i have
+>>> some questions regarding the bootloader step and need some advices on the
+>>> best way to handle it.
+>>>
+>>> The SoC combines a hard processing system (HPS) and an FPGA, so the board
+>>> design can change and the bootloader must provide a preloader.
+>>>
+>>> This preloader is normally generated using the Altera tools (Quartus,
+>>> Qsys, bsp-editor) and results in source files defining the board that will
+>>> be used in a patched u-boot from rocketboard (rocketboard is altera i
+>>> guess).
+>>> For more informations on this step, please look at :
+>>> http://www.rocketboards.org/foswiki/Documentation/PreloaderUbootCustomization
+>>>
+>>> Then the preloader must be sign using an other tool from Altera (mkpimage)
+>>> that comes with all the Altera dev environment.
+>>> Maxime Hadjinlian has done a fork of this tool in GO
+>>> (https://github.com/maximeh/mkpimage)
+>>>
+>>> If i use the sources from the rocketboard repository
+>>> (http://git.rocketboards.org/?p=u-boot-socfpga.git;a=summary),
+>>> regardless the branch, the preloader generated doesn't work, even if i'm
+>>> signing it with the mkpimage tool from Altera (may be i'm missing something
+>>> here).
+>>
+>> Yes, many people have observed. this. There are some discussions going on in
+>> the rocketboard rfi mailing list on that too,
+>>
+>>> If i use the Altera tools to generate my preloader using Qsys and an
+>>> example design from Altera, then use the result sources files that define
+>>> the u-boot/board/altera/socfpga/*, built u-boot and sign it with the
+>>> mkpimage from Altera then it works.
+> The fact that it doesn't work out of the box with a really minimal
+> configuration is a real PITA.
+> As a matter of fact, I have heard that Altera is working on the 2nd
+> version of theses boards, and it seems software and mainlining efforts
+> has been pretty much put to a stop :/.
+What i can do, is adding an u-boot patch for this board in buildroot
+that will generate a working u-boot-spl based on the example design.
+>>
+>>
+>> Yesterday I posted a patch for uboot on the rocketboard RFI mailing list.
+>> http://lists.rocketboards.org/pipermail/rfi/2014-February/001281.html
+>>
+>> This patch adds a preloader signer (written in C) to the u-boot/tools as
+>> well as adding this to the Makefile to run automatically (like say the OMAP
+>> MLO signer does).
+> That's really nice ! I ment to do that but never took the time. With
+> the documentation published it is easier to code this right.
+> Well done !
+> Try to push it over to the mainline U-Boot mailing list, that can
+> interests them, I already offered my Go and another Python version of
+> my mkpimage a while ago, but maybe your C version will raise more
+> interests to them.
+>> I am also putting together some build-root recipes to copy the binary over
+>> (something like how the omap MLO is handled).
+> Obvious idea, could you put your branch online somewhere so S?bastien
+> could work with you and so you don't do both the work :) ?
+> I would be happy to help.
+I'm not sure it will be necessary, until the Charles patchs are mainline
+or at least in buildroot i could not use it.
+I think we could just generate an un-sign preloader and let the end user
+know that currently he has to sign it using the Altera tool or your tool
+Maxime, then if the Charles patchs are accepted we could changed the
+board config.
+What do you think ?
+>>
+>>> So my question is what the best way to provide the support for this board
+>>> in buildroot ?
+>>>
+>>> Assuming I have not made mistake, if you want to provide support for the
+>>> bootloader of this board without using any tools from Altera, you must :
+>>>
+>>> - Use the patched u-boot from rocketboard
+>>> - Define the board with a sample design, ie patch the sources in
+>>> u-boot/board/altera/socfpga/*
+>>> - Generate the bootloader (u-boot) and preloader (u-boot SPL)
+>>> - Sign the preloader with a fork to mkpimage tools (recode the mkpimage
+>>> from Maxim  Hadjinlian in C ?)
+>>>
+>>> Another approach would be to consider that the end user must provide their
+>>> bootloader and flash it, the buildroot board config take care of building
+>>> only Linux and the rootfs.
+>>
+>> I think it is better to build the preloader from buildroot too.
+> Ideally, it would be part of the uboot-tools packages.
+> That's also a reason why it would be nice if the U-Boot Tools could be
+> from the same sources as U-Boot, I had sent a patch regarding this
+> issues, but I have to rework my idea to re send this.
+>> -- Charles
+>>
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
