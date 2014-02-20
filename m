@@ -1,108 +1,188 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 20 Feb 2014 07:20:46 +0100
-Subject: [Buildroot] [PATCH] webkit: disable on < ARMv5t
-In-Reply-To: <1392847730-14412-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1392847730-14412-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <53059EBE.6030902@mind.be>
+Date: Thu, 20 Feb 2014 08:11:16 +0100
+Subject: [Buildroot] [V10 5/6] manual: adding packages perl
+In-Reply-To: <1392310269-21027-6-git-send-email-francois.perrad@gadz.org>
+References: <1392310269-21027-1-git-send-email-francois.perrad@gadz.org>
+ <1392310269-21027-6-git-send-email-francois.perrad@gadz.org>
+Message-ID: <5305AA94.6090404@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19/02/14 23:08, Thomas Petazzoni wrote:
-> webkit needs the ARM blx instruction, which is only available on >=
-> ARMv5t, so we have to make sure the webkit package cannot be enabled
-> on < ARMv5t. In order to achieve this, this commit introduces the
-> BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS hidden Config.in knob, which avoids
-> duplicating all over the place the complex architecture dependencies
-> of webkit.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.org/results/fdf/fdf8bc7660ac251792d0542d2729ea22753d3789/build-end.log
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Ah, documentation, always a big attractor of small corrections...
+
+On 13/02/14 17:51, Francois Perrad wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 > ---
->  package/midori/Config.in |  6 ++----
->  package/webkit/Config.in | 14 ++++++++++----
->  2 files changed, 12 insertions(+), 8 deletions(-)
+>  docs/manual/adding-packages-perl.txt |  108 ++++++++++++++++++++++++++++++++++
+>  docs/manual/adding-packages.txt      |    2 +
+>  2 files changed, 110 insertions(+)
+>  create mode 100644 docs/manual/adding-packages-perl.txt
 > 
-> diff --git a/package/midori/Config.in b/package/midori/Config.in
-> index a684376..c3b5a1b 100644
-> --- a/package/midori/Config.in
-> +++ b/package/midori/Config.in
-> @@ -8,15 +8,13 @@ config BR2_PACKAGE_MIDORI
->  	depends on BR2_INSTALL_LIBSTDCPP # webkit
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # webkit -> enchant -> libglib2
->  	depends on BR2_USE_WCHAR	 # webkit
-> -	depends on (BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || BR2_mipsel || \
-> -		    BR2_powerpc || BR2_sh || BR2_sparc || BR2_x86_64) # webkit
-> +	depends on BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
->  	help
->  	  Midori is a lightweight web browser based on WebKit
->  
->  	  http://software.twotoasts.de/?page=midori
->  
->  comment "midori needs libgtk2 and a toolchain w/ C++, wchar, threads"
-> -	depends on (BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || BR2_mipsel || \
-> -		    BR2_powerpc || BR2_sh || BR2_sparc || BR2_x86_64)
-> +	depends on BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
->  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
->  		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_LIBGTK2
-> diff --git a/package/webkit/Config.in b/package/webkit/Config.in
-> index 0207a6d..daaec36 100644
-> --- a/package/webkit/Config.in
-> +++ b/package/webkit/Config.in
-> @@ -1,11 +1,18 @@
-> +config BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
-> +	bool
-> +	# ARM needs BLX, so v5t+
-> +	default y if (BR2_arm || BR2_armeb) && \
-> +		!(BR2_arm7tdmi || BR2_arm720t || BR2_arm920t || BR2_arm922t || BR2_fa526)
-> +	default y if BR2_i386 || BR2_mips || BR2_mipsel || \
-> +		BR2_powerpc || BR2_sh || BR2_sparc || BR2_x86_64
+> diff --git a/docs/manual/adding-packages-perl.txt b/docs/manual/adding-packages-perl.txt
+> new file mode 100644
+> index 0000000..4e127dd
+> --- /dev/null
+> +++ b/docs/manual/adding-packages-perl.txt
+> @@ -0,0 +1,108 @@
+> +// -*- mode:doc; -*-
+> +// vim: set syntax=asciidoc:
+> +
+> +Infrastructure for Perl/CPAN packages
+> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> +
+> +[[perl-package-tutorial]]
+> +
+> ++perl-package+ tutorial
+> +^^^^^^^^^^^^^^^^^^^^^^^
+> +
+> +First, let's see how to write a +.mk+ file for a Perl/CPAN package,
+> +with an example :
+> +
+> +------------------------
+> +01: ################################################################################
+> +02: #
+> +03: # perl-foo-bar
+> +04: #
+> +05: ################################################################################
+> +06:
+> +07: PERL_FOO_BAR_VERSION = 0.02
+> +08: PERL_FOO_BAR_SOURCE = Foo-Bar-$(PERL_FOO_BAR_VERSION).tar.gz
+> +09: PERL_FOO_BAR_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MO/MONGER/
+> +10: PERL_FOO_BAR_DEPENDENCIES = perl-strictures
+> +11: PERL_FOO_BAR_LICENSE = Artistic or GPLv1+
+> +12: PERL_FOO_BAR_LICENSE_FILES = LICENSE
+> +13:
+> +14: $(eval $(perl-package))
+> +------------------------
+> +
+> +On line 7, we declare the version of the package.
+> +
+> +On line 8 and 9, we declare the name of the tarball and the location
+> +of the tarball on a CPAN server. Buildroot will automatically download
+> +the tarball from this location.
+> +
+> +On line 10, we declare our dependencies, so that they are built
+> +before the build process of our package starts.
+> +
+> +On line 11 and 12, we give licensing details about the package (its
+> +license on line 11, and the file containing the license text on line
+> +12).
+> +
+> +Finally, on line 14, we invoke the +perl-package+ macro that
+> +generates all the Makefile rules that actually allow the package to be
+> +built.
+> +
+> +Most of these data can be retrieved from https://metacpan.org/.
+> +So, this file and the Config.in can be generated by running
+> +the script +supports/scripts/scancpan Foo-Bar+ in the +TOPDIR+ directory
 
- We normally write
+ TOPDIR -> buildroot
 
-	depends on FOO
-	depends on BAR
+(I have a feeling that the TOPDIR was actually inserted because of an
+earlier review comment, so maybe my feedback is not correct).
 
-rather than
+> +(or in the +BR2_EXTERNAL+ directory).
+> +This script recursively creates packages for all required Perl/CPAN
+> +dependencies.
 
-	depends on FOO && BAR
+ How about:
 
- Shouldn't we do the same here?
+ This script creates a Config.in file and foo-bar.mk file for the
+requested package, and also recursively for all dependencies specified by
+CPAN. You should still manually edit the result. In particular, the
+following things should be checked.
 
-	default y if BR2_i386
-	default y if BR2_mips
+* The +PERL_FOO_BAR_LICENSE_FILES+ variable is not set, because metacpan
+  doesn't have this information. Also, the name of the license file(s)
+  varies between packages, and some don't even have a license file.
+* If the perl module links with a shared library that is provided by
+  another (non-perl) package, this dependency is not added automatically.
+  It has to be added manually to +PERL_FOO_BAR_DEPENDENCIES+.
+* The +package/Config.in+ file has to be updated manually to include the
+  generated Config.in files. As a hint, the +scancpan+ script prints out
+  the required +source "..."+ statements, sorted alphabetically.
+
+> +
+> +[[perl-package-reference]]
+> +
+> ++perl-package+ reference
+> +^^^^^^^^^^^^^^^^^^^^^^^^
+> +
+> +As a policy, packages that provide Perl/CPAN modules should all be
+> +named +perl-<something>+ in Buildroot.
+> +
+> +This infrastructure handles various Perl build systems :
+> ++ExtUtils-MakeMaker+, +Module-Build+ and +Module-Build-Tiny+.
+
+ Shouldn't that be ExtUtils::MakeMaker etc?
+
+> ++Build.PL+ is always preferred when a package provides a +Makefile.PL+
+> +and a +Build.PL+.
+> +
+> +The main macro of the Perl/CPAN package infrastructure is
+> ++perl-package+. It is similar to the +generic-package+ macro. The ability to
+> +have target and host packages is also available, with the
+> ++host-perl-package+ macro.
+> +
+> +Just like the generic infrastructure, the Perl/CPAN infrastructure
+> +works by defining a number of variables before calling the
+> ++perl-package+ macro.
+> +
+> +First, all the package metadata information variables that exist in the
+> +generic infrastructure also exist in the Perl/CPAN infrastructure:
+> ++PERL_FOO_VERSION+, +PERL_FOO_SOURCE+,
+> ++PERL_FOO_PATCH+, +PERL_FOO_SITE+,
+> ++PERL_FOO_SUBDIR+, +PERL_FOO_DEPENDENCIES+,
+> ++PERL_FOO_INSTALL_TARGET+.
+> +
+> +Note that setting +PERL_FOO_INSTALL_STAGING+ to +YES+ has no effect
+> +unless a +PERL_FOO_INSTALL_STAGING_CMDS+ variable is defined. The perl
+> +infrastructure doesn't define these commands since Perl modules generally
+> +don't need to be installed to the +staging+ directory.
+> +
+> +A few additional variables, specific to the Perl/CPAN infrastructure,
+> +can also be defined. Many of them are only useful in very specific
+> +cases, typical packages will therefore only use a few of them.
+> +
+> +* +PERL_FOO_CONF_OPT+, to specify additional configure
+
+ I think +HOST_PERL_FOO_CONF_OPT+ should be mentioned explicitly here as
+well, so it is clear that this is not "inherited" from PERL_FOO_CONF_OPT.
 
 
  Regards,
  Arnout
 
+> +  options to pass to the +perl Makefile.PL+ or +perl Build.PL+.
+> +  By default, empty.
 > +
->  config BR2_PACKAGE_WEBKIT
->  	bool "webkit"
->  	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on BR2_USE_WCHAR # enchant -> libglib2
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # enchant -> libglib2
->  	depends on BR2_PACKAGE_LIBGTK2
-> -	depends on (BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || BR2_mipsel || \
-> -		    BR2_powerpc || BR2_sh || BR2_sparc || BR2_x86_64)
-> +	depends on BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
->  	select BR2_PACKAGE_CAIRO_PNG
->  	select BR2_PACKAGE_ENCHANT
->  	select BR2_PACKAGE_HARFBUZZ
-> @@ -29,7 +36,6 @@ config BR2_PACKAGE_WEBKIT
->  	  http://webkit.org/
+> +* +PERL_FOO_BUILD_OPT+, to specify additional options to
+> +  pass to +make pure_all+ or +perl Build build+ in the build step.
+> +  By default, empty.
+> +
+> +* +PERL_FOO_INSTALL_TARGET_OPT+, to specify additional options to
+> +  pass to +make pure_install+ or +perl Build install+ in the install step.
+> +  By default, empty.
+> +
+> +* +HOST_PERL_FOO_INSTALL_OPT+, to specify additional options to
+> +  pass to +make pure_install+ or +perl Build install+ in the install step.
+> +  By default, empty.
+> diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
+> index cc86529..745e33a 100644
+> --- a/docs/manual/adding-packages.txt
+> +++ b/docs/manual/adding-packages.txt
+> @@ -22,6 +22,8 @@ include::adding-packages-python.txt[]
 >  
->  comment "webkit needs libgtk2 and a toolchain w/ C++, wchar, threads"
-> -	depends on (BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || BR2_mipsel || \
-> -		    BR2_powerpc || BR2_sh || BR2_sparc || BR2_x86_64)
-> +	depends on BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
->  	depends on !BR2_PACKAGE_LIBGTK2 || !BR2_INSTALL_LIBSTDCPP || \
->  		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+>  include::adding-packages-luarocks.txt[]
+>  
+> +include::adding-packages-perl.txt[]
+> +
+>  include::adding-packages-hooks.txt[]
+>  
+>  include::adding-packages-gettext.txt[]
 > 
 
 
