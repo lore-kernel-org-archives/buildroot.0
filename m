@@ -1,41 +1,56 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 20 Feb 2014 22:52:35 +0100
-Subject: [Buildroot] [PATCH] libv4l: fix build on AArch64
-In-Reply-To: <1392932560-26817-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Thu, 20 Feb 2014 22:42:40 +0100")
-References: <1392932560-26817-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87ppmhwixo.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 20 Feb 2014 22:50:42 +0100
+Subject: [Buildroot] [git commit] libsepol: really fix static library build
+Message-ID: <20140220215248.A846A9CAF6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=777f3b56be9debbf75f5f08b5e3f2a86811e5fbc
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > AArch64 does not implement the SYS_open system call, but only the
- > SYS_openat system call, as should be done for all modern architectures
- > merged into the Linux kernel. This causes problems when building
- > libv4l 0.8.9, which are fixed by integrating an upstream patch,
- > available in a more recent version of libv4l. Backporting the patch is
- > preferred over bumping libv4l, as libv4l has a fairly large number of
- > reverse dependencies, and we don't want to break anything that close
- > to the release.
+In commit 52eeb04c7608b9675bd8c2d57d3a4d1373ee72ad ('libsepol: fix
+static-only library build') I forgot to git add the changes made to
+the libsepol.mk file itself. Those changes are needed to actually pass
+STATIC=<something> when building static libraries only.
 
- > Note that this commit also renames the existing libv4l-largefile.patch
- > to libv4l-01-largefile.patch in order to comply with the Buildroot
- > patch naming scheme, and guarantee the order in which patches are
- > applied.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libsepol/libsepol.mk |   12 +++++++++---
+ 1 files changed, 9 insertions(+), 3 deletions(-)
 
- > Fixes:
-
- >   http://autobuild.buildroot.org/results/ed6/ed66792e332ee0256a17f98cbe21dfcfe6e8743b/
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed, thanks.
-
-A libv4l bump for next would be nice though ;)
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libsepol/libsepol.mk b/package/libsepol/libsepol.mk
+index c359cd7..19b193c 100644
+--- a/package/libsepol/libsepol.mk
++++ b/package/libsepol/libsepol.mk
+@@ -11,18 +11,24 @@ LIBSEPOL_LICENSE_FILES = COPYING
+ 
+ LIBSEPOL_INSTALL_STAGING = YES
+ 
++LIBSEPOL_MAKE_FLAGS = $(TARGET_CONFIGURE_OPTS)
++
++ifeq ($(BR2_PREFER_STATIC_LIB),y)
++LIBSEPOL_MAKE_FLAGS += STATIC=1
++endif
++
+ define LIBSEPOL_BUILD_CMDS
+ 	# DESTDIR is needed during the compile to compute library and
+ 	# header paths.
+-	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) DESTDIR=$(STAGING_DIR)
++	$(MAKE) -C $(@D) $(LIBSEPOL_MAKE_FLAGS) DESTDIR=$(STAGING_DIR)
+ endef
+ 
+ define LIBSEPOL_INSTALL_STAGING_CMDS
+-	$(MAKE) -C $(@D) install $(TARGET_CONFIGURE_OPTS) DESTDIR=$(STAGING_DIR)
++	$(MAKE) -C $(@D) install $(LIBSEPOL_MAKE_FLAGS) DESTDIR=$(STAGING_DIR)
+ endef
+ 
+ define LIBSEPOL_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) install $(TARGET_CONFIGURE_OPTS) DESTDIR=$(TARGET_DIR)
++	$(MAKE) -C $(@D) install $(LIBSEPOL_MAKE_FLAGS) DESTDIR=$(TARGET_DIR)
+ endef
+ 
+ define HOST_LIBSEPOL_BUILD_CMDS
