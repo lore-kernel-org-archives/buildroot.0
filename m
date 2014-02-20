@@ -1,37 +1,47 @@
-From: Frank Bergmann <frank@frajasalo.de>
-Date: Thu, 20 Feb 2014 22:59:38 +0100
-Subject: [Buildroot] [PATCH v2 2/2] e2fsprogs: disable e4defrag for nios
-In-Reply-To: <1392933578-2256-1-git-send-email-frank@frajasalo.de>
-References: <1392933578-2256-1-git-send-email-frank@frajasalo.de>
-Message-ID: <1392933578-2256-2-git-send-email-frank@frajasalo.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 20 Feb 2014 23:11:55 +0100
+Subject: [Buildroot] [PATCH] pv: fix minisetlocale related build failure
+Message-ID: <1392934315-27932-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-e4defrag has to be disabled because of the (external) toolchain declares
-the fallocate64 call in the header files but don't implement it in the
-library. e4defrag defines its own fallocate64 function that throws an
-error because of the previous declaration in the toolchain header.
+pv configure script is somewhat stupid: if it cannot find the host
+gettext tool msgfmt, it concludes that gettext is not available, and
+provides its own minimal version. Unfortunately, this minimal version
+conflicts with the available target gettext. We fix this by ensuring
+that host-gettext is built if gettext support is enabled, by adding it
+to the dependencies.
 
-Signed-off-by: Frank Bergmann <frank@frajasalo.de>
+Fixes:
+
+  http://autobuild.buildroot.org/results/d30/d30db79190f2cf8953751d55a5d34644f60daec4/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/e2fsprogs/Config.in |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/pv/pv.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/e2fsprogs/Config.in b/package/e2fsprogs/Config.in
-index 7775e94..1e87aef 100644
---- a/package/e2fsprogs/Config.in
-+++ b/package/e2fsprogs/Config.in
-@@ -49,7 +49,7 @@ config BR2_PACKAGE_E2FSPROGS_E2UNDO
+diff --git a/package/pv/pv.mk b/package/pv/pv.mk
+index ab5190a..0ba8f5f 100644
+--- a/package/pv/pv.mk
++++ b/package/pv/pv.mk
+@@ -9,7 +9,13 @@ PV_SOURCE = pv-$(PV_VERSION).tar.bz2
+ PV_SITE = http://www.ivarch.com/programs/sources
+ PV_LICENSE = Artistic-2.0
+ PV_LICENSE_FILES = doc/COPYING
+-PV_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
++
++# pv configure script is somewhat stupid: if it cannot find the host
++# gettext tool msgfmt, it concludes that gettext is not available, and
++# provides its own minimal version. Unfortunately, this minimal
++# version conflicts with the available target gettext. We fix this by
++# ensuring that host-gettext is built if gettext support is enabled;
++PV_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext host-gettext)
  
- config BR2_PACKAGE_E2FSPROGS_E4DEFRAG
- 	bool "e4defrag"
--	depends on !BR2_avr32 # fallocate not implemented
-+	depends on !BR2_avr32 && !BR2_nios2 # fallocate not implemented
- 
- config BR2_PACKAGE_E2FSPROGS_FILEFRAG
- 	bool "filefrag"
+ # While 'pv' uses autoconf, it does not use automake for its
+ # makefiles. It uses $(LD) $(LDFLAGS) to achieve partial linking, but
 -- 
-1.7.10.4
+1.8.3.2
