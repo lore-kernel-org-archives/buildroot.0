@@ -1,28 +1,28 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 20 Feb 2014 08:17:22 +0000 (UTC)
-Subject: [Buildroot] [Bug 5030] busybox built fails if we use an override
- src dir BUSYBOX_OVERRIDE_SRCDIR and that dir does not contain .config
-In-Reply-To: <bug-5030-163@https.bugs.busybox.net/>
-References: <bug-5030-163@https.bugs.busybox.net/>
-Message-ID: <20140220081722.D0BD89CA9D@busybox.osuosl.org>
+Date: Thu, 20 Feb 2014 08:19:30 +0000 (UTC)
+Subject: [Buildroot] [Bug 6542] external python modules fail to compile to
+ pyc if \\N escapes are used
+In-Reply-To: <bug-6542-163@https.bugs.busybox.net/>
+References: <bug-6542-163@https.bugs.busybox.net/>
+Message-ID: <20140220081930.C07DF9CAD4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5030
+https://bugs.busybox.net/show_bug.cgi?id=6542
 
 Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
+             Status|ASSIGNED                    |RESOLVED
          Resolution|                            |FIXED
 
---- Comment #2 from Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> 2014-02-20 08:17:22 UTC ---
-This bug has been fixed with commit 
-http://git.buildroot.org/buildroot/commit/?id=eedfc7121cf5b9a8dee8546c85b3bd36e9a743a4
+--- Comment #2 from Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> 2014-02-20 08:19:30 UTC ---
+Problem fixed with commit
+http://git.buildroot.org/buildroot/commit/?id=c3d539b53ff0533e91ae849dbdcdd589b0fec0cc
 
 Thanks for reporting!
 
