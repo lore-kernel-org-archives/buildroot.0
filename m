@@ -1,26 +1,24 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Feb 2014 23:15:05 +0100
-Subject: [Buildroot] [PATCH] libv4l: fix build on AArch64
-In-Reply-To: <87ppmhwixo.fsf@dell.be.48ers.dk>
-References: <1392932560-26817-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <87ppmhwixo.fsf@dell.be.48ers.dk>
-Message-ID: <20140220231505.2a713853@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 20 Feb 2014 23:23:10 +0100
+Subject: [Buildroot] [PATCH] gdb: cross-gdb has no support for NIOS 2
+In-Reply-To: <1392934466-28160-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Thu, 20 Feb 2014 23:14:26 +0100")
+References: <1392934466-28160-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87lhx5whip.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Thu, 20 Feb 2014 22:52:35 +0100, Peter Korsgaard wrote:
+ > Fixes:
+ >   http://autobuild.buildroot.org/results/df0/df09e1fe301480b599be777bf26874d66a152810//
 
-> A libv4l bump for next would be nice though ;)
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-In the TODO list :)
+Committed, thanks.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
