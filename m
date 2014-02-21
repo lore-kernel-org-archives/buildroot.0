@@ -1,31 +1,30 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 21 Feb 2014 12:44:39 +0100
-Subject: [Buildroot] [PATCH] gpsd: disallow NMEA2000 CAN driver on AVR32
-In-Reply-To: <1392981186-16080-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Fri, 21 Feb 2014 12:13:06 +0100")
-References: <1392981186-16080-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87sircvgew.fsf@dell.be.48ers.dk>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Fri, 21 Feb 2014 14:25:55 +0100
+Subject: [Buildroot] [PATCH] jansson: bump to 2.6
+Message-ID: <1392989155-15406-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/jansson/jansson.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > AVR32 is using uClibc 0.9.31, which lacks some CAN related definitions
- > that prevent the gpsd nmea2000 driver from building.
-
- > The rest of gpsd, with all options and drivers enabled, builds fine on
- > AVR32.
-
- > Fixes:
-
- >   http://autobuild.buildroot.org/results/ee2/ee2ec848e893f08fa80caf99a67e68b73b6400e8/
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed, thanks.
-
+diff --git a/package/jansson/jansson.mk b/package/jansson/jansson.mk
+index bb3240f..6ead0ec 100644
+--- a/package/jansson/jansson.mk
++++ b/package/jansson/jansson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-JANSSON_VERSION = 2.5
++JANSSON_VERSION = 2.6
+ JANSSON_SITE = http://www.digip.org/jansson/releases
+ JANSSON_LICENSE = MIT
+ JANSSON_LICENSE_FILES = LICENSE
 -- 
-Bye, Peter Korsgaard
+1.8.1.2
