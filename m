@@ -1,50 +1,61 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 21 Feb 2014 10:24:05 +0100
+From: Frank Bergmann <bergmann@rosho.de>
+Date: Fri, 21 Feb 2014 10:46:16 +0100
 Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <20140221100842.2d988a70@skate> (Thomas Petazzoni's message of
- "Fri, 21 Feb 2014 10:08:42 +0100")
+In-Reply-To: <20140221100842.2d988a70@skate>
 References: <20140221073009.2E62F10136B@stock.ovh.net>
  <20140221100842.2d988a70@skate>
-Message-ID: <87zjlkvmx6.fsf@dell.be.48ers.dk>
+Message-ID: <53072068.1020407@rosho.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hello,
 
-Hi,
+On 21.02.2014 10:08, Thomas Petazzoni wrote:
+> Hello all,
+>
+> On Fri, 21 Feb 2014 08:30:08 +0100 (CET), Thomas Petazzoni wrote:
+>
+>>       nios2 |               e2fsprogs-1.42.9 | NOK | http://autobuild.buildroot.net/results/480d1337de3467520d629fa8bdee57436337ce05/
+>
+> Fixed by
+> http://lists.busybox.net/pipermail/buildroot/2014-February/089981.html
+> and
+> http://lists.busybox.net/pipermail/buildroot/2014-February/089982.html,
+> but I must say I don't necessarily understand the problem.
 
- >> sh4a |               dropbear-2014.63 | NOK | http://autobuild.buildroot.net/results/294f462fd585b405fc3067967f9508202bb76230/
+A short C-program test.c:
 
- > Download problem. Peter, can you put the tarball on
- > sources.buildroot.net?
 
-I did already yesterday evening. The mirror script runs every 30
-minutes, so normally sources.buildroot.net should have the tarballs
-pretty much right away, but the script got broken by the recent
-BUILDROOT_DL_DIR -> BR2_DL_DIR change and I hadn't noticed it.
 
-Fixed now.
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE
+#endif
 
- >> avr32 | gpsd-b4c32aa40cff1b4e1041d5... | NOK | http://autobuild.buildroot.net/results/ee2ec848e893f08fa80caf99a67e68b73b6400e8/
+#include <fcntl.h>
 
- > driver_nmea2000.c: In function 'nmea2000_open':
- > driver_nmea2000.c:1607: error: 'PF_CAN' undeclared (first use in this function)
- > driver_nmea2000.c:1607: error: (Each undeclared identifier is reported only once
- > driver_nmea2000.c:1607: error: for each function it appears in.)
- > driver_nmea2000.c:1636: error: 'AF_CAN' undeclared (first use in this function)
+int main(int argc, char **argv) {
+   return fallocate(0, 0, 0, 0);
+}
 
- > Smells like a too old kernel header problem, but it uses an AVR32
- > toolchain built by Buildroot 2014.02-rc1, so I would suppose the kernel
- > headers are quite recent?
 
-PF_CAN comes from uClibc (bits/socket.h), and 0.9.31 didn't have
-PF_CAN. Either we should mark this as !avr32 or backport the uClibc
-change:
 
-http://git.buildroot.net/uClibc/commit/?id=6f810c757e5b14a97f
+That makes no sense but compiles without errors:
 
--- 
-Bye, Peter Korsgaard
+$> nios2-linux-gnu-gcc test.c
+$> ls
+a.out  test.c
+
+But when I provide _FILE_OFFSET_BITS=64 the library uses fallocate64 
+instead of fallocate:
+
+$> nios2-linux-gnu-gcc -D_FILE_OFFSET_BITS=64 test.c
+/tmp/ccQbizFP.o: In function `main':
+test.c:(.text+0x30): undefined reference to `fallocate64'
+collect2: error: ld returned 1 exit status
+
+
+Regards,
+Frank.
