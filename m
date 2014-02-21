@@ -1,32 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 21 Feb 2014 21:54:31 +0100
-Subject: [Buildroot] [git commit branch/next] jansson: bump to 2.6
-Message-ID: <20140221223049.CDB6490E0A@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 21 Feb 2014 23:31:29 +0100
+Subject: [Buildroot] [PATCH] Config: default BR2_PACKAGE_OVERRIDE_FILE
+	to $(CONFIG_DIR)/local.mk
+In-Reply-To: <20140221221128.GA16700@free.fr> (Yann E. MORIN's message of
+ "Fri, 21 Feb 2014 23:11:28 +0100")
+References: <1391032104-18150-1-git-send-email-yann.morin.1998@free.fr>
+ <20140221221128.GA16700@free.fr>
+Message-ID: <8738jcumgu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=be7e2bca8dc96e0e2da50a2237ce406c9e8d079f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/jansson/jansson.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ > All,
+ > On 2014-01-29 22:48 +0100, Yann E. MORIN spake thusly:
+ >> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ >> 
+ >> The current default for BR2_PACKAGE_OVERRIDE_FILE points to:
+ >> $(TOPDIR)/local.mk
+ >> 
+ >> This works well for in-tree builds, but is not very useful for
+ >> out-of-tree builds, when the Buildroot source tree may be shared for
+ >> different concurrent builds.
+ >> 
+ >> Also, it seems to be more sensible to have local.mk alognside
+ >> the .config file.
+ >> 
+ >> Hence, change the default for BR2_PACKAGE_OVERRIDE_FILE to point to:
+ >> $(CONFIG_DIR)/local.mk
+ >> 
+ >> Note that this does not change the current behaviour for in-tree
+ >> builds, since in that case $(CONFIG_DIR) == $(TOPDIR).
+ >> 
+ >> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ >> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 
-diff --git a/package/jansson/jansson.mk b/package/jansson/jansson.mk
-index bb3240f..6ead0ec 100644
---- a/package/jansson/jansson.mk
-+++ b/package/jansson/jansson.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--JANSSON_VERSION = 2.5
-+JANSSON_VERSION = 2.6
- JANSSON_SITE = http://www.digip.org/jansson/releases
- JANSSON_LICENSE = MIT
- JANSSON_LICENSE_FILES = LICENSE
+ > Ping? For -next?
+
+Sorry, I must have missed it.
+
+Committed to next, thanks.
+
+-- 
+Bye, Peter Korsgaard
