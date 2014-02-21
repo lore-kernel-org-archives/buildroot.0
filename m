@@ -1,27 +1,21 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 21 Feb 2014 14:34:49 +0000 (UTC)
-Subject: [Buildroot] [Bug 5774] Not able to build ALSA-Utils for static build
-In-Reply-To: <bug-5774-163@https.bugs.busybox.net/>
-References: <bug-5774-163@https.bugs.busybox.net/>
-Message-ID: <20140221143449.508C69CB09@busybox.osuosl.org>
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Fri, 21 Feb 2014 14:49:43 +0000 (UTC)
+Subject: [Buildroot] What's the buildroot attitude to u-boot building?
+References: <CAE21AQqMQmKKL0=Q55P2zQhV8+iBdpX416xK+SgZd3+ONi8Mgg@mail.gmail.com>
+Message-ID: <le7p26$n75$1@ger.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5774
+On 2014-02-21, Charles Manning <cdhmanning@gmail.com> wrote:
 
---- Comment #2 from Vicente Olivert Riera <vincent.riera@imgtec.com> 2014-02-21 14:34:49 UTC ---
-(In reply to comment #1)
-> In any case, the patch attached to this bug report is not ok: it would remove
-> -ldl unconditionally, even if shared libraries were requested.
-
-Hi Thomas,
-
-even if you remove -ldl from configure it will still failing. I have tried it.
+I messed with using buildroot for building U-Boot, and decided it was
+better to build it outside of buildroot.  I found buildroot great for
+building a root filesystem, but I didn't find it useful for other
+things (like building toolchains, bootloaders, kernels, etc.).  I
+think it makes a lot more sense to build those separately.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Grant
