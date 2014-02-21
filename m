@@ -1,43 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 21 Feb 2014 12:43:52 +0100
-Subject: [Buildroot] [git commit] gpsd: disallow NMEA2000 CAN driver on AVR32
-Message-ID: <20140221205611.470EA9CADE@busybox.osuosl.org>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Fri, 21 Feb 2014 22:00:52 +0100
+Subject: [Buildroot] [PATCH v3 1/1] ncftp: fix cross-compilation test
+Message-ID: <1393016452-10812-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f7d43f93bb7bec840506cd28faf81e619a0fe28d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The cross-compilation test is based on the ability to run
+a test program on the host, which is wrong.
 
-AVR32 is using uClibc 0.9.31, which lacks some CAN related definitions
-that prevent the gpsd nmea2000 driver from building.
+If it runs, then the configure script concludes
+that we're doing native compilation,
+if it doesn't run, we're doing cross-compilation.
 
-The rest of gpsd, with all options and drivers enabled, builds fine on
-AVR32.
+The configure script needs to be regenerated to fix the
+cross-compilation test.
 
-Fixes:
+Fixes
+http://autobuild.buildroot.net/results/969/969a49ae97a50634ea846a82b9c360e4fb020ace/build-end.log
 
-  http://autobuild.buildroot.org/results/ee2/ee2ec848e893f08fa80caf99a67e68b73b6400e8/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- package/gpsd/Config.in |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/ncftp/ncftp.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
-index 00a8a13..fbbf7a9 100644
---- a/package/gpsd/Config.in
-+++ b/package/gpsd/Config.in
-@@ -174,6 +174,9 @@ config BR2_PACKAGE_GPSD_NMEA2000
- 	bool "NMEA2000"
- 	select BR2_PACKAGE_GPSD_NAVCOM
- 	select BR2_PACKAGE_GPSD_AIVDM
-+	# uClibc 0.9.31, used on AVR32, does not have the necessary
-+	# CAN definitions.
-+	depends on !BR2_avr32
- 	help
- 	  NMEA2000/CAN support
+diff --git a/package/ncftp/ncftp.mk b/package/ncftp/ncftp.mk
+index ff6c70a..841c82b 100644
+--- a/package/ncftp/ncftp.mk
++++ b/package/ncftp/ncftp.mk
+@@ -11,6 +11,14 @@ NCFTP_TARGET_BINS = ncftp
+ NCFTP_LICENSE = Clarified Artistic License
+ NCFTP_LICENSE_FILES = doc/LICENSE.txt
  
++NCFTP_DEPENDENCIES = host-autoconf
++
++define NCFTP_RUN_AUTOCONF
++       (cd $(@D); $(HOST_DIR)/usr/bin/autoconf -I$(@D)/autoconf_local/)
++endef
++
++NCFTP_PRE_CONFIGURE_HOOKS += NCFTP_RUN_AUTOCONF
++
+ ifeq ($(BR2_PACKAGE_NCFTP_GET),y)
+ 	NCFTP_TARGET_BINS += ncftpget
+ endif
+-- 
+1.8.5.3
