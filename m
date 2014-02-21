@@ -1,42 +1,59 @@
-From: Charles Manning <cdhmanning@gmail.com>
-Date: Fri, 21 Feb 2014 14:53:06 +1300
-Subject: [Buildroot] What's the buildroot attitude to u-boot building?
-Message-ID: <CAE21AQqMQmKKL0=Q55P2zQhV8+iBdpX416xK+SgZd3+ONi8Mgg@mail.gmail.com>
+From: =?UTF-8?q?Marcelo=20Guti=C3=A9rrez?= <kuyurix@gmail.com>
+Date: Fri, 21 Feb 2014 00:27:59 +0000
+Subject: [Buildroot] [PATCH 1/1] ffmpeg: pass BR2_GCC_TARGET_CPU option on
+	ARM
+Message-ID: <1392942479-18781-1-git-send-email-kuyurix@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All
+Commit d3539dd53b ('arch: pass cpu option instead of tune option on ARM')
+changed variable from BR2_GCC_TARGET_TUNE to BR2_GCC_TARGET_CPU
 
-I am having a look at adding some stuff to generate a signed pre-loader for
-the SoCFPGA architecture.
+Therefore, doesn't pass the "--cpu=" option on ARM.
 
-There seem to be two options to doing this:
-1) Have it fall out of building u-boot (probably the best option once the
-patches I'm pushing into u-vboot have settled down)
-2) Make an independent build like xloader (probably a better interum
-solution), since for now the SocFPGA preloader building is still somewhat
-haphazard and needs a magic version of u-boot.
+Signed-off-by: Marcelo Guti?rrez <kuyurix@gmail.com>
+---
+ package/ffmpeg/ffmpeg.mk |   11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-Looking through all the u-boot config stuff makes me wonder why some of the
-stuff is even there.
-
-For instance, why are there things like  BR2_TARGET_UBOOT_ETHADDR?
-Overriding elements of the u-boot config header by patching over them from
-a complete different config system (buildroot) seems to be asking for
-trouble.
-
-Surely it would be far better for people to edit their u-boot config
-headers?
-
-Can someone explain the rationale behind doing this sort of config in
-buildroot?
-
-Thanks
-
-CHarles
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140221/61317655/attachment.html>
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index a067fe6..ca48a92 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -17,7 +17,7 @@ FFMPEG_LICENSE_FILES += COPYING.GPLv2
+ endif
+ 
+ FFMPEG_CONF_OPT = \
+-	--prefix=/usr		\
++	--prefix=/usr \
+ 	--enable-avfilter \
+ 	--disable-debug \
+ 	--disable-version3 \
+@@ -320,6 +320,14 @@ ifeq ($(BR2_PREFER_STATIC_LIB),)
+ FFMPEG_CONF_OPT += --enable-pic
+ endif
+ 
++ifeq ($(BR2_arm),y)
++FFMPEG_CONF_OPT += \
++	--cpu=$(BR2_GCC_TARGET_CPU)
++else
++FFMPEG_CONF_OPT += \
++$(if $(BR2_GCC_TARGET_TUNE),--cpu=$(BR2_GCC_TARGET_TUNE))
++endif
++
+ FFMPEG_CONF_OPT += $(call qstrip,$(BR2_PACKAGE_FFMPEG_EXTRACONF))
+ 
+ # Override FFMPEG_CONFIGURE_CMDS: FFmpeg does not support --target and others
+@@ -335,7 +343,6 @@ define FFMPEG_CONFIGURE_CMDS
+ 		--host-cc="$(HOSTCC)" \
+ 		--arch=$(BR2_ARCH) \
+ 		--target-os="linux" \
+-		$(if $(BR2_GCC_TARGET_TUNE),--cpu=$(BR2_GCC_TARGET_TUNE)) \
+ 		$(SHARED_STATIC_LIBS_OPTS) \
+ 		$(FFMPEG_CONF_OPT) \
+ 	)
+-- 
+1.7.10.4
