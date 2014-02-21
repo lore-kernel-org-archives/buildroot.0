@@ -1,33 +1,21 @@
-From: Marco Trapanese <marcotrapanese@gmail.com>
-Date: Fri, 21 Feb 2014 20:37:51 +0100
-Subject: [Buildroot] udev 182: scsi/scsi.h not found
-Message-ID: <5307AB0F.30602@gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 21 Feb 2014 21:54:35 +0100
+Subject: [Buildroot] [PATCH] jansson: bump to 2.6
+In-Reply-To: <1392989155-15406-1-git-send-email-yegorslists@googlemail.com>
+ (Yegor Yefremov's message of "Fri, 21 Feb 2014 14:25:55 +0100")
+References: <1392989155-15406-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <87k3couqyc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all!
-I'm still learning and I was able to fix several issue by myself.
-Anyway my first buildroot compilation is not completed yet!
+>>>>> "Yegor" == Yegor Yefremov <yegorslists@googlemail.com> writes:
 
-The building of udev 182 ends with the following error:
+ > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-src/ata_id/ata_id.c:32:23: fatal error: scsi/scsi.h: File o directory 
-non esistente
-  #include <scsi/scsi.h>
-                        ^
-compilation terminated.
-make[3]: *** [src/ata_id/ata_id.o] Error 1
-make[3]: *** Waiting for unfinished jobs....
-make[2]: *** [all-recursive] Error 1
-make[1]: *** [all] Error 2
+Committed to next, thanks.
 
-
-grep -rn 'scsi' package/ leads to the package libiscsi but selecting it 
-doesn't fix the problem.
-
-Thus I'm asking again an hint to put me on the right way.....
-Thanks!
-Marco
+-- 
+Bye, Peter Korsgaard
