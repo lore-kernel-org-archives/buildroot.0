@@ -1,51 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 21 Feb 2014 23:31:07 +0100
-Subject: [Buildroot] [git commit branch/next] Config: default
-	BR2_PACKAGE_OVERRIDE_FILE to $(CONFIG_DIR)/local.mk
-Message-ID: <20140221223207.3A07790E0A@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 21 Feb 2014 23:33:36 +0100
+Subject: [Buildroot] [PATCH] Fix backup and kernel download url.
+Message-ID: <1393022016-7804-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=eda3d0e1d01c3f3e32a24759ddd107574a118c8c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Remove duplicated slash from backup and kernel download url,
+e.g. http://www.kernel.org/pub//linux/kernel/v3.x/linux-3.13.3.tar.xz
 
-The current default for BR2_PACKAGE_OVERRIDE_FILE points to:
-    $(TOPDIR)/local.mk
-
-This works well for in-tree builds, but is not very useful for
-out-of-tree builds, when the Buildroot source tree may be shared for
-different concurrent builds.
-
-Also, it seems to be more sensible to have local.mk alognside
-the .config file.
-
-Hence, change the default for BR2_PACKAGE_OVERRIDE_FILE to point to:
-    $(CONFIG_DIR)/local.mk
-
-Note that this does not change the current behaviour for in-tree
-builds, since in that case $(CONFIG_DIR) == $(TOPDIR).
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/Config.in b/Config.in
-index c5c8aa8..55f5fd8 100644
+index bcfefc7..d05f4b1 100644
 --- a/Config.in
 +++ b/Config.in
-@@ -475,7 +475,7 @@ config BR2_PREFER_STATIC_LIB
+@@ -173,7 +173,7 @@ if !BR2_PRIMARY_SITE_ONLY
  
- config BR2_PACKAGE_OVERRIDE_FILE
- 	string "location of a package override file"
--	default "$(TOPDIR)/local.mk"
-+	default "$(CONFIG_DIR)/local.mk"
+ config BR2_BACKUP_SITE
+ 	string "Backup download site"
+-	default "http://sources.buildroot.net/"
++	default "http://sources.buildroot.net"
  	help
- 	  A package override file is a short makefile that contains
- 	  variable definitions of the form <pkg>_OVERRIDE_SRCDIR,
+ 	  Backup site to download from. If this option is set then buildroot
+ 	  will fall back to download package sources from here if the
+@@ -181,7 +181,7 @@ config BR2_BACKUP_SITE
+ 
+ config BR2_KERNEL_MIRROR
+ 	string "Kernel.org mirror"
+-	default "http://www.kernel.org/pub/"
++	default "http://www.kernel.org/pub"
+ 	help
+ 	  kernel.org is mirrored on a number of servers around the world.
+ 	  The following allows you to select your preferred mirror.
+-- 
+1.8.1.4
