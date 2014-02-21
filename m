@@ -1,36 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 Feb 2014 23:59:22 +0100
-Subject: [Buildroot] udev 182: scsi/scsi.h not found
-In-Reply-To: <5307C265.8020004@gmail.com>
-References: <5307AB0F.30602@gmail.com> <87fvncuqmu.fsf@dell.be.48ers.dk>
- <5307C265.8020004@gmail.com>
-Message-ID: <20140221235922.26b25b2f@skate>
+Date: Sat, 22 Feb 2014 00:04:28 +0100
+Subject: [Buildroot] What's the buildroot attitude to u-boot building?
+In-Reply-To: <le7p26$n75$1@ger.gmane.org>
+References: <CAE21AQqMQmKKL0=Q55P2zQhV8+iBdpX416xK+SgZd3+ONi8Mgg@mail.gmail.com>
+ <le7p26$n75$1@ger.gmane.org>
+Message-ID: <20140222000428.77575be9@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Marco Trapanese,
+Dear Grant Edwards,
 
-On Fri, 21 Feb 2014 22:17:25 +0100, Marco Trapanese wrote:
-> Il 21/02/2014 22:01, Peter Korsgaard ha scritto:
-> > What toolchain / .config are you using? uClibc (default for the internal
-> > toolchain) provides scsi/scsi.h
-> 
-> I'm using eglibc because I need the eglfs support. Currently I'm trying 
-> to use the internal toolchain just to see if it builds successfully. 
-> Likely the next shot will be the linaro toolchain (it's for a imx6 board).
+On Fri, 21 Feb 2014 14:49:43 +0000 (UTC), Grant Edwards wrote:
 
-When you report a build error, you should always :
+> I messed with using buildroot for building U-Boot, and decided it was
+> better to build it outside of buildroot.  I found buildroot great for
+> building a root filesystem, but I didn't find it useful for other
+> things (like building toolchains, bootloaders, kernels, etc.).  I
+> think it makes a lot more sense to build those separately.
 
- 1) Ensure that the build error can be reproduced after a "make clean;
-    make" cycle.
+Do you have more details about what you found unpractical in Buildroot
+to build U-Boot and your kernel? What issues did you had, or things you
+found not really nice?
 
- 2) Provide your Buildroot .config file as well as the exact Buildroot
-    version you're using.
-
-Thanks!
+Thanks for your feedback!
 
 Thomas
 -- 
