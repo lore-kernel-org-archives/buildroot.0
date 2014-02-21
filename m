@@ -1,47 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 22 Feb 2014 23:40:16 +0100
-Subject: [Buildroot] [git commit] rt-tests: use
-	BR2_TOOLCHAIN_HAS_THREADS_NPTL
-Message-ID: <20140228133415.DEF2A9BBF9@busybox.osuosl.org>
+Date: Fri, 21 Feb 2014 21:54:31 +0100
+Subject: [Buildroot] [git commit] jansson: bump to 2.6
+Message-ID: <20140228133415.97F919BBF9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fe061a9898369389cabca340ce00fd62b0e8481d
+commit: http://git.buildroot.net/buildroot/commit/?id=be7e2bca8dc96e0e2da50a2237ce406c9e8d079f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rt-tests/Config.in |   12 +++---------
- 1 files changed, 3 insertions(+), 9 deletions(-)
+ package/jansson/jansson.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/rt-tests/Config.in b/package/rt-tests/Config.in
-index 58a88a8..461e6de 100644
---- a/package/rt-tests/Config.in
-+++ b/package/rt-tests/Config.in
-@@ -1,10 +1,6 @@
- config BR2_PACKAGE_RT_TESTS
- 	bool "rt-tests"
--	depends on BR2_TOOLCHAIN_HAS_THREADS
--	# priority-inheritance mutex needs NPTL
--	depends on !BR2_PTHREADS && !BR2_PTHREADS_OLD
--	# no NPTL for these archs
--	depends on !BR2_avr32 && !BR2_xtensa && !BR2_arc
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	help
- 	  Set of utilities for testing the real-time behaviour of a
- 	  Linux system.
-@@ -23,7 +19,5 @@ config BR2_PACKAGE_RT_TESTS
+diff --git a/package/jansson/jansson.mk b/package/jansson/jansson.mk
+index bb3240f..6ead0ec 100644
+--- a/package/jansson/jansson.mk
++++ b/package/jansson/jansson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  http://rt.wiki.kernel.org
- 
--comment "rt-tests needs a toolchain w/ threads"
--	depends on !BR2_PTHREADS && !BR2_PTHREADS_OLD
--	depends on !BR2_avr32 && !BR2_xtensa && !BR2_arc
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+comment "rt-tests needs a toolchain w/ NPTL"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+-JANSSON_VERSION = 2.5
++JANSSON_VERSION = 2.6
+ JANSSON_SITE = http://www.digip.org/jansson/releases
+ JANSSON_LICENSE = MIT
+ JANSSON_LICENSE_FILES = LICENSE
