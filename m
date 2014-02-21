@@ -1,28 +1,40 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 21 Feb 2014 10:50:05 +0100
+From: Anton Kolesov <Anton.Kolesov@synopsys.com>
+Date: Fri, 21 Feb 2014 09:49:32 +0000
 Subject: [Buildroot] Analysis of build failures
 In-Reply-To: <20140221100842.2d988a70@skate>
 References: <20140221073009.2E62F10136B@stock.ovh.net>
  <20140221100842.2d988a70@skate>
-Message-ID: <CAAXf6LWhNMeQkHgo_-b5KtmpYkfTTh=8G1n3k_BOJaALH2pqJQ@mail.gmail.com>
+Message-ID: <39A54937CC95F24AA2F794E2D2B66B1356C6E79F@de02wembxa.internal.synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Feb 21, 2014 at 10:08 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-[..]
->
->>    powerpc |                  webkit-1.11.5 | NOK | http://autobuild.buildroot.net/results/c1ffdd6fd0a7d352faddbe58a81b66c22bbf7bbf/
->
-> Architecture support problem.
->
-> ./Source/JavaScriptCore/assembler/MacroAssembler.h:62:2: error: #error "The MacroAssembler is not supported on this platform."
->
+Hi Thomas,
+> 
+> >        arc |                ruby-1.9.3-p484 | NOK |
+> http://autobuild.buildroot.net/results/c3d235d4c42f6b256cf3bba7140dae5c7
+> bd4d2fd/
+> 
+> compiling parser.c
+> {standard input}: Assembler messages:
+> {standard input}:2581: Error: operand out of range (524 is not between -512
+> and 511)
+> {standard input}:2585: Error: operand out of range (516 is not between -512
+> and 511)
+> {standard input}:2856: Error: operand out of range (512 is not between -512
+> and 511)
+> 
+> Compiler problem on ARC. Maybe fixed by the bump of the ARC toolchain
+> in next. Anton, can you confirm?
+> 
 
-Last release cycle I looked into this, found an existing bug report,
-and added onto it, but without a lot of success:
-https://bugs.webkit.org/show_bug.cgi?id=113638
-I managed to fix one part of the problem, but bumped into another one.
+Yes, I've just run with "next" and ruby builds successfully.
+
+> 
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
