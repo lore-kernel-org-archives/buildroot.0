@@ -1,48 +1,51 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 21 Feb 2014 23:31:29 +0100
-Subject: [Buildroot] [PATCH] Config: default BR2_PACKAGE_OVERRIDE_FILE
-	to $(CONFIG_DIR)/local.mk
-In-Reply-To: <20140221221128.GA16700@free.fr> (Yann E. MORIN's message of
- "Fri, 21 Feb 2014 23:11:28 +0100")
-References: <1391032104-18150-1-git-send-email-yann.morin.1998@free.fr>
- <20140221221128.GA16700@free.fr>
-Message-ID: <8738jcumgu.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 21 Feb 2014 23:31:07 +0100
+Subject: [Buildroot] [git commit branch/next] Config: default
+	BR2_PACKAGE_OVERRIDE_FILE to $(CONFIG_DIR)/local.mk
+Message-ID: <20140221223207.3A07790E0A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=eda3d0e1d01c3f3e32a24759ddd107574a118c8c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > All,
- > On 2014-01-29 22:48 +0100, Yann E. MORIN spake thusly:
- >> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- >> 
- >> The current default for BR2_PACKAGE_OVERRIDE_FILE points to:
- >> $(TOPDIR)/local.mk
- >> 
- >> This works well for in-tree builds, but is not very useful for
- >> out-of-tree builds, when the Buildroot source tree may be shared for
- >> different concurrent builds.
- >> 
- >> Also, it seems to be more sensible to have local.mk alognside
- >> the .config file.
- >> 
- >> Hence, change the default for BR2_PACKAGE_OVERRIDE_FILE to point to:
- >> $(CONFIG_DIR)/local.mk
- >> 
- >> Note that this does not change the current behaviour for in-tree
- >> builds, since in that case $(CONFIG_DIR) == $(TOPDIR).
- >> 
- >> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- >> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+The current default for BR2_PACKAGE_OVERRIDE_FILE points to:
+    $(TOPDIR)/local.mk
 
- > Ping? For -next?
+This works well for in-tree builds, but is not very useful for
+out-of-tree builds, when the Buildroot source tree may be shared for
+different concurrent builds.
 
-Sorry, I must have missed it.
+Also, it seems to be more sensible to have local.mk alognside
+the .config file.
 
-Committed to next, thanks.
+Hence, change the default for BR2_PACKAGE_OVERRIDE_FILE to point to:
+    $(CONFIG_DIR)/local.mk
 
--- 
-Bye, Peter Korsgaard
+Note that this does not change the current behaviour for in-tree
+builds, since in that case $(CONFIG_DIR) == $(TOPDIR).
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/Config.in b/Config.in
+index c5c8aa8..55f5fd8 100644
+--- a/Config.in
++++ b/Config.in
+@@ -475,7 +475,7 @@ config BR2_PREFER_STATIC_LIB
+ 
+ config BR2_PACKAGE_OVERRIDE_FILE
+ 	string "location of a package override file"
+-	default "$(TOPDIR)/local.mk"
++	default "$(CONFIG_DIR)/local.mk"
+ 	help
+ 	  A package override file is a short makefile that contains
+ 	  variable definitions of the form <pkg>_OVERRIDE_SRCDIR,
