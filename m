@@ -1,37 +1,69 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 21 Feb 2014 22:30:24 +0100
-Subject: [Buildroot] [git commit] skeleton: /etc/fstab: make sure /tmp is
-	world writable and sticky
-Message-ID: <20140221213607.A36E9826F9@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 21 Feb 2014 23:11:28 +0100
+Subject: [Buildroot] [PATCH] Config: default BR2_PACKAGE_OVERRIDE_FILE
+ to $(CONFIG_DIR)/local.mk
+In-Reply-To: <1391032104-18150-1-git-send-email-yann.morin.1998@free.fr>
+References: <1391032104-18150-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20140221221128.GA16700@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a1451719dfca5b40619b396b01da5fbddb65ba32
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+All,
 
-ramfs (which is used instead of tmpfs if CONFIG_SHMEM isn't enabled in the
-kernel configuration), defaults to mode 0755 instead of 01777 like tmpfs
-uses.
+On 2014-01-29 22:48 +0100, Yann E. MORIN spake thusly:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> The current default for BR2_PACKAGE_OVERRIDE_FILE points to:
+>     $(TOPDIR)/local.mk
+> 
+> This works well for in-tree builds, but is not very useful for
+> out-of-tree builds, when the Buildroot source tree may be shared for
+> different concurrent builds.
+> 
+> Also, it seems to be more sensible to have local.mk alognside
+> the .config file.
+> 
+> Hence, change the default for BR2_PACKAGE_OVERRIDE_FILE to point to:
+>     $(CONFIG_DIR)/local.mk
+> 
+> Note that this does not change the current behaviour for in-tree
+> builds, since in that case $(CONFIG_DIR) == $(TOPDIR).
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 
-/tmp should be world writable and sticky, so explictly enforce the mode so
-ramfs users gets it correct instead of relying on the defaults.
+Ping? For -next?
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- system/skeleton/etc/fstab |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Note that it was acked by Arnout.
 
-diff --git a/system/skeleton/etc/fstab b/system/skeleton/etc/fstab
-index a2f56ff..e000aad 100644
---- a/system/skeleton/etc/fstab
-+++ b/system/skeleton/etc/fstab
-@@ -5,5 +5,5 @@
- proc		/proc	       proc     defaults	  0	 0
- devpts		/dev/pts       devpts   defaults,gid=5,mode=620	  0	 0
- tmpfs           /dev/shm       tmpfs    mode=0777         0      0
--tmpfs           /tmp           tmpfs    defaults          0      0
-+tmpfs           /tmp           tmpfs    mode=1777         0      0
- sysfs		/sys	       sysfs    defaults	  0	 0
+> ---
+>  Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Config.in b/Config.in
+> index 7ec7c2a..f8d6e23 100644
+> --- a/Config.in
+> +++ b/Config.in
+> @@ -488,7 +488,7 @@ config BR2_HAVE_DOCUMENTATION
+>  
+>  config BR2_PACKAGE_OVERRIDE_FILE
+>  	string "location of a package override file"
+> -	default "$(TOPDIR)/local.mk"
+> +	default "$(CONFIG_DIR)/local.mk"
+>  	help
+>  	  A package override file is a short makefile that contains
+>  	  variable definitions of the form <pkg>_OVERRIDE_SRCDIR,
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
