@@ -1,64 +1,52 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 21 Feb 2014 23:11:28 +0100
-Subject: [Buildroot] [PATCH] Config: default BR2_PACKAGE_OVERRIDE_FILE
- to $(CONFIG_DIR)/local.mk
-In-Reply-To: <1391032104-18150-1-git-send-email-yann.morin.1998@free.fr>
-References: <1391032104-18150-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20140221221128.GA16700@free.fr>
+Date: Fri, 21 Feb 2014 23:17:50 +0100
+Subject: [Buildroot] [PATCH 0/3 v3] BR2_EXTERNAL, O: misc fixes and docs
+Message-ID: <cover.1393020340.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-On 2014-01-29 22:48 +0100, Yann E. MORIN spake thusly:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> The current default for BR2_PACKAGE_OVERRIDE_FILE points to:
->     $(TOPDIR)/local.mk
-> 
-> This works well for in-tree builds, but is not very useful for
-> out-of-tree builds, when the Buildroot source tree may be shared for
-> different concurrent builds.
-> 
-> Also, it seems to be more sensible to have local.mk alognside
-> the .config file.
-> 
-> Hence, change the default for BR2_PACKAGE_OVERRIDE_FILE to point to:
->     $(CONFIG_DIR)/local.mk
-> 
-> Note that this does not change the current behaviour for in-tree
-> builds, since in that case $(CONFIG_DIR) == $(TOPDIR).
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Hello All!
 
-Ping? For -next?
+Here is a small series that fixes use of relative paths in BR2_EXTERNAL
+and documents the limitations in the manual for BR2_EXTERNAL and O.
 
-Note that it was acked by Arnout.
+The first patch is an actual fix for this case:
+    make O=.. BR2_EXTERNAL=.. foo_defconfig
 
-> ---
->  Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Config.in b/Config.in
-> index 7ec7c2a..f8d6e23 100644
-> --- a/Config.in
-> +++ b/Config.in
-> @@ -488,7 +488,7 @@ config BR2_HAVE_DOCUMENTATION
->  
->  config BR2_PACKAGE_OVERRIDE_FILE
->  	string "location of a package override file"
-> -	default "$(TOPDIR)/local.mk"
-> +	default "$(CONFIG_DIR)/local.mk"
->  	help
->  	  A package override file is a short makefile that contains
->  	  variable definitions of the form <pkg>_OVERRIDE_SRCDIR,
+The rest are enhancements/clarifications to the manual. 
+
+As such, I propose them as candidates for 2014.02.
+
+
+Changes v2 -> v3:
+  - refreshed on-top current master, should apply to -next as well.
+
+Changes v1 -> v2:
+  - don't discourage relative paths, just properly document them  (Thomas,
+    Arnout)
+  - fix overriding BR2_EXTERNAL  (J?r?my)
+  - simplify error message when BR2_EXTERNAL is not found  (Arnout)
+  - document that $(O) is created
 
 Regards,
 Yann E. MORIN.
+
+
+----------------------------------------------------------------
+Yann E. MORIN (3):
+      Makefile: internally use absolute paths to BR2_EXTERNAL
+      manual: switch BR2_EXTERNAL examples to use absolute paths
+      manual: add explanations on limitations about using O=...
+
+ Makefile                             |  5 +++++
+ docs/manual/common-usage.txt         | 12 +++++++++---
+ docs/manual/customize-outside-br.txt | 10 +++++-----
+ 3 files changed, 19 insertions(+), 8 deletions(-)
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
