@@ -1,21 +1,49 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Fri, 21 Feb 2014 14:49:43 +0000 (UTC)
-Subject: [Buildroot] What's the buildroot attitude to u-boot building?
-References: <CAE21AQqMQmKKL0=Q55P2zQhV8+iBdpX416xK+SgZd3+ONi8Mgg@mail.gmail.com>
-Message-ID: <le7p26$n75$1@ger.gmane.org>
+From: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
+Date: Fri, 21 Feb 2014 10:54:18 -0500
+Subject: [Buildroot] SoCkit support question?
+In-Reply-To: <20140221123040.4920ad0a@skate>
+References: <940580837.479152.1392839319094.JavaMail.root@mail>	<CAGduivymyJe+NLi=tsk1uCxit3ZOy=U8WxLjh=myR9MZGbL+ZQ@mail.gmail.com>	<530673E3.9030506@savoirfairelinux.com>	<201402211124.03017.manningc2@actrix.gen.nz>
+ <20140221123040.4920ad0a@skate>
+Message-ID: <530776AA.7000903@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2014-02-21, Charles Manning <cdhmanning@gmail.com> wrote:
+Hi Thomas,
 
-I messed with using buildroot for building U-Boot, and decided it was
-better to build it outside of buildroot.  I found buildroot great for
-building a root filesystem, but I didn't find it useful for other
-things (like building toolchains, bootloaders, kernels, etc.).  I
-think it makes a lot more sense to build those separately.
+On 02/21/2014 06:30 AM, Thomas Petazzoni wrote:
+> Dear Charles Manning,
+>
+> On Fri, 21 Feb 2014 11:24:02 +1300, Charles Manning wrote:
+>
+>> I have just sent my second patch for this to the u-boot list. They didn't like 
+>> my last one because it was standalone and not integrated into mkimage. They 
+>> might come back with some formatting stuff, but I think it will be mainlined 
+>> in a day or two.
+>>
+>> Once that is in place, it can be patched into the u-boot-socfpga tree and the 
+>> preloader is built and signed as part of a regular u-boot build. It just 
+>> needs a build-root copy step to copy it into output/images. I will be doing 
+>> that today.
+> In the mean time (until your patch gets accepted, and a new U-Boot
+> release is made with it), it is still possible to support the SoCkit by
+> having U-Boot build an unsigned image, and let the user manually use
+> the Altera provided mkpimage tool to sign it. It just needs to be
+> documented in board/arrow/sockit/readme.txt, with all the other details
+> on how to actually set up the board to use the bootloader and kernel
+> images produced by Buildroot.
+>
+> Don't wait for perfection. Do something simple that works now, and
+> improve on top of it progressively :)
+>
+> Best regards,
+>
+> Thomas
 
--- 
-Grant
+I will send you patches for the unsigned version with documentation today.
+
+Best regards,
+
+Sebastien.
