@@ -1,31 +1,88 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 21 Feb 2014 08:54:04 +0100
-Subject: [Buildroot] [PATCH] coreutils: add gnulib patch to fix
-	librt/libthread link in static case
-In-Reply-To: <1392937490-19214-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Fri, 21 Feb 2014 00:04:50 +0100")
-References: <1392937490-19214-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87d2igx5nn.fsf@dell.be.48ers.dk>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 21 Feb 2014 08:57:06 +0100
+Subject: [Buildroot] Open bug analysis (Feb 20)
+Message-ID: <CAAXf6LWMuQACfLPO3DzZYSriOFndL+r7FhCPRHiidG-w2PsOVg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+All,
 
- > coreutils was no building in the static link case with uClibc, due to
+We have been able to close many bugs already, 21 bugs remaining, of which:
+- 7 new package requests (patches often available)
+- 2 indicators of disabled builds on some arch (dmraid, gpsd)
 
-s/no/not/
+*Bugs for which an action is already proposed*.
+Feedback on this is requested: do you agree or not with the proposed action?
 
- > binaries being linked with librt (for timer functions), but not with
- > libpthread. However, librt uses functions from libpthread, so both
- > must be specified. This lack of linking against libpthread was caused
- > to a defiency in one of the gnulib m4 macro, for which we add a patch.
+Dbus and /var/run management
+https://bugs.busybox.net/show_bug.cgi?id=5420
+Here I don't see what the problem is. It is about the creation of
+/var/run/dbus while /var/run is a symlink to /tmp. Looking at the
+code, I don't see how it can be a problem (which I responded in the
+bug report). Unless someone can explain what is going wrong exactly, I
+would propose to close this (Resolved/Worksforme for example).
+Do you agree?
 
-/to a defiency/by a deficiency/
+Support for kernel signed modules
+https://bugs.busybox.net/show_bug.cgi?id=6764
+Arnout suggested to close this bug explaining the submitter that this
+is a kernel problem, not something we can solve in buildroot. This is
+fine by me.
+Do others agree?
 
-Committed, thanks.
+Busybox compiled from buildroot hangs on pass from intiramfs to init
+https://bugs.busybox.net/show_bug.cgi?id=6794
+The submitter claims that stripping the busybox binary causes
+incorrect runtime behavior. I asked for more info, but no response. I
+would propose to close this as Worksforme.
 
--- 
-Bye, Peter Korsgaard
+
+*Bugs that have patches attached that should be sent to the list (not
+package patches)*: (adopters welcome)
+
+procps Unknown HZ value! (XX) Assume 100.
+https://bugs.busybox.net/show_bug.cgi?id=6626
+ThomasP proposed to replace procps with procps-ng, the submitter
+provided a patch, but did not send it to the list.
+
+
+*Bugs needing investigation*
+
+Checking external toolchain for eabihf
+https://bugs.busybox.net/show_bug.cgi?id=6842
+
+Running udhcpc on a system with NFS root kills NFS
+https://bugs.busybox.net/show_bug.cgi?id=4790
+
+Boot hangs when starting samba if BR2_ENABLE_LOCALE is enabled
+https://bugs.busybox.net/show_bug.cgi?id=5396
+
+config flags to the Xenomai build system
+https://bugs.busybox.net/show_bug.cgi?id=5900
+
+Cannot compile gcc without threads (uClibc-based)
+https://bugs.busybox.net/show_bug.cgi?id=6230
+
+
+*Bugs under investigation by someone already*:
+
+Doing a Buildroot build from /usr doesn't work
+https://bugs.busybox.net/show_bug.cgi?id=5750
+This bug is under investigation by myself, it won't be done before
+2014.02 though.
+
+Not able to build ALSA-Lib for static build
+https://bugs.busybox.net/show_bug.cgi?id=5768
+and
+Not able to build ALSA-Utils for static build
+https://bugs.busybox.net/show_bug.cgi?id=5774
+I have sent patches that fix these problems and received some
+feedback, that I will address. However, it will not be for 2014.02
+anymore.
+
+
+Thanks all for your feedback,
+Thomas
