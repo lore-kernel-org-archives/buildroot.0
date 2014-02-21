@@ -1,36 +1,33 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 21 Feb 2014 22:01:29 +0100
-Subject: [Buildroot] udev 182: scsi/scsi.h not found
-In-Reply-To: <5307AB0F.30602@gmail.com> (Marco Trapanese's message of "Fri, 21
- Feb 2014 20:37:51 +0100")
-References: <5307AB0F.30602@gmail.com>
-Message-ID: <87fvncuqmu.fsf@dell.be.48ers.dk>
+Date: Fri, 21 Feb 2014 22:07:55 +0100
+Subject: [Buildroot] [PATCH 1/2] tvheadend: fix error compiling with
+	ccache
+In-Reply-To: <1392989961-18289-1-git-send-email-martin@barkynet.com> (Martin
+ Bark's message of "Fri, 21 Feb 2014 13:39:20 +0000")
+References: <1392989961-18289-1-git-send-email-martin@barkynet.com>
+Message-ID: <87bny0uqc4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Marco" == Marco Trapanese <marcotrapanese@gmail.com> writes:
+>>>>> "Martin" == Martin Bark <martin@barkynet.com> writes:
 
- > Hi all!
- > I'm still learning and I was able to fix several issue by myself.
- > Anyway my first buildroot compilation is not completed yet!
+ > The tvheadend configure script fails to correctly handle spaces in any of
+ > the options passed to it.  If ccache is used the configure script fails to
+ > handle the space in the --cc option and errors.  Also the --cflags option
+ > fails to handle multiple entries and only uses the first one.  This patch
+ > simple removes setting the --cc and --cflags options as the configure
+ > script will correctly use the CC and CFLAGS variables already passed in
+ > TARGET_CONFIGURE_OPTS.
 
- > The building of udev 182 ends with the following error:
+ > Signed-off-by: Martin Bark <martin@barkynet.com>
+ > Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 
- > src/ata_id/ata_id.c:32:23: fatal error: scsi/scsi.h: File o directory
- > non esistente
- >  #include <scsi/scsi.h>
- >                        ^
- > compilation terminated.
- > make[3]: *** [src/ata_id/ata_id.o] Error 1
- > make[3]: *** Waiting for unfinished jobs....
- > make[2]: *** [all-recursive] Error 1
- > make[1]: *** [all] Error 2
+Committed, thanks.
 
-What toolchain / .config are you using? uClibc (default for the internal
-toolchain) provides scsi/scsi.h
+Is there supposed to be a patch 2/2 somewhere?
 
 -- 
 Bye, Peter Korsgaard
