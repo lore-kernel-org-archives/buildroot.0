@@ -1,49 +1,36 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Fri, 21 Feb 2014 22:00:52 +0100
-Subject: [Buildroot] [PATCH v3 1/1] ncftp: fix cross-compilation test
-Message-ID: <1393016452-10812-1-git-send-email-romain.naour@openwide.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 21 Feb 2014 22:01:29 +0100
+Subject: [Buildroot] udev 182: scsi/scsi.h not found
+In-Reply-To: <5307AB0F.30602@gmail.com> (Marco Trapanese's message of "Fri, 21
+ Feb 2014 20:37:51 +0100")
+References: <5307AB0F.30602@gmail.com>
+Message-ID: <87fvncuqmu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The cross-compilation test is based on the ability to run
-a test program on the host, which is wrong.
+>>>>> "Marco" == Marco Trapanese <marcotrapanese@gmail.com> writes:
 
-If it runs, then the configure script concludes
-that we're doing native compilation,
-if it doesn't run, we're doing cross-compilation.
+ > Hi all!
+ > I'm still learning and I was able to fix several issue by myself.
+ > Anyway my first buildroot compilation is not completed yet!
 
-The configure script needs to be regenerated to fix the
-cross-compilation test.
+ > The building of udev 182 ends with the following error:
 
-Fixes
-http://autobuild.buildroot.net/results/969/969a49ae97a50634ea846a82b9c360e4fb020ace/build-end.log
+ > src/ata_id/ata_id.c:32:23: fatal error: scsi/scsi.h: File o directory
+ > non esistente
+ >  #include <scsi/scsi.h>
+ >                        ^
+ > compilation terminated.
+ > make[3]: *** [src/ata_id/ata_id.o] Error 1
+ > make[3]: *** Waiting for unfinished jobs....
+ > make[2]: *** [all-recursive] Error 1
+ > make[1]: *** [all] Error 2
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
- package/ncftp/ncftp.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+What toolchain / .config are you using? uClibc (default for the internal
+toolchain) provides scsi/scsi.h
 
-diff --git a/package/ncftp/ncftp.mk b/package/ncftp/ncftp.mk
-index ff6c70a..841c82b 100644
---- a/package/ncftp/ncftp.mk
-+++ b/package/ncftp/ncftp.mk
-@@ -11,6 +11,14 @@ NCFTP_TARGET_BINS = ncftp
- NCFTP_LICENSE = Clarified Artistic License
- NCFTP_LICENSE_FILES = doc/LICENSE.txt
- 
-+NCFTP_DEPENDENCIES = host-autoconf
-+
-+define NCFTP_RUN_AUTOCONF
-+       (cd $(@D); $(HOST_DIR)/usr/bin/autoconf -I$(@D)/autoconf_local/)
-+endef
-+
-+NCFTP_PRE_CONFIGURE_HOOKS += NCFTP_RUN_AUTOCONF
-+
- ifeq ($(BR2_PACKAGE_NCFTP_GET),y)
- 	NCFTP_TARGET_BINS += ncftpget
- endif
 -- 
-1.8.5.3
+Bye, Peter Korsgaard
