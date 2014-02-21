@@ -1,88 +1,72 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 21 Feb 2014 08:57:06 +0100
-Subject: [Buildroot] Open bug analysis (Feb 20)
-Message-ID: <CAAXf6LWMuQACfLPO3DzZYSriOFndL+r7FhCPRHiidG-w2PsOVg@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 21 Feb 2014 08:52:31 +0100
+Subject: [Buildroot] [git commit] coreutils: add gnulib patch to fix
+	librt/libthread link in static case
+Message-ID: <20140221075948.778599CAC5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+commit: http://git.buildroot.net/buildroot/commit/?id=0cb2b158d4650ab0f0648056c212686d026997ae
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We have been able to close many bugs already, 21 bugs remaining, of which:
-- 7 new package requests (patches often available)
-- 2 indicators of disabled builds on some arch (dmraid, gpsd)
+coreutils was not building in the static link case with uClibc, due to
+binaries being linked with librt (for timer functions), but not with
+libpthread. However, librt uses functions from libpthread, so both
+must be specified. This lack of linking against libpthread was caused
+by a deficiency in one of the gnulib m4 macro, for which we add a patch.
 
-*Bugs for which an action is already proposed*.
-Feedback on this is requested: do you agree or not with the proposed action?
+Fixes:
 
-Dbus and /var/run management
-https://bugs.busybox.net/show_bug.cgi?id=5420
-Here I don't see what the problem is. It is about the creation of
-/var/run/dbus while /var/run is a symlink to /tmp. Looking at the
-code, I don't see how it can be a problem (which I responded in the
-bug report). Unless someone can explain what is going wrong exactly, I
-would propose to close this (Resolved/Worksforme for example).
-Do you agree?
+  http://autobuild.buildroot.org/results/bd4/bd4cc779b46e3837e3d6c43c97eaf42fdfc3a288/
 
-Support for kernel signed modules
-https://bugs.busybox.net/show_bug.cgi?id=6764
-Arnout suggested to close this bug explaining the submitter that this
-is a kernel problem, not something we can solve in buildroot. This is
-fine by me.
-Do others agree?
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../coreutils/coreutils-02-fix-timer-time-m4.patch |   36 ++++++++++++++++++++
+ 1 files changed, 36 insertions(+), 0 deletions(-)
 
-Busybox compiled from buildroot hangs on pass from intiramfs to init
-https://bugs.busybox.net/show_bug.cgi?id=6794
-The submitter claims that stripping the busybox binary causes
-incorrect runtime behavior. I asked for more info, but no response. I
-would propose to close this as Worksforme.
-
-
-*Bugs that have patches attached that should be sent to the list (not
-package patches)*: (adopters welcome)
-
-procps Unknown HZ value! (XX) Assume 100.
-https://bugs.busybox.net/show_bug.cgi?id=6626
-ThomasP proposed to replace procps with procps-ng, the submitter
-provided a patch, but did not send it to the list.
-
-
-*Bugs needing investigation*
-
-Checking external toolchain for eabihf
-https://bugs.busybox.net/show_bug.cgi?id=6842
-
-Running udhcpc on a system with NFS root kills NFS
-https://bugs.busybox.net/show_bug.cgi?id=4790
-
-Boot hangs when starting samba if BR2_ENABLE_LOCALE is enabled
-https://bugs.busybox.net/show_bug.cgi?id=5396
-
-config flags to the Xenomai build system
-https://bugs.busybox.net/show_bug.cgi?id=5900
-
-Cannot compile gcc without threads (uClibc-based)
-https://bugs.busybox.net/show_bug.cgi?id=6230
-
-
-*Bugs under investigation by someone already*:
-
-Doing a Buildroot build from /usr doesn't work
-https://bugs.busybox.net/show_bug.cgi?id=5750
-This bug is under investigation by myself, it won't be done before
-2014.02 though.
-
-Not able to build ALSA-Lib for static build
-https://bugs.busybox.net/show_bug.cgi?id=5768
-and
-Not able to build ALSA-Utils for static build
-https://bugs.busybox.net/show_bug.cgi?id=5774
-I have sent patches that fix these problems and received some
-feedback, that I will address. However, it will not be for 2014.02
-anymore.
-
-
-Thanks all for your feedback,
-Thomas
+diff --git a/package/coreutils/coreutils-02-fix-timer-time-m4.patch b/package/coreutils/coreutils-02-fix-timer-time-m4.patch
+new file mode 100644
+index 0000000..3b4d81b
+--- /dev/null
++++ b/package/coreutils/coreutils-02-fix-timer-time-m4.patch
+@@ -0,0 +1,36 @@
++Fix thread detection with uClibc in timer_time.m4
++
++The timer_time.m4 gl_TIMER_TIME function determines which libraries
++need to be linked to get access to the timer function, generally -lrt
++for Linux systems. On platforms where threads are used, librt
++typically uses thread functions from libpthread.
++
++However, the test to determine whether the platform has thread or not
++is incorrect: it assumes that if the C library is uClibc, then threads
++are not available. This is actually not true: uClibc has configurable
++thread support, and when thread support is available, librt calls
++libpthread functions.
++
++This is important when static linking is used, because otherwise only
++-lrt is used at link time, which fails because librt calls undefined
++thread functions. Both -lrt and -lpthread must be passed.
++
++This problem is fixed by making the uClibc thread detection a bit
++smarter, thanks to the usage of the __HAS_NO_THREADS__ macro defined
++in <bits/uClibc_config.h>, which itself is included by <features.h>.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/m4/timer_time.m4
++===================================================================
++--- a/m4/timer_time.m4
+++++ b/m4/timer_time.m4
++@@ -28,7 +28,7 @@
++ #include <features.h>
++ #ifdef __GNU_LIBRARY__
++  #if ((__GLIBC__ == 2 && __GLIBC_MINOR__ >= 2) || (__GLIBC__ > 2)) \
++-     && !defined __UCLIBC__
+++     && !(__UCLIBC__ && __HAS_NO_THREADS__)
++   Thread emulation available
++  #endif
++ #endif
