@@ -1,39 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 22 Feb 2014 23:40:08 +0100
-Subject: [Buildroot] [git commit branch/next] docs/manual: indicate how to
-	handle BR2_TOOLCHAIN_HAS_THREADS_NPTL
-Message-ID: <20140222224511.7357F826F9@busybox.osuosl.org>
+Date: Sat, 22 Feb 2014 23:40:16 +0100
+Subject: [Buildroot] [git commit branch/next] rt-tests: use
+	BR2_TOOLCHAIN_HAS_THREADS_NPTL
+Message-ID: <20140222224511.89216826F9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7586be4aae3ab93badcfad2ccbd434f2e7885f11
+commit: http://git.buildroot.net/buildroot/commit/?id=fe061a9898369389cabca340ce00fd62b0e8481d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Samuel Martin <s.martin49@gmail.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/adding-packages-directory.txt |    7 ++++++-
- 1 files changed, 6 insertions(+), 1 deletions(-)
+ package/rt-tests/Config.in |   12 +++---------
+ 1 files changed, 3 insertions(+), 9 deletions(-)
 
-diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-index 40af809..3dc5395 100644
---- a/docs/manual/adding-packages-directory.txt
-+++ b/docs/manual/adding-packages-directory.txt
-@@ -235,7 +235,12 @@ use in the comment.
+diff --git a/package/rt-tests/Config.in b/package/rt-tests/Config.in
+index 58a88a8..461e6de 100644
+--- a/package/rt-tests/Config.in
++++ b/package/rt-tests/Config.in
+@@ -1,10 +1,6 @@
+ config BR2_PACKAGE_RT_TESTS
+ 	bool "rt-tests"
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	# priority-inheritance mutex needs NPTL
+-	depends on !BR2_PTHREADS && !BR2_PTHREADS_OLD
+-	# no NPTL for these archs
+-	depends on !BR2_avr32 && !BR2_xtensa && !BR2_arc
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	help
+ 	  Set of utilities for testing the real-time behaviour of a
+ 	  Linux system.
+@@ -23,7 +19,5 @@ config BR2_PACKAGE_RT_TESTS
  
- * thread support
- ** Dependency symbol: +BR2_TOOLCHAIN_HAS_THREADS+
--** Comment string: +threads+
-+** Comment string: +threads+ (unless +BR2_TOOLCHAIN_HAS_THREADS_NPTL+
-+   is also needed, in which case, specifying only +NPTL+ is sufficient)
-+
-+* NPTL thread support
-+** Dependency symbol: +BR2_TOOLCHAIN_HAS_THREADS_NPTL+
-+** Comment string: +NPTL+
+ 	  http://rt.wiki.kernel.org
  
- * RPC support
- ** Dependency symbol: +BR2_TOOLCHAIN_HAS_NATIVE_RPC+
+-comment "rt-tests needs a toolchain w/ threads"
+-	depends on !BR2_PTHREADS && !BR2_PTHREADS_OLD
+-	depends on !BR2_avr32 && !BR2_xtensa && !BR2_arc
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++comment "rt-tests needs a toolchain w/ NPTL"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
