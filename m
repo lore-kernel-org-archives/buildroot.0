@@ -1,50 +1,56 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 22 Feb 2014 10:58:10 +0100
-Subject: [Buildroot] [PATCH 1/1] sdl: run autogen.sh as PRE_CONFIGURE step
-Message-ID: <1393063090-831-1-git-send-email-romain.naour@openwide.fr>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sat, 22 Feb 2014 13:06:48 +0100
+Subject: [Buildroot] [PATCH 1/3] Makefile: internally use absolute paths
+	to	BR2_EXTERNAL
+In-Reply-To: <fe4af64de250841875483a827e6f4684fad64f71.1393020340.git.yann.morin.1998@free.fr>
+References: <cover.1393020340.git.yann.morin.1998@free.fr>
+ <fe4af64de250841875483a827e6f4684fad64f71.1393020340.git.yann.morin.1998@free.fr>
+Message-ID: <95fe8a6d-a049-4ff1-a33e-e5d282c07770@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For the same reason as for the gpm package:
+"Yann E. MORIN" <yann.morin.1998@free.fr> schreef:
+>From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>
+>Using a relative path for BR2_EXTERNAL, and using an external defconfig,
+>such as in (from a Buildroot top-dir):
+>    make O=.. BR2_EXTERNAL=.. foo_defconfig
+>
+>is broken. It is unclear why the %_defconfig rule recurses in that case.
+>
+>This patch internaly makes BR2_EXTERNAL canonical (ie. makes it an absolute
+>path), and checks the directory exists.
+>
+>Reported-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
+>Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>Cc: Peter Korsgaard <jacmet@uclibc.org>
+>Cc: Romain Naour <romain.naour@openwide.fr>
+>Cc: Arnout Vandecappelle <arnout@mind.be>
+>
+>---
+>Changes v1->v2:
+>  - fix override BR2_EXTERNAL  (J?r?my)
+>  - only one error message  (Arnout)
+>---
+> Makefile | 5 +++++
+> 1 file changed, 5 insertions(+)
+>
+>diff --git a/Makefile b/Makefile
+>index 98d32c0..4766160 100644
+>--- a/Makefile
+>+++ b/Makefile
+>@@ -119,6 +119,11 @@ ifeq ($(BR2_EXTERNAL),)
+>   override BR2_EXTERNAL = support/dummy-external
+>   $(shell rm -f $(BR2_EXTERNAL_FILE))
+> else
+>+  _BR2_EXTERNAL = $(shell cd $(BR2_EXTERNAL) >/dev/null 2>&1 && pwd)
+>+  ifeq ($(_BR2_EXTERNAL),)
+>+    $(error BR2_EXTERNAL='$(BR2_EXTERNAL)' does not exist, relatively to $(TOPDIR))
 
-"Move the GPM_RUN_AUTOGEN to be a PRE_CONFIGURE step because this step
-depends on the dependancies being built. If it is a POST_PATCH step
-the dependencies won't be built and the GPM_RUN_AUTOGEN step will fail
-(if the host doesn't have autotools)"
--- Ryan Barnett
+I think this should be 'relative to'.
 
-Fixes:
-http://autobuild.buildroot.net/results/543/543b4135c7996133f32e82d72d6f2969622f8617/build-end.log
-
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
- package/sdl/sdl.mk | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
-index ba5fbca..ad3e19d 100644
---- a/package/sdl/sdl.mk
-+++ b/package/sdl/sdl.mk
-@@ -12,15 +12,14 @@ SDL_LICENSE_FILES = COPYING
- SDL_INSTALL_STAGING = YES
- 
- # we're patching configure.in, but package cannot autoreconf with our version of
--# autotools, so we have to do it manually instead of setting SD_AUTORECONF = YES
-+# autotools, so we have to do it manually instead of setting SDL_AUTORECONF = YES
- define SDL_RUN_AUTOGEN
- 	cd $(@D) && PATH=$(HOST_PATH) ./autogen.sh
- endef
- 
--SDL_POST_PATCH_HOOKS += SDL_RUN_AUTOGEN
-+SDL_PRE_CONFIGURE_HOOKS += SDL_RUN_AUTOGEN
- SDL_DEPENDENCIES += host-automake host-autoconf host-libtool
- 
--
- ifeq ($(BR2_PACKAGE_SDL_FBCON),y)
- SDL_CONF_OPT += --enable-video-fbcon=yes
- else
--- 
-1.8.5.3
+Best regards,
+Thomas
