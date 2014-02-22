@@ -1,40 +1,51 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 22 Feb 2014 23:33:30 +0100
-Subject: [Buildroot] [PATCH] binutils: install libiberty
-Message-ID: <1393108410-9568-1-git-send-email-arnout@mind.be>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 22 Feb 2014 23:42:46 +0100
+Subject: [Buildroot] [PATCH v2 0/6] Add toolchain knob for NPTL
+In-Reply-To: <1392757744-29984-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 18 Feb 2014 22:08:58 +0100")
+References: <1392757744-29984-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87ob1yrcpl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some packages (actually, just oprofile) need to link against libiberty.
-This option just installs libiberty.a so it has no effect on the target,
-therefore it's not needed to add a config option for it.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Before binutils-2.24, there was a bug in libiberty/Makefile.in that
-caused libiberty to be installed regardless of the
---enable-install-libiberty option. This problem wasn't noticed before
-because binutils-2.24 is not selected on any of the autobuilders: the
-version can only be selected if an internal toolchain is used, and it
-defaults to 2.21.
+ > Hello,
+ > This is v2 of the NPTL patch series. Changes since v1:
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/binutils/binutils.mk | 1 +
- 1 file changed, 1 insertion(+)
+ >  * Made the comment string "NPTL" instead of "NPTL threads", as
+ >    suggested by Thomas De Schampheleire.
 
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index d6828f5..b5a2dc7 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -51,6 +51,7 @@ endif
- BINUTILS_CONF_OPT = --disable-multilib --disable-werror \
- 		--host=$(GNU_TARGET_NAME) \
- 		--target=$(GNU_TARGET_NAME) \
-+		--enable-install-libiberty \
- 		$(BINUTILS_EXTRA_CONFIG_OPTIONS)
- 
- # Install binutils after busybox to prefer full-blown utilities
+ >  * Rebased on top of the next branch.
+
+ > Original cover letter:
+
+ > We have a growing number of packages that need pthread functions only
+ > available when the NPTL implementation is used. But at the same time,
+ > we have several architectures (AVR32, ARC, Blackfin and Xtensa) that
+ > don't support NPTL.
+
+ > This set of commits adds a new hidden toolchain config knob named
+ > BR2_TOOLCHAIN_HAS_THREADS_NPTL, and uses it in four packages: three
+ > were already having special conditions to more-or-less detect the
+ > availability of NPTL, and one package (qt5) which fixes an autobuilder
+ > failure.
+
+ > Thomas
+
+ > Thomas Petazzoni (6):
+ >   toolchain: introduce a toolchain knob for NPTL
+ >   docs/manual: indicate how to handle BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ >   rt-tests: use BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ >   sconeserver: use BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ >   tvheadend: use BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ >   qt5: needs NPTL threads
+
+Committed series to next with the minor tweak Arnout suggested for patch
+1, thanks.
+
 -- 
-1.9.0
+Bye, Peter Korsgaard
