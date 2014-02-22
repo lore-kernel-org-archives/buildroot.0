@@ -1,40 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Feb 2014 19:29:57 +0100
-Subject: [Buildroot] [PATCH] distcc: deprecate package,
-	only useful for development
-Message-ID: <1393093797-12770-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sat, 22 Feb 2014 19:32:09 +0100
+Subject: [Buildroot] [PATCH 1/1] sdl: run autogen.sh as PRE_CONFIGURE
+ step
+In-Reply-To: <20140222181220.134dc547@skate>
+References: <1393063090-831-1-git-send-email-romain.naour@openwide.fr>
+ <20140222181220.134dc547@skate>
+Message-ID: <5308ED29.8050201@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since quite a while, we have deprecated, and then removed the support
-to build a compiler on the target. Therefore, having a distcc package
-for the package is quite useless, and this patch consequently marks it
-as deprecated so it can be removed in a future version of Buildroot.
+Hi Thomas,
+Le 22/02/2014 18:12, Thomas Petazzoni a ?crit :
+> Dear Romain Naour,
+>
+> On Sat, 22 Feb 2014 10:58:10 +0100, Romain Naour wrote:
+>> For the same reason as for the gpm package:
+>>
+>> "Move the GPM_RUN_AUTOGEN to be a PRE_CONFIGURE step because this step
+>> depends on the dependancies being built. If it is a POST_PATCH step
+>> the dependencies won't be built and the GPM_RUN_AUTOGEN step will fail
+>> (if the host doesn't have autotools)"
+>> -- Ryan Barnett
+>>
+>> Fixes:
+>> http://autobuild.buildroot.net/results/543/543b4135c7996133f32e82d72d6f2969622f8617/build-end.log
+>>
+>> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+>> ---
+>>   package/sdl/sdl.mk | 5 ++---
+>>   1 file changed, 2 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
+>> index ba5fbca..ad3e19d 100644
+>> --- a/package/sdl/sdl.mk
+>> +++ b/package/sdl/sdl.mk
+>> @@ -12,15 +12,14 @@ SDL_LICENSE_FILES = COPYING
+>>   SDL_INSTALL_STAGING = YES
+>>   
+>>   # we're patching configure.in, but package cannot autoreconf with our version of
+>> -# autotools, so we have to do it manually instead of setting SD_AUTORECONF = YES
+>> +# autotools, so we have to do it manually instead of setting SDL_AUTORECONF = YES
+>>   define SDL_RUN_AUTOGEN
+>>   	cd $(@D) && PATH=$(HOST_PATH) ./autogen.sh
+>>   endef
+>>   
+>> -SDL_POST_PATCH_HOOKS += SDL_RUN_AUTOGEN
+>> +SDL_PRE_CONFIGURE_HOOKS += SDL_RUN_AUTOGEN
+>>   SDL_DEPENDENCIES += host-automake host-autoconf host-libtool
+> A similar change was made (but for a different reason) in the next
+> branch, in commit
+> http://git.buildroot.net/buildroot/commit/package/sdl?h=next&id=f75b5de9f6f473a257c607e97419a2338d57333c.
+>
+> Peter, we should backport this patch into the master branch, I believe.
+>
+> Thomas
+Ha ok, I didn't see it.
+Indeed, we need it in master branch.
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/16b/16be2138c8e5ba785fa2ad55b478dcd1b6fb5123/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/distcc/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/package/distcc/Config.in b/package/distcc/Config.in
-index 2c30a21..0bf36b1 100644
---- a/package/distcc/Config.in
-+++ b/package/distcc/Config.in
-@@ -2,6 +2,8 @@ config BR2_PACKAGE_DISTCC
- 	bool "distcc"
- 	# needs fork()
- 	depends on BR2_USE_MMU
-+	# development tool on target, deprecated
-+	depends on BR2_DEPRECATED
- 	help
- 	  Distributed compiler client and server.  Allows you to
- 	  distribute compilation of C code across several machines
--- 
-1.8.3.2
+Thanks,
+Romain
