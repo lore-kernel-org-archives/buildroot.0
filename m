@@ -1,20 +1,44 @@
-From: Alexander Varnin <fenixk19@mail.ru>
-Date: Sun, 23 Feb 2014 02:02:46 +0400
-Subject: [Buildroot] [PATCH 1/1] mono: new package
-In-Reply-To: <1393105881-20127-1-git-send-email-fenixk19@mail.ru>
-References: <1393105881-20127-1-git-send-email-fenixk19@mail.ru>
-Message-ID: <53091E86.6040202@mail.ru>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 22 Feb 2014 23:10:56 +0100
+Subject: [Buildroot] [PATCH] libcec: not available on pure static builds
+Message-ID: <1393107056-29830-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I wish to add a comment, that mono still requires runtime (so called
-assemblies), that is not getting build in cross-compile mode (cause it
-requires host c# compiler to be built). So to make use of mono, you have
-to compile the same version on host, extract runtime libraries, and
-install it together with cross-compiled mono. This package does not
-build host side mono, it is only doing cross-compile. Host runtime
-building can be automated with buildroot, however, this is easily can be
-done manually, so personally I don't need it.
+libcec needs libdl, so it cannot work on pure static builds.
+
+Fixes:
+
+  http://autobuild.buildroot.org/results/670/670ce46627daaa4ae9ecdb8ffb6f97d0574354d4/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libcec/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/libcec/Config.in b/package/libcec/Config.in
+index 4cfe1ce..8097472 100644
+--- a/package/libcec/Config.in
++++ b/package/libcec/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_LIBCEC
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_WCHAR
++	depends on !BR2_PREFER_STATIC_LIB
+ 	help
+ 	  libcec allows you in combination with the right hardware to
+ 	  control your home theater devices with your TV remote
+@@ -10,6 +11,6 @@ config BR2_PACKAGE_LIBCEC
+ 
+ 	  http://libcec.pulse-eight.com
+ 
+-comment "libcec needs a toolchain w/ C++, wchar, threads"
++comment "libcec needs a toolchain w/ C++, wchar, threads, dynamic library"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_USE_WCHAR
++		!BR2_USE_WCHAR || BR2_PREFER_STATIC_LIB
+-- 
+1.8.3.2
