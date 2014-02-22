@@ -1,72 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Feb 2014 08:30:09 +0100 (CET)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-02-21
-Message-ID: <20140222073009.F3DE0100FC3@stock.ovh.net>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sat, 22 Feb 2014 10:58:10 +0100
+Subject: [Buildroot] [PATCH 1/1] sdl: run autogen.sh as PRE_CONFIGURE step
+Message-ID: <1393063090-831-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2014-02-21
-===============================
+For the same reason as for the gpm package:
 
-        success : 91 
-       failures : 21 
-       timeouts : 1  
-          TOTAL : 113
+"Move the GPM_RUN_AUTOGEN to be a PRE_CONFIGURE step because this step
+depends on the dependancies being built. If it is a POST_PATCH step
+the dependencies won't be built and the GPM_RUN_AUTOGEN step will fail
+(if the host doesn't have autotools)"
+-- Ryan Barnett
 
-Classification of failures by reason
-====================================
+Fixes:
+http://autobuild.buildroot.net/results/543/543b4135c7996133f32e82d72d6f2969622f8617/build-end.log
 
-                 libevas-1.7.7 | 2 
-                 cairo-1.12.10 | 1 
-                      qt-4.8.5 | 1 
-               w_scan-20130331 | 1 
-        ltp-testsuite-20130904 | 1 
-                     php-5.5.8 | 1 
-              wireshark-1.10.5 | 1 
-               qt5script-5.2.0 | 1 
-                 distcc-2.18.3 | 1 
-                    libcgi-1.0 | 1 
-            gst-ffmpeg-0.10.13 | 1 
-                aiccu-20070115 | 1 
-                     lua-5.1.5 | 1 
-                 webkit-1.11.5 | 1 
-        gst1-plugins-bad-1.2.2 | 1 
-           host-libxslt-1.1.28 | 1 
-                 mplayer-1.1.1 | 1 
-/home/test/test/2/output/ho... | 1 
-                 mpg123-1.18.0 | 1 
-                 pixman-0.30.0 | 1 
-                  fbdump-0.4.2 | 1 
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+ package/sdl/sdl.mk | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-Detail of failures
-===================
-
-    x86_64 | /home/test/test/2/output/ho... | TIM | http://autobuild.buildroot.net/results/af6131c61d4d11060389337deb3e76370e4e2ea8/
-     avr32 |                 aiccu-20070115 | NOK | http://autobuild.buildroot.net/results/a2490d434152625d9208615d83f4c5d6daea79d0/
-       arm |                  cairo-1.12.10 | NOK | http://autobuild.buildroot.net/results/878e5332e3768217f72a34978c8e1d31ef095b47/
-      i686 |                  distcc-2.18.3 | NOK | http://autobuild.buildroot.net/results/16be2138c8e5ba785fa2ad55b478dcd1b6fb5123/
-   powerpc |                   fbdump-0.4.2 | NOK | http://autobuild.buildroot.net/results/1fb298374de905117b3c65c736e9d75900e8010a/
-    x86_64 |             gst-ffmpeg-0.10.13 | NOK | http://autobuild.buildroot.net/results/1e608a4800361be26a674798418a6a246f026cfb/
-  mips64el |         gst1-plugins-bad-1.2.2 | NOK | http://autobuild.buildroot.net/results/f5b248eb7be38d6eb3655cdc1ab6ee5e716b9b29/
-      i686 |            host-libxslt-1.1.28 | NOK | http://autobuild.buildroot.net/results/57a91500c75bdbbf85a1c10626a22bc7387295b1/
-      bfin |                     libcgi-1.0 | NOK | http://autobuild.buildroot.net/results/625105bcaf26345f422b225787fc19611b65cd57/
-       arm |                  libevas-1.7.7 | NOK | http://autobuild.buildroot.net/results/693df99db4ab357b48d427be3a72f6d64dd53065/
-       arm |                  libevas-1.7.7 | NOK | http://autobuild.buildroot.net/results/6de90018a9eeb9c495d15046a8b3270eb95a5550/
-       arm |         ltp-testsuite-20130904 | NOK | http://autobuild.buildroot.net/results/b522e91c45c133526ef276d426acea790fb48f26/
-      bfin |                      lua-5.1.5 | NOK | http://autobuild.buildroot.net/results/e765f992ad721a094579140c153ff71f20753265/
-      bfin |                  mpg123-1.18.0 | NOK | http://autobuild.buildroot.net/results/5b053af566dd122ae7e58893e77d5d5f3070fb9e/
-       arm |                  mplayer-1.1.1 | NOK | http://autobuild.buildroot.net/results/e662033e2a29bf9a7012cdd8a4c5ff0c0643de2f/
-       arm |                      php-5.5.8 | NOK | http://autobuild.buildroot.net/results/f4b21520be0aee63a6a0fad6455b14ea210e712d/
-microblaze |                  pixman-0.30.0 | NOK | http://autobuild.buildroot.net/results/972947db1b068160117694412b2d6b3b5630b3d8/
-      bfin |                       qt-4.8.5 | NOK | http://autobuild.buildroot.net/results/4f744595efceba2d5a54151bf5f1802eb1268fac/
-       arm |                qt5script-5.2.0 | NOK | http://autobuild.buildroot.net/results/613e34e1090a55452abc3859e2e45ef2e38d9ac3/
-   powerpc |                  webkit-1.11.5 | NOK | http://autobuild.buildroot.net/results/0da4638face01bd68a9ef42ba73d82f3e805ff0e/
-    xtensa |               wireshark-1.10.5 | NOK | http://autobuild.buildroot.net/results/53312916610369c19e28f8809120a5005c3b47d3/
-   powerpc |                w_scan-20130331 | NOK | http://autobuild.buildroot.net/results/889cfe95f65c5d513250aa683dee45e410c7d9dc/
-
-
+diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
+index ba5fbca..ad3e19d 100644
+--- a/package/sdl/sdl.mk
++++ b/package/sdl/sdl.mk
+@@ -12,15 +12,14 @@ SDL_LICENSE_FILES = COPYING
+ SDL_INSTALL_STAGING = YES
+ 
+ # we're patching configure.in, but package cannot autoreconf with our version of
+-# autotools, so we have to do it manually instead of setting SD_AUTORECONF = YES
++# autotools, so we have to do it manually instead of setting SDL_AUTORECONF = YES
+ define SDL_RUN_AUTOGEN
+ 	cd $(@D) && PATH=$(HOST_PATH) ./autogen.sh
+ endef
+ 
+-SDL_POST_PATCH_HOOKS += SDL_RUN_AUTOGEN
++SDL_PRE_CONFIGURE_HOOKS += SDL_RUN_AUTOGEN
+ SDL_DEPENDENCIES += host-automake host-autoconf host-libtool
+ 
+-
+ ifeq ($(BR2_PACKAGE_SDL_FBCON),y)
+ SDL_CONF_OPT += --enable-video-fbcon=yes
+ else
 -- 
-http://autobuild.buildroot.net
+1.8.5.3
