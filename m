@@ -1,11 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 22 Feb 2014 21:25:38 +0100
-Subject: [Buildroot] [PATCH] distcc: deprecate package,
-	only useful for development
-In-Reply-To: <1393093797-12770-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sat, 22 Feb 2014 19:29:57 +0100")
-References: <1393093797-12770-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <877g8muc71.fsf@dell.be.48ers.dk>
+Date: Sat, 22 Feb 2014 21:26:23 +0100
+Subject: [Buildroot] [PATCH] aiccu: disable on AVR32
+In-Reply-To: <1393094615-13012-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sat, 22 Feb 2014 19:43:35 +0100")
+References: <1393094615-13012-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <8738jauc5s.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,16 +13,21 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > Since quite a while, we have deprecated, and then removed the support
- > to build a compiler on the target. Therefore, having a distcc package
- > for the package is quite useless, and this patch consequently marks it
- > as deprecated so it can be removed in a future version of Buildroot.
+ > In commit 87492d244a1dbf6114bb464e8d8dbedcf08fb399 ("aiccu: disable
+ > for uClibc 0.9.31/0.9.32"), we made sure it was not possible to select
+ > aiccu with uClibc 0.9.31 and 0.9.32, because they lack dn_skipname().
+
+ > However, we still have the problem that external AVR32 toolchains can
+ > select aiccu, which causes build failures. Therefore, we also disallow
+ > aiccu on AVR32 altogether. We keep the 0.9.31/0.9.32 exclusions,
+ > because if they are used on other architectures, it would also fail
+ > due to the lack of dn_skipname().
 
  > Fixes:
 
- >   http://autobuild.buildroot.net/results/16b/16be2138c8e5ba785fa2ad55b478dcd1b6fb5123/
+ >   http://autobuild.buildroot.org/results/a24/a2490d434152625d9208615d83f4c5d6daea79d0/
 
-It doesn't really fix the error, but ok.
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Committed, thanks.
 
