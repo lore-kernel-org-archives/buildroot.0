@@ -1,58 +1,40 @@
-From: Ryan Barnett <ryanbarnett3@gmail.com>
-Date: Sat, 22 Feb 2014 23:32:49 +0100
-Subject: [Buildroot] [PATCH 1/1] rt-tests: disable on unsupported
-	architectures
-Message-ID: <1393108369-11880-1-git-send-email-rjbarnet@rockwellcollins.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat, 22 Feb 2014 23:33:30 +0100
+Subject: [Buildroot] [PATCH] binutils: install libiberty
+Message-ID: <1393108410-9568-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-rt-tests is not supported by a uclibc toolchain that does not implement
-_pid in struct sigevent. Currently this is all MIPS architectures
-in uclibc.
+Some packages (actually, just oprofile) need to link against libiberty.
+This option just installs libiberty.a so it has no effect on the target,
+therefore it's not needed to add a config option for it.
 
-Fixes:
-  http://autobuild.buildroot.net/results/074/074265602bec4aba6c82d1aee389045e8ad33d4b
+Before binutils-2.24, there was a bug in libiberty/Makefile.in that
+caused libiberty to be installed regardless of the
+--enable-install-libiberty option. This problem wasn't noticed before
+because binutils-2.24 is not selected on any of the autobuilders: the
+version can only be selected if an internal toolchain is used, and it
+defaults to 2.21.
 
-Also rt-tests depends on NPTL which is not available on the bfin
-architecture.
-
-Fixes:
-  http://autobuild.buildroot.net/results/ac9/ac95f73b2351d46d9a8c48caae7f6c3ea124e8bc
-
-Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/rt-tests/Config.in | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ package/binutils/binutils.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/rt-tests/Config.in b/package/rt-tests/Config.in
-index 58a88a8..e40ce46 100644
---- a/package/rt-tests/Config.in
-+++ b/package/rt-tests/Config.in
-@@ -4,7 +4,10 @@ config BR2_PACKAGE_RT_TESTS
- 	# priority-inheritance mutex needs NPTL
- 	depends on !BR2_PTHREADS && !BR2_PTHREADS_OLD
- 	# no NPTL for these archs
--	depends on !BR2_avr32 && !BR2_xtensa && !BR2_arc
-+	depends on !BR2_avr32 && !BR2_xtensa && !BR2_arc && !BR2_bfin
-+	# no _tid field in 'struct sigevent'
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC && \
-+		!(BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el)
- 	help
- 	  Set of utilities for testing the real-time behaviour of a
- 	  Linux system.
-@@ -25,5 +28,9 @@ config BR2_PACKAGE_RT_TESTS
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index d6828f5..b5a2dc7 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -51,6 +51,7 @@ endif
+ BINUTILS_CONF_OPT = --disable-multilib --disable-werror \
+ 		--host=$(GNU_TARGET_NAME) \
+ 		--target=$(GNU_TARGET_NAME) \
++		--enable-install-libiberty \
+ 		$(BINUTILS_EXTRA_CONFIG_OPTIONS)
  
- comment "rt-tests needs a toolchain w/ threads"
- 	depends on !BR2_PTHREADS && !BR2_PTHREADS_OLD
--	depends on !BR2_avr32 && !BR2_xtensa && !BR2_arc
-+	depends on !BR2_avr32 && !BR2_xtensa && !BR2_arc && !BR2_bfin
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
-+comment "rt-tests needs an (e)glibc toolchain"
-+	depends on BR2_TOOLCHAIN_USES_UCLIBC && \
-+		(BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el)
+ # Install binutils after busybox to prefer full-blown utilities
 -- 
-1.8.3.2
+1.9.0
