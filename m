@@ -1,40 +1,41 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 22 Feb 2014 21:45:43 +0100
-Subject: [Buildroot] [PATCH 2/3] manual: switch BR2_EXTERNAL examples to
-	use	absolute paths
-In-Reply-To: <48973489-6ffd-4d9d-b8ad-0d9392ebe929@email.android.com> (Thomas
- De Schampheleire's message of "Sat, 22 Feb 2014 13:09:39 +0100")
+Date: Sat, 22 Feb 2014 21:46:07 +0100
+Subject: [Buildroot] [PATCH 3/3] manual: add explanations on limitations
+	about using O=...
+In-Reply-To: <9eb719929c8f1740b880ad177c7dec7aaa29ede4.1393020340.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Fri, 21 Feb 2014 23:17:54 +0100")
 References: <cover.1393020340.git.yann.morin.1998@free.fr>
- <c885b064a16923e79d388249bd4ea7161a4bac22.1393020340.git.yann.morin.1998@free.fr>
- <48973489-6ffd-4d9d-b8ad-0d9392ebe929@email.android.com>
-Message-ID: <87ppmeswp4.fsf@dell.be.48ers.dk>
+ <9eb719929c8f1740b880ad177c7dec7aaa29ede4.1393020340.git.yann.morin.1998@free.fr>
+Message-ID: <87lhx2swog.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > "Yann E. MORIN" <yann.morin.1998@free.fr> schreef:
- >> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- >> 
- >> Although it is possible to use relative paths, there are a few pitfalls
- >> whith doing so.
+ > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Using a relative path for O=... has limitations, since it is interpreted
+ > relative to the Buildroot tree, and thus may lead to unexpected results.
 
- > With, but actually I think when would be better.
+ > For example, running this:
+ >     make -C buildroot O=my-O
 
-..
- 
- >> -The +BR2_EXTERNAL+ path can be either an absolute or a relative path,
- >> +*Note:* the +BR2_EXTERNAL+ path can be either an absolute or a relative path,
- >> but if it's passed as a relative path, it is important to note that it
- >> -is interpreted relatively to the main Buildroot source directory, not
- >> +is interpreted relatively to the main Buildroot source directory, *not*
+ > will not create my-O in the current working directory, but as a
+ > sub-directory of the Buildroot tree, here in buildroot/my-O
 
- > I may be wrong, but I also think it should be 'relative' here...
+ > Explain this in the manual (as is similarly done for BR2_EXTERNAL).
+ > Also add a note that $(O) will be created if missing.
 
-I think so too. Committed with that fixed, thanks both.
+ > Also change O=.. and -C .. to O=<...> and -C <...> to make it explicit
+ > this is an ellipse, not a relative path.
+
+ > Reported-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Samuel Martin <s.martin49@gmail.com>
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
