@@ -1,57 +1,31 @@
-From: Ryan Barnett <ryanbarnett3@gmail.com>
-Date: Sat, 22 Feb 2014 21:24:44 +0100
-Subject: [Buildroot] [PATCH v2 1/1] mpg123: needs MMU
-Message-ID: <1393100684-5488-1-git-send-email-rjbarnet@rockwellcollins.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 22 Feb 2014 21:25:38 +0100
+Subject: [Buildroot] [PATCH] distcc: deprecate package,
+	only useful for development
+In-Reply-To: <1393093797-12770-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sat, 22 Feb 2014 19:29:57 +0100")
+References: <1393093797-12770-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <877g8muc71.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-mpg123 needs MMU because the application that is built with this
-package uses fork. Currently it is difficult to only build the
-libraries for mpg123 so disabling the package all together when there
-is no MMU support.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Note: mpg123 is an optional dependency of mpd but mpd already requires
-BR2_USE_MMU so there is no need to add this as a dependency.
+ > Since quite a while, we have deprecated, and then removed the support
+ > to build a compiler on the target. Therefore, having a distcc package
+ > for the package is quite useless, and this patch consequently marks it
+ > as deprecated so it can be removed in a future version of Buildroot.
 
-Fixes:
-  http://autobuild.buildroot.net/results/5b0/5b053af566dd122ae7e58893e77d5d5f3070fb9e
+ > Fixes:
 
-Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
----
-v1 -> v2
-  - Added autobuild failure link
+ >   http://autobuild.buildroot.net/results/16b/16be2138c8e5ba785fa2ad55b478dcd1b6fb5123/
 
-Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
----
- package/gstreamer1/gst1-plugins-bad/Config.in | 1 +
- package/mpg123/Config.in                      | 1 +
- 2 files changed, 2 insertions(+)
+It doesn't really fix the error, but ok.
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index 407bf31..3647e53 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -400,6 +400,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MPEG2ENC
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MPG123
- 	bool "mpg123"
- 	select BR2_PACKAGE_MPG123
-+	depends on BR2_USE_MMU # mpg123
- 	help
- 	  mp3 decoding based on the mpg123 library
+Committed, thanks.
 
-diff --git a/package/mpg123/Config.in b/package/mpg123/Config.in
-index 18ac41c..a7ac035 100644
---- a/package/mpg123/Config.in
-+++ b/package/mpg123/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_MPG123
- 	bool "mpg123"
-+	depends on BR2_USE_MMU # fork - in the application
- 	help
- 	  Fast, free and portable MPEG audio player for Unix.  It supports
- 	  MPEG 1.0/2.0 layers 1, 2 and 3.
---
-1.8.3.2
+-- 
+Bye, Peter Korsgaard
