@@ -1,42 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 22 Feb 2014 23:56:39 +0100
-Subject: [Buildroot] [git commit] binutils: install libiberty
-Message-ID: <20140222230556.8248B8270D@busybox.osuosl.org>
+From: Ryan Barnett <ryanbarnett3@gmail.com>
+Date: Sun, 23 Feb 2014 00:07:28 +0100
+Subject: [Buildroot] [PATCH v2 1/2] rt-tests: disable for uclibc mips
+Message-ID: <1393110449-12710-1-git-send-email-rjbarnet@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=70ee9fcdfcf6fc7cb214e454afe55cbffec84621
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+rt-tests is not supported by a uclibc toolchain that does not implement
+_pid in struct sigevent. Currently this is all MIPS architectures
+in uclibc.
 
-Some packages (actually, just oprofile) need to link against libiberty.
-This option just installs libiberty.a so it has no effect on the target,
-therefore it's not needed to add a config option for it.
+Fixes:
+  http://autobuild.buildroot.net/results/074/074265602bec4aba6c82d1aee389045e8ad33d4b
 
-Before binutils-2.24, there was a bug in libiberty/Makefile.in that
-caused libiberty to be installed regardless of the
---enable-install-libiberty option. This problem wasn't noticed before
-because binutils-2.24 is not selected on any of the autobuilders: the
-version can only be selected if an internal toolchain is used, and it
-defaults to 2.21.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
 ---
- package/binutils/binutils.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/rt-tests/Config.in | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index d6828f5..b5a2dc7 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -51,6 +51,7 @@ endif
- BINUTILS_CONF_OPT = --disable-multilib --disable-werror \
- 		--host=$(GNU_TARGET_NAME) \
- 		--target=$(GNU_TARGET_NAME) \
-+		--enable-install-libiberty \
- 		$(BINUTILS_EXTRA_CONFIG_OPTIONS)
- 
- # Install binutils after busybox to prefer full-blown utilities
+diff --git a/package/rt-tests/Config.in b/package/rt-tests/Config.in
+index 58a88a8..a8cede0 100644
+--- a/package/rt-tests/Config.in
++++ b/package/rt-tests/Config.in
+@@ -5,6 +5,9 @@ config BR2_PACKAGE_RT_TESTS
+ 	depends on !BR2_PTHREADS && !BR2_PTHREADS_OLD
+ 	# no NPTL for these archs
+ 	depends on !BR2_avr32 && !BR2_xtensa && !BR2_arc
++	# no _tid field in 'struct sigevent'
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC if (BR2_mips || BR2_mipsel || \
++		BR2_mips64 || BR2_mips64el)
+ 	help
+ 	  Set of utilities for testing the real-time behaviour of a
+ 	  Linux system.
+@@ -27,3 +30,7 @@ comment "rt-tests needs a toolchain w/ threads"
+ 	depends on !BR2_PTHREADS && !BR2_PTHREADS_OLD
+ 	depends on !BR2_avr32 && !BR2_xtensa && !BR2_arc
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
++
++comment "rt-tests needs an (e)glibc toolchain"
++	depends on BR2_TOOLCHAIN_USES_UCLIBC if (BR2_mips || BR2_mipsel || \
++		BR2_mips64 || BR2_mips64el)
+-- 
+1.8.3.2
