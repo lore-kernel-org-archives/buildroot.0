@@ -1,64 +1,46 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 22 Feb 2014 19:32:09 +0100
-Subject: [Buildroot] [PATCH 1/1] sdl: run autogen.sh as PRE_CONFIGURE
- step
-In-Reply-To: <20140222181220.134dc547@skate>
-References: <1393063090-831-1-git-send-email-romain.naour@openwide.fr>
- <20140222181220.134dc547@skate>
-Message-ID: <5308ED29.8050201@openwide.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 22 Feb 2014 19:43:35 +0100
+Subject: [Buildroot] [PATCH] aiccu: disable on AVR32
+Message-ID: <1393094615-13012-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-Le 22/02/2014 18:12, Thomas Petazzoni a ?crit :
-> Dear Romain Naour,
->
-> On Sat, 22 Feb 2014 10:58:10 +0100, Romain Naour wrote:
->> For the same reason as for the gpm package:
->>
->> "Move the GPM_RUN_AUTOGEN to be a PRE_CONFIGURE step because this step
->> depends on the dependancies being built. If it is a POST_PATCH step
->> the dependencies won't be built and the GPM_RUN_AUTOGEN step will fail
->> (if the host doesn't have autotools)"
->> -- Ryan Barnett
->>
->> Fixes:
->> http://autobuild.buildroot.net/results/543/543b4135c7996133f32e82d72d6f2969622f8617/build-end.log
->>
->> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
->> ---
->>   package/sdl/sdl.mk | 5 ++---
->>   1 file changed, 2 insertions(+), 3 deletions(-)
->>
->> diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
->> index ba5fbca..ad3e19d 100644
->> --- a/package/sdl/sdl.mk
->> +++ b/package/sdl/sdl.mk
->> @@ -12,15 +12,14 @@ SDL_LICENSE_FILES = COPYING
->>   SDL_INSTALL_STAGING = YES
->>   
->>   # we're patching configure.in, but package cannot autoreconf with our version of
->> -# autotools, so we have to do it manually instead of setting SD_AUTORECONF = YES
->> +# autotools, so we have to do it manually instead of setting SDL_AUTORECONF = YES
->>   define SDL_RUN_AUTOGEN
->>   	cd $(@D) && PATH=$(HOST_PATH) ./autogen.sh
->>   endef
->>   
->> -SDL_POST_PATCH_HOOKS += SDL_RUN_AUTOGEN
->> +SDL_PRE_CONFIGURE_HOOKS += SDL_RUN_AUTOGEN
->>   SDL_DEPENDENCIES += host-automake host-autoconf host-libtool
-> A similar change was made (but for a different reason) in the next
-> branch, in commit
-> http://git.buildroot.net/buildroot/commit/package/sdl?h=next&id=f75b5de9f6f473a257c607e97419a2338d57333c.
->
-> Peter, we should backport this patch into the master branch, I believe.
->
-> Thomas
-Ha ok, I didn't see it.
-Indeed, we need it in master branch.
+In commit 87492d244a1dbf6114bb464e8d8dbedcf08fb399 ("aiccu: disable
+for uClibc 0.9.31/0.9.32"), we made sure it was not possible to select
+aiccu with uClibc 0.9.31 and 0.9.32, because they lack dn_skipname().
 
-Thanks,
-Romain
+However, we still have the problem that external AVR32 toolchains can
+select aiccu, which causes build failures. Therefore, we also disallow
+aiccu on AVR32 altogether. We keep the 0.9.31/0.9.32 exclusions,
+because if they are used on other architectures, it would also fail
+due to the lack of dn_skipname().
+
+Fixes:
+
+  http://autobuild.buildroot.org/results/a24/a2490d434152625d9208615d83f4c5d6daea79d0/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/aiccu/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/aiccu/Config.in b/package/aiccu/Config.in
+index 17e6449..9865b5c 100644
+--- a/package/aiccu/Config.in
++++ b/package/aiccu/Config.in
+@@ -7,6 +7,10 @@ config BR2_PACKAGE_AICCU
+ 	# Uses dn_skipname(), only available since 0.9.33
+ 	depends on !BR2_UCLIBC_VERSION_0_9_31 && \
+ 		!BR2_UCLIBC_VERSION_0_9_32
++	# AVR32 only has uClibc 0.9.31, so there's no way it can build
++	# due to the lack of dn_skipname(), even with external
++	# toolchains.
++	depends on !BR2_avr32
+ 	select BR2_PACKAGE_GNUTLS
+ 	help
+ 	  SixXS Automatic IPv6 Connectivity Client Utility
+-- 
+1.8.3.2
