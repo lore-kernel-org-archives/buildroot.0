@@ -1,36 +1,44 @@
-From: Ryan Barnett <ryanbarnett3@gmail.com>
-Date: Sat, 22 Feb 2014 22:29:40 +0100
-Subject: [Buildroot] [PATCH 1/1] sawman: add autoreconf step
-Message-ID: <1393104580-10965-1-git-send-email-rjbarnet@rockwellcollins.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 22 Feb 2014 22:40:22 +0100
+Subject: [Buildroot] [PATCH] libcgi: fix build failure on pure static
+	library builds
+In-Reply-To: <1393103520-9012-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sat, 22 Feb 2014 22:12:00 +0100")
+References: <1393103520-9012-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <871tyusu61.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-sawman needs the autoreconf step added in order for Vicente Olivert
-Riera's patch - "sawman: Link using gcc instead of ld"
-(8fc5ea004386431eaecfea51376fcc11c23c77c1) - to take effect.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Fixes:
-  http://autobuild.buildroot.net/results/19b/19bfe0d39e457fd260b73928331721f57555fc84
+ > libcgi always builds both the shared and static library, which doesn't
+ > work on architecture that don't support shared library at all, such as
+ > Blackfin with the FLAT format. libcgi uses autoconf, but not automake,
+ > and the Makefile is not of the highest possible quality, so this
+ > commit fixes the problem by introducing a "STATIC" variable that can
+ > be set from the environment. When set to a non-empty value, the
+ > Makefile assumes it should only build the static version of the
+ > library.
 
-Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
----
- package/sawman/sawman.mk | 1 +
- 1 file changed, 1 insertion(+)
+ > Note that this package is in desperate need of some care: there is one
+ > single patch that mixes several changes together, it doesn't have a
+ > description or a Signed-off-by line, and there is now a github project
+ > for libcgi at https://github.com/rafaelsteil/libcgi/ that has the same
+ > fixes.
 
-diff --git a/package/sawman/sawman.mk b/package/sawman/sawman.mk
-index d807bb4..00516ca 100644
---- a/package/sawman/sawman.mk
-+++ b/package/sawman/sawman.mk
-@@ -8,6 +8,7 @@ SAWMAN_VERSION = 1.6.3
- SAWMAN_SOURCE = SaWMan-$(SAWMAN_VERSION).tar.gz
- SAWMAN_SITE = http://www.directfb.org/downloads/Extras
- SAWMAN_INSTALL_STAGING = YES
-+SAWMAN_AUTORECONF = YES
- SAWMAN_DEPENDENCIES = directfb
- 
- $(eval $(autotools-package))
+ > However, for the purpose of the master branch, we're doing the most
+ > minimal fix possible, by just adding this STATIC variable.
+
+ > Fixes:
+
+ >   http://autobuild.buildroot.net/results/625/625105bcaf26345f422b225787fc19611b65cd57/
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Committed, thanks.
+
 -- 
-1.8.3.2
+Bye, Peter Korsgaard
