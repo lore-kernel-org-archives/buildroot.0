@@ -1,32 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Feb 2014 19:23:34 +0100
-Subject: [Buildroot] [PATCH 0 of 4] alsa-lib/alsa-utils autobuild fixes
-In-Reply-To: <patchbomb.1392224140@argentina>
-References: <patchbomb.1392224140@argentina>
-Message-ID: <20140222192334.2d6bddd0@skate>
+Date: Sat, 22 Feb 2014 19:29:57 +0100
+Subject: [Buildroot] [PATCH] distcc: deprecate package,
+	only useful for development
+Message-ID: <1393093797-12770-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Since quite a while, we have deprecated, and then removed the support
+to build a compiler on the target. Therefore, having a distcc package
+for the package is quite useless, and this patch consequently marks it
+as deprecated so it can be removed in a future version of Buildroot.
 
-On Wed, 12 Feb 2014 17:55:40 +0100, Thomas De Schampheleire wrote:
+Fixes:
 
-> This series fixes the alsa-lib / alsa-utils autobuild failures, most notably
-> seen on Blackfin FLAT, but the alsa-utils problem was also seen on ARM.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+  http://autobuild.buildroot.net/results/16b/16be2138c8e5ba785fa2ad55b478dcd1b6fb5123/
 
-Would you mind resending your series by taking into account Peter's
-comment for PATCH 2, and then replace your PATCH 4 by a patch that
-simply disallow alsa-utils on !MMU systems?
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/distcc/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Thanks!
-
-Thomas
+diff --git a/package/distcc/Config.in b/package/distcc/Config.in
+index 2c30a21..0bf36b1 100644
+--- a/package/distcc/Config.in
++++ b/package/distcc/Config.in
+@@ -2,6 +2,8 @@ config BR2_PACKAGE_DISTCC
+ 	bool "distcc"
+ 	# needs fork()
+ 	depends on BR2_USE_MMU
++	# development tool on target, deprecated
++	depends on BR2_DEPRECATED
+ 	help
+ 	  Distributed compiler client and server.  Allows you to
+ 	  distribute compilation of C code across several machines
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.3.2
