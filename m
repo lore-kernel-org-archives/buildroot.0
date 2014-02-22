@@ -1,45 +1,57 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 22 Feb 2014 21:24:11 +0100
-Subject: [Buildroot] [PATCH 1/2] evas: depend on thread support
-In-Reply-To: <1393093203-12370-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sat, 22 Feb 2014 19:20:02 +0100")
-References: <1393093203-12370-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87bnxyuc9g.fsf@dell.be.48ers.dk>
+From: Ryan Barnett <ryanbarnett3@gmail.com>
+Date: Sat, 22 Feb 2014 21:24:44 +0100
+Subject: [Buildroot] [PATCH v2 1/1] mpg123: needs MMU
+Message-ID: <1393100684-5488-1-git-send-email-rjbarnet@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+mpg123 needs MMU because the application that is built with this
+package uses fork. Currently it is difficult to only build the
+libraries for mpg123 so disabling the package all together when there
+is no MMU support.
 
- > Evas has an optional mechanism to do asynchronous preloading of
- > images. This mechanism is optional, and in commit
- > b6d92bf415df33ac86487d68f5f8299f406859d2 ("libevas: async image
- > preload support needs threads support in toolchain"), Peter made sure
- > to disable the asychronous preloading when no thread support was
- > available.
+Note: mpg123 is an optional dependency of mpd but mpd already requires
+BR2_USE_MMU so there is no need to add this as a dependency.
 
- > Unfortunately, it seems like disabling the asynchronous loading is
- > rarely used, and it in facts fails to build: a member of structure is
- > not present when asynchronous preloading is disabled, but the code
- > continues to use it.
+Fixes:
+  http://autobuild.buildroot.net/results/5b0/5b053af566dd122ae7e58893e77d5d5f3070fb9e
 
- > Since the fix is not obvious, and all this mechanism seems to have
- > changed completely in EFL 1.8.x, and we probably don't care much about
- > EFL without threads, this commit adds a dependency of libevas on
- > thread support. Consequently, it also reverts commit
- > b6d92bf415df33ac86487d68f5f8299f406859d2 which is no longer necessary.
+Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+---
+v1 -> v2
+  - Added autobuild failure link
 
- > Of course, this commit propagates this additional dependency to the
- > reverse dependencies of libevas.
+Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+---
+ package/gstreamer1/gst1-plugins-bad/Config.in | 1 +
+ package/mpg123/Config.in                      | 1 +
+ 2 files changed, 2 insertions(+)
 
- > Fixes:
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index 407bf31..3647e53 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -400,6 +400,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MPEG2ENC
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MPG123
+ 	bool "mpg123"
+ 	select BR2_PACKAGE_MPG123
++	depends on BR2_USE_MMU # mpg123
+ 	help
+ 	  mp3 decoding based on the mpg123 library
 
- >   http://autobuild.buildroot.org/results/6de/6de90018a9eeb9c495d15046a8b3270eb95a5550//
- >   http://autobuild.buildroot.org/results/693/693df99db4ab357b48d427be3a72f6d64dd53065//
-
-Committed both, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/mpg123/Config.in b/package/mpg123/Config.in
+index 18ac41c..a7ac035 100644
+--- a/package/mpg123/Config.in
++++ b/package/mpg123/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_MPG123
+ 	bool "mpg123"
++	depends on BR2_USE_MMU # fork - in the application
+ 	help
+ 	  Fast, free and portable MPEG audio player for Unix.  It supports
+ 	  MPEG 1.0/2.0 layers 1, 2 and 3.
+--
+1.8.3.2
