@@ -1,85 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Feb 2014 23:23:33 +0100
-Subject: [Buildroot] [PATCH] pixman: add patch to fix Microblaze build
-	failure
-Message-ID: <1393107813-30143-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Ryan Barnett <ryanbarnett3@gmail.com>
+Date: Sat, 22 Feb 2014 23:32:49 +0100
+Subject: [Buildroot] [PATCH 1/1] rt-tests: disable on unsupported
+	architectures
+Message-ID: <1393108369-11880-1-git-send-email-rjbarnet@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Microblaze build of pixman was failing due to FE_DIVBYZERO not
-being implemented. It turns out that the usage of it, like fenv.h and
-feenableexcept() is optional. So the patch simply adds a configure
-check and disables the appropriate code (which is only use in the
-tests anyway).
-
-This commit also renames the existing patch to follow the patch naming
-convention, and get a reliable ordering when applying patches.
+rt-tests is not supported by a uclibc toolchain that does not implement
+_pid in struct sigevent. Currently this is all MIPS architectures
+in uclibc.
 
 Fixes:
+  http://autobuild.buildroot.net/results/074/074265602bec4aba6c82d1aee389045e8ad33d4b
 
-  http://autobuild.buildroot.org/results/806/8064092cdbac85fbf4322429d29d5d11dc51860f/
+Also rt-tests depends on NPTL which is not available on the bfin
+architecture.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Fixes:
+  http://autobuild.buildroot.net/results/ac9/ac95f73b2351d46d9a8c48caae7f6c3ea124e8bc
+
+Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
 ---
- ...flags.patch => pixman-01-loongson-cflags.patch} |  0
- package/pixman/pixman-02-check-fe-divbyzero.patch  | 41 ++++++++++++++++++++++
- 2 files changed, 41 insertions(+)
- rename package/pixman/{pixman-loongson-cflags.patch => pixman-01-loongson-cflags.patch} (100%)
- create mode 100644 package/pixman/pixman-02-check-fe-divbyzero.patch
+ package/rt-tests/Config.in | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/package/pixman/pixman-loongson-cflags.patch b/package/pixman/pixman-01-loongson-cflags.patch
-similarity index 100%
-rename from package/pixman/pixman-loongson-cflags.patch
-rename to package/pixman/pixman-01-loongson-cflags.patch
-diff --git a/package/pixman/pixman-02-check-fe-divbyzero.patch b/package/pixman/pixman-02-check-fe-divbyzero.patch
-new file mode 100644
-index 0000000..44dd691
---- /dev/null
-+++ b/package/pixman/pixman-02-check-fe-divbyzero.patch
-@@ -0,0 +1,41 @@
-+Add a check for FE_DIVBYZERO
+diff --git a/package/rt-tests/Config.in b/package/rt-tests/Config.in
+index 58a88a8..e40ce46 100644
+--- a/package/rt-tests/Config.in
++++ b/package/rt-tests/Config.in
+@@ -4,7 +4,10 @@ config BR2_PACKAGE_RT_TESTS
+ 	# priority-inheritance mutex needs NPTL
+ 	depends on !BR2_PTHREADS && !BR2_PTHREADS_OLD
+ 	# no NPTL for these archs
+-	depends on !BR2_avr32 && !BR2_xtensa && !BR2_arc
++	depends on !BR2_avr32 && !BR2_xtensa && !BR2_arc && !BR2_bfin
++	# no _tid field in 'struct sigevent'
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC && \
++		!(BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el)
+ 	help
+ 	  Set of utilities for testing the real-time behaviour of a
+ 	  Linux system.
+@@ -25,5 +28,9 @@ config BR2_PACKAGE_RT_TESTS
+ 
+ comment "rt-tests needs a toolchain w/ threads"
+ 	depends on !BR2_PTHREADS && !BR2_PTHREADS_OLD
+-	depends on !BR2_avr32 && !BR2_xtensa && !BR2_arc
++	depends on !BR2_avr32 && !BR2_xtensa && !BR2_arc && !BR2_bfin
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
 +
-+Some architectures (namely Microblaze) do have fenv.h and
-+feenableexcept, but they don't have the FE_DIVBYZERO definition. This
-+patch adds a configure check for FE_DIVBYZERO, and only uses it if
-+it's available.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/configure.ac
-+===================================================================
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -838,6 +838,11 @@
-+    AC_DEFINE(HAVE_FEENABLEEXCEPT, 1, [Whether we have feenableexcept()])
-+ fi
-+ 
-++AC_CHECK_DECL([FE_DIVBYZERO], [], [], [[#include <fenv.h>]])
-++if test x$have_fe_divbyzero = xyes; then
-++   AC_DEFINE(HAVE_FEDIVBYZERO, 1, [Whether we have FE_DIVBYZERO])
-++fi
-++
-+ AC_CHECK_FUNC(gettimeofday, have_gettimeofday=yes, have_gettimeofday=no)
-+ AC_CHECK_HEADER(sys/time.h, have_sys_time_h=yes, have_sys_time_h=no)
-+ if test x$have_gettimeofday = xyes && test x$have_sys_time_h = xyes; then
-+Index: b/test/utils.c
-+===================================================================
-+--- a/test/utils.c
-++++ b/test/utils.c
-+@@ -776,9 +776,11 @@
-+ {
-+ #ifdef HAVE_FENV_H
-+ #ifdef HAVE_FEENABLEEXCEPT
-++#ifdef HAVE_FE_DIVBYZERO
-+     feenableexcept (FE_DIVBYZERO);
-+ #endif
-+ #endif
-++#endif
-+ }
-+ 
-+ void *
++comment "rt-tests needs an (e)glibc toolchain"
++	depends on BR2_TOOLCHAIN_USES_UCLIBC && \
++		(BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el)
 -- 
 1.8.3.2
