@@ -1,37 +1,40 @@
-From: Ryan Barnett <ryanbarnett3@gmail.com>
-Date: Sat, 22 Feb 2014 21:49:00 +0100
-Subject: [Buildroot] [PATCH 1/1] iputils: disable on older uclibc versions
-Message-ID: <1393102140-5880-1-git-send-email-rjbarnet@rockwellcollins.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 22 Feb 2014 21:57:46 +0100
+Subject: [Buildroot] [PATCH v2] distcc: deprecate package,
+	only useful for development
+In-Reply-To: <1393102023-4049-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sat, 22 Feb 2014 21:47:03 +0100")
+References: <1393102023-4049-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87ha7qsw51.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Disable when using a uclibc version before 0.9.33 since __dn_comp
-function support was added in this version. Also disabling on AVR32
-since any AVR32 toolchain will be based on a uclibc version older
-than 0.9.33 (for using an external AVR32 toolchain).
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
----
- package/iputils/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ > Since quite a while, we have deprecated, and then removed the support
+ > to build a compiler on the target. Therefore, having a distcc package
+ > for the package is quite useless, and this patch consequently marks it
+ > as deprecated so it can be removed in a future version of Buildroot.
 
-diff --git a/package/iputils/Config.in b/package/iputils/Config.in
-index d4d2829..b24f34f 100644
---- a/package/iputils/Config.in
-+++ b/package/iputils/Config.in
-@@ -2,6 +2,10 @@ config BR2_PACKAGE_IPUTILS
- 	bool "iputils"
- 	select BR2_OPENSSL if BR2_INET_IPV6
- 	depends on BR2_USE_MMU # fork()
-+	# requires __dn_comp (only available in since uclibc 0.9.33)
-+	depends on !BR2_avr32
-+	depends on !BR2_UCLIBC_VERSION_0_9_31 && \
-+		!BR2_UCLIBC_VERSION_0_9_32
- 	help
- 	  This package is set of small useful utilities for Linux networking.
- 	  It includes complete versions of ping, traceroute, etc.
+ > Fixes:
+
+ >   http://autobuild.buildroot.net/results/16b/16be2138c8e5ba785fa2ad55b478dcd1b6fb5123/
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > ---
+
+Committed this one instead, thanks.
+
+ > Changes v1 -> v2:
+
+ >  * Use BR2_DEPRECATED_SINCE_2014_02 instead of BR2_DEPRECATED. Thanks
+ >    to Ryan Barnett for anticipating Thomas DS potential reaction to my
+ >    mistake :-)
+
+;)
+
 -- 
-1.8.3.2
+Bye, Peter Korsgaard
