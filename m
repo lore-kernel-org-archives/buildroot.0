@@ -1,40 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 22 Feb 2014 22:00:32 +0100
-Subject: [Buildroot] [git commit] iputils: disable on older uclibc versions
-Message-ID: <20140222210313.2CCDF9B2FF@busybox.osuosl.org>
+Date: Sat, 22 Feb 2014 21:56:57 +0100
+Subject: [Buildroot] [git commit] Makefile: internally use absolute paths to
+	BR2_EXTERNAL
+Message-ID: <20140222210312.D37E79056B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=50c33ad125e84f6df485b85ef10c9dd6b73ae7ea
+commit: http://git.buildroot.net/buildroot/commit/?id=5f5e5f2919c631ead7aee4e3546e9680d3e63ace
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Disable when using a uclibc version before 0.9.33 since dn_comp
-function support was added in this version. Also disabling on AVR32
-since any AVR32 toolchain will be based on a uclibc version older
-than 0.9.33 (for using an external AVR32 toolchain).
+Using a relative path for BR2_EXTERNAL, and using an external defconfig,
+such as in (from a Buildroot top-dir):
+    make O=.. BR2_EXTERNAL=.. foo_defconfig
 
-[Peter: use dn_comp instead of __dn_comp]
-Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+is broken. It is unclear why the %_defconfig rule recurses in that case.
+
+This patch internaly makes BR2_EXTERNAL canonical (ie. makes it an absolute
+path), and checks the directory exists.
+
+[Peter: s/relatively/relative/ as suggested by Thomas]
+Reported-by: J??r??my Rosen <jeremy.rosen@openwide.fr>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Cc: Romain Naour <romain.naour@openwide.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/iputils/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ Makefile |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-diff --git a/package/iputils/Config.in b/package/iputils/Config.in
-index d4d2829..e7bb3d9 100644
---- a/package/iputils/Config.in
-+++ b/package/iputils/Config.in
-@@ -2,6 +2,10 @@ config BR2_PACKAGE_IPUTILS
- 	bool "iputils"
- 	select BR2_OPENSSL if BR2_INET_IPV6
- 	depends on BR2_USE_MMU # fork()
-+	# requires dn_comp (only available in since uclibc 0.9.33)
-+	depends on !BR2_avr32
-+	depends on !BR2_UCLIBC_VERSION_0_9_31 && \
-+		!BR2_UCLIBC_VERSION_0_9_32
- 	help
- 	  This package is set of small useful utilities for Linux networking.
- 	  It includes complete versions of ping, traceroute, etc.
+diff --git a/Makefile b/Makefile
+index 98d32c0..502991f 100644
+--- a/Makefile
++++ b/Makefile
+@@ -119,6 +119,11 @@ ifeq ($(BR2_EXTERNAL),)
+   override BR2_EXTERNAL = support/dummy-external
+   $(shell rm -f $(BR2_EXTERNAL_FILE))
+ else
++  _BR2_EXTERNAL = $(shell cd $(BR2_EXTERNAL) >/dev/null 2>&1 && pwd)
++  ifeq ($(_BR2_EXTERNAL),)
++    $(error BR2_EXTERNAL='$(BR2_EXTERNAL)' does not exist, relative to $(TOPDIR))
++  endif
++  override BR2_EXTERNAL := $(_BR2_EXTERNAL)
+   $(shell echo BR2_EXTERNAL ?= $(BR2_EXTERNAL) > $(BR2_EXTERNAL_FILE))
+ endif
+ 
