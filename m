@@ -1,54 +1,62 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 22 Feb 2014 21:35:19 +0100
-Subject: [Buildroot] [PATCH v2 1/1] mpg123: needs MMU
-In-Reply-To: <1393100684-5488-1-git-send-email-rjbarnet@rockwellcollins.com>
- (Ryan Barnett's message of "Sat, 22 Feb 2014 21:24:44 +0100")
-References: <1393100684-5488-1-git-send-email-rjbarnet@rockwellcollins.com>
-Message-ID: <87y512sx6g.fsf@dell.be.48ers.dk>
+Date: Sat, 22 Feb 2014 21:40:54 +0100
+Subject: [Buildroot] [PATCH 1/3] Makefile: internally use absolute paths
+	to	BR2_EXTERNAL
+In-Reply-To: <95fe8a6d-a049-4ff1-a33e-e5d282c07770@email.android.com> (Thomas
+ De Schampheleire's message of "Sat, 22 Feb 2014 13:06:48 +0100")
+References: <cover.1393020340.git.yann.morin.1998@free.fr>
+ <fe4af64de250841875483a827e6f4684fad64f71.1393020340.git.yann.morin.1998@free.fr>
+ <95fe8a6d-a049-4ff1-a33e-e5d282c07770@email.android.com>
+Message-ID: <87txbqswx5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ryan" == Ryan Barnett <ryanbarnett3@gmail.com> writes:
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
- > mpg123 needs MMU because the application that is built with this
- > package uses fork. Currently it is difficult to only build the
- > libraries for mpg123 so disabling the package all together when there
- > is no MMU support.
+ > "Yann E. MORIN" <yann.morin.1998@free.fr> schreef:
+ >> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ >> 
+ >> Using a relative path for BR2_EXTERNAL, and using an external defconfig,
+ >> such as in (from a Buildroot top-dir):
+ >> make O=.. BR2_EXTERNAL=.. foo_defconfig
+ >> 
+ >> is broken. It is unclear why the %_defconfig rule recurses in that case.
+ >> 
+ >> This patch internaly makes BR2_EXTERNAL canonical (ie. makes it an absolute
+ >> path), and checks the directory exists.
+ >> 
+ >> Reported-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
+ >> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ >> Cc: Peter Korsgaard <jacmet@uclibc.org>
+ >> Cc: Romain Naour <romain.naour@openwide.fr>
+ >> Cc: Arnout Vandecappelle <arnout@mind.be>
+ >> 
+ >> ---
+ >> Changes v1->v2:
+ >> - fix override BR2_EXTERNAL  (J?r?my)
+ >> - only one error message  (Arnout)
+ >> ---
+ >> Makefile | 5 +++++
+ >> 1 file changed, 5 insertions(+)
+ >> 
+ >> diff --git a/Makefile b/Makefile
+ >> index 98d32c0..4766160 100644
+ >> --- a/Makefile
+ >> +++ b/Makefile
+ >> @@ -119,6 +119,11 @@ ifeq ($(BR2_EXTERNAL),)
+ >> override BR2_EXTERNAL = support/dummy-external
+ >> $(shell rm -f $(BR2_EXTERNAL_FILE))
+ >> else
+ >> +  _BR2_EXTERNAL = $(shell cd $(BR2_EXTERNAL) >/dev/null 2>&1 && pwd)
+ >> +  ifeq ($(_BR2_EXTERNAL),)
+ >> +    $(error BR2_EXTERNAL='$(BR2_EXTERNAL)' does not exist, relatively to $(TOPDIR))
 
- > Note: mpg123 is an optional dependency of mpd but mpd already requires
- > BR2_USE_MMU so there is no need to add this as a dependency.
+ > I think this should be 'relative to'.
 
- > Fixes:
- >   http://autobuild.buildroot.net/results/5b0/5b053af566dd122ae7e58893e77d5d5f3070fb9e
-
- > Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
- > ---
- > v1 -> v2
- >   - Added autobuild failure link
-
- > Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
- > ---
- >  package/gstreamer1/gst1-plugins-bad/Config.in | 1 +
- >  package/mpg123/Config.in                      | 1 +
- >  2 files changed, 2 insertions(+)
-
- > diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
- > index 407bf31..3647e53 100644
- > --- a/package/gstreamer1/gst1-plugins-bad/Config.in
- > +++ b/package/gstreamer1/gst1-plugins-bad/Config.in
- > @@ -400,6 +400,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MPEG2ENC
- >  config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MPG123
- >  	bool "mpg123"
- >  	select BR2_PACKAGE_MPG123
- > +	depends on BR2_USE_MMU # mpg123
-
-All of gstreamer1 depends on mmu (because of glib), so this is not
-really needed, but OK.
-
-Committed, thanks.
+Committed with that changed, thanks.
 
 -- 
 Bye, Peter Korsgaard
