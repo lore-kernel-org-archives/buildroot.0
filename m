@@ -1,50 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 22 Feb 2014 23:40:52 +0100
-Subject: [Buildroot] [git commit branch/next] tvheadend: use
+Date: Sat, 22 Feb 2014 23:40:44 +0100
+Subject: [Buildroot] [git commit branch/next] sconeserver: use
 	BR2_TOOLCHAIN_HAS_THREADS_NPTL
-Message-ID: <20140222224511.A8748826F9@busybox.osuosl.org>
+Message-ID: <20140222224511.96962826F9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=977276685fe72fc6014e1f86e9f54199d725e0bd
+commit: http://git.buildroot.net/buildroot/commit/?id=0c28e36a2b2cb48943bde5dfe6fe69606c2f5166
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tvheadend/Config.in |   12 +++---------
+ package/sconeserver/Config.in |   12 +++---------
  1 files changed, 3 insertions(+), 9 deletions(-)
 
-diff --git a/package/tvheadend/Config.in b/package/tvheadend/Config.in
-index da60f83..74df825 100644
---- a/package/tvheadend/Config.in
-+++ b/package/tvheadend/Config.in
-@@ -1,22 +1,16 @@
--comment "tvheadend needs a toolchain w/ largefile, IPv6, threads"
--	depends on !BR2_avr32 && !BR2_xtensa && !BR2_arc
--	depends on !BR2_PTHREADS && !BR2_PTHREADS_OLD
--	depends on !BR2_LARGEFILE || !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS
-+comment "tvheadend needs a toolchain w/ largefile, IPv6, NPTL"
-+	depends on !BR2_LARGEFILE || !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 
- config BR2_PACKAGE_TVHEADEND
- 	bool "tvheadend"
- 	depends on BR2_LARGEFILE && BR2_INET_IPV6
+diff --git a/package/sconeserver/Config.in b/package/sconeserver/Config.in
+index ccb9c00..76c3d91 100644
+--- a/package/sconeserver/Config.in
++++ b/package/sconeserver/Config.in
+@@ -1,11 +1,7 @@
+ menuconfig BR2_PACKAGE_SCONESERVER
+ 	bool "sconeserver"
+ 	depends on BR2_INSTALL_LIBSTDCPP
 -	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	# tvheadend requires an atomic_add operation. Either you have
- 	# a gcc >= 4.3 toolchain and it uses the gcc intrinsics, or it
- 	# has special code for x86, x86-64, PPC and ARM. So in the
- 	# context of Buildroot, the only really problematic
- 	# architecture is avr32, which uses gcc 4.2.
- 	depends on !BR2_avr32
--	# clock_nanosleep needs NPTL
+-	# pthread_setschedprio needs NPTL
 -	depends on !BR2_PTHREADS && !BR2_PTHREADS_OLD
 -	# no NPTL for these archs
--	depends on !BR2_xtensa && !BR2_arc
- 	select BR2_PACKAGE_DVB_APPS
- 	select BR2_PACKAGE_OPENSSL
+-	depends on !BR2_avr32 && !BR2_xtensa && !BR2_arc
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_PACKAGE_PCRE
  	help
+ 	  Sconeserver is a modular, object-orientated and extremely versatile
+@@ -102,7 +98,5 @@ comment "ui module requires X.org"
+ 
+ endif # BR2_PACKAGE_SCONESERVER
+ 
+-comment "sconeserver needs a toolchain w/ C++, threads"
+-	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
+-	depends on !BR2_PTHREADS && !BR2_PTHREADS_OLD
+-	depends on !BR2_avr32 && !BR2_xtensa && !BR2_arc
++comment "sconeserver needs a toolchain w/ C++, NPTL"
++	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS_NPTL)
