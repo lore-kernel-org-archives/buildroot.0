@@ -1,82 +1,81 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Feb 2014 22:07:54 +0100
-Subject: [Buildroot] [git commit] docs/manual: update informations about C
-	library in internal backend
-Message-ID: <20140223213139.279E096E70@busybox.osuosl.org>
+Date: Sun, 23 Feb 2014 21:54:33 +0100
+Subject: [Buildroot] [git commit] docs/manual: add section about dependency
+	graphs
+Message-ID: <20140223213139.1471B96E70@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ba4146c37cef697b1c9e0d606692f895be6060d0
+commit: http://git.buildroot.net/buildroot/commit/?id=e78cc3af5187ed662de2e66939f64248d0c85e14
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now that we have eglibc and glibc support in the internal backend, and
-no longer marked as experimental, a little bit of rewording is
-needed. It is no longer necessary to indicate that uClibc was
-historically supported as the only C library, and that the glibc
-support is experimental. We also update the rest of the description to
-be less uClibc specific.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/configure.txt |   30 +++++++++++-------------------
- 1 files changed, 11 insertions(+), 19 deletions(-)
+ docs/manual/common-usage.txt |   52 ++++++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 52 insertions(+), 0 deletions(-)
 
-diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
-index 89df3d9..b566e8a 100644
---- a/docs/manual/configure.txt
-+++ b/docs/manual/configure.txt
-@@ -68,12 +68,10 @@ The _internal toolchain backend_ is the backend where Buildroot builds
- by itself a cross-compilation toolchain, before building the userspace
- applications and libraries for your target embedded system.
- 
--This backend is the historical backend of Buildroot, and has been
--limited for a long time to the usage of the
--http://www.uclibc.org[uClibc C library]. Support for the _eglibc_ C
--library has been added in 2013 and is at this point considered
--experimental. See the _External toolchain backend_ for another
--solution to use _glibc_ or _eglibc_.
-+This backend supports several C libraries:
-+http://www.uclibc.org[uClibc], the
-+http://www.gnu.org/software/libc/libc.html[glibc] and
-+http://www.eglibc.org[eglibc].
- 
- Once you have selected this backend, a number of options appear. The
- most important ones allow to:
-@@ -96,18 +94,7 @@ most important ones allow to:
-    the C library might be using interfaces that are not provided by
-    your Linux kernel.
- 
-- * Change the version and the configuration of the uClibc C library
--   (if uClibc is selected). The default options are usually
--   fine. However, if you really need to specifically customize the
--   configuration of your uClibc C library, you can pass a specific
--   configuration file here. Or alternatively, you can run the +make
--   uclibc-menuconfig+ command to get access to uClibc's configuration
--   interface. Note that all packages in Buildroot are tested against
--   the default uClibc configuration bundled in Buildroot: if you
--   deviate from this configuration by removing features from uClibc,
--   some packages may no longer build.
--
-- * Change the version of the GCC compiler and binutils.
-+ * Change the version of the GCC compiler, binutils and the C library.
- 
-  * Select a number of toolchain options (uClibc only): whether the
-    toolchain should have largefile support (i.e support for files
-@@ -118,7 +105,12 @@ most important ones allow to:
-    libraries visible in Buildroot menus will change: many applications
-    and libraries require certain toolchain options to be enabled. Most
-    packages show a comment when a certain toolchain option is required
--   to be able to enable those packages.
-+   to be able to enable those packages. If needed, you can further
-+   refine the uClibc configuration by running +make
-+   uclibc-menuconfig+. Note however that all packages in Buildroot are
-+   tested against the default uClibc configuration bundled in
-+   Buildroot: if you deviate from this configuration by removing
-+   features from uClibc, some packages may no longer build.
- 
- It is worth noting that whenever one of those options is modified,
- then the entire toolchain and system must be rebuilt. See
+diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
+index 9a8c92a..bef42c6 100644
+--- a/docs/manual/common-usage.txt
++++ b/docs/manual/common-usage.txt
+@@ -149,3 +149,55 @@ of an ext2 filesystem may be corrupted; or, if you have sparse files in
+ your filesystem, those parts may not be all-zeroes when read back). You
+ should only use sparse files when handling files on the build machine, not
+ when transferring them to an actual device that will be used on the target.
++
++Graphing the dependencies between packages
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++[[graph-depends]]
++
++One of Buildroot's jobs is to know the dependencies between packages,
++and make sure they are built in the right order. These dependencies
++can sometimes be quite complicated, and for a given system, it is
++often not easy to understand why such or such package was brought into
++the build by Buildroot.
++
++In order to help understanding the dependencies, and therefore better
++understand what is the role of the different components in your
++embedded Linux system, Buildroot is capable of generating dependency
++graphs.
++
++To generate a dependency graph of the full system you have compiled,
++simply run:
++
++------------------------
++make graph-depends
++------------------------
++
++You will find the generated graph in
+++output/graphs/graph-depends.pdf+.
++
++If your system is quite large, the dependency graph may be too complex
++and difficult to read. It is therefore possible to generate the
++dependency graph just for a given package:
++
++------------------------
++make <pkg>-graph-depends
++------------------------
++
++You will find the generated graph in
+++output/graph/<pkg>-graph-depends.pdf+.
++
++Note that the dependency graphs are generated using the +dot+ tool
++from the _Graphviz_ project, which you must have installed on your
++system to use this feature. In most distributions, it is available as
++the +graphviz+ package.
++
++By default, the dependency graphs are generated in the PDF
++format. However, by passing the +GRAPH_OUT+ environment variable, you
++can switch to other output formats, such as PNG, PostScript or
++SVG. All formats supported by the +-T+ option of the +dot+ tool are
++supported.
++
++--------------------------------
++GRAPH_OUT=svg make graph-depends
++--------------------------------
