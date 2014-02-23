@@ -1,47 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Feb 2014 12:33:03 +0100
-Subject: [Buildroot] [git commit] alsa-utils: disable on no-mmu platforms
-	(fork)
-Message-ID: <20140223113404.D8F918B50D@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 23 Feb 2014 08:43:20 -0300
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{4, 10, 12,
+	13}.x stable versions
+Message-ID: <1393155801-29030-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9520a56810ffb2c5d84aa2da283b37ec4c512b2c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-alsa-utils uses fork which is not available on targets without MMU support.
-It seems to be possible to replace fork with vfork in alsa-utils, but we do
-not like to carry such patches in buildroot without them being accepted
-upstream.
-
-Fixes
-http://autobuild.buildroot.org/results/9f8/9f8e572c9f1c677155cc7d1828371bcf572ff878
-
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/alsa-utils/Config.in |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/linux-headers/Config.in.host | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/alsa-utils/Config.in b/package/alsa-utils/Config.in
-index 12f1020..6398593 100644
---- a/package/alsa-utils/Config.in
-+++ b/package/alsa-utils/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_ALSA_UTILS
- 	bool "alsa-utils"
-+	depends on BR2_USE_MMU # fork
- 	depends on BR2_LARGEFILE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
- 	select BR2_PACKAGE_ALSA_LIB
-@@ -10,6 +11,7 @@ config BR2_PACKAGE_ALSA_UTILS
- 	  http://www.alsa-project.org/
- 
- comment "alsa-utils needs a toolchain w/ largefile, threads"
-+	depends on BR2_USE_MMU # fork
- 	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
- 
- if BR2_PACKAGE_ALSA_UTILS
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index c99210d..134e338 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -72,14 +72,14 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.2.55"	if BR2_KERNEL_HEADERS_3_2
+-	default "3.4.80"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.82"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
+ 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
+ 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
+ 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
+-	default "3.10.30"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.32"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+-	default "3.12.11"	if BR2_KERNEL_HEADERS_3_12
+-	default "3.13.3"	if BR2_KERNEL_HEADERS_3_13
++	default "3.12.13"	if BR2_KERNEL_HEADERS_3_12
++	default "3.13.5"	if BR2_KERNEL_HEADERS_3_13
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+-- 
+1.8.3.2
