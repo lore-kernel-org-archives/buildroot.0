@@ -1,66 +1,32 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun, 23 Feb 2014 15:47:28 +0100
-Subject: [Buildroot] [PATCH] manual: Add a note for dependency comment
-	format
-In-Reply-To: <20140223154421.0bb178b1@skate>
-References: <1393160748-14235-1-git-send-email-maxime.hadjinlian@gmail.com>
- <20140223150456.78a2b2ce@skate>
- <CAGduivyrc0Gk92pbS=-0TLSp4xWDnV54hz1mzH-ixvHCD1hOrw@mail.gmail.com>
- <20140223154421.0bb178b1@skate>
-Message-ID: <CAGduivwQc-LkgcZUj7o0dFAbGLgQb1QX9qch2c=NQ0x0aZz6ng@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 23 Feb 2014 14:48:48 +0000 (UTC)
+Subject: [Buildroot] [Bug 6794] Busybox compiled from buildroot hangs on
+ pass from intiramfs to init
+In-Reply-To: <bug-6794-163@https.bugs.busybox.net/>
+References: <bug-6794-163@https.bugs.busybox.net/>
+Message-ID: <20140223144848.572169B838@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Feb 23, 2014 at 3:44 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Maxime Hadjinlian,
->
-> On Sun, 23 Feb 2014 15:35:37 +0100, Maxime Hadjinlian wrote:
->> Hi Thomas, all
->> On Sun, Feb 23, 2014 at 3:04 PM, Thomas Petazzoni
->> <thomas.petazzoni@free-electrons.com> wrote:
->> > Dear Maxime Hadjinlian,
->> >
->> > On Sun, 23 Feb 2014 14:05:48 +0100, Maxime Hadjinlian wrote:
->> >> Add a quick note to clarify that the format of the depencency comments
->> >> applies irregardless of the number of dependencies.
->> >>
->> >> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
->> >> ---
->> >>  docs/manual/adding-packages-directory.txt | 1 +
->> >>  1 file changed, 1 insertion(+)
->> >>
->> >> diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
->> >> index 3dc5395..b6dc981 100644
->> >> --- a/docs/manual/adding-packages-directory.txt
->> >> +++ b/docs/manual/adding-packages-directory.txt
->> >> @@ -205,6 +205,7 @@ aircrack-ng needs a toolchain w/ largefile, threads
->> >>
->> >>  Note that this text is kept brief on purpose, so that it will fit on a
->> >>  80-character terminal.
->> >> +This format must be repected even if there is only one dependency.
->> >
->> > I'm not sure what you mean here. Could you explain a bit more?
->> The examples always give with n depedency. Someone may ask himself if
->> this format is valid for only one depedency.
->> Should it reduce the with to w/, etc...
->
-> Then it is unclear, because your sentence come right after the sentence
-> mentioning the 80-character limit. So when I read this, I thought you
-> were saying "even when there is a single dependency, the text must fit
-> on a 80-character terminal", which doesn't made much sense.
-Ok, maybe transform this block in a:
-Note:
- - bla
- - bla
-Would be better, or moving it somewhere else ? Or simply putting up
-another example with only one dependency ?
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+https://bugs.busybox.net/show_bug.cgi?id=6794
+
+Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |WORKSFORME
+
+--- Comment #2 from Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> 2014-02-23 14:48:48 UTC ---
+Many people are using busybox inside an initramfs without problems. Therefore,
+I am closing this bug. If you still experience this problem, please reopen and
+provide more details about this problem, ideally with a reproducible
+configuration. Thanks.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
