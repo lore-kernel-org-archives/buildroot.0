@@ -1,103 +1,159 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 25 Feb 2014 21:27:11 +0100
-Subject: [Buildroot] [git commit] udev: update udev to new virtual package
-	infra.
-Message-ID: <20140228133416.EFE199BBF9@busybox.osuosl.org>
+Date: Sun, 23 Feb 2014 22:38:02 +0100
+Subject: [Buildroot] [git commit] manual: adding packages perl
+Message-ID: <20140228133416.A0BC09BBF9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5e35c1bedd55c044ab68f3b37738686a951eb9ce
+commit: http://git.buildroot.net/buildroot/commit/?id=d8fab8c5ee7a1b3a1236754a4a59e0630c0cf592
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The udev virtual package and its current providers (eudev and systemd)
-have been updated to use the latest version of virtual package
-infrastructure.
-
-A provider should now select BR2_PACKAGE_HAS_UDEV and well as set a
-value for BR2_PACKAGE_PROVIDES_UDEV.
-
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/eudev/Config.in   |    3 +++
- package/systemd/Config.in |    3 +++
- package/udev/Config.in    |    8 ++++----
- package/udev/udev.mk      |   16 ++++------------
- 4 files changed, 14 insertions(+), 16 deletions(-)
+ docs/manual/adding-packages-perl.txt |  120 ++++++++++++++++++++++++++++++++++
+ docs/manual/adding-packages.txt      |    2 +
+ 2 files changed, 122 insertions(+), 0 deletions(-)
 
-diff --git a/package/eudev/Config.in b/package/eudev/Config.in
-index bfad99a..40ff721 100644
---- a/package/eudev/Config.in
-+++ b/package/eudev/Config.in
-@@ -21,6 +21,9 @@ config BR2_PACKAGE_EUDEV
- 
- if BR2_PACKAGE_EUDEV
- 
-+config BR2_PACKAGE_PROVIDES_UDEV
-+	default "eudev"
+diff --git a/docs/manual/adding-packages-perl.txt b/docs/manual/adding-packages-perl.txt
+new file mode 100644
+index 0000000..53aacbd
+--- /dev/null
++++ b/docs/manual/adding-packages-perl.txt
+@@ -0,0 +1,120 @@
++// -*- mode:doc; -*-
++// vim: set syntax=asciidoc:
 +
- config BR2_PACKAGE_EUDEV_RULES_GEN
- 	bool "enable rules generator"
- 	help
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index e3ea433..eacc23c 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -40,6 +40,9 @@ config BR2_PACKAGE_SYSTEMD
- 
- if BR2_PACKAGE_SYSTEMD
- 
-+config BR2_PACKAGE_PROVIDES_UDEV
-+	default "systemd"
++Infrastructure for Perl/CPAN packages
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 +
- config BR2_PACKAGE_SYSTEMD_ALL_EXTRAS
- 	bool "enable all extras"
- 	select BR2_PACKAGE_XZ
-diff --git a/package/udev/Config.in b/package/udev/Config.in
-index 5cd4051..941a515 100644
---- a/package/udev/Config.in
-+++ b/package/udev/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_HAS_UDEV
- 	bool
--	help
--	  udev is now a virtual package.
--	  Packages requiring udevd at run time or libudev/gudev at build time
--	  should select it.
++[[perl-package-tutorial]]
 +
-+config BR2_PACKAGE_PROVIDES_UDEV
-+	depends on BR2_PACKAGE_HAS_UDEV
-+	string
-diff --git a/package/udev/udev.mk b/package/udev/udev.mk
-index a5d0f80..f5eeeb4 100644
---- a/package/udev/udev.mk
-+++ b/package/udev/udev.mk
-@@ -5,20 +5,12 @@
- ################################################################################
+++perl-package+ tutorial
++^^^^^^^^^^^^^^^^^^^^^^^
++
++First, let's see how to write a +.mk+ file for a Perl/CPAN package,
++with an example :
++
++------------------------
++01: ################################################################################
++02: #
++03: # perl-foo-bar
++04: #
++05: ################################################################################
++06:
++07: PERL_FOO_BAR_VERSION = 0.02
++08: PERL_FOO_BAR_SOURCE = Foo-Bar-$(PERL_FOO_BAR_VERSION).tar.gz
++09: PERL_FOO_BAR_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MO/MONGER/
++10: PERL_FOO_BAR_DEPENDENCIES = perl-strictures
++11: PERL_FOO_BAR_LICENSE = Artistic or GPLv1+
++12: PERL_FOO_BAR_LICENSE_FILES = LICENSE
++13:
++14: $(eval $(perl-package))
++------------------------
++
++On line 7, we declare the version of the package.
++
++On line 8 and 9, we declare the name of the tarball and the location
++of the tarball on a CPAN server. Buildroot will automatically download
++the tarball from this location.
++
++On line 10, we declare our dependencies, so that they are built
++before the build process of our package starts.
++
++On line 11 and 12, we give licensing details about the package (its
++license on line 11, and the file containing the license text on line
++12).
++
++Finally, on line 14, we invoke the +perl-package+ macro that
++generates all the Makefile rules that actually allow the package to be
++built.
++
++Most of these data can be retrieved from https://metacpan.org/.
++So, this file and the Config.in can be generated by running
++the script +supports/scripts/scancpan Foo-Bar+ in the Buildroot directory
++(or in the +BR2_EXTERNAL+ directory).
++This script creates a Config.in file and foo-bar.mk file for the
++requested package, and also recursively for all dependencies specified by
++CPAN. You should still manually edit the result. In particular, the
++following things should be checked.
++
++* The +PERL_FOO_BAR_LICENSE_FILES+ variable is not set, because metacpan
++  doesn't have this information. Also, the name of the license file(s)
++  varies between packages, and some don't even have a license file.
++* If the perl module links with a shared library that is provided by
++  another (non-perl) package, this dependency is not added automatically.
++  It has to be added manually to +PERL_FOO_BAR_DEPENDENCIES+.
++* The +package/Config.in+ file has to be updated manually to include the
++  generated Config.in files. As a hint, the +scancpan+ script prints out
++  the required +source "..."+ statements, sorted alphabetically.
++
++[[perl-package-reference]]
++
+++perl-package+ reference
++^^^^^^^^^^^^^^^^^^^^^^^^
++
++As a policy, packages that provide Perl/CPAN modules should all be
++named +perl-<something>+ in Buildroot.
++
++This infrastructure handles various Perl build systems :
+++ExtUtils-MakeMaker+, +Module-Build+ and +Module-Build-Tiny+.
+++Build.PL+ is always preferred when a package provides a +Makefile.PL+
++and a +Build.PL+.
++
++The main macro of the Perl/CPAN package infrastructure is
+++perl-package+. It is similar to the +generic-package+ macro. The ability to
++have target and host packages is also available, with the
+++host-perl-package+ macro.
++
++Just like the generic infrastructure, the Perl/CPAN infrastructure
++works by defining a number of variables before calling the
+++perl-package+ macro.
++
++First, all the package metadata information variables that exist in the
++generic infrastructure also exist in the Perl/CPAN infrastructure:
+++PERL_FOO_VERSION+, +PERL_FOO_SOURCE+,
+++PERL_FOO_PATCH+, +PERL_FOO_SITE+,
+++PERL_FOO_SUBDIR+, +PERL_FOO_DEPENDENCIES+,
+++PERL_FOO_INSTALL_TARGET+.
++
++Note that setting +PERL_FOO_INSTALL_STAGING+ to +YES+ has no effect
++unless a +PERL_FOO_INSTALL_STAGING_CMDS+ variable is defined. The perl
++infrastructure doesn't define these commands since Perl modules generally
++don't need to be installed to the +staging+ directory.
++
++A few additional variables, specific to the Perl/CPAN infrastructure,
++can also be defined. Many of them are only useful in very specific
++cases, typical packages will therefore only use a few of them.
++
++* +PERL_FOO_CONF_OPT+/+HOST_PERL_FOO_CONF_OPT+, to specify additional
++  configure options to pass to the +perl Makefile.PL+ or +perl Build.PL+.
++  By default, empty.
++
++* +PERL_FOO_BUILD_OPT+/+HOST_PERL_FOO_BUILD_OPT+, to specify additional
++  options to pass to +make pure_all+ or +perl Build build+ in the build step.
++  By default, empty.
++
++* +PERL_FOO_INSTALL_TARGET_OPT+, to specify additional options to
++  pass to +make pure_install+ or +perl Build install+ in the install step.
++  By default, empty.
++
++* +HOST_PERL_FOO_INSTALL_OPT+, to specify additional options to
++  pass to +make pure_install+ or +perl Build install+ in the install step.
++  By default, empty.
+diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
+index cc86529..745e33a 100644
+--- a/docs/manual/adding-packages.txt
++++ b/docs/manual/adding-packages.txt
+@@ -22,6 +22,8 @@ include::adding-packages-python.txt[]
  
- UDEV_SOURCE =
-+UDEV_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_UDEV))
+ include::adding-packages-luarocks.txt[]
  
--ifeq ($(BR2_PACKAGE_EUDEV),y)
--UDEV_DEPENDENCIES += eudev
--endif
--
--ifeq ($(BR2_PACKAGE_SYSTEMD),y)
--UDEV_DEPENDENCIES += systemd
--endif
--
-+ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
- ifeq ($(UDEV_DEPENDENCIES),)
--define UDEV_CONFIGURE_CMDS
--	echo "No Udev implementation selected. Configuration error."
--	exit 1
--endef
-+$(error No Udev implementation selected. Configuration error)
-+endif
- endif
++include::adding-packages-perl.txt[]
++
+ include::adding-packages-hooks.txt[]
  
- $(eval $(generic-package))
+ include::adding-packages-gettext.txt[]
