@@ -1,91 +1,82 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Feb 2014 15:13:25 +0100
-Subject: [Buildroot] FW: [PATCH] linux-headers: cross compile fix
-In-Reply-To: <884EA965490E3C4D8E66AEF41E98025006C47E@ezex10.ezchip.com>
-References: <884EA965490E3C4D8E66AEF41E98025006BF4D@ezex10.ezchip.com>
- <20140223105041.414123e2@skate>
- <884EA965490E3C4D8E66AEF41E98025006C47E@ezex10.ezchip.com>
-Message-ID: <20140223141325.GB3342@free.fr>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sun, 23 Feb 2014 15:17:14 +0100
+Subject: [Buildroot] [pkg-perl infra v11 0/6] a package infrastructure for
+	Perl/CPAN modules
+Message-ID: <1393165041-21015-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Noam, All,
+delta V11 vs V10
+ - manual
+   + some improvements
+ - scancpan
+   + add comments
 
-On 2014-02-23 12:33 +0000, Noam Camus spake thusly:
-> See Inline
-> 
-> -----Original Message-----
-> From: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com] 
-> Sent: Sunday, February 23, 2014 11:51 AM
-> To: Noam Camus
-> Cc: buildroot at busybox.net
-> Subject: Re: [Buildroot] FW: [PATCH] linux-headers: cross compile fix
-> 
-> Dear Noam Camus,
-> 
-> On Sun, 23 Feb 2014 08:29:15 +0000, Noam Camus wrote:
-> > Otherwise compiler not found errors occured.
-> > 
-> > Signed-off-by: Noam Camus <noamc@ezchip.com>
-> > ---
-> >  package/linux-headers/linux-headers.mk |    1 +
-> >  1 files changed, 1 insertions(+), 0 deletions(-)
-> > 
-> > diff --git a/package/linux-headers/linux-headers.mk 
-> > b/package/linux-headers/linux-headers.mk
-> > index 30d3076..632b94f 100644
-> > --- a/package/linux-headers/linux-headers.mk
-> > +++ b/package/linux-headers/linux-headers.mk
-> > @@ -25,6 +25,7 @@ define LINUX_HEADERS_INSTALL_STAGING_CMDS
-> >  			HOSTCFLAGS="$(HOSTCFLAGS)" \
-> >  			HOSTCXX="$(HOSTCXX)" \
-> >  			INSTALL_HDR_PATH=$(STAGING_DIR)/usr \
-> > +			CROSS_COMPILE="$(TARGET_CROSS)" \
-> >  			headers_install)
-> >  endef
-> >  
-> 
-> Doesn't look harmful in principle, but it seems to have worked until now
-> without CROSS_COMPILE="$(TARGET_CROSS)". Can you expand the commit log
-> by explaining in which case you have seen errors, and which errors.
-> The linux-headers package is used daily to build toolchains by all
-> Buildroot users, so I'd like to understand how your situation is
-> different. Is it that the ARC kernel headers need something special?
-> But we are building ARC toolchains everyday in the autobuilders, with
-> no problem. That's why I'd like to have more details.
-> Thomas 
-> 
-> [Noam Camus]
-> Just use target linux-headers-rebuild and you will get many errors that
-> buildroot silently ignores.
+delta V9 vs V10
+ - reorder patches (Note that patch 1/6 can go in immediately, perhaps even for 2014.02)
+ - scancpan
+   + remove spurious final empty line in Config.in
+   + POD description
+   + generates target/host variants only when needed
+ - manual
 
-It's not Buildroot that ignores those errors, it's the Linux buildsystem
-itself that ignores them, since they are harmless at the time of
-installing headers.
+delta V8 vs V9 :
+ - scancpan 
+   + back to fatpack
+   + use 5.018;
 
-> You alternatively may add intentionally BAD CROSS_COMPILE if you don't
-> have ARC setup handy and see that Toolchain building is not stopped due
-> to this error.
+delta V7 vs V8 :
+ - typo and minor improvements
 
-The cross-compiler is not used at the time of 'make headers-install'.
-So, those are spurious errors of the Linux buildsystem.
+delta V6 vs V7 :
+ - global
+   + substitute 'perl_5' by 'Artistic or GPLv1+'
+ - scancpan
+   + remove 'NO ABSTRACT'
+   + check Module::CoreList::is_core with the target Perl version
+   + add packages Module-CoreList and MetaCPAN-API-Tiny instead of use Fatpack
+   + add GPL
 
-They can/should be safely ignored.
+delta V5 vs V6 :
+ - export PERL5LIB
+ - rename PKG_PERL_ARCHNAME to PERL_ARCHNAME
+ - remove $(2)_*_OPT (with empty default value)
+ - remove PERL_INSTALL_TARGET_GOALS
 
-(Side note: ARC is not the only arch that exhibit this behaviour. IIRC,
-cris, hexagon, ia64, parisc, score and xtensa behave the same, with ia64
-in an aggaravated way.)
 
-Regards,
-Yann E. MORIN.
+Francois Perrad (6):
+  perl: remove PERL_INSTALL_TARGET_GOALS
+  pkg-perl: new infrastructure
+  host-perl-xml-parser: rename and refactor with perl infrastructure
+  host-perl-module-build: new package
+  manual: adding packages perl
+  scancpan: a new script
+
+ Config.in                                        |   11 +
+ docs/manual/adding-packages-perl.txt             |  120 ++++
+ docs/manual/adding-packages.txt                  |    2 +
+ package/Config.in                                |    1 -
+ package/Makefile.in                              |    4 +-
+ package/intltool/intltool.mk                     |    2 +-
+ package/libxml-parser-perl/Config.in             |   10 -
+ package/libxml-parser-perl/libxml-parser-perl.mk |   35 -
+ package/metacity/metacity.mk                     |    2 +-
+ package/perl-module-build/perl-module-build.mk   |   12 +
+ package/perl-xml-parser/perl-xml-parser.mk       |   17 +
+ package/perl/perl.mk                             |    4 +-
+ package/pkg-perl.mk                              |  181 ++++++
+ support/scripts/scancpan                         |  741 ++++++++++++++++++++++
+ 14 files changed, 1090 insertions(+), 52 deletions(-)
+ create mode 100644 docs/manual/adding-packages-perl.txt
+ delete mode 100644 package/libxml-parser-perl/Config.in
+ delete mode 100644 package/libxml-parser-perl/libxml-parser-perl.mk
+ create mode 100644 package/perl-module-build/perl-module-build.mk
+ create mode 100644 package/perl-xml-parser/perl-xml-parser.mk
+ create mode 100644 package/pkg-perl.mk
+ create mode 100755 support/scripts/scancpan
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.9.5
