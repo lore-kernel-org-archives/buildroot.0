@@ -1,45 +1,33 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 23 Feb 2014 11:11:19 +0100
-Subject: [Buildroot] [PATCH 5 of 5 v2] alsa-utils/Config.in: move comment to
- top, to fix nesting of config options
-In-Reply-To: <patchbomb.1393150274@argentina>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 23 Feb 2014 11:12:35 +0100
+Subject: [Buildroot] [PATCH 1 of 5 v2] alsa-lib: add sequence number to
+ existing patches
+In-Reply-To: <e9b9920e8aa8acfce9ad.1393150275@argentina>
 References: <patchbomb.1393150274@argentina>
-Message-ID: <66b82225c29844efa58a.1393150279@argentina>
+ <e9b9920e8aa8acfce9ad.1393150275@argentina>
+Message-ID: <20140223111235.67e9cd0a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-To allow proper nesting of suboptions of a package, the suboptions should
-come directly after the main option, and cannot be interleaved with a
-comment.
+Dear Thomas De Schampheleire,
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+On Sun, 23 Feb 2014 11:11:15 +0100, Thomas De Schampheleire wrote:
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> 
+> ---
+> 
+> diff --git a/package/alsa-lib/alsa-lib-avr32-bad-inline.patch b/package/alsa-lib/alsa-lib-0001-avr32-bad-inline.patch
+> rename from package/alsa-lib/alsa-lib-avr32-bad-inline.patch
+> rename to package/alsa-lib/alsa-lib-0001-avr32-bad-inline.patch
+> diff --git a/package/alsa-lib/alsa-lib-no-mmu.patch b/package/alsa-lib/alsa-lib-0002-no-mmu.patch
+> rename from package/alsa-lib/alsa-lib-no-mmu.patch
+> rename to package/alsa-lib/alsa-lib-0002-no-mmu.patch
 
----
- package/alsa-utils/Config.in |  8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/alsa-utils/Config.in b/package/alsa-utils/Config.in
---- a/package/alsa-utils/Config.in
-+++ b/package/alsa-utils/Config.in
-@@ -1,3 +1,7 @@
-+comment "alsa-utils needs a toolchain w/ largefile, threads"
-+	depends on BR2_USE_MMU # fork
-+	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
-+
- config BR2_PACKAGE_ALSA_UTILS
- 	bool "alsa-utils"
- 	depends on BR2_USE_MMU # fork
-@@ -10,10 +14,6 @@ config BR2_PACKAGE_ALSA_UTILS
- 
- 	  http://www.alsa-project.org/
- 
--comment "alsa-utils needs a toolchain w/ largefile, threads"
--	depends on BR2_USE_MMU # fork
--	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
--
- if BR2_PACKAGE_ALSA_UTILS
- menu "ALSA utils selection"
- 
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
