@@ -1,63 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 23 Feb 2014 23:58:05 +0100
-Subject: [Buildroot] [PATCH 1/7] cairo: fix build on Blackfin in
-	test/cairo-test-runner.c
+Date: Sun, 23 Feb 2014 23:58:06 +0100
+Subject: [Buildroot] [PATCH 2/7] cairo: improve the Blackfin build fix
 In-Reply-To: <1393196291-12636-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1393196291-12636-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1393196291-12636-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1393196291-12636-3-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch for Cairo that ensures <unistd.h> is properly included to
-get the prototype of readlink and getppid even on non-MMU platforms.
+Patch cairo-001-blackfin-build-fix.patch was added in commit
+d372d0b6777f52cd493dc0a892593d4390536ec5 ('cairo: add patch to fix
+Blackfin build failure') to take into account the fact that Blackfin
+has a non-empty USER_LABEL_PREFIX: C symbol 'foo' corresponds to
+assembly symbol '_foo', contrary to most other architectures where
+they are the same.
 
-Fixes:
+However, the patch was only fixing the relevant macros in
+src/cairo-compiler-private.h and did not take into account the
+duplicated version of these macros in
+util/cairo-script/cairo-script-private.h. This commit fixes that.
 
-  http://autobuild.buildroot.net/results/93a97f90345d193b52035b2dc7559a306e11098e/
+This commit is fixing a build failure on Blackfin, for which there was
+no recorded autobuilder result because this problem was hidden by the
+problem fixed by the previous commit ('cairo: fix build on Blackfin in
+test/cairo-test-runner.c').
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/cairo/cairo-003-fix-nofork-build.patch | 29 ++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
- create mode 100644 package/cairo/cairo-003-fix-nofork-build.patch
+ package/cairo/cairo-001-blackfin-build-fix.patch | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/package/cairo/cairo-003-fix-nofork-build.patch b/package/cairo/cairo-003-fix-nofork-build.patch
-new file mode 100644
-index 0000000..702e991
---- /dev/null
-+++ b/package/cairo/cairo-003-fix-nofork-build.patch
-@@ -0,0 +1,29 @@
-+test: fix build when SHOULD_FORK is false
-+
-+The code in test/cairo-test-runner.c properly takes into account
-+platforms that do have fork() support, and uses the SHOULD_FORK define
-+to know whether fork is available or not.
-+
-+However, this SHOULD_FORK macro is used to guard the inclusion of
-+<unistd.h>, which is needed to get the prototype of other functions
-+(namely readlink and getppid), that are used in portions of this file
-+not guarded by SHOULD_FORK.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/test/cairo-test-runner.c
+diff --git a/package/cairo/cairo-001-blackfin-build-fix.patch b/package/cairo/cairo-001-blackfin-build-fix.patch
+index 94dff6b..0e8dd3a 100644
+--- a/package/cairo/cairo-001-blackfin-build-fix.patch
++++ b/package/cairo/cairo-001-blackfin-build-fix.patch
+@@ -34,3 +34,22 @@ Index: b/src/cairo-compiler-private.h
+  #else
+  # define slim_hidden_proto(name)		int _cairo_dummy_prototype(void)
+  # define slim_hidden_proto_no_warn(name)	int _cairo_dummy_prototype(void)
++Index: b/util/cairo-script/cairo-script-private.h
 +===================================================================
-+--- a/test/cairo-test-runner.c
-++++ b/test/cairo-test-runner.c
-+@@ -36,10 +36,10 @@
-+ #include <pixman.h> /* for version information */
-+ 
-+ #define SHOULD_FORK HAVE_FORK && HAVE_WAITPID
-+-#if SHOULD_FORK
-+ #if HAVE_UNISTD_H
-+ #include <unistd.h>
-+ #endif
-++#if SHOULD_FORK
-+ #if HAVE_SIGNAL_H
-+ #include <signal.h>
-+ #endif
++--- a/util/cairo-script/cairo-script-private.h
+++++ b/util/cairo-script/cairo-script-private.h
++@@ -109,12 +109,13 @@
++ 	__asm__ (slim_hidden_asmname (internal))
++ # define slim_hidden_def1(name, internal)				\
++   extern __typeof (name) EXT_##name __asm__(slim_hidden_asmname(name))	\
++-	__attribute__((__alias__(slim_hidden_asmname(internal))))
+++	__attribute__((__alias__(slim_hidden_realname(internal))))
++ # define slim_hidden_ulp		slim_hidden_ulp1(__USER_LABEL_PREFIX__)
++ # define slim_hidden_ulp1(x)		slim_hidden_ulp2(x)
++ # define slim_hidden_ulp2(x)		#x
++ # define slim_hidden_asmname(name)	slim_hidden_asmname1(name)
++ # define slim_hidden_asmname1(name)	slim_hidden_ulp #name
+++# define slim_hidden_realname(name)     #name
++ #else
++ # define slim_hidden_proto(name)		int _csi_dummy_prototype(void)
++ # define slim_hidden_proto_no_warn(name)	int _csi_dummy_prototype(void)
 -- 
 1.8.3.2
