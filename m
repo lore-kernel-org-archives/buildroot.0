@@ -1,47 +1,99 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 24 Feb 2014 00:16:01 +0100
-Subject: [Buildroot] [PATCH] libsecret: not available on AVR32,
-	compiler error
-Message-ID: <1393197361-13223-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 24 Feb 2014 00:40:57 +0100
+Subject: [Buildroot] [PATCH 0/13 v2] Add dependency on kernel headers
+Message-ID: <cover.1393198603.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libsecret does built on AVR32 due an internal compiler error, and
-since it's unlikely that gcc will ever be upgraded on AVR32, we simply
-mark this package as not available. The only reverse dependency of
-libsecret is webkit, which already cannot be selected on AVR32.
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Fixes:
+Hello All!
 
-  http://autobuild.buildroot.org/results/2d4/2d41f97378f06d0f3922e078ec0d02549690d4c1/
+This series introduces infrastructure for packages to depend on the
+required version of kernel headers.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libsecret/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
+It follows the proposal made on the list:
+    http://lists.busybox.net/pipermail/buildroot/2014-February/088924.html
 
-diff --git a/package/libsecret/Config.in b/package/libsecret/Config.in
-index 70f1fe7..9a21d2e 100644
---- a/package/libsecret/Config.in
-+++ b/package/libsecret/Config.in
-@@ -4,6 +4,8 @@ config BR2_PACKAGE_LIBSECRET
- 	depends on BR2_USE_WCHAR # gettext dep in libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
- 	depends on BR2_USE_MMU # libglib2
-+	# Triggers an internal compiler error on AVR32
-+	depends on !BR2_avr32
- 	help
- 	  libsecret is a library for storing and retrieving passwords and other
- 	  secrets. It communicates with the "Secret Service" using DBus.
-@@ -13,5 +15,6 @@ config BR2_PACKAGE_LIBSECRET
- 	  https://wiki.gnome.org/Libsecret
- 
- comment "libsecret needs a toolchain w/ wchar, threads"
-+	depends on !BR2_avr32
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+The basic idea is to add a symbol for each kernel header version, and
+have toolchains select the appropriate symbol, and packages depend on the
+appropriate symbol.
+
+In this series:
+
+  - such symbols are added for all kernel headers >= 3.0;
+
+  - the internal toochain backend selects the appropriate symbol, without
+    user-visible changes for known kernel headers versions, and with a new
+    choice for manually-specified kernel headers version;
+
+  - the predefined external toolchains select the appropriate symbols
+    without user-visible changes; those using kernel headers older than
+    3.0, select nothing, and a comment is added to state so;
+
+  - for the custom external toolchain, a new choice is shown to the
+    user, to select the appropriate kernel headers version;
+
+  - five packages are converted to take advantage of this.
+
+For example:
+
+  - BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1 selects
+    BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
+
+  - dvb-apps depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
+
+
+Changes v1 -> v2:
+  - typo and asciidoc syntax in the manual  (Samuel, Thomas DS)
+  - add choice for custom kernel headers  (Arnout)
+  - add check to strictly enforce selection  (Thomas, Arnout)
+  - add help to choice  (Thomas DS)
+
+
+Regards,
+Yann E. MORIN.
+
+
+----------------------------------------------------------------
+Yann E. MORIN (13):
+      package/linux-headers: remove 2.6 snapshot
+      toolchain/common: add minimum kernel headers options
+      manual: document minimal kernel headers dependency
+      toolchain/external/predefined: add choice to select 'AT_LEAST_XXX' header version
+      toolchain/external/custom: add choice to select 'AT_LEAST_XXX' header version
+      package/linux-headers: select appropriate 'AT_LEAST_XXX' header version
+      toolchain/external: check kernel headers version for custom toolchain
+      toolchain/internal: check kernel headers version for manually-specified version
+      package/dvb-apps: requires kernel headers >= 3.3
+      package/w_scan: requires kernel headers >= 3.0
+      package/weston: requires kernel headers >= 3.0
+      package/tvheadend: requires kernel headers >= 3.2
+      package/mmc-utils: requires kernel headers >= 3.0
+
+ docs/manual/adding-packages-directory.txt          |   6 ++
+ package/dvb-apps/Config.in                         |   5 +-
+ package/linux-headers/Config.in.host               |  86 +++++++++++++++-
+ package/linux-headers/linux-headers.mk             |   9 ++
+ package/mmc-utils/Config.in                        |   5 +-
+ package/tvheadend/Config.in                        |   5 +-
+ package/w_scan/Config.in                           |   4 +
+ package/weston/Config.in                           |   5 +-
+ support/scripts/check-kernel-headers.sh            |  22 ++++
+ toolchain/helpers.mk                               |  13 +++
+ toolchain/toolchain-common.in                      |  79 +++++++++++++++
+ toolchain/toolchain-external/Config.in             | 111 +++++++++++++++++++++
+ toolchain/toolchain-external/toolchain-external.mk |   7 +-
+ 13 files changed, 344 insertions(+), 13 deletions(-)
+ create mode 100755 support/scripts/check-kernel-headers.sh
+
 -- 
-1.8.3.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
