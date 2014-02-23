@@ -1,253 +1,159 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 23 Feb 2014 15:17:16 +0100
-Subject: [Buildroot] [pkg-perl infra v11 2/6] pkg-perl: new infrastructure
+Date: Sun, 23 Feb 2014 15:17:17 +0100
+Subject: [Buildroot] [pkg-perl infra v11 3/6] host-perl-xml-parser: rename
+	and refactor with perl infrastructure
 In-Reply-To: <1393165041-21015-1-git-send-email-francois.perrad@gadz.org>
 References: <1393165041-21015-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1393165041-21015-3-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1393165041-21015-4-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- Config.in           |   11 ++++
- package/Makefile.in |    4 +-
- package/pkg-perl.mk |  181 +++++++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 195 insertions(+), 1 deletion(-)
- create mode 100644 package/pkg-perl.mk
+Even though libxml-parser-perl had a Config.in file with an option to
+enable it on the target, this option was hidden by a dependency on
+BR2_HOST_ONLY. So in practice, it was not possible to enable
+libxml-parser-perl on the target. This allows us to rename
+libxml-parser-perl to perl-xml-parser to follow the new naming
+convention of Perl packages, without having to introduce
+Config.in.legacy material.
 
-diff --git a/Config.in b/Config.in
-index 55f5fd8..5a2a098 100644
---- a/Config.in
-+++ b/Config.in
-@@ -230,6 +230,17 @@ config BR2_LUAROCKS_MIRROR
+In addition to this rename, the package is converted to use the newly
+introduced Perl package infrastructure.
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+---
+ package/Config.in                                |    1 -
+ package/intltool/intltool.mk                     |    2 +-
+ package/libxml-parser-perl/Config.in             |   10 -------
+ package/libxml-parser-perl/libxml-parser-perl.mk |   35 ----------------------
+ package/metacity/metacity.mk                     |    2 +-
+ package/perl-xml-parser/perl-xml-parser.mk       |   17 +++++++++++
+ 6 files changed, 19 insertions(+), 48 deletions(-)
+ delete mode 100644 package/libxml-parser-perl/Config.in
+ delete mode 100644 package/libxml-parser-perl/libxml-parser-perl.mk
+ create mode 100644 package/perl-xml-parser/perl-xml-parser.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 087e5f4..543c7a6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -634,7 +634,6 @@ source "package/json-c/Config.in"
+ source "package/json-glib/Config.in"
+ source "package/libjson/Config.in"
+ source "package/libroxml/Config.in"
+-source "package/libxml-parser-perl/Config.in"
+ source "package/libxml2/Config.in"
+ source "package/libxmlpp/Config.in"
+ source "package/libxslt/Config.in"
+diff --git a/package/intltool/intltool.mk b/package/intltool/intltool.mk
+index 58b46e6..6b2a704 100644
+--- a/package/intltool/intltool.mk
++++ b/package/intltool/intltool.mk
+@@ -9,7 +9,7 @@ INTLTOOL_SITE = https://launchpad.net/intltool/trunk/$(INTLTOOL_VERSION)/+downlo
+ INTLTOOL_LICENSE = GPLv2+
+ INTLTOOL_LICENSE_FILES = COPYING
  
- 	  See http://luarocks.org
+-HOST_INTLTOOL_DEPENDENCIES = host-gettext host-libxml-parser-perl
++HOST_INTLTOOL_DEPENDENCIES = host-gettext host-perl-xml-parser
  
-+config BR2_CPAN_MIRROR
-+	string "CPAN mirror (Perl packages)"
-+	default "http://search.cpan.org/CPAN"
-+	help
-+	  CPAN (Comprehensive Perl Archive Network) is a repository
-+	  of Perl packages. It has multiple software mirrors scattered
-+	  around the world. This option allows you to select a mirror.
-+
-+	  The list of mirrors is available at:
-+	  http://search.cpan.org/mirror
-+
- endmenu
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+diff --git a/package/libxml-parser-perl/Config.in b/package/libxml-parser-perl/Config.in
+deleted file mode 100644
+index bdda236..0000000
+--- a/package/libxml-parser-perl/Config.in
++++ /dev/null
+@@ -1,10 +0,0 @@
+-config BR2_PACKAGE_LIBXML_PARSER_PERL
+-	bool "libxml-parser-perl"
+-	select BR2_PACKAGE_EXPAT
+-	# Hide from configuration as we only support the host package
+-	# for the moment
+-	depends on BR2_HOST_ONLY
+-	help
+-	  The Perl XML::Parser module.
+-
+-	  http://www.cpan.org/modules/by-module/XML/
+diff --git a/package/libxml-parser-perl/libxml-parser-perl.mk b/package/libxml-parser-perl/libxml-parser-perl.mk
+deleted file mode 100644
+index 53f3bcf..0000000
+--- a/package/libxml-parser-perl/libxml-parser-perl.mk
++++ /dev/null
+@@ -1,35 +0,0 @@
+-################################################################################
+-#
+-# libxml-parser-perl
+-#
+-################################################################################
+-
+-LIBXML_PARSER_PERL_VERSION = 2.36
+-LIBXML_PARSER_PERL_SOURCE = XML-Parser-$(LIBXML_PARSER_PERL_VERSION).tar.gz
+-LIBXML_PARSER_PERL_SITE = http://www.cpan.org/modules/by-module/XML/
+-
+-LIBXML_PARSER_PERL_DEPENDENCIES = expat
+-
+-define HOST_LIBXML_PARSER_PERL_CONFIGURE_CMDS
+- (cd $(@D) ; \
+-   $(HOST_CONFIGURE_OPTS) perl Makefile.PL \
+-        PREFIX=$(HOST_DIR)/usr \
+-        EXPATLIBPATH=$(HOST_DIR)/usr/lib \
+-        EXPATINCPATH=$(HOST_DIR)/usr/include \
+-        INSTALLDIRS=site \
+-        INSTALLSITELIB=$(HOST_DIR)/usr/lib/perl \
+-        INSTALLSITEARCH=$(HOST_DIR)/usr/lib/perl \
+-        USE_MM_LD_RUN_PATH=1 \
+- )
+-endef
+-
+-define HOST_LIBXML_PARSER_PERL_BUILD_CMDS
+- $(HOST_MAKE_ENV) $(MAKE) -C $(@D)
+-endef
+-
+-define HOST_LIBXML_PARSER_PERL_INSTALL_CMDS
+- $(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
+-endef
+-
+-$(eval $(generic-package))
+-$(eval $(host-generic-package))
+diff --git a/package/metacity/metacity.mk b/package/metacity/metacity.mk
+index 9306b00..18f5c76 100644
+--- a/package/metacity/metacity.mk
++++ b/package/metacity/metacity.mk
+@@ -19,7 +19,7 @@ METACITY_CONF_OPT = --x-includes=$(STAGING_DIR)/usr/include/X11 \
  
- config BR2_JLEVEL
-diff --git a/package/Makefile.in b/package/Makefile.in
-index eea7043..454f614 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -206,7 +206,8 @@ HOST_PATH=$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(PATH)
- HOSTCC_VERSION:=$(shell $(HOSTCC_NOCCACHE) --version | \
- 	sed -n 's/^.* \([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)[ ]*.*$$/\1\2\3/p')
- 
--export PERL5LIB := $(HOST_DIR)/usr/lib/perl
-+HOST_PERL_ARCHNAME := $(shell perl -MConfig -e "print Config->{archname}")
-+export PERL5LIB := $(HOST_DIR)/usr/lib/perl5/$(HOST_PERL_ARCHNAME):$(HOST_DIR)/usr/lib/perl5
- 
- TARGET_CONFIGURE_OPTS=PATH=$(TARGET_PATH) \
- 		AR="$(TARGET_AR)" \
-@@ -359,5 +360,6 @@ include package/pkg-download.mk
- include package/pkg-autotools.mk
- include package/pkg-cmake.mk
- include package/pkg-luarocks.mk
-+include package/pkg-perl.mk
- include package/pkg-python.mk
- include package/pkg-generic.mk
-diff --git a/package/pkg-perl.mk b/package/pkg-perl.mk
+ METACITY_DEPENDENCIES = libgtk2 \
+ 	xlib_libX11 \
+-	host-libxml-parser-perl \
++	host-perl-xml-parser \
+ 	xlib_libXcomposite \
+ 	xlib_libXfixes \
+ 	xlib_libXrender \
+diff --git a/package/perl-xml-parser/perl-xml-parser.mk b/package/perl-xml-parser/perl-xml-parser.mk
 new file mode 100644
-index 0000000..fdf1580
+index 0000000..fb9bf0f
 --- /dev/null
-+++ b/package/pkg-perl.mk
-@@ -0,0 +1,181 @@
++++ b/package/perl-xml-parser/perl-xml-parser.mk
+@@ -0,0 +1,17 @@
 +################################################################################
-+# Perl package infrastructure
 +#
-+# This file implements an infrastructure that eases development of
-+# package .mk files for Perl packages.
-+#
-+# See the Buildroot documentation for details on the usage of this
-+# infrastructure
-+#
-+# In terms of implementation, this perl infrastructure requires
-+# the .mk file to only specify metadata information about the
-+# package: name, version, download URL, etc.
-+#
-+# We still allow the package .mk file to override what the different
-+# steps are doing, if needed. For example, if <PKG>_BUILD_CMDS is
-+# already defined, it is used as the list of commands to perform to
-+# build the package, instead of the default perl behaviour. The
-+# package can also define some post operation hooks.
++# perl-xml-parser
 +#
 +################################################################################
 +
-+PERL_ARCHNAME	= $(ARCH)-linux
++PERL_XML_PARSER_VERSION = 2.41
++PERL_XML_PARSER_SOURCE = XML-Parser-$(PERL_XML_PARSER_VERSION).tar.gz
++PERL_XML_PARSER_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TODDR/
++PERL_XML_PARSER_DEPENDENCIES = expat
++PERL_XML_PARSER_LICENSE = Artistic or GPLv1+
 +
-+################################################################################
-+# inner-perl-package -- defines how the configuration, compilation and
-+# installation of a perl package should be done, implements a
-+# few hooks to tune the build process for perl specifities and
-+# calls the generic package infrastructure to generate the necessary
-+# make targets
-+#
-+#  argument 1 is the lowercase package name
-+#  argument 2 is the uppercase package name, including an HOST_ prefix
-+#             for host packages
-+#  argument 3 is the uppercase package name, without the HOST_ prefix
-+#             for host packages
-+#  argument 4 is the type (target or host)
-+################################################################################
++HOST_LIBXML_PARSER_PERL_CONF_OPT = \
++	EXPATLIBPATH=$(HOST_DIR)/usr/lib \
++	EXPATINCPATH=$(HOST_DIR)/usr/include
 +
-+define inner-perl-package
-+
-+#
-+# Configure step. Only define it if not already defined by the package
-+# .mk file. And take care of the differences between host and target
-+# packages.
-+#
-+ifndef $(2)_CONFIGURE_CMDS
-+ifeq ($(4),target)
-+
-+# Configure package for target
-+define $(2)_CONFIGURE_CMDS
-+	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] ; then \
-+		perl Build.PL \
-+			--config ar="$(TARGET_AR)" \
-+			--config full_ar="$(TARGET_AR)" \
-+			--config cc="$(TARGET_CC)" \
-+			--config ccflags="$(TARGET_CFLAGS)" \
-+			--config ld="$(TARGET_CC)" \
-+			--config lddlflags="-shared $(TARGET_LDFLAGS)" \
-+			--config ldflags="$(TARGET_LDFLAGS)" \
-+			--include_dirs $$(STAGING_DIR)/usr/lib/perl5/$$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE \
-+			--destdir $$(TARGET_DIR) \
-+			--installdirs vendor \
-+			--install_path lib=/usr/lib/perl5/site_perl/$$(PERL_VERSION) \
-+			--install_path arch=/usr/lib/perl5/site_perl/$$(PERL_VERSION)/$(PERL_ARCHNAME) \
-+			--install_path bin=/usr/bin \
-+			--install_path script=/usr/bin \
-+			--install_path bindoc=/usr/share/man/man1 \
-+			--install_path libdoc=/usr/share/man/man3 \
-+			$$($(2)_CONF_OPT); \
-+	else \
-+		PERL_AUTOINSTALL=--skipdeps \
-+		perl Makefile.PL \
-+			AR="$(TARGET_AR)" \
-+			FULL_AR="$(TARGET_AR)" \
-+			CC="$(TARGET_CC)" \
-+			CCFLAGS="$(TARGET_CFLAGS)" \
-+			LD="$(TARGET_CC)" \
-+			LDDLFLAGS="-shared $(TARGET_LDFLAGS)" \
-+			LDFLAGS="$(TARGET_LDFLAGS)" \
-+			DESTDIR=$$(TARGET_DIR) \
-+			INSTALLDIRS=vendor \
-+			INSTALLVENDORLIB=/usr/lib/perl5/site_perl/$$(PERL_VERSION) \
-+			INSTALLVENDORARCH=/usr/lib/perl5/site_perl/$$(PERL_VERSION)/$(PERL_ARCHNAME) \
-+			INSTALLVENDORBIN=/usr/bin \
-+			INSTALLVENDORSCRIPT=/usr/bin \
-+			INSTALLVENDORMAN1DIR=/usr/share/man/man1 \
-+			INSTALLVENDORMAN3DIR=/usr/share/man/man3 \
-+			$$($(2)_CONF_OPT); \
-+	fi
-+endef
-+else
-+
-+# Configure package for host
-+define $(2)_CONFIGURE_CMDS
-+	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] ; then \
-+		perl Build.PL \
-+			--install_base $$(HOST_DIR)/usr \
-+			--installdirs vendor \
-+			$$($(2)_CONF_OPT); \
-+	else \
-+		PERL_AUTOINSTALL=--skipdeps \
-+		perl Makefile.PL \
-+			INSTALL_BASE=$$(HOST_DIR)/usr \
-+			INSTALLDIRS=vendor \
-+			$$($(2)_CONF_OPT); \
-+	fi
-+endef
-+endif
-+endif
-+
-+#
-+# Build step. Only define it if not already defined by the package .mk
-+# file. And take care of the differences between host and target
-+# packages.
-+#
-+ifndef $(2)_BUILD_CMDS
-+ifeq ($(4),target)
-+
-+# Build package for target
-+define $(2)_BUILD_CMDS
-+	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] ; then \
-+		perl Build $$($(2)_BUILD_OPT) build; \
-+	else \
-+		$(MAKE1) \
-+			PERL_INC=$$(STAGING_DIR)/usr/lib/perl5/$$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE \
-+			$$($(2)_BUILD_OPT) pure_all; \
-+	fi
-+endef
-+else
-+
-+# Build package for host
-+define $(2)_BUILD_CMDS
-+	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] ; then \
-+		perl Build $$($(2)_BUILD_OPT) build; \
-+	else \
-+		$(MAKE1) $$($(2)_BUILD_OPT) pure_all; \
-+	fi
-+endef
-+endif
-+endif
-+
-+#
-+# Host installation step. Only define it if not already defined by the
-+# package .mk file.
-+#
-+ifndef $(2)_INSTALL_CMDS
-+define $(2)_INSTALL_CMDS
-+	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] ; then \
-+		perl Build $$($(2)_INSTALL_TARGET_OPT) install; \
-+	else \
-+		$(MAKE1) $$($(2)_INSTALL_TARGET_OPT) pure_install; \
-+	fi
-+endef
-+endif
-+
-+#
-+# Target installation step. Only define it if not already defined by
-+# the package .mk file.
-+#
-+ifndef $(2)_INSTALL_TARGET_CMDS
-+define $(2)_INSTALL_TARGET_CMDS
-+	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] ; then \
-+		perl Build $$($(2)_INSTALL_TARGET_OPT) install; \
-+	else \
-+		$(MAKE1) $$($(2)_INSTALL_TARGET_OPT) pure_install; \
-+	fi
-+endef
-+endif
-+
-+# Call the generic package infrastructure to generate the necessary
-+# make targets
-+$(call inner-generic-package,$(1),$(2),$(3),$(4))
-+
-+endef
-+
-+################################################################################
-+# perl-package -- the target generator macro for Perl packages
-+################################################################################
-+
-+perl-package = $(call inner-perl-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
-+host-perl-package = $(call inner-perl-package,host-$(pkgname),$(call UPPERCASE,host-$(pkgname)),$(call UPPERCASE,$(pkgname)),host)
++$(eval $(host-perl-package))
 -- 
 1.7.9.5
