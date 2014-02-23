@@ -1,35 +1,94 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 23 Feb 2014 16:35:03 +0100
-Subject: [Buildroot] [PATCH] package/linux-headers: add comment to
-	safely ignore missing cross-compiler
-In-Reply-To: <1393166118-26660-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Sun, 23 Feb 2014 15:35:18 +0100")
-References: <1393166118-26660-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87lhx1q1ug.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 23 Feb 2014 16:35:47 +0100
+Subject: [Buildroot] [PATCH 06/13] docs/manual: add section about build
+ time graphing
+In-Reply-To: <1393167879-16637-7-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1393167879-16637-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1393167879-16637-7-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20140223153547.GH3342@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Thomas, All,
 
- > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > For some architectures (eg. Arc, Cris, Hexagon, ia64, Parisc, Score and
- > Xtensa), the Linux buildsystem tries to call the cross-compiler when
- > installing the headers.
+On 2014-02-23 16:04 +0100, Thomas Petazzoni spake thusly:
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  docs/manual/common-usage.txt | 47 ++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 47 insertions(+)
+> 
+> diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
+> index bef42c6..76e4023 100644
+> --- a/docs/manual/common-usage.txt
+> +++ b/docs/manual/common-usage.txt
+> @@ -201,3 +201,50 @@ supported.
+>  --------------------------------
+>  GRAPH_OUT=svg make graph-depends
+>  --------------------------------
+> +
+> +Graphing the build duration
+> +~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> +
+> +[[graph-duration]]
+> +
+> +When the build of a system takes a long time, it is sometimes useful
+> +to be able to understand which packages are the longest to build, to
+> +see if anything can be done to speed up the build. In order to help
+> +such build time analysis, Buildroot collects the build time of each
+> +step of each package, and allows to generate graphs from these data.
+> +
+> +To generate the build time graph after a build, run:
+> +
+> +----------------
+> +make graph-build
+> +----------------
+> +
+> +This will generate a set of files in +output/graphs+ :
+> +
+> +* +build.hist-build.pdf+, an histogram of the build time for each
+> +  package, ordered in the build order.
+> +
+> +* +build.hist-duration.pdf+, an histogram of the build time for each
+> +  package, ordered by duration (longest first)
+> +
+> +* +build.hist-name.pdf+, an histogram of the build time for each
+> +  package, order by package name.
+> +
+> +* +build.pie-packages.pdf+, a pie chart of the build time per package
+> +
+> +* +build.pie-steps.pdf+, a pie chart of the global time spent in each
+> +  step of the packages build process.
+> +
+> +This +graph-build+ target requires the Python Matplotlib and Numpy
+> +libraries to be installed (+python-matplotlib+ and +python-numpy+ on
+> +most distributions), and also the +argparse+ module if you're using a
+> +Python version older than 2.7 (+python-argparse+ on most
+> +distributions).
+> +
+> +By default, the output format for the graph is PDF, but a different
+> +format can be selected using the +GRAPH_OUT+ environment variable. The
+> +only other format supported is PNG:
+> +
+> +----------------
+> +GRAPH_OUT=png make graph-build
+> +----------------
 
- > This is a spurious call, since a cross-compiler is not needed at all to
- > install the headers.
+We also have GRAPH_ALT which sets an alternative colour-scheme for the
+time graphs:
+    GRAPH_ALT=y make graph-build
 
- > As some users have reported the issue, just add a comment in linux-headers.mk
- > directing the user to ignore those errors.
+Which can be combined with GRAPH_OUT, of course.
 
- > Reported-by: Noam Camus <noamc@ezchip.com>
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed, thanks.
+Regards,
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
