@@ -1,60 +1,105 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun, 23 Feb 2014 17:17:41 +0100
-Subject: [Buildroot] [PATCH v2 2/2] classpath: Use generic check for host
-	program
-In-Reply-To: <1393172261-17421-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1393172261-17421-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <1393172261-17421-2-git-send-email-maxime.hadjinlian@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 23 Feb 2014 17:21:20 +0100
+Subject: [Buildroot] [PATCH 07/13] docs/manual: update informations
+ about C library in internal backend
+In-Reply-To: <1393167879-16637-8-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1393167879-16637-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1393167879-16637-8-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20140223162120.GB32759@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove the specific check that was done in dependencies.sh to use the
-generic one that were introduced by the previous patch.
+Thomas, All,
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
----
-Changes v1 -> v2:
-  - None
----
- package/classpath/Config.in          |  2 ++
- support/dependencies/dependencies.sh | 10 ----------
- 2 files changed, 2 insertions(+), 10 deletions(-)
+On 2014-02-23 16:04 +0100, Thomas Petazzoni spake thusly:
+> Now that we have eglibc and glibc support in the internal backend, and
+> no longer marked as experimental, a little bit of rewording is
+> needed. It is no longer necessary to indicate that uClibc was
+> historically supported as the only C library, and that the glibc
+> support is experimental. We also update the rest of the description to
+> be less uClibc specific.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  docs/manual/configure.txt | 30 +++++++++++-------------------
+>  1 file changed, 11 insertions(+), 19 deletions(-)
+> 
+> diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
+> index 89df3d9..b566e8a 100644
+> --- a/docs/manual/configure.txt
+> +++ b/docs/manual/configure.txt
+> @@ -68,12 +68,10 @@ The _internal toolchain backend_ is the backend where Buildroot builds
+>  by itself a cross-compilation toolchain, before building the userspace
+>  applications and libraries for your target embedded system.
+>  
+> -This backend is the historical backend of Buildroot, and has been
+> -limited for a long time to the usage of the
+> -http://www.uclibc.org[uClibc C library]. Support for the _eglibc_ C
+> -library has been added in 2013 and is at this point considered
+> -experimental. See the _External toolchain backend_ for another
+> -solution to use _glibc_ or _eglibc_.
+> +This backend supports several C libraries:
+> +http://www.uclibc.org[uClibc], the
 
-diff --git a/package/classpath/Config.in b/package/classpath/Config.in
-index 0153bca..6eabacd 100644
---- a/package/classpath/Config.in
-+++ b/package/classpath/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_CLASSPATH
- 	bool "classpath"
-+	select BR2_HOST_NEEDS_JAVAC
-+	select BR2_HOST_NEEDS_JAR
- 	depends on BR2_PACKAGE_JAMVM
- 	depends on BR2_INET_IPV6
- 	help
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index b18a888..7d69cce 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -183,16 +183,6 @@ if grep ^BR2_TOOLCHAIN_BUILDROOT=y $BR2_CONFIG > /dev/null && \
- 	fi
- fi
- 
--if grep -q ^BR2_PACKAGE_CLASSPATH=y $BR2_CONFIG ; then
--	for prog in javac jar; do
--		if ! which $prog > /dev/null ; then
--			echo >&2
--			echo "You must install '$prog' on your build machine" >&2
--			exit 1
--		fi
--	done
--fi
--
- if grep -q ^BR2_NEEDS_HOST_JAVA=y $BR2_CONFIG ; then
- 	check_prog_host "java"
- fi
+s/the//  since you don't do it for the other two.
+
+> +http://www.gnu.org/software/libc/libc.html[glibc] and
+> +http://www.eglibc.org[eglibc].
+>  
+>  Once you have selected this backend, a number of options appear. The
+>  most important ones allow to:
+> @@ -96,18 +94,7 @@ most important ones allow to:
+>     the C library might be using interfaces that are not provided by
+>     your Linux kernel.
+
+Unrelated to your patch, but what about:
+    [...] the C library might be using interfaces, or exposing thos
+    interfaces to applications, that are not provided by the running
+    Linux kernel.
+
+> - * Change the version and the configuration of the uClibc C library
+> -   (if uClibc is selected). The default options are usually
+> -   fine. However, if you really need to specifically customize the
+> -   configuration of your uClibc C library, you can pass a specific
+> -   configuration file here. Or alternatively, you can run the +make
+> -   uclibc-menuconfig+ command to get access to uClibc's configuration
+> -   interface. Note that all packages in Buildroot are tested against
+> -   the default uClibc configuration bundled in Buildroot: if you
+> -   deviate from this configuration by removing features from uClibc,
+> -   some packages may no longer build.
+> -
+> - * Change the version of the GCC compiler and binutils.
+> + * Change the version of the GCC compiler, binutils and the C library.
+>  
+>   * Select a number of toolchain options (uClibc only): whether the
+>     toolchain should have largefile support (i.e support for files
+> @@ -118,7 +105,12 @@ most important ones allow to:
+>     libraries visible in Buildroot menus will change: many applications
+>     and libraries require certain toolchain options to be enabled. Most
+>     packages show a comment when a certain toolchain option is required
+> -   to be able to enable those packages.
+> +   to be able to enable those packages. If needed, you can further
+> +   refine the uClibc configuration by running +make
+> +   uclibc-menuconfig+. Note however that all packages in Buildroot are
+> +   tested against the default uClibc configuration bundled in
+> +   Buildroot: if you deviate from this configuration by removing
+> +   features from uClibc, some packages may no longer build.
+>  
+>  It is worth noting that whenever one of those options is modified,
+>  then the entire toolchain and system must be rebuilt. See
+
+Otherwise, looks good.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.8.5.3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
