@@ -1,52 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 23 Feb 2014 18:40:32 +0100
-Subject: [Buildroot] [PATCH v2 1/2] infra: Add generic check_prog_host
- function
-In-Reply-To: <1393172261-17421-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1393172261-17421-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20140223184032.2c6d08de@skate>
+Date: Sun, 23 Feb 2014 18:42:21 +0100
+Subject: [Buildroot] [PATCH] package/rt-tests: fix Kconfig syntax
+In-Reply-To: <1393176587-27407-1-git-send-email-yann.morin.1998@free.fr>
+References: <1393176587-27407-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20140223184221.2649dcb1@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxime Hadjinlian,
+Dear Yann E. MORIN,
 
-On Sun, 23 Feb 2014 17:17:40 +0100, Maxime Hadjinlian wrote:
+On Sun, 23 Feb 2014 18:29:47 +0100, Yann E. MORIN wrote:
 
-> +# Verify that which is installed
-> +check_prog_host "which"
+> diff --git a/package/rt-tests/Config.in b/package/rt-tests/Config.in
+> index ff4284e..605635c 100644
+> --- a/package/rt-tests/Config.in
+> +++ b/package/rt-tests/Config.in
+> @@ -6,8 +6,8 @@ config BR2_PACKAGE_RT_TESTS
+>  	# no NPTL for these archs
+>  	depends on !BR2_avr32 && !BR2_xtensa && !BR2_arc && !BR2_bfin
+>  	# no _tid field in 'struct sigevent'
+> -	depends on !BR2_TOOLCHAIN_USES_UCLIBC if (BR2_mips || BR2_mipsel || \
+> -		BR2_mips64 || BR2_mips64el)
+> +	depends on ! ( BR2_TOOLCHAIN_USES_UCLIBC && (BR2_mips || BR2_mipsel || \
+> +		BR2_mips64 || BR2_mips64el) )
 
-Since your function check_prog_host uses which to determine if the
-program exists, isn't it weird to use which to verify it?
+I know it's nitpicking, but I must say I personally dislike these
+spaces between !, parenthesis and the rest. I very much prefer:
 
-Your check_host_prog function could also be used in:
-
-# Check that a few mandatory programs are installed
-missing_progs="no"
-for prog in patch perl tar wget cpio python unzip rsync bc ${DL_TOOLS} ; do
-        if ! which $prog > /dev/null ; then
-                echo "You must install '$prog' on your build machine";
-                missing_progs="yes"
-                if test $prog = "svn" ; then
-                        echo "  svn is usually part of the subversion package in your distribution"
-                elif test $prog = "hg" ; then
-                        echo "  hg is usually part of the mercurial package in your distribution"
-                elif test $prog = "zcat" ; then
-                        echo "  zcat is usually part of the gzip package in your distribution"
-                elif test $prog = "bzcat" ; then
-                        echo "  bzcat is usually part of the bzip2 package in your distribution"
-                fi
-        fi
-done
-
-if test "${missing_progs}" = "yes" ; then
-        exit 1
-fi
-
-Though you see that this loop has this missing_progs variable that
-allows to list all the missing programs, and only abort at the end.
+	depends on !(BR2_TOOLCHAIN_USES_UCLIBC && (BR2_mips || BR2_mipsel || \
+		BR2_mips64 || BR2_mips64el))
 
 Thomas
 -- 
