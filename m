@@ -1,41 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 23 Feb 2014 16:04:34 +0100
-Subject: [Buildroot] [PATCH 08/13] docs/manual: update external toolchain
-	examples
+Date: Sun, 23 Feb 2014 16:04:37 +0100
+Subject: [Buildroot] [PATCH 11/13] docs/manual: refresh informations about
+	*-menuconfig targets
 In-Reply-To: <1393167879-16637-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1393167879-16637-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1393167879-16637-9-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1393167879-16637-12-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Replace ADI by Analog Devices, which is clearer for most people, and
-remove the Xilinx external toolchains since we have deprecated them.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/configure.txt | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ docs/manual/make-tips.txt | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
-index b566e8a..a6afafb 100644
---- a/docs/manual/configure.txt
-+++ b/docs/manual/configure.txt
-@@ -138,10 +138,9 @@ http://www.linaro.org[Linaro] for ARM,
- http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition/[Sourcery
- CodeBench] for ARM, x86, x86-64, PowerPC, MIPS and SuperH,
- https://blackfin.uclinux.org/gf/project/toolchain[Blackfin toolchains
--from ADI], http://git.xilinx.com/[Xilinx toolchains for Microblaze],
--etc.) and is capable of downloading them automatically, or it can be
--pointed to a custom toolchain, either available for download or
--installed locally.
-+from Analog Devices], etc.) and is capable of downloading them
-+automatically, or it can be pointed to a custom toolchain, either
-+available for download or installed locally.
+diff --git a/docs/manual/make-tips.txt b/docs/manual/make-tips.txt
+index 0159ffe..faf59f2 100644
+--- a/docs/manual/make-tips.txt
++++ b/docs/manual/make-tips.txt
+@@ -32,10 +32,12 @@ The result of the search shows the help message of the matching items.
+ Not all targets are always available,
+ some settings in the +.config+ file may hide some targets:
  
- Then, you have three solutions to use an external toolchain:
++* +busybox-menuconfig+ and +busybox-savedefconfig+ ony work when
++  +busybox+ is enabled;
+ * +linux-menuconfig+ and +linux-savedefconfig+ only work when
+   +linux+ is enabled;
+-* +uclibc-menuconfig+ is only available when the
+-  Buildroot internal toolchain backend is used;
++* +uclibc-menuconfig+ is only available when the uClibc C library is
++  selected in the internal toolchain backend;
+ * +barebox-menuconfig+ and +barebox-savedefconfig+ only work when the
+   +barebox+ bootloader is enabled.
  
 -- 
 1.8.3.2
