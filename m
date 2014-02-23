@@ -1,71 +1,80 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 23 Feb 2014 18:06:41 +0100
-Subject: [Buildroot] [PATCH] qt: needs MMU (fork)
-In-Reply-To: <1a66f6a964fb37f6144d.1393175048@argentina>
-References: <1a66f6a964fb37f6144d.1393175048@argentina>
-Message-ID: <CAAXf6LU5sqHAFU6iYr87cSyQJPOAv67bQecfjSccRgWti9rzSQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 23 Feb 2014 18:19:25 +0100
+Subject: [Buildroot] [PATCH v2 1/2] rt-tests: disable for uclibc mips
+In-Reply-To: <1393110449-12710-1-git-send-email-rjbarnet@rockwellcollins.com>
+References: <1393110449-12710-1-git-send-email-rjbarnet@rockwellcollins.com>
+Message-ID: <20140223171925.GD32759@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Feb 23, 2014 at 6:04 PM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/4f7/4f744595efceba2d5a54151bf5f1802eb1268fac/
->
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->
-> ---
->  package/opencv/Config.in        |  1 +
->  package/openpowerlink/Config.in |  2 ++
->  package/qt/Config.in            |  2 ++
->  3 files changed, 5 insertions(+), 0 deletions(-)
->
-> diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-> --- a/package/opencv/Config.in
-> +++ b/package/opencv/Config.in
-> @@ -169,6 +169,7 @@ config BR2_PACKAGE_OPENCV_WITH_QT
->         bool "qt backend support"
->         depends on BR2_INSTALL_LIBSTDCPP
->         depends on !BR2_avr32 # qt
-> +       depends on BR2_USE_MMU # qt
->         select BR2_PACKAGE_QT
->         select BR2_PACKAGE_QT_STL
->         default y
-> diff --git a/package/openpowerlink/Config.in b/package/openpowerlink/Config.in
-> --- a/package/openpowerlink/Config.in
-> +++ b/package/openpowerlink/Config.in
-> @@ -1,4 +1,5 @@
->  comment "openpowerlink needs a toolchain w/ C++, threads"
-> +       depends on BR2_USE_MMU
->         depends on BR2_i386 || BR2_x86_64
->         depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
->
-> @@ -7,6 +8,7 @@ config BR2_PACKAGE_OPENPOWERLINK
->         depends on BR2_INSTALL_LIBSTDCPP
->         depends on BR2_TOOLCHAIN_HAS_THREADS
->         depends on BR2_i386 || BR2_x86_64
-> +       depends on BR2_USE_MMU # qt
->         help
->           openPOWERLINK is an Open Source Industrial Ethernet
->           stack implementing the POWERLINK protocol for Managing Node
-> diff --git a/package/qt/Config.in b/package/qt/Config.in
-> --- a/package/qt/Config.in
-> +++ b/package/qt/Config.in
-> @@ -1,10 +1,12 @@
->  comment "qt needs a toolchain w/ C++, threads"
->         depends on !BR2_avr32
-> +       depends on BR2_USE_MMU
->         depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
->
->  menuconfig BR2_PACKAGE_QT
->         bool "Qt"
->         depends on !BR2_avr32 # lacks TLS
-> +       depends on BR2_USE_MMU # fork
->         depends on BR2_INSTALL_LIBSTDCPP
->         depends on BR2_TOOLCHAIN_HAS_THREADS
->         help
+Ryan, Peter, All,
 
-This should have been flagged as 'v2', sorry...
+On 2014-02-23 00:07 +0100, Ryan Barnett spake thusly:
+> rt-tests is not supported by a uclibc toolchain that does not implement
+> _pid in struct sigevent. Currently this is all MIPS architectures
+> in uclibc.
+> 
+> Fixes:
+>   http://autobuild.buildroot.net/results/074/074265602bec4aba6c82d1aee389045e8ad33d4b
+> 
+> Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+> ---
+>  package/rt-tests/Config.in | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/package/rt-tests/Config.in b/package/rt-tests/Config.in
+> index 58a88a8..a8cede0 100644
+> --- a/package/rt-tests/Config.in
+> +++ b/package/rt-tests/Config.in
+> @@ -5,6 +5,9 @@ config BR2_PACKAGE_RT_TESTS
+>  	depends on !BR2_PTHREADS && !BR2_PTHREADS_OLD
+>  	# no NPTL for these archs
+>  	depends on !BR2_avr32 && !BR2_xtensa && !BR2_arc
+> +	# no _tid field in 'struct sigevent'
+> +	depends on !BR2_TOOLCHAIN_USES_UCLIBC if (BR2_mips || BR2_mipsel || \
+> +		BR2_mips64 || BR2_mips64el)
+
+Gah! This is not correct Kconfig syntax and breaks:
+
+    $ make menuconfig
+    [...]
+    package/rt-tests/Config.in:10: syntax error
+    package/rt-tests/Config.in:9: invalid option
+    package/rt-tests/Config.in:36: syntax error
+    package/rt-tests/Config.in:35: invalid option
+    make[1]: *** [oldconfig] Error 1
+
+Peter, can we revert this change until we have a proper fix, please?
+
+Ryan, what were you trying to do here? Why can you use something like
+(variable abbreviated for clarity):
+
+    depends on ! ( UCLIBC && ( mips || mipsel || mips64 || mips64el ) )
+
+>  	help
+>  	  Set of utilities for testing the real-time behaviour of a
+>  	  Linux system.
+> @@ -27,3 +30,7 @@ comment "rt-tests needs a toolchain w/ threads"
+>  	depends on !BR2_PTHREADS && !BR2_PTHREADS_OLD
+>  	depends on !BR2_avr32 && !BR2_xtensa && !BR2_arc
+>  	depends on !BR2_TOOLCHAIN_HAS_THREADS
+> +
+> +comment "rt-tests needs an (e)glibc toolchain"
+> +	depends on BR2_TOOLCHAIN_USES_UCLIBC if (BR2_mips || BR2_mipsel || \
+> +		BR2_mips64 || BR2_mips64el)
+
+Ditto.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
