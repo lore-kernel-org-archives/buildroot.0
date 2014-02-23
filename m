@@ -1,57 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 23 Feb 2014 15:44:21 +0100
-Subject: [Buildroot] [PATCH] manual: Add a note for dependency comment
- format
-In-Reply-To: <CAGduivyrc0Gk92pbS=-0TLSp4xWDnV54hz1mzH-ixvHCD1hOrw@mail.gmail.com>
-References: <1393160748-14235-1-git-send-email-maxime.hadjinlian@gmail.com>
- <20140223150456.78a2b2ce@skate>
- <CAGduivyrc0Gk92pbS=-0TLSp4xWDnV54hz1mzH-ixvHCD1hOrw@mail.gmail.com>
-Message-ID: <20140223154421.0bb178b1@skate>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 23 Feb 2014 14:45:42 +0000 (UTC)
+Subject: [Buildroot] [Bug 5420] Dbus and /var/run management
+In-Reply-To: <bug-5420-163@https.bugs.busybox.net/>
+References: <bug-5420-163@https.bugs.busybox.net/>
+Message-ID: <20140223144542.8C99B9B806@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxime Hadjinlian,
+https://bugs.busybox.net/show_bug.cgi?id=5420
 
-On Sun, 23 Feb 2014 15:35:37 +0100, Maxime Hadjinlian wrote:
-> Hi Thomas, all
-> On Sun, Feb 23, 2014 at 3:04 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
-> > Dear Maxime Hadjinlian,
-> >
-> > On Sun, 23 Feb 2014 14:05:48 +0100, Maxime Hadjinlian wrote:
-> >> Add a quick note to clarify that the format of the depencency comments
-> >> applies irregardless of the number of dependencies.
-> >>
-> >> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> >> ---
-> >>  docs/manual/adding-packages-directory.txt | 1 +
-> >>  1 file changed, 1 insertion(+)
-> >>
-> >> diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-> >> index 3dc5395..b6dc981 100644
-> >> --- a/docs/manual/adding-packages-directory.txt
-> >> +++ b/docs/manual/adding-packages-directory.txt
-> >> @@ -205,6 +205,7 @@ aircrack-ng needs a toolchain w/ largefile, threads
-> >>
-> >>  Note that this text is kept brief on purpose, so that it will fit on a
-> >>  80-character terminal.
-> >> +This format must be repected even if there is only one dependency.
-> >
-> > I'm not sure what you mean here. Could you explain a bit more?
-> The examples always give with n depedency. Someone may ask himself if
-> this format is valid for only one depedency.
-> Should it reduce the with to w/, etc...
+Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> changed:
 
-Then it is unclear, because your sentence come right after the sentence
-mentioning the 80-character limit. So when I read this, I thought you
-were saying "even when there is a single dependency, the text must fit
-on a 80-character terminal", which doesn't made much sense.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |WORKSFORME
 
-Thomas
+--- Comment #2 from Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> 2014-02-23 14:45:42 UTC ---
+No feedback from submitter after request for clarification.
+There seems to be no problem in the handling of /tmp and /var/run/dbus, even
+with symbolic links.
+Please reopen if you still have the problem, in which case you should provide
+more details.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
