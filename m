@@ -1,79 +1,57 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Feb 2014 20:12:28 +0100
-Subject: [Buildroot] [PATCH 2/2] package/mysql: fix debugging options
-In-Reply-To: <1392244774-15356-2-git-send-email-kuyurix@gmail.com>
-References: <1392244774-15356-1-git-send-email-kuyurix@gmail.com>
- <1392244774-15356-2-git-send-email-kuyurix@gmail.com>
-Message-ID: <20140223191228.GG32759@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 23 Feb 2014 20:16:40 +0100
+Subject: [Buildroot] [PATCH] lua: needs dynamic library support (dlopen)
+In-Reply-To: <CAB0FRssLEc6ntNwO53oDL-+yNSnBkBnP=wr7VAS3ox2WZ+HsCA@mail.gmail.com>
+References: <8a14c6297835e91f6691.1393175989@argentina>
+ <20140223183830.2a7c25eb@skate>
+ <d16bf125-1e0d-4c3a-a591-7cd43b3c7469@email.android.com>
+ <CAB0FRssLEc6ntNwO53oDL-+yNSnBkBnP=wr7VAS3ox2WZ+HsCA@mail.gmail.com>
+Message-ID: <20140223201640.145e11f7@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Marcello, All,
+Dear Fran?ois Perrad,
 
-On 2014-02-12 22:39 +0000, Marcelo Guti?rrez spake thusly:
-> From: Marcelo Gutierrez <kuyurix@gmail.com>
+On Sun, 23 Feb 2014 19:15:41 +0100, Fran?ois Perrad wrote:
+
+> >>No, that's not the correct fix. The correct fix is a variant of
+> >>http://patchwork.ozlabs.org/patch/313208/, which as suggested by Peter
+> >>should use BR2_PREFER_STATIC_LIB as a condition, and not
+> >>BR2_BINFMT_FLAT.
+> >
+> > Ok, understood.
+> > Francois, what are your plans with that patch?
 > 
-> The usual --{en,dis}able-debug passed by the infrastructure are not
-> recognised by mysql's ./configure, as it uses unusual options.
+> http://patchwork.ozlabs.org/patch/313208/ is a V1 with BR2_BINFMT_FLAT.
+> I've already send a V2, see
+> http://patchwork.ozlabs.org/patch/314145/ --> lua: refactor install steps
+> http://patchwork.ozlabs.org/patch/314146/ --> lua: handles BR2_PREFER_STATIC_LIB
 > 
-> Also, debugging is only meaningfull to the server, not the client.
-> 
-> Signed-off-by: Marcelo Gutierrez (UTN/FRH) <kuyurix@gmail.com>
-> [yann.morin.1998 at free.fr: actually add the options, move in server if-block]
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Note: V1 fixes only compilation issue, V2 handles compilation,
+> linking, and installation
 
-Obviously, this already has my SoB-line.
+Generally speaking, I would recommend you (and I believe I already did)
+to write more detailed commit logs. It would clearly help to get your
+patches merged. Your first patch has absolutely no information, and
+your second patch only references the autobuilder failure.
 
-So this is just a reminder for Peter. ;-)
+As a rule of thumb, if your patch is not trivial, there should at least
+be 2 or 3 paragraphs of text in the commit log. If there is not 2 or 3
+paragraphs, then you should, before sending the patch, wonder if there
+is really enough information for an external reviewer to understand
+what's going on.
 
-Regards,
-Yann E. MORIN.
+I really, really appreciate all your contributions, and I would like to
+see them merged faster. And to help achieve this, better commit logs is
+definitely a key thing.
 
-> ---
->  package/mysql/mysql.mk |   11 +++++++++--
->  1 file changed, 9 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/mysql/mysql.mk b/package/mysql/mysql.mk
-> index 27afc9f..95b30b7 100644
-> --- a/package/mysql/mysql.mk
-> +++ b/package/mysql/mysql.mk
-> @@ -30,8 +30,7 @@ MYSQL_CONF_OPT = \
->  	--without-libedit \
->  	--without-readline \
->  	--with-low-memory \
-> -	--enable-thread-safe-client \
-> -	$(ENABLE_DEBUG)
-> +	--enable-thread-safe-client
->  
->  ifeq ($(BR2_PACKAGE_MYSQL_SERVER),y)
->  MYSQL_DEPENDENCIES += host-mysql host-bison
-> @@ -57,6 +56,14 @@ MYSQL_CONF_OPT += \
->  	--without-plugin-innodb_plugin \
->  	--without-plugin-ndbcluster
->  
-> +# Debugging is only available for the server, so no need for
-> +# this if-block outside of the server if-block
-> +ifeq ($(BR2_ENABLE_DEBUG),y)
-> +MYSQL_CONF_OPT += --with-debug=full
-> +else
-> +MYSQL_CONF_OPT += --without-debug
-> +endif
-> +
->  define HOST_MYSQL_BUILD_CMDS
->  	$(MAKE) -C $(@D)/include my_config.h
->  	$(MAKE) -C $(@D)/mysys libmysys.a
-> -- 
-> 1.7.9.5
-> 
+Thanks a lot!
 
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
