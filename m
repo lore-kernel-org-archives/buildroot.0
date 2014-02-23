@@ -1,44 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Feb 2014 12:30:02 +0100
-Subject: [Buildroot] [git commit] pixman: fix patch for FE_DIVBYZERO
-	detection
-Message-ID: <20140223113404.BD51E9B97B@busybox.osuosl.org>
+Date: Sun, 23 Feb 2014 12:32:09 +0100
+Subject: [Buildroot] [git commit] alsa-lib: add sequence number to existing
+	patches
+Message-ID: <20140223113404.C5A708B50D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cb7c12f58cb58b0ea14d2a49b009676ddefec98f
+commit: http://git.buildroot.net/buildroot/commit/?id=f895a67968c201ee8b84e1b181a6b5973c1fd8f4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In commit a9baea4345625f6f00fc59395faec83e08346015 ('pixman: add patch
-to fix Microblaze build failure'), a patch is added to the pixman
-package to avoid using the FE_DIVBYZERO definition when it is not
-available. However, it was using the have_fe_divbyzero variable to
-define or not HAVE_FEDIVBYZERO, while the AC_CHECK_DECL autoconf macro
-sets the ac_cv_have_decl_FE_DIVBYZERO variable.
-
-The end result was that the FE_DIVBYZERO macro was considered as never
-being available. This commit fixes that by using the appropriate
-variable.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pixman/pixman-02-check-fe-divbyzero.patch |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ ....patch => alsa-lib-0001-avr32-bad-inline.patch} |    0
+ ...lib-no-mmu.patch => alsa-lib-0002-no-mmu.patch} |    0
+ 2 files changed, 0 insertions(+), 0 deletions(-)
 
-diff --git a/package/pixman/pixman-02-check-fe-divbyzero.patch b/package/pixman/pixman-02-check-fe-divbyzero.patch
-index 44dd691..01c6c96 100644
---- a/package/pixman/pixman-02-check-fe-divbyzero.patch
-+++ b/package/pixman/pixman-02-check-fe-divbyzero.patch
-@@ -16,7 +16,7 @@ Index: b/configure.ac
-  fi
-  
- +AC_CHECK_DECL([FE_DIVBYZERO], [], [], [[#include <fenv.h>]])
--+if test x$have_fe_divbyzero = xyes; then
-++if test x$ac_cv_have_decl_FE_DIVBYZERO = xyes; then
- +   AC_DEFINE(HAVE_FEDIVBYZERO, 1, [Whether we have FE_DIVBYZERO])
- +fi
- +
+diff --git a/package/alsa-lib/alsa-lib-avr32-bad-inline.patch b/package/alsa-lib/alsa-lib-0001-avr32-bad-inline.patch
+similarity index 100%
+rename from package/alsa-lib/alsa-lib-avr32-bad-inline.patch
+rename to package/alsa-lib/alsa-lib-0001-avr32-bad-inline.patch
+diff --git a/package/alsa-lib/alsa-lib-no-mmu.patch b/package/alsa-lib/alsa-lib-0002-no-mmu.patch
+similarity index 100%
+rename from package/alsa-lib/alsa-lib-no-mmu.patch
+rename to package/alsa-lib/alsa-lib-0002-no-mmu.patch
