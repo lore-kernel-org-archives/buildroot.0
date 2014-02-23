@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 Feb 2014 00:40:49 +0100
-Subject: [Buildroot] [PATCH 02/13] toolchain/common: add minimum kernel
-	headers options
+Date: Mon, 24 Feb 2014 00:40:50 +0100
+Subject: [Buildroot] [PATCH 03/13] manual: document minimal kernel headers
+	dependency
 In-Reply-To: <cover.1393198603.git.yann.morin.1998@free.fr>
 References: <cover.1393198603.git.yann.morin.1998@free.fr>
-Message-ID: <0ea158ba0ec00584cdeef65a7545a948d4b21c27.1393198603.git.yann.morin.1998@free.fr>
+Message-ID: <1249d9593e127149e2634d7224be38baac0f8850.1393198603.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,103 +13,36 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-We now have quite a few packages that depend on the kernel headers to be
-at least a certain version. For example, dvb-apps requires at least the
-3.3 kernel headers.
-
-Add a set of options that packages can depend on, to check that the kernel
-headers match their required version.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Samuel Martin <s.martin49@gmail.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 ---
-Notes:
-1. We only add those versions already in the internal backend choice,
-on the assumption that we won't have a package that depends on headers
-older than the ones we provide ourselves in our internal backend.
-
-This may pose a problem if the user selects (eg.) 2.6.39 as a custom
-version, and a package would work with those headers. But since we only
-start with 3.0, the package would not be selectable.
-
-2. This does not address the format of the comment for when a package
-depends on a specific kernel headers, to come in a following patch.
-
-3. This is not used for now, but will be in the following patches.
+Changes v1 -> v2:
+  - fix typo  (Samuel)
+  - fix asciidoc syntax  (Thomas DS)
 ---
- toolchain/toolchain-common.in | 59 +++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 59 insertions(+)
+ docs/manual/adding-packages-directory.txt | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 8435a65..f0785a2 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -107,3 +107,62 @@ config BR2_ECLIPSE_REGISTER
- 	  This options tells Buildroot to generate the necessary
- 	  configuration files to make your toolchain appear within
- 	  Eclipse, through the Eclipse Buildroot plugin.
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index 40e543c..ead3570 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -218,6 +218,12 @@ use in the comment.
+ ** Dependency symbol: +BR2_USE_MMU+
+ ** Comment string: no comment to be added
+ 
++* Kernel headers
++** Dependency symbol: +BR2_TOOLCHAIN_HEADERS_AT_LEAST_X_Y+, (replace
++   +X_Y+ with the proper version, see +toolchain/toolchain-common.in+)
++** Comment string: +headers >= X.Y+ (replace +X.Y+ with the
++   proper version)
 +
-+# Options for packages to depend on, if they require at least a
-+# specific version of the kernel headers.
-+# Toolchains should choose the adequate option (ie. the highest
-+# version, not all of them).
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-+	bool
-+
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
-+	bool
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-+
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
-+	bool
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
-+
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
-+	bool
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
-+
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
-+	bool
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
-+
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
-+	bool
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
-+
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_6
-+	bool
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
-+
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
-+	bool
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_6
-+
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
-+	bool
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
-+
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
-+	bool
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
-+
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
-+	bool
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
-+
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
-+	bool
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
-+
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
-+	bool
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
-+
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
-+	bool
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
+ * C library
+ ** Dependency symbol: +BR2_TOOLCHAIN_USES_GLIBC+,
+ +BR2_TOOLCHAIN_USES_UCLIBC+
 -- 
 1.8.3.2
