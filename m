@@ -1,49 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Feb 2014 16:34:53 +0100
-Subject: [Buildroot] [git commit] package/linux-headers: add comment to
-	safely ignore missing cross-compiler
-Message-ID: <20140223153613.E1B3D9B583@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 23 Feb 2014 16:37:52 +0100
+Subject: [Buildroot] [PATCH 04/13] docs/manual: reference Python and Lua
+ infras from the list of package infrastructures
+In-Reply-To: <20140223152957.GF3342@free.fr>
+References: <1393167879-16637-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1393167879-16637-5-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20140223152957.GF3342@free.fr>
+Message-ID: <20140223163752.7964f79d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6c1ee14b2922e737474e53a740a2af0f00a444f7
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Yann E. MORIN,
 
-For some architectures (eg. Arc, Cris, Hexagon, ia64, Parisc, Score and
-Xtensa), the Linux buildsystem tries to call the cross-compiler when
-installing the headers.
+On Sun, 23 Feb 2014 16:29:57 +0100, Yann E. MORIN wrote:
 
-This is a spurious call, since a cross-compiler is not needed at all to
-install the headers.
+> > +* *Makefiles for Python modules*: We have a dedicated infrastructure
+> > +   for Python modules that use either the +distutils+ or the
+> > +   +setuptools+ mechanism. We cover them through a
+> > +   xref:python-package-tutorial[tutorial] and
+> > +   xref:python-package-reference[reference].
+> 
+> I believe english grammar mandates the following:
+>     [...] a tutorial and a reference.
+> 
+> So, you're missing an 'a' between the 'and' and the 'reference'.
 
-As some users have reported the issue, just add a comment in linux-headers.mk
-directing the user to ignore those errors.
+Ok. I'll see if Peter applies the patch and makes the change himself
+before resending 13 patches :-)
 
-Reported-by: Noam Camus <noamc@ezchip.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/linux-headers/linux-headers.mk |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+> Also, what about the mandatory status of this? For other package
+> onfrastructures, we say:
+>     This infrastructure must be used for new packages that rely on [XXX]
+>     as their build system.
+> 
+> Why don't we add this for Python modules?
 
-diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
-index 30d3076..086e5d5 100644
---- a/package/linux-headers/linux-headers.mk
-+++ b/package/linux-headers/linux-headers.mk
-@@ -17,6 +17,12 @@ LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.xz
- 
- LINUX_HEADERS_INSTALL_STAGING = YES
- 
-+# For some architectures (eg. Arc, Cris, Hexagon, ia64, parisc,
-+# score and xtensa), the Linux buildsystem tries to call the
-+# cross-compiler, although it is not needed at all.
-+# This results in seemingly errors like:
-+#   [...]/scripts/gcc-version.sh: line 26: arc-linux-uclibc-gcc: command not found
-+# Those can be safely ignored.
- define LINUX_HEADERS_INSTALL_STAGING_CMDS
- 	(cd $(@D); \
- 		$(TARGET_MAKE_ENV) $(MAKE) \
+I found it quite redundant, and in fact I believe it is now a bit
+useless even for autotools and cmake packages. It used to be useful at
+the time we had old-style packages that were not yet converted. But
+nowadays, it is quite clear that if the package infrastructure exists
+and matches the build system of a given package, then it must be used.
+
+Thanks a lot for the review!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
