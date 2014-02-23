@@ -1,94 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Feb 2014 16:35:47 +0100
-Subject: [Buildroot] [PATCH 06/13] docs/manual: add section about build
- time graphing
-In-Reply-To: <1393167879-16637-7-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1393167879-16637-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1393167879-16637-7-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20140223153547.GH3342@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 23 Feb 2014 16:32:52 +0100
+Subject: [Buildroot] [git commit] webkit: disable on powerpc
+Message-ID: <20140223153613.BE9159B838@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=39a0fa4b0d85389f85f2cfe126e2f10f94542cb8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2014-02-23 16:04 +0100, Thomas Petazzoni spake thusly:
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  docs/manual/common-usage.txt | 47 ++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 47 insertions(+)
-> 
-> diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
-> index bef42c6..76e4023 100644
-> --- a/docs/manual/common-usage.txt
-> +++ b/docs/manual/common-usage.txt
-> @@ -201,3 +201,50 @@ supported.
->  --------------------------------
->  GRAPH_OUT=svg make graph-depends
->  --------------------------------
-> +
-> +Graphing the build duration
-> +~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> +
-> +[[graph-duration]]
-> +
-> +When the build of a system takes a long time, it is sometimes useful
-> +to be able to understand which packages are the longest to build, to
-> +see if anything can be done to speed up the build. In order to help
-> +such build time analysis, Buildroot collects the build time of each
-> +step of each package, and allows to generate graphs from these data.
-> +
-> +To generate the build time graph after a build, run:
-> +
-> +----------------
-> +make graph-build
-> +----------------
-> +
-> +This will generate a set of files in +output/graphs+ :
-> +
-> +* +build.hist-build.pdf+, an histogram of the build time for each
-> +  package, ordered in the build order.
-> +
-> +* +build.hist-duration.pdf+, an histogram of the build time for each
-> +  package, ordered by duration (longest first)
-> +
-> +* +build.hist-name.pdf+, an histogram of the build time for each
-> +  package, order by package name.
-> +
-> +* +build.pie-packages.pdf+, a pie chart of the build time per package
-> +
-> +* +build.pie-steps.pdf+, a pie chart of the global time spent in each
-> +  step of the packages build process.
-> +
-> +This +graph-build+ target requires the Python Matplotlib and Numpy
-> +libraries to be installed (+python-matplotlib+ and +python-numpy+ on
-> +most distributions), and also the +argparse+ module if you're using a
-> +Python version older than 2.7 (+python-argparse+ on most
-> +distributions).
-> +
-> +By default, the output format for the graph is PDF, but a different
-> +format can be selected using the +GRAPH_OUT+ environment variable. The
-> +only other format supported is PNG:
-> +
-> +----------------
-> +GRAPH_OUT=png make graph-build
-> +----------------
+webkit does not build correctly on powerpc. There is an upstream bug report
+with a partial fix, but with remaining problems.
+https://bugs.webkit.org/show_bug.cgi?id=113638
 
-We also have GRAPH_ALT which sets an alternative colour-scheme for the
-time graphs:
-    GRAPH_ALT=y make graph-build
+Until this problem is fixed, we disable webkit on powerpc.
 
-Which can be combined with GRAPH_OUT, of course.
+Fixes
+http://autobuild.buildroot.org/results/3ce/3ce992a663ddf1030a987bb778f8275a8e5fdef0/
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/webkit/Config.in |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/webkit/Config.in b/package/webkit/Config.in
+index 45f2058..0486490 100644
+--- a/package/webkit/Config.in
++++ b/package/webkit/Config.in
+@@ -4,7 +4,9 @@ config BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
+ 	default y if (BR2_arm || BR2_armeb) && \
+ 		!(BR2_arm7tdmi || BR2_arm720t || BR2_arm920t || BR2_arm922t || BR2_fa526)
+ 	default y if BR2_i386 || BR2_mips || BR2_mipsel || \
+-		BR2_powerpc || BR2_sh || BR2_sparc || BR2_x86_64
++		BR2_sh || BR2_sparc || BR2_x86_64
++
++# disabled on powerpc due to bug https://bugs.webkit.org/show_bug.cgi?id=113638
+ 
+ config BR2_PACKAGE_WEBKIT
+ 	bool "webkit"
