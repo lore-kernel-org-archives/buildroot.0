@@ -1,90 +1,70 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 23 Feb 2014 11:11:16 +0100
-Subject: [Buildroot] [PATCH 2 of 5 v2] alsa-lib: fix build when dynamic load
- is not supported (e.g. blackfin FLAT)
+Date: Sun, 23 Feb 2014 11:11:17 +0100
+Subject: [Buildroot] [PATCH 3 of 5 v2] alsa-lib: add patch to remove
+	hardcoded -ldl
 In-Reply-To: <patchbomb.1393150274@argentina>
 References: <patchbomb.1393150274@argentina>
-Message-ID: <5186281b48e0c41c30c9.1393150276@argentina>
+Message-ID: <7aa8c16598bc05610c36.1393150277@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The FLAT GNU toolchain doesn't include the dlfcn.h header file.
-Provide the necessary declarations (RTLD_*) to make alsa-lib happy.
+The AM_PATH_ALSA macro in utils/alsa.m4 unconditionally uses -ldl. This
+breaks compilation of alsa-utils (and probably other packages using this
+macro) for targets that do not support dynamic loading, such as for
+Blackfin FLAT binaries.
+
+This patch updates the macro to check if dlopen is available, and use that
+result to conditionally add -ldl to the list of libraries.
 
 Fixes
-http://autobuild.buildroot.org/results/706/7069e1f43cbed745d65f7dd9904a3fff034530ac/build-end.log
+http://autobuild.buildroot.org/results/de2/de286880973be956f6c504aa9a758171d6f49674/build-end.log
 
-Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
-[Thomas: change sequence number from 003 to 0003, update patch and commit
-         message ]
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
- package/alsa-lib/alsa-lib-0003-dlmisc.patch |  57 +++++++++++++++++++++++
- 1 files changed, 57 insertions(+), 0 deletions(-)
+ package/alsa-lib/alsa-lib-0004-conditional-enabling-of-libdl-in-m4.patch |  35 ++++++++++
+ 1 files changed, 35 insertions(+), 0 deletions(-)
 
-diff --git a/package/alsa-lib/alsa-lib-0003-dlmisc.patch b/package/alsa-lib/alsa-lib-0003-dlmisc.patch
+diff --git a/package/alsa-lib/alsa-lib-0004-conditional-enabling-of-libdl-in-m4.patch b/package/alsa-lib/alsa-lib-0004-conditional-enabling-of-libdl-in-m4.patch
 new file mode 100644
 --- /dev/null
-+++ b/package/alsa-lib/alsa-lib-0003-dlmisc.patch
-@@ -0,0 +1,57 @@
-+alsa-lib: provide dummy definitions of RTLD_* if necessary
++++ b/package/alsa-lib/alsa-lib-0004-conditional-enabling-of-libdl-in-m4.patch
+@@ -0,0 +1,35 @@
++alsa-lib: conditionally enable libdl in AM_PATH_ALSA m4 macro
 +
-+The FLAT GNU toolchain (e.g. blackfin) doesn't include the dlfcn.h header
-+file, so we need to guard that include. Additionally, provide dummy
-+definitions for parameters RTLD_GLOBAL / RTLD_NOW which are normally
-+provided by dlfcn.h.
++The AM_PATH_ALSA macro in utils/alsa.m4 unconditionally uses -ldl. This
++breaks compilation of alsa-utils (and probably other packages using this
++macro) for targets that do not support dynamic loading, such as for
++Blackfin FLAT binaries.
 +
-+Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
-+[Thomas: don't add separate dlmisc.h, move dummy defs to global.h]
++This patch updates the macro to check if dlopen is available, and use that
++result to conditionally add -ldl to the list of libraries.
++
 +Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 +
-+diff --git a/include/global.h b/include/global.h
-+--- a/include/global.h
-++++ b/include/global.h
-+@@ -97,6 +97,16 @@ extern struct snd_dlsym_link *snd_dlsym_
-+ /** \brief Returns the version of a dynamic symbol as a string. */
-+ #define SND_DLSYM_VERSION(version) __STRING(version)
++---
++
++diff --git a/utils/alsa.m4 b/utils/alsa.m4
++--- a/utils/alsa.m4
+++++ b/utils/alsa.m4
++@@ -44,6 +44,8 @@ if test "$alsa_inc_prefix" != "" ; then
++ fi
++ AC_MSG_RESULT($ALSA_CFLAGS)
 + 
-++/* RTLD_NOW and RTLD_GLOBAL (used for 'mode' in snd_dlopen) are not defined
-++ * on all arches (e.g. blackfin), so provide a dummy definition here. */
-++#ifndef RTLD_NOW
-++#define RTLD_NOW 0
-++#endif
+++AC_CHECK_LIB(c, dlopen, LIBDL="", [AC_CHECK_LIB(dl, dlopen, LIBDL="-ldl")])
 ++
-++#ifndef RTLD_GLOBAL
-++#define RTLD_GLOBAL 0
-++#endif
-++
-+ void *snd_dlopen(const char *file, int mode);
-+ void *snd_dlsym(void *handle, const char *name, const char *version);
-+ int snd_dlclose(void *handle);
-+diff --git a/modules/mixer/simple/sbasedl.c b/modules/mixer/simple/sbasedl.c
-+--- a/modules/mixer/simple/sbasedl.c
-++++ b/modules/mixer/simple/sbasedl.c
-+@@ -27,7 +27,9 @@
-+ #include <fcntl.h>
-+ #include <sys/ioctl.h>
-+ #include <math.h>
-++#ifdef HAVE_LIBDL
-+ #include <dlfcn.h>
-++#endif
-+ #include "config.h"
-+ #include "asoundlib.h"
-+ #include "mixer_abst.h"
-+diff --git a/src/mixer/simple_abst.c b/src/mixer/simple_abst.c
-+--- a/src/mixer/simple_abst.c
-++++ b/src/mixer/simple_abst.c
-+@@ -34,7 +34,9 @@
-+ #include <fcntl.h>
-+ #include <sys/ioctl.h>
-+ #include <math.h>
-++#ifdef HAVE_LIBDL
-+ #include <dlfcn.h>
-++#endif
-+ #include "config.h"
-+ #include "asoundlib.h"
-+ #include "mixer_simple.h"
++ dnl add any special lib dirs
++ AC_MSG_CHECKING(for ALSA LDFLAGS)
++ if test "$alsa_prefix" != "" ; then
++@@ -52,7 +54,7 @@ if test "$alsa_prefix" != "" ; then
++ fi
++ 
++ dnl add the alsa library
++-ALSA_LIBS="$ALSA_LIBS -lasound -lm -ldl -lpthread"
+++ALSA_LIBS="$ALSA_LIBS -lasound -lm $LIBDL -lpthread"
++ LIBS="$ALSA_LIBS $LIBS"
++ AC_MSG_RESULT($ALSA_LIBS)
++ 
