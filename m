@@ -1,42 +1,58 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Feb 2014 22:17:18 +0100
-Subject: [Buildroot] [git commit] docs/manual: update external toolchain
-	examples
-Message-ID: <20140223213139.3047E9B97B@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 23 Feb 2014 22:33:31 +0100
+Subject: [Buildroot] [PATCH 12/13] docs/manual: document the usage of
+ <pkg>_OVERRIDE_SRCDIR
+In-Reply-To: <87eh2to6v0.fsf@dell.be.48ers.dk>
+References: <1393167879-16637-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1393167879-16637-13-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20140223162934.GC32759@free.fr> <87eh2to6v0.fsf@dell.be.48ers.dk>
+Message-ID: <20140223213331.GJ32759@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=08ad8a7c0449cacc237215737c182f6730c6bc12
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 2014-02-23 22:29 +0100, Peter Korsgaard spake thusly:
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+> 
+> Hi,
+> 
+>  >> +appropriate solution, because this directory is removed on +make
+>  >> +clean+.
+>  >> +
+>  >> +Therefore, Buildroot provides a specific mechanism for this use case:
+>  >> +the +<pkg>_OVERRIDE_SRCDIR+ mechanism. Buildroot reads an _override_
+>  >> +file, which allows the user to tell Buildroot the location of the
+>  >> +source for certain packages. By default this _override_ file is named
+>  >> ++local.mk+ and located in the top directory of the Buildroot source
+>  >> +tree,
+> 
+>  > Wrong, now it is locate in $(CONFIG_DIR), that is, the directory where
+>  > we have the .config file, since:
+>  >     b1e514d Config: default BR2_PACKAGE_OVERRIDE_FILE to $(CONFIG_DIR)/local.mk
+> 
+>  > This is Buildroot's top dir when building in-tree, and for out-of-tree
+>  > builds, it's in $(O).
+> 
+> True, but that commit is only in next, and I imho think this series
+> belongs on master, so I'll leave it for now.
 
-Replace ADI by Analog Devices, which is clearer for most people, and
-remove the Xilinx external toolchains since we have deprecated them.
+Right! In fact, I was looking at my tree, which has it. It's eda3d0e on
+-next.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/manual/configure.txt |    7 +++----
- 1 files changed, 3 insertions(+), 4 deletions(-)
+And I agree, this series belongs to master. We'll just have to remember
+it at merge time.
 
-diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
-index b566e8a..a6afafb 100644
---- a/docs/manual/configure.txt
-+++ b/docs/manual/configure.txt
-@@ -138,10 +138,9 @@ http://www.linaro.org[Linaro] for ARM,
- http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition/[Sourcery
- CodeBench] for ARM, x86, x86-64, PowerPC, MIPS and SuperH,
- https://blackfin.uclinux.org/gf/project/toolchain[Blackfin toolchains
--from ADI], http://git.xilinx.com/[Xilinx toolchains for Microblaze],
--etc.) and is capable of downloading them automatically, or it can be
--pointed to a custom toolchain, either available for download or
--installed locally.
-+from Analog Devices], etc.) and is capable of downloading them
-+automatically, or it can be pointed to a custom toolchain, either
-+available for download or installed locally.
- 
- Then, you have three solutions to use an external toolchain:
- 
+Sorry for the disruption.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
