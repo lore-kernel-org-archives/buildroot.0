@@ -1,159 +1,252 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Feb 2014 22:38:02 +0100
-Subject: [Buildroot] [git commit branch/next] manual: adding packages perl
-Message-ID: <20140223214151.5D9D69B78F@busybox.osuosl.org>
+Date: Sun, 23 Feb 2014 22:36:42 +0100
+Subject: [Buildroot] [git commit branch/next] pkg-perl: new infrastructure
+Message-ID: <20140223214151.3D88C9A88B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d8fab8c5ee7a1b3a1236754a4a59e0630c0cf592
+commit: http://git.buildroot.net/buildroot/commit/?id=9fbb169976a313a20b6fdaf37e67ce80c4771650
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/adding-packages-perl.txt |  120 ++++++++++++++++++++++++++++++++++
- docs/manual/adding-packages.txt      |    2 +
- 2 files changed, 122 insertions(+), 0 deletions(-)
+ Config.in           |   11 +++
+ package/Makefile.in |    4 +-
+ package/pkg-perl.mk |  181 +++++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 195 insertions(+), 1 deletions(-)
 
-diff --git a/docs/manual/adding-packages-perl.txt b/docs/manual/adding-packages-perl.txt
+diff --git a/Config.in b/Config.in
+index 55f5fd8..5a2a098 100644
+--- a/Config.in
++++ b/Config.in
+@@ -230,6 +230,17 @@ config BR2_LUAROCKS_MIRROR
+ 
+ 	  See http://luarocks.org
+ 
++config BR2_CPAN_MIRROR
++	string "CPAN mirror (Perl packages)"
++	default "http://search.cpan.org/CPAN"
++	help
++	  CPAN (Comprehensive Perl Archive Network) is a repository
++	  of Perl packages. It has multiple software mirrors scattered
++	  around the world. This option allows you to select a mirror.
++
++	  The list of mirrors is available at:
++	  http://search.cpan.org/mirror
++
+ endmenu
+ 
+ config BR2_JLEVEL
+diff --git a/package/Makefile.in b/package/Makefile.in
+index eea7043..454f614 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -206,7 +206,8 @@ HOST_PATH=$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(PATH)
+ HOSTCC_VERSION:=$(shell $(HOSTCC_NOCCACHE) --version | \
+ 	sed -n 's/^.* \([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)[ ]*.*$$/\1\2\3/p')
+ 
+-export PERL5LIB := $(HOST_DIR)/usr/lib/perl
++HOST_PERL_ARCHNAME := $(shell perl -MConfig -e "print Config->{archname}")
++export PERL5LIB := $(HOST_DIR)/usr/lib/perl5/$(HOST_PERL_ARCHNAME):$(HOST_DIR)/usr/lib/perl5
+ 
+ TARGET_CONFIGURE_OPTS=PATH=$(TARGET_PATH) \
+ 		AR="$(TARGET_AR)" \
+@@ -359,5 +360,6 @@ include package/pkg-download.mk
+ include package/pkg-autotools.mk
+ include package/pkg-cmake.mk
+ include package/pkg-luarocks.mk
++include package/pkg-perl.mk
+ include package/pkg-python.mk
+ include package/pkg-generic.mk
+diff --git a/package/pkg-perl.mk b/package/pkg-perl.mk
 new file mode 100644
-index 0000000..53aacbd
+index 0000000..fdf1580
 --- /dev/null
-+++ b/docs/manual/adding-packages-perl.txt
-@@ -0,0 +1,120 @@
-+// -*- mode:doc; -*-
-+// vim: set syntax=asciidoc:
++++ b/package/pkg-perl.mk
+@@ -0,0 +1,181 @@
++################################################################################
++# Perl package infrastructure
++#
++# This file implements an infrastructure that eases development of
++# package .mk files for Perl packages.
++#
++# See the Buildroot documentation for details on the usage of this
++# infrastructure
++#
++# In terms of implementation, this perl infrastructure requires
++# the .mk file to only specify metadata information about the
++# package: name, version, download URL, etc.
++#
++# We still allow the package .mk file to override what the different
++# steps are doing, if needed. For example, if <PKG>_BUILD_CMDS is
++# already defined, it is used as the list of commands to perform to
++# build the package, instead of the default perl behaviour. The
++# package can also define some post operation hooks.
++#
++################################################################################
 +
-+Infrastructure for Perl/CPAN packages
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++PERL_ARCHNAME	= $(ARCH)-linux
 +
-+[[perl-package-tutorial]]
++################################################################################
++# inner-perl-package -- defines how the configuration, compilation and
++# installation of a perl package should be done, implements a
++# few hooks to tune the build process for perl specifities and
++# calls the generic package infrastructure to generate the necessary
++# make targets
++#
++#  argument 1 is the lowercase package name
++#  argument 2 is the uppercase package name, including an HOST_ prefix
++#             for host packages
++#  argument 3 is the uppercase package name, without the HOST_ prefix
++#             for host packages
++#  argument 4 is the type (target or host)
++################################################################################
 +
-++perl-package+ tutorial
-+^^^^^^^^^^^^^^^^^^^^^^^
++define inner-perl-package
 +
-+First, let's see how to write a +.mk+ file for a Perl/CPAN package,
-+with an example :
++#
++# Configure step. Only define it if not already defined by the package
++# .mk file. And take care of the differences between host and target
++# packages.
++#
++ifndef $(2)_CONFIGURE_CMDS
++ifeq ($(4),target)
 +
-+------------------------
-+01: ################################################################################
-+02: #
-+03: # perl-foo-bar
-+04: #
-+05: ################################################################################
-+06:
-+07: PERL_FOO_BAR_VERSION = 0.02
-+08: PERL_FOO_BAR_SOURCE = Foo-Bar-$(PERL_FOO_BAR_VERSION).tar.gz
-+09: PERL_FOO_BAR_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MO/MONGER/
-+10: PERL_FOO_BAR_DEPENDENCIES = perl-strictures
-+11: PERL_FOO_BAR_LICENSE = Artistic or GPLv1+
-+12: PERL_FOO_BAR_LICENSE_FILES = LICENSE
-+13:
-+14: $(eval $(perl-package))
-+------------------------
++# Configure package for target
++define $(2)_CONFIGURE_CMDS
++	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] ; then \
++		perl Build.PL \
++			--config ar="$(TARGET_AR)" \
++			--config full_ar="$(TARGET_AR)" \
++			--config cc="$(TARGET_CC)" \
++			--config ccflags="$(TARGET_CFLAGS)" \
++			--config ld="$(TARGET_CC)" \
++			--config lddlflags="-shared $(TARGET_LDFLAGS)" \
++			--config ldflags="$(TARGET_LDFLAGS)" \
++			--include_dirs $$(STAGING_DIR)/usr/lib/perl5/$$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE \
++			--destdir $$(TARGET_DIR) \
++			--installdirs vendor \
++			--install_path lib=/usr/lib/perl5/site_perl/$$(PERL_VERSION) \
++			--install_path arch=/usr/lib/perl5/site_perl/$$(PERL_VERSION)/$(PERL_ARCHNAME) \
++			--install_path bin=/usr/bin \
++			--install_path script=/usr/bin \
++			--install_path bindoc=/usr/share/man/man1 \
++			--install_path libdoc=/usr/share/man/man3 \
++			$$($(2)_CONF_OPT); \
++	else \
++		PERL_AUTOINSTALL=--skipdeps \
++		perl Makefile.PL \
++			AR="$(TARGET_AR)" \
++			FULL_AR="$(TARGET_AR)" \
++			CC="$(TARGET_CC)" \
++			CCFLAGS="$(TARGET_CFLAGS)" \
++			LD="$(TARGET_CC)" \
++			LDDLFLAGS="-shared $(TARGET_LDFLAGS)" \
++			LDFLAGS="$(TARGET_LDFLAGS)" \
++			DESTDIR=$$(TARGET_DIR) \
++			INSTALLDIRS=vendor \
++			INSTALLVENDORLIB=/usr/lib/perl5/site_perl/$$(PERL_VERSION) \
++			INSTALLVENDORARCH=/usr/lib/perl5/site_perl/$$(PERL_VERSION)/$(PERL_ARCHNAME) \
++			INSTALLVENDORBIN=/usr/bin \
++			INSTALLVENDORSCRIPT=/usr/bin \
++			INSTALLVENDORMAN1DIR=/usr/share/man/man1 \
++			INSTALLVENDORMAN3DIR=/usr/share/man/man3 \
++			$$($(2)_CONF_OPT); \
++	fi
++endef
++else
 +
-+On line 7, we declare the version of the package.
++# Configure package for host
++define $(2)_CONFIGURE_CMDS
++	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] ; then \
++		perl Build.PL \
++			--install_base $$(HOST_DIR)/usr \
++			--installdirs vendor \
++			$$($(2)_CONF_OPT); \
++	else \
++		PERL_AUTOINSTALL=--skipdeps \
++		perl Makefile.PL \
++			INSTALL_BASE=$$(HOST_DIR)/usr \
++			INSTALLDIRS=vendor \
++			$$($(2)_CONF_OPT); \
++	fi
++endef
++endif
++endif
 +
-+On line 8 and 9, we declare the name of the tarball and the location
-+of the tarball on a CPAN server. Buildroot will automatically download
-+the tarball from this location.
++#
++# Build step. Only define it if not already defined by the package .mk
++# file. And take care of the differences between host and target
++# packages.
++#
++ifndef $(2)_BUILD_CMDS
++ifeq ($(4),target)
 +
-+On line 10, we declare our dependencies, so that they are built
-+before the build process of our package starts.
++# Build package for target
++define $(2)_BUILD_CMDS
++	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] ; then \
++		perl Build $$($(2)_BUILD_OPT) build; \
++	else \
++		$(MAKE1) \
++			PERL_INC=$$(STAGING_DIR)/usr/lib/perl5/$$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE \
++			$$($(2)_BUILD_OPT) pure_all; \
++	fi
++endef
++else
 +
-+On line 11 and 12, we give licensing details about the package (its
-+license on line 11, and the file containing the license text on line
-+12).
++# Build package for host
++define $(2)_BUILD_CMDS
++	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] ; then \
++		perl Build $$($(2)_BUILD_OPT) build; \
++	else \
++		$(MAKE1) $$($(2)_BUILD_OPT) pure_all; \
++	fi
++endef
++endif
++endif
 +
-+Finally, on line 14, we invoke the +perl-package+ macro that
-+generates all the Makefile rules that actually allow the package to be
-+built.
++#
++# Host installation step. Only define it if not already defined by the
++# package .mk file.
++#
++ifndef $(2)_INSTALL_CMDS
++define $(2)_INSTALL_CMDS
++	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] ; then \
++		perl Build $$($(2)_INSTALL_TARGET_OPT) install; \
++	else \
++		$(MAKE1) $$($(2)_INSTALL_TARGET_OPT) pure_install; \
++	fi
++endef
++endif
 +
-+Most of these data can be retrieved from https://metacpan.org/.
-+So, this file and the Config.in can be generated by running
-+the script +supports/scripts/scancpan Foo-Bar+ in the Buildroot directory
-+(or in the +BR2_EXTERNAL+ directory).
-+This script creates a Config.in file and foo-bar.mk file for the
-+requested package, and also recursively for all dependencies specified by
-+CPAN. You should still manually edit the result. In particular, the
-+following things should be checked.
++#
++# Target installation step. Only define it if not already defined by
++# the package .mk file.
++#
++ifndef $(2)_INSTALL_TARGET_CMDS
++define $(2)_INSTALL_TARGET_CMDS
++	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] ; then \
++		perl Build $$($(2)_INSTALL_TARGET_OPT) install; \
++	else \
++		$(MAKE1) $$($(2)_INSTALL_TARGET_OPT) pure_install; \
++	fi
++endef
++endif
 +
-+* The +PERL_FOO_BAR_LICENSE_FILES+ variable is not set, because metacpan
-+  doesn't have this information. Also, the name of the license file(s)
-+  varies between packages, and some don't even have a license file.
-+* If the perl module links with a shared library that is provided by
-+  another (non-perl) package, this dependency is not added automatically.
-+  It has to be added manually to +PERL_FOO_BAR_DEPENDENCIES+.
-+* The +package/Config.in+ file has to be updated manually to include the
-+  generated Config.in files. As a hint, the +scancpan+ script prints out
-+  the required +source "..."+ statements, sorted alphabetically.
++# Call the generic package infrastructure to generate the necessary
++# make targets
++$(call inner-generic-package,$(1),$(2),$(3),$(4))
 +
-+[[perl-package-reference]]
++endef
 +
-++perl-package+ reference
-+^^^^^^^^^^^^^^^^^^^^^^^^
++################################################################################
++# perl-package -- the target generator macro for Perl packages
++################################################################################
 +
-+As a policy, packages that provide Perl/CPAN modules should all be
-+named +perl-<something>+ in Buildroot.
-+
-+This infrastructure handles various Perl build systems :
-++ExtUtils-MakeMaker+, +Module-Build+ and +Module-Build-Tiny+.
-++Build.PL+ is always preferred when a package provides a +Makefile.PL+
-+and a +Build.PL+.
-+
-+The main macro of the Perl/CPAN package infrastructure is
-++perl-package+. It is similar to the +generic-package+ macro. The ability to
-+have target and host packages is also available, with the
-++host-perl-package+ macro.
-+
-+Just like the generic infrastructure, the Perl/CPAN infrastructure
-+works by defining a number of variables before calling the
-++perl-package+ macro.
-+
-+First, all the package metadata information variables that exist in the
-+generic infrastructure also exist in the Perl/CPAN infrastructure:
-++PERL_FOO_VERSION+, +PERL_FOO_SOURCE+,
-++PERL_FOO_PATCH+, +PERL_FOO_SITE+,
-++PERL_FOO_SUBDIR+, +PERL_FOO_DEPENDENCIES+,
-++PERL_FOO_INSTALL_TARGET+.
-+
-+Note that setting +PERL_FOO_INSTALL_STAGING+ to +YES+ has no effect
-+unless a +PERL_FOO_INSTALL_STAGING_CMDS+ variable is defined. The perl
-+infrastructure doesn't define these commands since Perl modules generally
-+don't need to be installed to the +staging+ directory.
-+
-+A few additional variables, specific to the Perl/CPAN infrastructure,
-+can also be defined. Many of them are only useful in very specific
-+cases, typical packages will therefore only use a few of them.
-+
-+* +PERL_FOO_CONF_OPT+/+HOST_PERL_FOO_CONF_OPT+, to specify additional
-+  configure options to pass to the +perl Makefile.PL+ or +perl Build.PL+.
-+  By default, empty.
-+
-+* +PERL_FOO_BUILD_OPT+/+HOST_PERL_FOO_BUILD_OPT+, to specify additional
-+  options to pass to +make pure_all+ or +perl Build build+ in the build step.
-+  By default, empty.
-+
-+* +PERL_FOO_INSTALL_TARGET_OPT+, to specify additional options to
-+  pass to +make pure_install+ or +perl Build install+ in the install step.
-+  By default, empty.
-+
-+* +HOST_PERL_FOO_INSTALL_OPT+, to specify additional options to
-+  pass to +make pure_install+ or +perl Build install+ in the install step.
-+  By default, empty.
-diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
-index cc86529..745e33a 100644
---- a/docs/manual/adding-packages.txt
-+++ b/docs/manual/adding-packages.txt
-@@ -22,6 +22,8 @@ include::adding-packages-python.txt[]
- 
- include::adding-packages-luarocks.txt[]
- 
-+include::adding-packages-perl.txt[]
-+
- include::adding-packages-hooks.txt[]
- 
- include::adding-packages-gettext.txt[]
++perl-package = $(call inner-perl-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
++host-perl-package = $(call inner-perl-package,host-$(pkgname),$(call UPPERCASE,host-$(pkgname)),$(call UPPERCASE,$(pkgname)),host)
