@@ -1,13 +1,16 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 23 Feb 2014 23:09:47 +0100
-Subject: [Buildroot] [PATCH] binutils: add upstream patch to fix
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 23 Feb 2014 23:20:57 +0100
+Subject: [Buildroot] [git commit] binutils: add upstream patch to fix
 	--enable-install-libiberty flag
-Message-ID: <1393193387-1777-1-git-send-email-arnout@mind.be>
+Message-ID: <20140223222126.618509B838@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: http://git.buildroot.net/buildroot/commit/?id=fc82f8df85b4023ed8fe382a1cc5369f12d550f0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes http://autobuild.buildroot.org/results/1ea/1ea98985ce06dc1b7569ef5abe2fc13090fb5f3a
 
@@ -18,12 +21,11 @@ It is numbered 001 because it is an upstream patch, so it should come
 before the buildroot patches.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../001-fix-enable-install-libiberty-flag.patch    | 46 ++++++++++++++++++++++
- .../001-fix-enable-install-libiberty-flag.patch    | 46 ++++++++++++++++++++++
- 2 files changed, 92 insertions(+)
- create mode 100644 package/binutils/2.24/001-fix-enable-install-libiberty-flag.patch
- create mode 100644 package/binutils/8351467c933d277ebea0c8d99ad2b65b5f7b6bc2/001-fix-enable-install-libiberty-flag.patch
+ .../001-fix-enable-install-libiberty-flag.patch    |   46 ++++++++++++++++++++
+ .../001-fix-enable-install-libiberty-flag.patch    |   46 ++++++++++++++++++++
+ 2 files changed, 92 insertions(+), 0 deletions(-)
 
 diff --git a/package/binutils/2.24/001-fix-enable-install-libiberty-flag.patch b/package/binutils/2.24/001-fix-enable-install-libiberty-flag.patch
 new file mode 100644
@@ -129,5 +131,3 @@ index 0000000..e408401
 +-- 
 +1.7.1
 +
--- 
-1.9.0
