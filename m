@@ -1,64 +1,133 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 23 Feb 2014 22:48:34 +0100
-Subject: [Buildroot] [git commit] binutils: install libiberty
-In-Reply-To: <20140223104456.5b2585b6@skate>
-References: <20140222230556.8248B8270D@busybox.osuosl.org>
- <20140223104456.5b2585b6@skate>
-Message-ID: <530A6CB2.2080602@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 23 Feb 2014 23:09:47 +0100
+Subject: [Buildroot] [PATCH] binutils: add upstream patch to fix
+	--enable-install-libiberty flag
+Message-ID: <1393193387-1777-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/23/14 10:44, Thomas Petazzoni wrote:
-> Dear Peter Korsgaard,
-> 
-> On Sat, 22 Feb 2014 23:56:39 +0100, Peter Korsgaard wrote:
->> commit: http://git.buildroot.net/buildroot/commit/?id=70ee9fcdfcf6fc7cb214e454afe55cbffec84621
->> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->>
->> Some packages (actually, just oprofile) need to link against libiberty.
->> This option just installs libiberty.a so it has no effect on the target,
->> therefore it's not needed to add a config option for it.
->>
->> Before binutils-2.24, there was a bug in libiberty/Makefile.in that
->> caused libiberty to be installed regardless of the
->> --enable-install-libiberty option. This problem wasn't noticed before
->> because binutils-2.24 is not selected on any of the autobuilders: the
->> version can only be selected if an internal toolchain is used, and it
->> defaults to 2.21.
->>
->> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
->> ---
->>  package/binutils/binutils.mk |    1 +
->>  1 files changed, 1 insertions(+), 0 deletions(-)
-> 
-> Weird, seems like it didn't fix the dropwatch build problem on
-> Microblaze:
-> 
->   http://autobuild.buildroot.org/results/1ea/1ea98985ce06dc1b7569ef5abe2fc13090fb5f3a/build-end.log
-> 
-> (And yes, this build took place after this commit was merged)
+Fixes http://autobuild.buildroot.org/results/1ea/1ea98985ce06dc1b7569ef5abe2fc13090fb5f3a
 
- Okay, sorry, I've been careless...
+The upstream patch patches both configure.ac and configure, so we keep
+that.
 
- During my test I had switched to 2.22 at some point to find out what was
-happening, and I stupidly forgot to remove libiberty.a again... so after
-this patch the build succeeded, but only because libiberty.a is still there.
+It is numbered 001 because it is an upstream patch, so it should come
+before the buildroot patches.
 
- Anyway, it is missing commit 369be6981b2 by Mike Frysinger. Patch follows.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ .../001-fix-enable-install-libiberty-flag.patch    | 46 ++++++++++++++++++++++
+ .../001-fix-enable-install-libiberty-flag.patch    | 46 ++++++++++++++++++++++
+ 2 files changed, 92 insertions(+)
+ create mode 100644 package/binutils/2.24/001-fix-enable-install-libiberty-flag.patch
+ create mode 100644 package/binutils/8351467c933d277ebea0c8d99ad2b65b5f7b6bc2/001-fix-enable-install-libiberty-flag.patch
 
- Regards,
- Arnout
-
-
-
+diff --git a/package/binutils/2.24/001-fix-enable-install-libiberty-flag.patch b/package/binutils/2.24/001-fix-enable-install-libiberty-flag.patch
+new file mode 100644
+index 0000000..e408401
+--- /dev/null
++++ b/package/binutils/2.24/001-fix-enable-install-libiberty-flag.patch
+@@ -0,0 +1,46 @@
++From 369be6981b26787b2685e3b8c6da779dae8ce35f Mon Sep 17 00:00:00 2001
++From: Mike Frysinger <vapier@gentoo.org>
++Date: Mon, 6 Jan 2014 18:15:31 +0000
++Subject: [PATCH] libiberty: fix --enable-install-libiberty flag [PR 56780]
++
++Commit 199570 fixed the --disable-install-libiberty behavior, but it also
++added a bug where the enable path never works because the initial clear
++of target_header_dir wasn't deleted.  So we end up initializing properly
++at the top only to reset it at the end all the time.
++
++[Arnout: adapt to match 2.24 tarball]
++Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
++
++git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/trunk at 206367 138bc75d-0d04-0410-961f-82ee72b054a4
++---
++ libiberty/configure    |    1 -
++ libiberty/configure.ac |    1 -
++ 3 files changed, 6 insertions(+), 2 deletions(-)
++
++diff --git a/libiberty/configure b/libiberty/configure
++index 8ea54da..7bde9b3 100755
++--- a/libiberty/configure
+++++ b/libiberty/configure
++@@ -5507,7 +5507,6 @@ fi
++ 
++ setobjs=
++ CHECK=
++-target_header_dir=
++ if test -n "${with_target_subdir}"; then
++ 
++   # We are being configured as a target library.  AC_REPLACE_FUNCS
++diff --git a/libiberty/configure.ac b/libiberty/configure.ac
++index 4ad88a9..d6180bc 100644
++--- a/libiberty/configure.ac
+++++ b/libiberty/configure.ac
++@@ -405,7 +405,6 @@ fi
++ 
++ setobjs=
++ CHECK=
++-target_header_dir=
++ if test -n "${with_target_subdir}"; then
++ 
++   # We are being configured as a target library.  AC_REPLACE_FUNCS
++-- 
++1.7.1
++
+diff --git a/package/binutils/8351467c933d277ebea0c8d99ad2b65b5f7b6bc2/001-fix-enable-install-libiberty-flag.patch b/package/binutils/8351467c933d277ebea0c8d99ad2b65b5f7b6bc2/001-fix-enable-install-libiberty-flag.patch
+new file mode 100644
+index 0000000..e408401
+--- /dev/null
++++ b/package/binutils/8351467c933d277ebea0c8d99ad2b65b5f7b6bc2/001-fix-enable-install-libiberty-flag.patch
+@@ -0,0 +1,46 @@
++From 369be6981b26787b2685e3b8c6da779dae8ce35f Mon Sep 17 00:00:00 2001
++From: Mike Frysinger <vapier@gentoo.org>
++Date: Mon, 6 Jan 2014 18:15:31 +0000
++Subject: [PATCH] libiberty: fix --enable-install-libiberty flag [PR 56780]
++
++Commit 199570 fixed the --disable-install-libiberty behavior, but it also
++added a bug where the enable path never works because the initial clear
++of target_header_dir wasn't deleted.  So we end up initializing properly
++at the top only to reset it at the end all the time.
++
++[Arnout: adapt to match 2.24 tarball]
++Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
++
++git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/trunk at 206367 138bc75d-0d04-0410-961f-82ee72b054a4
++---
++ libiberty/configure    |    1 -
++ libiberty/configure.ac |    1 -
++ 3 files changed, 6 insertions(+), 2 deletions(-)
++
++diff --git a/libiberty/configure b/libiberty/configure
++index 8ea54da..7bde9b3 100755
++--- a/libiberty/configure
+++++ b/libiberty/configure
++@@ -5507,7 +5507,6 @@ fi
++ 
++ setobjs=
++ CHECK=
++-target_header_dir=
++ if test -n "${with_target_subdir}"; then
++ 
++   # We are being configured as a target library.  AC_REPLACE_FUNCS
++diff --git a/libiberty/configure.ac b/libiberty/configure.ac
++index 4ad88a9..d6180bc 100644
++--- a/libiberty/configure.ac
+++++ b/libiberty/configure.ac
++@@ -405,7 +405,6 @@ fi
++ 
++ setobjs=
++ CHECK=
++-target_header_dir=
++ if test -n "${with_target_subdir}"; then
++ 
++   # We are being configured as a target library.  AC_REPLACE_FUNCS
++-- 
++1.7.1
++
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.9.0
