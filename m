@@ -1,53 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 23 Feb 2014 16:37:52 +0100
-Subject: [Buildroot] [PATCH 04/13] docs/manual: reference Python and Lua
- infras from the list of package infrastructures
-In-Reply-To: <20140223152957.GF3342@free.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 23 Feb 2014 16:39:31 +0100
+Subject: [Buildroot] [PATCH 08/13] docs/manual: update external
+ toolchain examples
+In-Reply-To: <1393167879-16637-9-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1393167879-16637-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1393167879-16637-5-git-send-email-thomas.petazzoni@free-electrons.com>
- <20140223152957.GF3342@free.fr>
-Message-ID: <20140223163752.7964f79d@skate>
+ <1393167879-16637-9-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20140223153931.GI3342@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Thomas, All,
 
-On Sun, 23 Feb 2014 16:29:57 +0100, Yann E. MORIN wrote:
-
-> > +* *Makefiles for Python modules*: We have a dedicated infrastructure
-> > +   for Python modules that use either the +distutils+ or the
-> > +   +setuptools+ mechanism. We cover them through a
-> > +   xref:python-package-tutorial[tutorial] and
-> > +   xref:python-package-reference[reference].
+On 2014-02-23 16:04 +0100, Thomas Petazzoni spake thusly:
+> Replace ADI by Analog Devices, which is clearer for most people, and
+> remove the Xilinx external toolchains since we have deprecated them.
 > 
-> I believe english grammar mandates the following:
->     [...] a tutorial and a reference.
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  docs/manual/configure.txt | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
 > 
-> So, you're missing an 'a' between the 'and' and the 'reference'.
-
-Ok. I'll see if Peter applies the patch and makes the change himself
-before resending 13 patches :-)
-
-> Also, what about the mandatory status of this? For other package
-> onfrastructures, we say:
->     This infrastructure must be used for new packages that rely on [XXX]
->     as their build system.
+> diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
+> index b566e8a..a6afafb 100644
+> --- a/docs/manual/configure.txt
+> +++ b/docs/manual/configure.txt
+> @@ -138,10 +138,9 @@ http://www.linaro.org[Linaro] for ARM,
+>  http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition/[Sourcery
+>  CodeBench] for ARM, x86, x86-64, PowerPC, MIPS and SuperH,
+>  https://blackfin.uclinux.org/gf/project/toolchain[Blackfin toolchains
+> -from ADI], http://git.xilinx.com/[Xilinx toolchains for Microblaze],
+> -etc.) and is capable of downloading them automatically, or it can be
+> -pointed to a custom toolchain, either available for download or
+> -installed locally.
+> +from Analog Devices], etc.) and is capable of downloading them
+> +automatically, or it can be pointed to a custom toolchain, either
+> +available for download or installed locally.
+>  
+>  Then, you have three solutions to use an external toolchain:
+>  
+> -- 
+> 1.8.3.2
 > 
-> Why don't we add this for Python modules?
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-I found it quite redundant, and in fact I believe it is now a bit
-useless even for autotools and cmake packages. It used to be useful at
-the time we had old-style packages that were not yet converted. But
-nowadays, it is quite clear that if the package infrastructure exists
-and matches the build system of a given package, then it must be used.
-
-Thanks a lot for the review!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
