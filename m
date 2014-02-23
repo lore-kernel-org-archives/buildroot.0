@@ -1,48 +1,82 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Feb 2014 22:17:57 +0100
-Subject: [Buildroot] [git commit] docs/manual: mention that custom
-	toolchains is also useful for BR toolchains
-Message-ID: <20140223213139.3D3289B78F@busybox.osuosl.org>
+Date: Sun, 23 Feb 2014 22:07:54 +0100
+Subject: [Buildroot] [git commit] docs/manual: update informations about C
+	library in internal backend
+Message-ID: <20140223213139.279E096E70@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3883823614ba246b72b05c51a4ef3d5db419895a
+commit: http://git.buildroot.net/buildroot/commit/?id=ba4146c37cef697b1c9e0d606692f895be6060d0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Now that we have eglibc and glibc support in the internal backend, and
+no longer marked as experimental, a little bit of rewording is
+needed. It is no longer necessary to indicate that uClibc was
+historically supported as the only C library, and that the glibc
+support is experimental. We also update the rest of the description to
+be less uClibc specific.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/configure.txt |   16 ++++++++--------
- 1 files changed, 8 insertions(+), 8 deletions(-)
+ docs/manual/configure.txt |   30 +++++++++++-------------------
+ 1 files changed, 11 insertions(+), 19 deletions(-)
 
 diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
-index a6afafb..42d84fe 100644
+index 89df3d9..b566e8a 100644
 --- a/docs/manual/configure.txt
 +++ b/docs/manual/configure.txt
-@@ -159,14 +159,14 @@ Then, you have three solutions to use an external toolchain:
-   toolchain.
+@@ -68,12 +68,10 @@ The _internal toolchain backend_ is the backend where Buildroot builds
+ by itself a cross-compilation toolchain, before building the userspace
+ applications and libraries for your target embedded system.
  
- * Use a completely custom external toolchain. This is particularly
--  useful for toolchains generated using crosstool-NG. To do this,
--  select the +Custom toolchain+ solution in the +Toolchain+ list. You
--  need to fill the +Toolchain path+, +Toolchain prefix+ and +External
--  toolchain C library+ options. Then, you have to tell Buildroot what
--  your external toolchain supports. If your external toolchain uses
--  the 'glibc' library, you only have to tell whether your toolchain
--  supports C\+\+ or not and whether it has built-in RPC support. If
--  your external toolchain uses the 'uClibc'
-+  useful for toolchains generated using crosstool-NG or with Buildroot
-+  itself. To do this, select the +Custom toolchain+ solution in the
-+  +Toolchain+ list. You need to fill the +Toolchain path+, +Toolchain
-+  prefix+ and +External toolchain C library+ options. Then, you have
-+  to tell Buildroot what your external toolchain supports. If your
-+  external toolchain uses the 'glibc' library, you only have to tell
-+  whether your toolchain supports C\+\+ or not and whether it has
-+  built-in RPC support. If your external toolchain uses the 'uClibc'
-   library, then you have to tell Buildroot if it supports largefile,
-   IPv6, RPC, wide-char, locale, program invocation, threads and
-   C++. At the beginning of the execution, Buildroot will tell you if
+-This backend is the historical backend of Buildroot, and has been
+-limited for a long time to the usage of the
+-http://www.uclibc.org[uClibc C library]. Support for the _eglibc_ C
+-library has been added in 2013 and is at this point considered
+-experimental. See the _External toolchain backend_ for another
+-solution to use _glibc_ or _eglibc_.
++This backend supports several C libraries:
++http://www.uclibc.org[uClibc], the
++http://www.gnu.org/software/libc/libc.html[glibc] and
++http://www.eglibc.org[eglibc].
+ 
+ Once you have selected this backend, a number of options appear. The
+ most important ones allow to:
+@@ -96,18 +94,7 @@ most important ones allow to:
+    the C library might be using interfaces that are not provided by
+    your Linux kernel.
+ 
+- * Change the version and the configuration of the uClibc C library
+-   (if uClibc is selected). The default options are usually
+-   fine. However, if you really need to specifically customize the
+-   configuration of your uClibc C library, you can pass a specific
+-   configuration file here. Or alternatively, you can run the +make
+-   uclibc-menuconfig+ command to get access to uClibc's configuration
+-   interface. Note that all packages in Buildroot are tested against
+-   the default uClibc configuration bundled in Buildroot: if you
+-   deviate from this configuration by removing features from uClibc,
+-   some packages may no longer build.
+-
+- * Change the version of the GCC compiler and binutils.
++ * Change the version of the GCC compiler, binutils and the C library.
+ 
+  * Select a number of toolchain options (uClibc only): whether the
+    toolchain should have largefile support (i.e support for files
+@@ -118,7 +105,12 @@ most important ones allow to:
+    libraries visible in Buildroot menus will change: many applications
+    and libraries require certain toolchain options to be enabled. Most
+    packages show a comment when a certain toolchain option is required
+-   to be able to enable those packages.
++   to be able to enable those packages. If needed, you can further
++   refine the uClibc configuration by running +make
++   uclibc-menuconfig+. Note however that all packages in Buildroot are
++   tested against the default uClibc configuration bundled in
++   Buildroot: if you deviate from this configuration by removing
++   features from uClibc, some packages may no longer build.
+ 
+ It is worth noting that whenever one of those options is modified,
+ then the entire toolchain and system must be rebuilt. See
