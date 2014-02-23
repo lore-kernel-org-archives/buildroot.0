@@ -1,45 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 23 Feb 2014 22:30:50 +0100
-Subject: [Buildroot] [PATCH 00/13] Documentation updates and improvements
-In-Reply-To: <1393167879-16637-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 23 Feb 2014 16:04:26 +0100")
-References: <1393167879-16637-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87a9dho6t1.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 23 Feb 2014 21:27:07 +0100
+Subject: [Buildroot] [git commit] docs/manual: toolchain packages no longer
+	use custom makefiles
+Message-ID: <20140223213138.CB6FC9B97B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=0b100de2cf36d81910ab53978b8a379214a683ea
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hello,
- > Here is a set of documentation updates and improvements, about
- > toolchains, package infrastructures, dependency and build-time
- > graphing, and also finally a documentation about
- > <pkg>_OVERRIDE_SRCDIR.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ docs/manual/rebuilding-packages.txt |    3 ---
+ 1 files changed, 0 insertions(+), 3 deletions(-)
 
- > Thomas
-
- > Thomas Petazzoni (13):
- >   docs/manual: toolchain packages no longer use custom makefiles
- >   docs/manual: rephrase part about rebuilding packages
- >   docs/manual: rephrase and expand part on when a full rebuild is
- >     necessary
- >   docs/manual: reference Python and Lua infras from the list of package
- >     infrastructures
- >   docs/manual: add section about dependency graphs
- >   docs/manual: add section about build time graphing
- >   docs/manual: update informations about C library in internal backend
- >   docs/manual: update external toolchain examples
- >   docs/manual: mention that custom toolchains is also useful for BR
- >     toolchains
- >   docs/manual: rephrase paragraph about unsupported external toolchains
- >   docs/manual: refresh informations about *-menuconfig targets
- >   docs/manual: document the usage of <pkg>_OVERRIDE_SRCDIR
- >   docs/manual: mention the per-package graph-depends target
-
-Committed series with the minor changes suggested by Yann, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/docs/manual/rebuilding-packages.txt b/docs/manual/rebuilding-packages.txt
+index 88d6670..da8d230 100644
+--- a/docs/manual/rebuilding-packages.txt
++++ b/docs/manual/rebuilding-packages.txt
+@@ -69,8 +69,5 @@ files that just tell whether this or that action has been done):
+   Buildroot will trigger the recompilation of the package from the
+   compilation step (execution of +make+).
+ 
+-Note: toolchain packages use custom makefiles. Their stamp files are named
+-differently.
+-
+ Further details about package special make targets are explained in
+ xref:pkg-build-steps[].
