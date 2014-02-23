@@ -1,25 +1,65 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 23 Feb 2014 16:32:24 +0000 (UTC)
-Subject: [Buildroot] [Bug 6842] Checking external toolchain for eabihf
-In-Reply-To: <bug-6842-163@https.bugs.busybox.net/>
-References: <bug-6842-163@https.bugs.busybox.net/>
-Message-ID: <20140223163224.E4D889B669@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 23 Feb 2014 18:04:08 +0100
+Subject: [Buildroot] [PATCH] qt: needs MMU (fork)
+Message-ID: <1a66f6a964fb37f6144d.1393175048@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6842
+Fixes
+http://autobuild.buildroot.net/results/4f7/4f744595efceba2d5a54151bf5f1802eb1268fac/
 
---- Comment #3 from syntheticpp at gmx.net 2014-02-23 16:32:24 UTC ---
-Investigated it further: there are no problems when eglibc is used, only with
-uclibc.
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-A grep for 'hard' or "EABI" in the uclibc-0.9.33.2 sources shows nothing
-relevant, so I assume eabihf is not supported by uclibc.
+---
+ package/opencv/Config.in        |  1 +
+ package/openpowerlink/Config.in |  2 ++
+ package/qt/Config.in            |  2 ++
+ 3 files changed, 5 insertions(+), 0 deletions(-)
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+diff --git a/package/opencv/Config.in b/package/opencv/Config.in
+--- a/package/opencv/Config.in
++++ b/package/opencv/Config.in
+@@ -169,6 +169,7 @@ config BR2_PACKAGE_OPENCV_WITH_QT
+ 	bool "qt backend support"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on !BR2_avr32 # qt
++	depends on BR2_USE_MMU # qt
+ 	select BR2_PACKAGE_QT
+ 	select BR2_PACKAGE_QT_STL
+ 	default y
+diff --git a/package/openpowerlink/Config.in b/package/openpowerlink/Config.in
+--- a/package/openpowerlink/Config.in
++++ b/package/openpowerlink/Config.in
+@@ -1,4 +1,5 @@
+ comment "openpowerlink needs a toolchain w/ C++, threads"
++	depends on BR2_USE_MMU
+ 	depends on BR2_i386 || BR2_x86_64
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+ 
+@@ -7,6 +8,7 @@ config BR2_PACKAGE_OPENPOWERLINK
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_i386 || BR2_x86_64
++	depends on BR2_USE_MMU # qt
+ 	help
+ 	  openPOWERLINK is an Open Source Industrial Ethernet
+ 	  stack implementing the POWERLINK protocol for Managing Node
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -1,10 +1,12 @@
+ comment "qt needs a toolchain w/ C++, threads"
+ 	depends on !BR2_avr32
++	depends on BR2_USE_MMU
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+ 
+ menuconfig BR2_PACKAGE_QT
+ 	bool "Qt"
+ 	depends on !BR2_avr32 # lacks TLS
++	depends on BR2_USE_MMU # fork
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
