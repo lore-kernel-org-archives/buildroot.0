@@ -1,32 +1,22 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun, 23 Feb 2014 14:05:48 +0100
-Subject: [Buildroot] [PATCH] manual: Add a note for dependency comment format
-Message-ID: <1393160748-14235-1-git-send-email-maxime.hadjinlian@gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 23 Feb 2014 14:30:48 +0100
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{4, 10, 12,
+	13}.x stable versions
+In-Reply-To: <1393155801-29030-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Sun, 23 Feb 2014 08:43:20 -0300")
+References: <1393155801-29030-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87txbqot13.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a quick note to clarify that the format of the depencency comments
-applies irregardless of the number of dependencies.
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
----
- docs/manual/adding-packages-directory.txt | 1 +
- 1 file changed, 1 insertion(+)
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-index 3dc5395..b6dc981 100644
---- a/docs/manual/adding-packages-directory.txt
-+++ b/docs/manual/adding-packages-directory.txt
-@@ -205,6 +205,7 @@ aircrack-ng needs a toolchain w/ largefile, threads
- 
- Note that this text is kept brief on purpose, so that it will fit on a
- 80-character terminal.
-+This format must be repected even if there is only one dependency.
- 
- The rest of this section enumerates the different target and toolchain
- options, the corresponding config symbols to depend on, and the text to
+Committed both, thanks.
+
 -- 
-1.8.5.3
+Bye, Peter Korsgaard
