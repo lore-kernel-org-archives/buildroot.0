@@ -1,108 +1,73 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Feb 2014 20:19:43 +0100
-Subject: [Buildroot] [PATCH] am335x-pru-package: new package
-In-Reply-To: <1392255830-27810-1-git-send-email-fhunleth@troodon-software.com>
-References: <1392255830-27810-1-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <20140223191943.GH32759@free.fr>
+Date: Sun, 23 Feb 2014 20:31:16 +0100
+Subject: [Buildroot] [PATCH 1/1] ti-gfx: bump to version 5_01_00_01
+In-Reply-To: <52fd38fd.870eec0a.7f7f.13a5@mx.google.com>
+References: <52fd38fd.870eec0a.7f7f.13a5@mx.google.com>
+Message-ID: <20140223193116.GI32759@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Franck, All,
+Marcelo, All,
 
-On 2014-02-12 20:43 -0500, Frank Hunleth spake thusly:
-> am335x-pru-package provides an assembler and program loader for Texas
-> Instrument's AM335x programmable real-time units.
+On 2014-02-13 18:38 +0000, kuyurix at gmail.com spake thusly:
+> From: Marcelo Gutierrez <kuyurix@gmail.com>
 > 
-> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+> Signed-off-by: Marcelo Gutierrez <kuyurix@gmail.com>
 
-Thanks for your contribution, and sorry for the delay.
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Here are a few comments, below.
+Notes:
 
-[--SNIP--]
-> diff --git a/package/am335x-pru-package/Config.in.host b/package/am335x-pru-package/Config.in.host
-> new file mode 100644
-> index 0000000..283128e
-> --- /dev/null
-> +++ b/package/am335x-pru-package/Config.in.host
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_HOST_AM335X_PRU_PACKAGE
-> +	bool "host am335x-pru-package"
-> +	depends on BR2_arm # only relevant for TI am335x
-> +	help
-> +	  TI AM335X PRU assembler (pasm)
-> +
-> +	  https://github.com/beagleboard/am335x_pru_package
+  - The version pointed to by Spencer was 5.00.x, and was a beta
+    version, and only contained the hardfp variant. The version in
+    this patch is 5.01.x, is not marked as beta, and contains both
+    the hardfp and softfp variants.
 
-Is there any special reason this is a user-visible option?
-
-Does it make sense to build the host variant without building the target
-variant?
-
-> diff --git a/package/am335x-pru-package/am335x-pru-package.mk b/package/am335x-pru-package/am335x-pru-package.mk
-> new file mode 100644
-> index 0000000..f70e679
-> --- /dev/null
-> +++ b/package/am335x-pru-package/am335x-pru-package.mk
-> @@ -0,0 +1,40 @@
-> +################################################################################
-> +#
-> +# am335x-pru-package
-> +#
-> +################################################################################
-> +
-> +AM335X_PRU_PACKAGE_VERSION = f46d8cb564f492740ccd33a03e8368ee4ecc83ae
-> +AM335X_PRU_PACKAGE_SITE = $(call github,beagleboard,am335x_pru_package,$(AM335X_PRU_PACKAGE_VERSION))
-> +AM335X_PRU_PACKAGE_LICENSE = BSD-3c
-> +AM335X_PRU_PACKAGE_LICENSE_FILES = pru_sw/utils/LICENCE.txt
-> +AM335X_PRU_PACKAGE_DEPENDENCIES = host-am335x-pru-package
-> +AM335X_PRU_PACKAGE_INSTALL_STAGING = YES
-> +
-> +define AM335X_PRU_PACKAGE_BUILD_CMDS
-> +	$(MAKE) CROSS_COMPILE="$(TARGET_CROSS)" \
-> +		-C $(@D)/pru_sw/app_loader/interface all
-
-Usually, 'all' is the default target for make, so it is not required to
-specify it. You only need to specify it if it is not the default.
-
-> +endef
-> +
-> +define AM335X_PRU_PACKAGE_INSTALL_STAGING_CMDS
-> +	$(MAKE1) PREFIX="$(STAGING_DIR)/usr" \
-> +		-C $(@D)/pru_sw/app_loader/interface install
-> +endef
-> +
-> +define AM335X_PRU_PACKAGE_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -m 0755 -D $(@D)/pru_sw/app_loader/lib/libprussdrv.so \
-> +		$(TARGET_DIR)/usr/lib
-
-You need to pass the full intall path, not only the directory name.
-If $(TARGET_DIR)/usr/lib does not exist, then install would simply copy
-libprussdrv.so to the file $(TARGET_DIR)/usr/lib.
-
-    $(INSTALL) -m 0755 -D $(@D)/pru_sw/app_loader/lib/libprussdrv.so \
-    	$(TARGET_DIR)/usr/lib/libprussdrv.so
-
-> +endef
-> +
-> +define HOST_AM335X_PRU_PACKAGE_BUILD_CMDS
-> +	cd $(@D)/pru_sw/utils/pasm_source && \
-> +		$(HOSTCC) -Wall -D_UNIX_ pasm.c pasmpp.c pasmexp.c pasmop.c \
-> +			pasmdot.c pasmstruct.c pasmmacro.c -o ../pasm
-
-Any reason you output in the parent directory?
-Also, no indentation on the second line.
-
-Why not:
-    cd $(@D)/pru_sw/utils/pasm_source && \
-    $(HOSTCC) -Wall -D_UNIX_ pasm.c pasmpp.c pasmexp.c pasmop.c \
-    	pasmdot.c pasmstruct.c pasmmacro.c -o pasm
+  - With 4.10.x and before, the *_$(TI_GFX_VERSION).bin archive would
+    contain a huge load of stuff we did not need, and was roughly
+    1.7GiB big. But with 5.01.x, this file is now back to a more
+    acceptable size, roughly 140MiB (although it still contains way
+    much more than we need).
 
 Regards,
 Yann E. MORIN.
+
+> ---
+>  package/ti-gfx/ti-gfx.mk |    8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/ti-gfx/ti-gfx.mk b/package/ti-gfx/ti-gfx.mk
+> index a94f00d..5ea6b92 100644
+> --- a/package/ti-gfx/ti-gfx.mk
+> +++ b/package/ti-gfx/ti-gfx.mk
+> @@ -4,13 +4,13 @@
+>  #
+>  ################################################################################
+>  
+> -TI_GFX_VERSION = 4_09_00_01
+> -TI_GFX_SO_VERSION = 1.9.2188537
+> +TI_GFX_VERSION = 5_01_00_01
+> +TI_GFX_SO_VERSION = 1.10.2359475
+>  
+>  ifeq ($(BR2_ARM_EABIHF),y)
+> -TI_GFX_SOURCE = Graphics_SDK_setuplinux_$(TI_GFX_VERSION)_hardfp_minimal_demos.bin
+> +TI_GFX_SOURCE = Graphics_SDK_setuplinux_hardfp_$(TI_GFX_VERSION).bin
+>  else
+> -TI_GFX_SOURCE = Graphics_SDK_setuplinux_$(TI_GFX_VERSION)_minimal_demos.bin
+> +TI_GFX_SOURCE = Graphics_SDK_setuplinux_softfp_$(TI_GFX_VERSION).bin
+>  endif
+>  
+>  TI_GFX_SITE = http://downloads.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/gfxsdk/$(TI_GFX_VERSION)/exports/
+> -- 
+> 1.7.9.5
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
