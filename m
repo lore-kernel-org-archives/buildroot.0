@@ -1,38 +1,38 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 23 Feb 2014 17:37:22 +0000 (UTC)
-Subject: [Buildroot] [Bug 6842] Checking external toolchain for eabihf
-In-Reply-To: <bug-6842-163@https.bugs.busybox.net/>
-References: <bug-6842-163@https.bugs.busybox.net/>
-Message-ID: <20140223173722.678DF9B92A@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 23 Feb 2014 18:38:30 +0100
+Subject: [Buildroot] [PATCH] lua: needs dynamic library support (dlopen)
+In-Reply-To: <8a14c6297835e91f6691.1393175989@argentina>
+References: <8a14c6297835e91f6691.1393175989@argentina>
+Message-ID: <20140223183830.2a7c25eb@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6842
+Dear Thomas De Schampheleire,
 
---- Comment #4 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2014-02-23 17:37:22 UTC ---
-(In reply to comment #3)
-> Investigated it further: there are no problems when eglibc is used, only with
-> uclibc.
-
-Correct.
-
+On Sun, 23 Feb 2014 18:19:49 +0100, Thomas De Schampheleire wrote:
+> Fixes
+> http://autobuild.buildroot.net/results/e76/e765f992ad721a094579140c153ff71f20753265/
 > 
-> A grep for 'hard' or "EABI" in the uclibc-0.9.33.2 sources shows nothing
-> relevant, so I assume eabihf is not supported by uclibc.
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> 
+> ---
+>  package/dnsmasq/Config.in     |  4 ++++
+>  package/efl/libedje/Config.in |  5 +++--
+>  package/haserl/Config.in      |  5 +++++
+>  package/lighttpd/Config.in    |  4 ++++
+>  package/lua/Config.in         |  4 ++++
+>  5 files changed, 20 insertions(+), 2 deletions(-)
 
-I don't think the C library needs anything to "support" eabihf. eabihf is all
-about a change in the calling convention of functions taking floating point
-arguments.
+No, that's not the correct fix. The correct fix is a variant of
+http://patchwork.ozlabs.org/patch/313208/, which as suggested by Peter
+should use BR2_PREFER_STATIC_LIB as a condition, and not
+BR2_BINFMT_FLAT.
 
-I haven't got the bottom of this problem yet, but I have indeed reproduced it,
-and I continue to believe that the fix is *not* to change the external
-toolchain check, but instead to investigate *why* the uClibc crt1.o does not
-have those flags when built with the internal toolchain backend.
-
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
