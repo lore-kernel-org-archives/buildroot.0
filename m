@@ -1,7 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 Feb 2014 00:40:57 +0100
-Subject: [Buildroot] [PATCH 0/13 v2] Add dependency on kernel headers
-Message-ID: <cover.1393198603.git.yann.morin.1998@free.fr>
+Date: Mon, 24 Feb 2014 00:40:48 +0100
+Subject: [Buildroot] [PATCH 01/13] package/linux-headers: remove 2.6 snapshot
+In-Reply-To: <cover.1393198603.git.yann.morin.1998@free.fr>
+References: <cover.1393198603.git.yann.morin.1998@free.fr>
+Message-ID: <3e7506441035369b0fbbaca721511b4973c61a41.1393198603.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,90 +12,37 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Hello All!
+As Thomas states:
+    It is completely weird to ask the tarball to be named exactly
+    linux-2.6.tar.bz2. IMO, we should simply get rid of this feature.
 
-This series introduces infrastructure for packages to depend on the
-required version of kernel headers.
+Make it so! ;-)
 
-It follows the proposal made on the list:
-    http://lists.busybox.net/pipermail/buildroot/2014-February/088924.html
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/linux-headers/Config.in.host | 4 ----
+ 1 file changed, 4 deletions(-)
 
-The basic idea is to add a symbol for each kernel header version, and
-have toolchains select the appropriate symbol, and packages depend on the
-appropriate symbol.
-
-In this series:
-
-  - such symbols are added for all kernel headers >= 3.0;
-
-  - the internal toochain backend selects the appropriate symbol, without
-    user-visible changes for known kernel headers versions, and with a new
-    choice for manually-specified kernel headers version;
-
-  - the predefined external toolchains select the appropriate symbols
-    without user-visible changes; those using kernel headers older than
-    3.0, select nothing, and a comment is added to state so;
-
-  - for the custom external toolchain, a new choice is shown to the
-    user, to select the appropriate kernel headers version;
-
-  - five packages are converted to take advantage of this.
-
-For example:
-
-  - BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1 selects
-    BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
-
-  - dvb-apps depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
-
-
-Changes v1 -> v2:
-  - typo and asciidoc syntax in the manual  (Samuel, Thomas DS)
-  - add choice for custom kernel headers  (Arnout)
-  - add check to strictly enforce selection  (Thomas, Arnout)
-  - add help to choice  (Thomas DS)
-
-
-Regards,
-Yann E. MORIN.
-
-
-----------------------------------------------------------------
-Yann E. MORIN (13):
-      package/linux-headers: remove 2.6 snapshot
-      toolchain/common: add minimum kernel headers options
-      manual: document minimal kernel headers dependency
-      toolchain/external/predefined: add choice to select 'AT_LEAST_XXX' header version
-      toolchain/external/custom: add choice to select 'AT_LEAST_XXX' header version
-      package/linux-headers: select appropriate 'AT_LEAST_XXX' header version
-      toolchain/external: check kernel headers version for custom toolchain
-      toolchain/internal: check kernel headers version for manually-specified version
-      package/dvb-apps: requires kernel headers >= 3.3
-      package/w_scan: requires kernel headers >= 3.0
-      package/weston: requires kernel headers >= 3.0
-      package/tvheadend: requires kernel headers >= 3.2
-      package/mmc-utils: requires kernel headers >= 3.0
-
- docs/manual/adding-packages-directory.txt          |   6 ++
- package/dvb-apps/Config.in                         |   5 +-
- package/linux-headers/Config.in.host               |  86 +++++++++++++++-
- package/linux-headers/linux-headers.mk             |   9 ++
- package/mmc-utils/Config.in                        |   5 +-
- package/tvheadend/Config.in                        |   5 +-
- package/w_scan/Config.in                           |   4 +
- package/weston/Config.in                           |   5 +-
- support/scripts/check-kernel-headers.sh            |  22 ++++
- toolchain/helpers.mk                               |  13 +++
- toolchain/toolchain-common.in                      |  79 +++++++++++++++
- toolchain/toolchain-external/Config.in             | 111 +++++++++++++++++++++
- toolchain/toolchain-external/toolchain-external.mk |   7 +-
- 13 files changed, 344 insertions(+), 13 deletions(-)
- create mode 100755 support/scripts/check-kernel-headers.sh
-
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 134e338..fcecd62 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -56,9 +56,6 @@ choice
+ 
+ 	config BR2_KERNEL_HEADERS_VERSION
+ 		bool "Manually specified Linux version"
+-
+-	config BR2_KERNEL_HEADERS_SNAP
+-		bool "Local Linux snapshot (linux-2.6.tar.bz2)"
+ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_VERSION
+@@ -81,5 +78,4 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+ 	default "3.12.13"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.13.5"	if BR2_KERNEL_HEADERS_3_13
+-	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.3.2
