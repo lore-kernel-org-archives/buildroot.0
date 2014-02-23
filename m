@@ -1,44 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 23 Feb 2014 10:44:56 +0100
-Subject: [Buildroot] [git commit] binutils: install libiberty
-In-Reply-To: <20140222230556.8248B8270D@busybox.osuosl.org>
-References: <20140222230556.8248B8270D@busybox.osuosl.org>
-Message-ID: <20140223104456.5b2585b6@skate>
+Date: Sun, 23 Feb 2014 10:46:58 +0100
+Subject: [Buildroot] [PATCH] toolchain: control GNU_TARGET_NAME vendor
+ part
+In-Reply-To: <884EA965490E3C4D8E66AEF41E98025006BF23@ezex10.ezchip.com>
+References: <884EA965490E3C4D8E66AEF41E98025006BF23@ezex10.ezchip.com>
+Message-ID: <20140223104658.4088cdc6@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+Dear Noam Camus,
 
-On Sat, 22 Feb 2014 23:56:39 +0100, Peter Korsgaard wrote:
-> commit: http://git.buildroot.net/buildroot/commit/?id=70ee9fcdfcf6fc7cb214e454afe55cbffec84621
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, 23 Feb 2014 08:28:21 +0000, Noam Camus wrote:
+> When the toolchain is custom we can denote that by setting in the triplet the vendor part.
+> This is done through configution, where the default is buildroot.
 > 
-> Some packages (actually, just oprofile) need to link against libiberty.
-> This option just installs libiberty.a so it has no effect on the target,
-> therefore it's not needed to add a config option for it.
-> 
-> Before binutils-2.24, there was a bug in libiberty/Makefile.in that
-> caused libiberty to be installed regardless of the
-> --enable-install-libiberty option. This problem wasn't noticed before
-> because binutils-2.24 is not selected on any of the autobuilders: the
-> version can only be selected if an internal toolchain is used, and it
-> defaults to 2.21.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/binutils/binutils.mk |    1 +
->  1 files changed, 1 insertions(+), 0 deletions(-)
+> Signed-off-by: Noam Camus <noamc@ezchip.com>
 
-Weird, seems like it didn't fix the dropwatch build problem on
-Microblaze:
+Is there a compelling reason to allow the configuration of the vendor
+part of the tuple? To me, it makes sense that all Buildroot toolchain
+have the "buildroot" vendor, so that they can be identified easily.
 
-  http://autobuild.buildroot.org/results/1ea/1ea98985ce06dc1b7569ef5abe2fc13090fb5f3a/build-end.log
+Also, if by mistake the vendor part of the tuple is defined by the user
+as "unknown", they he might get compilation issues when building with
+target architecture == host architecture.
 
-(And yes, this build took place after this commit was merged)
+See 11017f081fc5b034e680d89eaea729c19f450e01 ('pkg-infra: make sure
+cross compiling is enabled when host == target').
 
 Thomas
 -- 
