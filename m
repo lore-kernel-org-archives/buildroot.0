@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 Feb 2014 00:40:53 +0100
-Subject: [Buildroot] [PATCH 06/13] package/linux-headers: select appropriate
-	'AT_LEAST_XXX' header version
+Date: Mon, 24 Feb 2014 00:40:54 +0100
+Subject: [Buildroot] [PATCH 07/13] toolchain/external: check kernel headers
+	version for custom toolchain
 In-Reply-To: <cover.1393198603.git.yann.morin.1998@free.fr>
 References: <cover.1393198603.git.yann.morin.1998@free.fr>
-Message-ID: <543ed1f03d1b9e9ebcf675c4fddb5e817bc56473.1393198603.git.yann.morin.1998@free.fr>
+Message-ID: <f793dfe165744515544bad0af6fd22eb608ea13f.1393198603.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,156 +13,132 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Select the appropriate BR2_TOOLCHAIN_HEADERS_AT_LEAST_XXX options for the
-internal toolchain backend.
+Ensure the kernel headers version used in the custom external toolchain,
+or the manually-specified kernel headers version, matches exactly the one
+selected by the user.
 
-For the manualy-specified version, we bring up the choice that sets the
-_AT_LEAST_XXX symbols.
+We do not care about the patch-level, since headers are not supposed to
+change between patchlevels. This applies only to kernels >= 3.0, but
+those are actually the ones we do care about; we treat all 2.6.x kernels
+as being a single version, since we do not support any 2.6 kernels for
+packages with kernel-dependant features.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: Paul Cercueil <paul@crapouillou.net>
 ---
- package/linux-headers/Config.in.host | 82 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 82 insertions(+)
+ support/scripts/check-kernel-headers.sh            | 22 ++++++++++++++++++++++
+ toolchain/helpers.mk                               | 13 +++++++++++++
+ toolchain/toolchain-common.in                      | 20 ++++++++++++++++++++
+ toolchain/toolchain-external/toolchain-external.mk |  7 ++++++-
+ 4 files changed, 61 insertions(+), 1 deletion(-)
+ create mode 100755 support/scripts/check-kernel-headers.sh
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index fcecd62..bd15fac 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -17,42 +17,53 @@ choice
- 	config BR2_KERNEL_HEADERS_3_0
- 		bool "Linux 3.0.x kernel headers"
- 		depends on !BR2_arc
-+		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+diff --git a/support/scripts/check-kernel-headers.sh b/support/scripts/check-kernel-headers.sh
+new file mode 100755
+index 0000000..4ce1a6d
+--- /dev/null
++++ b/support/scripts/check-kernel-headers.sh
+@@ -0,0 +1,22 @@
++#!/bin/sh
++
++CC="${1}"
++# Make sure we have enough version components
++HDR_VER="${2}.0.0"
++
++HDR_M="${HDR_VER%%.*}"
++HDR_V="${HDR_VER#*.}"
++HDR_m="${HDR_V%%.*}"
++
++# We do not want to account for the patchlevel, since headers
++# are not supposed to change in for different patchlevels,
++# so we mask it out.
++# This only applies to kernels >= 3.0, but that's the only one
++# we actually care about; we treat all 2.6.x kernels equally.
++
++exec ${CC} -E -x c -o - - >/dev/null 2>&1 <<_EOF_
++#include <linux/version.h>
++#if (LINUX_VERSION_CODE & ~0xFF) != KERNEL_VERSION(${HDR_M},${HDR_m},0)
++#error Incorrect kernel header version.
++#endif
++_EOF_
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index faa9d90..2182af2 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -163,6 +163,19 @@ copy_toolchain_sysroot = \
+ 	find $(STAGING_DIR) -type d | xargs chmod 755
  
- 	config BR2_KERNEL_HEADERS_3_2
- 		bool "Linux 3.2.x kernel headers"
- 		depends on !BR2_arc
-+		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
- 
- 	config BR2_KERNEL_HEADERS_3_4
- 		bool "Linux 3.4.x kernel headers"
- 		depends on !BR2_arc
-+		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
- 
- 	config BR2_KERNEL_HEADERS_3_6
- 		bool "Linux 3.6.x kernel headers"
- 		depends on BR2_DEPRECATED_SINCE_2013_05 && !BR2_arc
-+		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_6
- 
- 	config BR2_KERNEL_HEADERS_3_7
- 		bool "Linux 3.7.x kernel headers"
- 		depends on BR2_DEPRECATED_SINCE_2013_05 && !BR2_arc
-+		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
- 
- 	config BR2_KERNEL_HEADERS_3_8
- 		bool "Linux 3.8.x kernel headers"
- 		depends on BR2_DEPRECATED_SINCE_2013_08 && !BR2_arc
-+		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
- 
- 	config BR2_KERNEL_HEADERS_3_9
- 		bool "Linux 3.9.x kernel headers"
- 		depends on BR2_DEPRECATED_SINCE_2013_11
-+		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
- 
- 	config BR2_KERNEL_HEADERS_3_10
- 		bool "Linux 3.10.x kernel headers"
-+		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
- 
- 	config BR2_KERNEL_HEADERS_3_11
- 		bool "Linux 3.11.x kernel headers"
-+		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
- 
- 	config BR2_KERNEL_HEADERS_3_12
- 		bool "Linux 3.12.x kernel headers"
-+		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
- 
- 	config BR2_KERNEL_HEADERS_3_13
- 		bool "Linux 3.13.x kernel headers"
-+		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
- 
- 	config BR2_KERNEL_HEADERS_VERSION
- 		bool "Manually specified Linux version"
-@@ -65,6 +76,77 @@ config BR2_DEFAULT_KERNEL_VERSION
- 	  Specify the version you want to use.
- 	  E.G.: 3.6.10
- 
-+choice
-+	bool "Custom kernel headers series"
-+	depends on BR2_KERNEL_HEADERS_VERSION
-+	default BR2_PACKAGE_HOST_LINUX_HEADERS_REALLY_OLD
-+	help
-+	  Set to the kernel headers series you manually set above.
+ #
++# Check the specified kernel headers version actually matches the
++# version in the toolchain.
++#
++# $1: cross-gcc path
++# $2: kernel version string, in the form: X.Y
++#
++check_kernel_headers_version = \
++	if ! support/scripts/check-kernel-headers.sh $(1) $(2); then \
++		echo "Incorrect selection of kernel headers"; \
++	    exit 1; \
++	fi
 +
-+	  This is used to hide/show some packages that have strict
-+	  requirements on the version of kernel headers.
++#
+ # Check the availability of a particular glibc feature. This function
+ # is used to check toolchain options that are always supported by
+ # glibc, so we simply check that the corresponding option is properly
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index f0785a2..4d0ea2e 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -166,3 +166,23 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
+ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
+ 	bool
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
 +
-+config BR2_PACKAGE_HOST_LINUX_HEADERS_3_13
-+	bool "3.13.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
-+
-+config BR2_PACKAGE_HOST_LINUX_HEADERS_3_12
-+	bool "3.12.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
-+
-+config BR2_PACKAGE_HOST_LINUX_HEADERS_3_11
-+	bool "3.11.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
-+
-+config BR2_PACKAGE_HOST_LINUX_HEADERS_3_10
-+	bool "3.10.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
-+
-+config BR2_PACKAGE_HOST_LINUX_HEADERS_3_9
-+	bool "3.9.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
-+
-+config BR2_PACKAGE_HOST_LINUX_HEADERS_3_8
-+	bool "3.8.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
-+
-+config BR2_PACKAGE_HOST_LINUX_HEADERS_3_7
-+	bool "3.7.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
-+
-+config BR2_PACKAGE_HOST_LINUX_HEADERS_3_6
-+	bool "3.6.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_6
-+
-+config BR2_PACKAGE_HOST_LINUX_HEADERS_3_5
-+	bool "3.5.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
-+
-+config BR2_PACKAGE_HOST_LINUX_HEADERS_3_4
-+	bool "3.4.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
-+
-+config BR2_PACKAGE_HOST_LINUX_HEADERS_3_3
-+	bool "3.3.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
-+
-+config BR2_PACKAGE_HOST_LINUX_HEADERS_3_2
-+	bool "3.2.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
-+
-+config BR2_PACKAGE_HOST_LINUX_HEADERS_3_1
-+	bool "3.1.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
-+
-+config BR2_PACKAGE_HOST_LINUX_HEADERS_3_0
-+	bool "3.0.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-+
-+config BR2_PACKAGE_HOST_LINUX_HEADERS_REALLY_OLD
-+	bool "2.6.x"
-+
-+endchoice
-+
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
++# This order guarantees that the highest version is set, as kconfig
++# stops affecting a value on the first matching default.
++config BR2_TOOLCHAIN_HEADERS_AT_LEAST
++	string
++	default "3.13" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
++	default "3.12" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
++	default "3.11" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
++	default "3.10" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
++	default "3.9"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
++	default "3.8"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
++	default "3.7"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
++	default "3.6"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_6
++	default "3.5"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
++	default "3.4"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
++	default "3.3"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
++	default "3.2"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
++	default "3.1"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
++	default "3.0"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
++	default "2.6"
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index a7bfafc..8228468 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -410,7 +410,7 @@ endef
+ # Checks for an already installed toolchain: check the toolchain
+ # location, check that it supports sysroot, and then verify that it
+ # matches the configuration provided in Buildroot: ABI, C++ support,
+-# type of C library and all C library features.
++# kernel headers version, type of C library and all C library features.
+ define TOOLCHAIN_EXTERNAL_CONFIGURE_CMDS
+ 	$(Q)$(call check_cross_compiler_exists,$(TOOLCHAIN_EXTERNAL_CC))
+ 	$(Q)$(call check_unusable_toolchain,$(TOOLCHAIN_EXTERNAL_CC))
+@@ -419,6 +419,11 @@ define TOOLCHAIN_EXTERNAL_CONFIGURE_CMDS
+ 		@echo "External toolchain doesn't support --sysroot. Cannot use." ; \
+ 		exit 1 ; \
+ 	fi ; \
++	if [ "$(BR2_TOOLCHAIN_EXTERNAL_CUSTOM)" = "y" ]; then \
++		$(call check_kernel_headers_version,\
++			"$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS)",\
++			$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST))); \
++	fi ; \
+ 	if test "$(BR2_arm)" = "y" ; then \
+ 		$(call check_arm_abi,\
+ 			"$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS)",\
 -- 
 1.8.3.2
