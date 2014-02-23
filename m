@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 Feb 2014 00:40:59 +0100
-Subject: [Buildroot] [PATCH 12/13] package/tvheadend: requires kernel
-	headers >= 3.2
+Date: Mon, 24 Feb 2014 00:40:58 +0100
+Subject: [Buildroot] [PATCH 11/13] package/weston: requires kernel headers
+	>= 3.0
 In-Reply-To: <cover.1393198603.git.yann.morin.1998@free.fr>
 References: <cover.1393198603.git.yann.morin.1998@free.fr>
-Message-ID: <1d056233bc0573855790a4e90dec3f7a31f79156.1393198603.git.yann.morin.1998@free.fr>
+Message-ID: <5dc20bbef69ea063dddc0c8fe0df1a3455e61bd9.1393198603.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,37 +13,39 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-tvheadend requires SYS_TURBO, introduced in linux 3.2.
+It needs K_OFF, introduced in 2.6.39.
+
+Since we do not have dependencies on kernel headers before 3.0,
+just depend on kernel headers 3.0.
 
 Fixes:
-    http://autobuild.buildroot.net/results/4df/4df8cd85e0287910567df81c0394b2914570e98a
+    http://autobuild.buildroot.net/results/aa5/aa54b1aaf0ac89531d7a1e7dd3900b35605ae3f5
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/tvheadend/Config.in | 5 +++--
+ package/weston/Config.in | 5 +++--
  1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/tvheadend/Config.in b/package/tvheadend/Config.in
-index da60f83..4f8baae 100644
---- a/package/tvheadend/Config.in
-+++ b/package/tvheadend/Config.in
-@@ -1,7 +1,7 @@
--comment "tvheadend needs a toolchain w/ largefile, IPv6, threads"
-+comment "tvheadend needs a toolchain w/ largefile, IPv6, threads, headers >= 3.2"
- 	depends on !BR2_avr32 && !BR2_xtensa && !BR2_arc
- 	depends on !BR2_PTHREADS && !BR2_PTHREADS_OLD
--	depends on !BR2_LARGEFILE || !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_LARGEFILE || !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+diff --git a/package/weston/Config.in b/package/weston/Config.in
+index 247efc8..c1e8a7b 100644
+--- a/package/weston/Config.in
++++ b/package/weston/Config.in
+@@ -1,6 +1,6 @@
+-comment "weston needs udev and a toolchain w/ threads"
++comment "weston needs udev and a toolchain w/ threads, headers >= 3.0"
+ 	depends on !BR2_avr32
+-	depends on !BR2_PACKAGE_UDEV || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_PACKAGE_UDEV || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
  
- config BR2_PACKAGE_TVHEADEND
- 	bool "tvheadend"
-@@ -17,6 +17,7 @@ config BR2_PACKAGE_TVHEADEND
- 	depends on !BR2_PTHREADS && !BR2_PTHREADS_OLD
- 	# no NPTL for these archs
- 	depends on !BR2_xtensa && !BR2_arc
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
- 	select BR2_PACKAGE_DVB_APPS
- 	select BR2_PACKAGE_OPENSSL
- 	help
+ config BR2_PACKAGE_WESTON
+ 	bool "weston"
+@@ -14,6 +14,7 @@ config BR2_PACKAGE_WESTON
+ 	depends on BR2_PACKAGE_UDEV
+ 	depends on !BR2_avr32 # wayland
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+ 	# Runtime dependency
+ 	select BR2_PACKAGE_XKEYBOARD_CONFIG
+ 	# Make sure at least one compositor is selected.
 -- 
 1.8.3.2
