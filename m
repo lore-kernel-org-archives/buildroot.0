@@ -1,95 +1,46 @@
-From: Noam Camus <noamc@ezchip.com>
-Date: Sun, 23 Feb 2014 15:41:43 +0000
-Subject: [Buildroot] [PATCH] toolchain: control GNU_TARGET_NAME
-	vendor	part
-In-Reply-To: <20140223125102.025dd91a@skate>
-References: <884EA965490E3C4D8E66AEF41E98025006BF23@ezex10.ezchip.com>
- <20140223104658.4088cdc6@skate>
- <884EA965490E3C4D8E66AEF41E98025006C3BB@ezex10.ezchip.com>
- <20140223125102.025dd91a@skate>
-Message-ID: <884EA965490E3C4D8E66AEF41E98025006C816@ezex10.ezchip.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 23 Feb 2014 16:45:41 +0100
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20140223110021.16b6b976@skate> (Thomas Petazzoni's message of
+ "Sun, 23 Feb 2014 11:00:21 +0100")
+References: <20140223073009.3676E101056@stock.ovh.net>
+ <20140223110021.16b6b976@skate>
+Message-ID: <87ha7pq1cq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
->Right. I guess we can make this configurable. However, your patch has some issues:
+Hi,
 
-> * It only creates the option BR2_TOOLCHAIN_BUILDROOT_VENDOR in the
->   internal toolchain backend. But GNU_TARGET_NAME is also used with
->   the external toolchain backend, which means in the external
->   toolchain case we would end up with a GNU_TARGET_NAME having an
->   empty vendor part of the tuple.
+ >> avr32 |               gst1-libav-1.2.2 | NOK | http://autobuild.buildroot.net/results/d727c0f61b84acee08d2262691e07f9839235f54/
 
-> * The new Config.in option lacks an help text, and the help text
->   should explain in detail how this should be used, and in which
->   situations. Also the title of the help text should be just
->   "custom toolchain vendor name".
+ > Don't know. Any idea?
+
+Presumably avr32 has some relocation limitations like we've seen on mips
+xtensaand arc, maybe there's a magic gcc argument to make it use a
+different type?
 
 
-Below is the revised patch.
-Is it OK?
-Is it the right way to bring up the corrections?
-====================================================
+ >> mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/074265602bec4aba6c82d1aee389045e8ad33d4b/
 
-When the toolchain is custom we can denote that by setting in the triplet the vendor part.
-This is done through configution, where the default is buildroot.
+ > Ryan Barnett has sent a patch to fix this. Peter, can you commit
+ > http://patchwork.ozlabs.org/patch/323254/ and
+ > http://patchwork.ozlabs.org/patch/323255/.
 
-Signed-off-by: Noam Camus <noamc@ezchip.com>
----
- package/Makefile.in                     |   12 +++++++++++-
- toolchain/toolchain-buildroot/Config.in |   12 ++++++++++++
- 2 files changed, 23 insertions(+), 1 deletions(-)
+Will do.
 
-diff --git a/package/Makefile.in b/package/Makefile.in index eea7043..bdd6889 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -20,8 +20,18 @@ endif
- MAKE1:=$(HOSTMAKE) -j1
- MAKE:=$(HOSTMAKE) $(if $(PARALLEL_JOBS),-j$(PARALLEL_JOBS))
- 
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT_VENDOR),)
-+VENDOR:=buildroot
-+else
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT_VENDOR),unknown)
-+$(error You may not provide 'unknown' as vendor to toolchain tuple) 
-+else VENDOR:=$(call qstrip,$(BR2_TOOLCHAIN_BUILDROOT_VENDOR))
-+endif
-+endif
-+
- # Compute GNU_TARGET_NAME
--GNU_TARGET_NAME=$(ARCH)-buildroot-$(TARGET_OS)-$(LIBC)$(ABI)
-+GNU_TARGET_NAME=$(ARCH)-$(VENDOR)-$(TARGET_OS)-$(LIBC)$(ABI)
- 
- # Blackfin FLAT needs uclinux
- ifeq ($(BR2_bfin)$(BR2_BINFMT_FLAT),yy)
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index cd88889..216f308 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -69,6 +69,18 @@ config BR2_TOOLCHAIN_BUILDROOT_LIBC
- 	default "glibc"  if BR2_TOOLCHAIN_BUILDROOT_EGLIBC
- 	default "glibc"  if BR2_TOOLCHAIN_BUILDROOT_GLIBC
- 
-+config BR2_TOOLCHAIN_BUILDROOT_VENDOR
-+	string "custom toolchain vendor name"
-+	default "buildroot"
-+	help
-+	  This option accepts name for vendor field in toolchain tuple.
-+	  The toolchain tuple full format is:
-+	  cpu-vendor-kernel-os
-+	  You may use it in case of custom toolchain.
-+	  e.g. if your gcc depend on this field to make decisions.
-+	  NOTE: "unknown" is not allowed since it may be confused
-+	  with host toolchain.
-+
- source "package/uclibc/Config.in"
- 
- source "package/binutils/Config.in.host"
---
-1.7.1
 
-Thanks
-Noam
+ >> bfin |                     sdl-1.2.15 | NOK | http://autobuild.buildroot.net/results/9c893390fb4ca5630f03387adc918c8a3d80c912/
+ >> nios2 |                     sdl-1.2.15 | NOK | http://autobuild.buildroot.net/results/543b4135c7996133f32e82d72d6f2969622f8617/
+
+ > Both fixed by http://patchwork.ozlabs.org/patch/323145/. Peter can you
+ > commit this patch?
+
+I've already cherry picked the similar patch from next yesterday.
+
+-- 
+Bye, Peter Korsgaard
