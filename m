@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Feb 2014 17:21:20 +0100
-Subject: [Buildroot] [PATCH 07/13] docs/manual: update informations
- about C library in internal backend
-In-Reply-To: <1393167879-16637-8-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 23 Feb 2014 17:29:34 +0100
+Subject: [Buildroot] [PATCH 12/13] docs/manual: document the usage of
+ <pkg>_OVERRIDE_SRCDIR
+In-Reply-To: <1393167879-16637-13-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1393167879-16637-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1393167879-16637-8-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20140223162120.GB32759@free.fr>
+ <1393167879-16637-13-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20140223162934.GC32759@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,83 +15,82 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2014-02-23 16:04 +0100, Thomas Petazzoni spake thusly:
-> Now that we have eglibc and glibc support in the internal backend, and
-> no longer marked as experimental, a little bit of rewording is
-> needed. It is no longer necessary to indicate that uClibc was
-> historically supported as the only C library, and that the glibc
-> support is experimental. We also update the rest of the description to
-> be less uClibc specific.
-> 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  docs/manual/configure.txt | 30 +++++++++++-------------------
->  1 file changed, 11 insertions(+), 19 deletions(-)
+>  docs/manual/advanced.txt                    |  2 +
+>  docs/manual/using-buildroot-development.txt | 84 +++++++++++++++++++++++++++++
+>  2 files changed, 86 insertions(+)
+>  create mode 100644 docs/manual/using-buildroot-development.txt
 > 
-> diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
-> index 89df3d9..b566e8a 100644
-> --- a/docs/manual/configure.txt
-> +++ b/docs/manual/configure.txt
-> @@ -68,12 +68,10 @@ The _internal toolchain backend_ is the backend where Buildroot builds
->  by itself a cross-compilation toolchain, before building the userspace
->  applications and libraries for your target embedded system.
+> diff --git a/docs/manual/advanced.txt b/docs/manual/advanced.txt
+> index 764b71a..fb337f5 100644
+> --- a/docs/manual/advanced.txt
+> +++ b/docs/manual/advanced.txt
+> @@ -11,3 +11,5 @@ include::ccache-support.txt[]
+>  include::download-location.txt[]
 >  
-> -This backend is the historical backend of Buildroot, and has been
-> -limited for a long time to the usage of the
-> -http://www.uclibc.org[uClibc C library]. Support for the _eglibc_ C
-> -library has been added in 2013 and is at this point considered
-> -experimental. See the _External toolchain backend_ for another
-> -solution to use _glibc_ or _eglibc_.
-> +This backend supports several C libraries:
-> +http://www.uclibc.org[uClibc], the
+>  include::package-make-target.txt[]
+> +
+> +include::using-buildroot-development.txt[]
+> diff --git a/docs/manual/using-buildroot-development.txt b/docs/manual/using-buildroot-development.txt
+> new file mode 100644
+> index 0000000..3267302
+> --- /dev/null
+> +++ b/docs/manual/using-buildroot-development.txt
+> @@ -0,0 +1,84 @@
+> +// -*- mode:doc; -*-
+> +// vim: set syntax=asciidoc:
+> +
+> +Using Buildroot during development
+> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> +
+> +The normal operation of Buildroot is to download a tarball, extract
+> +it, configure, compile and install the software component found inside
+> +this tarball. The source code is extracted in
+> ++output/build/<package>-<name>+, which is a temporary directory:
 
-s/the//  since you don't do it for the other two.
+output/build/<package>-<version>
 
-> +http://www.gnu.org/software/libc/libc.html[glibc] and
-> +http://www.eglibc.org[eglibc].
->  
->  Once you have selected this backend, a number of options appear. The
->  most important ones allow to:
-> @@ -96,18 +94,7 @@ most important ones allow to:
->     the C library might be using interfaces that are not provided by
->     your Linux kernel.
+> +whenever +make clean+ is used, this directory is entirely removed, and
+> +re-recreated at the next +make+ invocation. Even when a Git or
+> +Subversion repository is used as the input for the package source
+> +code, Buildroot creates a tarball out of it, and then behaves as it
+> +does normally with tarballs.
 
-Unrelated to your patch, but what about:
-    [...] the C library might be using interfaces, or exposing thos
-    interfaces to applications, that are not provided by the running
-    Linux kernel.
+normally does
 
-> - * Change the version and the configuration of the uClibc C library
-> -   (if uClibc is selected). The default options are usually
-> -   fine. However, if you really need to specifically customize the
-> -   configuration of your uClibc C library, you can pass a specific
-> -   configuration file here. Or alternatively, you can run the +make
-> -   uclibc-menuconfig+ command to get access to uClibc's configuration
-> -   interface. Note that all packages in Buildroot are tested against
-> -   the default uClibc configuration bundled in Buildroot: if you
-> -   deviate from this configuration by removing features from uClibc,
-> -   some packages may no longer build.
-> -
-> - * Change the version of the GCC compiler and binutils.
-> + * Change the version of the GCC compiler, binutils and the C library.
->  
->   * Select a number of toolchain options (uClibc only): whether the
->     toolchain should have largefile support (i.e support for files
-> @@ -118,7 +105,12 @@ most important ones allow to:
->     libraries visible in Buildroot menus will change: many applications
->     and libraries require certain toolchain options to be enabled. Most
->     packages show a comment when a certain toolchain option is required
-> -   to be able to enable those packages.
-> +   to be able to enable those packages. If needed, you can further
-> +   refine the uClibc configuration by running +make
-> +   uclibc-menuconfig+. Note however that all packages in Buildroot are
-> +   tested against the default uClibc configuration bundled in
-> +   Buildroot: if you deviate from this configuration by removing
-> +   features from uClibc, some packages may no longer build.
->  
->  It is worth noting that whenever one of those options is modified,
->  then the entire toolchain and system must be rebuilt. See
+> +This behavior is well-suited when Buildroot is used mainly as an
+> +integration tool, to build and integrate all the components of an
+> +embedded Linux system. However, if one uses Buildroot during the
+> +development of certain components of the system, this behavior is not
+> +very convenient: one would instead like to make a small change to the
+> +source code of one package, and be able to quickly rebuild the system
+> +with Buildroot.
+> +
+> +Making changes directly in +output/build/<package>-<name>+ is not
 
-Otherwise, looks good.
+output/build/<package>-<version>
+
+> +appropriate solution, because this directory is removed on +make
+> +clean+.
+> +
+> +Therefore, Buildroot provides a specific mechanism for this use case:
+> +the +<pkg>_OVERRIDE_SRCDIR+ mechanism. Buildroot reads an _override_
+> +file, which allows the user to tell Buildroot the location of the
+> +source for certain packages. By default this _override_ file is named
+> ++local.mk+ and located in the top directory of the Buildroot source
+> +tree,
+
+Wrong, now it is locate in $(CONFIG_DIR), that is, the directory where
+we have the .config file, since:
+    b1e514d Config: default BR2_PACKAGE_OVERRIDE_FILE to $(CONFIG_DIR)/local.mk
+
+This is Buildroot's top dir when building in-tree, and for out-of-tree
+builds, it's in $(O).
+
+[--SNIP--]
+
+Otherwise, LGTM.
 
 Regards,
 Yann E. MORIN.
