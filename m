@@ -1,36 +1,58 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Sun, 23 Feb 2014 18:50:53 +0000 (UTC)
-Subject: [Buildroot] What's the buildroot attitude to u-boot building?
-References: <CAE21AQqMQmKKL0=Q55P2zQhV8+iBdpX416xK+SgZd3+ONi8Mgg@mail.gmail.com>
- <le7p26$n75$1@ger.gmane.org> <20140222000428.77575be9@skate>
- <leb2a2$688$1@ger.gmane.org> <20140223111839.1ef569b9@skate>
-Message-ID: <ledfud$cnf$1@ger.gmane.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 23 Feb 2014 20:04:07 +0100
+Subject: [Buildroot] [PATCH v2 1/1] manual: add virtual package tutorial.
+In-Reply-To: <20140219141950.GA25812@pc-eric>
+References: <1392390673-30343-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <CAHXCMMJuED9xj9wVS0d0d+USa=-7_MdD6ZwoKQNj3zyg2+1vpQ@mail.gmail.com>
+ <20140219141950.GA25812@pc-eric>
+Message-ID: <20140223190407.GE32759@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2014-02-23, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+Eric, All,
 
-> I guess here it's really a matter of taste.
+On 2014-02-19 15:19 +0100, Eric Le Bihan spake thusly:
+> On Tue, Feb 18, 2014 at 09:34:41PM +0100, Samuel Martin wrote:
+> [...]
+> > > +[[virtual-package-tutorial]]
+> > > +How to add a virtual package
+> > > +^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> > > +
+> > > +In Buildroot, a virtual package is a package whose functionalities are
+> > > +provided by one or more packages, referred to as 'providers'.
+> > > +
+> > > +For example, 'OpenGL ES' is an API for 2D and 3D graphics on embedded systems.
+> > > +The implementation of this API is different for the 'Allwinner Tech Sunxi' and
+> > > +the 'Texas Instruments OMAP35xx' plaftorms. So +libgles+ will be a virtual
+> > > +package and +sunxi-mali+ and +ti-gfx+ will be the providers.
+> >
+> > The generic way of presenting the virtual/provider "infra" in Buildroot is:
+> > we want to use the virtual/provider infrastructure when there is one
+> > API, but several packages implementing this API, so we want an
+> > extensible mechanism allowing to choose what implementation we want in
+> > the target rootfs.
+> I will update the text in order to put emphasis on this idea.
 
-True.
+How are your changes going?
 
-> I've seen a large of number of people/companies who really like the
-> fact that one *single* Buildroot configuration is building their
-> entire embedded Linux system: toolchain, rootfs, kernel and
-> bootloader images.
+There are quite a few improvements to the manual being upstreamed. Your
+changes would make for another nice addition.
 
-If those make up the entire embedded Linux system, then that would be
-convenient.
+Do you think you could resubmit sometime next week, so this has a chance
+to go in before the release?
 
-> It is indeed clear that Buildroot used to be mainly aimed at
-> "integration", not to be used during development work.
->
-> However, based on what you say, it really looks like you have never
-> looked at using <pkg>_OVERRIDE_SRCDIR together with "make
-><pkg>-rebuild", because they do precisely what you're looking for :-)
+Thanks for your work on this! :-)
 
-Indeed, I wasn't aware of those. It looks like they were added after I
-decided to build kernel and boot-loader independently.
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
