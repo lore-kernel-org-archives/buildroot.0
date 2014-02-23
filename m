@@ -1,35 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 23 Feb 2014 18:38:30 +0100
-Subject: [Buildroot] [PATCH] lua: needs dynamic library support (dlopen)
-In-Reply-To: <8a14c6297835e91f6691.1393175989@argentina>
-References: <8a14c6297835e91f6691.1393175989@argentina>
-Message-ID: <20140223183830.2a7c25eb@skate>
+Date: Sun, 23 Feb 2014 18:40:32 +0100
+Subject: [Buildroot] [PATCH v2 1/2] infra: Add generic check_prog_host
+ function
+In-Reply-To: <1393172261-17421-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1393172261-17421-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20140223184032.2c6d08de@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Dear Maxime Hadjinlian,
 
-On Sun, 23 Feb 2014 18:19:49 +0100, Thomas De Schampheleire wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/e76/e765f992ad721a094579140c153ff71f20753265/
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> 
-> ---
->  package/dnsmasq/Config.in     |  4 ++++
->  package/efl/libedje/Config.in |  5 +++--
->  package/haserl/Config.in      |  5 +++++
->  package/lighttpd/Config.in    |  4 ++++
->  package/lua/Config.in         |  4 ++++
->  5 files changed, 20 insertions(+), 2 deletions(-)
+On Sun, 23 Feb 2014 17:17:40 +0100, Maxime Hadjinlian wrote:
 
-No, that's not the correct fix. The correct fix is a variant of
-http://patchwork.ozlabs.org/patch/313208/, which as suggested by Peter
-should use BR2_PREFER_STATIC_LIB as a condition, and not
-BR2_BINFMT_FLAT.
+> +# Verify that which is installed
+> +check_prog_host "which"
+
+Since your function check_prog_host uses which to determine if the
+program exists, isn't it weird to use which to verify it?
+
+Your check_host_prog function could also be used in:
+
+# Check that a few mandatory programs are installed
+missing_progs="no"
+for prog in patch perl tar wget cpio python unzip rsync bc ${DL_TOOLS} ; do
+        if ! which $prog > /dev/null ; then
+                echo "You must install '$prog' on your build machine";
+                missing_progs="yes"
+                if test $prog = "svn" ; then
+                        echo "  svn is usually part of the subversion package in your distribution"
+                elif test $prog = "hg" ; then
+                        echo "  hg is usually part of the mercurial package in your distribution"
+                elif test $prog = "zcat" ; then
+                        echo "  zcat is usually part of the gzip package in your distribution"
+                elif test $prog = "bzcat" ; then
+                        echo "  bzcat is usually part of the bzip2 package in your distribution"
+                fi
+        fi
+done
+
+if test "${missing_progs}" = "yes" ; then
+        exit 1
+fi
+
+Though you see that this loop has this missing_progs variable that
+allows to list all the missing programs, and only abort at the end.
 
 Thomas
 -- 
