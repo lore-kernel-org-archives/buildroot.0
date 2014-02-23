@@ -1,32 +1,35 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 23 Feb 2014 16:33:40 +0100
-Subject: [Buildroot] [PATCH] webkit: disable on powerpc
-In-Reply-To: <b82a6eacae7968135320.1393165932@argentina> (Thomas De
- Schampheleire's message of "Sun, 23 Feb 2014 15:32:12 +0100")
-References: <b82a6eacae7968135320.1393165932@argentina>
-Message-ID: <87ppmdq1wr.fsf@dell.be.48ers.dk>
+Date: Sun, 23 Feb 2014 16:35:03 +0100
+Subject: [Buildroot] [PATCH] package/linux-headers: add comment to
+	safely ignore missing cross-compiler
+In-Reply-To: <1393166118-26660-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Sun, 23 Feb 2014 15:35:18 +0100")
+References: <1393166118-26660-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87lhx1q1ug.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > webkit does not build correctly on powerpc. There is an upstream bug report
- > with a partial fix, but with remaining problems.
- > https://bugs.webkit.org/show_bug.cgi?id=113638
+ > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > For some architectures (eg. Arc, Cris, Hexagon, ia64, Parisc, Score and
+ > Xtensa), the Linux buildsystem tries to call the cross-compiler when
+ > installing the headers.
 
- > Until this problem is fixed, we disable webkit on powerpc.
+ > This is a spurious call, since a cross-compiler is not needed at all to
+ > install the headers.
 
- > Fixes
- > http://autobuild.buildroot.org/results/3ce/3ce992a663ddf1030a987bb778f8275a8e5fdef0/
+ > As some users have reported the issue, just add a comment in linux-headers.mk
+ > directing the user to ignore those errors.
 
- > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+ > Reported-by: Noam Camus <noamc@ezchip.com>
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Committed, thanks.
-
-What about the webkit copies in qt4/5? Do they work on powerpc?
 
 -- 
 Bye, Peter Korsgaard
