@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 Feb 2014 00:40:57 +0100
-Subject: [Buildroot] [PATCH 10/13] package/w_scan: requires kernel headers
-	>= 3.0
+Date: Mon, 24 Feb 2014 00:40:59 +0100
+Subject: [Buildroot] [PATCH 12/13] package/tvheadend: requires kernel
+	headers >= 3.2
 In-Reply-To: <cover.1393198603.git.yann.morin.1998@free.fr>
 References: <cover.1393198603.git.yann.morin.1998@free.fr>
-Message-ID: <493b4f0aaae4fe62edf4d344244b064649dc2e66.1393198603.git.yann.morin.1998@free.fr>
+Message-ID: <1d056233bc0573855790a4e90dec3f7a31f79156.1393198603.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,29 +13,37 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-It needs DVB API version 5.3 or later, introduced in linux 3.0.
+tvheadend requires SYS_TURBO, introduced in linux 3.2.
 
 Fixes:
-    http://autobuild.buildroot.net/results/6e7/6e7c691099a8f3eef4fc84860ceb1a94f25873eb
+    http://autobuild.buildroot.net/results/4df/4df8cd85e0287910567df81c0394b2914570e98a
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/w_scan/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/tvheadend/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/w_scan/Config.in b/package/w_scan/Config.in
-index 4487b0a..02cb2c3 100644
---- a/package/w_scan/Config.in
-+++ b/package/w_scan/Config.in
-@@ -1,5 +1,9 @@
-+comment "w_scan needs a toolchain w/ headers >= 3.0"
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-+
- config BR2_PACKAGE_W_SCAN
- 	bool "w_scan"
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+diff --git a/package/tvheadend/Config.in b/package/tvheadend/Config.in
+index da60f83..4f8baae 100644
+--- a/package/tvheadend/Config.in
++++ b/package/tvheadend/Config.in
+@@ -1,7 +1,7 @@
+-comment "tvheadend needs a toolchain w/ largefile, IPv6, threads"
++comment "tvheadend needs a toolchain w/ largefile, IPv6, threads, headers >= 3.2"
+ 	depends on !BR2_avr32 && !BR2_xtensa && !BR2_arc
+ 	depends on !BR2_PTHREADS && !BR2_PTHREADS_OLD
+-	depends on !BR2_LARGEFILE || !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_LARGEFILE || !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+ 
+ config BR2_PACKAGE_TVHEADEND
+ 	bool "tvheadend"
+@@ -17,6 +17,7 @@ config BR2_PACKAGE_TVHEADEND
+ 	depends on !BR2_PTHREADS && !BR2_PTHREADS_OLD
+ 	# no NPTL for these archs
+ 	depends on !BR2_xtensa && !BR2_arc
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+ 	select BR2_PACKAGE_DVB_APPS
+ 	select BR2_PACKAGE_OPENSSL
  	help
- 	  w_scan is a small command line utility used to perform frequency
 -- 
 1.8.3.2
