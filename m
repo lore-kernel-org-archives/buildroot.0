@@ -1,29 +1,67 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 23 Feb 2014 23:21:34 +0100
-Subject: [Buildroot] [PATCH] binutils: add upstream patch to fix
-	--enable-install-libiberty flag
-In-Reply-To: <1393193387-1777-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Sun, 23 Feb 2014 23:09:47 +0100")
-References: <1393193387-1777-1-git-send-email-arnout@mind.be>
-Message-ID: <87wqglmpw1.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 23 Feb 2014 23:23:48 +0100
+Subject: [Buildroot] [PATCH v3 1/1] ncftp: fix cross-compilation test
+In-Reply-To: <1393016452-10812-1-git-send-email-romain.naour@openwide.fr>
+References: <1393016452-10812-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <530A74F4.8030906@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+On 02/21/14 22:00, Romain Naour wrote:
+> The cross-compilation test is based on the ability to run
+> a test program on the host, which is wrong.
+> 
+> If it runs, then the configure script concludes
+> that we're doing native compilation,
+> if it doesn't run, we're doing cross-compilation.
+> 
+> The configure script needs to be regenerated to fix the
+> cross-compilation test.
+> 
+> Fixes
+> http://autobuild.buildroot.net/results/969/969a49ae97a50634ea846a82b9c360e4fb020ace/build-end.log
+> 
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> ---
+>  package/ncftp/ncftp.mk | 8 ++++++++
 
- > Fixes http://autobuild.buildroot.org/results/1ea/1ea98985ce06dc1b7569ef5abe2fc13090fb5f3a
- > The upstream patch patches both configure.ac and configure, so we keep
- > that.
+ Looks like the patch file itself got lost in this revision...
 
- > It is numbered 001 because it is an upstream patch, so it should come
- > before the buildroot patches.
 
- > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ Regards,
+ Arnout
 
-Committed, thanks.
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/package/ncftp/ncftp.mk b/package/ncftp/ncftp.mk
+> index ff6c70a..841c82b 100644
+> --- a/package/ncftp/ncftp.mk
+> +++ b/package/ncftp/ncftp.mk
+> @@ -11,6 +11,14 @@ NCFTP_TARGET_BINS = ncftp
+>  NCFTP_LICENSE = Clarified Artistic License
+>  NCFTP_LICENSE_FILES = doc/LICENSE.txt
+>  
+> +NCFTP_DEPENDENCIES = host-autoconf
+> +
+> +define NCFTP_RUN_AUTOCONF
+> +       (cd $(@D); $(HOST_DIR)/usr/bin/autoconf -I$(@D)/autoconf_local/)
+> +endef
+> +
+> +NCFTP_PRE_CONFIGURE_HOOKS += NCFTP_RUN_AUTOCONF
+> +
+>  ifeq ($(BR2_PACKAGE_NCFTP_GET),y)
+>  	NCFTP_TARGET_BINS += ncftpget
+>  endif
+> 
+
 
 -- 
-Bye, Peter Korsgaard
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
