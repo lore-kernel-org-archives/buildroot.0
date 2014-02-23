@@ -1,24 +1,36 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 23 Feb 2014 18:22:52 +0000 (UTC)
-Subject: [Buildroot] [Bug 6842] Checking external toolchain for eabihf
-In-Reply-To: <bug-6842-163@https.bugs.busybox.net/>
-References: <bug-6842-163@https.bugs.busybox.net/>
-Message-ID: <20140223182252.8885B9B583@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 23 Feb 2014 19:35:52 +0100
+Subject: [Buildroot] [PATCH] webkit: disable on powerpc
+In-Reply-To: <CAAXf6LUbC4UZefJSpN_bvwXedQbOyfYC4==g9K-4V5=y=KihUg@mail.gmail.com>
+ (Thomas De Schampheleire's message of "Sun, 23 Feb 2014 19:01:53
+ +0100")
+References: <b82a6eacae7968135320.1393165932@argentina>
+ <87ppmdq1wr.fsf@dell.be.48ers.dk>
+ <CAAXf6LUbC4UZefJSpN_bvwXedQbOyfYC4==g9K-4V5=y=KihUg@mail.gmail.com>
+Message-ID: <87vbw5oewn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6842
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
---- Comment #5 from syntheticpp at gmx.net 2014-02-23 18:22:52 UTC ---
-> 
-> the fix is *not* to change the external toolchain check, 
+ >> What about the webkit copies in qt4/5? Do they work on powerpc?
 
-Yes, the patch should not be applied.
+ > Following defconfig builds just fine:
+
+ > BR2_powerpc=y
+ > BR2_DL_DIR="/home/tdescham/repo/contrib/dl"
+ > BR2_BACKUP_SITE="http://sources.buildroot.net/"
+ > BR2_KERNEL_MIRROR="http://www.kernel.org/pub/"
+ > BR2_CCACHE=y
+ > BR2_TOOLCHAIN_EXTERNAL=y
+ > BR2_PACKAGE_QT=y
+ > # BR2_PACKAGE_QT_XML is not set
+ > BR2_PACKAGE_QT_WEBKIT=y
+
+Ok, thanks for checking.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
