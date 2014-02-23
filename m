@@ -1,45 +1,68 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 23 Feb 2014 19:01:53 +0100
-Subject: [Buildroot] [PATCH] webkit: disable on powerpc
-In-Reply-To: <87ppmdq1wr.fsf@dell.be.48ers.dk>
-References: <b82a6eacae7968135320.1393165932@argentina>
- <87ppmdq1wr.fsf@dell.be.48ers.dk>
-Message-ID: <CAAXf6LUbC4UZefJSpN_bvwXedQbOyfYC4==g9K-4V5=y=KihUg@mail.gmail.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sun, 23 Feb 2014 19:12:05 +0100
+Subject: [Buildroot] [PATCH v2 1/2] infra: Add generic check_prog_host
+	function
+In-Reply-To: <20140223184032.2c6d08de@skate>
+References: <1393172261-17421-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <20140223184032.2c6d08de@skate>
+Message-ID: <CAGduivy7YPpfcvkOkZxH2_35BSxsjSK0_++RMaw3bxwJE2=QzA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Feb 23, 2014 at 4:33 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+On Sun, Feb 23, 2014 at 6:40 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Maxime Hadjinlian,
 >
->  > webkit does not build correctly on powerpc. There is an upstream bug report
->  > with a partial fix, but with remaining problems.
->  > https://bugs.webkit.org/show_bug.cgi?id=113638
+> On Sun, 23 Feb 2014 17:17:40 +0100, Maxime Hadjinlian wrote:
 >
->  > Until this problem is fixed, we disable webkit on powerpc.
+>> +# Verify that which is installed
+>> +check_prog_host "which"
 >
->  > Fixes
->  > http://autobuild.buildroot.org/results/3ce/3ce992a663ddf1030a987bb778f8275a8e5fdef0/
+> Since your function check_prog_host uses which to determine if the
+> program exists, isn't it weird to use which to verify it?
+Agreed but that was the original check also which I found a little in
+the first place. But since this patch is here only to introduce and
+use a function, I didn't see how to change that here.
 >
->  > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> Your check_host_prog function could also be used in:
 >
-> Committed, thanks.
+> # Check that a few mandatory programs are installed
+> missing_progs="no"
+> for prog in patch perl tar wget cpio python unzip rsync bc ${DL_TOOLS} ; do
+>         if ! which $prog > /dev/null ; then
+>                 echo "You must install '$prog' on your build machine";
+>                 missing_progs="yes"
+>                 if test $prog = "svn" ; then
+>                         echo "  svn is usually part of the subversion package in your distribution"
+>                 elif test $prog = "hg" ; then
+>                         echo "  hg is usually part of the mercurial package in your distribution"
+>                 elif test $prog = "zcat" ; then
+>                         echo "  zcat is usually part of the gzip package in your distribution"
+>                 elif test $prog = "bzcat" ; then
+>                         echo "  bzcat is usually part of the bzip2 package in your distribution"
+>                 fi
+>         fi
+> done
 >
-> What about the webkit copies in qt4/5? Do they work on powerpc?
-
-Following defconfig builds just fine:
-
-BR2_powerpc=y
-BR2_DL_DIR="/home/tdescham/repo/contrib/dl"
-BR2_BACKUP_SITE="http://sources.buildroot.net/"
-BR2_KERNEL_MIRROR="http://www.kernel.org/pub/"
-BR2_CCACHE=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_PACKAGE_QT=y
-# BR2_PACKAGE_QT_XML is not set
-BR2_PACKAGE_QT_WEBKIT=y
-
-Best regards,
-Thomas
+> if test "${missing_progs}" = "yes" ; then
+>         exit 1
+> fi
+>
+> Though you see that this loop has this missing_progs variable that
+> allows to list all the missing programs, and only abort at the end.
+I wanted to keep this one as is for the moment.
+As you point out, it uses the exact mechanisms we want for all the
+dependencies.sh, and it would be part of a follow up patch later one,
+which would uses the same mechanisms but all over the dependencies.sh.
+Which is want we want in the end.
+This first patch is mostly a follow up of the previous one, which
+added the BR2_NEEDS_HOST_JAVA
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
