@@ -1,36 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 23 Feb 2014 19:35:52 +0100
-Subject: [Buildroot] [PATCH] webkit: disable on powerpc
-In-Reply-To: <CAAXf6LUbC4UZefJSpN_bvwXedQbOyfYC4==g9K-4V5=y=KihUg@mail.gmail.com>
- (Thomas De Schampheleire's message of "Sun, 23 Feb 2014 19:01:53
- +0100")
-References: <b82a6eacae7968135320.1393165932@argentina>
- <87ppmdq1wr.fsf@dell.be.48ers.dk>
- <CAAXf6LUbC4UZefJSpN_bvwXedQbOyfYC4==g9K-4V5=y=KihUg@mail.gmail.com>
-Message-ID: <87vbw5oewn.fsf@dell.be.48ers.dk>
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Sun, 23 Feb 2014 18:50:53 +0000 (UTC)
+Subject: [Buildroot] What's the buildroot attitude to u-boot building?
+References: <CAE21AQqMQmKKL0=Q55P2zQhV8+iBdpX416xK+SgZd3+ONi8Mgg@mail.gmail.com>
+ <le7p26$n75$1@ger.gmane.org> <20140222000428.77575be9@skate>
+ <leb2a2$688$1@ger.gmane.org> <20140223111839.1ef569b9@skate>
+Message-ID: <ledfud$cnf$1@ger.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+On 2014-02-23, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
- >> What about the webkit copies in qt4/5? Do they work on powerpc?
+> I guess here it's really a matter of taste.
 
- > Following defconfig builds just fine:
+True.
 
- > BR2_powerpc=y
- > BR2_DL_DIR="/home/tdescham/repo/contrib/dl"
- > BR2_BACKUP_SITE="http://sources.buildroot.net/"
- > BR2_KERNEL_MIRROR="http://www.kernel.org/pub/"
- > BR2_CCACHE=y
- > BR2_TOOLCHAIN_EXTERNAL=y
- > BR2_PACKAGE_QT=y
- > # BR2_PACKAGE_QT_XML is not set
- > BR2_PACKAGE_QT_WEBKIT=y
+> I've seen a large of number of people/companies who really like the
+> fact that one *single* Buildroot configuration is building their
+> entire embedded Linux system: toolchain, rootfs, kernel and
+> bootloader images.
 
-Ok, thanks for checking.
+If those make up the entire embedded Linux system, then that would be
+convenient.
 
--- 
-Bye, Peter Korsgaard
+> It is indeed clear that Buildroot used to be mainly aimed at
+> "integration", not to be used during development work.
+>
+> However, based on what you say, it really looks like you have never
+> looked at using <pkg>_OVERRIDE_SRCDIR together with "make
+><pkg>-rebuild", because they do precisely what you're looking for :-)
+
+Indeed, I wasn't aware of those. It looks like they were added after I
+decided to build kernel and boot-loader independently.
