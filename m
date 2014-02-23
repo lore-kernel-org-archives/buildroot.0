@@ -1,82 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 23 Feb 2014 16:04:33 +0100
-Subject: [Buildroot] [PATCH 07/13] docs/manual: update informations about C
-	library in internal backend
+Date: Sun, 23 Feb 2014 16:04:36 +0100
+Subject: [Buildroot] [PATCH 10/13] docs/manual: rephrase paragraph about
+	unsupported external toolchains
 In-Reply-To: <1393167879-16637-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1393167879-16637-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1393167879-16637-8-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1393167879-16637-11-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that we have eglibc and glibc support in the internal backend, and
-no longer marked as experimental, a little bit of rewording is
-needed. It is no longer necessary to indicate that uClibc was
-historically supported as the only C library, and that the glibc
-support is experimental. We also update the rest of the description to
-be less uClibc specific.
+The ELDK now relies on Yocto, so it no longer has the funky
+non-standard way of doing multilib. Also, we didn't mention that Yocto
+toolchains/SDK are not suitable for usage with Buildroot. Therefore,
+this commit rewords this part of the documentation to explain that
+Yocto/OpenEmbedded SDKs cannot be used as external toolchains in
+Buildroot, and why.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/configure.txt | 30 +++++++++++-------------------
- 1 file changed, 11 insertions(+), 19 deletions(-)
+ docs/manual/configure.txt | 24 +++++++-----------------
+ 1 file changed, 7 insertions(+), 17 deletions(-)
 
 diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
-index 89df3d9..b566e8a 100644
+index 42d84fe..9a12440 100644
 --- a/docs/manual/configure.txt
 +++ b/docs/manual/configure.txt
-@@ -68,12 +68,10 @@ The _internal toolchain backend_ is the backend where Buildroot builds
- by itself a cross-compilation toolchain, before building the userspace
- applications and libraries for your target embedded system.
+@@ -179,23 +179,13 @@ Buildroot itself. In general, all toolchains that support the
+ 'sysroot' feature should work. If not, do not hesitate to contact the
+ developers.
  
--This backend is the historical backend of Buildroot, and has been
--limited for a long time to the usage of the
--http://www.uclibc.org[uClibc C library]. Support for the _eglibc_ C
--library has been added in 2013 and is at this point considered
--experimental. See the _External toolchain backend_ for another
--solution to use _glibc_ or _eglibc_.
-+This backend supports several C libraries:
-+http://www.uclibc.org[uClibc], the
-+http://www.gnu.org/software/libc/libc.html[glibc] and
-+http://www.eglibc.org[eglibc].
- 
- Once you have selected this backend, a number of options appear. The
- most important ones allow to:
-@@ -96,18 +94,7 @@ most important ones allow to:
-    the C library might be using interfaces that are not provided by
-    your Linux kernel.
- 
-- * Change the version and the configuration of the uClibc C library
--   (if uClibc is selected). The default options are usually
--   fine. However, if you really need to specifically customize the
--   configuration of your uClibc C library, you can pass a specific
--   configuration file here. Or alternatively, you can run the +make
--   uclibc-menuconfig+ command to get access to uClibc's configuration
--   interface. Note that all packages in Buildroot are tested against
--   the default uClibc configuration bundled in Buildroot: if you
--   deviate from this configuration by removing features from uClibc,
--   some packages may no longer build.
+-We do not support toolchains from the
+-http://www.denx.de/wiki/DULG/ELDK[ELDK] of Denx, for two reasons:
 -
-- * Change the version of the GCC compiler and binutils.
-+ * Change the version of the GCC compiler, binutils and the C library.
+-* The ELDK does not contain a pure toolchain (i.e just the compiler,
+-  binutils, the C and C++ libraries), but a toolchain that comes with
+-  a very large set of pre-compiled libraries and programs. Therefore,
+-  Buildroot cannot import the 'sysroot' of the toolchain, as it would
+-  contain hundreds of megabytes of pre-compiled libraries that are
+-  normally built by Buildroot.
+-
+-* The ELDK toolchains have a completely non-standard custom mechanism
+-  to handle multiple library variants. Instead of using the standard
+-  GCC 'multilib' mechanism, the ARM ELDK uses different symbolic links
+-  to the compiler to differentiate between library variants (for ARM
+-  soft-float and ARM VFP), and the PowerPC ELDK compiler uses a
+-  +CROSS_COMPILE+ environment variable. This non-standard behaviour
+-  makes it difficult to support ELDK in Buildroot.
++We do not support toolchains or SDK generated by OpenEmbedded or
++Yocto, because these toolchains are not pure toolchains (i.e just the
++compiler, binutils, the C and C++ libraries). Instead these toolchains
++come with a very large set of pre-compiled libraries and
++programs. Therefore, Buildroot cannot import the 'sysroot' of the
++toolchain, as it would contain hundreds of megabytes of pre-compiled
++libraries that are normally built by Buildroot.
  
-  * Select a number of toolchain options (uClibc only): whether the
-    toolchain should have largefile support (i.e support for files
-@@ -118,7 +105,12 @@ most important ones allow to:
-    libraries visible in Buildroot menus will change: many applications
-    and libraries require certain toolchain options to be enabled. Most
-    packages show a comment when a certain toolchain option is required
--   to be able to enable those packages.
-+   to be able to enable those packages. If needed, you can further
-+   refine the uClibc configuration by running +make
-+   uclibc-menuconfig+. Note however that all packages in Buildroot are
-+   tested against the default uClibc configuration bundled in
-+   Buildroot: if you deviate from this configuration by removing
-+   features from uClibc, some packages may no longer build.
- 
- It is worth noting that whenever one of those options is modified,
- then the entire toolchain and system must be rebuilt. See
+ We also do not support using the distribution toolchain (i.e the
+ gcc/binutils/C library installed by your distribution) as the
 -- 
 1.8.3.2
