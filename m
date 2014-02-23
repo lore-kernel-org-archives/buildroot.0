@@ -1,107 +1,52 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 23 Feb 2014 18:19:49 +0100
-Subject: [Buildroot] [PATCH] lua: needs dynamic library support (dlopen)
-Message-ID: <8a14c6297835e91f6691.1393175989@argentina>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 23 Feb 2014 18:29:47 +0100
+Subject: [Buildroot] [PATCH] package/rt-tests: fix Kconfig syntax
+Message-ID: <1393176587-27407-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/e76/e765f992ad721a094579140c153ff71f20753265/
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Fixes:
+    $ make menuconfig
+    [...]
+    package/rt-tests/Config.in:10: syntax error
+    package/rt-tests/Config.in:9: invalid option
+    package/rt-tests/Config.in:36: syntax error
+    package/rt-tests/Config.in:35: invalid option
+    make[1]: *** [oldconfig] Error 1
+    make: *** [_all] Error 2
 
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Ryan Barnett <rjbarnet@rockwellcollins.com>
 ---
- package/dnsmasq/Config.in     |  4 ++++
- package/efl/libedje/Config.in |  5 +++--
- package/haserl/Config.in      |  5 +++++
- package/lighttpd/Config.in    |  4 ++++
- package/lua/Config.in         |  4 ++++
- 5 files changed, 20 insertions(+), 2 deletions(-)
+ package/rt-tests/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/dnsmasq/Config.in b/package/dnsmasq/Config.in
---- a/package/dnsmasq/Config.in
-+++ b/package/dnsmasq/Config.in
-@@ -32,9 +32,13 @@ config BR2_PACKAGE_DNSMASQ_IDN
- config BR2_PACKAGE_DNSMASQ_LUA
- 	bool "Lua scripting support"
- 	select BR2_PACKAGE_LUA
-+	depends on !BR2_PREFER_STATIC_LIB # lua
+diff --git a/package/rt-tests/Config.in b/package/rt-tests/Config.in
+index ff4284e..605635c 100644
+--- a/package/rt-tests/Config.in
++++ b/package/rt-tests/Config.in
+@@ -6,8 +6,8 @@ config BR2_PACKAGE_RT_TESTS
+ 	# no NPTL for these archs
+ 	depends on !BR2_avr32 && !BR2_xtensa && !BR2_arc && !BR2_bfin
+ 	# no _tid field in 'struct sigevent'
+-	depends on !BR2_TOOLCHAIN_USES_UCLIBC if (BR2_mips || BR2_mipsel || \
+-		BR2_mips64 || BR2_mips64el)
++	depends on ! ( BR2_TOOLCHAIN_USES_UCLIBC && (BR2_mips || BR2_mipsel || \
++		BR2_mips64 || BR2_mips64el) )
  	help
- 	  Enable Lua scripting for dnsmasq
+ 	  Set of utilities for testing the real-time behaviour of a
+ 	  Linux system.
+@@ -32,5 +32,5 @@ comment "rt-tests needs a toolchain w/ threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
  
-+comment "Lua scripting support needs a toolchain w/ dynamic library"
-+	depends on BR2_PREFER_STATIC_LIB
-+
- config BR2_PACKAGE_DNSMASQ_CONNTRACK
- 	bool "conntrack marking support"
- 	select BR2_PACKAGE_LIBNETFILTER_CONNTRACK
-diff --git a/package/efl/libedje/Config.in b/package/efl/libedje/Config.in
---- a/package/efl/libedje/Config.in
-+++ b/package/efl/libedje/Config.in
-@@ -1,6 +1,6 @@
--comment "libedje needs a toolchain w/ threads"
-+comment "libedje needs a toolchain w/ threads, dynamic library"
- 	depends on !BR2_avr32
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_PREFER_STATIC_LIB
- 
- config BR2_PACKAGE_LIBEDJE
- 	bool "libedje"
-@@ -13,6 +13,7 @@ config BR2_PACKAGE_LIBEDJE
- 	select BR2_PACKAGE_LUA
- 	depends on !BR2_avr32 # libevas
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
-+	depends on !BR2_PREFER_STATIC_LIB # lua
- 	help
- 	  A graphical layout and animation library for animated
- 	  resizable, compressed and scalable themes.
-diff --git a/package/haserl/Config.in b/package/haserl/Config.in
---- a/package/haserl/Config.in
-+++ b/package/haserl/Config.in
-@@ -13,10 +13,15 @@ if BR2_PACKAGE_HASERL
- config BR2_PACKAGE_HASERL_WITH_LUA
- 	bool "Lua support"
- 	depends on BR2_PACKAGE_HASERL_VERSION_0_9_X
-+	depends on !BR2_PREFER_STATIC_LIB
- 	select BR2_PACKAGE_LUA
- 	help
- 	  Enable Lua support for haserl
- 
-+comment "Lua support needs a toolchain w/ dynamic library"
-+	depends on BR2_PACKAGE_HASERL_VERSION_0_9_X
-+	depends on BR2_PREFER_STATIC_LIB
-+
- choice
- 	prompt "Haserl version"
- 	default BR2_PACKAGE_HASERL_VERSION_0_9_X
-diff --git a/package/lighttpd/Config.in b/package/lighttpd/Config.in
---- a/package/lighttpd/Config.in
-+++ b/package/lighttpd/Config.in
-@@ -48,7 +48,11 @@ config BR2_PACKAGE_LIGHTTPD_WEBDAV
- config BR2_PACKAGE_LIGHTTPD_LUA
- 	bool "lua support"
- 	select BR2_PACKAGE_LUA
-+	depends on !BR2_PREFER_STATIC_LIB # lua
- 	help
- 	  Enable Lua support. Needed to support mod_magnet
- 
-+comment "lua support needs a toolchain w/ dynamic library"
-+	depends on BR2_PREFER_STATIC_LIB
-+
- endif
-diff --git a/package/lua/Config.in b/package/lua/Config.in
---- a/package/lua/Config.in
-+++ b/package/lua/Config.in
-@@ -1,5 +1,9 @@
-+comment "lua needs a toolchain w/ dynamic library"
-+	depends on BR2_PREFER_STATIC_LIB
-+
- config BR2_PACKAGE_LUA
- 	bool "lua"
-+	depends on !BR2_PREFER_STATIC_LIB # dlopen
- 	select BR2_PACKAGE_HAS_LUA_INTERPRETER
- 	help
- 	  Lua is a powerful, fast, light-weight, embeddable scripting language.
+ comment "rt-tests needs an (e)glibc toolchain"
+-	depends on BR2_TOOLCHAIN_USES_UCLIBC if (BR2_mips || BR2_mipsel || \
++	depends on BR2_TOOLCHAIN_USES_UCLIBC && (BR2_mips || BR2_mipsel || \
+ 		BR2_mips64 || BR2_mips64el)
+-- 
+1.8.3.2
