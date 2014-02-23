@@ -1,41 +1,43 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 23 Feb 2014 20:56:00 +0100
-Subject: [Buildroot] [PATCH 1/1] ti-gfx: bump to version 5_01_00_01
-In-Reply-To: <20140223193116.GI32759@free.fr> (Yann E. MORIN's message of
- "Sun, 23 Feb 2014 20:31:16 +0100")
-References: <52fd38fd.870eec0a.7f7f.13a5@mx.google.com>
- <20140223193116.GI32759@free.fr>
-Message-ID: <87mwhhob73.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 23 Feb 2014 20:55:37 +0100
+Subject: [Buildroot] [git commit branch/next] ti-gfx: bump to version
+	5_01_00_01
+Message-ID: <20140223195731.3D1469B92A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=83fb9bb738ae17bf2f11ae3e25250c035a8a7dba
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > Marcelo, All,
- > On 2014-02-13 18:38 +0000, kuyurix at gmail.com spake thusly:
- >> From: Marcelo Gutierrez <kuyurix@gmail.com>
- >> 
- >> Signed-off-by: Marcelo Gutierrez <kuyurix@gmail.com>
+Signed-off-by: Marcelo Gutierrez <kuyurix@gmail.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ti-gfx/ti-gfx.mk |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
- > Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
- > Notes:
-
- >   - The version pointed to by Spencer was 5.00.x, and was a beta
- >     version, and only contained the hardfp variant. The version in
- >     this patch is 5.01.x, is not marked as beta, and contains both
- >     the hardfp and softfp variants.
-
- >   - With 4.10.x and before, the *_$(TI_GFX_VERSION).bin archive would
- >     contain a huge load of stuff we did not need, and was roughly
- >     1.7GiB big. But with 5.01.x, this file is now back to a more
- >     acceptable size, roughly 140MiB (although it still contains way
- >     much more than we need).
-
-Sounds good. Committed to next, thanks both.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/ti-gfx/ti-gfx.mk b/package/ti-gfx/ti-gfx.mk
+index a94f00d..5ea6b92 100644
+--- a/package/ti-gfx/ti-gfx.mk
++++ b/package/ti-gfx/ti-gfx.mk
+@@ -4,13 +4,13 @@
+ #
+ ################################################################################
+ 
+-TI_GFX_VERSION = 4_09_00_01
+-TI_GFX_SO_VERSION = 1.9.2188537
++TI_GFX_VERSION = 5_01_00_01
++TI_GFX_SO_VERSION = 1.10.2359475
+ 
+ ifeq ($(BR2_ARM_EABIHF),y)
+-TI_GFX_SOURCE = Graphics_SDK_setuplinux_$(TI_GFX_VERSION)_hardfp_minimal_demos.bin
++TI_GFX_SOURCE = Graphics_SDK_setuplinux_hardfp_$(TI_GFX_VERSION).bin
+ else
+-TI_GFX_SOURCE = Graphics_SDK_setuplinux_$(TI_GFX_VERSION)_minimal_demos.bin
++TI_GFX_SOURCE = Graphics_SDK_setuplinux_softfp_$(TI_GFX_VERSION).bin
+ endif
+ 
+ TI_GFX_SITE = http://downloads.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/gfxsdk/$(TI_GFX_VERSION)/exports/
