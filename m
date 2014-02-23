@@ -1,39 +1,49 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 23 Feb 2014 15:32:12 +0100
-Subject: [Buildroot] [PATCH] webkit: disable on powerpc
-Message-ID: <b82a6eacae7968135320.1393165932@argentina>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 23 Feb 2014 15:35:18 +0100
+Subject: [Buildroot] [PATCH] package/linux-headers: add comment to safely
+	ignore missing cross-compiler
+Message-ID: <1393166118-26660-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-webkit does not build correctly on powerpc. There is an upstream bug report
-with a partial fix, but with remaining problems.
-https://bugs.webkit.org/show_bug.cgi?id=113638
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Until this problem is fixed, we disable webkit on powerpc.
+For some architectures (eg. Arc, Cris, Hexagon, ia64, Parisc, Score and
+Xtensa), the Linux buildsystem tries to call the cross-compiler when
+installing the headers.
 
-Fixes
-http://autobuild.buildroot.org/results/3ce/3ce992a663ddf1030a987bb778f8275a8e5fdef0/
+This is a spurious call, since a cross-compiler is not needed at all to
+install the headers.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+As some users have reported the issue, just add a comment in linux-headers.mk
+directing the user to ignore those errors.
 
+Reported-by: Noam Camus <noamc@ezchip.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/webkit/Config.in |  4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+ package/linux-headers/linux-headers.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/webkit/Config.in b/package/webkit/Config.in
---- a/package/webkit/Config.in
-+++ b/package/webkit/Config.in
-@@ -4,7 +4,9 @@ config BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
- 	default y if (BR2_arm || BR2_armeb) && \
- 		!(BR2_arm7tdmi || BR2_arm720t || BR2_arm920t || BR2_arm922t || BR2_fa526)
- 	default y if BR2_i386 || BR2_mips || BR2_mipsel || \
--		BR2_powerpc || BR2_sh || BR2_sparc || BR2_x86_64
-+		BR2_sh || BR2_sparc || BR2_x86_64
-+
-+# disabled on powerpc due to bug https://bugs.webkit.org/show_bug.cgi?id=113638
+diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
+index 30d3076..086e5d5 100644
+--- a/package/linux-headers/linux-headers.mk
++++ b/package/linux-headers/linux-headers.mk
+@@ -17,6 +17,12 @@ LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.xz
  
- config BR2_PACKAGE_WEBKIT
- 	bool "webkit"
+ LINUX_HEADERS_INSTALL_STAGING = YES
+ 
++# For some architectures (eg. Arc, Cris, Hexagon, ia64, parisc,
++# score and xtensa), the Linux buildsystem tries to call the
++# cross-compiler, although it is not needed at all.
++# This results in seemingly errors like:
++#   [...]/scripts/gcc-version.sh: line 26: arc-linux-uclibc-gcc: command not found
++# Those can be safely ignored.
+ define LINUX_HEADERS_INSTALL_STAGING_CMDS
+ 	(cd $(@D); \
+ 		$(TARGET_MAKE_ENV) $(MAKE) \
+-- 
+1.8.3.2
