@@ -1,42 +1,45 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 23 Feb 2014 22:29:39 +0100
-Subject: [Buildroot] [PATCH 12/13] docs/manual: document the usage of
-	<pkg>_OVERRIDE_SRCDIR
-In-Reply-To: <20140223162934.GC32759@free.fr> (Yann E. MORIN's message of
- "Sun, 23 Feb 2014 17:29:34 +0100")
+Date: Sun, 23 Feb 2014 22:30:50 +0100
+Subject: [Buildroot] [PATCH 00/13] Documentation updates and improvements
+In-Reply-To: <1393167879-16637-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 23 Feb 2014 16:04:26 +0100")
 References: <1393167879-16637-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1393167879-16637-13-git-send-email-thomas.petazzoni@free-electrons.com>
- <20140223162934.GC32759@free.fr>
-Message-ID: <87eh2to6v0.fsf@dell.be.48ers.dk>
+Message-ID: <87a9dho6t1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Hi,
+ > Hello,
+ > Here is a set of documentation updates and improvements, about
+ > toolchains, package infrastructures, dependency and build-time
+ > graphing, and also finally a documentation about
+ > <pkg>_OVERRIDE_SRCDIR.
 
- >> +appropriate solution, because this directory is removed on +make
- >> +clean+.
- >> +
- >> +Therefore, Buildroot provides a specific mechanism for this use case:
- >> +the +<pkg>_OVERRIDE_SRCDIR+ mechanism. Buildroot reads an _override_
- >> +file, which allows the user to tell Buildroot the location of the
- >> +source for certain packages. By default this _override_ file is named
- >> ++local.mk+ and located in the top directory of the Buildroot source
- >> +tree,
+ > Thomas
 
- > Wrong, now it is locate in $(CONFIG_DIR), that is, the directory where
- > we have the .config file, since:
- >     b1e514d Config: default BR2_PACKAGE_OVERRIDE_FILE to $(CONFIG_DIR)/local.mk
+ > Thomas Petazzoni (13):
+ >   docs/manual: toolchain packages no longer use custom makefiles
+ >   docs/manual: rephrase part about rebuilding packages
+ >   docs/manual: rephrase and expand part on when a full rebuild is
+ >     necessary
+ >   docs/manual: reference Python and Lua infras from the list of package
+ >     infrastructures
+ >   docs/manual: add section about dependency graphs
+ >   docs/manual: add section about build time graphing
+ >   docs/manual: update informations about C library in internal backend
+ >   docs/manual: update external toolchain examples
+ >   docs/manual: mention that custom toolchains is also useful for BR
+ >     toolchains
+ >   docs/manual: rephrase paragraph about unsupported external toolchains
+ >   docs/manual: refresh informations about *-menuconfig targets
+ >   docs/manual: document the usage of <pkg>_OVERRIDE_SRCDIR
+ >   docs/manual: mention the per-package graph-depends target
 
- > This is Buildroot's top dir when building in-tree, and for out-of-tree
- > builds, it's in $(O).
-
-True, but that commit is only in next, and I imho think this series
-belongs on master, so I'll leave it for now.
+Committed series with the minor changes suggested by Yann, thanks.
 
 -- 
 Bye, Peter Korsgaard
