@@ -1,41 +1,51 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 23 Feb 2014 08:43:21 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: bump to version 3.13.5
-In-Reply-To: <1393155801-29030-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1393155801-29030-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1393155801-29030-2-git-send-email-gustavo@zacarias.com.ar>
+From: Noam Camus <noamc@ezchip.com>
+Date: Sun, 23 Feb 2014 11:45:46 +0000
+Subject: [Buildroot] [PATCH] toolchain: control GNU_TARGET_NAME
+	vendor	part
+In-Reply-To: <20140223104658.4088cdc6@skate>
+References: <884EA965490E3C4D8E66AEF41E98025006BF23@ezex10.ezchip.com>
+ <20140223104658.4088cdc6@skate>
+Message-ID: <884EA965490E3C4D8E66AEF41E98025006C3BB@ezex10.ezchip.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Hi Thomas,
 
-diff --git a/linux/Config.in b/linux/Config.in
-index e52b13c..1f8ddf5 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.13.3"
-+	bool "3.13.5"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -104,7 +104,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.13.3" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.13.5" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
--- 
-1.8.3.2
+Here (EZchip) we change toolchain elements such binutils/gdb kernel (headers) and gcc.
+We are using override feature of buildroot to create our custom buildroot toolchain.
+One of the GCC changes we carry is that we assume dedicated vendor (ezchip) to control several GCC defaults and enable extra configurations within GCC.
+
+About "unknown" I guess that it can be blocked by checking the value and in some cases cause intentional make error.
+
+I hope this makes sense to you.
+
+Noam
+
+-----Original Message-----
+From: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com] 
+Sent: Sunday, February 23, 2014 11:47 AM
+To: Noam Camus
+Cc: buildroot at busybox.net
+Subject: Re: [Buildroot] [PATCH] toolchain: control GNU_TARGET_NAME vendor part
+
+Dear Noam Camus,
+
+On Sun, 23 Feb 2014 08:28:21 +0000, Noam Camus wrote:
+> When the toolchain is custom we can denote that by setting in the triplet the vendor part.
+> This is done through configution, where the default is buildroot.
+> 
+> Signed-off-by: Noam Camus <noamc@ezchip.com>
+
+Is there a compelling reason to allow the configuration of the vendor part of the tuple? To me, it makes sense that all Buildroot toolchain have the "buildroot" vendor, so that they can be identified easily.
+
+Also, if by mistake the vendor part of the tuple is defined by the user as "unknown", they he might get compilation issues when building with target architecture == host architecture.
+
+See 11017f081fc5b034e680d89eaea729c19f450e01 ('pkg-infra: make sure cross compiling is enabled when host == target').
+
+Thomas
+--
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering http://free-electrons.com
