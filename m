@@ -1,41 +1,61 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Feb 2014 14:30:36 +0100
-Subject: [Buildroot] [git commit] linux: bump to version 3.13.5
-Message-ID: <20140223133143.774D58E27D@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 23 Feb 2014 15:04:31 +0100
+Subject: [Buildroot] [PATCH 1/2] infra: Add generic check_prog_host
+ function
+In-Reply-To: <1393160241-10015-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1393160241-10015-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20140223150431.400d91e2@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=87d6d0d0f3b80204d94910c31bc56a33c5d34a57
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Maxime Hadjinlian,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+On Sun, 23 Feb 2014 13:57:20 +0100, Maxime Hadjinlian wrote:
 
-diff --git a/linux/Config.in b/linux/Config.in
-index e52b13c..1f8ddf5 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.13.3"
-+	bool "3.13.5"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -104,7 +104,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.13.3" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.13.5" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+> diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+> index a8261b3..e5a6e36 100755
+> --- a/support/dependencies/dependencies.sh
+> +++ b/support/dependencies/dependencies.sh
+> @@ -64,6 +64,16 @@ if ! which sed > /dev/null ; then
+>  	exit 1
+>  fi
+>  
+> +check_prog_host()
+> +{
+> +	prog="$1"
+> +	if ! which $prog > /dev/null ; then
+> +		echo >&2
+> +		echo "You must install '$prog' on your build machine" >&2
+> +		exit 1
+> +	fi
+> +}
+
+This seems like a good direction. However:
+
+ 1/ It would be nice if we could use it for the other similar cases in
+    dependencies.sh. You will maybe have to extend the function with a
+    second argument that would be the name of the package to install on
+    typical distributions, since for some programs, we suggest the user
+    which package should be installed, when it is not obvious from
+    looking at the name of the missing program.
+
+ 2/ We should rework dependencies.sh so that it does *all* its checks,
+    and only at the end abort the build if some error was detected.
+    It's quite annoying to start the build, see that a program is
+    missing, install it, restart the build, see that another program is
+    missing and so on.
+
+1/ is I believe a natural extension of what you're proposing here, and
+could be included in your patch set.
+
+2/ involves much more work, and we can certainly consider it as a
+separate work, to be done as a separate patch set.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
