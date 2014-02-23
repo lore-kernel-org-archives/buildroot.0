@@ -1,40 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 23 Feb 2014 16:13:39 +0100
-Subject: [Buildroot] Structure of the Buildroot manual
-Message-ID: <20140223161339.3b42f921@skate>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 23 Feb 2014 16:16:42 +0100
+Subject: [Buildroot] [PATCH 01/13] docs/manual: toolchain packages no
+ longer use custom makefiles
+In-Reply-To: <1393167879-16637-2-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1393167879-16637-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1393167879-16637-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20140223151642.GC3342@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas, All,
 
-Today I've written a few updates to the Buildroot manual, and I find
-its structure a bit weird.
+On 2014-02-23 16:04 +0100, Thomas Petazzoni spake thusly:
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-The "Daily use" section in "Working with Buildroot" is just a random
-list of facts, with no real connection with each other, and the
-difference with "Advanced usage" in "Going further in Buildroot's
-innards" is not really clear. This section "Going further in Buildroot's
-innards" has a first chapter, 6.1 that really talks about Buildroot
-internal, but the biggest part of the section, 6.2, is not at all about
-Buildroot internals. It's much more a set of tips and descriptions of
-slightly advanced features... a bit like the "Daily use" section.
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Similarly the "3.2 make tips" section is a random set of facts, which
-could more or less fit into the "3.5 Daily use" section.
+Regard,
+Yann E. MORIN.
 
-I think we have some good content for the Buildroot manual, but the
-structure is somewhat weird. Maybe it's time to refresh its structure,
-after analyzing the information that we have, and in which order it
-should be presented. I'm sure Thomas DS would have a lot of useful
-ideas in this area :-)
+> ---
+>  docs/manual/rebuilding-packages.txt | 3 ---
+>  1 file changed, 3 deletions(-)
+> 
+> diff --git a/docs/manual/rebuilding-packages.txt b/docs/manual/rebuilding-packages.txt
+> index 88d6670..da8d230 100644
+> --- a/docs/manual/rebuilding-packages.txt
+> +++ b/docs/manual/rebuilding-packages.txt
+> @@ -69,8 +69,5 @@ files that just tell whether this or that action has been done):
+>    Buildroot will trigger the recompilation of the package from the
+>    compilation step (execution of +make+).
+>  
+> -Note: toolchain packages use custom makefiles. Their stamp files are named
+> -differently.
+> -
+>  Further details about package special make targets are explained in
+>  xref:pkg-build-steps[].
+> -- 
+> 1.8.3.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
