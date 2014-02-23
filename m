@@ -1,32 +1,27 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 23 Feb 2014 12:30:09 +0100
-Subject: [Buildroot] [PATCH] pixman: fix patch for FE_DIVBYZERO detection
-In-Reply-To: <1393150105-8421-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 23 Feb 2014 11:08:25 +0100")
-References: <1393150105-8421-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <8738jaqd6m.fsf@dell.be.48ers.dk>
+Date: Sun, 23 Feb 2014 12:33:44 +0100
+Subject: [Buildroot] [PATCH 0 of 5 v2] alsa-lib/alsa-utils: autobuild
+	fixes
+In-Reply-To: <patchbomb.1393150274@argentina> (Thomas De Schampheleire's
+ message of "Sun, 23 Feb 2014 11:11:14 +0100")
+References: <patchbomb.1393150274@argentina>
+Message-ID: <87y512oyg7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
- > In commit a9baea4345625f6f00fc59395faec83e08346015 ('pixman: add patch
- > to fix Microblaze build failure'), a patch is added to the pixman
- > package to avoid using the FE_DIVBYZERO definition when it is not
- > available. However, it was using the have_fe_divbyzero variable to
- > define or not HAVE_FEDIVBYZERO, while the AC_CHECK_DECL autoconf macro
- > sets the ac_cv_have_decl_FE_DIVBYZERO variable.
+ > v2: disable alsa-utils on no-mmu instead of trying to use vfork
 
- > The end result was that the FE_DIVBYZERO macro was considered as never
- > being available. This commit fixes that by using the appropriate
- > variable.
+ > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > ---
+ > Note: after 2014.02, I take the action to send the patches upstream.
 
-Committed, thanks.
+Committed series, thanks!
 
 -- 
 Bye, Peter Korsgaard
