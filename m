@@ -1,31 +1,43 @@
-From: Mike Zick <minimod@morethan.org>
-Date: Sun, 23 Feb 2014 13:56:50 -0600
-Subject: [Buildroot] What's the buildroot attitude to u-boot building?
-In-Reply-To: <ledfud$cnf$1@ger.gmane.org>
-References: <CAE21AQqMQmKKL0=Q55P2zQhV8+iBdpX416xK+SgZd3+ONi8Mgg@mail.gmail.com>
- <le7p26$n75$1@ger.gmane.org> <20140222000428.77575be9@skate>
- <leb2a2$688$1@ger.gmane.org> <20140223111839.1ef569b9@skate>
- <ledfud$cnf$1@ger.gmane.org>
-Message-ID: <20140223135650.074d14a1@core2quad.morethan.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 23 Feb 2014 20:03:11 +0000 (UTC)
+Subject: [Buildroot] [Bug 6842] Checking external toolchain for eabihf
+In-Reply-To: <bug-6842-163@https.bugs.busybox.net/>
+References: <bug-6842-163@https.bugs.busybox.net/>
+Message-ID: <20140223200311.213209B97B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 23 Feb 2014 18:50:53 +0000 (UTC)
-Grant Edwards <grant.b.edwards@gmail.com> wrote:
+https://bugs.busybox.net/show_bug.cgi?id=6842
 
-> > I've seen a large of number of people/companies who really like the
-> > fact that one *single* Buildroot configuration is building their
-> > entire embedded Linux system: toolchain, rootfs, kernel and
-> > bootloader images.  
-> 
-> If those make up the entire embedded Linux system, then that would be
-> convenient.
->
+--- Comment #6 from syntheticpp at gmx.net 2014-02-23 20:03:10 UTC ---
+command line for crtl1.o looks like this:
 
-And there is now the BR_EXTERNAL source tree for the additions to 
-complete the specific embedded Linux system.
+$ /opt/testgcc4.8.2/usr/bin/arm-buildroot-linux-uclibcgnueabihf-gcc -c
+libc/sysdeps/linux/arm/crt1.S -o lib/crt1.o -include ./include/libc-symbols.h
+-Wall -Wstrict-prototypes -Wstrict-aliasing -funsigned-char -fno-builtin
+-fno-asm -mlittle-endian -fno-stack-protector -nostdinc -I./include -I./include
+-I. -I./libc/sysdeps/linux -I./libc/sysdeps/linux/arm -Os -funit-at-a-time
+-fmerge-all-constants -fstrict-aliasing -fno-tree-loop-optimize
+-fno-tree-dominator-opts -fno-strength-reduce -DHAVE_FORCED_UNWIND
+-I./libpthread/nptl -I./libpthread/nptl
+-I./libpthread/nptl/sysdeps/unix/sysv/linux/arm/
+-I./libpthread/nptl/sysdeps/unix/sysv/linux/arm -I./libpthread/nptl/sysdeps/arm
+-I./libpthread/nptl/sysdeps/arm -I./libpthread/nptl/sysdeps/unix/sysv/linux
+-I./libpthread/nptl/sysdeps/unix/sysv/linux -I./libpthread/nptl/sysdeps/pthread
+-I./libpthread/nptl/sysdeps/pthread/bits -I./libpthread/nptl/sysdeps/generic
+-I./ldso/ldso/arm -I./ldso/include -I./libc/sysdeps/linux/common
+-I/opt/testgcc4.8.2/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/
+-isystem
+/opt/testgcc4.8.2/usr/lib/gcc/arm-buildroot-linux-uclibcgnueabihf/4.8.2/include-fixed
+-isystem
+/opt/testgcc4.8.2/usr/lib/gcc/arm-buildroot-linux-uclibcgnueabihf/4.8.2/include
+-DNDEBUG -D__USE_STDIO_FUTEXES__ -MT lib/crt1.o -MD -MP -MF lib/.crt1.o.dep
+-D__ASSEMBLER__ -Wa,--noexecstack    -DL_crt1
 
-Mike
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
