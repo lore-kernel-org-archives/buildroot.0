@@ -1,101 +1,50 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 23 Feb 2014 15:56:30 +0100
-Subject: [Buildroot] Open bug analysis (Feb 20)
-In-Reply-To: <CAAXf6LWMuQACfLPO3DzZYSriOFndL+r7FhCPRHiidG-w2PsOVg@mail.gmail.com>
-References: <CAAXf6LWMuQACfLPO3DzZYSriOFndL+r7FhCPRHiidG-w2PsOVg@mail.gmail.com>
-Message-ID: <CAAXf6LWBzDtXZYyF_6dHXKorCr5KA5N7Pq7pQJGp6LCUQrUyWA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 23 Feb 2014 16:04:26 +0100
+Subject: [Buildroot] [PATCH 00/13] Documentation updates and improvements
+Message-ID: <1393167879-16637-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
 
-On Fri, Feb 21, 2014 at 8:57 AM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> All,
->
-> We have been able to close many bugs already, 21 bugs remaining, of which:
-> - 7 new package requests (patches often available)
-> - 2 indicators of disabled builds on some arch (dmraid, gpsd)
->
-> *Bugs for which an action is already proposed*.
-> Feedback on this is requested: do you agree or not with the proposed action?
->
-> Dbus and /var/run management
-> https://bugs.busybox.net/show_bug.cgi?id=5420
-> Here I don't see what the problem is. It is about the creation of
-> /var/run/dbus while /var/run is a symlink to /tmp. Looking at the
-> code, I don't see how it can be a problem (which I responded in the
-> bug report). Unless someone can explain what is going wrong exactly, I
-> would propose to close this (Resolved/Worksforme for example).
-> Do you agree?
->
-> Support for kernel signed modules
-> https://bugs.busybox.net/show_bug.cgi?id=6764
-> Arnout suggested to close this bug explaining the submitter that this
-> is a kernel problem, not something we can solve in buildroot. This is
-> fine by me.
-> Do others agree?
->
-> Busybox compiled from buildroot hangs on pass from intiramfs to init
-> https://bugs.busybox.net/show_bug.cgi?id=6794
-> The submitter claims that stripping the busybox binary causes
-> incorrect runtime behavior. I asked for more info, but no response. I
-> would propose to close this as Worksforme.
->
+Here is a set of documentation updates and improvements, about
+toolchains, package infrastructures, dependency and build-time
+graphing, and also finally a documentation about
+<pkg>_OVERRIDE_SRCDIR.
 
-Above bugs are closed now.
-
->
-> *Bugs that have patches attached that should be sent to the list (not
-> package patches)*: (adopters welcome)
->
-> procps Unknown HZ value! (XX) Assume 100.
-> https://bugs.busybox.net/show_bug.cgi?id=6626
-> ThomasP proposed to replace procps with procps-ng, the submitter
-> provided a patch, but did not send it to the list.
->
->
-> *Bugs needing investigation*
->
-> Checking external toolchain for eabihf
-> https://bugs.busybox.net/show_bug.cgi?id=6842
->
-> Running udhcpc on a system with NFS root kills NFS
-> https://bugs.busybox.net/show_bug.cgi?id=4790
->
-> Boot hangs when starting samba if BR2_ENABLE_LOCALE is enabled
-> https://bugs.busybox.net/show_bug.cgi?id=5396
->
-> config flags to the Xenomai build system
-> https://bugs.busybox.net/show_bug.cgi?id=5900
->
-> Cannot compile gcc without threads (uClibc-based)
-> https://bugs.busybox.net/show_bug.cgi?id=6230
->
->
-> *Bugs under investigation by someone already*:
->
-> Doing a Buildroot build from /usr doesn't work
-> https://bugs.busybox.net/show_bug.cgi?id=5750
-> This bug is under investigation by myself, it won't be done before
-> 2014.02 though.
->
-> Not able to build ALSA-Lib for static build
-> https://bugs.busybox.net/show_bug.cgi?id=5768
-
-Bug fixed now.
-
-> and
-> Not able to build ALSA-Utils for static build
-> https://bugs.busybox.net/show_bug.cgi?id=5774
-> I have sent patches that fix these problems and received some
-> feedback, that I will address. However, it will not be for 2014.02
-> anymore.
-
-Bug closed as wontfix, should be fixed upstream first.
-
-Best regards,
 Thomas
+
+Thomas Petazzoni (13):
+  docs/manual: toolchain packages no longer use custom makefiles
+  docs/manual: rephrase part about rebuilding packages
+  docs/manual: rephrase and expand part on when a full rebuild is
+    necessary
+  docs/manual: reference Python and Lua infras from the list of package
+    infrastructures
+  docs/manual: add section about dependency graphs
+  docs/manual: add section about build time graphing
+  docs/manual: update informations about C library in internal backend
+  docs/manual: update external toolchain examples
+  docs/manual: mention that custom toolchains is also useful for BR
+    toolchains
+  docs/manual: rephrase paragraph about unsupported external toolchains
+  docs/manual: refresh informations about *-menuconfig targets
+  docs/manual: document the usage of <pkg>_OVERRIDE_SRCDIR
+  docs/manual: mention the per-package graph-depends target
+
+ docs/manual/adding-packages-directory.txt   |  11 +++
+ docs/manual/advanced.txt                    |   2 +
+ docs/manual/common-usage.txt                |  99 +++++++++++++++++++++
+ docs/manual/configure.txt                   |  77 ++++++----------
+ docs/manual/make-tips.txt                   |   6 +-
+ docs/manual/package-make-target.txt         |   5 ++
+ docs/manual/rebuilding-packages.txt         | 132 +++++++++++++++++++---------
+ docs/manual/using-buildroot-development.txt |  84 ++++++++++++++++++
+ 8 files changed, 324 insertions(+), 92 deletions(-)
+ create mode 100644 docs/manual/using-buildroot-development.txt
+
+-- 
+1.8.3.2
