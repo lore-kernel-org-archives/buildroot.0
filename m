@@ -1,45 +1,45 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 23 Feb 2014 11:11:18 +0100
-Subject: [Buildroot] [PATCH 4 of 5 v2] alsa-utils: disable on no-mmu
-	platforms (fork)
+Date: Sun, 23 Feb 2014 11:11:19 +0100
+Subject: [Buildroot] [PATCH 5 of 5 v2] alsa-utils/Config.in: move comment to
+ top, to fix nesting of config options
 In-Reply-To: <patchbomb.1393150274@argentina>
 References: <patchbomb.1393150274@argentina>
-Message-ID: <bb2af0b4fae99bdd1e77.1393150278@argentina>
+Message-ID: <66b82225c29844efa58a.1393150279@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-alsa-utils uses fork which is not available on targets without MMU support.
-It seems to be possible to replace fork with vfork in alsa-utils, but we do
-not like to carry such patches in buildroot without them being accepted
-upstream.
-
-Fixes
-http://autobuild.buildroot.org/results/9f8/9f8e572c9f1c677155cc7d1828371bcf572ff878
+To allow proper nesting of suboptions of a package, the suboptions should
+come directly after the main option, and cannot be interleaved with a
+comment.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
- package/alsa-utils/Config.in |  2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/alsa-utils/Config.in |  8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/package/alsa-utils/Config.in b/package/alsa-utils/Config.in
 --- a/package/alsa-utils/Config.in
 +++ b/package/alsa-utils/Config.in
-@@ -1,5 +1,6 @@
+@@ -1,3 +1,7 @@
++comment "alsa-utils needs a toolchain w/ largefile, threads"
++	depends on BR2_USE_MMU # fork
++	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
++
  config BR2_PACKAGE_ALSA_UTILS
  	bool "alsa-utils"
-+	depends on BR2_USE_MMU # fork
- 	depends on BR2_LARGEFILE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
- 	select BR2_PACKAGE_ALSA_LIB
-@@ -10,6 +11,7 @@ config BR2_PACKAGE_ALSA_UTILS
+ 	depends on BR2_USE_MMU # fork
+@@ -10,10 +14,6 @@ config BR2_PACKAGE_ALSA_UTILS
+ 
  	  http://www.alsa-project.org/
  
- comment "alsa-utils needs a toolchain w/ largefile, threads"
-+	depends on BR2_USE_MMU # fork
- 	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
- 
+-comment "alsa-utils needs a toolchain w/ largefile, threads"
+-	depends on BR2_USE_MMU # fork
+-	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
+-
  if BR2_PACKAGE_ALSA_UTILS
+ menu "ALSA utils selection"
+ 
