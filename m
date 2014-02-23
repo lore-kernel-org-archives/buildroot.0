@@ -1,36 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 23 Feb 2014 16:04:39 +0100
-Subject: [Buildroot] [PATCH 13/13] docs/manual: mention the per-package
-	graph-depends target
-In-Reply-To: <1393167879-16637-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1393167879-16637-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1393167879-16637-14-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 23 Feb 2014 16:13:39 +0100
+Subject: [Buildroot] Structure of the Buildroot manual
+Message-ID: <20140223161339.3b42f921@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- docs/manual/package-make-target.txt | 5 +++++
- 1 file changed, 5 insertions(+)
+Hello,
 
-diff --git a/docs/manual/package-make-target.txt b/docs/manual/package-make-target.txt
-index 9eefe68..bd514f4 100644
---- a/docs/manual/package-make-target.txt
-+++ b/docs/manual/package-make-target.txt
-@@ -63,6 +63,11 @@ Additionally, there are some other useful make targets:
- | +show-depends+    | Displays the dependencies required to build the
- package
- 
-+| +graph-depends+   | Generate a dependency graph of the package, in the
-+context of the current Buildroot configuration. See
-+xref:graph-depends[this section] for more details about dependency
-+graphs.
-+
- | +dirclean+        | Remove the whole package build directory
- 
- | +rebuild+         | Re-run the compilation commands - this only makes
+Today I've written a few updates to the Buildroot manual, and I find
+its structure a bit weird.
+
+The "Daily use" section in "Working with Buildroot" is just a random
+list of facts, with no real connection with each other, and the
+difference with "Advanced usage" in "Going further in Buildroot's
+innards" is not really clear. This section "Going further in Buildroot's
+innards" has a first chapter, 6.1 that really talks about Buildroot
+internal, but the biggest part of the section, 6.2, is not at all about
+Buildroot internals. It's much more a set of tips and descriptions of
+slightly advanced features... a bit like the "Daily use" section.
+
+Similarly the "3.2 make tips" section is a random set of facts, which
+could more or less fit into the "3.5 Daily use" section.
+
+I think we have some good content for the Buildroot manual, but the
+structure is somewhat weird. Maybe it's time to refresh its structure,
+after analyzing the information that we have, and in which order it
+should be presented. I'm sure Thomas DS would have a lot of useful
+ideas in this area :-)
+
+Thanks!
+
+Thomas
 -- 
-1.8.3.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
