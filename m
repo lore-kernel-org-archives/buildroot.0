@@ -1,68 +1,55 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun, 23 Feb 2014 19:12:05 +0100
-Subject: [Buildroot] [PATCH v2 1/2] infra: Add generic check_prog_host
-	function
-In-Reply-To: <20140223184032.2c6d08de@skate>
-References: <1393172261-17421-1-git-send-email-maxime.hadjinlian@gmail.com>
- <20140223184032.2c6d08de@skate>
-Message-ID: <CAGduivy7YPpfcvkOkZxH2_35BSxsjSK0_++RMaw3bxwJE2=QzA@mail.gmail.com>
+From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Sun, 23 Feb 2014 19:15:41 +0100
+Subject: [Buildroot] [PATCH] lua: needs dynamic library support (dlopen)
+In-Reply-To: <d16bf125-1e0d-4c3a-a591-7cd43b3c7469@email.android.com>
+References: <8a14c6297835e91f6691.1393175989@argentina>
+ <20140223183830.2a7c25eb@skate>
+ <d16bf125-1e0d-4c3a-a591-7cd43b3c7469@email.android.com>
+Message-ID: <CAB0FRssLEc6ntNwO53oDL-+yNSnBkBnP=wr7VAS3ox2WZ+HsCA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Feb 23, 2014 at 6:40 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Maxime Hadjinlian,
+2014-02-23 18:49 GMT+01:00 Thomas De Schampheleire <patrickdepinguin@gmail.com>:
+> Thomas Petazzoni <thomas.petazzoni@free-electrons.com> schreef:
+>>Dear Thomas De Schampheleire,
+>>
+>>On Sun, 23 Feb 2014 18:19:49 +0100, Thomas De Schampheleire wrote:
+>>> Fixes
+>>> http://autobuild.buildroot.net/results/e76/e765f992ad721a094579140c153ff71f20753265/
+>>>
+>>> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>>>
+>>> ---
+>>>  package/dnsmasq/Config.in     |  4 ++++
+>>>  package/efl/libedje/Config.in |  5 +++--
+>>>  package/haserl/Config.in      |  5 +++++
+>>>  package/lighttpd/Config.in    |  4 ++++
+>>>  package/lua/Config.in         |  4 ++++
+>>>  5 files changed, 20 insertions(+), 2 deletions(-)
+>>
+>>No, that's not the correct fix. The correct fix is a variant of
+>>http://patchwork.ozlabs.org/patch/313208/, which as suggested by Peter
+>>should use BR2_PREFER_STATIC_LIB as a condition, and not
+>>BR2_BINFMT_FLAT.
 >
-> On Sun, 23 Feb 2014 17:17:40 +0100, Maxime Hadjinlian wrote:
+> Ok, understood.
+> Francois, what are your plans with that patch?
+
+http://patchwork.ozlabs.org/patch/313208/ is a V1 with BR2_BINFMT_FLAT.
+I've already send a V2, see
+http://patchwork.ozlabs.org/patch/314145/ --> lua: refactor install steps
+http://patchwork.ozlabs.org/patch/314146/ --> lua: handles BR2_PREFER_STATIC_LIB
+
+Note: V1 fixes only compilation issue, V2 handles compilation,
+linking, and installation
+
+Fran?ois
+
 >
->> +# Verify that which is installed
->> +check_prog_host "which"
->
-> Since your function check_prog_host uses which to determine if the
-> program exists, isn't it weird to use which to verify it?
-Agreed but that was the original check also which I found a little in
-the first place. But since this patch is here only to introduce and
-use a function, I didn't see how to change that here.
->
-> Your check_host_prog function could also be used in:
->
-> # Check that a few mandatory programs are installed
-> missing_progs="no"
-> for prog in patch perl tar wget cpio python unzip rsync bc ${DL_TOOLS} ; do
->         if ! which $prog > /dev/null ; then
->                 echo "You must install '$prog' on your build machine";
->                 missing_progs="yes"
->                 if test $prog = "svn" ; then
->                         echo "  svn is usually part of the subversion package in your distribution"
->                 elif test $prog = "hg" ; then
->                         echo "  hg is usually part of the mercurial package in your distribution"
->                 elif test $prog = "zcat" ; then
->                         echo "  zcat is usually part of the gzip package in your distribution"
->                 elif test $prog = "bzcat" ; then
->                         echo "  bzcat is usually part of the bzip2 package in your distribution"
->                 fi
->         fi
-> done
->
-> if test "${missing_progs}" = "yes" ; then
->         exit 1
-> fi
->
-> Though you see that this loop has this missing_progs variable that
-> allows to list all the missing programs, and only abort at the end.
-I wanted to keep this one as is for the moment.
-As you point out, it uses the exact mechanisms we want for all the
-dependencies.sh, and it would be part of a follow up patch later one,
-which would uses the same mechanisms but all over the dependencies.sh.
-Which is want we want in the end.
-This first patch is mostly a follow up of the previous one, which
-added the BR2_NEEDS_HOST_JAVA
->
+> Thanks,
 > Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+>
+>
