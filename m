@@ -1,71 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Feb 2014 20:51:10 +0100
-Subject: [Buildroot] [git commit] qt: needs MMU (fork)
-Message-ID: <20140223195503.28D5F9B92A@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 23 Feb 2014 20:56:00 +0100
+Subject: [Buildroot] [PATCH 1/1] ti-gfx: bump to version 5_01_00_01
+In-Reply-To: <20140223193116.GI32759@free.fr> (Yann E. MORIN's message of
+ "Sun, 23 Feb 2014 20:31:16 +0100")
+References: <52fd38fd.870eec0a.7f7f.13a5@mx.google.com>
+ <20140223193116.GI32759@free.fr>
+Message-ID: <87mwhhob73.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8bb561444b74bc8177ec2fa7d0d1c21e3df0a4ec
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Fixes
-http://autobuild.buildroot.net/results/4f7/4f744595efceba2d5a54151bf5f1802eb1268fac/
+ > Marcelo, All,
+ > On 2014-02-13 18:38 +0000, kuyurix at gmail.com spake thusly:
+ >> From: Marcelo Gutierrez <kuyurix@gmail.com>
+ >> 
+ >> Signed-off-by: Marcelo Gutierrez <kuyurix@gmail.com>
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/opencv/Config.in        |    1 +
- package/openpowerlink/Config.in |    2 ++
- package/qt/Config.in            |    2 ++
- 3 files changed, 5 insertions(+), 0 deletions(-)
+ > Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index 9e952ca..96ff6d8 100644
---- a/package/opencv/Config.in
-+++ b/package/opencv/Config.in
-@@ -169,6 +169,7 @@ config BR2_PACKAGE_OPENCV_WITH_QT
- 	bool "qt backend support"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_avr32 # qt
-+	depends on BR2_USE_MMU # qt
- 	select BR2_PACKAGE_QT
- 	select BR2_PACKAGE_QT_STL
- 	default y
-diff --git a/package/openpowerlink/Config.in b/package/openpowerlink/Config.in
-index cdb09a2..8573961 100644
---- a/package/openpowerlink/Config.in
-+++ b/package/openpowerlink/Config.in
-@@ -1,4 +1,5 @@
- comment "openpowerlink needs a toolchain w/ C++, threads"
-+	depends on BR2_USE_MMU
- 	depends on BR2_i386 || BR2_x86_64
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
- 
-@@ -7,6 +8,7 @@ config BR2_PACKAGE_OPENPOWERLINK
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_i386 || BR2_x86_64
-+	depends on BR2_USE_MMU # qt
- 	help
- 	  openPOWERLINK is an Open Source Industrial Ethernet
- 	  stack implementing the POWERLINK protocol for Managing Node
-diff --git a/package/qt/Config.in b/package/qt/Config.in
-index 926d54c..5105e5d 100644
---- a/package/qt/Config.in
-+++ b/package/qt/Config.in
-@@ -1,10 +1,12 @@
- comment "qt needs a toolchain w/ C++, threads"
- 	depends on !BR2_avr32
-+	depends on BR2_USE_MMU
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
- 
- menuconfig BR2_PACKAGE_QT
- 	bool "Qt"
- 	depends on !BR2_avr32 # lacks TLS
-+	depends on BR2_USE_MMU # fork
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
+ > Notes:
+
+ >   - The version pointed to by Spencer was 5.00.x, and was a beta
+ >     version, and only contained the hardfp variant. The version in
+ >     this patch is 5.01.x, is not marked as beta, and contains both
+ >     the hardfp and softfp variants.
+
+ >   - With 4.10.x and before, the *_$(TI_GFX_VERSION).bin archive would
+ >     contain a huge load of stuff we did not need, and was roughly
+ >     1.7GiB big. But with 5.01.x, this file is now back to a more
+ >     acceptable size, roughly 140MiB (although it still contains way
+ >     much more than we need).
+
+Sounds good. Committed to next, thanks both.
+
+-- 
+Bye, Peter Korsgaard
