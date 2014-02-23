@@ -1,33 +1,29 @@
-From: Noam Camus <noamc@ezchip.com>
-Date: Sun, 23 Feb 2014 08:29:34 +0000
-Subject: [Buildroot] FW: [PATCH] external toolchain: use relative path to
- external toolchain.
-Message-ID: <884EA965490E3C4D8E66AEF41E98025006BF60@ezex10.ezchip.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 23 Feb 2014 09:34:22 +0100
+Subject: [Buildroot] [PATCH 0 of 4] alsa-lib/alsa-utils autobuild fixes
+In-Reply-To: <20140222192334.2d6bddd0@skate>
+References: <patchbomb.1392224140@argentina> <20140222192334.2d6bddd0@skate>
+Message-ID: <CAAXf6LUUJE-9usbwpZS-uG6uYe26J0XPUbfxxGyzGcjoyOPH_w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now configuration may include relative path to external toolchain.
+On Sat, Feb 22, 2014 at 7:23 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Thomas De Schampheleire,
+>
+> On Wed, 12 Feb 2014 17:55:40 +0100, Thomas De Schampheleire wrote:
+>
+>> This series fixes the alsa-lib / alsa-utils autobuild failures, most notably
+>> seen on Blackfin FLAT, but the alsa-utils problem was also seen on ARM.
+>>
+>> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>
+> Would you mind resending your series by taking into account Peter's
+> comment for PATCH 2, and then replace your PATCH 4 by a patch that
+> simply disallow alsa-utils on !MMU systems?
+>
 
-Signed-off-by: Noam Camus <noamc@ezchip.com>
----
- toolchain/toolchain-external/toolchain-external.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index a7bfafc..46f33a9 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -131,7 +131,7 @@ TOOLCHAIN_EXTERNAL_PREFIX=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD),y)
- TOOLCHAIN_EXTERNAL_INSTALL_DIR=$(HOST_DIR)/opt/ext-toolchain
- else
--TOOLCHAIN_EXTERNAL_INSTALL_DIR=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PATH))
-+TOOLCHAIN_EXTERNAL_INSTALL_DIR=$(abspath $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PATH)))
- endif
- 
- ifeq ($(TOOLCHAIN_EXTERNAL_INSTALL_DIR),)
--- 
-1.7.1
+Yes, working on it...
