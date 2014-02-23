@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 23 Feb 2014 16:04:32 +0100
-Subject: [Buildroot] [PATCH 06/13] docs/manual: add section about build time
-	graphing
+Date: Sun, 23 Feb 2014 16:04:31 +0100
+Subject: [Buildroot] [PATCH 05/13] docs/manual: add section about dependency
+	graphs
 In-Reply-To: <1393167879-16637-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1393167879-16637-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1393167879-16637-7-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1393167879-16637-6-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,63 +13,68 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/common-usage.txt | 47 ++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 47 insertions(+)
+ docs/manual/common-usage.txt | 52 ++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 52 insertions(+)
 
 diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
-index bef42c6..76e4023 100644
+index 9a8c92a..bef42c6 100644
 --- a/docs/manual/common-usage.txt
 +++ b/docs/manual/common-usage.txt
-@@ -201,3 +201,50 @@ supported.
- --------------------------------
- GRAPH_OUT=svg make graph-depends
- --------------------------------
+@@ -149,3 +149,55 @@ of an ext2 filesystem may be corrupted; or, if you have sparse files in
+ your filesystem, those parts may not be all-zeroes when read back). You
+ should only use sparse files when handling files on the build machine, not
+ when transferring them to an actual device that will be used on the target.
 +
-+Graphing the build duration
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~
++Graphing the dependencies between packages
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 +
-+[[graph-duration]]
++[[graph-depends]]
 +
-+When the build of a system takes a long time, it is sometimes useful
-+to be able to understand which packages are the longest to build, to
-+see if anything can be done to speed up the build. In order to help
-+such build time analysis, Buildroot collects the build time of each
-+step of each package, and allows to generate graphs from these data.
++One of Buildroot's jobs is to know the dependencies between packages,
++and make sure they are built in the right order. These dependencies
++can sometimes be quite complicated, and for a given system, it is
++often not easy to understand why such or such package was brought into
++the build by Buildroot.
 +
-+To generate the build time graph after a build, run:
++In order to help understanding the dependencies, and therefore better
++understand what is the role of the different components in your
++embedded Linux system, Buildroot is capable of generating dependency
++graphs.
 +
-+----------------
-+make graph-build
-+----------------
++To generate a dependency graph of the full system you have compiled,
++simply run:
 +
-+This will generate a set of files in +output/graphs+ :
++------------------------
++make graph-depends
++------------------------
 +
-+* +build.hist-build.pdf+, an histogram of the build time for each
-+  package, ordered in the build order.
++You will find the generated graph in
+++output/graphs/graph-depends.pdf+.
 +
-+* +build.hist-duration.pdf+, an histogram of the build time for each
-+  package, ordered by duration (longest first)
++If your system is quite large, the dependency graph may be too complex
++and difficult to read. It is therefore possible to generate the
++dependency graph just for a given package:
 +
-+* +build.hist-name.pdf+, an histogram of the build time for each
-+  package, order by package name.
++------------------------
++make <pkg>-graph-depends
++------------------------
 +
-+* +build.pie-packages.pdf+, a pie chart of the build time per package
++You will find the generated graph in
+++output/graph/<pkg>-graph-depends.pdf+.
 +
-+* +build.pie-steps.pdf+, a pie chart of the global time spent in each
-+  step of the packages build process.
++Note that the dependency graphs are generated using the +dot+ tool
++from the _Graphviz_ project, which you must have installed on your
++system to use this feature. In most distributions, it is available as
++the +graphviz+ package.
 +
-+This +graph-build+ target requires the Python Matplotlib and Numpy
-+libraries to be installed (+python-matplotlib+ and +python-numpy+ on
-+most distributions), and also the +argparse+ module if you're using a
-+Python version older than 2.7 (+python-argparse+ on most
-+distributions).
++By default, the dependency graphs are generated in the PDF
++format. However, by passing the +GRAPH_OUT+ environment variable, you
++can switch to other output formats, such as PNG, PostScript or
++SVG. All formats supported by the +-T+ option of the +dot+ tool are
++supported.
 +
-+By default, the output format for the graph is PDF, but a different
-+format can be selected using the +GRAPH_OUT+ environment variable. The
-+only other format supported is PNG:
-+
-+----------------
-+GRAPH_OUT=png make graph-build
-+----------------
++--------------------------------
++GRAPH_OUT=svg make graph-depends
++--------------------------------
 -- 
 1.8.3.2
