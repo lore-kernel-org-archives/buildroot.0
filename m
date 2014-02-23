@@ -1,64 +1,95 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Feb 2014 16:39:31 +0100
-Subject: [Buildroot] [PATCH 08/13] docs/manual: update external
- toolchain examples
-In-Reply-To: <1393167879-16637-9-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1393167879-16637-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1393167879-16637-9-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20140223153931.GI3342@free.fr>
+From: Noam Camus <noamc@ezchip.com>
+Date: Sun, 23 Feb 2014 15:41:43 +0000
+Subject: [Buildroot] [PATCH] toolchain: control GNU_TARGET_NAME
+	vendor	part
+In-Reply-To: <20140223125102.025dd91a@skate>
+References: <884EA965490E3C4D8E66AEF41E98025006BF23@ezex10.ezchip.com>
+ <20140223104658.4088cdc6@skate>
+ <884EA965490E3C4D8E66AEF41E98025006C3BB@ezex10.ezchip.com>
+ <20140223125102.025dd91a@skate>
+Message-ID: <884EA965490E3C4D8E66AEF41E98025006C816@ezex10.ezchip.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
 
-On 2014-02-23 16:04 +0100, Thomas Petazzoni spake thusly:
-> Replace ADI by Analog Devices, which is clearer for most people, and
-> remove the Xilinx external toolchains since we have deprecated them.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>Right. I guess we can make this configurable. However, your patch has some issues:
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> * It only creates the option BR2_TOOLCHAIN_BUILDROOT_VENDOR in the
+>   internal toolchain backend. But GNU_TARGET_NAME is also used with
+>   the external toolchain backend, which means in the external
+>   toolchain case we would end up with a GNU_TARGET_NAME having an
+>   empty vendor part of the tuple.
 
-Regards,
-Yann E. MORIN.
+> * The new Config.in option lacks an help text, and the help text
+>   should explain in detail how this should be used, and in which
+>   situations. Also the title of the help text should be just
+>   "custom toolchain vendor name".
 
-> ---
->  docs/manual/configure.txt | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
-> 
-> diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
-> index b566e8a..a6afafb 100644
-> --- a/docs/manual/configure.txt
-> +++ b/docs/manual/configure.txt
-> @@ -138,10 +138,9 @@ http://www.linaro.org[Linaro] for ARM,
->  http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition/[Sourcery
->  CodeBench] for ARM, x86, x86-64, PowerPC, MIPS and SuperH,
->  https://blackfin.uclinux.org/gf/project/toolchain[Blackfin toolchains
-> -from ADI], http://git.xilinx.com/[Xilinx toolchains for Microblaze],
-> -etc.) and is capable of downloading them automatically, or it can be
-> -pointed to a custom toolchain, either available for download or
-> -installed locally.
-> +from Analog Devices], etc.) and is capable of downloading them
-> +automatically, or it can be pointed to a custom toolchain, either
-> +available for download or installed locally.
->  
->  Then, you have three solutions to use an external toolchain:
->  
-> -- 
-> 1.8.3.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Below is the revised patch.
+Is it OK?
+Is it the right way to bring up the corrections?
+====================================================
+
+When the toolchain is custom we can denote that by setting in the triplet the vendor part.
+This is done through configution, where the default is buildroot.
+
+Signed-off-by: Noam Camus <noamc@ezchip.com>
+---
+ package/Makefile.in                     |   12 +++++++++++-
+ toolchain/toolchain-buildroot/Config.in |   12 ++++++++++++
+ 2 files changed, 23 insertions(+), 1 deletions(-)
+
+diff --git a/package/Makefile.in b/package/Makefile.in index eea7043..bdd6889 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -20,8 +20,18 @@ endif
+ MAKE1:=$(HOSTMAKE) -j1
+ MAKE:=$(HOSTMAKE) $(if $(PARALLEL_JOBS),-j$(PARALLEL_JOBS))
+ 
++ifeq ($(BR2_TOOLCHAIN_BUILDROOT_VENDOR),)
++VENDOR:=buildroot
++else
++ifeq ($(BR2_TOOLCHAIN_BUILDROOT_VENDOR),unknown)
++$(error You may not provide 'unknown' as vendor to toolchain tuple) 
++else VENDOR:=$(call qstrip,$(BR2_TOOLCHAIN_BUILDROOT_VENDOR))
++endif
++endif
++
+ # Compute GNU_TARGET_NAME
+-GNU_TARGET_NAME=$(ARCH)-buildroot-$(TARGET_OS)-$(LIBC)$(ABI)
++GNU_TARGET_NAME=$(ARCH)-$(VENDOR)-$(TARGET_OS)-$(LIBC)$(ABI)
+ 
+ # Blackfin FLAT needs uclinux
+ ifeq ($(BR2_bfin)$(BR2_BINFMT_FLAT),yy)
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index cd88889..216f308 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -69,6 +69,18 @@ config BR2_TOOLCHAIN_BUILDROOT_LIBC
+ 	default "glibc"  if BR2_TOOLCHAIN_BUILDROOT_EGLIBC
+ 	default "glibc"  if BR2_TOOLCHAIN_BUILDROOT_GLIBC
+ 
++config BR2_TOOLCHAIN_BUILDROOT_VENDOR
++	string "custom toolchain vendor name"
++	default "buildroot"
++	help
++	  This option accepts name for vendor field in toolchain tuple.
++	  The toolchain tuple full format is:
++	  cpu-vendor-kernel-os
++	  You may use it in case of custom toolchain.
++	  e.g. if your gcc depend on this field to make decisions.
++	  NOTE: "unknown" is not allowed since it may be confused
++	  with host toolchain.
++
+ source "package/uclibc/Config.in"
+ 
+ source "package/binutils/Config.in.host"
+--
+1.7.1
+
+Thanks
+Noam
