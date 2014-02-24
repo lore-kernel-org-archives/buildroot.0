@@ -1,32 +1,29 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 24 Feb 2014 09:11:40 +0100
-Subject: [Buildroot] [PATCH 0/7] Misc set of fixes
-In-Reply-To: <1393196291-12636-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1393196291-12636-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAAXf6LUT9iL353aWjybhjJoQJmfD_iKGm842Au71137q1u9B1A@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 24 Feb 2014 08:24:26 +0000 (UTC)
+Subject: [Buildroot] [Bug 6842] Checking external toolchain for eabihf
+In-Reply-To: <bug-6842-163@https.bugs.busybox.net/>
+References: <bug-6842-163@https.bugs.busybox.net/>
+Message-ID: <20140224082426.7162E9B97B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Feb 23, 2014 at 11:58 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> The first three patches are fixes for build failures. The last four
-> patches are fixes for missing dependency propagation of BR2_USE_MMU.
->
+https://bugs.busybox.net/show_bug.cgi?id=6842
 
-It would be great if someone could create a script (for example based
-on kconfiglib) that automatically verifies whether all needed
-dependencies are in place. Since the logic to determine this is pretty
-straightforward, it should not be th?t hard. It may take a while to
-execute, but that shouldn't be a problem.
+--- Comment #7 from Stefan S?rensen <stefan.sorensen@spectralink.com> 2014-02-24 08:24:25 UTC ---
+(In reply to comment #4)
 
-Any interested persons?
+> I haven't got the bottom of this problem yet, but I have indeed reproduced it,
+> and I continue to believe that the fix is *not* to change the external
+> toolchain check, but instead to investigate *why* the uClibc crt1.o does not
+> have those flags when built with the internal toolchain backend.
 
-Samuel: you have been using kconfiglib before, what is your view on it?
+The attributes are added by the compiler, not the assembler. glibc has both c
+and assembler source for crt1.o while uclibc has only assembler source.
 
-Thanks,
-Thomas
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
