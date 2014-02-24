@@ -1,54 +1,130 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 24 Feb 2014 08:30:07 +0100 (CET)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-02-23
-Message-ID: <20140224073008.3ECD8100F60@stock.ovh.net>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Mon, 24 Feb 2014 08:34:36 +0100
+Subject: [Buildroot] =?utf-8?q?=5BPATCH_00/24=5D_lua?=
+Message-ID: <1393227301-14874-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2014-02-23
-===============================
+patches 1/24 & 2/24 are a split of this one http://patchwork.ozlabs.org/patch/314145/
+which was a first step for fixing lua on bfin.
+patch 3/24 fixes a issue with scripts of cgilua (not visible on autobuilder).
+so these 3 patches are good candidate for 2014.02.
 
-        success : 98 
-       failures : 14 
-       timeouts : 0  
-          TOTAL : 112
+patches 4/24 to 7/24 allow luarocks to use host-luajit when luajit is used on target.
 
-Classification of failures by reason
-====================================
+patches 8/24 to 24/24 are new packages, all are Lua modules.
 
-               alsa-lib-1.0.26 | 4 
-                libnftnl-1.0.0 | 1 
-                libsecret-0.15 | 1 
-              strongswan-5.0.4 | 1 
-                 dropwatch-1.4 | 1 
-tvheadend-c7d0335eb10d02b78... | 1 
-                    mpd-0.18.7 | 1 
-                     php-5.5.8 | 1 
-         qt5connectivity-5.2.0 | 1 
-              wireshark-1.10.5 | 1 
-                 cairo-1.12.10 | 1 
+Fran?ois
 
-Detail of failures
-===================
+Francois Perrad (24):
+  lua: remove LUA_INSTALLED_FILES
+  lua: refactor install steps
+  luarocks: never wraps script
+  luajit: refactor without dont-strip.patch
+  luajit: refactor without shared-lib.patch
+  luajit: add host-luajit
+  luarocks: allow to work with host-luajit
+  ljlinenoise: new package
+  lpeg: new package
+  cosmo: new package
+  lua-iconv: new package
+  luajson: new package
+  lualogging: new package
+  dado: new package
+  lrandom: new package
+  lua-testmore: new package
+  lua-coat: new package
+  lua-coatpersistent: new package
+  lua-messagepack: new package
+  lua-csnappy: new package
+  lzlib: new package
+  lunit: new package
+  lpty: new package
+  lsqlite3: new package
 
-      i686 |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/52aefcd1ff1d2ed2b648468794fe5beac7605789/
-   powerpc |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/a3804fe08e2868933dfe019eb0cd618fe0fb4df3/
-    x86_64 |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/2bda5ff80a2e8ed3efd341e3a95f491d18444006/
-       sh4 |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/4191a9724338e60ce83f919d83c5e23864a88a0e/
-       arm |                  cairo-1.12.10 | NOK | http://autobuild.buildroot.net/results/35e2435769ce4b1fc7480f03d26beaf9abbd5986/
-microblaze |                  dropwatch-1.4 | NOK | http://autobuild.buildroot.net/results/1ea98985ce06dc1b7569ef5abe2fc13090fb5f3a/
-   powerpc |                 libnftnl-1.0.0 | NOK | http://autobuild.buildroot.net/results/59dfd2d0308e32ac98e2f5facf62964cd39c6761/
-     avr32 |                 libsecret-0.15 | NOK | http://autobuild.buildroot.net/results/2d41f97378f06d0f3922e078ec0d02549690d4c1/
-   powerpc |                     mpd-0.18.7 | NOK | http://autobuild.buildroot.net/results/5c7405511a9138153d1de63347b99e063a3816fd/
-       sh4 |                      php-5.5.8 | NOK | http://autobuild.buildroot.net/results/3644fc595370b8c13b17ccb6ab1ea7fe8f66c219/
-   powerpc |          qt5connectivity-5.2.0 | NOK | http://autobuild.buildroot.net/results/c54dc99425fb2eee5cfed4af6e72b4f7b07cb32d/
-       arm |               strongswan-5.0.4 | NOK | http://autobuild.buildroot.net/results/e2394705545dad8e33ffc558df518014c15f5271/
-       arm | tvheadend-c7d0335eb10d02b78... | NOK | http://autobuild.buildroot.net/results/f0257f97a4c4ffb4458554eab6468a9fe627f21b/
-    xtensa |               wireshark-1.10.5 | NOK | http://autobuild.buildroot.net/results/3bbba270745d96a08ff6eb98f9f3d39ca3a3ea9e/
-
+ package/Config.in                                  |   17 ++++++++
+ package/cosmo/Config.in                            |    7 ++++
+ package/cosmo/cosmo.mk                             |   10 +++++
+ package/dado/Config.in                             |    6 +++
+ package/dado/dado.mk                               |   10 +++++
+ package/ljlinenoise/Config.in                      |   15 +++++++
+ package/ljlinenoise/ljlinenoise.mk                 |   13 +++++++
+ package/lpeg/Config.in                             |    8 ++++
+ package/lpeg/lpeg.mk                               |   10 +++++
+ package/lpty/Config.in                             |    7 ++++
+ package/lpty/lpty.mk                               |   13 +++++++
+ package/lrandom/Config.in                          |    8 ++++
+ package/lrandom/lrandom.mk                         |   15 +++++++
+ package/lsqlite3/Config.in                         |    8 ++++
+ package/lsqlite3/lsqlite3.mk                       |   12 ++++++
+ package/lua-coat/Config.in                         |    6 +++
+ package/lua-coat/lua-coat.mk                       |   13 +++++++
+ package/lua-coatpersistent/Config.in               |    8 ++++
+ package/lua-coatpersistent/lua-coatpersistent.mk   |   13 +++++++
+ package/lua-csnappy/Config.in                      |    8 ++++
+ package/lua-csnappy/lua-csnappy.mk                 |   13 +++++++
+ package/lua-iconv/Config.in                        |    9 +++++
+ package/lua-iconv/lua-iconv.mk                     |   13 +++++++
+ package/lua-messagepack/Config.in                  |    7 ++++
+ package/lua-messagepack/lua-messagepack.mk         |   13 +++++++
+ package/lua-testmore/Config.in                     |    6 +++
+ package/lua-testmore/lua-testmore.mk               |   13 +++++++
+ package/lua/5.1.5/lua-02-shared-libs-for-lua.patch |   22 +++++++++++
+ package/lua/5.2.3/lua-02-shared-libs-for-lua.patch |   22 +++++++++++
+ package/lua/lua.mk                                 |   41 ++------------------
+ package/luainterpreter/luainterpreter.mk           |    4 ++
+ package/luajit/luajit-02-shared-lib.patch          |   17 --------
+ package/luajit/luajit-03-dont-strip.patch          |   23 -----------
+ package/luajit/luajit.mk                           |   12 +++++-
+ package/luajson/Config.in                          |    8 ++++
+ package/luajson/luajson.mk                         |   13 +++++++
+ package/lualogging/Config.in                       |    9 +++++
+ package/lualogging/lualogging.mk                   |   13 +++++++
+ package/luarocks/luarocks.mk                       |   19 ++++++---
+ package/lunit/Config.in                            |   10 +++++
+ package/lunit/lunit.mk                             |   13 +++++++
+ package/lzlib/Config.in                            |    9 +++++
+ package/lzlib/lzlib.mk                             |   12 ++++++
+ 43 files changed, 443 insertions(+), 85 deletions(-)
+ create mode 100644 package/cosmo/Config.in
+ create mode 100644 package/cosmo/cosmo.mk
+ create mode 100644 package/dado/Config.in
+ create mode 100644 package/dado/dado.mk
+ create mode 100644 package/ljlinenoise/Config.in
+ create mode 100644 package/ljlinenoise/ljlinenoise.mk
+ create mode 100644 package/lpeg/Config.in
+ create mode 100644 package/lpeg/lpeg.mk
+ create mode 100644 package/lpty/Config.in
+ create mode 100644 package/lpty/lpty.mk
+ create mode 100644 package/lrandom/Config.in
+ create mode 100644 package/lrandom/lrandom.mk
+ create mode 100644 package/lsqlite3/Config.in
+ create mode 100644 package/lsqlite3/lsqlite3.mk
+ create mode 100644 package/lua-coat/Config.in
+ create mode 100644 package/lua-coat/lua-coat.mk
+ create mode 100644 package/lua-coatpersistent/Config.in
+ create mode 100644 package/lua-coatpersistent/lua-coatpersistent.mk
+ create mode 100644 package/lua-csnappy/Config.in
+ create mode 100644 package/lua-csnappy/lua-csnappy.mk
+ create mode 100644 package/lua-iconv/Config.in
+ create mode 100644 package/lua-iconv/lua-iconv.mk
+ create mode 100644 package/lua-messagepack/Config.in
+ create mode 100644 package/lua-messagepack/lua-messagepack.mk
+ create mode 100644 package/lua-testmore/Config.in
+ create mode 100644 package/lua-testmore/lua-testmore.mk
+ delete mode 100644 package/luajit/luajit-02-shared-lib.patch
+ delete mode 100644 package/luajit/luajit-03-dont-strip.patch
+ create mode 100644 package/luajson/Config.in
+ create mode 100644 package/luajson/luajson.mk
+ create mode 100644 package/lualogging/Config.in
+ create mode 100644 package/lualogging/lualogging.mk
+ create mode 100644 package/lunit/Config.in
+ create mode 100644 package/lunit/lunit.mk
+ create mode 100644 package/lzlib/Config.in
+ create mode 100644 package/lzlib/lzlib.mk
 
 -- 
-http://autobuild.buildroot.net
+1.7.9.5
