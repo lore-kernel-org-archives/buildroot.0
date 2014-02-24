@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 24 Feb 2014 08:34:50 +0100
-Subject: [Buildroot] [PATCH 14/24] dado: new package
+Date: Mon, 24 Feb 2014 08:34:51 +0100
+Subject: [Buildroot] [PATCH 15/24] lrandom: new package
 In-Reply-To: <1393227301-14874-1-git-send-email-francois.perrad@gadz.org>
 References: <1393227301-14874-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1393227301-14874-15-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1393227301-14874-16-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,51 +13,58 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/Config.in      |    1 +
- package/dado/Config.in |    6 ++++++
- package/dado/dado.mk   |   10 ++++++++++
- 3 files changed, 17 insertions(+)
- create mode 100644 package/dado/Config.in
- create mode 100644 package/dado/dado.mk
+ package/Config.in          |    1 +
+ package/lrandom/Config.in  |    8 ++++++++
+ package/lrandom/lrandom.mk |   15 +++++++++++++++
+ 3 files changed, 24 insertions(+)
+ create mode 100644 package/lrandom/Config.in
+ create mode 100644 package/lrandom/lrandom.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 0a1e891..f9124d7 100644
+index f9124d7..32fd6f6 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -368,6 +368,7 @@ source "package/cgilua/Config.in"
- source "package/copas/Config.in"
- source "package/cosmo/Config.in"
- source "package/coxpcall/Config.in"
-+source "package/dado/Config.in"
- source "package/lbase64/Config.in"
+@@ -373,6 +373,7 @@ source "package/lbase64/Config.in"
  source "package/ljlinenoise/Config.in"
  source "package/ljsyscall/Config.in"
-diff --git a/package/dado/Config.in b/package/dado/Config.in
+ source "package/lpeg/Config.in"
++source "package/lrandom/Config.in"
+ source "package/lua-cjson/Config.in"
+ source "package/lua-ev/Config.in"
+ source "package/lua-iconv/Config.in"
+diff --git a/package/lrandom/Config.in b/package/lrandom/Config.in
 new file mode 100644
-index 0000000..fb469f4
+index 0000000..661707d
 --- /dev/null
-+++ b/package/dado/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_DADO
-+	bool "dado"
++++ b/package/lrandom/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_LRANDOM
++	bool "lrandom"
++	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
 +	help
-+	  Database Facilities for LuaSQL.
++	  A library for generating random numbers
++	  based on the Mersenne Twister
 +
-+	  http://www.ccpa.puc-rio.br/software/dado/
-diff --git a/package/dado/dado.mk b/package/dado/dado.mk
++	  http://www.tecgraf.puc-rio.br/~lhf/ftp/lua/#lrandom
+diff --git a/package/lrandom/lrandom.mk b/package/lrandom/lrandom.mk
 new file mode 100644
-index 0000000..3a58215
+index 0000000..0035791
 --- /dev/null
-+++ b/package/dado/dado.mk
-@@ -0,0 +1,10 @@
++++ b/package/lrandom/lrandom.mk
+@@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# dado
++# lrandom
 +#
 +################################################################################
 +
-+DADO_VERSION = 1.5.2-1
-+DADO_LICENSE = MIT
++ifeq ($(BR2_PACKAGE_LUA_5_2),y)
++LRANDOM_VERSION = 20120430.52-1
++else
++LRANDOM_VERSION = 20120430.51-1
++endif
++LRANDOM_SUBDIR  = random
++LRANDOM_LICENSE = Public domain
 +
 +$(eval $(luarocks-package))
 -- 
