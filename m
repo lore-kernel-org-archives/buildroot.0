@@ -1,73 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 Feb 2014 18:59:22 +0100
-Subject: [Buildroot] [PATCH] package/linux-headers: remove 2.6 snapshot
-In-Reply-To: <530AEFC9.1040508@mind.be>
-References: <1393187673-16648-1-git-send-email-yann.morin.1998@free.fr>
- <530AEFC9.1040508@mind.be>
-Message-ID: <20140224175922.GA11048@free.fr>
+From: Marco Trapanese <marcotrapanese@gmail.com>
+Date: Mon, 24 Feb 2014 19:18:18 +0100
+Subject: [Buildroot] Few questions external toolchain
+Message-ID: <530B8CEA.90306@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Hello,
+after reading the documentation I still have some questions.
+I want to use a Linaro toolchain for an imx6 board.
 
-On 2014-02-24 08:07 +0100, Arnout Vandecappelle spake thusly:
-> On 02/23/14 21:34, Yann E. MORIN wrote:
-> > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > 
-> > As Thomas states:
-> >     It is completely weird to ask the tarball to be named exactly
-> >     linux-2.6.tar.bz2. IMO, we should simply get rid of this feature.
-> > 
-> > Make it so! ;-)
-> > 
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > ---
-> >  package/linux-headers/Config.in.host | 4 ----
-> >  1 file changed, 4 deletions(-)
-> > 
-> > diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-> > index 134e338..fcecd62 100644
-> > --- a/package/linux-headers/Config.in.host
-> > +++ b/package/linux-headers/Config.in.host
-> > @@ -56,9 +56,6 @@ choice
-> >  
-> >  	config BR2_KERNEL_HEADERS_VERSION
-> >  		bool "Manually specified Linux version"
-> > -
-> > -	config BR2_KERNEL_HEADERS_SNAP
-> > -		bool "Local Linux snapshot (linux-2.6.tar.bz2)"
-> >  endchoice
-> >  
-> >  config BR2_DEFAULT_KERNEL_VERSION
-> > @@ -81,5 +78,4 @@ config BR2_DEFAULT_KERNEL_HEADERS
-> >  	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
-> >  	default "3.12.13"	if BR2_KERNEL_HEADERS_3_12
-> >  	default "3.13.5"	if BR2_KERNEL_HEADERS_3_13
-> > -	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
-> >  	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
-> > 
-> 
->  This is missing Config.in.legacy support. The help text of the legacy
-> support should mention that the same can be achieved by using
-> BR2_LINUX_KERNEL_CUSTOM_TARBALL.
+The toolchain is hosted on a git repository, and I don't understand how 
+to tell this to buildroot. It seems it looks for a tar.gz file.
 
-In retrospect, BR2_LINUX_KERNEL_CUSTOM_TARBALL is for building the
-kernel. It is not used to install the headers, which is what we are
-doing here.
+Anyway I tried to manually git clone the toolchain and I passed the 
+directory of the local repo.
+When it tries to compile something it returns:
 
-We still need to add a legacy option, though.
+checking for arm-buildroot-linux-gnueabi-gcc... 
+/home/marco/dev/buildroot/output/host/usr/bin/arm-fsl-linux-gnueabi-gcc
+checking whether the C compiler works... no
+configure: error: in 
+`/home/marco/dev/buildroot/output/build/alsa-lib-1.0.26':
 
-Regarrds,
-Yann E. MORIN.
+the path is correct, but why it looks for 
+"arm-buildroot-linux-gnueabi-gcc"? It seems the internal toolchain!
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Attached there is my .config file and the buildroot version is: 2014.02-rc2
+
+Thanks!
+Marco
+
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: .config
+Type: application/xml
+Size: 39446 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140224/b4b6c472/attachment.wsdl>
