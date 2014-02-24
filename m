@@ -1,83 +1,47 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 24 Feb 2014 19:50:45 +0100
-Subject: [Buildroot] [PATCH] gst-fsl-plugins: add missing librt linking for
-	libgstfsl.
-Message-ID: <1393267845-15148-1-git-send-email-ps.report@gmx.net>
+From: Jason Jiang <Jason.Jiang@intusurg.com>
+Date: Mon, 24 Feb 2014 18:57:40 +0000
+Subject: [Buildroot] Link error when building latest rootfs for i.MX6
+Message-ID: <44C2037B3E0E704C9BB751CAFFB640483C55A413@SV950-MBX1.corp.intusurg.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes runtime failure of gst-fsl-plugins, e.g.
+Hi,
 
-(gst-plugin-scanner:1700): GStreamer-WARNING **: Failed to load
-        plugin '/usr/lib/gstreamer-0.10/libmfw_vpu.so':
-        /usr/lib/libgstfsl-0.10.so.0: undefined symbol: shm_open)
+I had a problem building the latest rootfs for my i.MX6 board. I got the latest one from http://www.buildroot.org/download.html. I tried to build it in the following way:
 
-when compiled with buildroot/glibc toolchain.
+$ make menuconfig...
 
-See also old buildroot mailing list request [1].
+#  Target ARM (Little-Endian)
 
-[1] http://lists.busybox.net/pipermail/buildroot/2013-June/073910.html
+#  Target Cortex A-9
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- ...sl-linkage-add-lrt-for-shared-memory-func.patch | 46 ++++++++++++++++++++++
- 1 file changed, 46 insertions(+)
- create mode 100644 package/gstreamer/gst-fsl-plugins/gst-fsl-plugins-0004-Fix-libgstfsl-linkage-add-lrt-for-shared-memory-func.patch
+#  Under toolchain:
 
-diff --git a/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins-0004-Fix-libgstfsl-linkage-add-lrt-for-shared-memory-func.patch b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins-0004-Fix-libgstfsl-linkage-add-lrt-for-shared-memory-func.patch
-new file mode 100644
-index 0000000..863f1b6
---- /dev/null
-+++ b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins-0004-Fix-libgstfsl-linkage-add-lrt-for-shared-memory-func.patch
-@@ -0,0 +1,46 @@
-+From 1ca4251d1284f2cb56e31aaec4d369809e2139c9 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Mon, 24 Feb 2014 16:30:39 +0100
-+Subject: [PATCH] Fix libgstfsl linkage (add -lrt for shared memory functions).
-+
-+Fixes runtime failure of gst-fsl-plugins, e.g.:
-+(gst-plugin-scanner:1700): GStreamer-WARNING **: Failed to load
-+	plugin '/usr/lib/gstreamer-0.10/libmfw_vpu.so':
-+	/usr/lib/libgstfsl-0.10.so.0: undefined symbol: shm_open)
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ configure.ac     | 3 +++
-+ libs/Makefile.am | 2 +-
-+ 2 files changed, 4 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index f7907a7..9f834df 100755
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -173,6 +173,9 @@ AC_CHECK_LIB(ipu, mxc_ipu_lib_task_init, [IPU_LIBS=-lipu], [echo "No libipu arou
-+ AC_SUBST(IPU_CFLAGS)
-+ AC_SUBST(IPU_LIBS)
-+ 
-++AC_SEARCH_LIBS([shm_open], [rt], [SHM_LIBS="-lrt"])
-++AC_SUBST(SHM_LIBS)
-++
-+ FSL_MM_CORE_CFLAGS=`$PKG_CONFIG --cflags libfslaudiocodec 2>/dev/null`
-+ FSL_MM_CORE_CFLAGS="$FSL_MM_CORE_CFLAGS `$PKG_CONFIG --cflags libfslvideocodec 2>/dev/null`"
-+ FSL_MM_CORE_CFLAGS="$FSL_MM_CORE_CFLAGS `$PKG_CONFIG --cflags libfslparser 2>/dev/null`"
-+diff --git a/libs/Makefile.am b/libs/Makefile.am
-+index a68fd4b..7b19b92 100755
-+--- a/libs/Makefile.am
-++++ b/libs/Makefile.am
-+@@ -12,7 +12,7 @@ libgstfsl_ at GST_MAJORMINOR@_la_SOURCES = \
-+ 
-+ libgstfsl_ at GST_MAJORMINOR@_la_CFLAGS  = $(GST_BASE_CFLAGS) $(IPU_CFLAGS) -I../inc/common
-+ libgstfsl_ at GST_MAJORMINOR@_la_LDFLAGS = -version-info @GSTMXLIBS_VERSION@
-+-libgstfsl_ at GST_MAJORMINOR@_la_LIBADD = $(GST_BASE_LIBS) -lgstvideo- at GST_MAJORMINOR@ -lgstinterfaces-$(GST_MAJORMINOR) $(IPU_LIBS)
-++libgstfsl_ at GST_MAJORMINOR@_la_LIBADD = $(GST_BASE_LIBS) -lgstvideo- at GST_MAJORMINOR@ -lgstinterfaces-$(GST_MAJORMINOR) $(IPU_LIBS) $(SHM_LIBS)
-+ 
-+ libgstfsl_ at GST_MAJORMINOR@includedir = $(includedir)/gstreamer- at GST_MAJORMINOR@/gst/imx-mm
-+ libgstfsl_ at GST_MAJORMINOR@include_HEADERS = \
-+-- 
-+1.8.1.4
-+
--- 
-1.8.1.4
+#      External
+
+#      Sourcery Codebench ARM 2013.05
+
+#      Downloaded and installed
+
+#  Under System Configuration, chose ttymxc0 as the Port to run a getty (login prompt) on,
+
+#  Under Target Packages->Filesystem and Flash utilities: enable dosfstools and e2fsprogs
+
+#  Under Filesystem Images, selected Output cpio - gzipped; tar the root filesystem
+
+$ make busybox-menuconfig...
+
+#  Do nothing, just exit (this step probably isn't necessary).
+
+$ make V=1 2>&1 | tee make.out
+
+But at the end, I got link error: "/opt/freescale/usr/local/gcc-4.6.2-glibc-2.13-linaro-multilib-2011.12/fsl-linaro-toolchain/bin/../lib/gcc/arm-fsl-linux-gnueabi/4.6.2/../../../../arm-fsl-linux-gnueabi/bin/ld: cannot find crti.o: No such file or directory". I googled around for the whole day and just couldn't figure out the solution. Could you help please?
+
+Thank you,
+Jason
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140224/4fa2455b/attachment.html>
