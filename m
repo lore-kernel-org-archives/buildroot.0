@@ -1,26 +1,42 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 24 Feb 2014 22:15:41 +0100
-Subject: [Buildroot] [PATCH] manual: fix missing DL_DIR rename to
-	BR2_DL_DIR
-In-Reply-To: <1393272463-32021-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Mon, 24 Feb 2014 21:07:43 +0100")
-References: <1393272463-32021-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87y510ky9u.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 24 Feb 2014 22:16:01 +0100
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <CAAEAJfBPQdJC3Q7pr5tmkGsWdVW9W7cJBmPOE1OWMOKo-Kj88Q@mail.gmail.com>
+References: <20140223073009.3676E101056@stock.ovh.net>
+ <20140223110021.16b6b976@skate>
+ <CAAEAJfBPQdJC3Q7pr5tmkGsWdVW9W7cJBmPOE1OWMOKo-Kj88Q@mail.gmail.com>
+Message-ID: <20140224221601.12c4dcf1@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Dear Ezequiel Garc?a,
 
- > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > There was one instance of DL_DIR that was left out. Fix that.
+On Sun, 23 Feb 2014 20:46:37 -0300, Ezequiel Garc?a wrote:
+> On 23 February 2014 07:00, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+> >
+> >>      nios2 |                 minidlna-1.1.1 | NOK | http://autobuild.buildroot.net/results/2e6fa6e4891b5cc4c75943130158aa24fa77f26e/
+> >
+> > configure: error: Could not find libavformat - part of ffmpeg
+> > make: *** [/home/test/test/3/output/build/minidlna-1.1.1/.stamp_configured] Error 1
+> >
+> > Ezequiel?
+> >
+> 
+> Already discussed here: http://patchwork.ozlabs.org/patch/312275/
+> 
+> Since it seems a compiler bug, all we can do for now is disable minidlna
+> for nios2 with a note about a compiler's bug.
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Samuel Martin <s.martin49@gmail.com>
+The _gp problem seems to be occurring for a bunch of other packages. We
+should contact the Sourcery CodeBench people about this, I believe.
+Someone to take the lead on this?
 
-Committed, thanks.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
