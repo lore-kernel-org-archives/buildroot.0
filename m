@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 24 Feb 2014 08:34:51 +0100
-Subject: [Buildroot] [PATCH 15/24] lrandom: new package
+Date: Mon, 24 Feb 2014 08:34:52 +0100
+Subject: [Buildroot] [PATCH 16/24] lua-testmore: new package
 In-Reply-To: <1393227301-14874-1-git-send-email-francois.perrad@gadz.org>
 References: <1393227301-14874-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1393227301-14874-16-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1393227301-14874-17-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,58 +13,54 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/Config.in          |    1 +
- package/lrandom/Config.in  |    8 ++++++++
- package/lrandom/lrandom.mk |   15 +++++++++++++++
- 3 files changed, 24 insertions(+)
- create mode 100644 package/lrandom/Config.in
- create mode 100644 package/lrandom/lrandom.mk
+ package/Config.in                    |    1 +
+ package/lua-testmore/Config.in       |    6 ++++++
+ package/lua-testmore/lua-testmore.mk |   13 +++++++++++++
+ 3 files changed, 20 insertions(+)
+ create mode 100644 package/lua-testmore/Config.in
+ create mode 100644 package/lua-testmore/lua-testmore.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index f9124d7..32fd6f6 100644
+index 32fd6f6..7b6ace6 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -373,6 +373,7 @@ source "package/lbase64/Config.in"
- source "package/ljlinenoise/Config.in"
- source "package/ljsyscall/Config.in"
- source "package/lpeg/Config.in"
-+source "package/lrandom/Config.in"
- source "package/lua-cjson/Config.in"
+@@ -378,6 +378,7 @@ source "package/lua-cjson/Config.in"
  source "package/lua-ev/Config.in"
  source "package/lua-iconv/Config.in"
-diff --git a/package/lrandom/Config.in b/package/lrandom/Config.in
+ source "package/lua-msgpack-native/Config.in"
++source "package/lua-testmore/Config.in"
+ source "package/luasql-sqlite3/Config.in"
+ source "package/luabitop/Config.in"
+ source "package/luacrypto/Config.in"
+diff --git a/package/lua-testmore/Config.in b/package/lua-testmore/Config.in
 new file mode 100644
-index 0000000..661707d
+index 0000000..61dea3a
 --- /dev/null
-+++ b/package/lrandom/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_LRANDOM
-+	bool "lrandom"
-+	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
++++ b/package/lua-testmore/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_LUA_TESTMORE
++	bool "lua-testmore"
 +	help
-+	  A library for generating random numbers
-+	  based on the Mersenne Twister
++	  an Unit Testing Framework.
 +
-+	  http://www.tecgraf.puc-rio.br/~lhf/ftp/lua/#lrandom
-diff --git a/package/lrandom/lrandom.mk b/package/lrandom/lrandom.mk
++	  http://fperrad.github.io/lua-TestMore/
+diff --git a/package/lua-testmore/lua-testmore.mk b/package/lua-testmore/lua-testmore.mk
 new file mode 100644
-index 0000000..0035791
+index 0000000..fcbb170
 --- /dev/null
-+++ b/package/lrandom/lrandom.mk
-@@ -0,0 +1,15 @@
++++ b/package/lua-testmore/lua-testmore.mk
+@@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# lrandom
++# lua-testmore
 +#
 +################################################################################
 +
-+ifeq ($(BR2_PACKAGE_LUA_5_2),y)
-+LRANDOM_VERSION = 20120430.52-1
-+else
-+LRANDOM_VERSION = 20120430.51-1
-+endif
-+LRANDOM_SUBDIR  = random
-+LRANDOM_LICENSE = Public domain
++LUA_TESTMORE_VERSION_UPSTREAM = 0.3.1
++LUA_TESTMORE_VERSION = $(LUA_TESTMORE_VERSION_UPSTREAM)-1
++LUA_TESTMORE_SUBDIR  = lua-TestMore-$(LUA_TESTMORE_VERSION_UPSTREAM)
++LUA_TESTMORE_LICENSE = MIT
++LUA_TESTMORE_LICENSE_FILES = $(LUA_TESTMORE_SUBDIR)/COPYRIGHT
 +
 +$(eval $(luarocks-package))
 -- 
