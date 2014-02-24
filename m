@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 24 Feb 2014 08:34:48 +0100
-Subject: [Buildroot] [PATCH 12/24] luajson: new package
+Date: Mon, 24 Feb 2014 08:34:49 +0100
+Subject: [Buildroot] [PATCH 13/24] lualogging: new package
 In-Reply-To: <1393227301-14874-1-git-send-email-francois.perrad@gadz.org>
 References: <1393227301-14874-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1393227301-14874-13-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1393227301-14874-14-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,56 +13,57 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/Config.in          |    1 +
- package/luajson/Config.in  |    8 ++++++++
- package/luajson/luajson.mk |   13 +++++++++++++
- 3 files changed, 22 insertions(+)
- create mode 100644 package/luajson/Config.in
- create mode 100644 package/luajson/luajson.mk
+ package/Config.in                |    1 +
+ package/lualogging/Config.in     |    9 +++++++++
+ package/lualogging/lualogging.mk |   13 +++++++++++++
+ 3 files changed, 23 insertions(+)
+ create mode 100644 package/lualogging/Config.in
+ create mode 100644 package/lualogging/lualogging.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 5f3ef17..e65d71d 100644
+index e65d71d..0a1e891 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -382,6 +382,7 @@ source "package/luacrypto/Config.in"
- source "package/luaexpat/Config.in"
+@@ -383,6 +383,7 @@ source "package/luaexpat/Config.in"
  source "package/luaexpatutils/Config.in"
  source "package/luafilesystem/Config.in"
-+source "package/luajson/Config.in"
+ source "package/luajson/Config.in"
++source "package/lualogging/Config.in"
  source "package/luaposix/Config.in"
  source "package/luasec/Config.in"
  source "package/luasocket/Config.in"
-diff --git a/package/luajson/Config.in b/package/luajson/Config.in
+diff --git a/package/lualogging/Config.in b/package/lualogging/Config.in
 new file mode 100644
-index 0000000..9be7d25
+index 0000000..37d7015
 --- /dev/null
-+++ b/package/luajson/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_LUAJSON
-+	bool "luajson"
-+	select BR2_PACKAGE_LPEG
++++ b/package/lualogging/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_LUALOGGING
++	bool "lualogging"
 +	help
-+	  LuaJSON is a customizable JSON decoder/encoder
-+	  using LPEG for parsing.
++	  LuaLogging provides a simple API to use logging features in Lua.
++	  Its design was based on log4j. LuaLogging currently supports,
++	  through the use of appenders, console, file, rolling file, email,
++	  socket and SQL outputs.
 +
-+	  http://github.com/harningt/luajson
-diff --git a/package/luajson/luajson.mk b/package/luajson/luajson.mk
++	  http://www.keplerproject.org/lualogging/
+diff --git a/package/lualogging/lualogging.mk b/package/lualogging/lualogging.mk
 new file mode 100644
-index 0000000..88db6b0
+index 0000000..91007f2
 --- /dev/null
-+++ b/package/luajson/luajson.mk
++++ b/package/lualogging/lualogging.mk
 @@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# luajson
++# lualogging
 +#
 +################################################################################
 +
-+LUAJSON_VERSION_UPSTREAM = 1.3.2
-+LUAJSON_VERSION = $(LUAJSON_VERSION_UPSTREAM)-1
-+LUAJSON_SUBDIR  = luajson
-+LUAJSON_LICENSE = MIT
-+LUAJSON_LICENSE_FILES = $(LUAJSON_SUBDIR)/LICENSE
++LUALOGGING_VERSION_UPSTREAM = 1.3.0
++LUALOGGING_VERSION = $(LUALOGGING_VERSION_UPSTREAM)-1
++LUALOGGING_SUBDIR  = lualogging
++LUALOGGING_LICENSE = MIT
++LUALOGGING_LICENSE_FILES = $(LUALOGGING_SUBDIR)/COPYRIGHT
 +
 +$(eval $(luarocks-package))
 -- 
