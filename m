@@ -1,122 +1,83 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 Feb 2014 19:29:51 +0100
-Subject: [Buildroot] [PATCH 1/2] infra: improve dependency check in
- virtual packages.
-In-Reply-To: <1393235404-2693-2-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1393235404-2693-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1393235404-2693-2-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <20140224182951.GB11048@free.fr>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 24 Feb 2014 19:50:45 +0100
+Subject: [Buildroot] [PATCH] gst-fsl-plugins: add missing librt linking for
+	libgstfsl.
+Message-ID: <1393267845-15148-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Eric, All,
+Fixes runtime failure of gst-fsl-plugins, e.g.
 
-On 2014-02-24 10:50 +0100, Eric Le Bihan spake thusly:
-> The current version of dependency check for virtual package <foo>
-> defines FOO_CONFIGURE_CMDS to print an error message if the
-> dependencies are not met.
-> 
-> This patch updates all the virtual packages to use the GNU Make control
-> function $(error text...) instead.
-> 
-> This makes the error happen at the beginning of the build, with a clearer
-> message.
-> 
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+(gst-plugin-scanner:1700): GStreamer-WARNING **: Failed to load
+        plugin '/usr/lib/gstreamer-0.10/libmfw_vpu.so':
+        /usr/lib/libgstfsl-0.10.so.0: undefined symbol: shm_open)
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+when compiled with buildroot/glibc toolchain.
 
-Somewhat-unrelated to this change, see a comment below...
+See also old buildroot mailing list request [1].
 
-> ---
->  package/luainterpreter/luainterpreter.mk |    6 ++++++
->  package/opengl/libegl/libegl.mk          |    7 +++----
->  package/opengl/libgles/libgles.mk        |    7 +++----
->  package/opengl/libopenmax/libopenmax.mk  |    7 +++----
->  package/opengl/libopenvg/libopenvg.mk    |    7 +++----
->  package/powervr/powervr.mk               |    7 +++----
->  6 files changed, 21 insertions(+), 20 deletions(-)
-> 
-> diff --git a/package/luainterpreter/luainterpreter.mk b/package/luainterpreter/luainterpreter.mk
-> index c37d621..5443477 100644
-> --- a/package/luainterpreter/luainterpreter.mk
-> +++ b/package/luainterpreter/luainterpreter.mk
-> @@ -9,4 +9,10 @@ LUAINTERPRETER_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_LUA_INTERPRET
->  
->  LUAINTERPRETER_ABIVER = $(call qstrip,$(BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION))
->  
-> +ifeq ($(BR2_PACKAGE_HAS_LUA_INTERPRETER),y)
-> +ifeq ($(LUAINTERPRETER_DEPENDENCIES),)
-> +$(error No lua interpreter implementation selected. Configuration error.)
-> +endif
-> +endif
-> +
->  $(eval $(generic-package))
-> diff --git a/package/opengl/libegl/libegl.mk b/package/opengl/libegl/libegl.mk
-> index b2b74f1..3311e50 100644
-> --- a/package/opengl/libegl/libegl.mk
-> +++ b/package/opengl/libegl/libegl.mk
-> @@ -7,11 +7,10 @@
->  LIBEGL_SOURCE =
->  LIBEGL_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_OPENGL_EGL))
->  
-> +ifeq ($(BR2_PACKAGE_HAS_OPENGL_EGL),y)
->  ifeq ($(LIBEGL_DEPENDENCIES),)
-> -define LIBEGL_CONFIGURE_CMDS
-> -	echo "No libEGL implementation selected. Configuration error."
-> -	exit 1
-> -endef
-> +$(error No libEGL implementation selected. Configuration error.)
-> +endif
->  endif
->  
->  $(eval $(generic-package))
+[1] http://lists.busybox.net/pipermail/buildroot/2013-June/073910.html
 
-I don't know about you folks, but I'm beginning to see a pattern here...
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ ...sl-linkage-add-lrt-for-shared-memory-func.patch | 46 ++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+ create mode 100644 package/gstreamer/gst-fsl-plugins/gst-fsl-plugins-0004-Fix-libgstfsl-linkage-add-lrt-for-shared-memory-func.patch
 
-If all of our BR2_PACKAGE_HAS_FOOBAR options would match the corresponding
-FOOBAR_DEPENDENCIES, then we could use something like (absolutely untested,
-only pure random thoughts):
-
-    $(eval $(call virtual-package,FooBar))
-
-whith 'virtual-package' something like:
-
-    define virtual-package
-    ifeq ($(BR2_PACKAGE_HAS_$(call upper,$(1))),y)
-    ifeq ($($(call upper,$(1))_DEPENDENCIES),)
-    $(error No $(1) implementation selected. Configuration error.)
-    endif
-    endif
-    endef
-
-But then we would need:
-    s/BR2_PACKAGE_HAS_OPENGL_EGL/BR2_PACKAGE_HAS_LIBEGL/
-    s/BR2_PACKAGE_HAS_OPENGL_GLES/BR2_PACKAGE_HAS_LIBGLES/
-    s/BR2_PACKAGE_HAS_OPENMAX/BR2_PACKAGE_HAS_LIBOPENMAX/
-    s/BR2_PACKAGE_HAS_OPENVG/BR2_PACKAGE_HAS_LIBOPENVG/
-
-Lua interpreter and PowerVR already match this.
-
-We could even go further, so as to only require a call to 'virtual-package'
-and not to 'generic-package', with some carefully-crafted Makefile
-constructs (but we would loose the capitalisation of eg. lbEGL, since the
-package is named 'libegl', all in lower-case). 'virtual-package' could
-even override FOOBAR_SOURCE="" before calling generic-package behind the
-hood. This would make writing virtual packages even easier.
-
-Thought?
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins-0004-Fix-libgstfsl-linkage-add-lrt-for-shared-memory-func.patch b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins-0004-Fix-libgstfsl-linkage-add-lrt-for-shared-memory-func.patch
+new file mode 100644
+index 0000000..863f1b6
+--- /dev/null
++++ b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins-0004-Fix-libgstfsl-linkage-add-lrt-for-shared-memory-func.patch
+@@ -0,0 +1,46 @@
++From 1ca4251d1284f2cb56e31aaec4d369809e2139c9 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Mon, 24 Feb 2014 16:30:39 +0100
++Subject: [PATCH] Fix libgstfsl linkage (add -lrt for shared memory functions).
++
++Fixes runtime failure of gst-fsl-plugins, e.g.:
++(gst-plugin-scanner:1700): GStreamer-WARNING **: Failed to load
++	plugin '/usr/lib/gstreamer-0.10/libmfw_vpu.so':
++	/usr/lib/libgstfsl-0.10.so.0: undefined symbol: shm_open)
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ configure.ac     | 3 +++
++ libs/Makefile.am | 2 +-
++ 2 files changed, 4 insertions(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index f7907a7..9f834df 100755
++--- a/configure.ac
+++++ b/configure.ac
++@@ -173,6 +173,9 @@ AC_CHECK_LIB(ipu, mxc_ipu_lib_task_init, [IPU_LIBS=-lipu], [echo "No libipu arou
++ AC_SUBST(IPU_CFLAGS)
++ AC_SUBST(IPU_LIBS)
++ 
+++AC_SEARCH_LIBS([shm_open], [rt], [SHM_LIBS="-lrt"])
+++AC_SUBST(SHM_LIBS)
+++
++ FSL_MM_CORE_CFLAGS=`$PKG_CONFIG --cflags libfslaudiocodec 2>/dev/null`
++ FSL_MM_CORE_CFLAGS="$FSL_MM_CORE_CFLAGS `$PKG_CONFIG --cflags libfslvideocodec 2>/dev/null`"
++ FSL_MM_CORE_CFLAGS="$FSL_MM_CORE_CFLAGS `$PKG_CONFIG --cflags libfslparser 2>/dev/null`"
++diff --git a/libs/Makefile.am b/libs/Makefile.am
++index a68fd4b..7b19b92 100755
++--- a/libs/Makefile.am
+++++ b/libs/Makefile.am
++@@ -12,7 +12,7 @@ libgstfsl_ at GST_MAJORMINOR@_la_SOURCES = \
++ 
++ libgstfsl_ at GST_MAJORMINOR@_la_CFLAGS  = $(GST_BASE_CFLAGS) $(IPU_CFLAGS) -I../inc/common
++ libgstfsl_ at GST_MAJORMINOR@_la_LDFLAGS = -version-info @GSTMXLIBS_VERSION@
++-libgstfsl_ at GST_MAJORMINOR@_la_LIBADD = $(GST_BASE_LIBS) -lgstvideo- at GST_MAJORMINOR@ -lgstinterfaces-$(GST_MAJORMINOR) $(IPU_LIBS)
+++libgstfsl_ at GST_MAJORMINOR@_la_LIBADD = $(GST_BASE_LIBS) -lgstvideo- at GST_MAJORMINOR@ -lgstinterfaces-$(GST_MAJORMINOR) $(IPU_LIBS) $(SHM_LIBS)
++ 
++ libgstfsl_ at GST_MAJORMINOR@includedir = $(includedir)/gstreamer- at GST_MAJORMINOR@/gst/imx-mm
++ libgstfsl_ at GST_MAJORMINOR@include_HEADERS = \
++-- 
++1.8.1.4
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.1.4
