@@ -1,54 +1,36 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 24 Feb 2014 09:47:10 +0000
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <CALq67GAwyaeTrXofN71m+g7uNW1Lx8bTALgvT+skqgB7uXr45w@mail.gmail.com>
-References: <20140221073009.2E62F10136B@stock.ovh.net>
- <20140221100842.2d988a70@skate>
- <CALq67GAwyaeTrXofN71m+g7uNW1Lx8bTALgvT+skqgB7uXr45w@mail.gmail.com>
-Message-ID: <530B151E.90909@imgtec.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Mon, 24 Feb 2014 10:50:02 +0100
+Subject: [Buildroot] [PATCH 0/2] improve virtual package infra
+Message-ID: <1393235404-2693-1-git-send-email-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/22/2014 09:54 PM, Ryan Barnett wrote:
-> Thomas and Vicente,
->
-> On Fri, Feb 21, 2014 at 10:08 AM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->
->>>      mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/c76e6f8b2d7fc29abc2f4dcae962b60cf91a8e0c/
->>
->> Usual rt-tests failure on mipsel, fixed by a bump of rt-tests, but
->> which was committed to next.
->
-> rt-tests was not bumped on next but rather ltp-testsuite was to fix an
-> issue. However, Vicente submitted a patch to uclibc that will add for
-> _tid specifically targeted for this package. Is this something that
-> could be backported to our uclibc version?
->
-> Specifically the commit is as follows:
->
-> http://git.uclibc.org/uClibc/commit/?id=b4e6e61e2f7c6fb4bf59f66efaa74591a2112912
->
-> Another option to fix the rt-tests-0.83 failures is to disable
-> rt-tests when uclibc for mipsel is used.
->
-> This is what I found when I was investigating a recent rt-tests-0.83
-> autobuilder failure. I will not have time backport Vicente's patch but
-> I may have time to submit a patch to disable this package in the way
-> that is described above.
->
-> Thanks,
-> -Ryan
->
+This patch series, intended for the -next branch, improves virtual package
+infrastructure by:
 
-If we decide to not add more uClibc patches on BR, then I think we 
-should disable this package for uClibc + mips. Is useless to always have 
-an autobuild failure that you already know where the problem is but you 
-are not going to fix it. FIx it or disable that package. This autobuild 
-failure is just more nonsense flood.
+- using make control functions in dependency check.
+- adding a tutorial to the user manual.
 
--- 
-Vincent
+Best regards,
+ELB
+
+Eric Le Bihan (2):
+  infra: improve dependency check in virtual packages.
+  manual: add virtual package tutorial.
+
+ docs/manual/adding-packages-virtual.txt  |  102 ++++++++++++++++++++++++++++++
+ docs/manual/adding-packages.txt          |    2 +
+ package/luainterpreter/luainterpreter.mk |    6 ++
+ package/opengl/libegl/libegl.mk          |    7 +-
+ package/opengl/libgles/libgles.mk        |    7 +-
+ package/opengl/libopenmax/libopenmax.mk  |    7 +-
+ package/opengl/libopenvg/libopenvg.mk    |    7 +-
+ package/powervr/powervr.mk               |    7 +-
+ 8 files changed, 125 insertions(+), 20 deletions(-)
+ create mode 100644 docs/manual/adding-packages-virtual.txt
+
+--
+1.7.9.5
