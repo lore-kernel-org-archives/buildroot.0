@@ -1,51 +1,69 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 24 Feb 2014 12:38:22 +0100
-Subject: [Buildroot] [PATCH 03/13] manual: document minimal kernel
-	headers dependency
-In-Reply-To: <1249d9593e127149e2634d7224be38baac0f8850.1393198603.git.yann.morin.1998@free.fr>
-References: <cover.1393198603.git.yann.morin.1998@free.fr>
- <1249d9593e127149e2634d7224be38baac0f8850.1393198603.git.yann.morin.1998@free.fr>
-Message-ID: <CAAXf6LWOgVZ55U8C7XruiLoX8AetYPnPCTspF3uK6Eoxj+QkhQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 24 Feb 2014 18:19:00 +0100
+Subject: [Buildroot] [PATCH] package/linux-headers: remove 2.6 snapshot
+In-Reply-To: <530AEFC9.1040508@mind.be>
+References: <1393187673-16648-1-git-send-email-yann.morin.1998@free.fr>
+ <530AEFC9.1040508@mind.be>
+Message-ID: <20140224171900.GA31131@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Feb 24, 2014 at 12:40 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Samuel Martin <s.martin49@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
->
-> ---
-> Changes v1 -> v2:
->   - fix typo  (Samuel)
->   - fix asciidoc syntax  (Thomas DS)
-> ---
->  docs/manual/adding-packages-directory.txt | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-> index 40e543c..ead3570 100644
-> --- a/docs/manual/adding-packages-directory.txt
-> +++ b/docs/manual/adding-packages-directory.txt
-> @@ -218,6 +218,12 @@ use in the comment.
->  ** Dependency symbol: +BR2_USE_MMU+
->  ** Comment string: no comment to be added
->
-> +* Kernel headers
-> +** Dependency symbol: +BR2_TOOLCHAIN_HEADERS_AT_LEAST_X_Y+, (replace
-> +   +X_Y+ with the proper version, see +toolchain/toolchain-common.in+)
-> +** Comment string: +headers >= X.Y+ (replace +X.Y+ with the
-> +   proper version)
-> +
->  * C library
->  ** Dependency symbol: +BR2_TOOLCHAIN_USES_GLIBC+,
->  +BR2_TOOLCHAIN_USES_UCLIBC+
-> --
+Arnout, All,
 
-Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+On 2014-02-24 08:07 +0100, Arnout Vandecappelle spake thusly:
+> On 02/23/14 21:34, Yann E. MORIN wrote:
+> > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > 
+> > As Thomas states:
+> >     It is completely weird to ask the tarball to be named exactly
+> >     linux-2.6.tar.bz2. IMO, we should simply get rid of this feature.
+> > 
+> > Make it so! ;-)
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > ---
+> >  package/linux-headers/Config.in.host | 4 ----
+> >  1 file changed, 4 deletions(-)
+> > 
+> > diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+> > index 134e338..fcecd62 100644
+> > --- a/package/linux-headers/Config.in.host
+> > +++ b/package/linux-headers/Config.in.host
+> > @@ -56,9 +56,6 @@ choice
+> >  
+> >  	config BR2_KERNEL_HEADERS_VERSION
+> >  		bool "Manually specified Linux version"
+> > -
+> > -	config BR2_KERNEL_HEADERS_SNAP
+> > -		bool "Local Linux snapshot (linux-2.6.tar.bz2)"
+> >  endchoice
+> >  
+> >  config BR2_DEFAULT_KERNEL_VERSION
+> > @@ -81,5 +78,4 @@ config BR2_DEFAULT_KERNEL_HEADERS
+> >  	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+> >  	default "3.12.13"	if BR2_KERNEL_HEADERS_3_12
+> >  	default "3.13.5"	if BR2_KERNEL_HEADERS_3_13
+> > -	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+> >  	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+> > 
+> 
+>  This is missing Config.in.legacy support. The help text of the legacy
+> support should mention that the same can be achieved by using
+> BR2_LINUX_KERNEL_CUSTOM_TARBALL.
+
+Right, I forgot that. Thanks for spotting it! :-)
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
