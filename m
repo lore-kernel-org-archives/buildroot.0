@@ -1,10 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 24 Feb 2014 09:03:52 +0100
-Subject: [Buildroot] [PATCH 0/7] Misc set of fixes
-In-Reply-To: <1393196291-12636-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 23 Feb 2014 23:58:04 +0100")
-References: <1393196291-12636-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87sir9lyxj.fsf@dell.be.48ers.dk>
+Date: Mon, 24 Feb 2014 09:04:27 +0100
+Subject: [Buildroot] [PATCH] libsecret: not available on AVR32,
+	compiler error
+In-Reply-To: <1393197361-13223-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Mon, 24 Feb 2014 00:16:01 +0100")
+References: <1393197361-13223-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87ob1xlywk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +14,18 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > Hello,
- > The first three patches are fixes for build failures. The last four
- > patches are fixes for missing dependency propagation of BR2_USE_MMU.
+ > libsecret does built on AVR32 due an internal compiler error, and
+ > since it's unlikely that gcc will ever be upgraded on AVR32, we simply
+ > mark this package as not available. The only reverse dependency of
+ > libsecret is webkit, which already cannot be selected on AVR32.
 
- > Thomas
+ > Fixes:
 
- > Thomas Petazzoni (7):
- >   cairo: fix build on Blackfin in test/cairo-test-runner.c
- >   cairo: improve the Blackfin build fix
- >   util-linux: libblkid needs fork(), disable on !MMU
- >   opencv: add missing dependency on !MMU for gtk support
- >   packages: missing propagation of !mmu from pango
- >   pcmanfm: add missing BR2_USE_MMU dependency from gamin
- >   sconeserver: missing dependency on BR2_USE_MMU
+ >   http://autobuild.buildroot.org/results/2d4/2d41f97378f06d0f3922e078ec0d02549690d4c1/
 
-Committed series, thanks.
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
