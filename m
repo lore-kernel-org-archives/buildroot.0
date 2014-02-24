@@ -1,36 +1,21 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Mon, 24 Feb 2014 11:42:47 +0100
+From: Marco Trapanese <marcotrapanese@gmail.com>
+Date: Mon, 24 Feb 2014 12:18:44 +0100
 Subject: [Buildroot] udev 182: scsi/scsi.h not found
-In-Reply-To: <5307AB0F.30602@gmail.com>
-References: <5307AB0F.30602@gmail.com>
-Message-ID: <1671860.tqfC9E0M9p@sagittea>
+In-Reply-To: <1671860.tqfC9E0M9p@sagittea>
+References: <5307AB0F.30602@gmail.com> <1671860.tqfC9E0M9p@sagittea>
+Message-ID: <530B2A94.3040404@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Il 24/02/2014 11:42, J?r?me Pouiller ha scritto:
+> I already noticed this problem. It happends when linux-headers is 
+> rebuilt after libc (during its installation, linux-headers remove 
+> include/scsi/). You can simply rebuild your toolchain or just do a 
+> "make clean". 
 
-On Friday 21 February 2014 20:37:51 Marco Trapanese wrote:
-> Hi all!
-> I'm still learning and I was able to fix several issue by myself.
-> Anyway my first buildroot compilation is not completed yet!
-> 
-> The building of udev 182 ends with the following error:
-> 
-> src/ata_id/ata_id.c:32:23: fatal error: scsi/scsi.h: File o directory
-> non esistente
->   #include <scsi/scsi.h>
-I already noticed this problem. It happends when linux-headers is rebuilt  
-after libc (during its installation, linux-headers remove include/scsi/). 
-
-You can simply rebuild your toolchain or just do a "make clean".
-
-
-
-
--- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+In fact I've just finished a full rebuild and now there are no errors!
+Thanks
+Marco
