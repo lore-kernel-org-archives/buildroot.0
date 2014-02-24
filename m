@@ -1,48 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Feb 2014 23:17:36 +0100
-Subject: [Buildroot] [git commit] libsigsegv: add Blackfin support
-Message-ID: <20140224221755.1D7AF9BA72@busybox.osuosl.org>
+From: Lucas Zampar Bernardi <lucas.zampar@gmail.com>
+Date: Mon, 24 Feb 2014 19:58:52 -0300
+Subject: [Buildroot] [PATCH] Added support for linux headers for testing
+	versions to
+Message-ID: <530BCEAC.5080605@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=de4f1bb8fc94fe33cb8eef3a7100fdb25a7b4dec
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This patch add support to build a buildroot toolchain using a testing 
+version of linux kernel headers.
 
-Fixes:
 
- http://autobuild.buildroot.org/results/5e2/5e2c627cfcb2699b16a82eb9554f2c9dfabd5483/
+ From f8f0f306b9970a3b39774a43b7b47aad8692673d Mon Sep 17 00:00:00 2001
+From: Lucas Zampar Bernardi <lucas@writesys.com.br>
+Date: Mon, 24 Feb 2014 19:54:30 -0300
+Subject: [PATCH] Added support for linux headers for testing versions to
+  build cross-compile tools
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../libsigsegv-0004-fix-bfin-build.patch           |   19 +++++++++++++++++++
- 1 files changed, 19 insertions(+), 0 deletions(-)
+  package/linux-headers/linux-headers.mk |    6 ++++++
+  1 file changed, 6 insertions(+)
 
-diff --git a/package/libsigsegv/libsigsegv-0004-fix-bfin-build.patch b/package/libsigsegv/libsigsegv-0004-fix-bfin-build.patch
-new file mode 100644
-index 0000000..42900ea
---- /dev/null
-+++ b/package/libsigsegv/libsigsegv-0004-fix-bfin-build.patch
-@@ -0,0 +1,19 @@
-+Add stack direction for Blackfin
+diff --git a/package/linux-headers/linux-headers.mk 
+b/package/linux-headers/linux-headers.mk
+index 086e5d5..d6e9dbb 100644
+--- a/package/linux-headers/linux-headers.mk
++++ b/package/linux-headers/linux-headers.mk
+@@ -13,6 +13,12 @@ LINUX_HEADERS_SITE = 
+$(BR2_KERNEL_MIRROR)/linux/kernel/v2.6/
+  else
+  LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v3.x/
+  endif
 +
-+The stack grows downward on Blackfin, see
-+https://sourceware.org/binutils/docs/as/Blackfin-Syntax.html: "The
-+stack grows by decrementing the stack pointer.".
++# release candidates are in testing/ subdir
++ifneq ($(findstring -rc,$(LINUX_HEADERS_VERSION)),)
++LINUX_HEADERS_SITE := $(LINUX_HEADERS_SITE)testing/
++endif
 +
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Index: b/m4/stack-direction.m4
-+===================================================================
-+--- a/m4/stack-direction.m4
-++++ b/m4/stack-direction.m4
-+@@ -18,6 +18,7 @@
-+       arc | \
-+       arm* | strongarm* | xscale* | \
-+       avr | avr32 | \
-++      bfin | \
-+       c1 | c2 | c32 | c34 | c38 | \
-+       clipper | \
-+       cris | \
+  LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.xz
+
+  LINUX_HEADERS_INSTALL_STAGING = YES
+-- 
+1.7.9.5
