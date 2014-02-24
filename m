@@ -1,36 +1,141 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Feb 2014 22:42:49 +0100
-Subject: [Buildroot] [git commit] thrift: needs host-bison and host-flex
-Message-ID: <20140224214311.77C9B99B79@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 24 Feb 2014 22:50:57 +0100
+Subject: [Buildroot] [PATCH] gstreamer-imx: new package
+Message-ID: <1393278657-18919-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=51b387b99b4328365733f1d78ba7c978caf86d68
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-
-  http://autobuild.buildroot.org/results/d46/d46f9097780bdde68ec15f693281ee0b04667f98/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/thrift/thrift.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/gstreamer1/Config.in                       |  1 +
+ package/gstreamer1/gstreamer-imx/Config.in         | 21 ++++++++++++
+ ...headers-include-path-to-src-v4l2src-compi.patch | 31 ++++++++++++++++++
+ package/gstreamer1/gstreamer-imx/gstreamer-imx.mk  | 37 ++++++++++++++++++++++
+ 4 files changed, 90 insertions(+)
+ create mode 100644 package/gstreamer1/gstreamer-imx/Config.in
+ create mode 100644 package/gstreamer1/gstreamer-imx/gstreamer-imx-0001-Add-kernel-headers-include-path-to-src-v4l2src-compi.patch
+ create mode 100644 package/gstreamer1/gstreamer-imx/gstreamer-imx.mk
 
-diff --git a/package/thrift/thrift.mk b/package/thrift/thrift.mk
-index d61cc3a..0f6a1d0 100644
---- a/package/thrift/thrift.mk
-+++ b/package/thrift/thrift.mk
-@@ -9,7 +9,7 @@ THRIFT_SITE = http://www.us.apache.org/dist/thrift/$(THRIFT_VERSION)
- THRIFT_DEPENDENCIES = host-pkgconf host-thrift boost libevent openssl zlib
- THRIFT_INSTALL_STAGING = YES
- HOST_THRIFT_DEPENDENCIES = host-boost host-libevent host-openssl host-pkgconf \
--	host-zlib
-+	host-zlib host-bison host-flex
- THRIFT_CONF_OPT = --with-sysroot=$(STAGING_DIR) --with-tests=no \
- 	--with-boost=$(STAGING_DIR)
- HOST_THRIFT_CONF_OPT = --with-sysroot=$(HOST_DIR) --with-tests=no
+diff --git a/package/gstreamer1/Config.in b/package/gstreamer1/Config.in
+index fe0ad48..0068a8f 100644
+--- a/package/gstreamer1/Config.in
++++ b/package/gstreamer1/Config.in
+@@ -8,4 +8,5 @@ source "package/gstreamer1/gst1-plugins-bad/Config.in"
+ source "package/gstreamer1/gst1-plugins-ugly/Config.in"
+ source "package/gstreamer1/gst1-libav/Config.in"
+ source "package/gstreamer1/gst-omx/Config.in"
++source "package/gstreamer1/gstreamer-imx/Config.in"
+ endif
+diff --git a/package/gstreamer1/gstreamer-imx/Config.in b/package/gstreamer1/gstreamer-imx/Config.in
+new file mode 100644
+index 0000000..bcd77ca
+--- /dev/null
++++ b/package/gstreamer1/gstreamer-imx/Config.in
+@@ -0,0 +1,21 @@
++comment "gst-fsl-plugins needs an imx-specific Linux kernel to be built"
++	depends on BR2_arm && !BR2_LINUX_KERNEL
++
++config BR2_PACKAGE_GSTREAMER_IMX
++	bool "gstreamer-imx"
++	depends on BR2_LINUX_KERNEL
++	depends on BR2_arm # Only relevant for i.MX
++	select BR2_PACKAGE_GST1_PLUGINS_BASE
++	select BR2_PACKAGE_IMX_LIB
++	select BR2_PACKAGE_LIBFSLPARSER
++	select BR2_PACKAGE_LIBFSLCODEC
++	help
++	  GStreamer-1.x plugins for hardware-accelerated audio and video
++	  parsers and codecs on i.MX6 platform. It requires a kernel that
++	  includes the i.MX6 specific headers to be built.
++
++	  To use the VPU, its firmware blob must be installed as well. This
++	  can be found in the firmware-imx package in the "Hardware handling"
++	  menu.
++
++	  https://github.com/Freescale/gstreamer-imx
+diff --git a/package/gstreamer1/gstreamer-imx/gstreamer-imx-0001-Add-kernel-headers-include-path-to-src-v4l2src-compi.patch b/package/gstreamer1/gstreamer-imx/gstreamer-imx-0001-Add-kernel-headers-include-path-to-src-v4l2src-compi.patch
+new file mode 100644
+index 0000000..48e2c16
+--- /dev/null
++++ b/package/gstreamer1/gstreamer-imx/gstreamer-imx-0001-Add-kernel-headers-include-path-to-src-v4l2src-compi.patch
+@@ -0,0 +1,31 @@
++From 107767b506de69692436205c04a002e5de0f7bee Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Sat, 22 Feb 2014 23:22:26 +0100
++Subject: [PATCH] Add kernel headers include path to src/v4l2src compile.
++
++Fixes buildroot compile with newer sysroot kernel headers
++(> 3.10 because of VIDIOC_DBG_G_CHIP_IDENT ioctl removale).
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ src/v4l2src/wscript | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/src/v4l2src/wscript b/src/v4l2src/wscript
++index 0b8fbb1..3013ba7 100644
++--- a/src/v4l2src/wscript
+++++ b/src/v4l2src/wscript
++@@ -2,7 +2,9 @@
++ 
++ 
++ def configure(conf):
++-	pass
+++	import os
+++	if conf.options.kernel_headers:
+++		conf.env.append_value('INCLUDES', [os.path.abspath(os.path.expanduser(conf.options.kernel_headers))])
++ 
++ 
++ def build(bld):
++-- 
++1.8.1.4
++
+diff --git a/package/gstreamer1/gstreamer-imx/gstreamer-imx.mk b/package/gstreamer1/gstreamer-imx/gstreamer-imx.mk
+new file mode 100644
+index 0000000..3192056
+--- /dev/null
++++ b/package/gstreamer1/gstreamer-imx/gstreamer-imx.mk
+@@ -0,0 +1,37 @@
++################################################################################
++#
++# gstreamer-imx
++#
++################################################################################
++
++GSTREAMER_IMX_VERSION = 0.9.3
++GSTREAMER_IMX_SITE = $(call github,Freescale,gstreamer-imx,$(GSTREAMER_IMX_VERSION))
++
++GSTREAMER_IMX_LICENSE = LGPLv2+
++GSTREAMER_IMX_LICENSE_FILES = LICENSE
++
++GSTREAMER_IMX_DEPENDENCIES = gstreamer1 gst1-plugins-base libfslvpuwrap \
++	imx-lib libfslparser libfslcodec
++
++# needs access to imx-specific kernel headers
++GST_FSL_PLUGINS_DEPENDENCIES += linux
++
++define GSTREAMER_IMX_CONFIGURE_CMDS
++	$(GSTREAMER_IMX_WITHOUT_X11)
++	(cd $(@D); \
++		$(TARGET_CONFIGURE_OPTS) \
++		./waf configure \
++		--prefix=/usr \
++		--kernel-headers=$(LINUX_DIR)/include \
++	)
++endef
++
++define GSTREAMER_IMX_BUILD_CMDS
++       (cd $(@D); ./waf build -j $(PARALLEL_JOBS))
++endef
++
++define GSTREAMER_IMX_INSTALL_TARGET_CMDS
++       (cd $(@D); ./waf --destdir=$(TARGET_DIR) install)
++endef
++
++$(eval $(generic-package))
+-- 
+1.8.1.4
