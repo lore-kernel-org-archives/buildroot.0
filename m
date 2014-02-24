@@ -1,79 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Feb 2014 22:36:50 +0100
-Subject: [Buildroot] [git commit] graphs: rename user-facing variables
-Message-ID: <20140224214311.5F13499B79@busybox.osuosl.org>
+Date: Mon, 24 Feb 2014 22:15:36 +0100
+Subject: [Buildroot] [git commit] manual: fix missing DL_DIR rename to
+	BR2_DL_DIR
+Message-ID: <20140224214311.4E13B9BA1E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8ae7838c7005d13eb7a21718e1ac7c28416845b2
+commit: http://git.buildroot.net/buildroot/commit/?id=4d1216901fa676512c8f09e506b0db42af643745
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Rename the GRAPH_OUT and GRAPH_ALT variables according to our
-recently-agreed naming scheme for user-facing variables:
-  - GRAPH_OUT -> BR2_GRAPH_OUT
-  - GRAPH_ALT -> BR2_GRAPH_ALT
-
-The documentation part of the rename is handled by Thomas as
-part of his manual fixing spree. ;-)
+There was one instance of DL_DIR that was left out. Fix that.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Makefile               |   12 ++++++------
- package/pkg-generic.mk |    2 +-
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ docs/manual/adding-packages-generic.txt |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 502991f..312babd 100644
---- a/Makefile
-+++ b/Makefile
-@@ -136,7 +136,7 @@ endif
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index 14971b5..04e589f 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -253,7 +253,7 @@ information is (assuming the package name is +libfoo+) :
+   Buildroot should download from +LIBFOO_SITE+ in addition to the main
+   +LIBFOO_SOURCE+ (which usually is a tarball). Buildroot will not do
+   anything with those additional files, except download files: it will
+-  be up to the package recipe to use them from +$(DL_DIR)+.
++  be up to the package recipe to use them from +$(BR2_DL_DIR)+.
  
- # Need that early, before we scan packages
- # Avoids doing the $(or...) everytime
--BR2_GRAPH_OUT := $(or $(GRAPH_OUT),pdf)
-+_BR2_GRAPH_OUT := $(or $(BR2_GRAPH_OUT),pdf)
- 
- BUILD_DIR:=$(BASE_DIR)/build
- STAMP_DIR:=$(BASE_DIR)/stamps
-@@ -651,18 +651,18 @@ graph-build: $(O)/build/build-time.log
- 	@install -d $(O)/graphs
- 	$(foreach o,name build duration,./support/scripts/graph-build-time \
- 					--type=histogram --order=$(o) --input=$(<) \
--					--output=$(O)/graphs/build.hist-$(o).$(BR2_GRAPH_OUT) \
--					$(if $(GRAPH_ALT),--alternate-colors)$(sep))
-+					--output=$(O)/graphs/build.hist-$(o).$(_BR2_GRAPH_OUT) \
-+					$(if $(BR2_GRAPH_ALT),--alternate-colors)$(sep))
- 	$(foreach t,packages steps,./support/scripts/graph-build-time \
- 				   --type=pie-$(t) --input=$(<) \
--				   --output=$(O)/graphs/build.pie-$(t).$(BR2_GRAPH_OUT) \
--				   $(if $(GRAPH_ALT),--alternate-colors)$(sep))
-+				   --output=$(O)/graphs/build.pie-$(t).$(_BR2_GRAPH_OUT) \
-+				   $(if $(BR2_GRAPH_ALT),--alternate-colors)$(sep))
- 
- graph-depends:
- 	@$(INSTALL) -d $(O)/graphs
- 	@cd "$(CONFIG_DIR)"; \
- 	$(TOPDIR)/support/scripts/graph-depends \
--	|dot -T$(BR2_GRAPH_OUT) -o $(O)/graphs/$(@).$(BR2_GRAPH_OUT)
-+	|dot -T$(_BR2_GRAPH_OUT) -o $(O)/graphs/$(@).$(_BR2_GRAPH_OUT)
- 
- else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
- 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 555c3c2..5efd9ab 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -470,7 +470,7 @@ $(1)-graph-depends:
- 			@$(INSTALL) -d $(O)/graphs
- 			@cd "$(CONFIG_DIR)"; \
- 			$(TOPDIR)/support/scripts/graph-depends $(1) \
--			|dot -T$(BR2_GRAPH_OUT) -o $(O)/graphs/$$(@).$(BR2_GRAPH_OUT)
-+			|dot -T$(_BR2_GRAPH_OUT) -o $(O)/graphs/$$(@).$(_BR2_GRAPH_OUT)
- 
- $(1)-dirclean:		$$($(2)_TARGET_DIRCLEAN)
- 
+ * +LIBFOO_SITE_METHOD+ determines the method used to fetch or copy the
+   package source code. In many cases, Buildroot guesses the method
