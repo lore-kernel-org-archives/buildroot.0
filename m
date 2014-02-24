@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 24 Feb 2014 08:34:56 +0100
-Subject: [Buildroot] [PATCH 20/24] lua-csnappy: new package
+Date: Mon, 24 Feb 2014 08:34:57 +0100
+Subject: [Buildroot] [PATCH 21/24] lzlib: new package
 In-Reply-To: <1393227301-14874-1-git-send-email-francois.perrad@gadz.org>
 References: <1393227301-14874-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1393227301-14874-21-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1393227301-14874-22-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,56 +13,56 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/Config.in                  |    1 +
- package/lua-csnappy/Config.in      |    8 ++++++++
- package/lua-csnappy/lua-csnappy.mk |   13 +++++++++++++
+ package/Config.in       |    1 +
+ package/lzlib/Config.in |    9 +++++++++
+ package/lzlib/lzlib.mk  |   12 ++++++++++++
  3 files changed, 22 insertions(+)
- create mode 100644 package/lua-csnappy/Config.in
- create mode 100644 package/lua-csnappy/lua-csnappy.mk
+ create mode 100644 package/lzlib/Config.in
+ create mode 100644 package/lzlib/lzlib.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 4e32d25..9c34e58 100644
+index 9c34e58..fa3c729 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -377,6 +377,7 @@ source "package/lrandom/Config.in"
- source "package/lua-cjson/Config.in"
- source "package/lua-coat/Config.in"
- source "package/lua-coatpersistent/Config.in"
-+source "package/lua-csnappy/Config.in"
- source "package/lua-ev/Config.in"
- source "package/lua-iconv/Config.in"
- source "package/lua-messagepack/Config.in"
-diff --git a/package/lua-csnappy/Config.in b/package/lua-csnappy/Config.in
+@@ -394,6 +394,7 @@ source "package/lualogging/Config.in"
+ source "package/luaposix/Config.in"
+ source "package/luasec/Config.in"
+ source "package/luasocket/Config.in"
++source "package/lzlib/Config.in"
+ source "package/orbit/Config.in"
+ source "package/rings/Config.in"
+ source "package/wsapi/Config.in"
+diff --git a/package/lzlib/Config.in b/package/lzlib/Config.in
 new file mode 100644
-index 0000000..0562277
+index 0000000..fc94342
 --- /dev/null
-+++ b/package/lua-csnappy/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_LUA_CSNAPPY
-+	bool "lua-csnappy"
++++ b/package/lzlib/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_LZLIB
++	bool "lzlib"
++	select BR2_PACKAGE_ZLIB
++	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
 +	help
-+	  lua-csnappy is a binding of the csnappy library
-+	  which implements the Google's Snappy (de)compressor.
++	  This package provides a library to access zlib library functions
++	  and also to read/write gzip files using an interface similar to the base io package.
 +
-+	  http://fperrad.github.io/lua-csnappy/
-+
-diff --git a/package/lua-csnappy/lua-csnappy.mk b/package/lua-csnappy/lua-csnappy.mk
++	  http://luaforge.net/projects/lzlib/
+diff --git a/package/lzlib/lzlib.mk b/package/lzlib/lzlib.mk
 new file mode 100644
-index 0000000..07aaf77
+index 0000000..24208ba
 --- /dev/null
-+++ b/package/lua-csnappy/lua-csnappy.mk
-@@ -0,0 +1,13 @@
-+################################################################################
++++ b/package/lzlib/lzlib.mk
+@@ -0,0 +1,12 @@
++#############################################################
 +#
-+# lua-csnappy
++# lzlib
 +#
-+################################################################################
++#############################################################
 +
-+LUA_CSNAPPY_VERSION_UPSTREAM = 0.1.1
-+LUA_CSNAPPY_VERSION = $(LUA_CSNAPPY_VERSION_UPSTREAM)-1
-+LUA_CSNAPPY_SUBDIR  = lua-csnappy-$(LUA_CSNAPPY_VERSION_UPSTREAM)
-+LUA_CSNAPPY_LICENSE = BSD-3c
-+LUA_CSNAPPY_LICENSE_FILES = $(LUA_CSNAPPY_SUBDIR)/COPYRIGHT
++LZLIB_VERSION = 0.4.work3-1
++LZLIB_SUBDIR  = lzlib-0.4-work3
++LZLIB_DEPENDENCIES = zlib
++LZLIB_LICENSE = MIT
 +
 +$(eval $(luarocks-package))
 -- 
