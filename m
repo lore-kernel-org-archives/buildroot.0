@@ -1,13 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 24 Feb 2014 21:37:18 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-02-23
-In-Reply-To: <CAAXf6LX0eoYHR7PUb8MvZdJFiQN29Tt8CBf8iFqY8wFa3FFetw@mail.gmail.com>
-References: <20140224073008.3ECD8100F60@stock.ovh.net>
- <CAAXf6LVNCe6OeGpe8sngvwErdQPgfbFfHg8f2mxmZBPqajL8AQ@mail.gmail.com>
- <877g8kn6qf.fsf@dell.be.48ers.dk>
- <CAAXf6LX0eoYHR7PUb8MvZdJFiQN29Tt8CBf8iFqY8wFa3FFetw@mail.gmail.com>
-Message-ID: <20140224213718.4ae77597@skate>
+Date: Mon, 24 Feb 2014 21:38:34 +0100
+Subject: [Buildroot] [PATCH 0/7] Misc set of fixes
+In-Reply-To: <CAAXf6LUT9iL353aWjybhjJoQJmfD_iKGm842Au71137q1u9B1A@mail.gmail.com>
+References: <1393196291-12636-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <CAAXf6LUT9iL353aWjybhjJoQJmfD_iKGm842Au71137q1u9B1A@mail.gmail.com>
+Message-ID: <20140224213834.0e79d1c6@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,21 +13,21 @@ To: buildroot@busybox.net
 
 Dear Thomas De Schampheleire,
 
-On Mon, 24 Feb 2014 12:37:11 +0100, Thomas De Schampheleire wrote:
+On Mon, 24 Feb 2014 09:11:40 +0100, Thomas De Schampheleire wrote:
 
-> > Yes, but that relies on the TOOLCHAIN_HEADERS_AT_LEAST_x stuff. Do we
-> > want that for 2014.02?
+> > The first three patches are fixes for build failures. The last four
+> > patches are fixes for missing dependency propagation of BR2_USE_MMU.
 > 
-> It may be very short before the deadline for a patch series like this,
-> but if you ask me, I would dare to apply it still.
+> It would be great if someone could create a script (for example based
+> on kconfiglib) that automatically verifies whether all needed
+> dependencies are in place. Since the logic to determine this is pretty
+> straightforward, it should not be th?t hard. It may take a while to
+> execute, but that shouldn't be a problem.
 
-Even though I really believe the patch series is good, I don't think it
-should be applied now. We're 4 days before the end of the month, and
-therefore before the release. It is too risky to apply such a patch
-series now. I'm fine with adding more autobuilder exceptions for now,
-until Yann series is merged after the release.
-
-Best regards,
+Maybe there's no need for a tool. Just take some configuration of
+architecture, toolchain, static lib, and other "global configurations",
+and then run "make randpackageconfig" a number of times. You might get
+some warnings telling you that there are dependency violations.
 
 Thomas
 -- 
