@@ -1,31 +1,88 @@
-From: =?ISO-8859-1?Q?Ezequiel_Garc=EDa?= <ezequiel@vanguardiasur.com.ar>
-Date: Sun, 23 Feb 2014 20:46:37 -0300
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <20140223110021.16b6b976@skate>
-References: <20140223073009.3676E101056@stock.ovh.net>
- <20140223110021.16b6b976@skate>
-Message-ID: <CAAEAJfBPQdJC3Q7pr5tmkGsWdVW9W7cJBmPOE1OWMOKo-Kj88Q@mail.gmail.com>
+From: Charles Manning <cdhmanning@gmail.com>
+Date: Mon, 24 Feb 2014 14:33:49 +1300
+Subject: [Buildroot] What's the buildroot attitude to u-boot building?
+In-Reply-To: <20140222001309.143e02f7@skate>
+References: <CAE21AQqMQmKKL0=Q55P2zQhV8+iBdpX416xK+SgZd3+ONi8Mgg@mail.gmail.com>
+ <20140222001309.143e02f7@skate>
+Message-ID: <201402241433.49892.manningc2@actrix.gen.nz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 23 February 2014 07:00, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
+On Saturday 22 February 2014 12:13:09 Thomas Petazzoni wrote:
+> Dear Charles Manning,
 >
->>      nios2 |                 minidlna-1.1.1 | NOK | http://autobuild.buildroot.net/results/2e6fa6e4891b5cc4c75943130158aa24fa77f26e/
+> On Fri, 21 Feb 2014 14:53:06 +1300, Charles Manning wrote:
+> > I am having a look at adding some stuff to generate a signed pre-loader
+> > for the SoCFPGA architecture.
 >
-> configure: error: Could not find libavformat - part of ffmpeg
-> make: *** [/home/test/test/3/output/build/minidlna-1.1.1/.stamp_configured] Error 1
->
-> Ezequiel?
->
+> As you can see, some people are already working on supporting the
+> SoCKit platform, which uses the SoCFPGA architecture.
 
-Already discussed here: http://patchwork.ozlabs.org/patch/312275/
+Yes, I am watching that closely and I hope to be able to contribute.
 
-Since it seems a compiler bug, all we can do for now is disable minidlna
-for nios2 with a note about a compiler's bug.
--- 
-Ezequiel Garc?a, VanguardiaSur
-www.vanguardiasur.com.ar
+>
+> > There seem to be two options to doing this:
+> > 1) Have it fall out of building u-boot (probably the best option once the
+> > patches I'm pushing into u-vboot have settled down)
+> > 2) Make an independent build like xloader (probably a better interum
+> > solution), since for now the SocFPGA preloader building is still somewhat
+> > haphazard and needs a magic version of u-boot.
+>
+> I'm not sure to understand here. A defconfig for a SoCFPGA platform was
+> submitted today, and a single build of U-Boot produces both the
+> pre-loader and the real U-Boot image.
+
+That is right, it does produce an SPL image, but what is produced by 
+u-boot/master is currently rubbish code that does not execute. It is only 
+about 4k instead of about 45k.
+
+These issues are being worked on.
+
+>
+> > For instance, why are there things like  BR2_TARGET_UBOOT_ETHADDR?
+> > Overriding elements of the u-boot config header by patching over them
+> > from a complete different config system (buildroot) seems to be asking
+> > for trouble.
+>
+> Why is this asking for trouble?
+
+Well when you're trying to set up a u-boot environment, it makes sense to do 
+this in one place surely? If you do some settings in one place and others 
+elsewhere, you need to dig deeper to find which has precedence etc.
+
+>
+> Anyway, I agree that these tuning options for U-Boot are a bit weird.
+> Since in U-Boot there is no separation between the configuration and
+> the definition of the hardware platform, most people should patch
+> U-Boot if they want to change their configuration.
+>
+> Options such as BR2_TARGET_UBOOT_ETHADDR have been here for many many
+> years, and we have simply kept them over time. It was added back in
+> June 2007.
+
+Why would I want to set it here and not in the u-boot config header file where 
+the other stuff is configured?
+
+>
+> While I don't find it particularly pretty, I kind of fail to see what
+> troubles you think it could cause. Could you give more details about
+> this?
+
+I have used buildroot in the past to generate u-boot + MLO and have just 
+ignored these special options, using my u-boot config instead.
+
+Now I am looking at adding some configs, or working with existing ones, to add 
+SOCFPGA handling. so I wanted to understand why things were done as they are 
+so that I could do a better job.
+
+Since there are also some socfpga patches in the pipe, I will look at those 
+and try to play along with them.
+
+Thanks
+
+Regards
+
+Charles
