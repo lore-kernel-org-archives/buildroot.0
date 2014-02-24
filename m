@@ -1,61 +1,60 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 24 Feb 2014 09:50:29 +0000
-Subject: [Buildroot] [git commit] rt-tests: fix mips+uclibc check
-In-Reply-To: <20140223175404.BAA579B92A@busybox.osuosl.org>
-References: <20140223175404.BAA579B92A@busybox.osuosl.org>
-Message-ID: <530B15E5.5080706@imgtec.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Mon, 24 Feb 2014 11:00:48 +0100
+Subject: [Buildroot] [PATCH v2 1/1] manual: add virtual package tutorial.
+In-Reply-To: <20140223190407.GE32759@free.fr>
+References: <1392390673-30343-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <CAHXCMMJuED9xj9wVS0d0d+USa=-7_MdD6ZwoKQNj3zyg2+1vpQ@mail.gmail.com>
+ <20140219141950.GA25812@pc-eric> <20140223190407.GE32759@free.fr>
+Message-ID: <20140224100047.GA24002@pc-eric>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/23/2014 05:52 PM, Peter Korsgaard wrote:
-> commit: http://git.buildroot.net/buildroot/commit/?id=088ed8dcbb061bf573a0ed5c98fff22bac6138c0
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->
-> The conditional (suggested by me) introduced in 108952 (rt-tests: disable
-> for uclibc mips) isn't actually valid kconfig syntax, causing menuconfig to
-> error out.
->
-> Rewrite it to use proper syntax.
->
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->   package/rt-tests/Config.in |    6 +++---
->   1 files changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/package/rt-tests/Config.in b/package/rt-tests/Config.in
-> index ff4284e..8940668 100644
-> --- a/package/rt-tests/Config.in
-> +++ b/package/rt-tests/Config.in
-> @@ -6,8 +6,8 @@ config BR2_PACKAGE_RT_TESTS
->   	# no NPTL for these archs
->   	depends on !BR2_avr32 && !BR2_xtensa && !BR2_arc && !BR2_bfin
->   	# no _tid field in 'struct sigevent'
-> -	depends on !BR2_TOOLCHAIN_USES_UCLIBC if (BR2_mips || BR2_mipsel || \
-> -		BR2_mips64 || BR2_mips64el)
-> +	depends on !(BR2_TOOLCHAIN_USES_UCLIBC && (BR2_mips || BR2_mipsel || \
-> +		BR2_mips64 || BR2_mips64el))
->   	help
->   	  Set of utilities for testing the real-time behaviour of a
->   	  Linux system.
-> @@ -32,5 +32,5 @@ comment "rt-tests needs a toolchain w/ threads"
->   	depends on !BR2_TOOLCHAIN_HAS_THREADS
->
->   comment "rt-tests needs an (e)glibc toolchain"
-> -	depends on BR2_TOOLCHAIN_USES_UCLIBC if (BR2_mips || BR2_mipsel || \
-> +	depends on BR2_TOOLCHAIN_USES_UCLIBC && (BR2_mips || BR2_mipsel || \
->   		BR2_mips64 || BR2_mips64el)
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+Yann, All,
 
-If I recall correctly, when I was investigating this failure before 
-submitting the fix to uClibc upstream, there were more architectures 
-with this problem. MIPS wasn't the only one. Has that been changed?
+On Sun, Feb 23, 2014 at 08:04:07PM +0100, Yann E. MORIN wrote:
+> Eric, All,
+>
+> On 2014-02-19 15:19 +0100, Eric Le Bihan spake thusly:
+> > On Tue, Feb 18, 2014 at 09:34:41PM +0100, Samuel Martin wrote:
+> > [...]
+> > > > +[[virtual-package-tutorial]]
+> > > > +How to add a virtual package
+> > > > +^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> > > > +
+> > > > +In Buildroot, a virtual package is a package whose functionalities are
+> > > > +provided by one or more packages, referred to as 'providers'.
+> > > > +
+> > > > +For example, 'OpenGL ES' is an API for 2D and 3D graphics on embedded systems.
+> > > > +The implementation of this API is different for the 'Allwinner Tech Sunxi' and
+> > > > +the 'Texas Instruments OMAP35xx' plaftorms. So +libgles+ will be a virtual
+> > > > +package and +sunxi-mali+ and +ti-gfx+ will be the providers.
+> > >
+> > > The generic way of presenting the virtual/provider "infra" in Buildroot is:
+> > > we want to use the virtual/provider infrastructure when there is one
+> > > API, but several packages implementing this API, so we want an
+> > > extensible mechanism allowing to choose what implementation we want in
+> > > the target rootfs.
+> > I will update the text in order to put emphasis on this idea.
+>
+> How are your changes going?
+>
+> There are quite a few improvements to the manual being upstreamed. Your
+> changes would make for another nice addition.
+>
+> Do you think you could resubmit sometime next week, so this has a chance
+> to go in before the release?
+I sent a patch series intended for the next branch, which features:
 
--- 
-Vincent
+- a new version of the dependency check in the virtual package infra (less
+  shell script, more make functions). All the virtual packages have been
+  updated.
+- a new version of the tutorial, which includes the fixes.
+
+But I can provide a version of the tutorial for the current version of virtual
+infra for current branch if needed.
+
+Best regards,
+ELB
