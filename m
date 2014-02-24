@@ -1,77 +1,76 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 24 Feb 2014 08:34:43 +0100
-Subject: [Buildroot] [PATCH 07/24] luarocks: allow to work with host-luajit
+Date: Mon, 24 Feb 2014 08:34:44 +0100
+Subject: [Buildroot] [PATCH 08/24] ljlinenoise: new package
 In-Reply-To: <1393227301-14874-1-git-send-email-francois.perrad@gadz.org>
 References: <1393227301-14874-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1393227301-14874-8-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1393227301-14874-9-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-when we use luajit on target
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/luainterpreter/luainterpreter.mk |    4 ++++
- package/luarocks/luarocks.mk             |   18 ++++++++++++------
- 2 files changed, 16 insertions(+), 6 deletions(-)
+ package/Config.in                  |    1 +
+ package/ljlinenoise/Config.in      |   15 +++++++++++++++
+ package/ljlinenoise/ljlinenoise.mk |   13 +++++++++++++
+ 3 files changed, 29 insertions(+)
+ create mode 100644 package/ljlinenoise/Config.in
+ create mode 100644 package/ljlinenoise/ljlinenoise.mk
 
-diff --git a/package/luainterpreter/luainterpreter.mk b/package/luainterpreter/luainterpreter.mk
-index c37d621..d5b95db 100644
---- a/package/luainterpreter/luainterpreter.mk
-+++ b/package/luainterpreter/luainterpreter.mk
-@@ -5,8 +5,12 @@
- #############################################################
- 
- LUAINTERPRETER_SOURCE =
-+HOST_LUAINTERPRETER_SOURCE =
- LUAINTERPRETER_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_LUA_INTERPRETER))
- 
- LUAINTERPRETER_ABIVER = $(call qstrip,$(BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION))
- 
- $(eval $(generic-package))
-+$(eval $(host-generic-package))
+diff --git a/package/Config.in b/package/Config.in
+index fca61d6..edff553 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -368,6 +368,7 @@ source "package/cgilua/Config.in"
+ source "package/copas/Config.in"
+ source "package/coxpcall/Config.in"
+ source "package/lbase64/Config.in"
++source "package/ljlinenoise/Config.in"
+ source "package/ljsyscall/Config.in"
+ source "package/lua-cjson/Config.in"
+ source "package/lua-ev/Config.in"
+diff --git a/package/ljlinenoise/Config.in b/package/ljlinenoise/Config.in
+new file mode 100644
+index 0000000..3d2af35
+--- /dev/null
++++ b/package/ljlinenoise/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_LJLINENOISE
++	bool "ljlinenoise"
++	select BR2_PACKAGE_LJSYSCALL
++	# ljsyscall is specifically for LuaJIT, not Lua.
++	depends on BR2_PACKAGE_LUAJIT
++	# ljsyscall is only available for some target architectures
++	depends on BR2_i386 || BR2_x86_64 || BR2_powerpc || BR2_arm || BR2_armeb
++	help
++	  ljlinenoise is a pure LuaJIT port of linenoise,
++	  a small alternative to readline and libedit.
 +
-+LUA_RUN = $(HOST_DIR)/usr/bin/$(call qstrip,$(BR2_PACKAGE_PROVIDES_LUA_INTERPRETER))
-diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
-index 86e57d2..0b99de6 100644
---- a/package/luarocks/luarocks.mk
-+++ b/package/luarocks/luarocks.mk
-@@ -9,16 +9,22 @@ LUAROCKS_SITE = http://luarocks.org/releases/
- LUAROCKS_LICENSE = MIT
- LUAROCKS_LICENSE_FILES = COPYING
- 
--HOST_LUAROCKS_DEPENDENCIES = host-lua luainterpreter
-+HOST_LUAROCKS_DEPENDENCIES = host-luainterpreter luainterpreter
- 
- LUAROCKS_CONFIG_DIR  = $(HOST_DIR)/usr/etc/luarocks
- LUAROCKS_CONFIG_FILE = $(LUAROCKS_CONFIG_DIR)/config-$(LUAINTERPRETER_ABIVER).lua
- 
-+HOST_LUAROCKS_CONF_OPT = \
-+	--prefix=$(HOST_DIR)/usr \
-+	--sysconfdir=$(LUAROCKS_CONFIG_DIR) \
-+	--with-lua=$(HOST_DIR)/usr
++	  http://fperrad.github.io/ljlinenoise/
 +
-+ifeq ($(BR2_PACKAGE_LUAJIT),y)
-+HOST_LUAROCKS_CONF_OPT += --lua-suffix=jit
-+endif
++comment "ljlinenoise needs LuaJIT"
++	depends on !BR2_PACKAGE_LUAJIT && (BR2_i386 || BR2_x86_64 || BR2_powerpc || BR2_arm || BR2_armeb)
+diff --git a/package/ljlinenoise/ljlinenoise.mk b/package/ljlinenoise/ljlinenoise.mk
+new file mode 100644
+index 0000000..69f6130
+--- /dev/null
++++ b/package/ljlinenoise/ljlinenoise.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# ljlinenoise
++#
++################################################################################
 +
- define HOST_LUAROCKS_CONFIGURE_CMDS
--	cd $(@D) && ./configure \
--		--prefix=$(HOST_DIR)/usr \
--		--sysconfdir=$(LUAROCKS_CONFIG_DIR) \
--		--with-lua=$(HOST_DIR)/usr
-+	cd $(@D) && ./configure $(HOST_LUAROCKS_CONF_OPT)
- endef
- 
- define HOST_LUAROCKS_INSTALL_CMDS
-@@ -43,4 +49,4 @@ endef
- $(eval $(host-generic-package))
- 
- LUAROCKS_RUN = LUA_PATH="$(HOST_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/?.lua" \
--	$(HOST_DIR)/usr/bin/lua $(HOST_DIR)/usr/bin/luarocks
-+	$(LUA_RUN) $(HOST_DIR)/usr/bin/luarocks
++LJLINENOISE_VERSION_UPSTREAM = 0.1.1
++LJLINENOISE_VERSION = $(LJLINENOISE_VERSION_UPSTREAM)-1
++LJLINENOISE_SUBDIR  = ljlinenoise-$(LJLINENOISE_VERSION_UPSTREAM)
++LJLINENOISE_LICENSE = MIT
++LJLINENOISE_LICENSE_FILES = $(LJLINENOISE_SUBDIR)/COPYRIGHT
++
++$(eval $(luarocks-package))
 -- 
 1.7.9.5
