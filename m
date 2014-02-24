@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 24 Feb 2014 08:34:47 +0100
-Subject: [Buildroot] [PATCH 11/24] lua-iconv: new package
+Date: Mon, 24 Feb 2014 08:34:48 +0100
+Subject: [Buildroot] [PATCH 12/24] luajson: new package
 In-Reply-To: <1393227301-14874-1-git-send-email-francois.perrad@gadz.org>
 References: <1393227301-14874-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1393227301-14874-12-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1393227301-14874-13-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,57 +13,56 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/Config.in              |    1 +
- package/lua-iconv/Config.in    |    9 +++++++++
- package/lua-iconv/lua-iconv.mk |   13 +++++++++++++
- 3 files changed, 23 insertions(+)
- create mode 100644 package/lua-iconv/Config.in
- create mode 100644 package/lua-iconv/lua-iconv.mk
+ package/Config.in          |    1 +
+ package/luajson/Config.in  |    8 ++++++++
+ package/luajson/luajson.mk |   13 +++++++++++++
+ 3 files changed, 22 insertions(+)
+ create mode 100644 package/luajson/Config.in
+ create mode 100644 package/luajson/luajson.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 29a0245..5f3ef17 100644
+index 5f3ef17..e65d71d 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -374,6 +374,7 @@ source "package/ljsyscall/Config.in"
- source "package/lpeg/Config.in"
- source "package/lua-cjson/Config.in"
- source "package/lua-ev/Config.in"
-+source "package/lua-iconv/Config.in"
- source "package/lua-msgpack-native/Config.in"
- source "package/luasql-sqlite3/Config.in"
- source "package/luabitop/Config.in"
-diff --git a/package/lua-iconv/Config.in b/package/lua-iconv/Config.in
+@@ -382,6 +382,7 @@ source "package/luacrypto/Config.in"
+ source "package/luaexpat/Config.in"
+ source "package/luaexpatutils/Config.in"
+ source "package/luafilesystem/Config.in"
++source "package/luajson/Config.in"
+ source "package/luaposix/Config.in"
+ source "package/luasec/Config.in"
+ source "package/luasocket/Config.in"
+diff --git a/package/luajson/Config.in b/package/luajson/Config.in
 new file mode 100644
-index 0000000..2d9248c
+index 0000000..9be7d25
 --- /dev/null
-+++ b/package/lua-iconv/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_LUA_ICONV
-+	bool "lua-iconv"
-+	select BR2_PACKAGE_LIBICONV
-+	depends on !BR2_ENABLE_LOCALE
-+	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
++++ b/package/luajson/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_LUAJSON
++	bool "luajson"
++	select BR2_PACKAGE_LPEG
 +	help
-+	  Lua binding to the POSIX 'iconv' library
++	  LuaJSON is a customizable JSON decoder/encoder
++	  using LPEG for parsing.
 +
-+	  http://ittner.github.io/lua-iconv/
-diff --git a/package/lua-iconv/lua-iconv.mk b/package/lua-iconv/lua-iconv.mk
++	  http://github.com/harningt/luajson
+diff --git a/package/luajson/luajson.mk b/package/luajson/luajson.mk
 new file mode 100644
-index 0000000..edb901e
+index 0000000..88db6b0
 --- /dev/null
-+++ b/package/lua-iconv/lua-iconv.mk
++++ b/package/luajson/luajson.mk
 @@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# lua-iconv
++# luajson
 +#
 +################################################################################
 +
-+LUA_ICONV_VERSION_UPSTREAM = 7
-+LUA_ICONV_VERSION = $(LUA_ICONV_VERSION_UPSTREAM)-1
-+LUA_ICONV_SUBDIR  = lua-iconv-$(LUA_ICONV_VERSION_UPSTREAM)
-+LUA_ICONV_LICENSE = MIT
-+LUA_ICONV_LICENSE_FILES = $(LUA_ICONV_SUBDIR)/COPYING
++LUAJSON_VERSION_UPSTREAM = 1.3.2
++LUAJSON_VERSION = $(LUAJSON_VERSION_UPSTREAM)-1
++LUAJSON_SUBDIR  = luajson
++LUAJSON_LICENSE = MIT
++LUAJSON_LICENSE_FILES = $(LUAJSON_SUBDIR)/LICENSE
 +
 +$(eval $(luarocks-package))
 -- 
