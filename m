@@ -1,52 +1,51 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 24 Feb 2014 12:37:11 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-02-23
-In-Reply-To: <877g8kn6qf.fsf@dell.be.48ers.dk>
-References: <20140224073008.3ECD8100F60@stock.ovh.net>
- <CAAXf6LVNCe6OeGpe8sngvwErdQPgfbFfHg8f2mxmZBPqajL8AQ@mail.gmail.com>
- <877g8kn6qf.fsf@dell.be.48ers.dk>
-Message-ID: <CAAXf6LX0eoYHR7PUb8MvZdJFiQN29Tt8CBf8iFqY8wFa3FFetw@mail.gmail.com>
+Date: Mon, 24 Feb 2014 12:38:22 +0100
+Subject: [Buildroot] [PATCH 03/13] manual: document minimal kernel
+	headers dependency
+In-Reply-To: <1249d9593e127149e2634d7224be38baac0f8850.1393198603.git.yann.morin.1998@free.fr>
+References: <cover.1393198603.git.yann.morin.1998@free.fr>
+ <1249d9593e127149e2634d7224be38baac0f8850.1393198603.git.yann.morin.1998@free.fr>
+Message-ID: <CAAXf6LWOgVZ55U8C7XruiLoX8AetYPnPCTspF3uK6Eoxj+QkhQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Feb 24, 2014 at 11:30 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+On Mon, Feb 24, 2014 at 12:40 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 >
->  > [Peter: a few of these problems have patches in the queue. Could you
->  > apply these?]
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Samuel Martin <s.martin49@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 >
-> Which ones exactly?
+> ---
+> Changes v1 -> v2:
+>   - fix typo  (Samuel)
+>   - fix asciidoc syntax  (Thomas DS)
+> ---
+>  docs/manual/adding-packages-directory.txt | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>
+> diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+> index 40e543c..ead3570 100644
+> --- a/docs/manual/adding-packages-directory.txt
+> +++ b/docs/manual/adding-packages-directory.txt
+> @@ -218,6 +218,12 @@ use in the comment.
+>  ** Dependency symbol: +BR2_USE_MMU+
+>  ** Comment string: no comment to be added
+>
+> +* Kernel headers
+> +** Dependency symbol: +BR2_TOOLCHAIN_HEADERS_AT_LEAST_X_Y+, (replace
+> +   +X_Y+ with the proper version, see +toolchain/toolchain-common.in+)
+> +** Comment string: +headers >= X.Y+ (replace +X.Y+ with the
+> +   proper version)
+> +
+>  * C library
+>  ** Dependency symbol: +BR2_TOOLCHAIN_USES_GLIBC+,
+>  +BR2_TOOLCHAIN_USES_UCLIBC+
+> --
 
-The ones mentioned below, indeed...
-
->
->
->  >> libsecret-0.15 | 1
->  >      avr32 |                 libsecret-0.15 | NOK |
->  > http://autobuild.buildroot.net/results/2d41f97378f06d0f3922e078ec0d02549690d4c1/
->
->  > Patch available: http://patchwork.ozlabs.org/patch/323392/
->
-> Was applied yesterday.
-
-Great, thanks, I didn't see that.
-
->
->
->  >> tvheadend-c7d0335eb10d02b78... | 1
->
->  > Too old kernel headers (SYS_TURBO), patch available:
->  > http://patchwork.ozlabs.org/patch/323403/
->
-> Yes, but that relies on the TOOLCHAIN_HEADERS_AT_LEAST_x stuff. Do we
-> want that for 2014.02?
-
-It may be very short before the deadline for a patch series like this,
-but if you ask me, I would dare to apply it still.
-
-Best regards,
-Thomas
+Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
