@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 Feb 2014 18:19:00 +0100
+Date: Mon, 24 Feb 2014 18:59:22 +0100
 Subject: [Buildroot] [PATCH] package/linux-headers: remove 2.6 snapshot
 In-Reply-To: <530AEFC9.1040508@mind.be>
 References: <1393187673-16648-1-git-send-email-yann.morin.1998@free.fr>
  <530AEFC9.1040508@mind.be>
-Message-ID: <20140224171900.GA31131@free.fr>
+Message-ID: <20140224175922.GA11048@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -55,9 +55,13 @@ On 2014-02-24 08:07 +0100, Arnout Vandecappelle spake thusly:
 > support should mention that the same can be achieved by using
 > BR2_LINUX_KERNEL_CUSTOM_TARBALL.
 
-Right, I forgot that. Thanks for spotting it! :-)
+In retrospect, BR2_LINUX_KERNEL_CUSTOM_TARBALL is for building the
+kernel. It is not used to install the headers, which is what we are
+doing here.
 
-Regards,
+We still need to add a legacy option, though.
+
+Regarrds,
 Yann E. MORIN.
 
 -- 
