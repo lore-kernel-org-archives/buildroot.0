@@ -1,36 +1,63 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 24 Feb 2014 09:37:33 +0100
-Subject: [Buildroot] [PATCH] libtool: fix build on systems with
-	automake-1.11 (e.g. Fedora 10)
-In-Reply-To: <1392937787-23542-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Fri, 21 Feb 2014 00:09:47 +0100")
-References: <1392937787-23542-1-git-send-email-arnout@mind.be>
-Message-ID: <87fvn8nbxu.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 24 Feb 2014 08:58:23 +0100
+Subject: [Buildroot] [git commit] cairo: improve the Blackfin build fix
+Message-ID: <20140224083833.6063899B79@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=848c5b948092c7904a53119e7760e61c391667e9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > package/libtool/libtool-0001-mips64-n64-linking.patch touches an m4
- > file, so applying it triggers a run of autoconf, automake, etc. This
- > sometimes leads to build failures due to incompatible system autotools.
- > This was observed on Fedora 10, which has automake 1.11 while the
- > generated files that are included in the tarball require automake
- > 1.11.1.
+Patch cairo-001-blackfin-build-fix.patch was added in commit
+d372d0b6777f52cd493dc0a892593d4390536ec5 ('cairo: add patch to fix
+Blackfin build failure') to take into account the fact that Blackfin
+has a non-empty USER_LABEL_PREFIX: C symbol 'foo' corresponds to
+assembly symbol '_foo', contrary to most other architectures where
+they are the same.
 
- > We cannot simply set HOST_LIBTOOL_AUTORECONF = YES because that would
- > create a circular dependency on host-libtool. Therefore, the patch
- > patch is applied on the installed libtool.m4 instead of in the source
- > tree. Then, it also needs to be renamed to something that doesn't
- > match buildroot's patch convention so it doesn't get picked up
- > automatically.
+However, the patch was only fixing the relevant macros in
+src/cairo-compiler-private.h and did not take into account the
+duplicated version of these macros in
+util/cairo-script/cairo-script-private.h. This commit fixes that.
 
- > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+This commit is fixing a build failure on Blackfin, for which there was
+no recorded autobuilder result because this problem was hidden by the
+problem fixed by the previous commit ('cairo: fix build on Blackfin in
+test/cairo-test-runner.c').
 
-Committed, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/cairo/cairo-001-blackfin-build-fix.patch |   19 +++++++++++++++++++
+ 1 files changed, 19 insertions(+), 0 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/cairo/cairo-001-blackfin-build-fix.patch b/package/cairo/cairo-001-blackfin-build-fix.patch
+index 94dff6b..0e8dd3a 100644
+--- a/package/cairo/cairo-001-blackfin-build-fix.patch
++++ b/package/cairo/cairo-001-blackfin-build-fix.patch
+@@ -34,3 +34,22 @@ Index: b/src/cairo-compiler-private.h
+  #else
+  # define slim_hidden_proto(name)		int _cairo_dummy_prototype(void)
+  # define slim_hidden_proto_no_warn(name)	int _cairo_dummy_prototype(void)
++Index: b/util/cairo-script/cairo-script-private.h
++===================================================================
++--- a/util/cairo-script/cairo-script-private.h
+++++ b/util/cairo-script/cairo-script-private.h
++@@ -109,12 +109,13 @@
++ 	__asm__ (slim_hidden_asmname (internal))
++ # define slim_hidden_def1(name, internal)				\
++   extern __typeof (name) EXT_##name __asm__(slim_hidden_asmname(name))	\
++-	__attribute__((__alias__(slim_hidden_asmname(internal))))
+++	__attribute__((__alias__(slim_hidden_realname(internal))))
++ # define slim_hidden_ulp		slim_hidden_ulp1(__USER_LABEL_PREFIX__)
++ # define slim_hidden_ulp1(x)		slim_hidden_ulp2(x)
++ # define slim_hidden_ulp2(x)		#x
++ # define slim_hidden_asmname(name)	slim_hidden_asmname1(name)
++ # define slim_hidden_asmname1(name)	slim_hidden_ulp #name
+++# define slim_hidden_realname(name)     #name
++ #else
++ # define slim_hidden_proto(name)		int _csi_dummy_prototype(void)
++ # define slim_hidden_proto_no_warn(name)	int _csi_dummy_prototype(void)
