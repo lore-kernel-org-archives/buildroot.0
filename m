@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 24 Feb 2014 08:34:53 +0100
-Subject: [Buildroot] [PATCH 17/24] lua-coat: new package
+Date: Mon, 24 Feb 2014 08:34:54 +0100
+Subject: [Buildroot] [PATCH 18/24] lua-coatpersistent: new package
 In-Reply-To: <1393227301-14874-1-git-send-email-francois.perrad@gadz.org>
 References: <1393227301-14874-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1393227301-14874-18-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1393227301-14874-19-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,54 +13,56 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/Config.in            |    1 +
- package/lua-coat/Config.in   |    6 ++++++
- package/lua-coat/lua-coat.mk |   13 +++++++++++++
- 3 files changed, 20 insertions(+)
- create mode 100644 package/lua-coat/Config.in
- create mode 100644 package/lua-coat/lua-coat.mk
+ package/Config.in                                |    1 +
+ package/lua-coatpersistent/Config.in             |    8 ++++++++
+ package/lua-coatpersistent/lua-coatpersistent.mk |   13 +++++++++++++
+ 3 files changed, 22 insertions(+)
+ create mode 100644 package/lua-coatpersistent/Config.in
+ create mode 100644 package/lua-coatpersistent/lua-coatpersistent.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 7b6ace6..c494d64 100644
+index c494d64..3ed5f34 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -375,6 +375,7 @@ source "package/ljsyscall/Config.in"
- source "package/lpeg/Config.in"
+@@ -376,6 +376,7 @@ source "package/lpeg/Config.in"
  source "package/lrandom/Config.in"
  source "package/lua-cjson/Config.in"
-+source "package/lua-coat/Config.in"
+ source "package/lua-coat/Config.in"
++source "package/lua-coatpersistent/Config.in"
  source "package/lua-ev/Config.in"
  source "package/lua-iconv/Config.in"
  source "package/lua-msgpack-native/Config.in"
-diff --git a/package/lua-coat/Config.in b/package/lua-coat/Config.in
+diff --git a/package/lua-coatpersistent/Config.in b/package/lua-coatpersistent/Config.in
 new file mode 100644
-index 0000000..f6ba6cf
+index 0000000..581f927
 --- /dev/null
-+++ b/package/lua-coat/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_LUA_COAT
-+	bool "lua-coat"
++++ b/package/lua-coatpersistent/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_LUA_COATPERSISTENT
++	bool "lua-coatpersistent"
++	select BR2_PACKAGE_DADO
++	select BR2_PACKAGE_LUA_COAT
 +	help
-+	  Yet Another Lua Object-Oriented Model
++	  an ORM for lua-Coat
 +
-+	  http://fperrad.github.io/lua-Coat/
-diff --git a/package/lua-coat/lua-coat.mk b/package/lua-coat/lua-coat.mk
++	  http://fperrad.github.io/lua-CoatPersistent/
+diff --git a/package/lua-coatpersistent/lua-coatpersistent.mk b/package/lua-coatpersistent/lua-coatpersistent.mk
 new file mode 100644
-index 0000000..a9d9143
+index 0000000..3dc9861
 --- /dev/null
-+++ b/package/lua-coat/lua-coat.mk
++++ b/package/lua-coatpersistent/lua-coatpersistent.mk
 @@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# lua-coat
++# lua-coatpersistent
 +#
 +################################################################################
 +
-+LUA_COAT_VERSION_UPSTREAM = 0.9.0
-+LUA_COAT_VERSION = $(LUA_COAT_VERSION_UPSTREAM)-1
-+LUA_COAT_SUBDIR  = lua-Coat-$(LUA_COAT_VERSION_UPSTREAM)
-+LUA_COAT_LICENSE = MIT
-+LUA_COAT_LICENSE_FILES = $(LUA_COAT_SUBDIR)/COPYRIGHT
++LUA_COATPERSISTENT_VERSION_UPSTREAM = 0.2.0
++LUA_COATPERSISTENT_VERSION = $(LUA_COATPERSISTENT_VERSION_UPSTREAM)-1
++LUA_COATPERSISTENT_SUBDIR  = lua-CoatPersistent-$(LUA_COATPERSISTENT_VERSION_UPSTREAM)
++LUA_COATPERSISTENT_LICENSE = MIT
++LUA_COATPERSISTENT_LICENSE_FILES = $(LUA_COATPERSISTENT_SUBDIR)/COPYRIGHT
 +
 +$(eval $(luarocks-package))
 -- 
