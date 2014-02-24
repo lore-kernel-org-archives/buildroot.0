@@ -1,39 +1,46 @@
-From: Anton Kolesov <Anton.Kolesov@synopsys.com>
-Date: Mon, 24 Feb 2014 01:43:40 +0000
-Subject: [Buildroot] [PATCH] external toolchain: [ARC] gcc cpu parameter
-In-Reply-To: <20140223121147.3c24dde4@skate>
-References: <884EA965490E3C4D8E66AEF41E98025006BF3A@ezex10.ezchip.com>
- <20140223104807.473b5d47@skate>
- <884EA965490E3C4D8E66AEF41E98025006C2AD@ezex10.ezchip.com>
- <20140223121147.3c24dde4@skate>
-Message-ID: <39A54937CC95F24AA2F794E2D2B66B1356C6F746@de02wembxa.internal.synopsys.com>
+From: Charles Manning <cdhmanning@gmail.com>
+Date: Mon, 24 Feb 2014 15:26:41 +1300
+Subject: [Buildroot] [PATCH v2] configs: add SoCkit defconfig
+In-Reply-To: <1393005432-14285-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
+References: <1393005432-14285-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
+Message-ID: <201402241526.41765.manningc2@actrix.gen.nz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello Sebasitian
 
-> 
-> I'm Cc'ing Anton, from Synposys, to get more details about this.
+> +Copy the rootfs :
+> +
+> +  $ sudo dd if=rootfs.ext2 of=/dev/mmcblk0p2 bs=64k
 
-I've connected Noam and compiler engineering, so they can discuss what to do about this inconsistency.
+It is advisable to do:
 
-> 
-> Noam, which ARC external toolchain are you using? Maybe it's an older
-> ARC toolchain, and Synopsys has since then changed the possible -mcpu
-> values?
+sudo sync 
 
-Nope, this is the same for the current tools as well :-(
+at this stage. Some hosts do async writing to block devices and popping the SD 
+card after a write (particularly a large one) can end up losing data.
 
-Anton
 
-> 
-> Best regards,
-> 
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="socfpga_cyclone5"
+
+> +BR2_TARGET_UBOOT_BOARDNAME="socfpga_cyclone5"
+
+IMHO, this way of doing sockit board support is ugly because it stomps over 
+socfpga_cyclone5 breaks builds for that board . I know that this is the way 
+most people are doing it, but still...
+
+
+It is probably better if this is handled with proper boards.
+
+There is some work that Walter Lozano and I are doing which helps move this 
+along. There is some discussion on the rocketboard RFI ML.
+
+I am going to try to get a github repository of u-boot up that builds this as 
+socfpga_cyclone5 and then get the rocketboard people to merge it.
+
+Regards
+
+Charles
