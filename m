@@ -1,60 +1,55 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 24 Feb 2014 20:18:27 +0100
-Subject: [Buildroot] [PATCH 03/13] manual: document minimal kernel
-	headers dependency
-In-Reply-To: <1249d9593e127149e2634d7224be38baac0f8850.1393198603.git.yann.morin.1998@free.fr>
-References: <cover.1393198603.git.yann.morin.1998@free.fr>
- <1249d9593e127149e2634d7224be38baac0f8850.1393198603.git.yann.morin.1998@free.fr>
-Message-ID: <530B9B03.1070500@mind.be>
+Date: Mon, 24 Feb 2014 20:44:45 +0100
+Subject: [Buildroot] [PATCH 01/24] lua: remove LUA_INSTALLED_FILES
+In-Reply-To: <1393227301-14874-2-git-send-email-francois.perrad@gadz.org>
+References: <1393227301-14874-1-git-send-email-francois.perrad@gadz.org>
+ <1393227301-14874-2-git-send-email-francois.perrad@gadz.org>
+Message-ID: <530BA12D.8040207@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 24/02/14 00:40, Yann E. MORIN wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On 24/02/14 08:34, Francois Perrad wrote:
+> useless since previous commit (remove uninstall commands)
+> see http://git.buildroot.net/buildroot/commit/package/lua/lua.mk?id=eb7bd9ef617e5ddc8241981e7896d5b3f30ed9ee
+
+ This should be
+
+Useless since the uninstall commands were removed in eb7bd9ef
+
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Samuel Martin <s.martin49@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- However, this patch should only come after 8/13 - until all the
-toolchain backends support this option, it should _not_ be used.
 
- Regards,
- Arnout
-
-> 
 > ---
-> Changes v1 -> v2:
->   - fix typo  (Samuel)
->   - fix asciidoc syntax  (Thomas DS)
-> ---
->  docs/manual/adding-packages-directory.txt | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  package/lua/lua.mk |   11 -----------
+>  1 file changed, 11 deletions(-)
 > 
-> diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-> index 40e543c..ead3570 100644
-> --- a/docs/manual/adding-packages-directory.txt
-> +++ b/docs/manual/adding-packages-directory.txt
-> @@ -218,6 +218,12 @@ use in the comment.
->  ** Dependency symbol: +BR2_USE_MMU+
->  ** Comment string: no comment to be added
+> diff --git a/package/lua/lua.mk b/package/lua/lua.mk
+> index 2c867f6..a20531c 100644
+> --- a/package/lua/lua.mk
+> +++ b/package/lua/lua.mk
+> @@ -104,16 +104,5 @@ define HOST_LUA_INSTALL_CMDS
+>  	$(INSTALL) -m 0644 -D $(@D)/src/lauxlib.h $(HOST_DIR)/usr/include/lauxlib.h
+>  endef
 >  
-> +* Kernel headers
-> +** Dependency symbol: +BR2_TOOLCHAIN_HEADERS_AT_LEAST_X_Y+, (replace
-> +   +X_Y+ with the proper version, see +toolchain/toolchain-common.in+)
-> +** Comment string: +headers >= X.Y+ (replace +X.Y+ with the
-> +   proper version)
-> +
->  * C library
->  ** Dependency symbol: +BR2_TOOLCHAIN_USES_GLIBC+,
->  +BR2_TOOLCHAIN_USES_UCLIBC+
+> -LUA_INSTALLED_FILES = \
+> -	/usr/include/lua.h \
+> -	/usr/include/luaconf.h \
+> -	/usr/include/lualib.h \
+> -	/usr/include/lauxlib.h \
+> -	/usr/lib/pkgconfig/lua.pc \
+> -	/usr/bin/lua \
+> -	/usr/bin/luac \
+> -	/usr/lib/liblua.a \
+> -	/usr/lib/liblua.so*
+> -
+>  $(eval $(generic-package))
+>  $(eval $(host-generic-package))
 > 
 
 
