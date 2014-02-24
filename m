@@ -1,67 +1,54 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Mon, 24 Feb 2014 10:25:42 +0100
-Subject: [Buildroot] [PATCH v2 2/2] systemd: enable required kernel features.
-In-Reply-To: <1393233942-11638-1-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1393233942-11638-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <1393233942-11638-3-git-send-email-eric.le.bihan.dev@free.fr>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 24 Feb 2014 09:47:10 +0000
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <CALq67GAwyaeTrXofN71m+g7uNW1Lx8bTALgvT+skqgB7uXr45w@mail.gmail.com>
+References: <20140221073009.2E62F10136B@stock.ovh.net>
+ <20140221100842.2d988a70@skate>
+ <CALq67GAwyaeTrXofN71m+g7uNW1Lx8bTALgvT+skqgB7uXr45w@mail.gmail.com>
+Message-ID: <530B151E.90909@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When systemd is chosen as init system, the required kernel features are
-enabled.
+On 02/22/2014 09:54 PM, Ryan Barnett wrote:
+> Thomas and Vicente,
+>
+> On Fri, Feb 21, 2014 at 10:08 AM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>
+>>>      mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/c76e6f8b2d7fc29abc2f4dcae962b60cf91a8e0c/
+>>
+>> Usual rt-tests failure on mipsel, fixed by a bump of rt-tests, but
+>> which was committed to next.
+>
+> rt-tests was not bumped on next but rather ltp-testsuite was to fix an
+> issue. However, Vicente submitted a patch to uclibc that will add for
+> _tid specifically targeted for this package. Is this something that
+> could be backported to our uclibc version?
+>
+> Specifically the commit is as follows:
+>
+> http://git.uclibc.org/uClibc/commit/?id=b4e6e61e2f7c6fb4bf59f66efaa74591a2112912
+>
+> Another option to fix the rt-tests-0.83 failures is to disable
+> rt-tests when uclibc for mipsel is used.
+>
+> This is what I found when I was investigating a recent rt-tests-0.83
+> autobuilder failure. I will not have time backport Vicente's patch but
+> I may have time to submit a patch to disable this package in the way
+> that is described above.
+>
+> Thanks,
+> -Ryan
+>
 
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
----
- linux/linux.mk            |    6 +++++-
- package/systemd/Config.in |   16 ++++++++++++++--
- 2 files changed, 19 insertions(+), 3 deletions(-)
+If we decide to not add more uClibc patches on BR, then I think we 
+should disable this package for uClibc + mips. Is useless to always have 
+an autobuild failure that you already know where the problem is but you 
+are not going to fix it. FIx it or disable that package. This autobuild 
+failure is just more nonsense flood.
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index d7f51b3..f948e6c 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -195,7 +195,11 @@ define LINUX_CONFIGURE_CMDS
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_FUNCTION_TRACER,$(@D)/.config))
- 	$(if $(BR2_PACKAGE_SYSTEMD),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUPS,$(@D)/.config)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER,$(@D)/.config))
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_FHANDLE,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_AUTOFS4_FS,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_TMPFS_POSIX_ACL,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_TMPFS_POSIX_XATTR,$(@D)/.config))
- 	$(if $(BR2_LINUX_KERNEL_APPENDED_DTB),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_APPENDED_DTB,$(@D)/.config))
- 	yes '' | $(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) oldconfig
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index eacc23c..4f180a1 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -26,8 +26,20 @@ config BR2_PACKAGE_SYSTEMD
- 	  elaborate transactional dependency-based service control logic.
- 	  It can work as a drop-in replacement for sysvinit.
- 
--	  Systemd requires a Linux kernel >= 3.0, with inotify, devtmpfs,
--	  tmpfs vfs and tmpfs POSIX ACL enabled.
-+	  Systemd requires a Linux kernel >= 3.0 with the following options
-+	  enabled:
-+
-+	  - CONFIG_CGROUPS
-+	  - CONFIG_INOTIFY_USER
-+	  - CONFIG_FHANDLE
-+	  - CONFIG_AUTOFS4_FS
-+	  - CONFIG_TMPFS_POSIX_ACL
-+	  - CONFIG_TMPFS_XATTR
-+
-+	  These options will be automatically enabled by Buildroot if
-+	  it is responsible for building the kernel. Otherwise, if you
-+	  are building your kernel outside of Buildroot, make sure
-+	  these options are enabled.
- 
- 	  Systemd also provides udev, the userspace device daemon.
- 
 -- 
-1.7.9.5
+Vincent
