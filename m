@@ -1,46 +1,33 @@
-From: Lucas Zampar Bernardi <lucas.zampar@gmail.com>
-Date: Mon, 24 Feb 2014 19:58:52 -0300
-Subject: [Buildroot] [PATCH] Added support for linux headers for testing
-	versions to
-Message-ID: <530BCEAC.5080605@gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 25 Feb 2014 00:41:14 +0100
+Subject: [Buildroot] [PATCH] gst-fsl-plugins: add missing librt linking
+	for libgstfsl.
+In-Reply-To: <1393267845-15148-1-git-send-email-ps.report@gmx.net> (Peter
+ Seiderer's message of "Mon, 24 Feb 2014 19:50:45 +0100")
+References: <1393267845-15148-1-git-send-email-ps.report@gmx.net>
+Message-ID: <87ha7okrj9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch add support to build a buildroot toolchain using a testing 
-version of linux kernel headers.
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
+ > Fixes runtime failure of gst-fsl-plugins, e.g.
+ > (gst-plugin-scanner:1700): GStreamer-WARNING **: Failed to load
+ >         plugin '/usr/lib/gstreamer-0.10/libmfw_vpu.so':
+ >         /usr/lib/libgstfsl-0.10.so.0: undefined symbol: shm_open)
 
- From f8f0f306b9970a3b39774a43b7b47aad8692673d Mon Sep 17 00:00:00 2001
-From: Lucas Zampar Bernardi <lucas@writesys.com.br>
-Date: Mon, 24 Feb 2014 19:54:30 -0300
-Subject: [PATCH] Added support for linux headers for testing versions to
-  build cross-compile tools
+ > when compiled with buildroot/glibc toolchain.
 
----
-  package/linux-headers/linux-headers.mk |    6 ++++++
-  1 file changed, 6 insertions(+)
+ > See also old buildroot mailing list request [1].
 
-diff --git a/package/linux-headers/linux-headers.mk 
-b/package/linux-headers/linux-headers.mk
-index 086e5d5..d6e9dbb 100644
---- a/package/linux-headers/linux-headers.mk
-+++ b/package/linux-headers/linux-headers.mk
-@@ -13,6 +13,12 @@ LINUX_HEADERS_SITE = 
-$(BR2_KERNEL_MIRROR)/linux/kernel/v2.6/
-  else
-  LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v3.x/
-  endif
-+
-+# release candidates are in testing/ subdir
-+ifneq ($(findstring -rc,$(LINUX_HEADERS_VERSION)),)
-+LINUX_HEADERS_SITE := $(LINUX_HEADERS_SITE)testing/
-+endif
-+
-  LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.xz
+ > [1] http://lists.busybox.net/pipermail/buildroot/2013-June/073910.html
 
-  LINUX_HEADERS_INSTALL_STAGING = YES
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+
+Committed, thanks.
+
 -- 
-1.7.9.5
+Bye, Peter Korsgaard
