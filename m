@@ -1,29 +1,35 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 25 Feb 2014 11:48:56 -0300
-Subject: [Buildroot] [PATCH] thrift: needs host-bison
-In-Reply-To: <OF76D54DB6.483F34BD-ON86257C8A.0048BD1E-86257C8A.00492E7B@rockwellcollins.com>
-References: <1393332928-28879-1-git-send-email-gustavo@zacarias.com.ar>
- <OF76D54DB6.483F34BD-ON86257C8A.0048BD1E-86257C8A.00492E7B@rockwellcollins.com>
-Message-ID: <530CAD58.50106@zacarias.com.ar>
+Date: Tue, 25 Feb 2014 11:56:46 -0300
+Subject: [Buildroot] [PATCH] strongswan: needs threads
+Message-ID: <1393340206-8878-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/25/2014 10:19 AM, Ryan Barnett wrote:
+Fixes:
+http://autobuild.buildroot.net/results/e23/e2394705545dad8e33ffc558df518014c15f5271/
 
-> I believe Thomas P submitted a patch today or last night that does 
-> something similar and was accepted. However it doesn't appear that he 
-> added a dependancy on the thrift package itself.
-> 
-> http://patchwork.ozlabs.org/patch/323781/
-> 
-> Thanks,
-> -Ryan
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/strongswan/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Right, mail backlog and no morning pull got me.
-I've already superseeded it in patchwork.
-Having it for thrift itself is mostly correctness at the moment since it
-depends on host-thrift, just if in the (unlikely) future of that changing.
-Regards.
+diff --git a/package/strongswan/Config.in b/package/strongswan/Config.in
+index 63316cb..d53da64 100644
+--- a/package/strongswan/Config.in
++++ b/package/strongswan/Config.in
+@@ -1,6 +1,10 @@
++comment "strongswan needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
++
+ menuconfig BR2_PACKAGE_STRONGSWAN
+ 	bool "strongswan"
+ 	depends on BR2_USE_MMU # fork()
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  strongSwan is an OpenSource IPsec implementation for the
+ 	  Linux operating system. It is based on the discontinued
+-- 
+1.8.3.2
