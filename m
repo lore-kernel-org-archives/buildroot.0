@@ -1,37 +1,39 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 25 Feb 2014 21:32:43 +0100
-Subject: [Buildroot] [PATCH v2 2/2] systemd: enable required kernel
-	features.
-In-Reply-To: <530CCD06.3070008@mind.be>
-References: <1393233942-11638-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1393233942-11638-3-git-send-email-eric.le.bihan.dev@free.fr>
- <530CCD06.3070008@mind.be>
-Message-ID: <CAHXCMMJamG_ku6OU9CCG8bgnpwiDHhLrtMcFi=L1eqCRoBR3uA@mail.gmail.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Tue, 25 Feb 2014 21:38:32 +0100
+Subject: [Buildroot] [PATCH v2 2/2] manual: add virtual package tutorial.
+In-Reply-To: <CAHXCMM+zjqV=jtyN64aVnPU+CYn1mkw35i_NVGu5XnRX=jcngg@mail.gmail.com>
+References: <1393343137-4209-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <1393343137-4209-3-git-send-email-eric.le.bihan.dev@free.fr>
+ <CAHXCMM+zjqV=jtyN64aVnPU+CYn1mkw35i_NVGu5XnRX=jcngg@mail.gmail.com>
+Message-ID: <20140225203831.GA3340@milhouse>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Feb 25, 2014 at 6:04 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 24/02/14 10:25, Eric Le Bihan wrote:
->> When systemd is chosen as init system, the required kernel features are
->> enabled.
->>
->> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Hi!
+
+On Tue, Feb 25, 2014 at 09:01:54PM +0100, Samuel Martin wrote:
+> Hi Eric,
 >
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
-
+> On Tue, Feb 25, 2014 at 4:45 PM, Eric Le Bihan
+> <eric.le.bihan.dev@free.fr> wrote:
+> [...]
+> > +
+> > +Provider +Config.in+ file
+> > +^^^^^^^^^^^^^^^^^^^^^^^^^
+> > +
+> > +The +Config.in+ file of the package 'some-provider', which provides the
+> > +functionalities of 'something-virtual', should contain:
+> > +
 >
->  However, it would be good to add the same information to the end of
-> docs/manual/configure.txt
+> No word about the provider's *.mk file which does not need any change?
+I added a line about it, but when I converted the example to plain section, I
+have not noticed that the line stayed above the targeted section ("D'Oh"^5)...
+Will fix.
 
-May be good indeed, but it can be done in another patch.
+Thanks for your reviews!
 
-
-Regards,
-
--- 
-Samuel
+Best regards,
+ELB
