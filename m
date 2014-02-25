@@ -1,31 +1,33 @@
-From: Frank Ihle <frank.ihle@hs-offenburg.de>
-Date: Tue, 25 Feb 2014 10:04:34 +0100
-Subject: [Buildroot] In Buildroot, how to compile kernel modules
-Message-ID: <530C6AB2020000460004B173@gwia2.rz.hs-offenburg.de>
+From: Sven Neumann <neumann@teufel.de>
+Date: Tue, 25 Feb 2014 10:30:28 +0100
+Subject: [Buildroot] [PATCH] libpng: bump to version 1.6.9
+Message-ID: <1393320628-10918-1-git-send-email-neumann@teufel.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi everyone,
+This also fixes the download URL as oudated versions have been
+moved to the "older-releases" sub-folder.
 
-the Internet and the buildroot manual couldn't help me out. I have a .c code which should be compiled to a .ko kernel module. Right now I'm doing this separately, the steps are: 
+Signed-off-by: Sven Neumann <neumann@teufel.de>
+---
+ package/libpng/libpng.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-1. I run "make" of buildroot
-2. Building the kernel module with the link to the linux kernel, that buildroot has downloaded.
-3. After another make of buildroot, the .ko file is included via a fs-overlay and can be included with the "insmod" command
-
-Usually this works, but often I get error messages which  tell me I'm using a different kernel version. So to avoid this I'd like to enqueue this .c code to the make process of buildroot. But I'm not sure how this is done. 
-
-I actually just want to make changes on the Buildroot or Linux configuration and if Image is generated I'd still like to have a runnable kernel module. 
-
-Can somebody tell me a hint about the steps, a manual or a tutorial ?
-
-Kind Regards
-
-Frank Ihle
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140225/07161769/attachment.html>
+diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
+index f8b4d98..0bfe7d1 100644
+--- a/package/libpng/libpng.mk
++++ b/package/libpng/libpng.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBPNG_VERSION = 1.6.8
++LIBPNG_VERSION = 1.6.9
+ LIBPNG_SERIES = 16
+ LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
+ LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng${LIBPNG_SERIES}/$(LIBPNG_VERSION)
+-- 
+1.8.3.2
