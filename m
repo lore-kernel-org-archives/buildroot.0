@@ -1,95 +1,173 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 25 Feb 2014 21:54:15 +0100
-Subject: [Buildroot] [PATCH 1/2] infra: improve dependency check in
- virtual packages.
-In-Reply-To: <20140225120446.GA30238@pc-eric>
+Date: Tue, 25 Feb 2014 21:58:33 +0100
+Subject: [Buildroot] [PATCH 2/2] manual: add virtual package tutorial.
+In-Reply-To: <20140224190104.GC11048@free.fr>
 References: <1393235404-2693-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1393235404-2693-2-git-send-email-eric.le.bihan.dev@free.fr>
- <20140224182951.GB11048@free.fr> <20140225120446.GA30238@pc-eric>
-Message-ID: <530D02F7.3060302@mind.be>
+ <1393235404-2693-3-git-send-email-eric.le.bihan.dev@free.fr>
+ <20140224190104.GC11048@free.fr>
+Message-ID: <530D03F9.1090904@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 25/02/14 13:04, Eric Le Bihan wrote:
-> Hi!
+On 24/02/14 20:01, Yann E. MORIN wrote:
+> Eric, All,
 > 
-> On Mon, Feb 24, 2014 at 07:29:51PM +0100, Yann E. MORIN wrote:
-> [...]
->> I don't know about you folks, but I'm beginning to see a pattern here...
+> I think you should base this on master, since we think it would be very
+> interesting to have it in this release.
+
+ I don't think it's that important. I don't think people will be adding
+virtual packages for their custom stuff, so this documentation is
+targeted towards people that will upstream packages. And for these, we
+can assume that they read the documentation of master and not that of
+whatever release they happen to be working with.
+
+ And of course, if the $(virtual-package) infrastructure gets added, then
+this piece of documentation has to be entirely rewritten.
+
+> 
+> On 2014-02-24 10:50 +0100, Eric Le Bihan spake thusly:
+>> The manual now features a new section with instructions about how to add a
+>> virtual package.
 >>
->> If all of our BR2_PACKAGE_HAS_FOOBAR options would match the corresponding
->> FOOBAR_DEPENDENCIES, then we could use something like (absolutely untested,
->> only pure random thoughts):
+>> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+>> ---
+>>  docs/manual/adding-packages-virtual.txt |  102 +++++++++++++++++++++++++++++++
+>>  docs/manual/adding-packages.txt         |    2 +
+>>  2 files changed, 104 insertions(+)
+>>  create mode 100644 docs/manual/adding-packages-virtual.txt
 >>
->>     $(eval $(call virtual-package,FooBar))
->>
->> whith 'virtual-package' something like:
->>
->>     define virtual-package
->>     ifeq ($(BR2_PACKAGE_HAS_$(call upper,$(1))),y)
->>     ifeq ($($(call upper,$(1))_DEPENDENCIES),)
->>     $(error No $(1) implementation selected. Configuration error.)
->>     endif
->>     endif
->>     endef
->>
->> But then we would need:
->>     s/BR2_PACKAGE_HAS_OPENGL_EGL/BR2_PACKAGE_HAS_LIBEGL/
->>     s/BR2_PACKAGE_HAS_OPENGL_GLES/BR2_PACKAGE_HAS_LIBGLES/
->>     s/BR2_PACKAGE_HAS_OPENMAX/BR2_PACKAGE_HAS_LIBOPENMAX/
->>     s/BR2_PACKAGE_HAS_OPENVG/BR2_PACKAGE_HAS_LIBOPENVG/
-> IMHO, renaming BR2_PACKAGE_HAS_OPENGL_GLES to BR2_PACKAGE_HAS_LIBGLES and
-> friends is OK, as it matches the mesa3d naming and sounds less redundant.
->> Lua interpreter and PowerVR already match this.
->>
->> We could even go further, so as to only require a call to 'virtual-package'
->> and not to 'generic-package', with some carefully-crafted Makefile
->> constructs (but we would loose the capitalisation of eg. lbEGL, since the
->> package is named 'libegl', all in lower-case). 'virtual-package' could
->> even override FOOBAR_SOURCE="" before calling generic-package behind the
->> hood. This would make writing virtual packages even easier.
+>> diff --git a/docs/manual/adding-packages-virtual.txt b/docs/manual/adding-packages-virtual.txt
+>> new file mode 100644
+>> index 0000000..6cccc4e
+>> --- /dev/null
+>> +++ b/docs/manual/adding-packages-virtual.txt
+>> @@ -0,0 +1,102 @@
+>> +// -*- mode:doc; -*-
+>> +// vim: set syntax=asciidoc:
+>> +
+>> +Infrastructure for virtual packages
+>> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> +
+>> +[[virtual-package-tutorial]]
+>> +
+>> ++virtual-package+ tutorial
+>> +^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 
+> 'virtual-package' is not an infrastructure [ie. you can't use:
+> $(eval $(virtual-package)) ], 
 
- Indeed, I alluded to this in my comments on one of the earlier versions
-of Eric's patches.
+ Well, soon you will be able to! :-)
 
- In fact, you don't need to do a $(generic-package) at all. Nothing of
-the generic package infrastructure is needed for virtual packages: no
-source fetching, no building and installing, no legal info, no nothing.
-Therefore also the stamp files are redundant. Therefore also the build
-directory is redundant. Therefore also the version is redundant.
-
- The only thing we need is:
-
-$(pkg): $($(PKG)_DEPENDENCIES)
-
- We probably need a few more in order to propagate the other things that
-need dependency chains, perhaps -source and -legal-info (though it looks
-like that is still done through the TARGETS_SOURCE variable - I thought
-we removed that at some point?).
-
-
->>
->> Thought?
-> I like the idea. The virtual packages would become one-liners :-)
-> I'll test it.
-
- Make sure you do this on top of -next, because it may be affected by
-Fabio's parallel build changes.
 
  Regards,
  Arnout
 
+> so I would suggest to just use:
 > 
-> Best regards,
-> ELB
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>     Virtual package tutorial
+>     ^^^^^^^^^^^^^^^^^^^^^^^^
 > 
+> [--SNIP--]
+>> +First, let's create the virtual package.
+>> +
+>> +.Virtual package +Config.in+ file
+>> +=================================
+> 
+> The formatting of the title is weird. Here's what I've changed:
+> 
+>     Virtual package +Config.in+ file
+>     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 
+> 
+> (notice: no leading dot, and an empty line after the ^^^ line)
+> 
+>> +The +Config.in+ file of virtual package 'something-virtual' should contain:
+>> +
+>> +---------------------------
+>> +01: config BR2_PACKAGE_HAS_SOMETHING_VIRTUAL
+>> +02:	bool
+>> +03:
+>> +04: config BR2_PACKAGE_PROVIDES_SOMETHING_VIRTUAL
+>> +05:	depends on BR2_PACKAGE_HAS_SOMETHING_VIRTUAL
+>> +06:	string
+>> +---------------------------
+>> +=================================
+> 
+> Remove this === line.
+> 
+>> +In this file, we declare two options, +BR2_PACKAGE_HAS_SOMETHING_VIRTUAL+ and
+>> ++BR2_PACKAGE_PROVIDES_SOMETHING_VIRTUAL+, whose values will be used by the
+>> +providers.
+>> +
+>> +.Virtual package +*.mk+ file
+>> +============================
+> 
+> Ditto title.
+> 
+>> +The Makefile +package/something-virtual/something-virtual.mk+ should contain:
+>> +
+>> +---------------------------
+>> +01: ################################################################################
+>> +02: #
+>> +03: # something-virtual
+>> +04: #
+>> +05: ################################################################################
+>> +06:
+>> +07: SOMETHING_VIRTUAL_SOURCE =
+>> +08: SOMETHING_VIRTUAL_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_SOMETHING_VIRTUAL))
+>> +09:
+>> +10: ifeq ($(BR2_PACKAGE_HAS_SOMETHING_VIRTUAL),y)
+>> +11: ifeq ($(SOMETHING_VIRTUAL_DEPENDENCIES),)
+>> +12: $(error No something-virtual implementation selected. Configuration error.)
+>> +13: endif
+>> +14: endif
+>> +15:
+>> +16: $(eval $(generic-package))
+>> +---------------------------
+>> +============================
+> 
+> Ditto ===.
+> 
+>> +The Makefile is quite small as it will only check if a provider for the
+>> +virtual package has been selected.
+>> +
+>> +When adding a package as a provider, only the +Config.in+ file requires some
+>> +modifications. The +*.mk+ file should follow the Buildroot infrastructure with
+>> +no change at all.
+>> +
+>> +.Provider +Config.in+ file
+>> +==========================
+> 
+> Ditto title.
+> 
+>> +The +Config.in+ file of the package 'some-provider', which provides the
+>> +functionalities of 'something-virtual', should contain:
+>> +
+>> +---------------------------
+>> +01: config BR2_PACKAGE_SOME_PROVIDER
+>> +02:	bool "some-provider"
+>> +03:	select BR2_PACKAGE_HAS_SOMETHING_VIRTUAL
+>> +04:	help
+>> +05:	  This is a comment that explains what some-provider is.
+>> +06:
+>> +07:	  http://foosoftware.org/some-provider/
+>> +08:
+>> +09: if BR2_PACKAGE_SOME_PROVIDER
+>> +10: config BR2_PACKAGE_PROVIDES_SOMETHING_VIRTUAL
+>> +11:	default "some-provider"
+>> +12: endif
+>> +---------------------------
+>> +==========================
+> 
+> Ditto ===.
+> 
+> With those changes, the manual looks better, IMHO.
+> 
+> Regards,
+> Yann E. MORIN.
 > 
 
 
