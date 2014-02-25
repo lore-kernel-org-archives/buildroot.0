@@ -1,65 +1,75 @@
-From: Marco Trapanese <marcotrapanese@gmail.com>
-Date: Tue, 25 Feb 2014 11:17:54 +0100
-Subject: [Buildroot] Few questions external toolchain
-In-Reply-To: <530B8CEA.90306@gmail.com>
-References: <530B8CEA.90306@gmail.com>
-Message-ID: <530C6DD2.4070605@gmail.com>
+From: =?iso-8859-1?Q?Ra=FAl_S=E1nchez?= Siles <rasasi78@gmail.com>
+Date: Tue, 25 Feb 2014 11:23:01 +0100
+Subject: [Buildroot] In Buildroot, how to compile kernel modules
+In-Reply-To: <530C6AB2020000460004B173@gwia2.rz.hs-offenburg.de>
+References: <530C6AB2020000460004B173@gwia2.rz.hs-offenburg.de>
+Message-ID: <20140225102301.GA6130@trismegisto.universo>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Tue, Feb 25, 2014 at 10:04:34AM +0100, Frank Ihle wrote:
+> Hi everyone,
+> 
+[...]
+> 
+> I actually just want to make changes on the Buildroot or Linux configuration
+> and if Image is generated I'd still like to have a runnable kernel module.
+> 
+> Can somebody tell me a hint about the steps, a manual or a tutorial ?
+> 
+> Kind Regards
+> 
+> Frank Ihle
 
-After digging a bit more I found the following:
+  Hello:
 
-ls -l ~/dev/buildroot/output/host/usr/bin/*gcc
+  Consider this example for aufs, which I'll someday manage to submit. You'll
+need to created an aufs package, in this case Config.in and aufs.mk
 
-lrwxrwxrwx 1 marco marco     21 feb 25 11:00 arm-fsl-linux-gnueabi-gcc 
--> ext-toolchain-wrapper
--rwxr-xr-x 1 marco marco   5908 feb 25 11:00 ext-toolchain-wrapper
+  The interesting part is aufs.mk:
 
+------8<--------
+AUFS_SITE_METHOD = git
+AUFS_SITE = http://git.code.sf.net/p/aufs/aufs3-standalone
 
-./arm-fsl-linux-gnueabi-gcc
-arm-fsl-linux-gnueabi-gcc: fatal error: no input files
+AUFS_DEPENDENCIES = linux
+AUFS_INSTALL_STAGING = YES
 
-it's ok, but:
+define AUFS_BUILD_CMDS
+        $(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KDIR=$(LINUX_DIR) aufs.ko
+endef
 
-./ext-toolchain-wrapper
-/home/marco/dev/fsl-linaro-toolchain/bin/ext-toolchain-wrapper: No such 
-file or directory
+define AUFS_INSTALL_TARGET_CMDS
+        $(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KDIR=$(LINUX_DIR) install
+endef
 
-I don't understand this behavior and I didn't find any information about 
-in the documentation. Did I searched wrong?
-Thanks
-Marco
+define AUFS_INSTALL_STAGING_CMDS
+        $(MAKE) -C $(LINUX_DIR) $(LINUX_MAKE_FLAGS) -f scripts/Makefile.host \
+                scripts/unifdef
+        $(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KDIR=$(LINUX_DIR) usr/include/linux/aufs_type.h
+        $(INSTALL) -p -m 0644 $(@D)/usr/include/linux/aufs_type.h $(STAGING_DIR)/usr/include/linux
+endef
 
+$(eval $(generic-package))
+------>8--------
 
-Il 24/02/2014 19:18, Marco Trapanese ha scritto:
-> Hello,
-> after reading the documentation I still have some questions.
-> I want to use a Linaro toolchain for an imx6 board.
->
-> The toolchain is hosted on a git repository, and I don't understand 
-> how to tell this to buildroot. It seems it looks for a tar.gz file.
->
-> Anyway I tried to manually git clone the toolchain and I passed the 
-> directory of the local repo.
-> When it tries to compile something it returns:
->
-> checking for arm-buildroot-linux-gnueabi-gcc... 
-> /home/marco/dev/buildroot/output/host/usr/bin/arm-fsl-linux-gnueabi-gcc
-> checking whether the C compiler works... no
-> configure: error: in 
-> `/home/marco/dev/buildroot/output/build/alsa-lib-1.0.26':
->
-> the path is correct, but why it looks for 
-> "arm-buildroot-linux-gnueabi-gcc"? It seems the internal toolchain!
->
-> Attached there is my .config file and the buildroot version is: 
-> 2014.02-rc2
->
-> Thanks!
-> Marco
->
->
+  Mind that this is targetted for 2013.11 so it may not work that straight
+forward on a more recent (or older) version.
+
+  Notes:
+
+  - STAGING may not be needed in your case
+  - You may need to add/remove some stuff to get your case working.
+  - Consider following [0] guideliness
+
+[0] http://buildroot.net/downloads/manual/manual.html#adding-packages
+
+  Disclaimer: This snippet is not an aufs fully working example.
+
+  Regards,
+
+-- 
+Ra?l S?nchez Siles
