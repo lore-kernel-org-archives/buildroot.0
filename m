@@ -1,50 +1,38 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 25 Feb 2014 21:40:50 +0100
-Subject: [Buildroot] Antw: Re:  In Buildroot,
-	how to compile kernel modules
-In-Reply-To: <530C80B0020000460004B17F@gwia2.rz.hs-offenburg.de>
-References: <530C6AB2020000460004B173@gwia2.rz.hs-offenburg.de>
- <20140225102301.GA6130@trismegisto.universo>
- <530C80B0020000460004B17F@gwia2.rz.hs-offenburg.de>
-Message-ID: <530CFFD2.4040606@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 25 Feb 2014 21:48:31 +0100
+Subject: [Buildroot] [git commit] gdb: correct version selection on
+	arc/microblaze if host version isn't enabled
+Message-ID: <20140225205032.6AD719BA89@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 25/02/14 11:38, Frank Ihle wrote:
-> Hi and thanks for your response. Before i start hacking this, is it
-> really that complicated ? For me it doesn't seem a big deal ?
+commit: http://git.buildroot.net/buildroot/commit/?id=bd7b402fb195e22dc6b375f764ea5d2dd09d4e5e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Actually, a much better example for simple modules is
-package/on2-8170-modules/on2-8170-modules.mk
+Fixes http://autobuild.buildroot.net/results/858/8580840f6e41f198d2cfc0609e14765dbc2e7322/
 
- You need to set VERSION and SITE like for all packages.
+kconfig uses the first 'default ... if' line that matches, so ensure the
+arch specific ones come before the generic 7.5.1 default, otherwise
+arc/microblaze ends up with 7.5.1 instead of their custom version.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gdb/Config.in.host |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
- You need to set DEPENDENCIES to LINUX (and also in the Config.in you
-need to depend on BR2_LINUX_KERNEL).
-
- And you need the following build/install commands:
-
-define ON2_8170_MODULES_BUILD_CMDS
-        $(MAKE) -C $(LINUX_DIR) $(LINUX_MAKE_FLAGS) M=$(@D)
-endef
-
-define ON2_8170_MODULES_INSTALL_TARGET_CMDS
-        $(MAKE) -C $(LINUX_DIR) $(LINUX_MAKE_FLAGS) M=$(@D) \
-		modules_install
-endef
-
-
-
- Regards,
- Arnout
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index 8936dcb..7082d1c 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -51,7 +51,7 @@ config BR2_GDB_VERSION
+ 	                      (!BR2_PACKAGE_HOST_GDB && BR2_bfin)
+ 	default "6.7.1-avr32-2.1.5" if BR2_GDB_VERSION_6_7_1_AVR32_2_1_5 || \
+                                    (!BR2_PACKAGE_HOST_GDB && BR2_avr32)
+-	default "7.4.1"    if BR2_GDB_VERSION_7_4
+-	default "7.5.1"    if BR2_GDB_VERSION_7_5 || !BR2_PACKAGE_HOST_GDB
+ 	default "f25a1952afd054205f9471e449c1f7ca5b271b7c" if BR2_arc
+ 	default "6be65fb56ea6694a9260733a536a023a1e2d4d57" if BR2_microblaze
++	default "7.4.1"    if BR2_GDB_VERSION_7_4
++	default "7.5.1"    if BR2_GDB_VERSION_7_5 || !BR2_PACKAGE_HOST_GDB
