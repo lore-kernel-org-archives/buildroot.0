@@ -1,85 +1,110 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 25 Feb 2014 18:13:48 +0100
-Subject: [Buildroot] [PATCH v3 1/1] ncftp: fix cross-compilation test
-In-Reply-To: <530A7B97.3090701@openwide.fr>
-References: <1393016452-10812-1-git-send-email-romain.naour@openwide.fr>
- <530A74F4.8030906@mind.be> <530A7B97.3090701@openwide.fr>
-Message-ID: <530CCF4C.7090208@mind.be>
+Date: Tue, 25 Feb 2014 18:24:37 +0100
+Subject: [Buildroot] [PATCH 0/13 v2] Add dependency on kernel headers
+In-Reply-To: <cover.1393198603.git.yann.morin.1998@free.fr>
+References: <cover.1393198603.git.yann.morin.1998@free.fr>
+Message-ID: <530CD1D5.1010301@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 23/02/14 23:52, Romain Naour wrote:
-> Hi Arnout,
-> Le 23/02/2014 23:23, Arnout Vandecappelle a ?crit :
->> On 02/21/14 22:00, Romain Naour wrote:
->>> The cross-compilation test is based on the ability to run
->>> a test program on the host, which is wrong.
->>>
->>> If it runs, then the configure script concludes
->>> that we're doing native compilation,
->>> if it doesn't run, we're doing cross-compilation.
->>>
->>> The configure script needs to be regenerated to fix the
->>> cross-compilation test.
->>>
->>> Fixes
->>> http://autobuild.buildroot.net/results/969/969a49ae97a50634ea846a82b9c360e4fb020ace/build-end.log
->>>
->>>
->>> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
->>> ---
->>>   package/ncftp/ncftp.mk | 8 ++++++++
->>   Looks like the patch file itself got lost in this revision...
+ Hi Yann,
+
+On 24/02/14 00:40, Yann E. MORIN wrote:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > 
-> Thanks to the advice of ThomasP, the patch file is no longer necessary
-> since the configure script is regenerated correctly by autoconf.
-> I tested this patch in the same conditions as for ncftp build errors
-> (with a chrootwhere ncurses was not installed on the host)
+> Hello All!
+> 
+> This series introduces infrastructure for packages to depend on the
+> required version of kernel headers.
+> 
+> It follows the proposal made on the list:
+>     http://lists.busybox.net/pipermail/buildroot/2014-February/088924.html
+> 
+> The basic idea is to add a symbol for each kernel header version, and
+> have toolchains select the appropriate symbol, and packages depend on the
+> appropriate symbol.
 
- OK, now I understand.
-
- I'm going to send a follow-up patch to clarify this. Otherwise, an
-eventual version bumper will have a hard time understanding what is going on.
+ With all the additional symbols that are introduced by this series, some
+of which the user has to select from a huge choice (at least, it will be
+huge when we reach 3.45 five years from now), I wonder if it wouldn't be
+easier to add support for int comparisons in Kconfig expressions. I have
+taken a quick look and it doesn't seem impossible at first sight...
 
 
  Regards,
  Arnout
 
 > 
-> Best regards,
-> Romain
+> In this series:
 > 
->>
->>
->>   Regards,
->>   Arnout
->>
->>>   1 file changed, 8 insertions(+)
->>>
->>> diff --git a/package/ncftp/ncftp.mk b/package/ncftp/ncftp.mk
->>> index ff6c70a..841c82b 100644
->>> --- a/package/ncftp/ncftp.mk
->>> +++ b/package/ncftp/ncftp.mk
->>> @@ -11,6 +11,14 @@ NCFTP_TARGET_BINS = ncftp
->>>   NCFTP_LICENSE = Clarified Artistic License
->>>   NCFTP_LICENSE_FILES = doc/LICENSE.txt
->>>   +NCFTP_DEPENDENCIES = host-autoconf
->>> +
->>> +define NCFTP_RUN_AUTOCONF
->>> +       (cd $(@D); $(HOST_DIR)/usr/bin/autoconf -I$(@D)/autoconf_local/)
->>> +endef
->>> +
->>> +NCFTP_PRE_CONFIGURE_HOOKS += NCFTP_RUN_AUTOCONF
->>> +
->>>   ifeq ($(BR2_PACKAGE_NCFTP_GET),y)
->>>       NCFTP_TARGET_BINS += ncftpget
->>>   endif
->>>
->>
+>   - such symbols are added for all kernel headers >= 3.0;
 > 
+>   - the internal toochain backend selects the appropriate symbol, without
+>     user-visible changes for known kernel headers versions, and with a new
+>     choice for manually-specified kernel headers version;
+> 
+>   - the predefined external toolchains select the appropriate symbols
+>     without user-visible changes; those using kernel headers older than
+>     3.0, select nothing, and a comment is added to state so;
+> 
+>   - for the custom external toolchain, a new choice is shown to the
+>     user, to select the appropriate kernel headers version;
+> 
+>   - five packages are converted to take advantage of this.
+> 
+> For example:
+> 
+>   - BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1 selects
+>     BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
+> 
+>   - dvb-apps depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
+> 
+> 
+> Changes v1 -> v2:
+>   - typo and asciidoc syntax in the manual  (Samuel, Thomas DS)
+>   - add choice for custom kernel headers  (Arnout)
+>   - add check to strictly enforce selection  (Thomas, Arnout)
+>   - add help to choice  (Thomas DS)
+> 
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+> 
+> ----------------------------------------------------------------
+> Yann E. MORIN (13):
+>       package/linux-headers: remove 2.6 snapshot
+>       toolchain/common: add minimum kernel headers options
+>       manual: document minimal kernel headers dependency
+>       toolchain/external/predefined: add choice to select 'AT_LEAST_XXX' header version
+>       toolchain/external/custom: add choice to select 'AT_LEAST_XXX' header version
+>       package/linux-headers: select appropriate 'AT_LEAST_XXX' header version
+>       toolchain/external: check kernel headers version for custom toolchain
+>       toolchain/internal: check kernel headers version for manually-specified version
+>       package/dvb-apps: requires kernel headers >= 3.3
+>       package/w_scan: requires kernel headers >= 3.0
+>       package/weston: requires kernel headers >= 3.0
+>       package/tvheadend: requires kernel headers >= 3.2
+>       package/mmc-utils: requires kernel headers >= 3.0
+> 
+>  docs/manual/adding-packages-directory.txt          |   6 ++
+>  package/dvb-apps/Config.in                         |   5 +-
+>  package/linux-headers/Config.in.host               |  86 +++++++++++++++-
+>  package/linux-headers/linux-headers.mk             |   9 ++
+>  package/mmc-utils/Config.in                        |   5 +-
+>  package/tvheadend/Config.in                        |   5 +-
+>  package/w_scan/Config.in                           |   4 +
+>  package/weston/Config.in                           |   5 +-
+>  support/scripts/check-kernel-headers.sh            |  22 ++++
+>  toolchain/helpers.mk                               |  13 +++
+>  toolchain/toolchain-common.in                      |  79 +++++++++++++++
+>  toolchain/toolchain-external/Config.in             | 111 +++++++++++++++++++++
+>  toolchain/toolchain-external/toolchain-external.mk |   7 +-
+>  13 files changed, 344 insertions(+), 13 deletions(-)
+>  create mode 100755 support/scripts/check-kernel-headers.sh
 > 
 
 
