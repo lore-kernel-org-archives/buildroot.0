@@ -1,72 +1,34 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 25 Feb 2014 17:05:58 +0100
-Subject: [Buildroot] [PATCH] gst1-plugins-bad: select all opencv modules
-	needed
-In-Reply-To: <CAHXCMMJrPfpJxeOsyUsweqvSUbFsGYXhF8s_rJNMxr+QfO+8LA@mail.gmail.com>
-References: <1393342604-48284-1-git-send-email-Vincent.Riera@imgtec.com>
- <CAHXCMMJrPfpJxeOsyUsweqvSUbFsGYXhF8s_rJNMxr+QfO+8LA@mail.gmail.com>
-Message-ID: <CAHXCMMLRcGc48M=OhZyDusP6=xGLer58XWVtNmq4hWpEe6tT5w@mail.gmail.com>
+Date: Tue, 25 Feb 2014 17:07:22 +0100
+Subject: [Buildroot] [PATCH v2 1/2] packages: improve dependency check
+ in virtual packages.
+In-Reply-To: <1393343137-4209-2-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1393343137-4209-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <1393343137-4209-2-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <CAHXCMMLhgg3DXf0kySrGH2VTbvv0EMbrcO2jdatd4A=WLZfn6w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Feb 25, 2014 at 5:00 PM, Samuel Martin <s.martin49@gmail.com> wrote:
-> On Tue, Feb 25, 2014 at 4:36 PM, Vicente Olivert Riera
-> <Vincent.Riera@imgtec.com> wrote:
->> gstopencv.c includes the old-style header opencv/cv.h which includes a
->> set of module's headers. To satisfy the opencv/cv.h requirements we need
->> to select the modules which provide the required headers.
->>
->> Fixes:
->>    http://autobuild.buildroot.net/results/f5b/f5b248eb7be38d6eb3655cdc1ab6ee5e716b9b29/
->>
->> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> Reviewed-by: Samuel Martin <smartin@aldebaran-robotics.com>
-oops, wrong email!
-
+On Tue, Feb 25, 2014 at 4:45 PM, Eric Le Bihan
+<eric.le.bihan.dev@free.fr> wrote:
+> The current version of dependency check for virtual package <foo>
+> defines FOO_CONFIGURE_CMDS to print an error message if the
+> dependencies are not met.
+>
+> This patch updates all the virtual packages to use the GNU Make control
+> function $(error text...) instead.
+>
+> This makes the error happen at the beginning of the build, with a clearer
+> message.
+>
+> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 
->
->> ---
->>  package/gstreamer1/gst1-plugins-bad/Config.in |    9 +++++++++
->>  1 files changed, 9 insertions(+), 0 deletions(-)
->>
->> diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
->> index 407bf31..629ea3a 100644
->> --- a/package/gstreamer1/gst1-plugins-bad/Config.in
->> +++ b/package/gstreamer1/gst1-plugins-bad/Config.in
->> @@ -417,6 +417,15 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENCV
->>         bool "opencv"
->>         depends on BR2_INSTALL_LIBSTDCPP
->>         select BR2_PACKAGE_OPENCV
->> +       # Remove the following opencv modules when gstreamer fixes the
->> +       # problem of including the old "cv.h" header
->> +       select BR2_PACKAGE_OPENCV_LIB_CALIB3D
->> +       select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
->> +       select BR2_PACKAGE_OPENCV_LIB_FLANN
->> +       select BR2_PACKAGE_OPENCV_LIB_IMGPROC
->> +       select BR2_PACKAGE_OPENCV_LIB_LEGACY
->> +       select BR2_PACKAGE_OPENCV_LIB_OBJDETECT
->> +       select BR2_PACKAGE_OPENCV_LIB_VIDEO
->>         help
->>           GStreamer OpenCV Plugins
->>
->> --
->> 1.7.1
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->
-> Regards,
->
-> --
-> Samuel
-
-
+Regards,
 
 -- 
 Samuel
