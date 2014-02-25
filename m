@@ -1,146 +1,142 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Tue, 25 Feb 2014 16:45:36 +0100
-Subject: [Buildroot] [PATCH v2 1/2] packages: improve dependency check in
-	virtual packages.
+Date: Tue, 25 Feb 2014 16:45:37 +0100
+Subject: [Buildroot] [PATCH v2 2/2] manual: add virtual package tutorial.
 In-Reply-To: <1393343137-4209-1-git-send-email-eric.le.bihan.dev@free.fr>
 References: <1393343137-4209-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <1393343137-4209-2-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <1393343137-4209-3-git-send-email-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The current version of dependency check for virtual package <foo>
-defines FOO_CONFIGURE_CMDS to print an error message if the
-dependencies are not met.
-
-This patch updates all the virtual packages to use the GNU Make control
-function $(error text...) instead.
-
-This makes the error happen at the beginning of the build, with a clearer
-message.
+The manual now features a new section with instructions about how to add a
+virtual package.
 
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/luainterpreter/luainterpreter.mk |    6 ++++++
- package/opengl/libegl/libegl.mk          |    7 +++----
- package/opengl/libgles/libgles.mk        |    7 +++----
- package/opengl/libopenmax/libopenmax.mk  |    7 +++----
- package/opengl/libopenvg/libopenvg.mk    |    7 +++----
- package/powervr/powervr.mk               |    7 +++----
- 6 files changed, 21 insertions(+), 20 deletions(-)
+ docs/manual/adding-packages-virtual.txt |   99 +++++++++++++++++++++++++++++++
+ docs/manual/adding-packages.txt         |    2 +
+ 2 files changed, 101 insertions(+)
+ create mode 100644 docs/manual/adding-packages-virtual.txt
 
-diff --git a/package/luainterpreter/luainterpreter.mk b/package/luainterpreter/luainterpreter.mk
-index c37d621..5443477 100644
---- a/package/luainterpreter/luainterpreter.mk
-+++ b/package/luainterpreter/luainterpreter.mk
-@@ -9,4 +9,10 @@ LUAINTERPRETER_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_LUA_INTERPRET
-
- LUAINTERPRETER_ABIVER = $(call qstrip,$(BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION))
-
-+ifeq ($(BR2_PACKAGE_HAS_LUA_INTERPRETER),y)
-+ifeq ($(LUAINTERPRETER_DEPENDENCIES),)
-+$(error No lua interpreter implementation selected. Configuration error.)
-+endif
-+endif
+diff --git a/docs/manual/adding-packages-virtual.txt b/docs/manual/adding-packages-virtual.txt
+new file mode 100644
+index 0000000..10459b8
+--- /dev/null
++++ b/docs/manual/adding-packages-virtual.txt
+@@ -0,0 +1,99 @@
++// -*- mode:doc; -*-
++// vim: set syntax=asciidoc:
 +
- $(eval $(generic-package))
-diff --git a/package/opengl/libegl/libegl.mk b/package/opengl/libegl/libegl.mk
-index b2b74f1..3311e50 100644
---- a/package/opengl/libegl/libegl.mk
-+++ b/package/opengl/libegl/libegl.mk
-@@ -7,11 +7,10 @@
- LIBEGL_SOURCE =
- LIBEGL_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_OPENGL_EGL))
-
-+ifeq ($(BR2_PACKAGE_HAS_OPENGL_EGL),y)
- ifeq ($(LIBEGL_DEPENDENCIES),)
--define LIBEGL_CONFIGURE_CMDS
--	echo "No libEGL implementation selected. Configuration error."
--	exit 1
--endef
-+$(error No libEGL implementation selected. Configuration error.)
-+endif
- endif
-
- $(eval $(generic-package))
-diff --git a/package/opengl/libgles/libgles.mk b/package/opengl/libgles/libgles.mk
-index 0dcbaa7..7a07e37 100644
---- a/package/opengl/libgles/libgles.mk
-+++ b/package/opengl/libgles/libgles.mk
-@@ -7,11 +7,10 @@
- LIBGLES_SOURCE =
- LIBGLES_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_OPENGL_ES))
-
-+ifeq ($(BR2_PACKAGE_HAS_OPENGL_ES),y)
- ifeq ($(LIBGLES_DEPENDENCIES),)
--define LIBGLES_CONFIGURE_CMDS
--	echo "No libGLES implementation selected. Configuration error."
--	exit 1
--endef
-+$(error No libGLES implementation selected. Configuration error.)
-+endif
- endif
-
- $(eval $(generic-package))
-diff --git a/package/opengl/libopenmax/libopenmax.mk b/package/opengl/libopenmax/libopenmax.mk
-index c4f1f71..a2bd23d 100644
---- a/package/opengl/libopenmax/libopenmax.mk
-+++ b/package/opengl/libopenmax/libopenmax.mk
-@@ -7,11 +7,10 @@
- LIBOPENMAX_SOURCE =
- LIBOPENMAX_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_OPENMAX))
-
-+ifeq ($(BR2_PACKAGE_HAS_OPENMAX),y)
- ifeq ($(LIBOPENMAX_DEPENDENCIES),)
--define LIBOPENMAX_CONFIGURE_CMDS
--	echo "No libopenmax implementation selected. Configuration error."
--	exit 1
--endef
-+$(error No libopenmax implementation selected. Configuration error.)
-+endif
- endif
-
- $(eval $(generic-package))
-diff --git a/package/opengl/libopenvg/libopenvg.mk b/package/opengl/libopenvg/libopenvg.mk
-index ffd9d68..f81db5e 100644
---- a/package/opengl/libopenvg/libopenvg.mk
-+++ b/package/opengl/libopenvg/libopenvg.mk
-@@ -7,11 +7,10 @@
- LIBOPENVG_SOURCE =
- LIBOPENVG_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_OPENVG))
-
-+ifeq ($(BR2_PACKAGE_HAS_OPENVG),y)
- ifeq ($(LIBOPENVG_DEPENDENCIES),)
--define LIBOPENVG_CONFIGURE_CMDS
--	echo "No libOpenVG implementation selected. Configuration error."
--	exit 1
--endef
-+$(error No libOpenVG implementation selected. Configuration error.)
-+endif
- endif
-
- $(eval $(generic-package))
-diff --git a/package/powervr/powervr.mk b/package/powervr/powervr.mk
-index 1f43505..b36eb16 100644
---- a/package/powervr/powervr.mk
-+++ b/package/powervr/powervr.mk
-@@ -7,11 +7,10 @@
- POWERVR_SOURCE =
- POWERVR_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_POWERVR))
-
-+ifeq ($(BR2_PACKAGE_HAS_POWERVR),y)
- ifeq ($(POWERVR_DEPENDENCIES),)
--define POWERVR_CONFIGURE_CMDS
--	echo "No PowerVR implementation selected. Configuration error."
--	exit 1
--endef
-+$(error No PowerVR implementation selected. Configuration error.)
-+endif
- endif
-
- $(eval $(generic-package))
---
++[[virtual-package-tutorial]]
++
++Virtual package tutorial
++~~~~~~~~~~~~~~~~~~~~~~~~
++
++In Buildroot, a virtual package is a package whose functionalities are
++provided by one or more packages, referred to as 'providers'. The virtual
++package management is an extensible mechanism allowing the user to choose
++the provider used in the rootfs.
++
++For example, 'OpenGL ES' is an API for 2D and 3D graphics on embedded systems.
++The implementation of this API is different for the 'Allwinner Tech Sunxi' and
++the 'Texas Instruments OMAP35xx' plaftorms. So +libgles+ will be a virtual
++package and +sunxi-mali+ and +ti-gfx+ will be the providers.
++
++In the following example, we will explain how to add a new virtual package
++('something-virtual') and a provider for it ('some-provider').
++
++First, let's create the virtual package.
++
++Virtual package +Config.in+ file
++^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++
++The +Config.in+ file of virtual package 'something-virtual' should contain:
++
++---------------------------
++01: config BR2_PACKAGE_HAS_SOMETHING_VIRTUAL
++02:	bool
++03:
++04: config BR2_PACKAGE_PROVIDES_SOMETHING_VIRTUAL
++05:	depends on BR2_PACKAGE_HAS_SOMETHING_VIRTUAL
++06:	string
++---------------------------
++
++In this file, we declare two options, +BR2_PACKAGE_HAS_SOMETHING_VIRTUAL+ and
+++BR2_PACKAGE_PROVIDES_SOMETHING_VIRTUAL+, whose values will be used by the
++providers.
++
++Virtual package +*.mk+ file
++^^^^^^^^^^^^^^^^^^^^^^^^^^^
++
++The Makefile +package/something-virtual/something-virtual.mk+ should contain:
++
++---------------------------
++01: ################################################################################
++02: #
++03: # something-virtual
++04: #
++05: ################################################################################
++06:
++07: SOMETHING_VIRTUAL_SOURCE =
++08: SOMETHING_VIRTUAL_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_SOMETHING_VIRTUAL))
++09:
++10: ifeq ($(BR2_PACKAGE_HAS_SOMETHING_VIRTUAL),y)
++11: ifeq ($(SOMETHING_VIRTUAL_DEPENDENCIES),)
++12: $(error No something-virtual implementation selected. Configuration error.)
++13: endif
++14: endif
++15:
++16: $(eval $(generic-package))
++---------------------------
++
++The Makefile is quite small as it will only check if a provider for the
++virtual package has been selected.
++
++When adding a package as a provider, only the +Config.in+ file requires some
++modifications. The +*.mk+ file should follow the Buildroot infrastructure with
++no change at all.
++
++Provider +Config.in+ file
++^^^^^^^^^^^^^^^^^^^^^^^^^
++
++The +Config.in+ file of the package 'some-provider', which provides the
++functionalities of 'something-virtual', should contain:
++
++---------------------------
++01: config BR2_PACKAGE_SOME_PROVIDER
++02:	bool "some-provider"
++03:	select BR2_PACKAGE_HAS_SOMETHING_VIRTUAL
++04:	help
++05:	  This is a comment that explains what some-provider is.
++06:
++07:	  http://foosoftware.org/some-provider/
++08:
++09: if BR2_PACKAGE_SOME_PROVIDER
++10: config BR2_PACKAGE_PROVIDES_SOMETHING_VIRTUAL
++11:	default "some-provider"
++12: endif
++---------------------------
++
++On line 3, we select +BR2_PACKAGE_HAS_SOMETHING_VIRTUAL+, and on line 11, we
++set the value of +BR2_PACKAGE_PROVIDES_SOMETHING_VIRTUAL+ to the name of the
++provider, but only if it is selected.
++
++Of course, do not forget to add the proper build and runtime dependencies for
++this package!
+diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
+index cc86529..f763282 100644
+--- a/docs/manual/adding-packages.txt
++++ b/docs/manual/adding-packages.txt
+@@ -22,6 +22,8 @@ include::adding-packages-python.txt[]
+ 
+ include::adding-packages-luarocks.txt[]
+ 
++include::adding-packages-virtual.txt[]
++
+ include::adding-packages-hooks.txt[]
+ 
+ include::adding-packages-gettext.txt[]
+-- 
 1.7.9.5
