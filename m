@@ -1,65 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 25 Feb 2014 23:02:10 +0100
-Subject: [Buildroot] [PATCH 10/10] package/cryptodev: convert to the
-	virtual-package infrastructure
-In-Reply-To: <cover.1393365231.git.yann.morin.1998@free.fr>
-References: <cover.1393365231.git.yann.morin.1998@free.fr>
-Message-ID: <62aa83d0495c3ab39380704585f9050eb2b8212d.1393365231.git.yann.morin.1998@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 25 Feb 2014 22:45:50 +0100
+Subject: [Buildroot] [git commit] vlc: add warning that it has known issues
+Message-ID: <20140225220240.219859BA86@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+commit: http://git.buildroot.net/buildroot/commit/?id=e33019aaa0409e35b725dddffe09e3e2a42959d1
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since this package is implemented via a choice rather than the usual
-spearate-package providers, we only need BR2_PACKAGE_HAS_CRYPTODEV
-to be always defined when the 'cryptodev' package is selected.
+We've seen autobuilder failures for vlc on many platforms and we don't
+know how to solve them. It is also currently orphaned, i.e. there is
+nobody who is actively using the package and maintaining it in
+buildroot.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: Mike Zick <minimod@morethan.org>
+We could mark the package as BROKEN, but that would make it completely
+invisible for the users and the autobuilders, which would not help its
+orphan-ness. Therefore, instead, add a big fat warning in the config
+menus that it has known issues.
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cryptodev/Config.in    |  3 +++
- package/cryptodev/cryptodev.mk | 12 +-----------
- 2 files changed, 4 insertions(+), 11 deletions(-)
+ package/vlc/Config.in |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-diff --git a/package/cryptodev/Config.in b/package/cryptodev/Config.in
-index 0780cc7..2407e04 100644
---- a/package/cryptodev/Config.in
-+++ b/package/cryptodev/Config.in
-@@ -37,6 +37,9 @@ config BR2_PACKAGE_OCF_LINUX
- 
- endchoice
- 
-+config BR2_PACKAGE_HAS_CRYPTODEV
-+	def_bool y
+diff --git a/package/vlc/Config.in b/package/vlc/Config.in
+index 2335894..9c9d028 100644
+--- a/package/vlc/Config.in
++++ b/package/vlc/Config.in
+@@ -1,3 +1,8 @@
++if BR2_PACKAGE_VLC
++comment "vlc is known not to work in all configurations"
++comment "If you can fix it, please inform buildroot at buildroot.net"
++endif
 +
- config BR2_PACKAGE_PROVIDES_CRYPTODEV
- 	string
- 	default "cryptodev-linux" if BR2_PACKAGE_CRYPTODEV_LINUX
-diff --git a/package/cryptodev/cryptodev.mk b/package/cryptodev/cryptodev.mk
-index 11e6f48..969d1bd 100644
---- a/package/cryptodev/cryptodev.mk
-+++ b/package/cryptodev/cryptodev.mk
-@@ -4,14 +4,4 @@
- #
- ################################################################################
- 
--CRYPTODEV_SOURCE =
--CRYPTODEV_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_CRYPTODEV))
--
--ifeq ($(CRYPTODEV_DEPENDENCIES),)
--define CRYPTODEV_CONFIGURE_CMDS
--	echo "No CRYPTODEV implementation defined. Configuration error"
--	exit 1
--endef
--endif
--
--$(eval $(generic-package))
-+$(eval $(virtual-package))
--- 
-1.8.3.2
+ config BR2_PACKAGE_VLC
+ 	bool "vlc"
+ 	depends on (BR2_UCLIBC_VERSION_SNAPSHOT || BR2_TOOLCHAIN_USES_GLIBC) # spawn.h
