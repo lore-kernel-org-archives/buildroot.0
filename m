@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 25 Feb 2014 23:02:09 +0100
-Subject: [Buildroot] [PATCH 09/10] package/jpeg: convert to the
+Date: Tue, 25 Feb 2014 23:02:10 +0100
+Subject: [Buildroot] [PATCH 10/10] package/cryptodev: convert to the
 	virtual-package infrastructure
 In-Reply-To: <cover.1393365231.git.yann.morin.1998@free.fr>
 References: <cover.1393365231.git.yann.morin.1998@free.fr>
-Message-ID: <e5831257373e956a1c96ec246e3aa5783567e0ef.1393365231.git.yann.morin.1998@free.fr>
+Message-ID: <62aa83d0495c3ab39380704585f9050eb2b8212d.1393365231.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,8 +14,8 @@ To: buildroot@busybox.net
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Since this package is implemented via a choice rather than the usual
-spearate-package providers, we only need BR2_PACKAGE_HAS_JPEG to be
-always defined when the 'jpeg' package is selected.
+spearate-package providers, we only need BR2_PACKAGE_HAS_CRYPTODEV
+to be always defined when the 'cryptodev' package is selected.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
@@ -23,38 +23,38 @@ Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 Cc: Mike Zick <minimod@morethan.org>
 ---
- package/jpeg/Config.in |  3 +++
- package/jpeg/jpeg.mk   | 12 +-----------
+ package/cryptodev/Config.in    |  3 +++
+ package/cryptodev/cryptodev.mk | 12 +-----------
  2 files changed, 4 insertions(+), 11 deletions(-)
 
-diff --git a/package/jpeg/Config.in b/package/jpeg/Config.in
-index b7cdfeb..3042d24 100644
---- a/package/jpeg/Config.in
-+++ b/package/jpeg/Config.in
-@@ -30,6 +30,9 @@ config BR2_PACKAGE_JPEG_TURBO
+diff --git a/package/cryptodev/Config.in b/package/cryptodev/Config.in
+index 0780cc7..2407e04 100644
+--- a/package/cryptodev/Config.in
++++ b/package/cryptodev/Config.in
+@@ -37,6 +37,9 @@ config BR2_PACKAGE_OCF_LINUX
  
  endchoice
  
-+config BR2_PACKAGE_HAS_JPEG
++config BR2_PACKAGE_HAS_CRYPTODEV
 +	def_bool y
 +
- config BR2_PACKAGE_PROVIDES_JPEG
+ config BR2_PACKAGE_PROVIDES_CRYPTODEV
  	string
- 	default "libjpeg"    if BR2_PACKAGE_LIBJPEG
-diff --git a/package/jpeg/jpeg.mk b/package/jpeg/jpeg.mk
-index 3695bc8..2d56be6 100644
---- a/package/jpeg/jpeg.mk
-+++ b/package/jpeg/jpeg.mk
+ 	default "cryptodev-linux" if BR2_PACKAGE_CRYPTODEV_LINUX
+diff --git a/package/cryptodev/cryptodev.mk b/package/cryptodev/cryptodev.mk
+index 11e6f48..969d1bd 100644
+--- a/package/cryptodev/cryptodev.mk
++++ b/package/cryptodev/cryptodev.mk
 @@ -4,14 +4,4 @@
  #
  ################################################################################
  
--JPEG_SOURCE =
--JPEG_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_JPEG))
+-CRYPTODEV_SOURCE =
+-CRYPTODEV_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_CRYPTODEV))
 -
--ifeq ($(JPEG_DEPENDENCIES),)
--define JPEG_CONFIGURE_CMDS
--	echo "No JPEG implementation defined. Configuration error"
+-ifeq ($(CRYPTODEV_DEPENDENCIES),)
+-define CRYPTODEV_CONFIGURE_CMDS
+-	echo "No CRYPTODEV implementation defined. Configuration error"
 -	exit 1
 -endef
 -endif
