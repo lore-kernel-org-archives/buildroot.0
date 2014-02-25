@@ -1,82 +1,59 @@
-From: Frank Ihle <frank.ihle@hs-offenburg.de>
-Date: Tue, 25 Feb 2014 11:38:24 +0100
-Subject: [Buildroot] Antw: Re:  In Buildroot, how to compile kernel modules
-In-Reply-To: <20140225102301.GA6130@trismegisto.universo>
-References: <530C6AB2020000460004B173@gwia2.rz.hs-offenburg.de>
- <20140225102301.GA6130@trismegisto.universo>
-Message-ID: <530C80B0020000460004B17F@gwia2.rz.hs-offenburg.de>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Tue, 25 Feb 2014 13:04:48 +0100
+Subject: [Buildroot] [PATCH 1/2] infra: improve dependency check in
+ virtual packages.
+In-Reply-To: <20140224182951.GB11048@free.fr>
+References: <1393235404-2693-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <1393235404-2693-2-git-send-email-eric.le.bihan.dev@free.fr>
+ <20140224182951.GB11048@free.fr>
+Message-ID: <20140225120446.GA30238@pc-eric>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi and thanks for your response. Before i start hacking this, is it
-really that complicated ? For me it doesn't seem a big deal ?
+Hi!
 
+On Mon, Feb 24, 2014 at 07:29:51PM +0100, Yann E. MORIN wrote:
+[...]
+> I don't know about you folks, but I'm beginning to see a pattern here...
+>
+> If all of our BR2_PACKAGE_HAS_FOOBAR options would match the corresponding
+> FOOBAR_DEPENDENCIES, then we could use something like (absolutely untested,
+> only pure random thoughts):
+>
+>     $(eval $(call virtual-package,FooBar))
+>
+> whith 'virtual-package' something like:
+>
+>     define virtual-package
+>     ifeq ($(BR2_PACKAGE_HAS_$(call upper,$(1))),y)
+>     ifeq ($($(call upper,$(1))_DEPENDENCIES),)
+>     $(error No $(1) implementation selected. Configuration error.)
+>     endif
+>     endif
+>     endef
+>
+> But then we would need:
+>     s/BR2_PACKAGE_HAS_OPENGL_EGL/BR2_PACKAGE_HAS_LIBEGL/
+>     s/BR2_PACKAGE_HAS_OPENGL_GLES/BR2_PACKAGE_HAS_LIBGLES/
+>     s/BR2_PACKAGE_HAS_OPENMAX/BR2_PACKAGE_HAS_LIBOPENMAX/
+>     s/BR2_PACKAGE_HAS_OPENVG/BR2_PACKAGE_HAS_LIBOPENVG/
+IMHO, renaming BR2_PACKAGE_HAS_OPENGL_GLES to BR2_PACKAGE_HAS_LIBGLES and
+friends is OK, as it matches the mesa3d naming and sounds less redundant.
+> Lua interpreter and PowerVR already match this.
+>
+> We could even go further, so as to only require a call to 'virtual-package'
+> and not to 'generic-package', with some carefully-crafted Makefile
+> constructs (but we would loose the capitalisation of eg. lbEGL, since the
+> package is named 'libegl', all in lower-case). 'virtual-package' could
+> even override FOOBAR_SOURCE="" before calling generic-package behind the
+> hood. This would make writing virtual packages even easier.
+>
+> Thought?
+I like the idea. The virtual packages would become one-liners :-)
+I'll test it.
 
-
->>> Ra?l S?nchezSiles <rasasi78@gmail.com> 25.02.14 11.24 Uhr >>>
-Hello:
-
-  Consider this example for aufs, which I'll someday manage to submit.
-You'll
-need to created an aufs package, in this case Config.in and aufs.mk
-
-  The interesting part is aufs.mk:
-
-------8<--------
-AUFS_SITE_METHOD = git
-AUFS_SITE = http://git.code.sf.net/p/aufs/aufs3-standalone
-
-AUFS_DEPENDENCIES = linux
-AUFS_INSTALL_STAGING = YES
-
-define AUFS_BUILD_CMDS
-        $(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KDIR=$(LINUX_DIR) aufs.ko
-endef
-
-define AUFS_INSTALL_TARGET_CMDS
-        $(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KDIR=$(LINUX_DIR) install
-endef
-
-define AUFS_INSTALL_STAGING_CMDS
-        $(MAKE) -C $(LINUX_DIR) $(LINUX_MAKE_FLAGS) -f
-scripts/Makefile.host \
-                scripts/unifdef
-        $(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KDIR=$(LINUX_DIR)
-usr/include/linux/aufs_type.h
-        $(INSTALL) -p -m 0644 $(@D)/usr/include/linux/aufs_type.h
-$(STAGING_DIR)/usr/include/linux
-endef
-
-$(eval $(generic-package))
------->8--------
-
-  Mind that this is targetted for 2013.11 so it may not work that
-straight
-forward on a more recent (or older) version.
-
-  Notes:
-
-  - STAGING may not be needed in your case
-  - You may need to add/remove some stuff to get your case working.
-  - Consider following [0] guideliness
-
-[0] http://buildroot.net/downloads/manual/manual.html#adding-packages
-
-  Disclaimer: This snippet is not an aufs fully working example.
-
-  Regards,
-
--- 
-Ra?l S?nchez Siles
-_______________________________________________
-buildroot mailing list
-buildroot at busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
-
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140225/a2e68db6/attachment.html>
+Best regards,
+ELB
