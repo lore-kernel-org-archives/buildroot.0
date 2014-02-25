@@ -1,39 +1,193 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Tue, 25 Feb 2014 21:38:32 +0100
-Subject: [Buildroot] [PATCH v2 2/2] manual: add virtual package tutorial.
-In-Reply-To: <CAHXCMM+zjqV=jtyN64aVnPU+CYn1mkw35i_NVGu5XnRX=jcngg@mail.gmail.com>
-References: <1393343137-4209-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1393343137-4209-3-git-send-email-eric.le.bihan.dev@free.fr>
- <CAHXCMM+zjqV=jtyN64aVnPU+CYn1mkw35i_NVGu5XnRX=jcngg@mail.gmail.com>
-Message-ID: <20140225203831.GA3340@milhouse>
+From: Simon Dawson <spdawson@gmail.com>
+Date: Tue, 25 Feb 2014 20:36:06 +0000
+Subject: [Buildroot] [PATCH] vlc: fix some configure options
+Message-ID: <1393360566-4849-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+Fix a large number of incorrect configure options for vlc.
 
-On Tue, Feb 25, 2014 at 09:01:54PM +0100, Samuel Martin wrote:
-> Hi Eric,
->
-> On Tue, Feb 25, 2014 at 4:45 PM, Eric Le Bihan
-> <eric.le.bihan.dev@free.fr> wrote:
-> [...]
-> > +
-> > +Provider +Config.in+ file
-> > +^^^^^^^^^^^^^^^^^^^^^^^^^
-> > +
-> > +The +Config.in+ file of the package 'some-provider', which provides the
-> > +functionalities of 'something-virtual', should contain:
-> > +
->
-> No word about the provider's *.mk file which does not need any change?
-I added a line about it, but when I converted the example to plain section, I
-have not noticed that the line stayed above the targeted section ("D'Oh"^5)...
-Will fix.
+Configure warnings reported by Arnout Vandecappelle, in his analysis of vlc
+autobuild failures.
 
-Thanks for your reviews!
+---
+ package/vlc/vlc.mk | 70 +++++++++++++++++++++++++++---------------------------
+ 1 file changed, 35 insertions(+), 35 deletions(-)
 
-Best regards,
-ELB
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index 0e76e11..9bcedd1 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -14,23 +14,23 @@ VLC_AUTORECONF = YES
+ 
+ VLC_CONF_OPT += \
+ 	--disable-a52 \
+-	--disable-shout \
+-	--disable-twolame \
+-	--disable-dca \
+-	--disable-dirac \
+-	--disable-schroedinger \
+-	--disable-quicksync \
+-	--disable-fluidsynth \
++	--without-shout \
++	--without-twolame \
++	--without-dca \
++	--without-dirac \
++	--without-schroedinger \
++	--without-quicksync \
++	--without-fluidsynth \
+ 	--disable-zvbi \
+-	--disable-kate \
+-	--disable-caca \
++	--without-kate \
++	--without-caca \
+ 	--disable-jack \
+-	--disable-samplerate \
+-	--disable-chromaprint \
+-	--disable-goom \
++	--without-samplerate \
++	--without-chromaprint \
++	--without-goom \
+ 	--disable-projectm \
+ 	--disable-vsxu \
+-	--disable-mtp \
++	--without-mtp \
+ 	--without-opencv
+ 
+ # Set powerpc altivec appropriately
+@@ -49,10 +49,10 @@ endif
+ 
+ # bonjour support needs avahi-client, which needs avahi-daemon and dbus
+ ifeq ($(BR2_PACKAGE_AVAHI)$(BR2_PACKAGE_AVAHI_DAEMON)$(BR2_PACKAGE_DBUS),yyy)
+-VLC_CONF_OPT += --enable-bonjour
++VLC_CONF_OPT += --with-bonjour
+ VLC_DEPENDENCIES += avahi dbus
+ else
+-VLC_CONF_OPT += --disable-bonjour
++VLC_CONF_OPT += --without-bonjour
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_DBUS),y)
+@@ -96,10 +96,10 @@ VLC_CONF_OPT += --disable-swscale
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_FLAC),y)
+-VLC_CONF_OPT += --enable-flac
++VLC_CONF_OPT += --with-flac
+ VLC_DEPENDENCIES += flac
+ else
+-VLC_CONF_OPT += --disable-flac
++VLC_CONF_OPT += --without-flac
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_MESA3D),y)
+@@ -110,10 +110,10 @@ VLC_CONF_OPT += --disable-glx
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_OPUS),y)
+-VLC_CONF_OPT += --enable-opus
++VLC_CONF_OPT += --with-opus
+ VLC_DEPENDENCIES += opus
+ else
+-VLC_CONF_OPT += --disable-opus
++VLC_CONF_OPT += --without-opus
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBASS),y)
+@@ -147,10 +147,10 @@ VLC_CONF_OPT += --disable-mod
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBMPEG2),y)
+-VLC_CONF_OPT += --enable-libmpeg2
++VLC_CONF_OPT += --with-libmpeg2
+ VLC_DEPENDENCIES += libmpeg2
+ else
+-VLC_CONF_OPT += --disable-libmpeg2
++VLC_CONF_OPT += --without-libmpeg2
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBPNG),y)
+@@ -161,31 +161,31 @@ VLC_CONF_OPT += --disable-png
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBRSVG),y)
+-VLC_CONF_OPT += --enable-svg
++VLC_CONF_OPT += --with-svg
+ VLC_DEPENDENCIES += librsvg
+ else
+-VLC_CONF_OPT += --disable-svg
++VLC_CONF_OPT += --without-svg
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBTHEORA),y)
+-VLC_CONF_OPT += --enable-theora
++VLC_CONF_OPT += --with-theora
+ VLC_DEPENDENCIES += libtheora
+ else
+-VLC_CONF_OPT += --disable-theora
++VLC_CONF_OPT += --without-theora
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBUPNP),y)
+-VLC_CONF_OPT += --enable-upnp
++VLC_CONF_OPT += --with-upnp
+ VLC_DEPENDENCIES += libupnp
+ else
+-VLC_CONF_OPT += --disable-upnp
++VLC_CONF_OPT += --without-upnp
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBVORBIS),y)
+-VLC_CONF_OPT += --enable-vorbis
++VLC_CONF_OPT += --with-vorbis
+ VLC_DEPENDENCIES += libvorbis
+ else
+-VLC_CONF_OPT += --disable-vorbis
++VLC_CONF_OPT += --without-vorbis
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBV4L),y)
+@@ -203,10 +203,10 @@ VLC_CONF_OPT += --disable-xcb
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBXML2),y)
+-VLC_CONF_OPT += --enable-libxml2
++VLC_CONF_OPT += --with-libxml2
+ VLC_DEPENDENCIES += libxml2
+ else
+-VLC_CONF_OPT += --disable-libxml2
++VLC_CONF_OPT += --without-libxml2
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIVE555),y)
+@@ -254,10 +254,10 @@ VLC_CONF_OPT += --disable-sdl-image
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SPEEX),y)
+-VLC_CONF_OPT += --enable-speex
++VLC_CONF_OPT += --with-speex
+ VLC_DEPENDENCIES += speex
+ else
+-VLC_CONF_OPT += --disable-speex
++VLC_CONF_OPT += --without-speex
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_TREMOR),y)
+@@ -268,10 +268,10 @@ VLC_CONF_OPT += --disable-tremor
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_UDEV),y)
+-VLC_CONF_OPT += --enable-udev
++VLC_CONF_OPT += --with-udev
+ VLC_DEPENDENCIES += udev
+ else
+-VLC_CONF_OPT += --disable-udev
++VLC_CONF_OPT += --without-udev
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
+-- 
+1.8.3.2
