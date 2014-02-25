@@ -1,38 +1,113 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 25 Feb 2014 17:58:03 +0100
-Subject: [Buildroot] Analysis of VLC build failures
-In-Reply-To: <CAHt8ZCO3fhuv__zQweidJb=2TSBdC0M27P487=AOx1+780cm2g@mail.gmail.com>
-References: <20140223073009.3676E101056@stock.ovh.net>	<20140223110021.16b6b976@skate>	<530C4314.4000203@mind.be>
- <CAHt8ZCO3fhuv__zQweidJb=2TSBdC0M27P487=AOx1+780cm2g@mail.gmail.com>
-Message-ID: <530CCB9B.2000101@mind.be>
+Date: Tue, 25 Feb 2014 17:59:40 +0100
+Subject: [Buildroot] [PATCH v2 1/2] udev: update udev to new virtual
+ package infra.
+In-Reply-To: <1393233942-11638-2-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1393233942-11638-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <1393233942-11638-2-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <530CCBFC.6070603@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 25/02/14 16:17, Simon Dawson wrote:
-> On 25 February 2014 07:15, Arnout Vandecappelle <arnout@mind.be> wrote:
->>  My feeling is that vlc is currently not in a state that we can release
->> it. I have no issue with including some package that doesn't work very
->> well in a release, but for a flagship package like vlc I think it's
->> important that we really get it right. And currently we don't.
+On 24/02/14 10:25, Eric Le Bihan wrote:
+> The udev virtual package and its current providers (eudev and systemd)
+> have been updated to use the latest version of virtual package
+> infrastructure.
 > 
-> When I (re-)added this package, I had hoped to have more time to spend
-> on getting it working properly. (As it happens, the project for which
-> I needed vlc has now been abandoned.)
+> A provider should now select BR2_PACKAGE_HAS_UDEV and well as set a
+> value for BR2_PACKAGE_PROVIDES_UDEV.
 > 
-> I tend to agree that this is a potentially "high profile" package, and
-> that it ought perhaps to be dropped from the 2014.02 release.
+> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 
- I would also be OK with adding a comment to the VLC config option that
-warns the users that it is not working very well.
-
- I can send a patch if needed.
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 
  Regards,
  Arnout
+
+> ---
+>  package/eudev/Config.in   |    3 +++
+>  package/systemd/Config.in |    3 +++
+>  package/udev/Config.in    |    8 ++++----
+>  package/udev/udev.mk      |   16 ++++------------
+>  4 files changed, 14 insertions(+), 16 deletions(-)
+> 
+> diff --git a/package/eudev/Config.in b/package/eudev/Config.in
+> index bfad99a..40ff721 100644
+> --- a/package/eudev/Config.in
+> +++ b/package/eudev/Config.in
+> @@ -21,6 +21,9 @@ config BR2_PACKAGE_EUDEV
+>  
+>  if BR2_PACKAGE_EUDEV
+>  
+> +config BR2_PACKAGE_PROVIDES_UDEV
+> +	default "eudev"
+> +
+>  config BR2_PACKAGE_EUDEV_RULES_GEN
+>  	bool "enable rules generator"
+>  	help
+> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+> index e3ea433..eacc23c 100644
+> --- a/package/systemd/Config.in
+> +++ b/package/systemd/Config.in
+> @@ -40,6 +40,9 @@ config BR2_PACKAGE_SYSTEMD
+>  
+>  if BR2_PACKAGE_SYSTEMD
+>  
+> +config BR2_PACKAGE_PROVIDES_UDEV
+> +	default "systemd"
+> +
+>  config BR2_PACKAGE_SYSTEMD_ALL_EXTRAS
+>  	bool "enable all extras"
+>  	select BR2_PACKAGE_XZ
+> diff --git a/package/udev/Config.in b/package/udev/Config.in
+> index 5cd4051..941a515 100644
+> --- a/package/udev/Config.in
+> +++ b/package/udev/Config.in
+> @@ -1,6 +1,6 @@
+>  config BR2_PACKAGE_HAS_UDEV
+>  	bool
+> -	help
+> -	  udev is now a virtual package.
+> -	  Packages requiring udevd at run time or libudev/gudev at build time
+> -	  should select it.
+> +
+> +config BR2_PACKAGE_PROVIDES_UDEV
+> +	depends on BR2_PACKAGE_HAS_UDEV
+> +	string
+> diff --git a/package/udev/udev.mk b/package/udev/udev.mk
+> index a5d0f80..f5eeeb4 100644
+> --- a/package/udev/udev.mk
+> +++ b/package/udev/udev.mk
+> @@ -5,20 +5,12 @@
+>  ################################################################################
+>  
+>  UDEV_SOURCE =
+> +UDEV_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_UDEV))
+>  
+> -ifeq ($(BR2_PACKAGE_EUDEV),y)
+> -UDEV_DEPENDENCIES += eudev
+> -endif
+> -
+> -ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+> -UDEV_DEPENDENCIES += systemd
+> -endif
+> -
+> +ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+>  ifeq ($(UDEV_DEPENDENCIES),)
+> -define UDEV_CONFIGURE_CMDS
+> -	echo "No Udev implementation selected. Configuration error."
+> -	exit 1
+> -endef
+> +$(error No Udev implementation selected. Configuration error)
+> +endif
+>  endif
+>  
+>  $(eval $(generic-package))
+> 
 
 
 -- 
