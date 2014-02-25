@@ -1,71 +1,42 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 25 Feb 2014 13:25:42 +0000
-Subject: [Buildroot] [PATCH] qt5connectivity: Don't build scanner example
-	without QtQuick
-Message-ID: <1393334742-38019-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Marco Trapanese <marcotrapanese@gmail.com>
+Date: Tue, 25 Feb 2014 14:34:12 +0100
+Subject: [Buildroot] Few questions external toolchain
+In-Reply-To: <CAAXf6LUnOyzHbSaOZtcBak55CQuKr=zSzzgH8zLkaF7zGPdSVw@mail.gmail.com>
+References: <530B8CEA.90306@gmail.com> <530C6DD2.4070605@gmail.com>
+ <CAAXf6LUnOyzHbSaOZtcBak55CQuKr=zSzzgH8zLkaF7zGPdSVw@mail.gmail.com>
+Message-ID: <530C9BD4.2020201@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Apply upstream patch to fix this problem:
+Il 25/02/2014 14:10, Thomas De Schampheleire ha scritto:
+> The external toolchain wrapper is created automatically by buildroot 
+> when the toolchain is 'installed'. However, above I see two different 
+> paths: /home/marco/dev/fsl-linaro-toolchain/bin/ext-toolchain-wrapper 
+> and ~/dev/buildroot/output/host/usr/bin/ Have you moved the buildroot 
+> repository to another location? Normally the toolchain wrapper is 
+> located in <output>/host/usr/bin, just like the symbolic links that 
+> point to it. Best regards, Thomas 
 
-make[3]: Entering directory
-`/home/test/test/3/output/build/qt5connectivity-5.2.0/examples/bluetooth'
-cd scanner/ && ( test -e Makefile ||
-/home/test/test/3/output/host/usr/bin/qmake
-/home/test/test/3/output/build/qt5connectivity-5.2.0/examples/bluetooth/scanner/scanner.pro
--o Makefile ) && /usr/bin/make -f Makefile Project ERROR: Unknown
-module(s) in QT: quick
+Thomas,
+the first path:
 
-Fixes:
-   http://autobuild.buildroot.net/results/163/1635e4d385293ea560107bdf624033e8ffefbe72/
+/home/marco/dev/fsl-linaro-toolchain/fsl-linaro-toolchain/bin
 
-Upstream patch URL:
-   https://qt.gitorious.org/qt/qtconnectivity/commit/1454664752505f5870e4173d15362bfdfe4148e7/
+is where I put my toolchain.
+The second one:
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- ...n_t-build-scanner-example-without-qtquick.patch |   30 ++++++++++++++++++++
- 1 files changed, 30 insertions(+), 0 deletions(-)
- create mode 100644 package/qt5/qt5connectivity/qt5connectivity-0001-don_t-build-scanner-example-without-qtquick.patch
+home/marco/dev/buildroot/output/host/usr/bin/
 
-diff --git a/package/qt5/qt5connectivity/qt5connectivity-0001-don_t-build-scanner-example-without-qtquick.patch b/package/qt5/qt5connectivity/qt5connectivity-0001-don_t-build-scanner-example-without-qtquick.patch
-new file mode 100644
-index 0000000..0751ba7
---- /dev/null
-+++ b/package/qt5/qt5connectivity/qt5connectivity-0001-don_t-build-scanner-example-without-qtquick.patch
-@@ -0,0 +1,30 @@
-+qt5connectivity: Don't build scanner example without QtQuick
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+
-+From 1454664752505f5870e4173d15362bfdfe4148e7 Mon Sep 17 00:00:00 2001
-+From: Alex Blasche <alexander.blasche@digia.com>
-+Date: Wed, 15 Jan 2014 12:11:31 +0100
-+Subject: [PATCH] Don't build scanner example without QtQuick
-+
-+Task-number: QTBUG-35711
-+Change-Id: I0406fb5edd8fb2a90046308853485eaaa4311a26
-+Reviewed-by: Friedemann Kleint <Friedemann.Kleint@digia.com>
-+Reviewed-by: Fabian Bumberger <fbumberger@rim.com>
-+Reviewed-by: Alex Blasche <alexander.blasche@digia.com>
-+---
-+ examples/bluetooth/bluetooth.pro |    2 +-
-+ 1 files changed, 1 insertions(+), 1 deletions(-)
-+
-+diff --git a/examples/bluetooth/bluetooth.pro b/examples/bluetooth/bluetooth.pro
-+index e3ef769..549bb7c 100644
-+--- a/examples/bluetooth/bluetooth.pro
-++++ b/examples/bluetooth/bluetooth.pro
-+@@ -6,4 +6,4 @@ qtHaveModule(widgets) {
-+                bttennis
-+ }
-+ 
-+-SUBDIRS += scanner
-++qtHaveModule(quick): SUBDIRS += scanner
-+-- 
-+1.7.1
-+
--- 
-1.7.1
+is where buildroot wrapped the toolchain, but of course 
+/home/marco/dev/fsl-linaro-toolchain/bin/ext-toolchain-wrapper does not 
+exist!
+
+I tried to let buildroot to download the tarball but it's the same.
+In the meanwhile I fix this issue I'm compiling using the built-in 
+codesourcery toolchain.
+
+Best regards
+Marco
