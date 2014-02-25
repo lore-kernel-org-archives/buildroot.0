@@ -1,33 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 25 Feb 2014 20:50:13 +0100
-Subject: [Buildroot] [git commit] haserl: mark old 0.8 version as deprecated
-Message-ID: <20140225200719.9418D9BA8F@busybox.osuosl.org>
+Date: Tue, 25 Feb 2014 20:58:21 +0100
+Subject: [Buildroot] [git commit] strongswan: needs threads
+Message-ID: <20140225200719.B27DB9BA8F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e722f7cc2331339d116304556ec32468b40fac5a
+commit: http://git.buildroot.net/buildroot/commit/?id=3b38a1e6bb99ac53b3a95db52869c8d194ff94f7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The 0.8 version hasn't seen any updates since 2005, and there's no real
-reason to continue to use it today, so deprecate it.
+Fixes:
+http://autobuild.buildroot.net/results/e23/e2394705545dad8e33ffc558df518014c15f5271/
 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/haserl/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/strongswan/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/haserl/Config.in b/package/haserl/Config.in
-index ddcf3e0..bfe1df8 100644
---- a/package/haserl/Config.in
-+++ b/package/haserl/Config.in
-@@ -25,6 +25,7 @@ choice
- 
- config BR2_PACKAGE_HASERL_VERSION_0_8_X
- 	bool	"v 0.8.x"
-+	depends on BR2_DEPRECATED_SINCE_2014_02
+diff --git a/package/strongswan/Config.in b/package/strongswan/Config.in
+index 63316cb..d53da64 100644
+--- a/package/strongswan/Config.in
++++ b/package/strongswan/Config.in
+@@ -1,6 +1,10 @@
++comment "strongswan needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
++
+ menuconfig BR2_PACKAGE_STRONGSWAN
+ 	bool "strongswan"
+ 	depends on BR2_USE_MMU # fork()
++	depends on BR2_TOOLCHAIN_HAS_THREADS
  	help
- 	  stable version
- 
+ 	  strongSwan is an OpenSource IPsec implementation for the
+ 	  Linux operating system. It is based on the discontinued
