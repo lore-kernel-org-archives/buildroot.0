@@ -1,61 +1,46 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Tue, 25 Feb 2014 09:47:06 +0400
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 25 Feb 2014 06:50:12 +0100
 Subject: [Buildroot] [autobuild.buildroot.net] Build results for
 	2014-02-23
-In-Reply-To: <20140225052234.GO4869@tarshish>
+In-Reply-To: <530B9A88.9010402@mind.be>
 References: <20140224073008.3ECD8100F60@stock.ovh.net>
  <CAAXf6LVNCe6OeGpe8sngvwErdQPgfbFfHg8f2mxmZBPqajL8AQ@mail.gmail.com>
- <20140224213601.6c287457@skate> <20140225052234.GO4869@tarshish>
-Message-ID: <CAMo8BfJKYb9=iUNr3vnMkPqQGERhD4mY-NsGFxpa-0MDg+=znw@mail.gmail.com>
+ <877g8kn6qf.fsf@dell.be.48ers.dk>
+ <CAAXf6LX0eoYHR7PUb8MvZdJFiQN29Tt8CBf8iFqY8wFa3FFetw@mail.gmail.com>
+ <530B9A88.9010402@mind.be>
+Message-ID: <a278b312-d64e-47dd-9822-2e9d7a79e379@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
-
-On Tue, Feb 25, 2014 at 9:22 AM, Baruch Siach <baruch@tkos.co.il> wrote:
-> Hi Thomas,
+Arnout Vandecappelle <arnout@mind.be> schreef:
+>On 24/02/14 12:37, Thomas De Schampheleire wrote:
+>> On Mon, Feb 24, 2014 at 11:30 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+>>>
+>>>
+>>>  >> tvheadend-c7d0335eb10d02b78... | 1
+>>>
+>>>  > Too old kernel headers (SYS_TURBO), patch available:
+>>>  > http://patchwork.ozlabs.org/patch/323403/
+>>>
+>>> Yes, but that relies on the TOOLCHAIN_HEADERS_AT_LEAST_x stuff. Do we
+>>> want that for 2014.02?
+>> 
+>> It may be very short before the deadline for a patch series like this,
+>> but if you ask me, I would dare to apply it still.
 >
-> On Mon, Feb 24, 2014 at 09:36:01PM +0100, Thomas Petazzoni wrote:
->> > >               wireshark-1.10.5 | 1
->> >     xtensa |               wireshark-1.10.5 | NOK |
->> > http://autobuild.buildroot.net/results/3bbba270745d96a08ff6eb98f9f3d39ca3a3ea9e/
->> >
->> > {standard input}:119517: Error: operand 1 of 'j' has out of range
->> > value '4294825646'
->> > {standard input}:119521: Error: operand 1 of 'j' has out of range
->> > value '4294828543'
->> > {standard input}:119525: Error: operand 1 of 'j' has out of range
->> > value '4294829836'
->> > {standard input}:119529: Error: operand 1 of 'j' has out of range
->> > value '4294830953'
->> > {standard input}:119533: Error: operand 1 of 'j' has out of range
->> > value '4294832702'
->> > {standard input}:119537: Error: operand 1 of 'j' has out of range
->> > value '4294834399'
->> > {standard input}:119541: Error: operand 1 of 'j' has out of range
->> > value '4294835783'
->>
->> Compiler problem. Should we disable wireshark for now?
+> I disagree. Even though the patch series just touches Config.in so is
+>less risky, I think it's a bad idea to still apply it to master now. I
+>wouldn't like to have to release a 2014.02.1 again...
 >
-> This problem appeared after the last wireshark version bump, and may as well
-> disappear after the next. The same goes for kmod
-> (http://autobuild.buildroot.net/results/1a6/1a6e7119feeb8c6098daf0d5cdc41aa778a30693/)
+> Also note that this is not a regression - we've lived with the
+>incompatible kernel headers situation for years. I think that not fixing
+>this behaviour in 2014.02 is less bad than running the risk of breaking
+>something that works.
 
-I had a look at these two issues,
-kmod triggers a real bug in xtensa ld, by specifying --gc-sections option.
-Disabling this option might be a workaround.
-With wireshark gcc generates 'j' jumps instead of 'jx' when jump
-targets are too far.
-Looks like gcc bug.
+You're all a bunch of chickens!
 
-> and mplayer
-> (http://autobuild.buildroot.net/results/9d2/9d2cf930d51274e119a98f63c06741bf2014ca64/).
-> Disabling wireshark on xtensa for now is OK if it's enabled again on the next
-> version update.
-
--- 
-Thanks.
--- Max
+;)
