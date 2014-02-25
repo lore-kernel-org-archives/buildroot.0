@@ -1,31 +1,28 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 25 Feb 2014 22:46:02 +0100
-Subject: [Buildroot] [PATCH] vlc: add warning that it has known issues
-In-Reply-To: <1393363076-22276-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Tue, 25 Feb 2014 22:17:56 +0100")
-References: <1393363076-22276-1-git-send-email-arnout@mind.be>
-Message-ID: <878usyj279.fsf@dell.be.48ers.dk>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue, 25 Feb 2014 22:50:46 +0100
+Subject: [Buildroot] [PATCH] vlc: fix some configure options
+In-Reply-To: <1393360566-4849-1-git-send-email-spdawson@gmail.com>
+References: <1393360566-4849-1-git-send-email-spdawson@gmail.com>
+Message-ID: <CAHXCMML=zMYhKOp7G2d2cAg_=T+n21yAXK=W1iBRtnGFfsgpbg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+Hi Simon,
 
- > We've seen autobuilder failures for vlc on many platforms and we don't
- > know how to solve them. It is also currently orphaned, i.e. there is
- > nobody who is actively using the package and maintaining it in
- > buildroot.
+On Tue, Feb 25, 2014 at 9:36 PM, Simon Dawson <spdawson@gmail.com> wrote:
+> Fix a large number of incorrect configure options for vlc.
+>
+> Configure warnings reported by Arnout Vandecappelle, in his analysis of vlc
+> autobuild failures.
 
- > We could mark the package as BROKEN, but that would make it completely
- > invisible for the users and the autobuilders, which would not help its
- > orphan-ness. Therefore, instead, add a big fat warning in the config
- > menus that it has known issues.
+Don't forget your SoB line ;)
 
- > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 
-Committed, thanks.
+Regards,
 
 -- 
-Bye, Peter Korsgaard
+Samuel
