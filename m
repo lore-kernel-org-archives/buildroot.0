@@ -1,7 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 25 Feb 2014 23:02:07 +0100
-Subject: [Buildroot] [RFC PATCH 0/10] add new virtual-package infrastructure
-Message-ID: <cover.1393365231.git.yann.morin.1998@free.fr>
+Date: Tue, 25 Feb 2014 23:02:01 +0100
+Subject: [Buildroot] [PATCH 01/10] package/lua: rename config options
+In-Reply-To: <cover.1393365231.git.yann.morin.1998@free.fr>
+References: <cover.1393365231.git.yann.morin.1998@free.fr>
+Message-ID: <9d33ad25e0868032de5fc62d5c11b799f57e86bd.1393365231.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,107 +12,107 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Hello All!
+Package's options should be named after the package.
 
-Here is a quick series implementing a new infrastructure for virtual
-packages.
+Lua is an interpreter, but the package is named 'lua'. So we want to
+name the config option with '_LUA_', not with '_LUA_INTERPRETER_'
 
-Basically, all a virtual package has to do in its .mk is:
+Besides, naming them with '_LUA_INTERPRETER_' might be confusing, since
+there is a package named 'luainterpreter'.
 
-    $(eval $(virtual-package))
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Francois Perrad <fperrad@gmail.com>
+---
+ Config.in.legacy      | 24 ++++++++++++++++++++++++
+ package/lua/Config.in | 10 +++++-----
+ package/lua/lua.mk    |  4 ++--
+ 3 files changed, 31 insertions(+), 7 deletions(-)
 
-There is no need to:
-  - define the dependency against the provider,
-  - define _SOURCE=""  (empty)
-
-But it requires the config options for the virtual package be named
-after the package, eg.:
-
-    package | Selector option        | Provider option
-    --------+------------------------+-----------------------------
-    libegl  | BR2_PACKAGE_HAS_LIBEGL | BR2_PACKAGE_PROVIDES_LIBEGL
-    jpeg    | BR2_PACKAGE_HAS_JPEG   | BR2_PACKAGE_PROVIDES_JPEG
-
-So, after the virtual-package infra has been introduced, the series
-goes on to rename some options, and convert some packages over to
-this new infra.
-
-NOTE! This is an RFC! It's not final! This series has hardly been
-tested. Only the dependency chain has been tested to be OK. No
-build-test was performed.
-
-Regards,
-Yann E. MORIN.
-
-
-----------------------------------------------------------------
-Yann E. MORIN (10):
-      package/lua: rename config options
-      packages: add infrastructure for virtual packages
-      package/powervr: convert to the virtual-package infrastructure
-      package/libgles: convert to the virtual-package infrastructure
-      package/libegl: convert to the virtual-package infrastructure
-      package/libopenmax: convert to the virtual-package infrastructure
-      package/libopenvg: convert to the virtual-package infrastructure
-      package/luainterpreter: convert to the virtual-package infrastructure
-      package/jpeg: convert to the virtual-package infrastructure
-      package/cryptodev: convert to the virtual-package infrastructure
-
- Config.in.legacy                                 | 24 +++++++++
- package/Config.in                                |  2 +-
- package/Makefile.in                              |  1 +
- package/bellagio/Config.in                       |  4 +-
- package/cairo/cairo.mk                           |  4 +-
- package/cryptodev/Config.in                      |  3 ++
- package/cryptodev/cryptodev.mk                   | 12 +----
- package/freescale-imx/gpu-viv-bin-mx6q/Config.in |  8 +--
- package/gstreamer1/gst-omx/Config.in             |  4 +-
- package/gstreamer1/gst1-plugins-bad/Config.in    |  2 +-
- package/jpeg/Config.in                           |  3 ++
- package/jpeg/jpeg.mk                             | 12 +----
- package/lbase64/Config.in                        |  2 +-
- package/lua-cjson/Config.in                      |  2 +-
- package/lua-ev/Config.in                         |  2 +-
- package/lua-msgpack-native/Config.in             |  2 +-
- package/lua/Config.in                            | 14 +++---
- package/lua/lua.mk                               |  4 +-
- package/luaexpat/Config.in                       |  2 +-
- package/luafilesystem/Config.in                  |  2 +-
- package/luainterpreter/Config.in                 |  6 +--
- package/luainterpreter/luainterpreter.mk         |  5 +-
- package/luajit/Config.in                         |  4 +-
- package/luaposix/Config.in                       |  2 +-
- package/luasec/Config.in                         |  2 +-
- package/luasocket/Config.in                      |  2 +-
- package/luasql-sqlite3/Config.in                 |  2 +-
- package/opengl/libegl/Config.in                  |  6 +--
- package/opengl/libegl/libegl.mk                  | 12 +----
- package/opengl/libgles/Config.in                 |  6 +--
- package/opengl/libgles/libgles.mk                | 12 +----
- package/opengl/libopenmax/Config.in              |  6 +--
- package/opengl/libopenmax/libopenmax.mk          | 12 +----
- package/opengl/libopenvg/Config.in               |  6 +--
- package/opengl/libopenvg/libopenvg.mk            | 12 +----
- package/pkg-virtual.mk                           | 64 ++++++++++++++++++++++++
- package/powervr/powervr.mk                       | 12 +----
- package/qt/Config.in                             |  4 +-
- package/qt5/qt5base/Config.in                    |  6 +--
- package/qt5/qt5declarative/Config.in             |  6 +--
- package/qt5/qt5graphicaleffects/Config.in        |  6 +--
- package/qt5/qt5multimedia/Config.in              |  6 +--
- package/qt5/qt5quick1/Config.in                  |  6 +--
- package/qt5/qt5quickcontrols/Config.in           |  6 +--
- package/rings/Config.in                          |  2 +-
- package/rpi-userland/Config.in                   | 16 +++---
- package/sunxi-mali/Config.in                     |  8 +--
- package/ti-gfx/Config.in                         |  8 +--
- 48 files changed, 188 insertions(+), 166 deletions(-)
- create mode 100644 package/pkg-virtual.mk
-
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 4424e31..d100d34 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -99,6 +99,30 @@ comment "----------------------------------------------------"
+ endif
+ 
+ ###############################################################################
++comment "Legacy options removed in 2014.05"
++
++config BR2_PACKAGE_LUA_INTERPRETER_EDITING_NONE
++	bool "Lua command-line editing none has been renamed"
++	help
++	  The BR2_PACKAGE_LUA_INTERPRETER_EDITING_NONE option has been
++	  renamed to BR2_PACKAGE_LUA_EDITING_NONE. You will have to select
++	  it in the corresponding choice.
++
++config BR2_PACKAGE_LUA_INTERPRETER_READLINE
++	bool "Lua command-line editing using readline has been renamed"
++	help
++	  The BR2_PACKAGE_LUA_INTERPRETER_READLINE option has been
++	  renamed to BR2_PACKAGE_LUA_READLINE. You will have to select
++	  it in the corresponding choice.
++
++config BR2_PACKAGE_LUA_INTERPRETER_LINENOISE
++	bool "Lua command-line editing using linenoise has been renamed"
++	help
++	  The BR2_PACKAGE_LUA_INTERPRETER_LINENOISE option has been
++	  renamed to BR2_PACKAGE_LUA_LINENOISE. You will have to select
++	  it in the corresponding choice.
++
++###############################################################################
+ comment "Legacy options removed in 2014.02"
+ 
+ config BR2_sh2
+diff --git a/package/lua/Config.in b/package/lua/Config.in
+index c4c12e9..2afb7c5 100644
+--- a/package/lua/Config.in
++++ b/package/lua/Config.in
+@@ -30,22 +30,22 @@ config BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION
+ 	default "5.2"	if BR2_PACKAGE_LUA_5_2
+ 
+ choice
+-	prompt "Lua Interpreter command-line editing"
+-	default BR2_PACKAGE_LUA_INTERPRETER_EDITING_NONE
++	prompt "Lua command-line editing"
++	default BR2_PACKAGE_LUA_EDITING_NONE
+ 
+-config BR2_PACKAGE_LUA_INTERPRETER_EDITING_NONE
++config BR2_PACKAGE_LUA_EDITING_NONE
+ 	bool "none"
+ 	help
+ 	  None.
+ 
+-config BR2_PACKAGE_LUA_INTERPRETER_READLINE
++config BR2_PACKAGE_LUA_READLINE
+ 	bool "readline support"
+ 	select BR2_PACKAGE_READLINE
+ 	select BR2_PACKAGE_NCURSES
+ 	help
+ 	  Enables command-line editing in the Lua interpreter.
+ 
+-config BR2_PACKAGE_LUA_INTERPRETER_LINENOISE
++config BR2_PACKAGE_LUA_LINENOISE
+ 	bool "linenoise support"
+ 	select BR2_PACKAGE_LINENOISE
+ 	help
+diff --git a/package/lua/lua.mk b/package/lua/lua.mk
+index 2c867f6..49107a6 100644
+--- a/package/lua/lua.mk
++++ b/package/lua/lua.mk
+@@ -24,12 +24,12 @@ LUA_CFLAGS += -D_FILE_OFFSET_BITS=32
+ endif
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LUA_INTERPRETER_READLINE),y)
++ifeq ($(BR2_PACKAGE_LUA_READLINE),y)
+ 	LUA_DEPENDENCIES = readline ncurses
+ 	LUA_MYLIBS += -lreadline -lhistory -lncurses
+ 	LUA_CFLAGS += -DLUA_USE_POSIX -DLUA_USE_DLOPEN -DLUA_USE_READLINE
+ else
+-ifeq ($(BR2_PACKAGE_LUA_INTERPRETER_LINENOISE),y)
++ifeq ($(BR2_PACKAGE_LUA_LINENOISE),y)
+ 	LUA_DEPENDENCIES = linenoise
+ 	LUA_MYLIBS += -llinenoise
+ 	LUA_CFLAGS += -DLUA_USE_POSIX -DLUA_USE_DLOPEN -DLUA_USE_LINENOISE
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.3.2
