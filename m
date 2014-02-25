@@ -1,28 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 25 Feb 2014 22:12:03 +0100
-Subject: [Buildroot] [PATCH] ncftp: clarify the NCFTP_RUN_AUTOCONF hook.
-In-Reply-To: <1393362107-21729-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Tue, 25 Feb 2014 22:01:47 +0100")
-References: <1393362107-21729-1-git-send-email-arnout@mind.be>
-Message-ID: <87d2iaj3rw.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 25 Feb 2014 22:17:56 +0100
+Subject: [Buildroot] [PATCH] vlc: add warning that it has known issues
+Message-ID: <1393363076-22276-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+We've seen autobuilder failures for vlc on many platforms and we don't
+know how to solve them. It is also currently orphaned, i.e. there is
+nobody who is actively using the package and maintaining it in
+buildroot.
 
- > When I saw this patch it took me a while to figure out how/why it worked,
- > so let's make life easier for the eventual version bumper to understand
- > what's going on here.
+We could mark the package as BROKEN, but that would make it completely
+invisible for the users and the autobuilders, which would not help its
+orphan-ness. Therefore, instead, add a big fat warning in the config
+menus that it has known issues.
 
- > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- > ---
- > For -next
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/vlc/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-We made the change on master, and this change is obviously (tm) safe, so
-I've added it to master instead, thanks.
-
+diff --git a/package/vlc/Config.in b/package/vlc/Config.in
+index 2335894..9c9d028 100644
+--- a/package/vlc/Config.in
++++ b/package/vlc/Config.in
+@@ -1,3 +1,8 @@
++if BR2_PACKAGE_VLC
++comment "vlc is known not to work in all configurations"
++comment "If you can fix it, please inform buildroot at buildroot.net"
++endif
++
+ config BR2_PACKAGE_VLC
+ 	bool "vlc"
+ 	depends on (BR2_UCLIBC_VERSION_SNAPSHOT || BR2_TOOLCHAIN_USES_GLIBC) # spawn.h
 -- 
-Bye, Peter Korsgaard
+1.9.0
