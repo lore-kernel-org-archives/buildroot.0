@@ -1,68 +1,70 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Tue, 25 Feb 2014 10:15:13 +0400
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-02-23
-In-Reply-To: <20140225060341.GP4869@tarshish>
-References: <20140224073008.3ECD8100F60@stock.ovh.net>
- <CAAXf6LVNCe6OeGpe8sngvwErdQPgfbFfHg8f2mxmZBPqajL8AQ@mail.gmail.com>
- <20140224213601.6c287457@skate> <20140225052234.GO4869@tarshish>
- <CAMo8BfJKYb9=iUNr3vnMkPqQGERhD4mY-NsGFxpa-0MDg+=znw@mail.gmail.com>
- <20140225060341.GP4869@tarshish>
-Message-ID: <CAMo8BfKUQ0CUxB7GC4oSe5G4NoDOOsa3fARNFtqYx6G7kRBo9g@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 25 Feb 2014 08:30:10 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-02-24
+Message-ID: <20140225073010.CAAC1101221@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Feb 25, 2014 at 10:03 AM, Baruch Siach <baruch@tkos.co.il> wrote:
-> Hi Max,
->
-> On Tue, Feb 25, 2014 at 09:47:06AM +0400, Max Filippov wrote:
->> On Tue, Feb 25, 2014 at 9:22 AM, Baruch Siach <baruch@tkos.co.il> wrote:
->> > On Mon, Feb 24, 2014 at 09:36:01PM +0100, Thomas Petazzoni wrote:
->> >> > >               wireshark-1.10.5 | 1
->> >> >     xtensa |               wireshark-1.10.5 | NOK |
->> >> > http://autobuild.buildroot.net/results/3bbba270745d96a08ff6eb98f9f3d39ca3a3ea9e/
->> >> >
->> >> > {standard input}:119517: Error: operand 1 of 'j' has out of range
->> >> > value '4294825646'
->> >> > {standard input}:119521: Error: operand 1 of 'j' has out of range
->> >> > value '4294828543'
->> >> > {standard input}:119525: Error: operand 1 of 'j' has out of range
->> >> > value '4294829836'
->> >> > {standard input}:119529: Error: operand 1 of 'j' has out of range
->> >> > value '4294830953'
->> >> > {standard input}:119533: Error: operand 1 of 'j' has out of range
->> >> > value '4294832702'
->> >> > {standard input}:119537: Error: operand 1 of 'j' has out of range
->> >> > value '4294834399'
->> >> > {standard input}:119541: Error: operand 1 of 'j' has out of range
->> >> > value '4294835783'
->> >>
->> >> Compiler problem. Should we disable wireshark for now?
->> >
->> > This problem appeared after the last wireshark version bump, and may as well
->> > disappear after the next. The same goes for kmod
->> > (http://autobuild.buildroot.net/results/1a6/1a6e7119feeb8c6098daf0d5cdc41aa778a30693/)
->>
->> I had a look at these two issues,
->> kmod triggers a real bug in xtensa ld, by specifying --gc-sections option.
->
-> Thanks for investigating the issue. I'll try to come up with a patch for this.
->
->> Disabling this option might be a workaround.
->> With wireshark gcc generates 'j' jumps instead of 'jx' when jump
->> targets are too far.
->> Looks like gcc bug.
->
-> As you can see from the error message above, the target addresses seem to be
-> wrong (i.e., < 0).
+Build statistics for 2014-02-24
+===============================
 
-These are not addresses but offsets from the 'j' instruction; messages
-indicate that
-jump offsets are out of valid range -131068 to +131075 bytes.
+        success : 97 
+       failures : 22 
+       timeouts : 0  
+          TOTAL : 119
+
+Classification of failures by reason
+====================================
+
+         qt5connectivity-5.2.0 | 2 
+                     php-5.5.8 | 2 
+                 qt5base-5.2.0 | 2 
+                   cups-1.3.11 | 1 
+tvheadend-c7d0335eb10d02b78... | 1 
+                  weston-1.4.0 | 1 
+                sdl_ttf-2.0.11 | 1 
+                 fio-fio-2.1.4 | 1 
+                libnftnl-1.0.0 | 1 
+             host-thrift-0.9.1 | 1 
+                     lua-5.1.5 | 1 
+             fxload-2008_10_13 | 1 
+                     make-3.82 | 1 
+           host-libxslt-1.1.28 | 1 
+                pciutils-3.2.1 | 1 
+                 libevas-1.7.7 | 1 
+                     vlc-2.1.2 | 1 
+               libsigsegv-2.10 | 1 
+               libcuefile-r475 | 1 
+
+Detail of failures
+===================
+
+    xtensa |                    cups-1.3.11 | NOK | http://autobuild.buildroot.net/results/862d3695e2c928fc1a07e4e5c8886d8889e431e4/
+     nios2 |                  fio-fio-2.1.4 | NOK | http://autobuild.buildroot.net/results/02b10aa386ccb4e80583e3754ec93c9ad359f806/
+microblaze |              fxload-2008_10_13 | NOK | http://autobuild.buildroot.net/results/d03227f0ebe7a90bf9888f969b687b8778c85a79/
+      i686 |            host-libxslt-1.1.28 | NOK | http://autobuild.buildroot.net/results/3f823f0ae0304547a7a0d2dee336ca945f182a10/
+      i686 |              host-thrift-0.9.1 | NOK | http://autobuild.buildroot.net/results/d46f9097780bdde68ec15f693281ee0b04667f98/
+      bfin |                libcuefile-r475 | NOK | http://autobuild.buildroot.net/results/022689a1c3cda58d293328f63f912bfc5da0a6e2/
+       arm |                  libevas-1.7.7 | NOK | http://autobuild.buildroot.net/results/a31d7ddbded441bd207552ecaddc53bec20f1940/
+   powerpc |                 libnftnl-1.0.0 | NOK | http://autobuild.buildroot.net/results/c84292da523daf5bde5f1acc4040dd762e938aec/
+      bfin |                libsigsegv-2.10 | NOK | http://autobuild.buildroot.net/results/5e2c627cfcb2699b16a82eb9554f2c9dfabd5483/
+      bfin |                      lua-5.1.5 | NOK | http://autobuild.buildroot.net/results/44e2a79a29172a28ff3024a9d75e89a204efc22d/
+      bfin |                      make-3.82 | NOK | http://autobuild.buildroot.net/results/40f1ca8e5ae3a82cc5db2dfd3ccd8bc1028b9561/
+      bfin |                 pciutils-3.2.1 | NOK | http://autobuild.buildroot.net/results/7d7bffb2d3bbf3ee0b47de2aef834bd97e5fe547/
+microblaze |                      php-5.5.8 | NOK | http://autobuild.buildroot.net/results/e01d035e118b4adfa561b826893d08895c73567e/
+       arm |                      php-5.5.8 | NOK | http://autobuild.buildroot.net/results/501fbdb138225a79ccb482bd1caa670ff773f8dd/
+    xtensa |                  qt5base-5.2.0 | NOK | http://autobuild.buildroot.net/results/63f30dc980d07de79d31d89d63445077d2a56718/
+      i686 |                  qt5base-5.2.0 | NOK | http://autobuild.buildroot.net/results/148080d35e25ad54768fa9b42b88f7321c1d7070/
+   powerpc |          qt5connectivity-5.2.0 | NOK | http://autobuild.buildroot.net/results/1635e4d385293ea560107bdf624033e8ffefbe72/
+    mipsel |          qt5connectivity-5.2.0 | NOK | http://autobuild.buildroot.net/results/f6a9a8c59bdf452519e5f33e6a9c9d9140ab7f70/
+       arm |                 sdl_ttf-2.0.11 | NOK | http://autobuild.buildroot.net/results/c47cd52cbcc768f478048b24ede8dca32deade99/
+       arm | tvheadend-c7d0335eb10d02b78... | NOK | http://autobuild.buildroot.net/results/8efd1aa60c7b68ec5ddca7620d6d2d5eefaf5ac2/
+      mips |                      vlc-2.1.2 | NOK | http://autobuild.buildroot.net/results/a464c64d57c8f8e69489a37567adc9d346b51cdb/
+   powerpc |                   weston-1.4.0 | NOK | http://autobuild.buildroot.net/results/3e21df53ab2179cad784dcfbb4551d5588b14a47/
+
 
 -- 
-Thanks.
--- Max
+http://autobuild.buildroot.net
