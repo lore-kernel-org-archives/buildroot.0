@@ -1,157 +1,58 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 25 Feb 2014 23:51:30 +0100
-Subject: [Buildroot] [PATCH] vlc: fix some configure options
-In-Reply-To: <1393360566-4849-1-git-send-email-spdawson@gmail.com> (Simon
- Dawson's message of "Tue, 25 Feb 2014 20:36:06 +0000")
-References: <1393360566-4849-1-git-send-email-spdawson@gmail.com>
-Message-ID: <87sir6hklp.fsf@dell.be.48ers.dk>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 25 Feb 2014 23:53:56 +0100
+Subject: [Buildroot] [RFC/PATCH 0/1] gst-fsl-plugins: fix compile for
+ sysroot based on newer linux kernel headers
+In-Reply-To: <87wqgihlo2.fsf@dell.be.48ers.dk>
+References: <1393366722-27644-1-git-send-email-ps.report@gmx.net>,
+ <87wqgihlo2.fsf@dell.be.48ers.dk>
+Message-ID: <trinity-913bb981-bb5f-4c21-aa93-d4abc9ac6ea7-1393368836439@3capp-gmx-bs50>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Simon" == Simon Dawson <spdawson@gmail.com> writes:
+> Gesendet: Dienstag, 25. Februar 2014 um 23:28 Uhr
+> Von: "Peter Korsgaard" <jacmet@uclibc.org>
+> An: "Peter Seiderer" <ps.report@gmx.net>
+> Cc: buildroot at busybox.net
+> Betreff: Re: [RFC/PATCH 0/1] gst-fsl-plugins: fix compile for sysroot based on newer linux kernel headers
+>
+> >>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+> 
+>  > The freescale specific gst-fsl-plugins-3.0.1/src/misc/v4l_source/src/mfw_gst_v4lsrc.c
+>  > compile depends on the VIDIOC_DBG_G_CHIP_IDENT ioctl (which was removed
+>  > from linux kernel in version 3.11). This breaks compile with toolchains
+>  > based on actual linux kernel headers (e.g. buildroot/glibc toolchain).
+> 
+>  > Which is the right way to fix this problem?
+> 
+>  > - fix include precedence from sysroot to custom linux kernel headers
+>  >   as done in the following patch (latest freescale custom kernel
+>  >   is 3.10 based)
+> 
+>  > - add comment/hint in package description about this dependency
+> 
+>  > - and/or add dependency (or check) for sysroot linux kernel headers
+>  >   version <= 3.10.x (any hint how to do this?)
+> 
+> How about just patching mfw_gst_v4lsrc.c to use a local definition for
+> VIDIOC_DBG_G_CHIP_IDENT if the kernel headers don't provide it (E.G. in
+> a #ifndef VIDIOC_DBG_G_CHIP_IDENT conditional)?
+> 
+> -- 
+> Bye, Peter Korsgaard
+> 
 
- > Fix a large number of incorrect configure options for vlc.
- > Configure warnings reported by Arnout Vandecappelle, in his analysis of vlc
- > autobuild failures.
+Was my first thought too, but the gst-fsl-plugins logic seems to be that sysroot
+and runnign kernel are different ones. The running/custoom kernel needs the
+imx/freescale-specific extensions.
 
- > ---
- >  package/vlc/vlc.mk | 70 +++++++++++++++++++++++++++---------------------------
- >  1 file changed, 35 insertions(+), 35 deletions(-)
+The #ifndef VIDIOC_DBG_G_CHIP_IDENT conditional solution would give the
+wrong/sysroot based result instead the right/custom kernel based one
+(a plugin without VIDIOC_DBG_G_CHIP_IDENT ioctl, a running kernel with
+existing VIDIOC_DBG_G_CHIP_IDENT ioctl).
 
- > diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
- > index 0e76e11..9bcedd1 100644
- > --- a/package/vlc/vlc.mk
- > +++ b/package/vlc/vlc.mk
- > @@ -14,23 +14,23 @@ VLC_AUTORECONF = YES
- 
- >  VLC_CONF_OPT += \
- >  	--disable-a52 \
- > -	--disable-shout \
- > -	--disable-twolame \
- > -	--disable-dca \
- > -	--disable-dirac \
- > -	--disable-schroedinger \
- > -	--disable-quicksync \
- > -	--disable-fluidsynth \
- > +	--without-shout \
- > +	--without-twolame \
- > +	--without-dca \
- > +	--without-dirac \
- > +	--without-schroedinger \
- > +	--without-quicksync \
- > +	--without-fluidsynth \
+Best solution would be consistent versions of toolchain and custom kernel...
 
-Did you test these?
-
-From a quick look:
-
-./configure --help | egrep 'a52|shout|twolame|dca|dirac|schroedinger|quicksync|fluidsynth'
-  --enable-shout          libshout output plugin [default=auto]
-  --enable-twolame        MPEG Audio Layer 2 encoder [default=auto]
-  --enable-a52            A/52 support with liba52 (default enabled)
-  --with-a52=PATH         a52 headers and libraries
-  --with-a52-tree=PATH    a52dec tree for static linking
-  --enable-dca            DTS Coherent Acoustics support with libdca
-  --enable-dirac          dirac encoder [default=auto]
-  --enable-schroedinger   dirac decoder and encoder using schroedinger
-  --enable-quicksync      Intel QuickSync MPEG4-Part10/MPEG2 (aka H.264/H.262)
-  --enable-fluidsynth     MIDI synthetiser with libfluidsynth [default=auto]
-
-So they all seem to be of the --enable / --disable form and not --with / --without.
-
- >  	--disable-zvbi \
- > -	--disable-kate \
- > -	--disable-caca \
- > +	--without-kate \
- > +	--without-caca \
- >  	--disable-jack \
- > -	--disable-samplerate \
- > -	--disable-chromaprint \
- > -	--disable-goom \
- > +	--without-samplerate \
- > +	--without-chromaprint \
- > +	--without-goom \
-
-Same here:
-
-./configure --help | egrep 'kate|caca|samplerate|chromaprint|goom'
-  --enable-kate           kate codec [default=auto]
-  --enable-caca           libcaca output [default=auto]
-  --enable-samplerate     Resampler with libsamplerate [default=auto]
-  --enable-chromaprint    (Chromaprint based audio fingerprinter)
-  --enable-goom           goom visualization plugin [default=auto]
-
-
-
- >  	--disable-projectm \
- >  	--disable-vsxu \
- > -	--disable-mtp \
- > +	--without-mtp \
- >  	--without-opencv
-
-And here:
-
-./configure --help | egrep 'mtp'
-  --enable-mtp            MTP devices support [default=auto]
-
-
-
- >  # Set powerpc altivec appropriately
- > @@ -49,10 +49,10 @@ endif
- 
- >  # bonjour support needs avahi-client, which needs avahi-daemon and dbus
- >  ifeq ($(BR2_PACKAGE_AVAHI)$(BR2_PACKAGE_AVAHI_DAEMON)$(BR2_PACKAGE_DBUS),yyy)
- > -VLC_CONF_OPT += --enable-bonjour
- > +VLC_CONF_OPT += --with-bonjour
- >  VLC_DEPENDENCIES += avahi dbus
- >  else
- > -VLC_CONF_OPT += --disable-bonjour
- > +VLC_CONF_OPT += --without-bonjour
-
-./configure --help | egrep 'bonjour'
-  --enable-bonjour        Bonjour services discovery [default=auto]
-
-
- >  endif
- 
- >  ifeq ($(BR2_PACKAGE_DBUS),y)
- > @@ -96,10 +96,10 @@ VLC_CONF_OPT += --disable-swscale
- >  endif
- 
- >  ifeq ($(BR2_PACKAGE_FLAC),y)
- > -VLC_CONF_OPT += --enable-flac
- > +VLC_CONF_OPT += --with-flac
- >  VLC_DEPENDENCIES += flac
- >  else
- > -VLC_CONF_OPT += --disable-flac
- > +VLC_CONF_OPT += --without-flac
- >  endif
-
-./configure --help | egrep 'flac'
-  --enable-flac           libflac decoder/encoder support [default=auto]
-
-
- >  ifeq ($(BR2_PACKAGE_MESA3D),y)
- > @@ -110,10 +110,10 @@ VLC_CONF_OPT += --disable-glx
- >  endif
- 
- >  ifeq ($(BR2_PACKAGE_OPUS),y)
- > -VLC_CONF_OPT += --enable-opus
- > +VLC_CONF_OPT += --with-opus
- >  VLC_DEPENDENCIES += opus
- >  else
- > -VLC_CONF_OPT += --disable-opus
- > +VLC_CONF_OPT += --without-opus
- >  endif
-
-./configure --help | egrep 'opus'
-  --enable-opus           Opus support [default=auto]
-
-
-.. And so on. What's going on here?
-
--- 
-Bye, Peter Korsgaard
+Bye, Peter Seiderer
