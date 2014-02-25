@@ -1,142 +1,45 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Tue, 25 Feb 2014 16:45:37 +0100
-Subject: [Buildroot] [PATCH v2 2/2] manual: add virtual package tutorial.
-In-Reply-To: <1393343137-4209-1-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1393343137-4209-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <1393343137-4209-3-git-send-email-eric.le.bihan.dev@free.fr>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 25 Feb 2014 15:36:44 +0000
+Subject: [Buildroot] [PATCH] gst1-plugins-bad: select all opencv modules
+	needed
+Message-ID: <1393342604-48284-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The manual now features a new section with instructions about how to add a
-virtual package.
+gstopencv.c includes the old-style header opencv/cv.h which includes a
+set of module's headers. To satisfy the opencv/cv.h requirements we need
+to select the modules which provide the required headers.
 
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Fixes:
+   http://autobuild.buildroot.net/results/f5b/f5b248eb7be38d6eb3655cdc1ab6ee5e716b9b29/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- docs/manual/adding-packages-virtual.txt |   99 +++++++++++++++++++++++++++++++
- docs/manual/adding-packages.txt         |    2 +
- 2 files changed, 101 insertions(+)
- create mode 100644 docs/manual/adding-packages-virtual.txt
+ package/gstreamer1/gst1-plugins-bad/Config.in |    9 +++++++++
+ 1 files changed, 9 insertions(+), 0 deletions(-)
 
-diff --git a/docs/manual/adding-packages-virtual.txt b/docs/manual/adding-packages-virtual.txt
-new file mode 100644
-index 0000000..10459b8
---- /dev/null
-+++ b/docs/manual/adding-packages-virtual.txt
-@@ -0,0 +1,99 @@
-+// -*- mode:doc; -*-
-+// vim: set syntax=asciidoc:
-+
-+[[virtual-package-tutorial]]
-+
-+Virtual package tutorial
-+~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+In Buildroot, a virtual package is a package whose functionalities are
-+provided by one or more packages, referred to as 'providers'. The virtual
-+package management is an extensible mechanism allowing the user to choose
-+the provider used in the rootfs.
-+
-+For example, 'OpenGL ES' is an API for 2D and 3D graphics on embedded systems.
-+The implementation of this API is different for the 'Allwinner Tech Sunxi' and
-+the 'Texas Instruments OMAP35xx' plaftorms. So +libgles+ will be a virtual
-+package and +sunxi-mali+ and +ti-gfx+ will be the providers.
-+
-+In the following example, we will explain how to add a new virtual package
-+('something-virtual') and a provider for it ('some-provider').
-+
-+First, let's create the virtual package.
-+
-+Virtual package +Config.in+ file
-+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-+
-+The +Config.in+ file of virtual package 'something-virtual' should contain:
-+
-+---------------------------
-+01: config BR2_PACKAGE_HAS_SOMETHING_VIRTUAL
-+02:	bool
-+03:
-+04: config BR2_PACKAGE_PROVIDES_SOMETHING_VIRTUAL
-+05:	depends on BR2_PACKAGE_HAS_SOMETHING_VIRTUAL
-+06:	string
-+---------------------------
-+
-+In this file, we declare two options, +BR2_PACKAGE_HAS_SOMETHING_VIRTUAL+ and
-++BR2_PACKAGE_PROVIDES_SOMETHING_VIRTUAL+, whose values will be used by the
-+providers.
-+
-+Virtual package +*.mk+ file
-+^^^^^^^^^^^^^^^^^^^^^^^^^^^
-+
-+The Makefile +package/something-virtual/something-virtual.mk+ should contain:
-+
-+---------------------------
-+01: ################################################################################
-+02: #
-+03: # something-virtual
-+04: #
-+05: ################################################################################
-+06:
-+07: SOMETHING_VIRTUAL_SOURCE =
-+08: SOMETHING_VIRTUAL_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_SOMETHING_VIRTUAL))
-+09:
-+10: ifeq ($(BR2_PACKAGE_HAS_SOMETHING_VIRTUAL),y)
-+11: ifeq ($(SOMETHING_VIRTUAL_DEPENDENCIES),)
-+12: $(error No something-virtual implementation selected. Configuration error.)
-+13: endif
-+14: endif
-+15:
-+16: $(eval $(generic-package))
-+---------------------------
-+
-+The Makefile is quite small as it will only check if a provider for the
-+virtual package has been selected.
-+
-+When adding a package as a provider, only the +Config.in+ file requires some
-+modifications. The +*.mk+ file should follow the Buildroot infrastructure with
-+no change at all.
-+
-+Provider +Config.in+ file
-+^^^^^^^^^^^^^^^^^^^^^^^^^
-+
-+The +Config.in+ file of the package 'some-provider', which provides the
-+functionalities of 'something-virtual', should contain:
-+
-+---------------------------
-+01: config BR2_PACKAGE_SOME_PROVIDER
-+02:	bool "some-provider"
-+03:	select BR2_PACKAGE_HAS_SOMETHING_VIRTUAL
-+04:	help
-+05:	  This is a comment that explains what some-provider is.
-+06:
-+07:	  http://foosoftware.org/some-provider/
-+08:
-+09: if BR2_PACKAGE_SOME_PROVIDER
-+10: config BR2_PACKAGE_PROVIDES_SOMETHING_VIRTUAL
-+11:	default "some-provider"
-+12: endif
-+---------------------------
-+
-+On line 3, we select +BR2_PACKAGE_HAS_SOMETHING_VIRTUAL+, and on line 11, we
-+set the value of +BR2_PACKAGE_PROVIDES_SOMETHING_VIRTUAL+ to the name of the
-+provider, but only if it is selected.
-+
-+Of course, do not forget to add the proper build and runtime dependencies for
-+this package!
-diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
-index cc86529..f763282 100644
---- a/docs/manual/adding-packages.txt
-+++ b/docs/manual/adding-packages.txt
-@@ -22,6 +22,8 @@ include::adding-packages-python.txt[]
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index 407bf31..629ea3a 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -417,6 +417,15 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENCV
+ 	bool "opencv"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	select BR2_PACKAGE_OPENCV
++	# Remove the following opencv modules when gstreamer fixes the
++	# problem of including the old "cv.h" header
++	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
++	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
++	select BR2_PACKAGE_OPENCV_LIB_FLANN
++	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
++	select BR2_PACKAGE_OPENCV_LIB_LEGACY
++	select BR2_PACKAGE_OPENCV_LIB_OBJDETECT
++	select BR2_PACKAGE_OPENCV_LIB_VIDEO
+ 	help
+ 	  GStreamer OpenCV Plugins
  
- include::adding-packages-luarocks.txt[]
- 
-+include::adding-packages-virtual.txt[]
-+
- include::adding-packages-hooks.txt[]
- 
- include::adding-packages-gettext.txt[]
 -- 
-1.7.9.5
+1.7.1
