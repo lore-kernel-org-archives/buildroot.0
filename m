@@ -1,38 +1,71 @@
-From: Lucas Zampar Bernardi <lucas.zampar@gmail.com>
-Date: Tue, 25 Feb 2014 10:22:08 -0300
-Subject: [Buildroot] [PATCH] Added support for linux headers for testing
-	versions to build cross-compile tools
-Message-ID: <1393334528-10441-1-git-send-email-lucas.zampar@gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 25 Feb 2014 13:25:42 +0000
+Subject: [Buildroot] [PATCH] qt5connectivity: Don't build scanner example
+	without QtQuick
+Message-ID: <1393334742-38019-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Lucas Zampar Bernardi <lucas@writesys.com.br>
+Apply upstream patch to fix this problem:
 
+make[3]: Entering directory
+`/home/test/test/3/output/build/qt5connectivity-5.2.0/examples/bluetooth'
+cd scanner/ && ( test -e Makefile ||
+/home/test/test/3/output/host/usr/bin/qmake
+/home/test/test/3/output/build/qt5connectivity-5.2.0/examples/bluetooth/scanner/scanner.pro
+-o Makefile ) && /usr/bin/make -f Makefile Project ERROR: Unknown
+module(s) in QT: quick
 
-This patch add support to buildroot compile an internal cross-compiler using linux hearders with releases candidates versions (testing).
+Fixes:
+   http://autobuild.buildroot.net/results/163/1635e4d385293ea560107bdf624033e8ffefbe72/
+
+Upstream patch URL:
+   https://qt.gitorious.org/qt/qtconnectivity/commit/1454664752505f5870e4173d15362bfdfe4148e7/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/linux-headers/linux-headers.mk |    6 ++++++
- 1 file changed, 6 insertions(+)
+ ...n_t-build-scanner-example-without-qtquick.patch |   30 ++++++++++++++++++++
+ 1 files changed, 30 insertions(+), 0 deletions(-)
+ create mode 100644 package/qt5/qt5connectivity/qt5connectivity-0001-don_t-build-scanner-example-without-qtquick.patch
 
-diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
-index 086e5d5..d6e9dbb 100644
---- a/package/linux-headers/linux-headers.mk
-+++ b/package/linux-headers/linux-headers.mk
-@@ -13,6 +13,12 @@ LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v2.6/
- else
- LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v3.x/
- endif
+diff --git a/package/qt5/qt5connectivity/qt5connectivity-0001-don_t-build-scanner-example-without-qtquick.patch b/package/qt5/qt5connectivity/qt5connectivity-0001-don_t-build-scanner-example-without-qtquick.patch
+new file mode 100644
+index 0000000..0751ba7
+--- /dev/null
++++ b/package/qt5/qt5connectivity/qt5connectivity-0001-don_t-build-scanner-example-without-qtquick.patch
+@@ -0,0 +1,30 @@
++qt5connectivity: Don't build scanner example without QtQuick
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 +
-+# release candidates are in testing/ subdir
-+ifneq ($(findstring -rc,$(LINUX_HEADERS_VERSION)),)
-+LINUX_HEADERS_SITE := $(LINUX_HEADERS_SITE)testing/
-+endif
++From 1454664752505f5870e4173d15362bfdfe4148e7 Mon Sep 17 00:00:00 2001
++From: Alex Blasche <alexander.blasche@digia.com>
++Date: Wed, 15 Jan 2014 12:11:31 +0100
++Subject: [PATCH] Don't build scanner example without QtQuick
 +
- LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.xz
- 
- LINUX_HEADERS_INSTALL_STAGING = YES
++Task-number: QTBUG-35711
++Change-Id: I0406fb5edd8fb2a90046308853485eaaa4311a26
++Reviewed-by: Friedemann Kleint <Friedemann.Kleint@digia.com>
++Reviewed-by: Fabian Bumberger <fbumberger@rim.com>
++Reviewed-by: Alex Blasche <alexander.blasche@digia.com>
++---
++ examples/bluetooth/bluetooth.pro |    2 +-
++ 1 files changed, 1 insertions(+), 1 deletions(-)
++
++diff --git a/examples/bluetooth/bluetooth.pro b/examples/bluetooth/bluetooth.pro
++index e3ef769..549bb7c 100644
++--- a/examples/bluetooth/bluetooth.pro
+++++ b/examples/bluetooth/bluetooth.pro
++@@ -6,4 +6,4 @@ qtHaveModule(widgets) {
++                bttennis
++ }
++ 
++-SUBDIRS += scanner
+++qtHaveModule(quick): SUBDIRS += scanner
++-- 
++1.7.1
++
 -- 
-1.7.9.5
+1.7.1
