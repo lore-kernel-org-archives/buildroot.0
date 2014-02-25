@@ -1,80 +1,85 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 25 Feb 2014 18:04:06 +0100
-Subject: [Buildroot] [PATCH v2 2/2] systemd: enable required kernel
-	features.
-In-Reply-To: <1393233942-11638-3-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1393233942-11638-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1393233942-11638-3-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <530CCD06.3070008@mind.be>
+Date: Tue, 25 Feb 2014 18:13:48 +0100
+Subject: [Buildroot] [PATCH v3 1/1] ncftp: fix cross-compilation test
+In-Reply-To: <530A7B97.3090701@openwide.fr>
+References: <1393016452-10812-1-git-send-email-romain.naour@openwide.fr>
+ <530A74F4.8030906@mind.be> <530A7B97.3090701@openwide.fr>
+Message-ID: <530CCF4C.7090208@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 24/02/14 10:25, Eric Le Bihan wrote:
-> When systemd is chosen as init system, the required kernel features are
-> enabled.
+On 23/02/14 23:52, Romain Naour wrote:
+> Hi Arnout,
+> Le 23/02/2014 23:23, Arnout Vandecappelle a ?crit :
+>> On 02/21/14 22:00, Romain Naour wrote:
+>>> The cross-compilation test is based on the ability to run
+>>> a test program on the host, which is wrong.
+>>>
+>>> If it runs, then the configure script concludes
+>>> that we're doing native compilation,
+>>> if it doesn't run, we're doing cross-compilation.
+>>>
+>>> The configure script needs to be regenerated to fix the
+>>> cross-compilation test.
+>>>
+>>> Fixes
+>>> http://autobuild.buildroot.net/results/969/969a49ae97a50634ea846a82b9c360e4fb020ace/build-end.log
+>>>
+>>>
+>>> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+>>> ---
+>>>   package/ncftp/ncftp.mk | 8 ++++++++
+>>   Looks like the patch file itself got lost in this revision...
 > 
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> Thanks to the advice of ThomasP, the patch file is no longer necessary
+> since the configure script is regenerated correctly by autoconf.
+> I tested this patch in the same conditions as for ncftp build errors
+> (with a chrootwhere ncurses was not installed on the host)
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ OK, now I understand.
 
- However, it would be good to add the same information to the end of
-docs/manual/configure.txt
+ I'm going to send a follow-up patch to clarify this. Otherwise, an
+eventual version bumper will have a hard time understanding what is going on.
+
 
  Regards,
  Arnout
 
-> ---
->  linux/linux.mk            |    6 +++++-
->  package/systemd/Config.in |   16 ++++++++++++++--
->  2 files changed, 19 insertions(+), 3 deletions(-)
 > 
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index d7f51b3..f948e6c 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -195,7 +195,11 @@ define LINUX_CONFIGURE_CMDS
->  		$(call KCONFIG_ENABLE_OPT,CONFIG_FUNCTION_TRACER,$(@D)/.config))
->  	$(if $(BR2_PACKAGE_SYSTEMD),
->  		$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUPS,$(@D)/.config)
-> -		$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER,$(@D)/.config))
-> +		$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER,$(@D)/.config)
-> +		$(call KCONFIG_ENABLE_OPT,CONFIG_FHANDLE,$(@D)/.config)
-> +		$(call KCONFIG_ENABLE_OPT,CONFIG_AUTOFS4_FS,$(@D)/.config)
-> +		$(call KCONFIG_ENABLE_OPT,CONFIG_TMPFS_POSIX_ACL,$(@D)/.config)
-> +		$(call KCONFIG_ENABLE_OPT,CONFIG_TMPFS_POSIX_XATTR,$(@D)/.config))
->  	$(if $(BR2_LINUX_KERNEL_APPENDED_DTB),
->  		$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_APPENDED_DTB,$(@D)/.config))
->  	yes '' | $(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) oldconfig
-> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-> index eacc23c..4f180a1 100644
-> --- a/package/systemd/Config.in
-> +++ b/package/systemd/Config.in
-> @@ -26,8 +26,20 @@ config BR2_PACKAGE_SYSTEMD
->  	  elaborate transactional dependency-based service control logic.
->  	  It can work as a drop-in replacement for sysvinit.
->  
-> -	  Systemd requires a Linux kernel >= 3.0, with inotify, devtmpfs,
-> -	  tmpfs vfs and tmpfs POSIX ACL enabled.
-> +	  Systemd requires a Linux kernel >= 3.0 with the following options
-> +	  enabled:
-> +
-> +	  - CONFIG_CGROUPS
-> +	  - CONFIG_INOTIFY_USER
-> +	  - CONFIG_FHANDLE
-> +	  - CONFIG_AUTOFS4_FS
-> +	  - CONFIG_TMPFS_POSIX_ACL
-> +	  - CONFIG_TMPFS_XATTR
-> +
-> +	  These options will be automatically enabled by Buildroot if
-> +	  it is responsible for building the kernel. Otherwise, if you
-> +	  are building your kernel outside of Buildroot, make sure
-> +	  these options are enabled.
->  
->  	  Systemd also provides udev, the userspace device daemon.
->  
+> Best regards,
+> Romain
+> 
+>>
+>>
+>>   Regards,
+>>   Arnout
+>>
+>>>   1 file changed, 8 insertions(+)
+>>>
+>>> diff --git a/package/ncftp/ncftp.mk b/package/ncftp/ncftp.mk
+>>> index ff6c70a..841c82b 100644
+>>> --- a/package/ncftp/ncftp.mk
+>>> +++ b/package/ncftp/ncftp.mk
+>>> @@ -11,6 +11,14 @@ NCFTP_TARGET_BINS = ncftp
+>>>   NCFTP_LICENSE = Clarified Artistic License
+>>>   NCFTP_LICENSE_FILES = doc/LICENSE.txt
+>>>   +NCFTP_DEPENDENCIES = host-autoconf
+>>> +
+>>> +define NCFTP_RUN_AUTOCONF
+>>> +       (cd $(@D); $(HOST_DIR)/usr/bin/autoconf -I$(@D)/autoconf_local/)
+>>> +endef
+>>> +
+>>> +NCFTP_PRE_CONFIGURE_HOOKS += NCFTP_RUN_AUTOCONF
+>>> +
+>>>   ifeq ($(BR2_PACKAGE_NCFTP_GET),y)
+>>>       NCFTP_TARGET_BINS += ncftpget
+>>>   endif
+>>>
+>>
+> 
 > 
 
 
