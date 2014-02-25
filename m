@@ -1,102 +1,146 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 25 Feb 2014 21:27:11 +0100
-Subject: [Buildroot] [git commit branch/next] udev: update udev to new
-	virtual package infra.
-Message-ID: <20140225203135.4D06F9BA89@busybox.osuosl.org>
+Date: Tue, 25 Feb 2014 21:29:34 +0100
+Subject: [Buildroot] [git commit branch/next] packages: improve dependency
+	check in virtual packages.
+Message-ID: <20140225203135.6E66A9BA89@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5e35c1bedd55c044ab68f3b37738686a951eb9ce
+commit: http://git.buildroot.net/buildroot/commit/?id=f72fe5736c806e6079830f3d953dc9875827b86b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The udev virtual package and its current providers (eudev and systemd)
-have been updated to use the latest version of virtual package
-infrastructure.
+The current version of dependency check for virtual package <foo>
+defines FOO_CONFIGURE_CMDS to print an error message if the
+dependencies are not met.
 
-A provider should now select BR2_PACKAGE_HAS_UDEV and well as set a
-value for BR2_PACKAGE_PROVIDES_UDEV.
+This patch updates all the virtual packages to use the GNU Make control
+function $(error text...) instead.
+
+This makes the error happen at the beginning of the build, with a clearer
+message.
 
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/eudev/Config.in   |    3 +++
- package/systemd/Config.in |    3 +++
- package/udev/Config.in    |    8 ++++----
- package/udev/udev.mk      |   16 ++++------------
- 4 files changed, 14 insertions(+), 16 deletions(-)
+ package/luainterpreter/luainterpreter.mk |    6 ++++++
+ package/opengl/libegl/libegl.mk          |    7 +++----
+ package/opengl/libgles/libgles.mk        |    7 +++----
+ package/opengl/libopenmax/libopenmax.mk  |    7 +++----
+ package/opengl/libopenvg/libopenvg.mk    |    7 +++----
+ package/powervr/powervr.mk               |    7 +++----
+ 6 files changed, 21 insertions(+), 20 deletions(-)
 
-diff --git a/package/eudev/Config.in b/package/eudev/Config.in
-index bfad99a..40ff721 100644
---- a/package/eudev/Config.in
-+++ b/package/eudev/Config.in
-@@ -21,6 +21,9 @@ config BR2_PACKAGE_EUDEV
+diff --git a/package/luainterpreter/luainterpreter.mk b/package/luainterpreter/luainterpreter.mk
+index c37d621..5443477 100644
+--- a/package/luainterpreter/luainterpreter.mk
++++ b/package/luainterpreter/luainterpreter.mk
+@@ -9,4 +9,10 @@ LUAINTERPRETER_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_LUA_INTERPRET
  
- if BR2_PACKAGE_EUDEV
+ LUAINTERPRETER_ABIVER = $(call qstrip,$(BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION))
  
-+config BR2_PACKAGE_PROVIDES_UDEV
-+	default "eudev"
++ifeq ($(BR2_PACKAGE_HAS_LUA_INTERPRETER),y)
++ifeq ($(LUAINTERPRETER_DEPENDENCIES),)
++$(error No lua interpreter implementation selected. Configuration error.)
++endif
++endif
 +
- config BR2_PACKAGE_EUDEV_RULES_GEN
- 	bool "enable rules generator"
- 	help
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index e3ea433..eacc23c 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -40,6 +40,9 @@ config BR2_PACKAGE_SYSTEMD
+ $(eval $(generic-package))
+diff --git a/package/opengl/libegl/libegl.mk b/package/opengl/libegl/libegl.mk
+index b2b74f1..3311e50 100644
+--- a/package/opengl/libegl/libegl.mk
++++ b/package/opengl/libegl/libegl.mk
+@@ -7,11 +7,10 @@
+ LIBEGL_SOURCE =
+ LIBEGL_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_OPENGL_EGL))
  
- if BR2_PACKAGE_SYSTEMD
- 
-+config BR2_PACKAGE_PROVIDES_UDEV
-+	default "systemd"
-+
- config BR2_PACKAGE_SYSTEMD_ALL_EXTRAS
- 	bool "enable all extras"
- 	select BR2_PACKAGE_XZ
-diff --git a/package/udev/Config.in b/package/udev/Config.in
-index 5cd4051..941a515 100644
---- a/package/udev/Config.in
-+++ b/package/udev/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_HAS_UDEV
- 	bool
--	help
--	  udev is now a virtual package.
--	  Packages requiring udevd at run time or libudev/gudev at build time
--	  should select it.
-+
-+config BR2_PACKAGE_PROVIDES_UDEV
-+	depends on BR2_PACKAGE_HAS_UDEV
-+	string
-diff --git a/package/udev/udev.mk b/package/udev/udev.mk
-index a5d0f80..f5eeeb4 100644
---- a/package/udev/udev.mk
-+++ b/package/udev/udev.mk
-@@ -5,20 +5,12 @@
- ################################################################################
- 
- UDEV_SOURCE =
-+UDEV_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_UDEV))
- 
--ifeq ($(BR2_PACKAGE_EUDEV),y)
--UDEV_DEPENDENCIES += eudev
--endif
--
--ifeq ($(BR2_PACKAGE_SYSTEMD),y)
--UDEV_DEPENDENCIES += systemd
--endif
--
-+ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
- ifeq ($(UDEV_DEPENDENCIES),)
--define UDEV_CONFIGURE_CMDS
--	echo "No Udev implementation selected. Configuration error."
++ifeq ($(BR2_PACKAGE_HAS_OPENGL_EGL),y)
+ ifeq ($(LIBEGL_DEPENDENCIES),)
+-define LIBEGL_CONFIGURE_CMDS
+-	echo "No libEGL implementation selected. Configuration error."
 -	exit 1
 -endef
-+$(error No Udev implementation selected. Configuration error)
++$(error No libEGL implementation selected. Configuration error.)
++endif
+ endif
+ 
+ $(eval $(generic-package))
+diff --git a/package/opengl/libgles/libgles.mk b/package/opengl/libgles/libgles.mk
+index 0dcbaa7..7a07e37 100644
+--- a/package/opengl/libgles/libgles.mk
++++ b/package/opengl/libgles/libgles.mk
+@@ -7,11 +7,10 @@
+ LIBGLES_SOURCE =
+ LIBGLES_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_OPENGL_ES))
+ 
++ifeq ($(BR2_PACKAGE_HAS_OPENGL_ES),y)
+ ifeq ($(LIBGLES_DEPENDENCIES),)
+-define LIBGLES_CONFIGURE_CMDS
+-	echo "No libGLES implementation selected. Configuration error."
+-	exit 1
+-endef
++$(error No libGLES implementation selected. Configuration error.)
++endif
+ endif
+ 
+ $(eval $(generic-package))
+diff --git a/package/opengl/libopenmax/libopenmax.mk b/package/opengl/libopenmax/libopenmax.mk
+index c4f1f71..a2bd23d 100644
+--- a/package/opengl/libopenmax/libopenmax.mk
++++ b/package/opengl/libopenmax/libopenmax.mk
+@@ -7,11 +7,10 @@
+ LIBOPENMAX_SOURCE =
+ LIBOPENMAX_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_OPENMAX))
+ 
++ifeq ($(BR2_PACKAGE_HAS_OPENMAX),y)
+ ifeq ($(LIBOPENMAX_DEPENDENCIES),)
+-define LIBOPENMAX_CONFIGURE_CMDS
+-	echo "No libopenmax implementation selected. Configuration error."
+-	exit 1
+-endef
++$(error No libopenmax implementation selected. Configuration error.)
++endif
+ endif
+ 
+ $(eval $(generic-package))
+diff --git a/package/opengl/libopenvg/libopenvg.mk b/package/opengl/libopenvg/libopenvg.mk
+index ffd9d68..f81db5e 100644
+--- a/package/opengl/libopenvg/libopenvg.mk
++++ b/package/opengl/libopenvg/libopenvg.mk
+@@ -7,11 +7,10 @@
+ LIBOPENVG_SOURCE =
+ LIBOPENVG_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_OPENVG))
+ 
++ifeq ($(BR2_PACKAGE_HAS_OPENVG),y)
+ ifeq ($(LIBOPENVG_DEPENDENCIES),)
+-define LIBOPENVG_CONFIGURE_CMDS
+-	echo "No libOpenVG implementation selected. Configuration error."
+-	exit 1
+-endef
++$(error No libOpenVG implementation selected. Configuration error.)
++endif
+ endif
+ 
+ $(eval $(generic-package))
+diff --git a/package/powervr/powervr.mk b/package/powervr/powervr.mk
+index 1f43505..b36eb16 100644
+--- a/package/powervr/powervr.mk
++++ b/package/powervr/powervr.mk
+@@ -7,11 +7,10 @@
+ POWERVR_SOURCE =
+ POWERVR_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_POWERVR))
+ 
++ifeq ($(BR2_PACKAGE_HAS_POWERVR),y)
+ ifeq ($(POWERVR_DEPENDENCIES),)
+-define POWERVR_CONFIGURE_CMDS
+-	echo "No PowerVR implementation selected. Configuration error."
+-	exit 1
+-endef
++$(error No PowerVR implementation selected. Configuration error.)
 +endif
  endif
  
