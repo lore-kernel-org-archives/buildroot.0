@@ -1,29 +1,25 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 25 Feb 2014 22:55:17 +0100
+From: Simon Dawson <spdawson@gmail.com>
+Date: Tue, 25 Feb 2014 21:59:42 +0000
 Subject: [Buildroot] [PATCH] vlc: fix some configure options
-In-Reply-To: <CAHXCMML=zMYhKOp7G2d2cAg_=T+n21yAXK=W1iBRtnGFfsgpbg@mail.gmail.com>
- (Samuel Martin's message of "Tue, 25 Feb 2014 22:50:46 +0100")
+In-Reply-To: <874n3mj1ru.fsf@dell.be.48ers.dk>
 References: <1393360566-4849-1-git-send-email-spdawson@gmail.com>
  <CAHXCMML=zMYhKOp7G2d2cAg_=T+n21yAXK=W1iBRtnGFfsgpbg@mail.gmail.com>
-Message-ID: <874n3mj1ru.fsf@dell.be.48ers.dk>
+ <874n3mj1ru.fsf@dell.be.48ers.dk>
+Message-ID: <CAHt8ZCNxr+OC_LOoNshG-X2dte8ggDf-7Ya9o2UPXgLdBt4V8w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
+Hi Peter.
 
- > Hi Simon,
- > On Tue, Feb 25, 2014 at 9:36 PM, Simon Dawson <spdawson@gmail.com> wrote:
- >> Fix a large number of incorrect configure options for vlc.
- >> 
- >> Configure warnings reported by Arnout Vandecappelle, in his analysis of vlc
- >> autobuild failures.
+On 25 Feb 2014 21:55, "Peter Korsgaard" <jacmet@uclibc.org> wrote:
+> Simon, can I add it when I commit?
 
- > Don't forget your SoB line ;)
+Yes, of course. Sorry about that.
 
-Simon, can I add it when I commit?
-
--- 
-Bye, Peter Korsgaard
+Simon.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140225/baa5687c/attachment.html>
