@@ -1,37 +1,41 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 25 Feb 2014 22:38:13 +0100
-Subject: [Buildroot] [PATCH 02/24] lua: refactor install steps
-In-Reply-To: <CAB0FRsszkDtd1UVPmtEG+AEUW2uY6VrajFHE9K+X1C0efi3GDw@mail.gmail.com>
-References: <1393227301-14874-1-git-send-email-francois.perrad@gadz.org>	<1393227301-14874-3-git-send-email-francois.perrad@gadz.org>	<530CD566.7090305@mind.be>
- <CAB0FRsszkDtd1UVPmtEG+AEUW2uY6VrajFHE9K+X1C0efi3GDw@mail.gmail.com>
-Message-ID: <530D0D45.7040303@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 25 Feb 2014 22:40:33 +0100
+Subject: [Buildroot] [PATCH v2 1/2] packages: improve dependency check
+ in virtual packages.
+In-Reply-To: <1393343137-4209-2-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1393343137-4209-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <1393343137-4209-2-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <20140225214033.GB3567@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 25/02/14 22:07, Fran?ois Perrad wrote:
->> >
->> >  Not related to this patch, but it seems to me that the .so is built and
->> > installed unconditionally, even on BR2_PREFER_STATIC and BINFMT_FLAT. How
->> > can this even work?
-> You are right. lua doesn't work with Blackfin.
-> See http://patchwork.ozlabs.org/patch/314146/
+Eric, All,
 
- OK, I'll do a quick review of that patch.
+On 2014-02-25 16:45 +0100, Eric Le Bihan spake thusly:
+> The current version of dependency check for virtual package <foo>
+> defines FOO_CONFIGURE_CMDS to print an error message if the
+> dependencies are not met.
+> 
+> This patch updates all the virtual packages to use the GNU Make control
+> function $(error text...) instead.
+> 
+> This makes the error happen at the beginning of the build, with a clearer
+> message.
 
- Could you make a series of the first two of these, together with an
-update of 314146, to be included in 2014.02?
+You missed two virtual packages in this change:
+  - jpeg
+  - cryptodev
 
-
- Regards,
- Arnout
+Regards,
+Yann E. MORIN.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
