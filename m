@@ -1,199 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 25 Feb 2014 21:19:56 +0100
-Subject: [Buildroot] [git commit branch/next] wpa_supplicant: rework .config
-	file editing
-Message-ID: <20140225202051.5DEA99BA89@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 25 Feb 2014 17:58:03 +0100
+Subject: [Buildroot] Analysis of VLC build failures
+In-Reply-To: <CAHt8ZCO3fhuv__zQweidJb=2TSBdC0M27P487=AOx1+780cm2g@mail.gmail.com>
+References: <20140223073009.3676E101056@stock.ovh.net>	<20140223110021.16b6b976@skate>	<530C4314.4000203@mind.be>
+ <CAHt8ZCO3fhuv__zQweidJb=2TSBdC0M27P487=AOx1+780cm2g@mail.gmail.com>
+Message-ID: <530CCB9B.2000101@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5cc2a89a45ddc34a5dbd863f924dfa12a8274395
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On 25/02/14 16:17, Simon Dawson wrote:
+> On 25 February 2014 07:15, Arnout Vandecappelle <arnout@mind.be> wrote:
+>>  My feeling is that vlc is currently not in a state that we can release
+>> it. I have no issue with including some package that doesn't work very
+>> well in a release, but for a flagship package like vlc I think it's
+>> important that we really get it right. And currently we don't.
+> 
+> When I (re-)added this package, I had hoped to have more time to spend
+> on getting it working properly. (As it happens, the project for which
+> I needed vlc has now been abandoned.)
+> 
+> I tend to agree that this is a potentially "high profile" package, and
+> that it ought perhaps to be dropped from the 2014.02 release.
 
-Do all substitutions on the .config file in a single sed command.
-Make the .config file editing a lot more readable. Based on ideas
-brought up by Arnout Vandecappelle on the mailing-list.
+ I would also be OK with adding a comment to the VLC config option that
+warns the users that it is not working very well.
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- (build-test with all features enabled)
-[Samuel: rebase on head of master]
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wpa_supplicant/wpa_supplicant.mk |  109 +++++++++++-------------------
- 1 files changed, 40 insertions(+), 69 deletions(-)
+ I can send a patch if needed.
 
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index 920f96a..d2b21c2 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -15,63 +15,57 @@ WPA_SUPPLICANT_DBUS_NEW_SERVICE = fi.w1.wpa_supplicant1
- WPA_SUPPLICANT_CFLAGS = $(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/libnl3/
- WPA_SUPPLICANT_LDFLAGS = $(TARGET_LDFLAGS)
- 
-+WPA_SUPPLICANT_CONFIG_EDITS =
-+
-+WPA_SUPPLICANT_CONFIG_SET =
-+
-+WPA_SUPPLICANT_CONFIG_ENABLE = \
-+	CONFIG_IEEE80211N	\
-+	CONFIG_IEEE80211R	\
-+	CONFIG_INTERWORKING	\
-+	CONFIG_DELAYED_MIC	\
-+	CONFIG_INTERNAL_LIBTOMMATH
-+
-+WPA_SUPPLICANT_CONFIG_DISABLE = \
-+	CONFIG_DRIVER_ATMEL	\
-+	CONFIG_SMARTCARD
-+
- ifeq ($(BR2_PACKAGE_LIBNL),y)
- 	WPA_SUPPLICANT_DEPENDENCIES += libnl
--define WPA_SUPPLICANT_LIBNL_CONFIG
--	echo 'CONFIG_LIBNL32=y' >>$(WPA_SUPPLICANT_CONFIG)
--endef
-+	WPA_SUPPLICANT_CONFIG_SET += CONFIG_LIBNL32
- else
--define WPA_SUPPLICANT_LIBNL_CONFIG
--	$(SED) 's/^\(CONFIG_DRIVER_NL80211.*\)/#\1/' $(WPA_SUPPLICANT_CONFIG)
--endef
-+	WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_DRIVER_NL80211
- endif
- 
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_EAP),y)
--define WPA_SUPPLICANT_EAP_CONFIG
--	$(SED) 's/\(#\)\(CONFIG_EAP_AKA.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/\(#\)\(CONFIG_EAP_FAST.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/\(#\)\(CONFIG_EAP_GPSK.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/\(#\)\(CONFIG_EAP_IKEV2.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/\(#\)\(CONFIG_EAP_PAX.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/\(#\)\(CONFIG_EAP_PSK.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/\(#\)\(CONFIG_EAP_SAKE.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/\(#\)\(CONFIG_EAP_SIM.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/\(#\)\(CONFIG_EAP_TNC.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/\(#\)\(CONFIG_TLSV1.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--endef
-+	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_EAP_AKA		\
-+					CONFIG_EAP_FAST		\
-+					CONFIG_EAP_GPSK 	\
-+					CONFIG_EAP_IKEV2	\
-+					CONFIG_EAP_PAX		\
-+					CONFIG_EAP_PSK		\
-+					CONFIG_EAP_SAKE		\
-+					CONFIG_EAP_SIM		\
-+					CONFIG_EAP_TNC
- else
--define WPA_SUPPLICANT_EAP_CONFIG
--	$(SED) 's/^\(CONFIG_EAP.*\)/#\1/' $(WPA_SUPPLICANT_CONFIG)
--endef
-+	WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_EAP
- endif
- 
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT),y)
--define WPA_SUPPLICANT_AP_CONFIG
--	echo 'CONFIG_AP=y' >>$(WPA_SUPPLICANT_CONFIG)
--endef
-+	WPA_SUPPLICANT_CONFIG_SET += CONFIG_AP
- endif
- 
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_WPS),y)
--define WPA_SUPPLICANT_WPS_CONFIG
--	$(SED) 's/\(#\)\(CONFIG_WPS.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--endef
-+	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_WPS
- endif
- 
--define WPA_SUPPLICANT_LIBTOMMATH_CONFIG
--	$(SED) 's/\(#\)\(CONFIG_INTERNAL_LIBTOMMATH.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--endef
--
- # Try to use openssl if it's already available
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- 	WPA_SUPPLICANT_DEPENDENCIES += openssl
--define WPA_SUPPLICANT_TLS_CONFIG
--	$(SED) 's/\(#\)\(CONFIG_TLS=openssl\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/\(#\)\(CONFIG_EAP_PWD.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--endef
-+	WPA_SUPPLICANT_CONFIG_EDITS += 's/\#\(CONFIG_TLS=openssl\)/\1/'
-+	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_EAP_PWD
- else
--define WPA_SUPPLICANT_TLS_CONFIG
--	$(SED) 's/\(#\)\(CONFIG_TLS=\).*/\2internal/' $(WPA_SUPPLICANT_CONFIG)
--endef
-+	WPA_SUPPLICANT_CONFIG_EDITS += 's/\#\(CONFIG_TLS=\).*/\1internal/'
- endif
- 
- ifeq ($(BR2_PACKAGE_DBUS),y)
-@@ -81,9 +75,7 @@ ifeq ($(BR2_PACKAGE_DBUS),y)
- 		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig"
- 
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS_OLD),y)
--define WPA_SUPPLICANT_DBUS_OLD_CONFIG
--	$(SED) 's/\(#\)\(CONFIG_CTRL_IFACE_DBUS=\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--endef
-+	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_CTRL_IFACE_DBUS=
- define WPA_SUPPLICANT_INSTALL_DBUS_OLD
- 	$(INSTALL) -D \
- 	  $(@D)/wpa_supplicant/dbus/$(WPA_SUPPLICANT_DBUS_OLD_SERVICE).service \
-@@ -92,9 +84,7 @@ endef
- endif
- 
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS_NEW),y)
--define WPA_SUPPLICANT_DBUS_NEW_CONFIG
--	$(SED) 's/\(#\)\(CONFIG_CTRL_IFACE_DBUS_NEW=\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--endef
-+	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_CTRL_IFACE_DBUS_NEW
- define WPA_SUPPLICANT_INSTALL_DBUS_NEW
- 	$(INSTALL) -D \
- 	  $(@D)/wpa_supplicant/dbus/$(WPA_SUPPLICANT_DBUS_NEW_SERVICE).service \
-@@ -103,17 +93,9 @@ endef
- endif
- 
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS_INTROSPECTION),y)
--define WPA_SUPPLICANT_DBUS_INTROSPECTION_CONFIG
--	$(SED) 's/\(#\)\(CONFIG_CTRL_IFACE_DBUS_INTRO=\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--endef
-+	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_CTRL_IFACE_DBUS_INTRO
- endif
- 
--define WPA_SUPPLICANT_DBUS_CONFIG
--	$(WPA_SUPPLICANT_DBUS_OLD_CONFIG)
--	$(WPA_SUPPLICANT_DBUS_NEW_CONFIG)
--	$(WPA_SUPPLICANT_DBUS_INTROSPECTION_CONFIG)
--endef
--
- endif
- 
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DEBUG_SYSLOG),y)
-@@ -124,22 +106,11 @@ endif
- 
- define WPA_SUPPLICANT_CONFIGURE_CMDS
- 	cp $(@D)/wpa_supplicant/defconfig $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/\(#\)\(CONFIG_HS20.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/\(#\)\(CONFIG_IEEE80211N.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/\(#\)\(CONFIG_IEEE80211R.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/\(#\)\(CONFIG_IEEE80211W.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/\(#\)\(CONFIG_INTERWORKING.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/\(#\)\(CONFIG_DELAYED_MIC.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/\(CONFIG_DRIVER_ATMEL\)/#\1/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/\(CONFIG_SMARTCARD\)/#\1/' $(WPA_SUPPLICANT_CONFIG)
--	$(WPA_SUPPLICANT_LIBTOMMATH_CONFIG)
--	$(WPA_SUPPLICANT_TLS_CONFIG)
--	$(WPA_SUPPLICANT_EAP_CONFIG)
--	$(WPA_SUPPLICANT_WPS_CONFIG)
--	$(WPA_SUPPLICANT_LIBNL_CONFIG)
--	$(WPA_SUPPLICANT_DBUS_CONFIG)
--	$(WPA_SUPPLICANT_AP_CONFIG)
--	$(WPA_SUPPLICANT_DEBUG_CONFIG)
-+	sed -i $(patsubst %,-e 's/^\(%\)/#\1/',$(WPA_SUPPLICANT_CONFIG_DISABLE)) \
-+	       $(patsubst %,-e 's/^#\(%\)/\1/',$(WPA_SUPPLICANT_CONFIG_ENABLE)) \
-+	       $(patsubst %,-e '1i%=y',$(WPA_SUPPLICANT_CONFIG_SET)) \
-+	       $(patsubst %,-e %,$(WPA_SUPPLICANT_CONFIG_EDITS)) \
-+	       $(WPA_SUPPLICANT_CONFIG)
- endef
- 
- define WPA_SUPPLICANT_BUILD_CMDS
+
+ Regards,
+ Arnout
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
