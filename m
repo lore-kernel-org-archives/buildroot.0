@@ -1,24 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 25 Feb 2014 21:09:59 +0100
-Subject: [Buildroot] [PATCH] libpng: bump to version 1.6.9
-In-Reply-To: <1393320628-10918-1-git-send-email-neumann@teufel.de> (Sven
- Neumann's message of "Tue, 25 Feb 2014 10:30:28 +0100")
-References: <1393320628-10918-1-git-send-email-neumann@teufel.de>
-Message-ID: <8738j7j6nc.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 25 Feb 2014 21:09:26 +0100
+Subject: [Buildroot] [git commit branch/next] libpng: bump to version 1.6.9
+Message-ID: <20140225201017.C06C89BA7B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Neumann <neumann@teufel.de> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=c16bc1b12ff334eec117f6c1835d7005eceaa5f9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > This also fixes the download URL as oudated versions have been
- > moved to the "older-releases" sub-folder.
+This also fixes the download URL as oudated versions have been
+moved to the "older-releases" sub-folder.
 
- > Signed-off-by: Sven Neumann <neumann@teufel.de>
+Signed-off-by: Sven Neumann <neumann@teufel.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libpng/libpng.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed to next, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
+index f8b4d98..0bfe7d1 100644
+--- a/package/libpng/libpng.mk
++++ b/package/libpng/libpng.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBPNG_VERSION = 1.6.8
++LIBPNG_VERSION = 1.6.9
+ LIBPNG_SERIES = 16
+ LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
+ LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng${LIBPNG_SERIES}/$(LIBPNG_VERSION)
