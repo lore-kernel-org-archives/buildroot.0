@@ -1,52 +1,31 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 25 Feb 2014 09:02:59 +0100
-Subject: [Buildroot] Buildroot 2014.02-rc3 released
-Message-ID: <878uszlivg.fsf@dell.be.48ers.dk>
+From: Frank Ihle <frank.ihle@hs-offenburg.de>
+Date: Tue, 25 Feb 2014 10:04:34 +0100
+Subject: [Buildroot] In Buildroot, how to compile kernel modules
+Message-ID: <530C6AB2020000460004B173@gwia2.rz.hs-offenburg.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi everyone,
 
-Buildroot 2014.02-rc3 is released - Go download it at:
+the Internet and the buildroot manual couldn't help me out. I have a .c code which should be compiled to a .ko kernel module. Right now I'm doing this separately, the steps are: 
 
-http://buildroot.net/downloads/buildroot-2014.02-rc3.tar.gz
+1. I run "make" of buildroot
+2. Building the kernel module with the link to the linux kernel, that buildroot has downloaded.
+3. After another make of buildroot, the .ko file is included via a fs-overlay and can be included with the "insmod" command
 
-or
+Usually this works, but often I get error messages which  tell me I'm using a different kernel version. So to avoid this I'd like to enqueue this .c code to the make process of buildroot. But I'm not sure how this is done. 
 
-http://buildroot.net/downloads/buildroot-2014.02-rc3.tar.bz2
+I actually just want to make changes on the Buildroot or Linux configuration and if Image is generated I'd still like to have a runnable kernel module. 
 
-Or get it from Git:
+Can somebody tell me a hint about the steps, a manual or a tutorial ?
 
-git://git.buildroot.net/buildroot
+Kind Regards
 
-Another week, another release candidate.
+Frank Ihle
 
-Please give it a spin and report any problems to the mailing list or
-bug tracker. Many thanks to the people contributing to this release:
-
-git shortlog -sn 2014.02-rc2..
-
-    41  Thomas Petazzoni
-     8  Thomas De Schampheleire
-     7  Yann E. MORIN
-     6  Arnout Vandecappelle
-     5  Peter Korsgaard
-     5  Ryan Barnett
-     2  Gustavo Zacarias
-     2  Peter Seiderer
-     2  Vicente Olivert Riera
-     1  Fabio Porcedda
-     1  Martin Bark
-     1  Romain Naour
-
-For more details, see the CHANGES file:
-
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2014.02-rc3
-
-Expect the final 2014.02 release by Wednesday or Thursday.
-
--- 
-Bye, Peter Korsgaard
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140225/07161769/attachment.html>
