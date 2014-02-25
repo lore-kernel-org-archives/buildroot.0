@@ -1,38 +1,46 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 25 Feb 2014 23:28:29 +0100
-Subject: [Buildroot] [RFC/PATCH 0/1] gst-fsl-plugins: fix compile for
-	sysroot based on newer linux kernel headers
-In-Reply-To: <1393366722-27644-1-git-send-email-ps.report@gmx.net> (Peter
- Seiderer's message of "Tue, 25 Feb 2014 23:18:41 +0100")
-References: <1393366722-27644-1-git-send-email-ps.report@gmx.net>
-Message-ID: <87wqgihlo2.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 25 Feb 2014 23:30:26 +0100
+Subject: [Buildroot] [PATCH v2 2/2] manual: add virtual package tutorial.
+In-Reply-To: <1393343137-4209-3-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1393343137-4209-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <1393343137-4209-3-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <20140225223023.GC3567@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+Eric, All,
 
- > The freescale specific gst-fsl-plugins-3.0.1/src/misc/v4l_source/src/mfw_gst_v4lsrc.c
- > compile depends on the VIDIOC_DBG_G_CHIP_IDENT ioctl (which was removed
- > from linux kernel in version 3.11). This breaks compile with toolchains
- > based on actual linux kernel headers (e.g. buildroot/glibc toolchain).
+On 2014-02-25 16:45 +0100, Eric Le Bihan spake thusly:
+> The manual now features a new section with instructions about how to add a
+> virtual package.
+> 
+> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 
- > Which is the right way to fix this problem?
+Same comment as Samuel.
 
- > - fix include precedence from sysroot to custom linux kernel headers
- >   as done in the following patch (latest freescale custom kernel
- >   is 3.10 based)
+Otherwise, I agree with Arnout: we will soon have a virtual-package
+infrastructure (see my recent RFC series), and virtual packages are not
+something we expect to be added very often.
 
- > - add comment/hint in package description about this dependency
+I know I pushed you to repost an updated version of that patch, so we
+could get it in for 2014.02, but in restrospect, Arnout is right: we can
+well wait post-release to aply it. My apologies.
 
- > - and/or add dependency (or check) for sysroot linux kernel headers
- >   version <= 3.10.x (any hint how to do this?)
+Anyway, this patch is rather good, and will need only minor changes (ie.
+removals) to the .mk section once we have the virtual-package infra.
 
-How about just patching mfw_gst_v4lsrc.c to use a local definition for
-VIDIOC_DBG_G_CHIP_IDENT if the kernel headers don't provide it (E.G. in
-a #ifndef VIDIOC_DBG_G_CHIP_IDENT conditional)?
+Thank you for your work on this! :-)
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
