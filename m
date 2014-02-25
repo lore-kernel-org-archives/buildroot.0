@@ -1,72 +1,72 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 25 Feb 2014 21:00:57 +0100
-Subject: [Buildroot] [git commit] openswan: security bump to version 2.6.40
-Message-ID: <20140225200719.C78719BA92@busybox.osuosl.org>
+Date: Tue, 25 Feb 2014 20:58:06 +0100
+Subject: [Buildroot] [git commit] qt5connectivity: Don't build scanner
+	example without QtQuick
+Message-ID: <20140225200719.AAF849B97B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=88b76e26496e0bacaef635a17e94093b3958461f
+commit: http://git.buildroot.net/buildroot/commit/?id=8c5156cce0f9af0a3e35dfc998b9841dae1f58cb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2013-6466.
-openswan-wno-error-cpp.patch is no longer required since it's now
-conditional on a check for a modern enough compiler.
+Apply upstream patch to fix this problem:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+make[3]: Entering directory
+`/home/test/test/3/output/build/qt5connectivity-5.2.0/examples/bluetooth'
+cd scanner/ && ( test -e Makefile ||
+/home/test/test/3/output/host/usr/bin/qmake
+/home/test/test/3/output/build/qt5connectivity-5.2.0/examples/bluetooth/scanner/scanner.pro
+-o Makefile ) && /usr/bin/make -f Makefile Project ERROR: Unknown
+module(s) in QT: quick
+
+Fixes:
+   http://autobuild.buildroot.net/results/163/1635e4d385293ea560107bdf624033e8ffefbe72/
+
+Upstream patch URL:
+   https://qt.gitorious.org/qt/qtconnectivity/commit/1454664752505f5870e4173d15362bfdfe4148e7/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openswan/openswan-wno-error-cpp.patch |   29 -------------------------
- package/openswan/openswan.mk                  |    2 +-
- 2 files changed, 1 insertions(+), 30 deletions(-)
+ ...n_t-build-scanner-example-without-qtquick.patch |   30 ++++++++++++++++++++
+ 1 files changed, 30 insertions(+), 0 deletions(-)
 
-diff --git a/package/openswan/openswan-wno-error-cpp.patch b/package/openswan/openswan-wno-error-cpp.patch
-deleted file mode 100644
-index 8e79ae9..0000000
---- a/package/openswan/openswan-wno-error-cpp.patch
-+++ /dev/null
-@@ -1,29 +0,0 @@
--Kill -Wno-error=cpp, old(ish) gcc versions (< 4.4) don't like it and we still
--got 4.3.x available for internal toolchains.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--diff -Nura openswan-2.6.39.orig/lib/libopenswan/Makefile openswan-2.6.39/lib/libopenswan/Makefile
----- openswan-2.6.39.orig/lib/libopenswan/Makefile	2013-06-11 07:22:50.228520267 -0300
--+++ openswan-2.6.39/lib/libopenswan/Makefile	2013-06-11 07:27:40.087849447 -0300
--@@ -86,7 +86,7 @@
-- CFLAGS+= -Wno-error=cast-qual
--
-- # some junk left in alg_info.c
---CFLAGS+= -Wno-error=cpp
--+#CFLAGS+= -Wno-error=cpp
--
-- #CFLAGS+= -Wmissing-declarations
-- CFLAGS+= -Wstrict-prototypes
--diff -Nura openswan-2.6.39.orig/programs/pluto/Makefile openswan-2.6.39/programs/pluto/Makefile
----- openswan-2.6.39.orig/programs/pluto/Makefile	2013-06-11 07:22:49.753504978 -0300
--+++ openswan-2.6.39/programs/pluto/Makefile	2013-06-11 07:27:53.020265681 -0300
--@@ -47,7 +47,7 @@
--
-- # must turn this off due to myid.c
-- CFLAGS+= -Wno-error=cast-qual
---CFLAGS+= -Wno-error=cpp
--+#CFLAGS+= -Wno-error=cpp
--
-- ifeq ($(HAVE_BROKEN_POPEN),true)
-- CFLAGS+=-DHAVE_BROKEN_POPEN
-diff --git a/package/openswan/openswan.mk b/package/openswan/openswan.mk
-index 0b8e7d3..ae055d4 100644
---- a/package/openswan/openswan.mk
-+++ b/package/openswan/openswan.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENSWAN_VERSION = 2.6.39
-+OPENSWAN_VERSION = 2.6.40
- OPENSWAN_SITE = http://download.openswan.org/openswan
- OPENSWAN_LICENSE = GPLv2+, BSD-3c
- OPENSWAN_LICENSE_FILES = COPYING LICENSE
+diff --git a/package/qt5/qt5connectivity/qt5connectivity-0001-don_t-build-scanner-example-without-qtquick.patch b/package/qt5/qt5connectivity/qt5connectivity-0001-don_t-build-scanner-example-without-qtquick.patch
+new file mode 100644
+index 0000000..0751ba7
+--- /dev/null
++++ b/package/qt5/qt5connectivity/qt5connectivity-0001-don_t-build-scanner-example-without-qtquick.patch
+@@ -0,0 +1,30 @@
++qt5connectivity: Don't build scanner example without QtQuick
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++
++From 1454664752505f5870e4173d15362bfdfe4148e7 Mon Sep 17 00:00:00 2001
++From: Alex Blasche <alexander.blasche@digia.com>
++Date: Wed, 15 Jan 2014 12:11:31 +0100
++Subject: [PATCH] Don't build scanner example without QtQuick
++
++Task-number: QTBUG-35711
++Change-Id: I0406fb5edd8fb2a90046308853485eaaa4311a26
++Reviewed-by: Friedemann Kleint <Friedemann.Kleint@digia.com>
++Reviewed-by: Fabian Bumberger <fbumberger@rim.com>
++Reviewed-by: Alex Blasche <alexander.blasche@digia.com>
++---
++ examples/bluetooth/bluetooth.pro |    2 +-
++ 1 files changed, 1 insertions(+), 1 deletions(-)
++
++diff --git a/examples/bluetooth/bluetooth.pro b/examples/bluetooth/bluetooth.pro
++index e3ef769..549bb7c 100644
++--- a/examples/bluetooth/bluetooth.pro
+++++ b/examples/bluetooth/bluetooth.pro
++@@ -6,4 +6,4 @@ qtHaveModule(widgets) {
++                bttennis
++ }
++ 
++-SUBDIRS += scanner
+++qtHaveModule(quick): SUBDIRS += scanner
++-- 
++1.7.1
++
