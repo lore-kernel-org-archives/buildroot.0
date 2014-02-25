@@ -1,67 +1,147 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Feb 2014 08:53:59 +0100
-Subject: [Buildroot] [git commit] python,
-	python3: fix to ensure libpython is stripped
-Message-ID: <20140228133414.AFCCB9BA7B@busybox.osuosl.org>
+Date: Tue, 25 Feb 2014 21:29:34 +0100
+Subject: [Buildroot] [git commit] packages: improve dependency check in
+	virtual packages.
+Message-ID: <20140228133417.1C6C29BBF9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=99d930e65db24ac1ed5e768324154cc1f10e9eae
+commit: http://git.buildroot.net/buildroot/commit/?id=f72fe5736c806e6079830f3d953dc9875827b86b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The python and python3 builds mark libpython as read-only which
-prevents it from being stripped out correctly for the target.
+The current version of dependency check for virtual package <foo>
+defines FOO_CONFIGURE_CMDS to print an error message if the
+dependencies are not met.
 
-Signed-off-by: Przemyslaw Wrzos <przemyslaw.wrzos@calyptech.com>
-Acked-by: Thomas De Schampheleire <thomas.de_schampheleire@alcatel-lucent.com>
-Tested-by: Thomas De Schampheleire <thomas.de_schampheleire@alcatel-lucent.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+This patch updates all the virtual packages to use the GNU Make control
+function $(error text...) instead.
+
+This makes the error happen at the beginning of the build, with a clearer
+message.
+
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python/python.mk   |    9 +++++++++
- package/python3/python3.mk |    9 +++++++++
- 2 files changed, 18 insertions(+), 0 deletions(-)
+ package/luainterpreter/luainterpreter.mk |    6 ++++++
+ package/opengl/libegl/libegl.mk          |    7 +++----
+ package/opengl/libgles/libgles.mk        |    7 +++----
+ package/opengl/libopenmax/libopenmax.mk  |    7 +++----
+ package/opengl/libopenvg/libopenvg.mk    |    7 +++----
+ package/powervr/powervr.mk               |    7 +++----
+ 6 files changed, 21 insertions(+), 20 deletions(-)
 
-diff --git a/package/python/python.mk b/package/python/python.mk
-index 3b0a4dd..94765cb 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -160,6 +160,15 @@ endef
+diff --git a/package/luainterpreter/luainterpreter.mk b/package/luainterpreter/luainterpreter.mk
+index c37d621..5443477 100644
+--- a/package/luainterpreter/luainterpreter.mk
++++ b/package/luainterpreter/luainterpreter.mk
+@@ -9,4 +9,10 @@ LUAINTERPRETER_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_LUA_INTERPRET
  
- PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_REMOVE_USELESS_FILES
+ LUAINTERPRETER_ABIVER = $(call qstrip,$(BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION))
  
-+#
-+# Make sure libpython gets stripped out on target
-+#
-+define PYTHON_ENSURE_LIBPYTHON_STRIPPED
-+	chmod u+w $(TARGET_DIR)/usr/lib/libpython$(PYTHON_VERSION_MAJOR)*.so
-+endef
++ifeq ($(BR2_PACKAGE_HAS_LUA_INTERPRETER),y)
++ifeq ($(LUAINTERPRETER_DEPENDENCIES),)
++$(error No lua interpreter implementation selected. Configuration error.)
++endif
++endif
 +
-+PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_ENSURE_LIBPYTHON_STRIPPED
-+
- PYTHON_AUTORECONF = YES
+ $(eval $(generic-package))
+diff --git a/package/opengl/libegl/libegl.mk b/package/opengl/libegl/libegl.mk
+index b2b74f1..3311e50 100644
+--- a/package/opengl/libegl/libegl.mk
++++ b/package/opengl/libegl/libegl.mk
+@@ -7,11 +7,10 @@
+ LIBEGL_SOURCE =
+ LIBEGL_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_OPENGL_EGL))
  
- # Provided to other packages
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 13f53f4..880b66e 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -131,6 +131,15 @@ endef
++ifeq ($(BR2_PACKAGE_HAS_OPENGL_EGL),y)
+ ifeq ($(LIBEGL_DEPENDENCIES),)
+-define LIBEGL_CONFIGURE_CMDS
+-	echo "No libEGL implementation selected. Configuration error."
+-	exit 1
+-endef
++$(error No libEGL implementation selected. Configuration error.)
++endif
+ endif
  
- PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_REMOVE_USELESS_FILES
+ $(eval $(generic-package))
+diff --git a/package/opengl/libgles/libgles.mk b/package/opengl/libgles/libgles.mk
+index 0dcbaa7..7a07e37 100644
+--- a/package/opengl/libgles/libgles.mk
++++ b/package/opengl/libgles/libgles.mk
+@@ -7,11 +7,10 @@
+ LIBGLES_SOURCE =
+ LIBGLES_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_OPENGL_ES))
  
-+#
-+# Make sure libpython gets stripped out on target
-+#
-+define PYTHON3_ENSURE_LIBPYTHON_STRIPPED
-+	chmod u+w $(TARGET_DIR)/usr/lib/libpython$(PYTHON3_VERSION_MAJOR)*.so
-+endef
-+
-+PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_ENSURE_LIBPYTHON_STRIPPED
-+
- PYTHON3_AUTORECONF = YES
++ifeq ($(BR2_PACKAGE_HAS_OPENGL_ES),y)
+ ifeq ($(LIBGLES_DEPENDENCIES),)
+-define LIBGLES_CONFIGURE_CMDS
+-	echo "No libGLES implementation selected. Configuration error."
+-	exit 1
+-endef
++$(error No libGLES implementation selected. Configuration error.)
++endif
+ endif
  
- define PYTHON3_INSTALL_SYMLINK
+ $(eval $(generic-package))
+diff --git a/package/opengl/libopenmax/libopenmax.mk b/package/opengl/libopenmax/libopenmax.mk
+index c4f1f71..a2bd23d 100644
+--- a/package/opengl/libopenmax/libopenmax.mk
++++ b/package/opengl/libopenmax/libopenmax.mk
+@@ -7,11 +7,10 @@
+ LIBOPENMAX_SOURCE =
+ LIBOPENMAX_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_OPENMAX))
+ 
++ifeq ($(BR2_PACKAGE_HAS_OPENMAX),y)
+ ifeq ($(LIBOPENMAX_DEPENDENCIES),)
+-define LIBOPENMAX_CONFIGURE_CMDS
+-	echo "No libopenmax implementation selected. Configuration error."
+-	exit 1
+-endef
++$(error No libopenmax implementation selected. Configuration error.)
++endif
+ endif
+ 
+ $(eval $(generic-package))
+diff --git a/package/opengl/libopenvg/libopenvg.mk b/package/opengl/libopenvg/libopenvg.mk
+index ffd9d68..f81db5e 100644
+--- a/package/opengl/libopenvg/libopenvg.mk
++++ b/package/opengl/libopenvg/libopenvg.mk
+@@ -7,11 +7,10 @@
+ LIBOPENVG_SOURCE =
+ LIBOPENVG_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_OPENVG))
+ 
++ifeq ($(BR2_PACKAGE_HAS_OPENVG),y)
+ ifeq ($(LIBOPENVG_DEPENDENCIES),)
+-define LIBOPENVG_CONFIGURE_CMDS
+-	echo "No libOpenVG implementation selected. Configuration error."
+-	exit 1
+-endef
++$(error No libOpenVG implementation selected. Configuration error.)
++endif
+ endif
+ 
+ $(eval $(generic-package))
+diff --git a/package/powervr/powervr.mk b/package/powervr/powervr.mk
+index 1f43505..b36eb16 100644
+--- a/package/powervr/powervr.mk
++++ b/package/powervr/powervr.mk
+@@ -7,11 +7,10 @@
+ POWERVR_SOURCE =
+ POWERVR_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_POWERVR))
+ 
++ifeq ($(BR2_PACKAGE_HAS_POWERVR),y)
+ ifeq ($(POWERVR_DEPENDENCIES),)
+-define POWERVR_CONFIGURE_CMDS
+-	echo "No PowerVR implementation selected. Configuration error."
+-	exit 1
+-endef
++$(error No PowerVR implementation selected. Configuration error.)
++endif
+ endif
+ 
+ $(eval $(generic-package))
