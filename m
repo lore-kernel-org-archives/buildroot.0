@@ -1,49 +1,72 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 25 Feb 2014 20:59:44 +0100
-Subject: [Buildroot] [git commit] gst1-plugins-bad: select all opencv
-	modules needed
-Message-ID: <20140225200719.BBFBF9B97B@busybox.osuosl.org>
+Date: Tue, 25 Feb 2014 21:00:57 +0100
+Subject: [Buildroot] [git commit] openswan: security bump to version 2.6.40
+Message-ID: <20140225200719.C78719BA92@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3324f4e8b69ab49783a233b27c9b2edeecedb5ce
+commit: http://git.buildroot.net/buildroot/commit/?id=88b76e26496e0bacaef635a17e94093b3958461f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-gstopencv.c includes the old-style header opencv/cv.h which includes a
-set of module's headers. To satisfy the opencv/cv.h requirements we need
-to select the modules which provide the required headers.
+Fixes CVE-2013-6466.
+openswan-wno-error-cpp.patch is no longer required since it's now
+conditional on a check for a modern enough compiler.
 
-Fixes:
-   http://autobuild.buildroot.net/results/f5b/f5b248eb7be38d6eb3655cdc1ab6ee5e716b9b29/
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Reviewed-by: Samuel Martin <smartin@aldebaran-robotics.com>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst1-plugins-bad/Config.in |    9 +++++++++
- 1 files changed, 9 insertions(+), 0 deletions(-)
+ package/openswan/openswan-wno-error-cpp.patch |   29 -------------------------
+ package/openswan/openswan.mk                  |    2 +-
+ 2 files changed, 1 insertions(+), 30 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index 3647e53..efad91e 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -418,6 +418,15 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENCV
- 	bool "opencv"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_OPENCV
-+	# Remove the following opencv modules when gstreamer fixes the
-+	# problem of including the old "cv.h" header
-+	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
-+	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
-+	select BR2_PACKAGE_OPENCV_LIB_FLANN
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-+	select BR2_PACKAGE_OPENCV_LIB_LEGACY
-+	select BR2_PACKAGE_OPENCV_LIB_OBJDETECT
-+	select BR2_PACKAGE_OPENCV_LIB_VIDEO
- 	help
- 	  GStreamer OpenCV Plugins
+diff --git a/package/openswan/openswan-wno-error-cpp.patch b/package/openswan/openswan-wno-error-cpp.patch
+deleted file mode 100644
+index 8e79ae9..0000000
+--- a/package/openswan/openswan-wno-error-cpp.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-Kill -Wno-error=cpp, old(ish) gcc versions (< 4.4) don't like it and we still
+-got 4.3.x available for internal toolchains.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura openswan-2.6.39.orig/lib/libopenswan/Makefile openswan-2.6.39/lib/libopenswan/Makefile
+---- openswan-2.6.39.orig/lib/libopenswan/Makefile	2013-06-11 07:22:50.228520267 -0300
+-+++ openswan-2.6.39/lib/libopenswan/Makefile	2013-06-11 07:27:40.087849447 -0300
+-@@ -86,7 +86,7 @@
+- CFLAGS+= -Wno-error=cast-qual
+-
+- # some junk left in alg_info.c
+--CFLAGS+= -Wno-error=cpp
+-+#CFLAGS+= -Wno-error=cpp
+-
+- #CFLAGS+= -Wmissing-declarations
+- CFLAGS+= -Wstrict-prototypes
+-diff -Nura openswan-2.6.39.orig/programs/pluto/Makefile openswan-2.6.39/programs/pluto/Makefile
+---- openswan-2.6.39.orig/programs/pluto/Makefile	2013-06-11 07:22:49.753504978 -0300
+-+++ openswan-2.6.39/programs/pluto/Makefile	2013-06-11 07:27:53.020265681 -0300
+-@@ -47,7 +47,7 @@
+-
+- # must turn this off due to myid.c
+- CFLAGS+= -Wno-error=cast-qual
+--CFLAGS+= -Wno-error=cpp
+-+#CFLAGS+= -Wno-error=cpp
+-
+- ifeq ($(HAVE_BROKEN_POPEN),true)
+- CFLAGS+=-DHAVE_BROKEN_POPEN
+diff --git a/package/openswan/openswan.mk b/package/openswan/openswan.mk
+index 0b8e7d3..ae055d4 100644
+--- a/package/openswan/openswan.mk
++++ b/package/openswan/openswan.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-OPENSWAN_VERSION = 2.6.39
++OPENSWAN_VERSION = 2.6.40
+ OPENSWAN_SITE = http://download.openswan.org/openswan
+ OPENSWAN_LICENSE = GPLv2+, BSD-3c
+ OPENSWAN_LICENSE_FILES = COPYING LICENSE
