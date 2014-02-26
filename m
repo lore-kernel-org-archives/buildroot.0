@@ -1,67 +1,71 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Feb 2014 23:47:39 +0100
-Subject: [Buildroot] [git commit] luajit: pass LDCONFIG=true to make sure
-	dynamic library links are created
-Message-ID: <20140226225343.F11099BAF0@busybox.osuosl.org>
+Date: Wed, 26 Feb 2014 23:48:33 +0100
+Subject: [Buildroot] [git commit] libxml2: do not detect zlib/lzma when not
+	available
+Message-ID: <20140226225344.0871E999C6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=40089283e91fc6daae1aff0346f6821bd2bcab80
+commit: http://git.buildroot.net/buildroot/commit/?id=de62a1ab616cf5ecc674ce5205d34e9f8c383cf8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-To install its shared library, the luajit Makefile does:
+The host-libxml2 package does not depend on zlib or lzma, but may
+detect versions available on the host. This can cause problems in the
+following situation:
 
-        cd src && test -f $(FILE_SO) && \
-          $(INSTALL_X) $(FILE_SO) $(INSTALL_DYN) && \
-          $(LDCONFIG) $(INSTALL_LIB) && \
-          $(SYMLINK) $(INSTALL_SONAME) $(INSTALL_SHORT1) && \
-          $(SYMLINK) $(INSTALL_SONAME) $(INSTALL_SHORT2) || :
+ 1 host-libxml2 is built, finds an available lzma library in the
+   system, enables lzma support by using it.
 
-This means that if ldconfig doesn't work or isn't available on the
-system, it won't create the libluajit-5.1.so -> libluajit-5.1.so.5.2.0
-symbolic link.
+ 2 host-xz is built, which installs a different version of the lzma
+   library into $(HOST_DIR)
 
-Not having this symbolic link prevents lua-ev from finding the shared
-version of the luajit library, and it fallbacks to using the
-libluajit.a static library. However, this static library is not built
-with -fPIC, so using it within a shared library doesn't work, and
-leads to build failures on architectures that really do want to have
-non-fPIC code into a shared library, such as x86-64.
+ 3 host-libxslt is built, tries to link against libxml2, which fails
+   because now the visible lzma library is the one from
+   $(HOST_DIR)/usr/lib and no longer the one libxml2 was built agains.
 
-By passing LDCONFIG=true during the installation steps of luajit, we
-ensure that the symbolic links are created, which allows lua-ev to
-detect the shared library properly, making everybody happy.
+To fix this, this patch passes --without-zlib and --without-lzma to
+the host package.
 
-Investigation conducted with Samuel Martin. Thanks!
+In addition, since the target variant of libxml2 does not have
+provisions to depend on the target lzma, we also pass --without-lzma
+for the target variant. The case of zlib for the target was already
+properly taken into account.
 
 Fixes:
 
-  http://autobuild.buildroot.org/results/41c/41c8bb9cf91a86908a150dae27726136cb56f5b7/
+  http://autobuild.buildroot.org/results/6dc/6dcef647eb0f0db7de3f34194eb15ceebc645b39/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/luajit/luajit.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/libxml2/libxml2.mk |    8 +++++---
+ 1 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
-index 529d3c2..4122d0a 100644
---- a/package/luajit/luajit.mk
-+++ b/package/luajit/luajit.mk
-@@ -48,11 +48,11 @@ define LUAJIT_BUILD_CMDS
- endef
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index 7116b82..62f3e27 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -16,15 +16,17 @@ ifneq ($(BR2_LARGEFILE),y)
+ LIBXML2_CONF_ENV = CC="$(TARGET_CC) $(TARGET_CFLAGS) -DNO_LARGEFILE_SOURCE"
+ endif
  
- define LUAJIT_INSTALL_STAGING_CMDS
--	$(MAKE) PREFIX="/usr" DESTDIR="$(STAGING_DIR)" -C $(@D) install
-+	$(MAKE) PREFIX="/usr" DESTDIR="$(STAGING_DIR)" LDCONFIG=true -C $(@D) install
- endef
+-LIBXML2_CONF_OPT = --with-gnu-ld --without-python --without-debug
++LIBXML2_CONF_OPT = --with-gnu-ld --without-python --without-debug --without-lzma
  
- define LUAJIT_INSTALL_TARGET_CMDS
--	$(MAKE) PREFIX="/usr" DESTDIR="$(TARGET_DIR)" -C $(@D) install
-+	$(MAKE) PREFIX="/usr" DESTDIR="$(TARGET_DIR)" LDCONFIG=true -C $(@D) install
- endef
+ HOST_LIBXML2_DEPENDENCIES = host-pkgconf
  
- $(eval $(generic-package))
++HOST_LIBXML2_CONF_OPT = --without-zlib --without-lzma
++
+ # mesa3d uses functions that are only available with debug
+ ifeq ($(BR2_PACKAGE_MESA3D),y)
+-HOST_LIBXML2_CONF_OPT = --with-debug
++HOST_LIBXML2_CONF_OPT += --with-debug
+ else
+-HOST_LIBXML2_CONF_OPT = --without-debug
++HOST_LIBXML2_CONF_OPT += --without-debug
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_HOST_LIBXML2_PYTHON),y)
