@@ -1,29 +1,27 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 26 Feb 2014 07:32:53 -0300
-Subject: [Buildroot] [PATCH] php-gnupg: new package
-In-Reply-To: <877g8igsoy.fsf@dell.be.48ers.dk>
-References: <1393359365-21266-1-git-send-email-gustavo@zacarias.com.ar>
- <877g8igsoy.fsf@dell.be.48ers.dk>
-Message-ID: <530DC2D5.5050703@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 26 Feb 2014 11:33:10 +0100
+Subject: [Buildroot] [PATCH] gst1-plugins-bad: Add bug URL for the
+	opencv modules issue
+In-Reply-To: <1393410522-20287-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Wed, 26 Feb 2014 10:28:42 +0000")
+References: <1393410522-20287-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <87mwhef9jt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/26/2014 05:54 AM, Peter Korsgaard wrote:
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
->  > +++ b/package/php-gnupg/Config.in
->  > @@ -0,0 +1,9 @@
->  > +config BR2_PACKAGE_PHP_GNUPG
->  > +	bool "php-gnupg"
->  > +	depends on BR2_PACKAGE_PHP
->  > +	depends on BR2_USE_MMU # libassuan
-> 
-> Does php really work on nonmmu?
+ > A bug has been reported upstream to fix this issue properly, and a
+ > GStreamer developer agreed with our proposal. We add the bug URL to
+ > comments on Config.in to let the interested users follow the progress of
+ > this issue.
 
-The CLI variant builds for nommu, if it works and if it's useful in any
-way is quite open to discussion :)
-IMHO it's not very useful, most nommu platforms are short on some form
-of memory which php likes a lot.
-Regards.
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
