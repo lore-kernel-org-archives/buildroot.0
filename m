@@ -1,35 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Feb 2014 21:53:49 +0100
-Subject: [Buildroot] [git commit] giblib: remove unnecessary autoreconf
-	options
-Message-ID: <20140228133417.7C58C9BBF9@busybox.osuosl.org>
+Date: Wed, 26 Feb 2014 11:24:57 +0100
+Subject: [Buildroot] [git commit] monit: bump to version 5.7
+Message-ID: <20140228133417.517049BBF9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c06693f7a8a2625e02903aae2693f51cb36072a7
+commit: http://git.buildroot.net/buildroot/commit/?id=14dc1ef762e365fe5a7535c416adbbdecc21199f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The default $(PKG)_AUTORECONF_OPT already includes the -i flag,
-so there is no point in specifying this in the package makefile.
+CHANGES version 5.7:
+https://mmonit.com/monit/dist/CHANGES.txt
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Johan Derycke <johan.derycke@barco.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/giblib/giblib.mk |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+ package/monit/monit.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/giblib/giblib.mk b/package/giblib/giblib.mk
-index b955943..6d1ebb8 100644
---- a/package/giblib/giblib.mk
-+++ b/package/giblib/giblib.mk
-@@ -9,7 +9,6 @@ GIBLIB_SITE = http://linuxbrit.co.uk/downloads/
- GIBLIB_INSTALL_STAGING = YES
- GIBLIB_DEPENDENCIES = imlib2
- GIBLIB_AUTORECONF = YES
--GIBLIB_AUTORECONF_OPT = --install
- GIBLIB_CONF_OPT = --with-imlib2-prefix=$(STAGING_DIR)/usr \
- 		  --with-imlib2-exec-prefix=$(STAGING_DIR)/usr
- GIBLIB_CONFIG_SCRIPTS = giblib-config
+diff --git a/package/monit/monit.mk b/package/monit/monit.mk
+index ec7c95d..3fdc17e 100644
+--- a/package/monit/monit.mk
++++ b/package/monit/monit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MONIT_VERSION = 5.6
++MONIT_VERSION = 5.7
+ MONIT_SITE = http://mmonit.com/monit/dist/
+ MONIT_LICENSE = AGPLv3 with OpenSSL exception
+ MONIT_LICENSE_FILES = COPYING
