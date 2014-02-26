@@ -1,31 +1,50 @@
-From: Marco Trapanese <marcotrapanese@gmail.com>
-Date: Wed, 26 Feb 2014 23:46:33 +0100
-Subject: [Buildroot] Few questions external toolchain
-In-Reply-To: <530E60FF.6090300@mind.be>
-References: <530B8CEA.90306@gmail.com> <530C6DD2.4070605@gmail.com>
- <CAAXf6LUbFzxUgz+kkes-f7TO0as40kDuaF+v6BG2neWEBeR-hw@mail.gmail.com>
- <530E1C12.9090400@gmail.com> <530E60FF.6090300@mind.be>
-Message-ID: <530E6EC9.6090400@gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 26 Feb 2014 23:47:46 +0100
+Subject: [Buildroot] [PATCH] luajit: pass LDCONFIG=true to make sure
+	dynamic library links are created
+In-Reply-To: <1393453799-32640-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Wed, 26 Feb 2014 23:29:59 +0100")
+References: <1393453799-32640-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87txblbiel.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Il 26/02/2014 22:47, Arnout Vandecappelle ha scritto:
-> This smells like our external toolchain logic doesn't properly locate 
-> and copy the sysroot. Can you verify if output/staging/usr/lib/crt1.o 
-> exists? 
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
+ > To install its shared library, the luajit Makefile does:
+ >         cd src && test -f $(FILE_SO) && \
+ >           $(INSTALL_X) $(FILE_SO) $(INSTALL_DYN) && \
+ >           $(LDCONFIG) $(INSTALL_LIB) && \
+ >           $(SYMLINK) $(INSTALL_SONAME) $(INSTALL_SHORT1) && \
+ >           $(SYMLINK) $(INSTALL_SONAME) $(INSTALL_SHORT2) || :
 
-Yes, it exists!
+ > This means that if ldconfig doesn't work or isn't available on the
+ > system, it won't create the libluajit-5.1.so -> libluajit-5.1.so.5.2.0
+ > symbolic link.
 
+ > Not having this symbolic link prevents lua-ev from finding the shared
+ > version of the luajit library, and it fallbacks to using the
+ > libluajit.a static library. However, this static library is not built
+ > with -fPIC, so using it within a shared library doesn't work, and
+ > leads to build failures on architectures that really do want to have
+ > non-fPIC code into a shared library, such as x86-64.
 
-> Perhaps if you can give the URL of this external toolchain, we can 
-> have a look? Regards, Arnout 
+ > By passing LDCONFIG=true during the installation steps of luajit, we
+ > ensure that the symbolic links are created, which allows lua-ev to
+ > detect the shared library properly, making everybody happy.
 
+ > Investigation conducted with Samuel Martin. Thanks!
 
-https://github.com/embest-tech/fsl-linaro-toolchain
+ > Fixes:
 
-Thank you!
-Marco
+ >   http://autobuild.buildroot.org/results/41c/41c8bb9cf91a86908a150dae27726136cb56f5b7/
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
