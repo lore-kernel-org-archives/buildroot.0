@@ -1,71 +1,51 @@
-From: Frank Ihle <frank.ihle@hs-offenburg.de>
-Date: Wed, 26 Feb 2014 08:31:40 +0100
-Subject: [Buildroot] In Buildroot, how to compile kernel modules
-In-Reply-To: <530CFFD2.4040606@mind.be>
-References: <530C6AB2020000460004B173@gwia2.rz.hs-offenburg.de>
- <20140225102301.GA6130@trismegisto.universo>
- <530C80B0020000460004B17F@gwia2.rz.hs-offenburg.de>
- <530CFFD2.4040606@mind.be>
-Message-ID: <530DA66C020000460004B1F9@gwia2.rz.hs-offenburg.de>
+From: Mike Zick <minimod@morethan.org>
+Date: Wed, 26 Feb 2014 01:48:47 -0600
+Subject: [Buildroot] compiling kernel
+In-Reply-To: <1393369707.747.YahooMailNeo@web120205.mail.ne1.yahoo.com>
+References: <1393369707.747.YahooMailNeo@web120205.mail.ne1.yahoo.com>
+Message-ID: <20140226014847.23839269@core2quad.morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Right setting kernel dependencies makes sense, but I'm not so sure about the process: when I have the following makefile
+On Tue, 25 Feb 2014 15:08:27 -0800 (PST)
+Basavaraj Hiremath <hraj50@yahoo.com> wrote:
 
-obj-m += /<path-to-module>/measurement_gpio.o
-KDIR := /<BR-path>/output/build/linux-2.6.39/
-PWD := $(shell pwd)
-default:
-    $(MAKE) ARCH=arm CROSS_COMPILE=/<BR-path>/output/host/opt/ext-toolchain/bin/arm-none-linux-gnueabi- -C modules
+> Hi,
+> Recently started using build root system, I have following questions,
+> could you clarify?
+> 
+> 1. how can I compile kernel and root file system separately, so that
+> application user can use the kernel binary to create the root file
+> system(no need to have kernel code)?
+>
 
-where is then the generated .ko file and how can I make sure that in this build process the .ko file will be moved to a certain place ?
+The kernel (and any code linked to it) is GPLv2 -
+The source code must be available to whoever has the the binary.
 
-Kind Regards
+The kernel can be separately compiled from the root file system,
+but breaking the terms of the GPLv2 license is not one of the reasons.
 
-Frank
+If your system image uses proprietary code, the BR_EXTERNAL tree is
+provided for that purpose.
 
+> 2. Even after using the pre-built target tool chain, build root
+> compiles some of the host tools for the first time and later uses
+> these host tools. Can I have pre-built host tools required for the
+> build root similar to target tool chain? In multi user system on the
+> Linux machine, only one user need to compile the target tool chain
+> and host tools and rest of the user just create root file system
+> using these target tool chain and host tools.
+>
 
->>> Arnout Vandecappelle <arnout@mind.be> 25.02.14 21.42 Uhr >>>
-On 25/02/14 11:38, Frank Ihle wrote:
-> Hi and thanks for your response. Before i start hacking this, is it
-> really that complicated ? For me it doesn't seem a big deal ?
+Yes.
 
- Actually, a much better example for simple modules is
-package/on2-8170-modules/on2-8170-modules.mk
+Your best starting place would be to review the buildroot manual.
+Available both on-line and packaged with buildroot.
 
- You need to set VERSION and SITE like for all packages.
-
- You need to set DEPENDENCIES to LINUX (and also in the Config.in you
-need to depend on BR2_LINUX_KERNEL).
-
- And you need the following build/install commands:
-
-define ON2_8170_MODULES_BUILD_CMDS
-        $(MAKE) -C $(LINUX_DIR) $(LINUX_MAKE_FLAGS) M=$(@D)
-endef
-
-define ON2_8170_MODULES_INSTALL_TARGET_CMDS
-        $(MAKE) -C $(LINUX_DIR) $(LINUX_MAKE_FLAGS) M=$(@D) \
-        modules_install
-endef
-
-
-
- Regards,
- Arnout
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
-
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140226/b0a79691/attachment.html>
+Mike 
+> 
+> Thanks in advance,
+> Raj
