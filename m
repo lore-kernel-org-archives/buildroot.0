@@ -1,33 +1,34 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Wed, 26 Feb 2014 11:03:17 +0100
-Subject: [Buildroot] [lua v2 4/4] luarocks: never wraps script
-In-Reply-To: <1393408997-32259-1-git-send-email-francois.perrad@gadz.org>
-References: <1393408997-32259-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1393408997-32259-5-git-send-email-francois.perrad@gadz.org>
+From: Derycke, Johan <johan.derycke@barco.com>
+Date: Wed, 26 Feb 2014 10:04:16 +0000
+Subject: [Buildroot] [PATCH] monit: bump to version 5.7
+Message-ID: <E1CF8EFE2042404B87DE2B6D662128020ED58658@KUUMEX10.barco.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-this config prevents the introduction of some HOST_DIR paths on target
+CHANGES version 5.7:
+https://mmonit.com/monit/dist/CHANGES.txt
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Johan Derycke <johan.derycke@barco.com>
 ---
- package/luarocks/luarocks.mk |    1 +
- 1 file changed, 1 insertion(+)
+ package/monit/monit.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
-index 88ab22a..86e57d2 100644
---- a/package/luarocks/luarocks.mk
-+++ b/package/luarocks/luarocks.mk
-@@ -37,6 +37,7 @@ define HOST_LUAROCKS_INSTALL_CMDS
- 	echo "external_deps_dirs = { [[$(STAGING_DIR)/usr]] }"  >> $(LUAROCKS_CONFIG_FILE)
- 	echo "gcc_rpath = false"                                >> $(LUAROCKS_CONFIG_FILE)
- 	echo "rocks_trees = { [[$(TARGET_DIR)/usr]] }"          >> $(LUAROCKS_CONFIG_FILE)
-+	echo "wrap_bin_scripts = false"                         >> $(LUAROCKS_CONFIG_FILE)
- endef
- 
- $(eval $(host-generic-package))
--- 
-1.7.9.5
+diff --git a/package/monit/monit.mk b/package/monit/monit.mk
+index ec7c95d..3fdc17e 100644
+--- a/package/monit/monit.mk
++++ b/package/monit/monit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+
+-MONIT_VERSION = 5.6
++MONIT_VERSION = 5.7
+ MONIT_SITE = http://mmonit.com/monit/dist/
+ MONIT_LICENSE = AGPLv3 with OpenSSL exception
+ MONIT_LICENSE_FILES = COPYING
+--
+1.7.10.4
+This message is subject to the following terms and conditions: MAIL DISCLAIMER<http://www.barco.com/en/maildisclaimer>
