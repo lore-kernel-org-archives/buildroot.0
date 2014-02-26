@@ -1,45 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Feb 2014 22:37:34 +0100
-Subject: [Buildroot] [git commit] host-perl-module-build: new package
-Message-ID: <20140228133416.8B79C9BBF9@busybox.osuosl.org>
+Date: Wed, 26 Feb 2014 21:52:23 +0100
+Subject: [Buildroot] [git commit] libtpl: remove unnecessary autoreconf
+	options
+Message-ID: <20140228133417.70D679BBF9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=649ce56f1924e2deb9abbd960cce153e0d780b48
+commit: http://git.buildroot.net/buildroot/commit/?id=bd59a5dafa97a9e43d995b33163f3856644485ac
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Some Perl packages depend on very recent versions of Module-Build
-which are not yet shipped with a stable perl version.
-But the cpan client is able to update Module-Build as pre-requirement.
-On Buildroot, we must install the latest Module-Build.
+The default $(PKG)_AUTORECONF_OPT already includes the -i and -f flags,
+so there is no point in specifying these in the package makefile.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/perl-module-build/perl-module-build.mk |   12 ++++++++++++
- 1 files changed, 12 insertions(+), 0 deletions(-)
+ package/libtpl/libtpl.mk |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/package/perl-module-build/perl-module-build.mk b/package/perl-module-build/perl-module-build.mk
-new file mode 100644
-index 0000000..a95278d
---- /dev/null
-+++ b/package/perl-module-build/perl-module-build.mk
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# perl-module-build
-+#
-+################################################################################
-+
-+PERL_MODULE_BUILD_VERSION = 0.4204
-+PERL_MODULE_BUILD_SOURCE = Module-Build-$(PERL_MODULE_BUILD_VERSION).tar.gz
-+PERL_MODULE_BUILD_SITE = $(BR2_CPAN_MIRROR)/authors/id/L/LE/LEONT/
-+PERL_MODULE_BUILD_LICENSE = Artistic or GPLv1+
-+
-+$(eval $(host-perl-package))
+diff --git a/package/libtpl/libtpl.mk b/package/libtpl/libtpl.mk
+index ff05991..1d4becf 100644
+--- a/package/libtpl/libtpl.mk
++++ b/package/libtpl/libtpl.mk
+@@ -11,7 +11,6 @@ LIBTPL_LICENSE = BSD-like
+ LIBTPL_LICENSE_FILES = LICENSE
+ 
+ LIBTPL_AUTORECONF = YES
+-LIBTPL_AUTORECONF_OPT = --install --force
+ 
+ define LIBTPL_CREATE_MISSING_FILES
+ 	touch $(@D)/NEWS $(@D)/AUTHORS $(@D)/ChangeLog $(@D)/COPYING
