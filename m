@@ -1,68 +1,65 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 26 Feb 2014 18:49:19 +0100
-Subject: [Buildroot] [PATCH] vlc: fix some configure options
-In-Reply-To: <CAHt8ZCMj+vSa4htd5Q=mbAG=VZq=fpt1s0ubQFP2u4rYQ0FFhA@mail.gmail.com>
-References: <1393360566-4849-1-git-send-email-spdawson@gmail.com>
- <87sir6hklp.fsf@dell.be.48ers.dk> <87ob1uhk68.fsf@dell.be.48ers.dk>
- <CAHt8ZCMj+vSa4htd5Q=mbAG=VZq=fpt1s0ubQFP2u4rYQ0FFhA@mail.gmail.com>
-Message-ID: <530E291F.2000708@mind.be>
+Date: Wed, 26 Feb 2014 18:32:54 +0100
+Subject: [Buildroot] In Buildroot, how to compile kernel modules
+In-Reply-To: <530DA66C020000460004B1F9@gwia2.rz.hs-offenburg.de>
+References: <530C6AB2020000460004B173@gwia2.rz.hs-offenburg.de>
+ <20140225102301.GA6130@trismegisto.universo>
+ <530C80B0020000460004B17F@gwia2.rz.hs-offenburg.de>
+ <530CFFD2.4040606@mind.be>
+ <530DA66C020000460004B1F9@gwia2.rz.hs-offenburg.de>
+Message-ID: <530E2546.6000404@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 26/02/14 11:11, Simon Dawson wrote:
-> Hi Peter,
+On 26/02/14 08:31, Frank Ihle wrote:
+> Right setting kernel dependencies makes sense, but I'm not so sure about
+> the process: when I have the following makefile
 > 
-> On 25 February 2014 23:00, Peter Korsgaard <peter@korsgaard.com> wrote:
->>  > Did you test these?
+> obj-m += /<path-to-module>/measurement_gpio.o
+
+ The obj-m should not contain a path.
+
+> KDIR := /<BR-path>/output/build/linux-2.6.39/
+> PWD := $(shell pwd)
+> default:
+>     $(MAKE) ARCH=arm
+> CROSS_COMPILE=/<BR-path>/output/host/opt/ext-toolchain/bin/arm-none-linux-gnueabi-
+> -C modules
 > 
-> Yes, I did.
-> 
->> Ahh, now I get it. Our autoreconf somehow converts all those --enable /
->> --disable to --with / --without.
-> 
-> Yes, exactly so.
-> 
->> Anybody that has any idea why this is so? It quite unfortunate as we
->> will have to change all of this back once we bump the vlc version and no
->> longer need VLC_AUTORECONF = YES.
-> 
-> I haven't yet got to the bottom of how/why this is happening, I'm afraid.
+> where is then the generated .ko file and how can I make sure that in this
+> build process the .ko file will be moved to a certain place ?
 
- There's a lot of strangeness caused by our AUTORECONF...
+ The modules_install target of the kernel will do that:
 
- I guess it has something to do with all the warnings we get when
-AUTORECONFing, since in m4/with_pkg.m4 I do see:
-
-m4_case(def_arg,
-            [yes],[m4_pushdef([with_without], [--disable-]with_arg)],
-            [m4_pushdef([with_without],[--enable-]with_arg)])
-
-AC_ARG_ENABLE(with_arg,
-     AS_HELP_STRING(with_without, description[ @<:@default=]def_arg[@:>@]),,
-    [AS_TR_SH([enable_]with_arg)=def_arg])
+define ON2_8170_MODULES_INSTALL_TARGET_CMDS
+$(MAKE) -C $(LINUX_DIR) $(LINUX_MAKE_FLAGS) M=$(@D) \
+        modules_install
+endef
 
 
- In other words, it registers an --enable option.
+ If you want to support the same from your own makefile, you should add
+something like:
 
- I guess that the PKG_CHECK_MODULES option implicitly enables a
---with-foo option as well, but doesn't mention it in the help text.
+make -C $(KDIR) M=`pwd` INSTALL_MOD_PATH=<...>/output/target \
+	modules_install
 
+
+ By the way, please don't top-post, and strip the irrelevant parts from
+the quoted text.
 
  Regards,
  Arnout
 
 > 
-> Simon.
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Kind Regards
 > 
+> Frank
 > 
 
+[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
