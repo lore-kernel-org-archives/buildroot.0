@@ -1,43 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Feb 2014 14:43:49 +0100
-Subject: [Buildroot] [git commit] lua: remove LUA_INSTALLED_FILES
-Message-ID: <20140226140759.2E9B19BAFF@busybox.osuosl.org>
+From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Wed, 26 Feb 2014 16:14:15 +0100
+Subject: [Buildroot] [lua v2 2/4] lua: refactor install steps
+In-Reply-To: <87mwhedl2s.fsf@dell.be.48ers.dk>
+References: <1393408997-32259-1-git-send-email-francois.perrad@gadz.org>
+ <1393408997-32259-3-git-send-email-francois.perrad@gadz.org>
+ <87mwhedl2s.fsf@dell.be.48ers.dk>
+Message-ID: <CAB0FRssmso3x1ctLXfZNS8YOWFm0U3ao-ES+-EeDktyWxLoJXw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0127a1cc5a688d2acb8969bd692e5de1765999e1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+2014-02-26 15:07 GMT+01:00 Peter Korsgaard <jacmet@uclibc.org>:
+>>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
+>
+>  > since the comeback of version in module path (see commit ccd68a51)
+>  > the upstream Makefiles are usable for install.
+>
+>  > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+>
+> What is the impact of this? Why do we want it for 2014.02?
 
-Useless since the uninstall commands were removed in eb7bd9ef
+See Arnout's request in :
+ http://patchwork.ozlabs.org/patch/323460/
+ http://patchwork.ozlabs.org/patch/314146/
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/lua/lua.mk |   11 -----------
- 1 files changed, 0 insertions(+), 11 deletions(-)
+Fran?ois
 
-diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-index 2c867f6..a20531c 100644
---- a/package/lua/lua.mk
-+++ b/package/lua/lua.mk
-@@ -104,16 +104,5 @@ define HOST_LUA_INSTALL_CMDS
- 	$(INSTALL) -m 0644 -D $(@D)/src/lauxlib.h $(HOST_DIR)/usr/include/lauxlib.h
- endef
- 
--LUA_INSTALLED_FILES = \
--	/usr/include/lua.h \
--	/usr/include/luaconf.h \
--	/usr/include/lualib.h \
--	/usr/include/lauxlib.h \
--	/usr/lib/pkgconfig/lua.pc \
--	/usr/bin/lua \
--	/usr/bin/luac \
--	/usr/lib/liblua.a \
--	/usr/lib/liblua.so*
--
- $(eval $(generic-package))
- $(eval $(host-generic-package))
+>
+> --
+> Bye, Peter Korsgaard
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
