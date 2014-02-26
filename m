@@ -1,47 +1,37 @@
-From: Marco Trapanese <marcotrapanese@gmail.com>
-Date: Wed, 26 Feb 2014 20:53:17 +0100
-Subject: [Buildroot] Few questions external toolchain
-In-Reply-To: <CAAXf6LUYGTL2BQJY07JMu5WmLb7qxf+Mb6AQvi-EWYvYxi3EXA@mail.gmail.com>
-References: <530B8CEA.90306@gmail.com> <530C6DD2.4070605@gmail.com>
- <CAAXf6LUbFzxUgz+kkes-f7TO0as40kDuaF+v6BG2neWEBeR-hw@mail.gmail.com>
- <530E1C12.9090400@gmail.com>
- <CAAXf6LUYGTL2BQJY07JMu5WmLb7qxf+Mb6AQvi-EWYvYxi3EXA@mail.gmail.com>
-Message-ID: <530E462D.50600@gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 26 Feb 2014 21:36:22 +0100
+Subject: [Buildroot] [PATCH v2] package/ti-gfx: number and fix the
+	new-clk-api patch
+In-Reply-To: <1393440194-32641-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Wed, 26 Feb 2014 19:43:14 +0100")
+References: <1393440194-32641-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <8761o1ehmh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Il 26/02/2014 20:42, Thomas De Schampheleire ha scritto:
+ > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Add a sequence number to the newclkapi patch.
+ > Rebase it ontop of the 5.01.00.01 release.
 
-> Can you run following command: 
-> /home/marco/dev/buildroot/output/host/usr/bin/arm-fsl-linux-gnueabi-gcc -print-file-name=crt1.o 
-> and verify that the reported file exists? What is the output? 
+ > Note: this is barely tested. It applies neatly, but I can't test it,
+ > since I do not have the hardware. I bumped the patch by basically
+ > renaming the problematic functions like the previous patch did:
+ >     s/clk_enable/clk_prepare_enable/
+ >     s/clk_disable/clk_disable_unprepare/
 
-The output is:
-
-crt1.o
-
-Furthermore:
-
-find -name crt1.o
-./output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/crt1.o
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Spenser Gilliland <spenser@gillilanding.com>
+ > ---
+ > Changes v1 -> v2:
+ >   - actually renumber the patch
 
 
-> Normally you shouldn't give any special environment flags. You could 
-> also try to compile a simple hello world program with that compiler in 
-> output/host/usr/bin, to see if that works correctly or not.
+Committed to next, thanks.
 
-Compiling an hello world program with the (symbolic link) in 
-output/host/usr/bin/arm-fsl-linux-gnueabi-gcc leads to the same linker 
-errors described in the previous post.
-
-But the original compiler 
-(/home/marco/dev/fsl-linaro-toolchain/bin/arm-fsl-linux-gnueabi-gcc) 
-works fine with the same hello world.
-
-Thanks again!
-Marco
+-- 
+Bye, Peter Korsgaard
