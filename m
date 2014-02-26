@@ -1,38 +1,25 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 26 Feb 2014 16:22:02 +0100
-Subject: [Buildroot] [lua v2 2/4] lua: refactor install steps
-In-Reply-To: <CAB0FRssmso3x1ctLXfZNS8YOWFm0U3ao-ES+-EeDktyWxLoJXw@mail.gmail.com>
- (=?utf-8?Q?=22Fran=C3=A7ois?= Perrad"'s message of "Wed, 26 Feb 2014
- 16:14:15 +0100")
+Date: Wed, 26 Feb 2014 17:33:00 +0100
+Subject: [Buildroot] [lua v2 3/4] lua: handles BR2_PREFER_STATIC_LIB
+In-Reply-To: <1393408997-32259-4-git-send-email-francois.perrad@gadz.org>
+ (Francois Perrad's message of "Wed, 26 Feb 2014 11:03:16 +0100")
 References: <1393408997-32259-1-git-send-email-francois.perrad@gadz.org>
- <1393408997-32259-3-git-send-email-francois.perrad@gadz.org>
- <87mwhedl2s.fsf@dell.be.48ers.dk>
- <CAB0FRssmso3x1ctLXfZNS8YOWFm0U3ao-ES+-EeDktyWxLoJXw@mail.gmail.com>
-Message-ID: <87ios1ew6d.fsf@dell.be.48ers.dk>
+ <1393408997-32259-4-git-send-email-francois.perrad@gadz.org>
+Message-ID: <87eh2pesw3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fran?ois" == Fran?ois Perrad <francois.perrad@gadz.org> writes:
+>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
 
- > 2014-02-26 15:07 GMT+01:00 Peter Korsgaard <jacmet@uclibc.org>:
- >>>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
- >> 
- >> > since the comeback of version in module path (see commit ccd68a51)
- >> > the upstream Makefiles are usable for install.
- >> 
- >> > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
- >> 
- >> What is the impact of this? Why do we want it for 2014.02?
+ > fix compilation with Blackfin FLAT
+ > see http://autobuild.buildroot.net/results/b41/b4146bf821d59f694546f6e3a341394cc8fa43ce/
 
- > See Arnout's request in :
- >  http://patchwork.ozlabs.org/patch/323460/
- >  http://patchwork.ozlabs.org/patch/314146/
+ > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-Ok, thanks. A bit more detailed commit description would be nice for
-future patches would be good.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
