@@ -1,65 +1,90 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 26 Feb 2014 18:32:54 +0100
-Subject: [Buildroot] In Buildroot, how to compile kernel modules
-In-Reply-To: <530DA66C020000460004B1F9@gwia2.rz.hs-offenburg.de>
-References: <530C6AB2020000460004B173@gwia2.rz.hs-offenburg.de>
- <20140225102301.GA6130@trismegisto.universo>
- <530C80B0020000460004B17F@gwia2.rz.hs-offenburg.de>
- <530CFFD2.4040606@mind.be>
- <530DA66C020000460004B1F9@gwia2.rz.hs-offenburg.de>
-Message-ID: <530E2546.6000404@mind.be>
+Date: Wed, 26 Feb 2014 18:38:14 +0100
+Subject: [Buildroot] compiling kernel
+In-Reply-To: <20140226014847.23839269@core2quad.morethan.org>
+References: <1393369707.747.YahooMailNeo@web120205.mail.ne1.yahoo.com>
+ <20140226014847.23839269@core2quad.morethan.org>
+Message-ID: <530E2686.8040409@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 26/02/14 08:31, Frank Ihle wrote:
-> Right setting kernel dependencies makes sense, but I'm not so sure about
-> the process: when I have the following makefile
+On 26/02/14 08:48, Mike Zick wrote:
+> On Tue, 25 Feb 2014 15:08:27 -0800 (PST)
+> Basavaraj Hiremath <hraj50@yahoo.com> wrote:
 > 
-> obj-m += /<path-to-module>/measurement_gpio.o
+>> Hi,
+>> Recently started using build root system, I have following questions,
+>> could you clarify?
+>>
+>> 1. how can I compile kernel and root file system separately, so that
+>> application user can use the kernel binary to create the root file
+>> system(no need to have kernel code)?
 
- The obj-m should not contain a path.
+ Compiling the kernel outside of buildroot is possible. You just
+cross-compile it in the usual way, but pass
+CROSS_COMPILE=<buildroot>/output/host/usr/bin/foo-bar-baz-
+and
+TARGET_DIR=<buildroot>/output/target
 
-> KDIR := /<BR-path>/output/build/linux-2.6.39/
-> PWD := $(shell pwd)
-> default:
->     $(MAKE) ARCH=arm
-> CROSS_COMPILE=/<BR-path>/output/host/opt/ext-toolchain/bin/arm-none-linux-gnueabi-
-> -C modules
+(the latter is for installing modules).
+
+ If you use a pre-installed external toolchain, it's also possible to use
+it directly for CROSS_COMPILE.
+
+ Or you can make a separate buildroot config for the kernel and for the
+rootfs, of course.
+
+>>
 > 
-> where is then the generated .ko file and how can I make sure that in this
-> build process the .ko file will be moved to a certain place ?
+> The kernel (and any code linked to it) is GPLv2 -
+> The source code must be available to whoever has the the binary.
 
- The modules_install target of the kernel will do that:
+ There may be other reasons to want to compile them separately.
 
-define ON2_8170_MODULES_INSTALL_TARGET_CMDS
-$(MAKE) -C $(LINUX_DIR) $(LINUX_MAKE_FLAGS) M=$(@D) \
-        modules_install
-endef
+> 
+> The kernel can be separately compiled from the root file system,
+> but breaking the terms of the GPLv2 license is not one of the reasons.
+> 
+> If your system image uses proprietary code, the BR_EXTERNAL tree is
+> provided for that purpose.
+> 
+>> 2. Even after using the pre-built target tool chain, build root
+>> compiles some of the host tools for the first time and later uses
+>> these host tools. Can I have pre-built host tools required for the
+>> build root similar to target tool chain? In multi user system on the
+>> Linux machine, only one user need to compile the target tool chain
+>> and host tools and rest of the user just create root file system
+>> using these target tool chain and host tools.
+>>
+> 
+> Yes.
 
+ Actually, no. Buildroot will always rebuild the host-packages that it
+needs. Not rebuilding them would be part of the SDK concept that we've
+been thinking about for two years, but nobody has ever actually worked on
+that...
 
- If you want to support the same from your own makefile, you should add
-something like:
-
-make -C $(KDIR) M=`pwd` INSTALL_MOD_PATH=<...>/output/target \
-	modules_install
-
-
- By the way, please don't top-post, and strip the irrelevant parts from
-the quoted text.
 
  Regards,
  Arnout
 
 > 
-> Kind Regards
+> Your best starting place would be to review the buildroot manual.
+> Available both on-line and packaged with buildroot.
 > 
-> Frank
+> Mike 
+>>
+>> Thanks in advance,
+>> Raj
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 > 
 
-[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
