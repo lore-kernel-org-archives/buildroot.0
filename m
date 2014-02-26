@@ -1,62 +1,75 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Feb 2014 21:55:24 +0100
-Subject: [Buildroot] [git commit] cegui06: need dynamic library support
-Message-ID: <20140226205608.3E9329BAEC@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 26 Feb 2014 21:57:40 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2014-02-25
+In-Reply-To: <87k3cigt81.fsf@dell.be.48ers.dk>
+References: <20140226073009.06EDD100CEF@stock.ovh.net>
+ <87k3cigt81.fsf@dell.be.48ers.dk>
+Message-ID: <20140226215740.4fd07066@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d1284c502234d67b67d334ee0a0ee84bd1cdc89e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Peter Korsgaard,
 
-Fixes:
+On Wed, 26 Feb 2014 09:42:54 +0100, Peter Korsgaard wrote:
 
-  http://autobuild.buildroot.org/results/caf/caf421629f4465cd347dc40af0b559c4d9b0c09f/
+>  >       i686 |            host-libxslt-1.1.28 | NOK | http://autobuild.buildroot.net/results/6dcef647eb0f0db7de3f34194eb15ceebc645b39/
+> 
+>   CCLD   testThreads
+> /home/peko/scratch/host/usr/lib/libxml2.so: undefined reference to `lzma_code at XZ_5.0'
+> /home/peko/scratch/host/usr/lib/libxml2.so: undefined reference to `lzma_auto_decoder at XZ_5.0'
+> /home/peko/scratch/host/usr/lib/libxml2.so: undefined reference to `lzma_end at XZ_5.0'
+> /home/peko/scratch/host/usr/lib/libxml2.so: undefined reference to `lzma_properties_decode at XZ_5.0'
+> /home/peko/scratch/host/usr/lib/libxml2.so: undefined reference to `lzma_code at XZ_5.0'
+> /home/peko/scratch/host/usr/lib/libxml2.so: undefined reference to `lzma_auto_decoder at XZ_5.0'
+> /home/peko/scratch/host/usr/lib/libxml2.so: undefined reference to `lzma_end at XZ_5.0'
+> /home/peko/scratch/host/usr/lib/libxml2.so: undefined reference to `lzma_properties_decode at XZ_5.0'
+> 
+> Thomas, I think you looked into it and it was something about it picking
+> up lzma from the build machine. Do you have a fix?
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/cegui06/Config.in |    5 +++--
- package/spice/Config.in   |    4 ++++
- 2 files changed, 7 insertions(+), 2 deletions(-)
+Yeah, probably need to explicitly disable lzma support from
+host-libxml2, I'd say.
 
-diff --git a/package/cegui06/Config.in b/package/cegui06/Config.in
-index 92bbb70..f03e488 100644
---- a/package/cegui06/Config.in
-+++ b/package/cegui06/Config.in
-@@ -1,10 +1,11 @@
--comment "cegui06 needs a toolchain w/ C++, threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
-+comment "cegui06 needs a toolchain w/ C++, threads, dynamic library"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || BR2_PREFER_STATIC_LIB
- 
- config BR2_PACKAGE_CEGUI06
- 	bool "cegui06"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_PREFER_STATIC_LIB
- 	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_FREETYPE
- 	select BR2_PACKAGE_PCRE
-diff --git a/package/spice/Config.in b/package/spice/Config.in
-index 9bddb06..b95e32e 100644
---- a/package/spice/Config.in
-+++ b/package/spice/Config.in
-@@ -50,11 +50,15 @@ comment "client needs a toolchain w/ threads, C++"
- config BR2_PACKAGE_SPICE_GUI
- 	bool "Enable GUI"
- 	depends on BR2_PACKAGE_SPICE_CLIENT
-+	depends on !BR2_PREFER_STATIC_LIB
- 	select BR2_PACKAGE_CEGUI06
- 	help
- 	  Say 'y' here to enable the Graphical User Interface (GUI)
- 	  start dialog.
- 
-+comment "gui needs a toolchain w/ dynamic library"
-+	depends on BR2_PREFER_STATIC_LIB
-+
- config BR2_PACKAGE_SPICE_TUNNEL
- 	bool "Enable network redirection"
- 	select BR2_PACKAGE_SLIRP
+>  >        arm |         ltp-testsuite-20130904 | NOK | http://autobuild.buildroot.net/results/722fea5a4a30c271a83cadf61e2d1e07bcb7a4ea/
+> 
+> Ptrace issue:
+> 
+> /home/test/test/1/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/ptrace.h:58:8: error: redefinition of 'struct ptrace_peeksiginfo_args'
+
+Maybe fixed by the ltp-testsuite bump in -next.
+
+>  >    powerpc | mmc-utils-11f2ceabc4ad3f0dd... | NOK | http://autobuild.buildroot.net/results/fa45d93d145f3991e9c8bb99997b7e41cedc64b0/
+> 
+> Too old kernel headers?
+
+Yes.
+
+> 
+> mmc.h:18:29: fatal error: linux/mmc/ioctl.h: No such file or directory
+
+>  >    powerpc |                   sysklogd-1.5 | NOK | http://autobuild.buildroot.net/results/88d76be91d04a22dd2f1683396a172be085e1657/
+> 
+> Internal compiler error. Thomas, how old is this ctng toolchain?
+
+Fairly old. Yann has provided me some newer ctng toolchains, but he has
+used "br" as the vendor part of the tuple, which I find highly
+confusing, so I haven't put in "production" these newer ctng toolchains.
+
+>  >    powerpc |              xlib_libXau-1.0.8 | NOK | http://autobuild.buildroot.net/results/f62f8e63082fdfb9a68c8b4e629e5a7fa02b3bba/
+> 
+> Out of memory?
+> 
+> configure: creating ./config.status
+> ./config.status: fork: Cannot allocate memory
+
+Crappy build machine :-)
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
