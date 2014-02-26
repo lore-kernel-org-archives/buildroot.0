@@ -1,35 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 26 Feb 2014 22:10:49 +0100
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <CAAEAJfB_dn3e3z6dWnKUv4mB47sgb3EL8GY5CtCy5kF-DMV-wA@mail.gmail.com>
-References: <20140223073009.3676E101056@stock.ovh.net>
- <20140223110021.16b6b976@skate>
- <CAAEAJfBPQdJC3Q7pr5tmkGsWdVW9W7cJBmPOE1OWMOKo-Kj88Q@mail.gmail.com>
- <20140224221601.12c4dcf1@skate>
- <CAAEAJfB_dn3e3z6dWnKUv4mB47sgb3EL8GY5CtCy5kF-DMV-wA@mail.gmail.com>
-Message-ID: <20140226221049.3243a610@skate>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 26 Feb 2014 22:23:25 +0100
+Subject: [Buildroot] [PATCH v3 1/1] ncftp: fix cross-compilation test
+In-Reply-To: <530E56FC.20608@openwide.fr>
+References: <1393016452-10812-1-git-send-email-romain.naour@openwide.fr>
+ <530A74F4.8030906@mind.be> <530A7B97.3090701@openwide.fr>
+ <530CCF4C.7090208@mind.be> <530E56FC.20608@openwide.fr>
+Message-ID: <530E5B4D.3090205@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ezequiel Garc?a,
+On 26/02/14 22:05, Romain Naour wrote:
+> I wonder if any other packages can be affected by this issue ?
+> At least we know that autoconf 2.13 is not safe for cross-compilation...
 
-On Mon, 24 Feb 2014 18:18:35 -0300, Ezequiel Garc?a wrote:
+ The first autoconf version after 2.13 is 2.50, and this solves the
+cross-compilation issue (see release notes). 2.50 was released on May 21,
+2001. Seems unlikely that there are many packages that are distributed
+with such an ancient autoconf...
 
-> > The _gp problem seems to be occurring for a bunch of other packages. We
-> > should contact the Sourcery CodeBench people about this, I believe.
-> > Someone to take the lead on this?
-> 
-> Altera provided the names of the people working on this (and also
-> suggested they might not reply to private mails). Let me find some
-> time to prepare a mail for them.
+ Regards,
+ Arnout
 
-Good. Please keep us informed of the outcome of these discussions.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
