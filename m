@@ -1,35 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Feb 2014 21:52:23 +0100
-Subject: [Buildroot] [git commit] libtpl: remove unnecessary autoreconf
-	options
-Message-ID: <20140228133417.70D679BBF9@busybox.osuosl.org>
+Date: Wed, 26 Feb 2014 09:52:27 +0100
+Subject: [Buildroot] [git commit] php: bump to version 5.5.9
+Message-ID: <20140228133417.24B999BBF9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bd59a5dafa97a9e43d995b33163f3856644485ac
+commit: http://git.buildroot.net/buildroot/commit/?id=b553ffe8dc38d285e0730ed9e6b16a6117ccab66
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The default $(PKG)_AUTORECONF_OPT already includes the -i and -f flags,
-so there is no point in specifying these in the package makefile.
-
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libtpl/libtpl.mk |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+ package/php/php.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libtpl/libtpl.mk b/package/libtpl/libtpl.mk
-index ff05991..1d4becf 100644
---- a/package/libtpl/libtpl.mk
-+++ b/package/libtpl/libtpl.mk
-@@ -11,7 +11,6 @@ LIBTPL_LICENSE = BSD-like
- LIBTPL_LICENSE_FILES = LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 2f6280f..f01e131 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- LIBTPL_AUTORECONF = YES
--LIBTPL_AUTORECONF_OPT = --install --force
- 
- define LIBTPL_CREATE_MISSING_FILES
- 	touch $(@D)/NEWS $(@D)/AUTHORS $(@D)/ChangeLog $(@D)/COPYING
+-PHP_VERSION = 5.5.8
++PHP_VERSION = 5.5.9
+ PHP_SITE = http://www.php.net/distributions
+ PHP_INSTALL_STAGING = YES
+ PHP_INSTALL_STAGING_OPT = INSTALL_ROOT=$(STAGING_DIR) install
