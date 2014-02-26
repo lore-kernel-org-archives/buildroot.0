@@ -1,35 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Feb 2014 21:52:23 +0100
-Subject: [Buildroot] [git commit branch/next] libtpl: remove unnecessary
-	autoreconf options
-Message-ID: <20140226205417.277739BAEC@busybox.osuosl.org>
+Date: Wed, 26 Feb 2014 21:28:12 +0100
+Subject: [Buildroot] [git commit branch/next] package/ti-gfx: do not
+	forcefully remove source dir on extract
+Message-ID: <20140226205417.1F09996DFF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bd59a5dafa97a9e43d995b33163f3856644485ac
+commit: http://git.buildroot.net/buildroot/commit/?id=066a464aa14aec1abd38e5cc786efaef36a3c556
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The default $(PKG)_AUTORECONF_OPT already includes the -i and -f flags,
-so there is no point in specifying these in the package makefile.
+ti-gfx uses custom extract commands, which first and foremost removes
+the source dir unconditionally.
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Thee side-effect of this is that make will re-extract, re-patch and
+probably re-build ti-gfx at each run.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Spenser Gilliland <spenser@gillilanding.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libtpl/libtpl.mk |    1 -
+ package/ti-gfx/ti-gfx.mk |    1 -
  1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/package/libtpl/libtpl.mk b/package/libtpl/libtpl.mk
-index ff05991..1d4becf 100644
---- a/package/libtpl/libtpl.mk
-+++ b/package/libtpl/libtpl.mk
-@@ -11,7 +11,6 @@ LIBTPL_LICENSE = BSD-like
- LIBTPL_LICENSE_FILES = LICENSE
+diff --git a/package/ti-gfx/ti-gfx.mk b/package/ti-gfx/ti-gfx.mk
+index 5ea6b92..e48715d 100644
+--- a/package/ti-gfx/ti-gfx.mk
++++ b/package/ti-gfx/ti-gfx.mk
+@@ -90,7 +90,6 @@ TI_GFX_HDR_DIRS = OGLES2/EGL OGLES2/EWS OGLES2/GLES2 OGLES2/KHR \
+ 	OGLES/GLES bufferclass_ti/ pvr2d/ wsegl/
  
- LIBTPL_AUTORECONF = YES
--LIBTPL_AUTORECONF_OPT = --install --force
- 
- define LIBTPL_CREATE_MISSING_FILES
- 	touch $(@D)/NEWS $(@D)/AUTHORS $(@D)/ChangeLog $(@D)/COPYING
+ define TI_GFX_EXTRACT_CMDS
+-	$(RM) -rf $(TI_GFX_DIR)
+ 	chmod +x $(DL_DIR)/$(TI_GFX_SOURCE)
+ 	printf "Y\nY\n qY\n\n" | $(DL_DIR)/$(TI_GFX_SOURCE) \
+ 		--prefix $(@D) \
