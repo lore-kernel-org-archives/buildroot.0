@@ -1,39 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Feb 2014 21:28:12 +0100
-Subject: [Buildroot] [git commit] package/ti-gfx: do not forcefully remove
-	source dir on extract
-Message-ID: <20140228133417.680879BBF9@busybox.osuosl.org>
+Date: Wed, 26 Feb 2014 21:53:49 +0100
+Subject: [Buildroot] [git commit] giblib: remove unnecessary autoreconf
+	options
+Message-ID: <20140228133417.7C58C9BBF9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=066a464aa14aec1abd38e5cc786efaef36a3c556
+commit: http://git.buildroot.net/buildroot/commit/?id=c06693f7a8a2625e02903aae2693f51cb36072a7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-ti-gfx uses custom extract commands, which first and foremost removes
-the source dir unconditionally.
+The default $(PKG)_AUTORECONF_OPT already includes the -i flag,
+so there is no point in specifying this in the package makefile.
 
-Thee side-effect of this is that make will re-extract, re-patch and
-probably re-build ti-gfx at each run.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Spenser Gilliland <spenser@gillilanding.com>
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ti-gfx/ti-gfx.mk |    1 -
+ package/giblib/giblib.mk |    1 -
  1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/package/ti-gfx/ti-gfx.mk b/package/ti-gfx/ti-gfx.mk
-index 5ea6b92..e48715d 100644
---- a/package/ti-gfx/ti-gfx.mk
-+++ b/package/ti-gfx/ti-gfx.mk
-@@ -90,7 +90,6 @@ TI_GFX_HDR_DIRS = OGLES2/EGL OGLES2/EWS OGLES2/GLES2 OGLES2/KHR \
- 	OGLES/GLES bufferclass_ti/ pvr2d/ wsegl/
- 
- define TI_GFX_EXTRACT_CMDS
--	$(RM) -rf $(TI_GFX_DIR)
- 	chmod +x $(DL_DIR)/$(TI_GFX_SOURCE)
- 	printf "Y\nY\n qY\n\n" | $(DL_DIR)/$(TI_GFX_SOURCE) \
- 		--prefix $(@D) \
+diff --git a/package/giblib/giblib.mk b/package/giblib/giblib.mk
+index b955943..6d1ebb8 100644
+--- a/package/giblib/giblib.mk
++++ b/package/giblib/giblib.mk
+@@ -9,7 +9,6 @@ GIBLIB_SITE = http://linuxbrit.co.uk/downloads/
+ GIBLIB_INSTALL_STAGING = YES
+ GIBLIB_DEPENDENCIES = imlib2
+ GIBLIB_AUTORECONF = YES
+-GIBLIB_AUTORECONF_OPT = --install
+ GIBLIB_CONF_OPT = --with-imlib2-prefix=$(STAGING_DIR)/usr \
+ 		  --with-imlib2-exec-prefix=$(STAGING_DIR)/usr
+ GIBLIB_CONFIG_SCRIPTS = giblib-config
