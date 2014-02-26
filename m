@@ -1,44 +1,59 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 26 Feb 2014 11:06:44 +0000
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <20140221100842.2d988a70@skate>
-References: <20140221073009.2E62F10136B@stock.ovh.net>
- <20140221100842.2d988a70@skate>
-Message-ID: <530DCAC4.90908@imgtec.com>
+From: Julien DELACOU <julien.delacou@st.com>
+Date: Wed, 26 Feb 2014 12:16:50 +0100
+Subject: [Buildroot] [buildroot] wavpack/iconv link issue
+Message-ID: <530DCD22.2080609@st.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/21/2014 09:08 AM, Thomas Petazzoni wrote:
->>        mips |                      vlc-2.1.2 | NOK | http://autobuild.buildroot.net/results/95cac37ef8f035c024ebcd808367739c29875f30/
->
-> /home/test/test/3/output/host/opt/ext-toolchain/bin/../lib/gcc/mips-linux-gnu/4.7.3/../../../../mips-linux-gnu/bin/ld: ./.libs/libvlc_srtp.a(libvlc_srtp_la-srtp.o): relocation R_MIPS_26 against `div' can not be used when making a shared object; recompile with -fPIC
-> ./.libs/libvlc_srtp.a(libvlc_srtp_la-srtp.o): could not read symbols: Bad value
-> collect2: error: ld returned 1 exit status
->
-> We have the same problem on x86-64: some vlc library is apparently not
-> build with -fPIC. Could someone look into this?
->
-> It has caused the last 3 build failures of vlc on mips:
->
->   http://autobuild.buildroot.org/?reason=vlc-2.1.2&arch=mips&step=3
->
-> and the four last build failures of vlc on x86-64:
->
->   http://autobuild.buildroot.org/results/a53/a53ea017ec92150c7d37c0da0ca9a8dac75f460e/build-end.log
+Hi,
 
-After compiling libgcrypt with -fPIC, the error has changed to this one:
+I'm trying to enable wavpack within an already compiled buildroot.
 
-/home/test/test/3/output/host/opt/ext-toolchain/bin/../lib/gcc/mips-linux-gnu/4.7.3/../../../../mips-linux-gnu/bin/ld: 
-./.libs/libunzip.a(unzip.o): relocation R_MIPS_26 against `a local 
-symbol' can not be used when making a shared object; recompile with -fPIC
+After having enabled BR2_PACKAGE_WAVPACK using make menuconfig, I ran 
+'make clean all' (since it is recommended after adding some libraries to 
+the package selection).
 
-I don't know if this is an improvement or not, and I don't know what to 
-do next :/
+When I do so, I face the following error at link:
+/local/frq08628/views/a2_evb_1.1/toolchains/elf-fdpic-v7/bin/../lib/gcc/arm-v7-linux-uclibceabi/4.7.4/../../../../arm-v7-linux-uclibceabi/bin/ld: 
+wavpack-wavpack.o: undefined reference to symbol 'libiconv_open'
+...
+/local/frq08628/views/a2_evb_1.1/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libiconv.so.2: 
+could not read symbols: Invalid operation
 
-Maybe someone else has more ideas.
+Even after a make distclean/make, problem still persists.
+
+I checked my defconfig, BR2_PACKAGE_LIBICONV is set, libiconv.so is 
+correctly generated. Moreover, the ./configure found it (I suppose using 
+--with-iconv):
+checking iconv.h usability... yes
+checking iconv.h presence... yes
+checking for iconv.h... yes
+checking for iconv... no
+checking for iconv in -liconv... yes
+
+The only problem seems to be that the -liconv directive is not added to 
+linker command.
+Problem seems to be solved by patching as follow:
+
+-wavpack_LDADD = $(AM_LDADD) $(top_builddir)/src/.libs/libwavpack.la 
+$(LIBM)
++wavpack_LDADD = $(AM_LDADD) $(top_builddir)/src/.libs/libwavpack.la 
+$(LIBM) $(ICONV)
+  wvunpack_SOURCES = wvunpack.c utils.c md5.c
+  wvunpack_CFLAGS = $(AM_CFLAGS) -I$(top_srcdir)/include
+-wvunpack_LDADD = $(AM_LDADD) $(top_builddir)/src/.libs/libwavpack.la 
+$(LIBM)
++wvunpack_LDADD = $(AM_LDADD) $(top_builddir)/src/.libs/libwavpack.la 
+$(LIBM) $(ICONV)
+
+Nevertheless, I'm wondering if it is a proper way to do (and do not 
+patch the Makefile) ?
+
+Thanks,
 
 -- 
-Vincent
+BR
+Julien
