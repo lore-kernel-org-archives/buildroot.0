@@ -1,40 +1,77 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Feb 2014 22:33:43 +0100
-Subject: [Buildroot] [git commit] perl: remove PERL_INSTALL_TARGET_GOALS
-Message-ID: <20140228133416.4DD849BA7B@busybox.osuosl.org>
+Date: Wed, 26 Feb 2014 09:52:41 +0100
+Subject: [Buildroot] [git commit] php-gnupg: new package
+Message-ID: <20140228133417.2FAB29BBF9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7128d249c0227321f2588c09d184da436e45df84
+commit: http://git.buildroot.net/buildroot/commit/?id=7f6a380b1800f209ddefd729cc13837932451a65
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-useless since previous commit (removal of BR2_HAVE_DOCUMENTATION)
-see http://git.buildroot.net/buildroot/diff/package/perl/perl.mk?id=7164a32632d14cb83698ddec45e84ad2f3252e9e
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/perl/perl.mk |    4 +---
- 1 files changed, 1 insertions(+), 3 deletions(-)
+ package/Config.in              |    1 +
+ package/php-gnupg/Config.in    |    9 +++++++++
+ package/php-gnupg/php-gnupg.mk |   23 +++++++++++++++++++++++
+ 3 files changed, 33 insertions(+), 0 deletions(-)
 
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 5ede81b..51aeb14 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -90,10 +90,8 @@ define PERL_INSTALL_STAGING_CMDS
- 	$(MAKE1) -C $(@D) DESTDIR="$(STAGING_DIR)" install.perl
- endef
- 
--PERL_INSTALL_TARGET_GOALS = install.perl
--
- define PERL_INSTALL_TARGET_CMDS
--	$(MAKE1) -C $(@D) DESTDIR="$(TARGET_DIR)" $(PERL_INSTALL_TARGET_GOALS)
-+	$(MAKE1) -C $(@D) DESTDIR="$(TARGET_DIR)" install.perl
- endef
- 
- $(eval $(generic-package))
+diff --git a/package/Config.in b/package/Config.in
+index 543c7a6..fd081fd 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -400,6 +400,7 @@ source "package/php/Config.in"
+ if BR2_PACKAGE_PHP
+ if !BR2_PREFER_STATIC_LIB
+ menu "External php extensions"
++source "package/php-gnupg/Config.in"
+ source "package/php-imagick/Config.in"
+ source "package/php-ssh2/Config.in"
+ source "package/php-yaml/Config.in"
+diff --git a/package/php-gnupg/Config.in b/package/php-gnupg/Config.in
+new file mode 100644
+index 0000000..49fb43b
+--- /dev/null
++++ b/package/php-gnupg/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PHP_GNUPG
++	bool "php-gnupg"
++	depends on BR2_PACKAGE_PHP
++	depends on BR2_USE_MMU # libassuan
++	select BR2_PACKAGE_LIBGPGME
++	help
++	  PHP wrapper around the gpgme library.
++
++	  http://pecl.php.net/package/gnupg
+diff --git a/package/php-gnupg/php-gnupg.mk b/package/php-gnupg/php-gnupg.mk
+new file mode 100644
+index 0000000..5fc1dc4
+--- /dev/null
++++ b/package/php-gnupg/php-gnupg.mk
+@@ -0,0 +1,23 @@
++################################################################################
++#
++# php-gnupg
++#
++################################################################################
++
++PHP_GNUPG_VERSION = 1.3.3
++PHP_GNUPG_SOURCE = gnupg-$(PHP_GNUPG_VERSION).tgz
++PHP_GNUPG_SITE = http://pecl.php.net/get
++# phpize does the autoconf magic
++PHP_GNUPG_DEPENDENCIES = php libgpgme host-autoconf host-pkgconf
++PHP_GNUPG_CONF_OPT = --with-php-config=$(STAGING_DIR)/usr/bin/php-config
++PHP_GNUPG_LICENSE = BSD-2c
++PHP_GNUPG_LICENSE_FILES = LICENSE
++
++define PHP_GNUPG_PHPIZE
++	(cd $(@D); \
++		$(STAGING_DIR)/usr/bin/phpize)
++endef
++
++PHP_GNUPG_PRE_CONFIGURE_HOOKS += PHP_GNUPG_PHPIZE
++
++$(eval $(autotools-package))
