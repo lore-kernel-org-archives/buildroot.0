@@ -1,39 +1,67 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Feb 2014 13:17:44 +0100
-Subject: [Buildroot] [git commit] vlc: needs toolchain with c++ support
-Message-ID: <20140226121827.51A339BAE8@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 26 Feb 2014 13:23:29 +0100
+Subject: [Buildroot] wavpack/iconv link issue
+In-Reply-To: <530DCD22.2080609@st.com> (Julien DELACOU's message of "Wed, 26
+ Feb 2014 12:16:50 +0100")
+References: <530DCD22.2080609@st.com>
+Message-ID: <87zjledpvi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=666addf1bc14d793cc279f77f89b1fba84496f12
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Julien" == Julien DELACOU <julien.delacou@st.com> writes:
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/vlc/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+ > Hi,
+ > I'm trying to enable wavpack within an already compiled buildroot.
 
-diff --git a/package/vlc/Config.in b/package/vlc/Config.in
-index 9c9d028..ec1daf4 100644
---- a/package/vlc/Config.in
-+++ b/package/vlc/Config.in
-@@ -6,6 +6,7 @@ endif
- config BR2_PACKAGE_VLC
- 	bool "vlc"
- 	depends on (BR2_UCLIBC_VERSION_SNAPSHOT || BR2_TOOLCHAIN_USES_GLIBC) # spawn.h
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_LARGEFILE
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-@@ -16,5 +17,5 @@ config BR2_PACKAGE_VLC
- 
- 	  http://www.videolan.org/vlc/
- 
--comment "vlc needs a uclibc snapshot or (e)glibc toolchain w/ largefile, wchar, threads"
--	depends on !(BR2_UCLIBC_VERSION_SNAPSHOT || BR2_TOOLCHAIN_USES_GLIBC) || !BR2_LARGEFILE || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+comment "vlc needs a uclibc snapshot or (e)glibc toolchain w/ C++, largefile, wchar, threads"
-+	depends on !(BR2_UCLIBC_VERSION_SNAPSHOT || BR2_TOOLCHAIN_USES_GLIBC) || !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+ > After having enabled BR2_PACKAGE_WAVPACK using make menuconfig, I ran 
+ > 'make clean all' (since it is recommended after adding some libraries to 
+ > the package selection).
+
+ > When I do so, I face the following error at link:
+ > /local/frq08628/views/a2_evb_1.1/toolchains/elf-fdpic-v7/bin/../lib/gcc/arm-v7-linux-uclibceabi/4.7.4/../../../../arm-v7-linux-uclibceabi/bin/ld: 
+ > wavpack-wavpack.o: undefined reference to symbol 'libiconv_open'
+ > ...
+ > /local/frq08628/views/a2_evb_1.1/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libiconv.so.2: 
+ > could not read symbols: Invalid operation
+
+ > Even after a make distclean/make, problem still persists.
+
+ > I checked my defconfig, BR2_PACKAGE_LIBICONV is set, libiconv.so is 
+ > correctly generated. Moreover, the ./configure found it (I suppose using 
+ > --with-iconv):
+ > checking iconv.h usability... yes
+ > checking iconv.h presence... yes
+ > checking for iconv.h... yes
+ > checking for iconv... no
+ > checking for iconv in -liconv... yes
+
+ > The only problem seems to be that the -liconv directive is not added to 
+ > linker command.
+ > Problem seems to be solved by patching as follow:
+
+ > -wavpack_LDADD = $(AM_LDADD) $(top_builddir)/src/.libs/libwavpack.la 
+ > $(LIBM)
+ > +wavpack_LDADD = $(AM_LDADD) $(top_builddir)/src/.libs/libwavpack.la 
+ > $(LIBM) $(ICONV)
+ >   wvunpack_SOURCES = wvunpack.c utils.c md5.c
+ >   wvunpack_CFLAGS = $(AM_CFLAGS) -I$(top_srcdir)/include
+ > -wvunpack_LDADD = $(AM_LDADD) $(top_builddir)/src/.libs/libwavpack.la 
+ > $(LIBM)
+ > +wvunpack_LDADD = $(AM_LDADD) $(top_builddir)/src/.libs/libwavpack.la 
+ > $(LIBM) $(ICONV)
+
+ > Nevertheless, I'm wondering if it is a proper way to do (and do not 
+ > patch the Makefile) ?
+
+Normally you can pass LIBS=-liconv to configure, E.G.
+
+WAVPACK_CONF_OPT += LIBS=-liconv
+
+But strangely enough, our autobuilders haven't triggered this
+issue. What buildroot version are you using?
+
+-- 
+Bye, Peter Korsgaard
