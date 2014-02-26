@@ -1,36 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Feb 2014 21:53:53 +0100
-Subject: [Buildroot] [git commit branch/next] zyre: remove unnecessary
+Date: Wed, 26 Feb 2014 21:53:49 +0100
+Subject: [Buildroot] [git commit branch/next] giblib: remove unnecessary
 	autoreconf options
-Message-ID: <20140226205417.3CCDE96DFF@busybox.osuosl.org>
+Message-ID: <20140226205417.320B896DFF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9e40a1005f51d10784db295797ed270a130d79d5
+commit: http://git.buildroot.net/buildroot/commit/?id=c06693f7a8a2625e02903aae2693f51cb36072a7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The default $(PKG)_AUTORECONF_OPT already includes the -i and -f flags,
-so there is no point in specifying these in the package makefile. Further,
-the -v option to autoreconf is not required.
+The default $(PKG)_AUTORECONF_OPT already includes the -i flag,
+so there is no point in specifying this in the package makefile.
 
 Signed-off-by: Simon Dawson <spdawson@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/zyre/zyre.mk |    1 -
+ package/giblib/giblib.mk |    1 -
  1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/package/zyre/zyre.mk b/package/zyre/zyre.mk
-index 405697a..66952aa 100644
---- a/package/zyre/zyre.mk
-+++ b/package/zyre/zyre.mk
-@@ -11,7 +11,6 @@ ZYRE_LICENSE_FILES = COPYING COPYING.LESSER
- ZYRE_INSTALL_STAGING = YES
- ZYRE_DEPENDENCIES = filemq
- ZYRE_AUTORECONF = YES
--ZYRE_AUTORECONF_OPT = --install --force --verbose
- 
- define ZYRE_CREATE_CONFIG_DIR
- 	mkdir -p $(@D)/config
+diff --git a/package/giblib/giblib.mk b/package/giblib/giblib.mk
+index b955943..6d1ebb8 100644
+--- a/package/giblib/giblib.mk
++++ b/package/giblib/giblib.mk
+@@ -9,7 +9,6 @@ GIBLIB_SITE = http://linuxbrit.co.uk/downloads/
+ GIBLIB_INSTALL_STAGING = YES
+ GIBLIB_DEPENDENCIES = imlib2
+ GIBLIB_AUTORECONF = YES
+-GIBLIB_AUTORECONF_OPT = --install
+ GIBLIB_CONF_OPT = --with-imlib2-prefix=$(STAGING_DIR)/usr \
+ 		  --with-imlib2-exec-prefix=$(STAGING_DIR)/usr
+ GIBLIB_CONFIG_SCRIPTS = giblib-config
