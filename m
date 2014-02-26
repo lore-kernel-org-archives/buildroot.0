@@ -1,65 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 26 Feb 2014 23:29:59 +0100
-Subject: [Buildroot] [PATCH] luajit: pass LDCONFIG=true to make sure dynamic
-	library links are created
-Message-ID: <1393453799-32640-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Marco Trapanese <marcotrapanese@gmail.com>
+Date: Wed, 26 Feb 2014 23:46:33 +0100
+Subject: [Buildroot] Few questions external toolchain
+In-Reply-To: <530E60FF.6090300@mind.be>
+References: <530B8CEA.90306@gmail.com> <530C6DD2.4070605@gmail.com>
+ <CAAXf6LUbFzxUgz+kkes-f7TO0as40kDuaF+v6BG2neWEBeR-hw@mail.gmail.com>
+ <530E1C12.9090400@gmail.com> <530E60FF.6090300@mind.be>
+Message-ID: <530E6EC9.6090400@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-To install its shared library, the luajit Makefile does:
+Il 26/02/2014 22:47, Arnout Vandecappelle ha scritto:
+> This smells like our external toolchain logic doesn't properly locate 
+> and copy the sysroot. Can you verify if output/staging/usr/lib/crt1.o 
+> exists? 
 
-        cd src && test -f $(FILE_SO) && \
-          $(INSTALL_X) $(FILE_SO) $(INSTALL_DYN) && \
-          $(LDCONFIG) $(INSTALL_LIB) && \
-          $(SYMLINK) $(INSTALL_SONAME) $(INSTALL_SHORT1) && \
-          $(SYMLINK) $(INSTALL_SONAME) $(INSTALL_SHORT2) || :
 
-This means that if ldconfig doesn't work or isn't available on the
-system, it won't create the libluajit-5.1.so -> libluajit-5.1.so.5.2.0
-symbolic link.
+Yes, it exists!
 
-Not having this symbolic link prevents lua-ev from finding the shared
-version of the luajit library, and it fallbacks to using the
-libluajit.a static library. However, this static library is not built
-with -fPIC, so using it within a shared library doesn't work, and
-leads to build failures on architectures that really do want to have
-non-fPIC code into a shared library, such as x86-64.
 
-By passing LDCONFIG=true during the installation steps of luajit, we
-ensure that the symbolic links are created, which allows lua-ev to
-detect the shared library properly, making everybody happy.
+> Perhaps if you can give the URL of this external toolchain, we can 
+> have a look? Regards, Arnout 
 
-Investigation conducted with Samuel Martin. Thanks!
 
-Fixes:
+https://github.com/embest-tech/fsl-linaro-toolchain
 
-  http://autobuild.buildroot.org/results/41c/41c8bb9cf91a86908a150dae27726136cb56f5b7/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/luajit/luajit.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
-index 529d3c2..4122d0a 100644
---- a/package/luajit/luajit.mk
-+++ b/package/luajit/luajit.mk
-@@ -48,11 +48,11 @@ define LUAJIT_BUILD_CMDS
- endef
- 
- define LUAJIT_INSTALL_STAGING_CMDS
--	$(MAKE) PREFIX="/usr" DESTDIR="$(STAGING_DIR)" -C $(@D) install
-+	$(MAKE) PREFIX="/usr" DESTDIR="$(STAGING_DIR)" LDCONFIG=true -C $(@D) install
- endef
- 
- define LUAJIT_INSTALL_TARGET_CMDS
--	$(MAKE) PREFIX="/usr" DESTDIR="$(TARGET_DIR)" -C $(@D) install
-+	$(MAKE) PREFIX="/usr" DESTDIR="$(TARGET_DIR)" LDCONFIG=true -C $(@D) install
- endef
- 
- $(eval $(generic-package))
--- 
-1.8.3.2
+Thank you!
+Marco
