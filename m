@@ -1,145 +1,115 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Feb 2014 17:22:04 +0100
-Subject: [Buildroot] [git commit] lua: refactor install steps
-Message-ID: <20140226163328.5730C9BA95@busybox.osuosl.org>
+From: Marco Trapanese <marcotrapanese@gmail.com>
+Date: Wed, 26 Feb 2014 17:53:38 +0100
+Subject: [Buildroot] Few questions external toolchain
+In-Reply-To: <CAAXf6LUbFzxUgz+kkes-f7TO0as40kDuaF+v6BG2neWEBeR-hw@mail.gmail.com>
+References: <530B8CEA.90306@gmail.com> <530C6DD2.4070605@gmail.com>
+ <CAAXf6LUbFzxUgz+kkes-f7TO0as40kDuaF+v6BG2neWEBeR-hw@mail.gmail.com>
+Message-ID: <530E1C12.9090400@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=179266d292b483b9bb1fe847b7d5b191d751b643
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-since the comeback of version in module path (see commit ccd68a51)
-the upstream Makefiles are usable for install.
+Hi Thomas,
+thank you for your clarification. Perhaps this is described in the guide 
+but I didn't find it.
+About the toolchain git repo I tried to set the URL as 
+'git://URL_of_repo/' but it asks for a tarball.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/lua/5.1.5/lua-02-shared-libs-for-lua.patch |   22 ++++++++++++++
- package/lua/5.2.3/lua-02-shared-libs-for-lua.patch |   22 ++++++++++++++
- package/lua/lua.mk                                 |   30 ++------------------
- 3 files changed, 47 insertions(+), 27 deletions(-)
+Anyway I can live with it at the moment... I manually cloned the 
+repository outside buildroot and I passed the path of the toolchain's 
+root directory.
 
-diff --git a/package/lua/5.1.5/lua-02-shared-libs-for-lua.patch b/package/lua/5.1.5/lua-02-shared-libs-for-lua.patch
-index 97a7068..bd40534 100644
---- a/package/lua/5.1.5/lua-02-shared-libs-for-lua.patch
-+++ b/package/lua/5.1.5/lua-02-shared-libs-for-lua.patch
-@@ -1,8 +1,30 @@
- Add the compilation of a shared library.
- Compile the lua binary with the shared library.
-+And install the shared library.
- 
- Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
- 
-+Index: b/Makefile
-+===================================================================
-+--- a/Makefile
-++++ b/Makefile
-+@@ -44,6 +44,7 @@
-+ TO_BIN= lua luac
-+ TO_INC= lua.h luaconf.h lualib.h lauxlib.h ../etc/lua.hpp
-+ TO_LIB= liblua.a
-++TO_SOLIB = liblua.so.$(R)
-+ TO_MAN= lua.1 luac.1
-+ 
-+ # Lua version and release.
-+@@ -61,6 +62,8 @@
-+ install: dummy
-+ 	cd src && $(MKDIR) $(INSTALL_BIN) $(INSTALL_INC) $(INSTALL_LIB) $(INSTALL_MAN) $(INSTALL_LMOD) $(INSTALL_CMOD)
-+ 	cd src && $(INSTALL_EXEC) $(TO_BIN) $(INSTALL_BIN)
-++	cd src && $(INSTALL_EXEC) $(TO_SOLIB) $(INSTALL_LIB)
-++	ln -sf $(TO_SOLIB) $(INSTALL_LIB)/liblua.so
-+ 	cd src && $(INSTALL_DATA) $(TO_INC) $(INSTALL_INC)
-+ 	cd src && $(INSTALL_DATA) $(TO_LIB) $(INSTALL_LIB)
-+ 	cd doc && $(INSTALL_DATA) $(TO_MAN) $(INSTALL_MAN)
- Index: b/src/Makefile
- ===================================================================
- --- a/src/Makefile
-diff --git a/package/lua/5.2.3/lua-02-shared-libs-for-lua.patch b/package/lua/5.2.3/lua-02-shared-libs-for-lua.patch
-index 4679325..cd8a5bf 100644
---- a/package/lua/5.2.3/lua-02-shared-libs-for-lua.patch
-+++ b/package/lua/5.2.3/lua-02-shared-libs-for-lua.patch
-@@ -1,8 +1,30 @@
- Add the compilation of a shared library.
- Compile the lua binary with the shared library.
-+And install the shared library.
- 
- Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
- 
-+Index: b/Makefile
-+===================================================================
-+--- a/Makefile
-++++ b/Makefile
-+@@ -42,6 +42,7 @@
-+ TO_BIN= lua luac
-+ TO_INC= lua.h luaconf.h lualib.h lauxlib.h lua.hpp
-+ TO_LIB= liblua.a
-++TO_SOLIB = liblua.so.$(R)
-+ TO_MAN= lua.1 luac.1
-+ 
-+ # Lua version and release.
-+@@ -60,6 +61,8 @@
-+ install: dummy
-+ 	cd src && $(MKDIR) $(INSTALL_BIN) $(INSTALL_INC) $(INSTALL_LIB) $(INSTALL_MAN) $(INSTALL_LMOD) $(INSTALL_CMOD)
-+ 	cd src && $(INSTALL_EXEC) $(TO_BIN) $(INSTALL_BIN)
-++	cd src && $(INSTALL_EXEC) $(TO_SOLIB) $(INSTALL_LIB)
-++	ln -sf $(TO_SOLIB) $(INSTALL_LIB)/liblua.so
-+ 	cd src && $(INSTALL_DATA) $(TO_INC) $(INSTALL_INC)
-+ 	cd src && $(INSTALL_DATA) $(TO_LIB) $(INSTALL_LIB)
-+ 	cd doc && $(INSTALL_DATA) $(TO_MAN) $(INSTALL_MAN)
- Index: b/src/Makefile
- ===================================================================
- --- a/src/Makefile
-diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-index a20531c..c016d7e 100644
---- a/package/lua/lua.mk
-+++ b/package/lua/lua.mk
-@@ -65,43 +65,19 @@ define HOST_LUA_BUILD_CMDS
- endef
- 
- define LUA_INSTALL_STAGING_CMDS
-+	$(MAKE) INSTALL_TOP="$(STAGING_DIR)/usr" -C $(@D) install
- 	$(INSTALL) -m 0644 -D $(@D)/etc/lua.pc \
- 		$(STAGING_DIR)/usr/lib/pkgconfig/lua.pc
--	$(INSTALL) -m 0755 -D $(@D)/src/lua $(STAGING_DIR)/usr/bin/lua
--	$(INSTALL) -m 0755 -D $(@D)/src/luac $(STAGING_DIR)/usr/bin/luac
--	$(INSTALL) -m 0755 -D $(@D)/src/liblua.so.$(LUA_VERSION) \
--		$(STAGING_DIR)/usr/lib/liblua.so.$(LUA_VERSION)
--	ln -sf liblua.so.$(LUA_VERSION) $(STAGING_DIR)/usr/lib/liblua.so
--	$(INSTALL) -m 0644 -D $(@D)/src/liblua.a $(STAGING_DIR)/usr/lib/liblua.a
--	$(INSTALL) -m 0644 -D $(@D)/src/lua.h $(STAGING_DIR)/usr/include/lua.h
--	$(INSTALL) -m 0644 -D $(@D)/src/luaconf.h $(STAGING_DIR)/usr/include/luaconf.h
--	$(INSTALL) -m 0644 -D $(@D)/src/lualib.h $(STAGING_DIR)/usr/include/lualib.h
--	$(INSTALL) -m 0644 -D $(@D)/src/lauxlib.h $(STAGING_DIR)/usr/include/lauxlib.h
- endef
- 
- define LUA_INSTALL_TARGET_CMDS
--	$(INSTALL) -m 0755 -D $(@D)/src/lua $(TARGET_DIR)/usr/bin/lua
--	$(INSTALL) -m 0755 -D $(@D)/src/luac $(TARGET_DIR)/usr/bin/luac
--	$(INSTALL) -m 0755 -D $(@D)/src/liblua.so.$(LUA_VERSION) \
--		$(TARGET_DIR)/usr/lib/liblua.so.$(LUA_VERSION)
--	ln -sf liblua.so.$(LUA_VERSION) $(TARGET_DIR)/usr/lib/liblua.so
--	mkdir -p $(TARGET_DIR)/usr/lib/lua/$(LUAINTERPRETER_ABIVER)
--	mkdir -p $(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)
-+	$(MAKE) INSTALL_TOP="$(TARGET_DIR)/usr" -C $(@D) install
- endef
- 
- define HOST_LUA_INSTALL_CMDS
--	$(INSTALL) -m 0755 -D $(@D)/src/lua $(HOST_DIR)/usr/bin/lua
--	$(INSTALL) -m 0755 -D $(@D)/src/luac $(HOST_DIR)/usr/bin/luac
--	$(INSTALL) -m 0755 -D $(@D)/src/liblua.so.$(LUA_VERSION) \
--		$(HOST_DIR)/usr/lib/liblua.so.$(LUA_VERSION)
--	ln -sf liblua.so.$(LUA_VERSION) $(HOST_DIR)/usr/lib/liblua.so
--	$(INSTALL) -m 0644 -D $(@D)/src/liblua.a $(HOST_DIR)/usr/lib/liblua.a
-+	$(MAKE) INSTALL_TOP="$(HOST_DIR)/usr" -C $(@D) install
- 	$(INSTALL) -m 0644 -D $(@D)/etc/lua.pc \
- 		$(HOST_DIR)/usr/lib/pkgconfig/lua.pc
--	$(INSTALL) -m 0644 -D $(@D)/src/lua.h $(HOST_DIR)/usr/include/lua.h
--	$(INSTALL) -m 0644 -D $(@D)/src/luaconf.h $(HOST_DIR)/usr/include/luaconf.h
--	$(INSTALL) -m 0644 -D $(@D)/src/lualib.h $(HOST_DIR)/usr/include/lualib.h
--	$(INSTALL) -m 0644 -D $(@D)/src/lauxlib.h $(HOST_DIR)/usr/include/lauxlib.h
- endef
- 
- $(eval $(generic-package))
+Below the relevant part of the config.log. It seems the linker cannot 
+find the libraries. Should I set any environment variables? I can't see 
+any other options in the nconfig menu.
+
+configure:3133: checking for arm-buildroot-linux-gnueabi-gcc
+configure:3160: result: 
+/home/marco/dev/buildroot/output/host/usr/bin/arm-fsl-linux-gnueabi-gcc
+configure:3429: checking for C compiler version
+configure:3438: 
+/home/marco/dev/buildroot/output/host/usr/bin/arm-fsl-linux-gnueabi-gcc 
+--version >&5
+arm-fsl-linux-gnueabi-gcc (Freescale MAD -- Linaro 2011.07 -- Built at 
+2011/08/10 09:20) 4.6.2 20110630 (prerelease)
+Copyright (C) 2011 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+configure:3449: $? = 0
+configure:3438: 
+/home/marco/dev/buildroot/output/host/usr/bin/arm-fsl-linux-gnueabi-gcc 
+-v >&5
+Using built-in specs.
+COLLECT_GCC=/home/marco/dev/fsl-linaro-toolchain/bin/arm-fsl-linux-gnueabi-gcc
+COLLECT_LTO_WRAPPER=/home/marco/dev/fsl-linaro-toolchain/bin/../libexec/gcc/arm-fsl-linux-gnueabi/4.6.2/lto-wrapper
+Target: arm-fsl-linux-gnueabi
+Configured with: 
+/work/build/.build/src/gcc-linaro-4.6-2011.06-0/configure 
+--build=i686-build_pc-linux-gnu --host=i686-build_pc-linux-gnu 
+--target=arm-fsl-linux-gnueabi --prefix=/work/fsl-linaro-toolchain-2.13 
+--with-sysroot=/work/fsl-linaro-toolchain-2.13/arm-fsl-linux-gnueabi/multi-libs 
+--enable-languages=c,c++ --with-pkgversion='Freescale MAD -- Linaro 
+2011.07 -- Built at 2011/08/10 09:20' --enable-__cxa_atexit 
+--disable-libmudflap --disable-libgomp --disable-libssp 
+--with-gmp=/work/build/.build/arm-fsl-linux-gnueabi/build/static 
+--with-mpfr=/work/build/.build/arm-fsl-linux-gnueabi/build/static 
+--with-mpc=/work/build/.build/arm-fsl-linux-gnueabi/build/static 
+--with-ppl=/work/build/.build/arm-fsl-linux-gnueabi/build/static 
+--with-cloog=/work/build/.build/arm-fsl-linux-gnueabi/build/static 
+--with-libelf=/work/build/.build/arm-fsl-linux-gnueabi/build/static 
+--with-host-libstdcxx='-static-libgcc -Wl,-Bstatic,-lstdc++,-Bdynamic 
+-lm -L/work/build/.build/arm-fsl-linux-gnueabi/build/static/lib -lpwl' 
+--enable-threads=posix --enable-target-optspace --enable-plugin 
+--enable-multilib 
+--with-local-prefix=/work/fsl-linaro-toolchain-2.13/arm-fsl-linux-gnueabi/multi-libs 
+--disable-nls --enable-c99 --enable-long-long --with-system-zlib
+Thread model: posix
+gcc version 4.6.2 20110630 (prerelease) (Freescale MAD -- Linaro 2011.07 
+-- Built at 2011/08/10 09:20)
+configure:3449: $? = 0
+configure:3438: 
+/home/marco/dev/buildroot/output/host/usr/bin/arm-fsl-linux-gnueabi-gcc 
+-V >&5
+arm-fsl-linux-gnueabi-gcc: error: unrecognized option '-V'
+arm-fsl-linux-gnueabi-gcc: fatal error: no input files
+compilation terminated.
+configure:3449: $? = 1
+configure:3438: 
+/home/marco/dev/buildroot/output/host/usr/bin/arm-fsl-linux-gnueabi-gcc 
+-qversion >&5
+arm-fsl-linux-gnueabi-gcc: error: unrecognized option '-qversion'
+arm-fsl-linux-gnueabi-gcc: fatal error: no input files
+compilation terminated.
+configure:3449: $? = 1
+configure:3469: checking whether the C compiler works
+configure:3491: 
+/home/marco/dev/buildroot/output/host/usr/bin/arm-fsl-linux-gnueabi-gcc 
+-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe 
+-Os  -D_GNU_SOURCE -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE 
+-D_FILE_OFFSET_BITS=64  -lm conftest.c  >&5
+/home/marco/dev/fsl-linaro-toolchain/bin/../lib/gcc/arm-fsl-linux-gnueabi/4.6.2/../../../../arm-fsl-linux-gnueabi/bin/ld: 
+cannot find crt1.o: No such file or directory
+/home/marco/dev/fsl-linaro-toolchain/bin/../lib/gcc/arm-fsl-linux-gnueabi/4.6.2/../../../../arm-fsl-linux-gnueabi/bin/ld: 
+cannot find crti.o: No such file or directory
+/home/marco/dev/fsl-linaro-toolchain/bin/../lib/gcc/arm-fsl-linux-gnueabi/4.6.2/../../../../arm-fsl-linux-gnueabi/bin/ld: 
+cannot find -lm
+/home/marco/dev/fsl-linaro-toolchain/bin/../lib/gcc/arm-fsl-linux-gnueabi/4.6.2/../../../../arm-fsl-linux-gnueabi/bin/ld: 
+cannot find -lgcc_s
+/home/marco/dev/fsl-linaro-toolchain/bin/../lib/gcc/arm-fsl-linux-gnueabi/4.6.2/../../../../arm-fsl-linux-gnueabi/bin/ld: 
+cannot find -lc
+/home/marco/dev/fsl-linaro-toolchain/bin/../lib/gcc/arm-fsl-linux-gnueabi/4.6.2/../../../../arm-fsl-linux-gnueabi/bin/ld: 
+cannot find -lgcc_s
+/home/marco/dev/fsl-linaro-toolchain/bin/../lib/gcc/arm-fsl-linux-gnueabi/4.6.2/../../../../arm-fsl-linux-gnueabi/bin/ld: 
+cannot find crtn.o: No such file or directory
+collect2: ld returned 1 exit status
+configure:3495: $? = 1
+configure:3533: result: no
+
+
+
+Thanks!
+Marco
