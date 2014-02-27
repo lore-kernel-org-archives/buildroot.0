@@ -1,54 +1,111 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Thu, 27 Feb 2014 08:24:21 +0000
-Subject: [Buildroot] [PATCH] vlc: add a patch to remove autoreconf
-	warnings
-In-Reply-To: <1393457442-26456-1-git-send-email-arnout@mind.be>
-References: <1393457442-26456-1-git-send-email-arnout@mind.be>
-Message-ID: <CAHt8ZCPZW_XnW22v5TVSR8jR-m=iMZh8wKArhKSvGEtn2-KhhQ@mail.gmail.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Thu, 27 Feb 2014 09:30:14 +0100
+Subject: [Buildroot] [PATCH v2] website: brand new version !
+In-Reply-To: <530EDCC0.7060300@mind.be>
+References: <1393456468-19111-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <530EDCC0.7060300@mind.be>
+Message-ID: <CAGduivxRCfKOx0JquDceGW6WAUipv78qo=G6gckzJ0tWzB-YMw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 26 February 2014 23:30, Arnout Vandecappelle (Essensium/Mind)
-<arnout@mind.be> wrote:
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  ...c-0003-automake-add-subdir-objects-option.patch | 22 ++++++++++++++++++++++
->  1 file changed, 22 insertions(+)
->  create mode 100644 package/vlc/vlc-0003-automake-add-subdir-objects-option.patch
+Hi Arnout, all
+On Thu, Feb 27, 2014 at 7:35 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>  Hi Maxime,
 >
-> diff --git a/package/vlc/vlc-0003-automake-add-subdir-objects-option.patch b/package/vlc/vlc-0003-automake-add-subdir-objects-option.patch
-> new file mode 100644
-> index 0000000..cea6a38
-> --- /dev/null
-> +++ b/package/vlc/vlc-0003-automake-add-subdir-objects-option.patch
-> @@ -0,0 +1,22 @@
-> +automake: add subdir-objects option
-> +
-> +Our version of automake warns if this option is enabled and source files
-> +in subdirectories are used.
-> +
-> +It doesn't really seems to have a noticable effect on the build, but it
-> +does remove a lot of annoying warnings.
-> +
-> +Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> +
-> +diff -Nrup vlc-2.1.2.orig/configure.ac vlc-2.1.2/configure.ac
-> +--- vlc-2.1.2.orig/configure.ac        2014-02-27 00:22:19.512944952 +0100
-> ++++ vlc-2.1.2/configure.ac     2014-02-27 00:24:21.360940651 +0100
-> +@@ -24,7 +24,7 @@ AC_CANONICAL_BUILD
-> + AC_CANONICAL_HOST
-> + AC_PRESERVE_HELP_ORDER
-> +
-> +-AM_INIT_AUTOMAKE(tar-ustar color-tests foreign)
-> ++AM_INIT_AUTOMAKE(tar-ustar color-tests foreign subdir-objects)
-> + AC_CONFIG_HEADERS([config.h])
-> +
-> + # Disable with "./configure --disable-silent-rules" or "make V=1"
+>  Great work!
+>
+> On 02/27/14 00:14, Maxime Hadjinlian wrote:
+>> A brand new identify for buildroot.org
+>
+>  identity
+>
+>> This should at least give us a few years before we need to it again.
+>>
+>> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+>> ---
+>> Changes v1 -> v2:
+>>   - Fix typo in discutions => discussions
+>>   - Add a "filter" to avoid git commit mail in mailing activity
+>> ---
+>>  README                                     |   59 +
+>>  docs/README                                |   59 -
+>>  docs/about.html                            |   11 +-
+>>  docs/contribute.html                       |   39 +
+>>  docs/copyright.txt                         |    2 +-
+>>  docs/css/bootstrap-responsive.css          | 1092 +++++
+>>  docs/css/bootstrap-responsive.min.css      |    9 +
+>>  docs/css/bootstrap.css                     | 6039 ++++++++++++++++++++++++++++
+>>  docs/css/bootstrap.min.css                 |  882 ++++
+>>  docs/css/bootswatch.less                   |  181 +
+>>  docs/css/variables.less                    |  301 ++
+>>  docs/developer.html                        |   47 -
+>>  docs/docs.html                             |    4 +-
+>>  docs/download.html                         |   46 +-
+>>  docs/footer.html                           |   24 +-
+>>  docs/git.html                              |   44 -
+>>  docs/header.html                           |  102 +-
+>>  docs/images/glyphicons-halflings-white.png |  Bin 0 -> 8777 bytes
+>>  docs/images/glyphicons-halflings.png       |  Bin 0 -> 12799 bytes
+>>  docs/images/logo.png                       |  Bin 129459 -> 117499 bytes
+>>  docs/images/menuconfig.png                 |  Bin 9087 -> 8604 bytes
+>>  docs/index.html                            |   34 +-
+>>  docs/js/bootstrap.js                       | 2159 ++++++++++
+>>  docs/js/bootstrap.min.js                   |    6 +
+>>  docs/js/buildroot.js                       |   63 +
+>>  docs/js/jquery-1.10.2.min.js               |    6 +
+>>  docs/lists.html                            |   40 -
+>>  docs/news.html                             |  115 +-
+>>  docs/sponsors.html                         |    2 +-
+>>  docs/stylesheet.css                        |   75 -
+>>  docs/support.html                          |   45 +
+>>  31 files changed, 11067 insertions(+), 419 deletions(-)
+>
+>  Clearly, a patch like this is impossible to review...
+>
+Yeah, I'm sorry for this :(
+>  Could you:
+>
+> * split of the things that are just downloaded into separate patches (and
+> clearly mention that it is just downloading something, as well as the
+> place where it was downloaded from);
+OK, I will split this in a nice series so it's easier to review.
+>
+> * use the -M option to track movements, or set format.find-renames=true;
+Yes Peter, told me that, I did not knew about that option, I will do.
+>
+> * split off the patches that use bootstrap from the patches that really
+> change something;
+>
+> * put the website live somewhere so we can see what it looks like;
+That's already done: http://br.f00.fr
+>
+> * give more descriptive commit messages?
+Yeah I was not very inspired and ThomasP was not really helpful, he
+put way too many buzz words in one sentence, I could not bare :).
+>
+>
+>  While you're doing this, it would also be nice to move the website into
+> a separate directory. Not that there is anything except website and
+> manual in the docs directory, but it would clarify things. Or maybe we
+> could even remove the docs directory and put manual and website at the
+> top-level. Anyway, that would be in a separate, final patch.
+I think, it was only to not clutter the root directory. But It would
+make sense to split theses two things.
+>
+>
+>  Thanks!
+>
+>
+>  Regards,
+>  Arnout
+>
 > --
-> 1.9.0
-
-Acked-by: Simon Dawson <spdawson@gmail.com>
-Tested-by: Simon Dawson <spdawson@gmail.com>
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
