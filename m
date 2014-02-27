@@ -1,24 +1,36 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 27 Feb 2014 15:40:22 +0100
-Subject: [Buildroot] [PATCH] vlc: fix some configure options
-In-Reply-To: <1393360566-4849-1-git-send-email-spdawson@gmail.com> (Simon
- Dawson's message of "Tue, 25 Feb 2014 20:36:06 +0000")
-References: <1393360566-4849-1-git-send-email-spdawson@gmail.com>
-Message-ID: <871tyoaaax.fsf@dell.be.48ers.dk>
+Date: Thu, 27 Feb 2014 15:40:41 +0100
+Subject: [Buildroot] [PATCH] vlc: fix shared library building
+In-Reply-To: <1393456876-8525-1-git-send-email-arnout@mind.be> (Arnout
+ Vandecappelle's message of "Thu, 27 Feb 2014 00:21:16 +0100")
+References: <1393456876-8525-1-git-send-email-arnout@mind.be>
+Message-ID: <87wqgg8vpy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Simon" == Simon Dawson <spdawson@gmail.com> writes:
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
- > Fix a large number of incorrect configure options for vlc.
- > Configure warnings reported by Arnout Vandecappelle, in his analysis of vlc
- > autobuild failures.
+ > Fixes e.g.
+ > http://autobuild.buildroot.net/results/9c7/9c7a97882d446a42cabcb07e4af7e6825192e70b
 
-Committed with the commit message extended to explain that this is
-caused by our autoreconfm thanks.
+ > VLC cannot build static and shared libraries at the same time.
+
+ > Also, live555 only has a static library, and VLC tries to link this into
+ > a shared library. Therefore, disable the live555 plugin unless static
+ > linking is selected. It would be better to build live555 as a shared
+ > library, but that's for another patch.
+
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > ---
+ > I obviously haven't tested this very intensively, but it makes at least
+ > one build work :-)
+
+Great ;)
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
