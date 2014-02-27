@@ -1,30 +1,28 @@
-From: Sven Neumann <neumann@teufel.de>
-Date: Thu, 27 Feb 2014 14:06:35 +0100
-Subject: [Buildroot] [PATCH] libarchive: fix download location
-Message-ID: <1393506395-15064-1-git-send-email-neumann@teufel.de>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 27 Feb 2014 14:20:34 +0100
+Subject: [Buildroot] Patches to consider for 2014.02
+In-Reply-To: <CAAXf6LVAkBn+eqaLzvBRi0KYSFVpoq+1-pdUJX=m+D-Uc78ezg@mail.gmail.com>
+ (Thomas De Schampheleire's message of "Thu, 27 Feb 2014 13:36:09
+ +0100")
+References: <CAAXf6LVAkBn+eqaLzvBRi0KYSFVpoq+1-pdUJX=m+D-Uc78ezg@mail.gmail.com>
+Message-ID: <87txbkadzx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Sven Neumann <neumann@teufel.de>
----
- package/libarchive/libarchive.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
-diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-index 44d9cd2..0b8713f 100644
---- a/package/libarchive/libarchive.mk
-+++ b/package/libarchive/libarchive.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBARCHIVE_VERSION = 3.0.4
--LIBARCHIVE_SITE = http://github.com/downloads/libarchive/libarchive
-+LIBARCHIVE_SITE = http://www.libarchive.org/downloads/
- LIBARCHIVE_INSTALL_STAGING = YES
- 
- ifeq ($(BR2_PACKAGE_ZLIB),y)
+ > Hi Peter,
+ > I did a quick run through patchwork and noticed following slightly
+ > older patches that could be considered still for 2014.02 (untested):
+
+ > e2fsprogs nios fixes
+ > http://patchwork.ozlabs.org/patch/322367/
+ > http://patchwork.ozlabs.org/patch/322366/
+
+Thanks, will check them.
+
 -- 
-1.8.3.2
+Bye, Peter Korsgaard
