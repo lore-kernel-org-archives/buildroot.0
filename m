@@ -1,49 +1,156 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 27 Feb 2014 21:43:23 +0100
-Subject: [Buildroot] Qt5 and gpu-viv-bin-mx6q problem
-In-Reply-To: <530FA318.20001@boundarydevices.com>
-References: <CACP2RPZb4V-hv61+eSq_pAaah8jmzXCFVr7hMN_jR=VzQDzFOA@mail.gmail.com>
- <530F9D1C.7020100@mind.be> <530FA318.20001@boundarydevices.com>
-Message-ID: <530FA36B.1010003@mind.be>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 27 Feb 2014 17:47:11 -0300
+Subject: [Buildroot] [PATCH 3/3] hostapd: rework .config and bump to version
+	2.1
+In-Reply-To: <1393534031-696-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1393534031-696-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1393534031-696-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/27/14 21:42, Eric Nelson wrote:
-> Hi Arnout,
-> 
-> On 02/27/2014 01:16 PM, Arnout Vandecappelle wrote:
->> On 02/27/14 09:22, Massimiliano Marretta wrote:
->>> Dear,
->>>
->>> <snip>
->>>
->>> - If I use the last buildroot linaro toolchain 4.8-2013.09, the system
->>> not start because the kernel is to old ( 3.0.35 ).
->>> - If I use the toolchain linaro-4.7-2013.01 the Qt5 qmlscene exit without
->>> message and gpu-viv-bin-mx6q examples not start with the message program
->>> not found.
->>
->>   I think that gpu-viv-bin-mx6q are softfp libraries, so they won't work
->> with Linaro (hardfp) toolchains. I'm surprised that qt5 builds at all in
->> that case...
->>
-> The latest patches (on -next) allow for either hardfp or softfp:
-> 
->     http://git.buildroot.net/buildroot/commit/package/freescale-imx/gpu-viv-bin-mx6q?h=next&id=b0b72591d74c1a84b8c1b2e1990a2fe1dfe8c4ab
+Rework .config file editing as was done for wpa_supplicant and bump to
+version 2.1 which includes 802.11ac and ACS support.
 
- Yes, but the OP mentioned that he uses 2013.11 in the text you snipped.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/hostapd/hostapd.mk | 92 +++++++++++++++++++---------------------------
+ 1 file changed, 37 insertions(+), 55 deletions(-)
 
- Regards,
- Arnout
-
-
+diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+index 0fbd8bc..37de60d 100644
+--- a/package/hostapd/hostapd.mk
++++ b/package/hostapd/hostapd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-HOSTAPD_VERSION = 2.0
++HOSTAPD_VERSION = 2.1
+ HOSTAPD_SITE = http://hostap.epitest.fi/releases
+ HOSTAPD_SUBDIR = hostapd
+ HOSTAPD_CONFIG = $(HOSTAPD_DIR)/$(HOSTAPD_SUBDIR)/.config
+@@ -12,6 +12,22 @@ HOSTAPD_DEPENDENCIES = libnl
+ HOSTAPD_CFLAGS = $(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/libnl3/
+ HOSTAPD_LICENSE = GPLv2/BSD-3c
+ HOSTAPD_LICENSE_FILES = README
++HOSTAPD_CONFIG_SET =
++
++HOSTAPD_CONFIG_ENABLE = \
++	CONFIG_ACS \
++	CONFIG_FULL_DYNAMIC_VLAN \
++	CONFIG_HS20 \
++	CONFIG_IEEE80211AC \
++	CONFIG_IEEE80211N \
++	CONFIG_IEEE80211R \
++	CONFIG_IEEE80211W \
++	CONFIG_INTERNAL_LIBTOMMATH \
++	CONFIG_INTERWORKING \
++	CONFIG_LIBNL32 \
++	CONFIG_VLAN_NETLINK
++
++HOSTAPD_CONFIG_DISABLE =
+ 
+ # libnl-3 needs -lm (for rint) and -lpthread if linking statically
+ # And library order matters hence stick -lnl-3 first since it's appended
+@@ -20,76 +36,42 @@ ifeq ($(BR2_PREFER_STATIC_LIB),y)
+ HOSTAPD_LIBS += -lnl-3 -lm -lpthread
+ endif
+ 
+-define HOSTAPD_LIBNL_CONFIG
+-	echo 'CONFIG_LIBNL32=y' >>$(HOSTAPD_CONFIG)
+-	$(SED) 's/\(#\)\(CONFIG_VLAN_NETLINK.*\)/\2/' $(HOSTAPD_CONFIG)
+-endef
+-
+-define HOSTAPD_LIBTOMMATH_CONFIG
+-	$(SED) 's/\(#\)\(CONFIG_INTERNAL_LIBTOMMATH.*\)/\2/' $(HOSTAPD_CONFIG)
+-endef
++ifeq ($(BR2_INET_IPV6),)
++	HOSTAPD_CONFIG_DISABLE += CONFIG_IPV6
++endif
+ 
+ # Try to use openssl if it's already available
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ 	HOSTAPD_DEPENDENCIES += openssl
+-define HOSTAPD_TLS_CONFIG
+-	$(SED) 's/\(#\)\(CONFIG_TLS=openssl\)/\2/' $(HOSTAPD_CONFIG)
+-	$(SED) 's/\(#\)\(CONFIG_EAP_PWD.*\)/\2/' $(HOSTAPD_CONFIG)
+-endef
++	HOSTAPD_CONFIG_EDITS += 's/\#\(CONFIG_TLS=openssl\)/\1/'
+ else
+-define HOSTAPD_TLS_CONFIG
+-	$(SED) 's/\(#\)\(CONFIG_TLS=\).*/\2internal/' $(HOSTAPD_CONFIG)
+-endef
++	HOSTAPD_CONFIG_DISABLE += CONFIG_EAP_PWD
++	HOSTAPD_CONFIG_EDITS += 's/\#\(CONFIG_TLS=\).*/\1internal/'
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_HOSTAPD_EAP),y)
+-define HOSTAPD_EAP_CONFIG
+-	$(SED) 's/\(#\)\(CONFIG_EAP_AKA.*\)/\2/' $(HOSTAPD_CONFIG)
+-	$(SED) 's/\(#\)\(CONFIG_EAP_FAST.*\)/\2/' $(HOSTAPD_CONFIG)
+-	$(SED) 's/\(#\)\(CONFIG_EAP_GPSK.*\)/\2/' $(HOSTAPD_CONFIG)
+-	$(SED) 's/\(#\)\(CONFIG_EAP_IKEV2.*\)/\2/' $(HOSTAPD_CONFIG)
+-	$(SED) 's/\(#\)\(CONFIG_EAP_PAX.*\)/\2/' $(HOSTAPD_CONFIG)
+-	$(SED) 's/\(#\)\(CONFIG_EAP_PSK.*\)/\2/' $(HOSTAPD_CONFIG)
+-	$(SED) 's/\(#\)\(CONFIG_EAP_SAKE.*\)/\2/' $(HOSTAPD_CONFIG)
+-	$(SED) 's/\(#\)\(CONFIG_EAP_SIM.*\)/\2/' $(HOSTAPD_CONFIG)
+-	$(SED) 's/\(#\)\(CONFIG_EAP_TNC.*\)/\2/' $(HOSTAPD_CONFIG)
+-	$(SED) 's/\(#\)\(CONFIG_RADIUS_SERVER.*\)/\2/' $(HOSTAPD_CONFIG)
+-	$(SED) 's/\(#\)\(CONFIG_TLSV1.*\)/\2/' $(HOSTAPD_CONFIG)
+-endef
+-ifneq ($(BR2_INET_IPV6),y)
+-define HOSTAPD_RADIUS_IPV6_CONFIG
+-	$(SED) 's/\(CONFIG_IPV6.*\)/#\1/' $(HOSTAPD_CONFIG)
+-endef
+-endif
++	HOSTAPD_CONFIG_ENABLE += \
++		CONFIG_EAP \
++		CONFIG_RADIUS_SERVER \
++		CONFIG_TLSV1
+ else
+-define HOSTAPD_EAP_CONFIG
+-	$(SED) 's/^\(CONFIG_EAP.*\)/#\1/' $(HOSTAPD_CONFIG)
+-	$(SED) 's/\(#\)\(CONFIG_NO_ACCOUNTING.*\)/\2/' $(HOSTAPD_CONFIG)
+-	$(SED) 's/\(#\)\(CONFIG_NO_RADIUS.*\)/\2/' $(HOSTAPD_CONFIG)
+-endef
++	HOSTAPD_CONFIG_DISABLE += CONFIG_EAP
++	HOSTAPD_CONFIG_ENABLE += \
++		CONFIG_NO_ACCOUNTING \
++		CONFIG_NO_RADIUS
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_HOSTAPD_WPS),y)
+-define HOSTAPD_WPS_CONFIG
+-	$(SED) 's/\(#\)\(CONFIG_WPS.*\)/\2/' $(HOSTAPD_CONFIG)
+-endef
++	HOSTAPD_CONFIG_ENABLE += CONFIG_WPS
+ endif
+ 
+ define HOSTAPD_CONFIGURE_CMDS
+ 	cp $(@D)/hostapd/defconfig $(HOSTAPD_CONFIG)
+-# Misc
+-	$(SED) 's/\(#\)\(CONFIG_HS20.*\)/\2/' $(HOSTAPD_CONFIG)
+-	$(SED) 's/\(#\)\(CONFIG_IEEE80211N.*\)/\2/' $(HOSTAPD_CONFIG)
+-	$(SED) 's/\(#\)\(CONFIG_IEEE80211R.*\)/\2/' $(HOSTAPD_CONFIG)
+-	$(SED) 's/\(#\)\(CONFIG_IEEE80211W.*\)/\2/' $(HOSTAPD_CONFIG)
+-	$(SED) 's/\(#\)\(CONFIG_INTERWORKING.*\)/\2/' $(HOSTAPD_CONFIG)
+-	$(SED) 's/\(#\)\(CONFIG_FULL_DYNAMIC_VLAN.*\)/\2/' $(HOSTAPD_CONFIG)
+-	$(HOSTAPD_LIBTOMMATH_CONFIG)
+-	$(HOSTAPD_TLS_CONFIG)
+-	$(HOSTAPD_RADIUS_IPV6_CONFIG)
+-	$(HOSTAPD_EAP_CONFIG)
+-	$(HOSTAPD_WPS_CONFIG)
+-	$(HOSTAPD_LIBNL_CONFIG)
++	sed -i $(patsubst %,-e 's/^#\(%\)/\1/',$(HOSTAPD_CONFIG_ENABLE)) \
++		$(patsubst %,-e 's/^\(%\)/#\1/',$(HOSTAPD_CONFIG_DISABLE)) \
++		$(patsubst %,-e '1i%=y',$(HOSTAPD_CONFIG_SET)) \
++		$(patsubst %,-e %,$(HOSTAPD_CONFIG_EDITS)) \
++		$(HOSTAPD_CONFIG)
+ endef
+ 
+ define HOSTAPD_BUILD_CMDS
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.8.3.2
