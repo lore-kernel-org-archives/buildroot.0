@@ -1,70 +1,31 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Feb 2014 09:07:27 +0100
-Subject: [Buildroot] [git commit] gcc: fix xtensa overlay application
-Message-ID: <20140227082146.016B29BB97@busybox.osuosl.org>
+From: Massimiliano Marretta <max@marretta.com>
+Date: Thu, 27 Feb 2014 09:22:05 +0100
+Subject: [Buildroot] Qt5 and gpu-viv-bin-mx6q problem
+Message-ID: <CACP2RPZb4V-hv61+eSq_pAaah8jmzXCFVr7hMN_jR=VzQDzFOA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a957e1b265e2736da7c2aa746c084f228ff7985d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear,
 
-gcc build scripts use wrong variable name to specify xtensa overlay
-application command. As a result gcc is built with the default overlay,
-which leads to obscure failures later in the build process.
+I have some problem to obtain a buildroot with Qt5 and gpu-viv-bin-mx6q.
+Where is the correct combination of toolchain and floating point strategy ?
 
-xtensa toolchain needs an additional configuration for a specific core
-variant we're building for. This configuration is called 'overlay' and
-is an archive with files for binutils, gcc and gdb that replace
-corresponding files in toolchain components.
+I try some combination of toolchains with the last stable version of
+buildroot (2013.11).
 
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gcc/gcc-final/gcc-final.mk               |    2 +-
- package/gcc/gcc-initial/gcc-initial.mk           |    2 +-
- package/gcc/gcc-intermediate/gcc-intermediate.mk |    2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+- If I use the last codebanch toolchain the gpu-viv-bin-mx6q examples and
+the Qt5 qmlscene crash with segmentation fault.
+- If I use the last buildroot linaro toolchain 4.8-2013.09, the system not
+start because the kernel is to old ( 3.0.35 ).
+- If I use the toolchain linaro-4.7-2013.01 the Qt5 qmlscene exit without
+message and gpu-viv-bin-mx6q examples not start with the message program
+not found.
 
-diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index ecc4068..622dcf2 100644
---- a/package/gcc/gcc-final/gcc-final.mk
-+++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -15,7 +15,7 @@ HOST_GCC_FINAL_DEPENDENCIES = \
- HOST_GCC_FINAL_EXTRACT_CMDS = $(HOST_GCC_EXTRACT_CMDS)
- 
- ifneq ($(call qstrip, $(BR2_XTENSA_CORE_NAME)),)
--HOST_GCC_FINAL_POST_EXTRACT_CMDS += HOST_GCC_FINAL_XTENSA_OVERLAY_EXTRACT
-+HOST_GCC_FINAL_POST_EXTRACT_HOOKS += HOST_GCC_XTENSA_OVERLAY_EXTRACT
- endif
- 
- HOST_GCC_FINAL_POST_PATCH_HOOKS += HOST_GCC_APPLY_PATCHES
-diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
-index 0eb492f..bc5ad26 100644
---- a/package/gcc/gcc-initial/gcc-initial.mk
-+++ b/package/gcc/gcc-initial/gcc-initial.mk
-@@ -13,7 +13,7 @@ HOST_GCC_INITIAL_DEPENDENCIES = $(HOST_GCC_COMMON_DEPENDENCIES)
- HOST_GCC_INITIAL_EXTRACT_CMDS = $(HOST_GCC_EXTRACT_CMDS)
- 
- ifneq ($(call qstrip, $(BR2_XTENSA_CORE_NAME)),)
--HOST_GCC_INITIAL_POST_EXTRACT_CMDS += HOST_GCC_XTENSA_OVERLAY_EXTRACT
-+HOST_GCC_INITIAL_POST_EXTRACT_HOOKS += HOST_GCC_XTENSA_OVERLAY_EXTRACT
- endif
- 
- HOST_GCC_INITIAL_POST_PATCH_HOOKS += HOST_GCC_APPLY_PATCHES
-diff --git a/package/gcc/gcc-intermediate/gcc-intermediate.mk b/package/gcc/gcc-intermediate/gcc-intermediate.mk
-index 2105cec..db84d18 100644
---- a/package/gcc/gcc-intermediate/gcc-intermediate.mk
-+++ b/package/gcc/gcc-intermediate/gcc-intermediate.mk
-@@ -15,7 +15,7 @@ HOST_GCC_INTERMEDIATE_DEPENDENCIES = \
- HOST_GCC_INTERMEDIATE_EXTRACT_CMDS = $(HOST_GCC_EXTRACT_CMDS)
- 
- ifneq ($(call qstrip, $(BR2_XTENSA_CORE_NAME)),)
--HOST_GCC_INTERMEDIATE_POST_EXTRACT_CMDS += HOST_GCC_XTENSA_OVERLAY_EXTRACT
-+HOST_GCC_INTERMEDIATE_POST_EXTRACT_HOOKS += HOST_GCC_XTENSA_OVERLAY_EXTRACT
- endif
- 
- HOST_GCC_INTERMEDIATE_POST_PATCH_HOOKS += HOST_GCC_APPLY_PATCHES
+Best Regards,
+Massimiliano Marretta
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140227/291fdf61/attachment.html>
