@@ -1,25 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Feb 2014 18:34:31 +0100
-Subject: [Buildroot] Google Summer of Code 2014: Buildroot organization
-	accepted
-Message-ID: <20140227183431.3296892b@skate>
+Date: Thu, 27 Feb 2014 18:38:25 +0100
+Subject: [Buildroot] [PATCH v2] website: brand new version !
+In-Reply-To: <CAGduivxRCfKOx0JquDceGW6WAUipv78qo=G6gckzJ0tWzB-YMw@mail.gmail.com>
+References: <1393456468-19111-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <530EDCC0.7060300@mind.be>
+ <CAGduivxRCfKOx0JquDceGW6WAUipv78qo=G6gckzJ0tWzB-YMw@mail.gmail.com>
+Message-ID: <20140227183825.5b510feb@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Maxime Hadjinlian,
 
-The Buildroot organization has been accepted for the Google Summer of
-Code 2014, which means we will be able to mentor and pay a few students
-to work on Buildroot this summer.
+On Thu, 27 Feb 2014 09:30:14 +0100, Maxime Hadjinlian wrote:
 
-If you're interested in working on cool embedded Linux stuff and want
-to get paid during the summer to do it, have a look at our ideas at
-http://elinux.org/Buildroot:GSoC2014Ideas or propose your own ideas!
+> > * split of the things that are just downloaded into separate patches (and
+> > clearly mention that it is just downloading something, as well as the
+> > place where it was downloaded from);
+> OK, I will split this in a nice series so it's easier to review.
 
-Thanks!
+Also make sure to split the move of the README file, as it's really
+unrelated to the new web site.
 
 Thomas
 -- 
