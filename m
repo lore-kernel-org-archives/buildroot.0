@@ -1,39 +1,49 @@
-From: Eric Nelson <eric.nelson@boundarydevices.com>
-Date: Thu, 27 Feb 2014 13:42:00 -0700
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 27 Feb 2014 21:43:23 +0100
 Subject: [Buildroot] Qt5 and gpu-viv-bin-mx6q problem
-In-Reply-To: <530F9D1C.7020100@mind.be>
+In-Reply-To: <530FA318.20001@boundarydevices.com>
 References: <CACP2RPZb4V-hv61+eSq_pAaah8jmzXCFVr7hMN_jR=VzQDzFOA@mail.gmail.com>
- <530F9D1C.7020100@mind.be>
-Message-ID: <530FA318.20001@boundarydevices.com>
+ <530F9D1C.7020100@mind.be> <530FA318.20001@boundarydevices.com>
+Message-ID: <530FA36B.1010003@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
-
-On 02/27/2014 01:16 PM, Arnout Vandecappelle wrote:
-> On 02/27/14 09:22, Massimiliano Marretta wrote:
->> Dear,
+On 02/27/14 21:42, Eric Nelson wrote:
+> Hi Arnout,
+> 
+> On 02/27/2014 01:16 PM, Arnout Vandecappelle wrote:
+>> On 02/27/14 09:22, Massimiliano Marretta wrote:
+>>> Dear,
+>>>
+>>> <snip>
+>>>
+>>> - If I use the last buildroot linaro toolchain 4.8-2013.09, the system
+>>> not start because the kernel is to old ( 3.0.35 ).
+>>> - If I use the toolchain linaro-4.7-2013.01 the Qt5 qmlscene exit without
+>>> message and gpu-viv-bin-mx6q examples not start with the message program
+>>> not found.
 >>
->> <snip>
- >>
->> - If I use the last buildroot linaro toolchain 4.8-2013.09, the system
->> not start because the kernel is to old ( 3.0.35 ).
->> - If I use the toolchain linaro-4.7-2013.01 the Qt5 qmlscene exit without
->> message and gpu-viv-bin-mx6q examples not start with the message program
->> not found.
->
->   I think that gpu-viv-bin-mx6q are softfp libraries, so they won't work
-> with Linaro (hardfp) toolchains. I'm surprised that qt5 builds at all in
-> that case...
->
-The latest patches (on -next) allow for either hardfp or softfp:
+>>   I think that gpu-viv-bin-mx6q are softfp libraries, so they won't work
+>> with Linaro (hardfp) toolchains. I'm surprised that qt5 builds at all in
+>> that case...
+>>
+> The latest patches (on -next) allow for either hardfp or softfp:
+> 
+>     http://git.buildroot.net/buildroot/commit/package/freescale-imx/gpu-viv-bin-mx6q?h=next&id=b0b72591d74c1a84b8c1b2e1990a2fe1dfe8c4ab
 
-	http://git.buildroot.net/buildroot/commit/package/freescale-imx/gpu-viv-bin-mx6q?h=next&id=b0b72591d74c1a84b8c1b2e1990a2fe1dfe8c4ab
+ Yes, but the OP mentioned that he uses 2013.11 in the text you snipped.
 
-Regards,
+ Regards,
+ Arnout
 
 
-Eric
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
