@@ -1,49 +1,78 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Feb 2014 23:44:26 +0100
-Subject: [Buildroot] [PATCH v2] libdrm: bump to 2.4.52 and remove
- useless dependencies on libpciaccess
-In-Reply-To: <1393539908-14365-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
-References: <1393539908-14365-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
-Message-ID: <20140227234426.324e0e42@skate>
+Date: Thu, 27 Feb 2014 23:56:46 +0100
+Subject: [Buildroot] [PATCH] zlog: new package
+In-Reply-To: <1390461447-17521-1-git-send-email-yegorslists@googlemail.com>
+References: <1390461447-17521-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20140227235646.45e3ea5a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sebastien Bourdelin,
+Hello Yegor,
 
-On Thu, 27 Feb 2014 17:25:07 -0500, Sebastien Bourdelin wrote:
-> Since the version 2.4.32, libdrm no longer requires dependencies on
-> the libpciaccess unless for the intel-dri.
-> 
-> For more information :
-> http://cgit.freedesktop.org/mesa/drm/commit/?id=be30d350b64c1a83473a9ffbedf8e2c680a65fcd
-> 
-> Signed-off-by: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> (PATCH v1)
-> ---
-> Changes v1 -> v2:
->   - bump to version 2.4.52
+Sorry for the long delay before reviewing this. I believe it's almost
+ready, just a couple of comments below.
 
-Thanks a lot for your contribution!
+On Thu, 23 Jan 2014 08:17:27 +0100, yegorslists at googlemail.com wrote:
 
-However, the patch has two problems:
+> diff --git a/package/zlog/Config.in b/package/zlog/Config.in
+> new file mode 100644
+> index 0000000..478b2f8
+> --- /dev/null
+> +++ b/package/zlog/Config.in
+> @@ -0,0 +1,12 @@
+> +config BR2_PACKAGE_ZLOG
+> +	bool "zlog"
+> +	depends on BR2_LARGEFILE
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
 
- *) You added a significant change (bumping the version number), but
- you kept the Reviewed-by tag of another person. This is typically
- considered as a bad practice: Arnout had endorsed your previous
- version, and maybe not this one.
+From my testing you also need:
 
- *) When your commit log title contains something like "do this *AND*
- do that", it's a strong indication that your patch is not correct, and
- should instead be split in two patches: one "doing this" and the other
- "doing that". In this case, the patch "doing that" could carry
- Arnout's Reviewed-by, since it wouldn't have changed since Arnout's
- review.
+	depends on !BR2_PREFER_STATIC_LIB
 
-Would you mind resending an updated version that takes into account
-those comments?
+because zlog only produces a shared library.
+
+> +	help
+> +	  zlog is a reliable, high-performance, thread safe, flexible,
+> +	  clear-model, pure C logging library.
+> +
+> +	  https://github.com/HardySimpson/zlog
+> +
+> +comment "zlog needs a toolchain w/ threads, largefile"
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE
+
+This needs to be updated to take into account the !static lib
+dependency.
+
+
+> +ZLOG_VERSION = ca6162be1608839e99c6388c28488c51ccf98e4a
+> +ZLOG_SITE = $(call github,HardySimpson,zlog,$(ZLOG_VERSION))
+> +ZLOG_LICENSE = GPLv2.1
+
+The license is LGPLv2.1.
+
+> +ZLOG_LICENSE_FILES = COPYING
+> +ZLOG_INSTALL_STAGING = YES
+> +
+> +define ZLOG_BUILD_CMDS
+> +	$(MAKE1) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" \
+> +		-C $(@D) all
+> +endef
+> +
+> +define ZLOG_INSTALL_STAGING_CMDS
+> +	$(MAKE) PREFIX=$(STAGING_DIR)/usr INCLUDE_PATH=include LIBRARY_PATH=lib  -C $(@D) install
+> +endef
+> +
+> +define ZLOG_INSTALL_TARGET_CMDS
+> +	$(MAKE) PREFIX=$(TARGET_DIR)/usr INCLUDE_PATH=include LIBRARY_PATH=lib -C $(@D) install
+> +endef
+
+Why do you pass INCLUDE_PATH=include and LIBRARY_PATH=lib ? Looking at
+the makefile of zlog, these seem to be the default values.
+
+Thanks!
 
 Thomas
 -- 
