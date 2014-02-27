@@ -1,106 +1,68 @@
-From: Marcelo Gutierrez <kuyurix@gmail.com>
-Date: Thu, 27 Feb 2014 17:08:33 -0300
-Subject: [Buildroot] [PATCH 1/1] ti-gfx: bump to version 5_01_00_01
-In-Reply-To: <87vbw2dmqi.fsf@dell.be.48ers.dk>
-References: <52fd38fd.870eec0a.7f7f.13a5@mx.google.com>
- <20140223193116.GI32759@free.fr>
- <87mwhhob73.fsf@dell.be.48ers.dk> <87vbw2dmqi.fsf@dell.be.48ers.dk>
-Message-ID: <CA+kK6Wt1obEVFsk_G_RPrhn6ViVxXVRq11JvT3mrqW0dQUWuCA@mail.gmail.com>
+From: Simon Dawson <spdawson@gmail.com>
+Date: Thu, 27 Feb 2014 20:09:23 +0000
+Subject: [Buildroot] [PATCH] vlc: avoid that AUTORECONF renames
+ configure's arguments
+In-Reply-To: <1393529854-27070-1-git-send-email-arnout@mind.be>
+References: <1393529854-27070-1-git-send-email-arnout@mind.be>
+Message-ID: <CAHt8ZCNdQ6THULD7xkm7nc-JTjVxB8M9JHBoGvWbEgrdY_XYCA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter, all
-
-Ehh, but the newclkapi patch no longer applies:
+On 27 February 2014 19:37, Arnout Vandecappelle (Essensium/Mind)
+<arnout@mind.be> wrote:
+> VLC defines two autoconf functions which are also defined by our own
+> pkg.m4 from pkgconf. Unfortunately, they are defined in a different way:
+> VLC adds --enable- options, but pkg.m4 adds --with- options. To make
+> sure we use VLC's definition, rename these two functions from
+> PKG_WITH_MODULES to VLC_PKG_WITH_MODULES and from PKG_HAVE_WITH_MODULES
+> to VLC_PKG_HAVE_WITH_MODULES.
 >
-> Applying ti-gfx-newclkapi.patch using patch:
-> patching file GFX_Linux_KM/services4/system/omap3630/sysutils_linux.c
-> Hunk #1 FAILED at 153.
-> Hunk #2 FAILED at 167.
-> Hunk #3 FAILED at 233.
-> Hunk #4 FAILED at 246.
-> Hunk #5 succeeded at 540 (offset 166 lines).
-> Hunk #6 FAILED at 444.
-> Hunk #7 FAILED at 490.
-> 6 out of 7 hunks FAILED -- saving rejects to file
-> GFX_Linux_KM/services4/system/omap3630/sysutils_linux.c.rej
-> Patch failed!  Please fix ti-gfx-newclkapi.patch!
-> make: *** [/home/peko/source/buildroot/
-> output/build/ti-gfx-5_01_00_01/.stamp_patched] Error 1
+> Note that the second function (PKG_HAVE_WITH_MODULES) is in fact
+> defined in exactly the same way by VLC and pkgconf, but this might no
+> longer be the case when either pkgconf or VLC is updated. Therefore,
+> that one is renamed as well.
 >
-> Could you please send a patch to fix it?
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+> I propose to apply this to next but not to master - Simon's patch 02004773
+> has been applied to master and fixes it as well. However, that means that
+> 02004773 has to be reverted when next is merged into master.
 >
-
-I wonder if we need to apply that patch?
-
-All I can say that SGX version works great on BBB(ti-kernel 3.12 using
-beaglebone_defconfig)
-
-Regards,
-Marcelo
-
-
-
-
-2014-02-26 10:31 GMT-03:00 Peter Korsgaard <peter@korsgaard.com>:
-
-> >>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+>  package/vlc/vlc.mk | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
 >
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
->  >> Marcelo, All,
->  >> On 2014-02-13 18:38 +0000, kuyurix at gmail.com spake thusly:
->  >>> From: Marcelo Gutierrez <kuyurix@gmail.com>
->  >>>
->  >>> Signed-off-by: Marcelo Gutierrez <kuyurix@gmail.com>
+> diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+> index 923439d..5727193 100644
+> --- a/package/vlc/vlc.mk
+> +++ b/package/vlc/vlc.mk
+> @@ -12,6 +12,17 @@ VLC_LICENSE_FILES = COPYING COPYING.LIB
+>  VLC_DEPENDENCIES = host-pkgconf
+>  VLC_AUTORECONF = YES
 >
->  >> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->
->  >> Notes:
->
->  >> - The version pointed to by Spencer was 5.00.x, and was a beta
->  >> version, and only contained the hardfp variant. The version in
->  >> this patch is 5.01.x, is not marked as beta, and contains both
->  >> the hardfp and softfp variants.
->
->  >> - With 4.10.x and before, the *_$(TI_GFX_VERSION).bin archive would
->  >> contain a huge load of stuff we did not need, and was roughly
->  >> 1.7GiB big. But with 5.01.x, this file is now back to a more
->  >> acceptable size, roughly 140MiB (although it still contains way
->  >> much more than we need).
->
->  > Sounds good. Committed to next, thanks both.
->
-> Ehh, but the newclkapi patch no longer applies:
->
-> Applying ti-gfx-newclkapi.patch using patch:
-> patching file GFX_Linux_KM/services4/system/omap3630/sysutils_linux.c
-> Hunk #1 FAILED at 153.
-> Hunk #2 FAILED at 167.
-> Hunk #3 FAILED at 233.
-> Hunk #4 FAILED at 246.
-> Hunk #5 succeeded at 540 (offset 166 lines).
-> Hunk #6 FAILED at 444.
-> Hunk #7 FAILED at 490.
-> 6 out of 7 hunks FAILED -- saving rejects to file
-> GFX_Linux_KM/services4/system/omap3630/sysutils_linux.c.rej
-> Patch failed!  Please fix ti-gfx-newclkapi.patch!
-> make: ***
-> [/home/peko/source/buildroot/output/build/ti-gfx-5_01_00_01/.stamp_patched]
-> Error 1
->
-> Could you please send a patch to fix it?
->
-> I also see that 5_01_01_01 is out:
->
->
-> http://tigraphics.blogspot.be/2014/02/1q-2014-linux-graphics-sdk-release.html
->
+> +# VLC defines two autoconf functions which are also defined by our own pkg.m4
+> +# from pkgconf. Unfortunately, they are defined in a different way: VLC adds
+> +# --enable- options, but pkg.m4 adds --with- options. To make sure we use
+> +# VLC's definition, rename these two functions.
+> +define VLC_OVERRIDE_PKG_M4
+> +       $(SED) 's/PKG_WITH_MODULES/VLC_PKG_WITH_MODULES/g' \
+> +               -e 's/PKG_HAVE_WITH_MODULES/VLC_PKG_HAVE_WITH_MODULES/g' \
+> +               $(@D)/configure.ac $(@D)/m4/with_pkg.m4
+> +endef
+> +VLC_POST_PATCH_HOOKS += VLC_OVERRIDE_PKG_M4
+> +
+>  VLC_CONF_OPT += \
+>         --disable-a52 \
+>         --disable-shout \
 > --
-> Bye, Peter Korsgaard
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140227/f9743bad/attachment.html>
+> 1.9.0
+
+Nice lateral thinking; and I like that we now have explicit commentary
+in the package makefile, to document the weirdness.
+
+Acked-by: Simon Dawson <spdawson@gmail.com>
+Tested-by: Simon Dawson <spdawson@gmail.com>
