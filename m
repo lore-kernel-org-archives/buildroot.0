@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 27 Feb 2014 08:08:33 +0100
-Subject: [Buildroot] [PATCH 10/24] cosmo: new package
-In-Reply-To: <1393227301-14874-11-git-send-email-francois.perrad@gadz.org>
+Date: Thu, 27 Feb 2014 08:18:02 +0100
+Subject: [Buildroot] [PATCH 12/24] luajson: new package
+In-Reply-To: <1393227301-14874-13-git-send-email-francois.perrad@gadz.org>
 References: <1393227301-14874-1-git-send-email-francois.perrad@gadz.org>
- <1393227301-14874-11-git-send-email-francois.perrad@gadz.org>
-Message-ID: <530EE471.6020908@mind.be>
+ <1393227301-14874-13-git-send-email-francois.perrad@gadz.org>
+Message-ID: <530EE6AA.9030202@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,58 +15,66 @@ On 02/24/14 08:34, Francois Perrad wrote:
 > 
 > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 > ---
->  package/Config.in       |    1 +
->  package/cosmo/Config.in |    7 +++++++
->  package/cosmo/cosmo.mk  |   10 ++++++++++
->  3 files changed, 18 insertions(+)
->  create mode 100644 package/cosmo/Config.in
->  create mode 100644 package/cosmo/cosmo.mk
+>  package/Config.in          |    1 +
+>  package/luajson/Config.in  |    8 ++++++++
+>  package/luajson/luajson.mk |   13 +++++++++++++
+>  3 files changed, 22 insertions(+)
+>  create mode 100644 package/luajson/Config.in
+>  create mode 100644 package/luajson/luajson.mk
 > 
 > diff --git a/package/Config.in b/package/Config.in
-> index a7df716..29a0245 100644
+> index 5f3ef17..e65d71d 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -366,6 +366,7 @@ if BR2_PACKAGE_HAS_LUA_INTERPRETER
->  menu "Lua libraries/modules"
->  source "package/cgilua/Config.in"
->  source "package/copas/Config.in"
-> +source "package/cosmo/Config.in"
->  source "package/coxpcall/Config.in"
->  source "package/lbase64/Config.in"
->  source "package/ljlinenoise/Config.in"
-> diff --git a/package/cosmo/Config.in b/package/cosmo/Config.in
+> @@ -382,6 +382,7 @@ source "package/luacrypto/Config.in"
+>  source "package/luaexpat/Config.in"
+>  source "package/luaexpatutils/Config.in"
+>  source "package/luafilesystem/Config.in"
+> +source "package/luajson/Config.in"
+>  source "package/luaposix/Config.in"
+>  source "package/luasec/Config.in"
+>  source "package/luasocket/Config.in"
+> diff --git a/package/luajson/Config.in b/package/luajson/Config.in
 > new file mode 100644
-> index 0000000..1b5b622
+> index 0000000..9be7d25
 > --- /dev/null
-> +++ b/package/cosmo/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_COSMO
-> +	bool "cosmo"
+> +++ b/package/luajson/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_LUAJSON
+> +	bool "luajson"
 > +	select BR2_PACKAGE_LPEG
 
- Mention "run-time dependency only"
+ # run-time dependency only
+
+> +	help
+> +	  LuaJSON is a customizable JSON decoder/encoder
+> +	  using LPEG for parsing.
+> +
+> +	  http://github.com/harningt/luajson
+> diff --git a/package/luajson/luajson.mk b/package/luajson/luajson.mk
+> new file mode 100644
+> index 0000000..88db6b0
+> --- /dev/null
+> +++ b/package/luajson/luajson.mk
+> @@ -0,0 +1,13 @@
+> +################################################################################
+> +#
+> +# luajson
+> +#
+> +################################################################################
+> +
+> +LUAJSON_VERSION_UPSTREAM = 1.3.2
+> +LUAJSON_VERSION = $(LUAJSON_VERSION_UPSTREAM)-1
+> +LUAJSON_SUBDIR  = luajson
+
+ If the upstream version is not included in the subdir, you don't need to
+split the version in two parts.
 
  Regards,
  Arnout
 
-> +	help
-> +	  Cosmo is a "safe templates" engine for Lua.
-> +
-> +	  http://mascarenhas.github.io/cosmo/
-> diff --git a/package/cosmo/cosmo.mk b/package/cosmo/cosmo.mk
-> new file mode 100644
-> index 0000000..2592f62
-> --- /dev/null
-> +++ b/package/cosmo/cosmo.mk
-> @@ -0,0 +1,10 @@
-> +################################################################################
-> +#
-> +# cosmo
-> +#
-> +################################################################################
-> +
-> +COSMO_VERSION = 13.01.30-1
-> +COSMO_LICENSE = MIT
+> +LUAJSON_LICENSE = MIT
+> +LUAJSON_LICENSE_FILES = $(LUAJSON_SUBDIR)/LICENSE
 > +
 > +$(eval $(luarocks-package))
 > 
