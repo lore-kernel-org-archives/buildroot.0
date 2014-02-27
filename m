@@ -1,95 +1,49 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 27 Feb 2014 07:35:44 +0100
-Subject: [Buildroot] [PATCH v2] website: brand new version !
-In-Reply-To: <1393456468-19111-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1393456468-19111-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <530EDCC0.7060300@mind.be>
+Date: Thu, 27 Feb 2014 07:44:41 +0100
+Subject: [Buildroot] [PATCH 06/24] luajit: add host-luajit
+In-Reply-To: <1393227301-14874-7-git-send-email-francois.perrad@gadz.org>
+References: <1393227301-14874-1-git-send-email-francois.perrad@gadz.org>
+ <1393227301-14874-7-git-send-email-francois.perrad@gadz.org>
+Message-ID: <530EDED9.8060506@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Maxime,
-
- Great work!
-
-On 02/27/14 00:14, Maxime Hadjinlian wrote:
-> A brand new identify for buildroot.org
-
- identity
-
-> This should at least give us a few years before we need to it again.
+On 02/24/14 08:34, Francois Perrad wrote:
 > 
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> ---
-> Changes v1 -> v2:
->   - Fix typo in discutions => discussions
->   - Add a "filter" to avoid git commit mail in mailing activity
-> ---
->  README                                     |   59 +
->  docs/README                                |   59 -
->  docs/about.html                            |   11 +-
->  docs/contribute.html                       |   39 +
->  docs/copyright.txt                         |    2 +-
->  docs/css/bootstrap-responsive.css          | 1092 +++++
->  docs/css/bootstrap-responsive.min.css      |    9 +
->  docs/css/bootstrap.css                     | 6039 ++++++++++++++++++++++++++++
->  docs/css/bootstrap.min.css                 |  882 ++++
->  docs/css/bootswatch.less                   |  181 +
->  docs/css/variables.less                    |  301 ++
->  docs/developer.html                        |   47 -
->  docs/docs.html                             |    4 +-
->  docs/download.html                         |   46 +-
->  docs/footer.html                           |   24 +-
->  docs/git.html                              |   44 -
->  docs/header.html                           |  102 +-
->  docs/images/glyphicons-halflings-white.png |  Bin 0 -> 8777 bytes
->  docs/images/glyphicons-halflings.png       |  Bin 0 -> 12799 bytes
->  docs/images/logo.png                       |  Bin 129459 -> 117499 bytes
->  docs/images/menuconfig.png                 |  Bin 9087 -> 8604 bytes
->  docs/index.html                            |   34 +-
->  docs/js/bootstrap.js                       | 2159 ++++++++++
->  docs/js/bootstrap.min.js                   |    6 +
->  docs/js/buildroot.js                       |   63 +
->  docs/js/jquery-1.10.2.min.js               |    6 +
->  docs/lists.html                            |   40 -
->  docs/news.html                             |  115 +-
->  docs/sponsors.html                         |    2 +-
->  docs/stylesheet.css                        |   75 -
->  docs/support.html                          |   45 +
->  31 files changed, 11067 insertions(+), 419 deletions(-)
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
- Clearly, a patch like this is impossible to review...
-
- Could you:
-
-* split of the things that are just downloaded into separate patches (and
-clearly mention that it is just downloading something, as well as the
-place where it was downloaded from);
-
-* use the -M option to track movements, or set format.find-renames=true;
-
-* split off the patches that use bootstrap from the patches that really
-change something;
-
-* put the website live somewhere so we can see what it looks like;
-
-* give more descriptive commit messages?
-
-
- While you're doing this, it would also be nice to move the website into
-a separate directory. Not that there is anything except website and
-manual in the docs directory, but it would clarify things. Or maybe we
-could even remove the docs directory and put manual and website at the
-top-level. Anyway, that would be in a separate, final patch.
-
-
- Thanks!
-
+ You should indicate why host-luajit is needed.
 
  Regards,
  Arnout
+
+> ---
+>  package/luajit/luajit.mk |    9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
+> index 01fbb78..f742333 100644
+> --- a/package/luajit/luajit.mk
+> +++ b/package/luajit/luajit.mk
+> @@ -56,4 +56,13 @@ define LUAJIT_INSTALL_TARGET_CMDS
+>  	$(MAKE) PREFIX="/usr" DESTDIR="$(TARGET_DIR)" -C $(@D) install
+>  endef
+>  
+> +define HOST_LUAJIT_BUILD_CMDS
+> +	$(MAKE) PREFIX="/usr" BUILDMODE=static -C $(@D) amalg
+> +endef
+> +
+> +define HOST_LUAJIT_INSTALL_CMDS
+> +	$(MAKE) PREFIX="/usr" DESTDIR="$(HOST_DIR)" -C $(@D) install
+> +endef
+> +
+>  $(eval $(generic-package))
+> +$(eval $(host-generic-package))
+> 
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
