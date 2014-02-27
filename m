@@ -1,78 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Feb 2014 23:56:46 +0100
-Subject: [Buildroot] [PATCH] zlog: new package
-In-Reply-To: <1390461447-17521-1-git-send-email-yegorslists@googlemail.com>
-References: <1390461447-17521-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20140227235646.45e3ea5a@skate>
+Date: Thu, 27 Feb 2014 23:59:52 +0100
+Subject: [Buildroot] [PATCH 1/4] luajit: refactor without
+ dont-strip.patch
+In-Reply-To: <1390465713-12600-1-git-send-email-francois.perrad@gadz.org>
+References: <1390465713-12600-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20140227235952.4bde8034@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yegor,
+Dear Francois Perrad,
 
-Sorry for the long delay before reviewing this. I believe it's almost
-ready, just a couple of comments below.
+On Thu, 23 Jan 2014 09:28:30 +0100, Francois Perrad wrote:
+> the variable TARGET_STRIP does the job
+> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/luajit/luajit-03-dont-strip.patch |   23 -----------------------
+>  package/luajit/luajit.mk                  |    2 +-
+>  2 files changed, 1 insertion(+), 24 deletions(-)
+>  delete mode 100644 package/luajit/luajit-03-dont-strip.patch
 
-On Thu, 23 Jan 2014 08:17:27 +0100, yegorslists at googlemail.com wrote:
-
-> diff --git a/package/zlog/Config.in b/package/zlog/Config.in
-> new file mode 100644
-> index 0000000..478b2f8
-> --- /dev/null
-> +++ b/package/zlog/Config.in
-> @@ -0,0 +1,12 @@
-> +config BR2_PACKAGE_ZLOG
-> +	bool "zlog"
-> +	depends on BR2_LARGEFILE
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-
-From my testing you also need:
-
-	depends on !BR2_PREFER_STATIC_LIB
-
-because zlog only produces a shared library.
-
-> +	help
-> +	  zlog is a reliable, high-performance, thread safe, flexible,
-> +	  clear-model, pure C logging library.
-> +
-> +	  https://github.com/HardySimpson/zlog
-> +
-> +comment "zlog needs a toolchain w/ threads, largefile"
-> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE
-
-This needs to be updated to take into account the !static lib
-dependency.
+Looks good to me. Just a question below.
 
 
-> +ZLOG_VERSION = ca6162be1608839e99c6388c28488c51ccf98e4a
-> +ZLOG_SITE = $(call github,HardySimpson,zlog,$(ZLOG_VERSION))
-> +ZLOG_LICENSE = GPLv2.1
+> +		TARGET_STRIP=@: \
 
-The license is LGPLv2.1.
+Any reason to use @: instead of just : ?
 
-> +ZLOG_LICENSE_FILES = COPYING
-> +ZLOG_INSTALL_STAGING = YES
-> +
-> +define ZLOG_BUILD_CMDS
-> +	$(MAKE1) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" \
-> +		-C $(@D) all
-> +endef
-> +
-> +define ZLOG_INSTALL_STAGING_CMDS
-> +	$(MAKE) PREFIX=$(STAGING_DIR)/usr INCLUDE_PATH=include LIBRARY_PATH=lib  -C $(@D) install
-> +endef
-> +
-> +define ZLOG_INSTALL_TARGET_CMDS
-> +	$(MAKE) PREFIX=$(TARGET_DIR)/usr INCLUDE_PATH=include LIBRARY_PATH=lib -C $(@D) install
-> +endef
-
-Why do you pass INCLUDE_PATH=include and LIBRARY_PATH=lib ? Looking at
-the makefile of zlog, these seem to be the default values.
-
-Thanks!
+Also, personally, I would probably prefer TARGET_STRIP=true. I know
+it's the same, but I find the usage of ':' a bit hard to read.
 
 Thomas
 -- 
