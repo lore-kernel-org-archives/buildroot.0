@@ -1,23 +1,30 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 27 Feb 2014 13:01:05 +0000 (UTC)
-Subject: [Buildroot] [Bug 6938] mkuser script generates wrong password for
- new user in target/etc/shadow
-In-Reply-To: <bug-6938-163@https.bugs.busybox.net/>
-References: <bug-6938-163@https.bugs.busybox.net/>
-Message-ID: <20140227130105.28FB29BB96@busybox.osuosl.org>
+From: Sven Neumann <neumann@teufel.de>
+Date: Thu, 27 Feb 2014 14:06:35 +0100
+Subject: [Buildroot] [PATCH] libarchive: fix download location
+Message-ID: <1393506395-15064-1-git-send-email-neumann@teufel.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6938
+Signed-off-by: Sven Neumann <neumann@teufel.de>
+---
+ package/libarchive/libarchive.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- Comment #4 from Pavel Kucera <poli@centrum.cz> 2014-02-27 13:01:05 UTC ---
-I'm OK with closing this bug. Looked in a master tree and the typo is fixed
-here, so there is no problem anymore. Thank you to guide me to correct usage.
-
+diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
+index 44d9cd2..0b8713f 100644
+--- a/package/libarchive/libarchive.mk
++++ b/package/libarchive/libarchive.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBARCHIVE_VERSION = 3.0.4
+-LIBARCHIVE_SITE = http://github.com/downloads/libarchive/libarchive
++LIBARCHIVE_SITE = http://www.libarchive.org/downloads/
+ LIBARCHIVE_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.8.3.2
