@@ -1,40 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Feb 2014 23:59:52 +0100
-Subject: [Buildroot] [PATCH 1/4] luajit: refactor without
- dont-strip.patch
-In-Reply-To: <1390465713-12600-1-git-send-email-francois.perrad@gadz.org>
-References: <1390465713-12600-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20140227235952.4bde8034@skate>
+From: Bernd Kuhls <berndkuhls@hotmail.com>
+Date: Fri, 28 Feb 2014 00:04:36 +0100
+Subject: [Buildroot] [PATCH v2] libdrm: bump to 2.4.52 and remove
+	useless dependencies on libpciaccess
+References: <1393539908-14365-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
+Message-ID: <4ts4uaxbmu.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+Sebastien Bourdelin
+<sebastien.bourdelin@savoirfairelinux.com>
+wrote in
+news:1393539908-14365-1-git-send-email-sebastien.bourdelin at savoirfairelinux
+.com: 
 
-On Thu, 23 Jan 2014 09:28:30 +0100, Francois Perrad wrote:
-> the variable TARGET_STRIP does the job
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/luajit/luajit-03-dont-strip.patch |   23 -----------------------
->  package/luajit/luajit.mk                  |    2 +-
->  2 files changed, 1 insertion(+), 24 deletions(-)
->  delete mode 100644 package/luajit/luajit-03-dont-strip.patch
+> Since the version 2.4.32, libdrm no longer requires dependencies on
+> the libpciaccess unless for the intel-dri.
 
-Looks good to me. Just a question below.
+Hi,
 
+please have a look at this patch series addressing the same topic:
 
-> +		TARGET_STRIP=@: \
+http://patchwork.ozlabs.org/patch/317523/
+http://patchwork.ozlabs.org/patch/317522/
+http://patchwork.ozlabs.org/patch/317524/
 
-Any reason to use @: instead of just : ?
-
-Also, personally, I would probably prefer TARGET_STRIP=true. I know
-it's the same, but I find the usage of ':' a bit hard to read.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards, Bernd
