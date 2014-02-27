@@ -1,104 +1,112 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 27 Feb 2014 17:47:10 -0300
-Subject: [Buildroot] [PATCH 2/3] wpa_suppicant: bump to version 2.1
-In-Reply-To: <1393534031-696-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1393534031-696-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1393534031-696-2-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 27 Feb 2014 21:51:23 +0100
+Subject: [Buildroot] [git commit] Update for 2014.02
+Message-ID: <20140227205641.E28DB9BAF0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now with 802.11ac and P2P support.
+commit: http://git.buildroot.net/buildroot/commit/?id=a6cfaea44e5105cb66e4e797042f64335f5e7c01
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-CONFIG_LIBNL32 was a hidden option so switch to ENABLE/DISABLE now.
-CONFIG_DRIVER_ATMEL was dropped.
-CONFIG_DELAYED_MIC is no longer optional.
-CONFIG_AP was also hidden so also switch to ENABLE/DISABLE.
-CONFIG_EAP_* now blindly enabled instead of doing one per each.
-
-P2P support is unified with the AP mode config knob since it's the more
-likely scenario and share code between them.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wpa_supplicant/wpa_supplicant.mk | 25 ++++++++++---------------
- 1 file changed, 10 insertions(+), 15 deletions(-)
+ CHANGES            |   13 +++++++++++++
+ Makefile           |    2 +-
+ docs/download.html |   14 +++++++-------
+ docs/news.html     |    9 +++++++++
+ 4 files changed, 30 insertions(+), 8 deletions(-)
 
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index 34e8e1f..17788cc 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/CHANGES b/CHANGES
+index 363a0bb..45a31c4 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,16 @@
++2014.02, Released February 27th, 2014
++
++	Minor fixes.
++
++	Updated/fixed packages: cegui06, cppdb, e2fsprogs, gcc, gdb,
++	gst1-plugins-bad, gstreamer, gstreamer1, haserl, imagemagick,
++	libpng, libxml2, lua, luajit, luarock, ncftp, openswan,
++	pcsc-lite, qt5connectivity, ramsmp, strongswan, vlc
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#6938: mkuser script generates wrong password for new user in..
++
+ 2014.02-rc3, Released February 25th, 2014
  
--WPA_SUPPLICANT_VERSION = 2.0
-+WPA_SUPPLICANT_VERSION = 2.1
- WPA_SUPPLICANT_SITE = http://hostap.epitest.fi/releases
- WPA_SUPPLICANT_LICENSE = GPLv2/BSD-3c
- WPA_SUPPLICANT_LICENSE_FILES = README
-@@ -20,51 +20,46 @@ WPA_SUPPLICANT_CONFIG_EDITS =
- WPA_SUPPLICANT_CONFIG_SET =
+ 	Minor fixes.
+diff --git a/Makefile b/Makefile
+index 63baafb..18b631d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -25,7 +25,7 @@
+ #--------------------------------------------------------------
  
- WPA_SUPPLICANT_CONFIG_ENABLE = \
-+	CONFIG_IEEE80211AC	\
- 	CONFIG_IEEE80211N	\
- 	CONFIG_IEEE80211R	\
- 	CONFIG_INTERWORKING	\
--	CONFIG_DELAYED_MIC	\
- 	CONFIG_INTERNAL_LIBTOMMATH
+ # Set and export the version string
+-export BR2_VERSION:=2014.02-rc3
++export BR2_VERSION:=2014.02
  
- WPA_SUPPLICANT_CONFIG_DISABLE = \
--	CONFIG_DRIVER_ATMEL	\
- 	CONFIG_SMARTCARD
+ # Check for minimal make version (note: this check will break at make 10.x)
+ MIN_MAKE_VERSION=3.81
+diff --git a/docs/download.html b/docs/download.html
+index 66c7da7..bae86df 100644
+--- a/docs/download.html
++++ b/docs/download.html
+@@ -6,17 +6,17 @@
  
- ifeq ($(BR2_PACKAGE_LIBNL),y)
- 	WPA_SUPPLICANT_DEPENDENCIES += libnl
--	WPA_SUPPLICANT_CONFIG_SET += CONFIG_LIBNL32
-+	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_LIBNL32
- else
- 	WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_DRIVER_NL80211
- endif
+ <p>
  
-+# Trailing underscore on purpose to not enable CONFIG_EAPOL_TEST
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_EAP),y)
--	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_EAP_AKA		\
--					CONFIG_EAP_FAST		\
--					CONFIG_EAP_GPSK 	\
--					CONFIG_EAP_IKEV2	\
--					CONFIG_EAP_PAX		\
--					CONFIG_EAP_PSK		\
--					CONFIG_EAP_SAKE		\
--					CONFIG_EAP_SIM		\
--					CONFIG_EAP_TNC
-+	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_EAP_
- else
- 	WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_EAP
- endif
+-The latest stable release is <b>2013.11</b>, which can be downloaded
++The latest stable release is <b>2014.02</b>, which can be downloaded
+ here:<p>
  
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT),y)
--	WPA_SUPPLICANT_CONFIG_SET += CONFIG_AP
-+	WPA_SUPPLICANT_CONFIG_ENABLE += \
-+		CONFIG_AP \
-+		CONFIG_P2P
- endif
+-<a href="/downloads/buildroot-2013.11.tar.gz">buildroot-2013.11.tar.gz</a>
+-(<a href="/downloads/buildroot-2013.11.tar.gz.sign">PGP signature</a>)
++<a href="/downloads/buildroot-2014.02.tar.gz">buildroot-2014.02.tar.gz</a>
++(<a href="/downloads/buildroot-2014.02.tar.gz.sign">PGP signature</a>)
+ or
+-<a href="/downloads/buildroot-2013.11.tar.bz2">buildroot-2013.11.tar.bz2</a>
+-(<a href="/downloads/buildroot-2013.11.tar.bz2.sign">PGP signature</a>).
++<a href="/downloads/buildroot-2014.02.tar.bz2">buildroot-2014.02.tar.bz2</a>
++(<a href="/downloads/buildroot-2014.02.tar.bz2.sign">PGP signature</a>).
  
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_WPS),y)
- 	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_WPS
-+	WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_WPS_NFC
- endif
+ <p>
+-
++<!--
+ The latest release candidate is <b>2014.02-rc3</b>, which can be
+ downloaded here:<p>
  
- # Try to use openssl if it's already available
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- 	WPA_SUPPLICANT_DEPENDENCIES += openssl
- 	WPA_SUPPLICANT_CONFIG_EDITS += 's/\#\(CONFIG_TLS=openssl\)/\1/'
--	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_EAP_PWD
- else
-+	WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_EAP_PWD
- 	WPA_SUPPLICANT_CONFIG_EDITS += 's/\#\(CONFIG_TLS=\).*/\1internal/'
- endif
+@@ -26,7 +26,7 @@ or
+ <a href="/downloads/buildroot-2014.02-rc3.tar.bz2">buildroot-2014.02-rc3.tar.bz2</a>
+ (<a href="/downloads/buildroot-2014.02-rc3.tar.bz2.sign">PGP signature</a>).
+ <p>
+-
++-->
+ This and earlier releases (and their PGP signatures) can always be downloaded from
+ <a href="/downloads/">http://buildroot.net/downloads/</a>.
  
--- 
-1.8.3.2
+diff --git a/docs/news.html b/docs/news.html
+index 92ff34d..9efca65 100644
+--- a/docs/news.html
++++ b/docs/news.html
+@@ -5,6 +5,15 @@
+ <p>
+ 
+ <ul>
++  <li><b>27 February 2014 -- 2014.02 released</b>
++
++    <p>The stable 2014.02 release is out - Thanks to everyone
++    contributing and testing the release candidates. See the
++    <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2014.02">CHANGES</a>
++    file for more details,
++    and go to the <a href="/downloads/">downloads page</a> to pick up the
++    <a href="/downloads/buildroot-2014.02.tar.bz2">2014.02 release</a>.</p>
++
+   <li><b>25 February 2014 -- 2014.02-rc3 released</b>
+ 
+     <p>Release candidate 3 is out with more cleanups and build fixes. See the <a
