@@ -1,81 +1,95 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 27 Feb 2014 07:39:46 +0100
-Subject: [Buildroot] [PATCH 04/24] luajit: refactor without
-	dont-strip.patch
-In-Reply-To: <1393227301-14874-5-git-send-email-francois.perrad@gadz.org>
-References: <1393227301-14874-1-git-send-email-francois.perrad@gadz.org>
- <1393227301-14874-5-git-send-email-francois.perrad@gadz.org>
-Message-ID: <530EDDB2.1080104@mind.be>
+Date: Thu, 27 Feb 2014 07:35:44 +0100
+Subject: [Buildroot] [PATCH v2] website: brand new version !
+In-Reply-To: <1393456468-19111-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1393456468-19111-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <530EDCC0.7060300@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/24/14 08:34, Francois Perrad wrote:
-> the variable TARGET_STRIP does the job
+ Hi Maxime,
+
+ Great work!
+
+On 02/27/14 00:14, Maxime Hadjinlian wrote:
+> A brand new identify for buildroot.org
+
+ identity
+
+> This should at least give us a few years before we need to it again.
 > 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 > ---
->  package/luajit/luajit-03-dont-strip.patch |   23 -----------------------
->  package/luajit/luajit.mk                  |    2 +-
->  2 files changed, 1 insertion(+), 24 deletions(-)
->  delete mode 100644 package/luajit/luajit-03-dont-strip.patch
-> 
-> diff --git a/package/luajit/luajit-03-dont-strip.patch b/package/luajit/luajit-03-dont-strip.patch
-> deleted file mode 100644
-> index 66bdadf..0000000
-> --- a/package/luajit/luajit-03-dont-strip.patch
-> +++ /dev/null
-> @@ -1,23 +0,0 @@
-> -Don't strip the library and binary
-> -
-> -This allows Buildroot to do it if needed, but only if needed.
-> -
-> -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> -
-> -Index: b/src/Makefile
-> -===================================================================
-> ---- a/src/Makefile
-> -+++ b/src/Makefile
-> -@@ -665,12 +665,10 @@
-> - $(LUAJIT_SO): $(LJVMCORE_O)
-> - 	$(E) "DYNLINK   $@"
-> - 	$(Q)$(TARGET_LD) $(TARGET_ASHLDFLAGS) -o $@ $(LJVMCORE_DYNO) $(TARGET_ALIBS)
-> --	$(Q)$(TARGET_STRIP) $@
-> - 
-> - $(LUAJIT_T): $(TARGET_O) $(LUAJIT_O) $(TARGET_DEP)
-> - 	$(E) "LINK      $@"
-> - 	$(Q)$(TARGET_LD) $(TARGET_ALDFLAGS) -o $@ $(LUAJIT_O) -lluajit -L. $(TARGET_ALIBS)
-> --	$(Q)$(TARGET_STRIP) $@
-> - 	$(E) "OK        Successfully built LuaJIT"
-> - 
-> - ##############################################################################
-> diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
-> index 529d3c2..186b3fd 100644
-> --- a/package/luajit/luajit.mk
-> +++ b/package/luajit/luajit.mk
-> @@ -37,7 +37,7 @@ define LUAJIT_BUILD_CMDS
->  		DYNAMIC_CC="$(TARGET_CC) -fPIC" \
->  		TARGET_LD="$(TARGET_CC)" \
->  		TARGET_AR="$(TARGET_AR) rcus" \
-> -		TARGET_STRIP="$(TARGET_STRIP)" \
-> +		TARGET_STRIP=@: \
+> Changes v1 -> v2:
+>   - Fix typo in discutions => discussions
+>   - Add a "filter" to avoid git commit mail in mailing activity
+> ---
+>  README                                     |   59 +
+>  docs/README                                |   59 -
+>  docs/about.html                            |   11 +-
+>  docs/contribute.html                       |   39 +
+>  docs/copyright.txt                         |    2 +-
+>  docs/css/bootstrap-responsive.css          | 1092 +++++
+>  docs/css/bootstrap-responsive.min.css      |    9 +
+>  docs/css/bootstrap.css                     | 6039 ++++++++++++++++++++++++++++
+>  docs/css/bootstrap.min.css                 |  882 ++++
+>  docs/css/bootswatch.less                   |  181 +
+>  docs/css/variables.less                    |  301 ++
+>  docs/developer.html                        |   47 -
+>  docs/docs.html                             |    4 +-
+>  docs/download.html                         |   46 +-
+>  docs/footer.html                           |   24 +-
+>  docs/git.html                              |   44 -
+>  docs/header.html                           |  102 +-
+>  docs/images/glyphicons-halflings-white.png |  Bin 0 -> 8777 bytes
+>  docs/images/glyphicons-halflings.png       |  Bin 0 -> 12799 bytes
+>  docs/images/logo.png                       |  Bin 129459 -> 117499 bytes
+>  docs/images/menuconfig.png                 |  Bin 9087 -> 8604 bytes
+>  docs/index.html                            |   34 +-
+>  docs/js/bootstrap.js                       | 2159 ++++++++++
+>  docs/js/bootstrap.min.js                   |    6 +
+>  docs/js/buildroot.js                       |   63 +
+>  docs/js/jquery-1.10.2.min.js               |    6 +
+>  docs/lists.html                            |   40 -
+>  docs/news.html                             |  115 +-
+>  docs/sponsors.html                         |    2 +-
+>  docs/stylesheet.css                        |   75 -
+>  docs/support.html                          |   45 +
+>  31 files changed, 11067 insertions(+), 419 deletions(-)
 
- Hm, why is this needed to begin with? package/Makefile.in sets
-TARGET_STRIP to strip, sstrip or none according to the config option. So
-that should work correctly, right?
+ Clearly, a patch like this is impossible to review...
 
- Of course, that does mean that we don't have unstripped binaries in
-staging, but it's the same for all other packages that do stripping.
+ Could you:
+
+* split of the things that are just downloaded into separate patches (and
+clearly mention that it is just downloading something, as well as the
+place where it was downloaded from);
+
+* use the -M option to track movements, or set format.find-renames=true;
+
+* split off the patches that use bootstrap from the patches that really
+change something;
+
+* put the website live somewhere so we can see what it looks like;
+
+* give more descriptive commit messages?
+
+
+ While you're doing this, it would also be nice to move the website into
+a separate directory. Not that there is anything except website and
+manual in the docs directory, but it would clarify things. Or maybe we
+could even remove the docs directory and put manual and website at the
+top-level. Anyway, that would be in a separate, final patch.
+
+
+ Thanks!
+
 
  Regards,
  Arnout
->  		TARGET_CFLAGS="$(TARGET_CFLAGS)" \
->  		TARGET_LDFLAGS="$(TARGET_LDFLAGS)" \
->  		HOST_CC="$(LUAJIT_HOST_CC)" \
-> 
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
