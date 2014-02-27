@@ -1,8 +1,10 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 27 Feb 2014 10:49:38 +0000 (UTC)
-Subject: [Buildroot] [Bug 6938] New: mkuser script generates wrong password
- for new user in target/etc/shadow
-Message-ID: <bug-6938-163@https.bugs.busybox.net/>
+Date: Thu, 27 Feb 2014 12:17:24 +0000 (UTC)
+Subject: [Buildroot] [Bug 6938] mkuser script generates wrong password for
+ new user in target/etc/shadow
+In-Reply-To: <bug-6938-163@https.bugs.busybox.net/>
+References: <bug-6938-163@https.bugs.busybox.net/>
+Message-ID: <20140227121724.16F399BB95@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,46 +13,16 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=6938
 
-           Summary: mkuser script generates wrong password for new user in
-                    target/etc/shadow
-           Product: buildroot
-           Version: 2013.11
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: poli at centrum.cz
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+--- Comment #1 from Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> 2014-02-27 12:17:23 UTC ---
+Please describe in more detail the problems you are experiencing, otherwise we
+cannot help you.
 
-
-I've modified my mkusers script from buildroot-2013.11/support/scripts to
-generate correct passwords for manually added users from custom packages. I've
-renamed files, so the changes are clear.
-
-diff -u mkusers_2013.11 mkusers_2013.11_modified 
---- mkusers_2013.11    2014-02-27 11:06:38.000000000 +0100
-+++ mkusers_2013.11_modified    2014-02-27 11:05:15.000000000 +0100
-@@ -261,7 +261,7 @@
-
- #----------------------------------------------------------------------------
- # Encode a password
--encode_password() {
-+encode_passwd() {
-     local passwd="${1}"
-
-     mkpasswd -m "${PASSWD_METHOD}" "${passwd}"
-@@ -313,7 +313,7 @@
-             _passwd="$( encode_passwd "${passwd#=}" )"
-             ;;
-         *)
--            _passwd="${passwd}"
-+            _passwd="$( encode_passwd "${passwd}" )"
-             ;;
-     esac
+- What is the problem with the passwords generated from the script?
+- How are you using the script?
+- Which password method have you configured (BR2_TARGET_GENERIC_PASSWD_METHOD)
+- If you are using SHA256 or SHA512, are you sure that the busybox application
+(assuming you are using it) is configured with the following option:
+CONFIG_USE_BB_CRYPT_SHA ?
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
