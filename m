@@ -1,64 +1,90 @@
-From: Massimiliano Marretta <max@marretta.com>
-Date: Thu, 27 Feb 2014 22:40:42 +0100
-Subject: [Buildroot] Qt5 and gpu-viv-bin-mx6q problem
-Message-ID: <CACP2RPYKf_dVKkiHVsqM4vA-Ox69h0C_Nvt33Q-e5uGP6xDorA@mail.gmail.com>
+From: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
+Date: Thu, 27 Feb 2014 17:25:07 -0500
+Subject: [Buildroot] [PATCH v2] libdrm: bump to 2.4.52 and remove useless
+	dependencies on libpciaccess
+Message-ID: <1393539908-14365-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Can I use the gpu-viv-bin-mx6q-3.5.7-1.0.0-hfp.bin with the kernel version
-3.0.35  ?
+Since the version 2.4.32, libdrm no longer requires dependencies on
+the libpciaccess unless for the intel-dri.
 
+For more information :
+http://cgit.freedesktop.org/mesa/drm/commit/?id=be30d350b64c1a83473a9ffbedf8e2c680a65fcd
 
-2014-02-27 21:42 GMT+01:00 Eric Nelson <eric.nelson@boundarydevices.com>:
+Signed-off-by: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> (PATCH v1)
+---
+Changes v1 -> v2:
+  - bump to version 2.4.52
+---
+ package/libdrm/Config.in | 3 ---
+ package/libdrm/libdrm.mk | 5 +----
+ 2 files changed, 1 insertion(+), 7 deletions(-)
 
-> Hi Arnout,
->
-> On 02/27/2014 01:16 PM, Arnout Vandecappelle wrote:
->
->> On 02/27/14 09:22, Massimiliano Marretta wrote:
->>
->>> Dear,
->>>
->>> <snip>
->>>
->> >>
->
->> - If I use the last buildroot linaro toolchain 4.8-2013.09, the system
->>> not start because the kernel is to old ( 3.0.35 ).
->>> - If I use the toolchain linaro-4.7-2013.01 the Qt5 qmlscene exit without
->>> message and gpu-viv-bin-mx6q examples not start with the message program
->>> not found.
->>>
->>
->>   I think that gpu-viv-bin-mx6q are softfp libraries, so they won't work
->> with Linaro (hardfp) toolchains. I'm surprised that qt5 builds at all in
->> that case...
->>
->>  The latest patches (on -next) allow for either hardfp or softfp:
->
->         http://git.buildroot.net/buildroot/commit/package/
-> freescale-imx/gpu-viv-bin-mx6q?h=next&id=b0b72591d74c1a84b8c1b2e1990a2f
-> e1dfe8c4ab
->
-> Regards,
->
->
-> Eric
->
-
-
-
+diff --git a/package/libdrm/Config.in b/package/libdrm/Config.in
+index 205f47c..4ac4e52 100644
+--- a/package/libdrm/Config.in
++++ b/package/libdrm/Config.in
+@@ -23,21 +23,18 @@ config BR2_PACKAGE_LIBDRM_INTEL
+ config BR2_PACKAGE_LIBDRM_RADEON
+ 	bool "radeon"
+ 	select BR2_PACKAGE_LIBATOMIC_OPS
+-	select BR2_PACKAGE_XLIB_LIBPCIACCESS
+ 	depends on BR2_i386 || BR2_x86_64
+ 	help
+ 	  install AMD/ATI graphics driver
+ 
+ config BR2_PACKAGE_LIBDRM_NOUVEAU
+ 	bool "nouveau"
+-	select BR2_PACKAGE_XLIB_LIBPCIACCESS
+ 	depends on BR2_i386 || BR2_x86_64
+ 	help
+ 	  install Nvidia graphics driver
+ 
+ config BR2_PACKAGE_LIBDRM_VMWGFX
+ 	bool "vmwgfx"
+-	select BR2_PACKAGE_XLIB_LIBPCIACCESS
+ 	depends on BR2_i386 || BR2_x86_64
+ 	help
+ 	  installs Vmware graphics driver
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index f5efaf1..71fce98 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBDRM_VERSION = 2.4.46
++LIBDRM_VERSION = 2.4.52
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+ LIBDRM_SITE = http://dri.freedesktop.org/libdrm/
+ LIBDRM_LICENSE = MIT
+@@ -28,21 +28,18 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBDRM_RADEON),y)
+ LIBDRM_CONF_OPT += --enable-radeon
+-LIBDRM_DEPENDENCIES += xlib_libpciaccess
+ else
+ LIBDRM_CONF_OPT += --disable-radeon
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBDRM_NOUVEAU),y)
+ LIBDRM_CONF_OPT += --enable-nouveau
+-LIBDRM_DEPENDENCIES += xlib_libpciaccess
+ else
+ LIBDRM_CONF_OPT += --disable-nouveau
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBDRM_VMWGFX),y)
+ LIBDRM_CONF_OPT += --enable-vmwgfx
+-LIBDRM_DEPENDENCIES += xlib_libpciaccess
+ else
+ LIBDRM_CONF_OPT += --disable-vmwgfx
+ endif
 -- 
-Massimiliano Marretta
-Via Zuccola 11
-41015 Nonantola (Mo) - Italy
-tel: +39 347 5340305
-skype: mmarretta
- *mailto:max at marretta.com* <max@marretta.com>
-*web:www.marretta.com* <http://www.marretta.com/>
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140227/69fa5c36/attachment.html>
+1.9.0
