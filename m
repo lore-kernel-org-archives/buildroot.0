@@ -1,34 +1,67 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 27 Feb 2014 10:02:49 +0100
-Subject: [Buildroot] [PATCH v2] website: brand new version !
-In-Reply-To: <CAGduivxRCfKOx0JquDceGW6WAUipv78qo=G6gckzJ0tWzB-YMw@mail.gmail.com>
- (Maxime Hadjinlian's message of "Thu, 27 Feb 2014 09:30:14 +0100")
-References: <1393456468-19111-1-git-send-email-maxime.hadjinlian@gmail.com>
- <530EDCC0.7060300@mind.be>
- <CAGduivxRCfKOx0JquDceGW6WAUipv78qo=G6gckzJ0tWzB-YMw@mail.gmail.com>
-Message-ID: <87y50x9bd2.fsf@dell.be.48ers.dk>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Thu, 27 Feb 2014 10:05:59 +0100
+Subject: [Buildroot] [PATCH 05/24] luajit: refactor without
+	shared-lib.patch
+In-Reply-To: <1393227301-14874-6-git-send-email-francois.perrad@gadz.org>
+References: <1393227301-14874-1-git-send-email-francois.perrad@gadz.org>
+ <1393227301-14874-6-git-send-email-francois.perrad@gadz.org>
+Message-ID: <CAHXCMMLud0oSuXB1L01GiPv68SCK-7omOQjL6gSzVHvHD3kJSQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
+Hi Francois,
 
-Hi,
+On Mon, Feb 24, 2014 at 8:34 AM, Francois Perrad <fperrad@gmail.com> wrote:
+> the variable BUILDMODE does the job
+>
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/luajit/luajit-02-shared-lib.patch |   17 -----------------
+>  package/luajit/luajit.mk                  |    1 +
+>  2 files changed, 1 insertion(+), 17 deletions(-)
+>  delete mode 100644 package/luajit/luajit-02-shared-lib.patch
+>
+> diff --git a/package/luajit/luajit-02-shared-lib.patch b/package/luajit/luajit-02-shared-lib.patch
+> deleted file mode 100644
+> index 361e5c2..0000000
+> --- a/package/luajit/luajit-02-shared-lib.patch
+> +++ /dev/null
+> @@ -1,17 +0,0 @@
+> -Compile the luajit binary dynamically against the luajit library
+> -
+> -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> -
+> -Index: b/src/Makefile
+> -===================================================================
+> ---- a/src/Makefile
+> -+++ b/src/Makefile
+> -@@ -669,7 +669,7 @@
+> -
+> - $(LUAJIT_T): $(TARGET_O) $(LUAJIT_O) $(TARGET_DEP)
+> -       $(E) "LINK      $@"
+> --      $(Q)$(TARGET_LD) $(TARGET_ALDFLAGS) -o $@ $(LUAJIT_O) $(TARGET_O) $(TARGET_ALIBS)
+> -+      $(Q)$(TARGET_LD) $(TARGET_ALDFLAGS) -o $@ $(LUAJIT_O) -lluajit -L. $(TARGET_ALIBS)
+> -       $(Q)$(TARGET_STRIP) $@
+> -       $(E) "OK        Successfully built LuaJIT"
+> -
+> diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
+> index 186b3fd..01fbb78 100644
+> --- a/package/luajit/luajit.mk
+> +++ b/package/luajit/luajit.mk
+> @@ -44,6 +44,7 @@ define LUAJIT_BUILD_CMDS
+>                 HOST_CFLAGS="$(HOST_CFLAGS)" \
+>                 HOST_LDFLAGS="$(HOST_LDFLAGS)" \
+>                 $(LUAJIT_NO_LARGEFILE) \
+> +               BUILDMODE=dynamic \
 
- >> While you're doing this, it would also be nice to move the website into
- >> a separate directory. Not that there is anything except website and
- >> manual in the docs directory, but it would clarify things. Or maybe we
- >> could even remove the docs directory and put manual and website at the
- >> top-level. Anyway, that would be in a separate, final patch.
+AFAICS, luajit can be selected if BR2_PREFER_STATIC_LIB=y.
+How does this play in such a case?
 
- > I think, it was only to not clutter the root directory. But It would
- > make sense to split theses two things.
+Regards,
 
-Notice that the website today is simply a git checkout (with a cronjob
-to update it), so we need to get the osuosl.org guys involved if we move
-it around - So I prefer to keep it where it is for now.
 
 -- 
-Bye, Peter Korsgaard
+Samuel
