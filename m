@@ -1,51 +1,70 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Feb 2014 09:19:18 +0100
-Subject: [Buildroot] [git commit] gstreamer{,
-	1}: fix unaligned access detection for microblaze
-Message-ID: <20140227082146.D794E9B1EA@busybox.osuosl.org>
+Date: Thu, 27 Feb 2014 09:07:27 +0100
+Subject: [Buildroot] [git commit] gcc: fix xtensa overlay application
+Message-ID: <20140227082146.016B29BB97@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5f623e4696474357075279769548a13a37ebbd0d
+commit: http://git.buildroot.net/buildroot/commit/?id=a957e1b265e2736da7c2aa746c084f228ff7985d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes http://autobuild.buildroot.net/results/f49/f4914bb3999c8a7a0c0a2afdac5de40fb9058372/
+gcc build scripts use wrong variable name to specify xtensa overlay
+application command. As a result gcc is built with the default overlay,
+which leads to obscure failures later in the build process.
 
-Similar to the existing handling for avr32 and xtensa. Also add it for
-gstreamer1 for good measure as it was missing there as well.
+xtensa toolchain needs an additional configuration for a specific core
+variant we're building for. This configuration is called 'overlay' and
+is an archive with files for binutils, gcc and gdb that replace
+corresponding files in toolchain components.
 
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer/gstreamer/gstreamer.mk    |    2 +-
- package/gstreamer1/gstreamer1/gstreamer1.mk |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gcc/gcc-final/gcc-final.mk               |    2 +-
+ package/gcc/gcc-initial/gcc-initial.mk           |    2 +-
+ package/gcc/gcc-intermediate/gcc-intermediate.mk |    2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer/gstreamer/gstreamer.mk b/package/gstreamer/gstreamer/gstreamer.mk
-index 0667e38..4696876 100644
---- a/package/gstreamer/gstreamer/gstreamer.mk
-+++ b/package/gstreamer/gstreamer/gstreamer.mk
-@@ -12,7 +12,7 @@ GSTREAMER_INSTALL_STAGING = YES
- # Checking if unaligned memory access works correctly cannot be done when cross
- # compiling. For the following architectures there is no information available
- # in the configure script.
--ifeq ($(BR2_avr32)$(BR2_xtensa),y)
-+ifeq ($(BR2_avr32)$(BR2_xtensa)$(BR2_microblaze),y)
- GSTREAMER_CONF_ENV = as_cv_unaligned_access=no
+diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+index ecc4068..622dcf2 100644
+--- a/package/gcc/gcc-final/gcc-final.mk
++++ b/package/gcc/gcc-final/gcc-final.mk
+@@ -15,7 +15,7 @@ HOST_GCC_FINAL_DEPENDENCIES = \
+ HOST_GCC_FINAL_EXTRACT_CMDS = $(HOST_GCC_EXTRACT_CMDS)
+ 
+ ifneq ($(call qstrip, $(BR2_XTENSA_CORE_NAME)),)
+-HOST_GCC_FINAL_POST_EXTRACT_CMDS += HOST_GCC_FINAL_XTENSA_OVERLAY_EXTRACT
++HOST_GCC_FINAL_POST_EXTRACT_HOOKS += HOST_GCC_XTENSA_OVERLAY_EXTRACT
  endif
- ifeq ($(BR2_aarch64),y)
-diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
-index cf2a86d..fe158cf 100644
---- a/package/gstreamer1/gstreamer1/gstreamer1.mk
-+++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
-@@ -14,7 +14,7 @@ GSTREAMER1_LICENSE = LGPLv2+ LGPLv2.1+
- # Checking if unaligned memory access works correctly cannot be done when cross
- # compiling. For the following architectures there is no information available
- # in the configure script.
--ifeq ($(BR2_avr32)$(BR2_xtensa),y)
-+ifeq ($(BR2_avr32)$(BR2_xtensa)$(BR2_microblaze),y)
- GSTREAMER1_CONF_ENV = as_cv_unaligned_access=no
+ 
+ HOST_GCC_FINAL_POST_PATCH_HOOKS += HOST_GCC_APPLY_PATCHES
+diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
+index 0eb492f..bc5ad26 100644
+--- a/package/gcc/gcc-initial/gcc-initial.mk
++++ b/package/gcc/gcc-initial/gcc-initial.mk
+@@ -13,7 +13,7 @@ HOST_GCC_INITIAL_DEPENDENCIES = $(HOST_GCC_COMMON_DEPENDENCIES)
+ HOST_GCC_INITIAL_EXTRACT_CMDS = $(HOST_GCC_EXTRACT_CMDS)
+ 
+ ifneq ($(call qstrip, $(BR2_XTENSA_CORE_NAME)),)
+-HOST_GCC_INITIAL_POST_EXTRACT_CMDS += HOST_GCC_XTENSA_OVERLAY_EXTRACT
++HOST_GCC_INITIAL_POST_EXTRACT_HOOKS += HOST_GCC_XTENSA_OVERLAY_EXTRACT
  endif
- ifeq ($(BR2_aarch64),y)
+ 
+ HOST_GCC_INITIAL_POST_PATCH_HOOKS += HOST_GCC_APPLY_PATCHES
+diff --git a/package/gcc/gcc-intermediate/gcc-intermediate.mk b/package/gcc/gcc-intermediate/gcc-intermediate.mk
+index 2105cec..db84d18 100644
+--- a/package/gcc/gcc-intermediate/gcc-intermediate.mk
++++ b/package/gcc/gcc-intermediate/gcc-intermediate.mk
+@@ -15,7 +15,7 @@ HOST_GCC_INTERMEDIATE_DEPENDENCIES = \
+ HOST_GCC_INTERMEDIATE_EXTRACT_CMDS = $(HOST_GCC_EXTRACT_CMDS)
+ 
+ ifneq ($(call qstrip, $(BR2_XTENSA_CORE_NAME)),)
+-HOST_GCC_INTERMEDIATE_POST_EXTRACT_CMDS += HOST_GCC_XTENSA_OVERLAY_EXTRACT
++HOST_GCC_INTERMEDIATE_POST_EXTRACT_HOOKS += HOST_GCC_XTENSA_OVERLAY_EXTRACT
+ endif
+ 
+ HOST_GCC_INTERMEDIATE_POST_PATCH_HOOKS += HOST_GCC_APPLY_PATCHES
