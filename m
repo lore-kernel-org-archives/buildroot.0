@@ -1,56 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Feb 2014 15:31:27 +0100
-Subject: [Buildroot] [git commit] vlc: fix shared library building
-Message-ID: <20140227144133.788409A88B@busybox.osuosl.org>
+Date: Thu, 27 Feb 2014 15:31:54 +0100
+Subject: [Buildroot] [git commit] vlc: add a patch to remove autoreconf
+	warnings
+Message-ID: <20140227144133.8960E9A88B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=929f371cb078f96f64391af10c066bd45aa85bb9
+commit: http://git.buildroot.net/buildroot/commit/?id=132cf723ec05041dca60d09ef92d47193c8bd8e7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes e.g.
-http://autobuild.buildroot.net/results/9c7/9c7a97882d446a42cabcb07e4af7e6825192e70b
-
-VLC cannot build static and shared libraries at the same time.
-
-Also, live555 only has a static library, and VLC tries to link this into
-a shared library. Therefore, disable the live555 plugin unless static
-linking is selected. It would be better to build live555 as a shared
-library, but that's for another patch.
-
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-by: Simon Dawson <spdawson@gmail.com>
+Tested-by: Simon Dawson <spdawson@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/vlc/vlc.mk |    9 ++++++++-
- 1 files changed, 8 insertions(+), 1 deletions(-)
+ ...c-0003-automake-add-subdir-objects-option.patch |   22 ++++++++++++++++++++
+ 1 files changed, 22 insertions(+), 0 deletions(-)
 
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 9bcedd1..94010c8 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -33,6 +33,11 @@ VLC_CONF_OPT += \
- 	--without-mtp \
- 	--without-opencv
- 
-+# Building static and shared doesn't work, so force static off.
-+ifeq ($(BR2_PREFER_STATIC_LIB),)
-+VLC_CONF_OPT += --disable-static
-+endif
+diff --git a/package/vlc/vlc-0003-automake-add-subdir-objects-option.patch b/package/vlc/vlc-0003-automake-add-subdir-objects-option.patch
+new file mode 100644
+index 0000000..cea6a38
+--- /dev/null
++++ b/package/vlc/vlc-0003-automake-add-subdir-objects-option.patch
+@@ -0,0 +1,22 @@
++automake: add subdir-objects option
 +
- # Set powerpc altivec appropriately
- ifeq ($(BR2_powerpc_7400)$(BR2_powerpc_7450)$(BR2_powerpc_970),y)
- VCL_CONF_OPT += --enable-altivec
-@@ -209,7 +214,9 @@ else
- VLC_CONF_OPT += --without-libxml2
- endif
- 
--ifeq ($(BR2_PACKAGE_LIVE555),y)
-+# live555 installs a static library only, and vlc tries to link it into a
-+# shared library - which doesn't work. So only enable live555 if static.
-+ifeq ($(BR2_PACKAGE_LIVE555)$(BR2_PREFER_STATIC_LIB),yy)
- VLC_CONF_OPT += --enable-live555
- VLC_DEPENDENCIES += live555
- VLC_CONF_ENV += \
++Our version of automake warns if this option is enabled and source files
++in subdirectories are used.
++
++It doesn't really seems to have a noticable effect on the build, but it
++does remove a lot of annoying warnings.
++
++Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
++
++diff -Nrup vlc-2.1.2.orig/configure.ac vlc-2.1.2/configure.ac
++--- vlc-2.1.2.orig/configure.ac	2014-02-27 00:22:19.512944952 +0100
+++++ vlc-2.1.2/configure.ac	2014-02-27 00:24:21.360940651 +0100
++@@ -24,7 +24,7 @@ AC_CANONICAL_BUILD
++ AC_CANONICAL_HOST
++ AC_PRESERVE_HELP_ORDER
++ 
++-AM_INIT_AUTOMAKE(tar-ustar color-tests foreign)
+++AM_INIT_AUTOMAKE(tar-ustar color-tests foreign subdir-objects)
++ AC_CONFIG_HEADERS([config.h])
++ 
++ # Disable with "./configure --disable-silent-rules" or "make V=1"
