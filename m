@@ -1,32 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Feb 2014 08:30:10 +0100
-Subject: [Buildroot] [PATCH] ramsmp: not available on !MMU, needs fork
-Message-ID: <1393486210-1391-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Thu, 27 Feb 2014 08:35:03 +0100
+Subject: [Buildroot] [PATCH] gcc: fix xtensa overlay application
+In-Reply-To: <1393477640-14319-1-git-send-email-jcmvbkbc@gmail.com>
+References: <1393477640-14319-1-git-send-email-jcmvbkbc@gmail.com>
+Message-ID: <20140227083503.1c07d270@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
+Dear Max Filippov,
 
-  http://autobuild.buildroot.org/results/aaa/aaa7f8e5ec72ce69805d6c1a5cde5ff47e1c118e/
+On Thu, 27 Feb 2014 09:07:20 +0400, Max Filippov wrote:
+> gcc build scripts use wrong variable name to specify xtensa overlay
+> application command. As a result gcc is built with the default overlay,
+> which leads to obscure failures later in the build process.
+> 
+> xtensa toolchain needs an additional configuration for a specific core
+> variant we're building for. This configuration is called 'overlay' and
+> is an archive with files for binutils, gcc and gdb that replace
+> corresponding files in toolchain components.
+> 
+> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/ramsmp/Config.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/ramsmp/Config.in b/package/ramsmp/Config.in
-index c379bb1..ecab6a4 100644
---- a/package/ramsmp/Config.in
-+++ b/package/ramsmp/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_RAMSMP
- 	bool "ramspeed/smp"
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  RAMspeed/SMP is a free open source command line utility
- 	  to measure cache and memory performance of multiprocessor machines.
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -- 
-1.8.3.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
