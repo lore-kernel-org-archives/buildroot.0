@@ -1,107 +1,63 @@
-From: Marco Trapanese <marcotrapanese@gmail.com>
-Date: Thu, 27 Feb 2014 07:11:21 +0100
-Subject: [Buildroot] ipv6 and eglibc
-In-Reply-To: <20140218094655.27e2a040@skate>
-References: <53031C60.6020803@gmail.com> <20140218094655.27e2a040@skate>
-Message-ID: <530ED709.2090409@gmail.com>
+From: =?UTF-8?B?UGV0ZXIgS8O8bW1lbA==?= <syntheticpp@gmx.net>
+Date: Thu, 27 Feb 2014 07:14:04 +0100
+Subject: [Buildroot] [PATCH 1/1] ti-gfx: build with GCC 4.8
+In-Reply-To: <20140226221957.GC16780@free.fr>
+References: <1392391790-22941-1-git-send-email-syntheticpp@gmx.net>
+ <20140226221957.GC16780@free.fr>
+Message-ID: <530ED7AC.1060409@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-Thomas,
-here my current package files of postres:
-
-Config.in
-config BR2_PACKAGE_POSTGRES
-     bool "postgres"
-     depends on BR2_INET_IPV6
-     help
-      Postgres SQL server
-
-comment "postgres requires a toolchain with IPV6 support enabled"
-     depends on !BR2_INET_IPV6
-
-postgres.mk
-POSTGRES_VERSION=9.3.2
-POSTGRES_SOURCE=postgresql-$(POSTGRES_VERSION).tar.gz
-POSTGRES_SITE=http://ftp.postgresql.org/pub/source/v$(POSTGRES_VERSION)/($POSTGRES_SOURCE)
-POSTGRES_CONF_OPT=--with-system-tzdata=/usr/share/zoneinfo
-POSTGRES_DEPENDENCIES=readline zlib
-
-$(eval $(autotool-package))
-
-
-I added the source item in the main Config.in and I selected the 
-"postgres" package in the nconfig menu.
-However, I can't see any reference to it neither in the Makefile nor in 
-the build directory (of course after a make clean all cycle).
-
-I read the guide at the autotools-based packages but it seems it doesn't 
-try at all to download and compile it. What should I check to be sure 
-buildroot understand it has to?
-
-By the way my .config file contains the following:
-
-BR2_PACKAGE_POSTGRES=y
-
-
-Thanks!
-Marco
-
-
-
-
-Il 18/02/2014 09:46, Thomas Petazzoni ha scritto:
-> Dear Marco Trapanese,
+On 26.02.2014 23:19, Yann E. MORIN wrote:
+> Peter, All,
 >
-> On Tue, 18 Feb 2014 09:40:00 +0100, Marco Trapanese wrote:
+> On 2014-02-14 16:29 +0100, Peter K?mmel spake thusly:
+>> In older kernels clk_disable() is a void function.
 >
->> I'm trying to add the postgres package, starting with this hints:
+> Not only in older kernels, but in recent kernels, too.
+>
+> For example, in v3.14-rc4:
+>
+>      $ git grep 'void clk_disable' include
+>      include/linux/clk.h:void clk_disable(struct clk *clk);
+>
+>> Signed-off-by: Peter K?mmel <syntheticpp@gmx.net>
+>> ---
+>>   package/ti-gfx/ti-gfx-newclkapi.patch | 4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
 >>
->> http://www.slideshare.net/jerome42/create-lightweight-docker-containers-with-buildroot
->>
->> I'm using the eglibc in order to enable the eglsf support for Qt5.
->> Postgresql requires the BR2_TOOLCHAIN_BUILDROOT_INET_IPV6.
->>
->> Searching for this keyword I see this:
->>
->> Symbol: BR2_TOOLCHAIN_BUILDROOT_INET_IPV6 [=n] ?
->> Type : boolean
->> Prompt: Enable IPv6 support
->> Location:
->> -> Toolchain
->> Defined at package/uclibc/Config.in:70
->> Depends on: BR2_TOOLCHAIN_BUILDROOT [=y] &&
->> BR2_TOOLCHAIN_BUILDROOT_UCLIBC [=n]
->> Selects: BR2_INET_IPV6 [=y] ?
->>
->> I guess because I'm using eglibc instead of uclibc.
-> This is because what J?r?me (who happens to be my cousin) did was
-> not completely correct (and I've Cc'ed J?r?me so he gets this
-> feedback!).
+>> diff --git a/package/ti-gfx/ti-gfx-newclkapi.patch b/package/ti-gfx/ti-gfx-newclkapi.patch
+>> index 8f50c7e..29ad20d 100644
+>> --- a/package/ti-gfx/ti-gfx-newclkapi.patch
+>> +++ b/package/ti-gfx/ti-gfx-newclkapi.patch
+>> @@ -14,7 +14,7 @@ Index: ti-gfx-4_09_00_01/GFX_Linux_KM/services4/system/omap3630/sysutils_linux.c
+>>   +#if LINUX_VERSION_CODE < KERNEL_VERSION(3,2,0)
+>>   +int clk_disable_unprepare(struct clk *clk)
+>>   +{
+>> -+	return clk_disable(clk);
+>> ++	clk_disable(clk); return 0;
+>>   +}
+>>   +#elif LINUX_VERSION_CODE < KERNEL_VERSION(3,3,0)
+>>   +int clk_disable_unprepare(struct clk *clk)
+>> @@ -35,7 +35,7 @@ Index: ti-gfx-4_09_00_01/GFX_Linux_KM/services4/system/omap3630/sysutils_linux.c
+>>   +#if LINUX_VERSION_CODE < KERNEL_VERSION(3,2,0)
+>>   +int clk_prepare_enable(struct clk *clk)
+>>   +{
+>> -+	return clk_enable(clk);
+>> ++	clk_enable(clk); return 0;
 >
-> Having a dependency on BR2_TOOLCHAIN_BUILDROOT_INET_IPV6 in a package
-> is incorrect, as it only works with the internal toolchain backend,
-> when building uClibc toolchains.
+> But why did you change clk_enable too? As far as I can see, it always
+> returned an int, for as long as it existed. Eg. in v2.6.19:
+
+Yes, this change was wrong.
+
 >
-> Instead, he should have read the great Buildroot documentation at
-> http://buildroot.org/downloads/manual/manual.html#dependencies-target-toolchain-options :-)
+>      $ git grep 'int clk_enable' include
+>      include/linux/clk.h:int clk_enable(struct clk *clk);
 >
-> So, Marco, just modify the line:
+> Regards,
+> Yann E. MORIN.
 >
-> 	depends on BR2_TOOLCHAIN_BUILDROOT_INET_IPV6
->
-> by:
->
-> 	depends on BR2_INET_IPV6
->
-> Also, please submit patches to add Postgresql support. Instead of
-> having people following the not-completely correct tutorial of J?r?me,
-> we would have Postgresql support in Buildroot itself.
->
-> Thanks!
->
-> Thomas
