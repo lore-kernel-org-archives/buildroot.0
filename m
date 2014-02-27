@@ -1,31 +1,54 @@
-From: Massimiliano Marretta <max@marretta.com>
-Date: Thu, 27 Feb 2014 09:22:05 +0100
-Subject: [Buildroot] Qt5 and gpu-viv-bin-mx6q problem
-Message-ID: <CACP2RPZb4V-hv61+eSq_pAaah8jmzXCFVr7hMN_jR=VzQDzFOA@mail.gmail.com>
+From: Simon Dawson <spdawson@gmail.com>
+Date: Thu, 27 Feb 2014 08:24:21 +0000
+Subject: [Buildroot] [PATCH] vlc: add a patch to remove autoreconf
+	warnings
+In-Reply-To: <1393457442-26456-1-git-send-email-arnout@mind.be>
+References: <1393457442-26456-1-git-send-email-arnout@mind.be>
+Message-ID: <CAHt8ZCPZW_XnW22v5TVSR8jR-m=iMZh8wKArhKSvGEtn2-KhhQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear,
+On 26 February 2014 23:30, Arnout Vandecappelle (Essensium/Mind)
+<arnout@mind.be> wrote:
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+>  ...c-0003-automake-add-subdir-objects-option.patch | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
+>  create mode 100644 package/vlc/vlc-0003-automake-add-subdir-objects-option.patch
+>
+> diff --git a/package/vlc/vlc-0003-automake-add-subdir-objects-option.patch b/package/vlc/vlc-0003-automake-add-subdir-objects-option.patch
+> new file mode 100644
+> index 0000000..cea6a38
+> --- /dev/null
+> +++ b/package/vlc/vlc-0003-automake-add-subdir-objects-option.patch
+> @@ -0,0 +1,22 @@
+> +automake: add subdir-objects option
+> +
+> +Our version of automake warns if this option is enabled and source files
+> +in subdirectories are used.
+> +
+> +It doesn't really seems to have a noticable effect on the build, but it
+> +does remove a lot of annoying warnings.
+> +
+> +Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> +
+> +diff -Nrup vlc-2.1.2.orig/configure.ac vlc-2.1.2/configure.ac
+> +--- vlc-2.1.2.orig/configure.ac        2014-02-27 00:22:19.512944952 +0100
+> ++++ vlc-2.1.2/configure.ac     2014-02-27 00:24:21.360940651 +0100
+> +@@ -24,7 +24,7 @@ AC_CANONICAL_BUILD
+> + AC_CANONICAL_HOST
+> + AC_PRESERVE_HELP_ORDER
+> +
+> +-AM_INIT_AUTOMAKE(tar-ustar color-tests foreign)
+> ++AM_INIT_AUTOMAKE(tar-ustar color-tests foreign subdir-objects)
+> + AC_CONFIG_HEADERS([config.h])
+> +
+> + # Disable with "./configure --disable-silent-rules" or "make V=1"
+> --
+> 1.9.0
 
-I have some problem to obtain a buildroot with Qt5 and gpu-viv-bin-mx6q.
-Where is the correct combination of toolchain and floating point strategy ?
-
-I try some combination of toolchains with the last stable version of
-buildroot (2013.11).
-
-- If I use the last codebanch toolchain the gpu-viv-bin-mx6q examples and
-the Qt5 qmlscene crash with segmentation fault.
-- If I use the last buildroot linaro toolchain 4.8-2013.09, the system not
-start because the kernel is to old ( 3.0.35 ).
-- If I use the toolchain linaro-4.7-2013.01 the Qt5 qmlscene exit without
-message and gpu-viv-bin-mx6q examples not start with the message program
-not found.
-
-Best Regards,
-Massimiliano Marretta
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140227/291fdf61/attachment.html>
+Acked-by: Simon Dawson <spdawson@gmail.com>
+Tested-by: Simon Dawson <spdawson@gmail.com>
