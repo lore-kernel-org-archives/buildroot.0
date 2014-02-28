@@ -1,26 +1,26 @@
-From: Frank Ihle <frank.ihle@hs-offenburg.de>
-Date: Fri, 28 Feb 2014 09:05:02 +0100
-Subject: [Buildroot] Antw: Re:  In Buildroot, how to compile kernel modules
-In-Reply-To: <530E2546.6000404@mind.be>
-References: <530C6AB2020000460004B173@gwia2.rz.hs-offenburg.de>
- <20140225102301.GA6130@trismegisto.universo>
- <530C80B0020000460004B17F@gwia2.rz.hs-offenburg.de>
- <530CFFD2.4040606@mind.be>
- <530DA66C020000460004B1F9@gwia2.rz.hs-offenburg.de>
- <530E2546.6000404@mind.be>
-Message-ID: <5310513E020000460004B33E@gwia2.rz.hs-offenburg.de>
+From: =?ISO-8859-1?Q?L=E9vai_Tam=E1s?= <levai.tamas@t-online.hu>
+Date: Fri, 28 Feb 2014 09:01:08 +0100
+Subject: [Buildroot] [PATCH] grep: bump version to 2.18
+Message-ID: <53104244.8010305@t-online.hu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks for the help I'll try that pretty soon. I guess this could get a nice feature in buildroot, if you can tell buildroot where the .c file is located and which parameters should be used and then the program then creates the module to a specific directory in the image.
+Signed-off-by: Tamas Levai <levai.tamas@t-online.hu>
+---
+  package/grep/grep.mk | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Kind Regards
+--- a/package/grep/grep.mk
++++ b/package/grep/grep.mk
+@@ -4,7 +4,7 @@
+#
+################################################################################
 
-Frank
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140228/f18606cb/attachment.html>
+-GREP_VERSION = 2.16
++GREP_VERSION = 2.18
+  GREP_SITE = $(BR2_GNU_MIRROR)/grep
+  GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
+  GREP_LICENSE = GPLv3+
