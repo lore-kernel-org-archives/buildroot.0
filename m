@@ -1,96 +1,79 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Fri, 28 Feb 2014 13:34:11 -0000
-Subject: [Buildroot] [git commit] php-zmq: new package
-Message-ID: <20140228133410.E8B1B9BA7B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] php-yaml: new package
+Message-ID: <20140228133410.F370A9BC4A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=efeda1bc487339beeeb9a1b58ab1fb241da6f548
+commit: http://git.buildroot.net/buildroot/commit/?id=534039b3297042acb632652469019347b9966700
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in          |   10 ++++++++++
- package/php-zmq/Config.in  |   17 +++++++++++++++++
- package/php-zmq/php-zmq.mk |   25 +++++++++++++++++++++++++
- 3 files changed, 52 insertions(+), 0 deletions(-)
+ package/Config.in            |    1 +
+ package/php-yaml/Config.in   |    8 ++++++++
+ package/php-yaml/php-yaml.mk |   26 ++++++++++++++++++++++++++
+ 3 files changed, 35 insertions(+), 0 deletions(-)
 
 diff --git a/package/Config.in b/package/Config.in
-index fca61d6..9041059 100644
+index 9041059..8998882 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -394,6 +394,16 @@ menu "Perl libraries/modules"
+@@ -397,6 +397,7 @@ source "package/php/Config.in"
+ if BR2_PACKAGE_PHP
+ if !BR2_PREFER_STATIC_LIB
+ menu "External php extensions"
++source "package/php-yaml/Config.in"
+ source "package/php-zmq/Config.in"
  endmenu
  endif
- source "package/php/Config.in"
-+if BR2_PACKAGE_PHP
-+if !BR2_PREFER_STATIC_LIB
-+menu "External php extensions"
-+source "package/php-zmq/Config.in"
-+endmenu
-+endif
-+if BR2_PREFER_STATIC_LIB
-+comment "External PHP extensions need a toolchain w/ dynamic library"
-+endif
-+endif
- source "package/python/Config.in"
- if BR2_PACKAGE_PYTHON
- menu "external python modules"
-diff --git a/package/php-zmq/Config.in b/package/php-zmq/Config.in
+diff --git a/package/php-yaml/Config.in b/package/php-yaml/Config.in
 new file mode 100644
-index 0000000..f32b5a3
+index 0000000..8d09ce2
 --- /dev/null
-+++ b/package/php-zmq/Config.in
-@@ -0,0 +1,17 @@
-+comment "php-zmq needs a toolchain w/ C++, IPv6, largefile, wchar, threads"
-+	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_INET_IPV6 && BR2_LARGEFILE \
-+		&& BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
-+
-+config BR2_PACKAGE_PHP_ZMQ
-+	bool "php-zmq"
++++ b/package/php-yaml/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PHP_YAML
++	bool "php-yaml"
 +	depends on BR2_PACKAGE_PHP
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_INET_IPV6
-+	depends on BR2_LARGEFILE # util-linux
-+	depends on BR2_USE_WCHAR # util-linux
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_ZEROMQ
++	select BR2_PACKAGE_LIBYAML
 +	help
-+	  ZeroMQ messaging bindings for PHP
++	  PHP YAML-1.1 parser and emitter.
 +
-+	  http://pecl.php.net/package/zmq
-diff --git a/package/php-zmq/php-zmq.mk b/package/php-zmq/php-zmq.mk
++	  http://pecl.php.net/package/yaml
+diff --git a/package/php-yaml/php-yaml.mk b/package/php-yaml/php-yaml.mk
 new file mode 100644
-index 0000000..2b48a63
+index 0000000..a53e012
 --- /dev/null
-+++ b/package/php-zmq/php-zmq.mk
-@@ -0,0 +1,25 @@
++++ b/package/php-yaml/php-yaml.mk
+@@ -0,0 +1,26 @@
 +################################################################################
 +#
-+# php-zmq
++# php-yaml
 +#
 +################################################################################
 +
-+PHP_ZMQ_VERSION = 1.1.2
-+PHP_ZMQ_SOURCE = zmq-$(PHP_ZMQ_VERSION).tgz
-+PHP_ZMQ_SITE = http://pecl.php.net/get
++PHP_YAML_VERSION = 1.1.1
++PHP_YAML_SOURCE = yaml-$(PHP_YAML_VERSION).tgz
++PHP_YAML_SITE = http://pecl.php.net/get
++PHP_YAML_CONF_OPT = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
++	--with-yaml=$(STAGING_DIR)/usr
 +# phpize does the autoconf magic
-+PHP_ZMQ_DEPENDENCIES = php zeromq host-autoconf host-pkgconf
-+PHP_ZMQ_CONF_OPT = --with-php-config=$(STAGING_DIR)/usr/bin/php-config
-+PHP_ZMQ_LICENSE = BSD-3c
-+PHP_ZMQ_LICENSE_FILES = LICENSE
++PHP_YAML_DEPENDENCIES = libyaml php host-autoconf
++PHP_YAML_LICENSE = MIT
++PHP_YAML_LICENSE_FILES = LICENSE
 +
-+define PHP_ZMQ_PHPIZE
++define PHP_YAML_PHPIZE
 +	(cd $(@D); \
 +		PHP_AUTOCONF=$(HOST_DIR)/usr/bin/autoconf \
 +		PHP_AUTOHEADER=$(HOST_DIR)/usr/bin/autoheader \
 +		$(STAGING_DIR)/usr/bin/phpize)
 +endef
 +
-+PHP_ZMQ_PRE_CONFIGURE_HOOKS += PHP_ZMQ_PHPIZE
++PHP_YAML_PRE_CONFIGURE_HOOKS += PHP_YAML_PHPIZE
 +
 +$(eval $(autotools-package))
