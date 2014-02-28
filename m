@@ -1,34 +1,26 @@
-From: Marco Trapanese <marcotrapanese@gmail.com>
-Date: Fri, 28 Feb 2014 08:57:29 +0100
-Subject: [Buildroot] raspberry pi, Qt5 and audio output
-Message-ID: <53104169.90506@gmail.com>
+From: Frank Ihle <frank.ihle@hs-offenburg.de>
+Date: Fri, 28 Feb 2014 09:05:02 +0100
+Subject: [Buildroot] Antw: Re:  In Buildroot, how to compile kernel modules
+In-Reply-To: <530E2546.6000404@mind.be>
+References: <530C6AB2020000460004B173@gwia2.rz.hs-offenburg.de>
+ <20140225102301.GA6130@trismegisto.universo>
+ <530C80B0020000460004B17F@gwia2.rz.hs-offenburg.de>
+ <530CFFD2.4040606@mind.be>
+ <530DA66C020000460004B1F9@gwia2.rz.hs-offenburg.de>
+ <530E2546.6000404@mind.be>
+Message-ID: <5310513E020000460004B33E@gwia2.rz.hs-offenburg.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-with buildroot Buildroot 2014.02-rc3-00017-g29e5833 and the attached 
-.config file I'm able to run Qt5 + webkit application on the RPi.
-Still I cannot execute any audio file using Qt5 Multimedia.
+Thanks for the help I'll try that pretty soon. I guess this could get a nice feature in buildroot, if you can tell buildroot where the .c file is located and which parameters should be used and then the program then creates the module to a specific directory in the image.
 
-I get a warning like this:
+Kind Regards
 
-defaultServiceProvider::requestService(): no service found for - 
-"org.qt-project.qt.mediaplayer"
-
-Anyway I can play any file using aplay, or other players.
-Perhaps I miss some qt-related stuff... did someone run into the same 
-problem?
-
-Thanks!
-Marco
+Frank
 
 -------------- next part --------------
-A non-text attachment was scrubbed...
-Name: .config
-Type: application/xml
-Size: 49706 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140228/b6a084b9/attachment.wsdl>
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140228/f18606cb/attachment.html>
