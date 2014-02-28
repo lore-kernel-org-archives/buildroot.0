@@ -1,32 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Fri, 28 Feb 2014 13:34:12 -0000
-Subject: [Buildroot] [git commit] git: bump to version 1.8.5.4
-Message-ID: <20140228133411.2EF859BBF9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] gst1-plugins-bad: bump version
+Message-ID: <20140228133410.B99F49BA7B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=591b02ca7b47fb61a523e9db3d60350d0637b2cc
+commit: http://git.buildroot.net/buildroot/commit/?id=7a0570dca4a77214f659040305db08ffa45ece49
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/git/git.mk |    2 +-
+ .../gst1-plugins-bad/gst1-plugins-bad.mk           |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/git/git.mk b/package/git/git.mk
-index e2df3a0..63862f2 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index 0d9a108..046f6bc 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GIT_VERSION         = 1.8.5.3
-+GIT_VERSION         = 1.8.5.4
- GIT_SITE            = http://git-core.googlecode.com/files/
- GIT_LICENSE         = GPLv2 LGPLv2.1+
- GIT_LICENSE_FILES   = COPYING LGPL-2.1
+-GST1_PLUGINS_BAD_VERSION = 1.2.2
++GST1_PLUGINS_BAD_VERSION = 1.2.3
+ GST1_PLUGINS_BAD_SOURCE = gst-plugins-bad-$(GST1_PLUGINS_BAD_VERSION).tar.xz
+ GST1_PLUGINS_BAD_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-bad
+ GST1_PLUGINS_BAD_LICENSE_FILES = COPYING COPYING.LIB
