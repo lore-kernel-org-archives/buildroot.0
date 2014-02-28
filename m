@@ -1,71 +1,57 @@
-From: Massimiliano Marretta <max@marretta.com>
-Date: Fri, 28 Feb 2014 10:12:25 +0100
-Subject: [Buildroot] Qt5 and gpu-viv-bin-mx6q problem
-Message-ID: <CACP2RPYESsJz+mA1n-y81yinGB0AQCJ5o2bN6SQiXnYYM2XKzw@mail.gmail.com>
+From: Thierry Bultel <tbultel@free.fr>
+Date: Fri, 28 Feb 2014 11:42:54 +0100
+Subject: [Buildroot] Using same headers as kernel
+Message-ID: <5310682E.7050504@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Eric,
+Hi,
 
-many thanks for the suggestions.
+currently, it is possible to select the kernel version as same as 
+headers, through the BR2_LINUX_KERNEL_SAME_AS_HEADERS
+I would like to invert that logic, I found more convenient and intuitive 
+to aim a kernel version, and say that the toolchain
+is built with the headers for that version.
 
-I use the wandboard kernel version 3.0.35_4.1.0.
-I have apply your patch in my buildroot version and now with the linaro hf
-toolchain the gpu-viv-bin-mx6q examples work correctly.
-Unfortunately qmlscene exit without any message (both console and fb). Qt5
-work only with sf ?
+Moreover, it is currently not feasible to choose kernel headers from a 
+git location, thus the user has to manually create a snapshot.
 
-Why the patch is not present in the last buildroot version 14.02 ?
+I have a patch, that works ... almost.
+It consists of adding a BR2_LINUX_HEADERS_SAME_AS_KERNEL (that makes the 
+BR2_LINUX_KERNEL_SAME_AS_HEADERS unselectable of course),
+copying dl/source/version definitions from linux.mk,
+and add a dependency to linux-patch in linux-headers.mk, a little glue, 
+and it basically does the job.
 
-Regards,
-Massimiliano.
+But, when the Xenomai extension is selected, then "linux" depends on it, 
+and things are doing bad.
+Namely xenomai (indirectly) depends on linux-headers (the chain is 
+xenomai->udev->linux-utils->busybox),
+leading to a chicken and egg situation.
 
+I would not have that problem, if the dependencies were more ~layered~, 
+I mean, if linux-patch was depending on xenomai-patch
+instead of the whole package build.
 
-2014-02-28 1:11 GMT+01:00 Eric Nelson <eric.nelson@boundarydevices.com>:
+By the way, why is the order for execution:
 
-> Hi Massimiliano,
->
-> On 02/27/2014 02:40 PM, Massimiliano Marretta wrote:
->
->> Can I use the gpu-viv-bin-mx6q-3.5.7-1.0.0-hfp.bin with the kernel
->> version 3.0.35  ?
->>
->>
-> Unfortunately, saying "3.0.35" isn't specific enough. The first
-> few releases (what Freescale referred to as 1.0.0, 1.1.0, and 4.0.0)
-> won't support the badly-named 3.5.7-1.0.0 GPU binaries.
->
-> For that, you need the updates that came with the 3.0.35_4.1.0
-> release.
->
-> Clear, huh?
->
-> If you have a commit id in your source tree for the last Freescale
-> update we (or you) can likely pin-point it with "git branch --contains".
->
-> If you started with one of the older branches, it's likely that
-> your patches will forward-port pretty easily. None of the 3.0.35
-> releases from Freescale had any major re-structuring.
->
-> Regards,
->
->
-> Eric
->
+source, depends, extract, patch
 
+Could that be:
 
+source, extract, patch, depends
 
--- 
-Massimiliano Marretta
-Via Zuccola 11
-41015 Nonantola (Mo) - Italy
-tel: +39 347 5340305
-skype: mmarretta
- *mailto:max at marretta.com* <max@marretta.com>
-*web:www.marretta.com* <http://www.marretta.com/>
+instead ?
+
+How could I workaround the problem I have, without being to intrusive in 
+the existing logics ?
+
+Regards
+Thierry
+
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140228/da5c0bbd/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140228/a7366465/attachment.html>
