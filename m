@@ -1,57 +1,44 @@
-From: Thierry Bultel <tbultel@free.fr>
-Date: Fri, 28 Feb 2014 11:42:54 +0100
-Subject: [Buildroot] Using same headers as kernel
-Message-ID: <5310682E.7050504@free.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 28 Feb 2014 13:01:11 +0000 (UTC)
+Subject: [Buildroot] [Bug 6842] Checking external toolchain for eabihf
+In-Reply-To: <bug-6842-163@https.bugs.busybox.net/>
+References: <bug-6842-163@https.bugs.busybox.net/>
+Message-ID: <20140228130111.AE5059BC4F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+https://bugs.busybox.net/show_bug.cgi?id=6842
 
-currently, it is possible to select the kernel version as same as 
-headers, through the BR2_LINUX_KERNEL_SAME_AS_HEADERS
-I would like to invert that logic, I found more convenient and intuitive 
-to aim a kernel version, and say that the toolchain
-is built with the headers for that version.
+--- Comment #8 from Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> 2014-02-28 13:01:10 UTC ---
+Config file for toolchain:
+BR2_arm=y
+BR2_cortex_a8=y
+BR2_ARM_EABIHF=y
+BR2_ARM_FPU_VFPV3=y
+BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
+BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
+BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
+BR2_BINUTILS_VERSION_2_24=y
+BR2_GCC_VERSION_4_8_X=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_ENABLE_LOCALE_PURGE=y
+BR2_ENABLE_LOCALE_WHITELIST="C en_US de "
 
-Moreover, it is currently not feasible to choose kernel headers from a 
-git location, thus the user has to manually create a snapshot.
 
-I have a patch, that works ... almost.
-It consists of adding a BR2_LINUX_HEADERS_SAME_AS_KERNEL (that makes the 
-BR2_LINUX_KERNEL_SAME_AS_HEADERS unselectable of course),
-copying dl/source/version definitions from linux.mk,
-and add a dependency to linux-patch in linux-headers.mk, a little glue, 
-and it basically does the job.
+I can indeed confirm that uClibc builds crt1.o from crt1.S, using the command
+line as specified in comment #7.
 
-But, when the Xenomai extension is selected, then "linux" depends on it, 
-and things are doing bad.
-Namely xenomai (indirectly) depends on linux-headers (the chain is 
-xenomai->udev->linux-utils->busybox),
-leading to a chicken and egg situation.
+Looking in the binutils sources (that creates the assembler), I do find
+references to ABI_VFP, but I don't see places where it is actually emitted in
+the build, unless the source assembly file contains a statement
+.eabi_attribute.
 
-I would not have that problem, if the dependencies were more ~layered~, 
-I mean, if linux-patch was depending on xenomai-patch
-instead of the whole package build.
+So the statements made by the submitter seem to be valid.
 
-By the way, why is the order for execution:
-
-source, depends, extract, patch
-
-Could that be:
-
-source, extract, patch, depends
-
-instead ?
-
-How could I workaround the problem I have, without being to intrusive in 
-the existing logics ?
-
-Regards
-Thierry
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140228/a7366465/attachment.html>
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
