@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 28 Feb 2014 10:43:05 -0300
-Subject: [Buildroot] [PATCH] haveged: bump to version 1.9.1
-Message-ID: <1393594985-15152-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri, 28 Feb 2014 10:48:03 -0300
+Subject: [Buildroot] [PATCH] file: bump to version 5.17
+Message-ID: <1393595283-24703-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,21 +10,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/haveged/haveged.mk | 2 +-
+ package/file/file.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/haveged/haveged.mk b/package/haveged/haveged.mk
-index c0e3ba3..88d85cd 100644
---- a/package/haveged/haveged.mk
-+++ b/package/haveged/haveged.mk
+diff --git a/package/file/file.mk b/package/file/file.mk
+index dc7c206..ac9cf55 100644
+--- a/package/file/file.mk
++++ b/package/file/file.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HAVEGED_VERSION = 1.8
-+HAVEGED_VERSION = 1.9.1
- HAVEGED_SITE = http://www.issihosts.com/haveged
- HAVEGED_LICENSE = GPLv3+
- HAVEGED_LICENSE_FILES = COPYING
+-FILE_VERSION = 5.16
++FILE_VERSION = 5.17
+ FILE_SITE = ftp://ftp.astron.com/pub/file
+ FILE_DEPENDENCIES = host-file zlib
+ FILE_INSTALL_STAGING = YES
 -- 
 1.8.3.2
