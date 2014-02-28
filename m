@@ -1,53 +1,59 @@
-From: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
-Date: Fri, 28 Feb 2014 11:29:00 -0500
-Subject: [Buildroot] [PATCH v2] libdrm: bump to 2.4.52 and remove
- useless dependencies on libpciaccess
-In-Reply-To: <20140227234426.324e0e42@skate>
-References: <1393539908-14365-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
- <20140227234426.324e0e42@skate>
-Message-ID: <5310B94C.3020805@savoirfairelinux.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 28 Feb 2014 17:45:56 +0100
+Subject: [Buildroot] [PATCH] legal-info: extract even no-redistribute
+	packages
+Message-ID: <1393605956-18133-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, Bernd
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-On 02/27/2014 05:44 PM, Thomas Petazzoni wrote:
-> Thanks a lot for your contribution!
->
-> However, the patch has two problems:
->
->  *) You added a significant change (bumping the version number), but
->  you kept the Reviewed-by tag of another person. This is typically
->  considered as a bad practice: Arnout had endorsed your previous
->  version, and maybe not this one.
->
->  *) When your commit log title contains something like "do this *AND*
->  do that", it's a strong indication that your patch is not correct, and
->  should instead be split in two patches: one "doing this" and the other
->  "doing that". In this case, the patch "doing that" could carry
->  Arnout's Reviewed-by, since it wouldn't have changed since Arnout's
->  review.
->
-> Would you mind resending an updated version that takes into account
-> those comments?
->
-> Thomas
-Thanks for your advice Thomas, i'll keep it in mind.
+If a package is marked _REDISTRIBUTE = NO, then legal-info will not
+try to extract it first.
 
-On 02/27/2014 05:44 PM, Bernd Kuhls wrote:
-> Hi,
->
-> please have a look at this patch series addressing the same topic:
->
-> http://patchwork.ozlabs.org/patch/317523/
-> http://patchwork.ozlabs.org/patch/317522/
-> http://patchwork.ozlabs.org/patch/317524/
->
-> Regards, Bernd
-Bernd i saw some of your patches but not this one sorry.
-My patch is redundant with Bernd's patches, so you can burn mine :)
+If that package also declares some _LICENSE_FILES, legal-info fails
+if it is the only action we're trying to run:
 
-Regards.
+    $ cat defconfig
+    BR2_INIT_NONE=y
+    BR2_PACKAGE_LIBFSLCODEC=y
+    $ make BR2_DEFCONFIG=$(pwd)/defconfig defconfig
+    $ make libfslcodec-legal-info
+    /bin/sh: /home/ymorin/dev/buildroot/O/legal-info/licenses.txt: No such file or directory
+    make[1]: *** [libfslcodec-legal-info] Error 1
+
+Fix this by always having legal-info extract the archives if one or
+more _LICENSE_FILES are specified.
+
+Fixes:
+    http://autobuild.buildroot.net/results/884/884ba13bb024fd9a4818f3184495b2cccc3f595e/
+    http://autobuild.buildroot.net/results/b6e/b6e152ce117764337c243a9f356b32064106f5c3/
+    http://autobuild.buildroot.net/results/a58/a588b3b535a1259f7bc110a6323e5f33830bcd94/
+    http://autobuild.buildroot.net/results/6d5/6d5da7fe5aee871d98fd5503875453556ccbf854/
+    [...]
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+---
+ package/pkg-generic.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 339c3eb..7b4d04e 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -555,7 +555,8 @@ $(2)_MANIFEST_LICENSE_FILES = $$($(2)_LICENSE_FILES)
+ endif
+ $(2)_MANIFEST_LICENSE_FILES ?= not saved
+ 
+-ifeq ($$($(2)_REDISTRIBUTE),YES)
++# If the package declares _LICENSE_FILES, we need to extract it
++ifneq ($$($(2)_LICENSE_FILES),)
+ ifneq ($$($(2)_SITE_METHOD),local)
+ ifneq ($$($(2)_SITE_METHOD),override)
+ # Packages that have a tarball need it downloaded and extracted beforehand
+-- 
+1.8.3.2
