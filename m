@@ -1,79 +1,71 @@
-From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Fri, 28 Feb 2014 09:22:31 +0100
-Subject: [Buildroot] [PATCH 05/24] luajit: refactor without
-	shared-lib.patch
-In-Reply-To: <CAHXCMMLud0oSuXB1L01GiPv68SCK-7omOQjL6gSzVHvHD3kJSQ@mail.gmail.com>
-References: <1393227301-14874-1-git-send-email-francois.perrad@gadz.org>
- <1393227301-14874-6-git-send-email-francois.perrad@gadz.org>
- <CAHXCMMLud0oSuXB1L01GiPv68SCK-7omOQjL6gSzVHvHD3kJSQ@mail.gmail.com>
-Message-ID: <CAB0FRstTSDCjhg7SsPqGd4TGONwJWLfJ2dwT1KwqppLP3JAF=Q@mail.gmail.com>
+From: Massimiliano Marretta <max@marretta.com>
+Date: Fri, 28 Feb 2014 10:12:25 +0100
+Subject: [Buildroot] Qt5 and gpu-viv-bin-mx6q problem
+Message-ID: <CACP2RPYESsJz+mA1n-y81yinGB0AQCJ5o2bN6SQiXnYYM2XKzw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2014-02-27 10:05 GMT+01:00 Samuel Martin <s.martin49@gmail.com>:
-> Hi Francois,
+Dear Eric,
+
+many thanks for the suggestions.
+
+I use the wandboard kernel version 3.0.35_4.1.0.
+I have apply your patch in my buildroot version and now with the linaro hf
+toolchain the gpu-viv-bin-mx6q examples work correctly.
+Unfortunately qmlscene exit without any message (both console and fb). Qt5
+work only with sf ?
+
+Why the patch is not present in the last buildroot version 14.02 ?
+
+Regards,
+Massimiliano.
+
+
+2014-02-28 1:11 GMT+01:00 Eric Nelson <eric.nelson@boundarydevices.com>:
+
+> Hi Massimiliano,
 >
-> On Mon, Feb 24, 2014 at 8:34 AM, Francois Perrad <fperrad@gmail.com> wrote:
->> the variable BUILDMODE does the job
+> On 02/27/2014 02:40 PM, Massimiliano Marretta wrote:
+>
+>> Can I use the gpu-viv-bin-mx6q-3.5.7-1.0.0-hfp.bin with the kernel
+>> version 3.0.35  ?
 >>
->> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
->> ---
->>  package/luajit/luajit-02-shared-lib.patch |   17 -----------------
->>  package/luajit/luajit.mk                  |    1 +
->>  2 files changed, 1 insertion(+), 17 deletions(-)
->>  delete mode 100644 package/luajit/luajit-02-shared-lib.patch
 >>
->> diff --git a/package/luajit/luajit-02-shared-lib.patch b/package/luajit/luajit-02-shared-lib.patch
->> deleted file mode 100644
->> index 361e5c2..0000000
->> --- a/package/luajit/luajit-02-shared-lib.patch
->> +++ /dev/null
->> @@ -1,17 +0,0 @@
->> -Compile the luajit binary dynamically against the luajit library
->> -
->> -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->> -
->> -Index: b/src/Makefile
->> -===================================================================
->> ---- a/src/Makefile
->> -+++ b/src/Makefile
->> -@@ -669,7 +669,7 @@
->> -
->> - $(LUAJIT_T): $(TARGET_O) $(LUAJIT_O) $(TARGET_DEP)
->> -       $(E) "LINK      $@"
->> --      $(Q)$(TARGET_LD) $(TARGET_ALDFLAGS) -o $@ $(LUAJIT_O) $(TARGET_O) $(TARGET_ALIBS)
->> -+      $(Q)$(TARGET_LD) $(TARGET_ALDFLAGS) -o $@ $(LUAJIT_O) -lluajit -L. $(TARGET_ALIBS)
->> -       $(Q)$(TARGET_STRIP) $@
->> -       $(E) "OK        Successfully built LuaJIT"
->> -
->> diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
->> index 186b3fd..01fbb78 100644
->> --- a/package/luajit/luajit.mk
->> +++ b/package/luajit/luajit.mk
->> @@ -44,6 +44,7 @@ define LUAJIT_BUILD_CMDS
->>                 HOST_CFLAGS="$(HOST_CFLAGS)" \
->>                 HOST_LDFLAGS="$(HOST_LDFLAGS)" \
->>                 $(LUAJIT_NO_LARGEFILE) \
->> +               BUILDMODE=dynamic \
+> Unfortunately, saying "3.0.35" isn't specific enough. The first
+> few releases (what Freescale referred to as 1.0.0, 1.1.0, and 4.0.0)
+> won't support the badly-named 3.5.7-1.0.0 GPU binaries.
 >
-> AFAICS, luajit can be selected if BR2_PREFER_STATIC_LIB=y.
-> How does this play in such a case?
+> For that, you need the updates that came with the 3.0.35_4.1.0
+> release.
 >
-
-I'll add a patch "luajit: handles BR2_PREFER_STATIC_LIB",
-at this time, the dynamic variant is always built.
-
-Fran?ois
-
+> Clear, huh?
+>
+> If you have a commit id in your source tree for the last Freescale
+> update we (or you) can likely pin-point it with "git branch --contains".
+>
+> If you started with one of the older branches, it's likely that
+> your patches will forward-port pretty easily. None of the 3.0.35
+> releases from Freescale had any major re-structuring.
+>
 > Regards,
 >
 >
-> --
-> Samuel
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Eric
+>
+
+
+
+-- 
+Massimiliano Marretta
+Via Zuccola 11
+41015 Nonantola (Mo) - Italy
+tel: +39 347 5340305
+skype: mmarretta
+ *mailto:max at marretta.com* <max@marretta.com>
+*web:www.marretta.com* <http://www.marretta.com/>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140228/da5c0bbd/attachment.html>
