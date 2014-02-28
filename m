@@ -1,18 +1,32 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 28 Feb 2014 17:07:55 -0300
-Subject: [Buildroot] [PATCH] Makefile: ensure system is built even if no
- filesystem image is selected
-In-Reply-To: <1393617927-1661-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1393617927-1661-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <5310EC9B.40204@zacarias.com.ar>
+Date: Fri, 28 Feb 2014 17:42:21 -0300
+Subject: [Buildroot] [PATCH] libmicrohttpd: bump to version 0.9.34
+Message-ID: <1393620141-22543-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/28/2014 05:05 PM, Thomas Petazzoni wrote:
+Adds support for TFO.
 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libmicrohttpd/libmicrohttpd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
+index 965c559..95d066d 100644
+--- a/package/libmicrohttpd/libmicrohttpd.mk
++++ b/package/libmicrohttpd/libmicrohttpd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBMICROHTTPD_VERSION = 0.9.33
++LIBMICROHTTPD_VERSION = 0.9.34
+ LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
+ LIBMICROHTTPD_LICENSE_FILES = COPYING
+ LIBMICROHTTPD_INSTALL_STAGING = YES
+-- 
+1.8.3.2
