@@ -1,8 +1,7 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 28 Feb 2014 17:34:25 +0000
-Subject: [Buildroot] [PATCH] grep: bump version to 2.18 Signed-off-by:
-	Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Message-ID: <1393608865-52833-1-git-send-email-Vincent.Riera@imgtec.com>
+Date: Fri, 28 Feb 2014 17:36:12 +0000
+Subject: [Buildroot] [PATCH v2] grep: bump version to 2.18
+Message-ID: <1393608972-52930-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
