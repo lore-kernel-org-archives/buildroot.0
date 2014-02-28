@@ -1,42 +1,39 @@
 From: Eric Nelson <eric.nelson@boundarydevices.com>
-Date: Thu, 27 Feb 2014 16:50:32 -0700
+Date: Thu, 27 Feb 2014 17:11:00 -0700
 Subject: [Buildroot] Qt5 and gpu-viv-bin-mx6q problem
-In-Reply-To: <530FA36B.1010003@mind.be>
-References: <CACP2RPZb4V-hv61+eSq_pAaah8jmzXCFVr7hMN_jR=VzQDzFOA@mail.gmail.com>
- <530F9D1C.7020100@mind.be> <530FA318.20001@boundarydevices.com>
- <530FA36B.1010003@mind.be>
-Message-ID: <530FCF48.8000401@boundarydevices.com>
+In-Reply-To: <CACP2RPYKf_dVKkiHVsqM4vA-Ox69h0C_Nvt33Q-e5uGP6xDorA@mail.gmail.com>
+References: <CACP2RPYKf_dVKkiHVsqM4vA-Ox69h0C_Nvt33Q-e5uGP6xDorA@mail.gmail.com>
+Message-ID: <530FD414.10003@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/27/2014 01:43 PM, Arnout Vandecappelle wrote:
-> On 02/27/14 21:42, Eric Nelson wrote:
->> Hi Arnout,
->>
->> On 02/27/2014 01:16 PM, Arnout Vandecappelle wrote:
->>> On 02/27/14 09:22, Massimiliano Marretta wrote:
->>>> Dear,
->>>>
->>>> <snip>
->>>>
->>>> - If I use the last buildroot linaro toolchain 4.8-2013.09, the system
->>>> not start because the kernel is to old ( 3.0.35 ).
->>>> - If I use the toolchain linaro-4.7-2013.01 the Qt5 qmlscene exit without
->>>> message and gpu-viv-bin-mx6q examples not start with the message program
->>>> not found.
->>>
->>>    I think that gpu-viv-bin-mx6q are softfp libraries, so they won't work
->>> with Linaro (hardfp) toolchains. I'm surprised that qt5 builds at all in
->>> that case...
->>>
->> The latest patches (on -next) allow for either hardfp or softfp:
->>
->>      http://git.buildroot.net/buildroot/commit/package/freescale-imx/gpu-viv-bin-mx6q?h=next&id=b0b72591d74c1a84b8c1b2e1990a2fe1dfe8c4ab
->
->   Yes, but the OP mentioned that he uses 2013.11 in the text you snipped.
+Hi Massimiliano,
+
+On 02/27/2014 02:40 PM, Massimiliano Marretta wrote:
+> Can I use the gpu-viv-bin-mx6q-3.5.7-1.0.0-hfp.bin with the kernel
+> version 3.0.35  ?
 >
 
-Oops.
+Unfortunately, saying "3.0.35" isn't specific enough. The first
+few releases (what Freescale referred to as 1.0.0, 1.1.0, and 4.0.0)
+won't support the badly-named 3.5.7-1.0.0 GPU binaries.
+
+For that, you need the updates that came with the 3.0.35_4.1.0
+release.
+
+Clear, huh?
+
+If you have a commit id in your source tree for the last Freescale
+update we (or you) can likely pin-point it with "git branch --contains".
+
+If you started with one of the older branches, it's likely that
+your patches will forward-port pretty easily. None of the 3.0.35
+releases from Freescale had any major re-structuring.
+
+Regards,
+
+
+Eric
