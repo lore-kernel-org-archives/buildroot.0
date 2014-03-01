@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Mar 2014 14:47:42 +0100
-Subject: [Buildroot] [PATCH 1/2] readline: bump to version 6.3
-In-Reply-To: <1393534739-7133-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Sat, 1 Mar 2014 14:48:03 +0100
+Subject: [Buildroot] [PATCH 2/2] bash: bump to version 4.3
+In-Reply-To: <1393534739-7133-2-git-send-email-gustavo@zacarias.com.ar>
 References: <1393534739-7133-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140301144742.029f1215@skate>
+ <1393534739-7133-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140301144803.5488a38c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,15 +13,11 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Thu, 27 Feb 2014 17:58:58 -0300, Gustavo Zacarias wrote:
+On Thu, 27 Feb 2014 17:58:59 -0300, Gustavo Zacarias wrote:
+> Switch to external readline support to potentially reduce target size.
+> 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  ...s-link.patch => readline-001-curses-link.patch} |  0
->  package/readline/readline-6.2-pl1.patch            | 29 ----------------------
->  package/readline/readline.mk                       |  5 ++--
->  3 files changed, 3 insertions(+), 31 deletions(-)
->  rename package/readline/{readline-6.2-curses-link.patch => readline-001-curses-link.patch} (100%)
->  delete mode 100644 package/readline/readline-6.2-pl1.patch
 
 Applied, thanks.
 
