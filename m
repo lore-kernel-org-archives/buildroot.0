@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sat,  1 Mar 2014 18:23:05 +0100
-Subject: [Buildroot] [lua V3 4/8] luajit: add host variant
+Date: Sat,  1 Mar 2014 18:23:06 +0100
+Subject: [Buildroot] [lua V3 5/8] luainterpreter: add host variant
 In-Reply-To: <1393694590-29945-1-git-send-email-francois.perrad@gadz.org>
 References: <1393694590-29945-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1393694590-29945-5-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1393694590-29945-6-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,25 +13,22 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/luajit/luajit.mk |    9 +++++++++
- 1 file changed, 9 insertions(+)
+ package/luainterpreter/luainterpreter.mk |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
-index 859425a..cb1d94e 100644
---- a/package/luajit/luajit.mk
-+++ b/package/luajit/luajit.mk
-@@ -62,4 +62,13 @@ define LUAJIT_INSTALL_TARGET_CMDS
- 	$(MAKE) PREFIX="/usr" DESTDIR="$(TARGET_DIR)" LDCONFIG=true -C $(@D) install
- endef
+diff --git a/package/luainterpreter/luainterpreter.mk b/package/luainterpreter/luainterpreter.mk
+index c37d621..976fec8 100644
+--- a/package/luainterpreter/luainterpreter.mk
++++ b/package/luainterpreter/luainterpreter.mk
+@@ -5,8 +5,10 @@
+ #############################################################
  
-+define HOST_LUAJIT_BUILD_CMDS
-+	$(MAKE) PREFIX="/usr" BUILDMODE=static -C $(@D) amalg
-+endef
-+
-+define HOST_LUAJIT_INSTALL_CMDS
-+	$(MAKE) PREFIX="/usr" DESTDIR="$(HOST_DIR)" -C $(@D) install
-+endef
-+
+ LUAINTERPRETER_SOURCE =
++HOST_LUAINTERPRETER_SOURCE =
+ LUAINTERPRETER_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_LUA_INTERPRETER))
+ 
+ LUAINTERPRETER_ABIVER = $(call qstrip,$(BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION))
+ 
  $(eval $(generic-package))
 +$(eval $(host-generic-package))
 -- 
