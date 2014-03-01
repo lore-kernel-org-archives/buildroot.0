@@ -1,41 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 2 Mar 2014 00:30:06 +0100
-Subject: [Buildroot] More work on a package updates checking tool
-In-Reply-To: <CACjG4B+DJSmnY9m_7u4w8cr4NCE61R7SBRQ1G5yecphFoBdpbA@mail.gmail.com>
-References: <CACjG4BJuyTZ=Fbgmt=qiNs+qn1pQt0R6xV+MCw_5CKbc+XFZqg@mail.gmail.com>
- <20131219180239.5a5c6771@skate>
- <CACjG4BKCDV4yqOfjfdnFnPErvGYJtbBraqRvj5H8oPSu-1PYhA@mail.gmail.com>
- <20140202121951.3619d2cf@skate>
- <CACjG4B+DJSmnY9m_7u4w8cr4NCE61R7SBRQ1G5yecphFoBdpbA@mail.gmail.com>
-Message-ID: <20140302003006.63a1a7a9@skate>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun,  2 Mar 2014 00:39:47 +0100
+Subject: [Buildroot] [PATCH 0/6] Lttng packages bump
+Message-ID: <1393717193-19774-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear arnaud aujon,
+Hi all,
 
-On Mon, 3 Feb 2014 09:52:29 +0100, arnaud aujon wrote:
+Here is a short series bumping LTTng related packages to their latest
+version.
 
-> > Do you have any news about this work? It would be really useful to have
-> > this to replace http://autobuild.buildroot.org/stats/, and have the
-> > very useful informations of which packages might be upgraded to a newer
-> > upstream version.
-> >
-> > Have you had some time to work on this? Any progress?
-> 
-> I'm still working on it, I spent some time rewriting it in a more pythonic
-> way.
-> There is still some clean up to do but I will be able to provide a version
-> pretty soon.
+Yours,
+Samuel
 
-Any news? :-)
+Samuel Martin (6):
+  liburcu: bump version to 0.8.3
+  lttng-libust: bump version to 2.4.0
+  lttng-modules: bump version to 2.4.0
+  lttng-tools: bump version to 2.4.0
+  lttng-babeltrace: bump version to 1.2.0
+  liburcu: disable build with gcc-4.8.x on ARM
 
-Thanks!
+ package/liburcu/Config.in                    | 11 +++++++++++
+ package/liburcu/liburcu.mk                   |  6 +++---
+ package/lttng-babeltrace/lttng-babeltrace.mk |  6 +++---
+ package/lttng-libust/Config.in               |  6 ++++++
+ package/lttng-libust/lttng-libust.mk         |  4 ++--
+ package/lttng-modules/lttng-modules.mk       |  2 +-
+ package/lttng-tools/Config.in                |  6 ++++++
+ package/lttng-tools/lttng-tools.mk           |  7 +++----
+ 8 files changed, 35 insertions(+), 13 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+--
+1.9.0
