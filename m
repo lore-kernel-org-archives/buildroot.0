@@ -1,38 +1,45 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat,  1 Mar 2014 20:59:07 +0100
-Subject: [Buildroot] [PATCH v5 0/4] PATH cleanup
-Message-ID: <1393703951-7059-1-git-send-email-s.martin49@gmail.com>
+Date: Sat,  1 Mar 2014 20:59:08 +0100
+Subject: [Buildroot] [PATCH v5 1/4] bustle: use TARGET_MAKE_ENV instead of
+	setting PATH in the make environment
+In-Reply-To: <1393703951-7059-1-git-send-email-s.martin49@gmail.com>
+References: <1393703951-7059-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <1393703951-7059-2-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+TARGET_MAKE_ENV already contains the PATH definition among other useful
+variables.
 
-Another round for this series, with this time, as main change: the
-removing of any intermediat BR_PATH variable, and the export of PATH,
-making the series even shorter. :)
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Yours,
-Samuel** BLURB HERE ***
+---
+changes v4 -> v5:
+- rebase
+- add Acked-by tag
 
-Samuel Martin (4):
-  bustle: use TARGET_MAKE_ENV instead of setting PATH in the make
-    environment
-  Makefile: export PATH including the Buildroot host bindirs
-  Makefile: add $(HOST_DIR)/sbin to the PATH
-  *.mk: remove all occurences of TARGET_PATH and HOST_PATH
+changes v3 -> v4:
+- add this change to the series (ThomasP)
+---
+ package/bustle/bustle.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- Makefile                 |  4 ++++
- fs/ext2/ext2.mk          |  2 +-
- package/Makefile.in      | 13 ++++---------
- package/bustle/bustle.mk |  2 +-
- package/gpm/gpm.mk       |  2 +-
- package/libhid/libhid.mk |  2 +-
- package/pkg-python.mk    |  8 ++------
- package/sdl/sdl.mk       |  2 +-
- 8 files changed, 15 insertions(+), 20 deletions(-)
-
---
+diff --git a/package/bustle/bustle.mk b/package/bustle/bustle.mk
+index 2330c08..7bc3e97 100644
+--- a/package/bustle/bustle.mk
++++ b/package/bustle/bustle.mk
+@@ -11,7 +11,7 @@ BUSTLE_LICENSE_FILES = LICENSE
+ BUSTLE_DEPENDENCIES = libglib2 libpcap host-pkgconf
+ 
+ define BUSTLE_BUILD_CMDS
+-	PATH=$(TARGET_PATH) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
+ 		PCAP_FLAGS='-lpcap' -C $(@D) dist/build/bustle-pcap
+ endef
+ 
+-- 
 1.9.0
