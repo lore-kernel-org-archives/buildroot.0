@@ -1,36 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Mar 2014 20:39:35 +0100
-Subject: [Buildroot] [git commit] bash: always prefix readline
-Message-ID: <20140301194456.1E7409936B@busybox.osuosl.org>
+Date: Sat, 1 Mar 2014 20:40:18 +0100
+Subject: [Buildroot] [git commit] libmicrohttpd: disable curl testcases
+Message-ID: <20140301194456.58FC78AC85@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7a95111e48f5fe387f592463effa233834c6fda1
+commit: http://git.buildroot.net/buildroot/commit/?id=25c438bce1c02775f2c23d8878ab71c3022b0c95
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Always prefix the readline directory otherwise autodetection may pick up
-the host readline when headers are available and target == host (or are
-link-compatible). Fixes:
-http://autobuild.buildroot.org/results/44a/44a962623be757143a3d6d37fc6cd14964094f79/
+They require a toolchain with IPv6. Fixes:
+http://autobuild.buildroot.net/results/edb/edb1b5ee1ffaa6a495b4d7c2976f618c8331b5d2/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/bash/bash.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/libmicrohttpd/libmicrohttpd.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/bash/bash.mk b/package/bash/bash.mk
-index 401f1f2..6c7691f 100644
---- a/package/bash/bash.mk
-+++ b/package/bash/bash.mk
-@@ -12,6 +12,7 @@ BASH_LICENSE = GPLv3+
- BASH_LICENSE_FILES = COPYING
+diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
+index 95d066d..2312a4d 100644
+--- a/package/libmicrohttpd/libmicrohttpd.mk
++++ b/package/libmicrohttpd/libmicrohttpd.mk
+@@ -8,7 +8,7 @@ LIBMICROHTTPD_VERSION = 0.9.34
+ LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
+ LIBMICROHTTPD_LICENSE_FILES = COPYING
+ LIBMICROHTTPD_INSTALL_STAGING = YES
+-LIBMICROHTTPD_CONF_OPT = --disable-spdy
++LIBMICROHTTPD_CONF_OPT = --disable-curl --disable-spdy
  
- BASH_CONF_ENV += \
-+	ac_cv_rl_prefix="$(STAGING_DIR)" \
- 	ac_cv_rl_version="$(READLINE_VERSION)" \
- 	bash_cv_job_control_missing=present \
- 	bash_cv_sys_named_pipes=present \
+ ifeq ($(BR2_PACKAGE_LIBMICROHTTPD_SSL),y)
+ LIBMICROHTTPD_LICENSE = LGPLv2.1+
