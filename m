@@ -1,28 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Mar 2014 14:43:59 +0100
-Subject: [Buildroot] [PATCH 1/1] grep: bump version to 2.18
-In-Reply-To: <1393680064-11021-1-git-send-email-levai.tamas@t-online.hu>
-References: <1393680064-11021-1-git-send-email-levai.tamas@t-online.hu>
-Message-ID: <20140301144359.61d45953@skate>
+Date: Sat, 1 Mar 2014 14:46:09 +0100
+Subject: [Buildroot] [PATCH] lzip: new package
+In-Reply-To: <1393599281-28078-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1393599281-28078-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140301144609.016009bd@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Tam?s L?vai,
+Dear Gustavo Zacarias,
 
-On Sat,  1 Mar 2014 14:21:04 +0100, Tam?s L?vai wrote:
-> Signed-off-by: Tam?s L?vai <levai.tamas@t-online.hu>
-> ---
->  package/grep/grep.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Fri, 28 Feb 2014 11:54:41 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Applied, thanks.
+Since you're adding a host variant of the package, it would be good to
+have some details in the commit log as to why this is necessary.
 
-(There was however no need to send the new patch twice!).
+> +define LZIP_CONFIGURE_CMDS
+> +	(cd $(@D); ./configure \
+> +		CXX="$(TARGET_CXX)" \
+> +		CPPFLAGS="$(TARGET_CPPFLAGS)" \
+> +		CXXFLAGS="$(TARGET_CXXFLAGS)" \
+> +		LDFLAGS="$(TARGET_LDFLAGS)" \
+> +		--prefix=/usr )
+> +
+> +endef
 
-Thanks,
+Useless blank line before endef.
+
+If you're using the generic-package infra, I suppose it's because the
+configure script isn't autotools-based. It would be good to mention
+that in a comment before LZIP_CONFIGURE_CMDS.
+
+Also, what about using TARGET_CONFIGURE_OPTS / HOST_CONFIGURE_OPTS
+instead of passing CXX, CPPFLAGS, CXXFLAGS and LDFLAGS ?
+
+Thanks!
 
 Thomas
 -- 
