@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  1 Mar 2014 15:52:59 +0100
-Subject: [Buildroot] [PATCH 04/13] toolchain/external/custom: add choice to
-	select 'AT_LEAST_XXX' header version
+Date: Sat,  1 Mar 2014 15:53:00 +0100
+Subject: [Buildroot] [PATCH 05/13] package/linux-headers: select appropriate
+	'AT_LEAST_XXX' header version
 In-Reply-To: <cover.1393685422.git.yann.morin.1998@free.fr>
 References: <cover.1393685422.git.yann.morin.1998@free.fr>
-Message-ID: <cce15d527a6ade49df33661e0c6e442ff2ee7b4f.1393685422.git.yann.morin.1998@free.fr>
+Message-ID: <b67e5f54c6b4a106bcb63da55e12d536a863cbbd.1393685422.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,111 +14,155 @@ To: buildroot@busybox.net
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Select the appropriate BR2_TOOLCHAIN_HEADERS_AT_LEAST_XXX options for the
-external, custom toolchain backend.
+internal toolchain backend.
 
-We try to be conservative here, and default to kernel headers 2.6.x.
+For the manualy-specified version, we bring up the choice that sets the
+_AT_LEAST_XXX symbols.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-
+Cc: Paul Cercueil <paul@crapouillou.net>
 ---
-Changes v1 -> v2:
-  - add help entry  (Thomas DS)
----
- toolchain/toolchain-external/Config.in | 79 ++++++++++++++++++++++++++++++++++
- 1 file changed, 79 insertions(+)
+ package/linux-headers/Config.in.host | 82 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 82 insertions(+)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 5981ef2..7a94f5a 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -945,6 +945,85 @@ config BR2_TOOLCHAIN_EXTERNAL_MUSL
- if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index fcecd62..bd15fac 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -17,42 +17,53 @@ choice
+ 	config BR2_KERNEL_HEADERS_3_0
+ 		bool "Linux 3.0.x kernel headers"
+ 		depends on !BR2_arc
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
  
- choice
-+	bool "External toolchain kernel headers series"
-+	depends on BR2_TOOLCHAIN_EXTERNAL_CUSTOM
-+	default BR2_TOOLCHAIN_EXTERNAL_HEADERS_REALLY_OLD
+ 	config BR2_KERNEL_HEADERS_3_2
+ 		bool "Linux 3.2.x kernel headers"
+ 		depends on !BR2_arc
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+ 
+ 	config BR2_KERNEL_HEADERS_3_4
+ 		bool "Linux 3.4.x kernel headers"
+ 		depends on !BR2_arc
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
+ 
+ 	config BR2_KERNEL_HEADERS_3_6
+ 		bool "Linux 3.6.x kernel headers"
+ 		depends on BR2_DEPRECATED_SINCE_2013_05 && !BR2_arc
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_6
+ 
+ 	config BR2_KERNEL_HEADERS_3_7
+ 		bool "Linux 3.7.x kernel headers"
+ 		depends on BR2_DEPRECATED_SINCE_2013_05 && !BR2_arc
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
+ 
+ 	config BR2_KERNEL_HEADERS_3_8
+ 		bool "Linux 3.8.x kernel headers"
+ 		depends on BR2_DEPRECATED_SINCE_2013_08 && !BR2_arc
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
+ 
+ 	config BR2_KERNEL_HEADERS_3_9
+ 		bool "Linux 3.9.x kernel headers"
+ 		depends on BR2_DEPRECATED_SINCE_2013_11
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
+ 
+ 	config BR2_KERNEL_HEADERS_3_10
+ 		bool "Linux 3.10.x kernel headers"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+ 
+ 	config BR2_KERNEL_HEADERS_3_11
+ 		bool "Linux 3.11.x kernel headers"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
+ 
+ 	config BR2_KERNEL_HEADERS_3_12
+ 		bool "Linux 3.12.x kernel headers"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
+ 
+ 	config BR2_KERNEL_HEADERS_3_13
+ 		bool "Linux 3.13.x kernel headers"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
+ 
+ 	config BR2_KERNEL_HEADERS_VERSION
+ 		bool "Manually specified Linux version"
+@@ -65,6 +76,77 @@ config BR2_DEFAULT_KERNEL_VERSION
+ 	  Specify the version you want to use.
+ 	  E.G.: 3.6.10
+ 
++choice
++	bool "Custom kernel headers series"
++	depends on BR2_KERNEL_HEADERS_VERSION
++	default BR2_PACKAGE_HOST_LINUX_HEADERS_REALLY_OLD
 +	help
-+	  Set to the kernel headers version that were used to build
-+	  this external toolchain.
++	  Set to the kernel headers series you manually set above.
 +
 +	  This is used to hide/show some packages that have strict
 +	  requirements on the version of kernel headers.
 +
-+	  If unsure what version your toolchain is using, you can look
-+	  at the value of LINUX_VERSION_CODE in linux/version.h in your
-+	  toolchain. The Linux version is M.m.p, with:
-+	    M = ( LINUX_VERSION_CODE >> 16 ) & 0xFF
-+	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
-+	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
-+
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_13
++config BR2_PACKAGE_HOST_LINUX_HEADERS_3_13
 +	bool "3.13.x"
 +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
 +
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_12
++config BR2_PACKAGE_HOST_LINUX_HEADERS_3_12
 +	bool "3.12.x"
 +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
 +
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_11
++config BR2_PACKAGE_HOST_LINUX_HEADERS_3_11
 +	bool "3.11.x"
 +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
 +
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10
++config BR2_PACKAGE_HOST_LINUX_HEADERS_3_10
 +	bool "3.10.x"
 +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
 +
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_9
++config BR2_PACKAGE_HOST_LINUX_HEADERS_3_9
 +	bool "3.9.x"
 +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
 +
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_8
++config BR2_PACKAGE_HOST_LINUX_HEADERS_3_8
 +	bool "3.8.x"
 +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
 +
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_7
++config BR2_PACKAGE_HOST_LINUX_HEADERS_3_7
 +	bool "3.7.x"
 +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
 +
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_6
++config BR2_PACKAGE_HOST_LINUX_HEADERS_3_6
 +	bool "3.6.x"
 +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_6
 +
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_5
++config BR2_PACKAGE_HOST_LINUX_HEADERS_3_5
 +	bool "3.5.x"
 +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
 +
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_4
++config BR2_PACKAGE_HOST_LINUX_HEADERS_3_4
 +	bool "3.4.x"
 +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
 +
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_3
++config BR2_PACKAGE_HOST_LINUX_HEADERS_3_3
 +	bool "3.3.x"
 +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
 +
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_2
++config BR2_PACKAGE_HOST_LINUX_HEADERS_3_2
 +	bool "3.2.x"
 +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
 +
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_1
++config BR2_PACKAGE_HOST_LINUX_HEADERS_3_1
 +	bool "3.1.x"
 +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
 +
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_0
++config BR2_PACKAGE_HOST_LINUX_HEADERS_3_0
 +	bool "3.0.x"
 +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
 +
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_REALLY_OLD
++config BR2_PACKAGE_HOST_LINUX_HEADERS_REALLY_OLD
 +	bool "2.6.x"
 +
 +endchoice
 +
-+choice
- 	prompt "External toolchain C library"
- 	default BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
- 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
 -- 
 1.8.3.2
