@@ -1,53 +1,56 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat,  1 Mar 2014 18:16:02 +0100
-Subject: [Buildroot] [PATCH] pkg-cmaketargets.mk: do not hardcode absolute
-	path in toolchainfile.cmake
-Message-ID: <1393694162-21952-1-git-send-email-s.martin49@gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sat,  1 Mar 2014 18:23:01 +0100
+Subject: [Buildroot] [lua V3 0/8] lua
+Message-ID: <1393694590-29945-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The patch allows sharing or moving the toolchains.
+delta V3 vs V1 (remaining)
+  - luajit: refactor without dont-strip.patch
+    now with 'true' instead of '@:'
+  - luajit: handles BR2_PREFER_STATIC_LIB
+    new patch
+  - luainterpreter: add host variant
+    new patch, previously included in the luarocks one
+  - ljlinenoise
+    split dependencies for comment statement in Config.in
+  - lua-iconv
+    add missing dependencies in .mk
 
-This is a step toward making the toolchain/sdk relocatable.
+delta V2 vs V1
+  - only a subset for 2014.02
+  - add fix for Blackfin FLAT
 
-Closes #6818
+Francois Perrad (8):
+  luajit: refactor without dont-strip.patch
+  luajit: refactor without shared-lib.patch
+  luajit: handles BR2_PREFER_STATIC_LIB
+  luajit: add host variant
+  luainterpreter: add host variant
+  luarocks: allow to work with host-luainterpreter
+  ljlinenoise: new package
+  lua-iconv: new package
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Cc: Uwe Strempel <u.strempel@googlemail.com>
----
- package/pkg-cmake.mk | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ package/Config.in                         |    2 ++
+ package/ljlinenoise/Config.in             |   16 ++++++++++++++++
+ package/ljlinenoise/ljlinenoise.mk        |   13 +++++++++++++
+ package/lua-iconv/Config.in               |    8 ++++++++
+ package/lua-iconv/lua-iconv.mk            |   14 ++++++++++++++
+ package/luainterpreter/luainterpreter.mk  |    4 ++++
+ package/luajit/luajit-02-shared-lib.patch |   17 -----------------
+ package/luajit/luajit-03-dont-strip.patch |   23 -----------------------
+ package/luajit/luajit.mk                  |   18 +++++++++++++++++-
+ package/luarocks/luarocks.mk              |   18 ++++++++++++------
+ 10 files changed, 86 insertions(+), 47 deletions(-)
+ create mode 100644 package/ljlinenoise/Config.in
+ create mode 100644 package/ljlinenoise/ljlinenoise.mk
+ create mode 100644 package/lua-iconv/Config.in
+ create mode 100644 package/lua-iconv/lua-iconv.mk
+ delete mode 100644 package/luajit/luajit-02-shared-lib.patch
+ delete mode 100644 package/luajit/luajit-03-dont-strip.patch
 
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index f7e454b..4effb15 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -159,16 +159,18 @@ host-cmake-package = $(call inner-cmake-package,host-$(pkgname),$(call UPPERCASE
- $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
- 	@mkdir -p $(@D)
- 	@echo -en "\
-+	get_filename_component(_HOST_DIR \$${CMAKE_CURRENT_LIST_FILE} PATH)\n\
-+	set(_HOST_DIR \"\$${_HOST_DIR}/../../..\")\n\
- 	set(CMAKE_SYSTEM_NAME Linux)\n\
--	set(CMAKE_C_COMPILER $(TARGET_CC_NOCCACHE))\n\
--	set(CMAKE_CXX_COMPILER $(TARGET_CXX_NOCCACHE))\n\
-+	set(CMAKE_C_COMPILER \"\$${_HOST_DIR}/$(subst $(HOST_DIR)/,,$(TARGET_CROSS))gcc\")\n\
-+	set(CMAKE_CXX_COMPILER \"\$${_HOST_DIR}/$(subst $(HOST_DIR)/,,$(TARGET_CROSS))g++\")\n\
- 	set(CMAKE_C_FLAGS \"\$${CMAKE_C_FLAGS} $(TARGET_CFLAGS)\" CACHE STRING \"Buildroot CFLAGS\" FORCE)\n\
- 	set(CMAKE_CXX_FLAGS \"\$${CMAKE_CXX_FLAGS} $(TARGET_CXXFLAGS)\" CACHE STRING \"Buildroot CXXFLAGS\" FORCE)\n\
- 	set(CMAKE_INSTALL_SO_NO_EXE 0)\n\
--	set(CMAKE_PROGRAM_PATH \"$(HOST_DIR)/usr/bin\")\n\
--	set(CMAKE_FIND_ROOT_PATH \"$(STAGING_DIR)\")\n\
-+	set(CMAKE_PROGRAM_PATH \"\$${_HOST_DIR}/usr/bin\")\n\
-+	set(CMAKE_FIND_ROOT_PATH \"\$${_HOST_DIR}/$(STAGING_SUBDIR)\")\n\
- 	set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)\n\
- 	set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)\n\
- 	set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)\n\
--	set(ENV{PKG_CONFIG_SYSROOT_DIR} \"$(STAGING_DIR)\")\n\
-+	set(ENV{PKG_CONFIG_SYSROOT_DIR} \"\$${_HOST_DIR}/$(STAGING_SUBDIR)\")\n\
- 	" > $@
 -- 
-1.9.0
+1.7.9.5
