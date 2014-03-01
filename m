@@ -1,46 +1,54 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 1 Mar 2014 22:41:34 +0100
-Subject: [Buildroot] [lua V3 4/8] luajit: add host variant
-In-Reply-To: <20140301193910.369c3cdd@skate>
-References: <1393694590-29945-1-git-send-email-francois.perrad@gadz.org>
- <1393694590-29945-5-git-send-email-francois.perrad@gadz.org>
- <20140301174721.GB3354@free.fr> <20140301193910.369c3cdd@skate>
-Message-ID: <20140301214134.GF3354@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 1 Mar 2014 23:25:20 +0100
+Subject: [Buildroot] [PATCH 1/1] zeromq: bump to version 4.0.1
+In-Reply-To: <1381509097-5424-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+References: <1381509097-5424-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <20140301232520.4ee4b22b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Dear Jerzy Grzegorek,
 
-On 2014-03-01 19:39 +0100, Thomas Petazzoni spake thusly:
-> On Sat, 1 Mar 2014 18:47:21 +0100, Yann E. MORIN wrote:
-> > I'm really worried about how this is gonna play with the virtual-package
-> > insfrastructure curently pending.
-[--SNIP--]
-> While in general I prefer to merge things as soon as possible, and then
-> improve on top of it later on, in this case, I believe it would be nice
-> if the virtual package infra could from the beginning support the host
-> package case since we know we will need it for the Lua stuff.
+On Fri, 11 Oct 2013 18:31:37 +0200, Jerzy Grzegorek wrote:
+> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+> ---
+>  package/zeromq/zeromq.mk |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Yann, you could just test it with some simple dummy host packages to
-> ensure that your virtual infra works for host packages, and leave it to
-> Fran?ois to rebase his series on top of the infra once it has been
-> merged.
-> 
-> How does it sounds?
+> diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
+> index a624b52..d40bed5 100644
+> --- a/package/zeromq/zeromq.mk
+> +++ b/package/zeromq/zeromq.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -ZEROMQ_VERSION = 3.2.4
+> +ZEROMQ_VERSION = 4.0.1
+>  ZEROMQ_SITE = http://download.zeromq.org/
+>  ZEROMQ_INSTALL_STAGING = YES
+>  ZEROMQ_DEPENDENCIES = util-linux
 
-I already thought about this. But writing a host virtual package that
-actually makes sense is not so easy. But I can try to do so...
+I tried to apply this patch, but unfortunately, it apparently breaks
+the build of mongrel2:
 
-Regards,
-Yann E. MORIN.
+src/superpoll.c: In function ?SuperPoll_poll?:
+src/superpoll.c:229:53: error: ?ZMQ_POLL_MSEC? undeclared (first use in this function)
+src/superpoll.c:229:53: note: each undeclared identifier is reported only once for each function it appears in
 
+I've checked the other reverse dependencies of zeromq, and they seem to
+build fine.
+
+Can you find a solution to the mongrel2 problem, and resubmit the
+appropriate patch?
+
+Thanks!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
