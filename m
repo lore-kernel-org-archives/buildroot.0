@@ -1,48 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Mar 2014 23:47:40 +0100
-Subject: [Buildroot] [git commit] luarocks: remove luainterpreter dependency
-Message-ID: <20140301225012.ADC4D9936F@busybox.osuosl.org>
+Date: Sat, 1 Mar 2014 23:50:30 +0100
+Subject: [Buildroot] [PATCH] luarocks: remove luainterpreter dependency
+In-Reply-To: <1393713055-15107-1-git-send-email-francois.perrad@gadz.org>
+References: <1393713055-15107-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20140301235030.4b2db15e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7669aab6b4c9a479e561d5faa9b72cce1720ccb7
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Francois Perrad,
 
-All packages using the luarocks infrastructure need a dependency on
-luainterpreter, because having the Lua interpreter for the target is
-needed to built native Lua modules. This dependency is already taken
-care of in pkg-luarocks.mk.
+On Sat,  1 Mar 2014 23:30:55 +0100, Francois Perrad wrote:
+> a package using luarocks infrastructure needs a dependency with luainterpreter.
+> this is already done in pkg-luarocks.mk.
+> 
+> here, in luarocks.mk, this dependency causes an issue with 'make legal-info' :
+> luainterpreter and an toolchain are built.
+> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/luarocks/luarocks.mk |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-However, host-luarocks, which is built as a dependency of the extract
-step of any luarocks package, also had a dependency on
-luainterpreter. Not only this was not necessary, but it was causing
-problems with 'make legal-info'. Since 'make legal-info' triggers the
-extraction of all packages, as soon as a luarocks package was enabled,
-it would trigger the build of host-luarocks, itself triggering the
-build of luainterpreter and therefore its dependencies, amongst which
-the entire cross-compilation toolchain.
+Applied, after adding a lot more details in the commit log.
 
-[Thomas: reword commit log to include more detailed explanations.]
+Thanks!
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/luarocks/luarocks.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
-index 86e57d2..926fd04 100644
---- a/package/luarocks/luarocks.mk
-+++ b/package/luarocks/luarocks.mk
-@@ -9,7 +9,7 @@ LUAROCKS_SITE = http://luarocks.org/releases/
- LUAROCKS_LICENSE = MIT
- LUAROCKS_LICENSE_FILES = COPYING
- 
--HOST_LUAROCKS_DEPENDENCIES = host-lua luainterpreter
-+HOST_LUAROCKS_DEPENDENCIES = host-lua
- 
- LUAROCKS_CONFIG_DIR  = $(HOST_DIR)/usr/etc/luarocks
- LUAROCKS_CONFIG_FILE = $(LUAROCKS_CONFIG_DIR)/config-$(LUAINTERPRETER_ABIVER).lua
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
