@@ -1,33 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 2 Mar 2014 00:15:30 +0100
-Subject: [Buildroot] [lua V3 7/8] ljlinenoise: new package
-In-Reply-To: <1393694590-29945-8-git-send-email-francois.perrad@gadz.org>
-References: <1393694590-29945-1-git-send-email-francois.perrad@gadz.org>
- <1393694590-29945-8-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20140302001530.25e0f51d@skate>
+Date: Sun, 2 Mar 2014 00:22:38 +0100
+Subject: [Buildroot] [PATCH 1/2] imagemagick: disable documentation
+In-Reply-To: <1392508668-27561-1-git-send-email-romain.naour@openwide.fr>
+References: <1392508668-27561-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20140302002238.2eb2d717@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+Dear Romain Naour,
 
-On Sat,  1 Mar 2014 18:23:08 +0100, Francois Perrad wrote:
+On Sun, 16 Feb 2014 00:57:47 +0100, Romain Naour wrote:
+> There is no options to disable the documentation,
+> so remove it directly in Makefile.am
 > 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 > ---
->  package/Config.in                  |    1 +
->  package/ljlinenoise/Config.in      |   16 ++++++++++++++++
->  package/ljlinenoise/ljlinenoise.mk |   13 +++++++++++++
->  3 files changed, 30 insertions(+)
->  create mode 100644 package/ljlinenoise/Config.in
->  create mode 100644 package/ljlinenoise/ljlinenoise.mk
+>  .../imagemagick/imagemagick-02-disable-doc.patch   | 47 ++++++++++++++++++++++
+>  1 file changed, 47 insertions(+)
+>  create mode 100644 package/imagemagick/imagemagick-02-disable-doc.patch
 
-Applied, after adjusting the Config.in file to indicate that ljsyscall
-is a runtime dependency only.
+Can you have a look at implementing the solution proposed by Arnout
+(i.e adding a --disable-docs or --disable-documentation configure
+option) ?
 
-Thanks!
+Also, it would be really great if you could push this patch, as well as
+the other patch we already have against imagemagick, to the upstream
+project.
+
+Thanks a lot!
 
 Thomas
 -- 
