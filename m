@@ -1,85 +1,104 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 1 Mar 2014 19:58:45 +0100
-Subject: [Buildroot] [PATCH 09/17] manual: update the virtual package
- section with the new infra-structure
-In-Reply-To: <5adb45b81357b97d8bff1f46a13b73c8cace4546.1393695127.git.yann.morin.1998@free.fr>
-References: <cover.1393695127.git.yann.morin.1998@free.fr>
- <5adb45b81357b97d8bff1f46a13b73c8cace4546.1393695127.git.yann.morin.1998@free.fr>
-Message-ID: <CAHXCMMK-DEM9twKkaf9jyMugDU2TebXs1x527GFRw0vZF7KiVg@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat,  1 Mar 2014 16:04:15 -0300
+Subject: [Buildroot] [PATCHv2] lzip: new package
+Message-ID: <1393700655-14223-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+The host variant is in preparation for possibly some gnu packages
+shipping tar.lz versions only.
+At least ed 1.10 did it (still needed to add extraction support for it).
 
-On Sat, Mar 1, 2014 at 6:32 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> ---
->  docs/manual/adding-packages-virtual.txt | 25 ++++++++-----------------
->  1 file changed, 8 insertions(+), 17 deletions(-)
->
-> diff --git a/docs/manual/adding-packages-virtual.txt b/docs/manual/adding-packages-virtual.txt
-> index 76f5794..7bf3273 100644
-> --- a/docs/manual/adding-packages-virtual.txt
-> +++ b/docs/manual/adding-packages-virtual.txt
-> @@ -1,10 +1,10 @@
->  // -*- mode:doc; -*-
->  // vim: set syntax=asciidoc:
->
-> -[[virtual-package-tutorial]]
-> +Infrastructure for virtual packages
-> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->
-> -Virtual package tutorial
-> -~~~~~~~~~~~~~~~~~~~~~~~~
-> +[[virtual-package-tutorial]]
->
->  In Buildroot, a virtual package is a package whose functionalities are
->  provided by one or more packages, referred to as 'providers'. The virtual
-> @@ -16,6 +16,9 @@ The implementation of this API is different for the 'Allwinner Tech Sunxi' and
->  the 'Texas Instruments OMAP35xx' plaftorms. So +libgles+ will be a virtual
->  package and +sunxi-mali+ and +ti-gfx+ will be the providers.
->
-> ++virtual-package+ tutorial
-> +^^^^^^^^^^^^^^^^^^^^^^^^^^
-> +
->  In the following example, we will explain how to add a new virtual package
->  ('something-virtual') and a provider for it ('some-provider').
->
-> @@ -42,7 +45,7 @@ providers.
->  Virtual package's +*.mk+ file
->  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->
-> -The Makefile +package/something-virtual/something-virtual.mk+ should contain:
-> +The +.mk+ for the virtual package should just evaluate the +virtual-package+ macro:
->
->  ---------------------------
->  01: ################################################################################
-> @@ -51,21 +54,9 @@ The Makefile +package/something-virtual/something-virtual.mk+ should contain:
->  04: #
->  05: ################################################################################
->  06:
-> -07: SOMETHING_VIRTUAL_SOURCE =
-> -08: SOMETHING_VIRTUAL_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_SOMETHING_VIRTUAL))
-> -09:
-> -10: ifeq ($(BR2_PACKAGE_HAS_SOMETHING_VIRTUAL),y)
-> -11: ifeq ($(SOMETHING_VIRTUAL_DEPENDENCIES),)
-> -12: $(error No something-virtual implementation selected. Configuration error.)
-> -13: endif
-> -14: endif
-> -15:
-> -16: $(eval $(generic-package))
-> +16: $(eval $(virtual-package))
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/Config.in      |  1 +
+ package/lzip/Config.in | 15 +++++++++++++++
+ package/lzip/lzip.mk   | 40 ++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 56 insertions(+)
+ create mode 100644 package/lzip/Config.in
+ create mode 100644 package/lzip/lzip.mk
 
-it should be:
-07: $(eval $(virtual-package))
-
-Regards,
-
+diff --git a/package/Config.in b/package/Config.in
+index 33a68f0..5b5dc6d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -35,6 +35,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/gzip/Config.in"
+ endif
+ source "package/infozip/Config.in"
++source "package/lzip/Config.in"
+ source "package/lzop/Config.in"
+ source "package/xz/Config.in"
+ endmenu
+diff --git a/package/lzip/Config.in b/package/lzip/Config.in
+new file mode 100644
+index 0000000..b72ac78
+--- /dev/null
++++ b/package/lzip/Config.in
+@@ -0,0 +1,15 @@
++comment "lzip needs a toolchain w/ C++, largefile"
++	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_LARGEFILE)
++
++config BR2_PACKAGE_LZIP
++	bool "lzip"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_LARGEFILE
++	help
++	  Lzip is a lossless data compressor with a user interface similar
++	  to the one of gzip or bzip2.
++	  Lzip is about as fast as gzip, compresses most files more than
++	  bzip2, and is better than both from a data recovery perspective.
++	  Lzip is a clean implementation of the LZMA algorithm.
++
++	  http://savannah.nongnu.org/projects/lzip
+diff --git a/package/lzip/lzip.mk b/package/lzip/lzip.mk
+new file mode 100644
+index 0000000..0aa7051
+--- /dev/null
++++ b/package/lzip/lzip.mk
+@@ -0,0 +1,40 @@
++################################################################################
++#
++# lzip
++#
++################################################################################
++
++LZIP_VERSION = 1.15
++LZIP_SITE = http://download.savannah.gnu.org/releases/lzip/
++LZIP_LICENSE = GPLv3+
++LZIP_LICENSE_FILES = COPYING
++
++define LZIP_CONFIGURE_CMDS
++	(cd $(@D); ./configure --prefix=/usr \
++		$(TARGET_CONFIGURE_OPTS) )
++endef
++
++define HOST_LZIP_CONFIGURE_CMDS
++	(cd $(@D); ./configure --prefix=/usr \
++		$(HOST_CONFIGURE_OPTS) )
++endef
++
++define LZIP_BUILD_CMDS
++	$(MAKE) -C $(@D)
++endef
++
++define HOST_LZIP_BUILD_CMDS
++	$(MAKE) -C $(@D)
++endef
++
++define LZIP_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
++endef
++
++define HOST_LZIP_INSTALL_CMDS
++	$(MAKE) -C $(@D) DESTDIR=$(HOST_DIR) install
++endef
++
++# It's not autotools-based
++$(eval $(generic-package))
++$(eval $(host-generic-package))
 -- 
-Samuel
+1.8.3.2
