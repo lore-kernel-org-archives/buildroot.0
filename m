@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Mar 2014 20:41:33 +0100
-Subject: [Buildroot] [PATCH] libmicrohttpd: disable curl testcases
-In-Reply-To: <1393699309-25956-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1393699309-25956-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140301204133.743ad9bf@skate>
+Date: Sat, 1 Mar 2014 20:42:29 +0100
+Subject: [Buildroot] [PATCH 1/2] lvm2: add readline bump fix patch
+In-Reply-To: <1393701664-7513-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1393701664-7513-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140301204229.3d6dad4f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +12,22 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Sat,  1 Mar 2014 15:41:49 -0300, Gustavo Zacarias wrote:
-> They require a toolchain with IPv6. Fixes:
-> http://autobuild.buildroot.net/results/edb/edb1b5ee1ffaa6a495b4d7c2976f618c8331b5d2/
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/libmicrohttpd/libmicrohttpd.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Sat,  1 Mar 2014 16:21:03 -0300, Gustavo Zacarias wrote:
 
-Applied, thanks.
+> +The CPPFunction typedef (among others) have been deprecated in favour of
+
+s/have/has/
+
+> +specific prototyped typedefs since readline 4.2.
+> +They've been working since because compatibility typedefs have been
+> +until they were removed in readline 6.3.
+
+I don't understand this last sentence. Is it my english that it too
+limited, or because the sentence doesn't make sense? :-)
+
+Same question for PATCH 2/2, which has the same issue.
+
+Thanks,
 
 Thomas
 -- 
