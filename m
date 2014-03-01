@@ -1,79 +1,264 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sat, 1 Mar 2014 17:16:27 +0100
-Subject: [Buildroot] Evaluation of the 2014.02 stabilization cycle
-Message-ID: <CAAXf6LW5FsWksuQH4Gpof-Ze=r9PzeZ1-zZYNZnyZidhDV+gfQ@mail.gmail.com>
+From: Martin Bark <martin@barkynet.com>
+Date: Sat, 01 Mar 2014 16:17:03 +0000
+Subject: [Buildroot] [PATCH v8] xbmc: new package
+In-Reply-To: <1393158585-27193-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1393158585-27193-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <531207FF.1050402@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Maxime,
 
-Buildroot 2014.02 has been released, and I'd like to take this
-opportunity to reflect on the stabilization cycle of this release
-(during the month of February). Feel free to share your thoughts
-too...
+I tested out this patch.  It all build fine for me and i was able to run 
+xbmc on the raspberry pi.  I used the yatse android app to control xmbc 
+and i was able to watch some youtube videos with no issue :)
 
-What I liked was:
-- many developers analyzing and fixing autobuild failures. I have seen
-autobuild fixes passing by during the entire month, until the very
-end, and this has made a great improvement in our 'out-of-the-box
-experience'. Looking at the statistics [1], at the beginning of the
-month we were around 50% success rate, while we were able to reach 87%
-at the day of the release!
-Moreover, a number of the remaining problems are already analyzed and
-will be fixed in the next release, although we can expect new failures
-coming in now that the -next branch has been merged into master.
+I have a few comments below.
 
-- several improvements to the documentation have been sent. While our
-documentation is already pretty good, things can always improve, so
-these patches were very welcome!
+On 23/02/14 12:29, Maxime Hadjinlian wrote:
 
-- the fact that patches intended for 2014.02 (be it autobuild fixes,
-documentation improvements, or other fixes) were applied swiftly by
-Peter. Specifically for the autobuild results this was very useful, as
-it allowed each day to show new failures (previously eclipsed by
-existing failures).
+-- snip --
 
-- the fact that we closed a large amount of bugs. During the entire
-month of February, we closed 36 bugs [2], and today there are only 16
-bugs remaining [3]! Of these bugs, 7 are new packages.
+> diff --git a/package/xbmc/S50xbmc b/package/xbmc/S50xbmc
+> new file mode 100755
+> index 0000000..ce51f7e
+> --- /dev/null
+> +++ b/package/xbmc/S50xbmc
+> @@ -0,0 +1,41 @@
+> +#!/bin/sh
+> +#
+> +# Starts XBMC.
+> +#
+> +
+> +BIN_NAME=xbmc.bin
+> +XBMC=/usr/lib/xbmc/$BIN_NAME
+> +XBMC_ARGS="--standalone -fs -n"
+> +PIDFILE=/var/run/xbmc.pid
+> +
+> +start() {
+> +	echo -n "Starting XBMC: "
+> +	start-stop-daemon -S -q -p $PIDFILE --exec $XBMC -- $XBMC_ARGS
 
+I had to add -b to the start-stop-daemon options to background xbmc.bin 
+otherwise the startup halted on this script.  Also i added -m so 
+start-stop-daemon would create the pid file.  Without the -m option the 
+stop command fails because the pid file does not exist.
 
-What I did not like so much:
+> +	[ $? == 0 ] && echo "OK" || echo "FAIL"
+> +}
+> +stop() {
+> +	echo -n "Stopping XBMC: "
+> +	start-stop-daemon -K -q -p $PIDFILE
+> +	[ $? == 0 ] && echo "OK" || echo "FAIL"
+> +}
+> +restart() {
+> +	stop
+> +	start
+> +}
+> +
+> +case "$1" in
+> +	start)
+> +		start
+> +	;;
+> +	stop)
+> +		stop
+> +	;;
+> +	restart|reload)
+> +		restart
+> +	;;
+> +	*)
+> +		echo "Usage: $0 {start|stop|restart}"
+> +	exit 1
+> +esac
+> +
+> +exit $?
 
-- the fact that many feature patches (that never had a chance to enter
-2014.02) were sent during the stabilization cycle, even by regular
-contributors. While I realize that we cannot expect non-regular
-contributors to respect the standard release cycle, this is not true
-for regular contributors.
-There are two reasons why I find this inconvenient:
+-- snip --
 
-1. The large amount of feature patches clutters the mailing list, in
-the sense that it is more difficult to see which mails/patches are
-relevant for the upcoming release and which are for the next.
+> diff --git a/package/xbmc/xbmc-0002-RaspberryPi-Default-Settings.patch b/package/xbmc/xbmc-0002-RaspberryPi-Default-Settings.patch
+> new file mode 100644
+> index 0000000..43960e6
+> --- /dev/null
+> +++ b/package/xbmc/xbmc-0002-RaspberryPi-Default-Settings.patch
+> @@ -0,0 +1,168 @@
+> +From 2541772a3ed71402a620466feb6a337b40f08880 Mon Sep 17 00:00:00 2001
+> +From: Maxime Hadjinlian <maximeh.hadjinlian@gmail.com>
+> +Date: Sat, 15 Dec 2012 23:41:06 +0100
+> +Subject: [PATCH] RaspberryPi Default Settings
+> +
+> +Add some default settings if the target platform is the RaspberryPi.
+> +Avoid the fact that the user _MUST_ have an advandcedsettings.xml to be able
+> +to use XBMC properly.
+> +
+> +Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 
-2. During the stabilization month, all the (limited) time that I can
-spent on buildroot is spent on the upcoming release. This means that I
-fully ignore any patch that is not intended for that release, which
-means I won't review it (even though I would review the patch had it
-come at another moment in the release cycle). If other people act the
-same way, this means that patches sent during the stabilization month
-receive less reviews than others.
+I thought you were going to remove this patch and instead include a 
+default advandcedsettings.xml for the raspberry pi.
 
-To conclude, I would prefer if the focus of (almost) all regular
-contributors would be on the stabilization of the release, and the
-ongoing support of users, rather than sending/reviewing patches for
-the next release.
+> +---
+> + xbmc/settings/AdvancedSettings.cpp          |   31 +++++++++++++++++++++++++++
+> + xbmc/settings/GUISettings.cpp               |    8 +++----
+> + xbmc/settings/GUIWindowSettingsCategory.cpp |    4 ++--
+> + 3 files changed, 37 insertions(+), 6 deletions(-)
+> +
+> +diff --git a/xbmc/settings/AdvancedSettings.cpp b/xbmc/settings/AdvancedSettings.cpp
+> +index 2cbbf98..42ccabd 100644
+> +--- a/xbmc/settings/AdvancedSettings.cpp
+> ++++ b/xbmc/settings/AdvancedSettings.cpp
+> +@@ -72,7 +72,11 @@ void CAdvancedSettings::Initialize()
+> +   m_karaokeAlwaysEmptyOnCdgs = 1;
+> +   m_karaokeUseSongSpecificBackground = 0;
+> +
+> ++  #if defined(TARGET_RASPBERRY_PI)
+> ++  m_audioDefaultPlayer = "omxplayer";
+> ++  #else
+> +   m_audioDefaultPlayer = "paplayer";
+> ++  #endif
+> +   m_audioPlayCountMinimumPercent = 90.0f;
+> +   m_audioHost = "default";
+> +
+> +@@ -93,8 +97,14 @@ void CAdvancedSettings::Initialize()
+> +   m_videoBlackBarColour = 0;
+> +   m_videoPPFFmpegDeint = "linblenddeint";
+> +   m_videoPPFFmpegPostProc = "ha:128:7,va,dr";
+> ++
+> ++  #if defined(TARGET_RASPBERRY_PI)
+> ++  m_videoDefaultPlayer = "omxplayer";
+> ++  m_videoDefaultDVDPlayer = "omxplayer";
+> ++  #else
+> +   m_videoDefaultPlayer = "dvdplayer";
+> +   m_videoDefaultDVDPlayer = "dvdplayer";
+> ++  #endif
+> +   m_videoIgnoreSecondsAtStart = 3*60;
+> +   m_videoIgnorePercentAtEnd   = 8.0f;
+> +   m_videoPlayCountMinimumPercent = 90.0f;
+> +@@ -287,7 +297,11 @@ void CAdvancedSettings::Initialize()
+> +   m_alwaysOnTop = false;
+> + #endif
+> +
+> ++  #if defined(TARGET_RASPBERRY_PI)
+> ++  m_bgInfoLoaderMaxThreads = 2;
+> ++  #else
+> +   m_bgInfoLoaderMaxThreads = 5;
+> ++  #endif
+> +
+> +   m_iPVRTimeCorrection             = 0;
+> +   m_iPVRInfoToggleInterval         = 3000;
+> +@@ -299,7 +313,12 @@ void CAdvancedSettings::Initialize()
+> +
+> +   m_measureRefreshrate = false;
+> +
+> ++  #if defined(TARGET_RASPBERRY_PI)
+> ++  m_cacheMemBufferSize = 1024 * 1024 * 10;
+> ++  #else
+> +   m_cacheMemBufferSize = 1024 * 1024 * 20;
+> ++  #endif
+> ++
+> +   m_addonPackageFolderSize = 200;
+> +
+> +   m_jsonOutputCompact = true;
+> +@@ -509,11 +528,17 @@ void CAdvancedSettings::ParseSettingsFile(const CStdString &file)
+> +         RefreshOverride override = {0};
+> +
+> +         float fps;
+> ++        #if defined(TARGET_RASPBERRY_PI)
+> ++          fps = 23.976;
+> ++          override.fpsmin = fps - 0.01f;
+> ++          override.fpsmax = fps + 0.01f;
+> ++        #else
+> +         if (XMLUtils::GetFloat(pRefreshOverride, "fps", fps))
+> +         {
+> +           override.fpsmin = fps - 0.01f;
+> +           override.fpsmax = fps + 0.01f;
+> +         }
+> ++        #endif
+> +
+> +         float fpsmin, fpsmax;
+> +         if (XMLUtils::GetFloat(pRefreshOverride, "fpsmin", fpsmin) &&
+> +@@ -524,11 +549,17 @@ void CAdvancedSettings::ParseSettingsFile(const CStdString &file)
+> +         }
+> +
+> +         float refresh;
+> ++        #if defined(TARGET_RASPBERRY_PI)
+> ++          refresh = 24.0;
+> ++          override.refreshmin = refresh - 0.01f;
+> ++          override.refreshmax = refresh + 0.01f;
+> ++        #else
+> +         if (XMLUtils::GetFloat(pRefreshOverride, "refresh", refresh))
+> +         {
+> +           override.refreshmin = refresh - 0.01f;
+> +           override.refreshmax = refresh + 0.01f;
+> +         }
+> ++        #endif
+> +
+> +         float refreshmin, refreshmax;
+> +         if (XMLUtils::GetFloat(pRefreshOverride, "refreshmin", refreshmin) &&
+> +diff --git a/xbmc/settings/GUISettings.cpp b/xbmc/settings/GUISettings.cpp
+> +index c1820a7..c00fb18 100644
+> +--- a/xbmc/settings/GUISettings.cpp
+> ++++ b/xbmc/settings/GUISettings.cpp
+> +@@ -537,11 +537,11 @@ void CGUISettings::Initialize()
+> +   AddInt(NULL, "input.appleremotesequencetime", 13603, 500, 50, 50, 1000, SPIN_CONTROL_INT_PLUS, MASK_MS, TEXT_OFF);
+> +   AddSeparator(in, "input.sep1");
+> + #endif
+> +-  AddBool(in, "input.remoteaskeyboard", 21449, false);
+> ++  AddBool(in, "input.remoteaskeyboard", 21449, true);
+> + #if defined(TARGET_DARWIN_IOS)
+> +   AddBool(NULL, "input.enablemouse", 21369, true);
+> + #else
+> +-  AddBool(in, "input.enablemouse", 21369, true);
+> ++  AddBool(in, "input.enablemouse", 21369, false);
+> + #endif
+> + #if defined(HAS_SDL_JOYSTICK)
+> +   AddBool(in, "input.enablejoystick", 35100, true);
+> +@@ -831,7 +831,7 @@ void CGUISettings::Initialize()
+> +
+> + #ifdef HAS_WEB_SERVER
+> +   CSettingsCategory* srvWeb = AddCategory(SETTINGS_SERVICE, "webserver", 33101);
+> +-  AddBool(srvWeb,  "services.webserver",        263, false);
+> ++  AddBool(srvWeb,  "services.webserver",        263, true);
+> +   AddString(srvWeb,"services.webserverport",    730, CUtil::CanBindPrivileged()?"80":"8080", EDIT_CONTROL_NUMBER_INPUT, false, 730);
+> +   AddString(srvWeb,"services.webserverusername",1048, "xbmc", EDIT_CONTROL_INPUT);
+> +   AddString(srvWeb,"services.webserverpassword",733, "", EDIT_CONTROL_HIDDEN_INPUT, true, 733);
+> +@@ -881,7 +881,7 @@ void CGUISettings::Initialize()
+> +   AddInt(laf, "lookandfeel.startupwindow",512,1, WINDOW_HOME, 1, WINDOW_PYTHON_END, SPIN_CONTROL_TEXT);
+> +   AddString(laf, "lookandfeel.soundskin",15108,"SKINDEFAULT", SPIN_CONTROL_TEXT);
+> +   AddSeparator(laf, "lookandfeel.sep2");
+> +-  AddBool(laf, "lookandfeel.enablerssfeeds",13305,  true);
+> ++  AddBool(laf, "lookandfeel.enablerssfeeds",13305,  false);
+> +   AddString(laf, "lookandfeel.rssedit", 21450, "", BUTTON_CONTROL_STANDARD);
+> +
+> +   CSettingsCategory* loc = AddCategory(SETTINGS_APPEARANCE, "locale", 14090);
+> +diff --git a/xbmc/settings/GUIWindowSettingsCategory.cpp b/xbmc/settings/GUIWindowSettingsCategory.cpp
+> +index b4cee69..a9bcb7a 100644
+> +--- a/xbmc/settings/GUIWindowSettingsCategory.cpp
+> ++++ b/xbmc/settings/GUIWindowSettingsCategory.cpp
+> +@@ -1271,7 +1271,7 @@ void CGUIWindowSettingsCategory::OnSettingChanged(CBaseSettingControl *pSettingC
+> +       if (!g_application.StartWebServer())
+> +       {
+> +         CGUIDialogOK::ShowAndGetInput(g_localizeStrings.Get(33101), "", g_localizeStrings.Get(33100), "");
+> +-        g_guiSettings.SetBool("services.webserver", false);
+> ++        g_guiSettings.SetBool("services.webserver", true);
+> +       }
+> +   }
+> +   else if (strSetting.Equals("services.webserverusername") || strSetting.Equals("services.webserverpassword"))
+> +@@ -1292,7 +1292,7 @@ void CGUIWindowSettingsCategory::OnSettingChanged(CBaseSettingControl *pSettingC
+> +     else
+> +     {
+> +       g_application.StopAirplayServer(true);
+> +-      g_guiSettings.SetBool("services.airplay", false);
+> ++      g_guiSettings.SetBool("services.airplay", true);
+> +       CZeroconf::GetInstance()->Stop();
+> +     }
+> + #endif
+> +--
+> +1.7.10.4
 
+-- snip --
 
-Obviously, all of the above is just my opinion, and I welcome your own
-opinions and feedback.
+Thanks
 
-Thanks,
-Thomas
-
-[1] http://autobuild.buildroot.org/stats.php
-[2] https://bugs.busybox.net/buglist.cgi?chfieldto=2014-02-28&query_format=advanced&chfieldfrom=2014-02-01&bug_status=RESOLVED&bug_status=VERIFIED&bug_status=CLOSED&product=buildroot
-[3] https://bugs.busybox.net/buglist.cgi?query_format=specific&order=relevance+desc&bug_status=__open__&product=buildroot&content=
+Martin
