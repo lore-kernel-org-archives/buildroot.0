@@ -1,104 +1,95 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat,  1 Mar 2014 16:04:15 -0300
-Subject: [Buildroot] [PATCHv2] lzip: new package
-Message-ID: <1393700655-14223-1-git-send-email-gustavo@zacarias.com.ar>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sat, 1 Mar 2014 20:06:13 +0100
+Subject: [Buildroot] [PATCH 0/17 v2] Add new virtual-package
+	infrastructure
+In-Reply-To: <cover.1393695127.git.yann.morin.1998@free.fr>
+References: <cover.1393695127.git.yann.morin.1998@free.fr>
+Message-ID: <CAHXCMMJtEhxwAMb6r1ngWguB-yagGayBpyBvKE4ePiyCv7cy1A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The host variant is in preparation for possibly some gnu packages
-shipping tar.lz versions only.
-At least ed 1.10 did it (still needed to add extraction support for it).
+Yann, all,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/Config.in      |  1 +
- package/lzip/Config.in | 15 +++++++++++++++
- package/lzip/lzip.mk   | 40 ++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 56 insertions(+)
- create mode 100644 package/lzip/Config.in
- create mode 100644 package/lzip/lzip.mk
+On Sat, Mar 1, 2014 at 6:32 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>
+> Hello All!
+>
+> Here is a quick series implementing a new infrastructure for virtual
+> packages.
+>
+> Basically, all a virtual package has to do in its .mk is:
+>
+>     $(eval $(virtual-package))
+>
+> There is no need to:
+>   - define the dependency against the provider,
+>   - define _SOURCE=""  (empty)
+>
+> But it requires the config options for the virtual package be named
+> after the package, eg.:
+>
+>     package | Selector option        | Provider option
+>     --------+------------------------+-----------------------------
+>     libegl  | BR2_PACKAGE_HAS_LIBEGL | BR2_PACKAGE_PROVIDES_LIBEGL
+>     jpeg    | BR2_PACKAGE_HAS_JPEG   | BR2_PACKAGE_PROVIDES_JPEG
+>
+> So the series:
+>   - starts with renaming some config options in the current virtual
+>     packages
+>   - then introduces the new virtual-package infra and the associated
+>     documentation in the manual
+>   - and finally converts the virtual packages over to the new infra.
+>
+> Special thanks to ?ric for his initial work on the manual, which
+> prompted the idea for this new infra! That's partly for this that I
+> kept his initial change to the manual almost unmolested.
+>
+>
+> Changes v1 -> v2:
+>   - include ?ric's virtual package tutorial to the manual  (?ric)
+>   - split the renaimg of config options from the actual conversion to
+>     the virtual-package infra
+>   - rebase on top of master after post-release merge
+>   - add host-virtual-package (will be needed by a pending lua-related
+>     series by Fran?ois)
+>
+>
+> Regards,
+> Yann E. MORIN.
+>
+>
+> ----------------------------------------------------------------
+> Yann E. MORIN (16):
+>       package/libgles: rename the _HAS and _PROVIDES variables
+>       package/libegl: rename the _HAS and _PROVIDES variables
+>       package/libopenmax: rename the _HAS and _PROVIDES variables
+>       package/libopenvg: rename the _HAS and _PROVIDES variables
+>       package/luainterpreter: rename the _HAS and _PROVIDES variables
+>       package/lua: rename config options
+>       packages: add infrastructure for virtual packages
+>       manual: update the virtual package section with the new infra-structure
+>       package/powervr: convert to the virtual-package infrastructure
+>       package/libgles: convert to the virtual-package infrastructure
+>       package/libegl: convert to the virtual-package infrastructure
+>       package/libopenmax: convert to the virtual-package infrastructure
+>       package/libopenvg: convert to the virtual-package infrastructure
+>       package/luainterpreter: convert to the virtual-package infrastructure
+>       package/jpeg: convert to the virtual-package infrastructure
+>       package/cryptodev: convert to the virtual-package infrastructure
+>
+> eric.le.bihan.dev at free.fr (1):
+>       manual: add virtual package tutorial
+>
 
-diff --git a/package/Config.in b/package/Config.in
-index 33a68f0..5b5dc6d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -35,6 +35,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/gzip/Config.in"
- endif
- source "package/infozip/Config.in"
-+source "package/lzip/Config.in"
- source "package/lzop/Config.in"
- source "package/xz/Config.in"
- endmenu
-diff --git a/package/lzip/Config.in b/package/lzip/Config.in
-new file mode 100644
-index 0000000..b72ac78
---- /dev/null
-+++ b/package/lzip/Config.in
-@@ -0,0 +1,15 @@
-+comment "lzip needs a toolchain w/ C++, largefile"
-+	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_LARGEFILE)
-+
-+config BR2_PACKAGE_LZIP
-+	bool "lzip"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_LARGEFILE
-+	help
-+	  Lzip is a lossless data compressor with a user interface similar
-+	  to the one of gzip or bzip2.
-+	  Lzip is about as fast as gzip, compresses most files more than
-+	  bzip2, and is better than both from a data recovery perspective.
-+	  Lzip is a clean implementation of the LZMA algorithm.
-+
-+	  http://savannah.nongnu.org/projects/lzip
-diff --git a/package/lzip/lzip.mk b/package/lzip/lzip.mk
-new file mode 100644
-index 0000000..0aa7051
---- /dev/null
-+++ b/package/lzip/lzip.mk
-@@ -0,0 +1,40 @@
-+################################################################################
-+#
-+# lzip
-+#
-+################################################################################
-+
-+LZIP_VERSION = 1.15
-+LZIP_SITE = http://download.savannah.gnu.org/releases/lzip/
-+LZIP_LICENSE = GPLv3+
-+LZIP_LICENSE_FILES = COPYING
-+
-+define LZIP_CONFIGURE_CMDS
-+	(cd $(@D); ./configure --prefix=/usr \
-+		$(TARGET_CONFIGURE_OPTS) )
-+endef
-+
-+define HOST_LZIP_CONFIGURE_CMDS
-+	(cd $(@D); ./configure --prefix=/usr \
-+		$(HOST_CONFIGURE_OPTS) )
-+endef
-+
-+define LZIP_BUILD_CMDS
-+	$(MAKE) -C $(@D)
-+endef
-+
-+define HOST_LZIP_BUILD_CMDS
-+	$(MAKE) -C $(@D)
-+endef
-+
-+define LZIP_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
-+endef
-+
-+define HOST_LZIP_INSTALL_CMDS
-+	$(MAKE) -C $(@D) DESTDIR=$(HOST_DIR) install
-+endef
-+
-+# It's not autotools-based
-+$(eval $(generic-package))
-+$(eval $(host-generic-package))
+[Samuel: for the whole series, with the minor fix in patch 9/17]
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+
+Regards,
+
+
 -- 
-1.8.3.2
+Samuel
