@@ -1,9 +1,9 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun,  2 Mar 2014 00:39:48 +0100
-Subject: [Buildroot] [PATCH 1/6] liburcu: bump version to 0.8.3
+Date: Sun,  2 Mar 2014 00:39:49 +0100
+Subject: [Buildroot] [PATCH 2/6] lttng-libust: bump version to 2.4.0
 In-Reply-To: <1393717193-19774-1-git-send-email-s.martin49@gmail.com>
 References: <1393717193-19774-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1393717193-19774-2-git-send-email-s.martin49@gmail.com>
+Message-ID: <1393717193-19774-3-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,27 +14,24 @@ Also adjust the license details
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/liburcu/liburcu.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/lttng-libust/lttng-libust.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/liburcu/liburcu.mk b/package/liburcu/liburcu.mk
-index a586382..44b640d 100644
---- a/package/liburcu/liburcu.mk
-+++ b/package/liburcu/liburcu.mk
-@@ -4,11 +4,11 @@
- #
+diff --git a/package/lttng-libust/lttng-libust.mk b/package/lttng-libust/lttng-libust.mk
+index b0ebd3f..375a6a3 100644
+--- a/package/lttng-libust/lttng-libust.mk
++++ b/package/lttng-libust/lttng-libust.mk
+@@ -5,9 +5,9 @@
  ################################################################################
  
--LIBURCU_VERSION = 0.7.7
-+LIBURCU_VERSION = 0.8.3
- LIBURCU_SITE    = http://lttng.org/files/urcu/
- LIBURCU_SOURCE  = userspace-rcu-$(LIBURCU_VERSION).tar.bz2
--LIBURCU_LICENSE = LGPLv2.1+ for the library; MIT-like license for few source files listed in LICENSE
--LIBURCU_LICENSE_FILES = lgpl-2.1.txt lgpl-relicensing.txt LICENSE
-+LIBURCU_LICENSE = LGPLv2.1+ for the library; MIT-like license for few source files listed in LICENSE; GPLv2+ for test; GPLv3 for few *.m4 files
-+LIBURCU_LICENSE_FILES = lgpl-2.1.txt lgpl-relicensing.txt gpl-2.0.txt LICENSE
+ LTTNG_LIBUST_SITE    = http://lttng.org/files/lttng-ust/
+-LTTNG_LIBUST_VERSION = 2.2.0
++LTTNG_LIBUST_VERSION = 2.4.0
+ LTTNG_LIBUST_SOURCE  = lttng-ust-$(LTTNG_LIBUST_VERSION).tar.bz2
+-LTTNG_LIBUST_LICENSE = LGPLv2.1; GPLv2 for lttng-gen-tp and ust-ctl
++LTTNG_LIBUST_LICENSE = LGPLv2.1; MIT for system headers; GPLv2 for liblttng-ust-ctl/ustctl.c (used by lttng-sessiond)
+ LTTNG_LIBUST_LICENSE_FILES = COPYING
  
- LIBURCU_INSTALL_STAGING = YES
- 
+ LTTNG_LIBUST_INSTALL_STAGING = YES
 -- 
 1.9.0
