@@ -1,39 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Mar 2014 19:48:00 +0100
-Subject: [Buildroot] [git commit] package/w_scan: requires kernel headers >=
-	3.0
-Message-ID: <20140301193723.7D7A496DFF@busybox.osuosl.org>
+Date: Sat, 1 Mar 2014 19:47:58 +0100
+Subject: [Buildroot] [git commit] package/dvb-apps: requires kernel headers
+	>= 3.3
+Message-ID: <20140301193723.751A996DFF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e583d1350793c377a01c8f4df484e056934aa51a
+commit: http://git.buildroot.net/buildroot/commit/?id=2ea508a2a36c4be5427afa1bd91f557c489f7558
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It needs DVB API version 5.3 or later, introduced in linux 3.0.
+dvb-apps requires linux kernel headers >= 3.3, for:
+    SYS_TURBO, SYS_DVBC_ANNEX_A      : introduced in 3.2
+    SYS_DVBC_ANNEX_C, DTV_ENUM_DELSYS: introduced in 3.3
 
 Fixes:
-    http://autobuild.buildroot.net/results/6e7/6e7c691099a8f3eef4fc84860ceb1a94f25873eb
+    http://autobuild.buildroot.net/results/a77/a7786dffa28e5472fbc9c8fe4ab302c84d7a3cb9
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/w_scan/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/dvb-apps/Config.in |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/w_scan/Config.in b/package/w_scan/Config.in
-index 4487b0a..02cb2c3 100644
---- a/package/w_scan/Config.in
-+++ b/package/w_scan/Config.in
-@@ -1,5 +1,9 @@
-+comment "w_scan needs a toolchain w/ headers >= 3.0"
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-+
- config BR2_PACKAGE_W_SCAN
- 	bool "w_scan"
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+diff --git a/package/dvb-apps/Config.in b/package/dvb-apps/Config.in
+index ba3ce45..ea0a12f 100644
+--- a/package/dvb-apps/Config.in
++++ b/package/dvb-apps/Config.in
+@@ -8,13 +8,14 @@ config BR2_PACKAGE_DVB_APPS
+ 
+ if BR2_PACKAGE_DVB_APPS
+ 
+-comment "dvb-apps utils needs a toolchain w/ largefile, threads"
+-	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
++comment "dvb-apps utils needs a toolchain w/ largefile, threads, headers >= 3.3"
++	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
+ 
+ config BR2_PACKAGE_DVB_APPS_UTILS
+ 	bool "dvb-apps utilities"
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
  	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
  	help
- 	  w_scan is a small command line utility used to perform frequency
+ 	  A small number of DVB test and utility programs,
