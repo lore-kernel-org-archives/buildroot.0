@@ -1,36 +1,32 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Sat, 1 Mar 2014 01:27:20 +0100
-Subject: [Buildroot] host perl  expat  broken
-Message-ID: <AD64DAF96C2F48068C6DE4BA542C19A9@JohanW7>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sat,  1 Mar 2014 08:42:46 +0100
+Subject: [Buildroot] [PATCH] perl-xml-parser: fix build
+Message-ID: <1393659766-25759-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+(missing when changing the naming scheme of Perl modules)
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/perl-xml-parser/perl-xml-parser.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/perl-xml-parser/perl-xml-parser.mk b/package/perl-xml-parser/perl-xml-parser.mk
+index fb9bf0f..f46f1f5 100644
+--- a/package/perl-xml-parser/perl-xml-parser.mk
++++ b/package/perl-xml-parser/perl-xml-parser.mk
+@@ -10,7 +10,7 @@ PERL_XML_PARSER_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TODDR/
+ PERL_XML_PARSER_DEPENDENCIES = expat
+ PERL_XML_PARSER_LICENSE = Artistic or GPLv1+
  
-Hi
-
-(using latest pull)
-
-
-make[2]: Entering directory `/home/brcpy/output/build/host-perl-xml-parser-2.41/Expat'
-cp Expat.pm ../blib/lib/XML/Parser/Expat.pm
-/usr/bin/perl /usr/share/perl/5.10.1/ExtUtils/xsubpp -noprototypes -typemap /usr/share/perl/5.10/ExtUtils/typemap -typemap typemap
-Expat.xs > Expat.xsc && mv Expat.xsc Expat.c
-cc -c   -D_REENTRANT -D_GNU_SOURCE -DDEBIAN -fno-strict-aliasing -pipe -fstack-protector -I/usr/local/include -D_LARGEFILE_SOURCE
--D_FILE_OFFSET_BITS=64 -O2 -g   -DVERSION=\"2.41\" -DXS_VERSION=\"2.41\" -fPIC "-I/usr/lib/perl/5.10/CORE"   Expat.c
-Expat.xs:12:19: fatal error: expat.h: No such file or directory
-compilation terminated.
-make[2]: *** [Expat.o] Error 1
-make[2]: Leaving directory `/home/brcpy/output/build/host-perl-xml-parser-2.41/Expat'
-make[1]: *** [subdirs] Error 2
-make[1]: Leaving directory `/home/brcpy/output/build/host-perl-xml-parser-2.41'
-make: *** [/home/brcpy/output/build/host-perl-xml-parser-2.41/.stamp_built] Error 2
+-HOST_LIBXML_PARSER_PERL_CONF_OPT = \
++HOST_PERL_XML_PARSER_CONF_OPT = \
+ 	EXPATLIBPATH=$(HOST_DIR)/usr/lib \
+ 	EXPATINCPATH=$(HOST_DIR)/usr/include
  
-Buildroot seems to look for the header file on my host machine.
-
-
-
-Regards 
- Johan
+-- 
+1.7.9.5
