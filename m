@@ -1,54 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Mar 2014 23:25:20 +0100
-Subject: [Buildroot] [PATCH 1/1] zeromq: bump to version 4.0.1
-In-Reply-To: <1381509097-5424-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1381509097-5424-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <20140301232520.4ee4b22b@skate>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sat,  1 Mar 2014 23:30:55 +0100
+Subject: [Buildroot] [PATCH] luarocks: remove luainterpreter dependency
+Message-ID: <1393713055-15107-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jerzy Grzegorek,
+a package using luarocks infrastructure needs a dependency with luainterpreter.
+this is already done in pkg-luarocks.mk.
 
-On Fri, 11 Oct 2013 18:31:37 +0200, Jerzy Grzegorek wrote:
-> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-> ---
->  package/zeromq/zeromq.mk |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
-> index a624b52..d40bed5 100644
-> --- a/package/zeromq/zeromq.mk
-> +++ b/package/zeromq/zeromq.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -ZEROMQ_VERSION = 3.2.4
-> +ZEROMQ_VERSION = 4.0.1
->  ZEROMQ_SITE = http://download.zeromq.org/
->  ZEROMQ_INSTALL_STAGING = YES
->  ZEROMQ_DEPENDENCIES = util-linux
+here, in luarocks.mk, this dependency causes an issue with 'make legal-info' :
+luainterpreter and an toolchain are built.
 
-I tried to apply this patch, but unfortunately, it apparently breaks
-the build of mongrel2:
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/luarocks/luarocks.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-src/superpoll.c: In function ?SuperPoll_poll?:
-src/superpoll.c:229:53: error: ?ZMQ_POLL_MSEC? undeclared (first use in this function)
-src/superpoll.c:229:53: note: each undeclared identifier is reported only once for each function it appears in
-
-I've checked the other reverse dependencies of zeromq, and they seem to
-build fine.
-
-Can you find a solution to the mongrel2 problem, and resubmit the
-appropriate patch?
-
-Thanks!
-
-Thomas
+diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
+index 86e57d2..926fd04 100644
+--- a/package/luarocks/luarocks.mk
++++ b/package/luarocks/luarocks.mk
+@@ -9,7 +9,7 @@ LUAROCKS_SITE = http://luarocks.org/releases/
+ LUAROCKS_LICENSE = MIT
+ LUAROCKS_LICENSE_FILES = COPYING
+ 
+-HOST_LUAROCKS_DEPENDENCIES = host-lua luainterpreter
++HOST_LUAROCKS_DEPENDENCIES = host-lua
+ 
+ LUAROCKS_CONFIG_DIR  = $(HOST_DIR)/usr/etc/luarocks
+ LUAROCKS_CONFIG_FILE = $(LUAROCKS_CONFIG_DIR)/config-$(LUAINTERPRETER_ABIVER).lua
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.9.5
