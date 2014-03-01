@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Mar 2014 20:41:19 +0100
-Subject: [Buildroot] [PATCH] php-gnupg: force gnupg detection
-In-Reply-To: <1393698381-21984-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1393698381-21984-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140301204119.052baba1@skate>
+Date: Sat, 1 Mar 2014 20:41:33 +0100
+Subject: [Buildroot] [PATCH] libmicrohttpd: disable curl testcases
+In-Reply-To: <1393699309-25956-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1393699309-25956-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140301204133.743ad9bf@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,14 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Sat,  1 Mar 2014 15:26:21 -0300, Gustavo Zacarias wrote:
-> Hardcode the gpg path and detection otherwise it will fail on a host
-> that doesn't have gnupg installed. Fixes:
-> http://autobuild.buildroot.net/results/757/757fb0b12af12de4f128d9c503d45b20776c2313/
-> Also define PHP_AUTOCONF and PHP_AUTOHEADER as other extensions do to
-> avoid stray issues.
+On Sat,  1 Mar 2014 15:41:49 -0300, Gustavo Zacarias wrote:
+> They require a toolchain with IPv6. Fixes:
+> http://autobuild.buildroot.net/results/edb/edb1b5ee1ffaa6a495b4d7c2976f618c8331b5d2/
 > 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/php-gnupg/php-gnupg.mk | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+>  package/libmicrohttpd/libmicrohttpd.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Applied, thanks.
 
