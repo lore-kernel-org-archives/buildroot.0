@@ -1,9 +1,9 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun,  2 Mar 2014 00:39:49 +0100
-Subject: [Buildroot] [PATCH 2/6] lttng-libust: bump version to 2.4.0
+Date: Sun,  2 Mar 2014 00:39:51 +0100
+Subject: [Buildroot] [PATCH 4/6] lttng-tools: bump version to 2.4.0
 In-Reply-To: <1393717193-19774-1-git-send-email-s.martin49@gmail.com>
 References: <1393717193-19774-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1393717193-19774-3-git-send-email-s.martin49@gmail.com>
+Message-ID: <1393717193-19774-5-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,24 +14,28 @@ Also adjust the license details
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/lttng-libust/lttng-libust.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/lttng-tools/lttng-tools.mk | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/lttng-libust/lttng-libust.mk b/package/lttng-libust/lttng-libust.mk
-index b0ebd3f..375a6a3 100644
---- a/package/lttng-libust/lttng-libust.mk
-+++ b/package/lttng-libust/lttng-libust.mk
-@@ -5,9 +5,9 @@
+diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
+index f6eff96..260bf82 100644
+--- a/package/lttng-tools/lttng-tools.mk
++++ b/package/lttng-tools/lttng-tools.mk
+@@ -4,12 +4,11 @@
+ #
  ################################################################################
  
- LTTNG_LIBUST_SITE    = http://lttng.org/files/lttng-ust/
--LTTNG_LIBUST_VERSION = 2.2.0
-+LTTNG_LIBUST_VERSION = 2.4.0
- LTTNG_LIBUST_SOURCE  = lttng-ust-$(LTTNG_LIBUST_VERSION).tar.bz2
--LTTNG_LIBUST_LICENSE = LGPLv2.1; GPLv2 for lttng-gen-tp and ust-ctl
-+LTTNG_LIBUST_LICENSE = LGPLv2.1; MIT for system headers; GPLv2 for liblttng-ust-ctl/ustctl.c (used by lttng-sessiond)
- LTTNG_LIBUST_LICENSE_FILES = COPYING
+-LTTNG_TOOLS_VERSION = 2.2.0
++LTTNG_TOOLS_VERSION = 2.4.0
+ LTTNG_TOOLS_SITE    = http://lttng.org/files/lttng-tools/
+ LTTNG_TOOLS_SOURCE  = lttng-tools-$(LTTNG_TOOLS_VERSION).tar.bz2
+-LTTNG_TOOLS_LICENSE = GPLv2; LGPLv2.1 for include/lttng/* and src/lib/lttng-ctl/*
+-# gpl-2.0.txt and lgpl-2.1.txt files are missing from the sources
+-LTTNG_TOOLS_LICENSE_FILES = LICENSE
++LTTNG_TOOLS_LICENSE = GPLv2+; LGPLv2.1+ for include/lttng/* and src/lib/lttng-ctl/*
++LTTNG_TOOLS_LICENSE_FILES = gpl-2.0.txt lgpl-2.1.txt LICENSE
  
- LTTNG_LIBUST_INSTALL_STAGING = YES
+ # The host-lttng-babeltrace technically isn't a required build
+ # dependency. However, having the babeltrace utilities built for the
 -- 
 1.9.0
