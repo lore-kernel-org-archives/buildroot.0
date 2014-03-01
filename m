@@ -1,43 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 2 Mar 2014 00:28:57 +0100
-Subject: [Buildroot] State of your Qt 5 patches
-Message-ID: <20140302002857.2a9f166d@skate>
+Date: Sun, 2 Mar 2014 00:29:16 +0100
+Subject: [Buildroot] [git commit] qt5multimedia: install gsttools library to
+	target
+Message-ID: <20140301232930.7DAD899371@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+commit: http://git.buildroot.net/buildroot/commit/?id=68af56cc3300fb8f3bef83a24d81167de91b27ca
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-You have quite a few Qt5 related patches waiting in patchwork. However,
-since you haven't used any version number for your patches, it's not
-necessarily obvious which patches are still current, and which version
-is the latest them.
+It is built when gst-plugins-base is selected.
 
-Could you have a look at the following patches, and let me know which
-ones no longer makes sense (because you have sent a new version) and
-which ones still make sense:
+Signed-off-by: Fatih A????c?? <fatih.asici@gmail.com>
+Noticed-by: Pawe?? Gibaszek <gibol666@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/qt5/qt5multimedia/qt5multimedia.mk |   11 +++++++++++
+ 1 files changed, 11 insertions(+), 0 deletions(-)
 
- http://patchwork.ozlabs.org/patch/320476/
- http://patchwork.ozlabs.org/patch/320475/
- http://patchwork.ozlabs.org/patch/320472/
- http://patchwork.ozlabs.org/patch/320462/
- http://patchwork.ozlabs.org/patch/320407/
- http://patchwork.ozlabs.org/patch/317465/
- http://patchwork.ozlabs.org/patch/317462/
- http://patchwork.ozlabs.org/patch/317461/
-
-Remember that you can manage your own patches on patchwork (to mark the
-old versions as superseded) by creating a patchwork account.
-
-Fatih, I've Cc'ed you in case you have a bit of time to look at these
-patches, and maybe review/test them.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
+index 1a3ca6b..5256920 100644
+--- a/package/qt5/qt5multimedia/qt5multimedia.mk
++++ b/package/qt5/qt5multimedia/qt5multimedia.mk
+@@ -20,6 +20,10 @@ QT5MULTIMEDIA_LICENSE = Commercial license
+ QT5MULTIMEDIA_REDISTRIBUTE = NO
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE),y)
++QT5MULTIMEDIA_DEPENDENCIES += gst-plugins-base
++endif
++
+ define QT5MULTIMEDIA_CONFIGURE_CMDS
+ 	(cd $(@D); $(HOST_DIR)/usr/bin/qmake)
+ endef
+@@ -34,9 +38,16 @@ define QT5MULTIMEDIA_INSTALL_STAGING_CMDS
+ endef
+ 
+ ifeq ($(BR2_PREFER_STATIC_LIB),)
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE),y)
++define QT5MULTIMEDIA_INSTALL_TARGET_QGSTTOOLS_LIB
++	cp -dpf $(STAGING_DIR)/usr/lib/libqgsttools*.so.* $(TARGET_DIR)/usr/lib
++endef
++endif
++
+ define QT5MULTIMEDIA_INSTALL_TARGET_LIBS
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Multimedia*.so.* $(TARGET_DIR)/usr/lib
+ 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/* $(TARGET_DIR)/usr/lib/qt/plugins
++	$(QT5MULTIMEDIA_INSTALL_TARGET_QGSTTOOLS_LIB)
+ endef
+ endif
+ 
