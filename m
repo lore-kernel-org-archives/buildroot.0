@@ -1,48 +1,125 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat,  1 Mar 2014 16:21:04 -0300
-Subject: [Buildroot] [PATCH 2/2] parted: add readline bump fix patch
-In-Reply-To: <1393701664-7513-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1393701664-7513-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1393701664-7513-2-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sat, 01 Mar 2014 20:25:33 +0100
+Subject: [Buildroot] [PATCH 08/17] packages: add infrastructure for
+	virtual packages
+In-Reply-To: <972572db05ab656c34dabde9a559255d0d386e25.1393695127.git.yann.morin.1998@free.fr>
+References: <cover.1393695127.git.yann.morin.1998@free.fr>
+ <972572db05ab656c34dabde9a559255d0d386e25.1393695127.git.yann.morin.1998@free.fr>
+Message-ID: <e279c8b8-16ff-4bd4-ac15-371aa10e4203@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/1e9/1e90929bfaf617381d490dc0b99f333968624ce7/
+"Yann E. MORIN" <yann.morin.1998@free.fr> schreef:
+>From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>
+>The virtual-package infrastructure allows to easily define a
+>virtual package in a single line:
+>
+>    $ package/some-virtual-package/some-virtual-package.mk:
+>    $(eval $(virtual-package))
+>
+>And that's all. :-)
+>
+>Thanks to ?ric for his work on the manual, that prompted the
+>idea for this virtual-package infrastructure! ;-)
+>
+>Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+>Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+>Cc: Mike Zick <minimod@morethan.org>
+>---
+> package/Makefile.in    |  1 +
+> package/pkg-virtual.mk | 65 ++++++++++++++++++++++++++++++++++++++++++++++++++
+> 2 files changed, 66 insertions(+)
+> create mode 100644 package/pkg-virtual.mk
+>
+>diff --git a/package/Makefile.in b/package/Makefile.in
+>index 454f614..c5cdf5a 100644
+>--- a/package/Makefile.in
+>+++ b/package/Makefile.in
+>@@ -362,4 +362,5 @@ include package/pkg-cmake.mk
+> include package/pkg-luarocks.mk
+> include package/pkg-perl.mk
+> include package/pkg-python.mk
+>+include package/pkg-virtual.mk
+> include package/pkg-generic.mk
+>diff --git a/package/pkg-virtual.mk b/package/pkg-virtual.mk
+>new file mode 100644
+>index 0000000..3932302
+>--- /dev/null
+>+++ b/package/pkg-virtual.mk
+>@@ -0,0 +1,65 @@
+>+################################################################################
+>+# Virtual package infrastructure
+>+#
+>+# This file implements an infrastructure that eases development of
+>+# package .mk files for virtual packages. It should be used for all
+>+# virtual packages.
+>+#
+>+# See the Buildroot documentation for details on the usage of this
+>+# infrastructure
+>+#
+>+# In terms of implementation, this virtual infrastructure requires
+>+# the .mk file to only call the 'virtual-package' macro.
+>+#
+>+################################################################################
+>+
+>+
+>+################################################################################
+>+# inner-virtual-package -- defines the dependency rules of the virtual
+>+# package against its provider.
+>+#
+>+#  argument 1 is the lowercase package name
+>+#  argument 2 is the uppercase package name, including an HOST_ prefix
+>+#             for host packages
+>+#  argument 3 is the uppercase package name, without the HOST_ prefix
+>+#             for host packages
+>+#  argument 4 is the type (target or host)
+>+################################################################################
+>+
+>+# Note: putting this comment here rather than in the define block, otherwise
+>+# make would try to expand the $(error ...) in the comment, which is not
+>+# really what we want.
+>+# We need to use second-expansion for the $(error ...) call, below,
+>+# so it is not evaluated now, but as part of the generated make code.
+>+
+>+define inner-virtual-package
+>+
+>+# Ensure the virtual package has an implementation defined.
+>+ifeq ($(BR2_PACKAGE_HAS_$(2)),y)
+>+ifeq ($(call qstrip,$(BR2_PACKAGE_PROVIDES_$(2))),)
+>+$$(error No implementation selected for virtual package $(1). Configuration error)
+>+endif
+>+endif
+>+
+>+# A virtual package does not have any source associated
+>+$(2)_SOURCE =
+>+
+>+# This must be repeated from inner-generic-package, otherwise we get an empty
+>+# _DEPENDENCIES
+>+$(2)_DEPENDENCIES ?= $(filter-out $(1),$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
+>+
+>+# Add dependency against the provider
+>+$(2)_DEPENDENCIES += $(call qstrip,$(BR2_PACKAGE_PROVIDES_$(2)))
+>+
+>+# Call the generic package infrastructure to generate the necessary
+>+# make targets
+>+$(call inner-generic-package,$(1),$(2),$(3),$(4))
+>+
+>+endef
+>+
+>+################################################################################
+>+# virtual-package -- the target generator macro for virtual packages
+>+################################################################################
+>+
+>+virtual-package = $(call inner-virtual-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
+>+host-virtual-package = $(call inner-virtual-package,host-$(pkgname),$(call UPPERCASE,host-$(pkgname)),$(call UPPERCASE,$(pkgname)),host)
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/parted/parted-001-readline-deprecated.patch | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
- create mode 100644 package/parted/parted-001-readline-deprecated.patch
+I haven't yet checked the details of your series, but what about using this series as an opportunity to set the VERSION of a virtual package to 'virtual' instead of the default 'undefined'? This will be visible both in output/build as in the log messages...
 
-diff --git a/package/parted/parted-001-readline-deprecated.patch b/package/parted/parted-001-readline-deprecated.patch
-new file mode 100644
-index 0000000..989c029
---- /dev/null
-+++ b/package/parted/parted-001-readline-deprecated.patch
-@@ -0,0 +1,19 @@
-+The CPPFunction typedef (among others) have been deprecated in favour of
-+specific prototyped typedefs since readline 4.2.
-+They've been working since because compatibility typedefs have been
-+until they were removed in readline 6.3.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura parted-3.1.orig/parted/ui.c parted-3.1/parted/ui.c
-+--- parted-3.1.orig/parted/ui.c	2014-03-01 16:11:41.970827134 -0300
-++++ parted-3.1/parted/ui.c	2014-03-01 16:11:55.540259786 -0300
-+@@ -1474,7 +1474,7 @@
-+ #ifdef HAVE_LIBREADLINE
-+   if (!opt_script_mode) {
-+     rl_initialize ();
-+-    rl_attempted_completion_function = (CPPFunction*) complete_function;
-++    rl_attempted_completion_function = (rl_completion_func_t *) complete_function;
-+     readline_state.in_readline = 0;
-+   }
-+ #endif
--- 
-1.8.3.2
+Best regards,
+Thomas
