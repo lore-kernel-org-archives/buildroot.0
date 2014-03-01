@@ -1,28 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 2 Mar 2014 00:29:42 +0100
-Subject: [Buildroot] [PATCH] qt5multimedia: install gsttools library to
- target
-In-Reply-To: <1390572380-28031-1-git-send-email-fatih.asici@gmail.com>
-References: <1390572380-28031-1-git-send-email-fatih.asici@gmail.com>
-Message-ID: <20140302002942.5d4455b4@skate>
+Date: Sun, 2 Mar 2014 00:30:06 +0100
+Subject: [Buildroot] More work on a package updates checking tool
+In-Reply-To: <CACjG4B+DJSmnY9m_7u4w8cr4NCE61R7SBRQ1G5yecphFoBdpbA@mail.gmail.com>
+References: <CACjG4BJuyTZ=Fbgmt=qiNs+qn1pQt0R6xV+MCw_5CKbc+XFZqg@mail.gmail.com>
+ <20131219180239.5a5c6771@skate>
+ <CACjG4BKCDV4yqOfjfdnFnPErvGYJtbBraqRvj5H8oPSu-1PYhA@mail.gmail.com>
+ <20140202121951.3619d2cf@skate>
+ <CACjG4B+DJSmnY9m_7u4w8cr4NCE61R7SBRQ1G5yecphFoBdpbA@mail.gmail.com>
+Message-ID: <20140302003006.63a1a7a9@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fatih A??c?,
+Dear arnaud aujon,
 
-On Fri, 24 Jan 2014 16:06:20 +0200, Fatih A??c? wrote:
-> It is built when gst-plugins-base is selected.
+On Mon, 3 Feb 2014 09:52:29 +0100, arnaud aujon wrote:
+
+> > Do you have any news about this work? It would be really useful to have
+> > this to replace http://autobuild.buildroot.org/stats/, and have the
+> > very useful informations of which packages might be upgraded to a newer
+> > upstream version.
+> >
+> > Have you had some time to work on this? Any progress?
 > 
-> Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
-> Noticed-by: Pawe? Gibaszek <gibol666@gmail.com>
-> ---
->  package/qt5/qt5multimedia/qt5multimedia.mk | 11 +++++++++++
->  1 file changed, 11 insertions(+)
+> I'm still working on it, I spent some time rewriting it in a more pythonic
+> way.
+> There is still some clean up to do but I will be able to provide a version
+> pretty soon.
 
-Applied, thanks.
+Any news? :-)
+
+Thanks!
 
 Thomas
 -- 
