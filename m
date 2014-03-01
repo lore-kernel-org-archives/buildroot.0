@@ -1,66 +1,170 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Mar 2014 17:14:37 +0100
-Subject: [Buildroot] [git commit] package/linux-headers: remove 2.6 snapshot
-Message-ID: <20140301193723.171DE9936B@busybox.osuosl.org>
+Date: Sat, 1 Mar 2014 19:43:22 +0100
+Subject: [Buildroot] [git commit] package/linux-headers: select appropriate
+	'AT_LEAST_XXX' header version
+Message-ID: <20140301193723.4C1FD96DFF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=971e331c54e08e82b4ed28a4eca8305933fa1cb0
+commit: http://git.buildroot.net/buildroot/commit/?id=88d0bca0c103f1e8f2e0006948e0cf4860a35a21
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As Thomas states:
-    It is completely weird to ask the tarball to be named exactly
-    linux-2.6.tar.bz2. IMO, we should simply get rid of this feature.
+Select the appropriate BR2_TOOLCHAIN_HEADERS_AT_LEAST_XXX options for the
+internal toolchain backend.
 
-Make it so! ;-)
+For the manualy-specified version, we bring up the choice that sets the
+_AT_LEAST_XXX symbols.
+
+[Thomas: rename symbols from BR2_PACKAGE_HOST_LINUX_HEADERS_<version>
+to BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_<version> to clearly indicate
+that they are used to specify the version of custom headers.]
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Cc: Paul Cercueil <paul@crapouillou.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in.legacy                     |    7 +++++++
- package/linux-headers/Config.in.host |    4 ----
- 2 files changed, 7 insertions(+), 4 deletions(-)
+ package/linux-headers/Config.in.host |   82 ++++++++++++++++++++++++++++++++++
+ 1 files changed, 82 insertions(+), 0 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 09c3a2b..cfcf5a3 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -101,6 +101,13 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2014.05"
- 
-+config BR2_KERNEL_HEADERS_SNAP
-+	bool "Local Linux snapshot support removed"
-+	select BR2_LEGACY
-+	help
-+	  Support for using a custom snapshot to install the Linux
-+	  kernel headers has been removed.
-+
- config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
- 	bool "/dev management by udev removed"
- 	select BR2_LEGACY
 diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 134e338..fcecd62 100644
+index fcecd62..8d306bd 100644
 --- a/package/linux-headers/Config.in.host
 +++ b/package/linux-headers/Config.in.host
-@@ -56,9 +56,6 @@ choice
+@@ -17,42 +17,53 @@ choice
+ 	config BR2_KERNEL_HEADERS_3_0
+ 		bool "Linux 3.0.x kernel headers"
+ 		depends on !BR2_arc
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+ 
+ 	config BR2_KERNEL_HEADERS_3_2
+ 		bool "Linux 3.2.x kernel headers"
+ 		depends on !BR2_arc
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+ 
+ 	config BR2_KERNEL_HEADERS_3_4
+ 		bool "Linux 3.4.x kernel headers"
+ 		depends on !BR2_arc
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
+ 
+ 	config BR2_KERNEL_HEADERS_3_6
+ 		bool "Linux 3.6.x kernel headers"
+ 		depends on BR2_DEPRECATED_SINCE_2013_05 && !BR2_arc
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_6
+ 
+ 	config BR2_KERNEL_HEADERS_3_7
+ 		bool "Linux 3.7.x kernel headers"
+ 		depends on BR2_DEPRECATED_SINCE_2013_05 && !BR2_arc
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
+ 
+ 	config BR2_KERNEL_HEADERS_3_8
+ 		bool "Linux 3.8.x kernel headers"
+ 		depends on BR2_DEPRECATED_SINCE_2013_08 && !BR2_arc
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
+ 
+ 	config BR2_KERNEL_HEADERS_3_9
+ 		bool "Linux 3.9.x kernel headers"
+ 		depends on BR2_DEPRECATED_SINCE_2013_11
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
+ 
+ 	config BR2_KERNEL_HEADERS_3_10
+ 		bool "Linux 3.10.x kernel headers"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+ 
+ 	config BR2_KERNEL_HEADERS_3_11
+ 		bool "Linux 3.11.x kernel headers"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
+ 
+ 	config BR2_KERNEL_HEADERS_3_12
+ 		bool "Linux 3.12.x kernel headers"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
+ 
+ 	config BR2_KERNEL_HEADERS_3_13
+ 		bool "Linux 3.13.x kernel headers"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
  
  	config BR2_KERNEL_HEADERS_VERSION
  		bool "Manually specified Linux version"
--
--	config BR2_KERNEL_HEADERS_SNAP
--		bool "Local Linux snapshot (linux-2.6.tar.bz2)"
- endchoice
+@@ -65,6 +76,77 @@ config BR2_DEFAULT_KERNEL_VERSION
+ 	  Specify the version you want to use.
+ 	  E.G.: 3.6.10
  
- config BR2_DEFAULT_KERNEL_VERSION
-@@ -81,5 +78,4 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
- 	default "3.12.13"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.13.5"	if BR2_KERNEL_HEADERS_3_13
--	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
++choice
++	bool "Custom kernel headers series"
++	depends on BR2_KERNEL_HEADERS_VERSION
++	default BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_REALLY_OLD
++	help
++	  Set to the kernel headers series you manually set above.
++
++	  This is used to hide/show some packages that have strict
++	  requirements on the version of kernel headers.
++
++config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_13
++	bool "3.13.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
++
++config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_12
++	bool "3.12.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
++
++config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_11
++	bool "3.11.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
++
++config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10
++	bool "3.10.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
++
++config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_9
++	bool "3.9.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
++
++config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_8
++	bool "3.8.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
++
++config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_7
++	bool "3.7.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
++
++config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_6
++	bool "3.6.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_6
++
++config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_5
++	bool "3.5.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
++
++config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_4
++	bool "3.4.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
++
++config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_3
++	bool "3.3.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
++
++config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_2
++	bool "3.2.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
++
++config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_1
++	bool "3.1.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
++
++config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_0
++	bool "3.0.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
++
++config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_REALLY_OLD
++	bool "2.6.x"
++
++endchoice
++
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
