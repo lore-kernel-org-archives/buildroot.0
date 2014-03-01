@@ -1,61 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Mar 2014 16:09:04 +0100
-Subject: [Buildroot] [PATCH 00/24] lua
-In-Reply-To: <1393227301-14874-1-git-send-email-francois.perrad@gadz.org>
-References: <1393227301-14874-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20140301160904.29570bf8@skate>
+Date: Sat, 1 Mar 2014 16:07:09 +0100
+Subject: [Buildroot] [git commit] lualogging: new package
+Message-ID: <20140301151038.5E3C6903EB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+commit: http://git.buildroot.net/buildroot/commit/?id=4b21b576af9a071a5bc91957dfda7c8072ac1aff
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 24 Feb 2014 08:34:36 +0100, Francois Perrad wrote:
+[Thomas: simplify version specification in the .mk file.]
 
-> Francois Perrad (24):
->   lua: remove LUA_INSTALLED_FILES
->   lua: refactor install steps
->   luarocks: never wraps script
->   luajit: refactor without dont-strip.patch
->   luajit: refactor without shared-lib.patch
->   luajit: add host-luajit
->   luarocks: allow to work with host-luajit
->   ljlinenoise: new package
->   lpeg: new package
->   cosmo: new package
->   lua-iconv: new package
->   luajson: new package
->   lualogging: new package
->   dado: new package
->   lrandom: new package
->   lua-testmore: new package
->   lua-coat: new package
->   lua-coatpersistent: new package
->   lua-messagepack: new package
->   lua-csnappy: new package
->   lzlib: new package
->   lunit: new package
->   lpty: new package
->   lsqlite3: new package
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                |    1 +
+ package/lualogging/Config.in     |    9 +++++++++
+ package/lualogging/lualogging.mk |   12 ++++++++++++
+ 3 files changed, 22 insertions(+), 0 deletions(-)
 
-I've started applying a certain number of those patches, but when
-building some of these Lua packages, I have warning about missing
-dependencies. For example, when building luajson:
-
-  Missing dependency for luajson 1.3.2-1: lunit >= 0.4
-
-Or when building lualogging:
-
-  Missing dependency for lualogging 1.3.0-1: luasocket
-
-Are these normal?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index cc44228..c4cdcc4 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -385,6 +385,7 @@ source "package/luaexpat/Config.in"
+ source "package/luaexpatutils/Config.in"
+ source "package/luafilesystem/Config.in"
+ source "package/luajson/Config.in"
++source "package/lualogging/Config.in"
+ source "package/luaposix/Config.in"
+ source "package/luasec/Config.in"
+ source "package/luasocket/Config.in"
+diff --git a/package/lualogging/Config.in b/package/lualogging/Config.in
+new file mode 100644
+index 0000000..37d7015
+--- /dev/null
++++ b/package/lualogging/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_LUALOGGING
++	bool "lualogging"
++	help
++	  LuaLogging provides a simple API to use logging features in Lua.
++	  Its design was based on log4j. LuaLogging currently supports,
++	  through the use of appenders, console, file, rolling file, email,
++	  socket and SQL outputs.
++
++	  http://www.keplerproject.org/lualogging/
+diff --git a/package/lualogging/lualogging.mk b/package/lualogging/lualogging.mk
+new file mode 100644
+index 0000000..d17353c
+--- /dev/null
++++ b/package/lualogging/lualogging.mk
+@@ -0,0 +1,12 @@
++################################################################################
++#
++# lualogging
++#
++################################################################################
++
++LUALOGGING_VERSION = 1.3.0-1
++LUALOGGING_SUBDIR  = lualogging
++LUALOGGING_LICENSE = MIT
++LUALOGGING_LICENSE_FILES = $(LUALOGGING_SUBDIR)/COPYRIGHT
++
++$(eval $(luarocks-package))
