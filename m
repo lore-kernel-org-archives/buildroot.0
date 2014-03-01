@@ -1,32 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Mar 2014 15:42:43 +0100
-Subject: [Buildroot] [PATCH 10/24] cosmo: new package
-In-Reply-To: <1393227301-14874-11-git-send-email-francois.perrad@gadz.org>
-References: <1393227301-14874-1-git-send-email-francois.perrad@gadz.org>
- <1393227301-14874-11-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20140301154243.7f55bbde@skate>
+Date: Sat, 1 Mar 2014 15:43:47 +0100
+Subject: [Buildroot] [PATCH 2/2] bash: bump to version 4.3
+In-Reply-To: <1393534739-7133-2-git-send-email-gustavo@zacarias.com.ar>
+References: <1393534739-7133-1-git-send-email-gustavo@zacarias.com.ar>
+ <1393534739-7133-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140301154347.7ce25d7e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+Dear Gustavo Zacarias,
 
-On Mon, 24 Feb 2014 08:34:46 +0100, Francois Perrad wrote:
+On Thu, 27 Feb 2014 17:58:59 -0300, Gustavo Zacarias wrote:
+> Switch to external readline support to potentially reduce target size.
 > 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/Config.in       |    1 +
->  package/cosmo/Config.in |    7 +++++++
->  package/cosmo/cosmo.mk  |   10 ++++++++++
->  3 files changed, 18 insertions(+)
->  create mode 100644 package/cosmo/Config.in
->  create mode 100644 package/cosmo/cosmo.mk
 
-Applied, after fixing the suggestion made by Arnout.
-
-Thanks,
+This is causing some build issues, see
+http://autobuild.buildroot.org/results/44a/44a962623be757143a3d6d37fc6cd14964094f79/build-end.log.
 
 Thomas
 -- 
