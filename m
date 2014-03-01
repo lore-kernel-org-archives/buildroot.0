@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Mar 2014 15:43:47 +0100
-Subject: [Buildroot] [PATCH 2/2] bash: bump to version 4.3
-In-Reply-To: <1393534739-7133-2-git-send-email-gustavo@zacarias.com.ar>
-References: <1393534739-7133-1-git-send-email-gustavo@zacarias.com.ar>
- <1393534739-7133-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140301154347.7ce25d7e@skate>
+Date: Sat, 1 Mar 2014 15:44:36 +0100
+Subject: [Buildroot] [PATCH] php-gnupg: new package
+In-Reply-To: <1393359365-21266-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1393359365-21266-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140301154436.3b7be77e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,14 +12,24 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Thu, 27 Feb 2014 17:58:59 -0300, Gustavo Zacarias wrote:
-> Switch to external readline support to potentially reduce target size.
-> 
+On Tue, 25 Feb 2014 17:16:05 -0300, Gustavo Zacarias wrote:
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
+>  package/Config.in              |  1 +
+>  package/php-gnupg/Config.in    |  9 +++++++++
+>  package/php-gnupg/php-gnupg.mk | 23 +++++++++++++++++++++++
+>  3 files changed, 33 insertions(+)
+>  create mode 100644 package/php-gnupg/Config.in
+>  create mode 100644 package/php-gnupg/php-gnupg.mk
 
-This is causing some build issues, see
-http://autobuild.buildroot.org/results/44a/44a962623be757143a3d6d37fc6cd14964094f79/build-end.log.
+This package is causing some build issues, see
+http://autobuild.buildroot.org/results/efb/efbce29a2fa1d8561c10613d2145b9b382ddc83c/:
+
+checking for gawk... gawk
+checking for gnupg support... yes, shared
+checking for gnupg files in default path... not found
+configure: error: Please reinstall the gpgme distribution
+make: *** [/data/scratch/peko/build/php-gnupg-1.3.3/.stamp_configured] Error 1
 
 Thomas
 -- 
