@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  1 Mar 2014 15:53:03 +0100
-Subject: [Buildroot] [PATCH 08/13] manual: document minimal kernel headers
-	dependency
+Date: Sat,  1 Mar 2014 15:53:04 +0100
+Subject: [Buildroot] [PATCH 09/13] package/dvb-apps: requires kernel headers
+	>= 3.3
 In-Reply-To: <cover.1393685422.git.yann.morin.1998@free.fr>
 References: <cover.1393685422.git.yann.morin.1998@free.fr>
-Message-ID: <09213fecb2225b853b88007a6ea9197952d970a2.1393685422.git.yann.morin.1998@free.fr>
+Message-ID: <c4ff9425708eb2b59eb48e432ea57cd577000f1a.1393685422.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,38 +13,38 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
+dvb-apps requires linux kernel headers >= 3.3, for:
+    SYS_TURBO, SYS_DVBC_ANNEX_A      : introduced in 3.2
+    SYS_DVBC_ANNEX_C, DTV_ENUM_DELSYS: introduced in 3.3
+
+Fixes:
+    http://autobuild.buildroot.net/results/a77/a7786dffa28e5472fbc9c8fe4ab302c84d7a3cb9
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Samuel Martin <s.martin49@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
 ---
-Changes v1 -> v2:
-  - fix typo  (Samuel)
-  - fix asciidoc syntax  (Thomas DS)
----
- docs/manual/adding-packages-directory.txt | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/dvb-apps/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-index 6145f54..e56e59a 100644
---- a/docs/manual/adding-packages-directory.txt
-+++ b/docs/manual/adding-packages-directory.txt
-@@ -218,6 +218,12 @@ use in the comment.
- ** Dependency symbol: +BR2_USE_MMU+
- ** Comment string: no comment to be added
+diff --git a/package/dvb-apps/Config.in b/package/dvb-apps/Config.in
+index ba3ce45..ea0a12f 100644
+--- a/package/dvb-apps/Config.in
++++ b/package/dvb-apps/Config.in
+@@ -8,13 +8,14 @@ config BR2_PACKAGE_DVB_APPS
  
-+* Kernel headers
-+** Dependency symbol: +BR2_TOOLCHAIN_HEADERS_AT_LEAST_X_Y+, (replace
-+   +X_Y+ with the proper version, see +toolchain/toolchain-common.in+)
-+** Comment string: +headers >= X.Y+ (replace +X.Y+ with the
-+   proper version)
-+
- * C library
- ** Dependency symbol: +BR2_TOOLCHAIN_USES_GLIBC+,
- +BR2_TOOLCHAIN_USES_UCLIBC+
+ if BR2_PACKAGE_DVB_APPS
+ 
+-comment "dvb-apps utils needs a toolchain w/ largefile, threads"
+-	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
++comment "dvb-apps utils needs a toolchain w/ largefile, threads, headers >= 3.3"
++	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
+ 
+ config BR2_PACKAGE_DVB_APPS_UTILS
+ 	bool "dvb-apps utilities"
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	help
+ 	  A small number of DVB test and utility programs,
 -- 
 1.8.3.2
