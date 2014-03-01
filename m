@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  1 Mar 2014 18:32:37 +0100
-Subject: [Buildroot] [PATCH 08/17] packages: add infrastructure for virtual
-	packages
+Date: Sat,  1 Mar 2014 18:32:40 +0100
+Subject: [Buildroot] [PATCH 11/17] package/libgles: convert to the
+	virtual-package infrastructure
 In-Reply-To: <cover.1393695127.git.yann.morin.1998@free.fr>
 References: <cover.1393695127.git.yann.morin.1998@free.fr>
-Message-ID: <972572db05ab656c34dabde9a559255d0d386e25.1393695127.git.yann.morin.1998@free.fr>
+Message-ID: <ad1d3c14be83687365422a1b33146328c2bc72ea.1393695127.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,108 +13,33 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-The virtual-package infrastructure allows to easily define a
-virtual package in a single line:
-
-    $ package/some-virtual-package/some-virtual-package.mk:
-    $(eval $(virtual-package))
-
-And that's all. :-)
-
-Thanks to ?ric for his work on the manual, that prompted the
-idea for this virtual-package infrastructure! ;-)
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 Cc: Mike Zick <minimod@morethan.org>
 ---
- package/Makefile.in    |  1 +
- package/pkg-virtual.mk | 65 ++++++++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 66 insertions(+)
- create mode 100644 package/pkg-virtual.mk
+ package/opengl/libgles/libgles.mk | 11 +----------
+ 1 file changed, 1 insertion(+), 10 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 454f614..c5cdf5a 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -362,4 +362,5 @@ include package/pkg-cmake.mk
- include package/pkg-luarocks.mk
- include package/pkg-perl.mk
- include package/pkg-python.mk
-+include package/pkg-virtual.mk
- include package/pkg-generic.mk
-diff --git a/package/pkg-virtual.mk b/package/pkg-virtual.mk
-new file mode 100644
-index 0000000..3932302
---- /dev/null
-+++ b/package/pkg-virtual.mk
-@@ -0,0 +1,65 @@
-+################################################################################
-+# Virtual package infrastructure
-+#
-+# This file implements an infrastructure that eases development of
-+# package .mk files for virtual packages. It should be used for all
-+# virtual packages.
-+#
-+# See the Buildroot documentation for details on the usage of this
-+# infrastructure
-+#
-+# In terms of implementation, this virtual infrastructure requires
-+# the .mk file to only call the 'virtual-package' macro.
-+#
-+################################################################################
-+
-+
-+################################################################################
-+# inner-virtual-package -- defines the dependency rules of the virtual
-+# package against its provider.
-+#
-+#  argument 1 is the lowercase package name
-+#  argument 2 is the uppercase package name, including an HOST_ prefix
-+#             for host packages
-+#  argument 3 is the uppercase package name, without the HOST_ prefix
-+#             for host packages
-+#  argument 4 is the type (target or host)
-+################################################################################
-+
-+# Note: putting this comment here rather than in the define block, otherwise
-+# make would try to expand the $(error ...) in the comment, which is not
-+# really what we want.
-+# We need to use second-expansion for the $(error ...) call, below,
-+# so it is not evaluated now, but as part of the generated make code.
-+
-+define inner-virtual-package
-+
-+# Ensure the virtual package has an implementation defined.
-+ifeq ($(BR2_PACKAGE_HAS_$(2)),y)
-+ifeq ($(call qstrip,$(BR2_PACKAGE_PROVIDES_$(2))),)
-+$$(error No implementation selected for virtual package $(1). Configuration error)
-+endif
-+endif
-+
-+# A virtual package does not have any source associated
-+$(2)_SOURCE =
-+
-+# This must be repeated from inner-generic-package, otherwise we get an empty
-+# _DEPENDENCIES
-+$(2)_DEPENDENCIES ?= $(filter-out $(1),$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
-+
-+# Add dependency against the provider
-+$(2)_DEPENDENCIES += $(call qstrip,$(BR2_PACKAGE_PROVIDES_$(2)))
-+
-+# Call the generic package infrastructure to generate the necessary
-+# make targets
-+$(call inner-generic-package,$(1),$(2),$(3),$(4))
-+
-+endef
-+
-+################################################################################
-+# virtual-package -- the target generator macro for virtual packages
-+################################################################################
-+
-+virtual-package = $(call inner-virtual-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
-+host-virtual-package = $(call inner-virtual-package,host-$(pkgname),$(call UPPERCASE,host-$(pkgname)),$(call UPPERCASE,$(pkgname)),host)
+diff --git a/package/opengl/libgles/libgles.mk b/package/opengl/libgles/libgles.mk
+index 041e378..407f8f9 100644
+--- a/package/opengl/libgles/libgles.mk
++++ b/package/opengl/libgles/libgles.mk
+@@ -4,13 +4,4 @@
+ #
+ ################################################################################
+ 
+-LIBGLES_SOURCE =
+-LIBGLES_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_LIBGLES))
+-
+-ifeq ($(BR2_PACKAGE_HAS_LIBGLES),y)
+-ifeq ($(LIBGLES_DEPENDENCIES),)
+-$(error No libGLES implementation selected. Configuration error.)
+-endif
+-endif
+-
+-$(eval $(generic-package))
++$(eval $(virtual-package))
 -- 
 1.8.3.2
