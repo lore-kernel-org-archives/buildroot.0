@@ -1,27 +1,36 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Fri, 28 Feb 2014 23:29:21 +0100
-Subject: [Buildroot] [PATCH] Makefile: ensure system is built even if no
- filesystem image is selected
-In-Reply-To: <5310EC9B.40204@zacarias.com.ar>
-References: <1393617927-1661-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <5310EC9B.40204@zacarias.com.ar>
-Message-ID: <CAHkwnC8HJ=wNTdEqhOfwOkNQqY0PTfUsP1-jU3MexHZbyT2uHw@mail.gmail.com>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Sat, 1 Mar 2014 01:27:20 +0100
+Subject: [Buildroot] host perl  expat  broken
+Message-ID: <AD64DAF96C2F48068C6DE4BA542C19A9@JohanW7>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Feb 28, 2014 at 9:07 PM, Gustavo Zacarias
-<gustavo@zacarias.com.ar> wrote:
-> On 02/28/2014 05:05 PM, Thomas Petazzoni wrote:
->
->> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->
-> Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ 
+Hi
 
-Acked-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+(using latest pull)
 
-Thanks
--- 
-Fabio Porcedda
+
+make[2]: Entering directory `/home/brcpy/output/build/host-perl-xml-parser-2.41/Expat'
+cp Expat.pm ../blib/lib/XML/Parser/Expat.pm
+/usr/bin/perl /usr/share/perl/5.10.1/ExtUtils/xsubpp -noprototypes -typemap /usr/share/perl/5.10/ExtUtils/typemap -typemap typemap
+Expat.xs > Expat.xsc && mv Expat.xsc Expat.c
+cc -c   -D_REENTRANT -D_GNU_SOURCE -DDEBIAN -fno-strict-aliasing -pipe -fstack-protector -I/usr/local/include -D_LARGEFILE_SOURCE
+-D_FILE_OFFSET_BITS=64 -O2 -g   -DVERSION=\"2.41\" -DXS_VERSION=\"2.41\" -fPIC "-I/usr/lib/perl/5.10/CORE"   Expat.c
+Expat.xs:12:19: fatal error: expat.h: No such file or directory
+compilation terminated.
+make[2]: *** [Expat.o] Error 1
+make[2]: Leaving directory `/home/brcpy/output/build/host-perl-xml-parser-2.41/Expat'
+make[1]: *** [subdirs] Error 2
+make[1]: Leaving directory `/home/brcpy/output/build/host-perl-xml-parser-2.41'
+make: *** [/home/brcpy/output/build/host-perl-xml-parser-2.41/.stamp_built] Error 2
+ 
+Buildroot seems to look for the header file on my host machine.
+
+
+
+Regards 
+ Johan
