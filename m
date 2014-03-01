@@ -1,23 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Mar 2014 20:38:29 +0100
-Subject: [Buildroot] [PATCH 0/13 v3] Add dependency on kernel headers
-In-Reply-To: <cover.1393685422.git.yann.morin.1998@free.fr>
-References: <cover.1393685422.git.yann.morin.1998@free.fr>
-Message-ID: <20140301203829.0b659d9f@skate>
+Date: Sat, 1 Mar 2014 20:41:07 +0100
+Subject: [Buildroot] [PATCH] bash: always prefix readline
+In-Reply-To: <1393696466-11902-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1393696466-11902-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140301204107.43d5dcc4@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Gustavo Zacarias,
 
-On Sat,  1 Mar 2014 15:53:04 +0100, Yann E. MORIN wrote:
+On Sat,  1 Mar 2014 14:54:26 -0300, Gustavo Zacarias wrote:
+> Always prefix the readline directory otherwise autodetection may pick up
+> the host readline when headers are available and target == host (or are
+> link-compatible). Fixes:
+> http://autobuild.buildroot.org/results/44a/44a962623be757143a3d6d37fc6cd14964094f79/
 
-> This series introduces infrastructure for packages to depend on the
-> required version of kernel headers.
-
-Series committed, thanks!
+Applied, thanks.
 
 Thomas
 -- 
