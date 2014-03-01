@@ -1,30 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Mar 2014 23:50:30 +0100
-Subject: [Buildroot] [PATCH] luarocks: remove luainterpreter dependency
-In-Reply-To: <1393713055-15107-1-git-send-email-francois.perrad@gadz.org>
-References: <1393713055-15107-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20140301235030.4b2db15e@skate>
+Date: Sat, 1 Mar 2014 23:56:18 +0100
+Subject: [Buildroot] [PATCH 0/17 v2] Add new virtual-package
+ infrastructure
+In-Reply-To: <cover.1393695127.git.yann.morin.1998@free.fr>
+References: <cover.1393695127.git.yann.morin.1998@free.fr>
+Message-ID: <20140301235618.04b363a8@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+Dear Yann E. MORIN,
 
-On Sat,  1 Mar 2014 23:30:55 +0100, Francois Perrad wrote:
-> a package using luarocks infrastructure needs a dependency with luainterpreter.
-> this is already done in pkg-luarocks.mk.
-> 
-> here, in luarocks.mk, this dependency causes an issue with 'make legal-info' :
-> luainterpreter and an toolchain are built.
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/luarocks/luarocks.mk |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Sat,  1 Mar 2014 18:32:43 +0100, Yann E. MORIN wrote:
 
-Applied, after adding a lot more details in the commit log.
+>       package/libgles: rename the _HAS and _PROVIDES variables
+>       package/libegl: rename the _HAS and _PROVIDES variables
+>       package/libopenmax: rename the _HAS and _PROVIDES variables
+>       package/libopenvg: rename the _HAS and _PROVIDES variables
+>       package/luainterpreter: rename the _HAS and _PROVIDES variables
+
+I certainly agree to ensure that the kconfig symbol matches the package
+name. However, I am not sure the renaming of BR2_PACKAGE_HAS_OPENGL_ES
+to BR2_PACKAGE_HAS_LIBGLES is really nice. BR2_PACKAGE_HAS_OPENGL_ES
+had the merit of explicitly containing the word "OpenGL", while LIBGLES
+makes that a bit more cryptic. Do we want to instead rename the package
+to libopengl-es or some other variation on this?
+
+A similar reflexion could be made on the naming of the libegl package.
+
+Of course, I'm open to other opinions on this, the above comments are
+not really a very strong opinion on my side.
+
+My original plan was to apply patches 1 -> 6 of your series in order to
+remove you a bunch of patches to handle, but I'm not sure about these
+renames.
 
 Thanks!
 
