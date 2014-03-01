@@ -1,34 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Mar 2014 12:55:53 +0100
-Subject: [Buildroot] [git commit] perl-xml-parser: fix build
-Message-ID: <20140301115611.AAE8D9BC7A@busybox.osuosl.org>
+Date: Sat, 1 Mar 2014 12:59:06 +0100
+Subject: [Buildroot] [PATCH] grep: bump version to 2.18
+In-Reply-To: <53104244.8010305@t-online.hu>
+References: <53104244.8010305@t-online.hu>
+Message-ID: <20140301125906.1f155340@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ff7de87fce8c0be5506fbfd851a01a21cff67941
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear L?vai Tam?s,
 
-(missing when changing the naming scheme of Perl modules)
+On Fri, 28 Feb 2014 09:01:08 +0100, L?vai Tam?s wrote:
+> Signed-off-by: Tamas Levai <levai.tamas@t-online.hu>
+> ---
+>   package/grep/grep.mk | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> --- a/package/grep/grep.mk
+> +++ b/package/grep/grep.mk
+> @@ -4,7 +4,7 @@
+> #
+> ################################################################################
+> 
+> -GREP_VERSION = 2.16
+> +GREP_VERSION = 2.18
+>   GREP_SITE = $(BR2_GNU_MIRROR)/grep
+>   GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
+>   GREP_LICENSE = GPLv3+
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/perl-xml-parser/perl-xml-parser.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Thanks for your patch. It looks good, but unfortunately, you have used
+Thunderbird to send it, and Thunderbird has screwed up the patch. Could
+you please resend it with 'git send-email', which ensures that your
+patch will not reformatted by your e-mail client on the way?
 
-diff --git a/package/perl-xml-parser/perl-xml-parser.mk b/package/perl-xml-parser/perl-xml-parser.mk
-index fb9bf0f..f46f1f5 100644
---- a/package/perl-xml-parser/perl-xml-parser.mk
-+++ b/package/perl-xml-parser/perl-xml-parser.mk
-@@ -10,7 +10,7 @@ PERL_XML_PARSER_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TODDR/
- PERL_XML_PARSER_DEPENDENCIES = expat
- PERL_XML_PARSER_LICENSE = Artistic or GPLv1+
- 
--HOST_LIBXML_PARSER_PERL_CONF_OPT = \
-+HOST_PERL_XML_PARSER_CONF_OPT = \
- 	EXPATLIBPATH=$(HOST_DIR)/usr/lib \
- 	EXPATINCPATH=$(HOST_DIR)/usr/include
- 
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
