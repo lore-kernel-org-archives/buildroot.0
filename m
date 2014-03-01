@@ -1,70 +1,83 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Mar 2014 13:06:18 +0100
-Subject: [Buildroot] [git commit] python, python3: fix unicodedata enabling
-Message-ID: <20140301120708.B33249BC87@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 1 Mar 2014 14:19:01 +0100
+Subject: [Buildroot] [PATCH] legal-info: extract even no-redistribute
+ packages
+In-Reply-To: <CAHkwnC_J=bVgXyK5X-MPA5csths8M1OkxnxU=d6Zk9=7gYc3Bw@mail.gmail.com>
+References: <1393605956-18133-1-git-send-email-yann.morin.1998@free.fr>
+ <CAHkwnC_J=bVgXyK5X-MPA5csths8M1OkxnxU=d6Zk9=7gYc3Bw@mail.gmail.com>
+Message-ID: <20140301131901.GA3354@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bec21dcfa7042d1f7065cf467c4f9c777f0fd072
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fabio, All,
 
-A confusion was made when applying commit
-c3d539b53ff0533e91ae849dbdcdd589b0fec0cc ('host python/python3:
-conditionally disable unicodedata') and then commit
-73293e88c828c9bddc0b684a4603f86f70f8e876 ('python, python3: enable
-unicodedata for host-python, needed by setuptools').
+On 2014-03-01 00:39 +0100, Fabio Porcedda spake thusly:
+> On Fri, Feb 28, 2014 at 5:45 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> >
+> > If a package is marked _REDISTRIBUTE = NO, then legal-info will not
+> > try to extract it first.
+> >
+> > If that package also declares some _LICENSE_FILES, legal-info fails
+> > if it is the only action we're trying to run:
+> >
+> >     $ cat defconfig
+> >     BR2_INIT_NONE=y
+> >     BR2_PACKAGE_LIBFSLCODEC=y
+> >     $ make BR2_DEFCONFIG=$(pwd)/defconfig defconfig
+> >     $ make libfslcodec-legal-info
+> >     /bin/sh: /home/ymorin/dev/buildroot/O/legal-info/licenses.txt: No such file or directory
+> >     make[1]: *** [libfslcodec-legal-info] Error 1
+> >
+> > Fix this by always having legal-info extract the archives if one or
+> > more _LICENSE_FILES are specified.
+> >
+> > Fixes:
+> >     http://autobuild.buildroot.net/results/884/884ba13bb024fd9a4818f3184495b2cccc3f595e/
+> >     http://autobuild.buildroot.net/results/b6e/b6e152ce117764337c243a9f356b32064106f5c3/
+> >     http://autobuild.buildroot.net/results/a58/a588b3b535a1259f7bc110a6323e5f33830bcd94/
+> >     http://autobuild.buildroot.net/results/6d5/6d5da7fe5aee871d98fd5503875453556ccbf854/
+> >     [...]
+> >
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> > ---
+> >  package/pkg-generic.mk | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> > index 339c3eb..7b4d04e 100644
+> > --- a/package/pkg-generic.mk
+> > +++ b/package/pkg-generic.mk
+> > @@ -555,7 +555,8 @@ $(2)_MANIFEST_LICENSE_FILES = $$($(2)_LICENSE_FILES)
+> >  endif
+> >  $(2)_MANIFEST_LICENSE_FILES ?= not saved
+> >
+> > -ifeq ($$($(2)_REDISTRIBUTE),YES)
+> > +# If the package declares _LICENSE_FILES, we need to extract it
+> > +ifneq ($$($(2)_LICENSE_FILES),)
+> >  ifneq ($$($(2)_SITE_METHOD),local)
+> >  ifneq ($$($(2)_SITE_METHOD),override)
+> 
+> If  the package declares _LICENSE_FILES we need to extract it even if
+> SITE_METHOD is local or override?
 
-The first commit added the enabling of unicodedata in the host Python
-when the target Python is configured with unicodedata, which is
-necessary because building the target unicodedata Python module
-requires having unicodedata support in the host Python.
+I'm a bit uneasy as deciding what we should do in those cases.
 
-The second commit enabled the unicodedata unconditionally in the host
-Python, because it is needed by host-setuptools.
+We do not even save the tarballs for 'local' or 'override' packages in
+the first place. Saving the license texts would derogate from this
+behaviour.
 
-However, when the second commit was applied, the logic that consisted
-in disabling unicodedate in the host Python when not needed was kept,
-which resulted in breaking the build of host-setuptools due to the
-lack of unicodedata support in the host python.
+Regards,
+Yann E. MORIN.
 
-This commit fixes that by only leaving the unconditional
---enable-unicodedata in the host Python configuration options, and
-therefore removing the problematic conditional --disable-unicodedata.
-
-Fixes:
-
-  http://autobuild.buildroot.org/results/b62/b622fc14776f5a6c26ff0d1fb882f4ae6cccc5d8/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/python/python.mk   |    1 -
- package/python3/python3.mk |    1 -
- 2 files changed, 0 insertions(+), 2 deletions(-)
-
-diff --git a/package/python/python.mk b/package/python/python.mk
-index e177ef7..94765cb 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -89,7 +89,6 @@ endif
- 
- ifneq ($(BR2_PACKAGE_PYTHON_UNICODEDATA),y)
- PYTHON_CONF_OPT += --disable-unicodedata
--HOST_PYTHON_CONF_OPT += --disable-unicodedata
- endif
- 
- # Default is UCS2 w/o a conf opt
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 24e90d6..880b66e 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -77,7 +77,6 @@ endif
- 
- ifneq ($(BR2_PACKAGE_PYTHON3_UNICODEDATA),y)
- PYTHON3_CONF_OPT += --disable-unicodedata
--HOST_PYTHON3_CONF_OPT += --disable-unicodedata
- endif
- 
- ifeq ($(BR2_PACKAGE_PYTHON3_BZIP2),y)
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
