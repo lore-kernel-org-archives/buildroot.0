@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  1 Mar 2014 18:32:46 +0100
-Subject: [Buildroot] [PATCH 17/17] package/cryptodev: convert to the
-	virtual-package infrastructure
+Date: Sat,  1 Mar 2014 18:32:35 +0100
+Subject: [Buildroot] [PATCH 06/17] package/lua: rename config options
 In-Reply-To: <cover.1393695127.git.yann.morin.1998@free.fr>
 References: <cover.1393695127.git.yann.morin.1998@free.fr>
-Message-ID: <a75d71e062ea77f7d70c840ee06bce3d740eeacc.1393695127.git.yann.morin.1998@free.fr>
+Message-ID: <925c46aa42067d08a356bbfd7142c89955437a69.1393695127.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,53 +12,104 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Since this package is implemented via a choice rather than the usual
-separate-package providers, we only need BR2_PACKAGE_HAS_CRYPTODEV
-to be always defined when the 'cryptodev' package is selected.
+Package's options should be named after the package.
+
+Lua is an interpreter, but the package is named 'lua'. So we want to
+name the config option with '_LUA_', not with '_LUA_INTERPRETER_'
+
+Besides, naming them with '_LUA_INTERPRETER_' might be confusing, since
+there is a package named 'luainterpreter'.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: Mike Zick <minimod@morethan.org>
+Cc: Francois Perrad <fperrad@gmail.com>
 ---
- package/cryptodev/Config.in    |  3 +++
- package/cryptodev/cryptodev.mk | 12 +-----------
- 2 files changed, 4 insertions(+), 11 deletions(-)
+ Config.in.legacy      | 21 +++++++++++++++++++++
+ package/lua/Config.in | 10 +++++-----
+ package/lua/lua.mk    |  4 ++--
+ 3 files changed, 28 insertions(+), 7 deletions(-)
 
-diff --git a/package/cryptodev/Config.in b/package/cryptodev/Config.in
-index 0780cc7..2407e04 100644
---- a/package/cryptodev/Config.in
-+++ b/package/cryptodev/Config.in
-@@ -37,6 +37,9 @@ config BR2_PACKAGE_OCF_LINUX
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 09c3a2b..944a0ab 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -101,6 +101,27 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2014.05"
  
- endchoice
- 
-+config BR2_PACKAGE_HAS_CRYPTODEV
-+	def_bool y
++config BR2_PACKAGE_LUA_INTERPRETER_EDITING_NONE
++	bool "Lua command-line editing none has been renamed"
++	help
++	  The BR2_PACKAGE_LUA_INTERPRETER_EDITING_NONE option has been
++	  renamed to BR2_PACKAGE_LUA_EDITING_NONE. You will have to select
++	  it in the corresponding choice.
 +
- config BR2_PACKAGE_PROVIDES_CRYPTODEV
- 	string
- 	default "cryptodev-linux" if BR2_PACKAGE_CRYPTODEV_LINUX
-diff --git a/package/cryptodev/cryptodev.mk b/package/cryptodev/cryptodev.mk
-index 11e6f48..969d1bd 100644
---- a/package/cryptodev/cryptodev.mk
-+++ b/package/cryptodev/cryptodev.mk
-@@ -4,14 +4,4 @@
- #
- ################################################################################
++config BR2_PACKAGE_LUA_INTERPRETER_READLINE
++	bool "Lua command-line editing using readline has been renamed"
++	help
++	  The BR2_PACKAGE_LUA_INTERPRETER_READLINE option has been
++	  renamed to BR2_PACKAGE_LUA_READLINE. You will have to select
++	  it in the corresponding choice.
++
++config BR2_PACKAGE_LUA_INTERPRETER_LINENOISE
++	bool "Lua command-line editing using linenoise has been renamed"
++	help
++	  The BR2_PACKAGE_LUA_INTERPRETER_LINENOISE option has been
++	  renamed to BR2_PACKAGE_LUA_LINENOISE. You will have to select
++	  it in the corresponding choice.
++
+ config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
+ 	bool "/dev management by udev removed"
+ 	select BR2_LEGACY
+diff --git a/package/lua/Config.in b/package/lua/Config.in
+index 2f1b25b..0e31858 100644
+--- a/package/lua/Config.in
++++ b/package/lua/Config.in
+@@ -30,22 +30,22 @@ config BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION
+ 	default "5.2"	if BR2_PACKAGE_LUA_5_2
  
--CRYPTODEV_SOURCE =
--CRYPTODEV_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_CRYPTODEV))
--
--ifeq ($(CRYPTODEV_DEPENDENCIES),)
--define CRYPTODEV_CONFIGURE_CMDS
--	echo "No CRYPTODEV implementation defined. Configuration error"
--	exit 1
--endef
--endif
--
--$(eval $(generic-package))
-+$(eval $(virtual-package))
+ choice
+-	prompt "Lua Interpreter command-line editing"
+-	default BR2_PACKAGE_LUA_INTERPRETER_EDITING_NONE
++	prompt "Lua command-line editing"
++	default BR2_PACKAGE_LUA_EDITING_NONE
+ 
+-config BR2_PACKAGE_LUA_INTERPRETER_EDITING_NONE
++config BR2_PACKAGE_LUA_EDITING_NONE
+ 	bool "none"
+ 	help
+ 	  None.
+ 
+-config BR2_PACKAGE_LUA_INTERPRETER_READLINE
++config BR2_PACKAGE_LUA_READLINE
+ 	bool "readline support"
+ 	select BR2_PACKAGE_READLINE
+ 	select BR2_PACKAGE_NCURSES
+ 	help
+ 	  Enables command-line editing in the Lua interpreter.
+ 
+-config BR2_PACKAGE_LUA_INTERPRETER_LINENOISE
++config BR2_PACKAGE_LUA_LINENOISE
+ 	bool "linenoise support"
+ 	select BR2_PACKAGE_LINENOISE
+ 	help
+diff --git a/package/lua/lua.mk b/package/lua/lua.mk
+index bf68e65..bc8799a 100644
+--- a/package/lua/lua.mk
++++ b/package/lua/lua.mk
+@@ -31,12 +31,12 @@ else
+ 	LUA_MYLIBS += -ldl
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LUA_INTERPRETER_READLINE),y)
++ifeq ($(BR2_PACKAGE_LUA_READLINE),y)
+ 	LUA_DEPENDENCIES = readline ncurses
+ 	LUA_MYLIBS += -lreadline -lhistory -lncurses
+ 	LUA_CFLAGS += -DLUA_USE_READLINE
+ else
+-ifeq ($(BR2_PACKAGE_LUA_INTERPRETER_LINENOISE),y)
++ifeq ($(BR2_PACKAGE_LUA_LINENOISE),y)
+ 	LUA_DEPENDENCIES = linenoise
+ 	LUA_MYLIBS += -llinenoise
+ 	LUA_CFLAGS += -DLUA_USE_LINENOISE
 -- 
 1.8.3.2
