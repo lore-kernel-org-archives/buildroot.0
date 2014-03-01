@@ -1,33 +1,85 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat,  1 Mar 2014 15:41:49 -0300
-Subject: [Buildroot] [PATCH] libmicrohttpd: disable curl testcases
-Message-ID: <1393699309-25956-1-git-send-email-gustavo@zacarias.com.ar>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sat, 1 Mar 2014 19:58:45 +0100
+Subject: [Buildroot] [PATCH 09/17] manual: update the virtual package
+ section with the new infra-structure
+In-Reply-To: <5adb45b81357b97d8bff1f46a13b73c8cace4546.1393695127.git.yann.morin.1998@free.fr>
+References: <cover.1393695127.git.yann.morin.1998@free.fr>
+ <5adb45b81357b97d8bff1f46a13b73c8cace4546.1393695127.git.yann.morin.1998@free.fr>
+Message-ID: <CAHXCMMK-DEM9twKkaf9jyMugDU2TebXs1x527GFRw0vZF7KiVg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-They require a toolchain with IPv6. Fixes:
-http://autobuild.buildroot.net/results/edb/edb1b5ee1ffaa6a495b4d7c2976f618c8331b5d2/
+Hi Yann,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libmicrohttpd/libmicrohttpd.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Sat, Mar 1, 2014 at 6:32 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> ---
+>  docs/manual/adding-packages-virtual.txt | 25 ++++++++-----------------
+>  1 file changed, 8 insertions(+), 17 deletions(-)
+>
+> diff --git a/docs/manual/adding-packages-virtual.txt b/docs/manual/adding-packages-virtual.txt
+> index 76f5794..7bf3273 100644
+> --- a/docs/manual/adding-packages-virtual.txt
+> +++ b/docs/manual/adding-packages-virtual.txt
+> @@ -1,10 +1,10 @@
+>  // -*- mode:doc; -*-
+>  // vim: set syntax=asciidoc:
+>
+> -[[virtual-package-tutorial]]
+> +Infrastructure for virtual packages
+> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>
+> -Virtual package tutorial
+> -~~~~~~~~~~~~~~~~~~~~~~~~
+> +[[virtual-package-tutorial]]
+>
+>  In Buildroot, a virtual package is a package whose functionalities are
+>  provided by one or more packages, referred to as 'providers'. The virtual
+> @@ -16,6 +16,9 @@ The implementation of this API is different for the 'Allwinner Tech Sunxi' and
+>  the 'Texas Instruments OMAP35xx' plaftorms. So +libgles+ will be a virtual
+>  package and +sunxi-mali+ and +ti-gfx+ will be the providers.
+>
+> ++virtual-package+ tutorial
+> +^^^^^^^^^^^^^^^^^^^^^^^^^^
+> +
+>  In the following example, we will explain how to add a new virtual package
+>  ('something-virtual') and a provider for it ('some-provider').
+>
+> @@ -42,7 +45,7 @@ providers.
+>  Virtual package's +*.mk+ file
+>  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>
+> -The Makefile +package/something-virtual/something-virtual.mk+ should contain:
+> +The +.mk+ for the virtual package should just evaluate the +virtual-package+ macro:
+>
+>  ---------------------------
+>  01: ################################################################################
+> @@ -51,21 +54,9 @@ The Makefile +package/something-virtual/something-virtual.mk+ should contain:
+>  04: #
+>  05: ################################################################################
+>  06:
+> -07: SOMETHING_VIRTUAL_SOURCE =
+> -08: SOMETHING_VIRTUAL_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_SOMETHING_VIRTUAL))
+> -09:
+> -10: ifeq ($(BR2_PACKAGE_HAS_SOMETHING_VIRTUAL),y)
+> -11: ifeq ($(SOMETHING_VIRTUAL_DEPENDENCIES),)
+> -12: $(error No something-virtual implementation selected. Configuration error.)
+> -13: endif
+> -14: endif
+> -15:
+> -16: $(eval $(generic-package))
+> +16: $(eval $(virtual-package))
 
-diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
-index 95d066d..2312a4d 100644
---- a/package/libmicrohttpd/libmicrohttpd.mk
-+++ b/package/libmicrohttpd/libmicrohttpd.mk
-@@ -8,7 +8,7 @@ LIBMICROHTTPD_VERSION = 0.9.34
- LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
- LIBMICROHTTPD_LICENSE_FILES = COPYING
- LIBMICROHTTPD_INSTALL_STAGING = YES
--LIBMICROHTTPD_CONF_OPT = --disable-spdy
-+LIBMICROHTTPD_CONF_OPT = --disable-curl --disable-spdy
- 
- ifeq ($(BR2_PACKAGE_LIBMICROHTTPD_SSL),y)
- LIBMICROHTTPD_LICENSE = LGPLv2.1+
+it should be:
+07: $(eval $(virtual-package))
+
+Regards,
+
 -- 
-1.8.3.2
+Samuel
