@@ -1,45 +1,66 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  1 Mar 2014 18:32:41 +0100
-Subject: [Buildroot] [PATCH 12/17] package/libegl: convert to the
-	virtual-package infrastructure
-In-Reply-To: <cover.1393695127.git.yann.morin.1998@free.fr>
-References: <cover.1393695127.git.yann.morin.1998@free.fr>
-Message-ID: <bc613df07cec73ae41edfe693a374a01bbad4ce5.1393695127.git.yann.morin.1998@free.fr>
+Date: Sat, 1 Mar 2014 18:47:21 +0100
+Subject: [Buildroot] [lua V3 4/8] luajit: add host variant
+In-Reply-To: <1393694590-29945-5-git-send-email-francois.perrad@gadz.org>
+References: <1393694590-29945-1-git-send-email-francois.perrad@gadz.org>
+ <1393694590-29945-5-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20140301174721.GB3354@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Fran?ois, All,
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: Mike Zick <minimod@morethan.org>
----
- package/opengl/libegl/libegl.mk | 11 +----------
- 1 file changed, 1 insertion(+), 10 deletions(-)
+On 2014-03-01 18:23 +0100, Francois Perrad spake thusly:
+> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/luajit/luajit.mk |    9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
+> index 859425a..cb1d94e 100644
+> --- a/package/luajit/luajit.mk
+> +++ b/package/luajit/luajit.mk
+> @@ -62,4 +62,13 @@ define LUAJIT_INSTALL_TARGET_CMDS
+>  	$(MAKE) PREFIX="/usr" DESTDIR="$(TARGET_DIR)" LDCONFIG=true -C $(@D) install
+>  endef
+>  
+> +define HOST_LUAJIT_BUILD_CMDS
+> +	$(MAKE) PREFIX="/usr" BUILDMODE=static -C $(@D) amalg
+> +endef
+> +
+> +define HOST_LUAJIT_INSTALL_CMDS
+> +	$(MAKE) PREFIX="/usr" DESTDIR="$(HOST_DIR)" -C $(@D) install
+> +endef
+> +
+>  $(eval $(generic-package))
+> +$(eval $(host-generic-package))
 
-diff --git a/package/opengl/libegl/libegl.mk b/package/opengl/libegl/libegl.mk
-index 2e399ce..1f5460e 100644
---- a/package/opengl/libegl/libegl.mk
-+++ b/package/opengl/libegl/libegl.mk
-@@ -4,13 +4,4 @@
- #
- ################################################################################
- 
--LIBEGL_SOURCE =
--LIBEGL_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_LIBEGL))
--
--ifeq ($(BR2_PACKAGE_HAS_LIBEGL),y)
--ifeq ($(LIBEGL_DEPENDENCIES),)
--$(error No libEGL implementation selected. Configuration error.)
--endif
--endif
--
--$(eval $(generic-package))
-+$(eval $(virtual-package))
+I'm really worried about how this is gonna play with the virtual-package
+insfrastructure curently pending.
+
+On one hand, I'd like the virtual-package infra to go in first (hey! I
+wrote it! ;-) ), since I'm not very versed in this lua stuff (but you
+are), and we currently have no host virtual packages. But that would
+put the burden onto you to rebase your series.
+
+On the other hand, sicne you're introducing host virtual packages, we
+may want to have them in before the virtual-package infra, so we get a
+pretty good idea of what is actually required.
+
+So, whatever... Let's see what Thomas (deputy-maintainer while Peter's
+on vacation) will say about this. Thomas? ;-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.8.3.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
