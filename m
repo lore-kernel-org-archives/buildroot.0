@@ -1,34 +1,60 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat,  1 Mar 2014 14:54:26 -0300
-Subject: [Buildroot] [PATCH] bash: always prefix readline
-Message-ID: <1393696466-11902-1-git-send-email-gustavo@zacarias.com.ar>
+From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Sat, 1 Mar 2014 19:23:56 +0100
+Subject: [Buildroot] [UNSURE]Issue with the luarocks infra and legal-info
+In-Reply-To: <20140301165018.2743ec23@skate>
+References: <20140301165018.2743ec23@skate>
+Message-ID: <CAB0FRsvJNxpkSMYjhnLAC2i91iXF-BwJKg4-PTCy4bYWY6ULEQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Always prefix the readline directory otherwise autodetection may pick up
-the host readline when headers are available and target == host (or are
-link-compatible). Fixes:
-http://autobuild.buildroot.org/results/44a/44a962623be757143a3d6d37fc6cd14964094f79/
+2014-03-01 16:50 GMT+01:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Hello Fran?ois,
+>
+> I've discovered an issue with the luarocks package infrastructure that
+> apparently we didn't notice during its review. The problem is that the
+> luarocks package infrastructure makes the extract step of a lua package
+> depend on host-luarocks.
+>
+> The problem with this is that the legal-info infrastructure does run
+> the extract step of all packages in order to extract their source code
+> and get the license files. In the case of luarocks packages, this
+> triggers the build of host-luarocks, itself triggering the build of
+> host-lua and the selected lua-interpreter. But lua-interpreter is a
+> target package, so it depends on the toolchain, so the toolchain is
+> also built. This is rather annoying for the legal-info make target,
+> which should be relatively quick and normally not build anything or
+> only small things.
+>
+> Is there anything that can be done to improve this? Does host-luarocks
+> really need to depend on the target lua interpreter?
+>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/bash/bash.mk | 1 +
- 1 file changed, 1 insertion(+)
+Before the Luarocks infrastructure, only native Lua modules have an
+explicit dependency with luainterpreter.
+With the Luarocks infrastructure, all Lua modules need an implicit
+dependency with luainterpreter (we don't need to split native and pure
+Lua module cases).
+These is done in 2 places :
+in http://git.buildroot.net/buildroot/tree/package/pkg-luarocks.mk#n44 with
+     $(2)_DEPENDENCIES    += host-luarocks luainterpreter
+in http://git.buildroot.net/buildroot/tree/package/luarocks/luarocks.mk#n12
+     HOST_LUAROCKS_DEPENDENCIES = host-lua luainterpreter
 
-diff --git a/package/bash/bash.mk b/package/bash/bash.mk
-index 401f1f2..6c7691f 100644
---- a/package/bash/bash.mk
-+++ b/package/bash/bash.mk
-@@ -12,6 +12,7 @@ BASH_LICENSE = GPLv3+
- BASH_LICENSE_FILES = COPYING
- 
- BASH_CONF_ENV += \
-+	ac_cv_rl_prefix="$(STAGING_DIR)" \
- 	ac_cv_rl_version="$(READLINE_VERSION)" \
- 	bash_cv_job_control_missing=present \
- 	bash_cv_sys_named_pipes=present \
--- 
-1.8.3.2
+The good place is the first one. So, you could write :
+     HOST_LUAROCKS_DEPENDENCIES = host-lua
+and perhaps soon with the first virtual host package :
+     HOST_LUAROCKS_DEPENDENCIES = host-luainterpreter
+
+Fran?ois
+
+> Thanks in advance for your suggestions,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
