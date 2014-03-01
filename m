@@ -1,36 +1,37 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sat,  1 Mar 2014 23:30:55 +0100
-Subject: [Buildroot] [PATCH] luarocks: remove luainterpreter dependency
-Message-ID: <1393713055-15107-1-git-send-email-francois.perrad@gadz.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 1 Mar 2014 23:46:15 +0100
+Subject: [Buildroot] [git commit] bustle: use TARGET_MAKE_ENV instead of
+	setting PATH in the make environment
+Message-ID: <20140301224624.72A249936F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-a package using luarocks infrastructure needs a dependency with luainterpreter.
-this is already done in pkg-luarocks.mk.
+commit: http://git.buildroot.net/buildroot/commit/?id=3d93589c8f318654b3cf572930541085f68adbf0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-here, in luarocks.mk, this dependency causes an issue with 'make legal-info' :
-luainterpreter and an toolchain are built.
+TARGET_MAKE_ENV already contains the PATH definition among other useful
+variables.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/luarocks/luarocks.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/bustle/bustle.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
-index 86e57d2..926fd04 100644
---- a/package/luarocks/luarocks.mk
-+++ b/package/luarocks/luarocks.mk
-@@ -9,7 +9,7 @@ LUAROCKS_SITE = http://luarocks.org/releases/
- LUAROCKS_LICENSE = MIT
- LUAROCKS_LICENSE_FILES = COPYING
+diff --git a/package/bustle/bustle.mk b/package/bustle/bustle.mk
+index 2330c08..7bc3e97 100644
+--- a/package/bustle/bustle.mk
++++ b/package/bustle/bustle.mk
+@@ -11,7 +11,7 @@ BUSTLE_LICENSE_FILES = LICENSE
+ BUSTLE_DEPENDENCIES = libglib2 libpcap host-pkgconf
  
--HOST_LUAROCKS_DEPENDENCIES = host-lua luainterpreter
-+HOST_LUAROCKS_DEPENDENCIES = host-lua
+ define BUSTLE_BUILD_CMDS
+-	PATH=$(TARGET_PATH) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
+ 		PCAP_FLAGS='-lpcap' -C $(@D) dist/build/bustle-pcap
+ endef
  
- LUAROCKS_CONFIG_DIR  = $(HOST_DIR)/usr/etc/luarocks
- LUAROCKS_CONFIG_FILE = $(LUAROCKS_CONFIG_DIR)/config-$(LUAINTERPRETER_ABIVER).lua
--- 
-1.7.9.5
