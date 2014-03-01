@@ -1,41 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Mar 2014 23:56:18 +0100
-Subject: [Buildroot] [PATCH 0/17 v2] Add new virtual-package
- infrastructure
-In-Reply-To: <cover.1393695127.git.yann.morin.1998@free.fr>
-References: <cover.1393695127.git.yann.morin.1998@free.fr>
-Message-ID: <20140301235618.04b363a8@skate>
+Date: Sun, 2 Mar 2014 00:02:32 +0100
+Subject: [Buildroot] [lua V3 0/8] lua
+In-Reply-To: <1393694590-29945-1-git-send-email-francois.perrad@gadz.org>
+References: <1393694590-29945-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20140302000232.6430d956@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Francois Perrad,
 
-On Sat,  1 Mar 2014 18:32:43 +0100, Yann E. MORIN wrote:
+On Sat,  1 Mar 2014 18:23:01 +0100, Francois Perrad wrote:
 
->       package/libgles: rename the _HAS and _PROVIDES variables
->       package/libegl: rename the _HAS and _PROVIDES variables
->       package/libopenmax: rename the _HAS and _PROVIDES variables
->       package/libopenvg: rename the _HAS and _PROVIDES variables
->       package/luainterpreter: rename the _HAS and _PROVIDES variables
+> Francois Perrad (8):
+>   luajit: refactor without dont-strip.patch
+>   luajit: refactor without shared-lib.patch
+>   luajit: handles BR2_PREFER_STATIC_LIB
+>   luajit: add host variant
+>   luainterpreter: add host variant
+>   luarocks: allow to work with host-luainterpreter
 
-I certainly agree to ensure that the kconfig symbol matches the package
-name. However, I am not sure the renaming of BR2_PACKAGE_HAS_OPENGL_ES
-to BR2_PACKAGE_HAS_LIBGLES is really nice. BR2_PACKAGE_HAS_OPENGL_ES
-had the merit of explicitly containing the word "OpenGL", while LIBGLES
-makes that a bit more cryptic. Do we want to instead rename the package
-to libopengl-es or some other variation on this?
+For all these patches, and especially the last three ones, I want
+commit logs. I really do appreciate _a lot_ all the work you're doing
+on Lua and Perl, it's really awesome. And I really mean it. But you
+need to work on improving your commit logs. For now, we have no idea
+*why* you're doing these changes.
 
-A similar reflexion could be made on the naming of the libegl package.
+All the other core developers are doing efforts to write long,
+descriptive commit logs, and experience has shown that they are
+immensely useful 6 or 12 months later when we got back in the Git
+history to understand why things were done. Look at what they do, and
+follow the basic rule of thumb that any non-trivial patch should have
+at least 2 or 3 paragraphs in its commit log explaining *why* the
+change is being made.
 
-Of course, I'm open to other opinions on this, the above comments are
-not really a very strong opinion on my side.
-
-My original plan was to apply patches 1 -> 6 of your series in order to
-remove you a bunch of patches to handle, but I'm not sure about these
-renames.
+At this point, I have no idea what you are doing. I presume patches 4
+and 5 are preparations for patch 6, but I don't understand what patch 6
+is doing, and nowhere it is mentioned why patches 4 and 5 are needed.
 
 Thanks!
 
