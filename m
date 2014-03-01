@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  1 Mar 2014 18:32:35 +0100
-Subject: [Buildroot] [PATCH 06/17] package/lua: rename config options
+Date: Sat,  1 Mar 2014 18:32:37 +0100
+Subject: [Buildroot] [PATCH 08/17] packages: add infrastructure for virtual
+	packages
 In-Reply-To: <cover.1393695127.git.yann.morin.1998@free.fr>
 References: <cover.1393695127.git.yann.morin.1998@free.fr>
-Message-ID: <925c46aa42067d08a356bbfd7142c89955437a69.1393695127.git.yann.morin.1998@free.fr>
+Message-ID: <972572db05ab656c34dabde9a559255d0d386e25.1393695127.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,104 +13,108 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Package's options should be named after the package.
+The virtual-package infrastructure allows to easily define a
+virtual package in a single line:
 
-Lua is an interpreter, but the package is named 'lua'. So we want to
-name the config option with '_LUA_', not with '_LUA_INTERPRETER_'
+    $ package/some-virtual-package/some-virtual-package.mk:
+    $(eval $(virtual-package))
 
-Besides, naming them with '_LUA_INTERPRETER_' might be confusing, since
-there is a package named 'luainterpreter'.
+And that's all. :-)
+
+Thanks to ?ric for his work on the manual, that prompted the
+idea for this virtual-package infrastructure! ;-)
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Francois Perrad <fperrad@gmail.com>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Cc: Mike Zick <minimod@morethan.org>
 ---
- Config.in.legacy      | 21 +++++++++++++++++++++
- package/lua/Config.in | 10 +++++-----
- package/lua/lua.mk    |  4 ++--
- 3 files changed, 28 insertions(+), 7 deletions(-)
+ package/Makefile.in    |  1 +
+ package/pkg-virtual.mk | 65 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 66 insertions(+)
+ create mode 100644 package/pkg-virtual.mk
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 09c3a2b..944a0ab 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -101,6 +101,27 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2014.05"
- 
-+config BR2_PACKAGE_LUA_INTERPRETER_EDITING_NONE
-+	bool "Lua command-line editing none has been renamed"
-+	help
-+	  The BR2_PACKAGE_LUA_INTERPRETER_EDITING_NONE option has been
-+	  renamed to BR2_PACKAGE_LUA_EDITING_NONE. You will have to select
-+	  it in the corresponding choice.
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 454f614..c5cdf5a 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -362,4 +362,5 @@ include package/pkg-cmake.mk
+ include package/pkg-luarocks.mk
+ include package/pkg-perl.mk
+ include package/pkg-python.mk
++include package/pkg-virtual.mk
+ include package/pkg-generic.mk
+diff --git a/package/pkg-virtual.mk b/package/pkg-virtual.mk
+new file mode 100644
+index 0000000..3932302
+--- /dev/null
++++ b/package/pkg-virtual.mk
+@@ -0,0 +1,65 @@
++################################################################################
++# Virtual package infrastructure
++#
++# This file implements an infrastructure that eases development of
++# package .mk files for virtual packages. It should be used for all
++# virtual packages.
++#
++# See the Buildroot documentation for details on the usage of this
++# infrastructure
++#
++# In terms of implementation, this virtual infrastructure requires
++# the .mk file to only call the 'virtual-package' macro.
++#
++################################################################################
 +
-+config BR2_PACKAGE_LUA_INTERPRETER_READLINE
-+	bool "Lua command-line editing using readline has been renamed"
-+	help
-+	  The BR2_PACKAGE_LUA_INTERPRETER_READLINE option has been
-+	  renamed to BR2_PACKAGE_LUA_READLINE. You will have to select
-+	  it in the corresponding choice.
 +
-+config BR2_PACKAGE_LUA_INTERPRETER_LINENOISE
-+	bool "Lua command-line editing using linenoise has been renamed"
-+	help
-+	  The BR2_PACKAGE_LUA_INTERPRETER_LINENOISE option has been
-+	  renamed to BR2_PACKAGE_LUA_LINENOISE. You will have to select
-+	  it in the corresponding choice.
++################################################################################
++# inner-virtual-package -- defines the dependency rules of the virtual
++# package against its provider.
++#
++#  argument 1 is the lowercase package name
++#  argument 2 is the uppercase package name, including an HOST_ prefix
++#             for host packages
++#  argument 3 is the uppercase package name, without the HOST_ prefix
++#             for host packages
++#  argument 4 is the type (target or host)
++################################################################################
 +
- config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
- 	bool "/dev management by udev removed"
- 	select BR2_LEGACY
-diff --git a/package/lua/Config.in b/package/lua/Config.in
-index 2f1b25b..0e31858 100644
---- a/package/lua/Config.in
-+++ b/package/lua/Config.in
-@@ -30,22 +30,22 @@ config BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION
- 	default "5.2"	if BR2_PACKAGE_LUA_5_2
- 
- choice
--	prompt "Lua Interpreter command-line editing"
--	default BR2_PACKAGE_LUA_INTERPRETER_EDITING_NONE
-+	prompt "Lua command-line editing"
-+	default BR2_PACKAGE_LUA_EDITING_NONE
- 
--config BR2_PACKAGE_LUA_INTERPRETER_EDITING_NONE
-+config BR2_PACKAGE_LUA_EDITING_NONE
- 	bool "none"
- 	help
- 	  None.
- 
--config BR2_PACKAGE_LUA_INTERPRETER_READLINE
-+config BR2_PACKAGE_LUA_READLINE
- 	bool "readline support"
- 	select BR2_PACKAGE_READLINE
- 	select BR2_PACKAGE_NCURSES
- 	help
- 	  Enables command-line editing in the Lua interpreter.
- 
--config BR2_PACKAGE_LUA_INTERPRETER_LINENOISE
-+config BR2_PACKAGE_LUA_LINENOISE
- 	bool "linenoise support"
- 	select BR2_PACKAGE_LINENOISE
- 	help
-diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-index bf68e65..bc8799a 100644
---- a/package/lua/lua.mk
-+++ b/package/lua/lua.mk
-@@ -31,12 +31,12 @@ else
- 	LUA_MYLIBS += -ldl
- endif
- 
--ifeq ($(BR2_PACKAGE_LUA_INTERPRETER_READLINE),y)
-+ifeq ($(BR2_PACKAGE_LUA_READLINE),y)
- 	LUA_DEPENDENCIES = readline ncurses
- 	LUA_MYLIBS += -lreadline -lhistory -lncurses
- 	LUA_CFLAGS += -DLUA_USE_READLINE
- else
--ifeq ($(BR2_PACKAGE_LUA_INTERPRETER_LINENOISE),y)
-+ifeq ($(BR2_PACKAGE_LUA_LINENOISE),y)
- 	LUA_DEPENDENCIES = linenoise
- 	LUA_MYLIBS += -llinenoise
- 	LUA_CFLAGS += -DLUA_USE_LINENOISE
++# Note: putting this comment here rather than in the define block, otherwise
++# make would try to expand the $(error ...) in the comment, which is not
++# really what we want.
++# We need to use second-expansion for the $(error ...) call, below,
++# so it is not evaluated now, but as part of the generated make code.
++
++define inner-virtual-package
++
++# Ensure the virtual package has an implementation defined.
++ifeq ($(BR2_PACKAGE_HAS_$(2)),y)
++ifeq ($(call qstrip,$(BR2_PACKAGE_PROVIDES_$(2))),)
++$$(error No implementation selected for virtual package $(1). Configuration error)
++endif
++endif
++
++# A virtual package does not have any source associated
++$(2)_SOURCE =
++
++# This must be repeated from inner-generic-package, otherwise we get an empty
++# _DEPENDENCIES
++$(2)_DEPENDENCIES ?= $(filter-out $(1),$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
++
++# Add dependency against the provider
++$(2)_DEPENDENCIES += $(call qstrip,$(BR2_PACKAGE_PROVIDES_$(2)))
++
++# Call the generic package infrastructure to generate the necessary
++# make targets
++$(call inner-generic-package,$(1),$(2),$(3),$(4))
++
++endef
++
++################################################################################
++# virtual-package -- the target generator macro for virtual packages
++################################################################################
++
++virtual-package = $(call inner-virtual-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
++host-virtual-package = $(call inner-virtual-package,host-$(pkgname),$(call UPPERCASE,host-$(pkgname)),$(call UPPERCASE,$(pkgname)),host)
 -- 
 1.8.3.2
