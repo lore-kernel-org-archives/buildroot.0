@@ -1,47 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Mar 2014 19:39:10 +0100
-Subject: [Buildroot] [lua V3 4/8] luajit: add host variant
-In-Reply-To: <20140301174721.GB3354@free.fr>
-References: <1393694590-29945-1-git-send-email-francois.perrad@gadz.org>
- <1393694590-29945-5-git-send-email-francois.perrad@gadz.org>
- <20140301174721.GB3354@free.fr>
-Message-ID: <20140301193910.369c3cdd@skate>
+Date: Sat, 1 Mar 2014 19:41:46 +0100
+Subject: [Buildroot] [UNSURE]Issue with the luarocks infra and legal-info
+In-Reply-To: <CAB0FRsvJNxpkSMYjhnLAC2i91iXF-BwJKg4-PTCy4bYWY6ULEQ@mail.gmail.com>
+References: <20140301165018.2743ec23@skate>
+ <CAB0FRsvJNxpkSMYjhnLAC2i91iXF-BwJKg4-PTCy4bYWY6ULEQ@mail.gmail.com>
+Message-ID: <20140301194146.4814ee45@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Fran?ois Perrad,
 
-On Sat, 1 Mar 2014 18:47:21 +0100, Yann E. MORIN wrote:
+On Sat, 1 Mar 2014 19:23:56 +0100, Fran?ois Perrad wrote:
 
-> I'm really worried about how this is gonna play with the virtual-package
-> insfrastructure curently pending.
+> Before the Luarocks infrastructure, only native Lua modules have an
+> explicit dependency with luainterpreter.
+> With the Luarocks infrastructure, all Lua modules need an implicit
+> dependency with luainterpreter (we don't need to split native and pure
+> Lua module cases).
+
+Right, but most likely this dependency on the target Lua interpreter is
+only need before *building* Lua modules, not before *extracting* Lua
+modules. Which is, if I understood correctly, what you propose below.
+
+> These is done in 2 places :
+> in http://git.buildroot.net/buildroot/tree/package/pkg-luarocks.mk#n44 with
+>      $(2)_DEPENDENCIES    += host-luarocks luainterpreter
+> in http://git.buildroot.net/buildroot/tree/package/luarocks/luarocks.mk#n12
+>      HOST_LUAROCKS_DEPENDENCIES = host-lua luainterpreter
 > 
-> On one hand, I'd like the virtual-package infra to go in first (hey! I
-> wrote it! ;-) ), since I'm not very versed in this lua stuff (but you
-> are), and we currently have no host virtual packages. But that would
-> put the burden onto you to rebase your series.
-> 
-> On the other hand, sicne you're introducing host virtual packages, we
-> may want to have them in before the virtual-package infra, so we get a
-> pretty good idea of what is actually required.
-> 
-> So, whatever... Let's see what Thomas (deputy-maintainer while Peter's
-> on vacation) will say about this. Thomas? ;-)
+> The good place is the first one. So, you could write :
+>      HOST_LUAROCKS_DEPENDENCIES = host-lua
+> and perhaps soon with the first virtual host package :
+>      HOST_LUAROCKS_DEPENDENCIES = host-luainterpreter
 
-While in general I prefer to merge things as soon as possible, and then
-improve on top of it later on, in this case, I believe it would be nice
-if the virtual package infra could from the beginning support the host
-package case since we know we will need it for the Lua stuff.
+Right. It's still a bit annoying to have to build host-luarocks and
+host-lua to do 'make legal-info', but it's certainly a lot more
+reasonable that having to build the toolchain :-)
 
-Yann, you could just test it with some simple dummy host packages to
-ensure that your virtual infra works for host packages, and leave it to
-Fran?ois to rebase his series on top of the infra once it has been
-merged.
+Could you integrate a patch that does this simplification in the next
+version of your Lua improvements?
 
-How does it sounds?
+Thanks!
 
 Thomas
 -- 
