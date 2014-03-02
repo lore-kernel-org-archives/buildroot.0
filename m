@@ -1,53 +1,41 @@
-From: =?UTF-8?B?UGV0ZXIgS8O8bW1lbA==?= <syntheticpp@gmx.net>
-Date: Sun, 02 Mar 2014 11:35:07 +0100
-Subject: [Buildroot] State of your Qt 5 patches
-In-Reply-To: <20140302002857.2a9f166d@skate>
-References: <20140302002857.2a9f166d@skate>
-Message-ID: <5313095B.7070204@gmx.net>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sun, 02 Mar 2014 11:45:55 +0100
+Subject: [Buildroot] [PATCH 1/2] imagemagick: disable documentation
+In-Reply-To: <20140302002238.2eb2d717@skate>
+References: <1392508668-27561-1-git-send-email-romain.naour@openwide.fr>
+ <20140302002238.2eb2d717@skate>
+Message-ID: <53130BE3.8080904@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02.03.2014 00:28, Thomas Petazzoni wrote:
-> Hello Peter,
->
-> You have quite a few Qt5 related patches waiting in patchwork. However,
-> since you haven't used any version number for your patches, it's not
-> necessarily obvious which patches are still current, and which version
-> is the latest them.
->
-> Could you have a look at the following patches, and let me know which
-> ones no longer makes sense (because you have sent a new version) and
-> which ones still make sense:
->
->   http://patchwork.ozlabs.org/patch/320476/
->   http://patchwork.ozlabs.org/patch/320475/
->   http://patchwork.ozlabs.org/patch/320472/
->   http://patchwork.ozlabs.org/patch/320462/
->   http://patchwork.ozlabs.org/patch/320407/
->   http://patchwork.ozlabs.org/patch/317465/
->   http://patchwork.ozlabs.org/patch/317462/
->   http://patchwork.ozlabs.org/patch/317461/
-
 Hi Thomas,
 
-the patches where intended for 2014.02.
+Le 02/03/2014 00:22, Thomas Petazzoni a ?crit :
+> Dear Romain Naour,
+>
+> On Sun, 16 Feb 2014 00:57:47 +0100, Romain Naour wrote:
+>> There is no options to disable the documentation,
+>> so remove it directly in Makefile.am
+>>
+>> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+>> ---
+>>   .../imagemagick/imagemagick-02-disable-doc.patch   | 47 ++++++++++++++++++++++
+>>   1 file changed, 47 insertions(+)
+>>   create mode 100644 package/imagemagick/imagemagick-02-disable-doc.patch
+> Can you have a look at implementing the solution proposed by Arnout
+> (i.e adding a --disable-docs or --disable-documentation configure
+> option) ?
 
-Maybe we should simply drop them and wait for Qt 5.3, planned for 29th Apr 2014:
-http://qt-project.org/wiki/Qt-5.3-release
+Not yet, but it's in my todo list.
+I'll do it as soon as possible but I have another task to finish before.
 
-Peter
+> Also, it would be really great if you could push this patch, as well as
+> the other patch we already have against imagemagick, to the upstream
+> project.
+This is what I planned to do :)
 
->
-> Remember that you can manage your own patches on patchwork (to mark the
-> old versions as superseded) by creating a patchwork account.
->
-> Fatih, I've Cc'ed you in case you have a bit of time to look at these
-> patches, and maybe review/test them.
->
-> Thanks!
->
-> Thomas
->
+Best regards,
+Romain
