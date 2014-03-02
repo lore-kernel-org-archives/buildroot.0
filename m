@@ -1,22 +1,24 @@
 From: Oded Hanson <OHanson@xsightsys.com>
-Date: Sun, 2 Mar 2014 07:23:22 +0000
+Date: Sun, 2 Mar 2014 07:27:36 +0000
 Subject: [Buildroot] Segmentation fault while trying to remote debug
  with GDB and GDBServer
 In-Reply-To: <20140302070650.GE3874@tarshish>
 References: <51ef4c3ec6f84eab802c23a14ecb48ae@DBXPR07MB142.eurprd07.prod.outlook.com>,
  <20140302070650.GE3874@tarshish>
-Message-ID: <1b130230e2e34bbeb1f5b4e2b36a1ccf@DBXPR07MB142.eurprd07.prod.outlook.com>
+Message-ID: <24eee2c96f804b55ae7767734d5a4f6e@DBXPR07MB142.eurprd07.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sorry.  Missed the reply all :)
+I missed your answer about the GDB.
 
-Baruch,  is there something in my logs which make you see that im using wrong linker ? Because im looking at the compilation and linking parameters in eclipse and they seem to be pointing to the right path.
+How can I force GDB to use my cross compiler libs instead?
 
-Why are you so certain im using the host linker ?
+The logs you see are from my manually using GDB,  which indeed might have not been configured to use the cross compiler libs,  however,  I get the same problem when using the debugger from eclipse,  using the buildroot plugin , which does indeed use the libraries from the cross compiler (at least it should,  how can I verify this? )
+
+Thanks so much
 
 Oded
 
@@ -250,4 +252,4 @@ baruch
    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140302/ff6e8549/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140302/72a5fbd1/attachment.html>
