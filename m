@@ -1,29 +1,23 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 2 Mar 2014 16:25:32 +0100
-Subject: [Buildroot] [PATCHv3 0/4] Samba4 package
-In-Reply-To: <1393764138-27869-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1393764138-27869-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140302162532.077ced45@skate>
+Date: Sun, 2 Mar 2014 16:25:44 +0100
+Subject: [Buildroot] [PATCH] samba4: add comment arch dependencies
+In-Reply-To: <b249dcfddfaa7cb817d4975854a2c3565515d553.1393770914.git.baruch@tkos.co.il>
+References: <b249dcfddfaa7cb817d4975854a2c3565515d553.1393770914.git.baruch@tkos.co.il>
+Message-ID: <20140302162544.3efaac3e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Baruch Siach,
 
-On Sun,  2 Mar 2014 09:42:14 -0300, Gustavo Zacarias wrote:
+On Sun,  2 Mar 2014 16:35:14 +0200, Baruch Siach wrote:
+> Hide the comment for unsupported architectures.
+> 
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-> Gustavo Zacarias (4):
->   python: fixup python-config script
->   heimdal: new package
->   samba: update description and rename patches
->   samba4: new package
-
-Series applied, thanks. I've also applied the patch from Christophe
-Vu-Brugier that adds the x86-64 informations.
-
-Thanks,
+Applied, thanks.
 
 Thomas
 -- 
