@@ -1,42 +1,45 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun, 2 Mar 2014 23:54:33 +0100
-Subject: [Buildroot] [PATCH 1/4] docs: Move README file to root
-In-Reply-To: <20140302214117.4ba15844@skate>
+Date: Sun, 2 Mar 2014 23:55:54 +0100
+Subject: [Buildroot] [PATCH 0/4] Brand new website
+In-Reply-To: <20140302214010.3e7dac9a@skate>
 References: <1393784504-11327-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1393784504-11327-2-git-send-email-maxime.hadjinlian@gmail.com>
- <20140302214117.4ba15844@skate>
-Message-ID: <CAGduivxBBX5VAg_f4WA5-067VN-MZGRvQG-uSu6Jwz335wrHSw@mail.gmail.com>
+ <CAAXf6LX5Ew_2M4OTjuwCeTqmWt+r6vkmguRk+tXvYcwFd4F+yg@mail.gmail.com>
+ <20140302214010.3e7dac9a@skate>
+Message-ID: <CAGduivxkn0Fd2xjFnZnUTKW__u8dBfRodTZRZeYT=rX39Uq3rA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, all
-On Sun, Mar 2, 2014 at 9:41 PM, Thomas Petazzoni
+Hi ThomasP, ThomasDS, all
+
+On Sun, Mar 2, 2014 at 9:40 PM, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
-> Dear Maxime Hadjinlian,
+> Dear Thomas De Schampheleire,
 >
-> On Sun,  2 Mar 2014 19:21:41 +0100, Maxime Hadjinlian wrote:
->> Move the README file from the subdirectory doc to the root.
+> On Sun, 2 Mar 2014 21:38:59 +0100, Thomas De Schampheleire wrote:
+>
+>> On Sun, Mar 2, 2014 at 7:21 PM, Maxime Hadjinlian
+>> <maxime.hadjinlian@gmail.com> wrote:
+>> > This series updates our current website.
+>> > It also take the occasion to move the README file that was in the
+>> > docs subdirectory to the root of the project.
+>> > First by getting Bootstrap and JQuery into it, then reworking the
+>> > HTML and the content a bit.
+>> >
+>> > Maxime Hadjinlian (4):
+>> >   docs: Move README file to root
+>> >   website: Add Bootstrap and JQuery framework
+>> >   website: Add Buildroot javascript
+>> >   website: new website !
 >>
->> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
->> ---
->>  docs/README => README | 0
->>  1 file changed, 0 insertions(+), 0 deletions(-)
->>  rename docs/README => README (100%)
+>> It seems that patch 2/4 and 4/4 did not make it to the list... could
+>> you check?
 >
-> But isn't this README completely crappy as a general presentation of
-> Buildroot? Shouldn't it be replaced by a better README that contains
-> some more relevant details?
-Well... It's not *that* crappy. It's may be badly written or organized
-but at least it exists and show some pointers to a starting user.
->
-> Of course, I'll take your patch as is, hoping that someone will take on
-> the job of writing a better README :)
-I am sure since this file will be seen by much more people, someone
-will write a better one, I could try myself at that job but I'm quite
-awful with documentation writing :)
+> Most likely they are too big, and are blocked in moderation. And I
+> don't have access to the moderation interface for the list.
+As ThomasP said, they are blocked in moderation, Peter need to intervene :)
 >
 > Thomas
 > --
