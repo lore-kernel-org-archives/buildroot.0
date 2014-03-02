@@ -1,74 +1,50 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 2 Mar 2014 23:19:59 +0100
-Subject: [Buildroot] [PATCH 11/13] pkg-infra: add possiblity to check
- downloaded files against known hashes
-In-Reply-To: <CAHXCMMLfCntMjYv4ONecSyhLGph=+CdR5mJu92bkCbfxYWhTzA@mail.gmail.com>
+Date: Sun, 2 Mar 2014 23:32:12 +0100
+Subject: [Buildroot] [PATCH 0/13 v2] some download-related changes
+In-Reply-To: <e621c002-e271-4fb7-ac3a-86ebfa4e460b@email.android.com>
 References: <cover.1393781649.git.yann.morin.1998@free.fr>
- <b36750f8cb541e068cdce6ec65241ed155997c97.1393781650.git.yann.morin.1998@free.fr>
- <CAHXCMMLfCntMjYv4ONecSyhLGph=+CdR5mJu92bkCbfxYWhTzA@mail.gmail.com>
-Message-ID: <20140302221959.GB3379@free.fr>
+ <CAHXCMMJj3GskwyhNsXtZNcT_oRAVOZECQ6e9-8xCEG4uOE_g0A@mail.gmail.com>
+ <e621c002-e271-4fb7-ac3a-86ebfa4e460b@email.android.com>
+Message-ID: <20140302223212.GC3379@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Samuel, All,
+Thomas, All,
 
-On 2014-03-02 21:10 +0100, Samuel Martin spake thusly:
-> Yann,
-> 
-> On Sun, Mar 2, 2014 at 6:51 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On 2014-03-02 21:55 +0100, Thomas De Schampheleire spake thusly:
+> Samuel Martin <s.martin49@gmail.com> schreef:
+> >Yann, all
 > >
-> > Some of the packages that Buildroot might build are sensitive packages,
-> > related to security: openssl, dropbear, ca-certificates...
-> >
-> > Some of those packages are downloaded over plain http, because there is
-> > no way to get them over a secure channel, such as https.
-> >
-> > In these dark times of pervasive surveillance, the potential for harm that
-> > a tampered-with package could generate, we may want to check the integrity
-> > of those sensitive packages.
-> >
-> > So, each package may now provide a list of hashes for all files that needs
-> > to be downloaded, and Buildroot will just fail if any downloaded file does
-> > not match its known hash.
-> >
-> > Hashes can be any of the sha1 or sha2 variants, and will be checked even if
-> > the file was pre-downloaded.
-> >
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Baruch Siach <baruch@tkos.co.il>
-> > Cc: Arnout Vandecappelle <arnout@mind.be>
-> > ---
-> > Note: this is not a bullet-proof solution, since Buildroot may itself be
-> > compromised. But since we do sign our releases, then we secure the list of
-> > hashes at the same time. Only random snapshots from the repository may be
-> > at risk of tampering, although this is highly doubtfull, given how git
-> > stores its data.
-> > ---
-> >  package/pkg-download.mk     | 27 +++++++++++------
-> >  support/download/check-hash | 71 +++++++++++++++++++++++++++++++++++++++++++++
-> >  2 files changed, 89 insertions(+), 9 deletions(-)
-> >  create mode 100755 support/download/check-hash
-> >
-> > diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-> > index c94ecba..adaccef 100644
-> > --- a/package/pkg-download.mk
-> > +++ b/package/pkg-download.mk
-> > @@ -58,6 +58,17 @@ domainseparator=$(if $(1),$(1),/)
-> >  # github(user,package,version): returns site of github repository
-> >  github = https://github.com/$(1)/$(2)/tarball/$(3)
-> >
-> > +# Helper for checking a tarball's checksum
-> > +# If the hash does not match, remove the incorrect file
-> > +# $(1): the path to the fies with the hashes
-> 
-> nit:
-> s/fies/file/
+> >On Sun, Mar 2, 2014 at 6:51 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> >> This series contains those download-related changes:
+[--SNIP--]
+> In this same area (but can be in separate patches) we should protect
+> all download helpers against interrupted downloads. This is already
+> some for wget and git, but not for hg and the others...
 
-Already spotted by Gustavo on IRC. Thanks!
+For all download helpers (except wget), we force-remove the local copy
+(clone or checkout) before cloning/checking out, in case there were some
+leftovers from a previous run.
+
+The only phase that can still be interrupted is creating the archive
+from the local copy. Even for git, this is not correctly handled:
+
+    cvs:    tar czf "${output}" "${repodir}"
+    git:    gzip -c "${output}.tmp" >"${output}"
+    hg:     ${HG} archive [...] "${output}"
+    svn:    tar czf "${output}" "${repodir}"
+
+which leaves open a (small) window were we could have a problem.
+
+Only wget gets it right:
+    mv "${tmpfile}" "${output}"
+
+So, yes, we can do better. I'll fix and resubmit.
+
+Thank you!
 
 Regards,
 Yann E. MORIN.
