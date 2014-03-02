@@ -1,76 +1,107 @@
-From: Oded Hanson <OHanson@xsightsys.com>
-Date: Sun, 2 Mar 2014 12:32:52 +0000
-Subject: [Buildroot] Segmentation fault while trying to remote debug
- with GDB and GDBServer
-In-Reply-To: <20140302122406.GJ3874@tarshish>
-References: <51ef4c3ec6f84eab802c23a14ecb48ae@DBXPR07MB142.eurprd07.prod.outlook.com>
- <20140302070650.GE3874@tarshish>
- <24eee2c96f804b55ae7767734d5a4f6e@DBXPR07MB142.eurprd07.prod.outlook.com>
- <20140302091205.GF3874@tarshish>
- <29f88dd2071c483bb7102687088ac6b3@DBXPR07MB142.eurprd07.prod.outlook.com>,
- <20140302122406.GJ3874@tarshish>
-Message-ID: <b311051511874a2a831c2d19a5c0aef7@DBXPR07MB142.eurprd07.prod.outlook.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun,  2 Mar 2014 09:42:14 -0300
+Subject: [Buildroot] [PATCHv3 0/4] Samba4 package
+Message-ID: <1393764138-27869-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sure I understand that.
+Changes for v3
+--------------
+Update python-config patch for new python 2.7.6 package.
+Fix gettext woes in v2 patchset.
+Add upstream status to patches.
+Bump to samba 4.1.5
 
-I just prefer to used the internal tool chain if possible.
+Changes for v2
+--------------
+depend on !BR2_PACKAGE_SAMBA as recommended by Arnout & Thomas.
+Add comments to samba4 package as mentioned by Samuel Martin.
+Make the samba(3) description useful and rename patches.
 
-Oded
+Notes
+-----
 
-On Mar 2, 2014 2:24 PM, Baruch Siach <baruch@tkos.co.il> wrote:
-Hi Oded,
+This patchset adds a samba 4.1.x package to buildroot.
 
-On Sun, Mar 02, 2014 at 12:06:35PM +0000, Oded Hanson wrote:
-> OK... After 1 hour of rebuilding my system back with the internal GLIBC
-> toolchain I can say...
->
-> Thanks !!! :)
+Samba 4.1.x uses the waf build system which isn't very cross-compile
+friendly, and also some tests are formulated in a way that isn't
+cross-build friendly either by needing to run them.
 
-Good to hear. I just want to note again that for correct GDB operation,
-setting sysroot is needed for external toolchains as well.
+For this reason the samba4 build system includes a way to define
+answers for many of the tests, but this support isn't complete
+and some tests still want to be executed.
 
-baruch
+Samba 3.6.x is being kept because 4.1.x has a bigger footprint, changes
+usage in some tools (swat has been dropped for example), has more
+toolchain dependencies and there may be validation issues for users
+as well.
+Samba 4.1.x also requires a proper answers file for each architecture,
+and at the moment i've only tested for ARM and PowerPC so only those
+architectures are supported to begin with. To add support for another
+architecture basically copy one of the cache files to the proper name,
+enable it in Config.in and adjust endianess and all of the "size of"
+answers. I'm in the process of automating the sizeof and endianess
+answers within the samba build system to make them cross friendly
+to simplify the answers file to just one generic linux variant.
+The 3.6.x branch is still security supported for the forseeable future.
 
-> Its working. Now I just need to see how to make the eclipse plugin run the
-> set sysroot command
->
-> -----Original Message-----
-> From: Baruch Siach [mailto:baruch at tkos.co.il]
-> Sent: Sunday, March 02, 2014 11:12 AM
-> To: Oded Hanson
-> Cc: buildroot at busybox.net
-> Subject: Re: [Buildroot] Segmentation fault while trying to remote debug with GDB and GDBServer
->
-> On Sun, Mar 02, 2014 at 07:27:36AM +0000, Oded Hanson wrote:
-> > I missed your answer about the GDB.
-> >
-> > How can I force GDB to use my cross compiler libs instead?
-> >
-> > The logs you see are from my manually using GDB,  which indeed might
-> > have not been configured to use the cross compiler libs,  however,  I
-> > get the same problem when using the debugger from eclipse,  using the
-> > buildroot plugin , which does indeed use the libraries from the cross
-> > compiler (at least it should,  how can I verify this? )
->
-> I'm not familiar with the Eclipse plugin so I can't comment on that. As to
-> command line invocation of GDB you can change the sysroot of GDB as I said
-> in my original response with:
->
-> (gdb) set sysroot /home/oded/Buildroot/buildroot-2013.11/output/staging
->
-> GDB uses sysroot to locate your target dynamic linker and libraries.
->
-> baruch
+I'm currently working with samba upstream to solve many of these
+issues but this will probably happen with the yet unreleased
+4.2 branch only.
 
---
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140302/87970604/attachment.html>
+The python patch is a backport from the 3.4 branch to avoid using
+a runtime python for python-config (a pure shell implementation).
+
+Heimdal patches are all upstream.
+
+Gustavo Zacarias (4):
+  python: fixup python-config script
+  heimdal: new package
+  samba: update description and rename patches
+  samba4: new package
+
+ package/Config.in                                  |   1 +
+ .../heimdal/heimdal-0001-add-roken-h-process.patch | 195 ++++++++++++++++++++
+ package/heimdal/heimdal-0002-use-Getopt-Std.patch  |  30 +++
+ package/heimdal/heimdal-0003-vendor.patch          |  19 ++
+ package/heimdal/heimdal-0004-compile_et.patch      |  28 +++
+ package/heimdal/heimdal.mk                         |  30 +++
+ package/python/python-010-fix-python-config.patch  | 205 +++++++++++++++++++++
+ package/samba/Config.in                            |   6 +-
+ ....patch => samba-0001-fix-smbd-libs-avahi.patch} |   0
+ ...addrinfo.patch => samba-0002-getaddrinfo.patch} |   0
+ package/samba4/Config.in                           |  24 +++
+ package/samba4/S91smb                              |  56 ++++++
+ package/samba4/arm-cache.txt                       |  65 +++++++
+ package/samba4/powerpc-cache.txt                   |  65 +++++++
+ ...-0001-build-don-t-execute-tests-summary.c.patch |  69 +++++++
+ ...ld-don-t-execute-statfs-and-f_fsid-checks.patch |  33 ++++
+ ...003-build-find-FILE_OFFSET_BITS-via-array.patch |  56 ++++++
+ ...uild-allow-some-python-variable-overrides.patch |  47 +++++
+ ...amba4-0005-builtin-heimdal-external-tools.patch |  42 +++++
+ package/samba4/samba4.mk                           | 113 ++++++++++++
+ 20 files changed, 1081 insertions(+), 3 deletions(-)
+ create mode 100644 package/heimdal/heimdal-0001-add-roken-h-process.patch
+ create mode 100644 package/heimdal/heimdal-0002-use-Getopt-Std.patch
+ create mode 100644 package/heimdal/heimdal-0003-vendor.patch
+ create mode 100644 package/heimdal/heimdal-0004-compile_et.patch
+ create mode 100644 package/heimdal/heimdal.mk
+ create mode 100644 package/python/python-010-fix-python-config.patch
+ rename package/samba/{samba-fix-smbd-libs-avahi.patch => samba-0001-fix-smbd-libs-avahi.patch} (100%)
+ rename package/samba/{samba-getaddrinfo.patch => samba-0002-getaddrinfo.patch} (100%)
+ create mode 100644 package/samba4/Config.in
+ create mode 100644 package/samba4/S91smb
+ create mode 100644 package/samba4/arm-cache.txt
+ create mode 100644 package/samba4/powerpc-cache.txt
+ create mode 100644 package/samba4/samba4-0001-build-don-t-execute-tests-summary.c.patch
+ create mode 100644 package/samba4/samba4-0002-build-don-t-execute-statfs-and-f_fsid-checks.patch
+ create mode 100644 package/samba4/samba4-0003-build-find-FILE_OFFSET_BITS-via-array.patch
+ create mode 100644 package/samba4/samba4-0004-build-allow-some-python-variable-overrides.patch
+ create mode 100644 package/samba4/samba4-0005-builtin-heimdal-external-tools.patch
+ create mode 100644 package/samba4/samba4.mk
+
+-- 
+1.8.3.2
