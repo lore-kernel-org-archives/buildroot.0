@@ -1,78 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 2 Mar 2014 14:19:36 +0100
-Subject: [Buildroot] State of your Qt 5 patches
-In-Reply-To: <53131901.3030006@gmx.net>
-References: <20140302002857.2a9f166d@skate> <5313095B.7070204@gmx.net>
- <20140302123100.1b966bcd@skate> <53131901.3030006@gmx.net>
-Message-ID: <20140302141936.10852ded@skate>
+Date: Sun, 2 Mar 2014 14:53:59 +0100
+Subject: [Buildroot] [git commit] jquery-ui: bump to version 1.10.4
+Message-ID: <20140302135433.4A504828EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter K?mmel,
+commit: http://git.buildroot.net/buildroot/commit/?id=c82cf6b73eb6a774e52cb9468c4ebc90cf4b55f1
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 02 Mar 2014 12:41:53 +0100, Peter K?mmel wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/jquery-ui/jquery-ui.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-> >>>    http://patchwork.ozlabs.org/patch/320476/
-> >>>    http://patchwork.ozlabs.org/patch/320475/
-> >>>    http://patchwork.ozlabs.org/patch/320472/
-> >>>    http://patchwork.ozlabs.org/patch/320462/
-> >>>    http://patchwork.ozlabs.org/patch/320407/
-> >>>    http://patchwork.ozlabs.org/patch/317465/
-> >>>    http://patchwork.ozlabs.org/patch/317462/
-> >>>    http://patchwork.ozlabs.org/patch/317461/
-> >>
-> >> Hi Thomas,
-> >>
-> >> the patches where intended for 2014.02.
-> >
-> > And why wouldn't they be usable now?
-> >
-> >> Maybe we should simply drop them and wait for Qt 5.3, planned for 29th Apr 2014:
-> >> http://qt-project.org/wiki/Qt-5.3-release
-> >
-> > That doesn't seem like a good idea. April, 29th will be very close to
-> > 2014.05-rc1, and so it might be too late to get the changes in.
-> >
-> > I would really like those Qt 5.2.1 changes to get it now. Can you tell
-> > me which patches from the list above still make sense?
-> 
-> http://patchwork.ozlabs.org/patch/320476/
-> http://patchwork.ozlabs.org/patch/320475/
-
-Thanks. Apparently you or someone else has already updated the status
-of all the other patches.
-
-> But I haven't tested them with current master, but I could check with master next week.
-
-Yes, it would be good. Also, Fatih, could you have a look at Peter's
-patches, and give your Acked-by/Reviewed-by as appropriate?
-
-> BTW, what's the correct way to update a patch?
-
-Resend it to the list, after updating it to the latest master. Make
-sure you change the patch version by doing:
-
-git send-email --subject-prefix="PATCH v2"
-
-and by including a changelog either in the patch itself below the "---"
-sign, or in the cover letter.
-
-See
-http://buildroot.org/downloads/manual/manual.html#_patch_revision_changelog
-for more details.
-
-> Just sending to the list like a new one and to superseded on patchwork?
-
-Yes, but make sure to change the subject prefix to include a version
-number, and include a changelog in the cover letter.
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/jquery-ui/jquery-ui.mk b/package/jquery-ui/jquery-ui.mk
+index 6524c40..5eadf53 100644
+--- a/package/jquery-ui/jquery-ui.mk
++++ b/package/jquery-ui/jquery-ui.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-JQUERY_UI_VERSION = 1.10.3
++JQUERY_UI_VERSION = 1.10.4
+ JQUERY_UI_SITE = http://jqueryui.com/resources/download
+ JQUERY_UI_SOURCE = jquery-ui-$(JQUERY_UI_VERSION).zip
+ JQUERY_UI_LICENSE = MIT
