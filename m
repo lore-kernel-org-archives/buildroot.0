@@ -1,109 +1,234 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun,  2 Mar 2014 22:33:46 +0100
-Subject: [Buildroot] [PATCH v2 1/1] imagemagick: disable documentation
-Message-ID: <1393796026-21985-1-git-send-email-romain.naour@openwide.fr>
+From: jean.sorgemoel at laposte.net <jean.sorgemoel@laposte.net>
+Date: Sun,  2 Mar 2014 22:41:54 +0100
+Subject: [Buildroot] [PATCH v6 1/2] adding bootloader option for iso9660
+	filesystem image
+In-Reply-To: <1376644934-4302-1-git-send-email-jean.sorgemoel@laposte.net>
+References: <1376644934-4302-1-git-send-email-jean.sorgemoel@laposte.net>
+Message-ID: <1393796515-14625-1-git-send-email-jean.sorgemoel@laposte.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add --disable-docs option in the configure script.
+From: Jerome Sagnole <jean.sorgemoel@laposte.net>
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+	* Adding multiple new options for ISO9660 filesystems: Joliet,
+	   RockRidge, name, input charset
+
+	* Adding the infrastructure to use different bootloaders.
+
+
+Signed-off-by: Jerome Sagnole <jean.sorgemoel@laposte.net>
 ---
-v2: Add an option in configure script
-    instead of patching the Makefile (Arnout)
-    upstream status: it's not sent yet
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
- ...gick-02-configure-Add-disable-docs-option.patch | 77 ++++++++++++++++++++++
- 1 file changed, 77 insertions(+)
- create mode 100644 package/imagemagick/imagemagick-02-configure-Add-disable-docs-option.patch
+changes v4 -> v5:
+	* addon to include comment Arnout Vandecappelle & Martin Bark
+	* modify option to include files and directories in iso image
+	   - suppress option BR2_TARGET_ROOTFS_ISOLINUX_EXTRA_FILES
+	   - add option BR2_TARGET_ROOTFS_ISO9660_OVERLAY
+	   - modify code to include this new option
+	* modify comment
+	* modify signed-off-by (use real name)
+	* keep default option for BR2_TARGET_ROOTFS_ISO9660_ROCK_RIDGE
+	    in old code, it defined by default (keep for compatibility)
+	* modify default option for BR2_TARGET_ROOTFS_ISO9660_NAME
+	* modify default option for BR2_TARGET_ROOTFS_ISO9660_INPUT_CHARSET 
+	* modify variable name to add prefix 'ISO9660_'
+	* "qstrip" each variable
+	    BR2_TARGET_ROOTFS_ISO9660_INPUT_CHARSET
+	    BR2_TARGET_ROOTFS_ISO9660_NAME
+	* modify command INITRD_SED_CMD
+	* modify kernel launch for this iso 
+	   - use LINUX_IMAGE_NAME 
+	   - add command sed to replace __LINUX_IMAGE_NAME__ in configuration
+	* suppress bootmsg.txt in isolinux.cfg is empty (bootloader isolinux)
 
-diff --git a/package/imagemagick/imagemagick-02-configure-Add-disable-docs-option.patch b/package/imagemagick/imagemagick-02-configure-Add-disable-docs-option.patch
-new file mode 100644
-index 0000000..2febccd
---- /dev/null
-+++ b/package/imagemagick/imagemagick-02-configure-Add-disable-docs-option.patch
-@@ -0,0 +1,77 @@
-+The manual and html data are unconditionally installed on target.
-+Some users may only want the executable.
+
+changes v3 -> v4:
+	* addon to include remark Arnout Vandecappelle & Thomas Petazzoni
+	* add choise to select bootloader in iso9660 menu
+	* modify comment
+	* seperate code in two patch
+	  1st patch : update iso9660 with grub
+	  2nd patch : add new bootloader isolinux
+
+
+changes v2 -> v3:
+	* addon to include remark Thomas Petazzoni & Arnout Vandecappelle
+	  - modify comment
+	  - default generate iso with grub bootloader
+	  - you can select isolinux bootloader
+	    - detail : (module fs/iso9660)
+	    - option to select bootloader (grub/isolinux)
+	    - file(s) bootloader configuration
+	    - option to copy file(s) on iso (only for isolinux)
+	    - option to create iso with long filenames (Joliet format)
+	    - option to create iso with POSIX file system (file mode, uid, gid, ...)
+	    - define volume label
+	    - define parameter input charset
+	    - can use initramfs (if activate), also cpio (like initrd)
+
+changes v1 -> v2:
+	* simplify code (suggest by Arnout Vandecappelle)
+	  - I suppress redundant comment
+	  - Suppress menu and use conditional (replace 'depends on' by 'if/endif')
+	  - Modify comment
+	  - suppress option (keyboard, ...)
+	  - replace 8 x space by tabulation
+	  - suppress extension 'BR2_'
+	  - use variable 'ISOLINUX_DIR'
+	  - suppress keyboard option
+	  - I can't use command '$(INSTALL) -D' beacause I don't define filenames (I keep old code)
+	  - Hide command genisoimage (with option $@) 
+
+Changes v0 -> v1:
+	* new branch to generate iso with bootloader isolinux
+
+
+ fs/iso9660/Config.in  |   39 ++++++++++++++++++++++++++++++-
+ fs/iso9660/iso9660.mk |   62 +++++++++++++++++++++++++++++++++++--------------
+ 2 files changed, 83 insertions(+), 18 deletions(-)
+
+diff --git a/fs/iso9660/Config.in b/fs/iso9660/Config.in
+index 50b4377..e881ca6 100644
+--- a/fs/iso9660/Config.in
++++ b/fs/iso9660/Config.in
+@@ -8,10 +8,47 @@ config BR2_TARGET_ROOTFS_ISO9660
+ 	help
+ 	  Build a bootable iso9660 image
+ 
++if BR2_TARGET_ROOTFS_ISO9660
 +
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+---
-+ Makefile.am  | 16 ++++++++++++++--
-+ configure.ac |  8 ++++++++
-+ 2 files changed, 22 insertions(+), 2 deletions(-)
+ config BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU
+ 	string "Boot menu.lst file"
+-	depends on BR2_TARGET_ROOTFS_ISO9660
+ 	default "fs/iso9660/menu.lst"
++	help
++	  Grub configuration
++	  Define menu, commands and options for grub
 +
-+diff --git a/Makefile.am b/Makefile.am
-+index c74a870..f2fa4e0 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -156,19 +156,25 @@ pkgconfig_DATA = \
-+ %- at MAGICK_MAJOR_VERSION@. at MAGICK_ABI_SUFFIX@.pc: %.pc
-+ 	cp -f $^ $@
-+ 
-++# Architecture independent data files installed in the package's data directory
-++docdir = $(DOCUMENTATION_PATH)
-++
-+ # Manual pages to install
-++if INSTALL_DOC
-+ man_MANS = \
-+ 	$(MAGICK_MANS) \
-+ 	$(WAND_MANS) \
-+ 	$(MAGICKPP_MANS) \
-+ 	$(UTILITIES_MANS)
-+ 
-+-# Architecture independent data files installed in the package's data directory
-+-docdir = $(DOCUMENTATION_PATH)
-+ doc_DATA = \
-+ 	LICENSE \
-+ 	ChangeLog \
-+ 	NEWS.txt
-++else
-++man_MANS =
-++doc_DATA =
-++endif
-+ 
-+ if MAINTAINER_MODE
-+ MAINTAINER_TARGETS = \
-+@@ -236,7 +242,13 @@ pkgdocdir = $(DOCUMENTATION_PATH)
-+ DOCDIRSDOXYGEN = www/api/MagickCore www/api/MagickWand
-+ DOCDIRSMANUAL = images images/patterns www www/api www/source www/Magick++
-+ DOCDIRS= $(DOCDIRSMANUAL) $(DOCDIRSDOXYGEN)
-++
-++if INSTALL_DOC
-+ HTML_INSTALL_DATA_TARGETS = install-data-html
-++else !INSTALL_DOC
-++HTML_INSTALL_DATA_TARGETS =
-++endif !INSTALL_DOC
-++
-+ install-data-html:
-+ 	$(mkinstalldirs) $(DESTDIR)$(pkgdocdir)
-+ 	$(INSTALL_DATA) $(srcdir)/index.html $(DESTDIR)$(pkgdocdir)
-+diff --git a/configure.ac b/configure.ac
-+index 445bccf..a2b5d0e 100755
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -3173,6 +3173,14 @@ esac
-+ AC_DEFINE_UNQUOTED(DOCUMENTATION_PATH,"$DEFINE_DOCUMENTATION_PATH",[Directory where ImageMagick documents live.])
-+ AC_SUBST(DOCUMENTATION_PATH)
-+ 
-++#
-++# Enable/Disable documentation
-++AC_ARG_ENABLE([docs],
-++  [AS_HELP_STRING([--disable-docs],
-++    [disable building of documentation])],
-++  wantdocs=$enableval, wantdocs=detect)
-++AM_CONDITIONAL([INSTALL_DOC], [test "$wantdocs" = "xyes"])
-++
-+ # Subdirectory to place architecture-dependent configuration files
-+ CONFIGURE_RELATIVE_PATH="${PACKAGE_NAME}-${MAGICK_MAJOR_VERSION}"
-+ AC_DEFINE_UNQUOTED(CONFIGURE_RELATIVE_PATH,"$CONFIGURE_RELATIVE_PATH",[Subdirectory of lib where architecture-dependent configuration files live.])
-+-- 
-+1.8.5.3
++config BR2_TARGET_ROOTFS_ISO9660_JOLIET
++	bool "Create iso with Joliet format (long filenames)"
++	default y
++	help
++	  Generate iso image with Joliet directory records.
++	  Use Unicode and each path component can be up 64
++	  Unicode characters long.
 +
++config BR2_TARGET_ROOTFS_ISO9660_ROCK_RIDGE
++	bool "Create iso with Rock Ridge extensions (POSIX filesystem)"
++	default y
++	help
++	  Generate iso image with Rock Ridge directory information,
++	  which makes it a POSIX filesystem (file mode, uid, gid, ...)
++
++config BR2_TARGET_ROOTFS_ISO9660_NAME
++	string "Volume label"
++	default ""
++	help
++	  cdrom name
++
++config BR2_TARGET_ROOTFS_ISO9660_INPUT_CHARSET
++	string "Input filename character encoding"
++	default "utf8"
++	help
++	  The character encoding with which the names of the files that
++	  will be copied into the iso9660 filesystem are encoded. For the
++	  RockRidge directory, the same encoding will be used. For the
++	  Joliet directory, it will be converted to UTF-16.
++	  (see program genisoimage : genisoimage -input-charset help)
++
++endif # BR2_TARGET_ROOTFS_ISO9660
+ 
+ comment "iso image needs a Linux kernel to be built"
+ 	depends on BR2_i386 || BR2_x86_64
+diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+index a6a9c95..7ac84ca 100644
+--- a/fs/iso9660/iso9660.mk
++++ b/fs/iso9660/iso9660.mk
+@@ -9,33 +9,53 @@
+ 
+ ISO9660_TARGET_DIR = $(BUILD_DIR)/iso9660
+ ISO9660_BOOT_MENU := $(call qstrip,$(BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU))
++ISO9660_CHARSET = $(call qstrip,$(BR2_TARGET_ROOTFS_ISO9660_INPUT_CHARSET))
++ISO9660_NAME = $(call qstrip,$(BR2_TARGET_ROOTFS_ISO9660_NAME))
++ISO9660_KERNEL_DST = $(ISO9660_TARGET_DIR)/kernel
++
++ISO9660_BOOTLOADER_BIN = $(GRUB_DIR)/stage2/stage2_eltorito
++ISO9660_BOOTLOADER_DIR = $(ISO9660_TARGET_DIR)/boot/grub/
++ISO9660_BOOTLOADER_DST_CFG = $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
++ISO9660_ELTORITO_BOOT = boot/grub/stage2_eltorito
+ 
+ $(BINARIES_DIR)/rootfs.iso9660: host-cdrkit host-fakeroot linux rootfs-cpio grub
+ 	@$(call MESSAGE,"Generating root filesystem image rootfs.iso9660")
+-	mkdir -p $(ISO9660_TARGET_DIR)
+-	mkdir -p $(ISO9660_TARGET_DIR)/boot/grub
+-	cp $(GRUB_DIR)/stage2/stage2_eltorito $(ISO9660_TARGET_DIR)/boot/grub/
+-	cp $(ISO9660_BOOT_MENU) $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
++	@mkdir -p $(ISO9660_TARGET_DIR)
++	@mkdir -p $(ISO9660_BOOTLOADER_DIR)
++
++	@cp $(ISO9660_BOOTLOADER_BIN) $(ISO9660_BOOTLOADER_DIR)
++	@cp $(ISO9660_BOOT_MENU) $(ISO9660_BOOTLOADER_DST_CFG)
++	@cp $(LINUX_IMAGE_PATH) $(ISO9660_KERNEL_DST)
++
+ ifeq ($(BR2_TARGET_GRUB_SPLASH),)
+-	$(SED) '/^splashimage/d' $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
++	@$(SED) '/^splashimage/d' $(ISO9660_BOOTLOADER_DST_CFG)
+ else
+-	cp boot/grub/splash.xpm.gz $(ISO9660_TARGET_DIR)/
+-endif
+-	cp $(LINUX_IMAGE_PATH) $(ISO9660_TARGET_DIR)/kernel
++	@cp boot/grub/splash.xpm.gz $(ISO9660_TARGET_DIR)/
++endif # BR2_TARGET_GRUB_SPLASH
++
+ ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
+-	$(SED) '/initrd/d'  $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
++	@$(SED) '/initrd/d'  $(ISO9660_BOOTLOADER_DST_CFG)
+ else
+-	cp $(BINARIES_DIR)/rootfs.cpio$(ROOTFS_CPIO_COMPRESS_EXT) $(ISO9660_TARGET_DIR)/initrd
+-endif
++	@cp $(BINARIES_DIR)/rootfs.cpio$(ROOTFS_CPIO_COMPRESS_EXT) \
++		$(ISO9660_TARGET_DIR)/initrd
++endif # BR2_TARGET_ROOTFS_INITRAMFS
++
+ 	# Use fakeroot to pretend all target binaries are owned by root
+-	rm -f $(FAKEROOT_SCRIPT)
+-	echo "chown -R 0:0 $(ISO9660_TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
++	@rm -f $(FAKEROOT_SCRIPT)
++	@echo "chown -R 0:0 $(ISO9660_TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
+ 	# Use fakeroot so mkisofs believes the previous fakery
+-	echo "$(HOST_DIR)/usr/bin/genisoimage -R -b boot/grub/stage2_eltorito -no-emul-boot " \
+-		"-boot-load-size 4 -boot-info-table -o $@ $(ISO9660_TARGET_DIR)" \
++	@echo "$(HOST_DIR)/usr/bin/genisoimage " \
++		"$(GENISOIMAGE_OPTS) " \
++		"-b $(ISO9660_ELTORITO_BOOT) " \
++		"-no-emul-boot " \
++		"-boot-load-size 4 " \
++		"-boot-info-table " \
++		"-input-charset '$(ISO9660_CHARSET)' " \
++		"-V '$(ISO9660_NAME)' " \
++		"-o $@ $(ISO9660_TARGET_DIR)" \
+ 		>> $(FAKEROOT_SCRIPT)
+-	chmod a+x $(FAKEROOT_SCRIPT)
+-	$(HOST_DIR)/usr/bin/fakeroot -- $(FAKEROOT_SCRIPT)
++	@chmod a+x $(FAKEROOT_SCRIPT)
++	@$(HOST_DIR)/usr/bin/fakeroot -- $(FAKEROOT_SCRIPT)
+ 	- at rm -f $(FAKEROOT_SCRIPT)
+ 	- at rm -rf $(ISO9660_TARGET_DIR)
+ 
+@@ -49,3 +69,11 @@ rootfs-iso9660: $(BINARIES_DIR)/rootfs.iso9660
+ ifeq ($(BR2_TARGET_ROOTFS_ISO9660),y)
+ TARGETS += rootfs-iso9660
+ endif
++
++ifeq ($(BR2_TARGET_ROOTFS_ISO9660_JOLIET),y)
++GENISOIMAGE_OPTS += -J
++endif
++
++ifeq ($(BR2_TARGET_ROOTFS_ISO9660_ROCK_RIDGE),y)
++GENISOIMAGE_OPTS += -R
++endif
 -- 
-1.8.5.3
+1.7.10.4
