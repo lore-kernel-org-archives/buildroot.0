@@ -1,10 +1,7 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  2 Mar 2014 17:52:57 +0100
-Subject: [Buildroot] [PATCH 16/19] package/jpeg: convert to the
-	virtual-package infrastructure
-In-Reply-To: <cover.1393778339.git.yann.morin.1998@free.fr>
-References: <cover.1393778339.git.yann.morin.1998@free.fr>
-Message-ID: <686490a338c0fe4fed9aa4a73016904cad6574cc.1393778339.git.yann.morin.1998@free.fr>
+Date: Sun,  2 Mar 2014 18:07:09 +0100
+Subject: [Buildroot] [PATCH 0/3] Some RPi bumps
+Message-ID: <cover.1393779995.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,54 +10,29 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Since this package is implemented via a choice rather than the usual
-separate-package providers, we only need BR2_PACKAGE_HAS_JPEG to be
-always defined when the 'jpeg' package is selected.
+Hello All!
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: Mike Zick <minimod@morethan.org>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
----
- package/jpeg/Config.in |  3 +++
- package/jpeg/jpeg.mk   | 12 +-----------
- 2 files changed, 4 insertions(+), 11 deletions(-)
+Here is a small series to bump the Raspberry Pi packages and defconfig.
 
-diff --git a/package/jpeg/Config.in b/package/jpeg/Config.in
-index b7cdfeb..3042d24 100644
---- a/package/jpeg/Config.in
-+++ b/package/jpeg/Config.in
-@@ -30,6 +30,9 @@ config BR2_PACKAGE_JPEG_TURBO
- 
- endchoice
- 
-+config BR2_PACKAGE_HAS_JPEG
-+	def_bool y
-+
- config BR2_PACKAGE_PROVIDES_JPEG
- 	string
- 	default "libjpeg"    if BR2_PACKAGE_LIBJPEG
-diff --git a/package/jpeg/jpeg.mk b/package/jpeg/jpeg.mk
-index 3695bc8..2d56be6 100644
---- a/package/jpeg/jpeg.mk
-+++ b/package/jpeg/jpeg.mk
-@@ -4,14 +4,4 @@
- #
- ################################################################################
- 
--JPEG_SOURCE =
--JPEG_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_JPEG))
--
--ifeq ($(JPEG_DEPENDENCIES),)
--define JPEG_CONFIGURE_CMDS
--	echo "No JPEG implementation defined. Configuration error"
--	exit 1
--endef
--endif
--
--$(eval $(generic-package))
-+$(eval $(virtual-package))
+Regards,
+Yann E. MORIN.
+
+
+----------------------------------------------------------------
+Yann E. MORIN (3):
+      package/rpi-userland: bump version
+      package/rpi-firmware: bump version
+      configs/raspberrypi: bump kernel version
+
+ configs/raspberrypi_defconfig        | 2 +-
+ package/rpi-firmware/rpi-firmware.mk | 2 +-
+ package/rpi-userland/rpi-userland.mk | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
 -- 
-1.8.3.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
