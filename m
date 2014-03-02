@@ -1,95 +1,46 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun,  2 Mar 2014 00:39:53 +0100
-Subject: [Buildroot] [PATCH 6/6] liburcu: disable build with gcc-4.8.x on ARM
-In-Reply-To: <1393717193-19774-1-git-send-email-s.martin49@gmail.com>
-References: <1393717193-19774-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1393717193-19774-7-git-send-email-s.martin49@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun,  2 Mar 2014 01:21:10 -0300
+Subject: [Buildroot] [PATCHv2 1/2] lvm2: add readline bump fix patch
+Message-ID: <1393734071-11971-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Because of a gcc bug [1], liburcu checks for compiler version [2] and
-stops the build prematurely if gcc-4.8.[0-2] is detected for ARM.
+Fixes:
+http://autobuild.buildroot.net/results/d6f/d6f4d388c62ec2137560aabbff46c4a30c584e18/
 
-So, this patch tries to reflect this toolchain dependency on liburcu and
-all its reverse dependency packages.
-
-However, a limitation of this is when the user is using a custom
-toolchain; that's why the bug details have been added in the liburcu
-help message.
-
-[1] http://gcc.gnu.org/bugzilla/show_bug.cgi?id=58854
-[2] http://git.lttng.org/?p=userspace-rcu.git;a=commitdiff;h=4b79310
-
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/liburcu/Config.in      | 11 +++++++++++
- package/lttng-libust/Config.in |  6 ++++++
- package/lttng-tools/Config.in  |  6 ++++++
- 3 files changed, 23 insertions(+)
+ package/lvm2/lvm2-001-readline-deprecated.patch | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+ create mode 100644 package/lvm2/lvm2-001-readline-deprecated.patch
 
-diff --git a/package/liburcu/Config.in b/package/liburcu/Config.in
-index 15ad5bd..90e9199 100644
---- a/package/liburcu/Config.in
-+++ b/package/liburcu/Config.in
-@@ -1,6 +1,12 @@
- config BR2_PACKAGE_LIBURCU
- 	bool "liburcu"
- 	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_powerpc || BR2_x86_64
-+	# liburcu/gcc-4.8.x bug
-+	depends on !((BR2_arm || BR2_armeb) && (BR2_GCC_VERSION_4_8_X || \
-+		BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_11 || \
-+		BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_10 || \
-+		BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_09 || \
-+		BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201311))
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  Userspace implementation of the Read-Copy-Update (RCU)
-@@ -8,6 +14,11 @@ config BR2_PACKAGE_LIBURCU
- 	  the LTTng tracing infrastructure, but can be used for other
- 	  purposes as well.
- 
-+	  On ARM, liburcu cannot be built using gcc 4.8.0, 4.8.1 or 4.8.2
-+	  because of:
-+	    http://gcc.gnu.org/bugzilla/show_bug.cgi?id=58854
-+	    http://git.lttng.org/?p=userspace-rcu.git;a=commitdiff;h=4b79310
+diff --git a/package/lvm2/lvm2-001-readline-deprecated.patch b/package/lvm2/lvm2-001-readline-deprecated.patch
+new file mode 100644
+index 0000000..15dc626
+--- /dev/null
++++ b/package/lvm2/lvm2-001-readline-deprecated.patch
+@@ -0,0 +1,19 @@
++The CPPFunction typedef (among others) have been deprecated in favour of
++specific prototyped typedefs since readline 4.2.
++It's been working since because compatibility typedefs have been
++in place until they were removed in readline 6.3.
 +
- 	  http://lttng.org/urcu
- 
- comment "liburcu needs a toolchain w/ threads"
-diff --git a/package/lttng-libust/Config.in b/package/lttng-libust/Config.in
-index 5e1a6d4..7ec5053 100644
---- a/package/lttng-libust/Config.in
-+++ b/package/lttng-libust/Config.in
-@@ -1,5 +1,11 @@
- config BR2_PACKAGE_LTTNG_LIBUST
- 	bool "lttng-libust"
-+	# liburcu/gcc-4.8.x bug
-+	depends on !((BR2_arm || BR2_armeb) && (BR2_GCC_VERSION_4_8_X || \
-+		BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_11 || \
-+		BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_10 || \
-+		BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_09 || \
-+		BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201311))
- 	select BR2_PACKAGE_LIBURCU
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-diff --git a/package/lttng-tools/Config.in b/package/lttng-tools/Config.in
-index 1e9e0c3..0f31bee 100644
---- a/package/lttng-tools/Config.in
-+++ b/package/lttng-tools/Config.in
-@@ -1,5 +1,11 @@
- config BR2_PACKAGE_LTTNG_TOOLS
- 	bool "lttng-tools"
-+	# liburcu/gcc-4.8.x bug
-+	depends on !((BR2_arm || BR2_armeb) && (BR2_GCC_VERSION_4_8_X || \
-+		BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_11 || \
-+		BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_10 || \
-+		BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_09 || \
-+		BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201311))
- 	select BR2_PACKAGE_LIBURCU
- 	select BR2_PACKAGE_POPT
- 	select BR2_PACKAGE_UTIL_LINUX
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nura LVM2.2.02.103.orig/tools/lvm.c LVM2.2.02.103/tools/lvm.c
++--- LVM2.2.02.103.orig/tools/lvm.c	2014-03-01 16:10:57.902422044 -0300
+++++ LVM2.2.02.103/tools/lvm.c	2014-03-01 16:11:34.791598230 -0300
++@@ -185,7 +185,7 @@
++ 	char *input = NULL, *args[MAX_ARGS], **argv;
++ 
++ 	rl_readline_name = "lvm";
++-	rl_attempted_completion_function = (CPPFunction *) _completion;
+++	rl_attempted_completion_function = (rl_completion_func_t *) _completion;
++ 
++ 	_read_history(cmd);
++ 
 -- 
-1.9.0
+1.8.3.2
