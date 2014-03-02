@@ -1,26 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 2 Mar 2014 16:24:52 +0100
-Subject: [Buildroot] [PATCH v2] manual: clarify
- Tested-by/Reviewed-by/Acked-by tags
-In-Reply-To: <7233ff47b45b0a950f77.1393769842@argentina>
-References: <7233ff47b45b0a950f77.1393769842@argentina>
-Message-ID: <20140302162452.44f588a0@skate>
+Date: Sun, 2 Mar 2014 16:25:32 +0100
+Subject: [Buildroot] [PATCHv3 0/4] Samba4 package
+In-Reply-To: <1393764138-27869-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1393764138-27869-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140302162532.077ced45@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Dear Gustavo Zacarias,
 
-On Sun, 02 Mar 2014 15:17:22 +0100, Thomas De Schampheleire wrote:
-> This patch updates the manual with more clarified descriptions of tags
-> Tested-by, Reviewed-by, and Acked-by, as discussed on the Buildroot
-> developer days in February 2014.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+On Sun,  2 Mar 2014 09:42:14 -0300, Gustavo Zacarias wrote:
 
-Applied, thanks.
+> Gustavo Zacarias (4):
+>   python: fixup python-config script
+>   heimdal: new package
+>   samba: update description and rename patches
+>   samba4: new package
+
+Series applied, thanks. I've also applied the patch from Christophe
+Vu-Brugier that adds the x86-64 informations.
+
+Thanks,
 
 Thomas
 -- 
