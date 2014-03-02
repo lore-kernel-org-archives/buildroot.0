@@ -1,28 +1,30 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 2 Mar 2014 15:32:43 +0100
-Subject: [Buildroot] [PATCH v2] manual: clarify
- Tested-by/Reviewed-by/Acked-by tags
-In-Reply-To: <7233ff47b45b0a950f77.1393769842@argentina>
-References: <7233ff47b45b0a950f77.1393769842@argentina>
-Message-ID: <CAHXCMMJ=pk_rWxP81_rFmOiM3E6Uo_UDk=pxZQWMwU_kEVMzAQ@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun,  2 Mar 2014 16:35:14 +0200
+Subject: [Buildroot] [PATCH] samba4: add comment arch dependencies
+Message-ID: <b249dcfddfaa7cb817d4975854a2c3565515d553.1393770914.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Mar 2, 2014 at 3:17 PM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> This patch updates the manual with more clarified descriptions of tags
-> Tested-by, Reviewed-by, and Acked-by, as discussed on the Buildroot
-> developer days in February 2014.
->
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Hide the comment for unsupported architectures.
 
-Acked-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/samba4/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-
-Regards,
-
+diff --git a/package/samba4/Config.in b/package/samba4/Config.in
+index fcc03dfb1528..bea26cba3625 100644
+--- a/package/samba4/Config.in
++++ b/package/samba4/Config.in
+@@ -20,5 +20,6 @@ config BR2_PACKAGE_SAMBA4
+ 	  http://www.samba.org/
+ 
+ comment "samba4 needs a toolchain w/ IPv6, wchar, largfile, threads"
++	depends on BR2_arm || BR2_powerpc || BR2_x86_64
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE || \
+ 		!BR2_USE_WCHAR || !BR2_INET_IPV6
 -- 
-Samuel
+1.9.0
