@@ -1,52 +1,33 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 2 Mar 2014 21:14:33 +0100
-Subject: [Buildroot] [PATCH 0/13 v2] some download-related changes
-In-Reply-To: <cover.1393781649.git.yann.morin.1998@free.fr>
-References: <cover.1393781649.git.yann.morin.1998@free.fr>
-Message-ID: <CAHXCMMJj3GskwyhNsXtZNcT_oRAVOZECQ6e9-8xCEG4uOE_g0A@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 2 Mar 2014 21:38:59 +0100
+Subject: [Buildroot] [PATCH 0/4] Brand new website
+In-Reply-To: <1393784504-11327-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1393784504-11327-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <CAAXf6LX5Ew_2M4OTjuwCeTqmWt+r6vkmguRk+tXvYcwFd4F+yg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, all
+Hi Maxime,
 
-On Sun, Mar 2, 2014 at 6:51 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On Sun, Mar 2, 2014 at 7:21 PM, Maxime Hadjinlian
+<maxime.hadjinlian@gmail.com> wrote:
+> This series updates our current website.
+> It also take the occasion to move the README file that was in the docs
+> subdirectory to the root of the project.
+> First by getting Bootstrap and JQuery into it, then reworking the HTML and the
+> content a bit.
 >
-> Hello All!
->
-> This series contains those download-related changes:
->
->   - Patches 1..3  : some cleanups and preparatory works in the
->     download infra,
->
->   - Patches 4..8  : move download helpers to shell scripts, one
->     such script for each download helper
->
->   - Patches 9..10 : don't use DL_DIR as scratchpad for temporary VCS
->     checkouts, since DL_DIR is a precious location
->
->   - Patches 11..13: check hashes of downloaded files, to ensure the
->     files are genuine
->
->
-> Changes v1 -> v2:
->   - don't do any behavioural change when switching to shell scripts,
->     just reproduce exactly what was in the Makefile  (Luca, Arnout)
->   - support more than one hash algorithm  (Arnout, Gustavo)
->   - typoes  (Luca, Baruch)
->
->
-> Regards,
-> Yann E. MORIN.
+> Maxime Hadjinlian (4):
+>   docs: Move README file to root
+>   website: Add Bootstrap and JQuery framework
+>   website: Add Buildroot javascript
+>   website: new website !
 >
 
-[Samuel: for the whole series, with the (nit) fix in patch 11/13]
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+It seems that patch 2/4 and 4/4 did not make it to the list... could you check?
 
-Regards,
-
--- 
-Samuel
+Best regards,
+Thomas
