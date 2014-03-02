@@ -1,57 +1,162 @@
-From: Oded Hanson <OHanson@xsightsys.com>
-Date: Sun, 2 Mar 2014 16:14:58 +0000
-Subject: [Buildroot] Segmentation fault while trying to remote debug
- with GDB and GDBServer
-In-Reply-To: <20140302171008.2014a1e0@skate>
-References: <51ef4c3ec6f84eab802c23a14ecb48ae@DBXPR07MB142.eurprd07.prod.outlook.com>
- <20140302070650.GE3874@tarshish>
- <24eee2c96f804b55ae7767734d5a4f6e@DBXPR07MB142.eurprd07.prod.outlook.com>
- <20140302091205.GF3874@tarshish>
- <29f88dd2071c483bb7102687088ac6b3@DBXPR07MB142.eurprd07.prod.outlook.com>
- <20140302122406.GJ3874@tarshish>
- <99f27349e290444ba06497af087cb0d8@DBXPR07MB142.eurprd07.prod.outlook.com>,
- <20140302171008.2014a1e0@skate>
-Message-ID: <492314416a7d462a844a1ae3f37fa446@DBXPR07MB142.eurprd07.prod.outlook.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 2 Mar 2014 17:17:38 +0100
+Subject: [Buildroot] [PATCH v5 1/2] modify bootloader option for iso9660
+ filesystem image (grub)
+In-Reply-To: <1393707656-29664-1-git-send-email-jean.sorgemoel@laposte.net>
+References: <1376644934-4302-1-git-send-email-jean.sorgemoel@laposte.net>
+ <1393707656-29664-1-git-send-email-jean.sorgemoel@laposte.net>
+Message-ID: <20140302171738.3c5c0020@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yes.  I believe thats the correct solution,  and thats what I did manually.
+Hello,
 
-Oded
+On Sat,  1 Mar 2014 22:00:55 +0100, jean.sorgemoel at laposte.net wrote:
+> From: Jerome Sagnole <jean.sorgemoel@laposte.net>
+> 
+> Changelog :
+> 
+> patch v1 : new branch to generate iso with bootloader isolinux
+> 
+> patch v2 : add bootloader option for iso9660 filesystem image (isolinux)
+>         addon to include comment Arnout Vandecappelle
+>         simplify code
+>           1/ I suppress redundant comment
+>           2/ Suppress menu and use conditional (replace 'depends on' by 'if/end$
+>           3/ Modify comment
+>           4/ suppress option (keyboard, ...)
+>           5/ replace 8 x space by tabulation
+>                 File : fs/isolinux/isolinux.mk
+>           6/ suppress extension 'BR2_'
+>           7/ use variable 'ISOLINUX_DIR'
+>           8/ suppress keyboard option
+>           9/ I can't use command '$(INSTALL) -D' beacause I don't define filena$
+>          10/ Hide command genisoimage (with option $@)
+> 
+> patch v3 : add bootloader option for iso9660 filesystem image (isolinux)
+>         addon to include comment Thomas Petazzoni & Arnout Vandecappelle
+>         modify comment
+>         default generate iso with grub bootloader
+>         you can select isolinux bootloader
+>         detail : (module fs/iso9660)
+>           option to select bootloader (grub/isolinux)
+>           file(s) bootloader configuration
+>           option to copy file(s) on iso (only for isolinux)
+>           option to create iso with long filenames (Joliet format)
+>           option to create iso with POSIX file system (file mode, uid, gid, ...)
+>           define volume label
+>           define parameter input charset
+>           can use initramfs (if activate), also cpio (like initrd)
+> 
+> patch v4 : add bootloader option for iso9660 filesystem image (isolinux)
+>         addon to include comment Arnout Vandecappelle & Thomas Petazzoni
+>         add choise to select bootloader in iso9660 menu
+>         modify comment
+>         seperate code in two patch
+>           1st patch : update iso9660 with grub
+>           2nd patch : add new bootloader isolinux
+> 
+> patch v5 part 1: modify bootloader option for iso9660 filesystem image (grub)
+>         addon to include comment Arnout Vandecappelle & Martin Bark
+>         modify option to include files and directories in iso image
+>           suppress option BR2_TARGET_ROOTFS_ISOLINUX_EXTRA_FILES
+>           add option BR2_TARGET_ROOTFS_ISO9660_OVERLAY
+>           modify code to include this new option
+>         modify comment
+>         modify signed-off-by (use real name)
+>         keep default option for BR2_TARGET_ROOTFS_ISO9660_ROCK_RIDGE
+>           in old code, it defined by default (keep for compatibility)
+>         modify default option for BR2_TARGET_ROOTFS_ISO9660_NAME
+>         modify default option for BR2_TARGET_ROOTFS_ISO9660_INPUT_CHARSET
+>         modify variable name to add prefix 'ISO9660_'
+>         "qstrip" each variable
+>           BR2_TARGET_ROOTFS_ISO9660_INPUT_CHARSET
+>           BR2_TARGET_ROOTFS_ISO9660_NAME
+>         modify command INITRD_SED_CMD
+>         modify kernel launch for this iso
+>           use LINUX_IMAGE_NAME
+>           add command sed to replace __LINUX_IMAGE_NAME__ in configuration
 
-On Mar 2, 2014 6:10 PM, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
-Dear Oded Hanson,
+This changelog should go after the "---" sign below. Moreover your
+commit should have a proper title, like:
 
-(Adding M?lanie Bats in Cc, since she is responsible for the Eclipse
-plugin development)
+	fs/iso9660: <short description>
 
-On Sun, 2 Mar 2014 12:44:23 +0000, Oded Hanson wrote:
+and a proper commit log, with several paragraphs explaining what the
+commit is changing. Your title mentions only "modify bootloader
+option", but your commit does *much* more than that. If your commit
+does multiple things, it should be split into several commits. Your
+commit actually seems to be doing several things:
 
-> For the completeness of the answer, I will add, that in eclipse plugin you can set the GDB command file. Pointing to a file with the set sysroot command in it, solves the issue also in eclipse and I can debug now from eclipse.
->
-> I guess this should be fixed in the eclipse plugin setup.
+ * Adding multiple new options for ISO9660 filesystems: Joliet,
+   RockRidge, name, input charset, overlay, etc.
 
-The Eclipse plugin does set the solib-path (see
-https://github.com/mbats/eclipse-buildroot-toolchain-plugin/blob/master/org.buildroot.cdt.toolchain/src/org/buildroot/cdt/toolchain/BuildrootLaunchConfigurationTabGroup.java#L70),
-but that is apparently insufficient for gdb to find the correct dynamic
-linker, especially when the host and target architectures are identical.
+ * Adding the infrastructure to use different bootloaders.
 
-Since there is apparently no way in Eclipse to set a gdb sysroot, I
-believe the only solution is for the Eclipse plugin to generate a
-simple gdbinit file:
+Those two things should lead to two separate patches.
 
-set sysroot /path/to/staging/directory
+See also
+http://buildroot.org/downloads/manual/manual.html#_patch_revision_changelog
+on how to format a git commit log with a changelog.
 
-and then instruct Eclipse to use it.
+> Signed-off-by: Jerome Sagnole <jean.sorgemoel@laposte.net>
+> ---
+>  fs/iso9660/Config.in  |   49 ++++++++++++++++++++++++++++++++++-
+>  fs/iso9660/iso9660.mk |   68 ++++++++++++++++++++++++++++++++++++-------------
+>  2 files changed, 99 insertions(+), 18 deletions(-)
+> 
+> diff --git a/fs/iso9660/Config.in b/fs/iso9660/Config.in
+> index 50b4377..8020bd8 100644
+> --- a/fs/iso9660/Config.in
+> +++ b/fs/iso9660/Config.in
+> @@ -8,10 +8,57 @@ config BR2_TARGET_ROOTFS_ISO9660
+>  	help
+>  	  Build a bootable iso9660 image
+>  
+> +if BR2_TARGET_ROOTFS_ISO9660
+> +
+>  config BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU
+>  	string "Boot menu.lst file"
+> -	depends on BR2_TARGET_ROOTFS_ISO9660
+>  	default "fs/iso9660/menu.lst"
+> +	help
+> +	  Grub configuration
+> +	  Define menu, commands and options for grub
+> +
+> +config BR2_TARGET_ROOTFS_ISO9660_OVERLAY
+> +	string "iso9660 filesystem overlay directories"
+> +	default ""
+> +	help
+> +	  Specify a list of directories that are copied over the root of the
+> +	  iso filesystem after the build has finished and before it is
+> +	  packed into the iso filesystem image.
+> +
+> +	  They are copied as-is into the iso image, excluding files ending
+> +	  with ~ and .git, .svn and .hg directories.
+
+I must say I'm not a big fan of this. We already have an overlay
+mechanism for the root filesystem. I understand that in the case of
+iso9660, the root filesystem as generated by Buildroot goes into the
+initramfs, and that there is no way to put some more stuff in the
+iso9660 filesystem itself (outside the initramfs), I believe that the
+direction we are taking here is the wrong one.
+
+Instead, I believe we should turn the iso9660 option into what it
+should have been in the first place: using an iso9660 root filesystem.
+So we would get rid of the initramfs usage, enable Rock Ridge and
+Joliet extensions by default, and put the Buildroot filesystem as is in
+the ISO9660 filesystem. This way, no need for an additional overlay
+mechanism, we can just re-use the one from Buildroot.
+
+Do you think this would be possible?
+
+Thanks,
 
 Thomas
---
+-- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140302/00499559/attachment.html>
