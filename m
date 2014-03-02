@@ -1,38 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 2 Mar 2014 12:32:11 +0100
-Subject: [Buildroot] [PATCH 9/9] exim: add new package
-In-Reply-To: <eahbuaxc1k.ln2@ID-313208.user.individual.net>
-References: <1314127033-14861-1-git-send-email-luca@lucaceresoli.net>
- <1314127033-14861-10-git-send-email-luca@lucaceresoli.net>
- <eahbuaxc1k.ln2@ID-313208.user.individual.net>
-Message-ID: <20140302123211.54ea9e2a@skate>
+From: =?UTF-8?B?UGV0ZXIgS8O8bW1lbA==?= <syntheticpp@gmx.net>
+Date: Sun, 02 Mar 2014 12:41:53 +0100
+Subject: [Buildroot] State of your Qt 5 patches
+In-Reply-To: <20140302123100.1b966bcd@skate>
+References: <20140302002857.2a9f166d@skate>	<5313095B.7070204@gmx.net>
+ <20140302123100.1b966bcd@skate>
+Message-ID: <53131901.3030006@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+On 02.03.2014 12:31, Thomas Petazzoni wrote:
+> Dear Peter K?mmel,
+>
+> On Sun, 02 Mar 2014 11:35:07 +0100, Peter K?mmel wrote:
+>
+>>> Could you have a look at the following patches, and let me know which
+>>> ones no longer makes sense (because you have sent a new version) and
+>>> which ones still make sense:
+>>>
+>>>    http://patchwork.ozlabs.org/patch/320476/
+>>>    http://patchwork.ozlabs.org/patch/320475/
+>>>    http://patchwork.ozlabs.org/patch/320472/
+>>>    http://patchwork.ozlabs.org/patch/320462/
+>>>    http://patchwork.ozlabs.org/patch/320407/
+>>>    http://patchwork.ozlabs.org/patch/317465/
+>>>    http://patchwork.ozlabs.org/patch/317462/
+>>>    http://patchwork.ozlabs.org/patch/317461/
+>>
+>> Hi Thomas,
+>>
+>> the patches where intended for 2014.02.
+>
+> And why wouldn't they be usable now?
+>
+>> Maybe we should simply drop them and wait for Qt 5.3, planned for 29th Apr 2014:
+>> http://qt-project.org/wiki/Qt-5.3-release
+>
+> That doesn't seem like a good idea. April, 29th will be very close to
+> 2014.05-rc1, and so it might be too late to get the changes in.
+>
+> I would really like those Qt 5.2.1 changes to get it now. Can you tell
+> me which patches from the list above still make sense?
 
-On Sun, 02 Mar 2014 12:29:50 +0100, Bernd Kuhls wrote:
+http://patchwork.ozlabs.org/patch/320476/
+http://patchwork.ozlabs.org/patch/320475/
 
-> quoting a mail from Aug 23rd, 2011 ;)
-> 
-> Is there still interest in having Exim in buildroot?
-> 
-> I have package files for my personal needs which deliver Exim 4.80.1 (, based 
-> on the quoted package, update to 4.82 is pending), Dovecot 2.2.12, dovecot-
-> pigeonhole 0.4.2, fetchmail 6.3.26 and clamav 0.98.1 which are used on a 
-> production system using uClibc/i386 for several months now.
+But I haven't tested them with current master, but I could check with master next week.
 
-If those packages are working for you, then please submit them. I don't
-see a reason for not including them if they work and they are used in
-production.
+BTW, what's the correct way to update a patch?
+Just sending to the list like a new one and to superseded on patchwork?
 
-Thanks!
+Thanks,
+Peter
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+>
+> Thanks!
+>
+> Thomas
+>
