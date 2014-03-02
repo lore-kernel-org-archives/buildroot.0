@@ -1,39 +1,24 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  2 Mar 2014 18:51:46 +0100
-Subject: [Buildroot] [PATCH 13/13] package/ca-certificates: add tarball's
-	hashes
-In-Reply-To: <cover.1393781649.git.yann.morin.1998@free.fr>
-References: <cover.1393781649.git.yann.morin.1998@free.fr>
-Message-ID: <2fc95a3d21ec0c3a60b7209f85ffc8d2f9dffc45.1393781650.git.yann.morin.1998@free.fr>
+From: Fatih =?utf-8?B?QcWfxLFjxLE=?= <fatih.asici@gmail.com>
+Date: Sun, 02 Mar 2014 19:56:44 +0200
+Subject: [Buildroot] [PATCH 1/1] Qt5: add qttools
+In-Reply-To: <1392379162-17980-1-git-send-email-syntheticpp@gmx.net>
+References: <1392379162-17980-1-git-send-email-syntheticpp@gmx.net>
+Message-ID: <2803480.yum1HfIk7d@asici>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On Friday 14 February 2014 12:59:22 Peter K?mmel wrote:
+> +       cp -dpf $(STAGING_DIR)/usr/lib/libQt5Help.so.* $(TARGET_DIR)/usr/lib
+> +       cp -dpf $(STAGING_DIR)/usr/lib/libQt5CLucene.so.*
+> $(TARGET_DIR)/usr/lib
 
-ca-certificates contains sensitive security-related information,
-and we want to ensure the archive that we download has not been
-compromised.
+These libraries are not build if widgets module is not enabled or png support 
+is disabled. sql and network libraries are also needed at runtime.
 
-Add the sha1 and sha256 hashes from Debian's packaging.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Martin Bark <martin@barkynet.com>
----
- package/ca-certificates/ca-certificates.hash | 3 +++
- 1 file changed, 3 insertions(+)
- create mode 100644 package/ca-certificates/ca-certificates.hash
-
-diff --git a/package/ca-certificates/ca-certificates.hash b/package/ca-certificates/ca-certificates.hash
-new file mode 100644
-index 0000000..13b0c30
---- /dev/null
-+++ b/package/ca-certificates/ca-certificates.hash
-@@ -0,0 +1,3 @@
-+# sha1 and sha256 from: $(CA_CERTIFICATES_SITE)/ca-certificates_20130906.dsc :
-+7f197c1bf7c7fc82e9f8f2fec6d8cc65f6a6187b                         ca-certificates_20130906.tar.gz
-+dd10520091d469e95e11e5fafb7422d3be0a66071984d09009ed3e0232cb277d ca-certificates_20130906.tar.gz
--- 
-1.8.3.2
+It would be better to provide an option under qt5tools which selects these 
+dependencies. Libraries are installed only if this option is selected. This 
+way, it will be possible to use host tools without having to enable gui 
+module.
