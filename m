@@ -1,7 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  2 Mar 2014 18:51:41 +0100
-Subject: [Buildroot] [PATCH 0/13 v2] some download-related changes
-Message-ID: <cover.1393781649.git.yann.morin.1998@free.fr>
+Date: Sun,  2 Mar 2014 18:51:34 +0100
+Subject: [Buildroot] [PATCH 01/13] pkg-infra: DOWNLOAD is never called with
+	two arguments
+In-Reply-To: <cover.1393781649.git.yann.morin.1998@free.fr>
+References: <cover.1393781649.git.yann.morin.1998@free.fr>
+Message-ID: <9eef3379eac2949fdf344b49b605a30aef49340c.1393781649.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,75 +13,38 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Hello All!
+Currently, the DOWNLOAD helper accepts one or two arguments:
+  - the source URI
+  - the source filename; if missing, it is derived from the URI
 
-This series contains those download-related changes:
+But we have no caller of DOWNLOAD that passes a second argument.
 
-  - Patches 1..3  : some cleanups and preparatory works in the
-    download infra,
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/pkg-download.mk | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-  - Patches 4..8  : move download helpers to shell scripts, one
-    such script for each download helper
-
-  - Patches 9..10 : don't use DL_DIR as scratchpad for temporary VCS
-    checkouts, since DL_DIR is a precious location
-
-  - Patches 11..13: check hashes of downloaded files, to ensure the
-    files are genuine
-
-
-Changes v1 -> v2:
-  - don't do any behavioural change when switching to shell scripts,
-    just reproduce exactly what was in the Makefile  (Luca, Arnout)
-  - support more than one hash algorithm  (Arnout, Gustavo)
-  - typoes  (Luca, Baruch)
-
-
-Regards,
-Yann E. MORIN.
-
-
-----------------------------------------------------------------
-Yann E. MORIN (13):
-      pkg-infra: DOWNLOAD is never called with two arguments
-      Makefile: rename USER_HOOKS_EXTRA_ENV to EXTRA_ENV
-      Makefile: add BR2_DL_DIR to EXTRA_ENV
-      pkg-infra: move the git download helper to a script
-      pkg-infra: move the svn download helper to a script
-      pkg-infra: move the cvs download helper to a script
-      pkg-infra: move the hg download helper to a script
-      pkg-infra: move the wget download helper to a script
-      pkg-infra: don't use DL_DIR as scratchpad for temporary VCS checkouts
-      pkg-infra: also set PKGDIR for the download step
-      pkg-infra: add possiblity to check downloaded files against known hashes
-      manual: add documentation about packages' hashes
-      package/ca-certificates: add tarball's hashes
-
- Makefile                                     |  4 +-
- docs/manual/adding-packages-directory.txt    | 57 +++++++++++++++++++
- package/Makefile.in                          |  5 +-
- package/ca-certificates/ca-certificates.hash |  3 +
- package/pkg-download.mk                      | 84 +++++++++++-----------------
- package/pkg-generic.mk                       |  3 +-
- support/download/check-hash                  | 71 +++++++++++++++++++++++
- support/download/cvs                         | 31 ++++++++++
- support/download/git                         | 40 +++++++++++++
- support/download/hg                          | 29 ++++++++++
- support/download/svn                         | 27 +++++++++
- support/download/wget                        | 23 ++++++++
- 12 files changed, 322 insertions(+), 55 deletions(-)
- create mode 100644 package/ca-certificates/ca-certificates.hash
- create mode 100755 support/download/check-hash
- create mode 100755 support/download/cvs
- create mode 100755 support/download/git
- create mode 100755 support/download/hg
- create mode 100755 support/download/svn
- create mode 100755 support/download/wget
-
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index 6d4cbcd..85842de 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -238,14 +238,13 @@ endef
+ # 3) BR2_BACKUP_SITE if enabled, unless BR2_PRIMARY_SITE_ONLY is set
+ #
+ # Argument 1 is the source location
+-# Argument 2 is the source filename
+ #
+ # E.G. use like this:
+-# $(call DOWNLOAD,$(FOO_SITE),$(FOO_SOURCE))
++# $(call DOWNLOAD,$(FOO_SITE))
+ ################################################################################
+ 
+ define DOWNLOAD
+-	$(call DOWNLOAD_INNER,$(1),$(if $(2),$(2),$(notdir $(1))))
++	$(call DOWNLOAD_INNER,$(1),$(notdir $(1)))
+ endef
+ 
+ define DOWNLOAD_INNER
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.3.2
