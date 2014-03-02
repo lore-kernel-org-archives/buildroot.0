@@ -1,32 +1,47 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun,  2 Mar 2014 09:58:38 -0300
-Subject: [Buildroot] [PATCH 5/5] flot: bump to version 0.8.2
-In-Reply-To: <1393765118-9353-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1393765118-9353-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1393765118-9353-5-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 02 Mar 2014 14:04:48 +0100
+Subject: [Buildroot] [PATCH 06/11] armadillo: new package
+In-Reply-To: <CAHXCMM+RUEfk31FiRUOdNdCU_CcEV1rEg8HWquUc+M7KXWJmkg@mail.gmail.com>
+References: <1392588004-13317-1-git-send-email-s.martin49@gmail.com>
+ <1392588004-13317-7-git-send-email-s.martin49@gmail.com>
+ <CAHXCMM+RUEfk31FiRUOdNdCU_CcEV1rEg8HWquUc+M7KXWJmkg@mail.gmail.com>
+Message-ID: <3481095e-bd0e-4536-9442-fdd9bd249a17@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/flot/flot.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Samuel Martin <s.martin49@gmail.com> schreef:
+>Hi all,
+>
+>On Sun, Feb 16, 2014 at 10:59 PM, Samuel Martin <s.martin49@gmail.com> wrote:
+>> Armadillo is a C++ linear algebra library.
+>>
+>> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+>> ---
+>>  package/Config.in              |  1 +
+>>  package/armadillo/Config.in    |  9 +++++++++
+>>  package/armadillo/armadillo.mk | 15 +++++++++++++++
+>>  3 files changed, 25 insertions(+)
+>>  create mode 100644 package/armadillo/Config.in
+>>  create mode 100644 package/armadillo/armadillo.mk
+>>
+>> diff --git a/package/Config.in b/package/Config.in
+>> index d843961..5c3226e 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -723,6 +723,7 @@ source "package/zyre/Config.in"
+>>  endmenu
+>>
+>>  menu "Other"
+>> +source "package/armadillo/Config.in"
+>>  source "package/apr/Config.in"
 
-diff --git a/package/flot/flot.mk b/package/flot/flot.mk
-index 8895e46..90f4177 100644
---- a/package/flot/flot.mk
-+++ b/package/flot/flot.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FLOT_VERSION = 0.8.1
-+FLOT_VERSION = 0.8.2
- FLOT_SITE = http://www.flotcharts.org/downloads
- FLOT_LICENSE = MIT
- FLOT_LICENSE_FILES = LICENSE.txt
--- 
-1.8.3.2
+Alphabetical order is not correct here.
+
+>>  source "package/apr-util/Config.in"
+>>  source "package/argp-standalone/Config.in"
+
+Best regards,
+Thomas
