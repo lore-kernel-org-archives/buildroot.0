@@ -1,48 +1,36 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Sun, 02 Mar 2014 15:47:10 +0100
-Subject: [Buildroot] [PATCH v5 1/3] xlib_libpthread-stubs: Rename
-	package to libpthread-stubs
-References: <BLU0-SMTP413A04CC0DB17EA13F7E9FBD98D0@phx.gbl>
- <20140302150146.50593a9f@skate>
-Message-ID: <essbuaxqp7.ln2@ID-313208.user.individual.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 2 Mar 2014 16:14:21 +0100
+Subject: [Buildroot] [git commit] systemd: add missing host-gperf dependency
+Message-ID: <20140302151449.164F69936F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni 
-<thomas.petazzoni@free-electrons.com> wrote 
-in news:20140302150146.50593a9f at skate: 
+commit: http://git.buildroot.net/buildroot/commit/?id=f07c6c483c7d8f4718c82e91ff1c9d41a43f02e0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Would it be possible to dig those patches and resend them on top of the
-> latest master? 
+Fixes:
 
-Hi,
+  http://autobuild.buildroot.org/results/910/91010b43e63b82e050046b8f10c2c42f31a8a620/
 
-yes, of course ;)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/systemd/systemd.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-The next step is to update mesa3d to 10.0.3 & xorg to 1.15.0:
-
-http://patchwork.ozlabs.org/patch/316704/
-http://patchwork.ozlabs.org/patch/316705/
-http://patchwork.ozlabs.org/patch/316707/
-http://patchwork.ozlabs.org/patch/316706/
-
-while I?am also waiting for the drm-related autobuild fallout ;)
-
-Now that the drm update made it into git I will update my patches for git 
-master, but afaics the opengl support is up for a change, too:
-
-http://patchwork.ozlabs.org/patch/316706/
-http://patchwork.ozlabs.org/patch/325462/
-
-Should I wait until the new code is merged? Mesa3d introduces a new 
-opengl/libgl package.
-
-FTR: sdl needs this patch to compile with libX11>= 1.5.99.902 on x86_64:
-http://hg.libsdl.org/SDL/raw-rev/91ad7b43317a
-
-This is already fixed here, I will include it in my next patch series.
-
-Regards, Bernd
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 36ef704..92bdbcc 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -15,7 +15,8 @@ SYSTEMD_DEPENDENCIES = \
+ 	libcap \
+ 	dbus \
+ 	util-linux \
+-	kmod
++	kmod \
++	host-gperf
+ 
+ # Make sure that systemd will always be built after busybox so that we have
+ # a consistent init setup between two builds
