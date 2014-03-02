@@ -1,235 +1,104 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 2 Mar 2014 15:20:16 +0100
-Subject: [Buildroot] [git commit] python: fixup python-config script
-Message-ID: <20140302142223.E0AD69936E@busybox.osuosl.org>
+Date: Sun, 2 Mar 2014 15:22:09 +0100
+Subject: [Buildroot] [git commit] samba4: add cross answers for x86_64
+Message-ID: <20140302142224.280969936E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=88680c5bf9110fafd0f76f44cc615b189029374b
+commit: http://git.buildroot.net/buildroot/commit/?id=d191d40e3fd8cef7fbf3168fdc261de8d4b114fd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The original version uses sysconfig from the python interpreter
-(normally host-python) which isn't really suited to provide information
-of the target python.
-Use the pure shell preprocessed backport from the upcoming python 3.4
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Christophe Vu-Brugier <cvubrugier@yahoo.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python/python-010-fix-python-config.patch |  205 +++++++++++++++++++++
- 1 files changed, 205 insertions(+), 0 deletions(-)
+ package/samba/samba4/x86_64-cache.txt |   65 +++++++++++++++++++++++++++++++++
+ package/samba4/Config.in              |    2 +-
+ 2 files changed, 66 insertions(+), 1 deletions(-)
 
-diff --git a/package/python/python-010-fix-python-config.patch b/package/python/python-010-fix-python-config.patch
+diff --git a/package/samba/samba4/x86_64-cache.txt b/package/samba/samba4/x86_64-cache.txt
 new file mode 100644
-index 0000000..f093d91
+index 0000000..6c98cfe
 --- /dev/null
-+++ b/package/python/python-010-fix-python-config.patch
-@@ -0,0 +1,205 @@
-+Add a backport of http://bugs.python.org/issue16235 so we can use
-+python-config for cross builds.
-+This basically replaces the python version of python-config with a pure-shell
-+version that's already preprocessed when installed and doesn't depend
-+on the sysconfig import that usually leads to bad data/results.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura Python-2.7.6.orig/configure.ac Python-2.7.6/configure.ac
-+--- Python-2.7.6.orig/configure.ac	2014-02-25 12:48:16.726535439 -0300
-++++ Python-2.7.6/configure.ac	2014-02-25 12:49:00.992176462 -0300
-+@@ -868,6 +868,7 @@
-+ 
-+ # Other platforms follow
-+ if test $enable_shared = "yes"; then
-++  PY_ENABLE_SHARED=1
-+   AC_DEFINE(Py_ENABLE_SHARED, 1, [Defined if Python is built as a shared library.])
-+   case $ac_sys_system in
-+     BeOS*)
-+@@ -928,6 +929,7 @@
-+ 
-+   esac
-+ else # shared is disabled
-++  PY_ENABLE_SHARED=0
-+   case $ac_sys_system in
-+     CYGWIN*)
-+           BLDLIBRARY='$(LIBRARY)'
-+@@ -1905,6 +1907,9 @@
-+ AC_SUBST(BLDSHARED)
-+ AC_SUBST(CCSHARED)
-+ AC_SUBST(LINKFORSHARED)
-++AC_SUBST(PY_ENABLE_SHARED)
-++LIBPL="${prefix}/lib/python${VERSION}/config"
-++AC_SUBST(LIBPL)
-+ # SO is the extension of shared libraries `(including the dot!)
-+ # -- usually .so, .sl on HP-UX, .dll on Cygwin
-+ AC_MSG_CHECKING(SO)
-+@@ -4529,7 +4534,7 @@
-+ AC_MSG_RESULT(done)
-+ 
-+ # generate output files
-+-AC_CONFIG_FILES(Makefile.pre Modules/Setup.config Misc/python.pc)
-++AC_CONFIG_FILES(Makefile.pre Modules/Setup.config Misc/python.pc Misc/python-config.sh)
-+ AC_CONFIG_FILES([Modules/ld_so_aix], [chmod +x Modules/ld_so_aix])
-+ AC_OUTPUT
-+ 
-+diff -Nura Python-2.7.6.orig/Makefile.pre.in Python-2.7.6/Makefile.pre.in
-+--- Python-2.7.6.orig/Makefile.pre.in	2014-02-25 12:48:16.611533773 -0300
-++++ Python-2.7.6/Makefile.pre.in	2014-02-25 12:49:00.993176482 -0300
-+@@ -161,7 +161,7 @@
-+ SUBDIRSTOO=	Include Lib Misc Demo
-+ 
-+ # Files and directories to be distributed
-+-CONFIGFILES=	configure configure.ac acconfig.h pyconfig.h.in Makefile.pre.in
-++CONFIGFILES=	configure configure.ac acconfig.h pyconfig.h.in Makefile.pre.in Misc/python-config.sh
-+ DISTFILES=	README ChangeLog $(CONFIGFILES)
-+ DISTDIRS=	$(SUBDIRS) $(SUBDIRSTOO) Ext-dummy
-+ DIST=		$(DISTFILES) $(DISTDIRS)
-+@@ -405,7 +405,7 @@
-+ 
-+ # Default target
-+ all:		build_all
-+-build_all:	$(BUILDPYTHON) oldsharedmods sharedmods gdbhooks
-++build_all:	$(BUILDPYTHON) oldsharedmods sharedmods gdbhooks python-config
-+ 
-+ # Compile a binary with gcc profile guided optimization.
-+ profile-opt:
-+@@ -1045,10 +1045,12 @@
-+ 	fi; \
-+ 	cd $(srcdir)/Lib/$(PLATDIR); $(RUNSHARED) ./regen
-+ 
-+-python-config: $(srcdir)/Misc/python-config.in
-++python-config: $(srcdir)/Misc/python-config.in Misc/python-config.sh
-+ 	# Substitution happens here, as the completely-expanded BINDIR
-+ 	# is not available in configure
-+-	sed -e "s, at EXENAME@,$(BINDIR)/python$(VERSION)$(EXE)," < $(srcdir)/Misc/python-config.in >python-config
-++	sed -e "s, at EXENAME@,$(BINDIR)/python$(VERSION)$(EXE)," < $(srcdir)/Misc/python-config.in >python-config.py
-++	# Replace makefile compat. variable references with shell script compat. ones; $(VAR) -> ${VAR}
-++	sed -e 's,\$$(\([A-Za-z0-9_]*\)),\$$\{\1\},g' Misc/python-config.sh >python-config
-+ 
-+ # Install the include files
-+ INCLDIRSTOMAKE=$(INCLUDEDIR) $(CONFINCLUDEDIR) $(INCLUDEPY) $(CONFINCLUDEPY)
-+@@ -1107,7 +1109,7 @@
-+ 	$(INSTALL_SCRIPT) $(srcdir)/Modules/makesetup $(DESTDIR)$(LIBPL)/makesetup
-+ 	$(INSTALL_SCRIPT) $(srcdir)/install-sh $(DESTDIR)$(LIBPL)/install-sh
-+ 	$(INSTALL_SCRIPT) python-config $(DESTDIR)$(BINDIR)/python$(VERSION)-config
-+-	rm python-config
-++	$(INSTALL_SCRIPT) python-config.py $(DESTDIR)$(LIBPL)/python-config.py
-+ 	@if [ -s Modules/python.exp -a \
-+ 		"`echo $(MACHDEP) | sed 's/^\(...\).*/\1/'`" = "aix" ]; then \
-+ 		echo; echo "Installing support files for building shared extension modules on AIX:"; \
-+@@ -1287,6 +1289,7 @@
-+ 		config.cache config.log pyconfig.h Modules/config.c
-+ 	-rm -rf build platform
-+ 	-rm -rf $(PYTHONFRAMEWORKDIR)
-++	-rm -f python-config.py python-config
-+ 
-+ # Make things extra clean, before making a distribution:
-+ # remove all generated files, even Makefile[.pre]
-+diff -Nura Python-2.7.6.orig/Misc/python-config.sh.in Python-2.7.6/Misc/python-config.sh.in
-+--- Python-2.7.6.orig/Misc/python-config.sh.in	1969-12-31 21:00:00.000000000 -0300
-++++ Python-2.7.6/Misc/python-config.sh.in	2014-02-25 12:49:00.993176482 -0300
-+@@ -0,0 +1,102 @@
-++#!/bin/sh
-++
-++exit_with_usage ()
-++{
-++	echo "Usage: $0 --prefix|--exec-prefix|--includes|--libs|--cflags|--ldflags|--extension-suffix|--help|--configdir"
-++	exit $1
-++}
-++
-++if [ "$1" = "" ] ; then
-++	exit_with_usage 1
-++fi
-++
-++# Returns the actual prefix where this script was installed to.
-++installed_prefix ()
-++{
-++	RESULT=$(dirname $(cd $(dirname "$1") && pwd -P))
-++	if which readlink >/dev/null 2>&1 ; then
-++	RESULT=$(readlink -f "$RESULT")
-++	fi
-++	echo $RESULT
-++}
-++
-++prefix_build="@prefix@"
-++prefix_real=$(installed_prefix "$0")
-++
-++# Use sed to fix paths from their built to locations to their installed to locations.
-++prefix=$(echo "$prefix_build" | sed "s#$prefix_build#$prefix_real#")
-++exec_prefix_build="@exec_prefix@"
-++exec_prefix=$(echo "$exec_prefix_build" | sed "s#$exec_prefix_build#$prefix_real#")
-++includedir=$(echo "@includedir@")
-++libdir=$(echo "@libdir@" | sed "s#$prefix_build#$prefix_real#")
-++CFLAGS=$(echo "@CFLAGS@" | sed "s#$prefix_build#$prefix_real#")
-++VERSION="@VERSION@"
-++LIBM="@LIBM@"
-++LIBC="@LIBC@"
-++SYSLIBS="$LIBM $LIBC"
-++LIBS="@LIBS@ $SYSLIBS -lpython${VERSION}"
-++BASECFLAGS="@BASECFLAGS@"
-++LDLIBRARY="@LDLIBRARY@"
-++LINKFORSHARED="@LINKFORSHARED@"
-++OPT="@OPT@"
-++PY_ENABLE_SHARED="@PY_ENABLE_SHARED@"
-++LDVERSION="@LDVERSION@"
-++LIBDEST=${prefix}/lib/python${VERSION}
-++LIBPL=$(echo "@LIBPL@" | sed "s#$prefix_build#$prefix_real#")
-++SO="@SO@"
-++PYTHONFRAMEWORK="@PYTHONFRAMEWORK@"
-++INCDIR="-I$includedir/python${VERSION}"
-++PLATINCDIR="-I$includedir/python${VERSION}"
-++
-++# Scan for --help or unknown argument.
-++for ARG in $*
-++do
-++	case $ARG in
-++	--help)
-++		exit_with_usage 0
-++	;;
-++	--prefix|--exec-prefix|--includes|--libs|--cflags|--ldflags|--extension-suffix|--abiflags|--configdir)
-++	;;
-++	*)
-++		exit_with_usage 1
-++	;;
-++esac
-++done
-++
-++for ARG in "$@"
-++do
-++	case "$ARG" in
-++	--prefix)
-++		echo "$prefix"
-++	;;
-++	--exec-prefix)
-++		echo "$exec_prefix"
-++	;;
-++	--includes)
-++		 echo "$INCDIR $PLATINCDIR"
-++	;;
-++	--cflags)
-++		echo "$INCDIR $PLATINCDIR $BASECFLAGS $CFLAGS $OPT"
-++	;;
-++	--libs)
-++		echo "$LIBS"
-++	;;
-++	--ldflags)
-++		LINKFORSHAREDUSED=
-++		if [ -z "$PYTHONFRAMEWORK" ] ; then
-++			LINKFORSHAREDUSED=$LINKFORSHARED
-++		fi
-++		LIBPLUSED=
-++		if [ "$PY_ENABLE_SHARED" = "0" ] ; then
-++			LIBPLUSED="-L$LIBPL"
-++		fi
-++		echo "$LIBPLUSED -L$libdir $LIBS $LINKFORSHAREDUSED"
-++	;;
-++	--extension-suffix)
-++		echo "$SO"
-++	;;
-++	--configdir)
-++		echo "$LIBPL"
-++	;;
-++esac
-++done
++++ b/package/samba/samba4/x86_64-cache.txt
+@@ -0,0 +1,65 @@
++Checking simple C program: OK
++rpath library support: OK
++-Wl,--version-script support: OK
++Checking getconf LFS_CFLAGS: NO
++Checking for large file support without additional flags: OK
++Checking for -D_LARGE_FILES: OK
++Checking correct behavior of strtoll: NO
++Checking for working strptime: OK
++Checking for C99 vsnprintf: OK
++Checking for HAVE_SHARED_MMAP: OK
++Checking for HAVE_MREMAP: OK
++Checking for HAVE_INCOHERENT_MMAP: NO
++Checking for HAVE_SECURE_MKSTEMP: OK
++Checking for HAVE_IFACE_GETIFADDRS: OK
++Checking for HAVE_LITTLE_ENDIAN - runtime: OK
++Checking for HAVE_BIG_ENDIAN - runtime: NO
++Checking for kernel change notify support: OK
++Checking for Linux kernel oplocks: OK
++Checking for kernel share modes: OK
++Checking whether blkcnt_t is 32 bit: NO
++Checking whether blkcnt_t is 64 bit: OK
++Checking if can we convert from CP850 to UCS-2LE: OK
++Checking if can we convert from UTF-8 to UCS-2LE: OK
++Checking whether we can use Linux thread-specific credentials with 32-bit system calls: OK
++Checking whether we can use Linux thread-specific credentials: OK
++Checking whether setreuid is available: OK
++Checking whether setresuid is available: OK
++Checking whether seteuid is available: OK
++Checking whether fcntl locking is available: OK
++Checking for the maximum value of the 'time_t' type: OK
++Checking whether the realpath function allows a NULL argument: OK
++Checking whether POSIX capabilities are available: OK
++Checking for ftruncate extend: OK
++getcwd takes a NULL argument: OK
++Checking uname sysname type: "Linux"
++Checking uname machine type: "x86_64"
++Checking uname release type: "3.0.0"
++Checking uname version type: "#1 Tue Nov 1 12:34:56 UTC 2013"
++Checking for WORDS_BIGENDIAN: NO
++Checking size of bool: "1"
++Checking size of char: "1"
++Checking size of int: "4"
++Checking size of long long: "8"
++Checking size of long: "8"
++Checking size of short: "2"
++Checking size of size_t: "8"
++Checking size of ssize_t: "8"
++Checking size of int8_t: "1"
++Checking size of uint8_t: "1"
++Checking size of int16_t: "2"
++Checking size of uint16_t: "2"
++Checking size of int32_t: "4"
++Checking size of uint32_t: "4"
++Checking size of int64_t: "8"
++Checking size of uint64_t: "8"
++Checking size of void*: "8"
++Checking size of off_t: "8"
++Checking size of dev_t: "8"
++Checking size of ino_t: "8"
++Checking size of time_t: "8"
++Checking size of ((struct utmp *)NULL)->ut_line: "32"
++Checking value of NSIG: "65"
++Checking value of _NSIG: "65"
++Checking value of SIGRTMAX: "64"
++Checking value of SIGRTMIN: "34"
+diff --git a/package/samba4/Config.in b/package/samba4/Config.in
+index b8d4154..fcc03df 100644
+--- a/package/samba4/Config.in
++++ b/package/samba4/Config.in
+@@ -7,7 +7,7 @@ config BR2_PACKAGE_SAMBA4
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # talloc python threads
+ 	# Supported architectures only limited by the cached answers
+-	depends on BR2_arm || BR2_powerpc
++	depends on BR2_arm || BR2_powerpc || BR2_x86_64
+ 	select BR2_PACKAGE_E2FSPROGS
+ 	select BR2_PACKAGE_POPT
+ 	select BR2_PACKAGE_PYTHON
