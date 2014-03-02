@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  2 Mar 2014 18:51:44 +0100
-Subject: [Buildroot] [PATCH 11/13] pkg-infra: add possiblity to check
-	downloaded files against known hashes
+Date: Sun,  2 Mar 2014 18:51:45 +0100
+Subject: [Buildroot] [PATCH 12/13] manual: add documentation about packages'
+	hashes
 In-Reply-To: <cover.1393781649.git.yann.morin.1998@free.fr>
 References: <cover.1393781649.git.yann.morin.1998@free.fr>
-Message-ID: <b36750f8cb541e068cdce6ec65241ed155997c97.1393781650.git.yann.morin.1998@free.fr>
+Message-ID: <f76fe6c9f9d2ffd40e2c60f98f0ad0f7ca5fa0d7.1393781650.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,175 +13,78 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Some of the packages that Buildroot might build are sensitive packages,
-related to security: openssl, dropbear, ca-certificates...
-
-Some of those packages are downloaded over plain http, because there is
-no way to get them over a secure channel, such as https.
-
-In these dark times of pervasive surveillance, the potential for harm that
-a tampered-with package could generate, we may want to check the integrity
-of those sensitive packages.
-
-So, each package may now provide a list of hashes for all files that needs
-to be downloaded, and Buildroot will just fail if any downloaded file does
-not match its known hash.
-
-Hashes can be any of the sha1 or sha2 variants, and will be checked even if
-the file was pre-downloaded.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Baruch Siach <baruch@tkos.co.il>
 Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Samuel Martin <s.martin49@gmail.com>
 ---
-Note: this is not a bullet-proof solution, since Buildroot may itself be
-compromised. But since we do sign our releases, then we secure the list of
-hashes at the same time. Only random snapshots from the repository may be
-at risk of tampering, although this is highly doubtfull, given how git
-stores its data.
----
- package/pkg-download.mk     | 27 +++++++++++------
- support/download/check-hash | 71 +++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 89 insertions(+), 9 deletions(-)
- create mode 100755 support/download/check-hash
+ docs/manual/adding-packages-directory.txt | 57 +++++++++++++++++++++++++++++++
+ 1 file changed, 57 insertions(+)
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index c94ecba..adaccef 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -58,6 +58,17 @@ domainseparator=$(if $(1),$(1),/)
- # github(user,package,version): returns site of github repository
- github = https://github.com/$(1)/$(2)/tarball/$(3)
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index e56e59a..11f5c58 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -346,3 +346,60 @@ different way, using different infrastructures:
  
-+# Helper for checking a tarball's checksum
-+# If the hash does not match, remove the incorrect file
-+# $(1): the path to the fies with the hashes
-+# $(2): the full path to the file to check
-+define VERIFY_HASH
-+	if ! support/download/check-hash $(1) $(2); then \
-+		rm -f $(1); \
-+		exit 1; \
-+	fi
-+endef
+ Further formatting details: see xref:writing-rules-mk[the writing
+ rules].
 +
- ################################################################################
- # The DOWNLOAD_* helpers are in charge of getting a working copy
- # of the source repository for their corresponding SCM,
-@@ -147,7 +158,8 @@ endef
- # to prepend the path with a slash: scp://[user@]host:/absolutepath
- define DOWNLOAD_SCP
- 	test -e $(DL_DIR)/$(2) || \
--	$(SCP) '$(call stripurischeme,$(call qstrip,$(1)))' $(DL_DIR)/$(2)
-+	$(SCP) '$(call stripurischeme,$(call qstrip,$(1)))' $(DL_DIR)/$(2) && \
-+	$(call VERIFY_HASH,$(PKGDIR)/$($(PKG)_NAME).hash,$(DL_DIR)/$(2))
- endef
- 
- define SOURCE_CHECK_SCP
-@@ -175,15 +187,11 @@ define SHOW_EXTERNAL_DEPS_HG
-   echo $($(PKG)_SOURCE)
- endef
- 
--# Download a file using wget. Only download the file if it doesn't
--# already exist in the download directory. If the download fails,
--# remove the file (because wget -O creates a 0-byte file even if the
--# download fails).  To handle an interrupted download as well, download
--# to a temporary file first.  The temporary file will be overwritten
--# the next time the download is tried.
++The +.hash+ file
++~~~~~~~~~~~~~~~~
++[[adding-packages-hash]]
 +
- define DOWNLOAD_WGET
- 	test -e $(DL_DIR)/$(2) || \
--	$(EXTRA_ENV) support/download/wget '$(call qstrip,$(1))' $(DL_DIR)/$(2)
-+	$(EXTRA_ENV) support/download/wget '$(call qstrip,$(1))' $(DL_DIR)/$(2) && \
-+	$(call VERIFY_HASH,$(PKGDIR)/$($(PKG)_NAME).hash,$(DL_DIR)/$(2))
- endef
- 
- define SOURCE_CHECK_WGET
-@@ -196,7 +204,8 @@ endef
- 
- define DOWNLOAD_LOCALFILES
- 	test -e $(DL_DIR)/$(2) || \
--		$(LOCALFILES) $(call stripurischeme,$(call qstrip,$(1))) $(DL_DIR)
-+	$(LOCALFILES) $(call stripurischeme,$(call qstrip,$(1))) $(DL_DIR) && \
-+	$(call VERIFY_HASH,$(PKGDIR)/$($(PKG)_NAME).hash,$(DL_DIR)/$(2))
- endef
- 
- define SOURCE_CHECK_LOCALFILES
-diff --git a/support/download/check-hash b/support/download/check-hash
-new file mode 100755
-index 0000000..ae62fc9
---- /dev/null
-+++ b/support/download/check-hash
-@@ -0,0 +1,71 @@
-+#!/bin/sh
-+set -e
++Optionally, you can add a third file, named +libfoo.hash+, that contains
++the hashes of the downloaded files for the +libfoo+ package.
 +
-+# Helper to check a file matches its known hash
-+# Call it with:
-+#   $1: the full path to the file to check
-+#   $2: the path of the file containing all the the expected hashes
++The hashes stored in that file are used to validate the integrity of the
++downloaded files.
 +
-+h_file="${1}"
-+file="${2}"
++The format for this file is one line for each file for which to check the
++hash, each line being space-separated, with these two fields:
 +
-+# Does the hash-file exist?
-+if [ ! -f "${h_file}" ]; then
-+    exit 0
-+fi
++* the hash of the file, one of:
++** +sha1+, 40 hexa-decimal characters
++** +sha224+, 56 hexa-decimal characters
++** +sha256+, 64 hexa-decimal characters
++** +sha384+, 96 hexa-decimal characters
++** +sha512+, 128 hexa-decimal characters
++* the name of the file, without any directory component
 +
-+# Check one hash for a file
-+# $1: known hash
-+# $2: file (full path)
-+check_one_hash() {
-+    _known="${1}"
-+    _file="${2}"
++Lines starting with a +#+ sign are considered comments, and ignored. Empty
++lines are ignored.
 +
-+    # What type of hash is it?
-+    # Note: md5 is supported, but un-documented on-purpose.
-+    # Note: sha3 is not supported, since there is currently no implemetation
-+    #       (the NIST has yet to publish the parameters).
-+    _h=
-+    case "${#_known}" in
-+        32) _h=md5;;
-+        40) _h=sha1;;
-+        56) _h=sha224;;
-+        64) _h=sha256;;
-+        96) _h=sha384;;
-+       128) _h=sha512;;
-+         *) # Unknown hash, exit with error
-+            printf "ERROR: malformed hash '%s' for '%s'\n"  \
-+                   "${_known}" "${_file##*/}" >&2
-+            exit 1
-+            ;;
-+    esac
++There can be more than one hash for a single file, each of its own line. In
++this case, all hashes must match.
 +
-+    # Do the hashes match?
-+    _hash=$( ${_h}sum "${_file}" |cut -d ' ' -f 1 )
-+    if [ "${_hash}" = "${_known}" ]; then
-+        printf "%s: OK (%s: %s)\n" "${_file##*/}" "${_h}" "${_hash}"
-+        return 0
-+    fi
++Ideally, the hashes stored in this file should match the hashes published by
++upstream, eg, on their website, in the email announcement... If no such info
++is available, then compute them yourself, and state so in a comment line
++above the hashes.
 +
-+    printf "ERROR: %s has wrong %s hash:\n" "${_file##*/}" "${_h}" >&2
-+    printf "ERROR: expected: %s\n" "${_known}" >&2
-+    printf "ERROR: got     : %s\n" "${_hash}" >&2
-+    printf "ERROR: Incomplete download, or MITM attack\n" >&2
++*Note:* the number of spaces does not matter, so one can use spaces to
++properly align the different fields.
 +
-+    exit 1
-+}
++The example below defines a +sha1+ and a +sha256+ published by upstream for
++the main +libfoo-1.2.3.tar.bz2+ tarball, plus two locally-computed hashes,
++a +sha256+ for a downloaded patch, and a +sha1+ for a downloaded binary blob:
 +
-+# Do we know one or more hashes for that file?
-+while read h f; do
-+    case "${h}" in
-+        ''|'#'*)
-+            # Skip comments and empty lines
-+            continue
-+            ;;
-+        *)
-+            if [ "${f}" = "${file##*/}" ]; then
-+                check_one_hash "${h}" "${file}"
-+            fi
-+            ;;
-+    esac
-+done <"${h_file}"
++----
++# Hashes from: http://www.foosoftware.org/download/libfoo-1.2.3.tar.bz2.{sha1,sha256}:
++486fb55c3efa71148fe07895fd713ea3a5ae343a                         libfoo-1.2.3.tar.bz2
++efc8103cc3bcb06bda6a781532d12701eb081ad83e8f90004b39ab81b65d4369 libfoo-1.2.3.tar.bz2
++
++# No upstream hashes for the following:
++ff52101fb90bbfc3fe9475e425688c660f46216d7e751c4bbdb1dc85cdccacb9 libfoo-fix-blabla.patch
++2d608f3c318c6b7557d551a5a09314f03452f1a1                         libfoo-data.bin
++----
++
++If the +.hash+ file is present, and there is one or more hashes for a
++downloaded file, the hash(es) of the downloaded file must match the
++hash(es) stored in the +.hash+ file. If one hash does not match, this is
++considered an error, and Buildroot aborts.
++
++If the +.hash+ file is present, but there is no hash for a downloaded file,
++or if the +.hash+ file is missing, then no check is done.
 -- 
 1.8.3.2
