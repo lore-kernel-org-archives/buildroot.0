@@ -1,39 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 2 Mar 2014 21:00:40 +0100
-Subject: [Buildroot] [PATCH 0/3] Some RPi bumps
-In-Reply-To: <cover.1393779995.git.yann.morin.1998@free.fr>
-References: <cover.1393779995.git.yann.morin.1998@free.fr>
-Message-ID: <20140302210040.50c3c567@skate>
+Date: Sun, 2 Mar 2014 21:01:40 +0100
+Subject: [Buildroot] [git commit] pkg-infra: DOWNLOAD is never called with
+	two arguments
+Message-ID: <20140302200146.6BC6E9B9D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+commit: http://git.buildroot.net/buildroot/commit/?id=18edb40bf539bed08d0d2f84bc5c547e4a22e656
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  2 Mar 2014 18:07:09 +0100, Yann E. MORIN wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> Hello All!
-> 
-> Here is a small series to bump the Raspberry Pi packages and
-> defconfig.
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-> 
-> ----------------------------------------------------------------
-> Yann E. MORIN (3):
->       package/rpi-userland: bump version
->       package/rpi-firmware: bump version
->       configs/raspberrypi: bump kernel version
+Currently, the DOWNLOAD helper accepts one or two arguments:
+  - the source URI
+  - the source filename; if missing, it is derived from the URI
 
-Patches applied, thanks.
+But we have no caller of DOWNLOAD that passes a second argument.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pkg-download.mk |    5 ++---
+ 1 files changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index 6d4cbcd..85842de 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -238,14 +238,13 @@ endef
+ # 3) BR2_BACKUP_SITE if enabled, unless BR2_PRIMARY_SITE_ONLY is set
+ #
+ # Argument 1 is the source location
+-# Argument 2 is the source filename
+ #
+ # E.G. use like this:
+-# $(call DOWNLOAD,$(FOO_SITE),$(FOO_SOURCE))
++# $(call DOWNLOAD,$(FOO_SITE))
+ ################################################################################
+ 
+ define DOWNLOAD
+-	$(call DOWNLOAD_INNER,$(1),$(if $(2),$(2),$(notdir $(1))))
++	$(call DOWNLOAD_INNER,$(1),$(notdir $(1)))
+ endef
+ 
+ define DOWNLOAD_INNER
