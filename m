@@ -1,41 +1,52 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Sun, 02 Mar 2014 12:29:50 +0100
-Subject: [Buildroot] [PATCH 9/9] exim: add new package
-References: <1314127033-14861-1-git-send-email-luca@lucaceresoli.net>
- <1314127033-14861-10-git-send-email-luca@lucaceresoli.net>
-Message-ID: <eahbuaxc1k.ln2@ID-313208.user.individual.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 2 Mar 2014 12:31:00 +0100
+Subject: [Buildroot] State of your Qt 5 patches
+In-Reply-To: <5313095B.7070204@gmx.net>
+References: <20140302002857.2a9f166d@skate>
+	<5313095B.7070204@gmx.net>
+Message-ID: <20140302123100.1b966bcd@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Luca Ceresoli <luca@lucaceresoli.net> wrote in
-news:1314127033-14861-10-git-send-email-luca at lucaceresoli.net: 
+Dear Peter K?mmel,
 
-> diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-> new file mode 100644
-> index 0000000..a12f5a2
-> --- /dev/null
-> +++ b/package/exim/exim.mk
-> @@ -0,0 +1,49 @@
-> +#############################################################
-> +#
-> +# exim
-> +#
-> +#############################################################
-> +
-> +EXIM_VERSION = 4.76
+On Sun, 02 Mar 2014 11:35:07 +0100, Peter K?mmel wrote:
 
-Hi,
+> > Could you have a look at the following patches, and let me know which
+> > ones no longer makes sense (because you have sent a new version) and
+> > which ones still make sense:
+> >
+> >   http://patchwork.ozlabs.org/patch/320476/
+> >   http://patchwork.ozlabs.org/patch/320475/
+> >   http://patchwork.ozlabs.org/patch/320472/
+> >   http://patchwork.ozlabs.org/patch/320462/
+> >   http://patchwork.ozlabs.org/patch/320407/
+> >   http://patchwork.ozlabs.org/patch/317465/
+> >   http://patchwork.ozlabs.org/patch/317462/
+> >   http://patchwork.ozlabs.org/patch/317461/
+> 
+> Hi Thomas,
+> 
+> the patches where intended for 2014.02.
 
-quoting a mail from Aug 23rd, 2011 ;)
+And why wouldn't they be usable now?
 
-Is there still interest in having Exim in buildroot?
+> Maybe we should simply drop them and wait for Qt 5.3, planned for 29th Apr 2014:
+> http://qt-project.org/wiki/Qt-5.3-release
 
-I have package files for my personal needs which deliver Exim 4.80.1 (, based 
-on the quoted package, update to 4.82 is pending), Dovecot 2.2.12, dovecot-
-pigeonhole 0.4.2, fetchmail 6.3.26 and clamav 0.98.1 which are used on a 
-production system using uClibc/i386 for several months now.
+That doesn't seem like a good idea. April, 29th will be very close to
+2014.05-rc1, and so it might be too late to get the changes in.
 
-Regards, Bernd
+I would really like those Qt 5.2.1 changes to get it now. Can you tell
+me which patches from the list above still make sense?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
