@@ -1,47 +1,235 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 2 Mar 2014 15:20:40 +0100
-Subject: [Buildroot] [git commit] samba: update description and rename
-	patches
-Message-ID: <20140302142224.0B3FC9936E@busybox.osuosl.org>
+Date: Sun, 2 Mar 2014 15:20:16 +0100
+Subject: [Buildroot] [git commit] python: fixup python-config script
+Message-ID: <20140302142223.E0AD69936E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=80ad06e51c24199e15614a6a7c89e06c7fca44c6
+commit: http://git.buildroot.net/buildroot/commit/?id=88680c5bf9110fafd0f76f44cc615b189029374b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+The original version uses sysconfig from the python interpreter
+(normally host-python) which isn't really suited to provide information
+of the target python.
+Use the pure shell preprocessed backport from the upcoming python 3.4
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/samba/Config.in                            |    6 +++---
- ....patch => samba-0001-fix-smbd-libs-avahi.patch} |    0
- ...addrinfo.patch => samba-0002-getaddrinfo.patch} |    0
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/python/python-010-fix-python-config.patch |  205 +++++++++++++++++++++
+ 1 files changed, 205 insertions(+), 0 deletions(-)
 
-diff --git a/package/samba/Config.in b/package/samba/Config.in
-index 1469075..c5b7e48 100644
---- a/package/samba/Config.in
-+++ b/package/samba/Config.in
-@@ -4,9 +4,9 @@ config BR2_PACKAGE_SAMBA
- 	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_POPT
- 	help
--	  Provides print services to all manner of SMB/CIFS clients,
--	  including the numerous versions of Microsoft Windows
--	  operating systems.
-+	  Provides secure, stable and fast file and print services
-+	  for all clients using the SMB/CIFS protocol, such as all
-+	  versions of DOS, Windows, OS/2, Linux and many others.
- 
- 	  http://www.samba.org/
- 
-diff --git a/package/samba/samba-fix-smbd-libs-avahi.patch b/package/samba/samba-0001-fix-smbd-libs-avahi.patch
-similarity index 100%
-rename from package/samba/samba-fix-smbd-libs-avahi.patch
-rename to package/samba/samba-0001-fix-smbd-libs-avahi.patch
-diff --git a/package/samba/samba-getaddrinfo.patch b/package/samba/samba-0002-getaddrinfo.patch
-similarity index 100%
-rename from package/samba/samba-getaddrinfo.patch
-rename to package/samba/samba-0002-getaddrinfo.patch
+diff --git a/package/python/python-010-fix-python-config.patch b/package/python/python-010-fix-python-config.patch
+new file mode 100644
+index 0000000..f093d91
+--- /dev/null
++++ b/package/python/python-010-fix-python-config.patch
+@@ -0,0 +1,205 @@
++Add a backport of http://bugs.python.org/issue16235 so we can use
++python-config for cross builds.
++This basically replaces the python version of python-config with a pure-shell
++version that's already preprocessed when installed and doesn't depend
++on the sysconfig import that usually leads to bad data/results.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nura Python-2.7.6.orig/configure.ac Python-2.7.6/configure.ac
++--- Python-2.7.6.orig/configure.ac	2014-02-25 12:48:16.726535439 -0300
+++++ Python-2.7.6/configure.ac	2014-02-25 12:49:00.992176462 -0300
++@@ -868,6 +868,7 @@
++ 
++ # Other platforms follow
++ if test $enable_shared = "yes"; then
+++  PY_ENABLE_SHARED=1
++   AC_DEFINE(Py_ENABLE_SHARED, 1, [Defined if Python is built as a shared library.])
++   case $ac_sys_system in
++     BeOS*)
++@@ -928,6 +929,7 @@
++ 
++   esac
++ else # shared is disabled
+++  PY_ENABLE_SHARED=0
++   case $ac_sys_system in
++     CYGWIN*)
++           BLDLIBRARY='$(LIBRARY)'
++@@ -1905,6 +1907,9 @@
++ AC_SUBST(BLDSHARED)
++ AC_SUBST(CCSHARED)
++ AC_SUBST(LINKFORSHARED)
+++AC_SUBST(PY_ENABLE_SHARED)
+++LIBPL="${prefix}/lib/python${VERSION}/config"
+++AC_SUBST(LIBPL)
++ # SO is the extension of shared libraries `(including the dot!)
++ # -- usually .so, .sl on HP-UX, .dll on Cygwin
++ AC_MSG_CHECKING(SO)
++@@ -4529,7 +4534,7 @@
++ AC_MSG_RESULT(done)
++ 
++ # generate output files
++-AC_CONFIG_FILES(Makefile.pre Modules/Setup.config Misc/python.pc)
+++AC_CONFIG_FILES(Makefile.pre Modules/Setup.config Misc/python.pc Misc/python-config.sh)
++ AC_CONFIG_FILES([Modules/ld_so_aix], [chmod +x Modules/ld_so_aix])
++ AC_OUTPUT
++ 
++diff -Nura Python-2.7.6.orig/Makefile.pre.in Python-2.7.6/Makefile.pre.in
++--- Python-2.7.6.orig/Makefile.pre.in	2014-02-25 12:48:16.611533773 -0300
+++++ Python-2.7.6/Makefile.pre.in	2014-02-25 12:49:00.993176482 -0300
++@@ -161,7 +161,7 @@
++ SUBDIRSTOO=	Include Lib Misc Demo
++ 
++ # Files and directories to be distributed
++-CONFIGFILES=	configure configure.ac acconfig.h pyconfig.h.in Makefile.pre.in
+++CONFIGFILES=	configure configure.ac acconfig.h pyconfig.h.in Makefile.pre.in Misc/python-config.sh
++ DISTFILES=	README ChangeLog $(CONFIGFILES)
++ DISTDIRS=	$(SUBDIRS) $(SUBDIRSTOO) Ext-dummy
++ DIST=		$(DISTFILES) $(DISTDIRS)
++@@ -405,7 +405,7 @@
++ 
++ # Default target
++ all:		build_all
++-build_all:	$(BUILDPYTHON) oldsharedmods sharedmods gdbhooks
+++build_all:	$(BUILDPYTHON) oldsharedmods sharedmods gdbhooks python-config
++ 
++ # Compile a binary with gcc profile guided optimization.
++ profile-opt:
++@@ -1045,10 +1045,12 @@
++ 	fi; \
++ 	cd $(srcdir)/Lib/$(PLATDIR); $(RUNSHARED) ./regen
++ 
++-python-config: $(srcdir)/Misc/python-config.in
+++python-config: $(srcdir)/Misc/python-config.in Misc/python-config.sh
++ 	# Substitution happens here, as the completely-expanded BINDIR
++ 	# is not available in configure
++-	sed -e "s, at EXENAME@,$(BINDIR)/python$(VERSION)$(EXE)," < $(srcdir)/Misc/python-config.in >python-config
+++	sed -e "s, at EXENAME@,$(BINDIR)/python$(VERSION)$(EXE)," < $(srcdir)/Misc/python-config.in >python-config.py
+++	# Replace makefile compat. variable references with shell script compat. ones; $(VAR) -> ${VAR}
+++	sed -e 's,\$$(\([A-Za-z0-9_]*\)),\$$\{\1\},g' Misc/python-config.sh >python-config
++ 
++ # Install the include files
++ INCLDIRSTOMAKE=$(INCLUDEDIR) $(CONFINCLUDEDIR) $(INCLUDEPY) $(CONFINCLUDEPY)
++@@ -1107,7 +1109,7 @@
++ 	$(INSTALL_SCRIPT) $(srcdir)/Modules/makesetup $(DESTDIR)$(LIBPL)/makesetup
++ 	$(INSTALL_SCRIPT) $(srcdir)/install-sh $(DESTDIR)$(LIBPL)/install-sh
++ 	$(INSTALL_SCRIPT) python-config $(DESTDIR)$(BINDIR)/python$(VERSION)-config
++-	rm python-config
+++	$(INSTALL_SCRIPT) python-config.py $(DESTDIR)$(LIBPL)/python-config.py
++ 	@if [ -s Modules/python.exp -a \
++ 		"`echo $(MACHDEP) | sed 's/^\(...\).*/\1/'`" = "aix" ]; then \
++ 		echo; echo "Installing support files for building shared extension modules on AIX:"; \
++@@ -1287,6 +1289,7 @@
++ 		config.cache config.log pyconfig.h Modules/config.c
++ 	-rm -rf build platform
++ 	-rm -rf $(PYTHONFRAMEWORKDIR)
+++	-rm -f python-config.py python-config
++ 
++ # Make things extra clean, before making a distribution:
++ # remove all generated files, even Makefile[.pre]
++diff -Nura Python-2.7.6.orig/Misc/python-config.sh.in Python-2.7.6/Misc/python-config.sh.in
++--- Python-2.7.6.orig/Misc/python-config.sh.in	1969-12-31 21:00:00.000000000 -0300
+++++ Python-2.7.6/Misc/python-config.sh.in	2014-02-25 12:49:00.993176482 -0300
++@@ -0,0 +1,102 @@
+++#!/bin/sh
+++
+++exit_with_usage ()
+++{
+++	echo "Usage: $0 --prefix|--exec-prefix|--includes|--libs|--cflags|--ldflags|--extension-suffix|--help|--configdir"
+++	exit $1
+++}
+++
+++if [ "$1" = "" ] ; then
+++	exit_with_usage 1
+++fi
+++
+++# Returns the actual prefix where this script was installed to.
+++installed_prefix ()
+++{
+++	RESULT=$(dirname $(cd $(dirname "$1") && pwd -P))
+++	if which readlink >/dev/null 2>&1 ; then
+++	RESULT=$(readlink -f "$RESULT")
+++	fi
+++	echo $RESULT
+++}
+++
+++prefix_build="@prefix@"
+++prefix_real=$(installed_prefix "$0")
+++
+++# Use sed to fix paths from their built to locations to their installed to locations.
+++prefix=$(echo "$prefix_build" | sed "s#$prefix_build#$prefix_real#")
+++exec_prefix_build="@exec_prefix@"
+++exec_prefix=$(echo "$exec_prefix_build" | sed "s#$exec_prefix_build#$prefix_real#")
+++includedir=$(echo "@includedir@")
+++libdir=$(echo "@libdir@" | sed "s#$prefix_build#$prefix_real#")
+++CFLAGS=$(echo "@CFLAGS@" | sed "s#$prefix_build#$prefix_real#")
+++VERSION="@VERSION@"
+++LIBM="@LIBM@"
+++LIBC="@LIBC@"
+++SYSLIBS="$LIBM $LIBC"
+++LIBS="@LIBS@ $SYSLIBS -lpython${VERSION}"
+++BASECFLAGS="@BASECFLAGS@"
+++LDLIBRARY="@LDLIBRARY@"
+++LINKFORSHARED="@LINKFORSHARED@"
+++OPT="@OPT@"
+++PY_ENABLE_SHARED="@PY_ENABLE_SHARED@"
+++LDVERSION="@LDVERSION@"
+++LIBDEST=${prefix}/lib/python${VERSION}
+++LIBPL=$(echo "@LIBPL@" | sed "s#$prefix_build#$prefix_real#")
+++SO="@SO@"
+++PYTHONFRAMEWORK="@PYTHONFRAMEWORK@"
+++INCDIR="-I$includedir/python${VERSION}"
+++PLATINCDIR="-I$includedir/python${VERSION}"
+++
+++# Scan for --help or unknown argument.
+++for ARG in $*
+++do
+++	case $ARG in
+++	--help)
+++		exit_with_usage 0
+++	;;
+++	--prefix|--exec-prefix|--includes|--libs|--cflags|--ldflags|--extension-suffix|--abiflags|--configdir)
+++	;;
+++	*)
+++		exit_with_usage 1
+++	;;
+++esac
+++done
+++
+++for ARG in "$@"
+++do
+++	case "$ARG" in
+++	--prefix)
+++		echo "$prefix"
+++	;;
+++	--exec-prefix)
+++		echo "$exec_prefix"
+++	;;
+++	--includes)
+++		 echo "$INCDIR $PLATINCDIR"
+++	;;
+++	--cflags)
+++		echo "$INCDIR $PLATINCDIR $BASECFLAGS $CFLAGS $OPT"
+++	;;
+++	--libs)
+++		echo "$LIBS"
+++	;;
+++	--ldflags)
+++		LINKFORSHAREDUSED=
+++		if [ -z "$PYTHONFRAMEWORK" ] ; then
+++			LINKFORSHAREDUSED=$LINKFORSHARED
+++		fi
+++		LIBPLUSED=
+++		if [ "$PY_ENABLE_SHARED" = "0" ] ; then
+++			LIBPLUSED="-L$LIBPL"
+++		fi
+++		echo "$LIBPLUSED -L$libdir $LIBS $LINKFORSHAREDUSED"
+++	;;
+++	--extension-suffix)
+++		echo "$SO"
+++	;;
+++	--configdir)
+++		echo "$LIBPL"
+++	;;
+++esac
+++done
