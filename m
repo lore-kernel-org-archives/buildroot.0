@@ -1,254 +1,45 @@
-From: Oded Hanson <OHanson@xsightsys.com>
-Date: Sun, 2 Mar 2014 12:06:35 +0000
-Subject: [Buildroot] Segmentation fault while trying to remote debug
- with GDB and GDBServer
-In-Reply-To: <20140302091205.GF3874@tarshish>
-References: <51ef4c3ec6f84eab802c23a14ecb48ae@DBXPR07MB142.eurprd07.prod.outlook.com>
- <20140302070650.GE3874@tarshish>
- <24eee2c96f804b55ae7767734d5a4f6e@DBXPR07MB142.eurprd07.prod.outlook.com>
- <20140302091205.GF3874@tarshish>
-Message-ID: <29f88dd2071c483bb7102687088ac6b3@DBXPR07MB142.eurprd07.prod.outlook.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 2 Mar 2014 13:13:24 +0100
+Subject: [Buildroot] Structure of the Buildroot manual
+In-Reply-To: <20140223161339.3b42f921@skate>
+References: <20140223161339.3b42f921@skate>
+Message-ID: <CAAXf6LURroMMeqV=RoJhXTzN=tV+wJFzKwzrOv+ADevXvrnUzA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-OK... After 1 hour of rebuilding my system back with the internal GLIBC toolchain I can say...
+Hi Thomas,
 
-Thanks !!! :)
+On Sun, Feb 23, 2014 at 4:13 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> Today I've written a few updates to the Buildroot manual, and I find
+> its structure a bit weird.
+>
+> The "Daily use" section in "Working with Buildroot" is just a random
+> list of facts, with no real connection with each other, and the
+> difference with "Advanced usage" in "Going further in Buildroot's
+> innards" is not really clear. This section "Going further in Buildroot's
+> innards" has a first chapter, 6.1 that really talks about Buildroot
+> internal, but the biggest part of the section, 6.2, is not at all about
+> Buildroot internals. It's much more a set of tips and descriptions of
+> slightly advanced features... a bit like the "Daily use" section.
+>
+> Similarly the "3.2 make tips" section is a random set of facts, which
+> could more or less fit into the "3.5 Daily use" section.
+>
+> I think we have some good content for the Buildroot manual, but the
+> structure is somewhat weird. Maybe it's time to refresh its structure,
+> after analyzing the information that we have, and in which order it
+> should be presented. I'm sure Thomas DS would have a lot of useful
+> ideas in this area :-)
+>
 
-Its working. Now I just need to see how to make the eclipse plugin run the set sysroot command 
+Just to let you know: I have seen this mail and am adding the topic to
+my todo list...
 
-Oded
-
------Original Message-----
-From: Baruch Siach [mailto:baruch at tkos.co.il] 
-Sent: Sunday, March 02, 2014 11:12 AM
-To: Oded Hanson
-Cc: buildroot at busybox.net
-Subject: Re: [Buildroot] Segmentation fault while trying to remote debug with GDB and GDBServer
-
-Hi Oded,
-
-On Sun, Mar 02, 2014 at 07:27:36AM +0000, Oded Hanson wrote:
-> I missed your answer about the GDB.
-> 
-> How can I force GDB to use my cross compiler libs instead?
-> 
-> The logs you see are from my manually using GDB,  which indeed might 
-> have not been configured to use the cross compiler libs,  however,  I 
-> get the same problem when using the debugger from eclipse,  using the 
-> buildroot plugin , which does indeed use the libraries from the cross 
-> compiler (at least it should,  how can I verify this? )
-
-I'm not familiar with the Eclipse plugin so I can't comment on that. As to command line invocation of GDB you can change the sysroot of GDB as I said in my original response with:
-
-(gdb) set sysroot /home/oded/Buildroot/buildroot-2013.11/output/staging
-
-GDB uses sysroot to locate your target dynamic linker and libraries.
-
-baruch
-
-> On Mar 2, 2014 9:07 AM, Baruch Siach <baruch@tkos.co.il> wrote:
-> Please keep the list on CC so that everyone may benefit from your 
-> experience.
-> 
-> On Sun, Mar 02, 2014 at 05:20:25AM +0000, Oded Hanson wrote:
-> > Thanks Baruch
-> >
-> > Why do you say I am using host linker ? Where can you see that ?
-> 
-> No. Your host GDB is using your host dynamic linker (and libraries) 
-> instead of your target's. Your host GDB does not have direct access to 
-> your target libraries. The host GDB relies on having access to these files on your host.
-> As you can see from the GDB output you provided, GDB loads
-> /lib64/ld-linux-x86-64.so.2 which is the dynamic linker of your host, 
-> and is apparently incompatible with your target's one.
-> 
-> > I have rechecked the eclipse plugin for buildroot,  and it seems to 
-> > be configured correctly to use the linker from the buildroot.  Also,  
-> > the gdb debugger is called from the buildroot path.  The 
-> > segmentation fault occurs when I run the gdb both manually and also 
-> > from the eclipse using the plugin setup.
-> >
-> > I have more information now.  If I select the external toolchain 
-> > with a precomplied toolchain instead of the internal glibc 
-> > toolchain,  then every thing seems to work fine.  So I guess it 
-> > might have to do specifically with the internal glibc toolchain. I understand its still experimental?
-> 
-> The external toolchain may bundle a dynamic linker and C library that 
-> are compatible enough with you host's to makes your HelloWorld run 
-> correctly. If you try to actually step into the code of the dynamic 
-> linker and C library you'll probably hit mismatch problems.
-> 
-> baruch
-> 
-> > On Mar 2, 2014 6:28 AM, Baruch Siach <baruch@tkos.co.il> wrote:
-> > > On Fri, Feb 28, 2014 at 03:58:49PM +0000, Oded Hanson wrote:
-> > > > I have built a target based on a x86_64 architecture. I am 
-> > > > booting it for testing on virtualbox (but it also boots with no 
-> > > > problem on my target). I am using the buildroot's internal 
-> > > > toolchain and the glibc C library (not uclibc !!).  I have tryed 
-> > > > few GCC compiler versions and few GDB debugger versions, all 
-> > > > resulting with the same issues. Currently using kernel 3.12.x, GCC 4.7.x and GDB 7.4.x.
-> > > >
-> > > > I have compiled a simple helloworld app, using the eclipse 
-> > > > plugin for buildroot. I have made sure its using the GCC generated by buildroot.
-> > > >
-> > > > When I run the helloworld application on the target machine, it 
-> > > > works fine as expected. However, when I try to remote debug it, 
-> > > > it crashes with a segmentation fault right at the start before it even reaches the main.
-> > > >
-> > > > I have performed the same action on my host (since its also 
-> > > > x86_64 I can do that :) ) and there, no segmentation fault occurs.
-> > > >
-> > > > I have attached the logs from both the gdbserver (run on the 
-> > > > target machine) and the gdb (run on the host), I really hope 
-> > > > someone will have an idea, because I have searched the entire 
-> > > > internet (literally), and unfortunately I have no clue whats going wrong here:
-> > > >
-> > > > gdb (host):
-> > > >
-> > > > oded at oded-VirtualBox:~/workspace/HelloWorld/debug$ 
-> > > > /home/oded/Buildroot/buildroot-2013.11/output/host/usr/bin/x86_6
-> > > > 4-buildroot-linux-gnu-gdb HelloWorld GNU gdb (GDB) 7.4.1 Copyright (C) 2012 Free Software Foundation, Inc.
-> > > > License GPLv3+: GNU GPL version 3 or later 
-> > > > <http://gnu.org/licenses/gpl.html>
-> > > > This is free software: you are free to change and redistribute it.
-> > > > There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
-> > > > and "show warranty" for details.
-> > > > This GDB was configured as "--host=x86_64-unknown-linux-gnu --target=x86_64-buildroot-linux-gnu".
-> > > > For bug reporting instructions, please see:
-> > > > <http://www.gnu.org/software/gdb/bugs/>...
-> > > > Reading symbols from /home/oded/workspace/HelloWorld/debug/HelloWorld...done.
-> > > > (gdb) target remote 192.168.0.67:2235 Remote debugging using 
-> > > > 192.168.0.67:2235 Reading symbols from 
-> > > > /lib64/ld-linux-x86-64.so.2...(no debugging symbols found)...done.
-> > > > Loaded symbols for /lib64/ld-linux-x86-64.so.2
-> > >
-> > > This is wrong. You are using the dynamic linker (and libraries) of your host.
-> > > This doesn't emit an error message just because your host and 
-> > > target architectures are identical (x86-64). Try setting sysroot 
-> > > to your buildroot staging directory:
-> > >
-> > > (gdb) set sysroot 
-> > > /home/oded/Buildroot/buildroot-2013.11/output/staging
-> > >
-> > > baruch
-> > >
-> > > > 0x00007ffff7dde2c0 in ?? () from /lib64/ld-linux-x86-64.so.2
-> > > > (gdb) continue
-> > > > Continuing.
-> > > >
-> > > > Program received signal SIGSEGV, Segmentation fault.
-> > > > 0x00007ffff7ded14f in ?? () from /lib64/ld-linux-x86-64.so.2
-> > > > (gdb)
-> > > >
-> > > >
-> > > > gdbserver (target):
-> > > >
-> > > > # ./test
-> > > > Hello World#
-> > > > # gdbserver --debug :2235 ./test my_waitpid (954, 0x0) 
-> > > > my_waitpid (954, 0x0): status(137f), 954 my_waitpid (954, 0x0) 
-> > > > my_waitpid (954, 0x0): status(1057f), 954 my_waitpid (955, 0x0) 
-> > > > my_waitpid (955, 0x0): status(137f), 955 my_waitpid (955, 0x0) 
-> > > > my_waitpid (955, 0x0): status(9), 955 my_waitpid (954, 0x0) 
-> > > > my_waitpid (954, 0x0): status(117f), 954 my_waitpid (954, 0x0) 
-> > > > my_waitpid (954, 0x0): status(9), 954 new_argv[0] = "./test"
-> > > > Process ./test created; pid = 956
-> > > > linux_wait: [Process 956]
-> > > > linux_wait_for_lwp: <all threads> my_waitpid (-1, 0x40000000) 
-> > > > blocking sigchld_handler my_waitpid (-1, 0x1): status(57f), 956 
-> > > > Got an event from 956 (57f) pc is 0x7ffff7dde2c0 stop pc is 
-> > > > 0x7ffff7dde2bf
-> > > > linux_wait_for_lwp: pc is 0x7ffff7dde2c0 Hit a non-gdbserver 
-> > > > trap event.
-> > > > wait_for_sigstop: LWP 956 already stopped Checking whether LWP 
-> > > > 956 needs to move out of the jump pad...no linux_wait ret = LWP 
-> > > > 956.956, 1, 5 Listening on port 2235 handling possible accept 
-> > > > event Remote debugging from host 192.168.0.176 linux_async (0), 
-> > > > previous=0 handling possible serial event handling possible 
-> > > > serial event handling possible serial event handling possible 
-> > > > serial event handling possible serial event handling possible 
-> > > > serial event handling possible serial event handling possible 
-> > > > serial event linux_async (0), previous=0 handling possible 
-> > > > serial event
-> > > > wait_for_sigstop: LWP 956 already stopped Checking whether LWP 
-> > > > 956 needs to move out of the jump pad...no Writing resume reply 
-> > > > for LWP 956.956:1
-> > > >
-> > > > handling possible serial event
-> > > > handling possible serial event
-> > > > handling possible serial event
-> > > > handling possible serial event
-> > > > handling possible serial event
-> > > > handling possible serial event
-> > > > handling possible serial event
-> > > > handling possible serial event
-> > > > symbol `gdb_agent_gdb_tp_heap_buffer' not found Trying host 
-> > > > libthread_db library: libthread_db.so.1.
-> > > > Host libthread_db.so.1 resolved to: /lib/libthread_db.so.1.
-> > > > td_ta_new(): application not linked with libthread 
-> > > > thread_db_load_search returning 0 handling possible serial event 
-> > > > handling possible serial event handling possible serial event 
-> > > > handling possible serial event symbol 
-> > > > `gdb_agent_gdb_tp_heap_buffer' not found Trying host 
-> > > > libthread_db library: libthread_db.so.1.
-> > > > Host libthread_db.so.1 resolved to: /lib/libthread_db.so.1.
-> > > > td_ta_new(): application not linked with libthread 
-> > > > thread_db_load_search returning 0 handling possible serial event 
-> > > > handling possible serial event handling possible serial event 
-> > > > handling possible serial event symbol 
-> > > > `gdb_agent_gdb_tp_heap_buffer' not found Trying host 
-> > > > libthread_db library: libthread_db.so.1.
-> > > > Host libthread_db.so.1 resolved to: /lib/libthread_db.so.1.
-> > > > td_ta_new(): application not linked with libthread 
-> > > > thread_db_load_search returning 0 handling possible serial event
-> > > > gdbserver/tracepoint: Returning trace status as 0, stop reason 
-> > > > tnotrun handling possible serial event
-> > > > gdbserver/tracepoint: Returning first trace state variable 
-> > > > definition handling possible serial event
-> > > > gdbserver/tracepoint: Returning first trace state variable 
-> > > > definition handling possible serial event
-> > > > gdbserver/tracepoint: Returning first tracepoint definition 
-> > > > piece handling possible serial event
-> > > > gdbserver/tracepoint: Returning trace status as 0, stop reason 
-> > > > tnotrun handling possible serial event Writing cc to 
-> > > > 0x7ffff7ded160 handling possible serial event handling possible 
-> > > > serial event handling possible serial event Need step over [LWP 
-> > > > 956]? No pc is 0x7ffff7dde2c0 Need step over [LWP 956]? 
-> > > > Cancelling, PC was changed.  Old stop_pc was 0x7ffff7dde2bf, PC 
-> > > > is now 0x7ffff7dde2c0 Resuming, no pending status or step over 
-> > > > needed resuming LWP 956 pc is 0x7ffff7dde2c0 Resuming lwp 956 
-> > > > (continue, signal 0, stop not expected)
-> > > >   resuming from pc 0x7ffff7dde2c0
-> > > > linux_wait: [<all threads>]
-> > > > linux_wait_for_lwp: <all threads> my_waitpid (-1, 0x40000000) 
-> > > > blocking sigchld_handler my_waitpid (-1, 0x1): status(b7f), 956 
-> > > > Got an event from 956 (b7f) pc is 0x7ffff7ded14f stop pc is 
-> > > > 0x7ffff7ded14f
-> > > > linux_wait_for_lwp: pc is 0x7ffff7ded14f Hit a non-gdbserver 
-> > > > trap event.
-> > > > wait_for_sigstop: LWP 956 already stopped Checking whether LWP 
-> > > > 956 needs to move out of the jump pad...no linux_wait ret = LWP 
-> > > > 956.956, 1, 11 Writing resume reply for LWP 956.956:1
-> > > >
-> > > > handling possible serial event
-> > > > Writing cd to 0x7ffff7ded160
-> > > > handling possible serial event
-> > > > handling possible serial event
-> > > > handling possible serial event
-> > > >
-> > > > ?
-> 
-> --
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Best regards,
+Thomas
