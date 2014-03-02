@@ -1,99 +1,104 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 2 Mar 2014 16:39:51 +0100
-Subject: [Buildroot] [PATCH] directfb-lua: new package
-In-Reply-To: <1375126587-983-1-git-send-email-ezequiel.garcia@free-electrons.com>
-References: <1375126587-983-1-git-send-email-ezequiel.garcia@free-electrons.com>
-Message-ID: <20140302163951.5f851dd9@skate>
+Date: Sun, 2 Mar 2014 16:42:09 +0100
+Subject: [Buildroot] [git commit] wpa_supplicant: bump to version 2.1
+Message-ID: <20140302154633.1DCD69B2DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fran?ois,
+commit: http://git.buildroot.net/buildroot/commit/?id=b119a108c771dff4aebf23b1b5a2fd10f2949053
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Could you review the following patch that adds a Lua binding to
-DirectFB ?
+Now with 802.11ac and P2P support.
 
-Thanks!
+CONFIG_LIBNL32 was a hidden option so switch to ENABLE/DISABLE now.
+CONFIG_DRIVER_ATMEL was dropped.
+CONFIG_DELAYED_MIC is no longer optional.
+CONFIG_AP was also hidden so also switch to ENABLE/DISABLE.
+CONFIG_EAP_* now blindly enabled instead of doing one per each.
 
-Thomas
+P2P support is unified with the AP mode config knob since it's the more
+likely scenario and share code between them.
 
-On Mon, 29 Jul 2013 16:36:27 -0300, Ezequiel Garcia wrote:
-> This is a Lua binding to DirectFB. It is an automated binding
-> generated from the DirectFB headers, so it generates an identical
-> API to DirectFB's, only simpler to use.
-> 
-> Signed-off-by: Ezequiel Garcia <ezequiel.garcia@free-electrons.com>
-> ---
->  package/Config.in                    |  1 +
->  package/directfb-lua/Config.in       | 10 ++++++++++
->  package/directfb-lua/directfb-lua.mk | 23 +++++++++++++++++++++++
->  3 files changed, 34 insertions(+)
->  create mode 100644 package/directfb-lua/Config.in
->  create mode 100644 package/directfb-lua/directfb-lua.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 6d5ff01..dcaac4c 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -120,6 +120,7 @@ comment "graphic libraries"
->  source "package/cegui06/Config.in"
->  source "package/directfb/Config.in"
->  source "package/directfb-examples/Config.in"
-> +source "package/directfb-lua/Config.in"
->  source "package/divine/Config.in"
->  source "package/fbdump/Config.in"
->  source "package/fbgrab/Config.in"
-> diff --git a/package/directfb-lua/Config.in b/package/directfb-lua/Config.in
-> new file mode 100644
-> index 0000000..7f941f9
-> --- /dev/null
-> +++ b/package/directfb-lua/Config.in
-> @@ -0,0 +1,10 @@
-> +config BR2_PACKAGE_DIRECTFB_LUA
-> +	bool "directfb-lua"
-> +	depends on BR2_PACKAGE_DIRECTFB
-> +	depends on BR2_PACKAGE_LUA
-> +	help
-> +	  directfb-lua is a Lua binding to DirectFB. It is an automated binding
-> +	  generated from the DirectFB headers. This means it generates an API
-> +	  identical to the DirectFB's, only easier to use.
-> +
-> +	  https://github.com/ezequielgarcia/directfb-lua
-> diff --git a/package/directfb-lua/directfb-lua.mk b/package/directfb-lua/directfb-lua.mk
-> new file mode 100644
-> index 0000000..f975a55
-> --- /dev/null
-> +++ b/package/directfb-lua/directfb-lua.mk
-> @@ -0,0 +1,23 @@
-> +################################################################################
-> +#
-> +# directfb-lua
-> +#
-> +################################################################################
-> +
-> +DIRECTFB_LUA_VERSION = v0.2.1
-> +DIRECTFB_LUA_SITE = https://github.com/ezequielgarcia/directfb-lua/tarball/$(DIRECTFB_LUA_VERSION)
-> +DIRECTFB_LUA_LICENSE = MIT
-> +DIRECTFB_LUA_LICENSE_FILES = COPYING
-> +DIRECTFB_LUA_DEPENDENCIES = directfb lua
-> +
-> +define DIRECTFB_LUA_BUILD_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) gen
-> +	$(TARGET_MAKE_ENV) CROSS_COMPILE="$(TARGET_CROSS)" $(MAKE) -C $(@D)
-> +endef
-> +
-> +define DIRECTFB_LUA_INSTALL_TARGET_CMDS
-> +	$(TARGET_MAKE_ENV) INSTALL_DIR="$(TARGET_DIR)/usr/lib/lua" \
-> +		$(MAKE) -C $(@D) install
-> +endef
-> +
-> +$(eval $(generic-package))
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/wpa_supplicant/wpa_supplicant.mk |   25 ++++++++++---------------
+ 1 files changed, 10 insertions(+), 15 deletions(-)
 
-
-
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index 34e8e1f..17788cc 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WPA_SUPPLICANT_VERSION = 2.0
++WPA_SUPPLICANT_VERSION = 2.1
+ WPA_SUPPLICANT_SITE = http://hostap.epitest.fi/releases
+ WPA_SUPPLICANT_LICENSE = GPLv2/BSD-3c
+ WPA_SUPPLICANT_LICENSE_FILES = README
+@@ -20,51 +20,46 @@ WPA_SUPPLICANT_CONFIG_EDITS =
+ WPA_SUPPLICANT_CONFIG_SET =
+ 
+ WPA_SUPPLICANT_CONFIG_ENABLE = \
++	CONFIG_IEEE80211AC	\
+ 	CONFIG_IEEE80211N	\
+ 	CONFIG_IEEE80211R	\
+ 	CONFIG_INTERWORKING	\
+-	CONFIG_DELAYED_MIC	\
+ 	CONFIG_INTERNAL_LIBTOMMATH
+ 
+ WPA_SUPPLICANT_CONFIG_DISABLE = \
+-	CONFIG_DRIVER_ATMEL	\
+ 	CONFIG_SMARTCARD
+ 
+ ifeq ($(BR2_PACKAGE_LIBNL),y)
+ 	WPA_SUPPLICANT_DEPENDENCIES += libnl
+-	WPA_SUPPLICANT_CONFIG_SET += CONFIG_LIBNL32
++	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_LIBNL32
+ else
+ 	WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_DRIVER_NL80211
+ endif
+ 
++# Trailing underscore on purpose to not enable CONFIG_EAPOL_TEST
+ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_EAP),y)
+-	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_EAP_AKA		\
+-					CONFIG_EAP_FAST		\
+-					CONFIG_EAP_GPSK 	\
+-					CONFIG_EAP_IKEV2	\
+-					CONFIG_EAP_PAX		\
+-					CONFIG_EAP_PSK		\
+-					CONFIG_EAP_SAKE		\
+-					CONFIG_EAP_SIM		\
+-					CONFIG_EAP_TNC
++	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_EAP_
+ else
+ 	WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_EAP
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT),y)
+-	WPA_SUPPLICANT_CONFIG_SET += CONFIG_AP
++	WPA_SUPPLICANT_CONFIG_ENABLE += \
++		CONFIG_AP \
++		CONFIG_P2P
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_WPS),y)
+ 	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_WPS
++	WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_WPS_NFC
+ endif
+ 
+ # Try to use openssl if it's already available
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ 	WPA_SUPPLICANT_DEPENDENCIES += openssl
+ 	WPA_SUPPLICANT_CONFIG_EDITS += 's/\#\(CONFIG_TLS=openssl\)/\1/'
+-	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_EAP_PWD
+ else
++	WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_EAP_PWD
+ 	WPA_SUPPLICANT_CONFIG_EDITS += 's/\#\(CONFIG_TLS=\).*/\1internal/'
+ endif
+ 
