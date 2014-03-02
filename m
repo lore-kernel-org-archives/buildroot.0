@@ -1,36 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  2 Mar 2014 18:07:13 +0100
-Subject: [Buildroot] [PATCH 3/3] configs/raspberrypi: bump kernel version
-In-Reply-To: <cover.1393779995.git.yann.morin.1998@free.fr>
-References: <cover.1393779995.git.yann.morin.1998@free.fr>
-Message-ID: <7f3401e798f8bdbd35429a1c8daeef2764392eb3.1393779995.git.yann.morin.1998@free.fr>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun, 2 Mar 2014 18:26:22 +0100
+Subject: [Buildroot] [PATCH 01/19] package/libgles: rename package and
+ the _HAS and _PROVIDES variables
+In-Reply-To: <73269cc1254dc8287c0e5751ca237507532ea3b9.1393778339.git.yann.morin.1998@free.fr>
+References: <cover.1393778339.git.yann.morin.1998@free.fr>
+ <73269cc1254dc8287c0e5751ca237507532ea3b9.1393778339.git.yann.morin.1998@free.fr>
+Message-ID: <CAHXCMMKdTkA-DQvkkbyEziOOQ83D-zkB+2dMnKhjzQ4b0fyBFg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On Sun, Mar 2, 2014 at 5:52 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>
+> The basic rule for a package is to have its options named
+> after the package name. There is no reason this should not
+> also be the case for virtual packages.
+>
+> Besides, this will allow us to switch libgles to use the
+> soon-to-be-introduced virtual-package infrastructure.
+>
+> Rename the package to opnegl-libgles so:
+>   - it has 'opengl' in its name, so it is easier to find
+>   - it has 'libgles' (the name of the library file), as the
+>     other Khronos-related packages have
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> Cc: Mike Zick <minimod@morethan.org>
+> Cc: Samuel Martin <s.martin49@gmail.com>
 
-Bump from rpi-3.10.29 to rpi-3.10.32.
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- configs/raspberrypi_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Regards,
 
-diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
-index 2d1cc34..90ca906 100644
---- a/configs/raspberrypi_defconfig
-+++ b/configs/raspberrypi_defconfig
-@@ -15,7 +15,7 @@ BR2_DEFAULT_KERNEL_VERSION="3.10.25"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/raspberrypi/linux.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="cdeb937acdc0cb00e3d3bc30d6053ec53030cc64"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="6ae359079d931d584c00492a7ea1d2538173b9b2"
- BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi_quick"
- BR2_LINUX_KERNEL_ZIMAGE=y
 -- 
-1.8.3.2
+Samuel
