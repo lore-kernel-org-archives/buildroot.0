@@ -1,270 +1,84 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 2 Mar 2014 11:12:05 +0200
-Subject: [Buildroot] Segmentation fault while trying to remote debug
- with GDB and GDBServer
-In-Reply-To: <24eee2c96f804b55ae7767734d5a4f6e@DBXPR07MB142.eurprd07.prod.outlook.com>
-References: <51ef4c3ec6f84eab802c23a14ecb48ae@DBXPR07MB142.eurprd07.prod.outlook.com>
- <20140302070650.GE3874@tarshish>
- <24eee2c96f804b55ae7767734d5a4f6e@DBXPR07MB142.eurprd07.prod.outlook.com>
-Message-ID: <20140302091205.GF3874@tarshish>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun, 2 Mar 2014 10:50:41 +0100
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20140302095754.13319d04@skate>
+References: <20140302073008.028A91015DC@stock.ovh.net>
+ <20140302095754.13319d04@skate>
+Message-ID: <CAHXCMM+qbZL-iXQzVA6CBOWYq4JuNG0XcB-dWnHkeFq5do38Bw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Oded,
+Thomas, all,
 
-On Sun, Mar 02, 2014 at 07:27:36AM +0000, Oded Hanson wrote:
-> I missed your answer about the GDB.
-> 
-> How can I force GDB to use my cross compiler libs instead?
-> 
-> The logs you see are from my manually using GDB,  which indeed might have 
-> not been configured to use the cross compiler libs,  however,  I get the 
-> same problem when using the debugger from eclipse,  using the buildroot 
-> plugin , which does indeed use the libraries from the cross compiler (at 
-> least it should,  how can I verify this? )
+On Sun, Mar 2, 2014 at 9:57 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+[...]
+>>        arm |               host-scons-2.3.0 | NOK | http://autobuild.buildroot.net/results/1ee0d18f2a9e45b94e4db04fd5c54e6f7994b1be/
+>>    powerpc |               host-scons-2.3.0 | NOK | http://autobuild.buildroot.net/results/d1421f2063ecfea9c4110414f481f779defa8ad5/
+>
+> Scons is not compatible with Python 3. But host-scons is not a target
+> package, it's a host package, so we cannot add a Python 3 related
+> dependency to it. So the two solutions that I see are:
+>
+>  * Change our host-python and host-python3 packages so that they are
+>    not exclusive from each other, and then find a way for host-scons to
+>    express the fact that it really needs host-python, and not the
+>    host-python version matching the selected target python version.
+>    Note that achieving this might be difficult.
 
-I'm not familiar with the Eclipse plugin so I can't comment on that. As to 
-command line invocation of GDB you can change the sysroot of GDB as I said in 
-my original response with:
+host-python and host-python3 are exclusive at the kconfig level, not
+the make target one, right or am I missing something?
+AFAICS the only overlapping thing between the 2 host package is the
+$(HOST_DIR)/usr/bin/python symlink.
 
-(gdb) set sysroot /home/oded/Buildroot/buildroot-2013.11/output/staging
+So, we could imagine building host-python and host-python3 in the same build.
+In such a case, the tricky point becomes the
+$(HOST_DIR)/usr/bin/python symlink management:
+- host-python should not install the symlink if python3 is enabled;
+- host-python3 should deactivate the symlink installation when python
+is enabled.
+Then, the SCONS variable should explicity refer to
+"$(HOST_DIR)/usr/bin/python2 $(HOST_DIR)/usr/bin/scons"
+So, we could be able to build host-python (for host-scons) even if
+python3 is enabled.
 
-GDB uses sysroot to locate your target dynamic linker and libraries.
+host-python is the only package providing python2 stuff we would allow
+to build when python3 is enabled.
 
-baruch
+For other packages, it should not change anything since the
+$(HOST_DIR)/usr/bin/python symlink still reflects the configuration
+(ie. its points to python3 if python3 is enabled, to python if
+python(2) is enabled).
+For example, crda needs host-python-m2crypto. Since there is no change
+in the buildroot configuration (ie. the BR2_PACKAGE_PYTHON and
+BR2_PACKAGE_PYTHON3 will still have the right value) and
+$(HOST_DIR)/usr/bin/python still reflect this configuration,
+host-python-m2crypto should still be built against the right python
+version.
 
-> On Mar 2, 2014 9:07 AM, Baruch Siach <baruch@tkos.co.il> wrote:
-> Please keep the list on CC so that everyone may benefit from your 
-> experience.
-> 
-> On Sun, Mar 02, 2014 at 05:20:25AM +0000, Oded Hanson wrote:
-> > Thanks Baruch
-> >
-> > Why do you say I am using host linker ? Where can you see that ?
-> 
-> No. Your host GDB is using your host dynamic linker (and libraries) instead of
-> your target's. Your host GDB does not have direct access to your target
-> libraries. The host GDB relies on having access to these files on your host.
-> As you can see from the GDB output you provided, GDB loads
-> /lib64/ld-linux-x86-64.so.2 which is the dynamic linker of your host, and is
-> apparently incompatible with your target's one.
-> 
-> > I have rechecked the eclipse plugin for buildroot,  and it seems to be
-> > configured correctly to use the linker from the buildroot.  Also,  the gdb
-> > debugger is called from the buildroot path.  The segmentation fault occurs
-> > when I run the gdb both manually and also from the eclipse using the plugin
-> > setup.
-> >
-> > I have more information now.  If I select the external toolchain with a
-> > precomplied toolchain instead of the internal glibc toolchain,  then every
-> > thing seems to work fine.  So I guess it might have to do specifically with
-> > the internal glibc toolchain. I understand its still experimental?
-> 
-> The external toolchain may bundle a dynamic linker and C library that are
-> compatible enough with you host's to makes your HelloWorld run correctly. If
-> you try to actually step into the code of the dynamic linker and C library
-> you'll probably hit mismatch problems.
-> 
-> baruch
-> 
-> > On Mar 2, 2014 6:28 AM, Baruch Siach <baruch@tkos.co.il> wrote:
-> > > On Fri, Feb 28, 2014 at 03:58:49PM +0000, Oded Hanson wrote:
-> > > > I have built a target based on a x86_64 architecture. I am booting it for
-> > > > testing on virtualbox (but it also boots with no problem on my target). I am
-> > > > using the buildroot's internal toolchain and the glibc C library (not uclibc
-> > > > !!).  I have tryed few GCC compiler versions and few GDB debugger versions,
-> > > > all resulting with the same issues. Currently using kernel 3.12.x, GCC 4.7.x
-> > > > and GDB 7.4.x.
-> > > >
-> > > > I have compiled a simple helloworld app, using the eclipse plugin for
-> > > > buildroot. I have made sure its using the GCC generated by buildroot.
-> > > >
-> > > > When I run the helloworld application on the target machine, it works fine
-> > > > as expected. However, when I try to remote debug it, it crashes with a
-> > > > segmentation fault right at the start before it even reaches the main.
-> > > >
-> > > > I have performed the same action on my host (since its also x86_64 I can do
-> > > > that :) ) and there, no segmentation fault occurs.
-> > > >
-> > > > I have attached the logs from both the gdbserver (run on the target machine)
-> > > > and the gdb (run on the host), I really hope someone will have an idea,
-> > > > because I have searched the entire internet (literally), and unfortunately I
-> > > > have no clue whats going wrong here:
-> > > >
-> > > > gdb (host):
-> > > >
-> > > > oded at oded-VirtualBox:~/workspace/HelloWorld/debug$ /home/oded/Buildroot/buildroot-2013.11/output/host/usr/bin/x86_64-buildroot-linux-gnu-gdb HelloWorld
-> > > > GNU gdb (GDB) 7.4.1
-> > > > Copyright (C) 2012 Free Software Foundation, Inc.
-> > > > License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
-> > > > This is free software: you are free to change and redistribute it.
-> > > > There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
-> > > > and "show warranty" for details.
-> > > > This GDB was configured as "--host=x86_64-unknown-linux-gnu --target=x86_64-buildroot-linux-gnu".
-> > > > For bug reporting instructions, please see:
-> > > > <http://www.gnu.org/software/gdb/bugs/>...
-> > > > Reading symbols from /home/oded/workspace/HelloWorld/debug/HelloWorld...done.
-> > > > (gdb) target remote 192.168.0.67:2235
-> > > > Remote debugging using 192.168.0.67:2235
-> > > > Reading symbols from /lib64/ld-linux-x86-64.so.2...(no debugging symbols found)...done.
-> > > > Loaded symbols for /lib64/ld-linux-x86-64.so.2
-> > >
-> > > This is wrong. You are using the dynamic linker (and libraries) of your host.
-> > > This doesn't emit an error message just because your host and target
-> > > architectures are identical (x86-64). Try setting sysroot to your buildroot
-> > > staging directory:
-> > >
-> > > (gdb) set sysroot /home/oded/Buildroot/buildroot-2013.11/output/staging
-> > >
-> > > baruch
-> > >
-> > > > 0x00007ffff7dde2c0 in ?? () from /lib64/ld-linux-x86-64.so.2
-> > > > (gdb) continue
-> > > > Continuing.
-> > > >
-> > > > Program received signal SIGSEGV, Segmentation fault.
-> > > > 0x00007ffff7ded14f in ?? () from /lib64/ld-linux-x86-64.so.2
-> > > > (gdb)
-> > > >
-> > > >
-> > > > gdbserver (target):
-> > > >
-> > > > # ./test
-> > > > Hello World#
-> > > > # gdbserver --debug :2235 ./test
-> > > > my_waitpid (954, 0x0)
-> > > > my_waitpid (954, 0x0): status(137f), 954
-> > > > my_waitpid (954, 0x0)
-> > > > my_waitpid (954, 0x0): status(1057f), 954
-> > > > my_waitpid (955, 0x0)
-> > > > my_waitpid (955, 0x0): status(137f), 955
-> > > > my_waitpid (955, 0x0)
-> > > > my_waitpid (955, 0x0): status(9), 955
-> > > > my_waitpid (954, 0x0)
-> > > > my_waitpid (954, 0x0): status(117f), 954
-> > > > my_waitpid (954, 0x0)
-> > > > my_waitpid (954, 0x0): status(9), 954
-> > > > new_argv[0] = "./test"
-> > > > Process ./test created; pid = 956
-> > > > linux_wait: [Process 956]
-> > > > linux_wait_for_lwp: <all threads>
-> > > > my_waitpid (-1, 0x40000000)
-> > > > blocking
-> > > > sigchld_handler
-> > > > my_waitpid (-1, 0x1): status(57f), 956
-> > > > Got an event from 956 (57f)
-> > > > pc is 0x7ffff7dde2c0
-> > > > stop pc is 0x7ffff7dde2bf
-> > > > linux_wait_for_lwp: pc is 0x7ffff7dde2c0
-> > > > Hit a non-gdbserver trap event.
-> > > > wait_for_sigstop: LWP 956 already stopped
-> > > > Checking whether LWP 956 needs to move out of the jump pad...no
-> > > > linux_wait ret = LWP 956.956, 1, 5
-> > > > Listening on port 2235
-> > > > handling possible accept event
-> > > > Remote debugging from host 192.168.0.176
-> > > > linux_async (0), previous=0
-> > > > handling possible serial event
-> > > > handling possible serial event
-> > > > handling possible serial event
-> > > > handling possible serial event
-> > > > handling possible serial event
-> > > > handling possible serial event
-> > > > handling possible serial event
-> > > > handling possible serial event
-> > > > linux_async (0), previous=0
-> > > > handling possible serial event
-> > > > wait_for_sigstop: LWP 956 already stopped
-> > > > Checking whether LWP 956 needs to move out of the jump pad...no
-> > > > Writing resume reply for LWP 956.956:1
-> > > >
-> > > > handling possible serial event
-> > > > handling possible serial event
-> > > > handling possible serial event
-> > > > handling possible serial event
-> > > > handling possible serial event
-> > > > handling possible serial event
-> > > > handling possible serial event
-> > > > handling possible serial event
-> > > > symbol `gdb_agent_gdb_tp_heap_buffer' not found
-> > > > Trying host libthread_db library: libthread_db.so.1.
-> > > > Host libthread_db.so.1 resolved to: /lib/libthread_db.so.1.
-> > > > td_ta_new(): application not linked with libthread
-> > > > thread_db_load_search returning 0
-> > > > handling possible serial event
-> > > > handling possible serial event
-> > > > handling possible serial event
-> > > > handling possible serial event
-> > > > symbol `gdb_agent_gdb_tp_heap_buffer' not found
-> > > > Trying host libthread_db library: libthread_db.so.1.
-> > > > Host libthread_db.so.1 resolved to: /lib/libthread_db.so.1.
-> > > > td_ta_new(): application not linked with libthread
-> > > > thread_db_load_search returning 0
-> > > > handling possible serial event
-> > > > handling possible serial event
-> > > > handling possible serial event
-> > > > handling possible serial event
-> > > > symbol `gdb_agent_gdb_tp_heap_buffer' not found
-> > > > Trying host libthread_db library: libthread_db.so.1.
-> > > > Host libthread_db.so.1 resolved to: /lib/libthread_db.so.1.
-> > > > td_ta_new(): application not linked with libthread
-> > > > thread_db_load_search returning 0
-> > > > handling possible serial event
-> > > > gdbserver/tracepoint: Returning trace status as 0, stop reason tnotrun
-> > > > handling possible serial event
-> > > > gdbserver/tracepoint: Returning first trace state variable definition
-> > > > handling possible serial event
-> > > > gdbserver/tracepoint: Returning first trace state variable definition
-> > > > handling possible serial event
-> > > > gdbserver/tracepoint: Returning first tracepoint definition piece
-> > > > handling possible serial event
-> > > > gdbserver/tracepoint: Returning trace status as 0, stop reason tnotrun
-> > > > handling possible serial event
-> > > > Writing cc to 0x7ffff7ded160
-> > > > handling possible serial event
-> > > > handling possible serial event
-> > > > handling possible serial event
-> > > > Need step over [LWP 956]? No
-> > > > pc is 0x7ffff7dde2c0
-> > > > Need step over [LWP 956]? Cancelling, PC was changed.  Old stop_pc was 0x7ffff7dde2bf, PC is now 0x7ffff7dde2c0
-> > > > Resuming, no pending status or step over needed
-> > > > resuming LWP 956
-> > > > pc is 0x7ffff7dde2c0
-> > > > Resuming lwp 956 (continue, signal 0, stop not expected)
-> > > >   resuming from pc 0x7ffff7dde2c0
-> > > > linux_wait: [<all threads>]
-> > > > linux_wait_for_lwp: <all threads>
-> > > > my_waitpid (-1, 0x40000000)
-> > > > blocking
-> > > > sigchld_handler
-> > > > my_waitpid (-1, 0x1): status(b7f), 956
-> > > > Got an event from 956 (b7f)
-> > > > pc is 0x7ffff7ded14f
-> > > > stop pc is 0x7ffff7ded14f
-> > > > linux_wait_for_lwp: pc is 0x7ffff7ded14f
-> > > > Hit a non-gdbserver trap event.
-> > > > wait_for_sigstop: LWP 956 already stopped
-> > > > Checking whether LWP 956 needs to move out of the jump pad...no
-> > > > linux_wait ret = LWP 956.956, 1, 11
-> > > > Writing resume reply for LWP 956.956:1
-> > > >
-> > > > handling possible serial event
-> > > > Writing cd to 0x7ffff7ded160
-> > > > handling possible serial event
-> > > > handling possible serial event
-> > > > handling possible serial event
-> > > >
-> > > > ?
-> 
-> --
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Of course, if we choose this way, it requires tests.
+
+Comments?
+
+>
+>  * Make the three target packages that actually need host-scons
+>    "depends on !BR2_PACKAGE_PYTHON3". This is a bit ugly, but the next
+>    version of SCons is supposed to support Python 3, so we could
+>    consider it as a temporary solution.
+
+I've just checked out scons repository and it cannot be bootstraped
+with python3 :'(
+
+>
+> Suggestions?
+
+See above ;)
+
+Regards,
+
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Samuel
