@@ -1,77 +1,47 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 02 Mar 2014 15:17:22 +0100
-Subject: [Buildroot] [PATCH v2] manual: clarify
-	Tested-by/Reviewed-by/Acked-by tags
-Message-ID: <7233ff47b45b0a950f77.1393769842@argentina>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 2 Mar 2014 15:20:40 +0100
+Subject: [Buildroot] [git commit] samba: update description and rename
+	patches
+Message-ID: <20140302142224.0B3FC9936E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch updates the manual with more clarified descriptions of tags
-Tested-by, Reviewed-by, and Acked-by, as discussed on the Buildroot
-developer days in February 2014.
+commit: http://git.buildroot.net/buildroot/commit/?id=80ad06e51c24199e15614a6a7c89e06c7fca44c6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-v2: fix mistake Tested-by -> Reviewed-by in comparison with Acked-by (Samuel)
+ package/samba/Config.in                            |    6 +++---
+ ....patch => samba-0001-fix-smbd-libs-avahi.patch} |    0
+ ...addrinfo.patch => samba-0002-getaddrinfo.patch} |    0
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
- docs/manual/contribute.txt |  43 +++++++++++++++++++++++++++++++++++++++--
- 1 files changed, 40 insertions(+), 3 deletions(-)
-
-diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
---- a/docs/manual/contribute.txt
-+++ b/docs/manual/contribute.txt
-@@ -145,10 +145,47 @@ submissions.
- Some tags are used to help following the state of any patch posted on
- the mailing-list:
+diff --git a/package/samba/Config.in b/package/samba/Config.in
+index 1469075..c5b7e48 100644
+--- a/package/samba/Config.in
++++ b/package/samba/Config.in
+@@ -4,9 +4,9 @@ config BR2_PACKAGE_SAMBA
+ 	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_POPT
+ 	help
+-	  Provides print services to all manner of SMB/CIFS clients,
+-	  including the numerous versions of Microsoft Windows
+-	  operating systems.
++	  Provides secure, stable and fast file and print services
++	  for all clients using the SMB/CIFS protocol, such as all
++	  versions of DOS, Windows, OS/2, Linux and many others.
  
--Acked-by:: Indicates that the patch can be committed.
-+Tested-by:: Indicates that the patch has been tested in one way or
-+  another. You are encouraged to specify what kind of testing you
-+  performed (compile-test on architecture X and Y, runtime test on
-+  target A, ...). This additional information helps other testers and
-+  the maintainer.
+ 	  http://www.samba.org/
  
--Tested-by:: Indicates that the patch has been tested. It is useful
--  but not necessary to add a comment about what has been tested.
-+Reviewed-by:: Indicates that you code-reviewed the patch and did your
-+  best in spotting problems, but you are not sufficiently familiar with
-+  the area touched to provide an Acked-by tag. This means that there
-+  may be remaining problems in the patch that would be spotted by
-+  someone with more experience in that area. Should such problems be
-+  detected, your Reviewed-by tag remains appropriate and you cannot
-+  be blamed.
-+
-+Acked-by:: Indicates that you code-reviewed the patch and you are
-+familiar enough with the area touched to feel that the patch can be
-+committed as-is (no additional changes required). In case it later turns
-+out that something is wrong with the patch, your Acked-by could be
-+considered inappropriate. The difference between Acked-by and
-+Reviewed-by is thus mainly that you are prepared to take the blame on
-+Acked patches, but not on Reviewed ones.
-+
-+If you reviewed a patch and have comments on it, you should simply reply
-+to the patch stating these comments, without providing a Reviewed-by or
-+Acked-by tag. These tags should only be provided if you judge the patch
-+to be good as it is.
-+
-+It is important to note that neither Reviewed-by nor Acked-by imply
-+that testing has been performed. To indicate that you both reviewed and
-+tested the patch, provide two separate tags (Reviewed/Acked-by and
-+Tested-by).
-+
-+Note also that _any developer_ can provide Tested/Reviewed/Acked-by
-+tags, without exception, and we encourage everyone to do this. Buildroot
-+does not have a defined group of _core_ developers, it just so happens
-+that some developers are more active than others. The maintainer will
-+value tags according to the track record of their submitter. Tags
-+provided by a regular contributor will naturally be trusted more than
-+tags provided by a newcomer. As you provide tags more regularly, your
-+'trustworthiness' (in the eyes of the maintainer) will go up, but _any_
-+tag provided is valuable.
- 
- Buildroot's Patchwork website can be used to pull in patches for testing
- purposes. Please see xref:apply-patches-patchwork[] for more
+diff --git a/package/samba/samba-fix-smbd-libs-avahi.patch b/package/samba/samba-0001-fix-smbd-libs-avahi.patch
+similarity index 100%
+rename from package/samba/samba-fix-smbd-libs-avahi.patch
+rename to package/samba/samba-0001-fix-smbd-libs-avahi.patch
+diff --git a/package/samba/samba-getaddrinfo.patch b/package/samba/samba-0002-getaddrinfo.patch
+similarity index 100%
+rename from package/samba/samba-getaddrinfo.patch
+rename to package/samba/samba-0002-getaddrinfo.patch
