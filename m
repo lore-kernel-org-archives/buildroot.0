@@ -1,45 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 2 Mar 2014 17:20:58 +0100
-Subject: [Buildroot] Segmentation fault while trying to remote debug
- with GDB and GDBServer
-In-Reply-To: <20140302171008.2014a1e0@skate>
-References: <51ef4c3ec6f84eab802c23a14ecb48ae@DBXPR07MB142.eurprd07.prod.outlook.com>
- <20140302070650.GE3874@tarshish>
- <24eee2c96f804b55ae7767734d5a4f6e@DBXPR07MB142.eurprd07.prod.outlook.com>
- <20140302091205.GF3874@tarshish>
- <29f88dd2071c483bb7102687088ac6b3@DBXPR07MB142.eurprd07.prod.outlook.com>
- <20140302122406.GJ3874@tarshish>
- <99f27349e290444ba06497af087cb0d8@DBXPR07MB142.eurprd07.prod.outlook.com>
- <20140302171008.2014a1e0@skate>
-Message-ID: <20140302172058.5d9a49e1@skate>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 2 Mar 2014 17:48:21 +0100
+Subject: [Buildroot] [PATCH 0/17 v2] Add new virtual-package
+ infrastructure
+In-Reply-To: <CAHXCMMJtEhxwAMb6r1ngWguB-yagGayBpyBvKE4ePiyCv7cy1A@mail.gmail.com>
+References: <cover.1393695127.git.yann.morin.1998@free.fr>
+ <CAHXCMMJtEhxwAMb6r1ngWguB-yagGayBpyBvKE4ePiyCv7cy1A@mail.gmail.com>
+Message-ID: <20140302164821.GA3379@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Samuel, All,
 
-On Sun, 2 Mar 2014 17:10:08 +0100, Thomas Petazzoni wrote:
+On 2014-03-01 20:06 +0100, Samuel Martin spake thusly:
+> On Sat, Mar 1, 2014 at 6:32 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Here is a quick series implementing a new infrastructure for virtual
+> > packages.
+[--SNIP--]
+> [Samuel: for the whole series, with the minor fix in patch 9/17]
+> Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 
-> The Eclipse plugin does set the solib-path (see
-> https://github.com/mbats/eclipse-buildroot-toolchain-plugin/blob/master/org.buildroot.cdt.toolchain/src/org/buildroot/cdt/toolchain/BuildrootLaunchConfigurationTabGroup.java#L70),
-> but that is apparently insufficient for gdb to find the correct dynamic
-> linker, especially when the host and target architectures are identical.
-> 
-> Since there is apparently no way in Eclipse to set a gdb sysroot, I
-> believe the only solution is for the Eclipse plugin to generate a
-> simple gdbinit file:
-> 
-> set sysroot /path/to/staging/directory
-> 
-> and then instruct Eclipse to use it.
+Thanks! :-)
 
-Or now that I think of it, maybe Buildroot should itself generate this
-gdbinit file. It may be useful even for users not using Eclipse.
+I've however removed it from the two previous patches, since they have
+changed quite a lot (due to the rename).
 
-Thomas
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
