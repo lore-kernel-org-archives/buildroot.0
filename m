@@ -1,82 +1,92 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 2 Mar 2014 09:06:50 +0200
+From: Oded Hanson <OHanson@xsightsys.com>
+Date: Sun, 2 Mar 2014 07:23:22 +0000
 Subject: [Buildroot] Segmentation fault while trying to remote debug
  with GDB and GDBServer
-In-Reply-To: <51ef4c3ec6f84eab802c23a14ecb48ae@DBXPR07MB142.eurprd07.prod.outlook.com>
-References: <51ef4c3ec6f84eab802c23a14ecb48ae@DBXPR07MB142.eurprd07.prod.outlook.com>
-Message-ID: <20140302070650.GE3874@tarshish>
+In-Reply-To: <20140302070650.GE3874@tarshish>
+References: <51ef4c3ec6f84eab802c23a14ecb48ae@DBXPR07MB142.eurprd07.prod.outlook.com>,
+ <20140302070650.GE3874@tarshish>
+Message-ID: <1b130230e2e34bbeb1f5b4e2b36a1ccf@DBXPR07MB142.eurprd07.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Sorry.  Missed the reply all :)
+
+Baruch,  is there something in my logs which make you see that im using wrong linker ? Because im looking at the compilation and linking parameters in eclipse and they seem to be pointing to the right path.
+
+Why are you so certain im using the host linker ?
+
+Oded
+
+On Mar 2, 2014 9:07 AM, Baruch Siach <baruch@tkos.co.il> wrote:
 Hi Oded,
 
 Please keep the list on CC so that everyone may benefit from your experience.
 
 On Sun, Mar 02, 2014 at 05:20:25AM +0000, Oded Hanson wrote:
 > Thanks Baruch
-> 
+>
 > Why do you say I am using host linker ? Where can you see that ?
 
-No. Your host GDB is using your host dynamic linker (and libraries) instead of 
-your target's. Your host GDB does not have direct access to your target 
-libraries. The host GDB relies on having access to these files on your host. 
-As you can see from the GDB output you provided, GDB loads 
-/lib64/ld-linux-x86-64.so.2 which is the dynamic linker of your host, and is 
+No. Your host GDB is using your host dynamic linker (and libraries) instead of
+your target's. Your host GDB does not have direct access to your target
+libraries. The host GDB relies on having access to these files on your host.
+As you can see from the GDB output you provided, GDB loads
+/lib64/ld-linux-x86-64.so.2 which is the dynamic linker of your host, and is
 apparently incompatible with your target's one.
 
-> I have rechecked the eclipse plugin for buildroot,? and it seems to be 
-> configured correctly to use the linker from the buildroot.? Also,? the gdb 
-> debugger is called from the buildroot path.? The segmentation fault occurs 
-> when I run the gdb both manually and also from the eclipse using the plugin 
+> I have rechecked the eclipse plugin for buildroot,  and it seems to be
+> configured correctly to use the linker from the buildroot.  Also,  the gdb
+> debugger is called from the buildroot path.  The segmentation fault occurs
+> when I run the gdb both manually and also from the eclipse using the plugin
 > setup.
 >
-> I have more information now.? If I select the external toolchain with a 
-> precomplied toolchain instead of the internal glibc toolchain,? then every 
-> thing seems to work fine.? So I guess it might have to do specifically with 
+> I have more information now.  If I select the external toolchain with a
+> precomplied toolchain instead of the internal glibc toolchain,  then every
+> thing seems to work fine.  So I guess it might have to do specifically with
 > the internal glibc toolchain. I understand its still experimental?
 
-The external toolchain may bundle a dynamic linker and C library that are 
-compatible enough with you host's to makes your HelloWorld run correctly. If 
-you try to actually step into the code of the dynamic linker and C library 
+The external toolchain may bundle a dynamic linker and C library that are
+compatible enough with you host's to makes your HelloWorld run correctly. If
+you try to actually step into the code of the dynamic linker and C library
 you'll probably hit mismatch problems.
 
 baruch
 
 > On Mar 2, 2014 6:28 AM, Baruch Siach <baruch@tkos.co.il> wrote:
 > > On Fri, Feb 28, 2014 at 03:58:49PM +0000, Oded Hanson wrote:
-> > > I have built a target based on a x86_64 architecture. I am booting it for 
-> > > testing on virtualbox (but it also boots with no problem on my target). I am 
-> > > using the buildroot's internal toolchain and the glibc C library (not uclibc 
-> > > !!).? I have tryed few GCC compiler versions and few GDB debugger versions, 
-> > > all resulting with the same issues. Currently using kernel 3.12.x, GCC 4.7.x 
+> > > I have built a target based on a x86_64 architecture. I am booting it for
+> > > testing on virtualbox (but it also boots with no problem on my target). I am
+> > > using the buildroot's internal toolchain and the glibc C library (not uclibc
+> > > !!).  I have tryed few GCC compiler versions and few GDB debugger versions,
+> > > all resulting with the same issues. Currently using kernel 3.12.x, GCC 4.7.x
 > > > and GDB 7.4.x.
-> > > 
-> > > I have compiled a simple helloworld app, using the eclipse plugin for 
+> > >
+> > > I have compiled a simple helloworld app, using the eclipse plugin for
 > > > buildroot. I have made sure its using the GCC generated by buildroot.
-> > > 
-> > > When I run the helloworld application on the target machine, it works fine 
-> > > as expected. However, when I try to remote debug it, it crashes with a 
+> > >
+> > > When I run the helloworld application on the target machine, it works fine
+> > > as expected. However, when I try to remote debug it, it crashes with a
 > > > segmentation fault right at the start before it even reaches the main.
-> > > 
-> > > I have performed the same action on my host (since its also x86_64 I can do 
+> > >
+> > > I have performed the same action on my host (since its also x86_64 I can do
 > > > that :) ) and there, no segmentation fault occurs.
-> > > 
-> > > I have attached the logs from both the gdbserver (run on the target machine) 
-> > > and the gdb (run on the host), I really hope someone will have an idea, 
-> > > because I have searched the entire internet (literally), and unfortunately I 
+> > >
+> > > I have attached the logs from both the gdbserver (run on the target machine)
+> > > and the gdb (run on the host), I really hope someone will have an idea,
+> > > because I have searched the entire internet (literally), and unfortunately I
 > > > have no clue whats going wrong here:
-> > > 
+> > >
 > > > gdb (host):
-> > > 
+> > >
 > > > oded at oded-VirtualBox:~/workspace/HelloWorld/debug$ /home/oded/Buildroot/buildroot-2013.11/output/host/usr/bin/x86_64-buildroot-linux-gnu-gdb HelloWorld
 > > > GNU gdb (GDB) 7.4.1
 > > > Copyright (C) 2012 Free Software Foundation, Inc.
 > > > License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
 > > > This is free software: you are free to change and redistribute it.
-> > > There is NO WARRANTY, to the extent permitted by law.? Type "show copying"
+> > > There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
 > > > and "show warranty" for details.
 > > > This GDB was configured as "--host=x86_64-unknown-linux-gnu --target=x86_64-buildroot-linux-gnu".
 > > > For bug reporting instructions, please see:
@@ -87,9 +97,9 @@ baruch
 > > > Reading symbols from /lib64/ld-linux-x86-64.so.2...(no debugging symbols found)...done.
 > > > Loaded symbols for /lib64/ld-linux-x86-64.so.2
 > >
-> > This is wrong. You are using the dynamic linker (and libraries) of your host. 
-> > This doesn't emit an error message just because your host and target 
-> > architectures are identical (x86-64). Try setting sysroot to your buildroot 
+> > This is wrong. You are using the dynamic linker (and libraries) of your host.
+> > This doesn't emit an error message just because your host and target
+> > architectures are identical (x86-64). Try setting sysroot to your buildroot
 > > staging directory:
 > >
 > > (gdb) set sysroot /home/oded/Buildroot/buildroot-2013.11/output/staging
@@ -99,14 +109,14 @@ baruch
 > > > 0x00007ffff7dde2c0 in ?? () from /lib64/ld-linux-x86-64.so.2
 > > > (gdb) continue
 > > > Continuing.
-> > > 
+> > >
 > > > Program received signal SIGSEGV, Segmentation fault.
 > > > 0x00007ffff7ded14f in ?? () from /lib64/ld-linux-x86-64.so.2
 > > > (gdb)
-> > > 
-> > > 
+> > >
+> > >
 > > > gdbserver (target):
-> > > 
+> > >
 > > > # ./test
 > > > Hello World#
 > > > # gdbserver --debug :2235 ./test
@@ -155,7 +165,7 @@ baruch
 > > > wait_for_sigstop: LWP 956 already stopped
 > > > Checking whether LWP 956 needs to move out of the jump pad...no
 > > > Writing resume reply for LWP 956.956:1
-> > > 
+> > >
 > > > handling possible serial event
 > > > handling possible serial event
 > > > handling possible serial event
@@ -204,12 +214,12 @@ baruch
 > > > handling possible serial event
 > > > Need step over [LWP 956]? No
 > > > pc is 0x7ffff7dde2c0
-> > > Need step over [LWP 956]? Cancelling, PC was changed.? Old stop_pc was 0x7ffff7dde2bf, PC is now 0x7ffff7dde2c0
+> > > Need step over [LWP 956]? Cancelling, PC was changed.  Old stop_pc was 0x7ffff7dde2bf, PC is now 0x7ffff7dde2c0
 > > > Resuming, no pending status or step over needed
 > > > resuming LWP 956
 > > > pc is 0x7ffff7dde2c0
 > > > Resuming lwp 956 (continue, signal 0, stop not expected)
-> > >?? resuming from pc 0x7ffff7dde2c0
+> > >   resuming from pc 0x7ffff7dde2c0
 > > > linux_wait: [<all threads>]
 > > > linux_wait_for_lwp: <all threads>
 > > > my_waitpid (-1, 0x40000000)
@@ -225,16 +235,19 @@ baruch
 > > > Checking whether LWP 956 needs to move out of the jump pad...no
 > > > linux_wait ret = LWP 956.956, 1, 11
 > > > Writing resume reply for LWP 956.956:1
-> > > 
+> > >
 > > > handling possible serial event
 > > > Writing cd to 0x7ffff7ded160
 > > > handling possible serial event
 > > > handling possible serial event
 > > > handling possible serial event
-> > > 
+> > >
 > > > ?
 
--- 
+--
      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
 =}------------------------------------------------ooO--U--Ooo------------{=
    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140302/ff6e8549/attachment.html>
