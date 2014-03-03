@@ -1,40 +1,28 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 03 Mar 2014 12:12:33 +0100
-Subject: [Buildroot] [PATCH 0/4] Brand new website
-In-Reply-To: <20140303085332.18831964@skate>
-References: <1393784504-11327-1-git-send-email-maxime.hadjinlian@gmail.com>
- <20140303085332.18831964@skate>
-Message-ID: <7f720206-4b65-4641-9e61-2f915e1067e0@email.android.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 03 Mar 2014 08:17:28 -0300
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20140303090219.65a08cc7@skate>
+References: <20140303073010.B46B51015B7@stock.ovh.net>
+ <20140303090219.65a08cc7@skate>
+Message-ID: <531464C8.1030201@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> schreef:
->Dear Maxime Hadjinlian,
->
->On Sun,  2 Mar 2014 19:21:40 +0100, Maxime Hadjinlian wrote:
->> This series updates our current website.
->> It also take the occasion to move the README file that was in the docs
->> subdirectory to the root of the project.
->> First by getting Bootstrap and JQuery into it, then reworking the HTML and the
->> content a bit.
->> 
->> Maxime Hadjinlian (4):
->>   docs: Move README file to root
->>   website: Add Bootstrap and JQuery framework
->>   website: Add Buildroot javascript
->>   website: new website !
->
->Unless someone objects, I'm going to apply this tonight. This way, we
->can more easily take incremental improvements as followup patches,
->especially since Maxime Hadjinlian told me that he would not have the
->time to work on another version before next week at least.
->
+On 03/03/2014 05:02 AM, Thomas Petazzoni wrote:
 
-I just posted some typo fixes, but other than that I have no objections. 
-When I last looked at the front page, I did feel that the mailing list ticker trimmed the subject too much, but this could be solved later, maybe with a smaller font in these blocks.
+>>    powerpc |                 libnftnl-1.0.0 | NOK | http://autobuild.buildroot.net/results/568d7fd5a6e6cd8a8e23184d7f977ce812b887fd/
+> 
+> Maybe a kernel headers problem. Gustavo ?
 
-Best regards,
-Thomas
+Hi.
+Definitely.
+That toolchain uses 2.6.38-ish kernel headers but include/linux/socket.h
+has issues, it doesn't define sa_family_t which vanilla does, hence the
+breakage.
+We can either disable libnftnl for that toolchain or consider removing
+it since it's getting old and there doesn't seem to be any new version
+forthcoming for some time now.
+Regards.
