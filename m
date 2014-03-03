@@ -1,48 +1,133 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun, 2 Mar 2014 23:55:54 +0100
-Subject: [Buildroot] [PATCH 0/4] Brand new website
-In-Reply-To: <20140302214010.3e7dac9a@skate>
-References: <1393784504-11327-1-git-send-email-maxime.hadjinlian@gmail.com>
- <CAAXf6LX5Ew_2M4OTjuwCeTqmWt+r6vkmguRk+tXvYcwFd4F+yg@mail.gmail.com>
- <20140302214010.3e7dac9a@skate>
-Message-ID: <CAGduivxkn0Fd2xjFnZnUTKW__u8dBfRodTZRZeYT=rX39Uq3rA@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon,  3 Mar 2014 00:07:01 +0000 (UTC)
+Subject: [Buildroot] [Bug 6944] New: building toolchain for sh4 fails
+Message-ID: <bug-6944-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi ThomasP, ThomasDS, all
+https://bugs.busybox.net/show_bug.cgi?id=6944
 
-On Sun, Mar 2, 2014 at 9:40 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Thomas De Schampheleire,
->
-> On Sun, 2 Mar 2014 21:38:59 +0100, Thomas De Schampheleire wrote:
->
->> On Sun, Mar 2, 2014 at 7:21 PM, Maxime Hadjinlian
->> <maxime.hadjinlian@gmail.com> wrote:
->> > This series updates our current website.
->> > It also take the occasion to move the README file that was in the
->> > docs subdirectory to the root of the project.
->> > First by getting Bootstrap and JQuery into it, then reworking the
->> > HTML and the content a bit.
->> >
->> > Maxime Hadjinlian (4):
->> >   docs: Move README file to root
->> >   website: Add Bootstrap and JQuery framework
->> >   website: Add Buildroot javascript
->> >   website: new website !
->>
->> It seems that patch 2/4 and 4/4 did not make it to the list... could
->> you check?
->
-> Most likely they are too big, and are blocked in moderation. And I
-> don't have access to the moderation interface for the list.
-As ThomasP said, they are blocked in moderation, Peter need to intervene :)
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+           Summary: building toolchain for sh4 fails
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: gdalex at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
+
+
+Hello support,
+
+I'm trying to build a toolchain for Renesas SH4.
+
+The process fails at the end with the following log:
+
+make[3]: Leaving directory
+`/home/g/toolchain/output/build/host-gcc-final-4.7.3/build/gcc'
+make[2]: Leaving directory
+`/home/g/toolchain/output/build/host-gcc-final-4.7.3/build'
+make[1]: Leaving directory
+`/home/g/toolchain/output/build/host-gcc-final-4.7.3/build'
+if [ ! -e /home/g/toolchain/output/host/usr/bin/sh4-buildroot-linux-gnu-cc ];
+then ln -snf sh4-buildroot-linux-gnu-gcc
+/home/g/toolchain/output/host/usr/bin/sh4-buildroot-linux-gnu-cc; fi
+if [ ! -e /home/g/toolchain/output/host/usr/sh4-buildroot-linux-gnu/bin/cc ];
+then ln -snf gcc
+/home/g/toolchain/output/host/usr/sh4-buildroot-linux-gnu/bin/cc; fi
+(cd /home/g/toolchain/output/host/usr/bin; for i in sh4-buildroot-linux-gnu-*;
+do ln -snf $i sh4-linux${i##sh4-buildroot-linux-gnu}; done)
+cp -dpf
+/home/g/toolchain/output/host/usr/sh4-buildroot-linux-gnu/lib*/libgcc_s*
+/home/g/toolchain/output/host/usr/sh4-buildroot-linux-gnu/sysroot/lib/
+cp: cannot stat
+?/home/g/toolchain/output/host/usr/sh4-buildroot-linux-gnu/lib*/libgcc_s*?: No
+such file or directory
+make:
+[/home/g/toolchain/output/build/host-gcc-final-4.7.3/.stamp_host_installed]
+Error 1 (ignored)
+cp -dpf
+/home/g/toolchain/output/host/usr/sh4-buildroot-linux-gnu/lib*/libgcc_s*
+/home/g/toolchain/output/target/lib/
+cp: cannot stat
+?/home/g/toolchain/output/host/usr/sh4-buildroot-linux-gnu/lib*/libgcc_s*?: No
+such file or directory
+make:
+[/home/g/toolchain/output/build/host-gcc-final-4.7.3/.stamp_host_installed]
+Error 1 (ignored)
+mkdir -p /home/g/toolchain/output/target/usr/lib
+for i in  libstdc++ libmudflapth ; do cp -dpf
+/home/g/toolchain/output/host/usr/sh4-buildroot-linux-gnu/lib*/${i}.so*
+/home/g/toolchain/output/host/usr/sh4-buildroot-linux-gnu/sysroot/usr/lib/ ; cp
+-dpf /home/g/toolchain/output/host/usr/sh4-buildroot-linux-gnu/lib*/${i}.a
+/home/g/toolchain/output/host/usr/sh4-buildroot-linux-gnu/sysroot/usr/lib/ ; cp
+-dpf /home/g/toolchain/output/host/usr/sh4-buildroot-linux-gnu/lib*/${i}.so*
+/home/g/toolchain/output/target/usr/lib/ ; done
+cp: cannot stat
+?/home/g/toolchain/output/host/usr/sh4-buildroot-linux-gnu/lib*/libstdc++.so*?:
+No such file or directory
+cp: cannot stat
+?/home/g/toolchain/output/host/usr/sh4-buildroot-linux-gnu/lib*/libstdc++.a?:
+No such file or directory
+cp: cannot stat
+?/home/g/toolchain/output/host/usr/sh4-buildroot-linux-gnu/lib*/libstdc++.so*?:
+No such file or directory
+cp: cannot stat
+?/home/g/toolchain/output/host/usr/sh4-buildroot-linux-gnu/lib*/libmudflapth.so*?:
+No such file or directory
+cp: cannot stat
+?/home/g/toolchain/output/host/usr/sh4-buildroot-linux-gnu/lib*/libmudflapth.a?:
+No such file or directory
+cp: cannot stat
+?/home/g/toolchain/output/host/usr/sh4-buildroot-linux-gnu/lib*/libmudflapth.so*?:
+No such file or directory
+make: ***
+[/home/g/toolchain/output/build/host-gcc-final-4.7.3/.stamp_host_installed]
+Error 1
+g at g-ThinkPad-X220:~/toolchain/buildroot$ 
+
+
+
+
+I'm using the SHA 5970e883419a55f25ea900d776287ae6ea34b62e from the buildroot
+git repo.
+
+The build tries to copy everything that's under
+/home/g/toolchain/output/host/usr/sh4-buildroot-linux-gnu/lib*
+
+Under that, I have only one folder named !m4
+
+
+
+ls -la /home/g/toolchain/output/host/usr/sh4-buildroot-linux-gnu/lib*
+total 12
+drwxr-xr-x 3 g g 4096 Mar  2 14:16 .
+drwxr-xr-x 6 g g 4096 Mar  2 14:23 ..
+drwxr-xr-x 2 g g 4096 Mar  2 18:56 !m4
+
+
+I guess the ! sign confuses the copy command.
+
+I started the build with this command:  make O=../output toolchain
+
+Attached is my config file.
+
+Am I doing something wrong?
+
+
+
+Cheers
+George
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
