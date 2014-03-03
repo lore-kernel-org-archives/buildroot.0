@@ -1,38 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Mar 2014 21:27:14 +0100
-Subject: [Buildroot] [PATCH v2] glibc: needs MMU
-In-Reply-To: <1393871487-2739-1-git-send-email-yann.morin.1998@free.fr>
-References: <1393871487-2739-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20140303212714.21b42ed4@skate>
+Date: Mon, 3 Mar 2014 21:28:39 +0100
+Subject: [Buildroot] [git commit] docs: Move README file to root
+Message-ID: <20140303202914.3300D9BCBA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+commit: http://git.buildroot.net/buildroot/commit/?id=f0d1fbe6f391ee4dc446eabaf5350d0bc4c61374
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  3 Mar 2014 19:31:27 +0100, Yann E. MORIN wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> Like eglibc, glibc is only available to MMU-based architectures.
-> 
-> Re-order select/depends to be in-line with eglibc, just above.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
-> Changes v1 -> v2:
->   - make it really a glibc stuff, not a uClibc one  (Gustavo)
->   - depends/select re-ordering
-> ---
->  toolchain/toolchain-buildroot/Config.in | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+Move the README file from the subdirectory doc to the root.
 
-Applied, thanks.
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ docs/README => README |    0
+ 1 files changed, 0 insertions(+), 0 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/docs/README b/README
+similarity index 100%
+rename from docs/README
+rename to README
