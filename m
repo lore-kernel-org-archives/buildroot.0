@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  3 Mar 2014 23:10:20 +0100
-Subject: [Buildroot] [PATCH 1/7] system: make the zoneinfo list a system
-	option
+Date: Mon,  3 Mar 2014 23:10:21 +0100
+Subject: [Buildroot] [PATCH 2/7] system: add selection of a default localtime
 In-Reply-To: <cover.1393884458.git.yann.morin.1998@free.fr>
 References: <cover.1393884458.git.yann.morin.1998@free.fr>
-Message-ID: <93d239b65ddcb83fa33cbc79eecf5f901526860e.1393884458.git.yann.morin.1998@free.fr>
+Message-ID: <ad568cb0d78ad63dc99ef3cf45ee0722527295db.1393884458.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,134 +13,58 @@ To: buildroot@busybox.net
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-
+[alexandre.belloni: move from "tzdata" to "system configuration"]
+Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+[yann.morin.1998 at free.fr: move into the BR2_TARGET_TZ_INFO conditionnal block]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-Note: because the tzdata package loses its prompt, it defaults
-to 'n'. This means a user will loose his timezone settings,
-unless he selects to install timezone info in the system
-configuration menu.
+ package/tzdata/tzdata.mk |  7 ++++++-
+ system/Config.in         | 14 ++++++++++++++
+ 2 files changed, 20 insertions(+), 1 deletion(-)
 
-We can not add a legacy option for that, or we'd get a circular
-dependency. The only way we'd be fool-proof would be by renaming
-the package altogether, and adding a legacy option for the old
-name.
----
- Config.in.legacy         | 15 +++++++++++++++
- package/tzdata/Config.in | 23 +++--------------------
- package/tzdata/tzdata.mk |  4 ++--
- system/Config.in         | 22 ++++++++++++++++++++++
- 4 files changed, 42 insertions(+), 22 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index afcd3b1..5e2970a 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -184,6 +184,21 @@ config BR2_PACKAGE_XLIB_LIBPTHREAD_STUBS
- ###############################################################################
- comment "Legacy options removed in 2014.02"
- 
-+config BR2_TARGET_TZ_ZONELIST
-+	default BR2_PACKAGE_TZDATA_ZONELIST if BR2_PACKAGE_TZDATA_ZONELIST != ""
-+
-+config BR2_PACKAGE_TZDATA_ZONELIST
-+	string "tzdata: the timezone list option has been renamed"
-+	help
-+	  The option BR2_PACKAGE_TZDATA_ZONELIST has been renamed to
-+	  BR2_TARGET_TZ_ZONELIST, and moved to the "System configuration"
-+	  menu. You'll need to select BR2_TARGET_TZ_INFO.
-+
-+config BR2_PACKAGE_TZDATA_ZONELIST_WRAP
-+	bool
-+	default y if BR2_PACKAGE_TZDATA_ZONELIST != ""
-+	select BR2_LEGACY
-+
- config BR2_sh2
- 	bool "sh2 support removed"
- 	help
-diff --git a/package/tzdata/Config.in b/package/tzdata/Config.in
-index 1be6814..1e6cc0f 100644
---- a/package/tzdata/Config.in
-+++ b/package/tzdata/Config.in
-@@ -1,26 +1,9 @@
--comment "tzdata needs an (e)glibc toolchain"
--	depends on !BR2_TOOLCHAIN_USES_GLIBC
-+# This package is not meant to be user-visible.
-+# It gets selected by BR2_TARGET_TZ in system/Config.in
- 
- config BR2_PACKAGE_TZDATA
--	bool "tzdata"
--	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	bool
- 	help
- 	  Time zone database
- 
- 	  http://www.iana.org/time-zones/repository/tz-link.html
--
--if BR2_PACKAGE_TZDATA
--
--config BR2_PACKAGE_TZDATA_ZONELIST
--	string "Time zone list"
--	default "default"
--	help
--	  Space-separated list of time zones to compile.
--
--	  The value "default" includes all commonly used time zones. Note
--	  that this set consumes around 5.5M.
--
--	  The full list is the list of files in the time zone database source,
--	  not including the build and .tab files.
--
--endif
 diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
-index 1cb5b3f..b6f07e2 100644
+index b6f07e2..c23b3df 100644
 --- a/package/tzdata/tzdata.mk
 +++ b/package/tzdata/tzdata.mk
-@@ -13,10 +13,10 @@ TZDATA_LICENSE = Public domain
- TZDATA_DEFAULT_ZONELIST = africa antarctica asia australasia backward etcetera \
- 			europe factory northamerica pacificnew southamerica
+@@ -39,8 +39,13 @@ define TZDATA_INSTALL_TARGET_CMDS
+ 	cp -a $(@D)/_output/* $(TARGET_DIR)/usr/share/zoneinfo
+ 	cd $(TARGET_DIR)/usr/share/zoneinfo;    \
+ 	for zone in posix/*; do                 \
+-	    ln -sfn "$${zone}" "$${zone##*/}";    \
++	    ln -sfn "$${zone}" "$${zone##*/}";  \
+ 	done
++	if [ -n "$(BR2_TARGET_LOCALTIME)" ]; then                           \
++	    cd $(TARGET_DIR)/etc;                                           \
++	    ln -sf ../usr/share/zoneinfo/$(BR2_TARGET_LOCALTIME) localtime; \
++	    echo "$(BR2_TARGET_LOCALTIME)" >timezone;                       \
++	fi
+ endef
  
--ifeq ($(call qstrip,$(BR2_PACKAGE_TZDATA_ZONELIST)),default)
-+ifeq ($(call qstrip,$(BR2_TARGET_TZ_ZONELIST)),default)
- TZDATA_ZONELIST = $(TZDATA_DEFAULT_ZONELIST)
- else
--TZDATA_ZONELIST = $(call qstrip,$(BR2_PACKAGE_TZDATA_ZONELIST))
-+TZDATA_ZONELIST = $(call qstrip,$(BR2_TARGET_TZ_ZONELIST))
- endif
- 
- # Don't strip any path components during extraction.
+ $(eval $(generic-package))
 diff --git a/system/Config.in b/system/Config.in
-index 89578c5..7ea0208 100644
+index 7ea0208..008369f 100644
 --- a/system/Config.in
 +++ b/system/Config.in
-@@ -265,6 +265,28 @@ config BR2_TARGET_GENERIC_GETTY_OPTIONS
- endmenu
- endif
+@@ -285,6 +285,20 @@ config BR2_TARGET_TZ_ZONELIST
+ 	  The full list is the list of files in the time zone database source,
+ 	  not including the build and .tab files.
  
-+config BR2_TARGET_TZ_INFO
-+	bool "Install timezone info"
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	select BR2_PACKAGE_TZDATA
++config BR2_TARGET_LOCALTIME
++	string "default local time"
 +	help
-+	  Say 'y' here to install timezone info.
++	  The time zone to install as the default local time, expressed as a
++	  tzdata location, such as:
++	    GMT
++	    Europe/Paris
++	    America/New_York
++	    Pacific/Wallis
++	    ...
 +
-+if BR2_TARGET_TZ_INFO
++	  If empty, no local time will be set, and the dates will be
++	  expressed in UTC.
 +
-+config BR2_TARGET_TZ_ZONELIST
-+	string "timezone list"
-+	help
-+	  Space-separated list of time zones to compile.
-+
-+	  The value "default" includes all commonly used time zones. Note
-+	  that this set consumes around 5.5M.
-+
-+	  The full list is the list of files in the time zone database source,
-+	  not including the build and .tab files.
-+
-+endif # BR2_TARGET_TZ_INFO
-+
+ endif # BR2_TARGET_TZ_INFO
+ 
  config BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
- 	bool "remount root filesystem read-write during boot"
- 	default y
 -- 
 1.8.3.2
