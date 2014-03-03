@@ -1,28 +1,39 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 03 Mar 2014 08:17:28 -0300
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Mon, 3 Mar 2014 12:31:45 +0100 (CET)
 Subject: [Buildroot] Analysis of build failures
 In-Reply-To: <20140303090219.65a08cc7@skate>
-References: <20140303073010.B46B51015B7@stock.ovh.net>
- <20140303090219.65a08cc7@skate>
-Message-ID: <531464C8.1030201@zacarias.com.ar>
+Message-ID: <495852511.10469178.1393846305700.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/03/2014 05:02 AM, Thomas Petazzoni wrote:
+Hi Thomas, All
 
->>    powerpc |                 libnftnl-1.0.0 | NOK | http://autobuild.buildroot.net/results/568d7fd5a6e6cd8a8e23184d7f977ce812b887fd/
-> 
-> Maybe a kernel headers problem. Gustavo ?
+| 
+| > microblaze |                     gpm-1.20.7 | NOK |
+| > http://autobuild.buildroot.net/results/e99afadca6de92aad8563006fc7219aa32d77a88/
+| 
+| Strange:
+| 
+| /home/test/test/2/output/host/usr/bin/microblaze-buildroot-linux-gnu-gcc
+| libgpm.so.2 \
+| 	 -L/home/test/test/2/output/build/gpm-1.20.7/src  -o
+| 	 lib/libgpm.so.2.1.0 lib/liblow.lo lib/libhigh.lo lib/libxtra.lo
+| 	 lib/report-lib.lo tools.lo  -lc
+| microblaze-buildroot-linux-gnu-gcc: error: libgpm.so.2: No such file
+| or directory
+| 
+| Spenser ?
 
-Hi.
-Definitely.
-That toolchain uses 2.6.38-ish kernel headers but include/linux/socket.h
-has issues, it doesn't define sa_family_t which vanilla does, hence the
-breakage.
-We can either disable libnftnl for that toolchain or consider removing
-it since it's getting old and there doesn't seem to be any new version
-forthcoming for some time now.
-Regards.
+It's because __ELF__ is not defined in microblaze toolchain :
+checking whether system is ELF... no
+
+If elf format is not enabled then gpm is build statically.
+You may have noticed that qpm static build is disabled in gpm.mk because it's broken.
+
+I can try to fix gpm's static build.
+
+Best regards,
+Romain
