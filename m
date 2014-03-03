@@ -1,45 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Mar 2014 22:04:17 +0100
-Subject: [Buildroot] [PATCH 1/1] pyrex: new package
-In-Reply-To: <1379700560-10738-1-git-send-email-mlweber1@rockwellcollins.com>
-References: <1379700560-10738-1-git-send-email-mlweber1@rockwellcollins.com>
-Message-ID: <20140303220417.6835ec44@skate>
+Date: Mon, 3 Mar 2014 22:07:50 +0100
+Subject: [Buildroot] [git commit] i2c-tools: Add i2c-dev.h to staging
+	directory for userspace i2c drivers.
+Message-ID: <20140303211005.13EB69BCBE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Matt Weber,
+commit: http://git.buildroot.net/buildroot/commit/?id=ff673f9a22b1467878f1a117f2c6198e9683d5c7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 20 Sep 2013 13:09:20 -0500, Matt Weber wrote:
+Signed-off-by: Jouko Nikula <jouko.nikula@espotel.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/i2c-tools/i2c-tools.mk |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-> index 0000000..551c15c
-> --- /dev/null
-> +++ b/package/python-pyrex/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_PYTHON_PYREX
-> +	bool "pyrex"
-> +	depends on BR2_PACKAGE_PYTHON
-> +	help
-> +	  Pyrex is a language for writing Python extension modules
-> +
-> +	  http://www.cosc.canterbury.ac.nz/greg.ewing/python/Pyrex/
-
-If I understand correctly what Pyrex is, it is a tool that generates C
-code that then needs to be compiled with gcc. At least that's what I
-understand from http://ldots.org/pyrex-guide/2-compiling.html.
-
-Therefore, I am wondering how useful it is to support the installation
-of python-pyrex to the target, while we don't have the support for
-providing a compiler on the target.
-
-Is there something I have missed about Pyrex?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
+index c6a967d..450dba7 100644
+--- a/package/i2c-tools/i2c-tools.mk
++++ b/package/i2c-tools/i2c-tools.mk
+@@ -9,6 +9,7 @@ I2C_TOOLS_SOURCE = i2c-tools-$(I2C_TOOLS_VERSION).tar.bz2
+ I2C_TOOLS_SITE = http://dl.lm-sensors.org/i2c-tools/releases
+ I2C_TOOLS_LICENSE = GPLv2+, GPLv2 (py-smbus)
+ I2C_TOOLS_LICENSE_FILES = COPYING
++I2C_TOOLS_INSTALL_STAGING = YES
+ 
+ define I2C_TOOLS_BUILD_CMDS
+  $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+@@ -21,4 +22,8 @@ define I2C_TOOLS_INSTALL_TARGET_CMDS
+ 	done
+ endef
+ 
++define I2C_TOOLS_INSTALL_STAGING_CMDS
++	$(INSTALL) -D -m644 $(@D)/include/linux/i2c-dev.h $(STAGING_DIR)/usr/include/linux/
++endef
++
+ $(eval $(generic-package))
