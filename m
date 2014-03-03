@@ -1,55 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Mar 2014 23:35:51 +0100
-Subject: [Buildroot] [PATCH 1/2] mysql: add option to build the server
-In-Reply-To: <1392244774-15356-1-git-send-email-kuyurix@gmail.com>
-References: <1392244774-15356-1-git-send-email-kuyurix@gmail.com>
-Message-ID: <20140303233551.75c74c6a@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 03 Mar 2014 19:37:17 -0300
+Subject: [Buildroot] UCLIBC_EXTRA_CFLAGS in uClibc overridden while
+ using buildroot
+In-Reply-To: <43F7AEDD312F9E499A1A4E3608E505ED2ABF14F2@SJEXCHMB09.corp.ad.broadcom.com>
+References: <43F7AEDD312F9E499A1A4E3608E505ED2ABF12D3@SJEXCHMB09.corp.ad.broadcom.com>
+ <20130607115530.7132b7b1@skate>
+ <43F7AEDD312F9E499A1A4E3608E505ED2ABF14F2@SJEXCHMB09.corp.ad.broadcom.com>
+Message-ID: <5315041D.9010906@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Marcelo Guti?rrez,
+On 06/07/2013 06:08 PM, Rajendra Dendukuri wrote:
 
-On Wed, 12 Feb 2014 22:39:33 +0000, Marcelo Guti?rrez wrote:
-> From: Marcelo Gutierrez <kuyurix@gmail.com>
-> 
-> 
-> Signed-off-by: Marcelo Gutierrez (UTN/FRH) <kuyurix@gmail.com>
-> ---
->  package/mysql/Config.in                            |    9 +
->  .../mysql-0003-ac_stack_direction-is-unset.patch   |   15 +
->  .../mysql-0004-Fix-gen_lex_hash-execution.patch    |   32 +
->  ...ql-0005-bison_3_breaks_mysql_server_build.patch | 3310 ++++++++++++++++++++
->  package/mysql/mysql.mk                             |   46 +-
->  5 files changed, 3411 insertions(+), 1 deletion(-)
->  create mode 100644 package/mysql/mysql-0003-ac_stack_direction-is-unset.patch
->  create mode 100644 package/mysql/mysql-0004-Fix-gen_lex_hash-execution.patch
->  create mode 100644 package/mysql/mysql-0005-bison_3_breaks_mysql_server_build.patch
+> Thanks for the inputs. The said patch works. Can we get this into release buildroot source tree.
 
-I've applied this, but:
-
- 1/ The package lacks an init script to start the MySQL server
-    automatically.
-
- 2/ When mysqld_safe is started automatically, it looks for stuff
-    in /usr/var that doesn't exist:
-
-700101 00:00:22 mysqld_safe Starting mysqld daemon with databases from /usr/var
-/usr/bin/mysqld_safe: line 595: can't create /usr/var/buildroot.err: nonexistent directory
-/usr/bin/mysqld_safe: eval: line 1: can't create /usr/var/buildroot.err: nonexistent directory
-
- 3/ Peter made some comments that have not been addressed. Since the
-    patch was large, I thought it would be easier to have it merged
-    first, and then do incremental changes.
-
-Could you work on those changes, and submit the corresponding patches?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Hi.
+Revived old thread!
+It may work for your particular case, but generally, it's a bad idea to
+allow tweaking libc build CFLAGS, specially when they're merged with
+package CFLAGS.
+What's the intention of this, fixing some problem or just plain
+optimization?
+The patch as it is right now would break PowerPC SPE ABI toolchains and
+probably Xtensa to a certain degree too (see package/Makefile.in)
+A config option with separate extra CFLAGS for uClibc could be
+introduced, but really, if it's not fixing anything in particular, why?
+If you're fixing some issue in a determined fixed scenario then it might
+be good to make it automatic.
+Regards.
