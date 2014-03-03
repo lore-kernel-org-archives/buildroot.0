@@ -1,55 +1,57 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  3 Mar 2014 23:10:26 +0100
-Subject: [Buildroot] [PATCH 7/7] system: allow setting the local timezone
-	for uClibc
-In-Reply-To: <cover.1393884458.git.yann.morin.1998@free.fr>
-References: <cover.1393884458.git.yann.morin.1998@free.fr>
-Message-ID: <8d077cf232f771f415eb591b285ced22711fba9d.1393884458.git.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 3 Mar 2014 23:09:51 +0100
+Subject: [Buildroot] [git commit] luajit: refactor without shared-lib.patch
+Message-ID: <20140303221045.445FA9BC6F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+commit: http://git.buildroot.net/buildroot/commit/?id=87c28ee58af8f3fdabeda8ad3b71056104442d5d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+the variable BUILDMODE does the job
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- system/Config.in | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ package/luajit/luajit-02-shared-lib.patch |   17 -----------------
+ package/luajit/luajit.mk                  |    1 +
+ 2 files changed, 1 insertions(+), 17 deletions(-)
 
-diff --git a/system/Config.in b/system/Config.in
-index 008369f..cea9429 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -267,8 +267,10 @@ endif
+diff --git a/package/luajit/luajit-02-shared-lib.patch b/package/luajit/luajit-02-shared-lib.patch
+deleted file mode 100644
+index 361e5c2..0000000
+--- a/package/luajit/luajit-02-shared-lib.patch
++++ /dev/null
+@@ -1,17 +0,0 @@
+-Compile the luajit binary dynamically against the luajit library
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Index: b/src/Makefile
+-===================================================================
+---- a/src/Makefile
+-+++ b/src/Makefile
+-@@ -669,7 +669,7 @@
+- 
+- $(LUAJIT_T): $(TARGET_O) $(LUAJIT_O) $(TARGET_DEP)
+- 	$(E) "LINK      $@"
+--	$(Q)$(TARGET_LD) $(TARGET_ALDFLAGS) -o $@ $(LUAJIT_O) $(TARGET_O) $(TARGET_ALIBS)
+-+	$(Q)$(TARGET_LD) $(TARGET_ALDFLAGS) -o $@ $(LUAJIT_O) -lluajit -L. $(TARGET_ALIBS)
+- 	$(Q)$(TARGET_STRIP) $@
+- 	$(E) "OK        Successfully built LuaJIT"
+- 
+diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
+index 72720d8..32596a1 100644
+--- a/package/luajit/luajit.mk
++++ b/package/luajit/luajit.mk
+@@ -44,6 +44,7 @@ define LUAJIT_BUILD_CMDS
+ 		HOST_CFLAGS="$(HOST_CFLAGS)" \
+ 		HOST_LDFLAGS="$(HOST_LDFLAGS)" \
+ 		$(LUAJIT_NO_LARGEFILE) \
++		BUILDMODE=dynamic \
+ 		-C $(@D) amalg
+ endef
  
- config BR2_TARGET_TZ_INFO
- 	bool "Install timezone info"
--	depends on BR2_TOOLCHAIN_USES_GLIBC
--	select BR2_PACKAGE_TZDATA
-+	# No timezone for musl; only for uClibc or (e)glibc.
-+	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC
-+	select BR2_PACKAGE_TZDATA if BR2_TOOLCHAIN_USES_GLIBC
-+	select BR2_PACKAGE_TZ if BR2_TOOLCHAIN_USES_UCLIBC
- 	help
- 	  Say 'y' here to install timezone info.
- 
-@@ -276,11 +278,13 @@ if BR2_TARGET_TZ_INFO
- 
- config BR2_TARGET_TZ_ZONELIST
- 	string "timezone list"
-+	# Only valid for uClibc or (e)glibc
-+	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC
- 	help
- 	  Space-separated list of time zones to compile.
- 
- 	  The value "default" includes all commonly used time zones. Note
--	  that this set consumes around 5.5M.
-+	  that this set consumes around 5.5M for (e)glibc and 2.1M for uClibc.
- 
- 	  The full list is the list of files in the time zone database source,
- 	  not including the build and .tab files.
--- 
-1.8.3.2
