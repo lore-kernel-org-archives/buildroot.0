@@ -1,34 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Mar 2014 21:21:13 +0100
-Subject: [Buildroot] [PATCH 4/4] systemd: uclibc now has
- posix_fallocate()
-In-Reply-To: <1386547663-2678-4-git-send-email-shawn@churchofgit.com>
-References: <1386547663-2678-1-git-send-email-shawn@churchofgit.com>
- <1386547663-2678-4-git-send-email-shawn@churchofgit.com>
-Message-ID: <20140303212113.6a1d1066@skate>
+Date: Mon, 3 Mar 2014 21:25:33 +0100
+Subject: [Buildroot] [PATCH] wget: fix build against uclibc snapshot
+In-Reply-To: <745b175536fa66c2f312ec98feadb25a8c543708.1393837610.git.baruch@tkos.co.il>
+References: <745b175536fa66c2f312ec98feadb25a8c543708.1393837610.git.baruch@tkos.co.il>
+Message-ID: <20140303212533.03c0f4b6@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Shawn Landden,
+Dear Baruch Siach,
 
-On Sun,  8 Dec 2013 16:07:43 -0800, Shawn Landden wrote:
-> uClibc commit 5643900913f64c00f1c29589145
+On Mon,  3 Mar 2014 11:06:50 +0200, Baruch Siach wrote:
+> Same fix as a728e2fe3 (coreutils: fix build against uclibc snapshot).
 > 
-> Signed-off-by: Shawn Landden <shawn@churchofgit.com>
+> uClibc development version adds support for POSIX spawn routines. However,
+> unlike glibc these routines are in librt. This breaks gnulib autoconf
+> detection. Teach gnulib autoconf to look for POSIX spawn in librt.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/bc20297dad0f0e9b7fa79fe835b9754fbce6dfdf/
+> 
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
->  package/systemd/systemd-uclibc-fix.patch | 18 ------------------
->  1 file changed, 18 deletions(-)
+>  .../wget-0001-spawn-fix-link-error-on-uclibc.patch | 40 ++++++++++++++++++++++
+>  package/wget/wget.mk                               |  3 ++
+>  2 files changed, 43 insertions(+)
+>  create mode 100644 package/wget/wget-0001-spawn-fix-link-error-on-uclibc.patch
 
-Thanks, but we have now bumped systemd to version 207, and this new
-version caused too much problems with uClibc, so we've made it depend
-on (e)glibc. As a consequence, your patch is no longer necessary.
-
-Do not hesitate to let us know if the new systemd version works for you.
-
-Thanks a lot!
+Applied, thanks.
 
 Thomas
 -- 
