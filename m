@@ -1,35 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Mar 2014 21:25:33 +0100
-Subject: [Buildroot] [PATCH] wget: fix build against uclibc snapshot
-In-Reply-To: <745b175536fa66c2f312ec98feadb25a8c543708.1393837610.git.baruch@tkos.co.il>
-References: <745b175536fa66c2f312ec98feadb25a8c543708.1393837610.git.baruch@tkos.co.il>
-Message-ID: <20140303212533.03c0f4b6@skate>
+Date: Mon, 3 Mar 2014 21:26:29 +0100
+Subject: [Buildroot] [PATCH] samba4: fix readline support
+In-Reply-To: <1393847052-13062-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1393847052-13062-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140303212629.422c3d21@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+Dear Gustavo Zacarias,
 
-On Mon,  3 Mar 2014 11:06:50 +0200, Baruch Siach wrote:
-> Same fix as a728e2fe3 (coreutils: fix build against uclibc snapshot).
+On Mon,  3 Mar 2014 08:44:12 -0300, Gustavo Zacarias wrote:
+> Add automatic readilne support since it's used when available.
+> Also add a patch to update to new-style typedefs that were removed from
+> readline 6.3 that causes build breakage. Fixes:
+> http://autobuild.buildroot.net/results/b13/b137c237ff6df81dd10f7895278d1f2f5d2326de/
 > 
-> uClibc development version adds support for POSIX spawn routines. However,
-> unlike glibc these routines are in librt. This breaks gnulib autoconf
-> detection. Teach gnulib autoconf to look for POSIX spawn in librt.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/bc20297dad0f0e9b7fa79fe835b9754fbce6dfdf/
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  .../wget-0001-spawn-fix-link-error-on-uclibc.patch | 40 ++++++++++++++++++++++
->  package/wget/wget.mk                               |  3 ++
->  2 files changed, 43 insertions(+)
->  create mode 100644 package/wget/wget-0001-spawn-fix-link-error-on-uclibc.patch
+>  ...line-switch-to-new-style-readline-typedef.patch | 32 ++++++++++++++++++++++
+>  package/samba4/samba4.mk                           |  3 +-
+>  2 files changed, 34 insertions(+), 1 deletion(-)
+>  create mode 100644 package/samba4/samba4-0006-smbreadline-switch-to-new-style-readline-typedef.patch
 
-Applied, thanks.
+Thanks, applied, after fixing the minor nit noticed by Baruch.
 
 Thomas
 -- 
