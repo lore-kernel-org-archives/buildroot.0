@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Mar 2014 23:40:31 +0100
-Subject: [Buildroot] [PATCH 07/11] python-numpy: new package
-In-Reply-To: <1392588004-13317-8-git-send-email-s.martin49@gmail.com>
+Date: Mon, 3 Mar 2014 23:42:19 +0100
+Subject: [Buildroot] [PATCH 08/11] python-numpy: add install-staging
+ command
+In-Reply-To: <1392588004-13317-9-git-send-email-s.martin49@gmail.com>
 References: <1392588004-13317-1-git-send-email-s.martin49@gmail.com>
- <1392588004-13317-8-git-send-email-s.martin49@gmail.com>
-Message-ID: <20140303234031.0b9848ed@skate>
+ <1392588004-13317-9-git-send-email-s.martin49@gmail.com>
+Message-ID: <20140303234219.19a2f7e0@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +14,47 @@ To: buildroot@busybox.net
 
 Dear Samuel Martin,
 
-On Sun, 16 Feb 2014 23:00:00 +0100, Samuel Martin wrote:
+On Sun, 16 Feb 2014 23:00:01 +0100, Samuel Martin wrote:
+> Some packages may include headers provided by python-numpy package.
+> So, also install it in the sysroot.
+> 
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> ---
+>  package/python-numpy/python-numpy.mk | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+> 
+> diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
+> index c082045..ff70cfe 100644
+> --- a/package/python-numpy/python-numpy.mk
+> +++ b/package/python-numpy/python-numpy.mk
+> @@ -28,4 +28,21 @@ define PYTHON_NUMPY_CONFIGURE_CMDS
+>  		echo "    $(lib)" >> $(@D)/site.cfg ;)
+>  endef
+>  
+> +# Some package may include few headers from NumPy, so let's install it in the
+> +# staging area.
+> +PYTHON_NUMPY_INSTALL_STAGING = YES
+> +
+> +# This install staging commands is an adjusted and simplified version of the
+> +# install target commands vampirized from the python-package infrastructure.
+> +#
+> +# Note that the append '--prefix=...' parameter overrides the one set by the
+> +# python-package infrastructure in the PYTHON_NUMPY_INSTALL_OPT variable.
+> +define PYTHON_NUMPY_INSTALL_STAGING_CMDS
+> +	(cd $(PYTHON_NUMPY_BUILDDIR)/; \
 
-> +if BR2_PACKAGE_PYTHON_NUMPY
-> +config BR2_PACKAGE_PYTHON_NUMPY_BLAS_LAPACK_SUPPORT
-> +	bool "blas/lapack support"
-> +	select BR2_PACKAGE_CLAPACK
-> +endif
+This can be $(@D), no ?
 
-Any reason why we don't automatically enable blas/lapack support when
-available? Also, I'd prefer to have the optional blas/lapack support
-available as a separate patch from the package addition itself, so that
-python-numpy can be applied independently from blas/lapack.
+> +		$(PYTHON_NUMPY_BASE_ENV) $(PYTHON_NUMPY_ENV) \
+> +		$(HOST_DIR)/usr/bin/python setup.py install \
+> +		$(PYTHON_NUMPY_BASE_INSTALL_OPT) \
+> +		$(PYTHON_NUMPY_INSTALL_OPT) --prefix=$(STAGING_DIR)/usr)
+> +endef
+> +
+>  $(eval $(python-package))
 
-Thanks,
+Also, any reason for having this separated from the package addition
+itself?
 
 Thomas
 -- 
