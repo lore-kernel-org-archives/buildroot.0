@@ -1,63 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Mar 2014 22:22:06 +0100
-Subject: [Buildroot] [git commit] linux: only depend on host-lzop if needed
-Message-ID: <20140303212321.09FDC9B9F2@busybox.osuosl.org>
+Date: Mon, 3 Mar 2014 22:22:18 +0100
+Subject: [Buildroot] [git commit] linux: check the configuration file exists
+Message-ID: <20140303212321.1E6199B9F2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ca80782f4571f004c2b8cf2d0e60e83343beff34
+commit: http://git.buildroot.net/buildroot/commit/?id=b4cacbf5b15db06132b5f401d39b4c8d4e79158e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-There is no reason to always depend on host-lzop, even when the kernel
-compression is not LZO.
+... and abort early, before we even use it.
 
-Since LZO is not the default compression option in the kernel (and there
-is not sign that will change in the foreseeable future), it will always
-appear in a config file, whether it is a complete config file or it is
-only a defconfig.
-
-So, only depend on host-lzop if the LZO compression is enabled in the
-kernel config file (either the defconfig or the custom config file).
-This includes:
-  - kernel compression itself
-  - initrd compression
-  - initramfs compression
-
+Reported-by: Peter Korsgaard <jacmet@uclibc.org>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/linux.mk |   11 +++++++++--
- 1 files changed, 9 insertions(+), 2 deletions(-)
+ linux/linux.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
 diff --git a/linux/linux.mk b/linux/linux.mk
-index f948e6c..cf728aa 100644
+index cf728aa..ec7dfc3 100644
 --- a/linux/linux.mk
 +++ b/linux/linux.mk
-@@ -41,7 +41,7 @@ endif
- LINUX_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
- 
- LINUX_INSTALL_IMAGES = YES
--LINUX_DEPENDENCIES  += host-kmod host-lzop
-+LINUX_DEPENDENCIES  += host-kmod
- 
- ifeq ($(BR2_LINUX_KERNEL_UBOOT_IMAGE),y)
- 	LINUX_DEPENDENCIES += host-uboot-tools
-@@ -163,7 +163,14 @@ LINUX_POST_PATCH_HOOKS += LINUX_APPLY_PATCHES
- ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
- KERNEL_SOURCE_CONFIG = $(KERNEL_ARCH_PATH)/configs/$(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))_defconfig
- else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
--KERNEL_SOURCE_CONFIG = $(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE)
-+KERNEL_SOURCE_CONFIG = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE))
-+endif
-+
-+ifeq ($(call KCONFIG_GET_OPT,CONFIG_KERNEL_LZO,$(KERNEL_SOURCE_CONFIG)),y)
-+LINUX_DEPENDENCIES += host-lzop
-+endif
-+ifeq ($(call KCONFIG_GET_OPT,CONFIG_RD_LZO,$(KERNEL_SOURCE_CONFIG)),y)
-+LINUX_DEPENDENCIES += host-lzop
+@@ -166,6 +166,10 @@ else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
+ KERNEL_SOURCE_CONFIG = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE))
  endif
  
- define LINUX_CONFIGURE_CMDS
++ifeq ($(wildcard $(KERNEL_SOURCE_CONFIG)),)
++$(error Configuration file '$(KERNEL_SOURCE_CONFIG)' not found.)
++endif
++
+ ifeq ($(call KCONFIG_GET_OPT,CONFIG_KERNEL_LZO,$(KERNEL_SOURCE_CONFIG)),y)
+ LINUX_DEPENDENCIES += host-lzop
+ endif
