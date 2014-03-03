@@ -1,45 +1,67 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 3 Mar 2014 10:38:19 +0100
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <20140303090219.65a08cc7@skate>
-References: <20140303073010.B46B51015B7@stock.ovh.net>
- <20140303090219.65a08cc7@skate>
-Message-ID: <CAHXCMMLUY6+eN6EzqVBk-=o0MO4QZktyRsmTHSFcRhX7B4Jk2Q@mail.gmail.com>
+From: Michael D <me@md-5.net>
+Date: Mon, 03 Mar 2014 20:48:47 +1100
+Subject: [Buildroot] Addition of packages: libvirt & qemu (target)
+Message-ID: <53144FFF.10702@md-5.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, all,
+Hi guys,
 
-On Mon, Mar 3, 2014 at 9:02 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Mon,  3 Mar 2014 08:30:10 +0100 (CET), Thomas Petazzoni wrote:
->
->>     mipsel |                     crda-1.1.3 | NOK | http://autobuild.buildroot.net/results/a1e53d66d3962fd5431e7601937b071a0a3c2084/
->>     x86_64 |                     crda-1.1.3 | NOK | http://autobuild.buildroot.net/results/b363c63b5dda7d55c3bd4c6aedc10666471113ad/
->
-> Problem of host python being Python 3 and not Python 2.
->
-[...]
->>        arm |               host-scons-2.3.0 | NOK | http://autobuild.buildroot.net/results/11e6c8c8d79d56ed43daf52e6d6dc80847709926/
->>        arm |               host-scons-2.3.0 | NOK | http://autobuild.buildroot.net/results/d75722fe096fc1ddbf62a51207b44b3cdbb6fed8/
->>    powerpc |               host-scons-2.3.0 | NOK | http://autobuild.buildroot.net/results/09a7de5ef086005b2f003ccd58ee1dae268c26a1/
->
-> Problem of host python being Python 3 and not Python 2.
-[...]
+First up, thanks for buildroot, its a really cool tool, and I've enjoyed 
+using it thus far. After some discussion on IRC with y_morin, I'd like 
+to put forward that the libvirt package is added, and that qemu is 
+adapted to support being installed on the target as well. libvirt is a 
+fairly standard autotools package, and shouldn't require much work, 
+although I did notice ./configure checked for some host qemu binaries.
 
-I've started looking at this host-python2 thing.
+You can see Yann's work on libvirt and target-qemu here:
+https://gitorious.org/buildroot/buildroot/source/e09cf6e8d412cfd6163358fc7f58c83f44cc0a38:package/libvirt
+https://gitorious.org/buildroot/buildroot/source/14ac053363188981cf7fb78b589a9e27fb464483:package/qemu
 
-So far, I have something working for host-scons, host-python-m2crypto and crda.
-I still have to look at samba4, and cleanup the patches before
-submitting them ;)
+and my inexperienced, hackjob work over here, updates the packages to 
+their latest versions and removes unneeded depends:
+https://github.com/md-5/Multiplicity/tree/master/package
 
+libvirt requires the following depends to work:
 
-Regards,
+host-pkgconf lvm2 libnl libxml2 yajl
 
+In order for the configure script to detect yajl properly, it needs a 
+(e)glibc toolchain. This is due to yajl requiring -lm, which is not 
+linked into the test binary. A better solution than requiring (e)glibc 
+would be to patch libvirt's ./configure to link in -lm for the yajl 
+test. Yann's work on libvirt also depends on
 
-Samuel
+libgcrypt and gnutls
+
+which I assume add extra features. Ideally libvirt's depend section 
+should be updated if these (and any other feature enhancing) packages 
+are selected.
+
+Building Qemu for the target on the other hand is quite a bit more 
+complex due to the sheer number of configuration options available. In 
+particular it depends on a x86 based toolchain with threads, and
+
+host-pkgconf host-python libglib2 pixman
+
+I'm reasonably sure Qemu can compile and run on other arches, however 
+Yann has not included support for this. Ideally the final package in 
+buildroot would only require these 4 libraries to build, additional 
+depends and features should be added with their necessary options and 
+installed if desired (util-linux, some sound libraries, and a lot of 
+graphics libraries for jpg/png manipulation).
+
+Anyway, enough of me talking, it would be great to see these two 
+packages become properly integrated into buildroot, and I am hoping 
+someone can manage it.
+
+If it helps sweeten the deal, I'll be more than happy to donate some 
+beer money to the successful contributors, or donate to the buildroot 
+project. I'll also be more than happy to make sure these packages stay 
+updated and working.
+
+Thanks
+Michael Dardis
