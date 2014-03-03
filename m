@@ -1,56 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Mar 2014 08:47:02 +0100
-Subject: [Buildroot] [PATCH 1/1] zeromq: bump to version 4.0.1
-In-Reply-To: <CAKAx1cj3DKFEcSjtw2-d1y3sZSO9y6kpvE6ZGjRdycnNAAugMw@mail.gmail.com>
-References: <1381509097-5424-1-git-send-email-jerzy.grzegorek@trzebnica.net>
- <20140301232520.4ee4b22b@skate>
- <CAKAx1cj3DKFEcSjtw2-d1y3sZSO9y6kpvE6ZGjRdycnNAAugMw@mail.gmail.com>
-Message-ID: <20140303084702.7790637d@skate>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon,  3 Mar 2014 07:52:11 +0000 (UTC)
+Subject: [Buildroot] [Bug 6944] building toolchain for sh4 fails
+In-Reply-To: <bug-6944-163@https.bugs.busybox.net/>
+References: <bug-6944-163@https.bugs.busybox.net/>
+Message-ID: <20140303075211.559539BCC1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Lionel Orry,
+https://bugs.busybox.net/show_bug.cgi?id=6944
 
-On Mon, 3 Mar 2014 07:51:45 +0100, Lionel Orry wrote:
+--- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2014-03-03 07:52:07 UTC ---
+Aah, glad to see we have a SuperH user!
 
-> > I tried to apply this patch, but unfortunately, it apparently breaks
-> > the build of mongrel2:
-> >
-> > src/superpoll.c: In function 'SuperPoll_poll':
-> > src/superpoll.c:229:53: error: 'ZMQ_POLL_MSEC' undeclared (first use in this function)
-> > src/superpoll.c:229:53: note: each undeclared identifier is reported only once for each function it appears in
-> >
-> > I've checked the other reverse dependencies of zeromq, and they seem to
-> > build fine.
-> >
-> > Can you find a solution to the mongrel2 problem, and resubmit the
-> > appropriate patch?
-> 
-> Such a patch would fix compilation, but the fact is this version of
+This problem is well-known (at least to me). The issue is that gcc for SH4
+insists on being multilib, to all the libraries are not directly in the sysroot
+but in some directory named "!m4" if I remember correctly. This confuses the
+Buildroot toolchain logic, which assumes the toolchain is not multilib.
 
-What do you mean by "such a patch" ? Maybe you forgot to attach a patch
-to your e-mail?
+Moreover, the other problem we have with SH4 is that to be able a kernel, you
+really need to have the m4-nofpu multilib variant, in addition to the m4 one.
+This is why configs/qemu_sh4_r2d_defconfig has this special configuration
+option:
 
-> Mongrel2 was not tested with ZeroMQ v4 and greater
-> and I don't know if we can simply bump its version like that. Maybe we
-> can but I am not 100% sure.
-> 
-> On another hand, mongrel2 development is becoming active again and
-> they are trying to prepare a release, so I will try to check there if
-> they ensure zeromq4 compliance and tested it. I will get back to you
-> when I can on this subject.
+BR2_EXTRA_GCC_CONFIG_OPTIONS="--with-multilib-list=m4,m4-nofpu"
 
-Ok, thanks!
+At this point, I must say I am not sure how this problem should be fixed
+exactly.
 
-Does ZeroMQ v4 changes the API/behavior a lot compared to v3 ?
+Do you have some good knowledge of the SuperH architecture variants? That would
+be very helpful: we lack some contributors using SuperH and having some minimal
+knowledge of the architecture.
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
