@@ -1,88 +1,55 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  3 Mar 2014 23:10:25 +0100
-Subject: [Buildroot] [PATCH 6/7] tz: new package
+Date: Mon,  3 Mar 2014 23:10:26 +0100
+Subject: [Buildroot] [PATCH 7/7] system: allow setting the local timezone
+	for uClibc
 In-Reply-To: <cover.1393884458.git.yann.morin.1998@free.fr>
 References: <cover.1393884458.git.yann.morin.1998@free.fr>
-Message-ID: <24914ab154e3d4fe029ecd36af73097db2cb129d.1393884458.git.yann.morin.1998@free.fr>
+Message-ID: <8d077cf232f771f415eb591b285ced22711fba9d.1393884458.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-uClibc can not use timezone info from tzdata as-is, but accepts setting
-the local timezone in /etc/TZ.
-
-Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-[yann.morin.1998 at free.fr: make it a blind package; little tweak to help text]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
 ---
- package/Config.in    |  1 +
- package/tz/Config.in |  4 ++++
- package/tz/tz.mk     | 30 ++++++++++++++++++++++++++++++
- 3 files changed, 35 insertions(+)
- create mode 100644 package/tz/Config.in
- create mode 100644 package/tz/tz.mk
+ system/Config.in | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 417c9b8..68d1f33 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -800,6 +800,7 @@ source "package/protobuf/Config.in"
- source "package/protobuf-c/Config.in"
- source "package/schifra/Config.in"
- source "package/startup-notification/Config.in"
-+source "package/tz/Config.in"
- source "package/tzdata/Config.in"
- source "package/zlog/Config.in"
- endmenu
-diff --git a/package/tz/Config.in b/package/tz/Config.in
-new file mode 100644
-index 0000000..943dc5c
---- /dev/null
-+++ b/package/tz/Config.in
-@@ -0,0 +1,4 @@
-+config BR2_PACKAGE_TZ
-+	bool
-+	help
-+	  Timezone info for uClibc.
-diff --git a/package/tz/tz.mk b/package/tz/tz.mk
-new file mode 100644
-index 0000000..e74c41b
---- /dev/null
-+++ b/package/tz/tz.mk
-@@ -0,0 +1,30 @@
-+################################################################################
-+#
-+# tz
-+#
-+################################################################################
-+
-+TZ_SOURCE =
-+TZ_DEPENDENCIES = host-tzdata host-tzdump
-+TZ_LICENSE = Public domain
-+
-+define TZ_BUILD_CMDS
-+	(cd $(HOST_DIR)/usr/share/zoneinfo/posix/;                 \
-+		for i in $$(find . -type f); do                    \
-+			mkdir -p $(@D)/output/$$(dirname $$i);         \
-+			$(TZDUMP) -p . -q $${i#./} > $(@D)/output/$$i; \
-+		done                                               \
-+	)
-+endef
-+
-+define TZ_INSTALL_TARGET_CMDS
-+	mkdir -p $(TARGET_DIR)/usr/share/zoneinfo/uclibc
-+	cp -a $(@D)/output/* $(TARGET_DIR)/usr/share/zoneinfo/uclibc
-+	if [ -n "$(BR2_TARGET_LOCALTIME)" ]; then                     \
-+		ln -sf /usr/share/zoneinfo/uclibc/$(BR2_TARGET_LOCALTIME) \
-+			$(TARGET_DIR)/etc/TZ;                                 \
-+	fi
-+
-+endef
-+
-+$(eval $(generic-package))
+diff --git a/system/Config.in b/system/Config.in
+index 008369f..cea9429 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -267,8 +267,10 @@ endif
+ 
+ config BR2_TARGET_TZ_INFO
+ 	bool "Install timezone info"
+-	depends on BR2_TOOLCHAIN_USES_GLIBC
+-	select BR2_PACKAGE_TZDATA
++	# No timezone for musl; only for uClibc or (e)glibc.
++	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC
++	select BR2_PACKAGE_TZDATA if BR2_TOOLCHAIN_USES_GLIBC
++	select BR2_PACKAGE_TZ if BR2_TOOLCHAIN_USES_UCLIBC
+ 	help
+ 	  Say 'y' here to install timezone info.
+ 
+@@ -276,11 +278,13 @@ if BR2_TARGET_TZ_INFO
+ 
+ config BR2_TARGET_TZ_ZONELIST
+ 	string "timezone list"
++	# Only valid for uClibc or (e)glibc
++	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC
+ 	help
+ 	  Space-separated list of time zones to compile.
+ 
+ 	  The value "default" includes all commonly used time zones. Note
+-	  that this set consumes around 5.5M.
++	  that this set consumes around 5.5M for (e)glibc and 2.1M for uClibc.
+ 
+ 	  The full list is the list of files in the time zone database source,
+ 	  not including the build and .tab files.
 -- 
 1.8.3.2
