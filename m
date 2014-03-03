@@ -1,129 +1,73 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Mon,  3 Mar 2014 08:19:58 +0100
-Subject: [Buildroot] [PATCH v2] zlog: new package
-Message-ID: <1393831198-2788-1-git-send-email-yegorslists@googlemail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon,  3 Mar 2014 08:30:10 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-03-02
+Message-ID: <20140303073010.B46B51015B7@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Build statistics for 2014-03-02
+===============================
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
-Change:
-	v2: add !BR2_PREFER_STATIC_LIB dependency, fix license and remove unneeded PATH definitions
+        success : 90 
+       failures : 27 
+       timeouts : 0  
+          TOTAL : 117
 
- package/Config.in                                  |    1 +
- package/zlog/Config.in                             |   13 ++++++++
- .../zlog/zlog-01-fix-compiling-on-Buildroot.patch  |   32 ++++++++++++++++++++
- package/zlog/zlog.mk                               |   26 ++++++++++++++++
- 4 files changed, 72 insertions(+), 0 deletions(-)
- create mode 100644 package/zlog/Config.in
- create mode 100644 package/zlog/zlog-01-fix-compiling-on-Buildroot.patch
- create mode 100644 package/zlog/zlog.mk
+Classification of failures by reason
+====================================
 
-diff --git a/package/Config.in b/package/Config.in
-index ab91719..8cbcd73 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -782,6 +782,7 @@ source "package/protobuf-c/Config.in"
- source "package/schifra/Config.in"
- source "package/startup-notification/Config.in"
- source "package/tzdata/Config.in"
-+source "package/zlog/Config.in"
- endmenu
- 
- menu "Security"
-diff --git a/package/zlog/Config.in b/package/zlog/Config.in
-new file mode 100644
-index 0000000..4217370
---- /dev/null
-+++ b/package/zlog/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_ZLOG
-+	bool "zlog"
-+	depends on BR2_LARGEFILE
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_PREFER_STATIC_LIB
-+	help
-+	  zlog is a reliable, high-performance, thread safe, flexible,
-+	  clear-model, pure C logging library.
-+
-+	  https://github.com/HardySimpson/zlog
-+
-+comment "zlog needs a toolchain w/ threads, largefile, dynamic library"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE || BR2_PREFER_STATIC_LIB
-diff --git a/package/zlog/zlog-01-fix-compiling-on-Buildroot.patch b/package/zlog/zlog-01-fix-compiling-on-Buildroot.patch
-new file mode 100644
-index 0000000..32aa7d6
---- /dev/null
-+++ b/package/zlog/zlog-01-fix-compiling-on-Buildroot.patch
-@@ -0,0 +1,32 @@
-+From a9f6a55bdb29a2bebc96a68ab53077906c25a9df Mon Sep 17 00:00:00 2001
-+From: Yegor Yefremov <yegorslists@googlemail.com>
-+Date: Wed, 22 Jan 2014 15:04:42 +0100
-+Subject: [PATCH] Fix compiling on Buildroot
-+
-+Buildroot always specifies -D_LARGEFILE_SOURCE, -D_LARGEFILE64_SOURCE,
-+-D_FILE_OFFSET_BITS=64, so define them only if they are not already
-+defined.
-+
-+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-+---
-+ src/fmacros.h |    4 ++++
-+ 1 files changed, 4 insertions(+), 0 deletions(-)
-+
-+diff --git a/src/fmacros.h b/src/fmacros.h
-+index fa37948..059dfeb 100644
-+--- a/src/fmacros.h
-++++ b/src/fmacros.h
-+@@ -14,7 +14,11 @@
-+ #define _XOPEN_SOURCE
-+ #endif
-+
-++#ifndef _LARGEFILE_SOURCE
-+ #define _LARGEFILE_SOURCE
-++#endif
-++#ifndef _FILE_OFFSET_BITS
-+ #define _FILE_OFFSET_BITS 64
-++#endif
-+
-+ #endif
-+--
-+1.7.7
-diff --git a/package/zlog/zlog.mk b/package/zlog/zlog.mk
-new file mode 100644
-index 0000000..fb8762c
---- /dev/null
-+++ b/package/zlog/zlog.mk
-@@ -0,0 +1,26 @@
-+################################################################################
-+#
-+# zlog
-+#
-+################################################################################
-+
-+ZLOG_VERSION = ca6162be1608839e99c6388c28488c51ccf98e4a
-+ZLOG_SITE = $(call github,HardySimpson,zlog,$(ZLOG_VERSION))
-+ZLOG_LICENSE = LGPLv2.1
-+ZLOG_LICENSE_FILES = COPYING
-+ZLOG_INSTALL_STAGING = YES
-+
-+define ZLOG_BUILD_CMDS
-+	$(MAKE1) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" \
-+		-C $(@D) all
-+endef
-+
-+define ZLOG_INSTALL_STAGING_CMDS
-+	$(MAKE) PREFIX=$(STAGING_DIR)/usr -C $(@D) install
-+endef
-+
-+define ZLOG_INSTALL_TARGET_CMDS
-+	$(MAKE) PREFIX=$(TARGET_DIR)/usr -C $(@D) install
-+endef
-+
-+$(eval $(generic-package))
+              host-scons-2.3.0 | 3 
+  toolchain-external-undefined | 3 
+                    parted-3.1 | 3 
+                       kmod-16 | 2 
+                    crda-1.1.3 | 2 
+czmq-b5730c5f8290a611fd3b92... | 2 
+                 lvm2-2.02.103 | 2 
+                   lftp-4.4.15 | 1 
+                    gpm-1.20.7 | 1 
+                   systemd-207 | 1 
+                libnftnl-1.0.0 | 1 
+make: *** [systemd-legal-in... | 1 
+                    fbgrab-1.2 | 1 
+          sane-backends-1.0.22 | 1 
+                     wget-1.15 | 1 
+libwebsockets-v1.22-chrome2... | 1 
+                     eudev-1.3 | 1 
+
+Detail of failures
+===================
+
+    mipsel |                     crda-1.1.3 | NOK | http://autobuild.buildroot.net/results/a1e53d66d3962fd5431e7601937b071a0a3c2084/
+    x86_64 |                     crda-1.1.3 | NOK | http://autobuild.buildroot.net/results/b363c63b5dda7d55c3bd4c6aedc10666471113ad/
+      bfin | czmq-b5730c5f8290a611fd3b92... | NOK | http://autobuild.buildroot.net/results/8f8b479ac11ed35a7b20d94567bb446044dd02d4/
+      bfin | czmq-b5730c5f8290a611fd3b92... | NOK | http://autobuild.buildroot.net/results/ba626190b8019a73ecce74b1eb07eed4ec79ae56/
+    x86_64 |                      eudev-1.3 | NOK | http://autobuild.buildroot.net/results/3a0238bd1170f2e7d1257e4756553f6e2f4a1268/
+    x86_64 |                     fbgrab-1.2 | NOK | http://autobuild.buildroot.net/results/9e079632a6c0556c96ec8ed7564286aa84044bf7/
+microblaze |                     gpm-1.20.7 | NOK | http://autobuild.buildroot.net/results/e99afadca6de92aad8563006fc7219aa32d77a88/
+       arm |               host-scons-2.3.0 | NOK | http://autobuild.buildroot.net/results/11e6c8c8d79d56ed43daf52e6d6dc80847709926/
+       arm |               host-scons-2.3.0 | NOK | http://autobuild.buildroot.net/results/d75722fe096fc1ddbf62a51207b44b3cdbb6fed8/
+   powerpc |               host-scons-2.3.0 | NOK | http://autobuild.buildroot.net/results/09a7de5ef086005b2f003ccd58ee1dae268c26a1/
+    xtensa |                        kmod-16 | NOK | http://autobuild.buildroot.net/results/9fb1a008e5fa13425ab9fba0d497cf877ef90457/
+    xtensa |                        kmod-16 | NOK | http://autobuild.buildroot.net/results/97d4c96d6f6cdc1ed4007456f4ab70be9dfa41b5/
+      bfin |                    lftp-4.4.15 | NOK | http://autobuild.buildroot.net/results/321a6eedd2c79ce45c047cd8ebddb67124da092c/
+   powerpc |                 libnftnl-1.0.0 | NOK | http://autobuild.buildroot.net/results/568d7fd5a6e6cd8a8e23184d7f977ce812b887fd/
+      bfin | libwebsockets-v1.22-chrome2... | NOK | http://autobuild.buildroot.net/results/97e21513dba6aae5b2e2721c9218589dbc75d702/
+       arm |                  lvm2-2.02.103 | NOK | http://autobuild.buildroot.net/results/b780582f8a1f3ac9886d4b23375d8a6a704d25a2/
+      i686 |                  lvm2-2.02.103 | NOK | http://autobuild.buildroot.net/results/a2e39cb626143c2d029ea3687891eab68ca0bde3/
+  mips64el | make: *** [systemd-legal-in... | NOK | http://autobuild.buildroot.net/results/e6c4dc22c014e62ce35273945a2a2307315ec3f7/
+    x86_64 |                     parted-3.1 | NOK | http://autobuild.buildroot.net/results/dc0592af4930b3631cc82bd0f510ee23466b3723/
+       arm |                     parted-3.1 | NOK | http://autobuild.buildroot.net/results/e9a576e2154f56c2f6b0f9ec017f04e085557a52/
+       sh4 |                     parted-3.1 | NOK | http://autobuild.buildroot.net/results/650960214be2b00ca7f028e31a36d74f3917454c/
+      bfin |           sane-backends-1.0.22 | NOK | http://autobuild.buildroot.net/results/5efcb8d898df0e798cc19eaf28a670356fc4e049/
+microblaze |                    systemd-207 | NOK | http://autobuild.buildroot.net/results/91010b43e63b82e050046b8f10c2c42f31a8a620/
+      i686 |   toolchain-external-undefined | NOK | http://autobuild.buildroot.net/results/accfb42f28c4701207df412eb6059a34997b02dd/
+       arm |   toolchain-external-undefined | NOK | http://autobuild.buildroot.net/results/e11e28c29808202363961dfca01e9c19f5fb3eaf/
+      i686 |   toolchain-external-undefined | NOK | http://autobuild.buildroot.net/results/0494eff48f4b55fef42f0713668dd2ac83822043/
+    xtensa |                      wget-1.15 | NOK | http://autobuild.buildroot.net/results/bc20297dad0f0e9b7fa79fe835b9754fbce6dfdf/
+
+
 -- 
-1.7.7
+http://autobuild.buildroot.net
