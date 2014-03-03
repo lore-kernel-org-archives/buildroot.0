@@ -1,46 +1,68 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Mar 2014 22:21:56 +0100
-Subject: [Buildroot] [git commit] packages infra: add function to get a
-	Kconfig option
-Message-ID: <20140303212320.ED3369BCBE@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 3 Mar 2014 22:24:00 +0100
+Subject: [Buildroot] [PATCH] toolchain: control GNU_TARGET_NAME vendor
+ part
+In-Reply-To: <884EA965490E3C4D8E66AEF41E98025006C816@ezex10.ezchip.com>
+References: <884EA965490E3C4D8E66AEF41E98025006BF23@ezex10.ezchip.com>
+ <20140223104658.4088cdc6@skate>
+ <884EA965490E3C4D8E66AEF41E98025006C3BB@ezex10.ezchip.com>
+ <20140223125102.025dd91a@skate>
+ <884EA965490E3C4D8E66AEF41E98025006C816@ezex10.ezchip.com>
+Message-ID: <20140303212359.GG3380@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c28a28eed1943c1efb958448a87a2e8f0baf48d6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Noam, All,
 
-We so far have no mean to get the value from a Kconfig option from the
-.config file of a package (eg. linux, busybox...).
+On 2014-02-23 15:41 +0000, Noam Camus spake thusly:
+[--SNIP--]
+> Below is the revised patch.
+> Is it OK?
+> Is it the right way to bring up the corrections?
 
-Add a new function that returns the unmangled value of an option.
-It expect two arguments:
-  - the Kconfig option name (complete, with leading CONFIG if necessary)
-  - the .config file to get it from
+Please just re-send the patch as you did the first time.
+Be sure to annotate it as:
+    [PATCH v2] blabla
 
-Note that, if the Kconfig option is a string, the returned value will
-contain the leading and trailing double-quotes.
+You can do that with:
+    git send-email --annotate [...]
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/pkg-utils.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+[--SNIP--]
+> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+> index cd88889..216f308 100644
+> --- a/toolchain/toolchain-buildroot/Config.in
+> +++ b/toolchain/toolchain-buildroot/Config.in
+> @@ -69,6 +69,18 @@ config BR2_TOOLCHAIN_BUILDROOT_LIBC
+>  	default "glibc"  if BR2_TOOLCHAIN_BUILDROOT_EGLIBC
+>  	default "glibc"  if BR2_TOOLCHAIN_BUILDROOT_GLIBC
+>  
+> +config BR2_TOOLCHAIN_BUILDROOT_VENDOR
+> +	string "custom toolchain vendor name"
+> +	default "buildroot"
+> +	help
+> +	  This option accepts name for vendor field in toolchain tuple.
+> +	  The toolchain tuple full format is:
+> +	  cpu-vendor-kernel-os
+> +	  You may use it in case of custom toolchain.
+> +	  e.g. if your gcc depend on this field to make decisions.
+> +	  NOTE: "unknown" is not allowed since it may be confused
+> +	  with host toolchain.
 
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index 91a1981..99fefe6 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -52,6 +52,8 @@ define KCONFIG_DISABLE_OPT
- 	echo "# $(1) is not set" >> $(2)
- endef
- 
-+KCONFIG_GET_OPT = $(shell sed -e 's/^$(1)=//p' $(2))
-+
- # Helper functions to determine the name of a package and its
- # directory from its makefile directory, using the $(MAKEFILE_LIST)
- # variable provided by make. This is used by the *TARGETS macros to
+I think Thomas said on IRC that he will have a better wording for the
+help text. Wait a little bit for his suggestion, before re-sending.
+
+Thanks!
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
