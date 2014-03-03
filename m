@@ -1,118 +1,92 @@
-From: Ezequiel Garcia <ezequiel.garcia@free-electrons.com>
-Date: Mon, 3 Mar 2014 20:05:57 -0300
-Subject: [Buildroot] [PATCH] directfb-lua: new package
-In-Reply-To: <CAB0FRsthGUWRVH-FhcFeN7Jd6m_nSsZNCa_a+Q25-R-1vCeD3g@mail.gmail.com>
-References: <1375126587-983-1-git-send-email-ezequiel.garcia@free-electrons.com>
- <CAB0FRsthGUWRVH-FhcFeN7Jd6m_nSsZNCa_a+Q25-R-1vCeD3g@mail.gmail.com>
-Message-ID: <20140303230556.GA22758@localhost>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 4 Mar 2014 00:09:09 +0100
+Subject: [Buildroot] [PATCH v2 1/1] Add new package: biosdevname
+In-Reply-To: <0F64ADC7-47A8-4E72-90E7-2F5A9E0F32B8@deadfrog.net>
+References: <0F64ADC7-47A8-4E72-90E7-2F5A9E0F32B8@deadfrog.net>
+Message-ID: <20140303230909.GB14940@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Mar 03, 2014 at 08:38:12PM +0100, Fran?ois Perrad wrote:
-> 2013-07-29 21:36 GMT+02:00 Ezequiel Garcia <ezequiel.garcia@free-electrons.com>:
-> > This is a Lua binding to DirectFB. It is an automated binding
-> > generated from the DirectFB headers, so it generates an identical
-> > API to DirectFB's, only simpler to use.
-> >
-> > Signed-off-by: Ezequiel Garcia <ezequiel.garcia@free-electrons.com>
-> > ---
-> >  package/Config.in                    |  1 +
-> >  package/directfb-lua/Config.in       | 10 ++++++++++
-> >  package/directfb-lua/directfb-lua.mk | 23 +++++++++++++++++++++++
-> >  3 files changed, 34 insertions(+)
-> >  create mode 100644 package/directfb-lua/Config.in
-> >  create mode 100644 package/directfb-lua/directfb-lua.mk
-> >
-> > diff --git a/package/Config.in b/package/Config.in
-> > index 6d5ff01..dcaac4c 100644
-> > --- a/package/Config.in
-> > +++ b/package/Config.in
-> > @@ -120,6 +120,7 @@ comment "graphic libraries"
-> >  source "package/cegui06/Config.in"
-> >  source "package/directfb/Config.in"
-> >  source "package/directfb-examples/Config.in"
-> > +source "package/directfb-lua/Config.in"
-> 
-> This is not the right place. directfb-lua must be inserted in the Lua
-> modules section, just after 'dado'.
-> 
-> >  source "package/divine/Config.in"
-> >  source "package/fbdump/Config.in"
-> >  source "package/fbgrab/Config.in"
-> > diff --git a/package/directfb-lua/Config.in b/package/directfb-lua/Config.in
-> > new file mode 100644
-> > index 0000000..7f941f9
-> > --- /dev/null
-> > +++ b/package/directfb-lua/Config.in
-> > @@ -0,0 +1,10 @@
-> > +config BR2_PACKAGE_DIRECTFB_LUA
-> > +       bool "directfb-lua"
-> > +       depends on BR2_PACKAGE_DIRECTFB
-> > +       depends on BR2_PACKAGE_LUA
-> 
-> The dependency with Lua is implicit in the Lua modules section.
-> The dependency with DirectFB must be rewritten like this :
-> 
->     select BR2_PACKAGE_DIRECTFB
->     depends on BR2_TOOLCHAIN_HAS_THREADS # directfb
->     depends on BR2_INSTALL_LIBSTDCPP # directfb
-> 
-> with this comment statement at the end of the file :
-> 
-> comment "directfb-lua needs a toolchain w/ C++, threads"
->     depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
-> 
-> > +       help
-> > +         directfb-lua is a Lua binding to DirectFB. It is an automated binding
-> > +         generated from the DirectFB headers. This means it generates an API
-> > +         identical to the DirectFB's, only easier to use.
-> > +
-> > +         https://github.com/ezequielgarcia/directfb-lua
-> > diff --git a/package/directfb-lua/directfb-lua.mk b/package/directfb-lua/directfb-lua.mk
-> > new file mode 100644
-> > index 0000000..f975a55
-> > --- /dev/null
-> > +++ b/package/directfb-lua/directfb-lua.mk
-> > @@ -0,0 +1,23 @@
-> > +################################################################################
-> > +#
-> > +# directfb-lua
-> > +#
-> > +################################################################################
-> > +
-> > +DIRECTFB_LUA_VERSION = v0.2.1
-> > +DIRECTFB_LUA_SITE = https://github.com/ezequielgarcia/directfb-lua/tarball/$(DIRECTFB_LUA_VERSION)
-> 
-> Now, Buildroot has a Github helper.
-> DIRECTFB_LUA_SITE = $(call
-> github,ezequielgarcia,directfb-lua,$(DIRECTFB_LUA_VERSION))
-> 
-> > +DIRECTFB_LUA_LICENSE = MIT
-> > +DIRECTFB_LUA_LICENSE_FILES = COPYING
-> > +DIRECTFB_LUA_DEPENDENCIES = directfb lua
-> 
-> Now, Buildroot has various Lua interpreters, and directfb-lua could be
-> build with all of them.
-> DIRECTFB_LUA_DEPENDENCIES = directfb luainterpreter
-> 
-> > +
-> > +define DIRECTFB_LUA_BUILD_CMDS
-> > +       $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) gen
-> > +       $(TARGET_MAKE_ENV) CROSS_COMPILE="$(TARGET_CROSS)" $(MAKE) -C $(@D)
-> > +endef
-> > +
-> > +define DIRECTFB_LUA_INSTALL_TARGET_CMDS
-> > +       $(TARGET_MAKE_ENV) INSTALL_DIR="$(TARGET_DIR)/usr/lib/lua" \
-> 
-> At this time :
->      INSTALL_DIR="$(TARGET_DIR)/usr/lib/lua/$(LUAINTERPRETER_ABIVER)"
-> 
+Ryan, All,
 
-Thanks a lot for the feedback! I'll push another patch.
+Thank you for your submission. Here are a few other comments.
+
+On 2014-02-03 16:37 -0500, Ryan Wilkins spake thusly:
+[--SNIP--]
+> diff --git a/package/biosdevname/Config.in b/package/biosdevname/Config.in
+> new file mode 100644
+> index 0000000..17a9aa4
+> --- /dev/null
+> +++ b/package/biosdevname/Config.in
+> @@ -0,0 +1,13 @@
+> +config BR2_PACKAGE_BIOSDEVNAME
+> +	bool "biosdevname"
+> +	depends on (BR2_i386 || BR2_x86_64) && BR2_PACKAGE_UDEV
+
+Two things:
+  - we usually separate the dependencies on architectures from the
+    dependencies on packages
+  - udev is now provided by a virtual package
+
+So, you should do:
+    depends on BR2_i386 || BR2_x86_64
+    dependson BR2_PACKAGE_HAS_UDEV
+
+> +	select BR2_PACKAGE_PCIUTILS
+> +	help
+> +	  Biosdevname is a udev helper that looks at various BIOS tables to
+> +	  figure out what the actual hardware names are for Ethernet ports
+> +	  and renames the ports accordingly.  This has the advantage of
+> +	  always referring to the same port regardless of system or
+> +	  hardware changes that might otherwise alter the typical ethX
+> +	  naming.
+> +
+> +	  http://linux.dell.com/biosdevname/
+> diff --git a/package/biosdevname/biosdevname.mk b/package/biosdevname/biosdevname.mk
+> new file mode 100644
+> index 0000000..be1c6af
+> --- /dev/null
+> +++ b/package/biosdevname/biosdevname.mk
+> @@ -0,0 +1,15 @@
+> +################################################################################
+> +#
+> +# biosdevname
+> +#
+> +################################################################################
+> +
+> +BIOSDEVNAME_VERSION = 0.4.1
+> +BIOSDEVNAME_SITE = http://linux.dell.com/biosdevname/biosdevname-$(BIOSDEVNAME_VERSION)
+
+The git repository has version v0.5.0, out 2013-01-18.
+THere are also a few fixes in the repository, that were made a few hours
+ago, so it might be a better bet to use a git snapshot:
+
+    BIOSDEVNAME_VERSION = c140ce659a204d67e4cc61d2191443123f7dd970
+    BIOSDEVNAME_SITE = git://linux.dell.com/biosdevname.git
+
+> +BIOSDEVNAME_LICENSE = GPL
+> +BIOSDEVNAME_LICENSE_FILES = COPYING
+> +BIOSDEVNAME_INSTALL_TARGET = YES
+
+Not needed, that's the default.
+
+> +BIOSDEVNAME_CONF_OPT = --exec-prefix=/
+> +BIOSDEVNAME_DEPENDENCIES = pciutils
+
+Missing dependency on udev:
+
+    BIOSDEVNAME_DEPENDENCIES = pciutils udev
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Ezequiel Garc?a, Free Electrons
-Embedded Linux, Kernel and Android Engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
