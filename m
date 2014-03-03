@@ -1,31 +1,52 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 3 Mar 2014 13:50:01 +0200
-Subject: [Buildroot] [PATCH] samba4: fix readline support
-In-Reply-To: <1393847052-13062-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1393847052-13062-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140303115001.GS3874@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 3 Mar 2014 13:48:05 +0100
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <495852511.10469178.1393846305700.JavaMail.root@openwide.fr>
+References: <20140303090219.65a08cc7@skate>
+ <495852511.10469178.1393846305700.JavaMail.root@openwide.fr>
+Message-ID: <20140303134805.2eb084c4@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gustavo,
+Dear Romain Naour,
 
-On Mon, Mar 03, 2014 at 08:44:12AM -0300, Gustavo Zacarias wrote:
-> Add automatic readilne support since it's used when available.
+On Mon, 3 Mar 2014 12:31:45 +0100 (CET), Romain Naour wrote:
 
-s/readilne/readline/
-
-> Also add a patch to update to new-style typedefs that were removed from
-> readline 6.3 that causes build breakage. Fixes:
-> http://autobuild.buildroot.net/results/b13/b137c237ff6df81dd10f7895278d1f2f5d2326de/
+> | 
+> | > microblaze |                     gpm-1.20.7 | NOK |
+> | > http://autobuild.buildroot.net/results/e99afadca6de92aad8563006fc7219aa32d77a88/
+> | 
+> | Strange:
+> | 
+> | /home/test/test/2/output/host/usr/bin/microblaze-buildroot-linux-gnu-gcc
+> | libgpm.so.2 \
+> | 	 -L/home/test/test/2/output/build/gpm-1.20.7/src  -o
+> | 	 lib/libgpm.so.2.1.0 lib/liblow.lo lib/libhigh.lo lib/libxtra.lo
+> | 	 lib/report-lib.lo tools.lo  -lc
+> | microblaze-buildroot-linux-gnu-gcc: error: libgpm.so.2: No such file
+> | or directory
+> | 
+> | Spenser ?
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> It's because __ELF__ is not defined in microblaze toolchain :
+> checking whether system is ELF... no
+> 
+> If elf format is not enabled then gpm is build statically.
+> You may have noticed that qpm static build is disabled in gpm.mk because it's broken.
+> 
+> I can try to fix gpm's static build.
 
-baruch
+Hum, but that's weird because Microblaze definitely uses the ELF binary
+format, supports shared library and has a MMU (at least for the
+Microblaze CPU variants that we support).
 
+So it should be working in shared library mode, I believe.
+
+Thomas
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
