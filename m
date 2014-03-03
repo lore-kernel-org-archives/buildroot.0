@@ -1,40 +1,45 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 3 Mar 2014 11:10:27 +0200
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 3 Mar 2014 10:38:19 +0100
 Subject: [Buildroot] Analysis of build failures
 In-Reply-To: <20140303090219.65a08cc7@skate>
 References: <20140303073010.B46B51015B7@stock.ovh.net>
  <20140303090219.65a08cc7@skate>
-Message-ID: <20140303091027.GP3874@tarshish>
+Message-ID: <CAHXCMMLUY6+eN6EzqVBk-=o0MO4QZktyRsmTHSFcRhX7B4Jk2Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Thomas, all,
 
-On Mon, Mar 03, 2014 at 09:02:19AM +0100, Thomas Petazzoni wrote:
+On Mon, Mar 3, 2014 at 9:02 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
 > On Mon,  3 Mar 2014 08:30:10 +0100 (CET), Thomas Petazzoni wrote:
-> 
-> >     xtensa |                      wget-1.15 | NOK | http://autobuild.buildroot.net/results/bc20297dad0f0e9b7fa79fe835b9754fbce6dfdf/
-> 
-> spawn_faction_adddup2.c: In function 'posix_spawn_file_actions_adddup2':
-> spawn_faction_adddup2.c:50:19: error: 'posix_spawn_file_actions_t' has no member named '_used'
-> spawn_faction_adddup2.c:50:42: error: 'posix_spawn_file_actions_t' has no member named '_allocated'
-> spawn_faction_adddup2.c:59:24: error: 'posix_spawn_file_actions_t' has no member named '_actions'
-> spawn_faction_adddup2.c:59:47: error: 'posix_spawn_file_actions_t' has no member named '_used'
-> spawn_faction_adddup2.c:65:19: error: 'posix_spawn_file_actions_t' has no member named '_used'
-> make[5]: *** [spawn_faction_adddup2.o] Error 1
-> 
-> Chris, Baruch, Max, an idea?
+>
+>>     mipsel |                     crda-1.1.3 | NOK | http://autobuild.buildroot.net/results/a1e53d66d3962fd5431e7601937b071a0a3c2084/
+>>     x86_64 |                     crda-1.1.3 | NOK | http://autobuild.buildroot.net/results/b363c63b5dda7d55c3bd4c6aedc10666471113ad/
+>
+> Problem of host python being Python 3 and not Python 2.
+>
+[...]
+>>        arm |               host-scons-2.3.0 | NOK | http://autobuild.buildroot.net/results/11e6c8c8d79d56ed43daf52e6d6dc80847709926/
+>>        arm |               host-scons-2.3.0 | NOK | http://autobuild.buildroot.net/results/d75722fe096fc1ddbf62a51207b44b3cdbb6fed8/
+>>    powerpc |               host-scons-2.3.0 | NOK | http://autobuild.buildroot.net/results/09a7de5ef086005b2f003ccd58ee1dae268c26a1/
+>
+> Problem of host python being Python 3 and not Python 2.
+[...]
 
-This is the same problem coreutils had, which was fixed by commit a728e2fe3 
-(coreutils: fix build against uclibc snapshot). Just sent the same fix for 
-wget.
+I've started looking at this host-python2 thing.
 
-baruch
+So far, I have something working for host-scons, host-python-m2crypto and crda.
+I still have to look at samba4, and cleanup the patches before
+submitting them ;)
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+
+Regards,
+
+
+Samuel
