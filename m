@@ -1,76 +1,88 @@
-From: Lionel Orry <lionel.orry@gmail.com>
-Date: Mon, 3 Mar 2014 09:14:44 +0100
-Subject: [Buildroot] [PATCH 1/1] zeromq: bump to version 4.0.1
-In-Reply-To: <20140303084702.7790637d@skate>
-References: <1381509097-5424-1-git-send-email-jerzy.grzegorek@trzebnica.net>
- <20140301232520.4ee4b22b@skate>
- <CAKAx1cj3DKFEcSjtw2-d1y3sZSO9y6kpvE6ZGjRdycnNAAugMw@mail.gmail.com>
- <20140303084702.7790637d@skate>
-Message-ID: <CAKAx1chY=kd3Y_N2-HRqmtELox8gSA9+hVUmaEAT4BNv_mXb9g@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon,  3 Mar 2014 11:06:50 +0200
+Subject: [Buildroot] [PATCH] wget: fix build against uclibc snapshot
+Message-ID: <745b175536fa66c2f312ec98feadb25a8c543708.1393837610.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+Same fix as a728e2fe3 (coreutils: fix build against uclibc snapshot).
 
-On Mon, Mar 3, 2014 at 8:47 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Lionel Orry,
->
-> On Mon, 3 Mar 2014 07:51:45 +0100, Lionel Orry wrote:
->
->> > I tried to apply this patch, but unfortunately, it apparently breaks
->> > the build of mongrel2:
->> >
->> > src/superpoll.c: In function 'SuperPoll_poll':
->> > src/superpoll.c:229:53: error: 'ZMQ_POLL_MSEC' undeclared (first use in this function)
->> > src/superpoll.c:229:53: note: each undeclared identifier is reported only once for each function it appears in
->> >
->> > I've checked the other reverse dependencies of zeromq, and they seem to
->> > build fine.
->> >
->> > Can you find a solution to the mongrel2 problem, and resubmit the
->> > appropriate patch?
->>
->> Such a patch would fix compilation, but the fact is this version of
->
-> What do you mean by "such a patch" ? Maybe you forgot to attach a patch
-> to your e-mail?
+uClibc development version adds support for POSIX spawn routines. However,
+unlike glibc these routines are in librt. This breaks gnulib autoconf
+detection. Teach gnulib autoconf to look for POSIX spawn in librt.
 
-um no, I meant the "appropriate patch" you were suggesting Jerzy to
-prepare so that mongrel2 compiles. If I understood correctly.
+Fixes:
+http://autobuild.buildroot.net/results/bc20297dad0f0e9b7fa79fe835b9754fbce6dfdf/
 
->
->> Mongrel2 was not tested with ZeroMQ v4 and greater
->> and I don't know if we can simply bump its version like that. Maybe we
->> can but I am not 100% sure.
->>
->> On another hand, mongrel2 development is becoming active again and
->> they are trying to prepare a release, so I will try to check there if
->> they ensure zeromq4 compliance and tested it. I will get back to you
->> when I can on this subject.
->
-> Ok, thanks!
->
-> Does ZeroMQ v4 changes the API/behavior a lot compared to v3 ?
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ .../wget-0001-spawn-fix-link-error-on-uclibc.patch | 40 ++++++++++++++++++++++
+ package/wget/wget.mk                               |  3 ++
+ 2 files changed, 43 insertions(+)
+ create mode 100644 package/wget/wget-0001-spawn-fix-link-error-on-uclibc.patch
 
-The v2 -> v3 transistion has been a nightmare more many devs, but they
-learnt from it and it seems the v3->v4 is much smoother.
-
-By the way, I noticed the mongrel2 devs tagged a v1.9.0 a month ago,
-and this release includes a zeromq4 compliance, plus other fixes and
-enhancements. May I suggest we simply bump the mongrel2 version ?
-
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-
-BR,
-Lionel
+diff --git a/package/wget/wget-0001-spawn-fix-link-error-on-uclibc.patch b/package/wget/wget-0001-spawn-fix-link-error-on-uclibc.patch
+new file mode 100644
+index 000000000000..54d6dfbf38e7
+--- /dev/null
++++ b/package/wget/wget-0001-spawn-fix-link-error-on-uclibc.patch
+@@ -0,0 +1,40 @@
++From d6eab2e70fc5ccc82a73e5c988b76a229e4cd3d5 Mon Sep 17 00:00:00 2001
++Message-Id: <d6eab2e70fc5ccc82a73e5c988b76a229e4cd3d5.1393836674.git.baruch@tkos.co.il>
++From: =?UTF-8?q?P=C3=A1draig=20Brady?= <P@draigBrady.com>
++Date: Tue, 14 Jan 2014 16:59:07 +0000
++Subject: [PATCH] spawn: fix link error on uclibc
++
++* m4/spawn_h.m4 (gl_HAVE_POSIX_SPAWN): use AC_SEARCH_LIBS,
++to incorporate -lrt if needed (on uclibc for example).
++* modules/posix_spawn: Reference the substituted LIB.
++
++Patch status: upstream (gnulib commit d6eab2e70fc5ccc82a73e5c988b76a229e4cd3d5)
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++
++diff --git a/m4/spawn_h.m4 b/m4/spawn_h.m4
++index 87fe12298471..3eb835c3c2a8 100644
++--- a/m4/spawn_h.m4
+++++ b/m4/spawn_h.m4
++@@ -64,7 +64,15 @@ AC_DEFUN([gl_HAVE_POSIX_SPAWN],
++   dnl once only, before all statements that occur in other macros.
++   AC_REQUIRE([gl_SPAWN_H_DEFAULTS])
++ 
++-  AC_CHECK_FUNCS_ONCE([posix_spawn])
+++  LIB_POSIX_SPAWN=
+++  AC_SUBST([LIB_POSIX_SPAWN])
+++  gl_saved_libs=$LIBS
+++    AC_SEARCH_LIBS([posix_spawn], [rt],
+++                   [test "$ac_cv_search_posix_spawn" = "none required" ||
+++                    LIB_POSIX_SPAWN=$ac_cv_search_posix_spawn])
+++    AC_CHECK_FUNCS([posix_spawn])
+++  LIBS=$gl_saved_libs
+++
++   if test $ac_cv_func_posix_spawn != yes; then
++     HAVE_POSIX_SPAWN=0
++   fi
++ 
++-- 
++1.9.0
++
+diff --git a/package/wget/wget.mk b/package/wget/wget.mk
+index ffdf047a5266..80f8314f9de7 100644
+--- a/package/wget/wget.mk
++++ b/package/wget/wget.mk
+@@ -10,6 +10,9 @@ WGET_SITE = $(BR2_GNU_MIRROR)/wget
+ WGET_LICENSE = GPLv3+
+ WGET_LICENSE_FILES = COPYING
+ 
++# patching gnulib .m4 file
++WGET_AUTORECONF = YES
++
+ # Prefer full-blown wget over busybox
+ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ 	WGET_DEPENDENCIES += busybox
+-- 
+1.9.0
