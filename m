@@ -1,52 +1,38 @@
-From: Mike Zick <minimod@morethan.org>
-Date: Mon, 3 Mar 2014 09:13:16 -0600
-Subject: [Buildroot] Old information on
- http://git.buildroot.net/buildroot/
-In-Reply-To: <53149AD2.6060807@carallon.com>
-References: <5314950B.9040506@carallon.com>
- <20140303090427.4032b712@core2quad.morethan.org>
- <53149AD2.6060807@carallon.com>
-Message-ID: <20140303091316.782e7fe8@core2quad.morethan.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 3 Mar 2014 18:19:38 +0100
+Subject: [Buildroot] [PATCH 0/19 v3] Add new virtual-package
+	infrastructure
+In-Reply-To: <cover.1393778339.git.yann.morin.1998@free.fr>
+References: <cover.1393778339.git.yann.morin.1998@free.fr>
+Message-ID: <20140303171938.GA3380@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 03 Mar 2014 15:08:02 +0000
-Will Wagner <willw@carallon.com> wrote:
+Hello All!
 
-> On 03/03/2014 15:04, Mike Zick wrote:
-> > On Mon, 03 Mar 2014 14:43:23 +0000
-> > Will Wagner <will_wagner@carallon.com> wrote:
-> >
-> >> Hello,
-> >>
-> >> I just noticed that there is very old data on the summary page when
-> >> browsing git, according to the footer it was generated 06/03/2013.
-> >>
-> >
-> > Try: http://git.buildroot.net/buildroot
-> > (No trailing '/' in URL.)
-> >
-> 
-> That's great!
-> 
-> So I guess the issue is instead that the 'Browse Source' link on the 
-> buildroot homepage needs updating to remove the trailing '/'
-> 
+On 2014-03-02 17:52 +0100, Yann E. MORIN spake thusly:
+> Here is a quick series implementing a new infrastructure for virtual
+> packages.
+[--SNIP--]
+> So the series:
+[--SNIP--]
+>   - and finally converts the virtual packages over to the new infra.
 
-Probably a 'good enough' (tm) bandaid.
+Doh... It just occured to me I forgot to convert the package that spawn
+all this virtual-package stuff in the first place: udev.
 
-- - - -
+It will be present in the next spin of the series.
 
-web-servers often (normally?) re-direct url/something to url/something/
-and then follow the same serving logic.
+Regards,
+Yann E. MORIN.
 
-this one doesn't, it has been reported before, but evidently is hard
-for the hosting people to find out why.
-
-Mike
-> Thanks
-> Will
-> 
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
