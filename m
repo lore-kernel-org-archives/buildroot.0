@@ -1,40 +1,89 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Mar 2014 21:26:56 +0100
-Subject: [Buildroot] [git commit] glibc: needs MMU
-Message-ID: <20140303202703.A59CC9B998@busybox.osuosl.org>
+Date: Mon, 3 Mar 2014 21:25:13 +0100
+Subject: [Buildroot] [git commit] wget: fix build against uclibc snapshot
+Message-ID: <20140303202703.9A0AF9BCC1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=71516ab9e86e5fde0060bf7b84ead24665763283
+commit: http://git.buildroot.net/buildroot/commit/?id=84bf8f04c68074e7a3acee4018f2ddd63733b52e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Like eglibc, glibc is only available to MMU-based architectures.
+Same fix as a728e2fe3 (coreutils: fix build against uclibc snapshot).
 
-Re-order select/depends to be in-line with eglibc, just above.
+uClibc development version adds support for POSIX spawn routines. However,
+unlike glibc these routines are in librt. This breaks gnulib autoconf
+detection. Teach gnulib autoconf to look for POSIX spawn in librt.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Fixes:
+http://autobuild.buildroot.net/results/bc20297dad0f0e9b7fa79fe835b9754fbce6dfdf/
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-buildroot/Config.in |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ .../wget-0001-spawn-fix-link-error-on-uclibc.patch |   40 ++++++++++++++++++++
+ package/wget/wget.mk                               |    3 +
+ 2 files changed, 43 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index eb5ee46..07db50b 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -46,8 +46,9 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
- 		   BR2_mips64 || BR2_mips64el || BR2_powerpc || \
- 		   BR2_sh     || BR2_sh64     || BR2_sparc   || \
- 		   BR2_x86_64 || BR2_microblaze
--	select BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_USE_MMU
- 	depends on !BR2_PREFER_STATIC_LIB
-+	select BR2_TOOLCHAIN_USES_GLIBC
- 	# our glibc.mk enables RPC support
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	help
+diff --git a/package/wget/wget-0001-spawn-fix-link-error-on-uclibc.patch b/package/wget/wget-0001-spawn-fix-link-error-on-uclibc.patch
+new file mode 100644
+index 0000000..54d6dfb
+--- /dev/null
++++ b/package/wget/wget-0001-spawn-fix-link-error-on-uclibc.patch
+@@ -0,0 +1,40 @@
++From d6eab2e70fc5ccc82a73e5c988b76a229e4cd3d5 Mon Sep 17 00:00:00 2001
++Message-Id: <d6eab2e70fc5ccc82a73e5c988b76a229e4cd3d5.1393836674.git.baruch@tkos.co.il>
++From: =?UTF-8?q?P=C3=A1draig=20Brady?= <P@draigBrady.com>
++Date: Tue, 14 Jan 2014 16:59:07 +0000
++Subject: [PATCH] spawn: fix link error on uclibc
++
++* m4/spawn_h.m4 (gl_HAVE_POSIX_SPAWN): use AC_SEARCH_LIBS,
++to incorporate -lrt if needed (on uclibc for example).
++* modules/posix_spawn: Reference the substituted LIB.
++
++Patch status: upstream (gnulib commit d6eab2e70fc5ccc82a73e5c988b76a229e4cd3d5)
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++
++diff --git a/m4/spawn_h.m4 b/m4/spawn_h.m4
++index 87fe12298471..3eb835c3c2a8 100644
++--- a/m4/spawn_h.m4
+++++ b/m4/spawn_h.m4
++@@ -64,7 +64,15 @@ AC_DEFUN([gl_HAVE_POSIX_SPAWN],
++   dnl once only, before all statements that occur in other macros.
++   AC_REQUIRE([gl_SPAWN_H_DEFAULTS])
++ 
++-  AC_CHECK_FUNCS_ONCE([posix_spawn])
+++  LIB_POSIX_SPAWN=
+++  AC_SUBST([LIB_POSIX_SPAWN])
+++  gl_saved_libs=$LIBS
+++    AC_SEARCH_LIBS([posix_spawn], [rt],
+++                   [test "$ac_cv_search_posix_spawn" = "none required" ||
+++                    LIB_POSIX_SPAWN=$ac_cv_search_posix_spawn])
+++    AC_CHECK_FUNCS([posix_spawn])
+++  LIBS=$gl_saved_libs
+++
++   if test $ac_cv_func_posix_spawn != yes; then
++     HAVE_POSIX_SPAWN=0
++   fi
++ 
++-- 
++1.9.0
++
+diff --git a/package/wget/wget.mk b/package/wget/wget.mk
+index ffdf047..80f8314 100644
+--- a/package/wget/wget.mk
++++ b/package/wget/wget.mk
+@@ -10,6 +10,9 @@ WGET_SITE = $(BR2_GNU_MIRROR)/wget
+ WGET_LICENSE = GPLv3+
+ WGET_LICENSE_FILES = COPYING
+ 
++# patching gnulib .m4 file
++WGET_AUTORECONF = YES
++
+ # Prefer full-blown wget over busybox
+ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ 	WGET_DEPENDENCIES += busybox
