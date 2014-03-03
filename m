@@ -1,45 +1,212 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Mar 2014 22:55:49 +0100
-Subject: [Buildroot] [git commit] linux: fix the KCONFIG_GET_OPT calls to be
-	inside a BR2_LINUX_KERNEL test
-Message-ID: <20140303215726.AC186828EF@busybox.osuosl.org>
+Date: Mon, 3 Mar 2014 22:49:38 +0100
+Subject: [Buildroot] [git commit] libxmlrpc: new package
+Message-ID: <20140303215726.A53E99BCC2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4ad1ea59a59f951fad072dcb19429e6f468abf05
+commit: http://git.buildroot.net/buildroot/commit/?id=92777aa29737349ef9a3033318dd59628fe30d38
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The KCONFIG_GET_OPT calls added by
-ca80782f4571f004c2b8cf2d0e60e83343beff34 ('linux: only depend on
-host-lzop if needed') are made even if the kernel package is not
-selected. This hangs the linux.mk parsing as they try to read from a
-file that doesn't exist.
-
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Alvaro G. M <alvaro.gamez@hazent.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/linux.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/Config.in                                  |    1 +
+ package/libxmlrpc/Config.in                        |   10 ++++++
+ .../libxmlrpc-0001-fix-gennmtab-build.patch        |   25 ++++++++++++++++
+ .../libxmlrpc-0002-fix-non-cplusplus-build.patch   |   27 ++++++++++++++++++
+ .../libxmlrpc/libxmlrpc-0003-non-wchar-build.patch |   24 ++++++++++++++++
+ .../libxmlrpc-0004-use-correct-curl-config.patch   |   22 ++++++++++++++
+ package/libxmlrpc/libxmlrpc.mk                     |   30 ++++++++++++++++++++
+ 7 files changed, 139 insertions(+), 0 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 91a5fb8..680279c 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -170,7 +170,6 @@ ifeq ($(BR2_LINUX_KERNEL),y)
- ifeq ($(wildcard $(KERNEL_SOURCE_CONFIG)),)
- $(error Configuration file '$(KERNEL_SOURCE_CONFIG)' not found.)
- endif
--endif
- 
- ifeq ($(call KCONFIG_GET_OPT,CONFIG_KERNEL_LZO,$(KERNEL_SOURCE_CONFIG)),y)
- LINUX_DEPENDENCIES += host-lzop
-@@ -178,6 +177,7 @@ endif
- ifeq ($(call KCONFIG_GET_OPT,CONFIG_RD_LZO,$(KERNEL_SOURCE_CONFIG)),y)
- LINUX_DEPENDENCIES += host-lzop
- endif
-+endif
- 
- define LINUX_CONFIGURE_CMDS
- 	$(INSTALL) -m 0644 $(KERNEL_SOURCE_CONFIG) $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
+diff --git a/package/Config.in b/package/Config.in
+index c099138..417c9b8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -655,6 +655,7 @@ source "package/libjson/Config.in"
+ source "package/libroxml/Config.in"
+ source "package/libxml2/Config.in"
+ source "package/libxmlpp/Config.in"
++source "package/libxmlrpc/Config.in"
+ source "package/libxslt/Config.in"
+ source "package/libyaml/Config.in"
+ source "package/mxml/Config.in"
+diff --git a/package/libxmlrpc/Config.in b/package/libxmlrpc/Config.in
+new file mode 100644
+index 0000000..26e4a52
+--- /dev/null
++++ b/package/libxmlrpc/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_LIBXMLRPC
++	bool "libxmlrpc"
++	select BR2_PACKAGE_LIBCURL
++	help
++	  XML-RPC is a quick-and-easy way to make procedure calls over
++	  the Internet. It converts the procedure call into an XML
++	  document, sends it to a remote server using HTTP, and gets
++	  back the response as XML.
++
++	  http://xmlrpc-c.sourceforge.net/
+diff --git a/package/libxmlrpc/libxmlrpc-0001-fix-gennmtab-build.patch b/package/libxmlrpc/libxmlrpc-0001-fix-gennmtab-build.patch
+new file mode 100644
+index 0000000..8cdd932
+--- /dev/null
++++ b/package/libxmlrpc/libxmlrpc-0001-fix-gennmtab-build.patch
+@@ -0,0 +1,25 @@
++Fix build of host tool
++
++genmtab is a tool that needs to be built for the host as it is used
++during the compilation process of libxmlrpc. Its Makefile needs a bit
++of tuning to use the conventional CC_FOR_BUILD, CFLAGS_FOR_BUILD and
++LDFLAGS_FOR_BUILD variables.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/lib/expat/gennmtab/Makefile
++===================================================================
++--- a/lib/expat/gennmtab/Makefile
+++++ b/lib/expat/gennmtab/Makefile
++@@ -40,9 +40,9 @@
++ dep: dep-common
++ 
++ gennmtab.o:%.o:%.c
++-	$(BUILDTOOL_CC) -c $< -o $@ $(CFLAGS_ALL) $(INCLUDES)
+++	$(CC_FOR_BUILD) -c $< -o $@ $(CFLAGS_FOR_BUILD) $(INCLUDES)
++ 
++ gennmtab:%:%.o
++-	$(BUILDTOOL_CCLD) -o $@ $(LDFLAGS) $^
+++	$(CC_FOR_BUILD) -o $@ $(LDFLAGS_FOR_BUILD) $^
++ 
++ include depend.mk
+diff --git a/package/libxmlrpc/libxmlrpc-0002-fix-non-cplusplus-build.patch b/package/libxmlrpc/libxmlrpc-0002-fix-non-cplusplus-build.patch
+new file mode 100644
+index 0000000..efeb9cc
+--- /dev/null
++++ b/package/libxmlrpc/libxmlrpc-0002-fix-non-cplusplus-build.patch
+@@ -0,0 +1,27 @@
++Handle builds without C++
++
++libxmlrpc nicely handles the fact of being built without C++ support,
++except for one location, fixed by this patch.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/lib/util/Makefile
++===================================================================
++--- a/lib/util/Makefile
+++++ b/lib/util/Makefile
++@@ -41,11 +41,14 @@
++ LIBOBJS = \
++   casprintf.o \
++   cmdline_parser.o \
++-  cmdline_parser_cpp.o \
++   getoptx.o \
++   string_parser.o \
++   stripcaseeq.o \
++ 
+++ifeq ($(ENABLE_CPLUSPLUS),yes)
+++LIBOBJS += cmdline_parser_cpp.o
+++endif
+++
++ .PHONY: all
++ all: $(LIBOBJS)
++ 
+diff --git a/package/libxmlrpc/libxmlrpc-0003-non-wchar-build.patch b/package/libxmlrpc/libxmlrpc-0003-non-wchar-build.patch
+new file mode 100644
+index 0000000..1f04353
+--- /dev/null
++++ b/package/libxmlrpc/libxmlrpc-0003-non-wchar-build.patch
+@@ -0,0 +1,24 @@
++Disable wide-char specific code
++
++The vast majority of the libxmlrpc code nicely handles the absence of
++wide char support, except at one location, which is fixed by this
++patch.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/src/xmlrpc_decompose.c
++===================================================================
++--- a/src/xmlrpc_decompose.c
+++++ b/src/xmlrpc_decompose.c
++@@ -217,7 +217,11 @@
++         xmlrpc_strfree(*decompRootP->store.Tstring.valueP);
++         break;
++     case 'w':
+++#if HAVE_UNICODE_WCHAR
++         free((void*)*decompRootP->store.TwideString.valueP);
+++#else
+++	XMLRPC_ASSERT(false);
+++#endif
++         break;
++     case '6':
++         free((void*)*decompRootP->store.TbitString.valueP);
+diff --git a/package/libxmlrpc/libxmlrpc-0004-use-correct-curl-config.patch b/package/libxmlrpc/libxmlrpc-0004-use-correct-curl-config.patch
+new file mode 100644
+index 0000000..ada0bd2
+--- /dev/null
++++ b/package/libxmlrpc/libxmlrpc-0004-use-correct-curl-config.patch
+@@ -0,0 +1,22 @@
++Use correct curl-config program
++
++Instead of calling again curl-config in src/Makefile (which ends up
++calling the wrong curl-config: the one in the PATH instead of the one
++pointed at by the environment variables at configure time), let's use
++the CURL_LDADD variable which was computed at configure time.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/src/Makefile
++===================================================================
++--- a/src/Makefile
+++++ b/src/Makefile
++@@ -56,7 +56,7 @@
++   TRANSPORT_MODS += blddir/lib/curl_transport/curltransaction
++   TRANSPORT_MODS += blddir/lib/curl_transport/curlmulti
++   TRANSPORT_MODS += blddir/lib/curl_transport/lock_pthread
++-  TRANSPORT_LIBDEP += $(shell curl-config --libs)
+++  TRANSPORT_LIBDEP += $(CURL_LDADD)
++ endif
++ ifeq ($(MUST_BUILD_LIBWWW_CLIENT),yes)
++   TRANSPORT_MODS += blddir/lib/libwww_transport/xmlrpc_libwww_transport
+diff --git a/package/libxmlrpc/libxmlrpc.mk b/package/libxmlrpc/libxmlrpc.mk
+new file mode 100644
+index 0000000..3d1af7e
+--- /dev/null
++++ b/package/libxmlrpc/libxmlrpc.mk
+@@ -0,0 +1,30 @@
++################################################################################
++#
++# libxmlrpc
++#
++################################################################################
++
++LIBXMLRPC_VERSION = 1.25.26
++LIBXMLRPC_SOURCE = xmlrpc-c-$(LIBXMLRPC_VERSION).tgz
++LIBXMLRPC_SITE = http://downloads.sourceforge.net/project/xmlrpc-c/Xmlrpc-c%20Super%20Stable/$(LIBXMLRPC_VERSION)
++LIBXMLRPC_LICENSE = BSD-3c (xml-rpc main code and abyss web server), BSD like (lib/expat), Python 1.5.2 license (parts of xmlrpc_base64.c)
++LIBXMLRPC_LICENSE_FILES = doc/COPYING
++LIBXMLRPC_INSTALL_STAGING = YES
++LIBXMLRPC_DEPENDENCIES = libcurl
++LIBXMLRPC_CONFIG_SCRIPTS = xmlrpc-c-config
++
++LIBXMLRPC_CONF_OPT = \
++	$(if $(BR2_USE_WCHAR),,ac_cv_header_wchar_h=no) \
++	$(if $(BR2_INSTALL_LIBSTDCPP),,--disable-cplusplus) \
++	have_curl_config=$(STAGING_DIR)/usr/bin/curl-config \
++	CURL_CONFIG=$(STAGING_DIR)/usr/bin/curl-config
++
++# Our package uses autoconf, but not automake, so we need to pass
++# those variables at compile time as well.
++LIBXMLRPC_MAKE_ENV = \
++	CC_FOR_BUILD="$(HOSTCC)" \
++	LD_FOR_BUILD="$(HOSTLD)" \
++	CFLAGS_FOR_BUILD="$(HOST_CFLAGS)" \
++	LDFLAGS_FOR_BUILD="$(HOST_LDFLAGS)"
++
++$(eval $(autotools-package))
