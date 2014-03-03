@@ -1,77 +1,129 @@
-From: Lionel Orry <lionel.orry@gmail.com>
-Date: Mon, 3 Mar 2014 07:51:45 +0100
-Subject: [Buildroot] [PATCH 1/1] zeromq: bump to version 4.0.1
-In-Reply-To: <20140301232520.4ee4b22b@skate>
-References: <1381509097-5424-1-git-send-email-jerzy.grzegorek@trzebnica.net>
- <20140301232520.4ee4b22b@skate>
-Message-ID: <CAKAx1cj3DKFEcSjtw2-d1y3sZSO9y6kpvE6ZGjRdycnNAAugMw@mail.gmail.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Mon,  3 Mar 2014 08:19:58 +0100
+Subject: [Buildroot] [PATCH v2] zlog: new package
+Message-ID: <1393831198-2788-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jerzy and Thomas,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-On Sat, Mar 1, 2014 at 11:25 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Jerzy Grzegorek,
->
-> On Fri, 11 Oct 2013 18:31:37 +0200, Jerzy Grzegorek wrote:
->> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
->> ---
->>  package/zeromq/zeromq.mk |    2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
->> index a624b52..d40bed5 100644
->> --- a/package/zeromq/zeromq.mk
->> +++ b/package/zeromq/zeromq.mk
->> @@ -4,7 +4,7 @@
->>  #
->>  ################################################################################
->>
->> -ZEROMQ_VERSION = 3.2.4
->> +ZEROMQ_VERSION = 4.0.1
->>  ZEROMQ_SITE = http://download.zeromq.org/
->>  ZEROMQ_INSTALL_STAGING = YES
->>  ZEROMQ_DEPENDENCIES = util-linux
->
-> I tried to apply this patch, but unfortunately, it apparently breaks
-> the build of mongrel2:
->
-> src/superpoll.c: In function 'SuperPoll_poll':
-> src/superpoll.c:229:53: error: 'ZMQ_POLL_MSEC' undeclared (first use in this function)
-> src/superpoll.c:229:53: note: each undeclared identifier is reported only once for each function it appears in
->
-> I've checked the other reverse dependencies of zeromq, and they seem to
-> build fine.
->
-> Can you find a solution to the mongrel2 problem, and resubmit the
-> appropriate patch?
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+Change:
+	v2: add !BR2_PREFER_STATIC_LIB dependency, fix license and remove unneeded PATH definitions
 
-Such a patch would fix compilation, but the fact is this version of
-Mongrel2 was not tested with ZeroMQ v4 and greater
-and I don't know if we can simply bump its version like that. Maybe we
-can but I am not 100% sure.
+ package/Config.in                                  |    1 +
+ package/zlog/Config.in                             |   13 ++++++++
+ .../zlog/zlog-01-fix-compiling-on-Buildroot.patch  |   32 ++++++++++++++++++++
+ package/zlog/zlog.mk                               |   26 ++++++++++++++++
+ 4 files changed, 72 insertions(+), 0 deletions(-)
+ create mode 100644 package/zlog/Config.in
+ create mode 100644 package/zlog/zlog-01-fix-compiling-on-Buildroot.patch
+ create mode 100644 package/zlog/zlog.mk
 
-On another hand, mongrel2 development is becoming active again and
-they are trying to prepare a release, so I will try to check there if
-they ensure zeromq4 compliance and tested it. I will get back to you
-when I can on this subject.
-
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-Best regards,
-Lionel
+diff --git a/package/Config.in b/package/Config.in
+index ab91719..8cbcd73 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -782,6 +782,7 @@ source "package/protobuf-c/Config.in"
+ source "package/schifra/Config.in"
+ source "package/startup-notification/Config.in"
+ source "package/tzdata/Config.in"
++source "package/zlog/Config.in"
+ endmenu
+ 
+ menu "Security"
+diff --git a/package/zlog/Config.in b/package/zlog/Config.in
+new file mode 100644
+index 0000000..4217370
+--- /dev/null
++++ b/package/zlog/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_ZLOG
++	bool "zlog"
++	depends on BR2_LARGEFILE
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_PREFER_STATIC_LIB
++	help
++	  zlog is a reliable, high-performance, thread safe, flexible,
++	  clear-model, pure C logging library.
++
++	  https://github.com/HardySimpson/zlog
++
++comment "zlog needs a toolchain w/ threads, largefile, dynamic library"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE || BR2_PREFER_STATIC_LIB
+diff --git a/package/zlog/zlog-01-fix-compiling-on-Buildroot.patch b/package/zlog/zlog-01-fix-compiling-on-Buildroot.patch
+new file mode 100644
+index 0000000..32aa7d6
+--- /dev/null
++++ b/package/zlog/zlog-01-fix-compiling-on-Buildroot.patch
+@@ -0,0 +1,32 @@
++From a9f6a55bdb29a2bebc96a68ab53077906c25a9df Mon Sep 17 00:00:00 2001
++From: Yegor Yefremov <yegorslists@googlemail.com>
++Date: Wed, 22 Jan 2014 15:04:42 +0100
++Subject: [PATCH] Fix compiling on Buildroot
++
++Buildroot always specifies -D_LARGEFILE_SOURCE, -D_LARGEFILE64_SOURCE,
++-D_FILE_OFFSET_BITS=64, so define them only if they are not already
++defined.
++
++Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
++---
++ src/fmacros.h |    4 ++++
++ 1 files changed, 4 insertions(+), 0 deletions(-)
++
++diff --git a/src/fmacros.h b/src/fmacros.h
++index fa37948..059dfeb 100644
++--- a/src/fmacros.h
+++++ b/src/fmacros.h
++@@ -14,7 +14,11 @@
++ #define _XOPEN_SOURCE
++ #endif
++
+++#ifndef _LARGEFILE_SOURCE
++ #define _LARGEFILE_SOURCE
+++#endif
+++#ifndef _FILE_OFFSET_BITS
++ #define _FILE_OFFSET_BITS 64
+++#endif
++
++ #endif
++--
++1.7.7
+diff --git a/package/zlog/zlog.mk b/package/zlog/zlog.mk
+new file mode 100644
+index 0000000..fb8762c
+--- /dev/null
++++ b/package/zlog/zlog.mk
+@@ -0,0 +1,26 @@
++################################################################################
++#
++# zlog
++#
++################################################################################
++
++ZLOG_VERSION = ca6162be1608839e99c6388c28488c51ccf98e4a
++ZLOG_SITE = $(call github,HardySimpson,zlog,$(ZLOG_VERSION))
++ZLOG_LICENSE = LGPLv2.1
++ZLOG_LICENSE_FILES = COPYING
++ZLOG_INSTALL_STAGING = YES
++
++define ZLOG_BUILD_CMDS
++	$(MAKE1) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" \
++		-C $(@D) all
++endef
++
++define ZLOG_INSTALL_STAGING_CMDS
++	$(MAKE) PREFIX=$(STAGING_DIR)/usr -C $(@D) install
++endef
++
++define ZLOG_INSTALL_TARGET_CMDS
++	$(MAKE) PREFIX=$(TARGET_DIR)/usr -C $(@D) install
++endef
++
++$(eval $(generic-package))
+-- 
+1.7.7
