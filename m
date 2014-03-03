@@ -1,63 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Mar 2014 23:42:19 +0100
-Subject: [Buildroot] [PATCH 08/11] python-numpy: add install-staging
- command
-In-Reply-To: <1392588004-13317-9-git-send-email-s.martin49@gmail.com>
-References: <1392588004-13317-1-git-send-email-s.martin49@gmail.com>
- <1392588004-13317-9-git-send-email-s.martin49@gmail.com>
-Message-ID: <20140303234219.19a2f7e0@skate>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon,  3 Mar 2014 23:55:05 +0100
+Subject: [Buildroot] [PATCH] toolchain/wrapper: rename BR_DEBUG_WRAPPER
+Message-ID: <1393887305-2252-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-On Sun, 16 Feb 2014 23:00:01 +0100, Samuel Martin wrote:
-> Some packages may include headers provided by python-numpy package.
-> So, also install it in the sysroot.
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> ---
->  package/python-numpy/python-numpy.mk | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
-> 
-> diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
-> index c082045..ff70cfe 100644
-> --- a/package/python-numpy/python-numpy.mk
-> +++ b/package/python-numpy/python-numpy.mk
-> @@ -28,4 +28,21 @@ define PYTHON_NUMPY_CONFIGURE_CMDS
->  		echo "    $(lib)" >> $(@D)/site.cfg ;)
->  endef
->  
-> +# Some package may include few headers from NumPy, so let's install it in the
-> +# staging area.
-> +PYTHON_NUMPY_INSTALL_STAGING = YES
-> +
-> +# This install staging commands is an adjusted and simplified version of the
-> +# install target commands vampirized from the python-package infrastructure.
-> +#
-> +# Note that the append '--prefix=...' parameter overrides the one set by the
-> +# python-package infrastructure in the PYTHON_NUMPY_INSTALL_OPT variable.
-> +define PYTHON_NUMPY_INSTALL_STAGING_CMDS
-> +	(cd $(PYTHON_NUMPY_BUILDDIR)/; \
+The user-facing variables should be prefixed with BR2_, not BR_.
 
-This can be $(@D), no ?
+Also quote the variable in the manual.
 
-> +		$(PYTHON_NUMPY_BASE_ENV) $(PYTHON_NUMPY_ENV) \
-> +		$(HOST_DIR)/usr/bin/python setup.py install \
-> +		$(PYTHON_NUMPY_BASE_INSTALL_OPT) \
-> +		$(PYTHON_NUMPY_INSTALL_OPT) --prefix=$(STAGING_DIR)/usr)
-> +endef
-> +
->  $(eval $(python-package))
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ docs/manual/customize-toolchain.txt                  | 2 +-
+ toolchain/toolchain-external/ext-toolchain-wrapper.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Also, any reason for having this separated from the package addition
-itself?
-
-Thomas
+diff --git a/docs/manual/customize-toolchain.txt b/docs/manual/customize-toolchain.txt
+index 4f3fe23..55a0480 100644
+--- a/docs/manual/customize-toolchain.txt
++++ b/docs/manual/customize-toolchain.txt
+@@ -21,7 +21,7 @@ When using an external toolchain, Buildroot generates a wrapper program,
+ that transparently passes the appropriate options (according to the
+ configuration) to the external toolchain programs. In case you need to
+ debug this wrapper to check exactly what arguments are passed, you can
+-set the environment variable BR_DEBUG_WRAPPER to either one of:
++set the environment variable +BR2_DEBUG_WRAPPER+ to either one of:
+ 
+ * +0+, empty or not set: no debug
+ 
+diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+index 81c6ed1..db49784 100644
+--- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
++++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+@@ -191,7 +191,7 @@ int main(int argc, char **argv)
+ 	 * set to 1          : trace all arguments on a single line
+ 	 * set to 2          : trace one argument per line
+ 	 */
+-	if ((env_debug = getenv("BR_DEBUG_WRAPPER"))) {
++	if ((env_debug = getenv("BR2_DEBUG_WRAPPER"))) {
+ 		debug = atoi(env_debug);
+ 		if (debug > 0) {
+ 			fprintf(stderr, "Toolchain wrapper executing:");
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.3.2
