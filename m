@@ -1,84 +1,78 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 4 Mar 2014 00:09:09 +0100
-Subject: [Buildroot] [PATCH v2 1/1] Add new package: biosdevname
-In-Reply-To: <0F64ADC7-47A8-4E72-90E7-2F5A9E0F32B8@deadfrog.net>
-References: <0F64ADC7-47A8-4E72-90E7-2F5A9E0F32B8@deadfrog.net>
-Message-ID: <20140303230909.GB14940@free.fr>
+Date: Tue, 4 Mar 2014 00:24:57 +0100
+Subject: [Buildroot] [PATCH] libubox: new package
+In-Reply-To: <1391080311-30640-1-git-send-email-yegorslists@googlemail.com>
+References: <1391080311-30640-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20140303232457.GC14940@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ryan, All,
+Yegor, All,
 
-Thank you for your submission. Here are a few other comments.
+Thanks for your contribution! Some comments below...
 
-On 2014-02-03 16:37 -0500, Ryan Wilkins spake thusly:
+On 2014-01-30 12:11 +0100, yegorslists at googlemail.com spake thusly:
 [--SNIP--]
-> diff --git a/package/biosdevname/Config.in b/package/biosdevname/Config.in
+> diff --git a/package/libubox/Config.in b/package/libubox/Config.in
 > new file mode 100644
-> index 0000000..17a9aa4
+> index 0000000..c6efb33
 > --- /dev/null
-> +++ b/package/biosdevname/Config.in
-> @@ -0,0 +1,13 @@
-> +config BR2_PACKAGE_BIOSDEVNAME
-> +	bool "biosdevname"
-> +	depends on (BR2_i386 || BR2_x86_64) && BR2_PACKAGE_UDEV
-
-Two things:
-  - we usually separate the dependencies on architectures from the
-    dependencies on packages
-  - udev is now provided by a virtual package
-
-So, you should do:
-    depends on BR2_i386 || BR2_x86_64
-    dependson BR2_PACKAGE_HAS_UDEV
-
-> +	select BR2_PACKAGE_PCIUTILS
+> +++ b/package/libubox/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_LIBUBOX
+> +	bool "libubox"
 > +	help
-> +	  Biosdevname is a udev helper that looks at various BIOS tables to
-> +	  figure out what the actual hardware names are for Ethernet ports
-> +	  and renames the ports accordingly.  This has the advantage of
-> +	  always referring to the same port regardless of system or
-> +	  hardware changes that might otherwise alter the typical ethX
-> +	  naming.
-> +
-> +	  http://linux.dell.com/biosdevname/
-> diff --git a/package/biosdevname/biosdevname.mk b/package/biosdevname/biosdevname.mk
+> +	  Small utility library for OpenWrt.
+
+In what way would this be of interest to Buildroot?
+
+Since this is "for OpenWRT", I fail to see the relevance to Buildroot.
+
+> +	  http://nbd.name/gitweb.cgi?p=luci2/libubox.git;a=summary
+> diff --git a/package/libubox/libubox.mk b/package/libubox/libubox.mk
 > new file mode 100644
-> index 0000000..be1c6af
+> index 0000000..ec8fbdb
 > --- /dev/null
-> +++ b/package/biosdevname/biosdevname.mk
-> @@ -0,0 +1,15 @@
+> +++ b/package/libubox/libubox.mk
+> @@ -0,0 +1,13 @@
 > +################################################################################
 > +#
-> +# biosdevname
+> +# libubox
 > +#
 > +################################################################################
 > +
-> +BIOSDEVNAME_VERSION = 0.4.1
-> +BIOSDEVNAME_SITE = http://linux.dell.com/biosdevname/biosdevname-$(BIOSDEVNAME_VERSION)
+> +LIBUBOX_VERSION = bbd846ec2d72b2629758b69dc122ac0b0f2c3e4b
+> +LIBUBOX_SITE = git://nbd.name/luci2/libubox.git
+> +LIBUBOX_LICENSE = LGPLv2.1
 
-The git repository has version v0.5.0, out 2013-01-18.
-THere are also a few fixes in the repository, that were made a few hours
-ago, so it might be a better bet to use a git snapshot:
+This is not correct:
+  - most of the files have a license header that do not reference the
+    LGPLv2.1, but which I did not recognise  [0]
+  - some have a BSD-3c license: avl.c
+  - at least one file is GPLv2: md5.c
 
-    BIOSDEVNAME_VERSION = c140ce659a204d67e4cc61d2191443123f7dd970
-    BIOSDEVNAME_SITE = git://linux.dell.com/biosdevname.git
+[0]
+ * Copyright (C) 2012 Felix Fietkau <nbd@openwrt.org>
+ *
+ * Permission to use, copy, modify, and/or distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-> +BIOSDEVNAME_LICENSE = GPL
-> +BIOSDEVNAME_LICENSE_FILES = COPYING
-> +BIOSDEVNAME_INSTALL_TARGET = YES
+> +LIBUBOX_INSTALL_STAGING = YES
+> +LIBUBOX_CONF_OPT = -DBUILD_LUA:BOOL=OFF
 
-Not needed, that's the default.
-
-> +BIOSDEVNAME_CONF_OPT = --exec-prefix=/
-> +BIOSDEVNAME_DEPENDENCIES = pciutils
-
-Missing dependency on udev:
-
-    BIOSDEVNAME_DEPENDENCIES = pciutils udev
+Maybe that could be made conditional on whether lua is enabled or not?
 
 Regards,
 Yann E. MORIN.
