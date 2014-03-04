@@ -1,33 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Mar 2014 19:35:25 +0100
-Subject: [Buildroot] [PATCH 1/3] hostapd: fix static linking
-In-Reply-To: <1393940113-3419-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1393940113-3419-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140304193525.78539daf@skate>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 4 Mar 2014 19:36:42 +0100
+Subject: [Buildroot] [RFC,
+ PATCH 2/8] package/dropbear: Add separate configuration options for
+ client and server
+In-Reply-To: <53153191.9050506@ozlabs.org>
+References: <1389862338.918265.958087681541.2.gpush@pablo>
+ <53151AFC.3010402@zacarias.com.ar> <53152757.2020707@ozlabs.org>
+ <5315300C.60102@zacarias.com.ar> <53153191.9050506@ozlabs.org>
+Message-ID: <20140304183642.GB11474@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Jeremy, All,
 
-On Tue,  4 Mar 2014 10:35:11 -0300, Gustavo Zacarias wrote:
-> A rebase of Samuel Martin's http://patchwork.ozlabs.org/patch/312320/
-> hostapd doesn't use pkg-config and upstream likely wouldn't take a patch
-> to do so (hostapd/wpa_supplicant are used in android builds, and it
-> doesn't use any auto* stuff either) so pass it in LIBS since we
-> always build openssl with libz support.
+On 2014-03-04 09:51 +0800, Jeremy Kerr spake thusly:
+> >> There are some scenarios where there's no point starting a SSH server
+> >> (in my case, it's because there's no persistent storage, so no
+> >> persistent host keys). However, I'd still like a ssh/scp client to be
+> >> available.
+> > 
+> > Well you'll want at least one of the options of dropbear, there's no
+> > point in excluding both.
+> > My common sense tells me you'll always want the client anyway, it's no
+> > security threat or space-consuming menace, so why not add just a SERVER
+> > option maybe?
+> > BR2_PACKAGE_DROPBEAR -> builds and install the client portion.
+> > BR2_PACKAGE_DROPBEAR_SERVER -> installs the server bits (default=y for
+> > compatibility reasons).
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/hostapd/hostapd.mk | 1 +
->  1 file changed, 1 insertion(+)
+> That sounds pretty good to me too. I'd be happy to implement whatever
+> the general consensus is :)
 
-All three patches applied, thanks.
+OK for me. But make sure the server is "default y", so old .config files
+still work.
 
-Thomas
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
