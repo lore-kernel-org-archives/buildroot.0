@@ -1,34 +1,35 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  4 Mar 2014 13:30:11 -0300
-Subject: [Buildroot] [PATCH] eudev: disable manpages
-Message-ID: <1393950611-6873-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 04 Mar 2014 17:35:58 +0100
+Subject: [Buildroot] [git commit] linux: only depend on host-lzop if
+	needed
+In-Reply-To: <20140304091400.4213b502@skate> (Thomas Petazzoni's message of
+ "Tue, 4 Mar 2014 09:14:00 +0100")
+References: <20140303212321.09FDC9B9F2@busybox.osuosl.org>
+ <87mwh679ls.fsf@dell.be.48ers.dk> <20140304091400.4213b502@skate>
+Message-ID: <87eh2h7wgh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If host-libxslt or some libxslt is around (xsltproc) eudev will try to
-build manpages with it. Problem is docbook DTDs might not be around and
-things will break. We want no manpages anyway. Fixes:
-http://autobuild.buildroot.net/results/c4e/c4e920b16c57e79df979f00cceaea7c0483f043c/
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/eudev/eudev.mk | 1 +
- 1 file changed, 1 insertion(+)
+ > Dear Peter Korsgaard,
+ > On Tue, 04 Mar 2014 07:37:19 +0100, Peter Korsgaard wrote:
 
-diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-index ffa413f..95aa1ce 100644
---- a/package/eudev/eudev.mk
-+++ b/package/eudev/eudev.mk
-@@ -15,6 +15,7 @@ EUDEV_AUTORECONF = YES
- EUDEV_CONF_ENV += LIBS=-lrt
- 
- EUDEV_CONF_OPT =		\
-+	--disable-manpages	\
- 	--sbindir=/sbin		\
- 	--with-rootlibdir=/lib	\
- 	--libexecdir=/lib	\
+ >> Doesn't this get executed very early, E.G. before the linux sources are
+ >> extracted?
+
+ > Indeed, but the configuration file is already available at this point.
+ > It may be either a full .config, or a minimal defconfig, but in both
+ > cases it doesn't matter. See below.
+
+As I explained on IRC, it isn't available if the defconfig isn't part of
+buildroot but inside the linux tree (arch/$ARCH/config/foo_defconfig).
+
+We do support such setups (and multiple defconfigs use it), and I don't
+see how it can be made to work here.
+
 -- 
-1.8.3.2
+Bye, Peter Korsgaard
