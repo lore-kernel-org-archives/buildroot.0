@@ -1,81 +1,23 @@
-From: Ed Sutter <ed.sutter@alcatel-lucent.com>
-Date: Tue, 04 Mar 2014 07:50:55 -0500
-Subject: [Buildroot] readonly rootfs problem
-In-Reply-To: <20140304061824.GY3874@tarshish>
-References: <5314FED7.80903@alcatel-lucent.com>
- <20140304061824.GY3874@tarshish>
-Message-ID: <5315CC2F.9090709@alcatel-lucent.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue,  4 Mar 2014 13:01:00 +0000 (UTC)
+Subject: [Buildroot] [Bug 6944] building toolchain for sh4 fails
+In-Reply-To: <bug-6944-163@https.bugs.busybox.net/>
+References: <bug-6944-163@https.bugs.busybox.net/>
+Message-ID: <20140304130100.4BF599BD2A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 3/4/2014 1:18 AM, Baruch Siach wrote:
-> Hi Ed,
->
-> On Mon, Mar 03, 2014 at 05:14:47PM -0500, Ed Sutter wrote:
->> I've been using buildroot to create my rootfs for a few months.
->> I build my kernel directly out of freescale.git.
->> I had been running with my rootfs nfs mounted, and all was well.
->> Recently I had spent some time with a ramdisk-based rootfs because
->> i was working on some kernel stuff.
->> Now I'm going back to running rootfs/nfs and I'm finding that
->> it "insists" on coming up in read-only mode.
->>
->> I was initially using buildroot-2013.08, and recently I
->> updated to buildroot-2013.11; however, I don't think that has
->> anything to do with this.  As far as I can tell I have everything
->> set up properly...
->>
->> ####On NFS host /etc/exports has...
->> /full_path_to_my_rootfs *(rw,no_root_squash)
->>
->> ####On target...
->> /etc/inittab...
->> null::sysinit:/bin/mount -o remount,rw / # REMOUNT_ROOTFS_RW
->>
->> /etc/fstab...
->> # /etc/fstab: static file system information.
->> #
->> # <file system> <mount pt>     <type> <options>         <dump> <pass>
->> /dev/root       /              ext2     rw,noauto         0      1
->> proc            /proc          proc     defaults          0      0
->> devpts          /dev/pts       devpts   defaults,gid=5,mode=620 0      0
->> tmpfs           /dev/shm       tmpfs    mode=0777         0      0
->> tmpfs           /tmp           tmpfs    defaults          0      0
->> sysfs           /sys           sysfs    defaults          0 0
->>
->> Output from mount:
->> # mount
->> rootfs on / type rootfs (rw)
->> 1.2.3.4:/full_path_to_my_rootfs on / type nfs (ro,relatime,vers=3,rsize=4096,wsize=4096,namlen=255,hard,nolock,proto=tcp,timeo=600,retrans=2,sec=sys,mountaddr=1.2.3.4,mountvers=3,mountproto=tcp,local_lock=all,addr=135.222.138.108)
->> devtmpfs on /dev type devtmpfs
->> (rw,relatime,size=110708k,nr_inodes=27677,mode=755)
->> proc on /proc type proc (rw,relatime)
->> devpts on /dev/pts type devpts (rw,relatime,gid=5,mode=620)
->> tmpfs on /dev/shm type tmpfs (rw,relatime,mode=777)
->> tmpfs on /tmp type tmpfs (rw,relatime)
->> sysfs on /sys type sysfs (rw,relatime)
->>
->> I actually think the problem is in the kernel, not the rootfs.
->> I say this because even some of my older rootfs copies (still on my
->> host) are now
->> showing up as read only.  The bootlog always ends up with this message:
->> VFS: Mounted root (nfs filesystem) readonly on device 0:11.
->>
->> Any idea what I might be doing wrong here?
-> What happens if you manually run:
->
-> 	mount -o remount,rw /
->
-> Do you see any error message?
->
-> baruch
->
-Just got it...
-This error started after I updated my kernel, and apparently the new kernel
-does not default to a rw nfs-mounted rootfs, so I had to add "rw" to the
-kernel command line.
-Thanks,
-Ed
+https://bugs.busybox.net/show_bug.cgi?id=6944
+
+--- Comment #3 from George <gdalex@gmail.com> 2014-03-04 13:00:59 UTC ---
+Created attachment 5270
+  --> https://bugs.busybox.net/attachment.cgi?id=5270
+Fix the toolchain build for the SuperH architecture.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
