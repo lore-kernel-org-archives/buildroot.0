@@ -1,29 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Mar 2014 19:39:07 +0100
-Subject: [Buildroot] [PATCH] gnutls: security bump to version 3.2.12
-In-Reply-To: <1393894962-16026-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1393894962-16026-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140304193907.17fe5adb@skate>
+Date: Tue, 4 Mar 2014 19:38:05 +0100
+Subject: [Buildroot] [git commit] libnftnl: exclude for CS PPC toolchains
+Message-ID: <20140304183929.3C3669BD19@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=f5866484ffe9eee32b020ee11d323404c471d7b4
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  3 Mar 2014 22:02:42 -0300, Gustavo Zacarias wrote:
-> Fixes CVE-2014-1959 / GNUTLS-SA-2014-1 and CVE-2014-0092 / GNUTLS-SA-2014.2
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/gnutls/gnutls.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+The CS PPC 2011.3 and 2010.9 toolchains have a bad linux/socket.h header
+that doesn't define sa_family_t which is used by linux/netlink.h (and
+libnftnl).
+Patching external toolchain headers wouldn't be too nice and they seem
+to be the only CS toolchains affected.
+It's definitely NOT a kernel header version issue, the toolchain is
+based on 2.6.38 headers and vanilla 2.6.38 has the proper definitions in
+place. Fixes:
+http://autobuild.buildroot.net/results/1e2/1e2cac84f0faa9b8915a628260ef41765d86e174/
 
-Applied, thanks.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libnftnl/Config.in |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libnftnl/Config.in b/package/libnftnl/Config.in
+index 75ca519..ffd9d5b 100644
+--- a/package/libnftnl/Config.in
++++ b/package/libnftnl/Config.in
+@@ -3,6 +3,8 @@ config BR2_PACKAGE_LIBNFTNL
+ 	depends on BR2_INET_IPV6
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	# bad headers, no sa_family_t in linux/socket.h
++	depends on !(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 || BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009)
+ 	select BR2_PACKAGE_LIBMNL
+ 	help
+ 	  libnftnl is a userspace library providing a low-level
