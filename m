@@ -1,46 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Mar 2014 19:36:55 +0100
-Subject: [Buildroot] Buildroot 2014.02 : make on raspberry pi failed
-In-Reply-To: <CACfHD-gFTUe-ybERH4tHGHx7b8zpvDv2ULY2m2eZ-=0WmJHfdw@mail.gmail.com>
-References: <CACfHD-gFTUe-ybERH4tHGHx7b8zpvDv2ULY2m2eZ-=0WmJHfdw@mail.gmail.com>
-Message-ID: <20140304193655.27b3f3ad@skate>
+Date: Tue, 4 Mar 2014 19:38:43 +0100
+Subject: [Buildroot] [PATCH] libnftnl: exclude for CS PPC toolchains
+In-Reply-To: <1393898330-20409-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1393898330-20409-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140304193843.0f42ccd0@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Cyrille DERORY,
+Dear Gustavo Zacarias,
 
-On Tue, 4 Mar 2014 10:22:11 +0100, Cyrille DERORY wrote:
-
-> I have tried to build for the raspberry pi target with the following :
-> make raspberrypi_defconfig
-> make
-
-Have you done previous builds before? If yes, have you done a "make
-clean" in between?
-
-Generally speaking, does this problem also occurs if you do:
-
-make clean
-make raspberrypi_defconfig
-make
-
- ?
-
-> I have an error :
+On Mon,  3 Mar 2014 22:58:50 -0300, Gustavo Zacarias wrote:
+> The CS PPC 2011.3 and 2010.9 toolchains have a bad linux/socket.h header
+> that doesn't define sa_family_t which is used by linux/netlink.h (and
+> libnftnl).
+> Patching external toolchain headers wouldn't be too nice and they seem
+> to be the only CS toolchains affected.
+> It's definitely NOT a kernel header version issue, the toolchain is
+> based on 2.6.38 headers and vanilla 2.6.38 has the proper definitions in
+> place. Fixes:
+> http://autobuild.buildroot.net/results/1e2/1e2cac84f0faa9b8915a628260ef41765d86e174/
 > 
-> mkdir: impossible de cr?er le r?pertoire
-> ? /home/cderory/T?l?chargements/buildroot/buildroot-2014.02/output/target/var/cache
-> ?:
-> N'est pas un dossier
-> Makefile:507: recipe for target 'target-finalize' failed
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/libnftnl/Config.in | 2 ++
+>  1 file changed, 2 insertions(+)
 
-Can you include a larger part of the commit, such as the last 100 or
-so ?
+Not nice to have conditions on specific toolchains, but since the
+breakage is specific to them, I guess we don't have much choice.
 
-Thanks,
+Thanks, patch applied.
 
 Thomas
 -- 
