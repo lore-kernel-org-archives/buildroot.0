@@ -1,67 +1,31 @@
-From: Jeremy Kerr <jk@ozlabs.org>
-Date: Tue, 04 Mar 2014 07:54:52 +0800
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 03 Mar 2014 21:14:52 -0300
 Subject: [Buildroot] [RFC,
  PATCH 2/8] package/dropbear: Add separate configuration options for
  client and server
-In-Reply-To: <20140303234654.GD14940@free.fr>
-References: <1389862338.917573.283530987294.0.gpush@pablo>
- <1389862338.918265.958087681541.2.gpush@pablo>
- <20140303234654.GD14940@free.fr>
-Message-ID: <5315164C.7090302@ozlabs.org>
+In-Reply-To: <1389862338.918265.958087681541.2.gpush@pablo>
+References: <1389862338.918265.958087681541.2.gpush@pablo>
+Message-ID: <53151AFC.3010402@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+On 01/16/2014 05:52 AM, Jeremy Kerr wrote:
 
-> On 2014-01-16 16:52 +0800, Jeremy Kerr spake thusly:
-> [--SNIP--]
->> index 68c3b71a..4a7327b7 100644
->> --- a/package/dropbear/Config.in
->> +++ b/package/dropbear/Config.in
->> @@ -8,6 +8,18 @@ config BR2_PACKAGE_DROPBEAR
->>  
->>  if BR2_PACKAGE_DROPBEAR
->>  
->> +config BR2_PACKAGE_DROPBEAR_SERVER
->> +	bool "dropbear ssh server"
->> +	default y
->> +	help
->> +	  Enable the dropbear ssh server, run from init
->> +
->> +config BR2_PACKAGE_DROPBEAR_CLIENT
->> +	bool "dropbear ssh client"
->> +	default y
->> +	help
->> +	  Enable the dropbear ssh client, scp and utilities
+> Currently, the dropbear package installs both client and server
+> components. For example, this means that when we only want the
+> client binaries, we also get the server run from init.
 > 
-> What if none is selected?
+> Even though it's a multi-call binary (the client and server
+> exist in the same executable), we'd like to selectively install the
+> links and init scripts. This change introduces separate configuration
+> options (both 'default y') for the client and server bits.
 
-Then neither the client nor server is installed; is that an issue?
-
-We could just have a comment (when !_CLIENT && !_SERVER) to notify the
-user that it's not a sensible configuration...
-
->> diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
->> index 3ef6c8da..a1cc5691 100644
->> --- a/package/dropbear/dropbear.mk
->> +++ b/package/dropbear/dropbear.mk
->> @@ -7,7 +7,7 @@
->>  DROPBEAR_VERSION = 2013.62
->>  DROPBEAR_SITE = http://matt.ucc.asn.au/dropbear/releases
->>  DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
->> -DROPBEAR_TARGET_BINS = dbclient dropbearkey dropbearconvert scp ssh
->> +DROPBEAR_TARGET_BINS = dropbearkey dropbearconvert
->>  DROPBEAR_MAKE =	$(MAKE) MULTI=1 SCPPROGRESS=1 \
->>  		PROGRAMS="dropbear dbclient dropbearkey dropbearconvert scp"
-> 		                   ^^^^^^^^
-> Should we not disable dbclient if it is not selected?
-
-We should. I'll sort this out in my next series.
-
-Thanks for the review!
-
-
-Jeremy
+Normally we don't make initscript installation an option and since the
+dropbear package options are essentially a no-op what's the point?
+(if you don't want sshd to startup on boot you can use a post build
+script to just remove the initscript from the target, that's the
+recommended way).
+Regards.
