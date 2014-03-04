@@ -1,88 +1,71 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 4 Mar 2014 20:24:10 +0100
-Subject: [Buildroot] [PATCH] libubox: new package
-In-Reply-To: <20140304183243.GA11474@free.fr>
-References: <1391080311-30640-1-git-send-email-yegorslists@googlemail.com>
- <20140303232457.GC14940@free.fr>
- <CAGm1_ksZJ0xQnTTUSmGVQZVfDwCaeZGf=nopB8_usH8pii43Ag@mail.gmail.com>
- <20140304183243.GA11474@free.fr>
-Message-ID: <CAGm1_ksi7DYLuC5vUdSBekjMkbATKWU0RQCgWz+eE2__PJyVBw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 4 Mar 2014 20:22:18 +0100
+Subject: [Buildroot] [PATCH] kmod: disable --gc-sections ld option when
+ building for xtensa
+In-Reply-To: <1393960216-18633-1-git-send-email-jcmvbkbc@gmail.com>
+References: <1393960216-18633-1-git-send-email-jcmvbkbc@gmail.com>
+Message-ID: <20140304202218.3396f4f9@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Mar 4, 2014 at 7:32 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> On 2014-03-04 07:59 +0100, Yegor Yefremov spake thusly:
->> On Tue, Mar 4, 2014 at 12:24 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->> > Yegor, All,
->> >
->> > Thanks for your contribution! Some comments below...
->> >
->> > On 2014-01-30 12:11 +0100, yegorslists at googlemail.com spake thusly:
->> > [--SNIP--]
->> >> diff --git a/package/libubox/Config.in b/package/libubox/Config.in
->> >> new file mode 100644
->> >> index 0000000..c6efb33
->> >> --- /dev/null
->> >> +++ b/package/libubox/Config.in
->> >> @@ -0,0 +1,6 @@
->> >> +config BR2_PACKAGE_LIBUBOX
->> >> +     bool "libubox"
->> >> +     help
->> >> +       Small utility library for OpenWrt.
->> >
->> > In what way would this be of interest to Buildroot?
->> >
->> > Since this is "for OpenWRT", I fail to see the relevance to Buildroot.
->>
->> My goal is to port libuci to Buildroot as I have some software, that
->> I've written for OpenWRT and now would like to use in BR too. The
->> software uses /etc/config/* infrastructure to access its configuration
->> files via libuci.
->> libubox it a dependency of libuci.
->
-> Ah, I see. Then, please say so in the help text (the one you provided is
-> not really interesting, as it does not say what libubox does).
+Dear Max Filippov,
 
-You're right. I'll post both patches for libubox and libuci. And who
-knows, perhaps we would be able to run LuCI especially LuCI2 on BR.
+On Tue,  4 Mar 2014 23:10:16 +0400, Max Filippov wrote:
+> This is a workaround for the following ld issue exhibited by --gc-sections
+> option, until a proper fix for binutils is ready:
+> 
+> ld: BFD (GNU Binutils) 2.22 internal error, aborting at elf32-xtensa.c line 3374 in elf_xtensa_finish_dynamic_sections
+> 
+> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+> ---
+>  package/kmod/900-disable-gc-sections.patch.xtensa | 12 ++++++++++++
 
->> > This is not correct:
->> >   - most of the files have a license header that do not reference the
->> >     LGPLv2.1, but which I did not recognise  [0]
->
-> It might be MIT:
->     http://spdx.org/licenses/MIT
->
->> >   - some have a BSD-3c license: avl.c
->> >   - at least one file is GPLv2: md5.c
->>
->> Hm. That's really odd. Should I omit license information for now?
->
-> No, just state all of them:
->     _LICENSES = GPLv2, BSD-3c, MIT
->
->> >> +LIBUBOX_INSTALL_STAGING = YES
->> >> +LIBUBOX_CONF_OPT = -DBUILD_LUA:BOOL=OFF
->> >
->> > Maybe that could be made conditional on whether lua is enabled or not?
->>
->> I wanted to start with a simple configuration, as I don't need Lua
->> right now, but I'll incorporate this feature in the v2.
->
-> OK, that's fine. If you don't use it, and so don't test it, there's no
-> reason to add it. If someone (or you, later) is interested in it, he'll
-> send a patch.
->
-> Regards,
-> Yann E. MORIN.
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+The patch should be named kmod-01-<description>.patch. We no longer
+accept architecture-specific patches, so the .xtensa extension has to
+go, and we have to ensure that the fix is usable on all architectures.
+
+So either we simply remove --gc-sections on all architecture, or the
+configure.ac test has to be made conditional on xtensa.
+
+>  1 file changed, 12 insertions(+)
+>  create mode 100644 package/kmod/900-disable-gc-sections.patch.xtensa
+> 
+> diff --git a/package/kmod/900-disable-gc-sections.patch.xtensa b/package/kmod/900-disable-gc-sections.patch.xtensa
+> new file mode 100644
+> index 0000000..2b7a9cb
+> --- /dev/null
+> +++ b/package/kmod/900-disable-gc-sections.patch.xtensa
+
+The patch lacks a description. See
+http://buildroot.org/downloads/manual/manual.html#patch-policy for more
+details about the format of the patches.
+
+> @@ -0,0 +1,12 @@
+> +--- kmod-16/configure	2013-12-23 01:31:12.456202872 +0400
+> ++++ kmod-16.mod/configure	2014-03-04 22:53:37.132241845 +0400
+> +@@ -14511,8 +14511,7 @@
+
+We normally prefer to patch configure.ac, and add KMOD_AUTORECONF = YES.
+
+All that being said, I believe there is a much simpler solution. Don't
+use any patch at all, and add:
+
+# --gc-sections triggers a bug in the current Xtensa binutils
+ifeq ($(BR2_xtensa),y)
+KMOD_CONF_ENV += cc_cv_LDFLAGS__Wl___gc_sections=no
+endif
+
+to package/kmod/kmod.mk.
+
+Can you test that it works for you, and submit the corresponding patch?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
