@@ -1,36 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Mar 2014 19:21:17 +0100
-Subject: [Buildroot] [git commit] eudev: disable manpages
-Message-ID: <20140304182239.B5F989BD19@busybox.osuosl.org>
+Date: Tue, 4 Mar 2014 19:22:48 +0100
+Subject: [Buildroot] [PATCH] eudev: disable manpages
+In-Reply-To: <1393950611-6873-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1393950611-6873-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140304192248.7630d1ae@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d5604d9c3de6cd0b24db1351227b017fd8a8be75
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Gustavo Zacarias,
 
-If host-libxslt or some libxslt is around (xsltproc) eudev will try to
-build manpages with it. Problem is docbook DTDs might not be around and
-things will break. We want no manpages anyway. Fixes:
-http://autobuild.buildroot.net/results/c4e/c4e920b16c57e79df979f00cceaea7c0483f043c/
+On Tue,  4 Mar 2014 13:30:11 -0300, Gustavo Zacarias wrote:
+> If host-libxslt or some libxslt is around (xsltproc) eudev will try to
+> build manpages with it. Problem is docbook DTDs might not be around and
+> things will break. We want no manpages anyway. Fixes:
+> http://autobuild.buildroot.net/results/c4e/c4e920b16c57e79df979f00cceaea7c0483f043c/
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/eudev/eudev.mk | 1 +
+>  1 file changed, 1 insertion(+)
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/eudev/eudev.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+Applied, thanks.
 
-diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-index ffa413f..95aa1ce 100644
---- a/package/eudev/eudev.mk
-+++ b/package/eudev/eudev.mk
-@@ -15,6 +15,7 @@ EUDEV_AUTORECONF = YES
- EUDEV_CONF_ENV += LIBS=-lrt
- 
- EUDEV_CONF_OPT =		\
-+	--disable-manpages	\
- 	--sbindir=/sbin		\
- 	--with-rootlibdir=/lib	\
- 	--libexecdir=/lib	\
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
