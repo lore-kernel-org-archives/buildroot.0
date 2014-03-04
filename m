@@ -1,123 +1,98 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 04 Mar 2014 18:19:23 +0100
-Subject: [Buildroot] [PATCH v5 4/4] *.mk: remove all occurences of
- TARGET_PATH and HOST_PATH
-In-Reply-To: <1393703951-7059-5-git-send-email-s.martin49@gmail.com>
-References: <1393703951-7059-1-git-send-email-s.martin49@gmail.com>
- <1393703951-7059-5-git-send-email-s.martin49@gmail.com>
-Message-ID: <53160B1B.20708@mind.be>
+Date: Tue, 04 Mar 2014 18:40:53 +0100
+Subject: [Buildroot] [RFC/PATCH 1/1] gst-fsl-plugins: fix compile for
+ sysroot based on newer linux kernel headers
+In-Reply-To: <20140302094859.66470cdc@skate>
+References: <1393366722-27644-1-git-send-email-ps.report@gmx.net>	<1393366722-27644-2-git-send-email-ps.report@gmx.net>
+ <20140302094859.66470cdc@skate>
+Message-ID: <53161025.7040908@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/03/14 20:59, Samuel Martin wrote:
-> Thanks to the 2 previous patches, the PATH now contains all locations
-> in which host-packages may install programs.
+On 02/03/14 09:48, Thomas Petazzoni wrote:
+> Arnout,
 > 
-> This patch removes the occurrences TARGET_PATH and HOST_PATH from the
-> *.mk files.
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> 
-> ---
-> changes v4 -> v5:
-> - rebase
-> - remove all occurence of {TARGET,HOST}_PATH
-> - fixup a couple of PATH definitions
-> 
-> changes v3 -> v4:
-> - rebase
-> - fix typo in commit log (ThomasP)
-> - rename BR2_PATH -> BR_PATH
-> - make substitution of new occurenrces (gpm.mk)
-> 
-> changes v2 -> v3:
-> - rebase
-> - no one-line commit log (ThomasP)
-> 
-> changes v1 -> v2:
-> - make substitution of new occurenrces (pkg-python.mk and sdl.mk)
-> ---
->  fs/ext2/ext2.mk          |  2 +-
->  package/Makefile.in      | 14 ++++----------
->  package/gpm/gpm.mk       |  2 +-
->  package/libhid/libhid.mk |  2 +-
->  package/pkg-python.mk    |  8 ++------
->  package/sdl/sdl.mk       |  2 +-
+> Since you originally added the package with -idirafter, can you comment
+> on the below patch? To me it makes sense that if the package needs
+> special kernel headers, it should use first the headers from the kernel
+> and then only the sysroot headers. Am I missing something that lead you
+> to the usage of -idirafter?
 
- Have you tested that ext2, gpm, libhid and sdl still work?
+ Ow yes good that you remind me...
 
->  6 files changed, 10 insertions(+), 20 deletions(-)
-> 
+ The problem is that the kernel headers in /usr/include/linux are not the
+same as the ones in $(LINUX_DIR)/include/linux: headers_install does some
+fixups on them. Also, $(LINUX_DIR)/include/net is completely different
+from /usr/include/net. So putting $(LINUX_DIR)/include in front of the
+system dirs is a bad idea. As in, it didn't work for me :-)
 
-[snip]
-> diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-> index 512ef66..7705a86 100644
-> --- a/package/pkg-python.mk
-> +++ b/package/pkg-python.mk
-> @@ -22,7 +22,6 @@
->  
->  # Target distutils-based packages
->  PKG_PYTHON_DISTUTILS_ENV = \
-> -	PATH="$(TARGET_PATH)" \
->  	CC="$(TARGET_CC)" \
->  	CFLAGS="$(TARGET_CFLAGS)" \
->  	LDFLAGS="$(TARGET_LDFLAGS)" \
-> @@ -39,15 +38,13 @@ PKG_PYTHON_DISTUTILS_INSTALL_OPT = \
->  	--prefix=$(TARGET_DIR)/usr
->  
->  # Host distutils-based packages
-> -HOST_PKG_PYTHON_DISTUTILS_ENV = \
-> -	PATH="$(HOST_PATH)"
-> +HOST_PKG_PYTHON_DISTUTILS_ENV =
+ Maybe a generic solution for packages that require specific kernel
+headers is to include a headers_install in the kernel's build?
 
- Since this is now empty, the variable can be removed. Also its use in
-python-m2crypto can be removed, and in $(2)_BASE_ENV. And since
-$(2)_BASE_ENV becomes empty, it can be removed as well.
-
- But perhaps you better do that in a separate patch, since some people
-may disagree.
+ Anyway, for this one, if it works with -I with all our external
+toolchains and with an internal uClibc and glibc toolchain, then I guess
+it's OK. Perhaps something got fixed in the gst-fsl-plugins bump.
 
 
  Regards,
  Arnout
 
-
->  
->  HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPT = \
->  	--prefix=$(HOST_DIR)/usr
->  
->  # Target setuptools-based packages
->  PKG_PYTHON_SETUPTOOLS_ENV = \
-> -	PATH="$(TARGET_PATH)" \
->  	PYTHONPATH="$(if $(BR2_PACKAGE_PYTHON3),$(PYTHON3_PATH),$(PYTHON_PATH))" \
->  	_python_sysroot=$(STAGING_DIR) \
->  	_python_prefix=/usr \
-> @@ -60,8 +57,7 @@ PKG_PYTHON_SETUPTOOLS_INSTALL_OPT = \
->  	--root=/
->  
->  # Host setuptools-based packages
-> -HOST_PKG_PYTHON_SETUPTOOLS_ENV = \
-> -	PATH="$(HOST_PATH)"
-> +HOST_PKG_PYTHON_SETUPTOOLS_ENV =
->  
->  HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPT = \
->  	--prefix=$(HOST_DIR)/usr
-> diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
-> index d5fb331..053a3c6 100644
-> --- a/package/sdl/sdl.mk
-> +++ b/package/sdl/sdl.mk
-> @@ -14,7 +14,7 @@ SDL_INSTALL_STAGING = YES
->  # we're patching configure.in, but package cannot autoreconf with our version of
->  # autotools, so we have to do it manually instead of setting SDL_AUTORECONF = YES
->  define SDL_RUN_AUTOGEN
-> -	cd $(@D) && PATH=$(HOST_PATH) ./autogen.sh
-> +	cd $(@D) && ./autogen.sh
->  endef
->  
->  SDL_PRE_CONFIGURE_HOOKS += SDL_RUN_AUTOGEN
+> 
+> See the patch below.
+> 
+> Thanks!
+> 
+> Thomas
+> 
+> On Tue, 25 Feb 2014 23:18:42 +0100, Peter Seiderer wrote:
+>> The v4l2 ioctl VIDIOC_DBG_G_CHIP_IDENT was removed in linux-3.11 (see [1]/[2]).
+>>
+>> To avoid build failure of the gst-fsl-plugins/mfw_gst_v4lsrc with toolchains based
+>> on newer linux kernel headers this patch gives the include of the custom linux
+>> kernel headers precedence over the sysroot linux kernel headers (oposed to the
+>> previous behavior).
+>>
+>> Fixes the following compile error with buildroot/glibc toolchain:
+>>
+>> mfw_gst_v4lsrc.c: In function 'mfw_gst_v4lsrc_capture_setup':
+>> mfw_gst_v4lsrc.c:452:10: error: variable 'chip' has initializer but incomplete type
+>>    struct v4l2_dbg_chip_ident chip = {0};
+>>           ^
+>> mfw_gst_v4lsrc.c:452:10: warning: excess elements in struct initializer [enabled by default]
+>> mfw_gst_v4lsrc.c:452:10: warning: (near initialization for 'chip') [enabled by default]
+>> mfw_gst_v4lsrc.c:452:30: error: storage size of 'chip' isn't known
+>>    struct v4l2_dbg_chip_ident chip = {0};
+>>                               ^
+>> mfw_gst_v4lsrc.c:464:22: error: 'VIDIOC_DBG_G_CHIP_IDENT' undeclared (first use in this function)
+>>    if (ioctl (fd_v4l, VIDIOC_DBG_G_CHIP_IDENT, &chip)) {
+>>                       ^
+>>
+>> [1] http://www.spinics.net/lists/linux-media/msg64081.html
+>> [2] https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/include/uapi/linux/videodev2.h?id=b71c99801e18eb172ae34851daf25044a3bf644a
+>>
+>> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+>> ---
+>>  package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
+>> index ccdb521..610bd78 100644
+>> --- a/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
+>> +++ b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
+>> @@ -23,7 +23,7 @@ GST_FSL_PLUGINS_CONF_ENV = PLATFORM=$(BR2_PACKAGE_GST_FSL_PLUGINS_PLATFORM)
+>>  
+>>  # needs access to imx-specific kernel headers
+>>  GST_FSL_PLUGINS_DEPENDENCIES += linux
+>> -GST_FSL_PLUGINS_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) -idirafter $(LINUX_DIR)/include"
+>> +GST_FSL_PLUGINS_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) -I$(LINUX_DIR)/include"
+>>  
+>>  ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
+>>  GST_FSL_PLUGINS_DEPENDENCIES += xlib_libX11
+> 
+> 
 > 
 
 
