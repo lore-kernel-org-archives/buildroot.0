@@ -1,35 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Mar 2014 10:44:15 +0100
-Subject: [Buildroot] [git commit] linux: only depend on host-lzop if
- needed
-In-Reply-To: <CAHkwnC_fm6gb6L3AkWB-oQoNdpkogrkj7dPfRqKVS3f+z6hCMA@mail.gmail.com>
-References: <20140303212321.09FDC9B9F2@busybox.osuosl.org>
- <87mwh679ls.fsf@dell.be.48ers.dk> <20140304091400.4213b502@skate>
- <CAHkwnC_fm6gb6L3AkWB-oQoNdpkogrkj7dPfRqKVS3f+z6hCMA@mail.gmail.com>
-Message-ID: <20140304104415.23508b79@skate>
+From: Martin Bark <martin@barkynet.com>
+Date: Tue, 04 Mar 2014 09:56:43 +0000
+Subject: [Buildroot] Linux won't build any more?
+In-Reply-To: <20140304090918.5eef0cd5@skate>
+References: <531584D4.3060301@freescale.com> <20140304090918.5eef0cd5@skate>
+Message-ID: <5315A35B.30204@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fabio Porcedda,
+Thomas,
 
-On Tue, 4 Mar 2014 10:40:09 +0100, Fabio Porcedda wrote:
+On 04/03/14 08:09, Thomas Petazzoni wrote:
+> Dear Vincent Stehl?,
+>
+> On Tue, 4 Mar 2014 08:46:28 +0100, Vincent Stehl? wrote:
+>
+>> FYI I wonder if the recent commits on the master branch have not broken
+>> linux kernel build in some cases. For example:
+>>
+>>     $ make freescale_imx6sabresd_defconfig
+>>     $ make
+>>     linux/linux.mk:171: *** Configuration file
+>> '/arch/arm/configs/imx6_defconfig' not found..  Stop.
+>>
+>> Same with qemu_arm_vexpress_defconfig.
+>>
+>> Git bisect points at commit b4cacbf5b15db06132b5f401d39b4c8d4e79158e,
+>> "linux: check the configuration file exists". If I revert this commit
+>> build will indeed still complain about the config but will go further.
+>
+> Thanks for the report. Do you still see this problem with the current
+> Git head, including commits
+> http://git.buildroot.net/buildroot/commit/?id=477c28cf1d637b224b819dd278103a05fb6f9dbb
+> and
+> http://git.buildroot.net/buildroot/commit/?id=4ad1ea59a59f951fad072dcb19429e6f468abf05 ?
+>
+> If you still see it, then I believe I'll just revert Yann's patches,
+> they have caused too much troubles already.
+>
+> Again, thanks for your report!
+>
+> Thomas
+>
 
-> There are two linux defconfigs files that uses LZO as default:
-> $ git grep KERNEL_LZO | grep /configs
-> arch/arm/configs/imx_v6_v7_defconfig:CONFIG_KERNEL_LZO=y
-> arch/sh/configs/sdk7786_defconfig:CONFIG_KERNEL_LZO=y
-> 
-> If such defconfigs are used the host-lzo dependency is not added, does it?
+I see this issue still, those two commit did not fix it.  I noticed the 
+issue using raspberrypi_defconfig
 
-It is: that's the whole point of Yann's patch. It greps in the provided
-configuration file, and if it finds that the LZO compression is
-selected, it adds host-lzop to the dependencies.
+	$ make raspberrypi_defconfig
+	$ make
+	linux/linux.mk:171: *** Configuration file 
+'/arch/arm/configs/bcmrpi_quick_defconfig' not found.. Stop.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Thanks
+
+Martin
