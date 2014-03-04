@@ -1,66 +1,58 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Wed, 5 Mar 2014 00:11:35 +0100
-Subject: [Buildroot] [PATCH v5 2/4] Makefile: export PATH including the
- Buildroot host bindirs
-In-Reply-To: <20140304225234.164382f9@skate>
-References: <1393703951-7059-1-git-send-email-s.martin49@gmail.com>
- <1393703951-7059-3-git-send-email-s.martin49@gmail.com>
- <53160821.9080907@mind.be> <20140304225234.164382f9@skate>
-Message-ID: <CAHXCMML5Q+w=9g=Wqsu3EJGUMWs8__fL4cYrTUPHsXyc-HH49w@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 05 Mar 2014 00:18:37 +0100
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20140302095754.13319d04@skate>
+References: <20140302073008.028A91015DC@stock.ovh.net>
+ <20140302095754.13319d04@skate>
+Message-ID: <53165F4D.5060405@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, Thomas, all,
+On 02/03/14 09:57, Thomas Petazzoni wrote:
+>>       i686 |          host-python3-3.4.0rc1 | NOK | http://autobuild.buildroot.net/results/2a62de3247ba5ad273f03d01e690a3eeb11aa7b4/
+> Parallel installation issue with Python 3. Either we should make Python
+> 3 entirely use MAKE1, or fix the problem. I have analyzed the problem,
+> and it is caused by the parallel installation of libpython into the
+> HOST_DIR and the execution of ./python in the Python source directory.
 
-On Tue, Mar 4, 2014 at 10:52 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Arnout Vandecappelle,
->
-> On Tue, 04 Mar 2014 18:06:41 +0100, Arnout Vandecappelle wrote:
->> On 01/03/14 20:59, Samuel Martin wrote:
->> > This patch exports the PATH variable containing the factorized content
->> > of TARGET_PATH and HOST_PATH (because they were fairly similar).
->> >
->> > TARGET_PATH and HOST_PATH are now set using only the PATH variable.
->> >
->> > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
->>
->>  Looks good to me.
->>
->>  Except... I'm having second thoughts about the principle of this patch.
->> When debugging failing builds, I often copy&paste the build command line
->> if I want to drill down to the details of the error. But if PATH is
->> exported (and TARGET_PATH is removed, in 4/4), it is no longer visible on
->> the command line... So I have to remember to set it myself...
->
-> True. I also do that very often.
+ Is that because we export an LD_LIBRARY_PATH that points to the freshly
+installed libpython? Because I would expect that ./python uses the build
+directory's libpython, not the installed one...
 
-... and I use that too!
+ Oh, but it actually does get called with the correct LD_LIBRARY_PATH:
 
->
-> I personally dislike exporting the PATH globally, as it means that
-> we're "magically" passing some stuff into the commands we are running,
-> which are not explicit when looking at the commands being executed.
+LD_LIBRARY_PATH=/home/peko/scratch/build/host-python3-3.4.0rc1:/home/peko/scratch/host/usr/lib:
+./python ...
 
-The main argument in favor of exporting the PATH is having it
-correctly set when executing the post-{build,image} scripts; things
-that could set when calling these scripts (the same way we set it in
-the environment when build the packages).
+ The issue is that the executable contains an RPATH pointing to the
+install location of libpython.so (in $(HOST_DIR)). When the file doesn't
+exist yet there, LD_LIBRARY_PATH kicks in and it finds the so file in the
+build directory. When the file does exist, it can link against it -
+except when it hasn't been fully written yet.
 
-I think I made the wrong call ;-)
-So, I'll go for another round.
+ The solution would be if the executable would use RUNPATH instead of
+RPATH - which according to e.g. [1] is what everybody should do (and I
+tend to agree). IOW, the option --enable-new-dtags should be passed to
+the linker ("new" is not really true BTW, the option has existed for
+since more than 10 years). When we would add a toolchain wrapper for ld,
+we could add it there.
 
->
->>  A workaround would be to add a 'make shell' target, that drops you into
->> an interactive shell. I don't really like it very much, but it would
->> solve other issues with exported variables.
->
-> Not a big fan either :/
+ But for the time being, I'll post a patch for python3 (and python, which
+suffers from the same problem) that adds --enable-new-dtags there.
 
-Regards,
+ Regards,
+ Arnout
+
+
+[1] http://blog.tremily.us/posts/rpath/
 
 -- 
-Samuel
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
