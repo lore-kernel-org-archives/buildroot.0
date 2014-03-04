@@ -1,28 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Mar 2014 09:54:13 +0100
-Subject: [Buildroot] [PATCH 2/2] boost: make build with python an option
-In-Reply-To: <E1CF8EFE2042404B87DE2B6D662128020ED58B9D@KUUMEX10.barco.com>
-References: <E1CF8EFE2042404B87DE2B6D662128020ED58B9D@KUUMEX10.barco.com>
-Message-ID: <20140304095413.5a37b51d@skate>
+From: Cyrille DERORY <cyrille.derory@derory.fr>
+Date: Tue, 4 Mar 2014 10:22:11 +0100
+Subject: [Buildroot] Buildroot 2014.02 : make on raspberry pi failed
+Message-ID: <CACfHD-gFTUe-ybERH4tHGHx7b8zpvDv2ULY2m2eZ-=0WmJHfdw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Derycke, Johan,
+Hello,
 
-On Tue, 4 Mar 2014 08:32:56 +0000, Derycke, Johan wrote:
+this my first days on buildroot and first post on this list.
 
-> +config BR2_PACKAGE_BOOST_PYTHON
-> +       depends on BR2_PACKAGE_PYTHON
-> +       bool "boost-python"
+I have tried to build for the raspberry pi target with the following :
+make raspberrypi_defconfig
+make
 
-Just to confirm, boost-python only works with Python 2.x, and not
-Python 3.x ?
+I have an error :
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+mkdir: impossible de cr?er le r?pertoire
+? /home/cderory/T?l?chargements/buildroot/buildroot-2014.02/output/target/var/cache
+?:
+N'est pas un dossier
+Makefile:507: recipe for target 'target-finalize' failed
+
+"cache"  is not a directory.
+ I have checked on "var" directory :
+
+[cderory at EEE-PC-DERORY var]$ ls -la
+total 40
+drwxr-xr-x  3 cderory users 4096  4 mars  03:01 .
+drwxr-xr-x 17 cderory users 4096  4 mars  03:01 ..
+-rwxr-xr-x  1 cderory users    6 27 f?vr. 21:51 cache
+drwxr-xr-x  2 cderory users 4096  4 mars  03:01 lib
+-rwxr-xr-x  1 cderory users    6 27 f?vr. 21:51 lock
+-rwxr-xr-x  1 cderory users    6 27 f?vr. 21:51 log
+-rwxr-xr-x  1 cderory users    6 27 f?vr. 21:51 pcmcia
+-rwxr-xr-x  1 cderory users    6 27 f?vr. 21:51 run
+-rwxr-xr-x  1 cderory users    6 27 f?vr. 21:51 spool
+-rwxr-xr-x  1 cderory users    6 27 f?vr. 21:51 tmp
+
+As you can see, "cache" is a file, not a directory.
+
+Am I wrong ?
+
+Thanks for your help.
+
+
+Cyrille DERORY
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140304/df43e41b/attachment-0001.html>
