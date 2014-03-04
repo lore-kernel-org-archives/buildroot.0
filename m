@@ -1,32 +1,41 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  3 Mar 2014 22:02:42 -0300
-Subject: [Buildroot] [PATCH] gnutls: security bump to version 3.2.12
-Message-ID: <1393894962-16026-1-git-send-email-gustavo@zacarias.com.ar>
+From: Jeremy Kerr <jk@ozlabs.org>
+Date: Tue, 04 Mar 2014 09:07:35 +0800
+Subject: [Buildroot] [RFC,
+ PATCH 2/8] package/dropbear: Add separate configuration options for
+ client and server
+In-Reply-To: <53151AFC.3010402@zacarias.com.ar>
+References: <1389862338.918265.958087681541.2.gpush@pablo>
+ <53151AFC.3010402@zacarias.com.ar>
+Message-ID: <53152757.2020707@ozlabs.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2014-1959 / GNUTLS-SA-2014-1 and CVE-2014-0092 / GNUTLS-SA-2014.2
+Hi Gustavo,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/gnutls/gnutls.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Normally we don't make initscript installation an option
 
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index c0bd778..c1fa40d 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- GNUTLS_VERSION_MAJOR = 3.2
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).10
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).12
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = GPLv3+ LGPLv2.1+
--- 
-1.8.3.2
+I think dropbear is a bit exceptional here, as both server and client
+are in the one package.
+
+> and since the
+> dropbear package options are essentially a no-op what's the point?
+
+There are some scenarios where there's no point starting a SSH server
+(in my case, it's because there's no persistent storage, so no
+persistent host keys). However, I'd still like a ssh/scp client to be
+available.
+
+> (if you don't want sshd to startup on boot you can use a post build
+> script to just remove the initscript from the target, that's the
+> recommended way).
+
+But isn't something that will go upstream and be available in a
+defconfig, right?
+
+Regards,
+
+
+Jeremy
