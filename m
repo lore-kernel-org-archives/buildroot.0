@@ -1,41 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Mar 2014 19:16:30 +0100
-Subject: [Buildroot] [git commit] Revert "linux: fix check of configuration
-	file existence"
-Message-ID: <20140304181827.2BADC9BD19@busybox.osuosl.org>
+Date: Tue, 4 Mar 2014 19:19:25 +0100
+Subject: [Buildroot] [PATCH 0/3 v2] linux: do not always depend on
+ host-lzop
+In-Reply-To: <20140303222317.795950dd@skate>
+References: <cover.1391876537.git.yann.morin.1998@free.fr>
+ <20140303222317.795950dd@skate>
+Message-ID: <20140304191925.50aaf715@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d30542712bc8d211466146d642874168479fb3d4
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-This reverts commit 477c28cf1d637b224b819dd278103a05fb6f9dbb. The
-whole host-lzop optional dependency logic cannot work, since the
-configuration file will only be known after the kernel sources are
-extracted, if an internal kernel defconfig is used, which is quite
-common.
+On Mon, 3 Mar 2014 22:23:17 +0100, Thomas Petazzoni wrote:
+> Dear Yann E. MORIN,
+> 
+> On Sat,  8 Feb 2014 17:26:03 +0100, Yann E. MORIN wrote:
+> 
+> > Here is a small series that makes Linux not always depend on host-lzop,
+> > and also cleans up a little bit the linux.mk.
+> 
+> Series applied, thanks.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- linux/linux.mk |    2 --
- 1 files changed, 0 insertions(+), 2 deletions(-)
+And I've reverted it because it simply cannot work with internal
+defconfig of the kernel, since they are only available after the kernel
+has been extracted, which is too late to declare whether we need the
+host-lzop dependency or not.
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 91a5fb8..ec7dfc3 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -166,11 +166,9 @@ else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
- KERNEL_SOURCE_CONFIG = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE))
- endif
- 
--ifeq ($(BR2_LINUX_KERNEL),y)
- ifeq ($(wildcard $(KERNEL_SOURCE_CONFIG)),)
- $(error Configuration file '$(KERNEL_SOURCE_CONFIG)' not found.)
- endif
--endif
- 
- ifeq ($(call KCONFIG_GET_OPT,CONFIG_KERNEL_LZO,$(KERNEL_SOURCE_CONFIG)),y)
- LINUX_DEPENDENCIES += host-lzop
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
