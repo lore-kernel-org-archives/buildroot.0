@@ -1,9 +1,7 @@
 From: Johan Derycke <johan.derycke@barco.com>
-Date: Tue,  4 Mar 2014 17:53:47 +0100
+Date: Tue,  4 Mar 2014 17:59:33 +0100
 Subject: [Buildroot] [PATCH v3 2/2] boost: make build with python an option
-In-Reply-To: <1393952027-21201-1-git-send-email-johan.derycke@barco.com>
-References: <1393952027-21201-1-git-send-email-johan.derycke@barco.com>
-Message-ID: <1393952027-21201-2-git-send-email-johan.derycke@barco.com>
+Message-ID: <1393952373-21301-1-git-send-email-johan.derycke@barco.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
