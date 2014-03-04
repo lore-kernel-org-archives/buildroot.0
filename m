@@ -1,76 +1,80 @@
 From: Noam Camus <noamc@ezchip.com>
-Date: Tue, 4 Mar 2014 03:47:38 +0000
-Subject: [Buildroot] [PATCH] toolchain: control GNU_TARGET_NAME
-	vendor	part
-In-Reply-To: <20140303224441.546bf9f3@skate>
-References: <884EA965490E3C4D8E66AEF41E98025006BF23@ezex10.ezchip.com>
- <20140223104658.4088cdc6@skate>
- <884EA965490E3C4D8E66AEF41E98025006C3BB@ezex10.ezchip.com>
- <20140223125102.025dd91a@skate>
- <884EA965490E3C4D8E66AEF41E98025006C816@ezex10.ezchip.com>,
- <20140303224441.546bf9f3@skate>
-Message-ID: <884EA965490E3C4D8E66AEF41E9802500938ED@ezex10.ezchip.com>
+Date: Tue, 4 Mar 2014 04:51:53 +0000
+Subject: [Buildroot] [PATCH 1/1] [V3] toolchain: control vendor part in
+	GNU_TARGET_NAME
+In-Reply-To: <1393908571-30334-1-git-send-email-noamc@ezchip.com>
+References: <1393908571-30334-1-git-send-email-noamc@ezchip.com>
+Message-ID: <884EA965490E3C4D8E66AEF41E9802500939A1@ezex10.ezchip.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->A better wording IMO:
+This option allows to customize the "vendor" part of the
+toolchain tuple, where the toolchain tuple has the form
+<cpu>-<vendor>-<kernel>-<os>. Use this option in situations
+where gcc might make different decisions based on the vendor
+part of the tuple.
 
->        This option allows to customize the "vendor" part of the
->         toolchain tuple, where the toolchain tuple has the form
->         <cpu>-<vendor>-<kernel>-<os>. The default value, "buildroot",
->         is fine for most cases, except in very specific situations
->         where gcc might make different decisions based on the vendor
->         part of the tuple. The value "unknown" is not allowed as the
->         cross-compiling toolchain might then be confused with the
->         native toolchain when the target and host architecture are
->         identical.
+Signed-off-by: Noam Camus <noamc@ezchip.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Makefile.in                     |   12 +++++++++++-
+ toolchain/toolchain-buildroot/Config.in |   17 +++++++++++++++++
+ 2 files changed, 28 insertions(+), 1 deletions(-)
 
->        If you're not sure, just leave the default "buildroot" value.
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 454f614..121fe74 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -20,8 +20,18 @@ endif
+ MAKE1:=$(HOSTMAKE) -j1
+ MAKE:=$(HOSTMAKE) $(if $(PARALLEL_JOBS),-j$(PARALLEL_JOBS))
 
-Thanks 
-It is indeed much better.
-I will send PATCH V2
-________________________________________
-From: Thomas Petazzoni [thomas.petazzoni at free-electrons.com]
-Sent: Monday, March 03, 2014 11:44 PM
-To: Noam Camus
-Cc: buildroot at busybox.net
-Subject: Re: [Buildroot] [PATCH] toolchain: control GNU_TARGET_NAME vendor      part
++ifeq ($(BR2_TOOLCHAIN_BUILDROOT_VENDOR),)
++VENDOR:=buildroot
++else
++ifeq ($(BR2_TOOLCHAIN_BUILDROOT_VENDOR),unknown)
++$(error The value 'unknown' is not allowed. It might be confused with native toolchain)
++else
++VENDOR:=$(call qstrip,$(BR2_TOOLCHAIN_BUILDROOT_VENDOR))
++endif
++endif
++
+ # Compute GNU_TARGET_NAME
+-GNU_TARGET_NAME=$(ARCH)-buildroot-$(TARGET_OS)-$(LIBC)$(ABI)
++GNU_TARGET_NAME=$(ARCH)-$(VENDOR)-$(TARGET_OS)-$(LIBC)$(ABI)
 
-Dear Noam Camus,
+ # Blackfin FLAT needs uclinux
+ ifeq ($(BR2_bfin)$(BR2_BINFMT_FLAT),yy)
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 07db50b..34f78ae 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -70,6 +70,23 @@ config BR2_TOOLCHAIN_BUILDROOT_LIBC
+        default "glibc"  if BR2_TOOLCHAIN_BUILDROOT_EGLIBC
+        default "glibc"  if BR2_TOOLCHAIN_BUILDROOT_GLIBC
 
-On Sun, 23 Feb 2014 15:41:43 +0000, Noam Camus wrote:
-> +config BR2_TOOLCHAIN_BUILDROOT_VENDOR
-> +     string "custom toolchain vendor name"
-> +     default "buildroot"
-> +     help
-> +       This option accepts name for vendor field in toolchain tuple.
-> +       The toolchain tuple full format is:
-> +       cpu-vendor-kernel-os
-> +       You may use it in case of custom toolchain.
-> +       e.g. if your gcc depend on this field to make decisions.
-> +       NOTE: "unknown" is not allowed since it may be confused
-> +       with host toolchain.
-
-A better wording IMO:
-
-        This option allows to customize the "vendor" part of the
-        toolchain tuple, where the toolchain tuple has the form
-        <cpu>-<vendor>-<kernel>-<os>. The default value, "buildroot",
-        is fine for most cases, except in very specific situations
-        where gcc might make different decisions based on the vendor
-        part of the tuple. The value "unknown" is not allowed as the
-        cross-compiling toolchain might then be confused with the
-        native toolchain when the target and host architecture are
-        identical.
-
-        If you're not sure, just leave the default "buildroot" value.
-
-Thomas
++config BR2_TOOLCHAIN_BUILDROOT_VENDOR
++       string "custom toolchain vendor name"
++       default "buildroot"
++       help
++
++         This option allows to customize the "vendor" part of the
++         toolchain tuple, where the toolchain tuple has the form
++         <cpu>-<vendor>-<kernel>-<os>. The default value, "buildroot",
++         is fine for most cases, except in very specific situations
++         where gcc might make different decisions based on the vendor
++         part of the tuple. The value "unknown" is not allowed, as the
++         cross-compiling toolchain might then be confused with the
++         native toolchain when the target and host architecture are
++         identical.
++
++         If you're not sure, just leave the default "buildroot" value.
++
+ source "package/uclibc/Config.in"
+ source "package/glibc/Config.in"
+ source "package/binutils/Config.in.host"
 --
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.1
