@@ -1,33 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Mar 2014 19:39:36 +0100
-Subject: [Buildroot] [PATCH] samba4: move x86_64 answer cache file
-In-Reply-To: <1393894923-15986-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1393894923-15986-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140304193936.5111e4c5@skate>
+From: Marcelo Gutierrez <kuyurix@gmail.com>
+Date: Tue, 4 Mar 2014 14:53:58 -0300
+Subject: [Buildroot] [PATCH 1/2] mysql: add option to build the server
+In-Reply-To: <20140304055103.GX3874@tarshish>
+References: <1392244774-15356-1-git-send-email-kuyurix@gmail.com>
+ <20140303233551.75c74c6a@skate>
+ <CA+kK6WsRpy_8rvtVb6iSrBNYCB-QOsKCP18STAP6RNDj434yPg@mail.gmail.com>
+ <20140304055103.GX3874@tarshish>
+Message-ID: <CA+kK6Wt_DD+FH5FxpEvGh_9t4=3jyBxH02ZhyD2W6T8cM0B+JQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Hi all,
 
-On Mon,  3 Mar 2014 22:02:03 -0300, Gustavo Zacarias wrote:
-> The x86_64 answer cache file from commit
-> d191d40e3fd8cef7fbf3168fdc261de8d4b114fd was intended for a previous
-> draft version of the samba4 package that resided in a different
-> directory.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/{samba => }/samba4/x86_64-cache.txt | 0
->  1 file changed, 0 insertions(+), 0 deletions(-)
->  rename package/{samba => }/samba4/x86_64-cache.txt (100%)
+You can to this by setting the MYSQL_USERS variable. See the example in
+> section 7.2.4 of the manual
+> (http://buildroot.net/downloads/manual/manual.html), and section 12.2 for
+> syntax details.
+>
 
-Applied, thanks.
+@Baruch: Thank you so much for the information.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+700101 00:00:22 mysqld_safe Starting mysqld daemon with databases from
+> /usr/var
+> /usr/bin/mysqld_safe: line 595: can't create /usr/var/buildroot.err:
+> nonexistent directory
+> /usr/bin/mysqld_safe: eval: line 1: can't create /usr/var/buildroot.err:
+> nonexistent directory
+>
+
+@Thomas: Issue fixed.(http://patchwork.ozlabs.org/patch/326422/)
+
+Regards,
+Marcelo.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140304/b41d65be/attachment.html>
