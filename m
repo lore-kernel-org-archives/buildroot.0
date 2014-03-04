@@ -1,43 +1,74 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 4 Mar 2014 07:51:03 +0200
-Subject: [Buildroot] [PATCH 1/2] mysql: add option to build the server
-In-Reply-To: <CA+kK6WsRpy_8rvtVb6iSrBNYCB-QOsKCP18STAP6RNDj434yPg@mail.gmail.com>
-References: <1392244774-15356-1-git-send-email-kuyurix@gmail.com>
- <20140303233551.75c74c6a@skate>
- <CA+kK6WsRpy_8rvtVb6iSrBNYCB-QOsKCP18STAP6RNDj434yPg@mail.gmail.com>
-Message-ID: <20140304055103.GX3874@tarshish>
+Date: Tue, 4 Mar 2014 08:18:24 +0200
+Subject: [Buildroot] readonly rootfs problem
+In-Reply-To: <5314FED7.80903@alcatel-lucent.com>
+References: <5314FED7.80903@alcatel-lucent.com>
+Message-ID: <20140304061824.GY3874@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Marcelo,
+Hi Ed,
 
-On Mon, Mar 03, 2014 at 11:39:59PM -0300, Marcelo Gutierrez wrote:
-> I've applied this, but:
-> >
-> >  1/ The package lacks an init script to start the MySQL server
-> >     automatically.
-> >
-> >  2/ When mysqld_safe is started automatically, it looks for stuff
-> >     in /usr/var that doesn't exist:
-> >
-> > 700101 00:00:22 mysqld_safe Starting mysqld daemon with databases from
-> > /usr/var
-> > /usr/bin/mysqld_safe: line 595: can't create /usr/var/buildroot.err:
-> > nonexistent directory
-> > /usr/bin/mysqld_safe: eval: line 1: can't create /usr/var/buildroot.err:
-> > nonexistent directory
-> >
+On Mon, Mar 03, 2014 at 05:14:47PM -0500, Ed Sutter wrote:
+> I've been using buildroot to create my rootfs for a few months.
+> I build my kernel directly out of freescale.git.
+> I had been running with my rootfs nfs mounted, and all was well.
+> Recently I had spent some time with a ramdisk-based rootfs because
+> i was working on some kernel stuff.
+> Now I'm going back to running rootfs/nfs and I'm finding that
+> it "insists" on coming up in read-only mode.
 > 
-> I can fix that but we'll need to add a mysql user and I have no idea how do
-> it
+> I was initially using buildroot-2013.08, and recently I
+> updated to buildroot-2013.11; however, I don't think that has
+> anything to do with this.  As far as I can tell I have everything
+> set up properly...
+> 
+> ####On NFS host /etc/exports has...
+> /full_path_to_my_rootfs *(rw,no_root_squash)
+> 
+> ####On target...
+> /etc/inittab...
+> null::sysinit:/bin/mount -o remount,rw / # REMOUNT_ROOTFS_RW
+> 
+> /etc/fstab...
+> # /etc/fstab: static file system information.
+> #
+> # <file system> <mount pt>     <type> <options>         <dump> <pass>
+> /dev/root       /              ext2     rw,noauto         0      1
+> proc            /proc          proc     defaults          0      0
+> devpts          /dev/pts       devpts   defaults,gid=5,mode=620 0      0
+> tmpfs           /dev/shm       tmpfs    mode=0777         0      0
+> tmpfs           /tmp           tmpfs    defaults          0      0
+> sysfs           /sys           sysfs    defaults          0 0
+> 
+> Output from mount:
+> # mount
+> rootfs on / type rootfs (rw)
+> 1.2.3.4:/full_path_to_my_rootfs on / type nfs (ro,relatime,vers=3,rsize=4096,wsize=4096,namlen=255,hard,nolock,proto=tcp,timeo=600,retrans=2,sec=sys,mountaddr=1.2.3.4,mountvers=3,mountproto=tcp,local_lock=all,addr=135.222.138.108)
+> devtmpfs on /dev type devtmpfs
+> (rw,relatime,size=110708k,nr_inodes=27677,mode=755)
+> proc on /proc type proc (rw,relatime)
+> devpts on /dev/pts type devpts (rw,relatime,gid=5,mode=620)
+> tmpfs on /dev/shm type tmpfs (rw,relatime,mode=777)
+> tmpfs on /tmp type tmpfs (rw,relatime)
+> sysfs on /sys type sysfs (rw,relatime)
+> 
+> I actually think the problem is in the kernel, not the rootfs.
+> I say this because even some of my older rootfs copies (still on my
+> host) are now
+> showing up as read only.  The bootlog always ends up with this message:
+> VFS: Mounted root (nfs filesystem) readonly on device 0:11.
+> 
+> Any idea what I might be doing wrong here?
 
-You can to this by setting the MYSQL_USERS variable. See the example in 
-section 7.2.4 of the manual 
-(http://buildroot.net/downloads/manual/manual.html), and section 12.2 for 
-syntax details.
+What happens if you manually run:
+
+	mount -o remount,rw /
+
+Do you see any error message?
 
 baruch
 
