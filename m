@@ -1,97 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 4 Mar 2014 19:52:41 +0100
-Subject: [Buildroot] [PATCH 1/1] [V3] toolchain: control vendor part in
- GNU_TARGET_NAME
-In-Reply-To: <884EA965490E3C4D8E66AEF41E9802500939A1@ezex10.ezchip.com>
-References: <1393908571-30334-1-git-send-email-noamc@ezchip.com>
- <884EA965490E3C4D8E66AEF41E9802500939A1@ezex10.ezchip.com>
-Message-ID: <20140304185240.GC11474@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 4 Mar 2014 20:09:48 +0100
+Subject: [Buildroot] Problem with starting TI Graphics
+In-Reply-To: <trinity-c25b0db0-54b6-4f8c-977a-023518dc467a-1392373446805@3capp-gmx-bs16>
+References: <trinity-96c3bbe4-4de2-4d94-a868-2ca9c13f130e-1392279117507@3capp-gmx-bs38>
+ <CA+kK6WuqEOYcgypxbDJ8Hs5Jy3JXpuGaQPb9Qgp0+nsjDz1k5g@mail.gmail.com>
+ <trinity-c25b0db0-54b6-4f8c-977a-023518dc467a-1392373446805@3capp-gmx-bs16>
+Message-ID: <20140304200948.619fc7fe@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Noam, All,
+Dear Peter Kuemmel,
 
-On 2014-03-04 04:51 +0000, Noam Camus spake thusly:
-> This option allows to customize the "vendor" part of the
-> toolchain tuple, where the toolchain tuple has the form
-> <cpu>-<vendor>-<kernel>-<os>. Use this option in situations
-> where gcc might make different decisions based on the vendor
-> part of the tuple.
-> 
-> Signed-off-by: Noam Camus <noamc@ezchip.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+On Fri, 14 Feb 2014 11:24:06 +0100, Peter Kuemmel wrote:
 
-I don't think Thomas provided a SoB line so far. You can't add such a
-line for someone else, unless they explicitly stated so. A SoB-line is
-binding:
-    http://elinux.org/Developer_Certificate_Of_Origin
+> Thanks, I found the issue: it was the missing user binary thumb support in the kernel.
 
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index 454f614..121fe74 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -20,8 +20,18 @@ endif
->  MAKE1:=$(HOSTMAKE) -j1
->  MAKE:=$(HOSTMAKE) $(if $(PARALLEL_JOBS),-j$(PARALLEL_JOBS))
-> 
-> +ifeq ($(BR2_TOOLCHAIN_BUILDROOT_VENDOR),)
-> +VENDOR:=buildroot
-> +else
-> +ifeq ($(BR2_TOOLCHAIN_BUILDROOT_VENDOR),unknown)
-> +$(error The value 'unknown' is not allowed. It might be confused with native toolchain)
+Interesting. Were you building the kernel with Buildroot, or separately?
 
-... with the native ...
+If you built your kernel with Buildroot, then maybe we should add
+something like:
 
-[--SNIP--]
-> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-> index 07db50b..34f78ae 100644
-> --- a/toolchain/toolchain-buildroot/Config.in
-> +++ b/toolchain/toolchain-buildroot/Config.in
-> @@ -70,6 +70,23 @@ config BR2_TOOLCHAIN_BUILDROOT_LIBC
->         default "glibc"  if BR2_TOOLCHAIN_BUILDROOT_EGLIBC
->         default "glibc"  if BR2_TOOLCHAIN_BUILDROOT_GLIBC
+	$(if $(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_ARM_INSTRUCTIONS_THUMB2),
+		$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_THUMB,$(@D)/.config))
 
-Your patch is space-mangled: the leading tabs have been replaced with
-spaces. Can you try to use 'git send-email' to send the mails? This is
-known to work correctly most of the case, whereas some user-friendly
-mailers (lie the ones from MS) have issues properly sending patches.
+This way we would ensure that the kernel gets built with
+CONFIG_ARM_THUMB=y when the Thumb or Thumb-2 instruction sets have been
+selected for userspace.
 
-> +config BR2_TOOLCHAIN_BUILDROOT_VENDOR
-> +       string "custom toolchain vendor name"
-> +       default "buildroot"
-> +       help
-> +
+Thoughts?
 
-Superfluous empty line.
-
-> +         This option allows to customize the "vendor" part of the
-> +         toolchain tuple, where the toolchain tuple has the form
-> +         <cpu>-<vendor>-<kernel>-<os>. The default value, "buildroot",
-> +         is fine for most cases, except in very specific situations
-> +         where gcc might make different decisions based on the vendor
-> +         part of the tuple. The value "unknown" is not allowed, as the
-> +         cross-compiling toolchain might then be confused with the
-> +         native toolchain when the target and host architecture are
-> +         identical.
-> +
-> +         If you're not sure, just leave the default "buildroot" value.
-
-Add something like:
-
-    Leaving this empty will also use the default "buildroot" value.
-
-Otherwise, looks good.
-
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
