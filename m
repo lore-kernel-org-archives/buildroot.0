@@ -1,81 +1,80 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Tue, 4 Mar 2014 11:00:14 +0100
-Subject: [Buildroot] Linux won't build any more?
-In-Reply-To: <5315A35B.30204@barkynet.com>
-References: <531584D4.3060301@freescale.com> <20140304090918.5eef0cd5@skate>
- <5315A35B.30204@barkynet.com>
-Message-ID: <CAHkwnC-yZKhj7ux9SOTYKjd1y71nhV1o18MjvG26rurMTNk0yQ@mail.gmail.com>
+From: Ed Sutter <ed.sutter@alcatel-lucent.com>
+Date: Tue, 04 Mar 2014 07:35:39 -0500
+Subject: [Buildroot] readonly rootfs problem
+In-Reply-To: <20140304061824.GY3874@tarshish>
+References: <5314FED7.80903@alcatel-lucent.com>
+ <20140304061824.GY3874@tarshish>
+Message-ID: <5315C89B.4070901@alcatel-lucent.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Mar 4, 2014 at 10:56 AM, Martin Bark <martin@barkynet.com> wrote:
-> Thomas,
+On 3/4/2014 1:18 AM, Baruch Siach wrote:
+> Hi Ed,
 >
+> On Mon, Mar 03, 2014 at 05:14:47PM -0500, Ed Sutter wrote:
+>> I've been using buildroot to create my rootfs for a few months.
+>> I build my kernel directly out of freescale.git.
+>> I had been running with my rootfs nfs mounted, and all was well.
+>> Recently I had spent some time with a ramdisk-based rootfs because
+>> i was working on some kernel stuff.
+>> Now I'm going back to running rootfs/nfs and I'm finding that
+>> it "insists" on coming up in read-only mode.
+>>
+>> I was initially using buildroot-2013.08, and recently I
+>> updated to buildroot-2013.11; however, I don't think that has
+>> anything to do with this.  As far as I can tell I have everything
+>> set up properly...
+>>
+>> ####On NFS host /etc/exports has...
+>> /full_path_to_my_rootfs *(rw,no_root_squash)
+>>
+>> ####On target...
+>> /etc/inittab...
+>> null::sysinit:/bin/mount -o remount,rw / # REMOUNT_ROOTFS_RW
+>>
+>> /etc/fstab...
+>> # /etc/fstab: static file system information.
+>> #
+>> # <file system> <mount pt>     <type> <options>         <dump> <pass>
+>> /dev/root       /              ext2     rw,noauto         0      1
+>> proc            /proc          proc     defaults          0      0
+>> devpts          /dev/pts       devpts   defaults,gid=5,mode=620 0      0
+>> tmpfs           /dev/shm       tmpfs    mode=0777         0      0
+>> tmpfs           /tmp           tmpfs    defaults          0      0
+>> sysfs           /sys           sysfs    defaults          0 0
+>>
+>> Output from mount:
+>> # mount
+>> rootfs on / type rootfs (rw)
+>> 1.2.3.4:/full_path_to_my_rootfs on / type nfs (ro,relatime,vers=3,rsize=4096,wsize=4096,namlen=255,hard,nolock,proto=tcp,timeo=600,retrans=2,sec=sys,mountaddr=1.2.3.4,mountvers=3,mountproto=tcp,local_lock=all,addr=135.222.138.108)
+>> devtmpfs on /dev type devtmpfs
+>> (rw,relatime,size=110708k,nr_inodes=27677,mode=755)
+>> proc on /proc type proc (rw,relatime)
+>> devpts on /dev/pts type devpts (rw,relatime,gid=5,mode=620)
+>> tmpfs on /dev/shm type tmpfs (rw,relatime,mode=777)
+>> tmpfs on /tmp type tmpfs (rw,relatime)
+>> sysfs on /sys type sysfs (rw,relatime)
+>>
+>> I actually think the problem is in the kernel, not the rootfs.
+>> I say this because even some of my older rootfs copies (still on my
+>> host) are now
+>> showing up as read only.  The bootlog always ends up with this message:
+>> VFS: Mounted root (nfs filesystem) readonly on device 0:11.
+>>
+>> Any idea what I might be doing wrong here?
+> What happens if you manually run:
 >
-> On 04/03/14 08:09, Thomas Petazzoni wrote:
->>
->> Dear Vincent Stehl?,
->>
->> On Tue, 4 Mar 2014 08:46:28 +0100, Vincent Stehl? wrote:
->>
->>> FYI I wonder if the recent commits on the master branch have not broken
->>> linux kernel build in some cases. For example:
->>>
->>>     $ make freescale_imx6sabresd_defconfig
->>>     $ make
->>>     linux/linux.mk:171: *** Configuration file
->>> '/arch/arm/configs/imx6_defconfig' not found..  Stop.
->>>
->>> Same with qemu_arm_vexpress_defconfig.
->>>
->>> Git bisect points at commit b4cacbf5b15db06132b5f401d39b4c8d4e79158e,
->>> "linux: check the configuration file exists". If I revert this commit
->>> build will indeed still complain about the config but will go further.
->>
->>
->> Thanks for the report. Do you still see this problem with the current
->> Git head, including commits
->>
->> http://git.buildroot.net/buildroot/commit/?id=477c28cf1d637b224b819dd278103a05fb6f9dbb
->> and
->>
->> http://git.buildroot.net/buildroot/commit/?id=4ad1ea59a59f951fad072dcb19429e6f468abf05
->> ?
->>
->> If you still see it, then I believe I'll just revert Yann's patches,
->> they have caused too much troubles already.
->>
->> Again, thanks for your report!
->>
->> Thomas
->>
+> 	mount -o remount,rw /
 >
-> I see this issue still, those two commit did not fix it.  I noticed the
-> issue using raspberrypi_defconfig
+> Do you see any error message?
 >
->         $ make raspberrypi_defconfig
->         $ make
->         linux/linux.mk:171: *** Configuration file
-> '/arch/arm/configs/bcmrpi_quick_defconfig' not found.. Stop.
-
-I confirm this issue:
-
-$ git describe
-2014.02-214-gce3044e
-
-$ cat defconfig
-BR2_x86_i686=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_DEFCONFIG="i386"
-
-make
-linux/linux.mk:171: *** Configuration file
-'/arch/x86/configs/i386_defconfig' not found..  Stop.
-
-Regards
--- 
-Fabio Porcedda
+> baruch
+>
+Thanks for responding, yea I've tried that (it fails).
+Here's the output:
+# mount -o remount,rw /
+mount: mounting 1.2.3.4:/full_path_to_my_rootfs on / failed: Invalid 
+argument
