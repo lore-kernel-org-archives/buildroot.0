@@ -1,42 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Mar 2014 19:38:05 +0100
-Subject: [Buildroot] [git commit] libnftnl: exclude for CS PPC toolchains
-Message-ID: <20140304183929.3C3669BD19@busybox.osuosl.org>
+Date: Tue, 4 Mar 2014 19:38:55 +0100
+Subject: [Buildroot] [git commit] gnutls: security bump to version 3.2.12
+Message-ID: <20140304183929.4878C8AC85@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f5866484ffe9eee32b020ee11d323404c471d7b4
+commit: http://git.buildroot.net/buildroot/commit/?id=310db15519b1dcb3921fcbea29808233b55548da
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The CS PPC 2011.3 and 2010.9 toolchains have a bad linux/socket.h header
-that doesn't define sa_family_t which is used by linux/netlink.h (and
-libnftnl).
-Patching external toolchain headers wouldn't be too nice and they seem
-to be the only CS toolchains affected.
-It's definitely NOT a kernel header version issue, the toolchain is
-based on 2.6.38 headers and vanilla 2.6.38 has the proper definitions in
-place. Fixes:
-http://autobuild.buildroot.net/results/1e2/1e2cac84f0faa9b8915a628260ef41765d86e174/
+Fixes CVE-2014-1959 / GNUTLS-SA-2014-1 and CVE-2014-0092 / GNUTLS-SA-2014.2
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libnftnl/Config.in |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/gnutls/gnutls.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libnftnl/Config.in b/package/libnftnl/Config.in
-index 75ca519..ffd9d5b 100644
---- a/package/libnftnl/Config.in
-+++ b/package/libnftnl/Config.in
-@@ -3,6 +3,8 @@ config BR2_PACKAGE_LIBNFTNL
- 	depends on BR2_INET_IPV6
- 	depends on BR2_LARGEFILE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	# bad headers, no sa_family_t in linux/socket.h
-+	depends on !(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 || BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009)
- 	select BR2_PACKAGE_LIBMNL
- 	help
- 	  libnftnl is a userspace library providing a low-level
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index c0bd778..c1fa40d 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ GNUTLS_VERSION_MAJOR = 3.2
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).10
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).12
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = GPLv3+ LGPLv2.1+
