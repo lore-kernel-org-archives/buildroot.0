@@ -1,27 +1,32 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  3 Mar 2014 22:02:03 -0300
-Subject: [Buildroot] [PATCH] samba4: move x86_64 answer cache file
-Message-ID: <1393894923-15986-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon,  3 Mar 2014 22:02:42 -0300
+Subject: [Buildroot] [PATCH] gnutls: security bump to version 3.2.12
+Message-ID: <1393894962-16026-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The x86_64 answer cache file from commit
-d191d40e3fd8cef7fbf3168fdc261de8d4b114fd was intended for a previous
-draft version of the samba4 package that resided in a different
-directory.
+Fixes CVE-2014-1959 / GNUTLS-SA-2014-1 and CVE-2014-0092 / GNUTLS-SA-2014.2
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/{samba => }/samba4/x86_64-cache.txt | 0
- 1 file changed, 0 insertions(+), 0 deletions(-)
- rename package/{samba => }/samba4/x86_64-cache.txt (100%)
+ package/gnutls/gnutls.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/samba/samba4/x86_64-cache.txt b/package/samba4/x86_64-cache.txt
-similarity index 100%
-rename from package/samba/samba4/x86_64-cache.txt
-rename to package/samba4/x86_64-cache.txt
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index c0bd778..c1fa40d 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ GNUTLS_VERSION_MAJOR = 3.2
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).10
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).12
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = GPLv3+ LGPLv2.1+
 -- 
 1.8.3.2
