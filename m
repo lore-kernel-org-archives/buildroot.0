@@ -1,39 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Mar 2014 20:09:48 +0100
-Subject: [Buildroot] Problem with starting TI Graphics
-In-Reply-To: <trinity-c25b0db0-54b6-4f8c-977a-023518dc467a-1392373446805@3capp-gmx-bs16>
-References: <trinity-96c3bbe4-4de2-4d94-a868-2ca9c13f130e-1392279117507@3capp-gmx-bs38>
- <CA+kK6WuqEOYcgypxbDJ8Hs5Jy3JXpuGaQPb9Qgp0+nsjDz1k5g@mail.gmail.com>
- <trinity-c25b0db0-54b6-4f8c-977a-023518dc467a-1392373446805@3capp-gmx-bs16>
-Message-ID: <20140304200948.619fc7fe@skate>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Tue,  4 Mar 2014 23:10:16 +0400
+Subject: [Buildroot] [PATCH] kmod: disable --gc-sections ld option when
+	building for xtensa
+Message-ID: <1393960216-18633-1-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Kuemmel,
+This is a workaround for the following ld issue exhibited by --gc-sections
+option, until a proper fix for binutils is ready:
 
-On Fri, 14 Feb 2014 11:24:06 +0100, Peter Kuemmel wrote:
+ld: BFD (GNU Binutils) 2.22 internal error, aborting at elf32-xtensa.c line 3374 in elf_xtensa_finish_dynamic_sections
 
-> Thanks, I found the issue: it was the missing user binary thumb support in the kernel.
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+---
+ package/kmod/900-disable-gc-sections.patch.xtensa | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+ create mode 100644 package/kmod/900-disable-gc-sections.patch.xtensa
 
-Interesting. Were you building the kernel with Buildroot, or separately?
-
-If you built your kernel with Buildroot, then maybe we should add
-something like:
-
-	$(if $(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_ARM_INSTRUCTIONS_THUMB2),
-		$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_THUMB,$(@D)/.config))
-
-This way we would ensure that the kernel gets built with
-CONFIG_ARM_THUMB=y when the Thumb or Thumb-2 instruction sets have been
-selected for userspace.
-
-Thoughts?
-
-Thomas
+diff --git a/package/kmod/900-disable-gc-sections.patch.xtensa b/package/kmod/900-disable-gc-sections.patch.xtensa
+new file mode 100644
+index 0000000..2b7a9cb
+--- /dev/null
++++ b/package/kmod/900-disable-gc-sections.patch.xtensa
+@@ -0,0 +1,12 @@
++--- kmod-16/configure	2013-12-23 01:31:12.456202872 +0400
+++++ kmod-16.mod/configure	2014-03-04 22:53:37.132241845 +0400
++@@ -14511,8 +14511,7 @@
++ 
++ 
++   for flag in  \
++-		       -Wl,--as-needed \
++-		       -Wl,--gc-sections; do
+++		       -Wl,--as-needed ; do
++ 
++   { $as_echo "$as_me:${as_lineno-$LINENO}: checking if $CC supports flag $flag in envvar LDFLAGS" >&5
++ $as_echo_n "checking if $CC supports flag $flag in envvar LDFLAGS... " >&6; }
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.1.4
