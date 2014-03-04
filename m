@@ -1,83 +1,37 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 4 Mar 2014 19:32:43 +0100
-Subject: [Buildroot] [PATCH] libubox: new package
-In-Reply-To: <CAGm1_ksZJ0xQnTTUSmGVQZVfDwCaeZGf=nopB8_usH8pii43Ag@mail.gmail.com>
-References: <1391080311-30640-1-git-send-email-yegorslists@googlemail.com>
- <20140303232457.GC14940@free.fr>
- <CAGm1_ksZJ0xQnTTUSmGVQZVfDwCaeZGf=nopB8_usH8pii43Ag@mail.gmail.com>
-Message-ID: <20140304183243.GA11474@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 4 Mar 2014 19:34:15 +0100
+Subject: [Buildroot] [git commit] hostapd: fix static linking
+Message-ID: <20140304183523.0D64C9BD19@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2014-03-04 07:59 +0100, Yegor Yefremov spake thusly:
-> On Tue, Mar 4, 2014 at 12:24 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > Yegor, All,
-> >
-> > Thanks for your contribution! Some comments below...
-> >
-> > On 2014-01-30 12:11 +0100, yegorslists at googlemail.com spake thusly:
-> > [--SNIP--]
-> >> diff --git a/package/libubox/Config.in b/package/libubox/Config.in
-> >> new file mode 100644
-> >> index 0000000..c6efb33
-> >> --- /dev/null
-> >> +++ b/package/libubox/Config.in
-> >> @@ -0,0 +1,6 @@
-> >> +config BR2_PACKAGE_LIBUBOX
-> >> +     bool "libubox"
-> >> +     help
-> >> +       Small utility library for OpenWrt.
-> >
-> > In what way would this be of interest to Buildroot?
-> >
-> > Since this is "for OpenWRT", I fail to see the relevance to Buildroot.
-> 
-> My goal is to port libuci to Buildroot as I have some software, that
-> I've written for OpenWRT and now would like to use in BR too. The
-> software uses /etc/config/* infrastructure to access its configuration
-> files via libuci.
-> libubox it a dependency of libuci.
+commit: http://git.buildroot.net/buildroot/commit/?id=30a8b49576437555ef98e632121dc52d0969c077
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Ah, I see. Then, please say so in the help text (the one you provided is
-not really interesting, as it does not say what libubox does).
+A rebase of Samuel Martin's http://patchwork.ozlabs.org/patch/312320/
+hostapd doesn't use pkg-config and upstream likely wouldn't take a patch
+to do so (hostapd/wpa_supplicant are used in android builds, and it
+doesn't use any auto* stuff either) so pass it in LIBS since we
+always build openssl with libz support.
 
-> > This is not correct:
-> >   - most of the files have a license header that do not reference the
-> >     LGPLv2.1, but which I did not recognise  [0]
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/hostapd/hostapd.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-It might be MIT:
-    http://spdx.org/licenses/MIT
-
-> >   - some have a BSD-3c license: avl.c
-> >   - at least one file is GPLv2: md5.c
-> 
-> Hm. That's really odd. Should I omit license information for now?
-
-No, just state all of them:
-    _LICENSES = GPLv2, BSD-3c, MIT
-
-> >> +LIBUBOX_INSTALL_STAGING = YES
-> >> +LIBUBOX_CONF_OPT = -DBUILD_LUA:BOOL=OFF
-> >
-> > Maybe that could be made conditional on whether lua is enabled or not?
-> 
-> I wanted to start with a simple configuration, as I don't need Lua
-> right now, but I'll incorporate this feature in the v2.
-
-OK, that's fine. If you don't use it, and so don't test it, there's no
-reason to add it. If someone (or you, later) is interested in it, he'll
-send a patch.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+index 37de60d..5b7dd77 100644
+--- a/package/hostapd/hostapd.mk
++++ b/package/hostapd/hostapd.mk
+@@ -43,6 +43,7 @@ endif
+ # Try to use openssl if it's already available
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ 	HOSTAPD_DEPENDENCIES += openssl
++	HOSTAPD_LIBS += $(if $(BR2_PREFER_STATIC_LIB),-lcrypto -lz)
+ 	HOSTAPD_CONFIG_EDITS += 's/\#\(CONFIG_TLS=openssl\)/\1/'
+ else
+ 	HOSTAPD_CONFIG_DISABLE += CONFIG_EAP_PWD
