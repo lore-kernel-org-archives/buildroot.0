@@ -1,51 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Mar 2014 22:52:34 +0100
-Subject: [Buildroot] [PATCH v5 2/4] Makefile: export PATH including the
- Buildroot host bindirs
-In-Reply-To: <53160821.9080907@mind.be>
-References: <1393703951-7059-1-git-send-email-s.martin49@gmail.com>
- <1393703951-7059-3-git-send-email-s.martin49@gmail.com>
- <53160821.9080907@mind.be>
-Message-ID: <20140304225234.164382f9@skate>
+Date: Tue, 4 Mar 2014 23:18:21 +0100
+Subject: [Buildroot] [git commit] kmod: disable --gc-sections ld option when
+	building for xtensa
+Message-ID: <20140304221850.1B5069BD03@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+commit: http://git.buildroot.net/buildroot/commit/?id=55c83179c4b30c9ec715a75297849abd74a63e05
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 04 Mar 2014 18:06:41 +0100, Arnout Vandecappelle wrote:
-> On 01/03/14 20:59, Samuel Martin wrote:
-> > This patch exports the PATH variable containing the factorized content
-> > of TARGET_PATH and HOST_PATH (because they were fairly similar).
-> > 
-> > TARGET_PATH and HOST_PATH are now set using only the PATH variable.
-> > 
-> > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> 
->  Looks good to me.
-> 
->  Except... I'm having second thoughts about the principle of this patch.
-> When debugging failing builds, I often copy&paste the build command line
-> if I want to drill down to the details of the error. But if PATH is
-> exported (and TARGET_PATH is removed, in 4/4), it is no longer visible on
-> the command line... So I have to remember to set it myself...
+This is a workaround for the following ld issue exhibited by --gc-sections
+option, until a proper fix for binutils is ready:
 
-True. I also do that very often.
+ld: BFD (GNU Binutils) 2.22 internal error, aborting at elf32-xtensa.c line 3374 in elf_xtensa_finish_dynamic_sections
 
-I personally dislike exporting the PATH globally, as it means that
-we're "magically" passing some stuff into the commands we are running,
-which are not explicit when looking at the commands being executed.
+Fixes:
 
->  A workaround would be to add a 'make shell' target, that drops you into
-> an interactive shell. I don't really like it very much, but it would
-> solve other issues with exported variables.
+  http://autobuild.buildroot.org/results/97d/97d4c96d6f6cdc1ed4007456f4ab70be9dfa41b5/
 
-Not a big fan either :/
+Suggested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/kmod/kmod.mk |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
+index f79a492..46c8ea9 100644
+--- a/package/kmod/kmod.mk
++++ b/package/kmod/kmod.mk
+@@ -32,6 +32,11 @@ KMOD_DEPENDENCIES += xz
+ KMOD_CONF_OPT += --with-xz
+ endif
+ 
++# --gc-sections triggers a bug in the current Xtensa binutils
++ifeq ($(BR2_xtensa),y)
++KMOD_CONF_ENV += cc_cv_LDFLAGS__Wl___gc_sections=no
++endif
++
+ ifeq ($(BR2_PACKAGE_KMOD_TOOLS),y)
+ 
+ # add license info for kmod tools
