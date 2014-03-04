@@ -1,32 +1,83 @@
-From: Marcelo Gutierrez <kuyurix@gmail.com>
-Date: Tue, 4 Mar 2014 15:30:44 -0300
-Subject: [Buildroot] [PATCH 4/4] mysql: host-mysql depends on host-zlib
-In-Reply-To: <20140304185227.46062c52@skate>
-References: <1393944603-3104-1-git-send-email-kuyurix@gmail.com>
- <1393944603-3104-4-git-send-email-kuyurix@gmail.com>
- <20140304185227.46062c52@skate>
-Message-ID: <CA+kK6WtYwDh0Tvt=U9Ke5bsRSnF0X69oOd9Hh4N=6wMSrs6AHA@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 4 Mar 2014 19:32:43 +0100
+Subject: [Buildroot] [PATCH] libubox: new package
+In-Reply-To: <CAGm1_ksZJ0xQnTTUSmGVQZVfDwCaeZGf=nopB8_usH8pii43Ag@mail.gmail.com>
+References: <1391080311-30640-1-git-send-email-yegorslists@googlemail.com>
+ <20140303232457.GC14940@free.fr>
+ <CAGm1_ksZJ0xQnTTUSmGVQZVfDwCaeZGf=nopB8_usH8pii43Ag@mail.gmail.com>
+Message-ID: <20140304183243.GA11474@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, all.
+On 2014-03-04 07:59 +0100, Yegor Yefremov spake thusly:
+> On Tue, Mar 4, 2014 at 12:24 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > Yegor, All,
+> >
+> > Thanks for your contribution! Some comments below...
+> >
+> > On 2014-01-30 12:11 +0100, yegorslists at googlemail.com spake thusly:
+> > [--SNIP--]
+> >> diff --git a/package/libubox/Config.in b/package/libubox/Config.in
+> >> new file mode 100644
+> >> index 0000000..c6efb33
+> >> --- /dev/null
+> >> +++ b/package/libubox/Config.in
+> >> @@ -0,0 +1,6 @@
+> >> +config BR2_PACKAGE_LIBUBOX
+> >> +     bool "libubox"
+> >> +     help
+> >> +       Small utility library for OpenWrt.
+> >
+> > In what way would this be of interest to Buildroot?
+> >
+> > Since this is "for OpenWRT", I fail to see the relevance to Buildroot.
+> 
+> My goal is to port libuci to Buildroot as I have some software, that
+> I've written for OpenWRT and now would like to use in BR too. The
+> software uses /etc/config/* infrastructure to access its configuration
+> files via libuci.
+> libubox it a dependency of libuci.
 
-Hum, why? I have built the mysql server successfully without this
-> patch. Can you give some details about why this is needed?
->
+Ah, I see. Then, please say so in the help text (the one you provided is
+not really interesting, as it does not say what libubox does).
 
-I downloaded a fresh "git buildroot" and I've only selected MySQL client
-and  MySQL server.
+> > This is not correct:
+> >   - most of the files have a license header that do not reference the
+> >     LGPLv2.1, but which I did not recognise  [0]
 
-When it was compiling "host-mysql", could not find "libzlt.la" library.
+It might be MIT:
+    http://spdx.org/licenses/MIT
 
-So I've added host-zlib and that issue completely gone.
+> >   - some have a BSD-3c license: avl.c
+> >   - at least one file is GPLv2: md5.c
+> 
+> Hm. That's really odd. Should I omit license information for now?
+
+No, just state all of them:
+    _LICENSES = GPLv2, BSD-3c, MIT
+
+> >> +LIBUBOX_INSTALL_STAGING = YES
+> >> +LIBUBOX_CONF_OPT = -DBUILD_LUA:BOOL=OFF
+> >
+> > Maybe that could be made conditional on whether lua is enabled or not?
+> 
+> I wanted to start with a simple configuration, as I don't need Lua
+> right now, but I'll incorporate this feature in the v2.
+
+OK, that's fine. If you don't use it, and so don't test it, there's no
+reason to add it. If someone (or you, later) is interested in it, he'll
+send a patch.
 
 Regards,
-Marcelo.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140304/cba326e5/attachment.html>
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
