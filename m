@@ -1,71 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Mar 2014 20:22:18 +0100
-Subject: [Buildroot] [PATCH] kmod: disable --gc-sections ld option when
- building for xtensa
-In-Reply-To: <1393960216-18633-1-git-send-email-jcmvbkbc@gmail.com>
-References: <1393960216-18633-1-git-send-email-jcmvbkbc@gmail.com>
-Message-ID: <20140304202218.3396f4f9@skate>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue,  4 Mar 2014 19:57:22 +0000 (UTC)
+Subject: [Buildroot] [Bug 6944] building toolchain for sh4 fails
+In-Reply-To: <bug-6944-163@https.bugs.busybox.net/>
+References: <bug-6944-163@https.bugs.busybox.net/>
+Message-ID: <20140304195722.3C6FD9BD2A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Max Filippov,
+https://bugs.busybox.net/show_bug.cgi?id=6944
 
-On Tue,  4 Mar 2014 23:10:16 +0400, Max Filippov wrote:
-> This is a workaround for the following ld issue exhibited by --gc-sections
-> option, until a proper fix for binutils is ready:
-> 
-> ld: BFD (GNU Binutils) 2.22 internal error, aborting at elf32-xtensa.c line 3374 in elf_xtensa_finish_dynamic_sections
-> 
-> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-> ---
->  package/kmod/900-disable-gc-sections.patch.xtensa | 12 ++++++++++++
+--- Comment #5 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2014-03-04 19:57:20 UTC ---
+Thanks for the patch!
 
-The patch should be named kmod-01-<description>.patch. We no longer
-accept architecture-specific patches, so the .xtensa extension has to
-go, and we have to ensure that the fix is usable on all architectures.
+However, I am not sure it will work correctly in all cases. It works in your
+case because only one multilib variant gets built, and installed in the !m4
+directory. But if you have
+BR2_EXTRA_GCC_CONFIG_OPTIONS="--with-multilib-list=m4,m4-nofpu", then two
+multilib variants will be built, and you will have two directories, not one.
 
-So either we simply remove --gc-sections on all architecture, or the
-configure.ac test has to be made conditional on xtensa.
+Could you check this case?
 
->  1 file changed, 12 insertions(+)
->  create mode 100644 package/kmod/900-disable-gc-sections.patch.xtensa
-> 
-> diff --git a/package/kmod/900-disable-gc-sections.patch.xtensa b/package/kmod/900-disable-gc-sections.patch.xtensa
-> new file mode 100644
-> index 0000000..2b7a9cb
-> --- /dev/null
-> +++ b/package/kmod/900-disable-gc-sections.patch.xtensa
+It's also a bit annoying that on SuperH, specifying a custom gcc option is
+needed to even be able to build a kernel. Do you know if there's something that
+can be done about it?
 
-The patch lacks a description. See
-http://buildroot.org/downloads/manual/manual.html#patch-policy for more
-details about the format of the patches.
-
-> @@ -0,0 +1,12 @@
-> +--- kmod-16/configure	2013-12-23 01:31:12.456202872 +0400
-> ++++ kmod-16.mod/configure	2014-03-04 22:53:37.132241845 +0400
-> +@@ -14511,8 +14511,7 @@
-
-We normally prefer to patch configure.ac, and add KMOD_AUTORECONF = YES.
-
-All that being said, I believe there is a much simpler solution. Don't
-use any patch at all, and add:
-
-# --gc-sections triggers a bug in the current Xtensa binutils
-ifeq ($(BR2_xtensa),y)
-KMOD_CONF_ENV += cc_cv_LDFLAGS__Wl___gc_sections=no
-endif
-
-to package/kmod/kmod.mk.
-
-Can you test that it works for you, and submit the corresponding patch?
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
