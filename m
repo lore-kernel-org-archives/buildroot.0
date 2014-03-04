@@ -1,58 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Mar 2014 19:29:27 +0100
-Subject: [Buildroot] [PATCH] dnsmasq: fix static linking
-In-Reply-To: <1393946074-32602-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1393946074-32602-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20140304192927.4c1cd475@skate>
+From: Marcelo Gutierrez <kuyurix@gmail.com>
+Date: Tue, 4 Mar 2014 15:30:44 -0300
+Subject: [Buildroot] [PATCH 4/4] mysql: host-mysql depends on host-zlib
+In-Reply-To: <20140304185227.46062c52@skate>
+References: <1393944603-3104-1-git-send-email-kuyurix@gmail.com>
+ <1393944603-3104-4-git-send-email-kuyurix@gmail.com>
+ <20140304185227.46062c52@skate>
+Message-ID: <CA+kK6WtYwDh0Tvt=U9Ke5bsRSnF0X69oOd9Hh4N=6wMSrs6AHA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Hi Thomas, all.
 
-On Tue, 4 Mar 2014 15:14:34 +0000, Vicente Olivert Riera wrote:
-> Append -pthread to LIBS to fix a static linking error like this one:
-> 
-> /home/test/test/2/output/host/usr/mipsel-buildroot-linux-uclibc/sysroot/usr/lib/libdbus-1.a(libdbus_1_la-dbus-sysdeps-pthread.o):
-> In function `_dbus_platform_cmutex_new':
-> dbus-sysdeps-pthread.c:(.text+0x30): undefined reference to
-> `pthread_mutex_init'
-> 
-> Fixes:
->    http://autobuild.buildroot.net/results/161/161446dde7e8e774773eb2b34fd555f5ac22dd02/
-> 
-> Reviewed-by: Markos Chandras <Markos.Chandras@imgtec.com>
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Hum, why? I have built the mysql server successfully without this
+> patch. Can you give some details about why this is needed?
+>
 
-Thanks, but I don't think it's the best fix for the problem.
+I downloaded a fresh "git buildroot" and I've only selected MySQL client
+and  MySQL server.
 
->  ifeq ($(BR2_PACKAGE_DBUS),y)
->  	DNSMASQ_DEPENDENCIES += host-pkgconf dbus
-> +	DNSMASQ_LIBS += $(if $(BR2_PREFER_STATIC_LIB),-pthread)
->  endif
+When it was compiling "host-mysql", could not find "libzlt.la" library.
 
-dnsmasq properly uses pkg-config to find which library to link against,
-and the dbus-1.pc properly lists -lrt and -lpthread in Libs.private
-(i.e libraries needed in the link when linking statically).
+So I've added host-zlib and that issue completely gone.
 
-The problem is just that the dnsmasq Makefile does not call pkg-config
-with the --static option when being built statically. Compare the
-output of:
-
-$ ./output/host/usr/bin/pkg-config --libs dbus-1
--L/home/thomas/projets/buildroot/output/host/usr/mipsel-buildroot-linux-uclibc/sysroot/usr/lib -ldbus-1
-
-against the output of:
-
-$ ./output/host/usr/bin/pkg-config --static --libs dbus-1
--L/home/thomas/projets/buildroot/output/host/usr/mipsel-buildroot-linux-uclibc/sysroot/usr/lib -ldbus-1 -lpthread -lrt
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards,
+Marcelo.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140304/cba326e5/attachment.html>
