@@ -1,32 +1,41 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 03 Mar 2014 23:07:07 -0300
-Subject: [Buildroot] [PATCH v2] gstreamer1-imx: new package
-In-Reply-To: <20140303205342.GF3380@free.fr>
-References: <1393363488-5547-1-git-send-email-ps.report@gmx.net>
- <20140303205342.GF3380@free.fr>
-Message-ID: <5315354B.5070805@zacarias.com.ar>
+From: Marcelo Gutierrez <kuyurix@gmail.com>
+Date: Mon, 3 Mar 2014 23:39:59 -0300
+Subject: [Buildroot] [PATCH 1/2] mysql: add option to build the server
+In-Reply-To: <20140303233551.75c74c6a@skate>
+References: <1392244774-15356-1-git-send-email-kuyurix@gmail.com>
+ <20140303233551.75c74c6a@skate>
+Message-ID: <CA+kK6WsRpy_8rvtVb6iSrBNYCB-QOsKCP18STAP6RNDj434yPg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/03/2014 05:53 PM, Yann E. MORIN wrote:
+Hi Thomas, all
 
-Hi all.
 
->> +define GSTREAMER1_IMX_BUILD_CMDS
->> +       (cd $(@D); ./waf build -j $(PARALLEL_JOBS))
-> 
-> Waf is known to have lotta isue when cross-compiling. Is that really
-> working correctly?
-> 
-> Fortunately, this is only supposed to ever be run for an ARM target, so
-> maybe they were not really concerned of making it really cross-compile
-> friendly, as long as it works in these specific comditions.
 
-Waf makes no distinction between host and target tools.
-That being said if the wscript doesn't want to execute cross-tests
-(intended for the target) or need to build special host tools as part of
-the build process, then it's possible it works.
-Regards.
+I've applied this, but:
+>
+>  1/ The package lacks an init script to start the MySQL server
+>     automatically.
+>
+>  2/ When mysqld_safe is started automatically, it looks for stuff
+>     in /usr/var that doesn't exist:
+>
+> 700101 00:00:22 mysqld_safe Starting mysqld daemon with databases from
+> /usr/var
+> /usr/bin/mysqld_safe: line 595: can't create /usr/var/buildroot.err:
+> nonexistent directory
+> /usr/bin/mysqld_safe: eval: line 1: can't create /usr/var/buildroot.err:
+> nonexistent directory
+>
+
+I can fix that but we'll need to add a mysql user and I have no idea how do
+it
+
+Regard,
+Marcelo
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140303/fe014a7e/attachment.html>
