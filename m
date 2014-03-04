@@ -1,112 +1,90 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 4 Mar 2014 22:38:45 +0100
-Subject: [Buildroot] [PATCH v2] bluez5_utils: new package
-In-Reply-To: <1383600898-25441-1-git-send-email-marcin@bis.org.pl>
-References: <CAAXf6LXLSDeRgXT9T+v77i=Wh3Ti-5G02U-7J7F4DAPJYUg2rA@mail.gmail.com>
- <1383600898-25441-1-git-send-email-marcin@bis.org.pl>
-Message-ID: <20140304213845.GG11474@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue,  4 Mar 2014 22:41:24 +0100
+Subject: [Buildroot] [PATCH 1/2] toolchain: generate a gdbinit file
+Message-ID: <1393969285-13984-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Marcin, All,
+This commit slightly improves the external toolchain backend, and the
+gdb build logic to create a file named
+$(STAGING_DIR)/usr/share/buildroot/gdbinit which can be used as a
+gdbinit file using gdb -x option. This allows gdb to automatically use
+the proper sysroot to find libraries.
 
-Thanks for your patch. Here are a few comments below...
+The initial insight for this patch comes from the report of Oded
+Hanson <OHanson@xsightsys.com>, who found an issue with the Eclipse
+Buildroot plugin, which was setting a solib-path in gdb, but not a
+sysroot. Setting a solib-path was enough to find shared libraries, but
+not the dynamic linker. And since Eclipse doesn't allow to set the
+sysroot in any other way that giving a gdbinit file, it makes sense to
+have Buildroot generate a gdbinit file (which was be used in other
+situations than Eclipse).
 
-On 2013-11-04 22:34 +0100, Marcin Bis spake thusly:
-> This patch adds support for BlueZ 5.x.
-> 
-> API is not backwards compatible with BlueZ 4. It uses kernel interface
-> introduced in 3.4 (3.5 for Low Energy).
+To achieve this, this commit introduces a gen_gdbinit_file helper in
+toolchain/helpers.mk, and uses it for the internal toolchain and
+external toolchain backends.
 
-So it has a dependency on the Linux kernel headers installed with the
-toolchain, right? We now have a way to express this kind of
-dependencies:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gdb/gdb.mk                                 | 2 ++
+ toolchain/helpers.mk                               | 7 +++++++
+ toolchain/toolchain-external/toolchain-external.mk | 7 +++++++
+ 3 files changed, 16 insertions(+)
 
-    depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
-
-See the current manual:
-    http://nightly.buildroot.org/#dependencies-target-toolchain-options
-
-[--SNIP--]
-> diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-> new file mode 100644
-> index 0000000..718699d
-> --- /dev/null
-> +++ b/package/bluez5_utils/bluez5_utils.mk
-> @@ -0,0 +1,40 @@
-> +################################################################################
-> +#
-> +# bluez5_utils
-> +#
-> +################################################################################
-> +
-> +BLUEZ5_UTILS_VERSION = 5.10
-
-There's 5.15, now...
-
-> +BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
-> +BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
-> +BLUEZ5_UTILS_INSTALL_STAGING = YES
-> +BLUEZ5_UTILS_DEPENDENCIES = dbus libglib2 libical readline
-> +BLUEZ5_UTILS_CONF_OPT = --enable-test --enable-tools --enable-library
-
-Maybe make tests optional?
-
-> +BLUEZ5_UTILS_AUTORECONF = YES
-
-Why is autoreconf needed? The tarballs do have ./configure.
-
-configure.ac uses PKG_PROG_PKG_CONFIG, so you'd need:
-    BLUEZ5_UTILS_DEPENDENCIES += host-pkgconf
-
-Also, configure.ac uses AC_DISABLE_STATIC, so it looks like they do not
-intend to support static linking. You'll need in Config.in:
-    depends on !BR2_PREFER_STATIC_LIB
-
-> +BLUEZ5_UTILS_LICENSE = GPLv2+ LGPLv2.1+
-> +BLUEZ5_UTILS_LICENSE_FILES = COPYING COPYING.LIB
-> +
-> +# experimental plugins
-> +ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL),y)
-> +BLUEZ5_UTILS_CONF_OPT += --enable-experimental
-> +else
-> +BLUEZ5_UTILS_CONF_OPT += --disable-experimental
-> +endif
-> +
-> +# use udev if available
-> +ifeq ($(BR2_PACKAGE_UDEV),y)
-> +        BLUEZ5_UTILS_CONF_OPT += --enable-udev
-> +        BLUEZ5_UTILS_DEPENDENCIES += udev
-> +else
-> +        BLUEZ5_UTILS_CONF_OPT += --disable-udev
-> +endif
-> +
-> +# integrate with systemd if available
-> +ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-> +        BLUEZ5_UTILS_CONF_OPT += --enable-systemd
-> +        BLUEZ5_UTILS_DEPENDENCIES += systemd
-> +else
-> +        BLUEZ5_UTILS_CONF_OPT += --disable-systemd
-> +endif
-
-Bluez4 has more config knobs: are they no longer applicable to Bluez5?
-  - Audio
-  - USB support
-  - GATT support
-
-Since you mention the subject in the commit log: is there a way to
-enable/disable support for BTLE?
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 69fb3ba..678c17c 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -126,5 +126,7 @@ endef
+ 
+ HOST_GDB_POST_INSTALL_HOOKS += HOST_GDB_ADD_SYMLINK
+ 
++HOST_GDB_POST_INSTALL_HOOKS += gen_gdbinit_file
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 64d5095..668a737 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -356,3 +356,10 @@ check_unusable_toolchain = \
+ 		echo "such as Buildroot." ; \
+ 		exit 1 ; \
+ 	fi
++
++#
++# Generate gdbinit file for use with Buildroot
++#
++gen_gdbinit_file = \
++	mkdir -p $(STAGING_DIR)/usr/share/buildroot/ ; \
++	echo "set sysroot $(STAGING_DIR)" > $(STAGING_DIR)/usr/share/buildroot/gdbinit
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 378e7b2..b45504b 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -617,6 +617,12 @@ define TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER
+ 		-o $(HOST_DIR)/usr/bin/ext-toolchain-wrapper
+ endef
+ 
++define TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT
++	if test -f $(TARGET_CROSS)gdb ; then \
++		$(call gen_gdbinit_file) ; \
++	fi
++endef
++
+ # Even though we're installing things in both the staging, the host
+ # and the target directory, we do everything within the
+ # install-staging step, arbitrarily.
+@@ -625,6 +631,7 @@ define TOOLCHAIN_EXTERNAL_INSTALL_STAGING_CMDS
+ 	$(TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FDPIC)
+ 	$(TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FLAT)
+ 	$(TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER)
++	$(TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT)
+ endef
+ 
+ $(eval $(generic-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.3.2
