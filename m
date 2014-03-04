@@ -1,78 +1,52 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 4 Mar 2014 08:18:24 +0200
-Subject: [Buildroot] readonly rootfs problem
-In-Reply-To: <5314FED7.80903@alcatel-lucent.com>
-References: <5314FED7.80903@alcatel-lucent.com>
-Message-ID: <20140304061824.GY3874@tarshish>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 04 Mar 2014 07:35:39 +0100
+Subject: [Buildroot] [git commit] packages infra: add function to get a
+	Kconfig option
+In-Reply-To: <20140303212320.ED3369BCBE@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Mon, 3 Mar 2014 22:21:56 +0100")
+References: <20140303212320.ED3369BCBE@busybox.osuosl.org>
+Message-ID: <87r46i79ok.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Ed,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Mon, Mar 03, 2014 at 05:14:47PM -0500, Ed Sutter wrote:
-> I've been using buildroot to create my rootfs for a few months.
-> I build my kernel directly out of freescale.git.
-> I had been running with my rootfs nfs mounted, and all was well.
-> Recently I had spent some time with a ramdisk-based rootfs because
-> i was working on some kernel stuff.
-> Now I'm going back to running rootfs/nfs and I'm finding that
-> it "insists" on coming up in read-only mode.
-> 
-> I was initially using buildroot-2013.08, and recently I
-> updated to buildroot-2013.11; however, I don't think that has
-> anything to do with this.  As far as I can tell I have everything
-> set up properly...
-> 
-> ####On NFS host /etc/exports has...
-> /full_path_to_my_rootfs *(rw,no_root_squash)
-> 
-> ####On target...
-> /etc/inittab...
-> null::sysinit:/bin/mount -o remount,rw / # REMOUNT_ROOTFS_RW
-> 
-> /etc/fstab...
-> # /etc/fstab: static file system information.
-> #
-> # <file system> <mount pt>     <type> <options>         <dump> <pass>
-> /dev/root       /              ext2     rw,noauto         0      1
-> proc            /proc          proc     defaults          0      0
-> devpts          /dev/pts       devpts   defaults,gid=5,mode=620 0      0
-> tmpfs           /dev/shm       tmpfs    mode=0777         0      0
-> tmpfs           /tmp           tmpfs    defaults          0      0
-> sysfs           /sys           sysfs    defaults          0 0
-> 
-> Output from mount:
-> # mount
-> rootfs on / type rootfs (rw)
-> 1.2.3.4:/full_path_to_my_rootfs on / type nfs (ro,relatime,vers=3,rsize=4096,wsize=4096,namlen=255,hard,nolock,proto=tcp,timeo=600,retrans=2,sec=sys,mountaddr=1.2.3.4,mountvers=3,mountproto=tcp,local_lock=all,addr=135.222.138.108)
-> devtmpfs on /dev type devtmpfs
-> (rw,relatime,size=110708k,nr_inodes=27677,mode=755)
-> proc on /proc type proc (rw,relatime)
-> devpts on /dev/pts type devpts (rw,relatime,gid=5,mode=620)
-> tmpfs on /dev/shm type tmpfs (rw,relatime,mode=777)
-> tmpfs on /tmp type tmpfs (rw,relatime)
-> sysfs on /sys type sysfs (rw,relatime)
-> 
-> I actually think the problem is in the kernel, not the rootfs.
-> I say this because even some of my older rootfs copies (still on my
-> host) are now
-> showing up as read only.  The bootlog always ends up with this message:
-> VFS: Mounted root (nfs filesystem) readonly on device 0:11.
-> 
-> Any idea what I might be doing wrong here?
+ > commit: http://git.buildroot.net/buildroot/commit/?id=c28a28eed1943c1efb958448a87a2e8f0baf48d6
+ > branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-What happens if you manually run:
+ > We so far have no mean to get the value from a Kconfig option from the
+ > .config file of a package (eg. linux, busybox...).
 
-	mount -o remount,rw /
+ > Add a new function that returns the unmangled value of an option.
+ > It expect two arguments:
+ >   - the Kconfig option name (complete, with leading CONFIG if necessary)
+ >   - the .config file to get it from
 
-Do you see any error message?
+ > Note that, if the Kconfig option is a string, the returned value will
+ > contain the leading and trailing double-quotes.
 
-baruch
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Peter Korsgaard <jacmet@uclibc.org>
+ > Cc: Arnout Vandecappelle <arnout@mind.be>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > ---
+ >  package/pkg-utils.mk |    2 ++
+ >  1 files changed, 2 insertions(+), 0 deletions(-)
+
+ > diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+ > index 91a1981..99fefe6 100644
+ > --- a/package/pkg-utils.mk
+ > +++ b/package/pkg-utils.mk
+ > @@ -52,6 +52,8 @@ define KCONFIG_DISABLE_OPT
+ >  	echo "# $(1) is not set" >> $(2)
+ >  endef
+ 
+ > +KCONFIG_GET_OPT = $(shell sed -e 's/^$(1)=//p' $(2))
+
+I believe this should be 'sed -n'
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Bye, Peter Korsgaard
