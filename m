@@ -1,51 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Mar 2014 15:44:46 +0100
-Subject: [Buildroot] [PATCH 2/2] Compile Poppler over Qt
-In-Reply-To: <1393940343-15899-1-git-send-email-jeremie.scheer@armadeus.com>
-References: <1393940343-15899-1-git-send-email-jeremie.scheer@armadeus.com>
-Message-ID: <20140304154446.42c57533@skate>
+Date: Tue, 4 Mar 2014 15:45:46 +0100
+Subject: [Buildroot] [PATCH v2 1/2] python-libconfig: new package
+In-Reply-To: <1393941501.23823.14.camel@kuuclt18625l>
+References: <1393941501.23823.14.camel@kuuclt18625l>
+Message-ID: <20140304154546.147e7937@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear jeremie.scheer at armadeus.com,
+Dear Derycke, Johan,
 
-On Tue,  4 Mar 2014 14:39:03 +0100, jeremie.scheer at armadeus.com wrote:
-> From: Jeremie Scheer <jeremie.scheer@armadeus.com>
-> 
-> 
-> Signed-off-by: Jeremie Scheer <jeremie.scheer@armadeus.com>
-> ---
->  package/poppler/poppler.mk |    9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
-> index 040327f..7dce7a0 100644
-> --- a/package/poppler/poppler.mk
-> +++ b/package/poppler/poppler.mk
-> @@ -7,10 +7,17 @@
->  POPPLER_VERSION = 0.24.4
->  POPPLER_SOURCE = poppler-$(POPPLER_VERSION).tar.xz
->  POPPLER_SITE = http://poppler.freedesktop.org
-> -POPPLER_DEPENDENCIES = fontconfig
->  POPPLER_LICENSE = GPLv2+
->  POPPLER_LICENSE_FILES = COPYING
->  POPPLER_CONF_OPT = --with-font-configuration=fontconfig
-> +POPPLER_INSTALL_STAGING = YES
-> +
-> +ifeq ($(BR2_PACKAGE_QT),y)
-> +	POPPLER_DEPENDENCIES = qt fontconfig
-> +else
-> +	POPPLER_DEPENDENCIES = fontconfig
-> +	POPPLER_CONF_OPT += --disable-poppler-qt4
+On Tue, 4 Mar 2014 13:58:10 +0000, Derycke, Johan wrote:
+> v2
+> -Fixed indentations and blank lines
+> -added package/Config.in
 
-Why isn't the fontconfig dependency part of the if, and not kept
-outside, since it is not related to Qt ?
+The changelog should not be part of the commit log itself. See
+http://buildroot.org/downloads/manual/manual.html#_patch_revision_changelog.
 
-Also, if poppler has a --disable-poppler-qt4 in one case, it probably
-has a --enable-poppler-qt4 option in the other case, no?
+> +PYTHON_LIBCONFIG_VERSION = b271c3d9dac938ad5cd29b67bd08cc5536a5a391
+> +PYTHON_LIBCONFIG_SITE = $(call github,cnangel,python-libconfig,
+> $(PYTHON_LIBCONFIG_VERSION))
+
+Your patch is line-wrapped. Can you use "git send-email" to ensure
+patches don't get line-wrapped by your e-mail client?
 
 Thanks!
 
