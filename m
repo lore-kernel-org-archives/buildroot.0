@@ -1,70 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 4 Mar 2014 21:01:14 +0100
-Subject: [Buildroot] [RFC,
- PATCH 1/8] package/busybox: Add facility for DHCP hooks
-In-Reply-To: <1389862338.917966.273409717366.1.gpush@pablo>
-References: <1389862338.917573.283530987294.0.gpush@pablo>
- <1389862338.917966.273409717366.1.gpush@pablo>
-Message-ID: <20140304200114.GD11474@free.fr>
+From: Marcelo Gutierrez <kuyurix@gmail.com>
+Date: Tue, 4 Mar 2014 17:03:05 -0300
+Subject: [Buildroot] [PATCH 4/4] mysql: host-mysql depends on host-zlib
+In-Reply-To: <CA+kK6WtYwDh0Tvt=U9Ke5bsRSnF0X69oOd9Hh4N=6wMSrs6AHA@mail.gmail.com>
+References: <1393944603-3104-1-git-send-email-kuyurix@gmail.com>
+ <1393944603-3104-4-git-send-email-kuyurix@gmail.com>
+ <20140304185227.46062c52@skate>
+ <CA+kK6WtYwDh0Tvt=U9Ke5bsRSnF0X69oOd9Hh4N=6wMSrs6AHA@mail.gmail.com>
+Message-ID: <CA+kK6WseNEiMeEyAUsW7ajZXdNyKdF8w98OkuhEpDEpQHsiniQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jeremy, All,
+Hi Thomas,
 
-On 2014-01-16 16:52 +0800, Jeremy Kerr spake thusly:
-> The (u)dhcpc hook installed by the busybox package configures the
-> network and exits. If we want to do anything further with a DHCP lease,
-> we'd have to replace the script entirely.
-> 
-> This change introduces a .d directory for hooks (based on the script
-> filename), which are executed after the interface configuration. This
-> allows packages to drop a script file in the .d directory to perform
-> actions on DHCP events.
-> 
-> We'll use this in a later change to notify petitboot of DHCP boot
-> information.
-> 
-> Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
 
-I'm not against such a change, but there is a gotcha, see below...
+> I downloaded a fresh "git buildroot" and I've only selected MySQL client
+> and  MySQL server.
+>
+> When it was compiling "host-mysql", could not find "libzlt.la" library.
+>
+> So I've added host-zlib and that issue completely gone.
+>
 
-[--SNIP--]
-> diff --git a/package/busybox/udhcpc.script b/package/busybox/udhcpc.script
-> index 43742fbd..8930d4a8 100755
-> --- a/package/busybox/udhcpc.script
-> +++ b/package/busybox/udhcpc.script
-> @@ -63,4 +63,13 @@ case "$1" in
->  		;;
->  esac
->  
-> +HOOK_DIR="$0.d"
-> +if [ -d "$HOOK_DIR" ]
-> +then
-> +	for HOOK in $HOOK_DIR/*; do
-> +		$HOOK "$@"
 
-If the directory exists, but there is no hook, then HOOK will have the
-value '${HOKK_DIR}/*', and this will result in a error.
+More details about host-zlib dependency....
 
-You have to do something like:
+I'm using a Debian distro and if remove "zlib1g-dev" package. I got the
+following error message without host-zlib.
 
-    for hook in "${HOOK_DIR}/"*; do
-        [ -f "${hook}" -a -x "${hook}" ] || continue
-        "${hook}" "${@}"
-    done
+libtool: link: cannot find the library `../zlib/libzlt.la' or unhandled
+argument `../zlib/libzlt.la'
 
-And then you do not need to protect with the if-block.
+Therefore, zlib1g-dev makes the difference.
 
 Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Marcelo
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140304/72838d63/attachment.html>
