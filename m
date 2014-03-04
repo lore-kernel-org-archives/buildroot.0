@@ -1,114 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Mar 2014 19:02:32 +0100
-Subject: [Buildroot] [PATCH v3 2/2] boost: make build with python an
- option
-In-Reply-To: <1393952027-21201-2-git-send-email-johan.derycke@barco.com>
-References: <1393952027-21201-1-git-send-email-johan.derycke@barco.com>
- <1393952027-21201-2-git-send-email-johan.derycke@barco.com>
-Message-ID: <20140304190232.4a927d29@skate>
+Date: Tue, 4 Mar 2014 19:14:11 +0100
+Subject: [Buildroot] [PATCH] i2c-tools: Add i2c-dev.h to staging
+ directory for userspace i2c drivers.
+In-Reply-To: <20140303221028.09ea1b18@skate>
+References: <1380017924-20072-1-git-send-email-jouko.nikula@espotel.com>
+ <20140303221028.09ea1b18@skate>
+Message-ID: <20140304191411.1e2a3899@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Johan Derycke,
+Hello,
 
-Thanks a lot for your persistence with those patches, really
-appreciated!
-
-On Tue,  4 Mar 2014 17:53:47 +0100, Johan Derycke wrote:
-
-> +config BR2_PACKAGE_BOOST_PYTHON
-> +	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
-> +	bool "boost-python"
-
-Ok, so this means that boost::python is compatible with Python 3, which
-seems to match various claims I've seen on the web.
-
->  # coroutine breaks on some weak toolchains and it's new for 1.54+
->  # log breaks with some toolchain combinations and it's new for 1.54+
-> -BOOST_WITHOUT_FLAGS = atomic coroutine log python
-> +BOOST_WITHOUT_FLAGS = atomic coroutine log
+On Mon, 3 Mar 2014 22:10:28 +0100, Thomas Petazzoni wrote:
+> Dear Jouko Nikula,
 > 
->  BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CHRONO),,chrono)
->  BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CONTEXT),,context)
-> @@ -40,6 +40,7 @@ BOOST_WITHOUT_FLAGS += $(if 
-> $(BR2_PACKAGE_BOOST_LOCALE),,locale)
->  BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_MATH),,math)
->  BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_MPI),,mpi)
->  BOOST_WITHOUT_FLAGS += $(if 
-> $(BR2_PACKAGE_BOOST_PROGRAM_OPTIONS),,program_options)
-> +BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_PYTHON),,python)
-
-Ok.
-
->  BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_RANDOM),,random)
->  BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_REGEX),,regex)
->  BOOST_WITHOUT_FLAGS += $(if 
-> $(BR2_PACKAGE_BOOST_SERIALIZATION),,serialization)
-> @@ -50,6 +51,8 @@ BOOST_WITHOUT_FLAGS += $(if 
-> $(BR2_PACKAGE_BOOST_THREAD),,thread)
->  BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_TIMER),,timer)
->  BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_WAVE),,wave)
+> On Tue, 24 Sep 2013 13:18:43 +0300, Jouko Nikula wrote:
+> > Signed-off-by: Jouko Nikula <jouko.nikula@espotel.com>
+> > ---
+> >  package/i2c-tools/i2c-tools.mk |    5 +++++
+> >  1 file changed, 5 insertions(+)
 > 
-> +BOOST_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
-> +
->  ifeq ($(BR2_PACKAGE_ICU),y)
->  BOOST_FLAGS += --with-icu=$(STAGING_DIR)/usr
->  BOOST_DEPENDENCIES += icu
-> @@ -61,6 +64,12 @@ ifeq ($(BR2_PACKAGE_BOOST_IOSTREAMS),y)
->  BOOST_DEPENDENCIES += bzip2 zlib
->  endif
-> 
-> +ifeq ($(BR2_PACKAGE_BOOST_PYTHON),y)
-> +BOOST_FLAGS += --with-python-root=$(HOST_DIR)
+> Applied, thanks.
 
-Depending on what Boost needs exactly, this might be correct or not. It
-is correct to find a Python interpreter that runs on the build machine.
-But Boost uses that to ask the Python interpreter various details about
-the Python installation (such as the location of Python modules, the
-cross-compiler to use, etc.), then it will be wrong. I guess I'll have
-to have a look.
+In fact, I will revert it: the modified i2c-dev.h by the i2c-tools
+has some definitions that conflicts with the i2c.h normally provided by
+the kernel headers. Therefore, if a userspace program or library
+includes both, it fails to build. This is the case with libsoc, see
+http://autobuild.buildroot.org/results/1f4/1f451a338487a2a3c8a8f9b18540d41b90ee5aac/build-end.log:
 
-> +BOOST_TARGET_CXXFLAGS 
-> += -I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)/
-> +BOOST_DEPENDENCIES += python
+In file included from ../lib/include/libsoc_i2c.h:2:0,
+                 from i2c.c:11:
+/home/test/test/1/output/host/usr/sh4-buildroot-linux-uclibc/sysroot/usr/include/linux/i2c-dev.h:38:8: error: redefinition of 'struct i2c_msg'
+In file included from ../lib/include/libsoc_i2c.h:1:0,
+                 from i2c.c:11:
+/home/test/test/1/output/host/usr/sh4-buildroot-linux-uclibc/sysroot/usr/include/linux/i2c.h:68:8: note: originally defined here
+In file included from ../lib/include/libsoc_i2c.h:2:0,
+                 from i2c.c:11:
+/home/test/test/1/output/host/usr/sh4-buildroot-linux-uclibc/sysroot/usr/include/linux/i2c-dev.h:90:7: error: redefinition of 'union i2c_smbus_data'
+In file included from ../lib/include/libsoc_i2c.h:1:0,
+                 from i2c.c:11:
+/home/test/test/1/output/host/usr/sh4-buildroot-linux-uclibc/sysroot/usr/include/linux/i2c.h:128:7: note: originally defined here
+make[2]: *** [libsoc_la-i2c.lo] Error 1
 
-This isn't going to work with Python 3. It should be:
+Apparently, it is well-known to the i2c-tools developers that their
+i2c-dev.h is broken, and not really usable in practice.
 
-ifeq ($(BR2_PACKAGE_PYTHON3),y)
-BOOST_TARGET_CXXFLAGS += -I$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)
-BOOST_DEPENDENCIES += python3
-else
-BOOST_TARGET_CXXFLAGS += -I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)
-BOOST_DEPENDENCIES += python
-endif
-
-> +endif
-> +
->  HOST_BOOST_OPT += toolset=gcc threading=multi variant=release link=shared 
-> \
->  	runtime-link=shared
-> 
-> @@ -84,7 +93,7 @@ BOOST_FLAGS += $(if 
-> $(BOOST_WITHOUT_FLAGS_COMMASEPERATED), --without-libraries=$
-> 
->  define BOOST_CONFIGURE_CMDS
->  	(cd $(@D) && ./bootstrap.sh $(BOOST_FLAGS))
-> -	echo "using gcc : $(TARGET_CC_VERSION) : $(TARGET_CXX) : 
-> <cxxflags>\"$(TARGET_CXXFLAGS)\" <linkflags>\"$(TARGET_LDFLAGS)\" ;" > 
-> $(@D)/user-config.jam
-> +	echo "using gcc : $(TARGET_CC_VERSION) : $(TARGET_CXX) : 
-> <cxxflags>\"$(BOOST_TARGET_CXXFLAGS)\" <linkflags>\"$(TARGET_LDFLAGS)\" ;" 
->  > $(@D)/user-config.jam
->  	echo "" >> $(@D)/user-config.jam
->  endef
-> 
-
-Ok.
-
-Thanks!
+Best regards,
 
 Thomas
 -- 
