@@ -1,41 +1,76 @@
-From: Marcelo Gutierrez <kuyurix@gmail.com>
-Date: Mon, 3 Mar 2014 23:39:59 -0300
-Subject: [Buildroot] [PATCH 1/2] mysql: add option to build the server
-In-Reply-To: <20140303233551.75c74c6a@skate>
-References: <1392244774-15356-1-git-send-email-kuyurix@gmail.com>
- <20140303233551.75c74c6a@skate>
-Message-ID: <CA+kK6WsRpy_8rvtVb6iSrBNYCB-QOsKCP18STAP6RNDj434yPg@mail.gmail.com>
+From: Noam Camus <noamc@ezchip.com>
+Date: Tue, 4 Mar 2014 03:47:38 +0000
+Subject: [Buildroot] [PATCH] toolchain: control GNU_TARGET_NAME
+	vendor	part
+In-Reply-To: <20140303224441.546bf9f3@skate>
+References: <884EA965490E3C4D8E66AEF41E98025006BF23@ezex10.ezchip.com>
+ <20140223104658.4088cdc6@skate>
+ <884EA965490E3C4D8E66AEF41E98025006C3BB@ezex10.ezchip.com>
+ <20140223125102.025dd91a@skate>
+ <884EA965490E3C4D8E66AEF41E98025006C816@ezex10.ezchip.com>,
+ <20140303224441.546bf9f3@skate>
+Message-ID: <884EA965490E3C4D8E66AEF41E9802500938ED@ezex10.ezchip.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, all
+>A better wording IMO:
 
+>        This option allows to customize the "vendor" part of the
+>         toolchain tuple, where the toolchain tuple has the form
+>         <cpu>-<vendor>-<kernel>-<os>. The default value, "buildroot",
+>         is fine for most cases, except in very specific situations
+>         where gcc might make different decisions based on the vendor
+>         part of the tuple. The value "unknown" is not allowed as the
+>         cross-compiling toolchain might then be confused with the
+>         native toolchain when the target and host architecture are
+>         identical.
 
+>        If you're not sure, just leave the default "buildroot" value.
 
-I've applied this, but:
->
->  1/ The package lacks an init script to start the MySQL server
->     automatically.
->
->  2/ When mysqld_safe is started automatically, it looks for stuff
->     in /usr/var that doesn't exist:
->
-> 700101 00:00:22 mysqld_safe Starting mysqld daemon with databases from
-> /usr/var
-> /usr/bin/mysqld_safe: line 595: can't create /usr/var/buildroot.err:
-> nonexistent directory
-> /usr/bin/mysqld_safe: eval: line 1: can't create /usr/var/buildroot.err:
-> nonexistent directory
->
+Thanks 
+It is indeed much better.
+I will send PATCH V2
+________________________________________
+From: Thomas Petazzoni [thomas.petazzoni at free-electrons.com]
+Sent: Monday, March 03, 2014 11:44 PM
+To: Noam Camus
+Cc: buildroot at busybox.net
+Subject: Re: [Buildroot] [PATCH] toolchain: control GNU_TARGET_NAME vendor      part
 
-I can fix that but we'll need to add a mysql user and I have no idea how do
-it
+Dear Noam Camus,
 
-Regard,
-Marcelo
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140303/fe014a7e/attachment.html>
+On Sun, 23 Feb 2014 15:41:43 +0000, Noam Camus wrote:
+> +config BR2_TOOLCHAIN_BUILDROOT_VENDOR
+> +     string "custom toolchain vendor name"
+> +     default "buildroot"
+> +     help
+> +       This option accepts name for vendor field in toolchain tuple.
+> +       The toolchain tuple full format is:
+> +       cpu-vendor-kernel-os
+> +       You may use it in case of custom toolchain.
+> +       e.g. if your gcc depend on this field to make decisions.
+> +       NOTE: "unknown" is not allowed since it may be confused
+> +       with host toolchain.
+
+A better wording IMO:
+
+        This option allows to customize the "vendor" part of the
+        toolchain tuple, where the toolchain tuple has the form
+        <cpu>-<vendor>-<kernel>-<os>. The default value, "buildroot",
+        is fine for most cases, except in very specific situations
+        where gcc might make different decisions based on the vendor
+        part of the tuple. The value "unknown" is not allowed as the
+        cross-compiling toolchain might then be confused with the
+        native toolchain when the target and host architecture are
+        identical.
+
+        If you're not sure, just leave the default "buildroot" value.
+
+Thomas
+--
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
