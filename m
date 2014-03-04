@@ -1,57 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Mar 2014 19:14:11 +0100
-Subject: [Buildroot] [PATCH] i2c-tools: Add i2c-dev.h to staging
- directory for userspace i2c drivers.
-In-Reply-To: <20140303221028.09ea1b18@skate>
-References: <1380017924-20072-1-git-send-email-jouko.nikula@espotel.com>
- <20140303221028.09ea1b18@skate>
-Message-ID: <20140304191411.1e2a3899@skate>
+Date: Tue, 4 Mar 2014 19:14:26 +0100
+Subject: [Buildroot] [git commit] Revert "i2c-tools: Add i2c-dev.h to
+	staging directory for userspace i2c drivers."
+Message-ID: <20140304181827.0A12B9BD2A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: http://git.buildroot.net/buildroot/commit/?id=41711cfdeda6f5fd9b2531f538f3643854d7d3ea
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 3 Mar 2014 22:10:28 +0100, Thomas Petazzoni wrote:
-> Dear Jouko Nikula,
-> 
-> On Tue, 24 Sep 2013 13:18:43 +0300, Jouko Nikula wrote:
-> > Signed-off-by: Jouko Nikula <jouko.nikula@espotel.com>
-> > ---
-> >  package/i2c-tools/i2c-tools.mk |    5 +++++
-> >  1 file changed, 5 insertions(+)
-> 
-> Applied, thanks.
+This reverts commit ff673f9a22b1467878f1a117f2c6198e9683d5c7, as the
+modified i2c-dev.h from i2c-tools has some definitions that conflict
+with the i2c.h from the kernel headers. This means that a userspace
+program or library that includes both will fail to build, as is the
+case with libsoc.
 
-In fact, I will revert it: the modified i2c-dev.h by the i2c-tools
-has some definitions that conflicts with the i2c.h normally provided by
-the kernel headers. Therefore, if a userspace program or library
-includes both, it fails to build. This is the case with libsoc, see
-http://autobuild.buildroot.org/results/1f4/1f451a338487a2a3c8a8f9b18540d41b90ee5aac/build-end.log:
+Fixes:
 
-In file included from ../lib/include/libsoc_i2c.h:2:0,
-                 from i2c.c:11:
-/home/test/test/1/output/host/usr/sh4-buildroot-linux-uclibc/sysroot/usr/include/linux/i2c-dev.h:38:8: error: redefinition of 'struct i2c_msg'
-In file included from ../lib/include/libsoc_i2c.h:1:0,
-                 from i2c.c:11:
-/home/test/test/1/output/host/usr/sh4-buildroot-linux-uclibc/sysroot/usr/include/linux/i2c.h:68:8: note: originally defined here
-In file included from ../lib/include/libsoc_i2c.h:2:0,
-                 from i2c.c:11:
-/home/test/test/1/output/host/usr/sh4-buildroot-linux-uclibc/sysroot/usr/include/linux/i2c-dev.h:90:7: error: redefinition of 'union i2c_smbus_data'
-In file included from ../lib/include/libsoc_i2c.h:1:0,
-                 from i2c.c:11:
-/home/test/test/1/output/host/usr/sh4-buildroot-linux-uclibc/sysroot/usr/include/linux/i2c.h:128:7: note: originally defined here
-make[2]: *** [libsoc_la-i2c.lo] Error 1
+  http://autobuild.buildroot.org/results/1f4/1f451a338487a2a3c8a8f9b18540d41b90ee5aac/
 
-Apparently, it is well-known to the i2c-tools developers that their
-i2c-dev.h is broken, and not really usable in practice.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/i2c-tools/i2c-tools.mk |    5 -----
+ 1 files changed, 0 insertions(+), 5 deletions(-)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
+index 450dba7..c6a967d 100644
+--- a/package/i2c-tools/i2c-tools.mk
++++ b/package/i2c-tools/i2c-tools.mk
+@@ -9,7 +9,6 @@ I2C_TOOLS_SOURCE = i2c-tools-$(I2C_TOOLS_VERSION).tar.bz2
+ I2C_TOOLS_SITE = http://dl.lm-sensors.org/i2c-tools/releases
+ I2C_TOOLS_LICENSE = GPLv2+, GPLv2 (py-smbus)
+ I2C_TOOLS_LICENSE_FILES = COPYING
+-I2C_TOOLS_INSTALL_STAGING = YES
+ 
+ define I2C_TOOLS_BUILD_CMDS
+  $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+@@ -22,8 +21,4 @@ define I2C_TOOLS_INSTALL_TARGET_CMDS
+ 	done
+ endef
+ 
+-define I2C_TOOLS_INSTALL_STAGING_CMDS
+-	$(INSTALL) -D -m644 $(@D)/include/linux/i2c-dev.h $(STAGING_DIR)/usr/include/linux/
+-endef
+-
+ $(eval $(generic-package))
