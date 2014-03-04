@@ -1,33 +1,34 @@
-From: mlweber1 at rockwellcollins.com <mlweber1@rockwellcollins.com>
-Date: Tue, 4 Mar 2014 09:27:55 -0600
-Subject: [Buildroot] [PATCH 1/1] pyrex: new package
-In-Reply-To: <20140304162310.444d5eea@skate>
-References: <1379700560-10738-1-git-send-email-mlweber1@rockwellcollins.com>	<20140303220417.6835ec44@skate>
- <OFDE37491E.EE5530A4-ON86257C91.00539055-86257C91.0053E4B7@rockwellcollins.com>
- <20140304162310.444d5eea@skate>
-Message-ID: <OF5DD362FC.CA076EEC-ON86257C91.0054D85E-86257C91.0054F43E@rockwellcollins.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue,  4 Mar 2014 13:30:11 -0300
+Subject: [Buildroot] [PATCH] eudev: disable manpages
+Message-ID: <1393950611-6873-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, 
+If host-libxslt or some libxslt is around (xsltproc) eudev will try to
+build manpages with it. Problem is docbook DTDs might not be around and
+things will break. We want no manpages anyway. Fixes:
+http://autobuild.buildroot.net/results/c4e/c4e920b16c57e79df979f00cceaea7c0483f043c/
 
-> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> To: mlweber1 at rockwellcollins.com
-> Cc: buildroot at busybox.net, "Ryan Barnett" <rjbarnet@rockwellcollins.com>
-> Date: 03/04/2014 09:23 AM
-> Subject: Re: [Buildroot] [PATCH 1/1] pyrex: new package
-> 
-<snip>
-> 
-> Ok, but then python-pyrex should be packaged as a host package, not as
-> a target package as you did, no?
-> 
-> Do you intend to resend an updated version which packages python-pyrex
-> as a host tool instead?
-No problem, I'll resend with it updated as a host tool!
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/eudev/eudev.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks
-Matt
+diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
+index ffa413f..95aa1ce 100644
+--- a/package/eudev/eudev.mk
++++ b/package/eudev/eudev.mk
+@@ -15,6 +15,7 @@ EUDEV_AUTORECONF = YES
+ EUDEV_CONF_ENV += LIBS=-lrt
+ 
+ EUDEV_CONF_OPT =		\
++	--disable-manpages	\
+ 	--sbindir=/sbin		\
+ 	--with-rootlibdir=/lib	\
+ 	--libexecdir=/lib	\
+-- 
+1.8.3.2
