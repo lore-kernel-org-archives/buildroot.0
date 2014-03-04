@@ -1,10 +1,10 @@
 From: Ed Sutter <ed.sutter@alcatel-lucent.com>
-Date: Tue, 04 Mar 2014 07:35:39 -0500
+Date: Tue, 04 Mar 2014 07:50:55 -0500
 Subject: [Buildroot] readonly rootfs problem
 In-Reply-To: <20140304061824.GY3874@tarshish>
 References: <5314FED7.80903@alcatel-lucent.com>
  <20140304061824.GY3874@tarshish>
-Message-ID: <5315C89B.4070901@alcatel-lucent.com>
+Message-ID: <5315CC2F.9090709@alcatel-lucent.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -73,8 +73,9 @@ On 3/4/2014 1:18 AM, Baruch Siach wrote:
 >
 > baruch
 >
-Thanks for responding, yea I've tried that (it fails).
-Here's the output:
-# mount -o remount,rw /
-mount: mounting 1.2.3.4:/full_path_to_my_rootfs on / failed: Invalid 
-argument
+Just got it...
+This error started after I updated my kernel, and apparently the new kernel
+does not default to a rw nfs-mounted rootfs, so I had to add "rw" to the
+kernel command line.
+Thanks,
+Ed
