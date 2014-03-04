@@ -1,65 +1,112 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Mar 2014 22:37:58 +0100
-Subject: [Buildroot] [PATCH v5 1/3] xlib_libpthread-stubs: Rename
- package to libpthread-stubs
-In-Reply-To: <essbuaxqp7.ln2@ID-313208.user.individual.net>
-References: <BLU0-SMTP413A04CC0DB17EA13F7E9FBD98D0@phx.gbl>
- <20140302150146.50593a9f@skate>
- <essbuaxqp7.ln2@ID-313208.user.individual.net>
-Message-ID: <20140304223758.22a685fd@skate>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 4 Mar 2014 22:38:45 +0100
+Subject: [Buildroot] [PATCH v2] bluez5_utils: new package
+In-Reply-To: <1383600898-25441-1-git-send-email-marcin@bis.org.pl>
+References: <CAAXf6LXLSDeRgXT9T+v77i=Wh3Ti-5G02U-7J7F4DAPJYUg2rA@mail.gmail.com>
+ <1383600898-25441-1-git-send-email-marcin@bis.org.pl>
+Message-ID: <20140304213845.GG11474@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Marcin, All,
 
-On Sun, 02 Mar 2014 15:47:10 +0100, Bernd Kuhls wrote:
+Thanks for your patch. Here are a few comments below...
 
-> The next step is to update mesa3d to 10.0.3 & xorg to 1.15.0:
+On 2013-11-04 22:34 +0100, Marcin Bis spake thusly:
+> This patch adds support for BlueZ 5.x.
 > 
-> http://patchwork.ozlabs.org/patch/316704/
-> http://patchwork.ozlabs.org/patch/316705/
-> http://patchwork.ozlabs.org/patch/316707/
-> http://patchwork.ozlabs.org/patch/316706/
+> API is not backwards compatible with BlueZ 4. It uses kernel interface
+> introduced in 3.4 (3.5 for Low Energy).
 
-These patches have a number of comments that have not been addressed.
-Can you take them into account and resend updated versions?
+So it has a dependency on the Linux kernel headers installed with the
+toolchain, right? We now have a way to express this kind of
+dependencies:
 
-> while I?am also waiting for the drm-related autobuild fallout ;)
-> 
-> Now that the drm update made it into git I will update my patches for git 
-> master, but afaics the opengl support is up for a change, too:
-> 
-> http://patchwork.ozlabs.org/patch/316706/
-> http://patchwork.ozlabs.org/patch/325462/
+    depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
 
-Not sure how these two patches are related. What do you mean exactly
-here?
+See the current manual:
+    http://nightly.buildroot.org/#dependencies-target-toolchain-options
 
-> Should I wait until the new code is merged? Mesa3d introduces a new 
-> opengl/libgl package.
+[--SNIP--]
+> diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+> new file mode 100644
+> index 0000000..718699d
+> --- /dev/null
+> +++ b/package/bluez5_utils/bluez5_utils.mk
+> @@ -0,0 +1,40 @@
+> +################################################################################
+> +#
+> +# bluez5_utils
+> +#
+> +################################################################################
+> +
+> +BLUEZ5_UTILS_VERSION = 5.10
 
-Which new code?
+There's 5.15, now...
 
-> FTR: sdl needs this patch to compile with libX11>= 1.5.99.902 on x86_64:
-> http://hg.libsdl.org/SDL/raw-rev/91ad7b43317a
-> 
-> This is already fixed here, I will include it in my next patch series.
+> +BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
+> +BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
+> +BLUEZ5_UTILS_INSTALL_STAGING = YES
+> +BLUEZ5_UTILS_DEPENDENCIES = dbus libglib2 libical readline
+> +BLUEZ5_UTILS_CONF_OPT = --enable-test --enable-tools --enable-library
 
-Huh, have you looked at sdl-0002-fix-compilation-with-libx11.patch in
-package/sdl/ ?
+Maybe make tests optional?
 
-It would be good if you could resend a complete patch series with all
-the patches that you believe are still pending on libdrm/mesa/X.org. Of
-course, make sure you take into account the comments that have been
-given on the patches already.
+> +BLUEZ5_UTILS_AUTORECONF = YES
 
-Thanks!
+Why is autoreconf needed? The tarballs do have ./configure.
 
-Thomas
+configure.ac uses PKG_PROG_PKG_CONFIG, so you'd need:
+    BLUEZ5_UTILS_DEPENDENCIES += host-pkgconf
+
+Also, configure.ac uses AC_DISABLE_STATIC, so it looks like they do not
+intend to support static linking. You'll need in Config.in:
+    depends on !BR2_PREFER_STATIC_LIB
+
+> +BLUEZ5_UTILS_LICENSE = GPLv2+ LGPLv2.1+
+> +BLUEZ5_UTILS_LICENSE_FILES = COPYING COPYING.LIB
+> +
+> +# experimental plugins
+> +ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL),y)
+> +BLUEZ5_UTILS_CONF_OPT += --enable-experimental
+> +else
+> +BLUEZ5_UTILS_CONF_OPT += --disable-experimental
+> +endif
+> +
+> +# use udev if available
+> +ifeq ($(BR2_PACKAGE_UDEV),y)
+> +        BLUEZ5_UTILS_CONF_OPT += --enable-udev
+> +        BLUEZ5_UTILS_DEPENDENCIES += udev
+> +else
+> +        BLUEZ5_UTILS_CONF_OPT += --disable-udev
+> +endif
+> +
+> +# integrate with systemd if available
+> +ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+> +        BLUEZ5_UTILS_CONF_OPT += --enable-systemd
+> +        BLUEZ5_UTILS_DEPENDENCIES += systemd
+> +else
+> +        BLUEZ5_UTILS_CONF_OPT += --disable-systemd
+> +endif
+
+Bluez4 has more config knobs: are they no longer applicable to Bluez5?
+  - Audio
+  - USB support
+  - GATT support
+
+Since you mention the subject in the commit log: is there a way to
+enable/disable support for BTLE?
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
