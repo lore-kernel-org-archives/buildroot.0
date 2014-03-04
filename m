@@ -1,49 +1,50 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 4 Mar 2014 15:14:34 +0000
-Subject: [Buildroot] [PATCH] dnsmasq: fix static linking
-Message-ID: <1393946074-32602-1-git-send-email-Vincent.Riera@imgtec.com>
+From: mlweber1 at rockwellcollins.com <mlweber1@rockwellcollins.com>
+Date: Tue, 4 Mar 2014 09:16:20 -0600
+Subject: [Buildroot] [PATCH 1/1] pyrex: new package
+In-Reply-To: <20140303220417.6835ec44@skate>
+References: <1379700560-10738-1-git-send-email-mlweber1@rockwellcollins.com>
+ <20140303220417.6835ec44@skate>
+Message-ID: <OFDE37491E.EE5530A4-ON86257C91.00539055-86257C91.0053E4B7@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Append -pthread to LIBS to fix a static linking error like this one:
+Hi Thomas, 
 
-/home/test/test/2/output/host/usr/mipsel-buildroot-linux-uclibc/sysroot/usr/lib/libdbus-1.a(libdbus_1_la-dbus-sysdeps-pthread.o):
-In function `_dbus_platform_cmutex_new':
-dbus-sysdeps-pthread.c:(.text+0x30): undefined reference to
-`pthread_mutex_init'
+> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> To: Matt Weber <mlweber1@rockwellcollins.com>
+> Cc: buildroot at busybox.net, "Ryan Barnett" <rjbarnet@rockwellcollins.com>
+> Date: 03/03/2014 03:04 PM
+> Subject: Re: [Buildroot] [PATCH 1/1] pyrex: new package
+> 
+> Dear Matt Weber,
+> 
+> On Fri, 20 Sep 2013 13:09:20 -0500, Matt Weber wrote:
+> 
+> > index 0000000..551c15c
+> > --- /dev/null
+> > +++ b/package/python-pyrex/Config.in
+> > @@ -0,0 +1,7 @@
+> > +config BR2_PACKAGE_PYTHON_PYREX
+> > +   bool "pyrex"
+> > +   depends on BR2_PACKAGE_PYTHON
+> > +   help
+> > +     Pyrex is a language for writing Python extension modules
+> > +
+> > +     http://www.cosc.canterbury.ac.nz/greg.ewing/python/Pyrex/
+> 
+> If I understand correctly what Pyrex is, it is a tool that generates C
+> code that then needs to be compiled with gcc. At least that's what I
+> understand from http://ldots.org/pyrex-guide/2-compiling.html.
+> 
+> Therefore, I am wondering how useful it is to support the installation
+> of python-pyrex to the target, while we don't have the support for
+> providing a compiler on the target.
+> 
+You are correct.  Our use case was just as a host tool to aid in our
+application build using the sysroot and not on target.
 
-Fixes:
-   http://autobuild.buildroot.net/results/161/161446dde7e8e774773eb2b34fd555f5ac22dd02/
-
-Reviewed-by: Markos Chandras <Markos.Chandras@imgtec.com>
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/dnsmasq/dnsmasq.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
-
-diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
-index 9bf9b84..a7e6958 100644
---- a/package/dnsmasq/dnsmasq.mk
-+++ b/package/dnsmasq/dnsmasq.mk
-@@ -61,6 +61,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_DBUS),y)
- 	DNSMASQ_DEPENDENCIES += host-pkgconf dbus
-+	DNSMASQ_LIBS += $(if $(BR2_PREFER_STATIC_LIB),-pthread)
- endif
- 
- define DNSMASQ_FIX_PKGCONFIG
-@@ -85,7 +86,7 @@ define DNSMASQ_BUILD_CMDS
- 	$(DNSMASQ_ENABLE_DBUS)
- 	$(DNSMASQ_ENABLE_LUA)
- 	$(DNSMASQ_ENABLE_CONNTRACK)
--	$(DNSMASQ_MAKE_ENV) $(MAKE1) -C $(@D) $(DNSMASQ_MAKE_OPT) all$(DNSMASQ_I18N)
-+	$(DNSMASQ_MAKE_ENV) $(MAKE1) -C $(@D) $(DNSMASQ_MAKE_OPT) LIBS+="$(DNSMASQ_LIBS)" all$(DNSMASQ_I18N)
- endef
- 
- define DNSMASQ_INSTALL_TARGET_CMDS
--- 
-1.7.1
+Thanks,
+Matt Weber
