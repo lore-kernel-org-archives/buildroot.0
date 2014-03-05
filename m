@@ -1,47 +1,69 @@
-From: =?UTF-8?q?Mathias=20De=20Mar=C3=A9?= <mathias.demare@gmail.com>
-Date: Wed,  5 Mar 2014 07:54:12 +0100
-Subject: [Buildroot] [PATCH 1/1] package: make package download from
-	Mercurial repositories more robust
-Message-ID: <1394002452-5114-1-git-send-email-mathias.demare@gmail.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Wed,  5 Mar 2014 08:17:28 +0100
+Subject: [Buildroot] [PATCH v2 1/2] libubox: new package
+Message-ID: <1394003849-17326-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Previously, after cloning a Mercurial repository,
-an interrupted 'hg archive' operation would leave behind a partial
-archive. This caused future archive operations to fail.
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Signed-off-by: Mathias De Mar? <mathias.demare@gmail.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/pkg-download.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+Changes:
+	v2: make package description more informative and fix license information
+ package/Config.in          |    1 +
+ package/libubox/Config.in  |    7 +++++++
+ package/libubox/libubox.mk |   13 +++++++++++++
+ 3 files changed, 21 insertions(+), 0 deletions(-)
+ create mode 100644 package/libubox/Config.in
+ create mode 100644 package/libubox/libubox.mk
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 85842de..6f53f53 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -176,13 +176,19 @@ define SHOW_EXTERNAL_DEPS_SCP
- endef
- 
- 
-+# Download a file using Mercurial.
-+# In case a previous clone failed, remove the directory.
-+# To handle interrupted archive operations, use a temporary directory,
-+# and remove this directory before archiving again.
- define DOWNLOAD_HG
- 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
- 	(pushd $(DL_DIR) > /dev/null && \
- 	rm -rf $($(PKG)_BASE_NAME) && \
- 	$(HG) clone --noupdate --rev $($(PKG)_DL_VERSION) $($(PKG)_SITE) $($(PKG)_BASE_NAME) && \
-+	rm -rf $(DL_DIR)/$($(PKG)_SOURCE).tmp && \
- 	$(HG) archive --repository $($(PKG)_BASE_NAME) --type tgz --prefix $($(PKG)_BASE_NAME)/ \
--	              --rev $($(PKG)_DL_VERSION) $(DL_DIR)/$($(PKG)_SOURCE) && \
-+			--rev $($(PKG)_DL_VERSION) $(DL_DIR)/$($(PKG)_SOURCE).tmp && \
-+	mv $(DL_DIR)/$($(PKG)_SOURCE).tmp $(DL_DIR)/$($(PKG)_SOURCE) && \
- 	rm -rf $($(PKG)_DL_DIR) && \
- 	popd > /dev/null)
- endef
+diff --git a/package/Config.in b/package/Config.in
+index ab91719..0e4b02e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -764,6 +764,7 @@ source "package/libsigc/Config.in"
+ source "package/libsigsegv/Config.in"
+ source "package/libtasn1/Config.in"
+ source "package/libtpl/Config.in"
++source "package/libubox/Config.in"
+ source "package/libunwind/Config.in"
+ source "package/liburcu/Config.in"
+ source "package/linux-pam/Config.in"
+diff --git a/package/libubox/Config.in b/package/libubox/Config.in
+new file mode 100644
+index 0000000..3fa78cf
+--- /dev/null
++++ b/package/libubox/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LIBUBOX
++	bool "libubox"
++	help
++	  Small utility library for OpenWrt. It is a dependency of
++	  libuci, that manages configuration files infrastructure.
++
++	  http://nbd.name/gitweb.cgi?p=luci2/libubox.git;a=summary
+diff --git a/package/libubox/libubox.mk b/package/libubox/libubox.mk
+new file mode 100644
+index 0000000..92e6122
+--- /dev/null
++++ b/package/libubox/libubox.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# libubox
++#
++################################################################################
++
++LIBUBOX_VERSION = bbd846ec2d72b2629758b69dc122ac0b0f2c3e4b
++LIBUBOX_SITE = git://nbd.name/luci2/libubox.git
++LIBUBOX_LICENSE = LGPLv2.1, GPLv2, BSD-3c, MIT
++LIBUBOX_INSTALL_STAGING = YES
++LIBUBOX_CONF_OPT = -DBUILD_LUA:BOOL=OFF
++
++$(eval $(cmake-package))
 -- 
-1.8.1.2
+1.7.7
