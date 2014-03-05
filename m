@@ -1,34 +1,39 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 5 Mar 2014 10:38:30 +0000
-Subject: [Buildroot] [PATCH] crda: Disable for Python 3
-Message-ID: <1394015910-64878-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Alvaro Gamez <alvaro.gamez@hazent.com>
+Date: Wed, 5 Mar 2014 11:29:28 +0100
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20140305112729.47a9a631@skate>
+References: <20140305073008.3DAFE101B04@stock.ovh.net>
+ <20140305112729.47a9a631@skate>
+Message-ID: <CAM+bi4t8Toj7ERf3DR=854xhwAS7-Ubtrr2xTGsfKjk5kRoZHw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package is not compatible with Python 3.
+2014-03-05 11:27 GMT+01:00 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com>:
 
-Fixes:
-   http://autobuild.buildroot.net/results/a1e/a1e53d66d3962fd5431e7601937b071a0a3c2084/
+> >       sh4a |              libxmlrpc-1.25.26 | NOK |
+> http://autobuild.buildroot.net/results/996fc95b302fb6dfc7cd9a468fd395226a36c6c4/
+>
+> Not sure:
+>
+> /home/test/test/1/output/host/usr/bin/sh-linux-gnu-gcc  -shared
+> -Wl,-soname,libxmlrpc_xmltok.so.3  xmltok.osh xmlrole.osh  -o
+> libxmlrpc_xmltok.so.3.25
+> xmltok.osh: file not recognized: File truncated
+> collect2: error: ld returned 1 exit status
+>
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/crda/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/crda/Config.in b/package/crda/Config.in
-index e56a45e..c59f6ec 100644
---- a/package/crda/Config.in
-+++ b/package/crda/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_CRDA
- 	bool "crda"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnl
-+	depends on !BR2_PACKAGE_PYTHON3
- 	select BR2_PACKAGE_LIBGCRYPT
- 	select BR2_PACKAGE_LIBNL
- 	# regdb is a runtime dependency
+That comes from the recently applied patch I sent.
+
+I'll look at it, it's a bit strange.
+
+
 -- 
-1.7.1
+?lvaro G?mez Machado
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140305/61807564/attachment.html>
