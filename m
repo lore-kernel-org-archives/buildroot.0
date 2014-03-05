@@ -1,125 +1,51 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 05 Mar 2014 07:23:25 +0100
-Subject: [Buildroot] [PATCH v2 1/1] imagemagick: disable documentation
-In-Reply-To: <1393796026-21985-1-git-send-email-romain.naour@openwide.fr>
-References: <1393796026-21985-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <5316C2DD.5070507@mind.be>
+Date: Wed, 05 Mar 2014 07:42:04 +0100
+Subject: [Buildroot] Segmentation fault while trying to remote debug
+ with GDB and GDBServer
+In-Reply-To: <20140302172058.5d9a49e1@skate>
+References: <51ef4c3ec6f84eab802c23a14ecb48ae@DBXPR07MB142.eurprd07.prod.outlook.com>
+ <20140302070650.GE3874@tarshish>
+ <24eee2c96f804b55ae7767734d5a4f6e@DBXPR07MB142.eurprd07.prod.outlook.com>
+ <20140302091205.GF3874@tarshish>
+ <29f88dd2071c483bb7102687088ac6b3@DBXPR07MB142.eurprd07.prod.outlook.com>
+ <20140302122406.GJ3874@tarshish>
+ <99f27349e290444ba06497af087cb0d8@DBXPR07MB142.eurprd07.prod.outlook.com>
+ <20140302171008.2014a1e0@skate> <20140302172058.5d9a49e1@skate>
+Message-ID: <5316C73C.3090804@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/03/14 22:33, Romain Naour wrote:
-> Add --disable-docs option in the configure script.
+On 02/03/14 17:20, Thomas Petazzoni wrote:
+> Hello,
 > 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> ---
-> v2: Add an option in configure script
->     instead of patching the Makefile (Arnout)
->     upstream status: it's not sent yet
+> On Sun, 2 Mar 2014 17:10:08 +0100, Thomas Petazzoni wrote:
 > 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> ---
->  ...gick-02-configure-Add-disable-docs-option.patch | 77 ++++++++++++++++++++++
->  1 file changed, 77 insertions(+)
->  create mode 100644 package/imagemagick/imagemagick-02-configure-Add-disable-docs-option.patch
+>> The Eclipse plugin does set the solib-path (see
+>> https://github.com/mbats/eclipse-buildroot-toolchain-plugin/blob/master/org.buildroot.cdt.toolchain/src/org/buildroot/cdt/toolchain/BuildrootLaunchConfigurationTabGroup.java#L70),
+>> but that is apparently insufficient for gdb to find the correct dynamic
+>> linker, especially when the host and target architectures are identical.
+>>
+>> Since there is apparently no way in Eclipse to set a gdb sysroot, I
+>> believe the only solution is for the Eclipse plugin to generate a
+>> simple gdbinit file:
+>>
+>> set sysroot /path/to/staging/directory
+>>
+>> and then instruct Eclipse to use it.
 > 
-> diff --git a/package/imagemagick/imagemagick-02-configure-Add-disable-docs-option.patch b/package/imagemagick/imagemagick-02-configure-Add-disable-docs-option.patch
-> new file mode 100644
-> index 0000000..2febccd
-> --- /dev/null
-> +++ b/package/imagemagick/imagemagick-02-configure-Add-disable-docs-option.patch
-> @@ -0,0 +1,77 @@
-> +The manual and html data are unconditionally installed on target.
-> +Some users may only want the executable.
-> +
-> +Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> +---
-> + Makefile.am  | 16 ++++++++++++++--
-> + configure.ac |  8 ++++++++
-> + 2 files changed, 22 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/Makefile.am b/Makefile.am
-> +index c74a870..f2fa4e0 100644
-> +--- a/Makefile.am
-> ++++ b/Makefile.am
-> +@@ -156,19 +156,25 @@ pkgconfig_DATA = \
-> + %- at MAGICK_MAJOR_VERSION@. at MAGICK_ABI_SUFFIX@.pc: %.pc
-> + 	cp -f $^ $@
-> + 
-> ++# Architecture independent data files installed in the package's data directory
-> ++docdir = $(DOCUMENTATION_PATH)
-> ++
-> + # Manual pages to install
-> ++if INSTALL_DOC
-> + man_MANS = \
-> + 	$(MAGICK_MANS) \
-> + 	$(WAND_MANS) \
-> + 	$(MAGICKPP_MANS) \
-> + 	$(UTILITIES_MANS)
-> + 
-> +-# Architecture independent data files installed in the package's data directory
-> +-docdir = $(DOCUMENTATION_PATH)
-> + doc_DATA = \
-> + 	LICENSE \
-> + 	ChangeLog \
-> + 	NEWS.txt
-> ++else
-> ++man_MANS =
-> ++doc_DATA =
+> Or now that I think of it, maybe Buildroot should itself generate this
+> gdbinit file. It may be useful even for users not using Eclipse.
 
- I believe the else is unnecessary, no?
+ Even better: buildroot should generate a wrapper (yet another one!) that
+passes -ex 'set sysroot ...' when calling cross-gdb.
 
-> ++endif
-> + 
-> + if MAINTAINER_MODE
-> + MAINTAINER_TARGETS = \
-> +@@ -236,7 +242,13 @@ pkgdocdir = $(DOCUMENTATION_PATH)
-> + DOCDIRSDOXYGEN = www/api/MagickCore www/api/MagickWand
-> + DOCDIRSMANUAL = images images/patterns www www/api www/source www/Magick++
-> + DOCDIRS= $(DOCDIRSMANUAL) $(DOCDIRSDOXYGEN)
-> ++
-> ++if INSTALL_DOC
-> + HTML_INSTALL_DATA_TARGETS = install-data-html
-> ++else !INSTALL_DOC
-> ++HTML_INSTALL_DATA_TARGETS =
-> ++endif !INSTALL_DOC
-> ++
-> + install-data-html:
-> + 	$(mkinstalldirs) $(DESTDIR)$(pkgdocdir)
-> + 	$(INSTALL_DATA) $(srcdir)/index.html $(DESTDIR)$(pkgdocdir)
-> +diff --git a/configure.ac b/configure.ac
-> +index 445bccf..a2b5d0e 100755
-> +--- a/configure.ac
-> ++++ b/configure.ac
-> +@@ -3173,6 +3173,14 @@ esac
-> + AC_DEFINE_UNQUOTED(DOCUMENTATION_PATH,"$DEFINE_DOCUMENTATION_PATH",[Directory where ImageMagick documents live.])
-> + AC_SUBST(DOCUMENTATION_PATH)
-> + 
-> ++#
-> ++# Enable/Disable documentation
-> ++AC_ARG_ENABLE([docs],
-> ++  [AS_HELP_STRING([--disable-docs],
-> ++    [disable building of documentation])],
-> ++  wantdocs=$enableval, wantdocs=detect)
-
- I think the wantdocs=detect is unneeded (there is no autodetection
-possible here...).
-
+ Can someone add that to the todo list on the wiki? (I'm currently offline.)
 
  Regards,
  Arnout
-
-> ++AM_CONDITIONAL([INSTALL_DOC], [test "$wantdocs" = "xyes"])
-> ++
-> + # Subdirectory to place architecture-dependent configuration files
-> + CONFIGURE_RELATIVE_PATH="${PACKAGE_NAME}-${MAGICK_MAJOR_VERSION}"
-> + AC_DEFINE_UNQUOTED(CONFIGURE_RELATIVE_PATH,"$CONFIGURE_RELATIVE_PATH",[Subdirectory of lib where architecture-dependent configuration files live.])
-> +-- 
-> +1.8.5.3
-> +
-> 
 
 
 -- 
