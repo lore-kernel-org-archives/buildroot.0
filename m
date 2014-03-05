@@ -1,65 +1,73 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 05 Mar 2014 17:24:34 +0100
-Subject: [Buildroot] [PATCH 8 of 8] manual: contributing: minor rewording of
- 'reporting bugs' section
-In-Reply-To: <patchbomb.1394036666@argentina>
-References: <patchbomb.1394036666@argentina>
-Message-ID: <c79971c9c229295a42da.1394036674@argentina>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Wed, 05 Mar 2014 17:56:17 +0100
+Subject: [Buildroot] [PATCH 9/9] exim: add new package
+In-Reply-To: <eahbuaxc1k.ln2@ID-313208.user.individual.net>
+References: <1314127033-14861-1-git-send-email-luca@lucaceresoli.net>
+ <1314127033-14861-10-git-send-email-luca@lucaceresoli.net>
+ <eahbuaxc1k.ln2@ID-313208.user.individual.net>
+Message-ID: <53175731.9010201@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch makes some minor fixes in the section about reporting bugs.
+Hi Bernd,
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Bernd Kuhls wrote:> Luca Ceresoli <luca@lucaceresoli.net> wrote in
+ > news:1314127033-14861-10-git-send-email-luca at lucaceresoli.net:
+ >
+ >> diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+ >> new file mode 100644
+ >> index 0000000..a12f5a2
+ >> --- /dev/null
+ >> +++ b/package/exim/exim.mk
+ >> @@ -0,0 +1,49 @@
+ >> +#############################################################
+ >> +#
+ >> +# exim
+ >> +#
+ >> +#############################################################
+ >> +
+ >> +EXIM_VERSION = 4.76
+ >
+ > Hi,
+ >
+ > quoting a mail from Aug 23rd, 2011 ;)
+ >
+ > Is there still interest in having Exim in buildroot?
 
----
- docs/manual/contribute.txt |  15 ++++++++-------
- 1 files changed, 8 insertions(+), 7 deletions(-)
+I am still actively using exim in my own configs, and with time I
+updated to 4.80.1 as well.
 
-Although I don't think this section belongs in the Contributing chapter,
-there currently isn't a better place. When I get to rethinking the manual
-structure, this can be changed.
+So yes, there is interest.
 
-diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
---- a/docs/manual/contribute.txt
-+++ b/docs/manual/contribute.txt
-@@ -266,16 +266,16 @@ This can be easily handled with +git for
- ---------------------
- 
- [[reporting-bugs]]
--Reporting issues/bugs, get help
---------------------------------
-+Reporting issues/bugs or getting help
-+-------------------------------------
- 
- Before reporting any issue, please check
- xref:mailing-list-subscribe[the mailing list archive] in case someone has
- already reported and fixed a similar problem.
- 
--However you choose to report bugs or get help,
--xref:bugtracker[opening a bug] or
--xref:mailing-list-subscribe[send a mail to the mailing list], there are
-+However you choose to report bugs or get help, either by
-+xref:bugtracker[opening a bug] or by
-+xref:mailing-list-subscribe[sending a mail to the mailing list], there are
- a number of details to provide in order to help people reproduce and
- find a solution to the issue.
- 
-@@ -287,11 +287,12 @@ Here is a short list of details to provi
- * host machine (OS/release)
- * version of Buildroot
- * target for which the build fails
--* package(s) which the build fails
-+* package(s) for which the build fails
- * the command that fails and its output
- * any information you think that may be relevant
- 
--Additionnally, your can add the +.config+ file.
-+Additionally, you should add the +.config+ file (or if you know how, a
-++defconfig+).
- 
- If some of these details are too large, do not hesitate to use a
- pastebin service (see http://www.similarsitesearch.com/alternatives-to/pastebin.com[]).
+My original patchset aimed at including exim and cyrus-imapd along with
+their dependencies, which include cyrus-sasl. However this set of
+packages required a lot of patches in order to work properly, and some
+of those I made were not of good quality. Exim has no nice build system,
+and the Cyrus stuff is even worse AFAIR.
+
+At that time I prarably was the only one here interested in these
+packages and there was no (sufficient) review from other developers.
+
+So in the end I just forgot about it and did not try to mainline it
+after all.
+
+ >
+ > I have package files for my personal needs which deliver Exim 4.80.1 
+(, based
+ > on the quoted package, update to 4.82 is pending), Dovecot 2.2.12, 
+dovecot-
+ > pigeonhole 0.4.2, fetchmail 6.3.26 and clamav 0.98.1 which are used on a
+ > production system using uClibc/i386 for several months now.
+
+Is your exim implementation changing anything relevant, apart from the
+version number?
+
+I'll try to find a little time to resubmit and updated version.
+Please send yours, so we can compare them and maybe merge them into a
+better one!
+
+-- 
+Luca
