@@ -1,69 +1,66 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 05 Mar 2014 08:12:55 +0100
-Subject: [Buildroot] [PATCH] toolchain/wrapper: rename BR_DEBUG_WRAPPER
-In-Reply-To: <1393887305-2252-1-git-send-email-yann.morin.1998@free.fr>
-References: <1393887305-2252-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <5316CE77.2030705@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 5 Mar 2014 10:04:31 +0100
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <53165F4D.5060405@mind.be>
+References: <20140302073008.028A91015DC@stock.ovh.net>
+ <20140302095754.13319d04@skate> <53165F4D.5060405@mind.be>
+Message-ID: <20140305100431.62d2715c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/03/14 23:55, Yann E. MORIN wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Dear Arnout Vandecappelle,
+
+On Wed, 05 Mar 2014 00:18:37 +0100, Arnout Vandecappelle wrote:
+> On 02/03/14 09:57, Thomas Petazzoni wrote:
+> >>       i686 |          host-python3-3.4.0rc1 | NOK | http://autobuild.buildroot.net/results/2a62de3247ba5ad273f03d01e690a3eeb11aa7b4/
+> > Parallel installation issue with Python 3. Either we should make Python
+> > 3 entirely use MAKE1, or fix the problem. I have analyzed the problem,
+> > and it is caused by the parallel installation of libpython into the
+> > HOST_DIR and the execution of ./python in the Python source directory.
 > 
-> The user-facing variables should be prefixed with BR2_, not BR_.
+>  Is that because we export an LD_LIBRARY_PATH that points to the freshly
+> installed libpython? Because I would expect that ./python uses the build
+> directory's libpython, not the installed one...
 > 
-> Also quote the variable in the manual.
+>  Oh, but it actually does get called with the correct LD_LIBRARY_PATH:
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-
- Regards,
- Arnout
-
-> ---
->  docs/manual/customize-toolchain.txt                  | 2 +-
->  toolchain/toolchain-external/ext-toolchain-wrapper.c | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> LD_LIBRARY_PATH=/home/peko/scratch/build/host-python3-3.4.0rc1:/home/peko/scratch/host/usr/lib:
+> ./python ...
 > 
-> diff --git a/docs/manual/customize-toolchain.txt b/docs/manual/customize-toolchain.txt
-> index 4f3fe23..55a0480 100644
-> --- a/docs/manual/customize-toolchain.txt
-> +++ b/docs/manual/customize-toolchain.txt
-> @@ -21,7 +21,7 @@ When using an external toolchain, Buildroot generates a wrapper program,
->  that transparently passes the appropriate options (according to the
->  configuration) to the external toolchain programs. In case you need to
->  debug this wrapper to check exactly what arguments are passed, you can
-> -set the environment variable BR_DEBUG_WRAPPER to either one of:
-> +set the environment variable +BR2_DEBUG_WRAPPER+ to either one of:
->  
->  * +0+, empty or not set: no debug
->  
-> diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-> index 81c6ed1..db49784 100644
-> --- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
-> +++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-> @@ -191,7 +191,7 @@ int main(int argc, char **argv)
->  	 * set to 1          : trace all arguments on a single line
->  	 * set to 2          : trace one argument per line
->  	 */
-> -	if ((env_debug = getenv("BR_DEBUG_WRAPPER"))) {
-> +	if ((env_debug = getenv("BR2_DEBUG_WRAPPER"))) {
->  		debug = atoi(env_debug);
->  		if (debug > 0) {
->  			fprintf(stderr, "Toolchain wrapper executing:");
+>  The issue is that the executable contains an RPATH pointing to the
+> install location of libpython.so (in $(HOST_DIR)).
+
+Correct. I came to the same conclusion when analyzing the problem the
+other day (but I reported only my findings on IRC, and didn't send a
+summary to the list, my bad).
+
+> When the file doesn't
+> exist yet there, LD_LIBRARY_PATH kicks in and it finds the so file in the
+> build directory. When the file does exist, it can link against it -
+> except when it hasn't been fully written yet.
 > 
+>  The solution would be if the executable would use RUNPATH instead of
+> RPATH - which according to e.g. [1] is what everybody should do (and I
+> tend to agree). IOW, the option --enable-new-dtags should be passed to
+> the linker ("new" is not really true BTW, the option has existed for
+> since more than 10 years). When we would add a toolchain wrapper for ld,
+> we could add it there.
+> 
+>  But for the time being, I'll post a patch for python3 (and python, which
+> suffers from the same problem) that adds --enable-new-dtags there.
 
+Indeed, DT_RUNPATH would fix the problem, but to me it feels more like
+a workaround than a real fix, no? Wouldn't the real fix be to ensure
+that the installation is atomic, i.e either the library is present in
+$(HOST_DIR)/usr/lib, or it is not? The problem here apparently occurs
+when Python is executed when the library file already exists in
+$(HOST_DIR)/usr/lib, but its copy hasn't finished yet.
 
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
