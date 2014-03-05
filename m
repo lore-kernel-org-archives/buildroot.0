@@ -1,102 +1,121 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 05 Mar 2014 18:10:54 +0100
-Subject: [Buildroot] [PATCH 1/2] python-libconfig: new package
-In-Reply-To: <E1CF8EFE2042404B87DE2B6D662128020ED58B96@KUUMEX10.barco.com>
-References: <E1CF8EFE2042404B87DE2B6D662128020ED58B96@KUUMEX10.barco.com>
-Message-ID: <53175A9E.3090001@mind.be>
+Date: Wed, 05 Mar 2014 18:43:35 +0100
+Subject: [Buildroot] [PATCH 1/1] [V3] toolchain: control vendor part in
+ GNU_TARGET_NAME
+In-Reply-To: <884EA965490E3C4D8E66AEF41E9802500939A1@ezex10.ezchip.com>
+References: <1393908571-30334-1-git-send-email-noamc@ezchip.com>
+ <884EA965490E3C4D8E66AEF41E9802500939A1@ezex10.ezchip.com>
+Message-ID: <53176247.1040108@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/03/14 09:32, Derycke, Johan wrote:
-> Python bindings to the C++ library libconfig
-> https://github.com/cnangel/python-libconfig
+On 04/03/14 05:51, Noam Camus wrote:
+> This option allows to customize the "vendor" part of the
+> toolchain tuple, where the toolchain tuple has the form
+> <cpu>-<vendor>-<kernel>-<os>. Use this option in situations
+> where gcc might make different decisions based on the vendor
+> part of the tuple.
 > 
-> Signed-off-by: Johan Derycke <johan.derycke@barco.com>
+> Signed-off-by: Noam Camus <noamc@ezchip.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  package/python-libconfig/Config.in           |    9 +++++++++
->  package/python-libconfig/python-libconfig.mk |   21 +++++++++++++++++++++
->  2 files changed, 30 insertions(+)
->  create mode 100644 package/python-libconfig/Config.in
->  create mode 100644 package/python-libconfig/python-libconfig.mk
+>  package/Makefile.in                     |   12 +++++++++++-
+>  toolchain/toolchain-buildroot/Config.in |   17 +++++++++++++++++
+>  2 files changed, 28 insertions(+), 1 deletions(-)
 > 
-> diff --git a/package/python-libconfig/Config.in b/package/python-libconfig/Config.in
-> new file mode 100644
-> index 0000000..7e4f317
-> --- /dev/null
-> +++ b/package/python-libconfig/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_PYTHON_LIBCONFIG
-> +       bool "python-libconfig"
-> +       depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
-> +  select BR2_PACKAGE_BOOST_PYTHON
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index 454f614..121fe74 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -20,8 +20,18 @@ endif
+>  MAKE1:=$(HOSTMAKE) -j1
+>  MAKE:=$(HOSTMAKE) $(if $(PARALLEL_JOBS),-j$(PARALLEL_JOBS))
+> 
+> +ifeq ($(BR2_TOOLCHAIN_BUILDROOT_VENDOR),)
+> +VENDOR:=buildroot
+> +else
+> +ifeq ($(BR2_TOOLCHAIN_BUILDROOT_VENDOR),unknown)
+> +$(error The value 'unknown' is not allowed. It might be confused with native toolchain)
+> +else
+> +VENDOR:=$(call qstrip,$(BR2_TOOLCHAIN_BUILDROOT_VENDOR))
+> +endif
+> +endif
 
- You should also select BR2_PACKAGE_BOOST.
+ I don't think it's a good idea to treat the case that vendor is empty
+specially. Anyway, it will never be empty or unknown, because it always
+includes quotes - it should be qstripped first.
 
- You should also depend on boost's toolchain dependencies:
-BR2_INSTALL_LIBSTDCPP, BR2_LARGEFILE, BR2_TOOLCHAIN_HAS_THREADS, and add
-the corresponding comment.
+ Therefore, this is better (also note the fixed spacing and := ):
 
- It's a crying shame that the python wrapper for something trivial like
-libconfig requires bloatware like boost :-) but that can't be helped of
-course.
+VENDOR = $(call qstrip,$(BR2_TOOLCHAIN_BUILDROOT_VENDOR))
+ifeq ($(VENDOR),)
+$(error BR2_TOOLCHAIN_BUILDROOT_VENDOR is not allowed to be empty)
+endif
+ifeq ($(VENDOR),unknown)
+$(error BR2_TOOLCHAIN_BUILDROOT_VENDOR cannot be 'unknown'. \
+        It might be confused with the native toolchain)
+endif
 
-> +       select BR2_PACKAGE_LIBCONFIG
+
+ I would also prefer to name the internal variable TARGET_VENDOR, similar
+to TARGET_OS.
+
+> +
+>  # Compute GNU_TARGET_NAME
+> -GNU_TARGET_NAME=$(ARCH)-buildroot-$(TARGET_OS)-$(LIBC)$(ABI)
+> +GNU_TARGET_NAME=$(ARCH)-$(VENDOR)-$(TARGET_OS)-$(LIBC)$(ABI)
+> 
+>  # Blackfin FLAT needs uclinux
+>  ifeq ($(BR2_bfin)$(BR2_BINFMT_FLAT),yy)
+> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+> index 07db50b..34f78ae 100644
+> --- a/toolchain/toolchain-buildroot/Config.in
+> +++ b/toolchain/toolchain-buildroot/Config.in
+> @@ -70,6 +70,23 @@ config BR2_TOOLCHAIN_BUILDROOT_LIBC
+>         default "glibc"  if BR2_TOOLCHAIN_BUILDROOT_EGLIBC
+>         default "glibc"  if BR2_TOOLCHAIN_BUILDROOT_GLIBC
+> 
+> +config BR2_TOOLCHAIN_BUILDROOT_VENDOR
+> +       string "custom toolchain vendor name"
+> +       default "buildroot"
 > +       help
-> +           Python bindings to the C++ library libconfig
+> +
+> +         This option allows to customize the "vendor" part of the
+> +         toolchain tuple, where the toolchain tuple has the form
+> +         <cpu>-<vendor>-<kernel>-<os>. The default value, "buildroot",
 
- Perhaps add a bit of the help text of libconfig.
+ It's more like <arch>-<vendor>-<os>-<libc>
+
+> +         is fine for most cases, except in very specific situations
+> +         where gcc might make different decisions based on the vendor
+> +         part of the tuple. The value "unknown" is not allowed, as the
+> +         cross-compiling toolchain might then be confused with the
+> +         native toolchain when the target and host architecture are
+> +         identical.
+> +
+> +         If you're not sure, just leave the default "buildroot" value.
+
+ With my comment above, Yann's comment about rewriting this is no longer
+correct of course.
+
 
  Regards,
  Arnout
 
 > +
-> +          https://github.com/cnangel/python-libconfig
-> diff --git a/package/python-libconfig/python-libconfig.mk b/package/python-libconfig/python-libconfig.mk
-> new file mode 100644
-> index 0000000..8d597ef
-> --- /dev/null
-> +++ b/package/python-libconfig/python-libconfig.mk
-> @@ -0,0 +1,21 @@
-> +################################################################################
-> +#
-> +# python-libconfig
-> +#
-> +################################################################################
-> +
-> +PYTHON_LIBCONFIG_VERSION = b271c3d9dac938ad5cd29b67bd08cc5536a5a391
-> +PYTHON_LIBCONFIG_SITE = https://github.com/cnangel/python-libconfig/
-> +PYTHON_LIBCONFIG_SITE_METHOD = git
-> +
-> +PYTHON_LIBCONFIG_LICENSE = BSD
-> +PYTHON_LIBCONFIG_LICENSE_FILES = README
-> +
-> +PYTHON_LIBCONFIG_SETUP_TYPE = setuptools
-> +
-> +PYTHON_LIBCONFIG_DEPENDENCIES = libconfig boost
-> +
-> +$(eval $(python-package))
-> +
-> +
-> +
+>  source "package/uclibc/Config.in"
+>  source "package/glibc/Config.in"
+>  source "package/binutils/Config.in.host"
 > --
-> 1.7.10.4
+> 1.7.1
 > 
-> Best regards,
-> Johan Derycke
-> 
-> 
-> 
-> 
-> 
-> This message is subject to the following terms and conditions: MAIL DISCLAIMER<http://www.barco.com/en/maildisclaimer>
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
-> 
 > 
 
 
