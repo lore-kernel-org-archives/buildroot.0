@@ -1,52 +1,45 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 05 Mar 2014 07:42:04 +0100
-Subject: [Buildroot] Segmentation fault while trying to remote debug
- with GDB and GDBServer
-In-Reply-To: <20140302172058.5d9a49e1@skate>
-References: <51ef4c3ec6f84eab802c23a14ecb48ae@DBXPR07MB142.eurprd07.prod.outlook.com>
- <20140302070650.GE3874@tarshish>
- <24eee2c96f804b55ae7767734d5a4f6e@DBXPR07MB142.eurprd07.prod.outlook.com>
- <20140302091205.GF3874@tarshish>
- <29f88dd2071c483bb7102687088ac6b3@DBXPR07MB142.eurprd07.prod.outlook.com>
- <20140302122406.GJ3874@tarshish>
- <99f27349e290444ba06497af087cb0d8@DBXPR07MB142.eurprd07.prod.outlook.com>
- <20140302171008.2014a1e0@skate> <20140302172058.5d9a49e1@skate>
-Message-ID: <5316C73C.3090804@mind.be>
+Date: Wed, 05 Mar 2014 07:34:53 +0100
+Subject: [Buildroot] [PATCH 04/13] pkg-infra: move the git download
+	helper to a script
+In-Reply-To: <1e961a98c83a9d2420c7c6a4177aa7cafb175291.1393781650.git.yann.morin.1998@free.fr>
+References: <cover.1393781649.git.yann.morin.1998@free.fr>
+ <1e961a98c83a9d2420c7c6a4177aa7cafb175291.1393781650.git.yann.morin.1998@free.fr>
+Message-ID: <5316C58D.9040105@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/03/14 17:20, Thomas Petazzoni wrote:
-> Hello,
+On 02/03/14 18:51, Yann E. MORIN wrote:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > 
-> On Sun, 2 Mar 2014 17:10:08 +0100, Thomas Petazzoni wrote:
+> The git download helper is getting a bit more complex. Fixing it in the
+> Makefile when it breaks (like the recent breakage with a non-existing
+> sha1-cset) proves to be challenging, to say the least.
 > 
->> The Eclipse plugin does set the solib-path (see
->> https://github.com/mbats/eclipse-buildroot-toolchain-plugin/blob/master/org.buildroot.cdt.toolchain/src/org/buildroot/cdt/toolchain/BuildrootLaunchConfigurationTabGroup.java#L70),
->> but that is apparently insufficient for gdb to find the correct dynamic
->> linker, especially when the host and target architectures are identical.
->>
->> Since there is apparently no way in Eclipse to set a gdb sysroot, I
->> believe the only solution is for the Eclipse plugin to generate a
->> simple gdbinit file:
->>
->> set sysroot /path/to/staging/directory
->>
->> and then instruct Eclipse to use it.
+> Move it into a shell script in support/download/git, which will make
+> it much easier to read, maintain, fix and enhance in the future.
 > 
-> Or now that I think of it, maybe Buildroot should itself generate this
-> gdbinit file. It may be useful even for users not using Eclipse.
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Peter Korsgaard <jacmet@uclibc.org>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
 
- Even better: buildroot should generate a wrapper (yet another one!) that
-passes -ex 'set sysroot ...' when calling cross-gdb.
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- Can someone add that to the todo list on the wiki? (I'm currently offline.)
 
  Regards,
  Arnout
 
+> ---
+>  package/pkg-download.mk | 17 +++--------------
+>  support/download/git    | 37 +++++++++++++++++++++++++++++++++++++
+>  2 files changed, 40 insertions(+), 14 deletions(-)
+>  create mode 100755 support/download/git
+[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
