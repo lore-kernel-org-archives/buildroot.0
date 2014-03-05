@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 5 Mar 2014 18:11:28 +0100
-Subject: [Buildroot] [PATCH 1 of 8] manual: contributing: expand
- introduction
-In-Reply-To: <6f236594e86703960655.1394036667@argentina>
+Date: Wed, 5 Mar 2014 18:17:30 +0100
+Subject: [Buildroot] [PATCH 5 of 8] manual: contributing: add section on
+ TODO list
+In-Reply-To: <ecfdbbf9e5c5e4b35498.1394036671@argentina>
 References: <patchbomb.1394036666@argentina>
- <6f236594e86703960655.1394036667@argentina>
-Message-ID: <20140305171128.GC5066@free.fr>
+ <ecfdbbf9e5c5e4b35498.1394036671@argentina>
+Message-ID: <20140305171730.GD5066@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,72 +15,39 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2014-03-05 17:24 +0100, Thomas De Schampheleire spake thusly:
-> This patch expands the introduction of the "Contributing to buildroot"
-> section. In general, the intention of this and subsequent patches is to
-> promote non-feature contributions, like autobuild fixes, bug report
-> analysis, TODO list work, etc.
+> This patch adds a small section about working on items from the TODO list.
 > 
 > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
+> 
 > ---
->  docs/manual/contribute.txt |  31 ++++++++++++++++++++-----------
->  1 files changed, 20 insertions(+), 11 deletions(-)
+>  docs/manual/contribute.txt |  8 ++++++++
+>  1 files changed, 8 insertions(+), 0 deletions(-)
 > 
 > diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
 > --- a/docs/manual/contribute.txt
 > +++ b/docs/manual/contribute.txt
-> @@ -2,26 +2,35 @@
->  // vim: set syntax=asciidoc:
+> @@ -139,6 +139,14 @@ Buildroot's Patchwork website can be use
+>  purposes. Please see xref:apply-patches-patchwork[] for more
+>  information on using Buildroot's Patchwork website to apply patches.
 >  
->  Contributing to Buildroot
-> -========================
-> +=========================
->  
-> -If you want to contribute to Buildroot, you will need a git view of
-> -the project. Refer to xref:getting-buildroot[] to get it.
-> +There are many ways in which you can contribute to Buildroot: analyzing
-> +and fixing bugs, analyzing and fixing package build failures detected by
-> +the autobuilders, testing and reviewing patches sent by other
-> +developers, working on the items in our TODO list and sending your own
-> +improvements to Buildroot or its manual. The following sections give a
-> +little more detail on each of these items.
->  
-> -Currently, the mailing list is the central place for contribution.
-> -If you have not already subscribed to it, then refer to
-> +If you are interested in contributing to Buildroot, the first thing you
-> +should do is to subscribe to the Buildroot mailing list. This list is
-> +the main way of interacting with other Buildroot developers and to send
-> +contributions to. If you aren't subscribed yet, then refer to
->  xref:mailing-list-subscribe[].
->  
-> -Recently, a web interface is also used to manage patches sent to the
-> -mailing list, see xref:patchwork[].
-> -
-> -[NOTE]
-> -_Please, do not attach patches to bugs, send them to the mailing list
-> -instead_ (see xref:submitting-patches[]).
-> +If you are going to touch the code, it is highly recommended to use a
-> +git repository of Buildroot, rather than starting from an extracted
-> +source code tarball. Git is the easiest way to develop from and directly
-> +send your patches to the mailing list. Refer to xref:getting-buildroot[]
-> +for more information on obtaining a Buildroot git tree.
+> +Work on items from the TODO list
+> +--------------------------------
+> +If you want to contribute to Buildroot but don't know where to start,
+
+There should be an empty line below the '----' line. Even if asciidoc is
+happy without one, it's not the way other chapters are written.
+
+Regards,
+Yann E. MORIN.
+
+> +and you don't like any of the above topics, you can always work on items
+> +from the http://elinux.org/Buildroot#Todo_list[Buildroot TODO list].
+> +Don't hesitate to discuss an item first on the mailing list or on IRC.
+> +Do edit the wiki to indicate when you start working on an item, so we
+> +avoid duplicate efforts.
 >  
 >  [[submitting-patches]]
 >  Submitting patches
->  ------------------
->  
-> +[NOTE]
-> +_Please, do not attach patches to bugs, send them to the mailing list
-> +instead_.
-> +
->  When your changes are done, and committed in your local git view,
->  _rebase_ your development branch on top of the upstream tree before
->  generating the patch set. To do so, run:
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
