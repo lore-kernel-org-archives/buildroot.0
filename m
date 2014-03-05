@@ -1,40 +1,65 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 05 Mar 2014 17:24:33 +0100
-Subject: [Buildroot] [PATCH 7 of 8] manual: contributing: don't recommend
- leaving out changelog from patches
+Date: Wed, 05 Mar 2014 17:24:34 +0100
+Subject: [Buildroot] [PATCH 8 of 8] manual: contributing: minor rewording of
+ 'reporting bugs' section
 In-Reply-To: <patchbomb.1394036666@argentina>
 References: <patchbomb.1394036666@argentina>
-Message-ID: <e95d3b84bcc4048fed60.1394036673@argentina>
+Message-ID: <c79971c9c229295a42da.1394036674@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, the manual states that if you send a series and include a
-changelog in the introduction mail (0 of x), it is not necessary to include
-a changelog on the individual patches.
-I don't like this: for large patch series it requires going back to the
-introduction mail when opening each patch, to understand what changed.
-This patch rewords the paragraph accordingly.
+This patch makes some minor fixes in the section about reporting bugs.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
- docs/manual/contribute.txt |  4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ docs/manual/contribute.txt |  15 ++++++++-------
+ 1 files changed, 8 insertions(+), 7 deletions(-)
+
+Although I don't think this section belongs in the Contributing chapter,
+there currently isn't a better place. When I get to rethinking the manual
+structure, this can be changed.
 
 diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
 --- a/docs/manual/contribute.txt
 +++ b/docs/manual/contribute.txt
-@@ -220,8 +220,8 @@ Patch revision changelog
- When improvements are requested, the new revision of each commit
- should include a changelog of the modifications between each
- submission. Note that when your patch series is introduced by a cover
--letter, the changelog may be added in the cover letter rather than in
--the individual commits.
-+letter, an overall changelog may be added to the cover letter in
-+addition to the changelog in the individual commits.
+@@ -266,16 +266,16 @@ This can be easily handled with +git for
+ ---------------------
  
- When added to the individual commits, this changelog is added when
- editing the commit message.  Below the +Signed-off-by+ section, add
+ [[reporting-bugs]]
+-Reporting issues/bugs, get help
+--------------------------------
++Reporting issues/bugs or getting help
++-------------------------------------
+ 
+ Before reporting any issue, please check
+ xref:mailing-list-subscribe[the mailing list archive] in case someone has
+ already reported and fixed a similar problem.
+ 
+-However you choose to report bugs or get help,
+-xref:bugtracker[opening a bug] or
+-xref:mailing-list-subscribe[send a mail to the mailing list], there are
++However you choose to report bugs or get help, either by
++xref:bugtracker[opening a bug] or by
++xref:mailing-list-subscribe[sending a mail to the mailing list], there are
+ a number of details to provide in order to help people reproduce and
+ find a solution to the issue.
+ 
+@@ -287,11 +287,12 @@ Here is a short list of details to provi
+ * host machine (OS/release)
+ * version of Buildroot
+ * target for which the build fails
+-* package(s) which the build fails
++* package(s) for which the build fails
+ * the command that fails and its output
+ * any information you think that may be relevant
+ 
+-Additionnally, your can add the +.config+ file.
++Additionally, you should add the +.config+ file (or if you know how, a
+++defconfig+).
+ 
+ If some of these details are too large, do not hesitate to use a
+ pastebin service (see http://www.similarsitesearch.com/alternatives-to/pastebin.com[]).
