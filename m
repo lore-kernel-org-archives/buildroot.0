@@ -1,55 +1,93 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 05 Mar 2014 22:09:00 +0100
-Subject: [Buildroot] Problem with starting TI Graphics
-In-Reply-To: <20140304200948.619fc7fe@skate>
-References: <trinity-96c3bbe4-4de2-4d94-a868-2ca9c13f130e-1392279117507@3capp-gmx-bs38>
- <CA+kK6WuqEOYcgypxbDJ8Hs5Jy3JXpuGaQPb9Qgp0+nsjDz1k5g@mail.gmail.com>
- <trinity-c25b0db0-54b6-4f8c-977a-023518dc467a-1392373446805@3capp-gmx-bs16>
- <20140304200948.619fc7fe@skate>
-Message-ID: <5317926C.30207@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed,  5 Mar 2014 22:47:12 +0100
+Subject: [Buildroot] [PATCH 0/12 v3] some download-related changes
+Message-ID: <cover.1394055621.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/03/14 20:09, Thomas Petazzoni wrote:
-> Dear Peter Kuemmel,
-> 
-> On Fri, 14 Feb 2014 11:24:06 +0100, Peter Kuemmel wrote:
-> 
->> Thanks, I found the issue: it was the missing user binary thumb support in the kernel.
-> 
-> Interesting. Were you building the kernel with Buildroot, or separately?
-> 
-> If you built your kernel with Buildroot, then maybe we should add
-> something like:
-> 
-> 	$(if $(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_ARM_INSTRUCTIONS_THUMB2),
-> 		$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_THUMB,$(@D)/.config))
-> 
-> This way we would ensure that the kernel gets built with
-> CONFIG_ARM_THUMB=y when the Thumb or Thumb-2 instruction sets have been
-> selected for userspace.
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
- This is a good idea, but wouldn't help with Peter's problem: the
-pvrsrvctl binary is not built by buildroot, so the problem occurs even if
-buildroot is build with ARM instructions.
+Hello All!
 
- Regards,
- Arnout
+This series contains those download-related changes:
 
-> 
-> Thoughts?
-> 
-> Thomas
-> 
+  - Patches 1..2  : some cleanups and preparatory works in the
+    download infra,
 
+  - Patches 3..7  : move download helpers to shell scripts, one
+    such script for each download helper
+
+  - Patches 8..9  : don't use DL_DIR as scratchpad for temporary VCS
+    checkouts, since DL_DIR is a precious location
+
+  - Patches 10..12: check hashes of downloaded files, to ensure the
+    files are genuine
+
+Samuel, I removed your reviewed-by tag on the patches that have changed
+quite a bit since last round: patches 8, 10 & 11.
+
+
+Changes v2 -> v3:
+  - avoid partial downloads  (Thomas DS)
+  - store hash-type in .hash file  (Gustavo)
+  - typoes  (Samuel, Gustavo)
+  - add possibility to treat missing hashes as an error
+
+Changes v1 -> v2:
+  - don't do any behavioural change when switching to shell scripts,
+    just reproduce exactly what was in the Makefile  (Luca, Arnout)
+  - support more than one hash algorithm  (Arnout, Gustavo)
+  - typoes  (Luca, Baruch)
+
+
+Regards,
+Yann E. MORIN.
+
+
+----------------------------------------------------------------
+Yann E. MORIN (12):
+      Makefile: rename USER_HOOKS_EXTRA_ENV to EXTRA_ENV
+      Makefile: add BR2_DL_DIR to EXTRA_ENV
+      pkg-infra: move the git download helper to a script
+      pkg-infra: move the svn download helper to a script
+      pkg-infra: move the cvs download helper to a script
+      pkg-infra: move the hg download helper to a script
+      pkg-infra: move the wget download helper to a script
+      pkg-infra: don't use DL_DIR as scratchpad for temporary VCS checkouts
+      pkg-infra: also set PKGDIR for the download step
+      pkg-infra: add possiblity to check downloaded files against known hashes
+      manual: add documentation about packages' hashes
+      package/ca-certificates: add tarball's hashes
+
+ Makefile                                     |  4 +-
+ docs/manual/adding-packages-directory.txt    | 65 +++++++++++++++++++++++
+ package/Makefile.in                          |  5 +-
+ package/ca-certificates/ca-certificates.hash |  3 ++
+ package/fis/fis.mk                           |  2 +-
+ package/pkg-download.mk                      | 79 +++++++++++-----------------
+ package/pkg-generic.mk                       |  3 +-
+ support/download/check-hash                  | 77 +++++++++++++++++++++++++++
+ support/download/cvs                         | 33 ++++++++++++
+ support/download/git                         | 41 +++++++++++++++
+ support/download/hg                          | 31 +++++++++++
+ support/download/svn                         | 30 +++++++++++
+ support/download/wget                        | 24 +++++++++
+ 13 files changed, 344 insertions(+), 53 deletions(-)
+ create mode 100644 package/ca-certificates/ca-certificates.hash
+ create mode 100755 support/download/check-hash
+ create mode 100755 support/download/cvs
+ create mode 100755 support/download/git
+ create mode 100755 support/download/hg
+ create mode 100755 support/download/svn
+ create mode 100755 support/download/wget
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
