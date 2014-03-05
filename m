@@ -1,40 +1,99 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  5 Mar 2014 22:47:17 +0100
-Subject: [Buildroot] [PATCH 12/12] package/ca-certificates: add tarball's
-	hashes
-In-Reply-To: <cover.1394055621.git.yann.morin.1998@free.fr>
-References: <cover.1394055621.git.yann.morin.1998@free.fr>
-Message-ID: <09bf110c89979139612c55483ca5812674c5810a.1394055621.git.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 5 Mar 2014 22:51:22 +0100
+Subject: [Buildroot] [git commit] libnspr: add support for AArch64
+Message-ID: <20140305215137.675969BD2A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+commit: http://git.buildroot.net/buildroot/commit/?id=206706efa152cabda15de990c7fb6e5d7bbf44e9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-ca-certificates contains sensitive security-related information,
-and we want to ensure the archive that we download has not been
-compromised.
-
-Add the sha1 and sha256 hashes from Debian's packaging.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Martin Bark <martin@barkynet.com>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Alexander Khryukin <alexander@mezon.ru>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ca-certificates/ca-certificates.hash | 3 +++
- 1 file changed, 3 insertions(+)
- create mode 100644 package/ca-certificates/ca-certificates.hash
+ package/libnspr/libnspr-0003-aarch64.patch |   74 ++++++++++++++++++++++++++++
+ 1 files changed, 74 insertions(+), 0 deletions(-)
 
-diff --git a/package/ca-certificates/ca-certificates.hash b/package/ca-certificates/ca-certificates.hash
+diff --git a/package/libnspr/libnspr-0003-aarch64.patch b/package/libnspr/libnspr-0003-aarch64.patch
 new file mode 100644
-index 0000000..06023d7
+index 0000000..a5e23ed
 --- /dev/null
-+++ b/package/ca-certificates/ca-certificates.hash
-@@ -0,0 +1,3 @@
-+# hashes from: $(CA_CERTIFICATES_SITE)/ca-certificates_20130906.dsc :
-+sha1   7f197c1bf7c7fc82e9f8f2fec6d8cc65f6a6187b                         ca-certificates_20130906.tar.gz
-+sha256 dd10520091d469e95e11e5fafb7422d3be0a66071984d09009ed3e0232cb277d ca-certificates_20130906.tar.gz
--- 
-1.8.3.2
++++ b/package/libnspr/libnspr-0003-aarch64.patch
+@@ -0,0 +1,74 @@
++Add AArch64 support
++
++Signed-off-by: Alexander Khryukin <alexander@mezon.ru>
++
++Index: b/mozilla/nsprpub/pr/include/md/_linux.cfg
++===================================================================
++--- a/mozilla/nsprpub/pr/include/md/_linux.cfg
+++++ b/mozilla/nsprpub/pr/include/md/_linux.cfg
++@@ -1009,6 +1009,52 @@
++ #define PR_BYTES_PER_WORD_LOG2   2
++ #define PR_BYTES_PER_DWORD_LOG2  3
++ 
+++#elif defined(__aarch64__)
+++
+++#define IS_LITTLE_ENDIAN 1
+++#undef  IS_BIG_ENDIAN
+++#define IS_64
+++
+++#define PR_BYTES_PER_BYTE   1
+++#define PR_BYTES_PER_SHORT  2
+++#define PR_BYTES_PER_INT    4
+++#define PR_BYTES_PER_INT64  8
+++#define PR_BYTES_PER_LONG   8
+++#define PR_BYTES_PER_FLOAT  4
+++#define PR_BYTES_PER_DOUBLE 8
+++#define PR_BYTES_PER_WORD   8
+++#define PR_BYTES_PER_DWORD  8
+++
+++#define PR_BITS_PER_BYTE    8
+++#define PR_BITS_PER_SHORT   16
+++#define PR_BITS_PER_INT     32
+++#define PR_BITS_PER_INT64   64
+++#define PR_BITS_PER_LONG    64
+++#define PR_BITS_PER_FLOAT   32
+++#define PR_BITS_PER_DOUBLE  64
+++#define PR_BITS_PER_WORD    64
+++
+++#define PR_BITS_PER_BYTE_LOG2   3
+++#define PR_BITS_PER_SHORT_LOG2  4
+++#define PR_BITS_PER_INT_LOG2    5
+++#define PR_BITS_PER_INT64_LOG2  6
+++#define PR_BITS_PER_LONG_LOG2   6
+++#define PR_BITS_PER_FLOAT_LOG2  5
+++#define PR_BITS_PER_DOUBLE_LOG2 6
+++#define PR_BITS_PER_WORD_LOG2   6
+++
+++#define PR_ALIGN_OF_SHORT   2
+++#define PR_ALIGN_OF_INT     4
+++#define PR_ALIGN_OF_LONG    8
+++#define PR_ALIGN_OF_INT64   8
+++#define PR_ALIGN_OF_FLOAT   4
+++#define PR_ALIGN_OF_DOUBLE  8
+++#define PR_ALIGN_OF_POINTER 8
+++#define PR_ALIGN_OF_WORD    8
+++
+++#define PR_BYTES_PER_WORD_LOG2  3
+++#define PR_BYTES_PER_DWORD_LOG2 3
+++
++ #else
++ 
++ #error "Unknown CPU architecture"
++Index: b/mozilla/nsprpub/pr/include/md/_linux.h
++===================================================================
++--- a/mozilla/nsprpub/pr/include/md/_linux.h
+++++ b/mozilla/nsprpub/pr/include/md/_linux.h
++@@ -59,6 +59,8 @@
++ #define _PR_SI_ARCHITECTURE "microblaze"
++ #elif defined(nios2)
++ #define _PR_SI_ARCHITECTURE "nios2"
+++#elif defined(__aarch64__)
+++#define _PR_SI_ARCHITECTURE "aarch64"
++ #else
++ #error "Unknown CPU architecture"
++ #endif
