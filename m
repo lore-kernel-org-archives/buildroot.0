@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 5 Mar 2014 18:29:17 +0100
-Subject: [Buildroot] [PATCH 6 of 8] manual: contributing: minor
- rewording of 'submitting patches' section
-In-Reply-To: <e71bbcb3a276227ed93f.1394036672@argentina>
+Date: Wed, 5 Mar 2014 18:37:45 +0100
+Subject: [Buildroot] [PATCH 2 of 8] manual: contributing: add section on
+ analyzing bug reports
+In-Reply-To: <0cc2a6824f249999fa57.1394036668@argentina>
 References: <patchbomb.1394036666@argentina>
- <e71bbcb3a276227ed93f.1394036672@argentina>
-Message-ID: <20140305172917.GG5066@free.fr>
+ <0cc2a6824f249999fa57.1394036668@argentina>
+Message-ID: <20140305173745.GH5066@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,8 +15,8 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2014-03-05 17:24 +0100, Thomas De Schampheleire spake thusly:
-> This patch makes some minor changes to the section about submitting patches.
-> Content-wise there are little changes.
+> This patch adds a small section to the manual promoting the reproduction,
+> analysis and fixing of bug reports.
 > 
 > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
@@ -26,66 +26,29 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  docs/manual/contribute.txt |  20 +++++++++++---------
->  1 files changed, 11 insertions(+), 9 deletions(-)
+>  docs/manual/contribute.txt |  10 ++++++++++
+>  1 files changed, 10 insertions(+), 0 deletions(-)
 > 
 > diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
 > --- a/docs/manual/contribute.txt
 > +++ b/docs/manual/contribute.txt
-> @@ -156,16 +156,18 @@ Submitting patches
->  _Please, do not attach patches to bugs, send them to the mailing list
->  instead_.
+> @@ -23,6 +23,16 @@ source code tarball. Git is the easiest 
+>  send your patches to the mailing list. Refer to xref:getting-buildroot[]
+>  for more information on obtaining a Buildroot git tree.
 >  
-> -When your changes are done, and committed in your local git view,
-> -_rebase_ your development branch on top of the upstream tree before
-> -generating the patch set. To do so, run:
-> +If you made some changes to Buildroot and you would like to contribute
-> +them to the Buildroot project, proceed as follows. Starting from the
-> +changes committed in your local git view, _rebase_ your development
-> +branch on top of the upstream tree before generating a patch set. To do
-> +so, run:
->  
->  ---------------------
->  $ git fetch --all --tags
->  $ git rebase origin/master
->  ---------------------
->  
-> -Here, you are ready to generate then submit your patch set.
-> +Now, you are ready to generate then submit your patch set.
->  
->  To generate it, run:
->  
-> @@ -177,7 +179,7 @@ This will generate patch files in the +o
->  automatically adding the +Signed-off-by+ line.
->  
->  Once patch files are generated, you can review/edit the commit message
-> -before submitting them using your favorite text editor.
-> +before submitting them, using your favorite text editor.
->  
->  Lastly, send/submit your patch set to the Buildroot mailing list:
->  
-> @@ -188,9 +190,9 @@ Lastly, send/submit your patch set to th
->  Note that +git+ should be configured to use your mail account.
->  To configure +git+, see +man git-send-email+ or google it.
->  
-> -Make sure posted *patches are not line-wrapped*, otherwise they cannot
-> -easily be applied. In such a case, fix your e-mail client, or better,
-> -use +git send-email+ to send your patches.
-> +If you do not use +git send-email+, make sure posted *patches are not
-> +line-wrapped*, otherwise they cannot easily be applied. In such a case,
-> +fix your e-mail client, or better yet, learn to use +git send-email+.
->  
->  Cover letter
->  ~~~~~~~~~~~~
-> @@ -236,7 +238,7 @@ Hereafter the recommended layout:
->  ---------------
->  Patch title less than 80-character length
->  
-> -Some more paragraph giving some more details.
-> +A paragraph giving more details.
->  
->  And yet another paragraph giving more details.
->  
+> +Reproducing, analyzing and fixing bugs
+> +--------------------------------------
+> +
+> +A first way of contributing is to have a look at the open bug reports in
+> +the https://bugs.busybox.net/buglist.cgi?product=buildroot[Buildroot bug
+> +tracker]. As we strive to keep the bug count as small as possible, all
+> +help in reproducing, analyzing and fixing reported bugs is more than
+> +welcome. Don't hesitate to add a comment to bug reports reporting your
+> +findings, even if you don't yet see the full picture.
+> +
+>  [[submitting-patches]]
+>  Submitting patches
+>  ------------------
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
