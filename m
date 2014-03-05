@@ -1,72 +1,105 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Wed,  5 Mar 2014 08:17:29 +0100
-Subject: [Buildroot] [PATCH v2 2/2] libuci: new package
-In-Reply-To: <1394003849-17326-1-git-send-email-yegorslists@googlemail.com>
-References: <1394003849-17326-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <1394003849-17326-2-git-send-email-yegorslists@googlemail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 5 Mar 2014 09:19:43 +0200
+Subject: [Buildroot] [PATCH 2/2] docs/manual: document how to use the
+ cross debugger
+In-Reply-To: <1393969285-13984-2-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1393969285-13984-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1393969285-13984-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20140305071943.GC4238@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Hi Thomas,
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/Config.in        |    1 +
- package/libuci/Config.in |    9 +++++++++
- package/libuci/libuci.mk |   14 ++++++++++++++
- 3 files changed, 24 insertions(+), 0 deletions(-)
- create mode 100644 package/libuci/Config.in
- create mode 100644 package/libuci/libuci.mk
+On Tue, Mar 04, 2014 at 10:41:25PM +0100, Thomas Petazzoni wrote:
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  docs/manual/advanced.txt                 |  2 ++
+>  docs/manual/using-buildroot-debugger.txt | 47 ++++++++++++++++++++++++++++++++
+>  2 files changed, 49 insertions(+)
+>  create mode 100644 docs/manual/using-buildroot-debugger.txt
+> 
+> diff --git a/docs/manual/advanced.txt b/docs/manual/advanced.txt
+> index fb337f5..ba74a93 100644
+> --- a/docs/manual/advanced.txt
+> +++ b/docs/manual/advanced.txt
+> @@ -6,6 +6,8 @@ Advanced usage
+>  
+>  include::using-buildroot-toolchain.txt[]
+>  
+> +include::using-buildroot-debugger.txt[]
+> +
+>  include::ccache-support.txt[]
+>  
+>  include::download-location.txt[]
+> diff --git a/docs/manual/using-buildroot-debugger.txt b/docs/manual/using-buildroot-debugger.txt
+> new file mode 100644
+> index 0000000..816addb
+> --- /dev/null
+> +++ b/docs/manual/using-buildroot-debugger.txt
+> @@ -0,0 +1,47 @@
+> +// -*- mode:doc; -*-
+> +// vim: set syntax=asciidoc:
+> +
+> +Using gdb in Buildroot
+> +~~~~~~~~~~~~~~~~~~~~~~
+> +
+> +Buildroot allows to do cross-debugging, where the debugger runs on the
+> +build machine and communicates with _gdbserver_ on the target to
+> +control the execution of the program.
+> +
+> +To achieve this:
+> +
+> +* In the _internal toolchain backend_, you must enable
+> +  +BR2_PACKAGE_HOST_GDB+, +BR2_PACKAGE_GDB+ and
+> +  +BR2_PACKAGE_GDB_SERVER+. This ensures that both the cross gdb and
+> +  gdbserver gets built, and that the gdbserver gets installed to your
+> +  target.
+> +
+> +* In the _external toolchain backend_, you should enable
+> +  +BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY+, which will copy the
+> +  external toolchain gdbserver to the target. If your external
+> +  toolchain does not have cross gdb and gdbserver, it is also possible
+> +  to build them using the same options as for the _internal toolchain
+> +  backend_.
 
-diff --git a/package/Config.in b/package/Config.in
-index 0e4b02e..07480bc 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -765,6 +765,7 @@ source "package/libsigsegv/Config.in"
- source "package/libtasn1/Config.in"
- source "package/libtpl/Config.in"
- source "package/libubox/Config.in"
-+source "package/libuci/Config.in"
- source "package/libunwind/Config.in"
- source "package/liburcu/Config.in"
- source "package/linux-pam/Config.in"
-diff --git a/package/libuci/Config.in b/package/libuci/Config.in
-new file mode 100644
-index 0000000..c1aba16
---- /dev/null
-+++ b/package/libuci/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_LIBUCI
-+	bool "libuci"
-+	select BR2_PACKAGE_LIBUBOX
-+	help
-+	  libuci is intended to centralize the whole configuration
-+	  of a device running OpenWrt. This package will also install
-+	  CLI tool uci.
-+
-+	  http://wiki.openwrt.org/doc/techref/uci
-diff --git a/package/libuci/libuci.mk b/package/libuci/libuci.mk
-new file mode 100644
-index 0000000..212074c
---- /dev/null
-+++ b/package/libuci/libuci.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# libuci
-+#
-+################################################################################
-+
-+LIBUCI_VERSION = 262fede3e8c8c08c1eb0d1be9bf102232fb86cb9
-+LIBUCI_SITE = git://nbd.name/uci.git
-+LIBUCI_LICENSE = LGPLv2.1
-+LIBUCI_INSTALL_STAGING = YES
-+LIBUCI_DEPENDENCIES = libubox
-+LIBUCI_CONF_OPT = -DBUILD_LUA:BOOL=OFF
-+
-+$(eval $(cmake-package))
+I'd rephrase to make it explicit that this is either/or. Something like "In 
+case you use the {internal,external} toolchain backend ...". Users trying to 
+get gdb running are quite often Buildroot beginners, so this point might not 
+be apparent to them.
+
+baruch
+
+> +
+> +Now, to start debugging a program called +foo+, you should run on the
+> +target:
+> +
+> +----------------------------
+> +gdbserver :2345 foo
+> +----------------------------
+> +
+> +This will make +gdbserver+ listen on TCP port 2345 for a connection
+> +for the cross gdb.
+> +
+> +Then, you should start the cross gdb using the following command line:
+> +
+> +----------------------------
+> +./output/host/usr/bin/<tuple>-gdb -x ./output/staging/usr/share/buildroot/gdbinit foo
+> +----------------------------
+> +
+> +Of course, +foo+ must be available in the current directory, built
+> +with debugging symbols.
+> +
+> +The +./output/staging/usr/share/buildroot/gdbinit+ file will tell the
+> +cross gdb where to find the libraries of the target.
+> +
+> -- 
+> 1.8.3.2
+
 -- 
-1.7.7
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
