@@ -1,7 +1,9 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Wed,  5 Mar 2014 08:17:28 +0100
-Subject: [Buildroot] [PATCH v2 1/2] libubox: new package
-Message-ID: <1394003849-17326-1-git-send-email-yegorslists@googlemail.com>
+Date: Wed,  5 Mar 2014 08:17:29 +0100
+Subject: [Buildroot] [PATCH v2 2/2] libuci: new package
+In-Reply-To: <1394003849-17326-1-git-send-email-yegorslists@googlemail.com>
+References: <1394003849-17326-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <1394003849-17326-2-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,57 +14,58 @@ From: Yegor Yefremov <yegorslists@googlemail.com>
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
-Changes:
-	v2: make package description more informative and fix license information
- package/Config.in          |    1 +
- package/libubox/Config.in  |    7 +++++++
- package/libubox/libubox.mk |   13 +++++++++++++
- 3 files changed, 21 insertions(+), 0 deletions(-)
- create mode 100644 package/libubox/Config.in
- create mode 100644 package/libubox/libubox.mk
+ package/Config.in        |    1 +
+ package/libuci/Config.in |    9 +++++++++
+ package/libuci/libuci.mk |   14 ++++++++++++++
+ 3 files changed, 24 insertions(+), 0 deletions(-)
+ create mode 100644 package/libuci/Config.in
+ create mode 100644 package/libuci/libuci.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index ab91719..0e4b02e 100644
+index 0e4b02e..07480bc 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -764,6 +764,7 @@ source "package/libsigc/Config.in"
- source "package/libsigsegv/Config.in"
+@@ -765,6 +765,7 @@ source "package/libsigsegv/Config.in"
  source "package/libtasn1/Config.in"
  source "package/libtpl/Config.in"
-+source "package/libubox/Config.in"
+ source "package/libubox/Config.in"
++source "package/libuci/Config.in"
  source "package/libunwind/Config.in"
  source "package/liburcu/Config.in"
  source "package/linux-pam/Config.in"
-diff --git a/package/libubox/Config.in b/package/libubox/Config.in
+diff --git a/package/libuci/Config.in b/package/libuci/Config.in
 new file mode 100644
-index 0000000..3fa78cf
+index 0000000..c1aba16
 --- /dev/null
-+++ b/package/libubox/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LIBUBOX
-+	bool "libubox"
++++ b/package/libuci/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_LIBUCI
++	bool "libuci"
++	select BR2_PACKAGE_LIBUBOX
 +	help
-+	  Small utility library for OpenWrt. It is a dependency of
-+	  libuci, that manages configuration files infrastructure.
++	  libuci is intended to centralize the whole configuration
++	  of a device running OpenWrt. This package will also install
++	  CLI tool uci.
 +
-+	  http://nbd.name/gitweb.cgi?p=luci2/libubox.git;a=summary
-diff --git a/package/libubox/libubox.mk b/package/libubox/libubox.mk
++	  http://wiki.openwrt.org/doc/techref/uci
+diff --git a/package/libuci/libuci.mk b/package/libuci/libuci.mk
 new file mode 100644
-index 0000000..92e6122
+index 0000000..212074c
 --- /dev/null
-+++ b/package/libubox/libubox.mk
-@@ -0,0 +1,13 @@
++++ b/package/libuci/libuci.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# libubox
++# libuci
 +#
 +################################################################################
 +
-+LIBUBOX_VERSION = bbd846ec2d72b2629758b69dc122ac0b0f2c3e4b
-+LIBUBOX_SITE = git://nbd.name/luci2/libubox.git
-+LIBUBOX_LICENSE = LGPLv2.1, GPLv2, BSD-3c, MIT
-+LIBUBOX_INSTALL_STAGING = YES
-+LIBUBOX_CONF_OPT = -DBUILD_LUA:BOOL=OFF
++LIBUCI_VERSION = 262fede3e8c8c08c1eb0d1be9bf102232fb86cb9
++LIBUCI_SITE = git://nbd.name/uci.git
++LIBUCI_LICENSE = LGPLv2.1
++LIBUCI_INSTALL_STAGING = YES
++LIBUCI_DEPENDENCIES = libubox
++LIBUCI_CONF_OPT = -DBUILD_LUA:BOOL=OFF
 +
 +$(eval $(cmake-package))
 -- 
