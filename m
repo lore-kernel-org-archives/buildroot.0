@@ -1,32 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Mar 2014 19:46:55 +0100
-Subject: [Buildroot] [PATCH] toolchain/wrapper: rename BR_DEBUG_WRAPPER
-In-Reply-To: <1393887305-2252-1-git-send-email-yann.morin.1998@free.fr>
-References: <1393887305-2252-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20140305194655.07901a7d@skate>
+Date: Wed, 5 Mar 2014 20:20:25 +0100
+Subject: [Buildroot] [PATCH 1/1] jquery-mobile : new package
+In-Reply-To: <1393781646-2497-1-git-send-email-sagaert.johan@skynet.be>
+References: <1393781646-2497-1-git-send-email-sagaert.johan@skynet.be>
+Message-ID: <20140305202025.640405f8@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Sagaert Johan,
 
-On Mon,  3 Mar 2014 23:55:05 +0100, Yann E. MORIN wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On Sun,  2 Mar 2014 18:34:06 +0100, Sagaert Johan wrote:
+> jQuery Mobile is a HTML5-based user interface system designed to make
+> responsive web sites and apps that are accessible on all smartphone,
+> tablet and desktop devices.
 > 
-> The user-facing variables should be prefixed with BR2_, not BR_.
-> 
-> Also quote the variable in the manual.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  docs/manual/customize-toolchain.txt                  | 2 +-
->  toolchain/toolchain-external/ext-toolchain-wrapper.c | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
 
-Applied, thanks.
+This looks good, except one thing:
+
+> +ifeq ($(BR2_PACKAGE_JQUERY_MOBILE_DEMOS),y)
+> +define JQUERY_MOBILE_INSTALL_DEMOS
+> +	mkdir -p $(TARGET_DIR)/var/www/demos
+> +	cp -r $(@D)/demos/* $(TARGET_DIR)/var/www/demos
+> +	$(INSTALL) -m 0644 -D $(@D)/demos/index.html $(TARGET_DIR)/var/www/demo.html
+
+Does this work? I mean the index.html file in the demos/ directory is
+meant to stay there: it has relative paths to the subdirectories in the
+demos/ directory. So if you move only this file from /var/www/demos
+to /var/www I'm not sure to understand how it can work.
+
+Thanks,
 
 Thomas
 -- 
