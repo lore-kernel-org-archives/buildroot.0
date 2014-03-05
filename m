@@ -1,41 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Mar 2014 20:20:25 +0100
-Subject: [Buildroot] [PATCH 1/1] jquery-mobile : new package
-In-Reply-To: <1393781646-2497-1-git-send-email-sagaert.johan@skynet.be>
-References: <1393781646-2497-1-git-send-email-sagaert.johan@skynet.be>
-Message-ID: <20140305202025.640405f8@skate>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Wed, 5 Mar 2014 21:50:59 +0100
+Subject: [Buildroot] [PATCH 1 of 8] manual: contributing: expand
+	introduction
+In-Reply-To: <20140305171128.GC5066@free.fr>
+References: <patchbomb.1394036666@argentina>
+ <6f236594e86703960655.1394036667@argentina>
+ <20140305171128.GC5066@free.fr>
+Message-ID: <CAHXCMMJYVLZ5AnddbTfikxFcmaZQbwWw=0eYZ7eXroFGb=9cQg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sagaert Johan,
+On Wed, Mar 5, 2014 at 6:11 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Thomas, All,
+>
+> On 2014-03-05 17:24 +0100, Thomas De Schampheleire spake thusly:
+>> This patch expands the introduction of the "Contributing to buildroot"
+>> section. In general, the intention of this and subsequent patches is to
+>> promote non-feature contributions, like autobuild fixes, bug report
+>> analysis, TODO list work, etc.
+>>
+>> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>
+> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-On Sun,  2 Mar 2014 18:34:06 +0100, Sagaert Johan wrote:
-> jQuery Mobile is a HTML5-based user interface system designed to make
-> responsive web sites and apps that are accessible on all smartphone,
-> tablet and desktop devices.
-> 
-> Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
+Acked-by: Samuel Martin <s.martin49@gmail.com>
 
-This looks good, except one thing:
+Regards,
 
-> +ifeq ($(BR2_PACKAGE_JQUERY_MOBILE_DEMOS),y)
-> +define JQUERY_MOBILE_INSTALL_DEMOS
-> +	mkdir -p $(TARGET_DIR)/var/www/demos
-> +	cp -r $(@D)/demos/* $(TARGET_DIR)/var/www/demos
-> +	$(INSTALL) -m 0644 -D $(@D)/demos/index.html $(TARGET_DIR)/var/www/demo.html
-
-Does this work? I mean the index.html file in the demos/ directory is
-meant to stay there: it has relative paths to the subdirectories in the
-demos/ directory. So if you move only this file from /var/www/demos
-to /var/www I'm not sure to understand how it can work.
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Samuel
