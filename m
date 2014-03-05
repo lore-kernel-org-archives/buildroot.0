@@ -1,31 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Mar 2014 19:42:32 +0100
-Subject: [Buildroot] [PATCH 1/1] package: normalize separator size to 80
-In-Reply-To: <1394006195-32245-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1394006195-32245-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <20140305194232.22d6b400@skate>
+Date: Wed, 5 Mar 2014 19:41:44 +0100
+Subject: [Buildroot] [git commit] support: fix typo in mkusers
+Message-ID: <20140305184253.4205F9BD70@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jerzy Grzegorek,
+commit: http://git.buildroot.net/buildroot/commit/?id=b083c0ba4be5b9bb750d6ec670384449fe09a121
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  5 Mar 2014 08:56:35 +0100, Jerzy Grzegorek wrote:
-> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-> ---
->  package/lbreakout2/lbreakout2.mk         |    4 ++--
->  package/ltris/ltris.mk                   |    4 ++--
->  package/luainterpreter/luainterpreter.mk |    4 ++--
->  package/lunit/lunit.mk                   |    4 ++--
->  package/lzlib/lzlib.mk                   |    4 ++--
->  5 files changed, 10 insertions(+), 10 deletions(-)
+This fixes the spurious "[: too many arguments" errors from mkusers.
 
-Applied, thanks.
+Signed-off-by: Philip Paeps <philip@paeps.cx>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/scripts/mkusers |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/support/scripts/mkusers b/support/scripts/mkusers
+index a67356a..90d1df7 100755
+--- a/support/scripts/mkusers
++++ b/support/scripts/mkusers
+@@ -63,7 +63,7 @@ get_uid() {
+ get_ugid() {
+     local username="${1}"
+ 
+-    awk -F:i -v username="${username}"                          \
++    awk -F: -v username="${username}"                          \
+         '$1 == username { printf( "%d\n", $4 ); }' "${PASSWD}"
+ }
+ 
