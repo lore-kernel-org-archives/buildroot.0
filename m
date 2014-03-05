@@ -1,51 +1,76 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 06 Mar 2014 00:27:40 +0100
-Subject: [Buildroot] [PATCH] Disable o32 ABI for MIPS64 architectures
-In-Reply-To: <1394039187-24328-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1394039187-24328-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <5317B2EC.4010201@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 6 Mar 2014 00:27:49 +0100
+Subject: [Buildroot] [PATCH 03/11] opencv: add jasper support
+In-Reply-To: <CAHXCMMKngVUrq+fY38wZVpVtPttSgu1mxtLQKF5K=FNZK7EpFg@mail.gmail.com>
+References: <1392588004-13317-1-git-send-email-s.martin49@gmail.com>
+ <1392588004-13317-4-git-send-email-s.martin49@gmail.com>
+ <20140305225913.GD9644@free.fr>
+ <CAHXCMMKngVUrq+fY38wZVpVtPttSgu1mxtLQKF5K=FNZK7EpFg@mail.gmail.com>
+Message-ID: <20140305232749.GF9644@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/03/14 18:06, Vicente Olivert Riera wrote:
-> Building o32 ELF files for MIPS64 is an exotic configuration that nobody
-> should be using. If o32 is required, then is better if it's built for
-> MIPS 32-bit cores so only 32-bit instructions will be used leading to a
-> more efficient o32 usage.
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  arch/Config.in.mips |    1 +
->  1 files changed, 1 insertions(+), 0 deletions(-)
-> 
-> diff --git a/arch/Config.in.mips b/arch/Config.in.mips
-> index d9c0c02..e2b1e60 100644
-> --- a/arch/Config.in.mips
-> +++ b/arch/Config.in.mips
-> @@ -47,6 +47,7 @@ choice
->  
->  config BR2_MIPS_OABI32
->  	bool "o32"
-> +	depends on !BR2_ARCH_IS_64
->  config BR2_MIPS_NABI32
->  	bool "n32"
->  	depends on BR2_ARCH_IS_64
-> 
+Samuel, All,
 
- Then maybe it's better to make the choice depend on BR2_ARCH_IS_64, and
-make the OABI32 symbol blind and default y on !BR2_ARCH_IS_64.
+On 2014-03-06 00:08 +0100, Samuel Martin spake thusly:
+> On Wed, Mar 5, 2014 at 11:59 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > Samuel, All,
+> >
+> > On 2014-02-16 22:59 +0100, Samuel Martin spake thusly:
+> >> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> >> ---
+> >>  package/opencv/Config.in | 6 ++++++
+> >>  package/opencv/opencv.mk | 8 +++++++-
+> >>  2 files changed, 13 insertions(+), 1 deletion(-)
+> >>
+> >> diff --git a/package/opencv/Config.in b/package/opencv/Config.in
+> >> index 2acbe19..73f03e1 100644
+> >> --- a/package/opencv/Config.in
+> >> +++ b/package/opencv/Config.in
+> >> @@ -158,6 +158,12 @@ config BR2_PACKAGE_OPENCV_WITH_GTK
+> >>       depends on BR2_INSTALL_LIBSTDCPP
+> >>       select BR2_PACKAGE_LIBGTK2
+> >>
+> >> +config BR2_PACKAGE_OPENCV_WITH_JASPER
+> >> +     bool "jasper (jpeg 2000) support"
+> >> +     select BR2_PACKAGE_JASPER
+> >> +     help
+> >> +       Use shared libjasper from the target system.
+> >
+> > What do you mean by "from the target system?"
+> 
+> OpenCV comes with many libs in its 3rdparty directory (ffmpeg, jinja2,
+> libjasper, libjpeg, libpng, libtiff, libwebp, openexr, tbb, zlib), and
+> can build these, or use those provided by the system or disabling
+> their support.
+> 
+> When I integrated opencv in BR for the first, it was requested to me
+> to only use the libs provided by the system. I stick to this ;-)
 
+Ah, OK I understand. But then, the help text is not clear enough.
 
- Regards,
- Arnout
+I would expect to read something like:
+
+    config BR2_PACKAGE_OPENCV_WITH_JASPER
+        bool "jpeg2000 support"
+        select BR2_PACKAGE_JASPER
+        help
+          Use the package 'libjasper' to provide support for jpeg2000.
+
+          The copy of libjasper bundled in openCV is not used.
+
+But do we even want to state this in the help text?
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
