@@ -1,120 +1,60 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Wed,  5 Mar 2014 23:04:40 +0100
-Subject: [Buildroot] [PATCH 1/6] python: rework python symlinks installation
+Date: Wed,  5 Mar 2014 23:04:41 +0100
+Subject: [Buildroot] [PATCH 2/6] python3: rework python symlinks installation
 In-Reply-To: <1394057085-10399-1-git-send-email-s.martin49@gmail.com>
 References: <1394057085-10399-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1394057085-10399-2-git-send-email-s.martin49@gmail.com>
+Message-ID: <1394057085-10399-3-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This change adds a patch to python disabling the installation of the
-python and python-config symlinks.
+This patch reworks the way python3 and python3-config symlink are
+installed.
 
-This allows Buildroot to control these symlinks' installation:
+Buildroot wants to control these symlinks' installation:
 
-* the python symlink should be unconditionally installed in the target
-  tree, and the python-config symlink in the staging tree, since it is
-  only built and installed in the target tree if the user selected it;
+* the python3 symlink should be unconditionally installed in the target
+  tree, and the python3-config symlink in the staging tree, since it is
+  the only python package built and installed in the target tree if the
+  user selected it;
 
-* the python and python-config symlinks should only be installed in
-  the host tree when python(2) is the selection of the user for the
+* the python3 and python3-config symlinks should only be installed in
+  the host tree when python3 is the selection of the user for the
   target.
-  Otherwise, when python3 is selected for the target, the host-python
-  may be required to built some packages. In such cases, the python
-  symlink should points to python3 (so should the python-config
-  symlink) to reflect the staging/target tree.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../python/python-011-remove-python-symlink.patch  | 29 ++++++++++++++++++++
- package/python/python.mk                           | 32 ++++++++++++++++++++++
- 2 files changed, 61 insertions(+)
- create mode 100644 package/python/python-011-remove-python-symlink.patch
+ package/python3/python3.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/package/python/python-011-remove-python-symlink.patch b/package/python/python-011-remove-python-symlink.patch
-new file mode 100644
-index 0000000..a9b1daa
---- /dev/null
-+++ b/package/python/python-011-remove-python-symlink.patch
-@@ -0,0 +1,29 @@
-+Remove the python symlink install rules.
-+
-+The python symlink installation will be handled by Buildroot itself, because
-+Buildroot needs to control to what python interpreter (python2 or python3) the
-+python symlink points to.
-+
-+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-+
-+diff -purN a/Makefile.pre.in b/Makefile.pre.in
-+--- a/Makefile.pre.in	2014-03-02 17:56:56.529132499 +0100
-++++ b/Makefile.pre.in	2014-03-02 19:24:02.346491849 +0100
-+@@ -857,17 +857,10 @@ $(DESTSHARED):
-+ #  $(PYTHON) -> python2 -> python$(VERSION))
-+ # Also create equivalent chains for other installed files
-+ bininstall:	altbininstall
-+-	-if test -f $(DESTDIR)$(BINDIR)/$(PYTHON) -o -h $(DESTDIR)$(BINDIR)/$(PYTHON); \
-+-	then rm -f $(DESTDIR)$(BINDIR)/$(PYTHON); \
-+-	else true; \
-+-	fi
-+-	(cd $(DESTDIR)$(BINDIR); $(LN) -s python2$(EXE) $(PYTHON))
-+ 	-rm -f $(DESTDIR)$(BINDIR)/python2$(EXE)
-+ 	(cd $(DESTDIR)$(BINDIR); $(LN) -s python$(VERSION)$(EXE) python2$(EXE))
-+ 	-rm -f $(DESTDIR)$(BINDIR)/python2-config
-+ 	(cd $(DESTDIR)$(BINDIR); $(LN) -s python$(VERSION)-config python2-config)
-+-	-rm -f $(DESTDIR)$(BINDIR)/python-config
-+-	(cd $(DESTDIR)$(BINDIR); $(LN) -s python2-config python-config)
-+ 	-test -d $(DESTDIR)$(LIBPC) || $(INSTALL) -d -m $(DIRMODE) $(DESTDIR)$(LIBPC)
-+ 	-rm -f $(DESTDIR)$(LIBPC)/python2.pc
-+ 	(cd $(DESTDIR)$(LIBPC); $(LN) -s python-$(VERSION).pc python2.pc)
-diff --git a/package/python/python.mk b/package/python/python.mk
-index 216448e..ec9a6d3 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -175,8 +175,40 @@ endef
- 
- PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_ENSURE_LIBPYTHON_STRIPPED
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 3d95a6d..19bef1e 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -156,11 +156,20 @@ ifneq ($(BR2_PACKAGE_PYTHON),y)
+ PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_INSTALL_SYMLINK
+ endif
  
 +#
-+# Always install the python symlink in the target tree
-+#
-+define PYTHON_INSTALL_TARGET_PYTHON_SYMLINK
-+	ln -sf python2 $(TARGET_DIR)/usr/bin/python
-+endef
-+
-+PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_INSTALL_TARGET_PYTHON_SYMLINK
-+
-+#
-+# Always install the python-config symlink in the staging tree
-+#
-+define PYTHON_INSTALL_STAGING_PYTHON_CONFIG_SYMLINK
-+	ln -sf python2-config $(STAGING_DIR)/usr/bin/python-config
-+endef
-+
-+PYTHON_POST_INSTALL_STAGING_HOOKS += PYTHON_INSTALL_STAGING_PYTHON_CONFIG_SYMLINK
-+
- PYTHON_AUTORECONF = YES
- 
-+#
-+# Some packages may have build scripts requiring python2.
-+# Only install the python symlink in the host tree if python(2) is enabled
++# Some packages may have build scripts requiring python3, whatever is the
++# python version chosen for the target.
++# Only install the python symlink in the host tree if python3 is enabled
 +# for the target.
 +#
-+ifeq ($(BR2_PACKAGE_PYTHON),y)
-+define HOST_PYTHON_INSTALL_PYTHON_SYMLINK
-+	ln -sf python2 $(HOST_DIR)/usr/bin/python
-+	ln -sf python2-config $(HOST_DIR)/usr/bin/python-config
-+endef
-+
-+HOST_PYTHON_POST_INSTALL_HOOKS += HOST_PYTHON_INSTALL_PYTHON_SYMLINK
-+endif
-+
- # Provided to other packages
- PYTHON_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/sysconfigdata/:$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/
++ifeq ($(BR2_PACKAGE_PYTHON3),y)
+ define HOST_PYTHON3_INSTALL_SYMLINK
+ 	ln -fs python3 $(HOST_DIR)/usr/bin/python
++	ln -fs python3-config $(HOST_DIR)/usr/bin/python-config
+ endef
  
+ HOST_PYTHON3_POST_INSTALL_HOOKS += HOST_PYTHON3_INSTALL_SYMLINK
++endif
+ 
+ # Provided to other packages
+ PYTHON3_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/sysconfigdata/:$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/
 -- 
 1.9.0
