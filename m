@@ -1,79 +1,40 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 05 Mar 2014 17:24:32 +0100
-Subject: [Buildroot] [PATCH 6 of 8] manual: contributing: minor rewording of
- 'submitting patches' section
+Date: Wed, 05 Mar 2014 17:24:33 +0100
+Subject: [Buildroot] [PATCH 7 of 8] manual: contributing: don't recommend
+ leaving out changelog from patches
 In-Reply-To: <patchbomb.1394036666@argentina>
 References: <patchbomb.1394036666@argentina>
-Message-ID: <e71bbcb3a276227ed93f.1394036672@argentina>
+Message-ID: <e95d3b84bcc4048fed60.1394036673@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch makes some minor changes to the section about submitting patches.
-Content-wise there are little changes.
+Currently, the manual states that if you send a series and include a
+changelog in the introduction mail (0 of x), it is not necessary to include
+a changelog on the individual patches.
+I don't like this: for large patch series it requires going back to the
+introduction mail when opening each patch, to understand what changed.
+This patch rewords the paragraph accordingly.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
- docs/manual/contribute.txt |  20 +++++++++++---------
- 1 files changed, 11 insertions(+), 9 deletions(-)
+ docs/manual/contribute.txt |  4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
 --- a/docs/manual/contribute.txt
 +++ b/docs/manual/contribute.txt
-@@ -156,16 +156,18 @@ Submitting patches
- _Please, do not attach patches to bugs, send them to the mailing list
- instead_.
+@@ -220,8 +220,8 @@ Patch revision changelog
+ When improvements are requested, the new revision of each commit
+ should include a changelog of the modifications between each
+ submission. Note that when your patch series is introduced by a cover
+-letter, the changelog may be added in the cover letter rather than in
+-the individual commits.
++letter, an overall changelog may be added to the cover letter in
++addition to the changelog in the individual commits.
  
--When your changes are done, and committed in your local git view,
--_rebase_ your development branch on top of the upstream tree before
--generating the patch set. To do so, run:
-+If you made some changes to Buildroot and you would like to contribute
-+them to the Buildroot project, proceed as follows. Starting from the
-+changes committed in your local git view, _rebase_ your development
-+branch on top of the upstream tree before generating a patch set. To do
-+so, run:
- 
- ---------------------
- $ git fetch --all --tags
- $ git rebase origin/master
- ---------------------
- 
--Here, you are ready to generate then submit your patch set.
-+Now, you are ready to generate then submit your patch set.
- 
- To generate it, run:
- 
-@@ -177,7 +179,7 @@ This will generate patch files in the +o
- automatically adding the +Signed-off-by+ line.
- 
- Once patch files are generated, you can review/edit the commit message
--before submitting them using your favorite text editor.
-+before submitting them, using your favorite text editor.
- 
- Lastly, send/submit your patch set to the Buildroot mailing list:
- 
-@@ -188,9 +190,9 @@ Lastly, send/submit your patch set to th
- Note that +git+ should be configured to use your mail account.
- To configure +git+, see +man git-send-email+ or google it.
- 
--Make sure posted *patches are not line-wrapped*, otherwise they cannot
--easily be applied. In such a case, fix your e-mail client, or better,
--use +git send-email+ to send your patches.
-+If you do not use +git send-email+, make sure posted *patches are not
-+line-wrapped*, otherwise they cannot easily be applied. In such a case,
-+fix your e-mail client, or better yet, learn to use +git send-email+.
- 
- Cover letter
- ~~~~~~~~~~~~
-@@ -236,7 +238,7 @@ Hereafter the recommended layout:
- ---------------
- Patch title less than 80-character length
- 
--Some more paragraph giving some more details.
-+A paragraph giving more details.
- 
- And yet another paragraph giving more details.
- 
+ When added to the individual commits, this changelog is added when
+ editing the commit message.  Below the +Signed-off-by+ section, add
