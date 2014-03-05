@@ -1,75 +1,120 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Wed,  5 Mar 2014 23:04:39 +0100
-Subject: [Buildroot] [PATCH 0/6] host-python2 hard dependency
-Message-ID: <1394057085-10399-1-git-send-email-s.martin49@gmail.com>
+Date: Wed,  5 Mar 2014 23:04:40 +0100
+Subject: [Buildroot] [PATCH 1/6] python: rework python symlinks installation
+In-Reply-To: <1394057085-10399-1-git-send-email-s.martin49@gmail.com>
+References: <1394057085-10399-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <1394057085-10399-2-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+This change adds a patch to python disabling the installation of the
+python and python-config symlinks.
 
+This allows Buildroot to control these symlinks' installation:
 
-Recently, the autobuilders have triggered some host package failures caused by
-an unmet host-python(2) dependency.
+* the python symlink should be unconditionally installed in the target
+  tree, and the python-config symlink in the staging tree, since it is
+  only built and installed in the target tree if the user selected it;
 
-These failures happen when python3 is selected for the target; in such cases,
-the host python is also python3. However, some packages indirectly require a
-python2 interpreter available for the host because they have some build scripts
-(crda, in a *.py script, uses m2crypto which can only be built for python2) or
-use a build-system non-python3-compliant (all packages based on Scons).
+* the python and python-config symlinks should only be installed in
+  the host tree when python(2) is the selection of the user for the
+  target.
+  Otherwise, when python3 is selected for the target, the host-python
+  may be required to built some packages. In such cases, the python
+  symlink should points to python3 (so should the python-config
+  symlink) to reflect the staging/target tree.
 
-This series intends to fix this issue.
-
-First, Buildroot needs to be able to manage the python symlink installation.
-The idea behind this is, in the host tree, the python symlink points to the
-interpreter the same version as the one in the target tree.
-So, we can have:
-- if python(2) is installed in the target:
-  $(HOST_DIR)/usr/bin/python -> python2
-- if python3 is installed in the target:
-  $(HOST_DIR)/usr/bin/python -> python3
-  $(HOST_DIR)/usr/bin/python2 -> python2.7
-This is done in the patches 1/6 and 2/6.
-
-The 3rd patch enhance the python infrastructure to allow setting the host python
-requirement for a package using the host-python-package infrastructure. This
-patch adds a new variable *_FORCE_HOST_PYTHON to be set to the interpreter name
-('python2' or 'python3'), which, if set, will take care of adding the right host
-python dependency and using the right interpreter in the build/install commands.
-
-The last 3 packages fix the wrong dependency, so the build failures. Note that,
-crda explicitly depends on host-python, while this dependency is automatically
-(implicitly) pulled in the python-m2crypto package via the *_FORCE_HOST_PYTHON
-usage.
-
-
-Yours,
-Samuel
-
-
-Samuel Martin (6):
-  python: rework python symlinks installation
-  python3: rework python symlinks installation
-  pkg-python: support host-python dependency different from the python
-    in the target
-  scons: force host-python dependency to be python2
-  python-m2crypto: requires host-python2
-  crda: override python interperter
-
- docs/manual/adding-packages-python.txt             |  8 ++++
- ...file-allow-to-override-python-interpreter.patch | 34 +++++++++++++++
- package/crda/crda.mk                               |  8 +++-
- package/pkg-python.mk                              | 50 ++++++++++++++++++++--
- package/python-m2crypto/python-m2crypto.mk         | 10 +++--
- .../python/python-011-remove-python-symlink.patch  | 29 +++++++++++++
- package/python/python.mk                           | 32 ++++++++++++++
- package/python3/python3.mk                         |  9 ++++
- package/scons/scons.mk                             |  4 +-
- 9 files changed, 175 insertions(+), 9 deletions(-)
- create mode 100644 package/crda/crda-0001-Makefile-allow-to-override-python-interpreter.patch
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../python/python-011-remove-python-symlink.patch  | 29 ++++++++++++++++++++
+ package/python/python.mk                           | 32 ++++++++++++++++++++++
+ 2 files changed, 61 insertions(+)
  create mode 100644 package/python/python-011-remove-python-symlink.patch
 
---
+diff --git a/package/python/python-011-remove-python-symlink.patch b/package/python/python-011-remove-python-symlink.patch
+new file mode 100644
+index 0000000..a9b1daa
+--- /dev/null
++++ b/package/python/python-011-remove-python-symlink.patch
+@@ -0,0 +1,29 @@
++Remove the python symlink install rules.
++
++The python symlink installation will be handled by Buildroot itself, because
++Buildroot needs to control to what python interpreter (python2 or python3) the
++python symlink points to.
++
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++
++diff -purN a/Makefile.pre.in b/Makefile.pre.in
++--- a/Makefile.pre.in	2014-03-02 17:56:56.529132499 +0100
+++++ b/Makefile.pre.in	2014-03-02 19:24:02.346491849 +0100
++@@ -857,17 +857,10 @@ $(DESTSHARED):
++ #  $(PYTHON) -> python2 -> python$(VERSION))
++ # Also create equivalent chains for other installed files
++ bininstall:	altbininstall
++-	-if test -f $(DESTDIR)$(BINDIR)/$(PYTHON) -o -h $(DESTDIR)$(BINDIR)/$(PYTHON); \
++-	then rm -f $(DESTDIR)$(BINDIR)/$(PYTHON); \
++-	else true; \
++-	fi
++-	(cd $(DESTDIR)$(BINDIR); $(LN) -s python2$(EXE) $(PYTHON))
++ 	-rm -f $(DESTDIR)$(BINDIR)/python2$(EXE)
++ 	(cd $(DESTDIR)$(BINDIR); $(LN) -s python$(VERSION)$(EXE) python2$(EXE))
++ 	-rm -f $(DESTDIR)$(BINDIR)/python2-config
++ 	(cd $(DESTDIR)$(BINDIR); $(LN) -s python$(VERSION)-config python2-config)
++-	-rm -f $(DESTDIR)$(BINDIR)/python-config
++-	(cd $(DESTDIR)$(BINDIR); $(LN) -s python2-config python-config)
++ 	-test -d $(DESTDIR)$(LIBPC) || $(INSTALL) -d -m $(DIRMODE) $(DESTDIR)$(LIBPC)
++ 	-rm -f $(DESTDIR)$(LIBPC)/python2.pc
++ 	(cd $(DESTDIR)$(LIBPC); $(LN) -s python-$(VERSION).pc python2.pc)
+diff --git a/package/python/python.mk b/package/python/python.mk
+index 216448e..ec9a6d3 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -175,8 +175,40 @@ endef
+ 
+ PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_ENSURE_LIBPYTHON_STRIPPED
+ 
++#
++# Always install the python symlink in the target tree
++#
++define PYTHON_INSTALL_TARGET_PYTHON_SYMLINK
++	ln -sf python2 $(TARGET_DIR)/usr/bin/python
++endef
++
++PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_INSTALL_TARGET_PYTHON_SYMLINK
++
++#
++# Always install the python-config symlink in the staging tree
++#
++define PYTHON_INSTALL_STAGING_PYTHON_CONFIG_SYMLINK
++	ln -sf python2-config $(STAGING_DIR)/usr/bin/python-config
++endef
++
++PYTHON_POST_INSTALL_STAGING_HOOKS += PYTHON_INSTALL_STAGING_PYTHON_CONFIG_SYMLINK
++
+ PYTHON_AUTORECONF = YES
+ 
++#
++# Some packages may have build scripts requiring python2.
++# Only install the python symlink in the host tree if python(2) is enabled
++# for the target.
++#
++ifeq ($(BR2_PACKAGE_PYTHON),y)
++define HOST_PYTHON_INSTALL_PYTHON_SYMLINK
++	ln -sf python2 $(HOST_DIR)/usr/bin/python
++	ln -sf python2-config $(HOST_DIR)/usr/bin/python-config
++endef
++
++HOST_PYTHON_POST_INSTALL_HOOKS += HOST_PYTHON_INSTALL_PYTHON_SYMLINK
++endif
++
+ # Provided to other packages
+ PYTHON_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/sysconfigdata/:$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/
+ 
+-- 
 1.9.0
