@@ -1,121 +1,48 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 05 Mar 2014 18:43:35 +0100
-Subject: [Buildroot] [PATCH 1/1] [V3] toolchain: control vendor part in
- GNU_TARGET_NAME
-In-Reply-To: <884EA965490E3C4D8E66AEF41E9802500939A1@ezex10.ezchip.com>
-References: <1393908571-30334-1-git-send-email-noamc@ezchip.com>
- <884EA965490E3C4D8E66AEF41E9802500939A1@ezex10.ezchip.com>
-Message-ID: <53176247.1040108@mind.be>
+Date: Wed, 05 Mar 2014 22:09:00 +0100
+Subject: [Buildroot] Problem with starting TI Graphics
+In-Reply-To: <20140304200948.619fc7fe@skate>
+References: <trinity-96c3bbe4-4de2-4d94-a868-2ca9c13f130e-1392279117507@3capp-gmx-bs38>
+ <CA+kK6WuqEOYcgypxbDJ8Hs5Jy3JXpuGaQPb9Qgp0+nsjDz1k5g@mail.gmail.com>
+ <trinity-c25b0db0-54b6-4f8c-977a-023518dc467a-1392373446805@3capp-gmx-bs16>
+ <20140304200948.619fc7fe@skate>
+Message-ID: <5317926C.30207@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/03/14 05:51, Noam Camus wrote:
-> This option allows to customize the "vendor" part of the
-> toolchain tuple, where the toolchain tuple has the form
-> <cpu>-<vendor>-<kernel>-<os>. Use this option in situations
-> where gcc might make different decisions based on the vendor
-> part of the tuple.
+On 04/03/14 20:09, Thomas Petazzoni wrote:
+> Dear Peter Kuemmel,
 > 
-> Signed-off-by: Noam Camus <noamc@ezchip.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/Makefile.in                     |   12 +++++++++++-
->  toolchain/toolchain-buildroot/Config.in |   17 +++++++++++++++++
->  2 files changed, 28 insertions(+), 1 deletions(-)
+> On Fri, 14 Feb 2014 11:24:06 +0100, Peter Kuemmel wrote:
 > 
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index 454f614..121fe74 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -20,8 +20,18 @@ endif
->  MAKE1:=$(HOSTMAKE) -j1
->  MAKE:=$(HOSTMAKE) $(if $(PARALLEL_JOBS),-j$(PARALLEL_JOBS))
+>> Thanks, I found the issue: it was the missing user binary thumb support in the kernel.
 > 
-> +ifeq ($(BR2_TOOLCHAIN_BUILDROOT_VENDOR),)
-> +VENDOR:=buildroot
-> +else
-> +ifeq ($(BR2_TOOLCHAIN_BUILDROOT_VENDOR),unknown)
-> +$(error The value 'unknown' is not allowed. It might be confused with native toolchain)
-> +else
-> +VENDOR:=$(call qstrip,$(BR2_TOOLCHAIN_BUILDROOT_VENDOR))
-> +endif
-> +endif
-
- I don't think it's a good idea to treat the case that vendor is empty
-specially. Anyway, it will never be empty or unknown, because it always
-includes quotes - it should be qstripped first.
-
- Therefore, this is better (also note the fixed spacing and := ):
-
-VENDOR = $(call qstrip,$(BR2_TOOLCHAIN_BUILDROOT_VENDOR))
-ifeq ($(VENDOR),)
-$(error BR2_TOOLCHAIN_BUILDROOT_VENDOR is not allowed to be empty)
-endif
-ifeq ($(VENDOR),unknown)
-$(error BR2_TOOLCHAIN_BUILDROOT_VENDOR cannot be 'unknown'. \
-        It might be confused with the native toolchain)
-endif
-
-
- I would also prefer to name the internal variable TARGET_VENDOR, similar
-to TARGET_OS.
-
-> +
->  # Compute GNU_TARGET_NAME
-> -GNU_TARGET_NAME=$(ARCH)-buildroot-$(TARGET_OS)-$(LIBC)$(ABI)
-> +GNU_TARGET_NAME=$(ARCH)-$(VENDOR)-$(TARGET_OS)-$(LIBC)$(ABI)
+> Interesting. Were you building the kernel with Buildroot, or separately?
 > 
->  # Blackfin FLAT needs uclinux
->  ifeq ($(BR2_bfin)$(BR2_BINFMT_FLAT),yy)
-> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-> index 07db50b..34f78ae 100644
-> --- a/toolchain/toolchain-buildroot/Config.in
-> +++ b/toolchain/toolchain-buildroot/Config.in
-> @@ -70,6 +70,23 @@ config BR2_TOOLCHAIN_BUILDROOT_LIBC
->         default "glibc"  if BR2_TOOLCHAIN_BUILDROOT_EGLIBC
->         default "glibc"  if BR2_TOOLCHAIN_BUILDROOT_GLIBC
+> If you built your kernel with Buildroot, then maybe we should add
+> something like:
 > 
-> +config BR2_TOOLCHAIN_BUILDROOT_VENDOR
-> +       string "custom toolchain vendor name"
-> +       default "buildroot"
-> +       help
-> +
-> +         This option allows to customize the "vendor" part of the
-> +         toolchain tuple, where the toolchain tuple has the form
-> +         <cpu>-<vendor>-<kernel>-<os>. The default value, "buildroot",
+> 	$(if $(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_ARM_INSTRUCTIONS_THUMB2),
+> 		$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_THUMB,$(@D)/.config))
+> 
+> This way we would ensure that the kernel gets built with
+> CONFIG_ARM_THUMB=y when the Thumb or Thumb-2 instruction sets have been
+> selected for userspace.
 
- It's more like <arch>-<vendor>-<os>-<libc>
-
-> +         is fine for most cases, except in very specific situations
-> +         where gcc might make different decisions based on the vendor
-> +         part of the tuple. The value "unknown" is not allowed, as the
-> +         cross-compiling toolchain might then be confused with the
-> +         native toolchain when the target and host architecture are
-> +         identical.
-> +
-> +         If you're not sure, just leave the default "buildroot" value.
-
- With my comment above, Yann's comment about rewriting this is no longer
-correct of course.
-
+ This is a good idea, but wouldn't help with Peter's problem: the
+pvrsrvctl binary is not built by buildroot, so the problem occurs even if
+buildroot is build with ARM instructions.
 
  Regards,
  Arnout
 
-> +
->  source "package/uclibc/Config.in"
->  source "package/glibc/Config.in"
->  source "package/binutils/Config.in.host"
-> --
-> 1.7.1
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Thoughts?
+> 
+> Thomas
 > 
 
 
