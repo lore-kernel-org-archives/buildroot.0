@@ -1,83 +1,109 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Wed, 5 Mar 2014 22:05:48 +0100
-Subject: [Buildroot] [PATCH 8 of 8] manual: contributing: minor
- rewording of 'reporting bugs' section
-In-Reply-To: <c79971c9c229295a42da.1394036674@argentina>
-References: <patchbomb.1394036666@argentina>
- <c79971c9c229295a42da.1394036674@argentina>
-Message-ID: <CAHXCMM+9ttSHtKpxbVrTau-3tgXSN-As64JYg_T4f7R4SSKP_g@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 05 Mar 2014 18:10:54 +0100
+Subject: [Buildroot] [PATCH 1/2] python-libconfig: new package
+In-Reply-To: <E1CF8EFE2042404B87DE2B6D662128020ED58B96@KUUMEX10.barco.com>
+References: <E1CF8EFE2042404B87DE2B6D662128020ED58B96@KUUMEX10.barco.com>
+Message-ID: <53175A9E.3090001@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-
-On Wed, Mar 5, 2014 at 5:24 PM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> This patch makes some minor fixes in the section about reporting bugs.
->
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->
+On 04/03/14 09:32, Derycke, Johan wrote:
+> Python bindings to the C++ library libconfig
+> https://github.com/cnangel/python-libconfig
+> 
+> Signed-off-by: Johan Derycke <johan.derycke@barco.com>
 > ---
->  docs/manual/contribute.txt |  15 ++++++++-------
->  1 files changed, 8 insertions(+), 7 deletions(-)
->
-> Although I don't think this section belongs in the Contributing chapter,
-> there currently isn't a better place. When I get to rethinking the manual
-> structure, this can be changed.
->
-> diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-> --- a/docs/manual/contribute.txt
-> +++ b/docs/manual/contribute.txt
-> @@ -266,16 +266,16 @@ This can be easily handled with +git for
->  ---------------------
->
->  [[reporting-bugs]]
-> -Reporting issues/bugs, get help
-> --------------------------------
-> +Reporting issues/bugs or getting help
-> +-------------------------------------
->
->  Before reporting any issue, please check
->  xref:mailing-list-subscribe[the mailing list archive] in case someone has
+>  package/python-libconfig/Config.in           |    9 +++++++++
+>  package/python-libconfig/python-libconfig.mk |   21 +++++++++++++++++++++
+>  2 files changed, 30 insertions(+)
+>  create mode 100644 package/python-libconfig/Config.in
+>  create mode 100644 package/python-libconfig/python-libconfig.mk
+> 
+> diff --git a/package/python-libconfig/Config.in b/package/python-libconfig/Config.in
+> new file mode 100644
+> index 0000000..7e4f317
+> --- /dev/null
+> +++ b/package/python-libconfig/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_PYTHON_LIBCONFIG
+> +       bool "python-libconfig"
+> +       depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+> +  select BR2_PACKAGE_BOOST_PYTHON
 
-We could add a link to buildroot gmane. This iscertainly the easiest
-way to search the ML archive.
+ You should also select BR2_PACKAGE_BOOST.
 
->  already reported and fixed a similar problem.
->
-> -However you choose to report bugs or get help,
-> -xref:bugtracker[opening a bug] or
-> -xref:mailing-list-subscribe[send a mail to the mailing list], there are
-> +However you choose to report bugs or get help, either by
-> +xref:bugtracker[opening a bug] or by
-> +xref:mailing-list-subscribe[sending a mail to the mailing list], there are
->  a number of details to provide in order to help people reproduce and
->  find a solution to the issue.
->
-> @@ -287,11 +287,12 @@ Here is a short list of details to provi
->  * host machine (OS/release)
->  * version of Buildroot
->  * target for which the build fails
-> -* package(s) which the build fails
-> +* package(s) for which the build fails
->  * the command that fails and its output
->  * any information you think that may be relevant
->
-> -Additionnally, your can add the +.config+ file.
-> +Additionally, you should add the +.config+ file (or if you know how, a
-> ++defconfig+).
->
->  If some of these details are too large, do not hesitate to use a
->  pastebin service (see http://www.similarsitesearch.com/alternatives-to/pastebin.com[]).
+ You should also depend on boost's toolchain dependencies:
+BR2_INSTALL_LIBSTDCPP, BR2_LARGEFILE, BR2_TOOLCHAIN_HAS_THREADS, and add
+the corresponding comment.
+
+ It's a crying shame that the python wrapper for something trivial like
+libconfig requires bloatware like boost :-) but that can't be helped of
+course.
+
+> +       select BR2_PACKAGE_LIBCONFIG
+> +       help
+> +           Python bindings to the C++ library libconfig
+
+ Perhaps add a bit of the help text of libconfig.
+
+ Regards,
+ Arnout
+
+> +
+> +          https://github.com/cnangel/python-libconfig
+> diff --git a/package/python-libconfig/python-libconfig.mk b/package/python-libconfig/python-libconfig.mk
+> new file mode 100644
+> index 0000000..8d597ef
+> --- /dev/null
+> +++ b/package/python-libconfig/python-libconfig.mk
+> @@ -0,0 +1,21 @@
+> +################################################################################
+> +#
+> +# python-libconfig
+> +#
+> +################################################################################
+> +
+> +PYTHON_LIBCONFIG_VERSION = b271c3d9dac938ad5cd29b67bd08cc5536a5a391
+> +PYTHON_LIBCONFIG_SITE = https://github.com/cnangel/python-libconfig/
+> +PYTHON_LIBCONFIG_SITE_METHOD = git
+> +
+> +PYTHON_LIBCONFIG_LICENSE = BSD
+> +PYTHON_LIBCONFIG_LICENSE_FILES = README
+> +
+> +PYTHON_LIBCONFIG_SETUP_TYPE = setuptools
+> +
+> +PYTHON_LIBCONFIG_DEPENDENCIES = libconfig boost
+> +
+> +$(eval $(python-package))
+> +
+> +
+> +
+> --
+> 1.7.10.4
+> 
+> Best regards,
+> Johan Derycke
+> 
+> 
+> 
+> 
+> 
+> This message is subject to the following terms and conditions: MAIL DISCLAIMER<http://www.barco.com/en/maildisclaimer>
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> 
 
-Regards,
 
 -- 
-Samuel
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
