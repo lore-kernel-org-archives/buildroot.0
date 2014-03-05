@@ -1,43 +1,60 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Wed,  5 Mar 2014 12:34:49 +0100
-Subject: [Buildroot] [PATCH] webkit: fix mmu reverse dependency moving it to
-	%_ARCH_SUPPORTS
-Message-ID: <1394019289-21897-1-git-send-email-fabio.porcedda@gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 5 Mar 2014 12:19:37 +0000
+Subject: [Buildroot] [PATCH] host-pkgconf: use --static option for static
+	builds
+Message-ID: <1394021977-60055-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Because mmu dependency was not propagated move it to
-BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS to automatically propagate it.
-It can ben moved to BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS because like
-target architecture dependencies it doesn't modify the comment string.
+Detect when BR2_PREFER_STATIC_LIBS is selected and modify the host
+pkg-config wrapper to append the --static option in that case.
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Fixes:
+   http://autobuild.buildroot.net/results/161/161446dde7e8e774773eb2b34fd555f5ac22dd02/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/webkit/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/pkgconf/pkg-config.in |    2 +-
+ package/pkgconf/pkgconf.mk    |   14 ++++++++++++++
+ 2 files changed, 15 insertions(+), 1 deletions(-)
 
-diff --git a/package/webkit/Config.in b/package/webkit/Config.in
-index 2b0addc..5ba2eb3 100644
---- a/package/webkit/Config.in
-+++ b/package/webkit/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
- 		!(BR2_arm7tdmi || BR2_arm720t || BR2_arm920t || BR2_arm922t || BR2_fa526)
- 	default y if BR2_i386 || BR2_mips || BR2_mipsel || \
- 		BR2_sh || BR2_sparc || BR2_x86_64
-+	depends on BR2_USE_MMU # libgail -> pango -> libglib2
+diff --git a/package/pkgconf/pkg-config.in b/package/pkgconf/pkg-config.in
+index 25a536b..4dec487 100644
+--- a/package/pkgconf/pkg-config.in
++++ b/package/pkgconf/pkg-config.in
+@@ -1,2 +1,2 @@
+ #!/bin/sh
+-PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:- at PKG_CONFIG_LIBDIR@} PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:- at STAGING_DIR@} $(dirname $0)/pkgconf $@
++PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:- at PKG_CONFIG_LIBDIR@} PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:- at STAGING_DIR@} $(dirname $0)/pkgconf @STATIC@ $@
+diff --git a/package/pkgconf/pkgconf.mk b/package/pkgconf/pkgconf.mk
+index f3f6526..9641371 100644
+--- a/package/pkgconf/pkgconf.mk
++++ b/package/pkgconf/pkgconf.mk
+@@ -24,8 +24,22 @@ define HOST_PKGCONF_INSTALL_WRAPPER
+ 		$(HOST_DIR)/usr/bin/pkg-config
+ endef
  
- # disabled on powerpc due to bug https://bugs.webkit.org/show_bug.cgi?id=113638
++define HOST_PKGCONF_STATIC
++	$(SED) 's, at STATIC@,--static,' $(HOST_DIR)/usr/bin/pkg-config
++endef
++
++define HOST_PKGCONF_SHARED
++	$(SED) 's, at STATIC@,,' $(HOST_DIR)/usr/bin/pkg-config
++endef
++
+ PKGCONF_POST_INSTALL_TARGET_HOOKS += PKGCONF_LINK_PKGCONFIG
+ HOST_PKGCONF_POST_INSTALL_HOOKS += HOST_PKGCONF_INSTALL_WRAPPER
  
-@@ -13,7 +14,6 @@ config BR2_PACKAGE_WEBKIT
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR # enchant -> libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # enchant -> libglib2
--	depends on BR2_USE_MMU # libgail -> pango -> libglib2
- 	depends on BR2_PACKAGE_LIBGTK2
- 	depends on BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
- 	depends on !BR2_BINFMT_FLAT # icu
++ifeq ($(BR2_PREFER_STATIC_LIB),y)
++	HOST_PKGCONF_POST_INSTALL_HOOKS += HOST_PKGCONF_STATIC
++else
++	HOST_PKGCONF_POST_INSTALL_HOOKS += HOST_PKGCONF_SHARED
++endif
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
-1.9.0
+1.7.1
