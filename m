@@ -1,43 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Mar 2014 22:51:02 +0100
-Subject: [Buildroot] [git commit] linux: remove dirs dependency
-Message-ID: <20140306215147.27C129BDD6@busybox.osuosl.org>
+Date: Thu, 6 Mar 2014 22:50:42 +0100
+Subject: [Buildroot] [git commit] webkit: fix mmu reverse dependency moving
+	it to %_ARCH_SUPPORTS
+Message-ID: <20140306215147.106AD9BDD4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=eca29bdf5fa16656d68f25160fad646832dc1d13
+commit: http://git.buildroot.net/buildroot/commit/?id=b08cddec48d27105b8413ed2c89393658d01f642
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The "dirs" dependency is redundant because now the "generic-package"
-infrastructure add automatically the "dirs" dependency so just remove
-the redundant references.
+Because mmu dependency was not propagated move it to
+BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS to automatically propagate it.
+It can ben moved to BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS because like
+target architecture dependencies it doesn't modify the comment string.
 
 Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/linux.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/webkit/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 3d52e69..e270705 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -302,12 +302,12 @@ include $(sort $(wildcard linux/linux-ext-*.mk))
- $(eval $(generic-package))
+diff --git a/package/webkit/Config.in b/package/webkit/Config.in
+index 2b0addc..5ba2eb3 100644
+--- a/package/webkit/Config.in
++++ b/package/webkit/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
+ 		!(BR2_arm7tdmi || BR2_arm720t || BR2_arm920t || BR2_arm922t || BR2_fa526)
+ 	default y if BR2_i386 || BR2_mips || BR2_mipsel || \
+ 		BR2_sh || BR2_sparc || BR2_x86_64
++	depends on BR2_USE_MMU # libgail -> pango -> libglib2
  
- ifeq ($(BR2_LINUX_KERNEL),y)
--linux-menuconfig linux-xconfig linux-gconfig linux-nconfig linux26-menuconfig linux26-xconfig linux26-gconfig linux26-nconfig: dirs linux-configure
-+linux-menuconfig linux-xconfig linux-gconfig linux-nconfig linux26-menuconfig linux26-xconfig linux26-gconfig linux26-nconfig: linux-configure
- 	$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) \
- 		$(subst linux-,,$(subst linux26-,,$@))
- 	rm -f $(LINUX_DIR)/.stamp_{built,target_installed,images_installed}
+ # disabled on powerpc due to bug https://bugs.webkit.org/show_bug.cgi?id=113638
  
--linux-savedefconfig linux26-savedefconfig: dirs linux-configure
-+linux-savedefconfig linux26-savedefconfig: linux-configure
- 	$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) \
- 		$(subst linux-,,$(subst linux26-,,$@))
- 
+@@ -13,7 +14,6 @@ config BR2_PACKAGE_WEBKIT
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR # enchant -> libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # enchant -> libglib2
+-	depends on BR2_USE_MMU # libgail -> pango -> libglib2
+ 	depends on BR2_PACKAGE_LIBGTK2
+ 	depends on BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
+ 	depends on !BR2_BINFMT_FLAT # icu
