@@ -1,46 +1,87 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Mar 2014 22:50:42 +0100
-Subject: [Buildroot] [git commit] webkit: fix mmu reverse dependency moving
-	it to %_ARCH_SUPPORTS
-Message-ID: <20140306215147.106AD9BDD4@busybox.osuosl.org>
+Date: Thu, 6 Mar 2014 22:50:48 +0100
+Subject: [Buildroot] [git commit] Makefile: remove BASE_TARGETS variable
+Message-ID: <20140306215147.19DCA9BD3D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b08cddec48d27105b8413ed2c89393658d01f642
+commit: http://git.buildroot.net/buildroot/commit/?id=cf53e15d09056cc9b72fc0d92b2a22e0e26ba989
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Because mmu dependency was not propagated move it to
-BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS to automatically propagate it.
-It can ben moved to BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS because like
-target architecture dependencies it doesn't modify the comment string.
+Because now the toolchain dependency is automatically added by the
+package infrastructure the BASE_TARGETS variable is useless so just
+remove it.
 
 Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/webkit/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ Makefile                            |   10 ++++------
+ docs/manual/how-buildroot-works.txt |    9 ++++-----
+ 2 files changed, 8 insertions(+), 11 deletions(-)
 
-diff --git a/package/webkit/Config.in b/package/webkit/Config.in
-index 2b0addc..5ba2eb3 100644
---- a/package/webkit/Config.in
-+++ b/package/webkit/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
- 		!(BR2_arm7tdmi || BR2_arm720t || BR2_arm920t || BR2_arm922t || BR2_fa526)
- 	default y if BR2_i386 || BR2_mips || BR2_mipsel || \
- 		BR2_sh || BR2_sparc || BR2_x86_64
-+	depends on BR2_USE_MMU # libgail -> pango -> libglib2
+diff --git a/Makefile b/Makefile
+index ae868da..2b13917 100644
+--- a/Makefile
++++ b/Makefile
+@@ -301,9 +301,7 @@ GNU_HOST_NAME:=$(shell support/gnuconfig/config.guess)
+ #
+ ################################################################################
  
- # disabled on powerpc due to bug https://bugs.webkit.org/show_bug.cgi?id=113638
+-BASE_TARGETS = toolchain
+-
+-TARGETS:=
++TARGETS:= toolchain
  
-@@ -13,7 +14,6 @@ config BR2_PACKAGE_WEBKIT
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR # enchant -> libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # enchant -> libglib2
--	depends on BR2_USE_MMU # libgail -> pango -> libglib2
- 	depends on BR2_PACKAGE_LIBGTK2
- 	depends on BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
- 	depends on !BR2_BINFMT_FLAT # icu
+ # silent mode requested?
+ QUIET:=$(if $(findstring s,$(MAKEFLAGS)),-q)
+@@ -412,7 +410,7 @@ endif
+ 
+ include fs/common.mk
+ 
+-TARGETS_SOURCE:=$(patsubst %,%-source,$(TARGETS) $(BASE_TARGETS))
++TARGETS_SOURCE:=$(patsubst %,%-source,$(TARGETS))
+ TARGETS_DIRCLEAN:=$(patsubst %,%-dirclean,$(TARGETS))
+ 
+ # host-* dependencies have to be handled specially, as those aren't
+@@ -434,7 +432,7 @@ HOST_DEPS = $(sort $(foreach dep,\
+ HOST_SOURCE += $(addsuffix -source,$(sort $(TARGETS_HOST_DEPS) $(HOST_DEPS)))
+ 
+ TARGETS_LEGAL_INFO:=$(patsubst %,%-legal-info,\
+-		$(TARGETS) $(BASE_TARGETS) $(TARGETS_HOST_DEPS) $(HOST_DEPS))))
++		$(TARGETS) $(TARGETS_HOST_DEPS) $(HOST_DEPS))))
+ 
+ dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
+ 	$(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR)
+@@ -453,7 +451,7 @@ world: target-post-image
+ .PHONY: all world toolchain dirs clean distclean source outputmakefile \
+ 	legal-info legal-info-prepare legal-info-clean printvars \
+ 	target-finalize target-post-image \
+-	$(BASE_TARGETS) $(TARGETS) $(TARGETS_ROOTFS) \
++	$(TARGETS) $(TARGETS_ROOTFS) \
+ 	$(TARGETS_DIRCLEAN) $(TARGETS_SOURCE) $(TARGETS_LEGAL_INFO) \
+ 	$(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
+ 	$(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR)
+diff --git a/docs/manual/how-buildroot-works.txt b/docs/manual/how-buildroot-works.txt
+index 68ddd13..a96e45b 100644
+--- a/docs/manual/how-buildroot-works.txt
++++ b/docs/manual/how-buildroot-works.txt
+@@ -56,11 +56,10 @@ configuration is done):
+   +stamps+, etc. in the output directory (+output/+ by default,
+   another value can be specified using +O=+)
+ 
+-* Generate all the targets listed in the +BASE_TARGETS+ variable. When
+-  an internal toolchain is used, this means generating the
+-  cross-compilation toolchain. When an external toolchain is used,
+-  this means checking the features of the external toolchain and
+-  importing it into the Buildroot environment.
++* Generate the toolchain target. When an internal toolchain is used, this
++  means generating the cross-compilation toolchain. When an external
++  toolchain is used, this means checking the features of the external
++  toolchain and importing it into the Buildroot environment.
+ 
+ * Generate all the targets listed in the +TARGETS+ variable. This
+   variable is filled by all the individual components'
