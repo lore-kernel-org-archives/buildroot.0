@@ -1,38 +1,116 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Mar 2014 22:45:59 +0100
-Subject: [Buildroot] [v2,
- 5/7] mesa3d: modularize and bump to version 10.0.3
-In-Reply-To: <4homuaxdgh.ln2@ID-313208.user.individual.net>
-References: <BLU0-SMTP47875A4E6642624302CE843D9AA0@phx.gbl>
- <5318B183.60005@savoirfairelinux.com>
- <4homuaxdgh.ln2@ID-313208.user.individual.net>
-Message-ID: <20140306224559.080a6fb3@skate>
+Date: Thu, 6 Mar 2014 22:50:55 +0100
+Subject: [Buildroot] [git commit] linux: fix coding style
+Message-ID: <20140306215147.1C4B89BDB1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=96d91375a34cf65c96306481a98fc275938f595c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 06 Mar 2014 18:40:21 +0100, Bernd Kuhls wrote:
-> Sebastien Bourdelin
-> <sebastien.bourdelin@savoirfairelinux.com>
-> wrote in news:5318B183.60005 at savoirfairelinux.com: 
-> 
-> > Hi bernd,
-> > Are you still working on that patch ?
-> > Regards,
-> > Sebastien.
-> 
-> Hi,
-> 
-> yes, just yesterday ;)
+As stated in the Buildroot user manual add one space before and after
+a = sign.
 
-So you will resubmit a new version?
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ linux/linux.mk |   42 +++++++++++++++++++++---------------------
+ 1 files changed, 21 insertions(+), 21 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/linux/linux.mk b/linux/linux.mk
+index f948e6c..3d52e69 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -41,7 +41,7 @@ endif
+ LINUX_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
+ 
+ LINUX_INSTALL_IMAGES = YES
+-LINUX_DEPENDENCIES  += host-kmod host-lzop
++LINUX_DEPENDENCIES += host-kmod host-lzop
+ 
+ ifeq ($(BR2_LINUX_KERNEL_UBOOT_IMAGE),y)
+ 	LINUX_DEPENDENCIES += host-uboot-tools
+@@ -80,36 +80,36 @@ endif
+ KERNEL_DTBS = $(addsuffix .dtb,$(KERNEL_DTS_NAME))
+ 
+ ifeq ($(BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM),y)
+-LINUX_IMAGE_NAME=$(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_TARGET_NAME))
++LINUX_IMAGE_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_TARGET_NAME))
+ else
+ ifeq ($(BR2_LINUX_KERNEL_UIMAGE),y)
+-LINUX_IMAGE_NAME=uImage
++LINUX_IMAGE_NAME = uImage
+ else ifeq ($(BR2_LINUX_KERNEL_APPENDED_UIMAGE),y)
+-LINUX_IMAGE_NAME=uImage
++LINUX_IMAGE_NAME = uImage
+ else ifeq ($(BR2_LINUX_KERNEL_BZIMAGE),y)
+-LINUX_IMAGE_NAME=bzImage
++LINUX_IMAGE_NAME = bzImage
+ else ifeq ($(BR2_LINUX_KERNEL_ZIMAGE),y)
+-LINUX_IMAGE_NAME=zImage
++LINUX_IMAGE_NAME = zImage
+ else ifeq ($(BR2_LINUX_KERNEL_APPENDED_ZIMAGE),y)
+-LINUX_IMAGE_NAME=zImage
++LINUX_IMAGE_NAME = zImage
+ else ifeq ($(BR2_LINUX_KERNEL_CUIMAGE),y)
+-LINUX_IMAGE_NAME=cuImage.$(KERNEL_DTS_NAME)
++LINUX_IMAGE_NAME = cuImage.$(KERNEL_DTS_NAME)
+ else ifeq ($(BR2_LINUX_KERNEL_SIMPLEIMAGE),y)
+-LINUX_IMAGE_NAME=simpleImage.$(KERNEL_DTS_NAME)
++LINUX_IMAGE_NAME = simpleImage.$(KERNEL_DTS_NAME)
+ else ifeq ($(BR2_LINUX_KERNEL_LINUX_BIN),y)
+-LINUX_IMAGE_NAME=linux.bin
++LINUX_IMAGE_NAME = linux.bin
+ else ifeq ($(BR2_LINUX_KERNEL_VMLINUX_BIN),y)
+-LINUX_IMAGE_NAME=vmlinux.bin
++LINUX_IMAGE_NAME = vmlinux.bin
+ else ifeq ($(BR2_LINUX_KERNEL_VMLINUX),y)
+-LINUX_IMAGE_NAME=vmlinux
++LINUX_IMAGE_NAME = vmlinux
+ else ifeq ($(BR2_LINUX_KERNEL_VMLINUZ),y)
+-LINUX_IMAGE_NAME=vmlinuz
++LINUX_IMAGE_NAME = vmlinuz
+ endif
+ endif
+ 
+ LINUX_KERNEL_UIMAGE_LOADADDR=$(call qstrip,$(BR2_LINUX_KERNEL_UIMAGE_LOADADDR))
+ ifneq ($(LINUX_KERNEL_UIMAGE_LOADADDR),)
+-LINUX_MAKE_FLAGS+=LOADADDR="$(LINUX_KERNEL_UIMAGE_LOADADDR)"
++LINUX_MAKE_FLAGS += LOADADDR="$(LINUX_KERNEL_UIMAGE_LOADADDR)"
+ endif
+ 
+ # Compute the arch path, since i386 and x86_64 are in arch/x86 and not
+@@ -117,22 +117,22 @@ endif
+ # for bzImage, arch/i386 and arch/x86_64 do not exist when copying the
+ # defconfig file.
+ ifeq ($(KERNEL_ARCH),i386)
+-KERNEL_ARCH_PATH=$(LINUX_DIR)/arch/x86
++KERNEL_ARCH_PATH = $(LINUX_DIR)/arch/x86
+ else ifeq ($(KERNEL_ARCH),x86_64)
+-KERNEL_ARCH_PATH=$(LINUX_DIR)/arch/x86
++KERNEL_ARCH_PATH = $(LINUX_DIR)/arch/x86
+ else
+-KERNEL_ARCH_PATH=$(LINUX_DIR)/arch/$(KERNEL_ARCH)
++KERNEL_ARCH_PATH = $(LINUX_DIR)/arch/$(KERNEL_ARCH)
+ endif
+ 
+ ifeq ($(BR2_LINUX_KERNEL_VMLINUX),y)
+-LINUX_IMAGE_PATH=$(LINUX_DIR)/$(LINUX_IMAGE_NAME)
++LINUX_IMAGE_PATH = $(LINUX_DIR)/$(LINUX_IMAGE_NAME)
+ else ifeq ($(BR2_LINUX_KERNEL_VMLINUZ),y)
+-LINUX_IMAGE_PATH=$(LINUX_DIR)/$(LINUX_IMAGE_NAME)
++LINUX_IMAGE_PATH = $(LINUX_DIR)/$(LINUX_IMAGE_NAME)
+ else
+ ifeq ($(KERNEL_ARCH),avr32)
+-LINUX_IMAGE_PATH=$(KERNEL_ARCH_PATH)/boot/images/$(LINUX_IMAGE_NAME)
++LINUX_IMAGE_PATH = $(KERNEL_ARCH_PATH)/boot/images/$(LINUX_IMAGE_NAME)
+ else
+-LINUX_IMAGE_PATH=$(KERNEL_ARCH_PATH)/boot/$(LINUX_IMAGE_NAME)
++LINUX_IMAGE_PATH = $(KERNEL_ARCH_PATH)/boot/$(LINUX_IMAGE_NAME)
+ endif
+ endif # BR2_LINUX_KERNEL_VMLINUX
+ 
