@@ -1,24 +1,93 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 06 Mar 2014 18:08:28 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-03-05
-In-Reply-To: <20140306073010.F1C12100E3F@stock.ovh.net>
-References: <20140306073010.F1C12100E3F@stock.ovh.net>
-Message-ID: <5318AB8C.9050802@mind.be>
+Date: Thu, 06 Mar 2014 18:26:23 +0100
+Subject: [Buildroot] [PATCH 1/2] python-libconfig: new package
+In-Reply-To: <E1CF8EFE2042404B87DE2B6D662128020ED591A9@KUUMEX10.barco.com>
+References: <E1CF8EFE2042404B87DE2B6D662128020ED58B96@KUUMEX10.barco.com>
+ <53175A9E.3090001@mind.be>
+ <E1CF8EFE2042404B87DE2B6D662128020ED591A9@KUUMEX10.barco.com>
+Message-ID: <5318AFBF.4000006@mind.be>
 List-Id: <buildroot.busybox.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/03/14 08:30, Thomas Petazzoni wrote:
->       i686 |                        [7m>>> | TIM | http://autobuild.buildroot.net/results/9d49f31c9dc16d2a2a4aafa535fbb5ea7e24a66f/
+On 06/03/14 10:05, Derycke, Johan wrote:
+> Hi,
+> 
+>> -----Original Message-----
+>> From: Arnout Vandecappelle [mailto:arnout at mind.be]
+>> Sent: woensdag 5 maart 2014 18:11
+>> To: Derycke, Johan; buildroot at busybox.net
+>> Subject: Re: [Buildroot] [PATCH 1/2] python-libconfig: new package
+>>
+>> On 04/03/14 09:32, Derycke, Johan wrote:
+>>> Python bindings to the C++ library libconfig
+>>> https://github.com/cnangel/python-libconfig
+>>>
+>>> Signed-off-by: Johan Derycke <johan.derycke@barco.com>
+>>> ---
+>>>  package/python-libconfig/Config.in           |    9 +++++++++
+>>>  package/python-libconfig/python-libconfig.mk |   21
+>> +++++++++++++++++++++
+>>>  2 files changed, 30 insertions(+)
+>>>  create mode 100644 package/python-libconfig/Config.in
+>>>  create mode 100644 package/python-libconfig/python-libconfig.mk
+>>>
+>>> diff --git a/package/python-libconfig/Config.in
+>>> b/package/python-libconfig/Config.in
+>>> new file mode 100644
+>>> index 0000000..7e4f317
+>>> --- /dev/null
+>>> +++ b/package/python-libconfig/Config.in
+>>> @@ -0,0 +1,9 @@
+>>> +config BR2_PACKAGE_PYTHON_LIBCONFIG
+>>> +       bool "python-libconfig"
+>>> +       depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+>>> +  select BR2_PACKAGE_BOOST_PYTHON
+>>
+>>  You should also select BR2_PACKAGE_BOOST.
+>>
+>>  You should also depend on boost's toolchain dependencies:
+>> BR2_INSTALL_LIBSTDCPP, BR2_LARGEFILE, BR2_TOOLCHAIN_HAS_THREADS,
+>> and add the corresponding comment.
+> 
+> Can I use:
+> 
+> comment "python libconfig needs boost"
+>         depends on !BR2_PACKAGE_BOOST
+>         depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+> 
+> to avoid the boost "bloatware" being installed behind the back?
 
- To be able to do _something_ useful in a case like this, it would be
-nice if output/build/build-time.log was also saved.
+ No, that's OK. The bloat is only in the source, not in the libary (I
+haven't built it yet but I expect it will be in the order of 100K).
 
- My guess is that the server was just overloaded during that build, so
-maybe it wouldn't help that much, but at least it's something.
+ I mainly made the remark to trigger you to consider if it is really
+needed. But I think I get it now: boost.Python is an alternative for
+something like swig or sip. I first thought it was using some of boost's
+standard C++ library alternatives.
+
 
  Regards,
  Arnout
+
+> 
+>>
+>>  It's a crying shame that the python wrapper for something trivial like libconfig
+>> requires bloatware like boost :-) but that can't be helped of course.
+>>
+>>> +       select BR2_PACKAGE_LIBCONFIG
+>>> +       help
+>>> +           Python bindings to the C++ library libconfig
+>>
+>>  Perhaps add a bit of the help text of libconfig.
+>>
+>>  Regards,
+>>  Arnout
+
+[snip]
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
