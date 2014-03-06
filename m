@@ -1,76 +1,128 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 6 Mar 2014 00:27:49 +0100
-Subject: [Buildroot] [PATCH 03/11] opencv: add jasper support
-In-Reply-To: <CAHXCMMKngVUrq+fY38wZVpVtPttSgu1mxtLQKF5K=FNZK7EpFg@mail.gmail.com>
-References: <1392588004-13317-1-git-send-email-s.martin49@gmail.com>
- <1392588004-13317-4-git-send-email-s.martin49@gmail.com>
- <20140305225913.GD9644@free.fr>
- <CAHXCMMKngVUrq+fY38wZVpVtPttSgu1mxtLQKF5K=FNZK7EpFg@mail.gmail.com>
-Message-ID: <20140305232749.GF9644@free.fr>
+From: Michael D <me@md-5.net>
+Date: Thu, 06 Mar 2014 17:44:42 +1100
+Subject: [Buildroot] Addition of packages: libvirt & qemu (target)
+In-Reply-To: <5316C8CD.7010806@mind.be>
+References: <53144FFF.10702@md-5.net> <5316C8CD.7010806@mind.be>
+Message-ID: <5318195A.5020104@md-5.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Samuel, All,
+> Just out of curiosity, what is your use case for qemu on the target?
+> IIRC for Yann is was just a let's-see-if-it-can-be-done hack, that's why
+> he never pushed it anymore. I can imagine borderline buildroot uses which
+> have lxr or docker on the target, but full-fledged qemu?
 
-On 2014-03-06 00:08 +0100, Samuel Martin spake thusly:
-> On Wed, Mar 5, 2014 at 11:59 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > Samuel, All,
-> >
-> > On 2014-02-16 22:59 +0100, Samuel Martin spake thusly:
-> >> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> >> ---
-> >>  package/opencv/Config.in | 6 ++++++
-> >>  package/opencv/opencv.mk | 8 +++++++-
-> >>  2 files changed, 13 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-> >> index 2acbe19..73f03e1 100644
-> >> --- a/package/opencv/Config.in
-> >> +++ b/package/opencv/Config.in
-> >> @@ -158,6 +158,12 @@ config BR2_PACKAGE_OPENCV_WITH_GTK
-> >>       depends on BR2_INSTALL_LIBSTDCPP
-> >>       select BR2_PACKAGE_LIBGTK2
-> >>
-> >> +config BR2_PACKAGE_OPENCV_WITH_JASPER
-> >> +     bool "jasper (jpeg 2000) support"
-> >> +     select BR2_PACKAGE_JASPER
-> >> +     help
-> >> +       Use shared libjasper from the target system.
-> >
-> > What do you mean by "from the target system?"
-> 
-> OpenCV comes with many libs in its 3rdparty directory (ffmpeg, jinja2,
-> libjasper, libjpeg, libpng, libtiff, libwebp, openexr, tbb, zlib), and
-> can build these, or use those provided by the system or disabling
-> their support.
-> 
-> When I integrated opencv in BR for the first, it was requested to me
-> to only use the libs provided by the system. I stick to this ;-)
 
-Ah, OK I understand. But then, the help text is not clear enough.
+Couple QEMU with an x86_64 host and KVM, suddenly buildroot becomes a 
+minimal hypervisor in a box. Now lets imagine we insert a buildroot USB 
+/ CD into a server.
+The server loads the entire system into 40mb of its memory, grabs an IP 
+and configuration parameters via dhcp, a small embedded binary reads 
+these settings, looks at what VMs are stored on the server and starts 
+running them. You can effectively make buildroot a quick way to spin up 
+ultra efficient and slim hypervisors.
 
-I would expect to read something like:
+ > You can typically also pass in LIBS="-lm" to configure.
 
-    config BR2_PACKAGE_OPENCV_WITH_JASPER
-        bool "jpeg2000 support"
-        select BR2_PACKAGE_JASPER
-        help
-          Use the package 'libjasper' to provide support for jpeg2000.
+I'll try rebuilding my toolchain with ulibc and passing -lm to 
+configure. Hopefully that turns out well - is there a quick way to do 
+this with an autotools .mk?
 
-          The copy of libjasper bundled in openCV is not used.
+ > - more autobuilder instances;
+Let me know what you need for that / what it entails.
 
-But do we even want to state this in the help text?
+Thanks
+Michael
 
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+On 05/03/14 17:48, Arnout Vandecappelle wrote:
+> On 03/03/14 10:48, Michael D wrote:
+>> Hi guys,
+>>
+>> First up, thanks for buildroot, its a really cool tool, and I've enjoyed
+>> using it thus far. After some discussion on IRC with y_morin, I'd like to
+>> put forward that the libvirt package is added, and that qemu is adapted
+>> to support being installed on the target as well.
+>   Just out of curiosity, what is your use case for qemu on the target?
+> IIRC for Yann is was just a let's-see-if-it-can-be-done hack, that's why
+> he never pushed it anymore. I can imagine borderline buildroot uses which
+> have lxr or docker on the target, but full-fledged qemu?
+>
+>
+>> libvirt is a fairly
+>> standard autotools package, and shouldn't require much work, although I
+>> did notice ./configure checked for some host qemu binaries.
+>>
+>> You can see Yann's work on libvirt and target-qemu here:
+>> https://gitorious.org/buildroot/buildroot/source/e09cf6e8d412cfd6163358fc7f58c83f44cc0a38:package/libvirt
+>>
+>> https://gitorious.org/buildroot/buildroot/source/14ac053363188981cf7fb78b589a9e27fb464483:package/qemu
+>>
+>>
+>> and my inexperienced, hackjob work over here, updates the packages to
+>> their latest versions and removes unneeded depends:
+>> https://github.com/md-5/Multiplicity/tree/master/package
+>>
+>> libvirt requires the following depends to work:
+>>
+>> host-pkgconf lvm2 libnl libxml2 yajl
+>>
+>> In order for the configure script to detect yajl properly, it needs a
+>> (e)glibc toolchain. This is due to yajl requiring -lm, which is not
+>> linked into the test binary. A better solution than requiring (e)glibc
+>> would be to patch libvirt's ./configure to link in -lm for the yajl test.
+>   You can typically also pass in LIBS="-lm" to configure.
+>
+>> Yann's work on libvirt also depends on
+>>
+>> libgcrypt and gnutls
+>>
+>> which I assume add extra features. Ideally libvirt's depend section
+>> should be updated if these (and any other feature enhancing) packages are
+>> selected.
+>>
+>> Building Qemu for the target on the other hand is quite a bit more
+>> complex due to the sheer number of configuration options available. In
+>> particular it depends on a x86 based toolchain with threads, and
+>>
+>> host-pkgconf host-python libglib2 pixman
+>>
+>> I'm reasonably sure Qemu can compile and run on other arches, however
+>> Yann has not included support for this. Ideally the final package in
+>> buildroot would only require these 4 libraries to build, additional
+>> depends and features should be added with their necessary options and
+>> installed if desired (util-linux, some sound libraries, and a lot of
+>> graphics libraries for jpg/png manipulation).
+>>
+>> Anyway, enough of me talking, it would be great to see these two packages
+>> become properly integrated into buildroot, and I am hoping someone can
+>> manage it.
+>>
+>> If it helps sweeten the deal, I'll be more than happy to donate some beer
+>> money to the successful contributors, or donate to the buildroot project.
+>> I'll also be more than happy to make sure these packages stay updated and
+>> working.
+>   We don't really have a way for accepting donations, but what we could
+> use is:
+>
+> - more autobuilder instances;
+>
+> - sponsoring for the buildroot developer meeting.
+>
+>
+>   Regards,
+>   Arnout
+>
+>
+>> Thanks
+>> Michael Dardis
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>
+>>
+>
