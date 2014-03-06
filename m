@@ -1,116 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Mar 2014 22:50:55 +0100
-Subject: [Buildroot] [git commit] linux: fix coding style
-Message-ID: <20140306215147.1C4B89BDB1@busybox.osuosl.org>
+Date: Thu, 6 Mar 2014 22:51:02 +0100
+Subject: [Buildroot] [git commit] linux: remove dirs dependency
+Message-ID: <20140306215147.27C129BDD6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=96d91375a34cf65c96306481a98fc275938f595c
+commit: http://git.buildroot.net/buildroot/commit/?id=eca29bdf5fa16656d68f25160fad646832dc1d13
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As stated in the Buildroot user manual add one space before and after
-a = sign.
+The "dirs" dependency is redundant because now the "generic-package"
+infrastructure add automatically the "dirs" dependency so just remove
+the redundant references.
 
 Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/linux.mk |   42 +++++++++++++++++++++---------------------
- 1 files changed, 21 insertions(+), 21 deletions(-)
+ linux/linux.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/linux/linux.mk b/linux/linux.mk
-index f948e6c..3d52e69 100644
+index 3d52e69..e270705 100644
 --- a/linux/linux.mk
 +++ b/linux/linux.mk
-@@ -41,7 +41,7 @@ endif
- LINUX_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
+@@ -302,12 +302,12 @@ include $(sort $(wildcard linux/linux-ext-*.mk))
+ $(eval $(generic-package))
  
- LINUX_INSTALL_IMAGES = YES
--LINUX_DEPENDENCIES  += host-kmod host-lzop
-+LINUX_DEPENDENCIES += host-kmod host-lzop
+ ifeq ($(BR2_LINUX_KERNEL),y)
+-linux-menuconfig linux-xconfig linux-gconfig linux-nconfig linux26-menuconfig linux26-xconfig linux26-gconfig linux26-nconfig: dirs linux-configure
++linux-menuconfig linux-xconfig linux-gconfig linux-nconfig linux26-menuconfig linux26-xconfig linux26-gconfig linux26-nconfig: linux-configure
+ 	$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) \
+ 		$(subst linux-,,$(subst linux26-,,$@))
+ 	rm -f $(LINUX_DIR)/.stamp_{built,target_installed,images_installed}
  
- ifeq ($(BR2_LINUX_KERNEL_UBOOT_IMAGE),y)
- 	LINUX_DEPENDENCIES += host-uboot-tools
-@@ -80,36 +80,36 @@ endif
- KERNEL_DTBS = $(addsuffix .dtb,$(KERNEL_DTS_NAME))
- 
- ifeq ($(BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM),y)
--LINUX_IMAGE_NAME=$(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_TARGET_NAME))
-+LINUX_IMAGE_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_TARGET_NAME))
- else
- ifeq ($(BR2_LINUX_KERNEL_UIMAGE),y)
--LINUX_IMAGE_NAME=uImage
-+LINUX_IMAGE_NAME = uImage
- else ifeq ($(BR2_LINUX_KERNEL_APPENDED_UIMAGE),y)
--LINUX_IMAGE_NAME=uImage
-+LINUX_IMAGE_NAME = uImage
- else ifeq ($(BR2_LINUX_KERNEL_BZIMAGE),y)
--LINUX_IMAGE_NAME=bzImage
-+LINUX_IMAGE_NAME = bzImage
- else ifeq ($(BR2_LINUX_KERNEL_ZIMAGE),y)
--LINUX_IMAGE_NAME=zImage
-+LINUX_IMAGE_NAME = zImage
- else ifeq ($(BR2_LINUX_KERNEL_APPENDED_ZIMAGE),y)
--LINUX_IMAGE_NAME=zImage
-+LINUX_IMAGE_NAME = zImage
- else ifeq ($(BR2_LINUX_KERNEL_CUIMAGE),y)
--LINUX_IMAGE_NAME=cuImage.$(KERNEL_DTS_NAME)
-+LINUX_IMAGE_NAME = cuImage.$(KERNEL_DTS_NAME)
- else ifeq ($(BR2_LINUX_KERNEL_SIMPLEIMAGE),y)
--LINUX_IMAGE_NAME=simpleImage.$(KERNEL_DTS_NAME)
-+LINUX_IMAGE_NAME = simpleImage.$(KERNEL_DTS_NAME)
- else ifeq ($(BR2_LINUX_KERNEL_LINUX_BIN),y)
--LINUX_IMAGE_NAME=linux.bin
-+LINUX_IMAGE_NAME = linux.bin
- else ifeq ($(BR2_LINUX_KERNEL_VMLINUX_BIN),y)
--LINUX_IMAGE_NAME=vmlinux.bin
-+LINUX_IMAGE_NAME = vmlinux.bin
- else ifeq ($(BR2_LINUX_KERNEL_VMLINUX),y)
--LINUX_IMAGE_NAME=vmlinux
-+LINUX_IMAGE_NAME = vmlinux
- else ifeq ($(BR2_LINUX_KERNEL_VMLINUZ),y)
--LINUX_IMAGE_NAME=vmlinuz
-+LINUX_IMAGE_NAME = vmlinuz
- endif
- endif
- 
- LINUX_KERNEL_UIMAGE_LOADADDR=$(call qstrip,$(BR2_LINUX_KERNEL_UIMAGE_LOADADDR))
- ifneq ($(LINUX_KERNEL_UIMAGE_LOADADDR),)
--LINUX_MAKE_FLAGS+=LOADADDR="$(LINUX_KERNEL_UIMAGE_LOADADDR)"
-+LINUX_MAKE_FLAGS += LOADADDR="$(LINUX_KERNEL_UIMAGE_LOADADDR)"
- endif
- 
- # Compute the arch path, since i386 and x86_64 are in arch/x86 and not
-@@ -117,22 +117,22 @@ endif
- # for bzImage, arch/i386 and arch/x86_64 do not exist when copying the
- # defconfig file.
- ifeq ($(KERNEL_ARCH),i386)
--KERNEL_ARCH_PATH=$(LINUX_DIR)/arch/x86
-+KERNEL_ARCH_PATH = $(LINUX_DIR)/arch/x86
- else ifeq ($(KERNEL_ARCH),x86_64)
--KERNEL_ARCH_PATH=$(LINUX_DIR)/arch/x86
-+KERNEL_ARCH_PATH = $(LINUX_DIR)/arch/x86
- else
--KERNEL_ARCH_PATH=$(LINUX_DIR)/arch/$(KERNEL_ARCH)
-+KERNEL_ARCH_PATH = $(LINUX_DIR)/arch/$(KERNEL_ARCH)
- endif
- 
- ifeq ($(BR2_LINUX_KERNEL_VMLINUX),y)
--LINUX_IMAGE_PATH=$(LINUX_DIR)/$(LINUX_IMAGE_NAME)
-+LINUX_IMAGE_PATH = $(LINUX_DIR)/$(LINUX_IMAGE_NAME)
- else ifeq ($(BR2_LINUX_KERNEL_VMLINUZ),y)
--LINUX_IMAGE_PATH=$(LINUX_DIR)/$(LINUX_IMAGE_NAME)
-+LINUX_IMAGE_PATH = $(LINUX_DIR)/$(LINUX_IMAGE_NAME)
- else
- ifeq ($(KERNEL_ARCH),avr32)
--LINUX_IMAGE_PATH=$(KERNEL_ARCH_PATH)/boot/images/$(LINUX_IMAGE_NAME)
-+LINUX_IMAGE_PATH = $(KERNEL_ARCH_PATH)/boot/images/$(LINUX_IMAGE_NAME)
- else
--LINUX_IMAGE_PATH=$(KERNEL_ARCH_PATH)/boot/$(LINUX_IMAGE_NAME)
-+LINUX_IMAGE_PATH = $(KERNEL_ARCH_PATH)/boot/$(LINUX_IMAGE_NAME)
- endif
- endif # BR2_LINUX_KERNEL_VMLINUX
+-linux-savedefconfig linux26-savedefconfig: dirs linux-configure
++linux-savedefconfig linux26-savedefconfig: linux-configure
+ 	$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) \
+ 		$(subst linux-,,$(subst linux26-,,$@))
  
