@@ -1,71 +1,78 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 6 Mar 2014 18:37:03 +0100
-Subject: [Buildroot] [PATCH 11/12] manual: add documentation about
- packages' hashes
-In-Reply-To: <CAAXf6LUexBaQVBvqZ5J5k895fqkv5qoX01pVeCuoEOpyO8O8Lg@mail.gmail.com>
-References: <cover.1394055621.git.yann.morin.1998@free.fr>
- <9cab6ed51fae5b7d5baa2a514aea4c7c5205fb30.1394055621.git.yann.morin.1998@free.fr>
- <CAAXf6LUexBaQVBvqZ5J5k895fqkv5qoX01pVeCuoEOpyO8O8Lg@mail.gmail.com>
-Message-ID: <20140306173703.GD3625@free.fr>
+From: Bernd Kuhls <berndkuhls@hotmail.com>
+Date: Thu, 06 Mar 2014 18:38:57 +0100
+Subject: [Buildroot] [PATCH 2/2] exim: new package
+References: <1394124890-29254-1-git-send-email-luca@lucaceresoli.net>
+ <1394124890-29254-3-git-send-email-luca@lucaceresoli.net>
+Message-ID: <heomuaxdgh.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hi,
 
-On 2014-03-06 18:14 +0100, Thomas De Schampheleire spake thusly:
-> On Wed, Mar 5, 2014 at 10:47 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-[--SNIP--]
-> > diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-> > index e56e59a..4609a7e 100644
-> > --- a/docs/manual/adding-packages-directory.txt
-> > +++ b/docs/manual/adding-packages-directory.txt
-[--SNIP--]
-> > +* the name of the file, without any directory component
-> > +
-> > +Lines starting with a +#+ sign are considered comments, and ignored. Empty
-> > +lines are ignored.
-> > +
-> > +There can be more than one hash for a single file, each of its own line. In
-> 
-> I think you can say:
-> ..., each on its own line
-> ..., each on a line of its own
-> but not 'each of its own line'
+Luca Ceresoli <luca@lucaceresoli.net> wrote in
+news:1394124890-29254-3-git-send-email-luca at lucaceresoli.net: 
 
-Funny how one reads what one thinks he has written, and not what was
-actually written. Of course, I meant 'on', not 'of'.
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -834,6 +834,7 @@ source "package/dnsmasq/Config.in"
+>  source "package/dropbear/Config.in"
+>  source "package/ebtables/Config.in"
+>  source "package/ethtool/Config.in"
+> +source "package/exim/Config.in"
 
-> > +this case, all hashes must match.
-> > +
-> > +Ideally, the hashes stored in this file should match the hashes published by
-> > +upstream, eg, on their website, in the email announcement... If no such info
-> 
-> 'eg' should be written with dots (e.g. , see
-> http://en.wikipedia.org/wiki/Exempli_gratia#exempli_gratia )
-> e-mail (with dash)
-> 
-> > +is available, then compute them yourself, and state so in a comment line
-> > +above the hashes.
-> 
-> I would write for this last sentence:
-> If upstream does not provide hashes, [...]
+what about creating a new section "Mail applications"?
 
-Furthermore, since there is no hash, it can be plural. I now wrote:
+> --- /dev/null
+> +++ b/package/exim/Local-Makefile
+> @@ -0,0 +1,15 @@
+> +BIN_DIRECTORY=/usr/sbin
+> +CONFIGURE_FILE=/etc/exim/configure
+> +EXIM_USER=ref:exim
+> +EXIM_GROUP=mail
+> +SPOOL_DIRECTORY=/var/spool/exim
+> +ROUTER_ACCEPT=yes
+> +TRANSPORT_LMTP=yes
+> +LOOKUP_DBM=yes
+> +LOOKUP_LSEARCH=yes
+> +PCRE_LIBS=-lpcre
+> +FIXED_NEVER_USERS=root
+> +HEADERS_CHARSET="ISO-8859-1"
+> +HAVE_ICONV=no
+> +SYSLOG_LOG_PID=yes
+> +TMPDIR="/tmp"
 
-    If upstream does not provide any hash, [...]
+Here I use a different approach using sed inside exim.mk:
 
-All applied. Thank you!
+( sed -e 's,^BIN_DIR.*$$,BIN_DIRECTORY=/usr/bin,' \
+      -e 's,^CONF.*$$,CONFIGURE_FILE=/etc/exim.conf,' \
+      -e 's,^# INCLUDE.*$$,INCLUDE=-I$(TARGET_DIR)/usr/include,' \
+      -e 's,^PCRE_CONFIG.*$$,# PCRE_CONFIG=no,' \
+      -e 's,^# PCRE_LIBS.*$$,PCRE_LIBS=-lpcre,' \
+      -e 's,^# HAVE_ICONV.*$$,HAVE_ICONV=yes,' \
+      -e 's,^# AUTH_CRAM_MD5=.*$$,AUTH_CRAM_MD5=yes,' \
+      -e 's,^# AUTH_DOVECOT=.*$$,AUTH_DOVECOT=yes,' \
+      -e 's,^# AUTH_PLAINTEXT=.*$$,AUTH_PLAINTEXT=yes,' \
+      -e 's,^# LOOKUP_PASSWD=.*$$,LOOKUP_PASSWD=yes,' \
+      -e 's,^# WITH_CONTENT_SCAN=.*$$,WITH_CONTENT_SCAN=yes,' \
+      -e 's,^# SUPPORT_TLS=.*$$,SUPPORT_TLS=yes,' \
+      -e 's,^# TLS_LIBS=.*$$,TLS_LIBS=-lssl -lcrypto,' \
+      -e 's,^# PID_FILE_PATH=.*$$,PID_FILE_PATH=/var/run/exim.pid,' \
+      -e 's,^COMPRESS_COMMAND=.*$$,COMPRESS_COMMAND=/bin/gzip,' \
+      -e 's,^ZCAT_COMMAND=.*$$,ZCAT_COMMAND=/bin/zcat,' \
+      -e 's,^EXIM_USER.*$$,EXIM_USER=ref:exim,' \
+      -e 's,^EXIM_MONITOR,#EXIM_MONITOR,' $(@D)/src/EDITME > 
+$(@D)/Local/Makefile \
+        ); \
 
-Regards,
-Yann E. MORIN.
+This should imho be extended to options in Config.in for different mail 
+environments, similar to the Debian packages exim4-daemon-heavy & exim4-
+daemon-light.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+I have to add that buildroot does not create a rootfs here, it delivers 
+binaries for my personal mailserver package which is used in another distro 
+with its own init system, therefore I can not review your init script.
+
+Regards, Bernd
