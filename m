@@ -1,87 +1,74 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 06 Mar 2014 12:13:05 +0100
-Subject: [Buildroot] [PATCH] Disable o32 ABI for MIPS64 architectures
-In-Reply-To: <53184507.7040006@imgtec.com>
-References: <1394039187-24328-1-git-send-email-Vincent.Riera@imgtec.com>
- <5317B2EC.4010201@mind.be> <53184507.7040006@imgtec.com>
-Message-ID: <53185841.9040800@mind.be>
+From: Noam Camus <noamc@ezchip.com>
+Date: Thu, 6 Mar 2014 11:25:10 +0000
+Subject: [Buildroot] [PATCH 1/1] [V4] toolchain: control vendor part in
+	GNU_TARGET_NAME
+Message-ID: <884EA965490E3C4D8E66AEF41E980250096191@ezex10.ezchip.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/03/14 10:51, Vicente Olivert Riera wrote:
-> On 03/05/2014 11:27 PM, Arnout Vandecappelle wrote:
->> On 05/03/14 18:06, Vicente Olivert Riera wrote:
->>> Building o32 ELF files for MIPS64 is an exotic configuration that nobody
->>> should be using. If o32 is required, then is better if it's built for
->>> MIPS 32-bit cores so only 32-bit instructions will be used leading to a
->>> more efficient o32 usage.
->>>
->>> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->>> ---
->>>   arch/Config.in.mips |    1 +
->>>   1 files changed, 1 insertions(+), 0 deletions(-)
->>>
->>> diff --git a/arch/Config.in.mips b/arch/Config.in.mips
->>> index d9c0c02..e2b1e60 100644
->>> --- a/arch/Config.in.mips
->>> +++ b/arch/Config.in.mips
->>> @@ -47,6 +47,7 @@ choice
->>>
->>>   config BR2_MIPS_OABI32
->>>       bool "o32"
->>> +    depends on !BR2_ARCH_IS_64
->>>   config BR2_MIPS_NABI32
->>>       bool "n32"
->>>       depends on BR2_ARCH_IS_64
->>>
->>
->>   Then maybe it's better to make the choice depend on BR2_ARCH_IS_64, and
->> make the OABI32 symbol blind and default y on !BR2_ARCH_IS_64.
-> 
-> OABI32 is already the default on !BR2_ARCH_IS_64. Take a look to this
-> part of the Config.in.mips:
-> 
-> choice
->         prompt "Target ABI"
->         depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
->         default BR2_MIPS_OABI32 if !BR2_ARCH_IS_64
->         default BR2_MIPS_NABI32 if BR2_ARCH_IS_64
+This option allows to customize the "vendor" part of the toolchain tuple, where the toolchain tuple has the form <arch>-<vendor>-<os>-<libc>. Use this option in situations where gcc might make different decisions based on the vendor part of the tuple.
 
- It's not just the default, it's the only valid choice. So indeed, it
-already doesn't make much sense to present the user with the choice if
-there is only one option. However, removing it is currently a bit
-complicated because you need to keep the BR2_MIPS_OABI32 config in the
-choice for BR2_ARCH_IS_64.
+Signed-off-by: Noam Camus <noamc@ezchip.com>
+---
+ package/Makefile.in                     |   17 ++++++++++++++++-
+ toolchain/toolchain-buildroot/Config.in |   16 ++++++++++++++++
+ 2 files changed, 32 insertions(+), 1 deletions(-)
 
- However, with your change, there is no need at all to keep the OABI32
-option in the choice: if 64, it is forced to no, and if !64, it is forced
-to yes.
-
-
- BTW, something I forgot to mention earlier: ideally there should be a
-legacy detection for existing configs with 64 and OABI32. It may be a bit
-difficult to implement, however.
-
- Regards,
- Arnout
-
-
-> 
->>
->>   Regards,
->>   Arnout
->>
-> 
-> 
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+diff --git a/package/Makefile.in b/package/Makefile.in index 454f614..bd9f18c 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -20,8 +20,23 @@ endif
+ MAKE1:=$(HOSTMAKE) -j1
+ MAKE:=$(HOSTMAKE) $(if $(PARALLEL_JOBS),-j$(PARALLEL_JOBS))
+ 
++ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
++TARGET_VENDOR = $(call qstrip,$(BR2_TOOLCHAIN_BUILDROOT_VENDOR))
++else
++TARGET_VENDOR = buildroot
++endif
++
++# Sanity checks
++ifeq ($(TARGET_VENDOR),)
++$(error BR2_TOOLCHAIN_BUILDROOT_VENDOR is not allowed to be empty) 
++endif ifeq ($(TARGET_VENDOR),unknown) $(error 
++BR2_TOOLCHAIN_BUILDROOT_VENDOR cannot be 'unknown'. \
++        It might be confused with the native toolchain) endif
++
+ # Compute GNU_TARGET_NAME
+-GNU_TARGET_NAME=$(ARCH)-buildroot-$(TARGET_OS)-$(LIBC)$(ABI)
++GNU_TARGET_NAME=$(ARCH)-$(TARGET_VENDOR)-$(TARGET_OS)-$(LIBC)$(ABI)
+ 
+ # Blackfin FLAT needs uclinux
+ ifeq ($(BR2_bfin)$(BR2_BINFMT_FLAT),yy)
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 07db50b..3487327 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -70,6 +70,22 @@ config BR2_TOOLCHAIN_BUILDROOT_LIBC
+ 	default "glibc"  if BR2_TOOLCHAIN_BUILDROOT_EGLIBC
+ 	default "glibc"  if BR2_TOOLCHAIN_BUILDROOT_GLIBC
+ 
++config BR2_TOOLCHAIN_BUILDROOT_VENDOR
++	string "custom toolchain vendor name"
++	default "buildroot"
++	help
++	  This option allows to customize the "vendor" part of the
++	  toolchain tuple, where the toolchain tuple has the form
++	  <arch>-<vendor>-<os>-<libc>. The default value, "buildroot",
++	  is fine for most cases, except in very specific situations
++	  where gcc might make different decisions based on the vendor
++	  part of the tuple. The value "unknown" is not allowed, as the
++	  cross-compiling toolchain might then be confused with the
++	  native toolchain when the target and host architecture are
++	  identical.
++
++	  If you're not sure, just leave the default "buildroot" value.
++
+ source "package/uclibc/Config.in"
+ source "package/glibc/Config.in"
+ source "package/binutils/Config.in.host"
+--
+1.7.1
