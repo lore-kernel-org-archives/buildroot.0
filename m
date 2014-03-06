@@ -1,33 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Mar 2014 23:02:13 +0100
-Subject: [Buildroot] [PATCH 1/2] fs/initramfs: fix initramfs support
-In-Reply-To: <1394139335-28476-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1394139335-28476-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140306230213.03554abd@skate>
+Date: Thu, 6 Mar 2014 23:08:50 +0100
+Subject: [Buildroot] [git commit] ljsyscall: move installation path to
+	/usr/share/lua/5x
+Message-ID: <20140306220855.D92399BDB1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=a888535d45f5dc3cbdeb08f5c30876d3139d65d4
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  6 Mar 2014 17:55:34 -0300, Gustavo Zacarias wrote:
-> On commit a24877586a566e052897e50e6a0c2f53cfb029f TARGETS_ROOTFS was
-> introduced, however fs/initramfs/initramfs.mk was never updated, hence a
-> show-targets would be rootfs-initramfs with rootfs-cpio afterwards hence
-> never rebuilding the kernel with a proper cpio archive since TARGETS is
-> always before rootfs-* as stated in the commit description.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  fs/initramfs/initramfs.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Move ljsyscall install destination to /usr/share/lua/$(abiver}, to
+match what the luarocks install would naturally do.  This also
+reflects the value of INSTALL_LMOD in the luajit.pc file.
 
-Both applied, thanks.
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Tested-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ljsyscall/ljsyscall.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/ljsyscall/ljsyscall.mk b/package/ljsyscall/ljsyscall.mk
+index 1f36dc7..cc49890 100644
+--- a/package/ljsyscall/ljsyscall.mk
++++ b/package/ljsyscall/ljsyscall.mk
+@@ -19,7 +19,7 @@ else ifeq ($(LJSYSCALL_ARCH),)
+ LJSYSCALL_ARCH = $(BR2_ARCH)
+ endif
+ 
+-LJSYSCALL_TARGET_DIR = $(TARGET_DIR)/usr/share/luajit-$(LUAJIT_VERSION)
++LJSYSCALL_TARGET_DIR = $(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)
+ 
+ define LJSYSCALL_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -d $(LJSYSCALL_TARGET_DIR)/syscall
