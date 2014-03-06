@@ -1,64 +1,52 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 7 Mar 2014 00:04:10 +0100
-Subject: [Buildroot] [PATCH 09/11] opencv: add python/numpy support
-In-Reply-To: <1392588004-13317-10-git-send-email-s.martin49@gmail.com>
-References: <1392588004-13317-1-git-send-email-s.martin49@gmail.com>
- <1392588004-13317-10-git-send-email-s.martin49@gmail.com>
-Message-ID: <20140306230410.GJ3625@free.fr>
+Date: Fri, 7 Mar 2014 00:17:25 +0100
+Subject: [Buildroot] [PATCH 1/1] [V4] toolchain: control vendor part in
+ GNU_TARGET_NAME
+In-Reply-To: <884EA965490E3C4D8E66AEF41E980250096191@ezex10.ezchip.com>
+References: <884EA965490E3C4D8E66AEF41E980250096191@ezex10.ezchip.com>
+Message-ID: <20140306231725.GA32126@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Samuel, All,
+Noam, All,
 
-On 2014-02-16 23:00 +0100, Samuel Martin spake thusly:
-> opencv_python module needs python-numpy because it uses some numpy
-> headers in this wrapper.
+On 2014-03-06 11:25 +0000, Noam Camus spake thusly:
+> This option allows to customize the "vendor" part of the toolchain tuple, where the toolchain tuple has the form <arch>-<vendor>-<os>-<libc>. Use this option in situations where gcc might make different decisions based on the vendor part of the tuple.
+
+Overly-long line, please wrap at <80 chars.
+
+(Or maybe your mailer is broken?)
+
+> Signed-off-by: Noam Camus <noamc@ezchip.com>
+> ---
+>  package/Makefile.in                     |   17 ++++++++++++++++-
+>  toolchain/toolchain-buildroot/Config.in |   16 ++++++++++++++++
+>  2 files changed, 32 insertions(+), 1 deletions(-)
 > 
-> A patch in the OpenCV's build-system is also needed to prevent it from
-> trying to run python for numpy detection. This patch has already been
-> integrated upstream.
-[--SNIP--]
-> diff --git a/package/opencv/opencv-0001-cmake-do-not-run-python-for-numpy-detection-when-cro.patch b/package/opencv/opencv-0001-cmake-do-not-run-python-for-numpy-detection-when-cro.patch
-> new file mode 100644
-> index 0000000..bff14eb
-> --- /dev/null
-> +++ b/package/opencv/opencv-0001-cmake-do-not-run-python-for-numpy-detection-when-cro.patch
-> @@ -0,0 +1,77 @@
-> +From 2ab6c54a6c466c3cb577cacbbace659fe55c2a4f Mon Sep 17 00:00:00 2001
-> +From: Samuel Martin <s.martin49@gmail.com>
-> +Date: Fri, 10 Jan 2014 23:39:59 +0100
-> +Subject: [PATCH] cmake: do not run python for numpy detection when
-> + cross-compiling
-
-It would be nice if you were using exactly the same patch as upstream:
-    6cb90c0e976ff24af85167e71d88c9d9b2ed06c7 fix cross-compilation issue with Numpy
-
-Yours is slightly different.
-
-Using the same patch as upstream would help spot it in a later bump.
-
-> diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
-> index 51255aa..52a2b42 100644
-> --- a/package/opencv/opencv.mk
-> +++ b/package/opencv/opencv.mk
-[--SNIP--]
-> @@ -226,6 +225,19 @@ OPENCV_CONF_OPT += \
->  	-DWITH_LIBV4L=OFF
->  endif
+> diff --git a/package/Makefile.in b/package/Makefile.in index 454f614..bd9f18c 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -20,8 +20,23 @@ endif
+>  MAKE1:=$(HOSTMAKE) -j1
+>  MAKE:=$(HOSTMAKE) $(if $(PARALLEL_JOBS),-j$(PARALLEL_JOBS))
 >  
-> +ifeq ($(BR2_PACKAGE_OPENCV_LIB_PYTHON),y)
-> +OPENCV_CONF_OPT += \
-> +	-DBUILD_NEW_PYTHON_SUPPORT=ON \
-> +	-DPYTHON_EXECUTABLE=$(HOST_DIR)/usr/bin/python2                               \
+> +ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+> +TARGET_VENDOR = $(call qstrip,$(BR2_TOOLCHAIN_BUILDROOT_VENDOR))
+> +else
+> +TARGET_VENDOR = buildroot
+> +endif
+> +
+> +# Sanity checks
+> +ifeq ($(TARGET_VENDOR),)
+> +$(error BR2_TOOLCHAIN_BUILDROOT_VENDOR is not allowed to be empty) 
+> +endif ifeq ($(TARGET_VENDOR),unknown) $(error 
+> +BR2_TOOLCHAIN_BUILDROOT_VENDOR cannot be 'unknown'. \
+> +        It might be confused with the native toolchain) endif
 
-I hope this is only needed at build time, not at runtime?
-
-Also, you specifically use 'python2', above. what about Python 2 vs.
-Python 3 ? Care to shed some light on this, to the non-pythonist I am?
-;-)
+Highly broken.
 
 Regards,
 Yann E. MORIN.
