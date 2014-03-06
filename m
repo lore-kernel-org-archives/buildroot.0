@@ -1,61 +1,34 @@
-From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Thu, 6 Mar 2014 21:51:44 +0100
-Subject: [Buildroot] luajit package fails to build on x86_64 for x86
-In-Reply-To: <CAHkwnC9NzMx8kE4KdBjnAys7Xj5n0sQS6AHa=ZrzLqQQtkFZUg@mail.gmail.com>
-References: <CAHkwnC9NzMx8kE4KdBjnAys7Xj5n0sQS6AHa=ZrzLqQQtkFZUg@mail.gmail.com>
-Message-ID: <CAB0FRsvxcXs0ZvjZVzcQw0S=v6Rx5tCqSq_LaHZDCwe1d6a84g@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu,  6 Mar 2014 17:55:34 -0300
+Subject: [Buildroot] [PATCH 1/2] fs/initramfs: fix initramfs support
+Message-ID: <1394139335-28476-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2014-03-06 11:43 GMT+01:00 Fabio Porcedda <fabio.porcedda@gmail.com>:
-> Hi all,
-> luajit fails to build on a Ubuntu 13.10 x86_64 with the following defconfig:
->
-> BR2_x86_generic=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_PACKAGE_LUAJIT=y
->
->
-> with the following build error:
->
-> CC        luajit.o
-> HOSTLINK  host/minilua
-> /usr/bin/ld: skipping incompatible
-> /usr/lib/gcc/x86_64-linux-gnu/4.8/libgcc.a when searching for -lgcc
-> /usr/bin/ld: cannot find -lgcc
-> /usr/bin/ld: skipping incompatible
-> /usr/lib/gcc/x86_64-linux-gnu/4.8/libgcc_s.so when searching for
-> -lgcc_s
-> /usr/bin/ld: cannot find -lgcc_s
-> collect2: error: ld returned 1 exit status
-> make[3]: *** [host/minilua] Error 1
-> make[2]: *** [amalg] Error 2
-> make[1]: *** [amalg] Error 2
-> make: *** [/e/buildroot/br-tmp/output/build/luajit-2.0.2/.stamp_built] Error 2
->
->
-> It builds fine for x86_64:
-> BR2_x86_64=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_PACKAGE_LUAJIT=y
->
-> Best regards
+On commit a24877586a566e052897e50e6a0c2f53cfb029f TARGETS_ROOTFS was
+introduced, however fs/initramfs/initramfs.mk was never updated, hence a
+show-targets would be rootfs-initramfs with rootfs-cpio afterwards hence
+never rebuilding the kernel with a proper cpio archive since TARGETS is
+always before rootfs-* as stated in the commit description.
 
-When Ubuntu 13.10 was released, I encoured many issues with it (but I
-don't remember details and I didn't make investigations), so I stay
-with 12.04 LTS. And now, I wait for 14.04 LTS.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ fs/initramfs/initramfs.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Do you see this issue with BR-2014.02 or with the master head (the 3
-lastest commits are mine) ?
-
-Fran?ois
-
-> --
-> Fabio Porcedda
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/fs/initramfs/initramfs.mk b/fs/initramfs/initramfs.mk
+index 7820d65..5d3ea89 100644
+--- a/fs/initramfs/initramfs.mk
++++ b/fs/initramfs/initramfs.mk
+@@ -18,5 +18,5 @@ rootfs-initramfs-show-depends:
+ 	@echo $(ROOTFS_INITRAMFS_DEPENDENCIES)
+ 
+ ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
+-TARGETS += rootfs-initramfs
++TARGETS_ROOTFS += rootfs-initramfs
+ endif
+-- 
+1.8.3.2
