@@ -1,86 +1,115 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Thu,  6 Mar 2014 10:42:27 +0100
-Subject: [Buildroot] [PATCH v2 2/4] Makefile: remove BASE_TARGETS variable
+Date: Thu,  6 Mar 2014 10:42:28 +0100
+Subject: [Buildroot] [PATCH v2 3/4] linux: fix coding style
 In-Reply-To: <1394098949-31981-1-git-send-email-fabio.porcedda@gmail.com>
 References: <1394098949-31981-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1394098949-31981-3-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <1394098949-31981-4-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Because now the toolchain dependency is automatically added by the
-package infrastructure the BASE_TARGETS variable is useless so just
-remove it.
+As stated in the Buildroot user manual add one space before and after
+a = sign.
 
 Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 ---
- Makefile                            | 10 ++++------
- docs/manual/how-buildroot-works.txt |  9 ++++-----
- 2 files changed, 8 insertions(+), 11 deletions(-)
+ linux/linux.mk | 42 +++++++++++++++++++++---------------------
+ 1 file changed, 21 insertions(+), 21 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 6eb9743..665865b 100644
---- a/Makefile
-+++ b/Makefile
-@@ -300,9 +300,7 @@ GNU_HOST_NAME:=$(shell support/gnuconfig/config.guess)
- #
- ################################################################################
+diff --git a/linux/linux.mk b/linux/linux.mk
+index f948e6c..3d52e69 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -41,7 +41,7 @@ endif
+ LINUX_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
  
--BASE_TARGETS = toolchain
--
--TARGETS:=
-+TARGETS:= toolchain
+ LINUX_INSTALL_IMAGES = YES
+-LINUX_DEPENDENCIES  += host-kmod host-lzop
++LINUX_DEPENDENCIES += host-kmod host-lzop
  
- # silent mode requested?
- QUIET:=$(if $(findstring s,$(MAKEFLAGS)),-q)
-@@ -411,7 +409,7 @@ endif
+ ifeq ($(BR2_LINUX_KERNEL_UBOOT_IMAGE),y)
+ 	LINUX_DEPENDENCIES += host-uboot-tools
+@@ -80,36 +80,36 @@ endif
+ KERNEL_DTBS = $(addsuffix .dtb,$(KERNEL_DTS_NAME))
  
- include fs/common.mk
+ ifeq ($(BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM),y)
+-LINUX_IMAGE_NAME=$(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_TARGET_NAME))
++LINUX_IMAGE_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_TARGET_NAME))
+ else
+ ifeq ($(BR2_LINUX_KERNEL_UIMAGE),y)
+-LINUX_IMAGE_NAME=uImage
++LINUX_IMAGE_NAME = uImage
+ else ifeq ($(BR2_LINUX_KERNEL_APPENDED_UIMAGE),y)
+-LINUX_IMAGE_NAME=uImage
++LINUX_IMAGE_NAME = uImage
+ else ifeq ($(BR2_LINUX_KERNEL_BZIMAGE),y)
+-LINUX_IMAGE_NAME=bzImage
++LINUX_IMAGE_NAME = bzImage
+ else ifeq ($(BR2_LINUX_KERNEL_ZIMAGE),y)
+-LINUX_IMAGE_NAME=zImage
++LINUX_IMAGE_NAME = zImage
+ else ifeq ($(BR2_LINUX_KERNEL_APPENDED_ZIMAGE),y)
+-LINUX_IMAGE_NAME=zImage
++LINUX_IMAGE_NAME = zImage
+ else ifeq ($(BR2_LINUX_KERNEL_CUIMAGE),y)
+-LINUX_IMAGE_NAME=cuImage.$(KERNEL_DTS_NAME)
++LINUX_IMAGE_NAME = cuImage.$(KERNEL_DTS_NAME)
+ else ifeq ($(BR2_LINUX_KERNEL_SIMPLEIMAGE),y)
+-LINUX_IMAGE_NAME=simpleImage.$(KERNEL_DTS_NAME)
++LINUX_IMAGE_NAME = simpleImage.$(KERNEL_DTS_NAME)
+ else ifeq ($(BR2_LINUX_KERNEL_LINUX_BIN),y)
+-LINUX_IMAGE_NAME=linux.bin
++LINUX_IMAGE_NAME = linux.bin
+ else ifeq ($(BR2_LINUX_KERNEL_VMLINUX_BIN),y)
+-LINUX_IMAGE_NAME=vmlinux.bin
++LINUX_IMAGE_NAME = vmlinux.bin
+ else ifeq ($(BR2_LINUX_KERNEL_VMLINUX),y)
+-LINUX_IMAGE_NAME=vmlinux
++LINUX_IMAGE_NAME = vmlinux
+ else ifeq ($(BR2_LINUX_KERNEL_VMLINUZ),y)
+-LINUX_IMAGE_NAME=vmlinuz
++LINUX_IMAGE_NAME = vmlinuz
+ endif
+ endif
  
--TARGETS_SOURCE:=$(patsubst %,%-source,$(TARGETS) $(BASE_TARGETS))
-+TARGETS_SOURCE:=$(patsubst %,%-source,$(TARGETS))
- TARGETS_DIRCLEAN:=$(patsubst %,%-dirclean,$(TARGETS))
+ LINUX_KERNEL_UIMAGE_LOADADDR=$(call qstrip,$(BR2_LINUX_KERNEL_UIMAGE_LOADADDR))
+ ifneq ($(LINUX_KERNEL_UIMAGE_LOADADDR),)
+-LINUX_MAKE_FLAGS+=LOADADDR="$(LINUX_KERNEL_UIMAGE_LOADADDR)"
++LINUX_MAKE_FLAGS += LOADADDR="$(LINUX_KERNEL_UIMAGE_LOADADDR)"
+ endif
  
- # host-* dependencies have to be handled specially, as those aren't
-@@ -433,7 +431,7 @@ HOST_DEPS = $(sort $(foreach dep,\
- HOST_SOURCE += $(addsuffix -source,$(sort $(TARGETS_HOST_DEPS) $(HOST_DEPS)))
+ # Compute the arch path, since i386 and x86_64 are in arch/x86 and not
+@@ -117,22 +117,22 @@ endif
+ # for bzImage, arch/i386 and arch/x86_64 do not exist when copying the
+ # defconfig file.
+ ifeq ($(KERNEL_ARCH),i386)
+-KERNEL_ARCH_PATH=$(LINUX_DIR)/arch/x86
++KERNEL_ARCH_PATH = $(LINUX_DIR)/arch/x86
+ else ifeq ($(KERNEL_ARCH),x86_64)
+-KERNEL_ARCH_PATH=$(LINUX_DIR)/arch/x86
++KERNEL_ARCH_PATH = $(LINUX_DIR)/arch/x86
+ else
+-KERNEL_ARCH_PATH=$(LINUX_DIR)/arch/$(KERNEL_ARCH)
++KERNEL_ARCH_PATH = $(LINUX_DIR)/arch/$(KERNEL_ARCH)
+ endif
  
- TARGETS_LEGAL_INFO:=$(patsubst %,%-legal-info,\
--		$(TARGETS) $(BASE_TARGETS) $(TARGETS_HOST_DEPS) $(HOST_DEPS))))
-+		$(TARGETS) $(TARGETS_HOST_DEPS) $(HOST_DEPS))))
+ ifeq ($(BR2_LINUX_KERNEL_VMLINUX),y)
+-LINUX_IMAGE_PATH=$(LINUX_DIR)/$(LINUX_IMAGE_NAME)
++LINUX_IMAGE_PATH = $(LINUX_DIR)/$(LINUX_IMAGE_NAME)
+ else ifeq ($(BR2_LINUX_KERNEL_VMLINUZ),y)
+-LINUX_IMAGE_PATH=$(LINUX_DIR)/$(LINUX_IMAGE_NAME)
++LINUX_IMAGE_PATH = $(LINUX_DIR)/$(LINUX_IMAGE_NAME)
+ else
+ ifeq ($(KERNEL_ARCH),avr32)
+-LINUX_IMAGE_PATH=$(KERNEL_ARCH_PATH)/boot/images/$(LINUX_IMAGE_NAME)
++LINUX_IMAGE_PATH = $(KERNEL_ARCH_PATH)/boot/images/$(LINUX_IMAGE_NAME)
+ else
+-LINUX_IMAGE_PATH=$(KERNEL_ARCH_PATH)/boot/$(LINUX_IMAGE_NAME)
++LINUX_IMAGE_PATH = $(KERNEL_ARCH_PATH)/boot/$(LINUX_IMAGE_NAME)
+ endif
+ endif # BR2_LINUX_KERNEL_VMLINUX
  
- dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
- 	$(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR)
-@@ -452,7 +450,7 @@ world: target-post-image
- .PHONY: all world toolchain dirs clean distclean source outputmakefile \
- 	legal-info legal-info-prepare legal-info-clean printvars \
- 	target-finalize target-post-image \
--	$(BASE_TARGETS) $(TARGETS) $(TARGETS_ROOTFS) \
-+	$(TARGETS) $(TARGETS_ROOTFS) \
- 	$(TARGETS_DIRCLEAN) $(TARGETS_SOURCE) $(TARGETS_LEGAL_INFO) \
- 	$(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
- 	$(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR)
-diff --git a/docs/manual/how-buildroot-works.txt b/docs/manual/how-buildroot-works.txt
-index 68ddd13..a96e45b 100644
---- a/docs/manual/how-buildroot-works.txt
-+++ b/docs/manual/how-buildroot-works.txt
-@@ -56,11 +56,10 @@ configuration is done):
-   +stamps+, etc. in the output directory (+output/+ by default,
-   another value can be specified using +O=+)
- 
--* Generate all the targets listed in the +BASE_TARGETS+ variable. When
--  an internal toolchain is used, this means generating the
--  cross-compilation toolchain. When an external toolchain is used,
--  this means checking the features of the external toolchain and
--  importing it into the Buildroot environment.
-+* Generate the toolchain target. When an internal toolchain is used, this
-+  means generating the cross-compilation toolchain. When an external
-+  toolchain is used, this means checking the features of the external
-+  toolchain and importing it into the Buildroot environment.
- 
- * Generate all the targets listed in the +TARGETS+ variable. This
-   variable is filled by all the individual components'
 -- 
 1.8.3.2
