@@ -1,74 +1,27 @@
-From: Noam Camus <noamc@ezchip.com>
-Date: Thu, 6 Mar 2014 11:25:10 +0000
-Subject: [Buildroot] [PATCH 1/1] [V4] toolchain: control vendor part in
-	GNU_TARGET_NAME
-Message-ID: <884EA965490E3C4D8E66AEF41E980250096191@ezex10.ezchip.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Thu, 6 Mar 2014 12:51:51 +0100
+Subject: [Buildroot] [PATCH 1 of 7] manual: contributing: move and
+ expand autobuild section
+In-Reply-To: <da988789cff841883542.1394100449@argentina>
+References: <patchbomb.1394100448@argentina>
+ <da988789cff841883542.1394100449@argentina>
+Message-ID: <CAHXCMMJ-XjLZVLopzhSQDf61Sao_BfaRkQNT+weLxxtS1MUnYA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This option allows to customize the "vendor" part of the toolchain tuple, where the toolchain tuple has the form <arch>-<vendor>-<os>-<libc>. Use this option in situations where gcc might make different decisions based on the vendor part of the tuple.
+On Thu, Mar 6, 2014 at 11:07 AM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+> This patch moves the section about autobuild fixing up, and expands it with
+> more details about what autobuilds are, and how you can help with it.
+>
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Signed-off-by: Noam Camus <noamc@ezchip.com>
----
- package/Makefile.in                     |   17 ++++++++++++++++-
- toolchain/toolchain-buildroot/Config.in |   16 ++++++++++++++++
- 2 files changed, 32 insertions(+), 1 deletions(-)
+Acked-by: Samuel Martin <s.martin49@gmail.com>
 
-diff --git a/package/Makefile.in b/package/Makefile.in index 454f614..bd9f18c 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -20,8 +20,23 @@ endif
- MAKE1:=$(HOSTMAKE) -j1
- MAKE:=$(HOSTMAKE) $(if $(PARALLEL_JOBS),-j$(PARALLEL_JOBS))
- 
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
-+TARGET_VENDOR = $(call qstrip,$(BR2_TOOLCHAIN_BUILDROOT_VENDOR))
-+else
-+TARGET_VENDOR = buildroot
-+endif
-+
-+# Sanity checks
-+ifeq ($(TARGET_VENDOR),)
-+$(error BR2_TOOLCHAIN_BUILDROOT_VENDOR is not allowed to be empty) 
-+endif ifeq ($(TARGET_VENDOR),unknown) $(error 
-+BR2_TOOLCHAIN_BUILDROOT_VENDOR cannot be 'unknown'. \
-+        It might be confused with the native toolchain) endif
-+
- # Compute GNU_TARGET_NAME
--GNU_TARGET_NAME=$(ARCH)-buildroot-$(TARGET_OS)-$(LIBC)$(ABI)
-+GNU_TARGET_NAME=$(ARCH)-$(TARGET_VENDOR)-$(TARGET_OS)-$(LIBC)$(ABI)
- 
- # Blackfin FLAT needs uclinux
- ifeq ($(BR2_bfin)$(BR2_BINFMT_FLAT),yy)
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index 07db50b..3487327 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -70,6 +70,22 @@ config BR2_TOOLCHAIN_BUILDROOT_LIBC
- 	default "glibc"  if BR2_TOOLCHAIN_BUILDROOT_EGLIBC
- 	default "glibc"  if BR2_TOOLCHAIN_BUILDROOT_GLIBC
- 
-+config BR2_TOOLCHAIN_BUILDROOT_VENDOR
-+	string "custom toolchain vendor name"
-+	default "buildroot"
-+	help
-+	  This option allows to customize the "vendor" part of the
-+	  toolchain tuple, where the toolchain tuple has the form
-+	  <arch>-<vendor>-<os>-<libc>. The default value, "buildroot",
-+	  is fine for most cases, except in very specific situations
-+	  where gcc might make different decisions based on the vendor
-+	  part of the tuple. The value "unknown" is not allowed, as the
-+	  cross-compiling toolchain might then be confused with the
-+	  native toolchain when the target and host architecture are
-+	  identical.
-+
-+	  If you're not sure, just leave the default "buildroot" value.
-+
- source "package/uclibc/Config.in"
- source "package/glibc/Config.in"
- source "package/binutils/Config.in.host"
---
-1.7.1
+Regards,
+
+-- 
+Samuel
