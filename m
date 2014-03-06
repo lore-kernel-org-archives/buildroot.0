@@ -1,26 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 06 Mar 2014 23:23:47 +0100
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 6 Mar 2014 23:30:51 +0100
 Subject: [Buildroot] [PATCH 6/6] toolchain-external: add Linaro ARM big
-	endian toolchain
-In-Reply-To: <1394058220-5863-7-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Wed, 5 Mar 2014 23:23:40 +0100")
+ endian toolchain
+In-Reply-To: <877g87t18s.fsf@dell.be.48ers.dk>
 References: <1394058220-5863-1-git-send-email-thomas.petazzoni@free-electrons.com>
  <1394058220-5863-7-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <877g87t18s.fsf@dell.be.48ers.dk>
+ <877g87t18s.fsf@dell.be.48ers.dk>
+Message-ID: <20140306233051.7f4add0c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Dear Peter Korsgaard,
 
- > Linaro has started to release ARM big endian toolchains, so we
- > integrate this toolchain in the external toolchain logic of
- > Buildroot. Since ARM big endian is probably going to be a lot more
- > confidential than ARM little endian, we will only support one version
+On Thu, 06 Mar 2014 23:23:47 +0100, Peter Korsgaard wrote:
 
-confidential? Do you mean 'specialized' or 'uncommon'?
+>  > Linaro has started to release ARM big endian toolchains, so we
+>  > integrate this toolchain in the external toolchain logic of
+>  > Buildroot. Since ARM big endian is probably going to be a lot more
+>  > confidential than ARM little endian, we will only support one version
+> 
+> confidential? Do you mean 'specialized' or 'uncommon'?
 
+Yes. In French "confidentiel" has two different meanings: it might mean
+"secret", or when talking about the usage, it can mean "rarely". I'll
+change to "uncommon", which is certainly better.
+
+Thanks for the review!
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
