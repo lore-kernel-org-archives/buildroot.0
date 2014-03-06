@@ -1,38 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Mar 2014 18:25:02 +0100
-Subject: [Buildroot] [PATCH 1/1] libxmlrpc: disable parallel build
-In-Reply-To: <1394096013-18180-1-git-send-email-alvaro.gamez@hazent.com>
-References: <20140305154228.76f34797@skate>
- <1394096013-18180-1-git-send-email-alvaro.gamez@hazent.com>
-Message-ID: <20140306182502.2de1a80a@skate>
+Date: Thu, 6 Mar 2014 18:25:27 +0100
+Subject: [Buildroot] [git commit] gst1-plugins-bad: add missing opencv ml
+	module dependency
+Message-ID: <20140306172532.94CD39BDCD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alvaro G. M,
+commit: http://git.buildroot.net/buildroot/commit/?id=01ab9e6b0e9332294f538ea24301cf53585e01ee
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  6 Mar 2014 09:53:33 +0100, Alvaro G. M wrote:
-> Although upstream tries to support parallel builds, there are several
-> dependencies that, if fixed, would end up making the library build
-> linearly, so in the end there would be no benefit to fix those.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/996/996fc95b302fb6dfc7cd9a468fd395226a36c6c4/
-> 
-> Suggested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Signed-off-by: Alvaro G. M. <alvaro.gamez@hazent.com>
-> Signed-off-by: Alvaro G. M <alvaro.gamez@hazent.com>
-> ---
->  package/libxmlrpc/libxmlrpc.mk | 1 +
->  1 file changed, 1 insertion(+)
+gst1-plugins-bad source code does include the old-style global opencv
+header "opencv/cv.h", which includes headers from the core, imgproc,
+video, features2d, flann, calib3d, objdetect and legacy modules.
 
-Applied, thanks.
+However, the legacy module, in addition to headers from some of the
+previously listed modules, also includes headers from the ml module.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Thus, the ml module must be selected to be able to build the legacy
+one, so the gst-plugins-bad's opencv plugin.
+
+Fixes:
+  http://autobuild.buildroot.net/results/d02/d02e1843ef90f4b40c99e3b23eddf376f827d46e/
+
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gstreamer1/gst1-plugins-bad/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index 0685322..2c5c290 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -434,6 +434,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENCV
+ 	select BR2_PACKAGE_OPENCV_LIB_FLANN
+ 	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
+ 	select BR2_PACKAGE_OPENCV_LIB_LEGACY
++	select BR2_PACKAGE_OPENCV_LIB_ML
+ 	select BR2_PACKAGE_OPENCV_LIB_OBJDETECT
+ 	select BR2_PACKAGE_OPENCV_LIB_VIDEO
+ 	help
