@@ -1,84 +1,71 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 06 Mar 2014 18:47:58 +0100
-Subject: [Buildroot] Problem with starting TI Graphics
-In-Reply-To: <53186E5A.1060209@gmx.net>
-References: <trinity-96c3bbe4-4de2-4d94-a868-2ca9c13f130e-1392279117507@3capp-gmx-bs38>
- <CA+kK6WuqEOYcgypxbDJ8Hs5Jy3JXpuGaQPb9Qgp0+nsjDz1k5g@mail.gmail.com>
- <trinity-c25b0db0-54b6-4f8c-977a-023518dc467a-1392373446805@3capp-gmx-bs16>
- <20140304200948.619fc7fe@skate> <5317926C.30207@mind.be>
- <53186E5A.1060209@gmx.net>
-Message-ID: <5318B4CE.1020701@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 6 Mar 2014 21:50:08 +0100
+Subject: [Buildroot] [PATCH 05/11] clapack: new package
+In-Reply-To: <CAHXCMMLNy_hLiw3dk+efGvmsCmDVzkQu4nuT3F_PneXhQoBgEQ@mail.gmail.com>
+References: <1392588004-13317-1-git-send-email-s.martin49@gmail.com>
+ <1392588004-13317-6-git-send-email-s.martin49@gmail.com>
+ <20140306193055.GE3625@free.fr> <20140306194208.GF3625@free.fr>
+ <CAHXCMMLNy_hLiw3dk+efGvmsCmDVzkQu4nuT3F_PneXhQoBgEQ@mail.gmail.com>
+Message-ID: <20140306205008.GG3625@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/03/14 13:47, Peter K?mmel wrote:
-> On 05.03.2014 22:09, Arnout Vandecappelle wrote:
->> On 04/03/14 20:09, Thomas Petazzoni wrote:
->>> Dear Peter Kuemmel,
->>>
->>> On Fri, 14 Feb 2014 11:24:06 +0100, Peter Kuemmel wrote:
->>>
->>>> Thanks, I found the issue: it was the missing user binary thumb
->>>> support in the kernel.
->>>
->>> Interesting. Were you building the kernel with Buildroot, or separately?
->>>
->>> If you built your kernel with Buildroot, then maybe we should add
->>> something like:
->>>
->>>     $(if $(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_ARM_INSTRUCTIONS_THUMB2),
->>>         $(call KCONFIG_ENABLE_OPT,CONFIG_ARM_THUMB,$(@D)/.config))
->>>
->>> This way we would ensure that the kernel gets built with
->>> CONFIG_ARM_THUMB=y when the Thumb or Thumb-2 instruction sets have been
->>> selected for userspace.
->>
->>   This is a good idea, but wouldn't help with Peter's problem: the
->> pvrsrvctl binary is not built by buildroot, so the problem occurs even if
->> buildroot is build with ARM instructions.
-> 
-> Yes, pvrsrvctl is not build by buildroot, but this is not the problem.
-> pvrsrvctl needs a kernel which supports thumb, so enabling thumb in the
-> kernel automatically by buildroot would solve the problem. (And would have
-> saved me many hours).
+Samuel, All,
 
- Yes, but Thomas proposed to add it automatically only when you select to
-build everything with thumb. It would not be done in the default case of
-BR2_ARM_INSTRUCTIONS_ARM_CHOICE (which you probably have...).
+On 2014-03-06 21:16 +0100, Samuel Martin spake thusly:
+> On Thu, Mar 6, 2014 at 8:42 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > Samuel, All,
+> >
+> > On 2014-03-06 20:30 +0100, Yann E. MORIN spake thusly:
+> >> On 2014-02-16 22:59 +0100, Samuel Martin spake thusly:
+> >> > This package provides BLAS and LAPACK libraries.
+> > [--SNIP--]
+> >> > diff --git a/package/clapack/clapack.mk b/package/clapack/clapack.mk
+> >> > new file mode 100644
+> >> > index 0000000..d8ca3be
+> >> > --- /dev/null
+> >> > +++ b/package/clapack/clapack.mk
+> >> > @@ -0,0 +1,20 @@
+> >> > +################################################################################
+> >> > +#
+> >> > +# clapack
+> >> > +#
+> >> > +################################################################################
+> >> > +
+> >> > +CLAPACK_VERSION = 3.2.1
+> >> > +CLAPACK_SOURCE = clapack-$(CLAPACK_VERSION)-CMAKE.tgz
+> >>
+> >> What the difference between this ^^^^ and clapack-3.2.1.tgz at the same site:
+> >>     http://www.netlib.org/clapack/clapack-3.2.1.tgz
+> >
+> > Why don't we use the non-cmake tarball?
+> 
+> Because I prefer/know better/am more confident in hacking CMake code
+> than handwritten makefiles.
+> So, I chose what is easier to me to maintain. Is it a valid argument? ;-)
 
- Regards,
- Arnout
+Yes, of course! I expected you'd say that. ;-)
 
+> > If the non-cmake *and* the build-system in there is flexible enough,
+> > that would allow us to not carry patches against the cmake build system.
 > 
-> Peter
-> 
->>
->>   Regards,
->>   Arnout
->>
->>>
->>> Thoughts?
->>>
->>> Thomas
->>>
->>
->>
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> 
+> I have to admit I have not even tried (and sorry, I don't really feel
+> like trying it).
 
+Yes, sure. I had to ask. ;-)
+
+But if possible, try to push those changes upstream.
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
