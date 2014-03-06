@@ -1,60 +1,44 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 06 Mar 2014 18:37:43 +0100
-Subject: [Buildroot] [PATCH v2 4/4] linux: remove dirs dependency
-In-Reply-To: <1394098949-31981-5-git-send-email-fabio.porcedda@gmail.com>
-References: <1394098949-31981-1-git-send-email-fabio.porcedda@gmail.com>
- <1394098949-31981-5-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <5318B267.2020301@mind.be>
+Date: Thu, 06 Mar 2014 18:45:00 +0100
+Subject: [Buildroot] [PATCH 08/12] pkg-infra: don't use DL_DIR as
+ scratchpad for temporary VCS checkouts
+In-Reply-To: <CAHXCMMJ-rQzL+Jkn_9QNw5y6t4W+ADQATR1JWe_bWJjM3h+YDg@mail.gmail.com>
+References: <cover.1394055621.git.yann.morin.1998@free.fr>
+ <46c87bc586c8fcf01ab538c6590c7a3cb4658344.1394055621.git.yann.morin.1998@free.fr>
+ <CAHXCMMJ-rQzL+Jkn_9QNw5y6t4W+ADQATR1JWe_bWJjM3h+YDg@mail.gmail.com>
+Message-ID: <5318B41C.1010801@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/03/14 10:42, Fabio Porcedda wrote:
-> The "dirs" dependency is redundant because now the "generic-package"
-> infrastructure add automatically the "dirs" dependency so just remove
-> the redundant references.
-> 
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+On 06/03/14 11:25, Samuel Martin wrote:
+[snip]
+>> +
+>> > +cd "${BUILD_DIR}"
+>> > +# Remove leftovers from a previous failed run
+>> > +rm -rf "${repodir}" "${output}.tmp"
+>> > +
+>> >  ${CVS} -z3 -d":pserver:anonymous@${repo}" \
+>> > -       co -d "${basename}" -r ":${rev}" -P "${rawname}"
+>> > -tar czf "${output}" "${basename}"
+>> > -rm -rf "${basename}"
+>> > +       co -d "${repodir}" -r ":${rev}" -P "${rawname}"
+>> > +tar czf "${output}.tmp" "${repodir}"
+>> > +mv "${output}.tmp" "${output}"
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> You move the temporary repository in the package build_dir.
+> Maybe the temporary output archive should be generated there as well,
+> so that the mv command will only move something valid.
 
-
- There are also redundant dependencies on dirs in Makefile and in
-package/uclibc/uclibc.mk - that can be done in a separate patch, but if
-you get around to fixing the other places before this one gets committed
-please do include it.
+ No! If the DL_DIR is on a different mount point than the build dir (e.g.
+on a shared network drive), then the move will become a copy so
+non-atomic. We want to avoid that!
 
 
  Regards,
  Arnout
-
-
-> ---
->  linux/linux.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index 3d52e69..e270705 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -302,12 +302,12 @@ include $(sort $(wildcard linux/linux-ext-*.mk))
->  $(eval $(generic-package))
->  
->  ifeq ($(BR2_LINUX_KERNEL),y)
-> -linux-menuconfig linux-xconfig linux-gconfig linux-nconfig linux26-menuconfig linux26-xconfig linux26-gconfig linux26-nconfig: dirs linux-configure
-> +linux-menuconfig linux-xconfig linux-gconfig linux-nconfig linux26-menuconfig linux26-xconfig linux26-gconfig linux26-nconfig: linux-configure
->  	$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) \
->  		$(subst linux-,,$(subst linux26-,,$@))
->  	rm -f $(LINUX_DIR)/.stamp_{built,target_installed,images_installed}
->  
-> -linux-savedefconfig linux26-savedefconfig: dirs linux-configure
-> +linux-savedefconfig linux26-savedefconfig: linux-configure
->  	$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) \
->  		$(subst linux-,,$(subst linux26-,,$@))
->  
-> 
 
 
 -- 
