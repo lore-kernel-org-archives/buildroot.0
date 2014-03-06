@@ -1,103 +1,173 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 06 Mar 2014 11:07:29 +0100
-Subject: [Buildroot] [PATCH 1 of 7] manual: contributing: move and expand
-	autobuild section
+Date: Thu, 06 Mar 2014 11:07:30 +0100
+Subject: [Buildroot] [PATCH 2 of 7] manual: contributing: move section on
+ patch reviews up and change intro
 In-Reply-To: <patchbomb.1394100448@argentina>
 References: <patchbomb.1394100448@argentina>
-Message-ID: <da988789cff841883542.1394100449@argentina>
+Message-ID: <be3e92ee4f9fed1805bb.1394100450@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch moves the section about autobuild fixing up, and expands it with
-more details about what autobuilds are, and how you can help with it.
+This patch moves the section about patch reviews and the
+Tested-by/Reviewed-by/Acked-by tags upwards. Additionally, the first
+paragraph is removed and replaced by another one. There are no other changes
+in the text.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 ---
-v2: mention the br-reproduce-build script (Yann)
+v2: fix indentation of Acked-by paragraph (Samuel), some rephrasing (Arnout)
 
- docs/manual/contribute.txt |  63 ++++++++++++++++++++++++++++++-----------
- 1 files changed, 46 insertions(+), 17 deletions(-)
+ docs/manual/contribute.txt |  127 ++++++++++++++++++++--------------------
+ 1 files changed, 65 insertions(+), 62 deletions(-)
 
 diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
 --- a/docs/manual/contribute.txt
 +++ b/docs/manual/contribute.txt
-@@ -33,6 +33,52 @@ help in reproducing, analyzing and fixin
- welcome. Don't hesitate to add a comment to bug reports reporting your
- findings, even if you don't yet see the full picture.
+@@ -79,6 +79,74 @@ basically two things that can be done:
+ Fixes http://autobuild.buildroot.org/results/51000a9d4656afe9e0ea6f07b9f8ed374c2e4069
+ ---------------------
  
-+Analyzing and fixing autobuild failures
-+---------------------------------------
++Reviewing and testing patches
++-----------------------------
 +
-+The Buildroot autobuilders are a set of build machines that continuously
-+run Buildroot builds based on random configurations. This is done for
-+all architectures supported by Buildroot, with various toolchains, and
-+with a random selection of packages. With the large commit activity on
-+Buildroot, these autobuilders are a great help in detecting problems
-+very early after commit.
++With the amount of patches sent to the mailing list each day, the
++maintainer has a very hard job to judge which patches are ready to apply
++and which ones aren't. Contributors can greatly help here by reviewing
++and testing these patches.
 +
-+All build results are available at http://autobuild.buildroot.org[],
-+statistics are at http://autobuild.buildroot.org/stats.php[]. Every day,
-+an overview of all failed packages is sent to the mailing list.
++In the review process, do not hesitate to respond to patch submissions
++for remarks, suggestions or anything that will help everyone to
++understand the patches and make them better. Please use internet
++style replies in plain text emails when responding to patch
++submissions.
 +
-+Detecting problems is great, but obviously these problems have to be
-+fixed as well. Your contribution is very welcome here! There are
-+basically two things that can be done:
++To indicate approval of a patch, there are three formal tags that keep
++track of this approval. To add your tag to a patch, reply to it with the
++approval tag below the original author's Signed-off-by line. These tags
++will be picked up automatically by patchwork (see
++ref:apply-patches-patchwork[]) and will be part of the commit log when
++the patch is accepted.
 +
-+- Analyzing the problems. The daily summary mails do not contain details
-+  about the actual failures: in order to see what's going on you have to
-+  open the build log and check the last output. Having someone doing
-+  this for all packages in the mail is very useful for other developers,
-+  as they can make a quick initial analysis based on this output alone.
++Tested-by:: Indicates that the patch has been tested successfully.
++  You are encouraged to specify what kind of testing you performed
++  (compile-test on architecture X and Y, runtime test on target A,
++  ...). This additional information helps other testers and the
++  maintainer.
 +
-+- Fixing a problem. When fixing autobuild failures, you should follow
-+  these steps:
-+  . Check if you can reproduce the problem by building with the same
-+    configuration. You can do this manually, or use the
-+    http://git.buildroot.org/buildroot-test/tree/utils/br-reproduce-build[br-reproduce-build]
-+    script that will automatically clone a Buildroot git repository,
-+    checkout the correct revision, download and set the right
-+    configuration, and start the build.
-+  . Analyze the problem and create a fix.
-+  . Verify that the problem is really fixed by starting from a clean
-+    Buildroot tree and only applying your fix.
-+  . Send the fix to the Buildroot mailing list (see
-+    xref:submitting-patches[]). In case you created a patch against the
-+    package sources, you should also send the patch upstream so that the
-+    problem will be fixed in a later release, and the patch in Buildroot
-+    can be removed.
-+    In the commit message of a patch fixing an autobuild failure, add a
-+    reference to the build result directory, as follows:
-+---------------------
-+Fixes http://autobuild.buildroot.org/results/51000a9d4656afe9e0ea6f07b9f8ed374c2e4069
-+---------------------
++Reviewed-by:: Indicates that you code-reviewed the patch and did your
++  best in spotting problems, but you are not sufficiently familiar with
++  the area touched to provide an Acked-by tag. This means that there
++  may be remaining problems in the patch that would be spotted by
++  someone with more experience in that area. Should such problems be
++  detected, your Reviewed-by tag remains appropriate and you cannot
++  be blamed.
++
++Acked-by:: Indicates that you code-reviewed the patch and you are
++  familiar enough with the area touched to feel that the patch can be
++  committed as-is (no additional changes required). In case it later
++  turns out that something is wrong with the patch, your Acked-by could
++  be considered inappropriate. The difference between Acked-by and
++  Reviewed-by is thus mainly that you are prepared to take the blame on
++  Acked patches, but not on Reviewed ones.
++
++If you reviewed a patch and have comments on it, you should simply reply
++to the patch stating these comments, without providing a Reviewed-by or
++Acked-by tag. These tags should only be provided if you judge the patch
++to be good as it is.
++
++It is important to note that neither Reviewed-by nor Acked-by imply
++that testing has been performed. To indicate that you both reviewed and
++tested the patch, provide two separate tags (Reviewed/Acked-by and
++Tested-by).
++
++Note also that _any developer_ can provide Tested/Reviewed/Acked-by
++tags, without exception, and we encourage everyone to do this. Buildroot
++does not have a defined group of _core_ developers, it just so happens
++that some developers are more active than others. The maintainer will
++value tags according to the track record of their submitter. Tags
++provided by a regular contributor will naturally be trusted more than
++tags provided by a newcomer. As you provide tags more regularly, your
++'trustworthiness' (in the eyes of the maintainer) will go up, but _any_
++tag provided is valuable.
++
++Buildroot's Patchwork website can be used to pull in patches for testing
++purposes. Please see xref:apply-patches-patchwork[] for more
++information on using Buildroot's Patchwork website to apply patches.
++
 +
  [[submitting-patches]]
  Submitting patches
  ------------------
-@@ -210,23 +256,6 @@ Buildroot's Patchwork website can be use
- purposes. Please see xref:apply-patches-patchwork[] for more
- information on using Buildroot's Patchwork website to apply patches.
+@@ -194,68 +262,6 @@ This can be easily handled with +git for
+     -M -o outgoing origin/master
+ ---------------------
  
--Autobuild
-----------
+-Reviewing/Testing patches
+--------------------------
 -
--The Buildroot community is currently setting up automatic builds in
--order to test more and more configurations. All build results are
--available at http://autobuild.buildroot.org[]
+-The review process for new patches is done over the mailing list. Once
+-a patch is submitted to the mailing list, other developers will provide
+-feedback to the patch via emails sent through the mailing list.
 -
--A good way to contribute is by fixing broken builds.
+-In the review process, do not hesitate to respond to patch submissions
+-for remarks, suggestions or anything that will help everyone to
+-understand the patches and make them better. Please use internet
+-style replies in plain text emails when responding to patch
+-submissions.
 -
--In the commit message of a patch fixing an _autobuild_, add a
--reference to the _build result directory_ (the +dir+ link in the _data
--column_):
+-Some tags are used to help following the state of any patch posted on
+-the mailing-list:
 -
-----------------------
--Fixes http://autobuild.buildroot.org/results/51000a9d4656afe9e0ea6f07b9f8ed374c2e4069
-----------------------
+-Tested-by:: Indicates that the patch has been tested in one way or
+-  another. You are encouraged to specify what kind of testing you
+-  performed (compile-test on architecture X and Y, runtime test on
+-  target A, ...). This additional information helps other testers and
+-  the maintainer.
+-
+-Reviewed-by:: Indicates that you code-reviewed the patch and did your
+-  best in spotting problems, but you are not sufficiently familiar with
+-  the area touched to provide an Acked-by tag. This means that there
+-  may be remaining problems in the patch that would be spotted by
+-  someone with more experience in that area. Should such problems be
+-  detected, your Reviewed-by tag remains appropriate and you cannot
+-  be blamed.
+-
+-Acked-by:: Indicates that you code-reviewed the patch and you are
+-familiar enough with the area touched to feel that the patch can be
+-committed as-is (no additional changes required). In case it later turns
+-out that something is wrong with the patch, your Acked-by could be
+-considered inappropriate. The difference between Acked-by and
+-Reviewed-by is thus mainly that you are prepared to take the blame on
+-Acked patches, but not on Reviewed ones.
+-
+-If you reviewed a patch and have comments on it, you should simply reply
+-to the patch stating these comments, without providing a Reviewed-by or
+-Acked-by tag. These tags should only be provided if you judge the patch
+-to be good as it is.
+-
+-It is important to note that neither Reviewed-by nor Acked-by imply
+-that testing has been performed. To indicate that you both reviewed and
+-tested the patch, provide two separate tags (Reviewed/Acked-by and
+-Tested-by).
+-
+-Note also that _any developer_ can provide Tested/Reviewed/Acked-by
+-tags, without exception, and we encourage everyone to do this. Buildroot
+-does not have a defined group of _core_ developers, it just so happens
+-that some developers are more active than others. The maintainer will
+-value tags according to the track record of their submitter. Tags
+-provided by a regular contributor will naturally be trusted more than
+-tags provided by a newcomer. As you provide tags more regularly, your
+-'trustworthiness' (in the eyes of the maintainer) will go up, but _any_
+-tag provided is valuable.
+-
+-Buildroot's Patchwork website can be used to pull in patches for testing
+-purposes. Please see xref:apply-patches-patchwork[] for more
+-information on using Buildroot's Patchwork website to apply patches.
 -
  [[reporting-bugs]]
  Reporting issues/bugs, get help
