@@ -1,42 +1,59 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Thu,  6 Mar 2014 10:42:29 +0100
-Subject: [Buildroot] [PATCH v2 4/4] linux: remove dirs dependency
-In-Reply-To: <1394098949-31981-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1394098949-31981-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1394098949-31981-5-git-send-email-fabio.porcedda@gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 6 Mar 2014 09:51:03 +0000
+Subject: [Buildroot] [PATCH] Disable o32 ABI for MIPS64 architectures
+In-Reply-To: <5317B2EC.4010201@mind.be>
+References: <1394039187-24328-1-git-send-email-Vincent.Riera@imgtec.com>
+ <5317B2EC.4010201@mind.be>
+Message-ID: <53184507.7040006@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The "dirs" dependency is redundant because now the "generic-package"
-infrastructure add automatically the "dirs" dependency so just remove
-the redundant references.
+On 03/05/2014 11:27 PM, Arnout Vandecappelle wrote:
+> On 05/03/14 18:06, Vicente Olivert Riera wrote:
+>> Building o32 ELF files for MIPS64 is an exotic configuration that nobody
+>> should be using. If o32 is required, then is better if it's built for
+>> MIPS 32-bit cores so only 32-bit instructions will be used leading to a
+>> more efficient o32 usage.
+>>
+>> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+>> ---
+>>   arch/Config.in.mips |    1 +
+>>   1 files changed, 1 insertions(+), 0 deletions(-)
+>>
+>> diff --git a/arch/Config.in.mips b/arch/Config.in.mips
+>> index d9c0c02..e2b1e60 100644
+>> --- a/arch/Config.in.mips
+>> +++ b/arch/Config.in.mips
+>> @@ -47,6 +47,7 @@ choice
+>>
+>>   config BR2_MIPS_OABI32
+>>   	bool "o32"
+>> +	depends on !BR2_ARCH_IS_64
+>>   config BR2_MIPS_NABI32
+>>   	bool "n32"
+>>   	depends on BR2_ARCH_IS_64
+>>
+>
+>   Then maybe it's better to make the choice depend on BR2_ARCH_IS_64, and
+> make the OABI32 symbol blind and default y on !BR2_ARCH_IS_64.
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
----
- linux/linux.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+OABI32 is already the default on !BR2_ARCH_IS_64. Take a look to this 
+part of the Config.in.mips:
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 3d52e69..e270705 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -302,12 +302,12 @@ include $(sort $(wildcard linux/linux-ext-*.mk))
- $(eval $(generic-package))
- 
- ifeq ($(BR2_LINUX_KERNEL),y)
--linux-menuconfig linux-xconfig linux-gconfig linux-nconfig linux26-menuconfig linux26-xconfig linux26-gconfig linux26-nconfig: dirs linux-configure
-+linux-menuconfig linux-xconfig linux-gconfig linux-nconfig linux26-menuconfig linux26-xconfig linux26-gconfig linux26-nconfig: linux-configure
- 	$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) \
- 		$(subst linux-,,$(subst linux26-,,$@))
- 	rm -f $(LINUX_DIR)/.stamp_{built,target_installed,images_installed}
- 
--linux-savedefconfig linux26-savedefconfig: dirs linux-configure
-+linux-savedefconfig linux26-savedefconfig: linux-configure
- 	$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) \
- 		$(subst linux-,,$(subst linux26-,,$@))
- 
+choice
+         prompt "Target ABI"
+         depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+         default BR2_MIPS_OABI32 if !BR2_ARCH_IS_64
+         default BR2_MIPS_NABI32 if BR2_ARCH_IS_64
+
+>
+>   Regards,
+>   Arnout
+>
+
+
 -- 
-1.8.3.2
+Vincent
