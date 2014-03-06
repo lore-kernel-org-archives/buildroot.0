@@ -1,59 +1,53 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 6 Mar 2014 09:51:03 +0000
-Subject: [Buildroot] [PATCH] Disable o32 ABI for MIPS64 architectures
-In-Reply-To: <5317B2EC.4010201@mind.be>
-References: <1394039187-24328-1-git-send-email-Vincent.Riera@imgtec.com>
- <5317B2EC.4010201@mind.be>
-Message-ID: <53184507.7040006@imgtec.com>
+Date: Thu, 6 Mar 2014 09:57:37 +0000
+Subject: [Buildroot] [PATCH] gst1-plugins-bad: add missing opencv ml
+ module dependency
+In-Reply-To: <1394060130-4805-1-git-send-email-s.martin49@gmail.com>
+References: <1394060130-4805-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <53184691.40008@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/05/2014 11:27 PM, Arnout Vandecappelle wrote:
-> On 05/03/14 18:06, Vicente Olivert Riera wrote:
->> Building o32 ELF files for MIPS64 is an exotic configuration that nobody
->> should be using. If o32 is required, then is better if it's built for
->> MIPS 32-bit cores so only 32-bit instructions will be used leading to a
->> more efficient o32 usage.
->>
->> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->> ---
->>   arch/Config.in.mips |    1 +
->>   1 files changed, 1 insertions(+), 0 deletions(-)
->>
->> diff --git a/arch/Config.in.mips b/arch/Config.in.mips
->> index d9c0c02..e2b1e60 100644
->> --- a/arch/Config.in.mips
->> +++ b/arch/Config.in.mips
->> @@ -47,6 +47,7 @@ choice
->>
->>   config BR2_MIPS_OABI32
->>   	bool "o32"
->> +	depends on !BR2_ARCH_IS_64
->>   config BR2_MIPS_NABI32
->>   	bool "n32"
->>   	depends on BR2_ARCH_IS_64
->>
+On 03/05/2014 10:55 PM, Samuel Martin wrote:
+> gst1-plugins-bad source code does include the old-style global opencv
+> header "opencv/cv.h", which includes headers from the core, imgproc,
+> video, features2d, flann, calib3d, objdetect and legacy modules.
 >
->   Then maybe it's better to make the choice depend on BR2_ARCH_IS_64, and
-> make the OABI32 symbol blind and default y on !BR2_ARCH_IS_64.
-
-OABI32 is already the default on !BR2_ARCH_IS_64. Take a look to this 
-part of the Config.in.mips:
-
-choice
-         prompt "Target ABI"
-         depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
-         default BR2_MIPS_OABI32 if !BR2_ARCH_IS_64
-         default BR2_MIPS_NABI32 if BR2_ARCH_IS_64
-
+> However, the legacy module, in addition to headers from some of the
+> previously listed modules, also includes headers from the ml module.
 >
->   Regards,
->   Arnout
+> Thus, the ml module must be selected to be able to build the legacy
+> one, so the gst-plugins-bad's opencv plugin.
+>
+> Fixes:
+>    http://autobuild.buildroot.net/results/d02/d02e1843ef90f4b40c99e3b23eddf376f827d46e/
+>
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> ---
+>   package/gstreamer1/gst1-plugins-bad/Config.in | 1 +
+>   1 file changed, 1 insertion(+)
+>
+> diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+> index 0685322..2c5c290 100644
+> --- a/package/gstreamer1/gst1-plugins-bad/Config.in
+> +++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+> @@ -434,6 +434,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENCV
+>   	select BR2_PACKAGE_OPENCV_LIB_FLANN
+>   	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
+>   	select BR2_PACKAGE_OPENCV_LIB_LEGACY
+> +	select BR2_PACKAGE_OPENCV_LIB_ML
+>   	select BR2_PACKAGE_OPENCV_LIB_OBJDETECT
+>   	select BR2_PACKAGE_OPENCV_LIB_VIDEO
+>   	help
 >
 
+Maybe your BR tree wasn't up to date in the moment to write this patch. 
+Look at this:
+
+http://git.buildroot.net/buildroot/commit/?id=3324f4e8b69ab49783a233b27c9b2edeecedb5ce
 
 -- 
 Vincent
