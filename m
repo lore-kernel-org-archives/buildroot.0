@@ -1,175 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Mar 2014 18:26:31 +0100
-Subject: [Buildroot] [git commit] manual: contributing: move section on
-	patch reviews up and change intro
-Message-ID: <20140306172752.EF3CC9B67F@busybox.osuosl.org>
+Date: Thu, 6 Mar 2014 18:27:24 +0100
+Subject: [Buildroot] [git commit] manual: contributing: don't recommend
+	leaving out changelog from patches
+Message-ID: <20140306172753.2C03B9B67F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=aeae2356b187ee880d722d2893196638345ad910
+commit: http://git.buildroot.net/buildroot/commit/?id=9b556772b62d61b6a19594cff7796b46a94e70e2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch moves the section about patch reviews and the
-Tested-by/Reviewed-by/Acked-by tags upwards. Additionally, the first
-paragraph is removed and replaced by another one. There are no other changes
-in the text.
+Currently, the manual states that if you send a series and include a
+changelog in the introduction mail (0 of x), it is not necessary to include
+a changelog on the individual patches.
+This is not always convenient: for large patch series it requires going back
+to the introduction mail when opening each patch, to understand what
+changed.
+This patch rewords the paragraph accordingly.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Acked-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/contribute.txt |  130 +++++++++++++++++++++++---------------------
- 1 files changed, 68 insertions(+), 62 deletions(-)
+ docs/manual/contribute.txt |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-index d4056a3..ffc4371 100644
+index a5ae2db..fb22bfb 100644
 --- a/docs/manual/contribute.txt
 +++ b/docs/manual/contribute.txt
-@@ -79,6 +79,74 @@ basically two things that can be done:
- Fixes http://autobuild.buildroot.org/results/51000a9d4656afe9e0ea6f07b9f8ed374c2e4069
- ---------------------
+@@ -228,8 +228,8 @@ Patch revision changelog
+ When improvements are requested, the new revision of each commit
+ should include a changelog of the modifications between each
+ submission. Note that when your patch series is introduced by a cover
+-letter, the changelog may be added in the cover letter rather than in
+-the individual commits.
++letter, an overall changelog may be added to the cover letter in
++addition to the changelog in the individual commits.
  
-+Reviewing and testing patches
-+-----------------------------
-+
-+With the amount of patches sent to the mailing list each day, the
-+maintainer has a very hard job to judge which patches are ready to apply
-+and which ones aren't. Contributors can greatly help here by reviewing
-+and testing these patches.
-+
-+In the review process, do not hesitate to respond to patch submissions
-+for remarks, suggestions or anything that will help everyone to
-+understand the patches and make them better. Please use internet
-+style replies in plain text emails when responding to patch
-+submissions.
-+
-+To indicate approval of a patch, there are three formal tags that keep
-+track of this approval. To add your tag to a patch, reply to it with the
-+approval tag below the original author's Signed-off-by line. These tags
-+will be picked up automatically by patchwork (see
-+ref:apply-patches-patchwork[]) and will be part of the commit log when
-+the patch is accepted.
-+
-+Tested-by:: Indicates that the patch has been tested successfully.
-+  You are encouraged to specify what kind of testing you performed
-+  (compile-test on architecture X and Y, runtime test on target A,
-+  ...). This additional information helps other testers and the
-+  maintainer.
-+
-+Reviewed-by:: Indicates that you code-reviewed the patch and did your
-+  best in spotting problems, but you are not sufficiently familiar with
-+  the area touched to provide an Acked-by tag. This means that there
-+  may be remaining problems in the patch that would be spotted by
-+  someone with more experience in that area. Should such problems be
-+  detected, your Reviewed-by tag remains appropriate and you cannot
-+  be blamed.
-+
-+Acked-by:: Indicates that you code-reviewed the patch and you are
-+  familiar enough with the area touched to feel that the patch can be
-+  committed as-is (no additional changes required). In case it later
-+  turns out that something is wrong with the patch, your Acked-by could
-+  be considered inappropriate. The difference between Acked-by and
-+  Reviewed-by is thus mainly that you are prepared to take the blame on
-+  Acked patches, but not on Reviewed ones.
-+
-+If you reviewed a patch and have comments on it, you should simply reply
-+to the patch stating these comments, without providing a Reviewed-by or
-+Acked-by tag. These tags should only be provided if you judge the patch
-+to be good as it is.
-+
-+It is important to note that neither Reviewed-by nor Acked-by imply
-+that testing has been performed. To indicate that you both reviewed and
-+tested the patch, provide two separate tags (Reviewed/Acked-by and
-+Tested-by).
-+
-+Note also that _any developer_ can provide Tested/Reviewed/Acked-by
-+tags, without exception, and we encourage everyone to do this. Buildroot
-+does not have a defined group of _core_ developers, it just so happens
-+that some developers are more active than others. The maintainer will
-+value tags according to the track record of their submitter. Tags
-+provided by a regular contributor will naturally be trusted more than
-+tags provided by a newcomer. As you provide tags more regularly, your
-+'trustworthiness' (in the eyes of the maintainer) will go up, but _any_
-+tag provided is valuable.
-+
-+Buildroot's Patchwork website can be used to pull in patches for testing
-+purposes. Please see xref:apply-patches-patchwork[] for more
-+information on using Buildroot's Patchwork website to apply patches.
-+
-+
- [[submitting-patches]]
- Submitting patches
- ------------------
-@@ -194,68 +262,6 @@ $ git format-patch --subject-prefix "PATCH v4" \
-     -M -o outgoing origin/master
- ---------------------
- 
--Reviewing/Testing patches
---------------------------
--
--The review process for new patches is done over the mailing list. Once
--a patch is submitted to the mailing list, other developers will provide
--feedback to the patch via emails sent through the mailing list.
--
--In the review process, do not hesitate to respond to patch submissions
--for remarks, suggestions or anything that will help everyone to
--understand the patches and make them better. Please use internet
--style replies in plain text emails when responding to patch
--submissions.
--
--Some tags are used to help following the state of any patch posted on
--the mailing-list:
--
--Tested-by:: Indicates that the patch has been tested in one way or
--  another. You are encouraged to specify what kind of testing you
--  performed (compile-test on architecture X and Y, runtime test on
--  target A, ...). This additional information helps other testers and
--  the maintainer.
--
--Reviewed-by:: Indicates that you code-reviewed the patch and did your
--  best in spotting problems, but you are not sufficiently familiar with
--  the area touched to provide an Acked-by tag. This means that there
--  may be remaining problems in the patch that would be spotted by
--  someone with more experience in that area. Should such problems be
--  detected, your Reviewed-by tag remains appropriate and you cannot
--  be blamed.
--
--Acked-by:: Indicates that you code-reviewed the patch and you are
--familiar enough with the area touched to feel that the patch can be
--committed as-is (no additional changes required). In case it later turns
--out that something is wrong with the patch, your Acked-by could be
--considered inappropriate. The difference between Acked-by and
--Reviewed-by is thus mainly that you are prepared to take the blame on
--Acked patches, but not on Reviewed ones.
--
--If you reviewed a patch and have comments on it, you should simply reply
--to the patch stating these comments, without providing a Reviewed-by or
--Acked-by tag. These tags should only be provided if you judge the patch
--to be good as it is.
--
--It is important to note that neither Reviewed-by nor Acked-by imply
--that testing has been performed. To indicate that you both reviewed and
--tested the patch, provide two separate tags (Reviewed/Acked-by and
--Tested-by).
--
--Note also that _any developer_ can provide Tested/Reviewed/Acked-by
--tags, without exception, and we encourage everyone to do this. Buildroot
--does not have a defined group of _core_ developers, it just so happens
--that some developers are more active than others. The maintainer will
--value tags according to the track record of their submitter. Tags
--provided by a regular contributor will naturally be trusted more than
--tags provided by a newcomer. As you provide tags more regularly, your
--'trustworthiness' (in the eyes of the maintainer) will go up, but _any_
--tag provided is valuable.
--
--Buildroot's Patchwork website can be used to pull in patches for testing
--purposes. Please see xref:apply-patches-patchwork[] for more
--information on using Buildroot's Patchwork website to apply patches.
--
- [[reporting-bugs]]
- Reporting issues/bugs, get help
- -------------------------------
+ When added to the individual commits, this changelog is added when
+ editing the commit message.  Below the +Signed-off-by+ section, add
