@@ -1,72 +1,55 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 06 Mar 2014 11:07:34 +0100
-Subject: [Buildroot] [PATCH 6 of 7] manual: contributing: minor rewording of
- 'reporting bugs' section
+Date: Thu, 06 Mar 2014 11:07:35 +0100
+Subject: [Buildroot] [PATCH 7 of 7] manual: contributing: modify commit
+	message template
 In-Reply-To: <patchbomb.1394100448@argentina>
 References: <patchbomb.1394100448@argentina>
-Message-ID: <979bfcee73f165aa7129.1394100454@argentina>
+Message-ID: <d8c7418a18af92f60eb8.1394100455@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch makes some minor fixes in the section about reporting bugs.
+This patch updates the commit message template provided in the manual.
+The new template emphasizes the importance of providing a description of the
+problem, the root cause, and the solution, and the fact that all this should
+be wrapped at 72 characters.
 
+Suggested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
-v2: provide an explicit list of 'good' pastebins (Yann)
+v2: new patch
 
- docs/manual/contribute.txt |  21 +++++++++++++--------
- 1 files changed, 13 insertions(+), 8 deletions(-)
-
-Although I don't think this section belongs in the Contributing chapter,
-there currently isn't a better place. When I get to rethinking the manual
-structure, this can be changed.
+ docs/manual/contribute.txt |  15 +++++++++++----
+ 1 files changed, 11 insertions(+), 4 deletions(-)
 
 diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
 --- a/docs/manual/contribute.txt
 +++ b/docs/manual/contribute.txt
-@@ -274,16 +274,16 @@ This can be easily handled with +git for
- ---------------------
+@@ -244,13 +244,20 @@ be preserved forever in the +git+ histor
+ Hereafter the recommended layout:
  
- [[reporting-bugs]]
--Reporting issues/bugs, get help
---------------------------------
-+Reporting issues/bugs or getting help
-+-------------------------------------
+ ---------------
+-Patch title less than 80-character length
++Patch title: short explanation, max 72 chars
  
- Before reporting any issue, please check
- xref:mailing-list-subscribe[the mailing list archive] in case someone has
- already reported and fixed a similar problem.
+-A paragraph giving more details.
++A paragraph that explains the problem, and how it manifests itself. If
++the problem is complex, it is OK to add more paragraphs. All paragraphs
++should be wrapped at 72 characters.
  
--However you choose to report bugs or get help,
--xref:bugtracker[opening a bug] or
--xref:mailing-list-subscribe[send a mail to the mailing list], there are
-+However you choose to report bugs or get help, either by
-+xref:bugtracker[opening a bug] or by
-+xref:mailing-list-subscribe[sending a mail to the mailing list], there are
- a number of details to provide in order to help people reproduce and
- find a solution to the issue.
+-And yet another paragraph giving more details.
++A paragraph that explains the root cause of the problem. Again, more
++than on paragraph is OK.
  
-@@ -295,11 +295,16 @@ Here is a short list of details to provi
- * host machine (OS/release)
- * version of Buildroot
- * target for which the build fails
--* package(s) which the build fails
-+* package(s) for which the build fails
- * the command that fails and its output
- * any information you think that may be relevant
- 
--Additionnally, your can add the +.config+ file.
-+Additionally, you should add the +.config+ file (or if you know how, a
-++defconfig+).
- 
- If some of these details are too large, do not hesitate to use a
--pastebin service (see http://www.similarsitesearch.com/alternatives-to/pastebin.com[]).
-+pastebin service. Note that not all available pastebin services will
-+preserve Unix-style line terminators when downloading raw pastes.
-+Following pastebin services are known to work correctly:
-+- https://gist.github.com/
-+- http://code.bulix.org/
+-Signed-off-by: John Doe <john.doe@noname.org>
++Finally, one or more paragraphs that explain how the problem is solved.
++Don't hesitate to explain complex solutions in detail.
++
++Signed-off-by: John DOE <john.doe@example.net>
++
+ ---
+ Changes v2 -> v3:
+   - foo bar  (suggested by Jane)
