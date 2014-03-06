@@ -1,280 +1,96 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu,  6 Mar 2014 17:54:50 +0100
-Subject: [Buildroot] [PATCH 2/2] exim: new package
-In-Reply-To: <1394124890-29254-1-git-send-email-luca@lucaceresoli.net>
-References: <1394124890-29254-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1394124890-29254-3-git-send-email-luca@lucaceresoli.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 6 Mar 2014 18:09:40 +0100
+Subject: [Buildroot] [PATCH 11/12] manual: add documentation about
+	packages' hashes
+In-Reply-To: <CAHXCMMKohY_kE5BEOL9iqs30b9=yS1o_MKpzA9n47kuEGN-=Rw@mail.gmail.com>
+References: <cover.1394055621.git.yann.morin.1998@free.fr>
+ <9cab6ed51fae5b7d5baa2a514aea4c7c5205fb30.1394055621.git.yann.morin.1998@free.fr>
+ <CAHXCMMKohY_kE5BEOL9iqs30b9=yS1o_MKpzA9n47kuEGN-=Rw@mail.gmail.com>
+Message-ID: <20140306170940.GB3625@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
----
- package/Config.in                                  |  1 +
- package/exim/Config.in                             |  9 +++++
- package/exim/Local-Makefile                        | 15 ++++++++
- package/exim/S86exim                               | 26 ++++++++++++++
- .../exim/exim-Build-buildconfig-for-the-host.patch | 23 ++++++++++++
- ...n-t-make-backup-copies-of-installed-files.patch | 40 +++++++++++++++++++++
- ...ip-version-check-and-symlink-installation.patch | 40 +++++++++++++++++++++
- package/exim/exim.mk                               | 41 ++++++++++++++++++++++
- 8 files changed, 195 insertions(+)
- create mode 100644 package/exim/Config.in
- create mode 100644 package/exim/Local-Makefile
- create mode 100644 package/exim/S86exim
- create mode 100644 package/exim/exim-Build-buildconfig-for-the-host.patch
- create mode 100644 package/exim/exim-Don-t-make-backup-copies-of-installed-files.patch
- create mode 100644 package/exim/exim-Skip-version-check-and-symlink-installation.patch
- create mode 100644 package/exim/exim.mk
+Samuel, All,
 
-diff --git a/package/Config.in b/package/Config.in
-index fca61d6..9650bc5 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -834,6 +834,7 @@ source "package/dnsmasq/Config.in"
- source "package/dropbear/Config.in"
- source "package/ebtables/Config.in"
- source "package/ethtool/Config.in"
-+source "package/exim/Config.in"
- source "package/foomatic-filters/Config.in"
- source "package/fping/Config.in"
- source "package/gesftpserver/Config.in"
-diff --git a/package/exim/Config.in b/package/exim/Config.in
-new file mode 100644
-index 0000000..70038a2
---- /dev/null
-+++ b/package/exim/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_EXIM
-+	bool "exim"
-+	select BR2_PACKAGE_PCRE
-+	select BR2_PACKAGE_BERKELEYDB
-+	help
-+	  Exim is a message transfer agent (MTA) developed at the University of
-+	  Cambridge for use on Unix systems connected to the Internet.
-+
-+	  http://www.exim.org/
-diff --git a/package/exim/Local-Makefile b/package/exim/Local-Makefile
-new file mode 100644
-index 0000000..191f0e0
---- /dev/null
-+++ b/package/exim/Local-Makefile
-@@ -0,0 +1,15 @@
-+BIN_DIRECTORY=/usr/sbin
-+CONFIGURE_FILE=/etc/exim/configure
-+EXIM_USER=ref:exim
-+EXIM_GROUP=mail
-+SPOOL_DIRECTORY=/var/spool/exim
-+ROUTER_ACCEPT=yes
-+TRANSPORT_LMTP=yes
-+LOOKUP_DBM=yes
-+LOOKUP_LSEARCH=yes
-+PCRE_LIBS=-lpcre
-+FIXED_NEVER_USERS=root
-+HEADERS_CHARSET="ISO-8859-1"
-+HAVE_ICONV=no
-+SYSLOG_LOG_PID=yes
-+TMPDIR="/tmp"
-diff --git a/package/exim/S86exim b/package/exim/S86exim
-new file mode 100644
-index 0000000..8c01b29
---- /dev/null
-+++ b/package/exim/S86exim
-@@ -0,0 +1,26 @@
-+#!/bin/sh
-+#
-+# Start/stop exim
-+#
-+
-+PIDFILE=/var/lock/exim/exim-daemon.pid
-+
-+case "$1" in
-+  start)
-+	echo "Starting exim..."
-+	start-stop-daemon -S -x exim -- -bd
-+	;;
-+  stop)
-+	echo -n "Stopping exim..."
-+	start-stop-daemon -K -o -p $PIDFILE
-+	;;
-+  restart|reload)
-+	"$0" stop
-+	"$0" start
-+	;;
-+  *)
-+	echo "Usage: $0 {start|stop|restart}"
-+	exit 1
-+esac
-+
-+exit $?
-diff --git a/package/exim/exim-Build-buildconfig-for-the-host.patch b/package/exim/exim-Build-buildconfig-for-the-host.patch
-new file mode 100644
-index 0000000..a926fbd
---- /dev/null
-+++ b/package/exim/exim-Build-buildconfig-for-the-host.patch
-@@ -0,0 +1,23 @@
-+buildconfig is meant to be executed on the host, so it has to be compiled
-+using $(HOSTCC), not $(CC).
-+
-+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-+---
-+ OS/Makefile-Base |    4 ++--
-+ 1 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/OS/Makefile-Base b/OS/Makefile-Base
-+index 29a6ad3..420ba60 100644
-+--- a/OS/Makefile-Base
-++++ b/OS/Makefile-Base
-+@@ -114,8 +114,8 @@ allexim: config.h $(EXIM_MONITOR) exicyclog exinext exiwhat \
-+ 
-+ # Targets for special-purpose configuration header builders
-+ buildconfig: buildconfig.c
-+-	@echo "$(CC) buildconfig.c"
-+-	$(FE)$(CC) $(CFLAGS) $(INCLUDE) -o buildconfig buildconfig.c $(LIBS)
-++	@echo "$(HOSTCC) buildconfig.c"
-++	$(FE)$(HOSTCC) $(HOSTCFLAGS) $(INCLUDE) -o buildconfig buildconfig.c $(LIBS)
-+ 
-+ 
-+ # Target for the exicyclog utility script
-diff --git a/package/exim/exim-Don-t-make-backup-copies-of-installed-files.patch b/package/exim/exim-Don-t-make-backup-copies-of-installed-files.patch
-new file mode 100644
-index 0000000..0cdaa74
---- /dev/null
-+++ b/package/exim/exim-Don-t-make-backup-copies-of-installed-files.patch
-@@ -0,0 +1,40 @@
-+If exim had already been installed, the install script makes backup
-+copies of the pre-existing executables with a ".0" suffix.
-+
-+This leads to useless duplicated files on the target, so disable this
-+piece of code.
-+
-+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-+---
-+ scripts/exim_install |   18 +++++++++---------
-+ 1 files changed, 9 insertions(+), 9 deletions(-)
-+
-+diff --git a/scripts/exim_install b/scripts/exim_install
-+index 616ab3c..e68e7d5 100755
-+--- a/scripts/exim_install
-++++ b/scripts/exim_install
-+@@ -344,15 +344,15 @@ while [ $# -gt 0 ]; do
-+ 
-+   else
-+     if ../scripts/newer ${name} ${BIN_DIRECTORY}/${name}; then
-+-      if [ -f ${BIN_DIRECTORY}/${name} ]; then
-+-        echo ${CP} ${BIN_DIRECTORY}/${name} ${BIN_DIRECTORY}/${name}.O
-+-        ${real} ${CP} ${BIN_DIRECTORY}/${name} ${BIN_DIRECTORY}/${name}.O
-+-        if [ $? -ne 0 ]; then
-+-          echo $com ""
-+-          echo $com "*** Exim installation ${ver}failed ***"
-+-          exit 1
-+-        fi
-+-      fi
-++#      if [ -f ${BIN_DIRECTORY}/${name} ]; then
-++#        echo ${CP} ${BIN_DIRECTORY}/${name} ${BIN_DIRECTORY}/${name}.O
-++#        ${real} ${CP} ${BIN_DIRECTORY}/${name} ${BIN_DIRECTORY}/${name}.O
-++#        if [ $? -ne 0 ]; then
-++#          echo $com ""
-++#          echo $com "*** Exim installation ${ver}failed ***"
-++#          exit 1
-++#        fi
-++#      fi
-+       echo ${CP} ${name} ${BIN_DIRECTORY}
-+       ${real} ${CP} ${name} ${BIN_DIRECTORY}
-+       if [ $? -ne 0 ]; then
-diff --git a/package/exim/exim-Skip-version-check-and-symlink-installation.patch b/package/exim/exim-Skip-version-check-and-symlink-installation.patch
-new file mode 100644
-index 0000000..94d21ae
---- /dev/null
-+++ b/package/exim/exim-Skip-version-check-and-symlink-installation.patch
-@@ -0,0 +1,40 @@
-+The exim install script installs a binary named exim-<version>, plus a symlink
-+to it named exim.
-+In order to achieve this "feature" (of dubious usefulness) it runs the
-+executable (on the host) and then filters its output to grab the version number.
-+This clearly cannot work if the executable is cross-compiled, so get rid of all
-+of it and just install an executable file called exim.
-+
-+Inspired by:
-+http://patch-tracker.debian.org/patch/series/view/exim4/4.76-2/35_install.dpatch
-+
-+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-+---
-+ scripts/exim_install |    7 +++++--
-+ 1 files changed, 5 insertions(+), 2 deletions(-)
-+
-+diff --git a/scripts/exim_install b/scripts/exim_install
-+index e68e7d5..487a4e1 100755
-+--- a/scripts/exim_install
-++++ b/scripts/exim_install
-+@@ -59,6 +59,8 @@ while [ $# -gt 0 ] ; do
-+   shift
-+ done
-+ 
-++do_symlink=no
-++
-+ # Get the values of BIN_DIRECTORY, CONFIGURE_FILE, INFO_DIRECTORY, NO_SYMLINK,
-+ # SYSTEM_ALIASES_FILE, and EXE from the global Makefile (in the build
-+ # directory). EXE is empty except in the Cygwin environment. In each case, keep
-+@@ -218,8 +220,9 @@ while [ $# -gt 0 ]; do
-+   # The exim binary is handled specially
-+ 
-+   if [ $name = exim${EXE} ]; then
-+-    version=exim-`./exim -bV -C /dev/null | \
-+-      awk '/Exim version/ { OFS=""; print $3,"-",substr($4,2,length($4)-1) }'`${EXE}
-++    version=exim
-++#    version=exim-`./exim -bV -C /dev/null | \
-++#      awk '/Exim version/ { OFS=""; print $3,"-",substr($4,2,length($4)-1) }'`${EXE}
-+ 
-+     if [ "${version}" = "exim-${EXE}" ]; then
-+       echo $com ""
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-new file mode 100644
-index 0000000..011d0a4
---- /dev/null
-+++ b/package/exim/exim.mk
-@@ -0,0 +1,41 @@
-+#############################################################
-+#
-+# exim
-+#
-+#############################################################
-+
-+EXIM_VERSION = 4.82
-+EXIM_SOURCE = exim-$(EXIM_VERSION).tar.bz2
-+EXIM_SITE = ftp://ftp.exim.org/pub/exim/exim4
-+EXIM_LICENSE = GPLv2+
-+EXIM_LICENSE_FILES = LICENCE
-+EXIM_DEPENDENCIES = pcre berkeleydb
-+
-+# These echos seem to be the sanest way to feed CC and CFLAGS to exim
-+define EXIM_CONFIGURE_CMDS
-+	install -D package/exim/Local-Makefile $(@D)/Local/Makefile
-+	echo "CC=$(TARGET_CC)" >>$(@D)/Local/Makefile
-+	echo "CFLAGS=$(TARGET_CFLAGS)" >>$(@D)/Local/Makefile
-+	echo "HOSTCC=$(HOSTCC)" >>$(@D)/Local/Makefile
-+	echo "HOSTCFLAGS=$(HOSTCFLAGS)" >>$(@D)/Local/Makefile
-+endef
-+
-+# "The -j (parallel) flag must not be used with make"
-+# (http://www.exim.org/exim-html-current/doc/html/spec_html/ch04.html)
-+define EXIM_BUILD_CMDS
-+	build=br $(MAKE1) -C $(@D)
-+endef
-+
-+define EXIM_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 755 package/exim/S86exim \
-+		$(TARGET_DIR)/etc/init.d/S86exim
-+	DESTDIR=${TARGET_DIR} INSTALL_ARG="-no_chown -no_symlink" build=br \
-+	  $(MAKE1) -C $(@D) install
-+	chmod u+s ${TARGET_DIR}/usr/sbin/exim
-+endef
-+
-+define EXIM_USERS
-+exim 88 mail 8 * - - - exim
-+endef
-+
-+$(eval $(generic-package))
+On 2014-03-06 11:56 +0100, Samuel Martin spake thusly:
+> On Wed, Mar 5, 2014 at 10:47 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+[--SNIP--]
+> > diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+> > index e56e59a..4609a7e 100644
+> > --- a/docs/manual/adding-packages-directory.txt
+> > +++ b/docs/manual/adding-packages-directory.txt
+> > @@ -346,3 +346,68 @@ different way, using different infrastructures:
+> >
+> >  Further formatting details: see xref:writing-rules-mk[the writing
+> >  rules].
+> > +
+> > +The +.hash+ file
+> > +~~~~~~~~~~~~~~~~
+> > +[[adding-packages-hash]]
+> > +
+> > +Optionally, you can add a third file, named +libfoo.hash+, that contains
+> > +the hashes of the downloaded files for the +libfoo+ package.
+> > +
+> > +The hashes stored in that file are used to validate the integrity of the
+> > +downloaded files.
+> > +
+> > +The format for this file is one line for each file for which to check the
+> > +hash, each line being space-separated, with these three fields:
+> > +
+> > +* the type of hash, one of:
+> > +** +sha1+, +sha224+, +sha256+, +sha384+, +sha512+
+> > +* the hash of the file:
+> > +** for +sha1+, 40 hexa-decimal characters
+> > +** for +sha224+, 56 hexa-decimal characters
+> > +** for +sha256+, 64 hexa-decimal characters
+> > +** for +sha384+, 96 hexa-decimal characters
+> > +** for +sha512+, 128 hexa-decimal characters
+> > +* the name of the file, without any directory component
+> > +
+> > +Lines starting with a +#+ sign are considered comments, and ignored. Empty
+> > +lines are ignored.
+> > +
+> > +There can be more than one hash for a single file, each of its own line. In
+> > +this case, all hashes must match.
+> 
+> Maybe a note explaining why it's better to provide more than 1 hash
+> for a file could be added.
+
+As I said to Gustavo on IRC, I'd prefer we only document the format of
+the .hash file in the manual, not define any policy. Ie. I don't think
+it is sensible to say something like:
+
+    For security considerations, adding more than one hash will ower the
+    risk of collusions if more than one hash type is provided.
+
+However, we can say, and I will add, something like:
+
+    If upstream provides more than one type of hash (say, sha1 and
+    sha512), then it is best to add all those hashes in the .hash file.
+
+This is more policy-neutral.
+
+We have to keep in mind that this feature is a first-level stop-gap for
+security-conscious people, but in no way a security measure. Those
+security-conscious users are encouraged to check the downloaded files
+using a side-band channel (eg. manually checking signatures and so
+on...)
+
+Buildroot itself can't check signatures: if the user does not have a
+chain-of-trust, from his own key and up to the signer's key, there is no
+point in checking the signature in the first place. We can't expect all
+users to have such a chain-of-trust, even less that all have a PGP key.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.8.3.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
