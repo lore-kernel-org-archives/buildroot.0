@@ -1,56 +1,73 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 6 Mar 2014 17:54:35 +0100
-Subject: [Buildroot] [PATCH 08/12] pkg-infra: don't use DL_DIR as
- scratchpad for temporary VCS checkouts
-In-Reply-To: <CAHXCMMJ-rQzL+Jkn_9QNw5y6t4W+ADQATR1JWe_bWJjM3h+YDg@mail.gmail.com>
-References: <cover.1394055621.git.yann.morin.1998@free.fr>
- <46c87bc586c8fcf01ab538c6590c7a3cb4658344.1394055621.git.yann.morin.1998@free.fr>
- <CAHXCMMJ-rQzL+Jkn_9QNw5y6t4W+ADQATR1JWe_bWJjM3h+YDg@mail.gmail.com>
-Message-ID: <20140306165435.GA3625@free.fr>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Thu,  6 Mar 2014 17:54:48 +0100
+Subject: [Buildroot] [PATCH 0/2] Adding exim
+Message-ID: <1394124890-29254-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Samuel, All,
+Hi all,
 
-On 2014-03-06 11:25 +0100, Samuel Martin spake thusly:
-> On Wed, Mar 5, 2014 at 10:47 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> >
-> > DL_DIR can be a very precious place for some users: they use it to store
-> > all the downloaded archives to share across all their Buildroot (and
-> > maybe non-Buildroot) builds.
-[--SNIP--]
-> > diff --git a/package/fis/fis.mk b/package/fis/fis.mk
-> > index e9426a1..d10fdd2 100644
-> > --- a/package/fis/fis.mk
-> > +++ b/package/fis/fis.mk
-> > @@ -6,7 +6,7 @@
-> >
-> >  FIS_SITE = http://svn.chezphil.org/utils/trunk
-> >  FIS_SITE_METHOD = svn
-> > -FIS_VERSION = 2892
-> > +FIS_VERSION = 9852
-> >
-> >  define FIS_BUILD_CMDS
-> >         $(TARGET_CC) $(TARGET_CFLAGS) -std=c99 -o $(@D)/fis \
-> 
-> This change seems not related to the rest of the patch! left over form
-> your test maybe? ;-)
+I'm resuming a patchset from 2011 [0], that was never merged, since Bernd
+Kuhls recently expressed interest a part of it [1].
 
-Yes, it's a leftover from some tests... Sigh...
+The original patchset goal was to add cyrus-imapd, cyrus-sasl and exim to
+Buildroot, along with their dependencies. That required a lot of patching
+because none of these packages are cross-compilation-friendly. The quality
+of my original patches was not very good, but there was apparently not much
+interest in them, and eventually I quite forgot about them.
 
-Thanks for spotting this. :-)
+The mentioned software are still up and running in my local buildroot-based
+projects, and they have been kept up-to-date.
 
-Regards,
-Yann E. MORIN.
+I am now resending only the exim-related patches, updated and with references
+to cyrus packages removed, because that's what Bernd expressed interest for.
+This makes exim not usable out of the box, because in my original patches it
+shipped a config file tailored for cyrus-imapd.
+
+However note an MTA is usually configured to deliver mail to a specific mail
+server, so in order to exploit exim it is necessary to add such a package.
+Bernd wrote he's working on dovecot, so he may add an exim config for it.
+Or I may resurrect and cleanup my cyrus-imapd patches and send them again
+after exim is in Buildroot.
+Or both.
+
+For the time being, here's my current best effort for bringing exim into
+Buildroot.
+
+Changes since the 2011 patchset:
+ - use the exim user, not the cyrus user (makes no sense without cyrus-imapd);
+ - do not ship a cyrus-centric configuration file;
+ - bump to 4.82 (latest upstream release).
+
+[0] http://lists.busybox.net/pipermail/buildroot/2011-August/045128.html
+[1] http://lists.busybox.net/pipermail/buildroot/2014-March/091094.html
+
+Luca
+
+Luca Ceresoli (2):
+  system/skeleton: add mail group
+  exim: new package
+
+ package/Config.in                                  |  1 +
+ package/exim/Config.in                             |  9 +++++
+ package/exim/Local-Makefile                        | 15 ++++++++
+ package/exim/S86exim                               | 26 ++++++++++++++
+ .../exim/exim-Build-buildconfig-for-the-host.patch | 23 ++++++++++++
+ ...n-t-make-backup-copies-of-installed-files.patch | 40 +++++++++++++++++++++
+ ...ip-version-check-and-symlink-installation.patch | 40 +++++++++++++++++++++
+ package/exim/exim.mk                               | 41 ++++++++++++++++++++++
+ system/skeleton/etc/group                          |  1 +
+ 9 files changed, 196 insertions(+)
+ create mode 100644 package/exim/Config.in
+ create mode 100644 package/exim/Local-Makefile
+ create mode 100644 package/exim/S86exim
+ create mode 100644 package/exim/exim-Build-buildconfig-for-the-host.patch
+ create mode 100644 package/exim/exim-Don-t-make-backup-copies-of-installed-files.patch
+ create mode 100644 package/exim/exim-Skip-version-check-and-symlink-installation.patch
+ create mode 100644 package/exim/exim.mk
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.3.2
