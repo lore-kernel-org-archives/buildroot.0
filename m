@@ -1,58 +1,53 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 06 Mar 2014 07:39:32 +0100
-Subject: [Buildroot] [PATCH 6 of 8] manual: contributing: minor
- rewording of 'submitting patches' section
-In-Reply-To: <20140305172647.GF5066@free.fr>
-References: <patchbomb.1394036666@argentina>
- <e71bbcb3a276227ed93f.1394036672@argentina> <20140305172647.GF5066@free.fr>
-Message-ID: <53181824.7040508@mind.be>
+Date: Thu, 06 Mar 2014 08:09:39 +0100
+Subject: [Buildroot] [PATCH 1/6] toolchain-external: fix musl external
+ support on x86
+In-Reply-To: <1394058220-5863-2-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1394058220-5863-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1394058220-5863-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <53181F33.4060004@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/03/14 18:26, Yann E. MORIN wrote:
-> Thomas, All,
+On 05/03/14 23:23, Thomas Petazzoni wrote:
+> On x86, the symbolic link ld-musl-<ARCH>.so.1 to libc.so must be
+> ld-musl-i386.so.1 in all cases, but $(ARCH) in Buildroot might be
+> i386, i486, i586, i686, etc. depending on the specific x86 variants
+> being selected.
 > 
-> Not directly related to your patch...
+> This commit fixes that by creating a MUSL_ARCH variable set to i386 on
+> x86, and to $(ARCH) on other architectures.
 > 
-> On 2014-03-05 17:24 +0100, Thomas De Schampheleire spake thusly:
->> @@ -236,7 +238,7 @@ Hereafter the recommended layout:
->>  ---------------
->>  Patch title less than 80-character length
->>  
->> -Some more paragraph giving some more details.
->> +A paragraph giving more details.
->>  
->>  And yet another paragraph giving more details.
-> 
-> I like it when commit log are describing what the problem is, what the
-> reason is, and how it is solved. Something like:
-> 
->     Patch title: short explanation, less than 80 chars
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
- Actually, everything should be wrapped at 72 chars, since 'git log'
-indents with a tab.
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-
- Regards,
- Arnout
-
+> ---
+>  toolchain/toolchain-external/toolchain-external.mk | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
 > 
->     A paragraph that explains the problem, and how
->     it manifests itself. If the problem is complex,
->     it is OK to add more paragraph.
-> 
->     A paragraph that explains the root cause of the problem.
->     Again, more than on paragraph is OK.
-> 
->     Finally, a paragraph than explains how it is solved.
->     
->     Signed-off-by: John DOE <john.doe@example.net>
-> 
-> Regards,
-> Yann E. MORIN.
+> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+> index 378e7b2..1b1053d 100644
+> --- a/toolchain/toolchain-external/toolchain-external.mk
+> +++ b/toolchain/toolchain-external/toolchain-external.mk
+> @@ -447,8 +447,13 @@ endef
+>  # of the dynamic library loader. We just need to create a symbolic
+>  # link to libc.so with the appropriate name.
+>  ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL),y)
+> +ifeq ($(BR2_i386),y)
+> +MUSL_ARCH = i386
+> +else
+> +MUSL_ARCH = $(ARCH)
+> +endif
+>  define TOOLCHAIN_EXTERNAL_MUSL_LD_LINK
+> -	ln -sf libc.so $(TARGET_DIR)/lib/ld-musl-$(ARCH).so.1
+> +	ln -sf libc.so $(TARGET_DIR)/lib/ld-musl-$(MUSL_ARCH).so.1
+>  endef
+>  TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_MUSL_LD_LINK
+>  endif
 > 
 
 
