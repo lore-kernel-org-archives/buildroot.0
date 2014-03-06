@@ -1,7 +1,7 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Thu,  6 Mar 2014 10:41:54 +0100
+Date: Thu,  6 Mar 2014 10:42:25 +0100
 Subject: [Buildroot] [PATCH v2 0/4] Misc patches
-Message-ID: <1394098918-13464-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <1394098949-31981-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
