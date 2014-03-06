@@ -1,41 +1,69 @@
-From: Alvaro G. M <alvaro.gamez@hazent.com>
-Date: Thu,  6 Mar 2014 09:53:33 +0100
-Subject: [Buildroot] [PATCH 1/1] libxmlrpc: disable parallel build
-In-Reply-To: <20140305154228.76f34797@skate>
-References: <20140305154228.76f34797@skate>
-Message-ID: <1394096013-18180-1-git-send-email-alvaro.gamez@hazent.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Thu, 6 Mar 2014 10:21:38 +0100
+Subject: [Buildroot] [PATCH 8 of 8] manual: contributing: minor
+ rewording of 'reporting bugs' section
+In-Reply-To: <CAAXf6LXzXCZpB+MRy14HmE4Apr0T79L-iUHx6JwN=3w5W13YVQ@mail.gmail.com>
+References: <patchbomb.1394036666@argentina>
+ <c79971c9c229295a42da.1394036674@argentina>
+ <CAHXCMM+9ttSHtKpxbVrTau-3tgXSN-As64JYg_T4f7R4SSKP_g@mail.gmail.com>
+ <CAAXf6LXzXCZpB+MRy14HmE4Apr0T79L-iUHx6JwN=3w5W13YVQ@mail.gmail.com>
+Message-ID: <CAHXCMMK-fR-Eq8wfacuE=+gUuGX7Hfv7uEBigPdchFGxQ4PWog@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Although upstream tries to support parallel builds, there are several
-dependencies that, if fixed, would end up making the library build
-linearly, so in the end there would be no benefit to fix those.
+On Thu, Mar 6, 2014 at 9:55 AM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+> Hi Samuel,
+>
+> On Wed, Mar 5, 2014 at 10:05 PM, Samuel Martin <s.martin49@gmail.com> wrote:
+>> Hi Thomas,
+>>
+>> On Wed, Mar 5, 2014 at 5:24 PM, Thomas De Schampheleire
+>> <patrickdepinguin@gmail.com> wrote:
+>>> This patch makes some minor fixes in the section about reporting bugs.
+>>>
+>>> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>>>
+>>> ---
+>>>  docs/manual/contribute.txt |  15 ++++++++-------
+>>>  1 files changed, 8 insertions(+), 7 deletions(-)
+>>>
+>>> Although I don't think this section belongs in the Contributing chapter,
+>>> there currently isn't a better place. When I get to rethinking the manual
+>>> structure, this can be changed.
+>>>
+>>> diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
+>>> --- a/docs/manual/contribute.txt
+>>> +++ b/docs/manual/contribute.txt
+>>> @@ -266,16 +266,16 @@ This can be easily handled with +git for
+>>>  ---------------------
+>>>
+>>>  [[reporting-bugs]]
+>>> -Reporting issues/bugs, get help
+>>> --------------------------------
+>>> +Reporting issues/bugs or getting help
+>>> +-------------------------------------
+>>>
+>>>  Before reporting any issue, please check
+>>>  xref:mailing-list-subscribe[the mailing list archive] in case someone has
+>>
+>> We could add a link to buildroot gmane. This iscertainly the easiest
+>> way to search the ML archive.
+>>
+>
+> This link is already present from the 'the mailing list archive'
+> reference, so I don't think we should replicate it here, right?
 
-Fixes:
+Fair enough!
 
-  http://autobuild.buildroot.net/results/996/996fc95b302fb6dfc7cd9a468fd395226a36c6c4/
+>
+> thanks,
+> Thomas
 
-Suggested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Alvaro G. M. <alvaro.gamez@hazent.com>
-Signed-off-by: Alvaro G. M <alvaro.gamez@hazent.com>
----
- package/libxmlrpc/libxmlrpc.mk | 1 +
- 1 file changed, 1 insertion(+)
+Regards,
 
-diff --git a/package/libxmlrpc/libxmlrpc.mk b/package/libxmlrpc/libxmlrpc.mk
-index 3d1af7e..ef120f9 100644
---- a/package/libxmlrpc/libxmlrpc.mk
-+++ b/package/libxmlrpc/libxmlrpc.mk
-@@ -12,6 +12,7 @@ LIBXMLRPC_LICENSE_FILES = doc/COPYING
- LIBXMLRPC_INSTALL_STAGING = YES
- LIBXMLRPC_DEPENDENCIES = libcurl
- LIBXMLRPC_CONFIG_SCRIPTS = xmlrpc-c-config
-+LIBXMLRPC_MAKE = $(MAKE1)
- 
- LIBXMLRPC_CONF_OPT = \
- 	$(if $(BR2_USE_WCHAR),,ac_cv_header_wchar_h=no) \
 -- 
-1.9.0.rc3
+Samuel
