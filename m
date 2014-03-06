@@ -1,92 +1,52 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 06 Mar 2014 18:26:23 +0100
-Subject: [Buildroot] [PATCH 1/2] python-libconfig: new package
-In-Reply-To: <E1CF8EFE2042404B87DE2B6D662128020ED591A9@KUUMEX10.barco.com>
-References: <E1CF8EFE2042404B87DE2B6D662128020ED58B96@KUUMEX10.barco.com>
- <53175A9E.3090001@mind.be>
- <E1CF8EFE2042404B87DE2B6D662128020ED591A9@KUUMEX10.barco.com>
-Message-ID: <5318AFBF.4000006@mind.be>
+Date: Thu, 06 Mar 2014 18:27:41 +0100
+Subject: [Buildroot] [PATCH v2 1/4] webkit: fix mmu reverse dependency
+ moving it to %_ARCH_SUPPORTS
+In-Reply-To: <1394098949-31981-2-git-send-email-fabio.porcedda@gmail.com>
+References: <1394098949-31981-1-git-send-email-fabio.porcedda@gmail.com>
+ <1394098949-31981-2-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <5318B00D.6050003@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/03/14 10:05, Derycke, Johan wrote:
-> Hi,
+On 06/03/14 10:42, Fabio Porcedda wrote:
+> Because mmu dependency was not propagated move it to
+> BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS to automatically propagate it.
+> It can ben moved to BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS because like
+> target architecture dependencies it doesn't modify the comment string.
 > 
->> -----Original Message-----
->> From: Arnout Vandecappelle [mailto:arnout at mind.be]
->> Sent: woensdag 5 maart 2014 18:11
->> To: Derycke, Johan; buildroot at busybox.net
->> Subject: Re: [Buildroot] [PATCH 1/2] python-libconfig: new package
->>
->> On 04/03/14 09:32, Derycke, Johan wrote:
->>> Python bindings to the C++ library libconfig
->>> https://github.com/cnangel/python-libconfig
->>>
->>> Signed-off-by: Johan Derycke <johan.derycke@barco.com>
->>> ---
->>>  package/python-libconfig/Config.in           |    9 +++++++++
->>>  package/python-libconfig/python-libconfig.mk |   21
->> +++++++++++++++++++++
->>>  2 files changed, 30 insertions(+)
->>>  create mode 100644 package/python-libconfig/Config.in
->>>  create mode 100644 package/python-libconfig/python-libconfig.mk
->>>
->>> diff --git a/package/python-libconfig/Config.in
->>> b/package/python-libconfig/Config.in
->>> new file mode 100644
->>> index 0000000..7e4f317
->>> --- /dev/null
->>> +++ b/package/python-libconfig/Config.in
->>> @@ -0,0 +1,9 @@
->>> +config BR2_PACKAGE_PYTHON_LIBCONFIG
->>> +       bool "python-libconfig"
->>> +       depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
->>> +  select BR2_PACKAGE_BOOST_PYTHON
->>
->>  You should also select BR2_PACKAGE_BOOST.
->>
->>  You should also depend on boost's toolchain dependencies:
->> BR2_INSTALL_LIBSTDCPP, BR2_LARGEFILE, BR2_TOOLCHAIN_HAS_THREADS,
->> and add the corresponding comment.
+> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+> ---
+>  package/webkit/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Can I use:
+> diff --git a/package/webkit/Config.in b/package/webkit/Config.in
+> index 2b0addc..5ba2eb3 100644
+> --- a/package/webkit/Config.in
+> +++ b/package/webkit/Config.in
+> @@ -5,6 +5,7 @@ config BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
+>  		!(BR2_arm7tdmi || BR2_arm720t || BR2_arm920t || BR2_arm922t || BR2_fa526)
+>  	default y if BR2_i386 || BR2_mips || BR2_mipsel || \
+>  		BR2_sh || BR2_sparc || BR2_x86_64
+> +	depends on BR2_USE_MMU # libgail -> pango -> libglib2
+>  
+>  # disabled on powerpc due to bug https://bugs.webkit.org/show_bug.cgi?id=113638
+>  
+> @@ -13,7 +14,6 @@ config BR2_PACKAGE_WEBKIT
+>  	depends on BR2_INSTALL_LIBSTDCPP
+>  	depends on BR2_USE_WCHAR # enchant -> libglib2
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # enchant -> libglib2
+> -	depends on BR2_USE_MMU # libgail -> pango -> libglib2
+>  	depends on BR2_PACKAGE_LIBGTK2
+>  	depends on BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
+>  	depends on !BR2_BINFMT_FLAT # icu
 > 
-> comment "python libconfig needs boost"
->         depends on !BR2_PACKAGE_BOOST
->         depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
-> 
-> to avoid the boost "bloatware" being installed behind the back?
-
- No, that's OK. The bloat is only in the source, not in the libary (I
-haven't built it yet but I expect it will be in the order of 100K).
-
- I mainly made the remark to trigger you to consider if it is really
-needed. But I think I get it now: boost.Python is an alternative for
-something like swig or sip. I first thought it was using some of boost's
-standard C++ library alternatives.
-
-
- Regards,
- Arnout
-
-> 
->>
->>  It's a crying shame that the python wrapper for something trivial like libconfig
->> requires bloatware like boost :-) but that can't be helped of course.
->>
->>> +       select BR2_PACKAGE_LIBCONFIG
->>> +       help
->>> +           Python bindings to the C++ library libconfig
->>
->>  Perhaps add a bit of the help text of libconfig.
->>
->>  Regards,
->>  Arnout
-
-[snip]
 
 
 -- 
