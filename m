@@ -1,30 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Mar 2014 22:43:35 +0100
-Subject: [Buildroot] [PATCH] vlc: update opencv disabling flag
-In-Reply-To: <1394196321-11562-1-git-send-email-s.martin49@gmail.com>
-References: <1394196321-11562-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <20140307224335.767bf7b8@skate>
+Date: Fri, 7 Mar 2014 22:43:45 +0100
+Subject: [Buildroot] [PATCH 1/3] configs/fsl_p1010rdb: fix and bump
+ relevant versions
+In-Reply-To: <1394195465-27656-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1394195465-27656-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140307224345.642c92de@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+Dear Gustavo Zacarias,
 
-On Fri,  7 Mar 2014 13:45:21 +0100, Samuel Martin wrote:
-> This patch completes the commit d7f13e500e5970577e7abd96a0e9254a1e8f643f
-> turning --{with,without}- options in --{enable,disable}- options.
+On Fri,  7 Mar 2014 09:31:03 -0300, Gustavo Zacarias wrote:
+> Tweak the config to deal with b155f5a5ab321b06df1c5d5f5e104438e8288cf8
+> fallout.
+> And bump to the latest kernel versions.
 > 
-> Fixes:
->   http://autobuild.buildroot.net/results/a34/a34abdcc92a6b2cf976760d66adf6c7572743bb4/
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/vlc/vlc.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  configs/freescale_p1010rdb_pa_defconfig | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 
-Applied, thanks.
+All three patches applied.
 
 Thomas
 -- 
