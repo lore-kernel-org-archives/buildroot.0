@@ -1,55 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Mar 2014 09:30:56 +0100
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <5319165F.2080401@openwide.fr>
-References: <20140303090219.65a08cc7@skate>
- <495852511.10469178.1393846305700.JavaMail.root@openwide.fr>
- <20140303134805.2eb084c4@skate> <5319165F.2080401@openwide.fr>
-Message-ID: <20140307093056.23f6c021@skate>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Fri, 7 Mar 2014 09:41:01 +0100
+Subject: [Buildroot] [PATCH v2 4/4] linux: remove dirs dependency
+In-Reply-To: <5318B267.2020301@mind.be>
+References: <1394098949-31981-1-git-send-email-fabio.porcedda@gmail.com>
+ <1394098949-31981-5-git-send-email-fabio.porcedda@gmail.com>
+ <5318B267.2020301@mind.be>
+Message-ID: <CAHkwnC92pZoA=8W08scQkre5zDYm1JMCpfWQTa9jTUQzyD_jyw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+On Thu, Mar 6, 2014 at 6:37 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 06/03/14 10:42, Fabio Porcedda wrote:
+>> The "dirs" dependency is redundant because now the "generic-package"
+>> infrastructure add automatically the "dirs" dependency so just remove
+>> the redundant references.
+>>
+>> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+>
+> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>
+>
+>  There are also redundant dependencies on dirs in Makefile and in
+> package/uclibc/uclibc.mk - that can be done in a separate patch, but if
+> you get around to fixing the other places before this one gets committed
+> please do include it.
 
-On Fri, 07 Mar 2014 01:44:15 +0100, Romain Naour wrote:
+Hi Arnout,
+thanks for reviewing.
+I will send a patch to remove the dirs dependency from the other files.
 
-> It seems that __ELF__ has been removed from gcc
-
-I don't really the relation between this statement you're making.
-
-> http://gcc.gnu.org/gcc-4.9/changes.html
-> "Support for a number of older systems and recently unmaintained or 
-> untested target ports of GCC has been declared obsolete in GCC 4.9"
-
-And this statement.
-
-> 
-> (version 4.9.0)
-> ./microblaze-buildroot-linux-gnu-cpp -dM /dev/null | grep __ELF__
-> 
-> (version 4.7.2)
-> (code sourcery toolchain x86)
-> ./i686-pc-linux-gnu-cpp -dM /dev/null | grep __ELF__
-> #define __ELF__ 1
-> 
-> (version 4.8.2)
-> (buildroot internal toolchain x86)
-> ./i686-buildroot-linux-gnu-cpp -dM /dev/null | grep __ELF__
-> #define __ELF__ 1
-
-And a x86 toolchain with gcc 4.9.x ?
-
-> I'll send a patch to remove this test since buildroot does not have 
-> support for non ELF system.
-
-That's not true: we support Blackfin FLAT, which is not an ELF binary
-format.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards
+Fabio Porcedda
