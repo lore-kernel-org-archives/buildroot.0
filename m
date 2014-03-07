@@ -1,111 +1,39 @@
-From: Lucas De Marchi <lucas.de.marchi@gmail.com>
-Date: Fri, 7 Mar 2014 01:08:36 -0300
-Subject: [Buildroot] Linux kernel module is not running anymore when
- switching from mdev to udev
-In-Reply-To: <5316F334020000460004B5AA@gwia2.rz.hs-offenburg.de>
-References: <5316F334020000460004B5AA@gwia2.rz.hs-offenburg.de>
-Message-ID: <CAKi4VAJ=VjGnbzbkL99sx7AEouNrXxdErHmO1VJmVL28_n1fDA@mail.gmail.com>
+From: Bernd Kuhls <berndkuhls@hotmail.com>
+Date: Fri, 07 Mar 2014 07:03:46 +0100
+Subject: [Buildroot] [v2,
+	5/7] mesa3d: modularize and bump to version 10.0.3
+References: <BLU0-SMTP47875A4E6642624302CE843D9AA0@phx.gbl>
+ <5318B183.60005@savoirfairelinux.com>
+ <4homuaxdgh.ln2@ID-313208.user.individual.net>
+ <20140306224559.080a6fb3@skate>
+Message-ID: <134ouaxlpp.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Frank,
+Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote
+in news:20140306224559.080a6fb3 at skate: 
 
-On Wed, Mar 5, 2014 at 5:49 AM, Frank Ihle <frank.ihle@hs-offenburg.de> wrote:
-> Hi everyone,
->
-> there is this problem, that I searched the Internet
-> for its solution but without success. Here's what it's about, I hope
-> someone can give me a hint:
->
->
->
->         I'm using Buildroot 2013.10 to generate my Linux 2.6.39 Images, with the following Kernel  module:
->
->
->
->   void GPIO_LED(void) {
->
->   printk(" GPIO: set PC8: '0');
->
->   at91_set_gpio_value(AT91_PIN_PC8, 1);
->
->
->   }
->
->
->   int init_module(void) {
->
->   GPIO_LED();   return 0;
->
->
->   }
->
->
->   MODULE_LICENSE("GPL");
->
->
->
-> When using it with mdev device management. everything works just
-> fine. But using it with a udev device management, while executing insmod
+> So you will resubmit a new version?
 
-I don't see how udev could be related to your problem. Maybe just how
-the dependencies were chosen...
+Hi,
 
+yes, but I need several days for testing the several combinations of 
+Config.in-options. During yesterdays testing some questions came up:
 
->
->
->
->   insmod /usr/modules/measurement_gpio.ko
->
->
->
-> the following message appeared:
->
->
->
->   insmod: can't insert '/usr/modules/measurement_gpio.ko': invalid
->   module format
->
->
->
-> Every setting stayed the same (especially the kernel version) but the
->  device management changes during this test, so actually the module
-> should be fine. Building the kernel to be able for loading modules for
-> multiple versions didn't solve it, neither the option "force module
-> loading"
->
->
-> The way I build my module is:
->
->
-> with Buildroot I'm generating an Image, on the way a Linux 2.6.39 is installed.Afterwards I'm compiling the kernel module with the path to the Linux 2.6.39, that Buildroot has downloaded.When the module is created I'm putting it into a fs-overlay directory, so it will be included into the image on next build.I hit another "make" on Buildroot and i got everything together and a bootable image.
->
->
-> I change nothing, that's why it confuses me even more
->
->
-> How can this be and how to solve it?
+Is it correct that buildroot lacks llvm support?
+If true, I have to remove some radeon-related options Spenser added:
+http://www.linuxfromscratch.org/blfs/view/svn/x/mesalib.html
 
-I successfully built an image with buildroot using systemd/udev/kmod
-some days ago. And inserting modules work fine. If it was a more
-recent kernel I'd say it's because you enabled module signature and
-your out-of-tree module isn't signed.  But it doesn't look like this.
+Also I could not find libclc/OpenCL as buildroot package:
+http://cgit.freedesktop.org/mesa/mesa/commit/?
+id=a64d3dd1358fe0f69ebbf10da35c9ebd672e6f9d
 
-CC'ing buildroot's ML to see if they have a clue.
+The current mesa3d.mk in buildroot only builds the swrast driver, my personal 
+need is to extend the package to compile the i965 drm driver so I will 
+concentrate on this. It does not need the dependencies I mentioned above.
 
->
-> Kind Regards,
-> Frank
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-modules" in
-> the body of a message to majordomo at vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
-
-
-
--- 
-
-Lucas De Marchi
+Regards, Bernd
