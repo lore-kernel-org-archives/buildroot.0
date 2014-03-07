@@ -1,40 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Mar 2014 23:50:55 +0100
-Subject: [Buildroot] [PATCH 1/1] chdkptp CLI added
-In-Reply-To: <1387798250-2437-2-git-send-email-matthew.j.urry@gmail.com>
-References: <1387798250-2437-1-git-send-email-matthew.j.urry@gmail.com>
- <1387798250-2437-2-git-send-email-matthew.j.urry@gmail.com>
-Message-ID: <20140307235055.494ef4e4@skate>
+Date: Fri, 7 Mar 2014 23:52:02 +0100
+Subject: [Buildroot] [PATCH 1/3] wiringpi: new package
+In-Reply-To: <CAKi4VALgR09CnsBJT7xF1qOharQcWs-ZxS54jtzb8+retET85Q@mail.gmail.com>
+References: <1389383422-29665-1-git-send-email-lucas.de.marchi@gmail.com>
+ <20140111140833.44613b15@skate>
+ <CAKi4VALgR09CnsBJT7xF1qOharQcWs-ZxS54jtzb8+retET85Q@mail.gmail.com>
+Message-ID: <20140307235202.5b69cf34@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Matthew Urry,
+Dear Lucas De Marchi,
 
-On Mon, 23 Dec 2013 11:30:50 +0000, Matthew Urry wrote:
-> 
-> Signed-off-by: Matthew Urry <matthew.j.urry@gmail.com>
-> ---
->  package/Config.in                                  |    1 +
->  package/chdkptp/Config.in                          |   15 +++++++++++
->  .../chdkptp-01-add_lm_flag_to_makefile.patch       |   15 +++++++++++
->  ...ptp-02-create_sh_script_to_launch_chdkptp.patch |   22 ++++++++++++++++
->  package/chdkptp/chdkptp.mk                         |   27 ++++++++++++++++++++
->  5 files changed, 80 insertions(+)
->  create mode 100644 package/chdkptp/Config.in
->  create mode 100644 package/chdkptp/chdkptp-01-add_lm_flag_to_makefile.patch
->  create mode 100644 package/chdkptp/chdkptp-02-create_sh_script_to_launch_chdkptp.patch
->  create mode 100644 package/chdkptp/chdkptp.mk
+On Sat, 11 Jan 2014 10:20:39 -0200, Lucas De Marchi wrote:
 
-You received some review on this patch on December, 28th 2013,
-suggesting several improvements to make your patch acceptable upstream.
-Your contributions are definitely welcome, but if you want to get it
-accepted, it'd be nice if you could resend a new version that takes
-into account the comments that have been made.
+> thanks for reviewing it, I'll send an updated version.
 
-Thanks a lot!
+Do you plan to resend new versions of your wiringpi and pi4j patches,
+taking into account the reviews that were made early January?
+
+Thanks!
 
 Thomas
 -- 
