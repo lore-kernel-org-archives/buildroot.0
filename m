@@ -1,101 +1,237 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 7 Mar 2014 19:01:03 +0100
-Subject: [Buildroot] [PATCH 1/1] [V5] toolchain: control vendor part in
- GNU_TARGET_NAME
-In-Reply-To: <884EA965490E3C4D8E66AEF41E980250096818@ezex10.ezchip.com>
-References: <1394155829-13670-1-git-send-email-noamc@ezchip.com>
- <884EA965490E3C4D8E66AEF41E980250096818@ezex10.ezchip.com>
-Message-ID: <20140307180102.GF3384@free.fr>
+From: jean.sorgemoel at laposte.net <jean.sorgemoel@laposte.net>
+Date: Fri,  7 Mar 2014 20:15:14 +0100
+Subject: [Buildroot] [PATCH v7 1/2] adding bootloader option for iso9660
+	filesystem image
+In-Reply-To: <1376644934-4302-1-git-send-email-jean.sorgemoel@laposte.ne>
+References: <1376644934-4302-1-git-send-email-jean.sorgemoel@laposte.ne>
+Message-ID: <1394219715-3947-1-git-send-email-jean.sorgemoel@laposte.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Noam, All,
+From: Jerome Sagnole <jean.sorgemoel@laposte.net>
 
-On 2014-03-07 01:32 +0000, Noam Camus spake thusly:
-> This option allows to customize the "vendor" part of the
-> toolchain tuple, where the toolchain tuple has the form
-> <arch>-<vendor>-<os>-<libc>. Use this option in situations
-> where gcc might make different decisions based on the vendor
-> part of the tuple.
-> 
-> Signed-off-by: Noam Camus <noamc@ezchip.com>
-> ---
->  package/Makefile.in                     |   17 ++++++++++++++++-
->  toolchain/toolchain-buildroot/Config.in |   16 ++++++++++++++++
->  2 files changed, 32 insertions(+), 1 deletions(-)
-> 
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index 454f614..bd9f18c 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -20,8 +20,23 @@ endif
->  MAKE1:=$(HOSTMAKE) -j1
->  MAKE:=$(HOSTMAKE) $(if $(PARALLEL_JOBS),-j$(PARALLEL_JOBS))
-> 
-> +ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
-> +TARGET_VENDOR = $(call qstrip,$(BR2_TOOLCHAIN_BUILDROOT_VENDOR))
-> +else
-> +TARGET_VENDOR = buildroot
-> +endif
-> +
-> +# Sanity checks
-> +ifeq ($(TARGET_VENDOR),)
-> +$(error BR2_TOOLCHAIN_BUILDROOT_VENDOR is not allowed to be empty)
-> +endif
-> +ifeq ($(TARGET_VENDOR),unknown)
-> +$(error BR2_TOOLCHAIN_BUILDROOT_VENDOR cannot be 'unknown'. \
-> +        It might be confused with the native toolchain)
-> +endif
-> +
->  # Compute GNU_TARGET_NAME
-> -GNU_TARGET_NAME=$(ARCH)-buildroot-$(TARGET_OS)-$(LIBC)$(ABI)
-> +GNU_TARGET_NAME=$(ARCH)-$(TARGET_VENDOR)-$(TARGET_OS)-$(LIBC)$(ABI)
-> 
->  # Blackfin FLAT needs uclinux
->  ifeq ($(BR2_bfin)$(BR2_BINFMT_FLAT),yy)
-> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-> index 07db50b..3487327 100644
-> --- a/toolchain/toolchain-buildroot/Config.in
-> +++ b/toolchain/toolchain-buildroot/Config.in
-> @@ -70,6 +70,22 @@ config BR2_TOOLCHAIN_BUILDROOT_LIBC
->         default "glibc"  if BR2_TOOLCHAIN_BUILDROOT_EGLIBC
->         default "glibc"  if BR2_TOOLCHAIN_BUILDROOT_GLIBC
 
-Your mailer (or editor?) is mangling the patch: the above are leading
-tabs in the current source tree, so your patch won't apply, since it has
-leading spaces instead.
+	* adjust patch with last update buildroot
+		(TARGETS -> TARGETS_ROOTFS)
 
-> +config BR2_TOOLCHAIN_BUILDROOT_VENDOR
-> +       string "custom toolchain vendor name"
-> +       default "buildroot"
-> +       help
 
-This should be a leading tab in front of 'string', 'default' and 'help'
+Signed-off-by: Jerome Sagnole <jean.sorgemoel@laposte.net>
+---
 
-> +         This option allows to customize the "vendor" part of the
-> +         toolchain tuple, where the toolchain tuple has the form
-> +         <arch>-<vendor>-<os>-<libc>. The default value, "buildroot",
-> +         is fine for most cases, except in very specific situations
-> +         where gcc might make different decisions based on the vendor
-> +         part of the tuple. The value "unknown" is not allowed, as the
-> +         cross-compiling toolchain might then be confused with the
-> +         native toolchain when the target and host architecture are
-> +         identical.
-> +
-> +         If you're not sure, just leave the default "buildroot" value.
+changes v5 -> v6:
+	* Adding multiple new options for ISO9660 filesystems: Joliet,
+	   RockRidge, name, input charset
+	* Adding the infrastructure to use different bootloaders.
 
-This should be a leading tab and two spaces in front of the help text.
+changes v4 -> v5:
+	* addon to include comment Arnout Vandecappelle & Martin Bark
+	* modify option to include files and directories in iso image
+	   - suppress option BR2_TARGET_ROOTFS_ISOLINUX_EXTRA_FILES
+	   - add option BR2_TARGET_ROOTFS_ISO9660_OVERLAY
+	   - modify code to include this new option
+	* modify comment
+	* modify signed-off-by (use real name)
+	* keep default option for BR2_TARGET_ROOTFS_ISO9660_ROCK_RIDGE
+	    in old code, it defined by default (keep for compatibility)
+	* modify default option for BR2_TARGET_ROOTFS_ISO9660_NAME
+	* modify default option for BR2_TARGET_ROOTFS_ISO9660_INPUT_CHARSET 
+	* modify variable name to add prefix 'ISO9660_'
+	* "qstrip" each variable
+	    BR2_TARGET_ROOTFS_ISO9660_INPUT_CHARSET
+	    BR2_TARGET_ROOTFS_ISO9660_NAME
+	* modify command INITRD_SED_CMD
+	* modify kernel launch for this iso 
+	   - use LINUX_IMAGE_NAME 
+	   - add command sed to replace __LINUX_IMAGE_NAME__ in configuration
+	* suppress bootmsg.txt in isolinux.cfg is empty (bootloader isolinux)
 
-Regards,
-Yann E. MORIN.
 
+changes v3 -> v4:
+	* addon to include remark Arnout Vandecappelle & Thomas Petazzoni
+	* add choise to select bootloader in iso9660 menu
+	* modify comment
+	* seperate code in two patch
+	  1st patch : update iso9660 with grub
+	  2nd patch : add new bootloader isolinux
+
+
+changes v2 -> v3:
+	* addon to include remark Thomas Petazzoni & Arnout Vandecappelle
+	  - modify comment
+	  - default generate iso with grub bootloader
+	  - you can select isolinux bootloader
+	    - detail : (module fs/iso9660)
+	    - option to select bootloader (grub/isolinux)
+	    - file(s) bootloader configuration
+	    - option to copy file(s) on iso (only for isolinux)
+	    - option to create iso with long filenames (Joliet format)
+	    - option to create iso with POSIX file system (file mode, uid, gid, ...)
+	    - define volume label
+	    - define parameter input charset
+	    - can use initramfs (if activate), also cpio (like initrd)
+
+changes v1 -> v2:
+	* simplify code (suggest by Arnout Vandecappelle)
+	  - I suppress redundant comment
+	  - Suppress menu and use conditional (replace 'depends on' by 'if/endif')
+	  - Modify comment
+	  - suppress option (keyboard, ...)
+	  - replace 8 x space by tabulation
+	  - suppress extension 'BR2_'
+	  - use variable 'ISOLINUX_DIR'
+	  - suppress keyboard option
+	  - I can't use command '$(INSTALL) -D' beacause I don't define filenames (I keep old code)
+	  - Hide command genisoimage (with option $@) 
+
+Changes v0 -> v1:
+	* new branch to generate iso with bootloader isolinux
+
+ fs/iso9660/Config.in  |   39 ++++++++++++++++++++++++++++++-
+ fs/iso9660/iso9660.mk |   62 +++++++++++++++++++++++++++++++++++--------------
+ 2 files changed, 83 insertions(+), 18 deletions(-)
+
+diff --git a/fs/iso9660/Config.in b/fs/iso9660/Config.in
+index 50b4377..e881ca6 100644
+--- a/fs/iso9660/Config.in
++++ b/fs/iso9660/Config.in
+@@ -8,10 +8,47 @@ config BR2_TARGET_ROOTFS_ISO9660
+ 	help
+ 	  Build a bootable iso9660 image
+ 
++if BR2_TARGET_ROOTFS_ISO9660
++
+ config BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU
+ 	string "Boot menu.lst file"
+-	depends on BR2_TARGET_ROOTFS_ISO9660
+ 	default "fs/iso9660/menu.lst"
++	help
++	  Grub configuration
++	  Define menu, commands and options for grub
++
++config BR2_TARGET_ROOTFS_ISO9660_JOLIET
++	bool "Create iso with Joliet format (long filenames)"
++	default y
++	help
++	  Generate iso image with Joliet directory records.
++	  Use Unicode and each path component can be up 64
++	  Unicode characters long.
++
++config BR2_TARGET_ROOTFS_ISO9660_ROCK_RIDGE
++	bool "Create iso with Rock Ridge extensions (POSIX filesystem)"
++	default y
++	help
++	  Generate iso image with Rock Ridge directory information,
++	  which makes it a POSIX filesystem (file mode, uid, gid, ...)
++
++config BR2_TARGET_ROOTFS_ISO9660_NAME
++	string "Volume label"
++	default ""
++	help
++	  cdrom name
++
++config BR2_TARGET_ROOTFS_ISO9660_INPUT_CHARSET
++	string "Input filename character encoding"
++	default "utf8"
++	help
++	  The character encoding with which the names of the files that
++	  will be copied into the iso9660 filesystem are encoded. For the
++	  RockRidge directory, the same encoding will be used. For the
++	  Joliet directory, it will be converted to UTF-16.
++	  (see program genisoimage : genisoimage -input-charset help)
++
++endif # BR2_TARGET_ROOTFS_ISO9660
+ 
+ comment "iso image needs a Linux kernel to be built"
+ 	depends on BR2_i386 || BR2_x86_64
+diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+index 6c8ace0..3cadfd1 100644
+--- a/fs/iso9660/iso9660.mk
++++ b/fs/iso9660/iso9660.mk
+@@ -9,33 +9,53 @@
+ 
+ ISO9660_TARGET_DIR = $(BUILD_DIR)/iso9660
+ ISO9660_BOOT_MENU := $(call qstrip,$(BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU))
++ISO9660_CHARSET = $(call qstrip,$(BR2_TARGET_ROOTFS_ISO9660_INPUT_CHARSET))
++ISO9660_NAME = $(call qstrip,$(BR2_TARGET_ROOTFS_ISO9660_NAME))
++ISO9660_KERNEL_DST = $(ISO9660_TARGET_DIR)/kernel
++
++ISO9660_BOOTLOADER_BIN = $(GRUB_DIR)/stage2/stage2_eltorito
++ISO9660_BOOTLOADER_DIR = $(ISO9660_TARGET_DIR)/boot/grub/
++ISO9660_BOOTLOADER_DST_CFG = $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
++ISO9660_ELTORITO_BOOT = boot/grub/stage2_eltorito
+ 
+ $(BINARIES_DIR)/rootfs.iso9660: host-cdrkit host-fakeroot linux rootfs-cpio grub
+ 	@$(call MESSAGE,"Generating root filesystem image rootfs.iso9660")
+-	mkdir -p $(ISO9660_TARGET_DIR)
+-	mkdir -p $(ISO9660_TARGET_DIR)/boot/grub
+-	cp $(GRUB_DIR)/stage2/stage2_eltorito $(ISO9660_TARGET_DIR)/boot/grub/
+-	cp $(ISO9660_BOOT_MENU) $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
++	@mkdir -p $(ISO9660_TARGET_DIR)
++	@mkdir -p $(ISO9660_BOOTLOADER_DIR)
++
++	@cp $(ISO9660_BOOTLOADER_BIN) $(ISO9660_BOOTLOADER_DIR)
++	@cp $(ISO9660_BOOT_MENU) $(ISO9660_BOOTLOADER_DST_CFG)
++	@cp $(LINUX_IMAGE_PATH) $(ISO9660_KERNEL_DST)
++
+ ifeq ($(BR2_TARGET_GRUB_SPLASH),)
+-	$(SED) '/^splashimage/d' $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
++	@$(SED) '/^splashimage/d' $(ISO9660_BOOTLOADER_DST_CFG)
+ else
+-	cp boot/grub/splash.xpm.gz $(ISO9660_TARGET_DIR)/
+-endif
+-	cp $(LINUX_IMAGE_PATH) $(ISO9660_TARGET_DIR)/kernel
++	@cp boot/grub/splash.xpm.gz $(ISO9660_TARGET_DIR)/
++endif # BR2_TARGET_GRUB_SPLASH
++
+ ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
+-	$(SED) '/initrd/d'  $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
++	@$(SED) '/initrd/d'  $(ISO9660_BOOTLOADER_DST_CFG)
+ else
+-	cp $(BINARIES_DIR)/rootfs.cpio$(ROOTFS_CPIO_COMPRESS_EXT) $(ISO9660_TARGET_DIR)/initrd
+-endif
++	@cp $(BINARIES_DIR)/rootfs.cpio$(ROOTFS_CPIO_COMPRESS_EXT) \
++		$(ISO9660_TARGET_DIR)/initrd
++endif # BR2_TARGET_ROOTFS_INITRAMFS
++
+ 	# Use fakeroot to pretend all target binaries are owned by root
+-	rm -f $(FAKEROOT_SCRIPT)
+-	echo "chown -R 0:0 $(ISO9660_TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
++	@rm -f $(FAKEROOT_SCRIPT)
++	@echo "chown -R 0:0 $(ISO9660_TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
+ 	# Use fakeroot so mkisofs believes the previous fakery
+-	echo "$(HOST_DIR)/usr/bin/genisoimage -R -b boot/grub/stage2_eltorito -no-emul-boot " \
+-		"-boot-load-size 4 -boot-info-table -o $@ $(ISO9660_TARGET_DIR)" \
++	@echo "$(HOST_DIR)/usr/bin/genisoimage " \
++		"$(GENISOIMAGE_OPTS) " \
++		"-b $(ISO9660_ELTORITO_BOOT) " \
++		"-no-emul-boot " \
++		"-boot-load-size 4 " \
++		"-boot-info-table " \
++		"-input-charset '$(ISO9660_CHARSET)' " \
++		"-V '$(ISO9660_NAME)' " \
++		"-o $@ $(ISO9660_TARGET_DIR)" \
+ 		>> $(FAKEROOT_SCRIPT)
+-	chmod a+x $(FAKEROOT_SCRIPT)
+-	$(HOST_DIR)/usr/bin/fakeroot -- $(FAKEROOT_SCRIPT)
++	@chmod a+x $(FAKEROOT_SCRIPT)
++	@$(HOST_DIR)/usr/bin/fakeroot -- $(FAKEROOT_SCRIPT)
+ 	- at rm -f $(FAKEROOT_SCRIPT)
+ 	- at rm -rf $(ISO9660_TARGET_DIR)
+ 
+@@ -49,3 +69,11 @@ rootfs-iso9660: $(BINARIES_DIR)/rootfs.iso9660
+ ifeq ($(BR2_TARGET_ROOTFS_ISO9660),y)
+ TARGETS_ROOTFS += rootfs-iso9660
+ endif
++
++ifeq ($(BR2_TARGET_ROOTFS_ISO9660_JOLIET),y)
++GENISOIMAGE_OPTS += -J
++endif
++
++ifeq ($(BR2_TARGET_ROOTFS_ISO9660_ROCK_RIDGE),y)
++GENISOIMAGE_OPTS += -R
++endif
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.10.4
