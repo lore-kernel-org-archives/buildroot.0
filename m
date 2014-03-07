@@ -1,48 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Mar 2014 23:39:52 +0100
-Subject: [Buildroot] [PATCH 4/7] package/zic: install header
-In-Reply-To: <ea469bd003d287011efcd1a8791628b0445aa85d.1393884458.git.yann.morin.1998@free.fr>
-References: <cover.1393884458.git.yann.morin.1998@free.fr>
- <ea469bd003d287011efcd1a8791628b0445aa85d.1393884458.git.yann.morin.1998@free.fr>
-Message-ID: <20140307233952.2b60d44f@skate>
+Date: Fri, 7 Mar 2014 23:46:43 +0100
+Subject: [Buildroot] [PATCH] Initial support for i.mx6 sabreauto board
+In-Reply-To: <BLU0-SMTP2974AC9E5F7279077E2563AF7F20@phx.gbl>
+References: <BLU0-SMTP2974AC9E5F7279077E2563AF7F20@phx.gbl>
+Message-ID: <20140307234643.605da11f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Abdul Hussain,
 
-On Mon,  3 Mar 2014 23:10:23 +0100, Yann E. MORIN wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> The incoming host-tzdump package requires the tzfile header,
-> so we isntall it.
-> 
-> Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-> [yann.morin.1998 at free.fr: split zic header-install to its own cset]
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On Fri, 8 Nov 2013 21:44:06 +0530, Abdul Hussain wrote:
+> Signed-off-by: Abdul Hussain <hussain.abdul@outlook.com>
 > ---
->  package/zic/zic.mk | 2 ++
->  1 file changed, 2 insertions(+)
+>  configs/freescale_imx6sabreauto_defconfig |    9 +++++++++
+>  1 file changed, 9 insertions(+)
+>  create mode 100644 configs/freescale_imx6sabreauto_defconfig
 > 
-> diff --git a/package/zic/zic.mk b/package/zic/zic.mk
-> index c9b6c7b..4814fba 100644
-> --- a/package/zic/zic.mk
-> +++ b/package/zic/zic.mk
-> @@ -22,6 +22,8 @@ endef
->  define HOST_ZIC_INSTALL_CMDS
->  	mkdir -p $(HOST_DIR)/usr/sbin
->  	install -D -m 755 $(@D)/zic $(HOST_DIR)/usr/sbin/zic
-> +	mkdir -p $(HOST_DIR)/usr/include
-> +	install -D -m 644 $(@D)/tzfile.h $(HOST_DIR)/usr/include/tzfile.h
->  endef
+> diff --git a/configs/freescale_imx6sabreauto_defconfig b/configs/freescale_imx6sabreauto_defconfig
+> new file mode 100644
+> index 0000000..d02a395
+> --- /dev/null
+> +++ b/configs/freescale_imx6sabreauto_defconfig
+> @@ -0,0 +1,9 @@
+> +BR2_arm=y
+> +BR2_cortex_a9=y
+> +BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="http://git.freescale.com/git/cgit.cgi/imx/linux-2.6-imx.git/snapshot/linux-2.6-imx-imx_3.0.35_4.1.0.tar.bz2"
+> +BR2_LINUX_KERNEL_DEFCONFIG="imx6"
+> +BR2_TARGET_UBOOT=y
+> +BR2_TARGET_UBOOT_BOARDNAME="mx6qsabreauto"
 
-Applied, thanks.
+A specific U-Boot version should be used, see all the other defconfig
+files we have in Buildroot.
 
-However, I've removed the mkdir -p line, which is useless because of
-the use of install -D. And I've replaced install by $(INSTALL), was we
-do in all other packages.
+Also, a specific kernel headers version should be specified, which
+matches the 3.0.x kernel being used here.
+
+Could you take these comments into account, and resubmit an updated
+version?
+
+Thanks!
 
 Thomas
 -- 
