@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Mar 2014 22:43:56 +0100
-Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{10,
- 13}.x stable versions
-In-Reply-To: <1394195367-27482-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1394195367-27482-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140307224356.72c100f7@skate>
+Date: Fri, 7 Mar 2014 22:44:14 +0100
+Subject: [Buildroot] [PATCH] configs/qemu: fix and bump relevant
+ kernel/header versions
+In-Reply-To: <1394186916-14902-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1394186916-14902-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140307224414.08f6919e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,13 +13,21 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Fri,  7 Mar 2014 09:29:26 -0300, Gustavo Zacarias wrote:
+On Fri,  7 Mar 2014 07:08:36 -0300, Gustavo Zacarias wrote:
+> Tweak the configs to deal with b155f5a5ab321b06df1c5d5f5e104438e8288cf8
+> fallout.
+> And bump to the latest kernel versions.
+> 
+> As of this commit the microblaze qemu targets seem broken, probably
+> because of commit 14e527eb66d251c878f212236729d715e350c135 or some qemu
+> limitation.
+> 
+> SPARC seems to have issues as well, the kernel seems to go down with an
+> unhandled exception with qemu 1.7.0
+> 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/linux-headers/Config.in.host | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Both patches applied, thanks!
+Applied, thanks.
 
 Thomas
 -- 
