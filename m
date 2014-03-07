@@ -1,50 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Mar 2014 23:46:43 +0100
-Subject: [Buildroot] [PATCH] Initial support for i.mx6 sabreauto board
-In-Reply-To: <BLU0-SMTP2974AC9E5F7279077E2563AF7F20@phx.gbl>
-References: <BLU0-SMTP2974AC9E5F7279077E2563AF7F20@phx.gbl>
-Message-ID: <20140307234643.605da11f@skate>
+Date: Fri, 7 Mar 2014 23:50:55 +0100
+Subject: [Buildroot] [PATCH 1/1] chdkptp CLI added
+In-Reply-To: <1387798250-2437-2-git-send-email-matthew.j.urry@gmail.com>
+References: <1387798250-2437-1-git-send-email-matthew.j.urry@gmail.com>
+ <1387798250-2437-2-git-send-email-matthew.j.urry@gmail.com>
+Message-ID: <20140307235055.494ef4e4@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Abdul Hussain,
+Dear Matthew Urry,
 
-On Fri, 8 Nov 2013 21:44:06 +0530, Abdul Hussain wrote:
-> Signed-off-by: Abdul Hussain <hussain.abdul@outlook.com>
-> ---
->  configs/freescale_imx6sabreauto_defconfig |    9 +++++++++
->  1 file changed, 9 insertions(+)
->  create mode 100644 configs/freescale_imx6sabreauto_defconfig
+On Mon, 23 Dec 2013 11:30:50 +0000, Matthew Urry wrote:
 > 
-> diff --git a/configs/freescale_imx6sabreauto_defconfig b/configs/freescale_imx6sabreauto_defconfig
-> new file mode 100644
-> index 0000000..d02a395
-> --- /dev/null
-> +++ b/configs/freescale_imx6sabreauto_defconfig
-> @@ -0,0 +1,9 @@
-> +BR2_arm=y
-> +BR2_cortex_a9=y
-> +BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="http://git.freescale.com/git/cgit.cgi/imx/linux-2.6-imx.git/snapshot/linux-2.6-imx-imx_3.0.35_4.1.0.tar.bz2"
-> +BR2_LINUX_KERNEL_DEFCONFIG="imx6"
-> +BR2_TARGET_UBOOT=y
-> +BR2_TARGET_UBOOT_BOARDNAME="mx6qsabreauto"
+> Signed-off-by: Matthew Urry <matthew.j.urry@gmail.com>
+> ---
+>  package/Config.in                                  |    1 +
+>  package/chdkptp/Config.in                          |   15 +++++++++++
+>  .../chdkptp-01-add_lm_flag_to_makefile.patch       |   15 +++++++++++
+>  ...ptp-02-create_sh_script_to_launch_chdkptp.patch |   22 ++++++++++++++++
+>  package/chdkptp/chdkptp.mk                         |   27 ++++++++++++++++++++
+>  5 files changed, 80 insertions(+)
+>  create mode 100644 package/chdkptp/Config.in
+>  create mode 100644 package/chdkptp/chdkptp-01-add_lm_flag_to_makefile.patch
+>  create mode 100644 package/chdkptp/chdkptp-02-create_sh_script_to_launch_chdkptp.patch
+>  create mode 100644 package/chdkptp/chdkptp.mk
 
-A specific U-Boot version should be used, see all the other defconfig
-files we have in Buildroot.
+You received some review on this patch on December, 28th 2013,
+suggesting several improvements to make your patch acceptable upstream.
+Your contributions are definitely welcome, but if you want to get it
+accepted, it'd be nice if you could resend a new version that takes
+into account the comments that have been made.
 
-Also, a specific kernel headers version should be specified, which
-matches the 3.0.x kernel being used here.
-
-Could you take these comments into account, and resubmit an updated
-version?
-
-Thanks!
+Thanks a lot!
 
 Thomas
 -- 
