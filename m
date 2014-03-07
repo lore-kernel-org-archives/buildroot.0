@@ -1,72 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Mar 2014 09:15:34 +0100
-Subject: [Buildroot] Linux kernel module is not running anymore when
- switching from mdev to udev
-In-Reply-To: <CAKi4VAJ=VjGnbzbkL99sx7AEouNrXxdErHmO1VJmVL28_n1fDA@mail.gmail.com>
-References: <5316F334020000460004B5AA@gwia2.rz.hs-offenburg.de>
- <CAKi4VAJ=VjGnbzbkL99sx7AEouNrXxdErHmO1VJmVL28_n1fDA@mail.gmail.com>
-Message-ID: <20140307091534.49f49b02@skate>
+Date: Fri, 7 Mar 2014 09:17:18 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2014-03-05
+In-Reply-To: <20140306225641.59c3c535@skate>
+References: <20140306073010.F1C12100E3F@stock.ovh.net>
+ <5318AB8C.9050802@mind.be> <20140306225641.59c3c535@skate>
+Message-ID: <20140307091718.2155e87b@skate>
 List-Id: <buildroot.busybox.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Frank,
+Hello,
 
-On Fri, 7 Mar 2014 01:08:36 -0300, Lucas De Marchi wrote:
-
-> > there is this problem, that I searched the Internet
-> > for its solution but without success. Here's what it's about, I hope
-> > someone can give me a hint:
-> >
-> >
-> >
-> >         I'm using Buildroot 2013.10 to generate my Linux 2.6.39 Images, with the following Kernel  module:
-> >
-> >
-> >
-> >   void GPIO_LED(void) {
-> >
-> >   printk(" GPIO: set PC8: '0');
-> >
-> >   at91_set_gpio_value(AT91_PIN_PC8, 1);
-> >
-> >
-> >   }
-> >
-> >
-> >   int init_module(void) {
-> >
-> >   GPIO_LED();   return 0;
-> >
-> >
-> >   }
-> >
-> >
-> >   MODULE_LICENSE("GPL");
-> >
-> >
-> >
-> > When using it with mdev device management. everything works just
-> > fine. But using it with a udev device management, while executing insmod
+On Thu, 6 Mar 2014 22:56:41 +0100, Thomas Petazzoni wrote:
+> Dear Arnout Vandecappelle,
 > 
-> I don't see how udev could be related to your problem. Maybe just how
-> the dependencies were chosen...
+> On Thu, 06 Mar 2014 18:08:28 +0100, Arnout Vandecappelle wrote:
+> > On 06/03/14 08:30, Thomas Petazzoni wrote:
+> > >       i686 |                        [7m>>> | TIM | http://autobuild.buildroot.net/results/9d49f31c9dc16d2a2a4aafa535fbb5ea7e24a66f/
+> > 
+> >  To be able to do _something_ useful in a case like this, it would be
+> > nice if output/build/build-time.log was also saved.
+> 
+> I've tentatively modified the scripts on my build server to include
+> build-time.log in the build results. We'll see if it works.
 
-I agree: the kernel module shown by Frank only toggle a GPIO, and does
-not expose any device in /dev or anything that would involve udev or
-mdev.
+It works:
 
-> > the following message appeared:
-> >
-> >   insmod: can't insert '/usr/modules/measurement_gpio.ko': invalid
-> >   module format
+ http://autobuild.buildroot.org/results/834/8348f41edf138433d1d8a1eeb1d426e2797ba4c5//build-time.log
+ http://autobuild.buildroot.org/results/946/946e34a19f3189f8348d8f1f160d5d0c3d19194c//build-time.log
 
-Are you sure you have built your module correctly, against the right
-version of the kernel headers that match the kernel you're running?
-
-Best regards,
+We'll see the next time one of these timeouts show up again.
 
 Thomas
 -- 
