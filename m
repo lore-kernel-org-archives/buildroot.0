@@ -1,29 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Mar 2014 22:54:25 +0100
-Subject: [Buildroot] [PATCH 1/1] ntp: add systemd unit file for ntpd
-In-Reply-To: <1390874405-25944-1-git-send-email-vsergeev@kumunetworks.com>
-References: <1390874405-25944-1-git-send-email-vsergeev@kumunetworks.com>
-Message-ID: <20140307225425.000c9959@skate>
+Date: Fri, 7 Mar 2014 22:54:47 +0100
+Subject: [Buildroot] [git commit] libenca: Move build host tool to
+	PRE_BUILD_HOOKS
+Message-ID: <20140307215451.E82E09BE0A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ivan Sergeev,
+commit: http://git.buildroot.net/buildroot/commit/?id=0644378b51f1db66ee3a09ed236f675d40dbc9d8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 27 Jan 2014 18:00:05 -0800, Ivan Sergeev wrote:
-> Signed-off-by: Ivan Sergeev <vsergeev@kumunetworks.com>
-> ---
->  package/ntp/ntp.mk       | 13 ++++++++++++-
->  package/ntp/ntpd.service | 11 +++++++++++
->  2 files changed, 23 insertions(+), 1 deletion(-)
->  create mode 100644 package/ntp/ntpd.service
+The make_hash host tool, should be built during a PRE_BUILD_HOOKS and
+not a POST_CONFIGURE_HOOKS.
 
-Applied, thanks!
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libenca/libenca.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libenca/libenca.mk b/package/libenca/libenca.mk
+index d998c66..66fcfaa 100644
+--- a/package/libenca/libenca.mk
++++ b/package/libenca/libenca.mk
+@@ -21,6 +21,6 @@ define LIBENCA_MAKE_HOST_TOOL
+ 	$(MAKE) -C $(@D)/tools $(HOST_CONFIGURE_OPTS) make_hash
+ endef
+ 
+-LIBENCA_POST_CONFIGURE_HOOKS += LIBENCA_MAKE_HOST_TOOL
++LIBENCA_PRE_BUILD_HOOKS += LIBENCA_MAKE_HOST_TOOL
+ 
+ $(eval $(autotools-package))
