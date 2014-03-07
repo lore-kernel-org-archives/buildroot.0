@@ -1,8 +1,10 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  7 Mar 2014 09:31:03 -0300
-Subject: [Buildroot] [PATCH 1/3] configs/fsl_p1010rdb: fix and bump relevant
-	versions
-Message-ID: <1394195465-27656-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri,  7 Mar 2014 09:31:04 -0300
+Subject: [Buildroot] [PATCH 2/3] configs/fsl_mpc8315erdb: fix and bump
+	relevant versions
+In-Reply-To: <1394195465-27656-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1394195465-27656-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1394195465-27656-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,14 +17,14 @@ And bump to the latest kernel versions.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- configs/freescale_p1010rdb_pa_defconfig | 5 +++--
+ configs/freescale_mpc8315erdb_defconfig | 5 +++--
  1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/configs/freescale_p1010rdb_pa_defconfig b/configs/freescale_p1010rdb_pa_defconfig
-index 4921cca..d3e0538 100644
---- a/configs/freescale_p1010rdb_pa_defconfig
-+++ b/configs/freescale_p1010rdb_pa_defconfig
-@@ -11,12 +11,13 @@ BR2_TARGET_ROOTFS_JFFS2_CUSTOM_EBSIZE=0x20000
+diff --git a/configs/freescale_mpc8315erdb_defconfig b/configs/freescale_mpc8315erdb_defconfig
+index 0b4979f..3cc5c5a 100644
+--- a/configs/freescale_mpc8315erdb_defconfig
++++ b/configs/freescale_mpc8315erdb_defconfig
+@@ -12,12 +12,13 @@ BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER=y
  
  # Lock headers version to match and avoid breakage
  BR2_KERNEL_HEADERS_VERSION=y
@@ -36,7 +38,7 @@ index 4921cca..d3e0538 100644
 -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.13"
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.13.6"
  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/p1010rdb/linux-3.13.config"
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/mpc8315erdb/linux-3.13.config"
  BR2_LINUX_KERNEL_UIMAGE=y
 -- 
 1.8.3.2
