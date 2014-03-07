@@ -1,84 +1,111 @@
-From: Noam Camus <noamc@ezchip.com>
-Date: Fri, 7 Mar 2014 01:32:53 +0000
-Subject: [Buildroot] [PATCH 1/1] [V5] toolchain: control vendor part in
-	GNU_TARGET_NAME
-In-Reply-To: <1394155829-13670-1-git-send-email-noamc@ezchip.com>
-References: <1394155829-13670-1-git-send-email-noamc@ezchip.com>
-Message-ID: <884EA965490E3C4D8E66AEF41E980250096818@ezex10.ezchip.com>
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+Date: Fri, 7 Mar 2014 01:08:36 -0300
+Subject: [Buildroot] Linux kernel module is not running anymore when
+ switching from mdev to udev
+In-Reply-To: <5316F334020000460004B5AA@gwia2.rz.hs-offenburg.de>
+References: <5316F334020000460004B5AA@gwia2.rz.hs-offenburg.de>
+Message-ID: <CAKi4VAJ=VjGnbzbkL99sx7AEouNrXxdErHmO1VJmVL28_n1fDA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Frank,
 
-This option allows to customize the "vendor" part of the
-toolchain tuple, where the toolchain tuple has the form
-<arch>-<vendor>-<os>-<libc>. Use this option in situations
-where gcc might make different decisions based on the vendor
-part of the tuple.
+On Wed, Mar 5, 2014 at 5:49 AM, Frank Ihle <frank.ihle@hs-offenburg.de> wrote:
+> Hi everyone,
+>
+> there is this problem, that I searched the Internet
+> for its solution but without success. Here's what it's about, I hope
+> someone can give me a hint:
+>
+>
+>
+>         I'm using Buildroot 2013.10 to generate my Linux 2.6.39 Images, with the following Kernel  module:
+>
+>
+>
+>   void GPIO_LED(void) {
+>
+>   printk(" GPIO: set PC8: '0');
+>
+>   at91_set_gpio_value(AT91_PIN_PC8, 1);
+>
+>
+>   }
+>
+>
+>   int init_module(void) {
+>
+>   GPIO_LED();   return 0;
+>
+>
+>   }
+>
+>
+>   MODULE_LICENSE("GPL");
+>
+>
+>
+> When using it with mdev device management. everything works just
+> fine. But using it with a udev device management, while executing insmod
 
-Signed-off-by: Noam Camus <noamc@ezchip.com>
----
- package/Makefile.in                     |   17 ++++++++++++++++-
- toolchain/toolchain-buildroot/Config.in |   16 ++++++++++++++++
- 2 files changed, 32 insertions(+), 1 deletions(-)
+I don't see how udev could be related to your problem. Maybe just how
+the dependencies were chosen...
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 454f614..bd9f18c 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -20,8 +20,23 @@ endif
- MAKE1:=$(HOSTMAKE) -j1
- MAKE:=$(HOSTMAKE) $(if $(PARALLEL_JOBS),-j$(PARALLEL_JOBS))
 
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
-+TARGET_VENDOR = $(call qstrip,$(BR2_TOOLCHAIN_BUILDROOT_VENDOR))
-+else
-+TARGET_VENDOR = buildroot
-+endif
-+
-+# Sanity checks
-+ifeq ($(TARGET_VENDOR),)
-+$(error BR2_TOOLCHAIN_BUILDROOT_VENDOR is not allowed to be empty)
-+endif
-+ifeq ($(TARGET_VENDOR),unknown)
-+$(error BR2_TOOLCHAIN_BUILDROOT_VENDOR cannot be 'unknown'. \
-+        It might be confused with the native toolchain)
-+endif
-+
- # Compute GNU_TARGET_NAME
--GNU_TARGET_NAME=$(ARCH)-buildroot-$(TARGET_OS)-$(LIBC)$(ABI)
-+GNU_TARGET_NAME=$(ARCH)-$(TARGET_VENDOR)-$(TARGET_OS)-$(LIBC)$(ABI)
+>
+>
+>
+>   insmod /usr/modules/measurement_gpio.ko
+>
+>
+>
+> the following message appeared:
+>
+>
+>
+>   insmod: can't insert '/usr/modules/measurement_gpio.ko': invalid
+>   module format
+>
+>
+>
+> Every setting stayed the same (especially the kernel version) but the
+>  device management changes during this test, so actually the module
+> should be fine. Building the kernel to be able for loading modules for
+> multiple versions didn't solve it, neither the option "force module
+> loading"
+>
+>
+> The way I build my module is:
+>
+>
+> with Buildroot I'm generating an Image, on the way a Linux 2.6.39 is installed.Afterwards I'm compiling the kernel module with the path to the Linux 2.6.39, that Buildroot has downloaded.When the module is created I'm putting it into a fs-overlay directory, so it will be included into the image on next build.I hit another "make" on Buildroot and i got everything together and a bootable image.
+>
+>
+> I change nothing, that's why it confuses me even more
+>
+>
+> How can this be and how to solve it?
 
- # Blackfin FLAT needs uclinux
- ifeq ($(BR2_bfin)$(BR2_BINFMT_FLAT),yy)
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index 07db50b..3487327 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -70,6 +70,22 @@ config BR2_TOOLCHAIN_BUILDROOT_LIBC
-        default "glibc"  if BR2_TOOLCHAIN_BUILDROOT_EGLIBC
-        default "glibc"  if BR2_TOOLCHAIN_BUILDROOT_GLIBC
+I successfully built an image with buildroot using systemd/udev/kmod
+some days ago. And inserting modules work fine. If it was a more
+recent kernel I'd say it's because you enabled module signature and
+your out-of-tree module isn't signed.  But it doesn't look like this.
 
-+config BR2_TOOLCHAIN_BUILDROOT_VENDOR
-+       string "custom toolchain vendor name"
-+       default "buildroot"
-+       help
-+         This option allows to customize the "vendor" part of the
-+         toolchain tuple, where the toolchain tuple has the form
-+         <arch>-<vendor>-<os>-<libc>. The default value, "buildroot",
-+         is fine for most cases, except in very specific situations
-+         where gcc might make different decisions based on the vendor
-+         part of the tuple. The value "unknown" is not allowed, as the
-+         cross-compiling toolchain might then be confused with the
-+         native toolchain when the target and host architecture are
-+         identical.
-+
-+         If you're not sure, just leave the default "buildroot" value.
-+
- source "package/uclibc/Config.in"
- source "package/glibc/Config.in"
- source "package/binutils/Config.in.host"
---
-1.7.1
+CC'ing buildroot's ML to see if they have a clue.
+
+>
+> Kind Regards,
+> Frank
+> --
+> To unsubscribe from this list: send the line "unsubscribe linux-modules" in
+> the body of a message to majordomo at vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+
+
+
+-- 
+
+Lucas De Marchi
