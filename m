@@ -1,50 +1,104 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Fri, 7 Mar 2014 15:00:54 +0100
-Subject: [Buildroot] [PATCH 0/17 v2] Add new virtual-package
- infrastructure
-In-Reply-To: <20140301235618.04b363a8@skate>
-References: <cover.1393695127.git.yann.morin.1998@free.fr>
- <20140301235618.04b363a8@skate>
-Message-ID: <20140307140052.GA5226@pc-eric>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Fri, 07 Mar 2014 15:53:24 +0100
+Subject: [Buildroot] [PATCH 2/2] exim: new package
+In-Reply-To: <heomuaxdgh.ln2@ID-313208.user.individual.net>
+References: <1394124890-29254-1-git-send-email-luca@lucaceresoli.net>
+ <1394124890-29254-3-git-send-email-luca@lucaceresoli.net>
+ <heomuaxdgh.ln2@ID-313208.user.individual.net>
+Message-ID: <5319DD64.9000701@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+Hi Bernd,
 
-On Sat, Mar 01, 2014 at 11:56:18PM +0100, Thomas Petazzoni wrote:
-> Dear Yann E. MORIN,
+please do reply to all, not only to the mailing list. Some people
+(including me) check their personal e-mail more frequently than mailing
+lists.
+
+Bernd Kuhls wrote:
+> Hi,
 >
-> On Sat,  1 Mar 2014 18:32:43 +0100, Yann E. MORIN wrote:
+> Luca Ceresoli <luca@lucaceresoli.net> wrote in
+> news:1394124890-29254-3-git-send-email-luca at lucaceresoli.net:
 >
-> >       package/libgles: rename the _HAS and _PROVIDES variables
-> >       package/libegl: rename the _HAS and _PROVIDES variables
-> >       package/libopenmax: rename the _HAS and _PROVIDES variables
-> >       package/libopenvg: rename the _HAS and _PROVIDES variables
-> >       package/luainterpreter: rename the _HAS and _PROVIDES variables
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -834,6 +834,7 @@ source "package/dnsmasq/Config.in"
+>>   source "package/dropbear/Config.in"
+>>   source "package/ebtables/Config.in"
+>>   source "package/ethtool/Config.in"
+>> +source "package/exim/Config.in"
 >
-> I certainly agree to ensure that the kconfig symbol matches the package
-> name. However, I am not sure the renaming of BR2_PACKAGE_HAS_OPENGL_ES
-> to BR2_PACKAGE_HAS_LIBGLES is really nice. BR2_PACKAGE_HAS_OPENGL_ES
-> had the merit of explicitly containing the word "OpenGL", while LIBGLES
-> makes that a bit more cryptic. Do we want to instead rename the package
-> to libopengl-es or some other variation on this?
+> what about creating a new section "Mail applications"?
+
+I don't think we have a large enough number of mail-related packages in
+Buildroot to justify such a section. But I may be wrong.
+
 >
-> A similar reflexion could be made on the naming of the libegl package.
-The names defined by Khronos Group are "OpenGL ES" and "EGL". That would
-logically lead to:
+>> --- /dev/null
+>> +++ b/package/exim/Local-Makefile
+>> @@ -0,0 +1,15 @@
+>> +BIN_DIRECTORY=/usr/sbin
+>> +CONFIGURE_FILE=/etc/exim/configure
+>> +EXIM_USER=ref:exim
+>> +EXIM_GROUP=mail
+>> +SPOOL_DIRECTORY=/var/spool/exim
+>> +ROUTER_ACCEPT=yes
+>> +TRANSPORT_LMTP=yes
+>> +LOOKUP_DBM=yes
+>> +LOOKUP_LSEARCH=yes
+>> +PCRE_LIBS=-lpcre
+>> +FIXED_NEVER_USERS=root
+>> +HEADERS_CHARSET="ISO-8859-1"
+>> +HAVE_ICONV=no
+>> +SYSLOG_LOG_PID=yes
+>> +TMPDIR="/tmp"
+>
+> Here I use a different approach using sed inside exim.mk:
+>
+> ( sed -e 's,^BIN_DIR.*$$,BIN_DIRECTORY=/usr/bin,' \
+>        -e 's,^CONF.*$$,CONFIGURE_FILE=/etc/exim.conf,' \
+>        -e 's,^# INCLUDE.*$$,INCLUDE=-I$(TARGET_DIR)/usr/include,' \
+>        -e 's,^PCRE_CONFIG.*$$,# PCRE_CONFIG=no,' \
+>        -e 's,^# PCRE_LIBS.*$$,PCRE_LIBS=-lpcre,' \
+>        -e 's,^# HAVE_ICONV.*$$,HAVE_ICONV=yes,' \
+>        -e 's,^# AUTH_CRAM_MD5=.*$$,AUTH_CRAM_MD5=yes,' \
+>        -e 's,^# AUTH_DOVECOT=.*$$,AUTH_DOVECOT=yes,' \
+>        -e 's,^# AUTH_PLAINTEXT=.*$$,AUTH_PLAINTEXT=yes,' \
+>        -e 's,^# LOOKUP_PASSWD=.*$$,LOOKUP_PASSWD=yes,' \
+>        -e 's,^# WITH_CONTENT_SCAN=.*$$,WITH_CONTENT_SCAN=yes,' \
+>        -e 's,^# SUPPORT_TLS=.*$$,SUPPORT_TLS=yes,' \
+>        -e 's,^# TLS_LIBS=.*$$,TLS_LIBS=-lssl -lcrypto,' \
+>        -e 's,^# PID_FILE_PATH=.*$$,PID_FILE_PATH=/var/run/exim.pid,' \
+>        -e 's,^COMPRESS_COMMAND=.*$$,COMPRESS_COMMAND=/bin/gzip,' \
+>        -e 's,^ZCAT_COMMAND=.*$$,ZCAT_COMMAND=/bin/zcat,' \
+>        -e 's,^EXIM_USER.*$$,EXIM_USER=ref:exim,' \
+>        -e 's,^EXIM_MONITOR,#EXIM_MONITOR,' $(@D)/src/EDITME >
+> $(@D)/Local/Makefile \
+>          ); \
 
-- libopengl-es/BR2_PACKAGE_HAS_OPENGL_ES
-- libegl/BR2_PACKAGE_HAS_EGL
+At first sight it looks cleaner, but it should be made more robust IMHO.
+Suppose in a future release the exim developers decide to uncomment a
+variable that is now commented, or vice versa, or to use two spaces
+between "#" and the variable name. Then your sed filters would silently
+stop working.
 
-But the names used for the libraries are libGLES and libEGL. Googling them
-leads to OpenGL related pages. Some GNU/Linux distros (Arch Linux, Debian)
-use them in package names.
+Also, the line:
+ >        -e 's,^CONF.*$$,CONFIGURE_FILE=/etc/exim.conf,' \
+could catch future variables stasting with CONF.
 
-IMHO, BR2_PACKAGE_HAS_LIBGLES and BR2_PACKAGE_HAS_LIBEGL, though not sticking
-with the official names, are not *that* cryptic.
+OTOH my approach is a bot rude, but you know what file you'll generate,
+which I find more reliable.
 
-Best regards,
-ELB
+>
+> This should imho be extended to options in Config.in for different mail
+> environments, similar to the Debian packages exim4-daemon-heavy & exim4-
+> daemon-light.
+
+Definitely. I see we use different values for some variables.
+
+-- 
+Luca
