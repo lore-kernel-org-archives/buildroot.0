@@ -1,66 +1,38 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Fri, 07 Mar 2014 16:04:13 +0100
-Subject: [Buildroot] [PATCH 1/2] system/skeleton: add mail group
-In-Reply-To: <20140306171331.GC3625@free.fr>
-References: <1394124890-29254-1-git-send-email-luca@lucaceresoli.net>
- <1394124890-29254-2-git-send-email-luca@lucaceresoli.net>
- <20140306171331.GC3625@free.fr>
-Message-ID: <5319DFED.9030706@lucaceresoli.net>
+From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+Date: Fri, 7 Mar 2014 16:21:06 +0100
+Subject: [Buildroot] Are deferred Initcalls possible with a Linux 2.6.39
+ Kernel?
+In-Reply-To: <5319D2C8020000460004B7A4@gwia2.rz.hs-offenburg.de>
+References: <5319D2C8020000460004B7A4@gwia2.rz.hs-offenburg.de>
+Message-ID: <20140307152105.GC2917@piout.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+On 07/03/2014 at 14:08:08 +0100, Frank Ihle wrote :
+> Hi everyone,
+> 
+> I want to load several modules not at boot time, but afterwards when system is ready to operate. There are the deferred initcalls, that do exactly what I want as  explained on http://elinux.org/Deferred_Initcalls. 
+> 
 
-Yann E. MORIN wrote:
-> Luca, All,
->
-> On 2014-03-06 17:54 +0100, Luca Ceresoli spake thusly:
->> ---
->>   system/skeleton/etc/group | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/system/skeleton/etc/group b/system/skeleton/etc/group
->> index 864d1db..85a1fa2 100644
->> --- a/system/skeleton/etc/group
->> +++ b/system/skeleton/etc/group
->> @@ -6,6 +6,7 @@ adm:x:4:
->>   tty:x:5:
->>   disk:x:6:
->>   lp:x:7:
->> +mail:x:8:
->>   kmem:x:9:
->>   wheel:x:10:root
->>   cdrom:x:11:
->
-> There is no reason to add the 'mail' group to the default skeleton. If
-> it is missing, 'mkuser' is expected to create it (if not, that's a bug.)
->
-> So the EXIM_USER in your second patch should be enough.
+deferred_initcall is not for modules but for driver statically compiled
+in the kernel. Is that what you are looking for ?
 
-Technically speaking you're perfectly right.
 
-I just felt the mail group is one of those groups that are supposed to
-be used by multiple packages. At least an MTA and a mail server, maybe
-a spam filter, a virus scanner... and we might have multiple
-alternatives for each of them.
+> Now to use them I need to apply a patch. On the given page, there are patches for Linux 2.6.26, 2.6.27, 2.6.28 and 3.10, unfortunately I'm using a Linux 2.6.39 and non of those patches can be applied successfully (Patch fails and If I make an Image afterwards, the "/proc/deferred_initcall" is not included)
+> 
+> Does anyone know if there are further patches or is there a workaround for Linux 2.6.39?
+> 
 
-So it looks bad to me to refer to the same group in (potentially) many
-packages and not having the group well-defined in "the" group list.
+I would say that the patch is sufficiently small to be ported easily on
+any kernel version.
 
-Of course this is my POV, and it's not very strong now that we have such
-a small number of mail-related packages in Buildroot...
+My guess would be that the 3.10 one is the one you should start with.
 
-Oh, following my idea I could as well change:
-
-  define EXIM_USERS
--exim 88 mail 8 * - - - exim
-+exim 88 mail -1 * - - - exim
-  endef
-
-and your script would get the group ID, right?
 
 -- 
-Luca
+Alexandre Belloni, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
