@@ -1,60 +1,83 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 7 Mar 2014 18:37:29 +0100
-Subject: [Buildroot] question about buildroot manual license
-In-Reply-To: <20140307063131.GL4148@waldemar-brodkorb.de>
-References: <20140307063131.GL4148@waldemar-brodkorb.de>
-Message-ID: <20140307173729.GD3384@free.fr>
+Date: Fri, 7 Mar 2014 18:49:03 +0100
+Subject: [Buildroot] luajit package fails to build on x86_64 for x86
+In-Reply-To: <CAHkwnC92VGYqeUSNsAiyuFQgErZtLwYyFJ89qa8bYrAoZ8mRkw@mail.gmail.com>
+References: <CAHkwnC9NzMx8kE4KdBjnAys7Xj5n0sQS6AHa=ZrzLqQQtkFZUg@mail.gmail.com>
+ <20140306213113.GH3625@free.fr>
+ <CAHkwnC9tLUTAVHnGNyPkPxNFFFMTiqPyAvhtahGEWZAPbY0BgQ@mail.gmail.com>
+ <20140307172121.GC3384@free.fr>
+ <CAHkwnC92VGYqeUSNsAiyuFQgErZtLwYyFJ89qa8bYrAoZ8mRkw@mail.gmail.com>
+Message-ID: <20140307174903.GE3384@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Waldemar, All,
+Fabio, All,
 
-On 2014-03-07 07:31 +0100, Waldemar Brodkorb spake thusly:
-> Hi developers, 
-> I am reading the buildroot manual and it is nice to read.
-> I would like to add some documentation to my own buildroot derivate,                                                                                                                                      
-> so my question is, what license is used for your document?
-> I have not found any mentioning about a license of the docs,
-> I am not sure if GPLv2 (the license of buildroot) is applicable
-> for documentation.        
+On 2014-03-07 18:32 +0100, Fabio Porcedda spake thusly:
+> On Fri, Mar 7, 2014 at 6:21 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > Fabio, All,
+> >
+> > On 2014-03-07 10:59 +0100, Fabio Porcedda spake thusly:
+> >> On Thu, Mar 6, 2014 at 10:31 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> >> > On 2014-03-06 11:43 +0100, Fabio Porcedda spake thusly:
+> >> >> Hi all,
+> >> >> luajit fails to build on a Ubuntu 13.10 x86_64 with the following defconfig:
+> >> >>
+> >> >> BR2_x86_generic=y
+> >> >> BR2_TOOLCHAIN_EXTERNAL=y
+> >> >> BR2_PACKAGE_LUAJIT=y
+> > [--SNIP--]
+> >> > And this can not work on a pure 64-bit system (aka, without the 32-bit
+> >> > legacy stuff).
+> > [--SNIP--]
+> >> > Not sure how we can get away with this...
+> >>
+> >> I think we have two choices:
+> >>  - add a check to test if 32bit compiler is installed and if not print
+> >> a clear message about the toolchain requirement
+> >
+> > I think this would be the first package to add such a check.
+> >
+> > How would you propose we implement this:
+> >   - in a pre-configure hook (but that will catch the failure late in the
+> >     build) ?
+> >   - in a make ifeq-block (so we can catch it early in the build) ?
+> 
+> > The second solution is more appealing to me, but might be a bit more
+> > complex to implement.
+> 
+> I think a check to be added like this:
+> 
+> luakit.mk:
+> 
+> luajit-dependencies:
+>    shell script to check and if it fails it prints an appropriate
+> message and stop the building
+> 
+> dependencies: luajit-dependencies
+> 
+> So the check it's done early at same time as other dependenies check.
 
-What makes you think GPLv2 is not applicable to the Buildroot's manual?
+Doing the check in dependencies is not much better than doing it as a
+pre-configure hook: it can be delayed quite late in the build process.
 
-The license for Buildroot is GPLv2. Which means that everything provided
-with Buildroot, unless otherwise specified in the files themselves or in
-an accompanying license file, is covered by Buildroot's license. [*]
+> Right now i don't know how to check about the presence of the 32bit
+> support on the 64 bit host toolchain.
 
-Maybe the GPLv2 is not the best license for documentation, but as long
-as there is no other licensing terms for the manual, that's the license
-that applies to Buildroot's manual.
+What about something like this:
 
-[*] Note: the patches we cary against the different packages are of
-course covered by the license of the package they each apply to, which
-may or may not be the same license as Buildroot's. Refer to each package
-licensing terms for the license of the patches.
+    ifeq ($(BR2_PACKAGE_LUAJIT),y)
+    ifeq ($(TARGET_32BIT)$(HOST_64BIT),yy)
+    ifneq ($(shell echo 'int main() { return 0; }' |gcc -m32 -o foo -x c - >/dev/null 2>&1 && echo y; rm -f foo),y)
+    $(error Can't build luajit for 32-bit target on this machine (mising 32-bit development packages))
+    endif
+    endif
+    endif
 
-> Is it enough for you, if I add something like this in the top
-> of the document:
-> "based on the buildroot manual. See http://www.buildroot.net for 
-> original authors."
-
-No, that's not enough. You have to respect the full terms of the GPLv2.
-Which basicaly translates to providing, but is not limited to providing,
-the following items:
-
-  - the source materials (the asciidoc files in docs/manual are considered
-    the sources for the manual),
-
-  - the scripts used to generate the manual from the asciidoc sources (the
-    docs/manual/manual.mk),
-
-  - the copyright notices where they appear, intact, with your own
-    copyright added if you did some substantial changes
-
-Note: IANAL; this is not legal advice; consult a lawyer.
+Not really trivial, but should work with some tweaking...
 
 Regards,
 Yann E. MORIN.
