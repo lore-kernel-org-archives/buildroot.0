@@ -1,38 +1,41 @@
-From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-Date: Fri, 7 Mar 2014 16:21:06 +0100
-Subject: [Buildroot] Are deferred Initcalls possible with a Linux 2.6.39
- Kernel?
-In-Reply-To: <5319D2C8020000460004B7A4@gwia2.rz.hs-offenburg.de>
-References: <5319D2C8020000460004B7A4@gwia2.rz.hs-offenburg.de>
-Message-ID: <20140307152105.GC2917@piout.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 7 Mar 2014 17:33:51 +0100
+Subject: [Buildroot] [PATCH v3 0/3] improve virtual package management
+In-Reply-To: <1394198534-16379-1-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1394198534-16379-1-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <20140307163351.GA3384@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/03/2014 at 14:08:08 +0100, Frank Ihle wrote :
-> Hi everyone,
+Eric, All,
+
+On 2014-03-07 14:22 +0100, Eric Le Bihan spake thusly:
+> This patch series improves virtual package management by:
 > 
-> I want to load several modules not at boot time, but afterwards when system is ready to operate. There are the deferred initcalls, that do exactly what I want as  explained on http://elinux.org/Deferred_Initcalls. 
-> 
+> - using make control functions in dependency check.
+> - adding a tutorial to the user manual.
 
-deferred_initcall is not for modules but for driver statically compiled
-in the kernel. Is that what you are looking for ?
+I've already integrated most of this in my virtual-package branch, which
+has already been posted to the list (at least twice) in the recent past.
 
+So, unless the maintainer-of-the-day disagrees, I think it is better to
+rather wait for the virtual-package infra to get in.
 
-> Now to use them I need to apply a patch. On the given page, there are patches for Linux 2.6.26, 2.6.27, 2.6.28 and 3.10, unfortunately I'm using a Linux 2.6.39 and non of those patches can be applied successfully (Patch fails and If I make an Image afterwards, the "/proc/deferred_initcall" is not included)
-> 
-> Does anyone know if there are further patches or is there a workaround for Linux 2.6.39?
-> 
+Which can be sped up by giving some tested-by, reviewed-by or acked-by
+tags to the already-posted patches. ;-)
 
-I would say that the patch is sufficiently small to be ported easily on
-any kernel version.
+Thanks for your work on this! :-)
 
-My guess would be that the 3.10 one is the one you should start with.
-
+Regards,
+Yann E. MORIN.
 
 -- 
-Alexandre Belloni, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
