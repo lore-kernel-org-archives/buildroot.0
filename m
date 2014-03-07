@@ -1,41 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Mar 2014 14:04:23 +0100
-Subject: [Buildroot] [PATCH 6/6] liburcu: disable build with gcc-4.8.x
- on ARM
-In-Reply-To: <CAHXCMM+YsCrFrnW06BdJ=AGR3VrUhZb_2UA+NevfdJXF=D+HTg@mail.gmail.com>
-References: <1393717193-19774-1-git-send-email-s.martin49@gmail.com>
- <1393717193-19774-7-git-send-email-s.martin49@gmail.com>
- <20140306231723.32e217fd@skate>
- <CAHXCMM+YsCrFrnW06BdJ=AGR3VrUhZb_2UA+NevfdJXF=D+HTg@mail.gmail.com>
-Message-ID: <20140307140423.064ce228@skate>
+From: Frank Ihle <frank.ihle@hs-offenburg.de>
+Date: Fri, 07 Mar 2014 14:08:08 +0100
+Subject: [Buildroot] Are deferred Initcalls possible with a Linux 2.6.39
+	Kernel?
+Message-ID: <5319D2C8020000460004B7A4@gwia2.rz.hs-offenburg.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+Hi everyone,
 
-On Fri, 7 Mar 2014 13:59:29 +0100, Samuel Martin wrote:
+I want to load several modules not at boot time, but afterwards when system is ready to operate. There are the deferred initcalls, that do exactly what I want as  explained on http://elinux.org/Deferred_Initcalls. 
 
-> > The exclusion of BR2_GCC_VERSION_4_8_X is wrong, because we have in
-> > Buildroot the patch fixing the
-> > http://gcc.gnu.org/bugzilla/show_bug.cgi?id=58854 gcc bug.
-> >
-> > But generally, I'm not really happy with this approach, as we would
-> > have to update these dependencies every time we bump/change the
-> > external toolchain Kconfig options... Unfortunately I don't have a
-> > better suggestion.
-> 
-> I did this because of the patch in liburcu checking for the compiler version.
-> I did not notice BR carries the patch fixing this bug.
+Now to use them I need to apply a patch. On the given page, there are patches for Linux 2.6.26, 2.6.27, 2.6.28 and 3.10, unfortunately I'm using a Linux 2.6.39 and non of those patches can be applied successfully (Patch fails and If I make an Image afterwards, the "/proc/deferred_initcall" is not included)
 
-So liburcu checks itself that the gcc version should be different than
-4.8.0, 4.8.1 and 4.8.2 ? It doesn't take into account that the 4.8.2
-might have been patched to fix the problem ? Can this test be disabled ?
+Does anyone know if there are further patches or is there a workaround for Linux 2.6.39?
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Kind Regards
+
+Frank
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140307/b8af308e/attachment.html>
