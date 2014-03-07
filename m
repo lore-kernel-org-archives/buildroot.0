@@ -1,59 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Mar 2014 14:25:51 +0100
-Subject: [Buildroot] [PATCH 6/6] liburcu: disable build with gcc-4.8.x
- on ARM
-In-Reply-To: <CAHXCMMLgnj7CEVFnkjjkc=PH9NfXZtDe92tnpo3YwwmTHjk-Qw@mail.gmail.com>
-References: <1393717193-19774-1-git-send-email-s.martin49@gmail.com>
- <1393717193-19774-7-git-send-email-s.martin49@gmail.com>
- <20140306231723.32e217fd@skate>
- <CAHXCMM+YsCrFrnW06BdJ=AGR3VrUhZb_2UA+NevfdJXF=D+HTg@mail.gmail.com>
- <20140307140423.064ce228@skate>
- <CAHXCMMLgnj7CEVFnkjjkc=PH9NfXZtDe92tnpo3YwwmTHjk-Qw@mail.gmail.com>
-Message-ID: <20140307142551.4723159f@skate>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Fri, 7 Mar 2014 15:00:54 +0100
+Subject: [Buildroot] [PATCH 0/17 v2] Add new virtual-package
+ infrastructure
+In-Reply-To: <20140301235618.04b363a8@skate>
+References: <cover.1393695127.git.yann.morin.1998@free.fr>
+ <20140301235618.04b363a8@skate>
+Message-ID: <20140307140052.GA5226@pc-eric>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+Hi!
 
-On Fri, 7 Mar 2014 14:14:45 +0100, Samuel Martin wrote:
+On Sat, Mar 01, 2014 at 11:56:18PM +0100, Thomas Petazzoni wrote:
+> Dear Yann E. MORIN,
+>
+> On Sat,  1 Mar 2014 18:32:43 +0100, Yann E. MORIN wrote:
+>
+> >       package/libgles: rename the _HAS and _PROVIDES variables
+> >       package/libegl: rename the _HAS and _PROVIDES variables
+> >       package/libopenmax: rename the _HAS and _PROVIDES variables
+> >       package/libopenvg: rename the _HAS and _PROVIDES variables
+> >       package/luainterpreter: rename the _HAS and _PROVIDES variables
+>
+> I certainly agree to ensure that the kconfig symbol matches the package
+> name. However, I am not sure the renaming of BR2_PACKAGE_HAS_OPENGL_ES
+> to BR2_PACKAGE_HAS_LIBGLES is really nice. BR2_PACKAGE_HAS_OPENGL_ES
+> had the merit of explicitly containing the word "OpenGL", while LIBGLES
+> makes that a bit more cryptic. Do we want to instead rename the package
+> to libopengl-es or some other variation on this?
+>
+> A similar reflexion could be made on the naming of the libegl package.
+The names defined by Khronos Group are "OpenGL ES" and "EGL". That would
+logically lead to:
 
-> > So liburcu checks itself that the gcc version should be different than
-> > 4.8.0, 4.8.1 and 4.8.2 ?
-> 
-> Yes, it's done by this patch:
-> http://git.lttng.org/?p=userspace-rcu.git;a=commitdiff;h=4b79310
+- libopengl-es/BR2_PACKAGE_HAS_OPENGL_ES
+- libegl/BR2_PACKAGE_HAS_EGL
 
-This patch is a bit stupid. It should actually test for the problem
-itself, not make some assumption about the gcc version.
+But the names used for the libraries are libGLES and libEGL. Googling them
+leads to OpenGL related pages. Some GNU/Linux distros (Arch Linux, Debian)
+use them in package names.
 
-> Just to be clear, your suggestion is only about enabling gcc-4.8.2
-> (with the fix), not gcc-4.8.0 nor gcc-4.8.1, right?
+IMHO, BR2_PACKAGE_HAS_LIBGLES and BR2_PACKAGE_HAS_LIBEGL, though not sticking
+with the official names, are not *that* cryptic.
 
-We don't support 4.8.0 and 4.8.1 in the internal toolchain backend.
-
-> Then we have to check for each external toolchain if it has the fix.
-
-Yes.
-
-> What about custom toolchain based on gcc-4.8.2? Shall we able it
-> (warning the user) or just disabling it?
-
-For custom toolchains, we have absolutely no idea which gcc version is
-being used at the Kconfig level, so I don't know how we could disallow
-building the package in this case.
-
-That being said, the kernel also mis-compiles on ARM with gcc 4.8.x if
-you don't have this fix, and we haven't done anything to prevent people
-from building the kernel against unfixed versions of gcc 4.8.x.
-Therefore, should we care about liburcu ?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Best regards,
+ELB
