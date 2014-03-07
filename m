@@ -1,32 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Mar 2014 22:55:02 +0100
-Subject: [Buildroot] [PATCH 2/2] libenca: Move build host tool to
- PRE_BUILD_HOOKS
-In-Reply-To: <1391390312-15662-2-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1391390312-15662-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1391390312-15662-2-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20140307225502.50bcf795@skate>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Fri,  7 Mar 2014 22:57:05 +0100
+Subject: [Buildroot] [PATCH 1/1] cmake: bump to version 2.8.12.2
+Message-ID: <1394229426-27093-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxime Hadjinlian,
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+---
+ package/cmake/cmake.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Mon,  3 Feb 2014 02:18:32 +0100, Maxime Hadjinlian wrote:
-> The make_hash host tool, should be built during a PRE_BUILD_HOOKS and
-> not a POST_CONFIGURE_HOOKS.
-> 
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> ---
->  package/libenca/libenca.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-
-Applied, thanks.
-
-Thomas
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index 9913a82..d45c642 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ CMAKE_VERSION_MAJOR = 2.8
+-CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).12.1
++CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).12.2
+ CMAKE_SITE = http://www.cmake.org/files/v$(CMAKE_VERSION_MAJOR)/
+ CMAKE_LICENSE = BSD-3c
+ CMAKE_LICENSE_FILES = Copyright.txt
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.9.5
