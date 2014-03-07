@@ -1,10 +1,10 @@
 From: jean.sorgemoel at laposte.net <jean.sorgemoel@laposte.net>
-Date: Fri,  7 Mar 2014 20:15:14 +0100
-Subject: [Buildroot] [PATCH v7 1/2] adding bootloader option for iso9660
+Date: Fri,  7 Mar 2014 20:15:15 +0100
+Subject: [Buildroot] [PATCH v7 2/2] add bootloader isolinux for iso9660
 	filesystem image
-In-Reply-To: <1376644934-4302-1-git-send-email-jean.sorgemoel@laposte.ne>
-References: <1376644934-4302-1-git-send-email-jean.sorgemoel@laposte.ne>
-Message-ID: <1394219715-3947-1-git-send-email-jean.sorgemoel@laposte.net>
+In-Reply-To: <1394219715-3947-1-git-send-email-jean.sorgemoel@laposte.net>
+References: <1394219715-3947-1-git-send-email-jean.sorgemoel@laposte.net>
+Message-ID: <1394219715-3947-2-git-send-email-jean.sorgemoel@laposte.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,14 +17,14 @@ From: Jerome Sagnole <jean.sorgemoel@laposte.net>
 	* adjust patch with last update buildroot
 		(TARGETS -> TARGETS_ROOTFS)
 
-
 Signed-off-by: Jerome Sagnole <jean.sorgemoel@laposte.net>
 ---
 
 changes v5 -> v6:
-	* Adding multiple new options for ISO9660 filesystems: Joliet,
-	   RockRidge, name, input charset
-	* Adding the infrastructure to use different bootloaders.
+	* Adding bootloader isolinux
+	* Modify kernel filename (use variable LINUX_IMAGE_NAME)
+	* Update grub/isolinux configuration
+		replace __LINUX_IMAGE_NAME__ by value of LINUX_IMAGE_NAME
 
 changes v4 -> v5:
 	* addon to include comment Arnout Vandecappelle & Martin Bark
@@ -48,7 +48,6 @@ changes v4 -> v5:
 	   - add command sed to replace __LINUX_IMAGE_NAME__ in configuration
 	* suppress bootmsg.txt in isolinux.cfg is empty (bootloader isolinux)
 
-
 changes v3 -> v4:
 	* addon to include remark Arnout Vandecappelle & Thomas Petazzoni
 	* add choise to select bootloader in iso9660 menu
@@ -56,7 +55,6 @@ changes v3 -> v4:
 	* seperate code in two patch
 	  1st patch : update iso9660 with grub
 	  2nd patch : add new bootloader isolinux
-
 
 changes v2 -> v3:
 	* addon to include remark Thomas Petazzoni & Arnout Vandecappelle
@@ -89,149 +87,188 @@ changes v1 -> v2:
 Changes v0 -> v1:
 	* new branch to generate iso with bootloader isolinux
 
- fs/iso9660/Config.in  |   39 ++++++++++++++++++++++++++++++-
- fs/iso9660/iso9660.mk |   62 +++++++++++++++++++++++++++++++++++--------------
- 2 files changed, 83 insertions(+), 18 deletions(-)
+ fs/iso9660/Config.in    |   40 ++++++++++++++++++++++++++++++++++++++--
+ fs/iso9660/bootmsg.txt  |    4 ++++
+ fs/iso9660/iso9660.mk   |   40 +++++++++++++++++++++++++++++++++++-----
+ fs/iso9660/isolinux.cfg |   10 ++++++++++
+ fs/iso9660/menu.lst     |    2 +-
+ 5 files changed, 88 insertions(+), 8 deletions(-)
+ create mode 100644 fs/iso9660/bootmsg.txt
+ create mode 100644 fs/iso9660/isolinux.cfg
 
 diff --git a/fs/iso9660/Config.in b/fs/iso9660/Config.in
-index 50b4377..e881ca6 100644
+index e881ca6..eb45591 100644
 --- a/fs/iso9660/Config.in
 +++ b/fs/iso9660/Config.in
-@@ -8,10 +8,47 @@ config BR2_TARGET_ROOTFS_ISO9660
+@@ -3,12 +3,30 @@ config BR2_TARGET_ROOTFS_ISO9660
+ 	depends on (BR2_i386 || BR2_x86_64)
+ 	depends on BR2_LINUX_KERNEL
+ 	select BR2_TARGET_ROOTFS_CPIO
+-	select BR2_TARGET_GRUB
+-	select BR2_TARGET_GRUB_FS_ISO9660
  	help
  	  Build a bootable iso9660 image
  
-+if BR2_TARGET_ROOTFS_ISO9660
+ if BR2_TARGET_ROOTFS_ISO9660
++choice
++	prompt "Bootloader"
++	default BR2_TARGET_ROOTFS_ISO9660_GRUB
++	help
++	  Select the bootloader that should be used for the bootable
++	  ISO9660 image.
 +
++config BR2_TARGET_ROOTFS_ISO9660_GRUB
++	bool "grub"
++	select BR2_TARGET_GRUB
++	select BR2_TARGET_GRUB_FS_ISO9660
++
++config BR2_TARGET_ROOTFS_ISO9660_ISOLINUX
++	bool "isolinux"
++	select BR2_TARGET_SYSLINUX
++	select BR2_TARGET_SYSLINUX_ISOLINUX
++
++endchoice
++
++if BR2_TARGET_ROOTFS_ISO9660_GRUB
+ 
  config BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU
  	string "Boot menu.lst file"
--	depends on BR2_TARGET_ROOTFS_ISO9660
- 	default "fs/iso9660/menu.lst"
-+	help
-+	  Grub configuration
-+	  Define menu, commands and options for grub
-+
-+config BR2_TARGET_ROOTFS_ISO9660_JOLIET
-+	bool "Create iso with Joliet format (long filenames)"
-+	default y
-+	help
-+	  Generate iso image with Joliet directory records.
-+	  Use Unicode and each path component can be up 64
-+	  Unicode characters long.
-+
-+config BR2_TARGET_ROOTFS_ISO9660_ROCK_RIDGE
-+	bool "Create iso with Rock Ridge extensions (POSIX filesystem)"
-+	default y
-+	help
-+	  Generate iso image with Rock Ridge directory information,
-+	  which makes it a POSIX filesystem (file mode, uid, gid, ...)
-+
-+config BR2_TARGET_ROOTFS_ISO9660_NAME
-+	string "Volume label"
-+	default ""
-+	help
-+	  cdrom name
-+
-+config BR2_TARGET_ROOTFS_ISO9660_INPUT_CHARSET
-+	string "Input filename character encoding"
-+	default "utf8"
-+	help
-+	  The character encoding with which the names of the files that
-+	  will be copied into the iso9660 filesystem are encoded. For the
-+	  RockRidge directory, the same encoding will be used. For the
-+	  Joliet directory, it will be converted to UTF-16.
-+	  (see program genisoimage : genisoimage -input-charset help)
-+
-+endif # BR2_TARGET_ROOTFS_ISO9660
+@@ -17,6 +35,24 @@ config BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU
+ 	  Grub configuration
+ 	  Define menu, commands and options for grub
  
- comment "iso image needs a Linux kernel to be built"
- 	depends on BR2_i386 || BR2_x86_64
++endif # BR2_TARGET_ROOTFS_ISO9660_GRUB
++
++if BR2_TARGET_ROOTFS_ISO9660_ISOLINUX
++
++config BR2_TARGET_ROOTFS_ISO9660_ISOLINUX_BOOT_MESSAGE
++	string "Boot message"
++	default "fs/iso9660/bootmsg.txt"
++	help
++	  Displays the contents of this file on the screen at boot time
++
++config BR2_TARGET_ROOTFS_ISO9660_ISOLINUX_CONFIG_FILE
++	string "Configuration file"
++	default "fs/iso9660/isolinux.cfg"
++	help
++	  This file defines all options to start isolinux
++
++endif # BR2_TARGET_ROOTFS_ISO9660_ISOLINUX
++
+ config BR2_TARGET_ROOTFS_ISO9660_JOLIET
+ 	bool "Create iso with Joliet format (long filenames)"
+ 	default y
+diff --git a/fs/iso9660/bootmsg.txt b/fs/iso9660/bootmsg.txt
+new file mode 100644
+index 0000000..efc9dfc
+--- /dev/null
++++ b/fs/iso9660/bootmsg.txt
+@@ -0,0 +1,4 @@
++Buildroot isolinux boot
++  buildroot) Launch linux from the CD-ROM
++  harddrive) Hard Drive (first partition)
++
 diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
-index 6c8ace0..3cadfd1 100644
+index 3cadfd1..2ac097b 100644
 --- a/fs/iso9660/iso9660.mk
 +++ b/fs/iso9660/iso9660.mk
-@@ -9,33 +9,53 @@
+@@ -8,33 +8,63 @@
+ ################################################################################
  
  ISO9660_TARGET_DIR = $(BUILD_DIR)/iso9660
- ISO9660_BOOT_MENU := $(call qstrip,$(BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU))
-+ISO9660_CHARSET = $(call qstrip,$(BR2_TARGET_ROOTFS_ISO9660_INPUT_CHARSET))
-+ISO9660_NAME = $(call qstrip,$(BR2_TARGET_ROOTFS_ISO9660_NAME))
-+ISO9660_KERNEL_DST = $(ISO9660_TARGET_DIR)/kernel
-+
-+ISO9660_BOOTLOADER_BIN = $(GRUB_DIR)/stage2/stage2_eltorito
-+ISO9660_BOOTLOADER_DIR = $(ISO9660_TARGET_DIR)/boot/grub/
-+ISO9660_BOOTLOADER_DST_CFG = $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
-+ISO9660_ELTORITO_BOOT = boot/grub/stage2_eltorito
+-ISO9660_BOOT_MENU := $(call qstrip,$(BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU))
++ISO9660_INITRD_SED_CMD = '/initrd/Id'
+ ISO9660_CHARSET = $(call qstrip,$(BR2_TARGET_ROOTFS_ISO9660_INPUT_CHARSET))
+ ISO9660_NAME = $(call qstrip,$(BR2_TARGET_ROOTFS_ISO9660_NAME))
+-ISO9660_KERNEL_DST = $(ISO9660_TARGET_DIR)/kernel
++ISO9660_KERNEL_DST = $(ISO9660_TARGET_DIR)/$(LINUX_IMAGE_NAME)
  
- $(BINARIES_DIR)/rootfs.iso9660: host-cdrkit host-fakeroot linux rootfs-cpio grub
++ifeq ($(BR2_TARGET_ROOTFS_ISO9660_GRUB),y)
++ISO9660_BOOTLOADER_PACKAGE = grub
+ ISO9660_BOOTLOADER_BIN = $(GRUB_DIR)/stage2/stage2_eltorito
+ ISO9660_BOOTLOADER_DIR = $(ISO9660_TARGET_DIR)/boot/grub/
++ISO9660_BOOTLOADER_SRC_CFG = $(call qstrip, \
++		$(BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU))
+ ISO9660_BOOTLOADER_DST_CFG = $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
+ ISO9660_ELTORITO_BOOT = boot/grub/stage2_eltorito
++endif
++
++ifeq ($(BR2_TARGET_ROOTFS_ISO9660_ISOLINUX),y)
++ISO9660_BOOTLOADER_PACKAGE = syslinux
++ISO9660_BOOTLOADER_BIN = $(BINARIES_DIR)/isolinux.bin
++ISO9660_BOOTLOADER_DIR = $(ISO9660_TARGET_DIR)
++ISO9660_BOOTLOADER_SRC_CFG = $(BR2_TARGET_ROOTFS_ISO9660_ISOLINUX_CONFIG_FILE)
++ISO9660_BOOTLOADER_DST_CFG = $(ISO9660_TARGET_DIR)/isolinux.cfg
++ISO9660_ELTORITO_BOOT = isolinux.bin
++ISO9660_BOOT_MESSAGE = $(call qstrip, \
++		$(BR2_TARGET_ROOTFS_ISO9660_ISOLINUX_BOOT_MESSAGE))
++endif
+ 
+-$(BINARIES_DIR)/rootfs.iso9660: host-cdrkit host-fakeroot linux rootfs-cpio grub
++$(BINARIES_DIR)/rootfs.iso9660: host-cdrkit host-fakeroot linux rootfs-cpio $(ISO9660_BOOTLOADER_PACKAGE)
  	@$(call MESSAGE,"Generating root filesystem image rootfs.iso9660")
--	mkdir -p $(ISO9660_TARGET_DIR)
--	mkdir -p $(ISO9660_TARGET_DIR)/boot/grub
--	cp $(GRUB_DIR)/stage2/stage2_eltorito $(ISO9660_TARGET_DIR)/boot/grub/
--	cp $(ISO9660_BOOT_MENU) $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
-+	@mkdir -p $(ISO9660_TARGET_DIR)
-+	@mkdir -p $(ISO9660_BOOTLOADER_DIR)
-+
-+	@cp $(ISO9660_BOOTLOADER_BIN) $(ISO9660_BOOTLOADER_DIR)
-+	@cp $(ISO9660_BOOT_MENU) $(ISO9660_BOOTLOADER_DST_CFG)
-+	@cp $(LINUX_IMAGE_PATH) $(ISO9660_KERNEL_DST)
-+
- ifeq ($(BR2_TARGET_GRUB_SPLASH),)
--	$(SED) '/^splashimage/d' $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
-+	@$(SED) '/^splashimage/d' $(ISO9660_BOOTLOADER_DST_CFG)
- else
--	cp boot/grub/splash.xpm.gz $(ISO9660_TARGET_DIR)/
--endif
--	cp $(LINUX_IMAGE_PATH) $(ISO9660_TARGET_DIR)/kernel
-+	@cp boot/grub/splash.xpm.gz $(ISO9660_TARGET_DIR)/
-+endif # BR2_TARGET_GRUB_SPLASH
-+
- ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
--	$(SED) '/initrd/d'  $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
-+	@$(SED) '/initrd/d'  $(ISO9660_BOOTLOADER_DST_CFG)
- else
--	cp $(BINARIES_DIR)/rootfs.cpio$(ROOTFS_CPIO_COMPRESS_EXT) $(ISO9660_TARGET_DIR)/initrd
--endif
-+	@cp $(BINARIES_DIR)/rootfs.cpio$(ROOTFS_CPIO_COMPRESS_EXT) \
-+		$(ISO9660_TARGET_DIR)/initrd
-+endif # BR2_TARGET_ROOTFS_INITRAMFS
-+
- 	# Use fakeroot to pretend all target binaries are owned by root
--	rm -f $(FAKEROOT_SCRIPT)
--	echo "chown -R 0:0 $(ISO9660_TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
-+	@rm -f $(FAKEROOT_SCRIPT)
-+	@echo "chown -R 0:0 $(ISO9660_TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
- 	# Use fakeroot so mkisofs believes the previous fakery
--	echo "$(HOST_DIR)/usr/bin/genisoimage -R -b boot/grub/stage2_eltorito -no-emul-boot " \
--		"-boot-load-size 4 -boot-info-table -o $@ $(ISO9660_TARGET_DIR)" \
-+	@echo "$(HOST_DIR)/usr/bin/genisoimage " \
-+		"$(GENISOIMAGE_OPTS) " \
-+		"-b $(ISO9660_ELTORITO_BOOT) " \
-+		"-no-emul-boot " \
-+		"-boot-load-size 4 " \
-+		"-boot-info-table " \
-+		"-input-charset '$(ISO9660_CHARSET)' " \
-+		"-V '$(ISO9660_NAME)' " \
-+		"-o $@ $(ISO9660_TARGET_DIR)" \
- 		>> $(FAKEROOT_SCRIPT)
--	chmod a+x $(FAKEROOT_SCRIPT)
--	$(HOST_DIR)/usr/bin/fakeroot -- $(FAKEROOT_SCRIPT)
-+	@chmod a+x $(FAKEROOT_SCRIPT)
-+	@$(HOST_DIR)/usr/bin/fakeroot -- $(FAKEROOT_SCRIPT)
- 	- at rm -f $(FAKEROOT_SCRIPT)
- 	- at rm -rf $(ISO9660_TARGET_DIR)
+ 	@mkdir -p $(ISO9660_TARGET_DIR)
+ 	@mkdir -p $(ISO9660_BOOTLOADER_DIR)
  
-@@ -49,3 +69,11 @@ rootfs-iso9660: $(BINARIES_DIR)/rootfs.iso9660
- ifeq ($(BR2_TARGET_ROOTFS_ISO9660),y)
- TARGETS_ROOTFS += rootfs-iso9660
- endif
+ 	@cp $(ISO9660_BOOTLOADER_BIN) $(ISO9660_BOOTLOADER_DIR)
+-	@cp $(ISO9660_BOOT_MENU) $(ISO9660_BOOTLOADER_DST_CFG)
++	@cp $(ISO9660_BOOTLOADER_SRC_CFG) $(ISO9660_BOOTLOADER_DST_CFG)
+ 	@cp $(LINUX_IMAGE_PATH) $(ISO9660_KERNEL_DST)
+ 
++ifeq ($(BR2_TARGET_ROOTFS_ISO9660_GRUB),y)
+ ifeq ($(BR2_TARGET_GRUB_SPLASH),)
+ 	@$(SED) '/^splashimage/d' $(ISO9660_BOOTLOADER_DST_CFG)
+ else
+ 	@cp boot/grub/splash.xpm.gz $(ISO9660_TARGET_DIR)/
+ endif # BR2_TARGET_GRUB_SPLASH
++endif # BR2_TARGET_ROOTFS_ISO9660_GRUB
 +
-+ifeq ($(BR2_TARGET_ROOTFS_ISO9660_JOLIET),y)
-+GENISOIMAGE_OPTS += -J
-+endif
++ifeq ($(BR2_TARGET_ROOTFS_ISO9660_ISOLINUX),y)
++ifeq ($(ISO9660_BOOT_MESSAGE),)
++	@$(SED) '/display bootmsg.txt/d' $(ISO9660_BOOTLOADER_DST_CFG)
++else
++	@cp $(ISO9660_BOOT_MESSAGE) \
++		$(ISO9660_TARGET_DIR)
++endif  # ISO9660_BOOT_MESSAGE
++endif  # BR2_TARGET_ROOTFS_ISO9660_ISOLINUX
 +
-+ifeq ($(BR2_TARGET_ROOTFS_ISO9660_ROCK_RIDGE),y)
-+GENISOIMAGE_OPTS += -R
-+endif
++	@$(SED) 's/__LINUX_IMAGE_NAME__/'$(LINUX_IMAGE_NAME)'/g' \
++		$(ISO9660_BOOTLOADER_DST_CFG)
+ 
+ ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
+-	@$(SED) '/initrd/d'  $(ISO9660_BOOTLOADER_DST_CFG)
++	@$(SED) $(ISO9660_INITRD_SED_CMD)  $(ISO9660_BOOTLOADER_DST_CFG)
+ else
+ 	@cp $(BINARIES_DIR)/rootfs.cpio$(ROOTFS_CPIO_COMPRESS_EXT) \
+ 		$(ISO9660_TARGET_DIR)/initrd
+diff --git a/fs/iso9660/isolinux.cfg b/fs/iso9660/isolinux.cfg
+new file mode 100644
+index 0000000..947d441
+--- /dev/null
++++ b/fs/iso9660/isolinux.cfg
+@@ -0,0 +1,10 @@
++display bootmsg.txt
++default buildroot
++timeout 10
++prompt 1
++LABEL buildroot
++  KERNEL __LINUX_IMAGE_NAME__
++  INITRD initrd
++
++LABEL harddrive
++  LOCALBOOT 0x80
+diff --git a/fs/iso9660/menu.lst b/fs/iso9660/menu.lst
+index c0bbff6..8cfb5e0 100644
+--- a/fs/iso9660/menu.lst
++++ b/fs/iso9660/menu.lst
+@@ -12,7 +12,7 @@ foreground 	000000
+ background 	cccccc
+ 
+ title		Buildroot ISO9660 image
+-kernel		/kernel
++kernel		/__LINUX_IMAGE_NAME__
+ initrd		/initrd
+ 
+ title		Hard Drive (first partition)
 -- 
 1.7.10.4
