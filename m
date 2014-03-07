@@ -1,77 +1,53 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 7 Mar 2014 18:12:23 +0100
-Subject: [Buildroot] [PATCH 0/17 v2] Add new virtual-package
- infrastructure
-In-Reply-To: <20140307140052.GA5226@pc-eric>
-References: <cover.1393695127.git.yann.morin.1998@free.fr>
- <20140301235618.04b363a8@skate> <20140307140052.GA5226@pc-eric>
-Message-ID: <20140307171223.GB3384@free.fr>
+Date: Fri, 7 Mar 2014 18:21:21 +0100
+Subject: [Buildroot] luajit package fails to build on x86_64 for x86
+In-Reply-To: <CAHkwnC9tLUTAVHnGNyPkPxNFFFMTiqPyAvhtahGEWZAPbY0BgQ@mail.gmail.com>
+References: <CAHkwnC9NzMx8kE4KdBjnAys7Xj5n0sQS6AHa=ZrzLqQQtkFZUg@mail.gmail.com>
+ <20140306213113.GH3625@free.fr>
+ <CAHkwnC9tLUTAVHnGNyPkPxNFFFMTiqPyAvhtahGEWZAPbY0BgQ@mail.gmail.com>
+Message-ID: <20140307172121.GC3384@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Eric, All,
+Fabio, All,
 
-On 2014-03-07 15:00 +0100, Eric Le Bihan spake thusly:
-> On Sat, Mar 01, 2014 at 11:56:18PM +0100, Thomas Petazzoni wrote:
-> > On Sat,  1 Mar 2014 18:32:43 +0100, Yann E. MORIN wrote:
-> >
-> > >       package/libgles: rename the _HAS and _PROVIDES variables
-> > >       package/libegl: rename the _HAS and _PROVIDES variables
-> > >       package/libopenmax: rename the _HAS and _PROVIDES variables
-> > >       package/libopenvg: rename the _HAS and _PROVIDES variables
-> > >       package/luainterpreter: rename the _HAS and _PROVIDES variables
-> >
-> > I certainly agree to ensure that the kconfig symbol matches the package
-> > name. However, I am not sure the renaming of BR2_PACKAGE_HAS_OPENGL_ES
-> > to BR2_PACKAGE_HAS_LIBGLES is really nice. BR2_PACKAGE_HAS_OPENGL_ES
-> > had the merit of explicitly containing the word "OpenGL", while LIBGLES
-> > makes that a bit more cryptic. Do we want to instead rename the package
-> > to libopengl-es or some other variation on this?
-> >
-> > A similar reflexion could be made on the naming of the libegl package.
-> The names defined by Khronos Group are "OpenGL ES" and "EGL". That would
-> logically lead to:
+On 2014-03-07 10:59 +0100, Fabio Porcedda spake thusly:
+> On Thu, Mar 6, 2014 at 10:31 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > On 2014-03-06 11:43 +0100, Fabio Porcedda spake thusly:
+> >> Hi all,
+> >> luajit fails to build on a Ubuntu 13.10 x86_64 with the following defconfig:
+> >>
+> >> BR2_x86_generic=y
+> >> BR2_TOOLCHAIN_EXTERNAL=y
+> >> BR2_PACKAGE_LUAJIT=y
+[--SNIP--]
+> > And this can not work on a pure 64-bit system (aka, without the 32-bit
+> > legacy stuff).
+[--SNIP--]
+> > Not sure how we can get away with this...
 > 
-> - libopengl-es/BR2_PACKAGE_HAS_OPENGL_ES
-> - libegl/BR2_PACKAGE_HAS_EGL
+> I think we have two choices:
+>  - add a check to test if 32bit compiler is installed and if not print
+> a clear message about the toolchain requirement
 
-With the virtual-package infrastructure, there should be corespondence
-between the package name and the option name, e.g.:
-    libopengl-es  -> BR2_PACKAGE_HAS_LIBOPENGL_ES
-    libegl        -> BR2_PACKAGE_HAS_LIBEGL
+I think this would be the first package to add such a check.
 
-because the package infrastructure (virtual or otherwise) needs to match
-option names from package names.
+How would you propose we implement this:
+  - in a pre-configure hook (but that will catch the failure late in the
+    build) ?
+  - in a make ifeq-block (so we can catch it early in the build) ?
 
-> But the names used for the libraries are libGLES and libEGL. Googling them
-> leads to OpenGL related pages. Some GNU/Linux distros (Arch Linux, Debian)
-> use them in package names.
-> 
-> IMHO, BR2_PACKAGE_HAS_LIBGLES and BR2_PACKAGE_HAS_LIBEGL, though not sticking
-> with the official names, are not *that* cryptic.
+The second solution is more appealing to me, but might be a bit more
+complex to implement.
 
-I agree that the rather-shoer libegl and libgles are meaningful-enough
-that a user should find them quite easily.
+>  - add (BR2_i386 && BR2_HOSTARCH='i386') to the config.in to exlude
+> such combination.
 
-So, before I repost the virtual-package series, I'd like we settle on
-the names of the packages. Note that for now, I've named them (and I'm
-willing to rename them again!):
-    package/opengl/opengl-libegl
-    package/opengl/opengl-libgles
-
-I find those names a bit strange, as it denotes from the other two
-packages:
-    package/opengl/libopenmax
-    package/opengl/libopenvg
-
-So, libegl and libgles would still match this naming scheme.
-
-OTOH, we could just move those packages out of package/opengl/ directly
-into package/ so we would no longer care about any similarity or
-dissimilarity between those packages names.
+But that would prevent the combination on systems that are setup with
+support for building 32-bit programs, which is a pity...
 
 Regards,
 Yann E. MORIN.
