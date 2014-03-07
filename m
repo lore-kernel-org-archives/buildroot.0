@@ -1,74 +1,84 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Fri, 07 Mar 2014 01:44:15 +0100
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <20140303134805.2eb084c4@skate>
-References: <20140303090219.65a08cc7@skate>	<495852511.10469178.1393846305700.JavaMail.root@openwide.fr>
- <20140303134805.2eb084c4@skate>
-Message-ID: <5319165F.2080401@openwide.fr>
+From: Noam Camus <noamc@ezchip.com>
+Date: Fri, 7 Mar 2014 01:32:53 +0000
+Subject: [Buildroot] [PATCH 1/1] [V5] toolchain: control vendor part in
+	GNU_TARGET_NAME
+In-Reply-To: <1394155829-13670-1-git-send-email-noamc@ezchip.com>
+References: <1394155829-13670-1-git-send-email-noamc@ezchip.com>
+Message-ID: <884EA965490E3C4D8E66AEF41E980250096818@ezex10.ezchip.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
 
-Le 03/03/2014 13:48, Thomas Petazzoni a ?crit :
-> Dear Romain Naour,
->
-> On Mon, 3 Mar 2014 12:31:45 +0100 (CET), Romain Naour wrote:
->
->> |
->> | > microblaze |                     gpm-1.20.7 | NOK |
->> | > http://autobuild.buildroot.net/results/e99afadca6de92aad8563006fc7219aa32d77a88/
->> |
->> | Strange:
->> |
->> | /home/test/test/2/output/host/usr/bin/microblaze-buildroot-linux-gnu-gcc
->> | libgpm.so.2 \
->> | 	 -L/home/test/test/2/output/build/gpm-1.20.7/src  -o
->> | 	 lib/libgpm.so.2.1.0 lib/liblow.lo lib/libhigh.lo lib/libxtra.lo
->> | 	 lib/report-lib.lo tools.lo  -lc
->> | microblaze-buildroot-linux-gnu-gcc: error: libgpm.so.2: No such file
->> | or directory
->> |
->> | Spenser ?
->>
->> It's because __ELF__ is not defined in microblaze toolchain :
->> checking whether system is ELF... no
->>
->> If elf format is not enabled then gpm is build statically.
->> You may have noticed that qpm static build is disabled in gpm.mk because it's broken.
->>
->> I can try to fix gpm's static build.
-> Hum, but that's weird because Microblaze definitely uses the ELF binary
-> format, supports shared library and has a MMU (at least for the
-> Microblaze CPU variants that we support).
->
-> So it should be working in shared library mode, I believe.
->
-> Thomas
+This option allows to customize the "vendor" part of the
+toolchain tuple, where the toolchain tuple has the form
+<arch>-<vendor>-<os>-<libc>. Use this option in situations
+where gcc might make different decisions based on the vendor
+part of the tuple.
 
-It seems that __ELF__ has been removed from gcc
-http://gcc.gnu.org/gcc-4.9/changes.html
-"Support for a number of older systems and recently unmaintained or 
-untested target ports of GCC has been declared obsolete in GCC 4.9"
+Signed-off-by: Noam Camus <noamc@ezchip.com>
+---
+ package/Makefile.in                     |   17 ++++++++++++++++-
+ toolchain/toolchain-buildroot/Config.in |   16 ++++++++++++++++
+ 2 files changed, 32 insertions(+), 1 deletions(-)
 
-(version 4.9.0)
-./microblaze-buildroot-linux-gnu-cpp -dM /dev/null | grep __ELF__
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 454f614..bd9f18c 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -20,8 +20,23 @@ endif
+ MAKE1:=$(HOSTMAKE) -j1
+ MAKE:=$(HOSTMAKE) $(if $(PARALLEL_JOBS),-j$(PARALLEL_JOBS))
 
-(version 4.7.2)
-(code sourcery toolchain x86)
-./i686-pc-linux-gnu-cpp -dM /dev/null | grep __ELF__
-#define __ELF__ 1
++ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
++TARGET_VENDOR = $(call qstrip,$(BR2_TOOLCHAIN_BUILDROOT_VENDOR))
++else
++TARGET_VENDOR = buildroot
++endif
++
++# Sanity checks
++ifeq ($(TARGET_VENDOR),)
++$(error BR2_TOOLCHAIN_BUILDROOT_VENDOR is not allowed to be empty)
++endif
++ifeq ($(TARGET_VENDOR),unknown)
++$(error BR2_TOOLCHAIN_BUILDROOT_VENDOR cannot be 'unknown'. \
++        It might be confused with the native toolchain)
++endif
++
+ # Compute GNU_TARGET_NAME
+-GNU_TARGET_NAME=$(ARCH)-buildroot-$(TARGET_OS)-$(LIBC)$(ABI)
++GNU_TARGET_NAME=$(ARCH)-$(TARGET_VENDOR)-$(TARGET_OS)-$(LIBC)$(ABI)
 
-(version 4.8.2)
-(buildroot internal toolchain x86)
-./i686-buildroot-linux-gnu-cpp -dM /dev/null | grep __ELF__
-#define __ELF__ 1
+ # Blackfin FLAT needs uclinux
+ ifeq ($(BR2_bfin)$(BR2_BINFMT_FLAT),yy)
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 07db50b..3487327 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -70,6 +70,22 @@ config BR2_TOOLCHAIN_BUILDROOT_LIBC
+        default "glibc"  if BR2_TOOLCHAIN_BUILDROOT_EGLIBC
+        default "glibc"  if BR2_TOOLCHAIN_BUILDROOT_GLIBC
 
-I'll send a patch to remove this test since buildroot does not have 
-support for non ELF system.
-
-Best regards,
-Romain
++config BR2_TOOLCHAIN_BUILDROOT_VENDOR
++       string "custom toolchain vendor name"
++       default "buildroot"
++       help
++         This option allows to customize the "vendor" part of the
++         toolchain tuple, where the toolchain tuple has the form
++         <arch>-<vendor>-<os>-<libc>. The default value, "buildroot",
++         is fine for most cases, except in very specific situations
++         where gcc might make different decisions based on the vendor
++         part of the tuple. The value "unknown" is not allowed, as the
++         cross-compiling toolchain might then be confused with the
++         native toolchain when the target and host architecture are
++         identical.
++
++         If you're not sure, just leave the default "buildroot" value.
++
+ source "package/uclibc/Config.in"
+ source "package/glibc/Config.in"
+ source "package/binutils/Config.in.host"
+--
+1.7.1
