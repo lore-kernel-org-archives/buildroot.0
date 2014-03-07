@@ -1,74 +1,68 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Fri, 7 Mar 2014 18:32:19 +0100
-Subject: [Buildroot] luajit package fails to build on x86_64 for x86
-In-Reply-To: <20140307172121.GC3384@free.fr>
-References: <CAHkwnC9NzMx8kE4KdBjnAys7Xj5n0sQS6AHa=ZrzLqQQtkFZUg@mail.gmail.com>
- <20140306213113.GH3625@free.fr>
- <CAHkwnC9tLUTAVHnGNyPkPxNFFFMTiqPyAvhtahGEWZAPbY0BgQ@mail.gmail.com>
- <20140307172121.GC3384@free.fr>
-Message-ID: <CAHkwnC92VGYqeUSNsAiyuFQgErZtLwYyFJ89qa8bYrAoZ8mRkw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 7 Mar 2014 18:37:29 +0100
+Subject: [Buildroot] question about buildroot manual license
+In-Reply-To: <20140307063131.GL4148@waldemar-brodkorb.de>
+References: <20140307063131.GL4148@waldemar-brodkorb.de>
+Message-ID: <20140307173729.GD3384@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Mar 7, 2014 at 6:21 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Fabio, All,
->
-> On 2014-03-07 10:59 +0100, Fabio Porcedda spake thusly:
->> On Thu, Mar 6, 2014 at 10:31 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->> > On 2014-03-06 11:43 +0100, Fabio Porcedda spake thusly:
->> >> Hi all,
->> >> luajit fails to build on a Ubuntu 13.10 x86_64 with the following defconfig:
->> >>
->> >> BR2_x86_generic=y
->> >> BR2_TOOLCHAIN_EXTERNAL=y
->> >> BR2_PACKAGE_LUAJIT=y
-> [--SNIP--]
->> > And this can not work on a pure 64-bit system (aka, without the 32-bit
->> > legacy stuff).
-> [--SNIP--]
->> > Not sure how we can get away with this...
->>
->> I think we have two choices:
->>  - add a check to test if 32bit compiler is installed and if not print
->> a clear message about the toolchain requirement
->
-> I think this would be the first package to add such a check.
->
-> How would you propose we implement this:
->   - in a pre-configure hook (but that will catch the failure late in the
->     build) ?
->   - in a make ifeq-block (so we can catch it early in the build) ?
+Waldemar, All,
 
-> The second solution is more appealing to me, but might be a bit more
-> complex to implement.
+On 2014-03-07 07:31 +0100, Waldemar Brodkorb spake thusly:
+> Hi developers, 
+> I am reading the buildroot manual and it is nice to read.
+> I would like to add some documentation to my own buildroot derivate,                                                                                                                                      
+> so my question is, what license is used for your document?
+> I have not found any mentioning about a license of the docs,
+> I am not sure if GPLv2 (the license of buildroot) is applicable
+> for documentation.        
 
-I think a check to be added like this:
+What makes you think GPLv2 is not applicable to the Buildroot's manual?
 
-luakit.mk:
+The license for Buildroot is GPLv2. Which means that everything provided
+with Buildroot, unless otherwise specified in the files themselves or in
+an accompanying license file, is covered by Buildroot's license. [*]
 
-luajit-dependencies:
-   shell script to check and if it fails it prints an appropriate
-message and stop the building
+Maybe the GPLv2 is not the best license for documentation, but as long
+as there is no other licensing terms for the manual, that's the license
+that applies to Buildroot's manual.
 
-dependencies: luajit-dependencies
+[*] Note: the patches we cary against the different packages are of
+course covered by the license of the package they each apply to, which
+may or may not be the same license as Buildroot's. Refer to each package
+licensing terms for the license of the patches.
 
-So the check it's done early at same time as other dependenies check.
+> Is it enough for you, if I add something like this in the top
+> of the document:
+> "based on the buildroot manual. See http://www.buildroot.net for 
+> original authors."
 
-Right now i don't know how to check about the presence of the 32bit
-support on the 64 bit host toolchain.
+No, that's not enough. You have to respect the full terms of the GPLv2.
+Which basicaly translates to providing, but is not limited to providing,
+the following items:
 
->
->>  - add (BR2_i386 && BR2_HOSTARCH='i386') to the config.in to exlude
->> such combination.
->
-> But that would prevent the combination on systems that are setup with
-> support for building 32-bit programs, which is a pity...
+  - the source materials (the asciidoc files in docs/manual are considered
+    the sources for the manual),
 
-You are right, i think it's just the easiest solution.
+  - the scripts used to generate the manual from the asciidoc sources (the
+    docs/manual/manual.mk),
 
-Regards
+  - the copyright notices where they appear, intact, with your own
+    copyright added if you did some substantial changes
+
+Note: IANAL; this is not legal advice; consult a lawyer.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Fabio Porcedda
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
