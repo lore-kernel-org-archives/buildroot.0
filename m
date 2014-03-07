@@ -1,36 +1,45 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Fri, 7 Mar 2014 09:41:01 +0100
-Subject: [Buildroot] [PATCH v2 4/4] linux: remove dirs dependency
-In-Reply-To: <5318B267.2020301@mind.be>
-References: <1394098949-31981-1-git-send-email-fabio.porcedda@gmail.com>
- <1394098949-31981-5-git-send-email-fabio.porcedda@gmail.com>
- <5318B267.2020301@mind.be>
-Message-ID: <CAHkwnC92pZoA=8W08scQkre5zDYm1JMCpfWQTa9jTUQzyD_jyw@mail.gmail.com>
+From: Waldemar Brodkorb <mail@waldemar-brodkorb.de>
+Date: Fri, 7 Mar 2014 09:52:43 +0100
+Subject: [Buildroot] question about buildroot manual license
+In-Reply-To: <4c722ce2-e724-45d7-8d5c-d4df3108b842@email.android.com>
+References: <20140307063131.GL4148@waldemar-brodkorb.de>
+ <4c722ce2-e724-45d7-8d5c-d4df3108b842@email.android.com>
+Message-ID: <20140307085243.GM4148@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Mar 6, 2014 at 6:37 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 06/03/14 10:42, Fabio Porcedda wrote:
->> The "dirs" dependency is redundant because now the "generic-package"
->> infrastructure add automatically the "dirs" dependency so just remove
->> the redundant references.
->>
->> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
->
-> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->
->
->  There are also redundant dependencies on dirs in Makefile and in
-> package/uclibc/uclibc.mk - that can be done in a separate patch, but if
-> you get around to fixing the other places before this one gets committed
-> please do include it.
+Hi Thomas,
+Thomas De Schampheleire wrote,
 
-Hi Arnout,
-thanks for reviewing.
-I will send a patch to remove the dirs dependency from the other files.
+> Waldemar Brodkorb <mail@waldemar-brodkorb.de> schreef:
+> >Hi developers, 
+> >I am reading the buildroot manual and it is nice to read.
+> >I would like to add some documentation to my own buildroot derivate,                                                                                                                                      
+> Aside from the license question, could you give some more detail about this derivative? How is it different from vanilla Buildroot?
 
-Regards
-Fabio Porcedda
+To make a long story short, it started with buildroot 2 in 2005 as I
+joined the OpenWrt project. I started working on porting the Linksys
+Kernel differences to a new 2.4.x kernel.
+https://dev.openwrt.org/browser/trunk/openwrt/package/linux?rev=209
+
+In June 2006 I forked OpenWrt and started with FreeWRT.
+http://web.archive.org/web/20060615170828/http://openbsd-geek.de/archives/224-An-open-letter-to-the-OpenWrt-community.html
+In Juli 2007 I left the FreeWRT project for personal reasons.
+In the middle of 2008 I started to work on a new project called
+OpenADK, which based on FreeWRT svn. In May 2009 I started using
+Git. 
+
+I am still hacking on embedded Linux systems for fun. At the moment
+I like to write some documentation about OpenADK, and the buildroot
+docs seems to be a perfect start.
+
+There are a lot of differences between buildroot and OpenADK, I will
+add a chapter about it in the planned manual.
+
+best regards,
+ Waldemar
+
+P.s.: sorry, that my mail got longer
