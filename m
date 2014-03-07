@@ -1,57 +1,39 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Fri, 07 Mar 2014 21:52:16 +0100
-Subject: [Buildroot] [PATCH 2/2] exim: new package
-References: <1394124890-29254-1-git-send-email-luca@lucaceresoli.net>
- <1394124890-29254-3-git-send-email-luca@lucaceresoli.net>
- <heomuaxdgh.ln2@ID-313208.user.individual.net>
- <5319DD64.9000701@lucaceresoli.net>
-Message-ID: <05opuax7o6.ln2@ID-313208.user.individual.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 7 Mar 2014 21:58:01 +0100
+Subject: [Buildroot] luajit package fails to build on x86_64 for x86
+In-Reply-To: <CAHkwnC-g36dQ0OzSkqZdrWbjkwe3izYqpF+e81gff-ezA35H6g@mail.gmail.com>
+References: <CAHkwnC9NzMx8kE4KdBjnAys7Xj5n0sQS6AHa=ZrzLqQQtkFZUg@mail.gmail.com>
+ <20140306213113.GH3625@free.fr>
+ <CAHkwnC9tLUTAVHnGNyPkPxNFFFMTiqPyAvhtahGEWZAPbY0BgQ@mail.gmail.com>
+ <20140307172121.GC3384@free.fr>
+ <CAHkwnC92VGYqeUSNsAiyuFQgErZtLwYyFJ89qa8bYrAoZ8mRkw@mail.gmail.com>
+ <20140307174903.GE3384@free.fr> <20140307204055.2d0a4b23@skate>
+ <CAHkwnC8GuQJaRaqw_0A1KNNaFyz4scJBzsALRGx0ounsg7Y5mQ@mail.gmail.com>
+ <20140307214651.1cb85457@skate>
+ <CAHkwnC-g36dQ0OzSkqZdrWbjkwe3izYqpF+e81gff-ezA35H6g@mail.gmail.com>
+Message-ID: <20140307215801.69039f22@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[posted and mailed]
+Dear Fabio Porcedda,
 
-Hi,
+On Fri, 7 Mar 2014 21:51:57 +0100, Fabio Porcedda wrote:
 
-Luca Ceresoli <luca@lucaceresoli.net> wrote in
-news:5319DD64.9000701 at lucaceresoli.net: 
+> Reading the gcc documentation the option -m32 work even on PowerPC:
+> http://gcc.gnu.org/onlinedocs/gcc-4.8.2/gcc/RS_002f6000-and-PowerPC-Options.html
 
-> Bernd Kuhls wrote:
->> Hi,
->>
->> Luca Ceresoli <luca@lucaceresoli.net> wrote in
->> news:1394124890-29254-3-git-send-email-luca-ep08DiM7hqZH3+C6az13tg at publi
->> c.gmane.org: 
->>
->>> --- a/package/Config.in
->>> +++ b/package/Config.in
->>> @@ -834,6 +834,7 @@ source "package/dnsmasq/Config.in"
->>>   source "package/dropbear/Config.in"
->>>   source "package/ebtables/Config.in"
->>>   source "package/ethtool/Config.in"
->>> +source "package/exim/Config.in"
->>
->> what about creating a new section "Mail applications"?
-> 
-> I don't think we have a large enough number of mail-related packages in
-> Buildroot to justify such a section. But I may be wrong.
+Ok, but not on ARM or MIPS, and probably not on many other 32 bits
+architectures supported by Buildroot. Bottom line: testing 'gcc -m32'
+is not a good way of testing whether the architecture is 32 bits or is
+a 64 bits architecture capable of building and running 32 bits binaries.
 
-I am planning to add the following packages to buildroot in addition to 
-exim:
+Best regards,
 
-- fetchmail
-- dovecot
-- dovecot-pigeonhole
-
-Currently the following mail-related packages are included in buildroot, 
-both in "Networking applications", and could be moved to the new section:
-- libesmtp
-- msmtp
-
-This makes 6 packages in total. I do not know how many packages are needed 
-to justify a new section, therefore I am asking before sending patches ;)
-
-Regards, Bernd
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
