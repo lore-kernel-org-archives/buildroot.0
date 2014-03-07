@@ -1,35 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Mar 2014 23:54:24 +0100
-Subject: [Buildroot] [PATCH] ZNC: new package
-In-Reply-To: <52c948a2.e358c20a.0e98.1fdc@mx.google.com>
-References: <1388876370-3441-1-git-send-email-cedric.chepied@gmail.com>
- <877gae7nd8.fsf@dell.be.48ers.dk>
- <52c948a2.e358c20a.0e98.1fdc@mx.google.com>
-Message-ID: <20140307235424.1787899e@skate>
+Date: Fri, 7 Mar 2014 23:56:11 +0100
+Subject: [Buildroot] [PATCH] bluez5_utils: new package
+In-Reply-To: <1387791444-28056-1-git-send-email-alexandre.belloni@free-electrons.com>
+References: <1387791444-28056-1-git-send-email-alexandre.belloni@free-electrons.com>
+Message-ID: <20140307235611.7558047d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear C?dric Ch?pied,
+Dear Alexandre Belloni,
 
-On Sun, 05 Jan 2014 12:57:20 +0100, C?dric Ch?pied wrote:
+On Mon, 23 Dec 2013 10:37:24 +0100, Alexandre Belloni wrote:
+> Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+> ---
+>  package/Config.in                                  |   1 +
+>  package/bluez5_utils/Config.in                     |  16 ++++
+>  .../bluez5_utils-5.12-enable_cg2900.patch          | 106 +++++++++++++++++++++
+>  package/bluez5_utils/bluez5_utils.mk               |  31 ++++++
+>  package/bluez_utils/Config.in                      |   8 +-
+>  5 files changed, 161 insertions(+), 1 deletion(-)
+>  create mode 100644 package/bluez5_utils/Config.in
+>  create mode 100644 package/bluez5_utils/bluez5_utils-5.12-enable_cg2900.patch
+>  create mode 100644 package/bluez5_utils/bluez5_utils.mk
 
-> > Out of interest, what does PKG_DEVLIB_DIR do and why don't we pass it
-> > for TARGET?
-> 
-> Same remark, I'll fix it and submit a new patch.
+Can you resend an updated version of this patch, that takes into
+account the review comments you have received? It would be great to
+have bluez5_utils in Buildroot.
 
-Do you plan on resending an updated version of your ZNC package? You
-received some comments on January 5th, but we haven't received a new
-version.
-
-This new package would be an appreciated contribution, but if you want
-to see it accepted, you should resend regularly new versions that take
-into account the review comments made by the other Buildroot developers.
-
-Thanks a lot!
+Thanks,
 
 Thomas
 -- 
