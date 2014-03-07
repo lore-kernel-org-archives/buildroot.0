@@ -1,62 +1,47 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri, 7 Mar 2014 14:14:45 +0100
-Subject: [Buildroot] [PATCH 6/6] liburcu: disable build with gcc-4.8.x
-	on ARM
-In-Reply-To: <20140307140423.064ce228@skate>
-References: <1393717193-19774-1-git-send-email-s.martin49@gmail.com>
- <1393717193-19774-7-git-send-email-s.martin49@gmail.com>
- <20140306231723.32e217fd@skate>
- <CAHXCMM+YsCrFrnW06BdJ=AGR3VrUhZb_2UA+NevfdJXF=D+HTg@mail.gmail.com>
- <20140307140423.064ce228@skate>
-Message-ID: <CAHXCMMLgnj7CEVFnkjjkc=PH9NfXZtDe92tnpo3YwwmTHjk-Qw@mail.gmail.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Fri,  7 Mar 2014 14:22:11 +0100
+Subject: [Buildroot] [PATCH v3 0/3] improve virtual package management
+Message-ID: <1394198534-16379-1-git-send-email-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Mar 7, 2014 at 2:04 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Samuel Martin,
->
-> On Fri, 7 Mar 2014 13:59:29 +0100, Samuel Martin wrote:
->
->> > The exclusion of BR2_GCC_VERSION_4_8_X is wrong, because we have in
->> > Buildroot the patch fixing the
->> > http://gcc.gnu.org/bugzilla/show_bug.cgi?id=58854 gcc bug.
->> >
->> > But generally, I'm not really happy with this approach, as we would
->> > have to update these dependencies every time we bump/change the
->> > external toolchain Kconfig options... Unfortunately I don't have a
->> > better suggestion.
->>
->> I did this because of the patch in liburcu checking for the compiler version.
->> I did not notice BR carries the patch fixing this bug.
->
-> So liburcu checks itself that the gcc version should be different than
-> 4.8.0, 4.8.1 and 4.8.2 ?
+This patch series improves virtual package management by:
 
-Yes, it's done by this patch:
-http://git.lttng.org/?p=userspace-rcu.git;a=commitdiff;h=4b79310
+- using make control functions in dependency check.
+- adding a tutorial to the user manual.
 
-> It doesn't take into account that the 4.8.2
-> might have been patched to fix the problem ?
+Changes v2 -> v3:
+  - rebased on master.
+  - removed already converted packages (lua, libegl, ...).
+  - converted cryptodev and jpeg (reported by Yann E. Morin).
+  - fixed comments on virtual package provider *.mk not being in the correct
+    section of tutorial (reported by S. Martin).
 
-Nope :-/
+Changes v1 -> v2:
+  - rebased on master.
+  - replaced 'infrastructure' by 'management' as this mechanism does not (yet?)
+    provide a "$(eval $(virtual-package))" helper
+  - converted code examples to plain sections (suggested by Yann E. Morin).
 
-> Can this test be disabled ?
+Best regards,
+ELB
 
-Certainly, I'm just not sure checking the compiler has the fix will be
-easy... anyway.
+Eric Le Bihan (3):
+  manual: add virtual package tutorial.
+  cryptodev: convert to new virtual package management.
+  jpeg: convert to new virtual package management.
 
-Just to be clear, your suggestion is only about enabling gcc-4.8.2
-(with the fix), not gcc-4.8.0 nor gcc-4.8.1, right?
-Then we have to check for each external toolchain if it has the fix.
-
-What about custom toolchain based on gcc-4.8.2? Shall we able it
-(warning the user) or just disabling it?
-
-Regards,
+ docs/manual/adding-packages-virtual.txt |   97 +++++++++++++++++++++++++++++++
+ docs/manual/adding-packages.txt         |    2 +
+ package/cryptodev/Config.in             |    3 +
+ package/cryptodev/cryptodev.mk          |    7 +--
+ package/jpeg/Config.in                  |    3 +
+ package/jpeg/jpeg.mk                    |    7 +--
+ 6 files changed, 111 insertions(+), 8 deletions(-)
+ create mode 100644 docs/manual/adding-packages-virtual.txt
 
 -- 
-Samuel
+1.7.9.5
