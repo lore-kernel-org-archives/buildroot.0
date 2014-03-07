@@ -1,27 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Mar 2014 23:52:02 +0100
-Subject: [Buildroot] [PATCH 1/3] wiringpi: new package
-In-Reply-To: <CAKi4VALgR09CnsBJT7xF1qOharQcWs-ZxS54jtzb8+retET85Q@mail.gmail.com>
-References: <1389383422-29665-1-git-send-email-lucas.de.marchi@gmail.com>
- <20140111140833.44613b15@skate>
- <CAKi4VALgR09CnsBJT7xF1qOharQcWs-ZxS54jtzb8+retET85Q@mail.gmail.com>
-Message-ID: <20140307235202.5b69cf34@skate>
+Date: Fri, 7 Mar 2014 23:54:24 +0100
+Subject: [Buildroot] [PATCH] ZNC: new package
+In-Reply-To: <52c948a2.e358c20a.0e98.1fdc@mx.google.com>
+References: <1388876370-3441-1-git-send-email-cedric.chepied@gmail.com>
+ <877gae7nd8.fsf@dell.be.48ers.dk>
+ <52c948a2.e358c20a.0e98.1fdc@mx.google.com>
+Message-ID: <20140307235424.1787899e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Lucas De Marchi,
+Dear C?dric Ch?pied,
 
-On Sat, 11 Jan 2014 10:20:39 -0200, Lucas De Marchi wrote:
+On Sun, 05 Jan 2014 12:57:20 +0100, C?dric Ch?pied wrote:
 
-> thanks for reviewing it, I'll send an updated version.
+> > Out of interest, what does PKG_DEVLIB_DIR do and why don't we pass it
+> > for TARGET?
+> 
+> Same remark, I'll fix it and submit a new patch.
 
-Do you plan to resend new versions of your wiringpi and pi4j patches,
-taking into account the reviews that were made early January?
+Do you plan on resending an updated version of your ZNC package? You
+received some comments on January 5th, but we haven't received a new
+version.
 
-Thanks!
+This new package would be an appreciated contribution, but if you want
+to see it accepted, you should resend regularly new versions that take
+into account the review comments made by the other Buildroot developers.
+
+Thanks a lot!
 
 Thomas
 -- 
