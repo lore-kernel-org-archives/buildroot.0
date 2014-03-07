@@ -1,33 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 8 Mar 2014 00:09:49 +0100
-Subject: [Buildroot] [PATCH] bluez5_utils: new package
-In-Reply-To: <20140307230331.GC2918@piout.net>
-References: <1387791444-28056-1-git-send-email-alexandre.belloni@free-electrons.com>
- <20140307235611.7558047d@skate> <20140307230331.GC2918@piout.net>
-Message-ID: <20140308000949.55ff73e4@skate>
+Date: Sat, 8 Mar 2014 00:10:27 +0100
+Subject: [Buildroot] [PATCH v4 1/1] jack2: new package
+In-Reply-To: <1383147961-4185-1-git-send-email-wzab01@gmail.com>
+References: <1256826d-31b9-4b85-8834-35694e372fac@email.android.com>
+ <1382658143-3850-1-git-send-email-wzab01@gmail.com>
+ <1382744168-14259-1-git-send-email-wzab01@gmail.com>
+ <20131027181024.14201db4@skate>
+ <1382903456-5996-1-git-send-email-wzab01@gmail.com>
+ <20131028202748.3d03c78f@skate>
+ <1383072946-4851-1-git-send-email-wzab01@gmail.com>
+ <20131029203433.563d6ced@skate>
+ <CAMduVEeEUoQYiixi9J0REN5cFZhv=tfimD8ObrFaktmNuEd+cQ@mail.gmail.com>
+ <20131030011404.7689a067@skate>
+ <1383147961-4185-1-git-send-email-wzab01@gmail.com>
+Message-ID: <20140308001027.6e0980a2@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexandre Belloni,
+Dear Wojciech M. Zabolotny,
 
-On Sat, 8 Mar 2014 00:03:32 +0100, Alexandre Belloni wrote:
+On Wed, 30 Oct 2013 16:46:01 +0100, Wojciech M. Zabolotny wrote:
+> Signed-off-by: Wojciech M. Zabolotny <wzab01@gmail.com>
+> ---
+>  package/Config.in       |  1 +
+>  package/jack2/Config.in | 17 +++++++++++++++++
+>  package/jack2/jack2.mk  | 29 +++++++++++++++++++++++++++++
+>  3 files changed, 47 insertions(+)
+>  create mode 100644 package/jack2/Config.in
+>  create mode 100644 package/jack2/jack2.mk
 
-> > Can you resend an updated version of this patch, that takes into
-> > account the review comments you have received? It would be great to
-> > have bluez5_utils in Buildroot.
-> 
-> It may make sense to take the patch from Marcin as it is almost the same
-> as mine Yann had a few comments on it this week:
-> 
-> http://lists.busybox.net/pipermail/buildroot/2014-March/091454.html
-
-Then, can you sync with Marcin and see if any of you can resend an
-updated patch?
-
-Thanks!
+Applied, thanks!
 
 Thomas
 -- 
