@@ -1,41 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Mar 2014 22:38:15 +0100
-Subject: [Buildroot] [git commit] linux: bump to version 3.13.6
-Message-ID: <20140307213820.9ED189936F@busybox.osuosl.org>
+Date: Fri, 7 Mar 2014 22:38:51 +0100
+Subject: [Buildroot] [git commit] configs/fsl_mpc8315erdb: fix and bump
+	relevant versions
+Message-ID: <20140307214327.6351E9B7F4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=314ae1fd2ccd50f354bdb384f34fa692a833580c
+commit: http://git.buildroot.net/buildroot/commit/?id=079282b2e2ebeb8c0b9636f64d1cb0570f62fec7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Tweak the config to deal with b155f5a5ab321b06df1c5d5f5e104438e8288cf8
+fallout.
+And bump to the latest kernel versions.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ configs/freescale_mpc8315erdb_defconfig |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 1f8ddf5..5db0e0c 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
+diff --git a/configs/freescale_mpc8315erdb_defconfig b/configs/freescale_mpc8315erdb_defconfig
+index 0b4979f..3cc5c5a 100644
+--- a/configs/freescale_mpc8315erdb_defconfig
++++ b/configs/freescale_mpc8315erdb_defconfig
+@@ -12,12 +12,13 @@ BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER=y
  
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.13.5"
-+	bool "3.13.6"
+ # Lock headers version to match and avoid breakage
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.13"
++BR2_DEFAULT_KERNEL_VERSION="3.13.6"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_13=y
  
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -104,7 +104,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.13.5" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.13.6" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.13"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.13.6"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/mpc8315erdb/linux-3.13.config"
+ BR2_LINUX_KERNEL_UIMAGE=y
