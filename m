@@ -1,42 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Mar 2014 23:38:40 +0100
-Subject: [Buildroot] [git commit] package/zic: install header
-Message-ID: <20140307223917.62C329BE22@busybox.osuosl.org>
+Date: Fri, 7 Mar 2014 23:39:52 +0100
+Subject: [Buildroot] [PATCH 4/7] package/zic: install header
+In-Reply-To: <ea469bd003d287011efcd1a8791628b0445aa85d.1393884458.git.yann.morin.1998@free.fr>
+References: <cover.1393884458.git.yann.morin.1998@free.fr>
+ <ea469bd003d287011efcd1a8791628b0445aa85d.1393884458.git.yann.morin.1998@free.fr>
+Message-ID: <20140307233952.2b60d44f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5c053979d4e22ec080aecf1911a354616124dcf4
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Yann E. MORIN,
 
-The incoming host-tzdump package requires the tzfile header,
-so we isntall it.
+On Mon,  3 Mar 2014 23:10:23 +0100, Yann E. MORIN wrote:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> The incoming host-tzdump package requires the tzfile header,
+> so we isntall it.
+> 
+> Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+> [yann.morin.1998 at free.fr: split zic header-install to its own cset]
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  package/zic/zic.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/zic/zic.mk b/package/zic/zic.mk
+> index c9b6c7b..4814fba 100644
+> --- a/package/zic/zic.mk
+> +++ b/package/zic/zic.mk
+> @@ -22,6 +22,8 @@ endef
+>  define HOST_ZIC_INSTALL_CMDS
+>  	mkdir -p $(HOST_DIR)/usr/sbin
+>  	install -D -m 755 $(@D)/zic $(HOST_DIR)/usr/sbin/zic
+> +	mkdir -p $(HOST_DIR)/usr/include
+> +	install -D -m 644 $(@D)/tzfile.h $(HOST_DIR)/usr/include/tzfile.h
+>  endef
 
-[Thomas: remove mkdir -p, unneeded because of the use of install -D,
-and change install to $(INSTALL), like we do in all other packages.]
+Applied, thanks.
 
-Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-[yann.morin.1998 at free.fr: split zic header-install to its own cset]
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/zic/zic.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+However, I've removed the mkdir -p line, which is useless because of
+the use of install -D. And I've replaced install by $(INSTALL), was we
+do in all other packages.
 
-diff --git a/package/zic/zic.mk b/package/zic/zic.mk
-index c9b6c7b..65605c5 100644
---- a/package/zic/zic.mk
-+++ b/package/zic/zic.mk
-@@ -20,8 +20,8 @@ define HOST_ZIC_BUILD_CMDS
- endef
- 
- define HOST_ZIC_INSTALL_CMDS
--	mkdir -p $(HOST_DIR)/usr/sbin
--	install -D -m 755 $(@D)/zic $(HOST_DIR)/usr/sbin/zic
-+	$(INSTALL) -D -m 755 $(@D)/zic $(HOST_DIR)/usr/sbin/zic
-+	$(INSTALL) -D -m 644 $(@D)/tzfile.h $(HOST_DIR)/usr/include/tzfile.h
- endef
- 
- $(eval $(host-generic-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
