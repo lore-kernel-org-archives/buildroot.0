@@ -1,33 +1,52 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Fri,  7 Mar 2014 22:58:15 +0100
-Subject: [Buildroot] [PATCH 1/1] poppler/Config.in: indentation cleanup
-Message-ID: <1394229495-27209-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Fri, 7 Mar 2014 22:58:04 +0100
+Subject: [Buildroot] luajit package fails to build on x86_64 for x86
+In-Reply-To: <20140307223003.53d17887@skate>
+References: <CAHkwnC9NzMx8kE4KdBjnAys7Xj5n0sQS6AHa=ZrzLqQQtkFZUg@mail.gmail.com>
+ <20140306213113.GH3625@free.fr>
+ <CAHkwnC9tLUTAVHnGNyPkPxNFFFMTiqPyAvhtahGEWZAPbY0BgQ@mail.gmail.com>
+ <20140307172121.GC3384@free.fr>
+ <CAHkwnC92VGYqeUSNsAiyuFQgErZtLwYyFJ89qa8bYrAoZ8mRkw@mail.gmail.com>
+ <20140307174903.GE3384@free.fr> <20140307204055.2d0a4b23@skate>
+ <CAHkwnC8GuQJaRaqw_0A1KNNaFyz4scJBzsALRGx0ounsg7Y5mQ@mail.gmail.com>
+ <20140307214651.1cb85457@skate>
+ <CAHkwnC-g36dQ0OzSkqZdrWbjkwe3izYqpF+e81gff-ezA35H6g@mail.gmail.com>
+ <20140307215801.69039f22@skate>
+ <CAHkwnC9Yx_uQqZQwiqmExJgErg_tey0n7dm5cZYWLp2sG_HsPw@mail.gmail.com>
+ <20140307223003.53d17887@skate>
+Message-ID: <CAHkwnC8Te3buvsDtyF+p_=iTcL_QYdaCz-Ty6B_BqY2RHNbhLw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
----
- package/poppler/Config.in |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Fri, Mar 7, 2014 at 10:30 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Fabio Porcedda,
+>
+> On Fri, 7 Mar 2014 22:11:33 +0100, Fabio Porcedda wrote:
+>
+>> > Ok, but not on ARM or MIPS, and probably not on many other 32 bits
+>> > architectures supported by Buildroot. Bottom line: testing 'gcc -m32'
+>> > is not a good way of testing whether the architecture is 32 bits or is
+>> > a 64 bits architecture capable of building and running 32 bits binaries.
+>>
+>> We need to test if 32bit binaries are built only for 64bit host architectures.
+>> Which are the 64bit host architectures that Buildroot supports?
+>
+> Potentially any 64 bits architecture, we don't have particular
+> dependencies on the host architecture.
 
-diff --git a/package/poppler/Config.in b/package/poppler/Config.in
-index 919de3e..fce296d 100644
---- a/package/poppler/Config.in
-+++ b/package/poppler/Config.in
-@@ -6,9 +6,9 @@ config BR2_PACKAGE_POPPLER
- 	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
- 	help
--	   Poppler is a PDF rendering library based on the xpdf-3.0 code base.
-+	  Poppler is a PDF rendering library based on the xpdf-3.0 code base.
- 
--	   http://poppler.freedesktop.org/
-+	  http://poppler.freedesktop.org/
- 
- comment "poppler needs a toolchain w/ C++, threads"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+Ok i undertand the general problem but right now the luajit package
+support building 32 binaries on a 64 host architecture only if the
+host compiler support the -m32 option so right now it's fine to test
+only if the -m32 option is used.
+
+So i think adding the line
+select BR2_HOSTARCH_NEEDS_IA32_COMPILER if BR2_ARCH_IS_64
+it's the right solution for checking the configurations supported by
+the luajit package.
+
 -- 
-1.7.9.5
+Fabio Porcedda
