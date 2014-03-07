@@ -1,83 +1,93 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 7 Mar 2014 18:49:03 +0100
-Subject: [Buildroot] luajit package fails to build on x86_64 for x86
-In-Reply-To: <CAHkwnC92VGYqeUSNsAiyuFQgErZtLwYyFJ89qa8bYrAoZ8mRkw@mail.gmail.com>
-References: <CAHkwnC9NzMx8kE4KdBjnAys7Xj5n0sQS6AHa=ZrzLqQQtkFZUg@mail.gmail.com>
- <20140306213113.GH3625@free.fr>
- <CAHkwnC9tLUTAVHnGNyPkPxNFFFMTiqPyAvhtahGEWZAPbY0BgQ@mail.gmail.com>
- <20140307172121.GC3384@free.fr>
- <CAHkwnC92VGYqeUSNsAiyuFQgErZtLwYyFJ89qa8bYrAoZ8mRkw@mail.gmail.com>
-Message-ID: <20140307174903.GE3384@free.fr>
+Date: Fri, 7 Mar 2014 19:01:03 +0100
+Subject: [Buildroot] [PATCH 1/1] [V5] toolchain: control vendor part in
+ GNU_TARGET_NAME
+In-Reply-To: <884EA965490E3C4D8E66AEF41E980250096818@ezex10.ezchip.com>
+References: <1394155829-13670-1-git-send-email-noamc@ezchip.com>
+ <884EA965490E3C4D8E66AEF41E980250096818@ezex10.ezchip.com>
+Message-ID: <20140307180102.GF3384@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabio, All,
+Noam, All,
 
-On 2014-03-07 18:32 +0100, Fabio Porcedda spake thusly:
-> On Fri, Mar 7, 2014 at 6:21 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > Fabio, All,
-> >
-> > On 2014-03-07 10:59 +0100, Fabio Porcedda spake thusly:
-> >> On Thu, Mar 6, 2014 at 10:31 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> >> > On 2014-03-06 11:43 +0100, Fabio Porcedda spake thusly:
-> >> >> Hi all,
-> >> >> luajit fails to build on a Ubuntu 13.10 x86_64 with the following defconfig:
-> >> >>
-> >> >> BR2_x86_generic=y
-> >> >> BR2_TOOLCHAIN_EXTERNAL=y
-> >> >> BR2_PACKAGE_LUAJIT=y
-> > [--SNIP--]
-> >> > And this can not work on a pure 64-bit system (aka, without the 32-bit
-> >> > legacy stuff).
-> > [--SNIP--]
-> >> > Not sure how we can get away with this...
-> >>
-> >> I think we have two choices:
-> >>  - add a check to test if 32bit compiler is installed and if not print
-> >> a clear message about the toolchain requirement
-> >
-> > I think this would be the first package to add such a check.
-> >
-> > How would you propose we implement this:
-> >   - in a pre-configure hook (but that will catch the failure late in the
-> >     build) ?
-> >   - in a make ifeq-block (so we can catch it early in the build) ?
+On 2014-03-07 01:32 +0000, Noam Camus spake thusly:
+> This option allows to customize the "vendor" part of the
+> toolchain tuple, where the toolchain tuple has the form
+> <arch>-<vendor>-<os>-<libc>. Use this option in situations
+> where gcc might make different decisions based on the vendor
+> part of the tuple.
 > 
-> > The second solution is more appealing to me, but might be a bit more
-> > complex to implement.
+> Signed-off-by: Noam Camus <noamc@ezchip.com>
+> ---
+>  package/Makefile.in                     |   17 ++++++++++++++++-
+>  toolchain/toolchain-buildroot/Config.in |   16 ++++++++++++++++
+>  2 files changed, 32 insertions(+), 1 deletions(-)
 > 
-> I think a check to be added like this:
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index 454f614..bd9f18c 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -20,8 +20,23 @@ endif
+>  MAKE1:=$(HOSTMAKE) -j1
+>  MAKE:=$(HOSTMAKE) $(if $(PARALLEL_JOBS),-j$(PARALLEL_JOBS))
 > 
-> luakit.mk:
+> +ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+> +TARGET_VENDOR = $(call qstrip,$(BR2_TOOLCHAIN_BUILDROOT_VENDOR))
+> +else
+> +TARGET_VENDOR = buildroot
+> +endif
+> +
+> +# Sanity checks
+> +ifeq ($(TARGET_VENDOR),)
+> +$(error BR2_TOOLCHAIN_BUILDROOT_VENDOR is not allowed to be empty)
+> +endif
+> +ifeq ($(TARGET_VENDOR),unknown)
+> +$(error BR2_TOOLCHAIN_BUILDROOT_VENDOR cannot be 'unknown'. \
+> +        It might be confused with the native toolchain)
+> +endif
+> +
+>  # Compute GNU_TARGET_NAME
+> -GNU_TARGET_NAME=$(ARCH)-buildroot-$(TARGET_OS)-$(LIBC)$(ABI)
+> +GNU_TARGET_NAME=$(ARCH)-$(TARGET_VENDOR)-$(TARGET_OS)-$(LIBC)$(ABI)
 > 
-> luajit-dependencies:
->    shell script to check and if it fails it prints an appropriate
-> message and stop the building
-> 
-> dependencies: luajit-dependencies
-> 
-> So the check it's done early at same time as other dependenies check.
+>  # Blackfin FLAT needs uclinux
+>  ifeq ($(BR2_bfin)$(BR2_BINFMT_FLAT),yy)
+> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+> index 07db50b..3487327 100644
+> --- a/toolchain/toolchain-buildroot/Config.in
+> +++ b/toolchain/toolchain-buildroot/Config.in
+> @@ -70,6 +70,22 @@ config BR2_TOOLCHAIN_BUILDROOT_LIBC
+>         default "glibc"  if BR2_TOOLCHAIN_BUILDROOT_EGLIBC
+>         default "glibc"  if BR2_TOOLCHAIN_BUILDROOT_GLIBC
 
-Doing the check in dependencies is not much better than doing it as a
-pre-configure hook: it can be delayed quite late in the build process.
+Your mailer (or editor?) is mangling the patch: the above are leading
+tabs in the current source tree, so your patch won't apply, since it has
+leading spaces instead.
 
-> Right now i don't know how to check about the presence of the 32bit
-> support on the 64 bit host toolchain.
+> +config BR2_TOOLCHAIN_BUILDROOT_VENDOR
+> +       string "custom toolchain vendor name"
+> +       default "buildroot"
+> +       help
 
-What about something like this:
+This should be a leading tab in front of 'string', 'default' and 'help'
 
-    ifeq ($(BR2_PACKAGE_LUAJIT),y)
-    ifeq ($(TARGET_32BIT)$(HOST_64BIT),yy)
-    ifneq ($(shell echo 'int main() { return 0; }' |gcc -m32 -o foo -x c - >/dev/null 2>&1 && echo y; rm -f foo),y)
-    $(error Can't build luajit for 32-bit target on this machine (mising 32-bit development packages))
-    endif
-    endif
-    endif
+> +         This option allows to customize the "vendor" part of the
+> +         toolchain tuple, where the toolchain tuple has the form
+> +         <arch>-<vendor>-<os>-<libc>. The default value, "buildroot",
+> +         is fine for most cases, except in very specific situations
+> +         where gcc might make different decisions based on the vendor
+> +         part of the tuple. The value "unknown" is not allowed, as the
+> +         cross-compiling toolchain might then be confused with the
+> +         native toolchain when the target and host architecture are
+> +         identical.
+> +
+> +         If you're not sure, just leave the default "buildroot" value.
 
-Not really trivial, but should work with some tweaking...
+This should be a leading tab and two spaces in front of the help text.
 
 Regards,
 Yann E. MORIN.
