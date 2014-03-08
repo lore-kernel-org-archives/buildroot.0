@@ -1,38 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 8 Mar 2014 11:11:32 +0100
-Subject: [Buildroot] [git commit] jack2: add select on
-	BR2_PACKAGE_ALSA_LIB_SEQ
-Message-ID: <20140308101217.59AD39BE58@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 8 Mar 2014 12:04:54 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2014-03-07
+In-Reply-To: <20140308073007.50AAF1016F2@stock.ovh.net>
+References: <20140308073007.50AAF1016F2@stock.ovh.net>
+Message-ID: <20140308110454.GA3254@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=714de8abcd0977eefc24c3bdb2cef5608059742d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas, All,
 
-The BR2_PACKAGE_ALSA_LIB_SEQ option is needed for jack2 to build
-properly.
+On 2014-03-08 08:30 +0100, Thomas Petazzoni spake thusly:
+> Detail of failures
+> ===================
+> 
+>       i686 |   CXX      Source/JavaScrip... | TIM | http://autobuild.buildroot.net/results/93a3e226f624bc389ad647014c070b66ac83de57/
 
-Fixes:
+This one had been running for 12663 seconds, which is 3h 31min 3s at the
+moment it _started_ building webkit.
 
-  http://autobuild.buildroot.org/results/fc4/fc42597a9a22af69a33c810561e2b3dd6c6bf8f4/
+So, it looks like some of the random builds can run for more than the
+limit of 4h.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/jack2/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+Of course, I'm not saying we should bump the limit. But this is a good
+example of why saving build-time.log is useful! ;-)
 
-diff --git a/package/jack2/Config.in b/package/jack2/Config.in
-index 2117f48..978c7a8 100644
---- a/package/jack2/Config.in
-+++ b/package/jack2/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_JACK2
- 	select BR2_PACKAGE_LIBSAMPLERATE
- 	select BR2_PACKAGE_LIBSNDFILE
- 	select BR2_PACKAGE_ALSA_LIB
-+	select BR2_PACKAGE_ALSA_LIB_SEQ
- 	help
- 	  JACK Audio Connection Kit (server and example clients).
- 
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
