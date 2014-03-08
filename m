@@ -1,22 +1,34 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Sat, 08 Mar 2014 10:11:45 +0100
-Subject: [Buildroot] Problem with autoreconf mesa3d
-References: <53199B41.5050509@carallon.com>
-Message-ID: <hf3ruaxam8.ln2@ID-313208.user.individual.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 8 Mar 2014 11:08:45 +0100
+Subject: [Buildroot] [git commit] Revert "libenca: Move build host tool to
+	PRE_BUILD_HOOKS"
+Message-ID: <20140308100938.F35269BE58@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Will Wagner <will_wagner@carallon.com> wrote in
-news:53199B41.5050509 at carallon.com: 
+commit: http://git.buildroot.net/buildroot/commit/?id=ffca352ac3c9de9c7f64598545f0ceb3f7b168de
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> I know people are working on bumping the version of mesa so perhaps this
-> would just go away with that? 
+This reverts commit 0644378b51f1db66ee3a09ed236f675d40dbc9d8, because
+the PRE_BUILD_HOOKS support has not been merged yet.
 
-Hi,
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libenca/libenca.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-yes, with mesa3d 10.0.3 this problem does not exist.
-
-Regards, Bernd
+diff --git a/package/libenca/libenca.mk b/package/libenca/libenca.mk
+index 66fcfaa..d998c66 100644
+--- a/package/libenca/libenca.mk
++++ b/package/libenca/libenca.mk
+@@ -21,6 +21,6 @@ define LIBENCA_MAKE_HOST_TOOL
+ 	$(MAKE) -C $(@D)/tools $(HOST_CONFIGURE_OPTS) make_hash
+ endef
+ 
+-LIBENCA_PRE_BUILD_HOOKS += LIBENCA_MAKE_HOST_TOOL
++LIBENCA_POST_CONFIGURE_HOOKS += LIBENCA_MAKE_HOST_TOOL
+ 
+ $(eval $(autotools-package))
