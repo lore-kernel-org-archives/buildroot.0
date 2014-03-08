@@ -4,7 +4,7 @@ Subject: [Buildroot] [PATCH v3 4/4] xdriver_xf86-video-intel: Bump version
 	to 2.99.910
 In-Reply-To: <1394285816-7111-1-git-send-email-berndkuhls@hotmail.com>
 References: <1394285816-7111-1-git-send-email-berndkuhls@hotmail.com>
-Message-ID: <BLU0-SMTP238CFC6C30AB443948075EED98A0@phx.gbl>
+Message-ID: <BLU0-SMTP202D62620D8976C4388970BD98A0@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
