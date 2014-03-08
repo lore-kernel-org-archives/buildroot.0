@@ -1,34 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 8 Mar 2014 11:08:45 +0100
-Subject: [Buildroot] [git commit] Revert "libenca: Move build host tool to
-	PRE_BUILD_HOOKS"
-Message-ID: <20140308100938.F35269BE58@busybox.osuosl.org>
+Date: Sat, 8 Mar 2014 11:11:32 +0100
+Subject: [Buildroot] [git commit] jack2: add select on
+	BR2_PACKAGE_ALSA_LIB_SEQ
+Message-ID: <20140308101217.59AD39BE58@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ffca352ac3c9de9c7f64598545f0ceb3f7b168de
+commit: http://git.buildroot.net/buildroot/commit/?id=714de8abcd0977eefc24c3bdb2cef5608059742d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This reverts commit 0644378b51f1db66ee3a09ed236f675d40dbc9d8, because
-the PRE_BUILD_HOOKS support has not been merged yet.
+The BR2_PACKAGE_ALSA_LIB_SEQ option is needed for jack2 to build
+properly.
+
+Fixes:
+
+  http://autobuild.buildroot.org/results/fc4/fc42597a9a22af69a33c810561e2b3dd6c6bf8f4/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libenca/libenca.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/jack2/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/libenca/libenca.mk b/package/libenca/libenca.mk
-index 66fcfaa..d998c66 100644
---- a/package/libenca/libenca.mk
-+++ b/package/libenca/libenca.mk
-@@ -21,6 +21,6 @@ define LIBENCA_MAKE_HOST_TOOL
- 	$(MAKE) -C $(@D)/tools $(HOST_CONFIGURE_OPTS) make_hash
- endef
+diff --git a/package/jack2/Config.in b/package/jack2/Config.in
+index 2117f48..978c7a8 100644
+--- a/package/jack2/Config.in
++++ b/package/jack2/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_JACK2
+ 	select BR2_PACKAGE_LIBSAMPLERATE
+ 	select BR2_PACKAGE_LIBSNDFILE
+ 	select BR2_PACKAGE_ALSA_LIB
++	select BR2_PACKAGE_ALSA_LIB_SEQ
+ 	help
+ 	  JACK Audio Connection Kit (server and example clients).
  
--LIBENCA_PRE_BUILD_HOOKS += LIBENCA_MAKE_HOST_TOOL
-+LIBENCA_POST_CONFIGURE_HOOKS += LIBENCA_MAKE_HOST_TOOL
- 
- $(eval $(autotools-package))
