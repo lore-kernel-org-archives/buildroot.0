@@ -1,37 +1,30 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Sat, 8 Mar 2014 14:36:56 +0100
-Subject: [Buildroot] [PATCH v3 4/4] xdriver_xf86-video-intel: Bump version
-	to 2.99.910
-In-Reply-To: <1394285816-7111-1-git-send-email-berndkuhls@hotmail.com>
-References: <1394285816-7111-1-git-send-email-berndkuhls@hotmail.com>
-Message-ID: <BLU0-SMTP202D62620D8976C4388970BD98A0@phx.gbl>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sat,  8 Mar 2014 14:54:41 +0100
+Subject: [Buildroot] [PATCH] perl: needs MMU
+Message-ID: <1394286881-27569-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
+see build http://autobuild.buildroot.net/results/ba7/ba71d0d532ccd8e16b727cddd5dcaa5521074945/
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
-v3: bump version to 2.99.910
-v2: bump version to 2.99.909
-v1: bump version to 2.99.908
+ package/perl/Config.in |    1 +
+ 1 file changed, 1 insertion(+)
 
- package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-index 332de54..67eb332 100644
---- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-+++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.907
-+XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.910
- XDRIVER_XF86_VIDEO_INTEL_SOURCE = xf86-video-intel-$(XDRIVER_XF86_VIDEO_INTEL_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_INTEL_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_INTEL_LICENSE = MIT
+diff --git a/package/perl/Config.in b/package/perl/Config.in
+index b2991b0..cdd5aab 100644
+--- a/package/perl/Config.in
++++ b/package/perl/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PERL
+ 	bool "perl"
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  Larry Wall's Practical Extraction and Report Language
+ 	  An interpreted scripting language, known among some as "Unix's Swiss
 -- 
-1.7.10.4
+1.7.9.5
