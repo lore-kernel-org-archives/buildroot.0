@@ -1,32 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 8 Mar 2014 15:08:24 +0100
-Subject: [Buildroot] [git commit] perl: needs MMU
-Message-ID: <20140308140846.2A9849BE0A@busybox.osuosl.org>
+Date: Sat, 8 Mar 2014 15:08:59 +0100
+Subject: [Buildroot] [PATCH] perl: needs MMU
+In-Reply-To: <1394286881-27569-1-git-send-email-francois.perrad@gadz.org>
+References: <1394286881-27569-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20140308150859.2da964b9@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=18bca3ef2438c5a0976a70e569d582152c5d774a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Francois Perrad,
 
-see build http://autobuild.buildroot.net/results/ba7/ba71d0d532ccd8e16b727cddd5dcaa5521074945/
+On Sat,  8 Mar 2014 14:54:41 +0100, Francois Perrad wrote:
+> see build http://autobuild.buildroot.net/results/ba7/ba71d0d532ccd8e16b727cddd5dcaa5521074945/
+> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/perl/Config.in |    1 +
+>  1 file changed, 1 insertion(+)
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/perl/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+Applied, thanks!
 
-diff --git a/package/perl/Config.in b/package/perl/Config.in
-index b2991b0..cdd5aab 100644
---- a/package/perl/Config.in
-+++ b/package/perl/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PERL
- 	bool "perl"
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  Larry Wall's Practical Extraction and Report Language
- 	  An interpreted scripting language, known among some as "Unix's Swiss
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
