@@ -1,27 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 8 Mar 2014 09:41:54 +0100
-Subject: [Buildroot] [PATCH 1/1] cmake: bump to version 2.8.12.2
-In-Reply-To: <1394229426-27093-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1394229426-27093-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <20140308094154.307887e6@skate>
+Date: Sat, 8 Mar 2014 09:41:27 +0100
+Subject: [Buildroot] [git commit] wireshark: bump to version 1.10.6
+Message-ID: <20140308084156.D82609BC75@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jerzy Grzegorek,
+commit: http://git.buildroot.net/buildroot/commit/?id=b8fe9511792b3fb841b2d51317e5c70ae9776475
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri,  7 Mar 2014 22:57:05 +0100, Jerzy Grzegorek wrote:
-> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-> ---
->  package/cmake/cmake.mk |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+The following vulnerabilities have been fixed.
+     * [1]wnpa-sec-2014-01
+       The NFS dissector could crash. Discovered by Moshe Kaplan.
+       ([2]Bug 9672)
+       Versions affected: 1.10.0 to 1.10.5, 1.8.0 to 1.8.12
+       [3]CVE-2014-2281
+     * [4]wnpa-sec-2014-02
+       The M3UA dissector could crash. Discovered by Laurent
+       Butti. ([5]Bug 9699)
+       Versions affected: 1.10.0 to 1.10.5
+       [6]CVE-2014-2282
+     * [7]wnpa-sec-2014-03
+       The RLC dissector could crash. ([8]Bug 9730)
+       Versions affected: 1.10.0 to 1.10.5, 1.8.0 to 1.8.12
+       [9]CVE-2014-2283
+     * [10]wnpa-sec-2014-04
+       The MPEG file parser could overflow a buffer. Discovered by
+       Wesley Neelen. ([11]Bug 9843)
+       Versions affected: 1.10.0 to 1.10.5, 1.8.0 to 1.8.12
+       [12]CVE-2014-2299
 
-Applied, thanks.
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/wireshark/wireshark.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index 1944b08..62dad8a 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIRESHARK_VERSION = 1.10.5
++WIRESHARK_VERSION = 1.10.6
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
+ WIRESHARK_SITE = http://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
