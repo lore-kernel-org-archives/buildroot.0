@@ -1,199 +1,55 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat,  8 Mar 2014 15:38:31 +0100
-Subject: [Buildroot] [PATCH v2 6/6] liburcu: disable build with gcc-4.8.x on
-	ARM
-In-Reply-To: <1394289511-10524-1-git-send-email-s.martin49@gmail.com>
-References: <1394289511-10524-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1394289511-10524-7-git-send-email-s.martin49@gmail.com>
+From: Bernd Kuhls <berndkuhls@hotmail.com>
+Date: Sat, 08 Mar 2014 19:08:16 +0100
+Subject: [Buildroot] [PATCH v3 2/4] mesa3d: modularize and bump to
+	version 10.0.3
+References: <1394285816-7111-1-git-send-email-berndkuhls@hotmail.com>
+ <BLU0-SMTP97E4F8E4DBB4C0482F0C9D98A0@phx.gbl> <20140308152101.38b8ac66@skate>
+Message-ID: <gt2suaxvbl.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Because of a gcc bug [1], liburcu checks for compiler version [2] and
-stops the build prematurely if gcc-4.8.[0-2] is detected for ARM.
+Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote
+in news:20140308152101.38b8ac66 at skate: 
 
-However a bug fix exists [3] and may be backported by ARM toolchain
-providers; that's what is done in Buildroot [4] or Linaro [5].
+>> +ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_ES),y)
+>> +MESA3D_CONF_OPT += --enable-gles1 --enable-gles2
+>> +else
+>> +MESA3D_CONF_OPT += --disable-gles1 --disable-gles2
+>> +endif
+>> +
+>> +ifeq ($(BR2_PACKAGE_MESA3D_OPENVG),y)
+>> +MESA3D_CONF_OPT += --enable-openvg --enable-gallium-egl
+>> +else
+>> +MESA3D_CONF_OPT += --disable-openvg --disable-gallium-egl
+>> +endif
+> 
+> In your Config.in, you have a dependency from EGL/OpenVG on udev, but
+> it isn't reflected here. Which one is correct?
 
-So, this change:
-- add a patch in liburcu to allow build with ARM gcc-4.8.2;
-- adds a new hidden symbol to reflect the toolchain status with regard
-  to this bug [1];
-- and controls liburcu visibility.
+Hi,
 
-However, a limitation of this is when the user is using a custom
-toolchain; that's why the bug details have been added in the liburcu
-help message.
+OpenVG depends on EGL (--enable-egl):
+"configure: error: cannot enable OpenVG without EGL"
 
-[1] http://gcc.gnu.org/bugzilla/show_bug.cgi?id=58854
-[2] http://git.lttng.org/?p=userspace-rcu.git;a=commitdiff;h=4b79310
-[3] http://gcc.gnu.org/viewcvs/gcc?view=revision&revision=204665
-[4] http://git.buildroot.net/buildroot/commit/?id=c443c2be1768ebbdcb76c55d0a08fd7c983488c8
-[5] http://bazaar.launchpad.net/~linaro-toolchain-dev/gcc-linaro/4.8/revision/122147
+EGL depends on gallium support (--enable-gallium-egl):
+"configure: error: cannot enable OpenVG without egl_gallium"
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+The EGL drm module depends on gbm:
+"configure: error: EGL platform drm needs gbm"
 
----
-changes v1 -> v2:
-- rebase
-- do not blindly blacklist all ARM gcc-4.8.2 (ThomasP)
-- introduce BR2_TOOLCHAIN_HAS_GCC_BUG_58854 symbol (ThomasP)
----
- package/liburcu/Config.in                          |  7 ++++
- ...01-Only-blacklist-ARM-gcc-4.8.0-and-4.8.1.patch | 40 ++++++++++++++++++++++
- package/lttng-libust/Config.in                     |  1 +
- package/lttng-tools/Config.in                      |  1 +
- toolchain/toolchain-common.in                      |  3 ++
- toolchain/toolchain-external/Config.in             |  4 +++
- 6 files changed, 56 insertions(+)
- create mode 100644 package/liburcu/liburcu-0001-Only-blacklist-ARM-gcc-4.8.0-and-4.8.1.patch
+gbm depends on udev:
+"error: gbm needs udev"
 
-diff --git a/package/liburcu/Config.in b/package/liburcu/Config.in
-index 15ad5bd..0975e5e 100644
---- a/package/liburcu/Config.in
-+++ b/package/liburcu/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LIBURCU
- 	bool "liburcu"
- 	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_powerpc || BR2_x86_64
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu/gcc-4.8.x bug
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  Userspace implementation of the Read-Copy-Update (RCU)
-@@ -8,6 +9,12 @@ config BR2_PACKAGE_LIBURCU
- 	  the LTTng tracing infrastructure, but can be used for other
- 	  purposes as well.
- 
-+	  On ARM, because of bug:
-+	    http://gcc.gnu.org/bugzilla/show_bug.cgi?id=58854
-+	  liburcu cannot be built using gcc 4.8.0, 4.8.1 or 4.8.2 without the
-+	  following bug fix:
-+	    http://gcc.gnu.org/viewcvs/gcc?view=revision&revision=204665
-+
- 	  http://lttng.org/urcu
- 
- comment "liburcu needs a toolchain w/ threads"
-diff --git a/package/liburcu/liburcu-0001-Only-blacklist-ARM-gcc-4.8.0-and-4.8.1.patch b/package/liburcu/liburcu-0001-Only-blacklist-ARM-gcc-4.8.0-and-4.8.1.patch
-new file mode 100644
-index 0000000..585abc0
---- /dev/null
-+++ b/package/liburcu/liburcu-0001-Only-blacklist-ARM-gcc-4.8.0-and-4.8.1.patch
-@@ -0,0 +1,40 @@
-+From 54d8fe7ae40902d6d38e670f4024092f53c14e1f Mon Sep 17 00:00:00 2001
-+From: Samuel Martin <s.martin49@gmail.com>
-+Date: Sat, 8 Mar 2014 13:19:14 +0100
-+Subject: [PATCH] Only blacklist ARM gcc 4.8.0 and 4.8.1
-+
-+Since many ARM toolchain providers include the bug fix for PR58854 in
-+their latest releases based on gcc-4.8.2, then only blacklist gcc 4.8.0
-+and 4.8.1.
-+
-+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-+---
-+ urcu/compiler.h | 9 ++++++++-
-+ 1 file changed, 8 insertions(+), 1 deletion(-)
-+
-+diff --git a/urcu/compiler.h b/urcu/compiler.h
-+index 1e30903..56115f1 100644
-+--- a/urcu/compiler.h
-++++ b/urcu/compiler.h
-+@@ -118,10 +118,17 @@
-+ 				+ __GNUC_PATCHLEVEL__)
-+ 
-+ /*
-++ * Official gcc releases from 4.8.0 to 4.8.2 have the following bug,
-++ * however, many arm toolchain providers have the included the fix for
-++ * their latest 4.8.2 releases.
-++ * So, we only blacklist gcc 4.8.0 and 4.8.1.
-++ * Unfortunately, this bug is not easy to test, so we rely on the
-++ * knowledge of the user on its compiler.
-++ *
-+  * http://gcc.gnu.org/bugzilla/show_bug.cgi?id=58854
-+  */
-+ # ifdef __ARMEL__
-+-#  if URCU_GCC_VERSION >= 40800 && URCU_GCC_VERSION <= 40802
-++#  if URCU_GCC_VERSION >= 40800 && URCU_GCC_VERSION <= 40801
-+ #   error Your gcc version produces clobbered frame accesses
-+ #  endif
-+ # endif
-+-- 
-+1.9.0
-+
-diff --git a/package/lttng-libust/Config.in b/package/lttng-libust/Config.in
-index 5e1a6d4..1f5e3af 100644
---- a/package/lttng-libust/Config.in
-+++ b/package/lttng-libust/Config.in
-@@ -8,6 +8,7 @@ config BR2_PACKAGE_LTTNG_LIBUST
- 	depends on BR2_LARGEFILE
- 	# liburcu only works on some architectures and requires threads support"
- 	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_powerpc || BR2_x86_64
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu/gcc-4.8.x bug
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  Userspace tracing library for the Lttng tracing
-diff --git a/package/lttng-tools/Config.in b/package/lttng-tools/Config.in
-index 1e9e0c3..0e36810 100644
---- a/package/lttng-tools/Config.in
-+++ b/package/lttng-tools/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_LTTNG_TOOLS
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
- 	# liburcu only works on some architectures and requires thread support
- 	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_powerpc || BR2_x86_64
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu/gcc-4.8.x bug
- 	depends on BR2_LARGEFILE
- 	depends on BR2_USE_WCHAR # util-linux
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 8927bf7..9dd2f5d 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -11,6 +11,9 @@ config BR2_LARGEFILE
- config BR2_INET_IPV6
- 	bool
- 
-+config BR2_TOOLCHAIN_HAS_GCC_BUG_58854
-+	bool
-+
- config BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	bool
- 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 7ad46c3..3990336 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -13,6 +13,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_11
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on BR2_ARM_EABIHF
- 	depends on !BR2_PREFER_STATIC_LIB
-+	select BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # toolchain generated before fix backport
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -36,6 +37,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_10
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on BR2_ARM_EABIHF
- 	depends on !BR2_PREFER_STATIC_LIB
-+	select BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # toolchain generated before fix backport
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -59,6 +61,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_09
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on BR2_ARM_EABIHF
- 	depends on !BR2_PREFER_STATIC_LIB
-+	select BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # toolchain generated before fix backport
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -86,6 +89,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201311
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on BR2_ARM_EABI
- 	depends on !BR2_PREFER_STATIC_LIB
-+	select BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # based-on gcc-4.8.1
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
--- 
-1.9.0
+This dependency chain is present in Config.in, should this also be present 
+in the mesa3d.mk-sections mentioned above? Is
+
+ifeq ($(BR2_PACKAGE_MESA3D_GBM),y)
+MESA3D_DEPENDENCIES += udev
+
+not enough?
+
+Regards, Bernd
