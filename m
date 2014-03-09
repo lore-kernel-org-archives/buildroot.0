@@ -1,58 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 9 Mar 2014 16:32:34 +0100
-Subject: [Buildroot] [PATCH v3 2/4] mesa3d: modularize and bump to
- version 10.0.3
-In-Reply-To: <gt2suaxvbl.ln2@ID-313208.user.individual.net>
-References: <1394285816-7111-1-git-send-email-berndkuhls@hotmail.com>
- <BLU0-SMTP97E4F8E4DBB4C0482F0C9D98A0@phx.gbl>
- <20140308152101.38b8ac66@skate>
- <gt2suaxvbl.ln2@ID-313208.user.individual.net>
-Message-ID: <20140309163234.275df357@skate>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun,  9 Mar 2014 19:54:35 +0100
+Subject: [Buildroot] [PATCH] pkg-download: update the github helper
+Message-ID: <1394391275-27735-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Once again, github updates the source download url.
+Even if only the zip archive link is advertised on the repositories'
+page, the *.tar.gz is still available.
 
-On Sat, 08 Mar 2014 19:08:16 +0100, Bernd Kuhls wrote:
+It is worthy to note that the tarball's content differs depending if
+it has been fetched from the former and the new url (the root directory
+name changes).
 
-> > In your Config.in, you have a dependency from EGL/OpenVG on udev, but
-> > it isn't reflected here. Which one is correct?
-> 
-> Hi,
-> 
-> OpenVG depends on EGL (--enable-egl):
-> "configure: error: cannot enable OpenVG without EGL"
-> 
-> EGL depends on gallium support (--enable-gallium-egl):
-> "configure: error: cannot enable OpenVG without egl_gallium"
-> 
-> The EGL drm module depends on gbm:
-> "configure: error: EGL platform drm needs gbm"
-> 
-> gbm depends on udev:
-> "error: gbm needs udev"
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/pkg-download.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Ah, ok!
-
-> This dependency chain is present in Config.in, should this also be present 
-> in the mesa3d.mk-sections mentioned above? Is
-> 
-> ifeq ($(BR2_PACKAGE_MESA3D_GBM),y)
-> MESA3D_DEPENDENCIES += udev
-> 
-> not enough?
-
-No, as long as the Config.in "select" ensure that
-BR2_PACKAGE_MESA3D_GBM is selected in the appropriate cases, then it's
-fine.
-
-Thanks!
-
-Thomas
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index 85842de..192b9e0 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -56,7 +56,7 @@ notdomain=$(patsubst $(call domain,$(1),$(2))$(call domainseparator,$(2))%,%,$(c
+ domainseparator=$(if $(1),$(1),/)
+ 
+ # github(user,package,version): returns site of github repository
+-github = https://github.com/$(1)/$(2)/tarball/$(3)
++github = https://github.com/$(1)/$(2)/archive/$(3)
+ 
+ ################################################################################
+ # The DOWNLOAD_* helpers are in charge of getting a working copy
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.0
