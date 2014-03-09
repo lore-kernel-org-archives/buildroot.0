@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 10 Mar 2014 00:18:05 +0100
-Subject: [Buildroot] [PATCH v6 5/6] pkg-cmake.mk: add PATH in the
- configure command environment
-In-Reply-To: <1394373623-10650-6-git-send-email-s.martin49@gmail.com>
+Date: Mon, 10 Mar 2014 00:19:02 +0100
+Subject: [Buildroot] [PATCH v6 6/6] Makefile: add PATH to the
+	USER_HOOKS_EXTRA_ENV
+In-Reply-To: <1394373623-10650-7-git-send-email-s.martin49@gmail.com>
 References: <1394373623-10650-1-git-send-email-s.martin49@gmail.com>
- <1394373623-10650-6-git-send-email-s.martin49@gmail.com>
-Message-ID: <20140309231805.GF3194@free.fr>
+ <1394373623-10650-7-git-send-email-s.martin49@gmail.com>
+Message-ID: <20140309231902.GG3194@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,63 +15,39 @@ To: buildroot@busybox.net
 Samuel, All,
 
 On 2014-03-09 15:00 +0100, Samuel Martin spake thusly:
-> Because BR_PATH is not exported in the environment beforehand running
-> cmake, it is necessary to add it on the cmake configure command.
+> This can be useful for post-{build,image} scripts, in case some host-tools
+> were specifically built to be used by these scripts.
 > 
 > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
 > ---
-> changes v4 -> v6:
-> - rebase
-> 
-> changes v3 -> v4:
-> - rebase
-> - rename BR2_PATH -> BR_PATH
-> 
-> changes v2 -> v3:
-> - rebase
-> - no one-line commit log (ThomasP)
-> 
-> changes v1 -> v2:
-> - remove explicit PATH=... in configure commands in pkg-autotools.mk
->   because it is already added via *_CONFIGURE_OPTS (ThomasP), and
->   reword the commit message.
+> changes v5 -> v6:
+> - add this cset
 > ---
->  package/pkg-cmake.mk | 2 ++
->  1 file changed, 2 insertions(+)
+>  package/Makefile.in | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-> index f7e454b..bf3db90 100644
-> --- a/package/pkg-cmake.mk
-> +++ b/package/pkg-cmake.mk
-> @@ -60,6 +60,7 @@ ifeq ($(4),target)
->  define $(2)_CONFIGURE_CMDS
->  	(cd $$($$(PKG)_BUILDDIR) && \
->  	rm -f CMakeCache.txt && \
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index 6817867..693a64e 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -278,6 +278,7 @@ HOST_MAKE_ENV=PATH=$(BR_PATH) \
+>  # explicitly pass it to user-supplied external hooks (eg. post-build,
+>  # post-images)
+>  USER_HOOKS_EXTRA_ENV=\
 > +	PATH=$(BR_PATH) \
->  	$$($$(PKG)_CONF_ENV) $(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
->  		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
->  		-DCMAKE_INSTALL_PREFIX="/usr" \
-> @@ -74,6 +75,7 @@ else
->  define $(2)_CONFIGURE_CMDS
->  	(cd $$($$(PKG)_BUILDDIR) && \
->  	rm -f CMakeCache.txt && \
-> +	PATH=$(BR_PATH) \
->  	$(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
->  		-DCMAKE_INSTALL_SO_NO_EXE=0 \
->  		-DCMAKE_FIND_ROOT_PATH="$$(HOST_DIR)" \
+>  	BUILD_DIR=$(BUILD_DIR)
+>  
+>  ################################################################################
 > -- 
 > 1.9.0
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
