@@ -1,40 +1,58 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun,  9 Mar 2014 15:00:23 +0100
-Subject: [Buildroot] [PATCH v6 6/6] Makefile: add PATH to the
-	USER_HOOKS_EXTRA_ENV
-In-Reply-To: <1394373623-10650-1-git-send-email-s.martin49@gmail.com>
-References: <1394373623-10650-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1394373623-10650-7-git-send-email-s.martin49@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 9 Mar 2014 16:32:34 +0100
+Subject: [Buildroot] [PATCH v3 2/4] mesa3d: modularize and bump to
+ version 10.0.3
+In-Reply-To: <gt2suaxvbl.ln2@ID-313208.user.individual.net>
+References: <1394285816-7111-1-git-send-email-berndkuhls@hotmail.com>
+ <BLU0-SMTP97E4F8E4DBB4C0482F0C9D98A0@phx.gbl>
+ <20140308152101.38b8ac66@skate>
+ <gt2suaxvbl.ln2@ID-313208.user.individual.net>
+Message-ID: <20140309163234.275df357@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This can be useful for post-{build,image} scripts, in case some host-tools
-were specifically built to be used by these scripts.
+Dear Bernd Kuhls,
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On Sat, 08 Mar 2014 19:08:16 +0100, Bernd Kuhls wrote:
 
----
-changes v5 -> v6:
-- add this cset
----
- package/Makefile.in | 1 +
- 1 file changed, 1 insertion(+)
+> > In your Config.in, you have a dependency from EGL/OpenVG on udev, but
+> > it isn't reflected here. Which one is correct?
+> 
+> Hi,
+> 
+> OpenVG depends on EGL (--enable-egl):
+> "configure: error: cannot enable OpenVG without EGL"
+> 
+> EGL depends on gallium support (--enable-gallium-egl):
+> "configure: error: cannot enable OpenVG without egl_gallium"
+> 
+> The EGL drm module depends on gbm:
+> "configure: error: EGL platform drm needs gbm"
+> 
+> gbm depends on udev:
+> "error: gbm needs udev"
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 6817867..693a64e 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -278,6 +278,7 @@ HOST_MAKE_ENV=PATH=$(BR_PATH) \
- # explicitly pass it to user-supplied external hooks (eg. post-build,
- # post-images)
- USER_HOOKS_EXTRA_ENV=\
-+	PATH=$(BR_PATH) \
- 	BUILD_DIR=$(BUILD_DIR)
- 
- ################################################################################
+Ah, ok!
+
+> This dependency chain is present in Config.in, should this also be present 
+> in the mesa3d.mk-sections mentioned above? Is
+> 
+> ifeq ($(BR2_PACKAGE_MESA3D_GBM),y)
+> MESA3D_DEPENDENCIES += udev
+> 
+> not enough?
+
+No, as long as the Config.in "select" ensure that
+BR2_PACKAGE_MESA3D_GBM is selected in the appropriate cases, then it's
+fine.
+
+Thanks!
+
+Thomas
 -- 
-1.9.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
