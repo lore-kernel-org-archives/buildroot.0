@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 9 Mar 2014 20:11:09 +0100
-Subject: [Buildroot] [PATCH] pkg-download: update the github helper
-In-Reply-To: <1394391275-27735-1-git-send-email-s.martin49@gmail.com>
-References: <1394391275-27735-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <20140309191109.GA3194@free.fr>
+Date: Sun, 9 Mar 2014 23:57:07 +0100
+Subject: [Buildroot] [PATCH v6 1/6] Makefile: introduce BR_PATH
+In-Reply-To: <1394373623-10650-2-git-send-email-s.martin49@gmail.com>
+References: <1394373623-10650-1-git-send-email-s.martin49@gmail.com>
+ <1394373623-10650-2-git-send-email-s.martin49@gmail.com>
+Message-ID: <20140309225707.GB3194@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,65 +13,73 @@ To: buildroot@busybox.net
 
 Samuel, All,
 
-On 2014-03-09 19:54 +0100, Samuel Martin spake thusly:
-> Once again, github updates the source download url.
-> Even if only the zip archive link is advertised on the repositories'
-> page, the *.tar.gz is still available.
+On 2014-03-09 15:00 +0100, Samuel Martin spake thusly:
+> Since the HOST_PATH and TARGET_PATH variables almost contain the same
+> things, let's factorize this in a single BR_PATH.
 > 
-> It is worthy to note that the tarball's content differs depending if
-> it has been fetched from the former and the new url (the root directory
-> name changes).
-
-It might be a bit confusing to state that the content is not the same.
-
-Indeed the archives differ, but the extracted files do not. Where the
-legacy archive would extract into:
-    <username>-<package>-<short-sha1>/
-
-the new official will extract into:
-    <package>-<full-sha1>/
-
-Other than that, the content of the archives are exactly the same.
-
-Note however that the archives are generated on-the-fly the first time
-they are downloaded, and cached for some undefined duration. This can
-easily be observed by downloading the same archive twice in a row: the
-first download ahs an unknown length (as reported by wget), while for
-the second download, the length is known (still reported by wget). As I
-do not have a caching proxy in-between me and github, it means githiub
-does the caching.
-
-But probably the archive will not stay in the cache indefinitely, and
-will be regenerated again when the cache has expired. If then the date
-of the creation of the archive is tored in the archive, we won;t have
-reproducible archives from github. Which means we won't be able to store
-hashes in Buildroot about such archives.
-
 > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Yep! :-)
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  package/pkg-download.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> changes v4 -> v6:
+> - rebase
+> - fix comments (Arnout)
 > 
-> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-> index 85842de..192b9e0 100644
-> --- a/package/pkg-download.mk
-> +++ b/package/pkg-download.mk
-> @@ -56,7 +56,7 @@ notdomain=$(patsubst $(call domain,$(1),$(2))$(call domainseparator,$(2))%,%,$(c
->  domainseparator=$(if $(1),$(1),/)
+> changes v3 -> v4:
+> - rebase
+> - rename BR2_PATH -> BR_PATH
+> 
+> changes v2 -> v3:
+> - rebase
+> 
+> changes v1 -> v2:
+> - rebase
+> ---
+>  Makefile            | 3 +++
+>  package/Makefile.in | 5 ++---
+>  2 files changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index 2b13917..1329ada 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -329,6 +329,9 @@ TAR_OPTIONS=$(call qstrip,$(BR2_TAR_OPTIONS)) -xf
+>  # packages compiled for the host go here
+>  HOST_DIR:=$(call qstrip,$(BR2_HOST_DIR))
 >  
->  # github(user,package,version): returns site of github repository
-> -github = https://github.com/$(1)/$(2)/tarball/$(3)
-> +github = https://github.com/$(1)/$(2)/archive/$(3)
+> +# Quotes are needed for spaces and all in the original PATH content.
+> +BR_PATH = "$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(HOST_DIR)/usr/sbin:$(PATH)"
+> +
+>  # locales to generate
+>  GENERATE_LOCALE=$(call qstrip,$(BR2_GENERATE_LOCALE))
 >  
->  ################################################################################
->  # The DOWNLOAD_* helpers are in charge of getting a working copy
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index 454f614..99c1975 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -144,8 +144,7 @@ else
+>  TARGET_CROSS=$(HOST_DIR)/usr/bin/$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))-
+>  endif
+>  
+> -# Quotes are needed for spaces et al in path components.
+> -TARGET_PATH="$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(HOST_DIR)/usr/sbin/:$(PATH)"
+> +TARGET_PATH = $(BR_PATH)
+>  
+>  # Define TARGET_xx variables for all common binutils/gcc
+>  TARGET_AR       = $(TARGET_CROSS)ar
+> @@ -200,7 +199,7 @@ HOST_CFLAGS   ?= -O2
+>  HOST_CFLAGS   += $(HOST_CPPFLAGS)
+>  HOST_CXXFLAGS += $(HOST_CFLAGS)
+>  HOST_LDFLAGS  += -L$(HOST_DIR)/lib -L$(HOST_DIR)/usr/lib -Wl,-rpath,$(HOST_DIR)/usr/lib
+> -HOST_PATH=$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(PATH)
+> +HOST_PATH = $(BR_PATH)
+>  
+>  # hostcc version as an integer - E.G. 4.3.2 => 432
+>  HOSTCC_VERSION:=$(shell $(HOSTCC_NOCCACHE) --version | \
 > -- 
 > 1.9.0
 > 
