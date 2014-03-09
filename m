@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 9 Mar 2014 23:57:07 +0100
-Subject: [Buildroot] [PATCH v6 1/6] Makefile: introduce BR_PATH
-In-Reply-To: <1394373623-10650-2-git-send-email-s.martin49@gmail.com>
+Date: Sun, 9 Mar 2014 23:58:23 +0100
+Subject: [Buildroot] [PATCH v6 2/6] Makefile: add $(HOST_DIR)/sbin to
+ BR_PATH
+In-Reply-To: <1394373623-10650-3-git-send-email-s.martin49@gmail.com>
 References: <1394373623-10650-1-git-send-email-s.martin49@gmail.com>
- <1394373623-10650-2-git-send-email-s.martin49@gmail.com>
-Message-ID: <20140309225707.GB3194@free.fr>
+ <1394373623-10650-3-git-send-email-s.martin49@gmail.com>
+Message-ID: <20140309225823.GC3194@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,79 +15,27 @@ To: buildroot@busybox.net
 Samuel, All,
 
 On 2014-03-09 15:00 +0100, Samuel Martin spake thusly:
-> Since the HOST_PATH and TARGET_PATH variables almost contain the same
-> things, let's factorize this in a single BR_PATH.
+> Extend BR_PATH because a few host-packages install programs in this
+> location.
 > 
 > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+[--SNIP--]
+> diff --git a/Makefile b/Makefile
+> index 1329ada..f815b93 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -330,7 +330,7 @@ TAR_OPTIONS=$(call qstrip,$(BR2_TAR_OPTIONS)) -xf
+>  HOST_DIR:=$(call qstrip,$(BR2_HOST_DIR))
+>  
+>  # Quotes are needed for spaces and all in the original PATH content.
+> -BR_PATH = "$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(HOST_DIR)/usr/sbin:$(PATH)"
+> +BR_PATH:="$(HOST_DIR)/bin:$(HOST_DIR)/sbin:$(HOST_DIR)/usr/bin:$(HOST_DIR)/usr/sbin:$(PATH)"
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+As seen on IRC, there's still a glitch on that line: it should be using
+a plain = not a :=
 
 Regards,
 Yann E. MORIN.
-
-> ---
-> changes v4 -> v6:
-> - rebase
-> - fix comments (Arnout)
-> 
-> changes v3 -> v4:
-> - rebase
-> - rename BR2_PATH -> BR_PATH
-> 
-> changes v2 -> v3:
-> - rebase
-> 
-> changes v1 -> v2:
-> - rebase
-> ---
->  Makefile            | 3 +++
->  package/Makefile.in | 5 ++---
->  2 files changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 2b13917..1329ada 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -329,6 +329,9 @@ TAR_OPTIONS=$(call qstrip,$(BR2_TAR_OPTIONS)) -xf
->  # packages compiled for the host go here
->  HOST_DIR:=$(call qstrip,$(BR2_HOST_DIR))
->  
-> +# Quotes are needed for spaces and all in the original PATH content.
-> +BR_PATH = "$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(HOST_DIR)/usr/sbin:$(PATH)"
-> +
->  # locales to generate
->  GENERATE_LOCALE=$(call qstrip,$(BR2_GENERATE_LOCALE))
->  
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index 454f614..99c1975 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -144,8 +144,7 @@ else
->  TARGET_CROSS=$(HOST_DIR)/usr/bin/$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))-
->  endif
->  
-> -# Quotes are needed for spaces et al in path components.
-> -TARGET_PATH="$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(HOST_DIR)/usr/sbin/:$(PATH)"
-> +TARGET_PATH = $(BR_PATH)
->  
->  # Define TARGET_xx variables for all common binutils/gcc
->  TARGET_AR       = $(TARGET_CROSS)ar
-> @@ -200,7 +199,7 @@ HOST_CFLAGS   ?= -O2
->  HOST_CFLAGS   += $(HOST_CPPFLAGS)
->  HOST_CXXFLAGS += $(HOST_CFLAGS)
->  HOST_LDFLAGS  += -L$(HOST_DIR)/lib -L$(HOST_DIR)/usr/lib -Wl,-rpath,$(HOST_DIR)/usr/lib
-> -HOST_PATH=$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(PATH)
-> +HOST_PATH = $(BR_PATH)
->  
->  # hostcc version as an integer - E.G. 4.3.2 => 432
->  HOSTCC_VERSION:=$(shell $(HOSTCC_NOCCACHE) --version | \
-> -- 
-> 1.9.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
