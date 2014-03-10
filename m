@@ -1,10 +1,7 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 10 Mar 2014 21:51:44 +0100
-Subject: [Buildroot] [PATCH 12/12] package/ca-certificates: add tarball's
-	hashes
-In-Reply-To: <cover.1394484283.git.yann.morin.1998@free.fr>
-References: <cover.1394484283.git.yann.morin.1998@free.fr>
-Message-ID: <985eb7379f1347835b44d685bbcef295fea730c5.1394484283.git.yann.morin.1998@free.fr>
+Date: Mon, 10 Mar 2014 22:24:13 +0100
+Subject: [Buildroot] [PATCH 0/5] Misc bumps (branch yem/bumps)
+Message-ID: <cover.1394486562.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,28 +10,56 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-ca-certificates contains sensitive security-related information,
-and we want to ensure the archive that we download has not been
-compromised.
+Hello All!
 
-Add the sha1 and sha256 hashes from Debian's packaging.
+Here are a few bumps to:
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Martin Bark <martin@barkynet.com>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
----
- package/ca-certificates/ca-certificates.hash | 3 +++
- 1 file changed, 3 insertions(+)
- create mode 100644 package/ca-certificates/ca-certificates.hash
+  - linux-firmware: fix a firmware file, bump for new firmwares, offer
+    alternatives for iwlwifi revisions
 
-diff --git a/package/ca-certificates/ca-certificates.hash b/package/ca-certificates/ca-certificates.hash
-new file mode 100644
-index 0000000..06023d7
---- /dev/null
-+++ b/package/ca-certificates/ca-certificates.hash
-@@ -0,0 +1,3 @@
-+# hashes from: $(CA_CERTIFICATES_SITE)/ca-certificates_20130906.dsc :
-+sha1   7f197c1bf7c7fc82e9f8f2fec6d8cc65f6a6187b                         ca-certificates_20130906.tar.gz
-+sha256 dd10520091d469e95e11e5fafb7422d3be0a66071984d09009ed3e0232cb277d ca-certificates_20130906.tar.gz
+  - rpi-firmware: bump for fixes
+
+  - tvheadend: bump for improvements and fixes all over the tree
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit ca4e9a78732bcacddd0c91ab35ee39a60ff040aa:
+
+  jack2: fix missing alsa-lib feature dependency (2014-03-10 13:13:03 +0100)
+
+are available in the git repository at:
+
+  git://gitorious.org/buildroot/buildroot.git yem/bumps
+
+for you to fetch changes up to 7fe2dbaa3e609fa6bd7d80f29daf6bb28d73c64d:
+
+  package/tvheadend: bump version (2014-03-10 18:15:01 +0100)
+
+----------------------------------------------------------------
+Yann E. MORIN (5):
+      package/linux-firmware: fix typo in firmware file for cxgb4
+      package/linux-firmware: bump for new firmwares
+      package/linux-firmware: different iwlwifi3160/7260 firmwares for different kernels
+      package/rpi-firmware: bump version
+      package/tvheadend: bump version
+
+ package/linux-firmware/Config.in                   | 28 ++++++++++++++++++++
+ package/linux-firmware/linux-firmware.mk           |  8 +++---
+ package/rpi-firmware/rpi-firmware.mk               |  2 +-
+ .../tvheadend-001-no-auto-download-dvbscans.patch  | 30 +++++++++++-----------
+ .../tvheadend/tvheadend-002-no-check_config.patch  |  8 +++---
+ .../tvheadend/tvheadend-003-remove-werror.patch    |  9 ++++---
+ .../tvheadend-004-dont-run-compiled-code.patch     | 21 ---------------
+ package/tvheadend/tvheadend.mk                     |  2 +-
+ 8 files changed, 58 insertions(+), 50 deletions(-)
+ delete mode 100644 package/tvheadend/tvheadend-004-dont-run-compiled-code.patch
+
 -- 
-1.8.3.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
