@@ -1,42 +1,37 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 10 Mar 2014 12:10:33 +0000
-Subject: [Buildroot] [PATCH] pcsc-lite: not available for static builds
-Message-ID: <1394453433-18449-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 10 Mar 2014 13:12:21 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-03-07
+In-Reply-To: <531D5F01.8080106@mind.be> (Arnout Vandecappelle's message of
+ "Mon, 10 Mar 2014 07:43:13 +0100")
+References: <20140308073007.50AAF1016F2@stock.ovh.net>
+ <20140308110454.GA3254@free.fr> <20140308150515.467d5568@skate>
+ <531D5F01.8080106@mind.be>
+Message-ID: <87y50is15m.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package requires dlopen and checks for it in the configure phase.
-If it's not present, then the build process is stopped.
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Fixes:
-   http://autobuild.buildroot.net/results/34b/34b83c3ea4a8aac6aeda225e5859bd318b13a676/
+Hi,
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/pcsc-lite/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ >  Maybe the timeout can be made to depend on the number of packages
+ > selected in the .config? Like 5 minutes per package (and a minimum of
+ > 1 hour)?
 
-diff --git a/package/pcsc-lite/Config.in b/package/pcsc-lite/Config.in
-index aab42e8..24981bd 100644
---- a/package/pcsc-lite/Config.in
-+++ b/package/pcsc-lite/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_PCSC_LITE
- 	bool "pcsc-lite"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
-+	depends on !BR2_PREFER_STATIC_LIB
- 	help
- 	  Middleware to access smart card using SCard API (PC/SC).
- 
-@@ -31,3 +32,6 @@ endif
- comment "pcsc-lite needs a toolchain w/ threads"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
-+comment "pcsc-lite needs a toolchain w/ dynamic library"
-+	depends on BR2_PREFER_STATIC_LIB
+ >  Or you could add an hour to the timeout if Webkit is selected...
+
+Does the build often get stuck? I don't recall seing it more than a few
+times on "my" builders. In my (simplistic) autobuilder script I simply
+do:
+
+# ensure machine isn't DOS'ed
+ulimit -S -t 4000 -v 2000000
+
+E.G. limit memory and cpu time
+
 -- 
-1.7.1
+Bye, Peter Korsgaard
