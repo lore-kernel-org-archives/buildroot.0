@@ -1,85 +1,52 @@
-From: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
-Date: Mon, 10 Mar 2014 15:15:04 -0400
-Subject: [Buildroot] [PATCH v4 2/5] mesa3d: modularize and bump to
- version 10.0.3
-In-Reply-To: <BLU0-SMTP3984B0DC7878232A1681D9AD9750@phx.gbl>
-References: <1394391692-13583-1-git-send-email-berndkuhls@hotmail.com>
- <BLU0-SMTP3984B0DC7878232A1681D9AD9750@phx.gbl>
-Message-ID: <531E0F38.8050105@savoirfairelinux.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 10 Mar 2014 21:14:53 +0200
+Subject: [Buildroot] [PATCH 3/3] rsyslog: bump to version 6.3.8
+In-Reply-To: <1394459809-22174-3-git-send-email-clshotwe@rockwellcollins.com>
+References: <1394459809-22174-1-git-send-email-clshotwe@rockwellcollins.com>
+ <1394459809-22174-3-git-send-email-clshotwe@rockwellcollins.com>
+Message-ID: <20140310191453.GW4249@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi bernd,
+Hi Clayton,
 
-On 03/09/2014 03:01 PM, Bernd Kuhls wrote:
-> +config BR2_PACKAGE_MESA3D_DRI_DRIVER_I965
-> +	bool "DRI i965 driver"
-> +	depends on BR2_PACKAGE_XORG7
-I don't think the dependance on XORG7 is required, see below.
+On Mon, Mar 10, 2014 at 08:56:49AM -0500, Clayton Shotwell wrote:
+> Bumping version of rsyslog and adding new dependencies of libee and
+> libestr.
+> 
+> Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
+> ---
+>  package/rsyslog/rsyslog.mk |    4 ++--
+>  1 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+> index daae010..3ca5eae 100644
+> --- a/package/rsyslog/rsyslog.mk
+> +++ b/package/rsyslog/rsyslog.mk
+> @@ -4,9 +4,9 @@
+>  #
+>  ################################################################################
+>  
+> -RSYSLOG_VERSION = 5.8.0
+> +RSYSLOG_VERSION = 6.3.8
+>  RSYSLOG_SITE = http://rsyslog.com/files/download/rsyslog/
+> -RSYSLOG_DEPENDENCIES = zlib
+> +RSYSLOG_DEPENDENCIES = zlib libestr libee
 
-> +ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER),y)
-> +MESA3D_DEPENDENCIES += \
-> +	xproto_xf86driproto \
-> +	xproto_dri2proto \
-> +	xproto_glproto \
-> +	xlib_libX11 \
-> +	xlib_libXext \
-> +	xlib_libXdamage \
-> +	xlib_libXfixes \
-> +	libxcb
-> +MESA3D_CONF_OPT += \
-> +	--enable-dri \
-> +	--enable-shared-glapi \
-> +	--enable-xa
-> +else
-> +MESA3D_CONF_OPT += \
-> +	--disable-dri \
-> +	--disable-shared-glapi \
-> +	--disable-xa
-> +endif
-> +
-I don't think you have to --disable-dri here, DRI is not only used by
-the xorg server packages, if you want to do hardware GL rendering
-without X on an intel graphic card, you still need to use the intel dri
-driver (i dont know about the others).
+Shouldn't you also select these packages in Config.in to make sure they are 
+available?
 
-> +# at least one API is required, for buildroot enable OpenGL API by default
-> +# other APIs (EGL, EGL_ES) are optional
-> +ifeq ($(MESA3D_GALLIUM_DRIVERS-y)$(MESA3D_DRI_DRIVERS-y),)
-> +MESA3D_CONF_OPT += \
-> +	--disable-opengl \
-> +	--disable-glx
-> +else
-> +MESA3D_CONF_OPT += \
-> +	--enable-opengl \
-> +	--enable-glx
-> +endif
-> +
-Enabling GLX is only required if you use the Xorg server.
-Perhaps it should be set in "ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER),y)".
+baruch
 
-> +ifeq ($(MESA3D_DRI_DRIVERS-y),)
-> +MESA3D_CONF_OPT += \
-> +	--without-dri-drivers
-> +else
-> +MESA3D_CONF_OPT += \
-> +	--with-dri-drivers=$(subst $(space),$(comma),$(MESA3D_DRI_DRIVERS-y))
-> +endif
-> +
-There is a problem here, you can have the option --with-dri-drivers and
---disable-dri at the same time.
-Perhaps the option "--enable-dri" should be set here.
+>  # Build after Busybox
+>  ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+> -- 
+> 1.7.1
 
-For example i can used the tool https://github.com/robclark/kmscube
-without any X dependancies, by using mesa with the minimal configure
-options set like this :
-./configure --disable-static --enable-dri --with-dri-drivers="i915"
---without-gallium-drivers --disable-glx --enable-gles1 --enable-gles2
---with-egl-platforms=drm --enable-gbm
-
-
-Regards,
-Sebastien.
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
