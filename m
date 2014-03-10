@@ -1,39 +1,46 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 10 Mar 2014 17:26:25 -0300
-Subject: [Buildroot] [PATCH 05/14] ipsec-tools: fix static linking
-In-Reply-To: <1394483194-17592-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1394483194-17592-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1394483194-17592-5-git-send-email-gustavo@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 10 Mar 2014 21:27:42 +0100
+Subject: [Buildroot] [PATCH 13/20] package/libopenmax: convert to the
+	virtual-package infrastructure
+In-Reply-To: <cover.1394482605.git.yann.morin.1998@free.fr>
+References: <cover.1394482605.git.yann.morin.1998@free.fr>
+Message-ID: <ffec4685531b1afe425a946625351d3200b6eaaf.1394482605.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As with other packages that use openssl and don't use pkg-config to
-pick up the deps it fails to build for static scenarios.
-So fix it by adding the zlib link option to LIBS.
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Cc: Mike Zick <minimod@morethan.org>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/ipsec-tools/ipsec-tools.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/opengl/libopenmax/libopenmax.mk | 11 +----------
+ 1 file changed, 1 insertion(+), 10 deletions(-)
 
-diff --git a/package/ipsec-tools/ipsec-tools.mk b/package/ipsec-tools/ipsec-tools.mk
-index d5521ac..44c3380 100644
---- a/package/ipsec-tools/ipsec-tools.mk
-+++ b/package/ipsec-tools/ipsec-tools.mk
-@@ -15,6 +15,11 @@ IPSEC_TOOLS_DEPENDENCIES = openssl flex host-flex
- # configure hardcodes -Werror, so override CFLAGS on make invocation
- IPSEC_TOOLS_MAKE_OPT = CFLAGS='$(TARGET_CFLAGS)'
+diff --git a/package/opengl/libopenmax/libopenmax.mk b/package/opengl/libopenmax/libopenmax.mk
+index 6cdeacd..bc2e7f8 100644
+--- a/package/opengl/libopenmax/libopenmax.mk
++++ b/package/opengl/libopenmax/libopenmax.mk
+@@ -4,13 +4,4 @@
+ #
+ ################################################################################
  
-+# openssl uses zlib, so we need to explicitly link with it when static
-+ifeq ($(BR2_PREFER_STATIC_LIB),y)
-+IPSEC_TOOLS_CONF_ENV += LIBS=-lz
-+endif
-+
- IPSEC_TOOLS_CONF_OPT = \
- 	  --disable-hybrid \
- 	  --without-libpam \
+-LIBOPENMAX_SOURCE =
+-LIBOPENMAX_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_LIBOPENMAX))
+-
+-ifeq ($(BR2_PACKAGE_HAS_LIBOPENMAX),y)
+-ifeq ($(LIBOPENMAX_DEPENDENCIES),)
+-$(error No libopenmax implementation selected. Configuration error.)
+-endif
+-endif
+-
+-$(eval $(generic-package))
++$(eval $(virtual-package))
 -- 
 1.8.3.2
