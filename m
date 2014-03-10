@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 10 Mar 2014 21:51:38 +0100
-Subject: [Buildroot] [PATCH 06/12] pkg-infra: move the hg download helper to
-	a script
+Date: Mon, 10 Mar 2014 21:51:42 +0100
+Subject: [Buildroot] [PATCH 10/12] pkg-infra: add possiblity to check
+	downloaded files against known hashes
 In-Reply-To: <cover.1394484283.git.yann.morin.1998@free.fr>
 References: <cover.1394484283.git.yann.morin.1998@free.fr>
-Message-ID: <1b03caafc699176c167b11993b2271f4a5444f53.1394484283.git.yann.morin.1998@free.fr>
+Message-ID: <0ad278d0c1c1aeecbfe3feca0082062d40af499d.1394484283.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,76 +13,183 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Maintaining the download helpers in the Makefile has proved to be a bit
-complex, so move it to a shell script.
+Some of the packages that Buildroot might build are sensitive packages,
+related to security: openssl, dropbear, ca-certificates...
+
+Some of those packages are downloaded over plain http, because there is
+no way to get them over a secure channel, such as https.
+
+In these dark times of pervasive surveillance, the potential for harm that
+a tampered-with package could generate, we may want to check the integrity
+of those sensitive packages.
+
+So, each package may now provide a list of hashes for all files that needs
+to be downloaded, and Buildroot will just fail if any downloaded file does
+not match its known hash, in which case it is removed.
+
+Hashes can be any of the md5, sha1 or sha2 variants, and will be checked
+even if the file was pre-downloaded.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Baruch Siach <baruch@tkos.co.il>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+
 ---
- package/pkg-download.mk | 11 +++--------
- support/download/hg     | 25 +++++++++++++++++++++++++
- 2 files changed, 28 insertions(+), 8 deletions(-)
- create mode 100755 support/download/hg
+Note: this is not a bullet-proof solution, since Buildroot may itself be
+compromised. But since we do sign our releases, then we secure the list of
+hashes at the same time. Only random snapshots from the repository may be
+at risk of tampering, although this is highly doubtfull, given how git
+stores its data.
+---
+ package/pkg-download.mk     | 27 ++++++++++------
+ support/download/check-hash | 76 +++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 94 insertions(+), 9 deletions(-)
+ create mode 100755 support/download/check-hash
 
 diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index b83c7df..36dcfac 100644
+index c94ecba..f4647fd 100644
 --- a/package/pkg-download.mk
 +++ b/package/pkg-download.mk
-@@ -13,7 +13,7 @@ export SVN := $(call qstrip,$(BR2_SVN))
- export CVS := $(call qstrip,$(BR2_CVS))
- BZR := $(call qstrip,$(BR2_BZR))
- export GIT := $(call qstrip,$(BR2_GIT))
--HG := $(call qstrip,$(BR2_HG)) $(QUIET)
-+export HG := $(call qstrip,$(BR2_HG)) $(QUIET)
- SCP := $(call qstrip,$(BR2_SCP)) $(QUIET)
- SSH := $(call qstrip,$(BR2_SSH)) $(QUIET)
- LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
-@@ -161,13 +161,8 @@ endef
+@@ -58,6 +58,17 @@ domainseparator=$(if $(1),$(1),/)
+ # github(user,package,version): returns site of github repository
+ github = https://github.com/$(1)/$(2)/tarball/$(3)
  
- define DOWNLOAD_HG
- 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
--	(pushd $(DL_DIR) > /dev/null && \
--	rm -rf $($(PKG)_BASE_NAME) && \
--	$(HG) clone --noupdate --rev $($(PKG)_DL_VERSION) $($(PKG)_SITE) $($(PKG)_BASE_NAME) && \
--	$(HG) archive --repository $($(PKG)_BASE_NAME) --type tgz --prefix $($(PKG)_BASE_NAME)/ \
--	              --rev $($(PKG)_DL_VERSION) $(DL_DIR)/$($(PKG)_SOURCE) && \
--	rm -rf $($(PKG)_DL_DIR) && \
--	popd > /dev/null)
-+	$(EXTRA_ENV) support/download/hg $($(PKG)_SITE) $($(PKG)_DL_VERSION) \
-+					  $($(PKG)_BASE_NAME) $(DL_DIR)/$($(PKG)_SOURCE)
++# Helper for checking a tarball's checksum
++# If the hash does not match, remove the incorrect file
++# $(1): the path to the file with the hashes
++# $(2): the full path to the file to check
++define VERIFY_HASH
++	if ! support/download/check-hash $(1) $(2); then \
++		rm -f $(2); \
++		exit 1; \
++	fi
++endef
++
+ ################################################################################
+ # The DOWNLOAD_* helpers are in charge of getting a working copy
+ # of the source repository for their corresponding SCM,
+@@ -147,7 +158,8 @@ endef
+ # to prepend the path with a slash: scp://[user@]host:/absolutepath
+ define DOWNLOAD_SCP
+ 	test -e $(DL_DIR)/$(2) || \
+-	$(SCP) '$(call stripurischeme,$(call qstrip,$(1)))' $(DL_DIR)/$(2)
++	$(SCP) '$(call stripurischeme,$(call qstrip,$(1)))' $(DL_DIR)/$(2) && \
++	$(call VERIFY_HASH,$(PKGDIR)/$($(PKG)_NAME).hash,$(DL_DIR)/$(2))
  endef
  
- # TODO: improve to check that the given PKG_DL_VERSION exists on the remote
-diff --git a/support/download/hg b/support/download/hg
-new file mode 100755
-index 0000000..70b49cf
---- /dev/null
-+++ b/support/download/hg
-@@ -0,0 +1,25 @@
-+#!/bin/sh
+ define SOURCE_CHECK_SCP
+@@ -175,15 +187,11 @@ define SHOW_EXTERNAL_DEPS_HG
+   echo $($(PKG)_SOURCE)
+ endef
+ 
+-# Download a file using wget. Only download the file if it doesn't
+-# already exist in the download directory. If the download fails,
+-# remove the file (because wget -O creates a 0-byte file even if the
+-# download fails).  To handle an interrupted download as well, download
+-# to a temporary file first.  The temporary file will be overwritten
+-# the next time the download is tried.
 +
-+# We want to catch any command failure, and exit immediately
+ define DOWNLOAD_WGET
+ 	test -e $(DL_DIR)/$(2) || \
+-	$(EXTRA_ENV) support/download/wget '$(call qstrip,$(1))' $(DL_DIR)/$(2)
++	$(EXTRA_ENV) support/download/wget '$(call qstrip,$(1))' $(DL_DIR)/$(2) && \
++	$(call VERIFY_HASH,$(PKGDIR)/$($(PKG)_NAME).hash,$(DL_DIR)/$(2))
+ endef
+ 
+ define SOURCE_CHECK_WGET
+@@ -196,7 +204,8 @@ endef
+ 
+ define DOWNLOAD_LOCALFILES
+ 	test -e $(DL_DIR)/$(2) || \
+-		$(LOCALFILES) $(call stripurischeme,$(call qstrip,$(1))) $(DL_DIR)
++	$(LOCALFILES) $(call stripurischeme,$(call qstrip,$(1))) $(DL_DIR) && \
++	$(call VERIFY_HASH,$(PKGDIR)/$($(PKG)_NAME).hash,$(DL_DIR)/$(2))
+ endef
+ 
+ define SOURCE_CHECK_LOCALFILES
+diff --git a/support/download/check-hash b/support/download/check-hash
+new file mode 100755
+index 0000000..1db8b8c
+--- /dev/null
++++ b/support/download/check-hash
+@@ -0,0 +1,76 @@
++#!/bin/sh
 +set -e
 +
-+# Download helper for hg
++# Helper to check a file matches its known hash
 +# Call it with:
-+#   $1: hg repo
-+#   $2: hg cset
-+#   $3: package's basename (eg. foobar-1.2.3)
-+#   $4: output file
-+# And this environment:
-+#   HG        : the hg command to call
-+#   BR2_DL_DIR: path to Buildroot's download dir
++#   $1: the full path to the file to check
++#   $2: the path of the file containing all the the expected hashes
 +
-+repo="${1}"
-+cset="${2}"
-+basename="${3}"
-+output="${4}"
++h_file="${1}"
++file="${2}"
 +
-+cd "${BR2_DL_DIR}"
-+${HG} clone --noupdate --rev "${cset}" "${repo}" "${basename}"
-+${HG} archive --repository "${basename}" --type tgz --prefix "${basename}" \
-+              --rev "${cset}" "${output}"
-+rm -rf "${basename}"
++# Does the hash-file exist?
++if [ ! -f "${h_file}" ]; then
++    exit 0
++fi
++
++# Check one hash for a file
++# $1: known hash
++# $2: file (full path)
++check_one_hash() {
++    _h="${1}"
++    _known="${2}"
++    _file="${3}"
++
++    # Note: sha3 is not supported, since there is currently no implemetation
++    #       (the NIST has yet to publish the parameters).
++    case "${_h}" in
++        md5|sha1)                       ;;
++        sha224|sha256|sha384|sha512)    ;;
++        *) # Unknown hash, exit with error
++            printf "ERROR: unknown hash '%s' for '%s'\n"  \
++                   "${_h}" "${_file##*/}" >&2
++            exit 1
++            ;;
++    esac
++
++    # Do the hashes match?
++    _hash=$( ${_h}sum "${_file}" |cut -d ' ' -f 1 )
++    if [ "${_hash}" = "${_known}" ]; then
++        printf "%s: OK (%s: %s)\n" "${_file##*/}" "${_h}" "${_hash}"
++        return 0
++    fi
++
++    printf "ERROR: %s has wrong %s hash:\n" "${_file##*/}" "${_h}" >&2
++    printf "ERROR: expected: %s\n" "${_known}" >&2
++    printf "ERROR: got     : %s\n" "${_hash}" >&2
++    printf "ERROR: Incomplete download, or MITM attack\n" >&2
++
++    exit 1
++}
++
++# Do we know one or more hashes for that file?
++nb_checks=0
++while read t h f; do
++    case "${h}" in
++        ''|'#'*)
++            # Skip comments and empty lines
++            continue
++            ;;
++        *)
++            if [ "${f}" = "${file##*/}" ]; then
++                check_one_hash "${t}" "${h}" "${file}"
++                : $((nb_checks++))
++            fi
++            ;;
++    esac
++done <"${h_file}"
++
++if [ ${nb_checks} -eq 0 ]; then
++    if [ -n "${BR2_ENFORCE_CHECK_HASH}" ]; then
++        printf "ERROR: No hash found for %s\n" "${file}" >&2
++        exit 1
++    else
++        printf "WARNING: No hash found for %s\n" "${file}" >&2
++    fi
++fi
 -- 
 1.8.3.2
