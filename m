@@ -1,30 +1,48 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 10 Mar 2014 15:08:39 -0300
-Subject: [Buildroot] [PATCH] ipset: bump to version 6.21.1
-Message-ID: <1394474919-6856-1-git-send-email-gustavo@zacarias.com.ar>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Mon, 10 Mar 2014 19:20:32 +0100
+Subject: [Buildroot] [PATCH v4 1/5] mesa3d: pull out from x11
+In-Reply-To: <20140310173941.GA3282@free.fr>
+References: <BLU0-SMTP4083C56CA0B43BBAC9B3616D9750@phx.gbl>
+ <20140310173941.GA3282@free.fr>
+Message-ID: <20140310182030.GB18832@pc-eric>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/ipset/ipset.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Yann E., All
+On Mon, Mar 10, 2014 at 06:39:41PM +0100, Yann E. MORIN wrote:
 
-diff --git a/package/ipset/ipset.mk b/package/ipset/ipset.mk
-index b075a53..5050d11 100644
---- a/package/ipset/ipset.mk
-+++ b/package/ipset/ipset.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IPSET_VERSION = 6.20.1
-+IPSET_VERSION = 6.21.1
- IPSET_SOURCE = ipset-$(IPSET_VERSION).tar.bz2
- IPSET_SITE = http://ipset.netfilter.org
- IPSET_DEPENDENCIES = libmnl host-pkgconf
--- 
-1.8.3.2
+> > diff --git a/package/Config.in b/package/Config.in
+> > index 70e5a7f..b0da653 100644
+> > --- a/package/Config.in
+> > +++ b/package/Config.in
+> > @@ -188,6 +188,7 @@ source "package/fbv/Config.in"
+> >  source "package/imagemagick/Config.in"
+> >  source "package/linux-fusion/Config.in"
+> >  source "package/lite/Config.in"
+> > +source "package/mesa3d/Config.in"
+>
+> If I understand correctly, mesa3d is an implementation of OpenGL. So,
+> *maybe* it would make sense to move it along the other OpenGL packages,
+> into package/opengl/.
+Some quick thoughts:
+
+1. As Mesa3D is an implementation of OpenGL, it will be a provider for the
+   virtual packages libegl, libgles and libopenvg.
+
+2. Mesa3D also provides libgl, but:
+
+  - no package in Buildroot requires full OpenGL.
+  - Buildroot is unlikely to include packages for AMD/NVidia/Intel drivers
+    (providers for libgl).
+
+  So there is no need for a libgl virtual package.
+
+3. IMHO package/opengl should only contain the definitions of the virtual
+   packages, not the providers (otherwise sunxi-mali should be moved to
+   package/opengl too!).
+
+Best regards,
+ELB
