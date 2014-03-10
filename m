@@ -1,198 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 10 Mar 2014 21:27:44 +0100
-Subject: [Buildroot] [PATCH 0/20 v4] Add new virtual-package infrastructure
-	(branch yem/virtual-packages)
-Message-ID: <cover.1394482605.git.yann.morin.1998@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 10 Mar 2014 17:26:23 -0300
+Subject: [Buildroot] [PATCH 03/14] nmap: bump to version 6.40
+In-Reply-To: <1394483194-17592-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1394483194-17592-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1394483194-17592-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/nmap/nmap.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Hello All!
-
-Here is a quick series implementing a new infrastructure for virtual
-packages.
-
-Basically, all a virtual package has to do in its .mk is:
-
-    $(eval $(virtual-package))
-
-There is no need to:
-  - define the dependency against the provider,
-  - define _SOURCE=""  (empty)
-
-But it requires the config options for the virtual package be named
-after the package, eg.:
-
-    package | Selector option        | Provider option
-    --------+------------------------+-----------------------------
-    libegl  | BR2_PACKAGE_HAS_LIBEGL | BR2_PACKAGE_PROVIDES_LIBEGL
-    jpeg    | BR2_PACKAGE_HAS_JPEG   | BR2_PACKAGE_PROVIDES_JPEG
-
-So the series:
-  - starts with renaming some config options in the current virtual
-    packages
-  - then introduces the new virtual-package infra and the associated
-    documentation in the manual
-  - and finally converts the virtual packages over to the new infra.
-
-Special thanks to ?ric for his initial work on the manual, which
-prompted the idea for this new infra! That's partly for this that
-I kept his initial change to the manual almost unmolested.
-
-Notes:
-
-  - the version string is strange. This does not work:
-        $(2)_VERSION = virtual
-    so I had to come up with the solution in patch 16.
-
-  - patch 20 is not to be applied. It contains only example virtual
-    packages, to test the implementation.
-
-
-Changes v3 -> v4:
-  - do not rename libegl and libgles  (Thomas P)
-  - typo (Jerzy)
-  - convert udev over to the new infra
-
-Changes v2 -> v3:
-  - rename libegl and libgles: s/^/opengl-/  (Thomas P)
-  - add host variant, for the upcoming lua stuff  (Fran?ois)
-  - add fake version string  (Thomas DS)
-
-Changes v1 -> v2:
-  - include ?ric's virtual package tutorial to the manual  (?ric)
-  - split the renaimg of config options from the actual conversion to
-    the virtual-package infra
-  - rebase on top of master after post-release merge
-  - add host-virtual-package (will be needed by a pending lua-related
-    series by Fran?ois)
-
-
-Regards,
-Yann E. MORIN.
-
-PS. Testing a mail-header to instruct Patchwork not to consider this
-an actual pull-request: X-Patchwork-Hint: ignore. Sorry if there's a
-miss... :-/
-
-
-The following changes since commit ca4e9a78732bcacddd0c91ab35ee39a60ff040aa:
-
-  jack2: fix missing alsa-lib feature dependency (2014-03-10 13:13:03 +0100)
-
-are available in the git repository at:
-
-  git://gitorious.org/buildroot/buildroot.git yem/virtual-packages
-
-for you to fetch changes up to 62d961284dab1896ecfc03bea98461a637642029:
-
-  FOO: tentative target and host virt packages (2014-03-10 18:15:13 +0100)
-
-----------------------------------------------------------------
-Yann E. MORIN (19):
-      package/libgles: rename the _HAS and _PROVIDES variables
-      package/libegl: rename the _HAS and _PROVIDES variables
-      package/libopenmax: rename the _HAS and _PROVIDES variables
-      package/libopenvg: rename the _HAS and _PROVIDES variables
-      package/luainterpreter: rename the _HAS and _PROVIDES variables
-      package/lua: rename config options
-      packages: add infrastructure for virtual packages
-      manual: update the virtual package section with the new infrastructure
-      package/powervr: convert to the virtual-package infrastructure
-      package/libgles: convert to the virtual-package infrastructure
-      package/libegl: convert to the virtual-package infrastructure
-      package/libopenmax: convert to the virtual-package infrastructure
-      package/libopenvg: convert to the virtual-package infrastructure
-      package/luainterpreter: convert to the virtual-package infrastructure
-      package/jpeg: convert to the virtual-package infrastructure
-      package/cryptodev: convert to the virtual-package infrastructure
-      package/udev: convert to the virtual-package infrastructure
-      virtual-package: fake a version string for virtual packages
-      FOO: tentative target and host virt packages
-
-eric.le.bihan.dev at free.fr (1):
-      manual: add virtual package tutorial
-
- Config.in.legacy                                 | 21 ++++++
- docs/manual/adding-packages-virtual.txt          | 93 ++++++++++++++++++++++++
- docs/manual/adding-packages.txt                  |  2 +
- package/Config.in                                |  6 +-
- package/Makefile.in                              |  1 +
- package/bellagio/Config.in                       |  4 +-
- package/cairo/cairo.mk                           |  4 +-
- package/cryptodev/Config.in                      |  3 +
- package/cryptodev/cryptodev.mk                   | 12 +--
- package/foo-prov/Config.in                       | 15 ++++
- package/foo-prov/foo-prov.mk                     | 13 ++++
- package/foo-user/Config.in                       |  7 ++
- package/foo-user/foo-user.mk                     | 16 ++++
- package/foo-virt/Config.in                       | 13 ++++
- package/foo-virt/foo-virt.mk                     |  2 +
- package/freescale-imx/gpu-viv-bin-mx6q/Config.in |  8 +-
- package/gstreamer1/gst-omx/Config.in             |  4 +-
- package/gstreamer1/gst1-plugins-bad/Config.in    |  2 +-
- package/jpeg/Config.in                           |  3 +
- package/jpeg/jpeg.mk                             | 12 +--
- package/lbase64/Config.in                        |  2 +-
- package/lpeg/Config.in                           |  2 +-
- package/lpty/Config.in                           |  2 +-
- package/lrandom/Config.in                        |  2 +-
- package/lsqlite3/Config.in                       |  2 +-
- package/lua-cjson/Config.in                      |  2 +-
- package/lua-ev/Config.in                         |  2 +-
- package/lua-msgpack-native/Config.in             |  2 +-
- package/lua/Config.in                            | 14 ++--
- package/lua/lua.mk                               |  4 +-
- package/luaexpat/Config.in                       |  2 +-
- package/luafilesystem/Config.in                  |  2 +-
- package/luainterpreter/Config.in                 |  6 +-
- package/luainterpreter/luainterpreter.mk         | 11 +--
- package/luajit/Config.in                         |  4 +-
- package/luaposix/Config.in                       |  2 +-
- package/luasec/Config.in                         |  2 +-
- package/luasocket/Config.in                      |  2 +-
- package/luasql-sqlite3/Config.in                 |  2 +-
- package/lzlib/Config.in                          |  2 +-
- package/opengl/libegl/Config.in                  |  6 +-
- package/opengl/libegl/libegl.mk                  | 11 +--
- package/opengl/libgles/Config.in                 |  6 +-
- package/opengl/libgles/libgles.mk                | 11 +--
- package/opengl/libopenmax/Config.in              |  6 +-
- package/opengl/libopenmax/libopenmax.mk          | 11 +--
- package/opengl/libopenvg/Config.in               |  6 +-
- package/opengl/libopenvg/libopenvg.mk            | 11 +--
- package/pkg-virtual.mk                           | 70 ++++++++++++++++++
- package/powervr/powervr.mk                       | 11 +--
- package/qt/Config.in                             |  4 +-
- package/qt5/qt5base/Config.in                    |  6 +-
- package/qt5/qt5declarative/Config.in             |  6 +-
- package/qt5/qt5graphicaleffects/Config.in        |  6 +-
- package/qt5/qt5multimedia/Config.in              |  6 +-
- package/qt5/qt5quick1/Config.in                  |  6 +-
- package/qt5/qt5quickcontrols/Config.in           |  6 +-
- package/rings/Config.in                          |  2 +-
- package/rpi-userland/Config.in                   | 16 ++--
- package/sunxi-mali/Config.in                     |  8 +-
- package/ti-gfx/Config.in                         |  8 +-
- package/udev/udev.mk                             | 11 +--
- 62 files changed, 362 insertions(+), 182 deletions(-)
- create mode 100644 docs/manual/adding-packages-virtual.txt
- create mode 100644 package/foo-prov/Config.in
- create mode 100644 package/foo-prov/foo-prov.mk
- create mode 100644 package/foo-user/Config.in
- create mode 100644 package/foo-user/foo-user.mk
- create mode 100644 package/foo-virt/Config.in
- create mode 100644 package/foo-virt/foo-virt.mk
- create mode 100644 package/pkg-virtual.mk
-
+diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
+index 47e4cfc..4ed39bf 100644
+--- a/package/nmap/nmap.mk
++++ b/package/nmap/nmap.mk
+@@ -4,13 +4,13 @@
+ #
+ ################################################################################
+ 
+-NMAP_VERSION = 6.01
++NMAP_VERSION = 6.40
+ NMAP_SITE = http://nmap.org/dist
+ NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
+ NMAP_DEPENDENCIES = libpcap pcre
+ NMAP_CONF_OPT = --without-liblua --without-zenmap \
+ 	--with-libdnet=included --with-liblinear=included \
+-	--with-libpcre="$(STAGING_DIR)/usr"
++	--with-libpcre="$(STAGING_DIR)/usr" --without-ncat
+ NMAP_LICENSE = GPLv2
+ NMAP_LICENSE_FILES = COPYING
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.3.2
