@@ -1,10 +1,10 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 10 Mar 2014 21:10:58 +0200
+Date: Mon, 10 Mar 2014 21:12:13 +0200
 Subject: [Buildroot] [PATCH 2/3] libee: new package
 In-Reply-To: <1394459809-22174-2-git-send-email-clshotwe@rockwellcollins.com>
 References: <1394459809-22174-1-git-send-email-clshotwe@rockwellcollins.com>
  <1394459809-22174-2-git-send-email-clshotwe@rockwellcollins.com>
-Message-ID: <20140310191058.GU4249@tarshish>
+Message-ID: <20140310191213.GV4249@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -45,6 +45,7 @@ On Mon, Mar 10, 2014 at 08:56:48AM -0500, Clayton Shotwell wrote:
 > +config BR2_PACKAGE_LIBEE
 > +	bool "libee"
 
+select BR2_PACKAGE_LIBEE?
 select BR2_PACKAGE_LIBESTR?
 
 baruch
@@ -89,6 +90,11 @@ baruch
 > +$(eval $(autotools-package))
 > -- 
 > 1.7.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
