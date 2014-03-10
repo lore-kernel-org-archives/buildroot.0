@@ -1,97 +1,119 @@
-From: Johan Derycke <johanderycke@gmail.com>
-Date: Mon, 10 Mar 2014 09:38:49 +0100
-Subject: [Buildroot] [PATCH v4 2/2] python-libconfig: new package
-In-Reply-To: <1394440729-27664-1-git-send-email-johan.derycke@barco.com>
-References: <1394440729-27664-1-git-send-email-johan.derycke@barco.com>
-Message-ID: <1394440729-27664-2-git-send-email-johan.derycke@barco.com>
+From: Jeremy Rosen <jeremy.rosen@openwide.fr>
+Date: Mon, 10 Mar 2014 10:00:37 +0100 (CET)
+Subject: [Buildroot] Raspaudio : how to use buildroot as a git submodule
+In-Reply-To: <1436673405.11266711.1394440215222.JavaMail.root@openwide.fr>
+Message-ID: <1612641374.11268842.1394442036999.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Python bindings to the C++ library libconfig 
-https://github.com/cnangel/python-libconfig
+Hello everybody
 
-Signed-off-by: Johan Derycke <johan.derycke@barco.com>
----
-Changes v3 -> v4:
-  -Avoid line-wrap using "git send-email" with gmail
-  -Also builds with python3
-  -Select BR2_PACKAGE_BOOST
-Changes v2 -> v3:
-  -Avoid line-wrap using "git send-email"
-Changes v1 -> v2:
-  -Fixed indentations and blank lines
-  -Added package/Config.in
+For some time I have been looking into how to integrate buildroot in a project
+where buildroot would be the engine to provide the filesystem building 
+infrastructure but where the main repository would not be a clone of the 
+buildroot project. The idea is to try to separate cleanly what is meant to
+go upstream from what is not and still be able to use git to properly save
+the data that is closely linked to the project
 
- package/Config.in                            |    1 +
- package/python-libconfig/Config.in           |   20 ++++++++++++++++++++
- package/python-libconfig/python-libconfig.mk |   17 +++++++++++++++++
- 3 files changed, 38 insertions(+)
- create mode 100644 package/python-libconfig/Config.in
- create mode 100644 package/python-libconfig/python-libconfig.mk
+I have now reached a point where things "simply works" and I can show my work
+to the bigger buildroot community.
 
-diff --git a/package/Config.in b/package/Config.in
-index 417c9b8..fb29097 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -442,6 +442,7 @@ source "package/python-id3/Config.in"
- source "package/python-ipy/Config.in"
- source "package/python-json-schema-validator/Config.in"
- source "package/python-keyring/Config.in"
-+source "package/python-libconfig/Config.in"
- source "package/python-mad/Config.in"
- source "package/python-meld3/Config.in"
- source "package/python-msgpack/Config.in"
-diff --git a/package/python-libconfig/Config.in b/package/python-libconfig/Config.in
-new file mode 100644
-index 0000000..35e9804
---- /dev/null
-+++ b/package/python-libconfig/Config.in
-@@ -0,0 +1,20 @@
-+comment "python-libconfig needs a toolchain w/ C++, largefile, threads"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
-+
-+
-+config BR2_PACKAGE_PYTHON_LIBCONFIG
-+	bool "python-libconfig"
-+	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_BOOST
-+	select BR2_PACKAGE_BOOST_PYTHON
-+	select BR2_PACKAGE_LIBCONFIG
-+	help
-+	  Python bindings to the C++ library libconfig
-+
-+	  https://github.com/cnangel/python-libconfig
-+
-+	  Libconfig is a simple library for manipulating structured
-+	  configuration files. The file format is more compact and more
-+	  readable than XML. And unlike XML, it is type-aware, so it is
-+	  not necessary to do string parsing in application code.
-+	  http://www.hyperrealm.com/libconfig/
-diff --git a/package/python-libconfig/python-libconfig.mk b/package/python-libconfig/python-libconfig.mk
-new file mode 100644
-index 0000000..3f5984b
---- /dev/null
-+++ b/package/python-libconfig/python-libconfig.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# python-libconfig
-+#
-+################################################################################
-+
-+PYTHON_LIBCONFIG_VERSION = b271c3d9dac938ad5cd29b67bd08cc5536a5a391
-+PYTHON_LIBCONFIG_SITE = $(call github,cnangel,python-libconfig,$(PYTHON_LIBCONFIG_VERSION))
-+
-+PYTHON_LIBCONFIG_LICENSE = BSD
-+PYTHON_LIBCONFIG_LICENSE_FILES = README
-+
-+PYTHON_LIBCONFIG_SETUP_TYPE = setuptools
-+
-+PYTHON_LIBCONFIG_DEPENDENCIES = libconfig boost
-+
-+$(eval $(python-package))
--- 
-1.7.10.4
+
+I will first introduce the project itself, then i'll discuss how to create
+your own project based on that infrastructure and then I'll discuss what
+could be upstreamed from the project and how
+
+
+So, with no further delay, let's introduce Raspaudio.
+
+Raspaudio is a small project that builds a filesystem for the raspberry pi
+which allows you to easily stream audio content from the pulseaudio server
+on your desktop to the audio output of the raspberry pi. Compile the 
+filesystem, plug the raspberry, configure the PC, you're done.
+
+Details on these steps can be found at 
+
+http://openwide-ingenierie.github.io/raspaudio/
+
+I won't go further than that in the project, the idea is that this is a
+"finished" buildroot project. you clone it, you compile it, you install
+it.
+
+   $ git clone --recursive git at github.com:Openwide-Ingenierie/raspaudio.git
+   $ cd raspaudio
+   $ make
+
+
+HOW TO REUSE THE RASPAUDIO INFRASTRUCTURE
+
+The whole point of raspaudio is to test the buildroot infrastructure and 
+provide an example that is reusable for other projects. If you want to 
+make a similar project, here is how to do it
+
+  $ mkdir new_project
+  $ cd new_project
+  $ git init
+  $ git submodule add git://git.buildroot.net/buildroot buildroot
+  $ wget https://raw.github.com/Openwide-Ingenierie/raspaudio/master/Makefile
+  $ touch Config.in
+  $ touch external.mk
+  $ echo "output/" > .gitignore
+  $ echo "dl/" >> .gitignore
+
+Change the field PROJECT_NAME in the Makefile to the name of your project
+
+  $ git add Makefile external.mk Config.in .gitignore
+  $ git commit -m"Project infrastructure"
+
+You can now configure your project in the usual buildroot way. For example :
+
+  $ make raspberrypi_defconfig
+  $ make menuconfig
+
+A file named $(PROJECT_NAME)_defconfig will appear. Add this project to git
+You can now work with your project in the usual way and all the important
+information will be saved in git.
+
+I tried to make the whole thing as close to the buildroot way as possible, 
+all Makefile targets should work properly and most infrasturcture variables
+(DL_DIR, BR2_EXTERNAL...) are set for you. This is here to help you quickly 
+have the infrastructure in place to deploy your own projects based on buildroot.
+
+
+WHERE TO GO FROM HERE
+
+The main thing I have noticed is that I have been developing post-build scripts
+that are completely generic and could easily be reused. It would be nice to 
+upstream these scripts (in particular, the script that automatically adds the 
+public key of the user doing the build to the authorized keys on the target)
+
+I am also developing an external Config.in that allows generating 
+/etc/network/interfaces via menuconfig. This would also be nice to upstream,
+maybe in a "contrib" subdirectory.
+
+Next, the Makefile of raspaudio (which is the core of the 
+reusable infrastructure) could also be kept by buildroot. This would bring
+all the good sides of upstreaming (up to date with buildroot, not lost
+in a third party website etc...) I'd like that to happen but I can understand 
+if this is not the direction the project wants to go.
+
+Last but not least, I am not a Makefile expert. I did things the way I was 
+able to, but I'm sure there are better ways to do that. So feel free to
+suggest a better way to integrate stuff
+
+
+    Regards
+
+    J?r?my Rosen
+
+fight key loggers : write some perl using vim
+
+
+Open Wide Ingenierie
+
+23, rue Daviel
+75013 Paris - France
+www.openwide.fr
