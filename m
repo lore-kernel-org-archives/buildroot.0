@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 10 Mar 2014 17:26:28 -0300
-Subject: [Buildroot] [PATCH 08/14] netatalk: bump to version 3.0.8
+Date: Mon, 10 Mar 2014 17:26:29 -0300
+Subject: [Buildroot] [PATCH 09/14] httping: bump to version 2.3.4
 In-Reply-To: <1394483194-17592-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1394483194-17592-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1394483194-17592-8-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1394483194-17592-9-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,54 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/netatalk/netatalk.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/httping/Config.in  | 5 +++++
+ package/httping/httping.mk | 7 +++++--
+ 2 files changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/package/netatalk/netatalk.mk b/package/netatalk/netatalk.mk
-index 2bd63ec..e5e5c6b 100644
---- a/package/netatalk/netatalk.mk
-+++ b/package/netatalk/netatalk.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/httping/Config.in b/package/httping/Config.in
+index 92c7a20..cd97e72 100644
+--- a/package/httping/Config.in
++++ b/package/httping/Config.in
+@@ -1,5 +1,10 @@
++comment "httping needs a toolchain w/ char"
++	depends on !BR2_USE_WCHAR
++
+ config BR2_PACKAGE_HTTPING
+ 	bool "httping"
++	depends on BR2_USE_WCHAR
++	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
+ 	help
+ 	  Httping is like 'ping' but for http-requests.
+ 	  Give it an url, and it'll show you how long it takes to connect,
+diff --git a/package/httping/httping.mk b/package/httping/httping.mk
+index 8385aaf..dd8abb3 100644
+--- a/package/httping/httping.mk
++++ b/package/httping/httping.mk
+@@ -4,12 +4,14 @@
  #
  ################################################################################
  
--NETATALK_VERSION = 3.0.5
-+NETATALK_VERSION = 3.0.8
- NETATALK_SITE = http://downloads.sourceforge.net/project/netatalk/netatalk/$(NETATALK_VERSION)
- NETATALK_SOURCE = netatalk-$(NETATALK_VERSION).tar.bz2
- NETATALK_AUTORECONF = YES
+-HTTPING_VERSION = 2.2.1
++HTTPING_VERSION = 2.3.4
+ HTTPING_SOURCE = httping-$(HTTPING_VERSION).tgz
+ HTTPING_SITE = http://www.vanheusden.com/httping
+ HTTPING_LICENSE = GPLv2
+ HTTPING_LICENSE_FILES = license.txt
++HTTPING_LDFLAGS = $(if $(BR2_NEEDS_GETTEXT),-lintl) $(TARGET_LDFLAGS)
+ HTTPING_DEPENDENCIES = \
++	$(if $(BR2_NEEDS_GETTEXT),gettext) \
+ 	$(if $(BR2_PACKAGE_OPENSSL),openssl) \
+ 	$(if $(BR2_PACKAGE_NCURSES),ncurses) \
+ 	$(if $(BR2_PACKAGE_FFTW),fftw)
+@@ -20,7 +22,8 @@ HTTPING_MAKE_OPT = $(TARGET_CONFIGURE_OPTS) \
+ 	TFO=$(if $(BR2_PACKAGE_HTTPING_TFO),yes,no)
+ 
+ define HTTPING_BUILD_CMDS
+-	$(HTTPING_MAKE_OPT) $(MAKE) OFLAGS= DEBUG=no -C $(@D)
++	$(HTTPING_MAKE_OPT) LDFLAGS="$(HTTPING_LDFLAGS)" \
++		$(MAKE) DEBUG=no -C $(@D)
+ endef
+ 
+ define HTTPING_INSTALL_TARGET_CMDS
 -- 
 1.8.3.2
