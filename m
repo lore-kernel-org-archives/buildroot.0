@@ -1,52 +1,39 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 10 Mar 2014 21:14:53 +0200
-Subject: [Buildroot] [PATCH 3/3] rsyslog: bump to version 6.3.8
-In-Reply-To: <1394459809-22174-3-git-send-email-clshotwe@rockwellcollins.com>
-References: <1394459809-22174-1-git-send-email-clshotwe@rockwellcollins.com>
- <1394459809-22174-3-git-send-email-clshotwe@rockwellcollins.com>
-Message-ID: <20140310191453.GW4249@tarshish>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 10 Mar 2014 16:34:05 -0300
+Subject: [Buildroot] [PATCH 1/2] socat: security bump to version 2.0.0-b7
+Message-ID: <1394480046-3187-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Clayton,
+Fixes CVE-2014-0019.
+Also rename patch according to policy.
 
-On Mon, Mar 10, 2014 at 08:56:49AM -0500, Clayton Shotwell wrote:
-> Bumping version of rsyslog and adding new dependencies of libee and
-> libestr.
-> 
-> Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
-> ---
->  package/rsyslog/rsyslog.mk |    4 ++--
->  1 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
-> index daae010..3ca5eae 100644
-> --- a/package/rsyslog/rsyslog.mk
-> +++ b/package/rsyslog/rsyslog.mk
-> @@ -4,9 +4,9 @@
->  #
->  ################################################################################
->  
-> -RSYSLOG_VERSION = 5.8.0
-> +RSYSLOG_VERSION = 6.3.8
->  RSYSLOG_SITE = http://rsyslog.com/files/download/rsyslog/
-> -RSYSLOG_DEPENDENCIES = zlib
-> +RSYSLOG_DEPENDENCIES = zlib libestr libee
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ .../{socat-no-documentation.patch => socat-001-no-documentation.patch}  | 0
+ package/socat/socat.mk                                                  | 2 +-
+ 2 files changed, 1 insertion(+), 1 deletion(-)
+ rename package/socat/{socat-no-documentation.patch => socat-001-no-documentation.patch} (100%)
 
-Shouldn't you also select these packages in Config.in to make sure they are 
-available?
-
-baruch
-
->  # Build after Busybox
->  ifeq ($(BR2_PACKAGE_BUSYBOX),y)
-> -- 
-> 1.7.1
-
+diff --git a/package/socat/socat-no-documentation.patch b/package/socat/socat-001-no-documentation.patch
+similarity index 100%
+rename from package/socat/socat-no-documentation.patch
+rename to package/socat/socat-001-no-documentation.patch
+diff --git a/package/socat/socat.mk b/package/socat/socat.mk
+index df60961..6ae67a9 100644
+--- a/package/socat/socat.mk
++++ b/package/socat/socat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SOCAT_VERSION = 2.0.0-b6
++SOCAT_VERSION = 2.0.0-b7
+ SOCAT_SOURCE = socat-$(SOCAT_VERSION).tar.bz2
+ SOCAT_SITE = http://www.dest-unreach.org/socat/download/
+ SOCAT_LICENSE = GPLv2
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+1.8.3.2
