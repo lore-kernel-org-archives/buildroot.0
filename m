@@ -1,38 +1,29 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Mon, 10 Mar 2014 18:51:04 +0100
-Subject: [Buildroot] [PATCH v3 0/3] improve virtual package management
-In-Reply-To: <20140307163351.GA3384@free.fr>
-References: <1394198534-16379-1-git-send-email-eric.le.bihan.dev@free.fr>
- <20140307163351.GA3384@free.fr>
-Message-ID: <20140310175104.GA18832@pc-eric>
+From: Bernd Kuhls <berndkuhls@hotmail.com>
+Date: Mon, 10 Mar 2014 18:52:47 +0100
+Subject: [Buildroot] [PATCH v4 1/5] mesa3d: pull out from x11
+References: <BLU0-SMTP4083C56CA0B43BBAC9B3616D9750@phx.gbl>
+ <20140310173941.GA3282@free.fr>
+Message-ID: <eoa1vaxos4.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+Hi,
 
-On Fri, Mar 07, 2014 at 05:33:51PM +0100, Yann E. MORIN wrote:
-> Eric, All,
->
-> On 2014-03-07 14:22 +0100, Eric Le Bihan spake thusly:
-> > This patch series improves virtual package management by:
-> >
-> > - using make control functions in dependency check.
-> > - adding a tutorial to the user manual.
->
-> I've already integrated most of this in my virtual-package branch, which
-> has already been posted to the list (at least twice) in the recent past.
-I had not properly reviewed your patches... Sorry for the noise.
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote in
+news:20140310173941.GA3282 at free.fr: 
 
-> So, unless the maintainer-of-the-day disagrees, I think it is better to
-> rather wait for the virtual-package infra to get in.
-Of course!
+> Maybe it would be nice to give in the commit log a bit more details on
+> why it makes sense to move it out of x11r7.
 
-> Which can be sped up by giving some tested-by, reviewed-by or acked-by
-> tags to the already-posted patches. ;-)
-I'll give them a shot.
+mesa3d does not depend on x11, it can be used by wayland as well.
 
-Best regards,
-ELB
+> If I understand correctly, mesa3d is an implementation of OpenGL. So,
+> *maybe* it would make sense to move it along the other OpenGL packages,
+> into package/opengl/.
+
+In package/opengl/ are only virtual packages.
+
+Regards, Bernd
