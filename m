@@ -1,57 +1,96 @@
-From: Clayton Shotwell <clshotwe@rockwellcollins.com>
-Date: Mon, 10 Mar 2014 14:03:06 -0500
-Subject: [Buildroot] [PATCH 3/3] rsyslog: bump to version 6.3.8
-In-Reply-To: <OF14BFD3A2.E76317EC-ON86257C97.004F3333-86257C97.00500AF5@LocalDomain>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 10 Mar 2014 21:10:58 +0200
+Subject: [Buildroot] [PATCH 2/3] libee: new package
+In-Reply-To: <1394459809-22174-2-git-send-email-clshotwe@rockwellcollins.com>
 References: <1394459809-22174-1-git-send-email-clshotwe@rockwellcollins.com>
- <1394459809-22174-3-git-send-email-clshotwe@rockwellcollins.com>
- <OF14BFD3A2.E76317EC-ON86257C97.004F3333-86257C97.00500AF5@LocalDomain>
-Message-ID: <OF6BF2D5D9.6086FE5F-ON86257C97.00686C68-86257C97.00688E01@rockwellcollins.com>
+ <1394459809-22174-2-git-send-email-clshotwe@rockwellcollins.com>
+Message-ID: <20140310191058.GU4249@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ryan J Barnett/USA/RockwellCollins wrote on 03/10/2014 09:34:21 AM:
+Hi Clayton,
 
-> From: Ryan J Barnett/USA/RockwellCollins
-> To: Clayton Shotwell <clshotwe@rockwellcollins.com>
-> Cc: buildroot at buildroot.org, buildroot-bounces at busybox.net
-> Date: 03/10/2014 09:34 AM
-> Subject: Re: [Buildroot] [PATCH 3/3] rsyslog: bump to version 6.3.8
+On Mon, Mar 10, 2014 at 08:56:48AM -0500, Clayton Shotwell wrote:
 > 
-> Clayton,
+> Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
+> ---
+>  package/Config.in       |    1 +
+>  package/libee/Config.in |   18 ++++++++++++++++++
+>  package/libee/libee.mk  |   16 ++++++++++++++++
+>  3 files changed, 35 insertions(+), 0 deletions(-)
+>  create mode 100644 package/libee/Config.in
+>  create mode 100644 package/libee/libee.mk
 > 
-> Clayton Shotwell <clshotwe@rockwellcollins.com> wrote on 03/10/2014 
-> 08:56:49 AM:
-> 
-> > 
-> 
-################################################################################
-> > 
-> > -RSYSLOG_VERSION = 5.8.0
-> > +RSYSLOG_VERSION = 6.3.8
-> >  RSYSLOG_SITE = http://rsyslog.com/files/download/rsyslog/
-> > -RSYSLOG_DEPENDENCIES = zlib
-> > +RSYSLOG_DEPENDENCIES = zlib libestr libee
-> > 
-> >  # Build after Busybox
-> >  ifeq ($(BR2_PACKAGE_BUSYBOX),y)
-> 
-> Checking the website for rsyslog it appears that the latest version is 
-> 7.6.0. Is there a reason to not bump to this version? Also could you add 
+> diff --git a/package/Config.in b/package/Config.in
+> index ab82483..42c21d8 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -767,6 +767,7 @@ source "package/libcap-ng/Config.in"
+>  source "package/libcgroup/Config.in"
+>  source "package/libcofi/Config.in"
+>  source "package/libdaemon/Config.in"
+> +source "package/libee/Config.in"
+>  source "package/libelf/Config.in"
+>  source "package/libev/Config.in"
+>  source "package/libevdev/Config.in"
+> diff --git a/package/libee/Config.in b/package/libee/Config.in
+> new file mode 100644
+> index 0000000..fd48d56
+> --- /dev/null
+> +++ b/package/libee/Config.in
+> @@ -0,0 +1,18 @@
+> +config BR2_PACKAGE_LIBEE
+> +	bool "libee"
 
-> the license information since there doesn't appear to be any for this 
-> package?
+select BR2_PACKAGE_LIBESTR?
 
-I went with 6.3.8 initially because that was the version that contained 
-the feature I need to use.  I didn't even check for a newer version.  I 
-will get the 7.6.0 built and tested and then I will resubmit my patches.
+baruch
 
-Thanks,
-Clayton
+> +	help
+> +	  An Event Expression Library inspired by CEE.
+> +
+> +	  CEE is an upcoming standard used to describe network
+> +	  events in a number of normalized formats. It's goal is
+> +	  to unify they currently many different representations
+> +	  that exist in the industry.
+> +
+> +	  The core idea of libee is to provide a small but hopefully
+> +	  convenient API layer above the CEE standard. However, CEE
+> +	  is not finished. At the time of this writing, CEE is under
+> +	  heavy development and even some of its core data structures
+> +	  (like the data dictionary and taxonmy) have not been fully
+> +	  specified.
+> +
+> +	  http://www.libee.org
+> diff --git a/package/libee/libee.mk b/package/libee/libee.mk
+> new file mode 100644
+> index 0000000..f9894d9
+> --- /dev/null
+> +++ b/package/libee/libee.mk
+> @@ -0,0 +1,16 @@
+> +################################################################################
+> +#
+> +# libee
+> +#
+> +################################################################################
+> +
+> +LIBEE_VERSION = 0.4.1
+> +LIBEE_SITE = http://www.libee.org/download/files/download/
+> +LIBEE_LICENSE = LGPLv2.1+
+> +LIBEE_LICENSE_FILE = COPYING
+> +LIBEE_DEPENDENCIES = libestr
+> +LIBEE_INSTALL_STAGING = YES
+> +
+> +LIBEE_MAKE = $(MAKE1)
+> +
+> +$(eval $(autotools-package))
+> -- 
+> 1.7.1
 
-Clayton Shotwell
-Software Engineer
-clshotwe at rockwellcollins.com
-www.rockwellcollins.com 
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
