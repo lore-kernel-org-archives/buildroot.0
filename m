@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 10 Mar 2014 21:27:39 +0100
-Subject: [Buildroot] [PATCH 10/20] package/powervr: convert to the
+Date: Mon, 10 Mar 2014 21:27:40 +0100
+Subject: [Buildroot] [PATCH 11/20] package/libgles: convert to the
 	virtual-package infrastructure
 In-Reply-To: <cover.1394482605.git.yann.morin.1998@free.fr>
 References: <cover.1394482605.git.yann.morin.1998@free.fr>
-Message-ID: <f28c95b635587ca07d418797b9ca6d5101be8dd3.1394482605.git.yann.morin.1998@free.fr>
+Message-ID: <cf1d4ab86486678a65cd74c95e8141d01c7b924d.1394482605.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,23 +20,23 @@ Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 Cc: Mike Zick <minimod@morethan.org>
 Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/powervr/powervr.mk | 11 +----------
+ package/opengl/libgles/libgles.mk | 11 +----------
  1 file changed, 1 insertion(+), 10 deletions(-)
 
-diff --git a/package/powervr/powervr.mk b/package/powervr/powervr.mk
-index b36eb16..5a55860 100644
---- a/package/powervr/powervr.mk
-+++ b/package/powervr/powervr.mk
+diff --git a/package/opengl/libgles/libgles.mk b/package/opengl/libgles/libgles.mk
+index 041e378..407f8f9 100644
+--- a/package/opengl/libgles/libgles.mk
++++ b/package/opengl/libgles/libgles.mk
 @@ -4,13 +4,4 @@
  #
  ################################################################################
  
--POWERVR_SOURCE =
--POWERVR_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_POWERVR))
+-LIBGLES_SOURCE =
+-LIBGLES_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_LIBGLES))
 -
--ifeq ($(BR2_PACKAGE_HAS_POWERVR),y)
--ifeq ($(POWERVR_DEPENDENCIES),)
--$(error No PowerVR implementation selected. Configuration error.)
+-ifeq ($(BR2_PACKAGE_HAS_LIBGLES),y)
+-ifeq ($(LIBGLES_DEPENDENCIES),)
+-$(error No libGLES implementation selected. Configuration error.)
 -endif
 -endif
 -
