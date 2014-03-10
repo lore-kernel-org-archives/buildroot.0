@@ -1,66 +1,32 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 10 Mar 2014 21:27:45 +0100
-Subject: [Buildroot] [PATCH 16/20] package/jpeg: convert to the
-	virtual-package infrastructure
-In-Reply-To: <cover.1394482605.git.yann.morin.1998@free.fr>
-References: <cover.1394482605.git.yann.morin.1998@free.fr>
-Message-ID: <2e0400841bb3fbb9cb4fe37d76f7f4e662183c10.1394482605.git.yann.morin.1998@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 10 Mar 2014 17:26:24 -0300
+Subject: [Buildroot] [PATCH 04/14] iftop: bump to version 1.0pre4
+In-Reply-To: <1394483194-17592-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1394483194-17592-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1394483194-17592-4-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Since this package is implemented via a choice rather than the usual
-separate-package providers, we only need BR2_PACKAGE_HAS_JPEG to be
-always defined when the 'jpeg' package is selected.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: Mike Zick <minimod@morethan.org>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/jpeg/Config.in |  3 +++
- package/jpeg/jpeg.mk   | 12 +-----------
- 2 files changed, 4 insertions(+), 11 deletions(-)
+ package/iftop/iftop.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/jpeg/Config.in b/package/jpeg/Config.in
-index b7cdfeb..3042d24 100644
---- a/package/jpeg/Config.in
-+++ b/package/jpeg/Config.in
-@@ -30,6 +30,9 @@ config BR2_PACKAGE_JPEG_TURBO
- 
- endchoice
- 
-+config BR2_PACKAGE_HAS_JPEG
-+	def_bool y
-+
- config BR2_PACKAGE_PROVIDES_JPEG
- 	string
- 	default "libjpeg"    if BR2_PACKAGE_LIBJPEG
-diff --git a/package/jpeg/jpeg.mk b/package/jpeg/jpeg.mk
-index 3695bc8..2d56be6 100644
---- a/package/jpeg/jpeg.mk
-+++ b/package/jpeg/jpeg.mk
-@@ -4,14 +4,4 @@
+diff --git a/package/iftop/iftop.mk b/package/iftop/iftop.mk
+index 29ec61a..91bd6cc 100644
+--- a/package/iftop/iftop.mk
++++ b/package/iftop/iftop.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--JPEG_SOURCE =
--JPEG_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_JPEG))
--
--ifeq ($(JPEG_DEPENDENCIES),)
--define JPEG_CONFIGURE_CMDS
--	echo "No JPEG implementation defined. Configuration error"
--	exit 1
--endef
--endif
--
--$(eval $(generic-package))
-+$(eval $(virtual-package))
+-IFTOP_VERSION = 1.0pre3
++IFTOP_VERSION = 1.0pre4
+ IFTOP_SITE = http://www.ex-parrot.com/pdw/iftop/download/
+ IFTOP_DEPENDENCIES = ncurses libpcap
+ IFTOP_LICENSE = GPLv2+
 -- 
 1.8.3.2
