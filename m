@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 10 Mar 2014 21:27:41 +0100
-Subject: [Buildroot] [PATCH 12/20] package/libegl: convert to the
+Date: Mon, 10 Mar 2014 21:27:43 +0100
+Subject: [Buildroot] [PATCH 14/20] package/libopenvg: convert to the
 	virtual-package infrastructure
 In-Reply-To: <cover.1394482605.git.yann.morin.1998@free.fr>
 References: <cover.1394482605.git.yann.morin.1998@free.fr>
-Message-ID: <95b1625559a1eff9b8fe0c0da19d37b14aad730c.1394482605.git.yann.morin.1998@free.fr>
+Message-ID: <dde479847cae1b9a83dcd887331c59821b369552.1394482605.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,23 +20,23 @@ Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 Cc: Mike Zick <minimod@morethan.org>
 Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/opengl/libegl/libegl.mk | 11 +----------
+ package/opengl/libopenvg/libopenvg.mk | 11 +----------
  1 file changed, 1 insertion(+), 10 deletions(-)
 
-diff --git a/package/opengl/libegl/libegl.mk b/package/opengl/libegl/libegl.mk
-index 2e399ce..1f5460e 100644
---- a/package/opengl/libegl/libegl.mk
-+++ b/package/opengl/libegl/libegl.mk
+diff --git a/package/opengl/libopenvg/libopenvg.mk b/package/opengl/libopenvg/libopenvg.mk
+index 1c6f929..3ce85a1 100644
+--- a/package/opengl/libopenvg/libopenvg.mk
++++ b/package/opengl/libopenvg/libopenvg.mk
 @@ -4,13 +4,4 @@
  #
  ################################################################################
  
--LIBEGL_SOURCE =
--LIBEGL_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_LIBEGL))
+-LIBOPENVG_SOURCE =
+-LIBOPENVG_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_LIBOPENVG))
 -
--ifeq ($(BR2_PACKAGE_HAS_LIBEGL),y)
--ifeq ($(LIBEGL_DEPENDENCIES),)
--$(error No libEGL implementation selected. Configuration error.)
+-ifeq ($(BR2_PACKAGE_HAS_LIBOPENVG),y)
+-ifeq ($(LIBOPENVG_DEPENDENCIES),)
+-$(error No libOpenVG implementation selected. Configuration error.)
 -endif
 -endif
 -
