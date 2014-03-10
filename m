@@ -1,36 +1,30 @@
-From: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
-Date: Mon, 10 Mar 2014 12:21:11 -0400
-Subject: [Buildroot] [PATCH v4 1/5] mesa3d: pull out from x11
-In-Reply-To: <BLU0-SMTP4083C56CA0B43BBAC9B3616D9750@phx.gbl>
-References: <BLU0-SMTP4083C56CA0B43BBAC9B3616D9750@phx.gbl>
-Message-ID: <531DE677.7040801@savoirfairelinux.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 10 Mar 2014 13:30:38 -0300
+Subject: [Buildroot] [PATCH] squid: bump to version 3.4.4
+Message-ID: <1394469038-24829-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/squid/squid.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 03/09/2014 03:01 PM, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
-> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
-> ---
-> v4: rebased v3
-> v3: Config.in: move package to "Graphic libraries" (Arnout)
-> v2: rebased v1
-> v1: rebased Spenser Gilliland?s patch:
->     http://patchwork.ozlabs.org/patch/278302/
->
->  package/Config.in                                     |    1 +
->  package/{x11r7 => }/mesa3d/Config.in                  |    0
->  package/{x11r7 => }/mesa3d/mesa3d-uclibc-locale.patch |    0
->  package/{x11r7 => }/mesa3d/mesa3d.mk                  |    0
->  package/x11r7/Config.in                               |    1 -
->  5 files changed, 1 insertion(+), 1 deletion(-)
->  rename package/{x11r7 => }/mesa3d/Config.in (100%)
->  rename package/{x11r7 => }/mesa3d/mesa3d-uclibc-locale.patch (100%)
->  rename package/{x11r7 => }/mesa3d/mesa3d.mk (100%)
-Reviewed-by: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
-
-Regards,
-Sebastien.
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 529c5df..a236ab9 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ SQUID_VERSION_MAJOR = 3.4
+-SQUID_VERSION = $(SQUID_VERSION_MAJOR).3
++SQUID_VERSION = $(SQUID_VERSION_MAJOR).4
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
+ SQUID_LICENSE = GPLv2+
+-- 
+1.8.3.2
