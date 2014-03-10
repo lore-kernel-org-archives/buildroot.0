@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 10 Mar 2014 21:27:31 +0100
-Subject: [Buildroot] [PATCH 02/20] package/libegl: rename the _HAS and
+Date: Mon, 10 Mar 2014 21:27:30 +0100
+Subject: [Buildroot] [PATCH 01/20] package/libgles: rename the _HAS and
 	_PROVIDES variables
 In-Reply-To: <cover.1394482605.git.yann.morin.1998@free.fr>
 References: <cover.1394482605.git.yann.morin.1998@free.fr>
-Message-ID: <fe3363c1659bc8824a4a1c931032dd40cd0e64fe.1394482605.git.yann.morin.1998@free.fr>
+Message-ID: <7568529058fb1caf7ef8222cf0412749053d1fa1.1394482605.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,7 +17,7 @@ The basic rule for a package is to have its options named
 after the package name. There is no reason this should not
 also be the case for virtual packages.
 
-Besides, this will allow us to switch libegl to use the
+Besides, this will allow us to switch libgles to use the
 soon-to-be-introduced virtual-package infrastructure.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
@@ -28,10 +28,11 @@ Cc: Mike Zick <minimod@morethan.org>
 Cc: Samuel Martin <s.martin49@gmail.com>
 Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 ---
+ package/cairo/cairo.mk                           | 2 +-
  package/freescale-imx/gpu-viv-bin-mx6q/Config.in | 4 ++--
  package/gstreamer1/gst1-plugins-bad/Config.in    | 2 +-
- package/opengl/libegl/Config.in                  | 6 +++---
- package/opengl/libegl/libegl.mk                  | 4 ++--
+ package/opengl/libgles/Config.in                 | 6 +++---
+ package/opengl/libgles/libgles.mk                | 4 ++--
  package/qt/Config.in                             | 2 +-
  package/qt5/qt5base/Config.in                    | 4 ++--
  package/qt5/qt5declarative/Config.in             | 4 ++--
@@ -42,267 +43,281 @@ Reviewed-by: Samuel Martin <s.martin49@gmail.com>
  package/rpi-userland/Config.in                   | 4 ++--
  package/sunxi-mali/Config.in                     | 4 ++--
  package/ti-gfx/Config.in                         | 4 ++--
- 14 files changed, 27 insertions(+), 27 deletions(-)
+ 15 files changed, 28 insertions(+), 28 deletions(-)
 
+diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
+index aa03a27..ee58aff 100644
+--- a/package/cairo/cairo.mk
++++ b/package/cairo/cairo.mk
+@@ -54,7 +54,7 @@ else
+ 	CAIRO_CONF_OPT += --disable-directfb
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_HAS_OPENGL_ES),y)
++ifeq ($(BR2_PACKAGE_HAS_LIBGLES),y)
+ 	CAIRO_CONF_OPT += --enable-glesv2
+ 	CAIRO_DEPENDENCIES += libgles
+ else
 diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/Config.in b/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
-index 379402d..864c605 100644
+index e084568..379402d 100644
 --- a/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
 +++ b/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
-@@ -4,7 +4,7 @@ comment "gpu-viv-bin-mx6q needs an (e)glibc toolchain"
- 
+@@ -5,7 +5,7 @@ comment "gpu-viv-bin-mx6q needs an (e)glibc toolchain"
  config BR2_PACKAGE_GPU_VIV_BIN_MX6Q
  	bool "gpu-viv-bin-mx6q"
--	select BR2_PACKAGE_HAS_OPENGL_EGL
-+	select BR2_PACKAGE_HAS_LIBEGL
- 	select BR2_PACKAGE_HAS_LIBGLES
+ 	select BR2_PACKAGE_HAS_OPENGL_EGL
+-	select BR2_PACKAGE_HAS_OPENGL_ES
++	select BR2_PACKAGE_HAS_LIBGLES
  	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_XORG7
  	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
-@@ -24,7 +24,7 @@ config BR2_PACKAGE_GPU_VIV_BIN_MX6Q
- 
- if BR2_PACKAGE_GPU_VIV_BIN_MX6Q
- 
--config BR2_PACKAGE_PROVIDES_OPENGL_EGL
-+config BR2_PACKAGE_PROVIDES_LIBEGL
+ 	depends on BR2_arm # Only relevant for i.MX6
+@@ -27,7 +27,7 @@ if BR2_PACKAGE_GPU_VIV_BIN_MX6Q
+ config BR2_PACKAGE_PROVIDES_OPENGL_EGL
  	default "gpu-viv-bin-mx6q"
  
- config BR2_PACKAGE_PROVIDES_LIBGLES
+-config BR2_PACKAGE_PROVIDES_OPENGL_ES
++config BR2_PACKAGE_PROVIDES_LIBGLES
+ 	default "gpu-viv-bin-mx6q"
+ 
+ config BR2_PACKAGE_GPU_VIV_BIN_MX6Q_EXAMPLES
 diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index 25e379f..2acb5a1 100644
+index 2c5c290..25e379f 100644
 --- a/package/gstreamer1/gst1-plugins-bad/Config.in
 +++ b/package/gstreamer1/gst1-plugins-bad/Config.in
 @@ -464,7 +464,7 @@ comment "rsvg plugin needs a toolchain w/ C++, wchar, threads"
  
  config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_EGLGLES
  	bool "eglgles"
--	depends on BR2_PACKAGE_HAS_OPENGL_EGL && BR2_PACKAGE_HAS_LIBGLES
-+	depends on BR2_PACKAGE_HAS_LIBEGL && BR2_PACKAGE_HAS_LIBGLES
+-	depends on BR2_PACKAGE_HAS_OPENGL_EGL && BR2_PACKAGE_HAS_OPENGL_ES
++	depends on BR2_PACKAGE_HAS_OPENGL_EGL && BR2_PACKAGE_HAS_LIBGLES
  	help
  	  EGL/GLES sink
  
-diff --git a/package/opengl/libegl/Config.in b/package/opengl/libegl/Config.in
-index 2d81a20..8401bb2 100644
---- a/package/opengl/libegl/Config.in
-+++ b/package/opengl/libegl/Config.in
+diff --git a/package/opengl/libgles/Config.in b/package/opengl/libgles/Config.in
+index 75ccfc8..b7b800f 100644
+--- a/package/opengl/libgles/Config.in
++++ b/package/opengl/libgles/Config.in
 @@ -1,6 +1,6 @@
--config BR2_PACKAGE_HAS_OPENGL_EGL
-+config BR2_PACKAGE_HAS_LIBEGL
+-config BR2_PACKAGE_HAS_OPENGL_ES
++config BR2_PACKAGE_HAS_LIBGLES
  	bool
  
--config BR2_PACKAGE_PROVIDES_OPENGL_EGL
--	depends on BR2_PACKAGE_HAS_OPENGL_EGL
-+config BR2_PACKAGE_PROVIDES_LIBEGL
-+	depends on BR2_PACKAGE_HAS_LIBEGL
+-config BR2_PACKAGE_PROVIDES_OPENGL_ES
+-	depends on BR2_PACKAGE_HAS_OPENGL_ES
++config BR2_PACKAGE_PROVIDES_LIBGLES
++	depends on BR2_PACKAGE_HAS_LIBGLES
  	string
-diff --git a/package/opengl/libegl/libegl.mk b/package/opengl/libegl/libegl.mk
-index 3311e50..2e399ce 100644
---- a/package/opengl/libegl/libegl.mk
-+++ b/package/opengl/libegl/libegl.mk
+diff --git a/package/opengl/libgles/libgles.mk b/package/opengl/libgles/libgles.mk
+index 7a07e37..041e378 100644
+--- a/package/opengl/libgles/libgles.mk
++++ b/package/opengl/libgles/libgles.mk
 @@ -5,9 +5,9 @@
  ################################################################################
  
- LIBEGL_SOURCE =
--LIBEGL_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_OPENGL_EGL))
-+LIBEGL_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_LIBEGL))
+ LIBGLES_SOURCE =
+-LIBGLES_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_OPENGL_ES))
++LIBGLES_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_LIBGLES))
  
--ifeq ($(BR2_PACKAGE_HAS_OPENGL_EGL),y)
-+ifeq ($(BR2_PACKAGE_HAS_LIBEGL),y)
- ifeq ($(LIBEGL_DEPENDENCIES),)
- $(error No libEGL implementation selected. Configuration error.)
+-ifeq ($(BR2_PACKAGE_HAS_OPENGL_ES),y)
++ifeq ($(BR2_PACKAGE_HAS_LIBGLES),y)
+ ifeq ($(LIBGLES_DEPENDENCIES),)
+ $(error No libGLES implementation selected. Configuration error.)
  endif
 diff --git a/package/qt/Config.in b/package/qt/Config.in
-index d3f6a5a..eed25c8 100644
+index 5105e5d..d3f6a5a 100644
 --- a/package/qt/Config.in
 +++ b/package/qt/Config.in
-@@ -295,7 +295,7 @@ config BR2_PACKAGE_QT_PHONON_BACKEND
+@@ -294,7 +294,7 @@ config BR2_PACKAGE_QT_PHONON_BACKEND
+ 
  config BR2_PACKAGE_QT_OPENGL_ES
  	bool "OpenGL ES v2.x support"
- 	depends on BR2_PACKAGE_HAS_LIBGLES
--	depends on BR2_PACKAGE_HAS_OPENGL_EGL
-+	depends on BR2_PACKAGE_HAS_LIBEGL
+-	depends on BR2_PACKAGE_HAS_OPENGL_ES
++	depends on BR2_PACKAGE_HAS_LIBGLES
+ 	depends on BR2_PACKAGE_HAS_OPENGL_EGL
  	help
  	  Enable the OpenGL ES v2.x support.
- 
 diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-index 437b1d2..5d5b7f6 100644
+index 5c404d1..437b1d2 100644
 --- a/package/qt5/qt5base/Config.in
 +++ b/package/qt5/qt5base/Config.in
-@@ -137,11 +137,11 @@ comment "X.org XCB backend available if X.org is enabled"
- 
+@@ -138,10 +138,10 @@ comment "X.org XCB backend available if X.org is enabled"
  config BR2_PACKAGE_QT5BASE_EGLFS
  	bool "eglfs support"
--	depends on BR2_PACKAGE_HAS_OPENGL_EGL
-+	depends on BR2_PACKAGE_HAS_LIBEGL
- 	depends on BR2_PACKAGE_HAS_LIBGLES
+ 	depends on BR2_PACKAGE_HAS_OPENGL_EGL
+-	depends on BR2_PACKAGE_HAS_OPENGL_ES
++	depends on BR2_PACKAGE_HAS_LIBGLES
  
  comment "eglfs backend available if OpenGLES and EGL are enabled"
--	depends on !BR2_PACKAGE_HAS_OPENGL_EGL || !BR2_PACKAGE_HAS_LIBGLES
-+	depends on !BR2_PACKAGE_HAS_LIBEGL || !BR2_PACKAGE_HAS_LIBGLES
+-	depends on !BR2_PACKAGE_HAS_OPENGL_EGL || !BR2_PACKAGE_HAS_OPENGL_ES
++	depends on !BR2_PACKAGE_HAS_OPENGL_EGL || !BR2_PACKAGE_HAS_LIBGLES
  
  config BR2_PACKAGE_QT5BASE_PRINTSUPPORT
  	bool "print support module"
 diff --git a/package/qt5/qt5declarative/Config.in b/package/qt5/qt5declarative/Config.in
-index 5e1516d..4a6e805 100644
+index c5753b1..5e1516d 100644
 --- a/package/qt5/qt5declarative/Config.in
 +++ b/package/qt5/qt5declarative/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_QT5DECLARATIVE
- 	select BR2_PACKAGE_QT5BASE
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_QT5DECLARATIVE
  	select BR2_PACKAGE_QT5BASE_GUI
  	select BR2_PACKAGE_QT5BASE_EGLFS
--	depends on BR2_PACKAGE_HAS_OPENGL_EGL
-+	depends on BR2_PACKAGE_HAS_LIBEGL
- 	depends on BR2_PACKAGE_HAS_LIBGLES
+ 	depends on BR2_PACKAGE_HAS_OPENGL_EGL
+-	depends on BR2_PACKAGE_HAS_OPENGL_ES
++	depends on BR2_PACKAGE_HAS_LIBGLES
  	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
  	help
+ 	  Qt is a cross-platform application and UI framework for
 @@ -16,5 +16,5 @@ config BR2_PACKAGE_QT5DECLARATIVE
  	  http://qt-project.org
  
  comment "qt5declarative requires an OpenGL-capable backend"
--	depends on (!BR2_PACKAGE_HAS_OPENGL_EGL || !BR2_PACKAGE_HAS_LIBGLES) && \
-+	depends on (!BR2_PACKAGE_HAS_LIBEGL || !BR2_PACKAGE_HAS_LIBGLES) && \
+-	depends on (!BR2_PACKAGE_HAS_OPENGL_EGL || !BR2_PACKAGE_HAS_OPENGL_ES) && \
++	depends on (!BR2_PACKAGE_HAS_OPENGL_EGL || !BR2_PACKAGE_HAS_LIBGLES) && \
  		BR2_PACKAGE_QT5_JSCORE_AVAILABLE
 diff --git a/package/qt5/qt5graphicaleffects/Config.in b/package/qt5/qt5graphicaleffects/Config.in
-index a821b40..2747af8 100644
+index f4029e9..a821b40 100644
 --- a/package/qt5/qt5graphicaleffects/Config.in
 +++ b/package/qt5/qt5graphicaleffects/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_QT5GRAPHICALEFFECTS
- 	select BR2_PACKAGE_QT5BASE
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_QT5GRAPHICALEFFECTS
  	select BR2_PACKAGE_QT5DECLARATIVE
  	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
--	depends on BR2_PACKAGE_HAS_OPENGL_EGL
-+	depends on BR2_PACKAGE_HAS_LIBEGL
- 	depends on BR2_PACKAGE_HAS_LIBGLES
+ 	depends on BR2_PACKAGE_HAS_OPENGL_EGL
+-	depends on BR2_PACKAGE_HAS_OPENGL_ES
++	depends on BR2_PACKAGE_HAS_LIBGLES
  	help
  	  Qt is a cross-platform application and UI framework for
+ 	  developers using C++.
 @@ -14,5 +14,5 @@ config BR2_PACKAGE_QT5GRAPHICALEFFECTS
  	  http://qt-project.org
  
  comment "qt5graphicaleffects requires an OpenGL-capable backend"
--	depends on (!BR2_PACKAGE_HAS_OPENGL_EGL || !BR2_PACKAGE_HAS_LIBGLES) && \
-+	depends on (!BR2_PACKAGE_HAS_LIBEGL || !BR2_PACKAGE_HAS_LIBGLES) && \
+-	depends on (!BR2_PACKAGE_HAS_OPENGL_EGL || !BR2_PACKAGE_HAS_OPENGL_ES) && \
++	depends on (!BR2_PACKAGE_HAS_OPENGL_EGL || !BR2_PACKAGE_HAS_LIBGLES) && \
  		BR2_PACKAGE_QT5_JSCORE_AVAILABLE
 diff --git a/package/qt5/qt5multimedia/Config.in b/package/qt5/qt5multimedia/Config.in
-index 765bdc1..c00491c 100644
+index 53b7f86..765bdc1 100644
 --- a/package/qt5/qt5multimedia/Config.in
 +++ b/package/qt5/qt5multimedia/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_QT5MULTIMEDIA
- 	bool "qt5multimedia"
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_QT5MULTIMEDIA
  	select BR2_PACKAGE_QT5BASE
  	select BR2_PACKAGE_QT5DECLARATIVE
--	depends on BR2_PACKAGE_HAS_OPENGL_EGL
-+	depends on BR2_PACKAGE_HAS_LIBEGL
- 	depends on BR2_PACKAGE_HAS_LIBGLES
+ 	depends on BR2_PACKAGE_HAS_OPENGL_EGL
+-	depends on BR2_PACKAGE_HAS_OPENGL_ES
++	depends on BR2_PACKAGE_HAS_LIBGLES
  	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
  	help
+ 	  Qt is a cross-platform application and UI framework for
 @@ -14,5 +14,5 @@ config BR2_PACKAGE_QT5MULTIMEDIA
  	  http://qt-project.org
  
  comment "qt5multimedia requires an OpenGL-capable backend"
--	depends on (!BR2_PACKAGE_HAS_OPENGL_EGL || !BR2_PACKAGE_HAS_LIBGLES) && \
-+	depends on (!BR2_PACKAGE_HAS_LIBEGL || !BR2_PACKAGE_HAS_LIBGLES) && \
+-	depends on (!BR2_PACKAGE_HAS_OPENGL_EGL || !BR2_PACKAGE_HAS_OPENGL_ES) && \
++	depends on (!BR2_PACKAGE_HAS_OPENGL_EGL || !BR2_PACKAGE_HAS_LIBGLES) && \
  		BR2_PACKAGE_QT5_JSCORE_AVAILABLE
 diff --git a/package/qt5/qt5quick1/Config.in b/package/qt5/qt5quick1/Config.in
-index 1ffcc0d..30c2e79 100644
+index 1a0b8bf..1ffcc0d 100644
 --- a/package/qt5/qt5quick1/Config.in
 +++ b/package/qt5/qt5quick1/Config.in
-@@ -8,7 +8,7 @@ config BR2_PACKAGE_QT5QUICK1
- 	select BR2_PACKAGE_QT5DECLARATIVE
+@@ -9,7 +9,7 @@ config BR2_PACKAGE_QT5QUICK1
  	# This module does not support static linking
  	depends on !BR2_PREFER_STATIC_LIB
--	depends on BR2_PACKAGE_HAS_OPENGL_EGL
-+	depends on BR2_PACKAGE_HAS_LIBEGL
- 	depends on BR2_PACKAGE_HAS_LIBGLES
+ 	depends on BR2_PACKAGE_HAS_OPENGL_EGL
+-	depends on BR2_PACKAGE_HAS_OPENGL_ES
++	depends on BR2_PACKAGE_HAS_LIBGLES
  	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
  	help
+ 	  Qt is a cross-platform application and UI framework for
 @@ -21,5 +21,5 @@ config BR2_PACKAGE_QT5QUICK1
  
  comment "qt5quick1 needs a toolchain w/ dynamic library and an OpenGL-capable backend"
  	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
--	depends on !BR2_PACKAGE_HAS_OPENGL_EGL || !BR2_PACKAGE_HAS_LIBGLES || \
-+	depends on !BR2_PACKAGE_HAS_LIBEGL || !BR2_PACKAGE_HAS_LIBGLES || \
+-	depends on !BR2_PACKAGE_HAS_OPENGL_EGL || !BR2_PACKAGE_HAS_OPENGL_ES || \
++	depends on !BR2_PACKAGE_HAS_OPENGL_EGL || !BR2_PACKAGE_HAS_LIBGLES || \
  		BR2_PREFER_STATIC_LIB
 diff --git a/package/qt5/qt5quickcontrols/Config.in b/package/qt5/qt5quickcontrols/Config.in
-index 355aef0..c350a74 100644
+index e72f2a4..355aef0 100644
 --- a/package/qt5/qt5quickcontrols/Config.in
 +++ b/package/qt5/qt5quickcontrols/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_QT5QUICKCONTROLS
- 	select BR2_PACKAGE_QT5BASE_NETWORK
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_QT5QUICKCONTROLS
  	select BR2_PACKAGE_QT5DECLARATIVE
  	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
--	depends on BR2_PACKAGE_HAS_OPENGL_EGL
-+	depends on BR2_PACKAGE_HAS_LIBEGL
- 	depends on BR2_PACKAGE_HAS_LIBGLES
+ 	depends on BR2_PACKAGE_HAS_OPENGL_EGL
+-	depends on BR2_PACKAGE_HAS_OPENGL_ES
++	depends on BR2_PACKAGE_HAS_LIBGLES
  	help
  	  Qt is a cross-platform application and UI framework for
+ 	  developers using C++.
 @@ -15,5 +15,5 @@ config BR2_PACKAGE_QT5QUICKCONTROLS
  	  http://qt-project.org
  
  comment "qt5quickcontrols requires an OpenGL-capable backend"
--	depends on (!BR2_PACKAGE_HAS_OPENGL_EGL || !BR2_PACKAGE_HAS_LIBGLES) && \
-+	depends on (!BR2_PACKAGE_HAS_LIBEGL || !BR2_PACKAGE_HAS_LIBGLES) && \
+-	depends on (!BR2_PACKAGE_HAS_OPENGL_EGL || !BR2_PACKAGE_HAS_OPENGL_ES) && \
++	depends on (!BR2_PACKAGE_HAS_OPENGL_EGL || !BR2_PACKAGE_HAS_LIBGLES) && \
  		BR2_PACKAGE_QT5_JSCORE_AVAILABLE
 diff --git a/package/rpi-userland/Config.in b/package/rpi-userland/Config.in
-index 68b535b..4a82c9d 100644
+index 2303942..68b535b 100644
 --- a/package/rpi-userland/Config.in
 +++ b/package/rpi-userland/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_RPI_USERLAND
- 	depends on BR2_INSTALL_LIBSTDCPP
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_RPI_USERLAND
  	depends on BR2_LARGEFILE
  	depends on BR2_TOOLCHAIN_HAS_THREADS
--	select BR2_PACKAGE_HAS_OPENGL_EGL
-+	select BR2_PACKAGE_HAS_LIBEGL
- 	select BR2_PACKAGE_HAS_LIBGLES
+ 	select BR2_PACKAGE_HAS_OPENGL_EGL
+-	select BR2_PACKAGE_HAS_OPENGL_ES
++	select BR2_PACKAGE_HAS_LIBGLES
  	select BR2_PACKAGE_HAS_OPENVG
  	select BR2_PACKAGE_HAS_OPENMAX
-@@ -19,7 +19,7 @@ config BR2_PACKAGE_RPI_USERLAND
- 
- if BR2_PACKAGE_RPI_USERLAND
- 
--config BR2_PACKAGE_PROVIDES_OPENGL_EGL
-+config BR2_PACKAGE_PROVIDES_LIBEGL
+ 	help
+@@ -22,7 +22,7 @@ if BR2_PACKAGE_RPI_USERLAND
+ config BR2_PACKAGE_PROVIDES_OPENGL_EGL
  	default "rpi-userland"
  
- config BR2_PACKAGE_PROVIDES_LIBGLES
+-config BR2_PACKAGE_PROVIDES_OPENGL_ES
++config BR2_PACKAGE_PROVIDES_LIBGLES
+ 	default "rpi-userland"
+ 
+ config BR2_PACKAGE_PROVIDES_OPENVG
 diff --git a/package/sunxi-mali/Config.in b/package/sunxi-mali/Config.in
-index c47b6a3..c95ebbb 100644
+index 9f188a3..c47b6a3 100644
 --- a/package/sunxi-mali/Config.in
 +++ b/package/sunxi-mali/Config.in
-@@ -1,6 +1,6 @@
+@@ -1,7 +1,7 @@
  config BR2_PACKAGE_SUNXI_MALI
  	bool "sunxi-mali"
--	select BR2_PACKAGE_HAS_OPENGL_EGL
-+	select BR2_PACKAGE_HAS_LIBEGL
- 	select BR2_PACKAGE_HAS_LIBGLES
+ 	select BR2_PACKAGE_HAS_OPENGL_EGL
+-	select BR2_PACKAGE_HAS_OPENGL_ES
++	select BR2_PACKAGE_HAS_LIBGLES
  	# The egl/gles mali libraries are provided as a git submodule of the
  	# sunxi-mali repo and are downloaded by the sunxi-mali-prop package.
-@@ -18,7 +18,7 @@ config BR2_PACKAGE_SUNXI_MALI
- 
- if BR2_PACKAGE_SUNXI_MALI
- 
--config BR2_PACKAGE_PROVIDES_OPENGL_EGL
-+config BR2_PACKAGE_PROVIDES_LIBEGL
+ 	select BR2_PACKAGE_SUNXI_MALI_PROP
+@@ -21,7 +21,7 @@ if BR2_PACKAGE_SUNXI_MALI
+ config BR2_PACKAGE_PROVIDES_OPENGL_EGL
  	default "sunxi-mali"
  
- config BR2_PACKAGE_PROVIDES_LIBGLES
+-config BR2_PACKAGE_PROVIDES_OPENGL_ES
++config BR2_PACKAGE_PROVIDES_LIBGLES
+ 	default "sunxi-mali"
+ 
+ config BR2_PACKAGE_SUNXI_MALI_DBG
 diff --git a/package/ti-gfx/Config.in b/package/ti-gfx/Config.in
-index 2bdc972..3e8648e 100644
+index f455f4c..2bdc972 100644
 --- a/package/ti-gfx/Config.in
 +++ b/package/ti-gfx/Config.in
-@@ -1,6 +1,6 @@
+@@ -1,7 +1,7 @@
  config BR2_PACKAGE_TI_GFX
  	bool "ti-gfx"
--	select BR2_PACKAGE_HAS_OPENGL_EGL
-+	select BR2_PACKAGE_HAS_LIBEGL
- 	select BR2_PACKAGE_HAS_LIBGLES
+ 	select BR2_PACKAGE_HAS_OPENGL_EGL
+-	select BR2_PACKAGE_HAS_OPENGL_ES
++	select BR2_PACKAGE_HAS_LIBGLES
  	select BR2_PACKAGE_HAS_POWERVR
  	depends on BR2_LINUX_KERNEL && BR2_TOOLCHAIN_USES_GLIBC && BR2_arm
-@@ -11,7 +11,7 @@ config BR2_PACKAGE_TI_GFX
- 
- if BR2_PACKAGE_TI_GFX
- 
--config BR2_PACKAGE_PROVIDES_OPENGL_EGL
-+config BR2_PACKAGE_PROVIDES_LIBEGL
+ 	help
+@@ -14,7 +14,7 @@ if BR2_PACKAGE_TI_GFX
+ config BR2_PACKAGE_PROVIDES_OPENGL_EGL
  	default "ti-gfx"
  
- config BR2_PACKAGE_PROVIDES_LIBGLES
+-config BR2_PACKAGE_PROVIDES_OPENGL_ES
++config BR2_PACKAGE_PROVIDES_LIBGLES
+ 	default "ti-gfx"
+ 
+ config BR2_PACKAGE_PROVIDES_POWERVR
 -- 
 1.8.3.2
