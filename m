@@ -1,120 +1,147 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 10 Mar 2014 21:27:35 +0100
-Subject: [Buildroot] [PATCH 06/20] package/lua: rename config options
+Date: Mon, 10 Mar 2014 21:27:36 +0100
+Subject: [Buildroot] [PATCH 07/20] manual: add virtual package tutorial
 In-Reply-To: <cover.1394482605.git.yann.morin.1998@free.fr>
 References: <cover.1394482605.git.yann.morin.1998@free.fr>
-Message-ID: <ba61222b95aea0b8ea7946ec981f1fdd464bf0c1.1394482605.git.yann.morin.1998@free.fr>
+Message-ID: <839a0fbdeb7525d7a261dfe90d8d6dc8f47c63e6.1394482605.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+From: "eric.le.bihan.dev@free.fr" <eric.le.bihan.dev@free.fr>
 
-Package's options should be named after the package.
+The manual now features a new section with instructions about how to add a
+virtual package.
 
-Lua is an interpreter, but the package is named 'lua'. So we want to
-name the config option with '_LUA_', not with '_LUA_INTERPRETER_'
-
-Besides, naming them with '_LUA_INTERPRETER_' might be confusing, since
-there is a package named 'luainterpreter'.
-
-Since the renamed options are part of a choice, we can't use the legacy
-options to select the new ones. So we instead instruct the user to go
-select the appropriate option in the choice.
-
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+[yann.morin.1998 at free.fr: move down statement about provider's .mk]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Francois Perrad <fperrad@gmail.com>
 Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 ---
- Config.in.legacy      | 21 +++++++++++++++++++++
- package/lua/Config.in | 10 +++++-----
- package/lua/lua.mk    |  4 ++--
- 3 files changed, 28 insertions(+), 7 deletions(-)
+ docs/manual/adding-packages-virtual.txt | 99 +++++++++++++++++++++++++++++++++
+ docs/manual/adding-packages.txt         |  2 +
+ 2 files changed, 101 insertions(+)
+ create mode 100644 docs/manual/adding-packages-virtual.txt
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index afcd3b1..e536ae0 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -101,6 +101,27 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2014.05"
- 
-+config BR2_PACKAGE_LUA_INTERPRETER_EDITING_NONE
-+	bool "Lua command-line editing none has been renamed"
-+	help
-+	  The BR2_PACKAGE_LUA_INTERPRETER_EDITING_NONE option has been
-+	  renamed to BR2_PACKAGE_LUA_EDITING_NONE. You will have to select
-+	  it in the corresponding choice.
+diff --git a/docs/manual/adding-packages-virtual.txt b/docs/manual/adding-packages-virtual.txt
+new file mode 100644
+index 0000000..76f5794
+--- /dev/null
++++ b/docs/manual/adding-packages-virtual.txt
+@@ -0,0 +1,99 @@
++// -*- mode:doc; -*-
++// vim: set syntax=asciidoc:
 +
-+config BR2_PACKAGE_LUA_INTERPRETER_READLINE
-+	bool "Lua command-line editing using readline has been renamed"
-+	help
-+	  The BR2_PACKAGE_LUA_INTERPRETER_READLINE option has been
-+	  renamed to BR2_PACKAGE_LUA_READLINE. You will have to select
-+	  it in the corresponding choice.
++[[virtual-package-tutorial]]
 +
-+config BR2_PACKAGE_LUA_INTERPRETER_LINENOISE
-+	bool "Lua command-line editing using linenoise has been renamed"
-+	help
-+	  The BR2_PACKAGE_LUA_INTERPRETER_LINENOISE option has been
-+	  renamed to BR2_PACKAGE_LUA_LINENOISE. You will have to select
-+	  it in the corresponding choice.
++Virtual package tutorial
++~~~~~~~~~~~~~~~~~~~~~~~~
 +
- config BR2_KERNEL_HEADERS_SNAP
- 	bool "Local Linux snapshot support removed"
- 	select BR2_LEGACY
-diff --git a/package/lua/Config.in b/package/lua/Config.in
-index 2f1b25b..0e31858 100644
---- a/package/lua/Config.in
-+++ b/package/lua/Config.in
-@@ -30,22 +30,22 @@ config BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION
- 	default "5.2"	if BR2_PACKAGE_LUA_5_2
++In Buildroot, a virtual package is a package whose functionalities are
++provided by one or more packages, referred to as 'providers'. The virtual
++package management is an extensible mechanism allowing the user to choose
++the provider used in the rootfs.
++
++For example, 'OpenGL ES' is an API for 2D and 3D graphics on embedded systems.
++The implementation of this API is different for the 'Allwinner Tech Sunxi' and
++the 'Texas Instruments OMAP35xx' plaftorms. So +libgles+ will be a virtual
++package and +sunxi-mali+ and +ti-gfx+ will be the providers.
++
++In the following example, we will explain how to add a new virtual package
++('something-virtual') and a provider for it ('some-provider').
++
++First, let's create the virtual package.
++
++Virtual package's +Config.in+ file
++^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++
++The +Config.in+ file of virtual package 'something-virtual' should contain:
++
++---------------------------
++01: config BR2_PACKAGE_HAS_SOMETHING_VIRTUAL
++02:	bool
++03:
++04: config BR2_PACKAGE_PROVIDES_SOMETHING_VIRTUAL
++05:	depends on BR2_PACKAGE_HAS_SOMETHING_VIRTUAL
++06:	string
++---------------------------
++
++In this file, we declare two options, +BR2_PACKAGE_HAS_SOMETHING_VIRTUAL+ and
+++BR2_PACKAGE_PROVIDES_SOMETHING_VIRTUAL+, whose values will be used by the
++providers.
++
++Virtual package's +*.mk+ file
++^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++
++The Makefile +package/something-virtual/something-virtual.mk+ should contain:
++
++---------------------------
++01: ################################################################################
++02: #
++03: # something-virtual
++04: #
++05: ################################################################################
++06:
++07: SOMETHING_VIRTUAL_SOURCE =
++08: SOMETHING_VIRTUAL_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_SOMETHING_VIRTUAL))
++09:
++10: ifeq ($(BR2_PACKAGE_HAS_SOMETHING_VIRTUAL),y)
++11: ifeq ($(SOMETHING_VIRTUAL_DEPENDENCIES),)
++12: $(error No something-virtual implementation selected. Configuration error.)
++13: endif
++14: endif
++15:
++16: $(eval $(generic-package))
++---------------------------
++
++The Makefile is quite small as it will only check if a provider for the
++virtual package has been selected.
++
++Provider's +Config.in+ file
++^^^^^^^^^^^^^^^^^^^^^^^^^^^
++
++When adding a package as a provider, only the +Config.in+ file requires some
++modifications. The +*.mk+ file should follow the Buildroot infrastructure with
++no change at all.
++
++The +Config.in+ file of the package 'some-provider', which provides the
++functionalities of 'something-virtual', should contain:
++
++---------------------------
++01: config BR2_PACKAGE_SOME_PROVIDER
++02:	bool "some-provider"
++03:	select BR2_PACKAGE_HAS_SOMETHING_VIRTUAL
++04:	help
++05:	  This is a comment that explains what some-provider is.
++06:
++07:	  http://foosoftware.org/some-provider/
++08:
++09: if BR2_PACKAGE_SOME_PROVIDER
++10: config BR2_PACKAGE_PROVIDES_SOMETHING_VIRTUAL
++11:	default "some-provider"
++12: endif
++---------------------------
++
++On line 3, we select +BR2_PACKAGE_HAS_SOMETHING_VIRTUAL+, and on line 11, we
++set the value of +BR2_PACKAGE_PROVIDES_SOMETHING_VIRTUAL+ to the name of the
++provider, but only if it is selected.
++
++Of course, do not forget to add the proper build and runtime dependencies for
++this package!
+diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
+index 745e33a..dbba930 100644
+--- a/docs/manual/adding-packages.txt
++++ b/docs/manual/adding-packages.txt
+@@ -24,6 +24,8 @@ include::adding-packages-luarocks.txt[]
  
- choice
--	prompt "Lua Interpreter command-line editing"
--	default BR2_PACKAGE_LUA_INTERPRETER_EDITING_NONE
-+	prompt "Lua command-line editing"
-+	default BR2_PACKAGE_LUA_EDITING_NONE
+ include::adding-packages-perl.txt[]
  
--config BR2_PACKAGE_LUA_INTERPRETER_EDITING_NONE
-+config BR2_PACKAGE_LUA_EDITING_NONE
- 	bool "none"
- 	help
- 	  None.
++include::adding-packages-virtual.txt[]
++
+ include::adding-packages-hooks.txt[]
  
--config BR2_PACKAGE_LUA_INTERPRETER_READLINE
-+config BR2_PACKAGE_LUA_READLINE
- 	bool "readline support"
- 	select BR2_PACKAGE_READLINE
- 	select BR2_PACKAGE_NCURSES
- 	help
- 	  Enables command-line editing in the Lua interpreter.
- 
--config BR2_PACKAGE_LUA_INTERPRETER_LINENOISE
-+config BR2_PACKAGE_LUA_LINENOISE
- 	bool "linenoise support"
- 	select BR2_PACKAGE_LINENOISE
- 	help
-diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-index bf68e65..bc8799a 100644
---- a/package/lua/lua.mk
-+++ b/package/lua/lua.mk
-@@ -31,12 +31,12 @@ else
- 	LUA_MYLIBS += -ldl
- endif
- 
--ifeq ($(BR2_PACKAGE_LUA_INTERPRETER_READLINE),y)
-+ifeq ($(BR2_PACKAGE_LUA_READLINE),y)
- 	LUA_DEPENDENCIES = readline ncurses
- 	LUA_MYLIBS += -lreadline -lhistory -lncurses
- 	LUA_CFLAGS += -DLUA_USE_READLINE
- else
--ifeq ($(BR2_PACKAGE_LUA_INTERPRETER_LINENOISE),y)
-+ifeq ($(BR2_PACKAGE_LUA_LINENOISE),y)
- 	LUA_DEPENDENCIES = linenoise
- 	LUA_MYLIBS += -llinenoise
- 	LUA_CFLAGS += -DLUA_USE_LINENOISE
+ include::adding-packages-gettext.txt[]
 -- 
 1.8.3.2
