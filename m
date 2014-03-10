@@ -1,52 +1,37 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 10 Mar 2014 14:23:50 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-03-07
-In-Reply-To: <87y50is15m.fsf@dell.be.48ers.dk>
-References: <20140308073007.50AAF1016F2@stock.ovh.net>	<20140308110454.GA3254@free.fr>
- <20140308150515.467d5568@skate>	<531D5F01.8080106@mind.be>
- <87y50is15m.fsf@dell.be.48ers.dk>
-Message-ID: <531DBCE6.9030007@mind.be>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Mon, 10 Mar 2014 14:48:31 +0100
+Subject: [Buildroot] [PATCH] luajit: needs for 32bit archictectures a 32bit
+	host gcc
+Message-ID: <1394459311-3028-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/03/14 13:12, Peter Korsgaard wrote:
->>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
-> 
-> Hi,
-> 
->  >  Maybe the timeout can be made to depend on the number of packages
->  > selected in the .config? Like 5 minutes per package (and a minimum of
->  > 1 hour)?
-> 
->  >  Or you could add an hour to the timeout if Webkit is selected...
-> 
-> Does the build often get stuck? I don't recall seing it more than a few
-> times on "my" builders. In my (simplistic) autobuilder script I simply
-> do:
-> 
-> # ensure machine isn't DOS'ed
-> ulimit -S -t 4000 -v 2000000
-> 
-> E.G. limit memory and cpu time
-> 
+For 32 bit archictectures the luajit package needs a host compiler
+able to generate 32 bit code using the "-m32" option so check if that
+option is supported.
 
- The build doesn't really get stuck (at least, as far as we can see). It
-just times out before it finishes. The cases I've looked at all end in
-the middle of a Webkit build, and the webkit package is started something
-like half an hour before the build is killed. Half an hour for webkit is
-not exaggerated for a not-too-fast machine.
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Fran?ois Perrad <francois.perrad@gadz.org>
+---
+ package/luajit/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
- Regards,
- Arnout
-
+diff --git a/package/luajit/Config.in b/package/luajit/Config.in
+index 9c4ecc3..dd93609 100644
+--- a/package/luajit/Config.in
++++ b/package/luajit/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_LUAJIT
+ 	# Luajit is only available for some target architectures, and
+ 	# has some complexity wrt 32/64. See luajit.mk for details.
+ 	depends on BR2_i386 || (BR2_x86_64 && BR2_HOSTARCH='x86_64') || BR2_powerpc || BR2_arm || BR2_armeb
++	select BR2_HOSTARCH_NEEDS_IA32_COMPILER if !BR2_ARCH_IS_64
+ 	help
+ 	  LuaJIT implements the full set of language features defined
+ 	  by Lua 5.1. The virtual machine (VM) is API- and
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.8.3.2
