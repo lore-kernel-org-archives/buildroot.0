@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 10 Mar 2014 21:27:33 +0100
-Subject: [Buildroot] [PATCH 04/20] package/libopenvg: rename the _HAS and
-	_PROVIDES variables
+Date: Mon, 10 Mar 2014 21:27:35 +0100
+Subject: [Buildroot] [PATCH 06/20] package/lua: rename config options
 In-Reply-To: <cover.1394482605.git.yann.morin.1998@free.fr>
 References: <cover.1394482605.git.yann.morin.1998@free.fr>
-Message-ID: <c858f23604349c75cf3657dbd960a220a1593e01.1394482605.git.yann.morin.1998@free.fr>
+Message-ID: <ba61222b95aea0b8ea7946ec981f1fdd464bf0c1.1394482605.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,91 +12,109 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-The basic rule for a package is to have its options named
-after the package name. There is no reason this should not
-also be the case for virtual packages.
+Package's options should be named after the package.
 
-Besides, renaming the package will allow us to switch libopenvg to use
-the soon-to-be-introduced virtual-package infrastructure.
+Lua is an interpreter, but the package is named 'lua'. So we want to
+name the config option with '_LUA_', not with '_LUA_INTERPRETER_'
+
+Besides, naming them with '_LUA_INTERPRETER_' might be confusing, since
+there is a package named 'luainterpreter'.
+
+Since the renamed options are part of a choice, we can't use the legacy
+options to select the new ones. So we instead instruct the user to go
+select the appropriate option in the choice.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: Mike Zick <minimod@morethan.org>
+Cc: Francois Perrad <fperrad@gmail.com>
 Reviewed-by: Samuel Martin <s.martin49@gmail.com>
-Cc: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 ---
- package/cairo/cairo.mk                | 2 +-
- package/opengl/libopenvg/Config.in    | 6 +++---
- package/opengl/libopenvg/libopenvg.mk | 4 ++--
- package/rpi-userland/Config.in        | 4 ++--
- 4 files changed, 8 insertions(+), 8 deletions(-)
+ Config.in.legacy      | 21 +++++++++++++++++++++
+ package/lua/Config.in | 10 +++++-----
+ package/lua/lua.mk    |  4 ++--
+ 3 files changed, 28 insertions(+), 7 deletions(-)
 
-diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
-index ee58aff..43238ca 100644
---- a/package/cairo/cairo.mk
-+++ b/package/cairo/cairo.mk
-@@ -61,7 +61,7 @@ else
- 	CAIRO_CONF_OPT += --disable-glesv2
- endif
+diff --git a/Config.in.legacy b/Config.in.legacy
+index afcd3b1..e536ae0 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -101,6 +101,27 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2014.05"
  
--ifeq ($(BR2_PACKAGE_HAS_OPENVG),y)
-+ifeq ($(BR2_PACKAGE_HAS_LIBOPENVG),y)
- 	CAIRO_CONF_OPT += --enable-vg
- 	CAIRO_DEPENDENCIES += libopenvg
- else
-diff --git a/package/opengl/libopenvg/Config.in b/package/opengl/libopenvg/Config.in
-index 9d31525..53cde6a 100644
---- a/package/opengl/libopenvg/Config.in
-+++ b/package/opengl/libopenvg/Config.in
-@@ -1,6 +1,6 @@
--config BR2_PACKAGE_HAS_OPENVG
-+config BR2_PACKAGE_HAS_LIBOPENVG
- 	bool
++config BR2_PACKAGE_LUA_INTERPRETER_EDITING_NONE
++	bool "Lua command-line editing none has been renamed"
++	help
++	  The BR2_PACKAGE_LUA_INTERPRETER_EDITING_NONE option has been
++	  renamed to BR2_PACKAGE_LUA_EDITING_NONE. You will have to select
++	  it in the corresponding choice.
++
++config BR2_PACKAGE_LUA_INTERPRETER_READLINE
++	bool "Lua command-line editing using readline has been renamed"
++	help
++	  The BR2_PACKAGE_LUA_INTERPRETER_READLINE option has been
++	  renamed to BR2_PACKAGE_LUA_READLINE. You will have to select
++	  it in the corresponding choice.
++
++config BR2_PACKAGE_LUA_INTERPRETER_LINENOISE
++	bool "Lua command-line editing using linenoise has been renamed"
++	help
++	  The BR2_PACKAGE_LUA_INTERPRETER_LINENOISE option has been
++	  renamed to BR2_PACKAGE_LUA_LINENOISE. You will have to select
++	  it in the corresponding choice.
++
+ config BR2_KERNEL_HEADERS_SNAP
+ 	bool "Local Linux snapshot support removed"
+ 	select BR2_LEGACY
+diff --git a/package/lua/Config.in b/package/lua/Config.in
+index 2f1b25b..0e31858 100644
+--- a/package/lua/Config.in
++++ b/package/lua/Config.in
+@@ -30,22 +30,22 @@ config BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION
+ 	default "5.2"	if BR2_PACKAGE_LUA_5_2
  
--config BR2_PACKAGE_PROVIDES_OPENVG
--	depends on BR2_PACKAGE_HAS_OPENVG
-+config BR2_PACKAGE_PROVIDES_LIBOPENVG
-+	depends on BR2_PACKAGE_HAS_LIBOPENVG
- 	string
-diff --git a/package/opengl/libopenvg/libopenvg.mk b/package/opengl/libopenvg/libopenvg.mk
-index f81db5e..1c6f929 100644
---- a/package/opengl/libopenvg/libopenvg.mk
-+++ b/package/opengl/libopenvg/libopenvg.mk
-@@ -5,9 +5,9 @@
- ################################################################################
+ choice
+-	prompt "Lua Interpreter command-line editing"
+-	default BR2_PACKAGE_LUA_INTERPRETER_EDITING_NONE
++	prompt "Lua command-line editing"
++	default BR2_PACKAGE_LUA_EDITING_NONE
  
- LIBOPENVG_SOURCE =
--LIBOPENVG_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_OPENVG))
-+LIBOPENVG_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_LIBOPENVG))
- 
--ifeq ($(BR2_PACKAGE_HAS_OPENVG),y)
-+ifeq ($(BR2_PACKAGE_HAS_LIBOPENVG),y)
- ifeq ($(LIBOPENVG_DEPENDENCIES),)
- $(error No libOpenVG implementation selected. Configuration error.)
- endif
-diff --git a/package/rpi-userland/Config.in b/package/rpi-userland/Config.in
-index 68ac1f6..aeee5e1 100644
---- a/package/rpi-userland/Config.in
-+++ b/package/rpi-userland/Config.in
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_RPI_USERLAND
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_HAS_LIBEGL
- 	select BR2_PACKAGE_HAS_LIBGLES
--	select BR2_PACKAGE_HAS_OPENVG
-+	select BR2_PACKAGE_HAS_LIBOPENVG
- 	select BR2_PACKAGE_HAS_LIBOPENMAX
+-config BR2_PACKAGE_LUA_INTERPRETER_EDITING_NONE
++config BR2_PACKAGE_LUA_EDITING_NONE
+ 	bool "none"
  	help
- 	  Raspberry Pi Userland contains the necessary library to use the
-@@ -25,7 +25,7 @@ config BR2_PACKAGE_PROVIDES_LIBEGL
- config BR2_PACKAGE_PROVIDES_LIBGLES
- 	default "rpi-userland"
+ 	  None.
  
--config BR2_PACKAGE_PROVIDES_OPENVG
-+config BR2_PACKAGE_PROVIDES_LIBOPENVG
- 	default "rpi-userland"
+-config BR2_PACKAGE_LUA_INTERPRETER_READLINE
++config BR2_PACKAGE_LUA_READLINE
+ 	bool "readline support"
+ 	select BR2_PACKAGE_READLINE
+ 	select BR2_PACKAGE_NCURSES
+ 	help
+ 	  Enables command-line editing in the Lua interpreter.
  
- config BR2_PACKAGE_PROVIDES_LIBOPENMAX
+-config BR2_PACKAGE_LUA_INTERPRETER_LINENOISE
++config BR2_PACKAGE_LUA_LINENOISE
+ 	bool "linenoise support"
+ 	select BR2_PACKAGE_LINENOISE
+ 	help
+diff --git a/package/lua/lua.mk b/package/lua/lua.mk
+index bf68e65..bc8799a 100644
+--- a/package/lua/lua.mk
++++ b/package/lua/lua.mk
+@@ -31,12 +31,12 @@ else
+ 	LUA_MYLIBS += -ldl
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LUA_INTERPRETER_READLINE),y)
++ifeq ($(BR2_PACKAGE_LUA_READLINE),y)
+ 	LUA_DEPENDENCIES = readline ncurses
+ 	LUA_MYLIBS += -lreadline -lhistory -lncurses
+ 	LUA_CFLAGS += -DLUA_USE_READLINE
+ else
+-ifeq ($(BR2_PACKAGE_LUA_INTERPRETER_LINENOISE),y)
++ifeq ($(BR2_PACKAGE_LUA_LINENOISE),y)
+ 	LUA_DEPENDENCIES = linenoise
+ 	LUA_MYLIBS += -llinenoise
+ 	LUA_CFLAGS += -DLUA_USE_LINENOISE
 -- 
 1.8.3.2
