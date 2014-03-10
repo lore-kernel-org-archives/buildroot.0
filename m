@@ -1,37 +1,174 @@
-From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Mon, 10 Mar 2014 09:34:21 -0500
-Subject: [Buildroot] [PATCH 3/3] rsyslog: bump to version 6.3.8
-In-Reply-To: <1394459809-22174-3-git-send-email-clshotwe@rockwellcollins.com>
-References: <1394459809-22174-1-git-send-email-clshotwe@rockwellcollins.com>
- <1394459809-22174-3-git-send-email-clshotwe@rockwellcollins.com>
-Message-ID: <OF14BFD3A2.E76317EC-ON86257C97.004F3333-86257C97.00500AF5@rockwellcollins.com>
+From: Alvaro Gamez <alvaro.gamez@hazent.com>
+Date: Mon, 10 Mar 2014 16:30:20 +0100
+Subject: [Buildroot] Raspaudio : how to use buildroot as a git submodule
+In-Reply-To: <1612641374.11268842.1394442036999.JavaMail.root@openwide.fr>
+References: <1436673405.11266711.1394440215222.JavaMail.root@openwide.fr>
+ <1612641374.11268842.1394442036999.JavaMail.root@openwide.fr>
+Message-ID: <CAM+bi4vYCeJc76ax8p1=Ldy-3ptinN7QT+yFZkYh0JpOghQ2tw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Clayton,
+Hi, Jeremy
 
-Clayton Shotwell <clshotwe@rockwellcollins.com> wrote on 03/10/2014 
-08:56:49 AM:
+Personally, I see potential in this.
 
-> 
-################################################################################
-> 
-> -RSYSLOG_VERSION = 5.8.0
-> +RSYSLOG_VERSION = 6.3.8
->  RSYSLOG_SITE = http://rsyslog.com/files/download/rsyslog/
-> -RSYSLOG_DEPENDENCIES = zlib
-> +RSYSLOG_DEPENDENCIES = zlib libestr libee
-> 
->  # Build after Busybox
->  ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+Have you thought of a way to include custom packages outside the buildroot
+hierarchy?
 
-Checking the website for rsyslog it appears that the latest version is 
-7.6.0. Is there a reason to not bump to this version? Also could you add 
-the license information since there doesn't appear to be any for this 
-package?
+Just as an example to illustrate the question,  in the case of NOOBS
+(https://github.com/raspberrypi/noobs), maybe the NOOBS application
+(
+https://github.com/raspberrypi/noobs/blob/master/buildroot/package/recovery/recovery.mk
+)
+itself isn't well suited for buildroot upstream for it's very architecure
+dependent.
 
-Thanks,
--Ryan
+So, have you thought of some way to place this directory outside buildroots
+hierarchy but
+let it be managed by buildroot? That, alongside your scripts and makefiles
+would allow
+to create root file systems with custom packages without "polluting" the
+buildroot
+directory/repository.
+
+Kind regards
+
+
+
+2014-03-10 10:00 GMT+01:00 Jeremy Rosen <jeremy.rosen@openwide.fr>:
+
+> Hello everybody
+>
+> For some time I have been looking into how to integrate buildroot in a
+> project
+> where buildroot would be the engine to provide the filesystem building
+> infrastructure but where the main repository would not be a clone of the
+> buildroot project. The idea is to try to separate cleanly what is meant to
+> go upstream from what is not and still be able to use git to properly save
+> the data that is closely linked to the project
+>
+> I have now reached a point where things "simply works" and I can show my
+> work
+> to the bigger buildroot community.
+>
+>
+> I will first introduce the project itself, then i'll discuss how to create
+> your own project based on that infrastructure and then I'll discuss what
+> could be upstreamed from the project and how
+>
+>
+> So, with no further delay, let's introduce Raspaudio.
+>
+> Raspaudio is a small project that builds a filesystem for the raspberry pi
+> which allows you to easily stream audio content from the pulseaudio server
+> on your desktop to the audio output of the raspberry pi. Compile the
+> filesystem, plug the raspberry, configure the PC, you're done.
+>
+> Details on these steps can be found at
+>
+> http://openwide-ingenierie.github.io/raspaudio/
+>
+> I won't go further than that in the project, the idea is that this is a
+> "finished" buildroot project. you clone it, you compile it, you install
+> it.
+>
+>    $ git clone --recursive git at github.com:
+> Openwide-Ingenierie/raspaudio.git
+>    $ cd raspaudio
+>    $ make
+>
+>
+> HOW TO REUSE THE RASPAUDIO INFRASTRUCTURE
+>
+> The whole point of raspaudio is to test the buildroot infrastructure and
+> provide an example that is reusable for other projects. If you want to
+> make a similar project, here is how to do it
+>
+>   $ mkdir new_project
+>   $ cd new_project
+>   $ git init
+>   $ git submodule add git://git.buildroot.net/buildroot buildroot
+>   $ wget
+> https://raw.github.com/Openwide-Ingenierie/raspaudio/master/Makefile
+>   $ touch Config.in
+>   $ touch external.mk
+>   $ echo "output/" > .gitignore
+>   $ echo "dl/" >> .gitignore
+>
+> Change the field PROJECT_NAME in the Makefile to the name of your project
+>
+>   $ git add Makefile external.mk Config.in .gitignore
+>   $ git commit -m"Project infrastructure"
+>
+> You can now configure your project in the usual buildroot way. For example
+> :
+>
+>   $ make raspberrypi_defconfig
+>   $ make menuconfig
+>
+> A file named $(PROJECT_NAME)_defconfig will appear. Add this project to git
+> You can now work with your project in the usual way and all the important
+> information will be saved in git.
+>
+> I tried to make the whole thing as close to the buildroot way as possible,
+> all Makefile targets should work properly and most infrasturcture variables
+> (DL_DIR, BR2_EXTERNAL...) are set for you. This is here to help you quickly
+> have the infrastructure in place to deploy your own projects based on
+> buildroot.
+>
+>
+> WHERE TO GO FROM HERE
+>
+> The main thing I have noticed is that I have been developing post-build
+> scripts
+> that are completely generic and could easily be reused. It would be nice to
+> upstream these scripts (in particular, the script that automatically adds
+> the
+> public key of the user doing the build to the authorized keys on the
+> target)
+>
+> I am also developing an external Config.in that allows generating
+> /etc/network/interfaces via menuconfig. This would also be nice to
+> upstream,
+> maybe in a "contrib" subdirectory.
+>
+> Next, the Makefile of raspaudio (which is the core of the
+> reusable infrastructure) could also be kept by buildroot. This would bring
+> all the good sides of upstreaming (up to date with buildroot, not lost
+> in a third party website etc...) I'd like that to happen but I can
+> understand
+> if this is not the direction the project wants to go.
+>
+> Last but not least, I am not a Makefile expert. I did things the way I was
+> able to, but I'm sure there are better ways to do that. So feel free to
+> suggest a better way to integrate stuff
+>
+>
+>     Regards
+>
+>     J?r?my Rosen
+>
+> fight key loggers : write some perl using vim
+>
+>
+> Open Wide Ingenierie
+>
+> 23, rue Daviel
+> 75013 Paris - France
+> www.openwide.fr
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+
+
+-- 
+?lvaro G?mez Machado
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140310/10050c74/attachment.html>
