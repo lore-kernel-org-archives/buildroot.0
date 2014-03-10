@@ -1,46 +1,54 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 10 Mar 2014 21:27:42 +0100
-Subject: [Buildroot] [PATCH 13/20] package/libopenmax: convert to the
-	virtual-package infrastructure
-In-Reply-To: <cover.1394482605.git.yann.morin.1998@free.fr>
-References: <cover.1394482605.git.yann.morin.1998@free.fr>
-Message-ID: <ffec4685531b1afe425a946625351d3200b6eaaf.1394482605.git.yann.morin.1998@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 10 Mar 2014 17:26:26 -0300
+Subject: [Buildroot] [PATCH 06/14] ipsec-tools: bump to version 0.8.2
+In-Reply-To: <1394483194-17592-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1394483194-17592-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1394483194-17592-6-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Also rename patch according to policy and add homepage.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: Mike Zick <minimod@morethan.org>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/opengl/libopenmax/libopenmax.mk | 11 +----------
- 1 file changed, 1 insertion(+), 10 deletions(-)
+ package/ipsec-tools/Config.in                                           | 2 ++
+ ...psec-tools-susv3-legacy.patch => ipsec-tools-001-susv3-legacy.patch} | 0
+ package/ipsec-tools/ipsec-tools.mk                                      | 2 +-
+ 3 files changed, 3 insertions(+), 1 deletion(-)
+ rename package/ipsec-tools/{ipsec-tools-susv3-legacy.patch => ipsec-tools-001-susv3-legacy.patch} (100%)
 
-diff --git a/package/opengl/libopenmax/libopenmax.mk b/package/opengl/libopenmax/libopenmax.mk
-index 6cdeacd..bc2e7f8 100644
---- a/package/opengl/libopenmax/libopenmax.mk
-+++ b/package/opengl/libopenmax/libopenmax.mk
-@@ -4,13 +4,4 @@
- #
+diff --git a/package/ipsec-tools/Config.in b/package/ipsec-tools/Config.in
+index 06a5a56..57fa5d4 100644
+--- a/package/ipsec-tools/Config.in
++++ b/package/ipsec-tools/Config.in
+@@ -5,6 +5,8 @@ config BR2_PACKAGE_IPSEC_TOOLS
+ 	help
+ 	  This package is required to support IPSec for Linux 2.6+
+ 
++	  http://ipsec-tools.sourceforge.net/
++
+ if BR2_PACKAGE_IPSEC_TOOLS
+ 
+ config BR2_PACKAGE_IPSEC_TOOLS_ADMINPORT
+diff --git a/package/ipsec-tools/ipsec-tools-susv3-legacy.patch b/package/ipsec-tools/ipsec-tools-001-susv3-legacy.patch
+similarity index 100%
+rename from package/ipsec-tools/ipsec-tools-susv3-legacy.patch
+rename to package/ipsec-tools/ipsec-tools-001-susv3-legacy.patch
+diff --git a/package/ipsec-tools/ipsec-tools.mk b/package/ipsec-tools/ipsec-tools.mk
+index 44c3380..870588d 100644
+--- a/package/ipsec-tools/ipsec-tools.mk
++++ b/package/ipsec-tools/ipsec-tools.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBOPENMAX_SOURCE =
--LIBOPENMAX_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_LIBOPENMAX))
--
--ifeq ($(BR2_PACKAGE_HAS_LIBOPENMAX),y)
--ifeq ($(LIBOPENMAX_DEPENDENCIES),)
--$(error No libopenmax implementation selected. Configuration error.)
--endif
--endif
--
--$(eval $(generic-package))
-+$(eval $(virtual-package))
+ IPSEC_TOOLS_VERSION_MAJOR = 0.8
+-IPSEC_TOOLS_VERSION = $(IPSEC_TOOLS_VERSION_MAJOR).0
++IPSEC_TOOLS_VERSION = $(IPSEC_TOOLS_VERSION_MAJOR).2
+ IPSEC_TOOLS_SOURCE = ipsec-tools-$(IPSEC_TOOLS_VERSION).tar.bz2
+ IPSEC_TOOLS_SITE = http://ftp.sunet.se/pub/NetBSD/misc/ipsec-tools/$(IPSEC_TOOLS_VERSION_MAJOR)/
+ IPSEC_TOOLS_INSTALL_STAGING = YES
 -- 
 1.8.3.2
