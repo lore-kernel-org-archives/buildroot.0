@@ -1,37 +1,65 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Mon, 10 Mar 2014 14:48:31 +0100
-Subject: [Buildroot] [PATCH] luajit: needs for 32bit archictectures a 32bit
-	host gcc
-Message-ID: <1394459311-3028-1-git-send-email-fabio.porcedda@gmail.com>
+From: Clayton Shotwell <clshotwe@rockwellcollins.com>
+Date: Mon, 10 Mar 2014 08:56:47 -0500
+Subject: [Buildroot] [PATCH 1/3] libestr: new package
+Message-ID: <1394459809-22174-1-git-send-email-clshotwe@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For 32 bit archictectures the luajit package needs a host compiler
-able to generate 32 bit code using the "-m32" option so check if that
-option is supported.
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Fran?ois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
 ---
- package/luajit/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/Config.in          |    1 +
+ package/libestr/Config.in  |    6 ++++++
+ package/libestr/libestr.mk |   13 +++++++++++++
+ 3 files changed, 20 insertions(+), 0 deletions(-)
+ create mode 100644 package/libestr/Config.in
+ create mode 100644 package/libestr/libestr.mk
 
-diff --git a/package/luajit/Config.in b/package/luajit/Config.in
-index 9c4ecc3..dd93609 100644
---- a/package/luajit/Config.in
-+++ b/package/luajit/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_LUAJIT
- 	# Luajit is only available for some target architectures, and
- 	# has some complexity wrt 32/64. See luajit.mk for details.
- 	depends on BR2_i386 || (BR2_x86_64 && BR2_HOSTARCH='x86_64') || BR2_powerpc || BR2_arm || BR2_armeb
-+	select BR2_HOSTARCH_NEEDS_IA32_COMPILER if !BR2_ARCH_IS_64
- 	help
- 	  LuaJIT implements the full set of language features defined
- 	  by Lua 5.1. The virtual machine (VM) is API- and
+diff --git a/package/Config.in b/package/Config.in
+index 2b76a8e..ab82483 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -817,6 +817,7 @@ source "package/enchant/Config.in"
+ source "package/icu/Config.in"
+ source "package/libedit/Config.in"
+ source "package/libenca/Config.in"
++source "package/libestr/Config.in"
+ source "package/libfribidi/Config.in"
+ source "package/libiconv/Config.in"
+ source "package/linenoise/Config.in"
+diff --git a/package/libestr/Config.in b/package/libestr/Config.in
+new file mode 100644
+index 0000000..b1ca2a5
+--- /dev/null
++++ b/package/libestr/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_LIBESTR
++	bool "libestr"
++	help
++	  Some essentials for string handling (and a bit more)
++
++	  http://libestr.adiscon.com/
+diff --git a/package/libestr/libestr.mk b/package/libestr/libestr.mk
+new file mode 100644
+index 0000000..9efe3b5
+--- /dev/null
++++ b/package/libestr/libestr.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# libestr
++#
++################################################################################
++
++LIBESTR_VERSION = 0.1.9
++LIBESTR_SITE = http://libestr.adiscon.com/files/download/
++LIBESTR_LICENSE = LGPLv2.1+
++LIBESTR_LICENSE_FILE = COPYING
++LIBESTR_INSTALL_STAGING = YES
++
++$(eval $(autotools-package))
 -- 
-1.8.3.2
+1.7.1
