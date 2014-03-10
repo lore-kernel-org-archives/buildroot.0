@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 10 Mar 2014 21:51:39 +0100
-Subject: [Buildroot] [PATCH 07/12] pkg-infra: move the wget download helper
-	to a script
+Date: Mon, 10 Mar 2014 21:51:38 +0100
+Subject: [Buildroot] [PATCH 06/12] pkg-infra: move the hg download helper to
+	a script
 In-Reply-To: <cover.1394484283.git.yann.morin.1998@free.fr>
 References: <cover.1394484283.git.yann.morin.1998@free.fr>
-Message-ID: <8d61170f3f8f282d7c142316b271a7caa21b2e39.1394484283.git.yann.morin.1998@free.fr>
+Message-ID: <1b03caafc699176c167b11993b2271f4a5444f53.1394484283.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,61 +19,70 @@ complex, so move it to a shell script.
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/pkg-download.mk |  6 ++----
- support/download/wget   | 21 +++++++++++++++++++++
- 2 files changed, 23 insertions(+), 4 deletions(-)
- create mode 100755 support/download/wget
+ package/pkg-download.mk | 11 +++--------
+ support/download/hg     | 25 +++++++++++++++++++++++++
+ 2 files changed, 28 insertions(+), 8 deletions(-)
+ create mode 100755 support/download/hg
 
 diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 36dcfac..c94ecba 100644
+index b83c7df..36dcfac 100644
 --- a/package/pkg-download.mk
 +++ b/package/pkg-download.mk
-@@ -8,7 +8,7 @@
- ################################################################################
- 
- # Download method commands
--WGET := $(call qstrip,$(BR2_WGET)) $(QUIET)
-+export WGET := $(call qstrip,$(BR2_WGET)) $(QUIET)
- export SVN := $(call qstrip,$(BR2_SVN))
+@@ -13,7 +13,7 @@ export SVN := $(call qstrip,$(BR2_SVN))
  export CVS := $(call qstrip,$(BR2_CVS))
  BZR := $(call qstrip,$(BR2_BZR))
-@@ -183,9 +183,7 @@ endef
- # the next time the download is tried.
- define DOWNLOAD_WGET
- 	test -e $(DL_DIR)/$(2) || \
--	($(WGET) -O $(DL_DIR)/$(2).tmp '$(call qstrip,$(1))' && \
--	 mv $(DL_DIR)/$(2).tmp $(DL_DIR)/$(2)) || \
--	(rm -f $(DL_DIR)/$(2).tmp ; exit 1)
-+	$(EXTRA_ENV) support/download/wget '$(call qstrip,$(1))' $(DL_DIR)/$(2)
+ export GIT := $(call qstrip,$(BR2_GIT))
+-HG := $(call qstrip,$(BR2_HG)) $(QUIET)
++export HG := $(call qstrip,$(BR2_HG)) $(QUIET)
+ SCP := $(call qstrip,$(BR2_SCP)) $(QUIET)
+ SSH := $(call qstrip,$(BR2_SSH)) $(QUIET)
+ LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
+@@ -161,13 +161,8 @@ endef
+ 
+ define DOWNLOAD_HG
+ 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+-	(pushd $(DL_DIR) > /dev/null && \
+-	rm -rf $($(PKG)_BASE_NAME) && \
+-	$(HG) clone --noupdate --rev $($(PKG)_DL_VERSION) $($(PKG)_SITE) $($(PKG)_BASE_NAME) && \
+-	$(HG) archive --repository $($(PKG)_BASE_NAME) --type tgz --prefix $($(PKG)_BASE_NAME)/ \
+-	              --rev $($(PKG)_DL_VERSION) $(DL_DIR)/$($(PKG)_SOURCE) && \
+-	rm -rf $($(PKG)_DL_DIR) && \
+-	popd > /dev/null)
++	$(EXTRA_ENV) support/download/hg $($(PKG)_SITE) $($(PKG)_DL_VERSION) \
++					  $($(PKG)_BASE_NAME) $(DL_DIR)/$($(PKG)_SOURCE)
  endef
  
- define SOURCE_CHECK_WGET
-diff --git a/support/download/wget b/support/download/wget
+ # TODO: improve to check that the given PKG_DL_VERSION exists on the remote
+diff --git a/support/download/hg b/support/download/hg
 new file mode 100755
-index 0000000..7865517
+index 0000000..70b49cf
 --- /dev/null
-+++ b/support/download/wget
-@@ -0,0 +1,21 @@
++++ b/support/download/hg
+@@ -0,0 +1,25 @@
 +#!/bin/sh
 +
 +# We want to catch any command failure, and exit immediately
 +set -e
 +
-+# Download helper for wget
++# Download helper for hg
 +# Call it with:
-+#   $1: URL
-+#   $2: output file
++#   $1: hg repo
++#   $2: hg cset
++#   $3: package's basename (eg. foobar-1.2.3)
++#   $4: output file
 +# And this environment:
-+#   WGET      : the wget command to call
++#   HG        : the hg command to call
++#   BR2_DL_DIR: path to Buildroot's download dir
 +
-+url="${1}"
-+output="${2}"
++repo="${1}"
++cset="${2}"
++basename="${3}"
++output="${4}"
 +
-+if ${WGET} -O "${output}.tmp" "${url}"; then
-+    mv "${output}.tmp" "${output}"
-+else
-+    rm -f "${output}.tmp"
-+    exit 1
-+fi
++cd "${BR2_DL_DIR}"
++${HG} clone --noupdate --rev "${cset}" "${repo}" "${basename}"
++${HG} archive --repository "${basename}" --type tgz --prefix "${basename}" \
++              --rev "${cset}" "${output}"
++rm -rf "${basename}"
 -- 
 1.8.3.2
