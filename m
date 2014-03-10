@@ -1,7 +1,9 @@
 From: Clayton Shotwell <clshotwe@rockwellcollins.com>
-Date: Mon, 10 Mar 2014 08:56:47 -0500
-Subject: [Buildroot] [PATCH 1/3] libestr: new package
-Message-ID: <1394459809-22174-1-git-send-email-clshotwe@rockwellcollins.com>
+Date: Mon, 10 Mar 2014 08:56:48 -0500
+Subject: [Buildroot] [PATCH 2/3] libee: new package
+In-Reply-To: <1394459809-22174-1-git-send-email-clshotwe@rockwellcollins.com>
+References: <1394459809-22174-1-git-send-email-clshotwe@rockwellcollins.com>
+Message-ID: <1394459809-22174-2-git-send-email-clshotwe@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,54 +13,69 @@ To: buildroot@busybox.net
 
 Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
 ---
- package/Config.in          |    1 +
- package/libestr/Config.in  |    6 ++++++
- package/libestr/libestr.mk |   13 +++++++++++++
- 3 files changed, 20 insertions(+), 0 deletions(-)
- create mode 100644 package/libestr/Config.in
- create mode 100644 package/libestr/libestr.mk
+ package/Config.in       |    1 +
+ package/libee/Config.in |   18 ++++++++++++++++++
+ package/libee/libee.mk  |   16 ++++++++++++++++
+ 3 files changed, 35 insertions(+), 0 deletions(-)
+ create mode 100644 package/libee/Config.in
+ create mode 100644 package/libee/libee.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 2b76a8e..ab82483 100644
+index ab82483..42c21d8 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -817,6 +817,7 @@ source "package/enchant/Config.in"
- source "package/icu/Config.in"
- source "package/libedit/Config.in"
- source "package/libenca/Config.in"
-+source "package/libestr/Config.in"
- source "package/libfribidi/Config.in"
- source "package/libiconv/Config.in"
- source "package/linenoise/Config.in"
-diff --git a/package/libestr/Config.in b/package/libestr/Config.in
+@@ -767,6 +767,7 @@ source "package/libcap-ng/Config.in"
+ source "package/libcgroup/Config.in"
+ source "package/libcofi/Config.in"
+ source "package/libdaemon/Config.in"
++source "package/libee/Config.in"
+ source "package/libelf/Config.in"
+ source "package/libev/Config.in"
+ source "package/libevdev/Config.in"
+diff --git a/package/libee/Config.in b/package/libee/Config.in
 new file mode 100644
-index 0000000..b1ca2a5
+index 0000000..fd48d56
 --- /dev/null
-+++ b/package/libestr/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_LIBESTR
-+	bool "libestr"
++++ b/package/libee/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_LIBEE
++	bool "libee"
 +	help
-+	  Some essentials for string handling (and a bit more)
++	  An Event Expression Library inspired by CEE.
 +
-+	  http://libestr.adiscon.com/
-diff --git a/package/libestr/libestr.mk b/package/libestr/libestr.mk
++	  CEE is an upcoming standard used to describe network
++	  events in a number of normalized formats. It's goal is
++	  to unify they currently many different representations
++	  that exist in the industry.
++
++	  The core idea of libee is to provide a small but hopefully
++	  convenient API layer above the CEE standard. However, CEE
++	  is not finished. At the time of this writing, CEE is under
++	  heavy development and even some of its core data structures
++	  (like the data dictionary and taxonmy) have not been fully
++	  specified.
++
++	  http://www.libee.org
+diff --git a/package/libee/libee.mk b/package/libee/libee.mk
 new file mode 100644
-index 0000000..9efe3b5
+index 0000000..f9894d9
 --- /dev/null
-+++ b/package/libestr/libestr.mk
-@@ -0,0 +1,13 @@
++++ b/package/libee/libee.mk
+@@ -0,0 +1,16 @@
 +################################################################################
 +#
-+# libestr
++# libee
 +#
 +################################################################################
 +
-+LIBESTR_VERSION = 0.1.9
-+LIBESTR_SITE = http://libestr.adiscon.com/files/download/
-+LIBESTR_LICENSE = LGPLv2.1+
-+LIBESTR_LICENSE_FILE = COPYING
-+LIBESTR_INSTALL_STAGING = YES
++LIBEE_VERSION = 0.4.1
++LIBEE_SITE = http://www.libee.org/download/files/download/
++LIBEE_LICENSE = LGPLv2.1+
++LIBEE_LICENSE_FILE = COPYING
++LIBEE_DEPENDENCIES = libestr
++LIBEE_INSTALL_STAGING = YES
++
++LIBEE_MAKE = $(MAKE1)
 +
 +$(eval $(autotools-package))
 -- 
