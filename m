@@ -1,39 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 11 Mar 2014 11:44:58 +0100
-Subject: [Buildroot] [git commit] package/linux-firmware: bump for new
-	firmwares
-Message-ID: <20140311104936.84C249BEED@busybox.osuosl.org>
+Date: Mon, 10 Mar 2014 14:14:40 +0100
+Subject: [Buildroot] [git commit] php: security bump to version 5.5.10
+Message-ID: <20140311104909.DC4409BEF3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cdf2b6f5d9bddf22c7f4609964a1549bfb219019
+commit: http://git.buildroot.net/buildroot/commit/?id=54198de1c92c97bd3b93b00b794d8bcbbfe11b58
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-A bunch of new WiFi firmwares has been added, some have been updated.
-Not limited to WiFi, but other firmwares are of less interest to
-Buildroot for now (eg. radeon, myri10ge...).
+Fixes CVE-2014-1943, CVE-2014-2270 and CVE-2013-7327.
 
-Fixups in WHENCE file (the all-licenses file).
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-firmware/linux-firmware.mk |    2 +-
+ package/php/php.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 45c82c6..307e8ee 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
+diff --git a/package/php/php.mk b/package/php/php.mk
+index c5da9e7..b3ffbef 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LINUX_FIRMWARE_VERSION = 52d77db9f133afe4d2b26aeccfd603745f45fda1
-+LINUX_FIRMWARE_VERSION = f8c22c692bdee57a20b092e647464ff6176df3ed
- LINUX_FIRMWARE_SITE = http://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
- LINUX_FIRMWARE_SITE_METHOD = git
- 
+-PHP_VERSION = 5.5.9
++PHP_VERSION = 5.5.10
+ PHP_SITE = http://www.php.net/distributions
+ PHP_INSTALL_STAGING = YES
+ PHP_INSTALL_STAGING_OPT = INSTALL_ROOT=$(STAGING_DIR) install
