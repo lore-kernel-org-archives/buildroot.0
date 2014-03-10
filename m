@@ -1,32 +1,66 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 10 Mar 2014 17:26:24 -0300
-Subject: [Buildroot] [PATCH 04/14] iftop: bump to version 1.0pre4
-In-Reply-To: <1394483194-17592-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1394483194-17592-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1394483194-17592-4-git-send-email-gustavo@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 10 Mar 2014 21:27:46 +0100
+Subject: [Buildroot] [PATCH 17/20] package/cryptodev: convert to the
+	virtual-package infrastructure
+In-Reply-To: <cover.1394482605.git.yann.morin.1998@free.fr>
+References: <cover.1394482605.git.yann.morin.1998@free.fr>
+Message-ID: <df45a0083aa4d67e3569ff6eff9b1b73a644bf69.1394482605.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/iftop/iftop.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-diff --git a/package/iftop/iftop.mk b/package/iftop/iftop.mk
-index 29ec61a..91bd6cc 100644
---- a/package/iftop/iftop.mk
-+++ b/package/iftop/iftop.mk
-@@ -4,7 +4,7 @@
+Since this package is implemented via a choice rather than the usual
+separate-package providers, we only need BR2_PACKAGE_HAS_CRYPTODEV
+to be always defined when the 'cryptodev' package is selected.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Cc: Mike Zick <minimod@morethan.org>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+---
+ package/cryptodev/Config.in    |  3 +++
+ package/cryptodev/cryptodev.mk | 12 +-----------
+ 2 files changed, 4 insertions(+), 11 deletions(-)
+
+diff --git a/package/cryptodev/Config.in b/package/cryptodev/Config.in
+index 0780cc7..2407e04 100644
+--- a/package/cryptodev/Config.in
++++ b/package/cryptodev/Config.in
+@@ -37,6 +37,9 @@ config BR2_PACKAGE_OCF_LINUX
+ 
+ endchoice
+ 
++config BR2_PACKAGE_HAS_CRYPTODEV
++	def_bool y
++
+ config BR2_PACKAGE_PROVIDES_CRYPTODEV
+ 	string
+ 	default "cryptodev-linux" if BR2_PACKAGE_CRYPTODEV_LINUX
+diff --git a/package/cryptodev/cryptodev.mk b/package/cryptodev/cryptodev.mk
+index 11e6f48..969d1bd 100644
+--- a/package/cryptodev/cryptodev.mk
++++ b/package/cryptodev/cryptodev.mk
+@@ -4,14 +4,4 @@
  #
  ################################################################################
  
--IFTOP_VERSION = 1.0pre3
-+IFTOP_VERSION = 1.0pre4
- IFTOP_SITE = http://www.ex-parrot.com/pdw/iftop/download/
- IFTOP_DEPENDENCIES = ncurses libpcap
- IFTOP_LICENSE = GPLv2+
+-CRYPTODEV_SOURCE =
+-CRYPTODEV_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_CRYPTODEV))
+-
+-ifeq ($(CRYPTODEV_DEPENDENCIES),)
+-define CRYPTODEV_CONFIGURE_CMDS
+-	echo "No CRYPTODEV implementation defined. Configuration error"
+-	exit 1
+-endef
+-endif
+-
+-$(eval $(generic-package))
++$(eval $(virtual-package))
 -- 
 1.8.3.2
