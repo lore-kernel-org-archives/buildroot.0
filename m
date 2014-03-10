@@ -1,96 +1,108 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 10 Mar 2014 17:26:34 -0300
-Subject: [Buildroot] [PATCH 14/14] tcpreplay: bump to version 4.0.3
-In-Reply-To: <1394483194-17592-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1394483194-17592-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1394483194-17592-14-git-send-email-gustavo@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 10 Mar 2014 21:51:40 +0100
+Subject: [Buildroot] [PATCH 0/12 v4] Some download-related changes (branch
+	yem/check-downloads)
+Message-ID: <cover.1394484283.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patch removed, already upstream.
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- ...ild-errors-when-ENABLE_VERBOSE-is-not-set.patch | 54 ----------------------
- package/tcpreplay/tcpreplay.mk                     |  2 +-
- 2 files changed, 1 insertion(+), 55 deletions(-)
- delete mode 100644 package/tcpreplay/tcpreplay-0001-Fix-build-errors-when-ENABLE_VERBOSE-is-not-set.patch
+Hello All!
 
-diff --git a/package/tcpreplay/tcpreplay-0001-Fix-build-errors-when-ENABLE_VERBOSE-is-not-set.patch b/package/tcpreplay/tcpreplay-0001-Fix-build-errors-when-ENABLE_VERBOSE-is-not-set.patch
-deleted file mode 100644
-index cbc829d..0000000
---- a/package/tcpreplay/tcpreplay-0001-Fix-build-errors-when-ENABLE_VERBOSE-is-not-set.patch
-+++ /dev/null
-@@ -1,54 +0,0 @@
--From 12d0d0876a9a9bf2818ba24ecb5646952b958c39 Mon Sep 17 00:00:00 2001
--From: Chris Packham <judge.packham@gmail.com>
--Date: Wed, 22 Jan 2014 20:37:04 +1300
--Subject: [PATCH] Fix build errors when ENABLE_VERBOSE is not set
--
--Upstream: https://github.com/cpackham/tcpreplay/commit/12d0d0876a9a9
--Fixes #59
--
--When ENABLE_VERBOSE is not set some additional calls to tcpreplay_seterr
--are made. When conforming to C99 variadic macros at least one argument is
--required after the format string[1]. To avoid this problem update the
--calls to tcpreplay_seterr to use a "%s" format string.
--
--[1] - http://gcc.gnu.org/onlinedocs/cpp/Variadic-Macros.html
--
--Signed-off-by: Chris Packham <judge.packham@gmail.com>
-----
-- src/tcpreplay_api.c | 6 +++---
-- 1 file changed, 3 insertions(+), 3 deletions(-)
--
--diff --git a/src/tcpreplay_api.c b/src/tcpreplay_api.c
--index 6b81bcc..de67080 100644
----- a/src/tcpreplay_api.c
--+++ b/src/tcpreplay_api.c
--@@ -690,7 +690,7 @@ tcpreplay_set_verbose(tcpreplay_t *ctx, bool value)
--     ctx->options->verbose = value;
--     return 0;
-- #else
---    tcpreplay_seterr(ctx, "verbose mode not supported");
--+    tcpreplay_seterr(ctx, "%s", "verbose mode not supported");
--     return -1;
-- #endif
-- }
--@@ -710,7 +710,7 @@ tcpreplay_set_tcpdump_args(tcpreplay_t *ctx, char *value)
--     ctx->options->tcpdump_args = safe_strdup(value);
--     return 0;
-- #else
---    tcpreplay_seterr(ctx, "verbose mode not supported");
--+    tcpreplay_seterr(ctx, "%s", "verbose mode not supported");
--     return -1;
-- #endif
-- }
--@@ -731,7 +731,7 @@ tcpreplay_set_tcpdump(tcpreplay_t *ctx, tcpdump_t *value)
--     ctx->options->tcpdump = value;
--     return 0;
-- #else
---    tcpreplay_seterr(ctx, "verbose mode not supported");
--+    tcpreplay_seterr(ctx, "%s", "verbose mode not supported");
--     return -1;
-- #endif
-- }
---- 
--1.8.5.2
--
-diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
-index fdb42a5..e1ff1f5 100644
---- a/package/tcpreplay/tcpreplay.mk
-+++ b/package/tcpreplay/tcpreplay.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TCPREPLAY_VERSION = 4.0.2
-+TCPREPLAY_VERSION = 4.0.3
- TCPREPLAY_SITE = http://downloads.sourceforge.net/project/tcpreplay/tcpreplay/$(TCPREPLAY_VERSION)
- TCPREPLAY_LICENSE = GPLv3
- TCPREPLAY_LICENSE_FILES = docs/LICENSE
+This series contains those download-related changes:
+
+  - Patches 1..2  : some cleanups and preparatory works in the
+    download infra,
+
+  - Patches 3..7  : move download helpers to shell scripts, one
+    such script for each download helper
+
+  - Patch   8     : don't use DL_DIR as scratchpad for temporary VCS
+    checkouts, since DL_DIR is a precious location
+
+  - Patches 9..11 : check hashes of downloaded files, to ensure the
+    files are genuine
+
+  - Patch   12    : add hashes for ca-certificates
+
+
+Changes v3 -> v4:
+  - enhance the manual, typoes  (Gustavo, Samuel, Thomas DS)
+  - remove spurious test bump on package/fis  (Samuel)
+
+Changes v2 -> v3:
+  - avoid partial downloads  (Thomas DS)
+  - store hash-type in .hash file  (Gustavo)
+  - typoes  (Samuel, Gustavo)
+  - add possibility to treat missing hashes as an error
+
+Changes v1 -> v2:
+  - don't do any behavioural change when switching to shell scripts,
+    just reproduce exactly what was in the Makefile  (Luca, Arnout)
+  - support more than one hash algorithm  (Arnout, Gustavo)
+  - typoes  (Luca, Baruch)
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit ca4e9a78732bcacddd0c91ab35ee39a60ff040aa:
+
+  jack2: fix missing alsa-lib feature dependency (2014-03-10 13:13:03 +0100)
+
+are available in the git repository at:
+
+  git://gitorious.org/buildroot/buildroot.git yem/check-downloads
+
+for you to fetch changes up to 985eb7379f1347835b44d685bbcef295fea730c5:
+
+  package/ca-certificates: add tarball's hashes (2014-03-10 18:15:03 +0100)
+
+----------------------------------------------------------------
+Yann E. MORIN (12):
+      Makefile: rename USER_HOOKS_EXTRA_ENV to EXTRA_ENV
+      Makefile: add BR2_DL_DIR to EXTRA_ENV
+      pkg-infra: move the git download helper to a script
+      pkg-infra: move the svn download helper to a script
+      pkg-infra: move the cvs download helper to a script
+      pkg-infra: move the hg download helper to a script
+      pkg-infra: move the wget download helper to a script
+      pkg-infra: don't use DL_DIR as scratchpad for temporary VCS checkouts
+      pkg-infra: also set PKGDIR for the download step
+      pkg-infra: add possiblity to check downloaded files against known hashes
+      manual: add documentation about packages' hashes
+      package/ca-certificates: add tarball's hashes
+
+ Makefile                                     |  4 +-
+ docs/manual/adding-packages-directory.txt    | 67 +++++++++++++++++++++++
+ package/Makefile.in                          |  5 +-
+ package/ca-certificates/ca-certificates.hash |  3 ++
+ package/pkg-download.mk                      | 79 +++++++++++-----------------
+ package/pkg-generic.mk                       |  3 +-
+ support/download/check-hash                  | 77 +++++++++++++++++++++++++++
+ support/download/cvs                         | 33 ++++++++++++
+ support/download/git                         | 41 +++++++++++++++
+ support/download/hg                          | 31 +++++++++++
+ support/download/svn                         | 30 +++++++++++
+ support/download/wget                        | 24 +++++++++
+ 12 files changed, 345 insertions(+), 52 deletions(-)
+ create mode 100644 package/ca-certificates/ca-certificates.hash
+ create mode 100755 support/download/check-hash
+ create mode 100755 support/download/cvs
+ create mode 100755 support/download/git
+ create mode 100755 support/download/hg
+ create mode 100755 support/download/svn
+ create mode 100755 support/download/wget
+
 -- 
-1.8.3.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
