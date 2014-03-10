@@ -1,102 +1,85 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 10 Mar 2014 21:12:13 +0200
-Subject: [Buildroot] [PATCH 2/3] libee: new package
-In-Reply-To: <1394459809-22174-2-git-send-email-clshotwe@rockwellcollins.com>
-References: <1394459809-22174-1-git-send-email-clshotwe@rockwellcollins.com>
- <1394459809-22174-2-git-send-email-clshotwe@rockwellcollins.com>
-Message-ID: <20140310191213.GV4249@tarshish>
+From: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
+Date: Mon, 10 Mar 2014 15:15:04 -0400
+Subject: [Buildroot] [PATCH v4 2/5] mesa3d: modularize and bump to
+ version 10.0.3
+In-Reply-To: <BLU0-SMTP3984B0DC7878232A1681D9AD9750@phx.gbl>
+References: <1394391692-13583-1-git-send-email-berndkuhls@hotmail.com>
+ <BLU0-SMTP3984B0DC7878232A1681D9AD9750@phx.gbl>
+Message-ID: <531E0F38.8050105@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Clayton,
+Hi bernd,
 
-On Mon, Mar 10, 2014 at 08:56:48AM -0500, Clayton Shotwell wrote:
-> 
-> Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
-> ---
->  package/Config.in       |    1 +
->  package/libee/Config.in |   18 ++++++++++++++++++
->  package/libee/libee.mk  |   16 ++++++++++++++++
->  3 files changed, 35 insertions(+), 0 deletions(-)
->  create mode 100644 package/libee/Config.in
->  create mode 100644 package/libee/libee.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index ab82483..42c21d8 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -767,6 +767,7 @@ source "package/libcap-ng/Config.in"
->  source "package/libcgroup/Config.in"
->  source "package/libcofi/Config.in"
->  source "package/libdaemon/Config.in"
-> +source "package/libee/Config.in"
->  source "package/libelf/Config.in"
->  source "package/libev/Config.in"
->  source "package/libevdev/Config.in"
-> diff --git a/package/libee/Config.in b/package/libee/Config.in
-> new file mode 100644
-> index 0000000..fd48d56
-> --- /dev/null
-> +++ b/package/libee/Config.in
-> @@ -0,0 +1,18 @@
-> +config BR2_PACKAGE_LIBEE
-> +	bool "libee"
+On 03/09/2014 03:01 PM, Bernd Kuhls wrote:
+> +config BR2_PACKAGE_MESA3D_DRI_DRIVER_I965
+> +	bool "DRI i965 driver"
+> +	depends on BR2_PACKAGE_XORG7
+I don't think the dependance on XORG7 is required, see below.
 
-select BR2_PACKAGE_LIBEE?
-select BR2_PACKAGE_LIBESTR?
+> +ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER),y)
+> +MESA3D_DEPENDENCIES += \
+> +	xproto_xf86driproto \
+> +	xproto_dri2proto \
+> +	xproto_glproto \
+> +	xlib_libX11 \
+> +	xlib_libXext \
+> +	xlib_libXdamage \
+> +	xlib_libXfixes \
+> +	libxcb
+> +MESA3D_CONF_OPT += \
+> +	--enable-dri \
+> +	--enable-shared-glapi \
+> +	--enable-xa
+> +else
+> +MESA3D_CONF_OPT += \
+> +	--disable-dri \
+> +	--disable-shared-glapi \
+> +	--disable-xa
+> +endif
+> +
+I don't think you have to --disable-dri here, DRI is not only used by
+the xorg server packages, if you want to do hardware GL rendering
+without X on an intel graphic card, you still need to use the intel dri
+driver (i dont know about the others).
 
-baruch
+> +# at least one API is required, for buildroot enable OpenGL API by default
+> +# other APIs (EGL, EGL_ES) are optional
+> +ifeq ($(MESA3D_GALLIUM_DRIVERS-y)$(MESA3D_DRI_DRIVERS-y),)
+> +MESA3D_CONF_OPT += \
+> +	--disable-opengl \
+> +	--disable-glx
+> +else
+> +MESA3D_CONF_OPT += \
+> +	--enable-opengl \
+> +	--enable-glx
+> +endif
+> +
+Enabling GLX is only required if you use the Xorg server.
+Perhaps it should be set in "ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER),y)".
 
-> +	help
-> +	  An Event Expression Library inspired by CEE.
+> +ifeq ($(MESA3D_DRI_DRIVERS-y),)
+> +MESA3D_CONF_OPT += \
+> +	--without-dri-drivers
+> +else
+> +MESA3D_CONF_OPT += \
+> +	--with-dri-drivers=$(subst $(space),$(comma),$(MESA3D_DRI_DRIVERS-y))
+> +endif
 > +
-> +	  CEE is an upcoming standard used to describe network
-> +	  events in a number of normalized formats. It's goal is
-> +	  to unify they currently many different representations
-> +	  that exist in the industry.
-> +
-> +	  The core idea of libee is to provide a small but hopefully
-> +	  convenient API layer above the CEE standard. However, CEE
-> +	  is not finished. At the time of this writing, CEE is under
-> +	  heavy development and even some of its core data structures
-> +	  (like the data dictionary and taxonmy) have not been fully
-> +	  specified.
-> +
-> +	  http://www.libee.org
-> diff --git a/package/libee/libee.mk b/package/libee/libee.mk
-> new file mode 100644
-> index 0000000..f9894d9
-> --- /dev/null
-> +++ b/package/libee/libee.mk
-> @@ -0,0 +1,16 @@
-> +################################################################################
-> +#
-> +# libee
-> +#
-> +################################################################################
-> +
-> +LIBEE_VERSION = 0.4.1
-> +LIBEE_SITE = http://www.libee.org/download/files/download/
-> +LIBEE_LICENSE = LGPLv2.1+
-> +LIBEE_LICENSE_FILE = COPYING
-> +LIBEE_DEPENDENCIES = libestr
-> +LIBEE_INSTALL_STAGING = YES
-> +
-> +LIBEE_MAKE = $(MAKE1)
-> +
-> +$(eval $(autotools-package))
-> -- 
-> 1.7.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+There is a problem here, you can have the option --with-dri-drivers and
+--disable-dri at the same time.
+Perhaps the option "--enable-dri" should be set here.
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+For example i can used the tool https://github.com/robclark/kmscube
+without any X dependancies, by using mesa with the minimal configure
+options set like this :
+./configure --disable-static --enable-dri --with-dri-drivers="i915"
+--without-gallium-drivers --disable-glx --enable-gles1 --enable-gles2
+--with-egl-platforms=drm --enable-gbm
+
+
+Regards,
+Sebastien.
