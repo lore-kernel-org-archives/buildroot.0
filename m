@@ -1,22 +1,22 @@
-From: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
-Date: Tue, 11 Mar 2014 17:50:23 -0400
-Subject: [Buildroot] [PATCH v5 1/6] libdrm: Remove xorg dependency for
- intel driver
-In-Reply-To: <BLU0-SMTP20422ECD84A18D82671FAE4D9770@phx.gbl>
-References: <BLU0-SMTP20422ECD84A18D82671FAE4D9770@phx.gbl>
-Message-ID: <531F851F.40002@savoirfairelinux.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 11 Mar 2014 23:05:39 +0100
+Subject: [Buildroot] [PATCH 01/14] libpcap: bump to version 1.5.3
+In-Reply-To: <1394483194-17592-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 10 Mar 2014 17:26:21 -0300")
+References: <1394483194-17592-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87a9cwqtl8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi bernd,
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-On 03/11/2014 02:53 PM, Bernd Kuhls wrote:
-> config BR2_PACKAGE_LIBDRM_INTEL bool "intel" - depends on
-> BR2_PACKAGE_XORG7 
-Remove that dependency will give a config error, so i was wrong with the
-dependency on BR2_PACKAGE_XORG7 in BR2_PACKAGE_MESA3D_DRI_DRIVER_I965
-because the intel dri driver depends on the libdrm that depends on the
-xlib_pciaccess which is inside the xorg7 package.
+ > TPACKET_V3 support issues fixed in 1.5.2/1.5.3 so the patch is no longer
+ > necessary.
+
+Committed series, thanks.
+
+-- 
+Bye, Peter Korsgaard
