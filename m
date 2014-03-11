@@ -1,54 +1,30 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 11 Mar 2014 23:39:43 +0100
-Subject: [Buildroot] [PATCH v7 2/6] Makefile: add $(HOST_DIR)/sbin to BR_PATH
-In-Reply-To: <1394577587-6426-1-git-send-email-s.martin49@gmail.com>
-References: <1394577587-6426-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1394577587-6426-3-git-send-email-s.martin49@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 11 Mar 2014 23:35:52 +0100
+Subject: [Buildroot] [git commit] strongswan: only show comment if applicable
+Message-ID: <20140311223920.6E4919BEA7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Extend BR_PATH because a few host-packages install programs in this
-location.
+commit: http://git.buildroot.net/buildroot/commit/?id=4db797d5422eaef35ce2709b9662f9e08f0208be
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+strongswan needs USE_MMU, so only show comment if that is available.
 
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-changes v6 -> v7:
-- rebase
-- fix typo (Yann)
+ package/strongswan/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-changes v4 -> v6:
-- rebase
-
-changes v3 -> v4:
-- rebase
-- fix typo in commit log (ThomasP)
-- rename BR2_PATH -> BR_PATH
-
-changes v2 -> v3:
-- rebase
-
-changes v1 -> v2:
-- rebase
----
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Makefile b/Makefile
-index 1329ada..3654845 100644
---- a/Makefile
-+++ b/Makefile
-@@ -330,7 +330,7 @@ TAR_OPTIONS=$(call qstrip,$(BR2_TAR_OPTIONS)) -xf
- HOST_DIR:=$(call qstrip,$(BR2_HOST_DIR))
+diff --git a/package/strongswan/Config.in b/package/strongswan/Config.in
+index 0daedda..d2cadf3 100644
+--- a/package/strongswan/Config.in
++++ b/package/strongswan/Config.in
+@@ -1,4 +1,5 @@
+ comment "strongswan needs a toolchain w/ threads"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
  
- # Quotes are needed for spaces and all in the original PATH content.
--BR_PATH = "$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(HOST_DIR)/usr/sbin:$(PATH)"
-+BR_PATH = "$(HOST_DIR)/bin:$(HOST_DIR)/sbin:$(HOST_DIR)/usr/bin:$(HOST_DIR)/usr/sbin:$(PATH)"
- 
- # locales to generate
- GENERATE_LOCALE=$(call qstrip,$(BR2_GENERATE_LOCALE))
--- 
-1.9.0
+ menuconfig BR2_PACKAGE_STRONGSWAN
