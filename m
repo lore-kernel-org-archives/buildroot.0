@@ -1,34 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 10 Mar 2014 14:14:40 +0100
-Subject: [Buildroot] [git commit] php: security bump to version 5.5.10
-Message-ID: <20140311104909.DC4409BEF3@busybox.osuosl.org>
+Date: Tue, 11 Mar 2014 11:48:04 +0100
+Subject: [Buildroot] [git commit] socat: security bump to version 2.0.0-b7
+Message-ID: <20140311104938.377769BF07@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=54198de1c92c97bd3b93b00b794d8bcbbfe11b58
+commit: http://git.buildroot.net/buildroot/commit/?id=442f13779ec07a0c9716b04461becf5381205999
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2014-1943, CVE-2014-2270 and CVE-2013-7327.
+Fixes CVE-2014-0019.
+Also rename patch according to policy.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ ...tion.patch => socat-001-no-documentation.patch} |    0
+ package/socat/socat.mk                             |    2 +-
+ 2 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/php/php.mk b/package/php/php.mk
-index c5da9e7..b3ffbef 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
+diff --git a/package/socat/socat-no-documentation.patch b/package/socat/socat-001-no-documentation.patch
+similarity index 100%
+rename from package/socat/socat-no-documentation.patch
+rename to package/socat/socat-001-no-documentation.patch
+diff --git a/package/socat/socat.mk b/package/socat/socat.mk
+index df60961..6ae67a9 100644
+--- a/package/socat/socat.mk
++++ b/package/socat/socat.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_VERSION = 5.5.9
-+PHP_VERSION = 5.5.10
- PHP_SITE = http://www.php.net/distributions
- PHP_INSTALL_STAGING = YES
- PHP_INSTALL_STAGING_OPT = INSTALL_ROOT=$(STAGING_DIR) install
+-SOCAT_VERSION = 2.0.0-b6
++SOCAT_VERSION = 2.0.0-b7
+ SOCAT_SOURCE = socat-$(SOCAT_VERSION).tar.bz2
+ SOCAT_SITE = http://www.dest-unreach.org/socat/download/
+ SOCAT_LICENSE = GPLv2
