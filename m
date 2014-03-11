@@ -1,50 +1,27 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 11 Mar 2014 23:04:20 +0100
-Subject: [Buildroot] [git commit] macchanger: bump to version 1.6.0
-Message-ID: <20140311220647.BBF1A9BEED@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 11 Mar 2014 23:21:11 +0100
+Subject: [Buildroot] Wrong list address in online documentation ?
+In-Reply-To: <20140311173620.GA5057@gmail.com> (Denis Bodor's message of "Tue, 
+ 11 Mar 2014 18:36:20 +0100")
+References: <20140311173620.GA5057@gmail.com>
+Message-ID: <8761nkqsvc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2310c598b094665f854c6847d200b7b5ba398968
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Denis" == Denis Bodor <lefinnois@lefinnois.net> writes:
 
-Also switch the homepage, it's not a proper one but at least it's no
-longer a 404.
-The license is now GPLv2+ but there's no COPYING file.
+ > Hi,
+ > I've just submitted my first patch... with a double post. I'm very sorry.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/macchanger/Config.in     |    2 +-
- package/macchanger/macchanger.mk |    5 ++---
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ > The post address for this list is buildroot at busybox.net but online
+ > manual.html say buildroot at buildroot.org in "git send-email" command line.
 
-diff --git a/package/macchanger/Config.in b/package/macchanger/Config.in
-index e26faa7..a9ebc8e 100644
---- a/package/macchanger/Config.in
-+++ b/package/macchanger/Config.in
-@@ -4,4 +4,4 @@ config BR2_PACKAGE_MACCHANGER
- 	  A GNU/Linux utility for viewing/manipulating the MAC address of
- 	  network interfaces
- 
--	  http://www.alobbs.com/macchanger
-+	  http://www.gnu.org/software/macchanger
-diff --git a/package/macchanger/macchanger.mk b/package/macchanger/macchanger.mk
-index 8656183..5ded0b8 100644
---- a/package/macchanger/macchanger.mk
-+++ b/package/macchanger/macchanger.mk
-@@ -4,9 +4,8 @@
- #
- ################################################################################
- 
--MACCHANGER_VERSION = 1.5.0
-+MACCHANGER_VERSION = 1.6.0
- MACCHANGER_SITE = $(BR2_GNU_MIRROR)/macchanger
--MACCHANGER_LICENSE = GPLv2
--MACCHANGER_LICENSE_FILES = COPYING
-+MACCHANGER_LICENSE = GPLv2+
- 
- $(eval $(autotools-package))
+Not to worry, they both go to the same list. Originally we used
+@busybox.net, but recently the @buildroot.org alias has been added as
+well.
+
+-- 
+Bye, Peter Korsgaard
