@@ -1,68 +1,31 @@
-From: Clayton Shotwell <clshotwe@rockwellcollins.com>
-Date: Tue, 11 Mar 2014 12:57:09 -0500
-Subject: [Buildroot] [PATCH v2 1/4] libestr: new package
-Message-ID: <1394560632-1923-1-git-send-email-clshotwe@rockwellcollins.com>
+From: Bernd Kuhls <berndkuhls@hotmail.com>
+Date: Tue, 11 Mar 2014 19:53:44 +0100
+Subject: [Buildroot] [PATCH v5 1/6] libdrm: Remove xorg dependency for intel
+	driver
+Message-ID: <BLU0-SMTP20422ECD84A18D82671FAE4D9770@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
 
+Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
 ---
-Changes v1 -> v2:
-  - No changes.
----
- package/Config.in          |    1 +
- package/libestr/Config.in  |    6 ++++++
- package/libestr/libestr.mk |   13 +++++++++++++
- 3 files changed, 20 insertions(+), 0 deletions(-)
- create mode 100644 package/libestr/Config.in
- create mode 100644 package/libestr/libestr.mk
+ package/libdrm/Config.in |    1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 2b76a8e..ab82483 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -817,6 +817,7 @@ source "package/enchant/Config.in"
- source "package/icu/Config.in"
- source "package/libedit/Config.in"
- source "package/libenca/Config.in"
-+source "package/libestr/Config.in"
- source "package/libfribidi/Config.in"
- source "package/libiconv/Config.in"
- source "package/linenoise/Config.in"
-diff --git a/package/libestr/Config.in b/package/libestr/Config.in
-new file mode 100644
-index 0000000..b1ca2a5
---- /dev/null
-+++ b/package/libestr/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_LIBESTR
-+	bool "libestr"
-+	help
-+	  Some essentials for string handling (and a bit more)
-+
-+	  http://libestr.adiscon.com/
-diff --git a/package/libestr/libestr.mk b/package/libestr/libestr.mk
-new file mode 100644
-index 0000000..9efe3b5
---- /dev/null
-+++ b/package/libestr/libestr.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# libestr
-+#
-+################################################################################
-+
-+LIBESTR_VERSION = 0.1.9
-+LIBESTR_SITE = http://libestr.adiscon.com/files/download/
-+LIBESTR_LICENSE = LGPLv2.1+
-+LIBESTR_LICENSE_FILE = COPYING
-+LIBESTR_INSTALL_STAGING = YES
-+
-+$(eval $(autotools-package))
+diff --git a/package/libdrm/Config.in b/package/libdrm/Config.in
+index 7192e94..24ff7de 100644
+--- a/package/libdrm/Config.in
++++ b/package/libdrm/Config.in
+@@ -13,7 +13,6 @@ menu "DRM Drivers"
+ 
+ config BR2_PACKAGE_LIBDRM_INTEL
+ 	bool "intel"
+-	depends on BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_LIBATOMIC_OPS
+ 	select BR2_PACKAGE_XLIB_LIBPCIACCESS
+ 	depends on BR2_i386 || BR2_x86_64
 -- 
-1.7.1
+1.7.10.4
