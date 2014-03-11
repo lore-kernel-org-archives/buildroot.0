@@ -1,37 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 11 Mar 2014 11:44:40 +0100
-Subject: [Buildroot] [git commit] package/linux-firmware: fix typo in
-	firmware file for cxgb4
-Message-ID: <20140311104935.390D69B1CB@busybox.osuosl.org>
+Date: Tue, 11 Mar 2014 11:48:28 +0100
+Subject: [Buildroot] [git commit] socat: add optional openssl and readline
+	support
+Message-ID: <20140311104939.08C8F9BF09@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cea2cf8fc130d4744a90ea6b76130caa40d2188c
+commit: http://git.buildroot.net/buildroot/commit/?id=df2b2104f4ed219f28bcea12b24cb9507666ee0c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Trivial inversion b/g: cxbg4 -> cxgb4
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Jeremy Kerr <jk@ozlabs.org>
-Acked-by: Jeremy Kerr <jk at ozlabs.org.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-firmware/linux-firmware.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/socat/socat.mk |   12 ++++++++++++
+ 1 files changed, 12 insertions(+), 0 deletions(-)
 
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index c4e7857..45c82c6 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -157,7 +157,7 @@ endif
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_CXGB4),y)
- LINUX_FIRMWARE_FILES += \
- 	cxgb4/t4fw-1.9.23.0.bin \
--	cxbg4/t4fw.bin
-+	cxgb4/t4fw.bin
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.chelsio_firmware
- endif
+diff --git a/package/socat/socat.mk b/package/socat/socat.mk
+index 6ae67a9..7172ea0 100644
+--- a/package/socat/socat.mk
++++ b/package/socat/socat.mk
+@@ -21,6 +21,18 @@ SOCAT_CONF_ENV = sc_cv_termios_ispeed=no \
  
+ SOCAT_DEPENDENCIES = host-autoconf
+ 
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++	SOCAT_DEPENDENCIES += openssl
++else
++	SOCAT_CONF_OPT += --disable-openssl
++endif
++
++ifeq ($(BR2_PACKAGE_READLINE),y)
++	SOCAT_DEPENDENCIES += readline
++else
++	SOCAT_CONF_OPT += --disable-readline
++endif
++
+ define SOCAT_RUN_AUTOCONF
+ 	(cd $(@D); $(HOST_DIR)/usr/bin/autoconf)
+ endef
