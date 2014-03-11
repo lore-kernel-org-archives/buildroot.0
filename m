@@ -1,63 +1,80 @@
-From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Tue, 11 Mar 2014 20:42:59 +0100
-Subject: [Buildroot] [PATCH 5/6] infra: add to luarocks support for
- top-level parallel make
-In-Reply-To: <1394540278-28740-6-git-send-email-fabio.porcedda@gmail.com>
-References: <1394540278-28740-1-git-send-email-fabio.porcedda@gmail.com>
- <1394540278-28740-6-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <CAB0FRsuRnHaq0SwMk3LZGAOHMSTn3Y5NbLXdUmUDYmrJZ216hg@mail.gmail.com>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Tue, 11 Mar 2014 20:59:20 +0100
+Subject: [Buildroot] [PATCH v2 1/4] libestr: new package
+In-Reply-To: <1394560632-1923-1-git-send-email-clshotwe@rockwellcollins.com>
+References: <1394560632-1923-1-git-send-email-clshotwe@rockwellcollins.com>
+Message-ID: <531F6B18.4050305@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2014-03-11 13:17 GMT+01:00 Fabio Porcedda <fabio.porcedda@gmail.com>:
-> The host-luarock dependency is not always satisfied for the extract
-> phase because the %-extract target is not anymore in the dependency
-> chain.
-> To be sure that the dependency is satfied add the dependency to the
 
-typo: satisfied
+Hi Clayton,
 
-> stamp file $(%_TARGET_EXTRACT) instead of the %-extract target.
+> Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
 >
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-> Cc: Francois Perrad <fperrad@gmail.com>
 > ---
->  package/pkg-luarocks.mk | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+> Changes v1 -> v2:
+>    - No changes.
+> ---
+>   package/Config.in          |    1 +
+>   package/libestr/Config.in  |    6 ++++++
+>   package/libestr/libestr.mk |   13 +++++++++++++
+>   3 files changed, 20 insertions(+), 0 deletions(-)
+>   create mode 100644 package/libestr/Config.in
+>   create mode 100644 package/libestr/libestr.mk
 >
-> diff --git a/package/pkg-luarocks.mk b/package/pkg-luarocks.mk
-> index bdda022..7010381 100644
-> --- a/package/pkg-luarocks.mk
-> +++ b/package/pkg-luarocks.mk
-> @@ -43,10 +43,6 @@ $(2)_SITE            ?= $(call qstrip,$(BR2_LUAROCKS_MIRROR))
->  # a target package, and can just add the required dependencies
->  $(2)_DEPENDENCIES      += host-luarocks luainterpreter
->
-> -# $(2)_DEPENDENCIES are handled for configure step (too late)
-> -# but host-luarocks is required to do the extract
-> -$(1)-extract: host-luarocks
-> -
->  #
->  # Extract step
->  #
-> @@ -71,6 +67,10 @@ endif
->  # make targets
->  $(call inner-generic-package,$(1),$(2),$(3),$(4))
->
-> +# $(2)_DEPENDENCIES are handled for configure step (too late)
-> +# but host-luarocks is required to do the extract
-> +$$($(2)_TARGET_EXTRACT): | host-luarocks
+> diff --git a/package/Config.in b/package/Config.in
+> index 2b76a8e..ab82483 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -817,6 +817,7 @@ source "package/enchant/Config.in"
+>   source "package/icu/Config.in"
+>   source "package/libedit/Config.in"
+>   source "package/libenca/Config.in"
+> +source "package/libestr/Config.in"
+>   source "package/libfribidi/Config.in"
+>   source "package/libiconv/Config.in"
+>   source "package/linenoise/Config.in"
+> diff --git a/package/libestr/Config.in b/package/libestr/Config.in
+> new file mode 100644
+> index 0000000..b1ca2a5
+> --- /dev/null
+> +++ b/package/libestr/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_LIBESTR
+> +	bool "libestr"
+> +	help
+> +	  Some essentials for string handling (and a bit more)
 > +
->  endef
->
->  ################################################################################
-> --
-> 1.8.3.2
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> +	  http://libestr.adiscon.com/
+> diff --git a/package/libestr/libestr.mk b/package/libestr/libestr.mk
+> new file mode 100644
+> index 0000000..9efe3b5
+> --- /dev/null
+> +++ b/package/libestr/libestr.mk
+> @@ -0,0 +1,13 @@
+> +################################################################################
+> +#
+> +# libestr
+> +#
+> +################################################################################
+> +
+> +LIBESTR_VERSION = 0.1.9
+> +LIBESTR_SITE = http://libestr.adiscon.com/files/download/
+> +LIBESTR_LICENSE = LGPLv2.1+
+> +LIBESTR_LICENSE_FILE = COPYING
+
+It should be:
+
+LIBESTR_LICENSE_FILES = COPYING
+
+
+Regards,
+Jerzy
+
+> +LIBESTR_INSTALL_STAGING = YES
+> +
+> +$(eval $(autotools-package))
