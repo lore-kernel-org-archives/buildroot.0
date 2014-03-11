@@ -1,53 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 11 Mar 2014 23:04:38 +0100
-Subject: [Buildroot] [git commit] ptpd2: bump to version 2.3.0
-Message-ID: <20140311220647.C34529BEED@busybox.osuosl.org>
+Date: Tue, 11 Mar 2014 23:02:33 +0100
+Subject: [Buildroot] [git commit] ipsec-tools: bump to version 0.8.2
+Message-ID: <20140311220647.87A759BEFF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a84e0527448f0f5143314739f88daee14c89210e
+commit: http://git.buildroot.net/buildroot/commit/?id=d1083adfc42377bff3629b08cbf1fbded46b4767
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now a proper autotools package, almost... (configure not shipped)
+Also rename patch according to policy and add homepage.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ptpd2/ptpd2.mk |   14 ++++----------
- 1 files changed, 4 insertions(+), 10 deletions(-)
+ package/ipsec-tools/Config.in                      |    2 ++
+ ...cy.patch => ipsec-tools-001-susv3-legacy.patch} |    0
+ package/ipsec-tools/ipsec-tools.mk                 |    2 +-
+ 3 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/ptpd2/ptpd2.mk b/package/ptpd2/ptpd2.mk
-index 0428c80..cd898d8 100644
---- a/package/ptpd2/ptpd2.mk
-+++ b/package/ptpd2/ptpd2.mk
-@@ -4,23 +4,17 @@
- #
+diff --git a/package/ipsec-tools/Config.in b/package/ipsec-tools/Config.in
+index 06a5a56..57fa5d4 100644
+--- a/package/ipsec-tools/Config.in
++++ b/package/ipsec-tools/Config.in
+@@ -5,6 +5,8 @@ config BR2_PACKAGE_IPSEC_TOOLS
+ 	help
+ 	  This package is required to support IPSec for Linux 2.6+
+ 
++	  http://ipsec-tools.sourceforge.net/
++
+ if BR2_PACKAGE_IPSEC_TOOLS
+ 
+ config BR2_PACKAGE_IPSEC_TOOLS_ADMINPORT
+diff --git a/package/ipsec-tools/ipsec-tools-susv3-legacy.patch b/package/ipsec-tools/ipsec-tools-001-susv3-legacy.patch
+similarity index 100%
+rename from package/ipsec-tools/ipsec-tools-susv3-legacy.patch
+rename to package/ipsec-tools/ipsec-tools-001-susv3-legacy.patch
+diff --git a/package/ipsec-tools/ipsec-tools.mk b/package/ipsec-tools/ipsec-tools.mk
+index 44c3380..870588d 100644
+--- a/package/ipsec-tools/ipsec-tools.mk
++++ b/package/ipsec-tools/ipsec-tools.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--PTPD2_VERSION = 2.2.2
-+PTPD2_VERSION = 2.3.0
- PTPD2_SITE = http://downloads.sourceforge.net/project/ptpd/ptpd/$(PTPD2_VERSION)
- PTPD2_SOURCE = ptpd-$(PTPD2_VERSION).tar.gz
-+# configure not shipped
-+PTPD2_AUTORECONF = YES
- PTPD2_LICENSE = BSD-2c
- PTPD2_LICENSE_FILES = COPYRIGHT
- 
--define PTPD2_BUILD_CMDS
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/src
--endef
--
--define PTPD2_INSTALL_TARGET_CMDS
--	$(INSTALL) -m 755 -D $(@D)/src/ptpd2 $(TARGET_DIR)/usr/sbin/ptpd2
--endef
--
- define PTPD2_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 755 -D package/ptpd2/S65ptpd2 \
- 		$(TARGET_DIR)/etc/init.d/S65ptpd2
- endef
- 
--$(eval $(generic-package))
-+$(eval $(autotools-package))
+ IPSEC_TOOLS_VERSION_MAJOR = 0.8
+-IPSEC_TOOLS_VERSION = $(IPSEC_TOOLS_VERSION_MAJOR).0
++IPSEC_TOOLS_VERSION = $(IPSEC_TOOLS_VERSION_MAJOR).2
+ IPSEC_TOOLS_SOURCE = ipsec-tools-$(IPSEC_TOOLS_VERSION).tar.bz2
+ IPSEC_TOOLS_SITE = http://ftp.sunet.se/pub/NetBSD/misc/ipsec-tools/$(IPSEC_TOOLS_VERSION_MAJOR)/
+ IPSEC_TOOLS_INSTALL_STAGING = YES
