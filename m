@@ -1,83 +1,59 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Tue, 11 Mar 2014 22:29:28 +0100
-Subject: [Buildroot] [PATCH v5 2/6] mesa3d: pull out from x11
-In-Reply-To: <BLU0-SMTP204532CA2C2B6238959F1EED9770@phx.gbl>
+From: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
+Date: Tue, 11 Mar 2014 17:49:18 -0400
+Subject: [Buildroot] [PATCH v5 3/6] mesa3d: modularize and bump to
+ version 10.0.3
+In-Reply-To: <BLU0-SMTP1419F6C427A11CAB6AF9F7ED9770@phx.gbl>
 References: <1394564029-528-1-git-send-email-berndkuhls@hotmail.com>
- <BLU0-SMTP204532CA2C2B6238959F1EED9770@phx.gbl>
-Message-ID: <531F8038.5020200@trzebnica.net>
+ <BLU0-SMTP1419F6C427A11CAB6AF9F7ED9770@phx.gbl>
+Message-ID: <531F84DE.5080005@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
 Hi Bernd,
 
-> mesa3d does not depend on x11, it can be used by wayland or other apps
->
-> Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
-> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
-> ---
-> v5: added explanation (Yann)
-> v4: rebased v3
-> v3: Config.in: move package to "Graphic libraries" (Arnout)
-> v2: rebased v1
-> v1: rebased Spenser Gilliland?s patch:
->      http://patchwork.ozlabs.org/patch/278302/
->
->   package/Config.in                                     |    1 +
->   package/{x11r7 => }/mesa3d/Config.in                  |    0
->   package/{x11r7 => }/mesa3d/mesa3d-uclibc-locale.patch |    0
->   package/{x11r7 => }/mesa3d/mesa3d.mk                  |    0
->   package/x11r7/Config.in                               |    1 -
->   5 files changed, 1 insertion(+), 1 deletion(-)
->   rename package/{x11r7 => }/mesa3d/Config.in (100%)
->   rename package/{x11r7 => }/mesa3d/mesa3d-uclibc-locale.patch (100%)
+On 03/11/2014 02:53 PM, Bernd Kuhls wrote:
+> +config BR2_PACKAGE_MESA3D_DRI_DRIVER_I965
+> +	bool "DRI i965 driver"
+> +	depends on BR2_i386 || BR2_x86_64
+> +	select BR2_PACKAGE_MESA3D_DRI_DRIVER
+> +	select BR2_PACKAGE_LIBDRM_INTEL
+> +	help
+> +	  Supports all Intel GPUs.  This version is most supported by Intel.
+> +
+We still need to have a dependency on BR2_PACKAGE_XORG7.
+Sorry for the noise.
 
-Shouldn't you rename this patch on
+> +ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER),y)
+> +MESA3D_DEPENDENCIES += \
+> +	xproto_xf86driproto \
+> +	xproto_dri2proto \
+> +	xproto_glproto \
+> +	xlib_libX11 \
+> +	xlib_libXext \
+> +	xlib_libXdamage \
+> +	xlib_libXfixes \
+> +	libxcb
+> +MESA3D_CONF_OPT += \
+> +	--enable-glx \
+> +	--enable-shared-glapi \
+> +	--enable-xa
+> +else
+> +MESA3D_CONF_OPT += \
+> +	--disable-glx \
+> +	--disable-shared-glapi \
+I didn't catch it before, but the shared-glapi option is required by GBM
+(so by EGL) when you use a DRI driver, perhaps you could add a
+conditionnal statement in your "ifeq
+($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)" or always enabled it when you use
+a DRI driver, i don't know if it can be a trouble to let this option
+enabled as default.
 
-.../mesa3d-01-uclibc-locale.patch
-
+FYI, with your patches and that little changes, i'm able to do hardware
+GL rendering with an intel graphic card and without X, so this
+configuration work for me.
 
 Regards,
-Jerzy
-
->   rename package/{x11r7 => }/mesa3d/mesa3d.mk (100%)
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 70e5a7f..b0da653 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -188,6 +188,7 @@ source "package/fbv/Config.in"
->   source "package/imagemagick/Config.in"
->   source "package/linux-fusion/Config.in"
->   source "package/lite/Config.in"
-> +source "package/mesa3d/Config.in"
->   source "package/ocrad/Config.in"
->   source "package/psplash/Config.in"
->   source "package/sawman/Config.in"
-> diff --git a/package/x11r7/mesa3d/Config.in b/package/mesa3d/Config.in
-> similarity index 100%
-> rename from package/x11r7/mesa3d/Config.in
-> rename to package/mesa3d/Config.in
-> diff --git a/package/x11r7/mesa3d/mesa3d-uclibc-locale.patch b/package/mesa3d/mesa3d-uclibc-locale.patch
-> similarity index 100%
-> rename from package/x11r7/mesa3d/mesa3d-uclibc-locale.patch
-> rename to package/mesa3d/mesa3d-uclibc-locale.patch
-> diff --git a/package/x11r7/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-> similarity index 100%
-> rename from package/x11r7/mesa3d/mesa3d.mk
-> rename to package/mesa3d/mesa3d.mk
-> diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-> index 5ef118b..458d09f 100644
-> --- a/package/x11r7/Config.in
-> +++ b/package/x11r7/Config.in
-> @@ -15,7 +15,6 @@ if BR2_PACKAGE_XORG7
->   	endmenu
->   	menu "X11R7 Libraries"
->   		source package/x11r7/libxcb/Config.in
-> -		source package/x11r7/mesa3d/Config.in
->   		source package/x11r7/xcb-util/Config.in
->   		source package/x11r7/xcb-util-image/Config.in
->   		source package/x11r7/xcb-util-keysyms/Config.in
+Sebastien.
