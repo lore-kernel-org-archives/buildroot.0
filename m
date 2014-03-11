@@ -1,74 +1,74 @@
-From: Denis Bodor <lefinnois@lefinnois.net>
-Date: Tue, 11 Mar 2014 18:11:21 +0100
-Subject: [Buildroot] [PATCH 1/1] Adding libstrophe
-Message-ID: <1394557881-4770-1-git-send-email-lefinnois@lefinnois.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 11 Mar 2014 18:33:50 +0100
+Subject: [Buildroot] [PATCH 1/6] barebox: fix coding style
+In-Reply-To: <1394540278-28740-2-git-send-email-fabio.porcedda@gmail.com>
+References: <1394540278-28740-1-git-send-email-fabio.porcedda@gmail.com>
+ <1394540278-28740-2-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <20140311173350.GA3330@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Denis Bodor <lefinnois@lefinnois.net>
----
- package/libstrophe/Config.in                            | 11 +++++++++++
- package/libstrophe/libstrophe-make-autoreconfable.patch |  9 +++++++++
- package/libstrophe/libstrophe.mk                        | 14 ++++++++++++++
- 3 files changed, 34 insertions(+)
- create mode 100644 package/libstrophe/Config.in
- create mode 100644 package/libstrophe/libstrophe-make-autoreconfable.patch
- create mode 100644 package/libstrophe/libstrophe.mk
+Fabio, All,
 
-diff --git a/package/libstrophe/Config.in b/package/libstrophe/Config.in
-new file mode 100644
-index 0000000..ac02a66
---- /dev/null
-+++ b/package/libstrophe/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_LIBSTROPHE
-+	bool "libstrophe"
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_EXPAT
-+	help
-+	  libstrophe is a lightweight XMPP client library written in C.
-+	  It has minimal dependencies and is configurable for various
-+	  environments. It runs well on both Linux, Unix, and Windows
-+	  based platforms.
-+
-+	  https://github.com/strophe/libstrophe
-diff --git a/package/libstrophe/libstrophe-make-autoreconfable.patch b/package/libstrophe/libstrophe-make-autoreconfable.patch
-new file mode 100644
-index 0000000..5caeaff
---- /dev/null
-+++ b/package/libstrophe/libstrophe-make-autoreconfable.patch
-@@ -0,0 +1,9 @@
-+diff -ur libstrophe.orig/Makefile.am libstrophe/Makefile.am
-+--- libstrophe.orig/Makefile.am	2014-03-02 18:58:36.219753865 +0100
-++++ libstrophe/Makefile.am	2014-03-02 18:58:02.739752477 +0100
-+@@ -1,4 +1,4 @@
-+-AUTOMAKE_OPTIONS = subdir-objects
-++AUTOMAKE_OPTIONS = subdir-objects foreign
-+ 
-+ CFLAGS = -g -Wall
-+ 
-diff --git a/package/libstrophe/libstrophe.mk b/package/libstrophe/libstrophe.mk
-new file mode 100644
-index 0000000..356d3d4
---- /dev/null
-+++ b/package/libstrophe/libstrophe.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+# 
-+# libstrophe
-+#
-+################################################################################
-+
-+LIBSTROPHE_VERSION = d408eaf2bbfe5ff5c56eab01463c278f9891c08e
-+LIBSTROPHE_SITE = $(call github,strophe,libstrophe,$(LIBSTROPHE_VERSION))
-+LIBSTROPHE_INSTALL_STAGING = YES
-+LIBSTROPHE_INSTALL_TARGET = NO
-+LIBSTROPHE_DEPENDENCIES = expat openssl host-pkgconf
-+LIBSTROPHE_AUTORECONF = YES
-+
-+$(eval $(autotools-package))
+On 2014-03-11 13:17 +0100, Fabio Porcedda spake thusly:
+> Break long lines.
+[--SNIP--]
+> -BAREBOX_MAKE_FLAGS = ARCH=$(BAREBOX_ARCH) CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)"
+> +BAREBOX_MAKE_FLAGS = ARCH=$(BAREBOX_ARCH) CROSS_COMPILE="$(CCACHE) \
+> +	$(TARGET_CROSS)"
+
+Although we have no written rule about thus, I'd rather that folded-lines
+assignments continue after the '=' sign, like:
+
+BAREBOX_MAKE_FLAGS = ARCH=$(BAREBOX_ARCH) CROSS_COMPILE="$(CCACHE) \
+                     $(TARGET_CROSS)"
+
+It makes it easier to see the assignment.
+
+>  ifeq ($(BR2_TARGET_BAREBOX_USE_DEFCONFIG),y)
+> -BAREBOX_SOURCE_CONFIG = $(@D)/arch/$(BAREBOX_ARCH)/configs/$(call qstrip,$(BR2_TARGET_BAREBOX_BOARD_DEFCONFIG))_defconfig
+> +BAREBOX_SOURCE_CONFIG = $(@D)/arch/$(BAREBOX_ARCH)/configs/$(call qstrip,\
+> +	$(BR2_TARGET_BAREBOX_BOARD_DEFCONFIG))_defconfig
+
+Ditto.
+
+>  else ifeq ($(BR2_TARGET_BAREBOX_USE_CUSTOM_CONFIG),y)
+>  BAREBOX_SOURCE_CONFIG = $(BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE)
+>  endif
+>  
+>  define BAREBOX_CONFIGURE_CMDS
+> -	cp $(BAREBOX_SOURCE_CONFIG) $(@D)/arch/$(BAREBOX_ARCH)/configs/buildroot_defconfig
+> -	$(TARGET_MAKE_ENV) $(MAKE) $(BAREBOX_MAKE_FLAGS) -C $(@D) buildroot_defconfig
+> +	cp $(BAREBOX_SOURCE_CONFIG) \
+> +		$(@D)/arch/$(BAREBOX_ARCH)/configs/buildroot_defconfig
+> +	$(TARGET_MAKE_ENV) $(MAKE) $(BAREBOX_MAKE_FLAGS) -C $(@D) \
+> +		buildroot_defconfig
+>  endef
+>  
+>  ifeq ($(BR2_TARGET_BAREBOX_BAREBOXENV),y)
+> @@ -68,7 +73,8 @@ endef
+>  endif
+>  
+>  ifeq ($(BR2_TARGET_BAREBOX_CUSTOM_ENV),y)
+> -BAREBOX_ENV_NAME = $(notdir $(call qstrip, $(BR2_TARGET_BAREBOX_CUSTOM_ENV_PATH)))
+> +BAREBOX_ENV_NAME = $(notdir $(call qstrip,\
+> +	$(BR2_TARGET_BAREBOX_CUSTOM_ENV_PATH)))
+
+Ditto.
+
+But I'd like the maintainer to Ack this before you resend. I have no
+strong opinion about it, I just find it easier to read...
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.9.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
