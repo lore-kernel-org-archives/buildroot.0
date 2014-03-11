@@ -1,95 +1,45 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Tue, 11 Mar 2014 19:53:49 +0100
-Subject: [Buildroot] [PATCH v5 6/6] xdriver_xf86-video-intel: Bump version
-	to 2.99.910
-In-Reply-To: <1394564029-528-1-git-send-email-berndkuhls@hotmail.com>
-References: <1394564029-528-1-git-send-email-berndkuhls@hotmail.com>
-Message-ID: <BLU0-SMTP152309A66EAFFBAFFC0C064D9770@phx.gbl>
+From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Tue, 11 Mar 2014 20:16:13 +0100
+Subject: [Buildroot] [PATCH 4/6] luajit: needs for 32bit archictectures
+	a 32bit host gcc
+In-Reply-To: <1394540278-28740-5-git-send-email-fabio.porcedda@gmail.com>
+References: <1394540278-28740-1-git-send-email-fabio.porcedda@gmail.com>
+ <1394540278-28740-5-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <CAB0FRst2zDEomsXb8FU_PbHf_Qo9ASqtJF5TfgaKT8OFiCJefQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- add necessary dependencies
-- add -D_GNU_SOURCE to avoid getline compilation error
+2014-03-11 13:17 GMT+01:00 Fabio Porcedda <fabio.porcedda@gmail.com>:
+> For 32 bit archictectures the luajit package needs a host compiler
+> able to generate 32 bit code using the "-m32" option so check if that
+> option is supported.
+>
+> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 
-Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
----
-v5: no changes
-v4: added dependencies, fixed getline compilation error
-v3: bump version to 2.99.910
-v2: bump version to 2.99.909
-v1: bump version to 2.99.908
+Acked-by: Francois Perrad <francois.perrad@gadz.org>
 
- package/x11r7/xdriver_xf86-video-intel/Config.in     |   13 ++++++++-----
- .../xdriver_xf86-video-intel.mk                      |   18 +++++++++++++++---
- 2 files changed, 23 insertions(+), 8 deletions(-)
-
-diff --git a/package/x11r7/xdriver_xf86-video-intel/Config.in b/package/x11r7/xdriver_xf86-video-intel/Config.in
-index 83b714a..026520c 100644
---- a/package/x11r7/xdriver_xf86-video-intel/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-intel/Config.in
-@@ -1,13 +1,16 @@
- config BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL
- 	bool "xf86-video-intel"
--	select BR2_PACKAGE_XPROTO_FONTSPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_RENDERPROTO
--	select BR2_PACKAGE_XPROTO_XPROTO
--	select BR2_PACKAGE_XLIB_LIBPCIACCESS
- 	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_LIBDRM_INTEL
- 	select BR2_PACKAGE_MESA3D
-+	select BR2_PACKAGE_MESA3D_DRI_DRIVER_I965
-+	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE
-+	select BR2_PACKAGE_XLIB_LIBPCIACCESS
-+	select BR2_PACKAGE_XLIB_LIBXRANDR
-+	select BR2_PACKAGE_XLIB_LIBXTST
-+	select BR2_PACKAGE_XPROTO_FONTSPROTO
-+	select BR2_PACKAGE_XPROTO_XF86DRIPROTO
-+	select BR2_PACKAGE_XPROTO_XPROTO
- 	depends on (BR2_i386 || BR2_x86_64)
- 	help
- 	  Intel video driver
-diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-index 332de54..e9f0bad 100644
---- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-+++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-@@ -4,12 +4,15 @@
- #
- ################################################################################
- 
--XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.907
-+XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.910
- XDRIVER_XF86_VIDEO_INTEL_SOURCE = xf86-video-intel-$(XDRIVER_XF86_VIDEO_INTEL_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_INTEL_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_INTEL_LICENSE = MIT
- XDRIVER_XF86_VIDEO_INTEL_LICENSE_FILES = COPYING
--XDRIVER_XF86_VIDEO_INTEL_AUTORECONF = YES
-+
-+# this fixes a getline-related compilation in src/sna/kgem.c
-+XDRIVER_XF86_VIDEO_INTEL_CONF_ENV = \
-+	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
- 
- XDRIVER_XF86_VIDEO_INTEL_CONF_OPT = \
- 	--enable-dri \
-@@ -23,6 +26,15 @@ XDRIVER_XF86_VIDEO_INTEL_CONF_OPT = \
- 	--disable-dga \
- 	--disable-async-swap
- 
--XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xproto libdrm xlib_libpciaccess
-+XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES = \
-+	libdrm \
-+	mesa3d \
-+	xlib_libXcomposite \
-+	xlib_libXrandr \
-+	xlib_libXtst \
-+	xlib_libpciaccess \
-+	xproto_fontsproto \
-+	xproto_xproto \
-+	xserver_xorg-server
- 
- $(eval $(autotools-package))
--- 
-1.7.10.4
+> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Fran?ois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/luajit/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/package/luajit/Config.in b/package/luajit/Config.in
+> index 9c4ecc3..dd93609 100644
+> --- a/package/luajit/Config.in
+> +++ b/package/luajit/Config.in
+> @@ -4,6 +4,7 @@ config BR2_PACKAGE_LUAJIT
+>         # Luajit is only available for some target architectures, and
+>         # has some complexity wrt 32/64. See luajit.mk for details.
+>         depends on BR2_i386 || (BR2_x86_64 && BR2_HOSTARCH='x86_64') || BR2_powerpc || BR2_arm || BR2_armeb
+> +       select BR2_HOSTARCH_NEEDS_IA32_COMPILER if !BR2_ARCH_IS_64
+>         help
+>           LuaJIT implements the full set of language features defined
+>           by Lua 5.1. The virtual machine (VM) is API- and
+> --
+> 1.8.3.2
+>
