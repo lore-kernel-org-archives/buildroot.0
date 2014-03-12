@@ -1,9 +1,9 @@
 From: Clayton Shotwell <clshotwe@rockwellcollins.com>
-Date: Wed, 12 Mar 2014 12:51:07 -0500
-Subject: [Buildroot] [PATCH v3 2/4] libee: new package
+Date: Wed, 12 Mar 2014 12:51:08 -0500
+Subject: [Buildroot] [PATCH v3 3/4] liblogging: new package
 In-Reply-To: <1394646669-10461-1-git-send-email-clshotwe@rockwellcollins.com>
 References: <1394646669-10461-1-git-send-email-clshotwe@rockwellcollins.com>
-Message-ID: <1394646669-10461-2-git-send-email-clshotwe@rockwellcollins.com>
+Message-ID: <1394646669-10461-3-git-send-email-clshotwe@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,74 +14,67 @@ Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
 
 ---
 Changes v2 -> v3:
-  - Corrected license files variable (Suggested by Jerzy)
+  - Fixed type in license files variable (Suggested by Jerzy)
 Changes v1 -> v2:
-  - Added a select to the configure for libestr (Suggested by Baruch)
+  - No changes.
 ---
- package/Config.in       |    1 +
- package/libee/Config.in |   19 +++++++++++++++++++
- package/libee/libee.mk  |   16 ++++++++++++++++
- 3 files changed, 36 insertions(+), 0 deletions(-)
- create mode 100644 package/libee/Config.in
- create mode 100644 package/libee/libee.mk
+ package/Config.in                |    1 +
+ package/liblogging/Config.in     |    8 ++++++++
+ package/liblogging/liblogging.mk |   20 ++++++++++++++++++++
+ 3 files changed, 29 insertions(+), 0 deletions(-)
+ create mode 100644 package/liblogging/Config.in
+ create mode 100644 package/liblogging/liblogging.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index ab82483..42c21d8 100644
+index 42c21d8..caaafa1 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -767,6 +767,7 @@ source "package/libcap-ng/Config.in"
- source "package/libcgroup/Config.in"
- source "package/libcofi/Config.in"
- source "package/libdaemon/Config.in"
-+source "package/libee/Config.in"
- source "package/libelf/Config.in"
- source "package/libev/Config.in"
- source "package/libevdev/Config.in"
-diff --git a/package/libee/Config.in b/package/libee/Config.in
+@@ -776,6 +776,7 @@ source "package/libffi/Config.in"
+ source "package/libglib2/Config.in"
+ source "package/libical/Config.in"
+ source "package/liblog4c-localtime/Config.in"
++source "package/liblogging/Config.in"
+ source "package/libnspr/Config.in"
+ source "package/libpfm4/Config.in"
+ source "package/libplist/Config.in"
+diff --git a/package/liblogging/Config.in b/package/liblogging/Config.in
 new file mode 100644
-index 0000000..9a3411e
+index 0000000..23c3c1a
 --- /dev/null
-+++ b/package/libee/Config.in
-@@ -0,0 +1,19 @@
-+config BR2_PACKAGE_LIBEE
-+	bool "libee"
-+	select BR2_PACKAGE_LIBESTR
++++ b/package/liblogging/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_LIBLOGGING
++	bool "liblogging"
 +	help
-+	  An Event Expression Library inspired by CEE.
++	  Liblogging is an easy to use library for
++	  logging. It offers an enhanced replacement
++	  for the syslog() call, but retains its ease of use.
 +
-+	  CEE is an upcoming standard used to describe network
-+	  events in a number of normalized formats. It's goal is
-+	  to unify they currently many different representations
-+	  that exist in the industry.
-+
-+	  The core idea of libee is to provide a small but hopefully
-+	  convenient API layer above the CEE standard. However, CEE
-+	  is not finished. At the time of this writing, CEE is under
-+	  heavy development and even some of its core data structures
-+	  (like the data dictionary and taxonmy) have not been fully
-+	  specified.
-+
-+	  http://www.libee.org
-diff --git a/package/libee/libee.mk b/package/libee/libee.mk
++	  http://www.liblogging.org/
+diff --git a/package/liblogging/liblogging.mk b/package/liblogging/liblogging.mk
 new file mode 100644
-index 0000000..cd424be
+index 0000000..fa181fb
 --- /dev/null
-+++ b/package/libee/libee.mk
-@@ -0,0 +1,16 @@
++++ b/package/liblogging/liblogging.mk
+@@ -0,0 +1,20 @@
 +################################################################################
 +#
-+# libee
++# liblogging
 +#
 +################################################################################
 +
-+LIBEE_VERSION = 0.4.1
-+LIBEE_SITE = http://www.libee.org/download/files/download/
-+LIBEE_LICENSE = LGPLv2.1+
-+LIBEE_LICENSE_FILES = COPYING
-+LIBEE_DEPENDENCIES = libestr
-+LIBEE_INSTALL_STAGING = YES
++LIBLOGGING_VERSION = 1.0.2
++LIBLOGGING_SITE = http://download.rsyslog.com/liblogging
++LIBLOGGING_LICENSE = BSD-2c
++LIBLOGGING_LICENSE_FILES = COPYING
++LIBLOGGING_INSTALL_STAGING = YES
++LIBLOGGING_CONF_OPT = --enable-cached-man-pages
 +
-+LIBEE_MAKE = $(MAKE1)
++ifeq ($(BR2_INIT_SYSTEMD),y)
++LIBLOGGING_CONF_OPT += --enable-journal
++else
++LIBLOGGING_CONF_OPT += --disable-journal
++endif
 +
 +$(eval $(autotools-package))
 -- 
