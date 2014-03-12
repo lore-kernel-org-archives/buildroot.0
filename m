@@ -1,50 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 12 Mar 2014 17:24:23 +0100
-Subject: [Buildroot] [git commit] device table dev: drop old CDROMs
-Message-ID: <20140312162501.E31949BEEC@busybox.osuosl.org>
+Date: Wed, 12 Mar 2014 17:23:38 +0100
+Subject: [Buildroot] [git commit] samba: security bump to version 3.6.23
+Message-ID: <20140312162502.3ED2B9BF2C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=43691a67c7e6c84518de6a5cf713115b6eba806f
+commit: http://git.buildroot.net/buildroot/commit/?id=42dcbd07eb632b5c5b632864cd4b4d6a8edbc1d0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop old custom CDROM devices from the device table, these are x86-only
-and really really old so it would be amazing these would be in working
-order.
-And they haven't been supported in linux for while.
+Fixes CVE-2013-4496 and CVE-2013-6442.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- system/device_table_dev.txt |   15 ---------------
- 1 files changed, 0 insertions(+), 15 deletions(-)
+ package/samba/samba.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/system/device_table_dev.txt b/system/device_table_dev.txt
-index 91ed769..c4257a6 100644
---- a/system/device_table_dev.txt
-+++ b/system/device_table_dev.txt
-@@ -125,21 +125,6 @@
- #/dev/fd0u2880	b	640	0	0	2	32	0	0	-
- #/dev/fd1u2880	b	640	0	0	2	33	0	0	-
+diff --git a/package/samba/samba.mk b/package/samba/samba.mk
+index 1f1d253..7d5ed5e 100644
+--- a/package/samba/samba.mk
++++ b/package/samba/samba.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--# All the proprietary cdrom devices in the world
--#/dev/aztcd	b	640	0	0	29	0	0	0	-
--#/dev/bpcd	b	640	0	0	41	0	0	0	-
--#/dev/capi20	c	640	0	0	68	0	0	1	2
--#/dev/cdu31a	b	640	0	0	15	0	0	0	-
--#/dev/cdu535	b	640	0	0	24	0	0	0	-
--#/dev/cm206cd	b	640	0	0	32	0	0	0	-
--#/dev/sjcd	b	640	0	0	18	0	0	0	-
--#/dev/sonycd	b	640	0	0	15	0	0	0	-
--#/dev/gscd	b	640	0	0	16	0	0	0	-
--#/dev/sbpcd	b	640	0	0	25	0	0	0	-
--#/dev/sbpcd	b	640	0	0	25	0	0	1	4
--#/dev/mcd	b	640	0	0	23	0	0	0	-
--#/dev/optcd	b	640	0	0	17	0	0	0	-
--
- # I2C device nodes
- /dev/i2c-	c	666	0	0	89	0	0	1	4
- 
+-SAMBA_VERSION = 3.6.22
++SAMBA_VERSION = 3.6.23
+ SAMBA_SITE = http://ftp.samba.org/pub/samba/stable
+ SAMBA_SUBDIR = source3
+ SAMBA_INSTALL_STAGING = YES
