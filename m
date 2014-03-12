@@ -1,103 +1,96 @@
 From: Jeremy Kerr <jk@ozlabs.org>
 Date: Wed, 12 Mar 2014 11:45:57 +0800
-Subject: [Buildroot] [PATCH 00/10 v2] Enable a buildroot-based petitboot
-	bootloader
+Subject: [Buildroot] [PATCH 04/10 v2] package/ncurses: Allow building wide
+	char support
 In-Reply-To: <1394595957.563937.119075350083.0.gpush@pablo>
-Message-ID: <1394595957.563937.119075350083.0.gpush@pablo>
+Message-ID: <1394595957.565289.287593411192.4.gpush@pablo>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Allow ncurses to be configured with wide char support; this causes the
+libraries to be built with the 'w' suffix (eg libncursesw.so,
+libmenuw.so, etc), so we need to create a few symlinks.
 
-The following series allows us to build a petitboot-based bootloader
-using buildroot.
-
-Petitboot is a kexec-based bootloader; by plumbing together a few linux
-utilities, we can implement a bootloader in userspace, using standard
-Linux drivers for hardware support. There's a bit of background of
-petitboot in my recent linux.conf.au talk:
-
- http://mirror.linux.org.au/linux.conf.au/2014/Thursday/89-Petitboot_doing_interesting_things_in_your_bootloader_-_Jeremy_Kerr.mp4
- 
-And the project homepage:
-
- https://www.kernel.org/pub/linux/kernel/people/geoff/petitboot/petitboot.html
-
-My primary target here is powerpc machines (and this series adds a
-defconfig to do a powerpc petitboot build), but I've also been able to
-get most of petitboot working when built as an EFI stub on x86 machines
-(we still need some platform-specific bits in petitboot for proper
-configuration persistence).
-
-While most of this series is fairly straightforward, there are a few
-items that might need a little more attention:
-
- - At the moment, I'm using my local repo for petitboot sources; it may
-   be better to wait until everything is merged upstream. Upstream is
-   still active, and I don't think this should take long.
-
- - We add wide-char support for ncurses; this seems to be working okay,
-   but could do with a little review.
-
- - I still need a couple of tweaks to the target system (/etc/locale and
-   /etc/inittab). At the moment, I'm carrying a change that introduces
-   an overlay for these two files, but that's not suitable for upstream
-   use:
-
-     http://git.ozlabs.org/?p=buildroot;a=commitdiff;h=d50bd74b
-   
-   Is there any way I can provide updates to these files? The changes
-   aren't board-specific; they're due to petitboot expecting to own
-   the default consoles for UIs. Or is there a better way to do this?
-
-This series is also available in my git tree, at:
-
-  git://git.ozlabs.org/~jk/buildroot/
-
-- in the petitboot branch. Note that that branch includes the overlay
-too, which isn't intended for upstream.
-
-Also, I'd like to give a big thanks to the buildroot developers; being
-able to re-roll an entire system with one command has made petitboot
-development *significantly* easier. Also, thanks to Thomas for the nudge
-to send these changes upstream!
-
-Please let me know if you have questions/comments/etc.
-
-Changes since v1, based on feedback:
-
- - drobbear: we only want a config option to disable the server,
-   instead of both client and server
-
- - ncurses: use NCURSES_LIBS-y
-
- - busybox: fix HOOK_DIR glob expansion
-
- - powerpc-utils, kexec-lite, petitboot: update upstream versions
-
- - petitboot: add dependencies
-
- - all: unified headers, now using full git SHAs
-
- - dtc: Added patch to update to 1.4.0
-
-Cheers,
-
-
-Jeremy
+Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
 
 ---
-Jeremy Kerr (10):
-      package/busybox: Add facility for DHCP hooks
-      package/dropbear: Add separate configuration option for dropbear server
-      package/ncurses: Remove duplicated library install code
-      package/ncurses: Allow building wide char support
-      package/dtc: Update to v1.4.0
-      package/powerpc-utils: Add powerpc hardware utilities
-      package/kexec-lite: Add a package for the kexec-lite tools
-      package/petitboot: Add petitboot, the userspace bootloader
-      package/iprutils: Add IBM Power RAID utilities
-      Add powerpc petitboot defconfig
+ package/ncurses/Config.in  |    6 ++++++
+ package/ncurses/ncurses.mk |   24 ++++++++++++++++++++++--
+ 2 files changed, 28 insertions(+), 2 deletions(-)
+
+diff --git a/package/ncurses/Config.in b/package/ncurses/Config.in
+index e8ab710..b90ec9e 100644
+--- a/package/ncurses/Config.in
++++ b/package/ncurses/Config.in
+@@ -10,6 +10,12 @@ config BR2_PACKAGE_NCURSES
+ 
+ if BR2_PACKAGE_NCURSES
+ 
++config BR2_PACKAGE_NCURSES_WCHAR
++	bool "enable wide char support"
++	depends on BR2_USE_WCHAR
++	help
++	  Enable wide char & UTF-8 support in ncurses libraries
++
+ config BR2_PACKAGE_NCURSES_TARGET_PANEL
+ 	bool "ncurses libpanel in target"
+ 	help
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index c2e1c3f..445f259 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -12,7 +12,7 @@ HOST_NCURSES_DEPENDENCIES =
+ NCURSES_PROGS = clear infocmp tabs tic toe tput tset
+ NCURSES_LICENSE = MIT with advertising clause
+ NCURSES_LICENSE_FILES = README
+-NCURSES_CONFIG_SCRIPTS = ncurses5-config
++NCURSES_CONFIG_SCRIPTS = ncurses$(NCURSES_LIB_SUFFIX)5-config
+ 
+ NCURSES_CONF_OPT = \
+ 	$(if $(BR2_PREFER_STATIC_LIB),--without-shared,--with-shared) \
+@@ -36,6 +36,24 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ 	NCURSES_DEPENDENCIES += busybox
+ endif
+ 
++ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
++NCURSES_CONF_OPT += --enable-widec
++NCURSES_LIB_SUFFIX = w
++
++define NCURSES_LINK_LIBS
++	for lib in $(NCURSES_LIBS-y); do \
++		ln -sf $${lib}$(NCURSES_LIB_SUFFIX).so \
++			$(1)/usr/lib/$${lib}.so; \
++	done
++endef
++
++NCURSES_LINK_TARGET_LIBS =  $(call NCURSES_LINK_LIBS, $(TARGET_DIR))
++NCURSES_LINK_STAGING_LIBS =  $(call NCURSES_LINK_LIBS, $(STAGING_DIR))
++
++NCURSES_POST_INSTALL_STAGING_HOOKS += NCURSES_LINK_STAGING_LIBS
++
++endif
++
+ NCURSES_LIBS-y = libncurses
+ NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_MENU) += libmenu
+ NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_PANEL) += libpanel
+@@ -52,7 +70,8 @@ endef
+ ifneq ($(BR2_PREFER_STATIC_LIB),y)
+ define NCURSES_INSTALL_TARGET_LIBS
+ 	for lib in $(NCURSES_LIBS-y); do \
+-		cp -dpf $(NCURSES_DIR)/lib/$${lib}.so* $(TARGET_DIR)/usr/lib/; \
++		cp -dpf $(NCURSES_DIR)/lib/$${lib}$(NCURSES_LIB_SUFFIX).so* \
++			$(TARGET_DIR)/usr/lib/; \
+ 	done
+ endef
+ endif
+@@ -70,6 +89,7 @@ endif
+ define NCURSES_INSTALL_TARGET_CMDS
+ 	mkdir -p $(TARGET_DIR)/usr/lib
+ 	$(NCURSES_INSTALL_TARGET_LIBS)
++	$(NCURSES_LINK_TARGET_LIBS)
+ 	ln -snf /usr/share/terminfo $(TARGET_DIR)/usr/lib/terminfo
+ 	mkdir -p $(TARGET_DIR)/usr/share/terminfo/x
+ 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm $(TARGET_DIR)/usr/share/terminfo/x
