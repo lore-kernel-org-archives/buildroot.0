@@ -1,58 +1,89 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Wed, 12 Mar 2014 23:16:40 +0100
-Subject: [Buildroot] [PATCH v6 4/5] pkgconf: rewrite variable sdkdir,
- needed by xdriver_xf86-video-intel
-In-Reply-To: <BLU0-SMTP316AB12B933108688B43F8BD9760@phx.gbl>
-References: <1394653353-10904-1-git-send-email-berndkuhls@hotmail.com>
- <BLU0-SMTP316AB12B933108688B43F8BD9760@phx.gbl>
-Message-ID: <5320DCC8.3000303@trzebnica.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 12 Mar 2014 23:16:50 +0100
+Subject: [Buildroot] [PATCH 08/10 v2] package/petitboot: Add petitboot,
+ the userspace bootloader
+In-Reply-To: <1394595957.566506.967533808031.8.gpush@pablo>
+References: <1394595957.563937.119075350083.0.gpush@pablo>
+ <1394595957.566506.967533808031.8.gpush@pablo>
+Message-ID: <20140312221650.GB3389@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Jeremy, All,
 
-Hi Bernd,
+On 2014-03-12 11:45 +0800, Jeremy Kerr spake thusly:
+> This change adds the petitboot package, a bootloader that exists in
+> userspace, and uses the kexec facility to boot into a new kernel.
+[--SNIP--]
+> diff --git a/package/petitboot/Config.in b/package/petitboot/Config.in
+> new file mode 100644
+> index 0000000..f5ffe8e
+> --- /dev/null
+> +++ b/package/petitboot/Config.in
+> @@ -0,0 +1,13 @@
+> +config BR2_PACKAGE_PETITBOOT
+> +	bool "petitboot"
+> +	depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
+> +	select BR2_PACKAGE_UDEV
 
-> Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
-> ---
-> v3: no changes
-> v2: no changes
->
->   package/pkgconf/pkgconf-fix-variable.patch |    4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
+Package udev no longer exists. udev is now a virtual package that is
+provided by eother systemd of eudev. So you can not 'select'
+BR2_PACKAGE_UDEV.
 
-/Shouldn't you rename this patch on/
+You should instead use:
+    depends on BR2_PACKAGE_HAS_UDEV
 
-pkgconf-01-fix-variable.patch
+[--SNIP--]
+> diff --git a/package/petitboot/petitboot.mk b/package/petitboot/petitboot.mk
+> new file mode 100644
+> index 0000000..8370fa2
+> --- /dev/null
+> +++ b/package/petitboot/petitboot.mk
+> @@ -0,0 +1,64 @@
+> +################################################################################
+> +#
+> +# petitboot
+> +#
+> +################################################################################
+[--SNIP--]
+> +define PETITBOOT_PRE_CONFIGURE_BOOTSTRAP
+> +	(cd $(@D) && ./bootstrap $(PETITBOOT_BOOTSTRAP_VERSION))
+> +endef
+> +
+> +PETITBOOT_PRE_CONFIGURE_HOOKS += PETITBOOT_PRE_CONFIGURE_BOOTSTRAP
+
+I find it too bad that an autotools package can not be autoreconf'ed.
+
+I've looked a bit at what this bootstrap does, and all it really is used
+for is to shoehorn the veersion in configure.ac.
+
+Since you seem to be involved in petitboot, here's a suggestion to do it
+otherwise:
+
+  - move the version stuff out of ./bootstrap, into its own script, eg.
+    ./version.sh
+
+  - change configure.ac to use AC_INIT as thus:
+
+    AC_INIT([petitboot],
+            [m4_esyscmd_s([./version.sh])],
+            [Geoff Levand <geoff@infradead.org>])
+
+Then the package will be entirely autoreconf-igurable. ;-)
+
+I haven't looked further in the patch, just pointing out a few things I
+spotted on a cursory look.
 
 Regards,
-Jerzy
+Yann E. MORIN.
 
->
-> diff --git a/package/pkgconf/pkgconf-fix-variable.patch b/package/pkgconf/pkgconf-fix-variable.patch
-> index e19f76c..4c213d6 100644
-> --- a/package/pkgconf/pkgconf-fix-variable.patch
-> +++ b/package/pkgconf/pkgconf-fix-variable.patch
-> @@ -7,17 +7,19 @@ This is sometimes used to find header files (E.G. in gst-plugins configure),
->   so ensure the sysroot'ed files are used.
->   
->   Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> +Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
->   
->   diff -Nura pkgconf-0.8.9.orig/main.c pkgconf-0.8.9/main.c
->   --- pkgconf-0.8.9.orig/main.c	2012-10-24 14:32:08.236508699 -0300
->   +++ pkgconf-0.8.9/main.c	2012-10-24 14:54:36.771070217 -0300
-> -@@ -298,7 +298,12 @@
-> +@@ -298,7 +298,13 @@
->    	if (eflag != PKG_ERRF_OK)
->    		return false;
->    
->   -	printf("%s\n", req.buf);
->   +	if ( !strcmp(req.variable, "includedir") ||
->   +	  !strcmp(req.variable, "mapdir") ||
-> ++	  !strcmp(req.variable, "sdkdir") ||
->   +	  !strcmp(req.variable, "libdir"))
->   +		printf("%s%s\n", sysroot_dir, req.buf);
->   +	else
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
