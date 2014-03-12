@@ -1,57 +1,70 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 12 Mar 2014 18:31:41 +0100
-Subject: [Buildroot] [PATCH v4 1/5] mesa3d: pull out from x11
-In-Reply-To: <531FFD8E.8010209@mind.be>
-References: <BLU0-SMTP4083C56CA0B43BBAC9B3616D9750@phx.gbl>
- <20140310173941.GA3282@free.fr> <20140310182030.GB18832@pc-eric>
- <20140310184119.GC3282@free.fr> <531FFD8E.8010209@mind.be>
-Message-ID: <20140312173141.GA3389@free.fr>
+From: Clayton Shotwell <clshotwe@rockwellcollins.com>
+Date: Wed, 12 Mar 2014 12:51:06 -0500
+Subject: [Buildroot] [PATCH v3 1/4] libestr: new package
+Message-ID: <1394646669-10461-1-git-send-email-clshotwe@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2014-03-12 07:24 +0100, Arnout Vandecappelle spake thusly:
-> On 03/10/14 19:41, Yann E. MORIN wrote:
-> >> > 1. As Mesa3D is an implementation of OpenGL, it will be a provider for the
-> >> >    virtual packages libegl, libgles and libopenvg.
-> > I've looked on my distro, and mesa3d does not provide any file named
-> > libegl*.so or ligles*.so or libopenvg*.so. So I don't think it should
-> > be, *as is*, a provider for libegl, libgles or libopenvg.
-> 
->  Have you looked at libegl1-mesa, libgles2-mesa, libopenvg1-mesa?
+Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
 
-Indeed, I was looking for libegl, not libEGL. And apt-file is not smart
-enough to do a case-insensitive search by default, so now:
+---
+Changes v2 -> v3:
+  - Corrected a typo in the license file (Suggested by Jerzy)
+Changes v1 -> v2:
+  - No changes.
+---
+ package/Config.in          |    1 +
+ package/libestr/Config.in  |    6 ++++++
+ package/libestr/libestr.mk |   13 +++++++++++++
+ 3 files changed, 20 insertions(+), 0 deletions(-)
+ create mode 100644 package/libestr/Config.in
+ create mode 100644 package/libestr/libestr.mk
 
-    $ apt-file search -i libegl |grep -E '\.so'
-    [...]
-    libegl1-mesa: /usr/lib/x86_64-linux-gnu/mesa-egl/libEGL.so.1.0.0
-    [...]
-
-    $ apt-file search -i libgles |grep -E '\.so'
-    [...]
-    libgles1-mesa: /usr/lib/x86_64-linux-gnu/mesa-egl/libGLESv1_CM.so.1.1.0
-    [...]
-    libgles2-mesa: /usr/lib/x86_64-linux-gnu/mesa-egl/libGLESv2.so.2.0.0
-    [...]
-
-    $ apt-file search -i libopenvg |grep -E '\.so'
-    [...]
-    libopenvg1-mesa: /usr/lib/x86_64-linux-gnu/mesa-egl/libOpenVG.so.1.0.0
-    [...]
-
-OK, good. So mesa3d can be added as a provider for libegl, libgles and
-libopenvg, indeed. It can be done in a separate patch, later.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/Config.in b/package/Config.in
+index 2b76a8e..ab82483 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -817,6 +817,7 @@ source "package/enchant/Config.in"
+ source "package/icu/Config.in"
+ source "package/libedit/Config.in"
+ source "package/libenca/Config.in"
++source "package/libestr/Config.in"
+ source "package/libfribidi/Config.in"
+ source "package/libiconv/Config.in"
+ source "package/linenoise/Config.in"
+diff --git a/package/libestr/Config.in b/package/libestr/Config.in
+new file mode 100644
+index 0000000..b1ca2a5
+--- /dev/null
++++ b/package/libestr/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_LIBESTR
++	bool "libestr"
++	help
++	  Some essentials for string handling (and a bit more)
++
++	  http://libestr.adiscon.com/
+diff --git a/package/libestr/libestr.mk b/package/libestr/libestr.mk
+new file mode 100644
+index 0000000..ea6011c
+--- /dev/null
++++ b/package/libestr/libestr.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# libestr
++#
++################################################################################
++
++LIBESTR_VERSION = 0.1.9
++LIBESTR_SITE = http://libestr.adiscon.com/files/download/
++LIBESTR_LICENSE = LGPLv2.1+
++LIBESTR_LICENSE_FILES = COPYING
++LIBESTR_INSTALL_STAGING = YES
++
++$(eval $(autotools-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.1
