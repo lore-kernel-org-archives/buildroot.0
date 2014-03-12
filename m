@@ -1,89 +1,43 @@
-From: Alvaro G. M <alvaro.gamez@hazent.com>
-Date: Wed, 12 Mar 2014 09:44:53 +0100
-Subject: [Buildroot] [PATCH 1/1] dcron: new package
-Message-ID: <1394613893-26144-1-git-send-email-alvaro.gamez@hazent.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 12 Mar 2014 10:57:32 +0100
+Subject: [Buildroot] How to change buildroot directory
+In-Reply-To: <5320168E.2090709@gmail.com> (Marco Trapanese's message of "Wed, 
+ 12 Mar 2014 09:10:54 +0100")
+References: <5320168E.2090709@gmail.com>
+Message-ID: <87ob1bpwmr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Alvaro G. M <alvaro.gamez@hazent.com>
----
- package/Config.in       |  1 +
- package/dcron/Config.in |  8 ++++++++
- package/dcron/dcron.mk  | 36 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 45 insertions(+)
- create mode 100644 package/dcron/Config.in
- create mode 100644 package/dcron/dcron.mk
+>>>>> "Marco" == Marco Trapanese <marcotrapanese@gmail.com> writes:
 
-diff --git a/package/Config.in b/package/Config.in
-index c0a3f20..d9c5a77 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1053,6 +1058,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/coreutils/Config.in"
- endif
- source "package/cpuload/Config.in"
-+source "package/dcron/Config.in"
- source "package/dsp-tools/Config.in"
- source "package/htop/Config.in"
- source "package/keyutils/Config.in"
-diff --git a/package/dcron/Config.in b/package/dcron/Config.in
-new file mode 100644
-index 0000000..70dadcd
---- /dev/null
-+++ b/package/dcron/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_DCRON
-+	bool "dcron"
-+	help
-+	  dcron is a time-based job scheduler with anacron-like features.
-+	  It works as a background daemon that parses individual crontab
-+	  files and executes commands on behalf of the users in question.
-+
-+	  http://www.jimpryor.net/linux/dcron.html
-diff --git a/package/dcron/dcron.mk b/package/dcron/dcron.mk
-new file mode 100644
-index 0000000..cfff875
---- /dev/null
-+++ b/package/dcron/dcron.mk
-@@ -0,0 +1,36 @@
-+################################################################################
-+#
-+# dcron
-+#
-+################################################################################
-+
-+DCRON_VERSION = 4.5
-+DCRON_SITE = http://www.jimpryor.net/linux/releases/
-+DCRON_LICENSE = GPLv2
-+
-+DCRON_MAKE_OPT = CC="$(TARGET_CC)" CXX="$(TARGET_CXX)" AR="$(TARGET_AR)"
-+
-+define DCRON_PERMISSIONS
-+/usr/sbin/crond			 f 4755	0 0 - - - - -
-+/usr/bin/crontab		 f 755  0 0 - - - - -
-+/etc/cron.d/system		 f 755  0 0 - - - - -
-+endef
-+
-+define DCRON_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) $(DCRON_MAKE_OPT)
-+endef
-+
-+define DCRON_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m0700 $(@D)/crond $(TARGET_DIR)/usr/sbin/crond
-+	$(INSTALL) -m4755 $(@D)/crontab $(TARGET_DIR)/usr/bin/crontab
-+	$(INSTALL) -D -m0644 $(@D)/extra/root.crontab $(TARGET_DIR)/etc/cron.d/system
-+	$(INSTALL) -d -m0755 $(TARGET_DIR)/var/spool/cron/crontabs \
-+	        $(TARGET_DIR)/etc/cron.daily $(TARGET_DIR)/etc/cron.hourly \
-+	        $(TARGET_DIR)/etc/cron.monthly $(TARGET_DIR)/etc/cron.weekly
-+endef
-+
-+define DCRON_CLEAN_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) clean
-+endef
-+
-+$(eval $(generic-package))
+ > Hello,
+ > I prepared a virtual machine with a fully configured (and compiled)
+ > buildroot filesystem/toolchain.
+ > Now I have to transfer this buildroot environment to another machine,
+ > which has a different path of course.
+
+ > How this could be done?
+
+ > Currently I tried:
+
+ > 1) create from scratch a new buildroot clone on the new machine and
+ > use my .config. Disadvantages: you need to recompile everything and
+ > using the latest builds you cannot have the same version.
+
+ > 2) copy the whole buildroot directory: the problem is every Makefile
+ > has the old path... so it's not possible to launch a make without a
+ > full clean/make cycle.
+
+The host/build directory of buildroot is currently not relocatable, so
+right now you only have option 1.
+
+The issue is also listed in our TODO, but so far hasn't been
+implemented:
+
+http://elinux.org/Buildroot#Core_Buildroot_infrastructure
+
 -- 
-1.9.0.rc3
+Bye, Peter Korsgaard
