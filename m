@@ -1,16 +1,16 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 12 Mar 2014 10:50:21 +0000 (UTC)
-Subject: [Buildroot] [Bug 6950] New: Full unicode support in ncurses
-Message-ID: <bug-6950-163@https.bugs.busybox.net/>
+Date: Wed, 12 Mar 2014 10:55:20 +0000 (UTC)
+Subject: [Buildroot] [Bug 6956] New: Packaging libsoxr
+Message-ID: <bug-6956-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6950
+https://bugs.busybox.net/show_bug.cgi?id=6956
 
-           Summary: Full unicode support in ncurses
+           Summary: Packaging libsoxr
            Product: buildroot
            Version: 2014.02
           Platform: All
@@ -25,9 +25,10 @@ https://bugs.busybox.net/show_bug.cgi?id=6950
    Estimated Hours: 0.0
 
 
-On one hand there is a general switch WIDE_CHAR but it has no influence on
-building ncursesw instead of ncurses. Thus there is no real unicode support for
-such programs like dialog.
+Since 18.6 mpd has support for libsoxr. This is better and more efficient
+re-sampling library for embedded systems. This is faster and smaller. I would
+do it by myself but is uses cmake I don't understand. The best option would be
+replacing libsamplerate with libsoxr or making them both available.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
