@@ -1,34 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 12 Mar 2014 22:24:41 +0100
-Subject: [Buildroot] [git commit] openswan: security bump to version 2.6.41
-Message-ID: <20140312212628.33A7D8F006@busybox.osuosl.org>
+Date: Wed, 12 Mar 2014 22:26:00 +0100
+Subject: [Buildroot] [git commit] luajit: bump to version 2.0.3
+Message-ID: <20140312212628.535978F006@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5b31dfca0e50a66e67570ecb395bba9ee6db5819
+commit: http://git.buildroot.net/buildroot/commit/?id=48c12351685660f31facee2606990fb5bbf9a5e6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2014-2037 (continuation of CVE-2013-6466 issues).
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openswan/openswan.mk |    2 +-
+ package/luajit/luajit.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/openswan/openswan.mk b/package/openswan/openswan.mk
-index ae055d4..4d82b49 100644
---- a/package/openswan/openswan.mk
-+++ b/package/openswan/openswan.mk
+diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
+index 859425a..c4b065d 100644
+--- a/package/luajit/luajit.mk
++++ b/package/luajit/luajit.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENSWAN_VERSION = 2.6.40
-+OPENSWAN_VERSION = 2.6.41
- OPENSWAN_SITE = http://download.openswan.org/openswan
- OPENSWAN_LICENSE = GPLv2+, BSD-3c
- OPENSWAN_LICENSE_FILES = COPYING LICENSE
+-LUAJIT_VERSION = 2.0.2
++LUAJIT_VERSION = 2.0.3
+ LUAJIT_SOURCE  = LuaJIT-$(LUAJIT_VERSION).tar.gz
+ LUAJIT_SITE    = http://luajit.org/download
+ LUAJIT_LICENSE = MIT
