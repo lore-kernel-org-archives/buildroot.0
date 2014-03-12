@@ -1,43 +1,26 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 12 Mar 2014 10:57:32 +0100
-Subject: [Buildroot] How to change buildroot directory
-In-Reply-To: <5320168E.2090709@gmail.com> (Marco Trapanese's message of "Wed, 
- 12 Mar 2014 09:10:54 +0100")
-References: <5320168E.2090709@gmail.com>
-Message-ID: <87ob1bpwmr.fsf@dell.be.48ers.dk>
+From: Denis Bodor <lefinnois@lefinnois.net>
+Date: Wed, 12 Mar 2014 10:59:51 +0100
+Subject: [Buildroot] [PATCH 1/1] Adding libstrophe
+In-Reply-To: <532007EA.5070205@mind.be>
+References: <1394557881-4770-1-git-send-email-lefinnois@lefinnois.net>
+ <532007EA.5070205@mind.be>
+Message-ID: <20140312095951.GA8491@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Marco" == Marco Trapanese <marcotrapanese@gmail.com> writes:
+Le mercredi 12 mars 2014 ??? 08:08:26 (+0100), Arnout Vandecappelle a ?crit :
+>  Hi Denis,
 
- > Hello,
- > I prepared a virtual machine with a fully configured (and compiled)
- > buildroot filesystem/toolchain.
- > Now I have to transfer this buildroot environment to another machine,
- > which has a different path of course.
+Hi Arnout
 
- > How this could be done?
+>  Thank you for your contribution! It looks good, but I have a few remarks
+> below. Could you fix them and resubmit?
 
- > Currently I tried:
-
- > 1) create from scratch a new buildroot clone on the new machine and
- > use my .config. Disadvantages: you need to recompile everything and
- > using the latest builds you cannot have the same version.
-
- > 2) copy the whole buildroot directory: the problem is every Makefile
- > has the old path... so it's not possible to launch a make without a
- > full clean/make cycle.
-
-The host/build directory of buildroot is currently not relocatable, so
-right now you only have option 1.
-
-The issue is also listed in our TODO, but so far hasn't been
-implemented:
-
-http://elinux.org/Buildroot#Core_Buildroot_infrastructure
+Of course. 
+Thanks for your help. New patch will follow soon.
 
 -- 
-Bye, Peter Korsgaard
+Denis
