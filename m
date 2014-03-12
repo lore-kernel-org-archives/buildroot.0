@@ -1,36 +1,48 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 12 Mar 2014 10:55:20 +0000 (UTC)
-Subject: [Buildroot] [Bug 6956] New: Packaging libsoxr
-Message-ID: <bug-6956-163@https.bugs.busybox.net/>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 12 Mar 2014 07:58:43 -0300
+Subject: [Buildroot] [PATCH] device table dev: drop old CDROMs
+Message-ID: <1394621923-25478-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6956
+Drop old custom CDROM devices from the device table, these are x86-only
+and really really old so it would be amazing these would be in working
+order.
+And they haven't been supported in linux for while.
 
-           Summary: Packaging libsoxr
-           Product: buildroot
-           Version: 2014.02
-          Platform: All
-        OS/Version: All
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: prezi77 at wp.pl
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ system/device_table_dev.txt | 15 ---------------
+ 1 file changed, 15 deletions(-)
 
-
-Since 18.6 mpd has support for libsoxr. This is better and more efficient
-re-sampling library for embedded systems. This is faster and smaller. I would
-do it by myself but is uses cmake I don't understand. The best option would be
-replacing libsamplerate with libsoxr or making them both available.
-
+diff --git a/system/device_table_dev.txt b/system/device_table_dev.txt
+index 91ed769..c4257a6 100644
+--- a/system/device_table_dev.txt
++++ b/system/device_table_dev.txt
+@@ -125,21 +125,6 @@
+ #/dev/fd0u2880	b	640	0	0	2	32	0	0	-
+ #/dev/fd1u2880	b	640	0	0	2	33	0	0	-
+ 
+-# All the proprietary cdrom devices in the world
+-#/dev/aztcd	b	640	0	0	29	0	0	0	-
+-#/dev/bpcd	b	640	0	0	41	0	0	0	-
+-#/dev/capi20	c	640	0	0	68	0	0	1	2
+-#/dev/cdu31a	b	640	0	0	15	0	0	0	-
+-#/dev/cdu535	b	640	0	0	24	0	0	0	-
+-#/dev/cm206cd	b	640	0	0	32	0	0	0	-
+-#/dev/sjcd	b	640	0	0	18	0	0	0	-
+-#/dev/sonycd	b	640	0	0	15	0	0	0	-
+-#/dev/gscd	b	640	0	0	16	0	0	0	-
+-#/dev/sbpcd	b	640	0	0	25	0	0	0	-
+-#/dev/sbpcd	b	640	0	0	25	0	0	1	4
+-#/dev/mcd	b	640	0	0	23	0	0	0	-
+-#/dev/optcd	b	640	0	0	17	0	0	0	-
+-
+ # I2C device nodes
+ /dev/i2c-	c	666	0	0	89	0	0	1	4
+ 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.8.3.2
