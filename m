@@ -1,40 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 12 Mar 2014 17:22:56 +0100
-Subject: [Buildroot] [git commit] linux-headers: bump 3.{4,
-	12}.x stable versions
-Message-ID: <20140312162500.E7E939BF2B@busybox.osuosl.org>
+Date: Wed, 12 Mar 2014 17:23:44 +0100
+Subject: [Buildroot] [git commit] samba4: security bump to version 4.1.6
+Message-ID: <20140312162502.2D9F89BF2D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dc3ac32e73067ef67c692db158e97e8017d622c2
+commit: http://git.buildroot.net/buildroot/commit/?id=184f2976c498eaf9272c3250fccca8a4b3a9d561
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fixes CVE-2013-4496 and CVE-2013-6442.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/samba4/samba4.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 73d0419..a3f26cd 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -151,13 +151,13 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.2.55"	if BR2_KERNEL_HEADERS_3_2
--	default "3.4.82"	if BR2_KERNEL_HEADERS_3_4
-+	default "3.4.83"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
- 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
- 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
- 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
- 	default "3.10.33"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
--	default "3.12.13"	if BR2_KERNEL_HEADERS_3_12
-+	default "3.12.14"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.13.6"	if BR2_KERNEL_HEADERS_3_13
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 72710bf..939cf0c 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SAMBA4_VERSION = 4.1.5
++SAMBA4_VERSION = 4.1.6
+ SAMBA4_SITE = http://ftp.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_LICENSE = GPLv3+
