@@ -1,71 +1,57 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 12 Mar 2014 22:24:26 +0100
-Subject: [Buildroot] [git commit] systemd: bump to v208.
-Message-ID: <20140312212628.24D9F9BE75@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 12 Mar 2014 18:50:40 -0300
+Subject: [Buildroot] [PATCH] igmpproxy: uclinux is also linux
+Message-ID: <1394661040-12579-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f1f71aa72226593ac60e001e369f2a624a7f25f3
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes:
+http://autobuild.buildroot.net/results/3dc/3dcb26947d7eee7ae4f17a082a144912c44f0526/
 
-This version bump comes with a patch, backported from v209, to fix
-a linker error when EFI support is disabled.
-
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- ...efined-reference-efi_loader_get_boot_usec.patch |   29 ++++++++++++++++++++
- package/systemd/systemd.mk                         |    2 +-
- 2 files changed, 30 insertions(+), 1 deletions(-)
+ package/igmpproxy/igmpproxy-01-uclinux.patch | 16 ++++++++++++++++
+ package/igmpproxy/igmpproxy.mk               |  2 ++
+ 2 files changed, 18 insertions(+)
+ create mode 100644 package/igmpproxy/igmpproxy-01-uclinux.patch
 
-diff --git a/package/systemd/systemd-02-efi-fix-Undefined-reference-efi_loader_get_boot_usec.patch b/package/systemd/systemd-02-efi-fix-Undefined-reference-efi_loader_get_boot_usec.patch
+diff --git a/package/igmpproxy/igmpproxy-01-uclinux.patch b/package/igmpproxy/igmpproxy-01-uclinux.patch
 new file mode 100644
-index 0000000..84b0a1a
+index 0000000..7fa4a23
 --- /dev/null
-+++ b/package/systemd/systemd-02-efi-fix-Undefined-reference-efi_loader_get_boot_usec.patch
-@@ -0,0 +1,29 @@
-+From 70d9b9fc0a4fa1698ff00e364c61bb875244efa1 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Cristian=20Rodr=C3=ADguez?= <crrodriguez@opensuse.org>
-+Date: Tue, 11 Feb 2014 09:54:49 -0300
-+Subject: [PATCH] efi: fix Undefined reference efi_loader_get_boot_usec when
-+ EFI support is disabled
++++ b/package/igmpproxy/igmpproxy-01-uclinux.patch
+@@ -0,0 +1,16 @@
++configure.ac: uclinux is also linux
 +
-+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-+---
-+ src/shared/boot-timestamps.c |    2 ++
-+ 1 file changed, 2 insertions(+)
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 +
-+diff --git a/src/shared/boot-timestamps.c b/src/shared/boot-timestamps.c
-+index 9449965..d656685 100644
-+--- a/src/shared/boot-timestamps.c
-++++ b/src/shared/boot-timestamps.c
-+@@ -40,8 +40,10 @@ int boot_timestamps(const dual_timestamp *n, dual_timestamp *firmware, dual_time
-+
-+         r = acpi_get_boot_usec(&x, &y);
-+         if (r < 0) {
-++#ifdef ENABLE_EFI
-+                 r = efi_loader_get_boot_usec(&x, &y);
-+                 if (r < 0)
-++#endif
-+                         return r;
-+         }
-+
-+--
-+1.7.9.5
-+
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 0fc00e1..0ac4651 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
++diff -Nura igmpproxy-0.1.orig/configure.ac igmpproxy-0.1/configure.ac
++--- igmpproxy-0.1.orig/configure.ac	2014-03-12 18:43:02.369323771 -0300
+++++ igmpproxy-0.1/configure.ac	2014-03-12 18:43:22.129979179 -0300
++@@ -7,7 +7,7 @@
++ 
++ AC_CANONICAL_HOST
++ case $host_os in
++-	linux*) os=linux;;
+++	linux*|uclinux*) os=linux;;
++ 	freebsd*) os=freebsd;;
++ 	netbsd*) os=netbsd;;
++ 	openbsd*) os=openbsd;;
+diff --git a/package/igmpproxy/igmpproxy.mk b/package/igmpproxy/igmpproxy.mk
+index 577717c..cdf3774 100644
+--- a/package/igmpproxy/igmpproxy.mk
++++ b/package/igmpproxy/igmpproxy.mk
+@@ -6,6 +6,8 @@
  
--SYSTEMD_VERSION = 207
-+SYSTEMD_VERSION = 208
- SYSTEMD_SITE = http://www.freedesktop.org/software/systemd/
- SYSTEMD_SOURCE = systemd-$(SYSTEMD_VERSION).tar.xz
- SYSTEMD_LICENSE = GPLv2+
+ IGMPPROXY_VERSION = 0.1
+ IGMPPROXY_SITE = http://downloads.sourceforge.net/project/igmpproxy/igmpproxy/$(IGMPPROXY_VERSION)
++# igmpproxy-01-uclinux.patch
++IGMPPROXY_AUTORECONF = YES
+ IGMPPROXY_LICENSE = GPLv2+
+ IGMPPROXY_LICENSE_FILES = COPYING
+ 
+-- 
+1.8.3.2
