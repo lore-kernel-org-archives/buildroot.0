@@ -1,59 +1,37 @@
 From: Jeremy Kerr <jk@ozlabs.org>
 Date: Wed, 12 Mar 2014 11:45:57 +0800
-Subject: [Buildroot] [PATCH 01/10 v2] package/busybox: Add facility for DHCP
-	hooks
+Subject: [Buildroot] [PATCH 05/10 v2] package/dtc: Update to v1.4.0
 In-Reply-To: <1394595957.563937.119075350083.0.gpush@pablo>
-Message-ID: <1394595957.564374.630651182054.1.gpush@pablo>
+Message-ID: <1394595957.565567.501633726418.5.gpush@pablo>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The (u)dhcpc hook installed by the busybox package configures the
-network and exits. If we want to do anything further with a DHCP lease,
-we'd have to replace the script entirely.
+Currently, we're using an untagged commit of dtc. Since inclusion in
+buildroot, version 1.4.0 has been released, which includes new
+endian-annotated type defintions.
 
-This change introduces a .d directory for hooks (based on the script
-filename), which are executed after the interface configuration. This
-allows packages to drop a script file in the .d directory to perform
-actions on DHCP events.
-
-We'll use this in a later change to notify petitboot of DHCP boot
-information.
+We want to use these type definitions in kexec-lite, so update to the
+new release.
 
 Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
 
 ---
- package/busybox/busybox.mk    |    2 ++
- package/busybox/udhcpc.script |    6 ++++++
- 2 files changed, 8 insertions(+)
+ package/dtc/dtc.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 793ffb9..0a094e1 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -206,6 +206,8 @@ define BUSYBOX_INSTALL_TARGET_CMDS
- 	if [ ! -f $(TARGET_DIR)/usr/share/udhcpc/default.script ]; then \
- 		$(INSTALL) -m 0755 -D package/busybox/udhcpc.script \
- 			$(TARGET_DIR)/usr/share/udhcpc/default.script; \
-+		$(INSTALL) -m 755 -d \
-+			$(TARGET_DIR)/usr/share/udhcpc/default.script.d; \
- 	fi
- 	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
- 	$(BUSYBOX_INSTALL_MDEV_CONF)
-diff --git a/package/busybox/udhcpc.script b/package/busybox/udhcpc.script
-index e23d1f1..50c52e6 100755
---- a/package/busybox/udhcpc.script
-+++ b/package/busybox/udhcpc.script
-@@ -64,4 +64,10 @@ case "$1" in
- 		;;
- esac
+diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
+index a230e60..a6898f2 100644
+--- a/package/dtc/dtc.mk
++++ b/package/dtc/dtc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+HOOK_DIR="$0.d"
-+for hook in "${HOOK_DIR}/"*; do
-+    [ -f "${hook}" -a -x "${hook}" ] || continue
-+    "${hook}" "${@}"
-+done
-+
- exit 0
+-DTC_VERSION         = e4b497f367a3b2ae99cc52089a14a221b13a76ef
++DTC_VERSION         = v1.4.0
+ DTC_SITE            = git://git.jdl.com/software/dtc.git
+ DTC_LICENSE         = GPLv2+/BSD-2c
+ DTC_LICENSE_FILES   = README.license GPL
