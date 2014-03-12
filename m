@@ -1,89 +1,73 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 12 Mar 2014 23:16:50 +0100
-Subject: [Buildroot] [PATCH 08/10 v2] package/petitboot: Add petitboot,
- the userspace bootloader
-In-Reply-To: <1394595957.566506.967533808031.8.gpush@pablo>
-References: <1394595957.563937.119075350083.0.gpush@pablo>
- <1394595957.566506.967533808031.8.gpush@pablo>
-Message-ID: <20140312221650.GB3389@free.fr>
+Date: Wed, 12 Mar 2014 23:29:27 +0100
+Subject: [Buildroot] [PATCH] legal-info: extract even no-redistribute
+	packages
+Message-ID: <1394663367-11778-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jeremy, All,
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-On 2014-03-12 11:45 +0800, Jeremy Kerr spake thusly:
-> This change adds the petitboot package, a bootloader that exists in
-> userspace, and uses the kexec facility to boot into a new kernel.
-[--SNIP--]
-> diff --git a/package/petitboot/Config.in b/package/petitboot/Config.in
-> new file mode 100644
-> index 0000000..f5ffe8e
-> --- /dev/null
-> +++ b/package/petitboot/Config.in
-> @@ -0,0 +1,13 @@
-> +config BR2_PACKAGE_PETITBOOT
-> +	bool "petitboot"
-> +	depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
-> +	select BR2_PACKAGE_UDEV
+Currently, if a package is marked _REDISTRIBUTE = NO, then legal-info
+will not try to extract it first.
 
-Package udev no longer exists. udev is now a virtual package that is
-provided by eother systemd of eudev. So you can not 'select'
-BR2_PACKAGE_UDEV.
+If that package also declares some _LICENSE_FILES, legal-info fails
+if it is the only action we're trying to run:
 
-You should instead use:
-    depends on BR2_PACKAGE_HAS_UDEV
+    $ cat defconfig
+    BR2_INIT_NONE=y
+    BR2_PACKAGE_LIBFSLCODEC=y
+    $ make BR2_DEFCONFIG=$(pwd)/defconfig defconfig
+    $ make libfslcodec-legal-info
+    /bin/sh: /home/ymorin/dev/buildroot/O/legal-info/licenses.txt: No such file or directory
+    make[1]: *** [libfslcodec-legal-info] Error 1
 
-[--SNIP--]
-> diff --git a/package/petitboot/petitboot.mk b/package/petitboot/petitboot.mk
-> new file mode 100644
-> index 0000000..8370fa2
-> --- /dev/null
-> +++ b/package/petitboot/petitboot.mk
-> @@ -0,0 +1,64 @@
-> +################################################################################
-> +#
-> +# petitboot
-> +#
-> +################################################################################
-[--SNIP--]
-> +define PETITBOOT_PRE_CONFIGURE_BOOTSTRAP
-> +	(cd $(@D) && ./bootstrap $(PETITBOOT_BOOTSTRAP_VERSION))
-> +endef
-> +
-> +PETITBOOT_PRE_CONFIGURE_HOOKS += PETITBOOT_PRE_CONFIGURE_BOOTSTRAP
+Fix this by always having legal-info extract the archives if one or
+more _LICENSE_FILES are specified.
 
-I find it too bad that an autotools package can not be autoreconf'ed.
+We do this for all types of packages: overriden, local or 'normal'
+remote packages. Even though we do not save the sources for the
+overriden or local packages, we need to save their licensing info,
+so we need to extract them.
 
-I've looked a bit at what this bootstrap does, and all it really is used
-for is to shoehorn the veersion in configure.ac.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Fabio Porcedda <fabio.porcedda@gmail.com>
 
-Since you seem to be involved in petitboot, here's a suggestion to do it
-otherwise:
+Chamges v1 -> v2:
+  - this is not fixing the autobuilders failure it was written to fix
+    so remove the references to such build failures  (Thomas P)
+  - also extract overriden and local packages  (Fabio)
+---
+ package/pkg-generic.mk | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-  - move the version stuff out of ./bootstrap, into its own script, eg.
-    ./version.sh
-
-  - change configure.ac to use AC_INIT as thus:
-
-    AC_INIT([petitboot],
-            [m4_esyscmd_s([./version.sh])],
-            [Geoff Levand <geoff@infradead.org>])
-
-Then the package will be entirely autoreconf-igurable. ;-)
-
-I haven't looked further in the patch, just pointing out a few things I
-spotted on a cursory look.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 339c3eb..d201a77 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -555,15 +555,13 @@ $(2)_MANIFEST_LICENSE_FILES = $$($(2)_LICENSE_FILES)
+ endif
+ $(2)_MANIFEST_LICENSE_FILES ?= not saved
+ 
+-ifeq ($$($(2)_REDISTRIBUTE),YES)
+-ifneq ($$($(2)_SITE_METHOD),local)
+-ifneq ($$($(2)_SITE_METHOD),override)
++# If the package declares _LICENSE_FILES, we need to extract it,
++# for overriden, local or normal remote packages alike.
++ifneq ($$($(2)_LICENSE_FILES),)
+ # Packages that have a tarball need it downloaded and extracted beforehand
+ $(1)-legal-info: $(1)-extract $(REDIST_SOURCES_DIR_$(call UPPERCASE,$(4)))
+ $(2)_MANIFEST_TARBALL = $$($(2)_SOURCE)
+ endif
+-endif
+-endif
+ $(2)_MANIFEST_TARBALL ?= not saved
+ 
+ # legal-info: produce legally relevant info.
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.3.2
