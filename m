@@ -1,47 +1,89 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 12 Mar 2014 09:03:53 +0100
-Subject: [Buildroot] [git commit] ptpd2: needs libpcap
-Message-ID: <20140312081514.914059BF2B@busybox.osuosl.org>
+From: Alvaro G. M <alvaro.gamez@hazent.com>
+Date: Wed, 12 Mar 2014 09:44:53 +0100
+Subject: [Buildroot] [PATCH 1/1] dcron: new package
+Message-ID: <1394613893-26144-1-git-send-email-alvaro.gamez@hazent.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7ae48d3b0b92c1fc6039ba06ff858a201c8570cc
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-That's what happens when testing a bunch of stuff that uses libpcap.
-Fixes:
-http://autobuild.buildroot.net/results/eaa/eaa615830a6b4cf3da88e71315364ad3e380f681/
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Alvaro G. M <alvaro.gamez@hazent.com>
 ---
- package/ptpd2/Config.in |    1 +
- package/ptpd2/ptpd2.mk  |    1 +
- 2 files changed, 2 insertions(+), 0 deletions(-)
+ package/Config.in       |  1 +
+ package/dcron/Config.in |  8 ++++++++
+ package/dcron/dcron.mk  | 36 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 45 insertions(+)
+ create mode 100644 package/dcron/Config.in
+ create mode 100644 package/dcron/dcron.mk
 
-diff --git a/package/ptpd2/Config.in b/package/ptpd2/Config.in
-index bf26453..e37b10e 100644
---- a/package/ptpd2/Config.in
-+++ b/package/ptpd2/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PTPD2
- 	bool "ptpd2"
-+	select BR2_PACKAGE_LIBPCAP
- 	help
- 	  The PTP daemon (PTPd) implements the Precision Time protocol
- 	  (PTP) as defined by the IEEE-1588-2008.
-diff --git a/package/ptpd2/ptpd2.mk b/package/ptpd2/ptpd2.mk
-index cd898d8..a5d1aff 100644
---- a/package/ptpd2/ptpd2.mk
-+++ b/package/ptpd2/ptpd2.mk
-@@ -7,6 +7,7 @@
- PTPD2_VERSION = 2.3.0
- PTPD2_SITE = http://downloads.sourceforge.net/project/ptpd/ptpd/$(PTPD2_VERSION)
- PTPD2_SOURCE = ptpd-$(PTPD2_VERSION).tar.gz
-+PTPD2_DEPENDENCIES = libpcap
- # configure not shipped
- PTPD2_AUTORECONF = YES
- PTPD2_LICENSE = BSD-2c
+diff --git a/package/Config.in b/package/Config.in
+index c0a3f20..d9c5a77 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1053,6 +1058,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/coreutils/Config.in"
+ endif
+ source "package/cpuload/Config.in"
++source "package/dcron/Config.in"
+ source "package/dsp-tools/Config.in"
+ source "package/htop/Config.in"
+ source "package/keyutils/Config.in"
+diff --git a/package/dcron/Config.in b/package/dcron/Config.in
+new file mode 100644
+index 0000000..70dadcd
+--- /dev/null
++++ b/package/dcron/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_DCRON
++	bool "dcron"
++	help
++	  dcron is a time-based job scheduler with anacron-like features.
++	  It works as a background daemon that parses individual crontab
++	  files and executes commands on behalf of the users in question.
++
++	  http://www.jimpryor.net/linux/dcron.html
+diff --git a/package/dcron/dcron.mk b/package/dcron/dcron.mk
+new file mode 100644
+index 0000000..cfff875
+--- /dev/null
++++ b/package/dcron/dcron.mk
+@@ -0,0 +1,36 @@
++################################################################################
++#
++# dcron
++#
++################################################################################
++
++DCRON_VERSION = 4.5
++DCRON_SITE = http://www.jimpryor.net/linux/releases/
++DCRON_LICENSE = GPLv2
++
++DCRON_MAKE_OPT = CC="$(TARGET_CC)" CXX="$(TARGET_CXX)" AR="$(TARGET_AR)"
++
++define DCRON_PERMISSIONS
++/usr/sbin/crond			 f 4755	0 0 - - - - -
++/usr/bin/crontab		 f 755  0 0 - - - - -
++/etc/cron.d/system		 f 755  0 0 - - - - -
++endef
++
++define DCRON_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) $(DCRON_MAKE_OPT)
++endef
++
++define DCRON_INSTALL_TARGET_CMDS
++	$(INSTALL) -m0700 $(@D)/crond $(TARGET_DIR)/usr/sbin/crond
++	$(INSTALL) -m4755 $(@D)/crontab $(TARGET_DIR)/usr/bin/crontab
++	$(INSTALL) -D -m0644 $(@D)/extra/root.crontab $(TARGET_DIR)/etc/cron.d/system
++	$(INSTALL) -d -m0755 $(TARGET_DIR)/var/spool/cron/crontabs \
++	        $(TARGET_DIR)/etc/cron.daily $(TARGET_DIR)/etc/cron.hourly \
++	        $(TARGET_DIR)/etc/cron.monthly $(TARGET_DIR)/etc/cron.weekly
++endef
++
++define DCRON_CLEAN_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) clean
++endef
++
++$(eval $(generic-package))
+-- 
+1.9.0.rc3
