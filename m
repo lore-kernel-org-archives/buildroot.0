@@ -1,96 +1,82 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Wed, 12 Mar 2014 20:42:33 +0100
-Subject: [Buildroot] [PATCH v6 5/5] xdriver_xf86-video-intel: Bump version
-	to 2.99.910
-In-Reply-To: <1394653353-10904-1-git-send-email-berndkuhls@hotmail.com>
-References: <1394653353-10904-1-git-send-email-berndkuhls@hotmail.com>
-Message-ID: <BLU0-SMTP335858980FB1E47924F3F70D9760@phx.gbl>
+From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+Date: Wed, 12 Mar 2014 21:24:17 +0100
+Subject: [Buildroot] Switching from uClibc to glibc as the default in
+ Buildroot?
+In-Reply-To: <CAAXf6LXoZ_dQNoy=z7u4ww-j2Eppe3mMiYn+6t=_x3odwBwGWA@mail.gmail.com>
+References: <20140218231447.524a1a20@skate>
+ <CAMKF1soCcLba_EacJLe7f9fM9=gFsTJYj0kaz6YzoXzEY1rx2A@mail.gmail.com>
+ <fd7802bd-3f37-4d70-ad22-2e46fc452b4b@email.android.com>
+ <66DCE5C2-E7A6-4634-8C79-441DA9FC46FB@gmail.com>
+ <20140219092112.6f359a55@skate> <87y5171p19.fsf@dell.be.48ers.dk>
+ <CAAXf6LXoZ_dQNoy=z7u4ww-j2Eppe3mMiYn+6t=_x3odwBwGWA@mail.gmail.com>
+Message-ID: <20140312202417.GC6240@nbbrfq.cc.univie.ac.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- add necessary dependencies
-- add -D_GNU_SOURCE to avoid getline compilation error
+On Fri, Mar 07, 2014 at 09:07:27AM +0100, Thomas De Schampheleire wrote:
+> Hi all,
+> 
+> On Wed, Feb 19, 2014 at 9:32 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+> >>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+> >
+> >  > Dear Khem Raj,
+> >  > On Tue, 18 Feb 2014 18:43:41 -0800, Khem Raj wrote:
+> >
+> >  >> > There are a great number of fixes since the last numbered release and I for one would greatly appreciate having at least a "testing" release with a bumped version number to use. Other than the ldso stat call problem I reported a couple of weeks ago, uClibc trunk has been working fairly well, and most bugs I run into are the typical growing pains of toolchain building from scratch rather than uClibc problems.
+> >  >>
+> >  >> so get going start testing git/master and report issues or successes you have.
+> >  >> help in testing it out, run uclibc test suites or any others you have setups for
+> >
+> >  > Please break the chicken-and-egg problem, and release 2014.02-rc1 right
+> >  > now, spit out a call for testing, and release 2014.02 at the end of the
+> >  > month. (Or pick any other date you want, those are just suggestions).
+> >
+> > Inded. When Bernard suggested the same last year I did test and reported
+> > issues, but never got any reply:
+> >
+> > http://lists.uclibc.org/pipermail/uclibc/2013-November/048093.html
+> >
+> 
+> Any further evolution in this matter?
+> 
+> Until now, this mail thread did not seem to have triggered any real
+> activity from the uClibc community.
+> 
+> Khem Raj: what is the plan forward? You have requested patches to be
+> sent, and testing to be performed, and the Buildroot community has
+> responded by telling that we only have patches that are already in the
+> uClibc tree (unreleased) and we have been testing this for a long
+> while already, without problems.
+> 
+> Maybe you feel this is not enough, in which case kindly provide more
+> details about what you consider blocking points to make a release, or
+> even a release candidate.
 
-Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
----
-v6: no changes
-v5: no changes
-v4: added dependencies, fixed getline compilation error
-v3: bump version to 2.99.910
-v2: bump version to 2.99.909
-v1: bump version to 2.99.908
+Well, see ML archives with a mail from Peter who tested a somewhat
+recent master and found ARM !LFS to be broken (i still consider !LFS to
+be an important thing to support, despite the maintenance burden).
+[the exact november mail above, btw]
+We have touched this on master as
+00571b43df2e0554d1b0716681832ba9975177c5 so this in fact did trigger a
+reaction from "the uClibc community". No reaction from the buildroot
+folks that current master resolved this !LFS ARM failure. Zilch.
+See?
+Where is your waterfall buildbot page that shows current uClibc-master
+state, again?
 
- package/x11r7/xdriver_xf86-video-intel/Config.in     |   13 ++++++++-----
- .../xdriver_xf86-video-intel.mk                      |   18 +++++++++++++++---
- 2 files changed, 23 insertions(+), 8 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-intel/Config.in b/package/x11r7/xdriver_xf86-video-intel/Config.in
-index 83b714a..026520c 100644
---- a/package/x11r7/xdriver_xf86-video-intel/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-intel/Config.in
-@@ -1,13 +1,16 @@
- config BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL
- 	bool "xf86-video-intel"
--	select BR2_PACKAGE_XPROTO_FONTSPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_RENDERPROTO
--	select BR2_PACKAGE_XPROTO_XPROTO
--	select BR2_PACKAGE_XLIB_LIBPCIACCESS
- 	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_LIBDRM_INTEL
- 	select BR2_PACKAGE_MESA3D
-+	select BR2_PACKAGE_MESA3D_DRI_DRIVER_I965
-+	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE
-+	select BR2_PACKAGE_XLIB_LIBPCIACCESS
-+	select BR2_PACKAGE_XLIB_LIBXRANDR
-+	select BR2_PACKAGE_XLIB_LIBXTST
-+	select BR2_PACKAGE_XPROTO_FONTSPROTO
-+	select BR2_PACKAGE_XPROTO_XF86DRIPROTO
-+	select BR2_PACKAGE_XPROTO_XPROTO
- 	depends on (BR2_i386 || BR2_x86_64)
- 	help
- 	  Intel video driver
-diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-index 332de54..e9f0bad 100644
---- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-+++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-@@ -4,12 +4,15 @@
- #
- ################################################################################
- 
--XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.907
-+XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.910
- XDRIVER_XF86_VIDEO_INTEL_SOURCE = xf86-video-intel-$(XDRIVER_XF86_VIDEO_INTEL_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_INTEL_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_INTEL_LICENSE = MIT
- XDRIVER_XF86_VIDEO_INTEL_LICENSE_FILES = COPYING
--XDRIVER_XF86_VIDEO_INTEL_AUTORECONF = YES
-+
-+# this fixes a getline-related compilation in src/sna/kgem.c
-+XDRIVER_XF86_VIDEO_INTEL_CONF_ENV = \
-+	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
- 
- XDRIVER_XF86_VIDEO_INTEL_CONF_OPT = \
- 	--enable-dri \
-@@ -23,6 +26,15 @@ XDRIVER_XF86_VIDEO_INTEL_CONF_OPT = \
- 	--disable-dga \
- 	--disable-async-swap
- 
--XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xproto libdrm xlib_libpciaccess
-+XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES = \
-+	libdrm \
-+	mesa3d \
-+	xlib_libXcomposite \
-+	xlib_libXrandr \
-+	xlib_libXtst \
-+	xlib_libpciaccess \
-+	xproto_fontsproto \
-+	xproto_xproto \
-+	xserver_xorg-server
- 
- $(eval $(autotools-package))
--- 
-1.7.10.4
+If buildroot would rebase their patches against current 0.9.33 branch
+then i would happily merge the backports that you cherry-picked and call
+it 0.9.33.++x but current master is just not in a condition that i feel
+comfortable to call 0.9.34. It works for big systems but as you can see
+with the ARM !LFS case has some severe regressions and i don't currently
+have time to tackle them all by myself.
+
+So what you can do is, either test and fix (!) master for non-fat target
+images at least, or help with re-baseing the buildroot, openwrt, freetz,
+you-name-it patches to the 0.9.33 branch for us to merge.
+
+thanks and cheers,
