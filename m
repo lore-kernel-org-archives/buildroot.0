@@ -1,54 +1,26 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Wed, 12 Mar 2014 13:18:32 +0100
-Subject: [Buildroot] host-fakeroot archive not sourced any more?
-In-Reply-To: <CAAXf6LXkv15AhY+2GaBG6pxgs0TpgX3SiY_EQP1Se4X5P2SwDA@mail.gmail.com>
-References: <532033B2.9030903@freescale.com>
- <CAAXf6LXkv15AhY+2GaBG6pxgs0TpgX3SiY_EQP1Se4X5P2SwDA@mail.gmail.com>
-Message-ID: <CAHkwnC_XBGoHGKVaTuS5_U601uASbzxwP-wF2X5Po6Ezo-PJAw@mail.gmail.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Wed, 12 Mar 2014 13:20:23 +0100
+Subject: [Buildroot] [PATCH 18/20] package/udev: convert to the
+ virtual-package infrastructure
+In-Reply-To: <0533dda6be874c12e0d45f9cc94a69bda85f1056.1394482605.git.yann.morin.1998@free.fr>
+References: <cover.1394482605.git.yann.morin.1998@free.fr>
+ <0533dda6be874c12e0d45f9cc94a69bda85f1056.1394482605.git.yann.morin.1998@free.fr>
+Message-ID: <20140312122023.GD17787@pc-eric>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Mar 12, 2014 at 12:56 PM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> On Wed, Mar 12, 2014 at 11:15 AM, Vincent Stehl?
-> <vincent.stehle@freescale.com> wrote:
->> Hi,
->>
->> FYI it seems buildroot will not source host-fakeroot archive correctly any
->> more when told to 'make source', with some configurations.
->>
->> This behavior can be seen for example on recent commit
->> 1ea6d850891bb4d936bcf1bddbf5432b819d5785, with the following commands:
->>
->>   $ rm -fr ..config.tmp .config .config.old output dl/*fakeroot*
->>   $ make qemu_arm_vexpress_defconfig
->>   $ make source
->>
->> In this case, fakeroot_1.18.2.orig.tar.bz2 is not fetched.
->>
->> After bisect, it seems this behavior started with commit 'a248775 Makefile:
->> add support for top-level parallel make'.
->>
->> A quick fix for 1ea6d850891bb4d936bcf1bddbf5432b819d5785 is to revert, in
->> that order:
->>
->>   cf53e15 Makefile: remove BASE_TARGETS variable
->>   fbb3b86 Makefile: ensure system is built ...
->>   d4c0c64 Makefile: fix target-finalize rule
->>   a248775 Makefile: add support for top-level parallel make
->>
->> ...and fakeroot archive is downloaded again.
->>
+On Mon, Mar 10, 2014 at 09:27:47PM +0100, Yann E. MORIN wrote:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 >
-> Vincent: thanks a lot for the report and the analysis!
->
-> Fabio: what is your suggestion here?
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> Cc: Mike Zick <minimod@morethan.org>
+Tested-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 
-I will look at it, thanks for reporting it.
-
-Regards
--- 
-Fabio Porcedda
+I tested this patch by building QEMU x86 images using eudev or systemd as
+providers.
