@@ -1,48 +1,22 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 12 Mar 2014 12:56:18 +0100
-Subject: [Buildroot] host-fakeroot archive not sourced any more?
-In-Reply-To: <532033B2.9030903@freescale.com>
-References: <532033B2.9030903@freescale.com>
-Message-ID: <CAAXf6LXkv15AhY+2GaBG6pxgs0TpgX3SiY_EQP1Se4X5P2SwDA@mail.gmail.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Wed, 12 Mar 2014 12:59:22 +0100
+Subject: [Buildroot] [PATCH 09/20] manual: update the virtual package
+ section with the new infrastructure
+In-Reply-To: <2f743c8ab39b1af88acc29db154220b0795889f1.1394482605.git.yann.morin.1998@free.fr>
+References: <cover.1394482605.git.yann.morin.1998@free.fr>
+ <2f743c8ab39b1af88acc29db154220b0795889f1.1394482605.git.yann.morin.1998@free.fr>
+Message-ID: <20140312115921.GA17787@pc-eric>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Mar 12, 2014 at 11:15 AM, Vincent Stehl?
-<vincent.stehle@freescale.com> wrote:
-> Hi,
+On Mon, Mar 10, 2014 at 09:27:38PM +0100, Yann E. MORIN wrote:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 >
-> FYI it seems buildroot will not source host-fakeroot archive correctly any
-> more when told to 'make source', with some configurations.
->
-> This behavior can be seen for example on recent commit
-> 1ea6d850891bb4d936bcf1bddbf5432b819d5785, with the following commands:
->
->   $ rm -fr ..config.tmp .config .config.old output dl/*fakeroot*
->   $ make qemu_arm_vexpress_defconfig
->   $ make source
->
-> In this case, fakeroot_1.18.2.orig.tar.bz2 is not fetched.
->
-> After bisect, it seems this behavior started with commit 'a248775 Makefile:
-> add support for top-level parallel make'.
->
-> A quick fix for 1ea6d850891bb4d936bcf1bddbf5432b819d5785 is to revert, in
-> that order:
->
->   cf53e15 Makefile: remove BASE_TARGETS variable
->   fbb3b86 Makefile: ensure system is built ...
->   d4c0c64 Makefile: fix target-finalize rule
->   a248775 Makefile: add support for top-level parallel make
->
-> ...and fakeroot archive is downloaded again.
->
-
-Vincent: thanks a lot for the report and the analysis!
-
-Fabio: what is your suggestion here?
-
-Thanks,
-Thomas
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> Cc: Samuel Martin <s.martin49@gmail.com>
+> Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Acked-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
