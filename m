@@ -1,122 +1,90 @@
 From: Jeremy Kerr <jk@ozlabs.org>
 Date: Wed, 12 Mar 2014 11:45:57 +0800
-Subject: [Buildroot] [PATCH 07/10 v2] package/kexec-lite: Add a package for
- the kexec-lite tools
+Subject: [Buildroot] [PATCH 03/10 v2] package/ncurses: Remove duplicated
+ library install code
 In-Reply-To: <1394595957.563937.119075350083.0.gpush@pablo>
-Message-ID: <1394595957.566180.688264078486.7.gpush@pablo>
+Message-ID: <1394595957.564990.873226929317.3.gpush@pablo>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Kexec-lite is a tiny impementation of kexec for devicetree-based
-platforms.
+Currently, the ncurses package conditionally defines macros to install
+the panel, form and menu libraries. This means we duplicate the install
+step for each library type.
+
+Rather than defining a set of macros, this change introduces a variable
+for the set of installed libraries, $(NCURSES_LIBS-y). We use this in a
+single macro to perform the library installation in one place.
+
+Based on a change suggested by Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>.
 
 Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
 
 ---
- package/Config.in                                    |    1 
- package/kexec-lite/Config.in                         |   12 +++
- package/kexec-lite/kexec-lite-01-clean-restart.patch |   34 +++++++++++
- package/kexec-lite/kexec-lite.mk                     |   22 +++++++
- 4 files changed, 69 insertions(+)
+ package/ncurses/ncurses.mk |   33 ++++++++++-----------------------
+ 1 file changed, 10 insertions(+), 23 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 5fe0594..e8662e0 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -53,6 +53,7 @@ source "package/fio/Config.in"
- source "package/gdb/Config.in"
- source "package/iozone/Config.in"
- source "package/kexec/Config.in"
-+source "package/kexec-lite/Config.in"
- source "package/ktap/Config.in"
- source "package/latencytop/Config.in"
- source "package/lmbench/Config.in"
-diff --git a/package/kexec-lite/Config.in b/package/kexec-lite/Config.in
-new file mode 100644
-index 0000000..daf7eb9
---- /dev/null
-+++ b/package/kexec-lite/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_KEXEC_LITE
-+	bool "kexec-lite"
-+	depends on BR2_powerpc
-+	select BR2_PACKAGE_LIBELF
-+	select BR2_PACKAGE_DTC
-+	select BR2_PACKAGE_DTC_PROGRAMS
-+	help
-+	  Kexec is a user space utiltity for loading another kernel
-+	  and asking the currently running kernel to do something with it.
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index e180a95..c2e1c3f 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -36,6 +36,11 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ 	NCURSES_DEPENDENCIES += busybox
+ endif
+ 
++NCURSES_LIBS-y = libncurses
++NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_MENU) += libmenu
++NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_PANEL) += libpanel
++NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_FORM) += libform
 +
-+	  This package is a tiny implementation of the kexec userspace
-+	  components, for devicetree-based platforms.
-diff --git a/package/kexec-lite/kexec-lite-01-clean-restart.patch b/package/kexec-lite/kexec-lite-01-clean-restart.patch
-new file mode 100644
-index 0000000..faaa93a
---- /dev/null
-+++ b/package/kexec-lite/kexec-lite-01-clean-restart.patch
-@@ -0,0 +1,34 @@
-+From 0a654c20e1b9324c57ba4116b52fb6ab33847e1d Mon Sep 17 00:00:00 2001
-+From: Jeremy Kerr <jk@ozlabs.org>
-+Date: Thu, 8 Aug 2013 17:16:31 +0800
-+Subject: [PATCH] kexec: Implement clean restart for busybox init
-+
-+Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
-+---
-+ kexec.c |    3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/kexec.c b/kexec.c
-+index 2edb7df..b2a0c42 100644
-+--- a/kexec.c
-++++ b/kexec.c
-+@@ -27,6 +27,7 @@
-+ #include <fcntl.h>
-+ #include <errno.h>
-+ #include <syscall.h>
-++#include <signal.h>
-+ #include <libfdt.h>
-+ #include <getopt.h>
-+ #include <sys/types.h>
-+@@ -818,7 +819,7 @@ int main(int argc, char *argv[])
-+ 			sync();
-+ 			exec_kexec();
-+ 		} else {
-+-			execlp("shutdown", "shutdown", "-r", "now", NULL);
-++			kill(1, SIGQUIT);
-+ 		}
-+ 
-+ 		return -1;
-+-- 
-+1.7.10.4
-+
-diff --git a/package/kexec-lite/kexec-lite.mk b/package/kexec-lite/kexec-lite.mk
-new file mode 100644
-index 0000000..aa09abc
---- /dev/null
-+++ b/package/kexec-lite/kexec-lite.mk
-@@ -0,0 +1,22 @@
-+################################################################################
-+#
-+# kexec-lite
-+#
-+################################################################################
-+
-+KEXEC_LITE_VERSION = 0e30677d8232595c135772e1121b7be98c118e13
-+KEXEC_LITE_SITE = $(call github,antonblanchard,kexec-lite,$(KEXEC_LITE_VERSION))
-+KEXEC_LITE_LICENSE = GPL
-+KEXEC_LITE_DEPENDENCIES = libelf dtc
-+
-+define KEXEC_LITE_BUILD_CMDS
-+	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" \
-+		    CFLAGS="$(TARGET_CFLAGS)" \
-+		    -C $(@D) all
-+endef
-+
-+define KEXEC_LITE_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 755 $(@D)/kexec $(TARGET_DIR)/usr/sbin/
-+endef
-+
-+$(eval $(generic-package))
+ ifneq ($(BR2_ENABLE_DEBUG),y)
+ NCURSES_CONF_OPT += --without-debug
+ endif
+@@ -45,27 +50,13 @@ define NCURSES_BUILD_CMDS
+ endef
+ 
+ ifneq ($(BR2_PREFER_STATIC_LIB),y)
+-
+-ifeq ($(BR2_PACKAGE_NCURSES_TARGET_PANEL),y)
+-define NCURSES_INSTALL_TARGET_PANEL
+-	cp -dpf $(NCURSES_DIR)/lib/libpanel.so* $(TARGET_DIR)/usr/lib/
+-endef
+-endif
+-
+-ifeq ($(BR2_PACKAGE_NCURSES_TARGET_FORM),y)
+-define NCURSES_INSTALL_TARGET_FORM
+-	cp -dpf $(NCURSES_DIR)/lib/libform.so* $(TARGET_DIR)/usr/lib/
+-endef
+-endif
+-
+-ifeq ($(BR2_PACKAGE_NCURSES_TARGET_MENU),y)
+-define NCURSES_INSTALL_TARGET_MENU
+-	cp -dpf $(NCURSES_DIR)/lib/libmenu.so* $(TARGET_DIR)/usr/lib/
++define NCURSES_INSTALL_TARGET_LIBS
++	for lib in $(NCURSES_LIBS-y); do \
++		cp -dpf $(NCURSES_DIR)/lib/$${lib}.so* $(TARGET_DIR)/usr/lib/; \
++	done
+ endef
+ endif
+ 
+-endif
+-
+ ifeq ($(BR2_PACKAGE_NCURSES_TARGET_PROGS),y)
+ define NCURSES_INSTALL_TARGET_PROGS
+ 	for x in $(NCURSES_PROGS); do \
+@@ -78,11 +69,7 @@ endif
+ 
+ define NCURSES_INSTALL_TARGET_CMDS
+ 	mkdir -p $(TARGET_DIR)/usr/lib
+-	$(if $(BR2_PREFER_STATIC_LIB),,cp -dpf $(NCURSES_DIR)/lib/libncurses.so* $(TARGET_DIR)/usr/lib/)
+-	$(NCURSES_INSTALL_TARGET_PANEL)
+-	$(NCURSES_INSTALL_TARGET_FORM)
+-	$(NCURSES_INSTALL_TARGET_MENU)
+-	$(NCURSES_INSTALL_TARGET_PROGS)
++	$(NCURSES_INSTALL_TARGET_LIBS)
+ 	ln -snf /usr/share/terminfo $(TARGET_DIR)/usr/lib/terminfo
+ 	mkdir -p $(TARGET_DIR)/usr/share/terminfo/x
+ 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm $(TARGET_DIR)/usr/share/terminfo/x
