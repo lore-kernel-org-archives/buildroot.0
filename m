@@ -1,35 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 12 Mar 2014 22:25:38 +0100
-Subject: [Buildroot] [git commit] sqlite: bump to version 3.8.4.1
-Message-ID: <20140312212628.4D5569BE75@busybox.osuosl.org>
+Date: Wed, 12 Mar 2014 22:25:24 +0100
+Subject: [Buildroot] [git commit] lighttpd: security bump to version 1.4.35
+Message-ID: <20140312212628.4774A8F006@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a68997424e7c802d0a781caf589c0450cba81da9
+commit: http://git.buildroot.net/buildroot/commit/?id=93ebbe3a35165f081992fbcff6d8fc9d7b4db9f3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fixes lighttpd SA-2014-01 (CVE not assigned yet).
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sqlite/sqlite.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/lighttpd/lighttpd.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index b27eb58..7893e6b 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,9 +4,9 @@
- #
+diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+index 375f934d..e1b9d79 100644
+--- a/package/lighttpd/lighttpd.mk
++++ b/package/lighttpd/lighttpd.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--SQLITE_VERSION = 3080100
-+SQLITE_VERSION = 3080401
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
--SQLITE_SITE = http://www.sqlite.org/2013
-+SQLITE_SITE = http://www.sqlite.org/2014
- SQLITE_LICENSE = Public domain
- SQLITE_INSTALL_STAGING = YES
- 
+ LIGHTTPD_VERSION_MAJOR = 1.4
+-LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).34
++LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).35
+ LIGHTTPD_SOURCE = lighttpd-$(LIGHTTPD_VERSION).tar.xz
+ LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-$(LIGHTTPD_VERSION_MAJOR).x
+ LIGHTTPD_LICENSE = BSD-3c
