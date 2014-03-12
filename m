@@ -1,149 +1,218 @@
 From: Jeremy Kerr <jk@ozlabs.org>
 Date: Wed, 12 Mar 2014 11:45:57 +0800
-Subject: [Buildroot] [PATCH 06/10 v2] package/powerpc-utils: Add powerpc
-	hardware utilities
+Subject: [Buildroot] [PATCH 08/10 v2] package/petitboot: Add petitboot,
+ the userspace bootloader
 In-Reply-To: <1394595957.563937.119075350083.0.gpush@pablo>
-Message-ID: <1394595957.565885.179025903671.6.gpush@pablo>
+Message-ID: <1394595957.566506.967533808031.8.gpush@pablo>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This change adds a package definition for the powerpc-utils project,
-containing a set of powerpc-specific hardware management utilities.
+This change adds the petitboot package, a bootloader that exists in
+userspace, and uses the kexec facility to boot into a new kernel.
 
-We're using a git tag from upstream, which contains a few build-system
-fixes.
+We add a little extra infrastructure to get things integrated into a
+buildroot environment:
+
+ - scripts to make kexec work with busybox init, for a clean shutdown
+
+ - udev rules to get removable event notifications, and start the
+   petitboot UI processes
+
+ - startup scripts for the device-discovery process
 
 Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
 
 ---
- package/Config.in                                                               |    1 
- package/powerpc-utils/Config.in                                                 |    5 
- package/powerpc-utils/powerpc-utils-01-add-subdir-objects-automake-option.patch |   71 ++++++++++
- package/powerpc-utils/powerpc-utils.mk                                          |   16 ++
- 4 files changed, 93 insertions(+)
+ package/Config.in                            |    1 
+ package/petitboot/Config.in                  |   13 +++
+ package/petitboot/S14silence-console         |    9 ++
+ package/petitboot/S15pb-discover             |   23 ++++++
+ package/petitboot/kexec-restart              |    8 ++
+ package/petitboot/petitboot-console-ui.rules |    5 +
+ package/petitboot/petitboot.mk               |   64 +++++++++++++++++++
+ package/petitboot/removable-event-poll.rules |    4 +
+ 8 files changed, 127 insertions(+)
 
 diff --git a/package/Config.in b/package/Config.in
-index 70e5a7f..5fe0594 100644
+index e8662e0..d98688c 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1062,6 +1062,7 @@ source "package/monit/Config.in"
+@@ -1063,6 +1063,7 @@ source "package/monit/Config.in"
  source "package/ncdu/Config.in"
  source "package/numactl/Config.in"
  source "package/nut/Config.in"
-+source "package/powerpc-utils/Config.in"
++source "package/petitboot/Config.in"
+ source "package/powerpc-utils/Config.in"
  source "package/polkit/Config.in"
  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/procps/Config.in"
-diff --git a/package/powerpc-utils/Config.in b/package/powerpc-utils/Config.in
+diff --git a/package/petitboot/Config.in b/package/petitboot/Config.in
 new file mode 100644
-index 0000000..c919094
+index 0000000..f5ffe8e
 --- /dev/null
-+++ b/package/powerpc-utils/Config.in
-@@ -0,0 +1,5 @@
-+config BR2_PACKAGE_POWERPC_UTILS
-+	bool "powerpc-utils"
-+	select BR2_PACKAGE_ZLIB
++++ b/package/petitboot/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_PETITBOOT
++	bool "petitboot"
++	depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
++	select BR2_PACKAGE_UDEV
++	select BR2_PACKAGE_NCURSES
++	# run-time dependency only
++	select BR2_PACKAGE_KEXEC_LITE if !BR2_PACKAGE_KEXEC
++	# run-time dependency only
++	select BR2_PACKAGE_POWERPC_UTILS if BR2_powerpc
 +	help
-+	  System utilities for powerpc machines
-diff --git a/package/powerpc-utils/powerpc-utils-01-add-subdir-objects-automake-option.patch b/package/powerpc-utils/powerpc-utils-01-add-subdir-objects-automake-option.patch
-new file mode 100644
-index 0000000..0311280
++	  Petitboot is a small kexec-based bootloader
++
++	  http://www.kernel.org/pub/linux/kernel/people/geoff/petitboot/petitboot.html
+diff --git a/package/petitboot/S14silence-console b/package/petitboot/S14silence-console
+new file mode 100755
+index 0000000..6570200
 --- /dev/null
-+++ b/package/powerpc-utils/powerpc-utils-01-add-subdir-objects-automake-option.patch
-@@ -0,0 +1,71 @@
-+From c9e3c0cde53b4b77728590bd2375e62a3dfaaf62 Mon Sep 17 00:00:00 2001
-+From: Jeremy Kerr <jk@ozlabs.org>
-+Date: Wed, 12 Mar 2014 10:43:46 +0800
-+Subject: [PATCH] automake: Add subdir-objects automake option
++++ b/package/petitboot/S14silence-console
+@@ -0,0 +1,9 @@
++#!/bin/sh
 +
-+Current git builds fail for me, with:
++case "$1" in
++    start)
++        echo 0 0 7 0 > /proc/sys/kernel/printk
++        ;;
++esac
 +
-+  configure.ac:13: installing 'build-aux/compile'
-+  automake: warnings are treated as errors
-+  src/Makefile.am:8: warning: source file 'common/pseries_platform.c' is in a subdirectory,
-+  src/Makefile.am:8: but option 'subdir-objects' is disabled
-+  automake: warning: possible forward-incompatibility.
-+  automake: At least a source file is in a subdirectory, but the 'subdir-objects'
-+  automake: automake option hasn't been enabled.  For now, the corresponding output
-+  automake: object file(s) will be placed in the top-level directory.  However,
-+  automake: this behaviour will change in future Automake versions: they will
-+  automake: unconditionally cause object files to be placed in the same subdirectory
-+  automake: of the corresponding sources.
-+  automake: You are advised to start using 'subdir-objects' option throughout your
-+  automake: project, to avoid future incompatibilities.
-+  src/drmgr/Makefile.am:9: warning: source file '$(COM_DIR)/pseries_platform.c' is in a subdirectory,
-+  src/drmgr/Makefile.am:9: but option 'subdir-objects' is disabled
-+  autoreconf: automake failed with exit status: 1
-+
-+Using:
-+
-+automake (GNU automake) 1.14.1
-+
-+Since we're using objects in subdirectories, we need the subdir-objects
-+atuomake option.
-+
-+Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
-+---
-+ Makefile.am           | 2 +-
-+ src/Makefile.am       | 2 ++
-+ src/drmgr/Makefile.am | 2 ++
-+ 3 files changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index 35df9f7..b3309c7 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -1,4 +1,4 @@
-+-AUTOMAKE_OPTIONS = foreign
-++AUTOMAKE_OPTIONS = foreign subdir-objects
-+ SUBDIRS = src man scripts
-+ 
-+ docdir = $(datadir)/doc/packages/@PACKAGE@
-+diff --git a/src/Makefile.am b/src/Makefile.am
-+index 8f17cd2..18403b8 100644
-+--- a/src/Makefile.am
-++++ b/src/Makefile.am
-+@@ -1,3 +1,5 @@
-++AUTOMAKE_OPTIONS = subdir-objects
-++
-+ AM_CFLAGS = -Wall -g -I common/ 
-+ AM_LDFLAGS =
-+ 
-+diff --git a/src/drmgr/Makefile.am b/src/drmgr/Makefile.am
-+index 2127b0d..4255fac 100644
-+--- a/src/drmgr/Makefile.am
-++++ b/src/drmgr/Makefile.am
-+@@ -1,3 +1,5 @@
-++AUTOMAKE_OPTIONS = subdir-objects
-++
-+ COM_DIR = $(top_srcdir)/src/common
-+ 
-+ AM_CFLAGS = -Wall -g -I $(COM_DIR)
-+-- 
-+1.8.3.2
-+
-diff --git a/package/powerpc-utils/powerpc-utils.mk b/package/powerpc-utils/powerpc-utils.mk
-new file mode 100644
-index 0000000..6f8448c
++exit 0
+diff --git a/package/petitboot/S15pb-discover b/package/petitboot/S15pb-discover
+new file mode 100755
+index 0000000..ebdf944
 --- /dev/null
-+++ b/package/powerpc-utils/powerpc-utils.mk
-@@ -0,0 +1,16 @@
++++ b/package/petitboot/S15pb-discover
+@@ -0,0 +1,23 @@
++#!/bin/sh
++
++LOGFILE=/var/log/petitboot/pb-discover.log
++PIDFILE=/var/run/petitboot.pid
++
++case "$1" in
++    start)
++        ulimit -c unlimited
++        mkdir -p $(dirname $LOGFILE)
++        PATH=/usr/bin:/usr/sbin:/bin:/sbin pb-discover -l $LOGFILE &
++        echo $! > $PIDFILE
++        ;;
++    stop)
++        pid=$(cat $PIDFILE)
++        [ -n "$pid" ] && kill -TERM $pid
++        ;;
++    *)
++        echo "Usage: $0 {start|stop}"
++        exit 1
++        ;;
++esac
++
++exit 0
+diff --git a/package/petitboot/kexec-restart b/package/petitboot/kexec-restart
+new file mode 100755
+index 0000000..0175e76
+--- /dev/null
++++ b/package/petitboot/kexec-restart
+@@ -0,0 +1,8 @@
++#!/bin/sh
++
++/usr/sbin/kexec -f -e
++
++while :
++do
++    sleep 1
++done
+diff --git a/package/petitboot/petitboot-console-ui.rules b/package/petitboot/petitboot-console-ui.rules
+new file mode 100644
+index 0000000..7464856
+--- /dev/null
++++ b/package/petitboot/petitboot-console-ui.rules
+@@ -0,0 +1,5 @@
++
++# spawn a petitboot UI on common user-visible interface devices
++SUBSYSTEM=="tty", KERNEL=="hvc*", RUN+="/usr/libexec/petitboot/pb-console --getty --detach -- -n -i 0 $name vt100"
++SUBSYSTEM=="tty", KERNEL=="tty0", RUN+="/usr/libexec/petitboot/pb-console --getty --detach -- -n -i 0 $name vt100"
++SUBSYSTEM=="tty", KERNEL=="ttyS*", RUN+="/usr/libexec/petitboot/pb-console --getty --detach -- -n -i 0 $name vt100"
+diff --git a/package/petitboot/petitboot.mk b/package/petitboot/petitboot.mk
+new file mode 100644
+index 0000000..8370fa2
+--- /dev/null
++++ b/package/petitboot/petitboot.mk
+@@ -0,0 +1,64 @@
 +################################################################################
 +#
-+# powerpc-utils
++# petitboot
 +#
 +################################################################################
 +
-+POWERPC_UTILS_VERSION = 64fe85e9473d05607dd8deda5023c7dd426216a5
-+POWERPC_UTILS_SITE = git://git.code.sf.net/p/powerpc-utils/powerpc-utils
-+POWERPC_UTILS_AUTORECONF = YES
-+POWERPC_UTILS_DEPENDENCIES = zlib
-+POWERPC_UTILS_LICENSE = Common Public License Version 1.0
-+POWERPC_UTILS_LICENSE_FILES = COPYRIGHT
++PETITBOOT_VERSION = bddd4552cced1a45d26e06de74d61c1fe464e140
++PETITBOOT_SITE = git://git.ozlabs.org/home/jk/git/petitboot
++PETITBOOT_DEPENDENCIES = ncurses udev host-autoconf host-automake host-libtool \
++			 host-bison host-flex
++PETITBOOT_LICENSE = GPLv2
++PETITBOOT_LICENSE_FILES = COPYING
 +
-+POWERPC_UTILS_CONF_OPT = --without-librtas
++PETITBOOT_CONF_OPT += --with-ncurses --without-twin-x11 --without-twin-fbdev \
++	      --localstatedir=/var \
++	      HOST_PROG_KEXEC=/usr/sbin/kexec \
++	      HOST_PROG_SHUTDOWN=/usr/libexec/petitboot/bb-kexec-reboot \
++	      $(if $(BR2_PACKAGE_BUSYBOX),--with-tftp=busybox)
++
++ifdef PETITBOOT_DEBUG
++PETITBOOT_CONF_OPT += --enable-debug
++endif
++
++ifeq ($(BR2_PACKAGE_NCURSES_WIDEC),y)
++PETITBOOT_CONF_OPT += --with-ncursesw MENU_LIB=-lmenuw FORM_LIB=-lformw
++endif
++
++# shorten any full git versions
++PETITBOOT_BOOTSTRAP_VERSION = $(shell echo "$(PETITBOOT_VERSION)" | \
++		sed 's,^\([[:xdigit:]]\{8\}\)[[:xdigit:]]*$$,\1,')
++
++define PETITBOOT_PRE_CONFIGURE_BOOTSTRAP
++	(cd $(@D) && ./bootstrap $(PETITBOOT_BOOTSTRAP_VERSION))
++endef
++
++PETITBOOT_PRE_CONFIGURE_HOOKS += PETITBOOT_PRE_CONFIGURE_BOOTSTRAP
++
++define PETITBOOT_POST_INSTALL
++	$(INSTALL) -D -m 0755 $(@D)/utils/bb-kexec-reboot \
++		$(TARGET_DIR)/usr/libexec/petitboot
++	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/petitboot/boot.d
++	$(INSTALL) -D -m 0755 $(@D)/utils/hooks/01-create-default-dtb \
++		$(TARGET_DIR)/etc/petitboot/boot.d/
++	$(INSTALL) -D -m 0755 $(@D)/utils/hooks/20-set-stdout \
++		$(TARGET_DIR)/etc/petitboot/boot.d/
++
++	$(INSTALL) -D -m 0755 package/petitboot/S14silence-console \
++		$(TARGET_DIR)/etc/init.d/
++	$(INSTALL) -D -m 0755 package/petitboot/S15pb-discover \
++		$(TARGET_DIR)/etc/init.d/
++	$(INSTALL) -D -m 0755 package/petitboot/kexec-restart \
++		$(TARGET_DIR)/usr/sbin/
++	$(INSTALL) -D -m 0755 package/petitboot/petitboot-console-ui.rules \
++		$(TARGET_DIR)/etc/udev/rules.d/
++	$(INSTALL) -D -m 0755 package/petitboot/removable-event-poll.rules \
++		$(TARGET_DIR)/etc/udev/rules.d/
++
++	ln -sf /usr/sbin/pb-udhcpc \
++		$(TARGET_DIR)/usr/share/udhcpc/default.script.d/
++endef
++
++PETITBOOT_POST_INSTALL_TARGET_HOOKS += PETITBOOT_POST_INSTALL
 +
 +$(eval $(autotools-package))
+diff --git a/package/petitboot/removable-event-poll.rules b/package/petitboot/removable-event-poll.rules
+new file mode 100644
+index 0000000..b736aef
+--- /dev/null
++++ b/package/petitboot/removable-event-poll.rules
+@@ -0,0 +1,4 @@
++
++# petitboot needs notification for media change events on removable devices,
++# which we only get if we've set the poll_msecs sysfs attribute.
++ACTION!="remove", ATTR{removable}=="1", ATTR{events_poll_msecs}="2000"
