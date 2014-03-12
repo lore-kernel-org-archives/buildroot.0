@@ -1,48 +1,32 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 12 Mar 2014 07:58:43 -0300
-Subject: [Buildroot] [PATCH] device table dev: drop old CDROMs
-Message-ID: <1394621923-25478-1-git-send-email-gustavo@zacarias.com.ar>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 12 Mar 2014 11:53:42 +0000 (UTC)
+Subject: [Buildroot] [Bug 6956] Packaging libsoxr
+In-Reply-To: <bug-6956-163@https.bugs.busybox.net/>
+References: <bug-6956-163@https.bugs.busybox.net/>
+Message-ID: <20140312115343.90E4E9BF2B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop old custom CDROM devices from the device table, these are x86-only
-and really really old so it would be amazing these would be in working
-order.
-And they haven't been supported in linux for while.
+https://bugs.busybox.net/show_bug.cgi?id=6956
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- system/device_table_dev.txt | 15 ---------------
- 1 file changed, 15 deletions(-)
+--- Comment #1 from Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> 2014-03-12 11:53:38 UTC ---
+There shouldn't be a real need to understand cmake in order to make a package
+available in buildroot. Have you had a look at this part of the manual?
+http://buildroot.uclibc.org/downloads/manual/manual.html#adding-packages 
 
-diff --git a/system/device_table_dev.txt b/system/device_table_dev.txt
-index 91ed769..c4257a6 100644
---- a/system/device_table_dev.txt
-+++ b/system/device_table_dev.txt
-@@ -125,21 +125,6 @@
- #/dev/fd0u2880	b	640	0	0	2	32	0	0	-
- #/dev/fd1u2880	b	640	0	0	2	33	0	0	-
- 
--# All the proprietary cdrom devices in the world
--#/dev/aztcd	b	640	0	0	29	0	0	0	-
--#/dev/bpcd	b	640	0	0	41	0	0	0	-
--#/dev/capi20	c	640	0	0	68	0	0	1	2
--#/dev/cdu31a	b	640	0	0	15	0	0	0	-
--#/dev/cdu535	b	640	0	0	24	0	0	0	-
--#/dev/cm206cd	b	640	0	0	32	0	0	0	-
--#/dev/sjcd	b	640	0	0	18	0	0	0	-
--#/dev/sonycd	b	640	0	0	15	0	0	0	-
--#/dev/gscd	b	640	0	0	16	0	0	0	-
--#/dev/sbpcd	b	640	0	0	25	0	0	0	-
--#/dev/sbpcd	b	640	0	0	25	0	0	1	4
--#/dev/mcd	b	640	0	0	23	0	0	0	-
--#/dev/optcd	b	640	0	0	17	0	0	0	-
--
- # I2C device nodes
- /dev/i2c-	c	666	0	0	89	0	0	1	4
- 
+Buildroot has a 'cmake-package' infrastructure, which makes it easy to add
+packages that have cmake makefiles.
+
+If you can, implementing this yourself will create much bigger chances of the
+changes becoming available in buildroot, because other buildroot developers
+already have a lot of other work, so may not start on libsoxr.
+
+Thanks in advance...
+
 -- 
-1.8.3.2
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
