@@ -1,37 +1,36 @@
 From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Wed, 12 Mar 2014 20:33:21 +0100
-Subject: [Buildroot] [PATCH v5 3/6] mesa3d: modularize and bump to
-	version 10.0.3
-References: <1394564029-528-1-git-send-email-berndkuhls@hotmail.com>
- <BLU0-SMTP1419F6C427A11CAB6AF9F7ED9770@phx.gbl>
- <531F84DE.5080005@savoirfairelinux.com>
-Message-ID: <1dp6vaxn6k.ln2@ID-313208.user.individual.net>
+Date: Wed, 12 Mar 2014 20:24:56 +0100
+Subject: [Buildroot] [PATCH v5 1/6] libdrm: Remove xorg dependency for
+	intel driver
+References: <BLU0-SMTP20422ECD84A18D82671FAE4D9770@phx.gbl>
+ <531F851F.40002@savoirfairelinux.com>
+ <3p65vaxf8m.ln2@ID-313208.user.individual.net>
+ <lo95vax104.ln2@ID-313208.user.individual.net>
+ <5320096D.1020900@savoirfairelinux.com>
+Message-ID: <8to6vaxn6k.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sebastien Bourdelin <sebastien.bourdelin-4ysUXcep3aM1wj+D4I0NRVaTQe2KTcn/
-@public.gmane.org> wrote in news:531F84DE.5080005 at savoirfairelinux.com:
+Sebastien Bourdelin
+<sebastien.bourdelin@savoirfairelinux.com>
+wrote in news:5320096D.1020900 at savoirfairelinux.com: 
 
-> I didn't catch it before, but the shared-glapi option is required by GBM
-> (so by EGL) when you use a DRI driver, perhaps you could add a
-> conditionnal statement in your "ifeq
-> ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)" or always enabled it when you use
-> a DRI driver, i don't know if it can be a trouble to let this option
-> enabled as default.
+>>> xlib_pciaccess itself does not depend on xorg stuff, I was able to
+>>> compile the libdrm intel driver with patch v5 without activating
+>>> xorg7. 
+> As far as i understand, the package XORG7 is a kind of a container which
+> doesn't compile anything, it only adds global toolchain dependencies for
+> all the xorg stuff.
+> Did you try to build the xlib_libpciaccess with a toolchain without this
+> options ?
 
 Hi,
 
-mesa3d configure.ac:
-
-> # Shared GLAPI is only useful for DRI
-> if test "x$enable_dri" = xno; then
->   AC_MSG_NOTICE([Shared GLAPI is only useful for DRI, disabling])
->    enable_shared_glapi=no
-> fi
-
-Therefore I moved the -shared-glapi option to ifeq ($(MESA3D_DRI_DRIVERS-y),)
+no, and I do not think I will try to do se because I would like to see my 
+patches committed to buildroot in the nearby future;) I will post a new 
+series without this patch.
 
 Regards, Bernd
