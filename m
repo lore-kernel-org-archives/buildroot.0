@@ -1,26 +1,31 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 12 Mar 2014 09:04:53 +0100
-Subject: [Buildroot] [PATCH 2/2] httping: disable ncurses support
-In-Reply-To: <1394584243-8501-2-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 11 Mar 2014 21:30:43 -0300")
-References: <1394584243-8501-1-git-send-email-gustavo@zacarias.com.ar>
- <1394584243-8501-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87siqnq1ui.fsf@dell.be.48ers.dk>
+From: Marco Trapanese <marcotrapanese@gmail.com>
+Date: Wed, 12 Mar 2014 09:10:54 +0100
+Subject: [Buildroot] How to change buildroot directory
+Message-ID: <5320168E.2090709@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+Hello,
+I prepared a virtual machine with a fully configured (and compiled) 
+buildroot filesystem/toolchain.
+Now I have to transfer this buildroot environment to another machine, 
+which has a different path of course.
 
- > The new version requires ncursesw support so disable it until we've got
- > support for it. Fixes:
- > http://autobuild.buildroot.net/results/588/58840df1254034bf77cde3935fd900d1da13de56/
+How this could be done?
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Currently I tried:
 
-Committed, thanks.
+1) create from scratch a new buildroot clone on the new machine and use 
+my .config. Disadvantages: you need to recompile everything and using 
+the latest builds you cannot have the same version.
 
--- 
-Bye, Peter Korsgaard
+2) copy the whole buildroot directory: the problem is every Makefile has 
+the old path... so it's not possible to launch a make without a full 
+clean/make cycle.
+
+What do you recommend?
+Thanks
+Marco
