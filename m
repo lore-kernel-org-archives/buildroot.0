@@ -1,40 +1,58 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Wed, 12 Mar 2014 23:14:06 +0100
-Subject: [Buildroot] [PATCH 1/1] imagemagick: disable documentation
-In-Reply-To: <1394147900-16917-1-git-send-email-romain.naour@openwide.fr>
-References: <1394147900-16917-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <5320DC2E.3000104@openwide.fr>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Wed, 12 Mar 2014 23:16:40 +0100
+Subject: [Buildroot] [PATCH v6 4/5] pkgconf: rewrite variable sdkdir,
+ needed by xdriver_xf86-video-intel
+In-Reply-To: <BLU0-SMTP316AB12B933108688B43F8BD9760@phx.gbl>
+References: <1394653353-10904-1-git-send-email-berndkuhls@hotmail.com>
+ <BLU0-SMTP316AB12B933108688B43F8BD9760@phx.gbl>
+Message-ID: <5320DCC8.3000303@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
 
-Le 07/03/2014 00:18, Romain Naour a ?crit :
-> Add --disable-docs option in the configure script.
->
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Hi Bernd,
+
+> Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
 > ---
-> v3: Remove useless "else" in Makefile.am (Arnout)
->      Fix test "$wantdocs" = "yes"
->      Add Documentation install status (yes/no)
->      upstream status: patch sent
+> v3: no changes
+> v2: no changes
 >
-> v2: Add an option in configure script
->      instead of patching the Makefile (Arnout)
->      upstream status: it's not sent yet
-> ---
->   .../imagemagick-02-Add-disable-docs-option.patch   | 86 ++++++++++++++++++++++
->   1 file changed, 86 insertions(+)
->   create mode 100644 package/imagemagick/imagemagick-02-Add-disable-docs-option.patch
->
->
-This patch has been merged in imagemagick trunk and it's now available
-in the new imagemagick 6.8.8-8 release :)
+>   package/pkgconf/pkgconf-fix-variable.patch |    4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
 
-So, I'll remove it from patchwork.
+/Shouldn't you rename this patch on/
 
-Best regards,
-Romain Naour
+pkgconf-01-fix-variable.patch
+
+Regards,
+Jerzy
+
+>
+> diff --git a/package/pkgconf/pkgconf-fix-variable.patch b/package/pkgconf/pkgconf-fix-variable.patch
+> index e19f76c..4c213d6 100644
+> --- a/package/pkgconf/pkgconf-fix-variable.patch
+> +++ b/package/pkgconf/pkgconf-fix-variable.patch
+> @@ -7,17 +7,19 @@ This is sometimes used to find header files (E.G. in gst-plugins configure),
+>   so ensure the sysroot'ed files are used.
+>   
+>   Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> +Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
+>   
+>   diff -Nura pkgconf-0.8.9.orig/main.c pkgconf-0.8.9/main.c
+>   --- pkgconf-0.8.9.orig/main.c	2012-10-24 14:32:08.236508699 -0300
+>   +++ pkgconf-0.8.9/main.c	2012-10-24 14:54:36.771070217 -0300
+> -@@ -298,7 +298,12 @@
+> +@@ -298,7 +298,13 @@
+>    	if (eflag != PKG_ERRF_OK)
+>    		return false;
+>    
+>   -	printf("%s\n", req.buf);
+>   +	if ( !strcmp(req.variable, "includedir") ||
+>   +	  !strcmp(req.variable, "mapdir") ||
+> ++	  !strcmp(req.variable, "sdkdir") ||
+>   +	  !strcmp(req.variable, "libdir"))
+>   +		printf("%s%s\n", sysroot_dir, req.buf);
+>   +	else
