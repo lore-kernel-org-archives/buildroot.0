@@ -1,117 +1,98 @@
 From: Jeremy Kerr <jk@ozlabs.org>
 Date: Wed, 12 Mar 2014 11:45:57 +0800
-Subject: [Buildroot] [PATCH 09/10 v2] package/iprutils: Add IBM Power RAID
-	utilities
+Subject: [Buildroot] [PATCH 02/10 v2] package/dropbear: Add separate
+ configuration option for dropbear server
 In-Reply-To: <1394595957.563937.119075350083.0.gpush@pablo>
-Message-ID: <1394595957.566789.595625760281.9.gpush@pablo>
+Message-ID: <1394595957.564691.704879444300.2.gpush@pablo>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Currently, the dropbear package installs both client and server
+components. This means that when we only want the client binaries, we
+also get the server, which is run from init.
+
+Even though it's a multi-call binary (the client and server
+exist in the same executable), we can define which parts are
+compiled-in. We'd also like to selectively install the links and init
+scripts.
+
+This change introduces a separate configuration for the dropbear server.
+
 Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
 
 ---
- package/Config.in                                   |    1 
- package/iprutils/Config.in                          |   10 ++++
- package/iprutils/iprutils-01-dont-use-gettext.patch |   30 ++++++++++++
- package/iprutils/iprutils.mk                        |   26 ++++++++++
- 4 files changed, 67 insertions(+)
+ package/dropbear/Config.in   |    6 ++++++
+ package/dropbear/dropbear.mk |   11 +++++++++--
+ 2 files changed, 15 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index d98688c..d62731d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1056,6 +1056,7 @@ endif
- source "package/cpuload/Config.in"
- source "package/dsp-tools/Config.in"
- source "package/htop/Config.in"
-+source "package/iprutils/Config.in"
- source "package/keyutils/Config.in"
- source "package/kmod/Config.in"
- source "package/lxc/Config.in"
-diff --git a/package/iprutils/Config.in b/package/iprutils/Config.in
-new file mode 100644
-index 0000000..d72688f
---- /dev/null
-+++ b/package/iprutils/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_IPRUTILS
-+	bool "iprutils"
-+	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_NCURSES_TARGET_PANEL
-+	select BR2_PACKAGE_NCURSES_TARGET_FORM
-+	select BR2_PACKAGE_NCURSES_TARGET_MENU
-+	select BR2_PACKAGE_LIBSYSFS
-+	select BR2_PACKAGE_PCIUTILS
+diff --git a/package/dropbear/Config.in b/package/dropbear/Config.in
+index 68c3b71..9ff5f47 100644
+--- a/package/dropbear/Config.in
++++ b/package/dropbear/Config.in
+@@ -8,6 +8,12 @@ config BR2_PACKAGE_DROPBEAR
+ 
+ if BR2_PACKAGE_DROPBEAR
+ 
++config BR2_PACKAGE_DROPBEAR_SERVER
++	bool "dropbear ssh server"
++	default y
 +	help
-+	  System utilities for IBM Power RAID devices
-diff --git a/package/iprutils/iprutils-01-dont-use-gettext.patch b/package/iprutils/iprutils-01-dont-use-gettext.patch
-new file mode 100644
-index 0000000..8d3d5dd
---- /dev/null
-+++ b/package/iprutils/iprutils-01-dont-use-gettext.patch
-@@ -0,0 +1,30 @@
-+From 0aa3952890e14f5447147ae4d0d37c515e4fefea Mon Sep 17 00:00:00 2001
-+From: Jeremy Kerr <jk@ozlabs.org>
-+Date: Fri, 26 Jul 2013 13:07:22 +0800
-+Subject: [PATCH] iprconfig: Don't use gettext
++	  Enable the dropbear ssh server, run from init
 +
-+... since we don't have any translations.
+ config BR2_PACKAGE_DROPBEAR_DISABLE_REVERSEDNS
+ 	bool "disable reverse DNS lookups"
+ 	help
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index 2ac6211..b393c8a 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -8,8 +8,9 @@ DROPBEAR_VERSION = 2014.63
+ DROPBEAR_SITE = http://matt.ucc.asn.au/dropbear/releases
+ DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
+ DROPBEAR_TARGET_BINS = dbclient dropbearkey dropbearconvert scp ssh
++DROPBEAR_MAKE_PROGRAMS = $(filter-out ssh, $(DROPBEAR_TARGET_BINS))
+ DROPBEAR_MAKE =	$(MAKE) MULTI=1 SCPPROGRESS=1 \
+-		PROGRAMS="dropbear dbclient dropbearkey dropbearconvert scp"
++		PROGRAMS="$(DROPBEAR_MAKE_PROGRAMS)"
+ 
+ DROPBEAR_LICENSE = MIT, BSD-2c-like, BSD-2c
+ DROPBEAR_LICENSE_FILES = LICENSE
+@@ -18,6 +19,10 @@ ifeq ($(BR2_PREFER_STATIC_LIB),y)
+ DROPBEAR_MAKE += STATIC=1
+ endif
+ 
++ifeq ($(BR2_PACKAGE_DROPBEAR_SERVER),y)
++DROPBEAR_TARGET_BINS += dropbear
++endif
 +
-+Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
-+---
-+ iprconfig.h |    4 +---
-+ 1 file changed, 1 insertion(+), 3 deletions(-)
-+
-+diff --git a/iprconfig.h b/iprconfig.h
-+index 867b5ac..a9cdf5e 100644
-+--- a/iprconfig.h
-++++ b/iprconfig.h
-+@@ -11,9 +11,7 @@
-+  *
-+  **/
-+ 
-+-#include <libintl.h>
-+-
-+-#define _(string) gettext(string)
-++#define _(string) (string)
-+ #define __(string) (string)
-+ #define EXIT_FLAG		0x8000	/* stops at given screen on exit call */
-+ #define CANCEL_FLAG		0x4000	/* stops at given screen on quit call */
-+-- 
-+1.7.10.4
-+
-diff --git a/package/iprutils/iprutils.mk b/package/iprutils/iprutils.mk
-new file mode 100644
-index 0000000..15de9af
---- /dev/null
-+++ b/package/iprutils/iprutils.mk
-@@ -0,0 +1,26 @@
-+################################################################################
-+#
-+# iprutils
-+#
-+################################################################################
-+
-+IPRUTILS_VERSION = 2.3.15
-+IPRUTILS_SITE = http://downloads.sourceforge.net/project/iprdd/iprutils%20for%202.6%20kernels/$(IPRUTILS_VERSION)
-+IPRUTILS_SOURCE = iprutils-$(IPRUTILS_VERSION)-src.tgz
-+IPRUTILS_DEPENDENCIES = ncurses libsysfs pciutils
-+IPRUTILS_LICENSE = Common Public License Version 1.0
-+IPRUTILS_LICENSE_FILES = LICENSE
-+
-+define IPRUTILS_BUILD_CMDS
-+	$(MAKE) CC=$(TARGET_CC) LD=$(TARGET_LD) -C $(@D) all
-+endef
-+
-+define IPRUTILS_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/iprconfig $(TARGET_DIR)/sbin/iprconfig
-+	$(INSTALL) -D -m 0755 $(@D)/iprupdate $(TARGET_DIR)/sbin/iprupdate
-+	$(INSTALL) -D -m 0755 $(@D)/iprdump $(TARGET_DIR)/sbin/iprdump
-+	$(INSTALL) -D -m 0755 $(@D)/iprinit $(TARGET_DIR)/sbin/iprinit
-+	$(INSTALL) -D -m 0755 $(@D)/iprdbg $(TARGET_DIR)/sbin/iprdbg
-+endef
-+
-+$(eval $(generic-package))
+ define DROPBEAR_FIX_XAUTH
+ 	$(SED) 's,^#define XAUTH_COMMAND.*/xauth,#define XAUTH_COMMAND "/usr/bin/xauth,g' $(@D)/options.h
+ endef
+@@ -43,6 +48,7 @@ define DROPBEAR_DISABLE_STANDALONE
+ 	$(SED) 's:\(#define NON_INETD_MODE\):/*\1 */:' $(@D)/options.h
+ endef
+ 
++ifeq ($(BR2_PACKAGE_DROPBEAR_SERVER),y)
+ define DROPBEAR_INSTALL_INIT_SYSTEMD
+ 	$(INSTALL) -D -m 644 package/dropbear/dropbear.service \
+ 		$(TARGET_DIR)/etc/systemd/system/dropbear.service
+@@ -59,6 +65,7 @@ endef
+ else
+ DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_DISABLE_STANDALONE
+ endif
++endif
+ 
+ ifeq ($(BR2_PACKAGE_DROPBEAR_DISABLE_REVERSEDNS),)
+ DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_ENABLE_REVERSE_DNS
+@@ -82,7 +89,7 @@ endif
+ 
+ define DROPBEAR_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -m 755 $(@D)/dropbearmulti $(TARGET_DIR)/usr/sbin/dropbear
+-	for f in $(DROPBEAR_TARGET_BINS); do \
++	for f in $(filter-out dropbear,$(DROPBEAR_TARGET_BINS)); do \
+ 		ln -snf ../sbin/dropbear $(TARGET_DIR)/usr/bin/$$f ; \
+ 	done
+ endef
