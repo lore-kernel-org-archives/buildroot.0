@@ -1,31 +1,40 @@
-From: Marco Trapanese <marcotrapanese@gmail.com>
-Date: Wed, 12 Mar 2014 09:10:54 +0100
-Subject: [Buildroot] How to change buildroot directory
-Message-ID: <5320168E.2090709@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 12 Mar 2014 09:04:13 +0100
+Subject: [Buildroot] [git commit] httping: disable ncurses support
+Message-ID: <20140312081514.AEA0D9042A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-I prepared a virtual machine with a fully configured (and compiled) 
-buildroot filesystem/toolchain.
-Now I have to transfer this buildroot environment to another machine, 
-which has a different path of course.
+commit: http://git.buildroot.net/buildroot/commit/?id=1ea6d850891bb4d936bcf1bddbf5432b819d5785
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-How this could be done?
+The new version requires ncursesw support so disable it until we've got
+support for it. Fixes:
+http://autobuild.buildroot.net/results/588/58840df1254034bf77cde3935fd900d1da13de56/
 
-Currently I tried:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/httping/httping.mk |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
 
-1) create from scratch a new buildroot clone on the new machine and use 
-my .config. Disadvantages: you need to recompile everything and using 
-the latest builds you cannot have the same version.
-
-2) copy the whole buildroot directory: the problem is every Makefile has 
-the old path... so it's not possible to launch a make without a full 
-clean/make cycle.
-
-What do you recommend?
-Thanks
-Marco
+diff --git a/package/httping/httping.mk b/package/httping/httping.mk
+index dd8abb3..42d694f 100644
+--- a/package/httping/httping.mk
++++ b/package/httping/httping.mk
+@@ -13,11 +13,10 @@ HTTPING_LDFLAGS = $(if $(BR2_NEEDS_GETTEXT),-lintl) $(TARGET_LDFLAGS)
+ HTTPING_DEPENDENCIES = \
+ 	$(if $(BR2_NEEDS_GETTEXT),gettext) \
+ 	$(if $(BR2_PACKAGE_OPENSSL),openssl) \
+-	$(if $(BR2_PACKAGE_NCURSES),ncurses) \
+ 	$(if $(BR2_PACKAGE_FFTW),fftw)
+ HTTPING_MAKE_OPT = $(TARGET_CONFIGURE_OPTS) \
+ 	FW=$(if $(BR2_PACKAGE_FFTW),yes,no) \
+-	NC=$(if $(BR2_PACKAGE_NCURSES),yes,no) \
++	NC=no \
+ 	SSL=$(if $(BR2_PACKAGE_OPENSSL),yes,no) \
+ 	TFO=$(if $(BR2_PACKAGE_HTTPING_TFO),yes,no)
+ 
