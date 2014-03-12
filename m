@@ -1,90 +1,103 @@
 From: Jeremy Kerr <jk@ozlabs.org>
 Date: Wed, 12 Mar 2014 11:45:57 +0800
-Subject: [Buildroot] [PATCH 03/10 v2] package/ncurses: Remove duplicated
- library install code
+Subject: [Buildroot] [PATCH 00/10 v2] Enable a buildroot-based petitboot
+	bootloader
 In-Reply-To: <1394595957.563937.119075350083.0.gpush@pablo>
-Message-ID: <1394595957.564990.873226929317.3.gpush@pablo>
+Message-ID: <1394595957.563937.119075350083.0.gpush@pablo>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, the ncurses package conditionally defines macros to install
-the panel, form and menu libraries. This means we duplicate the install
-step for each library type.
+Hi all,
 
-Rather than defining a set of macros, this change introduces a variable
-for the set of installed libraries, $(NCURSES_LIBS-y). We use this in a
-single macro to perform the library installation in one place.
+The following series allows us to build a petitboot-based bootloader
+using buildroot.
 
-Based on a change suggested by Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>.
+Petitboot is a kexec-based bootloader; by plumbing together a few linux
+utilities, we can implement a bootloader in userspace, using standard
+Linux drivers for hardware support. There's a bit of background of
+petitboot in my recent linux.conf.au talk:
 
-Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
+ http://mirror.linux.org.au/linux.conf.au/2014/Thursday/89-Petitboot_doing_interesting_things_in_your_bootloader_-_Jeremy_Kerr.mp4
+ 
+And the project homepage:
+
+ https://www.kernel.org/pub/linux/kernel/people/geoff/petitboot/petitboot.html
+
+My primary target here is powerpc machines (and this series adds a
+defconfig to do a powerpc petitboot build), but I've also been able to
+get most of petitboot working when built as an EFI stub on x86 machines
+(we still need some platform-specific bits in petitboot for proper
+configuration persistence).
+
+While most of this series is fairly straightforward, there are a few
+items that might need a little more attention:
+
+ - At the moment, I'm using my local repo for petitboot sources; it may
+   be better to wait until everything is merged upstream. Upstream is
+   still active, and I don't think this should take long.
+
+ - We add wide-char support for ncurses; this seems to be working okay,
+   but could do with a little review.
+
+ - I still need a couple of tweaks to the target system (/etc/locale and
+   /etc/inittab). At the moment, I'm carrying a change that introduces
+   an overlay for these two files, but that's not suitable for upstream
+   use:
+
+     http://git.ozlabs.org/?p=buildroot;a=commitdiff;h=d50bd74b
+   
+   Is there any way I can provide updates to these files? The changes
+   aren't board-specific; they're due to petitboot expecting to own
+   the default consoles for UIs. Or is there a better way to do this?
+
+This series is also available in my git tree, at:
+
+  git://git.ozlabs.org/~jk/buildroot/
+
+- in the petitboot branch. Note that that branch includes the overlay
+too, which isn't intended for upstream.
+
+Also, I'd like to give a big thanks to the buildroot developers; being
+able to re-roll an entire system with one command has made petitboot
+development *significantly* easier. Also, thanks to Thomas for the nudge
+to send these changes upstream!
+
+Please let me know if you have questions/comments/etc.
+
+Changes since v1, based on feedback:
+
+ - drobbear: we only want a config option to disable the server,
+   instead of both client and server
+
+ - ncurses: use NCURSES_LIBS-y
+
+ - busybox: fix HOOK_DIR glob expansion
+
+ - powerpc-utils, kexec-lite, petitboot: update upstream versions
+
+ - petitboot: add dependencies
+
+ - all: unified headers, now using full git SHAs
+
+ - dtc: Added patch to update to 1.4.0
+
+Cheers,
+
+
+Jeremy
 
 ---
- package/ncurses/ncurses.mk |   33 ++++++++++-----------------------
- 1 file changed, 10 insertions(+), 23 deletions(-)
-
-diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-index e180a95..c2e1c3f 100644
---- a/package/ncurses/ncurses.mk
-+++ b/package/ncurses/ncurses.mk
-@@ -36,6 +36,11 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- 	NCURSES_DEPENDENCIES += busybox
- endif
- 
-+NCURSES_LIBS-y = libncurses
-+NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_MENU) += libmenu
-+NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_PANEL) += libpanel
-+NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_FORM) += libform
-+
- ifneq ($(BR2_ENABLE_DEBUG),y)
- NCURSES_CONF_OPT += --without-debug
- endif
-@@ -45,27 +50,13 @@ define NCURSES_BUILD_CMDS
- endef
- 
- ifneq ($(BR2_PREFER_STATIC_LIB),y)
--
--ifeq ($(BR2_PACKAGE_NCURSES_TARGET_PANEL),y)
--define NCURSES_INSTALL_TARGET_PANEL
--	cp -dpf $(NCURSES_DIR)/lib/libpanel.so* $(TARGET_DIR)/usr/lib/
--endef
--endif
--
--ifeq ($(BR2_PACKAGE_NCURSES_TARGET_FORM),y)
--define NCURSES_INSTALL_TARGET_FORM
--	cp -dpf $(NCURSES_DIR)/lib/libform.so* $(TARGET_DIR)/usr/lib/
--endef
--endif
--
--ifeq ($(BR2_PACKAGE_NCURSES_TARGET_MENU),y)
--define NCURSES_INSTALL_TARGET_MENU
--	cp -dpf $(NCURSES_DIR)/lib/libmenu.so* $(TARGET_DIR)/usr/lib/
-+define NCURSES_INSTALL_TARGET_LIBS
-+	for lib in $(NCURSES_LIBS-y); do \
-+		cp -dpf $(NCURSES_DIR)/lib/$${lib}.so* $(TARGET_DIR)/usr/lib/; \
-+	done
- endef
- endif
- 
--endif
--
- ifeq ($(BR2_PACKAGE_NCURSES_TARGET_PROGS),y)
- define NCURSES_INSTALL_TARGET_PROGS
- 	for x in $(NCURSES_PROGS); do \
-@@ -78,11 +69,7 @@ endif
- 
- define NCURSES_INSTALL_TARGET_CMDS
- 	mkdir -p $(TARGET_DIR)/usr/lib
--	$(if $(BR2_PREFER_STATIC_LIB),,cp -dpf $(NCURSES_DIR)/lib/libncurses.so* $(TARGET_DIR)/usr/lib/)
--	$(NCURSES_INSTALL_TARGET_PANEL)
--	$(NCURSES_INSTALL_TARGET_FORM)
--	$(NCURSES_INSTALL_TARGET_MENU)
--	$(NCURSES_INSTALL_TARGET_PROGS)
-+	$(NCURSES_INSTALL_TARGET_LIBS)
- 	ln -snf /usr/share/terminfo $(TARGET_DIR)/usr/lib/terminfo
- 	mkdir -p $(TARGET_DIR)/usr/share/terminfo/x
- 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm $(TARGET_DIR)/usr/share/terminfo/x
+Jeremy Kerr (10):
+      package/busybox: Add facility for DHCP hooks
+      package/dropbear: Add separate configuration option for dropbear server
+      package/ncurses: Remove duplicated library install code
+      package/ncurses: Allow building wide char support
+      package/dtc: Update to v1.4.0
+      package/powerpc-utils: Add powerpc hardware utilities
+      package/kexec-lite: Add a package for the kexec-lite tools
+      package/petitboot: Add petitboot, the userspace bootloader
+      package/iprutils: Add IBM Power RAID utilities
+      Add powerpc petitboot defconfig
