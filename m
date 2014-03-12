@@ -1,39 +1,70 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Wed, 12 Mar 2014 15:25:28 +0100
-Subject: [Buildroot] host-fakeroot archive not sourced any more?
-In-Reply-To: <53206B17.2000409@freescale.com>
-References: <532033B2.9030903@freescale.com>
- <CAAXf6LXkv15AhY+2GaBG6pxgs0TpgX3SiY_EQP1Se4X5P2SwDA@mail.gmail.com>
- <CAHkwnC_XBGoHGKVaTuS5_U601uASbzxwP-wF2X5Po6Ezo-PJAw@mail.gmail.com>
- <CAHkwnC99ifVpDJPBnMD+4rsWcykfMf2U4KTrtZRYqpkRVUfy1w@mail.gmail.com>
- <53206B17.2000409@freescale.com>
-Message-ID: <CAHkwnC-MWz654MAc9Gfx1UptPkDeCnSp=tjJq9=k7U6J296wew@mail.gmail.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Wed, 12 Mar 2014 15:49:45 +0100
+Subject: [Buildroot] [PATCH 1/1] systemd: bump to v208.
+Message-ID: <1394635785-27317-1-git-send-email-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Mar 12, 2014 at 3:11 PM, Vincent Stehl?
-<vincent.stehle@freescale.com> wrote:
-> On 03/12/2014 01:44 PM, Fabio Porcedda wrote:
->>
->> -               $(addsuffix _DEPENDENCIES,$(call UPPERCASE,$(TARGETS))),\
->> +               $(addsuffix _DEPENDENCIES,$(call UPPERCASE,$(TARGETS)
->> $(TARGETS_ROOTFS))),\
->
->
-> Hi Fabio,
->
-> Thanks for the patch; I confirm it repairs fakeroot fetching. I'll start to
-> use it instead of the reverts and see how it goes.
+This version bump comes with a patch, backported from v209, to fix
+a linker error when EFI support is disabled.
 
-Great!
-Thanks for testing it and sorry for the trouble.
-I will send tomorrow the patch to the mailing list, maybe an improved
-version because i fear that i need to add TARGETS_ROOTFS in more
-places.
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+---
+ ...efined-reference-efi_loader_get_boot_usec.patch |   29 ++++++++++++++++++++
+ package/systemd/systemd.mk                         |    2 +-
+ 2 files changed, 30 insertions(+), 1 deletion(-)
+ create mode 100644 package/systemd/systemd-02-efi-fix-Undefined-reference-efi_loader_get_boot_usec.patch
 
-Best regards
+diff --git a/package/systemd/systemd-02-efi-fix-Undefined-reference-efi_loader_get_boot_usec.patch b/package/systemd/systemd-02-efi-fix-Undefined-reference-efi_loader_get_boot_usec.patch
+new file mode 100644
+index 0000000..84b0a1a
+--- /dev/null
++++ b/package/systemd/systemd-02-efi-fix-Undefined-reference-efi_loader_get_boot_usec.patch
+@@ -0,0 +1,29 @@
++From 70d9b9fc0a4fa1698ff00e364c61bb875244efa1 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Cristian=20Rodr=C3=ADguez?= <crrodriguez@opensuse.org>
++Date: Tue, 11 Feb 2014 09:54:49 -0300
++Subject: [PATCH] efi: fix Undefined reference efi_loader_get_boot_usec when
++ EFI support is disabled
++
++Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
++---
++ src/shared/boot-timestamps.c |    2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/src/shared/boot-timestamps.c b/src/shared/boot-timestamps.c
++index 9449965..d656685 100644
++--- a/src/shared/boot-timestamps.c
+++++ b/src/shared/boot-timestamps.c
++@@ -40,8 +40,10 @@ int boot_timestamps(const dual_timestamp *n, dual_timestamp *firmware, dual_time
++
++         r = acpi_get_boot_usec(&x, &y);
++         if (r < 0) {
+++#ifdef ENABLE_EFI
++                 r = efi_loader_get_boot_usec(&x, &y);
++                 if (r < 0)
+++#endif
++                         return r;
++         }
++
++--
++1.7.9.5
++
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 0fc00e1..0ac4651 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SYSTEMD_VERSION = 207
++SYSTEMD_VERSION = 208
+ SYSTEMD_SITE = http://www.freedesktop.org/software/systemd/
+ SYSTEMD_SOURCE = systemd-$(SYSTEMD_VERSION).tar.xz
+ SYSTEMD_LICENSE = GPLv2+
 -- 
-Fabio Porcedda
+1.7.9.5
