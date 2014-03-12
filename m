@@ -1,37 +1,75 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 12 Mar 2014 09:40:50 -0300
-Subject: [Buildroot] [PATCH] linux-headers: bump 3.{4, 12}.x stable versions
-Message-ID: <1394628050-27398-1-git-send-email-gustavo@zacarias.com.ar>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Wed, 12 Mar 2014 13:44:00 +0100
+Subject: [Buildroot] host-fakeroot archive not sourced any more?
+In-Reply-To: <CAHkwnC_XBGoHGKVaTuS5_U601uASbzxwP-wF2X5Po6Ezo-PJAw@mail.gmail.com>
+References: <532033B2.9030903@freescale.com>
+ <CAAXf6LXkv15AhY+2GaBG6pxgs0TpgX3SiY_EQP1Se4X5P2SwDA@mail.gmail.com>
+ <CAHkwnC_XBGoHGKVaTuS5_U601uASbzxwP-wF2X5Po6Ezo-PJAw@mail.gmail.com>
+Message-ID: <CAHkwnC99ifVpDJPBnMD+4rsWcykfMf2U4KTrtZRYqpkRVUfy1w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Wed, Mar 12, 2014 at 1:18 PM, Fabio Porcedda
+<fabio.porcedda@gmail.com> wrote:
+> On Wed, Mar 12, 2014 at 12:56 PM, Thomas De Schampheleire
+> <patrickdepinguin@gmail.com> wrote:
+>> On Wed, Mar 12, 2014 at 11:15 AM, Vincent Stehl?
+>> <vincent.stehle@freescale.com> wrote:
+>>> Hi,
+>>>
+>>> FYI it seems buildroot will not source host-fakeroot archive correctly any
+>>> more when told to 'make source', with some configurations.
+>>>
+>>> This behavior can be seen for example on recent commit
+>>> 1ea6d850891bb4d936bcf1bddbf5432b819d5785, with the following commands:
+>>>
+>>>   $ rm -fr ..config.tmp .config .config.old output dl/*fakeroot*
+>>>   $ make qemu_arm_vexpress_defconfig
+>>>   $ make source
+>>>
+>>> In this case, fakeroot_1.18.2.orig.tar.bz2 is not fetched.
+>>>
+>>> After bisect, it seems this behavior started with commit 'a248775 Makefile:
+>>> add support for top-level parallel make'.
+>>>
+>>> A quick fix for 1ea6d850891bb4d936bcf1bddbf5432b819d5785 is to revert, in
+>>> that order:
+>>>
+>>>   cf53e15 Makefile: remove BASE_TARGETS variable
+>>>   fbb3b86 Makefile: ensure system is built ...
+>>>   d4c0c64 Makefile: fix target-finalize rule
+>>>   a248775 Makefile: add support for top-level parallel make
+>>>
+>>> ...and fakeroot archive is downloaded again.
+>>>
+>>
+>> Vincent: thanks a lot for the report and the analysis!
+>>
+>> Fabio: what is your suggestion here?
+>
+> I will look at it, thanks for reporting it.
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 73d0419..a3f26cd 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -151,13 +151,13 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.2.55"	if BR2_KERNEL_HEADERS_3_2
--	default "3.4.82"	if BR2_KERNEL_HEADERS_3_4
-+	default "3.4.83"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
- 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
- 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
- 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
- 	default "3.10.33"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
--	default "3.12.13"	if BR2_KERNEL_HEADERS_3_12
-+	default "3.12.14"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.13.6"	if BR2_KERNEL_HEADERS_3_13
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+
+Can you try this patch?
+
+diff --git a/Makefile b/Makefile
+index 481f779..e8e41a4 100644
+--- a/Makefile
++++ b/Makefile
+@@ -418,7 +418,7 @@ TARGETS_DIRCLEAN := $(patsubst %,%-dirclean,$(TARGETS))
+ # variable for each enabled target.
+ # Notice: this only works for newstyle gentargets/autotargets packages
+ TARGETS_HOST_DEPS = $(sort $(filter host-%,$(foreach dep,\
+-               $(addsuffix _DEPENDENCIES,$(call UPPERCASE,$(TARGETS))),\
++               $(addsuffix _DEPENDENCIES,$(call UPPERCASE,$(TARGETS)
+$(TARGETS_ROOTFS))),\
+                $($(dep)))))
+ # Host packages can in turn have their own dependencies. Likewise find
+ # all the package names listed in the HOST_<PKG>_DEPENDENCIES for each
+
+Regards
 -- 
-1.8.3.2
+Fabio Porcedda
