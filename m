@@ -1,40 +1,105 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 12 Mar 2014 07:24:14 +0100
-Subject: [Buildroot] [PATCH v4 1/5] mesa3d: pull out from x11
-In-Reply-To: <20140310184119.GC3282@free.fr>
-References: <BLU0-SMTP4083C56CA0B43BBAC9B3616D9750@phx.gbl>
- <20140310173941.GA3282@free.fr> <20140310182030.GB18832@pc-eric>
- <20140310184119.GC3282@free.fr>
-Message-ID: <531FFD8E.8010209@mind.be>
+Date: Wed, 12 Mar 2014 08:08:26 +0100
+Subject: [Buildroot] [PATCH 1/1] Adding libstrophe
+In-Reply-To: <1394557881-4770-1-git-send-email-lefinnois@lefinnois.net>
+References: <1394557881-4770-1-git-send-email-lefinnois@lefinnois.net>
+Message-ID: <532007EA.5070205@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/10/14 19:41, Yann E. MORIN wrote:
->> > 1. As Mesa3D is an implementation of OpenGL, it will be a provider for the
->> >    virtual packages libegl, libgles and libopenvg.
-> I've looked on my distro, and mesa3d does not provide any file named
-> libegl*.so or ligles*.so or libopenvg*.so. So I don't think it should
-> be, *as is*, a provider for libegl, libgles or libopenvg.
+ Hi Denis,
 
- Have you looked at libegl1-mesa, libgles2-mesa, libopenvg1-mesa?
+ Thank you for your contribution! It looks good, but I have a few remarks
+below. Could you fix them and resubmit?
 
+
+On 03/11/14 18:11, Denis Bodor wrote:
+> Signed-off-by: Denis Bodor <lefinnois@lefinnois.net>
+> ---
+>  package/libstrophe/Config.in                            | 11 +++++++++++
+>  package/libstrophe/libstrophe-make-autoreconfable.patch |  9 +++++++++
+>  package/libstrophe/libstrophe.mk                        | 14 ++++++++++++++
+
+ You forgot to add it to package/Config.in so it won't appear in the menu.
+
+>  3 files changed, 34 insertions(+)
+>  create mode 100644 package/libstrophe/Config.in
+>  create mode 100644 package/libstrophe/libstrophe-make-autoreconfable.patch
+>  create mode 100644 package/libstrophe/libstrophe.mk
 > 
->> > 2. Mesa3D also provides libgl, but:
-> libgl or libglx ?
-> 
-> On my distro (Ubuntu 13.10), there's no libgl.so, only libglx.so which
-> is provided by a bumch of different packages, of which the nvidia blobs.
+> diff --git a/package/libstrophe/Config.in b/package/libstrophe/Config.in
+> new file mode 100644
+> index 0000000..ac02a66
+> --- /dev/null
+> +++ b/package/libstrophe/Config.in
+> @@ -0,0 +1,11 @@
+> +config BR2_PACKAGE_LIBSTROPHE
+> +	bool "libstrophe"
+> +	select BR2_PACKAGE_OPENSSL
+> +	select BR2_PACKAGE_EXPAT
+> +	help
+> +	  libstrophe is a lightweight XMPP client library written in C.
+> +	  It has minimal dependencies and is configurable for various
+> +	  environments. It runs well on both Linux, Unix, and Windows
+> +	  based platforms.
+> +
+> +	  https://github.com/strophe/libstrophe
+> diff --git a/package/libstrophe/libstrophe-make-autoreconfable.patch b/package/libstrophe/libstrophe-make-autoreconfable.patch
+> new file mode 100644
+> index 0000000..5caeaff
+> --- /dev/null
+> +++ b/package/libstrophe/libstrophe-make-autoreconfable.patch
 
- That one is in libgl1-mesa-glx.
+ Patches should be numbered, e.g. libstrophe-01-make-autoreconfable.patch
 
- All that stuff is only installed if you need it - which you usually
-don't because glx is enough for desktop use.
+ Also, the patch should have a small "commit log" with your signed-off-by.
+
+> @@ -0,0 +1,9 @@
+> +diff -ur libstrophe.orig/Makefile.am libstrophe/Makefile.am
+> +--- libstrophe.orig/Makefile.am	2014-03-02 18:58:36.219753865 +0100
+> ++++ libstrophe/Makefile.am	2014-03-02 18:58:02.739752477 +0100
+> +@@ -1,4 +1,4 @@
+> +-AUTOMAKE_OPTIONS = subdir-objects
+> ++AUTOMAKE_OPTIONS = subdir-objects foreign
+> + 
+> + CFLAGS = -g -Wall
+> + 
+> diff --git a/package/libstrophe/libstrophe.mk b/package/libstrophe/libstrophe.mk
+> new file mode 100644
+> index 0000000..356d3d4
+> --- /dev/null
+> +++ b/package/libstrophe/libstrophe.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +# 
+> +# libstrophe
+> +#
+> +################################################################################
+> +
+> +LIBSTROPHE_VERSION = d408eaf2bbfe5ff5c56eab01463c278f9891c08e
+> +LIBSTROPHE_SITE = $(call github,strophe,libstrophe,$(LIBSTROPHE_VERSION))
+> +LIBSTROPHE_INSTALL_STAGING = YES
+> +LIBSTROPHE_INSTALL_TARGET = NO
+
+ I guess that's because it only builds a static library? Can you add a
+comment that says that?
+
+> +LIBSTROPHE_DEPENDENCIES = expat openssl host-pkgconf
+> +LIBSTROPHE_AUTORECONF = YES
+
+ You're missing _LICENSE and _LICENSE_FILES.
+
 
  Regards,
  Arnout
+
+> +
+> +$(eval $(autotools-package))
+> 
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
