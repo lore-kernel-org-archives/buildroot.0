@@ -1,32 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 12 Mar 2014 22:26:00 +0100
-Subject: [Buildroot] [git commit] luajit: bump to version 2.0.3
-Message-ID: <20140312212628.535978F006@busybox.osuosl.org>
+Date: Wed, 12 Mar 2014 22:25:38 +0100
+Subject: [Buildroot] [git commit] sqlite: bump to version 3.8.4.1
+Message-ID: <20140312212628.4D5569BE75@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=48c12351685660f31facee2606990fb5bbf9a5e6
+commit: http://git.buildroot.net/buildroot/commit/?id=a68997424e7c802d0a781caf589c0450cba81da9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/luajit/luajit.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/sqlite/sqlite.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
-index 859425a..c4b065d 100644
---- a/package/luajit/luajit.mk
-+++ b/package/luajit/luajit.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index b27eb58..7893e6b 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LUAJIT_VERSION = 2.0.2
-+LUAJIT_VERSION = 2.0.3
- LUAJIT_SOURCE  = LuaJIT-$(LUAJIT_VERSION).tar.gz
- LUAJIT_SITE    = http://luajit.org/download
- LUAJIT_LICENSE = MIT
+-SQLITE_VERSION = 3080100
++SQLITE_VERSION = 3080401
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+-SQLITE_SITE = http://www.sqlite.org/2013
++SQLITE_SITE = http://www.sqlite.org/2014
+ SQLITE_LICENSE = Public domain
+ SQLITE_INSTALL_STAGING = YES
+ 
