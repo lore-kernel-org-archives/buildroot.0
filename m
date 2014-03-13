@@ -1,60 +1,113 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 13 Mar 2014 13:55:21 +0000
-Subject: [Buildroot] [PATCH] libesmtp: not available for static builds
-Message-ID: <1394718921-59546-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Uwe Kindler <uwe_kindler@web.de>
+Date: Thu, 13 Mar 2014 16:02:41 +0100
+Subject: [Buildroot] [PATCH v3] Added support for configuration of boost
+	binary names layout
+Message-ID: <1394722961-3138-1-git-send-email-uwe_kindler@web.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package requires libltdl and checks for it in the configure phase.
-If it's not present, then the build process is stopped.
 
-Fixes:
-   http://autobuild.buildroot.net/results/5cf/5cf145d3f9c78bef1f66fe9b1831723de8b4969f/
+Signed-off-by: Uwe Kindler <uwe_kindler@web.de>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/collectd/Config.in |    5 +++--
- package/libesmtp/Config.in |    4 ++++
- 2 files changed, 7 insertions(+), 2 deletions(-)
+Changes v2 -> v3:
+  - removed inconsistencies in Config.in help texts and fixed typos (suggested by Thomas De Schampheleire)
 
-diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index 70b0439..ad44842 100644
---- a/package/collectd/Config.in
-+++ b/package/collectd/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_COLLECTD
- 	depends on BR2_USE_MMU
- 	depends on BR2_INET_IPV6
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_PREFER_STATIC_LIB # libesmtp
- 	help
- 	  collectd is a daemon which collects system performance
- 	  statistics periodically and provides mechanisms to store
-@@ -435,6 +436,6 @@ endmenu
+Changes v1 -> v2:
+  -  handle "switch statement" in Config.in file via BR2_PACKAGE_BOOST_LAYOUT (suggested by Arnout Vandecappelle)
+
+---
+ package/boost/Config.in |   34 ++++++++++++++++++++++++++++++++++
+ package/boost/boost.mk  |    7 ++++---
+ 2 files changed, 38 insertions(+), 3 deletions(-)
+
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index 68c3909..57dd5fc 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -16,6 +16,40 @@ config BR2_PACKAGE_BOOST
  
- endif
+ if BR2_PACKAGE_BOOST
  
--comment "collectd needs a toolchain w/ IPv6, threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INET_IPV6
-+comment "collectd needs a toolchain w/ IPv6, threads, dynamic library"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INET_IPV6 || BR2_PREFER_STATIC_LIB
- 	depends on BR2_USE_MMU
-diff --git a/package/libesmtp/Config.in b/package/libesmtp/Config.in
-index 4e9e455..42a1c08 100644
---- a/package/libesmtp/Config.in
-+++ b/package/libesmtp/Config.in
-@@ -1,6 +1,10 @@
- config BR2_PACKAGE_LIBESMTP
- 	bool "libesmtp"
-+	depends on !BR2_PREFER_STATIC_LIB
- 	help
- 	  Library for sending emails through SMTP.
- 
- 	  http://www.stafford.uklinux.net/libesmtp
++choice
++	prompt "Layout"
++	default BR2_PACKAGE_BOOST_LAYOUT_SYSTEM
++	help
++	  Selects the layout of Boost binary names
 +
-+comment "libesmtp needs a toolchain w/ dynamic library"
-+	depends on BR2_PREFER_STATIC_LIB
++config BR2_PACKAGE_BOOST_LAYOUT_SYSTEM
++	bool "system"
++	help
++	  Boost binary names do not include the Boost version number or the name and 
++	  version number of the compiler.
++
++config BR2_PACKAGE_BOOST_LAYOUT_TAGGED
++	bool "tagged"
++	help
++	  Boost binary names include the encoded build properties such as 
++	  variant and threading, but do not include compiler name and version, or 
++	  Boost version. This option is useful if you build several variants of 
++	  Boost, using the same compiler.
++	  
++config BR2_PACKAGE_BOOST_LAYOUT_VERSIONED
++	bool "versioned"
++	help
++	  Boost binary names include the Boost version number, name and 
++	  version of the compiler and encoded build properties.
++	  
++config BR2_PACKAGE_BOOST_LAYOUT
++	string
++	default "system" if BR2_PACKAGE_BOOST_LAYOUT_SYSTEM
++	default "tagged" if BR2_PACKAGE_BOOST_LAYOUT_TAGGED
++	default "versioned" if BR2_PACKAGE_BOOST_LAYOUT_VERSIONED
++	  
++endchoice
++
+ config BR2_PACKAGE_BOOST_CHRONO
+ 	bool "boost-chrono"
+ 
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index 7aab614..2ae8034 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -81,6 +81,7 @@ endif
+ 
+ BOOST_WITHOUT_FLAGS_COMMASEPERATED += $(subst $(space),$(comma),$(strip $(BOOST_WITHOUT_FLAGS)))
+ BOOST_FLAGS += $(if $(BOOST_WITHOUT_FLAGS_COMMASEPERATED), --without-libraries=$(BOOST_WITHOUT_FLAGS_COMMASEPERATED))
++BOOST_LAYOUT = $(call qstrip, $(BR2_PACKAGE_BOOST_LAYOUT))
+ 
+ define BOOST_CONFIGURE_CMDS
+ 	(cd $(@D) && ./bootstrap.sh $(BOOST_FLAGS))
+@@ -99,7 +100,7 @@ define BOOST_INSTALL_TARGET_CMDS
+ 	--user-config=$(@D)/user-config.jam \
+ 	$(BOOST_OPT) \
+ 	--prefix=$(TARGET_DIR)/usr \
+-	--layout=system install )
++	--layout=$(BOOST_LAYOUT) install )
+ endef
+ 
+ define HOST_BOOST_BUILD_CMDS
+@@ -114,7 +115,7 @@ define HOST_BOOST_INSTALL_CMDS
+ 	--user-config=$(@D)/user-config.jam \
+ 	$(HOST_BOOST_OPT) \
+ 	--prefix=$(HOST_DIR)/usr \
+-	--layout=system install )
++	--layout=$(BOOST_LAYOUT) install )
+ endef
+ 
+ define BOOST_INSTALL_STAGING_CMDS
+@@ -122,7 +123,7 @@ define BOOST_INSTALL_STAGING_CMDS
+ 	--user-config=$(@D)/user-config.jam \
+ 	$(BOOST_OPT) \
+ 	--prefix=$(STAGING_DIR)/usr \
+-	--layout=system install)
++	--layout=$(BOOST_LAYOUT) install)
+ endef
+ 
+ $(eval $(generic-package))
 -- 
-1.7.1
+1.7.9.5
