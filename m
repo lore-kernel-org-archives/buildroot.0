@@ -1,41 +1,26 @@
-From: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
-Date: Thu, 13 Mar 2014 17:22:58 -0400
-Subject: [Buildroot] [PATCH v6 2/5] mesa3d: modularize and bump to
- version 10.0.4
-In-Reply-To: <v7j9vaxhd2.ln2@ID-313208.user.individual.net>
-References: <1394653353-10904-1-git-send-email-berndkuhls@hotmail.com>
- <BLU0-SMTP225D817D6365614C1517D91D9760@phx.gbl>
- <5322075D.20206@savoirfairelinux.com>
- <v7j9vaxhd2.ln2@ID-313208.user.individual.net>
-Message-ID: <532221B2.9000506@savoirfairelinux.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 13 Mar 2014 22:53:17 +0100
+Subject: [Buildroot] [PATCH] igmpproxy: uclinux is also linux
+In-Reply-To: <1394661040-12579-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 12 Mar 2014 18:50:40 -0300")
+References: <1394661040-12579-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <874n31ojea.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-On 03/13/2014 05:06 PM, Bernd Kuhls wrote:
-> Hi,
->
-> Sebastien Bourdelin
-> <sebastien.bourdelin@savoirfairelinux.com>
-> wrote in news:5322075D.20206 at savoirfairelinux.com: 
->
->>> +     --with-egl-platforms=$(foreach subst
->>> $(space),$(comma),$(MESA3D_EGL_PLATFORMS)) 
->> need quotes around the foreach for multiple selection ( example:
->> --with-egl-platform='drm x11')
-> according to http://www.mesa3d.org/egl.html
->
-> "Its argument is a comma separated string such as --with-egl-
-> platforms=x11,drm."
->
-> Regards, Bernd
-Ok, so you must remove the foreach, else you will have
-"--with-egl-platforms=x11 drm" and not "--with-egl-platforms=x11,drm"
-and the others options won't be taken in consideration.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/3dc/3dcb26947d7eee7ae4f17a082a144912c44f0526/
 
-Regards,
-Sebastien.
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Committed, thanks.
+
+Don't forget to send the patch upstream.
+
+-- 
+Bye, Peter Korsgaard
