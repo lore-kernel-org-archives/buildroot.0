@@ -1,97 +1,41 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Thu, 13 Mar 2014 22:16:45 +0100
-Subject: [Buildroot] [PATCH v7 5/5] xdriver_xf86-video-intel: Bump version
-	to 2.99.910
-In-Reply-To: <1394745405-4720-1-git-send-email-berndkuhls@hotmail.com>
-References: <1394745405-4720-1-git-send-email-berndkuhls@hotmail.com>
-Message-ID: <BLU0-SMTP38943CE6551DC29AC5439C2D9710@phx.gbl>
+From: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
+Date: Thu, 13 Mar 2014 17:22:58 -0400
+Subject: [Buildroot] [PATCH v6 2/5] mesa3d: modularize and bump to
+ version 10.0.4
+In-Reply-To: <v7j9vaxhd2.ln2@ID-313208.user.individual.net>
+References: <1394653353-10904-1-git-send-email-berndkuhls@hotmail.com>
+ <BLU0-SMTP225D817D6365614C1517D91D9760@phx.gbl>
+ <5322075D.20206@savoirfairelinux.com>
+ <v7j9vaxhd2.ln2@ID-313208.user.individual.net>
+Message-ID: <532221B2.9000506@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- add necessary dependencies
-- add -D_GNU_SOURCE to avoid getline compilation error
+Hi,
 
-Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
----
-v7: no changes
-v6: no changes
-v5: no changes
-v4: added dependencies, fixed getline compilation error
-v3: bump version to 2.99.910
-v2: bump version to 2.99.909
-v1: bump version to 2.99.908
+On 03/13/2014 05:06 PM, Bernd Kuhls wrote:
+> Hi,
+>
+> Sebastien Bourdelin
+> <sebastien.bourdelin@savoirfairelinux.com>
+> wrote in news:5322075D.20206 at savoirfairelinux.com: 
+>
+>>> +     --with-egl-platforms=$(foreach subst
+>>> $(space),$(comma),$(MESA3D_EGL_PLATFORMS)) 
+>> need quotes around the foreach for multiple selection ( example:
+>> --with-egl-platform='drm x11')
+> according to http://www.mesa3d.org/egl.html
+>
+> "Its argument is a comma separated string such as --with-egl-
+> platforms=x11,drm."
+>
+> Regards, Bernd
+Ok, so you must remove the foreach, else you will have
+"--with-egl-platforms=x11 drm" and not "--with-egl-platforms=x11,drm"
+and the others options won't be taken in consideration.
 
- package/x11r7/xdriver_xf86-video-intel/Config.in     |   13 ++++++++-----
- .../xdriver_xf86-video-intel.mk                      |   18 +++++++++++++++---
- 2 files changed, 23 insertions(+), 8 deletions(-)
-
-diff --git a/package/x11r7/xdriver_xf86-video-intel/Config.in b/package/x11r7/xdriver_xf86-video-intel/Config.in
-index 83b714a..026520c 100644
---- a/package/x11r7/xdriver_xf86-video-intel/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-intel/Config.in
-@@ -1,13 +1,16 @@
- config BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL
- 	bool "xf86-video-intel"
--	select BR2_PACKAGE_XPROTO_FONTSPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_RENDERPROTO
--	select BR2_PACKAGE_XPROTO_XPROTO
--	select BR2_PACKAGE_XLIB_LIBPCIACCESS
- 	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_LIBDRM_INTEL
- 	select BR2_PACKAGE_MESA3D
-+	select BR2_PACKAGE_MESA3D_DRI_DRIVER_I965
-+	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE
-+	select BR2_PACKAGE_XLIB_LIBPCIACCESS
-+	select BR2_PACKAGE_XLIB_LIBXRANDR
-+	select BR2_PACKAGE_XLIB_LIBXTST
-+	select BR2_PACKAGE_XPROTO_FONTSPROTO
-+	select BR2_PACKAGE_XPROTO_XF86DRIPROTO
-+	select BR2_PACKAGE_XPROTO_XPROTO
- 	depends on (BR2_i386 || BR2_x86_64)
- 	help
- 	  Intel video driver
-diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-index 332de54..e9f0bad 100644
---- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-+++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-@@ -4,12 +4,15 @@
- #
- ################################################################################
- 
--XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.907
-+XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.910
- XDRIVER_XF86_VIDEO_INTEL_SOURCE = xf86-video-intel-$(XDRIVER_XF86_VIDEO_INTEL_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_INTEL_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_INTEL_LICENSE = MIT
- XDRIVER_XF86_VIDEO_INTEL_LICENSE_FILES = COPYING
--XDRIVER_XF86_VIDEO_INTEL_AUTORECONF = YES
-+
-+# this fixes a getline-related compilation in src/sna/kgem.c
-+XDRIVER_XF86_VIDEO_INTEL_CONF_ENV = \
-+	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
- 
- XDRIVER_XF86_VIDEO_INTEL_CONF_OPT = \
- 	--enable-dri \
-@@ -23,6 +26,15 @@ XDRIVER_XF86_VIDEO_INTEL_CONF_OPT = \
- 	--disable-dga \
- 	--disable-async-swap
- 
--XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xproto libdrm xlib_libpciaccess
-+XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES = \
-+	libdrm \
-+	mesa3d \
-+	xlib_libXcomposite \
-+	xlib_libXrandr \
-+	xlib_libXtst \
-+	xlib_libpciaccess \
-+	xproto_fontsproto \
-+	xproto_xproto \
-+	xserver_xorg-server
- 
- $(eval $(autotools-package))
--- 
-1.7.10.4
+Regards,
+Sebastien.
