@@ -1,45 +1,62 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Thu, 13 Mar 2014 17:38:48 +0100
-Subject: [Buildroot] host-fakeroot archive not sourced any more?
-In-Reply-To: <CAHkwnC-MWz654MAc9Gfx1UptPkDeCnSp=tjJq9=k7U6J296wew@mail.gmail.com>
-References: <532033B2.9030903@freescale.com>
- <CAAXf6LXkv15AhY+2GaBG6pxgs0TpgX3SiY_EQP1Se4X5P2SwDA@mail.gmail.com>
- <CAHkwnC_XBGoHGKVaTuS5_U601uASbzxwP-wF2X5Po6Ezo-PJAw@mail.gmail.com>
- <CAHkwnC99ifVpDJPBnMD+4rsWcykfMf2U4KTrtZRYqpkRVUfy1w@mail.gmail.com>
- <53206B17.2000409@freescale.com>
- <CAHkwnC-MWz654MAc9Gfx1UptPkDeCnSp=tjJq9=k7U6J296wew@mail.gmail.com>
-Message-ID: <CAHkwnC8xxvnp9sf5+gofXYHRQbANkUdonht1W59FBnLRMBb+6g@mail.gmail.com>
+From: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
+Date: Thu, 13 Mar 2014 15:30:37 -0400
+Subject: [Buildroot] [PATCH v6 2/5] mesa3d: modularize and bump to
+ version 10.0.4
+In-Reply-To: <BLU0-SMTP225D817D6365614C1517D91D9760@phx.gbl>
+References: <1394653353-10904-1-git-send-email-berndkuhls@hotmail.com>
+ <BLU0-SMTP225D817D6365614C1517D91D9760@phx.gbl>
+Message-ID: <5322075D.20206@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Mar 12, 2014 at 3:25 PM, Fabio Porcedda
-<fabio.porcedda@gmail.com> wrote:
-> On Wed, Mar 12, 2014 at 3:11 PM, Vincent Stehl?
-> <vincent.stehle@freescale.com> wrote:
->> On 03/12/2014 01:44 PM, Fabio Porcedda wrote:
->>>
->>> -               $(addsuffix _DEPENDENCIES,$(call UPPERCASE,$(TARGETS))),\
->>> +               $(addsuffix _DEPENDENCIES,$(call UPPERCASE,$(TARGETS)
->>> $(TARGETS_ROOTFS))),\
->>
->>
->> Hi Fabio,
->>
->> Thanks for the patch; I confirm it repairs fakeroot fetching. I'll start to
->> use it instead of the reverts and see how it goes.
->
-> Great!
-> Thanks for testing it and sorry for the trouble.
-> I will send tomorrow the patch to the mailing list, maybe an improved
-> version because i fear that i need to add TARGETS_ROOTFS in more
-> places.
+Hi bernd,
 
-Patch sent:
-http://patchwork.ozlabs.org/patch/330004/
+Just some typo to fix,
+but ok for me.
+Tested on an intel graphic card, with X using GLX and without X using EGL.
 
-Regards
--- 
-Fabio Porcedda
+On 03/12/2014 03:42 PM, Bernd Kuhls wrote:
+> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+> index 0ce168e..30e8feb 100644
+> --- a/package/mesa3d/Config.in
+> +++ b/package/mesa3d/Config.in
+> @@ -1,14 +1,118 @@
+>  config BR2_PACKAGE_MESA3D
+>  	bool "Mesa 3D Graphics Library"
+> -	select BR2_PACKAGE_XPROTO_GLPROTO
+> -	select BR2_PACKAGE_XLIB_LIBXXF86VM
+> -	select BR2_PACKAGE_XLIB_LIBXDAMAGE
+> -	select BR2_PACKAGE_XLIB_LIBXFIXES
+> -	select BR2_PACKAGE_XPROTO_DRI2PROTO
+>  	select BR2_PACKAGE_LIBDRM
+>  	select BR2_PACKAGE_EXPAT
+>  	select BR2_PACKAGE_HOST_LIBXML2_PYTHON
+> -	depends on BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR
+> +	select BR2_PACKAGE_XPROTO_DRI2_PROTO if BR2_PACKAGE_XSERVER_XORG_SERVER
+Typo here, must be : BR2_PACKAGE_XPROTO_DRI2PROTO
+
+> +ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
+> +# egl depends on gbm, gbm depends on udev
+> +MESA3D_DEPENDENCIES += udev
+> +MESA3D_EGL_PLATFORMS = drm
+> +ifeq ($(BR2_PACKAGE_WAYLAND),y)
+> +MESA3D_DEPENDENCIES += wayland
+> +MESA3D_EGL_PLATFORMS += wayland
+> +endif
+> +ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER),y)
+> +MESA3D_EGL_PLATFORMS += x11
+> +endif
+> +MESA3D_CONF_OPT += \
+> +	--enable-gbm \
+> +	--enable-egl \
+> +	--with-egl-platforms=$(foreach subst $(space),$(comma),$(MESA3D_EGL_PLATFORMS))
+need quotes around the foreach for multiple selection ( example:
+--with-egl-platform='drm x11')
+
+Reviewed-by: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
+
+Regards,
+Sebastien.
