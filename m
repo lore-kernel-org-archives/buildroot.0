@@ -1,58 +1,74 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Mar 2014 22:52:43 +0100
-Subject: [Buildroot] [git commit] igmpproxy: uclinux is also linux
-Message-ID: <20140313220037.6475C9BF77@busybox.osuosl.org>
+From: Bernd Kuhls <berndkuhls@hotmail.com>
+Date: Thu, 13 Mar 2014 23:15:47 +0100
+Subject: [Buildroot] =?utf-8?q?=5BPATCH_v8_1/5=5D_mesa3d=3A_pull_out_from_?=
+	=?utf-8?q?x11?=
+Message-ID: <BLU0-SMTP128329771853DC186B6367AD9710@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c5cb5c3605cc3ce6c54601080aa421ec0c93d06f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+mesa3d does not depend on x11, it can be used by wayland or other apps
 
-Fixes:
-http://autobuild.buildroot.net/results/3dc/3dcb26947d7eee7ae4f17a082a144912c44f0526/
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
+Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 ---
- package/igmpproxy/igmpproxy-01-uclinux.patch |   16 ++++++++++++++++
- package/igmpproxy/igmpproxy.mk               |    2 ++
- 2 files changed, 18 insertions(+), 0 deletions(-)
+v8: no changes
+v7: no changes
+v6: no changes
+v5: added explanation (Yann)
+v4: rebased v3
+v3: Config.in: move package to "Graphic libraries" (Arnout)
+v2: rebased v1
+v1: rebased Spenser Gilliland?s patch:
+    http://patchwork.ozlabs.org/patch/278302/
 
-diff --git a/package/igmpproxy/igmpproxy-01-uclinux.patch b/package/igmpproxy/igmpproxy-01-uclinux.patch
-new file mode 100644
-index 0000000..7fa4a23
---- /dev/null
-+++ b/package/igmpproxy/igmpproxy-01-uclinux.patch
-@@ -0,0 +1,16 @@
-+configure.ac: uclinux is also linux
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura igmpproxy-0.1.orig/configure.ac igmpproxy-0.1/configure.ac
-+--- igmpproxy-0.1.orig/configure.ac	2014-03-12 18:43:02.369323771 -0300
-++++ igmpproxy-0.1/configure.ac	2014-03-12 18:43:22.129979179 -0300
-+@@ -7,7 +7,7 @@
-+ 
-+ AC_CANONICAL_HOST
-+ case $host_os in
-+-	linux*) os=linux;;
-++	linux*|uclinux*) os=linux;;
-+ 	freebsd*) os=freebsd;;
-+ 	netbsd*) os=netbsd;;
-+ 	openbsd*) os=openbsd;;
-diff --git a/package/igmpproxy/igmpproxy.mk b/package/igmpproxy/igmpproxy.mk
-index 577717c..cdf3774 100644
---- a/package/igmpproxy/igmpproxy.mk
-+++ b/package/igmpproxy/igmpproxy.mk
-@@ -6,6 +6,8 @@
- 
- IGMPPROXY_VERSION = 0.1
- IGMPPROXY_SITE = http://downloads.sourceforge.net/project/igmpproxy/igmpproxy/$(IGMPPROXY_VERSION)
-+# igmpproxy-01-uclinux.patch
-+IGMPPROXY_AUTORECONF = YES
- IGMPPROXY_LICENSE = GPLv2+
- IGMPPROXY_LICENSE_FILES = COPYING
- 
+ package/Config.in                                     |    1 +
+ package/{x11r7 => }/mesa3d/Config.in                  |    0
+ package/{x11r7 => }/mesa3d/mesa3d-uclibc-locale.patch |    0
+ package/{x11r7 => }/mesa3d/mesa3d.mk                  |    0
+ package/x11r7/Config.in                               |    1 -
+ 5 files changed, 1 insertion(+), 1 deletion(-)
+ rename package/{x11r7 => }/mesa3d/Config.in (100%)
+ rename package/{x11r7 => }/mesa3d/mesa3d-uclibc-locale.patch (100%)
+ rename package/{x11r7 => }/mesa3d/mesa3d.mk (100%)
+
+diff --git a/package/Config.in b/package/Config.in
+index 70e5a7f..b0da653 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -188,6 +188,7 @@ source "package/fbv/Config.in"
+ source "package/imagemagick/Config.in"
+ source "package/linux-fusion/Config.in"
+ source "package/lite/Config.in"
++source "package/mesa3d/Config.in"
+ source "package/ocrad/Config.in"
+ source "package/psplash/Config.in"
+ source "package/sawman/Config.in"
+diff --git a/package/x11r7/mesa3d/Config.in b/package/mesa3d/Config.in
+similarity index 100%
+rename from package/x11r7/mesa3d/Config.in
+rename to package/mesa3d/Config.in
+diff --git a/package/x11r7/mesa3d/mesa3d-uclibc-locale.patch b/package/mesa3d/mesa3d-uclibc-locale.patch
+similarity index 100%
+rename from package/x11r7/mesa3d/mesa3d-uclibc-locale.patch
+rename to package/mesa3d/mesa3d-uclibc-locale.patch
+diff --git a/package/x11r7/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+similarity index 100%
+rename from package/x11r7/mesa3d/mesa3d.mk
+rename to package/mesa3d/mesa3d.mk
+diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
+index 5ef118b..458d09f 100644
+--- a/package/x11r7/Config.in
++++ b/package/x11r7/Config.in
+@@ -15,7 +15,6 @@ if BR2_PACKAGE_XORG7
+ 	endmenu
+ 	menu "X11R7 Libraries"
+ 		source package/x11r7/libxcb/Config.in
+-		source package/x11r7/mesa3d/Config.in
+ 		source package/x11r7/xcb-util/Config.in
+ 		source package/x11r7/xcb-util-image/Config.in
+ 		source package/x11r7/xcb-util-keysyms/Config.in
+-- 
+1.7.10.4
