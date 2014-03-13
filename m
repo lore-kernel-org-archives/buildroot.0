@@ -1,110 +1,45 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Thu, 13 Mar 2014 17:35:35 +0100
-Subject: [Buildroot] [PATCH 1/6] barebox: fix coding style
-In-Reply-To: <5320027B.3000005@mind.be>
-References: <1394540278-28740-1-git-send-email-fabio.porcedda@gmail.com>
- <1394540278-28740-2-git-send-email-fabio.porcedda@gmail.com>
- <20140311173350.GA3330@free.fr> <5320027B.3000005@mind.be>
-Message-ID: <CAHkwnC-gS0_GD_XPZ0_pia4UFMMq7VZb-ouj0ezGWjN7bynVmg@mail.gmail.com>
+Date: Thu, 13 Mar 2014 17:38:48 +0100
+Subject: [Buildroot] host-fakeroot archive not sourced any more?
+In-Reply-To: <CAHkwnC-MWz654MAc9Gfx1UptPkDeCnSp=tjJq9=k7U6J296wew@mail.gmail.com>
+References: <532033B2.9030903@freescale.com>
+ <CAAXf6LXkv15AhY+2GaBG6pxgs0TpgX3SiY_EQP1Se4X5P2SwDA@mail.gmail.com>
+ <CAHkwnC_XBGoHGKVaTuS5_U601uASbzxwP-wF2X5Po6Ezo-PJAw@mail.gmail.com>
+ <CAHkwnC99ifVpDJPBnMD+4rsWcykfMf2U4KTrtZRYqpkRVUfy1w@mail.gmail.com>
+ <53206B17.2000409@freescale.com>
+ <CAHkwnC-MWz654MAc9Gfx1UptPkDeCnSp=tjJq9=k7U6J296wew@mail.gmail.com>
+Message-ID: <CAHkwnC8xxvnp9sf5+gofXYHRQbANkUdonht1W59FBnLRMBb+6g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout and Yann,
-thanks for reviewing the patch.
-
-On Wed, Mar 12, 2014 at 7:45 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 03/11/14 18:33, Yann E. MORIN wrote:
->> Fabio, All,
->>
->> On 2014-03-11 13:17 +0100, Fabio Porcedda spake thusly:
->>> Break long lines.
->> [--SNIP--]
->>> -BAREBOX_MAKE_FLAGS = ARCH=$(BAREBOX_ARCH) CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)"
->>> +BAREBOX_MAKE_FLAGS = ARCH=$(BAREBOX_ARCH) CROSS_COMPILE="$(CCACHE) \
->>> +    $(TARGET_CROSS)"
->
->  Splitting a line between quotes is evil.
-
-It's a matter of code style because it works fine, doesn't it?
-
->>
->> Although we have no written rule about thus, I'd rather that folded-lines
->> assignments continue after the '=' sign, like:
->>
->> BAREBOX_MAKE_FLAGS = ARCH=$(BAREBOX_ARCH) CROSS_COMPILE="$(CCACHE) \
->>                      $(TARGET_CROSS)"
->>
->> It makes it easier to see the assignment.
-
-I don't have a strong opinion about this, i'd like also to be
-consistent to the style used in buildroot and i was unable to find any
-code that follow that rule.
-
->  Or better yet (and this is the unwritten rule that we tend to follow):
->
-> BAREBOX_MAKE_FLAGS = \
->         ARCH=$(BAREBOX_ARCH) \
->         CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)"
-
-It's nice, i will do like that.
-
->
->>
->>>  ifeq ($(BR2_TARGET_BAREBOX_USE_DEFCONFIG),y)
->>> -BAREBOX_SOURCE_CONFIG = $(@D)/arch/$(BAREBOX_ARCH)/configs/$(call qstrip,$(BR2_TARGET_BAREBOX_BOARD_DEFCONFIG))_defconfig
->>> +BAREBOX_SOURCE_CONFIG = $(@D)/arch/$(BAREBOX_ARCH)/configs/$(call qstrip,\
->>> +    $(BR2_TARGET_BAREBOX_BOARD_DEFCONFIG))_defconfig
->
->  Splitting a single path is also evil. We do usually keep the long lines
-> in such a case.
-
-This time too it's a matter of code style, isn't it?
-
->
->>
->> Ditto.
->>
->>>  else ifeq ($(BR2_TARGET_BAREBOX_USE_CUSTOM_CONFIG),y)
->>>  BAREBOX_SOURCE_CONFIG = $(BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE)
->>>  endif
+On Wed, Mar 12, 2014 at 3:25 PM, Fabio Porcedda
+<fabio.porcedda@gmail.com> wrote:
+> On Wed, Mar 12, 2014 at 3:11 PM, Vincent Stehl?
+> <vincent.stehle@freescale.com> wrote:
+>> On 03/12/2014 01:44 PM, Fabio Porcedda wrote:
 >>>
->>>  define BAREBOX_CONFIGURE_CMDS
->>> -    cp $(BAREBOX_SOURCE_CONFIG) $(@D)/arch/$(BAREBOX_ARCH)/configs/buildroot_defconfig
->>> -    $(TARGET_MAKE_ENV) $(MAKE) $(BAREBOX_MAKE_FLAGS) -C $(@D) buildroot_defconfig
->>> +    cp $(BAREBOX_SOURCE_CONFIG) \
->>> +            $(@D)/arch/$(BAREBOX_ARCH)/configs/buildroot_defconfig
->>> +    $(TARGET_MAKE_ENV) $(MAKE) $(BAREBOX_MAKE_FLAGS) -C $(@D) \
->>> +            buildroot_defconfig
->>>  endef
->>>
->>>  ifeq ($(BR2_TARGET_BAREBOX_BAREBOXENV),y)
->>> @@ -68,7 +73,8 @@ endef
->>>  endif
->>>
->>>  ifeq ($(BR2_TARGET_BAREBOX_CUSTOM_ENV),y)
->>> -BAREBOX_ENV_NAME = $(notdir $(call qstrip, $(BR2_TARGET_BAREBOX_CUSTOM_ENV_PATH)))
->>> +BAREBOX_ENV_NAME = $(notdir $(call qstrip,\
->>> +    $(BR2_TARGET_BAREBOX_CUSTOM_ENV_PATH)))
->
->  This one is probably OK :-)
->
->
->  Regards,
->  Arnout
->
+>>> -               $(addsuffix _DEPENDENCIES,$(call UPPERCASE,$(TARGETS))),\
+>>> +               $(addsuffix _DEPENDENCIES,$(call UPPERCASE,$(TARGETS)
+>>> $(TARGETS_ROOTFS))),\
 >>
->> Ditto.
 >>
->> But I'd like the maintainer to Ack this before you resend. I have no
->> strong opinion about it, I just find it easier to read...
+>> Hi Fabio,
 >>
->> Regards,
->> Yann E. MORIN.
+>> Thanks for the patch; I confirm it repairs fakeroot fetching. I'll start to
+>> use it instead of the reverts and see how it goes.
+>
+> Great!
+> Thanks for testing it and sorry for the trouble.
+> I will send tomorrow the patch to the mailing list, maybe an improved
+> version because i fear that i need to add TARGETS_ROOTFS in more
+> places.
 
+Patch sent:
+http://patchwork.ozlabs.org/patch/330004/
 
-Thanks
+Regards
 -- 
 Fabio Porcedda
