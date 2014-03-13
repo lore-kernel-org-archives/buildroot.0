@@ -1,98 +1,55 @@
 From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Thu, 13 Mar 2014 23:15:51 +0100
-Subject: [Buildroot] [PATCH v8 5/5] xdriver_xf86-video-intel: Bump version
-	to 2.99.910
-In-Reply-To: <1394748951-8975-1-git-send-email-berndkuhls@hotmail.com>
-References: <1394748951-8975-1-git-send-email-berndkuhls@hotmail.com>
-Message-ID: <BLU0-SMTP2458B2C630FFDEA3CB1E7C1D9710@phx.gbl>
+Date: Thu, 13 Mar 2014 23:18:07 +0100
+Subject: [Buildroot] [PATCH v8 4/5] pkgconf: rewrite variable sdkdir,
+	needed by xdriver_xf86-video-intel
+Message-ID: <BLU0-SMTP105B9B88674FF02C4E59F1D9710@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- add necessary dependencies
-- add -D_GNU_SOURCE to avoid getline compilation error
+- rename patch file to include the apply order
 
 Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
 ---
 v8: no changes
-v7: no changes
+v7: renamed patch file (Jerzy), re-formatted changelog
 v6: no changes
 v5: no changes
-v4: added dependencies, fixed getline compilation error
-v3: bump version to 2.99.910
-v2: bump version to 2.99.909
-v1: bump version to 2.99.908
+v4: added initial version of this patch to v4 of the patch series
 
- package/x11r7/xdriver_xf86-video-intel/Config.in     |   13 ++++++++-----
- .../xdriver_xf86-video-intel.mk                      |   18 +++++++++++++++---
- 2 files changed, 23 insertions(+), 8 deletions(-)
+ .../{pkgconf-fix-variable.patch => pkgconf-01-fix-variable.patch}  |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+ rename package/pkgconf/{pkgconf-fix-variable.patch => pkgconf-01-fix-variable.patch} (88%)
 
-diff --git a/package/x11r7/xdriver_xf86-video-intel/Config.in b/package/x11r7/xdriver_xf86-video-intel/Config.in
-index 83b714a..026520c 100644
---- a/package/x11r7/xdriver_xf86-video-intel/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-intel/Config.in
-@@ -1,13 +1,16 @@
- config BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL
- 	bool "xf86-video-intel"
--	select BR2_PACKAGE_XPROTO_FONTSPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_RENDERPROTO
--	select BR2_PACKAGE_XPROTO_XPROTO
--	select BR2_PACKAGE_XLIB_LIBPCIACCESS
- 	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_LIBDRM_INTEL
- 	select BR2_PACKAGE_MESA3D
-+	select BR2_PACKAGE_MESA3D_DRI_DRIVER_I965
-+	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE
-+	select BR2_PACKAGE_XLIB_LIBPCIACCESS
-+	select BR2_PACKAGE_XLIB_LIBXRANDR
-+	select BR2_PACKAGE_XLIB_LIBXTST
-+	select BR2_PACKAGE_XPROTO_FONTSPROTO
-+	select BR2_PACKAGE_XPROTO_XF86DRIPROTO
-+	select BR2_PACKAGE_XPROTO_XPROTO
- 	depends on (BR2_i386 || BR2_x86_64)
- 	help
- 	  Intel video driver
-diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-index 332de54..e9f0bad 100644
---- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-+++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-@@ -4,12 +4,15 @@
- #
- ################################################################################
+diff --git a/package/pkgconf/pkgconf-fix-variable.patch b/package/pkgconf/pkgconf-01-fix-variable.patch
+similarity index 88%
+rename from package/pkgconf/pkgconf-fix-variable.patch
+rename to package/pkgconf/pkgconf-01-fix-variable.patch
+index e19f76c..4c213d6 100644
+--- a/package/pkgconf/pkgconf-fix-variable.patch
++++ b/package/pkgconf/pkgconf-01-fix-variable.patch
+@@ -7,17 +7,19 @@ This is sometimes used to find header files (E.G. in gst-plugins configure),
+ so ensure the sysroot'ed files are used.
  
--XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.907
-+XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.910
- XDRIVER_XF86_VIDEO_INTEL_SOURCE = xf86-video-intel-$(XDRIVER_XF86_VIDEO_INTEL_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_INTEL_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_INTEL_LICENSE = MIT
- XDRIVER_XF86_VIDEO_INTEL_LICENSE_FILES = COPYING
--XDRIVER_XF86_VIDEO_INTEL_AUTORECONF = YES
-+
-+# this fixes a getline-related compilation in src/sna/kgem.c
-+XDRIVER_XF86_VIDEO_INTEL_CONF_ENV = \
-+	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
+ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
  
- XDRIVER_XF86_VIDEO_INTEL_CONF_OPT = \
- 	--enable-dri \
-@@ -23,6 +26,15 @@ XDRIVER_XF86_VIDEO_INTEL_CONF_OPT = \
- 	--disable-dga \
- 	--disable-async-swap
- 
--XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xproto libdrm xlib_libpciaccess
-+XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES = \
-+	libdrm \
-+	mesa3d \
-+	xlib_libXcomposite \
-+	xlib_libXrandr \
-+	xlib_libXtst \
-+	xlib_libpciaccess \
-+	xproto_fontsproto \
-+	xproto_xproto \
-+	xserver_xorg-server
- 
- $(eval $(autotools-package))
+ diff -Nura pkgconf-0.8.9.orig/main.c pkgconf-0.8.9/main.c
+ --- pkgconf-0.8.9.orig/main.c	2012-10-24 14:32:08.236508699 -0300
+ +++ pkgconf-0.8.9/main.c	2012-10-24 14:54:36.771070217 -0300
+-@@ -298,7 +298,12 @@
++@@ -298,7 +298,13 @@
+  	if (eflag != PKG_ERRF_OK)
+  		return false;
+  
+ -	printf("%s\n", req.buf);
+ +	if ( !strcmp(req.variable, "includedir") ||
+ +	  !strcmp(req.variable, "mapdir") ||
+++	  !strcmp(req.variable, "sdkdir") ||
+ +	  !strcmp(req.variable, "libdir"))
+ +		printf("%s%s\n", sysroot_dir, req.buf);
+ +	else
 -- 
 1.7.10.4
