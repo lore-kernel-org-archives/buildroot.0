@@ -1,105 +1,76 @@
-From: Uwe Kindler <uwe_kindler@web.de>
-Date: Thu, 13 Mar 2014 11:13:01 +0100
-Subject: [Buildroot] [PATCH 1/1] Added support for configuration of boost
-	binary names layout
-Message-ID: <1394705581-23659-1-git-send-email-uwe_kindler@web.de>
+From: Vineet Gupta <Vineet.Gupta1@synopsys.com>
+Date: Thu, 13 Mar 2014 16:15:19 +0530
+Subject: [Buildroot] Switching from uClibc to glibc as the default in
+	Buildroot?
+In-Reply-To: <20140312202417.GC6240@nbbrfq.cc.univie.ac.at>
+References: <20140218231447.524a1a20@skate>
+ <CAMKF1soCcLba_EacJLe7f9fM9=gFsTJYj0kaz6YzoXzEY1rx2A@mail.gmail.com>
+ <fd7802bd-3f37-4d70-ad22-2e46fc452b4b@email.android.com>
+ <66DCE5C2-E7A6-4634-8C79-441DA9FC46FB@gmail.com>
+ <20140219092112.6f359a55@skate> <87y5171p19.fsf@dell.be.48ers.dk>
+ <CAAXf6LXoZ_dQNoy=z7u4ww-j2Eppe3mMiYn+6t=_x3odwBwGWA@mail.gmail.com>
+ <20140312202417.GC6240@nbbrfq.cc.univie.ac.at>
+Message-ID: <53218C3F.8090204@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Thursday 13 March 2014 01:54 AM, Bernhard Reutner-Fischer wrote:
+> On Fri, Mar 07, 2014 at 09:07:27AM +0100, Thomas De Schampheleire wrote:
+>> > Hi all,
+>> > 
+>> > On Wed, Feb 19, 2014 at 9:32 AM, Peter Korsgaard <jacmet-2zL2ArBv0bUdnm+yROfE0A@public.gmane.org> wrote:
+>>>>>>>> > >>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8@public.gmane.org> writes:
+>>> > >
+>>> > >  > Dear Khem Raj,
+>>> > >  > On Tue, 18 Feb 2014 18:43:41 -0800, Khem Raj wrote:
+>>> > >
+>>> > >  >> > There are a great number of fixes since the last numbered release and I for one would greatly appreciate having at least a "testing" release with a bumped version number to use. Other than the ldso stat call problem I reported a couple of weeks ago, uClibc trunk has been working fairly well, and most bugs I run into are the typical growing pains of toolchain building from scratch rather than uClibc problems.
+>>> > >  >>
+>>> > >  >> so get going start testing git/master and report issues or successes you have.
+>>> > >  >> help in testing it out, run uclibc test suites or any others you have setups for
+>>> > >
+>>> > >  > Please break the chicken-and-egg problem, and release 2014.02-rc1 right
+>>> > >  > now, spit out a call for testing, and release 2014.02 at the end of the
+>>> > >  > month. (Or pick any other date you want, those are just suggestions).
+>>> > >
+>>> > > Inded. When Bernard suggested the same last year I did test and reported
+>>> > > issues, but never got any reply:
+>>> > >
+>>> > > http://lists.uclibc.org/pipermail/uclibc/2013-November/048093.html
+>>> > >
+>> > 
+>> > Any further evolution in this matter?
+>> > 
+>> > Until now, this mail thread did not seem to have triggered any real
+>> > activity from the uClibc community.
+>> > 
+>> > Khem Raj: what is the plan forward? You have requested patches to be
+>> > sent, and testing to be performed, and the Buildroot community has
+>> > responded by telling that we only have patches that are already in the
+>> > uClibc tree (unreleased) and we have been testing this for a long
+>> > while already, without problems.
+>> > 
+>> > Maybe you feel this is not enough, in which case kindly provide more
+>> > details about what you consider blocking points to make a release, or
+>> > even a release candidate.
+> Well, see ML archives with a mail from Peter who tested a somewhat
+> recent master and found ARM !LFS to be broken (i still consider !LFS to
+> be an important thing to support, despite the maintenance burden).
+> [the exact november mail above, btw]
+> We have touched this on master as
+> 00571b43df2e0554d1b0716681832ba9975177c5 so this in fact did trigger a
+> reaction from "the uClibc community". No reaction from the buildroot
+> folks that current master resolved this !LFS ARM failure. Zilch.
+> See?
 
-Signed-off-by: Uwe Kindler <uwe_kindler@web.de>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/boost/Config.in |   34 ++++++++++++++++++++++++++++++++++
- package/boost/boost.mk  |    7 ++++---
- 2 files changed, 38 insertions(+), 3 deletions(-)
 
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index 68c3909..57dd5fc 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -16,6 +16,40 @@ config BR2_PACKAGE_BOOST
- 
- if BR2_PACKAGE_BOOST
- 
-+choice
-+	prompt "Layout"
-+	default BR2_PACKAGE_BOOST_LAYOUT_SYSTEM
-+	help
-+	  Selects the layout of boost binary names
-+
-+config BR2_PACKAGE_BOOST_LAYOUT_SYSTEM
-+	bool "system"
-+	help
-+	  Binaries names do not include the Boost version number or the name and 
-+	  version number of the compiler.
-+
-+config BR2_PACKAGE_BOOST_LAYOUT_TAGGED
-+	bool "tagged"
-+	help
-+	  Names of boost binaries include the encoded build properties such as 
-+	  variant and threading, but do not including compiler name and version, or 
-+	  Boost version. This option is useful if you build several variants of 
-+	  Boost, using the same compiler.
-+	  
-+config BR2_PACKAGE_BOOST_LAYOUT_VERSIONED
-+	bool "versioned"
-+	help
-+	  Names of boost binaries include the Boost version number, name and 
-+	  version of the compiler and encoded build properties.
-+	  
-+config BR2_PACKAGE_BOOST_LAYOUT
-+	string
-+	default "system" if BR2_PACKAGE_BOOST_LAYOUT_SYSTEM
-+	default "tagged" if BR2_PACKAGE_BOOST_LAYOUT_TAGGED
-+	default "versioned" if BR2_PACKAGE_BOOST_LAYOUT_VERSIONED
-+	  
-+endchoice
-+
- config BR2_PACKAGE_BOOST_CHRONO
- 	bool "boost-chrono"
- 
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index 7aab614..2ae8034 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -81,6 +81,7 @@ endif
- 
- BOOST_WITHOUT_FLAGS_COMMASEPERATED += $(subst $(space),$(comma),$(strip $(BOOST_WITHOUT_FLAGS)))
- BOOST_FLAGS += $(if $(BOOST_WITHOUT_FLAGS_COMMASEPERATED), --without-libraries=$(BOOST_WITHOUT_FLAGS_COMMASEPERATED))
-+BOOST_LAYOUT = $(call qstrip, $(BR2_PACKAGE_BOOST_LAYOUT))
- 
- define BOOST_CONFIGURE_CMDS
- 	(cd $(@D) && ./bootstrap.sh $(BOOST_FLAGS))
-@@ -99,7 +100,7 @@ define BOOST_INSTALL_TARGET_CMDS
- 	--user-config=$(@D)/user-config.jam \
- 	$(BOOST_OPT) \
- 	--prefix=$(TARGET_DIR)/usr \
--	--layout=system install )
-+	--layout=$(BOOST_LAYOUT) install )
- endef
- 
- define HOST_BOOST_BUILD_CMDS
-@@ -114,7 +115,7 @@ define HOST_BOOST_INSTALL_CMDS
- 	--user-config=$(@D)/user-config.jam \
- 	$(HOST_BOOST_OPT) \
- 	--prefix=$(HOST_DIR)/usr \
--	--layout=system install )
-+	--layout=$(BOOST_LAYOUT) install )
- endef
- 
- define BOOST_INSTALL_STAGING_CMDS
-@@ -122,7 +123,7 @@ define BOOST_INSTALL_STAGING_CMDS
- 	--user-config=$(@D)/user-config.jam \
- 	$(BOOST_OPT) \
- 	--prefix=$(STAGING_DIR)/usr \
--	--layout=system install)
-+	--layout=$(BOOST_LAYOUT) install)
- endef
- 
- $(eval $(generic-package))
--- 
-1.7.9.5
+I'm not sure if ARM !LFS failure is the same but I've posted (and reminded at
+least once) regarding a !LFS build failure on ARC.
+
+http://lists.uclibc.org/pipermail/uclibc/2014-January/048174.html
+http://lists.uclibc.org/pipermail/uclibc/2014-February/048215.html
+
+-Vineet
