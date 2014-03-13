@@ -1,63 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Mar 2014 22:59:07 +0100
-Subject: [Buildroot] [git commit] libesmtp: not available for static builds
-Message-ID: <20140313220037.72C5D9BDDE@busybox.osuosl.org>
+Date: Thu, 13 Mar 2014 22:52:43 +0100
+Subject: [Buildroot] [git commit] igmpproxy: uclinux is also linux
+Message-ID: <20140313220037.6475C9BF77@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5dc0e606b554c494a76ffcc216eb8911d2d71dfa
+commit: http://git.buildroot.net/buildroot/commit/?id=c5cb5c3605cc3ce6c54601080aa421ec0c93d06f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This package requires libltdl and checks for it in the configure phase.
-If it's not present, then the build process is stopped.
-
 Fixes:
-   http://autobuild.buildroot.net/results/5cf/5cf145d3f9c78bef1f66fe9b1831723de8b4969f/
+http://autobuild.buildroot.net/results/3dc/3dcb26947d7eee7ae4f17a082a144912c44f0526/
 
-[Peter: dependency should only apply to COLLECTD_NOTIFY_EMAIL suboption]
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/collectd/Config.in |    4 ++++
- package/libesmtp/Config.in |    4 ++++
- 2 files changed, 8 insertions(+), 0 deletions(-)
+ package/igmpproxy/igmpproxy-01-uclinux.patch |   16 ++++++++++++++++
+ package/igmpproxy/igmpproxy.mk               |    2 ++
+ 2 files changed, 18 insertions(+), 0 deletions(-)
 
-diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index 70b0439..daa9603 100644
---- a/package/collectd/Config.in
-+++ b/package/collectd/Config.in
-@@ -58,12 +58,16 @@ config BR2_PACKAGE_COLLECTD_LOGFILE
- 
- config BR2_PACKAGE_COLLECTD_NOTIFY_EMAIL
- 	bool "notify_email"
-+	depends on !BR2_PREFER_STATIC_LIB # libesmtp
- 	select BR2_PACKAGE_LIBESMTP
- 	select BR2_PACKAGE_OPENSSL
- 	help
- 	  Send an E-mail with the notification message to the
- 	  configured recipients.
- 
-+comment "notify_email needs a toolchain w/ dynamic library"
-+	depends on BR2_PREFER_STATIC_LIB
+diff --git a/package/igmpproxy/igmpproxy-01-uclinux.patch b/package/igmpproxy/igmpproxy-01-uclinux.patch
+new file mode 100644
+index 0000000..7fa4a23
+--- /dev/null
++++ b/package/igmpproxy/igmpproxy-01-uclinux.patch
+@@ -0,0 +1,16 @@
++configure.ac: uclinux is also linux
 +
- config BR2_PACKAGE_COLLECTD_SYSLOG
- 	bool "syslog"
- 	default y
-diff --git a/package/libesmtp/Config.in b/package/libesmtp/Config.in
-index 4e9e455..42a1c08 100644
---- a/package/libesmtp/Config.in
-+++ b/package/libesmtp/Config.in
-@@ -1,6 +1,10 @@
- config BR2_PACKAGE_LIBESMTP
- 	bool "libesmtp"
-+	depends on !BR2_PREFER_STATIC_LIB
- 	help
- 	  Library for sending emails through SMTP.
- 
- 	  http://www.stafford.uklinux.net/libesmtp
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 +
-+comment "libesmtp needs a toolchain w/ dynamic library"
-+	depends on BR2_PREFER_STATIC_LIB
++diff -Nura igmpproxy-0.1.orig/configure.ac igmpproxy-0.1/configure.ac
++--- igmpproxy-0.1.orig/configure.ac	2014-03-12 18:43:02.369323771 -0300
+++++ igmpproxy-0.1/configure.ac	2014-03-12 18:43:22.129979179 -0300
++@@ -7,7 +7,7 @@
++ 
++ AC_CANONICAL_HOST
++ case $host_os in
++-	linux*) os=linux;;
+++	linux*|uclinux*) os=linux;;
++ 	freebsd*) os=freebsd;;
++ 	netbsd*) os=netbsd;;
++ 	openbsd*) os=openbsd;;
+diff --git a/package/igmpproxy/igmpproxy.mk b/package/igmpproxy/igmpproxy.mk
+index 577717c..cdf3774 100644
+--- a/package/igmpproxy/igmpproxy.mk
++++ b/package/igmpproxy/igmpproxy.mk
+@@ -6,6 +6,8 @@
+ 
+ IGMPPROXY_VERSION = 0.1
+ IGMPPROXY_SITE = http://downloads.sourceforge.net/project/igmpproxy/igmpproxy/$(IGMPPROXY_VERSION)
++# igmpproxy-01-uclinux.patch
++IGMPPROXY_AUTORECONF = YES
+ IGMPPROXY_LICENSE = GPLv2+
+ IGMPPROXY_LICENSE_FILES = COPYING
+ 
