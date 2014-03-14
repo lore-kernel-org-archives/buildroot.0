@@ -1,103 +1,46 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 14 Mar 2014 21:22:21 +0100
-Subject: [Buildroot] [PATCH] slang: bump to 2.2.4
-In-Reply-To: <53235D1C.3050300@trzebnica.net>
-References: <1394814653-16144-1-git-send-email-yegorslists@googlemail.com>
- <53235D1C.3050300@trzebnica.net>
-Message-ID: <CAGm1_ksG9_g2vfQda3OoiHfYTssHx56biCSApofu9KenyATfug@mail.gmail.com>
+From: Bernd Kuhls <berndkuhls@hotmail.com>
+Date: Fri, 14 Mar 2014 21:51:06 +0100
+Subject: [Buildroot] [PATCH 1/2] minidlna: needs gettext and host-gettext
+	tools if locale is enabled
+Message-ID: <BLU0-SMTP657A1BE94A7B7893E432DAD9700@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Jerzy,
+Fixes http://autobuild.buildroot.net/results/c6b/c6baebe005d6c024514bb1ade5ca391ea341c239/
 
-On Fri, Mar 14, 2014 at 8:48 PM, Jerzy Grzegorek
-<jerzy.grzegorek@trzebnica.net> wrote:
->
-> Hi Yegor,
->
->
->> From: Yegor Yefremov <yegorslists@googlemail.com>
->>
->> Convert package from generic to autotools.
->>
->> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
->> ---
->>   package/slang/Config.in |    2 +-
->>   package/slang/slang.mk  |   31 ++++---------------------------
->>   2 files changed, 5 insertions(+), 28 deletions(-)
->>
->> diff --git a/package/slang/Config.in b/package/slang/Config.in
->> index 60facbb..9d8f047 100644
->> --- a/package/slang/Config.in
->> +++ b/package/slang/Config.in
->> @@ -3,4 +3,4 @@ config BR2_PACKAGE_SLANG
->>         help
->>           Multi-platform console display library.
->>   -       http://www.s-lang.org/
->> +         http://www.jedsoft.org/slang/index.html
->> diff --git a/package/slang/slang.mk b/package/slang/slang.mk
->> index 8cc93dd..2364e71 100644
->> --- a/package/slang/slang.mk
->> +++ b/package/slang/slang.mk
->> @@ -4,32 +4,9 @@
->>   #
->>
->> ################################################################################
->>   -SLANG_VERSION = 1.4.5
->> -SLANG_SOURCE = slang-$(SLANG_VERSION)-mini.tar.bz2
->> -SLANG_SITE = http://www.uclibc.org/
->> +SLANG_VERSION = 2.2.4
->> +SLANG_SITE = ftp://ftp.fu-berlin.de/pub/unix/misc/slang/v2.2/
->
->
-> My suggestion is:
->
-> SLANG_VERSION_MAJOR = 2.2
-> SLANG_VERSION = $(SLANG_VERSION_MAJOR).4
-> SLANG_SOURCE = slang-$(SLANG_VERSION).tar.bz2
-> SLANG_SITE =
-> ftp://ftp.fu-berlin.de/pub/unix/misc/slang/v$(SLANG_VERSION_MAJOR)/
+Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
+---
+ package/minidlna/Config.in   |    2 ++
+ package/minidlna/minidlna.mk |    1 +
+ 2 files changed, 3 insertions(+)
 
-O.K. I'll rework the patch, though I'm not sure, that this library
-will be updated very soon. The latest version was released in 2011.
-
->>   SLANG_INSTALL_STAGING = YES
->> +SLANG_MAKE = $(MAKE1)
->>   -# We need to add -fPIC since we're busting original CFLAGS
->> -# that have it, see bug #3295
->> -define SLANG_BUILD_CMDS
->> -       $(MAKE1) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS) -fPIC" \
->> -       LDFLAGS="$(TARGET_LDFLAGS)" -C $(@D)
->> -endef
->> -
->> -define SLANG_INSTALL_STAGING_CMDS
->> -       $(INSTALL) -D -m 0644 $(@D)/libslang.a
->> $(STAGING_DIR)/usr/lib/libslang.a
->> -       $(INSTALL) -D -m 0755 $(@D)/libslang.so
->> $(STAGING_DIR)/usr/lib/libslang.so
->> -       $(INSTALL) -D -m 0644 $(@D)/slang.h
->> $(STAGING_DIR)/usr/include/slang.h
->> -       $(INSTALL) -D -m 0644 $(@D)/slcurses.h
->> $(STAGING_DIR)/usr/include/slcurses.h
->> -       (cd $(STAGING_DIR)/usr/lib; ln -fs libslang.so libslang.so.1)
->> -endef
->> -
->> -define SLANG_INSTALL_TARGET_CMDS
->> -       $(INSTALL) -D -m 0644 $(@D)/libslang.a
->> $(TARGET_DIR)/usr/lib/libslang.a
->> -       $(INSTALL) -D -m 0755 $(@D)/libslang.so
->> $(TARGET_DIR)/usr/lib/libslang.so
->> -       $(INSTALL) -D -m 0644 $(@D)/slang.h
->> $(TARGET_DIR)/usr/include/slang.h
->> -       $(INSTALL) -D -m 0644 $(@D)/slcurses.h
->> $(TARGET_DIR)/usr/include/slcurses.h
->> -       (cd $(TARGET_DIR)/usr/lib; ln -fs libslang.so libslang.so.1)
->> -endef
->> -
->> -$(eval $(generic-package))
->> +$(eval $(autotools-package))
->
->
+diff --git a/package/minidlna/Config.in b/package/minidlna/Config.in
+index 1fcecde..02720e9 100644
+--- a/package/minidlna/Config.in
++++ b/package/minidlna/Config.in
+@@ -12,6 +12,8 @@ config BR2_PACKAGE_MINIDLNA
+ 	select BR2_PACKAGE_LIBEXIF
+ 	select BR2_PACKAGE_LIBJPEG
+ 	select BR2_PACKAGE_SQLITE
++	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
++	select BR2_PACKAGE_GETTEXT_TOOLS if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	help
+ 	  MiniDLNA (aka ReadyDLNA) is server software with the aim of being
+ 	  fully compliant with DLNA/UPnP-AV clients.
+diff --git a/package/minidlna/minidlna.mk b/package/minidlna/minidlna.mk
+index 94c2641..ea6a3fc 100644
+--- a/package/minidlna/minidlna.mk
++++ b/package/minidlna/minidlna.mk
+@@ -10,6 +10,7 @@ MINIDLNA_LICENSE = GPLv2 BSD-3c
+ MINIDLNA_LICENSE_FILES = COPYING LICENCE.miniupnpd
+ 
+ MINIDLNA_DEPENDENCIES = \
++	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext host-gettext) \
+ 	ffmpeg flac libvorbis libogg libid3tag libexif libjpeg sqlite \
+ 	host-xutil_makedepend
+ 
+-- 
+1.7.10.4
