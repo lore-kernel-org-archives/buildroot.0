@@ -1,33 +1,42 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Fri, 14 Mar 2014 21:51:07 +0100
-Subject: [Buildroot] [PATCH 2/2] minidlna: bump version to 1.1.2
-In-Reply-To: <1394830267-7835-1-git-send-email-berndkuhls@hotmail.com>
-References: <1394830267-7835-1-git-send-email-berndkuhls@hotmail.com>
-Message-ID: <BLU0-SMTP1684EBD570A53B55F66873D9700@phx.gbl>
+From: Arnaud Aujon <arnaud@intelibre.fr>
+Date: Fri, 14 Mar 2014 22:39:25 +0100
+Subject: [Buildroot] [PATCH] python-posix-ipc and
+	mobile-broadband-provider-info: fix package .mk name
+Message-ID: <1394833165-25242-1-git-send-email-arnaud@intelibre.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fix typo in python-posix-ipc package name and rename mobile_broadband_provider_info according to naming policy
 
-Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
+Signed-off-by: Arnaud Aujon <arnaud@intelibre.fr>
 ---
- package/minidlna/minidlna.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...ile_broadband_provider_info.mk => mobile-broadband-provider-info.mk} | 2 +-
+ package/python-posix-ipc/{python-poxix-ipc.mk => python-posix-ipc.mk}   | 0
+ 2 files changed, 1 insertion(+), 1 deletion(-)
+ rename package/mobile-broadband-provider-info/{mobile_broadband_provider_info.mk => mobile-broadband-provider-info.mk} (95%)
+ rename package/python-posix-ipc/{python-poxix-ipc.mk => python-posix-ipc.mk} (100%)
 
-diff --git a/package/minidlna/minidlna.mk b/package/minidlna/minidlna.mk
-index ea6a3fc..e1e2f3d 100644
---- a/package/minidlna/minidlna.mk
-+++ b/package/minidlna/minidlna.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/mobile-broadband-provider-info/mobile_broadband_provider_info.mk b/package/mobile-broadband-provider-info/mobile-broadband-provider-info.mk
+similarity index 95%
+rename from package/mobile-broadband-provider-info/mobile_broadband_provider_info.mk
+rename to package/mobile-broadband-provider-info/mobile-broadband-provider-info.mk
+index 431e172..f2a1136 100644
+--- a/package/mobile-broadband-provider-info/mobile_broadband_provider_info.mk
++++ b/package/mobile-broadband-provider-info/mobile-broadband-provider-info.mk
+@@ -1,6 +1,6 @@
+ ################################################################################
+ #
+-# mobile_broadband_provider_info
++# mobile-broadband-provider-info
  #
  ################################################################################
  
--MINIDLNA_VERSION = 1.1.1
-+MINIDLNA_VERSION = 1.1.2
- MINIDLNA_SITE = http://downloads.sourceforge.net/project/minidlna/minidlna/$(MINIDLNA_VERSION)
- MINIDLNA_LICENSE = GPLv2 BSD-3c
- MINIDLNA_LICENSE_FILES = COPYING LICENCE.miniupnpd
+diff --git a/package/python-posix-ipc/python-poxix-ipc.mk b/package/python-posix-ipc/python-posix-ipc.mk
+similarity index 100%
+rename from package/python-posix-ipc/python-poxix-ipc.mk
+rename to package/python-posix-ipc/python-posix-ipc.mk
 -- 
-1.7.10.4
+1.8.5.3
