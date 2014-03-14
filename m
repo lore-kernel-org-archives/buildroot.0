@@ -1,43 +1,73 @@
 From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Fri, 14 Mar 2014 23:21:31 +0100
-Subject: [Buildroot] [PATCH 0/2] Add mail packages
-Message-ID: <BLU0-SMTP145DC3EA39B458464EFE2D3D9700@phx.gbl>
+Date: Fri, 14 Mar 2014 23:21:32 +0100
+Subject: [Buildroot] [PATCH 1/2] Create new section "Mail" in menuconfig and
+	collect mail packages
+In-Reply-To: <1394835693-32232-1-git-send-email-berndkuhls@hotmail.com>
+References: <1394835693-32232-1-git-send-email-berndkuhls@hotmail.com>
+Message-ID: <BLU0-SMTP15284A38FE42BDBF236D49BD9700@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
+---
+ package/Config.in |   13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-this is the first set of patches to add these mail packages to buildroot:
-
-- fetchmail
-- exim
-- dovecot
-- dovecot-pigeonhole
-
-For better access to these and other mail packages already present in buildroot
-I suggest to create a new top level section in menuconfig especially for them.
-Since I also want to send a leafnode2 package at a later stage this section
-might later get renamed to "mail/news".
-
-I am sending this unfinished set today to start a discussion whether the
-new menuconfig section is acceptable or not.
-
-Regards, Bernd
-
-
-Bernd Kuhls (2):
-  Create new section "Mail" in menuconfig and collect mail packages
-  fetchmail: New package
-
- package/Config.in              |   14 +++++++++-----
- package/fetchmail/Config.in    |   12 ++++++++++++
- package/fetchmail/fetchmail.mk |   23 +++++++++++++++++++++++
- 3 files changed, 44 insertions(+), 5 deletions(-)
- create mode 100644 package/fetchmail/Config.in
- create mode 100644 package/fetchmail/fetchmail.mk
-
+diff --git a/package/Config.in b/package/Config.in
+index 70e5a7f..70d7023 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -230,7 +230,6 @@ source "package/leafpad/Config.in"
+ source "package/midori/Config.in"
+ source "package/pcmanfm/Config.in"
+ source "package/rdesktop/Config.in"
+-source "package/sylpheed/Config.in"
+ source "package/synergy/Config.in"
+ source "package/torsmo/Config.in"
+ source "package/wmctrl/Config.in"
+@@ -696,7 +695,6 @@ source "package/libcgi/Config.in"
+ source "package/libcgicc/Config.in"
+ source "package/libcurl/Config.in"
+ source "package/libdnet/Config.in"
+-source "package/libesmtp/Config.in"
+ source "package/libeXosip2/Config.in"
+ source "package/libfcgi/Config.in"
+ source "package/libgsasl/Config.in"
+@@ -842,6 +840,14 @@ source "package/sound-theme-borealis/Config.in"
+ source "package/sound-theme-freedesktop/Config.in"
+ endmenu
+ 
++menu "Mail"
++source "package/heirloom-mailx/Config.in"
++source "package/libesmtp/Config.in"
++source "package/msmtp/Config.in"
++source "package/mutt/Config.in"
++source "package/sylpheed/Config.in"
++endmenu
++
+ menu "Networking applications"
+ source "package/aiccu/Config.in"
+ source "package/aircrack-ng/Config.in"
+@@ -878,7 +884,6 @@ source "package/foomatic-filters/Config.in"
+ source "package/fping/Config.in"
+ source "package/gesftpserver/Config.in"
+ source "package/gutenprint/Config.in"
+-source "package/heirloom-mailx/Config.in"
+ source "package/hiawatha/Config.in"
+ source "package/hostapd/Config.in"
+ source "package/hplip/Config.in"
+@@ -912,9 +917,7 @@ source "package/modem-manager/Config.in"
+ source "package/mongoose/Config.in"
+ source "package/mongrel2/Config.in"
+ source "package/mrouted/Config.in"
+-source "package/msmtp/Config.in"
+ source "package/mtr/Config.in"
+-source "package/mutt/Config.in"
+ source "package/nbd/Config.in"
+ source "package/ncftp/Config.in"
+ source "package/ndisc6/Config.in"
 -- 
 1.7.10.4
