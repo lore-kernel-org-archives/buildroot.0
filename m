@@ -1,51 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 14 Mar 2014 23:10:44 +0100
-Subject: [Buildroot] [PATCH 2/2] legal-info: add a comment about what
-	pacakges we save the tarballs of
-In-Reply-To: <cover.1394834923.git.yann.morin.1998@free.fr>
-References: <cover.1394834923.git.yann.morin.1998@free.fr>
-Message-ID: <14c2e0397e1ce59801eb4e33561429c831dbadc8.1394834923.git.yann.morin.1998@free.fr>
+From: Bernd Kuhls <berndkuhls@hotmail.com>
+Date: Fri, 14 Mar 2014 23:21:31 +0100
+Subject: [Buildroot] [PATCH 0/2] Add mail packages
+Message-ID: <BLU0-SMTP145DC3EA39B458464EFE2D3D9700@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Hi,
 
-As the legal-info infra only (rightfully) saves the tarballs of packages
-that:
-  - we want to redistribute,
-  - and are not local,
-  - and are not overriden,
+this is the first set of patches to add these mail packages to buildroot:
 
-add a comment stating so.
+- fetchmail
+- exim
+- dovecot
+- dovecot-pigeonhole
 
-This should clarify the code-block, which although trivial to read,
-was not easy to interpret without thinking thouroughly about it.
+For better access to these and other mail packages already present in buildroot
+I suggest to create a new top level section in menuconfig especially for them.
+Since I also want to send a leafnode2 package at a later stage this section
+might later get renamed to "mail/news".
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Luca Ceresoli <luca@lucaceresoli.net>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Fabio Porcedda <fabio.porcedda@gmail.com>
----
- package/pkg-generic.mk | 3 +++
- 1 file changed, 3 insertions(+)
+I am sending this unfinished set today to start a discussion whether the
+new menuconfig section is acceptable or not.
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 6512495..d4aae1a 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -562,6 +562,9 @@ ifneq ($$($(2)_LICENSE_FILES),)
- $(1)-legal-info: $(1)-extract $(REDIST_SOURCES_DIR_$(call UPPERCASE,$(4)))
- endif
- 
-+# We only save the sources of packages we want to redistribute, that are
-+# non-local, and non-overriden. So only store, in the manifest, the tarball
-+# name of those packages.
- ifeq ($$($(2)_REDISTRIBUTE),YES)
- ifneq ($$($(2)_SITE_METHOD),local)
- ifneq ($$($(2)_SITE_METHOD),override)
+Regards, Bernd
+
+
+Bernd Kuhls (2):
+  Create new section "Mail" in menuconfig and collect mail packages
+  fetchmail: New package
+
+ package/Config.in              |   14 +++++++++-----
+ package/fetchmail/Config.in    |   12 ++++++++++++
+ package/fetchmail/fetchmail.mk |   23 +++++++++++++++++++++++
+ 3 files changed, 44 insertions(+), 5 deletions(-)
+ create mode 100644 package/fetchmail/Config.in
+ create mode 100644 package/fetchmail/fetchmail.mk
+
 -- 
-1.8.3.2
+1.7.10.4
