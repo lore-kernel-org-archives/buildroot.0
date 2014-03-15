@@ -1,40 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 15 Mar 2014 22:39:07 +0100
-Subject: [Buildroot] [git commit] pppd: install to staging
-Message-ID: <20140315214420.5FB239BF8A@busybox.osuosl.org>
+Date: Sat, 15 Mar 2014 22:42:05 +0100
+Subject: [Buildroot] [git commit] network-manager: add support for
+	ModemManager
+Message-ID: <20140315214420.8050A9BF72@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e63802618deb17fd30e2e36c6e27d6015a95f1eb
+commit: http://git.buildroot.net/buildroot/commit/?id=f3be3e53de232e88d7dbf7411e389ddcc7400237
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pppd/pppd.mk |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ package/network-manager/Config.in          |    8 ++++++++
+ package/network-manager/network-manager.mk |    7 +++++++
+ 2 files changed, 15 insertions(+), 0 deletions(-)
 
-diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
-index 0e24bd2..03118ca 100644
---- a/package/pppd/pppd.mk
-+++ b/package/pppd/pppd.mk
-@@ -11,6 +11,7 @@ PPPD_LICENSE = LGPLv2+ LGPL BSD-4c BSD-3c GPLv2+
- PPPD_LICENSE_FILES = pppd/tdb.c pppd/plugins/pppoatm/COPYING \
- 	pppdump/bsd-comp.c pppd/ccp.c pppd/plugins/passprompt.c
+diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
+index a6fbf0b..5b388b7 100644
+--- a/package/network-manager/Config.in
++++ b/package/network-manager/Config.in
+@@ -28,6 +28,14 @@ config BR2_PACKAGE_NETWORK_MANAGER
  
-+PPPD_INSTALL_STAGING = YES
- PPPD_TARGET_BINS = chat pppd pppdump pppstats
- PPPD_RADIUS_CONF = dictionary dictionary.ascend dictionary.compat \
- 			dictionary.merit dictionary.microsoft \
-@@ -92,4 +93,8 @@ define PPPD_INSTALL_TARGET_CMDS
- 	$(PPPD_INSTALL_RADIUS)
- endef
+ if BR2_PACKAGE_NETWORK_MANAGER
  
-+define PPPD_INSTALL_STAGING_CMDS
-+	$(MAKE) INSTROOT=$(STAGING_DIR)/ -C $(@D) $(PPPD_MAKE_OPT) install-devel
-+endef
++config BR2_PACKAGE_NETWORK_MANAGER_MODEM_MANAGER
++	bool "modem-manager support"
++	select BR2_PACKAGE_MODEM_MANAGER
++	select BR2_PACKAGE_MODEM_MANAGER_LIBMBIM
++	select BR2_PACKAGE_MODEM_MANAGER_LIBQMI
++	help
++	  This option enables support for ModemManager
 +
- $(eval $(generic-package))
+ config BR2_PACKAGE_NETWORK_MANAGER_PPPD
+ 	bool "pppd support"
+ 	select BR2_PACKAGE_PPPD
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 03057a6..89e0b29 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -40,6 +40,13 @@ else
+ 	NETWORK_MANAGER_CONF_OPT += --disable-ppp
+ endif
+ 
++ifeq ($(BR2_PACKAGE_NETWORK_MANAGER_MODEM_MANAGER),y)
++	NETWORK_MANAGER_DEPENDENCIES += modem-manager
++	NETWORK_MANAGER_CONF_OPT += --with-modem-manager-1
++else
++	NETWORK_MANAGER_CONF_OPT += --without-modem-manager-1
++endif
++
+ ifeq ($(BR2_PACKAGE_DHCP_CLIENT),y)
+ NETWORK_MANAGER_CONF_OPT += --with-dhclient=/usr/sbin/dhclient
+ endif
