@@ -1,75 +1,74 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 15 Mar 2014 21:11:24 +0100
-Subject: [Buildroot] [git commit] slang: bump to 2.2.4
-Message-ID: <20140315202727.793439BFF0@busybox.osuosl.org>
+Date: Sat, 15 Mar 2014 21:15:42 +0100
+Subject: [Buildroot] [git commit] Create new section "Mail" in menuconfig
+	and collect mail packages
+Message-ID: <20140315202727.9492F9BFE7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e747e3a6b36e6d8b208e861593c5c7f7dcb386eb
+commit: http://git.buildroot.net/buildroot/commit/?id=ff9c160ce71917dee0124fd9ba9726c70162ed1c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Convert package from generic to autotools.
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/slang/Config.in |    2 +-
- package/slang/slang.mk  |   33 ++++++---------------------------
- 2 files changed, 7 insertions(+), 28 deletions(-)
+ package/Config.in |   13 ++++++++-----
+ 1 files changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/package/slang/Config.in b/package/slang/Config.in
-index 60facbb..9d8f047 100644
---- a/package/slang/Config.in
-+++ b/package/slang/Config.in
-@@ -3,4 +3,4 @@ config BR2_PACKAGE_SLANG
- 	help
- 	  Multi-platform console display library.
+diff --git a/package/Config.in b/package/Config.in
+index 70e5a7f..70d7023 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -230,7 +230,6 @@ source "package/leafpad/Config.in"
+ source "package/midori/Config.in"
+ source "package/pcmanfm/Config.in"
+ source "package/rdesktop/Config.in"
+-source "package/sylpheed/Config.in"
+ source "package/synergy/Config.in"
+ source "package/torsmo/Config.in"
+ source "package/wmctrl/Config.in"
+@@ -696,7 +695,6 @@ source "package/libcgi/Config.in"
+ source "package/libcgicc/Config.in"
+ source "package/libcurl/Config.in"
+ source "package/libdnet/Config.in"
+-source "package/libesmtp/Config.in"
+ source "package/libeXosip2/Config.in"
+ source "package/libfcgi/Config.in"
+ source "package/libgsasl/Config.in"
+@@ -842,6 +840,14 @@ source "package/sound-theme-borealis/Config.in"
+ source "package/sound-theme-freedesktop/Config.in"
+ endmenu
  
--	  http://www.s-lang.org/
-+	  http://www.jedsoft.org/slang/index.html
-diff --git a/package/slang/slang.mk b/package/slang/slang.mk
-index 8cc93dd..c66971e 100644
---- a/package/slang/slang.mk
-+++ b/package/slang/slang.mk
-@@ -4,32 +4,11 @@
- #
- ################################################################################
- 
--SLANG_VERSION = 1.4.5
--SLANG_SOURCE = slang-$(SLANG_VERSION)-mini.tar.bz2
--SLANG_SITE = http://www.uclibc.org/
-+SLANG_VERSION_MAJOR = 2.2
-+SLANG_VERSION = $(SLANG_VERSION_MAJOR).4
-+SLANG_SOURCE = slang-$(SLANG_VERSION).tar.bz2
-+SLANG_SITE = ftp://ftp.fu-berlin.de/pub/unix/misc/slang/v$(SLANG_VERSION_MAJOR)/
- SLANG_INSTALL_STAGING = YES
-+SLANG_MAKE = $(MAKE1)
- 
--# We need to add -fPIC since we're busting original CFLAGS
--# that have it, see bug #3295
--define SLANG_BUILD_CMDS
--	$(MAKE1) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS) -fPIC" \
--	LDFLAGS="$(TARGET_LDFLAGS)" -C $(@D)
--endef
--
--define SLANG_INSTALL_STAGING_CMDS
--	$(INSTALL) -D -m 0644 $(@D)/libslang.a $(STAGING_DIR)/usr/lib/libslang.a
--	$(INSTALL) -D -m 0755 $(@D)/libslang.so $(STAGING_DIR)/usr/lib/libslang.so
--	$(INSTALL) -D -m 0644 $(@D)/slang.h $(STAGING_DIR)/usr/include/slang.h
--	$(INSTALL) -D -m 0644 $(@D)/slcurses.h $(STAGING_DIR)/usr/include/slcurses.h
--	(cd $(STAGING_DIR)/usr/lib; ln -fs libslang.so libslang.so.1)
--endef
--
--define SLANG_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 0644 $(@D)/libslang.a $(TARGET_DIR)/usr/lib/libslang.a
--	$(INSTALL) -D -m 0755 $(@D)/libslang.so $(TARGET_DIR)/usr/lib/libslang.so
--	$(INSTALL) -D -m 0644 $(@D)/slang.h $(TARGET_DIR)/usr/include/slang.h
--	$(INSTALL) -D -m 0644 $(@D)/slcurses.h $(TARGET_DIR)/usr/include/slcurses.h
--	(cd $(TARGET_DIR)/usr/lib; ln -fs libslang.so libslang.so.1)
--endef
--
--$(eval $(generic-package))
-+$(eval $(autotools-package))
++menu "Mail"
++source "package/heirloom-mailx/Config.in"
++source "package/libesmtp/Config.in"
++source "package/msmtp/Config.in"
++source "package/mutt/Config.in"
++source "package/sylpheed/Config.in"
++endmenu
++
+ menu "Networking applications"
+ source "package/aiccu/Config.in"
+ source "package/aircrack-ng/Config.in"
+@@ -878,7 +884,6 @@ source "package/foomatic-filters/Config.in"
+ source "package/fping/Config.in"
+ source "package/gesftpserver/Config.in"
+ source "package/gutenprint/Config.in"
+-source "package/heirloom-mailx/Config.in"
+ source "package/hiawatha/Config.in"
+ source "package/hostapd/Config.in"
+ source "package/hplip/Config.in"
+@@ -912,9 +917,7 @@ source "package/modem-manager/Config.in"
+ source "package/mongoose/Config.in"
+ source "package/mongrel2/Config.in"
+ source "package/mrouted/Config.in"
+-source "package/msmtp/Config.in"
+ source "package/mtr/Config.in"
+-source "package/mutt/Config.in"
+ source "package/nbd/Config.in"
+ source "package/ncftp/Config.in"
+ source "package/ndisc6/Config.in"
