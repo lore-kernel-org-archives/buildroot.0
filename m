@@ -1,94 +1,116 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 15 Mar 2014 00:20:45 +0100
-Subject: [Buildroot] [PATCH v2] pyrex: new host package
-In-Reply-To: <1394837899-14937-2-git-send-email-rc.lsw.collaborate@gmail.com>
-References: <1394837899-14937-1-git-send-email-rc.lsw.collaborate@gmail.com>
- <1394837899-14937-2-git-send-email-rc.lsw.collaborate@gmail.com>
-Message-ID: <20140314232045.GE16649@free.fr>
+From: Uwe Kindler <uwe_kindler@web.de>
+Date: Sat, 15 Mar 2014 05:27:52 +0100
+Subject: [Buildroot] [PATCH v4] Added support for configuration of boost
+	binary names layout
+Message-ID: <1394857672-512-1-git-send-email-uwe_kindler@web.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Matt, All,
 
-On 2014-03-14 17:58 -0500, rc.lsw.collaborate at gmail.com spake thusly:
-> From: Matt Weber <mlweber1@rockwellcollins.com>
+Signed-off-by: Uwe Kindler <uwe_kindler@web.de>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Could you add in the commit log what Pyrex is and why it would be needed
-as a host-only package?
+---
+Changes v3 -> v4:
+  - moved config BR2_PACKAGE_BOOST_LAYOUT out of choice
+  
+Changes v2 -> v3:
+  - removed inconsistencies in Config.in help texts and fixed typos (suggested by Thomas De Schampheleire)
 
-I can read the description in the help text, but that does not say why
-it is interesting to have Pyrex as a host-tool in Buildroot.
+Changes v1 -> v2:
+  -  handle "switch statement" in Config.in file via BR2_PACKAGE_BOOST_LAYOUT (suggested by Arnout Vandecappelle)
 
-Also, you're not adding any in-tree user of host-pyrex (maybe you have
-one or two such packages ready to be submitted? ;-) ), which does not
-help to understand why it is needed.
+---
+ package/boost/Config.in |   34 ++++++++++++++++++++++++++++++++++
+ package/boost/boost.mk  |    7 ++++---
+ 2 files changed, 38 insertions(+), 3 deletions(-)
 
-(Note: even if you provide such ackages, please expand this commit log
-anyway.)
-
-> Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
-> ---
-> Changes v1 -> v2:
->    - Converted to a host only pkg as this pkg provides generated
->      C code that an application would use from a sysroot
->      (not on target).  (Suggested by Thomas)
-> ---
->  package/Config.in                    |    1 +
->  package/python-pyrex/Config.in.host  |    7 +++++++
->  package/python-pyrex/python-pyrex.mk |   15 +++++++++++++++
->  3 files changed, 23 insertions(+)
->  create mode 100644 package/python-pyrex/Config.in.host
->  create mode 100644 package/python-pyrex/python-pyrex.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 70e5a7f..cec0fea 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -454,6 +454,7 @@ source "package/python-pyasn/Config.in"
->  source "package/python-pycrypto/Config.in"
->  source "package/python-pygame/Config.in"
->  source "package/python-pyparsing/Config.in"
-> +source "package/python-pyrex/Config.in.host"
-
-As I said in my reply to your cover-letter: we want to have all
-host-only packages in the "Host utilities" sub-menu.
-
-_But_ if this package is going to be used by other in-tree packages,
-there is no real need to add an entry in the "Host utilities" menu.
-
-We only add entries in that menu if a host tool may also be used outside
-of the Buildroot infrastructure. For example, the file system generators
-might be used by post-imnage scripts, so we expose them.
-
-But for purely internal host tools, we usually do not expose an entry
-for them.
-
->  source "package/python-pyro/Config.in"
->  source "package/python-pysnmp/Config.in"
->  source "package/python-pysnmp-apps/Config.in"
-> diff --git a/package/python-pyrex/Config.in.host b/package/python-pyrex/Config.in.host
-> new file mode 100644
-> index 0000000..ff83daf
-> --- /dev/null
-> +++ b/package/python-pyrex/Config.in.host
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_HOST_PYTHON_PYREX
-> +	bool "python-pyrex (host tool)"
-
-When you move this package to the "Host utilities" menu, change the
-prompt to simply:
-    "host pyrex"
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index 68c3909..57dd5fc 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -16,6 +16,40 @@ config BR2_PACKAGE_BOOST
+ 
+ if BR2_PACKAGE_BOOST
+ 
++choice
++	prompt "Layout"
++	default BR2_PACKAGE_BOOST_LAYOUT_SYSTEM
++	help
++	  Selects the layout of Boost binary names
++
++config BR2_PACKAGE_BOOST_LAYOUT_SYSTEM
++	bool "system"
++	help
++	  Boost binary names do not include the Boost version number or the name and 
++	  version number of the compiler.
++
++config BR2_PACKAGE_BOOST_LAYOUT_TAGGED
++	bool "tagged"
++	help
++	  Boost binary names include the encoded build properties such as 
++	  variant and threading, but do not include compiler name and version, or 
++	  Boost version. This option is useful if you build several variants of 
++	  Boost, using the same compiler.
++	  
++config BR2_PACKAGE_BOOST_LAYOUT_VERSIONED
++	bool "versioned"
++	help
++	  Boost binary names include the Boost version number, name and 
++	  version of the compiler and encoded build properties.
++	  
++endchoice
++
++config BR2_PACKAGE_BOOST_LAYOUT
++	string
++	default "system" if BR2_PACKAGE_BOOST_LAYOUT_SYSTEM
++	default "tagged" if BR2_PACKAGE_BOOST_LAYOUT_TAGGED
++	default "versioned" if BR2_PACKAGE_BOOST_LAYOUT_VERSIONED
++
+ config BR2_PACKAGE_BOOST_CHRONO
+ 	bool "boost-chrono"
+ 
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index 7aab614..2ae8034 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -81,6 +81,7 @@ endif
+ 
+ BOOST_WITHOUT_FLAGS_COMMASEPERATED += $(subst $(space),$(comma),$(strip $(BOOST_WITHOUT_FLAGS)))
+ BOOST_FLAGS += $(if $(BOOST_WITHOUT_FLAGS_COMMASEPERATED), --without-libraries=$(BOOST_WITHOUT_FLAGS_COMMASEPERATED))
++BOOST_LAYOUT = $(call qstrip, $(BR2_PACKAGE_BOOST_LAYOUT))
+ 
+ define BOOST_CONFIGURE_CMDS
+ 	(cd $(@D) && ./bootstrap.sh $(BOOST_FLAGS))
+@@ -99,7 +100,7 @@ define BOOST_INSTALL_TARGET_CMDS
+ 	--user-config=$(@D)/user-config.jam \
+ 	$(BOOST_OPT) \
+ 	--prefix=$(TARGET_DIR)/usr \
+-	--layout=system install )
++	--layout=$(BOOST_LAYOUT) install )
+ endef
+ 
+ define HOST_BOOST_BUILD_CMDS
+@@ -114,7 +115,7 @@ define HOST_BOOST_INSTALL_CMDS
+ 	--user-config=$(@D)/user-config.jam \
+ 	$(HOST_BOOST_OPT) \
+ 	--prefix=$(HOST_DIR)/usr \
+-	--layout=system install )
++	--layout=$(BOOST_LAYOUT) install )
+ endef
+ 
+ define BOOST_INSTALL_STAGING_CMDS
+@@ -122,7 +123,7 @@ define BOOST_INSTALL_STAGING_CMDS
+ 	--user-config=$(@D)/user-config.jam \
+ 	$(BOOST_OPT) \
+ 	--prefix=$(STAGING_DIR)/usr \
+-	--layout=system install)
++	--layout=$(BOOST_LAYOUT) install)
+ endef
+ 
+ $(eval $(generic-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.9.5
