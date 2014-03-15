@@ -1,73 +1,38 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 15 Mar 2014 22:53:39 +0100
-Subject: [Buildroot] Patchwork cleanup: proposal
-In-Reply-To: <092927c1-b383-4e46-bc8d-c6ce491b0e98@email.android.com>
-References: <092927c1-b383-4e46-bc8d-c6ce491b0e98@email.android.com>
-Message-ID: <20140315215339.GB3396@free.fr>
+From: Matt Weber <mlweber1@rockwellcollins.com>
+Date: Sat, 15 Mar 2014 16:59:30 -0500
+Subject: [Buildroot] [PATCH v2] pyrex: new host package
+In-Reply-To: <20140314232045.GE16649@free.fr>
+References: <1394837899-14937-1-git-send-email-rc.lsw.collaborate@gmail.com>
+ <1394837899-14937-2-git-send-email-rc.lsw.collaborate@gmail.com>
+ <20140314232045.GE16649@free.fr>
+Message-ID: <CAC2S8kgN+hnnagtQ=Ns4iuTU=1Eq195nWooesd_iAh7uC=qSfw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hi,
+On Fri, Mar 14, 2014 at 6:20 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Matt, All,
+>
+> On 2014-03-14 17:58 -0500, rc.lsw.collaborate at gmail.com spake thusly:
+>> From: Matt Weber <mlweber1@rockwellcollins.com>
+>
+> Could you add in the commit log what Pyrex is and why it would be needed
+> as a host-only package?
+Sure, I'll submit v3 and include a good description.
 
-On 2014-03-06 21:59 +0100, Thomas De Schampheleire spake thusly:
-[--SNIP--]
-> I would like to adjust the patchwork cleanup sessions based on this
-> experience: instead of having fixed-duration, sequential sessions of
-> two weeks, where the final triaging decision is taken at the end
-> based on input of the submitters, I would like to propose the
-> following:
-> 
-> - a triaging proposal for a number of patches is sent to the list
->   when time permits. As I'm currently leading these cleanup sessions
->   this would be done by me, but others could help here too. There is
->   no limit on the amount of patches that can be triaged in a given
->   timeframe.
-> 
-> - the triaging proposal is reviewed by other Buildroot developers.
->   This agreement/disagreement phase shouldn't take long.
-> 
-> - the output of this triaging can be:
->     A. We want this patch and someone should refresh and resend it.
->     B. We don't want this patch as it goes against Buildroot principles.
->     C. we're not sure and want to know if the submitter is still
->     interested in pursuing this patch.
-> 
-> - In case A, ideally the original submitter refreshes the patch and
->   resends it. If not, it ends up on the todo list.
-> - In case B, there is nothing to be done.
-> - In case C, the submitter (and other developers) get two weeks to
->   provide feedback. When no feedback is provided, the patch is rejected.
-> 
-> In a separate mail than the one with the triaging proposal, submitters
-> are notified of this decision.
-> 
-> 
-> The biggest advantage of this way of working would be the possibility
-> to triage more patches in each release, while still providing submitters
-> sufficient time to react.
-> 
-> Let me know what you think of this...
+> I can read the description in the help text, but that does not say why
+> it is interesting to have Pyrex as a host-tool in Buildroot.
+>
+> Also, you're not adding any in-tree user of host-pyrex (maybe you have
+> one or two such packages ready to be submitted? ;-) ), which does not
+> help to understand why it is needed.
+I've got a pkg almost ready to submit that wrappers the libpcap
+library with this
+framework.  I should be able to test it on target in a couple days and then
+submit that new pkg patch.
 
-I fail to see how it differs from the previous sessions. But if you find
-it will make it easier, let's give it a spin. ;-)
-
-From my experience, I found it tedious to look at patches, unless I had
-a special interest in them.
-
-May I suggest that:
-  - people that send a list of patches do so with the ones they care about
-  - we vote A/B/C as explained above
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thanks for the review!
+Matt
