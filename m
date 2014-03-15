@@ -1,80 +1,75 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 15 Mar 2014 21:18:31 +0100
-Subject: [Buildroot] [git commit] fetchmail: New package
-Message-ID: <20140315202727.A34E29BFE7@busybox.osuosl.org>
+Date: Sat, 15 Mar 2014 21:11:24 +0100
+Subject: [Buildroot] [git commit] slang: bump to 2.2.4
+Message-ID: <20140315202727.793439BFF0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c8528884479a210618b1cd2b99b79358a474904d
+commit: http://git.buildroot.net/buildroot/commit/?id=e747e3a6b36e6d8b208e861593c5c7f7dcb386eb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
+Convert package from generic to autotools.
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in              |    1 +
- package/fetchmail/Config.in    |   12 ++++++++++++
- package/fetchmail/fetchmail.mk |   23 +++++++++++++++++++++++
- 3 files changed, 36 insertions(+), 0 deletions(-)
+ package/slang/Config.in |    2 +-
+ package/slang/slang.mk  |   33 ++++++---------------------------
+ 2 files changed, 7 insertions(+), 28 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 70d7023..51d1e24 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -841,6 +841,7 @@ source "package/sound-theme-freedesktop/Config.in"
- endmenu
+diff --git a/package/slang/Config.in b/package/slang/Config.in
+index 60facbb..9d8f047 100644
+--- a/package/slang/Config.in
++++ b/package/slang/Config.in
+@@ -3,4 +3,4 @@ config BR2_PACKAGE_SLANG
+ 	help
+ 	  Multi-platform console display library.
  
- menu "Mail"
-+source "package/fetchmail/Config.in"
- source "package/heirloom-mailx/Config.in"
- source "package/libesmtp/Config.in"
- source "package/msmtp/Config.in"
-diff --git a/package/fetchmail/Config.in b/package/fetchmail/Config.in
-new file mode 100644
-index 0000000..3419821
---- /dev/null
-+++ b/package/fetchmail/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_FETCHMAIL
-+	bool "fetchmail"
-+	select BR2_PACKAGE_CA_CERTIFICATES
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_ZLIB
-+	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
-+	depends on BR2_USE_MMU # fork()
-+	help
-+	  Fetchmail - the mail-retrieval daemon
-+	  Client daemon to move mail from POP and IMAP to your local computer
-+
-+	  http://sourceforge.net/projects/fetchmail/
-diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
-new file mode 100644
-index 0000000..d891760
---- /dev/null
-+++ b/package/fetchmail/fetchmail.mk
-@@ -0,0 +1,23 @@
-+################################################################################
-+#
-+# fetchmail
-+#
-+################################################################################
-+
-+FETCHMAIL_VERSION_MAJOR = 6.3
-+FETCHMAIL_VERSION_MINOR = 26
-+FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).$(FETCHMAIL_VERSION_MINOR)
-+FETCHMAIL_SOURCE = fetchmail-$(FETCHMAIL_VERSION).tar.xz
-+FETCHMAIL_SITE = http://downloads.sourceforge.net/project/fetchmail/branch_$(FETCHMAIL_VERSION_MAJOR)/
-+FETCHMAIL_LICENSE = GPLv2; some exceptions are mentioned in COPYING
-+FETCHMAIL_LICENSE_FILES = COPYING
-+
-+FETCHMAIL_CONF_OPT = \
-+	--with-ssl=$(STAGING_DIR)/usr
-+
-+FETCHMAIL_DEPENDENCIES = \
-+	ca-certificates \
-+	openssl \
-+	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
-+
+-	  http://www.s-lang.org/
++	  http://www.jedsoft.org/slang/index.html
+diff --git a/package/slang/slang.mk b/package/slang/slang.mk
+index 8cc93dd..c66971e 100644
+--- a/package/slang/slang.mk
++++ b/package/slang/slang.mk
+@@ -4,32 +4,11 @@
+ #
+ ################################################################################
+ 
+-SLANG_VERSION = 1.4.5
+-SLANG_SOURCE = slang-$(SLANG_VERSION)-mini.tar.bz2
+-SLANG_SITE = http://www.uclibc.org/
++SLANG_VERSION_MAJOR = 2.2
++SLANG_VERSION = $(SLANG_VERSION_MAJOR).4
++SLANG_SOURCE = slang-$(SLANG_VERSION).tar.bz2
++SLANG_SITE = ftp://ftp.fu-berlin.de/pub/unix/misc/slang/v$(SLANG_VERSION_MAJOR)/
+ SLANG_INSTALL_STAGING = YES
++SLANG_MAKE = $(MAKE1)
+ 
+-# We need to add -fPIC since we're busting original CFLAGS
+-# that have it, see bug #3295
+-define SLANG_BUILD_CMDS
+-	$(MAKE1) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS) -fPIC" \
+-	LDFLAGS="$(TARGET_LDFLAGS)" -C $(@D)
+-endef
+-
+-define SLANG_INSTALL_STAGING_CMDS
+-	$(INSTALL) -D -m 0644 $(@D)/libslang.a $(STAGING_DIR)/usr/lib/libslang.a
+-	$(INSTALL) -D -m 0755 $(@D)/libslang.so $(STAGING_DIR)/usr/lib/libslang.so
+-	$(INSTALL) -D -m 0644 $(@D)/slang.h $(STAGING_DIR)/usr/include/slang.h
+-	$(INSTALL) -D -m 0644 $(@D)/slcurses.h $(STAGING_DIR)/usr/include/slcurses.h
+-	(cd $(STAGING_DIR)/usr/lib; ln -fs libslang.so libslang.so.1)
+-endef
+-
+-define SLANG_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m 0644 $(@D)/libslang.a $(TARGET_DIR)/usr/lib/libslang.a
+-	$(INSTALL) -D -m 0755 $(@D)/libslang.so $(TARGET_DIR)/usr/lib/libslang.so
+-	$(INSTALL) -D -m 0644 $(@D)/slang.h $(TARGET_DIR)/usr/include/slang.h
+-	$(INSTALL) -D -m 0644 $(@D)/slcurses.h $(TARGET_DIR)/usr/include/slcurses.h
+-	(cd $(TARGET_DIR)/usr/lib; ln -fs libslang.so libslang.so.1)
+-endef
+-
+-$(eval $(generic-package))
 +$(eval $(autotools-package))
