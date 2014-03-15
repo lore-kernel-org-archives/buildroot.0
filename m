@@ -1,22 +1,31 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 15 Mar 2014 21:26:54 +0100
-Subject: [Buildroot] [PATCH 2/2] fetchmail: New package
-In-Reply-To: <BLU0-SMTP1875387C9CEE20843356896D9700@phx.gbl> (Bernd Kuhls's
- message of "Fri, 14 Mar 2014 23:21:33 +0100")
-References: <1394835693-32232-1-git-send-email-berndkuhls@hotmail.com>
- <BLU0-SMTP1875387C9CEE20843356896D9700@phx.gbl>
-Message-ID: <87eh23mcmp.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 15 Mar 2014 21:14:46 +0100
+Subject: [Buildroot] [git commit] slang: add license info
+Message-ID: <20140315202727.834649BFF7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <berndkuhls@hotmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=595194535ac740930ec43ca6a20d9cb8a85bf787
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/slang/slang.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/slang/slang.mk b/package/slang/slang.mk
+index c66971e..d519eca 100644
+--- a/package/slang/slang.mk
++++ b/package/slang/slang.mk
+@@ -8,6 +8,8 @@ SLANG_VERSION_MAJOR = 2.2
+ SLANG_VERSION = $(SLANG_VERSION_MAJOR).4
+ SLANG_SOURCE = slang-$(SLANG_VERSION).tar.bz2
+ SLANG_SITE = ftp://ftp.fu-berlin.de/pub/unix/misc/slang/v$(SLANG_VERSION_MAJOR)/
++SLANG_LICENSE = GPLv2+
++SLANG_LICENSE_FILES = COPYING
+ SLANG_INSTALL_STAGING = YES
+ SLANG_MAKE = $(MAKE1)
+ 
