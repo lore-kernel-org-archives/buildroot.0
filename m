@@ -1,90 +1,93 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 16 Mar 2014 21:18:37 +0000 (UTC)
-Subject: [Buildroot] [Bug 6956] Packaging libsoxr
-In-Reply-To: <bug-6956-163@https.bugs.busybox.net/>
-References: <bug-6956-163@https.bugs.busybox.net/>
-Message-ID: <20140316211837.7B1119B964@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 16 Mar 2014 23:22:04 +0100
+Subject: [Buildroot] [PATCH] package/crosstool-ng: remove
+Message-ID: <1395008524-13190-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6956
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
---- Comment #2 from prezi77 at wp.pl 2014-03-16 21:18:36 UTC ---
-(In reply to comment #1)
-> There shouldn't be a real need to understand cmake in order to make a package
-> available in buildroot. Have you had a look at this part of the manual?
-> http://buildroot.uclibc.org/downloads/manual/manual.html#adding-packages 
-> 
-> Buildroot has a 'cmake-package' infrastructure, which makes it easy to add
-> packages that have cmake makefiles.
-> 
-> If you can, implementing this yourself will create much bigger chances of the
-> changes becoming available in buildroot, because other buildroot developers
-> already have a lot of other work, so may not start on libsoxr.
-> 
-> Thanks in advance...
+No one is using this host-package, since we no longer have the
+crosstool-NG toolchain backend.
 
-Well, as I said that not trivial like packaging mpdcron,libmpdclient or
-ncmpcpp.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ .../crosstool-ng-000-makefile-recursion.patch      | 38 ----------------------
+ package/crosstool-ng/crosstool-ng.mk               | 18 ----------
+ 2 files changed, 56 deletions(-)
+ delete mode 100644 package/crosstool-ng/crosstool-ng-000-makefile-recursion.patch
+ delete mode 100644 package/crosstool-ng/crosstool-ng.mk
 
-This what I see:
->> libsoxr 0.1.1 Patching
->>> libsoxr 0.1.1 Configuring
-(cd /home/prezi/buildroot-2014.02/output/build/libsoxr-0.1.1/ && rm -f
-CMakeCache.txt &&  /home/prezi/buildroot-2014.02/output/host/usr/bin/cmake
-/home/prezi/buildroot-2014.02/output/build/libsoxr-0.1.1/
--DCMAKE_TOOLCHAIN_FILE="/home/prezi/buildroot-2014.02/output/host/usr/share/buildroot/toolchainfile.cmake"
--DCMAKE_INSTALL_PREFIX="/usr" -DCMAKE_COLOR_MAKEFILE=OFF -DBUILD_SHARED_LIBS=ON
--Wno-dev )
-Re-run cmake no build system arguments
--- The C compiler identification is GNU 4.7.3
--- Check for working C compiler:
-/home/prezi/buildroot-2014.02/output/host/usr/bin/i586-buildroot-linux-uclibc-gcc
--- Check for working C compiler:
-/home/prezi/buildroot-2014.02/output/host/usr/bin/i586-buildroot-linux-uclibc-gcc
--- works
--- Detecting C compiler ABI info
--- Detecting C compiler ABI info - done
--- Looking for pow in m
--- Looking for pow in m - found
--- Try OpenMP C flag = [-fopenmp]
--- Performing Test OpenMP_FLAG_DETECTED
--- Performing Test OpenMP_FLAG_DETECTED - Success
--- Found OpenMP: -fopenmp  
--- Try SIMD C flag = [ ]
--- Performing Test SIMD_FLAG_DETECTED
--- Performing Test SIMD_FLAG_DETECTED - Failed
--- Try SIMD C flag = [/arch:SSE /fp:fast -D__SSE__]
--- Performing Test SIMD_FLAG_DETECTED
--- Performing Test SIMD_FLAG_DETECTED - Failed
--- Try SIMD C flag = [-msse -mfpmath=sse]
--- Performing Test SIMD_FLAG_DETECTED
--- Performing Test SIMD_FLAG_DETECTED - Success
--- Found SIMD: -msse -mfpmath=sse  
--- Looking for lrint
--- Looking for lrint - found
--- Looking for include file fenv.h
--- Looking for include file fenv.h - not found
--- Performing Test HAVE_WORDS_BIGENDIAN
-CMake Error: TRY_RUN() invoked in cross-compiling mode, please set the
-following cache variables appropriately:
-   HAVE_WORDS_BIGENDIAN_EXITCODE (advanced)
-For details see
-/home/prezi/buildroot-2014.02/output/build/libsoxr-0.1.1/TryRunResults.cmake
--- Performing Test HAVE_WORDS_BIGENDIAN - Failed
--- Configuring incomplete, errors occurred!
-See also
-"/home/prezi/buildroot-2014.02/output/build/libsoxr-0.1.1/CMakeFiles/CMakeOutput.log".
-See also
-"/home/prezi/buildroot-2014.02/output/build/libsoxr-0.1.1/CMakeFiles/CMakeError.log".
-make: ***
-[/home/prezi/buildroot-2014.02/output/build/libsoxr-0.1.1/.stamp_configured]
-Error 1
-
+diff --git a/package/crosstool-ng/crosstool-ng-000-makefile-recursion.patch b/package/crosstool-ng/crosstool-ng-000-makefile-recursion.patch
+deleted file mode 100644
+index b875e3f..0000000
+--- a/package/crosstool-ng/crosstool-ng-000-makefile-recursion.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-Makefile: allow recursion
+-
+-When crosstool-NG is used standalone, we completely avoid recursion,
+-because the Makefile calls itself only once.
+-
+-But when used as the buildroot toolchain backend, there is already
+-one level of make recursion when we first call the crosstool-NG
+-Makefile. And when buildroot is used out-of-tree, we are already
+-at the second level of recursion when calling the crosstool-NG
+-Makefile.
+-
+-So, to cope with the situation, just get rid of the recursion test.
+-
+-This probably won't go upstream.
+-
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
+-
+-diff -du crosstool-ng-1.12.0/Makefile.in host-crosstool-ng-1.12.0/Makefile.in
+---- crosstool-ng-1.12.0/Makefile.in     2011-08-01 01:21:34.000000000 +0200
+-+++ host-crosstool-ng-1.12.0/Makefile.in        2011-08-07 21:39:16.055958219 +0200
+-@@ -101,9 +101,14 @@
+- # level.
+- # This has the side effect of only showing the real targets, and hiding our
+- # internal ones. :-)
+--ifneq ($(MAKELEVEL),0)
+--$(error Recursion detected, bailing out...)
+--endif
+-+#
+-+# NB: For buildroot, this has no importance:
+-+# - crosstool-NG should never ever be called manually
+-+# - thus auto-completion would never ever be attempted
+-+# - so we shouldn't have to detect it
+-+#ifneq ($(MAKELEVEL),0)
+-+#$(error Recursion detected, bailing out...)
+-+#endif
+- 
+- MAKEFLAGS += $(CT_MAKEFLAGS)
+- build install clean distclean uninstall:
+diff --git a/package/crosstool-ng/crosstool-ng.mk b/package/crosstool-ng/crosstool-ng.mk
+deleted file mode 100644
+index 8d98db4..0000000
+--- a/package/crosstool-ng/crosstool-ng.mk
++++ /dev/null
+@@ -1,18 +0,0 @@
+-################################################################################
+-#
+-# crosstool-ng
+-#
+-################################################################################
+-
+-CROSSTOOL_NG_VERSION           = 1.18.0
+-CROSSTOOL_NG_SOURCE            = crosstool-ng-$(CROSSTOOL_NG_VERSION).tar.bz2
+-CROSSTOOL_NG_SITE              = http://crosstool-ng.org/download/crosstool-ng/
+-CROSSTOOL_NG_INSTALL_TARGET    = NO
+-CROSSTOOL_NG_MAKE              = $(MAKE1)
+-
+-HOST_CROSSTOOL_NG_DEPENDENCIES = \
+-	host-gawk \
+-	host-automake host-gperf host-bison host-flex \
+-	host-texinfo
+-
+-$(eval $(host-autotools-package))
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.8.3.2
