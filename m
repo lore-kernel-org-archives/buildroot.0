@@ -1,37 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Mar 2014 22:44:47 +0100
-Subject: [Buildroot] [git commit] s61x9_micoboard_defconfig: move to
-	internal toolchain
-Message-ID: <20140316223903.50F589BFDC@busybox.osuosl.org>
+From: =?ISO-8859-1?Q?Ezequiel_Garc=EDa?= <ezequiel@vanguardiasur.com.ar>
+Date: Sun, 16 Mar 2014 20:51:53 -0300
+Subject: [Buildroot] Patchwork cleanup #7: triaging proposal
+In-Reply-To: <20140316160712.GA3267@free.fr>
+References: <CAAXf6LWP0FX4AAGP_ACZHgoxEAEwarpEdHchukxE+V=WJnXROg@mail.gmail.com>
+ <20140316160712.GA3267@free.fr>
+Message-ID: <CAAEAJfC-R-ieqWuNFaeD3BeYoeM1WogQVwpQVUyfLw9xtLv2iA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f8573df213ef04cbc7fc60c7ad05c4a6c6f7dc5d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 16 March 2014 13:07, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>>
+>> directfb-lua: new package
+>> http://patchwork.ozlabs.org/patch/262971/
+>
+>     Vote: A, keep.
+>
 
-Now that the xilinx external toolchains have been deprecated.
+Quick context for directfb-lua.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- configs/s6lx9_microboard_defconfig |    6 ------
- 1 files changed, 0 insertions(+), 6 deletions(-)
+This is a little languange binding I created a few years ago when I was working
+close to DirectFB. However, it's no longer the case, and I won't be
+improving it.
+Of course, I'm still here and I can try to maintain it.
 
-diff --git a/configs/s6lx9_microboard_defconfig b/configs/s6lx9_microboard_defconfig
-index 05b4443..c54f3f4 100644
---- a/configs/s6lx9_microboard_defconfig
-+++ b/configs/s6lx9_microboard_defconfig
-@@ -1,11 +1,5 @@
- BR2_microblaze=y
- BR2_microblazeel=y
--BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2=y
--BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="microblazeel-unknown-linux-gnu"
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
--BR2_TOOLCHAIN_EXTERNAL_CXX=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyUL0"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ROOTFS_INITRAMFS=y
+Probably it should be integrated into DirectFB itself, as a automated-test tool
+or something, but that's something the DFB people should do.
+
+I thought about submitting the package to Buildroot, as otherwise it would fall
+into oblivion. The tool itself is handy for anyone working on DFB; at
+least to run
+quick API tests.
+
+That said, I'm happy to provide a v2, addressing Fran?ois' feedback.
+I just need to find some time to do it.
+
+Regards,
+-- 
+Ezequiel Garc?a, VanguardiaSur
+www.vanguardiasur.com.ar
