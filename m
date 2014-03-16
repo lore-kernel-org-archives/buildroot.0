@@ -1,35 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Mar 2014 21:24:27 +0100
-Subject: [Buildroot] [git commit] httping: needs host-gettext
-Message-ID: <20140316205026.28E209A8DF@busybox.osuosl.org>
+Date: Sun, 16 Mar 2014 21:49:41 +0100
+Subject: [Buildroot] [git commit] sdl_mixer: drop custom target install
+Message-ID: <20140316205026.5A1799BF67@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0bf78b830b9a5f2f1cdaa1fc097018edf1abd0eb
+commit: http://git.buildroot.net/buildroot/commit/?id=57d284fc2e9c6bbc22b9676f4af8bb3ead2e4460
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For msgfmt, fixes:
-http://autobuild.buildroot.net/results/9ce/9ce9b4c52a7e0d0159b5b4b9835b9e3e7f8b2a08/
+Fixes http://autobuild.buildroot.net/results/6ba/6ba399db1715a7759048e0d532768a335c3c97cc/
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+The default rule (make install) works fine, even for static build - so use
+that instead of explicitly copying *so files.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/httping/httping.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/sdl_mixer/sdl_mixer.mk |    4 ----
+ 1 files changed, 0 insertions(+), 4 deletions(-)
 
-diff --git a/package/httping/httping.mk b/package/httping/httping.mk
-index 42d694f..610cecb 100644
---- a/package/httping/httping.mk
-+++ b/package/httping/httping.mk
-@@ -10,7 +10,7 @@ HTTPING_SITE = http://www.vanheusden.com/httping
- HTTPING_LICENSE = GPLv2
- HTTPING_LICENSE_FILES = license.txt
- HTTPING_LDFLAGS = $(if $(BR2_NEEDS_GETTEXT),-lintl) $(TARGET_LDFLAGS)
--HTTPING_DEPENDENCIES = \
-+HTTPING_DEPENDENCIES = host-gettext \
- 	$(if $(BR2_NEEDS_GETTEXT),gettext) \
- 	$(if $(BR2_PACKAGE_OPENSSL),openssl) \
- 	$(if $(BR2_PACKAGE_FFTW),fftw)
+diff --git a/package/sdl_mixer/sdl_mixer.mk b/package/sdl_mixer/sdl_mixer.mk
+index b7a242f..51b1476 100644
+--- a/package/sdl_mixer/sdl_mixer.mk
++++ b/package/sdl_mixer/sdl_mixer.mk
+@@ -34,8 +34,4 @@ else
+ SDL_MIXER_CONF_OPT += --disable-music-ogg
+ endif
+ 
+-define SDL_MIXER_INSTALL_TARGET_CMDS
+-	cp -dpf $(STAGING_DIR)/usr/lib/libSDL_mixer*.so* $(TARGET_DIR)/usr/lib/
+-endef
+-
+ $(eval $(autotools-package))
