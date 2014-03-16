@@ -1,93 +1,37 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 Mar 2014 23:22:04 +0100
-Subject: [Buildroot] [PATCH] package/crosstool-ng: remove
-Message-ID: <1395008524-13190-1-git-send-email-yann.morin.1998@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 16 Mar 2014 22:44:47 +0100
+Subject: [Buildroot] [git commit] s61x9_micoboard_defconfig: move to
+	internal toolchain
+Message-ID: <20140316223903.50F589BFDC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+commit: http://git.buildroot.net/buildroot/commit/?id=f8573df213ef04cbc7fc60c7ad05c4a6c6f7dc5d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-No one is using this host-package, since we no longer have the
-crosstool-NG toolchain backend.
+Now that the xilinx external toolchains have been deprecated.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../crosstool-ng-000-makefile-recursion.patch      | 38 ----------------------
- package/crosstool-ng/crosstool-ng.mk               | 18 ----------
- 2 files changed, 56 deletions(-)
- delete mode 100644 package/crosstool-ng/crosstool-ng-000-makefile-recursion.patch
- delete mode 100644 package/crosstool-ng/crosstool-ng.mk
+ configs/s6lx9_microboard_defconfig |    6 ------
+ 1 files changed, 0 insertions(+), 6 deletions(-)
 
-diff --git a/package/crosstool-ng/crosstool-ng-000-makefile-recursion.patch b/package/crosstool-ng/crosstool-ng-000-makefile-recursion.patch
-deleted file mode 100644
-index b875e3f..0000000
---- a/package/crosstool-ng/crosstool-ng-000-makefile-recursion.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--Makefile: allow recursion
--
--When crosstool-NG is used standalone, we completely avoid recursion,
--because the Makefile calls itself only once.
--
--But when used as the buildroot toolchain backend, there is already
--one level of make recursion when we first call the crosstool-NG
--Makefile. And when buildroot is used out-of-tree, we are already
--at the second level of recursion when calling the crosstool-NG
--Makefile.
--
--So, to cope with the situation, just get rid of the recursion test.
--
--This probably won't go upstream.
--
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
--
--diff -du crosstool-ng-1.12.0/Makefile.in host-crosstool-ng-1.12.0/Makefile.in
----- crosstool-ng-1.12.0/Makefile.in     2011-08-01 01:21:34.000000000 +0200
--+++ host-crosstool-ng-1.12.0/Makefile.in        2011-08-07 21:39:16.055958219 +0200
--@@ -101,9 +101,14 @@
-- # level.
-- # This has the side effect of only showing the real targets, and hiding our
-- # internal ones. :-)
---ifneq ($(MAKELEVEL),0)
---$(error Recursion detected, bailing out...)
---endif
--+#
--+# NB: For buildroot, this has no importance:
--+# - crosstool-NG should never ever be called manually
--+# - thus auto-completion would never ever be attempted
--+# - so we shouldn't have to detect it
--+#ifneq ($(MAKELEVEL),0)
--+#$(error Recursion detected, bailing out...)
--+#endif
-- 
-- MAKEFLAGS += $(CT_MAKEFLAGS)
-- build install clean distclean uninstall:
-diff --git a/package/crosstool-ng/crosstool-ng.mk b/package/crosstool-ng/crosstool-ng.mk
-deleted file mode 100644
-index 8d98db4..0000000
---- a/package/crosstool-ng/crosstool-ng.mk
-+++ /dev/null
-@@ -1,18 +0,0 @@
--################################################################################
--#
--# crosstool-ng
--#
--################################################################################
--
--CROSSTOOL_NG_VERSION           = 1.18.0
--CROSSTOOL_NG_SOURCE            = crosstool-ng-$(CROSSTOOL_NG_VERSION).tar.bz2
--CROSSTOOL_NG_SITE              = http://crosstool-ng.org/download/crosstool-ng/
--CROSSTOOL_NG_INSTALL_TARGET    = NO
--CROSSTOOL_NG_MAKE              = $(MAKE1)
--
--HOST_CROSSTOOL_NG_DEPENDENCIES = \
--	host-gawk \
--	host-automake host-gperf host-bison host-flex \
--	host-texinfo
--
--$(eval $(host-autotools-package))
--- 
-1.8.3.2
+diff --git a/configs/s6lx9_microboard_defconfig b/configs/s6lx9_microboard_defconfig
+index 05b4443..c54f3f4 100644
+--- a/configs/s6lx9_microboard_defconfig
++++ b/configs/s6lx9_microboard_defconfig
+@@ -1,11 +1,5 @@
+ BR2_microblaze=y
+ BR2_microblazeel=y
+-BR2_TOOLCHAIN_EXTERNAL=y
+-BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2=y
+-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="microblazeel-unknown-linux-gnu"
+-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+-BR2_TOOLCHAIN_EXTERNAL_CXX=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyUL0"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ROOTFS_INITRAMFS=y
