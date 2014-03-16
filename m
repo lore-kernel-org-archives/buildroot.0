@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 Mar 2014 16:25:23 +0100
-Subject: [Buildroot] [PATCH 1/3] package/rpi-firmware: bump version
+Date: Sun, 16 Mar 2014 16:25:24 +0100
+Subject: [Buildroot] [PATCH 2/3] package/rpi-userland: bump version
 In-Reply-To: <cover.1394983430.git.yann.morin.1998@free.fr>
 References: <cover.1394983430.git.yann.morin.1998@free.fr>
-Message-ID: <2ba86d3d20e555e5b9ea7aad6cc0c38a13eba8b3.1394983430.git.yann.morin.1998@free.fr>
+Message-ID: <0a7a797d2b03f060d2a7387d8041996b8a6fccae.1394983430.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +12,25 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Bump for misc fixes and enhancements:
-  - firmware: smaller cut-down (aka rescue) firmware
-  - audio: sample rates, float samples, any-number-of-channels
-  - hdmi: fix for (high?) output rates
-  - video: h264 decode when changing resolution
-  - camera: high frame rates, full FoV
+High frame rates and full FoV in camera code.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/rpi-firmware/rpi-firmware.mk | 2 +-
+ package/rpi-userland/rpi-userland.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index a849d32..5bc65ff 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
+diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
+index 69b6ee6..3b7d5b5 100644
+--- a/package/rpi-userland/rpi-userland.mk
++++ b/package/rpi-userland/rpi-userland.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RPI_FIRMWARE_VERSION = a0eb06736a3f1583fc6cd575149c7835dc43582d
-+RPI_FIRMWARE_VERSION = 089cfb05ec350505ee84a99d567474c5bdc0505e
- RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
- RPI_FIRMWARE_LICENSE = BSD-3c
- RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
+-RPI_USERLAND_VERSION = 68a2cba184d2726327026429abfe033acf217384
++RPI_USERLAND_VERSION = 7beec2158da8229598f8e471ab5ca834078f5ad2
+ RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
+ RPI_USERLAND_LICENSE = BSD-3c
+ RPI_USERLAND_LICENSE_FILES = LICENCE
 -- 
 1.8.3.2
