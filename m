@@ -1,38 +1,24 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Sun, 16 Mar 2014 15:47:17 -0400
-Subject: [Buildroot] [PATCH] mtools: remove ignored configure options
-Message-ID: <1394999237-30259-1-git-send-email-fhunleth@troodon-software.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 16 Mar 2014 21:24:52 +0100
+Subject: [Buildroot] [PATCH] httping: needs host-gettext
+In-Reply-To: <1394970557-15905-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Sun, 16 Mar 2014 08:49:17 -0300")
+References: <1394970557-15905-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87txaxki23.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The --enable-xdf, --enable-vold, and --enable-new-vold options were
-actually not being passed to ./configure since they were specified on
-the wrong variable (MTOOLS_CONF_OPT vs. HOST_MTOOLS_CONF_OPT) and mtools
-is a host-only package. Fixing the variable name so that the options are
-actually used ends up causing the build to fail due to linker errors.
-Since vold identifiers and OS/2 XDF support are unlikely to be used any
-more, remove them completely.
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
----
- package/mtools/mtools.mk | 4 ----
- 1 file changed, 4 deletions(-)
+ > For msgfmt, fixes:
+ > http://autobuild.buildroot.net/results/9ce/9ce9b4c52a7e0d0159b5b4b9835b9e3e7f8b2a08/
 
-diff --git a/package/mtools/mtools.mk b/package/mtools/mtools.mk
-index 6751059..11517df 100644
---- a/package/mtools/mtools.mk
-+++ b/package/mtools/mtools.mk
-@@ -10,8 +10,4 @@ MTOOLS_SITE          = $(BR2_GNU_MIRROR)/mtools/
- MTOOLS_LICENSE       = GPLv3+
- MTOOLS_LICENSE_FILES = COPYING
- 
--MTOOLS_CONF_OPT = --enable-xdf        \
--                  --enable-vold       \
--                  --enable-new-vold
--
- $(eval $(host-autotools-package))
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Committed, thanks.
+
 -- 
-1.8.3.2
+Bye, Peter Korsgaard
