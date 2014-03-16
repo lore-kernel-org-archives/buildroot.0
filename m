@@ -1,7 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 Mar 2014 16:25:19 +0100
-Subject: [Buildroot] [PATCH 0/3] Misc RPi-related bumps (branch yem/bumps)
-Message-ID: <cover.1394983430.git.yann.morin.1998@free.fr>
+Date: Sun, 16 Mar 2014 16:25:23 +0100
+Subject: [Buildroot] [PATCH 1/3] package/rpi-firmware: bump version
+In-Reply-To: <cover.1394983430.git.yann.morin.1998@free.fr>
+References: <cover.1394983430.git.yann.morin.1998@free.fr>
+Message-ID: <2ba86d3d20e555e5b9ea7aad6cc0c38a13eba8b3.1394983430.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,44 +12,30 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Hello All!
+Bump for misc fixes and enhancements:
+  - firmware: smaller cut-down (aka rescue) firmware
+  - audio: sample rates, float samples, any-number-of-channels
+  - hdmi: fix for (high?) output rates
+  - video: h264 decode when changing resolution
+  - camera: high frame rates, full FoV
 
-Here is a small series with Raspberry Pi related bumps:
-  - rpi-firmware: misc fixes and enhancements
-  - rpi-userland: misc enhancements
-  - raspberypi_defconfig: bump kernel
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 9b4696a49f35d64dfae5bcdc11a5a6fb2d0a76cf:
-
-  rsyslog: bump to version 7.6.0 (2014-03-15 23:53:02 +0100)
-
-are available in the git repository at:
-
-  git://gitorious.org/buildroot/buildroot.git yem/bumps
-
-for you to fetch changes up to 5e7e25d2a1638a19595137e49dd92ea43cfb2b43:
-
-  configs/raspberrypi: bump kernel version (2014-03-16 15:00:15 +0100)
-
-----------------------------------------------------------------
-Yann E. MORIN (3):
-      package/rpi-firmware: bump version
-      package/rpi-userland: bump version
-      configs/raspberrypi: bump kernel version
-
- configs/raspberrypi_defconfig        | 4 ++--
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
  package/rpi-firmware/rpi-firmware.mk | 2 +-
- package/rpi-userland/rpi-userland.mk | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index a849d32..5bc65ff 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RPI_FIRMWARE_VERSION = a0eb06736a3f1583fc6cd575149c7835dc43582d
++RPI_FIRMWARE_VERSION = 089cfb05ec350505ee84a99d567474c5bdc0505e
+ RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
+ RPI_FIRMWARE_LICENSE = BSD-3c
+ RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.3.2
