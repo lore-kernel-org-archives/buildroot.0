@@ -1,34 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 16 Mar 2014 21:24:46 +0100
-Subject: [Buildroot] [git commit] package/rpi-userland: bump version
-Message-ID: <20140316205026.41D4D9BF67@busybox.osuosl.org>
+Date: Sun, 16 Mar 2014 21:24:35 +0100
+Subject: [Buildroot] [git commit] package/rpi-firmware: bump version
+Message-ID: <20140316205026.344849BFA2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=47f36ec58d98aa2eabd70b3c020d178febe5a306
+commit: http://git.buildroot.net/buildroot/commit/?id=2f76708fd046ce45fc91573d4280544e8314bce6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-High frame rates and full FoV in camera code.
+Bump for misc fixes and enhancements:
+  - firmware: smaller cut-down (aka rescue) firmware
+  - audio: sample rates, float samples, any-number-of-channels
+  - hdmi: fix for (high?) output rates
+  - video: h264 decode when changing resolution
+  - camera: high frame rates, full FoV
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rpi-userland/rpi-userland.mk |    2 +-
+ package/rpi-firmware/rpi-firmware.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
-index 69b6ee6..3b7d5b5 100644
---- a/package/rpi-userland/rpi-userland.mk
-+++ b/package/rpi-userland/rpi-userland.mk
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index a849d32..5bc65ff 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RPI_USERLAND_VERSION = 68a2cba184d2726327026429abfe033acf217384
-+RPI_USERLAND_VERSION = 7beec2158da8229598f8e471ab5ca834078f5ad2
- RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
- RPI_USERLAND_LICENSE = BSD-3c
- RPI_USERLAND_LICENSE_FILES = LICENCE
+-RPI_FIRMWARE_VERSION = a0eb06736a3f1583fc6cd575149c7835dc43582d
++RPI_FIRMWARE_VERSION = 089cfb05ec350505ee84a99d567474c5bdc0505e
+ RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
+ RPI_FIRMWARE_LICENSE = BSD-3c
+ RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
