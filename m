@@ -1,20 +1,44 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 17 Mar 2014 16:24:22 +0100
-Subject: [Buildroot] [PATCH] Remove STAMP_DIR.
-In-Reply-To: <1395044553-29436-1-git-send-email-arnout@mind.be>
-References: <1395044553-29436-1-git-send-email-arnout@mind.be>
-Message-ID: <CAAXf6LVvduruugRMP_NDYoajBHhUh_yKvpscFCv3+7q4DfOtRw@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 17 Mar 2014 15:45:45 +0000 (UTC)
+Subject: [Buildroot] [Bug 6956] Packaging libsoxr
+In-Reply-To: <bug-6956-163@https.bugs.busybox.net/>
+References: <bug-6956-163@https.bugs.busybox.net/>
+Message-ID: <20140317154545.72A819BFEB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Mar 17, 2014 at 9:22 AM, Arnout Vandecappelle (Essensium/Mind)
-<arnout@mind.be> wrote:
-> Since the migration of the toolchains to the generic package
-> infrastructure, it is no longer used.
->
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+https://bugs.busybox.net/show_bug.cgi?id=6956
 
-Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+--- Comment #3 from Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> 2014-03-17 15:45:44 UTC ---
+The libsoxr package tries to determine the endianness by running a program,
+which is not possible because we're cross compiling. However, this fact is
+detected, and the suggestion is to 'tell' libsoxr the right result:
+
+CMake Error: TRY_RUN() invoked in cross-compiling mode, please set the
+following cache variables appropriately:
+   HAVE_WORDS_BIGENDIAN_EXITCODE (advanced)
+
+
+So this means you have to pass this variable to the compilation of libsoxr.
+The variable HAVE_WORDS_BIGENDIAN_EXITCODE is created based on the
+test_big_endian macro, present in ./cmake/Modules/TestBigEndian.cmake.
+This file has a note: "1 if system is big endian"
+
+So essentially, you should add something like this in the libsoxr.mk file:
+
+ifeq ($(BR2_ENDIAN),"BIG")
+LIBSOXR_CONF_OPT += -DHAVE_WORDS_BIGENDIAN_EXITCODE=1
+else
+LIBSOXR_CONF_OPT += -DHAVE_WORDS_BIGENDIAN_EXITCODE=0
+endif
+
+I'm unsure about the exact way to pass this flag to the build, either with
+FOO_CONF_OPT or FOO_CONF_ENV, so you may want to try both.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
