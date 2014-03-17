@@ -1,82 +1,130 @@
-From: sonic.adi at gmail.com <sonic.adi@gmail.com>
-Date: Mon, 17 Mar 2014 17:37:44 +0800
-Subject: [Buildroot] [PATCH] toolchain: bfin: Add 2013R1 Blackfin toolchain
-	option
-Message-ID: <1395049064-12333-1-git-send-email-Sonic.adi@gmail.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Mon, 17 Mar 2014 10:40:25 +0100
+Subject: [Buildroot] [PATCH] newt: bump to 0.52.17
+Message-ID: <1395049225-11877-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Sonic Zhang <sonic.zhang@analog.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
+Changed download location, added popt dependency and
+updated the Makefile.in patch.
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- toolchain/toolchain-external/Config.in             |   19 +++++++++++++++++++
- toolchain/toolchain-external/toolchain-external.mk |    6 +++++-
- 2 files changed, 24 insertions(+), 1 deletion(-)
+ package/newt/Config.in               |    1 +
+ package/newt/newt-fix-makefile.patch |   29 +++++++++++------------------
+ package/newt/newt.mk                 |   26 +++++---------------------
+ 3 files changed, 17 insertions(+), 39 deletions(-)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 0607693..0600aeb 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -665,6 +665,23 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
- 	  Other architecture variants (beyond Pentium-4/Xeon) are
- 	  supported as well, but glibc is not optimised for it.
+diff --git a/package/newt/Config.in b/package/newt/Config.in
+index ae6b69c..f47207d 100644
+--- a/package/newt/Config.in
++++ b/package/newt/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_NEWT
+ 	bool "newt"
+ 	select BR2_PACKAGE_SLANG
++	select BR2_PACKAGE_POPT
+ 	help
+ 	  Programming library for color text mode, widget based user interfaces.
  
-+config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1
-+	bool "Blackfin.uclinux.org 2013R1-RC1"
-+	depends on BR2_bfin
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
-+	select BR2_INSTALL_LIBSTDCPP
-+	select BR2_LARGEFILE
-+	select BR2_INET_IPV6
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	select BR2_USE_WCHAR
-+	select BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
-+	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-+	help
-+	  Toolchain for the Blackfin architecture, from
-+	  http://blackfin.uclinux.org.
+diff --git a/package/newt/newt-fix-makefile.patch b/package/newt/newt-fix-makefile.patch
+index 227b0f3..84152fb 100644
+--- a/package/newt/newt-fix-makefile.patch
++++ b/package/newt/newt-fix-makefile.patch
+@@ -1,6 +1,5 @@
+ Fix Makefile.in
+ 
+-* Remove -Os from the CFLAGS (already handled by Buildroot)
+ * Use $(CC) instead of $(CPP) to generate .depend file because
+   '$(CPP) -M' call does not support multiple input files.
+   This avoid the following error:
+@@ -14,29 +13,23 @@ make[1]: Leaving directory
+ make: *** 
+ [/opt/br/output/build/newt-0.51.0/.stamp_built] Error 2
+ 
+-
+ Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+ 
+ ---
+-Index: newt-0.51.0/Makefile.in
++ Makefile.in |    2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
- config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
- 	bool "Blackfin.uclinux.org 2012R2-RC2"
- 	depends on BR2_bfin
-@@ -869,6 +886,8 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1 && BR2_BINFMT_FDPIC
- 	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 && BR2_BINFMT_FLAT
- 	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 && BR2_BINFMT_FDPIC
-+	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 && BR2_BINFMT_FLAT
-+	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 && BR2_BINFMT_FDPIC
- 	default BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX \
- 					 if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
++Index: b/Makefile.in
+ ===================================================================
+---- newt-0.51.0.orig/Makefile.in	2012-10-10 22:43:42.042318041 +0200
+-+++ newt-0.51.0/Makefile.in	2012-10-11 21:25:44.063873277 +0200
+-@@ -3,7 +3,7 @@ SHLIBS = -lslang -lm -lc
+- 
+- GPM_SUPPORT=@gpm_support@
+- 
+--CFLAGS = -Wall -Os -D_GNU_SOURCE
+-+CFLAGS += -D_GNU_SOURCE
+- 
+- VERSION = @VERSION@
+- CVSTAG = r$(subst .,-,$(VERSION))
+-@@ -86,7 +86,7 @@ clean:
+- 		$(SHAREDOBJS) *.so*
++--- a/Makefile.in
+++++ b/Makefile.in
++@@ -121,7 +121,7 @@
++ 		$(SHAREDDIR)/*.o *.$(SOEXT)*
+  
+  depend:
+--	$(CPP) $(CFLAGS) -M $(SOURCES) > .depend
+-+	$(CC) $(CFLAGS) -M $(SOURCES) > .depend
++-	$(CPP) $(CFLAGS) $(CPPFLAGS) -M $(SOURCES) > .depend
+++	$(CC) $(CFLAGS) $(CPPFLAGS) -M $(SOURCES) > .depend
+  
+  $(SHAREDDIR):
+  	mkdir -p $(SHAREDDIR)
+diff --git a/package/newt/newt.mk b/package/newt/newt.mk
+index 1d5e7d5..9c92677 100644
+--- a/package/newt/newt.mk
++++ b/package/newt/newt.mk
+@@ -4,32 +4,16 @@
+ #
+ ################################################################################
  
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 747d7e3..4b54694 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -327,6 +327,10 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2),y)
- TOOLCHAIN_EXTERNAL_SITE   = http://downloads.sourceforge.net/project/adi-toolchain/2012R2/2012R2-RC2/i386/
- TOOLCHAIN_EXTERNAL_SOURCE = blackfin-toolchain-2012R2-RC2.i386.tar.bz2
- TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS = blackfin-toolchain-uclibc-full-2012R2-RC2.i386.tar.bz2
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1),y)
-+TOOLCHAIN_EXTERNAL_SITE   = http://downloads.sourceforge.net/project/adi-toolchain/2013R1/2013R1-RC1/i386/
-+TOOLCHAIN_EXTERNAL_SOURCE = blackfin-toolchain-2013R1-RC1.i386.tar.bz2
-+TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS = blackfin-toolchain-uclibc-full-2013R1-RC1.i386.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_14_3),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sources.buildroot.net/
- TOOLCHAIN_EXTERNAL_SOURCE = lin32-microblazeel-unknown-linux-gnu_14.3_early.tar.xz
-@@ -364,7 +368,7 @@ endif
+-NEWT_VERSION         = 0.51.0
+-NEWT_SITE            = http://www.uclibc.org/
+-NEWT_SOURCE          = newt-$(NEWT_VERSION).tar.bz2
++NEWT_VERSION         = 0.52.17
++NEWT_SITE            = https://fedorahosted.org/releases/n/e/newt/
+ NEWT_LICENSE         = GPLv2
+ NEWT_LICENSE_FILES   = COPYING
+ NEWT_INSTALL_STAGING = YES
  
- TOOLCHAIN_EXTERNAL_INSTALL_STAGING = YES
+-NEWT_DEPENDENCIES = slang
++NEWT_DEPENDENCIES = slang popt
  
--ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2),y)
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1),y)
- # Special handling for Blackfin toolchain, because of the split in two
- # tarballs, and the organization of tarball contents. The tarballs
- # contain ./opt/uClinux/{bfin-uclinux,bfin-linux-uclibc} directories,
+-NEWT_MAKE_ENV += $(TARGET_CONFIGURE_OPTS)
+-NEWT_MAKE = $(MAKE1)
+-
+-define NEWT_INSTALL_STAGING_CMDS
+-	$(INSTALL) -D -m644 $(@D)/newt.h    $(STAGING_DIR)/usr/include/newt.h
+-	$(INSTALL) -D -m644 $(@D)/libnewt.a $(STAGING_DIR)/usr/lib/libnewt.a
+-	$(INSTALL) -m755 $(@D)/libnewt.so*  $(STAGING_DIR)/usr/lib/
+-	ln -fs libnewt.so.$(NEWT_VERSION)   $(STAGING_DIR)/usr/lib/libnewt.so
+-	ln -fs libnewt.so.$(NEWT_VERSION)   $(STAGING_DIR)/usr/lib/libnewt.so.0.51
+-endef
++NEWT_CONF_OPT = --without-python --without-tcl
+ 
+-define NEWT_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m644 $(@D)/newt.h    $(TARGET_DIR)/usr/include/newt.h
+-	$(INSTALL) -D -m644 $(@D)/libnewt.a $(TARGET_DIR)/usr/lib/libnewt.a
+-	$(INSTALL) -m755 $(@D)/libnewt.so*  $(TARGET_DIR)/usr/lib/
+-	ln -fs libnewt.so.$(NEWT_VERSION)   $(TARGET_DIR)/usr/lib/libnewt.so
+-	ln -fs libnewt.so.$(NEWT_VERSION)   $(TARGET_DIR)/usr/lib/libnewt.so.0.51
+-endef
++NEWT_MAKE = $(MAKE1)
+ 
+ $(eval $(autotools-package))
 -- 
-1.7.9.5
+1.7.7
