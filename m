@@ -1,48 +1,31 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 17 Mar 2014 20:13:46 +0000 (UTC)
-Subject: [Buildroot] [Bug 6956] Packaging libsoxr
-In-Reply-To: <bug-6956-163@https.bugs.busybox.net/>
-References: <bug-6956-163@https.bugs.busybox.net/>
-Message-ID: <20140317201346.AE0B19BEED@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 17 Mar 2014 22:10:12 +0100
+Subject: [Buildroot] [git commit] python3: bump version
+Message-ID: <20140317211030.6C8799C0D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6956
+commit: http://git.buildroot.net/buildroot/commit/?id=b40eb002646d3374123094b220c7f18497b7c461
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
---- Comment #4 from Samuel Martin <s.martin49@gmail.com> 2014-03-17 20:13:46 UTC ---
-(In reply to comment #3)
-> The libsoxr package tries to determine the endianness by running a program,
-> which is not possible because we're cross compiling. However, this fact is
-> detected, and the suggestion is to 'tell' libsoxr the right result:
-> 
-> CMake Error: TRY_RUN() invoked in cross-compiling mode, please set the
-> following cache variables appropriately:
->    HAVE_WORDS_BIGENDIAN_EXITCODE (advanced)
-> 
-> 
-> So this means you have to pass this variable to the compilation of libsoxr.
-> The variable HAVE_WORDS_BIGENDIAN_EXITCODE is created based on the
-> test_big_endian macro, present in ./cmake/Modules/TestBigEndian.cmake.
-> This file has a note: "1 if system is big endian"
-> 
-> So essentially, you should add something like this in the libsoxr.mk file:
-> 
-> ifeq ($(BR2_ENDIAN),"BIG")
-> LIBSOXR_CONF_OPT += -DHAVE_WORDS_BIGENDIAN_EXITCODE=1
-> else
-> LIBSOXR_CONF_OPT += -DHAVE_WORDS_BIGENDIAN_EXITCODE=0
-> endif
-> 
-> I'm unsure about the exact way to pass this flag to the build, either with
-> FOO_CONF_OPT or FOO_CONF_ENV, so you may want to try both.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python3/python3.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-I confirm, when using the cmake infrastructure, the flags are passed to
-FOO_CONF_OPT.
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 3d95a6d..ce75e46 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -6,7 +6,7 @@
+ 
+ PYTHON3_VERSION_MAJOR = 3.4
+ PYTHON3_VERSION_MINOR = 0
+-PYTHON3_VERSION       = $(PYTHON3_VERSION_MAJOR).$(PYTHON3_VERSION_MINOR)rc1
++PYTHON3_VERSION       = $(PYTHON3_VERSION_MAJOR).$(PYTHON3_VERSION_MINOR)
+ PYTHON3_SOURCE        = Python-$(PYTHON3_VERSION).tar.xz
+ PYTHON3_SITE          = http://python.org/ftp/python/$(PYTHON3_VERSION_MAJOR).$(PYTHON3_VERSION_MINOR)
+ 
