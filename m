@@ -1,44 +1,57 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 17 Mar 2014 15:45:45 +0000 (UTC)
-Subject: [Buildroot] [Bug 6956] Packaging libsoxr
-In-Reply-To: <bug-6956-163@https.bugs.busybox.net/>
-References: <bug-6956-163@https.bugs.busybox.net/>
-Message-ID: <20140317154545.72A819BFEB@busybox.osuosl.org>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 17 Mar 2014 17:40:22 +0000
+Subject: [Buildroot] [PATCH] libtool: revert a commit which re-introduced an
+	already fixed problem
+Message-ID: <1395078022-37381-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6956
+The commit ed73d1d2e3703290e74bb076bc6dd0417aa3ba21 modified the changes
+made by the commit 4268d3967e2d691c151d6b5629e4051deb077b9a. The problem
+that was fixed by the former commit is present again due to those
+modifications. This patch reverts those modifications to have that
+problem fixed again.
 
---- Comment #3 from Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> 2014-03-17 15:45:44 UTC ---
-The libsoxr package tries to determine the endianness by running a program,
-which is not possible because we're cross compiling. However, this fact is
-detected, and the suggestion is to 'tell' libsoxr the right result:
+Fixes:
+   http://autobuild.buildroot.net/results/b86/b86a83c6549004f226e7255242e54ef4e50c5ec3/
 
-CMake Error: TRY_RUN() invoked in cross-compiling mode, please set the
-following cache variables appropriately:
-   HAVE_WORDS_BIGENDIAN_EXITCODE (advanced)
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ ...patch => libtool-0001-mips64-n64-linking.patch} |    0
+ package/libtool/libtool.mk                         |   13 -------------
+ 2 files changed, 0 insertions(+), 13 deletions(-)
+ rename package/libtool/{libtool-mips64-n64-linking.post-install-patch => libtool-0001-mips64-n64-linking.patch} (100%)
 
-
-So this means you have to pass this variable to the compilation of libsoxr.
-The variable HAVE_WORDS_BIGENDIAN_EXITCODE is created based on the
-test_big_endian macro, present in ./cmake/Modules/TestBigEndian.cmake.
-This file has a note: "1 if system is big endian"
-
-So essentially, you should add something like this in the libsoxr.mk file:
-
-ifeq ($(BR2_ENDIAN),"BIG")
-LIBSOXR_CONF_OPT += -DHAVE_WORDS_BIGENDIAN_EXITCODE=1
-else
-LIBSOXR_CONF_OPT += -DHAVE_WORDS_BIGENDIAN_EXITCODE=0
-endif
-
-I'm unsure about the exact way to pass this flag to the build, either with
-FOO_CONF_OPT or FOO_CONF_ENV, so you may want to try both.
-
+diff --git a/package/libtool/libtool-mips64-n64-linking.post-install-patch b/package/libtool/libtool-0001-mips64-n64-linking.patch
+similarity index 100%
+rename from package/libtool/libtool-mips64-n64-linking.post-install-patch
+rename to package/libtool/libtool-0001-mips64-n64-linking.patch
+diff --git a/package/libtool/libtool.mk b/package/libtool/libtool.mk
+index 603f1f1..2f6ea7c 100644
+--- a/package/libtool/libtool.mk
++++ b/package/libtool/libtool.mk
+@@ -13,19 +13,6 @@ LIBTOOL_LICENSE_FILES = COPYING
+ 
+ HOST_LIBTOOL_LIBTOOL_PATCH = NO
+ 
+-# libtool-mips64-n64-linking.post-install-patch is an upstream patch that
+-# fixes MIPS64 n64 link failures. However, because the patch touches an m4
+-# file, applying it triggers a run of autoconf, automake, etc. This sometimes
+-# leads to build failures due to incompatible system autotools. We cannot
+-# simply set HOST_LIBTOOL_AUTORECONF = YES because that would create a
+-# circular dependency on host-libtool. Therefore, just apply the patch
+-# directly on the installed file.
+-define HOST_LIBTOOL_FIXUP_LIBTOOL_M4
+-	patch $(HOST_DIR)/usr/share/aclocal/libtool.m4 < \
+-		package/libtool/libtool-mips64-n64-linking.post-install-patch
+-endef
+-HOST_LIBTOOL_POST_INSTALL_HOOKS += HOST_LIBTOOL_FIXUP_LIBTOOL_M4
+-
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+ 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.1
