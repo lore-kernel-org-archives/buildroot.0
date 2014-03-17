@@ -1,28 +1,30 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 17 Mar 2014 08:45:38 +0100
-Subject: [Buildroot] [PATCH 0/3] Misc RPi-related bumps (branch
-	yem/bumps)
-In-Reply-To: <cover.1394983430.git.yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Sun, 16 Mar 2014 16:25:19 +0100")
-References: <cover.1394983430.git.yann.morin.1998@free.fr>
-Message-ID: <87ha6xjmjh.fsf@dell.be.48ers.dk>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Mon, 17 Mar 2014 09:03:55 +0100
+Subject: [Buildroot] [PATCH 1/1] imagemagick: bump to version 6.8.8-8
+Message-ID: <1395043435-5208-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+---
+ package/imagemagick/imagemagick.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Hello All!
-
- > Here is a small series with Raspberry Pi related bumps:
- >   - rpi-firmware: misc fixes and enhancements
- >   - rpi-userland: misc enhancements
- >   - raspberypi_defconfig: bump kernel
-
-Committed series, thanks.
-
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index c81ed24..1e565d1 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IMAGEMAGICK_VERSION = 6.8.8-7
++IMAGEMAGICK_VERSION = 6.8.8-8
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ # The official ImageMagick site only keeps the latest versions
+ # available, which is annoying. Use an alternate site that keeps all
 -- 
-Bye, Peter Korsgaard
+1.7.9.5
