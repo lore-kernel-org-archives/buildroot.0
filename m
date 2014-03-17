@@ -1,23 +1,23 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 17 Mar 2014 23:09:40 +0100
-Subject: [Buildroot] [PATCH] package/crosstool-ng: remove
-In-Reply-To: <1395008524-13190-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Sun, 16 Mar 2014 23:22:04 +0100")
-References: <1395008524-13190-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87lhw84guz.fsf@dell.be.48ers.dk>
+Date: Mon, 17 Mar 2014 23:11:25 +0100
+Subject: [Buildroot] [PATCH] mtools: update upstream URL
+In-Reply-To: <1394995362-7257-1-git-send-email-fhunleth@troodon-software.com>
+ (Frank Hunleth's message of "Sun, 16 Mar 2014 14:42:42 -0400")
+References: <1394995362-7257-1-git-send-email-fhunleth@troodon-software.com>
+Message-ID: <87ha6w4gs2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Frank" == Frank Hunleth <fhunleth@troodon-software.com> writes:
 
- > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > No one is using this host-package, since we no longer have the
- > crosstool-NG toolchain backend.
+ > The previously specified tux.org URL did not appear to be maintained.
+ > The gnu.org URL looks better maintained and is the same domain as the
+ > actual tarball download.
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
 
 Committed, thanks.
 
