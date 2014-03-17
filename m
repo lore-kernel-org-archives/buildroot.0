@@ -1,33 +1,79 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 17 Mar 2014 23:10:29 +0100
-Subject: [Buildroot] [git commit] mtools: update upstream URL
-Message-ID: <20140317221235.1030B9BF87@busybox.osuosl.org>
+Date: Mon, 17 Mar 2014 22:28:40 +0100
+Subject: [Buildroot] [git commit] libpng: security bump to version 1.6.10
+Message-ID: <20140317221234.CCFE09BEEC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bc3a7cc7a189f6221eeee3f11b54ee297f971f4e
+commit: http://git.buildroot.net/buildroot/commit/?id=d9b463b291c9585f868efb76a32507aa14b8d72d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The previously specified tux.org URL did not appear to be maintained.
-The gnu.org URL looks better maintained and is the same domain as the
-actual tarball download.
+Fixes CVE-2014-0333.
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mtools/Config.in.host |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/libpng/libpng-01-disable-tools.patch |   24 ++++++++++++------------
+ package/libpng/libpng.mk                     |    2 +-
+ 2 files changed, 13 insertions(+), 13 deletions(-)
 
-diff --git a/package/mtools/Config.in.host b/package/mtools/Config.in.host
-index 96f11d1..96b332b 100644
---- a/package/mtools/Config.in.host
-+++ b/package/mtools/Config.in.host
-@@ -6,4 +6,4 @@ config BR2_PACKAGE_HOST_MTOOLS
- 	  names, OS/2 Xdf disks and 2m disks (store up to 1992k on a high
- 	  density 3 1/2 disk).
+diff --git a/package/libpng/libpng-01-disable-tools.patch b/package/libpng/libpng-01-disable-tools.patch
+index cd7040c..e30eca9 100644
+--- a/package/libpng/libpng-01-disable-tools.patch
++++ b/package/libpng/libpng-01-disable-tools.patch
+@@ -4,27 +4,27 @@ in a non-interactive embedded system.
  
--	  http://www.tux.org/pub/tux/mtools/
-+	  http://www.gnu.org/software/mtools/
+ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ 
+-diff -Nura libpng-1.6.6.orig/Makefile.am libpng-1.6.6/Makefile.am
+---- libpng-1.6.6.orig/Makefile.am	2013-10-27 19:13:39.183376955 -0300
+-+++ libpng-1.6.6/Makefile.am	2013-10-27 19:13:50.388744191 -0300
++diff -Nura libpng-1.6.10.orig/Makefile.am libpng-1.6.10/Makefile.am
++--- libpng-1.6.10.orig/Makefile.am	2014-03-17 08:51:25.812005079 -0300
+++++ libpng-1.6.10/Makefile.am	2014-03-17 09:14:28.807586433 -0300
+ @@ -10,7 +10,7 @@
+- check_PROGRAMS= pngtest pngunknown pngstest pngvalid
++ check_PROGRAMS= pngtest pngunknown pngstest pngvalid pngimage
+  
+  # Utilities - installed
+ -bin_PROGRAMS= pngfix png-fix-itxt
+ +bin_PROGRAMS=
+  
+- pngtest_SOURCES = pngtest.c
+- pngtest_LDADD = libpng at PNGLIB_MAJOR@@PNGLIB_MINOR at .la
+-diff -Nura libpng-1.6.6.orig/Makefile.in libpng-1.6.6/Makefile.in
+---- libpng-1.6.6.orig/Makefile.in	2013-10-27 19:13:39.180376856 -0300
+-+++ libpng-1.6.6/Makefile.in	2013-10-27 19:14:55.332872643 -0300
+-@@ -59,7 +59,7 @@
++ # This ensures that pnglibconf.h gets built at the start of 'make all' or
++ # 'make check', but it does not add dependencies to the individual programs,
++diff -Nura libpng-1.6.10.orig/Makefile.in libpng-1.6.10/Makefile.in
++--- libpng-1.6.10.orig/Makefile.in	2014-03-17 08:51:25.807005070 -0300
+++++ libpng-1.6.10/Makefile.in	2014-03-17 09:14:44.846617623 -0300
++@@ -87,7 +87,7 @@
+  host_triplet = @host@
+  check_PROGRAMS = pngtest$(EXEEXT) pngunknown$(EXEEXT) \
+- 	pngstest$(EXEEXT) pngvalid$(EXEEXT)
++ 	pngstest$(EXEEXT) pngvalid$(EXEEXT) pngimage$(EXEEXT)
+ -bin_PROGRAMS = pngfix$(EXEEXT) png-fix-itxt$(EXEEXT)
+ +bin_PROGRAMS =
+  @PNG_ARM_NEON_TRUE at am__append_1 = arm/arm_init.c\
+- @PNG_ARM_NEON_TRUE@	arm/filter_neon.S
++ @PNG_ARM_NEON_TRUE@	arm/filter_neon.S arm/filter_neon_intrinsics.c
+  
+diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
+index 0bfe7d1..cdc80f1 100644
+--- a/package/libpng/libpng.mk
++++ b/package/libpng/libpng.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBPNG_VERSION = 1.6.9
++LIBPNG_VERSION = 1.6.10
+ LIBPNG_SERIES = 16
+ LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
+ LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng${LIBPNG_SERIES}/$(LIBPNG_VERSION)
