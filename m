@@ -1,38 +1,63 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 17 Mar 2014 22:23:51 +0100
-Subject: [Buildroot] [PATCH] newt: bump to 0.52.17
-In-Reply-To: <1395049225-11877-1-git-send-email-yegorslists@googlemail.com>
- (yegorslists@googlemail.com's message of "Mon, 17 Mar 2014 10:40:25
- +0100")
-References: <1395049225-11877-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <87ob145xjs.fsf@dell.be.48ers.dk>
+Date: Mon, 17 Mar 2014 22:28:28 +0100
+Subject: [Buildroot] [PATCH] support: properly check for bash as a
+	dependency
+In-Reply-To: <1395052954-1567-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Mon, 17 Mar 2014 11:42:34 +0100")
+References: <1395052954-1567-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87k3bs5xc3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > From: Yegor Yefremov <yegorslists@googlemail.com>
- > Changed download location, added popt dependency and
- > updated the Makefile.in patch.
+ > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > The way we are checking for bash is to look if "$SHELL --version"
+ > will return a string containing "^GNU bash".
 
- > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+ > In case the system shell is dash (eg. /bin/sh -> /bin/dash), but
+ > the user's login shell is bash, dash will not override the SHELL
+ > variable:
 
-It looks like it needs some help with gettext:
+ >     $ echo $SHELL
+ >     /bin/bash
+ >     $ /bin/dash
+ >     $$ echo $SHELL
+ >     /bin/bash
 
-checking for gettext in -lc... no
-checking for gettext in -lintl... no
-configure: error: in `/home/peko/source/buildroot/output/build/newt-0.52.17':
-configure: error: --enable-nls was specified, but the configure check failed
-See `config.log' for more details
-make: *** [/home/peko/source/buildroot/output/build/newt-0.52.17/.stamp_configured] Error 1
+ > The same happens when called as the interpreter for a shell script:
 
-You probably just need to do the 'select BR2_PACKAGE_GETTEXT if
-BR2_NEEDS_GETTEXT_IF_LOCALE' like E.G. avahi.
+ >     $ cat foo.sh
+ >     #!/bin/dash
+ >     echo $SHELL
 
-Care to fix this and send an updated patch? Thanks.
+ >     $ echo $SHELL
+ >     /bin/bash
+ >     $ ./foo.sh
+ >     /bin/bash
+
+ > So, calling "$SHELL --version" will still return "^GNU bash" no matter
+ > what shell is actually running.
+
+ > Since quite a lot of #!/bin/sh scripts are in fact bash scripts, we
+ > really want to ensure that /bin/sh is bash.
+
+Is that really still an issue? I just checked a few of the machines I
+often do buildroot builds on and they all have /bin/sh == dash.
+
+
+ > -# Check bash
+ > -if ! $SHELL --version 2>&1 | grep -q '^GNU bash'; then
+ > +# Check bash is the system shell
+ > +if ! /bin/sh --version 2>&1 | grep -q '^GNU bash'; then
+
+FYI, dash doesn't even understand a --version argument:
+
+sh --version
+sh: 0: Illegal option --
 
 -- 
 Bye, Peter Korsgaard
