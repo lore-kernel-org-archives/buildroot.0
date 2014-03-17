@@ -1,78 +1,90 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 17 Mar 2014 22:36:19 +0100
-Subject: [Buildroot] [PATCH] support: properly check for bash as a
-	dependency
-In-Reply-To: <87k3bs5xc3.fsf@dell.be.48ers.dk>
-References: <1395052954-1567-1-git-send-email-yann.morin.1998@free.fr>
- <87k3bs5xc3.fsf@dell.be.48ers.dk>
-Message-ID: <20140317213619.GB3393@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 17 Mar 2014 18:46:53 -0300
+Subject: [Buildroot] [PATCH] lvm2: needs threads
+Message-ID: <1395092813-1988-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+lvm2 needs threads because of commit
+35d3713bdc20a3ac22537ca04b0c1c6deab625cc
+Fixes:
+http://autobuild.buildroot.net/results/b4d/b4dcd9e98c4ea61f81b28675c0f87cfb2341f091/
 
-On 2014-03-17 22:28 +0100, Peter Korsgaard spake thusly:
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
-> 
->  > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
->  > The way we are checking for bash is to look if "$SHELL --version"
->  > will return a string containing "^GNU bash".
-> 
->  > In case the system shell is dash (eg. /bin/sh -> /bin/dash), but
->  > the user's login shell is bash, dash will not override the SHELL
->  > variable:
-> 
->  >     $ echo $SHELL
->  >     /bin/bash
->  >     $ /bin/dash
->  >     $$ echo $SHELL
->  >     /bin/bash
-> 
->  > The same happens when called as the interpreter for a shell script:
-> 
->  >     $ cat foo.sh
->  >     #!/bin/dash
->  >     echo $SHELL
-> 
->  >     $ echo $SHELL
->  >     /bin/bash
->  >     $ ./foo.sh
->  >     /bin/bash
-> 
->  > So, calling "$SHELL --version" will still return "^GNU bash" no matter
->  > what shell is actually running.
-> 
->  > Since quite a lot of #!/bin/sh scripts are in fact bash scripts, we
->  > really want to ensure that /bin/sh is bash.
-> 
-> Is that really still an issue? I just checked a few of the machines I
-> often do buildroot builds on and they all have /bin/sh == dash.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/cryptsetup/Config.in | 6 ++++--
+ package/dmraid/Config.in     | 6 ++++--
+ package/lvm2/Config.in       | 6 ++++--
+ 3 files changed, 12 insertions(+), 6 deletions(-)
 
-Some configure-y scripts will run with /bin/sh, but have bashisms in them.
-
-It was reported on IRC by Andrew that switching the system shell from
-dash to bash fixed an issue (Andrew, was that with libxml2?).
-
->  > -# Check bash
->  > -if ! $SHELL --version 2>&1 | grep -q '^GNU bash'; then
->  > +# Check bash is the system shell
->  > +if ! /bin/sh --version 2>&1 | grep -q '^GNU bash'; then
-> 
-> FYI, dash doesn't even understand a --version argument:
-
-Yes, but it surely does not return something matching "^GNU bash" which
-is all we care about.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/cryptsetup/Config.in b/package/cryptsetup/Config.in
+index 8405963..3545794 100644
+--- a/package/cryptsetup/Config.in
++++ b/package/cryptsetup/Config.in
+@@ -6,6 +6,7 @@ config BR2_PACKAGE_CRYPTSETUP
+ 	select BR2_PACKAGE_E2FSPROGS
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	depends on BR2_LARGEFILE # lvm2, util-linux
++	depends on BR2_TOOLCHAIN_HAS_THREADS # lvm2
+ 	depends on BR2_USE_MMU # lvm2, e2fsprogs
+ 	depends on !BR2_PREFER_STATIC_LIB # lvm2
+ 	depends on BR2_USE_WCHAR # util-linux
+@@ -15,6 +16,7 @@ config BR2_PACKAGE_CRYPTSETUP
+ 
+ 	  https://code.google.com/p/cryptsetup/
+ 
+-comment "cryptsetup needs a toolchain w/ largefile, wchar, dynamic library"
++comment "cryptsetup needs a toolchain w/ largefile, wchar, threads, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR  || BR2_PREFER_STATIC_LIB
++	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR || \
++		BR2_PREFER_STATIC_LIB || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/dmraid/Config.in b/package/dmraid/Config.in
+index fc370bd..2e3a3fa 100644
+--- a/package/dmraid/Config.in
++++ b/package/dmraid/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_DMRAID
+ 	bool "dmraid"
+ 	depends on BR2_LARGEFILE
++	depends on BR2_TOOLCHAIN_HAS_THREADS # lvm2
+ 	depends on BR2_USE_MMU # lvm2
+ 	depends on !BR2_PREFER_STATIC_LIB # lvm2
+ 	select BR2_PACKAGE_LVM2
+@@ -11,6 +12,7 @@ config BR2_PACKAGE_DMRAID
+ 	  dmraid uses the Linux device-mapper to create devices with
+ 	  respective mappings for the ATARAID sets discovered.
+ 
+-comment "dmraid needs a toolchain w/ largefile, dynamic library"
++comment "dmraid needs a toolchain w/ largefile, threads, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_LARGEFILE || BR2_PREFER_STATIC_LIB
++	depends on !BR2_LARGEFILE || BR2_PREFER_STATIC_LIB || \
++		!BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/lvm2/Config.in b/package/lvm2/Config.in
+index 3f8a52d..1251fae 100644
+--- a/package/lvm2/Config.in
++++ b/package/lvm2/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LVM2
+ 	bool "lvm2 & device mapper"
+ 	depends on BR2_LARGEFILE
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # needs fork()
+ 	depends on !BR2_PREFER_STATIC_LIB # It fails to build statically
+ 	help
+@@ -34,6 +35,7 @@ config BR2_PACKAGE_LVM2_APP_LIBRARY
+ 
+ endif
+ 
+-comment "lvm2 needs a toolchain w/ largefile, dynamic library"
++comment "lvm2 needs a toolchain w/ largefile, threads, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_LARGEFILE || BR2_PREFER_STATIC_LIB
++	depends on !BR2_LARGEFILE || BR2_PREFER_STATIC_LIB || \
++		!BR2_TOOLCHAIN_HAS_THREADS
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.3.2
