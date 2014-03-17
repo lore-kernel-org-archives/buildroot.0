@@ -1,79 +1,85 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 17 Mar 2014 22:28:40 +0100
-Subject: [Buildroot] [git commit] libpng: security bump to version 1.6.10
-Message-ID: <20140317221234.CCFE09BEEC@busybox.osuosl.org>
+Date: Mon, 17 Mar 2014 22:10:45 +0100
+Subject: [Buildroot] [git commit] Remove STAMP_DIR
+Message-ID: <20140317221234.C24579BF87@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d9b463b291c9585f868efb76a32507aa14b8d72d
+commit: http://git.buildroot.net/buildroot/commit/?id=e0c6067772f4f131678ca8eeb8e45dcbea9f6f36
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2014-0333.
+Since the migration of the toolchains to the generic package
+infrastructure, it is no longer used.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libpng/libpng-01-disable-tools.patch |   24 ++++++++++++------------
- package/libpng/libpng.mk                     |    2 +-
- 2 files changed, 13 insertions(+), 13 deletions(-)
+ Makefile                            |    9 ++++-----
+ docs/manual/how-buildroot-works.txt |    2 +-
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/libpng/libpng-01-disable-tools.patch b/package/libpng/libpng-01-disable-tools.patch
-index cd7040c..e30eca9 100644
---- a/package/libpng/libpng-01-disable-tools.patch
-+++ b/package/libpng/libpng-01-disable-tools.patch
-@@ -4,27 +4,27 @@ in a non-interactive embedded system.
+diff --git a/Makefile b/Makefile
+index 2b13917..011af57 100644
+--- a/Makefile
++++ b/Makefile
+@@ -152,7 +152,6 @@ endif
+ _BR2_GRAPH_OUT := $(or $(BR2_GRAPH_OUT),pdf)
  
- Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ BUILD_DIR:=$(BASE_DIR)/build
+-STAMP_DIR:=$(BASE_DIR)/stamps
+ BINARIES_DIR:=$(BASE_DIR)/images
+ TARGET_DIR:=$(BASE_DIR)/target
+ # initial definition so that 'make clean' works for most users, even without
+@@ -435,7 +434,7 @@ TARGETS_LEGAL_INFO:=$(patsubst %,%-legal-info,\
+ 		$(TARGETS) $(TARGETS_HOST_DEPS) $(HOST_DEPS))))
  
--diff -Nura libpng-1.6.6.orig/Makefile.am libpng-1.6.6/Makefile.am
----- libpng-1.6.6.orig/Makefile.am	2013-10-27 19:13:39.183376955 -0300
--+++ libpng-1.6.6/Makefile.am	2013-10-27 19:13:50.388744191 -0300
-+diff -Nura libpng-1.6.10.orig/Makefile.am libpng-1.6.10/Makefile.am
-+--- libpng-1.6.10.orig/Makefile.am	2014-03-17 08:51:25.812005079 -0300
-++++ libpng-1.6.10/Makefile.am	2014-03-17 09:14:28.807586433 -0300
- @@ -10,7 +10,7 @@
-- check_PROGRAMS= pngtest pngunknown pngstest pngvalid
-+ check_PROGRAMS= pngtest pngunknown pngstest pngvalid pngimage
-  
-  # Utilities - installed
- -bin_PROGRAMS= pngfix png-fix-itxt
- +bin_PROGRAMS=
-  
-- pngtest_SOURCES = pngtest.c
-- pngtest_LDADD = libpng at PNGLIB_MAJOR@@PNGLIB_MINOR at .la
--diff -Nura libpng-1.6.6.orig/Makefile.in libpng-1.6.6/Makefile.in
----- libpng-1.6.6.orig/Makefile.in	2013-10-27 19:13:39.180376856 -0300
--+++ libpng-1.6.6/Makefile.in	2013-10-27 19:14:55.332872643 -0300
--@@ -59,7 +59,7 @@
-+ # This ensures that pnglibconf.h gets built at the start of 'make all' or
-+ # 'make check', but it does not add dependencies to the individual programs,
-+diff -Nura libpng-1.6.10.orig/Makefile.in libpng-1.6.10/Makefile.in
-+--- libpng-1.6.10.orig/Makefile.in	2014-03-17 08:51:25.807005070 -0300
-++++ libpng-1.6.10/Makefile.in	2014-03-17 09:14:44.846617623 -0300
-+@@ -87,7 +87,7 @@
-  host_triplet = @host@
-  check_PROGRAMS = pngtest$(EXEEXT) pngunknown$(EXEEXT) \
-- 	pngstest$(EXEEXT) pngvalid$(EXEEXT)
-+ 	pngstest$(EXEEXT) pngvalid$(EXEEXT) pngimage$(EXEEXT)
- -bin_PROGRAMS = pngfix$(EXEEXT) png-fix-itxt$(EXEEXT)
- +bin_PROGRAMS =
-  @PNG_ARM_NEON_TRUE at am__append_1 = arm/arm_init.c\
-- @PNG_ARM_NEON_TRUE@	arm/filter_neon.S
-+ @PNG_ARM_NEON_TRUE@	arm/filter_neon.S arm/filter_neon_intrinsics.c
-  
-diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
-index 0bfe7d1..cdc80f1 100644
---- a/package/libpng/libpng.mk
-+++ b/package/libpng/libpng.mk
-@@ -4,7 +4,7 @@
+ dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
+-	$(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR)
++	$(HOST_DIR) $(BINARIES_DIR)
+ 
+ $(BUILD_DIR)/buildroot-config/auto.conf: $(BR2_CONFIG)
+ 	$(MAKE1) $(EXTRAMAKEARGS) HOSTCC="$(HOSTCC_NOCCACHE)" HOSTCXX="$(HOSTCXX_NOCCACHE)" silentoldconfig
+@@ -454,7 +453,7 @@ world: target-post-image
+ 	$(TARGETS) $(TARGETS_ROOTFS) \
+ 	$(TARGETS_DIRCLEAN) $(TARGETS_SOURCE) $(TARGETS_LEGAL_INFO) \
+ 	$(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
+-	$(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR)
++	$(HOST_DIR) $(BINARIES_DIR)
+ 
+ ################################################################################
+ #
+@@ -462,7 +461,7 @@ world: target-post-image
+ # dependencies anywhere else
  #
  ################################################################################
+-$(BUILD_DIR) $(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST):
++$(BUILD_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST):
+ 	@mkdir -p $@
  
--LIBPNG_VERSION = 1.6.9
-+LIBPNG_VERSION = 1.6.10
- LIBPNG_SERIES = 16
- LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
- LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng${LIBPNG_SERIES}/$(LIBPNG_VERSION)
+ # We make a symlink lib32->lib or lib64->lib as appropriate
+@@ -824,7 +823,7 @@ printvars:
+ 
+ clean:
+ 	rm -rf $(TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) \
+-		$(STAMP_DIR) $(BUILD_DIR) $(BASE_DIR)/staging \
++		$(BUILD_DIR) $(BASE_DIR)/staging \
+ 		$(LEGAL_INFO_DIR)
+ 
+ distclean: clean
+diff --git a/docs/manual/how-buildroot-works.txt b/docs/manual/how-buildroot-works.txt
+index a96e45b..5ef6e0f 100644
+--- a/docs/manual/how-buildroot-works.txt
++++ b/docs/manual/how-buildroot-works.txt
+@@ -53,7 +53,7 @@ The main Makefile performs the following steps (once the
+ configuration is done):
+ 
+ * Create all the output directories: +staging+, +target+, +build+,
+-  +stamps+, etc. in the output directory (+output/+ by default,
++  etc. in the output directory (+output/+ by default,
+   another value can be specified using +O=+)
+ 
+ * Generate the toolchain target. When an internal toolchain is used, this
