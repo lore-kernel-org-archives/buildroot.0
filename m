@@ -1,74 +1,64 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 17 Mar 2014 07:47:55 +0100
-Subject: [Buildroot] [PATCH] syslinux: install helper programs to the
- host
-In-Reply-To: <1394996670-8037-1-git-send-email-fhunleth@troodon-software.com>
-References: <1394996670-8037-1-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <53269A9B.1070009@mind.be>
+Date: Mon, 17 Mar 2014 07:59:24 +0100
+Subject: [Buildroot] Patchwork cleanup #7: triaging proposal
+In-Reply-To: <20140316184313.GA21975@free.fr>
+References: <CAAXf6LWP0FX4AAGP_ACZHgoxEAEwarpEdHchukxE+V=WJnXROg@mail.gmail.com>
+ <20140316160712.GA3267@free.fr> <5325D7A3.4090704@gigabyte.getmyip.com>
+ <20140316184313.GA21975@free.fr>
+Message-ID: <53269D4C.6020309@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/16/14 20:04, Frank Hunleth wrote:
-> Even though syslinux is built for the target, it does create helper
-> programs intended to be run on the host such as syslinux and extlinux.
-> This change installs these helper programs to the host so that they may be
-> called by post image creation scripts.
+On 03/16/14 19:43, Yann E. MORIN wrote:
+> Micha?l, All,
+> 
+> Please, do not send HTML mails, they do not make it to the list.
+> HTML mail is frowned upon on this list.
+> 
+> On 2014-03-16 17:56 +0100, Micha?l Zweers spake thusly:
+>> Yann E. MORIN wrote:
+>>
+>>  [v3,02/11] sunxi-mali: add explicit pthread/dl/rt dependencies
+>>  [1]http://patchwork.ozlabs.org/patch/278295
+>>
+>>     Vote: C, unsure. There was no feedback on the reason why the change
+>>     was needed in the first place (Peter tested and it worked).
+>>
+>> When cross compiling Qt5 for Olinuxino A13 I needed to link every Opengl program to
+>> -ldl -lrt -lpthread otherwise they would die during init. The sunxi OpenGl (framebuffer) binary blops probably needs them to function properly.
+>> (From my error logs, may be incomplete i don't really remember):
+>> #0  0x00000000 in ?? () #1  0x4020a584 in __pthread_initialize_minimal_internal ()
+>>    from /lib/libpthread.so.0 #2  0x40208bec in _init () from /lib/libpthread.so.0
+>> #3  0x4000e0d0 in ?? () from /lib/ld-linux.so.3
+>> #4  0xbefffcac in ?? () (gdb)
+>>
+>> So A, keep :)
+> 
+> Can you share your .config, please, so we can try to reproduce your build
+> failure?
+> 
+> You are reporting the exact same synptoms as the original submitter, but
+> that does not help understand what the problem actually is.
 
- So what is host-syslinux for then?
+ But Michael made it clear that it's a runtime failure, not a build failure:
 
+"otherwise they would die during init"
 
- In fact, we currently have two ways for installing the host-tools of
-bootloaders:
+ Looking at the backtrace,though, it doesn't make sense to me: the
+dynamic linker does resolve into /lib/libpthread.so.0, so how will an
+additional -lpthread at link time make a difference?
 
-1. An explicit host-foo package, used by syslinux and u-boot. In the case
-of u-boot, it's even a separate package u-boot-tools in package/
-
-2. Implicit when installing to target, used by grub, and grub2 (and by
-this patch as well). In the case of grub2, nothing is installed to target
-in fact, instead it's installed to HOST_DIR.
-
- So maybe we should converge on a single mechanism for all
-bootloader-host-tools. I'm personally in favour of option 1, but I have
-no strong opinion.
 
  Regards,
  Arnout
 
 
 > 
-> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
-> ---
->  boot/syslinux/syslinux.mk | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
-> index eedc364..7b3f9cf 100644
-> --- a/boot/syslinux/syslinux.mk
-> +++ b/boot/syslinux/syslinux.mk
-> @@ -11,7 +11,6 @@ SYSLINUX_SITE    = $(BR2_KERNEL_MIRROR)/linux/utils/boot/syslinux/4.xx/
->  SYSLINUX_LICENSE = GPLv2+
->  SYSLINUX_LICENSE_FILES = COPYING
->  
-> -SYSLINUX_INSTALL_TARGET = NO
->  SYSLINUX_INSTALL_IMAGES = YES
->  
->  SYSLINUX_DEPENDENCIES = host-nasm host-util-linux
-> @@ -23,6 +22,12 @@ define SYSLINUX_BUILD_CMDS
->  	$(TARGET_MAKE_ENV) $(MAKE) CC="$(HOSTCC) -idirafter $(HOST_DIR)/usr/include $(HOST_LDFLAGS)" AR="$(HOSTAR)" -C $(@D)
->  endef
->  
-> +define SYSLINUX_INSTALL_TARGET_CMDS
-> +	# While the actual bootloader is compiled for the target, several
-> +	# utilities for installing the bootloader are meant for the host.
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) INSTALLROOT=$(HOST_DIR) install
-> +endef
-> +
->  SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_ISOLINUX) += isolinux.bin
->  SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_PXELINUX) += pxelinux.bin
->  
+> Regards,
+> Yann E. MORIN.
 > 
 
 
