@@ -1,72 +1,77 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Mon, 17 Mar 2014 11:57:07 +0100
-Subject: [Buildroot] [PATCH] libndp: new package
-Message-ID: <1395053827-1966-1-git-send-email-yegorslists@googlemail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 17 Mar 2014 09:19:46 -0300
+Subject: [Buildroot] [PATCH] libpng: security bump to version 1.6.10
+Message-ID: <1395058786-31421-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Fixes CVE-2014-0333.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Config.in        |    1 +
- package/libndp/Config.in |   10 ++++++++++
- package/libndp/libndp.mk |   15 +++++++++++++++
- 3 files changed, 26 insertions(+), 0 deletions(-)
- create mode 100644 package/libndp/Config.in
- create mode 100644 package/libndp/libndp.mk
+ package/libpng/libpng-01-disable-tools.patch | 24 ++++++++++++------------
+ package/libpng/libpng.mk                     |  2 +-
+ 2 files changed, 13 insertions(+), 13 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 70e5a7f..f51a16f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -706,6 +706,7 @@ source "package/libmbus/Config.in"
- source "package/libmicrohttpd/Config.in"
- source "package/libmnl/Config.in"
- source "package/libmodbus/Config.in"
-+source "package/libndp/Config.in"
- source "package/libnetfilter_acct/Config.in"
- source "package/libnetfilter_conntrack/Config.in"
- source "package/libnetfilter_cthelper/Config.in"
-diff --git a/package/libndp/Config.in b/package/libndp/Config.in
-new file mode 100644
-index 0000000..516ac05
---- /dev/null
-+++ b/package/libndp/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_LIBNDP
-+	bool "libndp"
-+	depends on BR2_INET_IPV6
-+	help
-+	  This package contains a library which provides a wrapper
-+	  for IPv6 Neighbor Discovery Protocol. It also provides a tool
-+	  named ndptool for sending and receiving NDP messages.
-+
-+comment "libndp needs a toolchain w/ IPv6"
-+	depends on !BR2_INET_IPV6
-diff --git a/package/libndp/libndp.mk b/package/libndp/libndp.mk
-new file mode 100644
-index 0000000..af58c6e
---- /dev/null
-+++ b/package/libndp/libndp.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# libndp
-+#
-+################################################################################
-+
-+LIBNDP_VERSION = v1.2
-+LIBNDP_SITE = $(call github,jpirko,libndp,$(LIBNDP_VERSION))
-+LIBNDP_LICENSE = LGPLv2.1
-+LIBNDP_LICENSE_FILES = COPYING
-+LIBNDP_AUTORECONF = YES
-+LIBNDP_INSTALL_STAGING = YES
-+LIBNDP_CONF_OPT = --disable-debug
-+
-+$(eval $(autotools-package))
+diff --git a/package/libpng/libpng-01-disable-tools.patch b/package/libpng/libpng-01-disable-tools.patch
+index cd7040c..e30eca9 100644
+--- a/package/libpng/libpng-01-disable-tools.patch
++++ b/package/libpng/libpng-01-disable-tools.patch
+@@ -4,27 +4,27 @@ in a non-interactive embedded system.
+ 
+ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ 
+-diff -Nura libpng-1.6.6.orig/Makefile.am libpng-1.6.6/Makefile.am
+---- libpng-1.6.6.orig/Makefile.am	2013-10-27 19:13:39.183376955 -0300
+-+++ libpng-1.6.6/Makefile.am	2013-10-27 19:13:50.388744191 -0300
++diff -Nura libpng-1.6.10.orig/Makefile.am libpng-1.6.10/Makefile.am
++--- libpng-1.6.10.orig/Makefile.am	2014-03-17 08:51:25.812005079 -0300
+++++ libpng-1.6.10/Makefile.am	2014-03-17 09:14:28.807586433 -0300
+ @@ -10,7 +10,7 @@
+- check_PROGRAMS= pngtest pngunknown pngstest pngvalid
++ check_PROGRAMS= pngtest pngunknown pngstest pngvalid pngimage
+  
+  # Utilities - installed
+ -bin_PROGRAMS= pngfix png-fix-itxt
+ +bin_PROGRAMS=
+  
+- pngtest_SOURCES = pngtest.c
+- pngtest_LDADD = libpng at PNGLIB_MAJOR@@PNGLIB_MINOR at .la
+-diff -Nura libpng-1.6.6.orig/Makefile.in libpng-1.6.6/Makefile.in
+---- libpng-1.6.6.orig/Makefile.in	2013-10-27 19:13:39.180376856 -0300
+-+++ libpng-1.6.6/Makefile.in	2013-10-27 19:14:55.332872643 -0300
+-@@ -59,7 +59,7 @@
++ # This ensures that pnglibconf.h gets built at the start of 'make all' or
++ # 'make check', but it does not add dependencies to the individual programs,
++diff -Nura libpng-1.6.10.orig/Makefile.in libpng-1.6.10/Makefile.in
++--- libpng-1.6.10.orig/Makefile.in	2014-03-17 08:51:25.807005070 -0300
+++++ libpng-1.6.10/Makefile.in	2014-03-17 09:14:44.846617623 -0300
++@@ -87,7 +87,7 @@
+  host_triplet = @host@
+  check_PROGRAMS = pngtest$(EXEEXT) pngunknown$(EXEEXT) \
+- 	pngstest$(EXEEXT) pngvalid$(EXEEXT)
++ 	pngstest$(EXEEXT) pngvalid$(EXEEXT) pngimage$(EXEEXT)
+ -bin_PROGRAMS = pngfix$(EXEEXT) png-fix-itxt$(EXEEXT)
+ +bin_PROGRAMS =
+  @PNG_ARM_NEON_TRUE at am__append_1 = arm/arm_init.c\
+- @PNG_ARM_NEON_TRUE@	arm/filter_neon.S
++ @PNG_ARM_NEON_TRUE@	arm/filter_neon.S arm/filter_neon_intrinsics.c
+  
+diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
+index 0bfe7d1..cdc80f1 100644
+--- a/package/libpng/libpng.mk
++++ b/package/libpng/libpng.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBPNG_VERSION = 1.6.9
++LIBPNG_VERSION = 1.6.10
+ LIBPNG_SERIES = 16
+ LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
+ LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng${LIBPNG_SERIES}/$(LIBPNG_VERSION)
 -- 
-1.7.7
+1.8.3.2
