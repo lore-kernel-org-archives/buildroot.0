@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 Mar 2014 00:04:11 +0100
-Subject: [Buildroot] [PATCH 1/4] legal-info: extract even no-redistribute
-	packages
+Date: Tue, 18 Mar 2014 00:04:12 +0100
+Subject: [Buildroot] [PATCH 2/4] legal-info: save license files even for
+	no-redistribute packages
 In-Reply-To: <cover.1395097170.git.yann.morin.1998@free.fr>
 References: <cover.1395097170.git.yann.morin.1998@free.fr>
-Message-ID: <5d5bddd893ac6d6af3bf8caad0e27cfd78b2b960.1395097170.git.yann.morin.1998@free.fr>
+Message-ID: <dbdd65bfe908d6eead2e047dff4c8bb96e236ee3.1395097170.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,79 +13,67 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Currently, if a package is marked _REDISTRIBUTE = NO, then legal-info
-will not try to extract it first.
+The reason to save license files even for no-redistribute packages
+is that the license still applies to the files distributed as part
+of the rootfs, even if the sources are not themselves redistributed.
 
-If that package also declares some _LICENSE_FILES, legal-info fails
-if it is the only action we're trying to run:
+Move the copy of license files out of the non-local, non-overriden
+package case.
 
-    $ cat defconfig
-    BR2_INIT_NONE=y
-    BR2_PACKAGE_LIBFSLCODEC=y
-    $ make BR2_DEFCONFIG=$(pwd)/defconfig defconfig
-    $ make libfslcodec-legal-info
-    /bin/sh: /home/ymorin/dev/buildroot/O/legal-info/licenses.txt: No such file or directory
-    make[1]: *** [libfslcodec-legal-info] Error 1
-
-Fix this by always having legal-info extract the archives if one or
-more _LICENSE_FILES are specified.
-
-We do this for all types of packages: overriden, local or 'normal'
-remote packages. Even though we do not save the sources for the
-overriden or local packages, we need to save their licensing info,
-so we need to extract them.
-
-This implies that we now need to explicitly add PKG-source as a dependency
-of legal-info for pacakges we want to save (ie. redistributable, non-local
-and non-overriden packages).
-
+Reported-by: Luca Ceresoli <luca@lucaceresoli.net>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Luca Ceresoli <luca@lucaceresoli.net>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Fabio Porcedda <fabio.porcedda@gmail.com>
-
 ---
-Changes v3 -> v4:
-  - legal-info needs to depend on PKG-source when it needs to save a
-    package's tarball
-
-Changes v2 -> v3:
-  - don't include source URL of no-redistribute, or overriden, or local
-    packages in the manifest
-
-Changes v1 -> v2:
-  - this is not fixing the autobuilders failure it was written to fix
-    so remove the references to such build failures  (Thomas P)
-  - also extract overriden and local packages  (Fabio)
----
- package/pkg-generic.mk | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ package/pkg-generic.mk | 27 ++++++++++++++++-----------
+ 1 file changed, 16 insertions(+), 11 deletions(-)
 
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 339c3eb..3d8f0da 100644
+index 3d8f0da..006f862 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -555,11 +555,18 @@ $(2)_MANIFEST_LICENSE_FILES = $$($(2)_LICENSE_FILES)
- endif
- $(2)_MANIFEST_LICENSE_FILES ?= not saved
+@@ -575,6 +575,22 @@ $(2)_MANIFEST_TARBALL ?= not saved
  
-+# If the package declares _LICENSE_FILES, we need to extract it,
-+# for overriden, local or normal remote packages alike, whether
-+# we want to redistribute it or not.
-+ifneq ($$($(2)_LICENSE_FILES),)
-+$(1)-legal-info: $(1)-extract
-+endif
+ # legal-info: produce legally relevant info.
+ $(1)-legal-info:
++# Save license files if defined
++# We save the license files for any kind of package: normal, local,
++# overriden, or non-redistributable alike.
++# The reason to save license files even for no-redistribute packages
++# is that the license still applies to the files distributed as part
++# of the rootfs, even if the sources are not themselves redistributed.
++ifeq ($(call qstrip,$$($(2)_LICENSE_FILES)),)
++	@$(call legal-license-nofiles,$$($(2)_RAWNAME),$(call UPPERCASE,$(4)))
++	@$(call legal-warning-pkg,$$($(2)_RAWNAME),cannot save license ($(2)_LICENSE_FILES not defined))
++else
++# Double dollar signs are really needed here, to catch host packages
++# without explicit HOST_FOO_LICENSE_FILES assignment, also in case they
++# have multiple license files.
++	@$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$($(2)_RAWNAME),$$(F),$$($(2)_DIR)/$$(F),$(call UPPERCASE,$(4)))$$(sep))
++endif # license files
 +
+ # Packages without a source are assumed to be part of Buildroot, skip them.
+ ifneq ($(call qstrip,$$($(2)_SOURCE)),)
+ 
+@@ -588,17 +604,6 @@ else ifneq ($$($(2)_OVERRIDE_SRCDIR),)
+ else
+ # Other packages
+ 
+-# Save license files if defined
+-ifeq ($(call qstrip,$$($(2)_LICENSE_FILES)),)
+-	@$(call legal-license-nofiles,$$($(2)_RAWNAME),$(call UPPERCASE,$(4)))
+-	@$(call legal-warning-pkg,$$($(2)_RAWNAME),cannot save license ($(2)_LICENSE_FILES not defined))
+-else
+-# Double dollar signs are really needed here, to catch host packages
+-# without explicit HOST_FOO_LICENSE_FILES assignment, also in case they
+-# have multiple license files.
+-	@$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$($(2)_RAWNAME),$$(F),$$($(2)_DIR)/$$(F),$(call UPPERCASE,$(4)))$$(sep))
+-endif # license files
+-
  ifeq ($$($(2)_REDISTRIBUTE),YES)
- ifneq ($$($(2)_SITE_METHOD),local)
- ifneq ($$($(2)_SITE_METHOD),override)
--# Packages that have a tarball need it downloaded and extracted beforehand
--$(1)-legal-info: $(1)-extract $(REDIST_SOURCES_DIR_$(call UPPERCASE,$(4)))
-+# We need to download the package sources if we are to save it
-+$(1)-legal-info: $(1)-source $(REDIST_SOURCES_DIR_$(call UPPERCASE,$(4)))
- $(2)_MANIFEST_TARBALL = $$($(2)_SOURCE)
- endif
- endif
+ # Copy the source tarball (just hardlink if possible)
+ 	@cp -l $(DL_DIR)/$$($(2)_SOURCE) $(REDIST_SOURCES_DIR_$(call UPPERCASE,$(4))) 2>/dev/null || \
 -- 
 1.8.3.2
