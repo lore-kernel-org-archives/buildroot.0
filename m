@@ -1,77 +1,44 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 17 Mar 2014 09:19:46 -0300
-Subject: [Buildroot] [PATCH] libpng: security bump to version 1.6.10
-Message-ID: <1395058786-31421-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 17 Mar 2014 13:24:24 +0100
+Subject: [Buildroot] Error building Qt5Multimedia
+In-Reply-To: <53269705.6060805@gmail.com>
+References: <53269705.6060805@gmail.com>
+Message-ID: <CAAXf6LVoTKqC61B2fPbwp-9LQZ1ephfpEodHVfqedB7SPyn7kg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2014-0333.
+Hi Marco,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libpng/libpng-01-disable-tools.patch | 24 ++++++++++++------------
- package/libpng/libpng.mk                     |  2 +-
- 2 files changed, 13 insertions(+), 13 deletions(-)
+On Mon, Mar 17, 2014 at 7:32 AM, Marco Trapanese
+<marcotrapanese@gmail.com> wrote:
+> Hello,
+> I ran into another error building Qt5:
+>
+> cp: impossibile eseguire stat di
+> "/home/marco/dev/buildroot/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/libqgsttools*.so.*":
+> File o directory non esistente
+>
+> It says it doesn't find libqgsttools*.so.*, I searched in the nconfig (using
+> F8) and using find -name in the package directory without chance.
+>
+> Which package is required?
+>
 
-diff --git a/package/libpng/libpng-01-disable-tools.patch b/package/libpng/libpng-01-disable-tools.patch
-index cd7040c..e30eca9 100644
---- a/package/libpng/libpng-01-disable-tools.patch
-+++ b/package/libpng/libpng-01-disable-tools.patch
-@@ -4,27 +4,27 @@ in a non-interactive embedded system.
- 
- Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- 
--diff -Nura libpng-1.6.6.orig/Makefile.am libpng-1.6.6/Makefile.am
----- libpng-1.6.6.orig/Makefile.am	2013-10-27 19:13:39.183376955 -0300
--+++ libpng-1.6.6/Makefile.am	2013-10-27 19:13:50.388744191 -0300
-+diff -Nura libpng-1.6.10.orig/Makefile.am libpng-1.6.10/Makefile.am
-+--- libpng-1.6.10.orig/Makefile.am	2014-03-17 08:51:25.812005079 -0300
-++++ libpng-1.6.10/Makefile.am	2014-03-17 09:14:28.807586433 -0300
- @@ -10,7 +10,7 @@
-- check_PROGRAMS= pngtest pngunknown pngstest pngvalid
-+ check_PROGRAMS= pngtest pngunknown pngstest pngvalid pngimage
-  
-  # Utilities - installed
- -bin_PROGRAMS= pngfix png-fix-itxt
- +bin_PROGRAMS=
-  
-- pngtest_SOURCES = pngtest.c
-- pngtest_LDADD = libpng at PNGLIB_MAJOR@@PNGLIB_MINOR at .la
--diff -Nura libpng-1.6.6.orig/Makefile.in libpng-1.6.6/Makefile.in
----- libpng-1.6.6.orig/Makefile.in	2013-10-27 19:13:39.180376856 -0300
--+++ libpng-1.6.6/Makefile.in	2013-10-27 19:14:55.332872643 -0300
--@@ -59,7 +59,7 @@
-+ # This ensures that pnglibconf.h gets built at the start of 'make all' or
-+ # 'make check', but it does not add dependencies to the individual programs,
-+diff -Nura libpng-1.6.10.orig/Makefile.in libpng-1.6.10/Makefile.in
-+--- libpng-1.6.10.orig/Makefile.in	2014-03-17 08:51:25.807005070 -0300
-++++ libpng-1.6.10/Makefile.in	2014-03-17 09:14:44.846617623 -0300
-+@@ -87,7 +87,7 @@
-  host_triplet = @host@
-  check_PROGRAMS = pngtest$(EXEEXT) pngunknown$(EXEEXT) \
-- 	pngstest$(EXEEXT) pngvalid$(EXEEXT)
-+ 	pngstest$(EXEEXT) pngvalid$(EXEEXT) pngimage$(EXEEXT)
- -bin_PROGRAMS = pngfix$(EXEEXT) png-fix-itxt$(EXEEXT)
- +bin_PROGRAMS =
-  @PNG_ARM_NEON_TRUE at am__append_1 = arm/arm_init.c\
-- @PNG_ARM_NEON_TRUE@	arm/filter_neon.S
-+ @PNG_ARM_NEON_TRUE@	arm/filter_neon.S arm/filter_neon_intrinsics.c
-  
-diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
-index 0bfe7d1..cdc80f1 100644
---- a/package/libpng/libpng.mk
-+++ b/package/libpng/libpng.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBPNG_VERSION = 1.6.9
-+LIBPNG_VERSION = 1.6.10
- LIBPNG_SERIES = 16
- LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
- LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng${LIBPNG_SERIES}/$(LIBPNG_VERSION)
--- 
-1.8.3.2
+I created a build with your .config file, and did not have any error.
+libqgsttools is present in qt5multimedia itself:
+
+output/build/qt5multimedia-5.2.1/lib/libqgsttools_p.so.1.0.0
+output/build/qt5multimedia-5.2.1/lib/libqgsttools_p.so.1.0
+output/build/qt5multimedia-5.2.1/lib/libqgsttools_p.so.1
+output/build/qt5multimedia-5.2.1/lib/libqgsttools_p.so
+output/build/qt5multimedia-5.2.1/lib/libqgsttools_p.prl
+
+Did you do something special in your buildroot directory/repo ?
+Try starting from a clean environment:
+make clean all
+
+Best regards,
+Thomas
