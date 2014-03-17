@@ -1,131 +1,197 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Mon, 17 Mar 2014 15:32:58 +0100
-Subject: [Buildroot] [PATCH] eudev: bump to version 1.5.2.
-Message-ID: <1395066778-20800-1-git-send-email-eric.le.bihan.dev@free.fr>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 17 Mar 2014 15:59:23 +0100
+Subject: [Buildroot] Few questions external toolchain
+In-Reply-To: <530E6EC9.6090400@gmail.com>
+References: <530B8CEA.90306@gmail.com> <530C6DD2.4070605@gmail.com>
+ <CAAXf6LUbFzxUgz+kkes-f7TO0as40kDuaF+v6BG2neWEBeR-hw@mail.gmail.com>
+ <530E1C12.9090400@gmail.com> <530E60FF.6090300@mind.be>
+ <530E6EC9.6090400@gmail.com>
+Message-ID: <CAAXf6LViJ2jLz36qkfTkyTiMH+G5aLsZ+qA_Sbkq16Av+kvfKg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This version of eudev is synced with systemd 210 (notably gudev API
-changes).
+Hi Marco,
 
-It comes with an upstream patch to fix a build error involving
-<fcntl.h>.
+On Wed, Feb 26, 2014 at 11:46 PM, Marco Trapanese
+<marcotrapanese@gmail.com> wrote:
+> Il 26/02/2014 22:47, Arnout Vandecappelle ha scritto:
+>
+>> This smells like our external toolchain logic doesn't properly locate and
+>> copy the sysroot. Can you verify if output/staging/usr/lib/crt1.o exists?
+>
+>
+>
+> Yes, it exists!
+>
+>
+>
+>> Perhaps if you can give the URL of this external toolchain, we can have a
+>> look? Regards, Arnout
+>
+>
+>
+> https://github.com/embest-tech/fsl-linaro-toolchain
+>
 
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
----
- ...e-87-fails-to-build-on-linux-headers-3.13.patch |   85 ++++++++++++++++++++
- package/eudev/eudev.mk                             |    4 +-
- 2 files changed, 87 insertions(+), 2 deletions(-)
- create mode 100644 package/eudev/eudev-0001-Fix-issue-87-fails-to-build-on-linux-headers-3.13.patch
+I finally took some time to look into this, sorry for the long delay.
+I can indeed reproduce this problem:
 
-diff --git a/package/eudev/eudev-0001-Fix-issue-87-fails-to-build-on-linux-headers-3.13.patch b/package/eudev/eudev-0001-Fix-issue-87-fails-to-build-on-linux-headers-3.13.patch
-new file mode 100644
-index 0000000..80f7aa8
---- /dev/null
-+++ b/package/eudev/eudev-0001-Fix-issue-87-fails-to-build-on-linux-headers-3.13.patch
-@@ -0,0 +1,85 @@
-+From c5a77c7d10bafac25deca8e3c36946df0dc43071 Mon Sep 17 00:00:00 2001
-+From: "Anthony G. Basile" <blueness@gentoo.org>
-+Date: Sat, 15 Mar 2014 08:16:41 -0400
-+Subject: [PATCH] Fix issue #87: fails to build on linux headers 3.13
-+
-+Commit 80b10107cb added #include <linux/fcntl.h> in
-+src/accelerometer and friends for builds on uclibc.
-+This only works with glibc and musl systems with
-+linux headers 3.9 but fails with linux headers 3.13.
-+
-+We keep <linux/fcntl.h> but drop <fcntl.h>.
-+
-+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-+Signed-off-by: Anthony G. Basile <blueness@gentoo.org>
-+---
-+ src/accelerometer/accelerometer.c |    1 -
-+ src/ata_id/ata_id.c               |    1 -
-+ src/collect/collect.c             |    1 -
-+ src/mtd_probe/mtd_probe.c         |    1 -
-+ src/scsi_id/scsi_serial.c         |    1 -
-+ 5 files changed, 5 deletions(-)
-+
-+diff --git a/src/accelerometer/accelerometer.c b/src/accelerometer/accelerometer.c
-+index f65631a..386775b 100644
-+--- a/src/accelerometer/accelerometer.c
-++++ b/src/accelerometer/accelerometer.c
-+@@ -50,7 +50,6 @@
-+ #include <math.h>
-+ #include <sys/types.h>
-+ #include <sys/stat.h>
-+-#include <fcntl.h>
-+ #include <stdlib.h>
-+ #include <unistd.h>
-+ #include <getopt.h>
-+diff --git a/src/ata_id/ata_id.c b/src/ata_id/ata_id.c
-+index a25c713..500669c 100644
-+--- a/src/ata_id/ata_id.c
-++++ b/src/ata_id/ata_id.c
-+@@ -23,7 +23,6 @@
-+ #include <stdlib.h>
-+ #include <stdint.h>
-+ #include <unistd.h>
-+-#include <fcntl.h>
-+ #include <ctype.h>
-+ #include <string.h>
-+ #include <errno.h>
-+diff --git a/src/collect/collect.c b/src/collect/collect.c
-+index fbaf87f..7fefc62 100644
-+--- a/src/collect/collect.c
-++++ b/src/collect/collect.c
-+@@ -24,7 +24,6 @@
-+ #include <stddef.h>
-+ #include <unistd.h>
-+ #include <signal.h>
-+-#include <fcntl.h>
-+ #include <errno.h>
-+ #include <string.h>
-+ #include <getopt.h>
-+diff --git a/src/mtd_probe/mtd_probe.c b/src/mtd_probe/mtd_probe.c
-+index e604a72..bab2e8e 100644
-+--- a/src/mtd_probe/mtd_probe.c
-++++ b/src/mtd_probe/mtd_probe.c
-+@@ -22,7 +22,6 @@
-+ #include <mtd/mtd-user.h>
-+ #include <sys/types.h>
-+ #include <sys/stat.h>
-+-#include <fcntl.h>
-+ #include <unistd.h>
-+ #include <stdlib.h>
-+ #include <linux/fcntl.h>
-+diff --git a/src/scsi_id/scsi_serial.c b/src/scsi_id/scsi_serial.c
-+index b60b154..7c5f7a3 100644
-+--- a/src/scsi_id/scsi_serial.c
-++++ b/src/scsi_id/scsi_serial.c
-+@@ -23,7 +23,6 @@
-+ #include <stdio.h>
-+ #include <errno.h>
-+ #include <string.h>
-+-#include <fcntl.h>
-+ #include <stdlib.h>
-+ #include <unistd.h>
-+ #include <syslog.h>
-+--
-+1.7.9.5
-+
-diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-index 95aa1ce..a2fe528 100644
---- a/package/eudev/eudev.mk
-+++ b/package/eudev/eudev.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--EUDEV_VERSION = 1.3
--EUDEV_SITE = $(call github,gentoo,eudev,v$(EUDEV_VERSION))
-+EUDEV_VERSION = 1.5.2
-+EUDEV_SITE = $(call github,gentoo,eudev,$(EUDEV_VERSION))
- EUDEV_LICENSE = GPLv2+ (programs), LGPLv2.1+ (libraries)
- EUDEV_LICENSE_FILES = COPYING
- EUDEV_INSTALL_STAGING = YES
--- 
-1.7.9.5
+$ BR2_DEBUG_WRAPPER=2 ./output/host/usr/bin/arm-linux-gcc /tmp/test.c
+Toolchain wrapper executing:
+    '/home/tdescham/repo/contrib/fsl-linaro-toolchain/bin/arm-linux-gcc'
+    '--sysroot'
+    '/home/tdescham/repo/contrib/buildroot-toolchain-marco/output/host/usr/arm-buildroot-linux-gnueabi/sysroot'
+    '-mabi=aapcs-linux'
+    '-msoft-float'
+    '-marm'
+    '-pipe'
+    '-mfloat-abi=soft'
+    '-march=armv5te'
+    '-mcpu=arm926ej-s'
+    '/tmp/test.c'
+/home/tdescham/repo/contrib/fsl-linaro-toolchain/bin/../lib/gcc/arm-fsl-linux-gnueabi/4.6.2/../../../../arm-fsl-linux-gnueabi/bin/ld:
+cannot find crt1.o: No such file or directory
+/home/tdescham/repo/contrib/fsl-linaro-toolchain/bin/../lib/gcc/arm-fsl-linux-gnueabi/4.6.2/../../../../arm-fsl-linux-gnueabi/bin/ld:
+cannot find crti.o: No such file or directory
+/home/tdescham/repo/contrib/fsl-linaro-toolchain/bin/../lib/gcc/arm-fsl-linux-gnueabi/4.6.2/../../../../arm-fsl-linux-gnueabi/bin/ld:
+cannot find -lgcc_s
+/home/tdescham/repo/contrib/fsl-linaro-toolchain/bin/../lib/gcc/arm-fsl-linux-gnueabi/4.6.2/../../../../arm-fsl-linux-gnueabi/bin/ld:
+cannot find -lc
+/home/tdescham/repo/contrib/fsl-linaro-toolchain/bin/../lib/gcc/arm-fsl-linux-gnueabi/4.6.2/../../../../arm-fsl-linux-gnueabi/bin/ld:
+cannot find -lgcc_s
+/home/tdescham/repo/contrib/fsl-linaro-toolchain/bin/../lib/gcc/arm-fsl-linux-gnueabi/4.6.2/../../../../arm-fsl-linux-gnueabi/bin/ld:
+cannot find crtn.o: No such file or directory
+collect2: ld returned 1 exit status
+
+
+./output/host/usr/bin/arm-linux-gcc -print-file-name=crt1.o
+crt1.o
+
+
+The details of gcc provided with the toolchain:
+./output/host/usr/bin/arm-linux-gcc -v
+Using built-in specs.
+COLLECT_GCC=/home/tdescham/repo/contrib/fsl-linaro-toolchain/bin/arm-linux-gcc
+COLLECT_LTO_WRAPPER=/home/tdescham/repo/contrib/fsl-linaro-toolchain/bin/../libexec/gcc/arm-fsl-linux-gnueabi/4.6.2/lto-wrapper
+Target: arm-fsl-linux-gnueabi
+Configured with:
+/work/build/.build/src/gcc-linaro-4.6-2011.06-0/configure
+--build=i686-build_pc-linux-gnu --host=i686-build_pc-linux-gnu
+--target=arm-fsl-linux-gnueabi
+--prefix=/work/fsl-linaro-toolchain-2.13
+--with-sysroot=/work/fsl-linaro-toolchain-2.13/arm-fsl-linux-gnueabi/multi-libs
+--enable-languages=c,c++ --with-pkgversion='Freescale MAD -- Linaro
+2011.07 -- Built at 2011/08/10 09:20' --enable-__cxa_atexit
+--disable-libmudflap --disable-libgomp --disable-libssp
+--with-gmp=/work/build/.build/arm-fsl-linux-gnueabi/build/static
+--with-mpfr=/work/build/.build/arm-fsl-linux-gnueabi/build/static
+--with-mpc=/work/build/.build/arm-fsl-linux-gnueabi/build/static
+--with-ppl=/work/build/.build/arm-fsl-linux-gnueabi/build/static
+--with-cloog=/work/build/.build/arm-fsl-linux-gnueabi/build/static
+--with-libelf=/work/build/.build/arm-fsl-linux-gnueabi/build/static
+--with-host-libstdcxx='-static-libgcc -Wl,-Bstatic,-lstdc++,-Bdynamic
+-lm -L/work/build/.build/arm-fsl-linux-gnueabi/build/static/lib -lpwl'
+--enable-threads=posix --enable-target-optspace --enable-plugin
+--enable-multilib
+--with-local-prefix=/work/fsl-linaro-toolchain-2.13/arm-fsl-linux-gnueabi/multi-libs
+--disable-nls --enable-c99 --enable-long-long --with-system-zlib
+Thread model: posix
+gcc version 4.6.2 20110630 (prerelease) (Freescale MAD -- Linaro
+2011.07 -- Built at 2011/08/10 09:20)
+
+
+Looking at why crt1.o is not found, using strace, following locations are tried:
+
+8119  access("/home/tdescham/repo/contrib/fsl-linaro-toolchain/bin/../lib/gcc/arm-fsl-linux-gnueabi/4.6.2/armv5/crt1.o",
+R_OK) = -1 ENOENT (No such file or directory)
+8119  access("/home/tdescham/repo/contrib/fsl-linaro-toolchain/bin/../lib/gcc/armv5/crt1.o",
+R_OK) = -1 ENOENT (No such file or directory)
+8119  access("/home/tdescham/repo/contrib/fsl-linaro-toolchain/bin/../lib/gcc/arm-fsl-linux-gnueabi/4.6.2/../../../../arm-fsl-linux-gnueabi/lib/arm-fsl-linux-gnueabi/4.6.2/armv5/crt1.o",
+R_OK) = -1 ENOENT (No such file or directory)
+8119  access("/home/tdescham/repo/contrib/fsl-linaro-toolchain/bin/../lib/gcc/arm-fsl-linux-gnueabi/4.6.2/../../../../arm-fsl-linux-gnueabi/lib/armv5/crt1.o",
+R_OK) = -1 ENOENT (No such file or directory)
+8119  access("/home/tdescham/repo/contrib/buildroot-toolchain-marco/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/armv5/lib/arm-fsl-linux-gnueabi/4.6.2/armv5/crt1.o",
+R_OK) = -1 ENOENT (No such file or directory)
+8119  access("/home/tdescham/repo/contrib/buildroot-toolchain-marco/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/armv5/lib/armv5/crt1.o",
+R_OK) = -1 ENOENT (No such file or directory)
+8119  access("/home/tdescham/repo/contrib/buildroot-toolchain-marco/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/armv5/usr/lib/arm-fsl-linux-gnueabi/4.6.2/armv5/crt1.o",
+R_OK) = -1 ENOENT (No such file or directory)
+8119  access("/home/tdescham/repo/contrib/buildroot-toolchain-marco/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/armv5/usr/lib/armv5/crt1.o",
+R_OK) = -1 ENOENT (No such file or directory)
+8119  access("/home/tdescham/repo/contrib/fsl-linaro-toolchain/bin/../lib/gcc/arm-fsl-linux-gnueabi/4.6.2/crt1.o",
+R_OK) = -1 ENOENT (No such file or directory)
+8119  access("/home/tdescham/repo/contrib/fsl-linaro-toolchain/bin/../lib/gcc/crt1.o",
+R_OK) = -1 ENOENT (No such file or directory)
+8119  access("/home/tdescham/repo/contrib/fsl-linaro-toolchain/bin/../lib/gcc/arm-fsl-linux-gnueabi/4.6.2/../../../../arm-fsl-linux-gnueabi/lib/arm-fsl-linux-gnueabi/4.6.2/crt1.o",
+R_OK) = -1 ENOENT (No such file or directory)
+8119  access("/home/tdescham/repo/contrib/fsl-linaro-toolchain/bin/../lib/gcc/arm-fsl-linux-gnueabi/4.6.2/../../../../arm-fsl-linux-gnueabi/lib/crt1.o",
+R_OK) = -1 ENOENT (No such file or directory)
+8119  access("/home/tdescham/repo/contrib/buildroot-toolchain-marco/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/armv5/lib/arm-fsl-linux-gnueabi/4.6.2/crt1.o",
+R_OK) = -1 ENOENT (No such file or directory)
+8119  access("/home/tdescham/repo/contrib/buildroot-toolchain-marco/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/armv5/lib/crt1.o",
+R_OK) = -1 ENOENT (No such file or directory)
+8119  access("/home/tdescham/repo/contrib/buildroot-toolchain-marco/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/armv5/usr/lib/arm-fsl-linux-gnueabi/4.6.2/crt1.o",
+R_OK) = -1 ENOENT (No such file or directory)
+8119  access("/home/tdescham/repo/contrib/buildroot-toolchain-marco/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/armv5/usr/lib/crt1.o",
+R_OK) = -1 ENOENT (No such file or directory)
+
+
+while the real location is:
+output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/crt1.o
+
+
+If I check the original toolchain directly (outside of
+buildroot):./bin/arm-linux-gcc -print-file-name=crt1.o
+/home/tdescham/repo/contrib/fsl-linaro-toolchain/bin/../arm-fsl-linux-gnueabi/multi-libs/default/usr/lib/crt1.o
+
+
+So at least the original toolchain can find its crt1.o.
+
+Going back to buildroot, here are some variables determined in the
+external toolchain logic:
+SYSROOT_DIR=/home/tdescham/repo/contrib/fsl-linaro-toolchain/arm-fsl-linux-gnueabi/multi-libs/default/
+ARCH_SYSROOT_DIR=/home/tdescham/repo/contrib/fsl-linaro-toolchain/arm-fsl-linux-gnueabi/multi-libs/armv5/
+ARCH_LIB_DIR=lib
+SUPPORT_LIB_DIR=
+ARCH_SUBDIR=/home/tdescham/repo/contrib/fsl-linaro-toolchain/arm-fsl-linux-gnueabi/multi-libs/armv5/
+
+During copying of the toolchain files, I do see following message:
+
+ln: target '/home/tdescham/repo/contrib/buildroot-toolchain-marco/output/host/usr/arm-buildroot-linux-gnueabi/sysroot//home/tdescham/repo/contrib/fsl-linaro-toolchain/arm-fsl-linux-gnueabi/multi-libs/armv5/'
+is not a directory: No such file or directory
+Symlinking /home/tdescham/repo/contrib/buildroot-toolchain-marco/output/host/usr/arm-buildroot-linux-gnueabi/sysroot//home/tdescham/repo/contrib/fsl-linaro-toolchain/arm-fsl-linux-gnueabi/multi-libs/armv5/
+-> ./../../../../../../../../../
+
+and this message originates from:
+toolchain/helpers.mk:158:               echo "Symlinking
+$(STAGING_DIR)/$${ARCH_SUBDIR} -> $${relpath}" ; \
+
+meaning that ARCH_SUBDIR is not supposed to be an absolute path.
+ARCH_SUBDIR is determined as follows:
+ARCH_SUBDIR=`echo $${ARCH_SYSROOT_DIR} | sed -r -e
+"s:^$${SYSROOT_DIR}(.*)/$$:\1:"`
+
+which essentially strips off SYSROOT_DIR from the beginning of ARCH_SYSROOT_DIR.
+However, there is no common part between both variables in this toolchain:
+
+SYSROOT_DIR=/home/tdescham/repo/contrib/fsl-linaro-toolchain/arm-fsl-linux-gnueabi/multi-libs/default/
+ARCH_SYSROOT_DIR=/home/tdescham/repo/contrib/fsl-linaro-toolchain/arm-fsl-linux-gnueabi/multi-libs/armv5/
+
+so the logic of determining ARCH_SUBDIR is not correct in this case.
+Looking at the strace output given above, the expected ARCH_SUBDIR is
+'armv5'.
+
+However, I don't know what is the best way to handle this.
+One could try to find the greatest common path between SYSROOT_DIR and
+ARCH_SYSROOT_DIR
+(/home/tdescham/repo/contrib/fsl-linaro-toolchain/arm-fsl-linux-gnueabi/multi-libs/)
+and strip that from ARCH_SYSROOT_DIR to get ARCH_SUBDIR, which would
+fix this use case, but sounds not right.
+
+Any input appreciated,
+
+Best regards,
+Thomas
