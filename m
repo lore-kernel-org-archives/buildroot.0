@@ -1,69 +1,45 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 17 Mar 2014 22:56:58 +0100
-Subject: [Buildroot] [PATCH] systemd: bump to version 210.
-In-Reply-To: <1395066342-20668-1-git-send-email-eric.le.bihan.dev@free.fr>
- (Eric Le Bihan's message of "Mon, 17 Mar 2014 15:25:42 +0100")
-References: <1395066342-20668-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <87bnx45w0l.fsf@dell.be.48ers.dk>
+Date: Mon, 17 Mar 2014 23:01:21 +0100
+Subject: [Buildroot] [PATCH] support: properly check for bash as a
+	dependency
+In-Reply-To: <20140317213619.GB3393@free.fr> (Yann E. MORIN's message of "Mon, 
+ 17 Mar 2014 22:36:19 +0100")
+References: <1395052954-1567-1-git-send-email-yann.morin.1998@free.fr>
+ <87k3bs5xc3.fsf@dell.be.48ers.dk> <20140317213619.GB3393@free.fr>
+Message-ID: <877g7s5vta.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Eric" == Eric Le Bihan <eric.le.bihan.dev@free.fr> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > This patch bumps systemd to version 210. Systemd 209 introduced some majors
- > changes, which generated a lot of feedback and bugfixes. This lead to
- > version 210 a few days later.
+ > Peter, All,
 
-And 211 last week. Any reason to not go for 211 right away?
+ >> Is that really still an issue? I just checked a few of the machines I
+ >> often do buildroot builds on and they all have /bin/sh == dash.
 
- > Notable changes in 210:
+ > Some configure-y scripts will run with /bin/sh, but have bashisms in them.
 
- > - dropped dependency on libdbus in favor of internal sd-bus library.
- > - experimental support for kdbus.
- > - introduction of systemd-networkd, a simple network configuration manager.
- > - merge of libsystemd-*.so libraries into libsystemd.so.
- > - changes in Gudev API.
+ > It was reported on IRC by Andrew that switching the system shell from
+ > dash to bash fixed an issue (Andrew, was that with libxml2?).
 
-Another change mentioned in the announcement is:
-
-Oh, and one reminder that kinda got lost when we announced 209: you have
-to enable CONFIG_FHANDLE in your kernel to use systemd >= 209
-successfully, otherwise udev won't find any devices.
-
-But I see we already document and handle that in linux.mk
+I don't think it is libxml2 as the stuff I'm currently doing at $WORK
+uses libxml2 and I haven't seen any issues with /bin/sh = dash.
 
 
- > +++ b/package/systemd/systemd.mk
- > @@ -4,7 +4,7 @@
- >  #
- >  ################################################################################
- 
- > -SYSTEMD_VERSION = 208
- > +SYSTEMD_VERSION = 210
- >  SYSTEMD_SITE = http://www.freedesktop.org/software/systemd/
- >  SYSTEMD_SOURCE = systemd-$(SYSTEMD_VERSION).tar.xz
- >  SYSTEMD_LICENSE = GPLv2+
- > @@ -13,7 +13,6 @@ SYSTEMD_INSTALL_STAGING = YES
- >  SYSTEMD_DEPENDENCIES = \
- >  	host-intltool \
- >  	libcap \
- > -	dbus \
- >  	util-linux \
- >  	kmod \
- >  	host-gperf
- > @@ -44,6 +43,7 @@ SYSTEMD_CONF_OPT += \
- >  	--disable-myhostname \
- >  	--disable-tcpwrap \
- >  	--disable-tests \
- > +	--disable-dbus \
+ >> > -# Check bash
+ >> > -if ! $SHELL --version 2>&1 | grep -q '^GNU bash'; then
+ >> > +# Check bash is the system shell
+ >> > +if ! /bin/sh --version 2>&1 | grep -q '^GNU bash'; then
+ >> 
+ >> FYI, dash doesn't even understand a --version argument:
 
-I guess from this and the list of changes above that dbus is now only a
-runtime dependency, so I added a comment about that in Config.in.
+ > Yes, but it surely does not return something matching "^GNU bash" which
+ > is all we care about.
 
-Committed with that fixed, thanks.
+True.
 
 -- 
 Bye, Peter Korsgaard
