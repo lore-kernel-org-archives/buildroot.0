@@ -1,29 +1,63 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Tue, 18 Mar 2014 12:35:37 -0400
-Subject: [Buildroot] iconv_open, gconv advice
-Message-ID: <CA+-urNS-Ee+SsdsSLCC=1vOHPnCE1POQQNdm66KU+vw46rM+eA@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 18 Mar 2014 17:55:18 +0100
+Subject: [Buildroot] [PATCH] support: properly check for bash as a
+ dependency
+In-Reply-To: <20140318060130.282f5a46@skate>
+References: <1395052954-1567-1-git-send-email-yann.morin.1998@free.fr>
+ <20140318060130.282f5a46@skate>
+Message-ID: <20140318165518.GA3342@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When running mtools on the target, I found out that I get an
-iconv_open error with the x86 external toolchain. I suspect that other
-toolchains have this problem due to the usr/lib/gconv directory not
-being copied to the target for toolchains that have it. My hesitation
-with copying over the gconv directory is that it is quite large for
-how little use I'll get out of it.
+Thomas, All,
 
-Another fix to this problem is simply adding the following line to mtools.mk:
+On 2014-03-18 06:01 +0100, Thomas Petazzoni spake thusly:
+> On Mon, 17 Mar 2014 11:42:34 +0100, Yann E. MORIN wrote:
+> 
+> > So, calling "$SHELL --version" will still return "^GNU bash" no matter
+> > what shell is actually running.
+> > 
+> > Since quite a lot of #!/bin/sh scripts are in fact bash scripts, we
+> > really want to ensure that /bin/sh is bash.
+> 
+> I'm definitely against that. My system has /bin/sh pointing to dash,
+> and Buildroot works fine. One of the thing that annoyed me in
+> OpenEmbedded was its requirements to have /bin/sh be bash.
+> 
+> We clearly don't want that.
 
-MTOOLS_CONF_OPT = ac_cv_header_iconv_h='no'
+I'm just fine with that. :-)
 
-For my setup, I actually like this since my use of mtools shouldn't
-have to deal with any filename characters that require codepage
-handling.
+But the current check is broken anyway, as all it checks is that the
+login shell of the user is bash.
 
-Any thoughts from people on this list?
+  - if we want to work whith dash as the system shell, then the current
+    check is unneeded;
 
-Thanks,
-Frank
+  - if we want to work with dash as the system shell, we don't care what
+    login shell the user is using, as we must also work when this is dash;
+
+  - SHELL is not mandated by POSIX, so it may be empty on a
+    POSIX-compliant shell anyway.
+
+So, we should just remove this check altogether.
+
+> I've just checked the Free Electrons autobuilders, and there are also
+> using dash as /bin/sh. This means that if configure scripts were using
+> bashims unsupported by dash, we would have noticed.
+
+Andrew, what package was the breakage due to?
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
