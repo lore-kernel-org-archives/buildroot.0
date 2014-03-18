@@ -1,63 +1,29 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 Mar 2014 17:55:18 +0100
-Subject: [Buildroot] [PATCH] support: properly check for bash as a
- dependency
-In-Reply-To: <20140318060130.282f5a46@skate>
-References: <1395052954-1567-1-git-send-email-yann.morin.1998@free.fr>
- <20140318060130.282f5a46@skate>
-Message-ID: <20140318165518.GA3342@free.fr>
+From: Will Wagner <will_wagner@carallon.com>
+Date: Tue, 18 Mar 2014 17:21:36 +0000
+Subject: [Buildroot] Status of wayland package
+Message-ID: <532880A0.3020604@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello,
 
-On 2014-03-18 06:01 +0100, Thomas Petazzoni spake thusly:
-> On Mon, 17 Mar 2014 11:42:34 +0100, Yann E. MORIN wrote:
-> 
-> > So, calling "$SHELL --version" will still return "^GNU bash" no matter
-> > what shell is actually running.
-> > 
-> > Since quite a lot of #!/bin/sh scripts are in fact bash scripts, we
-> > really want to ensure that /bin/sh is bash.
-> 
-> I'm definitely against that. My system has /bin/sh pointing to dash,
-> and Buildroot works fine. One of the thing that annoyed me in
-> OpenEmbedded was its requirements to have /bin/sh be bash.
-> 
-> We clearly don't want that.
+I'm just starting to look at a new project and was interested in using 
+wayland.
 
-I'm just fine with that. :-)
+Can anyone tell me the status of the package in buildroot? According to 
+http://wayland.freedesktop.org/building.html there are quite a lot of 
+dependencies for wayland that don't seem to be reflected in buildroot. 
+Is it just that the wayland docs are very out of date?
 
-But the current check is broken anyway, as all it checks is that the
-login shell of the user is bash.
-
-  - if we want to work whith dash as the system shell, then the current
-    check is unneeded;
-
-  - if we want to work with dash as the system shell, we don't care what
-    login shell the user is using, as we must also work when this is dash;
-
-  - SHELL is not mandated by POSIX, so it may be empty on a
-    POSIX-compliant shell anyway.
-
-So, we should just remove this check altogether.
-
-> I've just checked the Free Electrons autobuilders, and there are also
-> using dash as /bin/sh. This means that if configure scripts were using
-> bashims unsupported by dash, we would have noticed.
-
-Andrew, what package was the breakage due to?
-
-Regards,
-Yann E. MORIN.
+Thanks
+Will
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+------------------------------------------------------------------------
+Will Wagner                                     will_wagner at carallon.com
+Development Manager                      Office Tel: +44 (0)20 7471 9224
+Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
+------------------------------------------------------------------------
