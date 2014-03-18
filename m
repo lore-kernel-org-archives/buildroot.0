@@ -1,38 +1,35 @@
-From: Marco Trapanese <marcotrapanese@gmail.com>
-Date: Tue, 18 Mar 2014 12:07:20 +0100
-Subject: [Buildroot] Error building Qt5Multimedia
-In-Reply-To: <CAAXf6LVoTKqC61B2fPbwp-9LQZ1ephfpEodHVfqedB7SPyn7kg@mail.gmail.com>
-References: <53269705.6060805@gmail.com>
- <CAAXf6LVoTKqC61B2fPbwp-9LQZ1ephfpEodHVfqedB7SPyn7kg@mail.gmail.com>
-Message-ID: <532828E8.5040405@gmail.com>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Tue, 18 Mar 2014 13:00:37 +0100
+Subject: [Buildroot] Patchwork cleanup #7: triaging proposal
+In-Reply-To: <20140316160712.GA3267@free.fr>
+References: <CAAXf6LWP0FX4AAGP_ACZHgoxEAEwarpEdHchukxE+V=WJnXROg@mail.gmail.com>
+ <20140316160712.GA3267@free.fr>
+Message-ID: <3293654.U6daepvtBH@sagittea>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Il 17/03/2014 13:24, Thomas De Schampheleire ha scritto:
-> I created a build with your .config file, and did not have any error. 
-> libqgsttools is present in qt5multimedia itself: 
-> output/build/qt5multimedia-5.2.1/lib/libqgsttools_p.so.1.0.0 
-> output/build/qt5multimedia-5.2.1/lib/libqgsttools_p.so.1.0 
-> output/build/qt5multimedia-5.2.1/lib/libqgsttools_p.so.1 
-> output/build/qt5multimedia-5.2.1/lib/libqgsttools_p.so 
-> output/build/qt5multimedia-5.2.1/lib/libqgsttools_p.prl Did you do 
-> something special in your buildroot directory/repo ? Try starting from 
-> a clean environment: make clean all Best regards, Thomas 
+On Sunday 16 March 2014 17:07:12 Yann E. MORIN wrote:
+> Thomas, All,
+> 
+> On 2014-03-16 08:48 +0100, Thomas De Schampheleire spake thusly:
+[...]
+> > [v2] Standardisation of $(BUILD)/.root name
+> > http://patchwork.ozlabs.org/patch/265680/
+> 
+>     Vote C: unsure.
+I am also unsure:
+  - With integration of parallel make, i think this patch does no more apply 
+correctly to master.
 
-Hi Thomas,
-I tried to:
+  - It looks like stamps/ directory is no more used. So, it may be possible to 
+drop stamps/. I continue to think .root should be more visible, but I am not 
+sure about where to place it.
 
-1) git clone again buildroot, in order to have a clean environment
-2) copy my .config file
-3) check it with make nconfig (without change anything)
-4) make
 
-It fails in the same way and under output/build/qt5multimedia-5.2.1/lib 
-there are no libqgsttools* files...
-I can't understand why it fails only on my pc!
-
-Thanks!
-Marco
+-- 
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
