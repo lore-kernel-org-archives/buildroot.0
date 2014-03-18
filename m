@@ -1,83 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Mar 2014 23:55:42 +0100
-Subject: [Buildroot] [PATCH] eigen: (optionally) install unsupported
- modules
-In-Reply-To: <1395173894-4811-2-git-send-email-zinosat@tiscali.it>
-References: <1395173894-4811-1-git-send-email-zinosat@tiscali.it>
- <1395173894-4811-2-git-send-email-zinosat@tiscali.it>
-Message-ID: <20140318235542.2eb029b1@skate>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 19 Mar 2014 00:33:49 +0100
+Subject: [Buildroot] [PATCH] support: properly check bash is available
+Message-ID: <1395185629-728-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Davide Viti,
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-On Tue, 18 Mar 2014 21:18:14 +0100, Davide Viti wrote:
-> From: Davide Viti <d.viti@infosolution.it>
-> 
-> 
-> Signed-off-by: Davide Viti <zinosat@tiscali.it>
+The current check is broken, as it only checks if the user's login
+shell is bash, not what the system shell is.
 
-We probably want the title of the patch to be:
+Mimick the sequence found in the top-level Makefile to search for
+bash, except for the fallback case, where we explicitly check that
+'sh' is bash, by checking if it sets $BASH, so we know the fallback
+case, in the top-level Makefile, to use 'sh' will indeed use bash.
 
-	eigen: add an option to install unsupported modules
+Remove superfluous semi-colons ';' at the end of lines, they are
+not needed in a shell script (this is not C!)
 
->  
-> +if BR2_PACKAGE_EIGEN
-> +
-> +config BR2_PACKAGE_EIGEN_UNSUPPORTED_MODULES
-> +        bool "unsupported modules"
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Cc: Andrew Barnes <andy@outsideglobe.com>
+---
+ support/dependencies/dependencies.sh | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-Indentation is wrong here: there should be one tab before the "bool"
-statement.
-
-> +	help
-> +	  Install eigen unsupported modules
-> +endif
-> +
->  comment "eigen needs a toolchain w/ C++"
->  	depends on !BR2_INSTALL_LIBSTDCPP
-> diff --git a/package/eigen/eigen.mk b/package/eigen/eigen.mk
-> index 5abd464..388dd63 100644
-> --- a/package/eigen/eigen.mk
-> +++ b/package/eigen/eigen.mk
-> @@ -13,6 +13,14 @@ EIGEN_LICENSE_FILES = COPYING.MPL2 COPYING.BSD COPYING.LGPL COPYING.README
->  EIGEN_INSTALL_STAGING = YES
->  EIGEN_INSTALL_TARGET = NO
->  
-> +define EIGEN_INSTALL_UNSUPPORTED_MODULES
-> +	cp -a $(@D)/unsupported $(STAGING_DIR)/usr/include/
-
-I'm a bit worried about having a directory called
-$(STAGING_DIR)/usr/include/unsupported. Shouldn't this directory be
-installed *below* the $(STAGING_DIR)/usr/include/Eigen directory
-created by the normal installation of Eigen?
-
-> +endef
-> +
-> +ifeq ($(BR2_PACKAGE_EIGEN_UNSUPPORTED_MODULES),y)
-> +	EIGEN_POST_INSTALL_STAGING_HOOKS += EIGEN_INSTALL_UNSUPPORTED_MODULES
-> +endif
-
-I believe we normally don't really use post install hooks when there is
-a definition of the staging install commands. Instead, we use the
-following idiom:
-
-ifeq ($(BR2_PACKAGE_EIGEN_UNSUPPORTED_MODULES),y)
-define EIGEN_INSTALL_UNSUPPORTED_MODULES_CMDS
-	cp -a ...
-endef
-endif
-
-define EIGEN_INSTALL_STAGING_CMDS
-	... existing installation steps ...
-	$(EIGEN_INSTALL_UNSUPPORTED_MODULES_CMDS)
-endef
-
-Thomas
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index a8261b3..0566814 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -139,11 +139,15 @@ if [ ! -z "$CXXCOMPILER" ] ; then
+ fi
+ 
+ # Check bash
+-if ! $SHELL --version 2>&1 | grep -q '^GNU bash'; then
++# We only check bash is available, setting SHELL appropriately is done
++# in the top-level Makefile, and we mimick the same sequence here
++if   [ -n "${BASH}" ]; then :
++elif [ -x /bin/bash ]; then :
++elif [ -z "$( sh -c 'echo $BASH' )" ]; then
+ 	echo
+-	echo "You must install 'bash' on your build machine";
+-	exit 1;
+-fi;
++	echo "You must install 'bash' on your build machine"
++	exit 1
++fi
+ 
+ # Check that a few mandatory programs are installed
+ missing_progs="no"
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.3.2
