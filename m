@@ -1,43 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Mar 2014 23:30:03 +0100
-Subject: [Buildroot] [PATCH v3 1/2] libubox: new package
-In-Reply-To: <1395172899-3799-1-git-send-email-yegorslists@googlemail.com>
-References: <1395172899-3799-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20140318233003.779610f2@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 18 Mar 2014 23:32:18 +0100
+Subject: [Buildroot] [PATCH] support: do not depend on bash
+In-Reply-To: <1395173848-15759-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Tue, 18 Mar 2014 21:17:28 +0100")
+References: <1395173848-15759-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87siqfw32l.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yegor Yefremov,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-On Tue, 18 Mar 2014 21:01:38 +0100, Yegor Yefremov wrote:
+ > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > We do want to work properly whatever the system shell or the
+ > user's login shell are.
 
-> +LIBUBOX_VERSION = bbd846ec2d72b2629758b69dc122ac0b0f2c3e4b
-> +LIBUBOX_SITE = git://nbd.name/luci2/libubox.git
-> +LIBUBOX_LICENSE = LGPLv2.1, GPLv2, BSD-3c, MIT
-> +LIBUBOX_INSTALL_STAGING = YES
-> +
-> +ifeq ($(BR2_PACKAGE_LUA),y)
-> +	LIBUBOX_DEPENDENCIES = lua
-> +	LIBUBOX_MAKE_ENV = \
-> +		PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)"	\
-> +		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig"
+ > The current check is anyway broken, as it only checks if the
+ > user's login shell is bash, not what the system shell is.
 
-No. These variables should I believe not be necessary. The
-cmake-package infrastructure should simply use PATH=$(TARGET_PATH) so
-that when a CMake package is built, $(HOST_DIR)/usr/bin/pkg-config is
-used, and this pkg-config variant already knows the right path and
-sysroot for the .pc files.
+ > Remove the check altogether, since it is unneeded, and broken.
 
-I believe Samuel Martin has already sent a patch doing this for the
-CMake package infrastructure.
+But we (currently atleast) do want bash for our own Makefiles (see
+toplevel Makefile). I'm not sure we're completely bashism-free (or if it
+is worth the trouble to be so).
 
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
