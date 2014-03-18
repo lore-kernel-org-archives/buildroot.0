@@ -1,40 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Mar 2014 23:28:03 +0100
-Subject: [Buildroot] [PATCH] pkg-perl: prevents the interactive prompts
-In-Reply-To: <1395169199-31890-1-git-send-email-francois.perrad@gadz.org>
-References: <1395169199-31890-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20140318232803.361f7abf@skate>
+Date: Tue, 18 Mar 2014 23:30:03 +0100
+Subject: [Buildroot] [PATCH v3 1/2] libubox: new package
+In-Reply-To: <1395172899-3799-1-git-send-email-yegorslists@googlemail.com>
+References: <1395172899-3799-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20140318233003.779610f2@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+Dear Yegor Yefremov,
 
-On Tue, 18 Mar 2014 19:59:59 +0100, Francois Perrad wrote:
-> during configure and build steps of Perl/CPAN package.
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/pkg-perl.mk |    3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/package/pkg-perl.mk b/package/pkg-perl.mk
-> index fdf1580..b5fada1 100644
-> --- a/package/pkg-perl.mk
-> +++ b/package/pkg-perl.mk
-> @@ -19,6 +19,9 @@
->  #
->  ################################################################################
->  
-> +# prevents the interactive prompts
-> +export PERL_MM_USE_DEFAULT=1
+On Tue, 18 Mar 2014 21:01:38 +0100, Yegor Yefremov wrote:
 
-Instead of exporting globally this variable, I believe I would prefer
-to see it passed only in the configure and build steps of the
-appropriate package infrastructure, passed explicitly. Like what we do
-for all autoconf arguments and environment variables, for example.
+> +LIBUBOX_VERSION = bbd846ec2d72b2629758b69dc122ac0b0f2c3e4b
+> +LIBUBOX_SITE = git://nbd.name/luci2/libubox.git
+> +LIBUBOX_LICENSE = LGPLv2.1, GPLv2, BSD-3c, MIT
+> +LIBUBOX_INSTALL_STAGING = YES
+> +
+> +ifeq ($(BR2_PACKAGE_LUA),y)
+> +	LIBUBOX_DEPENDENCIES = lua
+> +	LIBUBOX_MAKE_ENV = \
+> +		PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)"	\
+> +		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig"
+
+No. These variables should I believe not be necessary. The
+cmake-package infrastructure should simply use PATH=$(TARGET_PATH) so
+that when a CMake package is built, $(HOST_DIR)/usr/bin/pkg-config is
+used, and this pkg-config variant already knows the right path and
+sysroot for the .pc files.
+
+I believe Samuel Martin has already sent a patch doing this for the
+CMake package infrastructure.
 
 Thanks!
 
