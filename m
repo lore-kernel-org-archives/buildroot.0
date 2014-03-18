@@ -1,42 +1,45 @@
-From: raj <hraj50@yahoo.com>
-Date: Mon, 17 Mar 2014 17:18:46 -0700 (PDT)
-Subject: [Buildroot] compiling kernel
-In-Reply-To: <530E2686.8040409@mind.be>
-References: <1393369707.747.YahooMailNeo@web120205.mail.ne1.yahoo.com>
- <20140226014847.23839269@core2quad.morethan.org> <530E2686.8040409@mind.be>
-Message-ID: <1395101926704-65501.post@n4.nabble.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 18 Mar 2014 05:54:45 +0100
+Subject: [Buildroot] Patchwork cleanup #7: triaging proposal
+In-Reply-To: <CAAEAJfC-R-ieqWuNFaeD3BeYoeM1WogQVwpQVUyfLw9xtLv2iA@mail.gmail.com>
+References: <CAAXf6LWP0FX4AAGP_ACZHgoxEAEwarpEdHchukxE+V=WJnXROg@mail.gmail.com>
+ <20140316160712.GA3267@free.fr>
+ <CAAEAJfC-R-ieqWuNFaeD3BeYoeM1WogQVwpQVUyfLw9xtLv2iA@mail.gmail.com>
+Message-ID: <20140318055445.2aa965bb@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Dear Ezequiel Garc?a,
 
-Thanks much for your reply...
-I want to compile kernel and root file system separately for couple of
-reasons:
+On Sun, 16 Mar 2014 20:51:53 -0300, Ezequiel Garc?a wrote:
 
-1. I want application developer to just use prebuilt kernel binary + rootfs
-and run some script to create full Image so that, they don't need to have
-kernel source files.
+> Quick context for directfb-lua.
+> 
+> This is a little languange binding I created a few years ago when I was working
+> close to DirectFB. However, it's no longer the case, and I won't be
+> improving it.
+> Of course, I'm still here and I can try to maintain it.
+> 
+> Probably it should be integrated into DirectFB itself, as a automated-test tool
+> or something, but that's something the DFB people should do.
+> 
+> I thought about submitting the package to Buildroot, as otherwise it would fall
+> into oblivion. The tool itself is handy for anyone working on DFB; at
+> least to run
+> quick API tests.
+> 
+> That said, I'm happy to provide a v2, addressing Fran?ois' feedback.
+> I just need to find some time to do it.
 
-could you give some clarity on creating separately file system and passing
-boot args to kernel to use the file system located in the dram.
+If you don't use it, you don't really develop it anymore, and there
+isn't interest from other users, then maybe it isn't worth the effort
+to add this package in Buildroot?
 
-2. I can compile kernel without the  "Initial RAM filesystem and RAM disk
-(initramfs/initrd) support", so that it has only the kernel image. How do I
-built the file system image?
-
-
-Thanks & Regards,
-Raj
- 
-
-
-
-
-
---
-View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/compiling-kernel-tp63718p65501.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
