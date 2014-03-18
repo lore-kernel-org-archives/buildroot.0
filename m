@@ -1,42 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Mar 2014 05:54:45 +0100
-Subject: [Buildroot] Patchwork cleanup #7: triaging proposal
-In-Reply-To: <CAAEAJfC-R-ieqWuNFaeD3BeYoeM1WogQVwpQVUyfLw9xtLv2iA@mail.gmail.com>
-References: <CAAXf6LWP0FX4AAGP_ACZHgoxEAEwarpEdHchukxE+V=WJnXROg@mail.gmail.com>
- <20140316160712.GA3267@free.fr>
- <CAAEAJfC-R-ieqWuNFaeD3BeYoeM1WogQVwpQVUyfLw9xtLv2iA@mail.gmail.com>
-Message-ID: <20140318055445.2aa965bb@skate>
+Date: Tue, 18 Mar 2014 06:01:30 +0100
+Subject: [Buildroot] [PATCH] support: properly check for bash as a
+ dependency
+In-Reply-To: <1395052954-1567-1-git-send-email-yann.morin.1998@free.fr>
+References: <1395052954-1567-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20140318060130.282f5a46@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ezequiel Garc?a,
+Dear Yann E. MORIN,
 
-On Sun, 16 Mar 2014 20:51:53 -0300, Ezequiel Garc?a wrote:
+On Mon, 17 Mar 2014 11:42:34 +0100, Yann E. MORIN wrote:
 
-> Quick context for directfb-lua.
+> So, calling "$SHELL --version" will still return "^GNU bash" no matter
+> what shell is actually running.
 > 
-> This is a little languange binding I created a few years ago when I was working
-> close to DirectFB. However, it's no longer the case, and I won't be
-> improving it.
-> Of course, I'm still here and I can try to maintain it.
-> 
-> Probably it should be integrated into DirectFB itself, as a automated-test tool
-> or something, but that's something the DFB people should do.
-> 
-> I thought about submitting the package to Buildroot, as otherwise it would fall
-> into oblivion. The tool itself is handy for anyone working on DFB; at
-> least to run
-> quick API tests.
-> 
-> That said, I'm happy to provide a v2, addressing Fran?ois' feedback.
-> I just need to find some time to do it.
+> Since quite a lot of #!/bin/sh scripts are in fact bash scripts, we
+> really want to ensure that /bin/sh is bash.
 
-If you don't use it, you don't really develop it anymore, and there
-isn't interest from other users, then maybe it isn't worth the effort
-to add this package in Buildroot?
+I'm definitely against that. My system has /bin/sh pointing to dash,
+and Buildroot works fine. One of the thing that annoyed me in
+OpenEmbedded was its requirements to have /bin/sh be bash.
+
+We clearly don't want that.
+
+I've just checked the Free Electrons autobuilders, and there are also
+using dash as /bin/sh. This means that if configure scripts were using
+bashims unsupported by dash, we would have noticed.
 
 Thomas
 -- 
