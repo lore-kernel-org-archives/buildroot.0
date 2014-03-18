@@ -1,60 +1,78 @@
-From: Davide Viti <zinosat@tiscali.it>
-Date: Tue, 18 Mar 2014 21:18:14 +0100
-Subject: [Buildroot] [PATCH] eigen: (optionally) install unsupported modules
-In-Reply-To: <1395173894-4811-1-git-send-email-zinosat@tiscali.it>
-References: <1395173894-4811-1-git-send-email-zinosat@tiscali.it>
-Message-ID: <1395173894-4811-2-git-send-email-zinosat@tiscali.it>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 18 Mar 2014 21:28:22 +0100
+Subject: [Buildroot] [PATCH 2/4] legal-info: save license files even for
+ no-redistribute packages
+In-Reply-To: <532887A9.3010901@lucaceresoli.net>
+References: <cover.1395097170.git.yann.morin.1998@free.fr>
+ <dbdd65bfe908d6eead2e047dff4c8bb96e236ee3.1395097170.git.yann.morin.1998@free.fr>
+ <532887A9.3010901@lucaceresoli.net>
+Message-ID: <20140318202822.GB26810@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Davide Viti <d.viti@infosolution.it>
+Luca, All,
 
+On 2014-03-18 18:51 +0100, Luca Ceresoli spake thusly:
+> Yann E. MORIN wrote:
+> >From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> >The reason to save license files even for no-redistribute packages
+> >is that the license still applies to the files distributed as part
+> >of the rootfs, even if the sources are not themselves redistributed.
+[--SNIP--]
+> I like this change in general, but I have another minor nit here.
+> 
+> You moved code out of the big
+>   ifneq ($(call qstrip,$$($(2)_SOURCE)),)
+> cited above.
+> 
+> So we're now doing stuff also for packages that are part of Buildroot.
+> 
+> Assuming these will never have _LICENSE_FILES defined, which is fair,
+> we not have one more warning:
+>   WARNING: toolchain: cannot save license (TOOLCHAIN_LICENSE_FILES \
+>         not defined)
 
-Signed-off-by: Davide Viti <zinosat@tiscali.it>
----
- package/eigen/Config.in |    8 ++++++++
- package/eigen/eigen.mk  |    8 ++++++++
- 2 files changed, 16 insertions(+)
+Ah, I see. 'toolchain' is a special package, indeed, and will probably
+never have a _LICENSE_FILES defined.
 
-diff --git a/package/eigen/Config.in b/package/eigen/Config.in
-index e94f9a3..a653e37 100644
---- a/package/eigen/Config.in
-+++ b/package/eigen/Config.in
-@@ -13,5 +13,13 @@ config BR2_PACKAGE_EIGEN
- 
- 	  http://eigen.tuxfamily.org/
- 
-+if BR2_PACKAGE_EIGEN
-+
-+config BR2_PACKAGE_EIGEN_UNSUPPORTED_MODULES
-+        bool "unsupported modules"
-+	help
-+	  Install eigen unsupported modules
-+endif
-+
- comment "eigen needs a toolchain w/ C++"
- 	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/eigen/eigen.mk b/package/eigen/eigen.mk
-index 5abd464..388dd63 100644
---- a/package/eigen/eigen.mk
-+++ b/package/eigen/eigen.mk
-@@ -13,6 +13,14 @@ EIGEN_LICENSE_FILES = COPYING.MPL2 COPYING.BSD COPYING.LGPL COPYING.README
- EIGEN_INSTALL_STAGING = YES
- EIGEN_INSTALL_TARGET = NO
- 
-+define EIGEN_INSTALL_UNSUPPORTED_MODULES
-+	cp -a $(@D)/unsupported $(STAGING_DIR)/usr/include/
-+endef
-+
-+ifeq ($(BR2_PACKAGE_EIGEN_UNSUPPORTED_MODULES),y)
-+	EIGEN_POST_INSTALL_STAGING_HOOKS += EIGEN_INSTALL_UNSUPPORTED_MODULES
-+endif
-+
- # This package only consists of headers that need to be
- # copied over to the sysroot for compile time use
- define EIGEN_INSTALL_STAGING_CMDS
+What I think is we should not fo:
+
+    ifeq ($$($(2)_LICENSE_FILES),)
+
+but probably:
+
+    ifeq ($$(origin $(2)_LICENSE_FILES),undefined)
+
+And then:
+
+    TOOLCHAIN_LICENS_FILES =
+
+Which means that TOOLCHAIN_LICENSE_FILES *is* defined. Empty, but
+defined nonetheless.
+
+In which case, a defined but empty _LICENSE_FILES meanns: no license
+file to deal with.
+
+> Probably that ifneq should be moved just before the part of code you're
+> moving up, but that should be checked carefully.
+> 
+> If you feel like this bunch of lines are an annoying mess to handle, I'm
+> with you.
+
+OK, I'll see what I can do about that.
+
+Thanks for the review! :-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.7.10.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
