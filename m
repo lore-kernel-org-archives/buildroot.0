@@ -1,44 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Mar 2014 19:27:15 +0100
-Subject: [Buildroot] Error building Qt5Multimedia
-In-Reply-To: <CAAXf6LWEAPs-EpsHzgqJ1eiiRL+u2rssa_SM0EE5=6yQxrtbZQ@mail.gmail.com>
-References: <53269705.6060805@gmail.com>
- <CAAXf6LVoTKqC61B2fPbwp-9LQZ1ephfpEodHVfqedB7SPyn7kg@mail.gmail.com>
- <532828E8.5040405@gmail.com>
- <CAAXf6LVvo4VSgkHawfNuftrqW317QzQ8FO2c-1k33datwdpfSg@mail.gmail.com>
- <53284767.3040408@gmail.com> <53284881.1090803@gmail.com>
- <CAAXf6LUmEB2=XB=CuUnDREER139E3MiouKLMa4GAFrNvnDzJsw@mail.gmail.com>
- <53285568.7080900@gmail.com>
- <CAAXf6LX-dJFpaOkMaCg0A4PD1FphzO8xbPbLWTyLTX3xmO+ELA@mail.gmail.com>
- <53285C1B.9040201@gmail.com>
- <CAAXf6LWEAPs-EpsHzgqJ1eiiRL+u2rssa_SM0EE5=6yQxrtbZQ@mail.gmail.com>
-Message-ID: <20140318192715.09321cc5@skate>
+Date: Tue, 18 Mar 2014 19:27:51 +0100
+Subject: [Buildroot] [PATCH] support: properly check for bash as a
+ dependency
+In-Reply-To: <20140318165518.GA3342@free.fr>
+References: <1395052954-1567-1-git-send-email-yann.morin.1998@free.fr>
+ <20140318060130.282f5a46@skate> <20140318165518.GA3342@free.fr>
+Message-ID: <20140318192751.0b0caaab@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Dear Yann E. MORIN,
 
-On Tue, 18 Mar 2014 16:53:17 +0100, Thomas De Schampheleire wrote:
+On Tue, 18 Mar 2014 17:55:18 +0100, Yann E. MORIN wrote:
 
->  define QT5MULTIMEDIA_CONFIGURE_CMDS
-> -       (cd $(@D); $(HOST_DIR)/usr/bin/qmake)
-> +       (cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
->  endef
+> > I'm definitely against that. My system has /bin/sh pointing to dash,
+> > and Buildroot works fine. One of the thing that annoyed me in
+> > OpenEmbedded was its requirements to have /bin/sh be bash.
+> > 
+> > We clearly don't want that.
 > 
->  define QT5MULTIMEDIA_BUILD_CMDS
+> I'm just fine with that. :-)
 > 
-> and after applying this patch run:
-> make qt5multimedia-dirclean qt5multimedia
+> But the current check is broken anyway, as all it checks is that the
+> login shell of the user is bash.
 > 
-> I believe this should fix the problem. The same solution should be
-> applied to the other qt5 packages.
-> Or maybe someone else thinks the problem should be fixed in a different way.
-> I'm adding some people to this thread so they can shed their light on it...
+>   - if we want to work whith dash as the system shell, then the current
+>     check is unneeded;
+> 
+>   - if we want to work with dash as the system shell, we don't care what
+>     login shell the user is using, as we must also work when this is dash;
+> 
+>   - SHELL is not mandated by POSIX, so it may be empty on a
+>     POSIX-compliant shell anyway.
+> 
+> So, we should just remove this check altogether.
 
-Your change indeed looks good.
+Yes, I agree.
 
 Thomas
 -- 
