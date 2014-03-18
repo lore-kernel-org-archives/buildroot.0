@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Mar 2014 23:52:02 +0100
-Subject: [Buildroot] [v2] eigen: (optionally) install unsupported modules
-In-Reply-To: <1395173894-4811-1-git-send-email-zinosat@tiscali.it>
+Date: Tue, 18 Mar 2014 23:55:42 +0100
+Subject: [Buildroot] [PATCH] eigen: (optionally) install unsupported
+ modules
+In-Reply-To: <1395173894-4811-2-git-send-email-zinosat@tiscali.it>
 References: <1395173894-4811-1-git-send-email-zinosat@tiscali.it>
-Message-ID: <20140318235202.202ac1ab@skate>
+ <1395173894-4811-2-git-send-email-zinosat@tiscali.it>
+Message-ID: <20140318235542.2eb029b1@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,34 +14,67 @@ To: buildroot@busybox.net
 
 Dear Davide Viti,
 
-On Tue, 18 Mar 2014 21:18:13 +0100, Davide Viti wrote:
-> I'm working on a package that includes some files inside the
-> "unsupported" folder. The unsupported modules can be optionally
-> selected.
+On Tue, 18 Mar 2014 21:18:14 +0100, Davide Viti wrote:
+> From: Davide Viti <d.viti@infosolution.it>
 > 
-> Let's see if I can manage to properly send a signed patch with
-> introductory message: sorry for the noise!
+> 
+> Signed-off-by: Davide Viti <zinosat@tiscali.it>
 
-Almost :-)
+We probably want the title of the patch to be:
 
-For a single patch, there is no real need to send a separate
-introduction message, the patch itself is enough.
+	eigen: add an option to install unsupported modules
 
-To indicate the new version, you should generate the patch as follows:
+>  
+> +if BR2_PACKAGE_EIGEN
+> +
+> +config BR2_PACKAGE_EIGEN_UNSUPPORTED_MODULES
+> +        bool "unsupported modules"
 
-	git format-patch --suject-prefix="PATCHv2" HEAD^
+Indentation is wrong here: there should be one tab before the "bool"
+statement.
 
-so that the patch title becomes:
+> +	help
+> +	  Install eigen unsupported modules
+> +endif
+> +
+>  comment "eigen needs a toolchain w/ C++"
+>  	depends on !BR2_INSTALL_LIBSTDCPP
+> diff --git a/package/eigen/eigen.mk b/package/eigen/eigen.mk
+> index 5abd464..388dd63 100644
+> --- a/package/eigen/eigen.mk
+> +++ b/package/eigen/eigen.mk
+> @@ -13,6 +13,14 @@ EIGEN_LICENSE_FILES = COPYING.MPL2 COPYING.BSD COPYING.LGPL COPYING.README
+>  EIGEN_INSTALL_STAGING = YES
+>  EIGEN_INSTALL_TARGET = NO
+>  
+> +define EIGEN_INSTALL_UNSUPPORTED_MODULES
+> +	cp -a $(@D)/unsupported $(STAGING_DIR)/usr/include/
 
-	[PATCHv2] title of the patch
+I'm a bit worried about having a directory called
+$(STAGING_DIR)/usr/include/unsupported. Shouldn't this directory be
+installed *below* the $(STAGING_DIR)/usr/include/Eigen directory
+created by the normal installation of Eigen?
 
-You manually added [v2] to the title of your introduction e-mail, but
-it's actually more important to have it on the patches themselves. And
-don't do it manually, use git --subject-prefix option to do it!
+> +endef
+> +
+> +ifeq ($(BR2_PACKAGE_EIGEN_UNSUPPORTED_MODULES),y)
+> +	EIGEN_POST_INSTALL_STAGING_HOOKS += EIGEN_INSTALL_UNSUPPORTED_MODULES
+> +endif
 
-See
-http://buildroot.org/downloads/manual/manual.html#_patch_revision_changelog
-for more details.
+I believe we normally don't really use post install hooks when there is
+a definition of the staging install commands. Instead, we use the
+following idiom:
+
+ifeq ($(BR2_PACKAGE_EIGEN_UNSUPPORTED_MODULES),y)
+define EIGEN_INSTALL_UNSUPPORTED_MODULES_CMDS
+	cp -a ...
+endef
+endif
+
+define EIGEN_INSTALL_STAGING_CMDS
+	... existing installation steps ...
+	$(EIGEN_INSTALL_UNSUPPORTED_MODULES_CMDS)
+endef
 
 Thomas
 -- 
