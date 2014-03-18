@@ -1,57 +1,48 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 Mar 2014 23:45:01 +0100
-Subject: [Buildroot] [PATCH] support: do not depend on bash
-In-Reply-To: <87siqfw32l.fsf@dell.be.48ers.dk>
-References: <1395173848-15759-1-git-send-email-yann.morin.1998@free.fr>
- <87siqfw32l.fsf@dell.be.48ers.dk>
-Message-ID: <20140318224501.GC26810@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 18 Mar 2014 23:52:02 +0100
+Subject: [Buildroot] [v2] eigen: (optionally) install unsupported modules
+In-Reply-To: <1395173894-4811-1-git-send-email-zinosat@tiscali.it>
+References: <1395173894-4811-1-git-send-email-zinosat@tiscali.it>
+Message-ID: <20140318235202.202ac1ab@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Dear Davide Viti,
 
-On 2014-03-18 23:32 +0100, Peter Korsgaard spake thusly:
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+On Tue, 18 Mar 2014 21:18:13 +0100, Davide Viti wrote:
+> I'm working on a package that includes some files inside the
+> "unsupported" folder. The unsupported modules can be optionally
+> selected.
 > 
->  > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
->  > We do want to work properly whatever the system shell or the
->  > user's login shell are.
-> 
->  > The current check is anyway broken, as it only checks if the
->  > user's login shell is bash, not what the system shell is.
-> 
->  > Remove the check altogether, since it is unneeded, and broken.
-> 
-> But we (currently atleast) do want bash for our own Makefiles (see
-> toplevel Makefile). I'm not sure we're completely bashism-free (or if it
-> is worth the trouble to be so).
+> Let's see if I can manage to properly send a signed patch with
+> introductory message: sorry for the noise!
 
-OK, but then the check is jsut borked, since it does not check that basj
-is isntalled on the system.
+Almost :-)
 
-Notes:
-  - SHELL is set in the environment by the login shell;
-  - if one has bash as login shell, but sub-sequently runs dash, dahs
-    does not reset SHELL and does not set it; instead, it uses the value
-    that was pre-exisiting in the environment when it was launched.
+For a single patch, there is no real need to send a separate
+introduction message, the patch itself is enough.
 
-So, all the current shell tests is whether the user's login shell is bash.
+To indicate the new version, you should generate the patch as follows:
 
-If instead we want to check that we do have bash installed on the
-system, we need to fix the test.
+	git format-patch --suject-prefix="PATCHv2" HEAD^
 
-As it is now, it is only confusing.
+so that the patch title becomes:
 
-Regards,
-Yann E. MORIN.
+	[PATCHv2] title of the patch
 
+You manually added [v2] to the title of your introduction e-mail, but
+it's actually more important to have it on the patches themselves. And
+don't do it manually, use git --subject-prefix option to do it!
+
+See
+http://buildroot.org/downloads/manual/manual.html#_patch_revision_changelog
+for more details.
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
