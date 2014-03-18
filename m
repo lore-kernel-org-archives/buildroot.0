@@ -1,34 +1,95 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 18 Mar 2014 09:12:16 +0100
-Subject: [Buildroot] [git commit] docs/docs.html: use @buildroot.org for the
-	mailing list
-Message-ID: <20140318081243.037999BF87@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 18 Mar 2014 08:46:41 +0100
+Subject: [Buildroot] [PATCH] libtool: revert a commit which
+ re-introduced an already fixed problem
+In-Reply-To: <87txaw4gwt.fsf@dell.be.48ers.dk>
+References: <1395078022-37381-1-git-send-email-Vincent.Riera@imgtec.com>
+ <87txaw4gwt.fsf@dell.be.48ers.dk>
+Message-ID: <5327F9E1.1020301@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ba25b12ce45ed44636ad7fb9203d12032944af1a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 03/17/14 23:08, Peter Korsgaard wrote:
+>>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+> 
+>  > The commit ed73d1d2e3703290e74bb076bc6dd0417aa3ba21 modified the changes
+>  > made by the commit 4268d3967e2d691c151d6b5629e4051deb077b9a. The problem
+>  > that was fixed by the former commit is present again due to those
+>  > modifications. This patch reverts those modifications to have that
+>  > problem fixed again.
+> 
+>  > Fixes:
+>  >    http://autobuild.buildroot.net/results/b86/b86a83c6549004f226e7255242e54ef4e50c5ec3/
+> 
+> So this basically just reverts Arnouts fix for old automake versions? Do
+> we understand why it doesn't work? Can we come up with a solution that
+> both fixes the n64 issue and old automake?
 
-Now that @buildroot.org is working, we should use it everywhere.
+ I indeed never tested if the issue of 4268d39 was still fixed. I just
+understood from the commit message that it is only relevant for the
+libtool.m4 that is installed in the host dir, so I made use of that.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/docs.html |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ It should be rather easy to get this right then: a patch that fixes up
+configure directly, rather than libtool.m4.
 
-diff --git a/docs/docs.html b/docs/docs.html
-index 1e24553..77047b9 100644
---- a/docs/docs.html
-+++ b/docs/docs.html
-@@ -29,7 +29,7 @@ help:</p>
- <ul>
- 
-   <li>On the <a href="support.html">buildroot mailing list</a>
--  at <code>buildroot at uclibc.org</code></li>
-+  at <code>buildroot at buildroot.org</code></li>
- 
-   <li>On the <a href="irc://freenode.net/#buildroot">Buildroot IRC
-   channel</a>, <code>#buildroot</code> on Freenode</li>
+ Regards,
+ Arnout
+
+> 
+> 
+>  > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+>  > ---
+>  >  ...patch => libtool-0001-mips64-n64-linking.patch} |    0
+>  >  package/libtool/libtool.mk                         |   13 -------------
+>  >  2 files changed, 0 insertions(+), 13 deletions(-)
+>  >  rename package/libtool/{libtool-mips64-n64-linking.post-install-patch => libtool-0001-mips64-n64-linking.patch} (100%)
+> 
+>  > diff --git a/package/libtool/libtool-mips64-n64-linking.post-install-patch b/package/libtool/libtool-0001-mips64-n64-linking.patch
+>  > similarity index 100%
+>  > rename from package/libtool/libtool-mips64-n64-linking.post-install-patch
+>  > rename to package/libtool/libtool-0001-mips64-n64-linking.patch
+>  > diff --git a/package/libtool/libtool.mk b/package/libtool/libtool.mk
+>  > index 603f1f1..2f6ea7c 100644
+>  > --- a/package/libtool/libtool.mk
+>  > +++ b/package/libtool/libtool.mk
+>  > @@ -13,19 +13,6 @@ LIBTOOL_LICENSE_FILES = COPYING
+>  
+>  >  HOST_LIBTOOL_LIBTOOL_PATCH = NO
+>  
+>  > -# libtool-mips64-n64-linking.post-install-patch is an upstream patch that
+>  > -# fixes MIPS64 n64 link failures. However, because the patch touches an m4
+>  > -# file, applying it triggers a run of autoconf, automake, etc. This sometimes
+>  > -# leads to build failures due to incompatible system autotools. We cannot
+>  > -# simply set HOST_LIBTOOL_AUTORECONF = YES because that would create a
+>  > -# circular dependency on host-libtool. Therefore, just apply the patch
+>  > -# directly on the installed file.
+>  > -define HOST_LIBTOOL_FIXUP_LIBTOOL_M4
+>  > -	patch $(HOST_DIR)/usr/share/aclocal/libtool.m4 < \
+>  > -		package/libtool/libtool-mips64-n64-linking.post-install-patch
+>  > -endef
+>  > -HOST_LIBTOOL_POST_INSTALL_HOOKS += HOST_LIBTOOL_FIXUP_LIBTOOL_M4
+>  > -
+>  >  $(eval $(autotools-package))
+>  >  $(eval $(host-autotools-package))
+>  
+>  > -- 
+>  > 1.7.1
+> 
+>  > _______________________________________________
+>  > buildroot mailing list
+>  > buildroot at busybox.net
+>  > http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> 
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
