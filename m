@@ -1,95 +1,139 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Mar 2014 08:46:41 +0100
-Subject: [Buildroot] [PATCH] libtool: revert a commit which
- re-introduced an already fixed problem
-In-Reply-To: <87txaw4gwt.fsf@dell.be.48ers.dk>
-References: <1395078022-37381-1-git-send-email-Vincent.Riera@imgtec.com>
- <87txaw4gwt.fsf@dell.be.48ers.dk>
-Message-ID: <5327F9E1.1020301@mind.be>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Tue, 18 Mar 2014 10:10:17 +0100
+Subject: [Buildroot] [PATCH v2] newt: bump to 0.52.17
+Message-ID: <1395133817-11673-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/17/14 23:08, Peter Korsgaard wrote:
->>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
-> 
->  > The commit ed73d1d2e3703290e74bb076bc6dd0417aa3ba21 modified the changes
->  > made by the commit 4268d3967e2d691c151d6b5629e4051deb077b9a. The problem
->  > that was fixed by the former commit is present again due to those
->  > modifications. This patch reverts those modifications to have that
->  > problem fixed again.
-> 
->  > Fixes:
->  >    http://autobuild.buildroot.net/results/b86/b86a83c6549004f226e7255242e54ef4e50c5ec3/
-> 
-> So this basically just reverts Arnouts fix for old automake versions? Do
-> we understand why it doesn't work? Can we come up with a solution that
-> both fixes the n64 issue and old automake?
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
- I indeed never tested if the issue of 4268d39 was still fixed. I just
-understood from the commit message that it is only relevant for the
-libtool.m4 that is installed in the host dir, so I made use of that.
+Changed download location, added popt dependency and
+updated the Makefile.in patch.
 
- It should be rather easy to get this right then: a patch that fixes up
-configure directly, rather than libtool.m4.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+Changes:
+	v2: handle UTF and nls properly (Peter Korsgaard)
 
- Regards,
- Arnout
+ package/newt/Config.in               |  6 ++++++
+ package/newt/newt-fix-makefile.patch | 29 +++++++++++------------------
+ package/newt/newt.mk                 | 26 +++++---------------------
+ 3 files changed, 22 insertions(+), 39 deletions(-)
 
-> 
-> 
->  > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->  > ---
->  >  ...patch => libtool-0001-mips64-n64-linking.patch} |    0
->  >  package/libtool/libtool.mk                         |   13 -------------
->  >  2 files changed, 0 insertions(+), 13 deletions(-)
->  >  rename package/libtool/{libtool-mips64-n64-linking.post-install-patch => libtool-0001-mips64-n64-linking.patch} (100%)
-> 
->  > diff --git a/package/libtool/libtool-mips64-n64-linking.post-install-patch b/package/libtool/libtool-0001-mips64-n64-linking.patch
->  > similarity index 100%
->  > rename from package/libtool/libtool-mips64-n64-linking.post-install-patch
->  > rename to package/libtool/libtool-0001-mips64-n64-linking.patch
->  > diff --git a/package/libtool/libtool.mk b/package/libtool/libtool.mk
->  > index 603f1f1..2f6ea7c 100644
->  > --- a/package/libtool/libtool.mk
->  > +++ b/package/libtool/libtool.mk
->  > @@ -13,19 +13,6 @@ LIBTOOL_LICENSE_FILES = COPYING
->  
->  >  HOST_LIBTOOL_LIBTOOL_PATCH = NO
->  
->  > -# libtool-mips64-n64-linking.post-install-patch is an upstream patch that
->  > -# fixes MIPS64 n64 link failures. However, because the patch touches an m4
->  > -# file, applying it triggers a run of autoconf, automake, etc. This sometimes
->  > -# leads to build failures due to incompatible system autotools. We cannot
->  > -# simply set HOST_LIBTOOL_AUTORECONF = YES because that would create a
->  > -# circular dependency on host-libtool. Therefore, just apply the patch
->  > -# directly on the installed file.
->  > -define HOST_LIBTOOL_FIXUP_LIBTOOL_M4
->  > -	patch $(HOST_DIR)/usr/share/aclocal/libtool.m4 < \
->  > -		package/libtool/libtool-mips64-n64-linking.post-install-patch
->  > -endef
->  > -HOST_LIBTOOL_POST_INSTALL_HOOKS += HOST_LIBTOOL_FIXUP_LIBTOOL_M4
->  > -
->  >  $(eval $(autotools-package))
->  >  $(eval $(host-autotools-package))
->  
->  > -- 
->  > 1.7.1
-> 
->  > _______________________________________________
->  > buildroot mailing list
->  > buildroot at busybox.net
->  > http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> 
-
-
+diff --git a/package/newt/Config.in b/package/newt/Config.in
+index ae6b69c..1737f31 100644
+--- a/package/newt/Config.in
++++ b/package/newt/Config.in
+@@ -1,7 +1,13 @@
+ config BR2_PACKAGE_NEWT
+ 	bool "newt"
++	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_SLANG
++	select BR2_PACKAGE_POPT
++	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	help
+ 	  Programming library for color text mode, widget based user interfaces.
+ 
+ 	  http://www.redhat.com/
++
++comment "newt needs a toolchain w/ wchar"
++	depends on !BR2_USE_WCHAR
+diff --git a/package/newt/newt-fix-makefile.patch b/package/newt/newt-fix-makefile.patch
+index 227b0f3..84152fb 100644
+--- a/package/newt/newt-fix-makefile.patch
++++ b/package/newt/newt-fix-makefile.patch
+@@ -1,6 +1,5 @@
+ Fix Makefile.in
+ 
+-* Remove -Os from the CFLAGS (already handled by Buildroot)
+ * Use $(CC) instead of $(CPP) to generate .depend file because
+   '$(CPP) -M' call does not support multiple input files.
+   This avoid the following error:
+@@ -14,29 +13,23 @@ make[1]: Leaving directory
+ make: *** 
+ [/opt/br/output/build/newt-0.51.0/.stamp_built] Error 2
+ 
+-
+ Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+ 
+ ---
+-Index: newt-0.51.0/Makefile.in
++ Makefile.in |    2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++Index: b/Makefile.in
+ ===================================================================
+---- newt-0.51.0.orig/Makefile.in	2012-10-10 22:43:42.042318041 +0200
+-+++ newt-0.51.0/Makefile.in	2012-10-11 21:25:44.063873277 +0200
+-@@ -3,7 +3,7 @@ SHLIBS = -lslang -lm -lc
+- 
+- GPM_SUPPORT=@gpm_support@
+- 
+--CFLAGS = -Wall -Os -D_GNU_SOURCE
+-+CFLAGS += -D_GNU_SOURCE
+- 
+- VERSION = @VERSION@
+- CVSTAG = r$(subst .,-,$(VERSION))
+-@@ -86,7 +86,7 @@ clean:
+- 		$(SHAREDOBJS) *.so*
++--- a/Makefile.in
+++++ b/Makefile.in
++@@ -121,7 +121,7 @@
++ 		$(SHAREDDIR)/*.o *.$(SOEXT)*
+  
+  depend:
+--	$(CPP) $(CFLAGS) -M $(SOURCES) > .depend
+-+	$(CC) $(CFLAGS) -M $(SOURCES) > .depend
++-	$(CPP) $(CFLAGS) $(CPPFLAGS) -M $(SOURCES) > .depend
+++	$(CC) $(CFLAGS) $(CPPFLAGS) -M $(SOURCES) > .depend
+  
+  $(SHAREDDIR):
+  	mkdir -p $(SHAREDDIR)
+diff --git a/package/newt/newt.mk b/package/newt/newt.mk
+index 1d5e7d5..b567156 100644
+--- a/package/newt/newt.mk
++++ b/package/newt/newt.mk
+@@ -4,32 +4,16 @@
+ #
+ ################################################################################
+ 
+-NEWT_VERSION         = 0.51.0
+-NEWT_SITE            = http://www.uclibc.org/
+-NEWT_SOURCE          = newt-$(NEWT_VERSION).tar.bz2
++NEWT_VERSION         = 0.52.17
++NEWT_SITE            = https://fedorahosted.org/releases/n/e/newt/
+ NEWT_LICENSE         = GPLv2
+ NEWT_LICENSE_FILES   = COPYING
+ NEWT_INSTALL_STAGING = YES
+ 
+-NEWT_DEPENDENCIES = slang
++NEWT_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext) slang popt
+ 
+-NEWT_MAKE_ENV += $(TARGET_CONFIGURE_OPTS)
+-NEWT_MAKE = $(MAKE1)
+-
+-define NEWT_INSTALL_STAGING_CMDS
+-	$(INSTALL) -D -m644 $(@D)/newt.h    $(STAGING_DIR)/usr/include/newt.h
+-	$(INSTALL) -D -m644 $(@D)/libnewt.a $(STAGING_DIR)/usr/lib/libnewt.a
+-	$(INSTALL) -m755 $(@D)/libnewt.so*  $(STAGING_DIR)/usr/lib/
+-	ln -fs libnewt.so.$(NEWT_VERSION)   $(STAGING_DIR)/usr/lib/libnewt.so
+-	ln -fs libnewt.so.$(NEWT_VERSION)   $(STAGING_DIR)/usr/lib/libnewt.so.0.51
+-endef
++NEWT_CONF_OPT = --without-python --without-tcl
+ 
+-define NEWT_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m644 $(@D)/newt.h    $(TARGET_DIR)/usr/include/newt.h
+-	$(INSTALL) -D -m644 $(@D)/libnewt.a $(TARGET_DIR)/usr/lib/libnewt.a
+-	$(INSTALL) -m755 $(@D)/libnewt.so*  $(TARGET_DIR)/usr/lib/
+-	ln -fs libnewt.so.$(NEWT_VERSION)   $(TARGET_DIR)/usr/lib/libnewt.so
+-	ln -fs libnewt.so.$(NEWT_VERSION)   $(TARGET_DIR)/usr/lib/libnewt.so.0.51
+-endef
++NEWT_MAKE = $(MAKE1)
+ 
+ $(eval $(autotools-package))
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.8.1.2
