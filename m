@@ -1,39 +1,49 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 18 Mar 2014 09:05:10 +0100
-Subject: [Buildroot] What's the buildroot attitude to u-boot building?
-In-Reply-To: <20140318062125.772bd2e8@skate> (Thomas Petazzoni's message of
- "Tue, 18 Mar 2014 06:21:25 +0100")
-References: <CAE21AQqMQmKKL0=Q55P2zQhV8+iBdpX416xK+SgZd3+ONi8Mgg@mail.gmail.com>
- <20140222001309.143e02f7@skate>
- <201402241433.49892.manningc2@actrix.gen.nz>
- <87k3cknbyk.fsf@dell.be.48ers.dk> <20140318062125.772bd2e8@skate>
-Message-ID: <87zjko2aq1.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 18 Mar 2014 09:04:31 +0100
+Subject: [Buildroot] [git commit] uboot: mark custom network settings as
+	deprecated
+Message-ID: <20140318080519.50A4F9C127@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=a920fdd007b523c0000206bc5718a4c5c60a15be
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+As discussed on the the mailing list.
 
- >> > I have used buildroot in the past to generate u-boot + MLO and have just 
- >> > ignored these special options, using my u-boot config instead.
- >> 
- >> > Now I am looking at adding some configs, or working with existing ones, to add 
- >> > SOCFPGA handling. so I wanted to understand why things were done as they are 
- >> > so that I could do a better job.
- >> 
- >> I've also never used them (and disliked when they got added). Perhaps
- >> the time has come to deprecate those options?
- >> 
- >> Anybody disagrees?
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ Config.in            |    4 ++++
+ boot/uboot/Config.in |    1 +
+ 2 files changed, 5 insertions(+), 0 deletions(-)
 
- > I agree that those options are weird. I don't think we should be poking
- > into the U-Boot header files.
-
-OK, then I will mark them as BR2_DEPRECATED_SINCE_2014_05.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/Config.in b/Config.in
+index b904195..5823274 100644
+--- a/Config.in
++++ b/Config.in
+@@ -296,6 +296,10 @@ config BR2_DEPRECATED_SINCE_2014_02
+ 	bool
+ 	default y
+ 
++config BR2_DEPRECATED_SINCE_2014_05
++	bool
++	default y
++
+ endif
+ 
+ config BR2_ENABLE_DEBUG
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 035e550..90437b5 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -169,6 +169,7 @@ endif
+ 
+ menuconfig BR2_TARGET_UBOOT_NETWORK
+ 	bool "Custom Network Settings"
++	depends on BR2_DEPRECATED_SINCE_2014_05
+ 	help
+ 	  Custom network settings for U-boot
+ 
