@@ -1,70 +1,65 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Wed, 19 Mar 2014 12:10:23 +0100
-Subject: [Buildroot] [PATCH 6/6] Makefile: do not add the toolchain
- target to the TARGETS variable
-In-Reply-To: <5326A778.7070507@mind.be>
-References: <1394540278-28740-1-git-send-email-fabio.porcedda@gmail.com>
- <1394540278-28740-7-git-send-email-fabio.porcedda@gmail.com>
- <5326A778.7070507@mind.be>
-Message-ID: <CAHkwnC8+MsDLUd5XMU1GDmfNBCVU0p9JTaUmpWiYReTrSsAnKQ@mail.gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Wed, 19 Mar 2014 12:29:07 +0100
+Subject: [Buildroot] [PATCH v3 1/2] libubox: new package
+In-Reply-To: <CAGm1_kuWvJG9JuikJsBZ+uBwoBFoJVhyNnugaUvQS9HpPiFa-g@mail.gmail.com>
+References: <1395172899-3799-1-git-send-email-yegorslists@googlemail.com>
+ <20140318233003.779610f2@skate>
+ <CAGm1_kuWvJG9JuikJsBZ+uBwoBFoJVhyNnugaUvQS9HpPiFa-g@mail.gmail.com>
+Message-ID: <CAHXCMMKqbip=H_DnrDhv5fkU=pmwA69a6=7oh-0nznm85Zw7hg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Mar 17, 2014 at 8:42 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 03/11/14 13:17, Fabio Porcedda wrote:
->> Do not add the toolchain target to the TARGETS variable because now the
->> toolchain target is a dependency added automatically so it is not
->> necessary to add it anymore.
+Hi Yegor, all,
+
+On Wed, Mar 19, 2014 at 12:00 PM, Yegor Yefremov
+<yegorslists@googlemail.com> wrote:
+> On Tue, Mar 18, 2014 at 11:30 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Dear Yegor Yefremov,
+>>
+>> On Tue, 18 Mar 2014 21:01:38 +0100, Yegor Yefremov wrote:
+>>
+>>> +LIBUBOX_VERSION = bbd846ec2d72b2629758b69dc122ac0b0f2c3e4b
+>>> +LIBUBOX_SITE = git://nbd.name/luci2/libubox.git
+>>> +LIBUBOX_LICENSE = LGPLv2.1, GPLv2, BSD-3c, MIT
+>>> +LIBUBOX_INSTALL_STAGING = YES
+>>> +
+>>> +ifeq ($(BR2_PACKAGE_LUA),y)
+>>> +     LIBUBOX_DEPENDENCIES = lua
+>>> +     LIBUBOX_MAKE_ENV = \
+>>> +             PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)" \
+>>> +             PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig"
+
+This should be added in the cmake infrastructure.
+In package/pkg-cmake.mk, PKG_CONFIG_SYSROOT_DIR is already correctly set:
+http://git.buildroot.net/buildroot/tree/package/pkg-cmake.mk#n173
+
+I'm a bit dubious about the need for PKG_CONFIG_PATH, this is already
+a standard location in which pkg-config looks for (according to man).
+I would expect this variable to be set in the
+$(HOST_DIR)/usr/bin/pkg-config wrapper, but AFAICS it's not :-/
+
+BTW, what error are you facing without these variables set in
+configure env.? Could you pastebin the error logs?
+
+>>
+>> No. These variables should I believe not be necessary. The
+>> cmake-package infrastructure should simply use PATH=$(TARGET_PATH) so
+>> that when a CMake package is built, $(HOST_DIR)/usr/bin/pkg-config is
+>> used, and this pkg-config variant already knows the right path and
+>> sysroot for the .pc files.
+>>
+>> I believe Samuel Martin has already sent a patch doing this for the
+>> CMake package infrastructure.
 >
->  I disagree with this one. When you run make, you expect buildroot to
-> build the toolchain even if no target package is selected. One use case I
-> can think of: when preparing an internal toolchain for use as an external
-> toolchain in later builds.
+> Samuel could you point me to the right package with the proper example?
+>
+> Yegor
 
-Take in account that the "toolchain" target is always built because is
-a dependency of the "busybox" package that is always build and cannot
-be disabled and
-the "toolchain-buildroot" and "toolchain-external" are always enabled
-in the Config.in.
+Regards,
 
-I was thinking that the "toolchain" target is a package that uses tha
-package infrastructure, what about using the Config.in:
-
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 44f3ac6..94a0c7d 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -1,5 +1,9 @@
- menu "Toolchain"
-
-+config BR2_TOOLCHAIN
-+       bool
-+       default y
-+
- # Should be selected for glibc or eglibc
- config BR2_TOOLCHAIN_USES_GLIBC
-        bool
-diff --git a/Makefile b/Makefile
-index 384693a..3df9144 100644
---- a/Makefile
-+++ b/Makefile
-@@ -299,7 +299,7 @@ GNU_HOST_NAME:=$(shell support/gnuconfig/config.guess)
- #
- ################################################################################
-
--TARGETS:= toolchain
-+TARGETS :=
-
- # silent mode requested?
- QUIET:=$(if $(findstring s,$(MAKEFLAGS)),-q)
-
-
-I think this is more coherent to other always enabled packages like
-busybox and toolchain-*.
-
-Best regards
 -- 
-Fabio Porcedda
+Samuel
