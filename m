@@ -1,30 +1,92 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 19 Mar 2014 10:02:07 -0300
-Subject: [Buildroot] [PATCH 1/1] Fix microblize little endian toolchain
-In-Reply-To: <1395230465-4421-1-git-send-email-xvikto03@stud.fit.vutbr.cz>
-References: <1395230465-4421-1-git-send-email-xvikto03@stud.fit.vutbr.cz>
-Message-ID: <5329954F.7060701@zacarias.com.ar>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 19 Mar 2014 14:50:27 +0100
+Subject: [Buildroot] [PATCH] libtool: revert a commit which
+ re-introduced an already fixed problem
+In-Reply-To: <53296606.9070104@imgtec.com>
+References: <1395078022-37381-1-git-send-email-Vincent.Riera@imgtec.com>
+ <87txaw4gwt.fsf@dell.be.48ers.dk> <5327F9E1.1020301@mind.be>
+ <532823A9.9010603@imgtec.com> <53294D50.3040800@mind.be>
+ <53296606.9070104@imgtec.com>
+Message-ID: <5329A0A3.9020805@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/19/2014 09:01 AM, Jan Viktorin wrote:
-
-> From: Jan Drazil <xdrazi00@stud.fit.vutbr.cz>
+On 19/03/14 10:40, Vicente Olivert Riera wrote:
+> On 03/19/2014 07:54 AM, Arnout Vandecappelle wrote:
+>> On 03/18/14 11:44, Vicente Olivert Riera wrote:
+>>> On 03/18/2014 07:46 AM, Arnout Vandecappelle wrote:
+>>>> On 03/17/14 23:08, Peter Korsgaard wrote:
+>>>>>>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+>>>>>>>>>> writes:
+>>>>>
+>>>>>    > The commit ed73d1d2e3703290e74bb076bc6dd0417aa3ba21 modified the
+>>>>> changes
+>>>>>    > made by the commit 4268d3967e2d691c151d6b5629e4051deb077b9a. The
+>>>>> problem
+>>>>>    > that was fixed by the former commit is present again due to those
+>>>>>    > modifications. This patch reverts those modifications to have that
+>>>>>    > problem fixed again.
+>>>>>
+>>>>>    > Fixes:
+>>>>>    >
+>>>>> http://autobuild.buildroot.net/results/b86/b86a83c6549004f226e7255242e54ef4e50c5ec3/
+>>>>>
+>>>>>
+>>>>>
+>>>>> So this basically just reverts Arnouts fix for old automake
+>>>>> versions? Do
+>>>>> we understand why it doesn't work? Can we come up with a solution that
+>>>>> both fixes the n64 issue and old automake?
+>>>>
+>>>>    I indeed never tested if the issue of 4268d39 was still fixed. I just
+>>>> understood from the commit message that it is only relevant for the
+>>>> libtool.m4 that is installed in the host dir, so I made use of that.
+>>>>
+>>>>    It should be rather easy to get this right then: a patch that
+>>>> fixes up
+>>>> configure directly, rather than libtool.m4.
+>>>
+>>> Hello Arnout,
+>>>
+>>> how do you suggest to do it? Requiring an older automake would not be
+>>> possible because of this:
+>>>
+>>> dnl These are bootstrap requirements! Once built, libtool may work with
+>>> dnl much older releases of autoconf and automake.  See release notes.
+>>> dnl 1.11 is needed for color-tests, 1.11.1 fixes a security issue.
+>>> AM_INIT_AUTOMAKE([1.11.1 gnu subdir-objects dist-xz color-tests
+>>> parallel-tests])
+>>
+>>   I meant: create a patch that fixes up the configure script directly.
+>>
+>>   Can you give me a minimal defconfig that shows the problem (preferably
+>> using an external toolchain, e.g. from the autobuilders)? Then I can try
+>> to create that patch.
 > 
-> Buildroot toolchain creates big endian binaries instead of little endian
-> ones for microblaze architecture. The reason is wrong BR2_ARCH string.
-> KERNEL_ARCH must contain microblaze in both cases.
+> Hello Arnout,
 > 
-> Signed-off-by: Jan Drazil <xdrazi00@stud.fit.vutbr.cz>
-> Signed-off-by: Jan Viktorin <xvikto03@stud.fit.vutbr.cz>
+> unfortunately I don't have a minimal defconfig to reproduce that failure.
+> I use the one in the autobuild:
+> 
+> http://autobuild.buildroot.net/results/b86/b86a83c6549004f226e7255242e54ef4e50c5ec3/
 
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Tested-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Okay, the issue is that that defconfig enables libtool for the target,
+and autoreconf adds $(STAGING_DIR)/usr/share/aclocal to the include path.
+So the unpatched libtool will take precedence.
 
-The qemu_microblazeel_mmu_defconfig now starts the kernel (before it was
-a big failure). Still not great since OOM killer strikes before the
-login prompt.
-Regards.
+ Patch follows.
+
+ Regards,
+ Arnout
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
