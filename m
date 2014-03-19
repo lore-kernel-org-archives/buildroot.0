@@ -1,76 +1,60 @@
-From: Davide Viti <zinosat@tiscali.it>
-Date: Wed, 19 Mar 2014 01:13:38 +0100
-Subject: [Buildroot] [PATCHv3] eigen: add an option to install unsupported
-	modules
-Message-ID: <1395188018-10383-1-git-send-email-zinosat@tiscali.it>
+From: Marco Trapanese <marcotrapanese@gmail.com>
+Date: Wed, 19 Mar 2014 06:31:28 +0100
+Subject: [Buildroot] Error building Qt5Multimedia
+In-Reply-To: <CAAXf6LWEAPs-EpsHzgqJ1eiiRL+u2rssa_SM0EE5=6yQxrtbZQ@mail.gmail.com>
+References: <53269705.6060805@gmail.com>
+ <CAAXf6LVoTKqC61B2fPbwp-9LQZ1ephfpEodHVfqedB7SPyn7kg@mail.gmail.com>
+ <532828E8.5040405@gmail.com>
+ <CAAXf6LVvo4VSgkHawfNuftrqW317QzQ8FO2c-1k33datwdpfSg@mail.gmail.com>
+ <53284767.3040408@gmail.com> <53284881.1090803@gmail.com>
+ <CAAXf6LUmEB2=XB=CuUnDREER139E3MiouKLMa4GAFrNvnDzJsw@mail.gmail.com>
+ <53285568.7080900@gmail.com>
+ <CAAXf6LX-dJFpaOkMaCg0A4PD1FphzO8xbPbLWTyLTX3xmO+ELA@mail.gmail.com>
+ <53285C1B.9040201@gmail.com>
+ <CAAXf6LWEAPs-EpsHzgqJ1eiiRL+u2rssa_SM0EE5=6yQxrtbZQ@mail.gmail.com>
+Message-ID: <53292BB0.1010503@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Davide Viti <d.viti@infosolution.it>
 
 Hi Thomas,
-thank you very much for reviewing the patch!
-Here's a new version which implements all your suggestions.
 
-I do agree with installing the "unsupported" folder inside "Eigen"; 
-too bat it now breaks compilation on the PCL package I'm working on 
-which directly includes files starting from unsupported [1].
+Il 18/03/2014 16:53, Thomas De Schampheleire ha scritto:
 
-regrads,
-Davide
+>
+> This is actually a bug.
+> Could you try following patch:
+>
+> $ hg diff
+> diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk
+> b/package/qt5/qt5multimedia/qt5multimedia.mk
+> --- a/package/qt5/qt5multimedia/qt5multimedia.mk
+> +++ b/package/qt5/qt5multimedia/qt5multimedia.mk
+> @@ -25,7 +25,7 @@ QT5MULTIMEDIA_DEPENDENCIES += gst-plugin
+>   endif
+>
+>   define QT5MULTIMEDIA_CONFIGURE_CMDS
+> -       (cd $(@D); $(HOST_DIR)/usr/bin/qmake)
+> +       (cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
+>   endef
+>
+>   define QT5MULTIMEDIA_BUILD_CMDS
+>
+> and after applying this patch run:
+> make qt5multimedia-dirclean qt5multimedia
+>
+> I believe this should fix the problem. The same solution should be
+> applied to the other qt5 packages.
+> Or maybe someone else thinks the problem should be fixed in a different way.
+> I'm adding some people to this thread so they can shed their light on it...
 
 
-[1] https://github.com/PointCloudLibrary/pcl/blob/master/sample_consensus/include/pcl/sample_consensus/eigen.h
+I confirm it compiled successfully after applying your patch. I haven't 
+tried yet QtMultimedia on the target, but at least there were no errors 
+at compile-time :-)
 
-Signed-off-by: Davide Viti <zinosat@tiscali.it>
----
- package/eigen/Config.in |    8 ++++++++
- package/eigen/eigen.mk  |    7 +++++++
- 2 files changed, 15 insertions(+)
-
-diff --git a/package/eigen/Config.in b/package/eigen/Config.in
-index e94f9a3..fbada98 100644
---- a/package/eigen/Config.in
-+++ b/package/eigen/Config.in
-@@ -13,5 +13,13 @@ config BR2_PACKAGE_EIGEN
- 
- 	  http://eigen.tuxfamily.org/
- 
-+if BR2_PACKAGE_EIGEN
-+
-+config BR2_PACKAGE_EIGEN_UNSUPPORTED_MODULES
-+       bool "unsupported modules"
-+       help
-+         Install eigen unsupported modules
-+endif
-+
- comment "eigen needs a toolchain w/ C++"
- 	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/eigen/eigen.mk b/package/eigen/eigen.mk
-index 5abd464..96e6018 100644
---- a/package/eigen/eigen.mk
-+++ b/package/eigen/eigen.mk
-@@ -13,11 +13,18 @@ EIGEN_LICENSE_FILES = COPYING.MPL2 COPYING.BSD COPYING.LGPL COPYING.README
- EIGEN_INSTALL_STAGING = YES
- EIGEN_INSTALL_TARGET = NO
- 
-+ifeq ($(BR2_PACKAGE_EIGEN_UNSUPPORTED_MODULES),y)
-+define EIGEN_INSTALL_UNSUPPORTED_MODULES_CMDS
-+	cp -a $(@D)/unsupported $(STAGING_DIR)/usr/include/Eigen
-+endef
-+endif
-+
- # This package only consists of headers that need to be
- # copied over to the sysroot for compile time use
- define EIGEN_INSTALL_STAGING_CMDS
- 	$(RM) -r $(STAGING_DIR)/usr/include/Eigen
- 	cp -a $(@D)/Eigen $(STAGING_DIR)/usr/include/
-+	$(EIGEN_INSTALL_UNSUPPORTED_MODULES_CMDS)
- endef
- 
- $(eval $(generic-package))
--- 
-1.7.10.4
+Thank you for your support!
+Marco
