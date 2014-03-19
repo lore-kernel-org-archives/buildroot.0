@@ -1,44 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Mar 2014 00:25:04 +0100
-Subject: [Buildroot] [PATCH] libtool: use a different way to avoid
- autoreconfiguration
-In-Reply-To: <1395270180-12701-1-git-send-email-arnout@mind.be>
-References: <1395270180-12701-1-git-send-email-arnout@mind.be>
-Message-ID: <20140320002504.0cebf7d5@skate>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 20 Mar 2014 00:57:00 +0100
+Subject: [Buildroot] [PATCH v8] xbmc: new package
+In-Reply-To: <1393158585-27193-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1393158585-27193-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20140319235700.GC3328@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle (Essensium/Mind),
+Maxime, All,
 
-On Thu, 20 Mar 2014 00:03:00 +0100, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> In 4268d39, a patch was added to update libtool.m4 for MIPS n64 targets.
-> However, this caused the configure script to be regenerated during the
-> build steps, which in turn caused build failures on Fedora 12 hosts. In
-> ed73d1d, this was fixed by patching the installed libtool.m4 file
-> instead of the source file.
-> 
-> However, ed73d1d did not take into account that the target libtool will
-> also install libtool.m4 to staging, and that that version has
-> precedence over the one in HOST_DIR.
-> 
-> Therefore, this patch takes a different approach: the source file is
-> patched in the usual way, and instead the reconfigure is avoided by
-> touching the generated files.
-> 
-> On the target, we also cannot use the AUTORECONF mechanism because of
-> some mysterious Makefile.inc file. So just use the same approach and
-> wait for upstream to make a new release.
+On 2014-02-23 13:29 +0100, Maxime Hadjinlian spake thusly:
+> XBMC is an award-winning free and open source (GPL) software media player and
+> entertainment hub for digital media.
 
-Shouldn't we mark libtool on the target as something deprecated? We
-have already removed the support for autoconf and automake on the
-target, so having libtool seems quite useless, no?
+Are you still working on this?
 
-Thomas
+If that can help you, I've started accumulating a few of the suggested
+changes in a branch in my tree:
+    git://gitorious.org/buildroot/buildroot.git yem/xbmc
+
+    091d9b6 xbmc: new package
+    6547d40 package/xbmc: background XBMC and store PID in startup script
+    296d6b8 package/xbmc: cleanup dependencies
+
+I've made separate patches so we can keep track of the changes on top of
+your initial patch, but they should of course all be eventually folded in
+a single patch before final submission (or you can do it now in your tree
+if you want; just keep the SoB tags, please.)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
