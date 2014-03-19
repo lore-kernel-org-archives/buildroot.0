@@ -1,60 +1,44 @@
-From: Lionel Orry <lionel.orry@gmail.com>
-Date: Wed, 19 Mar 2014 11:04:15 +0100
-Subject: [Buildroot] autoreconf: Command not found
-In-Reply-To: <CAKAx1chQXSeM3q+B-T9BCPakjoUrzrjMj8vQ6OwHn6OaaG6RPw@mail.gmail.com>
-References: <CADYw_JJ+tid_YUNwBquEjnBiin+4uNN6bMSd9AEV++zf-5Xwdw@mail.gmail.com>
- <CAKAx1chQXSeM3q+B-T9BCPakjoUrzrjMj8vQ6OwHn6OaaG6RPw@mail.gmail.com>
-Message-ID: <CAKAx1ciu8+7EYbov5ox0SvVgp9ysx8CVNT4UZLAbyiWBfsQdkA@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 19 Mar 2014 07:49:00 -0300
+Subject: [Buildroot] [PATCH] mtools: fix target compilation
+Message-ID: <1395226140-8086-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi again,
+It needs some help regarding setpgrp, fixes:
+http://autobuild.buildroot.net/results/33e/33e38bf1c30cc09dbe992dfb95c48997ca860212/
+Also disable X11 support since it picks up the host variant.
+And use normal indentation for variables.
 
-On Wed, Mar 19, 2014 at 10:58 AM, Lionel Orry <lionel.orry@gmail.com> wrote:
-> Hi,
->
-> On Wed, Mar 19, 2014 at 8:06 AM, Stanislav Vlasic <svlasic@gmail.com> wrote:
->> Hi,
->>
->> sorry if I'm duplicating question but I'm facing problem building 3rd party
->> package on 2014.02 buildroot (package: xbmc, but doesn't really matter).
->>
->> Question, how to solve error: autoreconf: Command not found
->
-> I would tend to say, line 141
-> (https://github.com/Stane1983/buildroot-M3-MX/blob/2014.02-Amlogic/package/thirdparty/xbmc/xbmc.mk#L141),
-> use
->
->    cd $(XBMC_DIR) && $(TARGET_CONFIGURE_OPT) ./bootstrap
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/mtools/mtools.mk | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-Oops I made a typo : I meant
-
-   cd $(XBMC_DIR) && $(TARGET_CONFIGURE_OPTS) ./bootstrap
-
->
-> The most preferred way would be to use
->
-> XMBC_AUTORECONF = YES
->
-> but xmbc provides a customized bootstrap process which does not only
-> rely on autoreconf, so try the first suggestion above.
->
->>
->> I found autoreconf binary in out/host, but...
->>
->> My current makefile:
->> https://github.com/Stane1983/buildroot-M3-MX/blob/2014.02-Amlogic/package/thirdparty/xbmc/xbmc.mk
->>
->> Regards,
->> Stanislav Vlasic
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->
-> Regards,
-> Lionel
+diff --git a/package/mtools/mtools.mk b/package/mtools/mtools.mk
+index 6d8f44b..4880245 100644
+--- a/package/mtools/mtools.mk
++++ b/package/mtools/mtools.mk
+@@ -4,11 +4,13 @@
+ #
+ ################################################################################
+ 
+-MTOOLS_VERSION       = 4.0.18
+-MTOOLS_SOURCE        = mtools-$(MTOOLS_VERSION).tar.bz2
+-MTOOLS_SITE          = $(BR2_GNU_MIRROR)/mtools/
+-MTOOLS_LICENSE       = GPLv3+
++MTOOLS_VERSION = 4.0.18
++MTOOLS_SOURCE = mtools-$(MTOOLS_VERSION).tar.bz2
++MTOOLS_SITE = $(BR2_GNU_MIRROR)/mtools/
++MTOOLS_LICENSE = GPLv3+
+ MTOOLS_LICENSE_FILES = COPYING
++MTOOLS_CONF_ENV = ac_cv_func_setpgrp_void=yes
++MTOOLS_CONF_OPT = --without-x
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+-- 
+1.8.3.2
