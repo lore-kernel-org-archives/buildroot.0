@@ -1,35 +1,33 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 19 Mar 2014 19:35:23 +0100
-Subject: [Buildroot] [PATCH 6/6] Makefile: do not add the toolchain
- target to the TARGETS variable
-In-Reply-To: <532983A0.9050107@mind.be>
-References: <1394540278-28740-1-git-send-email-fabio.porcedda@gmail.com>
- <1394540278-28740-7-git-send-email-fabio.porcedda@gmail.com>
- <5326A778.7070507@mind.be>
- <CAHkwnC8+MsDLUd5XMU1GDmfNBCVU0p9JTaUmpWiYReTrSsAnKQ@mail.gmail.com>
- <532983A0.9050107@mind.be>
-Message-ID: <20140319183523.GA3328@free.fr>
+Date: Wed, 19 Mar 2014 19:42:39 +0100
+Subject: [Buildroot] autoreconf: Command not found
+In-Reply-To: <CADYw_JJ+tid_YUNwBquEjnBiin+4uNN6bMSd9AEV++zf-5Xwdw@mail.gmail.com>
+References: <CADYw_JJ+tid_YUNwBquEjnBiin+4uNN6bMSd9AEV++zf-5Xwdw@mail.gmail.com>
+Message-ID: <20140319184238.GB3328@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabio, Arnout, All,
+Stanislav, All,
 
-On 2014-03-19 12:46 +0100, Arnout Vandecappelle spake thusly:
-> On 19/03/14 12:10, Fabio Porcedda wrote:
-[--SNIP--]
-> > Take in account that the "toolchain" target is always built because is
-> > a dependency of the "busybox" package that is always build and cannot
-> > be disabled and
-> > the "toolchain-buildroot" and "toolchain-external" are always enabled
-> > in the Config.in.
-> 
->  busybox can be disabled (if you set the init system to "none").
+On 2014-03-19 08:06 +0100, Stanislav Vlasic spake thusly:
+> sorry if I'm duplicating question but I'm facing problem building 3rd party
+> package on 2014.02 buildroot (package: xbmc, but doesn't really matter).
 
-Indeed, and I very often uses that when I want to just test a single
-package I'm adding.
+Please note that we have a pending patch to add XBMC:
+    http://patchwork.ozlabs.org/patch/323307/
+
+It's v8, and there are still a few rough edges, but some people have
+reported success using that patch.
+
+(Cc-ing Maxime, since he's the original author.)
+
+If at all, it would be nice to help finalise this patch so it can be
+applied upstream Buildroot, rather than trying to work on your own fork
+of Buildroot (which may or may not have changes not in the Official
+Buidlroot, and that prevents us from really helping you).
 
 Regards,
 Yann E. MORIN.
