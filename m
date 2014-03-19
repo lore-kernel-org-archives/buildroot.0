@@ -1,44 +1,42 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 19 Mar 2014 07:49:00 -0300
-Subject: [Buildroot] [PATCH] mtools: fix target compilation
-Message-ID: <1395226140-8086-1-git-send-email-gustavo@zacarias.com.ar>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Wed, 19 Mar 2014 12:00:40 +0100
+Subject: [Buildroot] [PATCH v3 1/2] libubox: new package
+In-Reply-To: <20140318233003.779610f2@skate>
+References: <1395172899-3799-1-git-send-email-yegorslists@googlemail.com>
+ <20140318233003.779610f2@skate>
+Message-ID: <CAGm1_kuWvJG9JuikJsBZ+uBwoBFoJVhyNnugaUvQS9HpPiFa-g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It needs some help regarding setpgrp, fixes:
-http://autobuild.buildroot.net/results/33e/33e38bf1c30cc09dbe992dfb95c48997ca860212/
-Also disable X11 support since it picks up the host variant.
-And use normal indentation for variables.
+On Tue, Mar 18, 2014 at 11:30 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Yegor Yefremov,
+>
+> On Tue, 18 Mar 2014 21:01:38 +0100, Yegor Yefremov wrote:
+>
+>> +LIBUBOX_VERSION = bbd846ec2d72b2629758b69dc122ac0b0f2c3e4b
+>> +LIBUBOX_SITE = git://nbd.name/luci2/libubox.git
+>> +LIBUBOX_LICENSE = LGPLv2.1, GPLv2, BSD-3c, MIT
+>> +LIBUBOX_INSTALL_STAGING = YES
+>> +
+>> +ifeq ($(BR2_PACKAGE_LUA),y)
+>> +     LIBUBOX_DEPENDENCIES = lua
+>> +     LIBUBOX_MAKE_ENV = \
+>> +             PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)" \
+>> +             PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig"
+>
+> No. These variables should I believe not be necessary. The
+> cmake-package infrastructure should simply use PATH=$(TARGET_PATH) so
+> that when a CMake package is built, $(HOST_DIR)/usr/bin/pkg-config is
+> used, and this pkg-config variant already knows the right path and
+> sysroot for the .pc files.
+>
+> I believe Samuel Martin has already sent a patch doing this for the
+> CMake package infrastructure.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/mtools/mtools.mk | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+Samuel could you point me to the right package with the proper example?
 
-diff --git a/package/mtools/mtools.mk b/package/mtools/mtools.mk
-index 6d8f44b..4880245 100644
---- a/package/mtools/mtools.mk
-+++ b/package/mtools/mtools.mk
-@@ -4,11 +4,13 @@
- #
- ################################################################################
- 
--MTOOLS_VERSION       = 4.0.18
--MTOOLS_SOURCE        = mtools-$(MTOOLS_VERSION).tar.bz2
--MTOOLS_SITE          = $(BR2_GNU_MIRROR)/mtools/
--MTOOLS_LICENSE       = GPLv3+
-+MTOOLS_VERSION = 4.0.18
-+MTOOLS_SOURCE = mtools-$(MTOOLS_VERSION).tar.bz2
-+MTOOLS_SITE = $(BR2_GNU_MIRROR)/mtools/
-+MTOOLS_LICENSE = GPLv3+
- MTOOLS_LICENSE_FILES = COPYING
-+MTOOLS_CONF_ENV = ac_cv_func_setpgrp_void=yes
-+MTOOLS_CONF_OPT = --without-x
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
--- 
-1.8.3.2
+Yegor
