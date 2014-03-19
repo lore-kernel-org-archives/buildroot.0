@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 19 Mar 2014 20:30:07 +0100
-Subject: [Buildroot] [PATCH 2 of 4] qwt: use TARGET_MAKE_ENV when running
+Date: Wed, 19 Mar 2014 20:30:08 +0100
+Subject: [Buildroot] [PATCH 3 of 4] qtuio: use TARGET_MAKE_ENV when running
 	make and qmake
 In-Reply-To: <patchbomb.1395257405@argentina>
 References: <patchbomb.1395257405@argentina>
-Message-ID: <163c8448b6f2a17be27d.1395257407@argentina>
+Message-ID: <90542cc669bb4125a904.1395257408@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,23 +18,34 @@ packages that do this consistently.
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
- package/qwt/qwt.mk |  4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/qtuio/qtuio.mk |  6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/qwt/qwt.mk b/package/qwt/qwt.mk
---- a/package/qwt/qwt.mk
-+++ b/package/qwt/qwt.mk
-@@ -28,11 +28,11 @@ endif
+diff --git a/package/qtuio/qtuio.mk b/package/qtuio/qtuio.mk
+--- a/package/qtuio/qtuio.mk
++++ b/package/qtuio/qtuio.mk
+@@ -19,13 +19,13 @@ QTUIO_EXAMPLES = dials fingerpaint knobs
+ ifeq ($(BR2_QTUIO_EXAMPLES),y)
+ define QTUIO_CONFIGURE_EXAMPLES
+ 	for example in $(QTUIO_EXAMPLES) ; do \
+-		(cd $(@D)/examples/$${example} && $(QT_QMAKE)) ; \
++		(cd $(@D)/examples/$${example} && $(TARGET_MAKE_ENV) $(QT_QMAKE)) ; \
+ 	done
+ endef
+ endif
  
- define QWT_CONFIGURE_CMDS
- 	$(SED) $(QWT_CONFIG) $(@D)/qwtconfig.pri
--	(cd $(@D); $(QT_QMAKE))
-+	(cd $(@D); $(TARGET_MAKE_ENV) $(QT_QMAKE))
+ define QTUIO_CONFIGURE_CMDS
+-	cd $(@D)/src && $(QT_QMAKE)
++	cd $(@D)/src && $(TARGET_MAKE_ENV) $(QT_QMAKE)
+ 	$(QTUIO_CONFIGURE_EXAMPLES)
  endef
  
- define QWT_BUILD_CMDS
--	$(MAKE) -C $(@D)
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+@@ -38,7 +38,7 @@ endef
+ endif
+ 
+ define QTUIO_BUILD_CMDS
+-	$(MAKE) -C $(@D)/src
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src
+ 	$(QTUIO_BUILD_EXAMPLES)
  endef
  
- # After installation, we fixup the INSTALL_PREFIX in qwtconfig.pri so
