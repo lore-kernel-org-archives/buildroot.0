@@ -1,55 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 20 Mar 2014 23:35:49 +0100
-Subject: [Buildroot] [PATCH 1/6] manual/common-usage.txt: fix typo
-In-Reply-To: <1395353250-9475-2-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1395353250-9475-1-git-send-email-jerzy.grzegorek@trzebnica.net>
- <1395353250-9475-2-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <20140320223549.GA20862@free.fr>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 20 Mar 2014 23:56:38 +0100
+Subject: [Buildroot] ARC/uclibc-f37101d94284c692ee9b23bc72ef38b9473cd316
+	compile failure
+Message-ID: <trinity-2154b334-ea3f-48a7-ad1d-15cc3890166f-1395356198737@3capp-gmx-bs24>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jerzy, All,
+Hello,
 
-On 2014-03-20 23:07 +0100, Jerzy Grzegorek spake thusly:
-> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+with latest buildroot from git I get the following uclib compile failure.
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Buildroot defconfig:
 
-Regards,
-Yann E. MORIN.
+BR2_arceb=y
 
-> ---
->  docs/manual/common-usage.txt |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
-> index a16b887..ca1bffe 100644
-> --- a/docs/manual/common-usage.txt
-> +++ b/docs/manual/common-usage.txt
-> @@ -140,7 +140,7 @@ Other tools may have similar options. Please consult their respective man
->  pages.
->  
->  You can use sparse files if you need to store the filesystem images (eg.
-> -to transfer from one machine to another), of if you need to send them (eg.
-> +to transfer from one machine to another), or if you need to send them (eg.
->  to the Q&A team).
->  
->  Note however that flashing a filesystem image to a device while using the
-> -- 
-> 1.7.9.5
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Build log:
+...
+  CC libc/sysdeps/linux/common/getpgid.os
+  CC libc/sysdeps/linux/common/modify_ldt.os
+  CC libc/sysdeps/linux/common/posix_fadvise.os
+libc/sysdeps/linux/common/posix_fadvise.c:26:29: error: unknown type name 'off64_t'
+ int posix_fadvise64(int fd, off64_t offset, off64_t len, int advice);
+                             ^
+libc/sysdeps/linux/common/posix_fadvise.c:26:45: error: unknown type name 'off64_t'
+ int posix_fadvise64(int fd, off64_t offset, off64_t len, int advice);
+                                             ^
+libc/sysdeps/linux/common/posix_fadvise.c: In function 'posix_fadvise':
+libc/sysdeps/linux/common/posix_fadvise.c:32:2: warning: implicit declaration of function 'posix_fadvise64' [-Wimplicit-function-declaration]
+  return posix_fadvise64(fd, offset, len, advice);
+  ^
+make[2]: *** [libc/sysdeps/linux/common/posix_fadvise.os] Error 1
+make[1]: *** [/home/seiderer/Work/zeiss/freescale-imx6/build_arc/build/uclibc-f37101d94284c692ee9b23bc72ef38b9473cd316/.stamp_built] Error 2
+make: *** [_all] Error 2
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Peter
