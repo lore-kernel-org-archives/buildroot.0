@@ -1,64 +1,52 @@
-From: Dan Moulding <dan.moulding@rackwareinc.com>
-Date: Thu, 20 Mar 2014 11:38:09 -0600 (MDT)
-Subject: [Buildroot] ccache directory not being created
-Message-ID: <1395337089.65339451@apps.rackspace.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 20 Mar 2014 18:56:07 +0100
+Subject: [Buildroot] [PATCH] manual: Add Section on using Buildroot's
+ Toolchain Externally
+In-Reply-To: <20140320025844.12fa4f78@skate>
+References: <1395273466-19365-1-git-send-email-alan@signal11.us>
+ <20140320025844.12fa4f78@skate>
+Message-ID: <20140320175607.GB23560@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas, Alan, All,
 
-I have experienced a problem where, with ccache enabled, and the cache directory set to a subdirectory within the buildroot output directory, the build fails because ccache is trying to write files to the cache directory, but the cache directory doesn't exist. Well, more precisely, ccache will create the cache directory itself, but the cache directory's parent directory does not exist and ccache will not create that.
+On 2014-03-20 02:58 +0100, Thomas Petazzoni spake thusly:
+> On Wed, 19 Mar 2014 19:57:46 -0400, Alan Ott wrote:
+> > Signed-off-by: Alan Ott <alan@signal11.us>
+> > ---
+> >  docs/manual/customize-toolchain.txt | 30 ++++++++++++++++++++++++++++++
+> >  1 file changed, 30 insertions(+)
+> > 
+> > diff --git a/docs/manual/customize-toolchain.txt b/docs/manual/customize-toolchain.txt
+> > index 31c9140..71687d3 100644
+> > --- a/docs/manual/customize-toolchain.txt
+> > +++ b/docs/manual/customize-toolchain.txt
+> > @@ -49,3 +49,33 @@ It allows to tune major settings, such as:
+> >  
+> >  These settings are available after selecting the +Buildroot toolchain+ type in
+> >  the menu +Toolchain+.
+> > +
+> > +Using a Buildroot Toolchain from Outside Buildroot
+> > +^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 
+> Thanks a lot for this contribution. However, the manual already has a
+> section about this topic, see:
+> 
+>   http://buildroot.org/downloads/manual/manual.html#_using_the_generated_toolchain_outside_buildroot
 
-The error I get, during host-binutils 2.24 configuration, is:
+Doh, I missed it when looking at the manual. :-/
 
-  checking for C compiler default output file name...
-  configure: error: in `/home/dmoulding/rwi1/cai/buildroot/output/build/host-binutils-2.24':
-  configure: error: C compiler cannot create executables
-  See `config.log' for more details.
-  make: *** [/home/dmoulding/rwi1/cai/buildroot/output/build/host-binutils-  2.24/.stamp_configured] Error 77
+Regards,
+Yann E. MORIN.
 
-Examining config.log I see this:
-
-  configure:4258: checking for C compiler default output file name
-  configure:4280: /home/dmoulding/rwi1/cai/buildroot/output/host/usr/bin/ccache /usr/lib64/ccache/gcc -O2 -I/home/dmoulding/rwi1/cai/buildroot/output/host/usr/include -I/home/dmoulding/rwi1/cai/buildroot/output/host/usr/include -L/home/dmoulding/rwi1/cai/buildroot/output/host/lib -L/home/dmoulding/rwi1/cai/buildroot/output/host/usr/lib -Wl,-rpath,/home/dmoulding/rwi1/cai/buildroot/output/host/usr/lib conftest.c  >&5
-  ccache: failed to create /home/dmoulding/rwi1/cai/buildroot/output/build/toolchain-undefined/ccache-3.1.8/cache (No such file or directory)
-  configure:4284: $? = 1
-  configure:4321: result: 
-  configure: failed program was:
-  | /* confdefs.h */
-  | #define PACKAGE_NAME ""
-  | #define PACKAGE_TARNAME ""
-  | #define PACKAGE_VERSION ""
-  | #define PACKAGE_STRING ""
-  | #define PACKAGE_BUGREPORT ""
-  | #define PACKAGE_URL ""
-  | /* end confdefs.h.  */
-  | 
-  | int
-  | main ()
-  | {
-  | 
-  |   ;
-  |   return 0;
-  | }
-  configure:4327: error: in `/home/dmoulding/rwi1/cai/buildroot/output/build/host-binutils-2.24':
-  configure:4331: error: C compiler cannot create executables
-  See `config.log' for more details.
-
-Note that ccache is complaining that it cannot create the "cache" directory (the parent directory does not exist).
- 
-Relevant Buildroot configuration:
-
-  BR2_CCACHE=y
-  BR2_CCACHE_DIR="$(TOOLCHAIN_DIR)/ccache-$(CCACHE_VERSION)/cache"
-
-Looking way back in buildroot's history, I see that in 2010 (commit 17b66af), the way ccache is managed was reworked. Prior to this rework, the ccache makefile used to "mkdir -p" the cache directory. I don't see anywhere in the current revision where the equivalent is being done.
-
-For now, I have patched my package/ccache/ccache.mk to add a hook that does the "mkdir -p" step. Is this the right way to solve this problem, or have I overlooked something else?
-
-Cheers,
-
--- Dan
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
