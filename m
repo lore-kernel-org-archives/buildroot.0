@@ -1,65 +1,64 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 20 Mar 2014 18:38:31 +0100
-Subject: [Buildroot] [PATCH v8] xbmc: new package
-In-Reply-To: <CAGduivyzGsZjmrU0DD81kAEEEbc=r7Mhsm7yXLkL8xC=RkPP7g@mail.gmail.com>
-References: <1393158585-27193-1-git-send-email-maxime.hadjinlian@gmail.com>
- <20140319235700.GC3328@free.fr>
- <CAGduivyzGsZjmrU0DD81kAEEEbc=r7Mhsm7yXLkL8xC=RkPP7g@mail.gmail.com>
-Message-ID: <20140320173831.GA23560@free.fr>
+From: Dan Moulding <dan.moulding@rackwareinc.com>
+Date: Thu, 20 Mar 2014 11:38:09 -0600 (MDT)
+Subject: [Buildroot] ccache directory not being created
+Message-ID: <1395337089.65339451@apps.rackspace.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Maxime, All,
+Hello,
 
-On 2014-03-20 09:25 +0100, Maxime Hadjinlian spake thusly:
-> On Thu, Mar 20, 2014 at 12:57 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > On 2014-02-23 13:29 +0100, Maxime Hadjinlian spake thusly:
-> >> XBMC is an award-winning free and open source (GPL) software media player and
-> >> entertainment hub for digital media.
-> >
-> > Are you still working on this?
-> Yup, I am truly sorry with the lack of communication. I have been
-> under an ocean of work and as such have really no energy left to hack
-> (and my wife would literally murder me at this point).
+I have experienced a problem where, with ccache enabled, and the cache directory set to a subdirectory within the buildroot output directory, the build fails because ccache is trying to write files to the cache directory, but the cache directory doesn't exist. Well, more precisely, ccache will create the cache directory itself, but the cache directory's parent directory does not exist and ccache will not create that.
 
-Hey, no problem. We all have real lives to deal with. ;-)
+The error I get, during host-binutils 2.24 configuration, is:
 
-> *BUT* I was thinking of working on this either during my lunch hour or
-> friday night since I have the whole evening to myself.
+  checking for C compiler default output file name...
+  configure: error: in `/home/dmoulding/rwi1/cai/buildroot/output/build/host-binutils-2.24':
+  configure: error: C compiler cannot create executables
+  See `config.log' for more details.
+  make: *** [/home/dmoulding/rwi1/cai/buildroot/output/build/host-binutils-  2.24/.stamp_configured] Error 77
 
-Do not feel like this should be a burden on your shoulders. Take it
-along when you can and want. Doing something because you feel you have
-to is the best way to get burnt.
+Examining config.log I see this:
 
-> > If that can help you, I've started accumulating a few of the suggested
-> > changes in a branch in my tree:
-> >     git://gitorious.org/buildroot/buildroot.git yem/xbmc
-[--SNIP--]
-> From my point of view, I have left to do :
->     - The removal of the patch regarding the RPi specific settings
->     - Add them thought and advancedsettings.xml which will be
-> installed with XBMC if we are building for an RPi.
-> 
-> Have I missed anything ?
+  configure:4258: checking for C compiler default output file name
+  configure:4280: /home/dmoulding/rwi1/cai/buildroot/output/host/usr/bin/ccache /usr/lib64/ccache/gcc -O2 -I/home/dmoulding/rwi1/cai/buildroot/output/host/usr/include -I/home/dmoulding/rwi1/cai/buildroot/output/host/usr/include -L/home/dmoulding/rwi1/cai/buildroot/output/host/lib -L/home/dmoulding/rwi1/cai/buildroot/output/host/usr/lib -Wl,-rpath,/home/dmoulding/rwi1/cai/buildroot/output/host/usr/lib conftest.c  >&5
+  ccache: failed to create /home/dmoulding/rwi1/cai/buildroot/output/build/toolchain-undefined/ccache-3.1.8/cache (No such file or directory)
+  configure:4284: $? = 1
+  configure:4321: result: 
+  configure: failed program was:
+  | /* confdefs.h */
+  | #define PACKAGE_NAME ""
+  | #define PACKAGE_TARNAME ""
+  | #define PACKAGE_VERSION ""
+  | #define PACKAGE_STRING ""
+  | #define PACKAGE_BUGREPORT ""
+  | #define PACKAGE_URL ""
+  | /* end confdefs.h.  */
+  | 
+  | int
+  | main ()
+  | {
+  | 
+  |   ;
+  |   return 0;
+  | }
+  configure:4327: error: in `/home/dmoulding/rwi1/cai/buildroot/output/build/host-binutils-2.24':
+  configure:4331: error: C compiler cannot create executables
+  See `config.log' for more details.
 
-No, this is basically the review you had so far.
+Note that ccache is complaining that it cannot create the "cache" directory (the parent directory does not exist).
+ 
+Relevant Buildroot configuration:
 
-I can see improvements, but that can easily go in followup patches.
+  BR2_CCACHE=y
+  BR2_CCACHE_DIR="$(TOOLCHAIN_DIR)/ccache-$(CCACHE_VERSION)/cache"
 
-> Again sorry for the lack of communication and sudden disappearance.
+Looking way back in buildroot's history, I see that in 2010 (commit 17b66af), the way ccache is managed was reworked. Prior to this rework, the ccache makefile used to "mkdir -p" the cache directory. I don't see anywhere in the current revision where the equivalent is being done.
 
-No problem! Just ensure you enjoy doing that, and not feel compelled to.
+For now, I have patched my package/ccache/ccache.mk to add a hook that does the "mkdir -p" step. Is this the right way to solve this problem, or have I overlooked something else?
 
-Regards,
-Yann E. MORIN.
+Cheers,
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+-- Dan
