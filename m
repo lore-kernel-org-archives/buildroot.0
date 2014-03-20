@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 21 Mar 2014 00:18:22 +0100
-Subject: [Buildroot] [PATCH 5/6] manual/adding-packages-generic.txt:
- change the default value of <PKG>_SOURCE variable
-In-Reply-To: <1395353250-9475-6-git-send-email-jerzy.grzegorek@trzebnica.net>
+Date: Fri, 21 Mar 2014 00:19:27 +0100
+Subject: [Buildroot] [PATCH 6/6] manual/adding-packages-tips.txt: reword
+ part about package name
+In-Reply-To: <1395353250-9475-7-git-send-email-jerzy.grzegorek@trzebnica.net>
 References: <1395353250-9475-1-git-send-email-jerzy.grzegorek@trzebnica.net>
- <1395353250-9475-6-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <20140320231822.GE20862@free.fr>
+ <1395353250-9475-7-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <20140320231927.GF20862@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -23,22 +23,22 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  docs/manual/adding-packages-generic.txt |    2 +-
+>  docs/manual/adding-packages-tips.txt |    2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-> index 366b896..e125498 100644
-> --- a/docs/manual/adding-packages-generic.txt
-> +++ b/docs/manual/adding-packages-generic.txt
-> @@ -211,7 +211,7 @@ information is (assuming the package name is +libfoo+) :
->    the package. If +HOST_LIBFOO_SOURCE+ is not specified, it
->    defaults to +LIBFOO_SOURCE+. If none are specified, then
->    the value is assumed to be
-> -  +packagename-$(LIBFOO_VERSION).tar.gz+. +
-> +  +libfoo-$(LIBFOO_VERSION).tar.gz+. +
->    Example: +LIBFOO_SOURCE = foobar-$(LIBFOO_VERSION).tar.bz2+
+> diff --git a/docs/manual/adding-packages-tips.txt b/docs/manual/adding-packages-tips.txt
+> index 73c25be..ceaba8e 100644
+> --- a/docs/manual/adding-packages-tips.txt
+> +++ b/docs/manual/adding-packages-tips.txt
+> @@ -31,7 +31,7 @@ using the following rules:
+>    +BR2_PACKAGE_FOO_BAR_BOO+);
 >  
->  * +LIBFOO_PATCH+ may contain a space-separated list of patch file
+>  * the +*.mk+ file variable prefix is the upper case _package name_
+> -  `.` and `-` characters substituted with `_` (e.g.:
+> +  with `.` and `-` characters substituted with `_` (e.g.:
+>    +FOO_BAR_BOO_VERSION+).
+>  
+>  
 > -- 
 > 1.7.9.5
 > 
