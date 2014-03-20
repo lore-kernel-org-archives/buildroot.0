@@ -1,99 +1,65 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Thu, 20 Mar 2014 17:31:00 +0100
-Subject: [Buildroot] autoreconf: Command not found
-In-Reply-To: <CADYw_JJYQFccmGm0OE65u_LROK3eHRmHc6VOQtq8V9aQks=H9A@mail.gmail.com>
-References: <CADYw_JJ+tid_YUNwBquEjnBiin+4uNN6bMSd9AEV++zf-5Xwdw@mail.gmail.com>
- <20140319184238.GB3328@free.fr>
- <CADYw_JJYQFccmGm0OE65u_LROK3eHRmHc6VOQtq8V9aQks=H9A@mail.gmail.com>
-Message-ID: <CAGduivxyrirUy7o+ia95qF-KqvROemErHswwNjatt7C-GJagyQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 20 Mar 2014 18:38:31 +0100
+Subject: [Buildroot] [PATCH v8] xbmc: new package
+In-Reply-To: <CAGduivyzGsZjmrU0DD81kAEEEbc=r7Mhsm7yXLkL8xC=RkPP7g@mail.gmail.com>
+References: <1393158585-27193-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <20140319235700.GC3328@free.fr>
+ <CAGduivyzGsZjmrU0DD81kAEEEbc=r7Mhsm7yXLkL8xC=RkPP7g@mail.gmail.com>
+Message-ID: <20140320173831.GA23560@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Stanislav, all
+Maxime, All,
 
-On Thu, Mar 20, 2014 at 5:07 PM, Stanislav Vlasic <svlasic@gmail.com> wrote:
-> Thanx everybody for answering,
->
-> based on suggestions and patches, I managed to build xbmc and everything
-> else needed for buildroot.
->
-> Related to buildroot, all patches/packages are originally from official
-> 2014.02 buildroot, except amlogic changes (additional packages), packages in
-> thirdparty folder and
-> patches to alsa-lib, sdl and sdl_image (to be also available as host
-> packages).
->
-A few package in your thirdparty directory are already in buildroot :
-   - librtmp (called rtmpdump in buildroot)
-   - taglib
-   - shairport (libshairplay)
+On 2014-03-20 09:25 +0100, Maxime Hadjinlian spake thusly:
+> On Thu, Mar 20, 2014 at 12:57 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > On 2014-02-23 13:29 +0100, Maxime Hadjinlian spake thusly:
+> >> XBMC is an award-winning free and open source (GPL) software media player and
+> >> entertainment hub for digital media.
+> >
+> > Are you still working on this?
+> Yup, I am truly sorry with the lack of communication. I have been
+> under an ocean of work and as such have really no energy left to hack
+> (and my wife would literally murder me at this point).
 
-And for XBMC, it will be merged when it is merged :).
+Hey, no problem. We all have real lives to deal with. ;-)
 
-Also, sdl and sdl_image have host variant as I added them because of XBMC.
+> *BUT* I was thinking of working on this either during my lunch hour or
+> friday night since I have the whole evening to myself.
 
-Correct me if I'm wrong, but I think you forked this tree:
-https://github.com/huceke/buildroot-rbp
+Do not feel like this should be a burden on your shoulders. Take it
+along when you can and want. Doing something because you feel you have
+to is the best way to get burnt.
 
-Originally, while there is nothing wrong with this, a lot has happened
-in Buildroot and huceke's tree was not updated accordingly.
+> > If that can help you, I've started accumulating a few of the suggested
+> > changes in a branch in my tree:
+> >     git://gitorious.org/buildroot/buildroot.git yem/xbmc
+[--SNIP--]
+> From my point of view, I have left to do :
+>     - The removal of the patch regarding the RPi specific settings
+>     - Add them thought and advancedsettings.xml which will be
+> installed with XBMC if we are building for an RPi.
+> 
+> Have I missed anything ?
 
-And as Yann pointed out, why not help out and fix/add the packages you
-would want to use ?
-If you have specific packages that you don't want to merge in
-Buildroot, consider the BR2_EXTERNAL mechanism
-(http://buildroot.uclibc.org/downloads/manual/manual.html#outside-br-custom).
+No, this is basically the review you had so far.
 
-This way we would be able to help you the best we can and you don't
-have the headache of maintaining a separate fork.
+I can see improvements, but that can easily go in followup patches.
 
-Sounds great heh ? ;)
+> Again sorry for the lack of communication and sudden disappearance.
 
-> Commits:
-> https://github.com/Stane1983/buildroot-M3-MX/commits/2014.02-Amlogic
->
->
-> On Wed, Mar 19, 2014 at 7:42 PM, Yann E. MORIN <yann.morin.1998@free.fr>
-> wrote:
->>
->> Stanislav, All,
->>
->> On 2014-03-19 08:06 +0100, Stanislav Vlasic spake thusly:
->> > sorry if I'm duplicating question but I'm facing problem building 3rd
->> > party
->> > package on 2014.02 buildroot (package: xbmc, but doesn't really matter).
->>
->> Please note that we have a pending patch to add XBMC:
->>     http://patchwork.ozlabs.org/patch/323307/
->>
->> It's v8, and there are still a few rough edges, but some people have
->> reported success using that patch.
->>
->> (Cc-ing Maxime, since he's the original author.)
->>
->> If at all, it would be nice to help finalise this patch so it can be
->> applied upstream Buildroot, rather than trying to work on your own fork
->> of Buildroot (which may or may not have changes not in the Official
->> Buidlroot, and that prevents us from really helping you).
->>
->> Regards,
->> Yann E. MORIN.
->>
->> --
->>
->> .-----------------.--------------------.------------------.--------------------.
->> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
->> conspiracy: |
->> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->> |
->> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is
->> no  |
->> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
->> conspiracy.  |
->>
->> '------------------------------^-------^------------------^--------------------'
->
->
+No problem! Just ensure you enjoy doing that, and not feel compelled to.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
