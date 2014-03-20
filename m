@@ -1,65 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Mar 2014 15:51:30 +0100
-Subject: [Buildroot] [PATCH v4 2/2] libuci: new package
-In-Reply-To: <CAGm1_ktEWi+dhAxxBYg=8i9BfBw6QiDNNbVO-4+z+N3GNsT=_Q@mail.gmail.com>
-References: <1395266096-7649-1-git-send-email-yegorslists@googlemail.com>
- <1395266096-7649-2-git-send-email-yegorslists@googlemail.com>
- <20140319232343.71252ef2@skate>
- <CAGm1_ktEWi+dhAxxBYg=8i9BfBw6QiDNNbVO-4+z+N3GNsT=_Q@mail.gmail.com>
-Message-ID: <20140320155130.7dddc04d@skate>
+Date: Thu, 20 Mar 2014 15:54:22 +0100
+Subject: [Buildroot] [PATCH] libtool: use a different way to avoid
+ autoreconfiguration
+In-Reply-To: <532A8C01.2070702@mind.be>
+References: <1395270180-12701-1-git-send-email-arnout@mind.be>
+ <20140320002504.0cebf7d5@skate> <532A8C01.2070702@mind.be>
+Message-ID: <20140320155422.1ff40798@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yegor Yefremov,
+Dear Arnout Vandecappelle,
 
-On Thu, 20 Mar 2014 09:17:55 +0100, Yegor Yefremov wrote:
+On Thu, 20 Mar 2014 07:34:41 +0100, Arnout Vandecappelle wrote:
 
-> >> +config BR2_PACKAGE_LIBUCI
-> >> +     bool "libuci"
-> >> +     select BR2_PACKAGE_LIBUBOX
-> >> +     help
-> >> +       libuci is intended to centralize the whole configuration
-> >> +       of a device running OpenWrt. This package will also install
-> >
-> > What is a "device running OpenWrt" in the context of Buildroot ?
-> >
-> > Thomas
-> > --
-> > Thomas Petazzoni, CTO, Free Electrons
-> > Embedded Linux, Kernel and Android engineering
-> > http://free-electrons.com
+> > Shouldn't we mark libtool on the target as something deprecated? We
+> > have already removed the support for autoconf and automake on the
+> > target, so having libtool seems quite useless, no?
 > 
-> libuci provides just another config infrastructure. All config files
-> will be placed to /etc/config and you can read/write it's content via
-> libuci or UCI CLI. OpenWrt is using this approach and also develops
-> these packages. But it's usage is not limited to OpenWrt and can be
-> used by any distribution. See http://wiki.openwrt.org/doc/uci for more
-> details. I have found this tutorial for Ubunut:
-> http://www.wakoond.hu/2013/06/using-uci-on-ubuntu.html
-> 
-> I need these packages, because I have some programs I've developed for
-> OpenWrt, but would also like to use in BR. Another usage were to play
-> with swconfig (https://github.com/ringlej/swconfig). Of course you can
-> compile swconfig without uci support, but uci like config is much more
-> readable and handy: http://wiki.openwrt.org/doc/uci/network/switch.
-> 
-> And the real master plan were to port LuCI
-> (http://luci.subsignal.org/trac) or LuCI2 to BR, so that BR can get a
-> "standard" web-frontend.
-> 
-> I think OpenWrt is good tag for those familiar with this infrastructure.
+>  Pulseaudio depends on libtool. I guess it actually depends on libltdl,
+> though. But is precisely in libltdl that the problem occurs.
 
-Thanks for the explanation, but in fact I kind of knew all of this
-already. My message was more that your Config.in help text is
-misleading, as it doesn't really explain what libuci is, and it only
-indicates that it is "for OpenWrt", which doesn't make sense in the
-context of Buildroot. So I would rephrase the help text by indicating
-something like: "This library originates from the OpenWrt project to
-handle the configuration blablabla, but can also be used for the same
-purposes in projects other than OpenWrt".
+But isn't the libltdl code normally "copied" into the project when
+autoreconf is made, so that there should in fact not be any dependency
+from pulseaudio to the target libtool?
 
 Thomas
 -- 
