@@ -1,44 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Mar 2014 19:21:44 +0100
-Subject: [Buildroot] [PATCH v3] bluez5_utils: new package.
-In-Reply-To: <1395323298-15098-1-git-send-email-marcin@bis.org.pl>
-References: <20140304213845.GG11474@free.fr>
- <1395323298-15098-1-git-send-email-marcin@bis.org.pl>
-Message-ID: <20140320192144.2c53f07a@skate>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Thu, 20 Mar 2014 19:35:42 +0100
+Subject: [Buildroot] [V2] pkg-perl: prevents the interactive prompts
+Message-ID: <1395340542-23383-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Marcin Bis,
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/pkg-perl.mk |    4 ++++
+ 1 file changed, 4 insertions(+)
 
-On Thu, 20 Mar 2014 14:48:18 +0100, Marcin Bis wrote:
-
-> The patch follows:
-
-Thanks a lot, but the patch should be in a separate e-mail. As you sent
-it, all your discussion answering Yann's comment would end up in the
-patch commit log.
-
-> bluez5_utils: new package.
-> 
-> API is not backwards compatible with BlueZ 4.
-> 
-> BlueZ utils will use systemd and/or udev if enabled.
-> Contains a hook for installing GATT support tool, wchich is always
-> build but not installed by default.
-
-Also your Signed-off-by line is missing.
-
-See
-http://buildroot.org/downloads/manual/manual.html#_contributing_to_buildroot
-for more details about formatting patches.
-
-Thanks a lot!
-
-Thomas
+diff --git a/package/pkg-perl.mk b/package/pkg-perl.mk
+index fdf1580..447f364 100644
+--- a/package/pkg-perl.mk
++++ b/package/pkg-perl.mk
+@@ -49,6 +49,7 @@ ifeq ($(4),target)
+ # Configure package for target
+ define $(2)_CONFIGURE_CMDS
+ 	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] ; then \
++		PERL_MM_USE_DEFAULT=1 \
+ 		perl Build.PL \
+ 			--config ar="$(TARGET_AR)" \
+ 			--config full_ar="$(TARGET_AR)" \
+@@ -68,6 +69,7 @@ define $(2)_CONFIGURE_CMDS
+ 			--install_path libdoc=/usr/share/man/man3 \
+ 			$$($(2)_CONF_OPT); \
+ 	else \
++		PERL_MM_USE_DEFAULT=1 \
+ 		PERL_AUTOINSTALL=--skipdeps \
+ 		perl Makefile.PL \
+ 			AR="$(TARGET_AR)" \
+@@ -93,11 +95,13 @@ else
+ # Configure package for host
+ define $(2)_CONFIGURE_CMDS
+ 	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] ; then \
++		PERL_MM_USE_DEFAULT=1 \
+ 		perl Build.PL \
+ 			--install_base $$(HOST_DIR)/usr \
+ 			--installdirs vendor \
+ 			$$($(2)_CONF_OPT); \
+ 	else \
++		PERL_MM_USE_DEFAULT=1 \
+ 		PERL_AUTOINSTALL=--skipdeps \
+ 		perl Makefile.PL \
+ 			INSTALL_BASE=$$(HOST_DIR)/usr \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.9.5
