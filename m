@@ -1,32 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Mar 2014 06:12:45 +0100
-Subject: [Buildroot] Last call for Google Summer of Code 2014
-Message-ID: <20140320061245.7fd2f7fa@skate>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 20 Mar 2014 07:34:41 +0100
+Subject: [Buildroot] [PATCH] libtool: use a different way to avoid
+	autoreconfiguration
+In-Reply-To: <20140320002504.0cebf7d5@skate>
+References: <1395270180-12701-1-git-send-email-arnout@mind.be>
+ <20140320002504.0cebf7d5@skate>
+Message-ID: <532A8C01.2070702@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 20/03/14 00:25, Thomas Petazzoni wrote:
+> Dear Arnout Vandecappelle (Essensium/Mind),
+> 
+> On Thu, 20 Mar 2014 00:03:00 +0100, Arnout Vandecappelle
+> (Essensium/Mind) wrote:
+>> In 4268d39, a patch was added to update libtool.m4 for MIPS n64 targets.
+>> However, this caused the configure script to be regenerated during the
+>> build steps, which in turn caused build failures on Fedora 12 hosts. In
+>> ed73d1d, this was fixed by patching the installed libtool.m4 file
+>> instead of the source file.
+>>
+>> However, ed73d1d did not take into account that the target libtool will
+>> also install libtool.m4 to staging, and that that version has
+>> precedence over the one in HOST_DIR.
+>>
+>> Therefore, this patch takes a different approach: the source file is
+>> patched in the usual way, and instead the reconfigure is avoided by
+>> touching the generated files.
+>>
+>> On the target, we also cannot use the AUTORECONF mechanism because of
+>> some mysterious Makefile.inc file. So just use the same approach and
+>> wait for upstream to make a new release.
+> 
+> Shouldn't we mark libtool on the target as something deprecated? We
+> have already removed the support for autoconf and automake on the
+> target, so having libtool seems quite useless, no?
 
-If you're interested in participating to the Google Summer of Code 2014
-on Buildroot, this is your last chance: the deadline for candidates
-expires in one day and a few hours.
+ Pulseaudio depends on libtool. I guess it actually depends on libltdl,
+though. But is precisely in libltdl that the problem occurs.
 
-See http://elinux.org/Buildroot:GSoC2014Ideas for the project ideas
-that we have, even though you can also propose your own ideas.
 
-Then go to https://www.google-melange.com/gsoc/homepage/google/gsoc2014
-to apply as a candidate.
+ Regards,
+ Arnout
 
-Interested participants can also contact me, or get in touch with the
-other Buildroot people on IRC (#buildroot on Freenode).
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
