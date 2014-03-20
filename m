@@ -1,199 +1,68 @@
-From: Marcin Bis <marcin@bis.org.pl>
-Date: Thu, 20 Mar 2014 14:48:18 +0100
-Subject: [Buildroot] [PATCH v3] bluez5_utils: new package.
-In-Reply-To: <20140304213845.GG11474@free.fr>
-References: <20140304213845.GG11474@free.fr>
-Message-ID: <1395323298-15098-1-git-send-email-marcin@bis.org.pl>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 20 Mar 2014 15:51:30 +0100
+Subject: [Buildroot] [PATCH v4 2/2] libuci: new package
+In-Reply-To: <CAGm1_ktEWi+dhAxxBYg=8i9BfBw6QiDNNbVO-4+z+N3GNsT=_Q@mail.gmail.com>
+References: <1395266096-7649-1-git-send-email-yegorslists@googlemail.com>
+ <1395266096-7649-2-git-send-email-yegorslists@googlemail.com>
+ <20140319232343.71252ef2@skate>
+ <CAGm1_ktEWi+dhAxxBYg=8i9BfBw6QiDNNbVO-4+z+N3GNsT=_Q@mail.gmail.com>
+Message-ID: <20140320155130.7dddc04d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear Yegor Yefremov,
 
-Hi Yann
+On Thu, 20 Mar 2014 09:17:55 +0100, Yegor Yefremov wrote:
 
->> +BLUEZ5_UTILS_VERSION = 5.10
->
->There's 5.15, now...
-I have bumped it to 5.16 - newest version.
+> >> +config BR2_PACKAGE_LIBUCI
+> >> +     bool "libuci"
+> >> +     select BR2_PACKAGE_LIBUBOX
+> >> +     help
+> >> +       libuci is intended to centralize the whole configuration
+> >> +       of a device running OpenWrt. This package will also install
+> >
+> > What is a "device running OpenWrt" in the context of Buildroot ?
+> >
+> > Thomas
+> > --
+> > Thomas Petazzoni, CTO, Free Electrons
+> > Embedded Linux, Kernel and Android engineering
+> > http://free-electrons.com
+> 
+> libuci provides just another config infrastructure. All config files
+> will be placed to /etc/config and you can read/write it's content via
+> libuci or UCI CLI. OpenWrt is using this approach and also develops
+> these packages. But it's usage is not limited to OpenWrt and can be
+> used by any distribution. See http://wiki.openwrt.org/doc/uci for more
+> details. I have found this tutorial for Ubunut:
+> http://www.wakoond.hu/2013/06/using-uci-on-ubuntu.html
+> 
+> I need these packages, because I have some programs I've developed for
+> OpenWrt, but would also like to use in BR. Another usage were to play
+> with swconfig (https://github.com/ringlej/swconfig). Of course you can
+> compile swconfig without uci support, but uci like config is much more
+> readable and handy: http://wiki.openwrt.org/doc/uci/network/switch.
+> 
+> And the real master plan were to port LuCI
+> (http://luci.subsignal.org/trac) or LuCI2 to BR, so that BR can get a
+> "standard" web-frontend.
+> 
+> I think OpenWrt is good tag for those familiar with this infrastructure.
 
->> +BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
->> +BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
->> +BLUEZ5_UTILS_INSTALL_STAGING = YES
->> +BLUEZ5_UTILS_DEPENDENCIES = dbus libglib2 libical readline
->> +BLUEZ5_UTILS_CONF_OPT = --enable-test --enable-tools --enable-library
->
->Maybe make tests optional?
-Done
+Thanks for the explanation, but in fact I kind of knew all of this
+already. My message was more that your Config.in help text is
+misleading, as it doesn't really explain what libuci is, and it only
+indicates that it is "for OpenWrt", which doesn't make sense in the
+context of Buildroot. So I would rephrase the help text by indicating
+something like: "This library originates from the OpenWrt project to
+handle the configuration blablabla, but can also be used for the same
+purposes in projects other than OpenWrt".
 
->> +BLUEZ5_UTILS_AUTORECONF = YES
->
->Why is autoreconf needed? The tarballs do have ./configure.
-It seems not to be needed anymore. Previously, I copied it from
-Bluez 4.x
-
->Bluez4 has more config knobs: are they no longer applicable to Bluez5?
-Yes, they are no longer there. It seems, that Bluez code in 5.x
-was seriously cleaned.
->  - Audio
->  - USB support
-No longer here, as for USB - it relies on kernel's btusb driver.
->  - GATT support
-gatttool is always build but not installed (there are no configuration knobs
-for it).
-I have added a post-install hook to copy gatttool manually. 
-
->Since you mention the subject in the commit log: is there a way to
->enable/disable support for BTLE?
-I have not seen any 'lescan' and 'lecc' in hciconfig are always enabled.
-
-The patch follows:
-
-bluez5_utils: new package.
-
-API is not backwards compatible with BlueZ 4.
-
-BlueZ utils will use systemd and/or udev if enabled.
-Contains a hook for installing GATT support tool, wchich is always
-build but not installed by default.
----
- package/Config.in                    |    1 +
- package/bluez5_utils/Config.in       |   51 +++++++++++++++++++++++++++++++
- package/bluez5_utils/bluez5_utils.mk |   55 ++++++++++++++++++++++++++++++++++
- 3 files changed, 107 insertions(+)
- create mode 100644 package/bluez5_utils/Config.in
- create mode 100644 package/bluez5_utils/bluez5_utils.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index 688ed4d..653ab6c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -864,6 +864,7 @@ source "package/axel/Config.in"
- source "package/bcusdk/Config.in"
- source "package/bind/Config.in"
- source "package/bluez_utils/Config.in"
-+source "package/bluez5_utils/Config.in"
- source "package/bmon/Config.in"
- source "package/boa/Config.in"
- source "package/bridge-utils/Config.in"
-diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
-new file mode 100644
-index 0000000..c721fff
---- /dev/null
-+++ b/package/bluez5_utils/Config.in
-@@ -0,0 +1,51 @@
-+config BR2_PACKAGE_BLUEZ5_UTILS
-+	bool "bluez-utils 5.x"
-+	depends on !BR2_avr32
-+	depends on BR2_USE_WCHAR # libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
-+	depends on BR2_USE_MMU # dbus
-+	depends on !BR2_PACKAGE_BLUEZ_UTILS # conflicts with 4.x version
-+	select BR2_PACKAGE_DBUS
-+	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_LIBICAL
-+	select BR2_PACKAGE_READLINE
-+	help
-+	  bluez utils version 5.x
-+
-+	  With this release BlueZ only supports the new Bluetooth Management
-+	  kernel interface (introduced in Linux 3.4).
-+	  For Low Energy support at least kernel version 3.5 is needed.
-+
-+	  The API is not backwards compatible with BlueZ 4.
-+
-+	  Bluez utils will use systemd and/or udev if enabled.
-+
-+	  http://www.bluez.org
-+	  http://www.kernel.org/pub/linux/bluetooth
-+
-+if BR2_PACKAGE_BLUEZ5_UTILS
-+
-+config BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL
-+	bool "build experimental plugins"
-+	help
-+	  Build BlueZ 5.x experimental plugins (SAP, NFC, ...).
-+
-+config BR2_PACKAGE_BLUEZ5_UTILS_TEST
-+	bool "enable test"
-+	help
-+	  Enable test.
-+
-+config BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL
-+	bool "install GATT tool"
-+	help
-+	  Generic Attribute Profile (GATT) support. This provides profile
-+	  discovery and description services for Bluetooth Low Energy.
-+	  This will install the gatttool utility.
-+
-+	  It is always build with BlueZ 5.x, but upstream choose not to install
-+	  it by default.
-+
-+endif
-+
-+comment "bluez5-utils needs a toolchain w/ wchar, threads"
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-new file mode 100644
-index 0000000..d0d69df
---- /dev/null
-+++ b/package/bluez5_utils/bluez5_utils.mk
-@@ -0,0 +1,55 @@
-+################################################################################
-+#
-+# bluez5_utils
-+#
-+################################################################################
-+
-+BLUEZ5_UTILS_VERSION = 5.16
-+BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
-+BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
-+BLUEZ5_UTILS_INSTALL_STAGING = YES
-+BLUEZ5_UTILS_DEPENDENCIES = dbus libglib2 libical readline
-+BLUEZ5_UTILS_CONF_OPT = --enable-tools --enable-library
-+BLUEZ5_UTILS_LICENSE = GPLv2+ LGPLv2.1+
-+BLUEZ5_UTILS_LICENSE_FILES = COPYING COPYING.LIB
-+
-+# experimental plugins
-+ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL),y)
-+	BLUEZ5_UTILS_CONF_OPT += --enable-experimental
-+else
-+	BLUEZ5_UTILS_CONF_OPT += --disable-experimental
-+endif
-+
-+# install gatttool (For some reason upstream choose not to do it by default)
-+define BLUEZ5_UTILS_INSTALL_GATTTOOL
-+	$(INSTALL) -D -m 0755 $(@D)/attrib/gatttool $(TARGET_DIR)/usr/bin
-+endef
-+
-+ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL),y)
-+	BLUEZ5_UTILS_POST_INSTALL_TARGET_HOOKS += BLUEZ5_UTILS_INSTALL_GATTTOOL
-+endif
-+
-+# enable test
-+ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_TEST),y)
-+	BLUEZ5_UTILS_CONF_OPT += --enable-test
-+else
-+	BLUEZ5_UTILS_CONF_OPT += --disable-test
-+endif
-+
-+# use udev if available
-+ifeq ($(BR2_PACKAGE_UDEV),y)
-+        BLUEZ5_UTILS_CONF_OPT += --enable-udev
-+        BLUEZ5_UTILS_DEPENDENCIES += udev
-+else
-+        BLUEZ5_UTILS_CONF_OPT += --disable-udev
-+endif
-+
-+# integrate with systemd if available
-+ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-+        BLUEZ5_UTILS_CONF_OPT += --enable-systemd
-+        BLUEZ5_UTILS_DEPENDENCIES += systemd
-+else
-+        BLUEZ5_UTILS_CONF_OPT += --disable-systemd
-+endif
-+
-+$(eval $(autotools-package))
+Thomas
 -- 
-1.7.9.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
