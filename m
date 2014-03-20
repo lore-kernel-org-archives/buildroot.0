@@ -1,115 +1,84 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 20 Mar 2014 10:30:04 +0100
-Subject: [Buildroot] Builtroot toolchain with gcc snapshot version
- 4.9-20140309 compile failure
-Message-ID: <trinity-75f996d8-d171-4abd-9868-076266c3faed-1395307804240@3capp-gmx-bs26>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Thu, 20 Mar 2014 10:38:23 +0100
+Subject: [Buildroot] [PATCH 6/6] Makefile: do not add the toolchain
+ target to the TARGETS variable
+In-Reply-To: <532983A0.9050107@mind.be>
+References: <1394540278-28740-1-git-send-email-fabio.porcedda@gmail.com>
+ <1394540278-28740-7-git-send-email-fabio.porcedda@gmail.com>
+ <5326A778.7070507@mind.be>
+ <CAHkwnC8+MsDLUd5XMU1GDmfNBCVU0p9JTaUmpWiYReTrSsAnKQ@mail.gmail.com>
+ <532983A0.9050107@mind.be>
+Message-ID: <CAHkwnC9=EDb8aBGGF_KxR_=1=0PumYOnn68S7b1T5_hXuKA1cQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Wed, Mar 19, 2014 at 12:46 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 19/03/14 12:10, Fabio Porcedda wrote:
+>> On Mon, Mar 17, 2014 at 8:42 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>>> On 03/11/14 13:17, Fabio Porcedda wrote:
+>>>> Do not add the toolchain target to the TARGETS variable because now the
+>>>> toolchain target is a dependency added automatically so it is not
+>>>> necessary to add it anymore.
+>>>
+>>>  I disagree with this one. When you run make, you expect buildroot to
+>>> build the toolchain even if no target package is selected. One use case I
+>>> can think of: when preparing an internal toolchain for use as an external
+>>> toolchain in later builds.
+>>
+>> Take in account that the "toolchain" target is always built because is
+>> a dependency of the "busybox" package that is always build and cannot
+>> be disabled and
+>> the "toolchain-buildroot" and "toolchain-external" are always enabled
+>> in the Config.in.
+>
+>  busybox can be disabled (if you set the init system to "none").
 
-failed to compile buildroot toolchain with gcc 4.9-20140309 snapshot.
+I didn't know that, great!
 
-buildroot config:
-BR2_arm=y
-BR2_cortex_a9=y
-BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-BR2_BINUTILS_VERSION_2_24=y
-BR2_GCC_VERSION_SNAP=y
-BR2_GCC_SNAP_DATE="4.9-20140309"
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
+>  toolchain, toolchain-buildroot and toolchain-external are not added to
+> TARGETS because BR2_PACKAGE_TOOLCHAIN... is not defined.
 
-build log:
-...
-/usr/bin/g++   -O2 -I/home/seiderer/Work/Microscope_Platform/Hardware/FS_QBlissA9/tmp/build_fsqblissa9_gcc_4_9/host/usr/include -DIN_GCC  -DCROSS_DIRECTORY_STRUCTURE  -fno-exceptions -fno-rtti -fasynchronous-unwind-tables -W -Wall -Wno-narrowing -Wwrite-strings -Wcast-qual -Wmissing-format-attribute -pedantic -Wno-long-long -Wno-variadic-macros -Wno-overlength-strings -fno-common  -DHAVE_CONFIG_H -DGENERATOR_FILE -static-libstdc++ -static-libgcc -L/home/seiderer/Work/Microscope_Platform/Hardware/FS_QBlissA9/tmp/build_fsqblissa9_gcc_4_9/host/lib -L/home/seiderer/Work/Microscope_Platform/Hardware/FS_QBlissA9/tmp/build_fsqblissa9_gcc_4_9/host/usr/lib -Wl,-rpath,/home/seiderer/Work/Microscope_Platform/Hardware/FS_QBlissA9/tmp/build_fsqblissa9_gcc_4_9/host/usr/lib -o build/gengtype \
-    build/gengtype.o build/errors.o build/gengtype-lex.o build/gengtype-parse.o build/gengtype-state.o build/version.o ../build-x86_64-unknown-linux-gnu/libiberty/libiberty.a
-build/gengtype.o: In function `adjust_field_type(type*, options*)':
-gengtype.c:(.text+0x2170): undefined reference to `lexer_line'
-gengtype.c:(.text+0x218e): undefined reference to `lexer_line'
-gengtype.c:(.text+0x21e3): undefined reference to `lexer_line'
-gengtype.c:(.text+0x2253): undefined reference to `lexer_line'
-gengtype.c:(.text+0x226f): undefined reference to `lexer_line'
-build/gengtype.o:gengtype.c:(.text+0x22fd): more undefined references to `lexer_line' follow
-build/gengtype-parse.o: In function `require(int)':
-gengtype-parse.c:(.text+0x19d): undefined reference to `yylex(char const**)'
-build/gengtype-parse.o: In function `require2(int, int)':
-gengtype-parse.c:(.text+0x21d): undefined reference to `yylex(char const**)'
-build/gengtype-parse.o: In function `string_seq()':
-gengtype-parse.c:(.text+0x309): undefined reference to `yylex(char const**)'
-build/gengtype-parse.o: In function `consume_balanced(int, int)':
-gengtype-parse.c:(.text+0x3b0): undefined reference to `yylex(char const**)'
-gengtype-parse.c:(.text+0x466): undefined reference to `yylex(char const**)'
-build/gengtype-parse.o:gengtype-parse.c:(.text+0x48e): more undefined references to `yylex(char const**)' follow
-build/gengtype-parse.o: In function `type(options**, bool)':
-gengtype-parse.c:(.text+0x87e): undefined reference to `lexer_line'
-gengtype-parse.c:(.text+0x896): undefined reference to `lexer_line'
-gengtype-parse.c:(.text+0x8ed): undefined reference to `yylex(char const**)'
-gengtype-parse.c:(.text+0x90c): undefined reference to `lexer_line'
-gengtype-parse.c:(.text+0x924): undefined reference to `lexer_line'
-gengtype-parse.c:(.text+0x9ba): undefined reference to `yylex(char const**)'
-gengtype-parse.c:(.text+0x9d8): undefined reference to `lexer_line'
-gengtype-parse.c:(.text+0xa44): undefined reference to `yylex(char const**)'
-gengtype-parse.c:(.text+0xa79): undefined reference to `yylex(char const**)'
-gengtype-parse.c:(.text+0xa91): undefined reference to `yylex(char const**)'
-gengtype-parse.c:(.text+0xad2): undefined reference to `yylex(char const**)'
-gengtype-parse.c:(.text+0xb55): undefined reference to `yylex(char const**)'
-build/gengtype-parse.o:gengtype-parse.c:(.text+0xbd7): more undefined references to `yylex(char const**)' follow
-build/gengtype-parse.o: In function `type(options**, bool)':
-gengtype-parse.c:(.text+0xd05): undefined reference to `lexer_line'
-gengtype-parse.c:(.text+0xd97): undefined reference to `lexer_line'
-gengtype-parse.c:(.text+0xea6): undefined reference to `yylex(char const**)'
-gengtype-parse.c:(.text+0xed2): undefined reference to `yylex(char const**)'
-gengtype-parse.c:(.text+0xf05): undefined reference to `yylex(char const**)'
-gengtype-parse.c:(.text+0xf78): undefined reference to `yylex(char const**)'
-gengtype-parse.c:(.text+0xf9e): undefined reference to `yylex(char const**)'
-build/gengtype-parse.o:gengtype-parse.c:(.text+0x1084): more undefined references to `yylex(char const**)' follow
-build/gengtype-parse.o: In function `type(options**, bool)':
-gengtype-parse.c:(.text+0x10f0): undefined reference to `lexer_line'
-gengtype-parse.c:(.text+0x1160): undefined reference to `yylex(char const**)'
-build/gengtype-parse.o: In function `absdecl()':
-gengtype-parse.c:(.text+0x1223): undefined reference to `yylex(char const**)'
-build/gengtype-parse.o: In function `option(options*)':
-gengtype-parse.c:(.text+0x1282): undefined reference to `yylex(char const**)'
-gengtype-parse.c:(.text+0x12c4): undefined reference to `yylex(char const**)'
-build/gengtype-parse.o: In function `gtymarker()':
-gengtype-parse.c:(.text+0x1494): undefined reference to `yylex(char const**)'
-build/gengtype-parse.o:gengtype-parse.c:(.text+0x14e7): more undefined references to `yylex(char const**)' follow
-build/gengtype-parse.o: In function `parse_file(char const*)':
-gengtype-parse.c:(.text+0x1819): undefined reference to `yybegin(char const*)'
-gengtype-parse.c:(.text+0x18dd): undefined reference to `lexer_line'
-gengtype-parse.c:(.text+0x18f9): undefined reference to `lexer_toplevel_done'
-gengtype-parse.c:(.text+0x190d): undefined reference to `yylex(char const**)'
-gengtype-parse.c:(.text+0x1975): undefined reference to `yyend()'
-gengtype-parse.c:(.text+0x1a1f): undefined reference to `lexer_line'
-gengtype-parse.c:(.text+0x1a4e): undefined reference to `yylex(char const**)'
-gengtype-parse.c:(.text+0x1a86): undefined reference to `yylex(char const**)'
-collect2: error: ld returned 1 exit status
-make[3]: *** [build/gengtype] Error 1
-rm gcov.pod cpp.pod gfdl.pod fsf-funding.pod gcc.pod
-make[2]: *** [all-gcc] Error 2
-make[1]: *** [/home/seiderer/Work/Microscope_Platform/Hardware/FS_QBlissA9/tmp/build_fsqblissa9_gcc_4_9/build/host-gcc-initial-4.9-20140309/.stamp_built] Error 2
-make: *** [_all] Error 2
+They are added to targets, just use this command to check it:
 
-The following (draft) patch fixes the compile for me:
+$ make defconfig && make show-targets
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 236297d..c1da387 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -151,9 +151,7 @@ HOST_GCC_COMMON_DEPENDENCIES += host-mpc
- HOST_GCC_COMMON_CONF_OPT += --with-mpc=$(HOST_DIR)/usr
- endif
- 
--ifeq ($(BR2_arc),y)
- HOST_GCC_COMMON_DEPENDENCIES += host-flex host-bison
--endif
- 
- ifeq ($(BR2_SOFT_FLOAT),y)
+toolchain-buildroot toolchain busybox target-generic-securetty
+target-generic-hostname target-generic-issue target-root-passwd
+target-generic-getty-busybox target-generic-do-remount-rw rootfs-tar
 
-Any chance to add these dependency for gcc snapshot version >= 4.9 (any hint
-how to do this)?
+>>
+>> I was thinking that the "toolchain" target is a package that uses tha
+>> package infrastructure, what about using the Config.in:
+>>
+>> diff --git a/toolchain/Config.in b/toolchain/Config.in
+>> index 44f3ac6..94a0c7d 100644
+>> --- a/toolchain/Config.in
+>> +++ b/toolchain/Config.in
+>> @@ -1,5 +1,9 @@
+>>  menu "Toolchain"
+>>
+>> +config BR2_TOOLCHAIN
+>> +       bool
+>> +       default y
+>
+>  That would indeed be an option (it would have to be
+> BR2_PACKAGE_TOOLCHAIN, but that's a minor detail). I'm not sure, however,
+> if this is better than TARGETS := toolchain in the Makefile.
 
-Peter
+I've not used the PACKAGE prefix because it's not used at all for the
+toolchain config options, like the  BR2_TOOLCHAIN_BUILDROOT option.
+
+>
+>  Actually, I am in favour of adding blind options for everything that
+> uses the package infrastructure. That will allow us to do things like
+> checking select/DEPENDENCIES consistency, and generally makes things more
+> consistent.
+
+In next revision of the patch i will send the proposed patch.
+
+Thanks and regards
+-- 
+Fabio Porcedda
