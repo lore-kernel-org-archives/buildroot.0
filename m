@@ -1,54 +1,55 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 20 Mar 2014 23:35:36 +0100
-Subject: [Buildroot] [PATCH] gcc: fix snapshot compile
-Message-ID: <1395354936-4237-1-git-send-email-ps.report@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 20 Mar 2014 23:35:49 +0100
+Subject: [Buildroot] [PATCH 1/6] manual/common-usage.txt: fix typo
+In-Reply-To: <1395353250-9475-2-git-send-email-jerzy.grzegorek@trzebnica.net>
+References: <1395353250-9475-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+ <1395353250-9475-2-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <20140320223549.GA20862@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add gcc snapshot versions dependency on host-flex and host-bison
-(done as suggested by Thomas Petazzoni [1]).
+Jerzy, All,
 
-Fixes gcc snapshot version 4.9-20140309 compile failure [2].
+On 2014-03-20 23:07 +0100, Jerzy Grzegorek spake thusly:
+> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 
-Tested the following buildroot configs
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-BR2_arm=y
-BR2_cortex_a9=y
-BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-BR2_BINUTILS_VERSION_2_24=y
-BR2_GCC_VERSION_SNAP=y
-BR2_GCC_SNAP_DATE="4.9-20140309"
+Regards,
+Yann E. MORIN.
 
-and
+> ---
+>  docs/manual/common-usage.txt |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
+> index a16b887..ca1bffe 100644
+> --- a/docs/manual/common-usage.txt
+> +++ b/docs/manual/common-usage.txt
+> @@ -140,7 +140,7 @@ Other tools may have similar options. Please consult their respective man
+>  pages.
+>  
+>  You can use sparse files if you need to store the filesystem images (eg.
+> -to transfer from one machine to another), of if you need to send them (eg.
+> +to transfer from one machine to another), or if you need to send them (eg.
+>  to the Q&A team).
+>  
+>  Note however that flashing a filesystem image to a device while using the
+> -- 
+> 1.7.9.5
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-BR2_arcle=y
-
-For the ARC case disabled the BINUTILS_FROM_GIT host-flex and host-bison
-dependency.
-
-[1] http://lists.busybox.net/pipermail/buildroot/2014-March/092490.html
-[2] http://lists.busybox.net/pipermail/buildroot/2014-March/092459.html
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/gcc/gcc.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 236297d..bc15932 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -151,7 +151,7 @@ HOST_GCC_COMMON_DEPENDENCIES += host-mpc
- HOST_GCC_COMMON_CONF_OPT += --with-mpc=$(HOST_DIR)/usr
- endif
- 
--ifeq ($(BR2_arc),y)
-+ifneq ($(or $(BR2_arc),$(BR2_GCC_VERSION_SNAP)),)
- HOST_GCC_COMMON_DEPENDENCIES += host-flex host-bison
- endif
- 
 -- 
-1.8.1.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
