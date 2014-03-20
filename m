@@ -1,10 +1,9 @@
 From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Thu, 20 Mar 2014 23:07:30 +0100
-Subject: [Buildroot] [PATCH 6/6] manual/adding-packages-tips.txt: reword
-	part about package name
+Date: Thu, 20 Mar 2014 23:07:25 +0100
+Subject: [Buildroot] [PATCH 1/6] manual/common-usage.txt: fix typo
 In-Reply-To: <1395353250-9475-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 References: <1395353250-9475-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <1395353250-9475-7-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <1395353250-9475-2-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 ---
- docs/manual/adding-packages-tips.txt |    2 +-
+ docs/manual/common-usage.txt |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/docs/manual/adding-packages-tips.txt b/docs/manual/adding-packages-tips.txt
-index 73c25be..ceaba8e 100644
---- a/docs/manual/adding-packages-tips.txt
-+++ b/docs/manual/adding-packages-tips.txt
-@@ -31,7 +31,7 @@ using the following rules:
-   +BR2_PACKAGE_FOO_BAR_BOO+);
+diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
+index a16b887..ca1bffe 100644
+--- a/docs/manual/common-usage.txt
++++ b/docs/manual/common-usage.txt
+@@ -140,7 +140,7 @@ Other tools may have similar options. Please consult their respective man
+ pages.
  
- * the +*.mk+ file variable prefix is the upper case _package name_
--  `.` and `-` characters substituted with `_` (e.g.:
-+  with `.` and `-` characters substituted with `_` (e.g.:
-   +FOO_BAR_BOO_VERSION+).
+ You can use sparse files if you need to store the filesystem images (eg.
+-to transfer from one machine to another), of if you need to send them (eg.
++to transfer from one machine to another), or if you need to send them (eg.
+ to the Q&A team).
  
- 
+ Note however that flashing a filesystem image to a device while using the
 -- 
 1.7.9.5
