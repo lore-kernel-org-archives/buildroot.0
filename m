@@ -1,42 +1,78 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Thu, 20 Mar 2014 23:07:28 +0100
-Subject: [Buildroot] [PATCH 4/6] manual/adding-packages-generic.txt: fix
-	capitalization in titles of chapters
-In-Reply-To: <1395353250-9475-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1395353250-9475-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <1395353250-9475-5-git-send-email-jerzy.grzegorek@trzebnica.net>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Thu, 20 Mar 2014 23:17:10 +0100
+Subject: [Buildroot] [PATCH v5 1/2] libubox: new package
+Message-ID: <1395353831-7760-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- docs/manual/adding-packages-generic.txt |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Changes:
+	v5: description rework
+        v4: remove unneeded pkg-config macros
+        v3: add Lua support
+        v2: make package description more informative and fix license information
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index 04e589f..366b896 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -11,7 +11,7 @@ system is based on hand-written Makefiles or shell scripts.
- 
- [[generic-package-tutorial]]
- 
--+generic-package+ Tutorial
-++generic-package+ tutorial
- ^^^^^^^^^^^^^^^^^^^^^^^^^^
- 
- ------------------------------
-@@ -159,7 +159,7 @@ Makefile code necessary to make your package working.
- 
- [[generic-package-reference]]
- 
--+generic-package+ Reference
-++generic-package+ reference
- ^^^^^^^^^^^^^^^^^^^^^^^^^^^
- 
- There are two variants of the generic target. The +generic-package+ macro is
+ package/Config.in          |  1 +
+ package/libubox/Config.in  |  9 +++++++++
+ package/libubox/libubox.mk | 18 ++++++++++++++++++
+ 3 files changed, 28 insertions(+)
+ create mode 100644 package/libubox/Config.in
+ create mode 100644 package/libubox/libubox.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index f9c1b0b..a2e859c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -784,6 +784,7 @@ source "package/libsigc/Config.in"
+ source "package/libsigsegv/Config.in"
+ source "package/libtasn1/Config.in"
+ source "package/libtpl/Config.in"
++source "package/libubox/Config.in"
+ source "package/libunwind/Config.in"
+ source "package/liburcu/Config.in"
+ source "package/linux-pam/Config.in"
+diff --git a/package/libubox/Config.in b/package/libubox/Config.in
+new file mode 100644
+index 0000000..ba10f8d
+--- /dev/null
++++ b/package/libubox/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_LIBUBOX
++	bool "libubox"
++	help
++	  This library originates from the OpenWrt project to
++	  handle the configuration file infrastructure, but can
++	  also be used for the same purposes in projects other
++	  than OpenWrt.
++
++	  http://nbd.name/gitweb.cgi?p=luci2/libubox.git;a=summary
+diff --git a/package/libubox/libubox.mk b/package/libubox/libubox.mk
+new file mode 100644
+index 0000000..fe3f420
+--- /dev/null
++++ b/package/libubox/libubox.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# libubox
++#
++################################################################################
++
++LIBUBOX_VERSION = bbd846ec2d72b2629758b69dc122ac0b0f2c3e4b
++LIBUBOX_SITE = git://nbd.name/luci2/libubox.git
++LIBUBOX_LICENSE = LGPLv2.1, GPLv2, BSD-3c, MIT
++LIBUBOX_INSTALL_STAGING = YES
++
++ifeq ($(BR2_PACKAGE_LUA),y)
++	LIBUBOX_DEPENDENCIES = lua
++else
++	LIBUBOX_CONF_OPT = -DBUILD_LUA:BOOL=OFF
++endif
++
++$(eval $(cmake-package))
 -- 
-1.7.9.5
+1.8.3.2
