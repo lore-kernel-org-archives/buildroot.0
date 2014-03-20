@@ -1,51 +1,90 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 20 Mar 2014 07:34:41 +0100
-Subject: [Buildroot] [PATCH] libtool: use a different way to avoid
-	autoreconfiguration
-In-Reply-To: <20140320002504.0cebf7d5@skate>
-References: <1395270180-12701-1-git-send-email-arnout@mind.be>
- <20140320002504.0cebf7d5@skate>
-Message-ID: <532A8C01.2070702@mind.be>
+Date: Thu, 20 Mar 2014 07:34:52 +0100
+Subject: [Buildroot] Libtool 2.4.3 release
+In-Reply-To: <092BD668-BD02-45AB-A97F-D61BCA752A0C@gnu.org>
+References: <5329C7C2.4090307@essensium.com>
+ <092BD668-BD02-45AB-A97F-D61BCA752A0C@gnu.org>
+Message-ID: <532A8C0C.6040101@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 20/03/14 00:25, Thomas Petazzoni wrote:
-> Dear Arnout Vandecappelle (Essensium/Mind),
+
+
+On 20/03/14 06:07, Gary V. Vaughan wrote:
 > 
-> On Thu, 20 Mar 2014 00:03:00 +0100, Arnout Vandecappelle
-> (Essensium/Mind) wrote:
->> In 4268d39, a patch was added to update libtool.m4 for MIPS n64 targets.
->> However, this caused the configure script to be regenerated during the
->> build steps, which in turn caused build failures on Fedora 12 hosts. In
->> ed73d1d, this was fixed by patching the installed libtool.m4 file
->> instead of the source file.
->>
->> However, ed73d1d did not take into account that the target libtool will
->> also install libtool.m4 to staging, and that that version has
->> precedence over the one in HOST_DIR.
->>
->> Therefore, this patch takes a different approach: the source file is
->> patched in the usual way, and instead the reconfigure is avoided by
->> touching the generated files.
->>
->> On the target, we also cannot use the AUTORECONF mechanism because of
->> some mysterious Makefile.inc file. So just use the same approach and
->> wait for upstream to make a new release.
+> On Mar 20, 2014, at 5:37 AM, Arnout Vandecappelle
+> <arnout.vandecappelle@essensium.com
+> <mailto:arnout.vandecappelle@essensium.com>> wrote:
 > 
-> Shouldn't we mark libtool on the target as something deprecated? We
-> have already removed the support for autoconf and automake on the
-> target, so having libtool seems quite useless, no?
+>> [Please keep me in CC, I'm not on the list]
+>>
+>> Dear libtool maintainers,
+>>
+>> Is there a possibility for a new libtool release in the foreseeable future?
+> 
+> Hi Arnout,
+> 
+> Yes, absolutely. In fact there are only 2 things ahead of it on my TODO list:
+> 
+>   1. Figure out why a4ffcdb5e is a regression for test 57
+>   2. fix test 120 race condition
+> 
+> Unfortunately, Libtool is a complex beast, and we are woefully
+> undermanned here.
 
- Pulseaudio depends on libtool. I guess it actually depends on libltdl,
-though. But is precisely in libltdl that the problem occurs.
+ Complex beast indeed... Which is another reason why we prefer not to
+carry patches.
 
+> While everything rests on my shoulders, it will be at least another month
+> before I can start work (I'm in the process of emigrating and all that
+> entails).
+> 
+> Patches for those 2 items, or any other as yet unknown issues with git
+> master (or http://vaughan.pe/libtool/libtool-2.4.2.458.tar.gz if a
+> bootstrapped tarball is easier to work with) are extremely welcome, and
+> could lead to an immediate release...
 
- Regards,
- Arnout
+ Unfortunately, none of the buildroot maintainers seem up to the
+challenge of attacking ltmain...  We've had issues that are probably best
+solved within libtool but where we resort to other workarounds to keep
+things simple.
 
+> 
+> Most recent test logs here:
+> 
+>   http://vaughan.pe/libtool/libtool-2.4.2.458.logs/
+> 
+>> In buildroot, we build all autotools (including libtool) as part of the
+>> cross-compilation process. We recently had to add a libtool patch for
+>> MIPS n64 support, which is annoying because it means we have to re-run
+>> automake etc. to update the autools-generated scripts in libtool.
+> 
+> Did you patch just config.guess/config.sub and pass that back upstream?
+> That is a prerequisite for arriving in the next release.  Otherwise if
+> you patched Libtool files, are your changes in upstream already?
+
+ Yes, it's an upstream patch that we back-ported.
+
+> 
+>> However, our normal autotools support doesn't work because that creates a
+>> circular dependency. So we have to add a few hacks in the libtool build
+>> steps to make things work.
+>>
+>> A release of libtool would help a lot because then we don't need to
+>> carry patches and we don't need to generate configure etc.
+>>
+>> Thank you,
+>> Regards,
+>> Arnout
+>> -- 
+>> Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
+> 
+> Cheers,
+> -- 
+> Gary V. Vaughan (gary AT gnu DOT org)
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
