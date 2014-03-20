@@ -1,62 +1,81 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 20 Mar 2014 21:34:24 +0100
-Subject: [Buildroot] compiling kernel
-In-Reply-To: <1395101926704-65501.post@n4.nabble.com>
-References: <1393369707.747.YahooMailNeo@web120205.mail.ne1.yahoo.com>
- <20140226014847.23839269@core2quad.morethan.org> <530E2686.8040409@mind.be>
- <1395101926704-65501.post@n4.nabble.com>
-Message-ID: <532B50D0.7030100@mind.be>
+Date: Thu, 20 Mar 2014 21:43:59 +0100
+Subject: [Buildroot] [PATCH] support: properly check for bash as a
+	dependency
+In-Reply-To: <20140318165518.GA3342@free.fr>
+References: <1395052954-1567-1-git-send-email-yann.morin.1998@free.fr>
+ <20140318060130.282f5a46@skate> <20140318165518.GA3342@free.fr>
+Message-ID: <532B530F.5050408@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18/03/14 01:18, raj wrote:
-> Hi Arnout,
+On 18/03/14 17:55, Yann E. MORIN wrote:
+> Thomas, All,
 > 
-> Thanks much for your reply...
-> I want to compile kernel and root file system separately for couple of
-> reasons:
-> 
-> 1. I want application developer to just use prebuilt kernel binary + rootfs
-> and run some script to create full Image so that, they don't need to have
-> kernel source files.
-> 
-> could you give some clarity on creating separately file system and passing
-> boot args to kernel to use the file system located in the dram.
+> On 2014-03-18 06:01 +0100, Thomas Petazzoni spake thusly:
+>> On Mon, 17 Mar 2014 11:42:34 +0100, Yann E. MORIN wrote:
+>>
+>>> So, calling "$SHELL --version" will still return "^GNU bash" no matter
+>>> what shell is actually running.
 
- I'm not sure what you mean exactly, but perhaps you should look into
-unionfs-fuse. That allows you to boot a standard rootfs and then mount
-the developer's additions on top of it.
+ Have you tested this? dependencies.sh is run from the Makefile, and that
+says:
 
+SHELL:=$(shell if [ -x "$$BASH" ]; then echo $$BASH; \
+        else if [ -x /bin/bash ]; then echo /bin/bash; \
+        else echo sh; fi; fi)
+[snip]
+
+export SHELL CONFIG_SHELL quiet Q KBUILD_VERBOSE VERBOSE
+
+ So $SHELL _will_ be set to bash unless there is no bash.
+
+>>>
+>>> Since quite a lot of #!/bin/sh scripts are in fact bash scripts, we
+>>> really want to ensure that /bin/sh is bash.
+>>
+>> I'm definitely against that. My system has /bin/sh pointing to dash,
+>> and Buildroot works fine. One of the thing that annoyed me in
+>> OpenEmbedded was its requirements to have /bin/sh be bash.
+>>
+>> We clearly don't want that.
 > 
-> 2. I can compile kernel without the  "Initial RAM filesystem and RAM disk
-> (initramfs/initrd) support", so that it has only the kernel image. How do I
-> built the file system image?
+> I'm just fine with that. :-)
+> 
+> But the current check is broken anyway, as all it checks is that the
+> login shell of the user is bash.
+> 
+>   - if we want to work whith dash as the system shell, then the current
+>     check is unneeded;
+> 
+>   - if we want to work with dash as the system shell, we don't care what
+>     login shell the user is using, as we must also work when this is dash;
+> 
+>   - SHELL is not mandated by POSIX, so it may be empty on a
+>     POSIX-compliant shell anyway.
+> 
+> So, we should just remove this check altogether.
 
- Look in buildroot's filesystem options menu.
+ Not remove, but rather replace it with a check for /bin/bash existence.
+We do have quite a lot of stuff referring to /bin/bash. bash in PATH is
+not good enough.
+
 
  Regards,
  Arnout
 
 > 
+>> I've just checked the Free Electrons autobuilders, and there are also
+>> using dash as /bin/sh. This means that if configure scripts were using
+>> bashims unsupported by dash, we would have noticed.
 > 
-> Thanks & Regards,
-> Raj
->  
+> Andrew, what package was the breakage due to?
 > 
-> 
-> 
-> 
-> 
-> --
-> View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/compiling-kernel-tp63718p65501.html
-> Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Regards,
+> Yann E. MORIN.
 > 
 
 
