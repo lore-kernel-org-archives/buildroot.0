@@ -1,48 +1,72 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 20 Mar 2014 16:49:21 +0100
-Subject: [Buildroot] [PATCH] rsyslog: Update patch to upstreamed version
-In-Reply-To: <1395250078-16782-1-git-send-email-clshotwe@rockwellcollins.com>
- (Clayton Shotwell's message of "Wed, 19 Mar 2014 12:27:58 -0500")
-References: <1395250078-16782-1-git-send-email-clshotwe@rockwellcollins.com>
-Message-ID: <8738icx43i.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 20 Mar 2014 16:43:47 +0100
+Subject: [Buildroot] [git commit] libraries: add category Logging
+Message-ID: <20140320155006.1F30B9C1E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Clayton" == Clayton Shotwell <clshotwe@rockwellcollins.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=cda5715a44b3232a62a58af0c7e31943cbea7f6b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Patch for the libgcrypt-config path correction was accepted by the
- > mainline for rsyslog. Updating the buildroot patch until a new version
- > with the fix is released.
+Add new category and move all logging packages there:
 
-Committed, thanks.
+liblog4c-localtime
+liblogging
+log4cplus
+log4cxx
+zlog
 
-You forgot your signed-off-by, but as you already provided it in the
-patch files I have added it here as well. Please remember it in the
-future.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/Config.in |   13 ++++++++-----
+ 1 files changed, 8 insertions(+), 5 deletions(-)
 
- > ---
- >  ...yslog-0001-libgcrypt-config-path-override.patch |   22 +++++++++++--------
- >  1 files changed, 13 insertions(+), 9 deletions(-)
-
- > diff --git a/package/rsyslog/rsyslog-0001-libgcrypt-config-path-override.patch b/package/rsyslog/rsyslog-0001-libgcrypt-config-path-override.patch
- > index 6af0db7..c0d8bfa 100644
- > --- a/package/rsyslog/rsyslog-0001-libgcrypt-config-path-override.patch
- > +++ b/package/rsyslog/rsyslog-0001-libgcrypt-config-path-override.patch
- > @@ -1,6 +1,6 @@
- > -From 2d498883b19c386abacffca969eb404c9407a8cc Mon Sep 17 00:00:00 2001
- > +From 86d19e4e63c3fa5b9690991f3e29ffab93990acd Mon Sep 17 00:00:00 2001
- >  From: Clayton Shotwell <clshotwe@rockwellcollins.com>
- > -Date: Mon, 10 Mar 2014 14:40:35 -0500
- > +Date: Wed, 19 Mar 2014 08:28:55 -0500
- >  Subject: [PATCH] configure: Allow overriding of libgcrypt-config
+diff --git a/package/Config.in b/package/Config.in
+index 688ed4d..8986734 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -666,6 +666,14 @@ source "package/xerces/Config.in"
+ source "package/yajl/Config.in"
+ endmenu
  
- >  Allow the overriding of the libgcrypt-config path if it is not at
- > @@ -8,14 +8,14 @@ a standard location.
++menu "Logging"
++source "package/liblog4c-localtime/Config.in"
++source "package/liblogging/Config.in"
++source "package/log4cplus/Config.in"
++source "package/log4cxx/Config.in"
++source "package/zlog/Config.in"
++endmenu
++
+ menu "Multimedia"
+ source "package/libass/Config.in"
+ source "package/libbluray/Config.in"
+@@ -773,8 +781,6 @@ source "package/libevent/Config.in"
+ source "package/libffi/Config.in"
+ source "package/libglib2/Config.in"
+ source "package/libical/Config.in"
+-source "package/liblog4c-localtime/Config.in"
+-source "package/liblogging/Config.in"
+ source "package/libnspr/Config.in"
+ source "package/libpfm4/Config.in"
+ source "package/libplist/Config.in"
+@@ -788,8 +794,6 @@ source "package/libtpl/Config.in"
+ source "package/libunwind/Config.in"
+ source "package/liburcu/Config.in"
+ source "package/linux-pam/Config.in"
+-source "package/log4cplus/Config.in"
+-source "package/log4cxx/Config.in"
+ source "package/lttng-libust/Config.in"
+ source "package/mpc/Config.in"
+ source "package/mpfr/Config.in"
+@@ -803,7 +807,6 @@ source "package/protobuf-c/Config.in"
+ source "package/schifra/Config.in"
+ source "package/startup-notification/Config.in"
+ source "package/tzdata/Config.in"
+-source "package/zlog/Config.in"
+ endmenu
  
- >  Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
-
--- 
-Bye, Peter Korsgaard
+ menu "Security"
