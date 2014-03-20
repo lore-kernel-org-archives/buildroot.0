@@ -1,68 +1,199 @@
-From: Davide Viti <zinosat@tiscali.it>
-Date: Thu, 20 Mar 2014 11:45:48 +0100
-Subject: [Buildroot] [PATCH v5 2/2] eigen: add an option to install
-	unsupported modules
-In-Reply-To: <1395312348-5812-1-git-send-email-d.viti@infosolution.it>
-References: <1395312348-5812-1-git-send-email-d.viti@infosolution.it>
-Message-ID: <1395312348-5812-2-git-send-email-d.viti@infosolution.it>
+From: Marcin Bis <marcin@bis.org.pl>
+Date: Thu, 20 Mar 2014 14:48:18 +0100
+Subject: [Buildroot] [PATCH v3] bluez5_utils: new package.
+In-Reply-To: <20140304213845.GG11474@free.fr>
+References: <20140304213845.GG11474@free.fr>
+Message-ID: <1395323298-15098-1-git-send-email-marcin@bis.org.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Davide Viti <d.viti@infosolution.it>
+
+Hi Yann
+
+>> +BLUEZ5_UTILS_VERSION = 5.10
+>
+>There's 5.15, now...
+I have bumped it to 5.16 - newest version.
+
+>> +BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
+>> +BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
+>> +BLUEZ5_UTILS_INSTALL_STAGING = YES
+>> +BLUEZ5_UTILS_DEPENDENCIES = dbus libglib2 libical readline
+>> +BLUEZ5_UTILS_CONF_OPT = --enable-test --enable-tools --enable-library
+>
+>Maybe make tests optional?
+Done
+
+>> +BLUEZ5_UTILS_AUTORECONF = YES
+>
+>Why is autoreconf needed? The tarballs do have ./configure.
+It seems not to be needed anymore. Previously, I copied it from
+Bluez 4.x
+
+>Bluez4 has more config knobs: are they no longer applicable to Bluez5?
+Yes, they are no longer there. It seems, that Bluez code in 5.x
+was seriously cleaned.
+>  - Audio
+>  - USB support
+No longer here, as for USB - it relies on kernel's btusb driver.
+>  - GATT support
+gatttool is always build but not installed (there are no configuration knobs
+for it).
+I have added a post-install hook to copy gatttool manually. 
+
+>Since you mention the subject in the commit log: is there a way to
+>enable/disable support for BTLE?
+I have not seen any 'lescan' and 'lecc' in hciconfig are always enabled.
+
+The patch follows:
+
+bluez5_utils: new package.
+
+API is not backwards compatible with BlueZ 4.
+
+BlueZ utils will use systemd and/or udev if enabled.
+Contains a hook for installing GATT support tool, wchich is always
+build but not installed by default.
 ---
- Changes v4 -> v5:
-   - fix indentation (spaces > tabs)
+ package/Config.in                    |    1 +
+ package/bluez5_utils/Config.in       |   51 +++++++++++++++++++++++++++++++
+ package/bluez5_utils/bluez5_utils.mk |   55 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 107 insertions(+)
+ create mode 100644 package/bluez5_utils/Config.in
+ create mode 100644 package/bluez5_utils/bluez5_utils.mk
 
-Note to self: use emacs Ctrl-q TAB to force tab insertion
-
- package/eigen/Config.in | 8 ++++++++
- package/eigen/eigen.mk  | 7 +++++++
- 2 files changed, 15 insertions(+)
-
-diff --git a/package/eigen/Config.in b/package/eigen/Config.in
-index e94f9a3..03d65b1 100644
---- a/package/eigen/Config.in
-+++ b/package/eigen/Config.in
-@@ -13,5 +13,13 @@ config BR2_PACKAGE_EIGEN
- 
- 	  http://eigen.tuxfamily.org/
- 
-+if BR2_PACKAGE_EIGEN
-+
-+config BR2_PACKAGE_EIGEN_UNSUPPORTED_MODULES
-+	bool "unsupported modules"
+diff --git a/package/Config.in b/package/Config.in
+index 688ed4d..653ab6c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -864,6 +864,7 @@ source "package/axel/Config.in"
+ source "package/bcusdk/Config.in"
+ source "package/bind/Config.in"
+ source "package/bluez_utils/Config.in"
++source "package/bluez5_utils/Config.in"
+ source "package/bmon/Config.in"
+ source "package/boa/Config.in"
+ source "package/bridge-utils/Config.in"
+diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
+new file mode 100644
+index 0000000..c721fff
+--- /dev/null
++++ b/package/bluez5_utils/Config.in
+@@ -0,0 +1,51 @@
++config BR2_PACKAGE_BLUEZ5_UTILS
++	bool "bluez-utils 5.x"
++	depends on !BR2_avr32
++	depends on BR2_USE_WCHAR # libglib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
++	depends on BR2_USE_MMU # dbus
++	depends on !BR2_PACKAGE_BLUEZ_UTILS # conflicts with 4.x version
++	select BR2_PACKAGE_DBUS
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_LIBICAL
++	select BR2_PACKAGE_READLINE
 +	help
-+	  Install eigen unsupported modules
++	  bluez utils version 5.x
++
++	  With this release BlueZ only supports the new Bluetooth Management
++	  kernel interface (introduced in Linux 3.4).
++	  For Low Energy support at least kernel version 3.5 is needed.
++
++	  The API is not backwards compatible with BlueZ 4.
++
++	  Bluez utils will use systemd and/or udev if enabled.
++
++	  http://www.bluez.org
++	  http://www.kernel.org/pub/linux/bluetooth
++
++if BR2_PACKAGE_BLUEZ5_UTILS
++
++config BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL
++	bool "build experimental plugins"
++	help
++	  Build BlueZ 5.x experimental plugins (SAP, NFC, ...).
++
++config BR2_PACKAGE_BLUEZ5_UTILS_TEST
++	bool "enable test"
++	help
++	  Enable test.
++
++config BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL
++	bool "install GATT tool"
++	help
++	  Generic Attribute Profile (GATT) support. This provides profile
++	  discovery and description services for Bluetooth Low Energy.
++	  This will install the gatttool utility.
++
++	  It is always build with BlueZ 5.x, but upstream choose not to install
++	  it by default.
++
 +endif
 +
- comment "eigen needs a toolchain w/ C++"
- 	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/eigen/eigen.mk b/package/eigen/eigen.mk
-index 9a5ce7d..ac030a9 100644
---- a/package/eigen/eigen.mk
-+++ b/package/eigen/eigen.mk
-@@ -14,12 +14,19 @@ EIGEN_INSTALL_STAGING = YES
- EIGEN_INSTALL_TARGET = NO
- EIGEN_DEST_DIR = $(STAGING_DIR)/usr/include/eigen3
- 
-+ifeq ($(BR2_PACKAGE_EIGEN_UNSUPPORTED_MODULES),y)
-+define EIGEN_INSTALL_UNSUPPORTED_MODULES_CMDS
-+	cp -a $(@D)/unsupported $(EIGEN_DEST_DIR)
++comment "bluez5-utils needs a toolchain w/ wchar, threads"
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+new file mode 100644
+index 0000000..d0d69df
+--- /dev/null
++++ b/package/bluez5_utils/bluez5_utils.mk
+@@ -0,0 +1,55 @@
++################################################################################
++#
++# bluez5_utils
++#
++################################################################################
++
++BLUEZ5_UTILS_VERSION = 5.16
++BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
++BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
++BLUEZ5_UTILS_INSTALL_STAGING = YES
++BLUEZ5_UTILS_DEPENDENCIES = dbus libglib2 libical readline
++BLUEZ5_UTILS_CONF_OPT = --enable-tools --enable-library
++BLUEZ5_UTILS_LICENSE = GPLv2+ LGPLv2.1+
++BLUEZ5_UTILS_LICENSE_FILES = COPYING COPYING.LIB
++
++# experimental plugins
++ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL),y)
++	BLUEZ5_UTILS_CONF_OPT += --enable-experimental
++else
++	BLUEZ5_UTILS_CONF_OPT += --disable-experimental
++endif
++
++# install gatttool (For some reason upstream choose not to do it by default)
++define BLUEZ5_UTILS_INSTALL_GATTTOOL
++	$(INSTALL) -D -m 0755 $(@D)/attrib/gatttool $(TARGET_DIR)/usr/bin
 +endef
++
++ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL),y)
++	BLUEZ5_UTILS_POST_INSTALL_TARGET_HOOKS += BLUEZ5_UTILS_INSTALL_GATTTOOL
 +endif
 +
- # This package only consists of headers that need to be
- # copied over to the sysroot for compile time use
- define EIGEN_INSTALL_STAGING_CMDS
- 	$(RM) -r $(EIGEN_DEST_DIR)
- 	mkdir -p $(EIGEN_DEST_DIR)
- 	cp -a $(@D)/Eigen $(EIGEN_DEST_DIR)
-+	$(EIGEN_INSTALL_UNSUPPORTED_MODULES_CMDS)
- endef
- 
- $(eval $(generic-package))
++# enable test
++ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_TEST),y)
++	BLUEZ5_UTILS_CONF_OPT += --enable-test
++else
++	BLUEZ5_UTILS_CONF_OPT += --disable-test
++endif
++
++# use udev if available
++ifeq ($(BR2_PACKAGE_UDEV),y)
++        BLUEZ5_UTILS_CONF_OPT += --enable-udev
++        BLUEZ5_UTILS_DEPENDENCIES += udev
++else
++        BLUEZ5_UTILS_CONF_OPT += --disable-udev
++endif
++
++# integrate with systemd if available
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++        BLUEZ5_UTILS_CONF_OPT += --enable-systemd
++        BLUEZ5_UTILS_DEPENDENCIES += systemd
++else
++        BLUEZ5_UTILS_CONF_OPT += --disable-systemd
++endif
++
++$(eval $(autotools-package))
 -- 
-1.9.0
+1.7.9.5
