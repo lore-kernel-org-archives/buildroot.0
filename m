@@ -1,56 +1,63 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Thu, 20 Mar 2014 09:17:55 +0100
-Subject: [Buildroot] [PATCH v4 2/2] libuci: new package
-In-Reply-To: <20140319232343.71252ef2@skate>
-References: <1395266096-7649-1-git-send-email-yegorslists@googlemail.com>
- <1395266096-7649-2-git-send-email-yegorslists@googlemail.com>
- <20140319232343.71252ef2@skate>
-Message-ID: <CAGm1_ktEWi+dhAxxBYg=8i9BfBw6QiDNNbVO-4+z+N3GNsT=_Q@mail.gmail.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Thu, 20 Mar 2014 09:25:03 +0100
+Subject: [Buildroot] [PATCH v8] xbmc: new package
+In-Reply-To: <20140319235700.GC3328@free.fr>
+References: <1393158585-27193-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <20140319235700.GC3328@free.fr>
+Message-ID: <CAGduivyzGsZjmrU0DD81kAEEEbc=r7Mhsm7yXLkL8xC=RkPP7g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Mar 19, 2014 at 11:23 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Yegor Yefremov,
+Hi Yann, all
+On Thu, Mar 20, 2014 at 12:57 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Maxime, All,
 >
-> On Wed, 19 Mar 2014 22:54:56 +0100, Yegor Yefremov wrote:
+> On 2014-02-23 13:29 +0100, Maxime Hadjinlian spake thusly:
+>> XBMC is an award-winning free and open source (GPL) software media player and
+>> entertainment hub for digital media.
 >
->> +config BR2_PACKAGE_LIBUCI
->> +     bool "libuci"
->> +     select BR2_PACKAGE_LIBUBOX
->> +     help
->> +       libuci is intended to centralize the whole configuration
->> +       of a device running OpenWrt. This package will also install
+> Are you still working on this?
+Yup, I am truly sorry with the lack of communication. I have been
+under an ocean of work and as such have really no energy left to hack
+(and my wife would literally murder me at this point).
+*BUT* I was thinking of working on this either during my lunch hour or
+friday night since I have the whole evening to myself.
 >
-> What is a "device running OpenWrt" in the context of Buildroot ?
+> If that can help you, I've started accumulating a few of the suggested
+> changes in a branch in my tree:
+>     git://gitorious.org/buildroot/buildroot.git yem/xbmc
 >
-> Thomas
+>     091d9b6 xbmc: new package
+>     6547d40 package/xbmc: background XBMC and store PID in startup script
+>     296d6b8 package/xbmc: cleanup dependencies
+>
+> I've made separate patches so we can keep track of the changes on top of
+> your initial patch, but they should of course all be eventually folded in
+> a single patch before final submission (or you can do it now in your tree
+> if you want; just keep the SoB tags, please.)
+Oh shiny ! I'll have a look at them and merge them. I had already
+cleanup the dependency but I'll look at your patch to check if I
+didn't forgot anything.
+
+From my point of view, I have left to do :
+    - The removal of the patch regarding the RPi specific settings
+    - Add them thought and advancedsettings.xml which will be
+installed with XBMC if we are building for an RPi.
+
+Have I missed anything ?
+>
+> Regards,
+> Yann E. MORIN.
+>
 > --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
 
-libuci provides just another config infrastructure. All config files
-will be placed to /etc/config and you can read/write it's content via
-libuci or UCI CLI. OpenWrt is using this approach and also develops
-these packages. But it's usage is not limited to OpenWrt and can be
-used by any distribution. See http://wiki.openwrt.org/doc/uci for more
-details. I have found this tutorial for Ubunut:
-http://www.wakoond.hu/2013/06/using-uci-on-ubuntu.html
-
-I need these packages, because I have some programs I've developed for
-OpenWrt, but would also like to use in BR. Another usage were to play
-with swconfig (https://github.com/ringlej/swconfig). Of course you can
-compile swconfig without uci support, but uci like config is much more
-readable and handy: http://wiki.openwrt.org/doc/uci/network/switch.
-
-And the real master plan were to port LuCI
-(http://luci.subsignal.org/trac) or LuCI2 to BR, so that BR can get a
-"standard" web-frontend.
-
-I think OpenWrt is good tag for those familiar with this infrastructure.
-
-Yegor
+Again sorry for the lack of communication and sudden disappearance.
