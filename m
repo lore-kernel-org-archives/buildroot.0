@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 21 Mar 2014 00:17:42 +0100
-Subject: [Buildroot] [PATCH 4/6] manual/adding-packages-generic.txt: fix
- capitalization in titles of chapters
-In-Reply-To: <1395353250-9475-5-git-send-email-jerzy.grzegorek@trzebnica.net>
+Date: Fri, 21 Mar 2014 00:18:22 +0100
+Subject: [Buildroot] [PATCH 5/6] manual/adding-packages-generic.txt:
+ change the default value of <PKG>_SOURCE variable
+In-Reply-To: <1395353250-9475-6-git-send-email-jerzy.grzegorek@trzebnica.net>
 References: <1395353250-9475-1-git-send-email-jerzy.grzegorek@trzebnica.net>
- <1395353250-9475-5-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <20140320231742.GD20862@free.fr>
+ <1395353250-9475-6-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <20140320231822.GE20862@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -23,31 +23,22 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  docs/manual/adding-packages-generic.txt |    4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  docs/manual/adding-packages-generic.txt |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
 > diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-> index 04e589f..366b896 100644
+> index 366b896..e125498 100644
 > --- a/docs/manual/adding-packages-generic.txt
 > +++ b/docs/manual/adding-packages-generic.txt
-> @@ -11,7 +11,7 @@ system is based on hand-written Makefiles or shell scripts.
+> @@ -211,7 +211,7 @@ information is (assuming the package name is +libfoo+) :
+>    the package. If +HOST_LIBFOO_SOURCE+ is not specified, it
+>    defaults to +LIBFOO_SOURCE+. If none are specified, then
+>    the value is assumed to be
+> -  +packagename-$(LIBFOO_VERSION).tar.gz+. +
+> +  +libfoo-$(LIBFOO_VERSION).tar.gz+. +
+>    Example: +LIBFOO_SOURCE = foobar-$(LIBFOO_VERSION).tar.bz2+
 >  
->  [[generic-package-tutorial]]
->  
-> -+generic-package+ Tutorial
-> ++generic-package+ tutorial
->  ^^^^^^^^^^^^^^^^^^^^^^^^^^
->  
->  ------------------------------
-> @@ -159,7 +159,7 @@ Makefile code necessary to make your package working.
->  
->  [[generic-package-reference]]
->  
-> -+generic-package+ Reference
-> ++generic-package+ reference
->  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->  
->  There are two variants of the generic target. The +generic-package+ macro is
+>  * +LIBFOO_PATCH+ may contain a space-separated list of patch file
 > -- 
 > 1.7.9.5
 > 
