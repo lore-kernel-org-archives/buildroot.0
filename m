@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 21 Mar 2014 00:17:02 +0100
-Subject: [Buildroot] [PATCH 3/6] manual/faq-troubleshooting.txt: remove
- the extra 'the'
-In-Reply-To: <1395353250-9475-4-git-send-email-jerzy.grzegorek@trzebnica.net>
+Date: Fri, 21 Mar 2014 00:17:42 +0100
+Subject: [Buildroot] [PATCH 4/6] manual/adding-packages-generic.txt: fix
+ capitalization in titles of chapters
+In-Reply-To: <1395353250-9475-5-git-send-email-jerzy.grzegorek@trzebnica.net>
 References: <1395353250-9475-1-git-send-email-jerzy.grzegorek@trzebnica.net>
- <1395353250-9475-4-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <20140320231702.GC20862@free.fr>
+ <1395353250-9475-5-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <20140320231742.GD20862@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -23,22 +23,31 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  docs/manual/faq-troubleshooting.txt |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  docs/manual/adding-packages-generic.txt |    4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/docs/manual/faq-troubleshooting.txt b/docs/manual/faq-troubleshooting.txt
-> index 4026e18..a5079e3 100644
-> --- a/docs/manual/faq-troubleshooting.txt
-> +++ b/docs/manual/faq-troubleshooting.txt
-> @@ -117,7 +117,7 @@ Why doesn't Buildroot generate binary packages (.deb, .ipkg...)?
->  ----------------------------------------------------------------
+> diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+> index 04e589f..366b896 100644
+> --- a/docs/manual/adding-packages-generic.txt
+> +++ b/docs/manual/adding-packages-generic.txt
+> @@ -11,7 +11,7 @@ system is based on hand-written Makefiles or shell scripts.
 >  
->  One feature that is often discussed on the Buildroot list is the
-> -the general topic of "package management". To summarize, the idea
-> +general topic of "package management". To summarize, the idea
->  would be to add some tracking of which Buildroot package installs
->  what files, with the goals of:
+>  [[generic-package-tutorial]]
 >  
+> -+generic-package+ Tutorial
+> ++generic-package+ tutorial
+>  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  
+>  ------------------------------
+> @@ -159,7 +159,7 @@ Makefile code necessary to make your package working.
+>  
+>  [[generic-package-reference]]
+>  
+> -+generic-package+ Reference
+> ++generic-package+ reference
+>  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  
+>  There are two variants of the generic target. The +generic-package+ macro is
 > -- 
 > 1.7.9.5
 > 
