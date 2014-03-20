@@ -1,55 +1,99 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 20 Mar 2014 17:16:18 +0100
-Subject: [Buildroot] [PATCH] libtool: use a different way to avoid
-	autoreconfiguration
-In-Reply-To: <20140320155422.1ff40798@skate>
-References: <1395270180-12701-1-git-send-email-arnout@mind.be>	<20140320002504.0cebf7d5@skate>	<532A8C01.2070702@mind.be>
- <20140320155422.1ff40798@skate>
-Message-ID: <532B1452.6080502@mind.be>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Thu, 20 Mar 2014 17:31:00 +0100
+Subject: [Buildroot] autoreconf: Command not found
+In-Reply-To: <CADYw_JJYQFccmGm0OE65u_LROK3eHRmHc6VOQtq8V9aQks=H9A@mail.gmail.com>
+References: <CADYw_JJ+tid_YUNwBquEjnBiin+4uNN6bMSd9AEV++zf-5Xwdw@mail.gmail.com>
+ <20140319184238.GB3328@free.fr>
+ <CADYw_JJYQFccmGm0OE65u_LROK3eHRmHc6VOQtq8V9aQks=H9A@mail.gmail.com>
+Message-ID: <CAGduivxyrirUy7o+ia95qF-KqvROemErHswwNjatt7C-GJagyQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 20/03/14 15:54, Thomas Petazzoni wrote:
-> Dear Arnout Vandecappelle,
-> 
-> On Thu, 20 Mar 2014 07:34:41 +0100, Arnout Vandecappelle wrote:
-> 
->>> Shouldn't we mark libtool on the target as something deprecated? We
->>> have already removed the support for autoconf and automake on the
->>> target, so having libtool seems quite useless, no?
+Hi Stanislav, all
+
+On Thu, Mar 20, 2014 at 5:07 PM, Stanislav Vlasic <svlasic@gmail.com> wrote:
+> Thanx everybody for answering,
+>
+> based on suggestions and patches, I managed to build xbmc and everything
+> else needed for buildroot.
+>
+> Related to buildroot, all patches/packages are originally from official
+> 2014.02 buildroot, except amlogic changes (additional packages), packages in
+> thirdparty folder and
+> patches to alsa-lib, sdl and sdl_image (to be also available as host
+> packages).
+>
+A few package in your thirdparty directory are already in buildroot :
+   - librtmp (called rtmpdump in buildroot)
+   - taglib
+   - shairport (libshairplay)
+
+And for XBMC, it will be merged when it is merged :).
+
+Also, sdl and sdl_image have host variant as I added them because of XBMC.
+
+Correct me if I'm wrong, but I think you forked this tree:
+https://github.com/huceke/buildroot-rbp
+
+Originally, while there is nothing wrong with this, a lot has happened
+in Buildroot and huceke's tree was not updated accordingly.
+
+And as Yann pointed out, why not help out and fix/add the packages you
+would want to use ?
+If you have specific packages that you don't want to merge in
+Buildroot, consider the BR2_EXTERNAL mechanism
+(http://buildroot.uclibc.org/downloads/manual/manual.html#outside-br-custom).
+
+This way we would be able to help you the best we can and you don't
+have the headache of maintaining a separate fork.
+
+Sounds great heh ? ;)
+
+> Commits:
+> https://github.com/Stane1983/buildroot-M3-MX/commits/2014.02-Amlogic
+>
+>
+> On Wed, Mar 19, 2014 at 7:42 PM, Yann E. MORIN <yann.morin.1998@free.fr>
+> wrote:
 >>
->>  Pulseaudio depends on libtool. I guess it actually depends on libltdl,
->> though. But is precisely in libltdl that the problem occurs.
-> 
-> But isn't the libltdl code normally "copied" into the project when
-> autoreconf is made, so that there should in fact not be any dependency
-> from pulseaudio to the target libtool?
-
- I have no idea. Feel free to investigate.
-
- If we do deprecate libtool on target, then this patch is no longer
-needed to fix the autobuild issue. However, perhaps it would still be
-considered a cleaner way to handle things?
-
- Or perhaps another cleaner way is to use
-
-touch -t 201110171216 $(@D)/libltdl/m4/libtool.m4
-
-in a post-patch hook. The -t option is POSIX so it should be OK to use.
-There are actually many more places where we could use that.
-
-
- Regards,
- Arnout
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+>> Stanislav, All,
+>>
+>> On 2014-03-19 08:06 +0100, Stanislav Vlasic spake thusly:
+>> > sorry if I'm duplicating question but I'm facing problem building 3rd
+>> > party
+>> > package on 2014.02 buildroot (package: xbmc, but doesn't really matter).
+>>
+>> Please note that we have a pending patch to add XBMC:
+>>     http://patchwork.ozlabs.org/patch/323307/
+>>
+>> It's v8, and there are still a few rough edges, but some people have
+>> reported success using that patch.
+>>
+>> (Cc-ing Maxime, since he's the original author.)
+>>
+>> If at all, it would be nice to help finalise this patch so it can be
+>> applied upstream Buildroot, rather than trying to work on your own fork
+>> of Buildroot (which may or may not have changes not in the Official
+>> Buidlroot, and that prevents us from really helping you).
+>>
+>> Regards,
+>> Yann E. MORIN.
+>>
+>> --
+>>
+>> .-----------------.--------------------.------------------.--------------------.
+>> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
+>> conspiracy: |
+>> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
+>> |
+>> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is
+>> no  |
+>> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
+>> conspiracy.  |
+>>
+>> '------------------------------^-------^------------------^--------------------'
+>
+>
