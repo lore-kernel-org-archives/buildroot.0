@@ -1,53 +1,79 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Mar 2014 16:46:29 +0100
-Subject: [Buildroot] [git commit] Fix microblize little endian toolchain
-Message-ID: <20140320155006.1541C9BCC1@busybox.osuosl.org>
+Date: Thu, 20 Mar 2014 16:48:38 +0100
+Subject: [Buildroot] [git commit] rsyslog: Update patch to upstreamed version
+Message-ID: <20140320155006.284BD9C1B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c220581c789a49e6e00e7125301bd23d1651224a
+commit: http://git.buildroot.net/buildroot/commit/?id=eb52ebc8bb5cdda9039da3992d813251068e2694
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Buildroot toolchain creates big endian binaries instead of little endian
-ones for microblaze architecture. The reason is wrong BR2_ARCH string.
-KERNEL_ARCH must contain microblaze in both cases.
+Patch for the libgcrypt-config path correction was accepted by the
+mainline for rsyslog. Updating the buildroot patch until a new version
+with the fix is released.
 
-Signed-off-by: Jan Drazil <xdrazi00@stud.fit.vutbr.cz>
-Signed-off-by: Jan Viktorin <xvikto03@stud.fit.vutbr.cz>
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Tested-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Makefile                  |    3 ++-
- arch/Config.in.microblaze |    3 ++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ ...yslog-0001-libgcrypt-config-path-override.patch |   22 +++++++++++--------
+ 1 files changed, 13 insertions(+), 9 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 011af57..d49d7bf 100644
---- a/Makefile
-+++ b/Makefile
-@@ -318,7 +318,8 @@ KERNEL_ARCH:=$(shell echo "$(ARCH)" | sed -e "s/-.*//" \
- 	-e s/parisc64/parisc/ \
- 	-e s/powerpc64/powerpc/ \
- 	-e s/ppc.*/powerpc/ -e s/mips.*/mips/ \
--	-e s/sh.*/sh/)
-+	-e s/sh.*/sh/ \
-+	-e s/microblazeel/microblaze/)
+diff --git a/package/rsyslog/rsyslog-0001-libgcrypt-config-path-override.patch b/package/rsyslog/rsyslog-0001-libgcrypt-config-path-override.patch
+index 6af0db7..c0d8bfa 100644
+--- a/package/rsyslog/rsyslog-0001-libgcrypt-config-path-override.patch
++++ b/package/rsyslog/rsyslog-0001-libgcrypt-config-path-override.patch
+@@ -1,6 +1,6 @@
+-From 2d498883b19c386abacffca969eb404c9407a8cc Mon Sep 17 00:00:00 2001
++From 86d19e4e63c3fa5b9690991f3e29ffab93990acd Mon Sep 17 00:00:00 2001
+ From: Clayton Shotwell <clshotwe@rockwellcollins.com>
+-Date: Mon, 10 Mar 2014 14:40:35 -0500
++Date: Wed, 19 Mar 2014 08:28:55 -0500
+ Subject: [PATCH] configure: Allow overriding of libgcrypt-config
  
- ZCAT:=$(call qstrip,$(BR2_ZCAT))
- BZCAT:=$(call qstrip,$(BR2_BZCAT))
-diff --git a/arch/Config.in.microblaze b/arch/Config.in.microblaze
-index dbdd99a..2d4c1fe 100644
---- a/arch/Config.in.microblaze
-+++ b/arch/Config.in.microblaze
-@@ -1,5 +1,6 @@
- config BR2_ARCH
--	default "microblaze"
-+	default "microblazeel"  if BR2_microblazeel
-+	default "microblaze"    if BR2_microblazebe
+ Allow the overriding of the libgcrypt-config path if it is not at
+@@ -8,14 +8,14 @@ a standard location.
  
- config BR2_ENDIAN
- 	default "LITTLE" if BR2_microblazeel
+ Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
+ ---
+- configure.ac |   12 ++++--------
+- 1 file changed, 4 insertions(+), 8 deletions(-)
++ configure.ac |   14 +++++---------
++ 1 file changed, 5 insertions(+), 9 deletions(-)
+ 
+ diff --git a/configure.ac b/configure.ac
+-index 9643b84..7eb7712 100644
++index 314c16e..bf017d2 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -820,19 +820,15 @@ AC_ARG_ENABLE(libgcrypt,
++@@ -797,22 +797,18 @@ AC_ARG_ENABLE(libgcrypt,
+          [enable_libgcrypt=yes]
+  )
+  if test "x$enable_libgcrypt" = "xyes"; then
+@@ -25,8 +25,8 @@ index 9643b84..7eb7712 100644
+ -            [yes],,,
+ -            )
+ -        if test "x${HAVE_LIBGCRYPT_CONFIG}" != "xyes"; then
+-+	AC_PATH_PROG(LIBGCRYPT_CONFIG,libgcrypt-config)
+-+        if test "x${LIBGCRYPT_CONFIG}" == "x"; then
+++	AC_PATH_PROG([LIBGCRYPT_CONFIG],[libgcrypt-config],[no])
+++        if test "x${LIBGCRYPT_CONFIG}" = "xno"; then
+             AC_MSG_FAILURE([libgcrypt-config not found in PATH])
+          fi
+          AC_CHECK_LIB(
+@@ -38,7 +38,11 @@ index 9643b84..7eb7712 100644
+ +        	LIBGCRYPT_LIBS="`${LIBGCRYPT_CONFIG} --libs`"
+          	],
+          	[AC_MSG_FAILURE([libgcrypt is missing])],
+-         	[`libgcrypt-config --libs --cflags`]
++-        	[`libgcrypt-config --libs --cflags`]
+++        	[`${LIBGCRYPT_CONFIG} --libs --cflags`]
++         	)
++ 	AC_DEFINE([ENABLE_LIBGCRYPT], [1], [Indicator that LIBGCRYPT is present])
++ fi
+ -- 
+ 1.7.9.5
+ 
