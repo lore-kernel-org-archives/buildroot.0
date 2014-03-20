@@ -1,72 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Mar 2014 16:43:47 +0100
-Subject: [Buildroot] [git commit] libraries: add category Logging
-Message-ID: <20140320155006.1F30B9C1E7@busybox.osuosl.org>
+Date: Thu, 20 Mar 2014 16:44:43 +0100
+Subject: [Buildroot] [git commit] mtools: fix target compilation
+Message-ID: <20140320155006.1E0DF9C1EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cda5715a44b3232a62a58af0c7e31943cbea7f6b
+commit: http://git.buildroot.net/buildroot/commit/?id=42aca737b4520d457bea59dc9cb421a0ae6255bd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add new category and move all logging packages there:
+It needs some help regarding setpgrp, fixes:
+http://autobuild.buildroot.net/results/33e/33e38bf1c30cc09dbe992dfb95c48997ca860212/
+Also disable X11 support since it picks up the host variant.
+And use normal indentation for variables.
 
-liblog4c-localtime
-liblogging
-log4cplus
-log4cxx
-zlog
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in |   13 ++++++++-----
- 1 files changed, 8 insertions(+), 5 deletions(-)
+ package/mtools/mtools.mk |   10 ++++++----
+ 1 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 688ed4d..8986734 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -666,6 +666,14 @@ source "package/xerces/Config.in"
- source "package/yajl/Config.in"
- endmenu
+diff --git a/package/mtools/mtools.mk b/package/mtools/mtools.mk
+index 6d8f44b..4880245 100644
+--- a/package/mtools/mtools.mk
++++ b/package/mtools/mtools.mk
+@@ -4,11 +4,13 @@
+ #
+ ################################################################################
  
-+menu "Logging"
-+source "package/liblog4c-localtime/Config.in"
-+source "package/liblogging/Config.in"
-+source "package/log4cplus/Config.in"
-+source "package/log4cxx/Config.in"
-+source "package/zlog/Config.in"
-+endmenu
-+
- menu "Multimedia"
- source "package/libass/Config.in"
- source "package/libbluray/Config.in"
-@@ -773,8 +781,6 @@ source "package/libevent/Config.in"
- source "package/libffi/Config.in"
- source "package/libglib2/Config.in"
- source "package/libical/Config.in"
--source "package/liblog4c-localtime/Config.in"
--source "package/liblogging/Config.in"
- source "package/libnspr/Config.in"
- source "package/libpfm4/Config.in"
- source "package/libplist/Config.in"
-@@ -788,8 +794,6 @@ source "package/libtpl/Config.in"
- source "package/libunwind/Config.in"
- source "package/liburcu/Config.in"
- source "package/linux-pam/Config.in"
--source "package/log4cplus/Config.in"
--source "package/log4cxx/Config.in"
- source "package/lttng-libust/Config.in"
- source "package/mpc/Config.in"
- source "package/mpfr/Config.in"
-@@ -803,7 +807,6 @@ source "package/protobuf-c/Config.in"
- source "package/schifra/Config.in"
- source "package/startup-notification/Config.in"
- source "package/tzdata/Config.in"
--source "package/zlog/Config.in"
- endmenu
+-MTOOLS_VERSION       = 4.0.18
+-MTOOLS_SOURCE        = mtools-$(MTOOLS_VERSION).tar.bz2
+-MTOOLS_SITE          = $(BR2_GNU_MIRROR)/mtools/
+-MTOOLS_LICENSE       = GPLv3+
++MTOOLS_VERSION = 4.0.18
++MTOOLS_SOURCE = mtools-$(MTOOLS_VERSION).tar.bz2
++MTOOLS_SITE = $(BR2_GNU_MIRROR)/mtools/
++MTOOLS_LICENSE = GPLv3+
+ MTOOLS_LICENSE_FILES = COPYING
++MTOOLS_CONF_ENV = ac_cv_func_setpgrp_void=yes
++MTOOLS_CONF_OPT = --without-x
  
- menu "Security"
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
