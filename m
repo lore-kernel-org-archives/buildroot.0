@@ -1,88 +1,65 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 20 Mar 2014 21:43:59 +0100
-Subject: [Buildroot] [PATCH] support: properly check for bash as a
-	dependency
-In-Reply-To: <20140318165518.GA3342@free.fr>
-References: <1395052954-1567-1-git-send-email-yann.morin.1998@free.fr>
- <20140318060130.282f5a46@skate> <20140318165518.GA3342@free.fr>
-Message-ID: <532B530F.5050408@mind.be>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 21 Mar 2014 10:48:35 +0100
+Subject: [Buildroot] [PATCH] gcc: fix snapshot compile
+In-Reply-To: <1395354936-4237-1-git-send-email-ps.report@gmx.net> (Peter
+ Seiderer's message of "Thu, 20 Mar 2014 23:35:36 +0100")
+References: <1395354936-4237-1-git-send-email-ps.report@gmx.net>
+Message-ID: <87pplfvq4s.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18/03/14 17:55, Yann E. MORIN wrote:
-> Thomas, All,
-> 
-> On 2014-03-18 06:01 +0100, Thomas Petazzoni spake thusly:
->> On Mon, 17 Mar 2014 11:42:34 +0100, Yann E. MORIN wrote:
->>
->>> So, calling "$SHELL --version" will still return "^GNU bash" no matter
->>> what shell is actually running.
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
- Have you tested this? dependencies.sh is run from the Makefile, and that
-says:
+ > Add gcc snapshot versions dependency on host-flex and host-bison
+ > (done as suggested by Thomas Petazzoni [1]).
 
-SHELL:=$(shell if [ -x "$$BASH" ]; then echo $$BASH; \
-        else if [ -x /bin/bash ]; then echo /bin/bash; \
-        else echo sh; fi; fi)
-[snip]
+ > Fixes gcc snapshot version 4.9-20140309 compile failure [2].
 
-export SHELL CONFIG_SHELL quiet Q KBUILD_VERBOSE VERBOSE
+ > Tested the following buildroot configs
 
- So $SHELL _will_ be set to bash unless there is no bash.
+ > BR2_arm=y
+ > BR2_cortex_a9=y
+ > BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+ > BR2_BINUTILS_VERSION_2_24=y
+ > BR2_GCC_VERSION_SNAP=y
+ > BR2_GCC_SNAP_DATE="4.9-20140309"
 
->>>
->>> Since quite a lot of #!/bin/sh scripts are in fact bash scripts, we
->>> really want to ensure that /bin/sh is bash.
->>
->> I'm definitely against that. My system has /bin/sh pointing to dash,
->> and Buildroot works fine. One of the thing that annoyed me in
->> OpenEmbedded was its requirements to have /bin/sh be bash.
->>
->> We clearly don't want that.
-> 
-> I'm just fine with that. :-)
-> 
-> But the current check is broken anyway, as all it checks is that the
-> login shell of the user is bash.
-> 
->   - if we want to work whith dash as the system shell, then the current
->     check is unneeded;
-> 
->   - if we want to work with dash as the system shell, we don't care what
->     login shell the user is using, as we must also work when this is dash;
-> 
->   - SHELL is not mandated by POSIX, so it may be empty on a
->     POSIX-compliant shell anyway.
-> 
-> So, we should just remove this check altogether.
+ > and
 
- Not remove, but rather replace it with a check for /bin/bash existence.
-We do have quite a lot of stuff referring to /bin/bash. bash in PATH is
-not good enough.
+ > BR2_arcle=y
 
+ > For the ARC case disabled the BINUTILS_FROM_GIT host-flex and host-bison
+ > dependency.
 
- Regards,
- Arnout
+ > [1] http://lists.busybox.net/pipermail/buildroot/2014-March/092490.html
+ > [2] http://lists.busybox.net/pipermail/buildroot/2014-March/092459.html
 
-> 
->> I've just checked the Free Electrons autobuilders, and there are also
->> using dash as /bin/sh. This means that if configure scripts were using
->> bashims unsupported by dash, we would have noticed.
-> 
-> Andrew, what package was the breakage due to?
-> 
-> Regards,
-> Yann E. MORIN.
-> 
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ > ---
+ >  package/gcc/gcc.mk | 2 +-
+ >  1 file changed, 1 insertion(+), 1 deletion(-)
 
+ > diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+ > index 236297d..bc15932 100644
+ > --- a/package/gcc/gcc.mk
+ > +++ b/package/gcc/gcc.mk
+ > @@ -151,7 +151,7 @@ HOST_GCC_COMMON_DEPENDENCIES += host-mpc
+ >  HOST_GCC_COMMON_CONF_OPT += --with-mpc=$(HOST_DIR)/usr
+ >  endif
+ 
+ > -ifeq ($(BR2_arc),y)
+ > +ifneq ($(or $(BR2_arc),$(BR2_GCC_VERSION_SNAP)),)
+
+'or' is not needed as the symbols expand to nothing or 'y', so you can
+just do:
+
+ifneq ($(foo)$(bar)$(blih)$(blah),)
+..
+
+Committed with that changed, thanks.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Bye, Peter Korsgaard
