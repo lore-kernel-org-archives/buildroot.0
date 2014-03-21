@@ -1,56 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 21 Mar 2014 00:19:27 +0100
-Subject: [Buildroot] [PATCH 6/6] manual/adding-packages-tips.txt: reword
- part about package name
-In-Reply-To: <1395353250-9475-7-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1395353250-9475-1-git-send-email-jerzy.grzegorek@trzebnica.net>
- <1395353250-9475-7-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <20140320231927.GF20862@free.fr>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 21 Mar 2014 06:16:18 +0200
+Subject: [Buildroot] ARC/uclibc-f37101d94284c692ee9b23bc72ef38b9473cd316
+ compile failure
+In-Reply-To: <trinity-2154b334-ea3f-48a7-ad1d-15cc3890166f-1395356198737@3capp-gmx-bs24>
+References: <trinity-2154b334-ea3f-48a7-ad1d-15cc3890166f-1395356198737@3capp-gmx-bs24>
+Message-ID: <20140321041618.GO4266@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jerzy, All,
+Hi Peter,
 
-On 2014-03-20 23:07 +0100, Jerzy Grzegorek spake thusly:
-> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  docs/manual/adding-packages-tips.txt |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Thu, Mar 20, 2014 at 11:56:38PM +0100, Peter Seiderer wrote:
+> with latest buildroot from git I get the following uclib compile failure.
 > 
-> diff --git a/docs/manual/adding-packages-tips.txt b/docs/manual/adding-packages-tips.txt
-> index 73c25be..ceaba8e 100644
-> --- a/docs/manual/adding-packages-tips.txt
-> +++ b/docs/manual/adding-packages-tips.txt
-> @@ -31,7 +31,7 @@ using the following rules:
->    +BR2_PACKAGE_FOO_BAR_BOO+);
->  
->  * the +*.mk+ file variable prefix is the upper case _package name_
-> -  `.` and `-` characters substituted with `_` (e.g.:
-> +  with `.` and `-` characters substituted with `_` (e.g.:
->    +FOO_BAR_BOO_VERSION+).
->  
->  
-> -- 
-> 1.7.9.5
+> Buildroot defconfig:
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> BR2_arceb=y
+> 
+> Build log:
+> ...
+>   CC libc/sysdeps/linux/common/getpgid.os
+>   CC libc/sysdeps/linux/common/modify_ldt.os
+>   CC libc/sysdeps/linux/common/posix_fadvise.os
+> libc/sysdeps/linux/common/posix_fadvise.c:26:29: error: unknown type name 'off64_t'
+>  int posix_fadvise64(int fd, off64_t offset, off64_t len, int advice);
+>                              ^
+> libc/sysdeps/linux/common/posix_fadvise.c:26:45: error: unknown type name 'off64_t'
+>  int posix_fadvise64(int fd, off64_t offset, off64_t len, int advice);
+>                                              ^
+> libc/sysdeps/linux/common/posix_fadvise.c: In function 'posix_fadvise':
+> libc/sysdeps/linux/common/posix_fadvise.c:32:2: warning: implicit declaration of function 'posix_fadvise64' [-Wimplicit-function-declaration]
+>   return posix_fadvise64(fd, offset, len, advice);
+>   ^
+> make[2]: *** [libc/sysdeps/linux/common/posix_fadvise.os] Error 1
+> make[1]: *** [/home/seiderer/Work/zeiss/freescale-imx6/build_arc/build/uclibc-f37101d94284c692ee9b23bc72ef38b9473cd316/.stamp_built] Error 2
+> make: *** [_all] Error 2
+
+Do you have LFS support disabled? If so this is a known issue. You may try the 
+patch at http://thread.gmane.org/gmane.comp.lib.uclibc.general/23714 .
+
+baruch
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
