@@ -1,59 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 21 Mar 2014 07:27:03 +0100
-Subject: [Buildroot] [git commit] toolchain-external: Linaro AArch64
-	toolchains need a symlink, like ARM ones
-Message-ID: <20140321062945.2062E9C20E@busybox.osuosl.org>
+Date: Fri, 21 Mar 2014 07:26:53 +0100
+Subject: [Buildroot] [git commit] pkg-autotools: add a
+	AUTOCONF_AC_CHECK_FILE_VAL macro
+Message-ID: <20140321062945.13B379C210@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b60b6f660d640eaffd241876bd8a8146b965600f
+commit: http://git.buildroot.net/buildroot/commit/?id=f4642eea7e5c0c375f1b892074a3c22637042deb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Like ARM ones, the Linaro AArch64 toolchains expect libraries in
-/lib/aarch64-linux-gnu and /usr/lib/aarch64-linux-gnu, but Buildroot
-always installs them in /lib and /usr/lib. Therefore, this commit adds
-the appropriate symbolic links, just like we're already doing for
-Linaro ARM toolchains.
+When configure.ac scripts do AC_CHECK_FILE tests, they always fail in
+cross-compilation contexts because it is not possible to check for
+file existence during the build process. Therefore we have to preseed
+the configure environment with ac_cv_file_<foo>=yes variable, <foo>
+being the path of the file, where all slashes, dots or dashes have
+been replaced by underscores.
 
-Reported-by: Kevin Hilman <khilman@linaro.org>
+In the context of the boot-wrapper-aarch64, we will have to use three
+of these variables, with fairly complex paths. So instead of
+replicating the logic each time, we create a
+AUTOCONF_AC_CHECK_FILE_VAL macro to help defining such variables.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- toolchain/toolchain-external/toolchain-external.mk |    8 ++++++++
- 1 files changed, 8 insertions(+), 0 deletions(-)
+ package/pkg-autotools.mk |   10 ++++++++++
+ 1 files changed, 10 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 1b1053d..547d55d 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -242,6 +242,11 @@ define TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
- 	ln -sf . $(TARGET_DIR)/usr/lib/arm-linux-gnueabihf
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index 32ceef2..a646612 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -36,6 +36,16 @@ define CONFIG_UPDATE
+ 	done
  endef
  
-+define TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SYMLINK
-+	ln -sf . $(TARGET_DIR)/lib/aarch64-linux-gnu
-+	ln -sf . $(TARGET_DIR)/usr/lib/aarch64-linux-gnu
-+endef
++# This function generates the ac_cv_file_<foo> value for a given
++# filename. This is needed to convince configure script doing
++# AC_CHECK_FILE() tests that the file actually exists, since such
++# tests cannot be done in a cross-compilation context. This function
++# takes as argument the path of the file. An example usage is:
++#
++#  FOOBAR_CONF_ENV = \
++#	$(call AUTOCONF_AC_CHECK_FILE_VAL,/dev/random)=yes
++AUTOCONF_AC_CHECK_FILE_VAL = ac_cv_file_$(subst -,_,$(subst /,_,$(subst .,_,$(1))))
 +
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
- TOOLCHAIN_EXTERNAL_SOURCE = arm-2012.03-57-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
-@@ -346,12 +351,15 @@ TOOLCHAIN_EXTERNAL_SOURCE = microblaze-unknown-linux-gnu.tgz
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_09),y)
- TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/13.09/components/toolchain/binaries/
- TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.8-2013.09_linux.tar.xz
-+TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SYMLINK
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_10),y)
- TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/13.10/components/toolchain/binaries/
- TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.8-2013.10-1_linux.tar.xz
-+TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SYMLINK
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_11),y)
- TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/13.11/components/toolchain/binaries/
- TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.8-2013.11_linux.tar.xz
-+TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SYMLINK
- else
- # Custom toolchain
- TOOLCHAIN_EXTERNAL_SITE = $(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
+ ################################################################################
+ # inner-autotools-package -- defines how the configuration, compilation and
+ # installation of an autotools package should be done, implements a
