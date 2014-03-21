@@ -1,53 +1,83 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 21 Mar 2014 07:26:53 +0100
-Subject: [Buildroot] [git commit] pkg-autotools: add a
-	AUTOCONF_AC_CHECK_FILE_VAL macro
-Message-ID: <20140321062945.13B379C210@busybox.osuosl.org>
+Date: Fri, 21 Mar 2014 07:27:00 +0100
+Subject: [Buildroot] [git commit] boot-wrapper-aarch64: bump version and
+	switch to autotools-package
+Message-ID: <20140321062945.17C9B9C0CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f4642eea7e5c0c375f1b892074a3c22637042deb
+commit: http://git.buildroot.net/buildroot/commit/?id=3a89b061994da71f8f0c45681098b7921156bb2e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When configure.ac scripts do AC_CHECK_FILE tests, they always fail in
-cross-compilation contexts because it is not possible to check for
-file existence during the build process. Therefore we have to preseed
-the configure environment with ac_cv_file_<foo>=yes variable, <foo>
-being the path of the file, where all slashes, dots or dashes have
-been replaced by underscores.
-
-In the context of the boot-wrapper-aarch64, we will have to use three
-of these variables, with fairly complex paths. So instead of
-replicating the logic each time, we create a
-AUTOCONF_AC_CHECK_FILE_VAL macro to help defining such variables.
+This commit updates boot-wrapper-aarch64 to the latest version. As it
+now uses the autotools, we switch the package to the autotools-package
+infrastructure.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-autotools.mk |   10 ++++++++++
- 1 files changed, 10 insertions(+), 0 deletions(-)
+ boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk |   38 +++++++++++++++-----
+ 1 files changed, 28 insertions(+), 10 deletions(-)
 
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index 32ceef2..a646612 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -36,6 +36,16 @@ define CONFIG_UPDATE
- 	done
+diff --git a/boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk b/boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk
+index d9ddf48..f4e1e1f 100644
+--- a/boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk
++++ b/boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk
+@@ -4,26 +4,44 @@
+ #
+ ################################################################################
+ 
+-BOOT_WRAPPER_AARCH64_VERSION        = 26b62f586020fd998c6efd43db657eaafeec14da
++BOOT_WRAPPER_AARCH64_VERSION        = 4266507a84f8c06452109d38e0350d4759740694
+ BOOT_WRAPPER_AARCH64_SITE           = git://git.kernel.org/pub/scm/linux/kernel/git/cmarinas/boot-wrapper-aarch64.git
+ BOOT_WRAPPER_AARCH64_LICENSE        = BSD3c
+ BOOT_WRAPPER_AARCH64_LICENSE_FILES  = LICENSE.txt
+ BOOT_WRAPPER_AARCH64_DEPENDENCIES   = linux
+ BOOT_WRAPPER_AARCH64_INSTALL_IMAGES = YES
+ 
+-BOOT_WRAPPER_AARCH64_DTS = $(call qstrip,$(BR2_TARGET_BOOT_WRAPPER_AARCH64_DTS))
++# The Git repository does not have the generated configure script and
++# Makefile.
++BOOT_WRAPPER_AARCH64_AUTORECONF = YES
+ 
+-define BOOT_WRAPPER_AARCH64_BUILD_CMDS
+-	$(MAKE) \
+-		KERNEL=$(BINARIES_DIR)/Image \
+-		DTC=$(LINUX_DIR)/scripts/dtc/dtc \
+-		FDT_SRC=$(LINUX_DIR)/arch/arm64/boot/dts/$(BOOT_WRAPPER_AARCH64_DTS).dts \
+-		CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
+-		BOOTARGS='$(BR2_TARGET_BOOT_WRAPPER_AARCH64_BOOTARGS)' -C $(@D)
++BOOT_WRAPPER_AARCH64_DTB = /arch/arm64/boot/dts/$(basename $(call qstrip,$(BR2_TARGET_BOOT_WRAPPER_AARCH64_DTS))).dtb
++
++# Fixup the path to the DTB in configure.ac. In the future, this
++# should hopefully be made more configurable by the
++# boot-wrapper-aarch64 developers.
++define BOOT_WRAPPER_AARCH64_FIX_DTB_NAME
++	$(SED) 's%^KERN_DTB=.*%KERN_DTB=$(BOOT_WRAPPER_AARCH64_DTB)%' $(@D)/configure.ac
  endef
  
-+# This function generates the ac_cv_file_<foo> value for a given
-+# filename. This is needed to convince configure script doing
-+# AC_CHECK_FILE() tests that the file actually exists, since such
-+# tests cannot be done in a cross-compilation context. This function
-+# takes as argument the path of the file. An example usage is:
-+#
-+#  FOOBAR_CONF_ENV = \
-+#	$(call AUTOCONF_AC_CHECK_FILE_VAL,/dev/random)=yes
-+AUTOCONF_AC_CHECK_FILE_VAL = ac_cv_file_$(subst -,_,$(subst /,_,$(subst .,_,$(1))))
++BOOT_WRAPPER_AARCH64_PRE_PATCH_HOOKS += BOOT_WRAPPER_AARCH64_FIX_DTB_NAME
 +
- ################################################################################
- # inner-autotools-package -- defines how the configuration, compilation and
- # installation of an autotools package should be done, implements a
++BOOT_WRAPPER_AARCH64_CONF_OPT = \
++	--with-kernel-dir=$(LINUX_DIR) \
++	--with-cmdline=$(BR2_TARGET_BOOT_WRAPPER_AARCH64_BOOTARGS)
++
++# We need to convince the configure script that the Linux kernel tree
++# exists, as well as the DTB and the kernel Image. Even though those
++# are available on the build machine, the configure script uses
++# AC_CHECK_FILE tests, which are always disabled in cross-compilation
++# situations.
++BOOT_WRAPPER_AARCH64_CONF_ENV = \
++	$(call AUTOCONF_AC_CHECK_FILE_VAL,$(LINUX_DIR))=yes \
++	$(call AUTOCONF_AC_CHECK_FILE_VAL,$(LINUX_DIR)$(BOOT_WRAPPER_AARCH64_DTB))=yes \
++	$(call AUTOCONF_AC_CHECK_FILE_VAL,$(LINUX_DIR)/arch/arm64/boot/Image)=yes
++
+ define BOOT_WRAPPER_AARCH64_INSTALL_IMAGES_CMDS
+ 	cp $(@D)/linux-system.axf $(BINARIES_DIR)
+ endef
+ 
+-$(eval $(generic-package))
++$(eval $(autotools-package))
