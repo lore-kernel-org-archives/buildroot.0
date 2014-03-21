@@ -1,50 +1,36 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 21 Mar 2014 06:16:18 +0200
-Subject: [Buildroot] ARC/uclibc-f37101d94284c692ee9b23bc72ef38b9473cd316
- compile failure
-In-Reply-To: <trinity-2154b334-ea3f-48a7-ad1d-15cc3890166f-1395356198737@3capp-gmx-bs24>
-References: <trinity-2154b334-ea3f-48a7-ad1d-15cc3890166f-1395356198737@3capp-gmx-bs24>
-Message-ID: <20140321041618.GO4266@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 21 Mar 2014 05:34:02 +0100
+Subject: [Buildroot] [PATCH 0/4] Update the AArch64 defconfig for Foundation
+	v8
+Message-ID: <1395376446-29367-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hello,
 
-On Thu, Mar 20, 2014 at 11:56:38PM +0100, Peter Seiderer wrote:
-> with latest buildroot from git I get the following uclib compile failure.
-> 
-> Buildroot defconfig:
-> 
-> BR2_arceb=y
-> 
-> Build log:
-> ...
->   CC libc/sysdeps/linux/common/getpgid.os
->   CC libc/sysdeps/linux/common/modify_ldt.os
->   CC libc/sysdeps/linux/common/posix_fadvise.os
-> libc/sysdeps/linux/common/posix_fadvise.c:26:29: error: unknown type name 'off64_t'
->  int posix_fadvise64(int fd, off64_t offset, off64_t len, int advice);
->                              ^
-> libc/sysdeps/linux/common/posix_fadvise.c:26:45: error: unknown type name 'off64_t'
->  int posix_fadvise64(int fd, off64_t offset, off64_t len, int advice);
->                                              ^
-> libc/sysdeps/linux/common/posix_fadvise.c: In function 'posix_fadvise':
-> libc/sysdeps/linux/common/posix_fadvise.c:32:2: warning: implicit declaration of function 'posix_fadvise64' [-Wimplicit-function-declaration]
->   return posix_fadvise64(fd, offset, len, advice);
->   ^
-> make[2]: *** [libc/sysdeps/linux/common/posix_fadvise.os] Error 1
-> make[1]: *** [/home/seiderer/Work/zeiss/freescale-imx6/build_arc/build/uclibc-f37101d94284c692ee9b23bc72ef38b9473cd316/.stamp_built] Error 2
-> make: *** [_all] Error 2
+This set of commits updates the Foundation v8 defconfig to use a
+mainline kernel, bumps the version of the boot-wrapper-aarch64, and
+fixes a problem with the Linaro AArch64 toolchain (which was initially
+reported by Kevin Hilman on IRC).
 
-Do you have LFS support disabled? If so this is a known issue. You may try the 
-patch at http://thread.gmane.org/gmane.comp.lib.uclibc.general/23714 .
+Thomas
 
-baruch
+Thomas Petazzoni (4):
+  pkg-autotools: add a AUTOCONF_AC_CHECK_FILE_VAL macro
+  boot-wrapper-aarch64: bump version and switch to autotools-package
+  toolchain-external: Linaro AArch64 toolchains need a symlink, like ARM
+    ones
+  board/arm/foundation-v8: update defconfig and instructions
+
+ board/arm/foundation-v8/readme.txt                 |  2 +-
+ boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk  | 38 ++++++++++++++++------
+ configs/arm_foundationv8_defconfig                 | 18 +++++-----
+ package/pkg-autotools.mk                           | 10 ++++++
+ toolchain/toolchain-external/toolchain-external.mk |  8 +++++
+ 5 files changed, 57 insertions(+), 19 deletions(-)
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+1.8.3.2
