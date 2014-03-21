@@ -1,28 +1,66 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 21 Mar 2014 13:55:34 -0300
-Subject: [Buildroot] [PATCH v4] bluez5_utils: new package
-In-Reply-To: <532C6CC0.4070608@trzebnica.net>
-References: <532B4158.6070602@trzebnica.net>
- <1395395632-15685-1-git-send-email-marcin@bis.org.pl>
- <532C1D9A.8090109@trzebnica.net> <532C25A2.90907@zacarias.com.ar>
- <532C6CC0.4070608@trzebnica.net>
-Message-ID: <532C6F06.9000407@zacarias.com.ar>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 21 Mar 2014 20:42:57 +0100
+Subject: [Buildroot] ARC/uclibc-f37101d94284c692ee9b23bc72ef38b9473cd316
+ compile failure
+In-Reply-To: <20140321041618.GO4266@tarshish>
+References: <trinity-2154b334-ea3f-48a7-ad1d-15cc3890166f-1395356198737@3capp-gmx-bs24>, 
+ <20140321041618.GO4266@tarshish>
+Message-ID: <trinity-55258c93-6341-491f-b929-46019f88527c-1395430977707@3capp-gmx-bs22>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/21/2014 01:45 PM, Jerzy Grzegorek wrote:
->> Hmm? bluez5 > bluez, and we care about visual name there (how it shows
->> up in *config).
-> 
-> Don't compare bluez5 with bluez.
-> Compare bluez5_utils with bluez_utils.
-> 
-> Regards,
-> Jerzy
+Hello Baruch,
 
-Let me put it in exmaples, what if i make/add packages named bluezbeam,
-bluezhack and a dozen more?
-Regards.
+> Gesendet: Freitag, 21. M?rz 2014 um 05:16 Uhr
+> Von: "Baruch Siach" <baruch@tkos.co.il>
+> An: "Peter Seiderer" <ps.report@gmx.net>
+> Cc: buildroot at busybox.net
+> Betreff: Re: [Buildroot] ARC/uclibc-f37101d94284c692ee9b23bc72ef38b9473cd316 compile failure
+>
+> Hi Peter,
+> 
+> On Thu, Mar 20, 2014 at 11:56:38PM +0100, Peter Seiderer wrote:
+> > with latest buildroot from git I get the following uclib compile failure.
+> > 
+> > Buildroot defconfig:
+> > 
+> > BR2_arceb=y
+> > 
+> > Build log:
+> > ...
+> >   CC libc/sysdeps/linux/common/getpgid.os
+> >   CC libc/sysdeps/linux/common/modify_ldt.os
+> >   CC libc/sysdeps/linux/common/posix_fadvise.os
+> > libc/sysdeps/linux/common/posix_fadvise.c:26:29: error: unknown type name 'off64_t'
+> >  int posix_fadvise64(int fd, off64_t offset, off64_t len, int advice);
+> >                              ^
+> > libc/sysdeps/linux/common/posix_fadvise.c:26:45: error: unknown type name 'off64_t'
+> >  int posix_fadvise64(int fd, off64_t offset, off64_t len, int advice);
+> >                                              ^
+> > libc/sysdeps/linux/common/posix_fadvise.c: In function 'posix_fadvise':
+> > libc/sysdeps/linux/common/posix_fadvise.c:32:2: warning: implicit declaration of function 'posix_fadvise64' [-Wimplicit-function-declaration]
+> >   return posix_fadvise64(fd, offset, len, advice);
+> >   ^
+> > make[2]: *** [libc/sysdeps/linux/common/posix_fadvise.os] Error 1
+> > make[1]: *** [/home/seiderer/Work/zeiss/freescale-imx6/build_arc/build/uclibc-f37101d94284c692ee9b23bc72ef38b9473cd316/.stamp_built] Error 2
+> > make: *** [_all] Error 2
+> 
+> Do you have LFS support disabled? If so this is a known issue. You may try the 
+> patch at http://thread.gmane.org/gmane.comp.lib.uclibc.general/23714 .
+> 
+
+Thank you very much for the suggested patch, fixed the compile for me, will send
+a patch for buildroot soon...
+
+Peter
+
+> baruch
+> 
+> -- 
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+> =}------------------------------------------------ooO--U--Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+>
