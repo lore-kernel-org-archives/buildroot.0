@@ -1,91 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 23 Mar 2014 21:57:28 +0100
-Subject: [Buildroot] [RFC 0/3] Speeding up the Makefile parsing
-In-Reply-To: <874n2oveed.fsf@dell.be.48ers.dk>
-References: <1395596582-7062-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <874n2oveed.fsf@dell.be.48ers.dk>
-Message-ID: <20140323215728.081c2c90@skate>
+Date: Sun, 23 Mar 2014 22:07:09 +0100
+Subject: [Buildroot] Segmentation fault while trying to remote debug
+ with GDB and GDBServer
+In-Reply-To: <5316C73C.3090804@mind.be>
+References: <51ef4c3ec6f84eab802c23a14ecb48ae@DBXPR07MB142.eurprd07.prod.outlook.com>
+ <20140302070650.GE3874@tarshish>
+ <24eee2c96f804b55ae7767734d5a4f6e@DBXPR07MB142.eurprd07.prod.outlook.com>
+ <20140302091205.GF3874@tarshish>
+ <29f88dd2071c483bb7102687088ac6b3@DBXPR07MB142.eurprd07.prod.outlook.com>
+ <20140302122406.GJ3874@tarshish>
+ <99f27349e290444ba06497af087cb0d8@DBXPR07MB142.eurprd07.prod.outlook.com>
+ <20140302171008.2014a1e0@skate> <20140302172058.5d9a49e1@skate>
+ <5316C73C.3090804@mind.be>
+Message-ID: <20140323220709.2e1c4d6f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+Dear Arnout Vandecappelle,
 
-On Sun, 23 Mar 2014 21:38:50 +0100, Peter Korsgaard wrote:
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+On Wed, 05 Mar 2014 07:42:04 +0100, Arnout Vandecappelle wrote:
+
+> > On Sun, 2 Mar 2014 17:10:08 +0100, Thomas Petazzoni wrote:
+> > 
+> >> The Eclipse plugin does set the solib-path (see
+> >> https://github.com/mbats/eclipse-buildroot-toolchain-plugin/blob/master/org.buildroot.cdt.toolchain/src/org/buildroot/cdt/toolchain/BuildrootLaunchConfigurationTabGroup.java#L70),
+> >> but that is apparently insufficient for gdb to find the correct dynamic
+> >> linker, especially when the host and target architectures are identical.
+> >>
+> >> Since there is apparently no way in Eclipse to set a gdb sysroot, I
+> >> believe the only solution is for the Eclipse plugin to generate a
+> >> simple gdbinit file:
+> >>
+> >> set sysroot /path/to/staging/directory
+> >>
+> >> and then instruct Eclipse to use it.
+> > 
+> > Or now that I think of it, maybe Buildroot should itself generate this
+> > gdbinit file. It may be useful even for users not using Eclipse.
 > 
->  > Hello,
->  > The current strategy of Buildroot with regard to .mk files is to
->  > always include all of them. However, with an ever-increasing number of
->  > packages, the number of .mk files to parse is growing significantly,
->  > and this makes the execution of any trivial make target take at least
->  > 12 seconds on a relatively fast SSD equipped laptop. For example, a
->  > simple thing like "make help" or "make external-deps" takes 12 seconds
->  > solely because of the parsing time of more than a thousand of package
->  > makefiles.
-> 
-> .. and how fast is it after this series?
+>  Even better: buildroot should generate a wrapper (yet another one!) that
+> passes -ex 'set sysroot ...' when calling cross-gdb.
 
-Before the series:
+Except that as of today, we don't generate any wrapper for the case of
+the internal toolchain, while this particular "set sysroot ..." thing
+is useful for both internal and external toolchains.
 
-$ time make help
-[...]
-real	0m15.760s
-user	0m14.818s
-sys	0m0.969s
-
-After the series:
-
-$ time make help
-[...]
-real	0m1.209s
-user	0m0.807s
-sys	0m0.416s
-
->  > The proposed RFC solution is to look at the BR2_PACKAGE_<foo>
->  > variables, and from them derive the name of the package .mk files to
->  > be included. It is a simple change in the main Makefile, but it has
->  > two major consequences that we need to discuss on whether they are
->  > acceptable or not:
-> 
->  >  * We need to have BR2_PACKAGE_HOST_<foo> options for *all* host
->  >    packages. Of course, the vast majority of them can be blind
->  >    options, but it means that we have to ensure all the host packages
->  >    are properly selected at the Config.in level. That's a fairly
->  >    significant change.
-> 
-> I don't think this is too bad. Maybe we could look into generating the
-> _DEPENDENCIES line from depends/select statements in the Config.in
-> automatically, then we only need to explicitly handle the optional
-> dependencies in the .mk file (or decide to also handle them in Kconfig
-> if possible).
-
-Why not, but doing this would require a pre-processing step to process
-the Config.in file and generates the makefile dependencies from it.
-Also, having the mandatory dependencies handled automatically but not
-the optional dependencies seems a bit weird, no?
-
-That being said, doing for host packages what we do today for target
-packages doesn't that horrible, especially since we don't have all the
-crazy dependencies on toolchain options that are complicated to handle
-for target packages.
-
->  >  * Since the logic assume that BR2_PACKAGE_FOO is always
->  >    package/foo/foo.mk, it means we have to 1/ guarantee that the
->  >    package option name matches the package file name, and 2/ guarantee
->  >    that we don't use any sub-directories to store packages.
-> 
-> The 2nd part is more serious as we use subdirs today to group related
-> packages and have supported them "forever". We also used to tell people
-> (before BR2_EXTERNAL) to put their own packages under package/<company>.
-> 
-> I guess playing tricks with $(wildcard) to find the .mk file is going to
-> add quite some performance overhead.
-
-Yes. This part is more problematic, and I don't have a good solution
-for it.
+Do we want to switch to use wrappers for the internal toolchain as
+well? This would mean that it can no longer be simply installed into
+$(HOST_DIR)/usr. To be honest, I'm not sure we want to do make this
+change.
 
 Thomas
 -- 
