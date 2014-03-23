@@ -1,88 +1,42 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 23 Mar 2014 21:21:06 +0100
-Subject: [Buildroot] [PATCH v5 1/2] libubox: new package
-In-Reply-To: <1395353831-7760-1-git-send-email-yegorslists@googlemail.com>
- (Yegor Yefremov's message of "Thu, 20 Mar 2014 23:17:10 +0100")
-References: <1395353831-7760-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <87d2hcvf7x.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 23 Mar 2014 21:22:06 +0100
+Subject: [Buildroot] [git commit] mtools: fix build when libiconv is enabled
+Message-ID: <20140323202228.2349E9BE90@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yegor" == Yegor Yefremov <yegorslists@googlemail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=6aee76bcad2022d7c9bd530bef9126ff57035d10
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
- > ---
- > Changes:
- > 	v5: description rework
- >         v4: remove unneeded pkg-config macros
- >         v3: add Lua support
- >         v2: make package description more informative and fix license information
+Fixes
+http://autobuild.buildroot.net/results/298/298858b6cc89438dcd044c74dff4231186a065e1/
+http://autobuild.buildroot.net/results/7e7/7e7e7027226bb0251e32a90df2f00d9e84aedaaf/
+http://autobuild.buildroot.net/results/c18/c18e7da16121417e597a153ce7dc2a3b64ece3b0/
+http://autobuild.buildroot.net/results/b29/b29e80441ed87be651d720ae2dccf24d0f7fe8b6/
 
- >  package/Config.in          |  1 +
- >  package/libubox/Config.in  |  9 +++++++++
- >  package/libubox/libubox.mk | 18 ++++++++++++++++++
- >  3 files changed, 28 insertions(+)
- >  create mode 100644 package/libubox/Config.in
- >  create mode 100644 package/libubox/libubox.mk
+Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mtools/mtools.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
- > diff --git a/package/Config.in b/package/Config.in
- > index f9c1b0b..a2e859c 100644
- > --- a/package/Config.in
- > +++ b/package/Config.in
- > @@ -784,6 +784,7 @@ source "package/libsigc/Config.in"
- >  source "package/libsigsegv/Config.in"
- >  source "package/libtasn1/Config.in"
- >  source "package/libtpl/Config.in"
- > +source "package/libubox/Config.in"
- >  source "package/libunwind/Config.in"
- >  source "package/liburcu/Config.in"
- >  source "package/linux-pam/Config.in"
- > diff --git a/package/libubox/Config.in b/package/libubox/Config.in
- > new file mode 100644
- > index 0000000..ba10f8d
- > --- /dev/null
- > +++ b/package/libubox/Config.in
- > @@ -0,0 +1,9 @@
- > +config BR2_PACKAGE_LIBUBOX
- > +	bool "libubox"
- > +	help
- > +	  This library originates from the OpenWrt project to
- > +	  handle the configuration file infrastructure, but can
- > +	  also be used for the same purposes in projects other
- > +	  than OpenWrt.
- > +
- > +	  http://nbd.name/gitweb.cgi?p=luci2/libubox.git;a=summary
- > diff --git a/package/libubox/libubox.mk b/package/libubox/libubox.mk
- > new file mode 100644
- > index 0000000..fe3f420
- > --- /dev/null
- > +++ b/package/libubox/libubox.mk
- > @@ -0,0 +1,18 @@
- > +################################################################################
- > +#
- > +# libubox
- > +#
- > +################################################################################
- > +
- > +LIBUBOX_VERSION = bbd846ec2d72b2629758b69dc122ac0b0f2c3e4b
- > +LIBUBOX_SITE = git://nbd.name/luci2/libubox.git
- > +LIBUBOX_LICENSE = LGPLv2.1, GPLv2, BSD-3c, MIT
- > +LIBUBOX_INSTALL_STAGING = YES
- > +
- > +ifeq ($(BR2_PACKAGE_LUA),y)
- > +	LIBUBOX_DEPENDENCIES = lua
- > +else
- > +	LIBUBOX_CONF_OPT = -DBUILD_LUA:BOOL=OFF
-
-It would be nicer to use += in case this ever gets extended.
-
-I see that it unconditionally creates a .so, so it needs to depend on
-!BR2_PREFER_STATIC_LIB.
-
-Committed with those fixes, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/mtools/mtools.mk b/package/mtools/mtools.mk
+index 4880245..8649325 100644
+--- a/package/mtools/mtools.mk
++++ b/package/mtools/mtools.mk
+@@ -12,5 +12,11 @@ MTOOLS_LICENSE_FILES = COPYING
+ MTOOLS_CONF_ENV = ac_cv_func_setpgrp_void=yes
+ MTOOLS_CONF_OPT = --without-x
+ 
++# link with iconv if enabled
++ifeq ($(BR2_PACKAGE_LIBICONV),y)
++MTOOLS_DEPENDENCIES += libiconv
++MTOOLS_CONF_ENV += LIBS=-liconv
++endif
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
