@@ -1,37 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Mar 2014 22:49:59 +0100
-Subject: [Buildroot] [git commit] lttng-libust: bump version to 2.4.0
-Message-ID: <20140323221921.F301C9BF81@busybox.osuosl.org>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sun, 23 Mar 2014 23:19:16 +0100
+Subject: [Buildroot] [PATCH v10] xbmc: new package
+In-Reply-To: <1395611820-3061-1-git-send-email-yann.morin.1998@free.fr>
+References: <1395611820-3061-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <CAGduivwLE=HRVqqgZLGmtbSy+Yrts2xLmzuODs6KSkhdfJo7DA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b608ea3ef5258cfc0351b440e7e91fa8697208c4
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Yann, all
 
-Also adjust the license details
+[...]
+On Sun, Mar 23, 2014 at 10:57 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+>
+> XBMC is an award-winning free and open source (GPL) software media player and
+> entertainment hub for digital media.
+> This package was originally found at : https://github.com/huceke/buildroot-rbp
+> By gimli <ebsi4711@gmail.com>
+>
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: gimli <ebsi4711@gmail.com>
+> Cc: Martin Bark <martin@barkynet.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> Cc: Peter Korsgaard <jacmet@uclibc.org>
+> Cc: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+> ---
+> Chamges v9 -> v10:  (Yann)
+>   - further cleanup in dependencies
+>   - don't check for pre-existing startup script or systemd unit
+>     before installing therm
+>   - provide our own br-xbmc wrapper script
+>   - move XBMC's runtime config to a saner place
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/lttng-libust/lttng-libust.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/lttng-libust/lttng-libust.mk b/package/lttng-libust/lttng-libust.mk
-index b0ebd3f..375a6a3 100644
---- a/package/lttng-libust/lttng-libust.mk
-+++ b/package/lttng-libust/lttng-libust.mk
-@@ -5,9 +5,9 @@
- ################################################################################
- 
- LTTNG_LIBUST_SITE    = http://lttng.org/files/lttng-ust/
--LTTNG_LIBUST_VERSION = 2.2.0
-+LTTNG_LIBUST_VERSION = 2.4.0
- LTTNG_LIBUST_SOURCE  = lttng-ust-$(LTTNG_LIBUST_VERSION).tar.bz2
--LTTNG_LIBUST_LICENSE = LGPLv2.1; GPLv2 for lttng-gen-tp and ust-ctl
-+LTTNG_LIBUST_LICENSE = LGPLv2.1; MIT for system headers; GPLv2 for liblttng-ust-ctl/ustctl.c (used by lttng-sessiond)
- LTTNG_LIBUST_LICENSE_FILES = COPYING
- 
- LTTNG_LIBUST_INSTALL_STAGING = YES
+I looked at your patch before you merged them and I "ack" these
+changes (seems silly to ack a changeset on a patch so I won't ack them fomally).
