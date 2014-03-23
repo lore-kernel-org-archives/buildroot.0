@@ -1,764 +1,3966 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Mar 2014 22:57:00 +0100
-Subject: [Buildroot] [PATCH v10] xbmc: new package
-Message-ID: <1395611820-3061-1-git-send-email-yann.morin.1998@free.fr>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Mon, 24 Mar 2014 02:09:32 +0400
+Subject: [Buildroot] [PATCH] binutils: backport gas xtensa jump trampolines
+Message-ID: <1395612572-4127-1-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+This fixes compilation of huge source files that have jumps with offsets
+greater than 128 Kbytes, that otherwise fails with such messages:
 
-XBMC is an award-winning free and open source (GPL) software media player and
-entertainment hub for digital media.
-This package was originally found at : https://github.com/huceke/buildroot-rbp
-By gimli <ebsi4711@gmail.com>
+  {standard input}:65267: Error: operand 1 of 'j' has out of range value '131089'
+  {standard input}:106879: Error: operand 1 of 'j' has out of range value '4294833951'
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: gimli <ebsi4711@gmail.com>
-Cc: Martin Bark <martin@barkynet.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
-Cc: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Fixes:
+  http://autobuild.buildroot.net/results/e45/e450d5efc7435035c956bb962d598837648f319d/
+
+Backported from: a82c7d9030b67a6a76a5403d0e1641f9e42141ac
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 ---
-Chamges v9 -> v10:  (Yann)
-  - further cleanup in dependencies
-  - don't check for pre-existing startup script or systemd unit
-    before installing therm
-  - provide our own br-xbmc wrapper script
-  - move XBMC's runtime config to a saner place
-Changes v8 -> v9:
-  - Include patch from Yann E. Morin (See commit log below)
-  - Fix startup script (Martin Bark)
-  - Cleanup dependencies (Yann E. Morin)
-  - Remove RaspberryPi specific patch, most of them are now useless
-    anyway.
-Changes v7 -> v8:
-  - Fix comments and dependencies on components (Thomas Petazzoni)
-  - Change name for options (Thomas Petazzoni)
-  - Remove depends on external toolchain (Martin Bark)
-  - Fix various indent issues (Thomas Petazzoni)
-  - Fix hook placement (Thomas Petazzoni)
-  - Add host-gperf (Martin Bark)
-Changes v6 -> v7:
-  - Fix various capitalization issue (Thomas De Schampheleire)
-  - Changes depends on !uclibc to a depends on glibc (Thomas De Schampheleire)
-  - Remove TIFF being selected twice (Jerzy Grzegorek)
-Changes v5 -> v6:
-  - Fix missing depends on OpenGL (Yann E. Morin)
-  - Remove LIBCEC_RBP Config option (Yann E. Morin)
-  - Fix dependency that were, in the end, not optionnal (Martin Bark)
-  - Fix OpenGL check (Martin Bark)
-  - Uses BR2_HOST_NEEDS_JAVA (Martin Bark)
-Changes v4 -> v5:
-  - Remove MAKE1, seems to work fine with parallel build.
-Changes v3 -> v4:
-  - Rework init script
-  - Add systemd startup service
-Changes v2 -> v3:
-  - Fix indent
-  - Change librtmp to rtmpdump
-Changes v1 -> v2:
-  - Fix header (Yann E. Morin)
-  - Fix comment on toolchain option (Peter Korsgaard)
+ package/binutils/2.22/900-xtensa-trampolines.patch | 977 +++++++++++++++++++++
+ .../binutils/2.23.1/900-xtensa-trampolines.patch   | 977 +++++++++++++++++++++
+ .../binutils/2.23.2/900-xtensa-trampolines.patch   | 977 +++++++++++++++++++++
+ package/binutils/2.24/900-xtensa-trampolines.patch | 977 +++++++++++++++++++++
+ 4 files changed, 3908 insertions(+)
+ create mode 100644 package/binutils/2.22/900-xtensa-trampolines.patch
+ create mode 100644 package/binutils/2.23.1/900-xtensa-trampolines.patch
+ create mode 100644 package/binutils/2.23.2/900-xtensa-trampolines.patch
+ create mode 100644 package/binutils/2.24/900-xtensa-trampolines.patch
 
----
-package/xbmc: background XBMC and store PID in startup script
-
-Otherwise the startup script:
-  - hangs while XBMC is running,
-  - is not able to stop XBMC on shutdown.
-
-Reported-by: Martin Bark <martin@barkynet.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-
-(in v9)
-
----
-package/xbmc: cleanup dependencies
-
-XBMC needs an (e)glibc toolchain, which is only available on targets
-with an MMU, so there's no need to repeat it. Add missing dependency
-on threads.
-
-Most of the required dependencies for sub-options are already matched,
-as they already apply to XBMC itself.
-
-Better annotate dependencies inherited from a 'select' dependency.
-
-Fix un-met depdendency comments to repeat the feature prompt (eg.
-'libcec' -> 'hdmi cec', 'libnfs' -> 'nfs' ...)
-
-Re-order top-of-file comments, so they are in a more meaningful order.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-
-(in v9)
-
----
-package/xbmc: further cleanup in sub-options dependencies
-
-XBMC depends on a (e)glibc toolchain.
-
-(e)glibc always has support for wide chars, IPv6, and largefiles.
-
-So, sub-options of XBMC do not need to explicitly depend on those
-toolchain options.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-
-(in v10)
-
----
-package/xbmc: install startup script or systemd unit even if it exists
-
-If the sysV init startup script (or the systemd unit) already exists,
-it is not installed.
-
-This is an issue when working on tweaking the sysV inint startup script
-(or the systemd unit).
-
-Always install it; don't check if it is already installed.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-
-(in v10)
-
----
-package/xbmc: add our own wrapper script
-
-/usr/bin/xbmc is a wrapper script that calls to the real xbmc
-executable in /usr/lib/xbmc/xbmc.bin.
-
-We can not use this script, as it does some checks that are not
-always valid. For example, it checks that it can run glxinfo,
-which is not always available, although the target does have GL
-extensions.
-
-/usr/bin/xbmc-standlaone is basically a wrapper around that first
-wrapper above, so we can't use it any more.
-
-On the other hand, directly calling the real xbmc executable from
-the startup script means we're loosing XBMC exit codes. Thos exit
-codes are important, since XBMC exits with:
-  - 0  : normal exit, no action required by user
-  - 64 : normal exit, power-off required by user
-  - 66 : normal exit, reboot required by user
-
-Any other exit code is an error (save for 65, which I could not
-find the reason for).
-
-So, provide our own simple wrapper that runs XBMC in a loop, until
-it exits with one of the above error codes. If xbmc exit with 64,
-the scripts calls 'halt' and stops the loop; with 66, it calls
-'reboot' and stops the loop; with 0, it just breaks the loop; any
-other exit code just loop over after a 1 second pause.
-
-This wrapper expects the path to the real xbmc executable as first
-argument, and calls it with the remaining arguments, if any.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-
-(in v10)
-
----
-package/xbmc: don't store runtime config in /.xbmc
-
-When run from a startup script, XBMC has no $HOME where to store its
-configuration, so ends up storing it in /.xbmc  (yes, at the root of
-the rootfs).
-
-This is a problem for read-only filesystems, of course.
-
-But we can't easily change that, so create /.xbmc as a symlink where
-we want the config to eventually be, ie. /var/xbmc
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-
-(in v10)
-
----
----
- package/Config.in                               |   1 +
- package/xbmc/Config.in                          | 161 +++++++++++++++++++++
- package/xbmc/S50xbmc                            |  41 ++++++
- package/xbmc/br-xbmc                            |  36 +++++
- package/xbmc/xbmc-0001-Fixup-include-path.patch |  81 +++++++++++
- package/xbmc/xbmc.mk                            | 178 ++++++++++++++++++++++++
- package/xbmc/xbmc.service                       |  12 ++
- 7 files changed, 510 insertions(+)
- create mode 100644 package/xbmc/Config.in
- create mode 100755 package/xbmc/S50xbmc
- create mode 100755 package/xbmc/br-xbmc
- create mode 100644 package/xbmc/xbmc-0001-Fixup-include-path.patch
- create mode 100644 package/xbmc/xbmc.mk
- create mode 100644 package/xbmc/xbmc.service
-
-diff --git a/package/Config.in b/package/Config.in
-index 66ded0b..21a210e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -27,6 +27,7 @@ source "package/tstools/Config.in"
- source "package/vlc/Config.in"
- source "package/vorbis-tools/Config.in"
- source "package/wavpack/Config.in"
-+source "package/xbmc/Config.in"
- source "package/yavta/Config.in"
- endmenu
- 
-diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
+diff --git a/package/binutils/2.22/900-xtensa-trampolines.patch b/package/binutils/2.22/900-xtensa-trampolines.patch
 new file mode 100644
-index 0000000..e078d2f
+index 0000000..824cf44
 --- /dev/null
-+++ b/package/xbmc/Config.in
-@@ -0,0 +1,161 @@
-+comment "xbmc needs an (e)glibc toolchain w/ C++, threads"
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++++ b/package/binutils/2.22/900-xtensa-trampolines.patch
+@@ -0,0 +1,977 @@
++From a82c7d9030b67a6a76a5403d0e1641f9e42141ac Mon Sep 17 00:00:00 2001
++From: David Weatherford <weath@cadence.com>
++Date: Fri, 21 Mar 2014 11:53:42 +0000
++Subject: [PATCH] Add support to the Xtensa target for creating trampolines for
++ out-of-range branches.
 +
-+comment "xbmc requires an OpenGL ES and EGL backend"
-+	depends on !BR2_PACKAGE_HAS_OPENGL_EGL || !BR2_PACKAGE_HAS_OPENGL_ES
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
++    * tc-xtensa.c (xtensa_check_frag_count, xtensa_create_trampoline_frag)
++    (xtensa_maybe_create_trampoline_frag, init_trampoline_frag)
++    (find_trampoline_seg, search_trampolines, get_best_trampoline)
++    (check_and_update_trampolines, add_jump_to_trampoline)
++    (dump_trampolines): New function.
++    (md_parse_option): Add cases for --[no-]trampolines options.
++    (md_assemble, finish_vinsn, xtensa_end): Add call to
++    xtensa_check_frag_count.
++    (xg_assemble_vliw_tokens): Add call to
++    xtensa_maybe_create_trampoline_frag.
++    (xtensa_relax_frag): Relax fragments with RELAX_TRAMPOLINE state.
++    (relax_frag_immed): Relax jump instructions that cannot reach its
++    target.
++    * tc-xtensa.h (xtensa_relax_statesE::RELAX_TRAMPOLINE): New relax
++    state.
 +
-+menuconfig BR2_PACKAGE_XBMC
-+	bool "xbmc"
-+	select BR2_HOST_NEEDS_JAVA
-+	select BR2_PACKAGE_BOOST
-+	select BR2_PACKAGE_BOOST_THREAD
-+	select BR2_PACKAGE_BZIP2
-+	select BR2_PACKAGE_EXPAT
-+	select BR2_PACKAGE_FLAC
-+	select BR2_PACKAGE_FONTCONFIG
-+	select BR2_PACKAGE_FREETYPE
-+	select BR2_PACKAGE_JASPER
-+	select BR2_PACKAGE_JPEG
-+	select BR2_PACKAGE_LIBASS
-+	select BR2_PACKAGE_LIBCDIO
-+	select BR2_PACKAGE_LIBCURL
-+	select BR2_PACKAGE_LIBFRIBIDI
-+	select BR2_PACKAGE_LIBGCRYPT
-+	select BR2_PACKAGE_LIBID3TAG
-+	select BR2_PACKAGE_LIBMAD
-+	select BR2_PACKAGE_LIBMODPLUG
-+	select BR2_PACKAGE_LIBMPEG2
-+	select BR2_PACKAGE_LIBOGG
-+	select BR2_PACKAGE_LIBPLIST
-+	select BR2_PACKAGE_LIBPNG
-+	select BR2_PACKAGE_LIBSAMPLERATE
-+	select BR2_PACKAGE_LIBUNGIF
-+	select BR2_PACKAGE_LIBVORBIS
-+	select BR2_PACKAGE_LIBXML2
-+	select BR2_PACKAGE_LZO
-+	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_PCRE
-+	select BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON_BSDDB
-+	select BR2_PACKAGE_PYTHON_BZIP2
-+	select BR2_PACKAGE_PYTHON_CURSES
-+	select BR2_PACKAGE_PYTHON_PYEXPAT
-+	select BR2_PACKAGE_PYTHON_READLINE
-+	select BR2_PACKAGE_PYTHON_SQLITE
-+	select BR2_PACKAGE_PYTHON_SSL
-+	select BR2_PACKAGE_PYTHON_UNICODEDATA
-+	select BR2_PACKAGE_PYTHON_ZLIB
-+	select BR2_PACKAGE_READLINE
-+	select BR2_PACKAGE_SQLITE
-+	select BR2_PACKAGE_TAGLIB
-+	select BR2_PACKAGE_TIFF
-+	select BR2_PACKAGE_TINYXML
-+	select BR2_PACKAGE_YAJL
-+	select BR2_PACKAGE_ZLIB
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_PACKAGE_HAS_OPENGL_EGL && BR2_PACKAGE_HAS_OPENGL_ES
-+	help
-+	  XBMC is an award-winning free and open source (GPL) software
-+	  media player and entertainment hub for digital media.
++    * as.texinfo: Document --[no-]trampolines command-line options.
++    * c-xtensa.texi: Document trampolines relaxation and command line
++    options.
 +
-+	  http://xbmc.org
++    * frags.c (get_frag_count, clear_frag_count): New function.
++    (frag_alloc): Increment totalfrags counter.
++    * frags.h (get_frag_count, clear_frag_count): New function.
 +
-+if BR2_PACKAGE_XBMC
-+
-+config BR2_PACKAGE_XBMC_AVAHI
-+	bool "avahi"
-+	select BR2_PACKAGE_AVAHI
-+	select BR2_PACKAGE_AVAHI_DAEMON
-+	help
-+	  Enable Avahi support.
-+	  Select this if you want XBMC to support Bonjour protocol.
-+
-+config BR2_PACKAGE_XBMC_DBUS
-+	bool "dbus"
-+	select BR2_PACKAGE_DBUS
-+	help
-+	  Enable D-Bus support
-+
-+config BR2_PACKAGE_XBMC_LIBBLURAY
-+	bool "blu-ray"
-+	select BR2_PACKAGE_LIBBLURAY
-+	help
-+	  Enable Blu-ray input support.
-+	  Select this if you want to play back Blu-ray content.
-+
-+config BR2_PACKAGE_XBMC_LIBCEC
-+	bool "hdmi cec"
-+	depends on !BR2_PREFER_STATIC_LIB # libcec
-+	select BR2_PACKAGE_LIBCEC
-+	help
-+	  Enable CEC (Consumer Electronics Control) support.
-+	  Select this if you want XBMC to support HDMI CEC.
-+
-+comment "hdmi cec support needs a toolchain w/ dynamic library"
-+	depends on BR2_PREFER_STATIC_LIB
-+
-+config BR2_PACKAGE_XBMC_LIBMICROHTTPD
-+	bool "web server"
-+	select BR2_PACKAGE_LIBMICROHTTPD
-+	help
-+	  Enable webserver feature
-+
-+config BR2_PACKAGE_XBMC_LIBNFS
-+	bool "nfs"
-+	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	select BR2_PACKAGE_LIBNFS
-+	help
-+	  Enable NFS server support.
-+
-+comment "nfs support needs a toolchain w/ RPC support"
-+	depends on !BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+
-+config BR2_PACKAGE_XBMC_RTMPDUMP
-+	bool "rtmp"
-+	select BR2_PACKAGE_RTMPDUMP
-+	help
-+	  Enable RTMP input support.
-+	  Select this if you want to play back rtmp stream.
-+
-+config BR2_PACKAGE_XBMC_LIBSHAIRPLAY
-+	bool "shairport"
-+	select BR2_PACKAGE_LIBSHAIRPLAY
-+	help
-+	  Enable Shairport support.
-+	  Select this if you want to stream content from an Apple device.
-+
-+config BR2_PACKAGE_XBMC_LIBSMBCLIENT
-+	bool "samba"
-+	select BR2_PACKAGE_SAMBA
-+	select BR2_PACKAGE_SAMBA_LIBSMBCLIENT
-+	help
-+	  Enable Samba support
-+
-+config BR2_PACKAGE_XBMC_LIBTHEORA
-+	bool "theora"
-+	select BR2_PACKAGE_LIBTHEORA
-+	help
-+	  Enable Theora input support.
-+	  Select this if you want to play back OGG/OGV files (Video).
-+
-+config BR2_PACKAGE_XBMC_LIBUSB
-+	bool "usb"
-+	select BR2_PACKAGE_LIBUSB
-+	select BR2_PACKAGE_LIBUSB_COMPAT
-+	help
-+	  Enable libusb support.
-+
-+config BR2_PACKAGE_XBMC_WAVPACK
-+	bool "wavpack"
-+	select BR2_PACKAGE_WAVPACK
-+	help
-+	  Enable WAV input support.
-+	  Select this if you want to play back WV files.
-+
-+endif
-diff --git a/package/xbmc/S50xbmc b/package/xbmc/S50xbmc
-new file mode 100755
-index 0000000..c53d3cd
---- /dev/null
-+++ b/package/xbmc/S50xbmc
-@@ -0,0 +1,41 @@
-+#!/bin/sh
-+#
-+# Starts XBMC.
-+#
-+
-+BIN=/usr/bin/br-xbmc
-+XBMC=/usr/lib/xbmc/xbmc.bin
-+XBMC_ARGS="--standalone -fs -n"
-+PIDFILE=/var/run/xbmc.pid
-+
-+start() {
-+	echo -n "Starting XBMC: "
-+	start-stop-daemon -S -q -b -m -p $PIDFILE --exec $BIN -- $XBMC $XBMC_ARGS
-+	[ $? == 0 ] && echo "OK" || echo "FAIL"
-+}
-+stop() {
-+	echo -n "Stopping XBMC: "
-+	start-stop-daemon -K -q -p $PIDFILE
-+	[ $? == 0 ] && echo "OK" || echo "FAIL"
-+}
-+restart() {
-+	stop
-+	start
-+}
-+
-+case "$1" in
-+	start)
-+		start
-+	;;
-+	stop)
-+		stop
-+	;;
-+	restart|reload)
-+		restart
-+	;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart}"
-+	exit 1
-+esac
-+
-+exit $?
-diff --git a/package/xbmc/br-xbmc b/package/xbmc/br-xbmc
-new file mode 100755
-index 0000000..89467d3
---- /dev/null
-+++ b/package/xbmc/br-xbmc
-@@ -0,0 +1,36 @@
-+#!/bin/sh
-+
-+# We're called with the real XBMC executable as
-+# first argument, followed by any XBMC extra args
-+XBMC="${1}"
-+shift
-+
-+# In case someone asked we terminate, just kill
-+# the XBMC process
-+trap_kill() {
-+    LOOP=0
-+    killall "${XBMC##*/}"
-+}
-+trap trap_kill INT QUIT TERM
-+
-+LOOP=1
-+while [ ${LOOP} -eq 1 ]; do
-+    # Hack: Busybox ash does not catch signals while a non-builtin
-+    # is running, and only catches the signal when the non-builtin
-+    # command ends. So, we jsut background the XBMC binary, and wait
-+    # for it. But Busybox' ash's wait builtin does not return the
-+    # exit code even if there was only one job (which is correct
-+    # for POSIX). So we explicitly wait for the XBMC job
-+    "${XBMC}" "${@}" &
-+    wait %1
-+    ret=$?
-+    case "${ret}" in
-+        0)  ;;
-+        64) halt;   LOOP=0;;
-+        66) reboot; LOOP=0;;
-+        *)  # Crash
-+            sleep 1
-+            ;;
-+    esac
-+done
-+exit ${ret}
-diff --git a/package/xbmc/xbmc-0001-Fixup-include-path.patch b/package/xbmc/xbmc-0001-Fixup-include-path.patch
-new file mode 100644
-index 0000000..be99bd6
---- /dev/null
-+++ b/package/xbmc/xbmc-0001-Fixup-include-path.patch
-@@ -0,0 +1,81 @@
-+From 63c255f1f5d68363f49193aceed343e602dc8bdf Mon Sep 17 00:00:00 2001
-+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-+Date: Thu, 26 Dec 2013 21:17:10 +0100
-+Subject: [PATCH] Fixup include path
-+
-+Patch originally taken from :
-+http://repository.timesys.com/buildsources/x/xbmc/xbmc-11.0/xbmc-11.0-fixups.patch
-+
-+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
++    * all.exp: Add test for trampoline relaxation.
++    * trampoline.d: Trampoline relaxation expected dump.
++    * trampoline.s: Trampoline relaxation test source.
 +---
-+ lib/enca/configure                           | 3 ---
-+ lib/enca/configure.ac                        | 3 ---
-+ lib/libdvd/libdvdread/misc/dvdread-config.sh | 6 +++---
-+ lib/timidity/configure.in                    | 6 +++---
-+ 4 files changed, 6 insertions(+), 12 deletions(-)
++Backported from: a82c7d9030b67a6a76a5403d0e1641f9e42141ac
++Changes to Changelog files are dropped.
 +
-+diff --git a/lib/enca/configure b/lib/enca/configure
-+index c839a51..7af5a09 100644
-+--- a/lib/enca/configure
-++++ b/lib/enca/configure
-+@@ -12011,9 +12011,6 @@ fi
-+ if test "$prefix" = "NONE"; then
-+   LDFLAGS="$LDFLAGS -L$ac_default_prefix/lib"
-+   CPPFLAGS="$CPPFLAGS -I$ac_default_prefix/include"
-+-else
-+-  LDFLAGS="$LDFLAGS -L$prefix/lib"
-+-  CPPFLAGS="$CPPFLAGS -I$prefix/include"
-+ fi
++ gas/config/tc-xtensa.c                | 558 +++++++++++++++++++++++++++++++++-
++ gas/config/tc-xtensa.h                |   5 +
++ gas/doc/as.texinfo                    |   1 +
++ gas/doc/c-xtensa.texi                 |  92 ++++++
++ gas/frags.c                           |  15 +
++ gas/frags.h                           |   3 +
++ gas/testsuite/gas/xtensa/all.exp      |   1 +
++ gas/testsuite/gas/xtensa/trampoline.d |  26 ++
++ gas/testsuite/gas/xtensa/trampoline.s |  21 ++
++ 11 files changed, 753 insertions(+), 2 deletions(-)
++ create mode 100644 gas/testsuite/gas/xtensa/trampoline.d
++ create mode 100644 gas/testsuite/gas/xtensa/trampoline.s
++
++diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
++index fe8ec0f..ea23c96 100644
++--- a/gas/config/tc-xtensa.c
+++++ b/gas/config/tc-xtensa.c
++@@ -468,6 +468,12 @@ static void xtensa_set_frag_assembly_state (fragS *);
++ static void finish_vinsn (vliw_insn *);
++ static bfd_boolean emit_single_op (TInsn *);
++ static int total_frag_text_expansion (fragS *);
+++static bfd_boolean use_trampolines = TRUE;
+++static void xtensa_check_frag_count (void);
+++static void xtensa_create_trampoline_frag (bfd_boolean);
+++static void xtensa_maybe_create_trampoline_frag (void);
+++struct trampoline_frag;
+++static int init_trampoline_frag (struct trampoline_frag *);
++ 
++ /* Alignment Functions.  */
++ 
++@@ -520,6 +526,7 @@ static void tinsn_from_chars (TInsn *, char *, int);
++ static void tinsn_immed_from_frag (TInsn *, fragS *, int);
++ static int get_num_stack_text_bytes (IStack *);
++ static int get_num_stack_literal_bytes (IStack *);
+++static bfd_boolean tinsn_to_slotbuf (xtensa_format, int, TInsn *, xtensa_insnbuf);
++ 
++ /* vliw_insn functions.  */
++ 
++@@ -687,7 +694,10 @@ enum
++   option_prefer_l32r,
++   option_prefer_const16,
++ 
++-  option_target_hardware
+++  option_target_hardware,
+++
+++  option_trampolines,
+++  option_no_trampolines,
++ };
++ 
++ const char *md_shortopts = "";
++@@ -760,6 +770,9 @@ struct option md_longopts[] =
++ 
++   { "target-hardware", required_argument, NULL, option_target_hardware },
++ 
+++  { "trampolines", no_argument, NULL, option_trampolines },
+++  { "no-trampolines", no_argument, NULL, option_no_trampolines },
+++
++   { NULL, no_argument, NULL, 0 }
++ };
++ 
++@@ -940,6 +953,14 @@ md_parse_option (int c, char *arg)
++       directive_state[directive_transform] = FALSE;
++       return 1;
++ 
+++    case option_trampolines:
+++      use_trampolines = TRUE;
+++      return 1;
+++
+++    case option_no_trampolines:
+++      use_trampolines = FALSE;
+++      return 1;
+++
++     default:
++       return 0;
++     }
++@@ -963,7 +984,9 @@ Xtensa options:\n\
++                           flix bundles\n\
++   --no-allow-flix         neither allow hand-written nor generate\n\
++                           flix bundles\n\
++-  --rename-section old=new Rename section 'old' to 'new'\n", stream);
+++  --rename-section old=new Rename section 'old' to 'new'\n\
+++  --[no-]trampolines      [Do not] generate trampolines (jumps to jumps)\n\
+++                          when jumps do not reach their targets\n", stream);
++ }
++ 
++ 
++@@ -5568,6 +5591,8 @@ md_assemble (char *str)
++ 
++   /* We've just emitted a new instruction so clear the list of labels.  */
++   xtensa_clear_insn_labels ();
+++
+++  xtensa_check_frag_count ();
++ }
 + 
 + 
-+diff --git a/lib/enca/configure.ac b/lib/enca/configure.ac
-+index 41434df..47d5367 100644
-+--- a/lib/enca/configure.ac
-++++ b/lib/enca/configure.ac
-+@@ -100,9 +100,6 @@ dnl Dirty path hack.  Helps some people with badly set up search paths.
-+ if test "$prefix" = "NONE"; then
-+   LDFLAGS="$LDFLAGS -L$ac_default_prefix/lib"
-+   CPPFLAGS="$CPPFLAGS -I$ac_default_prefix/include"
-+-else
-+-  LDFLAGS="$LDFLAGS -L$prefix/lib"
-+-  CPPFLAGS="$CPPFLAGS -I$prefix/include"
-+ fi
++@@ -6372,6 +6397,8 @@ finish_vinsn (vliw_insn *vinsn)
++   xg_assemble_vliw_tokens (vinsn);
 + 
-+ dnl Checks for libraries.
-+diff --git a/lib/libdvd/libdvdread/misc/dvdread-config.sh b/lib/libdvd/libdvdread/misc/dvdread-config.sh
-+index e170c7e..25ee893 100644
-+--- a/lib/libdvd/libdvdread/misc/dvdread-config.sh
-++++ b/lib/libdvd/libdvdread/misc/dvdread-config.sh
-+@@ -48,9 +48,9 @@ if test "$echo_prefix" = "yes"; then
-+ fi
++   xg_clear_vinsn (vinsn);
+++
+++  xtensa_check_frag_count ();
++ }
 + 
-+ if test "$echo_cflags" = "yes"; then
-+-      echo -I$prefix/include $extracflags
-++      echo $extracflags
-+ fi
 + 
-+ if test "$echo_libs" = "yes"; then
-+-      echo -L$libdir $dvdreadlib
-+-fi      
-++      echo $dvdreadlib
-++fi
-+diff --git a/lib/timidity/configure.in b/lib/timidity/configure.in
-+index 9f2835b..733470a 100644
-+--- a/lib/timidity/configure.in
-++++ b/lib/timidity/configure.in
-+@@ -100,9 +100,9 @@ done
++@@ -7140,6 +7167,7 @@ xg_assemble_vliw_tokens (vliw_insn *vinsn)
++ 		    RELAX_UNREACHABLE,
++ 		    frag_now->fr_symbol, frag_now->fr_offset, NULL);
++ 	  xtensa_set_frag_assembly_state (frag_now);
+++	  xtensa_maybe_create_trampoline_frag ();
++ 	}
++       else if (is_branch && do_align_targets ())
++ 	{
++@@ -7222,9 +7250,164 @@ xtensa_end (void)
++   xtensa_sanity_check ();
 + 
-+ # add $prefix if specified.
-+ if test "x$prefix" != xNONE -a "x$prefix" != "x$ac_default_prefix" -a "x$prefix" != "x/usr"; then
-+-  LDFLAGS="-L$prefix/lib $LDFLAGS"
-+-  SHLDFLAGS="-L$prefix/lib $SHLDFLAGS"
-+-  CPPFLAGS="-I$prefix/include $CPPFLAGS"
-++  LDFLAGS="$LDFLAGS"
-++  SHLDFLAGS="$SHLDFLAGS"
-++  CPPFLAGS="$CPPFLAGS"
-+ fi
++   xtensa_add_config_info ();
+++
+++  xtensa_check_frag_count ();
+++}
+++
+++
+++struct trampoline_frag
+++{
+++  struct trampoline_frag *next;
+++  bfd_boolean needs_jump_around;
+++  fragS *fragP;
+++  fixS *fixP;
+++};
+++
+++struct trampoline_seg
+++{
+++  struct trampoline_seg *next;
+++  asection *seg;
+++  struct trampoline_frag trampoline_list;
+++};
+++
+++static struct trampoline_seg trampoline_seg_list;
+++#define J_RANGE (128 * 1024)
+++
+++static int unreachable_count = 0;
+++
+++
+++static void
+++xtensa_maybe_create_trampoline_frag (void)
+++{
+++  if (!use_trampolines)
+++    return;
+++
+++  /* We create an area for possible trampolines every 10 unreachable frags.
+++     These are preferred over the ones not preceded by an unreachable frag,
+++     because we don't have to jump around them. This function is called after
+++     each RELAX_UNREACHABLE frag is created.  */
+++
+++  if (++unreachable_count > 10)
+++    {
+++      xtensa_create_trampoline_frag (FALSE);
+++      clear_frag_count ();
+++      unreachable_count = 0;
+++    }
+++}
+++
+++static void
+++xtensa_check_frag_count (void)
+++{
+++  if (!use_trampolines || frag_now->tc_frag_data.is_no_transform)
+++    return;
+++
+++  /* We create an area for possible trampolines every 8000 frags or so. This
+++     is an estimate based on the max range of a "j" insn (+/-128K) divided
+++     by a typical frag byte count (16), minus a few for safety. This function
+++     is called after each source line is processed.  */
+++
+++  if (get_frag_count () > 8000)
+++    {
+++      xtensa_create_trampoline_frag (TRUE);
+++      clear_frag_count ();
+++      unreachable_count = 0;
+++    }
+++}
+++
+++static xtensa_insnbuf trampoline_buf = NULL;
+++static xtensa_insnbuf trampoline_slotbuf = NULL;
+++
+++#define TRAMPOLINE_FRAG_SIZE 3000
+++
+++static void
+++xtensa_create_trampoline_frag (bfd_boolean needs_jump_around)
+++{
+++  /* Emit a frag where we can place intermediate jump instructions,
+++     in case we need to jump farther than 128K bytes.
+++     Each jump instruction takes three bytes.
+++     We allocate enough for 1000 trampolines in each frag.
+++     If that's not enough, oh well.  */
+++
+++  struct trampoline_seg *ts = trampoline_seg_list.next;
+++  struct trampoline_frag *tf;
+++  char *varP;
+++  fragS *fragP;
+++  int size = TRAMPOLINE_FRAG_SIZE;
+++
+++  for ( ; ts; ts = ts->next)
+++    {
+++      if (ts->seg == now_seg)
+++	break;
+++    }
+++
+++  if (ts == NULL)
+++    {
+++      ts = (struct trampoline_seg *)xcalloc(sizeof (struct trampoline_seg), 1);
+++      ts->next = trampoline_seg_list.next;
+++      trampoline_seg_list.next = ts;
+++      ts->seg = now_seg;
+++    }
+++
+++  frag_wane (frag_now);
+++  frag_new (0);
+++  xtensa_set_frag_assembly_state (frag_now);
+++  varP = frag_var (rs_machine_dependent, size, size, RELAX_TRAMPOLINE, NULL, 0, NULL);
+++  fragP = (fragS *)(varP - SIZEOF_STRUCT_FRAG);
+++  if (trampoline_buf == NULL)
+++    {
+++      trampoline_buf = xtensa_insnbuf_alloc (xtensa_default_isa);
+++      trampoline_slotbuf = xtensa_insnbuf_alloc (xtensa_default_isa);
+++    }
+++  tf = (struct trampoline_frag *)xmalloc(sizeof (struct trampoline_frag));
+++  tf->next = ts->trampoline_list.next;
+++  ts->trampoline_list.next = tf;
+++  tf->needs_jump_around = needs_jump_around;
+++  tf->fragP = fragP;
+++  tf->fixP = NULL;
+++}
+++
+++
+++static struct trampoline_seg *
+++find_trampoline_seg (asection *seg)
+++{
+++  struct trampoline_seg *ts = trampoline_seg_list.next;
+++
+++  for ( ; ts; ts = ts->next)
+++    {
+++      if (ts->seg == seg)
+++	return ts;
+++    }
+++
+++  return NULL;
++ }
 + 
-+ dnl add --with-includes, --with-libraries
++ 
+++void dump_trampolines (void);
+++
+++void
+++dump_trampolines (void)
+++{
+++  struct trampoline_seg *ts = trampoline_seg_list.next;
+++
+++  for ( ; ts; ts = ts->next)
+++    {
+++      asection *seg = ts->seg;
+++
+++      if (seg == NULL)
+++	continue;
+++      fprintf(stderr, "SECTION %s\n", seg->name);
+++      struct trampoline_frag *tf = ts->trampoline_list.next;
+++      for ( ; tf; tf = tf->next)
+++	{
+++	  if (tf->fragP == NULL)
+++	    continue;
+++	  fprintf(stderr, "   0x%08x: fix=%d, jump_around=%s\n",
+++		  (int)tf->fragP->fr_address, (int)tf->fragP->fr_fix,
+++		  tf->needs_jump_around ? "T" : "F");
+++	}
+++    }
+++}
+++
++ static void
++ xtensa_cleanup_align_frags (void)
++ {
++@@ -8708,6 +8891,149 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
++ 	new_stretch += relax_frag_for_align (fragP, stretch);
++       break;
++ 
+++    case RELAX_TRAMPOLINE:
+++      if (fragP->tc_frag_data.relax_seen)
+++        {
+++          segment_info_type *seginfo = seg_info (now_seg);
+++          fragS *fP; /* The out-of-range jump.  */
+++          fixS *fixP;
+++
+++          /* Scan for jumps that will not reach.  */
+++          for (fixP = seginfo->fix_root; fixP ; fixP = fixP->fx_next)
+++            {
+++              symbolS *s = fixP->fx_addsy;
+++	      xtensa_opcode opcode;
+++              int target;
+++              int addr;
+++              int delta;
+++
+++              if (fixP->fx_r_type < BFD_RELOC_XTENSA_SLOT0_OP ||
+++                  fixP->fx_r_type > BFD_RELOC_XTENSA_SLOT14_OP)
+++                continue;
+++	      xtensa_insnbuf_from_chars (isa, trampoline_buf,
+++					 (unsigned char *) fixP->fx_frag->fr_literal + fixP->fx_where,
+++					 0);
+++	      fmt = xtensa_format_decode (isa, trampoline_buf);
+++	      gas_assert (fmt != XTENSA_UNDEFINED);
+++	      slot = fixP->tc_fix_data.slot;
+++	      xtensa_format_get_slot (isa, fmt, slot, trampoline_buf, trampoline_slotbuf);
+++	      opcode = xtensa_opcode_decode (isa, fmt, slot, trampoline_slotbuf);
+++	      if (opcode != xtensa_j_opcode)
+++		continue;
+++              target = S_GET_VALUE (s);
+++              addr = fixP->fx_frag->fr_address;
+++              delta = target - addr + stretch;
+++              if (delta > J_RANGE  || delta < -1 * J_RANGE)
+++                { /* Found an out-of-range jump; scan the list of trampolines for the best match.  */
+++		  struct trampoline_seg *ts = find_trampoline_seg (now_seg);
+++		  struct trampoline_frag *tf = ts->trampoline_list.next;
+++		  struct trampoline_frag *prev = &ts->trampoline_list;
+++		  int lower = (target < addr) ? target : addr;
+++		  int upper = (target > addr) ? target : addr;
+++		  int midpoint = lower + (upper - lower) / 2;
+++
+++		  if ((upper - lower) > 2 * J_RANGE)
+++		    {
+++		      /* One trampoline won't suffice; we need multiple jumps.
+++			 Jump to the trampoline that's farthest, but still in
+++			 range relative to the original "j" instruction.  */
+++		      for ( ; tf; prev = tf, tf = tf->next )
+++			{
+++			  int this_addr = tf->fragP->fr_address + tf->fragP->fr_fix;
+++			  int next_addr = (tf->next) ? tf->next->fragP->fr_address + tf->next->fragP->fr_fix : 0 ;
+++
+++			  if (addr == lower)
+++			    {
+++			      /* Forward jump.  */
+++			      if (this_addr - addr < J_RANGE)
+++				break;
+++			    }
+++			  else
+++			    {
+++			      /* Backward jump.  */
+++			      if (next_addr == 0 || addr - next_addr > J_RANGE)
+++				break;
+++			    }
+++			}
+++		    }
+++		  else
+++		    {
+++		      struct trampoline_frag *best_tf = NULL;
+++		      int best_delta = 0;
+++
+++		      for ( ; tf; prev = tf, tf = tf->next )
+++			{
+++			  int this_addr = tf->fragP->fr_address + tf->fragP->fr_fix;
+++			  int this_delta = abs (this_addr - midpoint);
+++
+++			  if (!best_tf || this_delta < best_delta)
+++			    {
+++			       best_tf = tf;
+++			       best_delta = this_delta;
+++			    }
+++			}
+++		      tf = best_tf;
+++		    }
+++		  if (tf->fragP == fragP)
+++		    {
+++		      int trampaddr = fragP->fr_address + fragP->fr_fix;
+++
+++		      if (abs (addr - trampaddr) < J_RANGE)
+++			{ /* The trampoline is in range of original; fix it!  */
+++			  fixS *newfixP;
+++			  int offset;
+++			  TInsn insn;
+++			  symbolS *lsym;
+++
+++			  new_stretch += init_trampoline_frag (tf);
+++			  offset = fragP->fr_fix; /* Where to assemble the j insn.  */
+++			  lsym = fragP->fr_symbol;
+++			  fP = fixP->fx_frag;
+++			  /* Assemble a jump to the target label here.  */
+++			  tinsn_init (&insn);
+++			  insn.insn_type = ITYPE_INSN;
+++			  insn.opcode = xtensa_j_opcode;
+++			  insn.ntok = 1;
+++			  set_expr_symbol_offset (&insn.tok[0], lsym, offset);
+++			  fmt = xg_get_single_format (xtensa_j_opcode);
+++			  tinsn_to_slotbuf (fmt, 0, &insn, trampoline_slotbuf);
+++			  xtensa_format_set_slot (isa, fmt, 0, trampoline_buf, trampoline_slotbuf);
+++			  xtensa_insnbuf_to_chars (isa, trampoline_buf, (unsigned char *)fragP->fr_literal + offset, 3);
+++			  fragP->fr_fix += 3;
+++			  fragP->fr_var -= 3;
+++			  /* Add a fix-up for the original j insn.  */
+++			  newfixP = fix_new (fP, fixP->fx_where, fixP->fx_size, lsym, fragP->fr_fix - 3, TRUE, fixP->fx_r_type);
+++			  newfixP->fx_no_overflow = 1;
+++			  newfixP->tc_fix_data.X_add_symbol = lsym;
+++			  newfixP->tc_fix_data.X_add_number = offset;
+++			  newfixP->tc_fix_data.slot = slot;
+++			  /* Move the fix-up from the original j insn to this one.  */
+++			  fixP->fx_frag = fragP;
+++			  fixP->fx_where = fragP->fr_fix - 3;
+++			  fixP->tc_fix_data.slot = 0;
+++			  /* Adjust the jump around this trampoline (if present).  */
+++			  if (tf->fixP != NULL)
+++			    {
+++			      tf->fixP->fx_offset += 3;
+++			    }
+++			  new_stretch += 3;
+++			  fragP->tc_frag_data.relax_seen = FALSE; /* Need another pass.  */
+++			  /* Do we have room for more?  */
+++			  if (fragP->fr_var < 3)
+++			    { /* No, convert to fill.  */
+++			      frag_wane (fragP);
+++			      fragP->fr_subtype = 0;
+++			      /* Remove from the trampoline_list.  */
+++			      prev->next = tf->next;
+++			      break;
+++			    }
+++			}
+++		    }
+++                }
+++            }
+++        }
+++      break;
+++
++     default:
++       as_bad (_("bad relaxation state"));
++     }
++@@ -9146,6 +9472,200 @@ bytes_to_stretch (fragS *this_frag,
++ }
++ 
++ 
+++static struct trampoline_frag *
+++search_trampolines (TInsn *tinsn, fragS *fragP, bfd_boolean unreachable_only)
+++{
+++  struct trampoline_seg *ts = find_trampoline_seg (now_seg);
+++  struct trampoline_frag *tf = (ts) ? ts->trampoline_list.next : NULL;
+++  struct trampoline_frag *best_tf = NULL;
+++  int best_delta = 0;
+++  int best_addr = 0;
+++  symbolS *sym = tinsn->tok[0].X_add_symbol;
+++  offsetT target = S_GET_VALUE (sym) + tinsn->tok[0].X_add_number;
+++  offsetT addr = fragP->fr_address;
+++  offsetT lower = (addr < target) ? addr : target;
+++  offsetT upper = (addr > target) ? addr : target;
+++  int delta = upper - lower;
+++  offsetT midpoint = lower + delta / 2;
+++  int this_delta = -1;
+++  int this_addr = -1;
+++
+++  if (delta > 2 * J_RANGE)
+++    {
+++      /* One trampoline won't do; we need multiple.
+++	 Choose the farthest trampoline that's still in range of the original
+++	 and let a later pass finish the job.  */
+++      for ( ; tf; tf = tf->next)
+++	{
+++	  int next_addr = (tf->next) ? tf->next->fragP->fr_address + tf->next->fragP->fr_fix : 0;
+++
+++	  this_addr = tf->fragP->fr_address + tf->fragP->fr_fix;
+++	  if (lower == addr)
+++	    {
+++	      /* Forward jump.  */
+++	      if (this_addr - addr < J_RANGE)
+++		break;
+++	    }
+++	  else
+++	    {
+++	      /* Backward jump.  */
+++	      if (next_addr == 0 || addr - next_addr > J_RANGE)
+++		break;
+++	    }
+++	  if (abs (addr - this_addr) < J_RANGE)
+++	    return tf;
+++
+++	  return NULL;
+++	}
+++    }
+++  for ( ; tf; tf = tf->next)
+++    {
+++      this_addr = tf->fragP->fr_address + tf->fragP->fr_fix;
+++      this_delta = abs (this_addr - midpoint);
+++      if (unreachable_only && tf->needs_jump_around)
+++	continue;
+++      if (!best_tf || this_delta < best_delta)
+++        {
+++	  best_tf = tf;
+++	  best_delta = this_delta;
+++	  best_addr = this_addr;
+++        }
+++    }
+++
+++  if (best_tf &&
+++      best_delta < J_RANGE &&
+++      abs(best_addr - lower) < J_RANGE &&
+++      abs(best_addr - upper) < J_RANGE)
+++    return best_tf;
+++
+++  return NULL; /* No suitable trampoline found.  */
+++}
+++
+++
+++static struct trampoline_frag *
+++get_best_trampoline (TInsn *tinsn, fragS *fragP)
+++{
+++  struct trampoline_frag *tf = NULL;
+++
+++  tf = search_trampolines (tinsn, fragP, TRUE); /* Try unreachable first.  */
+++
+++  if (tf == NULL)
+++    tf = search_trampolines (tinsn, fragP, FALSE); /* Try ones needing a jump-around, too.  */
+++
+++  return tf;
+++}
+++
+++
+++static void
+++check_and_update_trampolines (void)
+++{
+++  struct trampoline_seg *ts = find_trampoline_seg (now_seg);
+++  struct trampoline_frag *tf = ts->trampoline_list.next;
+++  struct trampoline_frag *prev = &ts->trampoline_list;
+++
+++  for ( ; tf; prev = tf, tf = tf->next)
+++    {
+++      if (tf->fragP->fr_var < 3)
+++	{
+++	  frag_wane (tf->fragP);
+++	  prev->next = tf->next;
+++	  tf->fragP = NULL;
+++	}
+++    }
+++}
+++
+++
+++static int
+++init_trampoline_frag (struct trampoline_frag *trampP)
+++{
+++  fragS *fp = trampP->fragP;
+++  int growth = 0;
+++
+++  if (fp->fr_fix == 0)
+++    {
+++      symbolS *lsym;
+++      char label[10 + 2 * sizeof(fp)];
+++      sprintf (label, ".L0_TR_%p", fp);
+++
+++      lsym = (symbolS *)local_symbol_make (label, now_seg, 0, fp);
+++      fp->fr_symbol = lsym;
+++      if (trampP->needs_jump_around)
+++        {
+++	  /* Add a jump around this block of jumps, in case
+++	     control flows into this block.  */
+++	  fixS *fixP;
+++	  TInsn insn;
+++	  xtensa_format fmt;
+++	  xtensa_isa isa = xtensa_default_isa;
+++
+++	  fp->tc_frag_data.is_insn = 1;
+++	  /* Assemble a jump insn.  */
+++	  tinsn_init (&insn);
+++	  insn.insn_type = ITYPE_INSN;
+++	  insn.opcode = xtensa_j_opcode;
+++	  insn.ntok = 1;
+++	  set_expr_symbol_offset (&insn.tok[0], lsym, 3);
+++	  fmt = xg_get_single_format (xtensa_j_opcode);
+++	  tinsn_to_slotbuf (fmt, 0, &insn, trampoline_slotbuf);
+++	  xtensa_format_set_slot (isa, fmt, 0, trampoline_buf, trampoline_slotbuf);
+++	  xtensa_insnbuf_to_chars (isa, trampoline_buf, (unsigned char *)fp->fr_literal, 3);
+++	  fp->fr_fix += 3;
+++	  fp->fr_var -= 3;
+++	  growth = 3;
+++	  fixP = fix_new (fp, 0, 3, lsym, 3, TRUE, BFD_RELOC_XTENSA_SLOT0_OP);
+++	  trampP->fixP = fixP;
+++        }
+++    }
+++  return growth;
+++}
+++
+++
+++static int
+++add_jump_to_trampoline (struct trampoline_frag *trampP, fragS *origfrag)
+++{
+++  fragS *tramp = trampP->fragP;
+++  fixS *fixP;
+++  int offset = tramp->fr_fix; /* Where to assemble the j insn.  */
+++  TInsn insn;
+++  symbolS *lsym;
+++  symbolS *tsym;
+++  int toffset;
+++  xtensa_format fmt;
+++  xtensa_isa isa = xtensa_default_isa;
+++  int growth = 0;
+++
+++  lsym = tramp->fr_symbol;
+++  /* Assemble a jump to the target label in the trampoline frag.  */
+++  tsym = origfrag->tc_frag_data.slot_symbols[0];
+++  toffset = origfrag-> tc_frag_data.slot_offsets[0];
+++  tinsn_init (&insn);
+++  insn.insn_type = ITYPE_INSN;
+++  insn.opcode = xtensa_j_opcode;
+++  insn.ntok = 1;
+++  set_expr_symbol_offset (&insn.tok[0], tsym, toffset);
+++  fmt = xg_get_single_format (xtensa_j_opcode);
+++  tinsn_to_slotbuf (fmt, 0, &insn, trampoline_slotbuf);
+++  xtensa_format_set_slot (isa, fmt, 0, trampoline_buf, trampoline_slotbuf);
+++  xtensa_insnbuf_to_chars (isa, trampoline_buf, (unsigned char *)tramp->fr_literal + offset, 3);
+++  tramp->fr_fix += 3;
+++  tramp->fr_var -= 3;
+++  growth = 3;
+++  /* add a fix-up for the trampoline jump.  */
+++  fixP = fix_new (tramp, tramp->fr_fix - 3, 3, tsym, toffset, TRUE, BFD_RELOC_XTENSA_SLOT0_OP);
+++  /* Modify the jump at the start of this trampoline to point past the newly-added jump.  */
+++  fixP = trampP->fixP;
+++  if (fixP)
+++    fixP->fx_offset += 3;
+++  /* Modify the original j to point here.  */
+++  origfrag->tc_frag_data.slot_symbols[0] = lsym;
+++  origfrag->tc_frag_data.slot_offsets[0] = tramp->fr_fix - 3;
+++  /* If trampoline is full, remove it from the list.  */
+++  check_and_update_trampolines ();
+++
+++  return growth;
+++}
+++
+++
++ static long
++ relax_frag_immed (segT segP,
++ 		  fragS *fragP,
++@@ -9284,6 +9804,37 @@ relax_frag_immed (segT segP,
++   if (negatable_branch && istack.ninsn > 1)
++     update_next_frag_state (fragP);
++ 
+++  /* If last insn is a jump, and it cannot reach its target, try to find a trampoline.  */
+++  if (istack.ninsn > 2 &&
+++      istack.insn[istack.ninsn - 1].insn_type == ITYPE_LABEL &&
+++      istack.insn[istack.ninsn - 2].insn_type == ITYPE_INSN &&
+++      istack.insn[istack.ninsn - 2].opcode == xtensa_j_opcode)
+++    {
+++      TInsn *jinsn = &istack.insn[istack.ninsn - 2];
+++
+++      if (!xg_symbolic_immeds_fit (jinsn, segP, fragP, fragP->fr_offset, total_text_diff))
+++	{
+++	  struct trampoline_frag *tf = get_best_trampoline (jinsn, fragP);
+++
+++	  if (tf)
+++	    {
+++	      this_text_diff += init_trampoline_frag (tf);
+++	      this_text_diff += add_jump_to_trampoline (tf, fragP);
+++	    }
+++	  else
+++	    {
+++	      /* If target symbol is undefined, assume it will reach once linked.  */
+++	      expressionS *exp = &istack.insn[istack.ninsn - 2].tok[0];
+++
+++	      if (exp->X_op == O_symbol && S_IS_DEFINED (exp->X_add_symbol))
+++		{
+++		  as_bad_where (fragP->fr_file, fragP->fr_line,
+++		    _("jump target out of range; no usable trampoline found"));
+++		}
+++	    }
+++	}
+++    }
+++
++   return this_text_diff;
++ }
++ 
++@@ -9404,6 +9955,9 @@ md_convert_frag (bfd *abfd ATTRIBUTE_UNUSED, segT sec, fragS *fragp)
++       else
++ 	as_bad (_("invalid relaxation fragment result"));
++       break;
+++
+++    case RELAX_TRAMPOLINE:
+++      break;
++     }
++ 
++   fragp->fr_var = 0;
++diff --git a/gas/config/tc-xtensa.h b/gas/config/tc-xtensa.h
++index 0bf1240..4672bc6 100644
++--- a/gas/config/tc-xtensa.h
+++++ b/gas/config/tc-xtensa.h
++@@ -180,6 +180,11 @@ enum xtensa_relax_statesE
++      prevent the linker from changing the size of any frag between the
++      section start and the org frag.  */
++ 
+++  RELAX_TRAMPOLINE,
+++  /* Every few thousand frags, we insert one of these, just in case we may
+++     need some space for a trampoline (jump to a jump) because the function
+++     has gotten too big. If not needed, it disappears. */
+++
++   RELAX_NONE
++ };
++ 
++diff --git a/gas/doc/as.texinfo b/gas/doc/as.texinfo
++index 5c8b000..dc97175 100644
++--- a/gas/doc/as.texinfo
+++++ b/gas/doc/as.texinfo
++@@ -543,6 +543,7 @@ gcc(1), ld(1), and the Info entries for @file{binutils} and @file{ld}.
++  [@b{--[no-]target-align}] [@b{--[no-]longcalls}]
++  [@b{--[no-]transform}]
++  [@b{--rename-section} @var{oldname}=@var{newname}]
+++ [@b{--[no-]trampolines}]
++ @end ifset
++ 
++ @ifset Z80
++diff --git a/gas/doc/c-xtensa.texi b/gas/doc/c-xtensa.texi
++index 406e635..e763e36 100644
++--- a/gas/doc/c-xtensa.texi
+++++ b/gas/doc/c-xtensa.texi
++@@ -91,6 +91,16 @@ instruction operands to be errors.
++ @kindex --rename-section
++ Rename the @var{oldname} section to @var{newname}.  This option can be used
++ multiple times to rename multiple sections.
+++
+++ at item --trampolines | --no-trampolines
+++ at kindex --trampolines
+++ at kindex --no-trampolines
+++Enable or disable transformation of jump instructions to allow jumps
+++across a greater range of addresses.  @xref{Xtensa Jump Relaxation,
+++,Jump Trampolines}.  This option should be used when jump targets can
+++potentially be out of range.  In the absence of such jumps this option
+++does not affect code size or performance.  The default is
+++ at samp{--trampolines}.
++ @end table
++ 
++ @c man end
++@@ -311,6 +321,7 @@ fields.
++ @menu
++ * Xtensa Branch Relaxation::        Relaxation of Branches.
++ * Xtensa Call Relaxation::          Relaxation of Function Calls.
+++* Xtensa Jump Relaxation::          Relaxation of Jumps.
++ * Xtensa Immediate Relaxation::     Relaxation of other Immediate Fields.
++ @end menu
++ 
++@@ -398,6 +409,87 @@ and some of the calls are out of range, function call relaxation can be
++ enabled using the @samp{--longcalls} command-line option or the
++ @code{longcalls} directive (@pxref{Longcalls Directive, ,longcalls}).
++ 
+++ at node Xtensa Jump Relaxation
+++ at subsection Jump Relaxation
+++ at cindex relaxation of jump instructions
+++ at cindex jump instructions, relaxation
+++
+++Jump instruction may require relaxation because the Xtensa jump instruction
+++(@code{J}) provide a PC-relative offset of only 128 Kbytes in either
+++direction.  One option is to use jump long (@code{J.L}) instruction, which
+++depending on jump distance may be assembled as jump (@code{J}) or indirect
+++jump (@code{JX}).  However it needs a free register.  When there's no spare
+++register it is possible to plant intermediate jump sites (trampolines)
+++between the jump instruction and its target.  These sites may be located in
+++areas unreachable by normal code execution flow, in that case they only
+++contain intermediate jumps, or they may be inserted in the middle of code
+++block, in which case there's an additional jump from the beginning of the
+++trampoline to the instruction past its end.  So, for example:
+++
+++ at smallexample
+++ at group
+++    j 1f
+++    ...
+++    retw
+++    ...
+++    mov a10, a2
+++    call8 func
+++    ...
+++1:
+++    ...
+++ at end group
+++ at end smallexample
+++
+++might be relaxed to:
+++
+++ at smallexample
+++ at group
+++    j .L0_TR_1
+++    ...
+++    retw
+++.L0_TR_1:
+++    j 1f
+++    ...
+++    mov a10, a2
+++    call8 func
+++    ...
+++1:
+++    ...
+++ at end group
+++ at end smallexample
+++
+++or to:
+++
+++ at smallexample
+++ at group
+++    j .L0_TR_1
+++    ...
+++    retw
+++    ...
+++    mov a10, a2
+++    j .L0_TR_0
+++.L0_TR_1:
+++    j 1f
+++.L0_TR_0:
+++    call8 func
+++    ...
+++1:
+++    ...
+++ at end group
+++ at end smallexample
+++
+++The Xtensa assempler uses trampolines with jump around only when it cannot
+++find suitable unreachable trampoline.  There may be multiple trampolines
+++between the jump instruction and its target.
+++
+++This relaxation does not apply to jumps to undefined symbols, assuming they
+++will reach their targets once resolved.
+++
+++Jump relaxation is enabled by default because it does not affect code size
+++or performance while the code itself is small.  This relaxation may be
+++disabled completely with @samp{--no-trampolines} or @samp{--no-transform}
+++command-line options (@pxref{Xtensa Options, ,Command Line Options}).
+++
++ @node Xtensa Immediate Relaxation
++ @subsection Other Immediate Field Relaxation
++ @cindex immediate fields, relaxation
++diff --git a/gas/frags.c b/gas/frags.c
++index 5f68480..e14099d 100644
++--- a/gas/frags.c
+++++ b/gas/frags.c
++@@ -24,6 +24,20 @@
++ 
++ extern fragS zero_address_frag;
++ extern fragS predefined_address_frag;
+++
+++static int totalfrags;
+++
+++int
+++get_frag_count (void)
+++{
+++  return totalfrags;
+++}
+++
+++void
+++clear_frag_count (void)
+++{
+++  totalfrags = 0;
+++}
++ 
++ /* Initialization for frag routines.  */
++ 
++@@ -70,6 +84,7 @@ frag_alloc (struct obstack *ob)
++   ptr = (fragS *) obstack_alloc (ob, SIZEOF_STRUCT_FRAG);
++   obstack_alignment_mask (ob) = oalign;
++   memset (ptr, 0, SIZEOF_STRUCT_FRAG);
+++  totalfrags++;
++   return ptr;
++ }
++ 
++diff --git a/gas/frags.h b/gas/frags.h
++index 319898f..2f9e1b5 100644
++--- a/gas/frags.h
+++++ b/gas/frags.h
++@@ -155,4 +155,7 @@ char *frag_var (relax_stateT type,
++ 
++ bfd_boolean frag_offset_fixed_p (const fragS *, const fragS *, offsetT *);
++ 
+++int get_frag_count (void);
+++void clear_frag_count (void);
+++
++ #endif /* FRAGS_H */
++diff --git a/gas/testsuite/gas/xtensa/all.exp b/gas/testsuite/gas/xtensa/all.exp
++index 2b2c294..3683b78 100644
++--- a/gas/testsuite/gas/xtensa/all.exp
+++++ b/gas/testsuite/gas/xtensa/all.exp
++@@ -98,6 +98,7 @@ if [istarget xtensa*-*-*] then {
++     run_dump_test "pcrel"
++     run_dump_test "weak-call"
++     run_dump_test "jlong"
+++    run_dump_test "trampoline"
++ }
++ 
++ if [info exists errorInfo] then {
++diff --git a/gas/testsuite/gas/xtensa/trampoline.d b/gas/testsuite/gas/xtensa/trampoline.d
++new file mode 100644
++index 0000000..b4f65dc
++--- /dev/null
+++++ b/gas/testsuite/gas/xtensa/trampoline.d
++@@ -0,0 +1,26 @@
+++#as:
+++#objdump: -d
+++#name: trampolines relaxation
+++
+++.*: +file format .*xtensa.*
+++#...
+++.*0:.*j.0x1194c
+++.*3:.*j.0x1194f
+++.*6:.*j.0x11952
+++.*9:.*j.0x1d4e4
+++#...
+++.*11949:.*j.0x11955
+++.*1194c:.*j.0x24a0e
+++.*1194f:.*j.0x24a0e
+++.*11952:.*j.0x24a11
+++#...
+++.*1d4e1:.*j.0x1d4e7
+++.*1d4e4:.*j.0x33462
+++#...
+++.*24a0e:.*j.0x24a0e
+++.*24a11:.*j.0x24a11
+++#...
+++.*3345f:.*ret
+++.*33462:.*j.0x49407
+++#...
+++.*49407:.*j.0x49407
++diff --git a/gas/testsuite/gas/xtensa/trampoline.s b/gas/testsuite/gas/xtensa/trampoline.s
++new file mode 100644
++index 0000000..259a3bb
++--- /dev/null
+++++ b/gas/testsuite/gas/xtensa/trampoline.s
++@@ -0,0 +1,21 @@
+++	.text
+++	j	1f
+++	j	1f
+++	j	2f
+++	j	3f
+++	.rep	25000
+++99:
+++	and	a2, a2, a3
+++	bne	a2, a3, 99b
+++	.endr
+++1:
+++	j	1b
+++2:
+++	j	2b
+++
+++	.rep	25000
+++	and	a2, a2, a3
+++	_ret
+++	.endr
+++3:
+++	j	3b
 +-- 
-+1.8.5.2
++1.8.1.4
 +
-diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
+diff --git a/package/binutils/2.23.1/900-xtensa-trampolines.patch b/package/binutils/2.23.1/900-xtensa-trampolines.patch
 new file mode 100644
-index 0000000..a43b41d
+index 0000000..824cf44
 --- /dev/null
-+++ b/package/xbmc/xbmc.mk
-@@ -0,0 +1,178 @@
-+################################################################################
-+#
-+# xbmc
-+#
-+################################################################################
++++ b/package/binutils/2.23.1/900-xtensa-trampolines.patch
+@@ -0,0 +1,977 @@
++From a82c7d9030b67a6a76a5403d0e1641f9e42141ac Mon Sep 17 00:00:00 2001
++From: David Weatherford <weath@cadence.com>
++Date: Fri, 21 Mar 2014 11:53:42 +0000
++Subject: [PATCH] Add support to the Xtensa target for creating trampolines for
++ out-of-range branches.
 +
-+XBMC_VERSION = 12.3-Frodo
-+XBMC_SITE = $(call github,xbmc,xbmc,$(XBMC_VERSION))
-+XBMC_LICENSE = GPLv2
-+XBMC_LICENSE_FILES = LICENSE.GPL
-+XBMC_DEPENDENCIES = host-gperf host-lzo host-sdl_image host-swig
-+XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
-+	libass libcdio libcurl libfribidi libgcrypt libmad libmodplug libmpeg2 \
-+	libogg libplist libpng libsamplerate libungif libvorbis libxml2 lzo ncurses \
-+	openssl pcre python readline sqlite taglib tiff tinyxml yajl zlib
++    * tc-xtensa.c (xtensa_check_frag_count, xtensa_create_trampoline_frag)
++    (xtensa_maybe_create_trampoline_frag, init_trampoline_frag)
++    (find_trampoline_seg, search_trampolines, get_best_trampoline)
++    (check_and_update_trampolines, add_jump_to_trampoline)
++    (dump_trampolines): New function.
++    (md_parse_option): Add cases for --[no-]trampolines options.
++    (md_assemble, finish_vinsn, xtensa_end): Add call to
++    xtensa_check_frag_count.
++    (xg_assemble_vliw_tokens): Add call to
++    xtensa_maybe_create_trampoline_frag.
++    (xtensa_relax_frag): Relax fragments with RELAX_TRAMPOLINE state.
++    (relax_frag_immed): Relax jump instructions that cannot reach its
++    target.
++    * tc-xtensa.h (xtensa_relax_statesE::RELAX_TRAMPOLINE): New relax
++    state.
 +
-+XBMC_CONF_ENV = \
-+	PYTHON_VERSION="$(PYTHON_VERSION_MAJOR)" \
-+	PYTHON_LDFLAGS="-lpython$(PYTHON_VERSION_MAJOR) -lpthread -ldl -lutil -lm" \
-+	PYTHON_CPPFLAGS="-I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)" \
-+	PYTHON_SITE_PKG="$(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
-+	PYTHON_NOVERSIONCHECK="no-check" \
-+	TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr"
++    * as.texinfo: Document --[no-]trampolines command-line options.
++    * c-xtensa.texi: Document trampolines relaxation and command line
++    options.
 +
-+XBMC_CONF_OPT +=  \
-+	--disable-alsa \
-+	--disable-crystalhd \
-+	--disable-debug \
-+	--disable-dvdcss \
-+	--disable-gl \
-+	--disable-hal \
-+	--disable-joystick \
-+	--disable-mysql \
-+	--disable-openmax \
-+	--disable-optical-drive \
-+	--disable-projectm \
-+	--disable-pulse \
-+	--disable-sdl \
-+	--disable-ssh \
-+	--disable-vaapi \
-+	--disable-vdpau \
-+	--disable-vtbdecoder \
-+	--disable-x11 \
-+	--disable-xrandr \
-+	--enable-gles \
-+	--enable-optimizations
++    * frags.c (get_frag_count, clear_frag_count): New function.
++    (frag_alloc): Increment totalfrags counter.
++    * frags.h (get_frag_count, clear_frag_count): New function.
 +
-+ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
-+XBMC_DEPENDENCIES += rpi-userland
-+XBMC_CONF_OPT += --with-platform=raspberry-pi --enable-player=omxplayer
-+XBMC_CONF_ENV += INCLUDES="-I$(STAGING_DIR)/usr/include/interface/vcos/pthreads \
-+	-I$(STAGING_DIR)/usr/include/interface/vmcs_host/linux"
-+endif
++    * all.exp: Add test for trampoline relaxation.
++    * trampoline.d: Trampoline relaxation expected dump.
++    * trampoline.s: Trampoline relaxation test source.
++---
++Backported from: a82c7d9030b67a6a76a5403d0e1641f9e42141ac
++Changes to Changelog files are dropped.
 +
-+ifeq ($(BR2_PACKAGE_DBUS),y)
-+XBMC_DEPENDENCIES += dbus
-+endif
++ gas/config/tc-xtensa.c                | 558 +++++++++++++++++++++++++++++++++-
++ gas/config/tc-xtensa.h                |   5 +
++ gas/doc/as.texinfo                    |   1 +
++ gas/doc/c-xtensa.texi                 |  92 ++++++
++ gas/frags.c                           |  15 +
++ gas/frags.h                           |   3 +
++ gas/testsuite/gas/xtensa/all.exp      |   1 +
++ gas/testsuite/gas/xtensa/trampoline.d |  26 ++
++ gas/testsuite/gas/xtensa/trampoline.s |  21 ++
++ 11 files changed, 753 insertions(+), 2 deletions(-)
++ create mode 100644 gas/testsuite/gas/xtensa/trampoline.d
++ create mode 100644 gas/testsuite/gas/xtensa/trampoline.s
 +
-+ifeq ($(BR2_PACKAGE_XBMC_LIBUSB),y)
-+XBMC_DEPENDENCIES += libusb-compat
-+XBMC_CONF_OPT += --enable-libusb
-+else
-+XBMC_CONF_OPT += --disable-libusb
-+endif
++diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
++index fe8ec0f..ea23c96 100644
++--- a/gas/config/tc-xtensa.c
+++++ b/gas/config/tc-xtensa.c
++@@ -468,6 +468,12 @@ static void xtensa_set_frag_assembly_state (fragS *);
++ static void finish_vinsn (vliw_insn *);
++ static bfd_boolean emit_single_op (TInsn *);
++ static int total_frag_text_expansion (fragS *);
+++static bfd_boolean use_trampolines = TRUE;
+++static void xtensa_check_frag_count (void);
+++static void xtensa_create_trampoline_frag (bfd_boolean);
+++static void xtensa_maybe_create_trampoline_frag (void);
+++struct trampoline_frag;
+++static int init_trampoline_frag (struct trampoline_frag *);
++ 
++ /* Alignment Functions.  */
++ 
++@@ -520,6 +526,7 @@ static void tinsn_from_chars (TInsn *, char *, int);
++ static void tinsn_immed_from_frag (TInsn *, fragS *, int);
++ static int get_num_stack_text_bytes (IStack *);
++ static int get_num_stack_literal_bytes (IStack *);
+++static bfd_boolean tinsn_to_slotbuf (xtensa_format, int, TInsn *, xtensa_insnbuf);
++ 
++ /* vliw_insn functions.  */
++ 
++@@ -687,7 +694,10 @@ enum
++   option_prefer_l32r,
++   option_prefer_const16,
++ 
++-  option_target_hardware
+++  option_target_hardware,
+++
+++  option_trampolines,
+++  option_no_trampolines,
++ };
++ 
++ const char *md_shortopts = "";
++@@ -760,6 +770,9 @@ struct option md_longopts[] =
++ 
++   { "target-hardware", required_argument, NULL, option_target_hardware },
++ 
+++  { "trampolines", no_argument, NULL, option_trampolines },
+++  { "no-trampolines", no_argument, NULL, option_no_trampolines },
+++
++   { NULL, no_argument, NULL, 0 }
++ };
++ 
++@@ -940,6 +953,14 @@ md_parse_option (int c, char *arg)
++       directive_state[directive_transform] = FALSE;
++       return 1;
++ 
+++    case option_trampolines:
+++      use_trampolines = TRUE;
+++      return 1;
+++
+++    case option_no_trampolines:
+++      use_trampolines = FALSE;
+++      return 1;
+++
++     default:
++       return 0;
++     }
++@@ -963,7 +984,9 @@ Xtensa options:\n\
++                           flix bundles\n\
++   --no-allow-flix         neither allow hand-written nor generate\n\
++                           flix bundles\n\
++-  --rename-section old=new Rename section 'old' to 'new'\n", stream);
+++  --rename-section old=new Rename section 'old' to 'new'\n\
+++  --[no-]trampolines      [Do not] generate trampolines (jumps to jumps)\n\
+++                          when jumps do not reach their targets\n", stream);
++ }
++ 
++ 
++@@ -5568,6 +5591,8 @@ md_assemble (char *str)
++ 
++   /* We've just emitted a new instruction so clear the list of labels.  */
++   xtensa_clear_insn_labels ();
+++
+++  xtensa_check_frag_count ();
++ }
++ 
++ 
++@@ -6372,6 +6397,8 @@ finish_vinsn (vliw_insn *vinsn)
++   xg_assemble_vliw_tokens (vinsn);
++ 
++   xg_clear_vinsn (vinsn);
+++
+++  xtensa_check_frag_count ();
++ }
++ 
++ 
++@@ -7140,6 +7167,7 @@ xg_assemble_vliw_tokens (vliw_insn *vinsn)
++ 		    RELAX_UNREACHABLE,
++ 		    frag_now->fr_symbol, frag_now->fr_offset, NULL);
++ 	  xtensa_set_frag_assembly_state (frag_now);
+++	  xtensa_maybe_create_trampoline_frag ();
++ 	}
++       else if (is_branch && do_align_targets ())
++ 	{
++@@ -7222,9 +7250,164 @@ xtensa_end (void)
++   xtensa_sanity_check ();
++ 
++   xtensa_add_config_info ();
+++
+++  xtensa_check_frag_count ();
+++}
+++
+++
+++struct trampoline_frag
+++{
+++  struct trampoline_frag *next;
+++  bfd_boolean needs_jump_around;
+++  fragS *fragP;
+++  fixS *fixP;
+++};
+++
+++struct trampoline_seg
+++{
+++  struct trampoline_seg *next;
+++  asection *seg;
+++  struct trampoline_frag trampoline_list;
+++};
+++
+++static struct trampoline_seg trampoline_seg_list;
+++#define J_RANGE (128 * 1024)
+++
+++static int unreachable_count = 0;
+++
+++
+++static void
+++xtensa_maybe_create_trampoline_frag (void)
+++{
+++  if (!use_trampolines)
+++    return;
+++
+++  /* We create an area for possible trampolines every 10 unreachable frags.
+++     These are preferred over the ones not preceded by an unreachable frag,
+++     because we don't have to jump around them. This function is called after
+++     each RELAX_UNREACHABLE frag is created.  */
+++
+++  if (++unreachable_count > 10)
+++    {
+++      xtensa_create_trampoline_frag (FALSE);
+++      clear_frag_count ();
+++      unreachable_count = 0;
+++    }
+++}
+++
+++static void
+++xtensa_check_frag_count (void)
+++{
+++  if (!use_trampolines || frag_now->tc_frag_data.is_no_transform)
+++    return;
+++
+++  /* We create an area for possible trampolines every 8000 frags or so. This
+++     is an estimate based on the max range of a "j" insn (+/-128K) divided
+++     by a typical frag byte count (16), minus a few for safety. This function
+++     is called after each source line is processed.  */
+++
+++  if (get_frag_count () > 8000)
+++    {
+++      xtensa_create_trampoline_frag (TRUE);
+++      clear_frag_count ();
+++      unreachable_count = 0;
+++    }
+++}
+++
+++static xtensa_insnbuf trampoline_buf = NULL;
+++static xtensa_insnbuf trampoline_slotbuf = NULL;
+++
+++#define TRAMPOLINE_FRAG_SIZE 3000
+++
+++static void
+++xtensa_create_trampoline_frag (bfd_boolean needs_jump_around)
+++{
+++  /* Emit a frag where we can place intermediate jump instructions,
+++     in case we need to jump farther than 128K bytes.
+++     Each jump instruction takes three bytes.
+++     We allocate enough for 1000 trampolines in each frag.
+++     If that's not enough, oh well.  */
+++
+++  struct trampoline_seg *ts = trampoline_seg_list.next;
+++  struct trampoline_frag *tf;
+++  char *varP;
+++  fragS *fragP;
+++  int size = TRAMPOLINE_FRAG_SIZE;
+++
+++  for ( ; ts; ts = ts->next)
+++    {
+++      if (ts->seg == now_seg)
+++	break;
+++    }
+++
+++  if (ts == NULL)
+++    {
+++      ts = (struct trampoline_seg *)xcalloc(sizeof (struct trampoline_seg), 1);
+++      ts->next = trampoline_seg_list.next;
+++      trampoline_seg_list.next = ts;
+++      ts->seg = now_seg;
+++    }
+++
+++  frag_wane (frag_now);
+++  frag_new (0);
+++  xtensa_set_frag_assembly_state (frag_now);
+++  varP = frag_var (rs_machine_dependent, size, size, RELAX_TRAMPOLINE, NULL, 0, NULL);
+++  fragP = (fragS *)(varP - SIZEOF_STRUCT_FRAG);
+++  if (trampoline_buf == NULL)
+++    {
+++      trampoline_buf = xtensa_insnbuf_alloc (xtensa_default_isa);
+++      trampoline_slotbuf = xtensa_insnbuf_alloc (xtensa_default_isa);
+++    }
+++  tf = (struct trampoline_frag *)xmalloc(sizeof (struct trampoline_frag));
+++  tf->next = ts->trampoline_list.next;
+++  ts->trampoline_list.next = tf;
+++  tf->needs_jump_around = needs_jump_around;
+++  tf->fragP = fragP;
+++  tf->fixP = NULL;
+++}
+++
+++
+++static struct trampoline_seg *
+++find_trampoline_seg (asection *seg)
+++{
+++  struct trampoline_seg *ts = trampoline_seg_list.next;
+++
+++  for ( ; ts; ts = ts->next)
+++    {
+++      if (ts->seg == seg)
+++	return ts;
+++    }
+++
+++  return NULL;
++ }
++ 
++ 
+++void dump_trampolines (void);
+++
+++void
+++dump_trampolines (void)
+++{
+++  struct trampoline_seg *ts = trampoline_seg_list.next;
+++
+++  for ( ; ts; ts = ts->next)
+++    {
+++      asection *seg = ts->seg;
+++
+++      if (seg == NULL)
+++	continue;
+++      fprintf(stderr, "SECTION %s\n", seg->name);
+++      struct trampoline_frag *tf = ts->trampoline_list.next;
+++      for ( ; tf; tf = tf->next)
+++	{
+++	  if (tf->fragP == NULL)
+++	    continue;
+++	  fprintf(stderr, "   0x%08x: fix=%d, jump_around=%s\n",
+++		  (int)tf->fragP->fr_address, (int)tf->fragP->fr_fix,
+++		  tf->needs_jump_around ? "T" : "F");
+++	}
+++    }
+++}
+++
++ static void
++ xtensa_cleanup_align_frags (void)
++ {
++@@ -8708,6 +8891,149 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
++ 	new_stretch += relax_frag_for_align (fragP, stretch);
++       break;
++ 
+++    case RELAX_TRAMPOLINE:
+++      if (fragP->tc_frag_data.relax_seen)
+++        {
+++          segment_info_type *seginfo = seg_info (now_seg);
+++          fragS *fP; /* The out-of-range jump.  */
+++          fixS *fixP;
+++
+++          /* Scan for jumps that will not reach.  */
+++          for (fixP = seginfo->fix_root; fixP ; fixP = fixP->fx_next)
+++            {
+++              symbolS *s = fixP->fx_addsy;
+++	      xtensa_opcode opcode;
+++              int target;
+++              int addr;
+++              int delta;
+++
+++              if (fixP->fx_r_type < BFD_RELOC_XTENSA_SLOT0_OP ||
+++                  fixP->fx_r_type > BFD_RELOC_XTENSA_SLOT14_OP)
+++                continue;
+++	      xtensa_insnbuf_from_chars (isa, trampoline_buf,
+++					 (unsigned char *) fixP->fx_frag->fr_literal + fixP->fx_where,
+++					 0);
+++	      fmt = xtensa_format_decode (isa, trampoline_buf);
+++	      gas_assert (fmt != XTENSA_UNDEFINED);
+++	      slot = fixP->tc_fix_data.slot;
+++	      xtensa_format_get_slot (isa, fmt, slot, trampoline_buf, trampoline_slotbuf);
+++	      opcode = xtensa_opcode_decode (isa, fmt, slot, trampoline_slotbuf);
+++	      if (opcode != xtensa_j_opcode)
+++		continue;
+++              target = S_GET_VALUE (s);
+++              addr = fixP->fx_frag->fr_address;
+++              delta = target - addr + stretch;
+++              if (delta > J_RANGE  || delta < -1 * J_RANGE)
+++                { /* Found an out-of-range jump; scan the list of trampolines for the best match.  */
+++		  struct trampoline_seg *ts = find_trampoline_seg (now_seg);
+++		  struct trampoline_frag *tf = ts->trampoline_list.next;
+++		  struct trampoline_frag *prev = &ts->trampoline_list;
+++		  int lower = (target < addr) ? target : addr;
+++		  int upper = (target > addr) ? target : addr;
+++		  int midpoint = lower + (upper - lower) / 2;
+++
+++		  if ((upper - lower) > 2 * J_RANGE)
+++		    {
+++		      /* One trampoline won't suffice; we need multiple jumps.
+++			 Jump to the trampoline that's farthest, but still in
+++			 range relative to the original "j" instruction.  */
+++		      for ( ; tf; prev = tf, tf = tf->next )
+++			{
+++			  int this_addr = tf->fragP->fr_address + tf->fragP->fr_fix;
+++			  int next_addr = (tf->next) ? tf->next->fragP->fr_address + tf->next->fragP->fr_fix : 0 ;
+++
+++			  if (addr == lower)
+++			    {
+++			      /* Forward jump.  */
+++			      if (this_addr - addr < J_RANGE)
+++				break;
+++			    }
+++			  else
+++			    {
+++			      /* Backward jump.  */
+++			      if (next_addr == 0 || addr - next_addr > J_RANGE)
+++				break;
+++			    }
+++			}
+++		    }
+++		  else
+++		    {
+++		      struct trampoline_frag *best_tf = NULL;
+++		      int best_delta = 0;
+++
+++		      for ( ; tf; prev = tf, tf = tf->next )
+++			{
+++			  int this_addr = tf->fragP->fr_address + tf->fragP->fr_fix;
+++			  int this_delta = abs (this_addr - midpoint);
+++
+++			  if (!best_tf || this_delta < best_delta)
+++			    {
+++			       best_tf = tf;
+++			       best_delta = this_delta;
+++			    }
+++			}
+++		      tf = best_tf;
+++		    }
+++		  if (tf->fragP == fragP)
+++		    {
+++		      int trampaddr = fragP->fr_address + fragP->fr_fix;
+++
+++		      if (abs (addr - trampaddr) < J_RANGE)
+++			{ /* The trampoline is in range of original; fix it!  */
+++			  fixS *newfixP;
+++			  int offset;
+++			  TInsn insn;
+++			  symbolS *lsym;
+++
+++			  new_stretch += init_trampoline_frag (tf);
+++			  offset = fragP->fr_fix; /* Where to assemble the j insn.  */
+++			  lsym = fragP->fr_symbol;
+++			  fP = fixP->fx_frag;
+++			  /* Assemble a jump to the target label here.  */
+++			  tinsn_init (&insn);
+++			  insn.insn_type = ITYPE_INSN;
+++			  insn.opcode = xtensa_j_opcode;
+++			  insn.ntok = 1;
+++			  set_expr_symbol_offset (&insn.tok[0], lsym, offset);
+++			  fmt = xg_get_single_format (xtensa_j_opcode);
+++			  tinsn_to_slotbuf (fmt, 0, &insn, trampoline_slotbuf);
+++			  xtensa_format_set_slot (isa, fmt, 0, trampoline_buf, trampoline_slotbuf);
+++			  xtensa_insnbuf_to_chars (isa, trampoline_buf, (unsigned char *)fragP->fr_literal + offset, 3);
+++			  fragP->fr_fix += 3;
+++			  fragP->fr_var -= 3;
+++			  /* Add a fix-up for the original j insn.  */
+++			  newfixP = fix_new (fP, fixP->fx_where, fixP->fx_size, lsym, fragP->fr_fix - 3, TRUE, fixP->fx_r_type);
+++			  newfixP->fx_no_overflow = 1;
+++			  newfixP->tc_fix_data.X_add_symbol = lsym;
+++			  newfixP->tc_fix_data.X_add_number = offset;
+++			  newfixP->tc_fix_data.slot = slot;
+++			  /* Move the fix-up from the original j insn to this one.  */
+++			  fixP->fx_frag = fragP;
+++			  fixP->fx_where = fragP->fr_fix - 3;
+++			  fixP->tc_fix_data.slot = 0;
+++			  /* Adjust the jump around this trampoline (if present).  */
+++			  if (tf->fixP != NULL)
+++			    {
+++			      tf->fixP->fx_offset += 3;
+++			    }
+++			  new_stretch += 3;
+++			  fragP->tc_frag_data.relax_seen = FALSE; /* Need another pass.  */
+++			  /* Do we have room for more?  */
+++			  if (fragP->fr_var < 3)
+++			    { /* No, convert to fill.  */
+++			      frag_wane (fragP);
+++			      fragP->fr_subtype = 0;
+++			      /* Remove from the trampoline_list.  */
+++			      prev->next = tf->next;
+++			      break;
+++			    }
+++			}
+++		    }
+++                }
+++            }
+++        }
+++      break;
+++
++     default:
++       as_bad (_("bad relaxation state"));
++     }
++@@ -9146,6 +9472,200 @@ bytes_to_stretch (fragS *this_frag,
++ }
++ 
++ 
+++static struct trampoline_frag *
+++search_trampolines (TInsn *tinsn, fragS *fragP, bfd_boolean unreachable_only)
+++{
+++  struct trampoline_seg *ts = find_trampoline_seg (now_seg);
+++  struct trampoline_frag *tf = (ts) ? ts->trampoline_list.next : NULL;
+++  struct trampoline_frag *best_tf = NULL;
+++  int best_delta = 0;
+++  int best_addr = 0;
+++  symbolS *sym = tinsn->tok[0].X_add_symbol;
+++  offsetT target = S_GET_VALUE (sym) + tinsn->tok[0].X_add_number;
+++  offsetT addr = fragP->fr_address;
+++  offsetT lower = (addr < target) ? addr : target;
+++  offsetT upper = (addr > target) ? addr : target;
+++  int delta = upper - lower;
+++  offsetT midpoint = lower + delta / 2;
+++  int this_delta = -1;
+++  int this_addr = -1;
+++
+++  if (delta > 2 * J_RANGE)
+++    {
+++      /* One trampoline won't do; we need multiple.
+++	 Choose the farthest trampoline that's still in range of the original
+++	 and let a later pass finish the job.  */
+++      for ( ; tf; tf = tf->next)
+++	{
+++	  int next_addr = (tf->next) ? tf->next->fragP->fr_address + tf->next->fragP->fr_fix : 0;
+++
+++	  this_addr = tf->fragP->fr_address + tf->fragP->fr_fix;
+++	  if (lower == addr)
+++	    {
+++	      /* Forward jump.  */
+++	      if (this_addr - addr < J_RANGE)
+++		break;
+++	    }
+++	  else
+++	    {
+++	      /* Backward jump.  */
+++	      if (next_addr == 0 || addr - next_addr > J_RANGE)
+++		break;
+++	    }
+++	  if (abs (addr - this_addr) < J_RANGE)
+++	    return tf;
+++
+++	  return NULL;
+++	}
+++    }
+++  for ( ; tf; tf = tf->next)
+++    {
+++      this_addr = tf->fragP->fr_address + tf->fragP->fr_fix;
+++      this_delta = abs (this_addr - midpoint);
+++      if (unreachable_only && tf->needs_jump_around)
+++	continue;
+++      if (!best_tf || this_delta < best_delta)
+++        {
+++	  best_tf = tf;
+++	  best_delta = this_delta;
+++	  best_addr = this_addr;
+++        }
+++    }
+++
+++  if (best_tf &&
+++      best_delta < J_RANGE &&
+++      abs(best_addr - lower) < J_RANGE &&
+++      abs(best_addr - upper) < J_RANGE)
+++    return best_tf;
+++
+++  return NULL; /* No suitable trampoline found.  */
+++}
+++
+++
+++static struct trampoline_frag *
+++get_best_trampoline (TInsn *tinsn, fragS *fragP)
+++{
+++  struct trampoline_frag *tf = NULL;
+++
+++  tf = search_trampolines (tinsn, fragP, TRUE); /* Try unreachable first.  */
+++
+++  if (tf == NULL)
+++    tf = search_trampolines (tinsn, fragP, FALSE); /* Try ones needing a jump-around, too.  */
+++
+++  return tf;
+++}
+++
+++
+++static void
+++check_and_update_trampolines (void)
+++{
+++  struct trampoline_seg *ts = find_trampoline_seg (now_seg);
+++  struct trampoline_frag *tf = ts->trampoline_list.next;
+++  struct trampoline_frag *prev = &ts->trampoline_list;
+++
+++  for ( ; tf; prev = tf, tf = tf->next)
+++    {
+++      if (tf->fragP->fr_var < 3)
+++	{
+++	  frag_wane (tf->fragP);
+++	  prev->next = tf->next;
+++	  tf->fragP = NULL;
+++	}
+++    }
+++}
+++
+++
+++static int
+++init_trampoline_frag (struct trampoline_frag *trampP)
+++{
+++  fragS *fp = trampP->fragP;
+++  int growth = 0;
+++
+++  if (fp->fr_fix == 0)
+++    {
+++      symbolS *lsym;
+++      char label[10 + 2 * sizeof(fp)];
+++      sprintf (label, ".L0_TR_%p", fp);
+++
+++      lsym = (symbolS *)local_symbol_make (label, now_seg, 0, fp);
+++      fp->fr_symbol = lsym;
+++      if (trampP->needs_jump_around)
+++        {
+++	  /* Add a jump around this block of jumps, in case
+++	     control flows into this block.  */
+++	  fixS *fixP;
+++	  TInsn insn;
+++	  xtensa_format fmt;
+++	  xtensa_isa isa = xtensa_default_isa;
+++
+++	  fp->tc_frag_data.is_insn = 1;
+++	  /* Assemble a jump insn.  */
+++	  tinsn_init (&insn);
+++	  insn.insn_type = ITYPE_INSN;
+++	  insn.opcode = xtensa_j_opcode;
+++	  insn.ntok = 1;
+++	  set_expr_symbol_offset (&insn.tok[0], lsym, 3);
+++	  fmt = xg_get_single_format (xtensa_j_opcode);
+++	  tinsn_to_slotbuf (fmt, 0, &insn, trampoline_slotbuf);
+++	  xtensa_format_set_slot (isa, fmt, 0, trampoline_buf, trampoline_slotbuf);
+++	  xtensa_insnbuf_to_chars (isa, trampoline_buf, (unsigned char *)fp->fr_literal, 3);
+++	  fp->fr_fix += 3;
+++	  fp->fr_var -= 3;
+++	  growth = 3;
+++	  fixP = fix_new (fp, 0, 3, lsym, 3, TRUE, BFD_RELOC_XTENSA_SLOT0_OP);
+++	  trampP->fixP = fixP;
+++        }
+++    }
+++  return growth;
+++}
+++
+++
+++static int
+++add_jump_to_trampoline (struct trampoline_frag *trampP, fragS *origfrag)
+++{
+++  fragS *tramp = trampP->fragP;
+++  fixS *fixP;
+++  int offset = tramp->fr_fix; /* Where to assemble the j insn.  */
+++  TInsn insn;
+++  symbolS *lsym;
+++  symbolS *tsym;
+++  int toffset;
+++  xtensa_format fmt;
+++  xtensa_isa isa = xtensa_default_isa;
+++  int growth = 0;
+++
+++  lsym = tramp->fr_symbol;
+++  /* Assemble a jump to the target label in the trampoline frag.  */
+++  tsym = origfrag->tc_frag_data.slot_symbols[0];
+++  toffset = origfrag-> tc_frag_data.slot_offsets[0];
+++  tinsn_init (&insn);
+++  insn.insn_type = ITYPE_INSN;
+++  insn.opcode = xtensa_j_opcode;
+++  insn.ntok = 1;
+++  set_expr_symbol_offset (&insn.tok[0], tsym, toffset);
+++  fmt = xg_get_single_format (xtensa_j_opcode);
+++  tinsn_to_slotbuf (fmt, 0, &insn, trampoline_slotbuf);
+++  xtensa_format_set_slot (isa, fmt, 0, trampoline_buf, trampoline_slotbuf);
+++  xtensa_insnbuf_to_chars (isa, trampoline_buf, (unsigned char *)tramp->fr_literal + offset, 3);
+++  tramp->fr_fix += 3;
+++  tramp->fr_var -= 3;
+++  growth = 3;
+++  /* add a fix-up for the trampoline jump.  */
+++  fixP = fix_new (tramp, tramp->fr_fix - 3, 3, tsym, toffset, TRUE, BFD_RELOC_XTENSA_SLOT0_OP);
+++  /* Modify the jump at the start of this trampoline to point past the newly-added jump.  */
+++  fixP = trampP->fixP;
+++  if (fixP)
+++    fixP->fx_offset += 3;
+++  /* Modify the original j to point here.  */
+++  origfrag->tc_frag_data.slot_symbols[0] = lsym;
+++  origfrag->tc_frag_data.slot_offsets[0] = tramp->fr_fix - 3;
+++  /* If trampoline is full, remove it from the list.  */
+++  check_and_update_trampolines ();
+++
+++  return growth;
+++}
+++
+++
++ static long
++ relax_frag_immed (segT segP,
++ 		  fragS *fragP,
++@@ -9284,6 +9804,37 @@ relax_frag_immed (segT segP,
++   if (negatable_branch && istack.ninsn > 1)
++     update_next_frag_state (fragP);
++ 
+++  /* If last insn is a jump, and it cannot reach its target, try to find a trampoline.  */
+++  if (istack.ninsn > 2 &&
+++      istack.insn[istack.ninsn - 1].insn_type == ITYPE_LABEL &&
+++      istack.insn[istack.ninsn - 2].insn_type == ITYPE_INSN &&
+++      istack.insn[istack.ninsn - 2].opcode == xtensa_j_opcode)
+++    {
+++      TInsn *jinsn = &istack.insn[istack.ninsn - 2];
+++
+++      if (!xg_symbolic_immeds_fit (jinsn, segP, fragP, fragP->fr_offset, total_text_diff))
+++	{
+++	  struct trampoline_frag *tf = get_best_trampoline (jinsn, fragP);
+++
+++	  if (tf)
+++	    {
+++	      this_text_diff += init_trampoline_frag (tf);
+++	      this_text_diff += add_jump_to_trampoline (tf, fragP);
+++	    }
+++	  else
+++	    {
+++	      /* If target symbol is undefined, assume it will reach once linked.  */
+++	      expressionS *exp = &istack.insn[istack.ninsn - 2].tok[0];
+++
+++	      if (exp->X_op == O_symbol && S_IS_DEFINED (exp->X_add_symbol))
+++		{
+++		  as_bad_where (fragP->fr_file, fragP->fr_line,
+++		    _("jump target out of range; no usable trampoline found"));
+++		}
+++	    }
+++	}
+++    }
+++
++   return this_text_diff;
++ }
++ 
++@@ -9404,6 +9955,9 @@ md_convert_frag (bfd *abfd ATTRIBUTE_UNUSED, segT sec, fragS *fragp)
++       else
++ 	as_bad (_("invalid relaxation fragment result"));
++       break;
+++
+++    case RELAX_TRAMPOLINE:
+++      break;
++     }
++ 
++   fragp->fr_var = 0;
++diff --git a/gas/config/tc-xtensa.h b/gas/config/tc-xtensa.h
++index 0bf1240..4672bc6 100644
++--- a/gas/config/tc-xtensa.h
+++++ b/gas/config/tc-xtensa.h
++@@ -180,6 +180,11 @@ enum xtensa_relax_statesE
++      prevent the linker from changing the size of any frag between the
++      section start and the org frag.  */
++ 
+++  RELAX_TRAMPOLINE,
+++  /* Every few thousand frags, we insert one of these, just in case we may
+++     need some space for a trampoline (jump to a jump) because the function
+++     has gotten too big. If not needed, it disappears. */
+++
++   RELAX_NONE
++ };
++ 
++diff --git a/gas/doc/as.texinfo b/gas/doc/as.texinfo
++index 5c8b000..dc97175 100644
++--- a/gas/doc/as.texinfo
+++++ b/gas/doc/as.texinfo
++@@ -543,6 +543,7 @@ gcc(1), ld(1), and the Info entries for @file{binutils} and @file{ld}.
++  [@b{--[no-]target-align}] [@b{--[no-]longcalls}]
++  [@b{--[no-]transform}]
++  [@b{--rename-section} @var{oldname}=@var{newname}]
+++ [@b{--[no-]trampolines}]
++ @end ifset
++ 
++ @ifset Z80
++diff --git a/gas/doc/c-xtensa.texi b/gas/doc/c-xtensa.texi
++index 406e635..e763e36 100644
++--- a/gas/doc/c-xtensa.texi
+++++ b/gas/doc/c-xtensa.texi
++@@ -91,6 +91,16 @@ instruction operands to be errors.
++ @kindex --rename-section
++ Rename the @var{oldname} section to @var{newname}.  This option can be used
++ multiple times to rename multiple sections.
+++
+++ at item --trampolines | --no-trampolines
+++ at kindex --trampolines
+++ at kindex --no-trampolines
+++Enable or disable transformation of jump instructions to allow jumps
+++across a greater range of addresses.  @xref{Xtensa Jump Relaxation,
+++,Jump Trampolines}.  This option should be used when jump targets can
+++potentially be out of range.  In the absence of such jumps this option
+++does not affect code size or performance.  The default is
+++ at samp{--trampolines}.
++ @end table
++ 
++ @c man end
++@@ -311,6 +321,7 @@ fields.
++ @menu
++ * Xtensa Branch Relaxation::        Relaxation of Branches.
++ * Xtensa Call Relaxation::          Relaxation of Function Calls.
+++* Xtensa Jump Relaxation::          Relaxation of Jumps.
++ * Xtensa Immediate Relaxation::     Relaxation of other Immediate Fields.
++ @end menu
++ 
++@@ -398,6 +409,87 @@ and some of the calls are out of range, function call relaxation can be
++ enabled using the @samp{--longcalls} command-line option or the
++ @code{longcalls} directive (@pxref{Longcalls Directive, ,longcalls}).
++ 
+++ at node Xtensa Jump Relaxation
+++ at subsection Jump Relaxation
+++ at cindex relaxation of jump instructions
+++ at cindex jump instructions, relaxation
+++
+++Jump instruction may require relaxation because the Xtensa jump instruction
+++(@code{J}) provide a PC-relative offset of only 128 Kbytes in either
+++direction.  One option is to use jump long (@code{J.L}) instruction, which
+++depending on jump distance may be assembled as jump (@code{J}) or indirect
+++jump (@code{JX}).  However it needs a free register.  When there's no spare
+++register it is possible to plant intermediate jump sites (trampolines)
+++between the jump instruction and its target.  These sites may be located in
+++areas unreachable by normal code execution flow, in that case they only
+++contain intermediate jumps, or they may be inserted in the middle of code
+++block, in which case there's an additional jump from the beginning of the
+++trampoline to the instruction past its end.  So, for example:
+++
+++ at smallexample
+++ at group
+++    j 1f
+++    ...
+++    retw
+++    ...
+++    mov a10, a2
+++    call8 func
+++    ...
+++1:
+++    ...
+++ at end group
+++ at end smallexample
+++
+++might be relaxed to:
+++
+++ at smallexample
+++ at group
+++    j .L0_TR_1
+++    ...
+++    retw
+++.L0_TR_1:
+++    j 1f
+++    ...
+++    mov a10, a2
+++    call8 func
+++    ...
+++1:
+++    ...
+++ at end group
+++ at end smallexample
+++
+++or to:
+++
+++ at smallexample
+++ at group
+++    j .L0_TR_1
+++    ...
+++    retw
+++    ...
+++    mov a10, a2
+++    j .L0_TR_0
+++.L0_TR_1:
+++    j 1f
+++.L0_TR_0:
+++    call8 func
+++    ...
+++1:
+++    ...
+++ at end group
+++ at end smallexample
+++
+++The Xtensa assempler uses trampolines with jump around only when it cannot
+++find suitable unreachable trampoline.  There may be multiple trampolines
+++between the jump instruction and its target.
+++
+++This relaxation does not apply to jumps to undefined symbols, assuming they
+++will reach their targets once resolved.
+++
+++Jump relaxation is enabled by default because it does not affect code size
+++or performance while the code itself is small.  This relaxation may be
+++disabled completely with @samp{--no-trampolines} or @samp{--no-transform}
+++command-line options (@pxref{Xtensa Options, ,Command Line Options}).
+++
++ @node Xtensa Immediate Relaxation
++ @subsection Other Immediate Field Relaxation
++ @cindex immediate fields, relaxation
++diff --git a/gas/frags.c b/gas/frags.c
++index 5f68480..e14099d 100644
++--- a/gas/frags.c
+++++ b/gas/frags.c
++@@ -24,6 +24,20 @@
++ 
++ extern fragS zero_address_frag;
++ extern fragS predefined_address_frag;
+++
+++static int totalfrags;
+++
+++int
+++get_frag_count (void)
+++{
+++  return totalfrags;
+++}
+++
+++void
+++clear_frag_count (void)
+++{
+++  totalfrags = 0;
+++}
++ 
++ /* Initialization for frag routines.  */
++ 
++@@ -70,6 +84,7 @@ frag_alloc (struct obstack *ob)
++   ptr = (fragS *) obstack_alloc (ob, SIZEOF_STRUCT_FRAG);
++   obstack_alignment_mask (ob) = oalign;
++   memset (ptr, 0, SIZEOF_STRUCT_FRAG);
+++  totalfrags++;
++   return ptr;
++ }
++ 
++diff --git a/gas/frags.h b/gas/frags.h
++index 319898f..2f9e1b5 100644
++--- a/gas/frags.h
+++++ b/gas/frags.h
++@@ -155,4 +155,7 @@ char *frag_var (relax_stateT type,
++ 
++ bfd_boolean frag_offset_fixed_p (const fragS *, const fragS *, offsetT *);
++ 
+++int get_frag_count (void);
+++void clear_frag_count (void);
+++
++ #endif /* FRAGS_H */
++diff --git a/gas/testsuite/gas/xtensa/all.exp b/gas/testsuite/gas/xtensa/all.exp
++index 2b2c294..3683b78 100644
++--- a/gas/testsuite/gas/xtensa/all.exp
+++++ b/gas/testsuite/gas/xtensa/all.exp
++@@ -98,6 +98,7 @@ if [istarget xtensa*-*-*] then {
++     run_dump_test "pcrel"
++     run_dump_test "weak-call"
++     run_dump_test "jlong"
+++    run_dump_test "trampoline"
++ }
++ 
++ if [info exists errorInfo] then {
++diff --git a/gas/testsuite/gas/xtensa/trampoline.d b/gas/testsuite/gas/xtensa/trampoline.d
++new file mode 100644
++index 0000000..b4f65dc
++--- /dev/null
+++++ b/gas/testsuite/gas/xtensa/trampoline.d
++@@ -0,0 +1,26 @@
+++#as:
+++#objdump: -d
+++#name: trampolines relaxation
+++
+++.*: +file format .*xtensa.*
+++#...
+++.*0:.*j.0x1194c
+++.*3:.*j.0x1194f
+++.*6:.*j.0x11952
+++.*9:.*j.0x1d4e4
+++#...
+++.*11949:.*j.0x11955
+++.*1194c:.*j.0x24a0e
+++.*1194f:.*j.0x24a0e
+++.*11952:.*j.0x24a11
+++#...
+++.*1d4e1:.*j.0x1d4e7
+++.*1d4e4:.*j.0x33462
+++#...
+++.*24a0e:.*j.0x24a0e
+++.*24a11:.*j.0x24a11
+++#...
+++.*3345f:.*ret
+++.*33462:.*j.0x49407
+++#...
+++.*49407:.*j.0x49407
++diff --git a/gas/testsuite/gas/xtensa/trampoline.s b/gas/testsuite/gas/xtensa/trampoline.s
++new file mode 100644
++index 0000000..259a3bb
++--- /dev/null
+++++ b/gas/testsuite/gas/xtensa/trampoline.s
++@@ -0,0 +1,21 @@
+++	.text
+++	j	1f
+++	j	1f
+++	j	2f
+++	j	3f
+++	.rep	25000
+++99:
+++	and	a2, a2, a3
+++	bne	a2, a3, 99b
+++	.endr
+++1:
+++	j	1b
+++2:
+++	j	2b
+++
+++	.rep	25000
+++	and	a2, a2, a3
+++	_ret
+++	.endr
+++3:
+++	j	3b
++-- 
++1.8.1.4
 +
-+ifeq ($(BR2_PACKAGE_XBMC_LIBMICROHTTPD),y)
-+XBMC_DEPENDENCIES += libmicrohttpd
-+XBMC_CONF_OPT += --enable-webserver
-+else
-+XBMC_CONF_OPT += --disable-webserver
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XBMC_LIBSMBCLIENT),y)
-+XBMC_DEPENDENCIES += samba
-+XBMC_CONF_OPT += --enable-samba
-+else
-+XBMC_CONF_OPT += --disable-samba
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XBMC_LIBNFS),y)
-+XBMC_DEPENDENCIES += libnfs
-+XBMC_CONF_OPT += --enable-nfs
-+else
-+XBMC_CONF_OPT += --disable-nfs
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XBMC_RTMPDUMP),y)
-+XBMC_DEPENDENCIES += rtmpdump
-+XBMC_CONF_OPT += --enable-rtmp
-+else
-+XBMC_CONF_OPT += --disable-rtmp
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XBMC_LIBBLURAY),y)
-+XBMC_DEPENDENCIES += libbluray
-+XBMC_CONF_OPT += --enable-libbluray
-+else
-+XBMC_CONF_OPT += --disable-libbluray
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XBMC_LIBSHAIRPLAY),y)
-+XBMC_DEPENDENCIES += libshairplay
-+XBMC_CONF_OPT += --enable-airplay
-+else
-+XBMC_CONF_OPT += --disable-airplay
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XBMC_AVAHI),y)
-+XBMC_DEPENDENCIES += avahi
-+XBMC_CONF_OPT += --enable-avahi
-+else
-+XBMC_CONF_OPT += --disable-avahi
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XBMC_LIBCEC),y)
-+XBMC_DEPENDENCIES += libcec
-+XBMC_CONF_OPT += --enable-libcec
-+else
-+XBMC_CONF_OPT += --disable-libcec
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XBMC_WAVPACK),y)
-+XBMC_DEPENDENCIES += wavpack
-+endif
-+
-+# Add HOST_DIR to PATH for codegenerator.mk to find swig
-+define XBMC_BOOTSTRAP
-+	cd $(@D) && PATH=$(HOST_PATH) ./bootstrap
-+endef
-+XBMC_PRE_CONFIGURE_HOOKS += XBMC_BOOTSTRAP
-+
-+define XBMC_CLEAN_UNUSED_ADDONS
-+	rm -Rf $(TARGET_DIR)/usr/share/xbmc/addons/screensaver.rsxs.plasma
-+	rm -Rf $(TARGET_DIR)/usr/share/xbmc/addons/visualization.milkdrop
-+	rm -Rf $(TARGET_DIR)/usr/share/xbmc/addons/visualization.projectm
-+	rm -Rf $(TARGET_DIR)/usr/share/xbmc/addons/visualization.itunes
-+endef
-+XBMC_POST_INSTALL_TARGET_HOOKS += XBMC_CLEAN_UNUSED_ADDONS
-+
-+define XBMC_CLEAN_CONFLUENCE_SKIN
-+	find $(TARGET_DIR)/usr/share/xbmc/addons/skin.confluence/media -name *.png -delete
-+	find $(TARGET_DIR)/usr/share/xbmc/addons/skin.confluence/media -name *.jpg -delete
-+endef
-+XBMC_POST_INSTALL_TARGET_HOOKS += XBMC_CLEAN_CONFLUENCE_SKIN
-+
-+define XBMC_INSTALL_BR_WRAPPER
-+	$(INSTALL) -D -m 0755 package/xbmc/br-xbmc \
-+		$(TARGET_DIR)/usr/bin/br-xbmc
-+endef
-+XBMC_POST_INSTALL_TARGET_HOOKS += XBMC_INSTALL_BR_WRAPPER
-+
-+# When run from a startup script, XBMC has no $HOME where to store its
-+# configuration, so ends up storing it in /.xbmc  (yes, at the root of
-+# the rootfs). This is a problem for read-only filesystems. But we can't
-+# easily change that, so create /.xbmc as a symlink where we want the
-+# config to eventually be.
-+define XBMC_INSTALL_CONFIG_DIR
-+	$(INSTALL) -d -m 0755 $(TARGET_DIR)/var/xbmc
-+	ln -sf /var/xbmc $(TARGET_DIR)/.xbmc
-+endef
-+XBMC_POST_INSTALL_TARGET_HOOKS += XBMC_INSTALL_CONFIG_DIR
-+
-+define XBMC_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 755 package/xbmc/S50xbmc \
-+		$(TARGET_DIR)/etc/init.d/S50xbmc
-+endef
-+
-+define XBMC_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/xbmc/xbmc.service \
-+		$(TARGET_DIR)/etc/systemd/system/xbmc.service
-+
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+
-+	ln -fs ../xbmc.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/xbmc.service
-+endef
-+
-+$(eval $(autotools-package))
-diff --git a/package/xbmc/xbmc.service b/package/xbmc/xbmc.service
+diff --git a/package/binutils/2.23.2/900-xtensa-trampolines.patch b/package/binutils/2.23.2/900-xtensa-trampolines.patch
 new file mode 100644
-index 0000000..3fe5895
+index 0000000..824cf44
 --- /dev/null
-+++ b/package/xbmc/xbmc.service
-@@ -0,0 +1,12 @@
-+[Unit]
-+Description = XBMC media center
-+After = network.target
++++ b/package/binutils/2.23.2/900-xtensa-trampolines.patch
+@@ -0,0 +1,977 @@
++From a82c7d9030b67a6a76a5403d0e1641f9e42141ac Mon Sep 17 00:00:00 2001
++From: David Weatherford <weath@cadence.com>
++Date: Fri, 21 Mar 2014 11:53:42 +0000
++Subject: [PATCH] Add support to the Xtensa target for creating trampolines for
++ out-of-range branches.
 +
-+[Service]
-+Type = simple
-+ExecStart = /usr/lib/xbmc/xbmc.bin --standalone -fs -n
-+Restart = on-failure
++    * tc-xtensa.c (xtensa_check_frag_count, xtensa_create_trampoline_frag)
++    (xtensa_maybe_create_trampoline_frag, init_trampoline_frag)
++    (find_trampoline_seg, search_trampolines, get_best_trampoline)
++    (check_and_update_trampolines, add_jump_to_trampoline)
++    (dump_trampolines): New function.
++    (md_parse_option): Add cases for --[no-]trampolines options.
++    (md_assemble, finish_vinsn, xtensa_end): Add call to
++    xtensa_check_frag_count.
++    (xg_assemble_vliw_tokens): Add call to
++    xtensa_maybe_create_trampoline_frag.
++    (xtensa_relax_frag): Relax fragments with RELAX_TRAMPOLINE state.
++    (relax_frag_immed): Relax jump instructions that cannot reach its
++    target.
++    * tc-xtensa.h (xtensa_relax_statesE::RELAX_TRAMPOLINE): New relax
++    state.
 +
-+[Install]
-+WantedBy = multi-user.target
++    * as.texinfo: Document --[no-]trampolines command-line options.
++    * c-xtensa.texi: Document trampolines relaxation and command line
++    options.
++
++    * frags.c (get_frag_count, clear_frag_count): New function.
++    (frag_alloc): Increment totalfrags counter.
++    * frags.h (get_frag_count, clear_frag_count): New function.
++
++    * all.exp: Add test for trampoline relaxation.
++    * trampoline.d: Trampoline relaxation expected dump.
++    * trampoline.s: Trampoline relaxation test source.
++---
++Backported from: a82c7d9030b67a6a76a5403d0e1641f9e42141ac
++Changes to Changelog files are dropped.
++
++ gas/config/tc-xtensa.c                | 558 +++++++++++++++++++++++++++++++++-
++ gas/config/tc-xtensa.h                |   5 +
++ gas/doc/as.texinfo                    |   1 +
++ gas/doc/c-xtensa.texi                 |  92 ++++++
++ gas/frags.c                           |  15 +
++ gas/frags.h                           |   3 +
++ gas/testsuite/gas/xtensa/all.exp      |   1 +
++ gas/testsuite/gas/xtensa/trampoline.d |  26 ++
++ gas/testsuite/gas/xtensa/trampoline.s |  21 ++
++ 11 files changed, 753 insertions(+), 2 deletions(-)
++ create mode 100644 gas/testsuite/gas/xtensa/trampoline.d
++ create mode 100644 gas/testsuite/gas/xtensa/trampoline.s
++
++diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
++index fe8ec0f..ea23c96 100644
++--- a/gas/config/tc-xtensa.c
+++++ b/gas/config/tc-xtensa.c
++@@ -468,6 +468,12 @@ static void xtensa_set_frag_assembly_state (fragS *);
++ static void finish_vinsn (vliw_insn *);
++ static bfd_boolean emit_single_op (TInsn *);
++ static int total_frag_text_expansion (fragS *);
+++static bfd_boolean use_trampolines = TRUE;
+++static void xtensa_check_frag_count (void);
+++static void xtensa_create_trampoline_frag (bfd_boolean);
+++static void xtensa_maybe_create_trampoline_frag (void);
+++struct trampoline_frag;
+++static int init_trampoline_frag (struct trampoline_frag *);
++ 
++ /* Alignment Functions.  */
++ 
++@@ -520,6 +526,7 @@ static void tinsn_from_chars (TInsn *, char *, int);
++ static void tinsn_immed_from_frag (TInsn *, fragS *, int);
++ static int get_num_stack_text_bytes (IStack *);
++ static int get_num_stack_literal_bytes (IStack *);
+++static bfd_boolean tinsn_to_slotbuf (xtensa_format, int, TInsn *, xtensa_insnbuf);
++ 
++ /* vliw_insn functions.  */
++ 
++@@ -687,7 +694,10 @@ enum
++   option_prefer_l32r,
++   option_prefer_const16,
++ 
++-  option_target_hardware
+++  option_target_hardware,
+++
+++  option_trampolines,
+++  option_no_trampolines,
++ };
++ 
++ const char *md_shortopts = "";
++@@ -760,6 +770,9 @@ struct option md_longopts[] =
++ 
++   { "target-hardware", required_argument, NULL, option_target_hardware },
++ 
+++  { "trampolines", no_argument, NULL, option_trampolines },
+++  { "no-trampolines", no_argument, NULL, option_no_trampolines },
+++
++   { NULL, no_argument, NULL, 0 }
++ };
++ 
++@@ -940,6 +953,14 @@ md_parse_option (int c, char *arg)
++       directive_state[directive_transform] = FALSE;
++       return 1;
++ 
+++    case option_trampolines:
+++      use_trampolines = TRUE;
+++      return 1;
+++
+++    case option_no_trampolines:
+++      use_trampolines = FALSE;
+++      return 1;
+++
++     default:
++       return 0;
++     }
++@@ -963,7 +984,9 @@ Xtensa options:\n\
++                           flix bundles\n\
++   --no-allow-flix         neither allow hand-written nor generate\n\
++                           flix bundles\n\
++-  --rename-section old=new Rename section 'old' to 'new'\n", stream);
+++  --rename-section old=new Rename section 'old' to 'new'\n\
+++  --[no-]trampolines      [Do not] generate trampolines (jumps to jumps)\n\
+++                          when jumps do not reach their targets\n", stream);
++ }
++ 
++ 
++@@ -5568,6 +5591,8 @@ md_assemble (char *str)
++ 
++   /* We've just emitted a new instruction so clear the list of labels.  */
++   xtensa_clear_insn_labels ();
+++
+++  xtensa_check_frag_count ();
++ }
++ 
++ 
++@@ -6372,6 +6397,8 @@ finish_vinsn (vliw_insn *vinsn)
++   xg_assemble_vliw_tokens (vinsn);
++ 
++   xg_clear_vinsn (vinsn);
+++
+++  xtensa_check_frag_count ();
++ }
++ 
++ 
++@@ -7140,6 +7167,7 @@ xg_assemble_vliw_tokens (vliw_insn *vinsn)
++ 		    RELAX_UNREACHABLE,
++ 		    frag_now->fr_symbol, frag_now->fr_offset, NULL);
++ 	  xtensa_set_frag_assembly_state (frag_now);
+++	  xtensa_maybe_create_trampoline_frag ();
++ 	}
++       else if (is_branch && do_align_targets ())
++ 	{
++@@ -7222,9 +7250,164 @@ xtensa_end (void)
++   xtensa_sanity_check ();
++ 
++   xtensa_add_config_info ();
+++
+++  xtensa_check_frag_count ();
+++}
+++
+++
+++struct trampoline_frag
+++{
+++  struct trampoline_frag *next;
+++  bfd_boolean needs_jump_around;
+++  fragS *fragP;
+++  fixS *fixP;
+++};
+++
+++struct trampoline_seg
+++{
+++  struct trampoline_seg *next;
+++  asection *seg;
+++  struct trampoline_frag trampoline_list;
+++};
+++
+++static struct trampoline_seg trampoline_seg_list;
+++#define J_RANGE (128 * 1024)
+++
+++static int unreachable_count = 0;
+++
+++
+++static void
+++xtensa_maybe_create_trampoline_frag (void)
+++{
+++  if (!use_trampolines)
+++    return;
+++
+++  /* We create an area for possible trampolines every 10 unreachable frags.
+++     These are preferred over the ones not preceded by an unreachable frag,
+++     because we don't have to jump around them. This function is called after
+++     each RELAX_UNREACHABLE frag is created.  */
+++
+++  if (++unreachable_count > 10)
+++    {
+++      xtensa_create_trampoline_frag (FALSE);
+++      clear_frag_count ();
+++      unreachable_count = 0;
+++    }
+++}
+++
+++static void
+++xtensa_check_frag_count (void)
+++{
+++  if (!use_trampolines || frag_now->tc_frag_data.is_no_transform)
+++    return;
+++
+++  /* We create an area for possible trampolines every 8000 frags or so. This
+++     is an estimate based on the max range of a "j" insn (+/-128K) divided
+++     by a typical frag byte count (16), minus a few for safety. This function
+++     is called after each source line is processed.  */
+++
+++  if (get_frag_count () > 8000)
+++    {
+++      xtensa_create_trampoline_frag (TRUE);
+++      clear_frag_count ();
+++      unreachable_count = 0;
+++    }
+++}
+++
+++static xtensa_insnbuf trampoline_buf = NULL;
+++static xtensa_insnbuf trampoline_slotbuf = NULL;
+++
+++#define TRAMPOLINE_FRAG_SIZE 3000
+++
+++static void
+++xtensa_create_trampoline_frag (bfd_boolean needs_jump_around)
+++{
+++  /* Emit a frag where we can place intermediate jump instructions,
+++     in case we need to jump farther than 128K bytes.
+++     Each jump instruction takes three bytes.
+++     We allocate enough for 1000 trampolines in each frag.
+++     If that's not enough, oh well.  */
+++
+++  struct trampoline_seg *ts = trampoline_seg_list.next;
+++  struct trampoline_frag *tf;
+++  char *varP;
+++  fragS *fragP;
+++  int size = TRAMPOLINE_FRAG_SIZE;
+++
+++  for ( ; ts; ts = ts->next)
+++    {
+++      if (ts->seg == now_seg)
+++	break;
+++    }
+++
+++  if (ts == NULL)
+++    {
+++      ts = (struct trampoline_seg *)xcalloc(sizeof (struct trampoline_seg), 1);
+++      ts->next = trampoline_seg_list.next;
+++      trampoline_seg_list.next = ts;
+++      ts->seg = now_seg;
+++    }
+++
+++  frag_wane (frag_now);
+++  frag_new (0);
+++  xtensa_set_frag_assembly_state (frag_now);
+++  varP = frag_var (rs_machine_dependent, size, size, RELAX_TRAMPOLINE, NULL, 0, NULL);
+++  fragP = (fragS *)(varP - SIZEOF_STRUCT_FRAG);
+++  if (trampoline_buf == NULL)
+++    {
+++      trampoline_buf = xtensa_insnbuf_alloc (xtensa_default_isa);
+++      trampoline_slotbuf = xtensa_insnbuf_alloc (xtensa_default_isa);
+++    }
+++  tf = (struct trampoline_frag *)xmalloc(sizeof (struct trampoline_frag));
+++  tf->next = ts->trampoline_list.next;
+++  ts->trampoline_list.next = tf;
+++  tf->needs_jump_around = needs_jump_around;
+++  tf->fragP = fragP;
+++  tf->fixP = NULL;
+++}
+++
+++
+++static struct trampoline_seg *
+++find_trampoline_seg (asection *seg)
+++{
+++  struct trampoline_seg *ts = trampoline_seg_list.next;
+++
+++  for ( ; ts; ts = ts->next)
+++    {
+++      if (ts->seg == seg)
+++	return ts;
+++    }
+++
+++  return NULL;
++ }
++ 
++ 
+++void dump_trampolines (void);
+++
+++void
+++dump_trampolines (void)
+++{
+++  struct trampoline_seg *ts = trampoline_seg_list.next;
+++
+++  for ( ; ts; ts = ts->next)
+++    {
+++      asection *seg = ts->seg;
+++
+++      if (seg == NULL)
+++	continue;
+++      fprintf(stderr, "SECTION %s\n", seg->name);
+++      struct trampoline_frag *tf = ts->trampoline_list.next;
+++      for ( ; tf; tf = tf->next)
+++	{
+++	  if (tf->fragP == NULL)
+++	    continue;
+++	  fprintf(stderr, "   0x%08x: fix=%d, jump_around=%s\n",
+++		  (int)tf->fragP->fr_address, (int)tf->fragP->fr_fix,
+++		  tf->needs_jump_around ? "T" : "F");
+++	}
+++    }
+++}
+++
++ static void
++ xtensa_cleanup_align_frags (void)
++ {
++@@ -8708,6 +8891,149 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
++ 	new_stretch += relax_frag_for_align (fragP, stretch);
++       break;
++ 
+++    case RELAX_TRAMPOLINE:
+++      if (fragP->tc_frag_data.relax_seen)
+++        {
+++          segment_info_type *seginfo = seg_info (now_seg);
+++          fragS *fP; /* The out-of-range jump.  */
+++          fixS *fixP;
+++
+++          /* Scan for jumps that will not reach.  */
+++          for (fixP = seginfo->fix_root; fixP ; fixP = fixP->fx_next)
+++            {
+++              symbolS *s = fixP->fx_addsy;
+++	      xtensa_opcode opcode;
+++              int target;
+++              int addr;
+++              int delta;
+++
+++              if (fixP->fx_r_type < BFD_RELOC_XTENSA_SLOT0_OP ||
+++                  fixP->fx_r_type > BFD_RELOC_XTENSA_SLOT14_OP)
+++                continue;
+++	      xtensa_insnbuf_from_chars (isa, trampoline_buf,
+++					 (unsigned char *) fixP->fx_frag->fr_literal + fixP->fx_where,
+++					 0);
+++	      fmt = xtensa_format_decode (isa, trampoline_buf);
+++	      gas_assert (fmt != XTENSA_UNDEFINED);
+++	      slot = fixP->tc_fix_data.slot;
+++	      xtensa_format_get_slot (isa, fmt, slot, trampoline_buf, trampoline_slotbuf);
+++	      opcode = xtensa_opcode_decode (isa, fmt, slot, trampoline_slotbuf);
+++	      if (opcode != xtensa_j_opcode)
+++		continue;
+++              target = S_GET_VALUE (s);
+++              addr = fixP->fx_frag->fr_address;
+++              delta = target - addr + stretch;
+++              if (delta > J_RANGE  || delta < -1 * J_RANGE)
+++                { /* Found an out-of-range jump; scan the list of trampolines for the best match.  */
+++		  struct trampoline_seg *ts = find_trampoline_seg (now_seg);
+++		  struct trampoline_frag *tf = ts->trampoline_list.next;
+++		  struct trampoline_frag *prev = &ts->trampoline_list;
+++		  int lower = (target < addr) ? target : addr;
+++		  int upper = (target > addr) ? target : addr;
+++		  int midpoint = lower + (upper - lower) / 2;
+++
+++		  if ((upper - lower) > 2 * J_RANGE)
+++		    {
+++		      /* One trampoline won't suffice; we need multiple jumps.
+++			 Jump to the trampoline that's farthest, but still in
+++			 range relative to the original "j" instruction.  */
+++		      for ( ; tf; prev = tf, tf = tf->next )
+++			{
+++			  int this_addr = tf->fragP->fr_address + tf->fragP->fr_fix;
+++			  int next_addr = (tf->next) ? tf->next->fragP->fr_address + tf->next->fragP->fr_fix : 0 ;
+++
+++			  if (addr == lower)
+++			    {
+++			      /* Forward jump.  */
+++			      if (this_addr - addr < J_RANGE)
+++				break;
+++			    }
+++			  else
+++			    {
+++			      /* Backward jump.  */
+++			      if (next_addr == 0 || addr - next_addr > J_RANGE)
+++				break;
+++			    }
+++			}
+++		    }
+++		  else
+++		    {
+++		      struct trampoline_frag *best_tf = NULL;
+++		      int best_delta = 0;
+++
+++		      for ( ; tf; prev = tf, tf = tf->next )
+++			{
+++			  int this_addr = tf->fragP->fr_address + tf->fragP->fr_fix;
+++			  int this_delta = abs (this_addr - midpoint);
+++
+++			  if (!best_tf || this_delta < best_delta)
+++			    {
+++			       best_tf = tf;
+++			       best_delta = this_delta;
+++			    }
+++			}
+++		      tf = best_tf;
+++		    }
+++		  if (tf->fragP == fragP)
+++		    {
+++		      int trampaddr = fragP->fr_address + fragP->fr_fix;
+++
+++		      if (abs (addr - trampaddr) < J_RANGE)
+++			{ /* The trampoline is in range of original; fix it!  */
+++			  fixS *newfixP;
+++			  int offset;
+++			  TInsn insn;
+++			  symbolS *lsym;
+++
+++			  new_stretch += init_trampoline_frag (tf);
+++			  offset = fragP->fr_fix; /* Where to assemble the j insn.  */
+++			  lsym = fragP->fr_symbol;
+++			  fP = fixP->fx_frag;
+++			  /* Assemble a jump to the target label here.  */
+++			  tinsn_init (&insn);
+++			  insn.insn_type = ITYPE_INSN;
+++			  insn.opcode = xtensa_j_opcode;
+++			  insn.ntok = 1;
+++			  set_expr_symbol_offset (&insn.tok[0], lsym, offset);
+++			  fmt = xg_get_single_format (xtensa_j_opcode);
+++			  tinsn_to_slotbuf (fmt, 0, &insn, trampoline_slotbuf);
+++			  xtensa_format_set_slot (isa, fmt, 0, trampoline_buf, trampoline_slotbuf);
+++			  xtensa_insnbuf_to_chars (isa, trampoline_buf, (unsigned char *)fragP->fr_literal + offset, 3);
+++			  fragP->fr_fix += 3;
+++			  fragP->fr_var -= 3;
+++			  /* Add a fix-up for the original j insn.  */
+++			  newfixP = fix_new (fP, fixP->fx_where, fixP->fx_size, lsym, fragP->fr_fix - 3, TRUE, fixP->fx_r_type);
+++			  newfixP->fx_no_overflow = 1;
+++			  newfixP->tc_fix_data.X_add_symbol = lsym;
+++			  newfixP->tc_fix_data.X_add_number = offset;
+++			  newfixP->tc_fix_data.slot = slot;
+++			  /* Move the fix-up from the original j insn to this one.  */
+++			  fixP->fx_frag = fragP;
+++			  fixP->fx_where = fragP->fr_fix - 3;
+++			  fixP->tc_fix_data.slot = 0;
+++			  /* Adjust the jump around this trampoline (if present).  */
+++			  if (tf->fixP != NULL)
+++			    {
+++			      tf->fixP->fx_offset += 3;
+++			    }
+++			  new_stretch += 3;
+++			  fragP->tc_frag_data.relax_seen = FALSE; /* Need another pass.  */
+++			  /* Do we have room for more?  */
+++			  if (fragP->fr_var < 3)
+++			    { /* No, convert to fill.  */
+++			      frag_wane (fragP);
+++			      fragP->fr_subtype = 0;
+++			      /* Remove from the trampoline_list.  */
+++			      prev->next = tf->next;
+++			      break;
+++			    }
+++			}
+++		    }
+++                }
+++            }
+++        }
+++      break;
+++
++     default:
++       as_bad (_("bad relaxation state"));
++     }
++@@ -9146,6 +9472,200 @@ bytes_to_stretch (fragS *this_frag,
++ }
++ 
++ 
+++static struct trampoline_frag *
+++search_trampolines (TInsn *tinsn, fragS *fragP, bfd_boolean unreachable_only)
+++{
+++  struct trampoline_seg *ts = find_trampoline_seg (now_seg);
+++  struct trampoline_frag *tf = (ts) ? ts->trampoline_list.next : NULL;
+++  struct trampoline_frag *best_tf = NULL;
+++  int best_delta = 0;
+++  int best_addr = 0;
+++  symbolS *sym = tinsn->tok[0].X_add_symbol;
+++  offsetT target = S_GET_VALUE (sym) + tinsn->tok[0].X_add_number;
+++  offsetT addr = fragP->fr_address;
+++  offsetT lower = (addr < target) ? addr : target;
+++  offsetT upper = (addr > target) ? addr : target;
+++  int delta = upper - lower;
+++  offsetT midpoint = lower + delta / 2;
+++  int this_delta = -1;
+++  int this_addr = -1;
+++
+++  if (delta > 2 * J_RANGE)
+++    {
+++      /* One trampoline won't do; we need multiple.
+++	 Choose the farthest trampoline that's still in range of the original
+++	 and let a later pass finish the job.  */
+++      for ( ; tf; tf = tf->next)
+++	{
+++	  int next_addr = (tf->next) ? tf->next->fragP->fr_address + tf->next->fragP->fr_fix : 0;
+++
+++	  this_addr = tf->fragP->fr_address + tf->fragP->fr_fix;
+++	  if (lower == addr)
+++	    {
+++	      /* Forward jump.  */
+++	      if (this_addr - addr < J_RANGE)
+++		break;
+++	    }
+++	  else
+++	    {
+++	      /* Backward jump.  */
+++	      if (next_addr == 0 || addr - next_addr > J_RANGE)
+++		break;
+++	    }
+++	  if (abs (addr - this_addr) < J_RANGE)
+++	    return tf;
+++
+++	  return NULL;
+++	}
+++    }
+++  for ( ; tf; tf = tf->next)
+++    {
+++      this_addr = tf->fragP->fr_address + tf->fragP->fr_fix;
+++      this_delta = abs (this_addr - midpoint);
+++      if (unreachable_only && tf->needs_jump_around)
+++	continue;
+++      if (!best_tf || this_delta < best_delta)
+++        {
+++	  best_tf = tf;
+++	  best_delta = this_delta;
+++	  best_addr = this_addr;
+++        }
+++    }
+++
+++  if (best_tf &&
+++      best_delta < J_RANGE &&
+++      abs(best_addr - lower) < J_RANGE &&
+++      abs(best_addr - upper) < J_RANGE)
+++    return best_tf;
+++
+++  return NULL; /* No suitable trampoline found.  */
+++}
+++
+++
+++static struct trampoline_frag *
+++get_best_trampoline (TInsn *tinsn, fragS *fragP)
+++{
+++  struct trampoline_frag *tf = NULL;
+++
+++  tf = search_trampolines (tinsn, fragP, TRUE); /* Try unreachable first.  */
+++
+++  if (tf == NULL)
+++    tf = search_trampolines (tinsn, fragP, FALSE); /* Try ones needing a jump-around, too.  */
+++
+++  return tf;
+++}
+++
+++
+++static void
+++check_and_update_trampolines (void)
+++{
+++  struct trampoline_seg *ts = find_trampoline_seg (now_seg);
+++  struct trampoline_frag *tf = ts->trampoline_list.next;
+++  struct trampoline_frag *prev = &ts->trampoline_list;
+++
+++  for ( ; tf; prev = tf, tf = tf->next)
+++    {
+++      if (tf->fragP->fr_var < 3)
+++	{
+++	  frag_wane (tf->fragP);
+++	  prev->next = tf->next;
+++	  tf->fragP = NULL;
+++	}
+++    }
+++}
+++
+++
+++static int
+++init_trampoline_frag (struct trampoline_frag *trampP)
+++{
+++  fragS *fp = trampP->fragP;
+++  int growth = 0;
+++
+++  if (fp->fr_fix == 0)
+++    {
+++      symbolS *lsym;
+++      char label[10 + 2 * sizeof(fp)];
+++      sprintf (label, ".L0_TR_%p", fp);
+++
+++      lsym = (symbolS *)local_symbol_make (label, now_seg, 0, fp);
+++      fp->fr_symbol = lsym;
+++      if (trampP->needs_jump_around)
+++        {
+++	  /* Add a jump around this block of jumps, in case
+++	     control flows into this block.  */
+++	  fixS *fixP;
+++	  TInsn insn;
+++	  xtensa_format fmt;
+++	  xtensa_isa isa = xtensa_default_isa;
+++
+++	  fp->tc_frag_data.is_insn = 1;
+++	  /* Assemble a jump insn.  */
+++	  tinsn_init (&insn);
+++	  insn.insn_type = ITYPE_INSN;
+++	  insn.opcode = xtensa_j_opcode;
+++	  insn.ntok = 1;
+++	  set_expr_symbol_offset (&insn.tok[0], lsym, 3);
+++	  fmt = xg_get_single_format (xtensa_j_opcode);
+++	  tinsn_to_slotbuf (fmt, 0, &insn, trampoline_slotbuf);
+++	  xtensa_format_set_slot (isa, fmt, 0, trampoline_buf, trampoline_slotbuf);
+++	  xtensa_insnbuf_to_chars (isa, trampoline_buf, (unsigned char *)fp->fr_literal, 3);
+++	  fp->fr_fix += 3;
+++	  fp->fr_var -= 3;
+++	  growth = 3;
+++	  fixP = fix_new (fp, 0, 3, lsym, 3, TRUE, BFD_RELOC_XTENSA_SLOT0_OP);
+++	  trampP->fixP = fixP;
+++        }
+++    }
+++  return growth;
+++}
+++
+++
+++static int
+++add_jump_to_trampoline (struct trampoline_frag *trampP, fragS *origfrag)
+++{
+++  fragS *tramp = trampP->fragP;
+++  fixS *fixP;
+++  int offset = tramp->fr_fix; /* Where to assemble the j insn.  */
+++  TInsn insn;
+++  symbolS *lsym;
+++  symbolS *tsym;
+++  int toffset;
+++  xtensa_format fmt;
+++  xtensa_isa isa = xtensa_default_isa;
+++  int growth = 0;
+++
+++  lsym = tramp->fr_symbol;
+++  /* Assemble a jump to the target label in the trampoline frag.  */
+++  tsym = origfrag->tc_frag_data.slot_symbols[0];
+++  toffset = origfrag-> tc_frag_data.slot_offsets[0];
+++  tinsn_init (&insn);
+++  insn.insn_type = ITYPE_INSN;
+++  insn.opcode = xtensa_j_opcode;
+++  insn.ntok = 1;
+++  set_expr_symbol_offset (&insn.tok[0], tsym, toffset);
+++  fmt = xg_get_single_format (xtensa_j_opcode);
+++  tinsn_to_slotbuf (fmt, 0, &insn, trampoline_slotbuf);
+++  xtensa_format_set_slot (isa, fmt, 0, trampoline_buf, trampoline_slotbuf);
+++  xtensa_insnbuf_to_chars (isa, trampoline_buf, (unsigned char *)tramp->fr_literal + offset, 3);
+++  tramp->fr_fix += 3;
+++  tramp->fr_var -= 3;
+++  growth = 3;
+++  /* add a fix-up for the trampoline jump.  */
+++  fixP = fix_new (tramp, tramp->fr_fix - 3, 3, tsym, toffset, TRUE, BFD_RELOC_XTENSA_SLOT0_OP);
+++  /* Modify the jump at the start of this trampoline to point past the newly-added jump.  */
+++  fixP = trampP->fixP;
+++  if (fixP)
+++    fixP->fx_offset += 3;
+++  /* Modify the original j to point here.  */
+++  origfrag->tc_frag_data.slot_symbols[0] = lsym;
+++  origfrag->tc_frag_data.slot_offsets[0] = tramp->fr_fix - 3;
+++  /* If trampoline is full, remove it from the list.  */
+++  check_and_update_trampolines ();
+++
+++  return growth;
+++}
+++
+++
++ static long
++ relax_frag_immed (segT segP,
++ 		  fragS *fragP,
++@@ -9284,6 +9804,37 @@ relax_frag_immed (segT segP,
++   if (negatable_branch && istack.ninsn > 1)
++     update_next_frag_state (fragP);
++ 
+++  /* If last insn is a jump, and it cannot reach its target, try to find a trampoline.  */
+++  if (istack.ninsn > 2 &&
+++      istack.insn[istack.ninsn - 1].insn_type == ITYPE_LABEL &&
+++      istack.insn[istack.ninsn - 2].insn_type == ITYPE_INSN &&
+++      istack.insn[istack.ninsn - 2].opcode == xtensa_j_opcode)
+++    {
+++      TInsn *jinsn = &istack.insn[istack.ninsn - 2];
+++
+++      if (!xg_symbolic_immeds_fit (jinsn, segP, fragP, fragP->fr_offset, total_text_diff))
+++	{
+++	  struct trampoline_frag *tf = get_best_trampoline (jinsn, fragP);
+++
+++	  if (tf)
+++	    {
+++	      this_text_diff += init_trampoline_frag (tf);
+++	      this_text_diff += add_jump_to_trampoline (tf, fragP);
+++	    }
+++	  else
+++	    {
+++	      /* If target symbol is undefined, assume it will reach once linked.  */
+++	      expressionS *exp = &istack.insn[istack.ninsn - 2].tok[0];
+++
+++	      if (exp->X_op == O_symbol && S_IS_DEFINED (exp->X_add_symbol))
+++		{
+++		  as_bad_where (fragP->fr_file, fragP->fr_line,
+++		    _("jump target out of range; no usable trampoline found"));
+++		}
+++	    }
+++	}
+++    }
+++
++   return this_text_diff;
++ }
++ 
++@@ -9404,6 +9955,9 @@ md_convert_frag (bfd *abfd ATTRIBUTE_UNUSED, segT sec, fragS *fragp)
++       else
++ 	as_bad (_("invalid relaxation fragment result"));
++       break;
+++
+++    case RELAX_TRAMPOLINE:
+++      break;
++     }
++ 
++   fragp->fr_var = 0;
++diff --git a/gas/config/tc-xtensa.h b/gas/config/tc-xtensa.h
++index 0bf1240..4672bc6 100644
++--- a/gas/config/tc-xtensa.h
+++++ b/gas/config/tc-xtensa.h
++@@ -180,6 +180,11 @@ enum xtensa_relax_statesE
++      prevent the linker from changing the size of any frag between the
++      section start and the org frag.  */
++ 
+++  RELAX_TRAMPOLINE,
+++  /* Every few thousand frags, we insert one of these, just in case we may
+++     need some space for a trampoline (jump to a jump) because the function
+++     has gotten too big. If not needed, it disappears. */
+++
++   RELAX_NONE
++ };
++ 
++diff --git a/gas/doc/as.texinfo b/gas/doc/as.texinfo
++index 5c8b000..dc97175 100644
++--- a/gas/doc/as.texinfo
+++++ b/gas/doc/as.texinfo
++@@ -543,6 +543,7 @@ gcc(1), ld(1), and the Info entries for @file{binutils} and @file{ld}.
++  [@b{--[no-]target-align}] [@b{--[no-]longcalls}]
++  [@b{--[no-]transform}]
++  [@b{--rename-section} @var{oldname}=@var{newname}]
+++ [@b{--[no-]trampolines}]
++ @end ifset
++ 
++ @ifset Z80
++diff --git a/gas/doc/c-xtensa.texi b/gas/doc/c-xtensa.texi
++index 406e635..e763e36 100644
++--- a/gas/doc/c-xtensa.texi
+++++ b/gas/doc/c-xtensa.texi
++@@ -91,6 +91,16 @@ instruction operands to be errors.
++ @kindex --rename-section
++ Rename the @var{oldname} section to @var{newname}.  This option can be used
++ multiple times to rename multiple sections.
+++
+++ at item --trampolines | --no-trampolines
+++ at kindex --trampolines
+++ at kindex --no-trampolines
+++Enable or disable transformation of jump instructions to allow jumps
+++across a greater range of addresses.  @xref{Xtensa Jump Relaxation,
+++,Jump Trampolines}.  This option should be used when jump targets can
+++potentially be out of range.  In the absence of such jumps this option
+++does not affect code size or performance.  The default is
+++ at samp{--trampolines}.
++ @end table
++ 
++ @c man end
++@@ -311,6 +321,7 @@ fields.
++ @menu
++ * Xtensa Branch Relaxation::        Relaxation of Branches.
++ * Xtensa Call Relaxation::          Relaxation of Function Calls.
+++* Xtensa Jump Relaxation::          Relaxation of Jumps.
++ * Xtensa Immediate Relaxation::     Relaxation of other Immediate Fields.
++ @end menu
++ 
++@@ -398,6 +409,87 @@ and some of the calls are out of range, function call relaxation can be
++ enabled using the @samp{--longcalls} command-line option or the
++ @code{longcalls} directive (@pxref{Longcalls Directive, ,longcalls}).
++ 
+++ at node Xtensa Jump Relaxation
+++ at subsection Jump Relaxation
+++ at cindex relaxation of jump instructions
+++ at cindex jump instructions, relaxation
+++
+++Jump instruction may require relaxation because the Xtensa jump instruction
+++(@code{J}) provide a PC-relative offset of only 128 Kbytes in either
+++direction.  One option is to use jump long (@code{J.L}) instruction, which
+++depending on jump distance may be assembled as jump (@code{J}) or indirect
+++jump (@code{JX}).  However it needs a free register.  When there's no spare
+++register it is possible to plant intermediate jump sites (trampolines)
+++between the jump instruction and its target.  These sites may be located in
+++areas unreachable by normal code execution flow, in that case they only
+++contain intermediate jumps, or they may be inserted in the middle of code
+++block, in which case there's an additional jump from the beginning of the
+++trampoline to the instruction past its end.  So, for example:
+++
+++ at smallexample
+++ at group
+++    j 1f
+++    ...
+++    retw
+++    ...
+++    mov a10, a2
+++    call8 func
+++    ...
+++1:
+++    ...
+++ at end group
+++ at end smallexample
+++
+++might be relaxed to:
+++
+++ at smallexample
+++ at group
+++    j .L0_TR_1
+++    ...
+++    retw
+++.L0_TR_1:
+++    j 1f
+++    ...
+++    mov a10, a2
+++    call8 func
+++    ...
+++1:
+++    ...
+++ at end group
+++ at end smallexample
+++
+++or to:
+++
+++ at smallexample
+++ at group
+++    j .L0_TR_1
+++    ...
+++    retw
+++    ...
+++    mov a10, a2
+++    j .L0_TR_0
+++.L0_TR_1:
+++    j 1f
+++.L0_TR_0:
+++    call8 func
+++    ...
+++1:
+++    ...
+++ at end group
+++ at end smallexample
+++
+++The Xtensa assempler uses trampolines with jump around only when it cannot
+++find suitable unreachable trampoline.  There may be multiple trampolines
+++between the jump instruction and its target.
+++
+++This relaxation does not apply to jumps to undefined symbols, assuming they
+++will reach their targets once resolved.
+++
+++Jump relaxation is enabled by default because it does not affect code size
+++or performance while the code itself is small.  This relaxation may be
+++disabled completely with @samp{--no-trampolines} or @samp{--no-transform}
+++command-line options (@pxref{Xtensa Options, ,Command Line Options}).
+++
++ @node Xtensa Immediate Relaxation
++ @subsection Other Immediate Field Relaxation
++ @cindex immediate fields, relaxation
++diff --git a/gas/frags.c b/gas/frags.c
++index 5f68480..e14099d 100644
++--- a/gas/frags.c
+++++ b/gas/frags.c
++@@ -24,6 +24,20 @@
++ 
++ extern fragS zero_address_frag;
++ extern fragS predefined_address_frag;
+++
+++static int totalfrags;
+++
+++int
+++get_frag_count (void)
+++{
+++  return totalfrags;
+++}
+++
+++void
+++clear_frag_count (void)
+++{
+++  totalfrags = 0;
+++}
++ 
++ /* Initialization for frag routines.  */
++ 
++@@ -70,6 +84,7 @@ frag_alloc (struct obstack *ob)
++   ptr = (fragS *) obstack_alloc (ob, SIZEOF_STRUCT_FRAG);
++   obstack_alignment_mask (ob) = oalign;
++   memset (ptr, 0, SIZEOF_STRUCT_FRAG);
+++  totalfrags++;
++   return ptr;
++ }
++ 
++diff --git a/gas/frags.h b/gas/frags.h
++index 319898f..2f9e1b5 100644
++--- a/gas/frags.h
+++++ b/gas/frags.h
++@@ -155,4 +155,7 @@ char *frag_var (relax_stateT type,
++ 
++ bfd_boolean frag_offset_fixed_p (const fragS *, const fragS *, offsetT *);
++ 
+++int get_frag_count (void);
+++void clear_frag_count (void);
+++
++ #endif /* FRAGS_H */
++diff --git a/gas/testsuite/gas/xtensa/all.exp b/gas/testsuite/gas/xtensa/all.exp
++index 2b2c294..3683b78 100644
++--- a/gas/testsuite/gas/xtensa/all.exp
+++++ b/gas/testsuite/gas/xtensa/all.exp
++@@ -98,6 +98,7 @@ if [istarget xtensa*-*-*] then {
++     run_dump_test "pcrel"
++     run_dump_test "weak-call"
++     run_dump_test "jlong"
+++    run_dump_test "trampoline"
++ }
++ 
++ if [info exists errorInfo] then {
++diff --git a/gas/testsuite/gas/xtensa/trampoline.d b/gas/testsuite/gas/xtensa/trampoline.d
++new file mode 100644
++index 0000000..b4f65dc
++--- /dev/null
+++++ b/gas/testsuite/gas/xtensa/trampoline.d
++@@ -0,0 +1,26 @@
+++#as:
+++#objdump: -d
+++#name: trampolines relaxation
+++
+++.*: +file format .*xtensa.*
+++#...
+++.*0:.*j.0x1194c
+++.*3:.*j.0x1194f
+++.*6:.*j.0x11952
+++.*9:.*j.0x1d4e4
+++#...
+++.*11949:.*j.0x11955
+++.*1194c:.*j.0x24a0e
+++.*1194f:.*j.0x24a0e
+++.*11952:.*j.0x24a11
+++#...
+++.*1d4e1:.*j.0x1d4e7
+++.*1d4e4:.*j.0x33462
+++#...
+++.*24a0e:.*j.0x24a0e
+++.*24a11:.*j.0x24a11
+++#...
+++.*3345f:.*ret
+++.*33462:.*j.0x49407
+++#...
+++.*49407:.*j.0x49407
++diff --git a/gas/testsuite/gas/xtensa/trampoline.s b/gas/testsuite/gas/xtensa/trampoline.s
++new file mode 100644
++index 0000000..259a3bb
++--- /dev/null
+++++ b/gas/testsuite/gas/xtensa/trampoline.s
++@@ -0,0 +1,21 @@
+++	.text
+++	j	1f
+++	j	1f
+++	j	2f
+++	j	3f
+++	.rep	25000
+++99:
+++	and	a2, a2, a3
+++	bne	a2, a3, 99b
+++	.endr
+++1:
+++	j	1b
+++2:
+++	j	2b
+++
+++	.rep	25000
+++	and	a2, a2, a3
+++	_ret
+++	.endr
+++3:
+++	j	3b
++-- 
++1.8.1.4
++
+diff --git a/package/binutils/2.24/900-xtensa-trampolines.patch b/package/binutils/2.24/900-xtensa-trampolines.patch
+new file mode 100644
+index 0000000..824cf44
+--- /dev/null
++++ b/package/binutils/2.24/900-xtensa-trampolines.patch
+@@ -0,0 +1,977 @@
++From a82c7d9030b67a6a76a5403d0e1641f9e42141ac Mon Sep 17 00:00:00 2001
++From: David Weatherford <weath@cadence.com>
++Date: Fri, 21 Mar 2014 11:53:42 +0000
++Subject: [PATCH] Add support to the Xtensa target for creating trampolines for
++ out-of-range branches.
++
++    * tc-xtensa.c (xtensa_check_frag_count, xtensa_create_trampoline_frag)
++    (xtensa_maybe_create_trampoline_frag, init_trampoline_frag)
++    (find_trampoline_seg, search_trampolines, get_best_trampoline)
++    (check_and_update_trampolines, add_jump_to_trampoline)
++    (dump_trampolines): New function.
++    (md_parse_option): Add cases for --[no-]trampolines options.
++    (md_assemble, finish_vinsn, xtensa_end): Add call to
++    xtensa_check_frag_count.
++    (xg_assemble_vliw_tokens): Add call to
++    xtensa_maybe_create_trampoline_frag.
++    (xtensa_relax_frag): Relax fragments with RELAX_TRAMPOLINE state.
++    (relax_frag_immed): Relax jump instructions that cannot reach its
++    target.
++    * tc-xtensa.h (xtensa_relax_statesE::RELAX_TRAMPOLINE): New relax
++    state.
++
++    * as.texinfo: Document --[no-]trampolines command-line options.
++    * c-xtensa.texi: Document trampolines relaxation and command line
++    options.
++
++    * frags.c (get_frag_count, clear_frag_count): New function.
++    (frag_alloc): Increment totalfrags counter.
++    * frags.h (get_frag_count, clear_frag_count): New function.
++
++    * all.exp: Add test for trampoline relaxation.
++    * trampoline.d: Trampoline relaxation expected dump.
++    * trampoline.s: Trampoline relaxation test source.
++---
++Backported from: a82c7d9030b67a6a76a5403d0e1641f9e42141ac
++Changes to Changelog files are dropped.
++
++ gas/config/tc-xtensa.c                | 558 +++++++++++++++++++++++++++++++++-
++ gas/config/tc-xtensa.h                |   5 +
++ gas/doc/as.texinfo                    |   1 +
++ gas/doc/c-xtensa.texi                 |  92 ++++++
++ gas/frags.c                           |  15 +
++ gas/frags.h                           |   3 +
++ gas/testsuite/gas/xtensa/all.exp      |   1 +
++ gas/testsuite/gas/xtensa/trampoline.d |  26 ++
++ gas/testsuite/gas/xtensa/trampoline.s |  21 ++
++ 11 files changed, 753 insertions(+), 2 deletions(-)
++ create mode 100644 gas/testsuite/gas/xtensa/trampoline.d
++ create mode 100644 gas/testsuite/gas/xtensa/trampoline.s
++
++diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
++index fe8ec0f..ea23c96 100644
++--- a/gas/config/tc-xtensa.c
+++++ b/gas/config/tc-xtensa.c
++@@ -468,6 +468,12 @@ static void xtensa_set_frag_assembly_state (fragS *);
++ static void finish_vinsn (vliw_insn *);
++ static bfd_boolean emit_single_op (TInsn *);
++ static int total_frag_text_expansion (fragS *);
+++static bfd_boolean use_trampolines = TRUE;
+++static void xtensa_check_frag_count (void);
+++static void xtensa_create_trampoline_frag (bfd_boolean);
+++static void xtensa_maybe_create_trampoline_frag (void);
+++struct trampoline_frag;
+++static int init_trampoline_frag (struct trampoline_frag *);
++ 
++ /* Alignment Functions.  */
++ 
++@@ -520,6 +526,7 @@ static void tinsn_from_chars (TInsn *, char *, int);
++ static void tinsn_immed_from_frag (TInsn *, fragS *, int);
++ static int get_num_stack_text_bytes (IStack *);
++ static int get_num_stack_literal_bytes (IStack *);
+++static bfd_boolean tinsn_to_slotbuf (xtensa_format, int, TInsn *, xtensa_insnbuf);
++ 
++ /* vliw_insn functions.  */
++ 
++@@ -687,7 +694,10 @@ enum
++   option_prefer_l32r,
++   option_prefer_const16,
++ 
++-  option_target_hardware
+++  option_target_hardware,
+++
+++  option_trampolines,
+++  option_no_trampolines,
++ };
++ 
++ const char *md_shortopts = "";
++@@ -760,6 +770,9 @@ struct option md_longopts[] =
++ 
++   { "target-hardware", required_argument, NULL, option_target_hardware },
++ 
+++  { "trampolines", no_argument, NULL, option_trampolines },
+++  { "no-trampolines", no_argument, NULL, option_no_trampolines },
+++
++   { NULL, no_argument, NULL, 0 }
++ };
++ 
++@@ -940,6 +953,14 @@ md_parse_option (int c, char *arg)
++       directive_state[directive_transform] = FALSE;
++       return 1;
++ 
+++    case option_trampolines:
+++      use_trampolines = TRUE;
+++      return 1;
+++
+++    case option_no_trampolines:
+++      use_trampolines = FALSE;
+++      return 1;
+++
++     default:
++       return 0;
++     }
++@@ -963,7 +984,9 @@ Xtensa options:\n\
++                           flix bundles\n\
++   --no-allow-flix         neither allow hand-written nor generate\n\
++                           flix bundles\n\
++-  --rename-section old=new Rename section 'old' to 'new'\n", stream);
+++  --rename-section old=new Rename section 'old' to 'new'\n\
+++  --[no-]trampolines      [Do not] generate trampolines (jumps to jumps)\n\
+++                          when jumps do not reach their targets\n", stream);
++ }
++ 
++ 
++@@ -5568,6 +5591,8 @@ md_assemble (char *str)
++ 
++   /* We've just emitted a new instruction so clear the list of labels.  */
++   xtensa_clear_insn_labels ();
+++
+++  xtensa_check_frag_count ();
++ }
++ 
++ 
++@@ -6372,6 +6397,8 @@ finish_vinsn (vliw_insn *vinsn)
++   xg_assemble_vliw_tokens (vinsn);
++ 
++   xg_clear_vinsn (vinsn);
+++
+++  xtensa_check_frag_count ();
++ }
++ 
++ 
++@@ -7140,6 +7167,7 @@ xg_assemble_vliw_tokens (vliw_insn *vinsn)
++ 		    RELAX_UNREACHABLE,
++ 		    frag_now->fr_symbol, frag_now->fr_offset, NULL);
++ 	  xtensa_set_frag_assembly_state (frag_now);
+++	  xtensa_maybe_create_trampoline_frag ();
++ 	}
++       else if (is_branch && do_align_targets ())
++ 	{
++@@ -7222,9 +7250,164 @@ xtensa_end (void)
++   xtensa_sanity_check ();
++ 
++   xtensa_add_config_info ();
+++
+++  xtensa_check_frag_count ();
+++}
+++
+++
+++struct trampoline_frag
+++{
+++  struct trampoline_frag *next;
+++  bfd_boolean needs_jump_around;
+++  fragS *fragP;
+++  fixS *fixP;
+++};
+++
+++struct trampoline_seg
+++{
+++  struct trampoline_seg *next;
+++  asection *seg;
+++  struct trampoline_frag trampoline_list;
+++};
+++
+++static struct trampoline_seg trampoline_seg_list;
+++#define J_RANGE (128 * 1024)
+++
+++static int unreachable_count = 0;
+++
+++
+++static void
+++xtensa_maybe_create_trampoline_frag (void)
+++{
+++  if (!use_trampolines)
+++    return;
+++
+++  /* We create an area for possible trampolines every 10 unreachable frags.
+++     These are preferred over the ones not preceded by an unreachable frag,
+++     because we don't have to jump around them. This function is called after
+++     each RELAX_UNREACHABLE frag is created.  */
+++
+++  if (++unreachable_count > 10)
+++    {
+++      xtensa_create_trampoline_frag (FALSE);
+++      clear_frag_count ();
+++      unreachable_count = 0;
+++    }
+++}
+++
+++static void
+++xtensa_check_frag_count (void)
+++{
+++  if (!use_trampolines || frag_now->tc_frag_data.is_no_transform)
+++    return;
+++
+++  /* We create an area for possible trampolines every 8000 frags or so. This
+++     is an estimate based on the max range of a "j" insn (+/-128K) divided
+++     by a typical frag byte count (16), minus a few for safety. This function
+++     is called after each source line is processed.  */
+++
+++  if (get_frag_count () > 8000)
+++    {
+++      xtensa_create_trampoline_frag (TRUE);
+++      clear_frag_count ();
+++      unreachable_count = 0;
+++    }
+++}
+++
+++static xtensa_insnbuf trampoline_buf = NULL;
+++static xtensa_insnbuf trampoline_slotbuf = NULL;
+++
+++#define TRAMPOLINE_FRAG_SIZE 3000
+++
+++static void
+++xtensa_create_trampoline_frag (bfd_boolean needs_jump_around)
+++{
+++  /* Emit a frag where we can place intermediate jump instructions,
+++     in case we need to jump farther than 128K bytes.
+++     Each jump instruction takes three bytes.
+++     We allocate enough for 1000 trampolines in each frag.
+++     If that's not enough, oh well.  */
+++
+++  struct trampoline_seg *ts = trampoline_seg_list.next;
+++  struct trampoline_frag *tf;
+++  char *varP;
+++  fragS *fragP;
+++  int size = TRAMPOLINE_FRAG_SIZE;
+++
+++  for ( ; ts; ts = ts->next)
+++    {
+++      if (ts->seg == now_seg)
+++	break;
+++    }
+++
+++  if (ts == NULL)
+++    {
+++      ts = (struct trampoline_seg *)xcalloc(sizeof (struct trampoline_seg), 1);
+++      ts->next = trampoline_seg_list.next;
+++      trampoline_seg_list.next = ts;
+++      ts->seg = now_seg;
+++    }
+++
+++  frag_wane (frag_now);
+++  frag_new (0);
+++  xtensa_set_frag_assembly_state (frag_now);
+++  varP = frag_var (rs_machine_dependent, size, size, RELAX_TRAMPOLINE, NULL, 0, NULL);
+++  fragP = (fragS *)(varP - SIZEOF_STRUCT_FRAG);
+++  if (trampoline_buf == NULL)
+++    {
+++      trampoline_buf = xtensa_insnbuf_alloc (xtensa_default_isa);
+++      trampoline_slotbuf = xtensa_insnbuf_alloc (xtensa_default_isa);
+++    }
+++  tf = (struct trampoline_frag *)xmalloc(sizeof (struct trampoline_frag));
+++  tf->next = ts->trampoline_list.next;
+++  ts->trampoline_list.next = tf;
+++  tf->needs_jump_around = needs_jump_around;
+++  tf->fragP = fragP;
+++  tf->fixP = NULL;
+++}
+++
+++
+++static struct trampoline_seg *
+++find_trampoline_seg (asection *seg)
+++{
+++  struct trampoline_seg *ts = trampoline_seg_list.next;
+++
+++  for ( ; ts; ts = ts->next)
+++    {
+++      if (ts->seg == seg)
+++	return ts;
+++    }
+++
+++  return NULL;
++ }
++ 
++ 
+++void dump_trampolines (void);
+++
+++void
+++dump_trampolines (void)
+++{
+++  struct trampoline_seg *ts = trampoline_seg_list.next;
+++
+++  for ( ; ts; ts = ts->next)
+++    {
+++      asection *seg = ts->seg;
+++
+++      if (seg == NULL)
+++	continue;
+++      fprintf(stderr, "SECTION %s\n", seg->name);
+++      struct trampoline_frag *tf = ts->trampoline_list.next;
+++      for ( ; tf; tf = tf->next)
+++	{
+++	  if (tf->fragP == NULL)
+++	    continue;
+++	  fprintf(stderr, "   0x%08x: fix=%d, jump_around=%s\n",
+++		  (int)tf->fragP->fr_address, (int)tf->fragP->fr_fix,
+++		  tf->needs_jump_around ? "T" : "F");
+++	}
+++    }
+++}
+++
++ static void
++ xtensa_cleanup_align_frags (void)
++ {
++@@ -8708,6 +8891,149 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
++ 	new_stretch += relax_frag_for_align (fragP, stretch);
++       break;
++ 
+++    case RELAX_TRAMPOLINE:
+++      if (fragP->tc_frag_data.relax_seen)
+++        {
+++          segment_info_type *seginfo = seg_info (now_seg);
+++          fragS *fP; /* The out-of-range jump.  */
+++          fixS *fixP;
+++
+++          /* Scan for jumps that will not reach.  */
+++          for (fixP = seginfo->fix_root; fixP ; fixP = fixP->fx_next)
+++            {
+++              symbolS *s = fixP->fx_addsy;
+++	      xtensa_opcode opcode;
+++              int target;
+++              int addr;
+++              int delta;
+++
+++              if (fixP->fx_r_type < BFD_RELOC_XTENSA_SLOT0_OP ||
+++                  fixP->fx_r_type > BFD_RELOC_XTENSA_SLOT14_OP)
+++                continue;
+++	      xtensa_insnbuf_from_chars (isa, trampoline_buf,
+++					 (unsigned char *) fixP->fx_frag->fr_literal + fixP->fx_where,
+++					 0);
+++	      fmt = xtensa_format_decode (isa, trampoline_buf);
+++	      gas_assert (fmt != XTENSA_UNDEFINED);
+++	      slot = fixP->tc_fix_data.slot;
+++	      xtensa_format_get_slot (isa, fmt, slot, trampoline_buf, trampoline_slotbuf);
+++	      opcode = xtensa_opcode_decode (isa, fmt, slot, trampoline_slotbuf);
+++	      if (opcode != xtensa_j_opcode)
+++		continue;
+++              target = S_GET_VALUE (s);
+++              addr = fixP->fx_frag->fr_address;
+++              delta = target - addr + stretch;
+++              if (delta > J_RANGE  || delta < -1 * J_RANGE)
+++                { /* Found an out-of-range jump; scan the list of trampolines for the best match.  */
+++		  struct trampoline_seg *ts = find_trampoline_seg (now_seg);
+++		  struct trampoline_frag *tf = ts->trampoline_list.next;
+++		  struct trampoline_frag *prev = &ts->trampoline_list;
+++		  int lower = (target < addr) ? target : addr;
+++		  int upper = (target > addr) ? target : addr;
+++		  int midpoint = lower + (upper - lower) / 2;
+++
+++		  if ((upper - lower) > 2 * J_RANGE)
+++		    {
+++		      /* One trampoline won't suffice; we need multiple jumps.
+++			 Jump to the trampoline that's farthest, but still in
+++			 range relative to the original "j" instruction.  */
+++		      for ( ; tf; prev = tf, tf = tf->next )
+++			{
+++			  int this_addr = tf->fragP->fr_address + tf->fragP->fr_fix;
+++			  int next_addr = (tf->next) ? tf->next->fragP->fr_address + tf->next->fragP->fr_fix : 0 ;
+++
+++			  if (addr == lower)
+++			    {
+++			      /* Forward jump.  */
+++			      if (this_addr - addr < J_RANGE)
+++				break;
+++			    }
+++			  else
+++			    {
+++			      /* Backward jump.  */
+++			      if (next_addr == 0 || addr - next_addr > J_RANGE)
+++				break;
+++			    }
+++			}
+++		    }
+++		  else
+++		    {
+++		      struct trampoline_frag *best_tf = NULL;
+++		      int best_delta = 0;
+++
+++		      for ( ; tf; prev = tf, tf = tf->next )
+++			{
+++			  int this_addr = tf->fragP->fr_address + tf->fragP->fr_fix;
+++			  int this_delta = abs (this_addr - midpoint);
+++
+++			  if (!best_tf || this_delta < best_delta)
+++			    {
+++			       best_tf = tf;
+++			       best_delta = this_delta;
+++			    }
+++			}
+++		      tf = best_tf;
+++		    }
+++		  if (tf->fragP == fragP)
+++		    {
+++		      int trampaddr = fragP->fr_address + fragP->fr_fix;
+++
+++		      if (abs (addr - trampaddr) < J_RANGE)
+++			{ /* The trampoline is in range of original; fix it!  */
+++			  fixS *newfixP;
+++			  int offset;
+++			  TInsn insn;
+++			  symbolS *lsym;
+++
+++			  new_stretch += init_trampoline_frag (tf);
+++			  offset = fragP->fr_fix; /* Where to assemble the j insn.  */
+++			  lsym = fragP->fr_symbol;
+++			  fP = fixP->fx_frag;
+++			  /* Assemble a jump to the target label here.  */
+++			  tinsn_init (&insn);
+++			  insn.insn_type = ITYPE_INSN;
+++			  insn.opcode = xtensa_j_opcode;
+++			  insn.ntok = 1;
+++			  set_expr_symbol_offset (&insn.tok[0], lsym, offset);
+++			  fmt = xg_get_single_format (xtensa_j_opcode);
+++			  tinsn_to_slotbuf (fmt, 0, &insn, trampoline_slotbuf);
+++			  xtensa_format_set_slot (isa, fmt, 0, trampoline_buf, trampoline_slotbuf);
+++			  xtensa_insnbuf_to_chars (isa, trampoline_buf, (unsigned char *)fragP->fr_literal + offset, 3);
+++			  fragP->fr_fix += 3;
+++			  fragP->fr_var -= 3;
+++			  /* Add a fix-up for the original j insn.  */
+++			  newfixP = fix_new (fP, fixP->fx_where, fixP->fx_size, lsym, fragP->fr_fix - 3, TRUE, fixP->fx_r_type);
+++			  newfixP->fx_no_overflow = 1;
+++			  newfixP->tc_fix_data.X_add_symbol = lsym;
+++			  newfixP->tc_fix_data.X_add_number = offset;
+++			  newfixP->tc_fix_data.slot = slot;
+++			  /* Move the fix-up from the original j insn to this one.  */
+++			  fixP->fx_frag = fragP;
+++			  fixP->fx_where = fragP->fr_fix - 3;
+++			  fixP->tc_fix_data.slot = 0;
+++			  /* Adjust the jump around this trampoline (if present).  */
+++			  if (tf->fixP != NULL)
+++			    {
+++			      tf->fixP->fx_offset += 3;
+++			    }
+++			  new_stretch += 3;
+++			  fragP->tc_frag_data.relax_seen = FALSE; /* Need another pass.  */
+++			  /* Do we have room for more?  */
+++			  if (fragP->fr_var < 3)
+++			    { /* No, convert to fill.  */
+++			      frag_wane (fragP);
+++			      fragP->fr_subtype = 0;
+++			      /* Remove from the trampoline_list.  */
+++			      prev->next = tf->next;
+++			      break;
+++			    }
+++			}
+++		    }
+++                }
+++            }
+++        }
+++      break;
+++
++     default:
++       as_bad (_("bad relaxation state"));
++     }
++@@ -9146,6 +9472,200 @@ bytes_to_stretch (fragS *this_frag,
++ }
++ 
++ 
+++static struct trampoline_frag *
+++search_trampolines (TInsn *tinsn, fragS *fragP, bfd_boolean unreachable_only)
+++{
+++  struct trampoline_seg *ts = find_trampoline_seg (now_seg);
+++  struct trampoline_frag *tf = (ts) ? ts->trampoline_list.next : NULL;
+++  struct trampoline_frag *best_tf = NULL;
+++  int best_delta = 0;
+++  int best_addr = 0;
+++  symbolS *sym = tinsn->tok[0].X_add_symbol;
+++  offsetT target = S_GET_VALUE (sym) + tinsn->tok[0].X_add_number;
+++  offsetT addr = fragP->fr_address;
+++  offsetT lower = (addr < target) ? addr : target;
+++  offsetT upper = (addr > target) ? addr : target;
+++  int delta = upper - lower;
+++  offsetT midpoint = lower + delta / 2;
+++  int this_delta = -1;
+++  int this_addr = -1;
+++
+++  if (delta > 2 * J_RANGE)
+++    {
+++      /* One trampoline won't do; we need multiple.
+++	 Choose the farthest trampoline that's still in range of the original
+++	 and let a later pass finish the job.  */
+++      for ( ; tf; tf = tf->next)
+++	{
+++	  int next_addr = (tf->next) ? tf->next->fragP->fr_address + tf->next->fragP->fr_fix : 0;
+++
+++	  this_addr = tf->fragP->fr_address + tf->fragP->fr_fix;
+++	  if (lower == addr)
+++	    {
+++	      /* Forward jump.  */
+++	      if (this_addr - addr < J_RANGE)
+++		break;
+++	    }
+++	  else
+++	    {
+++	      /* Backward jump.  */
+++	      if (next_addr == 0 || addr - next_addr > J_RANGE)
+++		break;
+++	    }
+++	  if (abs (addr - this_addr) < J_RANGE)
+++	    return tf;
+++
+++	  return NULL;
+++	}
+++    }
+++  for ( ; tf; tf = tf->next)
+++    {
+++      this_addr = tf->fragP->fr_address + tf->fragP->fr_fix;
+++      this_delta = abs (this_addr - midpoint);
+++      if (unreachable_only && tf->needs_jump_around)
+++	continue;
+++      if (!best_tf || this_delta < best_delta)
+++        {
+++	  best_tf = tf;
+++	  best_delta = this_delta;
+++	  best_addr = this_addr;
+++        }
+++    }
+++
+++  if (best_tf &&
+++      best_delta < J_RANGE &&
+++      abs(best_addr - lower) < J_RANGE &&
+++      abs(best_addr - upper) < J_RANGE)
+++    return best_tf;
+++
+++  return NULL; /* No suitable trampoline found.  */
+++}
+++
+++
+++static struct trampoline_frag *
+++get_best_trampoline (TInsn *tinsn, fragS *fragP)
+++{
+++  struct trampoline_frag *tf = NULL;
+++
+++  tf = search_trampolines (tinsn, fragP, TRUE); /* Try unreachable first.  */
+++
+++  if (tf == NULL)
+++    tf = search_trampolines (tinsn, fragP, FALSE); /* Try ones needing a jump-around, too.  */
+++
+++  return tf;
+++}
+++
+++
+++static void
+++check_and_update_trampolines (void)
+++{
+++  struct trampoline_seg *ts = find_trampoline_seg (now_seg);
+++  struct trampoline_frag *tf = ts->trampoline_list.next;
+++  struct trampoline_frag *prev = &ts->trampoline_list;
+++
+++  for ( ; tf; prev = tf, tf = tf->next)
+++    {
+++      if (tf->fragP->fr_var < 3)
+++	{
+++	  frag_wane (tf->fragP);
+++	  prev->next = tf->next;
+++	  tf->fragP = NULL;
+++	}
+++    }
+++}
+++
+++
+++static int
+++init_trampoline_frag (struct trampoline_frag *trampP)
+++{
+++  fragS *fp = trampP->fragP;
+++  int growth = 0;
+++
+++  if (fp->fr_fix == 0)
+++    {
+++      symbolS *lsym;
+++      char label[10 + 2 * sizeof(fp)];
+++      sprintf (label, ".L0_TR_%p", fp);
+++
+++      lsym = (symbolS *)local_symbol_make (label, now_seg, 0, fp);
+++      fp->fr_symbol = lsym;
+++      if (trampP->needs_jump_around)
+++        {
+++	  /* Add a jump around this block of jumps, in case
+++	     control flows into this block.  */
+++	  fixS *fixP;
+++	  TInsn insn;
+++	  xtensa_format fmt;
+++	  xtensa_isa isa = xtensa_default_isa;
+++
+++	  fp->tc_frag_data.is_insn = 1;
+++	  /* Assemble a jump insn.  */
+++	  tinsn_init (&insn);
+++	  insn.insn_type = ITYPE_INSN;
+++	  insn.opcode = xtensa_j_opcode;
+++	  insn.ntok = 1;
+++	  set_expr_symbol_offset (&insn.tok[0], lsym, 3);
+++	  fmt = xg_get_single_format (xtensa_j_opcode);
+++	  tinsn_to_slotbuf (fmt, 0, &insn, trampoline_slotbuf);
+++	  xtensa_format_set_slot (isa, fmt, 0, trampoline_buf, trampoline_slotbuf);
+++	  xtensa_insnbuf_to_chars (isa, trampoline_buf, (unsigned char *)fp->fr_literal, 3);
+++	  fp->fr_fix += 3;
+++	  fp->fr_var -= 3;
+++	  growth = 3;
+++	  fixP = fix_new (fp, 0, 3, lsym, 3, TRUE, BFD_RELOC_XTENSA_SLOT0_OP);
+++	  trampP->fixP = fixP;
+++        }
+++    }
+++  return growth;
+++}
+++
+++
+++static int
+++add_jump_to_trampoline (struct trampoline_frag *trampP, fragS *origfrag)
+++{
+++  fragS *tramp = trampP->fragP;
+++  fixS *fixP;
+++  int offset = tramp->fr_fix; /* Where to assemble the j insn.  */
+++  TInsn insn;
+++  symbolS *lsym;
+++  symbolS *tsym;
+++  int toffset;
+++  xtensa_format fmt;
+++  xtensa_isa isa = xtensa_default_isa;
+++  int growth = 0;
+++
+++  lsym = tramp->fr_symbol;
+++  /* Assemble a jump to the target label in the trampoline frag.  */
+++  tsym = origfrag->tc_frag_data.slot_symbols[0];
+++  toffset = origfrag-> tc_frag_data.slot_offsets[0];
+++  tinsn_init (&insn);
+++  insn.insn_type = ITYPE_INSN;
+++  insn.opcode = xtensa_j_opcode;
+++  insn.ntok = 1;
+++  set_expr_symbol_offset (&insn.tok[0], tsym, toffset);
+++  fmt = xg_get_single_format (xtensa_j_opcode);
+++  tinsn_to_slotbuf (fmt, 0, &insn, trampoline_slotbuf);
+++  xtensa_format_set_slot (isa, fmt, 0, trampoline_buf, trampoline_slotbuf);
+++  xtensa_insnbuf_to_chars (isa, trampoline_buf, (unsigned char *)tramp->fr_literal + offset, 3);
+++  tramp->fr_fix += 3;
+++  tramp->fr_var -= 3;
+++  growth = 3;
+++  /* add a fix-up for the trampoline jump.  */
+++  fixP = fix_new (tramp, tramp->fr_fix - 3, 3, tsym, toffset, TRUE, BFD_RELOC_XTENSA_SLOT0_OP);
+++  /* Modify the jump at the start of this trampoline to point past the newly-added jump.  */
+++  fixP = trampP->fixP;
+++  if (fixP)
+++    fixP->fx_offset += 3;
+++  /* Modify the original j to point here.  */
+++  origfrag->tc_frag_data.slot_symbols[0] = lsym;
+++  origfrag->tc_frag_data.slot_offsets[0] = tramp->fr_fix - 3;
+++  /* If trampoline is full, remove it from the list.  */
+++  check_and_update_trampolines ();
+++
+++  return growth;
+++}
+++
+++
++ static long
++ relax_frag_immed (segT segP,
++ 		  fragS *fragP,
++@@ -9284,6 +9804,37 @@ relax_frag_immed (segT segP,
++   if (negatable_branch && istack.ninsn > 1)
++     update_next_frag_state (fragP);
++ 
+++  /* If last insn is a jump, and it cannot reach its target, try to find a trampoline.  */
+++  if (istack.ninsn > 2 &&
+++      istack.insn[istack.ninsn - 1].insn_type == ITYPE_LABEL &&
+++      istack.insn[istack.ninsn - 2].insn_type == ITYPE_INSN &&
+++      istack.insn[istack.ninsn - 2].opcode == xtensa_j_opcode)
+++    {
+++      TInsn *jinsn = &istack.insn[istack.ninsn - 2];
+++
+++      if (!xg_symbolic_immeds_fit (jinsn, segP, fragP, fragP->fr_offset, total_text_diff))
+++	{
+++	  struct trampoline_frag *tf = get_best_trampoline (jinsn, fragP);
+++
+++	  if (tf)
+++	    {
+++	      this_text_diff += init_trampoline_frag (tf);
+++	      this_text_diff += add_jump_to_trampoline (tf, fragP);
+++	    }
+++	  else
+++	    {
+++	      /* If target symbol is undefined, assume it will reach once linked.  */
+++	      expressionS *exp = &istack.insn[istack.ninsn - 2].tok[0];
+++
+++	      if (exp->X_op == O_symbol && S_IS_DEFINED (exp->X_add_symbol))
+++		{
+++		  as_bad_where (fragP->fr_file, fragP->fr_line,
+++		    _("jump target out of range; no usable trampoline found"));
+++		}
+++	    }
+++	}
+++    }
+++
++   return this_text_diff;
++ }
++ 
++@@ -9404,6 +9955,9 @@ md_convert_frag (bfd *abfd ATTRIBUTE_UNUSED, segT sec, fragS *fragp)
++       else
++ 	as_bad (_("invalid relaxation fragment result"));
++       break;
+++
+++    case RELAX_TRAMPOLINE:
+++      break;
++     }
++ 
++   fragp->fr_var = 0;
++diff --git a/gas/config/tc-xtensa.h b/gas/config/tc-xtensa.h
++index 0bf1240..4672bc6 100644
++--- a/gas/config/tc-xtensa.h
+++++ b/gas/config/tc-xtensa.h
++@@ -180,6 +180,11 @@ enum xtensa_relax_statesE
++      prevent the linker from changing the size of any frag between the
++      section start and the org frag.  */
++ 
+++  RELAX_TRAMPOLINE,
+++  /* Every few thousand frags, we insert one of these, just in case we may
+++     need some space for a trampoline (jump to a jump) because the function
+++     has gotten too big. If not needed, it disappears. */
+++
++   RELAX_NONE
++ };
++ 
++diff --git a/gas/doc/as.texinfo b/gas/doc/as.texinfo
++index 5c8b000..dc97175 100644
++--- a/gas/doc/as.texinfo
+++++ b/gas/doc/as.texinfo
++@@ -543,6 +543,7 @@ gcc(1), ld(1), and the Info entries for @file{binutils} and @file{ld}.
++  [@b{--[no-]target-align}] [@b{--[no-]longcalls}]
++  [@b{--[no-]transform}]
++  [@b{--rename-section} @var{oldname}=@var{newname}]
+++ [@b{--[no-]trampolines}]
++ @end ifset
++ 
++ @ifset Z80
++diff --git a/gas/doc/c-xtensa.texi b/gas/doc/c-xtensa.texi
++index 406e635..e763e36 100644
++--- a/gas/doc/c-xtensa.texi
+++++ b/gas/doc/c-xtensa.texi
++@@ -91,6 +91,16 @@ instruction operands to be errors.
++ @kindex --rename-section
++ Rename the @var{oldname} section to @var{newname}.  This option can be used
++ multiple times to rename multiple sections.
+++
+++ at item --trampolines | --no-trampolines
+++ at kindex --trampolines
+++ at kindex --no-trampolines
+++Enable or disable transformation of jump instructions to allow jumps
+++across a greater range of addresses.  @xref{Xtensa Jump Relaxation,
+++,Jump Trampolines}.  This option should be used when jump targets can
+++potentially be out of range.  In the absence of such jumps this option
+++does not affect code size or performance.  The default is
+++ at samp{--trampolines}.
++ @end table
++ 
++ @c man end
++@@ -311,6 +321,7 @@ fields.
++ @menu
++ * Xtensa Branch Relaxation::        Relaxation of Branches.
++ * Xtensa Call Relaxation::          Relaxation of Function Calls.
+++* Xtensa Jump Relaxation::          Relaxation of Jumps.
++ * Xtensa Immediate Relaxation::     Relaxation of other Immediate Fields.
++ @end menu
++ 
++@@ -398,6 +409,87 @@ and some of the calls are out of range, function call relaxation can be
++ enabled using the @samp{--longcalls} command-line option or the
++ @code{longcalls} directive (@pxref{Longcalls Directive, ,longcalls}).
++ 
+++ at node Xtensa Jump Relaxation
+++ at subsection Jump Relaxation
+++ at cindex relaxation of jump instructions
+++ at cindex jump instructions, relaxation
+++
+++Jump instruction may require relaxation because the Xtensa jump instruction
+++(@code{J}) provide a PC-relative offset of only 128 Kbytes in either
+++direction.  One option is to use jump long (@code{J.L}) instruction, which
+++depending on jump distance may be assembled as jump (@code{J}) or indirect
+++jump (@code{JX}).  However it needs a free register.  When there's no spare
+++register it is possible to plant intermediate jump sites (trampolines)
+++between the jump instruction and its target.  These sites may be located in
+++areas unreachable by normal code execution flow, in that case they only
+++contain intermediate jumps, or they may be inserted in the middle of code
+++block, in which case there's an additional jump from the beginning of the
+++trampoline to the instruction past its end.  So, for example:
+++
+++ at smallexample
+++ at group
+++    j 1f
+++    ...
+++    retw
+++    ...
+++    mov a10, a2
+++    call8 func
+++    ...
+++1:
+++    ...
+++ at end group
+++ at end smallexample
+++
+++might be relaxed to:
+++
+++ at smallexample
+++ at group
+++    j .L0_TR_1
+++    ...
+++    retw
+++.L0_TR_1:
+++    j 1f
+++    ...
+++    mov a10, a2
+++    call8 func
+++    ...
+++1:
+++    ...
+++ at end group
+++ at end smallexample
+++
+++or to:
+++
+++ at smallexample
+++ at group
+++    j .L0_TR_1
+++    ...
+++    retw
+++    ...
+++    mov a10, a2
+++    j .L0_TR_0
+++.L0_TR_1:
+++    j 1f
+++.L0_TR_0:
+++    call8 func
+++    ...
+++1:
+++    ...
+++ at end group
+++ at end smallexample
+++
+++The Xtensa assempler uses trampolines with jump around only when it cannot
+++find suitable unreachable trampoline.  There may be multiple trampolines
+++between the jump instruction and its target.
+++
+++This relaxation does not apply to jumps to undefined symbols, assuming they
+++will reach their targets once resolved.
+++
+++Jump relaxation is enabled by default because it does not affect code size
+++or performance while the code itself is small.  This relaxation may be
+++disabled completely with @samp{--no-trampolines} or @samp{--no-transform}
+++command-line options (@pxref{Xtensa Options, ,Command Line Options}).
+++
++ @node Xtensa Immediate Relaxation
++ @subsection Other Immediate Field Relaxation
++ @cindex immediate fields, relaxation
++diff --git a/gas/frags.c b/gas/frags.c
++index 5f68480..e14099d 100644
++--- a/gas/frags.c
+++++ b/gas/frags.c
++@@ -24,6 +24,20 @@
++ 
++ extern fragS zero_address_frag;
++ extern fragS predefined_address_frag;
+++
+++static int totalfrags;
+++
+++int
+++get_frag_count (void)
+++{
+++  return totalfrags;
+++}
+++
+++void
+++clear_frag_count (void)
+++{
+++  totalfrags = 0;
+++}
++ 
++ /* Initialization for frag routines.  */
++ 
++@@ -70,6 +84,7 @@ frag_alloc (struct obstack *ob)
++   ptr = (fragS *) obstack_alloc (ob, SIZEOF_STRUCT_FRAG);
++   obstack_alignment_mask (ob) = oalign;
++   memset (ptr, 0, SIZEOF_STRUCT_FRAG);
+++  totalfrags++;
++   return ptr;
++ }
++ 
++diff --git a/gas/frags.h b/gas/frags.h
++index 319898f..2f9e1b5 100644
++--- a/gas/frags.h
+++++ b/gas/frags.h
++@@ -155,4 +155,7 @@ char *frag_var (relax_stateT type,
++ 
++ bfd_boolean frag_offset_fixed_p (const fragS *, const fragS *, offsetT *);
++ 
+++int get_frag_count (void);
+++void clear_frag_count (void);
+++
++ #endif /* FRAGS_H */
++diff --git a/gas/testsuite/gas/xtensa/all.exp b/gas/testsuite/gas/xtensa/all.exp
++index 2b2c294..3683b78 100644
++--- a/gas/testsuite/gas/xtensa/all.exp
+++++ b/gas/testsuite/gas/xtensa/all.exp
++@@ -98,6 +98,7 @@ if [istarget xtensa*-*-*] then {
++     run_dump_test "pcrel"
++     run_dump_test "weak-call"
++     run_dump_test "jlong"
+++    run_dump_test "trampoline"
++ }
++ 
++ if [info exists errorInfo] then {
++diff --git a/gas/testsuite/gas/xtensa/trampoline.d b/gas/testsuite/gas/xtensa/trampoline.d
++new file mode 100644
++index 0000000..b4f65dc
++--- /dev/null
+++++ b/gas/testsuite/gas/xtensa/trampoline.d
++@@ -0,0 +1,26 @@
+++#as:
+++#objdump: -d
+++#name: trampolines relaxation
+++
+++.*: +file format .*xtensa.*
+++#...
+++.*0:.*j.0x1194c
+++.*3:.*j.0x1194f
+++.*6:.*j.0x11952
+++.*9:.*j.0x1d4e4
+++#...
+++.*11949:.*j.0x11955
+++.*1194c:.*j.0x24a0e
+++.*1194f:.*j.0x24a0e
+++.*11952:.*j.0x24a11
+++#...
+++.*1d4e1:.*j.0x1d4e7
+++.*1d4e4:.*j.0x33462
+++#...
+++.*24a0e:.*j.0x24a0e
+++.*24a11:.*j.0x24a11
+++#...
+++.*3345f:.*ret
+++.*33462:.*j.0x49407
+++#...
+++.*49407:.*j.0x49407
++diff --git a/gas/testsuite/gas/xtensa/trampoline.s b/gas/testsuite/gas/xtensa/trampoline.s
++new file mode 100644
++index 0000000..259a3bb
++--- /dev/null
+++++ b/gas/testsuite/gas/xtensa/trampoline.s
++@@ -0,0 +1,21 @@
+++	.text
+++	j	1f
+++	j	1f
+++	j	2f
+++	j	3f
+++	.rep	25000
+++99:
+++	and	a2, a2, a3
+++	bne	a2, a3, 99b
+++	.endr
+++1:
+++	j	1b
+++2:
+++	j	2b
+++
+++	.rep	25000
+++	and	a2, a2, a3
+++	_ret
+++	.endr
+++3:
+++	j	3b
++-- 
++1.8.1.4
 +
 -- 
-1.8.3.2
+1.8.1.4
