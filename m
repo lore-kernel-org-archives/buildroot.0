@@ -1,43 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Mar 2014 20:53:38 +0100
-Subject: [Buildroot] [git commit] manual/adding-packages-generic.txt: fix
-	capitalization in titles of chapters
-Message-ID: <20140323195541.F34719C1CD@busybox.osuosl.org>
+Date: Sun, 23 Mar 2014 20:54:34 +0100
+Subject: [Buildroot] [git commit] manual/adding-packages-tips.txt: reword
+	part about package name
+Message-ID: <20140323195542.0E3529C1CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=66ffcfb17555a13fa39b28edd3765f1eeadc660c
+commit: http://git.buildroot.net/buildroot/commit/?id=74af345cff8a98bbabad6b33ef124a1fe2eb1a99
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/adding-packages-generic.txt |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ docs/manual/adding-packages-tips.txt |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index 04e589f..366b896 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -11,7 +11,7 @@ system is based on hand-written Makefiles or shell scripts.
+diff --git a/docs/manual/adding-packages-tips.txt b/docs/manual/adding-packages-tips.txt
+index 73c25be..ceaba8e 100644
+--- a/docs/manual/adding-packages-tips.txt
++++ b/docs/manual/adding-packages-tips.txt
+@@ -31,7 +31,7 @@ using the following rules:
+   +BR2_PACKAGE_FOO_BAR_BOO+);
  
- [[generic-package-tutorial]]
+ * the +*.mk+ file variable prefix is the upper case _package name_
+-  `.` and `-` characters substituted with `_` (e.g.:
++  with `.` and `-` characters substituted with `_` (e.g.:
+   +FOO_BAR_BOO_VERSION+).
  
--+generic-package+ Tutorial
-++generic-package+ tutorial
- ^^^^^^^^^^^^^^^^^^^^^^^^^^
  
- ------------------------------
-@@ -159,7 +159,7 @@ Makefile code necessary to make your package working.
- 
- [[generic-package-reference]]
- 
--+generic-package+ Reference
-++generic-package+ reference
- ^^^^^^^^^^^^^^^^^^^^^^^^^^^
- 
- There are two variants of the generic target. The +generic-package+ macro is
