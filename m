@@ -1,41 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Mar 2014 15:26:14 +0100
-Subject: [Buildroot] [git commit] linux-headers: bump 3.{4, 10,
-	13}.x stable versions
-Message-ID: <20140324142757.17C159C330@busybox.osuosl.org>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 24 Mar 2014 14:38:11 +0000
+Subject: [Buildroot] [PATCH] cifs-utils: fix building on static
+Message-ID: <1395671891-64769-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7aa23d3e76fd4f259c44b3b61981ec2ba3416c2d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Disable position independent executables when building on static.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes:
+   http://autobuild.buildroot.net/results/bb0/bb00db98477f0f81c95ac1830ef3649b30963416/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/linux-headers/Config.in.host |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ package/cifs-utils/cifs-utils.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index a3f26cd..f55f833 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -151,13 +151,13 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.2.55"	if BR2_KERNEL_HEADERS_3_2
--	default "3.4.83"	if BR2_KERNEL_HEADERS_3_4
-+	default "3.4.84"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
- 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
- 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
- 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
--	default "3.10.33"	if BR2_KERNEL_HEADERS_3_10
-+	default "3.10.34"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
- 	default "3.12.14"	if BR2_KERNEL_HEADERS_3_12
--	default "3.13.6"	if BR2_KERNEL_HEADERS_3_13
-+	default "3.13.7"	if BR2_KERNEL_HEADERS_3_13
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
+index 409ea53..3f4c71a 100644
+--- a/package/cifs-utils/cifs-utils.mk
++++ b/package/cifs-utils/cifs-utils.mk
+@@ -10,6 +10,10 @@ CIFS_UTILS_SITE    = http://ftp.samba.org/pub/linux-cifs/cifs-utils
+ CIFS_UTILS_LICENSE = GPLv3+
+ CIFS_UTILS_LICENSE_FILES = COPYING
+ 
++ifeq ($(BR2_PREFER_STATIC_LIB),y)
++CIFS_UTILS_CONF_OPT += --disable-pie
++endif
++
+ define CIFS_UTILS_NO_WERROR
+ 	$(SED) 's/-Werror//' $(@D)/Makefile.in
+ endef
+-- 
+1.7.1
