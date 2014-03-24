@@ -1,35 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 24 Mar 2014 20:07:10 +0100
-Subject: [Buildroot] [PATCH] lttng-babeltrace: fix typo in license
-	information
-Message-ID: <1395688030-6266-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Bernd Kuhls <berndkuhls@hotmail.com>
+Date: Mon, 24 Mar 2014 20:29:45 +0100
+Subject: [Buildroot] =?utf-8?q?=5BPATCH_1/1=5D_host-mtools=3A_Fix_build_fa?=
+	=?utf-8?q?ilure_introduced_by_libiconv_dependency?=
+Message-ID: <BLU0-SMTP166C506BEDB8CDC67D076CFD97A0@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
+Fixes http://autobuild.buildroot.net/results/8ff/8ff7fc94cc3e54f5608f7b4d2e6ccba5fd8e4177/
 
-  http://autobuild.buildroot.org/results/c22/c229130ceab6db9d8b7f373716de9ae4b15f45eb/build-end.log
+Also disable parallel make because "make install" is broken, see
+http://lists.openembedded.org/pipermail/openembedded-commits/2011-October/134396.html
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
 ---
- package/lttng-babeltrace/lttng-babeltrace.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/mtools/mtools.mk |    5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/lttng-babeltrace/lttng-babeltrace.mk b/package/lttng-babeltrace/lttng-babeltrace.mk
-index d54400b..84b1f60 100644
---- a/package/lttng-babeltrace/lttng-babeltrace.mk
-+++ b/package/lttng-babeltrace/lttng-babeltrace.mk
-@@ -8,7 +8,7 @@ LTTNG_BABELTRACE_SITE    = http://lttng.org/files/babeltrace/
- LTTNG_BABELTRACE_VERSION = 1.2.1
- LTTNG_BABELTRACE_SOURCE  = babeltrace-$(LTTNG_BABELTRACE_VERSION).tar.bz2
- LTTNG_BABELTRACE_LICENSE = MIT; LGPL2.1 for include/babeltrace/list.h; GPLv2+ for test code
--LTTNG_BABELTRACE_LICENSE_FILES = mit-license.txt glp-2.0.txt LICENSE
-+LTTNG_BABELTRACE_LICENSE_FILES = mit-license.txt gpl-2.0.txt LICENSE
+diff --git a/package/mtools/mtools.mk b/package/mtools/mtools.mk
+index 8649325..9dc72f3 100644
+--- a/package/mtools/mtools.mk
++++ b/package/mtools/mtools.mk
+@@ -16,7 +16,12 @@ MTOOLS_CONF_OPT = --without-x
+ ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ MTOOLS_DEPENDENCIES += libiconv
+ MTOOLS_CONF_ENV += LIBS=-liconv
++# We have no host dependencies
++HOST_MTOOLS_DEPENDENCIES =
+ endif
  
- LTTNG_BABELTRACE_DEPENDENCIES = popt util-linux libglib2
- 
++#?Package does not build in parallel due to improper make rules
++MTOOLS_MAKE = $(MAKE1)
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
-1.8.3.2
+1.7.10.4
