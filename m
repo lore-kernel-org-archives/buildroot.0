@@ -1,19 +1,22 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 24 Mar 2014 15:17:58 +0100
-Subject: [Buildroot] [PATCH] ecryptfs-utils: bump to version 104
-In-Reply-To: <1395657585-25416-1-git-send-email-marcin@bis.org.pl> (Marcin
- Bis's message of "Mon, 24 Mar 2014 11:39:45 +0100")
-References: <1395657585-25416-1-git-send-email-marcin@bis.org.pl>
-Message-ID: <87d2hbu1d5.fsf@dell.be.48ers.dk>
+Date: Mon, 24 Mar 2014 15:26:02 +0100
+Subject: [Buildroot] [PATCH] openssh: security bump to version 6.6p1
+In-Reply-To: <1395661670-26641-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 24 Mar 2014 08:47:50 -0300")
+References: <1395661670-26641-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <878urzu0zp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Marcin" == Marcin Bis <marcin@bis.org.pl> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > Signed-off-by: Marcin Bis <marcin@bis.org.pl>
+ > Fixes CVE-2014-2532.
+ > SUSv3 deprecation already handled upstream.
+
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
 Committed, thanks.
 
