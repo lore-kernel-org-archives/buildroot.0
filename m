@@ -1,27 +1,50 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 24 Mar 2014 15:27:35 +0100
-Subject: [Buildroot] [PATCH 1/1] systemd: needs kernel headers >= 3.0
-In-Reply-To: <1395666568-21604-1-git-send-email-eric.le.bihan.dev@free.fr>
- (Eric Le Bihan's message of "Mon, 24 Mar 2014 14:09:28 +0100")
-References: <1395666568-21604-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <87zjkfsmco.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 24 Mar 2014 15:18:08 +0100
+Subject: [Buildroot] [git commit] openssh: security bump to version 6.6p1
+Message-ID: <20140324142757.0F6C39C044@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Eric" == Eric Le Bihan <eric.le.bihan.dev@free.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=53587a3192aeaa72cf43f703ccfebdfd77998e1f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Systemd requires at least Linux headers 3.0 because it uses:
- > - setns(2) syscall, introduced in 3.0.
- > - IFLA_GROUP from if_link.h, introduced in 2.6.39.
+Fixes CVE-2014-2532.
+SUSv3 deprecation already handled upstream.
 
- > Fixes http://autobuild.buildroot.net/results/098/09866da023d527b3c228a98f1fde104e780e1883/
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/openssh/openssh.mk |   12 +-----------
+ 1 files changed, 1 insertions(+), 11 deletions(-)
 
- > Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index f5f334e..e35ea10 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENSSH_VERSION = 6.5p1
++OPENSSH_VERSION = 6.6p1
+ OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
+ OPENSSH_CONF_ENV = LD="$(TARGET_CC)" LDFLAGS="$(TARGET_CFLAGS)"
+ OPENSSH_CONF_OPT = --disable-lastlog --disable-utmp \
+@@ -30,14 +30,4 @@ define OPENSSH_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S50sshd
+ endef
+ 
+-# Replace deprecated bcopy/bzero with memset/memcpy
+-define OPENSSH_REPLACE_SUSV3_DEPRECATED
+-	for src in `find $(@D) -name \*.c`; do \
+-		$(SED) "s/bzero(\(.*,\)/memset(\1 0, /" $${src} ;\
+-		$(SED) "s/bcopy(\(.*,\) \(.*,\)/memcpy(\2 \1/" $${src} ;\
+-	done
+-endef
+-
+-OPENSSH_POST_PATCH_HOOKS += OPENSSH_REPLACE_SUSV3_DEPRECATED
+-
+ $(eval $(autotools-package))
