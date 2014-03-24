@@ -1,40 +1,40 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Mon, 24 Mar 2014 00:10:00 +0100
-Subject: [Buildroot] [PATCH v4] bluez5_utils: new package
-In-Reply-To: <532C6DDF.2090606@zacarias.com.ar>
-References: <532B4158.6070602@trzebnica.net>
- <1395395632-15685-1-git-send-email-marcin@bis.org.pl>
- <532C1D9A.8090109@trzebnica.net> <532C25A2.90907@zacarias.com.ar>
- <532C6CC0.4070608@trzebnica.net> <532C6DDF.2090606@zacarias.com.ar>
-Message-ID: <532F69C8.5060202@trzebnica.net>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Sun, 23 Mar 2014 20:47:57 -0400
+Subject: [Buildroot] Different site methods for the main package and patches
+Message-ID: <CA+-urNQrPff3iTDGdWwYvbhLPXwCrqZgVA91qQS_RgM66VG1eQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+I've run into an issue where I'd like to retrieve a package using git
+and then patch it using a diff file from another site. In my case, the
+package is the Linux kernel.
 
-Hi Gustavo, Marcin,
+This is possible to reproduce using the raspberrypi_defconfig and
+adding the BR2_LINUX_KERNEL_PATCH line below. Here are the relevant
+lines:
 
-> On 03/21/2014 01:45 PM, Jerzy Grzegorek wrote:
->
->>> Hmm? bluez5 > bluez, and we care about visual name there (how it shows
->>> up in *config).
->> Don't compare bluez5 with bluez.
->> Compare bluez5_utils with bluez_utils.
->>
->> Regards,
->> Jerzy
-> I know how sort works, i'm talking of common sense in this case.
-> python is before python3, samba is before samba4 and so on, so in the
-> bluez case the same would hold up, it's about context, not sort with lang=C.
-> Regards.
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_CUSTOM_GIT=y
+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/raspberrypi/linux.git"
+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="3bff11d4d4b8dc28cb9ce81449c989466ba27198"
+BR2_LINUX_KERNEL_PATCH="http://download.filesystems.org/unionfs/unionfs-2.x-latest/unionfs-2.5.12_for_3.10.21.diff.gz"
 
-Gustavo:  Ah, yes, right. Sorry for this and thanks for your clarification.
-Marcin:  Sorry for the noise. Just don't take my comment into consideration.
+The call that fails is in package/pkg-download.mk in DOWNLOAD_INNER.
+There's a test whether LINUX_SITE_METHOD is defined (which it is) and
+to use it for the $scheme. This is correct to download the kernel, but
+incorrect when going through the kernel patches. If I could undefine
+LINUX_SITE_METHOD, my use case would work since the method would be
+determined via the URI, but obviously other use cases would break.
 
-Regards,
-Jerzy
+For patches, I'd almost think that the <package>_SITE_METHOD shouldn't
+be used at all, since multiple patches could be specified that come
+from different places. I don't know what the ramifications of that
+change would be, though, or if there's a simpler solution.
 
->
->
+Any ideas?
+
+Thanks,
+Frank
