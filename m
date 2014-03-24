@@ -1,36 +1,37 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 24 Mar 2014 20:20:09 +0000 (UTC)
-Subject: [Buildroot] [Bug 6986] Make legal-info fails on uboot versions
-	before 2014.01
-In-Reply-To: <bug-6986-163@https.bugs.busybox.net/>
-References: <bug-6986-163@https.bugs.busybox.net/>
-Message-ID: <20140324202009.ECB349C0A8@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 24 Mar 2014 21:14:57 +0100
+Subject: [Buildroot] [git commit] lttng-babeltrace: fix typo in license
+	information
+Message-ID: <20140324202034.D13A29C0FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6986
+commit: http://git.buildroot.net/buildroot/commit/?id=8b2bed0671bb780c0197fa623ee1c1e4705e2e29
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Fixes:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |ASSIGNED
+  http://autobuild.buildroot.org/results/c22/c229130ceab6db9d8b7f373716de9ae4b15f45eb/build-end.log
 
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org> 2014-03-24 20:20:09 UTC ---
-Hi,
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/lttng-babeltrace/lttng-babeltrace.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-It would indeed be nice to handle this more gracefully, but that's
-unfortunately not currently possible with the legal-info infrastructure.
-
-The fact that it fails when the license file isn't available is quite nice for
-testing, as the autobuilders very soon informs us of the failure (mistyped
-license file, a package with a license change in a new version), but for the
-end user a warning would be nicer.
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+diff --git a/package/lttng-babeltrace/lttng-babeltrace.mk b/package/lttng-babeltrace/lttng-babeltrace.mk
+index d54400b..84b1f60 100644
+--- a/package/lttng-babeltrace/lttng-babeltrace.mk
++++ b/package/lttng-babeltrace/lttng-babeltrace.mk
+@@ -8,7 +8,7 @@ LTTNG_BABELTRACE_SITE    = http://lttng.org/files/babeltrace/
+ LTTNG_BABELTRACE_VERSION = 1.2.1
+ LTTNG_BABELTRACE_SOURCE  = babeltrace-$(LTTNG_BABELTRACE_VERSION).tar.bz2
+ LTTNG_BABELTRACE_LICENSE = MIT; LGPL2.1 for include/babeltrace/list.h; GPLv2+ for test code
+-LTTNG_BABELTRACE_LICENSE_FILES = mit-license.txt glp-2.0.txt LICENSE
++LTTNG_BABELTRACE_LICENSE_FILES = mit-license.txt gpl-2.0.txt LICENSE
+ 
+ LTTNG_BABELTRACE_DEPENDENCIES = popt util-linux libglib2
+ 
