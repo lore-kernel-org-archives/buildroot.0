@@ -1,45 +1,25 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 24 Mar 2014 19:36:47 +0000 (UTC)
-Subject: [Buildroot] [Bug 6986] New: Make legal-info fails on uboot versions
- before 2014.01
-Message-ID: <bug-6986-163@https.bugs.busybox.net/>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 24 Mar 2014 21:15:01 +0100
+Subject: [Buildroot] [PATCH] lttng-babeltrace: fix typo in license
+	information
+In-Reply-To: <1395688030-6266-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Mon, 24 Mar 2014 20:07:10 +0100")
+References: <1395688030-6266-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87vbv3s69m.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6986
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-           Summary: Make legal-info fails on uboot versions before 2014.01
-           Product: buildroot
-           Version: 2014.02
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: mstarr at hedonline.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+ > Fixes:
+ >   http://autobuild.buildroot.org/results/c22/c229130ceab6db9d8b7f373716de9ae4b15f45eb/build-end.log
 
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-In buildroot 2014.02, selecting U-Boot version as custom and then entering a
-version before 2014.01 results in 'make legal-info' failing with the following
-message:
-
-build/uboot-2013.07/Licenses/gpl-2.0.txt: No such file or directory
-
-This appears to be a change made in the following commit:
-http://git.buildroot.net/buildroot/commit/boot/uboot/uboot.mk?id=eb9b1f50281b4e0c3363923d461d57a165e8be15
-
-Can this be changed to look for the COPYING file at the root of the uboot
-directory for versions before 2014.01 and use the new Licenses/gpl-2.0.txt for
-version 2014.01 and after?
+Committed, thanks.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
