@@ -1,26 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 24 Mar 2014 21:15:35 +0100
-Subject: [Buildroot] [PATCH 1/1] host-mtools: Fix build failure
-	introduced by libiconv dependency
-In-Reply-To: <BLU0-SMTP166C506BEDB8CDC67D076CFD97A0@phx.gbl> (Bernd Kuhls's
- message of "Mon, 24 Mar 2014 20:29:45 +0100")
-References: <BLU0-SMTP166C506BEDB8CDC67D076CFD97A0@phx.gbl>
-Message-ID: <87r45rs68o.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 24 Mar 2014 20:20:09 +0000 (UTC)
+Subject: [Buildroot] [Bug 6986] Make legal-info fails on uboot versions
+	before 2014.01
+In-Reply-To: <bug-6986-163@https.bugs.busybox.net/>
+References: <bug-6986-163@https.bugs.busybox.net/>
+Message-ID: <20140324202009.ECB349C0A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <berndkuhls@hotmail.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=6986
 
- > Fixes http://autobuild.buildroot.net/results/8ff/8ff7fc94cc3e54f5608f7b4d2e6ccba5fd8e4177/
- > Also disable parallel make because "make install" is broken, see
- > http://lists.openembedded.org/pipermail/openembedded-commits/2011-October/134396.html
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
- > Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
 
-Committed, thanks.
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org> 2014-03-24 20:20:09 UTC ---
+Hi,
+
+It would indeed be nice to handle this more gracefully, but that's
+unfortunately not currently possible with the legal-info infrastructure.
+
+The fact that it fails when the license file isn't available is quite nice for
+testing, as the autobuilders very soon informs us of the failure (mistyped
+license file, a package with a license change in a new version), but for the
+end user a warning would be nicer.
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
