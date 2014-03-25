@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 25 Mar 2014 23:58:12 +0100
-Subject: [Buildroot] [PATCH 3 of 4] qtuio: use TARGET_MAKE_ENV when
- running make and qmake
-In-Reply-To: <90542cc669bb4125a904.1395257408@argentina>
+Date: Tue, 25 Mar 2014 23:59:45 +0100
+Subject: [Buildroot] [PATCH 4 of 4] qextserialport: use TARGET_MAKE_ENV
+ when running make and qmake
+In-Reply-To: <caeab58814c94c25ce68.1395257409@argentina>
 References: <patchbomb.1395257405@argentina>
- <90542cc669bb4125a904.1395257408@argentina>
-Message-ID: <53320A04.7060201@mind.be>
+ <caeab58814c94c25ce68.1395257409@argentina>
+Message-ID: <53320A61.1010805@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -22,42 +22,34 @@ On 19/03/14 20:30, Thomas De Schampheleire wrote:
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 
+ gpsd probably also requires this change.
+
+
  Regards,
  Arnout
 
 > 
 > ---
->  package/qtuio/qtuio.mk |  6 +++---
->  1 files changed, 3 insertions(+), 3 deletions(-)
+>  package/qextserialport/qextserialport.mk |  4 ++--
+>  1 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/qtuio/qtuio.mk b/package/qtuio/qtuio.mk
-> --- a/package/qtuio/qtuio.mk
-> +++ b/package/qtuio/qtuio.mk
-> @@ -19,13 +19,13 @@ QTUIO_EXAMPLES = dials fingerpaint knobs
->  ifeq ($(BR2_QTUIO_EXAMPLES),y)
->  define QTUIO_CONFIGURE_EXAMPLES
->  	for example in $(QTUIO_EXAMPLES) ; do \
-> -		(cd $(@D)/examples/$${example} && $(QT_QMAKE)) ; \
-> +		(cd $(@D)/examples/$${example} && $(TARGET_MAKE_ENV) $(QT_QMAKE)) ; \
->  	done
->  endef
->  endif
+> diff --git a/package/qextserialport/qextserialport.mk b/package/qextserialport/qextserialport.mk
+> --- a/package/qextserialport/qextserialport.mk
+> +++ b/package/qextserialport/qextserialport.mk
+> @@ -15,11 +15,11 @@ QEXTSERIALPORT_DEPENDENCIES = qt
+>  QEXTSERIALPORT_INSTALL_STAGING = YES
 >  
->  define QTUIO_CONFIGURE_CMDS
-> -	cd $(@D)/src && $(QT_QMAKE)
-> +	cd $(@D)/src && $(TARGET_MAKE_ENV) $(QT_QMAKE)
->  	$(QTUIO_CONFIGURE_EXAMPLES)
+>  define QEXTSERIALPORT_CONFIGURE_CMDS
+> -	(cd $(@D); $(QT_QMAKE))
+> +	(cd $(@D); $(TARGET_MAKE_ENV) $(QT_QMAKE))
 >  endef
 >  
-> @@ -38,7 +38,7 @@ endef
->  endif
->  
->  define QTUIO_BUILD_CMDS
-> -	$(MAKE) -C $(@D)/src
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src
->  	$(QTUIO_BUILD_EXAMPLES)
+>  define QEXTSERIALPORT_BUILD_CMDS
+> -	$(MAKE) -C $(@D)
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
 >  endef
 >  
+>  define QEXTSERIALPORT_INSTALL_STAGING_CMDS
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
