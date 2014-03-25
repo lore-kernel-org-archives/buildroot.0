@@ -1,35 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 24 Mar 2014 20:35:11 +0000 (UTC)
-Subject: [Buildroot] [Bug 6986] Make legal-info fails on uboot versions
-	before 2014.01
-In-Reply-To: <bug-6986-163@https.bugs.busybox.net/>
-References: <bug-6986-163@https.bugs.busybox.net/>
-Message-ID: <20140324203511.AA1FC9C0FB@busybox.osuosl.org>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Mon, 24 Mar 2014 21:05:17 -0400
+Subject: [Buildroot] [PATCH 1/1] qt: ensure that target dir exists before
+	installing there
+Message-ID: <1395709517-1886-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6986
+All of qt.mk's target installs ensure that their destinations exist,
+except for /usr/lib.  So do the same for /usr/lib, for consistency,
+and in case some combination of custom fs skeleton plus dependency
+on Qt leads to installing without a pre-existing /usr/lib directory.
 
---- Comment #2 from Matthew Starr <mstarr@hedonline.com> 2014-03-24 20:35:11 UTC ---
-(In reply to comment #1)
-> Hi,
-> 
-> It would indeed be nice to handle this more gracefully, but that's
-> unfortunately not currently possible with the legal-info infrastructure.
-> 
-> The fact that it fails when the license file isn't available is quite nice for
-> testing, as the autobuilders very soon informs us of the failure (mistyped
-> license file, a package with a license change in a new version), but for the
-> end user a warning would be nicer.
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+---
+ package/qt/qt.mk |    1 +
+ 1 file changed, 1 insertion(+)
 
-Could the boot/uboot/uboot.mk file be updated to look for the existence of the
-Licenses/gpl-2.0.txt file and if it doesn't exist look for the COPYING file? 
-If the COPYING file is also not present then fail.
-
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index bc329f0..507e0db 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -625,6 +625,7 @@ endef
+ # Library installation
+ ifeq ($(BR2_PACKAGE_QT_SHARED),y)
+ define QT_INSTALL_TARGET_LIBS
++	mkdir -p $(TARGET_DIR)/usr/lib
+ 	for lib in $(QT_INSTALL_LIBS); do \
+ 		cp -dpf $(STAGING_DIR)/usr/lib/lib$${lib}.so.* $(TARGET_DIR)/usr/lib ; \
+ 	done
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.9.5
