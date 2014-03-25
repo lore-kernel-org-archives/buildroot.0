@@ -1,55 +1,61 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 25 Mar 2014 23:59:45 +0100
-Subject: [Buildroot] [PATCH 4 of 4] qextserialport: use TARGET_MAKE_ENV
- when running make and qmake
-In-Reply-To: <caeab58814c94c25ce68.1395257409@argentina>
-References: <patchbomb.1395257405@argentina>
- <caeab58814c94c25ce68.1395257409@argentina>
-Message-ID: <53320A61.1010805@mind.be>
+Date: Wed, 26 Mar 2014 00:27:46 +0100
+Subject: [Buildroot] PowerPC: scsi/sg.h missing in glibc-2.18 /
+ linux-headers-3.10.20 toolchain
+In-Reply-To: <778977534.278661.1395686596735.JavaMail.root@mail>
+References: <778977534.278661.1395686596735.JavaMail.root@mail>
+Message-ID: <533210F2.5040908@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19/03/14 20:30, Thomas De Schampheleire wrote:
-> This patch prepends TARGET_MAKE_ENV to $(MAKE) and $(QT_QMAKE) command
-> lines, to make sure PATH is set correctly, and to line up with the qt5
-> packages that do this consistently.
+On 24/03/14 19:43, ?meric Vigier wrote:
+> Hi makers,
 > 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> I struggled to cross-compile (powerpc) strace-4.8 with linux-headers-3.10.20
+> and glibc-2.18.It does not find <scsi/sg.h> in my toolchain. Indeed there is
+> none in my sysroot:
+> 
+> $ find output/ -path "*/scsi/sg.h"
+> output/build/glibc-2.18/sysdeps/unix/sysv/linux/scsi/sg.h
+> output/build/linux-headers-3.10.20/include/scsi/sg.h
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ This is a known issue: linux-headers removes sg.h from the staging
+directory. Normally this isn't an issue because glibc installs it again,
+but if for whatever reason linux-headers gets reinstalled, it gets
+removed again. You shouldn't get this issue with a clean build.
 
-
- gpsd probably also requires this change.
+ See the thread at
+http://thread.gmane.org/gmane.comp.lib.uclibc.buildroot/77571
 
 
  Regards,
  Arnout
 
 > 
-> ---
->  package/qextserialport/qextserialport.mk |  4 ++--
->  1 files changed, 2 insertions(+), 2 deletions(-)
+> I have a duplicate buildroot with linux-headers-3.2.52 and the same glibc.
+> It succeeds to compile strace. Indeed headers are present in sysroot:
 > 
-> diff --git a/package/qextserialport/qextserialport.mk b/package/qextserialport/qextserialport.mk
-> --- a/package/qextserialport/qextserialport.mk
-> +++ b/package/qextserialport/qextserialport.mk
-> @@ -15,11 +15,11 @@ QEXTSERIALPORT_DEPENDENCIES = qt
->  QEXTSERIALPORT_INSTALL_STAGING = YES
->  
->  define QEXTSERIALPORT_CONFIGURE_CMDS
-> -	(cd $(@D); $(QT_QMAKE))
-> +	(cd $(@D); $(TARGET_MAKE_ENV) $(QT_QMAKE))
->  endef
->  
->  define QEXTSERIALPORT_BUILD_CMDS
-> -	$(MAKE) -C $(@D)
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
->  endef
->  
->  define QEXTSERIALPORT_INSTALL_STAGING_CMDS
+> $ find output/ -path "*/scsi/sg.h"
+> output/build/linux-headers-3.2.52/include/scsi/sg.h
+> output/build/glibc-2.18/sysdeps/unix/sysv/linux/scsi/sg.h
+> output/build/linux-3.2.x/include/scsi/sg.h
+> output/host/usr/powerpc-buildroot-linux-gnu/sysroot/usr/include/scsi/sg.h
+> 
+> I checked linux API changes but nothing about SCSI:
+> http://man7.org/tlpi/api_changes/index.html
+> 
+> I worked around this problem with a simple copy:
+> $ cp output/build/glibc-2.18/sysdeps/unix/sysv/linux/scsi/sg.h \
+>      output/host/usr/powerpc-buildroot-linux-gnu/sysroot/usr/incl
+> 
+> I'd like to know how to truly fix this issue. Is this a bug in the toolchain 
+> cross-compilation?
+> 
+> thanks,
+> Emeric
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
