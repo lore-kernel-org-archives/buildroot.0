@@ -1,52 +1,30 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 25 Mar 2014 07:31:16 +0000 (UTC)
-Subject: [Buildroot] [Bug 6986] Make legal-info fails on uboot versions
-	before 2014.01
-In-Reply-To: <bug-6986-163@https.bugs.busybox.net/>
-References: <bug-6986-163@https.bugs.busybox.net/>
-Message-ID: <20140325073116.748AF9C384@busybox.osuosl.org>
+From: =?UTF-8?q?Arnaud=20R=C3=A9billout?= <rebillout@syscom.ch>
+Date: Tue, 25 Mar 2014 08:59:55 +0100
+Subject: [Buildroot] [PATCH 0/1] dbus-triggerd, a helpful little daemon
+Message-ID: <1395734396-31668-1-git-send-email-rebillout@syscom.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6986
+Hi everyone,
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+let me introduce you to dbus-triggerd.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|ASSIGNED                    |RESOLVED
-         Resolution|                            |FIXED
+dbus-triggerd is a little daemon that can monitor dbus events, match
+them against some watch-expressions, then trigger shell-commands.
 
---- Comment #3 from Peter Korsgaard <jacmet@uclibc.org> 2014-03-25 07:31:15 UTC ---
-Like I mentioned above, this is currently not possible with the legal info
-infrastructure. Some packages have multiple license files, so it's difficult to
-come up with a simple syntax for optional filenames.
+The code is really small and neat, the only dependency is dbus.
+Furthermore, it comes with a manual page !
 
-Instead I have fixed it for u-boot by simply copying the license file from the
-old location to the new after extracting it:
+I find it especially useful in automated test scripts, but it can be
+used in any situation where dbus-interaction is needed, and shell script
+is preferred over other languages.
 
-commit 2e628372d34d9e77727185aaf47c82a439a22244
-Author: Peter Korsgaard <peter@korsgaard.com>
-Date:   Tue Mar 25 07:18:15 2014 +0100
+If anybody find it useful, here comes a patch to add this package to buildroot.
 
-    uboot: unbreak legal info for legacy versions
-
-    Fixes #6986
-
-    Prior to u-boot 2013.10, the GPL license text was stored in COPYING and not
-    Licenses/gpl-2.0.txt, breaking legal-info.
-
-    Work around it by simply copying the file from the old location to the new
-    if present.
-
-    Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-That commit should apply cleanly to 2014.02. Thanks!
+Regards,
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Arnaud R?billout
