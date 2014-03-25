@@ -1,148 +1,199 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 25 Mar 2014 21:12:06 +0100
-Subject: [Buildroot] [PATCH 1/1] dbus-triggerd: new package
-In-Reply-To: <1395734396-31668-2-git-send-email-rebillout@syscom.ch>
-References: <1395734396-31668-1-git-send-email-rebillout@syscom.ch>
- <1395734396-31668-2-git-send-email-rebillout@syscom.ch>
-Message-ID: <5331E316.4030706@mind.be>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 25 Mar 2014 21:17:15 +0100
+Subject: [Buildroot] Patchwork cleanup #7: triaging proposal
+In-Reply-To: <CAAXf6LWP0FX4AAGP_ACZHgoxEAEwarpEdHchukxE+V=WJnXROg@mail.gmail.com>
+References: <CAAXf6LWP0FX4AAGP_ACZHgoxEAEwarpEdHchukxE+V=WJnXROg@mail.gmail.com>
+Message-ID: <CAAXf6LUkjm0pyg1LTAqLY=+5-B=SAaPq2URdC_5yUu3K66Xn8g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 25/03/14 08:59, Arnaud R?billout wrote:
-> dbus-triggerd is a little daemon that can monitor dbus events, match
-> them against some watch-expressions, then trigger shell-commands.
-> 
-> It can be used in any situation where dbus-interaction is needed, and
-> shell script is preferred over other languages.
-> 
-> Signed-off-by: Arnaud R?billout <rebillout@syscom.ch>
-> ---
->  package/Config.in                                  |  1 +
->  package/dbus-triggerd/Config.in                    |  9 ++++++++
->  .../dbus-triggerd-01-cross-compil.patch            | 13 ++++++++++++
->  package/dbus-triggerd/dbus-triggerd.mk             | 24 ++++++++++++++++++++++
->  4 files changed, 47 insertions(+)
->  create mode 100644 package/dbus-triggerd/Config.in
->  create mode 100644 package/dbus-triggerd/dbus-triggerd-01-cross-compil.patch
->  create mode 100644 package/dbus-triggerd/dbus-triggerd.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index cfa53d3..fa24b57 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -272,6 +272,7 @@ source "package/dbus/Config.in"
->  source "package/dbus-cpp/Config.in"
->  source "package/dbus-glib/Config.in"
->  source "package/dbus-python/Config.in"
-> +source "package/dbus-triggerd/Config.in"
->  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
->  source "package/devmem2/Config.in"
->  endif
-> diff --git a/package/dbus-triggerd/Config.in b/package/dbus-triggerd/Config.in
-> new file mode 100644
-> index 0000000..e7f65b8
-> --- /dev/null
-> +++ b/package/dbus-triggerd/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_DBUS_TRIGGERD
-> +	bool "dbus-triggerd"
-> +	depends on BR2_USE_MMU # fork()
-> +	depends on BR2_PACKAGE_DBUS
+All,
 
- For the other dbus-* packages, the dbus dependencies are repeated (even
-though they're automatic because of the depends on DBUS). So I would do
-that here as well. And that means of course that there should also be a
-comment in case of missing toolchain features. See dbus-cpp for an example.
+On Sun, Mar 16, 2014 at 8:48 AM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+> Hi all,
+>
+> Here is a first patchwork cleanup based on the new patchwork cleanup
+> proposal [1]. Let's see how this goes and evaluate after one or more
+> sessions.
+>
+> Quick recap:
+> - in this mail, a decision for a number of patches (exact number can
+> vary) is already proposed. Buildroot developers should provide
+> feedback stating their agreement/disagreement with this proposed
+> decision.
+>
+> - patches are triaged into three categories:
+>     A. We want this patch and someone should refresh and resend it.
+>     B. We don't want this patch as it goes against Buildroot principles.
+>     C. we're not sure and want to know if the submitter is still
+> interested in pursuing this patch.
+>
+> - after the brief agreement/disagreement phase, patch submitters are
+> notified and get two weeks to provide feedback and/or fight the
+> decision. Patchwork is already updated at the beginning of these two
+> weeks, but closed patches can always be reopened.
+>
+> - during this two week cool-off period, new cleanup sessions can already start.
+>
 
-> +	help
-> +	  dbus-triggerd is a tool to trigger shell-commands upon receiving
-> +	  a given dbus-signal.
-> +
-> +	  http://gareus.org/oss/dbustriggerd/start
-> diff --git a/package/dbus-triggerd/dbus-triggerd-01-cross-compil.patch b/package/dbus-triggerd/dbus-triggerd-01-cross-compil.patch
-> new file mode 100644
-> index 0000000..67a2755
-> --- /dev/null
-> +++ b/package/dbus-triggerd/dbus-triggerd-01-cross-compil.patch
-> @@ -0,0 +1,13 @@
+A little later than expected, here is the conclusion of this triaging
+session. As announced, a two-week cool-off period will be initiated
+after notifying the submitters (in a separate mail), allowing them to
+provide feedback. In the mean time, new triaging sessions can be
+started.
 
- Patch misses a description + Signed-off-by.
+>
+> Triage proposal for this session:
+>
+> A. Patches to keep:
+> -------------------
+>
+> directfb-lua: new package
+> http://patchwork.ozlabs.org/patch/262971/
 
-> +--- a/Makefile	2014-03-25 07:27:15.761217767 +0100
-> ++++ b/Makefile	2014-03-25 07:31:28.523028955 +0100
-> +@@ -1,7 +1,8 @@
-> + PREFIX=/usr
-> ++PKG_CONFIG?=pkg-config
-> + 
-> +-CFLAGS=`pkg-config --cflags dbus-1` -Wall -O3
-> +-LDLIBS=`pkg-config --libs dbus-1`
-> ++CFLAGS+=`$(PKG_CONFIG) --cflags dbus-1` -Wall -O3
-> ++LDLIBS+=`$(PKG_CONFIG) --libs dbus-1`
+Ezequiel Garcia is no longer actively developing/using this tool. He
+is willing to refresh the patch, but as ThomasP pointed out: if no-one
+is using the tool it is not really needed to add it as a buildroot
+package.
+Based on this feedback, I will mark the patch as 'Changes requested'.
+Ezequiel can still refresh the patch if/when he wants, but there is no
+pressure at all.
 
- If you're anyway patching the Makefile, you can just as well make it:
+>
+> [v2] Standardisation of $(BUILD)/.root name
+> http://patchwork.ozlabs.org/patch/265680/
 
-CFLAGS?=-Wall -O3
-CFLAGS+=`$(PKG_CONFIG) --cflags dbus-1`
-LDLIBS+=`$(PKG_CONFIG) --libs dbus-1`
+With the stamps/ directory being gone after converting the toolchain
+packages into the standard package frameworks, this patch no longer
+made sense. Arnout submitted a patch removing the last remains of
+STAMP_DIR and friends.
+The patch as it is is no longer desired, so will be marked as
+Rejected. This does not mean the original submitter can submit an
+alternate proposal for .root, though.
+
+>
+> [2/2] arch/Config.in: Allow ARM to select BR2_BINFMT_FLAT
+> http://patchwork.ozlabs.org/patch/272450/
+>
+> arch/Config.in: Allow arm7tdmi to select BR2_BINFMT_FLAT
+> http://patchwork.ozlabs.org/patch/273066/
+>
+> [Note: the above two patches are related. The feedback in the patch is
+> to introduce a split between ARCH_HAS_MMU and BR2_USE_MMU, and thus
+> requires quite some work in the core infrastructure.]
+
+Here Yann voted C (unsure) with following explanation:
+"As Thomas said, they can't go in as-is. It would be better to add
+generic config options (_HAS_MMU, _USE_MMU et al.) first.
+So I'd rather say:
+    Vote: C, unsure: we do not want _these_ patches, but a better way
+    to express such a configuration."
+
+I think we are on the same page regarding the fact that more core work
+is needed for this topic. However, my interpretation of category C was
+that we'd ask input from the submitter to make a final decision. In
+this case, I think we do not need such input: it is clear that work
+needs to be done on the core infrastructure. At the same time, neither
+A (accept) or B (reject) are good categories, so in fact we really
+need a fourth category D (add to todo list).
+This is what I did: add an entry to the todo list briefly describing
+the problem [1], referring to the patches, and in the mean time keep
+the patches around in patchwork as reminder. However, as these are not
+patches that 'just' needs to be refreshed like the other patches
+marked as 'delegated to pdp', I suggest to use another delegate, like
+tpetazzoni to mark the difference. This doesn't mean that ThomasP
+needs to do this work, to be clear.
+
+[1] http://elinux.org/Buildroot#Core_Buildroot_infrastructure
+
+>
+>
+> [RFC] uclibc: Don't build shared library if !HAVE_SHARED
+> http://patchwork.ozlabs.org/patch/273175/
+>
+> Add pyside + shiboken packages
+> http://patchwork.ozlabs.org/patch/275929/
+>
+> [v2,1/1] package: remove the trailing slash sign from $(PKG)_SITE variable
+> http://patchwork.ozlabs.org/patch/276237/
+
+Above three marked as 'delegated to pdp', they need to be refreshed and resent.
+
+>
+> [v2,1/1] u-boot: allow to pass a custom configuration file
+> http://patchwork.ozlabs.org/patch/276286/
+
+C, unsure, as per feedback of Yann. Let's see what the submitter says.
+
+>
+> [v3,01/11] udev: explicitly include pthreads
+> http://patchwork.ozlabs.org/patch/278298
+>
+> [v3,02/11] sunxi-mali: add explicit pthread/dl/rt dependencies
+> http://patchwork.ozlabs.org/patch/278295
+
+For both the above:
+C, unsure: there is some uncertainty regarding the exact cause of the
+problem. This should be clarified first.
+
+>
+> [v3,05/11] sunxi-cedarx: bump to newer version, use armel2 binaries, add demo
+> http://patchwork.ozlabs.org/patch/278299
+>
+> [v3,08/11] libpng12: new package
+> http://patchwork.ozlabs.org/patch/278300
+>
+> [v3,09/11] libpng: ensure libpng12 is installed before libpng
+> http://patchwork.ozlabs.org/patch/278301
+>
+> [v3,10/11] glmark2: new package
+> http://patchwork.ozlabs.org/patch/278304
+>
+> [v3,11/11] mesa3d-demos: new package
+> http://patchwork.ozlabs.org/patch/278305
+
+For all the above: A (delegated to pdp).
+
+>
+>
+> B. Patches to reject:
+> ---------------------
+>
+> infra: display current task as title of the term window
+> http://patchwork.ozlabs.org/patch/265214/
+>
+> [Reason: as stated in the patch discussion, there is a problem when
+> interrupting the build. An alternative has been suggested: update the
+> MESSAGEs with a progress indication instead. The patch submitter could
+> send a new patch implementing this proposal if he is interested.]
+
+B. Reject
+
+>
+>
+> C. Unsure / need more investigation:
+> ------------------------------------
+>
+> [RESEND] package/Makefile.in: Fix dependency for selecting uclinux as TARGET_OS
+> http://patchwork.ozlabs.org/patch/277119/
+
+C Unsure.
+
+>
+> libgcc erroneously built as armv5 for arm920t(armv4t)
+> http://patchwork.ozlabs.org/patch/278212/
+
+B Reject: d3539dd5: arch: pass cpu option instead of tune option on
+ARM (feedback Yann)
 
 
+I will try to notify the submitters of these patches soon...
 
- Will you send this patch upstream?
+Thanks for the feedback, especially Yann!
 
-> + 
-> + all: dbus-triggerd
-> + 
-> diff --git a/package/dbus-triggerd/dbus-triggerd.mk b/package/dbus-triggerd/dbus-triggerd.mk
-> new file mode 100644
-> index 0000000..fa04c06
-> --- /dev/null
-> +++ b/package/dbus-triggerd/dbus-triggerd.mk
-> @@ -0,0 +1,24 @@
-> +################################################################################
-> +#
-> +# dbus-triggerd
-> +#
-> +################################################################################
-> +
-> +DBUS_TRIGGERD_VERSION = 749a7a83a79439395ebdc52ff86f2601396b8c72
-> +DBUS_TRIGGERD_SITE = git://rg42.org/dbustriggerd.git
-> +DBUS_TRIGGERD_LICENSE = GPLv2+
-> +DBUS_TRIGGERD_DEPENDENCIES = dbus
-> +
-> +define DBUS_TRIGGERD_BUILD_CMDS
-> +	CC="$(TARGET_CC)" \
-> +	CFLAGS="$(TARGET_CFLAGS)" \
-> +	LDFLAGS="$(TARGET_LDFLAGS)" \
-> +	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
-
- This should be $(TARGET_CONFIGURE_OPTS) which includes all of the above
-and more.
-
- Note BTW that the patch above refers to LDLIBS instead of LDFLAGS. Is
-LDFLAGS used?
-
-
- Regards,
- Arnout
-
-> +	$(MAKE) -C $(@D) all
-> +endef
-> +
-> +define DBUS_TRIGGERD_INSTALL_TARGET_CMDS
-> +	$(MAKE) DESTDIR="$(TARGET_DIR)" -C $(@D) install
-> +endef
-> +
-> +$(eval $(generic-package))
-> 
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Best regards,
+Thomas
