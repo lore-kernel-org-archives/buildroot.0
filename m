@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 25 Mar 2014 23:46:56 +0100
-Subject: [Buildroot] [PATCH 1 of 4] qt5 packages: set correct PATH when
- running qmake
-In-Reply-To: <bb907111e06d6d25c78f.1395257406@argentina>
+Date: Tue, 25 Mar 2014 23:54:54 +0100
+Subject: [Buildroot] [PATCH 2 of 4] qwt: use TARGET_MAKE_ENV when
+ running make and qmake
+In-Reply-To: <163c8448b6f2a17be27d.1395257407@argentina>
 References: <patchbomb.1395257405@argentina>
- <bb907111e06d6d25c78f.1395257406@argentina>
-Message-ID: <53320760.4080206@mind.be>
+ <163c8448b6f2a17be27d.1395257407@argentina>
+Message-ID: <5332093E.9010006@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,27 +13,42 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 19/03/14 20:30, Thomas De Schampheleire wrote:
-> The qmake step of qt5 packages may attempt to run pkg-config. If qmake is
-> executed in an environment where the buildroot host directory is not in
-> PATH, pkg-config from the build machine may be used (/usr/bin/pkg-config).
-> This causes qt5 package compilation to fail on machines that do not have
-> pkg-config installed.
-> Refer to mailing list thread [1] for a specific error case.
+> This patch prepends TARGET_MAKE_ENV to $(MAKE) and $(QT_QMAKE) command
+> lines, to make sure PATH is set correctly, and to line up with the qt5
+> packages that do this consistently.
 > 
-> This patch prepends TARGET_MAKE_ENV (which sets PATH) to the qmake call.
-> 
-> Reported-by: Marco Trapanese <marcotrapanese@gmail.com>
 > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
 > 
-> [1] http://lists.busybox.net/pipermail/buildroot/2014-March/092283.html
+> ---
+>  package/qwt/qwt.mk |  4 ++--
+>  1 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/qwt/qwt.mk b/package/qwt/qwt.mk
+> --- a/package/qwt/qwt.mk
+> +++ b/package/qwt/qwt.mk
+> @@ -28,11 +28,11 @@ endif
+>  
+>  define QWT_CONFIGURE_CMDS
+>  	$(SED) $(QWT_CONFIG) $(@D)/qwtconfig.pri
+> -	(cd $(@D); $(QT_QMAKE))
+> +	(cd $(@D); $(TARGET_MAKE_ENV) $(QT_QMAKE))
+>  endef
+>  
+>  define QWT_BUILD_CMDS
+> -	$(MAKE) -C $(@D)
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+>  endef
+>  
+>  # After installation, we fixup the INSTALL_PREFIX in qwtconfig.pri so
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-
- Regards,
- Arnout
-
-[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
