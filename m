@@ -1,81 +1,74 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 25 Mar 2014 23:51:54 +0100
-Subject: [Buildroot] [git commit] libubox: correct json-c handling
-Message-ID: <20140325225530.0DD4B9C381@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 25 Mar 2014 23:58:12 +0100
+Subject: [Buildroot] [PATCH 3 of 4] qtuio: use TARGET_MAKE_ENV when
+ running make and qmake
+In-Reply-To: <90542cc669bb4125a904.1395257408@argentina>
+References: <patchbomb.1395257405@argentina>
+ <90542cc669bb4125a904.1395257408@argentina>
+Message-ID: <53320A04.7060201@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4a93b8f72be21a91345285d6c10515184a3f3fe5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 19/03/14 20:30, Thomas De Schampheleire wrote:
+> This patch prepends TARGET_MAKE_ENV to $(MAKE) and $(QT_QMAKE) command
+> lines, to make sure PATH is set correctly, and to line up with the qt5
+> packages that do this consistently.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Fixes http://autobuild.buildroot.net/results/5a8/5a85e0e132f38a4a1a42c2b041f66003b64e748a/
-(and a bunch of similar failures)
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-libubox has optional json-c handling, including the legacy version which
-used libjson.so.  Unfortunately this support is buggy, so we end up with the
-wrong compiler flags, and more importantly it gets confused if libjson is
-enabled, as that also provides a (incompatible) libjson.so.
 
-Fix it by disabling the legacy handling.
+ Regards,
+ Arnout
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../libubox/libubox-01-drop-legacy-json-c.patch    |   34 ++++++++++++++++++++
- package/libubox/libubox.mk                         |    1 +
- 2 files changed, 35 insertions(+), 0 deletions(-)
+> 
+> ---
+>  package/qtuio/qtuio.mk |  6 +++---
+>  1 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/qtuio/qtuio.mk b/package/qtuio/qtuio.mk
+> --- a/package/qtuio/qtuio.mk
+> +++ b/package/qtuio/qtuio.mk
+> @@ -19,13 +19,13 @@ QTUIO_EXAMPLES = dials fingerpaint knobs
+>  ifeq ($(BR2_QTUIO_EXAMPLES),y)
+>  define QTUIO_CONFIGURE_EXAMPLES
+>  	for example in $(QTUIO_EXAMPLES) ; do \
+> -		(cd $(@D)/examples/$${example} && $(QT_QMAKE)) ; \
+> +		(cd $(@D)/examples/$${example} && $(TARGET_MAKE_ENV) $(QT_QMAKE)) ; \
+>  	done
+>  endef
+>  endif
+>  
+>  define QTUIO_CONFIGURE_CMDS
+> -	cd $(@D)/src && $(QT_QMAKE)
+> +	cd $(@D)/src && $(TARGET_MAKE_ENV) $(QT_QMAKE)
+>  	$(QTUIO_CONFIGURE_EXAMPLES)
+>  endef
+>  
+> @@ -38,7 +38,7 @@ endef
+>  endif
+>  
+>  define QTUIO_BUILD_CMDS
+> -	$(MAKE) -C $(@D)/src
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src
+>  	$(QTUIO_BUILD_EXAMPLES)
+>  endef
+>  
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 
-diff --git a/package/libubox/libubox-01-drop-legacy-json-c.patch b/package/libubox/libubox-01-drop-legacy-json-c.patch
-new file mode 100644
-index 0000000..84bd99a
---- /dev/null
-+++ b/package/libubox/libubox-01-drop-legacy-json-c.patch
-@@ -0,0 +1,34 @@
-+[PATCH] libubox: drop legacy json-c support
-+
-+The cmake logic is wrong (E.G. PKG_CHECK_FOR_MODULES fails unless all
-+modules are found), and the legacy libjson.so name is also used by the other
-+libjson (http://sourceforge.net/projects/libjson/) which provides an
-+incompatible API, so just drop it.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ CMakeLists.txt |    4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+Index: libubox-bbd846ec2d72b2629758b69dc122ac0b0f2c3e4b/CMakeLists.txt
-+===================================================================
-+--- libubox-bbd846ec2d72b2629758b69dc122ac0b0f2c3e4b.orig/CMakeLists.txt
-++++ libubox-bbd846ec2d72b2629758b69dc122ac0b0f2c3e4b/CMakeLists.txt
-+@@ -13,7 +13,7 @@
-+ ENDIF()
-+ 
-+ INCLUDE(FindPkgConfig)
-+-PKG_CHECK_MODULES(JSONC json-c json)
-++PKG_CHECK_MODULES(JSONC json-c)
-+ IF(JSONC_FOUND)
-+   ADD_DEFINITIONS(-DJSONC)
-+   INCLUDE_DIRECTORIES(${JSONC_INCLUDE_DIRS})
-+@@ -42,7 +42,7 @@
-+ 
-+ ADD_SUBDIRECTORY(lua)
-+ 
-+-find_library(json NAMES json-c json)
-++find_library(json NAMES json-c)
-+ IF(EXISTS ${json})
-+ 	ADD_LIBRARY(blobmsg_json SHARED blobmsg_json.c)
-+ 	TARGET_LINK_LIBRARIES(blobmsg_json ubox ${json})
-diff --git a/package/libubox/libubox.mk b/package/libubox/libubox.mk
-index 0743acc..28d5c63 100644
---- a/package/libubox/libubox.mk
-+++ b/package/libubox/libubox.mk
-@@ -8,6 +8,7 @@ LIBUBOX_VERSION = bbd846ec2d72b2629758b69dc122ac0b0f2c3e4b
- LIBUBOX_SITE = git://nbd.name/luci2/libubox.git
- LIBUBOX_LICENSE = LGPLv2.1, GPLv2, BSD-3c, MIT
- LIBUBOX_INSTALL_STAGING = YES
-+LIBUBOX_DEPENDENCIES = host-pkgconf $(if $(BR2_PACKAGE_JSON_C),json-c)
- 
- ifeq ($(BR2_PACKAGE_LUA),y)
- 	LIBUBOX_DEPENDENCIES += lua
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
