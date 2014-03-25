@@ -1,84 +1,142 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 25 Mar 2014 21:02:28 +0100
-Subject: [Buildroot] [PATCH v2] Disable o32 ABI for MIPS64 architectures
-In-Reply-To: <1395769952-64221-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1395769952-64221-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <5331E0D4.6070007@mind.be>
+Date: Tue, 25 Mar 2014 21:12:06 +0100
+Subject: [Buildroot] [PATCH 1/1] dbus-triggerd: new package
+In-Reply-To: <1395734396-31668-2-git-send-email-rebillout@syscom.ch>
+References: <1395734396-31668-1-git-send-email-rebillout@syscom.ch>
+ <1395734396-31668-2-git-send-email-rebillout@syscom.ch>
+Message-ID: <5331E316.4030706@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 25/03/14 18:52, Vicente Olivert Riera wrote:
-> Building o32 ELF files for MIPS64 is an exotic configuration that nobody
-> should be using. If o32 is required, then is better if it's built for
-> MIPS 32-bit cores so only 32-bit instructions will be used leading to a
-> more efficient o32 usage.
+On 25/03/14 08:59, Arnaud R?billout wrote:
+> dbus-triggerd is a little daemon that can monitor dbus events, match
+> them against some watch-expressions, then trigger shell-commands.
 > 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> It can be used in any situation where dbus-interaction is needed, and
+> shell script is preferred over other languages.
+> 
+> Signed-off-by: Arnaud R?billout <rebillout@syscom.ch>
 > ---
->  arch/Config.in.mips |   12 +++++++-----
->  1 files changed, 7 insertions(+), 5 deletions(-)
+>  package/Config.in                                  |  1 +
+>  package/dbus-triggerd/Config.in                    |  9 ++++++++
+>  .../dbus-triggerd-01-cross-compil.patch            | 13 ++++++++++++
+>  package/dbus-triggerd/dbus-triggerd.mk             | 24 ++++++++++++++++++++++
+>  4 files changed, 47 insertions(+)
+>  create mode 100644 package/dbus-triggerd/Config.in
+>  create mode 100644 package/dbus-triggerd/dbus-triggerd-01-cross-compil.patch
+>  create mode 100644 package/dbus-triggerd/dbus-triggerd.mk
 > 
-> diff --git a/arch/Config.in.mips b/arch/Config.in.mips
-> index d9c0c02..f558705 100644
-> --- a/arch/Config.in.mips
-> +++ b/arch/Config.in.mips
-> @@ -38,15 +38,12 @@ endchoice
->  
->  choice
->  	prompt "Target ABI"
-> -	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
-> -	default BR2_MIPS_OABI32 if !BR2_ARCH_IS_64
-> -	default BR2_MIPS_NABI32 if BR2_ARCH_IS_64
-> +	depends on BR2_mips64 || BR2_mips64el
-> +	default BR2_MIPS_NABI32
->  
->  	help
->  	  Application Binary Interface to use
->  
-> -config BR2_MIPS_OABI32
-> -	bool "o32"
->  config BR2_MIPS_NABI32
->  	bool "n32"
->  	depends on BR2_ARCH_IS_64
-> @@ -86,6 +83,11 @@ config BR2_GCC_TARGET_ARCH
->  	default "mips64"	if BR2_mips_64
->  	default "mips64r2"	if BR2_mips_64r2
->  
-> +config BR2_MIPS_OABI32
-> +	bool
-> +	default y		if BR2_mips || BR2_mipsel
-> +	default n		if BR2_mips64 || BR2_mips64el
+> diff --git a/package/Config.in b/package/Config.in
+> index cfa53d3..fa24b57 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -272,6 +272,7 @@ source "package/dbus/Config.in"
+>  source "package/dbus-cpp/Config.in"
+>  source "package/dbus-glib/Config.in"
+>  source "package/dbus-python/Config.in"
+> +source "package/dbus-triggerd/Config.in"
+>  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+>  source "package/devmem2/Config.in"
+>  endif
+> diff --git a/package/dbus-triggerd/Config.in b/package/dbus-triggerd/Config.in
+> new file mode 100644
+> index 0000000..e7f65b8
+> --- /dev/null
+> +++ b/package/dbus-triggerd/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_DBUS_TRIGGERD
+> +	bool "dbus-triggerd"
+> +	depends on BR2_USE_MMU # fork()
+> +	depends on BR2_PACKAGE_DBUS
 
- The default n isn't needed - that is the default already in all other cases.
+ For the other dbus-* packages, the dbus dependencies are repeated (even
+though they're automatic because of the depends on DBUS). So I would do
+that here as well. And that means of course that there should also be a
+comment in case of missing toolchain features. See dbus-cpp for an example.
 
+> +	help
+> +	  dbus-triggerd is a tool to trigger shell-commands upon receiving
+> +	  a given dbus-signal.
 > +
->  config BR2_GCC_TARGET_ABI
->  	default "32"		if BR2_MIPS_OABI32
->  	default "n32"		if BR2_MIPS_NABI32
-> 
+> +	  http://gareus.org/oss/dbustriggerd/start
+> diff --git a/package/dbus-triggerd/dbus-triggerd-01-cross-compil.patch b/package/dbus-triggerd/dbus-triggerd-01-cross-compil.patch
+> new file mode 100644
+> index 0000000..67a2755
+> --- /dev/null
+> +++ b/package/dbus-triggerd/dbus-triggerd-01-cross-compil.patch
+> @@ -0,0 +1,13 @@
 
- Normally we should have a Config.in.legacy entry to catch old .configs
-that have o32 for a mips64 target. However, that is not possible now.
-Therefore, it should be captured in the release notes. To make sure that
-Peter doesn't forget, can you add this to the top of CHANGES?
+ Patch misses a description + Signed-off-by.
+
+> +--- a/Makefile	2014-03-25 07:27:15.761217767 +0100
+> ++++ b/Makefile	2014-03-25 07:31:28.523028955 +0100
+> +@@ -1,7 +1,8 @@
+> + PREFIX=/usr
+> ++PKG_CONFIG?=pkg-config
+> + 
+> +-CFLAGS=`pkg-config --cflags dbus-1` -Wall -O3
+> +-LDLIBS=`pkg-config --libs dbus-1`
+> ++CFLAGS+=`$(PKG_CONFIG) --cflags dbus-1` -Wall -O3
+> ++LDLIBS+=`$(PKG_CONFIG) --libs dbus-1`
+
+ If you're anyway patching the Makefile, you can just as well make it:
+
+CFLAGS?=-Wall -O3
+CFLAGS+=`$(PKG_CONFIG) --cflags dbus-1`
+LDLIBS+=`$(PKG_CONFIG) --libs dbus-1`
 
 
-2014.05, Not yet released:
 
-Support for MIPS o32 ABI on MIPS-64 targets has been removed. Building
-o32 ELF files for MIPS64 is an exotic configuration that nobody should be
-using. If o32 is required, then is better if it's built for MIPS 32-bit
-cores so only 32-bit instructions will be used leading to a more
-efficient o32 usage.
+ Will you send this patch upstream?
 
+> + 
+> + all: dbus-triggerd
+> + 
+> diff --git a/package/dbus-triggerd/dbus-triggerd.mk b/package/dbus-triggerd/dbus-triggerd.mk
+> new file mode 100644
+> index 0000000..fa04c06
+> --- /dev/null
+> +++ b/package/dbus-triggerd/dbus-triggerd.mk
+> @@ -0,0 +1,24 @@
+> +################################################################################
+> +#
+> +# dbus-triggerd
+> +#
+> +################################################################################
+> +
+> +DBUS_TRIGGERD_VERSION = 749a7a83a79439395ebdc52ff86f2601396b8c72
+> +DBUS_TRIGGERD_SITE = git://rg42.org/dbustriggerd.git
+> +DBUS_TRIGGERD_LICENSE = GPLv2+
+> +DBUS_TRIGGERD_DEPENDENCIES = dbus
+> +
+> +define DBUS_TRIGGERD_BUILD_CMDS
+> +	CC="$(TARGET_CC)" \
+> +	CFLAGS="$(TARGET_CFLAGS)" \
+> +	LDFLAGS="$(TARGET_LDFLAGS)" \
+> +	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
 
+ This should be $(TARGET_CONFIGURE_OPTS) which includes all of the above
+and more.
+
+ Note BTW that the patch above refers to LDLIBS instead of LDFLAGS. Is
+LDFLAGS used?
 
 
  Regards,
  Arnout
+
+> +	$(MAKE) -C $(@D) all
+> +endef
+> +
+> +define DBUS_TRIGGERD_INSTALL_TARGET_CMDS
+> +	$(MAKE) DESTDIR="$(TARGET_DIR)" -C $(@D) install
+> +endef
+> +
+> +$(eval $(generic-package))
+> 
 
 
 -- 
