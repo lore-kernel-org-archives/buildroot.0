@@ -1,58 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Mar 2014 16:01:32 +0100
-Subject: [Buildroot] [git commit] beecrypt: only build C++ support if
-	dependencies are available
-Message-ID: <20140326150517.4F60E9C3B2@busybox.osuosl.org>
+Date: Wed, 26 Mar 2014 11:00:19 +0100
+Subject: [Buildroot] [git commit] package/ca-certificates: security bump to
+	20140223
+Message-ID: <20140326150517.438839C378@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=205839d085508b83d9437f2fbe002ef076aa0cdb
+commit: http://git.buildroot.net/buildroot/commit/?id=1015a2e1f56566519d983acca34130ad4ee2f523
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Instead of automatically pulling in the (big) icu library if the toolchain
-dependencies are available.
+Some new CA added, some removed.
 
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Cc: Martin Bark <martin@barkynet.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/beecrypt/Config.in   |    7 -------
- package/beecrypt/beecrypt.mk |    2 +-
- 2 files changed, 1 insertions(+), 8 deletions(-)
+ package/ca-certificates/ca-certificates.mk |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/beecrypt/Config.in b/package/beecrypt/Config.in
-index 8d63e5e..84754e5 100644
---- a/package/beecrypt/Config.in
-+++ b/package/beecrypt/Config.in
-@@ -1,8 +1,6 @@
- config BR2_PACKAGE_BEECRYPT
- 	bool "beecrypt"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	select BR2_PACKAGE_ICU if BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR && \
--	       !BR2_arc && !BR2_BINFMT_FLAT
- 	help
- 	  Beecrypt is a general-purpose cryptography library.
+diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
+index c975a7d..f7c27bd 100644
+--- a/package/ca-certificates/ca-certificates.mk
++++ b/package/ca-certificates/ca-certificates.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
-@@ -10,8 +8,3 @@ config BR2_PACKAGE_BEECRYPT
- 
- comment "beecrypt needs a toolchain w/ threads"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
--
--comment "beecrypt C++ support needs a toolchain w/ wchar"
--	depends on !BR2_arc
--	depends on !BR2_BINFMT_FLAT
--	depends on BR2_INSTALL_LIBSTDCPP && !BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/beecrypt/beecrypt.mk b/package/beecrypt/beecrypt.mk
-index 223b44f..c77782c 100644
---- a/package/beecrypt/beecrypt.mk
-+++ b/package/beecrypt/beecrypt.mk
-@@ -22,7 +22,7 @@ BEECRYPT_CONF_OPT = \
- 		--without-python \
- 		--disable-openmp
- 
--ifeq ($(BR2_PACKAGE_ICU),y)
-+ifeq ($(BR2_INSTALL_LIBSTDCPP)$(BR2_USE_WCHAR)$(BR2_PACKAGE_ICU),yyy)
- # C++ support needs icu
- BEECRYPT_DEPENDENCIES += icu
- else
+-CA_CERTIFICATES_VERSION = 20130906
+-CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.gz
+-CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20130907T154615Z/pool/main/c/ca-certificates
++CA_CERTIFICATES_VERSION = 20140223
++CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.xz
++CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20140325T163435Z/pool/main/c/ca-certificates/
+ CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python
+ CA_CERTIFICATES_LICENSE = GPLv2+ (script), MPLv2.0 (data)
+ CA_CERTIFICATES_LICENSE_FILES = debian/copyright
