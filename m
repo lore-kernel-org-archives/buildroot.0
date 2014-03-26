@@ -1,52 +1,51 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Wed, 26 Mar 2014 09:05:08 +0000
-Subject: [Buildroot] [PATCH] package/ca-certificates: security bump to
-	20140223
-In-Reply-To: <1395770212-21932-1-git-send-email-yann.morin.1998@free.fr>
-References: <1395770212-21932-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <53329844.5010601@barkynet.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Wed, 26 Mar 2014 14:46:19 +0100
+Subject: [Buildroot] libusb / udev support issue when using systemd and
+ raspberrypi_defconfig
+In-Reply-To: <CABGWzsQM1qyfQ8c7aMJ+ARU6RvQQxPRC=s1Uh3jBijJZQ-ADSQ@mail.gmail.com>
+References: <CABGWzsQM1qyfQ8c7aMJ+ARU6RvQQxPRC=s1Uh3jBijJZQ-ADSQ@mail.gmail.com>
+Message-ID: <20140326134616.GA24151@pc-eric>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+Hi Eric!
 
-On 25/03/14 17:56, Yann E. MORIN wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
->
-> Some new CA added, some removed.
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> Cc: Martin Bark <martin@barkynet.com>
-> ---
->   package/ca-certificates/ca-certificates.mk | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
-> index c975a7d..f7c27bd 100644
-> --- a/package/ca-certificates/ca-certificates.mk
-> +++ b/package/ca-certificates/ca-certificates.mk
-> @@ -4,9 +4,9 @@
->   #
->   ################################################################################
->
-> -CA_CERTIFICATES_VERSION = 20130906
-> -CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.gz
-> -CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20130907T154615Z/pool/main/c/ca-certificates
-> +CA_CERTIFICATES_VERSION = 20140223
-> +CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.xz
-> +CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20140325T163435Z/pool/main/c/ca-certificates/
->   CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python
->   CA_CERTIFICATES_LICENSE = GPLv2+ (script), MPLv2.0 (data)
->   CA_CERTIFICATES_LICENSE_FILES = debian/copyright
->
+On Wed, Mar 26, 2014 at 09:45:17AM +0100, Eric Limpens wrote:
+>    Hi,
+>     I'ld like to use systemd as init system on a RaspberryPi. Following these
+>    steps, libusb complains about the lack of udev support (missing libudev):
+>    git clone git://git.busybox.net/buildroot
+>    make raspberrypi_defconfig
+>    make menuconfig
+>     --> select glibc as C library
+>     --> select systemd as init system
+>     --> select package libusb
+>    make
+>    Is this a glitch with setting one of the BR2_PACKAGE_HAS_UDEV or
+>    BR2_PACKAGE_PROVIDERS_UDEV variables?
+I reproduced your bug. It is not a glitch with systemd being a provider for
+the virtual package udev, but a linking issue.
 
-Looks good to me. I guess this means this patch 
-http://patchwork.ozlabs.org/patch/328808 will need an update too.
+If you look at output/build/libusb-1.0.18/config.log, you will see that the
+configure script fails to detect libudev because of this:
 
-Thanks
+ <...>/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/libudev.so:  undefined reference to `__res_search'
+ <...>/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/libudev.so:  undefined reference to `__res_query'
 
-Martin
+These symbols are provided by libresolv.so. Since systemd 209, some
+convenience libraries have been merged into libsystemd, which pulls this
+-lresolv dependency.
+
+See this `discussion
+<http://lists.freedesktop.org/archives/systemd-devel/2014-March/017923.html>`_
+on system-devel mailing list for more details, as well as this `Gentoo bug report
+<https://bugs.gentoo.org/show_bug.cgi?id=504700>`_ for further details.
+
+This issue is fixed in system 212, which has been released today! I will soon
+post a patch to bump this package.
+
+Best regards,
+ELB
