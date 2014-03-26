@@ -1,31 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Mar 2014 22:03:27 +0100
-Subject: [Buildroot] [git commit] dbus: bump version
-Message-ID: <20140326210349.59B4D9C3B0@busybox.osuosl.org>
+Date: Wed, 26 Mar 2014 22:08:17 +0100
+Subject: [Buildroot] [git commit] beecrypt: only build C++ support if
+	dependencies are available
+In-Reply-To: <53331005.4070306@mind.be> (Arnout Vandecappelle's message of
+ "Wed, 26 Mar 2014 18:36:05 +0100")
+References: <20140326150517.4F60E9C3B2@busybox.osuosl.org>
+ <53331005.4070306@mind.be>
+Message-ID: <8738i4llby.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fa477eb4a5d4a9cf37a2c99863d0db6d2d52fe17
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/dbus/dbus.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ > On 26/03/14 16:01, Peter Korsgaard wrote:
+ >> commit: http://git.buildroot.net/buildroot/commit/?id=205839d085508b83d9437f2fbe002ef076aa0cdb
+ >> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ >> 
+ >> Instead of automatically pulling in the (big) icu library if the toolchain
+ >> dependencies are available.
 
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index e8b3da7..4bcc953 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DBUS_VERSION = 1.6.8
-+DBUS_VERSION = 1.6.18
- DBUS_SITE = http://dbus.freedesktop.org/releases/dbus
- DBUS_LICENSE = AFLv2.1 GPLv2+
- DBUS_LICENSE_FILES = COPYING
+ >  Wouldn't it be more appropriate to make an explicit config option for it
+ > then? I think this one falls under the category "Not obvious to the user
+ > that he should select library XXX to enable feature YYY."
+
+Possibly. It is imho somewhat similar to how we do for openssl, but I
+can understand that the icu / C++ interface link might not be clear to
+people.
+
+ >  Patch follows.
+
+Thanks.
+
+-- 
+Bye, Peter Korsgaard 
