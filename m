@@ -1,80 +1,32 @@
-From: Eric Limpens <limpens@gmail.com>
-Date: Wed, 26 Mar 2014 15:48:10 +0100
-Subject: [Buildroot] libusb / udev support issue when using systemd and
-	raspberrypi_defconfig
-In-Reply-To: <20140326134616.GA24151@pc-eric>
-References: <CABGWzsQM1qyfQ8c7aMJ+ARU6RvQQxPRC=s1Uh3jBijJZQ-ADSQ@mail.gmail.com>
- <20140326134616.GA24151@pc-eric>
-Message-ID: <CABGWzsQ-ZRtWhav4Dxm_sbQx5VmP_AHLux9Ox5CAQzSKYmpVTw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 26 Mar 2014 11:00:11 +0100
+Subject: [Buildroot] [git commit] imagemagick: bump to version 6.8.8-9
+Message-ID: <20140326150517.332029C3B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Eric!
+commit: http://git.buildroot.net/buildroot/commit/?id=07af58cd54c7ae34e83ddf743e90bbbf37153bee
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for reproducing / resolving the issue. I'll do an update when an
-updated package is pushed.
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/imagemagick/imagemagick.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-For now I force libusb to configure with --disable-udev, that way it builds
-ok.
-
-Sincerely,
-
-Eric.
-
-
-
-On Wed, Mar 26, 2014 at 2:46 PM, Eric Le Bihan <eric.le.bihan.dev@free.fr>wrote:
-
-> Hi Eric!
->
-> On Wed, Mar 26, 2014 at 09:45:17AM +0100, Eric Limpens wrote:
-> >    Hi,
-> >     I'ld like to use systemd as init system on a RaspberryPi. Following
-> these
-> >    steps, libusb complains about the lack of udev support (missing
-> libudev):
-> >    git clone git://git.busybox.net/buildroot
-> >    make raspberrypi_defconfig
-> >    make menuconfig
-> >     --> select glibc as C library
-> >     --> select systemd as init system
-> >     --> select package libusb
-> >    make
-> >    Is this a glitch with setting one of the BR2_PACKAGE_HAS_UDEV or
-> >    BR2_PACKAGE_PROVIDERS_UDEV variables?
-> I reproduced your bug. It is not a glitch with systemd being a provider for
-> the virtual package udev, but a linking issue.
->
-> If you look at output/build/libusb-1.0.18/config.log, you will see that the
-> configure script fails to detect libudev because of this:
->
->  <...>/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/libudev.so:
->  undefined reference to `__res_search'
->  <...>/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/libudev.so:
->  undefined reference to `__res_query'
->
-> These symbols are provided by libresolv.so. Since systemd 209, some
-> convenience libraries have been merged into libsystemd, which pulls this
-> -lresolv dependency.
->
-> See this `discussion
-> <
-> http://lists.freedesktop.org/archives/systemd-devel/2014-March/017923.html
-> >`_
-> on system-devel mailing list for more details, as well as this `Gentoo bug
-> report
-> <https://bugs.gentoo.org/show_bug.cgi?id=504700>`_ for further details.
->
-> This issue is fixed in system 212, which has been released today! I will
-> soon
-> post a patch to bump this package.
->
-> Best regards,
-> ELB
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140326/978fbe38/attachment.html>
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 1e565d1..5cf189f 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IMAGEMAGICK_VERSION = 6.8.8-8
++IMAGEMAGICK_VERSION = 6.8.8-9
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ # The official ImageMagick site only keeps the latest versions
+ # available, which is annoying. Use an alternate site that keeps all
