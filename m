@@ -1,49 +1,44 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 26 Mar 2014 22:32:18 +0100
-Subject: [Buildroot] [PATCH 1/1] python3: drop PYTHON3_VERSION_{MINOR,
-	MAJOR} variable
-In-Reply-To: <1395818305-25027-1-git-send-email-jerzy.grzegorek@trzebnica.net>
- (Jerzy Grzegorek's message of "Wed, 26 Mar 2014 08:18:25 +0100")
-References: <1395818305-25027-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <87lhvwk5nh.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 26 Mar 2014 22:32:54 +0100
+Subject: [Buildroot] [git commit] manual/using: output/toolchain is gone
+Message-ID: <20140326213335.3464B9C3A5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Jerzy" == Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=b7090a24d193c63adb259364c98263b0823b0643
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
- > ---
- >  package/python3/python3.mk |    8 +++-----
- >  1 file changed, 3 insertions(+), 5 deletions(-)
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ docs/manual/using.txt |    7 ++-----
+ 1 files changed, 2 insertions(+), 5 deletions(-)
 
- > diff --git a/package/python3/python3.mk b/package/python3/python3.mk
- > index ce75e46..21576bf 100644
- > --- a/package/python3/python3.mk
- > +++ b/package/python3/python3.mk
- > @@ -4,11 +4,9 @@
- >  #
- >  ################################################################################
+diff --git a/docs/manual/using.txt b/docs/manual/using.txt
+index 9b0a81f..4a33f7e 100644
+--- a/docs/manual/using.txt
++++ b/docs/manual/using.txt
+@@ -75,8 +75,8 @@ This directory contains several subdirectories:
+ * +images/+ where all the images (kernel image, bootloader and root
+   filesystem images) are stored.
  
- > -PYTHON3_VERSION_MAJOR = 3.4
- > -PYTHON3_VERSION_MINOR = 0
- > -PYTHON3_VERSION       = $(PYTHON3_VERSION_MAJOR).$(PYTHON3_VERSION_MINOR)
- > -PYTHON3_SOURCE        = Python-$(PYTHON3_VERSION).tar.xz
- > -PYTHON3_SITE          = http://python.org/ftp/python/$(PYTHON3_VERSION_MAJOR).$(PYTHON3_VERSION_MINOR)
- > +PYTHON3_VERSION = 3.4.0
- > +PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
- > +PYTHON3_SITE = http://python.org/ftp/python/$(PYTHON3_VERSION)
-
-Strike that - PYTHON3_VERSION_MAJOR is used in several places:
-
-git grep PYTHON3_VERSION_
-package/python3/python3.mk:     rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR)-config
-package/python3/python3.mk:     rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR)m-config
-package/python3/python3.mk:     for i in `find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/config-$(PYT
-package/python3/python3.mk:     chmod u+w $(TARGET_DIR)/usr/lib/libpython$(PYTHON3_VERSION_MAJOR)*.so
-package/python3/python3.mk:PYTHON3_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/sysconfigdata/:$(
+-* +build/+ where all the components except for the cross-compilation
+-  toolchain are built (this includes tools needed to run Buildroot on
++* +build/+ where all the components are built
++  (this includes tools needed to run Buildroot on
+   the host and packages compiled for the target). The +build/+
+   directory contains one subdirectory for each of these components.
  
--- 
-Bye, Peter Korsgaard
+@@ -108,9 +108,6 @@ This directory contains several subdirectories:
+   that are needed for the proper execution of Buildroot, including the
+   cross-compilation toolchain.
+ 
+-* +toolchain/+ contains the build directories for the various
+-  components of the cross-compilation toolchain.
+-
+ These commands, +make menuconfig|nconfig|gconfig|xconfig+ and +make+, are the
+ basic ones that allow to easily and quickly generate images fitting
+ your needs, with all the supports and applications you enabled.
