@@ -1,114 +1,73 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 27 Mar 2014 00:42:27 +0100
-Subject: [Buildroot] [PATCH] tcl: bump to version 8.6.1
-In-Reply-To: <1393887187-29706-1-git-send-email-andrew.ruder@elecsyscorp.com>
- (Andrew Ruder's message of "Mon, 3 Mar 2014 16:53:07 -0600")
-References: <1393887187-29706-1-git-send-email-andrew.ruder@elecsyscorp.com>
-Message-ID: <87bnwsil24.fsf@dell.be.48ers.dk>
+From: Joshua Kinard <kumba@gentoo.org>
+Date: Wed, 26 Mar 2014 19:45:00 -0400
+Subject: [Buildroot] [PATCH v2] Disable o32 ABI for MIPS64 architectures
+In-Reply-To: <53330BB4.8090102@mind.be>
+References: <1395769952-64221-1-git-send-email-Vincent.Riera@imgtec.com>
+ <5331E0D4.6070007@mind.be> <53321BC8.7020802@gentoo.org>
+ <5332E203.9040904@imgtec.com> <53330BB4.8090102@mind.be>
+Message-ID: <5333667C.4060404@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Andrew" == Andrew Ruder <andrew.ruder@elecsyscorp.com> writes:
+On 03/26/2014 13:17, Arnout Vandecappelle wrote:
+> 
+>  Hi Joshua,
+> 
+> On 26/03/14 15:19, Markos Chandras wrote:
+>> On 03/26/2014 12:14 AM, Joshua Kinard wrote:
+>>> On 03/25/2014 16:02, Arnout Vandecappelle wrote:
+> [snip]
+>>>> Support for MIPS o32 ABI on MIPS-64 targets has been removed. Building
+>>>> o32 ELF files for MIPS64 is an exotic configuration that nobody should be
+>>>> using. If o32 is required, then is better if it's built for MIPS 32-bit
+>>>> cores so only 32-bit instructions will be used leading to a more
+>>>> efficient o32 usage.
+>>>
+>>> Just to point out, I wouldn't call this "exotic" -- o32 on mips64 kernels
+>>> (MIPS-IV ISA) is what I run on my SGI O2 under Gentoo.  That said, I do
+>>> have
+>>> a somewhat-working n32 chroot on the same box.  Additionally, isn't o32
+> 
+>  So the mips64 n32 userspace created by buildroot doesn't work
+> completely, just somewhat?
 
-Hi,
-
- > We carry a patch that turns off building compatibility layers for old/broken
- > versions of standard functions (strstr, strtoul, strtod) with the assumption
- > that anything buildroot is targetting with the standard C library will be good
- > enough.
-
-Thanks, see below for a few comments:
- 
- > +++ b/package/tcl/tcl-0001-dont-build-compat.patch
- > @@ -0,0 +1,21 @@
- > +diff --git a/unix/tcl.m4 b/unix/tcl.m4
-
-Please add a git-style patch header explaining what the patch does and
-why + your signed-off-by. You can basically just copy your commit text
-above.
-
- > +++ b/package/tcl/tcl.mk
- > @@ -4,8 +4,8 @@
- >  #
- >  ################################################################################
- 
- > -TCL_VERSION_MAJOR = 8.4
- > -TCL_VERSION_MINOR = 19
- > +TCL_VERSION_MAJOR = 8.6
- > +TCL_VERSION_MINOR = 1
-
-TCL_VERSION_MINOR has been removed in the mean time.
-
- >  TCL_VERSION = $(TCL_VERSION_MAJOR).$(TCL_VERSION_MINOR)
- >  TCL_SOURCE = tcl$(TCL_VERSION)-src.tar.gz
- >  TCL_SITE = http://downloads.sourceforge.net/project/tcl/Tcl/$(TCL_VERSION)
- > @@ -13,6 +13,7 @@ TCL_LICENSE = tcl license
- >  TCL_LICENSE_FILES = license.terms
- >  TCL_SUBDIR = unix
- >  TCL_INSTALL_STAGING = YES
- > +TCL_AUTORECONF = YES
- >  TCL_CONF_OPT = \
- >  		--disable-symbols \
- >  		--disable-langinfo \
- > @@ -42,12 +43,30 @@ endef
- >  TCL_POST_INSTALL_TARGET_HOOKS += TCL_SYMLINK_TCLSH
- >  endif
- 
- > -# library get installed read only, so strip fails
- > -define TCL_FIXUP_RO_LIB
- > -	chmod +w $(TARGET_DIR)/usr/lib/libtcl*
- > +ifneq ($(BR2_PACKAGE_SQLITE),y)
- > +define TCL_REMOVE_SQLITE
- > +	rm -fr $(TARGET_DIR)/usr/lib/sqlite3.8.0 $(TARGET_DIR)/usr/lib/tdbcsqlite3-1.0.0
- >  endef
- > +TCL_POST_INSTALL_TARGET_HOOKS += TCL_REMOVE_SQLITE
- > +endif
- > +
- > +define TCL_REMOVE_EXTRA
- > +	rm -fr $(TARGET_DIR)/usr/lib/tdbcmysql1.0.0 \
- > +	       $(TARGET_DIR)/usr/lib/tdbcodbc1.0.0 \
- > +	       $(TARGET_DIR)/usr/lib/tdbcpostgres1.0.0 \
- > +	       $(TARGET_DIR)/usr/lib/tclConfig.sh \
- > +	       $(TARGET_DIR)/usr/lib/tclooConfig.sh
- > +endef
- > +TCL_POST_INSTALL_TARGET_HOOKS += TCL_REMOVE_EXTRA
- 
- > -TCL_POST_INSTALL_TARGET_HOOKS += TCL_FIXUP_RO_LIB
- > +ifneq ($(BR2_PACKAGE_SQLITE),y)
- > +define TCL_REMOVE_SQLITE
- > +	rm -fr $(TARGET_DIR)/usr/lib/sqlite3.8.0 \
- > +	       $(TARGET_DIR)/usr/lib/tdbcsqlite3-1.0.0 \
- > +	       $(TARGET_DIR)/usr/lib/tdbc1.0.0
- > +endef
-
-You seem to handle sqlite twice? Shouldn't sqlite atleast be added to
-TCL_DEPENDENCIES (and perhaps host-pkgconf if it is used) if it is
-enabled to ensure that the configure script picks it up?
+No, "somewhat" means I haven't powered that machine up in a while and
+updated it.  It boots into an o32 install I've had since 2005 (and am loathe
+to replace just yet, at least as long as the disks stay alive), and I chroot
+into a separate n32 root.  It's got an old 350MHz RM7000 CPU (PMC-Sierra),
+so updating can take a long time for just the o32 root (gcc is ~17hrs these
+days.  Used to be ~2.5hrs in the gcc-3.4.x days).  Once that's updated, I
+then update the n32 root.  Almost had that done until a recent snow storm
+knocked my power out, and I never resumed the update.
 
 
- > +TCL_POST_INSTALL_TARGET_HOOKS += TCL_REMOVE_SQLITE
- > +endif
- 
- >  $(eval $(autotools-package))
- >  $(eval $(host-autotools-package))
- > diff --git a/package/tcllib/tcllib.mk b/package/tcllib/tcllib.mk
- > index f2aca36..ae2e4da 100644
- > --- a/package/tcllib/tcllib.mk
- > +++ b/package/tcllib/tcllib.mk
- > @@ -10,6 +10,6 @@ TCLLIB_SITE          = http://downloads.sourceforge.net/project/tcllib/tcllib/$(
- >  TCLLIB_LICENSE       = tcl license
- >  TCLLIB_LICENSE_FILES = license.terms
- >  TCLLIB_DEPENDENCIES  = host-tcl
- > -TCLLIB_CONF_ENV      = ac_cv_path_tclsh="$(HOST_DIR)/usr/bin/tclsh8.4"
- > +TCLLIB_CONF_ENV      = ac_cv_path_tclsh="$(HOST_DIR)/usr/bin/tclsh8.6"
+>> We are talking about using 64-bit instructions in *userland* while
+>> maintaining the o32 ABI semantics. Well, this is definitely an exotic
+>> configuration. We are not talking about 64-bit kernels + o32 userland.
+>> An o32 userland usually comes from mips32 and you usually have only
+>> 32-bit instructions there.
+> 
+>  Joshua, if you agree with this reasoning, could you ack Vicente's patch?
 
-It would be good to use $(TCL_VERSION_MAJOR) here so we don't need to
-update it whenever the version is bumped.
+Let me get clarification on what "MIPS64" Vincent was referring to first.
+It's easy to mix that up.  I was assuming he meant o32 userland + mips64
+kernel, which I know still works, even though it is very inefficient (using
+just half of your available CPU registers).  If he's referring to the ISA of
+MIPS64 (or as I read it, mips64r1/mips64r2), then yeah, it's not a problem
+at all.  Though I am not an authority on MIPS' capabilities outside of the
+SGI hardware lineup, as that's all that I have available to play with.
 
-Care to fix these minor issues and resend? Thanks!
 
 -- 
-Bye, Peter Korsgaard
+Joshua Kinard
+Gentoo/MIPS
+kumba at gentoo.org
+4096R/D25D95E3 2011-03-28
+
+"The past tempts us, the present confuses us, the future frightens us.  And
+our lives slip away, moment by moment, lost in that vast, terrible in-between."
+
+--Emperor Turhan, Centauri Republic
