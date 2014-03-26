@@ -1,106 +1,62 @@
-From: Joshua Kinard <kumba@gentoo.org>
-Date: Tue, 25 Mar 2014 20:14:00 -0400
-Subject: [Buildroot] [PATCH v2] Disable o32 ABI for MIPS64 architectures
-In-Reply-To: <5331E0D4.6070007@mind.be>
-References: <1395769952-64221-1-git-send-email-Vincent.Riera@imgtec.com>
- <5331E0D4.6070007@mind.be>
-Message-ID: <53321BC8.7020802@gentoo.org>
+From: =?UTF-8?B?QXJuYXVkIFLDqWJpbGxvdXQ=?= <rebillout@syscom.ch>
+Date: Wed, 26 Mar 2014 08:01:31 +0100
+Subject: [Buildroot] [PATCH 1/1] dbus-triggerd: new package
+In-Reply-To: <5331E316.4030706@mind.be>
+References: <1395734396-31668-1-git-send-email-rebillout@syscom.ch>
+ <1395734396-31668-2-git-send-email-rebillout@syscom.ch>
+ <5331E316.4030706@mind.be>
+Message-ID: <53327B4B.2010005@syscom.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/25/2014 16:02, Arnout Vandecappelle wrote:
-> On 25/03/14 18:52, Vicente Olivert Riera wrote:
->> Building o32 ELF files for MIPS64 is an exotic configuration that nobody
->> should be using. If o32 is required, then is better if it's built for
->> MIPS 32-bit cores so only 32-bit instructions will be used leading to a
->> more efficient o32 usage.
->>
->> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->> ---
->>  arch/Config.in.mips |   12 +++++++-----
->>  1 files changed, 7 insertions(+), 5 deletions(-)
->>
->> diff --git a/arch/Config.in.mips b/arch/Config.in.mips
->> index d9c0c02..f558705 100644
->> --- a/arch/Config.in.mips
->> +++ b/arch/Config.in.mips
->> @@ -38,15 +38,12 @@ endchoice
->>  
->>  choice
->>  	prompt "Target ABI"
->> -	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
->> -	default BR2_MIPS_OABI32 if !BR2_ARCH_IS_64
->> -	default BR2_MIPS_NABI32 if BR2_ARCH_IS_64
->> +	depends on BR2_mips64 || BR2_mips64el
->> +	default BR2_MIPS_NABI32
->>  
->>  	help
->>  	  Application Binary Interface to use
->>  
->> -config BR2_MIPS_OABI32
->> -	bool "o32"
->>  config BR2_MIPS_NABI32
->>  	bool "n32"
->>  	depends on BR2_ARCH_IS_64
->> @@ -86,6 +83,11 @@ config BR2_GCC_TARGET_ARCH
->>  	default "mips64"	if BR2_mips_64
->>  	default "mips64r2"	if BR2_mips_64r2
->>  
->> +config BR2_MIPS_OABI32
->> +	bool
->> +	default y		if BR2_mips || BR2_mipsel
->> +	default n		if BR2_mips64 || BR2_mips64el
-> 
->  The default n isn't needed - that is the default already in all other cases.
-> 
->> +
->>  config BR2_GCC_TARGET_ABI
->>  	default "32"		if BR2_MIPS_OABI32
->>  	default "n32"		if BR2_MIPS_NABI32
->>
-> 
->  Normally we should have a Config.in.legacy entry to catch old .configs
-> that have o32 for a mips64 target. However, that is not possible now.
-> Therefore, it should be captured in the release notes. To make sure that
-> Peter doesn't forget, can you add this to the top of CHANGES?
-> 
-> 
-> 2014.05, Not yet released:
-> 
-> Support for MIPS o32 ABI on MIPS-64 targets has been removed. Building
-> o32 ELF files for MIPS64 is an exotic configuration that nobody should be
-> using. If o32 is required, then is better if it's built for MIPS 32-bit
-> cores so only 32-bit instructions will be used leading to a more
-> efficient o32 usage.
+Hi Arnout,
 
-Just to point out, I wouldn't call this "exotic" -- o32 on mips64 kernels
-(MIPS-IV ISA) is what I run on my SGI O2 under Gentoo.  That said, I do have
-a somewhat-working n32 chroot on the same box.  Additionally, isn't o32 the
-ABI that Debian still builds for most of their mips/mipsel targets?
+>   For the other dbus-* packages, the dbus dependencies are repeated (even
+> though they're automatic because of the depends on DBUS). So I would do
+> that here as well. And that means of course that there should also be a
+> comment in case of missing toolchain features. See dbus-cpp for an example.
+You're right, I forgot the comments, and the host-pkgconf dependency as 
+well.
+I will do as you suggest for the DBUS dependencies.
 
-I guess for newer MIPS hardware, this is definitely sensible, but given the
-wide availability of old SGI hardware on eBay, it's far from exotic.  I also
-believe Debian still supports DEC systems, which are even older.
+>   Patch misses a description + Signed-off-by.
+Correct.
 
-I still plan on looking at fixing the MIPS-II to MIPS-IV issue I raised a
-few weeks ago, but I've been tied up in other projects.  So if there is some
-legacy way to retain this capability, maybe by defining an SGI-specific
-target at some point, that'd be great.  It'll at least give me a starting
-port to isolate the legacy stuff so that it only applies to this old
-hardware and doesn't impede anyone working with newer hardware.
+>   If you're anyway patching the Makefile, you can just as well make it:
+>
+> CFLAGS?=-Wall -O3
+> CFLAGS+=`$(PKG_CONFIG) --cflags dbus-1`
+> LDLIBS+=`$(PKG_CONFIG) --libs dbus-1`
+>
+>
+>
+>   Will you send this patch upstream?
+Yep. I will send a patch right now.
 
-Food for thought :)
+
+>   This should be $(TARGET_CONFIGURE_OPTS) which includes all of the above
+> and more.
+OK. Actually, I've always been wondering it was OK to use 
+TARGET_CONFIGURE_OPTS in a generic package, I never dared to do it.
+
+>   Note BTW that the patch above refers to LDLIBS instead of LDFLAGS. Is
+> LDFLAGS used?
+Yep, LDFLAGS is used automatically by Make in this Makefile.
+
+
+
+Thanks for your comments, I will send the patch upstream a wait a little 
+for the author's comments on it.
+
+
+Regards
+
 
 -- 
-Joshua Kinard
-Gentoo/MIPS
-kumba at gentoo.org
-4096R/D25D95E3 2011-03-28
-
-"The past tempts us, the present confuses us, the future frightens us.  And
-our lives slip away, moment by moment, lost in that vast, terrible in-between."
-
---Emperor Turhan, Centauri Republic
+Arnaud R?billout
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140326/f245da9a/attachment.html>
