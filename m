@@ -1,34 +1,29 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 27 Mar 2014 00:45:43 +0100
-Subject: [Buildroot] [PATCH 1/2] cups: fix static linking
-In-Reply-To: <1394033401-23331-1-git-send-email-Vincent.Riera@imgtec.com>
- (Vicente Olivert Riera's message of "Wed, 5 Mar 2014 15:30:00 +0000")
-References: <1394033401-23331-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <877g7gikwo.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 27 Mar 2014 00:45:27 +0100
+Subject: [Buildroot] [git commit] cups: rename patches to follow BR
+	guidelines
+Message-ID: <20140326234558.22AED9C30E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=09b0b7d73f709fc0e2c5bbee47c4edcb877dfd7d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Append -lz to the cups linking libs to fix a problem like this one:
- > ../cups/libcups.a(file.o): In function `cupsFileSeek':
- > /home/test/test/1/output/build/cups-1.3.11/cups/file.c:1444: undefined
- > reference to `inflateEnd'
- > collect2: error: ld returned 1 exit status
- > make[2]: *** [ipp] Error 1
- > make[2]: *** Waiting for unfinished jobs....
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...h => cups-0002-fix-stack-protector-check.patch} |    0
+ ...s-mantohtml.patch => cups-0003-mantohtml.patch} |    0
+ 2 files changed, 0 insertions(+), 0 deletions(-)
 
- > This solution is the same used upstream in newer versions.
-
- > Fixes:
- >    http://autobuild.buildroot.net/results/f3d/f3d4f67ce7ee1d54f5bd4c87dfddb7417db614e5/
-
- > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-
-Committed both, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/cups/cups-fix-stack-protector-check.patch b/package/cups/cups-0002-fix-stack-protector-check.patch
+similarity index 100%
+rename from package/cups/cups-fix-stack-protector-check.patch
+rename to package/cups/cups-0002-fix-stack-protector-check.patch
+diff --git a/package/cups/cups-mantohtml.patch b/package/cups/cups-0003-mantohtml.patch
+similarity index 100%
+rename from package/cups/cups-mantohtml.patch
+rename to package/cups/cups-0003-mantohtml.patch
