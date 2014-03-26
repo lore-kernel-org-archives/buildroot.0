@@ -1,33 +1,68 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 26 Mar 2014 07:16:58 +0100
-Subject: [Buildroot] Status of wayland package
-In-Reply-To: <532880A0.3020604@carallon.com>
-References: <532880A0.3020604@carallon.com>
-Message-ID: <533270DA.5070701@mind.be>
+Date: Wed, 26 Mar 2014 08:46:23 +0100
+Subject: [Buildroot] [PATCH 1/1] dbus-triggerd: new package
+In-Reply-To: <53327B4B.2010005@syscom.ch>
+References: <1395734396-31668-1-git-send-email-rebillout@syscom.ch>
+ <1395734396-31668-2-git-send-email-rebillout@syscom.ch>
+ <5331E316.4030706@mind.be> <53327B4B.2010005@syscom.ch>
+Message-ID: <533285CF.6090700@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18/03/14 18:21, Will Wagner wrote:
-> Hello,
+On 26/03/14 08:01, Arnaud R?billout wrote:
+> Hi Arnout,
 > 
-> I'm just starting to look at a new project and was interested in using
-> wayland.
+>>  For the other dbus-* packages, the dbus dependencies are repeated (even
+>> though they're automatic because of the depends on DBUS). So I would do
+>> that here as well. And that means of course that there should also be a
+>> comment in case of missing toolchain features. See dbus-cpp for an example.
+> You're right, I forgot the comments, and the host-pkgconf dependency as well.
+> I will do as you suggest for the DBUS dependencies.
 > 
-> Can anyone tell me the status of the package in buildroot? According to
-> http://wayland.freedesktop.org/building.html there are quite a lot of
-> dependencies for wayland that don't seem to be reflected in buildroot. Is
-> it just that the wayland docs are very out of date?
+>>  Patch misses a description + Signed-off-by.
+> Correct.
+> 
+>>  If you're anyway patching the Makefile, you can just as well make it:
+>>
+>> CFLAGS?=-Wall -O3
+>> CFLAGS+=`$(PKG_CONFIG) --cflags dbus-1`
+>> LDLIBS+=`$(PKG_CONFIG) --libs dbus-1`
+>>
+>>
+>>
+>>  Will you send this patch upstream?
+> Yep. I will send a patch right now.
+> 
+> 
+>>  This should be $(TARGET_CONFIGURE_OPTS) which includes all of the above
+>> and more.
+> OK. Actually, I've always been wondering it was OK to use
+> TARGET_CONFIGURE_OPTS in a generic package, I never dared to do it.
 
- There aren't that many dependencies, and buildroot has them. Buildroot
-also has the wayland package, and since Yann regularly bumps it I guess
-it works for him.
+ Yeah, it should be renamed, really.
 
  Regards,
  Arnout
 
+> 
+>>  Note BTW that the patch above refers to LDLIBS instead of LDFLAGS. Is
+>> LDFLAGS used?
+> Yep, LDFLAGS is used automatically by Make in this Makefile.
+> 
+> 
+> 
+> Thanks for your comments, I will send the patch upstream a wait a little
+> for the author's comments on it.
+> 
+> 
+> Regards
+> 
+> 
+> -- 
+> Arnaud R?billout
 
 
 -- 
