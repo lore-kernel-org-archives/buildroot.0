@@ -1,43 +1,30 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Wed, 26 Mar 2014 19:46:09 +0100
-Subject: [Buildroot] [PATCH] manual/using: output/toolchain is gone
-Message-ID: <1395859569-23982-1-git-send-email-francois.perrad@gadz.org>
+From: Davide Viti <zinosat@tiscali.it>
+Date: Wed, 26 Mar 2014 20:52:59 +0100
+Subject: [Buildroot] [v3,2/2] canfestival: new package
+In-Reply-To: <1388673820-5710-3-git-send-email-s.martin49@gmail.com>
+References: <1388673820-5710-3-git-send-email-s.martin49@gmail.com>
+Message-ID: <20140326195259.GA26115@zinosat.dyndns.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Thu, Jan 02, 2014 at 03:43:40PM +0100, Samuel Martin wrote:
+...
+> +define CANFESTIVAL_CONFIGURE_CMDS
+> +	cd $(@D) && \
+> +		$(TARGET_CONFIGURE_OPTS) ./configure \
+> +		--binutils=$(TARGET_CROSS) --cc="$(TARGET_CC)" \
+> +		--cxx="$(TARGET_CC)" --ld="$(TARGET_CC)" \
+> +		--can=$(BR2_PACKAGE_CANFESTIVAL_DRIVER) \
+> +		--MAX_CAN_BUS_ID=$(BR2_PACKAGE_CANFESTIVAL_NBMMAXCAN)
+> +endef
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- docs/manual/using.txt |    7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+I've tested the patch with an arm toolchain and noticed that installed
+files end up not properly prefixed (i.e. /usr/arm-buildroot-linux-gnueabi/lib)
 
-diff --git a/docs/manual/using.txt b/docs/manual/using.txt
-index 9b0a81f..4a33f7e 100644
---- a/docs/manual/using.txt
-+++ b/docs/manual/using.txt
-@@ -75,8 +75,8 @@ This directory contains several subdirectories:
- * +images/+ where all the images (kernel image, bootloader and root
-   filesystem images) are stored.
- 
--* +build/+ where all the components except for the cross-compilation
--  toolchain are built (this includes tools needed to run Buildroot on
-+* +build/+ where all the components are built
-+  (this includes tools needed to run Buildroot on
-   the host and packages compiled for the target). The +build/+
-   directory contains one subdirectory for each of these components.
- 
-@@ -108,9 +108,6 @@ This directory contains several subdirectories:
-   that are needed for the proper execution of Buildroot, including the
-   cross-compilation toolchain.
- 
--* +toolchain/+ contains the build directories for the various
--  components of the cross-compilation toolchain.
--
- These commands, +make menuconfig|nconfig|gconfig|xconfig+ and +make+, are the
- basic ones that allow to easily and quickly generate images fitting
- your needs, with all the supports and applications you enabled.
--- 
-1.7.9.5
+It can be fixed by passing "--prefix=/usr" to configure
+
+regards,
+Davide
