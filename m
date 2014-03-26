@@ -1,40 +1,46 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Wed, 26 Mar 2014 23:22:06 +0100
-Subject: [Buildroot] [PATCH v2 1/1] python3: drop PYTHON3_VERSION_MINOR
-	variable
-Message-ID: <1395872526-17937-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 26 Mar 2014 23:37:12 +0100
+Subject: [Buildroot] Different site methods for the main package and
+ patches
+In-Reply-To: <53331268.4030205@mind.be>
+References: <CA+-urNQrPff3iTDGdWwYvbhLPXwCrqZgVA91qQS_RgM66VG1eQ@mail.gmail.com>
+ <53331268.4030205@mind.be>
+Message-ID: <20140326233712.4347c3c8@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
----
-v2
-- rename subject
-- drop only PYTHON3_VERSION_MINOR variable
+Dear Arnout Vandecappelle,
 
- package/python3/python3.mk |    7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+On Wed, 26 Mar 2014 18:46:16 +0100, Arnout Vandecappelle wrote:
 
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index ce75e46..0144d1e 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -5,10 +5,9 @@
- ################################################################################
- 
- PYTHON3_VERSION_MAJOR = 3.4
--PYTHON3_VERSION_MINOR = 0
--PYTHON3_VERSION       = $(PYTHON3_VERSION_MAJOR).$(PYTHON3_VERSION_MINOR)
--PYTHON3_SOURCE        = Python-$(PYTHON3_VERSION).tar.xz
--PYTHON3_SITE          = http://python.org/ftp/python/$(PYTHON3_VERSION_MAJOR).$(PYTHON3_VERSION_MINOR)
-+PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).0
-+PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
-+PYTHON3_SITE = http://python.org/ftp/python/$(PYTHON3_VERSION)
- 
- # Python needs itself and a "pgen" program to build itself, both being
- # provided in the Python sources. So in order to cross-compile Python,
+>  You're probably right about that. The problem is that the DOWNLOAD macro
+> cannot know if it is given a patch or the package itself. So it should
+> probably be changed to get _SITE_METHOD as an optional argument.
+> 
+>  Yann, perhaps you could take that up into your download method rework
+> series?
+
+Generally speaking, I'm a bit unhappy about how things work on the
+download front:
+
+ *) I don't really understand why we have a separation between _SITE
+    and _SOURCE, and why our infra assumes that _PATCH is relative to
+    _SITE. Why don't we simply make _SOURCE and _PATCH full URLs
+    instead? This way _PATCH can list multiple patches coming from
+    different locations, not necessarily the upstream location of the
+    package.
+
+ *) Why is the DOWNLOAD macro looking at _SITE_METHOD ? It believe it
+    should be a macro that remains independent of the package
+    infrastructure, and it should simply take as argument the
+    information that it needs, rather than poking directly into
+    _SITE_METHOD.
+
+Thomas
 -- 
-1.7.9.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
