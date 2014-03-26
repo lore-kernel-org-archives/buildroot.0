@@ -1,49 +1,84 @@
-From: Joshua Kinard <kumba@gentoo.org>
-Date: Wed, 26 Mar 2014 19:34:33 -0400
-Subject: [Buildroot] [PATCH v2] Disable o32 ABI for MIPS64 architectures
-In-Reply-To: <5332E203.9040904@imgtec.com>
-References: <1395769952-64221-1-git-send-email-Vincent.Riera@imgtec.com>
- <5331E0D4.6070007@mind.be> <53321BC8.7020802@gentoo.org>
- <5332E203.9040904@imgtec.com>
-Message-ID: <53336409.8090402@gentoo.org>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Thu, 27 Mar 2014 00:41:53 +0100
+Subject: [Buildroot] [PATCH v11] xbmc: new package
+In-Reply-To: <87mwgcim34.fsf@dell.be.48ers.dk>
+References: <1395875160-14253-1-git-send-email-yann.morin.1998@free.fr>
+ <87mwgcim34.fsf@dell.be.48ers.dk>
+Message-ID: <CAGduivyMu4pW5ky+5RBTa+Tn36oA_SqABTMhBN=j-Fw7A3_JDw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/26/2014 10:19, Markos Chandras wrote:
-> On 03/26/2014 12:14 AM, Joshua Kinard wrote:
->> On 03/25/2014 16:02, Arnout Vandecappelle wrote:
->>> On 25/03/14 18:52, Vicente Olivert Riera wrote:
-[snip]
->>> Support for MIPS o32 ABI on MIPS-64 targets has been removed. Building
->>> o32 ELF files for MIPS64 is an exotic configuration that nobody should be
->>> using. If o32 is required, then is better if it's built for MIPS 32-bit
->>> cores so only 32-bit instructions will be used leading to a more
->>> efficient o32 usage.
->>
->> Just to point out, I wouldn't call this "exotic" -- o32 on mips64 kernels
->> (MIPS-IV ISA) is what I run on my SGI O2 under Gentoo.  That said, I do have
->> a somewhat-working n32 chroot on the same box.  Additionally, isn't o32 the
->> ABI that Debian still builds for most of their mips/mipsel targets?
-> 
-> We are talking about using 64-bit instructions in *userland* while
-> maintaining the o32 ABI semantics. Well, this is definitely an exotic
-> configuration. We are not talking about 64-bit kernels + o32 userland.
-> An o32 userland usually comes from mips32 and you usually have only 32-bit
-> instructions there.
+Hurray !
+On 27 Mar 2014 00:20, "Peter Korsgaard" <jacmet@uclibc.org> wrote:
+>
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>
+>  > From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+>  > XBMC is an award-winning free and open source (GPL) software media
+>  > player and entertainment hub for digital media.
+>
+>  > We do provide a sub-option for each major feature we support, to avoid
+>  > letting the user hunt-down required libraries, since the dependency is
+>  > not always obvious and straightforward.
+>
+>  > We also provide our own wrapper script, because the ones bundled in
+>  > XBMC are not suitable to all platforms. We need such a wrapper script
+>  > because XBMC exits with different exit codes, depending on how the user
+>  > quit XBMC: 0 is normal exit, 64 is for halt, and 66 is for reboot. So
+>  > we can't simply call the real XBMC binary from the startup script, or
+>  > we would lose this information. So, we provide a wrapper script that
+>  > takes appropriate action according to the above exit codes.
+>
+>  > When run as root from a startup script, there is no HOME set, so XBMC
+>  > defaults to saving its configuration in /.xbmc (yes, at the root of the
+>  > rootfs). Since this does not play well with read-only filesystems (and
+>  > is inherently ugly anyway), and sicne there is no real clean way to
+tell
+>  > XBMC where to store its configuration, just provide a symlink to a
+better
+>  > place: /.xbmc -> /var/xbmc  (note: the only location _guaranteed_ to be
+>  > writable is /tmp, but we want the configuration to survive a reboot.
+So,
+>  > /var/xbmc looks a better place than /var/run/xbmc. and the user will
+>  > have to take action to ensure /var/xbmc be writable.) (note: for this
+>  > reason, we do not want to set $HOME to /root either, even if it is root
+>  > running XBMC.)
+>
+>  > Some of XBMC sub-options select libraries that depend on toolchain
+options,
+>  > such as IPv6. But those are already covered, being also implicit
+>  > dependencies of XBMC, as XBMC can only be used on an (e)glibc toolchain
+>  > anyway. When^WIf XBMC is one day buildable under uClibc/musl, this
+will be
+>  > time to revisit those dependencies.
+>
+>  > This package was originally found at :
+https://github.com/huceke/buildroot-rbp
+>  > By gimli <ebsi4711@gmail.com>
+>
+>  > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+>  > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>  > Cc: gimli <ebsi4711@gmail.com>
+>  > Cc: Martin Bark <martin@barkynet.com>
+>  > ---
+>  > Chamges v10 -> v11:
+>
+> Heh ;)
+>
+> Committed, thanks both!
+Hurray !!
 
-I think the mixup I am having is the "MIPS64" that Vincent is referring to
-is the ISA, e.g., mips64r[12], not "MIPS64" as in "64bit MIPS", right?
-
--- 
-Joshua Kinard
-Gentoo/MIPS
-kumba at gentoo.org
-4096R/D25D95E3 2011-03-28
-
-"The past tempts us, the present confuses us, the future frightens us.  And
-our lives slip away, moment by moment, lost in that vast, terrible in-between."
-
---Emperor Turhan, Centauri Republic
+Thanks Peter !
+>
+> --
+> Bye, Peter Korsgaard
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140327/d4bd3391/attachment.html>
