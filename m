@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Mar 2014 17:08:46 +0100
-Subject: [Buildroot] [git commit] qtuio: use TARGET_MAKE_ENV when running
-	make and qmake
-Message-ID: <20140326160936.811799C2A2@busybox.osuosl.org>
+Date: Wed, 26 Mar 2014 17:04:52 +0100
+Subject: [Buildroot] [git commit] qwt: use TARGET_MAKE_ENV when running make
+	and qmake
+Message-ID: <20140326160936.79D879C2A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=245ede6df02fa907a7ffcce060583b17196d1415
+commit: http://git.buildroot.net/buildroot/commit/?id=ae5234e3156eb9db3873daf19916307e0f670349
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 This patch prepends TARGET_MAKE_ENV to $(MAKE) and $(QT_QMAKE) command
@@ -20,35 +20,24 @@ Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qtuio/qtuio.mk |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ package/qwt/qwt.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/qtuio/qtuio.mk b/package/qtuio/qtuio.mk
-index fe23230..02927a4 100644
---- a/package/qtuio/qtuio.mk
-+++ b/package/qtuio/qtuio.mk
-@@ -19,13 +19,13 @@ QTUIO_EXAMPLES = dials fingerpaint knobs pinchzoom
- ifeq ($(BR2_QTUIO_EXAMPLES),y)
- define QTUIO_CONFIGURE_EXAMPLES
- 	for example in $(QTUIO_EXAMPLES) ; do \
--		(cd $(@D)/examples/$${example} && $(QT_QMAKE)) ; \
-+		(cd $(@D)/examples/$${example} && $(TARGET_MAKE_ENV) $(QT_QMAKE)) ; \
- 	done
- endef
- endif
+diff --git a/package/qwt/qwt.mk b/package/qwt/qwt.mk
+index aa5ec9b..776780b 100644
+--- a/package/qwt/qwt.mk
++++ b/package/qwt/qwt.mk
+@@ -28,11 +28,11 @@ endif
  
- define QTUIO_CONFIGURE_CMDS
--	cd $(@D)/src && $(QT_QMAKE)
-+	cd $(@D)/src && $(TARGET_MAKE_ENV) $(QT_QMAKE)
- 	$(QTUIO_CONFIGURE_EXAMPLES)
+ define QWT_CONFIGURE_CMDS
+ 	$(SED) $(QWT_CONFIG) $(@D)/qwtconfig.pri
+-	(cd $(@D); $(QT_QMAKE))
++	(cd $(@D); $(TARGET_MAKE_ENV) $(QT_QMAKE))
  endef
  
-@@ -38,7 +38,7 @@ endef
- endif
- 
- define QTUIO_BUILD_CMDS
--	$(MAKE) -C $(@D)/src
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src
- 	$(QTUIO_BUILD_EXAMPLES)
+ define QWT_BUILD_CMDS
+-	$(MAKE) -C $(@D)
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
  endef
  
+ # After installation, we fixup the INSTALL_PREFIX in qwtconfig.pri so
