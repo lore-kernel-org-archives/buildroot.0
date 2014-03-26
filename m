@@ -1,73 +1,34 @@
-From: Joshua Kinard <kumba@gentoo.org>
-Date: Wed, 26 Mar 2014 19:45:00 -0400
-Subject: [Buildroot] [PATCH v2] Disable o32 ABI for MIPS64 architectures
-In-Reply-To: <53330BB4.8090102@mind.be>
-References: <1395769952-64221-1-git-send-email-Vincent.Riera@imgtec.com>
- <5331E0D4.6070007@mind.be> <53321BC8.7020802@gentoo.org>
- <5332E203.9040904@imgtec.com> <53330BB4.8090102@mind.be>
-Message-ID: <5333667C.4060404@gentoo.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 27 Mar 2014 00:45:43 +0100
+Subject: [Buildroot] [PATCH 1/2] cups: fix static linking
+In-Reply-To: <1394033401-23331-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Wed, 5 Mar 2014 15:30:00 +0000")
+References: <1394033401-23331-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <877g7gikwo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/26/2014 13:17, Arnout Vandecappelle wrote:
-> 
->  Hi Joshua,
-> 
-> On 26/03/14 15:19, Markos Chandras wrote:
->> On 03/26/2014 12:14 AM, Joshua Kinard wrote:
->>> On 03/25/2014 16:02, Arnout Vandecappelle wrote:
-> [snip]
->>>> Support for MIPS o32 ABI on MIPS-64 targets has been removed. Building
->>>> o32 ELF files for MIPS64 is an exotic configuration that nobody should be
->>>> using. If o32 is required, then is better if it's built for MIPS 32-bit
->>>> cores so only 32-bit instructions will be used leading to a more
->>>> efficient o32 usage.
->>>
->>> Just to point out, I wouldn't call this "exotic" -- o32 on mips64 kernels
->>> (MIPS-IV ISA) is what I run on my SGI O2 under Gentoo.  That said, I do
->>> have
->>> a somewhat-working n32 chroot on the same box.  Additionally, isn't o32
-> 
->  So the mips64 n32 userspace created by buildroot doesn't work
-> completely, just somewhat?
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-No, "somewhat" means I haven't powered that machine up in a while and
-updated it.  It boots into an o32 install I've had since 2005 (and am loathe
-to replace just yet, at least as long as the disks stay alive), and I chroot
-into a separate n32 root.  It's got an old 350MHz RM7000 CPU (PMC-Sierra),
-so updating can take a long time for just the o32 root (gcc is ~17hrs these
-days.  Used to be ~2.5hrs in the gcc-3.4.x days).  Once that's updated, I
-then update the n32 root.  Almost had that done until a recent snow storm
-knocked my power out, and I never resumed the update.
+ > Append -lz to the cups linking libs to fix a problem like this one:
+ > ../cups/libcups.a(file.o): In function `cupsFileSeek':
+ > /home/test/test/1/output/build/cups-1.3.11/cups/file.c:1444: undefined
+ > reference to `inflateEnd'
+ > collect2: error: ld returned 1 exit status
+ > make[2]: *** [ipp] Error 1
+ > make[2]: *** Waiting for unfinished jobs....
 
+ > This solution is the same used upstream in newer versions.
 
->> We are talking about using 64-bit instructions in *userland* while
->> maintaining the o32 ABI semantics. Well, this is definitely an exotic
->> configuration. We are not talking about 64-bit kernels + o32 userland.
->> An o32 userland usually comes from mips32 and you usually have only
->> 32-bit instructions there.
-> 
->  Joshua, if you agree with this reasoning, could you ack Vicente's patch?
+ > Fixes:
+ >    http://autobuild.buildroot.net/results/f3d/f3d4f67ce7ee1d54f5bd4c87dfddb7417db614e5/
 
-Let me get clarification on what "MIPS64" Vincent was referring to first.
-It's easy to mix that up.  I was assuming he meant o32 userland + mips64
-kernel, which I know still works, even though it is very inefficient (using
-just half of your available CPU registers).  If he's referring to the ISA of
-MIPS64 (or as I read it, mips64r1/mips64r2), then yeah, it's not a problem
-at all.  Though I am not an authority on MIPS' capabilities outside of the
-SGI hardware lineup, as that's all that I have available to play with.
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
+Committed both, thanks.
 
 -- 
-Joshua Kinard
-Gentoo/MIPS
-kumba at gentoo.org
-4096R/D25D95E3 2011-03-28
-
-"The past tempts us, the present confuses us, the future frightens us.  And
-our lives slip away, moment by moment, lost in that vast, terrible in-between."
-
---Emperor Turhan, Centauri Republic
+Bye, Peter Korsgaard
