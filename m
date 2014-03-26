@@ -1,74 +1,31 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 26 Mar 2014 08:46:23 +0100
-Subject: [Buildroot] [PATCH 1/1] dbus-triggerd: new package
-In-Reply-To: <53327B4B.2010005@syscom.ch>
-References: <1395734396-31668-1-git-send-email-rebillout@syscom.ch>
- <1395734396-31668-2-git-send-email-rebillout@syscom.ch>
- <5331E316.4030706@mind.be> <53327B4B.2010005@syscom.ch>
-Message-ID: <533285CF.6090700@mind.be>
+From: Eric Limpens <limpens@gmail.com>
+Date: Wed, 26 Mar 2014 09:45:17 +0100
+Subject: [Buildroot] libusb / udev support issue when using systemd and
+	raspberrypi_defconfig
+Message-ID: <CABGWzsQM1qyfQ8c7aMJ+ARU6RvQQxPRC=s1Uh3jBijJZQ-ADSQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 26/03/14 08:01, Arnaud R?billout wrote:
-> Hi Arnout,
-> 
->>  For the other dbus-* packages, the dbus dependencies are repeated (even
->> though they're automatic because of the depends on DBUS). So I would do
->> that here as well. And that means of course that there should also be a
->> comment in case of missing toolchain features. See dbus-cpp for an example.
-> You're right, I forgot the comments, and the host-pkgconf dependency as well.
-> I will do as you suggest for the DBUS dependencies.
-> 
->>  Patch misses a description + Signed-off-by.
-> Correct.
-> 
->>  If you're anyway patching the Makefile, you can just as well make it:
->>
->> CFLAGS?=-Wall -O3
->> CFLAGS+=`$(PKG_CONFIG) --cflags dbus-1`
->> LDLIBS+=`$(PKG_CONFIG) --libs dbus-1`
->>
->>
->>
->>  Will you send this patch upstream?
-> Yep. I will send a patch right now.
-> 
-> 
->>  This should be $(TARGET_CONFIGURE_OPTS) which includes all of the above
->> and more.
-> OK. Actually, I've always been wondering it was OK to use
-> TARGET_CONFIGURE_OPTS in a generic package, I never dared to do it.
+Hi,
 
- Yeah, it should be renamed, really.
+ I'ld like to use systemd as init system on a RaspberryPi. Following these
+steps, libusb complains about the lack of udev support (missing libudev):
 
- Regards,
- Arnout
+git clone git://git.busybox.net/buildroot
+make raspberrypi_defconfig
+make menuconfig
+ --> select glibc as C library
+ --> select systemd as init system
+ --> select package libusb
+make
 
-> 
->>  Note BTW that the patch above refers to LDLIBS instead of LDFLAGS. Is
->> LDFLAGS used?
-> Yep, LDFLAGS is used automatically by Make in this Makefile.
-> 
-> 
-> 
-> Thanks for your comments, I will send the patch upstream a wait a little
-> for the author's comments on it.
-> 
-> 
-> Regards
-> 
-> 
-> -- 
-> Arnaud R?billout
+Is this a glitch with setting one of the BR2_PACKAGE_HAS_UDEV or
+BR2_PACKAGE_PROVIDERS_UDEV variables?
 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Eric
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140326/92380788/attachment.html>
