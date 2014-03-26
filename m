@@ -1,92 +1,43 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 26 Mar 2014 18:03:09 +0000
-Subject: [Buildroot] [PATCH v3] Disable o32 ABI for MIPS64 architectures
-In-Reply-To: <53330BEB.3090206@mind.be>
-References: <1395843340-18539-1-git-send-email-Vincent.Riera@imgtec.com>
- <53330BEB.3090206@mind.be>
-Message-ID: <5333165D.90100@imgtec.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Wed, 26 Mar 2014 19:46:09 +0100
+Subject: [Buildroot] [PATCH] manual/using: output/toolchain is gone
+Message-ID: <1395859569-23982-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/26/2014 05:18 PM, Arnout Vandecappelle wrote:
-> On 26/03/14 15:15, Vicente Olivert Riera wrote:
->> Building o32 ELF files for MIPS64 is an exotic configuration that nobody
->> should be using. If o32 is required, then is better if it's built for
->> MIPS 32-bit cores so only 32-bit instructions will be used leading to a
->> more efficient o32 usage.
->>
->> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->> ---
->>   CHANGES             |    8 ++++++++
->>   arch/Config.in.mips |   12 +++++++-----
->>   2 files changed, 15 insertions(+), 5 deletions(-)
->>
->> diff --git a/CHANGES b/CHANGES
->> index 45a31c4..f07ccfd 100644
->> --- a/CHANGES
->> +++ b/CHANGES
->> @@ -1,3 +1,11 @@
->> +2014.05, Not yet released:
->> +
->> +Support for MIPS o32 ABI on MIPS-64 targets has been removed. Building
->> +o32 ELF files for MIPS64 is an exotic configuration that nobody should
->> +be using. If o32 is required, then is better if it's built for MIPS
->> +32-bit cores so only 32-bit instructions will be used leading to a more
->> +efficient o32 usage.
->> +
->>   2014.02, Released February 27th, 2014
->>
->>   	Minor fixes.
->> diff --git a/arch/Config.in.mips b/arch/Config.in.mips
->> index d9c0c02..f558705 100644
->> --- a/arch/Config.in.mips
->> +++ b/arch/Config.in.mips
->> @@ -38,15 +38,12 @@ endchoice
->>
->>   choice
->>   	prompt "Target ABI"
->> -	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
->> -	default BR2_MIPS_OABI32 if !BR2_ARCH_IS_64
->> -	default BR2_MIPS_NABI32 if BR2_ARCH_IS_64
->> +	depends on BR2_mips64 || BR2_mips64el
->> +	default BR2_MIPS_NABI32
->>
->>   	help
->>   	  Application Binary Interface to use
->>
->> -config BR2_MIPS_OABI32
->> -	bool "o32"
->>   config BR2_MIPS_NABI32
->>   	bool "n32"
->>   	depends on BR2_ARCH_IS_64
->> @@ -86,6 +83,11 @@ config BR2_GCC_TARGET_ARCH
->>   	default "mips64"	if BR2_mips_64
->>   	default "mips64r2"	if BR2_mips_64r2
->>
->> +config BR2_MIPS_OABI32
->> +	bool
->> +	default y		if BR2_mips || BR2_mipsel
->> +	default n		if BR2_mips64 || BR2_mips64el
->
->   Did you forget to remove this or is there a reason to keep it? In the
-> latter case, please add an explanatory comment.
 
-Why would I want to remove this? The BR2_MIPS_OABI32 symbol is used by 
-glibc and uclibc packages.
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ docs/manual/using.txt |    7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
->   Regards,
->   Arnout
->
->> +
->>   config BR2_GCC_TARGET_ABI
->>   	default "32"		if BR2_MIPS_OABI32
->>   	default "n32"		if BR2_MIPS_NABI32
-
-
-
-
+diff --git a/docs/manual/using.txt b/docs/manual/using.txt
+index 9b0a81f..4a33f7e 100644
+--- a/docs/manual/using.txt
++++ b/docs/manual/using.txt
+@@ -75,8 +75,8 @@ This directory contains several subdirectories:
+ * +images/+ where all the images (kernel image, bootloader and root
+   filesystem images) are stored.
+ 
+-* +build/+ where all the components except for the cross-compilation
+-  toolchain are built (this includes tools needed to run Buildroot on
++* +build/+ where all the components are built
++  (this includes tools needed to run Buildroot on
+   the host and packages compiled for the target). The +build/+
+   directory contains one subdirectory for each of these components.
+ 
+@@ -108,9 +108,6 @@ This directory contains several subdirectories:
+   that are needed for the proper execution of Buildroot, including the
+   cross-compilation toolchain.
+ 
+-* +toolchain/+ contains the build directories for the various
+-  components of the cross-compilation toolchain.
+-
+ These commands, +make menuconfig|nconfig|gconfig|xconfig+ and +make+, are the
+ basic ones that allow to easily and quickly generate images fitting
+ your needs, with all the supports and applications you enabled.
 -- 
-Vincent
+1.7.9.5
