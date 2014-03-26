@@ -1,214 +1,59 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Mar 2014 17:04:49 +0100
-Subject: [Buildroot] [git commit] qt5 packages: set correct PATH when
-	running qmake
-Message-ID: <20140326160936.71F999C3AF@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 26 Mar 2014 18:17:40 +0100
+Subject: [Buildroot] [PATCH v2] Disable o32 ABI for MIPS64 architectures
+In-Reply-To: <5332E203.9040904@imgtec.com>
+References: <1395769952-64221-1-git-send-email-Vincent.Riera@imgtec.com>
+ <5331E0D4.6070007@mind.be> <53321BC8.7020802@gentoo.org>
+ <5332E203.9040904@imgtec.com>
+Message-ID: <53330BB4.8090102@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b923fdffdd77bccef2822748a2adcb9a04a1f1fa
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The qmake step of qt5 packages may attempt to run pkg-config. If qmake is
-executed in an environment where the buildroot host directory is not in
-PATH, pkg-config from the build machine may be used (/usr/bin/pkg-config).
-This causes qt5 package compilation to fail on machines that do not have
-pkg-config installed.
-Refer to mailing list thread [1] for a specific error case.
+ Hi Joshua,
 
-This patch prepends TARGET_MAKE_ENV (which sets PATH) to the qmake call.
+On 26/03/14 15:19, Markos Chandras wrote:
+> On 03/26/2014 12:14 AM, Joshua Kinard wrote:
+>> On 03/25/2014 16:02, Arnout Vandecappelle wrote:
+[snip]
+>>> Support for MIPS o32 ABI on MIPS-64 targets has been removed. Building
+>>> o32 ELF files for MIPS64 is an exotic configuration that nobody should be
+>>> using. If o32 is required, then is better if it's built for MIPS 32-bit
+>>> cores so only 32-bit instructions will be used leading to a more
+>>> efficient o32 usage.
+>>
+>> Just to point out, I wouldn't call this "exotic" -- o32 on mips64 kernels
+>> (MIPS-IV ISA) is what I run on my SGI O2 under Gentoo.  That said, I do
+>> have
+>> a somewhat-working n32 chroot on the same box.  Additionally, isn't o32
 
-Reported-by: Marco Trapanese <marcotrapanese@gmail.com>
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+ So the mips64 n32 userspace created by buildroot doesn't work
+completely, just somewhat?
 
-[1] http://lists.busybox.net/pipermail/buildroot/2014-March/092283.html
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/qt5/qt5connectivity/qt5connectivity.mk     |    2 +-
- package/qt5/qt5declarative/qt5declarative.mk       |    2 +-
- .../qt5/qt5graphicaleffects/qt5graphicaleffects.mk |    2 +-
- package/qt5/qt5imageformats/qt5imageformats.mk     |    2 +-
- package/qt5/qt5multimedia/qt5multimedia.mk         |    2 +-
- package/qt5/qt5quick1/qt5quick1.mk                 |    2 +-
- package/qt5/qt5quickcontrols/qt5quickcontrols.mk   |    2 +-
- package/qt5/qt5script/qt5script.mk                 |    2 +-
- package/qt5/qt5sensors/qt5sensors.mk               |    2 +-
- package/qt5/qt5serialport/qt5serialport.mk         |    2 +-
- package/qt5/qt5svg/qt5svg.mk                       |    2 +-
- package/qt5/qt5x11extras/qt5x11extras.mk           |    2 +-
- package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk       |    2 +-
- 13 files changed, 13 insertions(+), 13 deletions(-)
+>> the
+>> ABI that Debian still builds for most of their mips/mipsel targets?
 
-diff --git a/package/qt5/qt5connectivity/qt5connectivity.mk b/package/qt5/qt5connectivity/qt5connectivity.mk
-index 2be51d5..214d536 100644
---- a/package/qt5/qt5connectivity/qt5connectivity.mk
-+++ b/package/qt5/qt5connectivity/qt5connectivity.mk
-@@ -23,7 +23,7 @@ QT5CONNECTIVITY_DEPENDENCIES += qt5declarative
- endif
- 
- define QT5CONNECTIVITY_CONFIGURE_CMDS
--	(cd $(@D); $(HOST_DIR)/usr/bin/qmake)
-+	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
- endef
- 
- define QT5CONNECTIVITY_BUILD_CMDS
-diff --git a/package/qt5/qt5declarative/qt5declarative.mk b/package/qt5/qt5declarative/qt5declarative.mk
-index 6eb803a..472d092 100644
---- a/package/qt5/qt5declarative/qt5declarative.mk
-+++ b/package/qt5/qt5declarative/qt5declarative.mk
-@@ -19,7 +19,7 @@ QT5DECLARATIVE_REDISTRIBUTE = NO
- endif
- 
- define QT5DECLARATIVE_CONFIGURE_CMDS
--	(cd $(@D); $(HOST_DIR)/usr/bin/qmake)
-+	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
- endef
- 
- define QT5DECLARATIVE_BUILD_CMDS
-diff --git a/package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk b/package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk
-index 1e492c9..036cf21 100644
---- a/package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk
-+++ b/package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk
-@@ -21,7 +21,7 @@ QT5GRAPHICALEFFECTS_REDISTRIBUTE = NO
- endif
- 
- define QT5GRAPHICALEFFECTS_CONFIGURE_CMDS
--	(cd $(@D); $(HOST_DIR)/usr/bin/qmake)
-+	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
- endef
- 
- define QT5GRAPHICALEFFECTS_BUILD_CMDS
-diff --git a/package/qt5/qt5imageformats/qt5imageformats.mk b/package/qt5/qt5imageformats/qt5imageformats.mk
-index 52192c6..c4049c7 100644
---- a/package/qt5/qt5imageformats/qt5imageformats.mk
-+++ b/package/qt5/qt5imageformats/qt5imageformats.mk
-@@ -19,7 +19,7 @@ QT5IMAGEFORMATS_REDISTRIBUTE = NO
- endif
- 
- define QT5IMAGEFORMATS_CONFIGURE_CMDS
--	(cd $(@D); $(HOST_DIR)/usr/bin/qmake)
-+	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
- endef
- 
- define QT5IMAGEFORMATS_BUILD_CMDS
-diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
-index 5256920..e7ac562 100644
---- a/package/qt5/qt5multimedia/qt5multimedia.mk
-+++ b/package/qt5/qt5multimedia/qt5multimedia.mk
-@@ -25,7 +25,7 @@ QT5MULTIMEDIA_DEPENDENCIES += gst-plugins-base
- endif
- 
- define QT5MULTIMEDIA_CONFIGURE_CMDS
--	(cd $(@D); $(HOST_DIR)/usr/bin/qmake)
-+	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
- endef
- 
- define QT5MULTIMEDIA_BUILD_CMDS
-diff --git a/package/qt5/qt5quick1/qt5quick1.mk b/package/qt5/qt5quick1/qt5quick1.mk
-index 4cc011a..624b130 100644
---- a/package/qt5/qt5quick1/qt5quick1.mk
-+++ b/package/qt5/qt5quick1/qt5quick1.mk
-@@ -20,7 +20,7 @@ QT5QUICK1_REDISTRIBUTE = NO
- endif
- 
- define QT5QUICK1_CONFIGURE_CMDS
--	(cd $(@D); $(HOST_DIR)/usr/bin/qmake)
-+	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
- endef
- 
- define QT5QUICK1_BUILD_CMDS
-diff --git a/package/qt5/qt5quickcontrols/qt5quickcontrols.mk b/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
-index f9008b4..5f284fb 100644
---- a/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
-+++ b/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
-@@ -19,7 +19,7 @@ QT5QUICKCONTROLS_REDISTRIBUTE = NO
- endif
- 
- define QT5QUICKCONTROLS_CONFIGURE_CMDS
--	(cd $(@D); $(HOST_DIR)/usr/bin/qmake)
-+	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
- endef
- 
- define QT5QUICKCONTROLS_BUILD_CMDS
-diff --git a/package/qt5/qt5script/qt5script.mk b/package/qt5/qt5script/qt5script.mk
-index e62e0ac..a80995c 100644
---- a/package/qt5/qt5script/qt5script.mk
-+++ b/package/qt5/qt5script/qt5script.mk
-@@ -19,7 +19,7 @@ QT5SCRIPT_REDISTRIBUTE = NO
- endif
- 
- define QT5SCRIPT_CONFIGURE_CMDS
--	(cd $(@D); $(HOST_DIR)/usr/bin/qmake)
-+	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
- endef
- 
- define QT5SCRIPT_BUILD_CMDS
-diff --git a/package/qt5/qt5sensors/qt5sensors.mk b/package/qt5/qt5sensors/qt5sensors.mk
-index 21ec36c..1b03293 100644
---- a/package/qt5/qt5sensors/qt5sensors.mk
-+++ b/package/qt5/qt5sensors/qt5sensors.mk
-@@ -23,7 +23,7 @@ QT5SENSORS_DEPENDENCIES += qt5declarative
- endif
- 
- define QT5SENSORS_CONFIGURE_CMDS
--	(cd $(@D); $(HOST_DIR)/usr/bin/qmake)
-+	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
- endef
- 
- define QT5SENSORS_BUILD_CMDS
-diff --git a/package/qt5/qt5serialport/qt5serialport.mk b/package/qt5/qt5serialport/qt5serialport.mk
-index 0328ef8..719b647 100644
---- a/package/qt5/qt5serialport/qt5serialport.mk
-+++ b/package/qt5/qt5serialport/qt5serialport.mk
-@@ -19,7 +19,7 @@ QT5SERIALPORT_REDISTRIBUTE = NO
- endif
- 
- define QT5SERIALPORT_CONFIGURE_CMDS
--	(cd $(@D); $(HOST_DIR)/usr/bin/qmake)
-+	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
- endef
- 
- define QT5SERIALPORT_BUILD_CMDS
-diff --git a/package/qt5/qt5svg/qt5svg.mk b/package/qt5/qt5svg/qt5svg.mk
-index 2ff7fc8..da981f4 100644
---- a/package/qt5/qt5svg/qt5svg.mk
-+++ b/package/qt5/qt5svg/qt5svg.mk
-@@ -20,7 +20,7 @@ QT5SVG_REDISTRIBUTE = NO
- endif
- 
- define QT5SVG_CONFIGURE_CMDS
--	(cd $(@D); $(HOST_DIR)/usr/bin/qmake)
-+	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
- endef
- 
- define QT5SVG_BUILD_CMDS
-diff --git a/package/qt5/qt5x11extras/qt5x11extras.mk b/package/qt5/qt5x11extras/qt5x11extras.mk
-index 237fe32..fc4beda 100644
---- a/package/qt5/qt5x11extras/qt5x11extras.mk
-+++ b/package/qt5/qt5x11extras/qt5x11extras.mk
-@@ -19,7 +19,7 @@ QT5X11EXTRAS_REDISTRIBUTE = NO
- endif
- 
- define QT5X11EXTRAS_CONFIGURE_CMDS
--	(cd $(@D); $(HOST_DIR)/usr/bin/qmake)
-+	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
- endef
- 
- define QT5X11EXTRAS_BUILD_CMDS
-diff --git a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
-index 6f4fdc8..b0d0b06 100644
---- a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
-+++ b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
-@@ -19,7 +19,7 @@ QT5XMLPATTERNS_REDISTRIBUTE = NO
- endif
- 
- define QT5XMLPATTERNS_CONFIGURE_CMDS
--	(cd $(@D); $(HOST_DIR)/usr/bin/qmake)
-+	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
- endef
- 
- define QT5XMLPATTERNS_BUILD_CMDS
+ What Debian does is really not relevant here...
+
+> 
+> We are talking about using 64-bit instructions in *userland* while
+> maintaining the o32 ABI semantics. Well, this is definitely an exotic
+> configuration. We are not talking about 64-bit kernels + o32 userland.
+> An o32 userland usually comes from mips32 and you usually have only
+> 32-bit instructions there.
+
+ Joshua, if you agree with this reasoning, could you ack Vicente's patch?
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
