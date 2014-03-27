@@ -1,43 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Mar 2014 23:20:33 +0100
-Subject: [Buildroot] [git commit] qextserialport: use TARGET_MAKE_ENV when
-	running make and qmake
-Message-ID: <20140327222046.E95129C1CD@busybox.osuosl.org>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Thu, 27 Mar 2014 23:27:42 +0100
+Subject: [Buildroot] [PATCH] sdl: Fix host variant dependencies
+Message-ID: <1395959262-25285-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ab310df1887d1d862af287c1353a1e38e99cad6c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The host variant of sdl inherited the dependencies and conf opt from
+sdl which could lead to some trouble.
 
-This patch prepends TARGET_MAKE_ENV to $(MAKE) and $(QT_QMAKE) command
-lines, to make sure PATH is set correctly, and to line up with the qt5
-packages that do this consistently.
+For example:
+  If you were to build host-sdl and had alsa-lib enabled in your
+  packages list, it would try to build host-alsa-lib which does not
+  exists.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+This patch define basic dependencies and conf opt for the host variant.
+
+Reported-by: Eric Limpens <limpens@gmail.com>
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
- package/qextserialport/qextserialport.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/sdl/sdl.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/qextserialport/qextserialport.mk b/package/qextserialport/qextserialport.mk
-index 45dc9b8..b888435 100644
---- a/package/qextserialport/qextserialport.mk
-+++ b/package/qextserialport/qextserialport.mk
-@@ -15,11 +15,11 @@ QEXTSERIALPORT_DEPENDENCIES = qt
- QEXTSERIALPORT_INSTALL_STAGING = YES
+diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
+index d5fb331..086f5e9 100644
+--- a/package/sdl/sdl.mk
++++ b/package/sdl/sdl.mk
+@@ -21,6 +21,7 @@ SDL_PRE_CONFIGURE_HOOKS += SDL_RUN_AUTOGEN
+ HOST_SDL_PRE_CONFIGURE_HOOKS += SDL_RUN_AUTOGEN
  
- define QEXTSERIALPORT_CONFIGURE_CMDS
--	(cd $(@D); $(QT_QMAKE))
-+	(cd $(@D); $(TARGET_MAKE_ENV) $(QT_QMAKE))
- endef
+ SDL_DEPENDENCIES += host-automake host-autoconf host-libtool
++HOST_SDL_DEPENDENCIES += host-automake host-autoconf host-libtool
  
- define QEXTSERIALPORT_BUILD_CMDS
--	$(MAKE) -C $(@D)
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
- endef
+ ifeq ($(BR2_PACKAGE_SDL_FBCON),y)
+ SDL_CONF_OPT += --enable-video-fbcon=yes
+@@ -70,6 +71,12 @@ SDL_CONF_OPT += --enable-pulseaudio=no \
+ 		--disable-nasm \
+ 		--disable-video-ps3
  
- define QEXTSERIALPORT_INSTALL_STAGING_CMDS
++HOST_SDL_CONF_OPT += --enable-pulseaudio=no \
++		--disable-arts \
++		--disable-esd \
++		--disable-nasm \
++		--disable-video-ps3
++
+ SDL_CONFIG_SCRIPTS = sdl-config
+ 
+ # Remove the -Wl,-rpath option.
+-- 
+1.9.0
