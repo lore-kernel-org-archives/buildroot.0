@@ -1,53 +1,26 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Thu, 27 Mar 2014 23:27:42 +0100
-Subject: [Buildroot] [PATCH] sdl: Fix host variant dependencies
-Message-ID: <1395959262-25285-1-git-send-email-maxime.hadjinlian@gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 27 Mar 2014 23:31:14 +0100
+Subject: [Buildroot] [PATCH 2/4] barebox: fix coding style
+In-Reply-To: <1394184680-3562-3-git-send-email-fabio.porcedda@gmail.com>
+ (Fabio Porcedda's message of "Fri, 7 Mar 2014 10:31:18 +0100")
+References: <1394184680-3562-1-git-send-email-fabio.porcedda@gmail.com>
+ <1394184680-3562-3-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <87ha6jgtot.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The host variant of sdl inherited the dependencies and conf opt from
-sdl which could lead to some trouble.
+>>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
 
-For example:
-  If you were to build host-sdl and had alsa-lib enabled in your
-  packages list, it would try to build host-alsa-lib which does not
-  exists.
+ > As stated in the buildroot user manual add just a single space before
+ > and after a '=' sign.
+ > Break long lines.
 
-This patch define basic dependencies and conf opt for the host variant.
+ > Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 
-Reported-by: Eric Limpens <limpens@gmail.com>
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
----
- package/sdl/sdl.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+Committed, thanks.
 
-diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
-index d5fb331..086f5e9 100644
---- a/package/sdl/sdl.mk
-+++ b/package/sdl/sdl.mk
-@@ -21,6 +21,7 @@ SDL_PRE_CONFIGURE_HOOKS += SDL_RUN_AUTOGEN
- HOST_SDL_PRE_CONFIGURE_HOOKS += SDL_RUN_AUTOGEN
- 
- SDL_DEPENDENCIES += host-automake host-autoconf host-libtool
-+HOST_SDL_DEPENDENCIES += host-automake host-autoconf host-libtool
- 
- ifeq ($(BR2_PACKAGE_SDL_FBCON),y)
- SDL_CONF_OPT += --enable-video-fbcon=yes
-@@ -70,6 +71,12 @@ SDL_CONF_OPT += --enable-pulseaudio=no \
- 		--disable-nasm \
- 		--disable-video-ps3
- 
-+HOST_SDL_CONF_OPT += --enable-pulseaudio=no \
-+		--disable-arts \
-+		--disable-esd \
-+		--disable-nasm \
-+		--disable-video-ps3
-+
- SDL_CONFIG_SCRIPTS = sdl-config
- 
- # Remove the -Wl,-rpath option.
 -- 
-1.9.0
+Bye, Peter Korsgaard
