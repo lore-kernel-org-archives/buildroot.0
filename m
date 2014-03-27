@@ -1,41 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Mar 2014 23:48:56 +0100
-Subject: [Buildroot] [git commit] xbmc: Add comment for host-sdl_images
-	dependency
-Message-ID: <20140327224928.1F9DD9C0CF@busybox.osuosl.org>
+Date: Thu, 27 Mar 2014 23:38:10 +0100
+Subject: [Buildroot] [git commit] sdl: Fix host variant dependencies
+Message-ID: <20140327224928.1597C9C3AD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9cfd429c1c3d6c7b793f58210f39bb041e680bac
+commit: http://git.buildroot.net/buildroot/commit/?id=bfe884fac7467425b4f9bd02e124696fea780661
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-A few people have already asked why XBMC depends on host-sdl_image and
-host-sdl.
+The host variant of sdl inherited the dependencies and conf opt from
+sdl which could lead to some trouble.
 
-Since this is not obvious, this patch add a comments explaining why it's
-needed.
+For example:
+  If you were to build host-sdl and had alsa-lib enabled in your
+  packages list, it would try to build host-alsa-lib which does not
+  exists.
 
+This patch define basic dependencies and conf opt for the host variant.
+
+Reported-by: Eric Limpens <limpens@gmail.com>
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xbmc/xbmc.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/sdl/sdl.mk |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
 
-diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index a43b41d..6dbbb7d 100644
---- a/package/xbmc/xbmc.mk
-+++ b/package/xbmc/xbmc.mk
-@@ -8,6 +8,10 @@ XBMC_VERSION = 12.3-Frodo
- XBMC_SITE = $(call github,xbmc,xbmc,$(XBMC_VERSION))
- XBMC_LICENSE = GPLv2
- XBMC_LICENSE_FILES = LICENSE.GPL
-+# XBMC needs host-sdl_image (and therefore host-sdl) for a host tools it builds
-+# called TexturePacker. It is responsible to take all the images used in the
-+# GUI and pack them in a blob.
-+# http://wiki.xbmc.org/index.php?title=TexturePacker
- XBMC_DEPENDENCIES = host-gperf host-lzo host-sdl_image host-swig
- XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
- 	libass libcdio libcurl libfribidi libgcrypt libmad libmodplug libmpeg2 \
+diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
+index d5fb331..086f5e9 100644
+--- a/package/sdl/sdl.mk
++++ b/package/sdl/sdl.mk
+@@ -21,6 +21,7 @@ SDL_PRE_CONFIGURE_HOOKS += SDL_RUN_AUTOGEN
+ HOST_SDL_PRE_CONFIGURE_HOOKS += SDL_RUN_AUTOGEN
+ 
+ SDL_DEPENDENCIES += host-automake host-autoconf host-libtool
++HOST_SDL_DEPENDENCIES += host-automake host-autoconf host-libtool
+ 
+ ifeq ($(BR2_PACKAGE_SDL_FBCON),y)
+ SDL_CONF_OPT += --enable-video-fbcon=yes
+@@ -70,6 +71,12 @@ SDL_CONF_OPT += --enable-pulseaudio=no \
+ 		--disable-nasm \
+ 		--disable-video-ps3
+ 
++HOST_SDL_CONF_OPT += --enable-pulseaudio=no \
++		--disable-arts \
++		--disable-esd \
++		--disable-nasm \
++		--disable-video-ps3
++
+ SDL_CONFIG_SCRIPTS = sdl-config
+ 
+ # Remove the -Wl,-rpath option.
