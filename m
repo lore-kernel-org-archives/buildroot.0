@@ -1,104 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Mar 2014 23:27:22 +0100
-Subject: [Buildroot] [git commit] barebox: fix coding style
-Message-ID: <20140327223336.EAF309C3AD@busybox.osuosl.org>
+Date: Thu, 27 Mar 2014 23:32:15 +0100
+Subject: [Buildroot] [git commit] Remove "dirs" dependencies
+Message-ID: <20140327223336.F1B4B9C04C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=21413e354001a9cd6b1f823681ec047414dbf954
+commit: http://git.buildroot.net/buildroot/commit/?id=b94266c92585530068317b007bedc85a6c498c49
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As stated in the buildroot user manual add just a single space before
-and after a '=' sign.
-Break long lines.
+The package infrastructure add automatically the "dirs" dependency so
+remove it when the package infrastructure is being used.
 
 Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/barebox/barebox.mk |   32 +++++++++++++++++++-------------
- 1 files changed, 19 insertions(+), 13 deletions(-)
+ Makefile                 |    2 +-
+ package/uclibc/uclibc.mk |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-index 9324c25..f57d297 100644
---- a/boot/barebox/barebox.mk
-+++ b/boot/barebox/barebox.mk
-@@ -4,15 +4,15 @@
- #
- ################################################################################
+diff --git a/Makefile b/Makefile
+index d49d7bf..197cf84 100644
+--- a/Makefile
++++ b/Makefile
+@@ -626,7 +626,7 @@ target-post-image: $(TARGETS_ROOTFS) target-finalize
+ toolchain-eclipse-register:
+ 	./support/scripts/eclipse-register-toolchain `readlink -f $(O)` $(notdir $(TARGET_CROSS)) $(BR2_ARCH)
  
--BAREBOX_VERSION    = $(call qstrip,$(BR2_TARGET_BAREBOX_VERSION))
-+BAREBOX_VERSION = $(call qstrip,$(BR2_TARGET_BAREBOX_VERSION))
+-source: dirs $(TARGETS_SOURCE) $(HOST_SOURCE)
++source: $(TARGETS_SOURCE) $(HOST_SOURCE)
  
- ifeq ($(BAREBOX_VERSION),custom)
- # Handle custom Barebox tarballs as specified by the configuration
- BAREBOX_TARBALL = $(call qstrip,$(BR2_TARGET_BAREBOX_CUSTOM_TARBALL_LOCATION))
--BAREBOX_SITE    = $(patsubst %/,%,$(dir $(BAREBOX_TARBALL)))
--BAREBOX_SOURCE  = $(notdir $(BAREBOX_TARBALL))
-+BAREBOX_SITE = $(patsubst %/,%,$(dir $(BAREBOX_TARBALL)))
-+BAREBOX_SOURCE = $(notdir $(BAREBOX_TARBALL))
- else ifeq ($(BR2_TARGET_BAREBOX_CUSTOM_GIT),y)
--BAREBOX_SITE        = $(call qstrip,$(BR2_TARGET_BAREBOX_CUSTOM_GIT_REPO_URL))
-+BAREBOX_SITE = $(call qstrip,$(BR2_TARGET_BAREBOX_CUSTOM_GIT_REPO_URL))
- BAREBOX_SITE_METHOD = git
- else
- # Handle stable official Barebox versions
-@@ -26,7 +26,8 @@ BAREBOX_LICENSE_FILES = COPYING
- 
- ifneq ($(call qstrip,$(BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR)),)
- define BAREBOX_APPLY_CUSTOM_PATCHES
--	support/scripts/apply-patches.sh $(@D) $(BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR) \
-+	support/scripts/apply-patches.sh $(@D) \
-+		$(BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR) \
- 		barebox-$(BAREBOX_VERSION)-\*.patch
+ external-deps:
+ 	@$(MAKE1) -Bs DL_MODE=SHOW_EXTERNAL_DEPS $(EXTRAMAKEARGS) source | sort -u
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index f0fb53a..020e218 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -542,7 +542,7 @@ define UCLIBC_INSTALL_STAGING_CMDS
+ 	$(UCLIBC_INSTALL_UTILS_STAGING)
  endef
  
-@@ -39,25 +40,29 @@ BAREBOX_INSTALL_TARGET = NO
- endif
- 
- ifeq ($(KERNEL_ARCH),i386)
--BAREBOX_ARCH=x86
-+BAREBOX_ARCH = x86
- else ifeq ($(KERNEL_ARCH),powerpc)
--BAREBOX_ARCH=ppc
-+BAREBOX_ARCH = ppc
- else
--BAREBOX_ARCH=$(KERNEL_ARCH)
-+BAREBOX_ARCH = $(KERNEL_ARCH)
- endif
- 
--BAREBOX_MAKE_FLAGS = ARCH=$(BAREBOX_ARCH) CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)"
-+BAREBOX_MAKE_FLAGS = ARCH=$(BAREBOX_ARCH) CROSS_COMPILE="$(CCACHE) \
-+	$(TARGET_CROSS)"
- 
- 
- ifeq ($(BR2_TARGET_BAREBOX_USE_DEFCONFIG),y)
--BAREBOX_SOURCE_CONFIG = $(@D)/arch/$(BAREBOX_ARCH)/configs/$(call qstrip,$(BR2_TARGET_BAREBOX_BOARD_DEFCONFIG))_defconfig
-+BAREBOX_SOURCE_CONFIG = $(@D)/arch/$(BAREBOX_ARCH)/configs/$(call qstrip,\
-+	$(BR2_TARGET_BAREBOX_BOARD_DEFCONFIG))_defconfig
- else ifeq ($(BR2_TARGET_BAREBOX_USE_CUSTOM_CONFIG),y)
- BAREBOX_SOURCE_CONFIG = $(BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE)
- endif
- 
- define BAREBOX_CONFIGURE_CMDS
--	cp $(BAREBOX_SOURCE_CONFIG) $(@D)/arch/$(BAREBOX_ARCH)/configs/buildroot_defconfig
--	$(TARGET_MAKE_ENV) $(MAKE) $(BAREBOX_MAKE_FLAGS) -C $(@D) buildroot_defconfig
-+	cp $(BAREBOX_SOURCE_CONFIG) \
-+		$(@D)/arch/$(BAREBOX_ARCH)/configs/buildroot_defconfig
-+	$(TARGET_MAKE_ENV) $(MAKE) $(BAREBOX_MAKE_FLAGS) -C $(@D) \
-+		buildroot_defconfig
- endef
- 
- ifeq ($(BR2_TARGET_BAREBOX_BAREBOXENV),y)
-@@ -68,7 +73,8 @@ endef
- endif
- 
- ifeq ($(BR2_TARGET_BAREBOX_CUSTOM_ENV),y)
--BAREBOX_ENV_NAME = $(notdir $(call qstrip, $(BR2_TARGET_BAREBOX_CUSTOM_ENV_PATH)))
-+BAREBOX_ENV_NAME = $(notdir $(call qstrip,\
-+	$(BR2_TARGET_BAREBOX_CUSTOM_ENV_PATH)))
- define BAREBOX_BUILD_CUSTOM_ENV
- 	$(@D)/scripts/bareboxenv -s \
- 		$(call qstrip, $(BR2_TARGET_BAREBOX_CUSTOM_ENV_PATH)) \
+-uclibc-menuconfig: dirs uclibc-patch
++uclibc-menuconfig: uclibc-patch
+ 	$(MAKE1) -C $(UCLIBC_DIR) \
+ 		$(UCLIBC_MAKE_FLAGS) \
+ 		PREFIX=$(STAGING_DIR) \
