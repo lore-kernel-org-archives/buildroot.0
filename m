@@ -1,52 +1,44 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Fri, 28 Mar 2014 00:06:32 +0100
-Subject: [Buildroot] [PATCH 1/2] slang: fix linking issue
-Message-ID: <1395961593-9826-1-git-send-email-romain.naour@openwide.fr>
+Date: Fri, 28 Mar 2014 00:06:33 +0100
+Subject: [Buildroot] [PATCH 2/2] slang: add ncurses optional dependency
+In-Reply-To: <1395961593-9826-1-git-send-email-romain.naour@openwide.fr>
+References: <1395961593-9826-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1395961593-9826-2-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The installation location of the slang library
-does not take into account the DESTDIR directory.
-So SLANG_INST_LIB is initialized with -L/usr/lib/
-and slang may be linked with host's libdl.so (if any)
-Therefore, we have to pass correct installation paths.
-
-Fixes:
-http://autobuild.buildroot.net/results/df4/df435d9cebbdc84b3581ba258b618123570dde8b/
+Ncurses check need to be disabled if ncurses package is not
+selected.
+If we don't do that, host's ncurses5-config may be used by
+configure script.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- package/slang/slang.mk | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+Note: others optional dependencies may be missing
+(pcre oniguruma png z iconv)
+
+ package/slang/slang.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
 diff --git a/package/slang/slang.mk b/package/slang/slang.mk
-index d519eca..38f0b6f 100644
+index 38f0b6f..2006c71 100644
 --- a/package/slang/slang.mk
 +++ b/package/slang/slang.mk
-@@ -13,4 +13,21 @@ SLANG_LICENSE_FILES = COPYING
+@@ -13,6 +13,12 @@ SLANG_LICENSE_FILES = COPYING
  SLANG_INSTALL_STAGING = YES
  SLANG_MAKE = $(MAKE1)
  
-+# The installation location of the slang library
-+# does not take into account the DESTDIR directory.
-+# So SLANG_INST_LIB is initialized with -L/usr/lib/
-+# and slang may be linked with host's libdl.so (if any)
-+# Therefore, we have to pass correct installation paths.
-+SLANG_INSTALL_STAGING_OPT = \
-+	prefix=$(STAGING_DIR)/usr \
-+	exec_prefix=$(STAGING_DIR)/usr \
-+	DESTDIR=$(STAGING_DIR) \
-+	install
++ifeq ($(BR2_PACKAGE_NCURSES),y)
++	SLANG_DEPENDENCIES = ncurses
++else
++	SLANG_CONF_OPT = ac_cv_path_nc5config=no
++endif
 +
-+SLANG_INSTALL_TARGET_OPT = \
-+	prefix=$(STAGING_DIR)/usr \
-+	exec_prefix=$(STAGING_DIR)/usr \
-+	DESTDIR=$(TARGET_DIR) \
-+	install
-+
- $(eval $(autotools-package))
+ # The installation location of the slang library
+ # does not take into account the DESTDIR directory.
+ # So SLANG_INST_LIB is initialized with -L/usr/lib/
 -- 
 1.9.0
