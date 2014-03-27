@@ -1,49 +1,48 @@
-From: Hadrien Boutteville <hadrien.boutteville@gmail.com>
-Date: Thu, 27 Mar 2014 04:41:18 +0100
-Subject: [Buildroot] [PATCH 1/1] libubox: fix build with lua option
-Message-ID: <1395891678-11327-1-git-send-email-hadrien.boutteville@gmail.com>
+From: Sangjung <sangjung.woo@samsung.com>
+Date: Thu, 27 Mar 2014 15:33:41 +0900
+Subject: [Buildroot] NPTL compile error without MMU (ARM)
+Message-ID: <5333C645.8000203@samsung.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.org/results/fc6/fc64896ca5c3b05dfe4b5c5e7d25fc4b6c9976ad/
-and a bunch of similar failures.
+Dear developers.
 
-When Lua package is selected, libubox sets an option to build with Lua
-binding. Unfortunately, if LUAPATH is not passed libubox seeks it on
-the host instead of staging due to hard coded pkg-config commands in
-its CMake file. As a result Lua is not found and the build fails.
-Fix it by passing LUAPATH in LIBUBOX_CONF_OPT.
+Hi. I found out that nptl make a compile error when MMU (i.e. 'Toolchain 
+- Enable MMU support')  is disabled.
 
-Similarly, libubox seeks LUA_CFLAGS with the host's pkg-config for the
-same reason. To prevent potential errors, fix it by passing LUA_CFLAGS
-in LIBUBOX_CONF_OPT.
+Detailed error message is as below.
 
-Finally, libubox fails to build with Lua 5.2 because it uses functions
-removed from this version.
-Fix it by activating the option only with Lua 5.1.
+-------------------------------------------------------------------------------- 
 
-Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
----
- package/libubox/libubox.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+In file included from 
+libpthread/nptl/sysdeps/unix/sysv/linux/arm/fork.c:31:0:
+libpthread/nptl/sysdeps/unix/sysv/linux/arm/../fork.c:61:17: error: 
+'fork' undeclared here (not in a function)
+libpthread/nptl/sysdeps/unix/sysv/linux/arm/../fork.c:63:1: error: 
+'__libc_fork' redeclared as different kind of symbol
+libpthread/nptl/sysdeps/unix/sysv/linux/arm/../fork.c:61:23: note: 
+previous declaration of '__libc_fork' was here
+libpthread/nptl/sysdeps/unix/sysv/linux/arm/../fork.c:228:1: error: 
+'fork' redeclared as different kind of symbol
+libpthread/nptl/sysdeps/unix/sysv/linux/arm/../fork.c:227:1: note: 
+previous declaration of 'fork' was here
+libpthread/nptl/sysdeps/unix/sysv/linux/arm/../fork.c:229:1: error: 
+'__EI_fork' aliased to undefined symbol '__GI_fork'
+make[1]: *** [libpthread/nptl/sysdeps/unix/sysv/linux/arm/fork.os] Error 1
+-------------------------------------------------------------------------------- 
 
-diff --git a/package/libubox/libubox.mk b/package/libubox/libubox.mk
-index 28d5c63..22efc9a 100644
---- a/package/libubox/libubox.mk
-+++ b/package/libubox/libubox.mk
-@@ -10,8 +10,10 @@ LIBUBOX_LICENSE = LGPLv2.1, GPLv2, BSD-3c, MIT
- LIBUBOX_INSTALL_STAGING = YES
- LIBUBOX_DEPENDENCIES = host-pkgconf $(if $(BR2_PACKAGE_JSON_C),json-c)
- 
--ifeq ($(BR2_PACKAGE_LUA),y)
-+ifeq ($(BR2_PACKAGE_LUA_5_1),y)
- 	LIBUBOX_DEPENDENCIES += lua
-+	LIBUBOX_CONF_OPT += -DLUAPATH=$(STAGING_DIR)/usr/lib/lua/5.1 \
-+		-DLUA_CFLAGS=-I$(STAGING_DIR)/usr/include
- else
- 	LIBUBOX_CONF_OPT += -DBUILD_LUA:BOOL=OFF
- endif
+
+
+This problem is already reported by Axel Lin.
+(Link: http://lists.uclibc.org/pipermail/uclibc-cvs/2013-May/031094.html)
+
+However, it looks like that this issue is not solved for a long time.
+If someone let me know the alternative solution, I'd be really happy.
+
+Thank you in advances.
+
+BRs,
+Sangjung
