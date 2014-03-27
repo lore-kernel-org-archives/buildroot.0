@@ -1,55 +1,52 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Mar 2014 23:38:10 +0100
-Subject: [Buildroot] [git commit] sdl: Fix host variant dependencies
-Message-ID: <20140327224928.1597C9C3AD@busybox.osuosl.org>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Fri, 28 Mar 2014 00:06:32 +0100
+Subject: [Buildroot] [PATCH 1/2] slang: fix linking issue
+Message-ID: <1395961593-9826-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bfe884fac7467425b4f9bd02e124696fea780661
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The installation location of the slang library
+does not take into account the DESTDIR directory.
+So SLANG_INST_LIB is initialized with -L/usr/lib/
+and slang may be linked with host's libdl.so (if any)
+Therefore, we have to pass correct installation paths.
 
-The host variant of sdl inherited the dependencies and conf opt from
-sdl which could lead to some trouble.
+Fixes:
+http://autobuild.buildroot.net/results/df4/df435d9cebbdc84b3581ba258b618123570dde8b/
 
-For example:
-  If you were to build host-sdl and had alsa-lib enabled in your
-  packages list, it would try to build host-alsa-lib which does not
-  exists.
-
-This patch define basic dependencies and conf opt for the host variant.
-
-Reported-by: Eric Limpens <limpens@gmail.com>
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- package/sdl/sdl.mk |    7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
+ package/slang/slang.mk | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
-index d5fb331..086f5e9 100644
---- a/package/sdl/sdl.mk
-+++ b/package/sdl/sdl.mk
-@@ -21,6 +21,7 @@ SDL_PRE_CONFIGURE_HOOKS += SDL_RUN_AUTOGEN
- HOST_SDL_PRE_CONFIGURE_HOOKS += SDL_RUN_AUTOGEN
+diff --git a/package/slang/slang.mk b/package/slang/slang.mk
+index d519eca..38f0b6f 100644
+--- a/package/slang/slang.mk
++++ b/package/slang/slang.mk
+@@ -13,4 +13,21 @@ SLANG_LICENSE_FILES = COPYING
+ SLANG_INSTALL_STAGING = YES
+ SLANG_MAKE = $(MAKE1)
  
- SDL_DEPENDENCIES += host-automake host-autoconf host-libtool
-+HOST_SDL_DEPENDENCIES += host-automake host-autoconf host-libtool
- 
- ifeq ($(BR2_PACKAGE_SDL_FBCON),y)
- SDL_CONF_OPT += --enable-video-fbcon=yes
-@@ -70,6 +71,12 @@ SDL_CONF_OPT += --enable-pulseaudio=no \
- 		--disable-nasm \
- 		--disable-video-ps3
- 
-+HOST_SDL_CONF_OPT += --enable-pulseaudio=no \
-+		--disable-arts \
-+		--disable-esd \
-+		--disable-nasm \
-+		--disable-video-ps3
++# The installation location of the slang library
++# does not take into account the DESTDIR directory.
++# So SLANG_INST_LIB is initialized with -L/usr/lib/
++# and slang may be linked with host's libdl.so (if any)
++# Therefore, we have to pass correct installation paths.
++SLANG_INSTALL_STAGING_OPT = \
++	prefix=$(STAGING_DIR)/usr \
++	exec_prefix=$(STAGING_DIR)/usr \
++	DESTDIR=$(STAGING_DIR) \
++	install
 +
- SDL_CONFIG_SCRIPTS = sdl-config
- 
- # Remove the -Wl,-rpath option.
++SLANG_INSTALL_TARGET_OPT = \
++	prefix=$(STAGING_DIR)/usr \
++	exec_prefix=$(STAGING_DIR)/usr \
++	DESTDIR=$(TARGET_DIR) \
++	install
++
+ $(eval $(autotools-package))
+-- 
+1.9.0
