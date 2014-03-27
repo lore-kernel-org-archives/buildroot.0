@@ -1,49 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Mar 2014 23:32:15 +0100
-Subject: [Buildroot] [git commit] Remove "dirs" dependencies
-Message-ID: <20140327223336.F1B4B9C04C@busybox.osuosl.org>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Thu, 27 Mar 2014 23:40:46 +0100
+Subject: [Buildroot] [PATCH] xbmc: Add comment for host-sdl_images dependency
+Message-ID: <1395960046-26648-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b94266c92585530068317b007bedc85a6c498c49
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+A few people have already asked why XBMC depends on host-sdl_image and
+host-sdl.
 
-The package infrastructure add automatically the "dirs" dependency so
-remove it when the package infrastructure is being used.
+Since this is not obvious, this patch add a comments explaining why it's
+needed.
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
- Makefile                 |    2 +-
- package/uclibc/uclibc.mk |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/xbmc/xbmc.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/Makefile b/Makefile
-index d49d7bf..197cf84 100644
---- a/Makefile
-+++ b/Makefile
-@@ -626,7 +626,7 @@ target-post-image: $(TARGETS_ROOTFS) target-finalize
- toolchain-eclipse-register:
- 	./support/scripts/eclipse-register-toolchain `readlink -f $(O)` $(notdir $(TARGET_CROSS)) $(BR2_ARCH)
- 
--source: dirs $(TARGETS_SOURCE) $(HOST_SOURCE)
-+source: $(TARGETS_SOURCE) $(HOST_SOURCE)
- 
- external-deps:
- 	@$(MAKE1) -Bs DL_MODE=SHOW_EXTERNAL_DEPS $(EXTRAMAKEARGS) source | sort -u
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index f0fb53a..020e218 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -542,7 +542,7 @@ define UCLIBC_INSTALL_STAGING_CMDS
- 	$(UCLIBC_INSTALL_UTILS_STAGING)
- endef
- 
--uclibc-menuconfig: dirs uclibc-patch
-+uclibc-menuconfig: uclibc-patch
- 	$(MAKE1) -C $(UCLIBC_DIR) \
- 		$(UCLIBC_MAKE_FLAGS) \
- 		PREFIX=$(STAGING_DIR) \
+diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
+index a43b41d..6dbbb7d 100644
+--- a/package/xbmc/xbmc.mk
++++ b/package/xbmc/xbmc.mk
+@@ -8,6 +8,10 @@ XBMC_VERSION = 12.3-Frodo
+ XBMC_SITE = $(call github,xbmc,xbmc,$(XBMC_VERSION))
+ XBMC_LICENSE = GPLv2
+ XBMC_LICENSE_FILES = LICENSE.GPL
++# XBMC needs host-sdl_image (and therefore host-sdl) for a host tools it builds
++# called TexturePacker. It is responsible to take all the images used in the
++# GUI and pack them in a blob.
++# http://wiki.xbmc.org/index.php?title=TexturePacker
+ XBMC_DEPENDENCIES = host-gperf host-lzo host-sdl_image host-swig
+ XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
+ 	libass libcdio libcurl libfribidi libgcrypt libmad libmodplug libmpeg2 \
+-- 
+1.9.0
