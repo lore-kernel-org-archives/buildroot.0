@@ -1,67 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Mar 2014 00:44:51 +0100
-Subject: [Buildroot] [git commit] cups: fix static linking
-Message-ID: <20140326234558.1928E9C3AE@busybox.osuosl.org>
+From: Hadrien Boutteville <hadrien.boutteville@gmail.com>
+Date: Thu, 27 Mar 2014 04:41:18 +0100
+Subject: [Buildroot] [PATCH 1/1] libubox: fix build with lua option
+Message-ID: <1395891678-11327-1-git-send-email-hadrien.boutteville@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2bba6998233d18add174a621bd35747a769bcd87
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes
+http://autobuild.buildroot.org/results/fc6/fc64896ca5c3b05dfe4b5c5e7d25fc4b6c9976ad/
+and a bunch of similar failures.
 
-Append -lz to the cups linking libs to fix a problem like this one:
+When Lua package is selected, libubox sets an option to build with Lua
+binding. Unfortunately, if LUAPATH is not passed libubox seeks it on
+the host instead of staging due to hard coded pkg-config commands in
+its CMake file. As a result Lua is not found and the build fails.
+Fix it by passing LUAPATH in LIBUBOX_CONF_OPT.
 
-../cups/libcups.a(file.o): In function `cupsFileSeek':
-/home/test/test/1/output/build/cups-1.3.11/cups/file.c:1444: undefined
-reference to `inflateEnd'
-collect2: error: ld returned 1 exit status
-make[2]: *** [ipp] Error 1
-make[2]: *** Waiting for unfinished jobs....
+Similarly, libubox seeks LUA_CFLAGS with the host's pkg-config for the
+same reason. To prevent potential errors, fix it by passing LUA_CFLAGS
+in LIBUBOX_CONF_OPT.
 
-This solution is the same used upstream in newer versions.
+Finally, libubox fails to build with Lua 5.2 because it uses functions
+removed from this version.
+Fix it by activating the option only with Lua 5.1.
 
-Fixes:
-   http://autobuild.buildroot.net/results/f3d/f3d4f67ce7ee1d54f5bd4c87dfddb7417db614e5/
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
 ---
- package/cups/cups-0001-fix-static.patch |   28 ++++++++++++++++++++++++++++
- 1 files changed, 28 insertions(+), 0 deletions(-)
+ package/libubox/libubox.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/cups/cups-0001-fix-static.patch b/package/cups/cups-0001-fix-static.patch
-new file mode 100644
-index 0000000..4c9d0d4
---- /dev/null
-+++ b/package/cups/cups-0001-fix-static.patch
-@@ -0,0 +1,28 @@
-+cups: fix static linking
-+
-+Append -lz to the cups linking libs to fix a problem like this one:
-+
-+../cups/libcups.a(file.o): In function `cupsFileSeek':
-+/home/test/test/1/output/build/cups-1.3.11/cups/file.c:1444: undefined 
-+reference to `inflateEnd'
-+collect2: error: ld returned 1 exit status
-+make[2]: *** [ipp] Error 1
-+make[2]: *** Waiting for unfinished jobs....
-+
-+This solution is the same used upstream in newer versions.
-+
-+Fixes:
-+   http://autobuild.buildroot.net/results/f3d/f3d4f67ce7ee1d54f5bd4c87dfddb7417db614e5/
-+
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+--- cups-1.3.11/Makedefs.in.orig	2014-03-05 13:28:10.175437880 +0000
-++++ cups-1.3.11/Makedefs.in	2014-03-05 13:28:35.398845162 +0000
-+@@ -132,7 +132,7 @@ LDFLAGS		=	-L../cups -L../filter @LDARCH
-+ LEGACY_BACKENDS	=	@LEGACY_BACKENDS@
-+ LIBCUPSORDER	=	@LIBCUPSORDER@
-+ LIBCUPSIMAGEORDER =	@LIBCUPSIMAGEORDER@
-+-LINKCUPS	=	@LINKCUPS@ $(SSLLIBS)
-++LINKCUPS	=	@LINKCUPS@ $(SSLLIBS) $(LIBZ)
-+ LINKCUPSIMAGE	=	@LINKCUPSIMAGE@
-+ LIBS		=	$(LINKCUPS) $(COMMONLIBS)
-+ OPTIM		=	@OPTIM@
+diff --git a/package/libubox/libubox.mk b/package/libubox/libubox.mk
+index 28d5c63..22efc9a 100644
+--- a/package/libubox/libubox.mk
++++ b/package/libubox/libubox.mk
+@@ -10,8 +10,10 @@ LIBUBOX_LICENSE = LGPLv2.1, GPLv2, BSD-3c, MIT
+ LIBUBOX_INSTALL_STAGING = YES
+ LIBUBOX_DEPENDENCIES = host-pkgconf $(if $(BR2_PACKAGE_JSON_C),json-c)
+ 
+-ifeq ($(BR2_PACKAGE_LUA),y)
++ifeq ($(BR2_PACKAGE_LUA_5_1),y)
+ 	LIBUBOX_DEPENDENCIES += lua
++	LIBUBOX_CONF_OPT += -DLUAPATH=$(STAGING_DIR)/usr/lib/lua/5.1 \
++		-DLUA_CFLAGS=-I$(STAGING_DIR)/usr/include
+ else
+ 	LIBUBOX_CONF_OPT += -DBUILD_LUA:BOOL=OFF
+ endif
