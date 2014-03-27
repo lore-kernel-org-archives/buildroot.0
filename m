@@ -1,87 +1,99 @@
-From: Philippe Reynes <tremyfr@yahoo.fr>
-Date: Thu, 27 Mar 2014 18:17:09 +0000 (GMT)
-Subject: [Buildroot] [PATCH] Makefile: move fs/common.mk above
-	external.mk
-In-Reply-To: <87ha6kk5bi.fsf@dell.be.48ers.dk>
-References: <1395583071-10016-1-git-send-email-tremyfr@yahoo.fr>
- <87ha6kk5bi.fsf@dell.be.48ers.dk>
-Message-ID: <1395944229.86315.YahooMailNeo@web28802.mail.ir2.yahoo.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 27 Mar 2014 19:19:15 +0100
+Subject: [Buildroot] [PATCH 1/1] system: add ability to pass additional
+ users tables.
+In-Reply-To: <1395937176-7585-2-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1395937176-7585-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <1395937176-7585-2-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <20140327181915.GA4458@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Eric, All,
 
-I've done a little test before sending this patch.
-I've used this useless fs :
+On 2014-03-27 17:19 +0100, Eric Le Bihan spake thusly:
+> A new entry has been added to the "System Configuration" menu to allow
+> the user to set the location of additional user tables (besides the ones
+> defined in packages).
+> 
+> A user table is a text file, formatted using the mkusers syntax, which
+> describes the users on the target system, with their UID/GID, home
+> directory, password, etc.
+> 
+> The target root file system will be populated according the content of
+> these files.
+> 
+> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> ---
+>  fs/common.mk     |    6 +++++-
+>  system/Config.in |    9 +++++++++
+>  2 files changed, 14 insertions(+), 1 deletion(-)
+> 
+> diff --git a/fs/common.mk b/fs/common.mk
+> index d95c26b..6f37bd0 100644
+> --- a/fs/common.mk
+> +++ b/fs/common.mk
+> @@ -33,6 +33,7 @@ FULL_DEVICE_TABLE = $(BUILD_DIR)/_device_table.txt
+>  ROOTFS_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE) \
+>         $(BR2_ROOTFS_STATIC_DEVICE_TABLE))
+>  USERS_TABLE = $(BUILD_DIR)/_users_table.txt
+> +ROOTFS_USERS_TABLE = $(call qstrip,$(BR2_ROOTFS_USERS_TABLE))
+>  
+>  define ROOTFS_TARGET_INTERNAL
+>  
+> @@ -78,7 +79,10 @@ endif
+>  	printf '$$(subst $$(sep),\n,$$(PACKAGES_PERMISSIONS_TABLE))' >> $$(FULL_DEVICE_TABLE)
+>  	echo "$$(HOST_DIR)/usr/bin/makedevs -d $$(FULL_DEVICE_TABLE) $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
+>  endif
+> -	printf '$(subst $(sep),\n,$(PACKAGES_USERS))' > $(USERS_TABLE)
+> +ifneq ($$(ROOTFS_USERS_TABLE),)
+> +	cat $$(ROOTFS_USERS_TABLE) > $(USERS_TABLE)
+> +endif
+> +	printf '$(subst $(sep),\n,$(PACKAGES_USERS))' >> $(USERS_TABLE)
+>  	$(TOPDIR)/support/scripts/mkusers $(USERS_TABLE) $(TARGET_DIR) >> $(FAKEROOT_SCRIPT)
+>  	echo "$$(ROOTFS_$(2)_CMD)" >> $$(FAKEROOT_SCRIPT)
+>  	chmod a+x $$(FAKEROOT_SCRIPT)
+> diff --git a/system/Config.in b/system/Config.in
+> index e8f1ed6..b7052f5 100644
+> --- a/system/Config.in
+> +++ b/system/Config.in
+> @@ -280,6 +280,15 @@ config BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
+>  
+>  endif # BR2_ROOTFS_SKELETON_DEFAULT
+>  
+> +config BR2_ROOTFS_USERS_TABLE
+> +	string "Path to the users tables"
+> +	help
+> +	  Specify a space-separated list of users table locations,
+> +	  that will be passed to the mkusers utility to create
+> +	  users on the system, with home directory, password, etc.
+> +
+> +	  See manual for details on the usage and syntax of these files.
+> +
 
-define ROOTFS_USERFS_CMD
-??? echo "Nothing to do" ; \
-??? touch $@
-endef
+There is a discrepancy bewteen the description commit log and this help
+text, and the actual behaviour. The commit log and help text both
+explain this can be a space-separated list of files, but in the code you
+just treat it as if it were a unique file:
 
-$(eval $(call ROOTFS_TARGET,userfs))
+    ifneq ($$(ROOTFS_USERS_TABLE),)
+        cat $$(ROOTFS_USERS_TABLE) > $(USERS_TABLE)
+    endif
 
-In the file $(BR2_EXTERNAL)/fs/common.mk
+I think you should do something like:
 
-Without my patch, the file rootfs.userfs is not created.
-With my patch, the file rootfs.userfs is created.
-
-I could have missed something.
-Do you have an idea of what may failed ?
+    $(foreach f,$$(ROOTFS_USERS_TABLE),cat $$(f) >>$(USERS_TABLE)$(sep))
 
 Regards,
-Philippe
-
-
-
-
-
-
-
-
-
-Le Mercredi 26 mars 2014 22h39, Peter Korsgaard <jacmet@uclibc.org> a ?crit :
- 
->>>>> "Philippe" == Philippe Reynes <tremyfr@yahoo.fr> writes:
-
-
-> The file external.mk was included before fs/common.mk,
-> so it was impossible to add rootfs target to external.
-> This change move fs/common.mk before external.mk, so
-> now rootfs target may be added to external.
-
-> Signed-off-by: Philippe Reynes <tremyfr@yahoo.fr>
-> ---
->? Makefile |? ? 3 +--
->? 1 files changed, 1 insertions(+), 2 deletions(-)
-
-> diff --git a/Makefile b/Makefile
-> index d49d7bf..07e6c74 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -391,6 +391,7 @@ include $(sort $(wildcard package/*/*.mk))
->? include boot/common.mk
->? include linux/linux.mk
->? include system/system.mk
-> +include fs/common.mk
-
->? include $(BR2_EXTERNAL)/external.mk
-
-> @@ -408,8 +409,6 @@ ifeq ($(BR2_ECLIPSE_REGISTER),y)
->? TARGETS+=toolchain-eclipse-register
->? endif
-
-> -include fs/common.mk
-> -
-
-Hmm, does that really work? Does the locale data get correctly purged /
-generated before the filesystem images are generated?
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140327/8e1fef56/attachment.html>
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
