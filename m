@@ -1,38 +1,32 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Thu, 27 Mar 2014 23:40:46 +0100
-Subject: [Buildroot] [PATCH] xbmc: Add comment for host-sdl_images dependency
-Message-ID: <1395960046-26648-1-git-send-email-maxime.hadjinlian@gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 27 Mar 2014 23:48:14 +0100
+Subject: [Buildroot] [PATCH] sdl: Fix host variant dependencies
+In-Reply-To: <1395959262-25285-1-git-send-email-maxime.hadjinlian@gmail.com>
+ (Maxime Hadjinlian's message of "Thu, 27 Mar 2014 23:27:42 +0100")
+References: <1395959262-25285-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <878urvgswh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A few people have already asked why XBMC depends on host-sdl_image and
-host-sdl.
+>>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
 
-Since this is not obvious, this patch add a comments explaining why it's
-needed.
+ > The host variant of sdl inherited the dependencies and conf opt from
+ > sdl which could lead to some trouble.
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
----
- package/xbmc/xbmc.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ > For example:
+ >   If you were to build host-sdl and had alsa-lib enabled in your
+ >   packages list, it would try to build host-alsa-lib which does not
+ >   exists.
 
-diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index a43b41d..6dbbb7d 100644
---- a/package/xbmc/xbmc.mk
-+++ b/package/xbmc/xbmc.mk
-@@ -8,6 +8,10 @@ XBMC_VERSION = 12.3-Frodo
- XBMC_SITE = $(call github,xbmc,xbmc,$(XBMC_VERSION))
- XBMC_LICENSE = GPLv2
- XBMC_LICENSE_FILES = LICENSE.GPL
-+# XBMC needs host-sdl_image (and therefore host-sdl) for a host tools it builds
-+# called TexturePacker. It is responsible to take all the images used in the
-+# GUI and pack them in a blob.
-+# http://wiki.xbmc.org/index.php?title=TexturePacker
- XBMC_DEPENDENCIES = host-gperf host-lzo host-sdl_image host-swig
- XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
- 	libass libcdio libcurl libfribidi libgcrypt libmad libmodplug libmpeg2 \
+ > This patch define basic dependencies and conf opt for the host variant.
+
+ > Reported-by: Eric Limpens <limpens@gmail.com>
+ > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+
+Committed, thanks.
+
 -- 
-1.9.0
+Bye, Peter Korsgaard
