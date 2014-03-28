@@ -1,60 +1,115 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 28 Mar 2014 12:11:56 +0100
-Subject: [Buildroot] [PATCH 1/1] systemd: disable build for unsupported
- architectures.
-In-Reply-To: <1396001767-4910-1-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1396001767-4910-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <20140328121156.6d49c688@skate>
+From: Alvaro Gamez <alvaro.gamez@hazent.com>
+Date: Fri, 28 Mar 2014 12:25:53 +0100
+Subject: [Buildroot] [PATCH 1/1] dcron: new package
+In-Reply-To: <1396002495-29279-1-git-send-email-alvaro.gamez@hazent.com>
+References: <1396002495-29279-1-git-send-email-alvaro.gamez@hazent.com>
+Message-ID: <CAM+bi4s0jV+xri+1Jod5-CijN9hMkbHdKjFo_FqffRCfWKbVWg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Eric Le Bihan,
+Oops, I am sorry. I resent this patch by mistake, I forgot I had sent it
+before. Didn't mean to clutter the list since this is already in patchwork.
+Sorry again.
 
-On Fri, 28 Mar 2014 11:16:07 +0100, Eric Le Bihan wrote:
-> Systemd only supports the architectures defined in
-> src/shared/architecture.h. This list does not contain ARC, Blackfin,
-> Xtensa, Microblaze and Nios2, so this package is disabled for these
-> architectures.
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/bcc/bcce95eb0748505c0d62db21a6e420aae3c3181b/
-> 
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Regards
+
+
+2014-03-28 11:28 GMT+01:00 Alvaro G. M <alvaro.gamez@hazent.com>:
+
+> Signed-off-by: Alvaro G. M <alvaro.gamez@hazent.com>
 > ---
->  package/systemd/Config.in |    2 ++
->  system/Config.in          |    2 ++
->  2 files changed, 4 insertions(+)
-> 
-> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-> index 838e13e..66b5fc4 100644
-> --- a/package/systemd/Config.in
-> +++ b/package/systemd/Config.in
-> @@ -2,6 +2,8 @@ config BR2_PACKAGE_SYSTEMD
->  	bool "systemd"
->  	depends on BR2_INIT_SYSTEMD
->  	depends on !BR2_avr32 # no epoll_create1
-> +	depends on !BR2_arc && !BR2_bfin && !BR2_xtensa
-> +	depends on !BR2_microblaze && !BR2_nios2
+>  package/Config.in       |  1 +
+>  package/dcron/Config.in |  8 ++++++++
+>  package/dcron/dcron.mk  | 36 ++++++++++++++++++++++++++++++++++++
+>  3 files changed, 45 insertions(+)
+>  create mode 100644 package/dcron/Config.in
+>  create mode 100644 package/dcron/dcron.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index ad75d9b..e301d9a 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1067,6 +1067,7 @@ source "package/bootutils/Config.in"
+>  source "package/coreutils/Config.in"
+>  endif
+>  source "package/cpuload/Config.in"
+> +source "package/dcron/Config.in"
+>  source "package/dsp-tools/Config.in"
+>  source "package/htop/Config.in"
+>  source "package/keyutils/Config.in"
+> diff --git a/package/dcron/Config.in b/package/dcron/Config.in
+> new file mode 100644
+> index 0000000..70dadcd
+> --- /dev/null
+> +++ b/package/dcron/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_DCRON
+> +       bool "dcron"
+> +       help
+> +         dcron is a time-based job scheduler with anacron-like features.
+> +         It works as a background daemon that parses individual crontab
+> +         files and executes commands on behalf of the users in question.
+> +
+> +         http://www.jimpryor.net/linux/dcron.html
+> diff --git a/package/dcron/dcron.mk b/package/dcron/dcron.mk
+> new file mode 100644
+> index 0000000..cfff875
+> --- /dev/null
+> +++ b/package/dcron/dcron.mk
+> @@ -0,0 +1,36 @@
+>
+> +################################################################################
+> +#
+> +# dcron
+> +#
+>
+> +################################################################################
+> +
+> +DCRON_VERSION = 4.5
+> +DCRON_SITE = http://www.jimpryor.net/linux/releases/
+> +DCRON_LICENSE = GPLv2
+> +
+> +DCRON_MAKE_OPT = CC="$(TARGET_CC)" CXX="$(TARGET_CXX)" AR="$(TARGET_AR)"
+> +
+> +define DCRON_PERMISSIONS
+> +/usr/sbin/crond                         f 4755 0 0 - - - - -
+> +/usr/bin/crontab                f 755  0 0 - - - - -
+> +/etc/cron.d/system              f 755  0 0 - - - - -
+> +endef
+> +
+> +define DCRON_BUILD_CMDS
+> +       $(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D)
+> $(DCRON_MAKE_OPT)
+> +endef
+> +
+> +define DCRON_INSTALL_TARGET_CMDS
+> +       $(INSTALL) -m0700 $(@D)/crond $(TARGET_DIR)/usr/sbin/crond
+> +       $(INSTALL) -m4755 $(@D)/crontab $(TARGET_DIR)/usr/bin/crontab
+> +       $(INSTALL) -D -m0644 $(@D)/extra/root.crontab
+> $(TARGET_DIR)/etc/cron.d/system
+> +       $(INSTALL) -d -m0755 $(TARGET_DIR)/var/spool/cron/crontabs \
+> +               $(TARGET_DIR)/etc/cron.daily $(TARGET_DIR)/etc/cron.hourly
+> \
+> +               $(TARGET_DIR)/etc/cron.monthly
+> $(TARGET_DIR)/etc/cron.weekly
+> +endef
+> +
+> +define DCRON_CLEAN_CMDS
+> +       $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) clean
+> +endef
+> +
+> +$(eval $(generic-package))
+> --
+> 1.9.1
+>
+>
 
-Maybe it's better to use positive logic here, and only explicitly allow
-systemd on the architectures that it supports. This way if tomorrow we
-add support for a new architecture, we won't get weird failures.
 
-In package/systemd/Config.in:
-
-config BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
-	bool
-	default y if BR2_arm || BR2_powerpc || BR2_...
-
-and then use "depends on BR2_PACKAGE_SYSTEM_ARCH_SUPPORTS" where needed.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+?lvaro G?mez Machado
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140328/af291f09/attachment.html>
