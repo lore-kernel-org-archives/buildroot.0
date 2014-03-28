@@ -1,9 +1,9 @@
 From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Fri, 28 Mar 2014 22:24:45 +0100
-Subject: [Buildroot] [PATCH 4/9] manual/contribute.txt: fix typo
+Date: Fri, 28 Mar 2014 22:24:44 +0100
+Subject: [Buildroot] [PATCH 3/9] manual/make-tips.txt: fix typo
 In-Reply-To: <1396041895-29533-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 References: <1396041895-29533-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <1396041895-29533-5-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <1396041895-29533-4-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 ---
- docs/manual/contribute.txt |    2 +-
+ docs/manual/make-tips.txt |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-index 52d4d04..028dd90 100644
---- a/docs/manual/contribute.txt
-+++ b/docs/manual/contribute.txt
-@@ -97,7 +97,7 @@ To indicate approval of a patch, there are three formal tags that keep
- track of this approval. To add your tag to a patch, reply to it with the
- approval tag below the original author's Signed-off-by line. These tags
- will be picked up automatically by patchwork (see
--ref:apply-patches-patchwork[]) and will be part of the commit log when
-+xref:apply-patches-patchwork[]) and will be part of the commit log when
- the patch is accepted.
+diff --git a/docs/manual/make-tips.txt b/docs/manual/make-tips.txt
+index faf59f2..81edae3 100644
+--- a/docs/manual/make-tips.txt
++++ b/docs/manual/make-tips.txt
+@@ -32,7 +32,7 @@ The result of the search shows the help message of the matching items.
+ Not all targets are always available,
+ some settings in the +.config+ file may hide some targets:
  
- Tested-by:: Indicates that the patch has been tested successfully.
+-* +busybox-menuconfig+ and +busybox-savedefconfig+ ony work when
++* +busybox-menuconfig+ and +busybox-savedefconfig+ only work when
+   +busybox+ is enabled;
+ * +linux-menuconfig+ and +linux-savedefconfig+ only work when
+   +linux+ is enabled;
 -- 
 1.7.9.5
