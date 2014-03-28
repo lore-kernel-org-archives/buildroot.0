@@ -1,52 +1,39 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Fri, 28 Mar 2014 11:16:07 +0100
-Subject: [Buildroot] [PATCH 1/1] systemd: disable build for unsupported
-	architectures.
-Message-ID: <1396001767-4910-1-git-send-email-eric.le.bihan.dev@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 28 Mar 2014 11:22:11 +0100
+Subject: [Buildroot] [PATCH] website: Add a Google+ presence
+In-Reply-To: <CAGduivy7GcoDETxOj9-pVN1ucYWeKgFzr887FqFBF75a2hsf1g@mail.gmail.com>
+References: <1395962911-309-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <87r45mg0lq.fsf@dell.be.48ers.dk>
+ <CAGduivy7GcoDETxOj9-pVN1ucYWeKgFzr887FqFBF75a2hsf1g@mail.gmail.com>
+Message-ID: <20140328112211.584d31db@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Systemd only supports the architectures defined in
-src/shared/architecture.h. This list does not contain ARC, Blackfin,
-Xtensa, Microblaze and Nios2, so this package is disabled for these
-architectures.
+Dear Maxime Hadjinlian,
 
-Fixes http://autobuild.buildroot.net/results/bcc/bcce95eb0748505c0d62db21a6e420aae3c3181b/
+On Fri, 28 Mar 2014 10:51:30 +0100, Maxime Hadjinlian wrote:
+> > Is that the right link? I don't see any of the recent posts like on:
+> >
+> > https://plus.google.com/100084591154899263420/posts
+> >
+> Arg, the link I used is the Buildroot community but we do all our
+> posts from the Buildroot account which are different.
+> It is a bad copy paste on my part, I intended to use the Buildroot
+> account.
+> 
+> But maybe, we should use the community itself ?
+> I added Thomas P. on that matter, as he is the owner of both account.
 
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
----
- package/systemd/Config.in |    2 ++
- system/Config.in          |    2 ++
- 2 files changed, 4 insertions(+)
+I am not sure: the community page may contain posts from various other
+persons, which may or may not be accurate. Therefore, for the link to
+G+ from the official Buildroot web site, I believe I'd prefer to point
+to something we "control".
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index 838e13e..66b5fc4 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -2,6 +2,8 @@ config BR2_PACKAGE_SYSTEMD
- 	bool "systemd"
- 	depends on BR2_INIT_SYSTEMD
- 	depends on !BR2_avr32 # no epoll_create1
-+	depends on !BR2_arc && !BR2_bfin && !BR2_xtensa
-+	depends on !BR2_microblaze && !BR2_nios2
- 	depends on BR2_LARGEFILE # util-linux
- 	depends on BR2_USE_WCHAR # util-linux
- 	depends on BR2_INET_IPV6
-diff --git a/system/Config.in b/system/Config.in
-index e8f1ed6..217dbd4 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -88,6 +88,8 @@ config BR2_INIT_SYSV
- config BR2_INIT_SYSTEMD
- 	bool "systemd"
- 	depends on !BR2_avr32 # no epoll_create1
-+	depends on !BR2_arc && !BR2_bfin && !BR2_xtensa
-+	depends on !BR2_microblaze && !BR2_nios2
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on BR2_LARGEFILE
- 	depends on BR2_USE_WCHAR
+Thomas
 -- 
-1.7.9.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
