@@ -1,45 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 28 Mar 2014 12:09:09 +0100
-Subject: [Buildroot] Xenomai support for pre and post patches
-In-Reply-To: <CAEbDrgk-oaAJgHv=w02Hdzef9t7zphqWKBuq87eyD=FWHrA=Aw@mail.gmail.com>
-References: <CAEbDrgmqihPwKwxhr-WGQmAShN2Ahr7SsovCXgLgbtDUz+RWgg@mail.gmail.com>
- <CAEbDrgk-oaAJgHv=w02Hdzef9t7zphqWKBuq87eyD=FWHrA=Aw@mail.gmail.com>
-Message-ID: <20140328120909.260739cf@skate>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Fri, 28 Mar 2014 12:10:59 +0100
+Subject: [Buildroot] [PATCH 1/1] system: add ability to pass additional
+ users tables.
+In-Reply-To: <20140327181915.GA4458@free.fr>
+References: <1395937176-7585-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <1395937176-7585-2-git-send-email-eric.le.bihan.dev@free.fr>
+ <20140327181915.GA4458@free.fr>
+Message-ID: <20140328111056.GA28624@pc-eric>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gregory Dymarek,
+Hi!
 
-Thanks for your contribution!
+On Thu, Mar 27, 2014 at 07:19:15PM +0100, Yann E. MORIN wrote:
+> Eric, All,
+>
+[...]
+>
+> There is a discrepancy bewteen the description commit log and this help
+> text, and the actual behaviour. The commit log and help text both
+> explain this can be a space-separated list of files, but in the code you
+> just treat it as if it were a unique file:
+>
+>     ifneq ($$(ROOTFS_USERS_TABLE),)
+>         cat $$(ROOTFS_USERS_TABLE) > $(USERS_TABLE)
+>     endif
+>
+> I think you should do something like:
+>
+>     $(foreach f,$$(ROOTFS_USERS_TABLE),cat $$(f) >>$(USERS_TABLE)$(sep))
+In fact I use the same trick as for ROOTFS_DEVICE_TABLES: whether
+ROOTFS_USERS_TABLE is 'foo' or 'foo bar quux', the invocation of `cat` is
+valid, as `cat` takes a list of filenames as arguments. So no need to loop
+on a list. Or is the loop preferred because of portability issues?
 
-On Fri, 28 Mar 2014 09:42:19 +0000, Gregory Dymarek wrote:
+But it is true that I should use the plural form ROOTFS_USERS_TABLES.
 
-> The following patch adds support for pre- and post- adeos patches to
-> Xenomai.
-
-Can you explain why this is needed? You can already apply patches on
-any package using the BR2_GLOBAL_PATCH_DIR option. See
-http://buildroot.org/downloads/manual/manual.html#packages-custom for
-details about it.
-
-Basically, you can do:
-
-	BR2_GLOBAL_PATCH_DIR=board/<company>/<project>/
-
-and then, in:
-
-	board/<company>/<project>/xenomai/
-
-you put your patches, and then will be applied to Xenomai before it is
-being built.
+Thanks for your review.
 
 Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+ELB
