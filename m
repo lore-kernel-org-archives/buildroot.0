@@ -1,37 +1,43 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Fri, 28 Mar 2014 19:48:34 +0100
-Subject: [Buildroot] [PATCH] manual: Add singular example for dependency
-	comment
-Message-ID: <1396032514-10807-1-git-send-email-maxime.hadjinlian@gmail.com>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Fri, 28 Mar 2014 22:24:41 +0100
+Subject: [Buildroot] [PATCH 0/9] Documentation cleanup
+Message-ID: <1396041895-29533-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The manual always uses the format with multiple dependencies. This only
-add an example where is a single dependency to show that this format is
-applicable regardless of the number of dependencies.
+Hi,
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
----
- docs/manual/adding-packages-directory.txt | 4 ++++
- 1 file changed, 4 insertions(+)
+Here is a series that fixes a few typoes and makes small improvements
+in documentation.
 
-diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-index e56e59a..52eb653 100644
---- a/docs/manual/adding-packages-directory.txt
-+++ b/docs/manual/adding-packages-directory.txt
-@@ -202,6 +202,10 @@ for example:
- --------------------------
- aircrack-ng needs a toolchain w/ largefile, threads
- --------------------------
-+or
-+--------------------------
-+crda needs a toolchain w/ threads
-+--------------------------
- 
- Note that this text is kept brief on purpose, so that it will fit on a
- 80-character terminal.
+Regards,
+Jerzy
+
+
+Jerzy Grzegorek (9):
+  manual/configure.txt: reword part about internal toolchain backend
+  manual/configure.txt: fix typo
+  manual/make-tips.txt: fix typo
+  manual/contribute.txt: fix typo
+  manual/contribute.txt: reword part about reporting issues
+  manual/legal-notice.txt: fix typo
+  manual/contribute.txt: reword part about versioning patches
+  manual: fix typo in abbreviation 'e.g.'
+  manual: fix typo in abbreviation 'i.e.'
+
+ docs/manual/adding-packages-autotools.txt |    2 +-
+ docs/manual/adding-packages-generic.txt   |    4 ++--
+ docs/manual/common-usage.txt              |    8 ++++----
+ docs/manual/configure.txt                 |   16 ++++++++--------
+ docs/manual/contribute.txt                |    8 +++++---
+ docs/manual/customize-outside-br.txt      |    2 +-
+ docs/manual/faq-troubleshooting.txt       |    2 +-
+ docs/manual/legal-notice.txt              |    2 +-
+ docs/manual/make-tips.txt                 |    2 +-
+ 9 files changed, 24 insertions(+), 22 deletions(-)
+
 -- 
-1.9.0
+1.7.9.5
