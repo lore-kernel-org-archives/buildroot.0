@@ -1,79 +1,37 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Fri, 28 Mar 2014 19:41:34 +0100
-Subject: [Buildroot] [PATCH v2 1/2] infra: Add generic check_prog_host
-	function
-In-Reply-To: <CAGduivy7YPpfcvkOkZxH2_35BSxsjSK0_++RMaw3bxwJE2=QzA@mail.gmail.com>
-References: <1393172261-17421-1-git-send-email-maxime.hadjinlian@gmail.com>
- <20140223184032.2c6d08de@skate>
- <CAGduivy7YPpfcvkOkZxH2_35BSxsjSK0_++RMaw3bxwJE2=QzA@mail.gmail.com>
-Message-ID: <CAGduivw6n_tGvg+HOjptV01CxgpviCgumoq_6szpNzre7d8R-g@mail.gmail.com>
+Date: Fri, 28 Mar 2014 19:48:34 +0100
+Subject: [Buildroot] [PATCH] manual: Add singular example for dependency
+	comment
+Message-ID: <1396032514-10807-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+The manual always uses the format with multiple dependencies. This only
+add an example where is a single dependency to show that this format is
+applicable regardless of the number of dependencies.
 
-On Sun, Feb 23, 2014 at 7:12 PM, Maxime Hadjinlian
-<maxime.hadjinlian@gmail.com> wrote:
-> On Sun, Feb 23, 2014 at 6:40 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> Dear Maxime Hadjinlian,
->>
->> On Sun, 23 Feb 2014 17:17:40 +0100, Maxime Hadjinlian wrote:
->>
->>> +# Verify that which is installed
->>> +check_prog_host "which"
->>
->> Since your function check_prog_host uses which to determine if the
->> program exists, isn't it weird to use which to verify it?
-> Agreed but that was the original check also which I found a little in
-> the first place. But since this patch is here only to introduce and
-> use a function, I didn't see how to change that here.
->>
->> Your check_host_prog function could also be used in:
->>
->> # Check that a few mandatory programs are installed
->> missing_progs="no"
->> for prog in patch perl tar wget cpio python unzip rsync bc ${DL_TOOLS} ; do
->>         if ! which $prog > /dev/null ; then
->>                 echo "You must install '$prog' on your build machine";
->>                 missing_progs="yes"
->>                 if test $prog = "svn" ; then
->>                         echo "  svn is usually part of the subversion package in your distribution"
->>                 elif test $prog = "hg" ; then
->>                         echo "  hg is usually part of the mercurial package in your distribution"
->>                 elif test $prog = "zcat" ; then
->>                         echo "  zcat is usually part of the gzip package in your distribution"
->>                 elif test $prog = "bzcat" ; then
->>                         echo "  bzcat is usually part of the bzip2 package in your distribution"
->>                 fi
->>         fi
->> done
->>
->> if test "${missing_progs}" = "yes" ; then
->>         exit 1
->> fi
->>
->> Though you see that this loop has this missing_progs variable that
->> allows to list all the missing programs, and only abort at the end.
-> I wanted to keep this one as is for the moment.
-> As you point out, it uses the exact mechanisms we want for all the
-> dependencies.sh, and it would be part of a follow up patch later one,
-> which would uses the same mechanisms but all over the dependencies.sh.
-> Which is want we want in the end.
-> This first patch is mostly a follow up of the previous one, which
-> added the BR2_NEEDS_HOST_JAVA
->>
->> Thomas
->> --
->> Thomas Petazzoni, CTO, Free Electrons
->> Embedded Linux, Kernel and Android engineering
->> http://free-electrons.com
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+ docs/manual/adding-packages-directory.txt | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Just a bump.
-Thomas, if I remember correctly, you were not opposed to this patch ?
-As explained, it has been found that dependencies.sh needs a few other
-rounds of patch so it would be better shaped, but that can be done
-later.
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index e56e59a..52eb653 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -202,6 +202,10 @@ for example:
+ --------------------------
+ aircrack-ng needs a toolchain w/ largefile, threads
+ --------------------------
++or
++--------------------------
++crda needs a toolchain w/ threads
++--------------------------
+ 
+ Note that this text is kept brief on purpose, so that it will fit on a
+ 80-character terminal.
+-- 
+1.9.0
