@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 28 Mar 2014 01:00:24 +0100
-Subject: [Buildroot] [PATCH 07/10] package/dvb-apps: bump revision
+Date: Fri, 28 Mar 2014 01:00:25 +0100
+Subject: [Buildroot] [PATCH 08/10] package/tvheadend: bump revision
 In-Reply-To: <cover.1395964430.git.yann.morin.1998@free.fr>
 References: <cover.1395964430.git.yann.morin.1998@free.fr>
-Message-ID: <f89d399edd4a1a5daab116239d727188a1ec5d74.1395964430.git.yann.morin.1998@free.fr>
+Message-ID: <ce30fdb41d189596e0bc0d9de65f1ded6206343a.1395964430.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,112 +12,25 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-In this new revision, there is no longer transponders data, so dvb-apps
-now only installs the dvb-apps utilities.
-
-Packages that needs the transponders data have now all been switched to
-use dtv-scan-tables instead, so we don't need a legacy option for the
-transponders data.
-
-However, we add a legacy option for the utilities option, just to inform
-the user of the new behaviour.
-
-Sadly, a user that had dvb-apps selected just to get the transponders
-data will now get the full dvb-apps package installed. There's nothing
-we can really do about this.
+Adds a bunch of fixes all over the place.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- Config.in.legacy             |  7 +++++++
- package/dvb-apps/Config.in   | 24 +++++++-----------------
- package/dvb-apps/dvb-apps.mk | 13 +------------
- 3 files changed, 15 insertions(+), 29 deletions(-)
+ package/tvheadend/tvheadend.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index afcd3b1..17ead9b 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -101,6 +101,13 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2014.05"
- 
-+config BR2_PACKAGE_DVB_APPS_UTILS
-+	bool "dvb-apps utilities now built by default"
-+	select BR2_LEGACY
-+	help
-+	  The dvb-apps utilities are now always built when the dvb-apps
-+	  package is selected.
-+
- config BR2_KERNEL_HEADERS_SNAP
- 	bool "Local Linux snapshot support removed"
- 	select BR2_LEGACY
-diff --git a/package/dvb-apps/Config.in b/package/dvb-apps/Config.in
-index 76b33aa..3f8fdb6 100644
---- a/package/dvb-apps/Config.in
-+++ b/package/dvb-apps/Config.in
-@@ -1,25 +1,15 @@
- config BR2_PACKAGE_DVB_APPS
--	bool "dvb-apps (transponders data)"
--	select BR2_PACKAGE_DTV_SCAN_TABLES
--	help
--	  Install the DVB-C, DVB-S, DVB-T and ATSC transponders data.
--
--	  http://linuxtv.org/projects.php
--	  http://linuxtv.org/hg/dvb-apps
--
--if BR2_PACKAGE_DVB_APPS
--
--comment "dvb-apps utils needs a toolchain w/ largefile, threads, headers >= 3.3"
--	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
--
--config BR2_PACKAGE_DVB_APPS_UTILS
--	bool "dvb-apps utilities"
-+	bool "dvb-apps"
- 	depends on BR2_LARGEFILE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	help
--	  A small number of DVB test and utility programs,
-+	  Install a small number of DVB test and utility programs,
- 	  including szap and dvbscan.
- 
--endif
-+	  http://linuxtv.org/projects.php
-+	  http://linuxtv.org/hg/dvb-apps
-+
-+comment "dvb-apps utils needs a toolchain w/ largefile, threads, headers >= 3.3"
-+	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
-diff --git a/package/dvb-apps/dvb-apps.mk b/package/dvb-apps/dvb-apps.mk
-index 5f576e0..c5e1954 100644
---- a/package/dvb-apps/dvb-apps.mk
-+++ b/package/dvb-apps/dvb-apps.mk
-@@ -4,15 +4,9 @@
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index 87be703..4cfcf90 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DVB_APPS_VERSION        = be76da69f250
-+DVB_APPS_VERSION        = 3d43b280298c39a67d1d889e01e173f52c12da35
- DVB_APPS_SITE           = http://linuxtv.org/hg/dvb-apps
- DVB_APPS_SITE_METHOD    = hg
--
--DVB_APPS_DEPENDENCIES   = dtv-scan-tables
--
--ifeq ($(BR2_PACKAGE_DVB_APPS_UTILS),y)
--# Utilitiess are selected, build and install everything
--
- DVB_APPS_LICENSE        = GPLv2 GPLv2+ LGPLv2.1+
- DVB_APPS_LICENSE_FILES  = COPYING COPYING.LGPL
- 
-@@ -38,9 +32,4 @@ define DVB_APPS_INSTALL_TARGET_CMDS
- 	$(MAKE) -C $(@D) V=1 DESTDIR=$(TARGET_DIR) install
- endef
- 
--else
--# We do not really install anything, so there's no license
--DVB_APPS_LICENSE        = none
--endif
--
- $(eval $(generic-package))
+-TVHEADEND_VERSION           = c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3
++TVHEADEND_VERSION           = 6482d33ba90848018c530018e5c38992b8ac921c
+ TVHEADEND_SITE              = git://github.com/tvheadend/tvheadend.git
+ TVHEADEND_LICENSE           = GPLv3+
+ TVHEADEND_LICENSE_FILES     = LICENSE
 -- 
 1.8.3.2
