@@ -1,122 +1,78 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 28 Mar 2014 01:03:26 +0100
-Subject: [Buildroot] [PATCH 2/2] pacage/xbmc-addon-xvdr: new package
-In-Reply-To: <cover.1395964863.git.yann.morin.1998@free.fr>
-References: <cover.1395964863.git.yann.morin.1998@free.fr>
-Message-ID: <86a99e1a5318e92348b2c6788fd87dd6d7f9f290.1395964863.git.yann.morin.1998@free.fr>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Thu, 27 Mar 2014 22:08:46 -0400
+Subject: [Buildroot] [PATCH 1/1] netsnmp: fix tab/space formatting in init.d
+	script
+Message-ID: <1395972526-2048-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+The S59snmpd script has a strange mix of tabs and spaces.  Replace
+tabs with spaces, and also remove unnecessary line continuations
+from the start-stop-daemon lines, as none of them go beyond 80
+columns.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 ---
- package/xbmc-addon-xvdr/Config.in                  | 14 ++++++++++++
- .../xbmc-addon-xvdr-0001-foreign-automake.patch    | 25 ++++++++++++++++++++++
- package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk         | 25 ++++++++++++++++++++++
- package/xbmc/Config.in                             |  1 +
- 4 files changed, 65 insertions(+)
- create mode 100644 package/xbmc-addon-xvdr/Config.in
- create mode 100644 package/xbmc-addon-xvdr/xbmc-addon-xvdr-0001-foreign-automake.patch
- create mode 100644 package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk
+ package/netsnmp/S59snmpd |   27 ++++++++++++---------------
+ 1 file changed, 12 insertions(+), 15 deletions(-)
 
-diff --git a/package/xbmc-addon-xvdr/Config.in b/package/xbmc-addon-xvdr/Config.in
-new file mode 100644
-index 0000000..7329a9a
---- /dev/null
-+++ b/package/xbmc-addon-xvdr/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_XBMC_ADDON_XVDR
-+	bool "xbmc-addon-xvdr"
-+	help
-+	  This is a PVR add-on for XBMC to add VDR (http://tvdr.de/)
-+	  as a TV/PVR Backend to XBMC.
-+
-+	  It adds support for Live TV watching, replaying of Recordings,
-+	  programming Timers and EPG TV Guide to use on same computer or
-+	  over the Network.
-+
-+	  https://github.com/pipelka/xbmc-addon-xvdr
-+
-+	  Note: since the VDR server is not packaged in Buildroot, using
-+	  this addon requires that a remote VDR server be used.
-diff --git a/package/xbmc-addon-xvdr/xbmc-addon-xvdr-0001-foreign-automake.patch b/package/xbmc-addon-xvdr/xbmc-addon-xvdr-0001-foreign-automake.patch
-new file mode 100644
-index 0000000..6996e85
---- /dev/null
-+++ b/package/xbmc-addon-xvdr/xbmc-addon-xvdr-0001-foreign-automake.patch
-@@ -0,0 +1,25 @@
-+commit 846b0b5a8b559f94dffadf5b2f95ca845b6ba9f1
-+Author: Yann E. MORIN <yann.morin.1998@free.fr>
-+Date:   Wed Mar 26 07:45:58 2014 +0100
-+
-+    configure: set the foreign flag
-+    
-+    This is required since we do not bundle the necessary files (NEWS,
-+    INSTALL et al.) Setting it in configure.in is needed to be able
-+    to run autoreconf (in lieu of the weird autogen.sh)
-+    
-+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+diff --git a/configure.in b/configure.in
-+index 6e692e1..7be0d18 100755
-+--- a/configure.in
-++++ b/configure.in
-+@@ -12,7 +12,7 @@ AC_CANONICAL_HOST
-+ AC_CANONICAL_TARGET
-+ 
-+ dnl Setup for automake
-+-AM_INIT_AUTOMAKE
-++AM_INIT_AUTOMAKE([foreign])
-+ 
-+ dnl Check for tools
-+ 
-diff --git a/package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk b/package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk
-new file mode 100644
-index 0000000..9fa0a13
---- /dev/null
-+++ b/package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk
-@@ -0,0 +1,25 @@
-+################################################################################
-+#
-+# xbmc-addon-xvdr
-+#
-+################################################################################
-+
-+# This cset is on the branch 'xbmc-frodo'
-+# When XBMC is updated, then this should be updated to the corresponding branch
-+XBMC_ADDON_XVDR_VERSION = acd4e145fc3220cf708aaf40d895904732dce2c7
-+XBMC_ADDON_XVDR_SITE = $(call github,pipelka,xbmc-addon-xvdr,$(XBMC_ADDON_XVDR_VERSION))
-+XBMC_ADDON_XVDR_LICENSE = GPLv2+
-+XBMC_ADDON_XVDR_LICENSE_FILES = COPYING
-+
-+# There's no ./configure in the git tree, we need to generate it
-+# xbmc-addon-xvdr uses a weird autogen.sh script, which
-+# is even incorrect (it's missing the #! ) Sigh... :-(
-+# Fortunately, with our little patch, it autoreconfs nicely! :-)
-+XBMC_ADDON_XVDR_AUTORECONF = YES
-+
-+# This really is a runtime dependency, but we need XBMC to be isntalled
-+# first, since we'll install files in XBMC's directories _after_ XBMC has
-+# installed his own files
-+XBMC_ADDON_XVDR_DEPENDENCIES = xbmc
-+
-+$(eval $(autotools-package))
-diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
-index eb6ef55..d88821a 100644
---- a/package/xbmc/Config.in
-+++ b/package/xbmc/Config.in
-@@ -160,6 +160,7 @@ config BR2_PACKAGE_XBMC_WAVPACK
- 
- comment "XBMC addons"
- 
-+source "package/xbmc-addon-xvdr/Config.in"
- source "package/xbmc-pvr-addons/Config.in"
- 
- endif # BR2_PACKAGE_XBMC
+diff --git a/package/netsnmp/S59snmpd b/package/netsnmp/S59snmpd
+index 5df4b85..868be26 100755
+--- a/package/netsnmp/S59snmpd
++++ b/package/netsnmp/S59snmpd
+@@ -42,14 +42,12 @@ case "$1" in
+   start)
+     echo -n "Starting network management services:"
+     if [ "$SNMPDRUN" = "yes" -a -f /etc/snmp/snmpd.conf ]; then
+-	start-stop-daemon -q -S -x /usr/sbin/snmpd \
+-	    -- $SNMPDOPTS
+-	echo -n " snmpd"
++      start-stop-daemon -q -S -x /usr/sbin/snmpd -- $SNMPDOPTS
++      echo -n " snmpd"
+     fi
+     if [ "$TRAPDRUN" = "yes" -a -f /etc/snmp/snmptrapd.conf ]; then
+-	start-stop-daemon -q -S -x /usr/sbin/snmptrapd \
+-	    -- $TRAPDOPTS
+-	echo -n " snmptrapd"
++      start-stop-daemon -q -S -x /usr/sbin/snmptrapd -- $TRAPDOPTS
++      echo -n " snmptrapd"
+     fi
+     echo "."
+     ;;
+@@ -68,23 +66,22 @@ case "$1" in
+     # Allow the daemons time to exit completely.
+     sleep 2
+     if [ "$SNMPDRUN" = "yes" -a -f /etc/snmp/snmpd.conf ]; then
+-	start-stop-daemon -q -S -x /usr/sbin/snmpd -- $SNMPDOPTS
+-	echo -n " snmpd"
++      start-stop-daemon -q -S -x /usr/sbin/snmpd -- $SNMPDOPTS
++      echo -n " snmpd"
+     fi
+     if [ "$TRAPDRUN" = "yes" -a -f /etc/snmp/snmptrapd.conf ]; then
+-	# Allow snmpd time to start up.
+-	sleep 1
+-	start-stop-daemon -q -S -x /usr/sbin/snmptrapd -- $TRAPDOPTS
+-	echo -n " snmptrapd"
++      # Allow snmpd time to start up.
++      sleep 1
++      start-stop-daemon -q -S -x /usr/sbin/snmptrapd -- $TRAPDOPTS
++      echo -n " snmptrapd"
+     fi
+     echo "."
+     ;;
+   reload|force-reload)
+     echo -n "Reloading network management services:"
+     if [ "$SNMPDRUN" = "yes" -a -f /etc/snmp/snmpd.conf ]; then
+-        start-stop-daemon -q -K -s 1 \
+-	    -p /var/run/snmpd.pid -x /usr/sbin/snmpd
+-	echo -n " snmpd"
++      start-stop-daemon -q -K -s 1 -p /var/run/snmpd.pid -x /usr/sbin/snmpd
++      echo -n " snmpd"
+     fi
+     echo "."
+     ;;
 -- 
-1.8.3.2
+1.7.9.5
