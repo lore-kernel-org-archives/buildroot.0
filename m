@@ -1,37 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 28 Mar 2014 12:07:07 +0100
-Subject: [Buildroot] [PATCH v3] Disable o32 ABI for MIPS64 architectures
-In-Reply-To: <5335510C.3090006@imgtec.com>
-References: <1395843340-18539-1-git-send-email-Vincent.Riera@imgtec.com>
- <53330BEB.3090206@mind.be> <5333165D.90100@imgtec.com>
- <87txakk5tr.fsf@dell.be.48ers.dk> <5333F5E6.1040604@imgtec.com>
- <5334BC27.5000400@gentoo.org> <53354619.70905@imgtec.com>
- <53354EAD.2060907@imgtec.com> <5335510C.3090006@imgtec.com>
-Message-ID: <20140328120707.73840d9e@skate>
+Date: Fri, 28 Mar 2014 12:09:09 +0100
+Subject: [Buildroot] Xenomai support for pre and post patches
+In-Reply-To: <CAEbDrgk-oaAJgHv=w02Hdzef9t7zphqWKBuq87eyD=FWHrA=Aw@mail.gmail.com>
+References: <CAEbDrgmqihPwKwxhr-WGQmAShN2Ahr7SsovCXgLgbtDUz+RWgg@mail.gmail.com>
+ <CAEbDrgk-oaAJgHv=w02Hdzef9t7zphqWKBuq87eyD=FWHrA=Aw@mail.gmail.com>
+Message-ID: <20140328120909.260739cf@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Dear Gregory Dymarek,
 
-On Fri, 28 Mar 2014 10:38:04 +0000, Vicente Olivert Riera wrote:
+Thanks for your contribution!
 
-> > That's not a problem is it? It's ok if the line is missing. A
-> > missing line means "this option is not available". A line starting
-> > with "#" means "the option is available but currently disabled"
-> 
-> I want to be sure about that, because there are packages which use
-> the BR2_MIPS_OABI32 symbol. So, maybe having that line starting with
-> "#" means BR2_MIPS_OABI32=n, and everything works fine, and don't
-> having that line at all means that symbol is not defined and the
-> packages which use that symbol fail because of that. That's what I
-> want to know.
+On Fri, 28 Mar 2014 09:42:19 +0000, Gregory Dymarek wrote:
 
-BR2_FOO=n never exists. An option is either BR2_FOO=y, or undefined.
-And since # indicates comments in .config files, a # BR2_FOO is not set
-line is the same as not having BR2_FOO mentioned at all in the .config.
+> The following patch adds support for pre- and post- adeos patches to
+> Xenomai.
+
+Can you explain why this is needed? You can already apply patches on
+any package using the BR2_GLOBAL_PATCH_DIR option. See
+http://buildroot.org/downloads/manual/manual.html#packages-custom for
+details about it.
+
+Basically, you can do:
+
+	BR2_GLOBAL_PATCH_DIR=board/<company>/<project>/
+
+and then, in:
+
+	board/<company>/<project>/xenomai/
+
+you put your patches, and then will be applied to Xenomai before it is
+being built.
+
+Best regards,
 
 Thomas
 -- 
