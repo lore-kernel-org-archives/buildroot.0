@@ -1,56 +1,60 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 28 Mar 2014 01:00:27 +0100
-Subject: [Buildroot] [PATCH 10/10] package/tvheadend: do not line-up
-	variables
-In-Reply-To: <cover.1395964430.git.yann.morin.1998@free.fr>
-References: <cover.1395964430.git.yann.morin.1998@free.fr>
-Message-ID: <4f298ad3beb7ace204437c079c353fa641fe14ae.1395964430.git.yann.morin.1998@free.fr>
+From: Joshua Kinard <kumba@gentoo.org>
+Date: Thu, 27 Mar 2014 20:02:47 -0400
+Subject: [Buildroot] [PATCH v3] Disable o32 ABI for MIPS64 architectures
+In-Reply-To: <5333F5E6.1040604@imgtec.com>
+References: <1395843340-18539-1-git-send-email-Vincent.Riera@imgtec.com>
+ <53330BEB.3090206@mind.be> <5333165D.90100@imgtec.com>
+ <87txakk5tr.fsf@dell.be.48ers.dk> <5333F5E6.1040604@imgtec.com>
+Message-ID: <5334BC27.5000400@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On 03/27/2014 05:56, Vicente Olivert Riera wrote:
+> On 03/26/2014 09:28 PM, Peter Korsgaard wrote:
+>>>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+>>
+>> Hi,
+>>
+>>   >>> +config BR2_MIPS_OABI32
+>>   >>> +    bool
+>>   >>> +    default y        if BR2_mips || BR2_mipsel
+>>   >>> +    default n        if BR2_mips64 || BR2_mips64el
+>>   >>
+>>   >> Did you forget to remove this or is there a reason to keep it? In the
+>>   >> latter case, please add an explanatory comment.
+>>
+>>   > Why would I want to remove this? The BR2_MIPS_OABI32 symbol is used by
+>>   > glibc and uclibc packages.
+>>
+>> Arnout is just asking about the 'default n' line. Symbols are 'n' by
+>> default, so the line doesn't do anything as far as I can see.
+>>
+> 
+> I have maintained that line because if you remove it and then select any
+> MIPS64 target, the "# BR2_MIPS_OABI32 is not set" is not present on the
+> .config file.
+> 
+> Isn't that a problem?
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/tvheadend/tvheadend.mk | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+Is the definition of BR2_MIPS_OABI32 missing completely, or do you see
+"BR2_MIPS_OABI32=y"?  If it's missing completely, then it's virtually the
+same as it being there as a comment, which will get stripped out/ignored by
+the build system.  Kconfig/Kbuild (whatever it is called) only cares if the
+symbol is defined to "y".  I believe that is then checked for in Makefiles
+and is in a generated config.h file for use as a C #define.
 
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index 4cfcf90..250c4bb 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
-@@ -4,14 +4,14 @@
- #
- ################################################################################
- 
--TVHEADEND_VERSION           = 6482d33ba90848018c530018e5c38992b8ac921c
--TVHEADEND_SITE              = git://github.com/tvheadend/tvheadend.git
--TVHEADEND_LICENSE           = GPLv3+
--TVHEADEND_LICENSE_FILES     = LICENSE
--TVHEADEND_DEPENDENCIES      = host-pkgconf host-python openssl
-+TVHEADEND_VERSION = 6482d33ba90848018c530018e5c38992b8ac921c
-+TVHEADEND_SITE = git://github.com/tvheadend/tvheadend.git
-+TVHEADEND_LICENSE = GPLv3+
-+TVHEADEND_LICENSE_FILES = LICENSE
-+TVHEADEND_DEPENDENCIES = host-pkgconf host-python openssl
- 
- ifeq ($(BR2_PACKAGE_AVAHI),y)
--TVHEADEND_DEPENDENCIES     += avahi
-+TVHEADEND_DEPENDENCIES += avahi
- endif
- 
- #----------------------------------------------------------------------------
-@@ -20,7 +20,7 @@ endif
- # package, so it has a list of pre-scanned tunner configurations.
- # For buildroot, we add a patch that avoids doing that, but uses the
- # scan files installed by the dtv-scan-tables package
--TVHEADEND_DEPENDENCIES     += dtv-scan-tables
-+TVHEADEND_DEPENDENCIES += dtv-scan-tables
- 
- define TVHEADEND_CONFIGURE_CMDS
- 	(cd $(@D);				\
+That's how it works in the Linux kernel at least...
+
 -- 
-1.8.3.2
+Joshua Kinard
+Gentoo/MIPS
+kumba at gentoo.org
+4096R/D25D95E3 2011-03-28
+
+"The past tempts us, the present confuses us, the future frightens us.  And
+our lives slip away, moment by moment, lost in that vast, terrible in-between."
+
+--Emperor Turhan, Centauri Republic
