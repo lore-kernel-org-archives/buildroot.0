@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 28 Mar 2014 01:00:22 +0100
-Subject: [Buildroot] [PATCH 05/10] package/tvheadend: transponders data now
-	provided by dtv-scan-tables
+Date: Fri, 28 Mar 2014 01:00:23 +0100
+Subject: [Buildroot] [PATCH 06/10] package/gst1-plugins-bad: transponders
+	data now provided by dtv-scan-tables
 In-Reply-To: <cover.1395964430.git.yann.morin.1998@free.fr>
 References: <cover.1395964430.git.yann.morin.1998@free.fr>
-Message-ID: <e379cba61e803c4eafcb903a77a24162d2d4fcb2.1395964430.git.yann.morin.1998@free.fr>
+Message-ID: <3cd6bea5a0d79828dfbcf4b7694e2f63feccc485.1395964430.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,41 +15,35 @@ From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/tvheadend/Config.in    | 2 +-
- package/tvheadend/tvheadend.mk | 6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/gstreamer1/gst1-plugins-bad/Config.in           | 2 +-
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/tvheadend/Config.in b/package/tvheadend/Config.in
-index a5bbeee..bb71d81 100644
---- a/package/tvheadend/Config.in
-+++ b/package/tvheadend/Config.in
-@@ -12,7 +12,7 @@ config BR2_PACKAGE_TVHEADEND
- 	# context of Buildroot, the only really problematic
- 	# architecture is avr32, which uses gcc 4.2.
- 	depends on !BR2_avr32
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index 2c5c290..deffabe 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -481,7 +481,7 @@ comment "gst-plugins-bad-plugin-sndfile needs a toolchain w/ largefile"
+ 
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DVB
+ 	bool "dvb"
 -	select BR2_PACKAGE_DVB_APPS
 +	select BR2_PACKAGE_DTV_SCAN_TABLES
- 	select BR2_PACKAGE_OPENSSL
  	help
- 	  Tvheadend is a TV streaming server for Linux supporting DVB-S,
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index 9b1e443..87be703 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
-@@ -16,11 +16,11 @@ endif
+ 	  DVB elements
  
- #----------------------------------------------------------------------------
- # tvheadend is a little smuggler and thief! ;-)
--# During the ./configure, it downloads some files from the dvb-apps
-+# During the ./configure, it downloads some files from the dtv-scan-tables
- # package, so it has a list of pre-scanned tunner configurations.
- # For buildroot, we add a patch that avoids doing that, but uses the
--# scan files installed by the dvb-apps package
--TVHEADEND_DEPENDENCIES     += dvb-apps
-+# scan files installed by the dtv-scan-tables package
-+TVHEADEND_DEPENDENCIES     += dtv-scan-tables
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index dbd0625..f66c250 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -683,7 +683,7 @@ endif
  
- define TVHEADEND_CONFIGURE_CMDS
- 	(cd $(@D);				\
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DVB),y)
+ GST1_PLUGINS_BAD_CONF_OPT += --enable-dvb
+-GST1_PLUGINS_BAD_DEPENDENCIES += dvb-apps
++GST1_PLUGINS_BAD_DEPENDENCIES += dtv-scan-tables
+ else
+ GST1_PLUGINS_BAD_CONF_OPT += --disable-dvb
+ endif
 -- 
 1.8.3.2
