@@ -1,59 +1,58 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Fri, 28 Mar 2014 10:51:30 +0100
-Subject: [Buildroot] [PATCH] website: Add a Google+ presence
-In-Reply-To: <87r45mg0lq.fsf@dell.be.48ers.dk>
-References: <1395962911-309-1-git-send-email-maxime.hadjinlian@gmail.com>
- <87r45mg0lq.fsf@dell.be.48ers.dk>
-Message-ID: <CAGduivy7GcoDETxOj9-pVN1ucYWeKgFzr887FqFBF75a2hsf1g@mail.gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 28 Mar 2014 09:51:21 +0000
+Subject: [Buildroot] [PATCH v3] Disable o32 ABI for MIPS64 architectures
+In-Reply-To: <5334BC27.5000400@gentoo.org>
+References: <1395843340-18539-1-git-send-email-Vincent.Riera@imgtec.com>
+ <53330BEB.3090206@mind.be> <5333165D.90100@imgtec.com>
+ <87txakk5tr.fsf@dell.be.48ers.dk> <5333F5E6.1040604@imgtec.com>
+ <5334BC27.5000400@gentoo.org>
+Message-ID: <53354619.70905@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Mar 28, 2014 at 9:59 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
+On 03/28/2014 12:02 AM, Joshua Kinard wrote:
+> On 03/27/2014 05:56, Vicente Olivert Riera wrote:
+>> On 03/26/2014 09:28 PM, Peter Korsgaard wrote:
+>>>>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+>>>
+>>> Hi,
+>>>
+>>>    >>> +config BR2_MIPS_OABI32
+>>>    >>> +    bool
+>>>    >>> +    default y        if BR2_mips || BR2_mipsel
+>>>    >>> +    default n        if BR2_mips64 || BR2_mips64el
+>>>    >>
+>>>    >> Did you forget to remove this or is there a reason to keep it? In the
+>>>    >> latter case, please add an explanatory comment.
+>>>
+>>>    > Why would I want to remove this? The BR2_MIPS_OABI32 symbol is used by
+>>>    > glibc and uclibc packages.
+>>>
+>>> Arnout is just asking about the 'default n' line. Symbols are 'n' by
+>>> default, so the line doesn't do anything as far as I can see.
+>>>
+>>
+>> I have maintained that line because if you remove it and then select any
+>> MIPS64 target, the "# BR2_MIPS_OABI32 is not set" is not present on the
+>> .config file.
+>>
+>> Isn't that a problem?
 >
->  > Since we use Google+ to share our news, this add a logo on the menu bar,
->  > which links to the Buildroot profile.
+> Is the definition of BR2_MIPS_OABI32 missing completely, or do you see
+> "BR2_MIPS_OABI32=y"?  If it's missing completely, then it's virtually the
+> same as it being there as a comment, which will get stripped out/ignored by
+> the build system.  Kconfig/Kbuild (whatever it is called) only cares if the
+> symbol is defined to "y".  I believe that is then checked for in Makefiles
+> and is in a generated config.h file for use as a C #define.
 >
->  > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
->  > ---
->  >  docs/header.html      |   5 +++++
->  >  docs/images/gplus.png | Bin 0 -> 4760 bytes
->  >  2 files changed, 5 insertions(+)
->  >  create mode 100644 docs/images/gplus.png
->
->  > diff --git a/docs/header.html b/docs/header.html
->  > index f64869f..4823488 100644
->  > --- a/docs/header.html
->  > +++ b/docs/header.html
->  > @@ -16,6 +16,10 @@
->  >        .button_column{
->  >          width: 430px;
->  >        }
->  > +      .gplus {
->  > +        float:right;
->  > +        margin: 10px 0 0;
->  > +      }
->  >      </style>
->
->  >      <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
->  > @@ -43,6 +47,7 @@
->  >                <li><a href="/contribute.html">Contribute</a></li>
->  >                <li><a href="/sponsors.html">Sponsors</a></li>
->  >              </ul>
->  > +            <a class="gplus" href="https://plus.google.com/communities/105232314127123366079"><img src="images/gplus.png" height="28" width="28"></a>
->
-> Is that the right link? I don't see any of the recent posts like on:
->
-> https://plus.google.com/100084591154899263420/posts
->
-Arg, the link I used is the Buildroot community but we do all our
-posts from the Buildroot account which are different.
-It is a bad copy paste on my part, I intended to use the Buildroot account.
+> That's how it works in the Linux kernel at least...
 
-But maybe, we should use the community itself ?
-I added Thomas P. on that matter, as he is the owner of both account.
-> --
-> Bye, Peter Korsgaard
+If you remove the "default 'n'" line, and you select a MIPS64 target, 
+then "BR2_MIPS_OABI32=y" is completely missing in the .config file.
+
+
+-- 
+Vincent
