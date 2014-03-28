@@ -1,54 +1,80 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Mar 2014 09:54:41 +0100
-Subject: [Buildroot] [git commit] slang: fix linking issue
-Message-ID: <20140328090050.38A0D9C3EC@busybox.osuosl.org>
+Date: Fri, 28 Mar 2014 09:59:49 +0100
+Subject: [Buildroot] [git commit] netsnmp: fix tab/space formatting in
+	init.d script
+Message-ID: <20140328090050.4B39A9C3EC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=32c0fbbcdec5e4fdf853cb566a83680a4d393b90
+commit: http://git.buildroot.net/buildroot/commit/?id=9ef8f8e9c5ca219fedad926c61316e99bc49aa2e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The installation location of the slang library
-does not take into account the DESTDIR directory.
-So SLANG_INST_LIB is initialized with -L/usr/lib/
-and slang may be linked with host's libdl.so (if any)
-Therefore, we have to pass correct installation paths.
+The S59snmpd script has a strange mix of tabs and spaces.  Replace
+tabs with spaces, and also remove unnecessary line continuations
+from the start-stop-daemon lines, as none of them go beyond 80
+columns.
 
-Fixes:
-http://autobuild.buildroot.net/results/df4/df435d9cebbdc84b3581ba258b618123570dde8b/
-
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/slang/slang.mk |   17 +++++++++++++++++
- 1 files changed, 17 insertions(+), 0 deletions(-)
+ package/netsnmp/S59snmpd |   27 ++++++++++++---------------
+ 1 files changed, 12 insertions(+), 15 deletions(-)
 
-diff --git a/package/slang/slang.mk b/package/slang/slang.mk
-index d519eca..c6f0383 100644
---- a/package/slang/slang.mk
-+++ b/package/slang/slang.mk
-@@ -13,4 +13,21 @@ SLANG_LICENSE_FILES = COPYING
- SLANG_INSTALL_STAGING = YES
- SLANG_MAKE = $(MAKE1)
- 
-+# The installation location of the slang library
-+# does not take into account the DESTDIR directory.
-+# So SLANG_INST_LIB is initialized with -L/usr/lib/
-+# and slang may be linked with host's libdl.so (if any)
-+# Therefore, we have to pass correct installation paths.
-+SLANG_INSTALL_STAGING_OPT = \
-+	prefix=$(STAGING_DIR)/usr \
-+	exec_prefix=$(STAGING_DIR)/usr \
-+	DESTDIR=$(STAGING_DIR) \
-+	install
-+
-+SLANG_INSTALL_TARGET_OPT = \
-+	prefix=$(STAGING_DIR)/usr \
-+	exec_prefix=$(STAGING_DIR)/usr \
-+	DESTDIR=$(TARGET_DIR) \
-+	install
-+
- $(eval $(autotools-package))
+diff --git a/package/netsnmp/S59snmpd b/package/netsnmp/S59snmpd
+index 5df4b85..868be26 100755
+--- a/package/netsnmp/S59snmpd
++++ b/package/netsnmp/S59snmpd
+@@ -42,14 +42,12 @@ case "$1" in
+   start)
+     echo -n "Starting network management services:"
+     if [ "$SNMPDRUN" = "yes" -a -f /etc/snmp/snmpd.conf ]; then
+-	start-stop-daemon -q -S -x /usr/sbin/snmpd \
+-	    -- $SNMPDOPTS
+-	echo -n " snmpd"
++      start-stop-daemon -q -S -x /usr/sbin/snmpd -- $SNMPDOPTS
++      echo -n " snmpd"
+     fi
+     if [ "$TRAPDRUN" = "yes" -a -f /etc/snmp/snmptrapd.conf ]; then
+-	start-stop-daemon -q -S -x /usr/sbin/snmptrapd \
+-	    -- $TRAPDOPTS
+-	echo -n " snmptrapd"
++      start-stop-daemon -q -S -x /usr/sbin/snmptrapd -- $TRAPDOPTS
++      echo -n " snmptrapd"
+     fi
+     echo "."
+     ;;
+@@ -68,23 +66,22 @@ case "$1" in
+     # Allow the daemons time to exit completely.
+     sleep 2
+     if [ "$SNMPDRUN" = "yes" -a -f /etc/snmp/snmpd.conf ]; then
+-	start-stop-daemon -q -S -x /usr/sbin/snmpd -- $SNMPDOPTS
+-	echo -n " snmpd"
++      start-stop-daemon -q -S -x /usr/sbin/snmpd -- $SNMPDOPTS
++      echo -n " snmpd"
+     fi
+     if [ "$TRAPDRUN" = "yes" -a -f /etc/snmp/snmptrapd.conf ]; then
+-	# Allow snmpd time to start up.
+-	sleep 1
+-	start-stop-daemon -q -S -x /usr/sbin/snmptrapd -- $TRAPDOPTS
+-	echo -n " snmptrapd"
++      # Allow snmpd time to start up.
++      sleep 1
++      start-stop-daemon -q -S -x /usr/sbin/snmptrapd -- $TRAPDOPTS
++      echo -n " snmptrapd"
+     fi
+     echo "."
+     ;;
+   reload|force-reload)
+     echo -n "Reloading network management services:"
+     if [ "$SNMPDRUN" = "yes" -a -f /etc/snmp/snmpd.conf ]; then
+-        start-stop-daemon -q -K -s 1 \
+-	    -p /var/run/snmpd.pid -x /usr/sbin/snmpd
+-	echo -n " snmpd"
++      start-stop-daemon -q -K -s 1 -p /var/run/snmpd.pid -x /usr/sbin/snmpd
++      echo -n " snmpd"
+     fi
+     echo "."
+     ;;
