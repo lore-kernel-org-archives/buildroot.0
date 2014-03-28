@@ -1,56 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 28 Mar 2014 17:50:46 +0100
-Subject: [Buildroot] [PATCH 1/1] system: add ability to pass additional
- users tables.
-In-Reply-To: <20140328111056.GA28624@pc-eric>
-References: <1395937176-7585-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1395937176-7585-2-git-send-email-eric.le.bihan.dev@free.fr>
- <20140327181915.GA4458@free.fr> <20140328111056.GA28624@pc-eric>
-Message-ID: <20140328165046.GA3303@free.fr>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 28 Mar 2014 19:16:39 +0100
+Subject: [Buildroot] [PATCH] valgrind: Add support for MIPS architecture
+In-Reply-To: <1396025209-9495-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1396025209-9495-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <be46f8fb-8747-4d45-a946-fc11e5818688@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Eric, All,
+Hi Vicente,
 
-On 2014-03-28 12:10 +0100, Eric Le Bihan spake thusly:
-> On Thu, Mar 27, 2014 at 07:19:15PM +0100, Yann E. MORIN wrote:
-> > Eric, All,
-> >
-> [...]
-> >
-> > There is a discrepancy bewteen the description commit log and this help
-> > text, and the actual behaviour. The commit log and help text both
-> > explain this can be a space-separated list of files, but in the code you
-> > just treat it as if it were a unique file:
-> >
-> >     ifneq ($$(ROOTFS_USERS_TABLE),)
-> >         cat $$(ROOTFS_USERS_TABLE) > $(USERS_TABLE)
-> >     endif
-> >
-> > I think you should do something like:
-> >
-> >     $(foreach f,$$(ROOTFS_USERS_TABLE),cat $$(f) >>$(USERS_TABLE)$(sep))
-> In fact I use the same trick as for ROOTFS_DEVICE_TABLES: whether
-> ROOTFS_USERS_TABLE is 'foo' or 'foo bar quux', the invocation of `cat` is
-> valid, as `cat` takes a list of filenames as arguments. So no need to loop
-> on a list.
+Vicente Olivert Riera <Vincent.Riera@imgtec.com> schreef:
+>Reviewed-by: Markos Chandras <markos.chandras@imgtec.com>
+>Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+>---
+> package/valgrind/Config.in |    3 ++-
+> 1 files changed, 2 insertions(+), 1 deletions(-)
+>
+>diff --git a/package/valgrind/Config.in b/package/valgrind/Config.in
+>index dacdd86..fd5649b 100644
+>--- a/package/valgrind/Config.in
+>+++ b/package/valgrind/Config.in
+>@@ -1,7 +1,8 @@
+> config BR2_PACKAGE_VALGRIND
+> 	bool "valgrind"
+> 	depends on BR2_i386 || BR2_x86_64 || BR2_cortex_a8 || \
+>-		   BR2_cortex_a9 || BR2_powerpc
+>+		   BR2_cortex_a9 || BR2_powerpc || BR2_mips || \
+>+		   BR2_mipsel || BR2_mips64 || BR2_mips64el
+> 	help
+> 	  Tool for debugging and profiling Linux programs.
+> 
 
-Oh, right. OK, then.
+Did you test this on target?
+Do you have any idea why it wasn't enabled for mips before?
 
-> But it is true that I should use the plural form ROOTFS_USERS_TABLES.
-
-Yes, please.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thanks,
+Thomas
