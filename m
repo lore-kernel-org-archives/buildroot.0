@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 28 Mar 2014 01:00:25 +0100
-Subject: [Buildroot] [PATCH 08/10] package/tvheadend: bump revision
+Date: Fri, 28 Mar 2014 01:00:26 +0100
+Subject: [Buildroot] [PATCH 09/10] package/dvb-apps: do not line-up variables
 In-Reply-To: <cover.1395964430.git.yann.morin.1998@free.fr>
 References: <cover.1395964430.git.yann.morin.1998@free.fr>
-Message-ID: <ce30fdb41d189596e0bc0d9de65f1ded6206343a.1395964430.git.yann.morin.1998@free.fr>
+Message-ID: <b5d2ecc8962c5990368a153846ead697da70b649.1395964430.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,25 +12,39 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Adds a bunch of fixes all over the place.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/tvheadend/tvheadend.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/dvb-apps/dvb-apps.mk | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index 87be703..4cfcf90 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/dvb-apps/dvb-apps.mk b/package/dvb-apps/dvb-apps.mk
+index c5e1954..2a35d29 100644
+--- a/package/dvb-apps/dvb-apps.mk
++++ b/package/dvb-apps/dvb-apps.mk
+@@ -4,17 +4,17 @@
  #
  ################################################################################
  
--TVHEADEND_VERSION           = c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3
-+TVHEADEND_VERSION           = 6482d33ba90848018c530018e5c38992b8ac921c
- TVHEADEND_SITE              = git://github.com/tvheadend/tvheadend.git
- TVHEADEND_LICENSE           = GPLv3+
- TVHEADEND_LICENSE_FILES     = LICENSE
+-DVB_APPS_VERSION        = 3d43b280298c39a67d1d889e01e173f52c12da35
+-DVB_APPS_SITE           = http://linuxtv.org/hg/dvb-apps
+-DVB_APPS_SITE_METHOD    = hg
+-DVB_APPS_LICENSE        = GPLv2 GPLv2+ LGPLv2.1+
+-DVB_APPS_LICENSE_FILES  = COPYING COPYING.LGPL
++DVB_APPS_VERSION = 3d43b280298c39a67d1d889e01e173f52c12da35
++DVB_APPS_SITE = http://linuxtv.org/hg/dvb-apps
++DVB_APPS_SITE_METHOD = hg
++DVB_APPS_LICENSE = GPLv2 GPLv2+ LGPLv2.1+
++DVB_APPS_LICENSE_FILES = COPYING COPYING.LGPL
+ 
+ DVB_APPS_LDFLAGS = $(TARGET_LDFLAGS)
+ 
+ ifeq ($(BR2_ENABLE_LOCALE),)
+-DVB_APPS_DEPENDENCIES    = libiconv
+-DVB_APPS_LDFLAGS        += -liconv
++DVB_APPS_DEPENDENCIES = libiconv
++DVB_APPS_LDFLAGS += -liconv
+ endif
+ 
+ DVB_APPS_INSTALL_STAGING = YES
 -- 
 1.8.3.2
