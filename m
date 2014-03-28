@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 28 Mar 2014 01:00:23 +0100
-Subject: [Buildroot] [PATCH 06/10] package/gst1-plugins-bad: transponders
-	data now provided by dtv-scan-tables
+Date: Fri, 28 Mar 2014 01:00:24 +0100
+Subject: [Buildroot] [PATCH 07/10] package/dvb-apps: bump revision
 In-Reply-To: <cover.1395964430.git.yann.morin.1998@free.fr>
 References: <cover.1395964430.git.yann.morin.1998@free.fr>
-Message-ID: <3cd6bea5a0d79828dfbcf4b7694e2f63feccc485.1395964430.git.yann.morin.1998@free.fr>
+Message-ID: <f89d399edd4a1a5daab116239d727188a1ec5d74.1395964430.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,37 +12,112 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
+In this new revision, there is no longer transponders data, so dvb-apps
+now only installs the dvb-apps utilities.
+
+Packages that needs the transponders data have now all been switched to
+use dtv-scan-tables instead, so we don't need a legacy option for the
+transponders data.
+
+However, we add a legacy option for the utilities option, just to inform
+the user of the new behaviour.
+
+Sadly, a user that had dvb-apps selected just to get the transponders
+data will now get the full dvb-apps package installed. There's nothing
+we can really do about this.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/gstreamer1/gst1-plugins-bad/Config.in           | 2 +-
- package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ Config.in.legacy             |  7 +++++++
+ package/dvb-apps/Config.in   | 24 +++++++-----------------
+ package/dvb-apps/dvb-apps.mk | 13 +------------
+ 3 files changed, 15 insertions(+), 29 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index 2c5c290..deffabe 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -481,7 +481,7 @@ comment "gst-plugins-bad-plugin-sndfile needs a toolchain w/ largefile"
+diff --git a/Config.in.legacy b/Config.in.legacy
+index afcd3b1..17ead9b 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -101,6 +101,13 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2014.05"
  
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DVB
- 	bool "dvb"
--	select BR2_PACKAGE_DVB_APPS
-+	select BR2_PACKAGE_DTV_SCAN_TABLES
++config BR2_PACKAGE_DVB_APPS_UTILS
++	bool "dvb-apps utilities now built by default"
++	select BR2_LEGACY
++	help
++	  The dvb-apps utilities are now always built when the dvb-apps
++	  package is selected.
++
+ config BR2_KERNEL_HEADERS_SNAP
+ 	bool "Local Linux snapshot support removed"
+ 	select BR2_LEGACY
+diff --git a/package/dvb-apps/Config.in b/package/dvb-apps/Config.in
+index 76b33aa..3f8fdb6 100644
+--- a/package/dvb-apps/Config.in
++++ b/package/dvb-apps/Config.in
+@@ -1,25 +1,15 @@
+ config BR2_PACKAGE_DVB_APPS
+-	bool "dvb-apps (transponders data)"
+-	select BR2_PACKAGE_DTV_SCAN_TABLES
+-	help
+-	  Install the DVB-C, DVB-S, DVB-T and ATSC transponders data.
+-
+-	  http://linuxtv.org/projects.php
+-	  http://linuxtv.org/hg/dvb-apps
+-
+-if BR2_PACKAGE_DVB_APPS
+-
+-comment "dvb-apps utils needs a toolchain w/ largefile, threads, headers >= 3.3"
+-	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
+-
+-config BR2_PACKAGE_DVB_APPS_UTILS
+-	bool "dvb-apps utilities"
++	bool "dvb-apps"
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
  	help
- 	  DVB elements
+-	  A small number of DVB test and utility programs,
++	  Install a small number of DVB test and utility programs,
+ 	  including szap and dvbscan.
  
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index dbd0625..f66c250 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-@@ -683,7 +683,7 @@ endif
+-endif
++	  http://linuxtv.org/projects.php
++	  http://linuxtv.org/hg/dvb-apps
++
++comment "dvb-apps utils needs a toolchain w/ largefile, threads, headers >= 3.3"
++	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
+diff --git a/package/dvb-apps/dvb-apps.mk b/package/dvb-apps/dvb-apps.mk
+index 5f576e0..c5e1954 100644
+--- a/package/dvb-apps/dvb-apps.mk
++++ b/package/dvb-apps/dvb-apps.mk
+@@ -4,15 +4,9 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DVB),y)
- GST1_PLUGINS_BAD_CONF_OPT += --enable-dvb
--GST1_PLUGINS_BAD_DEPENDENCIES += dvb-apps
-+GST1_PLUGINS_BAD_DEPENDENCIES += dtv-scan-tables
- else
- GST1_PLUGINS_BAD_CONF_OPT += --disable-dvb
- endif
+-DVB_APPS_VERSION        = be76da69f250
++DVB_APPS_VERSION        = 3d43b280298c39a67d1d889e01e173f52c12da35
+ DVB_APPS_SITE           = http://linuxtv.org/hg/dvb-apps
+ DVB_APPS_SITE_METHOD    = hg
+-
+-DVB_APPS_DEPENDENCIES   = dtv-scan-tables
+-
+-ifeq ($(BR2_PACKAGE_DVB_APPS_UTILS),y)
+-# Utilitiess are selected, build and install everything
+-
+ DVB_APPS_LICENSE        = GPLv2 GPLv2+ LGPLv2.1+
+ DVB_APPS_LICENSE_FILES  = COPYING COPYING.LGPL
+ 
+@@ -38,9 +32,4 @@ define DVB_APPS_INSTALL_TARGET_CMDS
+ 	$(MAKE) -C $(@D) V=1 DESTDIR=$(TARGET_DIR) install
+ endef
+ 
+-else
+-# We do not really install anything, so there's no license
+-DVB_APPS_LICENSE        = none
+-endif
+-
+ $(eval $(generic-package))
 -- 
 1.8.3.2
