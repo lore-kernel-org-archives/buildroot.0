@@ -1,58 +1,52 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 28 Mar 2014 09:51:21 +0000
-Subject: [Buildroot] [PATCH v3] Disable o32 ABI for MIPS64 architectures
-In-Reply-To: <5334BC27.5000400@gentoo.org>
-References: <1395843340-18539-1-git-send-email-Vincent.Riera@imgtec.com>
- <53330BEB.3090206@mind.be> <5333165D.90100@imgtec.com>
- <87txakk5tr.fsf@dell.be.48ers.dk> <5333F5E6.1040604@imgtec.com>
- <5334BC27.5000400@gentoo.org>
-Message-ID: <53354619.70905@imgtec.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Fri, 28 Mar 2014 11:16:07 +0100
+Subject: [Buildroot] [PATCH 1/1] systemd: disable build for unsupported
+	architectures.
+Message-ID: <1396001767-4910-1-git-send-email-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/28/2014 12:02 AM, Joshua Kinard wrote:
-> On 03/27/2014 05:56, Vicente Olivert Riera wrote:
->> On 03/26/2014 09:28 PM, Peter Korsgaard wrote:
->>>>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
->>>
->>> Hi,
->>>
->>>    >>> +config BR2_MIPS_OABI32
->>>    >>> +    bool
->>>    >>> +    default y        if BR2_mips || BR2_mipsel
->>>    >>> +    default n        if BR2_mips64 || BR2_mips64el
->>>    >>
->>>    >> Did you forget to remove this or is there a reason to keep it? In the
->>>    >> latter case, please add an explanatory comment.
->>>
->>>    > Why would I want to remove this? The BR2_MIPS_OABI32 symbol is used by
->>>    > glibc and uclibc packages.
->>>
->>> Arnout is just asking about the 'default n' line. Symbols are 'n' by
->>> default, so the line doesn't do anything as far as I can see.
->>>
->>
->> I have maintained that line because if you remove it and then select any
->> MIPS64 target, the "# BR2_MIPS_OABI32 is not set" is not present on the
->> .config file.
->>
->> Isn't that a problem?
->
-> Is the definition of BR2_MIPS_OABI32 missing completely, or do you see
-> "BR2_MIPS_OABI32=y"?  If it's missing completely, then it's virtually the
-> same as it being there as a comment, which will get stripped out/ignored by
-> the build system.  Kconfig/Kbuild (whatever it is called) only cares if the
-> symbol is defined to "y".  I believe that is then checked for in Makefiles
-> and is in a generated config.h file for use as a C #define.
->
-> That's how it works in the Linux kernel at least...
+Systemd only supports the architectures defined in
+src/shared/architecture.h. This list does not contain ARC, Blackfin,
+Xtensa, Microblaze and Nios2, so this package is disabled for these
+architectures.
 
-If you remove the "default 'n'" line, and you select a MIPS64 target, 
-then "BR2_MIPS_OABI32=y" is completely missing in the .config file.
+Fixes http://autobuild.buildroot.net/results/bcc/bcce95eb0748505c0d62db21a6e420aae3c3181b/
 
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+---
+ package/systemd/Config.in |    2 ++
+ system/Config.in          |    2 ++
+ 2 files changed, 4 insertions(+)
 
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index 838e13e..66b5fc4 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -2,6 +2,8 @@ config BR2_PACKAGE_SYSTEMD
+ 	bool "systemd"
+ 	depends on BR2_INIT_SYSTEMD
+ 	depends on !BR2_avr32 # no epoll_create1
++	depends on !BR2_arc && !BR2_bfin && !BR2_xtensa
++	depends on !BR2_microblaze && !BR2_nios2
+ 	depends on BR2_LARGEFILE # util-linux
+ 	depends on BR2_USE_WCHAR # util-linux
+ 	depends on BR2_INET_IPV6
+diff --git a/system/Config.in b/system/Config.in
+index e8f1ed6..217dbd4 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -88,6 +88,8 @@ config BR2_INIT_SYSV
+ config BR2_INIT_SYSTEMD
+ 	bool "systemd"
+ 	depends on !BR2_avr32 # no epoll_create1
++	depends on !BR2_arc && !BR2_bfin && !BR2_xtensa
++	depends on !BR2_microblaze && !BR2_nios2
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_USE_WCHAR
 -- 
-Vincent
+1.7.9.5
