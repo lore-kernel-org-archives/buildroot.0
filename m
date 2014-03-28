@@ -1,188 +1,64 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Fri, 28 Mar 2014 19:29:32 +0100
-Subject: [Buildroot] [PATCH v3] infra: Add PRE_*_HOOKS for every step
-Message-ID: <1396031372-23308-1-git-send-email-maxime.hadjinlian@gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 28 Mar 2014 19:40:59 +0100
+Subject: [Buildroot] [PATCH] valgrind: Add support for MIPS architecture
+In-Reply-To: <5335BE6C.8020500@imgtec.com>
+References: <1396025209-9495-1-git-send-email-Vincent.Riera@imgtec.com>
+ <be46f8fb-8747-4d45-a946-fc11e5818688@email.android.com>
+ <5335BE6C.8020500@imgtec.com>
+Message-ID: <06ec4288-1b83-45b9-885d-993a337a6774@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add PRE_*_HOOKS to all the different steps through which a package may go.
+Vicente Olivert Riera <Vincent.Riera@imgtec.com> schreef:
+>On 03/28/2014 06:16 PM, Thomas De Schampheleire wrote:
+>> Hi Vicente,
+>>
+>> Vicente Olivert Riera <Vincent.Riera@imgtec.com> schreef:
+>>> Reviewed-by: Markos Chandras <markos.chandras@imgtec.com>
+>>> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+>>> ---
+>>> package/valgrind/Config.in |    3 ++-
+>>> 1 files changed, 2 insertions(+), 1 deletions(-)
+>>>
+>>> diff --git a/package/valgrind/Config.in b/package/valgrind/Config.in
+>>> index dacdd86..fd5649b 100644
+>>> --- a/package/valgrind/Config.in
+>>> +++ b/package/valgrind/Config.in
+>>> @@ -1,7 +1,8 @@
+>>> config BR2_PACKAGE_VALGRIND
+>>> 	bool "valgrind"
+>>> 	depends on BR2_i386 || BR2_x86_64 || BR2_cortex_a8 || \
+>>> -		   BR2_cortex_a9 || BR2_powerpc
+>>> +		   BR2_cortex_a9 || BR2_powerpc || BR2_mips || \
+>>> +		   BR2_mipsel || BR2_mips64 || BR2_mips64el
+>>> 	help
+>>> 	  Tool for debugging and profiling Linux programs.
+>>>
+>>
+>> Did you test this on target?
+>
+>Not yet, but it should work.
+>
+>> Do you have any idea why it wasn't enabled for mips before?
+>
+>Valgrind added support for MIPS on it's last release, 3.9.0:
+>
+>http://sourceforge.net/p/valgrind/mailman/valgrind-announce/thread/52738DEF.1070801 at acm.org/
+>
+>But you already knew that. The following message is yours:
+>
+>"One of the new features of Valgrind 3.9.0 is the addition of MIPS
+>support. Maybe it would be good to enable Valgrind on these
+>architectures. I'm adding Vincente and Markos in the Cc list, since
+>they are our main MIPS contributors. They might probably be interested
+>in doing this work, after testing on MIPS hardware."
 
-This will help avoid using POST_*_HOOKS to do tasks that should be done
-in the PRE_*_HOOKS of the next step.
-Otherwise, when the user would do a make foo-re<step>, this would not do
-what was really intented, the POST_*_HOOK of the preceding step not
-being executed.
+I think you are confusing the two Thomas'es, but that's ok :-).
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
----
-Changes v2 -> v3
-  - Fix a mis-match in the number of spaces used to indent (Yann E.
-    Morin)
-Changes v1 -> v2
-  - Move the PRE_*_HOOKS after the message (Arnout Vandecappelle)
-  - PRE_LEGAL_HOOKS executed even if condition is not met (Arnout Vandecappelle)
----
- docs/manual/adding-packages-hooks.txt | 17 +++++++++++++++++
- package/pkg-generic.mk                | 22 ++++++++++++++++++++--
- 2 files changed, 37 insertions(+), 2 deletions(-)
+Thanks for your explanation...
 
-diff --git a/docs/manual/adding-packages-hooks.txt b/docs/manual/adding-packages-hooks.txt
-index d96c991..38d3e4a 100644
---- a/docs/manual/adding-packages-hooks.txt
-+++ b/docs/manual/adding-packages-hooks.txt
-@@ -14,17 +14,34 @@ of the package construction.
- 
- The following hook points are available:
- 
-+* +LIBFOO_PRE_DOWNLOAD_HOOKS+
- * +LIBFOO_POST_DOWNLOAD_HOOKS+
-+
-+* +LIBFOO_PRE_EXTRACT_HOOKS+
- * +LIBFOO_POST_EXTRACT_HOOKS+
-+
-+* +LIBFOO_PRE_RSYNC_HOOKS+
- * +LIBFOO_POST_RSYNC_HOOKS+
-+
- * +LIBFOO_PRE_PATCH_HOOKS+
- * +LIBFOO_POST_PATCH_HOOKS+
-+
- * +LIBFOO_PRE_CONFIGURE_HOOKS+
- * +LIBFOO_POST_CONFIGURE_HOOKS+
-+
-+* +LIBFOO_PRE_BUILD_HOOKS+
- * +LIBFOO_POST_BUILD_HOOKS+
-+
-+* +LIBFOO_PRE_INSTALL_HOOKS+ (for host packages only)
- * +LIBFOO_POST_INSTALL_HOOKS+ (for host packages only)
-+
-+* +LIBFOO_PRE_INSTALL_STAGING_HOOKS+ (for target packages only)
- * +LIBFOO_POST_INSTALL_STAGING_HOOKS+ (for target packages only)
-+
-+* +LIBFOO_PRE_INSTALL_TARGET_HOOKS+ (for target packages only)
- * +LIBFOO_POST_INSTALL_TARGET_HOOKS+ (for target packages only)
-+
-+* +LIBFOO_PRE_LEGAL_INFO_HOOKS+
- * +LIBFOO_POST_LEGAL_INFO_HOOKS+
- 
- These variables are 'lists' of variable names containing actions to be
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 555c3c2..9edcfbe 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -70,6 +70,7 @@ endif
- 
- # Retrieve the archive
- $(BUILD_DIR)/%/.stamp_downloaded:
-+	$(foreach hook,$($(PKG)_PRE_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
- ifeq ($(DL_MODE),DOWNLOAD)
- # Only show the download message if it isn't already downloaded
- 	$(Q)if test ! -e $(DL_DIR)/$($(PKG)_SOURCE); then \
-@@ -101,6 +102,7 @@ endif
- $(BUILD_DIR)/%/.stamp_extracted:
- 	@$(call step_start,extract)
- 	@$(call MESSAGE,"Extracting")
-+	$(foreach hook,$($(PKG)_PRE_EXTRACT_HOOKS),$(call $(hook))$(sep))
- 	$(Q)mkdir -p $(@D)
- 	$($(PKG)_EXTRACT_CMDS)
- # some packages have messed up permissions inside
-@@ -114,6 +116,7 @@ $(BUILD_DIR)/%/.stamp_extracted:
- $(BUILD_DIR)/%/.stamp_rsynced:
- 	@$(call MESSAGE,"Syncing from source dir $(SRCDIR)")
- 	@test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ; exit 1)
-+	$(foreach hook,$($(PKG)_PRE_RSYNC_HOOKS),$(call $(hook))$(sep))
- 	rsync -au $(RSYNC_VCS_EXCLUSIONS) $(SRCDIR)/ $(@D)
- 	$(foreach hook,$($(PKG)_POST_RSYNC_HOOKS),$(call $(hook))$(sep))
- 	$(Q)touch $@
-@@ -162,8 +165,8 @@ $(BUILD_DIR)/%/.stamp_patched:
- # Configure
- $(BUILD_DIR)/%/.stamp_configured:
- 	@$(call step_start,configure)
--	$(foreach hook,$($(PKG)_PRE_CONFIGURE_HOOKS),$(call $(hook))$(sep))
- 	@$(call MESSAGE,"Configuring")
-+	$(foreach hook,$($(PKG)_PRE_CONFIGURE_HOOKS),$(call $(hook))$(sep))
- 	$($(PKG)_CONFIGURE_CMDS)
- 	$(foreach hook,$($(PKG)_POST_CONFIGURE_HOOKS),$(call $(hook))$(sep))
- 	$(Q)touch $@
-@@ -173,6 +176,7 @@ $(BUILD_DIR)/%/.stamp_configured:
- $(BUILD_DIR)/%/.stamp_built::
- 	@$(call step_start,build)
- 	@$(call MESSAGE,"Building")
-+	$(foreach hook,$($(PKG)_PRE_BUILD_HOOKS),$(call $(hook))$(sep))
- 	$($(PKG)_BUILD_CMDS)
- 	$(foreach hook,$($(PKG)_POST_BUILD_HOOKS),$(call $(hook))$(sep))
- 	$(Q)touch $@
-@@ -182,6 +186,7 @@ $(BUILD_DIR)/%/.stamp_built::
- $(BUILD_DIR)/%/.stamp_host_installed:
- 	@$(call step_start,install-host)
- 	@$(call MESSAGE,"Installing to host directory")
-+	$(foreach hook,$($(PKG)_PRE_INSTALL_HOOKS),$(call $(hook))$(sep))
- 	$($(PKG)_INSTALL_CMDS)
- 	$(foreach hook,$($(PKG)_POST_INSTALL_HOOKS),$(call $(hook))$(sep))
- 	$(Q)touch $@
-@@ -191,6 +196,7 @@ $(BUILD_DIR)/%/.stamp_host_installed:
- $(BUILD_DIR)/%/.stamp_staging_installed:
- 	@$(call step_start,install-staging)
- 	@$(call MESSAGE,"Installing to staging directory")
-+	$(foreach hook,$($(PKG)_PRE_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
- 	$($(PKG)_INSTALL_STAGING_CMDS)
- 	$(foreach hook,$($(PKG)_POST_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
- 	$(Q)if test -n "$($(PKG)_CONFIG_SCRIPTS)" ; then \
-@@ -207,6 +213,7 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
- $(BUILD_DIR)/%/.stamp_images_installed:
- 	@$(call step_start,install-image)
- 	@$(call MESSAGE,"Installing to images directory")
-+	$(foreach hook,$($(PKG)_PRE_INSTALL_IMAGES_HOOKS),$(call $(hook))$(sep))
- 	$($(PKG)_INSTALL_IMAGES_CMDS)
- 	$(foreach hook,$($(PKG)_POST_INSTALL_IMAGES_HOOKS),$(call $(hook))$(sep))
- 	$(Q)touch $@
-@@ -216,6 +223,7 @@ $(BUILD_DIR)/%/.stamp_images_installed:
- $(BUILD_DIR)/%/.stamp_target_installed:
- 	@$(call step_start,install-target)
- 	@$(call MESSAGE,"Installing to target")
-+	$(foreach hook,$($(PKG)_PRE_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
- 	$(if $(BR2_INIT_SYSTEMD),\
- 		$($(PKG)_INSTALL_INIT_SYSTEMD))
- 	$(if $(BR2_INIT_SYSV)$(BR2_INIT_BUSYBOX),\
-@@ -377,19 +385,28 @@ $(2)_EXTRACT_CMDS ?= \
- 	$$(if $$($(2)_SOURCE),$$(INFLATE$$(suffix $$($(2)_SOURCE))) $(DL_DIR)/$$($(2)_SOURCE) | \
- 	$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $$($(2)_DIR) $(TAR_OPTIONS) -)
- 
--# post-steps hooks
-+# pre/post-steps hooks
-+$(2)_PRE_DOWNLOAD_HOOKS         ?=
- $(2)_POST_DOWNLOAD_HOOKS        ?=
-+$(2)_PRE_EXTRACT_HOOKS          ?=
- $(2)_POST_EXTRACT_HOOKS         ?=
-+$(2)_PRE_RSYNC_HOOKS            ?=
- $(2)_POST_RSYNC_HOOKS           ?=
- $(2)_PRE_PATCH_HOOKS            ?=
- $(2)_POST_PATCH_HOOKS           ?=
- $(2)_PRE_CONFIGURE_HOOKS        ?=
- $(2)_POST_CONFIGURE_HOOKS       ?=
-+$(2)_PRE_BUILD_HOOKS            ?=
- $(2)_POST_BUILD_HOOKS           ?=
-+$(2)_PRE_INSTALL_HOOKS          ?=
- $(2)_POST_INSTALL_HOOKS         ?=
-+$(2)_PRE_INSTALL_STAGING_HOOKS  ?=
- $(2)_POST_INSTALL_STAGING_HOOKS ?=
-+$(2)_PRE_INSTALL_TARGET_HOOKS   ?=
- $(2)_POST_INSTALL_TARGET_HOOKS  ?=
-+$(2)_PRE_INSTALL_IMAGES_HOOKS   ?=
- $(2)_POST_INSTALL_IMAGES_HOOKS  ?=
-+$(2)_PRE_LEGAL_INFO_HOOKS       ?=
- $(2)_POST_LEGAL_INFO_HOOKS      ?=
- 
- # human-friendly targets and target sequencing
-@@ -543,6 +560,7 @@ $(2)_MANIFEST_TARBALL ?= not saved
- # legal-info: produce legally relevant info.
- $(1)-legal-info:
- # Packages without a source are assumed to be part of Buildroot, skip them.
-+	$(foreach hook,$($(2)_PRE_LEGAL_INFO_HOOKS),$(call $(hook))$(sep))
- ifneq ($(call qstrip,$$($(2)_SOURCE)),)
- 
- ifeq ($$($(2)_SITE_METHOD),local)
--- 
-1.9.0
+Best regards,
+Thomas
