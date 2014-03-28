@@ -1,64 +1,79 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 28 Mar 2014 19:40:59 +0100
-Subject: [Buildroot] [PATCH] valgrind: Add support for MIPS architecture
-In-Reply-To: <5335BE6C.8020500@imgtec.com>
-References: <1396025209-9495-1-git-send-email-Vincent.Riera@imgtec.com>
- <be46f8fb-8747-4d45-a946-fc11e5818688@email.android.com>
- <5335BE6C.8020500@imgtec.com>
-Message-ID: <06ec4288-1b83-45b9-885d-993a337a6774@email.android.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Fri, 28 Mar 2014 19:41:34 +0100
+Subject: [Buildroot] [PATCH v2 1/2] infra: Add generic check_prog_host
+	function
+In-Reply-To: <CAGduivy7YPpfcvkOkZxH2_35BSxsjSK0_++RMaw3bxwJE2=QzA@mail.gmail.com>
+References: <1393172261-17421-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <20140223184032.2c6d08de@skate>
+ <CAGduivy7YPpfcvkOkZxH2_35BSxsjSK0_++RMaw3bxwJE2=QzA@mail.gmail.com>
+Message-ID: <CAGduivw6n_tGvg+HOjptV01CxgpviCgumoq_6szpNzre7d8R-g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Vicente Olivert Riera <Vincent.Riera@imgtec.com> schreef:
->On 03/28/2014 06:16 PM, Thomas De Schampheleire wrote:
->> Hi Vicente,
+Hi all,
+
+On Sun, Feb 23, 2014 at 7:12 PM, Maxime Hadjinlian
+<maxime.hadjinlian@gmail.com> wrote:
+> On Sun, Feb 23, 2014 at 6:40 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Dear Maxime Hadjinlian,
 >>
->> Vicente Olivert Riera <Vincent.Riera@imgtec.com> schreef:
->>> Reviewed-by: Markos Chandras <markos.chandras@imgtec.com>
->>> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->>> ---
->>> package/valgrind/Config.in |    3 ++-
->>> 1 files changed, 2 insertions(+), 1 deletions(-)
->>>
->>> diff --git a/package/valgrind/Config.in b/package/valgrind/Config.in
->>> index dacdd86..fd5649b 100644
->>> --- a/package/valgrind/Config.in
->>> +++ b/package/valgrind/Config.in
->>> @@ -1,7 +1,8 @@
->>> config BR2_PACKAGE_VALGRIND
->>> 	bool "valgrind"
->>> 	depends on BR2_i386 || BR2_x86_64 || BR2_cortex_a8 || \
->>> -		   BR2_cortex_a9 || BR2_powerpc
->>> +		   BR2_cortex_a9 || BR2_powerpc || BR2_mips || \
->>> +		   BR2_mipsel || BR2_mips64 || BR2_mips64el
->>> 	help
->>> 	  Tool for debugging and profiling Linux programs.
->>>
+>> On Sun, 23 Feb 2014 17:17:40 +0100, Maxime Hadjinlian wrote:
 >>
->> Did you test this on target?
->
->Not yet, but it should work.
->
->> Do you have any idea why it wasn't enabled for mips before?
->
->Valgrind added support for MIPS on it's last release, 3.9.0:
->
->http://sourceforge.net/p/valgrind/mailman/valgrind-announce/thread/52738DEF.1070801 at acm.org/
->
->But you already knew that. The following message is yours:
->
->"One of the new features of Valgrind 3.9.0 is the addition of MIPS
->support. Maybe it would be good to enable Valgrind on these
->architectures. I'm adding Vincente and Markos in the Cc list, since
->they are our main MIPS contributors. They might probably be interested
->in doing this work, after testing on MIPS hardware."
+>>> +# Verify that which is installed
+>>> +check_prog_host "which"
+>>
+>> Since your function check_prog_host uses which to determine if the
+>> program exists, isn't it weird to use which to verify it?
+> Agreed but that was the original check also which I found a little in
+> the first place. But since this patch is here only to introduce and
+> use a function, I didn't see how to change that here.
+>>
+>> Your check_host_prog function could also be used in:
+>>
+>> # Check that a few mandatory programs are installed
+>> missing_progs="no"
+>> for prog in patch perl tar wget cpio python unzip rsync bc ${DL_TOOLS} ; do
+>>         if ! which $prog > /dev/null ; then
+>>                 echo "You must install '$prog' on your build machine";
+>>                 missing_progs="yes"
+>>                 if test $prog = "svn" ; then
+>>                         echo "  svn is usually part of the subversion package in your distribution"
+>>                 elif test $prog = "hg" ; then
+>>                         echo "  hg is usually part of the mercurial package in your distribution"
+>>                 elif test $prog = "zcat" ; then
+>>                         echo "  zcat is usually part of the gzip package in your distribution"
+>>                 elif test $prog = "bzcat" ; then
+>>                         echo "  bzcat is usually part of the bzip2 package in your distribution"
+>>                 fi
+>>         fi
+>> done
+>>
+>> if test "${missing_progs}" = "yes" ; then
+>>         exit 1
+>> fi
+>>
+>> Though you see that this loop has this missing_progs variable that
+>> allows to list all the missing programs, and only abort at the end.
+> I wanted to keep this one as is for the moment.
+> As you point out, it uses the exact mechanisms we want for all the
+> dependencies.sh, and it would be part of a follow up patch later one,
+> which would uses the same mechanisms but all over the dependencies.sh.
+> Which is want we want in the end.
+> This first patch is mostly a follow up of the previous one, which
+> added the BR2_NEEDS_HOST_JAVA
+>>
+>> Thomas
+>> --
+>> Thomas Petazzoni, CTO, Free Electrons
+>> Embedded Linux, Kernel and Android engineering
+>> http://free-electrons.com
 
-I think you are confusing the two Thomas'es, but that's ok :-).
-
-Thanks for your explanation...
-
-Best regards,
-Thomas
+Just a bump.
+Thomas, if I remember correctly, you were not opposed to this patch ?
+As explained, it has been found that dependencies.sh needs a few other
+rounds of patch so it would be better shaped, but that can be done
+later.
