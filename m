@@ -1,64 +1,248 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sat, 29 Mar 2014 11:43:22 +0100
-Subject: [Buildroot] [PATCH] libndp: new package
-In-Reply-To: <20140329113538.3ae1d4ed@skate>
-References: <1395053827-1966-1-git-send-email-yegorslists@googlemail.com>
- <20140329113538.3ae1d4ed@skate>
-Message-ID: <CAGm1_ktc8=O=WBZQuEQUTQ8QteguNEzCWbZV4c3vogDwvE9LoQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 29 Mar 2014 11:57:55 +0100
+Subject: [Buildroot] [PATCH v2] postgresql: new package
+In-Reply-To: <1395182160-26138-1-git-send-email-ps.report@gmx.net>
+References: <1395182160-26138-1-git-send-email-ps.report@gmx.net>
+Message-ID: <20140329115755.33e90c5b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Mar 29, 2014 at 11:35 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Yegor,
->
-> On Mon, 17 Mar 2014 11:57:07 +0100, yegorslists at googlemail.com wrote:
->> index 0000000..516ac05
->> --- /dev/null
->> +++ b/package/libndp/Config.in
->> @@ -0,0 +1,10 @@
->> +config BR2_PACKAGE_LIBNDP
->> +     bool "libndp"
->> +     depends on BR2_INET_IPV6
->> +     help
->> +       This package contains a library which provides a wrapper
->> +       for IPv6 Neighbor Discovery Protocol. It also provides a tool
->> +       named ndptool for sending and receiving NDP messages.
->> +
->
-> Missing upstream URL.
->
->> +comment "libndp needs a toolchain w/ IPv6"
->> +     depends on !BR2_INET_IPV6
->> diff --git a/package/libndp/libndp.mk b/package/libndp/libndp.mk
->> new file mode 100644
->> index 0000000..af58c6e
->> --- /dev/null
->> +++ b/package/libndp/libndp.mk
->> @@ -0,0 +1,15 @@
->> +################################################################################
->> +#
->> +# libndp
->> +#
->> +################################################################################
->> +
->> +LIBNDP_VERSION = v1.2
->> +LIBNDP_SITE = $(call github,jpirko,libndp,$(LIBNDP_VERSION))
->> +LIBNDP_LICENSE = LGPLv2.1
->
-> The license is really LGPLv2.1+.
->
-> And also the package was building with uClibc, there was a missing
-> #include <stdargh.h> (try building libndp with
-> http://autobuild.buildroot.org/toolchains/configs/free-electrons/br-arm-full.config
-> after removing the patch).
->
-> I've fixed those problems and committed. Can you send the stdarg.h
-> patch upstream?
+Dear Peter Seiderer,
 
-Will do.
+On Tue, 18 Mar 2014 23:36:00 +0100, Peter Seiderer wrote:
+> Based on suggested new package by Marco Trapanese ([1]).
+> 
+> [1] http://lists.busybox.net/pipermail/buildroot/2014-February/090661.html
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-Yegor
+I've tried to build this, but it doesn't build here. I'm using the
+following defconfig:
+
+BR2_arm=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2014.02-rc1.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_13=y
+BR2_TOOLCHAIN_EXTERNAL_LARGEFILE=y
+BR2_TOOLCHAIN_EXTERNAL_INET_IPV6=y
+BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_INIT_NONE=y
+BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
+BR2_PACKAGE_POSTGRESQL=y
+BR2_PACKAGE_LIBNDP=y
+
+The build failure is:
+
+In file included from regcomp.c:2030:0:
+regc_pg_locale.c: In function ?pg_wc_isdigit?:
+regc_pg_locale.c:312:6: error: dereferencing pointer to incomplete type
+regc_pg_locale.c: In function ?pg_wc_isalpha?:
+regc_pg_locale.c:345:6: error: dereferencing pointer to incomplete type
+regc_pg_locale.c: In function ?pg_wc_isalnum?:
+regc_pg_locale.c:378:6: error: dereferencing pointer to incomplete type
+regc_pg_locale.c: In function ?pg_wc_isupper?:
+regc_pg_locale.c:411:6: error: dereferencing pointer to incomplete type
+regc_pg_locale.c: In function ?pg_wc_islower?:
+regc_pg_locale.c:444:6: error: dereferencing pointer to incomplete type
+regc_pg_locale.c: In function ?pg_wc_isgraph?:
+regc_pg_locale.c:477:6: error: dereferencing pointer to incomplete type
+regc_pg_locale.c: In function ?pg_wc_isprint?:
+regc_pg_locale.c:510:6: error: dereferencing pointer to incomplete type
+regc_pg_locale.c: In function ?pg_wc_ispunct?:
+regc_pg_locale.c:543:6: error: dereferencing pointer to incomplete type
+regc_pg_locale.c: In function ?pg_wc_isspace?:
+regc_pg_locale.c:576:6: error: dereferencing pointer to incomplete type
+regc_pg_locale.c: In function ?pg_wc_toupper?:
+regc_pg_locale.c:617:12: error: dereferencing pointer to incomplete type
+regc_pg_locale.c:617:12: error: dereferencing pointer to incomplete type
+regc_pg_locale.c: In function ?pg_wc_tolower?:
+regc_pg_locale.c:658:12: error: dereferencing pointer to incomplete type
+regc_pg_locale.c:658:12: error: dereferencing pointer to incomplete type
+make[4]: *** [regcomp.o] Erreur 1
+make[4]: quittant le r?pertoire ? /home/thomas/projets/buildroot/output/build/postgresql-9.3.3/src/backend/regex ?
+
+Some other comments below.
+
+> diff --git a/package/postgresql/Config.in b/package/postgresql/Config.in
+> new file mode 100644
+> index 0000000..efc296f
+> --- /dev/null
+> +++ b/package/postgresql/Config.in
+> @@ -0,0 +1,13 @@
+> +config BR2_PACKAGE_POSTGRESQL
+> +	bool "PostgreSQL"
+
+should be lower-case.
+
+> +	depends on BR2_INET_IPV6
+> +	select BR2_PACKAGE_READLINE
+> +	select BR2_PACKAGE_ZLIB
+> +	help
+> +	  PostgreSQL is a powerful, open source object-relational
+> +	  database system.
+> +
+> +	  http://www.postgresql.org
+> +
+> +comment "PostgreSQL needs a toolchain w/ IPv6"
+
+Ditto.
+
+> +	depends on !BR2_INET_IPV6
+> diff --git a/package/postgresql/S50postgresql b/package/postgresql/S50postgresql
+> new file mode 100644
+> index 0000000..06cb4d5
+> --- /dev/null
+> +++ b/package/postgresql/S50postgresql
+> @@ -0,0 +1,44 @@
+> +#!/bin/sh
+> +#
+> +# start postgresql
+> +#
+> +
+> +umask 077
+> +
+> +if [ ! -f /srv/pgsql/data/PG_VERSION ]; then
+> +	echo "Initializing postgresql data base..."
+> +	su - postgres -c '/usr/bin/pg_ctl initdb -D /srv/pgsql/data '
+> +	echo "done"
+> +fi
+> +
+> +start() {
+> +	echo -n "Starting postgresql: "
+> +	su - postgres -c '/usr/bin/pg_ctl start -D /srv/pgsql/data -l logfile'
+> +	echo "OK"
+> +}
+> +stop() {
+> +	echo -n "Stopping postgresql: "
+> +	su - postgres -c '/usr/bin/pg_ctl stop -D /srv/pgsql/data -m fast'
+> +	echo "OK"
+> +}
+> +restart() {
+> +	stop
+> +	start
+> +}
+> +
+> +case "$1" in
+> +	start)
+> +		start
+> +		;;
+> +	stop)
+> +		stop
+> +		;;
+> +	restart|reload)
+> +		restart
+> +		;;
+> +	*)
+> +		echo "Usage: $0 {start|stop|restart}"
+> +		exit 1
+> +esac
+> +
+> +exit $?
+> diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+> new file mode 100644
+> index 0000000..f4edc69
+> --- /dev/null
+> +++ b/package/postgresql/postgresql.mk
+> @@ -0,0 +1,44 @@
+> +################################################################################
+> +#
+> +# postgresql
+> +#
+> +################################################################################
+> +
+> +POSTGRESQL_VERSION = 9.3.3
+> +POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+> +POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)/$(POSTGRESQL_SOURCE)
+
+This looks weird, why is $(POSTGRESQL_SOURCE) at the end of the site?
+
+> +POSTGRESQL_LICENSE = PostgreSQL
+> +POSTGRESQ_LICENSE_FILES = COPYRIGHT
+> +POSTGRESQL_DEPENDENCIES = readline zlib
+> +POSTGRESQL_CONF_OPT = --prefix=/usr
+
+This is not needed, as --prefix=/usr is part of the default
+configuration options.
+
+> +
+> +ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+> +	POSTGRESQL_CONF_OPT += --disable-thread-safety
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_TZDATA),y)
+> +	POSTGRESQL_DEPENDENCIES += tzdata
+> +	POSTGRESQL_CONF_OPT += --with-system-tzdata=/usr/share/zoneinfo
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_OPENSSL),y)
+> +	POSTGRESQL_DEPENDENCIES += openssl
+> +	POSTGRESQL_CONF_OPT += --with-openssl
+> +endif
+
+Please add a else condition to this test.
+
+else
+	POSTGRESQL_CONF_OPT += --without-openssl
+endif
+
+Also, there are many, many more configuration options. You don't have
+to support all of them for a first submission, but if you don't support
+a given feature, you should pass --without-<foo> for it so that the
+configure script doesn't mistakenly detect a library from the host. So
+for example: --without-pam --without-python --without-perl, etc.
+
+I see that you're making readline and zlib mandatory dependencies, but
+they are not: the package has --without-readline and --without-zlib
+options. So instead of mandatory dependencies, you should use:
+
+ifeq ($(BR2_PACKAGE_READLINE),y)
+POSTGRESQL_CONF_OPT += --with-readline
+POSTGRESQL_DEPENDENDENCIES += readline
+else
+POSTGRESQL_CONF_OPT += --without-readline
+endif
+
+> +
+> +define POSTGRESQL_USERS
+> +	postgres -1 postgres -1 * /srv/pgsql/data /bin/sh postgres PostgreSQL Server
+> +endef
+
+Is /srv a normal location for databases? Isn't /var used in general?
+
+> +
+> +define POSTGRESQL_INSTALL_TARGET_FIXUP
+> +	$(INSTALL) -v -dm700 $(TARGET_DIR)/srv/pgsql/data
+
+-v seems useless.
+
+Also, is there something that ensures that the /srv/pgsql/data
+directory is owned by the postgres user and group, instead of the
+default root user?
+
+> +endef
+> +
+> +POSTGRESQL_POST_INSTALL_TARGET_HOOKS += POSTGRESQL_INSTALL_TARGET_FIXUP
+> +
+> +define POSTGRESQL_INSTALL_INIT_SYSV
+> +	$(INSTALL) -m 0755 -D package/postgresql/S50postgresql \
+> +		$(TARGET_DIR)/etc/init.d/S50postgresql
+> +endef
+> +
+> +$(eval $(autotools-package))
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
