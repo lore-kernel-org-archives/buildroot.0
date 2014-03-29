@@ -1,72 +1,91 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 29 Mar 2014 16:17:04 +0100
-Subject: [Buildroot] [PATCH] script/scancpan: add -host & -hostonly options
-Message-ID: <1396106224-26505-1-git-send-email-francois.perrad@gadz.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 29 Mar 2014 16:17:37 +0100
+Subject: [Buildroot] [PATCH 09/10 v2] package/iprutils: Add IBM Power
+ RAID utilities
+In-Reply-To: <1394595957.566789.595625760281.9.gpush@pablo>
+References: <1394595957.563937.119075350083.0.gpush@pablo>
+ <1394595957.566789.595625760281.9.gpush@pablo>
+Message-ID: <20140329161737.292ee63f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear Jeremy Kerr,
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- support/scripts/scancpan |   18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
+I've applied your patch, with a few corrections (see below).
 
-diff --git a/support/scripts/scancpan b/support/scripts/scancpan
-index 8d26795..2008356 100755
---- a/support/scripts/scancpan
-+++ b/support/scripts/scancpan
-@@ -482,11 +482,13 @@ use File::Basename;
- use Module::CoreList;
- use MetaCPAN::API::Tiny;
- 
--my ($help, $man, $quiet, $force, $recommend);
-+my ($help, $man, $quiet, $force, $recommend, $host, $hostonly);
- GetOptions( 'help|?' => \$help,
-             'man' => \$man,
-             'quiet|q' => \$quiet,
-             'force|f' => \$force,
-+            'host' => \$host,
-+            'hostonly' => \$hostonly,
-             'recommend' => \$recommend
- ) or pod2usage(-exitval => 1);
- pod2usage(-exitval => 0) if $help;
-@@ -547,8 +549,8 @@ sub fetch {
- }
- 
- foreach my $distname (@ARGV) {
--    # Command-line's distributions are needed for target, not host
--    fetch( $distname, 1, 0 );
-+    # Command-line's distributions
-+    fetch( $distname, !$hostonly, $host || $hostonly );
- }
- say scalar keys %dist, q{ packages fetched.} unless $quiet;
- 
-@@ -660,6 +662,8 @@ supports/scripts/scancpan [options] [distname ...]
-    -man
-    -quiet
-    -force
-+   -host
-+   -hostonly
-    -recommend
- 
- =head1 OPTIONS
-@@ -682,6 +686,14 @@ Executes without output
- 
- Forces the overwriting of existing files.
- 
-+=item B<-host>
-+
-+Generates package for the target and host variants (the default is for target only).
-+
-+=item B<-hostonly>
-+
-+Generates package only for the host variant (the default is for target only).
-+
- =item B<-recommend>
- 
- Adds I<recommended> dependencies.
+On Wed, 12 Mar 2014 11:45:57 +0800, Jeremy Kerr wrote:
+
+> diff --git a/package/iprutils/Config.in b/package/iprutils/Config.in
+> new file mode 100644
+> index 0000000..d72688f
+> --- /dev/null
+> +++ b/package/iprutils/Config.in
+> @@ -0,0 +1,10 @@
+> +config BR2_PACKAGE_IPRUTILS
+> +	bool "iprutils"
+> +	select BR2_PACKAGE_NCURSES
+> +	select BR2_PACKAGE_NCURSES_TARGET_PANEL
+> +	select BR2_PACKAGE_NCURSES_TARGET_FORM
+> +	select BR2_PACKAGE_NCURSES_TARGET_MENU
+> +	select BR2_PACKAGE_LIBSYSFS
+> +	select BR2_PACKAGE_PCIUTILS
+> +	help
+> +	  System utilities for IBM Power RAID devices
+
+Here I've added the URL of the upstream project on SourceForge.
+
+
+> diff --git a/package/iprutils/iprutils.mk b/package/iprutils/iprutils.mk
+> new file mode 100644
+> index 0000000..15de9af
+> --- /dev/null
+> +++ b/package/iprutils/iprutils.mk
+> @@ -0,0 +1,26 @@
+> +################################################################################
+> +#
+> +# iprutils
+> +#
+> +################################################################################
+> +
+> +IPRUTILS_VERSION = 2.3.15
+> +IPRUTILS_SITE = http://downloads.sourceforge.net/project/iprdd/iprutils%20for%202.6%20kernels/$(IPRUTILS_VERSION)
+> +IPRUTILS_SOURCE = iprutils-$(IPRUTILS_VERSION)-src.tgz
+> +IPRUTILS_DEPENDENCIES = ncurses libsysfs pciutils
+> +IPRUTILS_LICENSE = Common Public License Version 1.0
+> +IPRUTILS_LICENSE_FILES = LICENSE
+> +
+> +define IPRUTILS_BUILD_CMDS
+> +	$(MAKE) CC=$(TARGET_CC) LD=$(TARGET_LD) -C $(@D) all
+> +endef
+
+Here instead of CC=$(TARGET_CC) and LD=$(TARGET_LD), I've used
+$(TARGET_CONFIGURE_OPTS), which also ensures CFLAGS and al. are passed.
+This required adding another patch to the package so that our CFLAGS
+can be passed from the environment and can be added with the
+package-specific CFLAGS.
+
+> +define IPRUTILS_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -D -m 0755 $(@D)/iprconfig $(TARGET_DIR)/sbin/iprconfig
+> +	$(INSTALL) -D -m 0755 $(@D)/iprupdate $(TARGET_DIR)/sbin/iprupdate
+> +	$(INSTALL) -D -m 0755 $(@D)/iprdump $(TARGET_DIR)/sbin/iprdump
+> +	$(INSTALL) -D -m 0755 $(@D)/iprinit $(TARGET_DIR)/sbin/iprinit
+> +	$(INSTALL) -D -m 0755 $(@D)/iprdbg $(TARGET_DIR)/sbin/iprdbg
+> +endef
+
+And I've replaced that my using the "make install" target of the
+package Makefile, which was doing the same thing. "make install" is
+also installing manpages, which is probably why you didn't use it, but
+Buildroot anyway automatically removes documentation from the target,
+such as manpages. Therefore, we prefer to use the package "make
+install", which is more likely to continue to work in the future.
+
+Thanks!
+
+Thomas
 -- 
-1.7.9.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
