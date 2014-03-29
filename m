@@ -1,9 +1,9 @@
 From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Sat, 29 Mar 2014 21:56:47 +0100
-Subject: [Buildroot] [PATCH 43/91] xapp_xbacklight: Bump version to 1.2.1
+Date: Sat, 29 Mar 2014 21:56:48 +0100
+Subject: [Buildroot] [PATCH 44/91] xapp_xrdb: Bump version to 1.1.0
 In-Reply-To: <1396126655-25994-1-git-send-email-berndkuhls@hotmail.com>
 References: <1396126655-25994-1-git-send-email-berndkuhls@hotmail.com>
-Message-ID: <BLU0-SMTP259D222486087A4B46B8B3DD9610@phx.gbl>
+Message-ID: <BLU0-SMTP221F9AB3E7C3FD84FF8D594D9610@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,26 +13,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
 ---
- package/x11r7/xapp_xbacklight/xapp_xbacklight.mk |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/x11r7/xapp_xrdb/xapp_xrdb.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/x11r7/xapp_xbacklight/xapp_xbacklight.mk b/package/x11r7/xapp_xbacklight/xapp_xbacklight.mk
-index d4325aa..88c4bc5 100644
---- a/package/x11r7/xapp_xbacklight/xapp_xbacklight.mk
-+++ b/package/x11r7/xapp_xbacklight/xapp_xbacklight.mk
-@@ -4,11 +4,11 @@
+diff --git a/package/x11r7/xapp_xrdb/xapp_xrdb.mk b/package/x11r7/xapp_xrdb/xapp_xrdb.mk
+index 4101d84..f32afa4 100644
+--- a/package/x11r7/xapp_xrdb/xapp_xrdb.mk
++++ b/package/x11r7/xapp_xrdb/xapp_xrdb.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XBACKLIGHT_VERSION = 1.1.2
-+XAPP_XBACKLIGHT_VERSION = 1.2.1
- XAPP_XBACKLIGHT_SOURCE = xbacklight-$(XAPP_XBACKLIGHT_VERSION).tar.bz2
- XAPP_XBACKLIGHT_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XBACKLIGHT_LICENSE = MIT
- XAPP_XBACKLIGHT_LICENSE_FILES = COPYING
--XAPP_XBACKLIGHT_DEPENDENCIES = xlib_libX11 xlib_libXrandr xlib_libXrender
-+XAPP_XBACKLIGHT_DEPENDENCIES = xlib_libX11 xlib_libXrandr xlib_libXrender xcb-util
- 
- $(eval $(autotools-package))
+-XAPP_XRDB_VERSION = 1.0.9
++XAPP_XRDB_VERSION = 1.1.0
+ XAPP_XRDB_SOURCE = xrdb-$(XAPP_XRDB_VERSION).tar.bz2
+ XAPP_XRDB_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XRDB_LICENSE = MIT
 -- 
 1.7.10.4
