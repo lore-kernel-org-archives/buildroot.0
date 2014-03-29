@@ -1,41 +1,65 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sat, 29 Mar 2014 10:49:32 +0100
-Subject: [Buildroot] [PATCH 1/1] xbmc: needs host-gawk
-In-Reply-To: <1396068232-9273-1-git-send-email-bluemrp9@gmail.com>
-References: <1396068232-9273-1-git-send-email-bluemrp9@gmail.com>
-Message-ID: <CAGduivyEy3Zy-wD5R6Ts3eOUfXtdmaqoJD9pCHhV-42V2y7T9w@mail.gmail.com>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Sat, 29 Mar 2014 10:52:38 +0100
+Subject: [Buildroot] [PATCH 0/9] Documentation cleanup
+In-Reply-To: <20140329093317.29e80f16@skate>
+References: <1396041895-29533-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+ <20140329093317.29e80f16@skate>
+Message-ID: <533697E6.5000804@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Ryan, all
-On Sat, Mar 29, 2014 at 5:43 AM, Ryan Coe <bluemrp9@gmail.com> wrote:
-> Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
-> ---
->  package/xbmc/xbmc.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+
+Hi Thomas,
+
+> Dear Jerzy Grzegorek,
 >
-> diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-> index 6dbbb7d..1aa823c 100644
-> --- a/package/xbmc/xbmc.mk
-> +++ b/package/xbmc/xbmc.mk
-> @@ -12,7 +12,7 @@ XBMC_LICENSE_FILES = LICENSE.GPL
->  # called TexturePacker. It is responsible to take all the images used in the
->  # GUI and pack them in a blob.
->  # http://wiki.xbmc.org/index.php?title=TexturePacker
-> -XBMC_DEPENDENCIES = host-gperf host-lzo host-sdl_image host-swig
-> +XBMC_DEPENDENCIES = host-gperf host-lzo host-sdl_image host-swig host-gawk
->  XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
->         libass libcdio libcurl libfribidi libgcrypt libmad libmodplug libmpeg2 \
->         libogg libplist libpng libsamplerate libungif libvorbis libxml2 lzo ncurses \
-> --
-> 1.9.1
+> On Fri, 28 Mar 2014 22:24:41 +0100, Jerzy Grzegorek wrote:
 >
-Just to nitpick, but could you keep the dependencies sorted ?
-Thanks
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>> Here is a series that fixes a few typoes and makes small improvements
+>> in documentation.
+> I've applied patches 1 to 6, 8 and 9. For patch 2, I made the change we
+> discussed.
+>
+> I haven't applied patch 7, because I don't agree with:
+>
+> +series is introduced by a cover letter, an overall patch version may be
+> +added to the cover letter in addition/instead to the individual commits.
+>
+> The version in the title of the cover letter does *not* replace the
+> version in the title of the patches. Both should be present, so the
+> "/instead" is not correct. Also, the "may be added" does not seem
+> right, because a version is always added to the cover letter title by
+> "git format-patch --subject-prefix".
+
+Regarding the "may be added", I agree.
+I proposed this change because I saw on mailing list both cases of
+submitting patch series introduced by a cover letter:
+
+  * "in addition" case:
+     [Patch vX 0/Y] ...
+     [Patch vX 1/Y] ...
+     ...
+     [Patch vX Y/Y] ...
+
+* "instead" case:
+     [Patch vX 0/Y] ...
+     [Patch 1/Y] ...
+     ...
+     [Patch Y/Y] ...
+
+but ok, agree.
+So maybe it should be:
+"Note that when your patch series is introduced by a cover letter,
+a patch version should be added to the cover letter in addition to
+the individual commits."
+
+Regards,
+Jerzy
+
+>
+> Best regards,
+>
+> Thomas
