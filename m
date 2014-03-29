@@ -1,81 +1,126 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Mar 2014 23:15:23 +0100
-Subject: [Buildroot] [git commit] xdriver_xf86-video-tdfx: Bump version to
-	1.4.5
-Message-ID: <20140329222158.A76749C42C@busybox.osuosl.org>
+Date: Sat, 29 Mar 2014 23:15:20 +0100
+Subject: [Buildroot] [git commit] xdriver_xf86-video-nv: Bump version to
+	2.1.20
+Message-ID: <20140329222158.9B0E69C42C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=17aa463339038ea6ec35432568fe1aa0bfd5358a
+commit: http://git.buildroot.net/buildroot/commit/?id=5e2495b96ae3c0b06bc7eaab857f3ee369d3df38
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...ch => xdriver_xf86-video-tdfx-0001-cross.patch} |    0
- .../xdriver_xf86-video-tdfx-0002-mibstore.patch    |   36 ++++++++++++++++++++
- .../xdriver_xf86-video-tdfx.mk                     |    2 +-
- 3 files changed, 37 insertions(+), 1 deletions(-)
+ .../xdriver_xf86-video-nv-0001-mibstore.patch      |   86 ++++++++++++++++++++
+ .../xdriver_xf86-video-nv/xdriver_xf86-video-nv.mk |    2 +-
+ 2 files changed, 87 insertions(+), 1 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx-1.4.0.patch b/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx-0001-cross.patch
-similarity index 100%
-rename from package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx-1.4.0.patch
-rename to package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx-0001-cross.patch
-diff --git a/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx-0002-mibstore.patch b/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx-0002-mibstore.patch
+diff --git a/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv-0001-mibstore.patch b/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv-0001-mibstore.patch
 new file mode 100644
-index 0000000..f156ea7
+index 0000000..e71418b
 --- /dev/null
-+++ b/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx-0002-mibstore.patch
-@@ -0,0 +1,36 @@
-+From 10498d2730c651eb7a1890eb9e728269732e9dad Mon Sep 17 00:00:00 2001
++++ b/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv-0001-mibstore.patch
+@@ -0,0 +1,86 @@
++From fc78fe98222b0204b8a2872a529763d6fe5048da Mon Sep 17 00:00:00 2001
 +From: Adam Jackson <ajax@redhat.com>
-+Date: Tue, 25 Sep 2012 12:54:59 +0000
++Date: Tue, 25 Sep 2012 12:54:49 +0000
 +Subject: Remove mibstore.h
 +
 +Signed-off-by: Adam Jackson <ajax@redhat.com>
 +---
 +Fetch from:
-+http://cgit.freedesktop.org/xorg/driver/xf86-video-tdfx/commit/?id=10498d2730c651eb7a1890eb9e728269732e9dad
++http://cgit.freedesktop.org/xorg/driver/xf86-video-nv/commit/?id=fc78fe98222b0204b8a2872a529763d6fe5048da
 +
 +Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
-+diff --git a/src/tdfx_driver.c b/src/tdfx_driver.c
-+index ddd5431..412da07 100644
-+--- a/src/tdfx_driver.c
-++++ b/src/tdfx_driver.c
-+@@ -62,10 +62,6 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
++
++diff --git a/src/g80_driver.c b/src/g80_driver.c
++index cc4e197..719b96c 100644
++--- a/src/g80_driver.c
+++++ b/src/g80_driver.c
++@@ -34,7 +34,6 @@
++ #include <xf86Resources.h>
++ #endif
++ #include <mipointer.h>
++-#include <mibstore.h>
++ #include <micmap.h>
++ #include <xf86cmap.h>
++ #include <fb.h>
++@@ -833,7 +832,6 @@ G80ScreenInit(SCREEN_INIT_ARGS_DECL)
++         }
++     }
 + 
-+ #include "compiler.h"
++-    miInitializeBackingStore(pScreen);
++     xf86SetBackingStore(pScreen);
++     xf86SetSilkenMouse(pScreen);
 + 
-+-/* Drivers using the mi implementation of backing store need: */
-+-
++diff --git a/src/nv_driver.c b/src/nv_driver.c
++index 6dad6e5..8f35334 100644
++--- a/src/nv_driver.c
+++++ b/src/nv_driver.c
++@@ -2550,7 +2550,6 @@ NVScreenInit(SCREEN_INIT_ARGS_DECL)
++     if (!pNv->NoAccel)
++ 	NVAccelInit(pScreen);
++     
++-    miInitializeBackingStore(pScreen);
++     xf86SetBackingStore(pScreen);
++     xf86SetSilkenMouse(pScreen);
++ 
++diff --git a/src/nv_include.h b/src/nv_include.h
++index fb190bf..f174eef 100644
++--- a/src/nv_include.h
+++++ b/src/nv_include.h
++@@ -24,9 +24,6 @@
++ /* All drivers initialising the SW cursor need this */
++ #include "mipointer.h"
++ 
++-/* All drivers implementing backing store need this */
 +-#include "mibstore.h"
 +-
-+ /* All drivers using the vgahw module need this */
-+ /* This driver needs to be modified to not use vgaHW for multihead operation */
-+ #include "vgaHW.h"
-+@@ -2373,7 +2369,6 @@ TDFXScreenInit(SCREEN_INIT_ARGS_DECL) {
-+     }
-+   }
++ #include "micmap.h"
 + 
-+-  miInitializeBackingStore(pScreen);
-+   xf86SetBackingStore(pScreen);
-+   xf86SetSilkenMouse(pScreen);
++ #include "xf86DDC.h"
++diff --git a/src/riva_driver.c b/src/riva_driver.c
++index e0667ef..759501e 100644
++--- a/src/riva_driver.c
+++++ b/src/riva_driver.c
++@@ -1168,7 +1168,6 @@ RivaScreenInit(SCREEN_INIT_ARGS_DECL)
++     if (!pRiva->NoAccel)
++ 	RivaAccelInit(pScreen);
++     
++-    miInitializeBackingStore(pScreen);
++     xf86SetBackingStore(pScreen);
++     xf86SetSilkenMouse(pScreen);
 + 
++diff --git a/src/riva_include.h b/src/riva_include.h
++index f2c5302..c7aeef7 100644
++--- a/src/riva_include.h
+++++ b/src/riva_include.h
++@@ -22,9 +22,6 @@
++ /* All drivers initialising the SW cursor need this */
++ #include "mipointer.h"
++ 
++-/* All drivers implementing backing store need this */
++-#include "mibstore.h"
++-
++ #include "micmap.h"
++ 
++ #include "xf86DDC.h"
 +--
 +cgit v0.9.0.2-2-gbebe
-diff --git a/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.mk b/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.mk
-index 7c06fb8..c23aa31 100644
---- a/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.mk
-+++ b/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.mk
+diff --git a/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv.mk b/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv.mk
+index 8f9d6e8..655bee9 100644
+--- a/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv.mk
++++ b/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_TDFX_VERSION = 1.4.4
-+XDRIVER_XF86_VIDEO_TDFX_VERSION = 1.4.5
- XDRIVER_XF86_VIDEO_TDFX_SOURCE = xf86-video-tdfx-$(XDRIVER_XF86_VIDEO_TDFX_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_TDFX_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_TDFX_LICENSE = MIT
+-XDRIVER_XF86_VIDEO_NV_VERSION = 2.1.18
++XDRIVER_XF86_VIDEO_NV_VERSION = 2.1.20
+ XDRIVER_XF86_VIDEO_NV_SOURCE = xf86-video-nv-$(XDRIVER_XF86_VIDEO_NV_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_NV_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_NV_LICENSE = MIT
