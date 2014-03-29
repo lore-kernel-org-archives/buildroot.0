@@ -1,39 +1,61 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 29 Mar 2014 20:19:00 -0300
-Subject: [Buildroot] [PATCH 2/2] libcgicc: bump to version 3.2.13
-In-Reply-To: <1396135140-1402-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1396135140-1402-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1396135140-1402-2-git-send-email-gustavo@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 30 Mar 2014 00:51:11 +0100
+Subject: [Buildroot] [PATCH 02/91] mesa3d: modularize and bump to
+ version 10.0.4
+In-Reply-To: <BLU0-SMTP4563F4DB1A0D9347C21F5F9D9610@phx.gbl>
+References: <1396126655-25994-1-git-send-email-berndkuhls@hotmail.com>
+ <BLU0-SMTP4563F4DB1A0D9347C21F5F9D9610@phx.gbl>
+Message-ID: <20140329235111.GP3227@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add license files and docs license definition.
+Bernd, All,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libcgicc/libcgicc.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+On 2014-03-29 21:56 +0100, Bernd Kuhls spake thusly:
+[--SNIP--]
+> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+> index 0ce168e..217528b 100644
+> --- a/package/mesa3d/Config.in
+> +++ b/package/mesa3d/Config.in
+[--SNIP--]
+> +config BR2_PACKAGE_MESA3D_OPENGL_EGL
+> +	bool "EGL"
+> +	depends on BR2_PACKAGE_HAS_UDEV
+> +	select BR2_PACKAGE_HAS_OPENGL_EGL
+> +	help
+> +	  Use the Khronos EGL APIs. EGL is a window manager for OpenGL applications
+> +	  similar to GLX, for X, and WGL, for Windows.
+> +
+> +config BR2_PACKAGE_MESA3D_OPENGL_ES
+> +	bool "OpenGL ES"
+> +	select BR2_PACKAGE_HAS_OPENGL_ES
+> +	help
+> +	  Use the Khronos OpenGL ES APIs.  This is commonly used on embedded
+> +	  systems and represents a subset of the OpenGL API.
+> +
+> +endmenu
+> +
+> +config BR2_PACKAGE_PROVIDES_OPENGL_EGL
+> +	default "mesa3d"
+> +
+> +config BR2_PACKAGE_PROVIDES_OPENGL_ES
+> +	default "mesa3d"
+> +
+> +endif
 
-diff --git a/package/libcgicc/libcgicc.mk b/package/libcgicc/libcgicc.mk
-index f1c181f..f0b373b 100644
---- a/package/libcgicc/libcgicc.mk
-+++ b/package/libcgicc/libcgicc.mk
-@@ -4,10 +4,11 @@
- #
- ################################################################################
- 
--LIBCGICC_VERSION = 3.2.12
-+LIBCGICC_VERSION = 3.2.13
- LIBCGICC_SITE = $(BR2_GNU_MIRROR)/cgicc
- LIBCGICC_SOURCE = cgicc-$(LIBCGICC_VERSION).tar.gz
--LIBCGICC_LICENSE = LGPLv3+
-+LIBCGICC_LICENSE = LGPLv3+, docs: GFDL1.2+
-+LIBCGICC_LICENSE_FILES = COPYING.LIB COPYING.DOC
- LIBCGICC_INSTALL_STAGING = YES
- LIBCGICC_AUTORECONF = YES
- LIBCGICC_CONFIG_SCRIPTS = cgicc-config
+Ah, this will need I adapt my virtual-package series to take this new
+provider into account.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.8.3.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
