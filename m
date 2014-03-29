@@ -1,40 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Mar 2014 09:08:04 +0100
-Subject: [Buildroot] [git commit] manual: Add singular example for
-	dependency comment
-Message-ID: <20140329080813.B66F29C41F@busybox.osuosl.org>
+Date: Sat, 29 Mar 2014 09:08:27 +0100
+Subject: [Buildroot] [PATCH] manual: Add singular example for dependency
+ comment
+In-Reply-To: <1396032514-10807-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1396032514-10807-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20140329090827.3b304cb3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=281635630a18220a7869d47faa2af9e8bdcd32e9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Maxime Hadjinlian,
 
-The manual always uses the format with multiple dependencies. This only
-add an example where is a single dependency to show that this format is
-applicable regardless of the number of dependencies.
+On Fri, 28 Mar 2014 19:48:34 +0100, Maxime Hadjinlian wrote:
+> The manual always uses the format with multiple dependencies. This only
+> add an example where is a single dependency to show that this format is
+> applicable regardless of the number of dependencies.
+> 
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> ---
+>  docs/manual/adding-packages-directory.txt | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- docs/manual/adding-packages-directory.txt |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+Applied, thanks.
 
-diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-index e56e59a..52eb653 100644
---- a/docs/manual/adding-packages-directory.txt
-+++ b/docs/manual/adding-packages-directory.txt
-@@ -202,6 +202,10 @@ for example:
- --------------------------
- aircrack-ng needs a toolchain w/ largefile, threads
- --------------------------
-+or
-+--------------------------
-+crda needs a toolchain w/ threads
-+--------------------------
- 
- Note that this text is kept brief on purpose, so that it will fit on a
- 80-character terminal.
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
