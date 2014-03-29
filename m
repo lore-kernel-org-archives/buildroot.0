@@ -1,100 +1,108 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 29 Mar 2014 12:56:16 +0100
-Subject: [Buildroot] [PATCH 6/6] crda: override python interperter
-In-Reply-To: <1394057085-10399-7-git-send-email-s.martin49@gmail.com>
-References: <1394057085-10399-1-git-send-email-s.martin49@gmail.com>
- <1394057085-10399-7-git-send-email-s.martin49@gmail.com>
-Message-ID: <20140329115616.GI3227@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 29 Mar 2014 13:13:08 +0100
+Subject: [Buildroot] [git commit] libstrophe: new package
+Message-ID: <20140329121357.E304E9C413@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Samuel, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=1acff22d5e34a91ed6e2f87312962160612fbd3d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2014-03-05 23:04 +0100, Samuel Martin spake thusly:
-> During its build, crda calls a python script importing m2crypto module
-> which requires python2 interpreter.
-> 
-> So, we have a build dependency against host-python.
-> 
-> Also, we make sure this python script is interpreted using the right
-> python interpreter; we add a patch allowing to enforce this and
-> explicitly set it.
-> 
-> Fixes:
->   http://autobuild.buildroot.net/results/a1e/a1e53d66d3962fd5431e7601937b071a0a3c2084/
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  ...file-allow-to-override-python-interpreter.patch | 34 ++++++++++++++++++++++
->  package/crda/crda.mk                               |  8 ++++-
->  2 files changed, 41 insertions(+), 1 deletion(-)
->  create mode 100644 package/crda/crda-0001-Makefile-allow-to-override-python-interpreter.patch
-> 
-> diff --git a/package/crda/crda-0001-Makefile-allow-to-override-python-interpreter.patch b/package/crda/crda-0001-Makefile-allow-to-override-python-interpreter.patch
-> new file mode 100644
-> index 0000000..2481390
-> --- /dev/null
-> +++ b/package/crda/crda-0001-Makefile-allow-to-override-python-interpreter.patch
-> @@ -0,0 +1,34 @@
-> +From 6831024a247fd89c7f7adcbee8a0be991b3caaf4 Mon Sep 17 00:00:00 2001
-> +From: Samuel Martin <s.martin49@gmail.com>
-> +Date: Sun, 2 Mar 2014 23:45:44 +0100
-> +Subject: [PATCH] Makefile: allow to override python interpreter
-> +
-> +Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+[Thomas: allow compilation with either expat or libxml2, reword the
+license description to indicate that it's MIT *or* GPLv3. ]
 
-Did you push that upstream?
+Signed-off-by: Denis Bodor <lefinnois@lefinnois.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                                  |    1 +
+ package/libstrophe/Config.in                       |   11 +++++++
+ .../libstrophe-01-make-autoreconfable.patch        |   13 +++++++++
+ package/libstrophe/libstrophe.mk                   |   29 ++++++++++++++++++++
+ 4 files changed, 54 insertions(+), 0 deletions(-)
 
-[--SNIP--]
-> diff --git a/package/crda/crda.mk b/package/crda/crda.mk
-> index ce87d44..0a10816 100644
-> --- a/package/crda/crda.mk
-> +++ b/package/crda/crda.mk
-> @@ -8,7 +8,7 @@ CRDA_VERSION = 1.1.3
->  CRDA_SOURCE = crda-$(CRDA_VERSION).tar.bz2
->  CRDA_SITE = http://wireless.kernel.org/download/crda
->  CRDA_DEPENDENCIES = host-pkgconf host-python-m2crypto \
-> -	libnl libgcrypt
-> +	libnl libgcrypt host-python
->  CRDA_LICENSE = ISC
->  CRDA_LICENSE_FILES = LICENSE
->  
-> @@ -23,10 +23,16 @@ CRDA_NLLIBS += -lnl-3 -lm -lpthread
->  CRDA_LDLIBS += `$(STAGING_DIR)/usr/bin/libgcrypt-config --libs`
->  endif
->  
-> +# * key2pub.py currently is not python3 compliant (thought python2/pyhton3
-
-s/thought/though/
-
-> +#   compliance could rather easily be achieved.
-> +# * key2pub.py uses M2Crypto python module, which is only available for
-> +#   python2, so we have to make sure this script is run suing the python2
-> +#   interpreter, hence the host-python dependency and the PYTHON var.
->  define CRDA_BUILD_CMDS
->  	$(TARGET_CONFIGURE_OPTS) \
->  		LDLIBS="$(CRDA_LDLIBS)" \
->  		NLLIBS="$(CRDA_NLLIBS)" \
-> +		PYTHON=$(HOST_DIR)/usr/bin/python2 \
->  		$(MAKE) all_noverify -C $(@D)
->  endef
-
-With the nit above fixed:
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/Config.in b/package/Config.in
+index 2fee0ef..394f0a5 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -732,6 +732,7 @@ source "package/librsync/Config.in"
+ source "package/libsocketcan/Config.in"
+ source "package/libshairplay/Config.in"
+ source "package/libsoup/Config.in"
++source "package/libstrophe/Config.in"
+ source "package/libtirpc/Config.in"
+ source "package/libtorrent/Config.in"
+ source "package/libupnp/Config.in"
+diff --git a/package/libstrophe/Config.in b/package/libstrophe/Config.in
+new file mode 100644
+index 0000000..d4e6a7d
+--- /dev/null
++++ b/package/libstrophe/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_LIBSTROPHE
++	bool "libstrophe"
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_LIBXML2 if !BR2_PACKAGE_EXPAT
++	help
++	  libstrophe is a lightweight XMPP client library written in C.
++	  It has minimal dependencies and is configurable for various
++	  environments. It runs well on both Linux, Unix, and Windows
++	  based platforms.
++
++	  https://github.com/strophe/libstrophe
+diff --git a/package/libstrophe/libstrophe-01-make-autoreconfable.patch b/package/libstrophe/libstrophe-01-make-autoreconfable.patch
+new file mode 100644
+index 0000000..98da3f4
+--- /dev/null
++++ b/package/libstrophe/libstrophe-01-make-autoreconfable.patch
+@@ -0,0 +1,13 @@
++Make the package autoreconfigurable
++
++Signed-off-by: Denis Bodor <lefinnois@lefinnois.net>
++
++diff -ur libstrophe.orig/Makefile.am libstrophe/Makefile.am
++--- libstrophe.orig/Makefile.am	2014-03-02 18:58:36.219753865 +0100
+++++ libstrophe/Makefile.am	2014-03-02 18:58:02.739752477 +0100
++@@ -1,4 +1,4 @@
++-AUTOMAKE_OPTIONS = subdir-objects
+++AUTOMAKE_OPTIONS = subdir-objects foreign
++ 
++ CFLAGS = -g -Wall
++ 
+diff --git a/package/libstrophe/libstrophe.mk b/package/libstrophe/libstrophe.mk
+new file mode 100644
+index 0000000..1bd55c7
+--- /dev/null
++++ b/package/libstrophe/libstrophe.mk
+@@ -0,0 +1,29 @@
++################################################################################
++#
++# libstrophe
++#
++################################################################################
++
++LIBSTROPHE_VERSION = d408eaf2bbfe5ff5c56eab01463c278f9891c08e
++LIBSTROPHE_SITE = $(call github,strophe,libstrophe,$(LIBSTROPHE_VERSION))
++LIBSTROPHE_DEPENDENCIES = openssl host-pkgconf
++LIBSTROPHE_AUTORECONF = YES
++LIBSTROPHE_LICENSE = MIT or GPLv3
++LIBSTROPHE_LICENSE_FILES = MIT-LICENSE.txt GPL-LICENSE.txt
++
++# This package does not build a dynamic library, so there is nothing
++# to be installed to the target.
++LIBSTROPHE_INSTALL_STAGING = YES
++LIBSTROPHE_INSTALL_TARGET = NO
++
++ifeq ($(BR2_PACKAGE_EXPAT),y)
++# Passing --without-libxml2 doesn't work, due to how AC_ARG_WITH is
++# used in configure.ac. As long as --with-libxml2 is *not* passed, the
++# configure script assumes expat should be used.
++LIBSTROPHE_DEPENDENCIES += expat
++else
++LIBSTROPHE_CONF_OPT += --with-libxml2
++LIBSTROPHE_DEPENDENCIES += libxml2
++endif
++
++$(eval $(autotools-package))
