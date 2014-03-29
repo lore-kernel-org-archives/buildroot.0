@@ -1,36 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Mar 2014 18:28:04 +0100
-Subject: [Buildroot] [git commit] package/rpi-userland: bump revision
-Message-ID: <20140329173147.33EE59C2A2@busybox.osuosl.org>
+Date: Sat, 29 Mar 2014 18:32:03 +0100
+Subject: [Buildroot] [PATCH 0/10] Misc bumps and implied changes (branch
+ yem/bumps)
+In-Reply-To: <cover.1395964430.git.yann.morin.1998@free.fr>
+References: <cover.1395964430.git.yann.morin.1998@free.fr>
+Message-ID: <20140329183203.2d8d74fb@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8382272de67b548df88177ba88fd568dc7055efd
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Yann E. MORIN,
 
-Changes for:
-  - sync with latest firmware API
-  - fix bitrate of video encoder
+On Fri, 28 Mar 2014 01:00:20 +0100, Yann E. MORIN wrote:
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/rpi-userland/rpi-userland.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+> Yann E. MORIN (10):
+>       package/rpi-firmware: bump revision
+>       package/rpi-userland: bump revision
+>       package/dtv-scan-tables: new package
+>       package/dvb-apps: rely on dtv-scan-tables to provide transponder data
+>       package/tvheadend: transponders data now provided by dtv-scan-tables
+>       package/gst1-plugins-bad: transponders data now provided by dtv-scan-tables
+>       package/dvb-apps: bump revision
+>       package/tvheadend: bump revision
+>       package/dvb-apps: do not line-up variables
+>       package/tvheadend: do not line-up variables
 
-diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
-index 3b7d5b5..3c20516 100644
---- a/package/rpi-userland/rpi-userland.mk
-+++ b/package/rpi-userland/rpi-userland.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RPI_USERLAND_VERSION = 7beec2158da8229598f8e471ab5ca834078f5ad2
-+RPI_USERLAND_VERSION = 58ab02e820df719440816534f4534ab1dfd66ce6
- RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
- RPI_USERLAND_LICENSE = BSD-3c
- RPI_USERLAND_LICENSE_FILES = LICENCE
+Series applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
