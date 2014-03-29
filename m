@@ -1,31 +1,87 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Sat, 29 Mar 2014 21:06:40 +0400
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-03-28
-In-Reply-To: <20140329175452.5c711852@skate>
-References: <20140329073011.D16F2101349@stock.ovh.net>
- <20140329175452.5c711852@skate>
-Message-ID: <CAMo8BfKRHRtzpxNQpOyhpEf3EwxLL6ioRN+Kv0iSoSvkxWQDQA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 29 Mar 2014 18:26:19 +0100
+Subject: [Buildroot] [git commit] python-libconfig: new package
+Message-ID: <20140329172704.A300F9C425@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: http://git.buildroot.net/buildroot/commit/?id=9523bdfddfab849bef143db493a052df863de44f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, Mar 29, 2014 at 8:54 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
->>     xtensa |                  mplayer-1.1.1 | NOK | http://autobuild.buildroot.net/results/db06965d3984ab6ca5e039f0e35d4be8638c488b/
->
-> Baruch, this is a Xtensa specific failure, can you have a look ?
+Python bindings to the C++ library libconfig
+https://github.com/cnangel/python-libconfig
 
-A fix for this and other similar issue with wireshark was posted last sunday:
-http://comments.gmane.org/gmane.comp.lib.uclibc.buildroot/80105
+Signed-off-by: Johan Derycke <johan.derycke@barco.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                            |    1 +
+ package/python-libconfig/Config.in           |   22 ++++++++++++++++++++++
+ package/python-libconfig/python-libconfig.mk |   17 +++++++++++++++++
+ 3 files changed, 40 insertions(+), 0 deletions(-)
 
-For this fix to be complete we need the following patch to be merged to uclibc:
-http://permalink.gmane.org/gmane.comp.lib.uclibc.general/23828
-
--- 
-Thanks.
--- Max
+diff --git a/package/Config.in b/package/Config.in
+index a9d1633..a4efa75 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -444,6 +444,7 @@ source "package/python-id3/Config.in"
+ source "package/python-ipy/Config.in"
+ source "package/python-json-schema-validator/Config.in"
+ source "package/python-keyring/Config.in"
++source "package/python-libconfig/Config.in"
+ source "package/python-mad/Config.in"
+ source "package/python-meld3/Config.in"
+ source "package/python-msgpack/Config.in"
+diff --git a/package/python-libconfig/Config.in b/package/python-libconfig/Config.in
+new file mode 100644
+index 0000000..eae6cda
+--- /dev/null
++++ b/package/python-libconfig/Config.in
+@@ -0,0 +1,22 @@
++comment "python-libconfig needs a toolchain w/ C++, largefile, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
++
++config BR2_PACKAGE_PYTHON_LIBCONFIG
++	bool "python-libconfig"
++	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_BOOST
++	select BR2_PACKAGE_BOOST_PYTHON
++	select BR2_PACKAGE_LIBCONFIG
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_LARGEFILE
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  Python bindings to the C++ library libconfig
++
++	  Libconfig is a simple library for manipulating structured
++	  configuration files. The file format is more compact and more
++	  readable than XML. And unlike XML, it is type-aware, so it is
++	  not necessary to do string parsing in application code.
++	  http://www.hyperrealm.com/libconfig/
++
++	  https://github.com/cnangel/python-libconfig
+diff --git a/package/python-libconfig/python-libconfig.mk b/package/python-libconfig/python-libconfig.mk
+new file mode 100644
+index 0000000..3f5984b
+--- /dev/null
++++ b/package/python-libconfig/python-libconfig.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# python-libconfig
++#
++################################################################################
++
++PYTHON_LIBCONFIG_VERSION = b271c3d9dac938ad5cd29b67bd08cc5536a5a391
++PYTHON_LIBCONFIG_SITE = $(call github,cnangel,python-libconfig,$(PYTHON_LIBCONFIG_VERSION))
++
++PYTHON_LIBCONFIG_LICENSE = BSD
++PYTHON_LIBCONFIG_LICENSE_FILES = README
++
++PYTHON_LIBCONFIG_SETUP_TYPE = setuptools
++
++PYTHON_LIBCONFIG_DEPENDENCIES = libconfig boost
++
++$(eval $(python-package))
