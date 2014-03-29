@@ -1,32 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Mar 2014 23:17:12 +0100
-Subject: [Buildroot] [git commit] xapp_mkfontscale: Bump version to 1.1.1
-Message-ID: <20140329222159.4A7579C42C@busybox.osuosl.org>
+Date: Sat, 29 Mar 2014 23:24:22 +0100
+Subject: [Buildroot] [PATCH 00/91] Update mesa3d & xorg
+In-Reply-To: <BLU0-SMTP39628D1C21A39FA8BD40475D9610@phx.gbl>
+References: <BLU0-SMTP39628D1C21A39FA8BD40475D9610@phx.gbl>
+Message-ID: <20140329232422.676634a8@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=21193beac0e2094ae7e7c29072b43423ec8a0c72
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Bernd Kuhls,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Sat, 29 Mar 2014 21:56:04 +0100, Bernd Kuhls wrote:
 
-diff --git a/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk b/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk
-index 067f380..c50bb0c 100644
---- a/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk
-+++ b/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XAPP_MKFONTSCALE_VERSION = 1.1.0
-+XAPP_MKFONTSCALE_VERSION = 1.1.1
- XAPP_MKFONTSCALE_SOURCE = mkfontscale-$(XAPP_MKFONTSCALE_VERSION).tar.bz2
- XAPP_MKFONTSCALE_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_MKFONTSCALE_LICENSE = MIT
+> this is a follow-up patch to replace v8 of my last patch series which
+> updated only mesa3d and xserver_xorg-server.
+> 
+> This patch includes and replaces the forementioned patch series and
+> catches, hopefully, all version bumps for xorg packages. Some packages
+> had to be patched for compatability with xorg-server 1.15, these patches
+> were mostly taken from upstream.
+
+Wow, that was huge. Since the mesa3d patches had already been on the
+list since quite some time, and the rest was just bumps, I've applied
+the whole thing, with the exception of PATCH 05/91.
+
+I am not sure to understand why the intel driver now unconditionally
+needs mesa3d. Also, I wanted to have more details on how to chose
+between User-Mode Setting and Kernel-Mode Setting with the intel driver.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
