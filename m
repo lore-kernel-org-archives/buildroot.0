@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 29 Mar 2014 22:43:52 +0100
-Subject: [Buildroot] [PATCH 81/91] xapp_xvidtune: Bump version to 1.0.3
+Date: Sat, 29 Mar 2014 22:43:51 +0100
+Subject: [Buildroot] [PATCH 80/91] xapp_bdftopcf: Bump version to 1.0.4
 In-Reply-To: <1396129442-26428-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1396129442-26428-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1396129442-26428-33-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1396129442-26428-32-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,21 +15,21 @@ From: Bernd Kuhls <berndkuhls@hotmail.com>
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xapp_xvidtune/xapp_xvidtune.mk |    2 +-
+ package/x11r7/xapp_bdftopcf/xapp_bdftopcf.mk |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/x11r7/xapp_xvidtune/xapp_xvidtune.mk b/package/x11r7/xapp_xvidtune/xapp_xvidtune.mk
-index 41c9dfe..d7c4d5b 100644
---- a/package/x11r7/xapp_xvidtune/xapp_xvidtune.mk
-+++ b/package/x11r7/xapp_xvidtune/xapp_xvidtune.mk
+diff --git a/package/x11r7/xapp_bdftopcf/xapp_bdftopcf.mk b/package/x11r7/xapp_bdftopcf/xapp_bdftopcf.mk
+index b03f80e..950d988 100644
+--- a/package/x11r7/xapp_bdftopcf/xapp_bdftopcf.mk
++++ b/package/x11r7/xapp_bdftopcf/xapp_bdftopcf.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XVIDTUNE_VERSION = 1.0.2
-+XAPP_XVIDTUNE_VERSION = 1.0.3
- XAPP_XVIDTUNE_SOURCE = xvidtune-$(XAPP_XVIDTUNE_VERSION).tar.bz2
- XAPP_XVIDTUNE_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XVIDTUNE_LICENSE = MIT
+-XAPP_BDFTOPCF_VERSION = 1.0.3
++XAPP_BDFTOPCF_VERSION = 1.0.4
+ XAPP_BDFTOPCF_SOURCE = bdftopcf-$(XAPP_BDFTOPCF_VERSION).tar.bz2
+ XAPP_BDFTOPCF_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_BDFTOPCF_LICENSE = MIT
 -- 
 1.7.10.4
