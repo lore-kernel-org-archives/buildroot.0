@@ -1,59 +1,44 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Sat, 29 Mar 2014 11:59:26 +0100
-Subject: [Buildroot] [PATCH 0/9] Documentation cleanup
-In-Reply-To: <20140329112838.0bee5010@skate>
-References: <1396041895-29533-1-git-send-email-jerzy.grzegorek@trzebnica.net>	<20140329093317.29e80f16@skate>	<533697E6.5000804@trzebnica.net>
- <20140329112838.0bee5010@skate>
-Message-ID: <5336A78E.3040605@trzebnica.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 29 Mar 2014 12:03:25 +0100
+Subject: [Buildroot] [PATCH v3] pyrex: new package
+In-Reply-To: <1394920830-12708-1-git-send-email-mlweber1@rockwellcollins.com>
+References: <1394920830-12708-1-git-send-email-mlweber1@rockwellcollins.com>
+Message-ID: <20140329120325.0faa54ca@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Matt,
 
-Hi Thomas,
+On Sat, 15 Mar 2014 17:00:30 -0500, mlweber1 at rockwellcollins.com wrote:
 
-> Dear Jerzy Grzegorek,
->
-> On Sat, 29 Mar 2014 10:52:38 +0100, Jerzy Grzegorek wrote:
->
->> Regarding the "may be added", I agree.
->> I proposed this change because I saw on mailing list both cases of
->> submitting patch series introduced by a cover letter:
->>
->>    * "in addition" case:
->>       [Patch vX 0/Y] ...
->>       [Patch vX 1/Y] ...
->>       ...
->>       [Patch vX Y/Y] ...
->>
->> * "instead" case:
->>       [Patch vX 0/Y] ...
->>       [Patch 1/Y] ...
->>       ...
->>       [Patch Y/Y] ...
-> To me, this second variant is wrong. This is because the cover letters
-> are not recorded by patchwork, so if the version is not mentioned in
-> the title of each individual patch, patchwork will not have the
-> information of the version of the patches.
->
->> So maybe it should be:
->> "Note that when your patch series is introduced by a cover letter,
->> a patch version should be added to the cover letter in addition to
->> the individual commits."
-> But is it really necessary? Such a wording seems to imply that the
-> contributor would have to do this manually, while the contributor
-> should instead simply use "git format-patch --subject-prefix", which
-> does just the right thing.
+> diff --git a/package/python-pyrex/Config.in.host b/package/python-pyrex/Config.in.host
+> new file mode 100644
+> index 0000000..4edeb38
+> --- /dev/null
+> +++ b/package/python-pyrex/Config.in.host
+> @@ -0,0 +1,10 @@
+> +config BR2_PACKAGE_HOST_PYTHON_PYREX
+> +	bool "python-pyrex"
+> +	depends on BR2_PACKAGE_PYTHON
 
-Ok, agree.
-You haven't changed
-C++  -->  C\++
-for my patch 2.
+Is it actually really needed to have this host package visible in
+menuconfig? python-pyrex is really a tool to generate code, so it
+should be used by other packages as a dependency, and does not
+necessarily need to be exposed in menuconfig.
 
-Regards,
-Jerzy
+To me, host-python-pyrex is a little bit like host-bison or host-flex:
+useful as a dependency of another package, but not really useful as a
+visible host package in menuconfig.
 
->
-> Thomas
+Would you agree if I removed this option when applying your patch?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
