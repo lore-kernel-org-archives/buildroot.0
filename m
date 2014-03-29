@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Mar 2014 00:51:11 +0100
+Date: Sun, 30 Mar 2014 00:57:28 +0100
 Subject: [Buildroot] [PATCH 02/91] mesa3d: modularize and bump to
  version 10.0.4
 In-Reply-To: <BLU0-SMTP4563F4DB1A0D9347C21F5F9D9610@phx.gbl>
 References: <1396126655-25994-1-git-send-email-berndkuhls@hotmail.com>
  <BLU0-SMTP4563F4DB1A0D9347C21F5F9D9610@phx.gbl>
-Message-ID: <20140329235111.GP3227@free.fr>
+Message-ID: <20140329235728.GQ3227@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -21,6 +21,9 @@ On 2014-03-29 21:56 +0100, Bernd Kuhls spake thusly:
 > --- a/package/mesa3d/Config.in
 > +++ b/package/mesa3d/Config.in
 [--SNIP--]
+> +menu "Additional API Support"
+> +depends on BR2_PACKAGE_MESA3D_DRIVER
+> +
 > +config BR2_PACKAGE_MESA3D_OPENGL_EGL
 > +	bool "EGL"
 > +	depends on BR2_PACKAGE_HAS_UDEV
@@ -40,14 +43,23 @@ On 2014-03-29 21:56 +0100, Bernd Kuhls spake thusly:
 > +
 > +config BR2_PACKAGE_PROVIDES_OPENGL_EGL
 > +	default "mesa3d"
-> +
+
+Ah, but that is wrong! If BR2_PACKAGE_MESA3D_OPENGL_EGL is not selected,
+then mesa3d can not be a provider of EGL!
+
+This should have been:
+
+    config BR2_PACKAGE_PROVIDES_OPENGL_EGL
+        default "mesa3d" if BR2_PACKAGE_MESA3D_OPENGL_EGL
+
 > +config BR2_PACKAGE_PROVIDES_OPENGL_ES
 > +	default "mesa3d"
-> +
+
+Ditto.
+
 > +endif
 
-Ah, this will need I adapt my virtual-package series to take this new
-provider into account.
+I'm preparing a patch...
 
 Regards,
 Yann E. MORIN.
