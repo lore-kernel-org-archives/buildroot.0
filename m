@@ -1,43 +1,48 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 29 Mar 2014 10:39:01 +0100
-Subject: [Buildroot] [PATCH 2/2] slang: add ncurses optional dependency
-In-Reply-To: <87vbuyg0r0.fsf@dell.be.48ers.dk>
-References: <1395961593-9826-1-git-send-email-romain.naour@openwide.fr>	<1395961593-9826-2-git-send-email-romain.naour@openwide.fr>
- <87vbuyg0r0.fsf@dell.be.48ers.dk>
-Message-ID: <533694B5.30606@openwide.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 29 Mar 2014 10:40:45 +0100
+Subject: [Buildroot] Major patch sets to review and test
+Message-ID: <20140329104045.13985ff3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hello,
 
-Le 28/03/2014 09:56, Peter Korsgaard a ?crit :
->>>>>> "Romain" == Romain Naour <romain.naour@openwide.fr> writes:
->   > Ncurses check need to be disabled if ncurses package is not
->   > selected.
->   > If we don't do that, host's ncurses5-config may be used by
->   > configure script.
->
->   > Signed-off-by: Romain Naour <romain.naour@openwide.fr>
->
-> Committed, thanks.
->
->   > Note: others optional dependencies may be missing
->   > (pcre oniguruma png z iconv)
->
-> Care to cook up a patch for those?
->
-Sorry, I had notime to rework on this patch yesterday.
-In the meantime Gustavo Zacarias added a patch for slsh and
-added the missing dependencies.
+As you've noticed, I've started committing a few patches. Peter is on
+business trip for a week, so I'm temporarily taking over the
+maintenance of Buildroot, with Peter's agreement of course.
 
-Also, my patch for slang has broken the newt package.
-newt could not find the slang library.
-http://autobuild.buildroot.net/results/553/5533328ec987f12d0b3dd81c430e960d3dc50503/build-end.log
+I'd like to take advantage of this to make some progress on at least a
+few of the major patch series that are sitting in patchwork, and
+therefore I would like people to comment/test/review those patch series.
 
-Thanks to Gustavo the problem is gone.
+The patch series I would like to have a look at are:
 
-Best regards,
-Romain
+ * The Python 2 / Python 3 fixes from Samuel. This series is
+   particularly important because it's needed to fix a number of
+   recurrent autobuilder failures. I'd especially appreciate to get some
+   reviews from Arnout on this series.
+
+   http://thread.gmane.org/gmane.comp.lib.uclibc.buildroot/79108/
+
+ * The virtual package infrastructure from Yann.
+
+   http://thread.gmane.org/gmane.comp.lib.uclibc.buildroot/79441/
+
+ * The download infrastructure changes from Yann.
+
+   http://thread.gmane.org/gmane.comp.lib.uclibc.buildroot/79474/
+
+Of course, reviews on other patches are also appreciated, but I'd like
+to put the emphasis on those three series. I know they are not the
+easiest ones, but we need to get through them.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
