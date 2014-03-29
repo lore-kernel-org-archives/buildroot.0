@@ -1,29 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Mar 2014 11:41:39 +0100
-Subject: [Buildroot] [PATCH] dnsmasq: add sysv initscript
-In-Reply-To: <1396083662-8515-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1396083662-8515-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140329114139.6671d168@skate>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Sat, 29 Mar 2014 11:43:22 +0100
+Subject: [Buildroot] [PATCH] libndp: new package
+In-Reply-To: <20140329113538.3ae1d4ed@skate>
+References: <1395053827-1966-1-git-send-email-yegorslists@googlemail.com>
+ <20140329113538.3ae1d4ed@skate>
+Message-ID: <CAGm1_ktc8=O=WBZQuEQUTQ8QteguNEzCWbZV4c3vogDwvE9LoQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+On Sat, Mar 29, 2014 at 11:35 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Yegor,
+>
+> On Mon, 17 Mar 2014 11:57:07 +0100, yegorslists at googlemail.com wrote:
+>> index 0000000..516ac05
+>> --- /dev/null
+>> +++ b/package/libndp/Config.in
+>> @@ -0,0 +1,10 @@
+>> +config BR2_PACKAGE_LIBNDP
+>> +     bool "libndp"
+>> +     depends on BR2_INET_IPV6
+>> +     help
+>> +       This package contains a library which provides a wrapper
+>> +       for IPv6 Neighbor Discovery Protocol. It also provides a tool
+>> +       named ndptool for sending and receiving NDP messages.
+>> +
+>
+> Missing upstream URL.
+>
+>> +comment "libndp needs a toolchain w/ IPv6"
+>> +     depends on !BR2_INET_IPV6
+>> diff --git a/package/libndp/libndp.mk b/package/libndp/libndp.mk
+>> new file mode 100644
+>> index 0000000..af58c6e
+>> --- /dev/null
+>> +++ b/package/libndp/libndp.mk
+>> @@ -0,0 +1,15 @@
+>> +################################################################################
+>> +#
+>> +# libndp
+>> +#
+>> +################################################################################
+>> +
+>> +LIBNDP_VERSION = v1.2
+>> +LIBNDP_SITE = $(call github,jpirko,libndp,$(LIBNDP_VERSION))
+>> +LIBNDP_LICENSE = LGPLv2.1
+>
+> The license is really LGPLv2.1+.
+>
+> And also the package was building with uClibc, there was a missing
+> #include <stdargh.h> (try building libndp with
+> http://autobuild.buildroot.org/toolchains/configs/free-electrons/br-arm-full.config
+> after removing the patch).
+>
+> I've fixed those problems and committed. Can you send the stdarg.h
+> patch upstream?
 
-On Sat, 29 Mar 2014 06:01:02 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/dnsmasq/S80dnsmasq | 26 ++++++++++++++++++++++++++
->  package/dnsmasq/dnsmasq.mk |  5 +++++
->  2 files changed, 31 insertions(+)
->  create mode 100755 package/dnsmasq/S80dnsmasq
+Will do.
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Yegor
