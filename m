@@ -1,53 +1,99 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Mar 2014 11:28:38 +0100
-Subject: [Buildroot] [PATCH 0/9] Documentation cleanup
-In-Reply-To: <533697E6.5000804@trzebnica.net>
-References: <1396041895-29533-1-git-send-email-jerzy.grzegorek@trzebnica.net>
- <20140329093317.29e80f16@skate> <533697E6.5000804@trzebnica.net>
-Message-ID: <20140329112838.0bee5010@skate>
+Date: Sat, 29 Mar 2014 11:33:49 +0100
+Subject: [Buildroot] [git commit] libndp: new package
+Message-ID: <20140329103417.82F539C3EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jerzy Grzegorek,
+commit: http://git.buildroot.net/buildroot/commit/?id=2d07ad8026eaedc3fb01c94ac56791aeef3202f5
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 29 Mar 2014 10:52:38 +0100, Jerzy Grzegorek wrote:
+[Thomas: add patch to add stdarg.h include needed on uClibc, add
+missing upstream URL in Config.in, fix license to be LGPLv2.1+ instead
+of LGPLv2.1]
 
-> Regarding the "may be added", I agree.
-> I proposed this change because I saw on mailing list both cases of
-> submitting patch series introduced by a cover letter:
-> 
->   * "in addition" case:
->      [Patch vX 0/Y] ...
->      [Patch vX 1/Y] ...
->      ...
->      [Patch vX Y/Y] ...
-> 
-> * "instead" case:
->      [Patch vX 0/Y] ...
->      [Patch 1/Y] ...
->      ...
->      [Patch Y/Y] ...
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                                  |    1 +
+ package/libndp/Config.in                           |   12 ++++++++++++
+ .../libndp/libndp-01-missing-stdarg-include.patch  |   16 ++++++++++++++++
+ package/libndp/libndp.mk                           |   15 +++++++++++++++
+ 4 files changed, 44 insertions(+), 0 deletions(-)
 
-To me, this second variant is wrong. This is because the cover letters
-are not recorded by patchwork, so if the version is not mentioned in
-the title of each individual patch, patchwork will not have the
-information of the version of the patches.
-
-> So maybe it should be:
-> "Note that when your patch series is introduced by a cover letter,
-> a patch version should be added to the cover letter in addition to
-> the individual commits."
-
-But is it really necessary? Such a wording seems to imply that the
-contributor would have to do this manually, while the contributor
-should instead simply use "git format-patch --subject-prefix", which
-does just the right thing.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index ad75d9b..2fee0ef 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -714,6 +714,7 @@ source "package/libmbus/Config.in"
+ source "package/libmicrohttpd/Config.in"
+ source "package/libmnl/Config.in"
+ source "package/libmodbus/Config.in"
++source "package/libndp/Config.in"
+ source "package/libnetfilter_acct/Config.in"
+ source "package/libnetfilter_conntrack/Config.in"
+ source "package/libnetfilter_cthelper/Config.in"
+diff --git a/package/libndp/Config.in b/package/libndp/Config.in
+new file mode 100644
+index 0000000..bb9093b
+--- /dev/null
++++ b/package/libndp/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_LIBNDP
++	bool "libndp"
++	depends on BR2_INET_IPV6
++	help
++	  This package contains a library which provides a wrapper
++	  for IPv6 Neighbor Discovery Protocol. It also provides a tool
++	  named ndptool for sending and receiving NDP messages.
++
++	  https://github.com/jpirko/libndp
++
++comment "libndp needs a toolchain w/ IPv6"
++	depends on !BR2_INET_IPV6
+diff --git a/package/libndp/libndp-01-missing-stdarg-include.patch b/package/libndp/libndp-01-missing-stdarg-include.patch
+new file mode 100644
+index 0000000..e10848e
+--- /dev/null
++++ b/package/libndp/libndp-01-missing-stdarg-include.patch
+@@ -0,0 +1,16 @@
++Add missing <stdarg.h> include for va_list
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/include/ndp.h
++===================================================================
++--- a/include/ndp.h
+++++ b/include/ndp.h
++@@ -20,6 +20,7 @@
++ #ifndef _NDP_H_
++ #define _NDP_H_
++ 
+++#include <stdarg.h>
++ #include <stdbool.h>
++ #include <netinet/in.h>
++ 
+diff --git a/package/libndp/libndp.mk b/package/libndp/libndp.mk
+new file mode 100644
+index 0000000..55d172b
+--- /dev/null
++++ b/package/libndp/libndp.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# libndp
++#
++################################################################################
++
++LIBNDP_VERSION = v1.2
++LIBNDP_SITE = $(call github,jpirko,libndp,$(LIBNDP_VERSION))
++LIBNDP_LICENSE = LGPLv2.1+
++LIBNDP_LICENSE_FILES = COPYING
++LIBNDP_AUTORECONF = YES
++LIBNDP_INSTALL_STAGING = YES
++LIBNDP_CONF_OPT = --disable-debug
++
++$(eval $(autotools-package))
