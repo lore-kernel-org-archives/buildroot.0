@@ -1,11 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 29 Mar 2014 12:50:03 +0100
-Subject: [Buildroot] [PATCH 4/6] scons: force host-python dependency to
- be python2
-In-Reply-To: <1394057085-10399-5-git-send-email-s.martin49@gmail.com>
+Date: Sat, 29 Mar 2014 12:51:58 +0100
+Subject: [Buildroot] [PATCH 5/6] python-m2crypto: requires host-python2
+In-Reply-To: <1394057085-10399-6-git-send-email-s.martin49@gmail.com>
 References: <1394057085-10399-1-git-send-email-s.martin49@gmail.com>
- <1394057085-10399-5-git-send-email-s.martin49@gmail.com>
-Message-ID: <20140329115003.GG3227@free.fr>
+ <1394057085-10399-6-git-send-email-s.martin49@gmail.com>
+Message-ID: <20140329115158.GH3227@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,53 +14,51 @@ To: buildroot@busybox.net
 Samuel, All,
 
 On 2014-03-05 23:04 +0100, Samuel Martin spake thusly:
-> Scons build-system needs python2 as interpreter (it does not support
-> python3 yet).
+> Acording to its homepage [1], m2crypto does not support python3 yet.
 > 
-> So, we need to force the host dependency to get the python2 interperter
-> built and available in the host tree to be able to build host-scons
-> itself and to build scons-based packages, whatever is the python
-> interpreter for the target.
+> So, this patch forces building the host m2crypto module for pyhton2.
 > 
-> This patch also makes sure scons will in be called using the right
-> python interpreter when invoked via $(SCONS).
-> 
-> Fixes:
->   http://autobuild.buildroot.net/results/11e6c8c8d79d56ed43daf52e6d6dc80847709926/
+> [1] https://pypi.python.org/pypi/M2Crypto
 > 
 > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 > Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewd-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-If the variable is renamed, my reviewed-by will still be valid.
+If the variable gets renamed, my reviewed-by still stands.
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  package/scons/scons.mk | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>  package/python-m2crypto/python-m2crypto.mk | 10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/scons/scons.mk b/package/scons/scons.mk
-> index e3fad1b..88396d4 100644
-> --- a/package/scons/scons.mk
-> +++ b/package/scons/scons.mk
-> @@ -10,10 +10,12 @@ SCONS_LICENSE = MIT
->  SCONS_LICENSE_FILES = LICENSE.txt
->  SCONS_SETUP_TYPE = distutils
+> diff --git a/package/python-m2crypto/python-m2crypto.mk b/package/python-m2crypto/python-m2crypto.mk
+> index dd0f77e..62dc720 100644
+> --- a/package/python-m2crypto/python-m2crypto.mk
+> +++ b/package/python-m2crypto/python-m2crypto.mk
+> @@ -10,12 +10,16 @@ PYTHON_M2CRYPTO_SOURCE = M2Crypto-$(PYTHON_M2CRYPTO_VERSION).tar.gz
+>  PYTHON_M2CRYPTO_SETUP_TYPE = setuptools
+>  HOST_PYTHON_M2CRYPTO_DEPENDENCIES = host-openssl host-swig
 >  
-> +HOST_SCONS_FORCE_HOST_PYTHON = python2
+> -# We need to override the build commands to be able to use build_ext,
+> -# which accepts the --openssl option.
+> +# We need to use python2 because m2crypto is not python3 compliant.
+> +HOST_PYTHON_M2CRYPTO_FORCE_HOST_PYTHON = python2
 > +
->  HOST_SCONS_INSTALL_OPT = \
->  	--install-lib=$(HOST_DIR)/usr/lib/scons-$(SCONS_VERSION)
+> +# * We need to override the build commands to be able to use build_ext,
+> +#   which accepts the --openssl option.
+> +# * Use python2 interpreter to avoid trying building some python3 objects.
+>  define HOST_PYTHON_M2CRYPTO_BUILD_CMDS
+>  	(cd $(@D); \
+>  		$(HOST_PKG_PYTHON_SETUPTOOLS_ENV) \
+> -		$(HOST_DIR)/usr/bin/python setup.py build_ext \
+> +		$(HOST_DIR)/usr/bin/python2 setup.py build_ext \
+>  			--openssl=$(HOST_DIR)/usr)
+>  endef
 >  
->  $(eval $(host-python-package))
->  
->  # variables used by other packages
-> -SCONS = $(HOST_DIR)/usr/bin/scons
-> +SCONS = $(HOST_DIR)/usr/bin/python2 $(HOST_DIR)/usr/bin/scons
 > -- 
 > 1.9.0
 > 
