@@ -1,28 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Mar 2014 23:37:02 +0100
-Subject: [Buildroot] [git commit] xapp_xmodmap: fix typo
-Message-ID: <20140329223728.9DD619C436@busybox.osuosl.org>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Sat, 29 Mar 2014 23:40:33 +0100
+Subject: [Buildroot] [PATCH 1/1] eudev : bump version to 1.5.3
+Message-ID: <1396132833-20016-1-git-send-email-sagaert.johan@skynet.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=192117f96dbbcc01fb2a581a65b64a5ce4ef0501
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
 ---
- package/x11r7/xapp_xmodmap/xapp_xmodmap.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/eudev/eudev.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/x11r7/xapp_xmodmap/xapp_xmodmap.mk b/package/x11r7/xapp_xmodmap/xapp_xmodmap.mk
-index 50ec278..9e059d5 100644
---- a/package/x11r7/xapp_xmodmap/xapp_xmodmap.mk
-+++ b/package/x11r7/xapp_xmodmap/xapp_xmodmap.mk
-@@ -1,4 +1,4 @@
--1################################################################################
-+################################################################################
+diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
+index a2fe528..8e5e83d 100644
+--- a/package/eudev/eudev.mk
++++ b/package/eudev/eudev.mk
+@@ -4,7 +4,7 @@
  #
- # xapp_xmodmap
- #
+ ################################################################################
+ 
+-EUDEV_VERSION = 1.5.2
++EUDEV_VERSION = 1.5.3
+ EUDEV_SITE = $(call github,gentoo,eudev,$(EUDEV_VERSION))
+ EUDEV_LICENSE = GPLv2+ (programs), LGPLv2.1+ (libraries)
+ EUDEV_LICENSE_FILES = COPYING
+-- 
+1.9.1
