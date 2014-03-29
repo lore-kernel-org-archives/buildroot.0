@@ -1,33 +1,39 @@
-From: Ryan Coe <bluemrp9@gmail.com>
-Date: Sat, 29 Mar 2014 08:38:49 -0700
-Subject: [Buildroot] [PATCH v2 1/1] xbmc: needs host-gawk
-Message-ID: <1396107529-23653-1-git-send-email-bluemrp9@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 29 Mar 2014 16:46:53 +0100
+Subject: [Buildroot] [PATCH] script/scancpan: add -host & -hostonly
+ options
+In-Reply-To: <1396106224-26505-1-git-send-email-francois.perrad@gadz.org>
+References: <1396106224-26505-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20140329164653.2ce9f6a3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
----
-Changes v1 -> v2
-  - Keep dependencies sorted
----
- package/xbmc/xbmc.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Dear Francois Perrad,
 
-diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index 6dbbb7d..c36439e 100644
---- a/package/xbmc/xbmc.mk
-+++ b/package/xbmc/xbmc.mk
-@@ -12,7 +12,7 @@ XBMC_LICENSE_FILES = LICENSE.GPL
- # called TexturePacker. It is responsible to take all the images used in the
- # GUI and pack them in a blob.
- # http://wiki.xbmc.org/index.php?title=TexturePacker
--XBMC_DEPENDENCIES = host-gperf host-lzo host-sdl_image host-swig
-+XBMC_DEPENDENCIES = host-gawk host-gperf host-lzo host-sdl_image host-swig
- XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
- 	libass libcdio libcurl libfribidi libgcrypt libmad libmodplug libmpeg2 \
- 	libogg libplist libpng libsamplerate libungif libvorbis libxml2 lzo ncurses \
+On Sat, 29 Mar 2014 16:17:04 +0100, Francois Perrad wrote:
+
+> +=item B<-host>
+> +
+> +Generates package for the target and host variants (the default is for target only).
+> +
+> +=item B<-hostonly>
+> +
+> +Generates package only for the host variant (the default is for target only).
+
+The naming of the options look really weird, IMO. If you use -host, I
+would assume that only the host variant is generated. What about:
+
+ * default behavior: target only (i.e same as -target below)
+ * -target: enable target package
+ * -notarget: disable target package
+ * -host: enable host package
+ * -nohost: disable host package
+
+Thomas
 -- 
-1.9.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
