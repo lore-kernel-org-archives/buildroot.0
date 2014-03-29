@@ -1,29 +1,30 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 28 Mar 2014 20:46:58 -0300
-Subject: [Buildroot] [PATCH] linux-headers: bump 3.12.x stable version
-Message-ID: <1396050418-6264-1-git-send-email-gustavo@zacarias.com.ar>
+From: Ryan Coe <bluemrp9@gmail.com>
+Date: Fri, 28 Mar 2014 21:43:52 -0700
+Subject: [Buildroot] [PATCH 1/1] xbmc: needs host-gawk
+Message-ID: <1396068232-9273-1-git-send-email-bluemrp9@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
 ---
- package/linux-headers/Config.in.host | 2 +-
+ package/xbmc/xbmc.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index f55f833..1fa498d 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -158,6 +158,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
- 	default "3.10.34"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
--	default "3.12.14"	if BR2_KERNEL_HEADERS_3_12
-+	default "3.12.15"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.13.7"	if BR2_KERNEL_HEADERS_3_13
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
+index 6dbbb7d..1aa823c 100644
+--- a/package/xbmc/xbmc.mk
++++ b/package/xbmc/xbmc.mk
+@@ -12,7 +12,7 @@ XBMC_LICENSE_FILES = LICENSE.GPL
+ # called TexturePacker. It is responsible to take all the images used in the
+ # GUI and pack them in a blob.
+ # http://wiki.xbmc.org/index.php?title=TexturePacker
+-XBMC_DEPENDENCIES = host-gperf host-lzo host-sdl_image host-swig
++XBMC_DEPENDENCIES = host-gperf host-lzo host-sdl_image host-swig host-gawk
+ XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
+ 	libass libcdio libcurl libfribidi libgcrypt libmad libmodplug libmpeg2 \
+ 	libogg libplist libpng libsamplerate libungif libvorbis libxml2 lzo ncurses \
 -- 
-1.8.3.2
+1.9.1
