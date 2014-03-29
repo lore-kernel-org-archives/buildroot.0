@@ -1,35 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Mar 2014 09:33:17 +0100
-Subject: [Buildroot] [PATCH 0/9] Documentation cleanup
-In-Reply-To: <1396041895-29533-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1396041895-29533-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <20140329093317.29e80f16@skate>
+Date: Sat, 29 Mar 2014 09:35:20 +0100
+Subject: [Buildroot] [PATCH] systemd: needs kernel headers >= 3.7.
+In-Reply-To: <1396024266-6662-1-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1396024266-6662-1-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <20140329093520.5318ada7@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jerzy Grzegorek,
+Dear Eric Le Bihan,
 
-On Fri, 28 Mar 2014 22:24:41 +0100, Jerzy Grzegorek wrote:
+On Fri, 28 Mar 2014 17:31:05 +0100, Eric Le Bihan wrote:
+> Systemd needs Linux headers >= 3.7 because it uses IFLA_GRE_FLOWINFO
+> from linux/if_tunnel.h.
+> 
+> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> ---
+>  system/Config.in |    6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 
-> Here is a series that fixes a few typoes and makes small improvements
-> in documentation.
-
-I've applied patches 1 to 6, 8 and 9. For patch 2, I made the change we
-discussed.
-
-I haven't applied patch 7, because I don't agree with:
-
-+series is introduced by a cover letter, an overall patch version may be
-+added to the cover letter in addition/instead to the individual commits.
-
-The version in the title of the cover letter does *not* replace the
-version in the title of the patches. Both should be present, so the
-"/instead" is not correct. Also, the "may be added" does not seem
-right, because a version is always added to the cover letter title by
-"git format-patch --subject-prefix".
+Are you sure Linux headers >= 3.7 are sufficient? I'm looking at the
+build failure at
+http://autobuild.buildroot.org/results/ad3/ad3b4003dc50582a493f1156234d83652104a6bf/build-end.log,
+and it looks like missing kernel definitions, even though the toolchain
+apparently uses 3.7 kernel headers, as far as I can see.
 
 Best regards,
 
