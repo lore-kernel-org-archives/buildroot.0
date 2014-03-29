@@ -1,40 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Mar 2014 14:26:26 +0100
-Subject: [Buildroot] [PATCH 3/6] pkg-python: support host-python
- dependency different from the python in the target
-In-Reply-To: <20140329114728.GF3227@free.fr>
-References: <1394057085-10399-1-git-send-email-s.martin49@gmail.com>
- <1394057085-10399-4-git-send-email-s.martin49@gmail.com>
- <20140329114728.GF3227@free.fr>
-Message-ID: <20140329142626.08cebfac@skate>
+Date: Sat, 29 Mar 2014 14:28:18 +0100
+Subject: [Buildroot] [PATCH 0/9] Documentation cleanup
+In-Reply-To: <5336B28B.5080800@trzebnica.net>
+References: <1396041895-29533-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+ <20140329093317.29e80f16@skate> <533697E6.5000804@trzebnica.net>
+ <20140329112838.0bee5010@skate> <5336A78E.3040605@trzebnica.net>
+ <20140329120546.1e26038c@skate> <5336B28B.5080800@trzebnica.net>
+Message-ID: <20140329142818.2be3d06e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Jerzy Grzegorek,
 
-On Sat, 29 Mar 2014 12:47:28 +0100, Yann E. MORIN wrote:
-
-> I thionk we should explicitly check for (empty), 'python2' or 'python3',
-> and abort on any other value:
+On Sat, 29 Mar 2014 12:46:19 +0100, Jerzy Grzegorek wrote:
 > 
->     ifeq ($($(2)_FORCE_HOST_PYTHON),python2)
->     $(2)_DEPENDENCIES += host-python
->     else ifeq ($($(2)_FORCE_HOST_PYTHON),python3)
->     $(2)_DEPENDENCIES += host-python3
->     else
->     $$(error Incorrect value '$($(2)_FORCE_HOST_PYTHON)' for $(2)_FORCE_HOST_PYTHON)
->     endif
->     endif
+> Hi Thomas,
+> 
+> > Dear Jerzy Grzegorek,
+> >
+> > On Sat, 29 Mar 2014 11:59:26 +0100, Jerzy Grzegorek wrote:
+> >
+> >> Ok, agree.
+> > Ok, thanks!
+> >
+> >> You haven't changed
+> >> C++  -->  C\++
+> >> for my patch 2.
+> > Huh ? See
+> > http://git.buildroot.net/buildroot/commit/?id=082dec8ce440236b1477e568f0965f05ad241adb
+> 
+> My patach should change only
+> C\+\+  -->   C\++
+> 
+> -  whether your toolchain supports C\+\+ or not and whether it has
+> +  whether your toolchain supports C\++ or not and whether it has
 
-Hum, most packages will *not* define <pkg>_FORCE_HOST_PYTHON I believe.
-Or do you plan to modify all packages that depend on host-python so
-that they all define a value for <pkg>_FORCE_HOST_PYTHON ?
+I believe C++ should also be fixed to C\++, no?
 
-I believe the idea was that if <pkg>_FORCE_HOST_PYTHON is not defined,
-then we default to whatever Python version has been selected.
+In any case, can you send a corrective patch?
+
+Thanks!
 
 Thomas
 -- 
