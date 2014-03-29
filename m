@@ -1,10 +1,10 @@
 From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Sat, 29 Mar 2014 21:56:36 +0100
-Subject: [Buildroot] [PATCH 32/91] xdriver_xf86-video-trident: Bump version
-	to 1.3.6
+Date: Sat, 29 Mar 2014 21:56:34 +0100
+Subject: [Buildroot] [PATCH 30/91] xdriver_xf86-video-nv: Bump version to
+	2.1.20
 In-Reply-To: <1396126655-25994-1-git-send-email-berndkuhls@hotmail.com>
 References: <1396126655-25994-1-git-send-email-berndkuhls@hotmail.com>
-Message-ID: <BLU0-SMTP322E31FD9ECF8D31A9F4167D9610@phx.gbl>
+Message-ID: <BLU0-SMTP15515D736AFE20BD36A8E68D9610@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,110 +13,115 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
 ---
- .../xdriver_xf86-video-trident-0001-mibstore.patch |   34 +++++++++++++++++
- .../xdriver_xf86-video-trident-0002-xaa.patch      |   39 ++++++++++++++++++++
- .../xdriver_xf86-video-trident.mk                  |    2 +-
- 3 files changed, 74 insertions(+), 1 deletion(-)
- create mode 100644 package/x11r7/xdriver_xf86-video-trident/xdriver_xf86-video-trident-0001-mibstore.patch
- create mode 100644 package/x11r7/xdriver_xf86-video-trident/xdriver_xf86-video-trident-0002-xaa.patch
+ .../xdriver_xf86-video-nv-0001-mibstore.patch      |   86 ++++++++++++++++++++
+ .../xdriver_xf86-video-nv/xdriver_xf86-video-nv.mk |    2 +-
+ 2 files changed, 87 insertions(+), 1 deletion(-)
+ create mode 100644 package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv-0001-mibstore.patch
 
-diff --git a/package/x11r7/xdriver_xf86-video-trident/xdriver_xf86-video-trident-0001-mibstore.patch b/package/x11r7/xdriver_xf86-video-trident/xdriver_xf86-video-trident-0001-mibstore.patch
+diff --git a/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv-0001-mibstore.patch b/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv-0001-mibstore.patch
 new file mode 100644
-index 0000000..efdd6ac
+index 0000000..e71418b
 --- /dev/null
-+++ b/package/x11r7/xdriver_xf86-video-trident/xdriver_xf86-video-trident-0001-mibstore.patch
-@@ -0,0 +1,34 @@
-+From 30787294c837aefa8820b6f76f00fe30d4e54181 Mon Sep 17 00:00:00 2001
++++ b/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv-0001-mibstore.patch
+@@ -0,0 +1,86 @@
++From fc78fe98222b0204b8a2872a529763d6fe5048da Mon Sep 17 00:00:00 2001
 +From: Adam Jackson <ajax@redhat.com>
-+Date: Tue, 25 Sep 2012 12:55:01 +0000
++Date: Tue, 25 Sep 2012 12:54:49 +0000
 +Subject: Remove mibstore.h
 +
 +Signed-off-by: Adam Jackson <ajax@redhat.com>
 +---
 +Fetch from:
-+http://cgit.freedesktop.org/xorg/driver/xf86-video-trident/commit/?id=30787294c837aefa8820b6f76f00fe30d4e54181
++http://cgit.freedesktop.org/xorg/driver/xf86-video-nv/commit/?id=fc78fe98222b0204b8a2872a529763d6fe5048da
 +
 +Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
 +
-+diff --git a/src/trident_driver.c b/src/trident_driver.c
-+index dc12b76..408c870 100644
-+--- a/src/trident_driver.c
-++++ b/src/trident_driver.c
-+@@ -56,7 +56,6 @@
-+ 
-+ #include "mipointer.h"
-+ 
-+-#include "mibstore.h"
-+ #include "shadow.h"
-+ #include "trident.h"
-+ #include "trident_regs.h"
-+@@ -3037,7 +3036,6 @@ TRIDENTScreenInit(SCREEN_INIT_ARGS_DECL)
-+     	TridentAccelInit(pScreen);
++diff --git a/src/g80_driver.c b/src/g80_driver.c
++index cc4e197..719b96c 100644
++--- a/src/g80_driver.c
+++++ b/src/g80_driver.c
++@@ -34,7 +34,6 @@
++ #include <xf86Resources.h>
++ #endif
++ #include <mipointer.h>
++-#include <mibstore.h>
++ #include <micmap.h>
++ #include <xf86cmap.h>
++ #include <fb.h>
++@@ -833,7 +832,6 @@ G80ScreenInit(SCREEN_INIT_ARGS_DECL)
++         }
 +     }
 + 
 +-    miInitializeBackingStore(pScreen);
 +     xf86SetBackingStore(pScreen);
++     xf86SetSilkenMouse(pScreen);
 + 
-+     /* Initialise cursor functions */
++diff --git a/src/nv_driver.c b/src/nv_driver.c
++index 6dad6e5..8f35334 100644
++--- a/src/nv_driver.c
+++++ b/src/nv_driver.c
++@@ -2550,7 +2550,6 @@ NVScreenInit(SCREEN_INIT_ARGS_DECL)
++     if (!pNv->NoAccel)
++ 	NVAccelInit(pScreen);
++     
++-    miInitializeBackingStore(pScreen);
++     xf86SetBackingStore(pScreen);
++     xf86SetSilkenMouse(pScreen);
++ 
++diff --git a/src/nv_include.h b/src/nv_include.h
++index fb190bf..f174eef 100644
++--- a/src/nv_include.h
+++++ b/src/nv_include.h
++@@ -24,9 +24,6 @@
++ /* All drivers initialising the SW cursor need this */
++ #include "mipointer.h"
++ 
++-/* All drivers implementing backing store need this */
++-#include "mibstore.h"
++-
++ #include "micmap.h"
++ 
++ #include "xf86DDC.h"
++diff --git a/src/riva_driver.c b/src/riva_driver.c
++index e0667ef..759501e 100644
++--- a/src/riva_driver.c
+++++ b/src/riva_driver.c
++@@ -1168,7 +1168,6 @@ RivaScreenInit(SCREEN_INIT_ARGS_DECL)
++     if (!pRiva->NoAccel)
++ 	RivaAccelInit(pScreen);
++     
++-    miInitializeBackingStore(pScreen);
++     xf86SetBackingStore(pScreen);
++     xf86SetSilkenMouse(pScreen);
++ 
++diff --git a/src/riva_include.h b/src/riva_include.h
++index f2c5302..c7aeef7 100644
++--- a/src/riva_include.h
+++++ b/src/riva_include.h
++@@ -22,9 +22,6 @@
++ /* All drivers initialising the SW cursor need this */
++ #include "mipointer.h"
++ 
++-/* All drivers implementing backing store need this */
++-#include "mibstore.h"
++-
++ #include "micmap.h"
++ 
++ #include "xf86DDC.h"
 +--
 +cgit v0.9.0.2-2-gbebe
-diff --git a/package/x11r7/xdriver_xf86-video-trident/xdriver_xf86-video-trident-0002-xaa.patch b/package/x11r7/xdriver_xf86-video-trident/xdriver_xf86-video-trident-0002-xaa.patch
-new file mode 100644
-index 0000000..0750002
---- /dev/null
-+++ b/package/x11r7/xdriver_xf86-video-trident/xdriver_xf86-video-trident-0002-xaa.patch
-@@ -0,0 +1,39 @@
-+From 48c15909691e28ad2c188a2978b1c8ef3d9d8760 Mon Sep 17 00:00:00 2001
-+From: Timo Aaltonen <tjaalton@ubuntu.com>
-+Date: Wed, 26 Sep 2012 08:01:26 +0000
-+Subject: Fix loading the driver without XAA
-+
-+---
-+Fetch from:
-+http://cgit.freedesktop.org/xorg/driver/xf86-video-trident/commit/?id=48c15909691e28ad2c188a2978b1c8ef3d9d8760
-+
-+Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
-+
-+diff --git a/src/trident_dga.c b/src/trident_dga.c
-+index 0263aa7..c4b5b9a 100644
-+--- a/src/trident_dga.c
-++++ b/src/trident_dga.c
-+@@ -37,10 +37,10 @@
-+ static Bool TRIDENT_OpenFramebuffer(ScrnInfoPtr, char **, unsigned char **, 
-+ 					int *, int *, int *);
-+ static Bool TRIDENT_SetMode(ScrnInfoPtr, DGAModePtr);
-+-static void TRIDENT_Sync(ScrnInfoPtr);
-+ static int  TRIDENT_GetViewport(ScrnInfoPtr);
-+ static void TRIDENT_SetViewport(ScrnInfoPtr, int, int, int);
-+ #ifdef HAVE_XAA_H
-++static void TRIDENT_Sync(ScrnInfoPtr);
-+ static void TRIDENT_FillRect(ScrnInfoPtr, int, int, int, int, unsigned long);
-+ static void TRIDENT_BlitRect(ScrnInfoPtr, int, int, int, int, int, int);
-+ #if 0
-+@@ -56,8 +56,8 @@ DGAFunctionRec TRIDENTDGAFuncs = {
-+    TRIDENT_SetMode,
-+    TRIDENT_SetViewport,
-+    TRIDENT_GetViewport,
-+-   TRIDENT_Sync,
-+ #ifdef HAVE_XAA_H
-++   TRIDENT_Sync,
-+    TRIDENT_FillRect,
-+    TRIDENT_BlitRect,
-+ #if 0
-+--
-+cgit v0.9.0.2-2-gbebe
-diff --git a/package/x11r7/xdriver_xf86-video-trident/xdriver_xf86-video-trident.mk b/package/x11r7/xdriver_xf86-video-trident/xdriver_xf86-video-trident.mk
-index ea73f1b..7a45e3f 100644
---- a/package/x11r7/xdriver_xf86-video-trident/xdriver_xf86-video-trident.mk
-+++ b/package/x11r7/xdriver_xf86-video-trident/xdriver_xf86-video-trident.mk
+diff --git a/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv.mk b/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv.mk
+index 8f9d6e8..655bee9 100644
+--- a/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv.mk
++++ b/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_TRIDENT_VERSION = 1.3.5
-+XDRIVER_XF86_VIDEO_TRIDENT_VERSION = 1.3.6
- XDRIVER_XF86_VIDEO_TRIDENT_SOURCE = xf86-video-trident-$(XDRIVER_XF86_VIDEO_TRIDENT_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_TRIDENT_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_TRIDENT_LICENSE = MIT
+-XDRIVER_XF86_VIDEO_NV_VERSION = 2.1.18
++XDRIVER_XF86_VIDEO_NV_VERSION = 2.1.20
+ XDRIVER_XF86_VIDEO_NV_SOURCE = xf86-video-nv-$(XDRIVER_XF86_VIDEO_NV_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_NV_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_NV_LICENSE = MIT
 -- 
 1.7.10.4
