@@ -1,65 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Mar 2014 11:35:38 +0100
-Subject: [Buildroot] [PATCH] libndp: new package
-In-Reply-To: <1395053827-1966-1-git-send-email-yegorslists@googlemail.com>
-References: <1395053827-1966-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20140329113538.3ae1d4ed@skate>
+Date: Sat, 29 Mar 2014 11:41:14 +0100
+Subject: [Buildroot] [git commit] dnsmasq: add sysv initscript
+Message-ID: <20140329104126.23EB29C3EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yegor,
+commit: http://git.buildroot.net/buildroot/commit/?id=cd9c1c3f75a0236a84a5c546fee1681b1756fb19
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 17 Mar 2014 11:57:07 +0100, yegorslists at googlemail.com wrote:
-> index 0000000..516ac05
-> --- /dev/null
-> +++ b/package/libndp/Config.in
-> @@ -0,0 +1,10 @@
-> +config BR2_PACKAGE_LIBNDP
-> +	bool "libndp"
-> +	depends on BR2_INET_IPV6
-> +	help
-> +	  This package contains a library which provides a wrapper
-> +	  for IPv6 Neighbor Discovery Protocol. It also provides a tool
-> +	  named ndptool for sending and receiving NDP messages.
-> +
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/dnsmasq/S80dnsmasq |   26 ++++++++++++++++++++++++++
+ package/dnsmasq/dnsmasq.mk |    5 +++++
+ 2 files changed, 31 insertions(+), 0 deletions(-)
 
-Missing upstream URL.
-
-> +comment "libndp needs a toolchain w/ IPv6"
-> +	depends on !BR2_INET_IPV6
-> diff --git a/package/libndp/libndp.mk b/package/libndp/libndp.mk
-> new file mode 100644
-> index 0000000..af58c6e
-> --- /dev/null
-> +++ b/package/libndp/libndp.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# libndp
-> +#
-> +################################################################################
-> +
-> +LIBNDP_VERSION = v1.2
-> +LIBNDP_SITE = $(call github,jpirko,libndp,$(LIBNDP_VERSION))
-> +LIBNDP_LICENSE = LGPLv2.1
-
-The license is really LGPLv2.1+.
-
-And also the package was building with uClibc, there was a missing
-#include <stdargh.h> (try building libndp with
-http://autobuild.buildroot.org/toolchains/configs/free-electrons/br-arm-full.config
-after removing the patch).
-
-I've fixed those problems and committed. Can you send the stdarg.h
-patch upstream?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/dnsmasq/S80dnsmasq b/package/dnsmasq/S80dnsmasq
+new file mode 100755
+index 0000000..2ff0206
+--- /dev/null
++++ b/package/dnsmasq/S80dnsmasq
+@@ -0,0 +1,26 @@
++#!/bin/sh
++
++[ -x /usr/sbin/dnsmasq ] || exit 0
++[ -f /etc/dnsmasq.conf ] || exit 0
++
++case "$1" in
++	start)
++		echo -n "Starting dnsmasq: "
++		start-stop-daemon -S -x /usr/sbin/dnsmasq
++		[ $? == 0 ] && echo "OK" || echo "FAIL"
++		;;
++	stop)
++		echo -n "Stopping dnsmasq: "
++		start-stop-daemon -K -q -x /usr/sbin/dnsmasq
++		[ $? == 0 ] && echo "OK" || echo "FAIL"
++		;;
++	restart|reload)
++		$0 stop
++		$0 start
++		;;
++	*)
++		echo "Usage: $0 {start|stop|restart}"
++		exit 1
++esac
++
++exit 0
+diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
+index 9bf9b84..56d11ee 100644
+--- a/package/dnsmasq/dnsmasq.mk
++++ b/package/dnsmasq/dnsmasq.mk
+@@ -93,4 +93,9 @@ define DNSMASQ_INSTALL_TARGET_CMDS
+ 	mkdir -p $(TARGET_DIR)/var/lib/misc/
+ endef
+ 
++define DNSMASQ_INSTALL_INIT_SYSV
++	$(INSTALL) -m 755 -D package/dnsmasq/S80dnsmasq \
++		$(TARGET_DIR)/etc/init.d/S80dnsmasq
++endef
++
+ $(eval $(generic-package))
