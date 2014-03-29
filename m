@@ -1,32 +1,23 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Mar 2014 18:55:48 +0100
-Subject: [Buildroot] [PATCH v2 1/1] dbus-triggerd: new package
-In-Reply-To: <1395905999-25181-1-git-send-email-rebillout@syscom.ch>
-References: <1395905999-25181-1-git-send-email-rebillout@syscom.ch>
-Message-ID: <20140329185548.311b0cd6@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat, 29 Mar 2014 16:16:02 -0300
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-03-28
+In-Reply-To: <20140329175452.5c711852@skate>
+References: <20140329073011.D16F2101349@stock.ovh.net>
+ <20140329175452.5c711852@skate>
+Message-ID: <53371BF2.4000603@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnaud R?billout,
+On 03/29/2014 01:54 PM, Thomas Petazzoni wrote:
 
-On Thu, 27 Mar 2014 08:39:59 +0100, Arnaud R?billout wrote:
-> dbus-triggerd is a little daemon that can monitor dbus events, match
-> them against some watch-expressions, then trigger shell-commands.
+>>    powerpc |                     mpd-0.18.9 | NOK | http://autobuild.buildroot.net/results/8d0e312f2cdd700c42775404f93173606eb99161/
 > 
-> It can be used in any situation where dbus-interaction is needed, and
-> shell script is preferred over other languages.
-> 
-> Signed-off-by: Arnaud R?billout <rebillout@syscom.ch>
+> Gustavo, mpd is your stuff :)
 
-Applied, thanks. I've just added $(TARGET_MAKE_ENV) in the environment,
-for good measure, even if it wasn't strictly necessary in the current
-situation.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+4.6.x is the minimum gcc for mpd and that's a 4.6.0 gcc, can you update it?
+Older 4.6.x series were really bad for e500 powerpc and C++.
+Regards.
