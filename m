@@ -1,49 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Mar 2014 23:50:39 +0100
-Subject: [Buildroot] [PATCH 00/91] Update mesa3d & xorg
-In-Reply-To: <BLU0-SMTP39628D1C21A39FA8BD40475D9610@phx.gbl>
-References: <BLU0-SMTP39628D1C21A39FA8BD40475D9610@phx.gbl>
-Message-ID: <20140329235039.4bf4983e@skate>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 29 Mar 2014 23:52:37 +0100
+Subject: [Buildroot] http:// and git:// repositories not in sync
+Message-ID: <20140329225237.GN3227@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Hello!
 
-On Sat, 29 Mar 2014 21:56:04 +0100, Bernd Kuhls wrote:
+While looking at the dtv-scan-tables repository, we noticed that we did
+get a different set of commits with the http:// or the git:// schemes to
+access the repository:
 
-> this is a follow-up patch to replace v8 of my last patch series which
-> updated only mesa3d and xserver_xorg-server.
-> 
-> This patch includes and replaces the forementioned patch series and
-> catches, hopefully, all version bumps for xorg packages. Some packages
-> had to be patched for compatability with xorg-server 1.15, these patches
-> were mostly taken from upstream.
+    $ git clone git://linuxtv.org/dtv-scan-tables.git dtv.git
+    [...]
+    $ cd dtv.git
+    $ git log --oneline |head
+    cfc2975 Updated scan table for au-Sydney_North_Shore
+    29b0b57 UK Update for COM 7, BBC B, and Local Muxes
+    177b522 DTV scantables for FI
+    7809ca1 Update es-Alfabia
+    69a1ac5 Initial tuning data for ca-AB-Calgary
+    1850cf8 Initial scan table for au-Melbourne-Selby
+    52a7b0a update scan file for ro-DigiTV
+    75f3b39 Initial Tuning Data for Uganda
+    7d31336 Never include ~ files
+    1d6f9b5 Initial scan files for PT
 
-Another problem: your patch series creates a circular dependency of
-kconfig options:
+    $ git clone http://linuxtv.org/git/dtv-scan-tables.git dtv.http
+    [...]
+    $ cd dtv.http
+    $ git log --oneline |head
+    7809ca1 Update es-Alfabia
+    69a1ac5 Initial tuning data for ca-AB-Calgary
+    1850cf8 Initial scan table for au-Melbourne-Selby
+    52a7b0a update scan file for ro-DigiTV
+    75f3b39 Initial Tuning Data for Uganda
+    7d31336 Never include ~ files
+    1d6f9b5 Initial scan files for PT
+    f61d5ec Merge pull request #6 from silid/master
+    6213a2f Table /usr/share/dvb/dvb-t/cz-All outdated
+    832df4f Removal of excess white space
 
-thomas at skate:~/projets/buildroot (master)$ make menuconfig
-package/xbmc/Config.in:10:error: recursive dependency detected!
-package/xbmc/Config.in:10:	symbol BR2_PACKAGE_XBMC depends on BR2_PACKAGE_HAS_OPENGL_EGL
-package/opengl/libegl/Config.in:1:	symbol BR2_PACKAGE_HAS_OPENGL_EGL is selected by BR2_PACKAGE_MESA3D_OPENGL_EGL
-package/mesa3d/Config.in:92:	symbol BR2_PACKAGE_MESA3D_OPENGL_EGL depends on BR2_PACKAGE_MESA3D
-package/mesa3d/Config.in:1:	symbol BR2_PACKAGE_MESA3D is selected by BR2_PACKAGE_LIBEVAS_GL
-package/efl/libevas/Config.in:149:	symbol BR2_PACKAGE_LIBEVAS_GL is part of choice <choice>
-package/efl/libevas/Config.in:144:	choice <choice> contains symbol <choice>
-package/efl/libevas/Config.in:144:	choice <choice> contains symbol BR2_PACKAGE_LIBEVAS_SDL_GL
-package/efl/libevas/Config.in:90:	symbol BR2_PACKAGE_LIBEVAS_SDL_GL depends on BR2_PACKAGE_SDL_X11
-package/sdl/Config.in:24:	symbol BR2_PACKAGE_SDL_X11 depends on BR2_PACKAGE_SDL
-package/sdl/Config.in:1:	symbol BR2_PACKAGE_SDL is selected by BR2_PACKAGE_PYTHON_PYGAME
-package/python-pygame/Config.in:1:	symbol BR2_PACKAGE_PYTHON_PYGAME depends on BR2_PACKAGE_PYTHON
-package/python/Config.in:1:	symbol BR2_PACKAGE_PYTHON is selected by BR2_PACKAGE_XBMC
+As you can see, the http:// scheme gets us three fewer changesets than
+the git:// scheme.
 
-It's not a trivial one :)
+Regards,
+Yann E. MORIN.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
