@@ -1,389 +1,180 @@
 From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Sat, 29 Mar 2014 21:56:06 +0100
-Subject: [Buildroot] [PATCH 02/91] mesa3d: modularize and bump to version
-	10.0.4
+Date: Sat, 29 Mar 2014 21:56:07 +0100
+Subject: [Buildroot] =?utf-8?q?=5BPATCH_03/91=5D_xorg=3A_Bump_xserver=5Fxo?=
+	=?utf-8?q?rg-server_version_to_1=2E15=2E0?=
 In-Reply-To: <1396126655-25994-1-git-send-email-berndkuhls@hotmail.com>
 References: <1396126655-25994-1-git-send-email-berndkuhls@hotmail.com>
-Message-ID: <BLU0-SMTP4563F4DB1A0D9347C21F5F9D9610@phx.gbl>
+Message-ID: <BLU0-SMTP95EB4DEC56115DBD1887D1D9610@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- add options to select mesa3d drivers
-- uClibc support was fixed in mesa3d v9.2
-  https://bugs.freedesktop.org/show_bug.cgi?id=51782
-  therefore mesa3d-uclibc-locale.patch was removed
-- removed MESA3D_AUTORECONF=yes as it was needed only
-  for mesa3d-uclibc-locale.patch
+- remove patches applied upstream
+- parallel make works
+- add new dependency xproto_presentproto
 
 Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
-Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 ---
- package/mesa3d/Config.in                           |  116 +++++++++++++++++-
- package/mesa3d/mesa3d-uclibc-locale.patch          |   56 ---------
- package/mesa3d/mesa3d.mk                           |  125 ++++++++++++++++----
- .../xserver_xorg-server/xserver_xorg-server.mk     |    4 +-
- 4 files changed, 214 insertions(+), 87 deletions(-)
- delete mode 100644 package/mesa3d/mesa3d-uclibc-locale.patch
+ package/x11r7/xserver_xorg-server/Config.in        |    1 +
+ .../xserver_xorg-server-02-cve-2013-1940.patch     |   34 -----------
+ ...ut-allocate-enough-space-for-null-charact.patch |   59 --------------------
+ .../xserver_xorg-server/xserver_xorg-server.mk     |    5 +-
+ 4 files changed, 4 insertions(+), 95 deletions(-)
+ delete mode 100644 package/x11r7/xserver_xorg-server/xserver_xorg-server-02-cve-2013-1940.patch
+ delete mode 100644 package/x11r7/xserver_xorg-server/xserver_xorg-server-03-Revert-kinput-allocate-enough-space-for-null-charact.patch
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 0ce168e..217528b 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -1,14 +1,118 @@
- config BR2_PACKAGE_MESA3D
- 	bool "Mesa 3D Graphics Library"
--	select BR2_PACKAGE_XPROTO_GLPROTO
--	select BR2_PACKAGE_XLIB_LIBXXF86VM
--	select BR2_PACKAGE_XLIB_LIBXDAMAGE
--	select BR2_PACKAGE_XLIB_LIBXFIXES
--	select BR2_PACKAGE_XPROTO_DRI2PROTO
- 	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_HOST_LIBXML2_PYTHON
--	depends on BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR
-+	select BR2_PACKAGE_XPROTO_DRI2PROTO if BR2_PACKAGE_XSERVER_XORG_SERVER
-+	select BR2_PACKAGE_XPROTO_XF86DRIPROTO if BR2_PACKAGE_XSERVER_XORG_SERVER
-+	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XSERVER_XORG_SERVER
-+	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XSERVER_XORG_SERVER
-+	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_XSERVER_XORG_SERVER
-+	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XSERVER_XORG_SERVER
-+	select BR2_PACKAGE_LIBXCB if BR2_PACKAGE_XSERVER_XORG_SERVER
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_LARGEFILE
- 	help
- 	  Mesa 3D, an open-source implementation of the OpenGL specification.
-+
-+	  http://mesa3d.org
-+
-+if BR2_PACKAGE_MESA3D
-+
-+# inform the .mk file of gallium or dri driver selection
-+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-+	select BR2_PACKAGE_MESA3D_DRIVER
-+	bool
-+
-+config BR2_PACKAGE_MESA3D_DRI_DRIVER
-+	select BR2_PACKAGE_MESA3D_DRIVER
-+	depends on !BR2_PREFER_STATIC_LIB
-+	bool
-+
-+comment "DRI drivers need shared libdrm"
-+	depends on BR2_PREFER_STATIC_LIB
-+
-+config BR2_PACKAGE_MESA3D_DRIVER
-+	bool
-+
-+menu "Drivers"
-+
-+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
-+	bool "Gallium nouveau driver"
-+	depends on BR2_i386 || BR2_x86_64
-+	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-+	select BR2_PACKAGE_LIBDRM_NOUVEAU
-+	help
-+	  Supports all Nvidia GPUs.
-+
-+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA
-+	bool "Gallium vmware svga driver"
-+	depends on BR2_i386 || BR2_x86_64
-+	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-+	select BR2_PACKAGE_LIBDRM_VMWGFX
-+	help
-+	  This is a virtual GPU driver for VMWare virtual machines.
-+
-+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
-+	bool "Gallium swrast driver"
-+	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-+	help
-+	  This is a software opengl implementation using the Gallium3D
-+	  infrastructure.
-+
-+config BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
-+	bool "DRI swrast driver"
-+	select BR2_PACKAGE_MESA3D_DRI_DRIVER
-+	help
-+	  This is a software opengl implementation using the DRI
-+	  infrastructure.
-+
-+config BR2_PACKAGE_MESA3D_DRI_DRIVER_I965
-+	bool "DRI i965 driver"
-+	depends on BR2_i386 || BR2_x86_64
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_MESA3D_DRI_DRIVER
-+	select BR2_PACKAGE_LIBDRM_INTEL
-+	help
-+	  Supports all Intel GPUs.  This version is most supported by Intel.
-+
-+config BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
-+	bool "DRI radeon driver"
-+	depends on BR2_i386 || BR2_x86_64
-+	select BR2_PACKAGE_MESA3D_DRI_DRIVER
-+	select BR2_PACKAGE_LIBDRM_RADEON
-+	help
-+	  Legacy Radeon driver for R100 series GPUs.
-+
-+endmenu
-+
-+menu "Additional API Support"
-+depends on BR2_PACKAGE_MESA3D_DRIVER
-+
-+config BR2_PACKAGE_MESA3D_OPENGL_EGL
-+	bool "EGL"
-+	depends on BR2_PACKAGE_HAS_UDEV
-+	select BR2_PACKAGE_HAS_OPENGL_EGL
-+	help
-+	  Use the Khronos EGL APIs. EGL is a window manager for OpenGL applications
-+	  similar to GLX, for X, and WGL, for Windows.
-+
-+config BR2_PACKAGE_MESA3D_OPENGL_ES
-+	bool "OpenGL ES"
-+	select BR2_PACKAGE_HAS_OPENGL_ES
-+	help
-+	  Use the Khronos OpenGL ES APIs.  This is commonly used on embedded
-+	  systems and represents a subset of the OpenGL API.
-+
-+endmenu
-+
-+config BR2_PACKAGE_PROVIDES_OPENGL_EGL
-+	default "mesa3d"
-+
-+config BR2_PACKAGE_PROVIDES_OPENGL_ES
-+	default "mesa3d"
-+
-+endif
-+
-+comment "mesa3d needs a toolchain w/ C++, largefile"
-+	depends on !BR2_LARGEFILE || !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/mesa3d/mesa3d-uclibc-locale.patch b/package/mesa3d/mesa3d-uclibc-locale.patch
+diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
+index 5f0c2d8..dfa7d10 100644
+--- a/package/x11r7/xserver_xorg-server/Config.in
++++ b/package/x11r7/xserver_xorg-server/Config.in
+@@ -36,6 +36,7 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER
+ 	select BR2_PACKAGE_XPROTO_GLPROTO
+ 	select BR2_PACKAGE_XPROTO_INPUTPROTO
+ 	select BR2_PACKAGE_XPROTO_KBPROTO
++	select BR2_PACKAGE_XPROTO_PRESENTPROTO
+ 	select BR2_PACKAGE_XPROTO_RANDRPROTO
+ 	select BR2_PACKAGE_XPROTO_RENDERPROTO
+ 	select BR2_PACKAGE_XPROTO_RESOURCEPROTO
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server-02-cve-2013-1940.patch b/package/x11r7/xserver_xorg-server/xserver_xorg-server-02-cve-2013-1940.patch
 deleted file mode 100644
-index 99afe8d..0000000
---- a/package/mesa3d/mesa3d-uclibc-locale.patch
+index d85494f..0000000
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server-02-cve-2013-1940.patch
 +++ /dev/null
-@@ -1,56 +0,0 @@
--[PATCH] Fix compilation on uClibc without locale support
+@@ -1,34 +0,0 @@
+-From 6ca03b9161d33b1d2b55a3a1a913cf88deb2343f Mon Sep 17 00:00:00 2001
+-From: Dave Airlie <airlied@gmail.com>
+-Date: Wed, 10 Apr 2013 06:09:01 +0000
+-Subject: xf86: fix flush input to work with Linux evdev devices.
 -
--Based on similar patch from OE:
+-So when we VT switch back and attempt to flush the input devices,
+-we don't succeed because evdev won't return part of an event,
+-since we were only asking for 4 bytes, we'd only get -EINVAL back.
 -
--http://git.openembedded.org/openembedded-core/commit/meta/recipes-graphics/mesa/mesa/0001-Compile-with-uclibc.patch?id=e4039eb74b20e96d4b8837cd58cf2d13d091e1ad
+-This could later cause events to be flushed that we shouldn't have
+-gotten.
 -
--Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+-This is a fix for CVE-2013-1940.
+-
+-Signed-off-by: Dave Airlie <airlied@redhat.com>
+-Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
+-Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
 ----
-- configure.ac            |    3 +++
-- src/glsl/strtod.c       |    2 +-
-- src/mesa/main/imports.c |    2 +-
-- 3 files changed, 5 insertions(+), 2 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index fbaa376..454dad2 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -450,6 +450,9 @@ AC_SUBST([DLOPEN_LIBS])
-- dnl See if posix_memalign is available
-- AC_CHECK_FUNC([posix_memalign], [DEFINES="$DEFINES -DHAVE_POSIX_MEMALIGN"])
+-diff --git a/hw/xfree86/os-support/shared/posix_tty.c b/hw/xfree86/os-support/shared/posix_tty.c
+-index ab3757a..4d08c1e 100644
+---- a/hw/xfree86/os-support/shared/posix_tty.c
+-+++ b/hw/xfree86/os-support/shared/posix_tty.c
+-@@ -421,7 +421,8 @@ xf86FlushInput(int fd)
+- {
+-     fd_set fds;
+-     struct timeval timeout;
+--    char c[4];
+-+    /* this needs to be big enough to flush an evdev event. */
+-+    char c[256];
 - 
--+dnl See if newlocale is available
--+AC_CHECK_FUNCS_ONCE(newlocale)
--+
-- dnl SELinux awareness.
-- AC_ARG_ENABLE([selinux],
--     [AS_HELP_STRING([--enable-selinux],
--diff --git a/src/glsl/strtod.c b/src/glsl/strtod.c
--index a876e13..9fce7e9 100644
----- a/src/glsl/strtod.c
--+++ b/src/glsl/strtod.c
--@@ -44,7 +44,7 @@ double
-- double
-- glsl_strtod(const char *s, char **end)
-- {
---#if defined(_GNU_SOURCE) && !defined(__CYGWIN__) && !defined(__FreeBSD__)
--+#if defined(_GNU_SOURCE) && !defined(__CYGWIN__) && !defined(__FreeBSD__) && defined(HAVE_NEWLOCALE)
--    static locale_t loc = NULL;
--    if (!loc) {
--       loc = newlocale(LC_CTYPE_MASK, "C", NULL);
--diff --git a/src/mesa/main/imports.c b/src/mesa/main/imports.c
--index d3727ef..363bf32 100644
----- a/src/mesa/main/imports.c
--+++ b/src/mesa/main/imports.c
--@@ -757,7 +757,7 @@ float
-- float
-- _mesa_strtof( const char *s, char **end )
-- {
---#if defined(_GNU_SOURCE) && !defined(__CYGWIN__) && !defined(__FreeBSD__)
--+#if defined(_GNU_SOURCE) && !defined(__CYGWIN__) && !defined(__FreeBSD__) && defined(HAVE_NEWLOCALE)
--    static locale_t loc = NULL;
--    if (!loc) {
--       loc = newlocale(LC_CTYPE_MASK, "C", NULL);
+-     DebugF("FlushingSerial\n");
+-     if (tcflush(fd, TCIFLUSH) == 0)
+---
+-cgit v0.9.0.2-2-gbebe
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server-03-Revert-kinput-allocate-enough-space-for-null-charact.patch b/package/x11r7/xserver_xorg-server/xserver_xorg-server-03-Revert-kinput-allocate-enough-space-for-null-charact.patch
+deleted file mode 100644
+index d19bc46..0000000
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server-03-Revert-kinput-allocate-enough-space-for-null-charact.patch
++++ /dev/null
+@@ -1,59 +0,0 @@
+-From 09f1e5b15b769e1122f0a8d7cae0820038992312 Mon Sep 17 00:00:00 2001
+-From: Julien Cristau <jcristau@debian.org>
+-Date: Sun, 7 Oct 2012 18:40:35 +0200
+-Subject: [PATCH] Revert "kinput: allocate enough space for null character."
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-This reverts commit 531785dd746d64ef7f473a83ca73bb20e74b6fca.
+-
+-The above commit breaks Xephyr option parsing.  Andrzej writes:
+-
+-  Xephyr -retro -keybd evdev,,device=/dev/input/event2,xkbrules=evdev,xkbmodel=evdev,xkblayout=pl -mouse evdev,,device=/dev/input/event1 :3
+-
+-  results in:
+-
+-  <snip>
+-  Pointer option key (device=) of value (/dev/input/event1) not assigned!
+-  Kbd option key (device=) of value (/dev/input/event2) not assigned!
+-  Kbd option key (xkbrules=) of value (evdev) not assigned!
+-  Kbd option key (xkbmodel=) of value (evdev) not assigned!
+-  Kbd option key (xkblayout=) of value (pl) not assigned!
+-  <snip>
+-
+-  The effect of the patch is that the "key=value" pairs are parsed in such
+-  a way that the key is added an "equals" sign to it and we end up with
+-  keys like "device=" instead of "device". This in turn has effect on
+-  KdParsePointerOptions and KdParseKbdOptions: the key does not match
+-  any choice presented in the "switch" statement, and so "Pointer/Kbd
+-  option key (...) of value (...) not assigned!" happens, making all
+-  "key=value" options inaccessible to the user. Reverting the patch makes
+-  them available again.
+-
+-Reference: http://bugs.debian.org/689246
+-Reported-by: Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>
+-Signed-off-by: Julien Cristau <jcristau@debian.org>
+-Cc: Dave Airlie <airlied@redhat.com>
+-Reviewed-by: S?ren Sandmann <ssp@redhat.com>
+-Signed-off-by: Keith Packard <keithp@keithp.com>
+----
+- hw/kdrive/src/kinput.c |    2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/hw/kdrive/src/kinput.c b/hw/kdrive/src/kinput.c
+-index d35dcf8..b1068bb 100644
+---- a/hw/kdrive/src/kinput.c
+-+++ b/hw/kdrive/src/kinput.c
+-@@ -1034,7 +1034,7 @@ KdGetOptions(InputOption **options, char *string)
+- 
+-     if (strchr(string, '=')) {
+-         tam_key = (strchr(string, '=') - string);
+--        key = strndup(string, tam_key + 1);
+-+        key = strndup(string, tam_key);
+-         if (!key)
+-             goto out;
+- 
 --- 
 -1.7.10.4
 -
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index d4080d4..f40b2ee 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -4,37 +4,116 @@
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 034b591..dd4e280 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -4,12 +4,11 @@
  #
  ################################################################################
  
--MESA3D_VERSION = 7.10.3
--MESA3D_SOURCE = MesaLib-$(MESA3D_VERSION).tar.gz
--MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/older-versions/7.x/$(MESA3D_VERSION)
-+MESA3D_VERSION = 10.0.4
-+MESA3D_SOURCE = MesaLib-$(MESA3D_VERSION).tar.bz2
-+MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
- MESA3D_LICENSE = MIT, SGI, Khronos
- MESA3D_LICENSE_FILES = docs/license.html
- 
--MESA3D_AUTORECONF = YES
- MESA3D_INSTALL_STAGING = YES
- 
--MESA3D_CONF_OPT = \
--	--disable-egl \
--	--disable-glu \
--	--disable-glw \
--	--disable-glut \
--	--disable-gallium \
--	--with-driver=dri \
--	--with-dri-drivers=swrast \
--	--disable-static
--
- MESA3D_DEPENDENCIES = \
--	xproto_glproto \
--	xlib_libXxf86vm \
--	xlib_libXdamage \
--	xlib_libXfixes \
--	xproto_dri2proto \
--	libdrm \
- 	expat \
--	host-xutil_makedepend \
-+	host-bison \
-+	host-flex \
-+	host-gettext \
- 	host-libxml2 \
- 	host-python \
--	host-bison \
--	host-flex
-+	host-xutil_makedepend \
-+	libdrm
-+
-+ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER),y)
-+MESA3D_DEPENDENCIES += \
-+	xproto_xf86driproto \
-+	xproto_dri2proto \
-+	xproto_glproto \
-+	xlib_libX11 \
-+	xlib_libXext \
-+	xlib_libXdamage \
-+	xlib_libXfixes \
-+	libxcb
-+MESA3D_CONF_OPT += \
-+	--enable-glx \
-+	--enable-xa
-+else
-+MESA3D_CONF_OPT += \
-+	--disable-glx \
-+	--disable-xa
-+endif
-+
-+ifeq ($(BR2_PREFER_STATIC_LIB),)
-+# fix for "configure: error: Cannot use static libraries for DRI drivers"
-+MESA3D_CONF_OPT += --disable-static
-+endif
-+
-+# Drivers
-+
-+#Gallium Drivers
-+MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU)  += nouveau
-+MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA)     += svga
-+MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST)   += swrast
-+# DRI Drivers
-+MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST) += swrast
-+MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_I965)   += i965
-+MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON) += radeon
-+
-+# at least one API is required, for buildroot enable OpenGL API by default
-+# other APIs (EGL, EGL_ES) are optional
-+ifeq ($(MESA3D_GALLIUM_DRIVERS-y)$(MESA3D_DRI_DRIVERS-y),)
-+MESA3D_CONF_OPT += \
-+	--disable-opengl
-+else
-+MESA3D_CONF_OPT += \
-+	--enable-opengl
-+endif
-+
-+ifeq ($(MESA3D_GALLIUM_DRIVERS-y),)
-+MESA3D_CONF_OPT += \
-+	--without-gallium-drivers
-+else
-+MESA3D_CONF_OPT += \
-+	--with-gallium-drivers=$(subst $(space),$(comma),$(MESA3D_GALLIUM_DRIVERS-y))
-+endif
-+
-+ifeq ($(MESA3D_DRI_DRIVERS-y),)
-+MESA3D_CONF_OPT += \
-+	--disable-dri \
-+	--disable-shared-glapi \
-+	--without-dri-drivers
-+else
-+MESA3D_CONF_OPT += \
-+	--enable-dri \
-+	--enable-shared-glapi \
-+	--with-dri-drivers=$(subst $(space),$(comma),$(MESA3D_DRI_DRIVERS-y))
-+endif
-+
-+# APIs
-+
-+ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
-+# egl depends on gbm, gbm depends on udev
-+MESA3D_DEPENDENCIES += udev
-+MESA3D_EGL_PLATFORMS = drm
-+ifeq ($(BR2_PACKAGE_WAYLAND),y)
-+MESA3D_DEPENDENCIES += wayland
-+MESA3D_EGL_PLATFORMS += wayland
-+endif
-+ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER),y)
-+MESA3D_EGL_PLATFORMS += x11
-+endif
-+MESA3D_CONF_OPT += \
-+	--enable-gbm \
-+	--enable-egl \
-+	--with-egl-platforms=$(subst $(space),$(comma),$(MESA3D_EGL_PLATFORMS))
-+else
-+MESA3D_CONF_OPT += \
-+	--disable-gbm \
-+	--disable-egl
-+endif
-+
-+ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_ES),y)
-+MESA3D_CONF_OPT += --enable-gles1 --enable-gles2
-+else
-+MESA3D_CONF_OPT += --disable-gles1 --disable-gles2
-+endif
- 
- $(eval $(autotools-package))
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 576579b..034b591 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -99,7 +99,7 @@ else # modular
- XSERVER_XORG_SERVER_CONF_OPT += --disable-kdrive --disable-xfbdev
+-XSERVER_XORG_SERVER_VERSION = 1.12.4
++XSERVER_XORG_SERVER_VERSION = 1.15.0
+ XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.bz2
+ XSERVER_XORG_SERVER_SITE = http://xorg.freedesktop.org/releases/individual/xserver
+ XSERVER_XORG_SERVER_LICENSE = MIT
+ XSERVER_XORG_SERVER_LICENSE_FILES = COPYING
+-XSERVER_XORG_SERVER_MAKE = $(MAKE1) # make install fails with parallel make
+ XSERVER_XORG_SERVER_INSTALL_STAGING = YES
+ XSERVER_XORG_SERVER_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install install-data
+ XSERVER_XORG_SERVER_DEPENDENCIES = 	\
+@@ -40,6 +39,7 @@ XSERVER_XORG_SERVER_DEPENDENCIES = 	\
+ 	xproto_glproto 			\
+ 	xproto_inputproto 		\
+ 	xproto_kbproto 			\
++	xproto_presentproto 		\
+ 	xproto_randrproto 		\
+ 	xproto_renderproto 		\
+ 	xproto_resourceproto 		\
+@@ -100,6 +100,7 @@ XSERVER_XORG_SERVER_CONF_OPT += --disable-kdrive --disable-xfbdev
  endif
  
--ifeq ($(BR2_PACKAGE_MESA3D),y)
-+ifeq ($(BR2_PACKAGE_MESA3D_DRIVER),y)
+ ifeq ($(BR2_PACKAGE_MESA3D_DRIVER),y)
++XSERVER_XORG_SERVER_CONF_OPT += --enable-dri
  XSERVER_XORG_SERVER_DEPENDENCIES += mesa3d xproto_xf86driproto
  else
  XSERVER_XORG_SERVER_CONF_OPT += --disable-dri
-@@ -172,7 +172,7 @@ ifneq ($(BR2_PACKAGE_XLIB_LIBDMX),y)
- XSERVER_XORG_SERVER_CONF_OPT += --disable-dmx
- endif
- 
--ifeq ($(BR2_PACKAGE_MESA3D),y)
-+ifeq ($(BR2_PACKAGE_MESA3D_DRIVER),y)
- XSERVER_XORG_SERVER_CONF_OPT += --enable-glx
- else
- XSERVER_XORG_SERVER_CONF_OPT += --disable-glx
 -- 
 1.7.10.4
