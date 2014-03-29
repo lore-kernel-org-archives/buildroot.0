@@ -1,36 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Mar 2014 16:46:53 +0100
-Subject: [Buildroot] [PATCH] script/scancpan: add -host & -hostonly
- options
-In-Reply-To: <1396106224-26505-1-git-send-email-francois.perrad@gadz.org>
-References: <1396106224-26505-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20140329164653.2ce9f6a3@skate>
+Date: Sat, 29 Mar 2014 16:47:18 +0100
+Subject: [Buildroot] [PATCH] valgrind: Add support for MIPS architecture
+In-Reply-To: <1396025209-9495-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1396025209-9495-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20140329164718.3b6af6c2@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+Dear Vicente Olivert Riera,
 
-On Sat, 29 Mar 2014 16:17:04 +0100, Francois Perrad wrote:
+On Fri, 28 Mar 2014 16:46:49 +0000, Vicente Olivert Riera wrote:
+> Reviewed-by: Markos Chandras <markos.chandras@imgtec.com>
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  package/valgrind/Config.in |    3 ++-
+>  1 files changed, 2 insertions(+), 1 deletions(-)
+> 
+> diff --git a/package/valgrind/Config.in b/package/valgrind/Config.in
+> index dacdd86..fd5649b 100644
+> --- a/package/valgrind/Config.in
+> +++ b/package/valgrind/Config.in
+> @@ -1,7 +1,8 @@
+>  config BR2_PACKAGE_VALGRIND
+>  	bool "valgrind"
+>  	depends on BR2_i386 || BR2_x86_64 || BR2_cortex_a8 || \
+> -		   BR2_cortex_a9 || BR2_powerpc
+> +		   BR2_cortex_a9 || BR2_powerpc || BR2_mips || \
+> +		   BR2_mipsel || BR2_mips64 || BR2_mips64el
+>  	help
+>  	  Tool for debugging and profiling Linux programs.
 
-> +=item B<-host>
-> +
-> +Generates package for the target and host variants (the default is for target only).
-> +
-> +=item B<-hostonly>
-> +
-> +Generates package only for the host variant (the default is for target only).
+This breaks the build on MIPS64:
 
-The naming of the options look really weird, IMO. If you use -host, I
-would assume that only the host variant is generated. What about:
-
- * default behavior: target only (i.e same as -target below)
- * -target: enable target package
- * -notarget: disable target package
- * -host: enable host package
- * -nohost: disable host package
+  http://autobuild.buildroot.org/results/213/21352bcbe1b309fef0f996c275cdfcda08619d96/build-end.log
 
 Thomas
 -- 
