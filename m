@@ -1,56 +1,48 @@
 From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Sun, 30 Mar 2014 20:55:37 +0400
-Subject: [Buildroot] [PATCH v2 2/3] Makefile.in: add -mtext-section-literals
-	to xtensa ABI
-In-Reply-To: <1396198538-32628-1-git-send-email-jcmvbkbc@gmail.com>
-References: <1396198538-32628-1-git-send-email-jcmvbkbc@gmail.com>
-Message-ID: <1396198538-32628-3-git-send-email-jcmvbkbc@gmail.com>
+Date: Sun, 30 Mar 2014 20:55:35 +0400
+Subject: [Buildroot] [PATCH v2 0/3] xtensa: add -mtext-section-literals to
+	xtensa ABI
+Message-ID: <1396198538-32628-1-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Collecting literals into separate section can be advantageous if that
-section is placed into DTCM at link time. This is applicable for code
-running on bare metal, but makes no sense under linux, where userspace
-is isolated from the physical memory details. OTOH placing literals into
-separate section breaks build of huge source files, because l32r
-instruction can only access literals in 256 KBytes range.
+Hi Thomas,
 
-Add -mtext-section-literals into xtensa ABI to fix build issues of
-packages with huge sources.
+these three patches are the second part of fixes for building huge sources,
+like wireshark or mplayer: adding trampolines support to binutils allows
+assembling of such files, but with literals placed into separate section
+build fails at the linking step.
 
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
----
+First patch allows building uclibc with -mtext-section-literals, it is
+posted to the uclibc list, but not reviewed/checked in yet.
+Second patch adds -mtext-section-literals flag to xtensa ABI.
+Third patch removes -mtext-section-literals flag from individual packages
+that used to need them.
+
 Changes v1 -> v2:
 - add comment to XTENSA_ABI variable explaining -mtext-section-literals usage
+- remove -mtext-section-literals from individual package *.mk's
 
- package/Makefile.in | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+Max Filippov (3):
+  uclibc: add missing .literal_position directives
+  Makefile.in: add -mtext-section-literals to xtensa ABI
+  xtensa: remove -mtext-section-literals from individual package *.mk's
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index eea7043..a70e538 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -72,8 +72,17 @@ endif
- # and is required for some packages. While this option can degrade both
- # code size and performance, the linker can usually optimize away the
- # overhead when a call ends up within a certain range.
-+#
-+# Use text-section-literals for Xtensa globally.
-+# Collecting literals into separate section can be advantageous if that
-+# section is placed into DTCM at link time. This is applicable for code
-+# running on bare metal, but makes no sense under linux, where userspace
-+# is isolated from the physical memory details. OTOH placing literals into
-+# separate section breaks build of huge source files, because l32r
-+# instruction can only access literals in 256 KBytes range.
-+#
- ifeq ($(BR2_xtensa),y)
--TARGET_ABI += -mlongcalls
-+TARGET_ABI += -mlongcalls -mtext-section-literals
- endif
- 
- STAGING_SUBDIR = usr/$(GNU_TARGET_NAME)/sysroot
+ package/Makefile.in                                | 11 +++-
+ package/civetweb/civetweb.mk                       |  3 --
+ package/ffmpeg/ffmpeg.mk                           |  4 --
+ package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk         |  4 --
+ package/gstreamer1/gst1-libav/gst1-libav.mk        |  4 --
+ package/lmbench/lmbench.mk                         |  4 --
+ package/php/php.mk                                 |  4 --
+ package/sqlcipher/sqlcipher.mk                     |  4 --
+ package/sqlite/sqlite.mk                           |  4 --
+ ...-add-missing-.literal_position-directives.patch | 62 ++++++++++++++++++++++
+ 10 files changed, 72 insertions(+), 32 deletions(-)
+ create mode 100644 package/uclibc/7bf35c8b7d4a1f97174eb49f47f33946b282114c/uclibc-0001-xtensa-add-missing-.literal_position-directives.patch
+
 -- 
 1.8.1.4
