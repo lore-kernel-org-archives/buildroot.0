@@ -1,39 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Mar 2014 11:28:45 +0200
-Subject: [Buildroot] [git commit] libcgicc: bump to version 3.2.13
-Message-ID: <20140330092855.90FF09BFEA@busybox.osuosl.org>
+Date: Sun, 30 Mar 2014 11:28:15 +0200
+Subject: [Buildroot] [git commit] radvd: bump to version 1.10.0
+Message-ID: <20140330092855.885E29C2C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f76aa49269c210ecd597941c5e4b6365dfa01c0f
+commit: http://git.buildroot.net/buildroot/commit/?id=ae3dc39b2c32273b57fde09c5c0ece852d006206
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also add license files and docs license definition.
+Adds 6LoWPAN support.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libcgicc/libcgicc.mk |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+ package/radvd/radvd.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libcgicc/libcgicc.mk b/package/libcgicc/libcgicc.mk
-index f1c181f..cf83d82 100644
---- a/package/libcgicc/libcgicc.mk
-+++ b/package/libcgicc/libcgicc.mk
-@@ -4,10 +4,11 @@
+diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
+index bc782fd..e82774e 100644
+--- a/package/radvd/radvd.mk
++++ b/package/radvd/radvd.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBCGICC_VERSION = 3.2.12
-+LIBCGICC_VERSION = 3.2.13
- LIBCGICC_SITE = $(BR2_GNU_MIRROR)/cgicc
- LIBCGICC_SOURCE = cgicc-$(LIBCGICC_VERSION).tar.gz
--LIBCGICC_LICENSE = LGPLv3+
-+LIBCGICC_LICENSE = LGPLv3+ (library), GFDL1.2+ (docs)
-+LIBCGICC_LICENSE_FILES = COPYING.LIB COPYING.DOC
- LIBCGICC_INSTALL_STAGING = YES
- LIBCGICC_AUTORECONF = YES
- LIBCGICC_CONFIG_SCRIPTS = cgicc-config
+-RADVD_VERSION = 1.9.9
++RADVD_VERSION = 1.10.0
+ RADVD_SOURCE = radvd-$(RADVD_VERSION).tar.xz
+ RADVD_SITE = http://www.litech.org/radvd/dist
+ RADVD_DEPENDENCIES = host-bison flex libdaemon host-flex host-pkgconf
