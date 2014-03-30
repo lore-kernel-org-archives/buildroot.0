@@ -1,51 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Mar 2014 11:47:32 +0200
-Subject: [Buildroot] [git commit] libubox: Lua binding needs mmu and fix
-	coding style
-Message-ID: <20140330094742.CDE8A9C41F@busybox.osuosl.org>
+Date: Sun, 30 Mar 2014 11:31:08 +0200
+Subject: [Buildroot] [git commit] package/mesa3d: fix EGL/GLES provider
+Message-ID: <20140330094742.A93DF9C41F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bbfc41cdc2b9295aa7d380009e266fcb71f90b18
+commit: http://git.buildroot.net/buildroot/commit/?id=694c876e55116cae80522539a347c9fee9bf487d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes
-http://autobuild.buildroot.net/results/4e1/4e112e4463fef7ad8757259b222fab10fbd09d0d/
+mesa3d being selected is not enough for it to be an EGL provider.
 
-The Lua binding option of libubox uses fork() so it needs the MMU.
+The corresponding options BR2_PACKAGE_MESA3D_OPENGL_EGL should be
+enabled. This option already correctlt selects BR2_PACKAGE_HAS_OPENGL_EGL.
 
-By the way, correction of coding style as stated in the buildroot
-manual.
+So, only declare mesa3d as an EGL provider if the option is set.
 
-Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
+Ditto for GLES.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Bernd Kuhls <berndkuhls@hotmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libubox/libubox.mk |   10 ++++++----
- 1 files changed, 6 insertions(+), 4 deletions(-)
+ package/mesa3d/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libubox/libubox.mk b/package/libubox/libubox.mk
-index 22efc9a..b552227 100644
---- a/package/libubox/libubox.mk
-+++ b/package/libubox/libubox.mk
-@@ -10,12 +10,14 @@ LIBUBOX_LICENSE = LGPLv2.1, GPLv2, BSD-3c, MIT
- LIBUBOX_INSTALL_STAGING = YES
- LIBUBOX_DEPENDENCIES = host-pkgconf $(if $(BR2_PACKAGE_JSON_C),json-c)
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 217528b..8ed0c07 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -107,10 +107,10 @@ config BR2_PACKAGE_MESA3D_OPENGL_ES
+ endmenu
  
-+ifeq ($(BR2_USE_MMU),y) # fork()
- ifeq ($(BR2_PACKAGE_LUA_5_1),y)
--	LIBUBOX_DEPENDENCIES += lua
--	LIBUBOX_CONF_OPT += -DLUAPATH=$(STAGING_DIR)/usr/lib/lua/5.1 \
--		-DLUA_CFLAGS=-I$(STAGING_DIR)/usr/include
-+LIBUBOX_DEPENDENCIES += lua
-+LIBUBOX_CONF_OPT += -DLUAPATH=$(STAGING_DIR)/usr/lib/lua/5.1 \
-+	-DLUA_CFLAGS=-I$(STAGING_DIR)/usr/include
- else
--	LIBUBOX_CONF_OPT += -DBUILD_LUA:BOOL=OFF
-+LIBUBOX_CONF_OPT += -DBUILD_LUA:BOOL=OFF
+ config BR2_PACKAGE_PROVIDES_OPENGL_EGL
+-	default "mesa3d"
++	default "mesa3d" if BR2_PACKAGE_MESA3D_OPENGL_EGL
+ 
+ config BR2_PACKAGE_PROVIDES_OPENGL_ES
+-	default "mesa3d"
++	default "mesa3d" if BR2_PACKAGE_MESA3D_OPENGL_ES
+ 
  endif
-+endif # MMU
  
- $(eval $(cmake-package))
