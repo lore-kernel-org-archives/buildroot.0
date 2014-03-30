@@ -1,56 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Mar 2014 17:24:13 +0200
-Subject: [Buildroot] [PATCH 1/1 v2] xdriver_xf86-video-intel: Bump
- version to 2.99.911
-In-Reply-To: <t9jl0bxj2h.ln2@ID-313208.user.individual.net>
-References: <1396178545-12912-1-git-send-email-bernd.kuhls@t-online.de>
- <20140330151109.658eb835@skate>
- <t9jl0bxj2h.ln2@ID-313208.user.individual.net>
-Message-ID: <20140330172413.049cd7d0@skate>
+Date: Sun, 30 Mar 2014 17:25:47 +0200
+Subject: [Buildroot] [git commit] dtv-scan-tables: fix license files
+Message-ID: <20140330152609.B112D9BC08@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=96b4550503d2a8515ea8cc8dce2297e22d2d0f9d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 30 Mar 2014 15:37:33 +0200, Bernd Kuhls wrote:
+Fixes:
 
-> > Do we want KMS vs. UMS to be a configurable option?
-> 
-> this is not necessary because the driver can have both options compiled, 
-> therefore I removed the kms/ums-related options.
+  http://autobuild.buildroot.org/results/39a/39a8ba05c0d6e02b517d44b9c54b76acdb9174c2/
 
-Ok.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/dtv-scan-tables/dtv-scan-tables.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-> > Then in the Config.in file, if BR2_PACKAGE_MESA3D_DRI_DRIVER_I965 is
-> > enabled, you want to select MESA3D.
-> 
-> +       select BR2_PACKAGE_MESA3D if BR2_PACKAGE_MESA3D_DRI_DRIVER_I965
-> 
-> leads to
-> 
-> package/mesa3d/Config.in:1:error: recursive dependency detected!
-> package/mesa3d/Config.in:1:     symbol BR2_PACKAGE_MESA3D is selected by BR2
-> _PACKAGE_MESA3D_DRI_DRIVER_I965
-> package/mesa3d/Config.in:70:    symbol BR2_PACKAGE_MESA3D_DRI_DRIVER_I965 
-> depends on BR2_PACKAGE_MESA3D
-
-Aaah, yes, I was mistaken. If BR2_PACKAGE_MESA3D_DRI_DRIVER_I965 is
-enabled, then of course BR2_PACKAGE_MESA3D is already enabled. Sorry
-for the noise.
-
-Can you look into the other circular dependency that your patch series
-has introduced? I've reported it to you yesterday evening.
-
-Also, by any chance, are you on IRC ? It would sometimes be useful to
-be able to discuss things directly with you. Thanks!
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/dtv-scan-tables/dtv-scan-tables.mk b/package/dtv-scan-tables/dtv-scan-tables.mk
+index 470db8c..db7fb91 100644
+--- a/package/dtv-scan-tables/dtv-scan-tables.mk
++++ b/package/dtv-scan-tables/dtv-scan-tables.mk
+@@ -15,7 +15,7 @@ DTV_SCAN_TABLES_SITE_METHOD = git
+ # license files (respectively for the GPLv2 and the LGPLv2.1), so we use
+ # that as the licensing information.
+ DTV_SCAN_TABLES_LICENSE = GPLv2 LGPLv2.1
+-DTV_SCAN_TABLES_LICENSE_FILES = COPYING COPYING.LIB
++DTV_SCAN_TABLES_LICENSE_FILES = COPYING COPYING.LGPL
+ 
+ define DTV_SCAN_TABLES_INSTALL_TARGET_CMDS
+ 	for f in atsc dvb-c dvb-s dvb-t; do \
