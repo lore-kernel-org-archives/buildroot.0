@@ -1,105 +1,72 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 30 Mar 2014 13:22:25 +0200
-Subject: [Buildroot] [PATCH 1/1 v2] xdriver_xf86-video-intel: Bump version
-	to 2.99.911
-Message-ID: <1396178545-12912-1-git-send-email-bernd.kuhls@t-online.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 30 Mar 2014 08:56:30 -0300
+Subject: [Buildroot] [PATCH] openswan: fix possible build failure
+Message-ID: <1396180590-28799-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- add necessary dependencies
-- add -D_GNU_SOURCE to avoid getline compilation error
+openswan's Makefile uses gcc instead of $(CC) for gcc version detection
+to use advanced warning/error options. The problem is that if the
+host gcc version is newish (>=4.6) and the gcc for the target is not it
+uses unsupported options.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
-v2: - depend on mesa3d only when the i965 DRI driver is selected (Thomas)
-    - allow both kms and ums support (Thomas):
-  Support for Kernel Mode Setting? yes
-  Support for legacy User Mode Setting (for i810)? yes
+ package/openswan/openswan-01-gcc-detection.patch | 43 ++++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
+ create mode 100644 package/openswan/openswan-01-gcc-detection.patch
 
- package/x11r7/xdriver_xf86-video-intel/Config.in   |   13 +++++----
- .../xdriver_xf86-video-intel.mk                    |   29 ++++++++++++++++----
- 2 files changed, 30 insertions(+), 12 deletions(-)
-
-diff --git a/package/x11r7/xdriver_xf86-video-intel/Config.in b/package/x11r7/xdriver_xf86-video-intel/Config.in
-index 83b714a..4b622df 100644
---- a/package/x11r7/xdriver_xf86-video-intel/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-intel/Config.in
-@@ -1,13 +1,14 @@
- config BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL
- 	bool "xf86-video-intel"
--	select BR2_PACKAGE_XPROTO_FONTSPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_RENDERPROTO
--	select BR2_PACKAGE_XPROTO_XPROTO
--	select BR2_PACKAGE_XLIB_LIBPCIACCESS
- 	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_LIBDRM_INTEL
--	select BR2_PACKAGE_MESA3D
-+	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE
-+	select BR2_PACKAGE_XLIB_LIBPCIACCESS
-+	select BR2_PACKAGE_XLIB_LIBXRANDR
-+	select BR2_PACKAGE_XLIB_LIBXTST
-+	select BR2_PACKAGE_XPROTO_FONTSPROTO
-+	select BR2_PACKAGE_XPROTO_XF86DRIPROTO
-+	select BR2_PACKAGE_XPROTO_XPROTO
- 	depends on (BR2_i386 || BR2_x86_64)
- 	help
- 	  Intel video driver
-diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-index 332de54..addb6ec 100644
---- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-+++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-@@ -4,18 +4,18 @@
- #
- ################################################################################
- 
--XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.907
-+XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.911
- XDRIVER_XF86_VIDEO_INTEL_SOURCE = xf86-video-intel-$(XDRIVER_XF86_VIDEO_INTEL_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_INTEL_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_INTEL_LICENSE = MIT
- XDRIVER_XF86_VIDEO_INTEL_LICENSE_FILES = COPYING
--XDRIVER_XF86_VIDEO_INTEL_AUTORECONF = YES
+diff --git a/package/openswan/openswan-01-gcc-detection.patch b/package/openswan/openswan-01-gcc-detection.patch
+new file mode 100644
+index 0000000..2feb5c5
+--- /dev/null
++++ b/package/openswan/openswan-01-gcc-detection.patch
+@@ -0,0 +1,43 @@
++From b37d4bd266ec65acdf5288e21722991d1c5ec44a Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Sun, 30 Mar 2014 08:52:05 -0300
++Subject: [PATCH] Makefile: use CC for version test instead of gcc
 +
-+# this fixes a getline-related compilation in src/sna/kgem.c
-+XDRIVER_XF86_VIDEO_INTEL_CONF_ENV = \
-+	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
- 
- XDRIVER_XF86_VIDEO_INTEL_CONF_OPT = \
--	--enable-dri \
--	--enable-kms-only \
- 	--disable-xvmc \
--	--disable-ums-only \
- 	--enable-sna \
- 	--disable-uxa \
- 	--disable-glamor \
-@@ -23,6 +23,23 @@ XDRIVER_XF86_VIDEO_INTEL_CONF_OPT = \
- 	--disable-dga \
- 	--disable-async-swap
- 
--XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xproto libdrm xlib_libpciaccess
-+XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES = \
-+	libdrm \
-+	xlib_libXcomposite \
-+	xlib_libXrandr \
-+	xlib_libXtst \
-+	xlib_libpciaccess \
-+	xproto_fontsproto \
-+	xproto_xproto \
-+	xserver_xorg-server
++Use $(CC) for the version test since that's different from gcc when
++cross-compiling.
 +
-+ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER_I965),y)
-+XDRIVER_XF86_VIDEO_INTEL_CONF_OPT += \
-+	--enable-dri
-+XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES += mesa3d
-+else
-+XDRIVER_XF86_VIDEO_INTEL_CONF_OPT += \
-+	--disable-dri
-+endif
- 
- $(eval $(autotools-package))
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ lib/libopenswan/Makefile | 2 +-
++ programs/pluto/Makefile  | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/lib/libopenswan/Makefile b/lib/libopenswan/Makefile
++index 3649fe7..06f5317 100644
++--- a/lib/libopenswan/Makefile
+++++ b/lib/libopenswan/Makefile
++@@ -90,7 +90,7 @@ CFLAGS+= -Wpointer-arith
++ CFLAGS+= -Wno-error=cast-qual
++ 
++ # Check if GCC's version is recent enough
++-GCC_VERSION_GE_46:=$(shell test `gcc -dumpversion | sed 's/^\([0-9]\)\.\([0-9]\).*/\1\2/'` -ge 46 && echo true || echo false)
+++GCC_VERSION_GE_46:=$(shell test `$(CC) -dumpversion | sed 's/^\([0-9]\)\.\([0-9]\).*/\1\2/'` -ge 46 && echo true || echo false)
++ ifeq ($(GCC_VERSION_GE_46),true)
++ # some junk left in alg_info.c
++ CFLAGS+= -Wno-error=cpp
++diff --git a/programs/pluto/Makefile b/programs/pluto/Makefile
++index 8e4bc89..ed5e9dc 100644
++--- a/programs/pluto/Makefile
+++++ b/programs/pluto/Makefile
++@@ -48,7 +48,7 @@ CPPFLAGS = $(HDRDIRS) $(DEFINES) \
++ # must turn this off due to myid.c
++ CFLAGS+= -Wno-error=cast-qual
++ # Check if GCC's version is recent enough
++-GCC_VERSION_GE_46:=$(shell test `gcc -dumpversion | sed 's/^\([0-9]\)\.\([0-9]\).*/\1\2/'` -ge 46 && echo true || echo false)
+++GCC_VERSION_GE_46:=$(shell test `$(CC) -dumpversion | sed 's/^\([0-9]\)\.\([0-9]\).*/\1\2/'` -ge 46 && echo true || echo false)
++ ifeq ($(GCC_VERSION_GE_46),true)
++ CFLAGS+= -Wno-error=cpp
++ endif
++-- 
++1.8.3.2
++
 -- 
-1.7.10.4
+1.8.3.2
