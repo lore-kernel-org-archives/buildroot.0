@@ -1,65 +1,77 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Sun, 30 Mar 2014 15:55:33 +0200
-Subject: [Buildroot] [PATCH 2/2] libcgicc: bump to version 3.2.13
-In-Reply-To: <20140330113051.5c43cc69@skate>
-References: <1396135140-1402-1-git-send-email-gustavo@zacarias.com.ar>
- <1396135140-1402-2-git-send-email-gustavo@zacarias.com.ar>
- <20140330113051.5c43cc69@skate>
-Message-ID: <53382255.4090603@lucaceresoli.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 30 Mar 2014 17:21:28 +0200
+Subject: [Buildroot] qt5, eglfs and xcb
+In-Reply-To: <5338207F.9010807@gmail.com>
+References: <5338207F.9010807@gmail.com>
+Message-ID: <20140330172128.06f1d5d2@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Dear Marco Trapanese,
 
-Thomas Petazzoni wrote:
-> Dear Gustavo Zacarias,
->
-> On Sat, 29 Mar 2014 20:19:00 -0300, Gustavo Zacarias wrote:
->> Also add license files and docs license definition.
->>
->> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
->> ---
->>   package/libcgicc/libcgicc.mk | 5 +++--
->>   1 file changed, 3 insertions(+), 2 deletions(-)
->
-> Applied, thanks, with one minor change.
->
->> +LIBCGICC_LICENSE = LGPLv3+, docs: GFDL1.2+
->
-> I've changed this to the more traditional:
->
-> 	LGPLv3+ (library), GFDL1.2+ (docs)
->
-> Though I'm wondering if:
->
->   * We shouldn't use GFDLv1.2+ instead, like we do for GPL/LGPL.
+On Sun, 30 Mar 2014 15:47:43 +0200, Marco Trapanese wrote:
 
-Unless there is a good reason, we should the same style for all
-licenses.
+> when you try to build qt5 with the X support (xcb), selecting one of the 
+> following modules: qtquick*, qt5declarative, qt5graphicaleffects and 
+> qt5multimedia, leads to force the selection of the eglfs support.
+> 
+> After three days of build failures (due to the same constants defined 
+> both from xbc and eglfs) I asked an aid to a company which offer a 
+> technical support about Qt. The says only qtquick2 requires the opengl 
+> acceleration and this one is provided also from xbc.
 
-So, yes, we should use GFDLv1.2+.
+This is not quite correct (even though the general problem you raise
+actually exists).
 
-Or... We may sync with SPDX: GPL-3.0, LGPL-2.1+, BSD-3-Clause, etc.
+First, it's actually qt5declarative that requires OpenGL (or OpenGL ES)
+support, and qt5quick1 depends on qt5declarative. Same for
+qt5graphicaleffects, it depends on qt5declarative.
 
->
->   * Whether we should really worry about the documentation license,
->     since we don't allow the installation of the documentation on the
->     target. I don't think we have any other package that describe the
->     license of their documentation.
+Moreover, under X.org, having XCB is clearly not sufficient to get
+OpenGL support. XCB is merely a modern implementation of libX11, which
+allows to talk to the X server to do some rendering, but not direct,
+OpenGL rendering.
 
-I'm quite neutral on this point, but I would like at least a comment to
-make it clear that whoever added the license info has checked, not just
-missed the other license(s).
+> So it shouldn't required at all the eglfs plugin if you're using X.
 
-Example:
+This is correct. eglfs is only needed for non-X.org situations.
 
-   # The docs are GFDLv1.2+, but not installed
-   LIBFOO_LICENSE = LGPLv3+
+> Please, might you verify this?
+> If they are right, could you fix the dependencies so we can build a 
+> working buildroot image with Qt5 and xcb?
 
+As explained above, this requires more than just XCB, contrary to what
+the company you requested support from is claiming. You need an OpenGL
+implementation that works under X.org, and this implementation is
+usually Mesa. And the support for making Mesa recognized as a proper
+OpenGL implementation has only been merged since yesterday, and is not
+yet completely ready.
 
+It would certainly be interesting to fix this in Buildroot and allow
+Qt5 to build for X.org with OpenGL support. But if you want this to
+happen, you should either:
 
+ 1) Do it yourself.
+
+ 2) Wait for someone else to do it, but then you can't expect any
+    particular deadline or guarantees. It may be something that will
+    get done this summer as part of the Google Summer of Code.
+
+ 3) Hire a third party to do it. Actually, it's a little bit strange
+    that you've asked a company who isn't able to fix the problem in
+    Buildroot, rather than a company that actually is able to do it.
+
+BTW, what is your hardware platform? What type of graphics hardware are
+you using? What X.org driver are you using?
+
+Anyway, thanks for the report, this is definitely something that should
+be improved.
+
+Thomas
 -- 
-Luca
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
