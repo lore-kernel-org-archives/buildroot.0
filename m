@@ -1,36 +1,108 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Mar 2014 17:32:46 +0200
-Subject: [Buildroot] [git commit] ifplugd: fix typo introduced in previous
-	commit
-Message-ID: <20140330153327.CCB689C2C2@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 30 Mar 2014 17:37:33 +0200
+Subject: [Buildroot] [PATCH 1/1 v3] xdriver_xf86-video-intel: Bump version
+	to 2.99.911
+Message-ID: <1396193853-19795-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ba53265b9c2d1d54bdde96becee20613f6d688c3
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+- add necessary dependencies
+- add -D_GNU_SOURCE to avoid getline compilation error
 
-Commit b1ec31a4dd2b7bd8959bdbc6d44e2cf2b56f8363 ('ifplugd: only
-install default action if not provided in skeleton') introduced a
-small typo, which we fix in this commit.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/ifplugd/ifplugd.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+v3: - add optional dependency BR2_PACKAGE_XPROTO_XF86DRIPROTO (Thomas)
+v2: - depend on mesa3d only when the i965 DRI driver is selected (Thomas)
+    - allow both kms and ums support (Thomas):
+  Support for Kernel Mode Setting? yes
+  Support for legacy User Mode Setting (for i810)? yes
 
-diff --git a/package/ifplugd/ifplugd.mk b/package/ifplugd/ifplugd.mk
-index 81b3884..7725978 100644
---- a/package/ifplugd/ifplugd.mk
-+++ b/package/ifplugd/ifplugd.mk
-@@ -27,7 +27,7 @@ define IFPLUGD_INSTALL_FIXUP
- 	fi
- 	if [ ! -f $(TARGET_DIR)/etc/ifplugd/ifplugd.action ]; then \
- 		$(INSTALL) -D -m 0755 $(@D)/conf/ifplugd.action \
--			$(TARGET_DIR)/etc/ifplugd/ifplugd.action
-+			$(TARGET_DIR)/etc/ifplugd/ifplugd.action ; \
- 	fi
- 	$(INSTALL) -D -m 0755 $(@D)/conf/ifplugd.init \
- 		$(TARGET_DIR)/etc/init.d/S45ifplugd
+ package/x11r7/xdriver_xf86-video-intel/Config.in   |   13 ++++----
+ .../xdriver_xf86-video-intel.mk                    |   31 ++++++++++++++++----
+ 2 files changed, 32 insertions(+), 12 deletions(-)
+
+diff --git a/package/x11r7/xdriver_xf86-video-intel/Config.in b/package/x11r7/xdriver_xf86-video-intel/Config.in
+index 83b714a..1917319 100644
+--- a/package/x11r7/xdriver_xf86-video-intel/Config.in
++++ b/package/x11r7/xdriver_xf86-video-intel/Config.in
+@@ -1,13 +1,14 @@
+ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL
+ 	bool "xf86-video-intel"
+-	select BR2_PACKAGE_XPROTO_FONTSPROTO
+-	select BR2_PACKAGE_XPROTO_RANDRPROTO
+-	select BR2_PACKAGE_XPROTO_RENDERPROTO
+-	select BR2_PACKAGE_XPROTO_XPROTO
+-	select BR2_PACKAGE_XLIB_LIBPCIACCESS
+ 	select BR2_PACKAGE_LIBDRM
+ 	select BR2_PACKAGE_LIBDRM_INTEL
+-	select BR2_PACKAGE_MESA3D
++	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE
++	select BR2_PACKAGE_XLIB_LIBPCIACCESS
++	select BR2_PACKAGE_XLIB_LIBXRANDR
++	select BR2_PACKAGE_XLIB_LIBXTST
++	select BR2_PACKAGE_XPROTO_FONTSPROTO
++	select BR2_PACKAGE_XPROTO_XF86DRIPROTO if BR2_PACKAGE_MESA3D_DRI_DRIVER_I965
++	select BR2_PACKAGE_XPROTO_XPROTO
+ 	depends on (BR2_i386 || BR2_x86_64)
+ 	help
+ 	  Intel video driver
+diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
+index 332de54..e9d3871 100644
+--- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
++++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
+@@ -4,18 +4,18 @@
+ #
+ ################################################################################
+ 
+-XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.907
++XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.911
+ XDRIVER_XF86_VIDEO_INTEL_SOURCE = xf86-video-intel-$(XDRIVER_XF86_VIDEO_INTEL_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_INTEL_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_INTEL_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_INTEL_LICENSE_FILES = COPYING
+-XDRIVER_XF86_VIDEO_INTEL_AUTORECONF = YES
++
++# this fixes a getline-related compilation in src/sna/kgem.c
++XDRIVER_XF86_VIDEO_INTEL_CONF_ENV = \
++	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
+ 
+ XDRIVER_XF86_VIDEO_INTEL_CONF_OPT = \
+-	--enable-dri \
+-	--enable-kms-only \
+ 	--disable-xvmc \
+-	--disable-ums-only \
+ 	--enable-sna \
+ 	--disable-uxa \
+ 	--disable-glamor \
+@@ -23,6 +23,25 @@ XDRIVER_XF86_VIDEO_INTEL_CONF_OPT = \
+ 	--disable-dga \
+ 	--disable-async-swap
+ 
+-XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xproto libdrm xlib_libpciaccess
++XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES = \
++	libdrm \
++	xlib_libXcomposite \
++	xlib_libXrandr \
++	xlib_libXtst \
++	xlib_libpciaccess \
++	xproto_fontsproto \
++	xproto_xproto \
++	xserver_xorg-server
++
++ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER_I965),y)
++XDRIVER_XF86_VIDEO_INTEL_CONF_OPT += \
++	--enable-dri
++XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES += \
++	mesa3d \
++	xproto_xf86driproto
++else
++XDRIVER_XF86_VIDEO_INTEL_CONF_OPT += \
++	--disable-dri
++endif
+ 
+ $(eval $(autotools-package))
+-- 
+1.7.10.4
