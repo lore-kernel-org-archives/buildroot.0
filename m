@@ -1,38 +1,28 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Sun, 30 Mar 2014 15:37:33 +0200
-Subject: [Buildroot] [PATCH 1/1 v2] xdriver_xf86-video-intel: Bump
-	version to 2.99.911
-References: <1396178545-12912-1-git-send-email-bernd.kuhls@t-online.de>
- <20140330151109.658eb835@skate>
-Message-ID: <t9jl0bxj2h.ln2@ID-313208.user.individual.net>
+From: Marco Trapanese <marcotrapanese@gmail.com>
+Date: Sun, 30 Mar 2014 15:47:43 +0200
+Subject: [Buildroot] qt5, eglfs and xcb
+Message-ID: <5338207F.9010807@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
+when you try to build qt5 with the X support (xcb), selecting one of the 
+following modules: qtquick*, qt5declarative, qt5graphicaleffects and 
+qt5multimedia, leads to force the selection of the eglfs support.
 
-Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote
-in news:20140330151109.658eb835 at skate: 
+After three days of build failures (due to the same constants defined 
+both from xbc and eglfs) I asked an aid to a company which offer a 
+technical support about Qt. The says only qtquick2 requires the opengl 
+acceleration and this one is provided also from xbc.
 
-> Do we want KMS vs. UMS to be a configurable option?
+So it shouldn't required at all the eglfs plugin if you're using X.
 
-this is not necessary because the driver can have both options compiled, 
-therefore I removed the kms/ums-related options.
+Please, might you verify this?
+If they are right, could you fix the dependencies so we can build a 
+working buildroot image with Qt5 and xcb?
 
-> Then in the Config.in file, if BR2_PACKAGE_MESA3D_DRI_DRIVER_I965 is
-> enabled, you want to select MESA3D.
-
-+       select BR2_PACKAGE_MESA3D if BR2_PACKAGE_MESA3D_DRI_DRIVER_I965
-
-leads to
-
-package/mesa3d/Config.in:1:error: recursive dependency detected!
-package/mesa3d/Config.in:1:     symbol BR2_PACKAGE_MESA3D is selected by BR2
-_PACKAGE_MESA3D_DRI_DRIVER_I965
-package/mesa3d/Config.in:70:    symbol BR2_PACKAGE_MESA3D_DRI_DRIVER_I965 
-depends on BR2_PACKAGE_MESA3D
-
-Regards, Bernd
+Thanks!
+Marco
