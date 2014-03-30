@@ -1,108 +1,41 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 30 Mar 2014 17:37:33 +0200
-Subject: [Buildroot] [PATCH 1/1 v3] xdriver_xf86-video-intel: Bump version
-	to 2.99.911
-Message-ID: <1396193853-19795-1-git-send-email-bernd.kuhls@t-online.de>
+From: Bernd Kuhls <berndkuhls@hotmail.com>
+Date: Sun, 30 Mar 2014 17:48:02 +0200
+Subject: [Buildroot] [PATCH 1/1 v2] xdriver_xf86-video-intel: Bump
+	version to 2.99.911
+References: <1396178545-12912-1-git-send-email-bernd.kuhls@t-online.de>
+ <20140330151109.658eb835@skate>
+ <t9jl0bxj2h.ln2@ID-313208.user.individual.net>
+ <20140330172413.049cd7d0@skate>
+Message-ID: <iuql0bxemh.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- add necessary dependencies
-- add -D_GNU_SOURCE to avoid getline compilation error
+Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote
+in news:20140330172413.049cd7d0 at skate: 
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v3: - add optional dependency BR2_PACKAGE_XPROTO_XF86DRIPROTO (Thomas)
-v2: - depend on mesa3d only when the i965 DRI driver is selected (Thomas)
-    - allow both kms and ums support (Thomas):
-  Support for Kernel Mode Setting? yes
-  Support for legacy User Mode Setting (for i810)? yes
+> Can you look into the other circular dependency that your patch series
+> has introduced? I've reported it to you yesterday evening.
 
- package/x11r7/xdriver_xf86-video-intel/Config.in   |   13 ++++----
- .../xdriver_xf86-video-intel.mk                    |   31 ++++++++++++++++----
- 2 files changed, 32 insertions(+), 12 deletions(-)
+Hi,
 
-diff --git a/package/x11r7/xdriver_xf86-video-intel/Config.in b/package/x11r7/xdriver_xf86-video-intel/Config.in
-index 83b714a..1917319 100644
---- a/package/x11r7/xdriver_xf86-video-intel/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-intel/Config.in
-@@ -1,13 +1,14 @@
- config BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL
- 	bool "xf86-video-intel"
--	select BR2_PACKAGE_XPROTO_FONTSPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_RENDERPROTO
--	select BR2_PACKAGE_XPROTO_XPROTO
--	select BR2_PACKAGE_XLIB_LIBPCIACCESS
- 	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_LIBDRM_INTEL
--	select BR2_PACKAGE_MESA3D
-+	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE
-+	select BR2_PACKAGE_XLIB_LIBPCIACCESS
-+	select BR2_PACKAGE_XLIB_LIBXRANDR
-+	select BR2_PACKAGE_XLIB_LIBXTST
-+	select BR2_PACKAGE_XPROTO_FONTSPROTO
-+	select BR2_PACKAGE_XPROTO_XF86DRIPROTO if BR2_PACKAGE_MESA3D_DRI_DRIVER_I965
-+	select BR2_PACKAGE_XPROTO_XPROTO
- 	depends on (BR2_i386 || BR2_x86_64)
- 	help
- 	  Intel video driver
-diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-index 332de54..e9d3871 100644
---- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-+++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-@@ -4,18 +4,18 @@
- #
- ################################################################################
- 
--XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.907
-+XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.911
- XDRIVER_XF86_VIDEO_INTEL_SOURCE = xf86-video-intel-$(XDRIVER_XF86_VIDEO_INTEL_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_INTEL_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_INTEL_LICENSE = MIT
- XDRIVER_XF86_VIDEO_INTEL_LICENSE_FILES = COPYING
--XDRIVER_XF86_VIDEO_INTEL_AUTORECONF = YES
-+
-+# this fixes a getline-related compilation in src/sna/kgem.c
-+XDRIVER_XF86_VIDEO_INTEL_CONF_ENV = \
-+	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
- 
- XDRIVER_XF86_VIDEO_INTEL_CONF_OPT = \
--	--enable-dri \
--	--enable-kms-only \
- 	--disable-xvmc \
--	--disable-ums-only \
- 	--enable-sna \
- 	--disable-uxa \
- 	--disable-glamor \
-@@ -23,6 +23,25 @@ XDRIVER_XF86_VIDEO_INTEL_CONF_OPT = \
- 	--disable-dga \
- 	--disable-async-swap
- 
--XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xproto libdrm xlib_libpciaccess
-+XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES = \
-+	libdrm \
-+	xlib_libXcomposite \
-+	xlib_libXrandr \
-+	xlib_libXtst \
-+	xlib_libpciaccess \
-+	xproto_fontsproto \
-+	xproto_xproto \
-+	xserver_xorg-server
-+
-+ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER_I965),y)
-+XDRIVER_XF86_VIDEO_INTEL_CONF_OPT += \
-+	--enable-dri
-+XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES += \
-+	mesa3d \
-+	xproto_xf86driproto
-+else
-+XDRIVER_XF86_VIDEO_INTEL_CONF_OPT += \
-+	--disable-dri
-+endif
- 
- $(eval $(autotools-package))
--- 
-1.7.10.4
+I did, but my knowledge about Kconfig and virtual packages unfortunately 
+reaches not that far:( One observation though I would like to share: when 
+commenting out
+
+source "package/xbmc/Config.in"
+
+the circular dependency error did not show up. Also Yann?s idea resolved the 
+"circular hell": 
+http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/80652
+
+During the coding on the mesa3d update shortly I already had a virtual 
+package for OpenGL, like you proposed, but, as I said, my knowledge here is 
+limited so I removed that (non-working) part from the patch in order to have 
+a working solution for mesa3d. Since I tested without the xbmc package from 
+Maxime (mine is different) I did not notice the dependency problem before.
+
+Regards, Bernd
