@@ -1,36 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Mar 2014 11:48:11 +0200
-Subject: [Buildroot] [PATCH 1/1] libubox: Lua binding needs mmu and fix
- coding style
-In-Reply-To: <1396150681-16655-1-git-send-email-hadrien.boutteville@gmail.com>
-References: <1396150681-16655-1-git-send-email-hadrien.boutteville@gmail.com>
-Message-ID: <20140330114811.36dc6247@skate>
+From: Bernd Kuhls <berndkuhls@hotmail.com>
+Date: Sun, 30 Mar 2014 11:52:42 +0200
+Subject: [Buildroot] [PATCH 1/1] mtools: Does not compile on bfin
+References: <1396171235-18112-1-git-send-email-bernd.kuhls@t-online.de>
+ <20140330092505.GE4579@tarshish>
+Message-ID: <a46l0bxdnn.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Hadrien Boutteville,
+Baruch Siach <baruch@tkos.co.il> wrote in
+news:20140330092505.GE4579 at tarshish: 
 
-On Sun, 30 Mar 2014 05:38:01 +0200, Hadrien Boutteville wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/4e1/4e112e4463fef7ad8757259b222fab10fbd09d0d/
-> 
-> The Lua binding option of libubox uses fork() so it needs the MMU.
-> 
-> By the way, correction of coding style as stated in the buildroot
-> manual.
-> 
-> Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
-> ---
->  package/libubox/libubox.mk | 10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
+> The build failure at 
+> http://autobuild.buildroot.net/results/c0f/c0ff79569690b5799c25c09bde581c
+> ee6acb9910/ predates commit 56e404bb883b0 (mtools: needs mmu) that added
+> the MMU dependency.
 
-Applied, thanks!
+Hi,
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+ah, ok, so forget that patch ;)
+
+Regards, Bernd
