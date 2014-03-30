@@ -1,59 +1,56 @@
 From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Sun, 30 Mar 2014 21:57:44 +0400
-Subject: [Buildroot] [PATCH v3 00/10] xtensa: add -mtext-section-literals to
-	xtensa ABI
-Message-ID: <1396202274-5109-1-git-send-email-jcmvbkbc@gmail.com>
+Date: Sun, 30 Mar 2014 21:57:46 +0400
+Subject: [Buildroot] [PATCH v3 02/10] Makefile.in: add
+	-mtext-section-literals to xtensa ABI
+In-Reply-To: <1396202274-5109-1-git-send-email-jcmvbkbc@gmail.com>
+References: <1396202274-5109-1-git-send-email-jcmvbkbc@gmail.com>
+Message-ID: <1396202274-5109-3-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Collecting literals into separate section can be advantageous if that
+section is placed into DTCM at link time. This is applicable for code
+running on bare metal, but makes no sense under linux, where userspace
+is isolated from the physical memory details. OTOH placing literals into
+separate section breaks build of huge source files, because l32r
+instruction can only access literals in 256 KBytes range.
 
-this series is the second part of fixes for building huge sources, like
-wireshark or mplayer: adding trampolines support to binutils allows
-assembling of such files, but with literals placed into separate section
-build fails at the linking step.
+Add -mtext-section-literals into xtensa ABI to fix build issues of
+packages with huge sources.
 
-First patch allows building uclibc with -mtext-section-literals, it is
-posted to the uclibc list, but not reviewed/checked in yet.
-Second patch adds -mtext-section-literals flag to xtensa ABI.
-Remaining patches revert -mtext-section-literals additions to individual
-packages.
-
-Changes v2 -> v3:
-- drop patch 3 and revert individual commits that added
-  -mtext-section-literals flag instead
-
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+---
 Changes v1 -> v2:
 - add comment to XTENSA_ABI variable explaining -mtext-section-literals usage
-- remove -mtext-section-literals from individual package *.mk's
 
-Max Filippov (10):
-  uclibc: add missing .literal_position directives
-  Makefile.in: add -mtext-section-literals to xtensa ABI
-  Revert "civetweb: fix build for xtensa"
-  Revert "ffmpeg: fix build for xtensa"
-  Revert "gst-ffmpeg: fix build for xtensa"
-  Revert "gst1-libav: fix build for xtensa"
-  Revert "lmbench: fix build for xtensa"
-  Revert "php: fix build for xtensa"
-  Revert "sqlcipher: fix build for xtensa"
-  Revert "xtensa: sqlite requires special compiler option"
+ package/Makefile.in | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
- package/Makefile.in                                | 11 +++-
- package/civetweb/civetweb.mk                       |  3 --
- package/ffmpeg/ffmpeg.mk                           |  8 ---
- package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk         |  8 ---
- package/gstreamer1/gst1-libav/gst1-libav.mk        |  8 ---
- package/lmbench/lmbench.mk                         |  4 --
- package/php/php.mk                                 |  4 --
- package/sqlcipher/sqlcipher.mk                     |  4 --
- package/sqlite/sqlite.mk                           |  4 --
- ...-add-missing-.literal_position-directives.patch | 62 ++++++++++++++++++++++
- 10 files changed, 72 insertions(+), 44 deletions(-)
- create mode 100644 package/uclibc/7bf35c8b7d4a1f97174eb49f47f33946b282114c/uclibc-0001-xtensa-add-missing-.literal_position-directives.patch
-
+diff --git a/package/Makefile.in b/package/Makefile.in
+index eea7043..a70e538 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -72,8 +72,17 @@ endif
+ # and is required for some packages. While this option can degrade both
+ # code size and performance, the linker can usually optimize away the
+ # overhead when a call ends up within a certain range.
++#
++# Use text-section-literals for Xtensa globally.
++# Collecting literals into separate section can be advantageous if that
++# section is placed into DTCM at link time. This is applicable for code
++# running on bare metal, but makes no sense under linux, where userspace
++# is isolated from the physical memory details. OTOH placing literals into
++# separate section breaks build of huge source files, because l32r
++# instruction can only access literals in 256 KBytes range.
++#
+ ifeq ($(BR2_xtensa),y)
+-TARGET_ABI += -mlongcalls
++TARGET_ABI += -mlongcalls -mtext-section-literals
+ endif
+ 
+ STAGING_SUBDIR = usr/$(GNU_TARGET_NAME)/sysroot
 -- 
 1.8.1.4
