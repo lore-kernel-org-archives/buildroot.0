@@ -1,7 +1,8 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Mar 2014 01:02:48 +0100
-Subject: [Buildroot] [PATCH] package/mesa3d: fix EGL/GLES provider
-Message-ID: <1396137768-22914-1-git-send-email-yann.morin.1998@free.fr>
+Date: Sun, 30 Mar 2014 01:15:12 +0100
+Subject: [Buildroot] [PATCH] package/xbmc: add missing dependency to libgles
+	and libegl
+Message-ID: <1396138512-7311-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,38 +11,24 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-mesa3d being selected is not enough for it to be an EGL provider.
-
-The corresponding options BR2_PACKAGE_MESA3D_OPENGL_EGL should be
-enabled. This option already correctlt selects BR2_PACKAGE_HAS_OPENGL_EGL.
-
-So, only declare mesa3d as an EGL provider if the option is set.
-
-Ditto for GLES.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Bernd Kuhls <berndkuhls@hotmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
- package/mesa3d/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/xbmc/xbmc.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 217528b..8ed0c07 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -107,10 +107,10 @@ config BR2_PACKAGE_MESA3D_OPENGL_ES
- endmenu
- 
- config BR2_PACKAGE_PROVIDES_OPENGL_EGL
--	default "mesa3d"
-+	default "mesa3d" if BR2_PACKAGE_MESA3D_OPENGL_EGL
- 
- config BR2_PACKAGE_PROVIDES_OPENGL_ES
--	default "mesa3d"
-+	default "mesa3d" if BR2_PACKAGE_MESA3D_OPENGL_ES
- 
- endif
+diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
+index 6dbbb7d..9e346bd 100644
+--- a/package/xbmc/xbmc.mk
++++ b/package/xbmc/xbmc.mk
+@@ -14,7 +14,7 @@ XBMC_LICENSE_FILES = LICENSE.GPL
+ # http://wiki.xbmc.org/index.php?title=TexturePacker
+ XBMC_DEPENDENCIES = host-gperf host-lzo host-sdl_image host-swig
+ XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
+-	libass libcdio libcurl libfribidi libgcrypt libmad libmodplug libmpeg2 \
++	libass libcdio libcurl libegl libfribidi libgcrypt libgles libmad libmodplug libmpeg2 \
+ 	libogg libplist libpng libsamplerate libungif libvorbis libxml2 lzo ncurses \
+ 	openssl pcre python readline sqlite taglib tiff tinyxml yajl zlib
  
 -- 
 1.8.3.2
