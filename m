@@ -1,17 +1,16 @@
 From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Sun, 30 Mar 2014 21:57:50 +0400
-Subject: [Buildroot] [PATCH v3 06/10] Revert "gst1-libav: fix build for
-	xtensa"
+Date: Sun, 30 Mar 2014 21:57:51 +0400
+Subject: [Buildroot] [PATCH v3 07/10] Revert "lmbench: fix build for xtensa"
 In-Reply-To: <1396202274-5109-1-git-send-email-jcmvbkbc@gmail.com>
 References: <1396202274-5109-1-git-send-email-jcmvbkbc@gmail.com>
-Message-ID: <1396202274-5109-7-git-send-email-jcmvbkbc@gmail.com>
+Message-ID: <1396202274-5109-8-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This reverts commit ae3298d7d489f5ee465ff4ce83494de527d0ac73.
+This reverts commit 7c04932603476f3adf474f3bc47c35bdb59d947a.
 Now that -mtext-section-literals is specified in the xtensa ABI this fix
 is no longer needed.
 
@@ -20,25 +19,23 @@ Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 Changes v2 -> v3:
 - new patch
 
- package/gstreamer1/gst1-libav/gst1-libav.mk | 8 --------
- 1 file changed, 8 deletions(-)
+ package/lmbench/lmbench.mk | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
-index a0a536e..1c45acc 100644
---- a/package/gstreamer1/gst1-libav/gst1-libav.mk
-+++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
-@@ -83,12 +83,4 @@ endif
- GST1_LIBAV_CONF_OPT = \
- 	--with-libav-extra-configure="$(GST1_LIBAV_CONF_EXTRA_OPT)"
+diff --git a/package/lmbench/lmbench.mk b/package/lmbench/lmbench.mk
+index 529026f..c3a6c09 100644
+--- a/package/lmbench/lmbench.mk
++++ b/package/lmbench/lmbench.mk
+@@ -19,10 +19,6 @@ LMBENCH_CFLAGS += -I$(STAGING_DIR)/usr/include/tirpc/
+ LMBENCH_LDFLAGS += -ltirpc
+ endif
  
--GST1_LIBAV_CFLAGS = $(TARGET_CFLAGS)
--
 -ifeq ($(BR2_xtensa),y)
--GST1_LIBAV_CFLAGS += -mtext-section-literals
+-LMBENCH_CFLAGS += -mtext-section-literals
 -endif
 -
--GST1_LIBAV_CONF_ENV += CFLAGS="$(GST1_LIBAV_CFLAGS)"
--
- $(eval $(autotools-package))
+ define LMBENCH_CONFIGURE_CMDS
+ 	$(call CONFIG_UPDATE,$(@D))
+ 	sed -i 's/CFLAGS=/CFLAGS+=/g' $(@D)/src/Makefile
 -- 
 1.8.1.4
