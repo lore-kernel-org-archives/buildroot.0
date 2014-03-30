@@ -1,45 +1,47 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Sat, 29 Mar 2014 20:53:40 -0400
-Subject: [Buildroot] [PATCH 1/1] ifplugd: only install default action if not
-	provided in skeleton
-Message-ID: <1396140820-1793-1-git-send-email-danomimanchego123@gmail.com>
+From: Hadrien Boutteville <hadrien.boutteville@gmail.com>
+Date: Sun, 30 Mar 2014 05:38:01 +0200
+Subject: [Buildroot] [PATCH 1/1] libubox: Lua binding needs mmu and fix
+	coding style
+Message-ID: <1396150681-16655-1-git-send-email-hadrien.boutteville@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Fixes
+http://autobuild.buildroot.net/results/4e1/4e112e4463fef7ad8757259b222fab10fbd09d0d/
 
+The Lua binding option of libubox uses fork() so it needs the MMU.
+
+By the way, correction of coding style as stated in the buildroot
+manual.
+
+Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
 ---
+ package/libubox/libubox.mk | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-This is basically a parallel check-in to ec771579451c54c8590800ca1803cd6bfcc9a116,
-which extended the same consideration to ifplugd.conf.
----
- package/ifplugd/ifplugd.mk |    8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/package/ifplugd/ifplugd.mk b/package/ifplugd/ifplugd.mk
-index 837e016..81b3884 100644
---- a/package/ifplugd/ifplugd.mk
-+++ b/package/ifplugd/ifplugd.mk
-@@ -21,12 +21,14 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- endif
+diff --git a/package/libubox/libubox.mk b/package/libubox/libubox.mk
+index 22efc9a..b552227 100644
+--- a/package/libubox/libubox.mk
++++ b/package/libubox/libubox.mk
+@@ -10,12 +10,14 @@ LIBUBOX_LICENSE = LGPLv2.1, GPLv2, BSD-3c, MIT
+ LIBUBOX_INSTALL_STAGING = YES
+ LIBUBOX_DEPENDENCIES = host-pkgconf $(if $(BR2_PACKAGE_JSON_C),json-c)
  
- define IFPLUGD_INSTALL_FIXUP
--	@if [ ! -f $(TARGET_DIR)/etc/ifplugd/ifplugd.conf ]; then \
-+	if [ ! -f $(TARGET_DIR)/etc/ifplugd/ifplugd.conf ]; then \
- 		$(INSTALL) -D $(@D)/conf/ifplugd.conf $(TARGET_DIR)/etc/ifplugd/ifplugd.conf; \
- 		$(SED) 's^\(ARGS=.*\)w^\1^' $(TARGET_DIR)/etc/ifplugd/ifplugd.conf; \
- 	fi
--	$(INSTALL) -D -m 0755 $(@D)/conf/ifplugd.action \
--		$(TARGET_DIR)/etc/ifplugd/ifplugd.action
-+	if [ ! -f $(TARGET_DIR)/etc/ifplugd/ifplugd.action ]; then \
-+		$(INSTALL) -D -m 0755 $(@D)/conf/ifplugd.action \
-+			$(TARGET_DIR)/etc/ifplugd/ifplugd.action
-+	fi
- 	$(INSTALL) -D -m 0755 $(@D)/conf/ifplugd.init \
- 		$(TARGET_DIR)/etc/init.d/S45ifplugd
- 	# don't use bash for init script
--- 
-1.7.9.5
++ifeq ($(BR2_USE_MMU),y) # fork()
+ ifeq ($(BR2_PACKAGE_LUA_5_1),y)
+-	LIBUBOX_DEPENDENCIES += lua
+-	LIBUBOX_CONF_OPT += -DLUAPATH=$(STAGING_DIR)/usr/lib/lua/5.1 \
+-		-DLUA_CFLAGS=-I$(STAGING_DIR)/usr/include
++LIBUBOX_DEPENDENCIES += lua
++LIBUBOX_CONF_OPT += -DLUAPATH=$(STAGING_DIR)/usr/lib/lua/5.1 \
++	-DLUA_CFLAGS=-I$(STAGING_DIR)/usr/include
+ else
+-	LIBUBOX_CONF_OPT += -DBUILD_LUA:BOOL=OFF
++LIBUBOX_CONF_OPT += -DBUILD_LUA:BOOL=OFF
+ endif
++endif # MMU
+ 
+ $(eval $(cmake-package))
