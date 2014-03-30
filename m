@@ -1,91 +1,59 @@
 From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Sun, 30 Mar 2014 21:57:45 +0400
-Subject: [Buildroot] [PATCH v3 01/10] uclibc: add missing .literal_position
-	directives
-In-Reply-To: <1396202274-5109-1-git-send-email-jcmvbkbc@gmail.com>
-References: <1396202274-5109-1-git-send-email-jcmvbkbc@gmail.com>
-Message-ID: <1396202274-5109-2-git-send-email-jcmvbkbc@gmail.com>
+Date: Sun, 30 Mar 2014 21:57:44 +0400
+Subject: [Buildroot] [PATCH v3 00/10] xtensa: add -mtext-section-literals to
+	xtensa ABI
+Message-ID: <1396202274-5109-1-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This allows building uclibc with -mtext-section-literals flag.
+Hi Thomas,
 
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
----
+this series is the second part of fixes for building huge sources, like
+wireshark or mplayer: adding trampolines support to binutils allows
+assembling of such files, but with literals placed into separate section
+build fails at the linking step.
+
+First patch allows building uclibc with -mtext-section-literals, it is
+posted to the uclibc list, but not reviewed/checked in yet.
+Second patch adds -mtext-section-literals flag to xtensa ABI.
+Remaining patches revert -mtext-section-literals additions to individual
+packages.
+
+Changes v2 -> v3:
+- drop patch 3 and revert individual commits that added
+  -mtext-section-literals flag instead
+
+Changes v1 -> v2:
+- add comment to XTENSA_ABI variable explaining -mtext-section-literals usage
+- remove -mtext-section-literals from individual package *.mk's
+
+Max Filippov (10):
+  uclibc: add missing .literal_position directives
+  Makefile.in: add -mtext-section-literals to xtensa ABI
+  Revert "civetweb: fix build for xtensa"
+  Revert "ffmpeg: fix build for xtensa"
+  Revert "gst-ffmpeg: fix build for xtensa"
+  Revert "gst1-libav: fix build for xtensa"
+  Revert "lmbench: fix build for xtensa"
+  Revert "php: fix build for xtensa"
+  Revert "sqlcipher: fix build for xtensa"
+  Revert "xtensa: sqlite requires special compiler option"
+
+ package/Makefile.in                                | 11 +++-
+ package/civetweb/civetweb.mk                       |  3 --
+ package/ffmpeg/ffmpeg.mk                           |  8 ---
+ package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk         |  8 ---
+ package/gstreamer1/gst1-libav/gst1-libav.mk        |  8 ---
+ package/lmbench/lmbench.mk                         |  4 --
+ package/php/php.mk                                 |  4 --
+ package/sqlcipher/sqlcipher.mk                     |  4 --
+ package/sqlite/sqlite.mk                           |  4 --
  ...-add-missing-.literal_position-directives.patch | 62 ++++++++++++++++++++++
- 1 file changed, 62 insertions(+)
+ 10 files changed, 72 insertions(+), 44 deletions(-)
  create mode 100644 package/uclibc/7bf35c8b7d4a1f97174eb49f47f33946b282114c/uclibc-0001-xtensa-add-missing-.literal_position-directives.patch
 
-diff --git a/package/uclibc/7bf35c8b7d4a1f97174eb49f47f33946b282114c/uclibc-0001-xtensa-add-missing-.literal_position-directives.patch b/package/uclibc/7bf35c8b7d4a1f97174eb49f47f33946b282114c/uclibc-0001-xtensa-add-missing-.literal_position-directives.patch
-new file mode 100644
-index 0000000..f5577c6
---- /dev/null
-+++ b/package/uclibc/7bf35c8b7d4a1f97174eb49f47f33946b282114c/uclibc-0001-xtensa-add-missing-.literal_position-directives.patch
-@@ -0,0 +1,62 @@
-+From 04d7bd868b300c8150231d7a37e62150eaf810d0 Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Mon, 24 Mar 2014 01:06:35 +0400
-+Subject: [PATCH] xtensa: add missing .literal_position directives
-+
-+This addition allows building uClibc with -mtext-section-literals
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+ ldso/ldso/xtensa/dl-startup.h | 1 +
-+ ldso/ldso/xtensa/resolve.S    | 1 +
-+ libc/string/xtensa/strcmp.S   | 5 +++--
-+ 3 files changed, 5 insertions(+), 2 deletions(-)
-+
-+diff --git a/ldso/ldso/xtensa/dl-startup.h b/ldso/ldso/xtensa/dl-startup.h
-+index 45af82d..b135a4c 100644
-+--- a/ldso/ldso/xtensa/dl-startup.h
-++++ b/ldso/ldso/xtensa/dl-startup.h
-+@@ -11,6 +11,7 @@
-+ __asm__ (
-+     "	.text\n"
-+     "	.align  4\n"
-++    "	.literal_position\n"
-+     "	.global _start\n"
-+     "	.type   _start, @function\n"
-+     "	.hidden _start\n"
-+diff --git a/ldso/ldso/xtensa/resolve.S b/ldso/ldso/xtensa/resolve.S
-+index 61c2c5d..d1ae8aa 100644
-+--- a/ldso/ldso/xtensa/resolve.S
-++++ b/ldso/ldso/xtensa/resolve.S
-+@@ -27,6 +27,7 @@
-+ 
-+ 	.text
-+ 	.align	4
-++	.literal_position
-+ 	.global	_dl_linux_resolve
-+ 	.type	_dl_linux_resolve, @function
-+ _dl_linux_resolve:
-+diff --git a/libc/string/xtensa/strcmp.S b/libc/string/xtensa/strcmp.S
-+index d3d72e0..8ed1ed0 100644
-+--- a/libc/string/xtensa/strcmp.S
-++++ b/libc/string/xtensa/strcmp.S
-+@@ -34,13 +34,14 @@
-+ 
-+ #define MASK4 0x40404040
-+ 
-++	.text
-++	.align 4
-++	.literal_position
-+ 	.literal .Lmask0, MASK0
-+ 	.literal .Lmask1, MASK1
-+ 	.literal .Lmask2, MASK2
-+ 	.literal .Lmask3, MASK3
-+ 	.literal .Lmask4, MASK4
-+-
-+-	.text
-+ ENTRY (strcmp)
-+ 	/* a2 = s1, a3 = s2 */
-+ 
-+-- 
-+1.8.1.4
-+
 -- 
 1.8.1.4
