@@ -1,305 +1,142 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 30 Mar 2014 23:54:01 +0200
-Subject: [Buildroot] [PATCH v2] postgresql: new package
-Message-ID: <trinity-c87c01cc-1c84-4994-8cbf-a9d3e9175317-1396216441410@3capp-gmx-bs13>
+From: =?UTF-8?q?Marcelo=20Guti=C3=A9rrez?= <kuyurix@gmail.com>
+Date: Sun, 30 Mar 2014 18:48:51 -0300
+Subject: [Buildroot] [PATCH 1/1] mysql: fix build failure on MIPS
+Message-ID: <1396216131-3222-1-git-send-email-kuyurix@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Fixes:
+http://autobuild.buildroot.net/results/6b61f90d1a36ba43ff568933bb74975128380516/
 
-thanks for the review...
+Signed-off-by: Marcelo Guti?rrez <kuyurix@gmail.com>
+---
+ .../mysql-0006-fix_build_failure_on_MIPS.patch     |  115 ++++++++++++++++++++
+ 1 file changed, 115 insertions(+)
+ create mode 100644 package/mysql/mysql-0006-fix_build_failure_on_MIPS.patch
 
-On Sat, Mar 29, 2014 at 11:57:55AM +0100, Thomas Petazzoni wrote:
-> Dear Peter Seiderer,
-> 
-> On Tue, 18 Mar 2014 23:36:00 +0100, Peter Seiderer wrote:
-> > Based on suggested new package by Marco Trapanese ([1]).
-> > 
-> > [1] http://lists.busybox.net/pipermail/buildroot/2014-February/090661.html
-> > 
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> 
-> I've tried to build this, but it doesn't build here. I'm using the
-> following defconfig:
-> 
-> BR2_arm=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2014.02-rc1.tar.bz2"
-> BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_13=y
-> BR2_TOOLCHAIN_EXTERNAL_LARGEFILE=y
-> BR2_TOOLCHAIN_EXTERNAL_INET_IPV6=y
-> BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-> # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-> BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
-> BR2_TOOLCHAIN_EXTERNAL_CXX=y
-> BR2_INIT_NONE=y
-> BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-> BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-> BR2_PACKAGE_POSTGRESQL=y
-> BR2_PACKAGE_LIBNDP=y
-> 
-> The build failure is:
-> 
-> In file included from regcomp.c:2030:0:
-> regc_pg_locale.c: In function ?pg_wc_isdigit?:
-> regc_pg_locale.c:312:6: error: dereferencing pointer to incomplete type
-> regc_pg_locale.c: In function ?pg_wc_isalpha?:
-> regc_pg_locale.c:345:6: error: dereferencing pointer to incomplete type
-> regc_pg_locale.c: In function ?pg_wc_isalnum?:
-> regc_pg_locale.c:378:6: error: dereferencing pointer to incomplete type
-> regc_pg_locale.c: In function ?pg_wc_isupper?:
-> regc_pg_locale.c:411:6: error: dereferencing pointer to incomplete type
-> regc_pg_locale.c: In function ?pg_wc_islower?:
-> regc_pg_locale.c:444:6: error: dereferencing pointer to incomplete type
-> regc_pg_locale.c: In function ?pg_wc_isgraph?:
-> regc_pg_locale.c:477:6: error: dereferencing pointer to incomplete type
-> regc_pg_locale.c: In function ?pg_wc_isprint?:
-> regc_pg_locale.c:510:6: error: dereferencing pointer to incomplete type
-> regc_pg_locale.c: In function ?pg_wc_ispunct?:
-> regc_pg_locale.c:543:6: error: dereferencing pointer to incomplete type
-> regc_pg_locale.c: In function ?pg_wc_isspace?:
-> regc_pg_locale.c:576:6: error: dereferencing pointer to incomplete type
-> regc_pg_locale.c: In function ?pg_wc_toupper?:
-> regc_pg_locale.c:617:12: error: dereferencing pointer to incomplete type
-> regc_pg_locale.c:617:12: error: dereferencing pointer to incomplete type
-> regc_pg_locale.c: In function ?pg_wc_tolower?:
-> regc_pg_locale.c:658:12: error: dereferencing pointer to incomplete type
-> regc_pg_locale.c:658:12: error: dereferencing pointer to incomplete type
-> make[4]: *** [regcomp.o] Erreur 1
-> make[4]: quittant le r?pertoire ? /home/thomas/projets/buildroot/output/build/postgresql-9.3.3/src/backend/regex ?
-> 
-
-o.k. I will take a look at it...
-
-> Some other comments below.
-> 
-> > diff --git a/package/postgresql/Config.in b/package/postgresql/Config.in
-> > new file mode 100644
-> > index 0000000..efc296f
-> > --- /dev/null
-> > +++ b/package/postgresql/Config.in
-> > @@ -0,0 +1,13 @@
-> > +config BR2_PACKAGE_POSTGRESQL
-> > +   bool "PostgreSQL"
-> 
-> should be lower-case.
-
-mhh, did take a look at package/mysql/Config.in: bool "MySQL" and did the same, use the
-offical name which emphasises the SQL..., but I can change this if lower-case Menu entries
-are an requirement?
-
-> 
-> > +   depends on BR2_INET_IPV6
-> > +   select BR2_PACKAGE_READLINE
-> > +   select BR2_PACKAGE_ZLIB
-> > +   help
-> > +     PostgreSQL is a powerful, open source object-relational
-> > +     database system.
-> > +
-> > +     http://www.postgresql.org
-> > +
-> > +comment "PostgreSQL needs a toolchain w/ IPv6"
-> 
-> Ditto.
-
-see above...
-
-> 
-> > +   depends on !BR2_INET_IPV6
-> > diff --git a/package/postgresql/S50postgresql b/package/postgresql/S50postgresql
-> > new file mode 100644
-> > index 0000000..06cb4d5
-> > --- /dev/null
-> > +++ b/package/postgresql/S50postgresql
-> > @@ -0,0 +1,44 @@
-> > +#!/bin/sh
-> > +#
-> > +# start postgresql
-> > +#
-> > +
-> > +umask 077
-> > +
-> > +if [ ! -f /srv/pgsql/data/PG_VERSION ]; then
-> > +   echo "Initializing postgresql data base..."
-> > +   su - postgres -c '/usr/bin/pg_ctl initdb -D /srv/pgsql/data '
-> > +   echo "done"
-> > +fi
-> > +
-> > +start() {
-> > +   echo -n "Starting postgresql: "
-> > +   su - postgres -c '/usr/bin/pg_ctl start -D /srv/pgsql/data -l logfile'
-> > +   echo "OK"
-> > +}
-> > +stop() {
-> > +   echo -n "Stopping postgresql: "
-> > +   su - postgres -c '/usr/bin/pg_ctl stop -D /srv/pgsql/data -m fast'
-> > +   echo "OK"
-> > +}
-> > +restart() {
-> > +   stop
-> > +   start
-> > +}
-> > +
-> > +case "$1" in
-> > +   start)
-> > +           start
-> > +           ;;
-> > +   stop)
-> > +           stop
-> > +           ;;
-> > +   restart|reload)
-> > +           restart
-> > +           ;;
-> > +   *)
-> > +           echo "Usage: $0 {start|stop|restart}"
-> > +           exit 1
-> > +esac
-> > +
-> > +exit $?
-> > diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-> > new file mode 100644
-> > index 0000000..f4edc69
-> > --- /dev/null
-> > +++ b/package/postgresql/postgresql.mk
-> > @@ -0,0 +1,44 @@
-> > +################################################################################
-> > +#
-> > +# postgresql
-> > +#
-> > +################################################################################
-> > +
-> > +POSTGRESQL_VERSION = 9.3.3
-> > +POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
-> > +POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)/$(POSTGRESQL_SOURCE)
-> 
-> This looks weird, why is $(POSTGRESQL_SOURCE) at the end of the site?
-
-o.k, will fix (was copy & paste error)
-
-> 
-> > +POSTGRESQL_LICENSE = PostgreSQL
-> > +POSTGRESQ_LICENSE_FILES = COPYRIGHT
-> > +POSTGRESQL_DEPENDENCIES = readline zlib
-> > +POSTGRESQL_CONF_OPT = --prefix=/usr
-> 
-> This is not needed, as --prefix=/usr is part of the default
-> configuration options.
-
-o.k. will change...
-
-> 
-> > +
-> > +ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-> > +   POSTGRESQL_CONF_OPT += --disable-thread-safety
-> > +endif
-> > +
-> > +ifeq ($(BR2_PACKAGE_TZDATA),y)
-> > +   POSTGRESQL_DEPENDENCIES += tzdata
-> > +   POSTGRESQL_CONF_OPT += --with-system-tzdata=/usr/share/zoneinfo
-> > +endif
-> > +
-> > +ifeq ($(BR2_PACKAGE_OPENSSL),y)
-> > +   POSTGRESQL_DEPENDENCIES += openssl
-> > +   POSTGRESQL_CONF_OPT += --with-openssl
-> > +endif
-> 
-> Also, there are many, many more configuration options. You don't have
-> to support all of them for a first submission, but if you don't support
-> a given feature, you should pass --without-<foo> for it so that the
-> configure script doesn't mistakenly detect a library from the host. So
-> for example: --without-pam --without-python --without-perl, etc.
-> 
-> I see that you're making readline and zlib mandatory dependencies, but
-> they are not: the package has --without-readline and --without-zlib
-> options. So instead of mandatory dependencies, you should use:
-> 
-> ifeq ($(BR2_PACKAGE_READLINE),y)
-> POSTGRESQL_CONF_OPT += --with-readline
-> POSTGRESQL_DEPENDENDENCIES += readline
-> else
-> POSTGRESQL_CONF_OPT += --without-readline
-> endif
-> 
-
-Did follow the PostgreSQL INSTALL hints stating:
-
-     * The GNU Readline library is used by default. It allows psql (the
-       PostgreSQL command line SQL interpreter) to remember each command
-       you type, and allows you to use arrow keys to recall and edit
-       previous commands. This is very helpful and is strongly
-       recommended. If you don't want to use it then you must specify the
-       "--without-readline" option to "configure". As an alternative, you
-       can often use the BSD-licensed "libedit" library, originally
-       developed on NetBSD. The "libedit" library is GNU
-       Readline-compatible and is used if "libreadline" is not found, or
-       if "--with-libedit-preferred" is used as an option to "configure".
-       If you are using a package-based Linux distribution, be aware that
-       you need both the readline and readline-devel packages, if those
-
-and made the default enabled packages mandatory...
-
-The same for zlib:
-
-     * The zlib compression library is used by default. If you don't want
-       to use it then you must specify the "--without-zlib" option to
-       "configure". Using this option disables support for compressed
-       archives in pg_dump and pg_restore.
-
-But I can make readline/zlib optional (with some comment in the
-Config.in file)?
-
-All other features/packages are optional (and disabled as the INSTALL file
-states):
-
-   The following packages are optional. They are not required in the
-   default configuration, but they are needed when certain build options
-   are enabled, as explained below:
-
-So I think there is no need to disable them explicitly?
-
-> > +
-> > +define POSTGRESQL_USERS
-> > +   postgres -1 postgres -1 * /srv/pgsql/data /bin/sh postgres PostgreSQL Server
-> > +endef
-> 
-> Is /srv a normal location for databases? Isn't /var used in general?
-
-o.k, will change...
-
-> 
-> > +
-> > +define POSTGRESQL_INSTALL_TARGET_FIXUP
-> > +   $(INSTALL) -v -dm700 $(TARGET_DIR)/srv/pgsql/data
-> 
-> -v seems useless.
-
-o.k., will change...
-
-> 
-> Also, is there something that ensures that the /srv/pgsql/data
-> directory is owned by the postgres user and group, instead of the
-> default root user?
-> 
-> > +endef
-> > +
-> > +POSTGRESQL_POST_INSTALL_TARGET_HOOKS += POSTGRESQL_INSTALL_TARGET_FIXUP
-> > +
-> > +define POSTGRESQL_INSTALL_INIT_SYSV
-> > +   $(INSTALL) -m 0755 -D package/postgresql/S50postgresql \
-> > +           $(TARGET_DIR)/etc/init.d/S50postgresql
-> > +endef
-> > +
-> > +$(eval $(autotools-package))
-> 
-> Thanks!
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+diff --git a/package/mysql/mysql-0006-fix_build_failure_on_MIPS.patch b/package/mysql/mysql-0006-fix_build_failure_on_MIPS.patch
+new file mode 100644
+index 0000000..b4d58ce
+--- /dev/null
++++ b/package/mysql/mysql-0006-fix_build_failure_on_MIPS.patch
+@@ -0,0 +1,115 @@
++Fix compiler error about empty if body and uninitialized variables.
++
++Signed-off-by: Marcelo Gutierrez <kuyurix@gmail.com>
++--- mysql-5.1.73.old/mysys/my_read.c	2013-11-04 15:52:27.000000000 -0300
+++++ mysql-5.1.73.new/mysys/my_read.c	2014-03-30 16:41:49.343613055 -0300
++@@ -35,7 +35,8 @@
++ 
++ size_t my_read(File Filedes, uchar *Buffer, size_t Count, myf MyFlags)
++ {
++-  size_t readbytes, save_count;
+++  size_t readbytes=0;
+++  size_t save_count=0;
++   DBUG_ENTER("my_read");
++   DBUG_PRINT("my",("Fd: %d  Buffer: 0x%lx  Count: %lu  MyFlags: %d",
++                    Filedes, (long) Buffer, (ulong) Count, MyFlags));
++--- mysql-5.1.73.old/sql/set_var.cc	2013-11-04 15:52:27.000000000 -0300
+++++ mysql-5.1.73.new/sql/set_var.cc	2014-03-30 17:35:30.983501123 -0300
++@@ -127,7 +127,9 @@
++ static void fix_net_retry_count(THD *thd, enum_var_type type);
++ static void fix_max_join_size(THD *thd, enum_var_type type);
++ static void fix_query_cache_size(THD *thd, enum_var_type type);
+++#ifdef HAVE_QUERY_CACHE
++ static void fix_query_cache_min_res_unit(THD *thd, enum_var_type type);
+++#endif
++ static void fix_myisam_max_sort_file_size(THD *thd, enum_var_type type);
++ static void fix_max_binlog_size(THD *thd, enum_var_type type);
++ static void fix_max_relay_log_size(THD *thd, enum_var_type type);
++@@ -2484,7 +2486,7 @@
++   char path[FN_REFLEN], buff[FN_REFLEN];
++   MY_STAT f_stat;
++   String str(buff, sizeof(buff), system_charset_info), *res;
++-  const char *log_file_str;
+++  const char *log_file_str=NULL;
++   size_t path_length;
++ 
++   if (!(res= var->value->val_str(&str)))
++--- mysql-5.1.73.old/sql/sql_delete.cc	2013-11-04 15:52:27.000000000 -0300
+++++ mysql-5.1.73.new/sql/sql_delete.cc	2014-03-30 16:58:00.115579378 -0300
++@@ -836,9 +836,9 @@
++     DBUG_VOID_RETURN;
++ 
++   /* Something already deleted so we have to invalidate cache */
++-  if (deleted)
+++  if (deleted){
++     query_cache_invalidate3(thd, delete_tables, 1);
++-
+++  }
++   /*
++     If rows from the first table only has been deleted and it is
++     transactional, just do rollback.
++--- mysql-5.1.73.old/sql/sql_insert.cc	2013-11-04 15:52:27.000000000 -0300
+++++ mysql-5.1.73.new/sql/sql_insert.cc	2014-03-30 16:57:07.723586220 -0300
++@@ -3363,8 +3363,9 @@
++         }
++         if (!thd->current_stmt_binlog_row_based && !can_rollback_data())
++           thd->transaction.all.modified_non_trans_table= TRUE;
++-	if (changed)
++-	  query_cache_invalidate3(thd, table, 1);
+++        if (changed){
+++          query_cache_invalidate3(thd, table, 1);
+++        }
++     }
++     DBUG_ASSERT(transactional_table || !changed ||
++ 		thd->transaction.stmt.modified_non_trans_table);
++--- mysql-5.1.73.old/sql/sql_rename.cc	2013-11-04 15:52:27.000000000 -0300
+++++ mysql-5.1.73.new/sql/sql_rename.cc	2014-03-30 17:37:11.895508466 -0300
++@@ -184,8 +184,9 @@
++       my_ok(thd);
++   }
++ 
++-  if (!error)
+++  if (!error){
++     query_cache_invalidate3(thd, table_list, 0);
+++  }
++ 
++   pthread_mutex_lock(&LOCK_open);
++   unlock_table_names(thd, table_list, (TABLE_LIST*) 0);
++--- mysql-5.1.73.old/sql/sql_update.cc	2013-11-04 15:52:27.000000000 -0300
+++++ mysql-5.1.73.new/sql/sql_update.cc	2014-03-30 16:59:52.647579411 -0300
++@@ -1886,8 +1886,9 @@
++     return;
++ 
++   /* Something already updated so we have to invalidate cache */
++-  if (updated)
+++  if (updated){
++     query_cache_invalidate3(thd, update_tables, 1);
+++  }
++   /*
++     If all tables that has been updated are trans safe then just do rollback.
++     If not attempt to do remaining updates.
++--- mysql-5.1.73.old/sql/sql_view.cc	2013-11-04 15:52:27.000000000 -0300
+++++ mysql-5.1.73.new/sql/sql_view.cc	2014-03-30 17:39:05.355507167 -0300
++@@ -697,8 +697,9 @@
++   }
++ 
++   VOID(pthread_mutex_unlock(&LOCK_open));
++-  if (mode != VIEW_CREATE_NEW)
+++  if (mode != VIEW_CREATE_NEW){
++     query_cache_invalidate3(thd, view, 0);
+++  }
++   start_waiting_global_read_lock(thd);
++   if (res)
++     goto err;
++diff -uNr mysql-5.1.73.old/storage/myisam/mi_search.c mysql-5.1.73.new/storage/myisam/mi_search.c
++--- mysql-5.1.73.old/storage/myisam/mi_search.c	2013-11-04 15:52:27.000000000 -0300
+++++ mysql-5.1.73.new/storage/myisam/mi_search.c	2014-03-30 16:43:18.611614365 -0300
++@@ -185,7 +185,7 @@
++                    uchar *buff __attribute__((unused)), my_bool *last_key)
++ {
++   reg4 int start,mid,end,save_end;
++-  int flag;
+++  int flag=0;
++   uint totlength,nod_flag,not_used[2];
++   DBUG_ENTER("_mi_bin_search");
++ 
+-- 
+1.7.10.4
