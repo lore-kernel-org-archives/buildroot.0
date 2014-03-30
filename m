@@ -1,34 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Mar 2014 01:15:12 +0100
-Subject: [Buildroot] [PATCH] package/xbmc: add missing dependency to libgles
-	and libegl
-Message-ID: <1396138512-7311-1-git-send-email-yann.morin.1998@free.fr>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Sat, 29 Mar 2014 20:53:40 -0400
+Subject: [Buildroot] [PATCH 1/1] ifplugd: only install default action if not
+	provided in skeleton
+Message-ID: <1396140820-1793-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
- package/xbmc/xbmc.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index 6dbbb7d..9e346bd 100644
---- a/package/xbmc/xbmc.mk
-+++ b/package/xbmc/xbmc.mk
-@@ -14,7 +14,7 @@ XBMC_LICENSE_FILES = LICENSE.GPL
- # http://wiki.xbmc.org/index.php?title=TexturePacker
- XBMC_DEPENDENCIES = host-gperf host-lzo host-sdl_image host-swig
- XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
--	libass libcdio libcurl libfribidi libgcrypt libmad libmodplug libmpeg2 \
-+	libass libcdio libcurl libegl libfribidi libgcrypt libgles libmad libmodplug libmpeg2 \
- 	libogg libplist libpng libsamplerate libungif libvorbis libxml2 lzo ncurses \
- 	openssl pcre python readline sqlite taglib tiff tinyxml yajl zlib
+This is basically a parallel check-in to ec771579451c54c8590800ca1803cd6bfcc9a116,
+which extended the same consideration to ifplugd.conf.
+---
+ package/ifplugd/ifplugd.mk |    8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/package/ifplugd/ifplugd.mk b/package/ifplugd/ifplugd.mk
+index 837e016..81b3884 100644
+--- a/package/ifplugd/ifplugd.mk
++++ b/package/ifplugd/ifplugd.mk
+@@ -21,12 +21,14 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ endif
  
+ define IFPLUGD_INSTALL_FIXUP
+-	@if [ ! -f $(TARGET_DIR)/etc/ifplugd/ifplugd.conf ]; then \
++	if [ ! -f $(TARGET_DIR)/etc/ifplugd/ifplugd.conf ]; then \
+ 		$(INSTALL) -D $(@D)/conf/ifplugd.conf $(TARGET_DIR)/etc/ifplugd/ifplugd.conf; \
+ 		$(SED) 's^\(ARGS=.*\)w^\1^' $(TARGET_DIR)/etc/ifplugd/ifplugd.conf; \
+ 	fi
+-	$(INSTALL) -D -m 0755 $(@D)/conf/ifplugd.action \
+-		$(TARGET_DIR)/etc/ifplugd/ifplugd.action
++	if [ ! -f $(TARGET_DIR)/etc/ifplugd/ifplugd.action ]; then \
++		$(INSTALL) -D -m 0755 $(@D)/conf/ifplugd.action \
++			$(TARGET_DIR)/etc/ifplugd/ifplugd.action
++	fi
+ 	$(INSTALL) -D -m 0755 $(@D)/conf/ifplugd.init \
+ 		$(TARGET_DIR)/etc/init.d/S45ifplugd
+ 	# don't use bash for init script
 -- 
-1.8.3.2
+1.7.9.5
