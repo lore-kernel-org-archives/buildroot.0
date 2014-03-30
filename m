@@ -1,74 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Mar 2014 17:21:28 +0200
-Subject: [Buildroot] qt5, eglfs and xcb
-In-Reply-To: <5338207F.9010807@gmail.com>
-References: <5338207F.9010807@gmail.com>
-Message-ID: <20140330172128.06f1d5d2@skate>
+Date: Sun, 30 Mar 2014 17:24:13 +0200
+Subject: [Buildroot] [PATCH 1/1 v2] xdriver_xf86-video-intel: Bump
+ version to 2.99.911
+In-Reply-To: <t9jl0bxj2h.ln2@ID-313208.user.individual.net>
+References: <1396178545-12912-1-git-send-email-bernd.kuhls@t-online.de>
+ <20140330151109.658eb835@skate>
+ <t9jl0bxj2h.ln2@ID-313208.user.individual.net>
+Message-ID: <20140330172413.049cd7d0@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Marco Trapanese,
+Dear Bernd Kuhls,
 
-On Sun, 30 Mar 2014 15:47:43 +0200, Marco Trapanese wrote:
+On Sun, 30 Mar 2014 15:37:33 +0200, Bernd Kuhls wrote:
 
-> when you try to build qt5 with the X support (xcb), selecting one of the 
-> following modules: qtquick*, qt5declarative, qt5graphicaleffects and 
-> qt5multimedia, leads to force the selection of the eglfs support.
+> > Do we want KMS vs. UMS to be a configurable option?
 > 
-> After three days of build failures (due to the same constants defined 
-> both from xbc and eglfs) I asked an aid to a company which offer a 
-> technical support about Qt. The says only qtquick2 requires the opengl 
-> acceleration and this one is provided also from xbc.
+> this is not necessary because the driver can have both options compiled, 
+> therefore I removed the kms/ums-related options.
 
-This is not quite correct (even though the general problem you raise
-actually exists).
+Ok.
 
-First, it's actually qt5declarative that requires OpenGL (or OpenGL ES)
-support, and qt5quick1 depends on qt5declarative. Same for
-qt5graphicaleffects, it depends on qt5declarative.
+> > Then in the Config.in file, if BR2_PACKAGE_MESA3D_DRI_DRIVER_I965 is
+> > enabled, you want to select MESA3D.
+> 
+> +       select BR2_PACKAGE_MESA3D if BR2_PACKAGE_MESA3D_DRI_DRIVER_I965
+> 
+> leads to
+> 
+> package/mesa3d/Config.in:1:error: recursive dependency detected!
+> package/mesa3d/Config.in:1:     symbol BR2_PACKAGE_MESA3D is selected by BR2
+> _PACKAGE_MESA3D_DRI_DRIVER_I965
+> package/mesa3d/Config.in:70:    symbol BR2_PACKAGE_MESA3D_DRI_DRIVER_I965 
+> depends on BR2_PACKAGE_MESA3D
 
-Moreover, under X.org, having XCB is clearly not sufficient to get
-OpenGL support. XCB is merely a modern implementation of libX11, which
-allows to talk to the X server to do some rendering, but not direct,
-OpenGL rendering.
+Aaah, yes, I was mistaken. If BR2_PACKAGE_MESA3D_DRI_DRIVER_I965 is
+enabled, then of course BR2_PACKAGE_MESA3D is already enabled. Sorry
+for the noise.
 
-> So it shouldn't required at all the eglfs plugin if you're using X.
+Can you look into the other circular dependency that your patch series
+has introduced? I've reported it to you yesterday evening.
 
-This is correct. eglfs is only needed for non-X.org situations.
+Also, by any chance, are you on IRC ? It would sometimes be useful to
+be able to discuss things directly with you. Thanks!
 
-> Please, might you verify this?
-> If they are right, could you fix the dependencies so we can build a 
-> working buildroot image with Qt5 and xcb?
-
-As explained above, this requires more than just XCB, contrary to what
-the company you requested support from is claiming. You need an OpenGL
-implementation that works under X.org, and this implementation is
-usually Mesa. And the support for making Mesa recognized as a proper
-OpenGL implementation has only been merged since yesterday, and is not
-yet completely ready.
-
-It would certainly be interesting to fix this in Buildroot and allow
-Qt5 to build for X.org with OpenGL support. But if you want this to
-happen, you should either:
-
- 1) Do it yourself.
-
- 2) Wait for someone else to do it, but then you can't expect any
-    particular deadline or guarantees. It may be something that will
-    get done this summer as part of the Google Summer of Code.
-
- 3) Hire a third party to do it. Actually, it's a little bit strange
-    that you've asked a company who isn't able to fix the problem in
-    Buildroot, rather than a company that actually is able to do it.
-
-BTW, what is your hardware platform? What type of graphics hardware are
-you using? What X.org driver are you using?
-
-Anyway, thanks for the report, this is definitely something that should
-be improved.
+Best regards,
 
 Thomas
 -- 
