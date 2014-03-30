@@ -1,35 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Mar 2014 17:25:47 +0200
-Subject: [Buildroot] [git commit] dtv-scan-tables: fix license files
-Message-ID: <20140330152609.B112D9BC08@busybox.osuosl.org>
+Date: Sun, 30 Mar 2014 17:27:03 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2014-03-28
+In-Reply-To: <CAMo8BfKRHRtzpxNQpOyhpEf3EwxLL6ioRN+Kv0iSoSvkxWQDQA@mail.gmail.com>
+References: <20140329073011.D16F2101349@stock.ovh.net>
+ <20140329175452.5c711852@skate>
+ <CAMo8BfKRHRtzpxNQpOyhpEf3EwxLL6ioRN+Kv0iSoSvkxWQDQA@mail.gmail.com>
+Message-ID: <20140330172703.4232fd90@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=96b4550503d2a8515ea8cc8dce2297e22d2d0f9d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Max Filippov,
 
-Fixes:
+On Sat, 29 Mar 2014 21:06:40 +0400, Max Filippov wrote:
 
-  http://autobuild.buildroot.org/results/39a/39a8ba05c0d6e02b517d44b9c54b76acdb9174c2/
+> On Sat, Mar 29, 2014 at 8:54 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+> >>     xtensa |                  mplayer-1.1.1 | NOK | http://autobuild.buildroot.net/results/db06965d3984ab6ca5e039f0e35d4be8638c488b/
+> >
+> > Baruch, this is a Xtensa specific failure, can you have a look ?
+> 
+> A fix for this and other similar issue with wireshark was posted last sunday:
+> http://comments.gmane.org/gmane.comp.lib.uclibc.buildroot/80105
+> 
+> For this fix to be complete we need the following patch to be merged to uclibc:
+> http://permalink.gmane.org/gmane.comp.lib.uclibc.general/23828
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/dtv-scan-tables/dtv-scan-tables.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Can you send a Buildroot patch that adds this uClibc patch to the
+Xtensa version? This way, I could test that both of the patches
+combined solve the wireshark and mplayer problems.
 
-diff --git a/package/dtv-scan-tables/dtv-scan-tables.mk b/package/dtv-scan-tables/dtv-scan-tables.mk
-index 470db8c..db7fb91 100644
---- a/package/dtv-scan-tables/dtv-scan-tables.mk
-+++ b/package/dtv-scan-tables/dtv-scan-tables.mk
-@@ -15,7 +15,7 @@ DTV_SCAN_TABLES_SITE_METHOD = git
- # license files (respectively for the GPLv2 and the LGPLv2.1), so we use
- # that as the licensing information.
- DTV_SCAN_TABLES_LICENSE = GPLv2 LGPLv2.1
--DTV_SCAN_TABLES_LICENSE_FILES = COPYING COPYING.LIB
-+DTV_SCAN_TABLES_LICENSE_FILES = COPYING COPYING.LGPL
- 
- define DTV_SCAN_TABLES_INSTALL_TARGET_CMDS
- 	for f in atsc dvb-c dvb-s dvb-t; do \
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
