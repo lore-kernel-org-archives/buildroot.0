@@ -1,77 +1,69 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 30 Mar 2014 20:36:48 +0200
-Subject: [Buildroot] [PATCH 7/8] libglu: new package
-In-Reply-To: <1396204609-5042-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1396204609-5042-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1396204609-5042-7-git-send-email-bernd.kuhls@t-online.de>
+From: Philippe Reynes <tremyfr@yahoo.fr>
+Date: Sun, 30 Mar 2014 20:02:21 +0100 (BST)
+Subject: [Buildroot] [PATCH] Makefile: move fs/common.mk above
+	external.mk
+In-Reply-To: <87ppl7gwdz.fsf@dell.be.48ers.dk>
+References: <1395583071-10016-1-git-send-email-tremyfr@yahoo.fr>	<87ha6kk5bi.fsf@dell.be.48ers.dk>	<1395944229.86315.YahooMailNeo@web28802.mail.ir2.yahoo.com>
+ <87ppl7gwdz.fsf@dell.be.48ers.dk> 
+Message-ID: <1396206141.79285.YahooMailNeo@web28804.mail.ir2.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi peter,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/Config.in        |    1 +
- package/libglu/Config.in |   10 ++++++++++
- package/libglu/libglu.mk |   19 +++++++++++++++++++
- 3 files changed, 30 insertions(+)
- create mode 100644 package/libglu/Config.in
- create mode 100644 package/libglu/libglu.mk
+I think I understand the issue now (thanks to Thomas and Yann).
+The filesystem target depend on target-finalize, and target-finalize
+depends on targets. 
 
-diff --git a/package/Config.in b/package/Config.in
-index 3550935..3240188 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -584,6 +584,7 @@ source "package/libexif/Config.in"
- source "package/libgail/Config.in"
- source "package/libgeotiff/Config.in"
- source "package/libglade/Config.in"
-+source "package/libglu/Config.in"
- source "package/libgtk2/Config.in"
- source "package/libpng/Config.in"
- source "package/libqrencode/Config.in"
-diff --git a/package/libglu/Config.in b/package/libglu/Config.in
-new file mode 100644
-index 0000000..042a0c3
---- /dev/null
-+++ b/package/libglu/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_LIBGLU
-+	bool "libglu"
-+	depends on BR2_PACKAGE_MESA3D
-+	help
-+	  Mesa OpenGL Utility library
-+
-+	  http://cgit.freedesktop.org/mesa/glu/
-+
-+comment "libglu depends on mesa3d"
-+	depends on !BR2_PACKAGE_MESA3D
-diff --git a/package/libglu/libglu.mk b/package/libglu/libglu.mk
-new file mode 100644
-index 0000000..3e5aafa
---- /dev/null
-+++ b/package/libglu/libglu.mk
-@@ -0,0 +1,19 @@
-+################################################################################
-+#
-+# libglu
-+#
-+################################################################################
-+
-+LIBGLU_VERSION = 9.0.0
-+LIBGLU_SITE = http://cgit.freedesktop.org/mesa/glu/snapshot
-+LIBGLU_SOURCE = glu-$(LIBGLU_VERSION).tar.gz
-+LIBGLU_LICENSE = SGI-B-2.0
-+LIBGLU_LICENSE_FILES = include/GL/glu.h
-+LIBGLU_INSTALL_STAGING = YES
-+LIBGLU_AUTORECONF = YES
-+LIBGLU_DEPENDENCIES = mesa3d
-+
-+LIBGLU_CONF_OPT = \
-+	--disable-osmesa
-+
-+$(eval $(autotools-package))
+grep -n target-finalize Makefile
+513:$(TARGETS_ROOTFS): target-finalize
+515:target-finalize: $(TARGETS)
+
+So even if we move fs/common.mk above external.mk,
+the filesystem targets will always be done after targets.
+So I think that this change should be safe.
+
+Best regards,
+Philippe
+
+
+
+Le , Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+ 
+>>>>> "Philippe" == Philippe Reynes <tremyfr@yahoo.fr> writes:
+
+> Hi Peter,
+> I've done a little test before sending this patch.
+> I've used this useless fs :
+
+> define ROOTFS_USERFS_CMD
+>? ?  echo "Nothing to do" ; \
+>? ?  touch $@
+> endef
+
+> $(eval $(call ROOTFS_TARGET,userfs))
+
+> In the file $(BR2_EXTERNAL)/fs/common.mk
+
+> Without my patch, the file rootfs.userfs is not created.
+> With my patch, the file rootfs.userfs is created.
+
+> I could have missed something.
+> Do you have an idea of what may failed ?
+
+The specific issue I mentioned was about the externally defined rootfs
+getting created before
+ target-purgelocales / target-generatelocales gets
+called. The easiest way to check that is to use a glibc toolchain and
+enable BR2_ENABLE_LOCALE_PURGE / BR2_GENERATE_LOCALE, and then stick an
+echo statement in each of them.
+
+
 -- 
-1.7.10.4
+Bye, Peter Korsgaard
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140330/ee1b7964/attachment.html>
