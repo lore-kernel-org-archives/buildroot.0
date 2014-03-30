@@ -1,24 +1,61 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Sun, 30 Mar 2014 12:30:04 -0400
-Subject: [Buildroot] [git commit] ifplugd: fix typo introduced in
-	previous commit
-In-Reply-To: <20140330153327.CCB689C2C2@busybox.osuosl.org>
-References: <20140330153327.CCB689C2C2@busybox.osuosl.org>
-Message-ID: <CANxTyt4ePoA=OBV1fODPQPqUg+q5YyW67+D3WZyaOR48jDa0jg@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 30 Mar 2014 19:36:46 +0300
+Subject: [Buildroot] [PATCH 2/2] Makefile.in: add
+ -mtext-section-literals to xtensa ABI
+In-Reply-To: <1396196521-30184-3-git-send-email-jcmvbkbc@gmail.com>
+References: <1396196521-30184-1-git-send-email-jcmvbkbc@gmail.com>
+ <1396196521-30184-3-git-send-email-jcmvbkbc@gmail.com>
+Message-ID: <20140330163646.GO4579@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Mar 30, 2014 at 11:32 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> commit: http://git.buildroot.net/buildroot/commit/?id=ba53265b9c2d1d54bdde96becee20613f6d688c3
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->
-> Commit b1ec31a4dd2b7bd8959bdbc6d44e2cf2b56f8363 ('ifplugd: only
-> install default action if not provided in skeleton') introduced a
-> small typo, which we fix in this commit.
+Hi Max,
 
-Arg, sorry about that.  There was a last minute cosmetic change to
-reduce the patch that obviously went wrong.  Apologies.
+On Sun, Mar 30, 2014 at 08:22:01PM +0400, Max Filippov wrote:
+> Collecting literals into separate section can be advantageous if that
+> section is placed into DTCM at link time. This is applicable for code
+> running on bare metal, but makes no sense under linux, where userspace
+> is isolated from the physical memory details. OTOH placing literals into
+> separate section breaks build of huge source files, because l32r
+> instruction can only access literals in 256 KBytes range.
+> 
+> Add -mtext-section-literals into xtensa ABI to fix build issues of
+> packages with huge sources.
+> 
+> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+> ---
+>  package/Makefile.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index eea7043..31c72a0 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -73,7 +73,7 @@ endif
+>  # code size and performance, the linker can usually optimize away the
+>  # overhead when a call ends up within a certain range.
+
+Please add the commit log explanation to the comment here.
+
+>  ifeq ($(BR2_xtensa),y)
+> -TARGET_ABI += -mlongcalls
+> +TARGET_ABI += -mlongcalls -mtext-section-literals
+
+With this in place a follow-up patch should remove local 
+-mtext-section-literals that I sprinkled on various packages to fix xtensa 
+build failures.
+
+Thanks,
+baruch
+
+>  endif
+>  
+>  STAGING_SUBDIR = usr/$(GNU_TARGET_NAME)/sysroot
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
