@@ -1,152 +1,150 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Sun, 30 Mar 2014 20:55:38 +0400
-Subject: [Buildroot] [PATCH v2 3/3] xtensa: remove -mtext-section-literals
-	from individual package *.mk's
-In-Reply-To: <1396198538-32628-1-git-send-email-jcmvbkbc@gmail.com>
-References: <1396198538-32628-1-git-send-email-jcmvbkbc@gmail.com>
-Message-ID: <1396198538-32628-4-git-send-email-jcmvbkbc@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 30 Mar 2014 19:07:04 +0200
+Subject: [Buildroot] [PATCH] Add agg (Anti-Grain Geometry) package
+In-Reply-To: <533844F5.8010906@free.fr>
+References: <1395411147-14354-1-git-send-email-julien.boibessot@free.fr>
+ <53320546.5030909@mind.be> <533844F5.8010906@free.fr>
+Message-ID: <20140330170704.GD3152@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that -mtext-section-literals is specified in xtensa ABI remove it
-from individual packages that needed it.
+Julien, All,
 
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
----
-Changes v1 -> v2:
-- new patch
+On 2014-03-30 18:23 +0200, Julien Boibessot spake thusly:
+> On 03/25/2014 11:37 PM, Arnout Vandecappelle wrote:
+> > On 21/03/14 15:12, julien.boibessot at free.fr wrote:
+> >> From: Julien Boibessot <julien.boibessot@armadeus.com>
+> >>
+> >> This library will be needed by gnash (soon coming Flash player).
+> >>
+> >> Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+> >> ---
+> >>  package/Config.in     |    1 +
+> >>  package/agg/Config.in |   13 +++++++++++++
+> >>  package/agg/agg.mk    |   40 ++++++++++++++++++++++++++++++++++++++++
+> >>  3 files changed, 54 insertions(+), 0 deletions(-)
+> >>  create mode 100644 package/agg/Config.in
+> >>  create mode 100644 package/agg/agg.mk
+> >>
+> >> diff --git a/package/Config.in b/package/Config.in
+> >> index 688ed4d..3b34a67 100644
+> >> --- a/package/Config.in
+> >> +++ b/package/Config.in
+> >> @@ -556,6 +556,7 @@ source "package/lockdev/Config.in"
+> >>  endmenu
+> >>  
+> >>  menu "Graphics"
+> >> +source "package/agg/Config.in"
+> >>  source "package/atk/Config.in"
+> >>  source "package/cairo/Config.in"
+> >>  source "package/fltk/Config.in"
+> >> diff --git a/package/agg/Config.in b/package/agg/Config.in
+> >> new file mode 100644
+> >> index 0000000..a842098
+> >> --- /dev/null
+> >> +++ b/package/agg/Config.in
+> >> @@ -0,0 +1,13 @@
+> >> +config BR2_PACKAGE_AGG
+> >> +	bool "agg"
+> >> +	depends on BR2_INSTALL_LIBSTDCPP
+> >> +	select BR2_PACKAGE_SDL
+> >> +	help
+> >> +	  The Anti-Grain Geometry project. A High Quality 2D Graphics Rendering
+> >> +	  Engine for C++.
+> >> +	  We select the SDL backend by default.
+> >> +
+> >> +	  http://www.antigrain.com/index.html
+> >> +
+> >> +comment "agg needs a toolchain with C++ support"
+> >> +	depends on !BR2_INSTALL_LIBSTDCPP
+> >> diff --git a/package/agg/agg.mk b/package/agg/agg.mk
+> >> new file mode 100644
+> >> index 0000000..05be931
+> >> --- /dev/null
+> >> +++ b/package/agg/agg.mk
+> >> @@ -0,0 +1,40 @@
+> >> +###############################################################################
+> >> +#
+> >> +# agg
+> >> +#
+> >> +###############################################################################
+> >> +
+> >> +AGG_VERSION = 2.5
+> >> +AGG_SITE = http://www.antigrain.com/
+> >> +AGG_LICENSE = GPLv3+
+> >> +AGG_LICENSE_FILES = COPYING
+> >> +AGG_INSTALL_STAGING = YES
+> >> +AGG_AUTORECONF = YES
+> >  Why is autoreconf needed? You take a release and don't have patches.
+> 
+> there is no "configure" in sources, so I thought it was the way to
+> regenerate it.
+> Another way to do that ?
 
- package/civetweb/civetweb.mk                | 3 ---
- package/ffmpeg/ffmpeg.mk                    | 4 ----
- package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk  | 4 ----
- package/gstreamer1/gst1-libav/gst1-libav.mk | 4 ----
- package/lmbench/lmbench.mk                  | 4 ----
- package/php/php.mk                          | 4 ----
- package/sqlcipher/sqlcipher.mk              | 4 ----
- package/sqlite/sqlite.mk                    | 4 ----
- 8 files changed, 31 deletions(-)
+No, that's the correct way. However, just state so in a comment, like:
 
-diff --git a/package/civetweb/civetweb.mk b/package/civetweb/civetweb.mk
-index be7620a..4b73a5e 100644
---- a/package/civetweb/civetweb.mk
-+++ b/package/civetweb/civetweb.mk
-@@ -25,9 +25,6 @@ endif
- 
- ifeq ($(BR2_CIVETWEB_WITH_LUA),y)
- 	CIVETWEB_CONF_OPT += WITH_LUA=1
--ifeq ($(BR2_xtensa),y)
--	CIVETWEB_COPT += -mtext-section-literals
--endif
- endif
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index a067fe6..a5d5de1 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -75,10 +75,6 @@ FFMPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBICONV),libiconv)
- 
- FFMPEG_CFLAGS = $(TARGET_CFLAGS)
- 
--ifeq ($(BR2_xtensa),y)
--FFMPEG_CFLAGS += -mtext-section-literals
--endif
--
- FFMPEG_CONF_ENV = CFLAGS="$(FFMPEG_CFLAGS)"
- 
- ifeq ($(BR2_PACKAGE_FFMPEG_GPL),y)
-diff --git a/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk b/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
-index eb7389f..1975682 100644
---- a/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
-+++ b/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
-@@ -16,10 +16,6 @@ GST_FFMPEG_CONF_EXTRA_OPT = \
- 
- GST_FFMPEG_CFLAGS = $(TARGET_CFLAGS)
- 
--ifeq ($(BR2_xtensa),y)
--GST_FFMPEG_CFLAGS += -mtext-section-literals
--endif
--
- GST_FFMPEG_CONF_ENV = CFLAGS="$(GST_FFMPEG_CFLAGS)"
- 
- ifeq ($(BR2_PACKAGE_ZLIB),y)
-diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
-index a0a536e..6e6ff51 100644
---- a/package/gstreamer1/gst1-libav/gst1-libav.mk
-+++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
-@@ -85,10 +85,6 @@ GST1_LIBAV_CONF_OPT = \
- 
- GST1_LIBAV_CFLAGS = $(TARGET_CFLAGS)
- 
--ifeq ($(BR2_xtensa),y)
--GST1_LIBAV_CFLAGS += -mtext-section-literals
--endif
--
- GST1_LIBAV_CONF_ENV += CFLAGS="$(GST1_LIBAV_CFLAGS)"
- 
- $(eval $(autotools-package))
-diff --git a/package/lmbench/lmbench.mk b/package/lmbench/lmbench.mk
-index 529026f..c3a6c09 100644
---- a/package/lmbench/lmbench.mk
-+++ b/package/lmbench/lmbench.mk
-@@ -19,10 +19,6 @@ LMBENCH_CFLAGS += -I$(STAGING_DIR)/usr/include/tirpc/
- LMBENCH_LDFLAGS += -ltirpc
- endif
- 
--ifeq ($(BR2_xtensa),y)
--LMBENCH_CFLAGS += -mtext-section-literals
--endif
--
- define LMBENCH_CONFIGURE_CMDS
- 	$(call CONFIG_UPDATE,$(@D))
- 	sed -i 's/CFLAGS=/CFLAGS+=/g' $(@D)/src/Makefile
-diff --git a/package/php/php.mk b/package/php/php.mk
-index de02f4b..5797758 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -35,10 +35,6 @@ ifneq ($(BR2_INET_IPV6),y)
- endif
- endif
- 
--ifeq ($(BR2_xtensa),y)
--PHP_CFLAGS += -mtext-section-literals
--endif
--
- PHP_CONF_OPT += $(if $(BR2_PACKAGE_PHP_CLI),,--disable-cli)
- PHP_CONF_OPT += $(if $(BR2_PACKAGE_PHP_CGI),,--disable-cgi)
- 
-diff --git a/package/sqlcipher/sqlcipher.mk b/package/sqlcipher/sqlcipher.mk
-index ace5ce8..6130870 100644
---- a/package/sqlcipher/sqlcipher.mk
-+++ b/package/sqlcipher/sqlcipher.mk
-@@ -32,10 +32,6 @@ ifeq ($(BR2_PACKAGE_SQLCIPHER_STAT3),y)
- SQLCIPHER_CFLAGS += -DSQLITE_ENABLE_STAT3
- endif
- 
--ifeq ($(BR2_xtensa),y)
--SQLCIPHER_CFLAGS += -mtext-section-literals
--endif
--
- ifeq ($(BR2_PACKAGE_SQLCIPHER_READLINE),y)
- SQLCIPHER_DEPENDENCIES += ncurses readline
- SQLCIPHER_CONF_OPT += --with-readline-inc="-I$(STAGING_DIR)/usr/include"
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index b27eb58..6493a29 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -33,10 +33,6 @@ ifeq ($(BR2_PACKAGE_SQLITE_SECURE_DELETE),y)
- SQLITE_CFLAGS += -DSQLITE_SECURE_DELETE
- endif
- 
--ifeq ($(BR2_xtensa),y)
--SQLITE_CFLAGS += -mtext-section-literals
--endif
--
- SQLITE_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) $(SQLITE_CFLAGS)"
- 
- SQLITE_CONF_OPT = \
+    # No ./configure in the sources, we need to generate it:
+    AGG_AUTORECONF = YES
+
+> >> +AGG_DEPENDENCIES = host-pkgconf sdl
+> >> +
+> >> +AGG_CONF_OPT = \
+> >> +        --with-sdl-prefix=$(STAGING_DIR)/usr \
+> >  Is this option really needed? It should be the default location for sdl...
+> 
+> it seems mandatory, otherwise "configure" takes the Host installed SDL
+> devt files in /usr/include/SDL/
+
+Ditto, say so in a comment just above.
+
+> >> +        --disable-sdltest
+> >> +
+> >> +ifeq ($(BR2_PACKAGE_SDL_X11),)
+> >> +AGG_CONF_OPT += \
+> >> +	--with-x=NO \
+> >> +	--disable-examples # examples require X11
+> >> +endif
+> >> +
+> >> +ifeq ($(BR2_PACKAGE_FREETYPE),y)
+> >> +AGG_DEPENDENCIES += freetype
+> >> +AGG_CONF_OPT += --enable-freetype
+> >> +else
+> >> +AGG_CONF_OPT += --disable-freetype
+> >> +endif
+> >> +
+> >> +define AGG_CREATE_MISSING_FILES
+> >> +	touch $(@D)/NEWS $(@D)/AUTHORS $(@D)/README
+> >> +# Fixes reconfiguring with recent automake:
+> >> +	$(SED) 's/AM_C_PROTOTYPES//' $(@D)/configure.in
+> >> +endef
+> >> +AGG_POST_EXTRACT_HOOKS += AGG_CREATE_MISSING_FILES
+> >  If you don't autoreconf, this wouldn't be needed, right?
+> 
+> maybe, but I don't know how to bypass autoreconf :-)
+> I could call agg's "autogen.sh" but Buildroot AUTORECONF is doing the
+> same no ?
+
+In fact, there is a better way yet: add a patch to configure or
+Makefile.am that adds the 'foreign' option to automake, which tells
+the autotools that those files are not needed. Similar to what is
+done for libfcgi (search for 'foreign'):
+    package/libfcgi/libfcgi-make-autoreconfable.patch
+
+With foreign, those files are not needed, so you can just use
+AGG_AUTORECONF = YES without the need to create the files.
+
+And then, push that patch upstream, if possible. ;-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.8.1.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
