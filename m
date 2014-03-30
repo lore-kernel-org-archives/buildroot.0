@@ -1,42 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Mar 2014 17:27:03 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-03-28
-In-Reply-To: <CAMo8BfKRHRtzpxNQpOyhpEf3EwxLL6ioRN+Kv0iSoSvkxWQDQA@mail.gmail.com>
-References: <20140329073011.D16F2101349@stock.ovh.net>
- <20140329175452.5c711852@skate>
- <CAMo8BfKRHRtzpxNQpOyhpEf3EwxLL6ioRN+Kv0iSoSvkxWQDQA@mail.gmail.com>
-Message-ID: <20140330172703.4232fd90@skate>
+Date: Sun, 30 Mar 2014 17:32:46 +0200
+Subject: [Buildroot] [git commit] ifplugd: fix typo introduced in previous
+	commit
+Message-ID: <20140330153327.CCB689C2C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Max Filippov,
+commit: http://git.buildroot.net/buildroot/commit/?id=ba53265b9c2d1d54bdde96becee20613f6d688c3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 29 Mar 2014 21:06:40 +0400, Max Filippov wrote:
+Commit b1ec31a4dd2b7bd8959bdbc6d44e2cf2b56f8363 ('ifplugd: only
+install default action if not provided in skeleton') introduced a
+small typo, which we fix in this commit.
 
-> On Sat, Mar 29, 2014 at 8:54 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
-> >>     xtensa |                  mplayer-1.1.1 | NOK | http://autobuild.buildroot.net/results/db06965d3984ab6ca5e039f0e35d4be8638c488b/
-> >
-> > Baruch, this is a Xtensa specific failure, can you have a look ?
-> 
-> A fix for this and other similar issue with wireshark was posted last sunday:
-> http://comments.gmane.org/gmane.comp.lib.uclibc.buildroot/80105
-> 
-> For this fix to be complete we need the following patch to be merged to uclibc:
-> http://permalink.gmane.org/gmane.comp.lib.uclibc.general/23828
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ifplugd/ifplugd.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Can you send a Buildroot patch that adds this uClibc patch to the
-Xtensa version? This way, I could test that both of the patches
-combined solve the wireshark and mplayer problems.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/ifplugd/ifplugd.mk b/package/ifplugd/ifplugd.mk
+index 81b3884..7725978 100644
+--- a/package/ifplugd/ifplugd.mk
++++ b/package/ifplugd/ifplugd.mk
+@@ -27,7 +27,7 @@ define IFPLUGD_INSTALL_FIXUP
+ 	fi
+ 	if [ ! -f $(TARGET_DIR)/etc/ifplugd/ifplugd.action ]; then \
+ 		$(INSTALL) -D -m 0755 $(@D)/conf/ifplugd.action \
+-			$(TARGET_DIR)/etc/ifplugd/ifplugd.action
++			$(TARGET_DIR)/etc/ifplugd/ifplugd.action ; \
+ 	fi
+ 	$(INSTALL) -D -m 0755 $(@D)/conf/ifplugd.init \
+ 		$(TARGET_DIR)/etc/init.d/S45ifplugd
