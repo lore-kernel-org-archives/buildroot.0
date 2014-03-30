@@ -1,50 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Mar 2014 11:13:50 +0200
-Subject: [Buildroot] [PATCH 00/91] Update mesa3d & xorg
-In-Reply-To: <20140329231259.GO3227@free.fr>
-References: <BLU0-SMTP39628D1C21A39FA8BD40475D9610@phx.gbl>
- <20140329235039.4bf4983e@skate> <20140329231259.GO3227@free.fr>
-Message-ID: <20140330111350.4782647c@skate>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 30 Mar 2014 11:20:35 +0200
+Subject: [Buildroot] [PATCH 1/1] mtools: Does not compile on bfin
+Message-ID: <1396171235-18112-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Fixes http://autobuild.buildroot.net/results/c0f/c0ff79569690b5799c25c09bde581cee6acb9910/
 
-On Sun, 30 Mar 2014 00:12:59 +0100, Yann E. MORIN wrote:
+expand.o: In function `_safePopenOut':
+expand.c:(.text+0x1e): undefined reference to `_fork'
+precmd.o: In function `_precmd':
+precmd.c:(.text+0x16): undefined reference to `_fork'
 
-> The problem seems related to libevas, where the dependency on openGL is
-> poorly handled.
-> 
-> I'm working on it, but you are free to investigate too. ;-)
-> 
-> So far, I managed to get rid of the circular hell, with this:
-> 
->     diff --git a/package/efl/libevas/Config.in b/package/efl/libevas/Config.in
->     index 2afa888..8eea23d 100644
->     --- a/package/efl/libevas/Config.in
->     +++ b/package/efl/libevas/Config.in
->     @@ -148,7 +148,7 @@ choice
->      config BR2_PACKAGE_LIBEVAS_GL
->             bool "generic OpenGL"
->     -       select BR2_PACKAGE_MESA3D
->     +       depends on BR2_PACKAGE_MESA3D
->             select BR2_PACKAGE_LIBEET
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mtools/Config.in |    1 +
+ 1 file changed, 1 insertion(+)
 
-But shouldn't BR2_PACKAGE_LIBEVAS_GL instead depend on a new virtual
-package for full OpenGL? We can imagine having in the future other
-implementations that Mesa3D for the full OpenGL, no? Like if you
-install the NVidia proprietary drivers, I believe they come with their
-own implementation of OpenGL, completely independent from Mesa3D, no?
-
-In this case, since we can "select" a virtual package because that
-doesn't make sense, the dependency would have to be a "depends on", and
-we're good, no?
-
-Thomas
+diff --git a/package/mtools/Config.in b/package/mtools/Config.in
+index 5865223..1c83b9e 100644
+--- a/package/mtools/Config.in
++++ b/package/mtools/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_MTOOLS
+ 	bool "mtools"
+ 	depends on BR2_USE_WCHAR
++	depends on !BR2_bfin # fork()
+ 	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  Mtools is a collection of utilities to access MS-DOS disks from
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.10.4
