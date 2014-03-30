@@ -1,74 +1,105 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Mar 2014 12:32:59 +0200
-Subject: [Buildroot] [PATCH 2/2] libcgicc: bump to version 3.2.13
-In-Reply-To: <20140330113051.5c43cc69@skate>
-References: <1396135140-1402-1-git-send-email-gustavo@zacarias.com.ar>
- <1396135140-1402-2-git-send-email-gustavo@zacarias.com.ar>
- <20140330113051.5c43cc69@skate>
-Message-ID: <20140330103259.GB3152@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 30 Mar 2014 13:22:25 +0200
+Subject: [Buildroot] [PATCH 1/1 v2] xdriver_xf86-video-intel: Bump version
+	to 2.99.911
+Message-ID: <1396178545-12912-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+- add necessary dependencies
+- add -D_GNU_SOURCE to avoid getline compilation error
 
-On 2014-03-30 11:30 +0200, Thomas Petazzoni spake thusly:
-> On Sat, 29 Mar 2014 20:19:00 -0300, Gustavo Zacarias wrote:
-> > Also add license files and docs license definition.
-> > 
-> > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> > ---
-> >  package/libcgicc/libcgicc.mk | 5 +++--
-> >  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> Applied, thanks, with one minor change.
-> 
-> > +LIBCGICC_LICENSE = LGPLv3+, docs: GFDL1.2+
-> 
-> I've changed this to the more traditional:
-> 
-> 	LGPLv3+ (library), GFDL1.2+ (docs)
-> 
-> Though I'm wondering if:
-> 
->  * We shouldn't use GFDLv1.2+ instead, like we do for GPL/LGPL.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: - depend on mesa3d only when the i965 DRI driver is selected (Thomas)
+    - allow both kms and ums support (Thomas):
+  Support for Kernel Mode Setting? yes
+  Support for legacy User Mode Setting (for i810)? yes
 
-For the sake of consistency, yes.i
+ package/x11r7/xdriver_xf86-video-intel/Config.in   |   13 +++++----
+ .../xdriver_xf86-video-intel.mk                    |   29 ++++++++++++++++----
+ 2 files changed, 30 insertions(+), 12 deletions(-)
 
-For the records, however, SPDX does not list any 'or-later' for the GFDL:
-    http://spdx.org/licenses/
-
-    ---
-    GNU Free Documentation License v1.1         GFDL-1.1
-    GNU Free Documentation License v1.2         GFDL-1.2
-    GNU Free Documentation License v1.3         GFDL-1.3
-    GNU General Public License v1.0 only        GPL-1.0
-    GNU General Public License v1.0 or later    GPL-1.0+
-    GNU General Public License v2.0 only        GPL-2.0
-    GNU General Public License v2.0 or later    GPL-2.0+
-    ---
-
-But that is valid for an author to specify this 'or later', so OK for
-the 'GFDLv1.2+'
-
->  * Whether we should really worry about the documentation license,
->    since we don't allow the installation of the documentation on the
->    target. I don't think we have any other package that describe the
->    license of their documentation.
-
-Well, if we're sure there's no installed doc, then we do not need this
-in the licensing info. But if in doubt, better let the user check on his
-side if the license indeed applies or not.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/x11r7/xdriver_xf86-video-intel/Config.in b/package/x11r7/xdriver_xf86-video-intel/Config.in
+index 83b714a..4b622df 100644
+--- a/package/x11r7/xdriver_xf86-video-intel/Config.in
++++ b/package/x11r7/xdriver_xf86-video-intel/Config.in
+@@ -1,13 +1,14 @@
+ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL
+ 	bool "xf86-video-intel"
+-	select BR2_PACKAGE_XPROTO_FONTSPROTO
+-	select BR2_PACKAGE_XPROTO_RANDRPROTO
+-	select BR2_PACKAGE_XPROTO_RENDERPROTO
+-	select BR2_PACKAGE_XPROTO_XPROTO
+-	select BR2_PACKAGE_XLIB_LIBPCIACCESS
+ 	select BR2_PACKAGE_LIBDRM
+ 	select BR2_PACKAGE_LIBDRM_INTEL
+-	select BR2_PACKAGE_MESA3D
++	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE
++	select BR2_PACKAGE_XLIB_LIBPCIACCESS
++	select BR2_PACKAGE_XLIB_LIBXRANDR
++	select BR2_PACKAGE_XLIB_LIBXTST
++	select BR2_PACKAGE_XPROTO_FONTSPROTO
++	select BR2_PACKAGE_XPROTO_XF86DRIPROTO
++	select BR2_PACKAGE_XPROTO_XPROTO
+ 	depends on (BR2_i386 || BR2_x86_64)
+ 	help
+ 	  Intel video driver
+diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
+index 332de54..addb6ec 100644
+--- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
++++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
+@@ -4,18 +4,18 @@
+ #
+ ################################################################################
+ 
+-XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.907
++XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.911
+ XDRIVER_XF86_VIDEO_INTEL_SOURCE = xf86-video-intel-$(XDRIVER_XF86_VIDEO_INTEL_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_INTEL_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_INTEL_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_INTEL_LICENSE_FILES = COPYING
+-XDRIVER_XF86_VIDEO_INTEL_AUTORECONF = YES
++
++# this fixes a getline-related compilation in src/sna/kgem.c
++XDRIVER_XF86_VIDEO_INTEL_CONF_ENV = \
++	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
+ 
+ XDRIVER_XF86_VIDEO_INTEL_CONF_OPT = \
+-	--enable-dri \
+-	--enable-kms-only \
+ 	--disable-xvmc \
+-	--disable-ums-only \
+ 	--enable-sna \
+ 	--disable-uxa \
+ 	--disable-glamor \
+@@ -23,6 +23,23 @@ XDRIVER_XF86_VIDEO_INTEL_CONF_OPT = \
+ 	--disable-dga \
+ 	--disable-async-swap
+ 
+-XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xproto libdrm xlib_libpciaccess
++XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES = \
++	libdrm \
++	xlib_libXcomposite \
++	xlib_libXrandr \
++	xlib_libXtst \
++	xlib_libpciaccess \
++	xproto_fontsproto \
++	xproto_xproto \
++	xserver_xorg-server
++
++ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER_I965),y)
++XDRIVER_XF86_VIDEO_INTEL_CONF_OPT += \
++	--enable-dri
++XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES += mesa3d
++else
++XDRIVER_XF86_VIDEO_INTEL_CONF_OPT += \
++	--disable-dri
++endif
+ 
+ $(eval $(autotools-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.10.4
