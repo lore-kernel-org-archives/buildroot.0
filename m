@@ -1,59 +1,91 @@
 From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Sun, 30 Mar 2014 20:40:19 +0400
-Subject: [Buildroot] [PATCH 2/2] Makefile.in: add
-	-mtext-section-literals to xtensa ABI
-In-Reply-To: <20140330163646.GO4579@tarshish>
-References: <1396196521-30184-1-git-send-email-jcmvbkbc@gmail.com>
- <1396196521-30184-3-git-send-email-jcmvbkbc@gmail.com>
- <20140330163646.GO4579@tarshish>
-Message-ID: <CAMo8Bf+1oS9yzqALUrJcOJMX5vq0ac6+QX0hX+UVDVSEoL_Ynw@mail.gmail.com>
+Date: Sun, 30 Mar 2014 20:55:36 +0400
+Subject: [Buildroot] [PATCH v2 1/3] uclibc: add missing .literal_position
+	directives
+In-Reply-To: <1396198538-32628-1-git-send-email-jcmvbkbc@gmail.com>
+References: <1396198538-32628-1-git-send-email-jcmvbkbc@gmail.com>
+Message-ID: <1396198538-32628-2-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Mar 30, 2014 at 8:36 PM, Baruch Siach <baruch@tkos.co.il> wrote:
-> Hi Max,
->
-> On Sun, Mar 30, 2014 at 08:22:01PM +0400, Max Filippov wrote:
->> Collecting literals into separate section can be advantageous if that
->> section is placed into DTCM at link time. This is applicable for code
->> running on bare metal, but makes no sense under linux, where userspace
->> is isolated from the physical memory details. OTOH placing literals into
->> separate section breaks build of huge source files, because l32r
->> instruction can only access literals in 256 KBytes range.
->>
->> Add -mtext-section-literals into xtensa ABI to fix build issues of
->> packages with huge sources.
->>
->> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
->> ---
->>  package/Makefile.in | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/package/Makefile.in b/package/Makefile.in
->> index eea7043..31c72a0 100644
->> --- a/package/Makefile.in
->> +++ b/package/Makefile.in
->> @@ -73,7 +73,7 @@ endif
->>  # code size and performance, the linker can usually optimize away the
->>  # overhead when a call ends up within a certain range.
->
-> Please add the commit log explanation to the comment here.
+This allows building uclibc with -mtext-section-literals flag.
 
-Ok.
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+---
+ ...-add-missing-.literal_position-directives.patch | 62 ++++++++++++++++++++++
+ 1 file changed, 62 insertions(+)
+ create mode 100644 package/uclibc/7bf35c8b7d4a1f97174eb49f47f33946b282114c/uclibc-0001-xtensa-add-missing-.literal_position-directives.patch
 
->>  ifeq ($(BR2_xtensa),y)
->> -TARGET_ABI += -mlongcalls
->> +TARGET_ABI += -mlongcalls -mtext-section-literals
->
-> With this in place a follow-up patch should remove local
-> -mtext-section-literals that I sprinkled on various packages to fix xtensa
-> build failures.
-
-Ok, will add it.
-
+diff --git a/package/uclibc/7bf35c8b7d4a1f97174eb49f47f33946b282114c/uclibc-0001-xtensa-add-missing-.literal_position-directives.patch b/package/uclibc/7bf35c8b7d4a1f97174eb49f47f33946b282114c/uclibc-0001-xtensa-add-missing-.literal_position-directives.patch
+new file mode 100644
+index 0000000..f5577c6
+--- /dev/null
++++ b/package/uclibc/7bf35c8b7d4a1f97174eb49f47f33946b282114c/uclibc-0001-xtensa-add-missing-.literal_position-directives.patch
+@@ -0,0 +1,62 @@
++From 04d7bd868b300c8150231d7a37e62150eaf810d0 Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Mon, 24 Mar 2014 01:06:35 +0400
++Subject: [PATCH] xtensa: add missing .literal_position directives
++
++This addition allows building uClibc with -mtext-section-literals
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++ ldso/ldso/xtensa/dl-startup.h | 1 +
++ ldso/ldso/xtensa/resolve.S    | 1 +
++ libc/string/xtensa/strcmp.S   | 5 +++--
++ 3 files changed, 5 insertions(+), 2 deletions(-)
++
++diff --git a/ldso/ldso/xtensa/dl-startup.h b/ldso/ldso/xtensa/dl-startup.h
++index 45af82d..b135a4c 100644
++--- a/ldso/ldso/xtensa/dl-startup.h
+++++ b/ldso/ldso/xtensa/dl-startup.h
++@@ -11,6 +11,7 @@
++ __asm__ (
++     "	.text\n"
++     "	.align  4\n"
+++    "	.literal_position\n"
++     "	.global _start\n"
++     "	.type   _start, @function\n"
++     "	.hidden _start\n"
++diff --git a/ldso/ldso/xtensa/resolve.S b/ldso/ldso/xtensa/resolve.S
++index 61c2c5d..d1ae8aa 100644
++--- a/ldso/ldso/xtensa/resolve.S
+++++ b/ldso/ldso/xtensa/resolve.S
++@@ -27,6 +27,7 @@
++ 
++ 	.text
++ 	.align	4
+++	.literal_position
++ 	.global	_dl_linux_resolve
++ 	.type	_dl_linux_resolve, @function
++ _dl_linux_resolve:
++diff --git a/libc/string/xtensa/strcmp.S b/libc/string/xtensa/strcmp.S
++index d3d72e0..8ed1ed0 100644
++--- a/libc/string/xtensa/strcmp.S
+++++ b/libc/string/xtensa/strcmp.S
++@@ -34,13 +34,14 @@
++ 
++ #define MASK4 0x40404040
++ 
+++	.text
+++	.align 4
+++	.literal_position
++ 	.literal .Lmask0, MASK0
++ 	.literal .Lmask1, MASK1
++ 	.literal .Lmask2, MASK2
++ 	.literal .Lmask3, MASK3
++ 	.literal .Lmask4, MASK4
++-
++-	.text
++ ENTRY (strcmp)
++ 	/* a2 = s1, a3 = s2 */
++ 
++-- 
++1.8.1.4
++
 -- 
-Thanks.
--- Max
+1.8.1.4
