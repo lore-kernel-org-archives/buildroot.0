@@ -1,55 +1,39 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 30 Mar 2014 12:25:05 +0300
-Subject: [Buildroot] [PATCH 1/1] mtools: Does not compile on bfin
-In-Reply-To: <1396171235-18112-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1396171235-18112-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140330092505.GE4579@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 30 Mar 2014 11:28:45 +0200
+Subject: [Buildroot] [git commit] libcgicc: bump to version 3.2.13
+Message-ID: <20140330092855.90FF09BFEA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd,
+commit: http://git.buildroot.net/buildroot/commit/?id=f76aa49269c210ecd597941c5e4b6365dfa01c0f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, Mar 30, 2014 at 11:20:35AM +0200, Bernd Kuhls wrote:
-> Fixes http://autobuild.buildroot.net/results/c0f/c0ff79569690b5799c25c09bde581cee6acb9910/
-> 
-> expand.o: In function `_safePopenOut':
-> expand.c:(.text+0x1e): undefined reference to `_fork'
-> precmd.o: In function `_precmd':
-> precmd.c:(.text+0x16): undefined reference to `_fork'
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/mtools/Config.in |    1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/mtools/Config.in b/package/mtools/Config.in
-> index 5865223..1c83b9e 100644
-> --- a/package/mtools/Config.in
-> +++ b/package/mtools/Config.in
-> @@ -1,6 +1,7 @@
->  config BR2_PACKAGE_MTOOLS
->  	bool "mtools"
->  	depends on BR2_USE_WCHAR
-> +	depends on !BR2_bfin # fork()
->  	depends on BR2_USE_MMU # fork()
+Also add license files and docs license definition.
 
-Blackfin and a non-MMU architecture, so this dependency is redundant. The 
-build failure at 
-http://autobuild.buildroot.net/results/c0f/c0ff79569690b5799c25c09bde581cee6acb9910/ 
-predates commit 56e404bb883b0 (mtools: needs mmu) that added the MMU 
-dependency.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libcgicc/libcgicc.mk |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-baurch
-
->  	help
->  	  Mtools is a collection of utilities to access MS-DOS disks from
-> -- 
-> 1.7.10.4
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+diff --git a/package/libcgicc/libcgicc.mk b/package/libcgicc/libcgicc.mk
+index f1c181f..cf83d82 100644
+--- a/package/libcgicc/libcgicc.mk
++++ b/package/libcgicc/libcgicc.mk
+@@ -4,10 +4,11 @@
+ #
+ ################################################################################
+ 
+-LIBCGICC_VERSION = 3.2.12
++LIBCGICC_VERSION = 3.2.13
+ LIBCGICC_SITE = $(BR2_GNU_MIRROR)/cgicc
+ LIBCGICC_SOURCE = cgicc-$(LIBCGICC_VERSION).tar.gz
+-LIBCGICC_LICENSE = LGPLv3+
++LIBCGICC_LICENSE = LGPLv3+ (library), GFDL1.2+ (docs)
++LIBCGICC_LICENSE_FILES = COPYING.LIB COPYING.DOC
+ LIBCGICC_INSTALL_STAGING = YES
+ LIBCGICC_AUTORECONF = YES
+ LIBCGICC_CONFIG_SCRIPTS = cgicc-config
