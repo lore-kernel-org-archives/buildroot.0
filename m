@@ -1,16 +1,17 @@
 From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Sun, 30 Mar 2014 21:57:51 +0400
-Subject: [Buildroot] [PATCH v3 07/10] Revert "lmbench: fix build for xtensa"
+Date: Sun, 30 Mar 2014 21:57:54 +0400
+Subject: [Buildroot] [PATCH v3 10/10] Revert "xtensa: sqlite requires
+	special compiler option"
 In-Reply-To: <1396202274-5109-1-git-send-email-jcmvbkbc@gmail.com>
 References: <1396202274-5109-1-git-send-email-jcmvbkbc@gmail.com>
-Message-ID: <1396202274-5109-8-git-send-email-jcmvbkbc@gmail.com>
+Message-ID: <1396202274-5109-11-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This reverts commit 7c04932603476f3adf474f3bc47c35bdb59d947a.
+This reverts commit 6a30cd3fb30b8057ddde2c72a88c0bb6ad7d1761.
 Now that -mtext-section-literals is specified in the xtensa ABI this fix
 is no longer needed.
 
@@ -19,23 +20,23 @@ Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 Changes v2 -> v3:
 - new patch
 
- package/lmbench/lmbench.mk | 4 ----
+ package/sqlite/sqlite.mk | 4 ----
  1 file changed, 4 deletions(-)
 
-diff --git a/package/lmbench/lmbench.mk b/package/lmbench/lmbench.mk
-index 529026f..c3a6c09 100644
---- a/package/lmbench/lmbench.mk
-+++ b/package/lmbench/lmbench.mk
-@@ -19,10 +19,6 @@ LMBENCH_CFLAGS += -I$(STAGING_DIR)/usr/include/tirpc/
- LMBENCH_LDFLAGS += -ltirpc
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index b27eb58..6493a29 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -33,10 +33,6 @@ ifeq ($(BR2_PACKAGE_SQLITE_SECURE_DELETE),y)
+ SQLITE_CFLAGS += -DSQLITE_SECURE_DELETE
  endif
  
 -ifeq ($(BR2_xtensa),y)
--LMBENCH_CFLAGS += -mtext-section-literals
+-SQLITE_CFLAGS += -mtext-section-literals
 -endif
 -
- define LMBENCH_CONFIGURE_CMDS
- 	$(call CONFIG_UPDATE,$(@D))
- 	sed -i 's/CFLAGS=/CFLAGS+=/g' $(@D)/src/Makefile
+ SQLITE_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) $(SQLITE_CFLAGS)"
+ 
+ SQLITE_CONF_OPT = \
 -- 
 1.8.1.4
