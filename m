@@ -1,47 +1,39 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 31 Mar 2014 22:06:26 +0200
-Subject: [Buildroot] [PATCH 13/16] sdl: Add new dependency libglu for opengl
-	support
+Date: Mon, 31 Mar 2014 22:06:29 +0200
+Subject: [Buildroot] [PATCH WIP 16/16] xbmc: Add xbmc-send script to send
+	commands to xbmc service
 In-Reply-To: <1396296389-28821-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1396296389-28821-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1396296389-28821-14-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1396296389-28821-17-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+http://wiki.xbmc.org/index.php?title=List_of_built-in_functions
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/sdl/sdl.mk |    6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ package/xbmc/xbmc.mk |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
-index 086f5e9..fa68198 100644
---- a/package/sdl/sdl.mk
-+++ b/package/sdl/sdl.mk
-@@ -62,9 +62,12 @@ SDL_DEPENDENCIES += alsa-lib
- endif
+diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
+index 974b4dd..d130ae2 100644
+--- a/package/xbmc/xbmc.mk
++++ b/package/xbmc/xbmc.mk
+@@ -204,6 +204,12 @@ define XBMC_INSTALL_BR_WRAPPER
+ endef
+ XBMC_POST_INSTALL_TARGET_HOOKS += XBMC_INSTALL_BR_WRAPPER
  
- ifeq ($(BR2_PACKAGE_MESA3D),y)
--SDL_DEPENDENCIES += mesa3d
-+SDL_DEPENDENCIES += libglu mesa3d
-+SDL_CONF_OPT += --enable-video-opengl
- endif
- 
-+SDL_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBICONV),libiconv)
++define XBMC_INSTALL_XBMC_SEND
++	$(INSTALL) -D $(@D)/tools/EventClients/lib/python/xbmcclient.py $(TARGET_DIR)/usr/lib/python2.7/xbmcclient.py
++	$(INSTALL) -D "$(@D)/tools/EventClients/Clients/XBMC Send/xbmc-send.py" $(TARGET_DIR)/usr/bin/xbmc-send
++endef
++XBMC_POST_INSTALL_TARGET_HOOKS += XBMC_INSTALL_XBMC_SEND
 +
- SDL_CONF_OPT += --enable-pulseaudio=no \
- 		--disable-arts \
- 		--disable-esd \
-@@ -72,6 +75,7 @@ SDL_CONF_OPT += --enable-pulseaudio=no \
- 		--disable-video-ps3
- 
- HOST_SDL_CONF_OPT += --enable-pulseaudio=no \
-+		--enable-video-x11=no \
- 		--disable-arts \
- 		--disable-esd \
- 		--disable-nasm \
+ # When run from a startup script, XBMC has no $HOME where to store its
+ # configuration, so ends up storing it in /.xbmc  (yes, at the root of
+ # the rootfs). This is a problem for read-only filesystems. But we can't
 -- 
 1.7.10.4
