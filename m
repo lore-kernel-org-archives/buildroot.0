@@ -1,35 +1,35 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 31 Mar 2014 16:08:13 -0300
-Subject: [Buildroot] [PATCH] jquery-keyboard: bump to version 1.18.6
-Message-ID: <1396292893-7001-1-git-send-email-gustavo@zacarias.com.ar>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 31 Mar 2014 22:06:19 +0200
+Subject: [Buildroot] [PATCH 06/16] libdrm: Explain dependency on xorg in
+	Kconfig
+In-Reply-To: <1396296389-28821-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1396296389-28821-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1396296389-28821-7-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also switch to github download helper.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/jquery-keyboard/jquery-keyboard.mk | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ package/libdrm/Config.in |    3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/jquery-keyboard/jquery-keyboard.mk b/package/jquery-keyboard/jquery-keyboard.mk
-index f67e7bd..f2e51bc 100644
---- a/package/jquery-keyboard/jquery-keyboard.mk
-+++ b/package/jquery-keyboard/jquery-keyboard.mk
-@@ -4,9 +4,8 @@
- #
- ################################################################################
+diff --git a/package/libdrm/Config.in b/package/libdrm/Config.in
+index 7192e94..0a8c681 100644
+--- a/package/libdrm/Config.in
++++ b/package/libdrm/Config.in
+@@ -20,6 +20,9 @@ config BR2_PACKAGE_LIBDRM_INTEL
+ 	help
+ 	  installs intel graphics driver
  
--JQUERY_KEYBOARD_VERSION = v1.18.2
--JQUERY_KEYBOARD_SITE = \
--	http://github.com/Mottie/Keyboard/tarball/$(JQUERY_KEYBOARD_VERSION)
-+JQUERY_KEYBOARD_VERSION = v1.18.6
-+JQUERY_KEYBOARD_SITE = $(call github,Mottie,Keyboard,$(JQUERY_KEYBOARD_VERSION))
- JQUERY_KEYBOARD_LICENSE = MIT WTFPL
- JQUERY_KEYBOARD_LICENSE_FILES = README.markdown
- 
++comment "libdrm intel driver depends on X.org"
++	depends on !BR2_PACKAGE_XORG7
++
+ config BR2_PACKAGE_LIBDRM_RADEON
+ 	bool "radeon"
+ 	depends on BR2_i386 || BR2_x86_64
 -- 
-1.8.3.2
+1.7.10.4
