@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 1 Apr 2014 00:05:46 +0200
-Subject: [Buildroot] [PATCH WIP 15/16] xbmc: Bump version to Gotham_beta3
-In-Reply-To: <1396296389-28821-16-git-send-email-bernd.kuhls@t-online.de>
+Date: Tue, 1 Apr 2014 00:20:08 +0200
+Subject: [Buildroot] [PATCH WIP 16/16] xbmc: Add xbmc-send script to
+ send commands to xbmc service
+In-Reply-To: <1396296389-28821-17-git-send-email-bernd.kuhls@t-online.de>
 References: <1396296389-28821-1-git-send-email-bernd.kuhls@t-online.de>
- <1396296389-28821-16-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140331220546.GD5004@free.fr>
+ <1396296389-28821-17-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20140331222008.GE5004@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +14,46 @@ To: buildroot@busybox.net
 
 Bernd, All,
 
-Hihi! Gotham! :-)
-
 On 2014-03-31 22:06 +0200, Bernd Kuhls spake thusly:
-> - add support for uClibc, X.org, mesa3d, vaapi
+> http://wiki.xbmc.org/index.php?title=List_of_built-in_functions
 
-For very large and complex beasts like XBMC, it would be better to
-split the patch:
-  - a first patch to bump
-  - a second to add uClibc support
-  - a third to add mesa3d
-  - a fourth to add vaapi
+Hey! That's pretty neat! :-)
 
-This will make it easier to review.
+We can use that to tell XBMC to exit properly, instead of killing it on
+reboot. Groovy! :-)
 
-As you said, we should consider this bump as an RFC: better wait for the
-final release rather than bundle a beta release.
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/xbmc/xbmc.mk |    6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
+> index 974b4dd..d130ae2 100644
+> --- a/package/xbmc/xbmc.mk
+> +++ b/package/xbmc/xbmc.mk
+> @@ -204,6 +204,12 @@ define XBMC_INSTALL_BR_WRAPPER
+>  endef
+>  XBMC_POST_INSTALL_TARGET_HOOKS += XBMC_INSTALL_BR_WRAPPER
+>  
+> +define XBMC_INSTALL_XBMC_SEND
+> +	$(INSTALL) -D $(@D)/tools/EventClients/lib/python/xbmcclient.py $(TARGET_DIR)/usr/lib/python2.7/xbmcclient.py
+
+If possible, please install both a .py and a .pyc to the target.
+
+Depending on:
+  - BR2_PACKAGE_PYTHON_PY_ONLY
+  - BR2_PACKAGE_PYTHON_PYC_ONLY
+  - BR2_PACKAGE_PYTHON_PY_PYC
+some of them will be forcibly removed.
+
+For example, if BR2_PACKAGE_PYTHON_PYC_ONLY is selected, then all .py
+files will get removed from the target.
+
+Note that I do not know how you can cross-generate a .pyc from a .py
+file in cross-compilation... :-/
+
+At the very least, if cross-generating the .pyc file is not possible,
+make this conditional on !BR2_PACKAGE_PYTHON_PYC_ONLY.
 
 Regards,
 Yann E. MORIN.
