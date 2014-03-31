@@ -1,49 +1,72 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Mon, 31 Mar 2014 02:36:43 +0200
-Subject: [Buildroot] rsync fails to build
-In-Reply-To: <20140329232048.45ced2b2@skate>
-References: <6699457346BD4E4E8F8D768D2249294C@JohanW7><20140329143057.6e6aa65a@skate><9E4B04B54DB642238FDE42DB9E40DE73@JohanW7><20140329180038.7acf5143@skate><5CA29710B49644AAA294F0FD9984A1D8@JohanW7>
- <20140329232048.45ced2b2@skate>
-Message-ID: <F9B5E559611E4C1580A5E85C9C0023A7@JohanW7>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 31 Mar 2014 06:26:49 +0300
+Subject: [Buildroot] [PATCH v3 00/10] xtensa: add
+ -mtext-section-literals to xtensa ABI
+In-Reply-To: <1396202274-5109-1-git-send-email-jcmvbkbc@gmail.com>
+References: <1396202274-5109-1-git-send-email-jcmvbkbc@gmail.com>
+Message-ID: <20140331032649.GQ4579@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Max,
 
-Dear Thomas 
-
-Yes , I can confirm rsync builds with the ccache disabled.
-
-I have kept the 2 rync build dirs in case they could be of any use.
-
-As a sidenote :
-nettle sometimes (1 on 20 ) throws a build error, and just starting make again without actually removing
-its build directory just resumes the build without error.
-It never gives an error when the ccache is off.
-
-Regards, Johan
-
------Oorspronkelijk bericht-----
-Van: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com] 
-Verzonden: zaterdag 29 maart 2014 23:21
-Aan: Sagaert Johan
-CC: buildroot at busybox.net
-Onderwerp: Re: [Buildroot] rsync fails to build
-
-Dear Sagaert Johan,
-
-On Sat, 29 Mar 2014 23:11:30 +0100, Sagaert Johan wrote:
-
-> The pasted text is here :
-> http://code.bulix.org/i9z88z-85936?raw
+On Sun, Mar 30, 2014 at 09:57:44PM +0400, Max Filippov wrote:
+> Hi Thomas,
 > 
-> Using gcc 4.8.x  did not solve it.
+> this series is the second part of fixes for building huge sources, like
+> wireshark or mplayer: adding trampolines support to binutils allows
+> assembling of such files, but with literals placed into separate section
+> build fails at the linking step.
+> 
+> First patch allows building uclibc with -mtext-section-literals, it is
+> posted to the uclibc list, but not reviewed/checked in yet.
+> Second patch adds -mtext-section-literals flag to xtensa ABI.
+> Remaining patches revert -mtext-section-literals additions to individual
+> packages.
 
-Can you retry after disabling ccache ?
+For patches 2-10:
 
-Thomas
---
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering http://free-electrons.com
+Reviewed-by: Baruch Siach <baruch@tkos.co.il>
+
+baruch
+
+> Changes v2 -> v3:
+> - drop patch 3 and revert individual commits that added
+>   -mtext-section-literals flag instead
+> 
+> Changes v1 -> v2:
+> - add comment to XTENSA_ABI variable explaining -mtext-section-literals usage
+> - remove -mtext-section-literals from individual package *.mk's
+> 
+> Max Filippov (10):
+>   uclibc: add missing .literal_position directives
+>   Makefile.in: add -mtext-section-literals to xtensa ABI
+>   Revert "civetweb: fix build for xtensa"
+>   Revert "ffmpeg: fix build for xtensa"
+>   Revert "gst-ffmpeg: fix build for xtensa"
+>   Revert "gst1-libav: fix build for xtensa"
+>   Revert "lmbench: fix build for xtensa"
+>   Revert "php: fix build for xtensa"
+>   Revert "sqlcipher: fix build for xtensa"
+>   Revert "xtensa: sqlite requires special compiler option"
+> 
+>  package/Makefile.in                                | 11 +++-
+>  package/civetweb/civetweb.mk                       |  3 --
+>  package/ffmpeg/ffmpeg.mk                           |  8 ---
+>  package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk         |  8 ---
+>  package/gstreamer1/gst1-libav/gst1-libav.mk        |  8 ---
+>  package/lmbench/lmbench.mk                         |  4 --
+>  package/php/php.mk                                 |  4 --
+>  package/sqlcipher/sqlcipher.mk                     |  4 --
+>  package/sqlite/sqlite.mk                           |  4 --
+>  ...-add-missing-.literal_position-directives.patch | 62 ++++++++++++++++++++++
+>  10 files changed, 72 insertions(+), 44 deletions(-)
+>  create mode 100644 package/uclibc/7bf35c8b7d4a1f97174eb49f47f33946b282114c/uclibc-0001-xtensa-add-missing-.literal_position-directives.patch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
