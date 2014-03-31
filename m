@@ -1,9 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 31 Mar 2014 22:06:27 +0200
-Subject: [Buildroot] [PATCH 14/16] opengl: New virtual package
+Date: Mon, 31 Mar 2014 22:06:26 +0200
+Subject: [Buildroot] [PATCH 13/16] sdl: Add new dependency libglu for opengl
+	support
 In-Reply-To: <1396296389-28821-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1396296389-28821-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1396296389-28821-15-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1396296389-28821-14-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,79 +14,34 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mesa3d/Config.in       |    4 ++++
- package/opengl/Config.in       |    1 +
- package/opengl/libgl/Config.in |    6 ++++++
- package/opengl/libgl/libgl.mk  |   16 ++++++++++++++++
- 4 files changed, 27 insertions(+)
- create mode 100644 package/opengl/libgl/Config.in
- create mode 100644 package/opengl/libgl/libgl.mk
+ package/sdl/sdl.mk |    6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 8ed0c07..d735e76 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -34,6 +34,7 @@ comment "DRI drivers need shared libdrm"
+diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
+index 086f5e9..fa68198 100644
+--- a/package/sdl/sdl.mk
++++ b/package/sdl/sdl.mk
+@@ -62,9 +62,12 @@ SDL_DEPENDENCIES += alsa-lib
+ endif
  
- config BR2_PACKAGE_MESA3D_DRIVER
- 	bool
-+	select BR2_PACKAGE_HAS_OPENGL_GL
+ ifeq ($(BR2_PACKAGE_MESA3D),y)
+-SDL_DEPENDENCIES += mesa3d
++SDL_DEPENDENCIES += libglu mesa3d
++SDL_CONF_OPT += --enable-video-opengl
+ endif
  
- menu "Drivers"
- 
-@@ -106,6 +107,9 @@ config BR2_PACKAGE_MESA3D_OPENGL_ES
- 
- endmenu
- 
-+config BR2_PACKAGE_PROVIDES_OPENGL_GL
-+	default "mesa3d" if BR2_PACKAGE_MESA3D_DRIVER
++SDL_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBICONV),libiconv)
 +
- config BR2_PACKAGE_PROVIDES_OPENGL_EGL
- 	default "mesa3d" if BR2_PACKAGE_MESA3D_OPENGL_EGL
+ SDL_CONF_OPT += --enable-pulseaudio=no \
+ 		--disable-arts \
+ 		--disable-esd \
+@@ -72,6 +75,7 @@ SDL_CONF_OPT += --enable-pulseaudio=no \
+ 		--disable-video-ps3
  
-diff --git a/package/opengl/Config.in b/package/opengl/Config.in
-index ed81835..02010a9 100644
---- a/package/opengl/Config.in
-+++ b/package/opengl/Config.in
-@@ -1,4 +1,5 @@
- source "package/opengl/libegl/Config.in"
-+source "package/opengl/libgl/Config.in"
- source "package/opengl/libgles/Config.in"
- source "package/opengl/libopenvg/Config.in"
- source "package/opengl/libopenmax/Config.in"
-diff --git a/package/opengl/libgl/Config.in b/package/opengl/libgl/Config.in
-new file mode 100644
-index 0000000..5421c86
---- /dev/null
-+++ b/package/opengl/libgl/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_HAS_OPENGL_GL
-+	bool
-+
-+config BR2_PACKAGE_PROVIDES_OPENGL_GL
-+	depends on BR2_PACKAGE_HAS_OPENGL_GL
-+	string
-diff --git a/package/opengl/libgl/libgl.mk b/package/opengl/libgl/libgl.mk
-new file mode 100644
-index 0000000..66346d6
---- /dev/null
-+++ b/package/opengl/libgl/libgl.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# libgl
-+#
-+################################################################################
-+
-+LIBGL_SOURCE =
-+LIBGL_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_OPENGL_GL))
-+
-+ifeq ($(BR2_PACKAGE_HAS_OPENGL_GL),y)
-+ifeq ($(LIBGL_DEPENDENCIES),)
-+$(error No libGL implementation selected. Configuration error.)
-+endif
-+endif
-+
-+$(eval $(generic-package))
+ HOST_SDL_CONF_OPT += --enable-pulseaudio=no \
++		--enable-video-x11=no \
+ 		--disable-arts \
+ 		--disable-esd \
+ 		--disable-nasm \
 -- 
 1.7.10.4
