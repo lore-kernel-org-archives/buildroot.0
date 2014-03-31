@@ -1,142 +1,89 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 31 Mar 2014 13:10:05 +0100
-Subject: [Buildroot] [PATCH] valgrind: remove default flags -mips32 and
-	-mips64 from Makefile.all.am
-Message-ID: <1396267805-11978-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 31 Mar 2014 09:20:59 -0300
+Subject: [Buildroot] [PATCH 1/2] linux-headers: add 3.14 and bump 3.4.x
+	stable version
+Message-ID: <1396268460-11000-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-During configuration of Valgrind we check does the compiler support
--march=mips32 and -march=mips64. If compiler supports these flags we are
-using them as default flags for mips32 and mips64.
-
-"VALGRIND_AUTORECONF = YES" needs to be added to valgrind.mk because
-this patch modifies the configure.ac.
-
-Original upstream patch:
-   https://github.com/svn2github/valgrind/commit/fdf6c5aea4671c3c43c90230510735d215dd1e1c
-
-Fixes:
-   http://autobuild.buildroot.net/results/213/21352bcbe1b309fef0f996c275cdfcda08619d96/
-
-Reviewed-by: Markos Chandras <markos.chandras@imgtec.com>
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- .../valgrind-0004-remove-default-mips-flags.patch  |   90 ++++++++++++++++++++
- package/valgrind/valgrind.mk                       |    1 +
- 2 files changed, 91 insertions(+), 0 deletions(-)
- create mode 100644 package/valgrind/valgrind-0004-remove-default-mips-flags.patch
+ package/linux-headers/Config.in.host | 13 +++++++++++--
+ toolchain/toolchain-common.in        |  5 +++++
+ 2 files changed, 16 insertions(+), 2 deletions(-)
 
-diff --git a/package/valgrind/valgrind-0004-remove-default-mips-flags.patch b/package/valgrind/valgrind-0004-remove-default-mips-flags.patch
-new file mode 100644
-index 0000000..cdbb434
---- /dev/null
-+++ b/package/valgrind/valgrind-0004-remove-default-mips-flags.patch
-@@ -0,0 +1,90 @@
-+From 374743e6faa9d3fc2fba1489e2ead8ea8ebd1f62 Mon Sep 17 00:00:00 2001
-+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+Date: Mon, 31 Mar 2014 12:00:39 +0100
-+Subject: [PATCH] mips32/64: Remove default flags -mips32 and -mips64 from Makefile.all.am
-+
-+During configuration of Valgrind we check does the compiler support
-+-march=mips32 and -march=mips64. If compiler supports these flags we are
-+using them as default flags for mips32 and mips64.
-+
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+---
-+ Makefile.all.am |    8 ++++----
-+ configure.ac    |   40 ++++++++++++++++++++++++++++++++++++++++
-+ 2 files changed, 44 insertions(+), 4 deletions(-)
-+
-+diff --git a/Makefile.all.am b/Makefile.all.am
-+index 1f69802..405f11f 100644
-+--- a/Makefile.all.am
-++++ b/Makefile.all.am
-+@@ -173,12 +173,12 @@ AM_CFLAGS_S390X_LINUX     = @FLAG_M64@ $(AM_CFLAGS_BASE) -fomit-frame-pointer
-+ AM_CCASFLAGS_S390X_LINUX  = @FLAG_M64@ -g -mzarch -march=z900
-+ 
-+ AM_FLAG_M3264_MIPS32_LINUX = @FLAG_M32@
-+-AM_CFLAGS_MIPS32_LINUX     = @FLAG_M32@ $(AM_CFLAGS_BASE) -mips32
-+-AM_CCASFLAGS_MIPS32_LINUX  = @FLAG_M32@ -mips32 -g
-++AM_CFLAGS_MIPS32_LINUX     = @FLAG_M32@ $(AM_CFLAGS_BASE) @FLAG_MIPS32@
-++AM_CCASFLAGS_MIPS32_LINUX  = @FLAG_M32@ -g @FLAG_MIPS32@
-+ 
-+ AM_FLAG_M3264_MIPS64_LINUX = @FLAG_M64@
-+-AM_CFLAGS_MIPS64_LINUX     = @FLAG_M64@ $(AM_CFLAGS_BASE) -mips64
-+-AM_CCASFLAGS_MIPS64_LINUX  = @FLAG_M64@ -mips64 -g
-++AM_CFLAGS_MIPS64_LINUX     = @FLAG_M64@ $(AM_CFLAGS_BASE) @FLAG_MIPS64@
-++AM_CCASFLAGS_MIPS64_LINUX  = @FLAG_M64@ -g @FLAG_MIPS64@
-+ 
-+ # Flags for the primary target.  These must be used to build the
-+ # regtests and performance tests.  In fact, these must be used to
-+diff --git a/configure.ac b/configure.ac
-+index 229ab98..0e3884c 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -1450,6 +1450,46 @@ CFLAGS=$safe_CFLAGS
-+ AC_SUBST(FLAG_M64)
-+ 
-+ 
-++# does this compiler support -march=mips32 (mips32 default) ?
-++AC_MSG_CHECKING([if gcc accepts -march=mips32])
-++
-++safe_CFLAGS=$CFLAGS
-++CFLAGS="$CFLAGS -march=mips32"
-++
-++AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[
-++  return 0;
-++]])], [
-++FLAG_MIPS32="-march=mips32"
-++AC_MSG_RESULT([yes])
-++], [
-++FLAG_MIPS32=""
-++AC_MSG_RESULT([no])
-++])
-++CFLAGS=$safe_CFLAGS
-++
-++AC_SUBST(FLAG_MIPS32)
-++
-++
-++# does this compiler support -march=mips64 (mips64 default) ?
-++AC_MSG_CHECKING([if gcc accepts -march=mips64])
-++
-++safe_CFLAGS=$CFLAGS
-++CFLAGS="$CFLAGS -march=mips64"
-++
-++AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[
-++  return 0;
-++]])], [
-++FLAG_MIPS64="-march=mips64"
-++AC_MSG_RESULT([yes])
-++], [
-++FLAG_MIPS64=""
-++AC_MSG_RESULT([no])
-++])
-++CFLAGS=$safe_CFLAGS
-++
-++AC_SUBST(FLAG_MIPS64)
-++
-++
-+ # does this compiler support -mmmx ?
-+ AC_MSG_CHECKING([if gcc accepts -mmmx])
-+ 
-+-- 
-+1.7.1
-+
-diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
-index cef67b0..b9aa019 100644
---- a/package/valgrind/valgrind.mk
-+++ b/package/valgrind/valgrind.mk
-@@ -10,6 +10,7 @@ VALGRIND_SOURCE  = valgrind-$(VALGRIND_VERSION).tar.bz2
- VALGRIND_LICENSE = GPLv2 GFDLv1.2
- VALGRIND_LICENSE_FILES = COPYING COPYING.DOCS
- VALGRIND_CONF_OPT = --disable-tls
-+VALGRIND_AUTORECONF = YES
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 1fa498d..6d8b867 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -5,7 +5,7 @@ comment "Kernel Header Options"
  
- # On ARM, Valgrind only supports ARMv7, and uses the arch part of the
- # host tuple to determine whether it's being built for ARMv7 or
+ choice
+ 	prompt "Kernel Headers"
+-	default BR2_KERNEL_HEADERS_3_13
++	default BR2_KERNEL_HEADERS_3_14
+ 	help
+ 	  Select the version of kernel header files you wish to use.
+ 	  You must select the correct set of header files to match
+@@ -65,6 +65,10 @@ choice
+ 		bool "Linux 3.13.x kernel headers"
+ 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
+ 
++	config BR2_KERNEL_HEADERS_3_14
++		bool "Linux 3.14.x kernel headers"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
++
+ 	config BR2_KERNEL_HEADERS_VERSION
+ 		bool "Manually specified Linux version"
+ endchoice
+@@ -86,6 +90,10 @@ choice
+ 	  This is used to hide/show some packages that have strict
+ 	  requirements on the version of kernel headers.
+ 
++config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14
++	bool "3.14.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
++
+ config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_13
+ 	bool "3.13.x"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
+@@ -151,7 +159,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.2.55"	if BR2_KERNEL_HEADERS_3_2
+-	default "3.4.84"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.85"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
+ 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
+ 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
+@@ -160,4 +168,5 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+ 	default "3.12.15"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.13.7"	if BR2_KERNEL_HEADERS_3_13
++	default "3.14"		if BR2_KERNEL_HEADERS_3_14
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index 9dd2f5d..b65b227 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -173,10 +173,15 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
+ 	bool
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
+ 
++config BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
++	bool
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
++
+ # This order guarantees that the highest version is set, as kconfig
+ # stops affecting a value on the first matching default.
+ config BR2_TOOLCHAIN_HEADERS_AT_LEAST
+ 	string
++	default "3.14" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
+ 	default "3.13" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
+ 	default "3.12" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
+ 	default "3.11" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
 -- 
-1.7.1
+1.8.3.2
