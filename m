@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 31 Mar 2014 18:10:21 -0300
-Subject: [Buildroot] [PATCH] pptp-linux: bump to version 1.8.0
-Message-ID: <1396300221-11919-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon, 31 Mar 2014 18:12:09 -0300
+Subject: [Buildroot] [PATCHv2] pptp-linux: bump to version 1.8.0
+Message-ID: <1396300329-12942-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,13 +12,13 @@ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
  .../pptp-linux/pptp-linux-001-susv3-legacy.patch   | 43 +++++++++++----------
  .../pptp-linux/pptp-linux-002-drop-stropts.patch   | 26 -------------
+ ...tch => pptp-linux-002-fix-parallel-build.patch} |  0
  package/pptp-linux/pptp-linux-003-ip-path.patch    | 44 ----------------------
- .../pptp-linux-004-fix-parallel-build.patch        | 23 -----------
  package/pptp-linux/pptp-linux.mk                   |  5 ++-
- 5 files changed, 27 insertions(+), 114 deletions(-)
+ 5 files changed, 27 insertions(+), 91 deletions(-)
  delete mode 100644 package/pptp-linux/pptp-linux-002-drop-stropts.patch
+ rename package/pptp-linux/{pptp-linux-004-fix-parallel-build.patch => pptp-linux-002-fix-parallel-build.patch} (100%)
  delete mode 100644 package/pptp-linux/pptp-linux-003-ip-path.patch
- delete mode 100644 package/pptp-linux/pptp-linux-004-fix-parallel-build.patch
 
 diff --git a/package/pptp-linux/pptp-linux-001-susv3-legacy.patch b/package/pptp-linux/pptp-linux-001-susv3-legacy.patch
 index f41b63f..5cc9f57 100644
@@ -105,6 +105,10 @@ index bc53cc2..0000000
 --- 
 -1.7.2.2
 -
+diff --git a/package/pptp-linux/pptp-linux-004-fix-parallel-build.patch b/package/pptp-linux/pptp-linux-002-fix-parallel-build.patch
+similarity index 100%
+rename from package/pptp-linux/pptp-linux-004-fix-parallel-build.patch
+rename to package/pptp-linux/pptp-linux-002-fix-parallel-build.patch
 diff --git a/package/pptp-linux/pptp-linux-003-ip-path.patch b/package/pptp-linux/pptp-linux-003-ip-path.patch
 deleted file mode 100644
 index 6d8f3c8..0000000
@@ -155,35 +159,6 @@ index 6d8f3c8..0000000
 --- 
 -1.7.2.2
 -
-diff --git a/package/pptp-linux/pptp-linux-004-fix-parallel-build.patch b/package/pptp-linux/pptp-linux-004-fix-parallel-build.patch
-deleted file mode 100644
-index 04a7977..0000000
---- a/package/pptp-linux/pptp-linux-004-fix-parallel-build.patch
-+++ /dev/null
-@@ -1,23 +0,0 @@
--Fix parallel build issue
--
--The config.h header file must be created before being used to build
--source files that include it, especially version.c. In order for this
--to happen even in highly-parallel builds, we add a dependency of all
--object files on config.h, in order to ensure it gets generated before
--make attempts to build the object files.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--
--Index: b/Makefile
--===================================================================
----- a/Makefile
--+++ b/Makefile
--@@ -37,6 +37,8 @@
-- 
-- all: config.h $(PPTP_BIN) pptpsetup.8
-- 
--+$(PPTP_OBJS): config.h
--+
-- $(PPTP_BIN): $(PPTP_OBJS) $(PPTP_DEPS)
-- 	$(CC) -o $(PPTP_BIN) $(PPTP_OBJS) $(LDFLAGS) $(LIBS)
-- 
 diff --git a/package/pptp-linux/pptp-linux.mk b/package/pptp-linux/pptp-linux.mk
 index 7b10886..dc624eb 100644
 --- a/package/pptp-linux/pptp-linux.mk
