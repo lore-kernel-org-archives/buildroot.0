@@ -1,107 +1,87 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 31 Mar 2014 18:59:49 +0200
-Subject: [Buildroot] [PATCH 1/1] [V6] toolchain: control vendor part in
- GNU_TARGET_NAME
-In-Reply-To: <884EA965490E3C4D8E66AEF41E9802500AA064@ezex10.ezchip.com>
-References: <884EA965490E3C4D8E66AEF41E9802500AA064@ezex10.ezchip.com>
-Message-ID: <20140331165949.GA5004@free.fr>
+Date: Mon, 31 Mar 2014 19:12:04 +0200
+Subject: [Buildroot] Patchwork cleanup #7: submitter notification
+ (feedback deadline: April 12)
+In-Reply-To: <CD43324F-6F9A-40AE-94AD-DD25A435DF7C@armadeus.org>
+References: <CAAXf6LW5stEOk84f-SiPvnYSxazu7vBgM-cNpQStV7j+dcMrbw@mail.gmail.com>
+ <CAAXf6LUAvi_C5NvSa6=mEhcipkBYM6XwPLHhRCZtxBccq05i0g@mail.gmail.com>
+ <CD43324F-6F9A-40AE-94AD-DD25A435DF7C@armadeus.org>
+Message-ID: <20140331171204.GB5004@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Noam, All,
-
-On 2014-03-09 07:15 +0000, Noam Camus spake thusly:
+On 2014-03-31 10:58 +0200, Eric Jarrige spake thusly:
+> Hi Thomas,
 > 
-> This option allows to customize the "vendor" part of the
-> toolchain tuple, where the toolchain tuple has the form
-> <arch>-<vendor>-<os>-<libc>. Use this option in situations
-> where gcc might make different decisions based on the vendor
-> part of the tuple.
+> >> [v2,1/1] u-boot: allow to pass a custom configuration file
+> >> http://patchwork.ozlabs.org/patch/276286/
+> >> Eric Jarrige
+> >> Yann Morin gave the feedback that this patch allows to overwrite
+> >> u-boot sources, rendering the declared license possible invalid.
 > 
-> Signed-off-by: Noam Camus <noamc@ezchip.com>
+> AFAIK this feature cannot overwrite the U-Boot license files and
+> according to the U-Boot licenses/README - "You can redistribute
+> U-Boot  and/or modify it under the terms of version 2 of the GNU
+> General Public License as published by the Free Software
+> Foundation."
+> So, it should not be an issue as long as the new config file respects
+> the terms of the version 2 of the GNU GPL license.
 
-Small nit below...
+Hmm. There was maybe a bit of misunderstanding in what I said. Lemme
+quote it here again:
 
-> ---
->  package/Makefile.in                     |   17 ++++++++++++++++-
->  toolchain/toolchain-buildroot/Config.in |   16 ++++++++++++++++
->  2 files changed, 32 insertions(+), 1 deletions(-)
+    ---
+    This is likely to overwrite a uboot source file
+    with a local file, so we won't be able to generate conpliant
+    legal-info when a custom comnfig file is used.
+    ---
+
+What I meant was, when running 'make legal-info', we will end up copying
+the tarball of the sources, and we will miss this file (since Buildroot
+is not recreating the tarballs from the build dir, but just copies what
+was downloaded.)
+
+So, this indeed can not overwrite the license file, but the sources in
+legal-info will not be the exact sources used to build U-Boot, so the
+legal-info will not create a compliant distribution.
+
+That's why I oppposed the change as-is.
+
+> >> Eric: are you still interested in pursuing this patch? If so, I think
+> >> some further discussion on it should be ignited.
 > 
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index 454f614..bd9f18c 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -20,8 +20,23 @@ endif
->  MAKE1:=$(HOSTMAKE) -j1
->  MAKE:=$(HOSTMAKE) $(if $(PARALLEL_JOBS),-j$(PARALLEL_JOBS))
->  
-> +ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
-> +TARGET_VENDOR = $(call qstrip,$(BR2_TOOLCHAIN_BUILDROOT_VENDOR))
-> +else
-> +TARGET_VENDOR = buildroot
-> +endif
-> +
-> +# Sanity checks
-> +ifeq ($(TARGET_VENDOR),)
-> +$(error BR2_TOOLCHAIN_BUILDROOT_VENDOR is not allowed to be empty)
-> +endif
-> +ifeq ($(TARGET_VENDOR),unknown)
-> +$(error BR2_TOOLCHAIN_BUILDROOT_VENDOR cannot be 'unknown'. \
-> +        It might be confused with the native toolchain)
-> +endif
-> +
->  # Compute GNU_TARGET_NAME
-> -GNU_TARGET_NAME=$(ARCH)-buildroot-$(TARGET_OS)-$(LIBC)$(ABI)
-> +GNU_TARGET_NAME=$(ARCH)-$(TARGET_VENDOR)-$(TARGET_OS)-$(LIBC)$(ABI)
->  
->  # Blackfin FLAT needs uclinux
->  ifeq ($(BR2_bfin)$(BR2_BINFMT_FLAT),yy)
-> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-> index 07db50b..3487327 100644
-> --- a/toolchain/toolchain-buildroot/Config.in
-> +++ b/toolchain/toolchain-buildroot/Config.in
-> @@ -70,6 +70,22 @@ config BR2_TOOLCHAIN_BUILDROOT_LIBC
->  	default "glibc"  if BR2_TOOLCHAIN_BUILDROOT_EGLIBC
->  	default "glibc"  if BR2_TOOLCHAIN_BUILDROOT_GLIBC
->  
-> +config BR2_TOOLCHAIN_BUILDROOT_VENDOR
-> +	string "custom toolchain vendor name"
-> +	default "buildroot"
-> +	help
-> +	  This option allows to customize the "vendor" part of the
-> +	  toolchain tuple, where the toolchain tuple has the form
-> +	  <arch>-<vendor>-<os>-<libc>. The default value, "buildroot",
-> +	  is fine for most cases, except in very specific situations
-> +	  where gcc might make different decisions based on the vendor
-> +	  part of the tuple. The value "unknown" is not allowed, as the
-> +	  cross-compiling toolchain might then be confused with the
-> +	  native toolchain when the target and host architecture are
-> +	  identical.
+> I submitted this patch because I think it is generic enough to support
+> custom U-Boot configuration file for any board without using a patch
+> but I can understand I am the only one customizing bootloader for
+> my boards.
+> So feel free to reject this patch if there is no interest to manage
+> U-Boot configuration files within BuildRoot.
 
-      This can not be empty either.
+I did not say we did not want to be able to provide a custom config
+file. I just said we need to be careful on the impact.
 
-With that added:
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+However, I see that it is possible to declare post-legal-info hooks in
+packages.
+
+So you could complement your patch with something like:
+
+    UBOOT_CUSTOM_CONFIG = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE))
+    ifneq ($(UBOOT_CUSTOM_CONFIG_FILE),)
+    define UBOOT_COPY_CUSTOM_CONFIG_FILE
+        $(INSTALL) -m 0644 -D $(UBOOT_CUSTOM_CONFIG_FILE) \
+                   $(SOMEWHERE)
+    endef
+    UBOOT_POST_LEGAL_INFO_HOOKS += UBOOT_COPY_CUSTOM_CONFIG_FILE
+    endif
+
+I'll leave it to you as an exercise to find what $(SOMEWHERE) should be.
+;-)
 
 Regards,
 Yann E. MORIN.
-
-> +	  If you're not sure, just leave the default "buildroot" value.
-> +
->  source "package/uclibc/Config.in"
->  source "package/glibc/Config.in"
->  source "package/binutils/Config.in.host"
-> -- 
-> 1.7.1
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
