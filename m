@@ -1,53 +1,129 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 31 Mar 2014 22:06:17 +0200
-Subject: [Buildroot] [PATCH 04/16] flex: Version bump 2.5.39
+Date: Mon, 31 Mar 2014 22:06:25 +0200
+Subject: [Buildroot] [PATCH 12/16] libglew: new package
 In-Reply-To: <1396296389-28821-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1396296389-28821-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1396296389-28821-5-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1396296389-28821-13-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- upstream fixed Makefile.in, flex-prog-ar.patch is unneeded now
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/flex/flex-prog-ar.patch |   11 -----------
- package/flex/flex.mk            |    2 +-
- 2 files changed, 1 insertion(+), 12 deletions(-)
- delete mode 100644 package/flex/flex-prog-ar.patch
+ package/Config.in                        |    1 +
+ package/libglew/Config.in                |   19 ++++++++++++++
+ package/libglew/libglew-0001-lib64.patch |   14 +++++++++++
+ package/libglew/libglew.mk               |   40 ++++++++++++++++++++++++++++++
+ 4 files changed, 74 insertions(+)
+ create mode 100644 package/libglew/Config.in
+ create mode 100644 package/libglew/libglew-0001-lib64.patch
+ create mode 100644 package/libglew/libglew.mk
 
-diff --git a/package/flex/flex-prog-ar.patch b/package/flex/flex-prog-ar.patch
-deleted file mode 100644
-index e0626ff..0000000
---- a/package/flex/flex-prog-ar.patch
-+++ /dev/null
-@@ -1,11 +0,0 @@
--diff -rup flex-2.5.33.orig/Makefile.in flex-2.5.33/Makefile.in
----- flex-2.5.33.orig/Makefile.in	2007-01-18 17:29:25.000000000 +0100
--+++ flex-2.5.33/Makefile.in	2007-01-18 18:28:22.000000000 +0100
--@@ -105,7 +105,6 @@ am__installdirs = "$(DESTDIR)$(libdir)"
-- 	"$(DESTDIR)$(includedir)"
-- libLIBRARIES_INSTALL = $(INSTALL_DATA)
-- LIBRARIES = $(lib_LIBRARIES)
---AR = ar
-- ARFLAGS = cru
-- libfl_a_AR = $(AR) $(ARFLAGS)
-- libfl_a_LIBADD =
-diff --git a/package/flex/flex.mk b/package/flex/flex.mk
-index 17f651b..2373d04 100644
---- a/package/flex/flex.mk
-+++ b/package/flex/flex.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FLEX_VERSION = 2.5.37
-+FLEX_VERSION = 2.5.39
- FLEX_SITE = http://download.sourceforge.net/project/flex
- FLEX_INSTALL_STAGING = YES
- FLEX_LICENSE = FLEX
+diff --git a/package/Config.in b/package/Config.in
+index 3240188..8433020 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -584,6 +584,7 @@ source "package/libexif/Config.in"
+ source "package/libgail/Config.in"
+ source "package/libgeotiff/Config.in"
+ source "package/libglade/Config.in"
++source "package/libglew/Config.in"
+ source "package/libglu/Config.in"
+ source "package/libgtk2/Config.in"
+ source "package/libpng/Config.in"
+diff --git a/package/libglew/Config.in b/package/libglew/Config.in
+new file mode 100644
+index 0000000..fdb2b91
+--- /dev/null
++++ b/package/libglew/Config.in
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_LIBGLEW
++	bool "libglew"
++	depends on BR2_PACKAGE_XSERVER_XORG_SERVER
++	depends on BR2_PACKAGE_MESA3D_DRIVER
++	select BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_XLIB_LIBXEXT
++	select BR2_PACKAGE_XLIB_LIBXI
++	select BR2_PACKAGE_XLIB_LIBXMU
++	help
++	  The OpenGL Extension Wrangler Library (GLEW) is a cross-platform C/C++
++	  extension loading library. GLEW provides efficient run-time mechanisms
++	  for determining which OpenGL extensions are supported on the target
++	  platform. OpenGL core and extension functionality is exposed in a
++	  single header file.
++
++	  http://glew.sourceforge.net
++
++comment "libglew depends on X.org server and an activated mesa3d driver"
++	depends on !BR2_PACKAGE_XSERVER_XORG_SERVER || !BR2_PACKAGE_MESA3D_DRIVER
+diff --git a/package/libglew/libglew-0001-lib64.patch b/package/libglew/libglew-0001-lib64.patch
+new file mode 100644
+index 0000000..b961aec
+--- /dev/null
++++ b/package/libglew/libglew-0001-lib64.patch
+@@ -0,0 +1,14 @@
++diff -uNr glew-1.10.0.org/config/Makefile.linux glew-1.10.0/config/Makefile.linux
++--- glew-1.10.0.org/config/Makefile.linux	2013-07-22 16:11:22.000000000 +0200
+++++ glew-1.10.0/config/Makefile.linux	2014-03-30 22:01:04.403574030 +0200
++@@ -10,8 +10,8 @@
++   ARCH64 = true
++ endif
++ ifeq (${ARCH64},true)
++-  LDFLAGS.EXTRA = -L/usr/X11R6/lib64 -L/usr/lib64
++-  LIBDIR = $(GLEW_DEST)/lib64
+++  LDFLAGS.EXTRA = -L/usr/X11R6/lib -L/usr/lib
+++  LIBDIR = $(GLEW_DEST)/lib
++ else
++   LDFLAGS.EXTRA = -L/usr/X11R6/lib -L/usr/lib
++   LIBDIR = $(GLEW_DEST)/lib
+diff --git a/package/libglew/libglew.mk b/package/libglew/libglew.mk
+new file mode 100644
+index 0000000..e9c08d7
+--- /dev/null
++++ b/package/libglew/libglew.mk
+@@ -0,0 +1,40 @@
++################################################################################
++#
++# libglew
++#
++################################################################################
++
++LIBGLEW_VERSION = 1.10.0
++LIBGLEW_SOURCE = glew-$(LIBGLEW_VERSION).tgz
++LIBGLEW_SITE = http://sourceforge.net/projects/glew/files/glew/$(LIBGLEW_VERSION)
++LIBGLEW_LICENSE = MIT
++LIBGLEW_INSTALL_STAGING = YES
++LIBGLEW_DEPENDENCIES = \
++	mesa3d \
++	xlib_libX11 \
++	xlib_libXext \
++	xlib_libXi \
++	xlib_libXmu
++
++define LIBGLEW_BUILD_CMDS
++    $(TARGET_MAKE_ENV) \
++    $(MAKE) -C $(@D) \
++    GLEW_DEST="/usr" CC="$(TARGET_CC)" RANLIB="$(TARGET_RANLIB)" AR="$(TARGET_AR)" LD="$(TARGET_CC)" \
++    POPT="$(TARGET_CFLAGS)" LDFLAGS.EXTRA="$(TARGET_LDFLAGS)"
++endef
++
++define LIBGLEW_INSTALL_STAGING_CMDS
++    $(TARGET_MAKE_ENV) \
++    $(TARGET_CONFIGURE_OPTS) \
++    $(MAKE) -C $(@D) \
++    GLEW_DEST="$(STAGING_DIR)/usr" install
++endef
++
++define LIBGLEW_INSTALL_TARGET_CMDS
++    $(TARGET_MAKE_ENV) \
++    $(TARGET_CONFIGURE_OPTS) \
++    $(MAKE) -C $(@D) \
++    GLEW_DEST="$(TARGET_DIR)/usr" install
++endef
++
++$(eval $(generic-package))
 -- 
 1.7.10.4
