@@ -1,42 +1,36 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Mon, 31 Mar 2014 11:44:18 +0200
-Subject: [Buildroot] [PATCH] systemd: needs kernel headers >= 3.8
-Message-ID: <1396259058-15561-1-git-send-email-eric.le.bihan.dev@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 31 Mar 2014 11:46:06 +0200
+Subject: [Buildroot] [PATCH] systemd: needs kernel headers >= 3.7.
+In-Reply-To: <20140331094057.GA28812@pc-eric>
+References: <1396024266-6662-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <20140329093520.5318ada7@skate> <20140329093208.GA3227@free.fr>
+ <20140331094057.GA28812@pc-eric>
+Message-ID: <20140331114606.38dd7d5a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Systemd needs Linux headers >= 3.8 because it uses IFLA_GRE_FLOWINFO,
-IFLA_IPTUN_FLAGS from linux/if_tunnel.h.
+Dear Eric Le Bihan,
 
-Fixes http://autobuild.buildroot.org/results/ad3/ad3b4003dc50582a493f1156234d83652104a6bf/
+On Mon, 31 Mar 2014 11:40:57 +0200, Eric Le Bihan wrote:
 
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
----
- system/Config.in |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+> BTW, why is it only possible to use an external toolchain for AArch64, and not
+> a Buildroot one? I've also noticied that the recently released Linaro 14.03
+> still uses Linux headers 3.7...
 
-diff --git a/system/Config.in b/system/Config.in
-index 8ff8d49..ba225ce 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -96,12 +96,12 @@ config BR2_INIT_SYSTEMD
- 	depends on BR2_TOOLCHAIN_HAS_SSP
- 	depends on BR2_USE_MMU
- 	depends on !BR2_PREFER_STATIC_LIB
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
- 	select BR2_PACKAGE_SYSTEMD
- 
--comment 'systemd needs an (e)glibc toolchain, headers >= 3.0'
-+comment 'systemd needs an (e)glibc toolchain, headers >= 3.8'
- 	depends on !(BR2_TOOLCHAIN_USES_GLIBC \
--		&& BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0)
-+		&& BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8)
- 
- config BR2_INIT_NONE
- 	bool "None"
+Because when I added AArch64 support in Buildroot, the support for it
+was not yet in mainline gcc/binutils/gdb/glibc. It was still in the
+process of being merged.
+
+Now that it has been done, it should be possible to add AArch64 support
+in the internal toolchain backend, without too much troubles, hopefully.
+
+Best regards,
+
+Thomas
 -- 
-1.7.9.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
