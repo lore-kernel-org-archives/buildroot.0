@@ -1,57 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Apr 2014 14:40:06 +0200
-Subject: [Buildroot] qt5, eglfs and xcb
-In-Reply-To: <533A8F6C.1010606@gmail.com>
-References: <5338207F.9010807@gmail.com> <20140330172128.06f1d5d2@skate>
- <533A8F6C.1010606@gmail.com>
-Message-ID: <20140401144006.5ea3dfc4@skate>
+Date: Tue, 1 Apr 2014 14:44:36 +0200
+Subject: [Buildroot] [git commit] linux: bump to version 3.14
+Message-ID: <20140401124447.C2DF69C2B8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Marco Trapanese,
+commit: http://git.buildroot.net/buildroot/commit/?id=094715d83a795ec5a5d29d4062612a9ec1d8269a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 01 Apr 2014 12:05:32 +0200, Marco Trapanese wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ linux/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-> Il 30/03/2014 17:21, Thomas Petazzoni ha scritto:
-> > As explained above, this requires more than just XCB, contrary to what 
-> > the company you requested support from is claiming. You need an OpenGL 
-> > implementation that works under X.org, and this implementation is 
-> > usually Mesa. And the support for making Mesa recognized as a proper 
-> > OpenGL implementation has only been merged since yesterday, and is not 
-> > yet completely ready. It would certainly be interesting to fix this in 
-> > Buildroot and allow Qt5 to build for X.org with OpenGL support. 
-> 
-> Ok, as far as I understand it means nobody has successfully compiled Qt5 
-> + webkit + xcb + mesa yet.
-> Perhaps, people use only the framebuffer with buildroot.
-
-Yes, on most embedded platforms, people use framebuffer + EGL + OpenGL
-ES I believe.
-
-
-> > BTW, what is your hardware platform? What type of graphics hardware 
-> > are you using? What X.org driver are you using? Anyway, thanks for the 
-> > report, this is definitely something that should be improved. Thomas 
-> 
-> We're using a Freescale iMX6 MARS board, with the modular X.org server.
-> As drivers, I selected:
-
-On i.MX6 you will clearly not want to use Mesa, as I believe there is
-no support for the i.MX6 GPU in the mainline Mesa (even though the
-etnaviv project has been making some interesting progress). So for the
-time being, you will have to use the OpenGL implementation available in
-the gpu-viv-bin-mx6q package. It has an X11 variant of the OpenGL
-implementation, so it should work with X.org. The only thing that
-remains is indeed fixing the Qt5 package to be able to build its X.org
-support with OpenGL support.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/linux/Config.in b/linux/Config.in
+index 20f08f0..c40dcd0 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -21,7 +21,7 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "3.13.7"
++	bool "3.14"
+ 
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -104,7 +104,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "3.13.7" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "3.14" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
