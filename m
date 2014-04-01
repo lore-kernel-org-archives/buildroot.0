@@ -1,28 +1,57 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Tue, 1 Apr 2014 21:11:14 +0200
-Subject: [Buildroot] [PATCH 0/6] Add virtual package for full-openGL
- (branch yem/fixes)
-In-Reply-To: <cover.1396302677.git.yann.morin.1998@free.fr>
-References: <cover.1396302677.git.yann.morin.1998@free.fr>
-Message-ID: <20140401191114.GA2396@milhouse>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue,  1 Apr 2014 19:41:38 +0000 (UTC)
+Subject: [Buildroot] [Bug 7016] New: Git issues in resulting buildroot tar
+Message-ID: <bug-7016-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann E., Bernd,
-On Mon, Mar 31, 2014 at 11:59:57PM +0200, Yann E. MORIN wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
->
-> Hello All!
->
-> This series introduces a virtual package for full-openGL providers.
-Thanks for your work on this. I am using it to add support for CoGL/Clutter to
-Buildroot (wraps opengl, gles, egl, with/without x11/wayland). Now I can build
-it for Qemu/x86 and Raspberry :-)
+https://bugs.busybox.net/show_bug.cgi?id=7016
 
-Best regards,
-ELB
+           Summary: Git issues in resulting buildroot tar
+           Product: buildroot
+           Version: 2014.02
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: brian at brianclements.net
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-(https://github.com/elebihan/buildroot/tree/clutter-support)
+
+Hi There,
+Sorry if this isn't the correct place for this bug, please forward me if so.
+
+I've built a pretty standard busybox chain using many different options and
+versions of git by this point, but the end result has been the same: using git
+in this freshly built image fails on anything involved decompressing objects
+(git clone among other things).
+
+The context here has been to make a Docker image of busybox with a complete git
+install contained therein. All my reproducible steps are here:
+
+https://github.com/brianclements/dockerfile-busyboxplus/blob/gitbug/tarmaker/Dockerfile
+
+I've even tried substituting different versions of buildroot (2013.08.1,
+2014.02) and different versions of git (1.8.3, 1.8.5.3, 1.9.0) all with the
+same result. The build succeeds, and the resulting image works as far as I can
+tell, but running "git clone" on a larger repository that involves compression
+of objects (smaller repos of text only work fine) will fail with: 
+
+fatal: serious inflate inconsistency   
+fatal: index-pack failed
+
+Any thoughts or further testing I can try to tweak the git build?
+
+Thanks.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
