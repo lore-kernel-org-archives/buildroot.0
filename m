@@ -1,57 +1,46 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue,  1 Apr 2014 19:41:38 +0000 (UTC)
-Subject: [Buildroot] [Bug 7016] New: Git issues in resulting buildroot tar
-Message-ID: <bug-7016-163@https.bugs.busybox.net/>
+From: Bernd Kuhls <berndkuhls@hotmail.com>
+Date: Tue, 01 Apr 2014 21:40:35 +0200
+Subject: [Buildroot] [PATCH WIP 15/16] xbmc: Bump version to Gotham_beta3
+References: <1396296389-28821-1-git-send-email-bernd.kuhls@t-online.de>
+ <1396296389-28821-16-git-send-email-bernd.kuhls@t-online.de>
+ <20140331220546.GD5004@free.fr>
+ <qi8r0bx5mu.ln2@ID-313208.user.individual.net>
+ <20140401183534.GB3291@free.fr>
+Message-ID: <jahr0bx4a6.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7016
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote in
+news:20140401183534.GB3291 at free.fr: 
 
-           Summary: Git issues in resulting buildroot tar
-           Product: buildroot
-           Version: 2014.02
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: brian at brianclements.net
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+> Note also, that many of the XBMC sub-options have dependencies on
+> toolchain features (eg. IPv6, threads, and so on...) which are not
+> currently expressed, being implicit as XBMC depends on (e)glibc, and so
+> those features are guaranteed to be present in this case. But when
+> enabling building with uClibc, those dependencies will have to be added,
+> which is not a trivial change. And your patch is missing all those new
+> required dependencies. Having split-patches will make it easier to check
+> those dependencies.
 
+Hi,
 
-Hi There,
-Sorry if this isn't the correct place for this bug, please forward me if so.
+ok, you convinced me to split the patch, I already started work ;)
 
-I've built a pretty standard busybox chain using many different options and
-versions of git by this point, but the end result has been the same: using git
-in this freshly built image fails on anything involved decompressing objects
-(git clone among other things).
+efc3c8359e6493dbcdf32afd4f9d4075dd4b9f4a WIP: xbmc: needs host-gawk
+bbcfd437efa76bd358a287d0505dc98f2c9987e5 WIP: xbmc: Add option for Goom 
+screensaver
+3b33e850145ae59e1a51f14933b1d889a7ce8091 WIP: xbmc: Disable broken rsxs 
+screensaver
+ca08b3b00d44a70cd65bedb5737254ff286b1c72 WIP: xbmc: Add lame support
+aaf2d1b40144266446d5764baf65b9ed1a44e7a3 WIP: xbmc: Add alsa support
+7a4721ab543e705ced87f8e4dbeb38c91af14914 WIP: xbmc: Add VA-API support
+21c7aa5957c8855a1b0ecbe5f2a8a16b583d4439 WIP: xbmc: Add X.org support
+283da553c5fe11f64486e825e8d1975403fa633e WIP: xbmc: Allow compilation with 
+uClibc
+19018489f879c289b41de3013ea98724bb0c550c WIP: xbmc: Bump version to 
+Gotham_beta3
 
-The context here has been to make a Docker image of busybox with a complete git
-install contained therein. All my reproducible steps are here:
-
-https://github.com/brianclements/dockerfile-busyboxplus/blob/gitbug/tarmaker/Dockerfile
-
-I've even tried substituting different versions of buildroot (2013.08.1,
-2014.02) and different versions of git (1.8.3, 1.8.5.3, 1.9.0) all with the
-same result. The build succeeds, and the resulting image works as far as I can
-tell, but running "git clone" on a larger repository that involves compression
-of objects (smaller repos of text only work fine) will fail with: 
-
-fatal: serious inflate inconsistency   
-fatal: index-pack failed
-
-Any thoughts or further testing I can try to tweak the git build?
-
-Thanks.
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Regards, Bernd
