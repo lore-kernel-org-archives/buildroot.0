@@ -1,46 +1,122 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Tue, 01 Apr 2014 21:40:35 +0200
-Subject: [Buildroot] [PATCH WIP 15/16] xbmc: Bump version to Gotham_beta3
-References: <1396296389-28821-1-git-send-email-bernd.kuhls@t-online.de>
- <1396296389-28821-16-git-send-email-bernd.kuhls@t-online.de>
- <20140331220546.GD5004@free.fr>
- <qi8r0bx5mu.ln2@ID-313208.user.individual.net>
- <20140401183534.GB3291@free.fr>
-Message-ID: <jahr0bx4a6.ln2@ID-313208.user.individual.net>
+From: Paul Cercueil <paul@crapouillou.net>
+Date: Tue, 01 Apr 2014 22:14:11 +0200
+Subject: [Buildroot] [PATCH 3/6] package/mesa3d: is a full-openGL
+ provider if X.org is present
+In-Reply-To: <20140401181437.GA3291@free.fr>
+References: <cover.1396302677.git.yann.morin.1998@free.fr>
+ <7b289a2d0fd88d16d66a9ce87db4a3a43821c630.1396302677.git.yann.morin.1998@free.fr>
+ <533A6F37.9050805@crapouillou.net> <20140401181437.GA3291@free.fr>
+Message-ID: <533B1E13.9020200@crapouillou.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote in
-news:20140401183534.GB3291 at free.fr: 
-
-> Note also, that many of the XBMC sub-options have dependencies on
-> toolchain features (eg. IPv6, threads, and so on...) which are not
-> currently expressed, being implicit as XBMC depends on (e)glibc, and so
-> those features are guaranteed to be present in this case. But when
-> enabling building with uClibc, those dependencies will have to be added,
-> which is not a trivial change. And your patch is missing all those new
-> required dependencies. Having split-patches will make it easier to check
-> those dependencies.
-
 Hi,
 
-ok, you convinced me to split the patch, I already started work ;)
+Comments embedded.
 
-efc3c8359e6493dbcdf32afd4f9d4075dd4b9f4a WIP: xbmc: needs host-gawk
-bbcfd437efa76bd358a287d0505dc98f2c9987e5 WIP: xbmc: Add option for Goom 
-screensaver
-3b33e850145ae59e1a51f14933b1d889a7ce8091 WIP: xbmc: Disable broken rsxs 
-screensaver
-ca08b3b00d44a70cd65bedb5737254ff286b1c72 WIP: xbmc: Add lame support
-aaf2d1b40144266446d5764baf65b9ed1a44e7a3 WIP: xbmc: Add alsa support
-7a4721ab543e705ced87f8e4dbeb38c91af14914 WIP: xbmc: Add VA-API support
-21c7aa5957c8855a1b0ecbe5f2a8a16b583d4439 WIP: xbmc: Add X.org support
-283da553c5fe11f64486e825e8d1975403fa633e WIP: xbmc: Allow compilation with 
-uClibc
-19018489f879c289b41de3013ea98724bb0c550c WIP: xbmc: Bump version to 
-Gotham_beta3
+On 01/04/2014 20:14, Yann E. MORIN wrote:
+> Paul, All,
+>
+> On 2014-04-01 09:48 +0200, Paul Cercueil spake thusly:
+>> I don't see the "if X.org is present" part in your patch, what would prevent
+>> me from trying to enable OpenGL on a X11-less system?
+> Right, the commit log does not really match the changeset.
+>
+>> You make BR2_PACKAGE_MESA3D_DRIVER select BR2_PACKAGE_HAS_OPENGL but that is
+>> wrong. Typically a X11-less system will enable a Gallium driver, while
+>> Mesa's OpenGL requires a DRI driver (hence the dependency on X11).
+> This is the same change Bernd did in his patch. I initially did:
+>
+>      config BR2_PACKAGE_MESA3D
+>          bool "mesa3d"
+>          select BR2_PACKAGE_HAS_OPENGL if BR2_PACKAGE_XORG7
+>
+>      if BR2_PACKAGE_MESA3D
+>
+>      config BR2_PACKAGE_PROVIDES_OPENGL
+>          default "mesa3d" if BR2_PACKAGE_XORG7
+>
+>      endif
+>
+> (only quoting the relevant parts)
+>
+> But as Bernd (who seems much more knowledgeable than I in mesa3d) made
+> than depend on BR2_PACKAGE_MESA3D_DRIVER, I eventually did the same.
+>
+>> What I suggest is to select BR2_PACKAGE_HAS_OPENGL only from
+>> BR2_PACKAGE_MESA3D_DRI_DRIVER, and make BR2_PACKAGE_MESA3D_DRI_DRIVER
+>> available only if X11 is enabled, since it makes no sense building X11-only
+>> drivers in that case.
+> But MESA3D_DRI_DRIVE is a blind option that is selected by the various
+> Gallium or DRI drivers.
+>
+> Of those drivers, only the i965 DRI driver depends on XORG7, the other
+> DRI drivers, as well as the Gallium drivers, do not depend on XORG7.
+>
+> Here are all the drivers:
+>      nouveau (Gallium)
+>      vmware  (Gallium)
+>      swrast  (Gallium)
+>      swrast  (DRI)
+>      i965    (DRI) depends on XORG7
+>      radeon  (DRI)
+>
+> So, taking your comment into account, only the i965 should provide
+> full-openGL, since it's the only one that guarantees X.org is present.
+>
+> However, are the others missing a dependency on XORG7? Is it possible
+> (and meaningful) to build the nouveau Gallium driver without X.org? The
+> radeon driver? ...
+>
+> I have to admit I am a bit lost in all this mess... :-(
 
-Regards, Bernd
+It works like this: regular OpenGL only works with DRI drivers, and DRI 
+drivers are only usable under X11.
+Which means that all DRI drivers should depend on XORG7 (even the swrast 
+one), and they should all select OpenGL.
+
+Gallium drivers are meant to be used with EGL and OpenGL ES, and only 
+some of them can be used under X11 using a DRI compatibility layer (for 
+instance, "nouveau" in Mesa is both a Gallium and a DRI driver). But 
+they should also all work fine without X11, and will support Wayland, 
+which is not the case for DRI drivers.
+>
+> So, here is basically what I propose for now:
+>
+>    - move the select _HAS_OPENGL to BR2_PACKAGE_MESA3D_DRI_DRIVER
+>    - do the select only if XORG7 is selected
+>    - add missing dependencies on XORG7 based on your feedback on the
+>      above question.
+>
+>
+> BTW, there is a bug in the way BR2_PACKAGE_MESA3D_DRI_DRIVER is defined:
+>
+>      config BR2_PACKAGE_MESA3D_DRI_DRIVER
+>          select BR2_PACKAGE_MESA3D_DRIVER
+>          depends on !BR2_PREFER_STATIC_LIB
+>          bool
+>
+> None of the symbols that select BR2_PACKAGE_MESA3D_DRI_DRIVER do depend
+> on !BR2_PREFER_STATIC_LIB, so we can end-up in an unmet-dependency hell.
+>
+> Basically, adding a 'depends on' to a no-prompt symbol is just wrong.
+>
+> I'll fix that in my series.
+>
+>> Also, the original Config.in has options to enable EGL/GLES, having an
+>> option to toggle OpenGL would be nice too, I think
+> Well, we can add such an option in a follow-up patch; I do not like to
+> mix fixes and enhancements in the same patch.
+>
+>> (and OpenVG, but that's a
+>> separate issue).
+> Ditto, it can be in a follow-up patch.
+>
+> Thank you for the review! :-)
+>
+> Regards,
+> Yann E. MORIN.
+>
