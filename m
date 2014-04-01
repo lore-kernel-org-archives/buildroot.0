@@ -1,30 +1,43 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Tue, 1 Apr 2014 10:39:01 +0200
-Subject: [Buildroot] [PATCH 5/6] infra: add to luarocks support for
- top-level parallel make
-In-Reply-To: <CAB0FRsuRnHaq0SwMk3LZGAOHMSTn3Y5NbLXdUmUDYmrJZ216hg@mail.gmail.com>
-References: <1394540278-28740-1-git-send-email-fabio.porcedda@gmail.com>
- <1394540278-28740-6-git-send-email-fabio.porcedda@gmail.com>
- <CAB0FRsuRnHaq0SwMk3LZGAOHMSTn3Y5NbLXdUmUDYmrJZ216hg@mail.gmail.com>
-Message-ID: <CAHkwnC-kpQv3QJbiNhyTTXHYCJZK8d4itAPFV0JzC3EX=N8=ug@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue,  1 Apr 2014 09:09:56 +0000 (UTC)
+Subject: [Buildroot] [Bug 7010] New: jamvm builds and runs fine under mips
+	(be)
+Message-ID: <bug-7010-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Mar 11, 2014 at 8:42 PM, Fran?ois Perrad
-<francois.perrad@gadz.org> wrote:
-> 2014-03-11 13:17 GMT+01:00 Fabio Porcedda <fabio.porcedda@gmail.com>:
->> The host-luarock dependency is not always satisfied for the extract
->> phase because the %-extract target is not anymore in the dependency
->> chain.
->> To be sure that the dependency is satfied add the dependency to the
->
-> typo: satisfied
+https://bugs.busybox.net/show_bug.cgi?id=7010
 
-I've corrected the type, thanks.
+           Summary: jamvm builds and runs fine under mips (be)
+           Product: buildroot
+           Version: 2014.02
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: alex at digriz.org.uk
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Regards
+
+Created attachment 5324
+  --> https://bugs.busybox.net/attachment.cgi?id=5324
+patch to buildroot to allow mips(be) build of jamvm
+
+Although the website does not include this platform as 'supported', it seems to
+work fine and can run the Netalyzr CLI tool[1] with no problems.
+
+Attached a patch that gets it building and running.
+
+[1] http://netalyzr.icsi.berkeley.edu/cli.html
+
 -- 
-Fabio Porcedda
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
