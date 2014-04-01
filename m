@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 2 Apr 2014 00:47:40 +0200
-Subject: [Buildroot] [PATCH 1/2] package/xbmc-pvr-addons: new package
-In-Reply-To: <CAGduivzH4ZF=HPHE3Py84Jwy9fBQLk_XXRccnCB65oxOd8k8hQ@mail.gmail.com>
+Date: Wed, 2 Apr 2014 00:54:27 +0200
+Subject: [Buildroot] [PATCH 2/2] pacage/xbmc-addon-xvdr: new package
+In-Reply-To: <CAGduivzva1TzbEEn3NPu0q82RwxO6ETaHqWaG56nJi5+wV5jMw@mail.gmail.com>
 References: <cover.1395964863.git.yann.morin.1998@free.fr>
- <0d760bbfa34458d432b96c0813654692780fc10e.1395964863.git.yann.morin.1998@free.fr>
- <CAGduivzH4ZF=HPHE3Py84Jwy9fBQLk_XXRccnCB65oxOd8k8hQ@mail.gmail.com>
-Message-ID: <20140401224740.GC9670@free.fr>
+ <86a99e1a5318e92348b2c6788fd87dd6d7f9f290.1395964863.git.yann.morin.1998@free.fr>
+ <CAGduivzva1TzbEEn3NPu0q82RwxO6ETaHqWaG56nJi5+wV5jMw@mail.gmail.com>
+Message-ID: <20140401225427.GD9670@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,80 +14,147 @@ To: buildroot@busybox.net
 
 Maxime, All,
 
-On 2014-04-02 00:35 +0200, Maxime Hadjinlian spake thusly:
-NIP--]
-> > diff --git a/package/xbmc-pvr-addons/xbmc-pvr-addons.mk b/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
+On 2014-04-02 00:41 +0200, Maxime Hadjinlian spake thusly:
+> On Fri, Mar 28, 2014 at 1:03 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> >
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> > ---
+> >  package/xbmc-addon-xvdr/Config.in                  | 14 ++++++++++++
+> >  .../xbmc-addon-xvdr-0001-foreign-automake.patch    | 25 ++++++++++++++++++++++
+> >  package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk         | 25 ++++++++++++++++++++++
+> >  package/xbmc/Config.in                             |  1 +
+> >  4 files changed, 65 insertions(+)
+> >  create mode 100644 package/xbmc-addon-xvdr/Config.in
+> >  create mode 100644 package/xbmc-addon-xvdr/xbmc-addon-xvdr-0001-foreign-automake.patch
+> >  create mode 100644 package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk
+> >
+> > diff --git a/package/xbmc-addon-xvdr/Config.in b/package/xbmc-addon-xvdr/Config.in
 > > new file mode 100644
-> > index 0000000..d19c3c8
+> > index 0000000..7329a9a
 > > --- /dev/null
-> > +++ b/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
-> > @@ -0,0 +1,34 @@
+> > +++ b/package/xbmc-addon-xvdr/Config.in
+> > @@ -0,0 +1,14 @@
+> > +config BR2_PACKAGE_XBMC_ADDON_XVDR
+> > +       bool "xbmc-addon-xvdr"
+> > +       help
+> > +         This is a PVR add-on for XBMC to add VDR (http://tvdr.de/)
+> > +         as a TV/PVR Backend to XBMC.
+> > +
+> > +         It adds support for Live TV watching, replaying of Recordings,
+> > +         programming Timers and EPG TV Guide to use on same computer or
+> > +         over the Network.
+> > +
+> > +         https://github.com/pipelka/xbmc-addon-xvdr
+> > +
+> > +         Note: since the VDR server is not packaged in Buildroot, using
+> > +         this addon requires that a remote VDR server be used.
+> I am shocked that you did not provide a patch for this :).
+> Would it be any difficult or you don't see the point in us doing so ?
+
+I did not look into it so far. I can have a look at it later, but I'm
+currently focusing on using tvheadend for my own setup...
+
+> > diff --git a/package/xbmc-addon-xvdr/xbmc-addon-xvdr-0001-foreign-automake.patch b/package/xbmc-addon-xvdr/xbmc-addon-xvdr-0001-foreign-automake.patch
+> > new file mode 100644
+> > index 0000000..6996e85
+> > --- /dev/null
+> > +++ b/package/xbmc-addon-xvdr/xbmc-addon-xvdr-0001-foreign-automake.patch
+> > @@ -0,0 +1,25 @@
+> > +commit 846b0b5a8b559f94dffadf5b2f95ca845b6ba9f1
+> > +Author: Yann E. MORIN <yann.morin.1998@free.fr>
+> > +Date:   Wed Mar 26 07:45:58 2014 +0100
+> > +
+> > +    configure: set the foreign flag
+> > +
+> > +    This is required since we do not bundle the necessary files (NEWS,
+> > +    INSTALL et al.) Setting it in configure.in is needed to be able
+> > +    to run autoreconf (in lieu of the weird autogen.sh)
+> > +
+> > +    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > +
+> > +diff --git a/configure.in b/configure.in
+> > +index 6e692e1..7be0d18 100755
+> > +--- a/configure.in
+> > ++++ b/configure.in
+> > +@@ -12,7 +12,7 @@ AC_CANONICAL_HOST
+> > + AC_CANONICAL_TARGET
+> > +
+> > + dnl Setup for automake
+> > +-AM_INIT_AUTOMAKE
+> > ++AM_INIT_AUTOMAKE([foreign])
+> > +
+> > + dnl Check for tools
+> > +
+> Do you think there is a chance for this one to make it mainline ?
+
+It has already been accepted:
+    https://github.com/pipelka/xbmc-addon-xvdr/commit/84e5860f488e67a3a3386c779f9a56adeb3dc220
+and more:
+    https://github.com/pipelka/xbmc-addon-xvdr/pull/130
+
+I have already added this info in the patch I have in my branch:
+    https://www.gitorious.org/buildroot/buildroot/commit/d419c3eb9a0bcfeb32f81b08126fc1c5bd25dfa8
+
+> > diff --git a/package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk b/package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk
+> > new file mode 100644
+> > index 0000000..9fa0a13
+> > --- /dev/null
+> > +++ b/package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk
+> > @@ -0,0 +1,25 @@
 > > +################################################################################
 > > +#
-> > +# xbmc-pvr-addons
+> > +# xbmc-addon-xvdr
 > > +#
 > > +################################################################################
 > > +
-> > +# This cset is on the branch 'frodo'
-> Little typo here.
+> > +# This cset is on the branch 'xbmc-frodo'
+> Little typo.
 
-As said on IRC: brain-fart on your side... ;-)
+Same brain-fart on your side, again. ;-)
 
 > > +# When XBMC is updated, then this should be updated to the corresponding branch
-> > +XBMC_PVR_ADDONS_VERSION = 319351af7f3b546a5a56cdf6492f6ba1aec1cd2f
-> > +XBMC_PVR_ADDONS_SITE = $(call github,opdenkamp,xbmc-pvr-addons,$(XBMC_PVR_ADDONS_VERSION))
-> > +XBMC_PVR_ADDONS_LICENSE = GPLv3+
-> > +XBMC_PVR_ADDONS_LICENSE_FILES = COPYING
+> > +XBMC_ADDON_XVDR_VERSION = acd4e145fc3220cf708aaf40d895904732dce2c7
+> > +XBMC_ADDON_XVDR_SITE = $(call github,pipelka,xbmc-addon-xvdr,$(XBMC_ADDON_XVDR_VERSION))
+> > +XBMC_ADDON_XVDR_LICENSE = GPLv2+
+> > +XBMC_ADDON_XVDR_LICENSE_FILES = COPYING
 > > +
 > > +# There's no ./configure in the git tree, we need to generate it
-> > +XBMC_PVR_ADDONS_AUTORECONF = YES
+> > +# xbmc-addon-xvdr uses a weird autogen.sh script, which
+> > +# is even incorrect (it's missing the #! ) Sigh... :-(
+> > +# Fortunately, with our little patch, it autoreconfs nicely! :-)
+> > +XBMC_ADDON_XVDR_AUTORECONF = YES
 > > +
-> > +XBMC_PVR_ADDONS_DEPENDENCIES = boost xbmc zlib
 > > +# This really is a runtime dependency, but we need XBMC to be isntalled
-> Small typo again.
+> Little typo here too.
 
 OK.
 
 > > +# first, since we'll install files in XBMC's directories _after_ XBMC has
 > > +# installed his own files
-> > +XBMC_PVR_ADDONS_DEPENDENCIES += xbmc
-> So xbmc is added twice to the dependencies ?
-
-Doh... I forgot to remove it in the first dependency line.
-
-> > +
-> > +XBMC_PVR_ADDONS_CONF_OPT = \
-> > +       --enable-release \
-> > +       --enable-addons-with-dependencies
-> > +
-> > +ifeq ($(BR2_PACKAGE_MYSQL),y)
-> > +XBMC_PVR_ADDONS_CONF_OPT += --enable-mysql
-> > +XBMC_PVR_ADDONS_DEPENDENCIES += mysql
-> > +else
-> > +XBMC_PVR_ADDONS_CONF_OPT += --disable-mysql
-> > +endif
+> > +XBMC_ADDON_XVDR_DEPENDENCIES = xbmc
 > > +
 > > +$(eval $(autotools-package))
 > > diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
-> > index e078d2f..eb6ef55 100644
+> > index eb6ef55..d88821a 100644
 > > --- a/package/xbmc/Config.in
 > > +++ b/package/xbmc/Config.in
-> > @@ -158,4 +158,8 @@ config BR2_PACKAGE_XBMC_WAVPACK
-> >           Enable WAV input support.
-> >           Select this if you want to play back WV files.
+> > @@ -160,6 +160,7 @@ config BR2_PACKAGE_XBMC_WAVPACK
 > >
-> > -endif
-> > +comment "XBMC addons"
-> > +
-> > +source "package/xbmc-pvr-addons/Config.in"
-> > +
-> > +endif # BR2_PACKAGE_XBMC
+> >  comment "XBMC addons"
+> >
+> > +source "package/xbmc-addon-xvdr/Config.in"
+> >  source "package/xbmc-pvr-addons/Config.in"
+> >
+> >  endif # BR2_PACKAGE_XBMC
 > > --
 > > 1.8.3.2
 > >
-> I haven't yet tried to build this, but I'll be sure to do it and report here.
+> 
+> As for the other patch, a quick review, build and test tomorrow :).
 
-Thanks, will fix the stuff.
+Thanks, will fix the typo.
 
 Regards,
 Yann E. MORIN.
