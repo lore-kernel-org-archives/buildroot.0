@@ -1,28 +1,37 @@
-From: Marco Trapanese <marcotrapanese@gmail.com>
-Date: Tue, 01 Apr 2014 18:18:20 +0200
-Subject: [Buildroot] qt5, eglfs and xcb
-In-Reply-To: <1396368972-8690-1-git-send-email-jezz@sysmic.org>
-References: <533A8F6C.1010606@gmail.com>
- <1396368972-8690-1-git-send-email-jezz@sysmic.org>
-Message-ID: <533AE6CC.4070900@gmail.com>
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+Date: Tue, 1 Apr 2014 13:55:40 -0300
+Subject: [Buildroot] [PATCH 1/3] wiringpi: new package
+In-Reply-To: <20140307235202.5b69cf34@skate>
+References: <1389383422-29665-1-git-send-email-lucas.de.marchi@gmail.com>
+ <20140111140833.44613b15@skate>
+ <CAKi4VALgR09CnsBJT7xF1qOharQcWs-ZxS54jtzb8+retET85Q@mail.gmail.com>
+ <20140307235202.5b69cf34@skate>
+Message-ID: <CAKi4VAK91MaRsMS3cJwOtUkptrXQnEFLsbYv_NgvFx7hTZshKQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Il 01/04/2014 18:16, J?r?me Pouiller ha scritto:
-> You may want to test following patches:
+Hi Thomas,
 
-I will test them as soon as possible!
 
+On Fri, Mar 7, 2014 at 7:52 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Lucas De Marchi,
 >
->    [PATCH 1/2] qt5declarative: Reduce dependencies to GLes2 only
->    [PATCH 2/2] Add supporit for Vivante xdriver
+> On Sat, 11 Jan 2014 10:20:39 -0200, Lucas De Marchi wrote:
 >
-> They are not yet ready for mainlining, but they should work with imx6
-> and Qt5 (I have quickly tested them with applications without OpenGL).
+>> thanks for reviewing it, I'll send an updated version.
+>
+> Do you plan to resend new versions of your wiringpi and pi4j patches,
+> taking into account the reviews that were made early January?
 
+sorry for the delay
 
-I thank you very much!
-Marco
+I totally lost interest in these 2 packages, partially because of the
+upstream reaction. Now I don't have access to a rpi anymore to test
+them. I may send again in future, but currently I have no plans.
+
+--
+Lucas De Marchi
