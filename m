@@ -1,111 +1,60 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  2 Apr 2014 21:46:42 +0200
-Subject: [Buildroot] [PATCH v2 28/41] xdriver_xf86-video-intel: Bump version
-	to 2.99.911
-In-Reply-To: <1396468015-1724-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1396468015-1724-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1396468015-1724-28-git-send-email-bernd.kuhls@t-online.de>
+From: Michal Sojka <sojka@merica.cz>
+Date: Wed,  2 Apr 2014 22:05:47 +0200
+Subject: [Buildroot] [PATCH] Rebuild busybox when an external config is
+	updated
+Message-ID: <1396469147-21713-1-git-send-email-sojka@merica.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- add necessary dependencies
-- add -D_GNU_SOURCE to avoid getline compilation error
+This patch adds dependency of busybox configure target to the
+configuration file specified with BUSYBOX_CONFIG_FILE variable. This
+means that the following sequence of commands rebuilds busybox after
+the busybox.config is changed:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+  make BUSYBOX_CONFIG_FILE=$PWD/busybox.config
+  echo SOME_OPTION=y >> busybox.config
+  make BUSYBOX_CONFIG_FILE=$PWD/busybox.config
+
+This behaviour is handy when a per-project busybox config is
+maintained in another repository and the config gets updated by
+another user (e.g. after git pull).
+
+Without this patch, the last command above does not rebuild busybox.
+
+This patch also modifies bysubox-update-config target to preserve the
+timestamp of "exported" config. This is to ensure, that the following
+sequence of commands builds busybox only once.
+
+  make BUSYBOX_CONFIG_FILE=$PWD/busybox.config
+  make BUSYBOX_CONFIG_FILE=$PWD/busybox.config busybox-update-config
+  make BUSYBOX_CONFIG_FILE=$PWD/busybox.config
+
+Signed-off-by: Michal Sojka <sojka@merica.cz>
 ---
-v5: rebased
-v4: no changes
-v3: - add optional dependency BR2_PACKAGE_XPROTO_XF86DRIPROTO (Thomas)
-v2: - depend on mesa3d only when the i965 DRI driver is selected (Thomas)
-    - allow both kms and ums support (Thomas):
-  Support for Kernel Mode Setting? yes
-  Support for legacy User Mode Setting (for i810)? yes
+ package/busybox/busybox.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
- package/x11r7/xdriver_xf86-video-intel/Config.in   |   11 +++----
- .../xdriver_xf86-video-intel.mk                    |   31 ++++++++++++++++----
- 2 files changed, 31 insertions(+), 11 deletions(-)
-
-diff --git a/package/x11r7/xdriver_xf86-video-intel/Config.in b/package/x11r7/xdriver_xf86-video-intel/Config.in
-index 8781e1c..e9074cf 100644
---- a/package/x11r7/xdriver_xf86-video-intel/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-intel/Config.in
-@@ -2,13 +2,14 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL
- 	bool "xf86-video-intel"
- 	depends on (BR2_i386 || BR2_x86_64)
- 	depends on BR2_PACKAGE_MESA3D
--	select BR2_PACKAGE_XPROTO_FONTSPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_RENDERPROTO
--	select BR2_PACKAGE_XPROTO_XPROTO
--	select BR2_PACKAGE_XLIB_LIBPCIACCESS
- 	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_LIBDRM_INTEL
-+	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE
-+	select BR2_PACKAGE_XLIB_LIBPCIACCESS
-+	select BR2_PACKAGE_XLIB_LIBXRANDR
-+	select BR2_PACKAGE_XLIB_LIBXTST
-+	select BR2_PACKAGE_XPROTO_FONTSPROTO
-+	select BR2_PACKAGE_XPROTO_XPROTO
- 	help
- 	  Intel video driver
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 793ffb9..b9be330 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -215,6 +215,8 @@ endef
  
-diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-index 332de54..e9d3871 100644
---- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-+++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-@@ -4,18 +4,18 @@
- #
- ################################################################################
+ $(eval $(generic-package))
  
--XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.907
-+XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.911
- XDRIVER_XF86_VIDEO_INTEL_SOURCE = xf86-video-intel-$(XDRIVER_XF86_VIDEO_INTEL_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_INTEL_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_INTEL_LICENSE = MIT
- XDRIVER_XF86_VIDEO_INTEL_LICENSE_FILES = COPYING
--XDRIVER_XF86_VIDEO_INTEL_AUTORECONF = YES
++$(BUSYBOX_TARGET_CONFIGURE): $(BUSYBOX_CONFIG_FILE)
 +
-+# this fixes a getline-related compilation in src/sna/kgem.c
-+XDRIVER_XF86_VIDEO_INTEL_CONF_ENV = \
-+	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
+ busybox-menuconfig busybox-xconfig busybox-gconfig: busybox-patch
+ 	$(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(BUSYBOX_DIR) \
+ 		$(subst busybox-,,$@)
+@@ -222,4 +224,4 @@ busybox-menuconfig busybox-xconfig busybox-gconfig: busybox-patch
+ 	rm -f $(BUSYBOX_DIR)/.stamp_target_installed
  
- XDRIVER_XF86_VIDEO_INTEL_CONF_OPT = \
--	--enable-dri \
--	--enable-kms-only \
- 	--disable-xvmc \
--	--disable-ums-only \
- 	--enable-sna \
- 	--disable-uxa \
- 	--disable-glamor \
-@@ -23,6 +23,25 @@ XDRIVER_XF86_VIDEO_INTEL_CONF_OPT = \
- 	--disable-dga \
- 	--disable-async-swap
- 
--XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xproto libdrm xlib_libpciaccess
-+XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES = \
-+	libdrm \
-+	xlib_libXcomposite \
-+	xlib_libXrandr \
-+	xlib_libXtst \
-+	xlib_libpciaccess \
-+	xproto_fontsproto \
-+	xproto_xproto \
-+	xserver_xorg-server
-+
-+ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER_I965),y)
-+XDRIVER_XF86_VIDEO_INTEL_CONF_OPT += \
-+	--enable-dri
-+XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES += \
-+	mesa3d \
-+	xproto_xf86driproto
-+else
-+XDRIVER_XF86_VIDEO_INTEL_CONF_OPT += \
-+	--disable-dri
-+endif
- 
- $(eval $(autotools-package))
+ busybox-update-config: busybox-configure
+-	cp -f $(BUSYBOX_BUILD_CONFIG) $(BUSYBOX_CONFIG_FILE)
++	cp -fa $(BUSYBOX_BUILD_CONFIG) $(BUSYBOX_CONFIG_FILE)
 -- 
-1.7.10.4
+1.9.1
