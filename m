@@ -1,84 +1,78 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed,  2 Apr 2014 08:30:08 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-04-01
-Message-ID: <20140402063008.E322D101A61@stock.ovh.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 02 Apr 2014 08:13:05 +0200
+Subject: [Buildroot] [PATCH 1/6] package/libevas: quick fix to get rid
+ of circular deps
+In-Reply-To: <eb47cebc21e1bc07000dd375c77a28b362e281e0.1396302677.git.yann.morin.1998@free.fr>
+References: <cover.1396302677.git.yann.morin.1998@free.fr>
+ <eb47cebc21e1bc07000dd375c77a28b362e281e0.1396302677.git.yann.morin.1998@free.fr>
+Message-ID: <533BAA71.4050104@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2014-04-01
-===============================
+On 31/03/14 23:59, Yann E. MORIN wrote:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> This is a quick workaround against the recently-introduced circular
+> dependencies hell:
+> 
+>     package/xbmc/Config.in:10:error: recursive dependency detected!
+>     package/xbmc/Config.in:10:      symbol BR2_PACKAGE_XBMC depends on BR2_PACKAGE_HAS_OPENGL_EGL
+>     package/opengl/libegl/Config.in:1:      symbol BR2_PACKAGE_HAS_OPENGL_EGL is selected by BR2_PACKAGE_MESA3D_OPENGL_EGL
+>     package/mesa3d/Config.in:92:    symbol BR2_PACKAGE_MESA3D_OPENGL_EGL depends on BR2_PACKAGE_MESA3D
+>     package/mesa3d/Config.in:1:     symbol BR2_PACKAGE_MESA3D is selected by BR2_PACKAGE_LIBEVAS_GL
+>     package/efl/libevas/Config.in:149:      symbol BR2_PACKAGE_LIBEVAS_GL is part of choice <choice>
+>     package/efl/libevas/Config.in:144:      choice <choice> contains symbol <choice>
+>     package/efl/libevas/Config.in:144:      choice <choice> contains symbol BR2_PACKAGE_LIBEVAS_SDL_GL
+>     package/efl/libevas/Config.in:90:       symbol BR2_PACKAGE_LIBEVAS_SDL_GL depends on BR2_PACKAGE_SDL_X11
+>     package/sdl/Config.in:24:       symbol BR2_PACKAGE_SDL_X11 depends on BR2_PACKAGE_SDL
+>     package/sdl/Config.in:1:        symbol BR2_PACKAGE_SDL is selected by BR2_PACKAGE_PYTHON_PYGAME
+>     package/python-pygame/Config.in:1:      symbol BR2_PACKAGE_PYTHON_PYGAME depends on BR2_PACKAGE_PYTHON
+>     package/python/Config.in:1:     symbol BR2_PACKAGE_PYTHON is selected by BR2_PACKAGE_XBMC
+> 
+> Until this is properly fixed with the addition of a virtual package for
+> full-openGL providers, just depend on mesa3d instead of selecting it.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Bernd Kuhls <berndkuhls@hotmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-        success : 59 
-       failures : 39 
-       timeouts : 0  
-          TOTAL : 98 
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Classification of failures by reason
-====================================
+ This should indeed go in quickly!
 
-            lttng-libust-2.4.0 | 10
-libuci-262fede3e8c8c08c1eb0... | 7 
-                     wget-1.15 | 5 
-             lttng-tools-2.4.0 | 3 
-              host-scons-2.3.0 | 2 
-                    mpd-0.18.9 | 2 
-                 qt5base-5.2.1 | 1 
-                cifs-utils-6.3 | 1 
-zmqpp-36413487f05b165dfc82a... | 1 
-                 cairo-1.12.10 | 1 
-          enlightenment-0.17.3 | 1 
-                   eudev-1.5.2 | 1 
-                    gpm-1.20.7 | 1 
-                   ptpd2-2.3.0 | 1 
-libubox-bbd846ec2d72b262975... | 1 
-                  samba4-4.1.6 | 1 
+ But shouldn't your series also include a patch that undoes this change?
 
-Detail of failures
-===================
+ Regards,
+ Arnout
 
-       arm |                  cairo-1.12.10 | NOK | http://autobuild.buildroot.net/results/d1c4669b546646503fb67eb035e07acb95102497/
-       arc |                 cifs-utils-6.3 | NOK | http://autobuild.buildroot.net/results/023df5c0583c2bc93541f65ac03164ec0fd040f5/
-   powerpc |           enlightenment-0.17.3 | NOK | http://autobuild.buildroot.net/results/946b13e6db337c0bf378f11ca738b622232cd4ef/
-   powerpc |                    eudev-1.5.2 | NOK | http://autobuild.buildroot.net/results/0605f279abfdfc837f6973f2898ed7ee39f2b8d1/
-microblazeel |                     gpm-1.20.7 | NOK | http://autobuild.buildroot.net/results/77891b2cdf3ee906e4ca9a115a4e177a11f2c0c7/
-      i686 |               host-scons-2.3.0 | NOK | http://autobuild.buildroot.net/results/48650738b0cc8c12a690f79d6c65079b3a5a3b84/
-      i686 |               host-scons-2.3.0 | NOK | http://autobuild.buildroot.net/results/070939be1482ebd895d06fed1367712117ca61fb/
-      bfin | libubox-bbd846ec2d72b262975... | NOK | http://autobuild.buildroot.net/results/17f83ec849d7a9591fa75be03eb739c3b95cf4ef/
-       arm | libuci-262fede3e8c8c08c1eb0... | NOK | http://autobuild.buildroot.net/results/b8790cbc04ba0a868bf225dbb9957a8301043f9e/
-    x86_64 | libuci-262fede3e8c8c08c1eb0... | NOK | http://autobuild.buildroot.net/results/39946c04677e0ac4336cc2e51b5daec9269276f5/
-       arm | libuci-262fede3e8c8c08c1eb0... | NOK | http://autobuild.buildroot.net/results/603280a71bc7d2b653d4f1333d7ed61c5cf48f31/
-      i686 | libuci-262fede3e8c8c08c1eb0... | NOK | http://autobuild.buildroot.net/results/9f89dd9851168ec538d5f40d83d5c97104e86f96/
-      i686 | libuci-262fede3e8c8c08c1eb0... | NOK | http://autobuild.buildroot.net/results/0bf1e1a08bc53520b5f8c21abc7020f95e4f6841/
-       arm | libuci-262fede3e8c8c08c1eb0... | NOK | http://autobuild.buildroot.net/results/bee2b1e52704b1f8eaf89b31185c18167c7d5236/
-       arm | libuci-262fede3e8c8c08c1eb0... | NOK | http://autobuild.buildroot.net/results/ce604dad7ae5f6bd424b6c8f8d3e2b020e31b494/
-       arm |             lttng-libust-2.4.0 | NOK | http://autobuild.buildroot.net/results/b8ff9d79cdf198a763c9f82b56b896f782c71586/
-    x86_64 |             lttng-libust-2.4.0 | NOK | http://autobuild.buildroot.net/results/b74c9941d53db771d481a7f6a57bbc6d8f176e17/
-      i686 |             lttng-libust-2.4.0 | NOK | http://autobuild.buildroot.net/results/02b38a16faff35359ab0f4a5707370c47101061f/
-       arm |             lttng-libust-2.4.0 | NOK | http://autobuild.buildroot.net/results/0f3d20afcc13fabbca5755b10d0a79ca6823f936/
-    x86_64 |             lttng-libust-2.4.0 | NOK | http://autobuild.buildroot.net/results/6d1d1d1a8d2a8d8871135b1a92a96c2b07c3de43/
-       arm |             lttng-libust-2.4.0 | NOK | http://autobuild.buildroot.net/results/adb54a8edcd9f4ca6173cdc8ea7a8acd9cdef501/
-       arm |             lttng-libust-2.4.0 | NOK | http://autobuild.buildroot.net/results/7c215f8495a7184ad5997b3672847330b17c2e1c/
-       arm |             lttng-libust-2.4.0 | NOK | http://autobuild.buildroot.net/results/bb81b090b9ebc25e104ca2547299afcf4c2f15e9/
-      i686 |             lttng-libust-2.4.0 | NOK | http://autobuild.buildroot.net/results/39d5f1cb21f71ee0518ab12da4e7a4bd7867f54f/
-    x86_64 |             lttng-libust-2.4.0 | NOK | http://autobuild.buildroot.net/results/5f3f47ac95f1375d57cb8a42eedf5563ff3b7621/
-       arm |              lttng-tools-2.4.0 | NOK | http://autobuild.buildroot.net/results/bc73442645023e57c456bc2324e2789ed86c44cf/
-       arm |              lttng-tools-2.4.0 | NOK | http://autobuild.buildroot.net/results/60040ed65c0a104c665967cf8fb7302510ca5476/
-       arm |              lttng-tools-2.4.0 | NOK | http://autobuild.buildroot.net/results/2562ab6360f28653db124ecc73a31ccfcedf441a/
-   powerpc |                     mpd-0.18.9 | NOK | http://autobuild.buildroot.net/results/6f2bd4f75201cb4113d8efe5731b639268310afe/
-   powerpc |                     mpd-0.18.9 | NOK | http://autobuild.buildroot.net/results/b6bed3ac5d6ba07d3f26b65f4694fda9ee0712ce/
-       arm |                    ptpd2-2.3.0 | NOK | http://autobuild.buildroot.net/results/801e5c1491a5f0d6070030f275f9e80e03e54644/
-      i686 |                  qt5base-5.2.1 | NOK | http://autobuild.buildroot.net/results/5c3a92a3e11bb3127a020447f1bd030e1db51a9b/
-    x86_64 |                   samba4-4.1.6 | NOK | http://autobuild.buildroot.net/results/07772102ea513d5a5baa09ad7a6d14e49a246e79/
-      i686 |                      wget-1.15 | NOK | http://autobuild.buildroot.net/results/8b7d0c5db590236bf1ab9e5d138b7f76899b8736/
-       arm |                      wget-1.15 | NOK | http://autobuild.buildroot.net/results/0d7e2409ffadc4ae6d7690ff786277f1535ff223/
-      i686 |                      wget-1.15 | NOK | http://autobuild.buildroot.net/results/89356654a4f51da4bb432533285a171038c927dd/
-  mips64el |                      wget-1.15 | NOK | http://autobuild.buildroot.net/results/e0c2fb640bf3d04d04f8e26893b408996b3d92d1/
-       sh4 |                      wget-1.15 | NOK | http://autobuild.buildroot.net/results/d0c39de64553d95bd8b8e18a677fe7e65a74fdd4/
-   powerpc | zmqpp-36413487f05b165dfc82a... | NOK | http://autobuild.buildroot.net/results/eee4c328797e694b0b6094a48759d24d9f0b05f8/
+
+> ---
+>  package/efl/libevas/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/efl/libevas/Config.in b/package/efl/libevas/Config.in
+> index 2afa888..8eea23d 100644
+> --- a/package/efl/libevas/Config.in
+> +++ b/package/efl/libevas/Config.in
+> @@ -148,7 +148,7 @@ choice
+>  
+>  config BR2_PACKAGE_LIBEVAS_GL
+>  	bool "generic OpenGL"
+> -	select BR2_PACKAGE_MESA3D
+> +	depends on BR2_PACKAGE_MESA3D
+>  	select BR2_PACKAGE_LIBEET
+>  
+>  config BR2_PACKAGE_LIBEVAS_GLES_SGX
+> 
 
 
 -- 
-http://autobuild.buildroot.net
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
