@@ -1,73 +1,33 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  2 Apr 2014 21:46:37 +0200
-Subject: [Buildroot] [PATCH v2 23/41] libva-intel-driver: new package
+Date: Wed,  2 Apr 2014 21:46:24 +0200
+Subject: [Buildroot] [PATCH v2 09/41] libogg: version bump 1.3.1
 In-Reply-To: <1396468015-1724-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1396468015-1724-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1396468015-1724-23-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1396468015-1724-10-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/Config.in                                |    1 +
- package/libva-intel-driver/Config.in             |   13 +++++++++++++
- package/libva-intel-driver/libva-intel-driver.mk |   13 +++++++++++++
- 3 files changed, 27 insertions(+)
- create mode 100644 package/libva-intel-driver/Config.in
- create mode 100644 package/libva-intel-driver/libva-intel-driver.mk
+ package/libogg/libogg.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index b45c6e9..3550935 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -594,6 +594,7 @@ source "package/libsvg-cairo/Config.in"
- source "package/libsvgtiny/Config.in"
- source "package/libungif/Config.in"
- source "package/libva/Config.in"
-+source "package/libva-intel-driver/Config.in"
- source "package/opencv/Config.in"
- source "package/opengl/Config.in"
- source "package/pango/Config.in"
-diff --git a/package/libva-intel-driver/Config.in b/package/libva-intel-driver/Config.in
-new file mode 100644
-index 0000000..343f45f
---- /dev/null
-+++ b/package/libva-intel-driver/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_LIBVA_INTEL_DRIVER
-+	bool "libva-intel-driver"
-+	depends on BR2_i386 || BR2_x86_64
-+	depends on BR2_PACKAGE_LIBVA
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_LIBDRM_INTEL
-+	help
-+	  VA-API back-end driver for Intel graphics chips
-+
-+	  https://01.org/linuxgraphics/community/vaapi
-+
-+comment "libva intel driver depends on libva & X.org"
-+	depends on !BR2_PACKAGE_LIBVA || !BR2_PACKAGE_XORG7
-diff --git a/package/libva-intel-driver/libva-intel-driver.mk b/package/libva-intel-driver/libva-intel-driver.mk
-new file mode 100644
-index 0000000..86d2dcc
---- /dev/null
-+++ b/package/libva-intel-driver/libva-intel-driver.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# libva-intel-driver
-+#
-+################################################################################
-+
-+LIBVA_INTEL_DRIVER_VERSION = 1.3.0
-+LIBVA_INTEL_DRIVER_SOURCE = libva-intel-driver-$(LIBVA_INTEL_DRIVER_VERSION).tar.bz2
-+LIBVA_INTEL_DRIVER_SITE = http://www.freedesktop.org/software/vaapi/releases/libva-intel-driver
-+LIBVA_INTEL_DRIVER_LICENSE = MIT
-+LIBVA_INTEL_DRIVER_DEPENDENCIES = libva
-+
-+$(eval $(autotools-package))
+diff --git a/package/libogg/libogg.mk b/package/libogg/libogg.mk
+index 23554d9..984e7b7 100644
+--- a/package/libogg/libogg.mk
++++ b/package/libogg/libogg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBOGG_VERSION = 1.3.0
++LIBOGG_VERSION = 1.3.1
+ LIBOGG_SOURCE = libogg-$(LIBOGG_VERSION).tar.xz
+ LIBOGG_SITE = http://downloads.xiph.org/releases/ogg
+ LIBOGG_LICENSE = BSD-3c
 -- 
 1.7.10.4
