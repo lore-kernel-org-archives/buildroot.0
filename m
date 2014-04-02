@@ -1,54 +1,37 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 02 Apr 2014 08:19:22 +0200
-Subject: [Buildroot] [PATCH 4/6] package/vlc: depends on the virtual
- package libgl
-In-Reply-To: <44a8749bc3ef2c283fa679da79efd8764e482682.1396302677.git.yann.morin.1998@free.fr>
-References: <cover.1396302677.git.yann.morin.1998@free.fr>
- <44a8749bc3ef2c283fa679da79efd8764e482682.1396302677.git.yann.morin.1998@free.fr>
-Message-ID: <533BABEA.4030802@mind.be>
+Date: Wed, 02 Apr 2014 07:53:45 +0200
+Subject: [Buildroot] rsync fails to build
+In-Reply-To: <1D90109776E04A139DC0C95B4F945F47@JohanW7>
+References: <6699457346BD4E4E8F8D768D2249294C@JohanW7>
+ <20140329143057.6e6aa65a@skate> <9E4B04B54DB642238FDE42DB9E40DE73@JohanW7>
+ <20140329180038.7acf5143@skate> <5CA29710B49644AAA294F0FD9984A1D8@JohanW7>
+ <20140329232048.45ced2b2@skate> <F9B5E559611E4C1580A5E85C9C0023A7@JohanW7>
+ <20140331102604.49ccba2b@skate> <1D90109776E04A139DC0C95B4F945F47@JohanW7>
+Message-ID: <533BA5E9.70505@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/04/14 00:00, Yann E. MORIN wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> Currently, vlc depends on mesa3d to provide the openGL support.
-> 
-> We now have a virtual package, libgl, which ensures openGL is available.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Bernd Kuhls <berndkuhls@hotmail.com>
-> ---
->  package/vlc/vlc.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-> index a9ee620..f78f209 100644
-> --- a/package/vlc/vlc.mk
-> +++ b/package/vlc/vlc.mk
-> @@ -118,9 +118,9 @@ else
->  VLC_CONF_OPT += --disable-flac
->  endif
+On 31/03/14 14:31, Sagaert Johan wrote:
 >  
-> -ifeq ($(BR2_PACKAGE_MESA3D),y)
-> +ifeq ($(BR2_PACKAGE_HAS_OPENGL),y)
->  VLC_CONF_OPT += --enable-glx
+> Dear Thomas
+> 
+> I have 2 buildroot build trees, since they are run on the same user account they share the same buildroot-ccache directories.
+> Could this be a cause of ccache trouble ?
 
- Since the option is called enable-glx, it sounds as if it should depend
-on X as well (I don't think wayland has glx, right?)
+ Yes. Until we solve the compilercheck problem, you should give a
+different BR2_CCACHE_DIR for both trees.
+
+ In fact, the same applies if you have different output directories for
+the same architecture.
+
+ If the architecture is different, ccache will work OK because the
+compiler basename is hashed.
 
  Regards,
  Arnout
-
-> -VLC_DEPENDENCIES += mesa3d
-> +VLC_DEPENDENCIES += libgl
->  else
->  VLC_CONF_OPT += --disable-glx
->  endif
-> 
 
 
 -- 
