@@ -1,38 +1,118 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  2 Apr 2014 21:46:47 +0200
-Subject: [Buildroot] [PATCH v2 33/41] xbmc: Add missing host-infozip
-	dependency (v2)
+Date: Wed,  2 Apr 2014 21:46:36 +0200
+Subject: [Buildroot] [PATCH v2 22/41] libva: new package
 In-Reply-To: <1396468015-1724-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1396468015-1724-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1396468015-1724-33-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1396468015-1724-22-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Reported-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-v2: rebased v1
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/xbmc/xbmc.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/Config.in       |    1 +
+ package/libva/Config.in |   12 ++++++++++
+ package/libva/libva.mk  |   59 +++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 72 insertions(+)
+ create mode 100644 package/libva/Config.in
+ create mode 100644 package/libva/libva.mk
 
-diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index a16ba2f..f29e04d 100644
---- a/package/xbmc/xbmc.mk
-+++ b/package/xbmc/xbmc.mk
-@@ -12,7 +12,7 @@ XBMC_LICENSE_FILES = LICENSE.GPL
- # called TexturePacker. It is responsible to take all the images used in the
- # GUI and pack them in a blob.
- # http://wiki.xbmc.org/index.php?title=TexturePacker
--XBMC_DEPENDENCIES = host-gawk host-gperf host-lzo host-sdl_image host-swig
-+XBMC_DEPENDENCIES = host-gawk host-gperf host-infozip host-lzo host-sdl_image host-swig
- XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
- 	libass libcdio libcurl libegl libfribidi libgcrypt libgles libmad libmodplug libmpeg2 \
- 	libogg libplist libpng libsamplerate libungif libvorbis libxml2 lzo ncurses \
+diff --git a/package/Config.in b/package/Config.in
+index e816603..b45c6e9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -593,6 +593,7 @@ source "package/libsvg/Config.in"
+ source "package/libsvg-cairo/Config.in"
+ source "package/libsvgtiny/Config.in"
+ source "package/libungif/Config.in"
++source "package/libva/Config.in"
+ source "package/opencv/Config.in"
+ source "package/opengl/Config.in"
+ source "package/pango/Config.in"
+diff --git a/package/libva/Config.in b/package/libva/Config.in
+new file mode 100644
+index 0000000..98a5ee8
+--- /dev/null
++++ b/package/libva/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_LIBVA
++	bool "libva"
++	select BR2_PACKAGE_LIBDRM
++	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XSERVER_XORG_SERVER
++	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XSERVER_XORG_SERVER
++	help
++	  The main motivation for VA-API (Video Acceleration API) is to enable
++	  hardware accelerated video decode/encode at various entry-points (VLD,
++	  IDCT, Motion Compensation etc.) for the prevailing coding standards
++	  today (MPEG-2, MPEG-4 ASP/H.263, MPEG-4 AVC/H.264, and VC-1/VMW3).
++
++	  http://www.freedesktop.org/wiki/Software/vaapi/
+diff --git a/package/libva/libva.mk b/package/libva/libva.mk
+new file mode 100644
+index 0000000..1c7e6e0
+--- /dev/null
++++ b/package/libva/libva.mk
+@@ -0,0 +1,59 @@
++################################################################################
++#
++# libva
++#
++################################################################################
++
++LIBVA_VERSION = 1.3.0
++LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
++LIBVA_SITE = http://www.freedesktop.org/software/vaapi/releases/libva
++LIBVA_LICENSE = MIT
++LIBVA_INSTALL_STAGING = YES
++
++LIBVA_DEPENDENCIES = \
++	host-pkgconf \
++	libdrm
++
++LIBVA_CONF_OPT = \
++	--enable-drm \
++	--disable-dummy-driver \
++	--with-drivers-path="/usr/lib/va"
++
++ifeq ($(BR2_PACKAGE_MESA3D),y)
++LIBVA_DEPENDENCIES += \
++	mesa3d
++LIBVA_CONF_OPT += \
++	--enable-glx
++endif
++
++ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER),y)
++LIBVA_DEPENDENCIES += \
++	xlib_libX11 \
++	xlib_libXext \
++	xlib_libXfixes
++LIBVA_CONF_OPT += \
++	--enable-x11
++else
++LIBVA_CONF_OPT += \
++	--disable-x11
++endif
++
++ifeq ($(BR2_PACKAGE_WAYLAND),y)
++LIBVA_DEPENDENCIES += \
++	wayland
++LIBVA_CONF_OPT += \
++	--enable-wayland
++else
++LIBVA_CONF_OPT += \
++	--disable-wayland
++endif
++
++ifeq ($(BR2_PACKAGE_HAS_OPENGL_EGL),y)
++LIBVA_CONF_OPT += \
++	--enable-egl
++else
++LIBVA_CONF_OPT += \
++	--disable-egl
++endif
++
++$(eval $(autotools-package))
 -- 
 1.7.10.4
