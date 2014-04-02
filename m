@@ -1,90 +1,39 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  2 Apr 2014 21:46:49 +0200
-Subject: [Buildroot] [PATCH v2 35/41] WIP: xbmc: Allow compilation with
-	uClibc
+Date: Wed,  2 Apr 2014 21:46:43 +0200
+Subject: [Buildroot] [PATCH v2 29/41] xbmc: Add xbmc-send script to send
+	commands to xbmc service
 In-Reply-To: <1396468015-1724-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1396468015-1724-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1396468015-1724-35-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1396468015-1724-29-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+http://wiki.xbmc.org/index.php?title=List_of_built-in_functions
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/xbmc/Config.in |   27 +++++++++++++++------------
- 1 file changed, 15 insertions(+), 12 deletions(-)
+ package/xbmc/xbmc.mk |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
-index fc8811e..e0576b6 100644
---- a/package/xbmc/Config.in
-+++ b/package/xbmc/Config.in
-@@ -1,11 +1,8 @@
--comment "xbmc needs an (e)glibc toolchain w/ C++, threads"
--	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-+comment "xbmc needs a toolchain w/ C++, largefile, threads, wchar"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
+index 9e346bd..79fb484 100644
+--- a/package/xbmc/xbmc.mk
++++ b/package/xbmc/xbmc.mk
+@@ -153,6 +153,12 @@ define XBMC_INSTALL_BR_WRAPPER
+ endef
+ XBMC_POST_INSTALL_TARGET_HOOKS += XBMC_INSTALL_BR_WRAPPER
  
--comment "xbmc requires an OpenGL ES and EGL backend"
--	depends on !BR2_PACKAGE_HAS_OPENGL_EGL || !BR2_PACKAGE_HAS_OPENGL_ES
--	depends on BR2_TOOLCHAIN_USES_GLIBC
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_HAS_THREADS
-+comment "xbmc needs an OpenGL backend"
-+	depends on !BR2_PACKAGE_HAS_OPENGL && !BR2_PACKAGE_HAS_OPENGL_EGL && !BR2_PACKAGE_HAS_OPENGL_ES
- 
- menuconfig BR2_PACKAGE_XBMC
- 	bool "xbmc"
-@@ -57,10 +54,12 @@ menuconfig BR2_PACKAGE_XBMC
- 	select BR2_PACKAGE_TINYXML
- 	select BR2_PACKAGE_YAJL
- 	select BR2_PACKAGE_ZLIB
--	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_LARGEFILE
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_PACKAGE_HAS_OPENGL_EGL && BR2_PACKAGE_HAS_OPENGL_ES
-+	depends on BR2_USE_MMU # python
-+	depends on BR2_USE_WCHAR
-+	depends on BR2_PACKAGE_HAS_OPENGL || (BR2_PACKAGE_HAS_OPENGL_EGL && BR2_PACKAGE_HAS_OPENGL_ES)
- 	help
- 	  XBMC is an award-winning free and open source (GPL) software
- 	  media player and entertainment hub for digital media.
-@@ -92,14 +91,14 @@ config BR2_PACKAGE_XBMC_LIBBLURAY
- 
- config BR2_PACKAGE_XBMC_LIBCEC
- 	bool "hdmi cec"
--	depends on !BR2_PREFER_STATIC_LIB # libcec
-+	depends on !BR2_PREFER_STATIC_LIB || !BR2_USE_WCHAR # libcec
- 	select BR2_PACKAGE_LIBCEC
- 	help
- 	  Enable CEC (Consumer Electronics Control) support.
- 	  Select this if you want XBMC to support HDMI CEC.
- 
--comment "hdmi cec support needs a toolchain w/ dynamic library"
--	depends on BR2_PREFER_STATIC_LIB
-+comment "hdmi cec support needs a toolchain w/ dynamic library, wchar"
-+	depends on BR2_PREFER_STATIC_LIB || !BR2_USE_WCHAR
- 
- config BR2_PACKAGE_XBMC_LIBMICROHTTPD
- 	bool "web server"
-@@ -126,11 +125,15 @@ config BR2_PACKAGE_XBMC_RTMPDUMP
- 
- config BR2_PACKAGE_XBMC_LIBSHAIRPLAY
- 	bool "shairport"
-+	depends on BR2_INET_IPV6
- 	select BR2_PACKAGE_LIBSHAIRPLAY
- 	help
- 	  Enable Shairport support.
- 	  Select this if you want to stream content from an Apple device.
- 
-+comment "shairport support needs a toolchain w/ IPv6"
-+	depends on !BR2_INET_IPV6
++define XBMC_INSTALL_XBMC_SEND
++	$(INSTALL) -D $(@D)/tools/EventClients/lib/python/xbmcclient.py $(TARGET_DIR)/usr/lib/python2.7/xbmcclient.py
++	$(INSTALL) -D "$(@D)/tools/EventClients/Clients/XBMC Send/xbmc-send.py" $(TARGET_DIR)/usr/bin/xbmc-send
++endef
++XBMC_POST_INSTALL_TARGET_HOOKS += XBMC_INSTALL_XBMC_SEND
 +
- config BR2_PACKAGE_XBMC_LIBSMBCLIENT
- 	bool "samba"
- 	select BR2_PACKAGE_SAMBA
+ # When run from a startup script, XBMC has no $HOME where to store its
+ # configuration, so ends up storing it in /.xbmc  (yes, at the root of
+ # the rootfs). This is a problem for read-only filesystems. But we can't
 -- 
 1.7.10.4
