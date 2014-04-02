@@ -1,35 +1,30 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed,  2 Apr 2014 07:35:04 +0000 (UTC)
-Subject: [Buildroot] [Bug 7016] Git issues in resulting buildroot tar
-In-Reply-To: <bug-7016-163@https.bugs.busybox.net/>
-References: <bug-7016-163@https.bugs.busybox.net/>
-Message-ID: <20140402073504.199469BF82@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed,  2 Apr 2014 08:15:52 -0300
+Subject: [Buildroot] [PATCH] linux-headers: bump 3.2.x series
+Message-ID: <1396437352-26725-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7016
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/linux-headers/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- Comment #1 from Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> 2014-04-02 07:35:03 UTC ---
-Can you provide more details on how you actually run this image? I am not
-familiar with Docker, so more details about how you run this is very welcome.
-
-Have you tried using a similar configuration on a non-docker environment, like
-qemu or a real target?
-
-Also, did you try to run git through 'strace' to see what is actually going on?
-Have you tried making a new local git repo using the git inside this image, and
-then clone that with the same git? Or have you only tried cloning an external
-git repo? If there is a problem with importing git data, the inflate can
-obviously fail. Generating a local git repo would help excluding that.
-
-For reference to others, here seems to be the basic flow to generate docker
-image using buildroot: (Jerome Petazzoni)
-http://blog.docker.io/2013/06/create-light-weight-docker-containers-buildroot/
-
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 470bf71..296f03e 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -158,7 +158,7 @@ endchoice
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+-	default "3.2.55"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.56"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.85"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
+ 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.8.3.2
