@@ -1,9 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  2 Apr 2014 21:46:20 +0200
-Subject: [Buildroot] [PATCH v2 05/41] sqlite: Version bump 3.8.4.2
+Date: Wed,  2 Apr 2014 21:46:28 +0200
+Subject: [Buildroot] [PATCH v2 14/41] libdrm: Explain dependency on xorg in
+	Kconfig
 In-Reply-To: <1396468015-1724-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1396468015-1724-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1396468015-1724-6-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1396468015-1724-14-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +14,22 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/sqlite/sqlite.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libdrm/Config.in |    3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 7893e6b..af59479 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libdrm/Config.in b/package/libdrm/Config.in
+index 7192e94..0a8c681 100644
+--- a/package/libdrm/Config.in
++++ b/package/libdrm/Config.in
+@@ -20,6 +20,9 @@ config BR2_PACKAGE_LIBDRM_INTEL
+ 	help
+ 	  installs intel graphics driver
  
--SQLITE_VERSION = 3080401
-+SQLITE_VERSION = 3080402
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = http://www.sqlite.org/2014
- SQLITE_LICENSE = Public domain
++comment "libdrm intel driver depends on X.org"
++	depends on !BR2_PACKAGE_XORG7
++
+ config BR2_PACKAGE_LIBDRM_RADEON
+ 	bool "radeon"
+ 	depends on BR2_i386 || BR2_x86_64
 -- 
 1.7.10.4
