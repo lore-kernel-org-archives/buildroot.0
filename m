@@ -1,64 +1,54 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 2 Apr 2014 18:25:00 +0200
-Subject: [Buildroot] [PATCH 1/6] package/libevas: quick fix to get rid
- of circular deps
-In-Reply-To: <533BAA71.4050104@mind.be>
+Date: Wed, 2 Apr 2014 18:26:53 +0200
+Subject: [Buildroot] [PATCH 4/6] package/vlc: depends on the virtual
+ package libgl
+In-Reply-To: <533BABEA.4030802@mind.be>
 References: <cover.1396302677.git.yann.morin.1998@free.fr>
- <eb47cebc21e1bc07000dd375c77a28b362e281e0.1396302677.git.yann.morin.1998@free.fr>
- <533BAA71.4050104@mind.be>
-Message-ID: <20140402162500.GA3509@free.fr>
+ <44a8749bc3ef2c283fa679da79efd8764e482682.1396302677.git.yann.morin.1998@free.fr>
+ <533BABEA.4030802@mind.be>
+Message-ID: <20140402162653.GB3509@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2014-04-02 08:13 +0200, Arnout Vandecappelle spake thusly:
-> On 31/03/14 23:59, Yann E. MORIN wrote:
+Arnout, All,
+
+On 2014-04-02 08:19 +0200, Arnout Vandecappelle spake thusly:
+> On 01/04/14 00:00, Yann E. MORIN wrote:
 > > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > > 
-> > This is a quick workaround against the recently-introduced circular
-> > dependencies hell:
+> > Currently, vlc depends on mesa3d to provide the openGL support.
 > > 
-> >     package/xbmc/Config.in:10:error: recursive dependency detected!
-> >     package/xbmc/Config.in:10:      symbol BR2_PACKAGE_XBMC depends on BR2_PACKAGE_HAS_OPENGL_EGL
-> >     package/opengl/libegl/Config.in:1:      symbol BR2_PACKAGE_HAS_OPENGL_EGL is selected by BR2_PACKAGE_MESA3D_OPENGL_EGL
-> >     package/mesa3d/Config.in:92:    symbol BR2_PACKAGE_MESA3D_OPENGL_EGL depends on BR2_PACKAGE_MESA3D
-> >     package/mesa3d/Config.in:1:     symbol BR2_PACKAGE_MESA3D is selected by BR2_PACKAGE_LIBEVAS_GL
-> >     package/efl/libevas/Config.in:149:      symbol BR2_PACKAGE_LIBEVAS_GL is part of choice <choice>
-> >     package/efl/libevas/Config.in:144:      choice <choice> contains symbol <choice>
-> >     package/efl/libevas/Config.in:144:      choice <choice> contains symbol BR2_PACKAGE_LIBEVAS_SDL_GL
-> >     package/efl/libevas/Config.in:90:       symbol BR2_PACKAGE_LIBEVAS_SDL_GL depends on BR2_PACKAGE_SDL_X11
-> >     package/sdl/Config.in:24:       symbol BR2_PACKAGE_SDL_X11 depends on BR2_PACKAGE_SDL
-> >     package/sdl/Config.in:1:        symbol BR2_PACKAGE_SDL is selected by BR2_PACKAGE_PYTHON_PYGAME
-> >     package/python-pygame/Config.in:1:      symbol BR2_PACKAGE_PYTHON_PYGAME depends on BR2_PACKAGE_PYTHON
-> >     package/python/Config.in:1:     symbol BR2_PACKAGE_PYTHON is selected by BR2_PACKAGE_XBMC
-> > 
-> > Until this is properly fixed with the addition of a virtual package for
-> > full-openGL providers, just depend on mesa3d instead of selecting it.
+> > We now have a virtual package, libgl, which ensures openGL is available.
 > > 
 > > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > > Cc: Bernd Kuhls <berndkuhls@hotmail.com>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > ---
+> >  package/vlc/vlc.mk | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+> > index a9ee620..f78f209 100644
+> > --- a/package/vlc/vlc.mk
+> > +++ b/package/vlc/vlc.mk
+> > @@ -118,9 +118,9 @@ else
+> >  VLC_CONF_OPT += --disable-flac
+> >  endif
+> >  
+> > -ifeq ($(BR2_PACKAGE_MESA3D),y)
+> > +ifeq ($(BR2_PACKAGE_HAS_OPENGL),y)
+> >  VLC_CONF_OPT += --enable-glx
 > 
-> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> 
->  This should indeed go in quickly!
+>  Since the option is called enable-glx, it sounds as if it should depend
+> on X as well (I don't think wayland has glx, right?)
 
-So I think. Let's wait for Thomas to land in TLS tonight, then we'll
-poke him on IRC! ;-)
+Well, full-openGL is only possible with X11 anyway, so BR2_PACKAGE_HAS_OPENGL
+will itself not be set when X.org is not selected as well.
 
->  But shouldn't your series also include a patch that undoes this change?
-
-Yes, of course. I realised that after sending. But as I said in the
-cover-letter, this first patch is important, and the rest was merely to
-start discusion on the topic.
-
-This series is now entirely deprecated, since we have a better plan (or
-so I hope) to fix all of this mess. I already have some important
-patches here, but the series is far from being complete.
-
-Thanks for the review. :-)
+So, I think we can just depend on BR2_PACKAGE_HAS_OPENGL for this
+option.
 
 Regards,
 Yann E. MORIN.
