@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  2 Apr 2014 21:46:48 +0200
-Subject: [Buildroot] [PATCH v2 34/41] WIP: xbmc: Bump version to Gotham_beta3
+Date: Wed,  2 Apr 2014 21:46:38 +0200
+Subject: [Buildroot] [PATCH v2 24/41] ffmpeg: Add libva support
 In-Reply-To: <1396468015-1724-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1396468015-1724-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1396468015-1724-34-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1396468015-1724-24-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,43 +13,34 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/xbmc/Config.in |    1 +
- package/xbmc/xbmc.mk   |    4 ++--
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/ffmpeg/ffmpeg.mk |    8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
-index cf6a6b9..fc8811e 100644
---- a/package/xbmc/Config.in
-+++ b/package/xbmc/Config.in
-@@ -35,6 +35,7 @@ menuconfig BR2_PACKAGE_XBMC
- 	select BR2_PACKAGE_LIBUNGIF
- 	select BR2_PACKAGE_LIBVORBIS
- 	select BR2_PACKAGE_LIBXML2
-+	select BR2_PACKAGE_LIBXSLT
- 	select BR2_PACKAGE_LZO
- 	select BR2_PACKAGE_NCURSES
- 	select BR2_PACKAGE_OPENSSL
-diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index f29e04d..e5eadd9 100644
---- a/package/xbmc/xbmc.mk
-+++ b/package/xbmc/xbmc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index a067fe6..0084a53 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -41,7 +41,6 @@ FFMPEG_CONF_OPT = \
+ 	--enable-mdct \
+ 	--enable-rdft \
+ 	--disable-crystalhd \
+-	--disable-vaapi \
+ 	--disable-vdpau \
+ 	--disable-dxva2 \
+ 	--enable-runtime-cpudetect \
+@@ -217,6 +216,13 @@ FFMPEG_CONF_OPT += \
+ 	--enable-encoder=libvorbis
+ endif
  
--XBMC_VERSION = 12.3-Frodo
-+XBMC_VERSION = Gotham_beta3
- XBMC_SITE = $(call github,xbmc,xbmc,$(XBMC_VERSION))
- XBMC_LICENSE = GPLv2
- XBMC_LICENSE_FILES = LICENSE.GPL
-@@ -15,7 +15,7 @@ XBMC_LICENSE_FILES = LICENSE.GPL
- XBMC_DEPENDENCIES = host-gawk host-gperf host-infozip host-lzo host-sdl_image host-swig
- XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
- 	libass libcdio libcurl libegl libfribidi libgcrypt libgles libmad libmodplug libmpeg2 \
--	libogg libplist libpng libsamplerate libungif libvorbis libxml2 lzo ncurses \
-+	libogg libplist libpng libsamplerate libungif libvorbis libxml2 libxslt lzo ncurses \
- 	openssl pcre python readline sqlite taglib tiff tinyxml yajl zlib
- 
- XBMC_CONF_ENV = \
++ifeq ($(BR2_PACKAGE_LIBVA),y)
++FFMPEG_CONF_OPT += --enable-vaapi
++FFMPEG_DEPENDENCIES += libva
++else
++FFMPEG_CONF_OPT += --disable-vaapi
++endif
++
+ ifeq ($(BR2_X86_CPU_HAS_MMX),y)
+ FFMPEG_CONF_OPT += --enable-yasm
+ FFMPEG_DEPENDENCIES += host-yasm
 -- 
 1.7.10.4
