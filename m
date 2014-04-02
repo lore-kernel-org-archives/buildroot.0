@@ -1,30 +1,21 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  2 Apr 2014 08:15:52 -0300
-Subject: [Buildroot] [PATCH] linux-headers: bump 3.2.x series
-Message-ID: <1396437352-26725-1-git-send-email-gustavo@zacarias.com.ar>
+From: Nathan Ford <nford@westpond.com>
+Date: Wed, 02 Apr 2014 09:54:41 -0400
+Subject: [Buildroot] init script installation policy
+Message-ID: <533C16A1.3080508@westpond.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/linux-headers/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+What is the policy for installing init scripts when there is already an
+init script in the target location? Currently there does not seem to be
+any consistency. I bring this up as I updated a project to a newer
+buildroot recently and a package I use went from not installing the init
+script if it was present, to always installing.
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 470bf71..296f03e 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -158,7 +158,7 @@ endchoice
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
--	default "3.2.55"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.56"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.85"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
- 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
--- 
-1.8.3.2
+For my projects I use a custom skeleton fs and like the fact that I can
+just store my custom init scripts for the packages I use in the skeleton.
+
+Thanks,
+--Nate
