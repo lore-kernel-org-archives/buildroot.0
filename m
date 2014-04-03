@@ -1,40 +1,80 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 3 Apr 2014 18:25:12 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-04-02
-In-Reply-To: <20140403063009.526E4101924@stock.ovh.net>
-References: <20140403063009.526E4101924@stock.ovh.net>
-Message-ID: <533D9978.3000404@imgtec.com>
+From: Paul Cercueil <paul@crapouillou.net>
+Date: Thu,  3 Apr 2014 23:01:21 +0200
+Subject: [Buildroot] [PATCH 11/11] stress: Patch to fix documentation source
+In-Reply-To: <1396558881-29631-1-git-send-email-paul@crapouillou.net>
+References: <1396558881-29631-1-git-send-email-paul@crapouillou.net>
+Message-ID: <1396558881-29631-11-git-send-email-paul@crapouillou.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/03/2014 07:30 AM, Thomas Petazzoni wrote:
-> Build statistics for 2014-04-02
+From: Maarten ter Huurne <maarten@treewalker.org>
 
->         network-manager-0.9.8.8 | 1
->    mips64el |        network-manager-0.9.8.8 | NOK | http://autobuild.buildroot.net/results/3b6a40c1683d0859a934e4d79e2048e97b193e94/
+Some versions of "makeinfo" consider @itemx not immediately following
+@item an error. It is a violation of the texinfo syntax, but silently
+ignored on most systems, for some reason.
 
-This failure is caused because when network-manager is going to be built 
-it detects that Qt has been installed, so it passes the option 
---enable-qt, which enables the Qt examples. It doesn't build 
-network-manager with Qt support (don't get confused by the name), it 
-only causes the Qt example to be built.
-The Qt example included in network-manager uses an operator which is 
-available only if Qt has been built with STL compatibility. This is the 
-description of the operator:
+Signed-Off-By: Maarten ter Huurne <maarten@treewalker.org>
+Acked-By: Paul Cercueil <paul@crapouillou.net>
+---
+ package/stress/stress-doc-itemx.patch | 47 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
+ create mode 100644 package/stress/stress-doc-itemx.patch
 
-"This operator is only available if Qt is configured with STL 
-compatibility enabled."
-
-From: http://qt-project.org/doc/qt-4.8/qstring.html#toStdString
-
-So, to be able to build that network-manager Qt example and fix the 
-autobuild failure we need to select BR2_PACKAGE_QT_STL. Or, the other 
-option (and I think is the one that has more sense) is to pass 
---disable-qt to the network-manager configure options.
-
+diff --git a/package/stress/stress-doc-itemx.patch b/package/stress/stress-doc-itemx.patch
+new file mode 100644
+index 0000000..8ef7fa4
+--- /dev/null
++++ b/package/stress/stress-doc-itemx.patch
+@@ -0,0 +1,47 @@
++diff -ru stress-1.0.4.org/doc/stress.texi stress-1.0.4/doc/stress.texi
++--- stress-1.0.4.org/doc/stress.texi	2005-03-10 02:16:02.000000000 +0100
+++++ stress-1.0.4/doc/stress.texi	2013-07-21 21:50:47.000000000 +0200
++@@ -65,7 +65,7 @@
++ @itemx --help
++ Show help information.
++ 
++- at itemx --version
+++ at item --version
++ Show version information.
++ 
++ @item -v
++@@ -84,7 +84,7 @@
++ @itemx --timeout @var{secs}
++ Time out after @var{secs} seconds.
++ 
++- at itemx --backoff @var{usecs}
+++ at item --backoff @var{usecs}
++ Wait for factor of @var{usecs} microseconds before starting work.
++ 
++ @item -c @var{forks}
++@@ -99,10 +99,10 @@
++ @itemx --vm @var{forks}
++ Spawn @var{forks} processes each spinning on @samp{malloc()}.
++ 
++- at itemx --vm-bytes @var{bytes}
+++ at item --vm-bytes @var{bytes}
++ Allocate @var{bytes} number of bytes.  The default is 1.
++ 
++- at itemx --vm-hang
+++ at item --vm-hang
++ Instruct each vm hog process to go to sleep after allocating memory.  This
++ contrasts with their normal behavior, which is to free the memory and
++ reallocate @emph{ad infinitum}.  This is useful for simulating low memory
++@@ -117,10 +117,10 @@
++ @itemx --hdd @var{forks}
++ Spawn @var{forks} processes each spinning on @samp{write()}.
++ 
++- at itemx --hdd-bytes @var{bytes}
+++ at item --hdd-bytes @var{bytes}
++ Write @var{bytes} number of bytes.  The default is 1GB.
++ 
++- at itemx --hdd-noclean
+++ at item --hdd-noclean
++ Do not unlink file(s) to which random ASCII data is written.
++ 
++ @end table
 -- 
-Vincent
+1.9.0
