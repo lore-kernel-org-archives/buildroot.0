@@ -1,29 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Apr 2014 21:27:37 +0200
-Subject: [Buildroot] [PATCH v4 00/37] XBMC Gotham Beta3 + misc stuff
-In-Reply-To: <1396551692-12371-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1396551692-12371-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140403212737.3ef94d72@skate>
+Date: Thu, 3 Apr 2014 21:27:59 +0200
+Subject: [Buildroot] [git commit] gmp: bump to version 6.0.0a
+Message-ID: <20140403192806.2B8C69C517@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=053459a0f32b415a0aba25da3e3fc214898cea51
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  3 Apr 2014 21:00:55 +0200, Bernd Kuhls wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gmp/gmp.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-> this series replaces mondays patch series "[PATCH 00/16] XBMC Gotham Beta3".
-> 
-> patches 1-12: unrelated version bumps
-
-I've applied patches 1 to 12.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/gmp/gmp.mk b/package/gmp/gmp.mk
+index d970545..f71a210 100644
+--- a/package/gmp/gmp.mk
++++ b/package/gmp/gmp.mk
+@@ -4,12 +4,12 @@
+ #
+ ################################################################################
+ 
+-GMP_VERSION = 5.1.3
++GMP_VERSION = 6.0.0a
+ GMP_SITE = $(BR2_GNU_MIRROR)/gmp
+ GMP_SOURCE = gmp-$(GMP_VERSION).tar.xz
+ GMP_INSTALL_STAGING = YES
+ GMP_LICENSE = LGPLv3+
+-GMP_LICENSE_FILES = COPYING.LIB
++GMP_LICENSE_FILES = COPYING.LESSERv3
+ GMP_DEPENDENCIES = host-m4
+ 
+ $(eval $(autotools-package))
