@@ -1,40 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Apr 2014 21:36:17 +0200
-Subject: [Buildroot] [git commit] Revert "gst1-libav: fix build for xtensa"
-Message-ID: <20140403193845.377809A856@busybox.osuosl.org>
+Date: Thu, 3 Apr 2014 21:36:38 +0200
+Subject: [Buildroot] [git commit] Revert "lmbench: fix build for xtensa"
+Message-ID: <20140403193845.3D3A59A856@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5a2ff09b8c094f723e68ac2d72a1fd85acc9a08f
+commit: http://git.buildroot.net/buildroot/commit/?id=0a91ba98811c479309fa218b2637059b096f2ae8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This reverts commit ae3298d7d489f5ee465ff4ce83494de527d0ac73.
+This reverts commit 7c04932603476f3adf474f3bc47c35bdb59d947a.
 Now that -mtext-section-literals is specified in the xtensa ABI this fix
 is no longer needed.
 
 Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gstreamer1/gst1-libav/gst1-libav.mk |    8 --------
- 1 files changed, 0 insertions(+), 8 deletions(-)
+ package/lmbench/lmbench.mk |    4 ----
+ 1 files changed, 0 insertions(+), 4 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
-index fb272e6..50dd1df 100644
---- a/package/gstreamer1/gst1-libav/gst1-libav.mk
-+++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
-@@ -83,12 +83,4 @@ endif
- GST1_LIBAV_CONF_OPT = \
- 	--with-libav-extra-configure="$(GST1_LIBAV_CONF_EXTRA_OPT)"
+diff --git a/package/lmbench/lmbench.mk b/package/lmbench/lmbench.mk
+index 529026f..c3a6c09 100644
+--- a/package/lmbench/lmbench.mk
++++ b/package/lmbench/lmbench.mk
+@@ -19,10 +19,6 @@ LMBENCH_CFLAGS += -I$(STAGING_DIR)/usr/include/tirpc/
+ LMBENCH_LDFLAGS += -ltirpc
+ endif
  
--GST1_LIBAV_CFLAGS = $(TARGET_CFLAGS)
--
 -ifeq ($(BR2_xtensa),y)
--GST1_LIBAV_CFLAGS += -mtext-section-literals
+-LMBENCH_CFLAGS += -mtext-section-literals
 -endif
 -
--GST1_LIBAV_CONF_ENV += CFLAGS="$(GST1_LIBAV_CFLAGS)"
--
- $(eval $(autotools-package))
+ define LMBENCH_CONFIGURE_CMDS
+ 	$(call CONFIG_UPDATE,$(@D))
+ 	sed -i 's/CFLAGS=/CFLAGS+=/g' $(@D)/src/Makefile
