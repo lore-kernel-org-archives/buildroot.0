@@ -1,42 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Apr 2014 21:35:55 +0200
-Subject: [Buildroot] [git commit] Revert "ffmpeg: fix build for xtensa"
-Message-ID: <20140403193845.2B5939A856@busybox.osuosl.org>
+Date: Thu, 3 Apr 2014 21:36:17 +0200
+Subject: [Buildroot] [git commit] Revert "gst1-libav: fix build for xtensa"
+Message-ID: <20140403193845.377809A856@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5449aeadf97c6cffa815e61fa816ff12fa0e9fa5
+commit: http://git.buildroot.net/buildroot/commit/?id=5a2ff09b8c094f723e68ac2d72a1fd85acc9a08f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This reverts commit 4ec35e76b8a31810a0b8955a6dee787cefa013bc.
+This reverts commit ae3298d7d489f5ee465ff4ce83494de527d0ac73.
 Now that -mtext-section-literals is specified in the xtensa ABI this fix
 is no longer needed.
 
 Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ffmpeg/ffmpeg.mk |    8 --------
+ package/gstreamer1/gst1-libav/gst1-libav.mk |    8 --------
  1 files changed, 0 insertions(+), 8 deletions(-)
 
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index a067fe6..fae558a 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -73,14 +73,6 @@ FFMPEG_CONF_OPT = \
+diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
+index fb272e6..50dd1df 100644
+--- a/package/gstreamer1/gst1-libav/gst1-libav.mk
++++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
+@@ -83,12 +83,4 @@ endif
+ GST1_LIBAV_CONF_OPT = \
+ 	--with-libav-extra-configure="$(GST1_LIBAV_CONF_EXTRA_OPT)"
  
- FFMPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBICONV),libiconv)
- 
--FFMPEG_CFLAGS = $(TARGET_CFLAGS)
+-GST1_LIBAV_CFLAGS = $(TARGET_CFLAGS)
 -
 -ifeq ($(BR2_xtensa),y)
--FFMPEG_CFLAGS += -mtext-section-literals
+-GST1_LIBAV_CFLAGS += -mtext-section-literals
 -endif
 -
--FFMPEG_CONF_ENV = CFLAGS="$(FFMPEG_CFLAGS)"
+-GST1_LIBAV_CONF_ENV += CFLAGS="$(GST1_LIBAV_CFLAGS)"
 -
- ifeq ($(BR2_PACKAGE_FFMPEG_GPL),y)
- FFMPEG_CONF_OPT += --enable-gpl
- else
+ $(eval $(autotools-package))
