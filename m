@@ -1,44 +1,66 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Thu,  3 Apr 2014 23:21:07 +0200
-Subject: [Buildroot] [PATCH v3 1/1] manual/configure.txt: fix typo
-Message-ID: <1396560067-14091-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 3 Apr 2014 23:23:50 +0200
+Subject: [Buildroot] [PATCH 04/11] gdb: Fix on-target threads debugging
+In-Reply-To: <1396558881-29631-4-git-send-email-paul@crapouillou.net>
+References: <1396558881-29631-1-git-send-email-paul@crapouillou.net>
+ <1396558881-29631-4-git-send-email-paul@crapouillou.net>
+Message-ID: <20140403212350.GD17328@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
----
-v3:
- - rebase on top of the master
-v2:
- - remove only one backslash
+Paul, Maarten, All,
 
- docs/manual/configure.txt |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On 2014-04-03 23:01 +0200, Paul Cercueil spake thusly:
+> From: Maarten ter Huurne <maarten@treewalker.org>
+> 
+> Signed-Off-By: Maarten ter Huurne <maarten@treewalker.org>
+> Acked-By: Paul Cercueil <paul@crapouillou.net>
+> ---
+>  Makefile | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/Makefile b/Makefile
+> index 09be13c..69ef7a5 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -506,6 +506,10 @@ $(BUILD_DIR)/.root:
+>  
+>  $(TARGET_DIR): $(BUILD_DIR)/.root
+>  
+> +ifeq ($(BR2_PACKAGE_GDB),y)
+> +BR2_STRIP_EXCLUDE_FILES += libpthread*.so*
+> +endif
 
-diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
-index c1c9477..ee5e65e 100644
---- a/docs/manual/configure.txt
-+++ b/docs/manual/configure.txt
-@@ -100,7 +100,7 @@ most important ones allow to:
-    toolchain should have largefile support (i.e. support for files
-    larger than 2 GB on 32 bits systems), IPv6 support, RPC support
-    (used mainly for NFS), wide-char support, locale support (for
--   internationalization), C\++ support or thread support. Depending on
-+   internationalization), C++ support or thread support. Depending on
-    which options you choose, the number of userspace applications and
-    libraries visible in Buildroot menus will change: many applications
-    and libraries require certain toolchain options to be enabled. Most
-@@ -165,7 +165,7 @@ Then, you have three solutions to use an external toolchain:
-   prefix+ and +External toolchain C library+ options. Then, you have
-   to tell Buildroot what your external toolchain supports. If your
-   external toolchain uses the 'glibc' library, you only have to tell
--  whether your toolchain supports C++ or not and whether it has
-+  whether your toolchain supports C\++ or not and whether it has
-   built-in RPC support. If your external toolchain uses the 'uClibc'
-   library, then you have to tell Buildroot if it supports largefile,
-   IPv6, RPC, wide-char, locale, program invocation, threads and
+Is that really needed? The exclude code already excludes that file:
+
+Makefile at 513:
+    [...] $(call findfileclauses,libpthread*.so* $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) [...]
+
+So, libpthread*.so* is always excluded from being stripped.
+
+Do you have a case where libpthread*.so* is still stripped?
+
+Regards,
+Yann E. MORIN.
+
+>  STRIP_FIND_CMD = find $(TARGET_DIR)
+>  ifneq (,$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS)))
+>  STRIP_FIND_CMD += \( $(call finddirclauses,$(TARGET_DIR),$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS))) \) -prune -o
+> -- 
+> 1.9.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-1.7.9.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
