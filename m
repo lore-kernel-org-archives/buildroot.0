@@ -1,10 +1,10 @@
 From: Paul Cercueil <paul@crapouillou.net>
-Date: Thu,  3 Apr 2014 23:01:13 +0200
-Subject: [Buildroot] [PATCH 03/11] gdb: Patch for "unrecognized real-time
-	signal" bug
+Date: Thu,  3 Apr 2014 23:01:18 +0200
+Subject: [Buildroot] [PATCH 08/11] python-pygame: Make installation of
+	examples optional
 In-Reply-To: <1396558881-29631-1-git-send-email-paul@crapouillou.net>
 References: <1396558881-29631-1-git-send-email-paul@crapouillou.net>
-Message-ID: <1396558881-29631-3-git-send-email-paul@crapouillou.net>
+Message-ID: <1396558881-29631-8-git-send-email-paul@crapouillou.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,63 +13,49 @@ To: buildroot@busybox.net
 
 From: Maarten ter Huurne <maarten@treewalker.org>
 
-This avoids the following error at GDB startup:
-
-GDB bug: target.c (gdb_signal_from_host): unrecognized real-time signal
-
-For details, see:
-  http://sourceware.org/bugzilla/show_bug.cgi?id=14523
+They take up 1.5 MB in the target file system.
 
 Signed-Off-By: Maarten ter Huurne <maarten@treewalker.org>
 Acked-By: Paul Cercueil <paul@crapouillou.net>
 ---
- package/gdb/7.4.1/signal-128.patch | 15 +++++++++++++++
- package/gdb/7.5.1/signal-128.patch | 15 +++++++++++++++
- 2 files changed, 30 insertions(+)
- create mode 100644 package/gdb/7.4.1/signal-128.patch
- create mode 100644 package/gdb/7.5.1/signal-128.patch
+ package/python-pygame/Config.in        | 6 ++++++
+ package/python-pygame/python-pygame.mk | 7 +++++++
+ 2 files changed, 13 insertions(+)
 
-diff --git a/package/gdb/7.4.1/signal-128.patch b/package/gdb/7.4.1/signal-128.patch
-new file mode 100644
-index 0000000..ea56372
---- /dev/null
-+++ b/package/gdb/7.4.1/signal-128.patch
-@@ -0,0 +1,15 @@
-+diff -ru gdb-7.4.1.org/gdb/common/signals.c gdb-7.4.1/gdb/common/signals.c
-+--- gdb-7.4.1.org/gdb/common/signals.c	2012-01-06 05:43:33.000000000 +0100
-++++ gdb-7.4.1/gdb/common/signals.c	2012-08-29 22:40:56.000000000 +0200
-+@@ -346,6 +346,11 @@
-+       else if (64 <= hostsig && hostsig <= 127)
-+ 	return (enum target_signal)
-+ 	  (hostsig - 64 + (int) TARGET_SIGNAL_REALTIME_64);
-++      else if (hostsig == 128)
-++	/* Some platforms, such as Linux MIPS, have NSIG == 128, in which case
-++	   signal 128 is the highest realtime signal. There is no constant for
-++	   that though. */
-++	return TARGET_SIGNAL_UNKNOWN;
-+       else
-+ 	error (_("GDB bug: target.c (target_signal_from_host): "
-+ 	       "unrecognized real-time signal"));
-diff --git a/package/gdb/7.5.1/signal-128.patch b/package/gdb/7.5.1/signal-128.patch
-new file mode 100644
-index 0000000..b46489e
---- /dev/null
-+++ b/package/gdb/7.5.1/signal-128.patch
-@@ -0,0 +1,15 @@
-+diff -ru gdb-7.5.org/gdb/common/signals.c gdb-7.5/gdb/common/signals.c
-+--- gdb-7.5.org/gdb/common/signals.c	2012-05-24 18:51:37.000000000 +0200
-++++ gdb-7.5/gdb/common/signals.c	2012-08-29 22:32:07.000000000 +0200
-+@@ -346,6 +346,11 @@
-+       else if (64 <= hostsig && hostsig <= 127)
-+ 	return (enum gdb_signal)
-+ 	  (hostsig - 64 + (int) GDB_SIGNAL_REALTIME_64);
-++      else if (hostsig == 128)
-++	/* Some platforms, such as Linux MIPS, have NSIG == 128, in which case
-++	   signal 128 is the highest realtime signal. There is no constant for
-++	   that though. */
-++	return GDB_SIGNAL_UNKNOWN;
-+       else
-+ 	error (_("GDB bug: target.c (gdb_signal_from_host): "
-+ 	       "unrecognized real-time signal"));
+diff --git a/package/python-pygame/Config.in b/package/python-pygame/Config.in
+index b9a367d..f72ee31 100644
+--- a/package/python-pygame/Config.in
++++ b/package/python-pygame/Config.in
+@@ -20,6 +20,12 @@ config BR2_PACKAGE_PYTHON_PYGAME_IMAGE
+ 	  pygame module for loading, saving and transfering images.
+ 	  Will autoselect sdl_image with png and jpeg support.
+ 
++config BR2_PACKAGE_PYTHON_PYGAME_EXAMPLES
++	bool "pygame.examples"
++	help
++	  Include examples.
++	  Selecting this option adds about 1.5 MB to the target file system.
++
+ config BR2_PACKAGE_PYTHON_PYGAME_FONT
+ 	bool "pygame.font"
+ 	select BR2_PACKAGE_SDL_TTF
+diff --git a/package/python-pygame/python-pygame.mk b/package/python-pygame/python-pygame.mk
+index d9219b9..77f9f6f 100644
+--- a/package/python-pygame/python-pygame.mk
++++ b/package/python-pygame/python-pygame.mk
+@@ -92,6 +92,13 @@ define PYTHON_PYGAME_REMOVE_TESTS
+ 	rm -rf $(TARGET_DIR)/usr/lib/python*/site-packages/pygame/tests
+ endef
+ 
++ifneq ($(BR2_PACKAGE_PYTHON_PYGAME_EXAMPLES),y)
++define PYTHON_PYGAME_REMOVE_EXAMPLES
++	rm -rf $(TARGET_DIR)/usr/lib/python*/site-packages/pygame/examples
++endef
++PYTHON_PYGAME_POST_INSTALL_TARGET_HOOKS += PYTHON_PYGAME_REMOVE_EXAMPLES
++endif
++
+ PYTHON_PYGAME_POST_INSTALL_TARGET_HOOKS += PYTHON_PYGAME_REMOVE_TESTS
+ 
+ $(eval $(python-package))
 -- 
 1.9.0
