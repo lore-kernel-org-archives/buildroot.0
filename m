@@ -1,69 +1,52 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 2 Apr 2014 23:08:46 +0200
-Subject: [Buildroot] [PATCH v2 31/41] xbmc: Fix Java dependency check
-	(v2)
-In-Reply-To: <1396468015-1724-31-git-send-email-bernd.kuhls@t-online.de>
-References: <1396468015-1724-1-git-send-email-bernd.kuhls@t-online.de>
- <1396468015-1724-31-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140402210846.GD3509@free.fr>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Wed, 2 Apr 2014 21:08:34 -0400
+Subject: [Buildroot] busybox installation with --noclobber
+Message-ID: <CANxTyt4JBk+nF2fWxxGvZOfGzYCuUAUaP7Y71fqXN+U89h4HZA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, Maxime, All,
+All,
 
-On 2014-04-02 21:46 +0200, Bernd Kuhls spake thusly:
-> From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> 
-> A check for Java has been implemented in dependencies.sh, but during the
-> review, the name of the variable had been changed from:
-> BR2_HOST_NEEDS_JAVA to BR2_NEEDS_HOST_JAVA
-> as it is more accurate.
-> 
-> The change was not made in XBMC and as such, you could start the build
-> of XBMC without Java on your system.
-> 
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+A tangential work flow issue came up while helping some co-workers
+recently.  Basically, they have a busybox configuration that must be
+duplicating the "real" version of apps installed by other packages.
+When they rebuild and re-install busybox (say, after a "make
+busybox-menuconfig"), their rootfs becomes unusable, presumably
+because the re-installation of the busybox symlinks must be wiping out
+something important.  To recover functionality, they have to either
+delete all of the .stamp_target_installed files to re-install
+everything, or else rebuild from scratch.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+As it turns out, the busybox install script has a --noclobber option,
+where symlinks will not be installed if something already exists at
+the destination (be it file or symlink).  This makes the busybox
+re-install work for my peers without subsequent head ache.  I provided
+a patch to them to force this option on.  So I'm now considering if
+such a change should be considered applicable more generally.
 
-Regards,
-Yann E. MORIN.
+I was originally inclined against such a patch, to encourage the
+active trimming down of busybox to eliminate the redundancy (by not
+dulling the pain).  But the reality is that identifying the duplicates
+sometimes is not so easy for my co-workers, so I fear that the project
+maintainers simply won't bother.
 
-> ---
-> v2: rebased http://patchwork.ozlabs.org/patch/335219/ (Maxime)
-> 
->  package/xbmc/Config.in |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
-> index e078d2f..cf6a6b9 100644
-> --- a/package/xbmc/Config.in
-> +++ b/package/xbmc/Config.in
-> @@ -9,7 +9,7 @@ comment "xbmc requires an OpenGL ES and EGL backend"
->  
->  menuconfig BR2_PACKAGE_XBMC
->  	bool "xbmc"
-> -	select BR2_HOST_NEEDS_JAVA
-> +	select BR2_NEEDS_HOST_JAVA
->  	select BR2_PACKAGE_BOOST
->  	select BR2_PACKAGE_BOOST_THREAD
->  	select BR2_PACKAGE_BZIP2
-> -- 
-> 1.7.10.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+There is also an argument that the --noclobber can be beneficial to
+the effort to trim down busybox.  For example:
+1. Build project from a clean state
+2. Delete busybox from that target directory:
+        rm -vf $(TARGET_DIR)/bin/busybox
+3. Delete broken symlinks from target directory's bin, sbin, usr/bin, usr/sbin:
+        find -L $(TARGET_DIR)/bin $(TARGET_DIR)/sbin
+$(TARGET_DIR)/usr/bin $(TARGET_DIR)/usr/sbin -type l -print -delete
+4. Re-install busybox:
+        make busybox-rebuild
+5. During install, take note of which symlinks are reported as
+"blahblah already exists"
+6. Remove the noted items from busybox configuration if appropriate
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Opinions?  Would there be interest in such a patch?
+
+Danomi -
