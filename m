@@ -1,9 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  3 Apr 2014 21:01:25 +0200
-Subject: [Buildroot] [PATCH v4 30/37] WIP: xbmc: Bump version to Gotham_beta3
+Date: Thu,  3 Apr 2014 21:01:21 +0200
+Subject: [Buildroot] [PATCH v4 26/37] sdl: Add new dependency libglu for
+	opengl support
 In-Reply-To: <1396551692-12371-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1396551692-12371-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1396551692-12371-31-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1396551692-12371-27-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,43 +14,34 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/xbmc/Config.in |    1 +
- package/xbmc/xbmc.mk   |    4 ++--
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/sdl/sdl.mk |    6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
-index cf6a6b9..fc8811e 100644
---- a/package/xbmc/Config.in
-+++ b/package/xbmc/Config.in
-@@ -35,6 +35,7 @@ menuconfig BR2_PACKAGE_XBMC
- 	select BR2_PACKAGE_LIBUNGIF
- 	select BR2_PACKAGE_LIBVORBIS
- 	select BR2_PACKAGE_LIBXML2
-+	select BR2_PACKAGE_LIBXSLT
- 	select BR2_PACKAGE_LZO
- 	select BR2_PACKAGE_NCURSES
- 	select BR2_PACKAGE_OPENSSL
-diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index f29e04d..e5eadd9 100644
---- a/package/xbmc/xbmc.mk
-+++ b/package/xbmc/xbmc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
+index 086f5e9..fa68198 100644
+--- a/package/sdl/sdl.mk
++++ b/package/sdl/sdl.mk
+@@ -62,9 +62,12 @@ SDL_DEPENDENCIES += alsa-lib
+ endif
  
--XBMC_VERSION = 12.3-Frodo
-+XBMC_VERSION = Gotham_beta3
- XBMC_SITE = $(call github,xbmc,xbmc,$(XBMC_VERSION))
- XBMC_LICENSE = GPLv2
- XBMC_LICENSE_FILES = LICENSE.GPL
-@@ -15,7 +15,7 @@ XBMC_LICENSE_FILES = LICENSE.GPL
- XBMC_DEPENDENCIES = host-gawk host-gperf host-infozip host-lzo host-sdl_image host-swig
- XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
- 	libass libcdio libcurl libegl libfribidi libgcrypt libgles libmad libmodplug libmpeg2 \
--	libogg libplist libpng libsamplerate libungif libvorbis libxml2 lzo ncurses \
-+	libogg libplist libpng libsamplerate libungif libvorbis libxml2 libxslt lzo ncurses \
- 	openssl pcre python readline sqlite taglib tiff tinyxml yajl zlib
+ ifeq ($(BR2_PACKAGE_MESA3D),y)
+-SDL_DEPENDENCIES += mesa3d
++SDL_DEPENDENCIES += libglu mesa3d
++SDL_CONF_OPT += --enable-video-opengl
+ endif
  
- XBMC_CONF_ENV = \
++SDL_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBICONV),libiconv)
++
+ SDL_CONF_OPT += --enable-pulseaudio=no \
+ 		--disable-arts \
+ 		--disable-esd \
+@@ -72,6 +75,7 @@ SDL_CONF_OPT += --enable-pulseaudio=no \
+ 		--disable-video-ps3
+ 
+ HOST_SDL_CONF_OPT += --enable-pulseaudio=no \
++		--enable-video-x11=no \
+ 		--disable-arts \
+ 		--disable-esd \
+ 		--disable-nasm \
 -- 
 1.7.10.4
