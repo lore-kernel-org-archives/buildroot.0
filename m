@@ -1,32 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Apr 2014 21:26:16 +0200
-Subject: [Buildroot] [git commit] php: version bump 5.5.11
-Message-ID: <20140403192648.A2E6B9B795@busybox.osuosl.org>
+Date: Thu, 3 Apr 2014 21:27:37 +0200
+Subject: [Buildroot] [PATCH v4 00/37] XBMC Gotham Beta3 + misc stuff
+In-Reply-To: <1396551692-12371-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1396551692-12371-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20140403212737.3ef94d72@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=be82bb7d907d67bd5648f68592442a2749222a38
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Bernd Kuhls,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/php/php.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Thu,  3 Apr 2014 21:00:55 +0200, Bernd Kuhls wrote:
 
-diff --git a/package/php/php.mk b/package/php/php.mk
-index b3ffbef..ef42e58 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 5.5.10
-+PHP_VERSION = 5.5.11
- PHP_SITE = http://www.php.net/distributions
- PHP_INSTALL_STAGING = YES
- PHP_INSTALL_STAGING_OPT = INSTALL_ROOT=$(STAGING_DIR) install
+> this series replaces mondays patch series "[PATCH 00/16] XBMC Gotham Beta3".
+> 
+> patches 1-12: unrelated version bumps
+
+I've applied patches 1 to 12.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
