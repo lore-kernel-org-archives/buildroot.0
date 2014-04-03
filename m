@@ -1,45 +1,67 @@
 From: Paul Cercueil <paul@crapouillou.net>
-Date: Thu,  3 Apr 2014 23:01:15 +0200
-Subject: [Buildroot] [PATCH 05/11] dialog: Patch incorrect use of toupper()
+Date: Thu,  3 Apr 2014 23:01:17 +0200
+Subject: [Buildroot] [PATCH 07/11] fmtools: Switch to 2.x series
 In-Reply-To: <1396558881-29631-1-git-send-email-paul@crapouillou.net>
 References: <1396558881-29631-1-git-send-email-paul@crapouillou.net>
-Message-ID: <1396558881-29631-5-git-send-email-paul@crapouillou.net>
+Message-ID: <1396558881-29631-7-git-send-email-paul@crapouillou.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On some platforms (e.g. MIPS), the "char" type is signed by default.
-The problem is that toupper() takes an int as argument: a signed
-char then gets sign-extended to 32bit, which causes an assertion
-failure as toupper() verifies that its argument fits in 8 bits.
+From: Maarten ter Huurne <maarten@treewalker.org>
 
-Signed-Off-By: Paul Cercueil <paul@crapouillou.net>
-Acked-By: Maarten ter Huurne <maarten@treewalker.org>
+Specifically, bump version to 2.0.1.
+The 2.x series uses the V4L2 API instead of V4L.
+
+Signed-Off-By: Maarten ter Huurne <maarten@treewalker.org>
+Acked-By: Paul Cercueil <paul@crapouillou.net>
 ---
- package/dialog/dialog-toupper.patch | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
- create mode 100644 package/dialog/dialog-toupper.patch
+ package/fmtools/Config.in  |  4 ++--
+ package/fmtools/fmtools.mk | 15 +++------------
+ 2 files changed, 5 insertions(+), 14 deletions(-)
 
-diff --git a/package/dialog/dialog-toupper.patch b/package/dialog/dialog-toupper.patch
-new file mode 100644
-index 0000000..3fe0e19
---- /dev/null
-+++ b/package/dialog/dialog-toupper.patch
-@@ -0,0 +1,13 @@
-+diff --git a/dlg_keys.h b/dlg_keys.h
-+index 6a96c0f..b7b42d9 100644
-+--- a/dlg_keys.h
-++++ b/dlg_keys.h
-+@@ -31,7 +31,7 @@
-+ #define dlg_toupper(ch) towupper((wint_t)ch)
-+ #define dlg_isupper(ch) iswupper((wint_t)ch)
-+ #else
-+-#define dlg_toupper(ch) toupper(ch)
-++#define dlg_toupper(ch) toupper((unsigned char)(ch))
-+ #define dlg_isupper(ch) (isalpha(ch) && isupper(ch))
-+ #endif
-+ 
+diff --git a/package/fmtools/Config.in b/package/fmtools/Config.in
+index 1591618..182b517 100644
+--- a/package/fmtools/Config.in
++++ b/package/fmtools/Config.in
+@@ -2,8 +2,8 @@ config BR2_PACKAGE_FMTOOLS
+ 	bool "fmtools"
+ 	help
+ 	  fmtools is a pair of simple command-line utilities for
+-	  "video4linux" radio tuner cards under Linux. It includes
++	  "video4linux2" radio tuner cards under Linux. It includes
+ 	  fm for power control, tuning, and volume and fmscan for
+ 	  scanning for stations.
+ 
+-	  http://www.stanford.edu/~blp/fmtools/
++	  http://benpfaff.org/fmtools/
+diff --git a/package/fmtools/fmtools.mk b/package/fmtools/fmtools.mk
+index 5f305b9..bacd73c 100644
+--- a/package/fmtools/fmtools.mk
++++ b/package/fmtools/fmtools.mk
+@@ -4,18 +4,9 @@
+ #
+ ################################################################################
+ 
+-FMTOOLS_VERSION = 1.0.2
+-FMTOOLS_SITE = http://www.stanford.edu/~blp/fmtools/
++FMTOOLS_VERSION = 2.0.1
++FMTOOLS_SITE = http://benpfaff.org/fmtools
+ FMTOOLS_LICENSE = GPLv2+
+ FMTOOLS_LICENSE_FILES = COPYING
+ 
+-define FMTOOLS_BUILD_CMDS
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+-endef
+-
+-define FMTOOLS_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m 0755 $(@D)/fm $(TARGET_DIR)/usr/sbin/fm
+-	$(INSTALL) -D -m 0755 $(@D)/fmscan $(TARGET_DIR)/usr/sbin/fmscan
+-endef
+-
+-$(eval $(generic-package))
++$(eval $(autotools-package))
 -- 
 1.9.0
