@@ -1,67 +1,123 @@
 From: Paul Cercueil <paul@crapouillou.net>
-Date: Thu,  3 Apr 2014 23:01:17 +0200
-Subject: [Buildroot] [PATCH 07/11] fmtools: Switch to 2.x series
+Date: Thu,  3 Apr 2014 23:01:19 +0200
+Subject: [Buildroot] [PATCH 09/11] util-linux: Add config switches for some
+	more binaries
 In-Reply-To: <1396558881-29631-1-git-send-email-paul@crapouillou.net>
 References: <1396558881-29631-1-git-send-email-paul@crapouillou.net>
-Message-ID: <1396558881-29631-7-git-send-email-paul@crapouillou.net>
+Message-ID: <1396558881-29631-9-git-send-email-paul@crapouillou.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Maarten ter Huurne <maarten@treewalker.org>
-
-Specifically, bump version to 2.0.1.
-The 2.x series uses the V4L2 API instead of V4L.
-
-Signed-Off-By: Maarten ter Huurne <maarten@treewalker.org>
-Acked-By: Paul Cercueil <paul@crapouillou.net>
+Signed-Off-By: Paul Cercueil <paul@crapouillou.net>
+Acked-By: Maarten ter Huurne <maarten@treewalker.org>
 ---
- package/fmtools/Config.in  |  4 ++--
- package/fmtools/fmtools.mk | 15 +++------------
- 2 files changed, 5 insertions(+), 14 deletions(-)
+ package/util-linux/Config.in     | 25 +++++++++++++++++++++++++
+ package/util-linux/util-linux.mk |  7 ++++++-
+ 2 files changed, 31 insertions(+), 1 deletion(-)
 
-diff --git a/package/fmtools/Config.in b/package/fmtools/Config.in
-index 1591618..182b517 100644
---- a/package/fmtools/Config.in
-+++ b/package/fmtools/Config.in
-@@ -2,8 +2,8 @@ config BR2_PACKAGE_FMTOOLS
- 	bool "fmtools"
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index b1db99a..e0143f7 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -56,6 +56,11 @@ config BR2_PACKAGE_UTIL_LINUX_ARCH
  	help
- 	  fmtools is a pair of simple command-line utilities for
--	  "video4linux" radio tuner cards under Linux. It includes
-+	  "video4linux2" radio tuner cards under Linux. It includes
- 	  fm for power control, tuning, and volume and fmscan for
- 	  scanning for stations.
+ 	  Print machine architecture
  
--	  http://www.stanford.edu/~blp/fmtools/
-+	  http://benpfaff.org/fmtools/
-diff --git a/package/fmtools/fmtools.mk b/package/fmtools/fmtools.mk
-index 5f305b9..bacd73c 100644
---- a/package/fmtools/fmtools.mk
-+++ b/package/fmtools/fmtools.mk
-@@ -4,18 +4,9 @@
- #
- ################################################################################
++config BR2_PACKAGE_UTIL_LINUX_CHFN_CHSH
++	bool "chfn/chsh"
++	help
++	  Change login shell, real user name and information
++
+ config BR2_PACKAGE_UTIL_LINUX_CRAMFS
+ 	bool "cramfs utilities"
+ 	select BR2_PACKAGE_ZLIB
+@@ -88,6 +93,11 @@ config BR2_PACKAGE_UTIL_LINUX_KILL
+ 	help
+ 	  Send a signal to a process
  
--FMTOOLS_VERSION = 1.0.2
--FMTOOLS_SITE = http://www.stanford.edu/~blp/fmtools/
-+FMTOOLS_VERSION = 2.0.1
-+FMTOOLS_SITE = http://benpfaff.org/fmtools
- FMTOOLS_LICENSE = GPLv2+
- FMTOOLS_LICENSE_FILES = COPYING
++config BR2_PACKAGE_UTIL_LINUX_LAST
++	bool "last"
++	help
++	  Show listing of last logged in users
++
+ config BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS
+ 	bool "login utilities"
+ 	depends on BR2_ENABLE_LOCALE # linux-pam
+@@ -98,6 +108,11 @@ config BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS
+ comment "login utilities needs a toolchain w/ locale"
+ 	depends on !BR2_ENABLE_LOCALE
  
--define FMTOOLS_BUILD_CMDS
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
--endef
--
--define FMTOOLS_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 0755 $(@D)/fm $(TARGET_DIR)/usr/sbin/fm
--	$(INSTALL) -D -m 0755 $(@D)/fmscan $(TARGET_DIR)/usr/sbin/fmscan
--endef
--
--$(eval $(generic-package))
-+$(eval $(autotools-package))
++config BR2_PACKAGE_UTIL_LINUX_LOSETUP
++	bool "losetup"
++	help
++	  Set up and control loop devices
++
+ config BR2_PACKAGE_UTIL_LINUX_MESG
+ 	bool "mesg"
+ 	help
+@@ -108,6 +123,11 @@ config BR2_PACKAGE_UTIL_LINUX_MOUNT
+ 	help
+ 	  Mount/unmount filesystems
+ 
++config BR2_PACKAGE_UTIL_LINUX_NEWGRP
++	bool "newgrp"
++	help
++	  Log in to a new group
++
+ config BR2_PACKAGE_UTIL_LINUX_PIVOT_ROOT
+ 	bool "pivot_root"
+ 	help
+@@ -158,6 +178,11 @@ config BR2_PACKAGE_UTIL_LINUX_UUIDD
+ 	help
+ 	  UUID generation daemon
+ 
++config BR2_PACKAGE_UTIL_LINUX_VIPW
++	bool "vipw"
++	help
++	  Edit the password, group, shadow-password or shadow-group file
++
+ config BR2_PACKAGE_UTIL_LINUX_WALL
+ 	bool "wall"
+ 	help
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 20b3d35..4b822c7 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -50,19 +50,23 @@ UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_LINUX_PAM),linux-pam)
+ UTIL_LINUX_CONF_OPT += \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_AGETTY),--enable-agetty,--disable-agetty) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_ARCH),--enable-arch,--disable-arch) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_CHFN_CHSH),--enable-chfn-chsh,--disable-chfn-chsh) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_CRAMFS),--enable-cramfs,--disable-cramfs) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_DDATE),--enable-ddate,--disable-ddate) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_EJECT),--enable-eject,--disable-eject) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_FALLOCATE),--enable-fallocate,--disable-fallocate) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_FSCK),--enable-fsck,--disable-fsck) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_KILL),--enable-kill,--disable-kill) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_LAST),--enable-last,--disable-last) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBBLKID),--enable-libblkid,--disable-libblkid) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT),--enable-libmount,--disable-libmount) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBUUID),--enable-libuuid,--disable-libuuid) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS),--enable-last --enable-login --enable-su --enable-sulogin,--disable-last --disable-login --disable-su --disable-sulogin) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_LOSETUP),--enable-losetup,--disable-losetup) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_MESG),--enable-mesg,--disable-mesg) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_MOUNT),--enable-mount,--disable-mount) \
+-	$(if $(BR2_PACKAGE_UTIL_LINUX_PARTX),,--disable-partx) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_NEWGRP),--enable-newgrp,--disable-newgrp) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_PARTX),--enable-partx,--disable-partx) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_PIVOT_ROOT),--enable-pivot_root,--disable-pivot_root) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_RAW),--enable-raw,--disable-raw) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_RENAME),--enable-rename,--disable-rename) \
+@@ -72,6 +76,7 @@ UTIL_LINUX_CONF_OPT += \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_UNSHARE),--enable-unshare,--disable-unshare) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_UTMPDUMP),--enable-utmpdump,--disable-utmpdump) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_UUIDD),--enable-uuidd,--disable-uuidd) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_VIPW),--enable-vipw,--disable-vipw) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_WALL),--enable-wall,--disable-wall) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_WRITE),--enable-write,--disable-write)
+ 
 -- 
 1.9.0
