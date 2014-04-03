@@ -1,38 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Apr 2014 21:36:49 +0200
-Subject: [Buildroot] [git commit] Revert "php: fix build for xtensa"
-Message-ID: <20140403193845.43EB39A856@busybox.osuosl.org>
+Date: Thu, 3 Apr 2014 21:39:05 +0200
+Subject: [Buildroot] [PATCH] binutils: backport gas xtensa jump
+ trampolines
+In-Reply-To: <1395612572-4127-1-git-send-email-jcmvbkbc@gmail.com>
+References: <1395612572-4127-1-git-send-email-jcmvbkbc@gmail.com>
+Message-ID: <20140403213905.48096716@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=611ce96b3daad5fe377d4da342560658a3d8231e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Max Filippov,
 
-This reverts commit 410c3cf7ebe69016e73bbe63d1ba4b0a251b5c9a.
-Now that -mtext-section-literals is specified in the xtensa ABI this fix
-is no longer needed.
+On Mon, 24 Mar 2014 02:09:32 +0400, Max Filippov wrote:
+> This fixes compilation of huge source files that have jumps with offsets
+> greater than 128 Kbytes, that otherwise fails with such messages:
+> 
+>   {standard input}:65267: Error: operand 1 of 'j' has out of range value '131089'
+>   {standard input}:106879: Error: operand 1 of 'j' has out of range value '4294833951'
+> 
+> Fixes:
+>   http://autobuild.buildroot.net/results/e45/e450d5efc7435035c956bb962d598837648f319d/
+> 
+> Backported from: a82c7d9030b67a6a76a5403d0e1641f9e42141ac
+> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/php/php.mk |    4 ----
- 1 files changed, 0 insertions(+), 4 deletions(-)
+Applied, thanks.
 
-diff --git a/package/php/php.mk b/package/php/php.mk
-index ef42e58..ba1200b 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -45,10 +45,6 @@ ifneq ($(BR2_INET_IPV6),y)
- endif
- endif
- 
--ifeq ($(BR2_xtensa),y)
--PHP_CFLAGS += -mtext-section-literals
--endif
--
- PHP_CONF_OPT += $(if $(BR2_PACKAGE_PHP_CLI),,--disable-cli)
- PHP_CONF_OPT += $(if $(BR2_PACKAGE_PHP_CGI),,--disable-cgi)
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
