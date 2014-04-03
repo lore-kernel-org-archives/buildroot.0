@@ -1,115 +1,69 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 4 Apr 2014 00:12:15 +0200
-Subject: [Buildroot] [PATCH 02/11] arch: MIPS: Add config option
- BR2_GCC_TARGET_TUNE
-In-Reply-To: <533DD7B6.8080009@crapouillou.net>
-References: <1396558881-29631-1-git-send-email-paul@crapouillou.net>
- <1396558881-29631-2-git-send-email-paul@crapouillou.net>
- <20140403211925.GC17328@free.fr> <533DD7B6.8080009@crapouillou.net>
-Message-ID: <20140403221215.GA25471@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 03 Apr 2014 18:45:49 +0200
+Subject: [Buildroot] busybox installation with --noclobber
+In-Reply-To: <CANxTyt4JBk+nF2fWxxGvZOfGzYCuUAUaP7Y71fqXN+U89h4HZA@mail.gmail.com>
+References: <CANxTyt4JBk+nF2fWxxGvZOfGzYCuUAUaP7Y71fqXN+U89h4HZA@mail.gmail.com>
+Message-ID: <533D903D.6080906@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Paul, All,
-
-On 2014-04-03 23:50 +0200, Paul Cercueil spake thusly:
-> This patch would pass the same value to --with-arch and --with-tune, unless
-> you define a different value for BR2_GCC_TARGET_TUNE in your defconfig.
-
-I see what you expect, but since BR2_GCC_TARGET_TUNE is a prompt-less
-option, setting it in a defconfig will be overriden when you use that
-defconfig.
-
-For example:
-
-    $ cat defconfig
-    BR2_MIPS=y
-    BR2_GCC_TARGET_ARCH="FOO-YEM"
-    $ make BR2_DEFCONFIG=$(pwd)/defconfig defconfig
-    [...]
-    $ grep FOO .config
-    [empty, nada, zilch]
-
-So, even if you set it in your defconfig, BR2_GCC_TARGET_ARCH is lost.
-
-Ditto for BR2_GCC_TARGET_TUNE.
-
-> We
-> use that for the Ingenic jz4740 processor, which is a mips32 processor but
-> running better the code tuned for mips32r2.
-
-Oh, I see. But that's not gonna happen with this code, I'm afraid.
-
-Can you double-check that it is indeed working for you? Because if it
-does, we have a really big bug in Kconfig (Oh, no, not one more...)
-
-Regards,
-Yann E. MORIN.
-
-> On 03/04/2014 23:19, Yann E. MORIN wrote:
-> >Paul, All,
-> >
-> >On 2014-04-03 23:01 +0200, Paul Cercueil spake thusly:
-> >>This option is actually already used in GCC's package.
-> >>
-> >>This allows to optimize the toolchain for a specific MIPS processor
-> >>while supporting more than one family of processors.
-> >Is that really needed? man gcc says:
-> >
-> >     When this option is not used, GCC optimizes for the processor
-> >     specified by -march.
-> >
-> >Since this patch would pass the same value to --with-arch and
-> >--with-tune, and since this is the default of gcc, is it really
-> >needed?
-> >
-> >Neither ACKing nor NAKing this patch. Can you explain a bit more why we
-> >would want that, given the above explanations?
-> >
-> >Regards,
-> >Yann E. MORIN.
-> >
-> >>Signed-Off-By: Paul Cercueil <paul@crapouillou.net>
-> >>---
-> >>  arch/Config.in.mips | 10 ++++++++++
-> >>  1 file changed, 10 insertions(+)
-> >>
-> >>diff --git a/arch/Config.in.mips b/arch/Config.in.mips
-> >>index 20951e0..e4160a2 100644
-> >>--- a/arch/Config.in.mips
-> >>+++ b/arch/Config.in.mips
-> >>@@ -83,6 +83,16 @@ config BR2_GCC_TARGET_ARCH
-> >>  	default "mips64"	if BR2_mips_64
-> >>  	default "mips64r2"	if BR2_mips_64r2
-> >>+config BR2_GCC_TARGET_TUNE
-> >>+	default "mips1"		if BR2_mips_1
-> >>+	default "mips2"		if BR2_mips_2
-> >>+	default "mips3"		if BR2_mips_3
-> >>+	default "mips4"		if BR2_mips_4
-> >>+	default "mips32"	if BR2_mips_32
-> >>+	default "mips32r2"	if BR2_mips_32r2
-> >>+	default "mips64"	if BR2_mips_64
-> >>+	default "mips64r2"	if BR2_mips_64r2
-> >>+
-> >>  config BR2_MIPS_OABI32
-> >>  	bool
-> >>  	default y		if BR2_mips || BR2_mipsel
-> >>-- 
-> >>1.9.0
-> >>
-> >>_______________________________________________
-> >>buildroot mailing list
-> >>buildroot at busybox.net
-> >>http://lists.busybox.net/mailman/listinfo/buildroot
+On 03/04/14 03:08, Danomi Manchego wrote:
+> All,
 > 
+> A tangential work flow issue came up while helping some co-workers
+> recently.  Basically, they have a busybox configuration that must be
+> duplicating the "real" version of apps installed by other packages.
+> When they rebuild and re-install busybox (say, after a "make
+> busybox-menuconfig"), their rootfs becomes unusable, presumably
+> because the re-installation of the busybox symlinks must be wiping out
+> something important.  To recover functionality, they have to either
+> delete all of the .stamp_target_installed files to re-install
+> everything, or else rebuild from scratch.
+> 
+> As it turns out, the busybox install script has a --noclobber option,
+> where symlinks will not be installed if something already exists at
+> the destination (be it file or symlink).  This makes the busybox
+> re-install work for my peers without subsequent head ache.  I provided
+> a patch to them to force this option on.  So I'm now considering if
+> such a change should be considered applicable more generally.
+> 
+> I was originally inclined against such a patch, to encourage the
+> active trimming down of busybox to eliminate the redundancy (by not
+> dulling the pain).  But the reality is that identifying the duplicates
+> sometimes is not so easy for my co-workers, so I fear that the project
+> maintainers simply won't bother.
+> 
+> There is also an argument that the --noclobber can be beneficial to
+> the effort to trim down busybox.  For example:
+> 1. Build project from a clean state
+> 2. Delete busybox from that target directory:
+>         rm -vf $(TARGET_DIR)/bin/busybox
+> 3. Delete broken symlinks from target directory's bin, sbin, usr/bin, usr/sbin:
+>         find -L $(TARGET_DIR)/bin $(TARGET_DIR)/sbin
+> $(TARGET_DIR)/usr/bin $(TARGET_DIR)/usr/sbin -type l -print -delete
+> 4. Re-install busybox:
+>         make busybox-rebuild
+> 5. During install, take note of which symlinks are reported as
+> "blahblah already exists"
+> 6. Remove the noted items from busybox configuration if appropriate
+> 
+> Opinions?  Would there be interest in such a patch?
+
+ It would be a good idea, I think. Currently, packages that provide the
+same functionality as busybox have to depend on it to make sure that
+busybox is built first, and this indeed makes busybox-rebuild impossible.
+It would be much simpler to use the noclobber option.
+
+ Regards,
+ Arnout
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
