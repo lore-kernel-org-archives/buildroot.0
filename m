@@ -1,33 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Apr 2014 21:20:31 +0200
-Subject: [Buildroot] [PATCH] util-linux: bump version to 2.24.1
-In-Reply-To: <1396536052-21336-1-git-send-email-Anton.Kolesov@synopsys.com>
-References: <1396536052-21336-1-git-send-email-Anton.Kolesov@synopsys.com>
-Message-ID: <20140403212031.0fab4b68@skate>
+Date: Thu, 3 Apr 2014 21:23:18 +0200
+Subject: [Buildroot] [PATCH v2 1/1] manual/configure.txt: fix typo
+In-Reply-To: <1396216393-9841-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+References: <1396216393-9841-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <20140403212318.1f4917bb@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Anton Kolesov,
+Dear Jerzy Grzegorek,
 
-On Thu,  3 Apr 2014 18:40:52 +0400, Anton Kolesov wrote:
-> From: Mischa Jonker <mjonker@synopsys.com>
-> 
-> Removed "support older machines" patch as it has been fixed upstream,
-> fixed up other patches.
-> 
-> This removes some arch-dependencies in fdiskbsdlabel.h, fixing the
-> build for the ARC-architecture.
-> 
-> This fixes:
-> http://autobuild.buildroot.net/results/8863799d856ccab51ee8ffd499378574ef166aee/
-> 
-> Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
-> Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
+On Sun, 30 Mar 2014 23:53:13 +0200, Jerzy Grzegorek wrote:
+> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 
-Applied, thanks.
+This patch does not apply. Additionally, I believe in fact using C\++
+is not needed: there are many occurrences of just "C++" that work
+perfectly fine.
+
+Can you cook a patch, that applies on the latest master, which makes
+sure we just use C++ everywhere?
+
+Thanks,
 
 Thomas
 -- 
