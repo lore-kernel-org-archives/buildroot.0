@@ -1,73 +1,55 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  3 Apr 2014 21:01:17 +0200
-Subject: [Buildroot] [PATCH v4 22/37] libva-intel-driver: new package
+Date: Thu,  3 Apr 2014 21:01:25 +0200
+Subject: [Buildroot] [PATCH v4 30/37] WIP: xbmc: Bump version to Gotham_beta3
 In-Reply-To: <1396551692-12371-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1396551692-12371-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1396551692-12371-23-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1396551692-12371-31-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/Config.in                                |    1 +
- package/libva-intel-driver/Config.in             |   13 +++++++++++++
- package/libva-intel-driver/libva-intel-driver.mk |   13 +++++++++++++
- 3 files changed, 27 insertions(+)
- create mode 100644 package/libva-intel-driver/Config.in
- create mode 100644 package/libva-intel-driver/libva-intel-driver.mk
+ package/xbmc/Config.in |    1 +
+ package/xbmc/xbmc.mk   |    4 ++--
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index b45c6e9..3550935 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -594,6 +594,7 @@ source "package/libsvg-cairo/Config.in"
- source "package/libsvgtiny/Config.in"
- source "package/libungif/Config.in"
- source "package/libva/Config.in"
-+source "package/libva-intel-driver/Config.in"
- source "package/opencv/Config.in"
- source "package/opengl/Config.in"
- source "package/pango/Config.in"
-diff --git a/package/libva-intel-driver/Config.in b/package/libva-intel-driver/Config.in
-new file mode 100644
-index 0000000..343f45f
---- /dev/null
-+++ b/package/libva-intel-driver/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_LIBVA_INTEL_DRIVER
-+	bool "libva-intel-driver"
-+	depends on BR2_i386 || BR2_x86_64
-+	depends on BR2_PACKAGE_LIBVA
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_LIBDRM_INTEL
-+	help
-+	  VA-API back-end driver for Intel graphics chips
-+
-+	  https://01.org/linuxgraphics/community/vaapi
-+
-+comment "libva intel driver depends on libva & X.org"
-+	depends on !BR2_PACKAGE_LIBVA || !BR2_PACKAGE_XORG7
-diff --git a/package/libva-intel-driver/libva-intel-driver.mk b/package/libva-intel-driver/libva-intel-driver.mk
-new file mode 100644
-index 0000000..86d2dcc
---- /dev/null
-+++ b/package/libva-intel-driver/libva-intel-driver.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# libva-intel-driver
-+#
-+################################################################################
-+
-+LIBVA_INTEL_DRIVER_VERSION = 1.3.0
-+LIBVA_INTEL_DRIVER_SOURCE = libva-intel-driver-$(LIBVA_INTEL_DRIVER_VERSION).tar.bz2
-+LIBVA_INTEL_DRIVER_SITE = http://www.freedesktop.org/software/vaapi/releases/libva-intel-driver
-+LIBVA_INTEL_DRIVER_LICENSE = MIT
-+LIBVA_INTEL_DRIVER_DEPENDENCIES = libva
-+
-+$(eval $(autotools-package))
+diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
+index cf6a6b9..fc8811e 100644
+--- a/package/xbmc/Config.in
++++ b/package/xbmc/Config.in
+@@ -35,6 +35,7 @@ menuconfig BR2_PACKAGE_XBMC
+ 	select BR2_PACKAGE_LIBUNGIF
+ 	select BR2_PACKAGE_LIBVORBIS
+ 	select BR2_PACKAGE_LIBXML2
++	select BR2_PACKAGE_LIBXSLT
+ 	select BR2_PACKAGE_LZO
+ 	select BR2_PACKAGE_NCURSES
+ 	select BR2_PACKAGE_OPENSSL
+diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
+index f29e04d..e5eadd9 100644
+--- a/package/xbmc/xbmc.mk
++++ b/package/xbmc/xbmc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XBMC_VERSION = 12.3-Frodo
++XBMC_VERSION = Gotham_beta3
+ XBMC_SITE = $(call github,xbmc,xbmc,$(XBMC_VERSION))
+ XBMC_LICENSE = GPLv2
+ XBMC_LICENSE_FILES = LICENSE.GPL
+@@ -15,7 +15,7 @@ XBMC_LICENSE_FILES = LICENSE.GPL
+ XBMC_DEPENDENCIES = host-gawk host-gperf host-infozip host-lzo host-sdl_image host-swig
+ XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
+ 	libass libcdio libcurl libegl libfribidi libgcrypt libgles libmad libmodplug libmpeg2 \
+-	libogg libplist libpng libsamplerate libungif libvorbis libxml2 lzo ncurses \
++	libogg libplist libpng libsamplerate libungif libvorbis libxml2 libxslt lzo ncurses \
+ 	openssl pcre python readline sqlite taglib tiff tinyxml yajl zlib
+ 
+ XBMC_CONF_ENV = \
 -- 
 1.7.10.4
