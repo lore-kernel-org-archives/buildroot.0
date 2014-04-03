@@ -1,37 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Apr 2014 21:35:38 +0200
-Subject: [Buildroot] [git commit] Revert "civetweb: fix build for xtensa"
-Message-ID: <20140403193845.24DEF9A856@busybox.osuosl.org>
+Date: Thu, 3 Apr 2014 21:36:05 +0200
+Subject: [Buildroot] [git commit] Revert "gst-ffmpeg: fix build for xtensa"
+Message-ID: <20140403193845.318579A856@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0e90b33c7475e3f40cd3ff15472cfd2efdf1a0dc
+commit: http://git.buildroot.net/buildroot/commit/?id=b9f696e683676486f7f2eff74bbc49cc986aaa9f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This reverts commit 37084ead509fa42db39637fcb837e7a99197c6c9.
+This reverts commit 7e558aa0d87d86be1bbc91b284acd0d11378ee4e.
 Now that -mtext-section-literals is specified in the xtensa ABI this fix
 is no longer needed.
 
 Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/civetweb/civetweb.mk |    3 ---
- 1 files changed, 0 insertions(+), 3 deletions(-)
+ package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk |    8 --------
+ 1 files changed, 0 insertions(+), 8 deletions(-)
 
-diff --git a/package/civetweb/civetweb.mk b/package/civetweb/civetweb.mk
-index be7620a..4b73a5e 100644
---- a/package/civetweb/civetweb.mk
-+++ b/package/civetweb/civetweb.mk
-@@ -25,9 +25,6 @@ endif
+diff --git a/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk b/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
+index eb7389f..6534f93 100644
+--- a/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
++++ b/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
+@@ -14,14 +14,6 @@ GST_FFMPEG_CONF_EXTRA_OPT = \
+ 		--cross-prefix=$(TARGET_CROSS) \
+ 		--target-os=linux
  
- ifeq ($(BR2_CIVETWEB_WITH_LUA),y)
- 	CIVETWEB_CONF_OPT += WITH_LUA=1
+-GST_FFMPEG_CFLAGS = $(TARGET_CFLAGS)
+-
 -ifeq ($(BR2_xtensa),y)
--	CIVETWEB_COPT += -mtext-section-literals
+-GST_FFMPEG_CFLAGS += -mtext-section-literals
 -endif
- endif
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-
+-GST_FFMPEG_CONF_ENV = CFLAGS="$(GST_FFMPEG_CFLAGS)"
+-
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ GST_FFMPEG_CONF_EXTRA_OPT += --enable-zlib
+ GST_FFMPEG_DEPENDENCIES += zlib
