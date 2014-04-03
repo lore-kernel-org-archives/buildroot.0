@@ -1,46 +1,37 @@
 From: Paul Cercueil <paul@crapouillou.net>
-Date: Thu,  3 Apr 2014 23:01:12 +0200
-Subject: [Buildroot] [PATCH 02/11] arch: MIPS: Add config option
-	BR2_GCC_TARGET_TUNE
+Date: Thu,  3 Apr 2014 23:01:14 +0200
+Subject: [Buildroot] [PATCH 04/11] gdb: Fix on-target threads debugging
 In-Reply-To: <1396558881-29631-1-git-send-email-paul@crapouillou.net>
 References: <1396558881-29631-1-git-send-email-paul@crapouillou.net>
-Message-ID: <1396558881-29631-2-git-send-email-paul@crapouillou.net>
+Message-ID: <1396558881-29631-4-git-send-email-paul@crapouillou.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This option is actually already used in GCC's package.
+From: Maarten ter Huurne <maarten@treewalker.org>
 
-This allows to optimize the toolchain for a specific MIPS processor
-while supporting more than one family of processors.
-
-Signed-Off-By: Paul Cercueil <paul@crapouillou.net>
+Signed-Off-By: Maarten ter Huurne <maarten@treewalker.org>
+Acked-By: Paul Cercueil <paul@crapouillou.net>
 ---
- arch/Config.in.mips | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ Makefile | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/Config.in.mips b/arch/Config.in.mips
-index 20951e0..e4160a2 100644
---- a/arch/Config.in.mips
-+++ b/arch/Config.in.mips
-@@ -83,6 +83,16 @@ config BR2_GCC_TARGET_ARCH
- 	default "mips64"	if BR2_mips_64
- 	default "mips64r2"	if BR2_mips_64r2
+diff --git a/Makefile b/Makefile
+index 09be13c..69ef7a5 100644
+--- a/Makefile
++++ b/Makefile
+@@ -506,6 +506,10 @@ $(BUILD_DIR)/.root:
  
-+config BR2_GCC_TARGET_TUNE
-+	default "mips1"		if BR2_mips_1
-+	default "mips2"		if BR2_mips_2
-+	default "mips3"		if BR2_mips_3
-+	default "mips4"		if BR2_mips_4
-+	default "mips32"	if BR2_mips_32
-+	default "mips32r2"	if BR2_mips_32r2
-+	default "mips64"	if BR2_mips_64
-+	default "mips64r2"	if BR2_mips_64r2
+ $(TARGET_DIR): $(BUILD_DIR)/.root
+ 
++ifeq ($(BR2_PACKAGE_GDB),y)
++BR2_STRIP_EXCLUDE_FILES += libpthread*.so*
++endif
 +
- config BR2_MIPS_OABI32
- 	bool
- 	default y		if BR2_mips || BR2_mipsel
+ STRIP_FIND_CMD = find $(TARGET_DIR)
+ ifneq (,$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS)))
+ STRIP_FIND_CMD += \( $(call finddirclauses,$(TARGET_DIR),$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS))) \) -prune -o
 -- 
 1.9.0
