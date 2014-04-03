@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  3 Apr 2014 21:01:30 +0200
-Subject: [Buildroot] [PATCH v4 35/37] WIP: xbmc: Add lame support
+Date: Thu,  3 Apr 2014 21:01:07 +0200
+Subject: [Buildroot] [PATCH v4 12/37] php: version bump 5.5.11
 In-Reply-To: <1396551692-12371-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1396551692-12371-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1396551692-12371-36-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1396551692-12371-13-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,26 +13,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/xbmc/xbmc.mk |    7 +++++++
- 1 file changed, 7 insertions(+)
+ package/php/php.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index a46fe11..bb62db5 100644
---- a/package/xbmc/xbmc.mk
-+++ b/package/xbmc/xbmc.mk
-@@ -102,6 +102,13 @@ else
- XBMC_CONF_OPT += --disable-alsa
- endif
+diff --git a/package/php/php.mk b/package/php/php.mk
+index b3ffbef..ef42e58 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_LAME),y)
-+XBMC_DEPENDENCIES += lame
-+XBMC_CONF_OPT += --enable-libmp3lame
-+else
-+XBMC_CONF_OPT += --disable-libmp3lame
-+endif
-+
- ifeq ($(BR2_PACKAGE_XBMC_LIBUSB),y)
- XBMC_DEPENDENCIES += libusb-compat
- XBMC_CONF_OPT += --enable-libusb
+-PHP_VERSION = 5.5.10
++PHP_VERSION = 5.5.11
+ PHP_SITE = http://www.php.net/distributions
+ PHP_INSTALL_STAGING = YES
+ PHP_INSTALL_STAGING_OPT = INSTALL_ROOT=$(STAGING_DIR) install
 -- 
 1.7.10.4
