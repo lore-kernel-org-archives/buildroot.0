@@ -1,58 +1,129 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  3 Apr 2014 21:01:10 +0200
-Subject: [Buildroot] [PATCH v4 15/37] DO NOT COMMIT - package/libevas: quick
-	fix to get rid of circular deps
+Date: Thu,  3 Apr 2014 21:01:20 +0200
+Subject: [Buildroot] [PATCH v4 25/37] libglew: new package
 In-Reply-To: <1396551692-12371-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1396551692-12371-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1396551692-12371-16-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1396551692-12371-26-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-This is a quick workaround against the recently-introduced circular
-dependencies hell:
-
-    package/xbmc/Config.in:10:error: recursive dependency detected!
-    package/xbmc/Config.in:10:      symbol BR2_PACKAGE_XBMC depends on BR2_PACKAGE_HAS_OPENGL_EGL
-    package/opengl/libegl/Config.in:1:      symbol BR2_PACKAGE_HAS_OPENGL_EGL is selected by BR2_PACKAGE_MESA3D_OPENGL_EGL
-    package/mesa3d/Config.in:92:    symbol BR2_PACKAGE_MESA3D_OPENGL_EGL depends on BR2_PACKAGE_MESA3D
-    package/mesa3d/Config.in:1:     symbol BR2_PACKAGE_MESA3D is selected by BR2_PACKAGE_LIBEVAS_GL
-    package/efl/libevas/Config.in:149:      symbol BR2_PACKAGE_LIBEVAS_GL is part of choice <choice>
-    package/efl/libevas/Config.in:144:      choice <choice> contains symbol <choice>
-    package/efl/libevas/Config.in:144:      choice <choice> contains symbol BR2_PACKAGE_LIBEVAS_SDL_GL
-    package/efl/libevas/Config.in:90:       symbol BR2_PACKAGE_LIBEVAS_SDL_GL depends on BR2_PACKAGE_SDL_X11
-    package/sdl/Config.in:24:       symbol BR2_PACKAGE_SDL_X11 depends on BR2_PACKAGE_SDL
-    package/sdl/Config.in:1:        symbol BR2_PACKAGE_SDL is selected by BR2_PACKAGE_PYTHON_PYGAME
-    package/python-pygame/Config.in:1:      symbol BR2_PACKAGE_PYTHON_PYGAME depends on BR2_PACKAGE_PYTHON
-    package/python/Config.in:1:     symbol BR2_PACKAGE_PYTHON is selected by BR2_PACKAGE_XBMC
-
-Until this is properly fixed with the addition of a virtual package for
-full-openGL providers, just depend on mesa3d instead of selecting it.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Bernd Kuhls <berndkuhls@hotmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/efl/libevas/Config.in |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/Config.in                        |    1 +
+ package/libglew/Config.in                |   19 ++++++++++++++
+ package/libglew/libglew-0001-lib64.patch |   14 +++++++++++
+ package/libglew/libglew.mk               |   40 ++++++++++++++++++++++++++++++
+ 4 files changed, 74 insertions(+)
+ create mode 100644 package/libglew/Config.in
+ create mode 100644 package/libglew/libglew-0001-lib64.patch
+ create mode 100644 package/libglew/libglew.mk
 
-diff --git a/package/efl/libevas/Config.in b/package/efl/libevas/Config.in
-index 2afa888..8eea23d 100644
---- a/package/efl/libevas/Config.in
-+++ b/package/efl/libevas/Config.in
-@@ -148,7 +148,7 @@ choice
- 
- config BR2_PACKAGE_LIBEVAS_GL
- 	bool "generic OpenGL"
--	select BR2_PACKAGE_MESA3D
-+	depends on BR2_PACKAGE_MESA3D
- 	select BR2_PACKAGE_LIBEET
- 
- config BR2_PACKAGE_LIBEVAS_GLES_SGX
+diff --git a/package/Config.in b/package/Config.in
+index 3240188..8433020 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -584,6 +584,7 @@ source "package/libexif/Config.in"
+ source "package/libgail/Config.in"
+ source "package/libgeotiff/Config.in"
+ source "package/libglade/Config.in"
++source "package/libglew/Config.in"
+ source "package/libglu/Config.in"
+ source "package/libgtk2/Config.in"
+ source "package/libpng/Config.in"
+diff --git a/package/libglew/Config.in b/package/libglew/Config.in
+new file mode 100644
+index 0000000..fdb2b91
+--- /dev/null
++++ b/package/libglew/Config.in
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_LIBGLEW
++	bool "libglew"
++	depends on BR2_PACKAGE_XSERVER_XORG_SERVER
++	depends on BR2_PACKAGE_MESA3D_DRIVER
++	select BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_XLIB_LIBXEXT
++	select BR2_PACKAGE_XLIB_LIBXI
++	select BR2_PACKAGE_XLIB_LIBXMU
++	help
++	  The OpenGL Extension Wrangler Library (GLEW) is a cross-platform C/C++
++	  extension loading library. GLEW provides efficient run-time mechanisms
++	  for determining which OpenGL extensions are supported on the target
++	  platform. OpenGL core and extension functionality is exposed in a
++	  single header file.
++
++	  http://glew.sourceforge.net
++
++comment "libglew depends on X.org server and an activated mesa3d driver"
++	depends on !BR2_PACKAGE_XSERVER_XORG_SERVER || !BR2_PACKAGE_MESA3D_DRIVER
+diff --git a/package/libglew/libglew-0001-lib64.patch b/package/libglew/libglew-0001-lib64.patch
+new file mode 100644
+index 0000000..b961aec
+--- /dev/null
++++ b/package/libglew/libglew-0001-lib64.patch
+@@ -0,0 +1,14 @@
++diff -uNr glew-1.10.0.org/config/Makefile.linux glew-1.10.0/config/Makefile.linux
++--- glew-1.10.0.org/config/Makefile.linux	2013-07-22 16:11:22.000000000 +0200
+++++ glew-1.10.0/config/Makefile.linux	2014-03-30 22:01:04.403574030 +0200
++@@ -10,8 +10,8 @@
++   ARCH64 = true
++ endif
++ ifeq (${ARCH64},true)
++-  LDFLAGS.EXTRA = -L/usr/X11R6/lib64 -L/usr/lib64
++-  LIBDIR = $(GLEW_DEST)/lib64
+++  LDFLAGS.EXTRA = -L/usr/X11R6/lib -L/usr/lib
+++  LIBDIR = $(GLEW_DEST)/lib
++ else
++   LDFLAGS.EXTRA = -L/usr/X11R6/lib -L/usr/lib
++   LIBDIR = $(GLEW_DEST)/lib
+diff --git a/package/libglew/libglew.mk b/package/libglew/libglew.mk
+new file mode 100644
+index 0000000..e9c08d7
+--- /dev/null
++++ b/package/libglew/libglew.mk
+@@ -0,0 +1,40 @@
++################################################################################
++#
++# libglew
++#
++################################################################################
++
++LIBGLEW_VERSION = 1.10.0
++LIBGLEW_SOURCE = glew-$(LIBGLEW_VERSION).tgz
++LIBGLEW_SITE = http://sourceforge.net/projects/glew/files/glew/$(LIBGLEW_VERSION)
++LIBGLEW_LICENSE = MIT
++LIBGLEW_INSTALL_STAGING = YES
++LIBGLEW_DEPENDENCIES = \
++	mesa3d \
++	xlib_libX11 \
++	xlib_libXext \
++	xlib_libXi \
++	xlib_libXmu
++
++define LIBGLEW_BUILD_CMDS
++    $(TARGET_MAKE_ENV) \
++    $(MAKE) -C $(@D) \
++    GLEW_DEST="/usr" CC="$(TARGET_CC)" RANLIB="$(TARGET_RANLIB)" AR="$(TARGET_AR)" LD="$(TARGET_CC)" \
++    POPT="$(TARGET_CFLAGS)" LDFLAGS.EXTRA="$(TARGET_LDFLAGS)"
++endef
++
++define LIBGLEW_INSTALL_STAGING_CMDS
++    $(TARGET_MAKE_ENV) \
++    $(TARGET_CONFIGURE_OPTS) \
++    $(MAKE) -C $(@D) \
++    GLEW_DEST="$(STAGING_DIR)/usr" install
++endef
++
++define LIBGLEW_INSTALL_TARGET_CMDS
++    $(TARGET_MAKE_ENV) \
++    $(TARGET_CONFIGURE_OPTS) \
++    $(MAKE) -C $(@D) \
++    GLEW_DEST="$(TARGET_DIR)/usr" install
++endef
++
++$(eval $(generic-package))
 -- 
 1.7.10.4
