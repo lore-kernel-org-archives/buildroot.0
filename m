@@ -1,27 +1,62 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 03 Apr 2014 22:14:46 +0200
-Subject: [Buildroot] [PATCH v2 1/1] manual/configure.txt: fix typo
-In-Reply-To: <20140403212318.1f4917bb@skate>
-References: <1396216393-9841-1-git-send-email-jerzy.grzegorek@trzebnica.net>
- <20140403212318.1f4917bb@skate>
-Message-ID: <08c159df-77a8-48ed-8884-1fbd49054502@email.android.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 3 Apr 2014 22:39:52 +0200
+Subject: [Buildroot] [PATCH] postgresql: new package
+In-Reply-To: <1396249169-14126-1-git-send-email-ps.report@gmx.net>
+References: <1396249169-14126-1-git-send-email-ps.report@gmx.net>
+Message-ID: <20140403223952.37034a1a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> schreef:
->Dear Jerzy Grzegorek,
->
->On Sun, 30 Mar 2014 23:53:13 +0200, Jerzy Grzegorek wrote:
->> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
->
->This patch does not apply. Additionally, I believe in fact using C\++
->is not needed: there are many occurrences of just "C++" that work
->perfectly fine.
->
->Can you cook a patch, that applies on the latest master, which makes
->sure we just use C++ everywhere?
+Dear Peter Seiderer,
 
-Make sure to test this properly. I added these escapes for a real reason.
+On Mon, 31 Mar 2014 08:59:29 +0200, Peter Seiderer wrote:
+
+> diff --git a/package/postgresql/Config.in b/package/postgresql/Config.in
+> new file mode 100644
+> index 0000000..bc0305b
+> --- /dev/null
+> +++ b/package/postgresql/Config.in
+> @@ -0,0 +1,20 @@
+> +config BR2_PACKAGE_POSTGRESQL
+> +	bool "PostgreSQL"
+
+lower case, please.
+
+> +	depends on BR2_INET_IPV6
+
+Since it currently doesn't build with uClibc, can you make this package
+depends on !BR2_TOOLCHAIN_USES_UCLIBC ?
+
+
+> +if [ ! -f /srv/pgsql/data/PG_VERSION ]; then
+
+I thought we changed to /var/lib/pgsql ?
+
+Maybe you should create a variable that contains /var/lib/pgsql to
+avoid this duplication.
+
+
+> +ifeq ($(BR2_PACKAGE_ZLIB),y)
+> +	POSTGRESQL_DEPENDENCIES += zlib
+> +else
+> +	POSTGRESQL_CONF_OPT += --wihtout-zlib
+
+Typo.
+
+> +ifeq ($(BR2_PACKAGE_OPENSSL),y)
+> +	POSTGRESQL_DEPENDENCIES += openssl
+> +	POSTGRESQL_CONF_OPT += --with-openssl
+
+else
+	POSTGRESQL_CONF_OPT += --without-openssl
+
+Other than that, looks good.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
