@@ -1,73 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Apr 2014 21:40:07 +0200
-Subject: [Buildroot] [git commit] openswan: fix possible build failure
-Message-ID: <20140403195201.948B99A856@busybox.osuosl.org>
+Date: Thu, 3 Apr 2014 21:49:20 +0200
+Subject: [Buildroot] [git commit] eigen: add an option to install
+	unsupported modules
+Message-ID: <20140403195201.C24E599C96@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c5af9cecf2aec9775d14f6f4d4830e36269e7401
+commit: http://git.buildroot.net/buildroot/commit/?id=feefe6b8843740562067625aaf3ca3b639502afc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-openswan's Makefile uses gcc instead of $(CC) for gcc version detection
-to use advanced warning/error options. The problem is that if the
-host gcc version is newish (>=4.6) and the gcc for the target is not it
-uses unsupported options.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Davide Viti <d.viti@infosolution.it>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/openswan/openswan-01-gcc-detection.patch |   43 ++++++++++++++++++++++
- 1 files changed, 43 insertions(+), 0 deletions(-)
+ package/eigen/Config.in |    8 ++++++++
+ package/eigen/eigen.mk  |    8 ++++++++
+ 2 files changed, 16 insertions(+), 0 deletions(-)
 
-diff --git a/package/openswan/openswan-01-gcc-detection.patch b/package/openswan/openswan-01-gcc-detection.patch
-new file mode 100644
-index 0000000..2feb5c5
---- /dev/null
-+++ b/package/openswan/openswan-01-gcc-detection.patch
-@@ -0,0 +1,43 @@
-+From b37d4bd266ec65acdf5288e21722991d1c5ec44a Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Sun, 30 Mar 2014 08:52:05 -0300
-+Subject: [PATCH] Makefile: use CC for version test instead of gcc
+diff --git a/package/eigen/Config.in b/package/eigen/Config.in
+index e94f9a3..03d65b1 100644
+--- a/package/eigen/Config.in
++++ b/package/eigen/Config.in
+@@ -13,5 +13,13 @@ config BR2_PACKAGE_EIGEN
+ 
+ 	  http://eigen.tuxfamily.org/
+ 
++if BR2_PACKAGE_EIGEN
 +
-+Use $(CC) for the version test since that's different from gcc when
-+cross-compiling.
++config BR2_PACKAGE_EIGEN_UNSUPPORTED_MODULES
++	bool "unsupported modules"
++	help
++	  Install eigen unsupported modules
++endif
 +
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+ lib/libopenswan/Makefile | 2 +-
-+ programs/pluto/Makefile  | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
+ comment "eigen needs a toolchain w/ C++"
+ 	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/eigen/eigen.mk b/package/eigen/eigen.mk
+index 9a5ce7d..7fd3187 100644
+--- a/package/eigen/eigen.mk
++++ b/package/eigen/eigen.mk
+@@ -14,12 +14,20 @@ EIGEN_INSTALL_STAGING = YES
+ EIGEN_INSTALL_TARGET = NO
+ EIGEN_DEST_DIR = $(STAGING_DIR)/usr/include/eigen3
+ 
++ifeq ($(BR2_PACKAGE_EIGEN_UNSUPPORTED_MODULES),y)
++define EIGEN_INSTALL_UNSUPPORTED_MODULES_CMDS
++	mkdir -p $(EIGEN_DEST_DIR)/unsupported
++	cp -a $(@D)/unsupported/Eigen $(EIGEN_DEST_DIR)/unsupported
++endef
++endif
 +
-+diff --git a/lib/libopenswan/Makefile b/lib/libopenswan/Makefile
-+index 3649fe7..06f5317 100644
-+--- a/lib/libopenswan/Makefile
-++++ b/lib/libopenswan/Makefile
-+@@ -90,7 +90,7 @@ CFLAGS+= -Wpointer-arith
-+ CFLAGS+= -Wno-error=cast-qual
-+ 
-+ # Check if GCC's version is recent enough
-+-GCC_VERSION_GE_46:=$(shell test `gcc -dumpversion | sed 's/^\([0-9]\)\.\([0-9]\).*/\1\2/'` -ge 46 && echo true || echo false)
-++GCC_VERSION_GE_46:=$(shell test `$(CC) -dumpversion | sed 's/^\([0-9]\)\.\([0-9]\).*/\1\2/'` -ge 46 && echo true || echo false)
-+ ifeq ($(GCC_VERSION_GE_46),true)
-+ # some junk left in alg_info.c
-+ CFLAGS+= -Wno-error=cpp
-+diff --git a/programs/pluto/Makefile b/programs/pluto/Makefile
-+index 8e4bc89..ed5e9dc 100644
-+--- a/programs/pluto/Makefile
-++++ b/programs/pluto/Makefile
-+@@ -48,7 +48,7 @@ CPPFLAGS = $(HDRDIRS) $(DEFINES) \
-+ # must turn this off due to myid.c
-+ CFLAGS+= -Wno-error=cast-qual
-+ # Check if GCC's version is recent enough
-+-GCC_VERSION_GE_46:=$(shell test `gcc -dumpversion | sed 's/^\([0-9]\)\.\([0-9]\).*/\1\2/'` -ge 46 && echo true || echo false)
-++GCC_VERSION_GE_46:=$(shell test `$(CC) -dumpversion | sed 's/^\([0-9]\)\.\([0-9]\).*/\1\2/'` -ge 46 && echo true || echo false)
-+ ifeq ($(GCC_VERSION_GE_46),true)
-+ CFLAGS+= -Wno-error=cpp
-+ endif
-+-- 
-+1.8.3.2
-+
+ # This package only consists of headers that need to be
+ # copied over to the sysroot for compile time use
+ define EIGEN_INSTALL_STAGING_CMDS
+ 	$(RM) -r $(EIGEN_DEST_DIR)
+ 	mkdir -p $(EIGEN_DEST_DIR)
+ 	cp -a $(@D)/Eigen $(EIGEN_DEST_DIR)
++	$(EIGEN_INSTALL_UNSUPPORTED_MODULES_CMDS)
+ endef
+ 
+ $(eval $(generic-package))
