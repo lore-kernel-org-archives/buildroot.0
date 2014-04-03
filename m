@@ -1,77 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Apr 2014 22:00:29 +0200
-Subject: [Buildroot] [PATCH v5] bluez5_utils: new package
-In-Reply-To: <1396256280-23284-1-git-send-email-marcin@bis.org.pl>
-References: <532F69C8.5060202@trzebnica.net>
- <1396256280-23284-1-git-send-email-marcin@bis.org.pl>
-Message-ID: <20140403220029.450f9b51@skate>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 03 Apr 2014 22:14:46 +0200
+Subject: [Buildroot] [PATCH v2 1/1] manual/configure.txt: fix typo
+In-Reply-To: <20140403212318.1f4917bb@skate>
+References: <1396216393-9841-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+ <20140403212318.1f4917bb@skate>
+Message-ID: <08c159df-77a8-48ed-8884-1fbd49054502@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Marcin Bis,
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> schreef:
+>Dear Jerzy Grzegorek,
+>
+>On Sun, 30 Mar 2014 23:53:13 +0200, Jerzy Grzegorek wrote:
+>> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+>
+>This patch does not apply. Additionally, I believe in fact using C\++
+>is not needed: there are many occurrences of just "C++" that work
+>perfectly fine.
+>
+>Can you cook a patch, that applies on the latest master, which makes
+>sure we just use C++ everywhere?
 
-On Mon, 31 Mar 2014 10:58:00 +0200, Marcin Bis wrote:
-> This patch adds Bluez 5.x.
-> API is not backwards compatible with BlueZ 4.x
-
-... so it is packaged as a separate package.
-
-> BlueZ utils will use systemd and/or udev if enabled.
-> Contains a hook for installing GATT support tool, wchich is always
-
-which
-
-> build but not installed by default.
-
-build -> built
-
-
-> diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
-> new file mode 100644
-> index 0000000..809dd8a
-> --- /dev/null
-> +++ b/package/bluez5_utils/Config.in
-> @@ -0,0 +1,54 @@
-> +config BR2_PACKAGE_BLUEZ5_UTILS
-> +	bool "bluez-utils 5.x"
-> +	depends on !BR2_avr32
-> +	depends on BR2_USE_WCHAR # libglib2
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
-> +	depends on BR2_USE_MMU # dbus
-> +	depends on !BR2_PACKAGE_BLUEZ_UTILS # conflicts with 4.x version
-> +	select BR2_PACKAGE_DBUS
-> +	select BR2_PACKAGE_LIBGLIB2
-> +	select BR2_PACKAGE_LIBICAL
-> +	select BR2_PACKAGE_READLINE
-> +	help
-> +	  bluez utils version 5.x
-> +
-> +	  With this release BlueZ only supports the new Bluetooth Management
-> +	  kernel interface (introduced in Linux 3.4).
-
-Does it need kernel headers >= 3.4 ?
-
-
-> +# install gatttool (For some reason upstream choose not to do it by default)
-> +ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL),y)
-> +define BLUEZ5_UTILS_INSTALL_GATTTOOL
-> +	$(INSTALL) -D -m 0755 $(@D)/attrib/gatttool $(TARGET_DIR)/usr/bin
-
-The destination path should be a full path, i.e:
-
-	$(TARGET_DIR)/usr/bin/gatttool
-
-> +# use udev if available
-> +ifeq ($(BR2_PACKAGE_UDEV),y)
-
-You should instead rely on BR2_PACKAGE_HAS_UDEV, so that it works with
-both eudev, or the udev built into systemd.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Make sure to test this properly. I added these escapes for a real reason.
