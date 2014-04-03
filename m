@@ -1,62 +1,65 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 3 Apr 2014 23:32:56 +0200
-Subject: [Buildroot] [PATCH 05/11] dialog: Patch incorrect use of
- toupper()
-In-Reply-To: <1396558881-29631-5-git-send-email-paul@crapouillou.net>
+Date: Thu, 3 Apr 2014 23:37:03 +0200
+Subject: [Buildroot] [PATCH 06/11] libao: Remove OSS plugin when ALSA is
+ enabled
+In-Reply-To: <1396558881-29631-6-git-send-email-paul@crapouillou.net>
 References: <1396558881-29631-1-git-send-email-paul@crapouillou.net>
- <1396558881-29631-5-git-send-email-paul@crapouillou.net>
-Message-ID: <20140403213256.GE17328@free.fr>
+ <1396558881-29631-6-git-send-email-paul@crapouillou.net>
+Message-ID: <20140403213703.GF17328@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Paul, All,
+Paul, Maarten, All,
 
 On 2014-04-03 23:01 +0200, Paul Cercueil spake thusly:
-> On some platforms (e.g. MIPS), the "char" type is signed by default.
-> The problem is that toupper() takes an int as argument: a signed
-> char then gets sign-extended to 32bit, which causes an assertion
-> failure as toupper() verifies that its argument fits in 8 bits.
+> From: Maarten ter Huurne <maarten@treewalker.org>
+> 
+> At runtime, libao will load all plugins, even ones that will never be used.
+> Since libao will prefer ALSA over OSS by default anyway, it is pretty safe
+> to exclude the OSS plugin.
+> 
+> There is no configure option for disabling the OSS plugin, so we remove
+> the shared object in a post-install hook.
+> 
+> Signed-Off-By: Maarten ter Huurne <maarten@treewalker.org>
+> Acked-By: Paul Cercueil <paul@crapouillou.net>
+> ---
+>  package/libao/libao.mk | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/libao/libao.mk b/package/libao/libao.mk
+> index 8e9ee35..e6704f2 100644
+> --- a/package/libao/libao.mk
+> +++ b/package/libao/libao.mk
+> @@ -11,11 +11,16 @@ LIBAO_INSTALL_STAGING = YES
+>  LIBAO_LICENSE = GPLv2+
+>  LIBAO_LICENSE_FILES = COPYING
+>  LIBAO_CONF_OPT = --disable-esd --disable-wmm --disable-arts \
+> -			--disable-nas --disable-pulse
+> +			--disable-nas --disable-pulse --disable-broken-oss
+> +
+> +define LIBAO_REMOVE_OSS_PLUGIN
+> +	rm -f $(TARGET_DIR)/usr/lib/ao/plugins-4/liboss.so
+> +endef
+>  
+>  ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
+>  LIBAO_DEPENDENCIES += alsa-lib
+>  LIBAO_CONF_OPT += --enable-alsa --enable-alsa-mmap
 
-I could not vefrify the assertion that MIPS has signed chars.
-
-However, this change is still corect, since it makes it explicit that we
-want an unsigned char.
-
-> Signed-Off-By: Paul Cercueil <paul@crapouillou.net>
-> Acked-By: Maarten ter Huurne <maarten@treewalker.org>
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Please define the hook at the place it's going to be used, that is, here.
+See:
+    http://nightly.buildroot.org/#_coding_style
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/dialog/dialog-toupper.patch | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
->  create mode 100644 package/dialog/dialog-toupper.patch
-> 
-> diff --git a/package/dialog/dialog-toupper.patch b/package/dialog/dialog-toupper.patch
-> new file mode 100644
-> index 0000000..3fe0e19
-> --- /dev/null
-> +++ b/package/dialog/dialog-toupper.patch
-> @@ -0,0 +1,13 @@
-> +diff --git a/dlg_keys.h b/dlg_keys.h
-> +index 6a96c0f..b7b42d9 100644
-> +--- a/dlg_keys.h
-> ++++ b/dlg_keys.h
-> +@@ -31,7 +31,7 @@
-> + #define dlg_toupper(ch) towupper((wint_t)ch)
-> + #define dlg_isupper(ch) iswupper((wint_t)ch)
-> + #else
-> +-#define dlg_toupper(ch) toupper(ch)
-> ++#define dlg_toupper(ch) toupper((unsigned char)(ch))
-> + #define dlg_isupper(ch) (isalpha(ch) && isupper(ch))
-> + #endif
-> + 
+> +LIBAO_POST_INSTALL_TARGET_HOOKS += LIBAO_REMOVE_OSS_PLUGIN
+>  else
+>  LIBAO_CONF_OPT += --disable-alsa
+>  endif
 > -- 
 > 1.9.0
 > 
