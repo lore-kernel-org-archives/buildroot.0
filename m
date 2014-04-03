@@ -1,11 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 3 Apr 2014 23:37:03 +0200
-Subject: [Buildroot] [PATCH 06/11] libao: Remove OSS plugin when ALSA is
- enabled
-In-Reply-To: <1396558881-29631-6-git-send-email-paul@crapouillou.net>
+Date: Thu, 3 Apr 2014 23:45:05 +0200
+Subject: [Buildroot] [PATCH 07/11] fmtools: Switch to 2.x series
+In-Reply-To: <1396558881-29631-7-git-send-email-paul@crapouillou.net>
 References: <1396558881-29631-1-git-send-email-paul@crapouillou.net>
- <1396558881-29631-6-git-send-email-paul@crapouillou.net>
-Message-ID: <20140403213703.GF17328@free.fr>
+ <1396558881-29631-7-git-send-email-paul@crapouillou.net>
+Message-ID: <20140403214504.GG17328@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,49 +16,68 @@ Paul, Maarten, All,
 On 2014-04-03 23:01 +0200, Paul Cercueil spake thusly:
 > From: Maarten ter Huurne <maarten@treewalker.org>
 > 
-> At runtime, libao will load all plugins, even ones that will never be used.
-> Since libao will prefer ALSA over OSS by default anyway, it is pretty safe
-> to exclude the OSS plugin.
-> 
-> There is no configure option for disabling the OSS plugin, so we remove
-> the shared object in a post-install hook.
+> Specifically, bump version to 2.0.1.
+> The 2.x series uses the V4L2 API instead of V4L.
 > 
 > Signed-Off-By: Maarten ter Huurne <maarten@treewalker.org>
 > Acked-By: Paul Cercueil <paul@crapouillou.net>
-> ---
->  package/libao/libao.mk | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/libao/libao.mk b/package/libao/libao.mk
-> index 8e9ee35..e6704f2 100644
-> --- a/package/libao/libao.mk
-> +++ b/package/libao/libao.mk
-> @@ -11,11 +11,16 @@ LIBAO_INSTALL_STAGING = YES
->  LIBAO_LICENSE = GPLv2+
->  LIBAO_LICENSE_FILES = COPYING
->  LIBAO_CONF_OPT = --disable-esd --disable-wmm --disable-arts \
-> -			--disable-nas --disable-pulse
-> +			--disable-nas --disable-pulse --disable-broken-oss
-> +
-> +define LIBAO_REMOVE_OSS_PLUGIN
-> +	rm -f $(TARGET_DIR)/usr/lib/ao/plugins-4/liboss.so
-> +endef
->  
->  ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
->  LIBAO_DEPENDENCIES += alsa-lib
->  LIBAO_CONF_OPT += --enable-alsa --enable-alsa-mmap
 
-Please define the hook at the place it's going to be used, that is, here.
-See:
-    http://nightly.buildroot.org/#_coding_style
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+v4l2 dates back to the 2.5.x Linux kernel, so it does not need to depend
+on the _AT_LEAST_XXX headers. Heck, today, virtually all toolchains
+available are made with headers at least 2.6.18, and we certainly never
+support older toolchains anyway...
 
 Regards,
 Yann E. MORIN.
 
-> +LIBAO_POST_INSTALL_TARGET_HOOKS += LIBAO_REMOVE_OSS_PLUGIN
->  else
->  LIBAO_CONF_OPT += --disable-alsa
->  endif
+> ---
+>  package/fmtools/Config.in  |  4 ++--
+>  package/fmtools/fmtools.mk | 15 +++------------
+>  2 files changed, 5 insertions(+), 14 deletions(-)
+> 
+> diff --git a/package/fmtools/Config.in b/package/fmtools/Config.in
+> index 1591618..182b517 100644
+> --- a/package/fmtools/Config.in
+> +++ b/package/fmtools/Config.in
+> @@ -2,8 +2,8 @@ config BR2_PACKAGE_FMTOOLS
+>  	bool "fmtools"
+>  	help
+>  	  fmtools is a pair of simple command-line utilities for
+> -	  "video4linux" radio tuner cards under Linux. It includes
+> +	  "video4linux2" radio tuner cards under Linux. It includes
+>  	  fm for power control, tuning, and volume and fmscan for
+>  	  scanning for stations.
+>  
+> -	  http://www.stanford.edu/~blp/fmtools/
+> +	  http://benpfaff.org/fmtools/
+> diff --git a/package/fmtools/fmtools.mk b/package/fmtools/fmtools.mk
+> index 5f305b9..bacd73c 100644
+> --- a/package/fmtools/fmtools.mk
+> +++ b/package/fmtools/fmtools.mk
+> @@ -4,18 +4,9 @@
+>  #
+>  ################################################################################
+>  
+> -FMTOOLS_VERSION = 1.0.2
+> -FMTOOLS_SITE = http://www.stanford.edu/~blp/fmtools/
+> +FMTOOLS_VERSION = 2.0.1
+> +FMTOOLS_SITE = http://benpfaff.org/fmtools
+>  FMTOOLS_LICENSE = GPLv2+
+>  FMTOOLS_LICENSE_FILES = COPYING
+>  
+> -define FMTOOLS_BUILD_CMDS
+> -	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+> -endef
+> -
+> -define FMTOOLS_INSTALL_TARGET_CMDS
+> -	$(INSTALL) -D -m 0755 $(@D)/fm $(TARGET_DIR)/usr/sbin/fm
+> -	$(INSTALL) -D -m 0755 $(@D)/fmscan $(TARGET_DIR)/usr/sbin/fmscan
+> -endef
+> -
+> -$(eval $(generic-package))
+> +$(eval $(autotools-package))
 > -- 
 > 1.9.0
 > 
