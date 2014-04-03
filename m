@@ -1,48 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Apr 2014 20:15:05 +0200
-Subject: [Buildroot] [git commit] infozip: Add a host variant
-Message-ID: <20140403181637.D42619C518@busybox.osuosl.org>
+Date: Thu, 3 Apr 2014 20:16:24 +0200
+Subject: [Buildroot] [git commit] xbmc: Add missing host-infozip dependency
+Message-ID: <20140403181637.DB5859B1EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ac369eec95dafbe2069d27e0a8bb6dbdd5f1f5af
+commit: http://git.buildroot.net/buildroot/commit/?id=a8b1bfa3574a6b17a1f96293a5b74d4f586a80ed
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Adding a host variant to the package infozip. It will be used by XBMC.
-
-[Thomas: use HOST_CONFIGURE_OPTS instead of TARGET_CONFIGURE_OPTS in
-the host installation step.]
+XBMC needs the zip command for the host to build.
 
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Reported-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Acked-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/infozip/infozip.mk |   13 +++++++++++++
- 1 files changed, 13 insertions(+), 0 deletions(-)
+ package/xbmc/xbmc.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/infozip/infozip.mk b/package/infozip/infozip.mk
-index 8e51224..42cd1db 100644
---- a/package/infozip/infozip.mk
-+++ b/package/infozip/infozip.mk
-@@ -26,4 +26,17 @@ define INFOZIP_INSTALL_TARGET_CMDS
- 		prefix=$(TARGET_DIR)/usr
- endef
- 
-+define HOST_INFOZIP_BUILD_CMDS
-+	$(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) \
-+		CFLAGS="$(HOST_CFLAGS) -I. -DUNIX" \
-+		AS="$(HOST_CC) -c" \
-+		-f unix/Makefile generic
-+endef
-+
-+define HOST_INFOZIP_INSTALL_CMDS
-+	$(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) -f unix/Makefile install \
-+		prefix=$(HOST_DIR)/usr
-+endef
-+
- $(eval $(generic-package))
-+$(eval $(host-generic-package))
+diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
+index 9e346bd..59255a4 100644
+--- a/package/xbmc/xbmc.mk
++++ b/package/xbmc/xbmc.mk
+@@ -12,7 +12,7 @@ XBMC_LICENSE_FILES = LICENSE.GPL
+ # called TexturePacker. It is responsible to take all the images used in the
+ # GUI and pack them in a blob.
+ # http://wiki.xbmc.org/index.php?title=TexturePacker
+-XBMC_DEPENDENCIES = host-gperf host-lzo host-sdl_image host-swig
++XBMC_DEPENDENCIES = host-gperf host-infozip host-lzo host-sdl_image host-swig
+ XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
+ 	libass libcdio libcurl libegl libfribidi libgcrypt libgles libmad libmodplug libmpeg2 \
+ 	libogg libplist libpng libsamplerate libungif libvorbis libxml2 lzo ncurses \
