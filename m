@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 3 Apr 2014 23:45:05 +0200
-Subject: [Buildroot] [PATCH 07/11] fmtools: Switch to 2.x series
-In-Reply-To: <1396558881-29631-7-git-send-email-paul@crapouillou.net>
+Date: Thu, 3 Apr 2014 23:48:30 +0200
+Subject: [Buildroot] [PATCH 08/11] python-pygame: Make installation of
+ examples optional
+In-Reply-To: <1396558881-29631-8-git-send-email-paul@crapouillou.net>
 References: <1396558881-29631-1-git-send-email-paul@crapouillou.net>
- <1396558881-29631-7-git-send-email-paul@crapouillou.net>
-Message-ID: <20140403214504.GG17328@free.fr>
+ <1396558881-29631-8-git-send-email-paul@crapouillou.net>
+Message-ID: <20140403214830.GH17328@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,68 +17,62 @@ Paul, Maarten, All,
 On 2014-04-03 23:01 +0200, Paul Cercueil spake thusly:
 > From: Maarten ter Huurne <maarten@treewalker.org>
 > 
-> Specifically, bump version to 2.0.1.
-> The 2.x series uses the V4L2 API instead of V4L.
+> They take up 1.5 MB in the target file system.
 > 
 > Signed-Off-By: Maarten ter Huurne <maarten@treewalker.org>
 > Acked-By: Paul Cercueil <paul@crapouillou.net>
+> ---
+>  package/python-pygame/Config.in        | 6 ++++++
+>  package/python-pygame/python-pygame.mk | 7 +++++++
+>  2 files changed, 13 insertions(+)
+> 
+> diff --git a/package/python-pygame/Config.in b/package/python-pygame/Config.in
+> index b9a367d..f72ee31 100644
+> --- a/package/python-pygame/Config.in
+> +++ b/package/python-pygame/Config.in
+> @@ -20,6 +20,12 @@ config BR2_PACKAGE_PYTHON_PYGAME_IMAGE
+>  	  pygame module for loading, saving and transfering images.
+>  	  Will autoselect sdl_image with png and jpeg support.
+>  
+> +config BR2_PACKAGE_PYTHON_PYGAME_EXAMPLES
+> +	bool "pygame.examples"
+> +	help
+> +	  Include examples.
+> +	  Selecting this option adds about 1.5 MB to the target file system.
+> +
+>  config BR2_PACKAGE_PYTHON_PYGAME_FONT
+>  	bool "pygame.font"
+>  	select BR2_PACKAGE_SDL_TTF
+> diff --git a/package/python-pygame/python-pygame.mk b/package/python-pygame/python-pygame.mk
+> index d9219b9..77f9f6f 100644
+> --- a/package/python-pygame/python-pygame.mk
+> +++ b/package/python-pygame/python-pygame.mk
+> @@ -92,6 +92,13 @@ define PYTHON_PYGAME_REMOVE_TESTS
+>  	rm -rf $(TARGET_DIR)/usr/lib/python*/site-packages/pygame/tests
+>  endef
+>  
+> +ifneq ($(BR2_PACKAGE_PYTHON_PYGAME_EXAMPLES),y)
+> +define PYTHON_PYGAME_REMOVE_EXAMPLES
+> +	rm -rf $(TARGET_DIR)/usr/lib/python*/site-packages/pygame/examples
+                                      ^^
+I'm not a fan of usign a wildcard here.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Can you checks with something like:
+    rm -rf $(TARGET_DIR)/usr/lib/python$$(PYTHON_VERSION_MAJOR)/site-packages/pygame/examples
 
-v4l2 dates back to the 2.5.x Linux kernel, so it does not need to depend
-on the _AT_LEAST_XXX headers. Heck, today, virtually all toolchains
-available are made with headers at least 2.6.18, and we certainly never
-support older toolchains anyway...
+(Yes, two '$' signs, which makes the variable expanded later, at call
+time, not at parse time.)
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/fmtools/Config.in  |  4 ++--
->  package/fmtools/fmtools.mk | 15 +++------------
->  2 files changed, 5 insertions(+), 14 deletions(-)
-> 
-> diff --git a/package/fmtools/Config.in b/package/fmtools/Config.in
-> index 1591618..182b517 100644
-> --- a/package/fmtools/Config.in
-> +++ b/package/fmtools/Config.in
-> @@ -2,8 +2,8 @@ config BR2_PACKAGE_FMTOOLS
->  	bool "fmtools"
->  	help
->  	  fmtools is a pair of simple command-line utilities for
-> -	  "video4linux" radio tuner cards under Linux. It includes
-> +	  "video4linux2" radio tuner cards under Linux. It includes
->  	  fm for power control, tuning, and volume and fmscan for
->  	  scanning for stations.
+> +endef
+> +PYTHON_PYGAME_POST_INSTALL_TARGET_HOOKS += PYTHON_PYGAME_REMOVE_EXAMPLES
+> +endif
+> +
+>  PYTHON_PYGAME_POST_INSTALL_TARGET_HOOKS += PYTHON_PYGAME_REMOVE_TESTS
 >  
-> -	  http://www.stanford.edu/~blp/fmtools/
-> +	  http://benpfaff.org/fmtools/
-> diff --git a/package/fmtools/fmtools.mk b/package/fmtools/fmtools.mk
-> index 5f305b9..bacd73c 100644
-> --- a/package/fmtools/fmtools.mk
-> +++ b/package/fmtools/fmtools.mk
-> @@ -4,18 +4,9 @@
->  #
->  ################################################################################
->  
-> -FMTOOLS_VERSION = 1.0.2
-> -FMTOOLS_SITE = http://www.stanford.edu/~blp/fmtools/
-> +FMTOOLS_VERSION = 2.0.1
-> +FMTOOLS_SITE = http://benpfaff.org/fmtools
->  FMTOOLS_LICENSE = GPLv2+
->  FMTOOLS_LICENSE_FILES = COPYING
->  
-> -define FMTOOLS_BUILD_CMDS
-> -	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-> -endef
-> -
-> -define FMTOOLS_INSTALL_TARGET_CMDS
-> -	$(INSTALL) -D -m 0755 $(@D)/fm $(TARGET_DIR)/usr/sbin/fm
-> -	$(INSTALL) -D -m 0755 $(@D)/fmscan $(TARGET_DIR)/usr/sbin/fmscan
-> -endef
-> -
-> -$(eval $(generic-package))
-> +$(eval $(autotools-package))
+>  $(eval $(python-package))
 > -- 
 > 1.9.0
 > 
