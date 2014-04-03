@@ -1,31 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Apr 2014 21:23:18 +0200
-Subject: [Buildroot] [PATCH v2 1/1] manual/configure.txt: fix typo
-In-Reply-To: <1396216393-9841-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1396216393-9841-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <20140403212318.1f4917bb@skate>
+Date: Thu, 3 Apr 2014 21:24:14 +0200
+Subject: [Buildroot] [git commit] xlib_xtrans: Version bump 1.3.4
+Message-ID: <20140403192648.55A909B795@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jerzy Grzegorek,
+commit: http://git.buildroot.net/buildroot/commit/?id=53d6dd3c77af2e8f72356f98c42292ab6eb8dbd5
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 30 Mar 2014 23:53:13 +0200, Jerzy Grzegorek wrote:
-> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/x11r7/xlib_xtrans/xlib_xtrans.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-This patch does not apply. Additionally, I believe in fact using C\++
-is not needed: there are many occurrences of just "C++" that work
-perfectly fine.
-
-Can you cook a patch, that applies on the latest master, which makes
-sure we just use C++ everywhere?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/x11r7/xlib_xtrans/xlib_xtrans.mk b/package/x11r7/xlib_xtrans/xlib_xtrans.mk
+index 8c5fd42..bc84dfb 100644
+--- a/package/x11r7/xlib_xtrans/xlib_xtrans.mk
++++ b/package/x11r7/xlib_xtrans/xlib_xtrans.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XLIB_XTRANS_VERSION = 1.3.2
++XLIB_XTRANS_VERSION = 1.3.4
+ XLIB_XTRANS_SOURCE = xtrans-$(XLIB_XTRANS_VERSION).tar.bz2
+ XLIB_XTRANS_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_XTRANS_LICENSE = MIT
