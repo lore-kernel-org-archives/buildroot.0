@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Apr 2014 20:12:22 +0200
-Subject: [Buildroot] [PATCH] smstools3: needs mmu
-In-Reply-To: <1396525040-28924-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1396525040-28924-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140403201222.20191863@skate>
+Date: Thu, 3 Apr 2014 20:13:01 +0200
+Subject: [Buildroot] [PATCH 1/2] gettext: make host gettextize
+ non-interactive
+In-Reply-To: <1396532611-30218-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1396532611-30218-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140403201301.7fd7848f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +13,16 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Thu,  3 Apr 2014 08:37:20 -0300, Gustavo Zacarias wrote:
-> Fixes:
-> http://autobuild.buildroot.net/results/9fe/9fe7a34501a39d4a1eaaedb75ab58e7cbdbe15c5/
+On Thu,  3 Apr 2014 10:43:30 -0300, Gustavo Zacarias wrote:
+> Make the host gettextize tool non-interactive to avoid stalling for user
+> confirmation when using it to fix up a package.
 > 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/smstools3/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+>  package/gettext/gettext.mk | 6 ++++++
+>  1 file changed, 6 insertions(+)
 
-Applied, thanks.
+Both applied, thanks.
 
 Thomas
 -- 
