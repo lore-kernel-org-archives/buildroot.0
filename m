@@ -1,154 +1,115 @@
-From: Paul Cercueil <paul@crapouillou.net>
-Date: Fri, 04 Apr 2014 00:00:02 +0200
-Subject: [Buildroot] [PATCH 09/11] util-linux: Add config switches for
- some more binaries
-In-Reply-To: <20140403215539.GI17328@free.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 4 Apr 2014 00:12:15 +0200
+Subject: [Buildroot] [PATCH 02/11] arch: MIPS: Add config option
+ BR2_GCC_TARGET_TUNE
+In-Reply-To: <533DD7B6.8080009@crapouillou.net>
 References: <1396558881-29631-1-git-send-email-paul@crapouillou.net>
- <1396558881-29631-9-git-send-email-paul@crapouillou.net>
- <20140403215539.GI17328@free.fr>
-Message-ID: <533DD9E2.80803@crapouillou.net>
+ <1396558881-29631-2-git-send-email-paul@crapouillou.net>
+ <20140403211925.GC17328@free.fr> <533DD7B6.8080009@crapouillou.net>
+Message-ID: <20140403221215.GA25471@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+Paul, All,
 
-On 03/04/2014 23:55, Yann E. MORIN wrote:
-> Paul, All,
->
-> On 2014-04-03 23:01 +0200, Paul Cercueil spake thusly:
->> Signed-Off-By: Paul Cercueil <paul@crapouillou.net>
->> Acked-By: Maarten ter Huurne <maarten@treewalker.org>
-> NAK: this patch was already applied and then reverted:
->      280b16f Revert "util-linux: Add config switches for some more binaries"
->
-> Because:
->      http://lists.busybox.net/pipermail/buildroot/2013-December/085198.html
->
-> It looks like the comment made by Peter in his mail were not addressed
-> (unless I missed them.)
->
-> Regards,
-> Yann E. MORIN.
+On 2014-04-03 23:50 +0200, Paul Cercueil spake thusly:
+> This patch would pass the same value to --with-arch and --with-tune, unless
+> you define a different value for BR2_GCC_TARGET_TUNE in your defconfig.
 
-You are absolutely right, I just forgot that I already tried to push 
-that patch. Sorry about that.
+I see what you expect, but since BR2_GCC_TARGET_TUNE is a prompt-less
+option, setting it in a defconfig will be overriden when you use that
+defconfig.
 
-Paul
+For example:
 
->
->> ---
->>   package/util-linux/Config.in     | 25 +++++++++++++++++++++++++
->>   package/util-linux/util-linux.mk |  7 ++++++-
->>   2 files changed, 31 insertions(+), 1 deletion(-)
->>
->> diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
->> index b1db99a..e0143f7 100644
->> --- a/package/util-linux/Config.in
->> +++ b/package/util-linux/Config.in
->> @@ -56,6 +56,11 @@ config BR2_PACKAGE_UTIL_LINUX_ARCH
->>   	help
->>   	  Print machine architecture
->>   
->> +config BR2_PACKAGE_UTIL_LINUX_CHFN_CHSH
->> +	bool "chfn/chsh"
->> +	help
->> +	  Change login shell, real user name and information
->> +
->>   config BR2_PACKAGE_UTIL_LINUX_CRAMFS
->>   	bool "cramfs utilities"
->>   	select BR2_PACKAGE_ZLIB
->> @@ -88,6 +93,11 @@ config BR2_PACKAGE_UTIL_LINUX_KILL
->>   	help
->>   	  Send a signal to a process
->>   
->> +config BR2_PACKAGE_UTIL_LINUX_LAST
->> +	bool "last"
->> +	help
->> +	  Show listing of last logged in users
->> +
->>   config BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS
->>   	bool "login utilities"
->>   	depends on BR2_ENABLE_LOCALE # linux-pam
->> @@ -98,6 +108,11 @@ config BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS
->>   comment "login utilities needs a toolchain w/ locale"
->>   	depends on !BR2_ENABLE_LOCALE
->>   
->> +config BR2_PACKAGE_UTIL_LINUX_LOSETUP
->> +	bool "losetup"
->> +	help
->> +	  Set up and control loop devices
->> +
->>   config BR2_PACKAGE_UTIL_LINUX_MESG
->>   	bool "mesg"
->>   	help
->> @@ -108,6 +123,11 @@ config BR2_PACKAGE_UTIL_LINUX_MOUNT
->>   	help
->>   	  Mount/unmount filesystems
->>   
->> +config BR2_PACKAGE_UTIL_LINUX_NEWGRP
->> +	bool "newgrp"
->> +	help
->> +	  Log in to a new group
->> +
->>   config BR2_PACKAGE_UTIL_LINUX_PIVOT_ROOT
->>   	bool "pivot_root"
->>   	help
->> @@ -158,6 +178,11 @@ config BR2_PACKAGE_UTIL_LINUX_UUIDD
->>   	help
->>   	  UUID generation daemon
->>   
->> +config BR2_PACKAGE_UTIL_LINUX_VIPW
->> +	bool "vipw"
->> +	help
->> +	  Edit the password, group, shadow-password or shadow-group file
->> +
->>   config BR2_PACKAGE_UTIL_LINUX_WALL
->>   	bool "wall"
->>   	help
->> diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
->> index 20b3d35..4b822c7 100644
->> --- a/package/util-linux/util-linux.mk
->> +++ b/package/util-linux/util-linux.mk
->> @@ -50,19 +50,23 @@ UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_LINUX_PAM),linux-pam)
->>   UTIL_LINUX_CONF_OPT += \
->>   	$(if $(BR2_PACKAGE_UTIL_LINUX_AGETTY),--enable-agetty,--disable-agetty) \
->>   	$(if $(BR2_PACKAGE_UTIL_LINUX_ARCH),--enable-arch,--disable-arch) \
->> +	$(if $(BR2_PACKAGE_UTIL_LINUX_CHFN_CHSH),--enable-chfn-chsh,--disable-chfn-chsh) \
->>   	$(if $(BR2_PACKAGE_UTIL_LINUX_CRAMFS),--enable-cramfs,--disable-cramfs) \
->>   	$(if $(BR2_PACKAGE_UTIL_LINUX_DDATE),--enable-ddate,--disable-ddate) \
->>   	$(if $(BR2_PACKAGE_UTIL_LINUX_EJECT),--enable-eject,--disable-eject) \
->>   	$(if $(BR2_PACKAGE_UTIL_LINUX_FALLOCATE),--enable-fallocate,--disable-fallocate) \
->>   	$(if $(BR2_PACKAGE_UTIL_LINUX_FSCK),--enable-fsck,--disable-fsck) \
->>   	$(if $(BR2_PACKAGE_UTIL_LINUX_KILL),--enable-kill,--disable-kill) \
->> +	$(if $(BR2_PACKAGE_UTIL_LINUX_LAST),--enable-last,--disable-last) \
->>   	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBBLKID),--enable-libblkid,--disable-libblkid) \
->>   	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT),--enable-libmount,--disable-libmount) \
->>   	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBUUID),--enable-libuuid,--disable-libuuid) \
->>   	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS),--enable-last --enable-login --enable-su --enable-sulogin,--disable-last --disable-login --disable-su --disable-sulogin) \
->> +	$(if $(BR2_PACKAGE_UTIL_LINUX_LOSETUP),--enable-losetup,--disable-losetup) \
->>   	$(if $(BR2_PACKAGE_UTIL_LINUX_MESG),--enable-mesg,--disable-mesg) \
->>   	$(if $(BR2_PACKAGE_UTIL_LINUX_MOUNT),--enable-mount,--disable-mount) \
->> -	$(if $(BR2_PACKAGE_UTIL_LINUX_PARTX),,--disable-partx) \
->> +	$(if $(BR2_PACKAGE_UTIL_LINUX_NEWGRP),--enable-newgrp,--disable-newgrp) \
->> +	$(if $(BR2_PACKAGE_UTIL_LINUX_PARTX),--enable-partx,--disable-partx) \
->>   	$(if $(BR2_PACKAGE_UTIL_LINUX_PIVOT_ROOT),--enable-pivot_root,--disable-pivot_root) \
->>   	$(if $(BR2_PACKAGE_UTIL_LINUX_RAW),--enable-raw,--disable-raw) \
->>   	$(if $(BR2_PACKAGE_UTIL_LINUX_RENAME),--enable-rename,--disable-rename) \
->> @@ -72,6 +76,7 @@ UTIL_LINUX_CONF_OPT += \
->>   	$(if $(BR2_PACKAGE_UTIL_LINUX_UNSHARE),--enable-unshare,--disable-unshare) \
->>   	$(if $(BR2_PACKAGE_UTIL_LINUX_UTMPDUMP),--enable-utmpdump,--disable-utmpdump) \
->>   	$(if $(BR2_PACKAGE_UTIL_LINUX_UUIDD),--enable-uuidd,--disable-uuidd) \
->> +	$(if $(BR2_PACKAGE_UTIL_LINUX_VIPW),--enable-vipw,--disable-vipw) \
->>   	$(if $(BR2_PACKAGE_UTIL_LINUX_WALL),--enable-wall,--disable-wall) \
->>   	$(if $(BR2_PACKAGE_UTIL_LINUX_WRITE),--enable-write,--disable-write)
->>   
->> -- 
->> 1.9.0
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
+    $ cat defconfig
+    BR2_MIPS=y
+    BR2_GCC_TARGET_ARCH="FOO-YEM"
+    $ make BR2_DEFCONFIG=$(pwd)/defconfig defconfig
+    [...]
+    $ grep FOO .config
+    [empty, nada, zilch]
+
+So, even if you set it in your defconfig, BR2_GCC_TARGET_ARCH is lost.
+
+Ditto for BR2_GCC_TARGET_TUNE.
+
+> We
+> use that for the Ingenic jz4740 processor, which is a mips32 processor but
+> running better the code tuned for mips32r2.
+
+Oh, I see. But that's not gonna happen with this code, I'm afraid.
+
+Can you double-check that it is indeed working for you? Because if it
+does, we have a really big bug in Kconfig (Oh, no, not one more...)
+
+Regards,
+Yann E. MORIN.
+
+> On 03/04/2014 23:19, Yann E. MORIN wrote:
+> >Paul, All,
+> >
+> >On 2014-04-03 23:01 +0200, Paul Cercueil spake thusly:
+> >>This option is actually already used in GCC's package.
+> >>
+> >>This allows to optimize the toolchain for a specific MIPS processor
+> >>while supporting more than one family of processors.
+> >Is that really needed? man gcc says:
+> >
+> >     When this option is not used, GCC optimizes for the processor
+> >     specified by -march.
+> >
+> >Since this patch would pass the same value to --with-arch and
+> >--with-tune, and since this is the default of gcc, is it really
+> >needed?
+> >
+> >Neither ACKing nor NAKing this patch. Can you explain a bit more why we
+> >would want that, given the above explanations?
+> >
+> >Regards,
+> >Yann E. MORIN.
+> >
+> >>Signed-Off-By: Paul Cercueil <paul@crapouillou.net>
+> >>---
+> >>  arch/Config.in.mips | 10 ++++++++++
+> >>  1 file changed, 10 insertions(+)
+> >>
+> >>diff --git a/arch/Config.in.mips b/arch/Config.in.mips
+> >>index 20951e0..e4160a2 100644
+> >>--- a/arch/Config.in.mips
+> >>+++ b/arch/Config.in.mips
+> >>@@ -83,6 +83,16 @@ config BR2_GCC_TARGET_ARCH
+> >>  	default "mips64"	if BR2_mips_64
+> >>  	default "mips64r2"	if BR2_mips_64r2
+> >>+config BR2_GCC_TARGET_TUNE
+> >>+	default "mips1"		if BR2_mips_1
+> >>+	default "mips2"		if BR2_mips_2
+> >>+	default "mips3"		if BR2_mips_3
+> >>+	default "mips4"		if BR2_mips_4
+> >>+	default "mips32"	if BR2_mips_32
+> >>+	default "mips32r2"	if BR2_mips_32r2
+> >>+	default "mips64"	if BR2_mips_64
+> >>+	default "mips64r2"	if BR2_mips_64r2
+> >>+
+> >>  config BR2_MIPS_OABI32
+> >>  	bool
+> >>  	default y		if BR2_mips || BR2_mipsel
+> >>-- 
+> >>1.9.0
+> >>
+> >>_______________________________________________
+> >>buildroot mailing list
+> >>buildroot at busybox.net
+> >>http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
