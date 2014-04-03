@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Apr 2014 21:39:05 +0200
-Subject: [Buildroot] [PATCH] binutils: backport gas xtensa jump
- trampolines
-In-Reply-To: <1395612572-4127-1-git-send-email-jcmvbkbc@gmail.com>
-References: <1395612572-4127-1-git-send-email-jcmvbkbc@gmail.com>
-Message-ID: <20140403213905.48096716@skate>
+Date: Thu, 3 Apr 2014 21:39:28 +0200
+Subject: [Buildroot] [PATCH v3 00/10] xtensa: add
+ -mtext-section-literals to xtensa ABI
+In-Reply-To: <1396202274-5109-1-git-send-email-jcmvbkbc@gmail.com>
+References: <1396202274-5109-1-git-send-email-jcmvbkbc@gmail.com>
+Message-ID: <20140403213928.657f737f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +13,20 @@ To: buildroot@busybox.net
 
 Dear Max Filippov,
 
-On Mon, 24 Mar 2014 02:09:32 +0400, Max Filippov wrote:
-> This fixes compilation of huge source files that have jumps with offsets
-> greater than 128 Kbytes, that otherwise fails with such messages:
-> 
->   {standard input}:65267: Error: operand 1 of 'j' has out of range value '131089'
->   {standard input}:106879: Error: operand 1 of 'j' has out of range value '4294833951'
-> 
-> Fixes:
->   http://autobuild.buildroot.net/results/e45/e450d5efc7435035c956bb962d598837648f319d/
-> 
-> Backported from: a82c7d9030b67a6a76a5403d0e1641f9e42141ac
-> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+On Sun, 30 Mar 2014 21:57:44 +0400, Max Filippov wrote:
 
-Applied, thanks.
+> this series is the second part of fixes for building huge sources, like
+> wireshark or mplayer: adding trampolines support to binutils allows
+> assembling of such files, but with literals placed into separate section
+> build fails at the linking step.
+> 
+> First patch allows building uclibc with -mtext-section-literals, it is
+> posted to the uclibc list, but not reviewed/checked in yet.
+> Second patch adds -mtext-section-literals flag to xtensa ABI.
+> Remaining patches revert -mtext-section-literals additions to individual
+> packages.
+
+Series applied, thanks.
 
 Thomas
 -- 
