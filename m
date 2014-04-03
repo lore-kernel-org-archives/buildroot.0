@@ -1,30 +1,37 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Wed, 02 Apr 2014 22:01:31 +0200
-Subject: [Buildroot] [PATCH 5/6] package/x11-video-drivers: do not
-	select, but depends on mesa3d
-References: <cover.1396302677.git.yann.morin.1998@free.fr>
- <887ad694204dc2032ade7bdacb8e9d9aa48205ac.1396302677.git.yann.morin.1998@free.fr>
-Message-ID: <qt6u0bxtl5.ln2@ID-313208.user.individual.net>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu,  3 Apr 2014 10:43:30 -0300
+Subject: [Buildroot] [PATCH 1/2] gettext: make host gettextize
+	non-interactive
+Message-ID: <1396532611-30218-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Make the host gettextize tool non-interactive to avoid stalling for user
+confirmation when using it to fix up a package.
 
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote in
-news:887ad694204dc2032ade7bdacb8e9d9aa48205ac.1396302677.git.yann.morin.199
-8 at free.fr: 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/gettext/gettext.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-> a/package/x11r7/xdriver_xf86-video-intel/Config.in +++
-> b/package/x11r7/xdriver_xf86-video-intel/Config.in @@ -1,5 +1,7 @@
-
-[...]
-
-> +comment "xf86-video-intel needs mesa3d"
-> +     depends on BR2_PACKAGE_MESA3D
-
-"depends on !BR2_PACKAGE_MESA3D"
-
-Regards, Bernd
+diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
+index 748c2a5..b5efa76 100644
+--- a/package/gettext/gettext.mk
++++ b/package/gettext/gettext.mk
+@@ -57,5 +57,11 @@ endef
+ endif
+ endif # GETTEXT_TOOLS = n
+ 
++# Disable interactive confirmation in host gettextize for package fixups
++define HOST_GETTEXT_GETTEXTIZE_CONFIRMATION
++	$(SED) '/read dummy/d' $(HOST_DIR)/usr/bin/gettextize
++endef
++HOST_GETTEXT_POST_INSTALL_HOOKS += HOST_GETTEXT_GETTEXTIZE_CONFIRMATION
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+-- 
+1.8.3.2
