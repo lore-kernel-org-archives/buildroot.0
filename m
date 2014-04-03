@@ -1,34 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Apr 2014 21:38:28 +0200
-Subject: [Buildroot] [git commit] binutils: backport gas xtensa jump
-	trampolines
-Message-ID: <20140403193845.5E01F9A856@busybox.osuosl.org>
+Date: Thu, 3 Apr 2014 21:37:19 +0200
+Subject: [Buildroot] [git commit] Revert "xtensa: sqlite requires special
+	compiler option"
+Message-ID: <20140403193845.502D79A856@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6acb2e1db29238b7d05a30968a29753e879ab819
+commit: http://git.buildroot.net/buildroot/commit/?id=e1acc9826d0605ba93aa04751931a2739520e0bc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This fixes compilation of huge source files that have jumps with offsets
-greater than 128 Kbytes, that otherwise fails with such messages:
+This reverts commit 6a30cd3fb30b8057ddde2c72a88c0bb6ad7d1761.
+Now that -mtext-section-literals is specified in the xtensa ABI this fix
+is no longer needed.
 
-  {standard input}:65267: Error: operand 1 of 'j' has out of range value '131089'
-  {standard input}:106879: Error: operand 1 of 'j' has out of range value '4294833951'
-
-Fixes:
-  http://autobuild.buildroot.net/results/e45/e450d5efc7435035c956bb962d598837648f319d/
-
-Backported from: a82c7d9030b67a6a76a5403d0e1641f9e42141ac
 Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/binutils/2.22/900-xtensa-trampolines.patch |  977 ++++++++++++++++++++
- .../binutils/2.23.1/900-xtensa-trampolines.patch   |  977 ++++++++++++++++++++
- .../binutils/2.23.2/900-xtensa-trampolines.patch   |  977 ++++++++++++++++++++
- package/binutils/2.24/900-xtensa-trampolines.patch |  977 ++++++++++++++++++++
- 4 files changed, 3908 insertions(+), 0 deletions(-)
+ package/sqlite/sqlite.mk |    4 ----
+ 1 files changed, 0 insertions(+), 4 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index af59479..b5104c9 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -33,10 +33,6 @@ ifeq ($(BR2_PACKAGE_SQLITE_SECURE_DELETE),y)
+ SQLITE_CFLAGS += -DSQLITE_SECURE_DELETE
+ endif
+ 
+-ifeq ($(BR2_xtensa),y)
+-SQLITE_CFLAGS += -mtext-section-literals
+-endif
+-
+ SQLITE_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) $(SQLITE_CFLAGS)"
+ 
+ SQLITE_CONF_OPT = \
