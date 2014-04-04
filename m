@@ -1,47 +1,101 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 04 Apr 2014 08:04:16 +0200
-Subject: [Buildroot] [PATCH] postgresql: new package
-In-Reply-To: <20140403223952.37034a1a@skate>
-References: <1396249169-14126-1-git-send-email-ps.report@gmx.net>
- <20140403223952.37034a1a@skate>
-Message-ID: <533E4B60.8090804@mind.be>
+Date: Fri, 04 Apr 2014 08:14:13 +0200
+Subject: [Buildroot] [PATCH 08/11] python-pygame: Make installation of
+ examples optional
+In-Reply-To: <20140403214830.GH17328@free.fr>
+References: <1396558881-29631-1-git-send-email-paul@crapouillou.net>
+ <1396558881-29631-8-git-send-email-paul@crapouillou.net>
+ <20140403214830.GH17328@free.fr>
+Message-ID: <533E4DB5.7090808@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/04/14 22:39, Thomas Petazzoni wrote:
-> Dear Peter Seiderer,
+On 03/04/14 23:48, Yann E. MORIN wrote:
+> Paul, Maarten, All,
 > 
-> On Mon, 31 Mar 2014 08:59:29 +0200, Peter Seiderer wrote:
+> On 2014-04-03 23:01 +0200, Paul Cercueil spake thusly:
+>> From: Maarten ter Huurne <maarten@treewalker.org>
+>>
+>> They take up 1.5 MB in the target file system.
+>>
+>> Signed-Off-By: Maarten ter Huurne <maarten@treewalker.org>
+>> Acked-By: Paul Cercueil <paul@crapouillou.net>
+>> ---
+>>  package/python-pygame/Config.in        | 6 ++++++
+>>  package/python-pygame/python-pygame.mk | 7 +++++++
+>>  2 files changed, 13 insertions(+)
+>>
+>> diff --git a/package/python-pygame/Config.in b/package/python-pygame/Config.in
+>> index b9a367d..f72ee31 100644
+>> --- a/package/python-pygame/Config.in
+>> +++ b/package/python-pygame/Config.in
+>> @@ -20,6 +20,12 @@ config BR2_PACKAGE_PYTHON_PYGAME_IMAGE
+>>  	  pygame module for loading, saving and transfering images.
+>>  	  Will autoselect sdl_image with png and jpeg support.
+>>  
+>> +config BR2_PACKAGE_PYTHON_PYGAME_EXAMPLES
+>> +	bool "pygame.examples"
+>> +	help
+>> +	  Include examples.
+>> +	  Selecting this option adds about 1.5 MB to the target file system.
+>> +
+>>  config BR2_PACKAGE_PYTHON_PYGAME_FONT
+>>  	bool "pygame.font"
+>>  	select BR2_PACKAGE_SDL_TTF
+>> diff --git a/package/python-pygame/python-pygame.mk b/package/python-pygame/python-pygame.mk
+>> index d9219b9..77f9f6f 100644
+>> --- a/package/python-pygame/python-pygame.mk
+>> +++ b/package/python-pygame/python-pygame.mk
+>> @@ -92,6 +92,13 @@ define PYTHON_PYGAME_REMOVE_TESTS
+>>  	rm -rf $(TARGET_DIR)/usr/lib/python*/site-packages/pygame/tests
+>>  endef
+>>  
+>> +ifneq ($(BR2_PACKAGE_PYTHON_PYGAME_EXAMPLES),y)
+>> +define PYTHON_PYGAME_REMOVE_EXAMPLES
+>> +	rm -rf $(TARGET_DIR)/usr/lib/python*/site-packages/pygame/examples
+>                                       ^^
+> I'm not a fan of usign a wildcard here.
 > 
-
-[snip[
-
->> +if [ ! -f /srv/pgsql/data/PG_VERSION ]; then
+> Can you checks with something like:
+>     rm -rf $(TARGET_DIR)/usr/lib/python$$(PYTHON_VERSION_MAJOR)/site-packages/pygame/examples
 > 
-> I thought we changed to /var/lib/pgsql ?
-> 
-> Maybe you should create a variable that contains /var/lib/pgsql to
-> avoid this duplication.
+> (Yes, two '$' signs, which makes the variable expanded later, at call
+> time, not at parse time.)
 
- I'm opposed to such variables, I don't see how they give an advantage:
+ It's inside a define so it will anyway only be expanded when
+PYTHON_PYGAME_REMOVE_EXAMPLES is expanded. In addition, this will be
+expanded only inside a rule, which means that the expansion is delayed
+until it is executed, not just until the rule is parsed (in the
+evaluation of the python-package macro).
 
-- they make the code less readable (you have to look up what
-POSTGRESQL_DATABASE_PATH expands to);
-
-- they make the code longer (extra line for the assignment, and
-POSTGRESQL_DATABASE_PATH is not significantly shorter than /var/lib/pgsql);
-
-- changing the path is quite trivial as long as it stays in the same file
-(I admit that I assume that you vi-users know how to escape a /).
-
+ In fact, with a double dollar it will not get expanded at all (I think).
 
  Regards,
  Arnout
 
-[snip]
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+>> +endef
+>> +PYTHON_PYGAME_POST_INSTALL_TARGET_HOOKS += PYTHON_PYGAME_REMOVE_EXAMPLES
+>> +endif
+>> +
+>>  PYTHON_PYGAME_POST_INSTALL_TARGET_HOOKS += PYTHON_PYGAME_REMOVE_TESTS
+>>  
+>>  $(eval $(python-package))
+>> -- 
+>> 1.9.0
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
