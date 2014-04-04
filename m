@@ -1,47 +1,53 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri,  4 Apr 2014 07:18:14 +0200
-Subject: [Buildroot] [PATCH v5 8/8] sdl: Add new dependency libglu for
-	opengl support
-In-Reply-To: <1396588694-6377-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1396588694-6377-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1396588694-6377-9-git-send-email-bernd.kuhls@t-online.de>
+Date: Fri,  4 Apr 2014 07:18:06 +0200
+Subject: [Buildroot] [PATCH v5 0/8] Add new libraries for XBMC Gotham
+Message-ID: <1396588694-6377-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Changelog:
+v5: - rebased
+    - updated libva (Thomas)
+    - include only git-ready patches (X11 intel driver will follow in a seperate patch)
+v4: - rebased
+    - removed flac version bump (Gustavo)
+    - removed libfs version bump https://github.com/OpenELEC/OpenELEC.tv/commit/b55859
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/sdl/sdl.mk |    6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Regards, Bernd
 
-diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
-index 086f5e9..fa68198 100644
---- a/package/sdl/sdl.mk
-+++ b/package/sdl/sdl.mk
-@@ -62,9 +62,12 @@ SDL_DEPENDENCIES += alsa-lib
- endif
- 
- ifeq ($(BR2_PACKAGE_MESA3D),y)
--SDL_DEPENDENCIES += mesa3d
-+SDL_DEPENDENCIES += libglu mesa3d
-+SDL_CONF_OPT += --enable-video-opengl
- endif
- 
-+SDL_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBICONV),libiconv)
-+
- SDL_CONF_OPT += --enable-pulseaudio=no \
- 		--disable-arts \
- 		--disable-esd \
-@@ -72,6 +75,7 @@ SDL_CONF_OPT += --enable-pulseaudio=no \
- 		--disable-video-ps3
- 
- HOST_SDL_CONF_OPT += --enable-pulseaudio=no \
-+		--enable-video-x11=no \
- 		--disable-arts \
- 		--disable-esd \
- 		--disable-nasm \
+Bernd Kuhls (8):
+  libdrm: Explain dependency on xorg in Kconfig
+  mesa3d: Explain dependency for i965 DRI driver on xorg in Kconfig
+  libva: new package
+  libva-intel-driver: new package
+  ffmpeg: Add libva support
+  libglu: new package
+  libglew: new package
+  sdl: Add new dependency libglu for opengl support
+
+ package/mesa3d/Config.in                              |    4 ----
+ package/opengl/Config.in                              |    1 -
+ package/opengl/libgl/Config.in                        |    6 ------
+ package/opengl/libgl/libgl.mk                         |   16 ----------------
+ package/vlc/vlc.mk                                    |    4 ++--
+ package/x11r7/xdriver_xf86-video-ati/Config.in        |    5 +----
+ package/x11r7/xdriver_xf86-video-glint/Config.in      |    5 +----
+ package/x11r7/xdriver_xf86-video-intel/Config.in      |    7 ++-----
+ package/x11r7/xdriver_xf86-video-mach64/Config.in     |    3 ---
+ package/x11r7/xdriver_xf86-video-mga/Config.in        |    5 +----
+ package/x11r7/xdriver_xf86-video-openchrome/Config.in |    5 +----
+ package/x11r7/xdriver_xf86-video-r128/Config.in       |    5 +----
+ package/x11r7/xdriver_xf86-video-savage/Config.in     |    5 +----
+ package/x11r7/xdriver_xf86-video-sis/Config.in        |    5 +----
+ package/x11r7/xdriver_xf86-video-tdfx/Config.in       |    5 +----
+ package/x11r7/xdriver_xf86-video-vmware/Config.in     |    5 +----
+ package/x11r7/xserver_xorg-server/Config.in           |    1 +
+ 17 files changed, 14 insertions(+), 73 deletions(-)
+ delete mode 100644 package/opengl/libgl/Config.in
+ delete mode 100644 package/opengl/libgl/libgl.mk
+
 -- 
 1.7.10.4
