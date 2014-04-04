@@ -1,26 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 4 Apr 2014 23:49:26 +0200
-Subject: [Buildroot] [PATCH] gmp: bump to version 6.0.0a
-In-Reply-To: <1396534496-20980-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1396534496-20980-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140404234926.1b4f72d5@skate>
+Date: Fri, 4 Apr 2014 23:50:10 +0200
+Subject: [Buildroot] [PATCH] util-linux: bump version to 2.24.1
+In-Reply-To: <1396536052-21336-1-git-send-email-Anton.Kolesov@synopsys.com>
+References: <1396536052-21336-1-git-send-email-Anton.Kolesov@synopsys.com>
+Message-ID: <20140404235010.194cbb55@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Anton Kolesov,
 
-On Thu,  3 Apr 2014 11:14:56 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/gmp/gmp.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+On Thu,  3 Apr 2014 18:40:52 +0400, Anton Kolesov wrote:
+> From: Mischa Jonker <mjonker@synopsys.com>
+> 
+> Removed "support older machines" patch as it has been fixed upstream,
+> fixed up other patches.
+> 
+> This removes some arch-dependencies in fdiskbsdlabel.h, fixing the
+> build for the ARC-architecture.
+> 
+> This fixes:
+> http://autobuild.buildroot.net/results/8863799d856ccab51ee8ffd499378574ef166aee/
+> 
+> Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
+> Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
 
-Fails to build on ARM Thumb2:
+This breaks the build on AVR32:
 
-  http://autobuild.buildroot.org/results/f44/f447ce933ad8dd975b17aeda03cc46b0cace0b03/build-end.log
+  http://autobuild.buildroot.org/results/45f/45ffc56784160447c6594354cc3fbab7fa94c196/build-end.log
+
+Error is undefined reference to `mkostemp', most likely due to the old
+uClibc used on AVR32.
 
 Thomas
 -- 
