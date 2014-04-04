@@ -1,10 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri,  4 Apr 2014 07:18:08 +0200
-Subject: [Buildroot] [PATCH v5 2/8] mesa3d: Explain dependency for i965 DRI
-	driver on xorg in Kconfig
+Date: Fri,  4 Apr 2014 07:18:11 +0200
+Subject: [Buildroot] [PATCH v5 5/8] ffmpeg: Add libva support
 In-Reply-To: <1396588694-6377-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1396588694-6377-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1396588694-6377-3-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1396588694-6377-6-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,22 +13,34 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mesa3d/Config.in |    3 +++
- 1 file changed, 3 insertions(+)
+ package/ffmpeg/ffmpeg.mk |    8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index f3d855b..12ec068 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -77,6 +77,9 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER_I965
- 	help
- 	  Supports all Intel GPUs.  This version is most supported by Intel.
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index fae558a..d3acffc 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -41,7 +41,6 @@ FFMPEG_CONF_OPT = \
+ 	--enable-mdct \
+ 	--enable-rdft \
+ 	--disable-crystalhd \
+-	--disable-vaapi \
+ 	--disable-vdpau \
+ 	--disable-dxva2 \
+ 	--enable-runtime-cpudetect \
+@@ -209,6 +208,13 @@ FFMPEG_CONF_OPT += \
+ 	--enable-encoder=libvorbis
+ endif
  
-+comment "DRI i965 driver depends on X.org"
-+	depends on !BR2_PACKAGE_XORG7
++ifeq ($(BR2_PACKAGE_LIBVA),y)
++FFMPEG_CONF_OPT += --enable-vaapi
++FFMPEG_DEPENDENCIES += libva
++else
++FFMPEG_CONF_OPT += --disable-vaapi
++endif
 +
- config BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
- 	bool "DRI radeon driver"
- 	depends on BR2_i386 || BR2_x86_64
+ ifeq ($(BR2_X86_CPU_HAS_MMX),y)
+ FFMPEG_CONF_OPT += --enable-yasm
+ FFMPEG_DEPENDENCIES += host-yasm
 -- 
 1.7.10.4
