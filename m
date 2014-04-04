@@ -1,33 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 4 Apr 2014 23:46:07 +0200
-Subject: [Buildroot] [PATCH v2 2/4] infra: add to luarocks support for
- top-level parallel make
-In-Reply-To: <1396343572-13551-3-git-send-email-fabio.porcedda@gmail.com>
-References: <1396343572-13551-1-git-send-email-fabio.porcedda@gmail.com>
- <1396343572-13551-3-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <20140404234607.6af8dff9@skate>
+Date: Fri, 4 Apr 2014 23:47:50 +0200
+Subject: [Buildroot] [PATCH 1/1] eudev : bump version to 1.5.3
+In-Reply-To: <1396132833-20016-1-git-send-email-sagaert.johan@skynet.be>
+References: <1396132833-20016-1-git-send-email-sagaert.johan@skynet.be>
+Message-ID: <20140404234750.235d34d0@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fabio Porcedda,
+Dear Sagaert Johan,
 
-On Tue,  1 Apr 2014 11:12:50 +0200, Fabio Porcedda wrote:
-> The host-luarock dependency is not always satisfied for the extract
-> phase because the %-extract target is not anymore in the dependency
-> chain.
-> To be sure that the dependency is satisfied add the dependency to the
-> stamp file $(%_TARGET_EXTRACT) instead of the %-extract target.
-> 
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-> Cc: Francois Perrad <fperrad@gmail.com>
+On Sat, 29 Mar 2014 23:40:33 +0100, Sagaert Johan wrote:
+> Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
 > ---
->  package/pkg-luarocks.mk | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+>  package/eudev/eudev.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied, thanks.
+Applied, thanks!
 
 Thomas
 -- 
