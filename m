@@ -1,59 +1,47 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 04 Apr 2014 07:59:05 +0200
-Subject: [Buildroot] [PATCH v3 1/1] manual/configure.txt: fix typo
-In-Reply-To: <1396560067-14091-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1396560067-14091-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <533E4A29.2070009@mind.be>
+Date: Fri, 04 Apr 2014 08:04:16 +0200
+Subject: [Buildroot] [PATCH] postgresql: new package
+In-Reply-To: <20140403223952.37034a1a@skate>
+References: <1396249169-14126-1-git-send-email-ps.report@gmx.net>
+ <20140403223952.37034a1a@skate>
+Message-ID: <533E4B60.8090804@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/04/14 23:21, Jerzy Grzegorek wrote:
-> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+On 03/04/14 22:39, Thomas Petazzoni wrote:
+> Dear Peter Seiderer,
+> 
+> On Mon, 31 Mar 2014 08:59:29 +0200, Peter Seiderer wrote:
+> 
 
- Could you add to the commit log _why_ this is a typo? You're removing a
-backslash in one place and adding it in another place, so it is not at
-all obvious why this is the correct thing to do. In fact, it's not a
-typo, it's a formatting error.
+[snip[
+
+>> +if [ ! -f /srv/pgsql/data/PG_VERSION ]; then
+> 
+> I thought we changed to /var/lib/pgsql ?
+> 
+> Maybe you should create a variable that contains /var/lib/pgsql to
+> avoid this duplication.
+
+ I'm opposed to such variables, I don't see how they give an advantage:
+
+- they make the code less readable (you have to look up what
+POSTGRESQL_DATABASE_PATH expands to);
+
+- they make the code longer (extra line for the assignment, and
+POSTGRESQL_DATABASE_PATH is not significantly shorter than /var/lib/pgsql);
+
+- changing the path is quite trivial as long as it stays in the same file
+(I admit that I assume that you vi-users know how to escape a /).
+
 
  Regards,
  Arnout
 
-> ---
-> v3:
->  - rebase on top of the master
-> v2:
->  - remove only one backslash
-> 
->  docs/manual/configure.txt |    4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
-> index c1c9477..ee5e65e 100644
-> --- a/docs/manual/configure.txt
-> +++ b/docs/manual/configure.txt
-> @@ -100,7 +100,7 @@ most important ones allow to:
->     toolchain should have largefile support (i.e. support for files
->     larger than 2 GB on 32 bits systems), IPv6 support, RPC support
->     (used mainly for NFS), wide-char support, locale support (for
-> -   internationalization), C\++ support or thread support. Depending on
-> +   internationalization), C++ support or thread support. Depending on
->     which options you choose, the number of userspace applications and
->     libraries visible in Buildroot menus will change: many applications
->     and libraries require certain toolchain options to be enabled. Most
-> @@ -165,7 +165,7 @@ Then, you have three solutions to use an external toolchain:
->    prefix+ and +External toolchain C library+ options. Then, you have
->    to tell Buildroot what your external toolchain supports. If your
->    external toolchain uses the 'glibc' library, you only have to tell
-> -  whether your toolchain supports C++ or not and whether it has
-> +  whether your toolchain supports C\++ or not and whether it has
->    built-in RPC support. If your external toolchain uses the 'uClibc'
->    library, then you have to tell Buildroot if it supports largefile,
->    IPv6, RPC, wide-char, locale, program invocation, threads and
-> 
-
+[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
