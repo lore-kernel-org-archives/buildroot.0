@@ -1,43 +1,57 @@
-From: Anton Kolesov <Anton.Kolesov@synopsys.com>
-Date: Fri,  4 Apr 2014 20:04:38 +0400
-Subject: [Buildroot] [PATCH] linphone: arc: Undefine __arc__ when building
-	for ARC processors
-Message-ID: <1396627478-13712-1-git-send-email-Anton.Kolesov@synopsys.com>
+From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@freescale.com>
+Date: Fri, 4 Apr 2014 18:37:02 +0200
+Subject: [Buildroot] [PATCH] configs: add Freescale SABRE Auto board support
+Message-ID: <1396629422-24577-1-git-send-email-vincent.stehle@freescale.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch is similar to 821a6d63. Libexosip2 defines symbol __arc__, which
-gets in contradiction with same symbol defined by the GCC for the Synopsys
-DesignWare ARC cores. Previous patch undefined __arc__ for libosip2 and
-libexosip2, however linphone includes headers from libexosip2, which causes
-build failure unless same patch is applied to it.
+SABRE Board for Automotive Infotainment (SABRE Auto, a.k.a. SABRE-AI) is
+Freescale's evaluation board based on the i.MX 6 ARM Cortex-A9 applications
+processor.
 
-This patch fixes
-http://autobuild.buildroot.net/results/0d2e19d40d6d0df4048e6ebae5f77022f89ca7cb/
+This defconfig is an adaptation of freescale_imx6sabresd_defconfig for SABRE
+Auto, and is based on Freescale "official" git repo on git.freescale.com and SW
+release 3.0.35_4.1.0.
 
-Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
+Signed-off-by: Vincent Stehl? <vincent.stehle@freescale.com>
+Cc: Gilles Talis <gilles.talis@gmail.com>
+Cc: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/linphone/linphone.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ configs/freescale_imx6sabreauto_defconfig | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
+ create mode 100644 configs/freescale_imx6sabreauto_defconfig
 
-diff --git a/package/linphone/linphone.mk b/package/linphone/linphone.mk
-index 91830ae..5e960a0 100644
---- a/package/linphone/linphone.mk
-+++ b/package/linphone/linphone.mk
-@@ -17,6 +17,11 @@ LINPHONE_DEPENDENCIES = host-pkgconf ortp mediastreamer libeXosip2 speex
- LINPHONE_LICENSE = GPLv2+
- LINPHONE_LICENSE_FILES = COPYING
- 
-+ifeq ($(BR2_arc),y)
-+# toolchain __arc__ define conflicts with libosip2 source
-+LINPHONE_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -U__arc__"
-+endif
+diff --git a/configs/freescale_imx6sabreauto_defconfig b/configs/freescale_imx6sabreauto_defconfig
+new file mode 100644
+index 0000000..1b99a6f
+--- /dev/null
++++ b/configs/freescale_imx6sabreauto_defconfig
+@@ -0,0 +1,23 @@
++# architecture
++BR2_arm=y
++BR2_cortex_a9=y
 +
- ifeq ($(BR2_PACKAGE_LIBGTK2)$(BR2_PACKAGE_XORG7),yy)
- LINPHONE_CONF_OPT += --enable-gtk_ui
- LINPHONE_DEPENDENCIES += libgtk2
++# system
++BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
++
++# kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.0.35_4.1.0"
++BR2_LINUX_KERNEL_DEFCONFIG="imx6"
++
++# filesystem
++BR2_TARGET_ROOTFS_EXT2=y
++
++# bootloader
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="mx6q_sabreauto"
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.0.35_4.1.0"
 -- 
-1.8.4.1
+1.9.1
