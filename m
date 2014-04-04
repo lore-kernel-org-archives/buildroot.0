@@ -1,41 +1,147 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 4 Apr 2014 23:32:35 +0200
-Subject: [Buildroot] [git commit] network-manager: Don't build Qt example
-	programs
-Message-ID: <20140404213825.663029C552@busybox.osuosl.org>
+Date: Fri, 4 Apr 2014 23:34:03 +0200
+Subject: [Buildroot] [git commit] systemd: revert use of ln relative option.
+Message-ID: <20140404213825.6F0CC9A851@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=28572ccbc28aa63af8082d69df84797a3718e195
+commit: http://git.buildroot.net/buildroot/commit/?id=9ac29d7de8f3d01a44979dc35f34f71e0e386953
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The purpose of "--enable-qt" option is not to build NetworkManager with
-Qt support. It's name can be a bit confusing. The real purpose of this
-option is to build Qt example programs, so we disable it as we also
-disable the tests and documentation in the target.
+Systemd build system now uses the `--relative` option from `ln(1)`.
+This option was added to GNU coreutils 8.16, which is not widely
+deployed yet by GNU/Linux distributions (not available in Debian Wheezy
+for example).
 
-Fixes:
-   http://autobuild.buildroot.net/results/3b6/3b6a40c1683d0859a934e4d79e2048e97b193e94/
+Fixes: http://autobuild.buildroot.net/results/354/3546c003a8fcbb36ef5ba29c00a96e473b927ecb/
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/network-manager/network-manager.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ ...uild-sys-revert-use-of-ln-relative-option.patch |  115 ++++++++++++++++++++
+ 1 files changed, 115 insertions(+), 0 deletions(-)
 
-diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-index 24bae63..1953888 100644
---- a/package/network-manager/network-manager.mk
-+++ b/package/network-manager/network-manager.mk
-@@ -24,6 +24,7 @@ NETWORK_MANAGER_CONF_ENV = \
- NETWORK_MANAGER_CONF_OPT = \
- 		--mandir=$(STAGING_DIR)/usr/man/ \
- 		--disable-tests \
-+		--disable-qt \
- 		--disable-more-warnings \
- 		--without-docs \
- 		--disable-gtk-doc \
+diff --git a/package/systemd/systemd-02-build-sys-revert-use-of-ln-relative-option.patch b/package/systemd/systemd-02-build-sys-revert-use-of-ln-relative-option.patch
+new file mode 100644
+index 0000000..003d380
+--- /dev/null
++++ b/package/systemd/systemd-02-build-sys-revert-use-of-ln-relative-option.patch
+@@ -0,0 +1,115 @@
++From a371e13f4400700d28c1a96767b3b28b0807bb1f Mon Sep 17 00:00:00 2001
++From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
++Date: Fri, 4 Apr 2014 11:13:23 +0200
++Subject: [PATCH] build-sys: revert use of ln relative option.
++
++Systemd build system now uses the `--relative` option from `ln(1)`.
++This option was added to GNU coreutils 8.16, which is not widely
++deployed yet by GNU/Linux distributions (not available in Debian Wheezy
++for example).
++
++This patch reverts the following commits:
++
++- "build-sys: Fix move-to-rootlibdir"
++- "build-sys: work around broken ln --relative -s -f"
++- "build-sys: prefer using ln --relative -s where appropriate"
++
++Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
++---
++ Makefile.am |   30 ++++++++----------------------
++ 1 file changed, 8 insertions(+), 22 deletions(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index 3d9e5c1..acb25c4 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -208,8 +208,8 @@ define move-to-rootlibdir
++ 	if test "$(libdir)" != "$(rootlibdir)"; then \
++ 		$(MKDIR_P) $(DESTDIR)$(rootlibdir) && \
++ 		so_img_name=$$(readlink $(DESTDIR)$(libdir)/$$libname) && \
++-		rm -f $(DESTDIR)$(libdir)/$$libname && \
++-		$(LN_S) --relative -f $(DESTDIR)$(rootlibdir)/$$so_img_name $(DESTDIR)$(libdir)/$$libname && \
+++		so_img_rel_target_prefix=$$(echo $(libdir) | sed 's,\(^/\|\)[^/][^/]*,..,g') && \
+++		$(LN_S) -f $$so_img_rel_target_prefix$(rootlibdir)/$$so_img_name $(DESTDIR)$(libdir)/$$libname && \
++ 		mv $(DESTDIR)$(libdir)/$$libname.* $(DESTDIR)$(rootlibdir); \
++ 	fi
++ endef
++@@ -233,6 +233,7 @@ USER_BUSNAMES_TARGET_WANTS =
++ 
++ SYSTEM_UNIT_ALIASES =
++ USER_UNIT_ALIASES =
+++
++ GENERAL_ALIASES =
++ 
++ install-target-wants-hook:
++@@ -268,9 +269,9 @@ install-aliases-hook:
++ 	set -- $(SYSTEM_UNIT_ALIASES) && \
++ 		dir=$(systemunitdir) && $(install-aliases)
++ 	set -- $(USER_UNIT_ALIASES) && \
++-		dir=$(userunitdir) && $(install-relative-aliases)
+++		dir=$(userunitdir) && $(install-aliases)
++ 	set -- $(GENERAL_ALIASES) && \
++-		dir= && $(install-relative-aliases)
+++		dir= && $(install-aliases)
++ 
++ define install-aliases
++ 	while [ -n "$$1" ]; do \
++@@ -281,15 +282,6 @@ define install-aliases
++ 	done
++ endef
++ 
++-define install-relative-aliases
++-	while [ -n "$$1" ]; do \
++-		$(MKDIR_P) `dirname $(DESTDIR)$$dir/$$2` && \
++-		rm -f $(DESTDIR)$$dir/$$2 && \
++-		$(LN_S) --relative $(DESTDIR)$$1 $(DESTDIR)$$dir/$$2 && \
++-		shift 2 || exit $$?; \
++-	done
++-endef
++-
++ INSTALL_EXEC_HOOKS += \
++ 	install-target-wants-hook \
++ 	install-directories-hook \
++@@ -312,10 +304,6 @@ AM_V_LN = $(AM_V_LN_$(V))
++ AM_V_LN_ = $(AM_V_LN_$(AM_DEFAULT_VERBOSITY))
++ AM_V_LN_0 = @echo "  LN      " $@;
++ 
++-AM_V_RM = $(AM_V_RM_$(V))
++-AM_V_RM_ = $(AM_V_RM_$(AM_DEFAULT_VERBOSITY))
++-AM_V_RM_0 = @echo "  RM      " $@;
++-
++ # ------------------------------------------------------------------------------
++ rootbin_PROGRAMS = \
++ 	systemctl \
++@@ -1884,8 +1872,7 @@ systemd_dbus1_generator_LDADD = \
++ 
++ dbus1-generator-install-hook:
++ 	$(AM_V_at)$(MKDIR_P) $(DESTDIR)$(usergeneratordir)
++-	$(AM_V_RM)rm -f $(DESTDIR)$(usergeneratordir)/systemd-dbus1-generator
++-	$(AM_V_LN)$(LN_S) --relative -f $(DESTDIR)$(systemgeneratordir)/systemd-dbus1-generator $(DESTDIR)$(usergeneratordir)/systemd-dbus1-generator
+++	$(AM_V_LN)$(LN_S) -f $(systemgeneratordir)/systemd-dbus1-generator $(DESTDIR)$(usergeneratordir)/systemd-dbus1-generator
++ 
++ dbus1-generator-uninstall-hook:
++ 	rm -f $(DESTDIR)$(usergeneratordir)/systemd-dbus1-generator
++@@ -2017,8 +2004,7 @@ systemd_bus_proxyd_LDADD = \
++ 
++ bus-proxyd-install-hook:
++ 	$(AM_V_at)$(MKDIR_P) $(DESTDIR)$(bindir)
++-	$(AM_V_RM)rm -f $(DESTDIR)$(bindir)/systemd-stdio-bridge
++-	$(AM_V_LN)$(LN_S) --relative -f $(DESTDIR)$(rootlibexecdir)/systemd-bus-proxyd $(DESTDIR)$(bindir)/systemd-stdio-bridge
+++	$(AM_V_LN)$(LN_S) -f $(rootlibexecdir)/systemd-bus-proxyd $(DESTDIR)$(bindir)/systemd-stdio-bridge
++ 
++ bus-proxyd-uninstall-hook:
++ 	rm -f $(DESTDIR)$(bindir)/systemd-stdio-bridge
++@@ -4959,7 +4945,7 @@ GENERAL_ALIASES += \
++ 	$(systemunitdir)/remote-fs.target $(pkgsysconfdir)/system/multi-user.target.wants/remote-fs.target \
++ 	$(systemunitdir)/getty at .service $(pkgsysconfdir)/system/getty.target.wants/getty at tty1.service \
++ 	$(pkgsysconfdir)/user $(sysconfdir)/xdg/systemd/user \
++-	$(dbussystemservicedir)/org.freedesktop.systemd1.service $(dbussessionservicedir)/org.freedesktop.systemd1.service
+++	../system-services/org.freedesktop.systemd1.service $(dbussessionservicedir)/org.freedesktop.systemd1.service
++ 
++ if HAVE_SYSV_COMPAT
++ INSTALL_DIRS += \
++-- 
++1.7.9.5
++
