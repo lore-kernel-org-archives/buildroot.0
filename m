@@ -1,35 +1,31 @@
-From: Vincent =?utf-8?b?U3RlaGzDqQ==?= <vincent.stehle@laposte.net>
-Date: Fri, 4 Apr 2014 21:21:46 +0000 (UTC)
-Subject: [Buildroot] host-binutils broken?
-References: <533EED51.9090204@freescale.com>
- <CAMo8BfJhxpqBFmFeADF97cKbANtzNFYy2_L=wrMjLn8zUtinyw@mail.gmail.com>
-Message-ID: <loom.20140404T230545-334@post.gmane.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 4 Apr 2014 23:30:23 +0200
+Subject: [Buildroot] [PATCH 1/2] lua-expat: bump to version 1.3.0
+In-Reply-To: <1396638907-14054-1-git-send-email-francois.perrad@gadz.org>
+References: <1396638907-14054-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20140404233023.5ceb3fba@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Max Filippov <jcmvbkbc@...> writes:
-> I couldn't reproduce it,
-(..)
-> Could you please share your .config and build log?
+Dear Francois Perrad,
 
-Hi Max,
+On Fri,  4 Apr 2014 21:15:06 +0200, Francois Perrad wrote:
+> which is now compatible with Lua 5.2
+> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/luaexpat/Config.in      |    4 ----
+>  package/luaexpat/luaexpat.mk    |    2 +-
+>  package/luaexpatutils/Config.in |    4 ----
+>  3 files changed, 1 insertion(+), 9 deletions(-)
 
-Thanks for looking into this issue. I could reproduce it at home in the 
-following way:
+Both patches applied, thanks!
 
-  $ git clean -fdx
-  $ git checkout f90760fe0ed7317510bc6f44c5508e2072ed217d
-  $ make raspberrypi_defconfig
-  $ make |& tee log
-
-It "chokes" when making as.info, during install-am.
-
-Here is the log: http://pastebin.com/nsUjcZXf
-And here is the .config: http://pastebin.com/cyuKb9yA
-
-Best regards,
-
-V.
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
