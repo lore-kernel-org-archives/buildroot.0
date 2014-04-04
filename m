@@ -1,42 +1,43 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 4 Apr 2014 17:35:32 +0200
-Subject: [Buildroot] [PATCH] network-manager: Don't build Qt example
-	programs
-In-Reply-To: <1396624973-58181-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1396624973-58181-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <CAGm1_kvAuADo09UdVsCTcSNyJiXExiyMCmJt5ODgXRBvmKTbmw@mail.gmail.com>
+From: Anton Kolesov <Anton.Kolesov@synopsys.com>
+Date: Fri,  4 Apr 2014 20:04:38 +0400
+Subject: [Buildroot] [PATCH] linphone: arc: Undefine __arc__ when building
+	for ARC processors
+Message-ID: <1396627478-13712-1-git-send-email-Anton.Kolesov@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Apr 4, 2014 at 5:22 PM, Vicente Olivert Riera
-<Vincent.Riera@imgtec.com> wrote:
-> The purpose of "--enable-qt" option is not to build NetworkManager with
-> Qt support. It's name can be a bit confusing. The real purpose of this
-> option is to build Qt example programs, so we disable it as we also
-> disable the tests and documentation in the target.
->
-> Fixes:
->    http://autobuild.buildroot.net/results/3b6/3b6a40c1683d0859a934e4d79e2048e97b193e94/
->
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/network-manager/network-manager.mk |    1 +
->  1 files changed, 1 insertions(+), 0 deletions(-)
->
-> diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-> index 24bae63..1953888 100644
-> --- a/package/network-manager/network-manager.mk
-> +++ b/package/network-manager/network-manager.mk
-> @@ -24,6 +24,7 @@ NETWORK_MANAGER_CONF_ENV = \
->  NETWORK_MANAGER_CONF_OPT = \
->                 --mandir=$(STAGING_DIR)/usr/man/ \
->                 --disable-tests \
-> +               --disable-qt \
->                 --disable-more-warnings \
->                 --without-docs \
->                 --disable-gtk-doc \
+This patch is similar to 821a6d63. Libexosip2 defines symbol __arc__, which
+gets in contradiction with same symbol defined by the GCC for the Synopsys
+DesignWare ARC cores. Previous patch undefined __arc__ for libosip2 and
+libexosip2, however linphone includes headers from libexosip2, which causes
+build failure unless same patch is applied to it.
 
-Tested-by: Yegor Yefremov <yegorslists@googlemail.com>
+This patch fixes
+http://autobuild.buildroot.net/results/0d2e19d40d6d0df4048e6ebae5f77022f89ca7cb/
+
+Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
+---
+ package/linphone/linphone.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/package/linphone/linphone.mk b/package/linphone/linphone.mk
+index 91830ae..5e960a0 100644
+--- a/package/linphone/linphone.mk
++++ b/package/linphone/linphone.mk
+@@ -17,6 +17,11 @@ LINPHONE_DEPENDENCIES = host-pkgconf ortp mediastreamer libeXosip2 speex
+ LINPHONE_LICENSE = GPLv2+
+ LINPHONE_LICENSE_FILES = COPYING
+ 
++ifeq ($(BR2_arc),y)
++# toolchain __arc__ define conflicts with libosip2 source
++LINPHONE_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -U__arc__"
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBGTK2)$(BR2_PACKAGE_XORG7),yy)
+ LINPHONE_CONF_OPT += --enable-gtk_ui
+ LINPHONE_DEPENDENCIES += libgtk2
+-- 
+1.8.4.1
