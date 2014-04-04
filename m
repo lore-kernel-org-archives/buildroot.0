@@ -1,41 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 4 Apr 2014 23:50:55 +0200
-Subject: [Buildroot] [PATCHv2] pptp-linux: bump to version 1.8.0
-In-Reply-To: <1396300329-12942-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1396300329-12942-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140404235055.39b4ce52@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri,  4 Apr 2014 19:29:46 -0300
+Subject: [Buildroot] [PATCH] ptpd2: handle snmp optional dep
+Message-ID: <1396650586-19093-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Handle the optional net-snmp dep or be explicit in disabling it since
+since it can pick up a distribution net-snmp-config and pollute
+everything. Hopefully fixes:
+http://autobuild.buildroot.net/results/5bd/5bdfcf544a83e18d12e27c598084c0ad520d6164/
 
-On Mon, 31 Mar 2014 18:12:09 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  .../pptp-linux/pptp-linux-001-susv3-legacy.patch   | 43 +++++++++++----------
->  .../pptp-linux/pptp-linux-002-drop-stropts.patch   | 26 -------------
->  ...tch => pptp-linux-002-fix-parallel-build.patch} |  0
->  package/pptp-linux/pptp-linux-003-ip-path.patch    | 44 ----------------------
->  package/pptp-linux/pptp-linux.mk                   |  5 ++-
->  5 files changed, 27 insertions(+), 91 deletions(-)
->  delete mode 100644 package/pptp-linux/pptp-linux-002-drop-stropts.patch
->  rename package/pptp-linux/{pptp-linux-004-fix-parallel-build.patch => pptp-linux-002-fix-parallel-build.patch} (100%)
->  delete mode 100644 package/pptp-linux/pptp-linux-003-ip-path.patch
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/ptpd2/ptpd2.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Seems to break the build on ARM:
-
-  http://autobuild.buildroot.org/results/5bd/5bdfcf544a83e18d12e27c598084c0ad520d6164/build-end.log
-
-{standard input}: Assembler messages:
-{standard input}:225: Error: bad instruction `rorw $8,'
-{standard input}:225: Error: bad instruction `rorl $16,r2'
-{standard input}:225: Error: bad instruction `rorw $8,'
-
-Thomas
+diff --git a/package/ptpd2/ptpd2.mk b/package/ptpd2/ptpd2.mk
+index a5d1aff..3133726 100644
+--- a/package/ptpd2/ptpd2.mk
++++ b/package/ptpd2/ptpd2.mk
+@@ -13,6 +13,13 @@ PTPD2_AUTORECONF = YES
+ PTPD2_LICENSE = BSD-2c
+ PTPD2_LICENSE_FILES = COPYRIGHT
+ 
++ifeq ($(BR2_PACKAGE_NETSNMP),y)
++	PTPD2_CONF_ENV += ac_cv_path_PATH_NET_SNMP_CONFIG=$(STAGING_DIR)/usr/bin/net-snmp-config
++	PTPD2_DEPENDENCIES += netsnmp
++else
++	PTPD2_CONF_OPT += --disable-snmp
++endif
++
+ define PTPD2_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 755 -D package/ptpd2/S65ptpd2 \
+ 		$(TARGET_DIR)/etc/init.d/S65ptpd2
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.3.2
