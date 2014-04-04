@@ -1,69 +1,87 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 4 Apr 2014 23:29:36 +0200
-Subject: [Buildroot] [git commit] lua-expat: bump to version 1.3.0
-Message-ID: <20140404213202.D56149C552@busybox.osuosl.org>
+Date: Fri, 4 Apr 2014 23:31:06 +0200
+Subject: [Buildroot] [git commit] script/scancpan: add -host & -target
+	options
+Message-ID: <20140404213202.E33EA9C552@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7dcbaa1a08723059d9bd045fc500f19a3e0ad3d8
+commit: http://git.buildroot.net/buildroot/commit/?id=0f33003a546df77908c65516dde725d4601268c0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-which is now compatible with Lua 5.2
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/luaexpat/Config.in      |    4 ----
- package/luaexpat/luaexpat.mk    |    2 +-
- package/luaexpatutils/Config.in |    4 ----
- 3 files changed, 1 insertions(+), 9 deletions(-)
+ support/scripts/scancpan |   24 ++++++++++++++++++------
+ 1 files changed, 18 insertions(+), 6 deletions(-)
 
-diff --git a/package/luaexpat/Config.in b/package/luaexpat/Config.in
-index 3394780..f8db318 100644
---- a/package/luaexpat/Config.in
-+++ b/package/luaexpat/Config.in
-@@ -2,11 +2,7 @@ config BR2_PACKAGE_LUAEXPAT
- 	bool "luaexpat"
- 	select BR2_PACKAGE_EXPAT
- 	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
--	depends on !BR2_PACKAGE_LUA_5_2
- 	help
- 	  LuaExpat is a SAX XML parser based on the Expat library.
+diff --git a/support/scripts/scancpan b/support/scripts/scancpan
+index 8d26795..dc62b47 100755
+--- a/support/scripts/scancpan
++++ b/support/scripts/scancpan
+@@ -482,11 +482,14 @@ use File::Basename;
+ use Module::CoreList;
+ use MetaCPAN::API::Tiny;
  
- 	  http://matthewwild.co.uk/projects/luaexpat/
--
--comment "luaexpat needs a Lua 5.1 interpreter"
--	depends on BR2_PACKAGE_LUA_5_2
-diff --git a/package/luaexpat/luaexpat.mk b/package/luaexpat/luaexpat.mk
-index d507c2a..c6768dc 100644
---- a/package/luaexpat/luaexpat.mk
-+++ b/package/luaexpat/luaexpat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-my ($help, $man, $quiet, $force, $recommend);
++my ($help, $man, $quiet, $force, $recommend, $host);
++my $target = 1;
+ GetOptions( 'help|?' => \$help,
+             'man' => \$man,
+             'quiet|q' => \$quiet,
+             'force|f' => \$force,
++            'host!' => \$host,
++            'target!' => \$target,
+             'recommend' => \$recommend
+ ) or pod2usage(-exitval => 1);
+ pod2usage(-exitval => 0) if $help;
+@@ -547,8 +550,8 @@ sub fetch {
+ }
  
--LUAEXPAT_VERSION = 1.2.0-1
-+LUAEXPAT_VERSION = 1.3.0-1
- LUAEXPAT_DEPENDENCIES = expat
- LUAEXPAT_LICENSE = MIT
+ foreach my $distname (@ARGV) {
+-    # Command-line's distributions are needed for target, not host
+-    fetch( $distname, 1, 0 );
++    # Command-line's distributions
++    fetch( $distname, !!$target, !!$host );
+ }
+ say scalar keys %dist, q{ packages fetched.} unless $quiet;
  
-diff --git a/package/luaexpatutils/Config.in b/package/luaexpatutils/Config.in
-index 333f98d..cb2887a 100644
---- a/package/luaexpatutils/Config.in
-+++ b/package/luaexpatutils/Config.in
-@@ -1,12 +1,8 @@
- config BR2_PACKAGE_LUAEXPATUTILS
- 	bool "luaexpatutils"
- 	select BR2_PACKAGE_LUAEXPAT
--	depends on !BR2_PACKAGE_LUA_5_2
- 	help
- 	  lxp.doc is a module that provides useful features for working with
- 	  XML formats in LOM format as used by the LuaExpat project from Kepler.
+@@ -660,6 +663,8 @@ supports/scripts/scancpan [options] [distname ...]
+    -man
+    -quiet
+    -force
++   -target/-notarget
++   -host/-nohost
+    -recommend
  
- 	  https://github.com/stevedonovan/LuaExpatUtils
--
--comment "luaexpatutils needs a Lua 5.1 interpreter"
--	depends on BR2_PACKAGE_LUA_5_2
+ =head1 OPTIONS
+@@ -682,6 +687,14 @@ Executes without output
+ 
+ Forces the overwriting of existing files.
+ 
++=item B<-target/-notarget>
++
++Switches package generation for the target variant (the default is C<-target>).
++
++=item B<-host/-nohost>
++
++Switches package generation for the host variant (the default is C<-nohost>).
++
+ =item B<-recommend>
+ 
+ Adds I<recommended> dependencies.
+@@ -695,9 +708,8 @@ Perl/CPAN distributions required by the specified distnames. The
+ dependencies and metadata are fetched from https://metacpan.org/.
+ 
+ After running this script, it is necessary to check the generated files.
+-You have to manually enable the host- version if you need it. You have to
+-manually add the license files (PERL_FOO_LICENSE_FILES variable). For
+-distributions that link against a target library, you have to add the
++You have to manually add the license files (PERL_FOO_LICENSE_FILES variable).
++For distributions that link against a target library, you have to add the
+ buildroot package name for that library to the DEPENDENCIES variable.
+ 
+ See the Buildroot documentation for details on the usage of the Perl
