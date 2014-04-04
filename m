@@ -1,57 +1,85 @@
-From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@freescale.com>
-Date: Fri, 4 Apr 2014 18:37:02 +0200
-Subject: [Buildroot] [PATCH] configs: add Freescale SABRE Auto board support
-Message-ID: <1396629422-24577-1-git-send-email-vincent.stehle@freescale.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Fri,  4 Apr 2014 19:10:33 +0200
+Subject: [Buildroot] [v2] script/scancpan: add -host & -target options
+Message-ID: <1396631433-29061-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-SABRE Board for Automotive Infotainment (SABRE Auto, a.k.a. SABRE-AI) is
-Freescale's evaluation board based on the i.MX 6 ARM Cortex-A9 applications
-processor.
 
-This defconfig is an adaptation of freescale_imx6sabresd_defconfig for SABRE
-Auto, and is based on Freescale "official" git repo on git.freescale.com and SW
-release 3.0.35_4.1.0.
-
-Signed-off-by: Vincent Stehl? <vincent.stehle@freescale.com>
-Cc: Gilles Talis <gilles.talis@gmail.com>
-Cc: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- configs/freescale_imx6sabreauto_defconfig | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
- create mode 100644 configs/freescale_imx6sabreauto_defconfig
+ support/scripts/scancpan |   24 ++++++++++++++++++------
+ 1 file changed, 18 insertions(+), 6 deletions(-)
 
-diff --git a/configs/freescale_imx6sabreauto_defconfig b/configs/freescale_imx6sabreauto_defconfig
-new file mode 100644
-index 0000000..1b99a6f
---- /dev/null
-+++ b/configs/freescale_imx6sabreauto_defconfig
-@@ -0,0 +1,23 @@
-+# architecture
-+BR2_arm=y
-+BR2_cortex_a9=y
+diff --git a/support/scripts/scancpan b/support/scripts/scancpan
+index 8d26795..dc62b47 100755
+--- a/support/scripts/scancpan
++++ b/support/scripts/scancpan
+@@ -482,11 +482,14 @@ use File::Basename;
+ use Module::CoreList;
+ use MetaCPAN::API::Tiny;
+ 
+-my ($help, $man, $quiet, $force, $recommend);
++my ($help, $man, $quiet, $force, $recommend, $host);
++my $target = 1;
+ GetOptions( 'help|?' => \$help,
+             'man' => \$man,
+             'quiet|q' => \$quiet,
+             'force|f' => \$force,
++            'host!' => \$host,
++            'target!' => \$target,
+             'recommend' => \$recommend
+ ) or pod2usage(-exitval => 1);
+ pod2usage(-exitval => 0) if $help;
+@@ -547,8 +550,8 @@ sub fetch {
+ }
+ 
+ foreach my $distname (@ARGV) {
+-    # Command-line's distributions are needed for target, not host
+-    fetch( $distname, 1, 0 );
++    # Command-line's distributions
++    fetch( $distname, !!$target, !!$host );
+ }
+ say scalar keys %dist, q{ packages fetched.} unless $quiet;
+ 
+@@ -660,6 +663,8 @@ supports/scripts/scancpan [options] [distname ...]
+    -man
+    -quiet
+    -force
++   -target/-notarget
++   -host/-nohost
+    -recommend
+ 
+ =head1 OPTIONS
+@@ -682,6 +687,14 @@ Executes without output
+ 
+ Forces the overwriting of existing files.
+ 
++=item B<-target/-notarget>
 +
-+# system
-+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
++Switches package generation for the target variant (the default is C<-target>).
 +
-+# kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.0.35_4.1.0"
-+BR2_LINUX_KERNEL_DEFCONFIG="imx6"
++=item B<-host/-nohost>
 +
-+# filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
++Switches package generation for the host variant (the default is C<-nohost>).
 +
-+# bootloader
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="mx6q_sabreauto"
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.0.35_4.1.0"
+ =item B<-recommend>
+ 
+ Adds I<recommended> dependencies.
+@@ -695,9 +708,8 @@ Perl/CPAN distributions required by the specified distnames. The
+ dependencies and metadata are fetched from https://metacpan.org/.
+ 
+ After running this script, it is necessary to check the generated files.
+-You have to manually enable the host- version if you need it. You have to
+-manually add the license files (PERL_FOO_LICENSE_FILES variable). For
+-distributions that link against a target library, you have to add the
++You have to manually add the license files (PERL_FOO_LICENSE_FILES variable).
++For distributions that link against a target library, you have to add the
+ buildroot package name for that library to the DEPENDENCIES variable.
+ 
+ See the Buildroot documentation for details on the usage of the Perl
 -- 
-1.9.1
+1.7.9.5
