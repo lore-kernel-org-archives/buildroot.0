@@ -1,55 +1,52 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Fri,  4 Apr 2014 21:15:07 +0200
-Subject: [Buildroot] [PATCH 2/2] luasec: bump to version 0.5
-In-Reply-To: <1396638907-14054-1-git-send-email-francois.perrad@gadz.org>
-References: <1396638907-14054-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1396638907-14054-2-git-send-email-francois.perrad@gadz.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 4 Apr 2014 21:18:22 +0200
+Subject: [Buildroot] [PATCH] postgresql: new package
+In-Reply-To: <533DD8E6.9000609@trzebnica.net>
+References: <1396249169-14126-1-git-send-email-ps.report@gmx.net>,
+ <533DD8E6.9000609@trzebnica.net>
+Message-ID: <trinity-98a66737-6ffb-4749-aac8-33bc61adf9a0-1396639102682@3capp-gmx-bs34>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-which is now compatible with Lua 5.2
+Hello Jerzy,
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/luasec/Config.in |    4 ----
- package/luasec/luasec.mk |    4 ++--
- 2 files changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/package/luasec/Config.in b/package/luasec/Config.in
-index 48aa766..ed55df7 100644
---- a/package/luasec/Config.in
-+++ b/package/luasec/Config.in
-@@ -3,12 +3,8 @@ config BR2_PACKAGE_LUASEC
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_LUASOCKET
- 	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
--	depends on !BR2_PACKAGE_LUA_5_2
- 	help
- 	  LuaSec is a binding for OpenSSL library to provide TLS/SSL
- 	  communication.
- 
- 	  http://www.inf.puc-rio.br/~brunoos/luasec/
--
--comment "luasec needs a Lua 5.1 interpreter"
--	depends on BR2_PACKAGE_LUA_5_2
-diff --git a/package/luasec/luasec.mk b/package/luasec/luasec.mk
-index 354e805..69f53b2 100644
---- a/package/luasec/luasec.mk
-+++ b/package/luasec/luasec.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--LUASEC_VERSION_UPSTREAM = 0.4.1
-+LUASEC_VERSION_UPSTREAM = 0.5
- LUASEC_VERSION = $(LUASEC_VERSION_UPSTREAM)-2
--LUASEC_SUBDIR  = luasec-luasec-$(LUASEC_VERSION_UPSTREAM)
-+LUASEC_SUBDIR  = luasec
- LUASEC_LICENSE = MIT
- LUASEC_LICENSE_FILES = $(LUASEC_SUBDIR)/LICENSE
- LUASEC_DEPENDENCIES = openssl
--- 
-1.7.9.5
+> Gesendet: Donnerstag, 03. April 2014 um 23:55 Uhr
+> Von: "Jerzy Grzegorek" <jerzy.grzegorek@trzebnica.net>
+> An: "Peter Seiderer" <ps.report@gmx.net>, buildroot at busybox.net
+> Betreff: Re: [Buildroot] [PATCH] postgresql: new package
+>
+[...]
+> 
+> > diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+> > new file mode 100644
+> > index 0000000..fee4aed
+> > --- /dev/null
+> > +++ b/package/postgresql/postgresql.mk
+> > @@ -0,0 +1,54 @@
+> > +################################################################################
+> > +#
+> > +# postgresql
+> > +#
+> > +################################################################################
+> > +
+> > +POSTGRESQL_VERSION = 9.3.3
+> > +POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+> > +POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+> > +POSTGRESQL_LICENSE = PostgreSQL
+> > +POSTGRESQ_LICENSE_FILES = COPYRIGHT
+> 
+> typo
+> POSTGRESQL_LICENSE_FILES = COPYRIGHT
+> 
+> 
+> Regards,
+> Jerzy
+> 
+
+Thank you for the review, will fix this on for the next version...
+Regards,
+Peter
