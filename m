@@ -1,28 +1,60 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 04 Apr 2014 07:30:09 +0200
-Subject: [Buildroot] new package not built, AR prefix not passed to make
-In-Reply-To: <504826970.101021.1396539134908.JavaMail.root@mail>
-References: <504826970.101021.1396539134908.JavaMail.root@mail>
-Message-ID: <533E4361.9000302@mind.be>
+Date: Fri, 04 Apr 2014 07:59:05 +0200
+Subject: [Buildroot] [PATCH v3 1/1] manual/configure.txt: fix typo
+In-Reply-To: <1396560067-14091-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+References: <1396560067-14091-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <533E4A29.2070009@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/04/14 17:32, ?meric Vigier wrote:
-[snip]
->   $ cat package/company/libfpga/Config.in 
->   config BR2_PACKAGE_COMPANY_LIBFPGA
+On 03/04/14 23:21, Jerzy Grzegorek wrote:
+> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 
- Either the symbol should be BR2_PACKAGE_LIBFPGA, or the directory should
-be package/company/company-libfpga (and the .mk file
-package/company/company-libfpga/company-libfpga.mk).
+ Could you add to the commit log _why_ this is a typo? You're removing a
+backslash in one place and adding it in another place, so it is not at
+all obvious why this is the correct thing to do. In fact, it's not a
+typo, it's a formatting error.
 
  Regards,
  Arnout
 
-[snip]
+> ---
+> v3:
+>  - rebase on top of the master
+> v2:
+>  - remove only one backslash
+> 
+>  docs/manual/configure.txt |    4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
+> index c1c9477..ee5e65e 100644
+> --- a/docs/manual/configure.txt
+> +++ b/docs/manual/configure.txt
+> @@ -100,7 +100,7 @@ most important ones allow to:
+>     toolchain should have largefile support (i.e. support for files
+>     larger than 2 GB on 32 bits systems), IPv6 support, RPC support
+>     (used mainly for NFS), wide-char support, locale support (for
+> -   internationalization), C\++ support or thread support. Depending on
+> +   internationalization), C++ support or thread support. Depending on
+>     which options you choose, the number of userspace applications and
+>     libraries visible in Buildroot menus will change: many applications
+>     and libraries require certain toolchain options to be enabled. Most
+> @@ -165,7 +165,7 @@ Then, you have three solutions to use an external toolchain:
+>    prefix+ and +External toolchain C library+ options. Then, you have
+>    to tell Buildroot what your external toolchain supports. If your
+>    external toolchain uses the 'glibc' library, you only have to tell
+> -  whether your toolchain supports C++ or not and whether it has
+> +  whether your toolchain supports C\++ or not and whether it has
+>    built-in RPC support. If your external toolchain uses the 'uClibc'
+>    library, then you have to tell Buildroot if it supports largefile,
+>    IPv6, RPC, wide-char, locale, program invocation, threads and
+> 
+
+
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
