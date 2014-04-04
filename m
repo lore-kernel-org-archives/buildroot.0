@@ -1,53 +1,109 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri,  4 Apr 2014 07:18:06 +0200
-Subject: [Buildroot] [PATCH v5 0/8] Add new libraries for XBMC Gotham
-Message-ID: <1396588694-6377-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Fri,  4 Apr 2014 07:18:09 +0200
+Subject: [Buildroot] [PATCH v5 3/8] [v2] libva: new package
+In-Reply-To: <1396588694-6377-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1396588694-6377-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1396588694-6377-4-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog:
-v5: - rebased
-    - updated libva (Thomas)
-    - include only git-ready patches (X11 intel driver will follow in a seperate patch)
-v4: - rebased
-    - removed flac version bump (Gustavo)
-    - removed libfs version bump https://github.com/OpenELEC/OpenELEC.tv/commit/b55859
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: re-formatted options (Thomas)
 
-Regards, Bernd
+ package/Config.in       |    1 +
+ package/libva/Config.in |   12 ++++++++++++
+ package/libva/libva.mk  |   48 +++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 61 insertions(+)
+ create mode 100644 package/libva/Config.in
+ create mode 100644 package/libva/libva.mk
 
-Bernd Kuhls (8):
-  libdrm: Explain dependency on xorg in Kconfig
-  mesa3d: Explain dependency for i965 DRI driver on xorg in Kconfig
-  libva: new package
-  libva-intel-driver: new package
-  ffmpeg: Add libva support
-  libglu: new package
-  libglew: new package
-  sdl: Add new dependency libglu for opengl support
-
- package/mesa3d/Config.in                              |    4 ----
- package/opengl/Config.in                              |    1 -
- package/opengl/libgl/Config.in                        |    6 ------
- package/opengl/libgl/libgl.mk                         |   16 ----------------
- package/vlc/vlc.mk                                    |    4 ++--
- package/x11r7/xdriver_xf86-video-ati/Config.in        |    5 +----
- package/x11r7/xdriver_xf86-video-glint/Config.in      |    5 +----
- package/x11r7/xdriver_xf86-video-intel/Config.in      |    7 ++-----
- package/x11r7/xdriver_xf86-video-mach64/Config.in     |    3 ---
- package/x11r7/xdriver_xf86-video-mga/Config.in        |    5 +----
- package/x11r7/xdriver_xf86-video-openchrome/Config.in |    5 +----
- package/x11r7/xdriver_xf86-video-r128/Config.in       |    5 +----
- package/x11r7/xdriver_xf86-video-savage/Config.in     |    5 +----
- package/x11r7/xdriver_xf86-video-sis/Config.in        |    5 +----
- package/x11r7/xdriver_xf86-video-tdfx/Config.in       |    5 +----
- package/x11r7/xdriver_xf86-video-vmware/Config.in     |    5 +----
- package/x11r7/xserver_xorg-server/Config.in           |    1 +
- 17 files changed, 14 insertions(+), 73 deletions(-)
- delete mode 100644 package/opengl/libgl/Config.in
- delete mode 100644 package/opengl/libgl/libgl.mk
-
+diff --git a/package/Config.in b/package/Config.in
+index e816603..b45c6e9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -593,6 +593,7 @@ source "package/libsvg/Config.in"
+ source "package/libsvg-cairo/Config.in"
+ source "package/libsvgtiny/Config.in"
+ source "package/libungif/Config.in"
++source "package/libva/Config.in"
+ source "package/opencv/Config.in"
+ source "package/opengl/Config.in"
+ source "package/pango/Config.in"
+diff --git a/package/libva/Config.in b/package/libva/Config.in
+new file mode 100644
+index 0000000..98a5ee8
+--- /dev/null
++++ b/package/libva/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_LIBVA
++	bool "libva"
++	select BR2_PACKAGE_LIBDRM
++	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XSERVER_XORG_SERVER
++	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XSERVER_XORG_SERVER
++	help
++	  The main motivation for VA-API (Video Acceleration API) is to enable
++	  hardware accelerated video decode/encode at various entry-points (VLD,
++	  IDCT, Motion Compensation etc.) for the prevailing coding standards
++	  today (MPEG-2, MPEG-4 ASP/H.263, MPEG-4 AVC/H.264, and VC-1/VMW3).
++
++	  http://www.freedesktop.org/wiki/Software/vaapi/
+diff --git a/package/libva/libva.mk b/package/libva/libva.mk
+new file mode 100644
+index 0000000..58d7b59
+--- /dev/null
++++ b/package/libva/libva.mk
+@@ -0,0 +1,48 @@
++################################################################################
++#
++# libva
++#
++################################################################################
++
++LIBVA_VERSION = 1.3.0
++LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
++LIBVA_SITE = http://www.freedesktop.org/software/vaapi/releases/libva
++LIBVA_LICENSE = MIT
++LIBVA_INSTALL_STAGING = YES
++
++LIBVA_DEPENDENCIES = host-pkgconf libdrm
++
++LIBVA_CONF_OPT = \
++	--enable-drm \
++	--disable-dummy-driver \
++	--with-drivers-path="/usr/lib/va"
++
++ifeq ($(BR2_PACKAGE_MESA3D),y)
++LIBVA_DEPENDENCIES += mesa3d
++LIBVA_CONF_OPT += --enable-glx
++endif
++
++ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER),y)
++LIBVA_DEPENDENCIES += \
++	xlib_libX11 \
++	xlib_libXext \
++	xlib_libXfixes
++LIBVA_CONF_OPT += --enable-x11
++else
++LIBVA_CONF_OPT += --disable-x11
++endif
++
++ifeq ($(BR2_PACKAGE_WAYLAND),y)
++LIBVA_DEPENDENCIES += wayland
++LIBVA_CONF_OPT += --enable-wayland
++else
++LIBVA_CONF_OPT += --disable-wayland
++endif
++
++ifeq ($(BR2_PACKAGE_HAS_OPENGL_EGL),y)
++LIBVA_CONF_OPT += --enable-egl
++else
++LIBVA_CONF_OPT += --disable-egl
++endif
++
++$(eval $(autotools-package))
 -- 
 1.7.10.4
