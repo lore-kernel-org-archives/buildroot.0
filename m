@@ -1,146 +1,48 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Fri,  4 Apr 2014 16:03:34 +0200
-Subject: [Buildroot] [PATCH] systemd: revert use of ln relative option.
-Message-ID: <1396620214-26517-1-git-send-email-eric.le.bihan.dev@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 4 Apr 2014 16:15:37 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2014-04-03
+In-Reply-To: <20140404135530.GA26146@pc-eric>
+References: <20140404063010.00CF61015BE@stock.ovh.net>
+ <20140404135530.GA26146@pc-eric>
+Message-ID: <20140404161537.6864a6f8@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Systemd build system now uses the `--relative` option from `ln(1)`.
-This option was added to GNU coreutils 8.16, which is not widely
-deployed yet by GNU/Linux distributions (not available in Debian Wheezy
-for example).
+Dear Eric Le Bihan,
 
-Fixes: http://autobuild.buildroot.net/results/354/3546c003a8fcbb36ef5ba29c00a96e473b927ecb/
+On Fri, 4 Apr 2014 15:55:32 +0200, Eric Le Bihan wrote:
 
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
----
- ...uild-sys-revert-use-of-ln-relative-option.patch |  115 ++++++++++++++++++++
- 1 file changed, 115 insertions(+)
- create mode 100644 package/systemd/systemd-02-build-sys-revert-use-of-ln-relative-option.patch
+> On Fri, Apr 04, 2014 at 08:30:09AM +0200, Thomas Petazzoni wrote:
+> 
+> >        arm |                    systemd-212 | NOK |
+> > http://autobuild.buildroot.net/results/3546c003a8fcbb36ef5ba29c00a96e473b927ecb/
+> This failure is due to systemd now using the `--relative` option of
+> `ln(1)` from GNU coreutils. This option was added to GNU coreutils
+> 8.16, but some GNU/Linux distributions like Debian Wheezy or Ubuntu
+> 12.04 ship 8.13. It looks like the Autobuild server runs one of
+> these :-) . Our users may be in this situation and may not want to
+> upgrade.
 
-diff --git a/package/systemd/systemd-02-build-sys-revert-use-of-ln-relative-option.patch b/package/systemd/systemd-02-build-sys-revert-use-of-ln-relative-option.patch
-new file mode 100644
-index 0000000..003d380
---- /dev/null
-+++ b/package/systemd/systemd-02-build-sys-revert-use-of-ln-relative-option.patch
-@@ -0,0 +1,115 @@
-+From a371e13f4400700d28c1a96767b3b28b0807bb1f Mon Sep 17 00:00:00 2001
-+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-+Date: Fri, 4 Apr 2014 11:13:23 +0200
-+Subject: [PATCH] build-sys: revert use of ln relative option.
-+
-+Systemd build system now uses the `--relative` option from `ln(1)`.
-+This option was added to GNU coreutils 8.16, which is not widely
-+deployed yet by GNU/Linux distributions (not available in Debian Wheezy
-+for example).
-+
-+This patch reverts the following commits:
-+
-+- "build-sys: Fix move-to-rootlibdir"
-+- "build-sys: work around broken ln --relative -s -f"
-+- "build-sys: prefer using ln --relative -s where appropriate"
-+
-+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-+---
-+ Makefile.am |   30 ++++++++----------------------
-+ 1 file changed, 8 insertions(+), 22 deletions(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index 3d9e5c1..acb25c4 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -208,8 +208,8 @@ define move-to-rootlibdir
-+ 	if test "$(libdir)" != "$(rootlibdir)"; then \
-+ 		$(MKDIR_P) $(DESTDIR)$(rootlibdir) && \
-+ 		so_img_name=$$(readlink $(DESTDIR)$(libdir)/$$libname) && \
-+-		rm -f $(DESTDIR)$(libdir)/$$libname && \
-+-		$(LN_S) --relative -f $(DESTDIR)$(rootlibdir)/$$so_img_name $(DESTDIR)$(libdir)/$$libname && \
-++		so_img_rel_target_prefix=$$(echo $(libdir) | sed 's,\(^/\|\)[^/][^/]*,..,g') && \
-++		$(LN_S) -f $$so_img_rel_target_prefix$(rootlibdir)/$$so_img_name $(DESTDIR)$(libdir)/$$libname && \
-+ 		mv $(DESTDIR)$(libdir)/$$libname.* $(DESTDIR)$(rootlibdir); \
-+ 	fi
-+ endef
-+@@ -233,6 +233,7 @@ USER_BUSNAMES_TARGET_WANTS =
-+ 
-+ SYSTEM_UNIT_ALIASES =
-+ USER_UNIT_ALIASES =
-++
-+ GENERAL_ALIASES =
-+ 
-+ install-target-wants-hook:
-+@@ -268,9 +269,9 @@ install-aliases-hook:
-+ 	set -- $(SYSTEM_UNIT_ALIASES) && \
-+ 		dir=$(systemunitdir) && $(install-aliases)
-+ 	set -- $(USER_UNIT_ALIASES) && \
-+-		dir=$(userunitdir) && $(install-relative-aliases)
-++		dir=$(userunitdir) && $(install-aliases)
-+ 	set -- $(GENERAL_ALIASES) && \
-+-		dir= && $(install-relative-aliases)
-++		dir= && $(install-aliases)
-+ 
-+ define install-aliases
-+ 	while [ -n "$$1" ]; do \
-+@@ -281,15 +282,6 @@ define install-aliases
-+ 	done
-+ endef
-+ 
-+-define install-relative-aliases
-+-	while [ -n "$$1" ]; do \
-+-		$(MKDIR_P) `dirname $(DESTDIR)$$dir/$$2` && \
-+-		rm -f $(DESTDIR)$$dir/$$2 && \
-+-		$(LN_S) --relative $(DESTDIR)$$1 $(DESTDIR)$$dir/$$2 && \
-+-		shift 2 || exit $$?; \
-+-	done
-+-endef
-+-
-+ INSTALL_EXEC_HOOKS += \
-+ 	install-target-wants-hook \
-+ 	install-directories-hook \
-+@@ -312,10 +304,6 @@ AM_V_LN = $(AM_V_LN_$(V))
-+ AM_V_LN_ = $(AM_V_LN_$(AM_DEFAULT_VERBOSITY))
-+ AM_V_LN_0 = @echo "  LN      " $@;
-+ 
-+-AM_V_RM = $(AM_V_RM_$(V))
-+-AM_V_RM_ = $(AM_V_RM_$(AM_DEFAULT_VERBOSITY))
-+-AM_V_RM_0 = @echo "  RM      " $@;
-+-
-+ # ------------------------------------------------------------------------------
-+ rootbin_PROGRAMS = \
-+ 	systemctl \
-+@@ -1884,8 +1872,7 @@ systemd_dbus1_generator_LDADD = \
-+ 
-+ dbus1-generator-install-hook:
-+ 	$(AM_V_at)$(MKDIR_P) $(DESTDIR)$(usergeneratordir)
-+-	$(AM_V_RM)rm -f $(DESTDIR)$(usergeneratordir)/systemd-dbus1-generator
-+-	$(AM_V_LN)$(LN_S) --relative -f $(DESTDIR)$(systemgeneratordir)/systemd-dbus1-generator $(DESTDIR)$(usergeneratordir)/systemd-dbus1-generator
-++	$(AM_V_LN)$(LN_S) -f $(systemgeneratordir)/systemd-dbus1-generator $(DESTDIR)$(usergeneratordir)/systemd-dbus1-generator
-+ 
-+ dbus1-generator-uninstall-hook:
-+ 	rm -f $(DESTDIR)$(usergeneratordir)/systemd-dbus1-generator
-+@@ -2017,8 +2004,7 @@ systemd_bus_proxyd_LDADD = \
-+ 
-+ bus-proxyd-install-hook:
-+ 	$(AM_V_at)$(MKDIR_P) $(DESTDIR)$(bindir)
-+-	$(AM_V_RM)rm -f $(DESTDIR)$(bindir)/systemd-stdio-bridge
-+-	$(AM_V_LN)$(LN_S) --relative -f $(DESTDIR)$(rootlibexecdir)/systemd-bus-proxyd $(DESTDIR)$(bindir)/systemd-stdio-bridge
-++	$(AM_V_LN)$(LN_S) -f $(rootlibexecdir)/systemd-bus-proxyd $(DESTDIR)$(bindir)/systemd-stdio-bridge
-+ 
-+ bus-proxyd-uninstall-hook:
-+ 	rm -f $(DESTDIR)$(bindir)/systemd-stdio-bridge
-+@@ -4959,7 +4945,7 @@ GENERAL_ALIASES += \
-+ 	$(systemunitdir)/remote-fs.target $(pkgsysconfdir)/system/multi-user.target.wants/remote-fs.target \
-+ 	$(systemunitdir)/getty at .service $(pkgsysconfdir)/system/getty.target.wants/getty at tty1.service \
-+ 	$(pkgsysconfdir)/user $(sysconfdir)/xdg/systemd/user \
-+-	$(dbussystemservicedir)/org.freedesktop.systemd1.service $(dbussessionservicedir)/org.freedesktop.systemd1.service
-++	../system-services/org.freedesktop.systemd1.service $(dbussessionservicedir)/org.freedesktop.systemd1.service
-+ 
-+ if HAVE_SYSV_COMPAT
-+ INSTALL_DIRS += \
-+-- 
-+1.7.9.5
-+
+Indeed. That's one of the reason why the distributions we use on the
+autobuilders are quite "old".
+
+> I'll post a fix, but would Buildroot benefit from installing
+> host-coreutils to avoid this kind of problem?
+
+In general, we try to avoid building too many native dependencies. In
+this specific case, if it's not really mandatory to build
+host-coreutils and can be avoided using a moderately simple patch, we
+prefer doing it this way. We don't want to rebuild the whole world of
+native tools just to build systemd, if possible :-)
+
+Thanks!
+
+Thomas
 -- 
-1.7.9.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
