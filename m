@@ -1,211 +1,103 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri,  4 Apr 2014 22:14:01 +0200
-Subject: [Buildroot] [PATCH v4] postgresql: new package
-Message-ID: <1396642441-4992-1-git-send-email-ps.report@gmx.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 04 Apr 2014 22:18:22 +0200
+Subject: [Buildroot] [PATCH 09/20] manual: update the virtual package
+ section with the new infrastructure
+In-Reply-To: <2f743c8ab39b1af88acc29db154220b0795889f1.1394482605.git.yann.morin.1998@free.fr>
+References: <cover.1394482605.git.yann.morin.1998@free.fr>
+ <2f743c8ab39b1af88acc29db154220b0795889f1.1394482605.git.yann.morin.1998@free.fr>
+Message-ID: <533F138E.3070702@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Based on suggested new package by Marco Trapanese ([1]).
+On 10/03/14 21:27, Yann E. MORIN wrote:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> Cc: Samuel Martin <s.martin49@gmail.com>
+> Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 
-[1] http://lists.busybox.net/pipermail/buildroot/2014-February/090661.html
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
-Changes v3 -> v4:
-  - renamed diplayed package name all lower case postgresql
-    (as suggested by Thomas Petazzoni)
-  - disabled postgresql for uClibc with locale/i18n because of compile
-    failure/uClibc bug (as suggested by Thomas Petazzoni)
-  - fixed data dir for initializing test in startup script
-    (as suggested by Thomas Petazzoni)
-  - fixed typos in feature disable commands
-    (as suggested by Thomas Petazzoni)
-  - fixed typo in license file variable name
-    (as suggested by Jerzy Grzegorek)
 
-Changes v2 -> v3:
-  - change data dir from /srv/pqsql/data to /var/lib/pgsql
-    (as suggested by Thomas Petazzoni)
-  - fix POSTGRESQL_SITE url (removed cut and paste error)
-    (as suggested by Thomas Petazzoni)
-  - remove superfluous POSTGRESQL_CONF_OPT prefix option
-    (as suggested by Thomas Petazzoni)
-  - fix POSTGRESQL_USERS (remove superfluous own group)
-    (as suggested by Yann E. MORIN)
-  - fix data dir install command (remove superfluous -v option)
-    (as suggested by Yann E. MORIN)
-  - make readline an zlib optional (add hint in the help text
-    instead)
-    (as suggested by Thomas Petazzoni)
+ Regards,
+ Arnout
 
-Changes v1 -> v2:
-  - add postgresql user
-  - add postgresql data directory
-  - add sysv initialize and startup script
----
- package/Config.in                |  1 +
- package/postgresql/Config.in     | 24 ++++++++++++++++++
- package/postgresql/S50postgresql | 44 ++++++++++++++++++++++++++++++++
- package/postgresql/postgresql.mk | 54 ++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 123 insertions(+)
- create mode 100644 package/postgresql/Config.in
- create mode 100644 package/postgresql/S50postgresql
- create mode 100644 package/postgresql/postgresql.mk
+> ---
+>  docs/manual/adding-packages-virtual.txt | 26 ++++++++++----------------
+>  1 file changed, 10 insertions(+), 16 deletions(-)
+> 
+> diff --git a/docs/manual/adding-packages-virtual.txt b/docs/manual/adding-packages-virtual.txt
+> index 76f5794..e8820a0 100644
+> --- a/docs/manual/adding-packages-virtual.txt
+> +++ b/docs/manual/adding-packages-virtual.txt
+> @@ -1,10 +1,10 @@
+>  // -*- mode:doc; -*-
+>  // vim: set syntax=asciidoc:
+>  
+> -[[virtual-package-tutorial]]
+> +Infrastructure for virtual packages
+> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>  
+> -Virtual package tutorial
+> -~~~~~~~~~~~~~~~~~~~~~~~~
+> +[[virtual-package-tutorial]]
+>  
+>  In Buildroot, a virtual package is a package whose functionalities are
+>  provided by one or more packages, referred to as 'providers'. The virtual
+> @@ -16,6 +16,9 @@ The implementation of this API is different for the 'Allwinner Tech Sunxi' and
+>  the 'Texas Instruments OMAP35xx' plaftorms. So +libgles+ will be a virtual
+>  package and +sunxi-mali+ and +ti-gfx+ will be the providers.
+>  
+> ++virtual-package+ tutorial
+> +^^^^^^^^^^^^^^^^^^^^^^^^^^
+> +
+>  In the following example, we will explain how to add a new virtual package
+>  ('something-virtual') and a provider for it ('some-provider').
+>  
+> @@ -42,7 +45,7 @@ providers.
+>  Virtual package's +*.mk+ file
+>  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  
+> -The Makefile +package/something-virtual/something-virtual.mk+ should contain:
+> +The +.mk+ for the virtual package should just evaluate the +virtual-package+ macro:
+>  
+>  ---------------------------
+>  01: ################################################################################
+> @@ -51,20 +54,11 @@ The Makefile +package/something-virtual/something-virtual.mk+ should contain:
+>  04: #
+>  05: ################################################################################
+>  06:
+> -07: SOMETHING_VIRTUAL_SOURCE =
+> -08: SOMETHING_VIRTUAL_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_SOMETHING_VIRTUAL))
+> -09:
+> -10: ifeq ($(BR2_PACKAGE_HAS_SOMETHING_VIRTUAL),y)
+> -11: ifeq ($(SOMETHING_VIRTUAL_DEPENDENCIES),)
+> -12: $(error No something-virtual implementation selected. Configuration error.)
+> -13: endif
+> -14: endif
+> -15:
+> -16: $(eval $(generic-package))
+> +07: $(eval $(virtual-package))
+>  ---------------------------
+>  
+> -The Makefile is quite small as it will only check if a provider for the
+> -virtual package has been selected.
+> +The ability to have target and host packages is also available, with the
+> ++host-virtual-package+ macro.
+>  
+>  Provider's +Config.in+ file
+>  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 
 
-diff --git a/package/Config.in b/package/Config.in
-index e816603..5805342 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -544,6 +544,7 @@ source "package/berkeleydb/Config.in"
- source "package/cppdb/Config.in"
- source "package/gdbm/Config.in"
- source "package/mysql/Config.in"
-+source "package/postgresql/Config.in"
- source "package/redis/Config.in"
- source "package/sqlcipher/Config.in"
- source "package/sqlite/Config.in"
-diff --git a/package/postgresql/Config.in b/package/postgresql/Config.in
-new file mode 100644
-index 0000000..4139799
---- /dev/null
-+++ b/package/postgresql/Config.in
-@@ -0,0 +1,24 @@
-+config BR2_PACKAGE_POSTGRESQL
-+	bool "postgresql"
-+	depends on BR2_INET_IPV6
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC || !BR2_TOOLCHAIN_BUILDROOT_LOCALE
-+	select BR2_PACKAGE_READLINE
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  PostgreSQL is a powerful, open source object-relational
-+	  database system.
-+
-+	  Enable the readline package to gain readline support in
-+	  pgsql (the command line interpreter), which offers
-+	  command history and edit functions.
-+
-+	  Enable the zlib package to gain builtin compression for
-+	  archives with pg_dump and pg_restore.
-+
-+	  http://www.postgresql.org
-+
-+comment "postgresql needs a toolchain w/ IPv6"
-+	depends on !BR2_INET_IPV6
-+
-+comment "postgresql does not compile w/ uClibc and locale/i18n enabled"
-+	depends on BR2_TOOLCHAIN_USES_UCLIBC && BR2_TOOLCHAIN_BUILDROOT_LOCALE
-diff --git a/package/postgresql/S50postgresql b/package/postgresql/S50postgresql
-new file mode 100644
-index 0000000..86a8d83
---- /dev/null
-+++ b/package/postgresql/S50postgresql
-@@ -0,0 +1,44 @@
-+#!/bin/sh
-+#
-+# start postgresql
-+#
-+
-+umask 077
-+
-+if [ ! -f /var/lib/pgsql/PG_VERSION ]; then
-+	echo "Initializing postgresql data base..."
-+	su - postgres -c '/usr/bin/pg_ctl initdb -D /var/lib/pgsql'
-+	echo "done"
-+fi
-+
-+start() {
-+	echo -n "Starting postgresql: "
-+	su - postgres -c '/usr/bin/pg_ctl start -D /var/lib/pgsql -l logfile'
-+	echo "OK"
-+}
-+stop() {
-+	echo -n "Stopping postgresql: "
-+	su - postgres -c '/usr/bin/pg_ctl stop -D /var/lib/pgsql -m fast'
-+	echo "OK"
-+}
-+restart() {
-+	stop
-+	start
-+}
-+
-+case "$1" in
-+	start)
-+		start
-+		;;
-+	stop)
-+		stop
-+		;;
-+	restart|reload)
-+		restart
-+		;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart}"
-+		exit 1
-+esac
-+
-+exit $?
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-new file mode 100644
-index 0000000..16e644f
---- /dev/null
-+++ b/package/postgresql/postgresql.mk
-@@ -0,0 +1,54 @@
-+################################################################################
-+#
-+# postgresql
-+#
-+################################################################################
-+
-+POSTGRESQL_VERSION = 9.3.3
-+POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
-+POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
-+POSTGRESQL_LICENSE = PostgreSQL
-+POSTGRESQL_LICENSE_FILES = COPYRIGHT
-+
-+ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-+	POSTGRESQL_CONF_OPT += --disable-thread-safety
-+endif
-+
-+ifeq ($(BR2_PACKAGE_READLINE),y)
-+	POSTGRESQL_DEPENDENCIES += readline
-+else
-+	POSTGRESQL_CONF_OPT += --without-readline
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+	POSTGRESQL_DEPENDENCIES += zlib
-+else
-+	POSTGRESQL_CONF_OPT += --without-zlib
-+endif
-+
-+ifeq ($(BR2_PACKAGE_TZDATA),y)
-+	POSTGRESQL_DEPENDENCIES += tzdata
-+	POSTGRESQL_CONF_OPT += --with-system-tzdata=/usr/share/zoneinfo
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+	POSTGRESQL_DEPENDENCIES += openssl
-+	POSTGRESQL_CONF_OPT += --with-openssl
-+endif
-+
-+define POSTGRESQL_USERS
-+	postgres -1 postgres -1 * /var/lib/pgsql /bin/sh - PostgreSQL Server
-+endef
-+
-+define POSTGRESQL_INSTALL_TARGET_FIXUP
-+	$(INSTALL) -dm 0700 $(TARGET_DIR)/var/lib/pgsql
-+endef
-+
-+POSTGRESQL_POST_INSTALL_TARGET_HOOKS += POSTGRESQL_INSTALL_TARGET_FIXUP
-+
-+define POSTGRESQL_INSTALL_INIT_SYSV
-+	$(INSTALL) -m 0755 -D package/postgresql/S50postgresql \
-+		$(TARGET_DIR)/etc/init.d/S50postgresql
-+endef
-+
-+$(eval $(autotools-package))
+
 -- 
-1.8.1.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
