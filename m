@@ -1,75 +1,72 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri,  4 Apr 2014 07:18:12 +0200
-Subject: [Buildroot] [PATCH v5 6/8] libglu: new package
+Date: Fri,  4 Apr 2014 07:18:10 +0200
+Subject: [Buildroot] [PATCH v5 4/8] libva-intel-driver: new package
 In-Reply-To: <1396588694-6377-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1396588694-6377-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1396588694-6377-7-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1396588694-6377-5-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/Config.in        |    1 +
- package/libglu/Config.in |   10 ++++++++++
- package/libglu/libglu.mk |   18 ++++++++++++++++++
- 3 files changed, 29 insertions(+)
- create mode 100644 package/libglu/Config.in
- create mode 100644 package/libglu/libglu.mk
+ package/Config.in                                |    1 +
+ package/libva-intel-driver/Config.in             |   13 +++++++++++++
+ package/libva-intel-driver/libva-intel-driver.mk |   13 +++++++++++++
+ 3 files changed, 27 insertions(+)
+ create mode 100644 package/libva-intel-driver/Config.in
+ create mode 100644 package/libva-intel-driver/libva-intel-driver.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 3550935..3240188 100644
+index b45c6e9..3550935 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -584,6 +584,7 @@ source "package/libexif/Config.in"
- source "package/libgail/Config.in"
- source "package/libgeotiff/Config.in"
- source "package/libglade/Config.in"
-+source "package/libglu/Config.in"
- source "package/libgtk2/Config.in"
- source "package/libpng/Config.in"
- source "package/libqrencode/Config.in"
-diff --git a/package/libglu/Config.in b/package/libglu/Config.in
+@@ -594,6 +594,7 @@ source "package/libsvg-cairo/Config.in"
+ source "package/libsvgtiny/Config.in"
+ source "package/libungif/Config.in"
+ source "package/libva/Config.in"
++source "package/libva-intel-driver/Config.in"
+ source "package/opencv/Config.in"
+ source "package/opengl/Config.in"
+ source "package/pango/Config.in"
+diff --git a/package/libva-intel-driver/Config.in b/package/libva-intel-driver/Config.in
 new file mode 100644
-index 0000000..042a0c3
+index 0000000..343f45f
 --- /dev/null
-+++ b/package/libglu/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_LIBGLU
-+	bool "libglu"
-+	depends on BR2_PACKAGE_MESA3D
++++ b/package/libva-intel-driver/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_LIBVA_INTEL_DRIVER
++	bool "libva-intel-driver"
++	depends on BR2_i386 || BR2_x86_64
++	depends on BR2_PACKAGE_LIBVA
++	depends on BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_LIBDRM_INTEL
 +	help
-+	  Mesa OpenGL Utility library
++	  VA-API back-end driver for Intel graphics chips
 +
-+	  http://cgit.freedesktop.org/mesa/glu/
++	  https://01.org/linuxgraphics/community/vaapi
 +
-+comment "libglu depends on mesa3d"
-+	depends on !BR2_PACKAGE_MESA3D
-diff --git a/package/libglu/libglu.mk b/package/libglu/libglu.mk
++comment "libva intel driver depends on libva & X.org"
++	depends on !BR2_PACKAGE_LIBVA || !BR2_PACKAGE_XORG7
+diff --git a/package/libva-intel-driver/libva-intel-driver.mk b/package/libva-intel-driver/libva-intel-driver.mk
 new file mode 100644
-index 0000000..9a4ebc1
+index 0000000..86d2dcc
 --- /dev/null
-+++ b/package/libglu/libglu.mk
-@@ -0,0 +1,18 @@
++++ b/package/libva-intel-driver/libva-intel-driver.mk
+@@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# libglu
++# libva-intel-driver
 +#
 +################################################################################
 +
-+LIBGLU_VERSION = 9.0.0
-+LIBGLU_SITE = http://cgit.freedesktop.org/mesa/glu/snapshot
-+LIBGLU_SOURCE = glu-$(LIBGLU_VERSION).tar.gz
-+LIBGLU_LICENSE = SGI-B-2.0
-+LIBGLU_LICENSE_FILES = include/GL/glu.h
-+LIBGLU_INSTALL_STAGING = YES
-+LIBGLU_AUTORECONF = YES
-+LIBGLU_DEPENDENCIES = mesa3d
-+
-+LIBGLU_CONF_OPT = --disable-osmesa
++LIBVA_INTEL_DRIVER_VERSION = 1.3.0
++LIBVA_INTEL_DRIVER_SOURCE = libva-intel-driver-$(LIBVA_INTEL_DRIVER_VERSION).tar.bz2
++LIBVA_INTEL_DRIVER_SITE = http://www.freedesktop.org/software/vaapi/releases/libva-intel-driver
++LIBVA_INTEL_DRIVER_LICENSE = MIT
++LIBVA_INTEL_DRIVER_DEPENDENCIES = libva
 +
 +$(eval $(autotools-package))
 -- 
