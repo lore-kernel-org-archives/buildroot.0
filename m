@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 4 Apr 2014 23:30:23 +0200
-Subject: [Buildroot] [PATCH 1/2] lua-expat: bump to version 1.3.0
-In-Reply-To: <1396638907-14054-1-git-send-email-francois.perrad@gadz.org>
-References: <1396638907-14054-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20140404233023.5ceb3fba@skate>
+Date: Fri, 4 Apr 2014 23:31:52 +0200
+Subject: [Buildroot] [v2] script/scancpan: add -host & -target options
+In-Reply-To: <1396631433-29061-1-git-send-email-francois.perrad@gadz.org>
+References: <1396631433-29061-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20140404233152.5e6f825d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,20 @@ To: buildroot@busybox.net
 
 Dear Francois Perrad,
 
-On Fri,  4 Apr 2014 21:15:06 +0200, Francois Perrad wrote:
-> which is now compatible with Lua 5.2
+On Fri,  4 Apr 2014 19:10:33 +0200, Francois Perrad wrote:
 > 
 > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 > ---
->  package/luaexpat/Config.in      |    4 ----
->  package/luaexpat/luaexpat.mk    |    2 +-
->  package/luaexpatutils/Config.in |    4 ----
->  3 files changed, 1 insertion(+), 9 deletions(-)
+>  support/scripts/scancpan |   24 ++++++++++++++++++------
+>  1 file changed, 18 insertions(+), 6 deletions(-)
 
-Both patches applied, thanks!
+To be honest, I hesitated to apply this patch. There is again not
+commit log, even though the change is far from being trivial.
+
+So I've applied it, but I really, really, really would like to see more
+verbose commit messages in the future.
+
+Thanks a lot!
 
 Thomas
 -- 
