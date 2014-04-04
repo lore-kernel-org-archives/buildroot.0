@@ -1,78 +1,29 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  4 Apr 2014 18:49:00 -0300
-Subject: [Buildroot] [PATCH] gmp: fix target build for ARM thumb
-Message-ID: <1396648140-16883-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 4 Apr 2014 23:49:26 +0200
+Subject: [Buildroot] [PATCH] gmp: bump to version 6.0.0a
+In-Reply-To: <1396534496-20980-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1396534496-20980-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140404234926.1b4f72d5@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pull upstream hg changeset c56ea318eb64 and 676e2d0f0e4d to fix ARM
-build breakage when compiling in thumb mode. Fixes:
-http://autobuild.buildroot.net/results/f44/f447ce933ad8dd975b17aeda03cc46b0cace0b03/
+Dear Gustavo Zacarias,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- .../gmp-01-arm-asm-conditional-on-no-thumb-1.patch  | 21 +++++++++++++++++++++
- .../gmp-02-arm-asm-conditional-on-no-thumb-2.patch  | 21 +++++++++++++++++++++
- 2 files changed, 42 insertions(+)
- create mode 100644 package/gmp/gmp-01-arm-asm-conditional-on-no-thumb-1.patch
- create mode 100644 package/gmp/gmp-02-arm-asm-conditional-on-no-thumb-2.patch
+On Thu,  3 Apr 2014 11:14:56 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/gmp/gmp.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gmp/gmp-01-arm-asm-conditional-on-no-thumb-1.patch b/package/gmp/gmp-01-arm-asm-conditional-on-no-thumb-1.patch
-new file mode 100644
-index 0000000..eb678b0
---- /dev/null
-+++ b/package/gmp/gmp-01-arm-asm-conditional-on-no-thumb-1.patch
-@@ -0,0 +1,21 @@
-+
-+# HG changeset patch
-+# User Torbjorn Granlund <tege@gmplib.org>
-+# Date 1396035313 -3600
-+# Node ID c56ea318eb6435bdd28dbfef657b2fe372134f1f
-+# Parent  c6fe20ab62acc266ff5ad3629bef447bc43dcd1b
-+Conditionalise ARM asm on !__thumb__.
-+
-+diff -r c6fe20ab62ac -r c56ea318eb64 mpn/generic/mod_1_1.c
-+--- a/mpn/generic/mod_1_1.c	Wed Mar 26 12:58:33 2014 +0100
-++++ b/mpn/generic/mod_1_1.c	Fri Mar 28 20:35:13 2014 +0100
-+@@ -129,7 +129,7 @@
-+ 	     "%2" ((UDItype)(a0)), "r" ((UDItype)(b0)) __CLOBBER_CC)
-+ #endif
-+ 
-+-#if defined (__arm__) && W_TYPE_SIZE == 32
-++#if defined (__arm__) && !defined (__thumb__) && W_TYPE_SIZE == 32
-+ #define add_mssaaaa(m, sh, sl, ah, al, bh, bl)				\
-+   __asm__ (  "adds	%2, %5, %6\n\t"					\
-+ 	     "adcs	%1, %3, %4\n\t"					\
-+
-diff --git a/package/gmp/gmp-02-arm-asm-conditional-on-no-thumb-2.patch b/package/gmp/gmp-02-arm-asm-conditional-on-no-thumb-2.patch
-new file mode 100644
-index 0000000..666cf58
---- /dev/null
-+++ b/package/gmp/gmp-02-arm-asm-conditional-on-no-thumb-2.patch
-@@ -0,0 +1,21 @@
-+
-+# HG changeset patch
-+# User Torbjorn Granlund <tege@gmplib.org>
-+# Date 1396602422 -7200
-+# Node ID 676e2d0f0e4dd301a7066079d2c9326c25c34a40
-+# Parent  0194a75b56b21a9196626430af86c5bd9110c42d
-+Conditionalise ARM asm on !__thumb__.
-+
-+diff -r 0194a75b56b2 -r 676e2d0f0e4d mpn/generic/div_qr_1n_pi1.c
-+--- a/mpn/generic/div_qr_1n_pi1.c	Thu Apr 03 23:58:51 2014 +0200
-++++ b/mpn/generic/div_qr_1n_pi1.c	Fri Apr 04 11:07:02 2014 +0200
-+@@ -130,7 +130,7 @@
-+ 	     "%2" ((UDItype)(a0)), "r" ((UDItype)(b0)) __CLOBBER_CC)
-+ #endif
-+ 
-+-#if defined (__arm__) && W_TYPE_SIZE == 32
-++#if defined (__arm__) && !defined (__thumb__) && W_TYPE_SIZE == 32
-+ #define add_mssaaaa(m, sh, sl, ah, al, bh, bl)				\
-+   __asm__ (  "adds	%2, %5, %6\n\t"					\
-+ 	     "adcs	%1, %3, %4\n\t"					\
-+
+Fails to build on ARM Thumb2:
+
+  http://autobuild.buildroot.org/results/f44/f447ce933ad8dd975b17aeda03cc46b0cace0b03/build-end.log
+
+Thomas
 -- 
-1.8.3.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
