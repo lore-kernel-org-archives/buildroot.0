@@ -1,31 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 4 Apr 2014 23:32:48 +0200
-Subject: [Buildroot] [PATCH] network-manager: Don't build Qt example
- programs
-In-Reply-To: <1396624973-58181-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1396624973-58181-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20140404233248.23e9cd8e@skate>
+Date: Fri, 4 Apr 2014 23:34:22 +0200
+Subject: [Buildroot] [PATCH] systemd: revert use of ln relative option.
+In-Reply-To: <1396620214-26517-1-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1396620214-26517-1-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <20140404233422.6b3d587b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Dear Eric Le Bihan,
 
-On Fri, 4 Apr 2014 16:22:53 +0100, Vicente Olivert Riera wrote:
-> The purpose of "--enable-qt" option is not to build NetworkManager with
-> Qt support. It's name can be a bit confusing. The real purpose of this
-> option is to build Qt example programs, so we disable it as we also
-> disable the tests and documentation in the target.
+On Fri,  4 Apr 2014 16:03:34 +0200, Eric Le Bihan wrote:
+> Systemd build system now uses the `--relative` option from `ln(1)`.
+> This option was added to GNU coreutils 8.16, which is not widely
+> deployed yet by GNU/Linux distributions (not available in Debian Wheezy
+> for example).
 > 
-> Fixes:
->    http://autobuild.buildroot.net/results/3b6/3b6a40c1683d0859a934e4d79e2048e97b193e94/
+> Fixes: http://autobuild.buildroot.net/results/354/3546c003a8fcbb36ef5ba29c00a96e473b927ecb/
 > 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 > ---
->  package/network-manager/network-manager.mk |    1 +
->  1 files changed, 1 insertions(+), 0 deletions(-)
+>  ...uild-sys-revert-use-of-ln-relative-option.patch |  115 ++++++++++++++++++++
+>  1 file changed, 115 insertions(+)
+>  create mode 100644 package/systemd/systemd-02-build-sys-revert-use-of-ln-relative-option.patch
 
 Applied, thanks.
 
