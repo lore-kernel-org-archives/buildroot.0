@@ -1,64 +1,121 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Apr 2014 19:21:11 +0200
-Subject: [Buildroot] [git commit] package/jpeg: convert to the
-	virtual-package infrastructure
-Message-ID: <20140405172339.3F7A99C5BE@busybox.osuosl.org>
+Date: Sat, 5 Apr 2014 19:20:56 +0200
+Subject: [Buildroot] [git commit] package/lua: rename config options
+Message-ID: <20140405172338.CC8E99C5BD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5e82185537209962a6d6283e2ea898eff8129271
+commit: http://git.buildroot.net/buildroot/commit/?id=c97aeb7e84d5d34e2833f6f143b061b856acf7e1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since this package is implemented via a choice rather than the usual
-separate-package providers, we only need BR2_PACKAGE_HAS_JPEG to be
-always defined when the 'jpeg' package is selected.
+Package's options should be named after the package.
+
+Lua is an interpreter, but the package is named 'lua'. So we want to
+name the config option with '_LUA_', not with '_LUA_INTERPRETER_'
+
+Besides, naming them with '_LUA_INTERPRETER_' might be confusing, since
+there is a package named 'luainterpreter'.
+
+Since the renamed options are part of a choice, we can't use the legacy
+options to select the new ones. So we instead instruct the user to go
+select the appropriate option in the choice.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: Mike Zick <minimod@morethan.org>
+Cc: Francois Perrad <fperrad@gmail.com>
 Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/jpeg/Config.in |    3 +++
- package/jpeg/jpeg.mk   |   12 +-----------
- 2 files changed, 4 insertions(+), 11 deletions(-)
+ Config.in.legacy      |   24 ++++++++++++++++++++++++
+ package/lua/Config.in |   10 +++++-----
+ package/lua/lua.mk    |    4 ++--
+ 3 files changed, 31 insertions(+), 7 deletions(-)
 
-diff --git a/package/jpeg/Config.in b/package/jpeg/Config.in
-index b7cdfeb..3042d24 100644
---- a/package/jpeg/Config.in
-+++ b/package/jpeg/Config.in
-@@ -30,6 +30,9 @@ config BR2_PACKAGE_JPEG_TURBO
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 17ead9b..ce44d0f 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -101,6 +101,30 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2014.05"
  
- endchoice
- 
-+config BR2_PACKAGE_HAS_JPEG
-+	def_bool y
++config BR2_PACKAGE_LUA_INTERPRETER_EDITING_NONE
++	bool "Lua command-line editing none has been renamed"
++	select BR2_LEGACY
++	help
++	  The BR2_PACKAGE_LUA_INTERPRETER_EDITING_NONE option has been
++	  renamed to BR2_PACKAGE_LUA_EDITING_NONE. You will have to select
++	  it in the corresponding choice.
 +
- config BR2_PACKAGE_PROVIDES_JPEG
- 	string
- 	default "libjpeg"    if BR2_PACKAGE_LIBJPEG
-diff --git a/package/jpeg/jpeg.mk b/package/jpeg/jpeg.mk
-index 3695bc8..2d56be6 100644
---- a/package/jpeg/jpeg.mk
-+++ b/package/jpeg/jpeg.mk
-@@ -4,14 +4,4 @@
- #
- ################################################################################
++config BR2_PACKAGE_LUA_INTERPRETER_READLINE
++	bool "Lua command-line editing using readline has been renamed"
++	select BR2_LEGACY
++	help
++	  The BR2_PACKAGE_LUA_INTERPRETER_READLINE option has been
++	  renamed to BR2_PACKAGE_LUA_READLINE. You will have to select
++	  it in the corresponding choice.
++
++config BR2_PACKAGE_LUA_INTERPRETER_LINENOISE
++	bool "Lua command-line editing using linenoise has been renamed"
++	select BR2_LEGACY
++	help
++	  The BR2_PACKAGE_LUA_INTERPRETER_LINENOISE option has been
++	  renamed to BR2_PACKAGE_LUA_LINENOISE. You will have to select
++	  it in the corresponding choice.
++
+ config BR2_PACKAGE_DVB_APPS_UTILS
+ 	bool "dvb-apps utilities now built by default"
+ 	select BR2_LEGACY
+diff --git a/package/lua/Config.in b/package/lua/Config.in
+index 2f1b25b..0e31858 100644
+--- a/package/lua/Config.in
++++ b/package/lua/Config.in
+@@ -30,22 +30,22 @@ config BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION
+ 	default "5.2"	if BR2_PACKAGE_LUA_5_2
  
--JPEG_SOURCE =
--JPEG_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_JPEG))
--
--ifeq ($(JPEG_DEPENDENCIES),)
--define JPEG_CONFIGURE_CMDS
--	echo "No JPEG implementation defined. Configuration error"
--	exit 1
--endef
--endif
--
--$(eval $(generic-package))
-+$(eval $(virtual-package))
+ choice
+-	prompt "Lua Interpreter command-line editing"
+-	default BR2_PACKAGE_LUA_INTERPRETER_EDITING_NONE
++	prompt "Lua command-line editing"
++	default BR2_PACKAGE_LUA_EDITING_NONE
+ 
+-config BR2_PACKAGE_LUA_INTERPRETER_EDITING_NONE
++config BR2_PACKAGE_LUA_EDITING_NONE
+ 	bool "none"
+ 	help
+ 	  None.
+ 
+-config BR2_PACKAGE_LUA_INTERPRETER_READLINE
++config BR2_PACKAGE_LUA_READLINE
+ 	bool "readline support"
+ 	select BR2_PACKAGE_READLINE
+ 	select BR2_PACKAGE_NCURSES
+ 	help
+ 	  Enables command-line editing in the Lua interpreter.
+ 
+-config BR2_PACKAGE_LUA_INTERPRETER_LINENOISE
++config BR2_PACKAGE_LUA_LINENOISE
+ 	bool "linenoise support"
+ 	select BR2_PACKAGE_LINENOISE
+ 	help
+diff --git a/package/lua/lua.mk b/package/lua/lua.mk
+index bf68e65..bc8799a 100644
+--- a/package/lua/lua.mk
++++ b/package/lua/lua.mk
+@@ -31,12 +31,12 @@ else
+ 	LUA_MYLIBS += -ldl
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LUA_INTERPRETER_READLINE),y)
++ifeq ($(BR2_PACKAGE_LUA_READLINE),y)
+ 	LUA_DEPENDENCIES = readline ncurses
+ 	LUA_MYLIBS += -lreadline -lhistory -lncurses
+ 	LUA_CFLAGS += -DLUA_USE_READLINE
+ else
+-ifeq ($(BR2_PACKAGE_LUA_INTERPRETER_LINENOISE),y)
++ifeq ($(BR2_PACKAGE_LUA_LINENOISE),y)
+ 	LUA_DEPENDENCIES = linenoise
+ 	LUA_MYLIBS += -llinenoise
+ 	LUA_CFLAGS += -DLUA_USE_LINENOISE
