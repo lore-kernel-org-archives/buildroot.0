@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  5 Apr 2014 14:10:16 +0200
-Subject: [Buildroot] [PATCH 12/13] package/libevas: switch dependency from
-	mesa3d to _HAS_OPENGL
+Date: Sat,  5 Apr 2014 14:10:17 +0200
+Subject: [Buildroot] [PATCH 13/13] package/vlc: depends on the virtual
+	package libgl
 In-Reply-To: <cover.1396699629.git.yann.morin.1998@free.fr>
 References: <cover.1396699629.git.yann.morin.1998@free.fr>
-Message-ID: <9048b9d1d2fea3913730fd6ef7bdeed5958c2f7a.1396699629.git.yann.morin.1998@free.fr>
+Message-ID: <55d8bed0fa397c30345e1ba8318eeeb76fac7a3a.1396699629.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,30 +13,35 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-We now have a virtual package that represents availability of
-full OpenGL.
+Currently, vlc depends on mesa3d to provide the openGL support.
 
-This should be the end of this dependency hell epic, now. :-)
+We now have a virtual package, libgl, which ensures openGL is available.
+
+This is support for full OpenGL, which is only available when X.Org is
+enabled, which is anyway a dependency of full OpenGL.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Bernd Kuhls <berndkuhls@hotmail.com>
 Cc: Paul Cercueil <paul@crapouillou.net>
 ---
- package/efl/libevas/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/vlc/vlc.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/efl/libevas/Config.in b/package/efl/libevas/Config.in
-index 8eea23d..a2b7cfb 100644
---- a/package/efl/libevas/Config.in
-+++ b/package/efl/libevas/Config.in
-@@ -148,7 +148,7 @@ choice
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index a9ee620..f78f209 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -118,9 +118,9 @@ else
+ VLC_CONF_OPT += --disable-flac
+ endif
  
- config BR2_PACKAGE_LIBEVAS_GL
- 	bool "generic OpenGL"
--	depends on BR2_PACKAGE_MESA3D
-+	depends on BR2_PACKAGE_HAS_OPENGL
- 	select BR2_PACKAGE_LIBEET
- 
- config BR2_PACKAGE_LIBEVAS_GLES_SGX
+-ifeq ($(BR2_PACKAGE_MESA3D),y)
++ifeq ($(BR2_PACKAGE_HAS_OPENGL),y)
+ VLC_CONF_OPT += --enable-glx
+-VLC_DEPENDENCIES += mesa3d
++VLC_DEPENDENCIES += libgl
+ else
+ VLC_CONF_OPT += --disable-glx
+ endif
 -- 
 1.8.3.2
