@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  5 Apr 2014 14:10:09 +0200
-Subject: [Buildroot] [PATCH 05/13] package/mesa3d: DRI drivers depend on
-	X.org
+Date: Sat,  5 Apr 2014 14:10:10 +0200
+Subject: [Buildroot] [PATCH 06/13] package/mesa3d: add comment for when
+	OpenGL EGL is not available
 In-Reply-To: <cover.1396699629.git.yann.morin.1998@free.fr>
 References: <cover.1396699629.git.yann.morin.1998@free.fr>
-Message-ID: <e52fe333038cdef0a027be9255f8b8b6c339ae8e.1396699629.git.yann.morin.1998@free.fr>
+Message-ID: <2224089a0c70d9a1cf3f2ed152eaf3757cf36f4b.1396699629.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,49 +13,35 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-It does not make sense to build DRI drivers without X.org.
+OpenGL EGL needs udev support, so add a comment stating so.
+
+Also, reword the OpenGL EGL prompt to be in the same format as the
+OpenGL ES prompt (and like the full OpenGL prompt that will shortly
+be added, too.)
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Paul Cercueil <paul@crapouillou.net>
 Cc: Bernd Kuhls <berndkuhls@hotmail.com>
 ---
- package/mesa3d/Config.in | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ package/mesa3d/Config.in | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 607cc6c..a447e3e 100644
+index a447e3e..36f5d91 100644
 --- a/package/mesa3d/Config.in
 +++ b/package/mesa3d/Config.in
-@@ -56,10 +56,10 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
- 	  This is a software opengl implementation using the Gallium3D
- 	  infrastructure.
+@@ -92,8 +92,11 @@ if BR2_PACKAGE_MESA3D_DRIVER
  
--comment "DRI drivers need dynamic library"
--	depends on BR2_PREFER_STATIC_LIB
-+comment "DRI drivers need dynamic library and an X.Org server"
-+	depends on BR2_PREFER_STATIC_LIB || !BR2_PACKAGE_XSERVER_XORG_SERVER
+ comment "Additional API Support"
  
--if !BR2_PREFER_STATIC_LIB
-+if !BR2_PREFER_STATIC_LIB && BR2_PACKAGE_XSERVER_XORG_SERVER
- 
- comment "DRI drivers"
- 
-@@ -73,7 +73,6 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
- config BR2_PACKAGE_MESA3D_DRI_DRIVER_I965
- 	bool "DRI i965 driver"
- 	depends on BR2_i386 || BR2_x86_64
--	depends on BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_MESA3D_DRI_DRIVER
- 	select BR2_PACKAGE_LIBDRM_INTEL
++comment "OpenGL EGL needs udev /dev management"
++	depends on !BR2_PACKAGE_HAS_UDEV
++
+ config BR2_PACKAGE_MESA3D_OPENGL_EGL
+-	bool "EGL"
++	bool "OpenGL EGL"
+ 	depends on BR2_PACKAGE_HAS_UDEV
+ 	select BR2_PACKAGE_HAS_OPENGL_EGL
  	help
-@@ -87,7 +86,7 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
- 	help
- 	  Legacy Radeon driver for R100 series GPUs.
- 
--endif # !BR2_PREFER_STATIC_LIB
-+endif # !BR2_PREFER_STATIC_LIB && BR2_PACKAGE_XSERVER_XORG_SERVER
- 
- if BR2_PACKAGE_MESA3D_DRIVER
- 
 -- 
 1.8.3.2
