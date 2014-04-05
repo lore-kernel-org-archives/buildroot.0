@@ -1,112 +1,68 @@
-From: Paul Cercueil <paul@crapouillou.net>
-Date: Sat, 05 Apr 2014 17:53:55 +0200
-Subject: [Buildroot] [PATCH 02/11] arch: MIPS: Add config option
-	BR2_GCC_TARGET_TUNE
-In-Reply-To: <20140403221215.GA25471@free.fr>
-References: <1396558881-29631-1-git-send-email-paul@crapouillou.net>
- <1396558881-29631-2-git-send-email-paul@crapouillou.net>
- <20140403211925.GC17328@free.fr> <533DD7B6.8080009@crapouillou.net>
- <20140403221215.GA25471@free.fr>
-Message-ID: <53402713.9070801@crapouillou.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat,  5 Apr 2014 18:24:43 +0200
+Subject: [Buildroot] [PATCH] support/mkusers: fix warnings when adding a new
+	user
+Message-ID: <1396715083-20764-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-On 04/04/2014 00:12, Yann E. MORIN wrote:
-> Paul, All,
->
-> On 2014-04-03 23:50 +0200, Paul Cercueil spake thusly:
->> This patch would pass the same value to --with-arch and --with-tune, unless
->> you define a different value for BR2_GCC_TARGET_TUNE in your defconfig.
-> I see what you expect, but since BR2_GCC_TARGET_TUNE is a prompt-less
-> option, setting it in a defconfig will be overriden when you use that
-> defconfig.
->
-> For example:
->
->      $ cat defconfig
->      BR2_MIPS=y
->      BR2_GCC_TARGET_ARCH="FOO-YEM"
->      $ make BR2_DEFCONFIG=$(pwd)/defconfig defconfig
->      [...]
->      $ grep FOO .config
->      [empty, nada, zilch]
->
-> So, even if you set it in your defconfig, BR2_GCC_TARGET_ARCH is lost.
->
-> Ditto for BR2_GCC_TARGET_TUNE.
->
->> We
->> use that for the Ingenic jz4740 processor, which is a mips32 processor but
->> running better the code tuned for mips32r2.
-> Oh, I see. But that's not gonna happen with this code, I'm afraid.
->
-> Can you double-check that it is indeed working for you? Because if it
-> does, we have a really big bug in Kconfig (Oh, no, not one more...)
->
-> Regards,
-> Yann E. MORIN.
+When adding a new user (or a new group), we would get warnings, like:
+  [...]/support/scripts/mkusers: line 145: [: too many arguments
 
-I confirm it works. Why is it a bug?
+This is because we're checking if a UID (or a GID) is already defined,
+and/or is different from the requested one, both checks in the same
+test.
 
-Paul
->
->> On 03/04/2014 23:19, Yann E. MORIN wrote:
->>> Paul, All,
->>>
->>> On 2014-04-03 23:01 +0200, Paul Cercueil spake thusly:
->>>> This option is actually already used in GCC's package.
->>>>
->>>> This allows to optimize the toolchain for a specific MIPS processor
->>>> while supporting more than one family of processors.
->>> Is that really needed? man gcc says:
->>>
->>>      When this option is not used, GCC optimizes for the processor
->>>      specified by -march.
->>>
->>> Since this patch would pass the same value to --with-arch and
->>> --with-tune, and since this is the default of gcc, is it really
->>> needed?
->>>
->>> Neither ACKing nor NAKing this patch. Can you explain a bit more why we
->>> would want that, given the above explanations?
->>>
->>> Regards,
->>> Yann E. MORIN.
->>>
->>>> Signed-Off-By: Paul Cercueil <paul@crapouillou.net>
->>>> ---
->>>>   arch/Config.in.mips | 10 ++++++++++
->>>>   1 file changed, 10 insertions(+)
->>>>
->>>> diff --git a/arch/Config.in.mips b/arch/Config.in.mips
->>>> index 20951e0..e4160a2 100644
->>>> --- a/arch/Config.in.mips
->>>> +++ b/arch/Config.in.mips
->>>> @@ -83,6 +83,16 @@ config BR2_GCC_TARGET_ARCH
->>>>   	default "mips64"	if BR2_mips_64
->>>>   	default "mips64r2"	if BR2_mips_64r2
->>>> +config BR2_GCC_TARGET_TUNE
->>>> +	default "mips1"		if BR2_mips_1
->>>> +	default "mips2"		if BR2_mips_2
->>>> +	default "mips3"		if BR2_mips_3
->>>> +	default "mips4"		if BR2_mips_4
->>>> +	default "mips32"	if BR2_mips_32
->>>> +	default "mips32r2"	if BR2_mips_32r2
->>>> +	default "mips64"	if BR2_mips_64
->>>> +	default "mips64r2"	if BR2_mips_64r2
->>>> +
->>>>   config BR2_MIPS_OABI32
->>>>   	bool
->>>>   	default y		if BR2_mips || BR2_mipsel
->>>> -- 
->>>> 1.9.0
->>>>
->>>> _______________________________________________
->>>> buildroot mailing list
->>>> buildroot at busybox.net
->>>> http://lists.busybox.net/mailman/listinfo/buildroot
+Of course, if a UID (or a GID) is not defined, it does not have a value,
+so we can not compare it to an integer.
+
+Fix that by splitting the test in two, so the second is only executed if
+the first is sucessful.
+
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ support/scripts/mkusers | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/support/scripts/mkusers b/support/scripts/mkusers
+index 90d1df7..3fa0fa8 100755
+--- a/support/scripts/mkusers
++++ b/support/scripts/mkusers
+@@ -137,12 +137,16 @@ check_user_validity() {
+         fi
+ 
+         # check the group does not already exists with another gid
+-        if [ -n "${_gid}" -a ${_gid} -ne ${gid} ]; then
++        # Need to split the check in two, otherwise '[' complains it
++        # is missing arguments when _gid is empty
++        if [ -n "${_gid}" ] && [ ${_gid} -ne ${gid} ]; then
+             fail "group already exists with gid '${_gid}'\n"
+         fi
+ 
+         # check the user does not already exists with another gid
+-        if [ -n "${_ugid}" -a ${_ugid} -ne ${gid} ]; then
++        # Need to split the check in two, otherwise '[' complains it
++        # is missing arguments when _ugid is empty
++        if [ -n "${_ugid}" ] && [ ${_ugid} -ne ${gid} ]; then
+             fail "user already exists with gid '${_ugid}'\n"
+         fi
+     fi
+@@ -156,7 +160,9 @@ check_user_validity() {
+         fi
+ 
+         # check the user does not already exists with another uid
+-        if [ -n "${_uid}" -a ${_uid} -ne ${uid} ]; then
++        # Need to split the check in two, otherwise '[' complains it
++        # is missing arguments when _uid is empty
++        if [ -n "${_uid}" ] && [ ${_uid} -ne ${uid} ]; then
+             fail "user already exists with uid '${_uid}'\n"
+         fi
+     fi
+-- 
+1.8.3.2
