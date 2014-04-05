@@ -1,51 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Apr 2014 19:06:41 +0200
-Subject: [Buildroot] [git commit] libuci: Lua binding needs mmu and version
-	5.1
-Message-ID: <20140405170702.5B2B19C5BE@busybox.osuosl.org>
+Date: Sat, 5 Apr 2014 19:07:27 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2014-03-28
+In-Reply-To: <CAGm1_kvmveF6QpT66fMfW+psigqShdzMi-_9bQthrnsA8q6mdg@mail.gmail.com>
+References: <20140329073011.D16F2101349@stock.ovh.net>
+ <20140329175452.5c711852@skate>
+ <CAGm1_kuaabmOkyg60eU+PkWuwOgCQ3Kci3yX=8SXdG=jjnaeqw@mail.gmail.com>
+ <20140405144804.743b310a@skate>
+ <CAGm1_kvmveF6QpT66fMfW+psigqShdzMi-_9bQthrnsA8q6mdg@mail.gmail.com>
+Message-ID: <20140405190727.7b8fdcbf@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e09c0444f70a2f60ff0e2c9b2d1d0840a5075f98
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Yegor Yefremov,
 
-The Lua binding option of libuci uses fork() so it needs the MMU.
+On Sat, 5 Apr 2014 16:44:06 +0200, Yegor Yefremov wrote:
 
-Finally, libuci fails to build with Lua 5.2 because it uses functions
-removed from this version. Fix it by activating the option only with
-Lua 5.1.
+> IF(NOT ${LUA_CHECK_RES} EQUAL 0 OR "${LUAPATH}" EQUAL "")
+> 
+> Could you test this?
+> 
+> diff --git a/lua/CMakeLists.txt b/lua/CMakeLists.txt
+> index e4295d7..4ba8e37 100644
+> --- a/lua/CMakeLists.txt
+> +++ b/lua/CMakeLists.txt
+> @@ -36,7 +36,7 @@ IF(NOT LUAPATH)
+>         )
+> 
+>         IF(BUILD_LUA)
+> -               IF(NOT ${LUA_CHECK_RES} EQUAL 0 OR ${LUAPATH} EQUAL "")
+> +               IF(NOT ${LUA_CHECK_RES} EQUAL 0 OR "${LUAPATH}" EQUAL "")
+>                         MESSAGE(SEND_ERROR "Lua was not found on your system")
+>                 ENDIF()
+>         ENDIF()
 
-[Thomas: use LIBUCI_ and not LIBUBOX_ otherwise the patch doesn't
-work.]
+This patch fixes the problem here. Can you send a patch for it?
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libuci/libuci.mk |   10 +++++++---
- 1 files changed, 7 insertions(+), 3 deletions(-)
+I'm pretty sure you can reproduce the problem if you disable Lua in
+your configuration.
 
-diff --git a/package/libuci/libuci.mk b/package/libuci/libuci.mk
-index 736b946..a7d3a80 100644
---- a/package/libuci/libuci.mk
-+++ b/package/libuci/libuci.mk
-@@ -10,10 +10,14 @@ LIBUCI_LICENSE = LGPLv2.1
- LIBUCI_INSTALL_STAGING = YES
- LIBUCI_DEPENDENCIES = libubox
- 
--ifeq ($(BR2_PACKAGE_LUA),y)
--	LIBUCI_DEPENDENCIES += lua
-+ifeq ($(BR2_USE_MMU),y) # fork()
-+ifeq ($(BR2_PACKAGE_LUA_5_1),y)
-+LIBUCI_DEPENDENCIES += lua
-+LIBUCI_CONF_OPT += -DLUAPATH=$(STAGING_DIR)/usr/lib/lua/5.1 \
-+	-DLUA_CFLAGS=-I$(STAGING_DIR)/usr/include
- else
--	LIBUCI_CONF_OPT += -DBUILD_LUA:BOOL=OFF
-+LIBUCI_CONF_OPT += -DBUILD_LUA:BOOL=OFF
- endif
-+endif # MMU
- 
- $(eval $(cmake-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
