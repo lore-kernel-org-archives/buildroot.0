@@ -1,54 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Apr 2014 16:41:15 +0200
-Subject: [Buildroot] [git commit] python-m2crypto: requires host-python2
-Message-ID: <20140405153937.C5E689BCF2@busybox.osuosl.org>
+Date: Sat, 5 Apr 2014 15:38:07 +0200
+Subject: [Buildroot] [git commit] python3: rework python symlinks
+	installation
+Message-ID: <20140405153937.ADA269BCF2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=09e8b6cd533ed9b42f7e0bc947bae5422646e4c9
+commit: http://git.buildroot.net/buildroot/commit/?id=a8127d3cf8296597c1f76215252efd12578a4e76
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Acording to its homepage [1], m2crypto does not support python3 yet.
+This patch reworks the way python3 and python3-config symlink are
+installed.
 
-So, this patch forces building the host m2crypto module for pyhton2.
+Buildroot wants to control these symlinks' installation:
 
-[1] https://pypi.python.org/pypi/M2Crypto
+* the python3 symlink should be unconditionally installed in the target
+  tree, and the python3-config symlink in the staging tree, since it is
+  the only python package built and installed in the target tree if the
+  user selected it;
 
-[Thomas: take into account the rename of the new variable to
-<pkg>_NEEDS_HOST_PYTHON.]
+* the python3 and python3-config symlinks should only be installed in
+  the host tree when python3 is the selection of the user for the
+  target.
+
+[Thomas: fix comment as suggested by Yann.]
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-m2crypto/python-m2crypto.mk |   10 +++++++---
- 1 files changed, 7 insertions(+), 3 deletions(-)
+ package/python3/python3.mk |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
 
-diff --git a/package/python-m2crypto/python-m2crypto.mk b/package/python-m2crypto/python-m2crypto.mk
-index dd0f77e..7e46f1d 100644
---- a/package/python-m2crypto/python-m2crypto.mk
-+++ b/package/python-m2crypto/python-m2crypto.mk
-@@ -10,12 +10,16 @@ PYTHON_M2CRYPTO_SOURCE = M2Crypto-$(PYTHON_M2CRYPTO_VERSION).tar.gz
- PYTHON_M2CRYPTO_SETUP_TYPE = setuptools
- HOST_PYTHON_M2CRYPTO_DEPENDENCIES = host-openssl host-swig
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 0144d1e..542f2c9 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -155,11 +155,18 @@ ifneq ($(BR2_PACKAGE_PYTHON),y)
+ PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_INSTALL_SYMLINK
+ endif
  
--# We need to override the build commands to be able to use build_ext,
--# which accepts the --openssl option.
-+# We need to use python2 because m2crypto is not python3 compliant.
-+HOST_PYTHON_M2CRYPTO_NEEDS_HOST_PYTHON = python2
-+
-+# * We need to override the build commands to be able to use build_ext,
-+#   which accepts the --openssl option.
-+# * Use python2 interpreter to avoid trying building some python3 objects.
- define HOST_PYTHON_M2CRYPTO_BUILD_CMDS
- 	(cd $(@D); \
- 		$(HOST_PKG_PYTHON_SETUPTOOLS_ENV) \
--		$(HOST_DIR)/usr/bin/python setup.py build_ext \
-+		$(HOST_DIR)/usr/bin/python2 setup.py build_ext \
- 			--openssl=$(HOST_DIR)/usr)
++# Some packages may have build scripts requiring python3, whatever is the
++# python version chosen for the target.
++# Only install the python symlink in the host tree if python3 is enabled
++# for the target.
++ifeq ($(BR2_PACKAGE_PYTHON3),y)
+ define HOST_PYTHON3_INSTALL_SYMLINK
+ 	ln -fs python3 $(HOST_DIR)/usr/bin/python
++	ln -fs python3-config $(HOST_DIR)/usr/bin/python-config
  endef
  
+ HOST_PYTHON3_POST_INSTALL_HOOKS += HOST_PYTHON3_INSTALL_SYMLINK
++endif
+ 
+ # Provided to other packages
+ PYTHON3_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/sysconfigdata/:$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/
