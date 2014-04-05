@@ -1,34 +1,30 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Sat, 5 Apr 2014 02:46:28 +0400
-Subject: [Buildroot] host-binutils broken?
-In-Reply-To: <loom.20140404T230545-334@post.gmane.org>
-References: <533EED51.9090204@freescale.com>
- <CAMo8BfJhxpqBFmFeADF97cKbANtzNFYy2_L=wrMjLn8zUtinyw@mail.gmail.com>
- <loom.20140404T230545-334@post.gmane.org>
-Message-ID: <CAMo8BfKN8NAsfS1aM31TzjUvfJ1EFRQTZVnxH4U2M0BN0XWq1A@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri,  4 Apr 2014 21:12:36 -0300
+Subject: [Buildroot] [PATCH 1/2] pcre: bump to version 8.35
+Message-ID: <1396656757-11271-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Apr 5, 2014 at 1:21 AM, Vincent Stehl?
-<vincent.stehle@laposte.net> wrote:
-> Thanks for looking into this issue. I could reproduce it at home in the
-> following way:
->
->   $ git clean -fdx
->   $ git checkout f90760fe0ed7317510bc6f44c5508e2072ed217d
->   $ make raspberrypi_defconfig
->   $ make |& tee log
->
-> It "chokes" when making as.info, during install-am.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/pcre/pcre.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Doesn't produce even a single warning for me... What's your makeinfo version?
-
-> Here is the log: http://pastebin.com/nsUjcZXf
-> And here is the .config: http://pastebin.com/cyuKb9yA
-
+diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
+index 14d3aa3..2077896 100644
+--- a/package/pcre/pcre.mk
++++ b/package/pcre/pcre.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PCRE_VERSION = 8.34
++PCRE_VERSION = 8.35
+ PCRE_SITE = ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre
+ PCRE_LICENSE = BSD-3c
+ PCRE_LICENSE_FILES = LICENCE
 -- 
-Thanks.
--- Max
+1.8.3.2
