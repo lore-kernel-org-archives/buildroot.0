@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  5 Apr 2014 14:10:15 +0200
-Subject: [Buildroot] [PATCH 11/13] package/mesa3d: with a DRI driver,
-	is a full OpenGL provider
+Date: Sat,  5 Apr 2014 14:10:16 +0200
+Subject: [Buildroot] [PATCH 12/13] package/libevas: switch dependency from
+	mesa3d to _HAS_OPENGL
 In-Reply-To: <cover.1396699629.git.yann.morin.1998@free.fr>
 References: <cover.1396699629.git.yann.morin.1998@free.fr>
-Message-ID: <20fdd8591be0a87c92150e2eb91c194a5622a295.1396699629.git.yann.morin.1998@free.fr>
+Message-ID: <9048b9d1d2fea3913730fd6ef7bdeed5958c2f7a.1396699629.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,39 +13,30 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Make mesa3d a provider for full OpenGL, as soon as a DRI driver is enabled.
+We now have a virtual package that represents availability of
+full OpenGL.
 
-Full OpenGL is only possible when:
-  - a DRI driver is enabled,
-  - and X.Org is enabled
-
-Since DRI driver in fact depend on X.Org being enabled in the first place,
-we can safely declare mesa3d as a full openGL provider as soon as at least
-one DRI driver is enabled.
+This should be the end of this dependency hell epic, now. :-)
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Bernd Kuhls <berndkuhls@hotmail.com>
 Cc: Paul Cercueil <paul@crapouillou.net>
 ---
- package/mesa3d/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/efl/libevas/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 36f5d91..eaba2d7 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -26,8 +26,12 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+diff --git a/package/efl/libevas/Config.in b/package/efl/libevas/Config.in
+index 8eea23d..a2b7cfb 100644
+--- a/package/efl/libevas/Config.in
++++ b/package/efl/libevas/Config.in
+@@ -148,7 +148,7 @@ choice
  
- config BR2_PACKAGE_MESA3D_DRI_DRIVER
- 	select BR2_PACKAGE_MESA3D_DRIVER
-+	select BR2_PACKAGE_HAS_OPENGL
- 	bool
+ config BR2_PACKAGE_LIBEVAS_GL
+ 	bool "generic OpenGL"
+-	depends on BR2_PACKAGE_MESA3D
++	depends on BR2_PACKAGE_HAS_OPENGL
+ 	select BR2_PACKAGE_LIBEET
  
-+config BR2_PACKAGE_PROVIDES_OPENGL
-+	default "mesa3d" if BR2_PACKAGE_MESA3D_DRI_DRIVER
-+
- config BR2_PACKAGE_MESA3D_DRIVER
- 	bool
- 
+ config BR2_PACKAGE_LIBEVAS_GLES_SGX
 -- 
 1.8.3.2
