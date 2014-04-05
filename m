@@ -1,55 +1,112 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Apr 2014 17:42:15 +0200
-Subject: [Buildroot] [PATCH 0/6] host-python2 hard dependency
-In-Reply-To: <1394057085-10399-1-git-send-email-s.martin49@gmail.com>
-References: <1394057085-10399-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <20140405174215.20b771eb@skate>
+From: Paul Cercueil <paul@crapouillou.net>
+Date: Sat, 05 Apr 2014 17:53:55 +0200
+Subject: [Buildroot] [PATCH 02/11] arch: MIPS: Add config option
+	BR2_GCC_TARGET_TUNE
+In-Reply-To: <20140403221215.GA25471@free.fr>
+References: <1396558881-29631-1-git-send-email-paul@crapouillou.net>
+ <1396558881-29631-2-git-send-email-paul@crapouillou.net>
+ <20140403211925.GC17328@free.fr> <533DD7B6.8080009@crapouillou.net>
+ <20140403221215.GA25471@free.fr>
+Message-ID: <53402713.9070801@crapouillou.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+Hi,
 
-On Wed,  5 Mar 2014 23:04:39 +0100, Samuel Martin wrote:
+On 04/04/2014 00:12, Yann E. MORIN wrote:
+> Paul, All,
+>
+> On 2014-04-03 23:50 +0200, Paul Cercueil spake thusly:
+>> This patch would pass the same value to --with-arch and --with-tune, unless
+>> you define a different value for BR2_GCC_TARGET_TUNE in your defconfig.
+> I see what you expect, but since BR2_GCC_TARGET_TUNE is a prompt-less
+> option, setting it in a defconfig will be overriden when you use that
+> defconfig.
+>
+> For example:
+>
+>      $ cat defconfig
+>      BR2_MIPS=y
+>      BR2_GCC_TARGET_ARCH="FOO-YEM"
+>      $ make BR2_DEFCONFIG=$(pwd)/defconfig defconfig
+>      [...]
+>      $ grep FOO .config
+>      [empty, nada, zilch]
+>
+> So, even if you set it in your defconfig, BR2_GCC_TARGET_ARCH is lost.
+>
+> Ditto for BR2_GCC_TARGET_TUNE.
+>
+>> We
+>> use that for the Ingenic jz4740 processor, which is a mips32 processor but
+>> running better the code tuned for mips32r2.
+> Oh, I see. But that's not gonna happen with this code, I'm afraid.
+>
+> Can you double-check that it is indeed working for you? Because if it
+> does, we have a really big bug in Kconfig (Oh, no, not one more...)
+>
+> Regards,
+> Yann E. MORIN.
 
-> Samuel Martin (6):
->   python: rework python symlinks installation
->   python3: rework python symlinks installation
->   pkg-python: support host-python dependency different from the python
->     in the target
->   scons: force host-python dependency to be python2
->   python-m2crypto: requires host-python2
->   crda: override python interperter
+I confirm it works. Why is it a bug?
 
-I've applied your patch series, after making a number of changes,
-according to Yann's review. The main change was the renaming of the
-variable from <pkg>_FORCE_HOST_PYTHON to <pkg>_NEEDS_HOST_PYTHON.
-You'll find all the details in the commit logs of the different commits.
-
-I've also added a separate commit to fix an unrelated issue I stumbled
-upon while testing your patch series.
-
-With your patch series, I've been able to test the following
-configurations:
-
- * Build a system with python2 as the target interpreter, with all
-   python external modules enabled, the crda package (which needs the
-   host python2 interpreter) as well as gpsd and exfat (which need
-   host-scons, which in turns needs the host python2 interpreter)
-
- * Build a system with python3 as the target interpreter, with all
-   python external modules enabled, the crda package (which needs the
-   host python2 interpreter) as well as gpsd and exfat (which need
-   host-scons, which in turns needs the host python2 interpreter)
-
-Both builds went fine.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Paul
+>
+>> On 03/04/2014 23:19, Yann E. MORIN wrote:
+>>> Paul, All,
+>>>
+>>> On 2014-04-03 23:01 +0200, Paul Cercueil spake thusly:
+>>>> This option is actually already used in GCC's package.
+>>>>
+>>>> This allows to optimize the toolchain for a specific MIPS processor
+>>>> while supporting more than one family of processors.
+>>> Is that really needed? man gcc says:
+>>>
+>>>      When this option is not used, GCC optimizes for the processor
+>>>      specified by -march.
+>>>
+>>> Since this patch would pass the same value to --with-arch and
+>>> --with-tune, and since this is the default of gcc, is it really
+>>> needed?
+>>>
+>>> Neither ACKing nor NAKing this patch. Can you explain a bit more why we
+>>> would want that, given the above explanations?
+>>>
+>>> Regards,
+>>> Yann E. MORIN.
+>>>
+>>>> Signed-Off-By: Paul Cercueil <paul@crapouillou.net>
+>>>> ---
+>>>>   arch/Config.in.mips | 10 ++++++++++
+>>>>   1 file changed, 10 insertions(+)
+>>>>
+>>>> diff --git a/arch/Config.in.mips b/arch/Config.in.mips
+>>>> index 20951e0..e4160a2 100644
+>>>> --- a/arch/Config.in.mips
+>>>> +++ b/arch/Config.in.mips
+>>>> @@ -83,6 +83,16 @@ config BR2_GCC_TARGET_ARCH
+>>>>   	default "mips64"	if BR2_mips_64
+>>>>   	default "mips64r2"	if BR2_mips_64r2
+>>>> +config BR2_GCC_TARGET_TUNE
+>>>> +	default "mips1"		if BR2_mips_1
+>>>> +	default "mips2"		if BR2_mips_2
+>>>> +	default "mips3"		if BR2_mips_3
+>>>> +	default "mips4"		if BR2_mips_4
+>>>> +	default "mips32"	if BR2_mips_32
+>>>> +	default "mips32r2"	if BR2_mips_32r2
+>>>> +	default "mips64"	if BR2_mips_64
+>>>> +	default "mips64r2"	if BR2_mips_64r2
+>>>> +
+>>>>   config BR2_MIPS_OABI32
+>>>>   	bool
+>>>>   	default y		if BR2_mips || BR2_mipsel
+>>>> -- 
+>>>> 1.9.0
+>>>>
+>>>> _______________________________________________
+>>>> buildroot mailing list
+>>>> buildroot at busybox.net
+>>>> http://lists.busybox.net/mailman/listinfo/buildroot
