@@ -1,37 +1,45 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Sat, 5 Apr 2014 18:35:12 +0400
-Subject: [Buildroot] host-binutils broken?
-In-Reply-To: <CAMo8Bf+twN0uqjLquE7GYVpf1CP0UndHy924Ome3c84dqP4Y0A@mail.gmail.com>
-References: <533EED51.9090204@freescale.com>
- <CAMo8BfJhxpqBFmFeADF97cKbANtzNFYy2_L=wrMjLn8zUtinyw@mail.gmail.com>
- <loom.20140404T230545-334@post.gmane.org>
- <CAMo8BfKN8NAsfS1aM31TzjUvfJ1EFRQTZVnxH4U2M0BN0XWq1A@mail.gmail.com>
- <533FF599.70104@bergerie>
- <CAMo8Bf+twN0uqjLquE7GYVpf1CP0UndHy924Ome3c84dqP4Y0A@mail.gmail.com>
-Message-ID: <CAMo8BfJZbpLA0VhG08bKT5OYvmNydEYJ_TW-FUU9oBpsdKjV+w@mail.gmail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Sat,  5 Apr 2014 16:36:57 +0200
+Subject: [Buildroot] [PATCH] libuci: Lua binding needs mmu and version 5.1
+Message-ID: <1396708617-7364-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Apr 5, 2014 at 6:04 PM, Max Filippov <jcmvbkbc@gmail.com> wrote:
-> On Sat, Apr 5, 2014 at 4:22 PM, Vincent <vincent.stehle@laposte.net> wrote:
->> On 04/05/2014 12:46 AM, Max Filippov wrote:
->>> What's your makeinfo version?
->> This is:
->>
->>   makeinfo (GNU texinfo) 5.2
->>
->> ...on debian testing, from package texinfo 5.2.0.dfsg.1-2.
->
-> Ok, I'll try this version (I currently have 4.13 on build machine).
+The Lua binding option of libuci uses fork() so it needs the MMU.
 
-Yes, now make as.info fails for me too. However, it fails for me both
-with and without
-my patch. Seems to me the easiest fix would be to drop *.texi hunks from my
-patch to binutils to just avoid as.info rebuild. Ok?
+Finally, libuci fails to build with Lua 5.2 because it uses functions
+removed from this version. Fix it by activating the option only with
+Lua 5.1.
 
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/libuci/libuci.mk | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/package/libuci/libuci.mk b/package/libuci/libuci.mk
+index 736b946..42e61ee 100644
+--- a/package/libuci/libuci.mk
++++ b/package/libuci/libuci.mk
+@@ -10,10 +10,14 @@ LIBUCI_LICENSE = LGPLv2.1
+ LIBUCI_INSTALL_STAGING = YES
+ LIBUCI_DEPENDENCIES = libubox
+ 
+-ifeq ($(BR2_PACKAGE_LUA),y)
+-	LIBUCI_DEPENDENCIES += lua
++ifeq ($(BR2_USE_MMU),y) # fork()
++ifeq ($(BR2_PACKAGE_LUA_5_1),y)
++LIBUBOX_DEPENDENCIES += lua
++LIBUBOX_CONF_OPT += -DLUAPATH=$(STAGING_DIR)/usr/lib/lua/5.1 \
++	-DLUA_CFLAGS=-I$(STAGING_DIR)/usr/include
+ else
+-	LIBUCI_CONF_OPT += -DBUILD_LUA:BOOL=OFF
++LIBUBOX_CONF_OPT += -DBUILD_LUA:BOOL=OFF
+ endif
++endif # MMU
+ 
+ $(eval $(cmake-package))
 -- 
-Thanks.
--- Max
+1.8.3.2
