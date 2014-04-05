@@ -1,45 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Apr 2014 14:42:55 +0200
-Subject: [Buildroot] host-binutils broken?
-In-Reply-To: <533FF599.70104@bergerie>
-References: <533EED51.9090204@freescale.com>
- <CAMo8BfJhxpqBFmFeADF97cKbANtzNFYy2_L=wrMjLn8zUtinyw@mail.gmail.com>
- <loom.20140404T230545-334@post.gmane.org>
- <CAMo8BfKN8NAsfS1aM31TzjUvfJ1EFRQTZVnxH4U2M0BN0XWq1A@mail.gmail.com>
- <533FF599.70104@bergerie>
-Message-ID: <20140405144255.7c60ff32@skate>
+Date: Sat, 5 Apr 2014 14:44:45 +0200
+Subject: [Buildroot] [PATCH] gmp: fix target build for ARM thumb
+In-Reply-To: <1396648140-16883-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1396648140-16883-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140405144445.3956ad75@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vincent,
+Dear Gustavo Zacarias,
 
-On Sat, 05 Apr 2014 14:22:49 +0200, Vincent wrote:
+On Fri,  4 Apr 2014 18:49:00 -0300, Gustavo Zacarias wrote:
+> Pull upstream hg changeset c56ea318eb64 and 676e2d0f0e4d to fix ARM
+> build breakage when compiling in thumb mode. Fixes:
+> http://autobuild.buildroot.net/results/f44/f447ce933ad8dd975b17aeda03cc46b0cace0b03/
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  .../gmp-01-arm-asm-conditional-on-no-thumb-1.patch  | 21 +++++++++++++++++++++
+>  .../gmp-02-arm-asm-conditional-on-no-thumb-2.patch  | 21 +++++++++++++++++++++
+>  2 files changed, 42 insertions(+)
+>  create mode 100644 package/gmp/gmp-01-arm-asm-conditional-on-no-thumb-1.patch
+>  create mode 100644 package/gmp/gmp-02-arm-asm-conditional-on-no-thumb-2.patch
 
-> Thanks for re-trying. You are lucky that it works for you :)
-> 
->  > What's your makeinfo version?
-> 
-> This is:
-> 
->    makeinfo (GNU texinfo) 5.2
-> 
-> ...on debian testing, from package texinfo 5.2.0.dfsg.1-2.
-> 
-> Does this call for a host-texinfo / host-makeinfo package?
-
-We already have, and in some situations, binutils depends on it:
-
-ifeq ($(BINUTILS_FROM_GIT),y)
-BINUTILS_DEPENDENCIES += host-texinfo host-flex host-bison
-HOST_BINUTILS_DEPENDENCIES += host-texinfo host-flex host-bison
-endif
-
-I believe what's happening is that the patches added by Max are making
-certain files newer, which triggers a rebuild of the documentation in
-binutils, which normally doesn't happen with release tarballs.
+Applied, thanks.
 
 Thomas
 -- 
