@@ -1,134 +1,68 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 5 Apr 2014 16:41:09 +0200
-Subject: [Buildroot] [PATCH 08/20] packages: add infrastructure for
- virtual packages
-In-Reply-To: <533F11CA.5040304@mind.be>
-References: <cover.1394482605.git.yann.morin.1998@free.fr>
- <19c0bbf58268a2133297840b8763d415ad5a4ef0.1394482605.git.yann.morin.1998@free.fr>
- <533F11CA.5040304@mind.be>
-Message-ID: <20140405144109.GA3177@free.fr>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Sat, 5 Apr 2014 16:44:06 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-03-28
+In-Reply-To: <20140405144804.743b310a@skate>
+References: <20140329073011.D16F2101349@stock.ovh.net>
+ <20140329175452.5c711852@skate>
+ <CAGm1_kuaabmOkyg60eU+PkWuwOgCQ3Kci3yX=8SXdG=jjnaeqw@mail.gmail.com>
+ <20140405144804.743b310a@skate>
+Message-ID: <CAGm1_kvmveF6QpT66fMfW+psigqShdzMi-_9bQthrnsA8q6mdg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, all,
+On Sat, Apr 5, 2014 at 2:48 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Yegor Yefremov,
+>
+> On Sun, 30 Mar 2014 13:59:44 +0200, Yegor Yefremov wrote:
+>
+>> >>        arm | libuci-262fede3e8c8c08c1eb0... | NOK | http://autobuild.buildroot.net/results/fd8fef776e079600ae0f8ded2763cd3fca39ebee/
+>> >>        arm | libuci-262fede3e8c8c08c1eb0... | NOK | http://autobuild.buildroot.net/results/11c352d0f676fc7737ba3a35747474a93ff01d4b/
+>> >>     x86_64 | libuci-262fede3e8c8c08c1eb0... | NOK | http://autobuild.buildroot.net/results/df805da50cdfea4ccee112f8b3c65655d1e5eee8/
+>> >>        arm | libuci-262fede3e8c8c08c1eb0... | NOK | http://autobuild.buildroot.net/results/00532a8356143baa308c4f832775d8ee28e27e66/
+>> >>     x86_64 | libuci-262fede3e8c8c08c1eb0... | NOK | http://autobuild.buildroot.net/results/f90465c77540308d7807dde4308e5ebff07ec9ba/
+>> >>        arm | libuci-262fede3e8c8c08c1eb0... | NOK | http://autobuild.buildroot.net/results/497f31a2147cd7ce136ca86a4bdc033088b8272f/
+>> >>        arm | libuci-262fede3e8c8c08c1eb0... | NOK | http://autobuild.buildroot.net/results/960cd673632fb4ae598ea6b278cb9664c6dc1ad0/
+>> >
+>> > Yegor, can you have a look ?
+>>
+>> I'll do next week. I've made a quick test with the first failed
+>> config. I've stripped it down to build settings and libuci, but it
+>> didn't fail on Ubuntu 13.10.
+>
+> Any news? libuci is still generating a good number of build failures
+> everyday. It would be good to fix this really soon.
 
-On 2014-04-04 22:10 +0200, Arnout Vandecappelle spake thusly:
-> On 10/03/14 21:27, Yann E. MORIN wrote:
-> > The virtual-package infrastructure allows to easily define a
-> > virtual package in a single line:
-[--SNIP--]
-> > +# Note: putting this comment here rather than in the define block, otherwise
-> > +# make would try to expand the $(error ...) in the comment, which is not
-> > +# really what we want.
-> 
->  That could be avoided by $$-quoting it inside the comment as well :-)
+Sorry for delay.
 
-I've tried, but that's just ugly...
+I still cannot reproduce the error. At first I've sent the patch, that
+combines two patches, that were made for libubox. As one can see, it
+is uci, that makes trouble, but not libubox.
 
-> > +# We need to use second-expansion for the $(error ...) call, below,
-> > +# so it is not evaluated now, but as part of the generated make code.
-> > +
-> > +define inner-virtual-package
-> > +
-> > +# Ensure the virtual package has an implementation defined.
-> > +ifeq ($(BR2_PACKAGE_HAS_$(2)),y)
-> 
->  Even though it is not strictly necessary (it will anyway be eval'ed
-> immediately after expansion), I think it's better to consistently use $$
-> everywhere (except for $(1) etc. of course). Currently it's not done
-> consistently in package-generic but it would be better to make it
-> consistent here.
+Then I have diffed both lua/CMakeLists.txt files and found out, that
+libubox one has LUAPATH quoted, but the one from uci not.
 
-OK.
+IF(NOT ${LUA_CHECK_RES} EQUAL 0 OR "${LUAPATH}" EQUAL "")
 
-> > +ifeq ($(call qstrip,$(BR2_PACKAGE_PROVIDES_$(2))),)
-> > +$$(error No implementation selected for virtual package $(1). Configuration error)
-> 
->  I think "Configuration error" is a bit vague, but I can't think of
-> anything better.
+Could you test this?
 
-Well, that's mostly a developper's message. The message is here to ensure
-the developper does not forget to set the _PROVIDES option.
+diff --git a/lua/CMakeLists.txt b/lua/CMakeLists.txt
+index e4295d7..4ba8e37 100644
+--- a/lua/CMakeLists.txt
++++ b/lua/CMakeLists.txt
+@@ -36,7 +36,7 @@ IF(NOT LUAPATH)
+        )
 
-When the configuration options are properly set, the user will never see
-that error message.
+        IF(BUILD_LUA)
+-               IF(NOT ${LUA_CHECK_RES} EQUAL 0 OR ${LUAPATH} EQUAL "")
++               IF(NOT ${LUA_CHECK_RES} EQUAL 0 OR "${LUAPATH}" EQUAL "")
+                        MESSAGE(SEND_ERROR "Lua was not found on your system")
+                ENDIF()
+        ENDIF()
 
-> > +endif
-> > +endif
-> > +
-> > +# A virtual package does not have any source associated
-> > +$(2)_SOURCE =
-> > +
-> > +# This must be repeated from inner-generic-package, otherwise we get an empty
-> > +# _DEPENDENCIES
-> > +$(2)_DEPENDENCIES ?= $(filter-out host-toolchain $(1),\
-> > +	$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
-> > +
-> > +# Add dependency against the provider
-> > +$(2)_DEPENDENCIES += $(call qstrip,$(BR2_PACKAGE_PROVIDES_$(2)))
-> > +
-> > +# Call the generic package infrastructure to generate the necessary
-> > +# make targets
-> > +$(call inner-generic-package,$(1),$(2),$(3),$(4))
-> 
->  I don't really see the need to call inner-generic-package here. Isn't it
-> sufficient to do:
-> 
-> ifeq ($$(BR2_PACKAGE_HAS_$(2)),y)
-> ifeq ($$(call qstrip,$$(BR2_PACKAGE_PROVIDES_$(2))),)
-> $$(error No implementation selected for virtual package $(1).
-> Configuration error)
-> endif
-> endif
-> 
-> $(1): $$(call qstrip,$$(BR2_PACKAGE_PROVIDES_$(2))
-> 
->  We don't need all the rest of the package infrastructure, do we? We
-> don't need to download any sources, we don't need legal info for the
-> virtual package, etc. etc. There's also no need to create stamp files
 
-I do not want o duplicate the logic in generic-package. For example:
-
-  - with the now-possible parallel build, all packages must depend on
-    'toolchain', which I'd have to add here;
-
-  - clean-for-rebuild on a virtual package will eventually trigger a
-    rebuild of all packages that depend on it (IIUC);
-
-  - show-dpeends and graph-depends are interesting for virtual packages;
-
-  - I can already think of a case where I'd need to run a post-install
-    hook for a virtual package.
-
-> > +
-> > +endef
-> > +
-> > +################################################################################
-> > +# virtual-package -- the target generator macro for virtual packages
-> > +################################################################################
-> > +
-> > +virtual-package = $(call inner-virtual-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
-> > +host-virtual-package = $(call inner-virtual-package,host-$(pkgname),$(call UPPERCASE,host-$(pkgname)),$(call UPPERCASE,$(pkgname)),host)
-> 
->  Note that with the simplification above, you only need the first two
-> arguments to the inner-virtual-package macro.
-
-Maybe, but I would prefer we keep the same arguments when calling inner
-functions, so all types of packages are handled the same. If we are to
-add (or remove) an argument in the future, it will be much easier to do.
-
-Plus the reasons expresed above.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Yegor
