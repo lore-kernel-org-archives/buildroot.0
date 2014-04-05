@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  5 Apr 2014 14:10:13 +0200
-Subject: [Buildroot] [PATCH 09/13] package/xorg-server: do not force-select
-	xf86driproto for mesa3d
+Date: Sat,  5 Apr 2014 14:10:14 +0200
+Subject: [Buildroot] [PATCH 10/13] package/libgl: introduce as a new virtual
+	package for full-openGL providers
 In-Reply-To: <cover.1396699629.git.yann.morin.1998@free.fr>
 References: <cover.1396699629.git.yann.morin.1998@free.fr>
-Message-ID: <7745e698d22026cf6b415dc4595d85670c32b341.1396699629.git.yann.morin.1998@free.fr>
+Message-ID: <76e42414ddf78d36ad4a28cb26cf81e0307c4397.1396699629.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,26 +13,67 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-This is already handled by mesa3d itself.
+Currently, on mesa3d is such a full-openGL provider.
+
+But it is easy to see a few more cropping at the door:
+  - NVidia's binary blob
+  - ATI's fglrx binary blob
+
+Having this virtual full-openGL package will help when those are getting in.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Bernd Kuhls <berndkuhls@hotmail.com>
 Cc: Paul Cercueil <paul@crapouillou.net>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xserver_xorg-server/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ package/opengl/Config.in       |  1 +
+ package/opengl/libgl/Config.in |  6 ++++++
+ package/opengl/libgl/libgl.mk  | 16 ++++++++++++++++
+ 3 files changed, 23 insertions(+)
+ create mode 100644 package/opengl/libgl/Config.in
+ create mode 100644 package/opengl/libgl/libgl.mk
 
-diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
-index dfa7d10..e191dce 100644
---- a/package/x11r7/xserver_xorg-server/Config.in
-+++ b/package/x11r7/xserver_xorg-server/Config.in
-@@ -45,7 +45,6 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER
- 	select BR2_PACKAGE_XPROTO_XEXTPROTO
- 	select BR2_PACKAGE_XPROTO_XF86BIGFONTPROTO
- 	select BR2_PACKAGE_XPROTO_XF86DGAPROTO
--	select BR2_PACKAGE_XPROTO_XF86DRIPROTO if BR2_PACKAGE_MESA3D
- 	select BR2_PACKAGE_XPROTO_XF86VIDMODEPROTO
- 	select BR2_PACKAGE_XPROTO_XPROTO
- 	select BR2_PACKAGE_XUTIL_UTIL_MACROS
+diff --git a/package/opengl/Config.in b/package/opengl/Config.in
+index ed81835..20ee28b 100644
+--- a/package/opengl/Config.in
++++ b/package/opengl/Config.in
+@@ -1,3 +1,4 @@
++source "package/opengl/libgl/Config.in"
+ source "package/opengl/libegl/Config.in"
+ source "package/opengl/libgles/Config.in"
+ source "package/opengl/libopenvg/Config.in"
+diff --git a/package/opengl/libgl/Config.in b/package/opengl/libgl/Config.in
+new file mode 100644
+index 0000000..5eb277a
+--- /dev/null
++++ b/package/opengl/libgl/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_HAS_OPENGL
++	bool
++
++config BR2_PACKAGE_PROVIDES_OPENGL
++	depends on BR2_PACKAGE_HAS_OPENGL
++	string
+diff --git a/package/opengl/libgl/libgl.mk b/package/opengl/libgl/libgl.mk
+new file mode 100644
+index 0000000..cf9daa5
+--- /dev/null
++++ b/package/opengl/libgl/libgl.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# libgl
++#
++################################################################################
++
++LIBGL_SOURCE =
++LIBGL_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_OPENGL))
++
++ifeq ($(BR2_PACKAGE_HAS_OPENGL),y)
++ifeq ($(LIBGL_DEPENDENCIES),)
++$(error No libGL implementation selected. Configuration error.)
++endif
++endif
++
++$(eval $(generic-package))
 -- 
 1.8.3.2
