@@ -1,50 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Apr 2014 15:25:26 +0200
-Subject: [Buildroot] [PATCH v4 05/37] flex: Version bump 2.5.39
-In-Reply-To: <1396551692-12371-6-git-send-email-bernd.kuhls@t-online.de>
-References: <1396551692-12371-1-git-send-email-bernd.kuhls@t-online.de>
- <1396551692-12371-6-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140405152526.0cb4b894@skate>
+From: Peter Meerwald <pmeerw@pmeerw.net>
+Date: Sat, 5 Apr 2014 15:29:00 +0200 (CEST)
+Subject: [Buildroot] eudev build failure
+Message-ID: <alpine.DEB.2.01.1404051520570.22206@pmeerw.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Hello,
 
-On Thu,  3 Apr 2014 21:01:00 +0200, Bernd Kuhls wrote:
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/flex/flex-prog-ar.patch |   11 -----------
->  package/flex/flex.mk            |    2 +-
->  2 files changed, 1 insertion(+), 12 deletions(-)
->  delete mode 100644 package/flex/flex-prog-ar.patch
+commit 221fd0cd adds 
+eudev-0001-Fix-issue-87-fails-to-build-on-linux-headers-3.13.patch
+which basically remove #include <fcntl.h> from a couple of file
 
-After applying this patch, host-thrift and ipsec-tools started to fail
-building, due to an undefined reference to yylex. Since no simple
-solution has been found, I've for now reverted your flex bump patch.
+this patch breaks the build for me (target: eglibc, kernel 3.14)
 
-Can you have a look at the host-thrift and ipsec-tools problems?
+the prototype for open() is supposed to be in fnctl.h, hence the define is 
+needed
 
-See:
+I think the patch 
+eudev-0001-Fix-issue-87-fails-to-build-on-linux-headers-3.13.patch
+should be dropped, this is not the right way to fix
 
- http://autobuild.buildroot.org/results/759/7590122fd85b644ae0886a127005188d1f882bef/
- http://autobuild.buildroot.org/results/238/238296556663d52015beb43df97106f6e164ce55/
+regards, p.
 
-Regarding host-thrift, it might be worth having a look at:
+// snip
+  CC       accelerometer.o
+In file included from ../../src/libudev/libudev-private.h:31:0,
+                 from accelerometer.c:65:
+../../src/libudev/util.h:302:32: warning: ?struct ucred? declared inside parameter list [enabled by default]
+ int getpeercred(int fd, struct ucred *ucred);
+                                ^
+../../src/libudev/util.h:302:32: warning: its scope is only this definition or declaration, which is probably not what you want [enabled by default]
+accelerometer.c: In function ?test_orientation?:
+accelerometer.c:203:9: warning: implicit declaration of function ?open? [-Wimplicit-function-declaration]
+         fd = open(devpath, O_RDONLY|O_CLOEXEC);
+         ^
+accelerometer.c:203:28: error: ?O_RDONLY? undeclared (first use in this function)
+         fd = open(devpath, O_RDONLY|O_CLOEXEC);
+                            ^
+accelerometer.c:203:28: note: each undeclared identifier is reported only once for each function it appears in accelerometer.c:203:37: error: ?O_CLOEXEC? undeclared (first use in this function)
+         fd = open(devpath, O_RDONLY|O_CLOEXEC);
+                                     ^
+make[4]: *** [accelerometer.o] Error 1
+// snip
 
- https://issues.apache.org/jira/browse/THRIFT-2386
+thanks, regards, p.
 
-Regarding ipsec-tools, it might be worth having a look at:
-
- https://www.mail-archive.com/openembedded-devel at lists.openembedded.org/msg35108.html
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+
+Peter Meerwald
++43-664-2444418 (mobile)
