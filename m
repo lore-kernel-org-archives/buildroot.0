@@ -1,119 +1,67 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Apr 2014 19:20:59 +0200
-Subject: [Buildroot] [git commit] packages: add infrastructure for virtual
-	packages
-Message-ID: <20140405172338.E05239C5BE@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat,  5 Apr 2014 19:33:05 +0200
+Subject: [Buildroot] [PATCH 0/2 v2] XBMC: add some PVR addons (branch
+	yem/xbmc)
+Message-ID: <cover.1396719130.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=74398244120177f2c5aa0aa1bdeb4046e82e1584
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-The virtual-package infrastructure allows to easily define a
-virtual package in a single line:
+Hello All!
 
-    $ cat package/some-virtual-package/some-virtual-package.mk
-    $(eval $(virtual-package))
+As a complement to our shinny new XBMC package, here are the PVR
+addons packaged, too.
 
-And that's all. :-)
+    And they drank, ate, danced the night-long.
+    And all rejoiced, and there was felicity.
 
-Thanks to ??ric for his work on the manual, that prompted the
-idea for this virtual-package infrastructure! ;-)
+Changes v1 -> v2:
+  - fix typoes  (Maxime)
+  - add pointer to patch applied upstream  (Maxime)
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: Mike Zick <minimod@morethan.org>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Makefile.in    |    1 +
- package/pkg-virtual.mk |   66 ++++++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 67 insertions(+), 0 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 986760c..1f5cbcd 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -371,4 +371,5 @@ include package/pkg-cmake.mk
- include package/pkg-luarocks.mk
- include package/pkg-perl.mk
- include package/pkg-python.mk
-+include package/pkg-virtual.mk
- include package/pkg-generic.mk
-diff --git a/package/pkg-virtual.mk b/package/pkg-virtual.mk
-new file mode 100644
-index 0000000..9b206ea
---- /dev/null
-+++ b/package/pkg-virtual.mk
-@@ -0,0 +1,66 @@
-+################################################################################
-+# Virtual package infrastructure
-+#
-+# This file implements an infrastructure that eases development of
-+# package .mk files for virtual packages. It should be used for all
-+# virtual packages.
-+#
-+# See the Buildroot documentation for details on the usage of this
-+# infrastructure
-+#
-+# In terms of implementation, this virtual infrastructure requires
-+# the .mk file to only call the 'virtual-package' macro.
-+#
-+################################################################################
-+
-+
-+################################################################################
-+# inner-virtual-package -- defines the dependency rules of the virtual
-+# package against its provider.
-+#
-+#  argument 1 is the lowercase package name
-+#  argument 2 is the uppercase package name, including an HOST_ prefix
-+#             for host packages
-+#  argument 3 is the uppercase package name, without the HOST_ prefix
-+#             for host packages
-+#  argument 4 is the type (target or host)
-+################################################################################
-+
-+# Note: putting this comment here rather than in the define block, otherwise
-+# make would try to expand the $(error ...) in the comment, which is not
-+# really what we want.
-+# We need to use second-expansion for the $(error ...) call, below,
-+# so it is not evaluated now, but as part of the generated make code.
-+
-+define inner-virtual-package
-+
-+# Ensure the virtual package has an implementation defined.
-+ifeq ($(BR2_PACKAGE_HAS_$(2)),y)
-+ifeq ($(call qstrip,$(BR2_PACKAGE_PROVIDES_$(2))),)
-+$$(error No implementation selected for virtual package $(1). Configuration error)
-+endif
-+endif
-+
-+# A virtual package does not have any source associated
-+$(2)_SOURCE =
-+
-+# This must be repeated from inner-generic-package, otherwise we get an empty
-+# _DEPENDENCIES
-+$(2)_DEPENDENCIES ?= $(filter-out host-toolchain $(1),\
-+	$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
-+
-+# Add dependency against the provider
-+$(2)_DEPENDENCIES += $(call qstrip,$(BR2_PACKAGE_PROVIDES_$(2)))
-+
-+# Call the generic package infrastructure to generate the necessary
-+# make targets
-+$(call inner-generic-package,$(1),$(2),$(3),$(4))
-+
-+endef
-+
-+################################################################################
-+# virtual-package -- the target generator macro for virtual packages
-+################################################################################
-+
-+virtual-package = $(call inner-virtual-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
-+host-virtual-package = $(call inner-virtual-package,host-$(pkgname),$(call UPPERCASE,host-$(pkgname)),$(call UPPERCASE,$(pkgname)),host)
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 455a354c960f686c2ae9654ae0112fdc31bec686:
+
+  virtual-package: fake a version string for virtual packages (2014-04-05 19:21:15 +0200)
+
+are available in the git repository at:
+
+  git://gitorious.org/buildroot/buildroot.git yem/xbmc
+
+for you to fetch changes up to 8ae0abc237b2226c537597eeea513d1808472472:
+
+  pacage/xbmc-addon-xvdr: new package (2014-04-05 19:30:56 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      package/xbmc-pvr-addons: new package
+      pacage/xbmc-addon-xvdr: new package
+
+ package/xbmc-addon-xvdr/Config.in                  | 14 +++++++++
+ .../xbmc-addon-xvdr-0001-foreign-automake.patch    | 28 ++++++++++++++++++
+ package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk         | 25 ++++++++++++++++
+ package/xbmc-pvr-addons/Config.in                  |  6 ++++
+ package/xbmc-pvr-addons/xbmc-pvr-addons.mk         | 34 ++++++++++++++++++++++
+ package/xbmc/Config.in                             |  7 ++++-
+ 6 files changed, 113 insertions(+), 1 deletion(-)
+ create mode 100644 package/xbmc-addon-xvdr/Config.in
+ create mode 100644 package/xbmc-addon-xvdr/xbmc-addon-xvdr-0001-foreign-automake.patch
+ create mode 100644 package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk
+ create mode 100644 package/xbmc-pvr-addons/Config.in
+ create mode 100644 package/xbmc-pvr-addons/xbmc-pvr-addons.mk
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
