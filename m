@@ -1,43 +1,60 @@
-From: Peter Meerwald <pmeerw@pmeerw.net>
-Date: Sat,  5 Apr 2014 14:51:02 +0200
-Subject: [Buildroot] [PATCH] perf: Fix compilation without libelf for
-	post-3.10 kernels
-Message-ID: <1396702262-26514-1-git-send-email-pmeerw@pmeerw.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 5 Apr 2014 15:21:36 +0200
+Subject: [Buildroot] [git commit] Revert "flex: Version bump 2.5.39"
+Message-ID: <20140405132306.9310C9C5A3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-kernel commit cf4cca10 (perf tools: Move libelf check config into config/Makefile)
-removes the NO_LIBELF check from the top-level Makefile
+commit: http://git.buildroot.net/buildroot/commit/?id=1be95896dde41c668e1c884db704b0da2ea360c9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-for newer kernels, if config/Makefile exists, we can assume that NO_LIBELF is
-also there
+The flex bump breaks at least two packages:
 
-Signed-off-by: Peter Meerwald <pmeerw@pmeerw.net>
+ - host-thrift, see http://autobuild.buildroot.org/results/759/7590122fd85b644ae0886a127005188d1f882bef/
+ - ipsec-tools, see http://autobuild.buildroot.org/results/238/238296556663d52015beb43df97106f6e164ce55/
+
+No simple fix was found for now, so reverting is the easiest solution
+until some time is found to look at doing a flex bump that doesn't
+break those packages.
+
+This reverts commit 931d9fbae78a6bb8006a2634e9322ac253cc86f4.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/perf/perf.mk | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ package/flex/flex-prog-ar.patch |   11 +++++++++++
+ package/flex/flex.mk            |    2 +-
+ 2 files changed, 12 insertions(+), 1 deletions(-)
 
-diff --git a/package/perf/perf.mk b/package/perf/perf.mk
-index d7898d0..7610f3d 100644
---- a/package/perf/perf.mk
-+++ b/package/perf/perf.mk
-@@ -36,9 +36,11 @@ define PERF_BUILD_CMDS
- 	fi
- 	$(Q)if test "$(BR2_PACKAGE_ELFUTILS)" = "" ; then \
- 		if ! grep -q NO_LIBELF $(LINUX_DIR)/tools/perf/Makefile ; then \
--			echo "The perf tool in your kernel cannot be built without libelf." ; \
--			echo "Either upgrade your kernel to >= 3.7, or enable the elfutils package." ; \
--			exit 1 ; \
-+			if ! test -r $(LINUX_DIR)/tools/perf/config/Makefile ; then \
-+				echo "The perf tool in your kernel cannot be built without libelf." ; \
-+				echo "Either upgrade your kernel to >= 3.7, or enable the elfutils package." ; \
-+				exit 1 ; \
-+			fi \
- 		fi \
- 	fi
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools/perf \
--- 
-1.9.1
+diff --git a/package/flex/flex-prog-ar.patch b/package/flex/flex-prog-ar.patch
+new file mode 100644
+index 0000000..e0626ff
+--- /dev/null
++++ b/package/flex/flex-prog-ar.patch
+@@ -0,0 +1,11 @@
++diff -rup flex-2.5.33.orig/Makefile.in flex-2.5.33/Makefile.in
++--- flex-2.5.33.orig/Makefile.in	2007-01-18 17:29:25.000000000 +0100
+++++ flex-2.5.33/Makefile.in	2007-01-18 18:28:22.000000000 +0100
++@@ -105,7 +105,6 @@ am__installdirs = "$(DESTDIR)$(libdir)"
++ 	"$(DESTDIR)$(includedir)"
++ libLIBRARIES_INSTALL = $(INSTALL_DATA)
++ LIBRARIES = $(lib_LIBRARIES)
++-AR = ar
++ ARFLAGS = cru
++ libfl_a_AR = $(AR) $(ARFLAGS)
++ libfl_a_LIBADD =
+diff --git a/package/flex/flex.mk b/package/flex/flex.mk
+index 2373d04..17f651b 100644
+--- a/package/flex/flex.mk
++++ b/package/flex/flex.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FLEX_VERSION = 2.5.39
++FLEX_VERSION = 2.5.37
+ FLEX_SITE = http://download.sourceforge.net/project/flex
+ FLEX_INSTALL_STAGING = YES
+ FLEX_LICENSE = FLEX
