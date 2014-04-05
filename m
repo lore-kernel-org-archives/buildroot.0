@@ -1,85 +1,85 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Sat, 05 Apr 2014 10:14:52 +0200
-Subject: [Buildroot] [PATCH v3 1/1] manual/configure.txt: fix typo
-In-Reply-To: <533E4A29.2070009@mind.be>
-References: <1396560067-14091-1-git-send-email-jerzy.grzegorek@trzebnica.net>
- <533E4A29.2070009@mind.be>
-Message-ID: <533FBB7C.1020409@trzebnica.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat,  5 Apr 2014 14:10:12 +0200
+Subject: [Buildroot] [PATCH 0/13 v2] Add virtual package for full-openGL
+	(branch yem/opengl)
+Message-ID: <cover.1396699629.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Hi Arnout,
+Hello All!
 
-Thanks for the feedback.
+This series introduces a virtual package for full-openGL providers.
 
-> On 03/04/14 23:21, Jerzy Grzegorek wrote:
->> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
->   Could you add to the commit log _why_ this is a typo? You're removing a
-> backslash in one place and adding it in another place, so it is not at
-> all obvious why this is the correct thing to do. In fact, it's not a
-> typo, it's a formatting error.
+This is still an RFC, for now. I'm posting it to get earlt feedback on
+whether this is a correct approach, or if I am completely off my shoes.
 
-There is an extra backslash in the latest stable release buildroot 2014.02
-documentation (html and pdf); have a look at:
-http://buildroot.uclibc.org/downloads/manual/manual.html#_cross_compilation_toolchain
-manual/configure.txt (buildroot 2014.02)
-"...
-   whether your toolchain supports C\+\+ or not and whether it has
-..."
-
-I posted a patch to remove this backslash (C\+\+ --> C\++), but in the 
-meantime after
-my discussion with Thomas P. (I suppose Thomas misunderstood me) he made
-commit 082dec8ce440236b1477e568f0965f05ad241adb
-
-So:
-my patch v3 = 'revert commit of Thomas' + 'my patch v2'
-commit of Thomas:
-commit 082dec8ce440236b1477e568f0965f05ad241adb
-my patch v2:
-http://lists.busybox.net/pipermail/buildroot/2014-March/093207.html
+Changes v1 -> v2:
+  - almost complete rewrite after comments by Paul and Bernd
 
 Regards,
-Jerzy
+Yann E. MORIN.
 
->
->   Regards,
->   Arnout
->
->> ---
->> v3:
->>   - rebase on top of the master
->> v2:
->>   - remove only one backslash
->>
->>   docs/manual/configure.txt |    4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
->> index c1c9477..ee5e65e 100644
->> --- a/docs/manual/configure.txt
->> +++ b/docs/manual/configure.txt
->> @@ -100,7 +100,7 @@ most important ones allow to:
->>      toolchain should have largefile support (i.e. support for files
->>      larger than 2 GB on 32 bits systems), IPv6 support, RPC support
->>      (used mainly for NFS), wide-char support, locale support (for
->> -   internationalization), C\++ support or thread support. Depending on
->> +   internationalization), C++ support or thread support. Depending on
->>      which options you choose, the number of userspace applications and
->>      libraries visible in Buildroot menus will change: many applications
->>      and libraries require certain toolchain options to be enabled. Most
->> @@ -165,7 +165,7 @@ Then, you have three solutions to use an external toolchain:
->>     prefix+ and +External toolchain C library+ options. Then, you have
->>     to tell Buildroot what your external toolchain supports. If your
->>     external toolchain uses the 'glibc' library, you only have to tell
->> -  whether your toolchain supports C++ or not and whether it has
->> +  whether your toolchain supports C\++ or not and whether it has
->>     built-in RPC support. If your external toolchain uses the 'uClibc'
->>     library, then you have to tell Buildroot if it supports largefile,
->>     IPv6, RPC, wide-char, locale, program invocation, threads and
->>
->
+
+The following changes since commit 5729ae52d4bfcc7d02da33359971623d65fd8989:
+
+  eudev : bump version to 1.5.3 (2014-04-04 23:47:36 +0200)
+
+are available in the git repository at:
+
+  git://gitorious.org/buildroot/buildroot.git yem/opengl
+
+for you to fetch changes up to 55d8bed0fa397c30345e1ba8318eeeb76fac7a3a:
+
+  package/vlc: depends on the virtual package libgl (2014-04-05 14:06:39 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (13):
+      package/xdriver_xf86-video-ati: depends on x86
+      package/x11-video-drivers: do not select, but depends on mesa3d
+      package/mesa3d: fix improper dependency of blind option
+      package/mesa3d: re-arrange menu items
+      package/mesa3d: DRI drivers depend on X.org
+      package/mesa3d: add comment for when OpenGL EGL is not available
+      package/mesa3d: simplify the code enabling full-OpenGL
+      package/mesa3d: only enable full OpenGL when a DRI driver is enabled
+      package/xorg-server: do not force-select xf86driproto for mesa3d
+      package/libgl: introduce as a new virtual package for full-openGL providers
+      package/mesa3d: with a DRI driver, is a full OpenGL provider
+      package/libevas: switch dependency from mesa3d to _HAS_OPENGL
+      package/vlc: depends on the virtual package libgl
+
+ package/efl/libevas/Config.in                      |  2 +-
+ package/mesa3d/Config.in                           | 34 ++++++++++++++--------
+ package/mesa3d/mesa3d.mk                           | 18 +++++-------
+ package/opengl/Config.in                           |  1 +
+ package/opengl/libgl/Config.in                     |  6 ++++
+ package/opengl/libgl/libgl.mk                      | 16 ++++++++++
+ package/vlc/vlc.mk                                 |  4 +--
+ package/x11r7/xdriver_xf86-video-ati/Config.in     |  6 +++-
+ package/x11r7/xdriver_xf86-video-glint/Config.in   |  5 +++-
+ package/x11r7/xdriver_xf86-video-intel/Config.in   |  7 +++--
+ package/x11r7/xdriver_xf86-video-mach64/Config.in  |  3 ++
+ package/x11r7/xdriver_xf86-video-mga/Config.in     |  5 +++-
+ .../x11r7/xdriver_xf86-video-openchrome/Config.in  |  5 +++-
+ package/x11r7/xdriver_xf86-video-r128/Config.in    |  5 +++-
+ package/x11r7/xdriver_xf86-video-savage/Config.in  |  5 +++-
+ package/x11r7/xdriver_xf86-video-sis/Config.in     |  5 +++-
+ package/x11r7/xdriver_xf86-video-tdfx/Config.in    |  5 +++-
+ package/x11r7/xdriver_xf86-video-vmware/Config.in  |  5 +++-
+ package/x11r7/xserver_xorg-server/Config.in        |  1 -
+ 19 files changed, 101 insertions(+), 37 deletions(-)
+ create mode 100644 package/opengl/libgl/Config.in
+ create mode 100644 package/opengl/libgl/libgl.mk
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
