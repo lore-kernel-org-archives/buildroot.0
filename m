@@ -1,148 +1,122 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  5 Apr 2014 17:21:44 +0200
-Subject: [Buildroot] [PATCH 07/21] manual: add virtual package tutorial
+Date: Sat,  5 Apr 2014 17:21:45 +0200
+Subject: [Buildroot] [PATCH 08/21] packages: add infrastructure for virtual
+	packages
 In-Reply-To: <cover.1396711074.git.yann.morin.1998@free.fr>
 References: <cover.1396711074.git.yann.morin.1998@free.fr>
-Message-ID: <58a86e3a25f01b55ca428c13d83680ca0fb00cb1.1396711074.git.yann.morin.1998@free.fr>
+Message-ID: <41a747fcf4004c4a56b93d9499e8bf75a7553121.1396711074.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "eric.le.bihan.dev@free.fr" <eric.le.bihan.dev@free.fr>
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-The manual now features a new section with instructions about how to add a
-virtual package.
+The virtual-package infrastructure allows to easily define a
+virtual package in a single line:
 
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-[yann.morin.1998 at free.fr: move down statement about provider's .mk]
+    $ cat package/some-virtual-package/some-virtual-package.mk
+    $(eval $(virtual-package))
+
+And that's all. :-)
+
+Thanks to ?ric for his work on the manual, that prompted the
+idea for this virtual-package infrastructure! ;-)
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Cc: Mike Zick <minimod@morethan.org>
 Reviewed-by: Samuel Martin <s.martin49@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- docs/manual/adding-packages-virtual.txt | 99 +++++++++++++++++++++++++++++++++
- docs/manual/adding-packages.txt         |  2 +
- 2 files changed, 101 insertions(+)
- create mode 100644 docs/manual/adding-packages-virtual.txt
+ package/Makefile.in    |  1 +
+ package/pkg-virtual.mk | 66 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 67 insertions(+)
+ create mode 100644 package/pkg-virtual.mk
 
-diff --git a/docs/manual/adding-packages-virtual.txt b/docs/manual/adding-packages-virtual.txt
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 986760c..1f5cbcd 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -371,4 +371,5 @@ include package/pkg-cmake.mk
+ include package/pkg-luarocks.mk
+ include package/pkg-perl.mk
+ include package/pkg-python.mk
++include package/pkg-virtual.mk
+ include package/pkg-generic.mk
+diff --git a/package/pkg-virtual.mk b/package/pkg-virtual.mk
 new file mode 100644
-index 0000000..76f5794
+index 0000000..9b206ea
 --- /dev/null
-+++ b/docs/manual/adding-packages-virtual.txt
-@@ -0,0 +1,99 @@
-+// -*- mode:doc; -*-
-+// vim: set syntax=asciidoc:
++++ b/package/pkg-virtual.mk
+@@ -0,0 +1,66 @@
++################################################################################
++# Virtual package infrastructure
++#
++# This file implements an infrastructure that eases development of
++# package .mk files for virtual packages. It should be used for all
++# virtual packages.
++#
++# See the Buildroot documentation for details on the usage of this
++# infrastructure
++#
++# In terms of implementation, this virtual infrastructure requires
++# the .mk file to only call the 'virtual-package' macro.
++#
++################################################################################
 +
-+[[virtual-package-tutorial]]
 +
-+Virtual package tutorial
-+~~~~~~~~~~~~~~~~~~~~~~~~
++################################################################################
++# inner-virtual-package -- defines the dependency rules of the virtual
++# package against its provider.
++#
++#  argument 1 is the lowercase package name
++#  argument 2 is the uppercase package name, including an HOST_ prefix
++#             for host packages
++#  argument 3 is the uppercase package name, without the HOST_ prefix
++#             for host packages
++#  argument 4 is the type (target or host)
++################################################################################
 +
-+In Buildroot, a virtual package is a package whose functionalities are
-+provided by one or more packages, referred to as 'providers'. The virtual
-+package management is an extensible mechanism allowing the user to choose
-+the provider used in the rootfs.
++# Note: putting this comment here rather than in the define block, otherwise
++# make would try to expand the $(error ...) in the comment, which is not
++# really what we want.
++# We need to use second-expansion for the $(error ...) call, below,
++# so it is not evaluated now, but as part of the generated make code.
 +
-+For example, 'OpenGL ES' is an API for 2D and 3D graphics on embedded systems.
-+The implementation of this API is different for the 'Allwinner Tech Sunxi' and
-+the 'Texas Instruments OMAP35xx' plaftorms. So +libgles+ will be a virtual
-+package and +sunxi-mali+ and +ti-gfx+ will be the providers.
++define inner-virtual-package
 +
-+In the following example, we will explain how to add a new virtual package
-+('something-virtual') and a provider for it ('some-provider').
++# Ensure the virtual package has an implementation defined.
++ifeq ($(BR2_PACKAGE_HAS_$(2)),y)
++ifeq ($(call qstrip,$(BR2_PACKAGE_PROVIDES_$(2))),)
++$$(error No implementation selected for virtual package $(1). Configuration error)
++endif
++endif
 +
-+First, let's create the virtual package.
++# A virtual package does not have any source associated
++$(2)_SOURCE =
 +
-+Virtual package's +Config.in+ file
-+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++# This must be repeated from inner-generic-package, otherwise we get an empty
++# _DEPENDENCIES
++$(2)_DEPENDENCIES ?= $(filter-out host-toolchain $(1),\
++	$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
 +
-+The +Config.in+ file of virtual package 'something-virtual' should contain:
++# Add dependency against the provider
++$(2)_DEPENDENCIES += $(call qstrip,$(BR2_PACKAGE_PROVIDES_$(2)))
 +
-+---------------------------
-+01: config BR2_PACKAGE_HAS_SOMETHING_VIRTUAL
-+02:	bool
-+03:
-+04: config BR2_PACKAGE_PROVIDES_SOMETHING_VIRTUAL
-+05:	depends on BR2_PACKAGE_HAS_SOMETHING_VIRTUAL
-+06:	string
-+---------------------------
++# Call the generic package infrastructure to generate the necessary
++# make targets
++$(call inner-generic-package,$(1),$(2),$(3),$(4))
 +
-+In this file, we declare two options, +BR2_PACKAGE_HAS_SOMETHING_VIRTUAL+ and
-++BR2_PACKAGE_PROVIDES_SOMETHING_VIRTUAL+, whose values will be used by the
-+providers.
++endef
 +
-+Virtual package's +*.mk+ file
-+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++################################################################################
++# virtual-package -- the target generator macro for virtual packages
++################################################################################
 +
-+The Makefile +package/something-virtual/something-virtual.mk+ should contain:
-+
-+---------------------------
-+01: ################################################################################
-+02: #
-+03: # something-virtual
-+04: #
-+05: ################################################################################
-+06:
-+07: SOMETHING_VIRTUAL_SOURCE =
-+08: SOMETHING_VIRTUAL_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_SOMETHING_VIRTUAL))
-+09:
-+10: ifeq ($(BR2_PACKAGE_HAS_SOMETHING_VIRTUAL),y)
-+11: ifeq ($(SOMETHING_VIRTUAL_DEPENDENCIES),)
-+12: $(error No something-virtual implementation selected. Configuration error.)
-+13: endif
-+14: endif
-+15:
-+16: $(eval $(generic-package))
-+---------------------------
-+
-+The Makefile is quite small as it will only check if a provider for the
-+virtual package has been selected.
-+
-+Provider's +Config.in+ file
-+^^^^^^^^^^^^^^^^^^^^^^^^^^^
-+
-+When adding a package as a provider, only the +Config.in+ file requires some
-+modifications. The +*.mk+ file should follow the Buildroot infrastructure with
-+no change at all.
-+
-+The +Config.in+ file of the package 'some-provider', which provides the
-+functionalities of 'something-virtual', should contain:
-+
-+---------------------------
-+01: config BR2_PACKAGE_SOME_PROVIDER
-+02:	bool "some-provider"
-+03:	select BR2_PACKAGE_HAS_SOMETHING_VIRTUAL
-+04:	help
-+05:	  This is a comment that explains what some-provider is.
-+06:
-+07:	  http://foosoftware.org/some-provider/
-+08:
-+09: if BR2_PACKAGE_SOME_PROVIDER
-+10: config BR2_PACKAGE_PROVIDES_SOMETHING_VIRTUAL
-+11:	default "some-provider"
-+12: endif
-+---------------------------
-+
-+On line 3, we select +BR2_PACKAGE_HAS_SOMETHING_VIRTUAL+, and on line 11, we
-+set the value of +BR2_PACKAGE_PROVIDES_SOMETHING_VIRTUAL+ to the name of the
-+provider, but only if it is selected.
-+
-+Of course, do not forget to add the proper build and runtime dependencies for
-+this package!
-diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
-index 745e33a..dbba930 100644
---- a/docs/manual/adding-packages.txt
-+++ b/docs/manual/adding-packages.txt
-@@ -24,6 +24,8 @@ include::adding-packages-luarocks.txt[]
- 
- include::adding-packages-perl.txt[]
- 
-+include::adding-packages-virtual.txt[]
-+
- include::adding-packages-hooks.txt[]
- 
- include::adding-packages-gettext.txt[]
++virtual-package = $(call inner-virtual-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
++host-virtual-package = $(call inner-virtual-package,host-$(pkgname),$(call UPPERCASE,host-$(pkgname)),$(call UPPERCASE,$(pkgname)),host)
 -- 
 1.8.3.2
