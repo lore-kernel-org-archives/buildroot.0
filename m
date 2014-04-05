@@ -1,25 +1,31 @@
-From: Vincent <vincent.stehle@laposte.net>
-Date: Sat, 05 Apr 2014 18:30:50 +0200
-Subject: [Buildroot] [PATCH] binutils: drop *.texi* hunks from xtensa
- trampolines patches
-In-Reply-To: <1396710856-21928-1-git-send-email-jcmvbkbc@gmail.com>
-References: <1396710856-21928-1-git-send-email-jcmvbkbc@gmail.com>
-Message-ID: <53402FBA.3030605@bergerie>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 5 Apr 2014 18:31:51 +0200
+Subject: [Buildroot] [git commit] system/skeleton: add mail group
+Message-ID: <20140405163218.5B3869C5BD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/05/2014 05:14 PM, Max Filippov wrote:
-> Rebuilding as.info with makeinfo version 5.2 results in a build error,
-> even with pristine binutils source. Dropping hunks that change *.texi*
-> files avoids documentation rebuild.
+commit: http://git.buildroot.net/buildroot/commit/?id=fa7697dc2b04bf3e35d5d456abbe20a93c650f2b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi Max,
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ system/skeleton/etc/group |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-It works like a charm for me; thanks!
-
-Best regards,
-
-V.
+diff --git a/system/skeleton/etc/group b/system/skeleton/etc/group
+index 864d1db..85a1fa2 100644
+--- a/system/skeleton/etc/group
++++ b/system/skeleton/etc/group
+@@ -6,6 +6,7 @@ adm:x:4:
+ tty:x:5:
+ disk:x:6:
+ lp:x:7:
++mail:x:8:
+ kmem:x:9:
+ wheel:x:10:root
+ cdrom:x:11:
