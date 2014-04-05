@@ -1,60 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Apr 2014 15:21:36 +0200
-Subject: [Buildroot] [git commit] Revert "flex: Version bump 2.5.39"
-Message-ID: <20140405132306.9310C9C5A3@busybox.osuosl.org>
+Date: Sat, 5 Apr 2014 15:25:26 +0200
+Subject: [Buildroot] [PATCH v4 05/37] flex: Version bump 2.5.39
+In-Reply-To: <1396551692-12371-6-git-send-email-bernd.kuhls@t-online.de>
+References: <1396551692-12371-1-git-send-email-bernd.kuhls@t-online.de>
+ <1396551692-12371-6-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20140405152526.0cb4b894@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1be95896dde41c668e1c884db704b0da2ea360c9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Bernd Kuhls,
 
-The flex bump breaks at least two packages:
+On Thu,  3 Apr 2014 21:01:00 +0200, Bernd Kuhls wrote:
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/flex/flex-prog-ar.patch |   11 -----------
+>  package/flex/flex.mk            |    2 +-
+>  2 files changed, 1 insertion(+), 12 deletions(-)
+>  delete mode 100644 package/flex/flex-prog-ar.patch
 
- - host-thrift, see http://autobuild.buildroot.org/results/759/7590122fd85b644ae0886a127005188d1f882bef/
- - ipsec-tools, see http://autobuild.buildroot.org/results/238/238296556663d52015beb43df97106f6e164ce55/
+After applying this patch, host-thrift and ipsec-tools started to fail
+building, due to an undefined reference to yylex. Since no simple
+solution has been found, I've for now reverted your flex bump patch.
 
-No simple fix was found for now, so reverting is the easiest solution
-until some time is found to look at doing a flex bump that doesn't
-break those packages.
+Can you have a look at the host-thrift and ipsec-tools problems?
 
-This reverts commit 931d9fbae78a6bb8006a2634e9322ac253cc86f4.
+See:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/flex/flex-prog-ar.patch |   11 +++++++++++
- package/flex/flex.mk            |    2 +-
- 2 files changed, 12 insertions(+), 1 deletions(-)
+ http://autobuild.buildroot.org/results/759/7590122fd85b644ae0886a127005188d1f882bef/
+ http://autobuild.buildroot.org/results/238/238296556663d52015beb43df97106f6e164ce55/
 
-diff --git a/package/flex/flex-prog-ar.patch b/package/flex/flex-prog-ar.patch
-new file mode 100644
-index 0000000..e0626ff
---- /dev/null
-+++ b/package/flex/flex-prog-ar.patch
-@@ -0,0 +1,11 @@
-+diff -rup flex-2.5.33.orig/Makefile.in flex-2.5.33/Makefile.in
-+--- flex-2.5.33.orig/Makefile.in	2007-01-18 17:29:25.000000000 +0100
-++++ flex-2.5.33/Makefile.in	2007-01-18 18:28:22.000000000 +0100
-+@@ -105,7 +105,6 @@ am__installdirs = "$(DESTDIR)$(libdir)"
-+ 	"$(DESTDIR)$(includedir)"
-+ libLIBRARIES_INSTALL = $(INSTALL_DATA)
-+ LIBRARIES = $(lib_LIBRARIES)
-+-AR = ar
-+ ARFLAGS = cru
-+ libfl_a_AR = $(AR) $(ARFLAGS)
-+ libfl_a_LIBADD =
-diff --git a/package/flex/flex.mk b/package/flex/flex.mk
-index 2373d04..17f651b 100644
---- a/package/flex/flex.mk
-+++ b/package/flex/flex.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FLEX_VERSION = 2.5.39
-+FLEX_VERSION = 2.5.37
- FLEX_SITE = http://download.sourceforge.net/project/flex
- FLEX_INSTALL_STAGING = YES
- FLEX_LICENSE = FLEX
+Regarding host-thrift, it might be worth having a look at:
+
+ https://issues.apache.org/jira/browse/THRIFT-2386
+
+Regarding ipsec-tools, it might be worth having a look at:
+
+ https://www.mail-archive.com/openembedded-devel at lists.openembedded.org/msg35108.html
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
