@@ -1,61 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Apr 2014 15:38:07 +0200
-Subject: [Buildroot] [git commit] python3: rework python symlinks
-	installation
-Message-ID: <20140405153937.ADA269BCF2@busybox.osuosl.org>
+Date: Sat, 5 Apr 2014 17:42:15 +0200
+Subject: [Buildroot] [PATCH 0/6] host-python2 hard dependency
+In-Reply-To: <1394057085-10399-1-git-send-email-s.martin49@gmail.com>
+References: <1394057085-10399-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <20140405174215.20b771eb@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a8127d3cf8296597c1f76215252efd12578a4e76
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Samuel Martin,
 
-This patch reworks the way python3 and python3-config symlink are
-installed.
+On Wed,  5 Mar 2014 23:04:39 +0100, Samuel Martin wrote:
 
-Buildroot wants to control these symlinks' installation:
+> Samuel Martin (6):
+>   python: rework python symlinks installation
+>   python3: rework python symlinks installation
+>   pkg-python: support host-python dependency different from the python
+>     in the target
+>   scons: force host-python dependency to be python2
+>   python-m2crypto: requires host-python2
+>   crda: override python interperter
 
-* the python3 symlink should be unconditionally installed in the target
-  tree, and the python3-config symlink in the staging tree, since it is
-  the only python package built and installed in the target tree if the
-  user selected it;
+I've applied your patch series, after making a number of changes,
+according to Yann's review. The main change was the renaming of the
+variable from <pkg>_FORCE_HOST_PYTHON to <pkg>_NEEDS_HOST_PYTHON.
+You'll find all the details in the commit logs of the different commits.
 
-* the python3 and python3-config symlinks should only be installed in
-  the host tree when python3 is the selection of the user for the
-  target.
+I've also added a separate commit to fix an unrelated issue I stumbled
+upon while testing your patch series.
 
-[Thomas: fix comment as suggested by Yann.]
+With your patch series, I've been able to test the following
+configurations:
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/python3/python3.mk |    7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
+ * Build a system with python2 as the target interpreter, with all
+   python external modules enabled, the crda package (which needs the
+   host python2 interpreter) as well as gpsd and exfat (which need
+   host-scons, which in turns needs the host python2 interpreter)
 
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 0144d1e..542f2c9 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -155,11 +155,18 @@ ifneq ($(BR2_PACKAGE_PYTHON),y)
- PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_INSTALL_SYMLINK
- endif
- 
-+# Some packages may have build scripts requiring python3, whatever is the
-+# python version chosen for the target.
-+# Only install the python symlink in the host tree if python3 is enabled
-+# for the target.
-+ifeq ($(BR2_PACKAGE_PYTHON3),y)
- define HOST_PYTHON3_INSTALL_SYMLINK
- 	ln -fs python3 $(HOST_DIR)/usr/bin/python
-+	ln -fs python3-config $(HOST_DIR)/usr/bin/python-config
- endef
- 
- HOST_PYTHON3_POST_INSTALL_HOOKS += HOST_PYTHON3_INSTALL_SYMLINK
-+endif
- 
- # Provided to other packages
- PYTHON3_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/sysconfigdata/:$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/
+ * Build a system with python3 as the target interpreter, with all
+   python external modules enabled, the crda package (which needs the
+   host python2 interpreter) as well as gpsd and exfat (which need
+   host-scons, which in turns needs the host python2 interpreter)
+
+Both builds went fine.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
