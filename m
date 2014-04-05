@@ -1,8 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  5 Apr 2014 19:33:05 +0200
-Subject: [Buildroot] [PATCH 0/2 v2] XBMC: add some PVR addons (branch
-	yem/xbmc)
-Message-ID: <cover.1396719130.git.yann.morin.1998@free.fr>
+Date: Sat,  5 Apr 2014 19:33:08 +0200
+Subject: [Buildroot] [PATCH 1/2] package/xbmc-pvr-addons: new package
+In-Reply-To: <cover.1396719130.git.yann.morin.1998@free.fr>
+References: <cover.1396719130.git.yann.morin.1998@free.fr>
+Message-ID: <77944ade712b9547aaf751f21872ea3016a4aefb.1396719130.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,57 +12,81 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Hello All!
-
-As a complement to our shinny new XBMC package, here are the PVR
-addons packaged, too.
-
-    And they drank, ate, danced the night-long.
-    And all rejoiced, and there was felicity.
-
-Changes v1 -> v2:
-  - fix typoes  (Maxime)
-  - add pointer to patch applied upstream  (Maxime)
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 455a354c960f686c2ae9654ae0112fdc31bec686:
-
-  virtual-package: fake a version string for virtual packages (2014-04-05 19:21:15 +0200)
-
-are available in the git repository at:
-
-  git://gitorious.org/buildroot/buildroot.git yem/xbmc
-
-for you to fetch changes up to 8ae0abc237b2226c537597eeea513d1808472472:
-
-  pacage/xbmc-addon-xvdr: new package (2014-04-05 19:30:56 +0200)
-
-----------------------------------------------------------------
-Yann E. MORIN (2):
-      package/xbmc-pvr-addons: new package
-      pacage/xbmc-addon-xvdr: new package
-
- package/xbmc-addon-xvdr/Config.in                  | 14 +++++++++
- .../xbmc-addon-xvdr-0001-foreign-automake.patch    | 28 ++++++++++++++++++
- package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk         | 25 ++++++++++++++++
- package/xbmc-pvr-addons/Config.in                  |  6 ++++
- package/xbmc-pvr-addons/xbmc-pvr-addons.mk         | 34 ++++++++++++++++++++++
- package/xbmc/Config.in                             |  7 ++++-
- 6 files changed, 113 insertions(+), 1 deletion(-)
- create mode 100644 package/xbmc-addon-xvdr/Config.in
- create mode 100644 package/xbmc-addon-xvdr/xbmc-addon-xvdr-0001-foreign-automake.patch
- create mode 100644 package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+ package/xbmc-pvr-addons/Config.in          |  6 ++++++
+ package/xbmc-pvr-addons/xbmc-pvr-addons.mk | 34 ++++++++++++++++++++++++++++++
+ package/xbmc/Config.in                     |  6 +++++-
+ 3 files changed, 45 insertions(+), 1 deletion(-)
  create mode 100644 package/xbmc-pvr-addons/Config.in
  create mode 100644 package/xbmc-pvr-addons/xbmc-pvr-addons.mk
 
+diff --git a/package/xbmc-pvr-addons/Config.in b/package/xbmc-pvr-addons/Config.in
+new file mode 100644
+index 0000000..27f20e3
+--- /dev/null
++++ b/package/xbmc-pvr-addons/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_XBMC_PVR_ADDONS
++	bool "xbmc-pvr-addons"
++	help
++	  A collection of PVR backend addons for XBMC.
++
++	  https://github.com/opdenkamp/xbmc-pvr-addons
+diff --git a/package/xbmc-pvr-addons/xbmc-pvr-addons.mk b/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
+new file mode 100644
+index 0000000..8692860
+--- /dev/null
++++ b/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
+@@ -0,0 +1,34 @@
++################################################################################
++#
++# xbmc-pvr-addons
++#
++################################################################################
++
++# This cset is on the branch 'frodo'
++# When XBMC is updated, then this should be updated to the corresponding branch
++XBMC_PVR_ADDONS_VERSION = 319351af7f3b546a5a56cdf6492f6ba1aec1cd2f
++XBMC_PVR_ADDONS_SITE = $(call github,opdenkamp,xbmc-pvr-addons,$(XBMC_PVR_ADDONS_VERSION))
++XBMC_PVR_ADDONS_LICENSE = GPLv3+
++XBMC_PVR_ADDONS_LICENSE_FILES = COPYING
++
++# There's no ./configure in the git tree, we need to generate it
++XBMC_PVR_ADDONS_AUTORECONF = YES
++
++XBMC_PVR_ADDONS_DEPENDENCIES = boost zlib
++# This really is a runtime dependency, but we need XBMC to be installed
++# first, since we'll install files in XBMC's directories _after_ XBMC has
++# installed his own files
++XBMC_PVR_ADDONS_DEPENDENCIES += xbmc
++
++XBMC_PVR_ADDONS_CONF_OPT = \
++	--enable-release \
++	--enable-addons-with-dependencies
++
++ifeq ($(BR2_PACKAGE_MYSQL),y)
++XBMC_PVR_ADDONS_CONF_OPT += --enable-mysql
++XBMC_PVR_ADDONS_DEPENDENCIES += mysql
++else
++XBMC_PVR_ADDONS_CONF_OPT += --disable-mysql
++endif
++
++$(eval $(autotools-package))
+diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
+index 70faaab..ef9f8bd 100644
+--- a/package/xbmc/Config.in
++++ b/package/xbmc/Config.in
+@@ -158,4 +158,8 @@ config BR2_PACKAGE_XBMC_WAVPACK
+ 	  Enable WAV input support.
+ 	  Select this if you want to play back WV files.
+ 
+-endif
++comment "XBMC addons"
++
++source "package/xbmc-pvr-addons/Config.in"
++
++endif # BR2_PACKAGE_XBMC
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.3.2
