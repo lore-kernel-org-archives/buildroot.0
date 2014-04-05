@@ -1,86 +1,102 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Apr 2014 19:21:00 +0200
-Subject: [Buildroot] [git commit] manual: update the virtual package section
-	with the new infrastructure
-Message-ID: <20140405172338.EA7CD9C5BE@busybox.osuosl.org>
+Date: Sat, 5 Apr 2014 19:20:53 +0200
+Subject: [Buildroot] [git commit] package/libopenvg: rename the _HAS and
+	_PROVIDES variables
+Message-ID: <20140405172338.B5DAD9C5BE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e92e0fd347f4657d0ce4fa8d089a7332093cf51a
+commit: http://git.buildroot.net/buildroot/commit/?id=db4b9774b34154f92246b12365bb5ecde9f16c6d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+The basic rule for a package is to have its options named
+after the package name. There is no reason this should not
+also be the case for virtual packages.
+
+Besides, renaming the package will allow us to switch libopenvg to use
+the soon-to-be-introduced virtual-package infrastructure.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Cc: Samuel Martin <s.martin49@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Cc: Mike Zick <minimod@morethan.org>
 Reviewed-by: Samuel Martin <s.martin49@gmail.com>
-Acked-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Cc: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/adding-packages-virtual.txt |   26 ++++++++++----------------
- 1 files changed, 10 insertions(+), 16 deletions(-)
+ package/cairo/cairo.mk                |    2 +-
+ package/opengl/libopenvg/Config.in    |    6 +++---
+ package/opengl/libopenvg/libopenvg.mk |    4 ++--
+ package/rpi-userland/Config.in        |    4 ++--
+ 4 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/docs/manual/adding-packages-virtual.txt b/docs/manual/adding-packages-virtual.txt
-index 76f5794..e8820a0 100644
---- a/docs/manual/adding-packages-virtual.txt
-+++ b/docs/manual/adding-packages-virtual.txt
-@@ -1,10 +1,10 @@
- // -*- mode:doc; -*-
- // vim: set syntax=asciidoc:
+diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
+index ee58aff..43238ca 100644
+--- a/package/cairo/cairo.mk
++++ b/package/cairo/cairo.mk
+@@ -61,7 +61,7 @@ else
+ 	CAIRO_CONF_OPT += --disable-glesv2
+ endif
  
--[[virtual-package-tutorial]]
-+Infrastructure for virtual packages
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-ifeq ($(BR2_PACKAGE_HAS_OPENVG),y)
++ifeq ($(BR2_PACKAGE_HAS_LIBOPENVG),y)
+ 	CAIRO_CONF_OPT += --enable-vg
+ 	CAIRO_DEPENDENCIES += libopenvg
+ else
+diff --git a/package/opengl/libopenvg/Config.in b/package/opengl/libopenvg/Config.in
+index 9d31525..53cde6a 100644
+--- a/package/opengl/libopenvg/Config.in
++++ b/package/opengl/libopenvg/Config.in
+@@ -1,6 +1,6 @@
+-config BR2_PACKAGE_HAS_OPENVG
++config BR2_PACKAGE_HAS_LIBOPENVG
+ 	bool
  
--Virtual package tutorial
--~~~~~~~~~~~~~~~~~~~~~~~~
-+[[virtual-package-tutorial]]
+-config BR2_PACKAGE_PROVIDES_OPENVG
+-	depends on BR2_PACKAGE_HAS_OPENVG
++config BR2_PACKAGE_PROVIDES_LIBOPENVG
++	depends on BR2_PACKAGE_HAS_LIBOPENVG
+ 	string
+diff --git a/package/opengl/libopenvg/libopenvg.mk b/package/opengl/libopenvg/libopenvg.mk
+index f81db5e..1c6f929 100644
+--- a/package/opengl/libopenvg/libopenvg.mk
++++ b/package/opengl/libopenvg/libopenvg.mk
+@@ -5,9 +5,9 @@
+ ################################################################################
  
- In Buildroot, a virtual package is a package whose functionalities are
- provided by one or more packages, referred to as 'providers'. The virtual
-@@ -16,6 +16,9 @@ The implementation of this API is different for the 'Allwinner Tech Sunxi' and
- the 'Texas Instruments OMAP35xx' plaftorms. So +libgles+ will be a virtual
- package and +sunxi-mali+ and +ti-gfx+ will be the providers.
+ LIBOPENVG_SOURCE =
+-LIBOPENVG_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_OPENVG))
++LIBOPENVG_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_LIBOPENVG))
  
-++virtual-package+ tutorial
-+^^^^^^^^^^^^^^^^^^^^^^^^^^
-+
- In the following example, we will explain how to add a new virtual package
- ('something-virtual') and a provider for it ('some-provider').
+-ifeq ($(BR2_PACKAGE_HAS_OPENVG),y)
++ifeq ($(BR2_PACKAGE_HAS_LIBOPENVG),y)
+ ifeq ($(LIBOPENVG_DEPENDENCIES),)
+ $(error No libOpenVG implementation selected. Configuration error.)
+ endif
+diff --git a/package/rpi-userland/Config.in b/package/rpi-userland/Config.in
+index 68ac1f6..aeee5e1 100644
+--- a/package/rpi-userland/Config.in
++++ b/package/rpi-userland/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_RPI_USERLAND
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_HAS_LIBEGL
+ 	select BR2_PACKAGE_HAS_LIBGLES
+-	select BR2_PACKAGE_HAS_OPENVG
++	select BR2_PACKAGE_HAS_LIBOPENVG
+ 	select BR2_PACKAGE_HAS_LIBOPENMAX
+ 	help
+ 	  Raspberry Pi Userland contains the necessary library to use the
+@@ -25,7 +25,7 @@ config BR2_PACKAGE_PROVIDES_LIBEGL
+ config BR2_PACKAGE_PROVIDES_LIBGLES
+ 	default "rpi-userland"
  
-@@ -42,7 +45,7 @@ providers.
- Virtual package's +*.mk+ file
- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-config BR2_PACKAGE_PROVIDES_OPENVG
++config BR2_PACKAGE_PROVIDES_LIBOPENVG
+ 	default "rpi-userland"
  
--The Makefile +package/something-virtual/something-virtual.mk+ should contain:
-+The +.mk+ for the virtual package should just evaluate the +virtual-package+ macro:
- 
- ---------------------------
- 01: ################################################################################
-@@ -51,20 +54,11 @@ The Makefile +package/something-virtual/something-virtual.mk+ should contain:
- 04: #
- 05: ################################################################################
- 06:
--07: SOMETHING_VIRTUAL_SOURCE =
--08: SOMETHING_VIRTUAL_DEPENDENCIES = $(call qstrip,$(BR2_PACKAGE_PROVIDES_SOMETHING_VIRTUAL))
--09:
--10: ifeq ($(BR2_PACKAGE_HAS_SOMETHING_VIRTUAL),y)
--11: ifeq ($(SOMETHING_VIRTUAL_DEPENDENCIES),)
--12: $(error No something-virtual implementation selected. Configuration error.)
--13: endif
--14: endif
--15:
--16: $(eval $(generic-package))
-+07: $(eval $(virtual-package))
- ---------------------------
- 
--The Makefile is quite small as it will only check if a provider for the
--virtual package has been selected.
-+The ability to have target and host packages is also available, with the
-++host-virtual-package+ macro.
- 
- Provider's +Config.in+ file
- ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ config BR2_PACKAGE_PROVIDES_LIBOPENMAX
