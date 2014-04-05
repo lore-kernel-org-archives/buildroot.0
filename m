@@ -1,61 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Apr 2014 19:08:36 +0200
-Subject: [Buildroot] [PATCH] libuci: Lua binding needs mmu and version
- 5.1
-In-Reply-To: <1396708617-7364-1-git-send-email-yegorslists@googlemail.com>
-References: <1396708617-7364-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20140405190836.7bcda5b5@skate>
+Date: Sat, 5 Apr 2014 19:21:02 +0200
+Subject: [Buildroot] [git commit] manual: add notes about depending on a
+	virtual package
+Message-ID: <20140405172338.F39639C5BE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yegor Yefremov,
+commit: http://git.buildroot.net/buildroot/commit/?id=b245d469c61cb853b83cbf3b538ee8a20c194cf0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  5 Apr 2014 16:36:57 +0200, Yegor Yefremov wrote:
-> The Lua binding option of libuci uses fork() so it needs the MMU.
-> 
-> Finally, libuci fails to build with Lua 5.2 because it uses functions
-> removed from this version. Fix it by activating the option only with
-> Lua 5.1.
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/libuci/libuci.mk | 10 +++++++---
->  1 file changed, 7 insertions(+), 3 deletions(-)
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ docs/manual/adding-packages-virtual.txt |   49 +++++++++++++++++++++++++++++++
+ 1 files changed, 49 insertions(+), 0 deletions(-)
 
-I've applied your patch... but I'm not really happy because you clearly
-tested the patch insufficiently:
-
-> diff --git a/package/libuci/libuci.mk b/package/libuci/libuci.mk
-> index 736b946..42e61ee 100644
-> --- a/package/libuci/libuci.mk
-> +++ b/package/libuci/libuci.mk
-> @@ -10,10 +10,14 @@ LIBUCI_LICENSE = LGPLv2.1
->  LIBUCI_INSTALL_STAGING = YES
->  LIBUCI_DEPENDENCIES = libubox
->  
-> -ifeq ($(BR2_PACKAGE_LUA),y)
-> -	LIBUCI_DEPENDENCIES += lua
-> +ifeq ($(BR2_USE_MMU),y) # fork()
-> +ifeq ($(BR2_PACKAGE_LUA_5_1),y)
-> +LIBUBOX_DEPENDENCIES += lua
-> +LIBUBOX_CONF_OPT += -DLUAPATH=$(STAGING_DIR)/usr/lib/lua/5.1 \
-> +	-DLUA_CFLAGS=-I$(STAGING_DIR)/usr/include
->  else
-> -	LIBUCI_CONF_OPT += -DBUILD_LUA:BOOL=OFF
-> +LIBUBOX_CONF_OPT += -DBUILD_LUA:BOOL=OFF
-
-LIBUBOX_* variables in libuci.mk ? Surely this cannot work.
-
-I've fixed that and applied, but it'd be nice if patches were minimally
-tested before being submitted :-)
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/docs/manual/adding-packages-virtual.txt b/docs/manual/adding-packages-virtual.txt
+index e8820a0..c1b5a0a 100644
+--- a/docs/manual/adding-packages-virtual.txt
++++ b/docs/manual/adding-packages-virtual.txt
+@@ -91,3 +91,52 @@ provider, but only if it is selected.
+ 
+ Of course, do not forget to add the proper build and runtime dependencies for
+ this package!
++
++Notes on depending on a virtual package
++^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++
++When adding a package that requires a certain +FEATURE+ provided by a virtual
++package, you have to use +depends on BR2_PACKAGE_HAS_FEATURE+, like so:
++
++---------------------------
++config BR2_PACKAGE_HAS_FEATURE
++    bool
++
++config BR2_PACKAGE_FOO
++    bool "foo"
++    depends on BR2_PACKAGE_HAS_FEATURE
++---------------------------
++
++Notes on depending on a specific provider
++^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++
++If your package really requires a specific provider, then you'll have to
++make your package +depends on+ this provider; you can _not_ +select+ a
++provider.
++
++Let's take an example with two providers for a +FEATURE+:
++
++---------------------------
++config BR2_PACKAGE_HAS_FEATURE
++    bool
++
++config BR2_PACKAGE_FOO
++    bool "foo"
++    select BR2_PACKAGE_HAS_FEATURE
++
++config BR2_PACKAGE_BAR
++    bool "bar"
++    select BR2_PACKAGE_HAS_FEATURE
++---------------------------
++
++And you are adding a package that needs +FEATURE+ as provided by +foo+,
++but not as provided by +bar+.
++
++If you were to use +select BR2_PACKAGE_FOO+, then the user would still
++be able to select +BR2_PACKAGE_BAR+ in the menuconfig. This would create
++a configuration inconsistency, whereby two providers of the same +FEATURE+
++would be enabled at once, one explicitly set by the user, the other
++implicitly by your +select+.
++
++Instead, you have to use +depends on BR2_PACKAGE_FOO+, which avoids any
++implicit configuration inconsistency.
