@@ -1,47 +1,34 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  5 Apr 2014 14:10:17 +0200
-Subject: [Buildroot] [PATCH 13/13] package/vlc: depends on the virtual
-	package libgl
-In-Reply-To: <cover.1396699629.git.yann.morin.1998@free.fr>
-References: <cover.1396699629.git.yann.morin.1998@free.fr>
-Message-ID: <55d8bed0fa397c30345e1ba8318eeeb76fac7a3a.1396699629.git.yann.morin.1998@free.fr>
+From: Vincent <vincent.stehle@laposte.net>
+Date: Sat, 05 Apr 2014 14:22:49 +0200
+Subject: [Buildroot] host-binutils broken?
+In-Reply-To: <CAMo8BfKN8NAsfS1aM31TzjUvfJ1EFRQTZVnxH4U2M0BN0XWq1A@mail.gmail.com>
+References: <533EED51.9090204@freescale.com>	<CAMo8BfJhxpqBFmFeADF97cKbANtzNFYy2_L=wrMjLn8zUtinyw@mail.gmail.com>	<loom.20140404T230545-334@post.gmane.org>
+ <CAMo8BfKN8NAsfS1aM31TzjUvfJ1EFRQTZVnxH4U2M0BN0XWq1A@mail.gmail.com>
+Message-ID: <533FF599.70104@bergerie>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On 04/05/2014 12:46 AM, Max Filippov wrote:
+(..)
+ > Doesn't produce even a single warning for me...
 
-Currently, vlc depends on mesa3d to provide the openGL support.
+Hi Max,
 
-We now have a virtual package, libgl, which ensures openGL is available.
+Thanks for re-trying. You are lucky that it works for you :)
 
-This is support for full OpenGL, which is only available when X.Org is
-enabled, which is anyway a dependency of full OpenGL.
+ > What's your makeinfo version?
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Bernd Kuhls <berndkuhls@hotmail.com>
-Cc: Paul Cercueil <paul@crapouillou.net>
----
- package/vlc/vlc.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+This is:
 
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index a9ee620..f78f209 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -118,9 +118,9 @@ else
- VLC_CONF_OPT += --disable-flac
- endif
- 
--ifeq ($(BR2_PACKAGE_MESA3D),y)
-+ifeq ($(BR2_PACKAGE_HAS_OPENGL),y)
- VLC_CONF_OPT += --enable-glx
--VLC_DEPENDENCIES += mesa3d
-+VLC_DEPENDENCIES += libgl
- else
- VLC_CONF_OPT += --disable-glx
- endif
--- 
-1.8.3.2
+   makeinfo (GNU texinfo) 5.2
+
+...on debian testing, from package texinfo 5.2.0.dfsg.1-2.
+
+Does this call for a host-texinfo / host-makeinfo package?
+
+Best regards,
+
+V.
