@@ -1,42 +1,28 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun,  6 Apr 2014 09:35:15 +0200
-Subject: [Buildroot] [PATCH] python: fix host-python symlink installation
-	when no python is selected
-Message-ID: <1396769715-28635-1-git-send-email-s.martin49@gmail.com>
+From: Philippe Reynes <tremyfr@yahoo.fr>
+Date: Sun,  6 Apr 2014 09:48:19 +0200
+Subject: [Buildroot] [PATCH 0/2] use host compressor for rootfs
+Message-ID: <1396770501-9443-1-git-send-email-tremyfr@yahoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When no python interpreter is selected, all host-python symlink
-installation were disabled.
-This could lead to a non-existing $(HOST_DIR)/usr/bin/python program.
+When the rootfs is compressed with lzma, lzo or xz, we
+use the binary compiled by buildroot. But with gzip
+or bzip, we use the tools of the machine. This serie
+change this behaviour for gzip and bzip2, it add
+a dependancy on host-<compressor> and use it to
+compress the rootfs.
 
-Fixes:
-  http://autobuild.buildroot.net/results/6e7/6e74a343b4e8e113fd34d45c9279419e233afe8a/
+Philippe Reynes (2):
+  rootfs-gzip: use host-gzip instead of local gzip
+  rootfs-bzip: use host-bzip2 instead of local bzip2
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
----
- package/python/python.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ fs/common.mk           |    6 ++++--
+ package/bzip2/bzip2.mk |    2 ++
+ package/gzip/gzip.mk   |    3 +++
+ 3 files changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/package/python/python.mk b/package/python/python.mk
-index feff644..8a2ba65 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -192,9 +192,9 @@ PYTHON_POST_INSTALL_STAGING_HOOKS += PYTHON_INSTALL_STAGING_PYTHON_CONFIG_SYMLIN
- PYTHON_AUTORECONF = YES
- 
- # Some packages may have build scripts requiring python2.
--# Only install the python symlink in the host tree if python2 is enabled
--# for the target.
--ifeq ($(BR2_PACKAGE_PYTHON),y)
-+# Only install the python symlink in the host tree if python3 is not enabled
-+# for the target, otherwise the default python program may be missing.
-+ifneq ($(BR2_PACKAGE_PYTHON3),y)
- define HOST_PYTHON_INSTALL_PYTHON_SYMLINK
- 	ln -sf python2 $(HOST_DIR)/usr/bin/python
- 	ln -sf python2-config $(HOST_DIR)/usr/bin/python-config
 -- 
-1.9.1
+1.7.4.4
