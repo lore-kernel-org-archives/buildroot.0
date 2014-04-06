@@ -1,87 +1,46 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon,  7 Apr 2014 00:20:06 +0200
-Subject: [Buildroot] [PATCH 5/5] agentpp: new package
-In-Reply-To: <1396822806-32655-1-git-send-email-luca@lucaceresoli.net>
-References: <1396822806-32655-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1396822806-32655-6-git-send-email-luca@lucaceresoli.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 07 Apr 2014 00:34:08 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-04-02
+In-Reply-To: <20140406203150.GC26684@free.fr> (Yann E. MORIN's message of
+ "Sun, 6 Apr 2014 22:31:50 +0200")
+References: <20140403063009.526E4101924@stock.ovh.net>
+ <nki01bxvlk.ln2@ID-313208.user.individual.net>
+ <20140406203150.GC26684@free.fr>
+Message-ID: <87ppkudr4v.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
----
- package/Config.in          |  1 +
- package/agentpp/Config.in  | 20 ++++++++++++++++++++
- package/agentpp/agentpp.mk | 20 ++++++++++++++++++++
- 3 files changed, 41 insertions(+)
- create mode 100644 package/agentpp/Config.in
- create mode 100644 package/agentpp/agentpp.mk
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-diff --git a/package/Config.in b/package/Config.in
-index cc28d51..f35e1c7 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -700,6 +700,7 @@ source "package/mediastreamer/Config.in"
- endmenu
- 
- menu "Networking"
-+source "package/agentpp/Config.in"
- source "package/c-ares/Config.in"
- source "package/cppzmq/Config.in"
- source "package/czmq/Config.in"
-diff --git a/package/agentpp/Config.in b/package/agentpp/Config.in
-new file mode 100644
-index 0000000..10e003b
---- /dev/null
-+++ b/package/agentpp/Config.in
-@@ -0,0 +1,20 @@
-+config BR2_PACKAGE_AGENTPP
-+	bool "agent++"
-+	select BR2_PACKAGE_SNMPPP
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	help
-+	  AGENT++ is a set of C++ classes which provides a complete protocol
-+	  engine and dispatch table for the development of SNMP agents.
-+	  AGENT++ is a multilingual API which supports SNMPv1, SNMPv2c, and
-+	  SNMPv3. It provides various C++ classes implementing prototypes for
-+	  scalar and table SNMP managed objects that can be customized by
-+	  derivation. Additional classes support the development of proxy
-+	  agents as well as sending notifications.
-+
-+	  SNMPv3 support is enabled if SNMP++ enables it.
-+
-+	  http://www.agentpp.com/agentpp3_5/agentpp3_5.html
-+
-+
-+comment "agent++ needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/agentpp/agentpp.mk b/package/agentpp/agentpp.mk
-new file mode 100644
-index 0000000..32af8e3
---- /dev/null
-+++ b/package/agentpp/agentpp.mk
-@@ -0,0 +1,20 @@
-+#############################################################
-+#
-+# agentpp
-+#
-+#############################################################
-+
-+AGENTPP_VERSION = 4.0.2
-+AGENTPP_SOURCE = agent++-$(AGENTPP_VERSION).tar.gz
-+AGENTPP_SITE = http://www.agentpp.com
-+AGENTPP_LICENSE = Apache-2.0
-+AGENTPP_LICENSE_FILES = LICENSE-2_0.txt
-+AGENTPP_INSTALL_STAGING = YES
-+AGENTPP_DEPENDENCIES = host-pkgconf snmppp
-+AGENTPP_CONF_OPT += \
-+	--disable-proxy \
-+	--disable-forwarder \
-+	--disable-rpath \
-+	--disable-dependency-tracking
-+
-+$(eval $(autotools-package))
+Hi,
+
+ >> During testing I did not see such an error here, but in the past this error 
+ >> was already discussed:
+ >> http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/61929
+ >> 
+ >> But it seems that the discussion did not continue, libunwind landed one day 
+ >> later in buildroot, quoting Andy: "Pending the outcome of that question, I'll 
+ >> put in the config a dependency of !BR2_TOOLCHAIN_*_<uclibc>."
+ >> 
+ >> Maybe this is still necessary?
+
+ > Yes, setcontext et al. were only added to uClibc master in early 2013:
+ >     http://git.uclibc.org/uClibc/commit/?id=a8dc90eaaa5e6474beac828558d969b1aafee4af
+
+ > So it is not yet in any release of uClibc.
+
+ > Either we backport this (Hirk!) or we disable X.org on uClibc.
+ > Count me in for disabling on uClibc.
+
+It is libunwind that uses get/setcontext, not Xorg - And libunwind is
+just an optional dependency for Xorg, so it is libunwind that shouldn't
+be available for (non-snapshot) uClibc.
+
+I'll send a patch to fix it.
+
 -- 
-1.8.3.2
+Bye, Peter Korsgaard
