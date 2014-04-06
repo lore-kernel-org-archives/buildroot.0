@@ -1,71 +1,82 @@
-From: Philippe Reynes <tremyfr@yahoo.fr>
-Date: Sun, 6 Apr 2014 10:59:20 +0100 (BST)
-Subject: [Buildroot] [PATCH 0/2] use host compressor for rootfs
-In-Reply-To: <d0022b62-8def-48d0-9b6c-da49e87e140b@email.android.com>
-References: <1396770501-9443-1-git-send-email-tremyfr@yahoo.fr>
- <20140406075912.GC4096@tarshish>
- <1396776324.27939.YahooMailNeo@web28803.mail.ir2.yahoo.com>
- <d0022b62-8def-48d0-9b6c-da49e87e140b@email.android.com>
-Message-ID: <1396778360.23799.YahooMailNeo@web28803.mail.ir2.yahoo.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 6 Apr 2014 12:02:21 +0200
+Subject: [Buildroot] [PATCH v2] Compile Poppler over Qt
+In-Reply-To: <1396345399-28487-1-git-send-email-jeremie.scheer@armadeus.com>
+References: <1396345399-28487-1-git-send-email-jeremie.scheer@armadeus.com>
+Message-ID: <20140406120221.5a5fd253@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello,
 
-I've experienced a weird behavior with lzma.
-We are using lzma to compress initramfs.
+The title of your commit should be:
 
-On an old buildroot where the local lzma was used.
+	poppler: allow building Qt support
 
-It was working fine on some machine, but it fails
-on others. The fails was a "not enought memory"
-at boot time. Of course, it was also an old kernel.
-I never understood why using local lzma raise
-this issue.
+i.e we always want to have the commit titles to look like:
 
+	<name of the package>: <what is going on>
 
-After we add a dependency to "host-lzma",
-it works everywhere.
+On Tue,  1 Apr 2014 11:43:19 +0200, jeremie.scheer at armadeus.com wrote:
 
-So using host-<compressor> fix this issue, and
-now we have the same behavior on all desktop.
+> diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
+> index 040327f..386e7b8 100644
+> --- a/package/poppler/poppler.mk
+> +++ b/package/poppler/poppler.mk
+> @@ -7,10 +7,18 @@
+>  POPPLER_VERSION = 0.24.4
+>  POPPLER_SOURCE = poppler-$(POPPLER_VERSION).tar.xz
+>  POPPLER_SITE = http://poppler.freedesktop.org
+> -POPPLER_DEPENDENCIES = fontconfig
+>  POPPLER_LICENSE = GPLv2+
+>  POPPLER_LICENSE_FILES = COPYING
+>  POPPLER_CONF_OPT = --with-font-configuration=fontconfig
+> +POPPLER_INSTALL_STAGING = YES
 
-This serie is based on : if it could happen on 
+The commit log should indicate why this is added.
 
-lzma, it could happen on gzip/bzip2.
+> +
+> +POPPLER_DEPENDENCIES = fontconfig
+> +
+> +ifeq ($(BR2_PACKAGE_QT),y)
+> +	POPPLER_DEPENDENCIES += qt
+> +else
+> +	POPPLER_CONF_OPT += --disable-poppler-qt4
+> +endif
 
+This doesn't really work: BR2_PACKAGE_QT is not sufficient, it also
+needs QtGui and QtXml. From the Poppler configure.ac:
 
-Regards,
-Philippe
+  PKG_CHECK_MODULES(POPPLER_QT4, 
+                    QtCore >= 4.4.0 QtGui >= 4.4.0 QtXml >= 4.4.0)
 
+So maybe I would suggest to instead add a Config.in option that looks
+like this:
 
-Le Dimanche 6 avril 2014 11h32, Thomas De Schampheleire <patrickdepinguin@gmail.com> a ?crit :
- 
-Philippe Reynes <tremyfr@yahoo.fr> schreef:
+config BR2_PACKAGE_POPPLER_QT
+	bool "qt support"
+	depends on BR2_PACKAGE_QT
+	select BR2_PACKAGE_QT_GUI
+	select BR2_PACKAGE_QT_XML
+	help
+	  Some help text
 
->Hi Baruch,
->
->I've missed this "mandatory dependancy".
->I suppose that this dependancy is usefull to uncompress tarball.
->But I think that the compilation of firmware should be done with
->tools compiled by buildroot.
->
->If lzma is used to compress the rootfs, then lzma is compile
->by builtoot. If gzip is used to compress the rootfs, then we use
->local gzip. It's not very "coherent".
->And using compiled binary with buildroot increase chance to
->regenerate firmware on (very) different machine.
->
->And I agree with you, it's not a "real" issue, it's more a "nice to have".
+and then in poppler.mk, do:
 
-The problem is that the build time is increased without good reason.
-If there is a problem with a specific version of gzip/bzip2, we could always use the suitable-host-package mechanism as we do for tar. In fact, you could start using it for lzma too and avoid building host-lzma if it's already present...
+ifeq ($(BR2_PACKAGE_POPPLER_QT),y)
+POPPLER_DEPENDENCIES += qt
+POPPLER_CONF_OPT += --enable-poppler-qt4
+else
+POPPLER_CONF_OPT += --disable-poppler-qt4
+endif
 
-Best regards,
+Thanks,
+
 Thomas
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140406/7000f352/attachment-0001.html>
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
