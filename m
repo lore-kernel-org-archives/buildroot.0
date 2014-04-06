@@ -1,35 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 6 Apr 2014 11:55:50 +0200
-Subject: [Buildroot] [PATCH] python: fix host-python symlink
- installation when no python is selected
-In-Reply-To: <1396769715-28635-1-git-send-email-s.martin49@gmail.com>
-References: <1396769715-28635-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <20140406115550.6bec56aa@skate>
+Date: Sun, 6 Apr 2014 11:56:03 +0200
+Subject: [Buildroot] [git commit] exim: move to "Mail" menu
+Message-ID: <20140406095613.81EBE9C58D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+commit: http://git.buildroot.net/buildroot/commit/?id=b5c0d8dd8fec2dcf64f609d9b2e230216b28d3de
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  6 Apr 2014 09:35:15 +0200, Samuel Martin wrote:
-> When no python interpreter is selected, all host-python symlink
-> installation were disabled.
-> This could lead to a non-existing $(HOST_DIR)/usr/bin/python program.
-> 
-> Fixes:
->   http://autobuild.buildroot.net/results/6e7/6e74a343b4e8e113fd34d45c9279419e233afe8a/
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> ---
->  package/python/python.mk | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index 9d8b31f..cc28d51 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -857,6 +857,7 @@ source "package/sound-theme-freedesktop/Config.in"
+ endmenu
+ 
+ menu "Mail"
++source "package/exim/Config.in"
+ source "package/fetchmail/Config.in"
+ source "package/heirloom-mailx/Config.in"
+ source "package/libesmtp/Config.in"
+@@ -897,7 +898,6 @@ source "package/dnsmasq/Config.in"
+ source "package/dropbear/Config.in"
+ source "package/ebtables/Config.in"
+ source "package/ethtool/Config.in"
+-source "package/exim/Config.in"
+ source "package/foomatic-filters/Config.in"
+ source "package/fping/Config.in"
+ source "package/gesftpserver/Config.in"
