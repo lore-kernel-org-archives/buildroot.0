@@ -1,58 +1,48 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 6 Apr 2014 12:46:19 +0300
-Subject: [Buildroot] [PATCH 0/2] use host compressor for rootfs
-In-Reply-To: <20140406113248.5d7216a6@skate>
-References: <1396770501-9443-1-git-send-email-tremyfr@yahoo.fr>
- <20140406075912.GC4096@tarshish>
- <1396776324.27939.YahooMailNeo@web28803.mail.ir2.yahoo.com>
- <20140406113248.5d7216a6@skate>
-Message-ID: <20140406094619.GE4096@tarshish>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sun, 06 Apr 2014 11:48:53 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-04-05
+In-Reply-To: <20140406110837.45baff8e@skate>
+References: <20140406063010.119BC100CBA@stock.ovh.net>
+ <20140406110837.45baff8e@skate>
+Message-ID: <53412305.1080101@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, Thomas,
+Hello Thomas,
 
-On Sun, Apr 06, 2014 at 11:32:48AM +0200, Thomas Petazzoni wrote:
-> On Sun, 6 Apr 2014 10:25:24 +0100 (BST), Philippe Reynes wrote:
-> 
-> > I've missed this "mandatory dependancy".
-> > I suppose that this dependancy is usefull to uncompress tarball.
-> > But I think that the compilation of firmware should be done with
-> > tools compiled by buildroot.
-> > 
-> > If lzma is used to compress the rootfs, then lzma is compile
-> > by builtoot. If gzip is used to compress the rootfs, then we use
-> > local gzip. It's not very "coherent".
-> > And using compiled binary with buildroot increase chance to
-> > regenerate firmware on (very) different machine.
-> > 
-> > And I agree with you, it's not a "real" issue, it's more a "nice to have".
-> 
-> Well, I guess there are two important things here:
-> 
->  1) Buildroot tries to avoid building native utilities needlessly. So
->     when possible, we try to use the tools available on the machine, in
->     order to keep the overall build time as reasonable as possible.
-> 
->  2) gzip and bzip2 are widely available tools, which haven't caused any
->     compatibility issue in years. On the other hands, tools like lzma,
->     xz and so on are a lot less widely available. They may not even be
->     available at all on old Linux distributions that some companies are
->     still using.
-> 
-> Both of these points combined explain why we handle gzip/bzip2
-> differently than lzma/xz.
+Le 06/04/2014 11:08, Thomas Petazzoni a ?crit :
+> Hello all,
+>
+> As usual, here is an analysis of yesterday build failures. I'd like to
+> try to keep the number of failures as low as possible throughout the
+> development cycle, so that during the debugging part of the cycle, we
+> can really try to get down as much as possible.
+>
+> Sonic, Aaron, Ezequiel, Samuel, Gustavo, Eric, Anton and Alexander,
+> there are questions for you below, please read on :-)
+>
+>>        i686 |             lttng-libust-2.4.0 | NOK | http://autobuild.buildroot.net/results/635a4c235524bf1bdeb00b5cb561ad601e23b9fe/
+>>     powerpc |             lttng-libust-2.4.0 | NOK | http://autobuild.buildroot.net/results/07961e79bbf689e323a673d8d7dbc40be6247365/
+>>         arm |             lttng-libust-2.4.0 | NOK | http://autobuild.buildroot.net/results/8d12fa43f0165feccc924d28e6268f9a1993cab7/
+>>         arm |             lttng-libust-2.4.0 | NOK | http://autobuild.buildroot.net/results/96dcf9a8597b6133b377084aa63636711a24c63c/
+>>      x86_64 |             lttng-libust-2.4.0 | NOK | http://autobuild.buildroot.net/results/ffb87e2c411671080ee4bca3d22223726a2e05c4/
+>>         arm |             lttng-libust-2.4.0 | NOK | http://autobuild.buildroot.net/results/0f9b993ad2439c71b64d92e12fc437c8143d25a7/
+> I will have a look at http://patchwork.ozlabs.org/patch/335116/ and
+> apply it after testing.
+ok, thanks.
 
-Since commit d1f325f554cab (xzcat: treat as host prerequisite and build if 
-needed) xz is always built when the host does not have it. Can we remove 
-host-xz from the dependencies of HOST_SQUASHFS and ROOTFS_*_XZ?
+>>      x86_64 |              util-linux-2.24.1 | NOK | http://autobuild.buildroot.net/results/389feb26b03a79a2a62e3090089503809fd3aee8/
+>>        i686 |              util-linux-2.24.1 | NOK | http://autobuild.buildroot.net/results/6ec9ae9f7af2322edd16951243cf2f23819b825b/
+> Anton, can you have a look at these issues?
+I have send two patches for this one:
+http://patchwork.ozlabs.org/patch/337249/
+http://patchwork.ozlabs.org/patch/337248/
 
-baruch
+I'm not confident about the second one since It is only build tested.
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Best regards,
+Romain Naour
