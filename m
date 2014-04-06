@@ -1,114 +1,109 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 6 Apr 2014 22:11:28 +0200
-Subject: [Buildroot] [PATCH 1/1] lttng-libust: Disable liblttng-ust-dl
- with uClibc.
-In-Reply-To: <1396181930-21038-1-git-send-email-romain.naour@openwide.fr>
-References: <1396181930-21038-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20140406201128.GB26684@free.fr>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Sun,  6 Apr 2014 22:29:17 +0200
+Subject: [Buildroot] [PATCH] exim: use a more standard build-time
+	configuration
+Message-ID: <1396816157-1828-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+Buildroot currently ships a very minimal build configuration file for exim,
+which disables most optional features. This is not coherent with the runtime
+configuration file, taken verbatim from the exim distribution, which enables
+some of these features.
 
-On 2014-03-30 14:18 +0200, Romain Naour spake thusly:
-> According to uClibc commit [1], dlinfo is not available.
-> To be able to use LTTng UST with uClibc, we need to disable
-> the Dynamic Linker Tracing functionality [2].
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/a6c/a6c33dd7ec2a36a50c5ea74b989a371d6c85e899/build-end.log
-> 
-> [1] http://git.uclibc.org/uClibc/commit/?id=f3c9dc499c5c787ddd8c4320f2d44d2ae6e40c22
-> [2] http://lists.lttng.org/pipermail/lttng-dev/2014-February/022423.html
-> 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+The visible symptom is an error during boot that prevents exim from starting:
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+  Exim configuration error in line 541 of /etc/exim/configure:
+    router dnslookup: cannot find router driver "dnslookup"
 
-> ---
->  ...iblttng-ust-dl-if-dlinfo-is-not-available.patch | 52 ++++++++++++++++++++++
->  1 file changed, 52 insertions(+)
->  create mode 100644 package/lttng-libust/lttng-libust-0001-Disable-liblttng-ust-dl-if-dlinfo-is-not-available.patch
-> 
-> diff --git a/package/lttng-libust/lttng-libust-0001-Disable-liblttng-ust-dl-if-dlinfo-is-not-available.patch b/package/lttng-libust/lttng-libust-0001-Disable-liblttng-ust-dl-if-dlinfo-is-not-available.patch
-> new file mode 100644
-> index 0000000..7849840
-> --- /dev/null
-> +++ b/package/lttng-libust/lttng-libust-0001-Disable-liblttng-ust-dl-if-dlinfo-is-not-available.patch
-> @@ -0,0 +1,52 @@
-> +Disable liblttng-ust-dl if dlinfo is not available in C library.
-> +
-> +According to uClibc commit [1], dlinfo is not available.
-> +To be able to use LTTng UST with uClibc, we need to disable
-> +the Dynamic Linker Tracing functionality [2].
-> +
-> +[1] http://git.uclibc.org/uClibc/commit/?id=f3c9dc499c5c787ddd8c4320f2d44d2ae6e40c22
-> +[2] http://lists.lttng.org/pipermail/lttng-dev/2014-February/022423.html
-> +
-> +Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+In order to fix this problem, we change the way exim is configured at build
+time. Instead of blindly copying a minimal Buildroot-provided configuration
+file, we now copy the exim-provided one and then tweak it to change the needed
+options. This actually makes the configuration closer to standard exim.
+As the amount of tweaking is remarkable, we also define a few macros to make
+it easier and more readable.
 
-Did you try to push this upstream?
+This new approach was suggested by Bernd Kuhls.
 
-Regards,
-Yann E. MORIN.
+Reported-By: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-> +---
-> + Makefile.am  | 5 ++++-
-> + configure.ac | 3 +++
-> + 2 files changed, 7 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/Makefile.am b/Makefile.am
-> +index b79d2dd..c907ff1 100644
-> +--- a/Makefile.am
-> ++++ b/Makefile.am
-> +@@ -4,11 +4,14 @@ SUBDIRS = . include snprintf libringbuffer liblttng-ust-comm \
-> + 		liblttng-ust \
-> + 		liblttng-ust-ctl \
-> + 		liblttng-ust-fork \
-> +-		liblttng-ust-dl \
-> + 		liblttng-ust-libc-wrapper \
-> + 		liblttng-ust-cyg-profile \
-> + 		tools
-> + 
-> ++if HAVE_DLINFO
-> ++SUBDIRS += liblttng-ust-dl
-> ++endif
-> ++
-> + if BUILD_JNI_INTERFACE
-> + SUBDIRS += liblttng-ust-java liblttng-ust-jul
-> + endif
-> +diff --git a/configure.ac b/configure.ac
-> +index f507883..5dcf0e2 100644
-> +--- a/configure.ac
-> ++++ b/configure.ac
-> +@@ -145,6 +145,9 @@ AC_C_INLINE
-> + AC_FUNC_MALLOC
-> + AC_CHECK_FUNCS([gettimeofday munmap socket strerror strtol sched_getcpu sysconf])
-> + 
-> ++AC_CHECK_FUNCS([dlinfo])
-> ++AM_CONDITIONAL([HAVE_DLINFO], [test "${ac_cv_func_dlinfo}" = "yes"])
-> ++
-> + CFLAGS="-Wall $CFLAGS"
-> + 
-> + # URCU
-> +-- 
-> +1.9.0
-> +
-> -- 
-> 1.9.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+---
 
+Note: although this patch fixes a problem and cleans up things, I am not
+totally satisfied with it. It enables many optional features that are not
+enabled in products where I use exim. If I used this version of the exim
+package the executable would become larger without any advantage for my use
+case. So I will consider producing a follow-up patch in the future to allow
+(de)activating some options via kconfig.
+
+This is in line with previous discussion with Bernd, and I would
+appreciate his comments on this proposal.
+
+Nevertheless I'm sending this patch right now because it fixes a problem,
+and it's IMO an overall improvement.
+---
+ package/exim/exim.mk | 43 +++++++++++++++++++++++++++++++++++--------
+ 1 file changed, 35 insertions(+), 8 deletions(-)
+
+diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+index 3e8404b..bfb138e 100644
+--- a/package/exim/exim.mk
++++ b/package/exim/exim.mk
+@@ -11,15 +11,42 @@ EXIM_LICENSE = GPLv2+
+ EXIM_LICENSE_FILES = LICENCE
+ EXIM_DEPENDENCIES = pcre berkeleydb
+ 
+-# These echos seem to be the sanest way to feed CC and CFLAGS to exim
++# Modify a variable value. It must already exist in the file, either
++# commented or not.
++define exim-config-change # variable-name, variable-value
++	$(SED) 's,^[#[:space:]]*$1[[:space:]]*=.*$$,$1=$2,' \
++		$(@D)/Local/Makefile
++endef
++
++# Comment-out a variable. Has no effect if it does not exits.
++define exim-config-unset # variable-name
++	$(SED) 's,^\([[:space:]]*$1[[:space:]]*=.*$$\),# \1,' \
++		$(@D)/Local/Makefile
++endef
++
++# Add a variable definition. It must not already exist in the file,
++# otherwise it would be defined twice with potentially different values.
++define exim-config-add # variable-name, variable-value
++	echo "$1=$2" >>$(@D)/Local/Makefile
++endef
++
+ define EXIM_CONFIGURE_CMDS
+-	$(INSTALL) -m 0644 -D package/exim/Local-Makefile $(@D)/Local/Makefile
+-	echo "CC=$(TARGET_CC)" >>$(@D)/Local/Makefile
+-	echo "CFLAGS=$(TARGET_CFLAGS)" >>$(@D)/Local/Makefile
+-	echo "AR=$(TARGET_AR) cq" >>$(@D)/Local/Makefile
+-	echo "RANLIB=$(TARGET_RANLIB)" >>$(@D)/Local/Makefile
+-	echo "HOSTCC=$(HOSTCC)" >>$(@D)/Local/Makefile
+-	echo "HOSTCFLAGS=$(HOSTCFLAGS)" >>$(@D)/Local/Makefile
++	$(INSTALL) -m 0644 $(@D)/src/EDITME $(@D)/Local/Makefile
++	$(call exim-config-change,BIN_DIRECTORY,/usr/sbin)
++	$(call exim-config-change,CONFIGURE_FILE,/etc/exim/configure)
++	$(call exim-config-change,EXIM_USER,ref:exim)
++	$(call exim-config-change,EXIM_GROUP,mail)
++	$(call exim-config-change,TRANSPORT_LMTP,yes)
++	$(call exim-config-change,PCRE_LIBS,-lpcre)
++	$(call exim-config-change,PCRE_CONFIG,no)
++	$(call exim-config-change,HAVE_ICONV,no)
++	$(call exim-config-unset,EXIM_MONITOR)
++	$(call exim-config-add,CC,$(TARGET_CC))
++	$(call exim-config-add,CFLAGS,$(TARGET_CFLAGS))
++	$(call exim-config-add,AR,$(TARGET_AR) cq)
++	$(call exim-config-add,RANLIB,$(TARGET_RANLIB))
++	$(call exim-config-add,HOSTCC,$(HOSTCC))
++	$(call exim-config-add,HOSTCFLAGS,$(HOSTCFLAGS))
+ endef
+ 
+ # "The -j (parallel) flag must not be used with make"
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.3.2
