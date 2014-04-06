@@ -1,39 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 6 Apr 2014 15:42:14 +0200
-Subject: [Buildroot] Microblaze maintenance in Buildroot
-Message-ID: <20140406154214.27160264@skate>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun,  6 Apr 2014 17:06:04 +0300
+Subject: [Buildroot] [PATCH] Don't build host-xz needlessly
+Message-ID: <2ba6488613955537b19028cc7284548620aef745.1396793164.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+Since commit d1f325f554cab (xzcat: treat as host prerequisite and build if
+needed) host-xz is always built when the host does not have xz installed.
+Removed all other host-xz dependencies.
 
-You're receiving this e-mail because you've at one point or another
-expressed interest in the Microblaze support in Buildroot.
+Cc: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ fs/common.mk                 | 1 -
+ package/squashfs/squashfs.mk | 2 +-
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
-We have a number of Microblaze related failures in the autobuilders,
-but for the moment, only Spenser is receiving each day the
-notifications of Microblaze failures, and he has not been very active
-lately in terms of Buildroot contribution.
-
-Would any (or several) of you be willing to receive these notifications
-(one e-mail per day) and provide patches to fix Microblaze related
-problems?
-
-Generally, I'm also interested in having a group of people take care of
-the Microblaze architecture in Buildroot. There are a few outstanding
-patches initially posted by Spenser in January (to update
-gcc/binutils/gdb, etc.) that received some comments, but Spenser never
-got back with updated versions of those patches.
-
-Anybody interested?
-
-Thanks,
-
-Thomas
+diff --git a/fs/common.mk b/fs/common.mk
+index d95c26ba5c43..080b8c687efb 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -59,7 +59,6 @@ ROOTFS_$(2)_COMPRESS_EXT = .lzo
+ ROOTFS_$(2)_COMPRESS_CMD = $$(LZOP) -9 -c
+ endif
+ ifeq ($$(BR2_TARGET_ROOTFS_$(2)_XZ),y)
+-ROOTFS_$(2)_DEPENDENCIES += host-xz
+ ROOTFS_$(2)_COMPRESS_EXT = .xz
+ ROOTFS_$(2)_COMPRESS_CMD = $$(XZ) -9 -C crc32 -c
+ endif
+diff --git a/package/squashfs/squashfs.mk b/package/squashfs/squashfs.mk
+index bff308c2fd57..8c6350ab4a91 100644
+--- a/package/squashfs/squashfs.mk
++++ b/package/squashfs/squashfs.mk
+@@ -40,7 +40,7 @@ SQUASHFS_MAKE_ARGS += GZIP_SUPPORT=0
+ endif
+ 
+ 
+-HOST_SQUASHFS_DEPENDENCIES = host-zlib host-lzo host-xz
++HOST_SQUASHFS_DEPENDENCIES = host-zlib host-lzo
+ 
+ # no libattr/xz in BR
+ HOST_SQUASHFS_MAKE_ARGS = \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
