@@ -1,37 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 6 Apr 2014 11:52:43 +0200
-Subject: [Buildroot] [PATCH] libuci: fix Lua finding
-In-Reply-To: <1396719988-2275-1-git-send-email-yegorslists@googlemail.com>
-References: <1396719988-2275-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20140406115243.59d13292@skate>
+Date: Sun, 6 Apr 2014 11:55:26 +0200
+Subject: [Buildroot] [git commit] python: fix host-python symlink
+	installation when no python is selected
+Message-ID: <20140406095535.2B5209C58D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yegor Yefremov,
+commit: http://git.buildroot.net/buildroot/commit/?id=2ffcd79cd26376931434ce76597e9db3d3f77db7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  5 Apr 2014 19:46:28 +0200, Yegor Yefremov wrote:
-> This patch fixes Lua path comparison, if Lua is not provided.
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/libuci/libuci-01-uci-fix-Lua-finding.patch | 31 ++++++++++++++++++++++
->  1 file changed, 31 insertions(+)
->  create mode 100644 package/libuci/libuci-01-uci-fix-Lua-finding.patch
+When no python interpreter is selected, all host-python symlink
+installation were disabled.
+This could lead to a non-existing $(HOST_DIR)/usr/bin/python program.
 
-Applied, thanks. I've added the autobuilder link, it would be good to
-do it next time, as it's very useful when looking at a commit, to get a
-reference to the build failure it is fixing. As an added bonus, it
-ensures that you are counted as the contributors fixing autobuilder
-failures that are thanked in the Buildroot release e-mail from
-Peter! :-)
+Fixes:
+  http://autobuild.buildroot.net/results/6e7/6e74a343b4e8e113fd34d45c9279419e233afe8a/
 
-Thanks!
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/python/python.mk |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/python/python.mk b/package/python/python.mk
+index feff644..8a2ba65 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -192,9 +192,9 @@ PYTHON_POST_INSTALL_STAGING_HOOKS += PYTHON_INSTALL_STAGING_PYTHON_CONFIG_SYMLIN
+ PYTHON_AUTORECONF = YES
+ 
+ # Some packages may have build scripts requiring python2.
+-# Only install the python symlink in the host tree if python2 is enabled
+-# for the target.
+-ifeq ($(BR2_PACKAGE_PYTHON),y)
++# Only install the python symlink in the host tree if python3 is not enabled
++# for the target, otherwise the default python program may be missing.
++ifneq ($(BR2_PACKAGE_PYTHON3),y)
+ define HOST_PYTHON_INSTALL_PYTHON_SYMLINK
+ 	ln -sf python2 $(HOST_DIR)/usr/bin/python
+ 	ln -sf python2-config $(HOST_DIR)/usr/bin/python-config
