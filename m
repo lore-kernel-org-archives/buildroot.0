@@ -1,82 +1,94 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 6 Apr 2014 12:02:21 +0200
-Subject: [Buildroot] [PATCH v2] Compile Poppler over Qt
-In-Reply-To: <1396345399-28487-1-git-send-email-jeremie.scheer@armadeus.com>
-References: <1396345399-28487-1-git-send-email-jeremie.scheer@armadeus.com>
-Message-ID: <20140406120221.5a5fd253@skate>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun, 6 Apr 2014 12:48:04 +0200
+Subject: [Buildroot] [PATCH] python: fix host-python symlink
+ installation when no python is selected
+In-Reply-To: <20140406083000.GD4096@tarshish>
+References: <1396769715-28635-1-git-send-email-s.martin49@gmail.com>
+ <20140406083000.GD4096@tarshish>
+Message-ID: <CAHXCMMKFCkPzYD=SgeYPUFS+p+RDVR-5mexT9r5CqoMuWUXC=Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Baruch, all,
 
-The title of your commit should be:
+On Sun, Apr 6, 2014 at 10:30 AM, Baruch Siach <baruch@tkos.co.il> wrote:
+> Hi Samuel,
+>
+> On Sun, Apr 06, 2014 at 09:35:15AM +0200, Samuel Martin wrote:
+>> When no python interpreter is selected, all host-python symlink
+>> installation were disabled.
+>> This could lead to a non-existing $(HOST_DIR)/usr/bin/python program.
+>>
+>> Fixes:
+>>   http://autobuild.buildroot.net/results/6e7/6e74a343b4e8e113fd34d45c9279419e233afe8a/
+>
+> I'm working on a similar problem
+> (http://autobuild.buildroot.net/results/dd0/dd04833b11a0ebb0193c861cb375b2112dd339d1/).
+> The following configure log shows the problem:
+>
+> checking for a Python interpreter with version >= 2.6... python
+> checking for python... /usr/bin/python
+> checking for python version... 2.6
+>
+> The host packaged python (2.6) is detected instead of the buildroot built one
+> (2.7), because the python symlink is missing. In this case
+> BR2_PACKAGE_PYTHON3=y so even with this patch the problem is not fixed. Your
+> commit e1584b7d3350 (python: rework python symlinks installation) originally
+> limited host python symlink creation, but I could not understand the reason
+> for this from the commit log.
 
-	poppler: allow building Qt support
+Just to sum-up the python cases:
+1) .config:
+  BR2_PACKAGE_PYTHON=n
+  BR2_PACKAGE_PYTHON3=n
+output:
+  host/usr/bin/python2 may exist
+  host/usr/bin/python never exists without this patch
+2) .config:
+  BR2_PACKAGE_PYTHON=y
+  BR2_PACKAGE_PYTHON3=n
+output:
+  host/usr/bin/python2 exists
+  host/usr/bin/python -> python2
+  host/usr/bin/python3 never exists
+3) .config:
+  BR2_PACKAGE_PYTHON=n
+  BR2_PACKAGE_PYTHON3=y
+output:
+  host/usr/bin/python3 exists
+  host/usr/bin/python -> python3
+  host/usr/bin/python2 may exist
 
-i.e we always want to have the commit titles to look like:
 
-	<name of the package>: <what is going on>
+In this build failure, the .config is in case #3.
 
-On Tue,  1 Apr 2014 11:43:19 +0200, jeremie.scheer at armadeus.com wrote:
+What happen is libevdev is built before python3 and host-python3 are built.
+But host/usr/bin/python2 is already built (because it is a dependency
+of libevdev).
 
-> diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
-> index 040327f..386e7b8 100644
-> --- a/package/poppler/poppler.mk
-> +++ b/package/poppler/poppler.mk
-> @@ -7,10 +7,18 @@
->  POPPLER_VERSION = 0.24.4
->  POPPLER_SOURCE = poppler-$(POPPLER_VERSION).tar.xz
->  POPPLER_SITE = http://poppler.freedesktop.org
-> -POPPLER_DEPENDENCIES = fontconfig
->  POPPLER_LICENSE = GPLv2+
->  POPPLER_LICENSE_FILES = COPYING
->  POPPLER_CONF_OPT = --with-font-configuration=fontconfig
-> +POPPLER_INSTALL_STAGING = YES
+So, there is no python symlink yet installed in the host dir.; that's
+why the configure script fallback on the system python installation.
 
-The commit log should indicate why this is added.
+I see 2 possible way to fix this:
+1) add the following line to libevdev.mk:
+LIBEVDEV_CONF_ENV += ac_cv_path_PYTHON=$(HOST_DIR)/usr/bin/python2
 
-> +
-> +POPPLER_DEPENDENCIES = fontconfig
-> +
-> +ifeq ($(BR2_PACKAGE_QT),y)
-> +	POPPLER_DEPENDENCIES += qt
-> +else
-> +	POPPLER_CONF_OPT += --disable-poppler-qt4
-> +endif
+2) or, if python3 is correctly supported by libevdev, then change the
+host-python dependency to:
+LIBEVDEV_DEPENDENCIES += $(if $(BR2_PACKAGE_PYHTON3),host-python3,host-python)
 
-This doesn't really work: BR2_PACKAGE_QT is not sufficient, it also
-needs QtGui and QtXml. From the Poppler configure.ac:
+Tricky bug that, I think, we may see again :-/
 
-  PKG_CHECK_MODULES(POPPLER_QT4, 
-                    QtCore >= 4.4.0 QtGui >= 4.4.0 QtXml >= 4.4.0)
+>
+> baruch
+>
 
-So maybe I would suggest to instead add a Config.in option that looks
-like this:
+Thanks a lot for sharing your investigations.
 
-config BR2_PACKAGE_POPPLER_QT
-	bool "qt support"
-	depends on BR2_PACKAGE_QT
-	select BR2_PACKAGE_QT_GUI
-	select BR2_PACKAGE_QT_XML
-	help
-	  Some help text
+Regards,
 
-and then in poppler.mk, do:
-
-ifeq ($(BR2_PACKAGE_POPPLER_QT),y)
-POPPLER_DEPENDENCIES += qt
-POPPLER_CONF_OPT += --enable-poppler-qt4
-else
-POPPLER_CONF_OPT += --disable-poppler-qt4
-endif
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Samuel
