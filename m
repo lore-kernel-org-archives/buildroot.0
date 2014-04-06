@@ -1,27 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 6 Apr 2014 14:09:40 +0200
-Subject: [Buildroot] [PATCH 1/1] nut: needs mmu
-In-Reply-To: <1396776187-6874-1-git-send-email-romain.naour@openwide.fr>
-References: <1396776187-6874-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20140406140940.3e73b8cf@skate>
+Date: Sun, 6 Apr 2014 14:10:08 +0200
+Subject: [Buildroot] [PATCH] libevdev: adjust host-python dependency
+In-Reply-To: <1396784186-13541-1-git-send-email-s.martin49@gmail.com>
+References: <1396784186-13541-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <20140406141008.4edd66cd@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+Dear Samuel Martin,
 
-On Sun,  6 Apr 2014 11:23:07 +0200, Romain Naour wrote:
-> While investigating on build failure [1], I realized that nut needs mmu since fork() is used.
-> So, conditions of this build failure are no longer encountered.
+On Sun,  6 Apr 2014 13:36:26 +0200, Samuel Martin wrote:
+> libevdev depends on host-python because of some of its build scripts.
+> These build scripts support python2 and python3.
 > 
-> [1] http://autobuild.buildroot.net/results/961/96193e18782697c2af8813a7714b66b4ba1f3d1c//build-end.log
+> When python3 is part of the target selection, then we can just use the
+> interpreter provided by the host-python3 package.
 > 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> Fixes:
+>   http://autobuild.buildroot.net/results/dd0/dd04833b11a0ebb0193c861cb375b2112dd339d1/
+> 
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 > ---
->  package/nut/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+>  package/libevdev/libevdev.mk | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 
 Applied, thanks.
 
