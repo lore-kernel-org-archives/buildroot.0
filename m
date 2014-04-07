@@ -1,30 +1,39 @@
-From: Ezequiel Garcia <ezequiel.garcia@free-electrons.com>
-Date: Mon, 7 Apr 2014 08:18:24 -0300
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 7 Apr 2014 13:27:20 +0200
 Subject: [Buildroot] [autobuild.buildroot.net] Build results for
  2014-04-05
-In-Reply-To: <20140406110837.45baff8e@skate>
+In-Reply-To: <20140407111824.GA544@arch.cereza>
 References: <20140406063010.119BC100CBA@stock.ovh.net>
- <20140406110837.45baff8e@skate>
-Message-ID: <20140407111824.GA544@arch.cereza>
+ <20140406110837.45baff8e@skate> <20140407111824.GA544@arch.cereza>
+Message-ID: <20140407132720.699be504@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Apr 06, Thomas Petazzoni wrote:
-> >      nios2 |                   dhcpcd-6.1.0 | NOK | http://autobuild.buildroot.net/results/c32ad4bac5f651502e551f7733f702afaa0e742a/
-> 
-> Ezequiel, can you look into this?
-> 
+Dear Ezequiel Garcia,
 
-Ah, yes. Known issue. The kernel headers exported to userspace by the Sourcery
-toolchain are completely broken. Seems like they used "cp" instead of
-"make headers_install".
+On Mon, 7 Apr 2014 08:18:24 -0300, Ezequiel Garcia wrote:
+> On Apr 06, Thomas Petazzoni wrote:
+> > >      nios2 |                   dhcpcd-6.1.0 | NOK | http://autobuild.buildroot.net/results/c32ad4bac5f651502e551f7733f702afaa0e742a/
+> > 
+> > Ezequiel, can you look into this?
+> > 
+> 
+> Ah, yes. Known issue. The kernel headers exported to userspace by the Sourcery
+> toolchain are completely broken. Seems like they used "cp" instead of
+> "make headers_install".
 
-If we want to fix headers in an external toolchain, this issue and others like
-it will get fixed.
+Ok.
+
+> If we want to fix headers in an external toolchain, this issue and others like
+> it will get fixed.
+
+I'm not sure to understand what you mean here, however.
+
+Thomas
 -- 
-Ezequiel Garc?a, Free Electrons
-Embedded Linux, Kernel and Android Engineering
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
