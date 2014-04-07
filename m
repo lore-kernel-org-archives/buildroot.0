@@ -1,87 +1,85 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 7 Apr 2014 22:26:10 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libgc: add Boehm-Demers-Weiser
- gc library
-In-Reply-To: <1396868422-5757-2-git-send-email-alex.bennee@linaro.org>
+Date: Mon, 7 Apr 2014 22:33:39 +0200
+Subject: [Buildroot] [PATCH 2/2] package/zile: add Zile is Lossy Emacs
+ editor
+In-Reply-To: <1396868422-5757-3-git-send-email-alex.bennee@linaro.org>
 References: <1396868422-5757-1-git-send-email-alex.bennee@linaro.org>
- <1396868422-5757-2-git-send-email-alex.bennee@linaro.org>
-Message-ID: <20140407202610.GB3215@free.fr>
+ <1396868422-5757-3-git-send-email-alex.bennee@linaro.org>
+Message-ID: <20140407203338.GC3215@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alex, Alex, All,
+Alex, All,
 
 On 2014-04-07 12:00 +0100, Alex Benn?e spake thusly:
-> This is needed for applications like Zile
-> 
-> Signed-off-by: Alex Benn?e <alex.bennee@linaro.org>
-> Signed-off-by: Alex Benn?e <alex@bennee.com>
-
-Woot! It's not that often with have a schizophrenic contributor! ;-)
-
+> This is a lightweight Emacs clone useful for embedded systems. I nabbed
+> the help2man disable patch from OpenEmbedded.
 [--SNIP--]
-> diff --git a/package/libgc/libgc.mk b/package/libgc/libgc.mk
+> diff --git a/package/zile/Config.in b/package/zile/Config.in
 > new file mode 100644
-> index 0000000..e5c4609
+> index 0000000..29fb0fc
 > --- /dev/null
-> +++ b/package/libgc/libgc.mk
-> @@ -0,0 +1,23 @@
+> +++ b/package/zile/Config.in
+> @@ -0,0 +1,14 @@
+> +config BR2_PACKAGE_ZILE
+> +	bool "zile"
+> +        select BR2_PACKAGE_LIBGC
+> +	depends on BR2_USE_MMU # fork()
+> +	help
+> +	  Zile is Lossy Emacs
+> +
+> +          GNU Zile (Zile Is Lossy Emacs) is a lightweight Emacs clone. Every
+> +          Emacs user should feel at home with Zile. Zile is aimed at small
+> +          footprint systems (a typical binary is about 100Kb) and quick editing
+> +          sessions (it starts up and shuts down instantly).
+> +
+> +	  http://www.gnu.org/software/zile/
+
+There is space damage above:
+  - use one tab in front of options parameters (type, select, depends...)
+  - use one tab and two spaces in front of the help text
+
+The above mixes spaces and tabs.
+
+> diff --git a/package/zile/remove-help2man.patch b/package/zile/remove-help2man.patch
+> new file mode 100644
+> index 0000000..c1a63f4
+> --- /dev/null
+> +++ b/package/zile/remove-help2man.patch
+> @@ -0,0 +1,28 @@
+> +Upstream-Status: Inappropriate [configuration]
+
+Please add a complete commit log, and your SoB lines too, in this patch.
+
+Could you also add a pointer to the upstream refusal (bug -tracker or ML
+archive), please?
+
+> diff --git a/package/zile/zile.mk b/package/zile/zile.mk
+> new file mode 100644
+> index 0000000..024595c
+> --- /dev/null
+> +++ b/package/zile/zile.mk
+> @@ -0,0 +1,13 @@
 > +################################################################################
 > +#
-> +# Boehm-Demers-Weiser's GC
+> +# Zile
 > +#
 > +################################################################################
 > +
-> +LIBGC_VERSION = 7.4.0
-> +LIBGC_SOURCE = gc-${LIBGC_VERSION}.tar.gz
+> +ZILE_VERSION = 2.4.11
+> +ZILE_SITE = http://ftp.gnu.org/gnu/zile/
+> +ZILE_LICENSE = GPLv1+
+> +ZILE_LICENSE_FILES = COPYING
+> +ZILE_CONF_OPT += --without-help2man
 
-Use parenthesis when evaluating variables, not curly-braces:
-    LIBGC_SOURCE = gc-$(LIBGC_VERSION).tar.gz
+In the previous patch, you added libgc, stating that it was a dependency
+of Zile, but you forgot to add it here.
 
-> +LIBGC_SITE = http://www.hboehm.info/gc/gc_source/
-> +LIBGC_EXTRA_DOWNLOADS = libatomic_ops-${LIBGC_VERSION}.tar.gz
-
-Ditto, parenthesis.
-
-> +LIBGC_LICENSE = GPLv1+
-> +LIBGC_LICENSE_FILES = COPYING
-> +LIBGC_INSTALL_STAGING = YES
-> +
-> +define LIBGC_POST_EXTRACT_INC_LIBATOMIC
-> +	env
-
-This is not needed.
-
-> +	mkdir -p $(@D)/libatomic_ops
-> +	tar -xvf ${BR2_DL_DIR}/libatomic_ops-${LIBGC_VERSION}.tar.gz --strip-components=1 -C $(@D)/libatomic_ops
-> +endef
-> +
-> +LIBGC_POST_EXTRACT_HOOKS += LIBGC_POST_EXTRACT_INC_LIBATOMIC
-
-I know this is how upstream suggests building, but I can refrain from
-finding this really ugly... Yuck! :-(
-
-Anyway: can't use you use something like:
-
-    LIBGC_LIBATOMIC_OPS = libatomic_ops-${LIBGC_VERSION}.tar.gz
-    LIBGC_EXTRA_DOWNLOADS = $(LIBGC_LIBATOMIC_OPS)
-
-    define LIBGC_POST_EXTRACT_INC_LIBATOMIC
-        $(INSTALL) -d -m 0755 $(LSOF_DIR)/libatomic_ops && \
-        $(call suitable-extractor,$(LIBGC_LIBATOMIC_OPS)) $(DL_DIR)/$(LIBGC_LIBATOMIC_OPS) |\
-            $(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(LSOF_DIR)/libatomic_opsi $(TAR_OPTIONS) -
-    endef
-    LIBGC_POST_EXTRACT_HOOKS += LIBGC_POST_EXTRACT_INC_LIBATOMIC
-
-Note LIBGC_LIBATOMIC_OPS is not strictly required, but I find it cleaner
-to use, rather than call suitabel-extract on _EXTRA_DOWNLOADS, which is
-a plual and could contain more than one file. That's purely for
-aesthetics.
-
-> +$(eval $(autotools-package))
+Probably it is working for you since libgz sorts alphabetically before
+zile, but that's not guaranteed with parallel builds.
 
 Regards,
 Yann E. MORIN.
