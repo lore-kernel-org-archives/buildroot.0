@@ -1,69 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 7 Apr 2014 23:39:00 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libgc: add Boehm-Demers-Weiser
- gc library
-In-Reply-To: <1396868422-5757-2-git-send-email-alex.bennee@linaro.org>
-References: <1396868422-5757-1-git-send-email-alex.bennee@linaro.org>
- <1396868422-5757-2-git-send-email-alex.bennee@linaro.org>
-Message-ID: <20140407233900.1b7b0e58@skate>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Mon, 07 Apr 2014 23:48:39 +0200
+Subject: [Buildroot] [PATCH v3] infra: Add PRE_*_HOOKS for every step
+In-Reply-To: <20140406143133.69594f69@skate>
+References: <1396031372-23308-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <20140406143133.69594f69@skate>
+Message-ID: <53431D37.4090601@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alex Benn?e,
+Hi Thomas,
 
-On Mon,  7 Apr 2014 12:00:21 +0100, Alex Benn?e wrote:
+Thomas Petazzoni wrote:
+> Hello,
+>
+> On Fri, 28 Mar 2014 19:29:32 +0100, Maxime Hadjinlian wrote:
+>
+>> +* +LIBFOO_PRE_LEGAL_INFO_HOOKS+
+>>   * +LIBFOO_POST_LEGAL_INFO_HOOKS+
+>
+> I'm generally fine with the patch, but I'm wondering what's the
+> usefulness of the legal-info hooks. I know you're merely adding a
+> pre-hook to match an existing post-hook, but I'm wondering what would
+> be the usage of a post-legal-info hook actually.
+>
+> Luca?
 
-> diff --git a/package/libgc/Config.in b/package/libgc/Config.in
-> new file mode 100644
-> index 0000000..bac636c
-> --- /dev/null
-> +++ b/package/libgc/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_LIBGC
-> +	bool "libgc"
-> +	help
-> +          The Boehm-Demers-Weiser conservative garbage collector can be used
-> +          as a garbage collecting replacement for C malloc or C++ new. It allows
-> +          you to allocate memory basically as you normally would, without
-> +          explicitly deallocating memory that is no longer useful.
-> +
-> +          http://www.hboehm.info/gc/
+Maybe some mysterious package wants to save some additional files in the
+sources directory, or anything even more strange...?
+No, I can't really think of anything sound.
 
-Indentation for the help text should be one tab + two spaces.
+OTOH having pre- and post-hooks for all steps /except one/ does not look
+very polished, and I think the effort to maintain an unused hook is
+minimal.
 
+So I would keep Maxime's patch as-is, unless there is a solid
+reason to do otherwise.
 
-> +################################################################################
-> +#
-> +# Boehm-Demers-Weiser's GC
-
-We normally just want the package name here, i.e the same as the
-directory name.
-
-> +#
-> +################################################################################
-> +
-> +LIBGC_VERSION = 7.4.0
-> +LIBGC_SOURCE = gc-${LIBGC_VERSION}.tar.gz
-> +LIBGC_SITE = http://www.hboehm.info/gc/gc_source/
-> +LIBGC_EXTRA_DOWNLOADS = libatomic_ops-${LIBGC_VERSION}.tar.gz
-> +LIBGC_LICENSE = GPLv1+
-> +LIBGC_LICENSE_FILES = COPYING
-> +LIBGC_INSTALL_STAGING = YES
-> +
-> +define LIBGC_POST_EXTRACT_INC_LIBATOMIC
-> +	env
-> +	mkdir -p $(@D)/libatomic_ops
-> +	tar -xvf ${BR2_DL_DIR}/libatomic_ops-${LIBGC_VERSION}.tar.gz --strip-components=1 -C $(@D)/libatomic_ops
-> +endef
-
-We have a libatomic_ops package in Buildroot. Wouldn't it be possible
-to use it instead?
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Luca
