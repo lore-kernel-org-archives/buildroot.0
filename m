@@ -1,41 +1,45 @@
-From: Markos Chandras <Markos.Chandras@imgtec.com>
-Date: Mon, 7 Apr 2014 14:53:41 +0100
-Subject: [Buildroot] [PATCH 02/11] arch: MIPS: Add config option
-	BR2_GCC_TARGET_TUNE
-In-Reply-To: <533DD7B6.8080009@crapouillou.net>
-References: <1396558881-29631-1-git-send-email-paul@crapouillou.net>
- <1396558881-29631-2-git-send-email-paul@crapouillou.net>
- <20140403211925.GC17328@free.fr> <533DD7B6.8080009@crapouillou.net>
-Message-ID: <5342ADE5.1060908@imgtec.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon,  7 Apr 2014 17:00:34 +0300
+Subject: [Buildroot] [PATCH] latencytop: disable static build
+Message-ID: <4cc42edb1d6c9e7d6c156bb56fb744ec84ff9ae0.1396879234.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/03/2014 10:50 PM, Paul Cercueil wrote:
-> Hi Yann,
->
-> This patch would pass the same value to --with-arch and --with-tune,
-> unless you define a different value for BR2_GCC_TARGET_TUNE in your
-> defconfig. We use that for the Ingenic jz4740 processor, which is a
-> mips32 processor but running better the code tuned for mips32r2.
->
-Hi Paul,
+The Makefile of latencytop doesn't take static linking into account when
+calling pkg-config for glib-2.0. Disable static build of latencytop.
 
-I don't understand this patch as well. If the jz4740 needs a mips32r2 
-userland, why not use Target Options-> Target Architecture Variant -> 
-mips32r2? You want to use the same toolchain for non-mips32r2 targets as 
-well?
+Fixes:
+http://autobuild.buildroot.net/results/e62/e62d35bcf7d6c98d0a0348532c2b159affb20e83/
 
-The TARGET_TUNE option has been removed for MIPS in 
-f60dafe06833a17540608d1c8172d6535c513f1e
-"arch/mips: Set BR2_GCC_TARGET_ARCH for MIPS"
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/latencytop/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-and i see no good reason to bring it back.
-
-If you need to optimize for a different ISA, wouldn't it be possible to 
-use custom CFLAGS in Toolchain->Target Optimizations?
-
+diff --git a/package/latencytop/Config.in b/package/latencytop/Config.in
+index b54ef052b47f..9d6e119fa759 100644
+--- a/package/latencytop/Config.in
++++ b/package/latencytop/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_LATENCYTOP
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+ 	depends on BR2_USE_MMU # libglib2
++	depends on !BR2_PREFER_STATIC_LIB
+ 	select BR2_PACKAGE_NCURSES
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	help
+@@ -21,6 +22,7 @@ config BR2_PACKAGE_LATENCYTOP
+ 
+ 	  http://www.latencytop.org
+ 
+-comment "latencytop needs a toolchain w/ wchar, threads"
++comment "latencytop needs a toolchain w/ wchar, threads, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_PREFER_STATIC_LIB
 -- 
-markos
+1.9.1
