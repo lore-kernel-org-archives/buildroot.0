@@ -1,87 +1,92 @@
-From: Clayton Shotwell <clshotwe@rockwellcollins.com>
-Date: Mon,  7 Apr 2014 15:45:22 -0500
-Subject: [Buildroot] [PATCH] legal-info: Add site to legal info manifest
-Message-ID: <1396903522-10063-1-git-send-email-clshotwe@rockwellcollins.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Mon, 07 Apr 2014 22:46:10 +0200
+Subject: [Buildroot] [lttng-dev] [PATCH 1/1] Disable liblttng-ust-dl if
+ dlinfo is not	available in C library.
+In-Reply-To: <794709247.8287.1396903345152.JavaMail.zimbra@efficios.com>
+References: <1396818161-20204-1-git-send-email-romain.naour@openwide.fr>
+ <794709247.8287.1396903345152.JavaMail.zimbra@efficios.com>
+Message-ID: <53430E92.9060401@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I would like to propose adding the site to the legal-info manifest
-files. This gives a little more information on where the sources came
-from without adding much overhead. Please note that is is only for
-packages where the source is not local or set with OVERRIDE_SRCDIR.
+Hi Mathieu,
 
-This patch works for the most part. The only issue I see with it occurs
-when the SITE for a package uses one of the common url macros such as
-BR2_GNU_MIRROR. The legal info manifest ends up having an extra set of
-double quotes in the site string.
+Le 07/04/2014 22:42, Mathieu Desnoyers a ?crit :
+> Merged into master and stable-2.4, thanks!
+>
+> Mathieu
+You're welcome.
 
-Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
----
- Makefile               |    6 +++---
- package/pkg-generic.mk |    4 +++-
- package/pkg-utils.mk   |    4 ++--
- 3 files changed, 8 insertions(+), 6 deletions(-)
+Best regards,
+Romain Naour
 
-diff --git a/Makefile b/Makefile
-index 41c51c6..31edf9a 100644
---- a/Makefile
-+++ b/Makefile
-@@ -638,9 +638,9 @@ legal-info-clean:
- legal-info-prepare: $(LEGAL_INFO_DIR)
- 	@$(call MESSAGE,"Collecting legal info")
- 	@$(call legal-license-file,buildroot,COPYING,COPYING,HOST)
--	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,TARGET)
--	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,HOST)
--	@$(call legal-manifest,buildroot,$(BR2_VERSION_FULL),GPLv2+,COPYING,not saved,HOST)
-+	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,TARGET)
-+	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,HOST)
-+	@$(call legal-manifest,buildroot,$(BR2_VERSION_FULL),GPLv2+,COPYING,not saved,not saved,HOST)
- 	@$(call legal-warning,the Buildroot source code has not been saved)
- 	@$(call legal-warning,the toolchain has not been saved)
- 	@cp $(BR2_CONFIG) $(LEGAL_INFO_DIR)/buildroot.config
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 339c3eb..eff021b 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -561,10 +561,12 @@ ifneq ($$($(2)_SITE_METHOD),override)
- # Packages that have a tarball need it downloaded and extracted beforehand
- $(1)-legal-info: $(1)-extract $(REDIST_SOURCES_DIR_$(call UPPERCASE,$(4)))
- $(2)_MANIFEST_TARBALL = $$($(2)_SOURCE)
-+$(2)_MANIFEST_SITE = $$($(2)_SITE)
- endif
- endif
- endif
- $(2)_MANIFEST_TARBALL ?= not saved
-+$(2)_MANIFEST_SITE ?= not saved
- 
- # legal-info: produce legally relevant info.
- $(1)-legal-info:
-@@ -599,7 +601,7 @@ ifeq ($$($(2)_REDISTRIBUTE),YES)
- endif # redistribute
- 
- endif # other packages
--	@$(call legal-manifest,$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_LICENSE),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_MANIFEST_TARBALL),$(call UPPERCASE,$(4)))
-+	@$(call legal-manifest,$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_LICENSE),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_MANIFEST_TARBALL),$$($(2)_MANIFEST_SITE),$(call UPPERCASE,$(4)))
- endif # ifneq ($(call qstrip,$$($(2)_SOURCE)),)
- 	$(foreach hook,$($(2)_POST_LEGAL_INFO_HOOKS),$(call $(hook))$(sep))
- 
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index 91a1981..42d5820 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -109,8 +109,8 @@ define legal-warning-pkg-savednothing # pkg, {local|override}
- 	$(call legal-warning-pkg,$(1),sources and license files not saved ($(2) packages not handled))
- endef
- 
--define legal-manifest # pkg, version, license, license-files, source, {HOST|TARGET}
--	echo '"$(1)","$(2)","$(3)","$(4)","$(5)"' >>$(LEGAL_MANIFEST_CSV_$(6))
-+define legal-manifest # pkg, version, license, license-files, source, url, {HOST|TARGET}
-+	echo '"$(1)","$(2)","$(3)","$(4)","$(5)","$(6)"' >>$(LEGAL_MANIFEST_CSV_$(7))
- endef
- 
- define legal-license-header # pkg, license-file, {HOST|TARGET}
--- 
-1.7.9.5
+>
+> ----- Original Message -----
+>> From: "Romain Naour" <romain.naour@openwide.fr>
+>> To: lttng-dev at lists.lttng.org
+>> Cc: "Romain Naour" <romain.naour@openwide.fr>
+>> Sent: Sunday, April 6, 2014 5:02:41 PM
+>> Subject: [lttng-dev] [PATCH 1/1] Disable liblttng-ust-dl if dlinfo is not	available in C library.
+>>
+>> According to uClibc commit [1], dlinfo is not available.
+>> To be able to use LTTng UST with uClibc, we need to disable
+>> the Dynamic Linker Tracing functionality [2].
+>>
+>> [1]
+>> http://git.uclibc.org/uClibc/commit/?id=f3c9dc499c5c787ddd8c4320f2d44d2ae6e40c22
+>> [2] http://lists.lttng.org/pipermail/lttng-dev/2014-February/022423.html
+>>
+>> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+>> ---
+>>   Makefile.am  | 5 ++++-
+>>   configure.ac | 3 +++
+>>   2 files changed, 7 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/Makefile.am b/Makefile.am
+>> index b79d2dd..c907ff1 100644
+>> --- a/Makefile.am
+>> +++ b/Makefile.am
+>> @@ -4,11 +4,14 @@ SUBDIRS = . include snprintf libringbuffer
+>> liblttng-ust-comm \
+>>   		liblttng-ust \
+>>   		liblttng-ust-ctl \
+>>   		liblttng-ust-fork \
+>> -		liblttng-ust-dl \
+>>   		liblttng-ust-libc-wrapper \
+>>   		liblttng-ust-cyg-profile \
+>>   		tools
+>>   
+>> +if HAVE_DLINFO
+>> +SUBDIRS += liblttng-ust-dl
+>> +endif
+>> +
+>>   if BUILD_JNI_INTERFACE
+>>   SUBDIRS += liblttng-ust-java liblttng-ust-jul
+>>   endif
+>> diff --git a/configure.ac b/configure.ac
+>> index b04d4e3..de6300e 100644
+>> --- a/configure.ac
+>> +++ b/configure.ac
+>> @@ -146,6 +146,9 @@ AC_C_INLINE
+>>   AC_FUNC_MALLOC
+>>   AC_CHECK_FUNCS([gettimeofday munmap socket strerror strtol sched_getcpu
+>>   sysconf])
+>>   
+>> +AC_CHECK_FUNCS([dlinfo])
+>> +AM_CONDITIONAL([HAVE_DLINFO], [test "${ac_cv_func_dlinfo}" = "yes"])
+>> +
+>>   CFLAGS="-Wall $CFLAGS"
+>>   
+>>   # URCU
+>> --
+>> 1.9.0
+>>
+>>
+>> _______________________________________________
+>> lttng-dev mailing list
+>> lttng-dev at lists.lttng.org
+>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>>
