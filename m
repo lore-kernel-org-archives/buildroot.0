@@ -1,39 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 7 Apr 2014 15:41:48 +0200
-Subject: [Buildroot] [PATCH] eglibc: bump to version 2.19 SVN R25243
-In-Reply-To: <5342A9EB.1030801@zacarias.com.ar>
-References: <1396875879-22199-1-git-send-email-gustavo@zacarias.com.ar>
- <20140407152919.2d1147fb@skate> <5342A9EB.1030801@zacarias.com.ar>
-Message-ID: <20140407154148.2b35dd34@skate>
+From: Markos Chandras <Markos.Chandras@imgtec.com>
+Date: Mon, 7 Apr 2014 14:53:41 +0100
+Subject: [Buildroot] [PATCH 02/11] arch: MIPS: Add config option
+	BR2_GCC_TARGET_TUNE
+In-Reply-To: <533DD7B6.8080009@crapouillou.net>
+References: <1396558881-29631-1-git-send-email-paul@crapouillou.net>
+ <1396558881-29631-2-git-send-email-paul@crapouillou.net>
+ <20140403211925.GC17328@free.fr> <533DD7B6.8080009@crapouillou.net>
+Message-ID: <5342ADE5.1060908@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+On 04/03/2014 10:50 PM, Paul Cercueil wrote:
+> Hi Yann,
+>
+> This patch would pass the same value to --with-arch and --with-tune,
+> unless you define a different value for BR2_GCC_TARGET_TUNE in your
+> defconfig. We use that for the Ingenic jz4740 processor, which is a
+> mips32 processor but running better the code tuned for mips32r2.
+>
+Hi Paul,
 
-On Mon, 07 Apr 2014 10:36:43 -0300, Gustavo Zacarias wrote:
+I don't understand this patch as well. If the jz4740 needs a mips32r2 
+userland, why not use Target Options-> Target Architecture Variant -> 
+mips32r2? You want to use the same toolchain for non-mips32r2 targets as 
+well?
 
-> > So we don't do like glibc where we support both 2.18 and 2.19 ? This is
-> > really a question, maybe it makes sense to only support one version at
-> > a time. In which case we could remove 2.18 from glibc.
-> 
-> My opinion is that we should just keep it as simple as possible.
-> If there's a special need for some architecture (like microblaze) let it
-> be so, but really unless we know there's some issue or exception i don't
-> think there's much value in keeping multiple versions, specially since
-> *glibc is backwards ABI compatible.
+The TARGET_TUNE option has been removed for MIPS in 
+f60dafe06833a17540608d1c8172d6535c513f1e
+"arch/mips: Set BR2_GCC_TARGET_ARCH for MIPS"
 
-Fine with me. My impression so far was that for critical components
-such as gcc/binutils/gdb/libc, we were keeping older versions a little
-bit longer to give it some time to test the newer version before
-forcing everyone to upgrade. Surely we need to continue to do this with
-gcc, where most of the 4.x.0 versions are typically broken on at least
-one architecture.
+and i see no good reason to bring it back.
 
-Thomas
+If you need to optimize for a different ISA, wouldn't it be possible to 
+use custom CFLAGS in Toolchain->Target Optimizations?
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+markos
