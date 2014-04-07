@@ -1,32 +1,134 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 7 Apr 2014 20:12:07 +0300
-Subject: [Buildroot] [PATCH] latencytop: disable static build
-In-Reply-To: <20140407175300.4b6111f1@skate>
-References: <4cc42edb1d6c9e7d6c156bb56fb744ec84ff9ae0.1396879234.git.baruch@tkos.co.il>
- <20140407175300.4b6111f1@skate>
-Message-ID: <20140407171207.GJ4096@tarshish>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon,  7 Apr 2014 20:19:12 +0200
+Subject: [Buildroot] [PATCH] support/check-kernel-headers: fix old custom
+	toolchains without -print-sysroot
+Message-ID: <1396894752-21040-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-On Mon, Apr 07, 2014 at 05:53:00PM +0200, Thomas Petazzoni wrote:
-> On Mon,  7 Apr 2014 17:00:34 +0300, Baruch Siach wrote:
-> > The Makefile of latencytop doesn't take static linking into account when
-> > calling pkg-config for glib-2.0. Disable static build of latencytop.
-> 
-> Well, there are *lots* of packages that don't take into account static
-> linking with pkg-config. There is even a patch proposed to improve this
-> situation: http://patchwork.ozlabs.org/patch/326741/.
+Old toolchains, with old gcc that do not support -print-sysroot, break the
+kernel-headers version check script: it fails to find the sysroot of the
+toolchain, and thus ends up including the host's linux/version.h.
 
-Thanks for the tip. I'll test this patch and report.
+Most of the time, this will break early, since the host's kernel headers
+will not match the toolchain settings.
 
-baruch
+But it can happen that the check is succesful, although the configuration
+of the toolchain is wrong:
 
+  - the custom toolchain has kernel headers vX.Y
+  - the user selected vX.Z  (Z!=Y)
+  - the host has headers vX.Y
+
+In this case, the check passes OK, but the build of some packages later on
+will break (which is exactly what those _AT_LEAST_XXX options were added to
+avoid).
+
+Fix that by passing the sysroot to the check script, instead of the cross
+compiler.
+
+We get the sysroot as thus:
+
+  - for custom toolchains, we use the macro toolchain_find_sysroot. We can
+    do that, because we already have a complete sysroot with libc.a at that
+    time.
+
+  - for internal toolchain using a custom kernel headers version, we just
+    use $(STAGING_DIR). We can't use the macro as for custom toolchains
+    above, because at the time we isntall the kernel headers, we do not yet
+    have a complete sysroot with a libc.a.  But we can just use
+    $(STAGING_DIR), since we're only interested in the kernel headers.
+
+For all other types of toolchains, we already have the _AT_LEAST_XXX options
+properly set, so we need not add a check in this case.
+
+Fixes:
+    http://autobuild.buildroot.net/results/f33/f331a6eff0b0b93c73af52db3a6b43e4e598577e/
+    http://autobuild.buildroot.net/results/a57/a5797c025bec50c10efdcff74945aab4021d05e4/
+    [...]
+
+[Thanks to Thomas for pointing out the toolchain_find_sysroot macro!]
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/linux-headers/linux-headers.mk             |  2 +-
+ support/scripts/check-kernel-headers.sh            | 11 +----------
+ toolchain/helpers.mk                               |  2 +-
+ toolchain/toolchain-external/toolchain-external.mk |  2 +-
+ 4 files changed, 4 insertions(+), 13 deletions(-)
+
+diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
+index 2361e40..7b3edf4 100644
+--- a/package/linux-headers/linux-headers.mk
++++ b/package/linux-headers/linux-headers.mk
+@@ -40,7 +40,7 @@ endef
+ ifeq ($(BR2_KERNEL_HEADERS_VERSION),y)
+ define LINUX_HEADERS_CHECK_VERSION
+ 	$(call check_kernel_headers_version,\
+-		"$(TARGET_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS)",\
++		$(STAGING_DIR),\
+ 		$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)))
+ endef
+ LINUX_HEADERS_POST_INSTALL_STAGING_HOOKS += LINUX_HEADERS_CHECK_VERSION
+diff --git a/support/scripts/check-kernel-headers.sh b/support/scripts/check-kernel-headers.sh
+index 2a0a301..82cf9ac 100755
+--- a/support/scripts/check-kernel-headers.sh
++++ b/support/scripts/check-kernel-headers.sh
+@@ -1,6 +1,6 @@
+ #!/bin/sh
+ 
+-CC="${1}"
++SYSROOT="${1}"
+ # Make sure we have enough version components
+ HDR_VER="${2}.0.0"
+ 
+@@ -10,15 +10,6 @@ HDR_m="${HDR_V%%.*}"
+ 
+ EXEC="$(mktemp --tmpdir check-headers.XXXXXX)"
+ 
+-# By the time we get here, we do not always have the staging-dir
+-# already populated (think external toolchain), so we can not use
+-# it.
+-# So we just ask the cross compiler what its default sysroot is.
+-# For multilib-aware toolchains where we should use a non-default
+-# sysroot, it's not really a problem since the version of the kernel
+-# headers is the same for all sysroots.
+-SYSROOT=$(${CC} -print-sysroot)
+-
+ # We do not want to account for the patch-level, since headers are
+ # not supposed to change for different patchlevels, so we mask it out.
+ # This only applies to kernels >= 3.0, but those are the only one
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 6875916..9595196 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -166,7 +166,7 @@ copy_toolchain_sysroot = \
+ # Check the specified kernel headers version actually matches the
+ # version in the toolchain.
+ #
+-# $1: cross-gcc path
++# $1: sysroot directory
+ # $2: kernel version string, in the form: X.Y
+ #
+ check_kernel_headers_version = \
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 547d55d..1424c23 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -431,7 +431,7 @@ define TOOLCHAIN_EXTERNAL_CONFIGURE_CMDS
+ 	fi ; \
+ 	if [ "$(BR2_TOOLCHAIN_EXTERNAL_CUSTOM)" = "y" ]; then \
+ 		$(call check_kernel_headers_version,\
+-			"$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS)",\
++			$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS)),\
+ 			$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST))); \
+ 	fi ; \
+ 	if test "$(BR2_arm)" = "y" ; then \
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+1.8.3.2
