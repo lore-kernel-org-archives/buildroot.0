@@ -1,63 +1,54 @@
-From: Lucile Quirion <lucile.quirion@savoirfairelinux.com>
-Date: Mon,  7 Apr 2014 15:17:24 -0400
-Subject: [Buildroot] [PATCH 1/1] cppcms: fix build with uClibc
-Message-ID: <1396898244-12852-1-git-send-email-lucile.quirion@savoirfairelinux.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 07 Apr 2014 21:40:46 +0200
+Subject: [Buildroot] [PATCH] Don't build host-xz needlessly
+In-Reply-To: <2ba6488613955537b19028cc7284548620aef745.1396793164.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Sun, 6 Apr 2014 17:06:04 +0300")
+References: <2ba6488613955537b19028cc7284548620aef745.1396793164.git.baruch@tkos.co.il>
+Message-ID: <87vbulc4ht.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch modifies the cppcms package in order to support uClibc-based
-toolchains.
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-The booster library by default compiles with the posix backend under
-Linux, but this needs monetary.h which isn't provided by uClibc, so
-work around that with the help of the DISABLE_POSIX_LOCALE configure
-option.
+ > Since commit d1f325f554cab (xzcat: treat as host prerequisite and build if
+ > needed) host-xz is always built when the host does not have xz installed.
+ > Removed all other host-xz dependencies.
 
-Signed-off-by: Lucile Quirion <lucile.quirion@savoirfairelinux.com>
----
- package/cppcms/Config.in | 6 ++----
- package/cppcms/cppcms.mk | 5 +++++
- 2 files changed, 7 insertions(+), 4 deletions(-)
+ > Cc: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > ---
+ >  fs/common.mk                 | 1 -
+ >  package/squashfs/squashfs.mk | 2 +-
+ >  2 files changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/cppcms/Config.in b/package/cppcms/Config.in
-index c88ae1e..2b99b52 100644
---- a/package/cppcms/Config.in
-+++ b/package/cppcms/Config.in
-@@ -4,8 +4,6 @@ config BR2_PACKAGE_CPPCMS
- 	select BR2_PACKAGE_PCRE
- 	select BR2_PACKAGE_LIBGCRYPT
- 	depends on BR2_INSTALL_LIBSTDCPP
--	# cppcms uses <monetary.h> which doesn't exist in uClibc
--	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	help
- 	  CppCMS is a Free High Performance Web Development Framework
- 	  (not a CMS) aimed for Rapid Web Application Development. It
-@@ -33,5 +31,5 @@ config BR2_PACKAGE_CPPCMS_ICU
+ > diff --git a/fs/common.mk b/fs/common.mk
+ > index d95c26ba5c43..080b8c687efb 100644
+ > --- a/fs/common.mk
+ > +++ b/fs/common.mk
+ > @@ -59,7 +59,6 @@ ROOTFS_$(2)_COMPRESS_EXT = .lzo
+ >  ROOTFS_$(2)_COMPRESS_CMD = $$(LZOP) -9 -c
+ >  endif
+ >  ifeq ($$(BR2_TARGET_ROOTFS_$(2)_XZ),y)
+ > -ROOTFS_$(2)_DEPENDENCIES += host-xz
+ >  ROOTFS_$(2)_COMPRESS_EXT = .xz
+ >  ROOTFS_$(2)_COMPRESS_CMD = $$(XZ) -9 -C crc32 -c
+ >  endif
+ > diff --git a/package/squashfs/squashfs.mk b/package/squashfs/squashfs.mk
+ > index bff308c2fd57..8c6350ab4a91 100644
+ > --- a/package/squashfs/squashfs.mk
+ > +++ b/package/squashfs/squashfs.mk
+ > @@ -40,7 +40,7 @@ SQUASHFS_MAKE_ARGS += GZIP_SUPPORT=0
+ >  endif
  
- endif
  
--comment "cppcms needs an (e)glibc toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_USES_GLIBC
-+comment "cppcms needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/cppcms/cppcms.mk b/package/cppcms/cppcms.mk
-index 4068df7..206b30f 100644
---- a/package/cppcms/cppcms.mk
-+++ b/package/cppcms/cppcms.mk
-@@ -18,6 +18,11 @@ CPPCMS_CONF_OPT += -DDISABLE_ICONV=ON
- CPPCMS_DEPENDENCIES += icu
- endif
- 
-+ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
-+# posix backend needs monetary.h which isn't available on uClibc
-+CPPCMS_CONF_OPT += -DDISABLE_POSIX_LOCALE=on
-+endif
-+
- # We copy cppcms_tmpl_cc from staging to host because this file can be
- # needed for compiling packages using cppcms. And it is not worth
- # creating a host package just for a python script.
+ > -HOST_SQUASHFS_DEPENDENCIES = host-zlib host-lzo host-xz
+ > +HOST_SQUASHFS_DEPENDENCIES = host-zlib host-lzo
+
+squashfs needs the libxz development files, which might not be available
+just because xzcat is, so I've dropped this line and committed - Thanks.
+
 -- 
-1.9.0
+Bye, Peter Korsgaard
