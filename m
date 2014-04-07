@@ -1,40 +1,87 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Mon,  7 Apr 2014 22:43:41 +0200
-Subject: [Buildroot] [PATCH 1/1] libuci: Disable lua binding on no mmu
-Message-ID: <1396903421-4110-1-git-send-email-romain.naour@openwide.fr>
+From: Clayton Shotwell <clshotwe@rockwellcollins.com>
+Date: Mon,  7 Apr 2014 15:45:22 -0500
+Subject: [Buildroot] [PATCH] legal-info: Add site to legal info manifest
+Message-ID: <1396903522-10063-1-git-send-email-clshotwe@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Same error as in libubox package.
-http://autobuild.buildroot.net/results/1a5/1a5c50f8ca0ae70c1e0d3733765f521790b97a30/build-end.log
+I would like to propose adding the site to the legal-info manifest
+files. This gives a little more information on where the sources came
+from without adding much overhead. Please note that is is only for
+packages where the source is not local or set with OVERRIDE_SRCDIR.
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+This patch works for the most part. The only issue I see with it occurs
+when the SITE for a package uses one of the common url macros such as
+BR2_GNU_MIRROR. The legal info manifest ends up having an extra set of
+double quotes in the site string.
+
+Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
 ---
- package/libuci/libuci.mk | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ Makefile               |    6 +++---
+ package/pkg-generic.mk |    4 +++-
+ package/pkg-utils.mk   |    4 ++--
+ 3 files changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/package/libuci/libuci.mk b/package/libuci/libuci.mk
-index a7d3a80..adc7bce 100644
---- a/package/libuci/libuci.mk
-+++ b/package/libuci/libuci.mk
-@@ -10,14 +10,12 @@ LIBUCI_LICENSE = LGPLv2.1
- LIBUCI_INSTALL_STAGING = YES
- LIBUCI_DEPENDENCIES = libubox
- 
--ifeq ($(BR2_USE_MMU),y) # fork()
--ifeq ($(BR2_PACKAGE_LUA_5_1),y)
-+ifeq ($(BR2_USE_MMU)$(BR2_PACKAGE_LUA_5_1),yy)
- LIBUCI_DEPENDENCIES += lua
- LIBUCI_CONF_OPT += -DLUAPATH=$(STAGING_DIR)/usr/lib/lua/5.1 \
- 	-DLUA_CFLAGS=-I$(STAGING_DIR)/usr/include
- else
- LIBUCI_CONF_OPT += -DBUILD_LUA:BOOL=OFF
+diff --git a/Makefile b/Makefile
+index 41c51c6..31edf9a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -638,9 +638,9 @@ legal-info-clean:
+ legal-info-prepare: $(LEGAL_INFO_DIR)
+ 	@$(call MESSAGE,"Collecting legal info")
+ 	@$(call legal-license-file,buildroot,COPYING,COPYING,HOST)
+-	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,TARGET)
+-	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,HOST)
+-	@$(call legal-manifest,buildroot,$(BR2_VERSION_FULL),GPLv2+,COPYING,not saved,HOST)
++	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,TARGET)
++	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,HOST)
++	@$(call legal-manifest,buildroot,$(BR2_VERSION_FULL),GPLv2+,COPYING,not saved,not saved,HOST)
+ 	@$(call legal-warning,the Buildroot source code has not been saved)
+ 	@$(call legal-warning,the toolchain has not been saved)
+ 	@cp $(BR2_CONFIG) $(LEGAL_INFO_DIR)/buildroot.config
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 339c3eb..eff021b 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -561,10 +561,12 @@ ifneq ($$($(2)_SITE_METHOD),override)
+ # Packages that have a tarball need it downloaded and extracted beforehand
+ $(1)-legal-info: $(1)-extract $(REDIST_SOURCES_DIR_$(call UPPERCASE,$(4)))
+ $(2)_MANIFEST_TARBALL = $$($(2)_SOURCE)
++$(2)_MANIFEST_SITE = $$($(2)_SITE)
  endif
--endif # MMU
+ endif
+ endif
+ $(2)_MANIFEST_TARBALL ?= not saved
++$(2)_MANIFEST_SITE ?= not saved
  
- $(eval $(cmake-package))
+ # legal-info: produce legally relevant info.
+ $(1)-legal-info:
+@@ -599,7 +601,7 @@ ifeq ($$($(2)_REDISTRIBUTE),YES)
+ endif # redistribute
+ 
+ endif # other packages
+-	@$(call legal-manifest,$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_LICENSE),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_MANIFEST_TARBALL),$(call UPPERCASE,$(4)))
++	@$(call legal-manifest,$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_LICENSE),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_MANIFEST_TARBALL),$$($(2)_MANIFEST_SITE),$(call UPPERCASE,$(4)))
+ endif # ifneq ($(call qstrip,$$($(2)_SOURCE)),)
+ 	$(foreach hook,$($(2)_POST_LEGAL_INFO_HOOKS),$(call $(hook))$(sep))
+ 
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index 91a1981..42d5820 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -109,8 +109,8 @@ define legal-warning-pkg-savednothing # pkg, {local|override}
+ 	$(call legal-warning-pkg,$(1),sources and license files not saved ($(2) packages not handled))
+ endef
+ 
+-define legal-manifest # pkg, version, license, license-files, source, {HOST|TARGET}
+-	echo '"$(1)","$(2)","$(3)","$(4)","$(5)"' >>$(LEGAL_MANIFEST_CSV_$(6))
++define legal-manifest # pkg, version, license, license-files, source, url, {HOST|TARGET}
++	echo '"$(1)","$(2)","$(3)","$(4)","$(5)","$(6)"' >>$(LEGAL_MANIFEST_CSV_$(7))
+ endef
+ 
+ define legal-license-header # pkg, license-file, {HOST|TARGET}
 -- 
-1.9.0
+1.7.9.5
