@@ -1,44 +1,69 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 7 Apr 2014 23:56:12 +0200
-Subject: [Buildroot] [PATCH v3] infra: Add PRE_*_HOOKS for every step
-In-Reply-To: <20140406143133.69594f69@skate>
-References: <1396031372-23308-1-git-send-email-maxime.hadjinlian@gmail.com>
- <20140406143133.69594f69@skate>
-Message-ID: <20140407215612.GI3215@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 08 Apr 2014 00:54:48 +0200
+Subject: [Buildroot] [PATCH v2] tcl: bump to version 8.6.1
+In-Reply-To: <1396899466-13715-1-git-send-email-andrew.ruder@elecsyscorp.com>
+ (Andrew Ruder's message of "Mon, 7 Apr 2014 14:37:46 -0500")
+References: <1396899466-13715-1-git-send-email-andrew.ruder@elecsyscorp.com>
+Message-ID: <87mwfwda2v.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+>>>>> "Andrew" == Andrew Ruder <andrew.ruder@elecsyscorp.com> writes:
 
-On 2014-04-06 14:31 +0200, Thomas Petazzoni spake thusly:
-> On Fri, 28 Mar 2014 19:29:32 +0100, Maxime Hadjinlian wrote:
-> 
-> > +* +LIBFOO_PRE_LEGAL_INFO_HOOKS+
-> >  * +LIBFOO_POST_LEGAL_INFO_HOOKS+
-> 
-> I'm generally fine with the patch, but I'm wondering what's the
-> usefulness of the legal-info hooks. I know you're merely adding a
-> pre-hook to match an existing post-hook, but I'm wondering what would
-> be the usage of a post-legal-info hook actually.
+ > Turn off building compatibility layers for old/broken versions of
+ > standard functions (strstr, strtoul, strtod) with the assumption that
+ > anything buildroot is using as a standard C library will be good enough
+ > to not have broken behavior.
 
-I can think of an example where it would be needed: the freescale imx6
-binary blobs for the GPU. There is a license text in the auto-extract
-archive, but we do not save it for now (because "that's just too much
-effort.")
+ > Signed-off-by: Andrew Ruder <andrew.ruder@elecsyscorp.com>
+ > Cc: Peter Korsgaard <jacmet@uclibc.org>
+ > ---
+ > This addresses the issues in the first version of the patch (courtesy Peter
+ > Korsgaard).  Sorry for the long delay on bugfixes.  Seems like my patch-submit
+ > days are few and far between.
 
-Adding a pre-legal hook could be useful to extract the license from the
-archive, for example.
+Thanks, but I still see issues :/
 
-Regards,
-Yann E. MORIN.
+tclUnixSock.c needs IPv6 support, so the package need to depend on
+BR2_INET_IPV6.
+
+
+ > +define TCL_REMOVE_EXTRA
+ > +	rm -fr $(TARGET_DIR)/usr/lib/tdbcmysql1.0.0 \
+ > +	       $(TARGET_DIR)/usr/lib/tdbcodbc1.0.0 \
+ > +	       $(TARGET_DIR)/usr/lib/tdbcpostgres1.0.0 \
+ > +	       $(TARGET_DIR)/usr/lib/tclConfig.sh \
+ > +	       $(TARGET_DIR)/usr/lib/tclooConfig.sh
+ >  endef
+ > +TCL_POST_INSTALL_TARGET_HOOKS += TCL_REMOVE_EXTRA
+ 
+ > -TCL_POST_INSTALL_TARGET_HOOKS += TCL_FIXUP_RO_LIB
+ > +ifeq ($(BR2_PACKAGE_SQLITE),y)
+ > +TCL_DEPENDENCIES = sqlite
+ > +HOST_TCL_DEPENDENCIES =
+ > +else
+ > +define TCL_REMOVE_SQLITE
+ > +	rm -fr $(TARGET_DIR)/usr/lib/sqlite3.8.0 \
+ > +	       $(TARGET_DIR)/usr/lib/tdbcsqlite3-1.0.0 \
+ > +	       $(TARGET_DIR)/usr/lib/tdbc1.0.0
+ > +endef
+ > +TCL_POST_INSTALL_TARGET_HOOKS += TCL_REMOVE_SQLITE
+ > +endif
+
+It seems suboptional to build stuff and then just throw it away. Even
+worse, the embedded sqlite fails to build if the system doesn't have
+largefile support.
+
+Looking at the Makefile, it looks like we can just rm pkgs/<pkg> for the
+unwanted packages in a post-patch hook.
+
+In the context of buildroot, does it ever make sense to build the
+embedded sqlite copy instead of using the existing package?
+
+Care to fix those issues and resend? Thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
