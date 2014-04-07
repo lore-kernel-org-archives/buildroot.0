@@ -1,92 +1,64 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Mon, 07 Apr 2014 22:46:10 +0200
-Subject: [Buildroot] [lttng-dev] [PATCH 1/1] Disable liblttng-ust-dl if
- dlinfo is not	available in C library.
-In-Reply-To: <794709247.8287.1396903345152.JavaMail.zimbra@efficios.com>
-References: <1396818161-20204-1-git-send-email-romain.naour@openwide.fr>
- <794709247.8287.1396903345152.JavaMail.zimbra@efficios.com>
-Message-ID: <53430E92.9060401@openwide.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 7 Apr 2014 22:46:13 +0200
+Subject: [Buildroot] [PATCH 1/1] libuci: Disable lua binding on no mmu
+In-Reply-To: <1396903421-4110-1-git-send-email-romain.naour@openwide.fr>
+References: <1396903421-4110-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20140407204613.GE3215@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Mathieu,
+Romain, All,
 
-Le 07/04/2014 22:42, Mathieu Desnoyers a ?crit :
-> Merged into master and stable-2.4, thanks!
->
-> Mathieu
-You're welcome.
+On 2014-04-07 22:43 +0200, Romain Naour spake thusly:
+> Same error as in libubox package.
+> http://autobuild.buildroot.net/results/1a5/1a5c50f8ca0ae70c1e0d3733765f521790b97a30/build-end.log
+> 
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 
-Best regards,
-Romain Naour
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
->
-> ----- Original Message -----
->> From: "Romain Naour" <romain.naour@openwide.fr>
->> To: lttng-dev at lists.lttng.org
->> Cc: "Romain Naour" <romain.naour@openwide.fr>
->> Sent: Sunday, April 6, 2014 5:02:41 PM
->> Subject: [lttng-dev] [PATCH 1/1] Disable liblttng-ust-dl if dlinfo is not	available in C library.
->>
->> According to uClibc commit [1], dlinfo is not available.
->> To be able to use LTTng UST with uClibc, we need to disable
->> the Dynamic Linker Tracing functionality [2].
->>
->> [1]
->> http://git.uclibc.org/uClibc/commit/?id=f3c9dc499c5c787ddd8c4320f2d44d2ae6e40c22
->> [2] http://lists.lttng.org/pipermail/lttng-dev/2014-February/022423.html
->>
->> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
->> ---
->>   Makefile.am  | 5 ++++-
->>   configure.ac | 3 +++
->>   2 files changed, 7 insertions(+), 1 deletion(-)
->>
->> diff --git a/Makefile.am b/Makefile.am
->> index b79d2dd..c907ff1 100644
->> --- a/Makefile.am
->> +++ b/Makefile.am
->> @@ -4,11 +4,14 @@ SUBDIRS = . include snprintf libringbuffer
->> liblttng-ust-comm \
->>   		liblttng-ust \
->>   		liblttng-ust-ctl \
->>   		liblttng-ust-fork \
->> -		liblttng-ust-dl \
->>   		liblttng-ust-libc-wrapper \
->>   		liblttng-ust-cyg-profile \
->>   		tools
->>   
->> +if HAVE_DLINFO
->> +SUBDIRS += liblttng-ust-dl
->> +endif
->> +
->>   if BUILD_JNI_INTERFACE
->>   SUBDIRS += liblttng-ust-java liblttng-ust-jul
->>   endif
->> diff --git a/configure.ac b/configure.ac
->> index b04d4e3..de6300e 100644
->> --- a/configure.ac
->> +++ b/configure.ac
->> @@ -146,6 +146,9 @@ AC_C_INLINE
->>   AC_FUNC_MALLOC
->>   AC_CHECK_FUNCS([gettimeofday munmap socket strerror strtol sched_getcpu
->>   sysconf])
->>   
->> +AC_CHECK_FUNCS([dlinfo])
->> +AM_CONDITIONAL([HAVE_DLINFO], [test "${ac_cv_func_dlinfo}" = "yes"])
->> +
->>   CFLAGS="-Wall $CFLAGS"
->>   
->>   # URCU
->> --
->> 1.9.0
->>
->>
->> _______________________________________________
->> lttng-dev mailing list
->> lttng-dev at lists.lttng.org
->> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->>
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/libuci/libuci.mk | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/package/libuci/libuci.mk b/package/libuci/libuci.mk
+> index a7d3a80..adc7bce 100644
+> --- a/package/libuci/libuci.mk
+> +++ b/package/libuci/libuci.mk
+> @@ -10,14 +10,12 @@ LIBUCI_LICENSE = LGPLv2.1
+>  LIBUCI_INSTALL_STAGING = YES
+>  LIBUCI_DEPENDENCIES = libubox
+>  
+> -ifeq ($(BR2_USE_MMU),y) # fork()
+> -ifeq ($(BR2_PACKAGE_LUA_5_1),y)
+> +ifeq ($(BR2_USE_MMU)$(BR2_PACKAGE_LUA_5_1),yy)
+>  LIBUCI_DEPENDENCIES += lua
+>  LIBUCI_CONF_OPT += -DLUAPATH=$(STAGING_DIR)/usr/lib/lua/5.1 \
+>  	-DLUA_CFLAGS=-I$(STAGING_DIR)/usr/include
+>  else
+>  LIBUCI_CONF_OPT += -DBUILD_LUA:BOOL=OFF
+>  endif
+> -endif # MMU
+>  
+>  $(eval $(cmake-package))
+> -- 
+> 1.9.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
