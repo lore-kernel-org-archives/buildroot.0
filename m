@@ -1,46 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 8 Apr 2014 00:56:30 +0200
-Subject: [Buildroot] [git commit] libubox: Disable lua binding on no mmu
-Message-ID: <20140407225719.9CB0999B2D@busybox.osuosl.org>
+Date: Mon, 7 Apr 2014 23:55:20 +0200
+Subject: [Buildroot] [git commit] harfbuzz: fix static linking of test
+	programs when toolchain has threads support
+Message-ID: <20140407225719.8B6A69C647@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=48ac052e32227057a88e253976a4927f2ab7e3a2
+commit: http://git.buildroot.net/buildroot/commit/?id=3d03017f53c2566ed32a0ae76d79eeb1ef4a7feb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The Lua binding option of libubox need to be
-explicitly disabled on no mmu case.
+Fixes http://autobuild.buildroot.net/results/701/701a1a260a58a81f45b3b9eae7eb47b400e05b37/
 
-Fixes:
-http://autobuild.buildroot.net/results/1a5/1a5c50f8ca0ae70c1e0d3733765f521790b97a30/build-end.log
-
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libubox/libubox.mk |    4 +---
- 1 files changed, 1 insertions(+), 3 deletions(-)
+ package/harfbuzz/harfbuzz.mk |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-diff --git a/package/libubox/libubox.mk b/package/libubox/libubox.mk
-index b552227..74db0cc 100644
---- a/package/libubox/libubox.mk
-+++ b/package/libubox/libubox.mk
-@@ -10,14 +10,12 @@ LIBUBOX_LICENSE = LGPLv2.1, GPLv2, BSD-3c, MIT
- LIBUBOX_INSTALL_STAGING = YES
- LIBUBOX_DEPENDENCIES = host-pkgconf $(if $(BR2_PACKAGE_JSON_C),json-c)
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index 23bc848..ed440ed 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
+@@ -13,6 +13,11 @@ HARFBUZZ_INSTALL_STAGING = YES
  
--ifeq ($(BR2_USE_MMU),y) # fork()
--ifeq ($(BR2_PACKAGE_LUA_5_1),y)
-+ifeq ($(BR2_USE_MMU)$(BR2_PACKAGE_LUA_5_1),yy)
- LIBUBOX_DEPENDENCIES += lua
- LIBUBOX_CONF_OPT += -DLUAPATH=$(STAGING_DIR)/usr/lib/lua/5.1 \
- 	-DLUA_CFLAGS=-I$(STAGING_DIR)/usr/include
- else
- LIBUBOX_CONF_OPT += -DBUILD_LUA:BOOL=OFF
- endif
--endif # MMU
+ HARFBUZZ_CONF_OPT = --without-coretext --without-uniscribe --without-graphite2
  
- $(eval $(cmake-package))
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++# forgets to link test programs with -pthread breaking static link
++HARFBUZZ_CONF_ENV = LDFLAGS="$(TARGET_LDFLAGS) -pthread"
++endif
++
+ ifeq ($(BR2_PACKAGE_CAIRO),y)
+ 	HARFBUZZ_DEPENDENCIES += cairo
+ 	HARFBUZZ_CONF_OPT += --with-cairo=yes
