@@ -1,71 +1,50 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 7 Apr 2014 16:19:44 +0200
-Subject: [Buildroot] [PATCH v1] Python script to check package version
-In-Reply-To: <1396793937-6868-1-git-send-email-arnaud@intelibre.fr>
-References: <1396793937-6868-1-git-send-email-arnaud@intelibre.fr>
-Message-ID: <CAAXf6LULqUjhD-R=W4nKJx6Xs15ic+5+GgNW6jW49SG6Kui=fA@mail.gmail.com>
+Date: Mon, 7 Apr 2014 16:32:16 +0200
+Subject: [Buildroot] [PATCH 1/1] zeromq: bump to version 4.0.1
+In-Reply-To: <20140303111124.1126480c@skate>
+References: <1381509097-5424-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+ <20140301232520.4ee4b22b@skate>
+ <CAKAx1cj3DKFEcSjtw2-d1y3sZSO9y6kpvE6ZGjRdycnNAAugMw@mail.gmail.com>
+ <20140303084702.7790637d@skate>
+ <CAKAx1chY=kd3Y_N2-HRqmtELox8gSA9+hVUmaEAT4BNv_mXb9g@mail.gmail.com>
+ <20140303111124.1126480c@skate>
+Message-ID: <CAAXf6LVOm34-2gHVMbiEp85otVQa7PVuzqsFbNCGOB0upKAAQA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnaud,
+Jerzy, Lionel,
 
-On Sun, Apr 6, 2014 at 4:18 PM, Arnaud Aujon <arnaud@intelibre.fr> wrote:
-> This patch introduce a new Python script to check package upstream version.
-> It aims to replace the current 'pkg-stats' script used by the autobuild server.
-> For every package, information available is :
->  * patch count
->  * infrastructure
->  * presence of licence files
->  * current version
->  * last upstream version
+On Mon, Mar 3, 2014 at 11:11 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Lionel Orry,
 >
-> Signed-off-by: Arnaud Aujon <arnaud@intelibre.fr>
-> ---
->  support/scripts/check-updates.py | 826 +++++++++++++++++++++++++++++++++++++++
->  1 file changed, 826 insertions(+)
->  create mode 100755 support/scripts/check-updates.py
+> On Mon, 3 Mar 2014 09:14:44 +0100, Lionel Orry wrote:
 >
-> diff --git a/support/scripts/check-updates.py b/support/scripts/check-updates.py
-> new file mode 100755
-> index 0000000..de16fdc
-> --- /dev/null
-> +++ b/support/scripts/check-updates.py
-> @@ -0,0 +1,826 @@
-> +#!/usr/bin/env python
-> +# -*- coding: utf-8 -*-
-> +"""
-> +check-updates script
-> +"""
-> +import sys
-> +import urllib2
-> +import httplib2
-> +from ftplib import FTP
-> +import ftplib
-> +import re
-> +from os import listdir, walk
-> +from os.path import exists, isfile, join
-> +import shutil
-> +from distutils.version import LooseVersion
-> +import logging
-> +from logging import info, debug, error
-> +from subprocess import check_output
-> +import pickle
+>> > What do you mean by "such a patch" ? Maybe you forgot to attach a patch
+>> > to your e-mail?
+>>
+>> um no, I meant the "appropriate patch" you were suggesting Jerzy to
+>> prepare so that mongrel2 compiles. If I understood correctly.
+>
+> Ah ok.
+>
+>> > Does ZeroMQ v4 changes the API/behavior a lot compared to v3 ?
+>>
+>> The v2 -> v3 transistion has been a nightmare more many devs, but they
+>> learnt from it and it seems the v3->v4 is much smoother.
+>>
+>> By the way, I noticed the mongrel2 devs tagged a v1.9.0 a month ago,
+>> and this release includes a zeromq4 compliance, plus other fixes and
+>> enhancements. May I suggest we simply bump the mongrel2 version ?
+>
+> Indeed, seems like the best solution.
+>
+> Jerzy, can you have a look into this?
 
-Why are you using both 'import X' and 'from X import Y' ?
-According to me, it's cleaner to only use 'import X' and use explicit
-references X.Y when accessing Y.
+Any of you interested in reviving this patch, bumping mongrel2 at the same time?
 
-[..]
-
-> +# vim uses hg
-
-For hg, there is no alternative to 'git ls-remote'.
-You either have to obtain the info from the website, or an hg browser,
-or clone the repo and check it locally.
-To get the list of tags, use 'hg tags'.
-
-Best regards,
+Thanks,
 Thomas
