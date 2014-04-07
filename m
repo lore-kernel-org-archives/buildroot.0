@@ -1,86 +1,78 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 8 Apr 2014 01:28:55 +0200
-Subject: [Buildroot] [git commit] agentpp: new package
-Message-ID: <20140407232955.E35909C64B@busybox.osuosl.org>
+Date: Tue, 8 Apr 2014 01:19:50 +0200
+Subject: [Buildroot] [git commit] snmppp: add option to disable SNMPv3
+	support
+Message-ID: <20140407232955.D9A979C64B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c5210ca0e62a520b2d0d7b935300f02b68f18600
+commit: http://git.buildroot.net/buildroot/commit/?id=4474809aa4b81fc234159e2555d5c0045e18692c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: add threads dependency, style fixes]
+Disabling SNMPv3 support also removes the dependency on OpenSSL, which is
+pretty large (over 2 MB of uncompressed filesystem size on an ARM926 platform).
+
+BR2_PACKAGE_SNMPPP_SNMPV3 defaults to yes for backward compatibility with
+previous Buildroot releases, where SNMPv3 was always enabled.
+
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in          |    1 +
- package/agentpp/Config.in  |   20 ++++++++++++++++++++
- package/agentpp/agentpp.mk |   20 ++++++++++++++++++++
- 3 files changed, 41 insertions(+), 0 deletions(-)
+ package/snmppp/Config.in |    8 +++++++-
+ package/snmppp/snmppp.mk |    9 ++++++++-
+ 2 files changed, 15 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index cc28d51..f35e1c7 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -700,6 +700,7 @@ source "package/mediastreamer/Config.in"
- endmenu
+diff --git a/package/snmppp/Config.in b/package/snmppp/Config.in
+index 1d5113f..8b69fab 100644
+--- a/package/snmppp/Config.in
++++ b/package/snmppp/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_SNMPPP
+ 	bool "snmp++"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_PACKAGE_OPENSSL
+ 	help
+ 	  SNMP++v3.x is a C++ API which supports SNMP v1, v2c, and v3.
  
- menu "Networking"
-+source "package/agentpp/Config.in"
- source "package/c-ares/Config.in"
- source "package/cppzmq/Config.in"
- source "package/czmq/Config.in"
-diff --git a/package/agentpp/Config.in b/package/agentpp/Config.in
-new file mode 100644
-index 0000000..1442a45
---- /dev/null
-+++ b/package/agentpp/Config.in
-@@ -0,0 +1,20 @@
-+config BR2_PACKAGE_AGENTPP
-+	bool "agent++"
-+	select BR2_PACKAGE_SNMPPP
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # snmp++
+@@ -17,6 +16,13 @@ config BR2_PACKAGE_SNMPPP_LOGGING
+ 	  According to the SNMP++ documentation, disabling logging "increases
+ 	  performance drastically and minimizes memory consumption".
+ 
++config BR2_PACKAGE_SNMPPP_SNMPV3
++	bool "enable SNMPv3"
++	default y
++	select BR2_PACKAGE_OPENSSL
 +	help
-+	  AGENT++ is a set of C++ classes which provides a complete protocol
-+	  engine and dispatch table for the development of SNMP agents.
-+	  AGENT++ is a multilingual API which supports SNMPv1, SNMPv2c, and
-+	  SNMPv3. It provides various C++ classes implementing prototypes for
-+	  scalar and table SNMP managed objects that can be customized by
-+	  derivation. Additional classes support the development of proxy
-+	  agents as well as sending notifications.
++	  Enable optional support for SNMP++. This selects OpenSSL.
 +
-+	  SNMPv3 support is enabled if SNMP++ enables it.
+ endif
+ 
+ comment "snmp++ needs a toolchain w/ threads, C++"
+diff --git a/package/snmppp/snmppp.mk b/package/snmppp/snmppp.mk
+index 3f3018d..57c4962 100644
+--- a/package/snmppp/snmppp.mk
++++ b/package/snmppp/snmppp.mk
+@@ -7,7 +7,7 @@
+ SNMPPP_VERSION = 3.3.4
+ SNMPPP_SOURCE = snmp++-$(SNMPPP_VERSION).tar.gz
+ SNMPPP_SITE = http://www.agentpp.com
+-SNMPPP_DEPENDENCIES = openssl host-pkgconf
++SNMPPP_DEPENDENCIES = host-pkgconf
+ SNMPPP_INSTALL_STAGING = YES
+ # no configure script in tarball
+ SNMPPP_AUTORECONF = YES
+@@ -15,4 +15,11 @@ SNMPPP_CONF_OPT = $(if $(BR2_PACKAGE_SNMPPP_LOGGING),--enable-logging,--disable-
+ SNMPPP_LICENSE = SNMP++
+ SNMPPP_LICENSE_FILES = src/v3.cpp
+ 
++ifeq ($(BR2_PACKAGE_SNMPPP_SNMPV3),y)
++	SNMPPP_CONF_OPT += --enable-snmpv3
++	SNMPPP_DEPENDENCIES += openssl
++else
++	SNMPPP_CONF_OPT += --disable-snmpv3
++endif
 +
-+	  http://www.agentpp.com/agentpp3_5/agentpp3_5.html
-+
-+comment "agent++ needs a toolchain w/ threads, C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/agentpp/agentpp.mk b/package/agentpp/agentpp.mk
-new file mode 100644
-index 0000000..46cdc1d
---- /dev/null
-+++ b/package/agentpp/agentpp.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# agentpp
-+#
-+################################################################################
-+
-+AGENTPP_VERSION = 4.0.2
-+AGENTPP_SOURCE = agent++-$(AGENTPP_VERSION).tar.gz
-+AGENTPP_SITE = http://www.agentpp.com
-+AGENTPP_LICENSE = Apache-2.0
-+AGENTPP_LICENSE_FILES = LICENSE-2_0.txt
-+AGENTPP_INSTALL_STAGING = YES
-+AGENTPP_DEPENDENCIES = host-pkgconf snmppp
-+AGENTPP_CONF_OPT += \
-+	--disable-proxy \
-+	--disable-forwarder \
-+	--disable-rpath \
-+	--disable-dependency-tracking
-+
-+$(eval $(autotools-package))
+ $(eval $(autotools-package))
