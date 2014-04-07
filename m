@@ -1,43 +1,24 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon, 07 Apr 2014 23:48:39 +0200
-Subject: [Buildroot] [PATCH v3] infra: Add PRE_*_HOOKS for every step
-In-Reply-To: <20140406143133.69594f69@skate>
-References: <1396031372-23308-1-git-send-email-maxime.hadjinlian@gmail.com>
- <20140406143133.69594f69@skate>
-Message-ID: <53431D37.4090601@lucaceresoli.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 07 Apr 2014 23:55:06 +0200
+Subject: [Buildroot] [PATCH] harfbuzz: disable static build
+In-Reply-To: <3efb9030cd296fe5bff851119271dad240900c1d.1396855052.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Mon, 7 Apr 2014 10:17:32 +0300")
+References: <3efb9030cd296fe5bff851119271dad240900c1d.1396855052.git.baruch@tkos.co.il>
+Message-ID: <87r458dcud.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Thomas Petazzoni wrote:
-> Hello,
->
-> On Fri, 28 Mar 2014 19:29:32 +0100, Maxime Hadjinlian wrote:
->
->> +* +LIBFOO_PRE_LEGAL_INFO_HOOKS+
->>   * +LIBFOO_POST_LEGAL_INFO_HOOKS+
->
-> I'm generally fine with the patch, but I'm wondering what's the
-> usefulness of the legal-info hooks. I know you're merely adding a
-> pre-hook to match an existing post-hook, but I'm wondering what would
-> be the usage of a post-legal-info hook actually.
->
-> Luca?
+ > harfbuzz doesn't handle static linking against pthread correctly.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/701/701a1a260a58a81f45b3b9eae7eb47b400e05b37/
 
-Maybe some mysterious package wants to save some additional files in the
-sources directory, or anything even more strange...?
-No, I can't really think of anything sound.
-
-OTOH having pre- and post-hooks for all steps /except one/ does not look
-very polished, and I think the effort to maintain an unused hook is
-minimal.
-
-So I would keep Maxime's patch as-is, unless there is a solid
-reason to do otherwise.
+Thanks, but looking at the build error (linking issue of test programs)
+it looks quite easy to fix, so I've done that instead.
 
 -- 
-Luca
+Bye, Peter Korsgaard
