@@ -1,78 +1,66 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 8 Apr 2014 01:19:50 +0200
-Subject: [Buildroot] [git commit] snmppp: add option to disable SNMPv3
-	support
-Message-ID: <20140407232955.D9A979C64B@busybox.osuosl.org>
+Date: Tue, 8 Apr 2014 01:18:29 +0200
+Subject: [Buildroot] [git commit] snmppp: fix missing includes
+Message-ID: <20140407232955.B77A59C64B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4474809aa4b81fc234159e2555d5c0045e18692c
+commit: http://git.buildroot.net/buildroot/commit/?id=fa4e4471f7b35b75880c7edc176805c22e81d8d0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Disabling SNMPv3 support also removes the dependency on OpenSSL, which is
-pretty large (over 2 MB of uncompressed filesystem size on an ARM926 platform).
-
-BR2_PACKAGE_SNMPPP_SNMPV3 defaults to yes for backward compatibility with
-previous Buildroot releases, where SNMPv3 was always enabled.
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/snmppp/Config.in |    8 +++++++-
- package/snmppp/snmppp.mk |    9 ++++++++-
- 2 files changed, 15 insertions(+), 2 deletions(-)
+ .../snmppp/snmppp-01-Add-missing-includes.patch    |   41 ++++++++++++++++++++
+ 1 files changed, 41 insertions(+), 0 deletions(-)
 
-diff --git a/package/snmppp/Config.in b/package/snmppp/Config.in
-index 1d5113f..8b69fab 100644
---- a/package/snmppp/Config.in
-+++ b/package/snmppp/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_SNMPPP
- 	bool "snmp++"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	select BR2_PACKAGE_OPENSSL
- 	help
- 	  SNMP++v3.x is a C++ API which supports SNMP v1, v2c, and v3.
- 
-@@ -17,6 +16,13 @@ config BR2_PACKAGE_SNMPPP_LOGGING
- 	  According to the SNMP++ documentation, disabling logging "increases
- 	  performance drastically and minimizes memory consumption".
- 
-+config BR2_PACKAGE_SNMPPP_SNMPV3
-+	bool "enable SNMPv3"
-+	default y
-+	select BR2_PACKAGE_OPENSSL
-+	help
-+	  Enable optional support for SNMP++. This selects OpenSSL.
+diff --git a/package/snmppp/snmppp-01-Add-missing-includes.patch b/package/snmppp/snmppp-01-Add-missing-includes.patch
+new file mode 100644
+index 0000000..c3fa491
+--- /dev/null
++++ b/package/snmppp/snmppp-01-Add-missing-includes.patch
+@@ -0,0 +1,41 @@
++From 6433c6e8d81313ec7ef6c8d3abf96fffa537e23e Mon Sep 17 00:00:00 2001
++From: Luca Ceresoli <luca@lucaceresoli.net>
++Date: Tue, 1 Apr 2014 14:35:25 +0200
++Subject: [PATCH] Add missing includes
 +
- endif
- 
- comment "snmp++ needs a toolchain w/ threads, C++"
-diff --git a/package/snmppp/snmppp.mk b/package/snmppp/snmppp.mk
-index 3f3018d..57c4962 100644
---- a/package/snmppp/snmppp.mk
-+++ b/package/snmppp/snmppp.mk
-@@ -7,7 +7,7 @@
- SNMPPP_VERSION = 3.3.4
- SNMPPP_SOURCE = snmp++-$(SNMPPP_VERSION).tar.gz
- SNMPPP_SITE = http://www.agentpp.com
--SNMPPP_DEPENDENCIES = openssl host-pkgconf
-+SNMPPP_DEPENDENCIES = host-pkgconf
- SNMPPP_INSTALL_STAGING = YES
- # no configure script in tarball
- SNMPPP_AUTORECONF = YES
-@@ -15,4 +15,11 @@ SNMPPP_CONF_OPT = $(if $(BR2_PACKAGE_SNMPPP_LOGGING),--enable-logging,--disable-
- SNMPPP_LICENSE = SNMP++
- SNMPPP_LICENSE_FILES = src/v3.cpp
- 
-+ifeq ($(BR2_PACKAGE_SNMPPP_SNMPV3),y)
-+	SNMPPP_CONF_OPT += --enable-snmpv3
-+	SNMPPP_DEPENDENCIES += openssl
-+else
-+	SNMPPP_CONF_OPT += --disable-snmpv3
-+endif
++Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
++---
++ include/snmp_pp/config_snmp_pp.h.in | 4 ++++
++ include/snmp_pp/smival.h            | 1 +
++ 2 files changed, 5 insertions(+)
 +
- $(eval $(autotools-package))
++diff --git a/include/snmp_pp/config_snmp_pp.h.in b/include/snmp_pp/config_snmp_pp.h.in
++index 89a5b0d..3100713 100644
++--- a/include/snmp_pp/config_snmp_pp.h.in
+++++ b/include/snmp_pp/config_snmp_pp.h.in
++@@ -28,6 +28,10 @@
++ #ifndef _CONFIG_SNMP_PP_H_
++ #define _CONFIG_SNMP_PP_H_
++ 
+++#ifdef __linux__
+++#include <sys/socket.h>
+++#endif
+++
++ #define SNMP_PP_VERSION_STRING "@VERSION@"
++ #define SNMP_PP_VERSION @SNMP_PP_MAJOR_VERSION@
++ #define SNMP_PP_RELEASE @SNMP_PP_MINOR_VERSION@
++diff --git a/include/snmp_pp/smival.h b/include/snmp_pp/smival.h
++index 7a36fab..7522087 100644
++--- a/include/snmp_pp/smival.h
+++++ b/include/snmp_pp/smival.h
++@@ -59,6 +59,7 @@
++ #define _SMIVALUE
++ 
++ //----[ includes ]-----------------------------------------------------
+++#include <string.h>
++ #include "snmp_pp/smi.h"
++ 
++ #ifdef SNMP_PP_NAMESPACE
++-- 
++1.8.3.2
++
