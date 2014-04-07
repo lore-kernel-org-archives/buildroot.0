@@ -1,71 +1,48 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 07 Apr 2014 08:27:31 -0300
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-04-05
-In-Reply-To: <20140406110837.45baff8e@skate>
-References: <20140406063010.119BC100CBA@stock.ovh.net>
- <20140406110837.45baff8e@skate>
-Message-ID: <53428BA3.3010908@zacarias.com.ar>
+From: =?UTF-8?q?Alex=20Benn=C3=A9e?= <alex.bennee@linaro.org>
+Date: Mon,  7 Apr 2014 12:00:20 +0100
+Subject: [Buildroot] [PATCH 0/2] Add lightweight Zile editor
+Message-ID: <1396868422-5757-1-git-send-email-alex.bennee@linaro.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/06/2014 06:08 AM, Thomas Petazzoni wrote:
->>        arm |                     php-5.5.11 | NOK | http://autobuild.buildroot.net/results/0dadb182d7550f5a7bf86005aef3528165c5b1ec/
-> 
-> checking for fork... no
-> configure: error: pcntl: fork() not supported by this platform
-> make: *** [/home/test/test/2/output/build/php-5.5.11/.stamp_configured] Error 1
-> 
-> Gustavo ?
+From: Alex Benn?e <alex@bennee.com>
 
-Hi.
-Can't seem to reproduce it here, on gentoo it builds up until the end.
-On a debian chroot it fails before on luajit:
+Hi,
 
-make[3]: Entering directory
-`/home/gustavoz/b/php/output/build/luajit-2.0.3/src'
-HOSTCC    host/minilua.o
-HOSTCC    host/buildvm_peobj.o
-HOSTCC    host/buildvm_asm.o
-In file included from /usr/include/features.h:378,
-                 from /usr/include/sys/types.h:27,
-                 from host/buildvm.h:9,
-                 from host/buildvm_peobj.c:9:
-/usr/include/gnu/stubs.h:7:27: error: gnu/stubs-32.h: No such file or
-directory
-In file included from /usr/include/features.h:378In file included from
-/usr/include/features.h:378,
-                 from /usr/include/sys/types.h:27,
-                 from host/buildvm.h:9,
-                 from host/buildvm_asm.c:6:
-/usr/include/gnu/stubs.h:7:27: error: gnu/stubs-32.h: No such file or
-directory
-,
-                 from /usr/include/limits.h:27,
-                 from
-/usr/lib/gcc/x86_64-linux-gnu/4.4.5/include-fixed/limits.h:122,
-                 from
-/usr/lib/gcc/x86_64-linux-gnu/4.4.5/include-fixed/syslimits.h:7,
-                 from
-/usr/lib/gcc/x86_64-linux-gnu/4.4.5/include-fixed/limits.h:11,
-                 from host/minilua.c:33:
-/usr/include/gnu/stubs.h:7:27: error: gnu/stubs-32.h: No such file or
-directory
-make[3]: *** [host/buildvm_peobj.o] Error 1
-make[3]: *** Waiting for unfinished jobs....
-make[3]: *** [host/buildvm_asm.o] Error 1
-make[3]: *** [host/minilua.o] Error 1
-make[3]: Leaving directory
-`/home/gustavoz/b/php/output/build/luajit-2.0.3/src'
-make[2]: *** [amalg] Error 2
-make[2]: Leaving directory
-`/home/gustavoz/b/php/output/build/luajit-2.0.3/src'
-make[1]: *** [amalg] Error 2
-make[1]: Leaving directory `/home/gustavoz/b/php/output/build/luajit-2.0.3'
-make: *** [/home/gustavoz/b/php/output/build/luajit-2.0.3/.stamp_built]
-Error 2
+The following two patches enable the addition of Zile to the roster of
+available editors in buildroot. Zile is a lightweight Emacs-a-like
+implementation. It requires libgc which will also be useful for a
+number of other packages if they get added to Buildroot. There is
+nothing especially complex in the build descriptions although libgc
+requires another source tree (lib_atomic) merging in the build and
+Zile needs help2man disabling.
 
-Regards.
+Cheers,
+
+--
+Alex Benn?e
+QEMU/KVM Hacker for Linaro
+
+
+Alex Benn?e (2):
+  package/libgc: add Boehm-Demers-Weiser gc library
+  package/zile: add Zile is Lossy Emacs editor
+
+ package/Config.in                  |  2 ++
+ package/libgc/Config.in            |  9 +++++++++
+ package/libgc/libgc.mk             | 23 +++++++++++++++++++++++
+ package/zile/Config.in             | 14 ++++++++++++++
+ package/zile/remove-help2man.patch | 28 ++++++++++++++++++++++++++++
+ package/zile/zile.mk               | 13 +++++++++++++
+ 6 files changed, 89 insertions(+)
+ create mode 100644 package/libgc/Config.in
+ create mode 100644 package/libgc/libgc.mk
+ create mode 100644 package/zile/Config.in
+ create mode 100644 package/zile/remove-help2man.patch
+ create mode 100644 package/zile/zile.mk
+
+-- 
+1.9.1
