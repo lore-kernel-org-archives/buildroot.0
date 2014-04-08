@@ -1,12 +1,12 @@
 From: Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>
-Date: Tue, 08 Apr 2014 11:19:48 +0100
-Subject: [Buildroot] [PATCH 2/2] package/zile: add Zile is Lossy Emacs
-	editor
-In-Reply-To: <20140407203338.GC3215@free.fr>
+Date: Tue, 08 Apr 2014 11:20:51 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libgc: add Boehm-Demers-Weiser
+	gc library
+In-Reply-To: <20140407202610.GB3215@free.fr>
 References: <1396868422-5757-1-git-send-email-alex.bennee@linaro.org>
- <1396868422-5757-3-git-send-email-alex.bennee@linaro.org>
- <20140407203338.GC3215@free.fr>
-Message-ID: <87y4zg3yyj.fsf@linaro.org>
+ <1396868422-5757-2-git-send-email-alex.bennee@linaro.org>
+ <20140407202610.GB3215@free.fr>
+Message-ID: <87wqf03yws.fsf@linaro.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,63 +16,82 @@ To: buildroot@busybox.net
 
 Yann E. MORIN <yann.morin.1998@free.fr> writes:
 
-> Alex, All,
+> Alex, Alex, All,
 >
 > On 2014-04-07 12:00 +0100, Alex Benn?e spake thusly:
-<snip>
->> +	  http://www.gnu.org/software/zile/
+>> This is needed for applications like Zile
+>> 
+>> Signed-off-by: Alex Benn?e <alex.bennee@linaro.org>
+>> Signed-off-by: Alex Benn?e <alex@bennee.com>
 >
-> There is space damage above:
->   - use one tab in front of options parameters (type, select, depends...)
->   - use one tab and two spaces in front of the help text
+> Woot! It's not that often with have a schizophrenic contributor! ;-)
+
+Yeah I blame format-patch for that one!
+
 >
-> The above mixes spaces and tabs.
-
-I'll get that cleaned up
-
->> diff --git a/package/zile/remove-help2man.patch b/package/zile/remove-help2man.patch
+> [--SNIP--]
+>> diff --git a/package/libgc/libgc.mk b/package/libgc/libgc.mk
 >> new file mode 100644
->> index 0000000..c1a63f4
+>> index 0000000..e5c4609
 >> --- /dev/null
->> +++ b/package/zile/remove-help2man.patch
->> @@ -0,0 +1,28 @@
->> +Upstream-Status: Inappropriate [configuration]
->
-> Please add a complete commit log, and your SoB lines too, in this patch.
->
-> Could you also add a pointer to the upstream refusal (bug -tracker or ML
-> archive), please?
-
-I'll see if I can find it. 
-
->
->> diff --git a/package/zile/zile.mk b/package/zile/zile.mk
->> new file mode 100644
->> index 0000000..024595c
->> --- /dev/null
->> +++ b/package/zile/zile.mk
->> @@ -0,0 +1,13 @@
+>> +++ b/package/libgc/libgc.mk
+>> @@ -0,0 +1,23 @@
 >> +################################################################################
 >> +#
->> +# Zile
+>> +# Boehm-Demers-Weiser's GC
 >> +#
 >> +################################################################################
 >> +
->> +ZILE_VERSION = 2.4.11
->> +ZILE_SITE = http://ftp.gnu.org/gnu/zile/
->> +ZILE_LICENSE = GPLv1+
->> +ZILE_LICENSE_FILES = COPYING
->> +ZILE_CONF_OPT += --without-help2man
+>> +LIBGC_VERSION = 7.4.0
+>> +LIBGC_SOURCE = gc-${LIBGC_VERSION}.tar.gz
 >
-> In the previous patch, you added libgc, stating that it was a dependency
-> of Zile, but you forgot to add it here.
+> Use parenthesis when evaluating variables, not curly-braces:
+>     LIBGC_SOURCE = gc-$(LIBGC_VERSION).tar.gz
+>
+>> +LIBGC_SITE = http://www.hboehm.info/gc/gc_source/
+>> +LIBGC_EXTRA_DOWNLOADS = libatomic_ops-${LIBGC_VERSION}.tar.gz
+>
+> Ditto, parenthesis.
+>
+>> +LIBGC_LICENSE = GPLv1+
+>> +LIBGC_LICENSE_FILES = COPYING
+>> +LIBGC_INSTALL_STAGING = YES
+>> +
+>> +define LIBGC_POST_EXTRACT_INC_LIBATOMIC
+>> +	env
+>
+> This is not needed.
+>
+>> +	mkdir -p $(@D)/libatomic_ops
+>> +	tar -xvf ${BR2_DL_DIR}/libatomic_ops-${LIBGC_VERSION}.tar.gz --strip-components=1 -C $(@D)/libatomic_ops
+>> +endef
+>> +
+>> +LIBGC_POST_EXTRACT_HOOKS += LIBGC_POST_EXTRACT_INC_LIBATOMIC
+>
+> I know this is how upstream suggests building, but I can refrain from
+> finding this really ugly... Yuck! :-(
+>
+> Anyway: can't use you use something like:
+>
+>     LIBGC_LIBATOMIC_OPS = libatomic_ops-${LIBGC_VERSION}.tar.gz
+>     LIBGC_EXTRA_DOWNLOADS = $(LIBGC_LIBATOMIC_OPS)
+>
+>     define LIBGC_POST_EXTRACT_INC_LIBATOMIC
+>         $(INSTALL) -d -m 0755 $(LSOF_DIR)/libatomic_ops && \
+>         $(call suitable-extractor,$(LIBGC_LIBATOMIC_OPS)) $(DL_DIR)/$(LIBGC_LIBATOMIC_OPS) |\
+>             $(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(LSOF_DIR)/libatomic_opsi $(TAR_OPTIONS) -
+>     endef
+>     LIBGC_POST_EXTRACT_HOOKS += LIBGC_POST_EXTRACT_INC_LIBATOMIC
+>
+> Note LIBGC_LIBATOMIC_OPS is not strictly required, but I find it cleaner
+> to use, rather than call suitabel-extract on _EXTRA_DOWNLOADS, which is
+> a plual and could contain more than one file. That's purely for
+> aesthetics.
 
-Ahh I thought it was enforced by the Config.in select but of course you
-need to ensure it's built as well. I'll fix that up.
+I'll look at using the buildroot defined one.
 
 >
-> Probably it is working for you since libgz sorts alphabetically before
-> zile, but that's not guaranteed with parallel builds.
+>> +$(eval $(autotools-package))
 >
 > Regards,
 > Yann E. MORIN.
