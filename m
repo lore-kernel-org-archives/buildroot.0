@@ -1,32 +1,89 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 8 Apr 2014 14:20:09 +0200
-Subject: [Buildroot] [git commit] gnutls: bump to version 3.2.13
-Message-ID: <20140408122105.DAE329C43C@busybox.osuosl.org>
+Date: Tue, 8 Apr 2014 14:06:54 +0200
+Subject: [Buildroot] [git commit] util-linux: add a check for mkostemp()
+Message-ID: <20140408122105.CBA7E9C68A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d996fe44d32a8382db7ca07636aea8d27366c448
+commit: http://git.buildroot.net/buildroot/commit/?id=a5a4b38c6a43d9da46cdd0244b1aae07d7bcce5c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+mkostemp() is missing with older version of uClibc (uClibc <= 0.9.33).
+So, we need to check if mkostemp() is available.
+If not, we use a wrapper function based on mkstemp() to implement it.
+
+Since util-linux v2.23, mkostemp() is called with O_CLOEXEC flag.
+If we use a define to mkstemp() to implement mkostemp(), flags will be
+discared.
+mkstemp() will pass O_RDWR|O_CREAT|O_EXCL, but not O_CLOEXEC, which
+means that the file descriptor will no longer be closed automatically
+upon exec().
+
+To avoid to discard the flags, we add a call to fcntl() to set O_CLOEXEC
+flag just after mkstemp().
+
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gnutls/gnutls.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ ...fine-mkostemp-for-older-version-of-uClibc.patch |   50 ++++++++++++++++++++
+ 1 files changed, 50 insertions(+), 0 deletions(-)
 
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index c1fa40d..11d65d0 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- GNUTLS_VERSION_MAJOR = 3.2
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).12
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).13
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = GPLv3+ LGPLv2.1+
+diff --git a/package/util-linux/util-linux-004-c.h-define-mkostemp-for-older-version-of-uClibc.patch b/package/util-linux/util-linux-004-c.h-define-mkostemp-for-older-version-of-uClibc.patch
+new file mode 100644
+index 0000000..0dfe7be
+--- /dev/null
++++ b/package/util-linux/util-linux-004-c.h-define-mkostemp-for-older-version-of-uClibc.patch
+@@ -0,0 +1,50 @@
++From 42a84250fc78bae3e885ecd1379e713663fe6487 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@openwide.fr>
++Date: Sun, 6 Apr 2014 12:12:41 +0200
++Subject: [PATCH 1/1] c.h: define mkostemp for older version of uClibc
++
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++---
++ configure.ac |  2 ++
++ include/c.h  | 14 ++++++++++++++
++ 2 files changed, 16 insertions(+)
++
++diff --git a/configure.ac b/configure.ac
++index 35a1f26..a9b8d34 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -321,6 +321,8 @@ AC_CHECK_FUNCS([ \
++ ])
++ AC_FUNC_FSEEKO
++ 
+++AC_CHECK_FUNCS([mkostemp])
+++
++ AC_CHECK_FUNCS([openat fstatat unlinkat], [have_openat=yes], [have_openat=no])
++ AC_CHECK_FUNCS([ioperm iopl], [have_io=yes])
++ 
++diff --git a/include/c.h b/include/c.h
++index 4a9bf3d..1b880ed 100644
++--- a/include/c.h
+++++ b/include/c.h
++@@ -300,4 +300,18 @@ static inline int usleep(useconds_t usec)
++ # define SEEK_HOLE	4
++ #endif
++ 
+++/*
+++ * mkostemp() may be missing with older version of uClibc
+++ */
+++#ifndef HAVE_MKOSTEMP
+++static inline int mkostemp(char *template, int flags)
+++{
+++	int fd;
+++	fd = mkstemp(template);
+++	if (flags & O_CLOEXEC && fd >= 0)
+++		fcntl(fd, F_SETFD, FD_CLOEXEC);
+++	return fd;
+++}
+++#endif
+++
++ #endif /* UTIL_LINUX_C_H */
++-- 
++1.9.0
++
