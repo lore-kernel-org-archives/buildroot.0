@@ -1,100 +1,72 @@
-From: Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>
-Date: Tue, 08 Apr 2014 11:20:51 +0100
-Subject: [Buildroot] [PATCH 1/2] package/libgc: add Boehm-Demers-Weiser
-	gc library
-In-Reply-To: <20140407202610.GB3215@free.fr>
-References: <1396868422-5757-1-git-send-email-alex.bennee@linaro.org>
- <1396868422-5757-2-git-send-email-alex.bennee@linaro.org>
- <20140407202610.GB3215@free.fr>
-Message-ID: <87wqf03yws.fsf@linaro.org>
+From: Lionel Orry <lionel.orry@gmail.com>
+Date: Tue, 8 Apr 2014 12:28:26 +0200
+Subject: [Buildroot] [PATCH 1/1] zeromq: bump to version 4.0.1
+In-Reply-To: <5343CBCF.8080103@zacarias.com.ar>
+References: <1381509097-5424-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+ <20140301232520.4ee4b22b@skate>
+ <CAKAx1cj3DKFEcSjtw2-d1y3sZSO9y6kpvE6ZGjRdycnNAAugMw@mail.gmail.com>
+ <20140303084702.7790637d@skate>
+ <CAKAx1chY=kd3Y_N2-HRqmtELox8gSA9+hVUmaEAT4BNv_mXb9g@mail.gmail.com>
+ <20140303111124.1126480c@skate>
+ <CAAXf6LVOm34-2gHVMbiEp85otVQa7PVuzqsFbNCGOB0upKAAQA@mail.gmail.com>
+ <CAKAx1ch=rxf=EfCfntHxqfsV4jQEU1asj9JTQ4odMhrD2xZJEA@mail.gmail.com>
+ <5343CBCF.8080103@zacarias.com.ar>
+Message-ID: <CAKAx1ciJq-EiGYcQEDHzVn5AfvaXE_dQ1ohYO_QLwi=ndEqL4g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
 
-Yann E. MORIN <yann.morin.1998@free.fr> writes:
+On Tue, Apr 8, 2014 at 12:13 PM, Gustavo Zacarias
+<gustavo@zacarias.com.ar> wrote:
+> On 04/08/2014 04:32 AM, Lionel Orry wrote:
+>
+>> Quick news : mongrel v1.9.0 depends on polarssl now. But they decided
+>> to declare this dependency as a git submodule of their repo, and the
+>> release tarball being taken directly from github does not include the
+>> polarssl code. In short, they release tarball is unuseable. I'll talk
+>> about it upstream.
+>>
+>> To make it clean, I'll try to get rid of the git submodule dep and
+>> make attempts with the polarssl buildroot package.
+>>
+>> The bad (or not?) news is that mongrel2 depends on polarssl v1.3.0
+>> (v1.3.x if polarssl properly versions its library, I think it is the
+>> case) and we currently use polarssl v1.2.10, so a polarssl bump
+>> version is needed first.
+>>
+>> Does anyone know what implications could a polarssl minor version bump
+>> have ? I already saw some of the polarssl patches don't apply properly
+>> so they need to be revisited. Gustavo, I think you were in charge of
+>> the last polarssl bump, do you think you could help with this one, or
+>> say whether it is a very bad idea to bump the package version ?
+>>
+>> Thanks everyone,
+>> Lionel
+>
+> Hi.
+> It breaks at least openvpn since the API isn't 100% compatible with the
+> 1.2.x series and openvpn doesn't handle 1.3.x yet.
+> Hiawatha has a new version which bundles/works with 1.3.x.
+> I haven't tried with libcurl but my gut tells me it should work since
+> they update often.
+> Dunno about rtmpdump.
+> It may be possible to make them live side-by-side by making a polarssl13
+> package, though it may need to reside in a non-default prefix.
+> Another possible solution is to fetch openvpn patches from git to make
+> it compatible, but last time i checked (several months ago) there were
+> none - that may have changed though.
+> I'll take a look and get back a bit later.
 
-> Alex, Alex, All,
->
-> On 2014-04-07 12:00 +0100, Alex Benn?e spake thusly:
->> This is needed for applications like Zile
->> 
->> Signed-off-by: Alex Benn?e <alex.bennee@linaro.org>
->> Signed-off-by: Alex Benn?e <alex@bennee.com>
->
-> Woot! It's not that often with have a schizophrenic contributor! ;-)
+Thanks a lot. In the meantime, I asked upstream for the possibility to
+build a proper release tarball including the polarssl source code, so
+that the version bump would not be necessary.
 
-Yeah I blame format-patch for that one!
+> Regards.
+>
 
->
-> [--SNIP--]
->> diff --git a/package/libgc/libgc.mk b/package/libgc/libgc.mk
->> new file mode 100644
->> index 0000000..e5c4609
->> --- /dev/null
->> +++ b/package/libgc/libgc.mk
->> @@ -0,0 +1,23 @@
->> +################################################################################
->> +#
->> +# Boehm-Demers-Weiser's GC
->> +#
->> +################################################################################
->> +
->> +LIBGC_VERSION = 7.4.0
->> +LIBGC_SOURCE = gc-${LIBGC_VERSION}.tar.gz
->
-> Use parenthesis when evaluating variables, not curly-braces:
->     LIBGC_SOURCE = gc-$(LIBGC_VERSION).tar.gz
->
->> +LIBGC_SITE = http://www.hboehm.info/gc/gc_source/
->> +LIBGC_EXTRA_DOWNLOADS = libatomic_ops-${LIBGC_VERSION}.tar.gz
->
-> Ditto, parenthesis.
->
->> +LIBGC_LICENSE = GPLv1+
->> +LIBGC_LICENSE_FILES = COPYING
->> +LIBGC_INSTALL_STAGING = YES
->> +
->> +define LIBGC_POST_EXTRACT_INC_LIBATOMIC
->> +	env
->
-> This is not needed.
->
->> +	mkdir -p $(@D)/libatomic_ops
->> +	tar -xvf ${BR2_DL_DIR}/libatomic_ops-${LIBGC_VERSION}.tar.gz --strip-components=1 -C $(@D)/libatomic_ops
->> +endef
->> +
->> +LIBGC_POST_EXTRACT_HOOKS += LIBGC_POST_EXTRACT_INC_LIBATOMIC
->
-> I know this is how upstream suggests building, but I can refrain from
-> finding this really ugly... Yuck! :-(
->
-> Anyway: can't use you use something like:
->
->     LIBGC_LIBATOMIC_OPS = libatomic_ops-${LIBGC_VERSION}.tar.gz
->     LIBGC_EXTRA_DOWNLOADS = $(LIBGC_LIBATOMIC_OPS)
->
->     define LIBGC_POST_EXTRACT_INC_LIBATOMIC
->         $(INSTALL) -d -m 0755 $(LSOF_DIR)/libatomic_ops && \
->         $(call suitable-extractor,$(LIBGC_LIBATOMIC_OPS)) $(DL_DIR)/$(LIBGC_LIBATOMIC_OPS) |\
->             $(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(LSOF_DIR)/libatomic_opsi $(TAR_OPTIONS) -
->     endef
->     LIBGC_POST_EXTRACT_HOOKS += LIBGC_POST_EXTRACT_INC_LIBATOMIC
->
-> Note LIBGC_LIBATOMIC_OPS is not strictly required, but I find it cleaner
-> to use, rather than call suitabel-extract on _EXTRA_DOWNLOADS, which is
-> a plual and could contain more than one file. That's purely for
-> aesthetics.
-
-I'll look at using the buildroot defined one.
-
->
->> +$(eval $(autotools-package))
->
-> Regards,
-> Yann E. MORIN.
-
--- 
-Alex Benn?e
+Kind regards,
+Lionel
