@@ -1,106 +1,75 @@
-From: Paul Cercueil <paul@crapouillou.net>
-Date: Tue,  8 Apr 2014 19:45:08 +0200
-Subject: [Buildroot] [PATCH 4/5] util-linux: Add config switches for some
-	more binaries
-In-Reply-To: <1396979109-10691-1-git-send-email-paul@crapouillou.net>
-References: <1396979109-10691-1-git-send-email-paul@crapouillou.net>
-Message-ID: <1396979109-10691-4-git-send-email-paul@crapouillou.net>
+From: Lionel Orry <lionel.orry@gmail.com>
+Date: Tue,  8 Apr 2014 20:40:21 +0200
+Subject: [Buildroot] [PATCH 1/1] mongrel2: bump to version 1.9.0
+Message-ID: <1396982421-17571-1-git-send-email-lionel.orry@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- package/util-linux/Config.in     | 20 ++++++++++++++++++++
- package/util-linux/util-linux.mk |  6 +++++-
- 2 files changed, 25 insertions(+), 1 deletion(-)
+The github helper does not retrieve a suitable tarball including the polarssl source code,
+thus the change on the download url.
 
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index b1db99a..cef8009 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -56,6 +56,11 @@ config BR2_PACKAGE_UTIL_LINUX_ARCH
- 	help
- 	  Print machine architecture
+This version of mongrel2 should be compliant with latest ZeroMQ versions.
+
+Signed-off-by: Lionel Orry <lionel.orry@gmail.com>
+---
+ .../mongrel2-0003-Fix-Makefiles-for-cross-compilation.patch  | 12 ++++++------
+ package/mongrel2/mongrel2.mk                                 |  4 ++--
+ 2 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/package/mongrel2/mongrel2-0003-Fix-Makefiles-for-cross-compilation.patch b/package/mongrel2/mongrel2-0003-Fix-Makefiles-for-cross-compilation.patch
+index 164d7f9..730d8eb 100644
+--- a/package/mongrel2/mongrel2-0003-Fix-Makefiles-for-cross-compilation.patch
++++ b/package/mongrel2/mongrel2-0003-Fix-Makefiles-for-cross-compilation.patch
+@@ -23,8 +23,8 @@ index 6dce4a6..d48e05e 100644
+ --- a/Makefile
+ +++ b/Makefile
+ @@ -1,4 +1,4 @@
+--CFLAGS=-g -O2 -Wall -Wextra -Isrc -pthread -rdynamic -DNDEBUG $(OPTFLAGS) -D_FILE_OFFSET_BITS=64
+-+override CFLAGS += -g -O2 -Wall -Wextra -Isrc -pthread -rdynamic -DNDEBUG $(OPTFLAGS) -D_FILE_OFFSET_BITS=64
++-CFLAGS=-g -O2 -Wall -Wextra -Isrc -Isrc/polarssl/include -pthread -rdynamic -DNDEBUG $(OPTFLAGS) -D_FILE_OFFSET_BITS=64
+++override CFLAGS += -g -O2 -Wall -Wextra -Isrc -Isrc/polarssl/include -pthread -rdynamic -DNDEBUG $(OPTFLAGS) -D_FILE_OFFSET_BITS=64
+  LIBS=-lzmq -ldl -lsqlite3 $(OPTLIBS)
+  PREFIX?=/usr/local
+  
+@@ -34,8 +34,8 @@ index 398490c..53f2255 100644
+ +++ b/tools/config_modules/Makefile
+ @@ -1,5 +1,5 @@
+  PREFIX?=/usr/local
+--CFLAGS=-I../../src $(OPTFLAGS) -fPIC -shared -nostartfiles -L../../build
+-+override CFLAGS += -I../../src $(OPTFLAGS) -fPIC -shared -nostartfiles -L../../build
++-CFLAGS=-I../../src -I../../src/polarssl/include $(OPTFLAGS) -fPIC -shared -nostartfiles -L../../build
+++override CFLAGS += -I../../src -I../../src/polarssl/include $(OPTFLAGS) -fPIC -shared -nostartfiles -L../../build
+  LDFLAGS=$(OPTLIBS)
+  
+  MONGO_SRC = mongo-c-driver/src/bson.c \
+@@ -45,8 +45,8 @@ index f9f4556..6077b79 100644
+ +++ b/tools/filters/Makefile
+ @@ -1,5 +1,5 @@
+  PREFIX?=/usr/local
+--CFLAGS=-I../../src $(OPTFLAGS) -fPIC -shared -nostartfiles -L../../build
+-+override CFLAGS += -I../../src $(OPTFLAGS) -fPIC -shared -nostartfiles -L../../build
++-CFLAGS=-I../../src -I../../src/polarssl/include $(OPTFLAGS) -g -fPIC -shared -nostartfiles -L../../build
+++ override CFLAGS += -I../../src -I../../src/polarssl/include $(OPTFLAGS) -g -fPIC -shared -nostartfiles -L../../build
+  LDFLAGS=$(OPTLIBS)
+  
+  all: null.so
+diff --git a/package/mongrel2/mongrel2.mk b/package/mongrel2/mongrel2.mk
+index e6a7be3..590a522 100644
+--- a/package/mongrel2/mongrel2.mk
++++ b/package/mongrel2/mongrel2.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_UTIL_LINUX_CHFN_CHSH
-+	bool "chfn/chsh"
-+	help
-+	  Change login shell, real user name and information
-+
- config BR2_PACKAGE_UTIL_LINUX_CRAMFS
- 	bool "cramfs utilities"
- 	select BR2_PACKAGE_ZLIB
-@@ -98,6 +103,11 @@ config BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS
- comment "login utilities needs a toolchain w/ locale"
- 	depends on !BR2_ENABLE_LOCALE
- 
-+config BR2_PACKAGE_UTIL_LINUX_LOSETUP
-+	bool "losetup"
-+	help
-+	  Set up and control loop devices
-+
- config BR2_PACKAGE_UTIL_LINUX_MESG
- 	bool "mesg"
- 	help
-@@ -108,6 +118,11 @@ config BR2_PACKAGE_UTIL_LINUX_MOUNT
- 	help
- 	  Mount/unmount filesystems
- 
-+config BR2_PACKAGE_UTIL_LINUX_NEWGRP
-+	bool "newgrp"
-+	help
-+	  Log in to a new group
-+
- config BR2_PACKAGE_UTIL_LINUX_PIVOT_ROOT
- 	bool "pivot_root"
- 	help
-@@ -158,6 +173,11 @@ config BR2_PACKAGE_UTIL_LINUX_UUIDD
- 	help
- 	  UUID generation daemon
- 
-+config BR2_PACKAGE_UTIL_LINUX_VIPW
-+	bool "vipw"
-+	help
-+	  Edit the password, group, shadow-password or shadow-group file
-+
- config BR2_PACKAGE_UTIL_LINUX_WALL
- 	bool "wall"
- 	help
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index f0ae3ae..cc57088 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -54,6 +54,7 @@ UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_LINUX_PAM),linux-pam)
- UTIL_LINUX_CONF_OPT += \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_AGETTY),--enable-agetty,--disable-agetty) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_ARCH),--enable-arch,--disable-arch) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_CHFN_CHSH),--enable-chfn-chsh,--disable-chfn-chsh) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_CRAMFS),--enable-cramfs,--disable-cramfs) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_DDATE),--enable-ddate,--disable-ddate) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_EJECT),--enable-eject,--disable-eject) \
-@@ -64,9 +65,11 @@ UTIL_LINUX_CONF_OPT += \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT),--enable-libmount,--disable-libmount) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBUUID),--enable-libuuid,--disable-libuuid) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS),--enable-last --enable-login --enable-su --enable-sulogin,--disable-last --disable-login --disable-su --disable-sulogin) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_LOSETUP),--enable-losetup,--disable-losetup) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_MESG),--enable-mesg,--disable-mesg) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_MOUNT),--enable-mount,--disable-mount) \
--	$(if $(BR2_PACKAGE_UTIL_LINUX_PARTX),,--disable-partx) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_NEWGRP),--enable-newgrp,--disable-newgrp) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_PARTX),--enable-partx,--disable-partx) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_PIVOT_ROOT),--enable-pivot_root,--disable-pivot_root) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_RAW),--enable-raw,--disable-raw) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_RENAME),--enable-rename,--disable-rename) \
-@@ -76,6 +79,7 @@ UTIL_LINUX_CONF_OPT += \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_UNSHARE),--enable-unshare,--disable-unshare) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_UTMPDUMP),--enable-utmpdump,--disable-utmpdump) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_UUIDD),--enable-uuidd,--disable-uuidd) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_VIPW),--enable-vipw,--disable-vipw) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_WALL),--enable-wall,--disable-wall) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_WRITE),--enable-write,--disable-write)
- 
+-MONGREL2_VERSION = v1.8.0
+-MONGREL2_SITE = $(call github,zedshaw,mongrel2,$(MONGREL2_VERSION))
++MONGREL2_VERSION = v1.9.0
++MONGREL2_SITE = https://github.com/zedshaw/mongrel2/releases/download/$(MONGREL2_VERSION)/
+ MONGREL2_LICENSE = BSD-3c
+ MONGREL2_LICENSE_FILES = LICENSE
+ MONGREL2_DEPENDENCIES = sqlite zeromq
 -- 
-1.9.1
+1.8.3.2
