@@ -1,73 +1,52 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Tue,  8 Apr 2014 10:03:34 +0200
-Subject: [Buildroot] [PATCH] libuci: bump version and remove obsolete patch
-Message-ID: <1396944214-22952-1-git-send-email-yegorslists@googlemail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 08 Apr 2014 07:13:35 -0300
+Subject: [Buildroot] [PATCH 1/1] zeromq: bump to version 4.0.1
+In-Reply-To: <CAKAx1ch=rxf=EfCfntHxqfsV4jQEU1asj9JTQ4odMhrD2xZJEA@mail.gmail.com>
+References: <1381509097-5424-1-git-send-email-jerzy.grzegorek@trzebnica.net>	<20140301232520.4ee4b22b@skate>	<CAKAx1cj3DKFEcSjtw2-d1y3sZSO9y6kpvE6ZGjRdycnNAAugMw@mail.gmail.com>	<20140303084702.7790637d@skate>	<CAKAx1chY=kd3Y_N2-HRqmtELox8gSA9+hVUmaEAT4BNv_mXb9g@mail.gmail.com>	<20140303111124.1126480c@skate>	<CAAXf6LVOm34-2gHVMbiEp85otVQa7PVuzqsFbNCGOB0upKAAQA@mail.gmail.com>
+ <CAKAx1ch=rxf=EfCfntHxqfsV4jQEU1asj9JTQ4odMhrD2xZJEA@mail.gmail.com>
+Message-ID: <5343CBCF.8080103@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+On 04/08/2014 04:32 AM, Lionel Orry wrote:
 
-The uci-fix-Lua-finding.patch was upstreamed, so remove it.
+> Quick news : mongrel v1.9.0 depends on polarssl now. But they decided
+> to declare this dependency as a git submodule of their repo, and the
+> release tarball being taken directly from github does not include the
+> polarssl code. In short, they release tarball is unuseable. I'll talk
+> about it upstream.
+> 
+> To make it clean, I'll try to get rid of the git submodule dep and
+> make attempts with the polarssl buildroot package.
+> 
+> The bad (or not?) news is that mongrel2 depends on polarssl v1.3.0
+> (v1.3.x if polarssl properly versions its library, I think it is the
+> case) and we currently use polarssl v1.2.10, so a polarssl bump
+> version is needed first.
+> 
+> Does anyone know what implications could a polarssl minor version bump
+> have ? I already saw some of the polarssl patches don't apply properly
+> so they need to be revisited. Gustavo, I think you were in charge of
+> the last polarssl bump, do you think you could help with this one, or
+> say whether it is a very bad idea to bump the package version ?
+> 
+> Thanks everyone,
+> Lionel
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/libuci/libuci-01-uci-fix-Lua-finding.patch | 31 ----------------------
- package/libuci/libuci.mk                           |  2 +-
- 2 files changed, 1 insertion(+), 32 deletions(-)
- delete mode 100644 package/libuci/libuci-01-uci-fix-Lua-finding.patch
-
-diff --git a/package/libuci/libuci-01-uci-fix-Lua-finding.patch b/package/libuci/libuci-01-uci-fix-Lua-finding.patch
-deleted file mode 100644
-index f37e136..0000000
---- a/package/libuci/libuci-01-uci-fix-Lua-finding.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From 980432ce260020ed8a907b3bbc1334845ba4c4a9 Mon Sep 17 00:00:00 2001
--From: Yegor Yefremov <yegorslists@googlemail.com>
--Date: Sat, 5 Apr 2014 19:18:10 +0200
--Subject: [PATCH] uci: fix Lua finding
--
--If ${LUAPATH} is not quoted and Lua is not provided, then following
--error occurs:
--
--"NOT" "No such file or directory" "EQUAL" "0" "OR" "EQUAL" ""
--
--Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-----
-- lua/CMakeLists.txt | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/lua/CMakeLists.txt b/lua/CMakeLists.txt
--index e4295d7..4ba8e37 100644
----- a/lua/CMakeLists.txt
--+++ b/lua/CMakeLists.txt
--@@ -36,7 +36,7 @@ IF(NOT LUAPATH)
-- 	)
-- 
-- 	IF(BUILD_LUA)
---		IF(NOT ${LUA_CHECK_RES} EQUAL 0 OR ${LUAPATH} EQUAL "")
--+		IF(NOT ${LUA_CHECK_RES} EQUAL 0 OR "${LUAPATH}" EQUAL "")
-- 			MESSAGE(SEND_ERROR "Lua was not found on your system")
-- 		ENDIF()
-- 	ENDIF()
---- 
--1.8.3.2
--
-diff --git a/package/libuci/libuci.mk b/package/libuci/libuci.mk
-index adc7bce..ff50874 100644
---- a/package/libuci/libuci.mk
-+++ b/package/libuci/libuci.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBUCI_VERSION = 262fede3e8c8c08c1eb0d1be9bf102232fb86cb9
-+LIBUCI_VERSION = ed938cc8e423d4a33b8f31e6e6d1eb0805ae3d10
- LIBUCI_SITE = git://nbd.name/uci.git
- LIBUCI_LICENSE = LGPLv2.1
- LIBUCI_INSTALL_STAGING = YES
--- 
-1.8.1.2
+Hi.
+It breaks at least openvpn since the API isn't 100% compatible with the
+1.2.x series and openvpn doesn't handle 1.3.x yet.
+Hiawatha has a new version which bundles/works with 1.3.x.
+I haven't tried with libcurl but my gut tells me it should work since
+they update often.
+Dunno about rtmpdump.
+It may be possible to make them live side-by-side by making a polarssl13
+package, though it may need to reside in a non-default prefix.
+Another possible solution is to fetch openvpn patches from git to make
+it compatible, but last time i checked (several months ago) there were
+none - that may have changed though.
+I'll take a look and get back a bit later.
+Regards.
