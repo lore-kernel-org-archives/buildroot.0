@@ -1,71 +1,54 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Wed, 09 Apr 2014 01:20:15 +0200
-Subject: [Buildroot] [lttng-dev] [PATCH 1/1] Disable liblttng-ust-dl if
- dlinfo is not available in C library.
-In-Reply-To: <20140408172442.GB3199@free.fr>
-References: <1396818161-20204-1-git-send-email-romain.naour@openwide.fr>
- <794709247.8287.1396903345152.JavaMail.zimbra@efficios.com>
- <53430E92.9060401@openwide.fr>
- <CAFXXi0kAZJDD7ygqs493ZPvJHMpkeuMTDvxHqMg9B722pJHHxQ@mail.gmail.com>
- <20140408172442.GB3199@free.fr>
-Message-ID: <5344842F.3070901@openwide.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 09 Apr 2014 01:40:35 +0200
+Subject: [Buildroot] [PATCH] support/check-kernel-headers: fix old
+	custom toolchains without -print-sysroot
+In-Reply-To: <1396894752-21040-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Mon, 7 Apr 2014 20:19:12 +0200")
+References: <1396894752-21040-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87ioqj8k5o.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Simon, Yann,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Le 08/04/2014 19:24, Yann E. MORIN a ?crit :
-> Simon, All,
->
-> On 2014-04-08 13:03 -0400, Simon Marchi spake thusly:
->> Hi Romain,
->>
->> It seems like with that commit, dlinfo is not found even on a glibc
->> based system, where it is present.
->>
->> See https://bugs.lttng.org/issues/778
->>
->> Do you have a suggestion to fix that ?
-> I think we should use AC_CHECK_DECL instead of AC_CHECK_FUNCS.
->
-> dlinfo is in dlfcn.h so we need a check that allows us to include that
-> header, and we must check for that header first, of course. So, maybe
-> something like (completely untested, directly written in the mail):
->
->      AC_CHECK_HEADER([dlfcn.h])
->      AS_IF([test "${ac_cv_header_dlfcn_h}" = "yes"],
->            [AC_CHECK_DECL([dlinfo],,,[dlfcn.h])],
->            [ac_cv_have_decl_dlinfo="no"])
->      AM_CONDITIONAL([HAVE_DLINFO], [test "${ac_cv_have_decl_dlinfo}" = "yes"])
->
-> But I'm no expert in autoconf, so the actual solution may be slightly
-> different.
->
-> Regards,
-> Yann E. MORIN.
->
-Sorry for the mistake, here is a new try:
+ > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Old toolchains, with old gcc that do not support -print-sysroot, break the
+ > kernel-headers version check script: it fails to find the sysroot of the
+ > toolchain, and thus ends up including the host's linux/version.h.
 
+ > Most of the time, this will break early, since the host's kernel headers
+ > will not match the toolchain settings.
 
-AC_CHECK_HEADER([dlfcn.h])
-AS_IF([test "${ac_cv_header_dlfcn_h}" = "yes"],
-     [AC_CHECK_DECLS([RTLD_DI_LINKMAP],,,
-         [#define _GNU_SOURCE /* Required on Linux to get GNU extensions */
-         #include <dlfcn.h>])
-     ],
-     [ac_cv_have_decl_RTLD_DI_LINKMAP="no"])
-AM_CONDITIONAL([HAVE_DLINFO], [test "${ac_cv_have_decl_RTLD_DI_LINKMAP}" 
-= "yes"])
+ > But it can happen that the check is succesful, although the configuration
+ > of the toolchain is wrong:
 
+ >   - the custom toolchain has kernel headers vX.Y
+ >   - the user selected vX.Z  (Z!=Y)
+ >   - the host has headers vX.Y
 
-I can't use dlinfo directly here because it isdetected
-even if it is not available in uClibc. (detected fromust-dlfcn.h ?)
-So, I use RTLD_DI_LINKMAP which is not defined in uClibc.
+ > In this case, the check passes OK, but the build of some packages later on
+ > will break (which is exactly what those _AT_LEAST_XXX options were added to
+ > avoid).
 
-I'll send the patch later (after doing some test)
+ > Fix that by passing the sysroot to the check script, instead of the cross
+ > compiler.
 
-Best regards,
-Romain Naour
+ > We get the sysroot as thus:
+
+ >   - for custom toolchains, we use the macro toolchain_find_sysroot. We can
+ >     do that, because we already have a complete sysroot with libc.a at that
+ >     time.
+
+ >   - for internal toolchain using a custom kernel headers version, we just
+ >     use $(STAGING_DIR). We can't use the macro as for custom toolchains
+ >     above, because at the time we isntall the kernel headers, we do not yet
+
+s/isntall/install/
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
