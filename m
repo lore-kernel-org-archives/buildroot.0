@@ -1,86 +1,67 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue,  8 Apr 2014 16:55:06 +0300
-Subject: [Buildroot] [PATCH] ne10: bump version to 1.0.0
-Message-ID: <99baf8d8d8d05b5f2de390deef6546acab0199dd.1396965306.git.baruch@tkos.co.il>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 8 Apr 2014 18:16:53 +0200
+Subject: [Buildroot] [PATCH 2/2] package/zile: add Zile is Lossy Emacs
+ editor
+In-Reply-To: <87y4zg3yyj.fsf@linaro.org>
+References: <1396868422-5757-1-git-send-email-alex.bennee@linaro.org>
+ <1396868422-5757-3-git-send-email-alex.bennee@linaro.org>
+ <20140407203338.GC3215@free.fr> <87y4zg3yyj.fsf@linaro.org>
+Message-ID: <20140408161653.GA3199@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switch to github helper while at it.
+Alex, All,
 
-Fixes:
-http://autobuild.buildroot.net/results/a2c/a2ca3fe245e410a738f4b10631a1414696a0edea/
+On 2014-04-08 11:19 +0100, Alex Benn?e spake thusly:
+> Yann E. MORIN <yann.morin.1998@free.fr> writes:
+[--SNIP--]
+> >> diff --git a/package/zile/zile.mk b/package/zile/zile.mk
+> >> new file mode 100644
+> >> index 0000000..024595c
+> >> --- /dev/null
+> >> +++ b/package/zile/zile.mk
+> >> @@ -0,0 +1,13 @@
+> >> +################################################################################
+> >> +#
+> >> +# Zile
+> >> +#
+> >> +################################################################################
+> >> +
+> >> +ZILE_VERSION = 2.4.11
+> >> +ZILE_SITE = http://ftp.gnu.org/gnu/zile/
+> >> +ZILE_LICENSE = GPLv1+
+> >> +ZILE_LICENSE_FILES = COPYING
+> >> +ZILE_CONF_OPT += --without-help2man
+> >
+> > In the previous patch, you added libgc, stating that it was a dependency
+> > of Zile, but you forgot to add it here.
+> 
+> Ahh I thought it was enforced by the Config.in select but of course you
+> need to ensure it's built as well. I'll fix that up.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- ...CMakeLists.txt-add-neon-support-to-CFLAGS.patch | 31 ++++++++++++++++++++++
- package/ne10/ne10.mk                               | 10 +++----
- 2 files changed, 36 insertions(+), 5 deletions(-)
- create mode 100644 package/ne10/ne10-01-CMakeLists.txt-add-neon-support-to-CFLAGS.patch
+THere are two types of dependencies:
+  - build-time dependencies, and
+  - run-time dependencies.
 
-diff --git a/package/ne10/ne10-01-CMakeLists.txt-add-neon-support-to-CFLAGS.patch b/package/ne10/ne10-01-CMakeLists.txt-add-neon-support-to-CFLAGS.patch
-new file mode 100644
-index 000000000000..1777de102328
---- /dev/null
-+++ b/package/ne10/ne10-01-CMakeLists.txt-add-neon-support-to-CFLAGS.patch
-@@ -0,0 +1,31 @@
-+From 1ab64866615643d19a8e5c4f1a3f62f1baad6e83 Mon Sep 17 00:00:00 2001
-+Message-Id: <1ab64866615643d19a8e5c4f1a3f62f1baad6e83.1396964788.git.baruch@tkos.co.il>
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Tue, 8 Apr 2014 16:40:28 +0300
-+Subject: [PATCH] CMakeLists.txt: add neon support to CFLAGS
-+
-+Fixed build failure:
-+
-+.../include/arm_neon.h:32:2: error: #error You must enable NEON instructions (e.g. -mfloat-abi=softfp -mfpu=neon) to use arm_neon.h
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+ CMakeLists.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index e5a98af53c1f..22ce166650da 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -78,7 +78,7 @@ if(ANDROID_PLATFORM)
-+       add_subdirectory(android/NE10Demo/jni)
-+     endif()
-+ elseif(GNULINUX_PLATFORM)
-+-    set(CMAKE_C_FLAGS "-O2 -mthumb-interwork -mthumb -march=armv7-a -mfpu=vfp3")
-++    set(CMAKE_C_FLAGS "-O2 -mthumb-interwork -mthumb -march=armv7-a -mfloat-abi=softfp -mfpu=neon")
-+     set(CMAKE_ASM_FLAGS "-mthumb-interwork -mthumb -march=armv7-a -mfpu=neon")
-+ elseif(IOS_PLATFORM)
-+     #set minimal target ios version.If not provided this option, Xcode
-+-- 
-+1.9.1
-+
-diff --git a/package/ne10/ne10.mk b/package/ne10/ne10.mk
-index 79b53b809d16..24411482e0a5 100644
---- a/package/ne10/ne10.mk
-+++ b/package/ne10/ne10.mk
-@@ -4,15 +4,15 @@
- #
- ################################################################################
- 
--# We use a Git commit ID because the last tagged version is more than
--# one year old.
--NE10_VERSION = 88c18f02199947b2c8b57796f5a3ca53160aff96
--NE10_SITE = http://github.com/projectNe10/Ne10/tarball/$(NE10_VERSION)
-+NE10_VERSION = v1.0.0
-+NE10_SITE = $(call github,projectNe10,Ne10,$(NE10_VERSION))
- NE10_LICENSE = BSD-3c or Apache-2.0
- NE10_LICENSE_FILES = doc/LICENSE
- 
-+NE10_CONF_OPT = -DGNULINUX_PLATFORM=ON
-+
- ifeq ($(BR2_PREFER_STATIC_LIB),)
--NE10_CONF_OPT = \
-+NE10_CONF_OPT += \
- 	-DNE10_BUILD_SHARED=ON
- endif
- 
+The run-time dependencies (eg. I need *that* program to be present) are
+handled purely in the Config.in.
+
+The build-time dependencies (eg. I need to link to *that* library) are
+handled both in Config.in and the .mk.
+
+The dependencies in Config.in will ensure that the package is present in
+the target, while the dependencies in the .mk guarantee the build order.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
