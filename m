@@ -1,41 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 9 Apr 2014 00:47:06 +0200
-Subject: [Buildroot] [git commit] cppcms: icu support needs wchar + threads
-Message-ID: <20140408225026.2D8E09C69E@busybox.osuosl.org>
+Date: Wed, 9 Apr 2014 00:44:21 +0200
+Subject: [Buildroot] [git commit] package/webkit: threads are also needed
+	for icu
+Message-ID: <20140408225026.222A59C54F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=28f0d896aed92980fcfcc3d6033772607c790a58
+commit: http://git.buildroot.net/buildroot/commit/?id=48c3eefca6e9f33d8b736e2bffcee152ce8abb9a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Add icu to the comment-list of packages requiring threads.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cppcms/Config.in |    7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
+ package/webkit/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/cppcms/Config.in b/package/cppcms/Config.in
-index 2b99b52..418146a 100644
---- a/package/cppcms/Config.in
-+++ b/package/cppcms/Config.in
-@@ -24,11 +24,18 @@ config BR2_PACKAGE_CPPCMS_ICU
- 	bool "enable icu support"
- 	depends on !BR2_arc # icu -> atomic builtins
+diff --git a/package/webkit/Config.in b/package/webkit/Config.in
+index 5ba2eb3..4112287 100644
+--- a/package/webkit/Config.in
++++ b/package/webkit/Config.in
+@@ -13,7 +13,7 @@ config BR2_PACKAGE_WEBKIT
+ 	bool "webkit"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR # enchant -> libglib2
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # enchant -> libglib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # enchant -> libglib2; icu
+ 	depends on BR2_PACKAGE_LIBGTK2
+ 	depends on BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
  	depends on !BR2_BINFMT_FLAT # icu
-+	depends on BR2_USE_WCHAR # icu
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # icu
- 	select BR2_PACKAGE_ICU
- 	help
- 	  Using ICU allows advanced localization features into CppCMS,
- 	  in another hand ICU is heavier than iconv.
- 
-+comment "icu support needs a toolchain w/ wchar, threads"
-+	depends on !BR2_arc
-+	depends on !BR2_BINFMT_FLAT
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+
- endif
- 
- comment "cppcms needs a toolchain w/ C++"
