@@ -1,26 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 8 Apr 2014 23:51:52 +0200
-Subject: [Buildroot] [PATCH] ne10: bump version to 1.0.0
-In-Reply-To: <99baf8d8d8d05b5f2de390deef6546acab0199dd.1396965306.git.baruch@tkos.co.il>
-References: <99baf8d8d8d05b5f2de390deef6546acab0199dd.1396965306.git.baruch@tkos.co.il>
-Message-ID: <20140408235152.66df3162@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 09 Apr 2014 00:04:58 +0200
+Subject: [Buildroot] [PATCH 3/6] tzdata: allow host build
+In-Reply-To: <e9034753bdf5bfff2e3d60a23232356d23ee0282.1396900553.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Mon, 7 Apr 2014 21:58:05 +0200")
+References: <cover.1396900553.git.yann.morin.1998@free.fr>
+ <e9034753bdf5bfff2e3d60a23232356d23ee0282.1396900553.git.yann.morin.1998@free.fr>
+Message-ID: <87ha63a35g.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-On Tue,  8 Apr 2014 16:55:06 +0300, Baruch Siach wrote:
+ > From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+ > uClibc uses its own format for timezone info. OTOH, we can generate
+ > uClibc-compatible timezone info from existing tzdata.
 
-> +-    set(CMAKE_C_FLAGS "-O2 -mthumb-interwork -mthumb -march=armv7-a -mfpu=vfp3")
-> ++    set(CMAKE_C_FLAGS "-O2 -mthumb-interwork -mthumb -march=armv7-a -mfloat-abi=softfp -mfpu=neon")
+ > Add a host-version of tzdata, so we can harvest its installed timezone
+ > info.
 
-This will not work on hardfp toolchains.
+ > Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Thomas
+It would be good if we could reuse more of the target logic for this,
+but that can be cleaned up later.
+
+Committed, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
