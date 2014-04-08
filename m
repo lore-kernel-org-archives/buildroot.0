@@ -1,61 +1,30 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 08 Apr 2014 22:53:36 +0200
-Subject: [Buildroot] [PATCH] ne10: bump version to 1.0.0
-In-Reply-To: <99baf8d8d8d05b5f2de390deef6546acab0199dd.1396965306.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 8 Apr 2014 16:55:06 +0300")
-References: <99baf8d8d8d05b5f2de390deef6546acab0199dd.1396965306.git.baruch@tkos.co.il>
-Message-ID: <877g6zbl0v.fsf@dell.be.48ers.dk>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Wed, 9 Apr 2014 01:00:51 +0400
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-04-07
+In-Reply-To: <20140408063009.EA284100CF4@stock.ovh.net>
+References: <20140408063009.EA284100CF4@stock.ovh.net>
+Message-ID: <CAMo8BfL7qvw6HgUtB62XJne2i_irrgWCwB4wtkGBvpP-X1M72w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+On Tue, Apr 8, 2014 at 10:30 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Build statistics for 2014-04-07
+[...]
+>     xtensa |                     php-5.5.11 | NOK | http://autobuild.buildroot.net/results/959b77fa2c1f13b1958b234803437e09734e882e/
 
- > Switch to github helper while at it.
- > Fixes:
- > http://autobuild.buildroot.net/results/a2c/a2ca3fe245e410a738f4b10631a1414696a0edea/
+Couldn't reproduce. But I had to disable BR2_PACKAGE_HOST_SAM_BA,
+otherwise it refused to build with the following message:
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
- > ---
-
-Hmm, something doesn't work here:
-
-Building C object modules/CMakeFiles/NE10_test.dir/math/NE10_detmat.neon.s.o
-[ 95%] Building C object modules/CMakeFiles/NE10_test.dir/math/NE10_transmat.neon.s.o
-Linking C executable NE10_test_static
-[ 95%] [ 96%] Building C object modules/CMakeFiles/NE10_test.dir/math/NE10_identitymat.neon.s.o
-Building C object modules/CMakeFiles/NE10_test.dir/dsp/NE10_cfft.neon.s.o
-/home/peko/source/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.8.1/../../../../arm-none-linux-gnueabi/bin/ld: cannot find crt1.o: No such file or directory
-/home/peko/source/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.8.1/../../../../arm-none-linux-gnueabi/bin/ld: cannot find crti.o: No such file or directory
-/home/peko/source/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.8.1/../../../../arm-none-linux-gnueabi/bin/ld: cannot find -lm
-/home/peko/source/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.8.1/../../../../arm-none-linux-gnueabi/bin/ld: cannot find -lgcc_s
-/home/peko/source/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.8.1/../../../../arm-none-linux-gnueabi/bin/ld: cannot find -lc
-/home/peko/source/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.8.1/../../../../arm-none-linux-gnueabi/bin/ld: cannot find -lgcc_s
-/home/peko/source/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.8.1/../../../../arm-none-linux-gnueabi/bin/ld: cannot find crtn.o: No such file or directory
-collect2: error: ld returned 1 exit status
-make[3]: *** [samples/NE10_test_static] Error 1
-make[3]: Leaving directory `/home/peko/source/buildroot/output/build/ne10-v1.0.0'
-make[2]: *** [samples/CMakeFiles/NE10_test_static.dir/all] Error 2
-make[2]: *** Waiting for unfinished jobs....
-[ 96%] Linking C shared library libNE10.so
-Building C object modules/CMakeFiles/NE10_test.dir/dsp/NE10_fft_float32.neon.s.o
-[ 96%] Building C object modules/CMakeFiles/NE10_test.dir/dsp/NE10_fft_int32.neon.s.o
-[ 97%] [ 97%] Building C object modules/CMakeFiles/NE10_test.dir/dsp/NE10_fir.neon.s.o
-Building C object modules/CMakeFiles/NE10_test.dir/dsp/NE10_fft_int16.neon.s.o
-/home/peko/source/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.8.1/../../../../arm-none-linux-gnueabi/bin/ld: cannot find crti.o: No such file or directory
-/home/peko/source/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.8.1/../../../../arm-none-linux-gnueabi/bin/ld: cannot find -lm
-/home/peko/source/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.8.1/../../../../arm-none-linux-gnueabi/bin/ld: cannot find -lgcc_s
-/home/peko/source/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.8.1/../../../../arm-none-linux-gnueabi/bin/ld: cannot find -lc
-/home/peko/source/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.8.1/../../../../arm-none-linux-gnueabi/bin/ld: cannot find -lgcc_s
-/home/peko/source/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.8.1/../../../../arm-none-linux-gnueabi/bin/ld: cannot find crtn.o: No such file or directory
-collect2: error: ld returned 1 exit status
-make[3]: *** [modules/libNE10.so.10] Error 1
-
-With a clean cortex A8 build (default codesourcery external toolchain).
-
-Any ideas?
+Your Buildroot configuration uses pre-built tools for the x86 architecture,
+but your build machine uses the x86-64 architecture without the 32
+bits compatibility
+library.
 
 -- 
-Bye, Peter Korsgaard
+Thanks.
+-- Max
