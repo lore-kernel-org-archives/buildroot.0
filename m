@@ -1,61 +1,73 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 8 Apr 2014 09:50:19 +0200
-Subject: [Buildroot] [git commit] taglib: needs wchar
-Message-ID: <20140408075118.4B5129C63E@busybox.osuosl.org>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Tue,  8 Apr 2014 10:03:34 +0200
+Subject: [Buildroot] [PATCH] libuci: bump version and remove obsolete patch
+Message-ID: <1396944214-22952-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=03d516f5172e3f695c6a665a4ce86b34fd7b111c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Fixes http://autobuild.buildroot.net/results/02a/02a6874aa21041ac9fef6fef51410c2ad92881c4/
+The uci-fix-Lua-finding.patch was upstreamed, so remove it.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/gstreamer1/gst1-plugins-good/Config.in |    5 +++--
- package/taglib/Config.in                       |    5 +++--
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ package/libuci/libuci-01-uci-fix-Lua-finding.patch | 31 ----------------------
+ package/libuci/libuci.mk                           |  2 +-
+ 2 files changed, 1 insertion(+), 32 deletions(-)
+ delete mode 100644 package/libuci/libuci-01-uci-fix-Lua-finding.patch
 
-diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
-index 20983d6..818412c 100644
---- a/package/gstreamer1/gst1-plugins-good/Config.in
-+++ b/package/gstreamer1/gst1-plugins-good/Config.in
-@@ -324,12 +324,13 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SPEEX
- config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_TAGLIB
- 	bool "taglib"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_TAGLIB
- 	help
- 	  Taglib tagging plugin library
+diff --git a/package/libuci/libuci-01-uci-fix-Lua-finding.patch b/package/libuci/libuci-01-uci-fix-Lua-finding.patch
+deleted file mode 100644
+index f37e136..0000000
+--- a/package/libuci/libuci-01-uci-fix-Lua-finding.patch
++++ /dev/null
+@@ -1,31 +0,0 @@
+-From 980432ce260020ed8a907b3bbc1334845ba4c4a9 Mon Sep 17 00:00:00 2001
+-From: Yegor Yefremov <yegorslists@googlemail.com>
+-Date: Sat, 5 Apr 2014 19:18:10 +0200
+-Subject: [PATCH] uci: fix Lua finding
+-
+-If ${LUAPATH} is not quoted and Lua is not provided, then following
+-error occurs:
+-
+-"NOT" "No such file or directory" "EQUAL" "0" "OR" "EQUAL" ""
+-
+-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+----
+- lua/CMakeLists.txt | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/lua/CMakeLists.txt b/lua/CMakeLists.txt
+-index e4295d7..4ba8e37 100644
+---- a/lua/CMakeLists.txt
+-+++ b/lua/CMakeLists.txt
+-@@ -36,7 +36,7 @@ IF(NOT LUAPATH)
+- 	)
+- 
+- 	IF(BUILD_LUA)
+--		IF(NOT ${LUA_CHECK_RES} EQUAL 0 OR ${LUAPATH} EQUAL "")
+-+		IF(NOT ${LUA_CHECK_RES} EQUAL 0 OR "${LUAPATH}" EQUAL "")
+- 			MESSAGE(SEND_ERROR "Lua was not found on your system")
+- 		ENDIF()
+- 	ENDIF()
+--- 
+-1.8.3.2
+-
+diff --git a/package/libuci/libuci.mk b/package/libuci/libuci.mk
+index adc7bce..ff50874 100644
+--- a/package/libuci/libuci.mk
++++ b/package/libuci/libuci.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--comment "taglib needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+comment "taglib needs a toolchain w/ C++, wchar"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
- 
- config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_VPX
- 	bool "vpx (webm)"
-diff --git a/package/taglib/Config.in b/package/taglib/Config.in
-index 8f832a6..209837f 100644
---- a/package/taglib/Config.in
-+++ b/package/taglib/Config.in
-@@ -2,6 +2,7 @@
- config BR2_PACKAGE_TAGLIB
- 	bool "taglib"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_USE_WCHAR
- 	help
- 	  TagLib is a library for reading and editing the meta-data of
- 	  several popular audio formats. Currently it supports both ID3v1
-@@ -20,5 +21,5 @@ config BR2_PACKAGE_TAGLIB_ASF
- 
- endif
- 
--comment "taglib needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+comment "taglib needs a toolchain w/ C++, wchar"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
+-LIBUCI_VERSION = 262fede3e8c8c08c1eb0d1be9bf102232fb86cb9
++LIBUCI_VERSION = ed938cc8e423d4a33b8f31e6e6d1eb0805ae3d10
+ LIBUCI_SITE = git://nbd.name/uci.git
+ LIBUCI_LICENSE = LGPLv2.1
+ LIBUCI_INSTALL_STAGING = YES
+-- 
+1.8.1.2
