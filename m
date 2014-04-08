@@ -1,10 +1,9 @@
 From: Paul Cercueil <paul@crapouillou.net>
-Date: Tue,  8 Apr 2014 19:45:07 +0200
-Subject: [Buildroot] [PATCH 3/5] libao: Remove OSS plugin when ALSA is
-	enabled
+Date: Tue,  8 Apr 2014 19:45:09 +0200
+Subject: [Buildroot] [PATCH 5/5] stress: Patch to fix documentation source
 In-Reply-To: <1396979109-10691-1-git-send-email-paul@crapouillou.net>
 References: <1396979109-10691-1-git-send-email-paul@crapouillou.net>
-Message-ID: <1396979109-10691-3-git-send-email-paul@crapouillou.net>
+Message-ID: <1396979109-10691-5-git-send-email-paul@crapouillou.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,40 +12,68 @@ To: buildroot@busybox.net
 
 From: Maarten ter Huurne <maarten@treewalker.org>
 
-At runtime, libao will load all plugins, even ones that will never be used.
-Since libao will prefer ALSA over OSS by default anyway, it is pretty safe
-to exclude the OSS plugin.
-
-There is no configure option for disabling the OSS plugin, so we remove
-the shared object in a post-install hook.
+Some versions of "makeinfo" consider @itemx not immediately following
+@item an error. It is a violation of the texinfo syntax, but silently
+ignored on most systems, for some reason.
 
 Signed-Off-By: Maarten ter Huurne <maarten@treewalker.org>
 ---
- package/libao/libao.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/stress/stress-0002-Fix-doc-itemx.patch | 47 ++++++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
+ create mode 100644 package/stress/stress-0002-Fix-doc-itemx.patch
 
-diff --git a/package/libao/libao.mk b/package/libao/libao.mk
-index 8e9ee35..3f7d166 100644
---- a/package/libao/libao.mk
-+++ b/package/libao/libao.mk
-@@ -11,11 +11,17 @@ LIBAO_INSTALL_STAGING = YES
- LIBAO_LICENSE = GPLv2+
- LIBAO_LICENSE_FILES = COPYING
- LIBAO_CONF_OPT = --disable-esd --disable-wmm --disable-arts \
--			--disable-nas --disable-pulse
-+			--disable-nas --disable-pulse --disable-broken-oss
- 
- ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
- LIBAO_DEPENDENCIES += alsa-lib
- LIBAO_CONF_OPT += --enable-alsa --enable-alsa-mmap
-+
-+# Remove the OSS plugin if ALSA is enabled, as libao will prefer ALSA anyway
-+define LIBAO_REMOVE_OSS_PLUGIN
-+	rm -f $(TARGET_DIR)/usr/lib/ao/plugins-4/liboss.so
-+endef
-+LIBAO_POST_INSTALL_TARGET_HOOKS += LIBAO_REMOVE_OSS_PLUGIN
- else
- LIBAO_CONF_OPT += --disable-alsa
- endif
+diff --git a/package/stress/stress-0002-Fix-doc-itemx.patch b/package/stress/stress-0002-Fix-doc-itemx.patch
+new file mode 100644
+index 0000000..8ef7fa4
+--- /dev/null
++++ b/package/stress/stress-0002-Fix-doc-itemx.patch
+@@ -0,0 +1,47 @@
++diff -ru stress-1.0.4.org/doc/stress.texi stress-1.0.4/doc/stress.texi
++--- stress-1.0.4.org/doc/stress.texi	2005-03-10 02:16:02.000000000 +0100
+++++ stress-1.0.4/doc/stress.texi	2013-07-21 21:50:47.000000000 +0200
++@@ -65,7 +65,7 @@
++ @itemx --help
++ Show help information.
++ 
++- at itemx --version
+++ at item --version
++ Show version information.
++ 
++ @item -v
++@@ -84,7 +84,7 @@
++ @itemx --timeout @var{secs}
++ Time out after @var{secs} seconds.
++ 
++- at itemx --backoff @var{usecs}
+++ at item --backoff @var{usecs}
++ Wait for factor of @var{usecs} microseconds before starting work.
++ 
++ @item -c @var{forks}
++@@ -99,10 +99,10 @@
++ @itemx --vm @var{forks}
++ Spawn @var{forks} processes each spinning on @samp{malloc()}.
++ 
++- at itemx --vm-bytes @var{bytes}
+++ at item --vm-bytes @var{bytes}
++ Allocate @var{bytes} number of bytes.  The default is 1.
++ 
++- at itemx --vm-hang
+++ at item --vm-hang
++ Instruct each vm hog process to go to sleep after allocating memory.  This
++ contrasts with their normal behavior, which is to free the memory and
++ reallocate @emph{ad infinitum}.  This is useful for simulating low memory
++@@ -117,10 +117,10 @@
++ @itemx --hdd @var{forks}
++ Spawn @var{forks} processes each spinning on @samp{write()}.
++ 
++- at itemx --hdd-bytes @var{bytes}
+++ at item --hdd-bytes @var{bytes}
++ Write @var{bytes} number of bytes.  The default is 1GB.
++ 
++- at itemx --hdd-noclean
+++ at item --hdd-noclean
++ Do not unlink file(s) to which random ASCII data is written.
++ 
++ @end table
 -- 
 1.9.1
