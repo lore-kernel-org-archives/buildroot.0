@@ -1,43 +1,68 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 08 Apr 2014 07:38:45 -0300
-Subject: [Buildroot] [PATCH 1/1] zeromq: bump to version 4.0.1
-In-Reply-To: <CAKAx1ciJq-EiGYcQEDHzVn5AfvaXE_dQ1ohYO_QLwi=ndEqL4g@mail.gmail.com>
-References: <1381509097-5424-1-git-send-email-jerzy.grzegorek@trzebnica.net>	<20140301232520.4ee4b22b@skate>	<CAKAx1cj3DKFEcSjtw2-d1y3sZSO9y6kpvE6ZGjRdycnNAAugMw@mail.gmail.com>	<20140303084702.7790637d@skate>	<CAKAx1chY=kd3Y_N2-HRqmtELox8gSA9+hVUmaEAT4BNv_mXb9g@mail.gmail.com>	<20140303111124.1126480c@skate>	<CAAXf6LVOm34-2gHVMbiEp85otVQa7PVuzqsFbNCGOB0upKAAQA@mail.gmail.com>	<CAKAx1ch=rxf=EfCfntHxqfsV4jQEU1asj9JTQ4odMhrD2xZJEA@mail.gmail.com>	<5343CBCF.8080103@zacarias.com.ar>
- <CAKAx1ciJq-EiGYcQEDHzVn5AfvaXE_dQ1ohYO_QLwi=ndEqL4g@mail.gmail.com>
-Message-ID: <5343D1B5.6090302@zacarias.com.ar>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue,  8 Apr 2014 14:25:09 +0300
+Subject: [Buildroot] [PATCH] libsoup: fix build with host python3
+Message-ID: <18d5e2ea9d03866503e41a399eff4f3c7888fda7.1396956309.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/08/2014 07:28 AM, Lionel Orry wrote:
+Apply upstream patch to make tld-parser.py python3 compatible.
 
->> Hi.
->> It breaks at least openvpn since the API isn't 100% compatible with the
->> 1.2.x series and openvpn doesn't handle 1.3.x yet.
->> Hiawatha has a new version which bundles/works with 1.3.x.
->> I haven't tried with libcurl but my gut tells me it should work since
->> they update often.
->> Dunno about rtmpdump.
->> It may be possible to make them live side-by-side by making a polarssl13
->> package, though it may need to reside in a non-default prefix.
->> Another possible solution is to fetch openvpn patches from git to make
->> it compatible, but last time i checked (several months ago) there were
->> none - that may have changed though.
->> I'll take a look and get back a bit later.
-> 
-> Thanks a lot. In the meantime, I asked upstream for the possibility to
-> build a proper release tarball including the polarssl source code, so
-> that the version bump would not be necessary.
+Fixes:
+http://autobuild.buildroot.net/results/d22/d22edc19001037f9593f45444ed953f74ee6b806/
 
-openvpn git mater is a no go, same with rtmpdump.
-If they ship the tarball that'd be great, otherwise we can look into
-packaging polarssl13.
-Fortunately upstream still considers polarssl12 maintained and there are
-security bumps if need be (not affected by the latest openssl/tls bug).
-There's always the option of helping/patching the offending packages to
-support it, but i'd rather not go there ;)
-Or the last option of kicking the polarssl backend from them and just
-keeping openssl/gnutls.
-Regards.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/libsoup/libsoup-01-python3-fix.patch | 39 ++++++++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+ create mode 100644 package/libsoup/libsoup-01-python3-fix.patch
+
+diff --git a/package/libsoup/libsoup-01-python3-fix.patch b/package/libsoup/libsoup-01-python3-fix.patch
+new file mode 100644
+index 000000000000..682d57c5c8e8
+--- /dev/null
++++ b/package/libsoup/libsoup-01-python3-fix.patch
+@@ -0,0 +1,39 @@
++From 74f27b8305cfbcf9324a07bea93829237c86e687 Mon Sep 17 00:00:00 2001
++From: Ross Lagerwall <rosslagerwall@gmail.com>
++Date: Tue, 18 Jun 2013 08:48:44 +0100
++Subject: tld-parser.py: Force file io to use utf-8
++
++This fixes an issue where the build would fail with a UnicodeDecodeError
++when run in a non-utf8 locale (which is typical in build environments)
++using Python 3.
++
++https://bugzilla.gnome.org/show_bug.cgi?id=702534
++
++Patch status: upstream
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++
++diff --git a/libsoup/tld-parser.py b/libsoup/tld-parser.py
++index c1a0346..5d9d2ba 100755
++--- a/libsoup/tld-parser.py
+++++ b/libsoup/tld-parser.py
++@@ -5,13 +5,14 @@
++ # Based on tld-parser.c Copyright (C) 2012 Igalia S.L.
++ 
++ import sys
+++import codecs
++ 
++ SOUP_TLD_RULE_NORMAL = 0
++ SOUP_TLD_RULE_MATCH_ALL = 1 << 0
++ SOUP_TLD_RULE_EXCEPTION = 1 << 1
++ 
++-tlds_file = open(sys.argv[1])
++-inc_file = open(sys.argv[2], 'w')
+++tlds_file = codecs.open(sys.argv[1], encoding='utf-8')
+++inc_file = codecs.open(sys.argv[2], 'w', encoding='utf-8')
++ 
++ first = True
++ for rule in tlds_file:
++-- 
++cgit v0.10.1
++
+-- 
+1.9.1
