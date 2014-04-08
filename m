@@ -1,53 +1,58 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 8 Apr 2014 19:24:42 +0200
-Subject: [Buildroot] [lttng-dev] [PATCH 1/1] Disable liblttng-ust-dl if
- dlinfo is not available in C library.
-In-Reply-To: <CAFXXi0kAZJDD7ygqs493ZPvJHMpkeuMTDvxHqMg9B722pJHHxQ@mail.gmail.com>
-References: <1396818161-20204-1-git-send-email-romain.naour@openwide.fr>
- <794709247.8287.1396903345152.JavaMail.zimbra@efficios.com>
- <53430E92.9060401@openwide.fr>
- <CAFXXi0kAZJDD7ygqs493ZPvJHMpkeuMTDvxHqMg9B722pJHHxQ@mail.gmail.com>
-Message-ID: <20140408172442.GB3199@free.fr>
+From: Paul Cercueil <paul@crapouillou.net>
+Date: Tue,  8 Apr 2014 19:45:06 +0200
+Subject: [Buildroot] [PATCH 2/5] python-pygame: Make installation of
+	examples optional
+In-Reply-To: <1396979109-10691-1-git-send-email-paul@crapouillou.net>
+References: <1396979109-10691-1-git-send-email-paul@crapouillou.net>
+Message-ID: <1396979109-10691-2-git-send-email-paul@crapouillou.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Simon, All,
+From: Maarten ter Huurne <maarten@treewalker.org>
 
-On 2014-04-08 13:03 -0400, Simon Marchi spake thusly:
-> Hi Romain,
-> 
-> It seems like with that commit, dlinfo is not found even on a glibc
-> based system, where it is present.
-> 
-> See https://bugs.lttng.org/issues/778
-> 
-> Do you have a suggestion to fix that ?
+They take up 1.5 MB in the target file system.
 
-I think we should use AC_CHECK_DECL instead of AC_CHECK_FUNCS.
+Signed-Off-By: Maarten ter Huurne <maarten@treewalker.org>
+---
+ package/python-pygame/Config.in        | 6 ++++++
+ package/python-pygame/python-pygame.mk | 7 +++++++
+ 2 files changed, 13 insertions(+)
 
-dlinfo is in dlfcn.h so we need a check that allows us to include that
-header, and we must check for that header first, of course. So, maybe
-something like (completely untested, directly written in the mail):
-
-    AC_CHECK_HEADER([dlfcn.h])
-    AS_IF([test "${ac_cv_header_dlfcn_h}" = "yes"],
-          [AC_CHECK_DECL([dlinfo],,,[dlfcn.h])],
-          [ac_cv_have_decl_dlinfo="no"])
-    AM_CONDITIONAL([HAVE_DLINFO], [test "${ac_cv_have_decl_dlinfo}" = "yes"])
-
-But I'm no expert in autoconf, so the actual solution may be slightly
-different.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/python-pygame/Config.in b/package/python-pygame/Config.in
+index b9a367d..f72ee31 100644
+--- a/package/python-pygame/Config.in
++++ b/package/python-pygame/Config.in
+@@ -20,6 +20,12 @@ config BR2_PACKAGE_PYTHON_PYGAME_IMAGE
+ 	  pygame module for loading, saving and transfering images.
+ 	  Will autoselect sdl_image with png and jpeg support.
+ 
++config BR2_PACKAGE_PYTHON_PYGAME_EXAMPLES
++	bool "pygame.examples"
++	help
++	  Include examples.
++	  Selecting this option adds about 1.5 MB to the target file system.
++
+ config BR2_PACKAGE_PYTHON_PYGAME_FONT
+ 	bool "pygame.font"
+ 	select BR2_PACKAGE_SDL_TTF
+diff --git a/package/python-pygame/python-pygame.mk b/package/python-pygame/python-pygame.mk
+index b6381a3..dac9a82 100644
+--- a/package/python-pygame/python-pygame.mk
++++ b/package/python-pygame/python-pygame.mk
+@@ -94,4 +94,11 @@ endef
+ 
+ PYTHON_PYGAME_POST_INSTALL_TARGET_HOOKS += PYTHON_PYGAME_REMOVE_TESTS
+ 
++ifneq ($(BR2_PACKAGE_PYTHON_PYGAME_EXAMPLES),y)
++define PYTHON_PYGAME_REMOVE_EXAMPLES
++	rm -rf $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/pygame/examples
++endef
++PYTHON_PYGAME_POST_INSTALL_TARGET_HOOKS += PYTHON_PYGAME_REMOVE_EXAMPLES
++endif
++
+ $(eval $(python-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
