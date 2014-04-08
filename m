@@ -1,76 +1,63 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 8 Apr 2014 06:58:51 +0300
-Subject: [Buildroot] host-pkgconf: use --static option for static builds
-In-Reply-To: <1394021977-60055-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1394021977-60055-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20140408035851.GK4096@tarshish>
+Date: Tue,  8 Apr 2014 07:31:35 +0300
+Subject: [Buildroot] [PATCH] openssl: bump to version 1.0.1g
+Message-ID: <826e70d65bb00ee9b67931921462d0798e036e18.1396931495.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Vicente,
+Fixes highly critical CVE-2014-0160. See http://heartbleed.com .
 
-On Wed, Mar 05, 2014 at 12:19:37PM +0000, Vicente Olivert Riera wrote:
-> Detect when BR2_PREFER_STATIC_LIBS is selected and modify the host
-> pkg-config wrapper to append the --static option in that case.
-> 
-> Fixes:
->    http://autobuild.buildroot.net/results/161/161446dde7e8e774773eb2b34fd555f5ac22dd02/
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Drop patch applied upstream.
 
-Also fixes 
-http://autobuild.buildroot.net/results/e62/e62d35bcf7d6c98d0a0348532c2b159affb20e83/.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/openssl/openssl-003-quote-cc.patch | 21 ---------------------
+ package/openssl/openssl.mk                 |  2 +-
+ 2 files changed, 1 insertion(+), 22 deletions(-)
+ delete mode 100644 package/openssl/openssl-003-quote-cc.patch
 
-Tested-by: Baruch Siach <baruch@tkos.co.il>
-
-Thanks,
-baruch
-
-> ---
-> package/pkgconf/pkg-config.in |    2 +-
->  package/pkgconf/pkgconf.mk    |   14 ++++++++++++++
->  2 files changed, 15 insertions(+), 1 deletions(-)
-> 
-> diff --git a/package/pkgconf/pkg-config.in b/package/pkgconf/pkg-config.in
-> index 25a536b..4dec487 100644
-> --- a/package/pkgconf/pkg-config.in
-> +++ b/package/pkgconf/pkg-config.in
-> @@ -1,2 +1,2 @@
->  #!/bin/sh
-> -PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:- at PKG_CONFIG_LIBDIR@} PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:- at STAGING_DIR@} $(dirname $0)/pkgconf $@
-> +PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:- at PKG_CONFIG_LIBDIR@} PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:- at STAGING_DIR@} $(dirname $0)/pkgconf @STATIC@ $@
-> diff --git a/package/pkgconf/pkgconf.mk b/package/pkgconf/pkgconf.mk
-> index f3f6526..9641371 100644
-> --- a/package/pkgconf/pkgconf.mk
-> +++ b/package/pkgconf/pkgconf.mk
-> @@ -24,8 +24,22 @@ define HOST_PKGCONF_INSTALL_WRAPPER
->  		$(HOST_DIR)/usr/bin/pkg-config
->  endef
->  
-> +define HOST_PKGCONF_STATIC
-> +	$(SED) 's, at STATIC@,--static,' $(HOST_DIR)/usr/bin/pkg-config
-> +endef
-> +
-> +define HOST_PKGCONF_SHARED
-> +	$(SED) 's, at STATIC@,,' $(HOST_DIR)/usr/bin/pkg-config
-> +endef
-> +
->  PKGCONF_POST_INSTALL_TARGET_HOOKS += PKGCONF_LINK_PKGCONFIG
->  HOST_PKGCONF_POST_INSTALL_HOOKS += HOST_PKGCONF_INSTALL_WRAPPER
->  
-> +ifeq ($(BR2_PREFER_STATIC_LIB),y)
-> +	HOST_PKGCONF_POST_INSTALL_HOOKS += HOST_PKGCONF_STATIC
-> +else
-> +	HOST_PKGCONF_POST_INSTALL_HOOKS += HOST_PKGCONF_SHARED
-> +endif
-> +
->  $(eval $(autotools-package))
->  $(eval $(host-autotools-package))
-
+diff --git a/package/openssl/openssl-003-quote-cc.patch b/package/openssl/openssl-003-quote-cc.patch
+deleted file mode 100644
+index 2c035d917d0f..000000000000
+--- a/package/openssl/openssl-003-quote-cc.patch
++++ /dev/null
+@@ -1,21 +0,0 @@
+-From 9aef04d9baa0a4bb5b8db92e9ab93b0a857a7659 Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Thu, 9 Jan 2014 20:08:04 -0300
+-Subject: [PATCH] Makefile.org: enclose CC parameter passing in quotes
+-
+-The compiler invocation might contain a space like when using ccache.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura openssl-1.0.1f.orig/Makefile.org openssl-1.0.1f/Makefile.org
+---- openssl-1.0.1f.orig/Makefile.org	2014-01-09 19:57:23.324040960 -0300
+-+++ openssl-1.0.1f/Makefile.org	2014-01-09 20:11:23.821070726 -0300
+-@@ -302,7 +302,7 @@
+- 			FIPSLD_CC="$(CC)"; CC=$(FIPSDIR)/bin/fipsld; \
+- 			export CC FIPSLD_CC FIPSLD_LIBCRYPTO; \
+- 		fi; \
+--		$(MAKE) -e SHLIBDIRS=crypto  CC=$${CC:-$(CC)} build-shared; \
+-+		$(MAKE) -e SHLIBDIRS=crypto  CC="$${CC:-$(CC)}" build-shared; \
+- 		touch -c fips_premain_dso$(EXE_EXT); \
+- 	else \
+- 		echo "There's no support for shared libraries on this platform" >&2; \
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index 98a098cf853d..52abb46dafa3 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENSSL_VERSION = 1.0.1f
++OPENSSL_VERSION = 1.0.1g
+ OPENSSL_SITE = http://www.openssl.org/source
+ OPENSSL_LICENSE = OpenSSL or SSLeay
+ OPENSSL_LICENSE_FILES = LICENSE
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+1.9.1
