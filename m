@@ -1,24 +1,23 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 08 Apr 2014 13:32:40 +0200
-Subject: [Buildroot] [PATCH] libuci: bump version and remove obsolete
-	patch
-In-Reply-To: <1396944214-22952-1-git-send-email-yegorslists@googlemail.com>
- (yegorslists@googlemail.com's message of "Tue, 8 Apr 2014 10:03:34
- +0200")
-References: <1396944214-22952-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <87sipoawfb.fsf@dell.be.48ers.dk>
+Date: Tue, 08 Apr 2014 13:35:29 +0200
+Subject: [Buildroot] [PATCH] libsoup: fix build with host python3
+In-Reply-To: <18d5e2ea9d03866503e41a399eff4f3c7888fda7.1396956309.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 8 Apr 2014 14:25:09 +0300")
+References: <18d5e2ea9d03866503e41a399eff4f3c7888fda7.1396956309.git.baruch@tkos.co.il>
+Message-ID: <87ob0cawam.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > From: Yegor Yefremov <yegorslists@googlemail.com>
- > The uci-fix-Lua-finding.patch was upstreamed, so remove it.
+ > Apply upstream patch to make tld-parser.py python3 compatible.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/d22/d22edc19001037f9593f45444ed953f74ee6b806/
 
- > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed, thanks.
 
