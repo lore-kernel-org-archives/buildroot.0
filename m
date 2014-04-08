@@ -1,67 +1,88 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 8 Apr 2014 18:16:53 +0200
-Subject: [Buildroot] [PATCH 2/2] package/zile: add Zile is Lossy Emacs
- editor
-In-Reply-To: <87y4zg3yyj.fsf@linaro.org>
-References: <1396868422-5757-1-git-send-email-alex.bennee@linaro.org>
- <1396868422-5757-3-git-send-email-alex.bennee@linaro.org>
- <20140407203338.GC3215@free.fr> <87y4zg3yyj.fsf@linaro.org>
-Message-ID: <20140408161653.GA3199@free.fr>
+From: Paul Cercueil <paul@crapouillou.net>
+Date: Tue, 08 Apr 2014 18:56:12 +0200
+Subject: [Buildroot] [PATCH 05/11] dialog: Patch incorrect use of
+	toupper()
+In-Reply-To: <533E5510.6040800@mind.be>
+References: <1396558881-29631-1-git-send-email-paul@crapouillou.net>
+ <1396558881-29631-5-git-send-email-paul@crapouillou.net>
+ <20140403213256.GE17328@free.fr> <533E5510.6040800@mind.be>
+Message-ID: <53442A2C.4080206@crapouillou.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alex, All,
+Hi,
 
-On 2014-04-08 11:19 +0100, Alex Benn?e spake thusly:
-> Yann E. MORIN <yann.morin.1998@free.fr> writes:
-[--SNIP--]
-> >> diff --git a/package/zile/zile.mk b/package/zile/zile.mk
-> >> new file mode 100644
-> >> index 0000000..024595c
-> >> --- /dev/null
-> >> +++ b/package/zile/zile.mk
-> >> @@ -0,0 +1,13 @@
-> >> +################################################################################
-> >> +#
-> >> +# Zile
-> >> +#
-> >> +################################################################################
-> >> +
-> >> +ZILE_VERSION = 2.4.11
-> >> +ZILE_SITE = http://ftp.gnu.org/gnu/zile/
-> >> +ZILE_LICENSE = GPLv1+
-> >> +ZILE_LICENSE_FILES = COPYING
-> >> +ZILE_CONF_OPT += --without-help2man
-> >
-> > In the previous patch, you added libgc, stating that it was a dependency
-> > of Zile, but you forgot to add it here.
-> 
-> Ahh I thought it was enforced by the Config.in select but of course you
-> need to ensure it's built as well. I'll fix that up.
+On 04/04/2014 08:45, Arnout Vandecappelle wrote:
+> On 03/04/14 23:32, Yann E. MORIN wrote:
+>> Paul, All,
+>>
+>> On 2014-04-03 23:01 +0200, Paul Cercueil spake thusly:
+>>> On some platforms (e.g. MIPS), the "char" type is signed by default.
+>>> The problem is that toupper() takes an int as argument: a signed
+>>> char then gets sign-extended to 32bit, which causes an assertion
+>>> failure as toupper() verifies that its argument fits in 8 bits.
+>> I could not vefrify the assertion that MIPS has signed chars.
+>   I think char is signed on all platforms. At least, it is on all
+> platforms I regularly use.
+>
 
-THere are two types of dependencies:
-  - build-time dependencies, and
-  - run-time dependencies.
+Well I read that ARM has unsigned chars, but I can't seem to find a real 
+list.
 
-The run-time dependencies (eg. I need *that* program to be present) are
-handled purely in the Config.in.
+>> However, this change is still corect, since it makes it explicit that we
+>> want an unsigned char.
+>   But then we should change all the packages that use toupper and
+> tolower... (and also isdigit and isalnum and ...).
+>
+>   Basically, if toupper() asserts in this case, it's a bug in the
+> toolchain, not in the package.
 
-The build-time dependencies (eg. I need to link to *that* library) are
-handled both in Config.in and the .mk.
+So you suggest to patch uClibc instead?
 
-The dependencies in Config.in will ensure that the package is present in
-the target, while the dependencies in the .mk guarantee the build order.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+>
+>
+>   Regards,
+>   Arnout
+>
+>>> Signed-Off-By: Paul Cercueil <paul@crapouillou.net>
+>>> Acked-By: Maarten ter Huurne <maarten@treewalker.org>
+>> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>>
+>> Regards,
+>> Yann E. MORIN.
+>>
+>>> ---
+>>>   package/dialog/dialog-toupper.patch | 13 +++++++++++++
+>>>   1 file changed, 13 insertions(+)
+>>>   create mode 100644 package/dialog/dialog-toupper.patch
+>>>
+>>> diff --git a/package/dialog/dialog-toupper.patch b/package/dialog/dialog-toupper.patch
+>>> new file mode 100644
+>>> index 0000000..3fe0e19
+>>> --- /dev/null
+>>> +++ b/package/dialog/dialog-toupper.patch
+>>> @@ -0,0 +1,13 @@
+>>> +diff --git a/dlg_keys.h b/dlg_keys.h
+>>> +index 6a96c0f..b7b42d9 100644
+>>> +--- a/dlg_keys.h
+>>> ++++ b/dlg_keys.h
+>>> +@@ -31,7 +31,7 @@
+>>> + #define dlg_toupper(ch) towupper((wint_t)ch)
+>>> + #define dlg_isupper(ch) iswupper((wint_t)ch)
+>>> + #else
+>>> +-#define dlg_toupper(ch) toupper(ch)
+>>> ++#define dlg_toupper(ch) toupper((unsigned char)(ch))
+>>> + #define dlg_isupper(ch) (isalpha(ch) && isupper(ch))
+>>> + #endif
+>>> +
+>>> -- 
+>>> 1.9.0
+>>>
+>>> _______________________________________________
+>>> buildroot mailing list
+>>> buildroot at busybox.net
+>>> http://lists.busybox.net/mailman/listinfo/buildroot
+>
