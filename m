@@ -1,37 +1,52 @@
 From: Paul Cercueil <paul@crapouillou.net>
-Date: Tue,  8 Apr 2014 19:45:05 +0200
-Subject: [Buildroot] [PATCH 1/5] python-pygame: Remove wildcards in macros
-Message-ID: <1396979109-10691-1-git-send-email-paul@crapouillou.net>
+Date: Tue,  8 Apr 2014 19:45:07 +0200
+Subject: [Buildroot] [PATCH 3/5] libao: Remove OSS plugin when ALSA is
+	enabled
+In-Reply-To: <1396979109-10691-1-git-send-email-paul@crapouillou.net>
+References: <1396979109-10691-1-git-send-email-paul@crapouillou.net>
+Message-ID: <1396979109-10691-3-git-send-email-paul@crapouillou.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- package/python-pygame/python-pygame.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+From: Maarten ter Huurne <maarten@treewalker.org>
 
-diff --git a/package/python-pygame/python-pygame.mk b/package/python-pygame/python-pygame.mk
-index d9219b9..b6381a3 100644
---- a/package/python-pygame/python-pygame.mk
-+++ b/package/python-pygame/python-pygame.mk
-@@ -83,13 +83,13 @@ define PYTHON_PYGAME_CONFIGURE_CMDS
- endef
+At runtime, libao will load all plugins, even ones that will never be used.
+Since libao will prefer ALSA over OSS by default anyway, it is pretty safe
+to exclude the OSS plugin.
+
+There is no configure option for disabling the OSS plugin, so we remove
+the shared object in a post-install hook.
+
+Signed-Off-By: Maarten ter Huurne <maarten@treewalker.org>
+---
+ package/libao/libao.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/package/libao/libao.mk b/package/libao/libao.mk
+index 8e9ee35..3f7d166 100644
+--- a/package/libao/libao.mk
++++ b/package/libao/libao.mk
+@@ -11,11 +11,17 @@ LIBAO_INSTALL_STAGING = YES
+ LIBAO_LICENSE = GPLv2+
+ LIBAO_LICENSE_FILES = COPYING
+ LIBAO_CONF_OPT = --disable-esd --disable-wmm --disable-arts \
+-			--disable-nas --disable-pulse
++			--disable-nas --disable-pulse --disable-broken-oss
  
- define PYTHON_PYGAME_REMOVE_DOC
--	rm -rf $(TARGET_DIR)/usr/lib/python*/site-packages/pygame/docs
-+	rm -rf $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/pygame/docs
- endef
- 
- PYTHON_PYGAME_POST_INSTALL_TARGET_HOOKS += PYTHON_PYGAME_REMOVE_DOC
- 
- define PYTHON_PYGAME_REMOVE_TESTS
--	rm -rf $(TARGET_DIR)/usr/lib/python*/site-packages/pygame/tests
-+	rm -rf $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/pygame/tests
- endef
- 
- PYTHON_PYGAME_POST_INSTALL_TARGET_HOOKS += PYTHON_PYGAME_REMOVE_TESTS
+ ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
+ LIBAO_DEPENDENCIES += alsa-lib
+ LIBAO_CONF_OPT += --enable-alsa --enable-alsa-mmap
++
++# Remove the OSS plugin if ALSA is enabled, as libao will prefer ALSA anyway
++define LIBAO_REMOVE_OSS_PLUGIN
++	rm -f $(TARGET_DIR)/usr/lib/ao/plugins-4/liboss.so
++endef
++LIBAO_POST_INSTALL_TARGET_HOOKS += LIBAO_REMOVE_OSS_PLUGIN
+ else
+ LIBAO_CONF_OPT += --disable-alsa
+ endif
 -- 
 1.9.1
