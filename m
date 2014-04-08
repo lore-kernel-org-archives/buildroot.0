@@ -1,57 +1,55 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 08 Apr 2014 23:47:29 +0200
-Subject: [Buildroot] [PATCH 2/6] system: add selection of a default
-	localtime
-In-Reply-To: <a4e40e88137b1d959e165e9720fcbef7286b2b06.1396900553.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Mon, 7 Apr 2014 21:58:04 +0200")
-References: <cover.1396900553.git.yann.morin.1998@free.fr>
- <a4e40e88137b1d959e165e9720fcbef7286b2b06.1396900553.git.yann.morin.1998@free.fr>
-Message-ID: <87txa3a3ym.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue,  8 Apr 2014 23:50:11 +0200
+Subject: [Buildroot] [PATCH 0/2] Misc icu fixes (branch yem/fixes)
+Message-ID: <cover.1396993575.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
- > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > [alexandre.belloni: move from "tzdata" to "system configuration"]
- > Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
- > [yann.morin.1998 at free.fr: move into the BR2_TARGET_TZ_INFO conditionnal block]
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > ---
- >  package/tzdata/tzdata.mk |  7 ++++++-
- >  system/Config.in         | 14 ++++++++++++++
- >  2 files changed, 20 insertions(+), 1 deletion(-)
+Hello All!
 
- > diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
- > index 5900473..762a31e 100644
- > --- a/package/tzdata/tzdata.mk
- > +++ b/package/tzdata/tzdata.mk
- > @@ -39,8 +39,13 @@ define TZDATA_INSTALL_TARGET_CMDS
- >  	cp -a $(@D)/_output/* $(TARGET_DIR)/usr/share/zoneinfo
- >  	cd $(TARGET_DIR)/usr/share/zoneinfo;    \
- >  	for zone in posix/*; do                 \
- > -	    ln -sfn "$${zone}" "$${zone##*/}";    \
- > +	    ln -sfn "$${zone}" "$${zone##*/}";  \
- >  	done
- > +	if [ -n "$(BR2_TARGET_LOCALTIME)" ]; then                           \
- > +	    cd $(TARGET_DIR)/etc;                                           \
- > +	    ln -sf ../usr/share/zoneinfo/$(BR2_TARGET_LOCALTIME) localtime; \
- > +	    echo "$(BR2_TARGET_LOCALTIME)" >timezone;                       \
+Here are two patch fixing reverse dependencies of icu: icu needs threads,
+so a package that selects icu should depend on threads, too.
 
-BR2_TARGET_LOCALTIME is a string kconfig, so it already has quotes
-around it, and the extra quotes will cancel eachother out.
+There are other packages that select icu, but they already depend on
+threads:
+  - beecrypt directly depends on threads
+  - cppcms depends on glibc, which always has threads
+  - qt5 already depends on NPTL (which is threads)
 
-We should imho use qstrip and assign it to a TZDATA_LOCALTIME variable
-and use that similar to how it is done for TZDATA_ZONELIST.
+Regards,
+Yann E. MORIN.
 
-Committed with that fixed, thanks.
 
-This also doesn't give very clear error messages if the user misspelled
-the localtime. Perhaps we should error out with something more sensible?
+The following changes since commit d996fe44d32a8382db7ca07636aea8d27366c448:
+
+  gnutls: bump to version 3.2.13 (2014-04-08 14:20:09 +0200)
+
+are available in the git repository at:
+
+  git://gitorious.org/buildroot/buildroot.git yem/fixes
+
+for you to fetch changes up to e160bc7dcf441eeda54db0df12a31e7e95337d5b:
+
+  package/webkit: threads are also needed for icu (2014-04-08 23:44:24 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      package/php: intl support needs icu, which needs threads
+      package/webkit: threads are also needed for icu
+
+ package/php/Config.ext   | 5 +++--
+ package/webkit/Config.in | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
