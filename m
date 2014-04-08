@@ -1,79 +1,106 @@
 From: Paul Cercueil <paul@crapouillou.net>
-Date: Tue,  8 Apr 2014 19:45:09 +0200
-Subject: [Buildroot] [PATCH 5/5] stress: Patch to fix documentation source
+Date: Tue,  8 Apr 2014 19:45:08 +0200
+Subject: [Buildroot] [PATCH 4/5] util-linux: Add config switches for some
+	more binaries
 In-Reply-To: <1396979109-10691-1-git-send-email-paul@crapouillou.net>
 References: <1396979109-10691-1-git-send-email-paul@crapouillou.net>
-Message-ID: <1396979109-10691-5-git-send-email-paul@crapouillou.net>
+Message-ID: <1396979109-10691-4-git-send-email-paul@crapouillou.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Maarten ter Huurne <maarten@treewalker.org>
-
-Some versions of "makeinfo" consider @itemx not immediately following
-@item an error. It is a violation of the texinfo syntax, but silently
-ignored on most systems, for some reason.
-
-Signed-Off-By: Maarten ter Huurne <maarten@treewalker.org>
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
- package/stress/stress-0002-Fix-doc-itemx.patch | 47 ++++++++++++++++++++++++++
- 1 file changed, 47 insertions(+)
- create mode 100644 package/stress/stress-0002-Fix-doc-itemx.patch
+ package/util-linux/Config.in     | 20 ++++++++++++++++++++
+ package/util-linux/util-linux.mk |  6 +++++-
+ 2 files changed, 25 insertions(+), 1 deletion(-)
 
-diff --git a/package/stress/stress-0002-Fix-doc-itemx.patch b/package/stress/stress-0002-Fix-doc-itemx.patch
-new file mode 100644
-index 0000000..8ef7fa4
---- /dev/null
-+++ b/package/stress/stress-0002-Fix-doc-itemx.patch
-@@ -0,0 +1,47 @@
-+diff -ru stress-1.0.4.org/doc/stress.texi stress-1.0.4/doc/stress.texi
-+--- stress-1.0.4.org/doc/stress.texi	2005-03-10 02:16:02.000000000 +0100
-++++ stress-1.0.4/doc/stress.texi	2013-07-21 21:50:47.000000000 +0200
-+@@ -65,7 +65,7 @@
-+ @itemx --help
-+ Show help information.
-+ 
-+- at itemx --version
-++ at item --version
-+ Show version information.
-+ 
-+ @item -v
-+@@ -84,7 +84,7 @@
-+ @itemx --timeout @var{secs}
-+ Time out after @var{secs} seconds.
-+ 
-+- at itemx --backoff @var{usecs}
-++ at item --backoff @var{usecs}
-+ Wait for factor of @var{usecs} microseconds before starting work.
-+ 
-+ @item -c @var{forks}
-+@@ -99,10 +99,10 @@
-+ @itemx --vm @var{forks}
-+ Spawn @var{forks} processes each spinning on @samp{malloc()}.
-+ 
-+- at itemx --vm-bytes @var{bytes}
-++ at item --vm-bytes @var{bytes}
-+ Allocate @var{bytes} number of bytes.  The default is 1.
-+ 
-+- at itemx --vm-hang
-++ at item --vm-hang
-+ Instruct each vm hog process to go to sleep after allocating memory.  This
-+ contrasts with their normal behavior, which is to free the memory and
-+ reallocate @emph{ad infinitum}.  This is useful for simulating low memory
-+@@ -117,10 +117,10 @@
-+ @itemx --hdd @var{forks}
-+ Spawn @var{forks} processes each spinning on @samp{write()}.
-+ 
-+- at itemx --hdd-bytes @var{bytes}
-++ at item --hdd-bytes @var{bytes}
-+ Write @var{bytes} number of bytes.  The default is 1GB.
-+ 
-+- at itemx --hdd-noclean
-++ at item --hdd-noclean
-+ Do not unlink file(s) to which random ASCII data is written.
-+ 
-+ @end table
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index b1db99a..cef8009 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -56,6 +56,11 @@ config BR2_PACKAGE_UTIL_LINUX_ARCH
+ 	help
+ 	  Print machine architecture
+ 
++config BR2_PACKAGE_UTIL_LINUX_CHFN_CHSH
++	bool "chfn/chsh"
++	help
++	  Change login shell, real user name and information
++
+ config BR2_PACKAGE_UTIL_LINUX_CRAMFS
+ 	bool "cramfs utilities"
+ 	select BR2_PACKAGE_ZLIB
+@@ -98,6 +103,11 @@ config BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS
+ comment "login utilities needs a toolchain w/ locale"
+ 	depends on !BR2_ENABLE_LOCALE
+ 
++config BR2_PACKAGE_UTIL_LINUX_LOSETUP
++	bool "losetup"
++	help
++	  Set up and control loop devices
++
+ config BR2_PACKAGE_UTIL_LINUX_MESG
+ 	bool "mesg"
+ 	help
+@@ -108,6 +118,11 @@ config BR2_PACKAGE_UTIL_LINUX_MOUNT
+ 	help
+ 	  Mount/unmount filesystems
+ 
++config BR2_PACKAGE_UTIL_LINUX_NEWGRP
++	bool "newgrp"
++	help
++	  Log in to a new group
++
+ config BR2_PACKAGE_UTIL_LINUX_PIVOT_ROOT
+ 	bool "pivot_root"
+ 	help
+@@ -158,6 +173,11 @@ config BR2_PACKAGE_UTIL_LINUX_UUIDD
+ 	help
+ 	  UUID generation daemon
+ 
++config BR2_PACKAGE_UTIL_LINUX_VIPW
++	bool "vipw"
++	help
++	  Edit the password, group, shadow-password or shadow-group file
++
+ config BR2_PACKAGE_UTIL_LINUX_WALL
+ 	bool "wall"
+ 	help
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index f0ae3ae..cc57088 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -54,6 +54,7 @@ UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_LINUX_PAM),linux-pam)
+ UTIL_LINUX_CONF_OPT += \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_AGETTY),--enable-agetty,--disable-agetty) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_ARCH),--enable-arch,--disable-arch) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_CHFN_CHSH),--enable-chfn-chsh,--disable-chfn-chsh) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_CRAMFS),--enable-cramfs,--disable-cramfs) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_DDATE),--enable-ddate,--disable-ddate) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_EJECT),--enable-eject,--disable-eject) \
+@@ -64,9 +65,11 @@ UTIL_LINUX_CONF_OPT += \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT),--enable-libmount,--disable-libmount) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBUUID),--enable-libuuid,--disable-libuuid) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS),--enable-last --enable-login --enable-su --enable-sulogin,--disable-last --disable-login --disable-su --disable-sulogin) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_LOSETUP),--enable-losetup,--disable-losetup) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_MESG),--enable-mesg,--disable-mesg) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_MOUNT),--enable-mount,--disable-mount) \
+-	$(if $(BR2_PACKAGE_UTIL_LINUX_PARTX),,--disable-partx) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_NEWGRP),--enable-newgrp,--disable-newgrp) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_PARTX),--enable-partx,--disable-partx) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_PIVOT_ROOT),--enable-pivot_root,--disable-pivot_root) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_RAW),--enable-raw,--disable-raw) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_RENAME),--enable-rename,--disable-rename) \
+@@ -76,6 +79,7 @@ UTIL_LINUX_CONF_OPT += \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_UNSHARE),--enable-unshare,--disable-unshare) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_UTMPDUMP),--enable-utmpdump,--disable-utmpdump) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_UUIDD),--enable-uuidd,--disable-uuidd) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_VIPW),--enable-vipw,--disable-vipw) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_WALL),--enable-wall,--disable-wall) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_WRITE),--enable-write,--disable-write)
+ 
 -- 
 1.9.1
