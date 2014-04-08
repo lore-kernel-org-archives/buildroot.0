@@ -1,7 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  8 Apr 2014 23:50:11 +0200
-Subject: [Buildroot] [PATCH 0/2] Misc icu fixes (branch yem/fixes)
-Message-ID: <cover.1396993575.git.yann.morin.1998@free.fr>
+Date: Tue,  8 Apr 2014 23:50:16 +0200
+Subject: [Buildroot] [PATCH 2/2] package/webkit: threads are also needed for
+	icu
+In-Reply-To: <cover.1396993575.git.yann.morin.1998@free.fr>
+References: <cover.1396993575.git.yann.morin.1998@free.fr>
+Message-ID: <e160bc7dcf441eeda54db0df12a31e7e95337d5b.1396993575.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,46 +13,25 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Hello All!
+Add icu to the comment-list of packages requiring threads.
 
-Here are two patch fixing reverse dependencies of icu: icu needs threads,
-so a package that selects icu should depend on threads, too.
-
-There are other packages that select icu, but they already depend on
-threads:
-  - beecrypt directly depends on threads
-  - cppcms depends on glibc, which always has threads
-  - qt5 already depends on NPTL (which is threads)
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit d996fe44d32a8382db7ca07636aea8d27366c448:
-
-  gnutls: bump to version 3.2.13 (2014-04-08 14:20:09 +0200)
-
-are available in the git repository at:
-
-  git://gitorious.org/buildroot/buildroot.git yem/fixes
-
-for you to fetch changes up to e160bc7dcf441eeda54db0df12a31e7e95337d5b:
-
-  package/webkit: threads are also needed for icu (2014-04-08 23:44:24 +0200)
-
-----------------------------------------------------------------
-Yann E. MORIN (2):
-      package/php: intl support needs icu, which needs threads
-      package/webkit: threads are also needed for icu
-
- package/php/Config.ext   | 5 +++--
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
  package/webkit/Config.in | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/package/webkit/Config.in b/package/webkit/Config.in
+index 5ba2eb3..4112287 100644
+--- a/package/webkit/Config.in
++++ b/package/webkit/Config.in
+@@ -13,7 +13,7 @@ config BR2_PACKAGE_WEBKIT
+ 	bool "webkit"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR # enchant -> libglib2
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # enchant -> libglib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # enchant -> libglib2; icu
+ 	depends on BR2_PACKAGE_LIBGTK2
+ 	depends on BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
+ 	depends on !BR2_BINFMT_FLAT # icu
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.3.2
