@@ -1,32 +1,30 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 08 Apr 2014 08:52:44 -0300
-Subject: [Buildroot] [PATCH] eglibc: bump to version 2.19 SVN R25243
-In-Reply-To: <20140407154148.2b35dd34@skate>
-References: <1396875879-22199-1-git-send-email-gustavo@zacarias.com.ar>	<20140407152919.2d1147fb@skate>	<5342A9EB.1030801@zacarias.com.ar>
- <20140407154148.2b35dd34@skate>
-Message-ID: <5343E30C.1090703@zacarias.com.ar>
+Date: Tue,  8 Apr 2014 08:53:28 -0300
+Subject: [Buildroot] [PATCH] gnutls: bump to version 3.2.13
+Message-ID: <1396958008-5673-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/07/2014 10:41 AM, Thomas Petazzoni wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/gnutls/gnutls.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->> My opinion is that we should just keep it as simple as possible.
->> If there's a special need for some architecture (like microblaze) let it
->> be so, but really unless we know there's some issue or exception i don't
->> think there's much value in keeping multiple versions, specially since
->> *glibc is backwards ABI compatible.
-> 
-> Fine with me. My impression so far was that for critical components
-> such as gcc/binutils/gdb/libc, we were keeping older versions a little
-> bit longer to give it some time to test the newer version before
-> forcing everyone to upgrade. Surely we need to continue to do this with
-> gcc, where most of the 4.x.0 versions are typically broken on at least
-> one architecture.
-
-D'oh, eglibc 2.19 is broken for PowerPC SPE ABI.
-So it seems we'll do two versions after all.
-I'll send a revised patch shortly.
-Regards.
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index c1fa40d..11d65d0 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ GNUTLS_VERSION_MAJOR = 3.2
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).12
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).13
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = GPLv3+ LGPLv2.1+
+-- 
+1.8.3.2
