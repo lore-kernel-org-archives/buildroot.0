@@ -1,89 +1,86 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 8 Apr 2014 14:06:54 +0200
-Subject: [Buildroot] [git commit] util-linux: add a check for mkostemp()
-Message-ID: <20140408122105.CBA7E9C68A@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue,  8 Apr 2014 16:55:06 +0300
+Subject: [Buildroot] [PATCH] ne10: bump version to 1.0.0
+Message-ID: <99baf8d8d8d05b5f2de390deef6546acab0199dd.1396965306.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a5a4b38c6a43d9da46cdd0244b1aae07d7bcce5c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Switch to github helper while at it.
 
-mkostemp() is missing with older version of uClibc (uClibc <= 0.9.33).
-So, we need to check if mkostemp() is available.
-If not, we use a wrapper function based on mkstemp() to implement it.
+Fixes:
+http://autobuild.buildroot.net/results/a2c/a2ca3fe245e410a738f4b10631a1414696a0edea/
 
-Since util-linux v2.23, mkostemp() is called with O_CLOEXEC flag.
-If we use a define to mkstemp() to implement mkostemp(), flags will be
-discared.
-mkstemp() will pass O_RDWR|O_CREAT|O_EXCL, but not O_CLOEXEC, which
-means that the file descriptor will no longer be closed automatically
-upon exec().
-
-To avoid to discard the flags, we add a call to fcntl() to set O_CLOEXEC
-flag just after mkstemp().
-
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- ...fine-mkostemp-for-older-version-of-uClibc.patch |   50 ++++++++++++++++++++
- 1 files changed, 50 insertions(+), 0 deletions(-)
+ ...CMakeLists.txt-add-neon-support-to-CFLAGS.patch | 31 ++++++++++++++++++++++
+ package/ne10/ne10.mk                               | 10 +++----
+ 2 files changed, 36 insertions(+), 5 deletions(-)
+ create mode 100644 package/ne10/ne10-01-CMakeLists.txt-add-neon-support-to-CFLAGS.patch
 
-diff --git a/package/util-linux/util-linux-004-c.h-define-mkostemp-for-older-version-of-uClibc.patch b/package/util-linux/util-linux-004-c.h-define-mkostemp-for-older-version-of-uClibc.patch
+diff --git a/package/ne10/ne10-01-CMakeLists.txt-add-neon-support-to-CFLAGS.patch b/package/ne10/ne10-01-CMakeLists.txt-add-neon-support-to-CFLAGS.patch
 new file mode 100644
-index 0000000..0dfe7be
+index 000000000000..1777de102328
 --- /dev/null
-+++ b/package/util-linux/util-linux-004-c.h-define-mkostemp-for-older-version-of-uClibc.patch
-@@ -0,0 +1,50 @@
-+From 42a84250fc78bae3e885ecd1379e713663fe6487 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@openwide.fr>
-+Date: Sun, 6 Apr 2014 12:12:41 +0200
-+Subject: [PATCH 1/1] c.h: define mkostemp for older version of uClibc
++++ b/package/ne10/ne10-01-CMakeLists.txt-add-neon-support-to-CFLAGS.patch
+@@ -0,0 +1,31 @@
++From 1ab64866615643d19a8e5c4f1a3f62f1baad6e83 Mon Sep 17 00:00:00 2001
++Message-Id: <1ab64866615643d19a8e5c4f1a3f62f1baad6e83.1396964788.git.baruch@tkos.co.il>
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Tue, 8 Apr 2014 16:40:28 +0300
++Subject: [PATCH] CMakeLists.txt: add neon support to CFLAGS
 +
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++Fixed build failure:
++
++.../include/arm_neon.h:32:2: error: #error You must enable NEON instructions (e.g. -mfloat-abi=softfp -mfpu=neon) to use arm_neon.h
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 +---
-+ configure.ac |  2 ++
-+ include/c.h  | 14 ++++++++++++++
-+ 2 files changed, 16 insertions(+)
++ CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/configure.ac b/configure.ac
-+index 35a1f26..a9b8d34 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -321,6 +321,8 @@ AC_CHECK_FUNCS([ \
-+ ])
-+ AC_FUNC_FSEEKO
-+ 
-++AC_CHECK_FUNCS([mkostemp])
-++
-+ AC_CHECK_FUNCS([openat fstatat unlinkat], [have_openat=yes], [have_openat=no])
-+ AC_CHECK_FUNCS([ioperm iopl], [have_io=yes])
-+ 
-+diff --git a/include/c.h b/include/c.h
-+index 4a9bf3d..1b880ed 100644
-+--- a/include/c.h
-++++ b/include/c.h
-+@@ -300,4 +300,18 @@ static inline int usleep(useconds_t usec)
-+ # define SEEK_HOLE	4
-+ #endif
-+ 
-++/*
-++ * mkostemp() may be missing with older version of uClibc
-++ */
-++#ifndef HAVE_MKOSTEMP
-++static inline int mkostemp(char *template, int flags)
-++{
-++	int fd;
-++	fd = mkstemp(template);
-++	if (flags & O_CLOEXEC && fd >= 0)
-++		fcntl(fd, F_SETFD, FD_CLOEXEC);
-++	return fd;
-++}
-++#endif
-++
-+ #endif /* UTIL_LINUX_C_H */
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index e5a98af53c1f..22ce166650da 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -78,7 +78,7 @@ if(ANDROID_PLATFORM)
++       add_subdirectory(android/NE10Demo/jni)
++     endif()
++ elseif(GNULINUX_PLATFORM)
++-    set(CMAKE_C_FLAGS "-O2 -mthumb-interwork -mthumb -march=armv7-a -mfpu=vfp3")
+++    set(CMAKE_C_FLAGS "-O2 -mthumb-interwork -mthumb -march=armv7-a -mfloat-abi=softfp -mfpu=neon")
++     set(CMAKE_ASM_FLAGS "-mthumb-interwork -mthumb -march=armv7-a -mfpu=neon")
++ elseif(IOS_PLATFORM)
++     #set minimal target ios version.If not provided this option, Xcode
 +-- 
-+1.9.0
++1.9.1
 +
+diff --git a/package/ne10/ne10.mk b/package/ne10/ne10.mk
+index 79b53b809d16..24411482e0a5 100644
+--- a/package/ne10/ne10.mk
++++ b/package/ne10/ne10.mk
+@@ -4,15 +4,15 @@
+ #
+ ################################################################################
+ 
+-# We use a Git commit ID because the last tagged version is more than
+-# one year old.
+-NE10_VERSION = 88c18f02199947b2c8b57796f5a3ca53160aff96
+-NE10_SITE = http://github.com/projectNe10/Ne10/tarball/$(NE10_VERSION)
++NE10_VERSION = v1.0.0
++NE10_SITE = $(call github,projectNe10,Ne10,$(NE10_VERSION))
+ NE10_LICENSE = BSD-3c or Apache-2.0
+ NE10_LICENSE_FILES = doc/LICENSE
+ 
++NE10_CONF_OPT = -DGNULINUX_PLATFORM=ON
++
+ ifeq ($(BR2_PREFER_STATIC_LIB),)
+-NE10_CONF_OPT = \
++NE10_CONF_OPT += \
+ 	-DNE10_BUILD_SHARED=ON
+ endif
+ 
+-- 
+1.9.1
