@@ -1,24 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 08 Apr 2014 08:53:16 +0200
-Subject: [Buildroot] [PATCH] openssl: bump to version 1.0.1g
-In-Reply-To: <826e70d65bb00ee9b67931921462d0798e036e18.1396931495.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 8 Apr 2014 07:31:35 +0300")
-References: <826e70d65bb00ee9b67931921462d0798e036e18.1396931495.git.baruch@tkos.co.il>
-Message-ID: <87wqf0b9cz.fsf@dell.be.48ers.dk>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue,  8 Apr 2014 10:13:26 +0300
+Subject: [Buildroot] [PATCH] openpgm: needs host python2
+Message-ID: <5e6d3d5d078accc9ba17a52b314cfe8e3badfefa.1396941206.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+When BR2_PACKAGE_PYTHON3=y host python symlinks to python3. This breaks the
+version_generator.py script. Make sure we have the right host python version.
 
- > Fixes highly critical CVE-2014-0160. See http://heartbleed.com .
- > Drop patch applied upstream.
+Fixes:
+http://autobuild.buildroot.net/results/01f/01f886a073439c0639ed93e596b68bcadf1a5824/
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/openpgm/openpgm.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Committed, thanks.
-
+diff --git a/package/openpgm/openpgm.mk b/package/openpgm/openpgm.mk
+index 3ec5c77e28c4..ccfa5909fb00 100644
+--- a/package/openpgm/openpgm.mk
++++ b/package/openpgm/openpgm.mk
+@@ -15,4 +15,10 @@ OPENPGM_SUBDIR = openpgm/pgm/
+ OPENPGM_CONF_ENV = ac_cv_file__proc_cpuinfo=yes ac_cv_file__dev_rtc=no \
+                    ac_cv_file__dev_hpet=no
+ 
++# version_generator.py needs python2
++ifeq ($(BR2_PACKAGE_PYTHON3),y)
++OPENPGM_DEPENDENCIES += host-python
++OPENPGM_CONF_ENV += ac_cv_path_PYTHON=$(HOST_DIR)/usr/bin/python2
++endif
++
+ $(eval $(autotools-package))
 -- 
-Bye, Peter Korsgaard
+1.9.1
