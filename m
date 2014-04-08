@@ -1,29 +1,26 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 08 Apr 2014 23:57:57 +0200
-Subject: [Buildroot] [PATCH 2/6] system: add selection of a default
-	localtime
-In-Reply-To: <87ppkra3t0.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Tue, 08 Apr 2014 23:50:51 +0200")
-References: <cover.1396900553.git.yann.morin.1998@free.fr>
- <a4e40e88137b1d959e165e9720fcbef7286b2b06.1396900553.git.yann.morin.1998@free.fr>
- <87txa3a3ym.fsf@dell.be.48ers.dk> <87ppkra3t0.fsf@dell.be.48ers.dk>
-Message-ID: <87lhvfa3h6.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 8 Apr 2014 23:51:52 +0200
+Subject: [Buildroot] [PATCH] ne10: bump version to 1.0.0
+In-Reply-To: <99baf8d8d8d05b5f2de390deef6546acab0199dd.1396965306.git.baruch@tkos.co.il>
+References: <99baf8d8d8d05b5f2de390deef6546acab0199dd.1396965306.git.baruch@tkos.co.il>
+Message-ID: <20140408235152.66df3162@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+Dear Baruch Siach,
 
- >> This also doesn't give very clear error messages if the user misspelled
- >> the localtime. Perhaps we should error out with something more sensible?
+On Tue,  8 Apr 2014 16:55:06 +0300, Baruch Siach wrote:
 
- > Hmm, and it doesn't actually work if you use something like
- > Europe/Copenhagen as those are under /usr/share/zoneinfo/posix :/
+> +-    set(CMAKE_C_FLAGS "-O2 -mthumb-interwork -mthumb -march=armv7-a -mfpu=vfp3")
+> ++    set(CMAKE_C_FLAGS "-O2 -mthumb-interwork -mthumb -march=armv7-a -mfloat-abi=softfp -mfpu=neon")
 
-And I somehow missed the /usr/share/zoneinfo/Europe symlink - Sorry about
-that.
+This will not work on hardfp toolchains.
 
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
