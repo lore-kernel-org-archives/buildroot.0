@@ -1,65 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 8 Apr 2014 22:53:58 +0200
-Subject: [Buildroot] [git commit] cppcms: fix build with uClibc
-Message-ID: <20140408224018.ABB999C63E@busybox.osuosl.org>
+Date: Tue, 8 Apr 2014 23:58:25 +0200
+Subject: [Buildroot] [git commit] tzdata: allow host build
+Message-ID: <20140408224018.BE5409C3B7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a518381ed805c368b42935fbfe51b3f3cb8a3bcf
+commit: http://git.buildroot.net/buildroot/commit/?id=56af48791726c256c2acbe9aa7c499dc05abbea8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch modifies the cppcms package in order to support uClibc-based
-toolchains.
+uClibc uses its own format for timezone info. OTOH, we can generate
+uClibc-compatible timezone info from existing tzdata.
 
-The booster library by default compiles with the posix backend under
-Linux, but this needs monetary.h which isn't provided by uClibc, so
-work around that with the help of the DISABLE_POSIX_LOCALE configure
-option.
+Add a host-version of tzdata, so we can harvest its installed timezone
+info.
 
-Signed-off-by: Lucile Quirion <lucile.quirion@savoirfairelinux.com>
+Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cppcms/Config.in |    6 ++----
- package/cppcms/cppcms.mk |    5 +++++
- 2 files changed, 7 insertions(+), 4 deletions(-)
+ package/tzdata/tzdata.mk |   20 ++++++++++++++++++++
+ 1 files changed, 20 insertions(+), 0 deletions(-)
 
-diff --git a/package/cppcms/Config.in b/package/cppcms/Config.in
-index c88ae1e..2b99b52 100644
---- a/package/cppcms/Config.in
-+++ b/package/cppcms/Config.in
-@@ -4,8 +4,6 @@ config BR2_PACKAGE_CPPCMS
- 	select BR2_PACKAGE_PCRE
- 	select BR2_PACKAGE_LIBGCRYPT
- 	depends on BR2_INSTALL_LIBSTDCPP
--	# cppcms uses <monetary.h> which doesn't exist in uClibc
--	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	help
- 	  CppCMS is a Free High Performance Web Development Framework
- 	  (not a CMS) aimed for Rapid Web Application Development. It
-@@ -33,5 +31,5 @@ config BR2_PACKAGE_CPPCMS_ICU
+diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
+index c9824dc..05a82a2 100644
+--- a/package/tzdata/tzdata.mk
++++ b/package/tzdata/tzdata.mk
+@@ -50,4 +50,24 @@ define TZDATA_INSTALL_TARGET_CMDS
+ 	fi
+ endef
  
- endif
- 
--comment "cppcms needs an (e)glibc toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_USES_GLIBC
-+comment "cppcms needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/cppcms/cppcms.mk b/package/cppcms/cppcms.mk
-index 4068df7..206b30f 100644
---- a/package/cppcms/cppcms.mk
-+++ b/package/cppcms/cppcms.mk
-@@ -18,6 +18,11 @@ CPPCMS_CONF_OPT += -DDISABLE_ICONV=ON
- CPPCMS_DEPENDENCIES += icu
- endif
- 
-+ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
-+# posix backend needs monetary.h which isn't available on uClibc
-+CPPCMS_CONF_OPT += -DDISABLE_POSIX_LOCALE=on
-+endif
++define HOST_TZDATA_EXTRACT_CMDS
++	gzip -d -c $(DL_DIR)/$(TZDATA_SOURCE) \
++		| $(TAR) --strip-components=0 -C $(@D) -xf -
++endef
 +
- # We copy cppcms_tmpl_cc from staging to host because this file can be
- # needed for compiling packages using cppcms. And it is not worth
- # creating a host package just for a python script.
++define HOST_TZDATA_BUILD_CMDS
++	(cd $(@D); \
++		for zone in $(TZDATA_ZONELIST); do \
++			$(ZIC) -d _output/posix -y yearistype.sh $$zone; \
++			$(ZIC) -d _output/right -L leapseconds -y yearistype.sh $$zone; \
++		done; \
++	)
++endef
++
++define HOST_TZDATA_INSTALL_CMDS
++	mkdir -p $(HOST_DIR)/usr/share/zoneinfo
++	cp -a $(@D)/_output/* $(HOST_DIR)/usr/share/zoneinfo
++endef
++
+ $(eval $(generic-package))
++$(eval $(host-generic-package))
