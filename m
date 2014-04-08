@@ -1,79 +1,67 @@
-From: Lionel Orry <lionel.orry@gmail.com>
-Date: Tue, 8 Apr 2014 09:32:53 +0200
-Subject: [Buildroot] [PATCH 1/1] zeromq: bump to version 4.0.1
-In-Reply-To: <CAAXf6LVOm34-2gHVMbiEp85otVQa7PVuzqsFbNCGOB0upKAAQA@mail.gmail.com>
-References: <1381509097-5424-1-git-send-email-jerzy.grzegorek@trzebnica.net>
- <20140301232520.4ee4b22b@skate>
- <CAKAx1cj3DKFEcSjtw2-d1y3sZSO9y6kpvE6ZGjRdycnNAAugMw@mail.gmail.com>
- <20140303084702.7790637d@skate>
- <CAKAx1chY=kd3Y_N2-HRqmtELox8gSA9+hVUmaEAT4BNv_mXb9g@mail.gmail.com>
- <20140303111124.1126480c@skate>
- <CAAXf6LVOm34-2gHVMbiEp85otVQa7PVuzqsFbNCGOB0upKAAQA@mail.gmail.com>
-Message-ID: <CAKAx1ch=rxf=EfCfntHxqfsV4jQEU1asj9JTQ4odMhrD2xZJEA@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 8 Apr 2014 10:45:24 +0300
+Subject: [Buildroot] [PATCH] openpgm: needs host python2
+In-Reply-To: <CAHXCMMLHK=UKzNyM11hOqy5J5GqNTMta6LcXQYScOkntS5MvsQ@mail.gmail.com>
+References: <5e6d3d5d078accc9ba17a52b314cfe8e3badfefa.1396941206.git.baruch@tkos.co.il>
+ <CAHXCMMLHK=UKzNyM11hOqy5J5GqNTMta6LcXQYScOkntS5MvsQ@mail.gmail.com>
+Message-ID: <20140408074524.GN4096@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Hi Samuel,
 
-On Mon, Apr 7, 2014 at 4:32 PM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> Jerzy, Lionel,
->
-> On Mon, Mar 3, 2014 at 11:11 AM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> Dear Lionel Orry,
->>
->> On Mon, 3 Mar 2014 09:14:44 +0100, Lionel Orry wrote:
->>
->>> > What do you mean by "such a patch" ? Maybe you forgot to attach a patch
->>> > to your e-mail?
->>>
->>> um no, I meant the "appropriate patch" you were suggesting Jerzy to
->>> prepare so that mongrel2 compiles. If I understood correctly.
->>
->> Ah ok.
->>
->>> > Does ZeroMQ v4 changes the API/behavior a lot compared to v3 ?
->>>
->>> The v2 -> v3 transistion has been a nightmare more many devs, but they
->>> learnt from it and it seems the v3->v4 is much smoother.
->>>
->>> By the way, I noticed the mongrel2 devs tagged a v1.9.0 a month ago,
->>> and this release includes a zeromq4 compliance, plus other fixes and
->>> enhancements. May I suggest we simply bump the mongrel2 version ?
->>
->> Indeed, seems like the best solution.
->>
->> Jerzy, can you have a look into this?
->
-> Any of you interested in reviving this patch, bumping mongrel2 at the same time?
+On Tue, Apr 08, 2014 at 09:29:27AM +0200, Samuel Martin wrote:
+> On Tue, Apr 8, 2014 at 9:13 AM, Baruch Siach <baruch@tkos.co.il> wrote:
+> > When BR2_PACKAGE_PYTHON3=y host python symlinks to python3. This breaks the
+> > version_generator.py script. Make sure we have the right host python version.
+> >
+> > Fixes:
+> > http://autobuild.buildroot.net/results/01f/01f886a073439c0639ed93e596b68bcadf1a5824/
+> >
+> > Cc: Samuel Martin <s.martin49@gmail.com>
+> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> > ---
+> >  package/openpgm/openpgm.mk | 6 ++++++
+> >  1 file changed, 6 insertions(+)
+> >
+> > diff --git a/package/openpgm/openpgm.mk b/package/openpgm/openpgm.mk
+> > index 3ec5c77e28c4..ccfa5909fb00 100644
+> > --- a/package/openpgm/openpgm.mk
+> > +++ b/package/openpgm/openpgm.mk
+> > @@ -15,4 +15,10 @@ OPENPGM_SUBDIR = openpgm/pgm/
+> >  OPENPGM_CONF_ENV = ac_cv_file__proc_cpuinfo=yes ac_cv_file__dev_rtc=no \
+> >                     ac_cv_file__dev_hpet=no
+> >
+> > +# version_generator.py needs python2
+> > +ifeq ($(BR2_PACKAGE_PYTHON3),y)
+> > +OPENPGM_DEPENDENCIES += host-python
+> > +OPENPGM_CONF_ENV += ac_cv_path_PYTHON=$(HOST_DIR)/usr/bin/python2
+> > +endif
+> > +
+> 
+> In the pointed build failure log, python is /scratch/peko/host/usr/bin/python.
+> Do we want to rely on the system python interpreter?
 
-Quick news : mongrel v1.9.0 depends on polarssl now. But they decided
-to declare this dependency as a git submodule of their repo, and the
-release tarball being taken directly from github does not include the
-polarssl code. In short, they release tarball is unuseable. I'll talk
-about it upstream.
+Buildroot already relies on host python as a dependency. We just don't record 
+the full path of python, so we can't use it to seed ac_cv_path_PYTHON. Should 
+we?
 
-To make it clean, I'll try to get rid of the git submodule dep and
-make attempts with the polarssl buildroot package.
+> Maybe in such a case we prefer unconditionally relying on python2
+> built by Buildroot...
 
-The bad (or not?) news is that mongrel2 depends on polarssl v1.3.0
-(v1.3.x if polarssl properly versions its library, I think it is the
-case) and we currently use polarssl v1.2.10, so a polarssl bump
-version is needed first.
+This makes sense. I'll remove the BR2_PACKAGE_PYTHON3 condition if nobody else 
+objects.
 
-Does anyone know what implications could a polarssl minor version bump
-have ? I already saw some of the polarssl patches don't apply properly
-so they need to be revisited. Gustavo, I think you were in charge of
-the last polarssl bump, do you think you could help with this one, or
-say whether it is a very bad idea to bump the package version ?
+baruch
 
-Thanks everyone,
-Lionel
+> >  $(eval $(autotools-package))
+> > --
+> > 1.9.1
 
->
-> Thanks,
-> Thomas
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
