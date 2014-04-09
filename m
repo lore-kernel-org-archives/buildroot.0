@@ -1,134 +1,111 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 9 Apr 2014 01:38:10 +0200
-Subject: [Buildroot] [git commit] support/check-kernel-headers: fix old
-	custom toolchains without -print-sysroot
-Message-ID: <20140408234056.BE2FF9C69D@busybox.osuosl.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Wed, 9 Apr 2014 06:11:43 +0200
+Subject: [Buildroot] [PATCH] ne10: bump version to 1.0.0
+In-Reply-To: <99baf8d8d8d05b5f2de390deef6546acab0199dd.1396965306.git.baruch@tkos.co.il>
+References: <99baf8d8d8d05b5f2de390deef6546acab0199dd.1396965306.git.baruch@tkos.co.il>
+Message-ID: <CAHXCMML_DSi3Mk55ez2u3Fpn1e=0BO2s=V7wgCoXKf1M_9o6Gw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2a82bb8a9049afefeff751c73d2cad92bb0c8b53
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Baruch, all,
 
-Old toolchains, with old gcc that do not support -print-sysroot, break the
-kernel-headers version check script: it fails to find the sysroot of the
-toolchain, and thus ends up including the host's linux/version.h.
+On Tue, Apr 8, 2014 at 3:55 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+> Switch to github helper while at it.
+>
+> Fixes:
+> http://autobuild.buildroot.net/results/a2c/a2ca3fe245e410a738f4b10631a1414696a0edea/
+>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  ...CMakeLists.txt-add-neon-support-to-CFLAGS.patch | 31 ++++++++++++++++++++++
+>  package/ne10/ne10.mk                               | 10 +++----
+>  2 files changed, 36 insertions(+), 5 deletions(-)
+>  create mode 100644 package/ne10/ne10-01-CMakeLists.txt-add-neon-support-to-CFLAGS.patch
+>
+> diff --git a/package/ne10/ne10-01-CMakeLists.txt-add-neon-support-to-CFLAGS.patch b/package/ne10/ne10-01-CMakeLists.txt-add-neon-support-to-CFLAGS.patch
+> new file mode 100644
+> index 000000000000..1777de102328
+> --- /dev/null
+> +++ b/package/ne10/ne10-01-CMakeLists.txt-add-neon-support-to-CFLAGS.patch
+> @@ -0,0 +1,31 @@
+> +From 1ab64866615643d19a8e5c4f1a3f62f1baad6e83 Mon Sep 17 00:00:00 2001
+> +Message-Id: <1ab64866615643d19a8e5c4f1a3f62f1baad6e83.1396964788.git.baruch@tkos.co.il>
+> +From: Baruch Siach <baruch@tkos.co.il>
+> +Date: Tue, 8 Apr 2014 16:40:28 +0300
+> +Subject: [PATCH] CMakeLists.txt: add neon support to CFLAGS
+> +
+> +Fixed build failure:
+> +
+> +.../include/arm_neon.h:32:2: error: #error You must enable NEON instructions (e.g. -mfloat-abi=softfp -mfpu=neon) to use arm_neon.h
+> +
+> +Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> +---
+> + CMakeLists.txt | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/CMakeLists.txt b/CMakeLists.txt
+> +index e5a98af53c1f..22ce166650da 100644
+> +--- a/CMakeLists.txt
+> ++++ b/CMakeLists.txt
+> +@@ -78,7 +78,7 @@ if(ANDROID_PLATFORM)
+> +       add_subdirectory(android/NE10Demo/jni)
+> +     endif()
+> + elseif(GNULINUX_PLATFORM)
+> +-    set(CMAKE_C_FLAGS "-O2 -mthumb-interwork -mthumb -march=armv7-a -mfpu=vfp3")
+> ++    set(CMAKE_C_FLAGS "-O2 -mthumb-interwork -mthumb -march=armv7-a -mfloat-abi=softfp -mfpu=neon")
+> +     set(CMAKE_ASM_FLAGS "-mthumb-interwork -mthumb -march=armv7-a -mfpu=neon")
+> + elseif(IOS_PLATFORM)
+> +     #set minimal target ios version.If not provided this option, Xcode
+> +--
+> +1.9.1
+> +
 
-Most of the time, this will break early, since the host's kernel headers
-will not match the toolchain settings.
+I clearly don't like this patch, so I nack it.
 
-But it can happen that the check is succesful, although the configuration
-of the toolchain is wrong:
+> diff --git a/package/ne10/ne10.mk b/package/ne10/ne10.mk
+> index 79b53b809d16..24411482e0a5 100644
+> --- a/package/ne10/ne10.mk
+> +++ b/package/ne10/ne10.mk
+> @@ -4,15 +4,15 @@
+>  #
+>  ################################################################################
+>
+> -# We use a Git commit ID because the last tagged version is more than
+> -# one year old.
+> -NE10_VERSION = 88c18f02199947b2c8b57796f5a3ca53160aff96
+> -NE10_SITE = http://github.com/projectNe10/Ne10/tarball/$(NE10_VERSION)
+> +NE10_VERSION = v1.0.0
+> +NE10_SITE = $(call github,projectNe10,Ne10,$(NE10_VERSION))
+>  NE10_LICENSE = BSD-3c or Apache-2.0
+>  NE10_LICENSE_FILES = doc/LICENSE
+>
+> +NE10_CONF_OPT = -DGNULINUX_PLATFORM=ON
+> +
+>  ifeq ($(BR2_PREFER_STATIC_LIB),)
+> -NE10_CONF_OPT = \
+> +NE10_CONF_OPT += \
+>         -DNE10_BUILD_SHARED=ON
+>  endif
 
-  - the custom toolchain has kernel headers vX.Y
-  - the user selected vX.Z  (Z!=Y)
-  - the host has headers vX.Y
+Instead of messing the CMAKE_C_FLAGS in the package build system
+itself for something related to the target, I suggest to do this logic
+in the Buildroot ne10.mk.
 
-In this case, the check passes OK, but the build of some packages later on
-will break (which is exactly what those _AT_LEAST_XXX options were added to
-avoid).
+I mean, the toolchainfile.cmake allows you to pass some CFLAGS because it does:
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}   -pipe -Os ... " CACHE STRING
+"Buildroot CFLAGS" FORCE)
 
-Fix that by passing the sysroot to the check script, instead of the cross
-compiler.
+So you can add the logic adjusting the -mfloat-abi=... and -mfpu=...
+in the ne10.mk:
+NE10_CONF_OPT +=
+-DCMAKE_C_FLAGS="-mfloat-abi=$(BR2_GCC_TARGET_FLOAT_ABI)
+-mfpu=$(BR2_GCC_TARGET_FPU)"
 
-We get the sysroot as thus:
 
-  - for custom toolchains, we use the macro toolchain_find_sysroot. We can
-    do that, because we already have a complete sysroot with libc.a at that
-    time.
+Regards,
 
-  - for internal toolchain using a custom kernel headers version, we just
-    use $(STAGING_DIR). We can't use the macro as for custom toolchains
-    above, because at the time we install the kernel headers, we do not yet
-    have a complete sysroot with a libc.a.  But we can just use
-    $(STAGING_DIR), since we're only interested in the kernel headers.
-
-For all other types of toolchains, we already have the _AT_LEAST_XXX options
-properly set, so we need not add a check in this case.
-
-Fixes:
-    http://autobuild.buildroot.net/results/f33/f331a6eff0b0b93c73af52db3a6b43e4e598577e/
-    http://autobuild.buildroot.net/results/a57/a5797c025bec50c10efdcff74945aab4021d05e4/
-    [...]
-
-[Thanks to Thomas for pointing out the toolchain_find_sysroot macro!]
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/linux-headers/linux-headers.mk             |    2 +-
- support/scripts/check-kernel-headers.sh            |   11 +----------
- toolchain/helpers.mk                               |    2 +-
- toolchain/toolchain-external/toolchain-external.mk |    2 +-
- 4 files changed, 4 insertions(+), 13 deletions(-)
-
-diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
-index 2361e40..7b3edf4 100644
---- a/package/linux-headers/linux-headers.mk
-+++ b/package/linux-headers/linux-headers.mk
-@@ -40,7 +40,7 @@ endef
- ifeq ($(BR2_KERNEL_HEADERS_VERSION),y)
- define LINUX_HEADERS_CHECK_VERSION
- 	$(call check_kernel_headers_version,\
--		"$(TARGET_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS)",\
-+		$(STAGING_DIR),\
- 		$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)))
- endef
- LINUX_HEADERS_POST_INSTALL_STAGING_HOOKS += LINUX_HEADERS_CHECK_VERSION
-diff --git a/support/scripts/check-kernel-headers.sh b/support/scripts/check-kernel-headers.sh
-index 2a0a301..82cf9ac 100755
---- a/support/scripts/check-kernel-headers.sh
-+++ b/support/scripts/check-kernel-headers.sh
-@@ -1,6 +1,6 @@
- #!/bin/sh
- 
--CC="${1}"
-+SYSROOT="${1}"
- # Make sure we have enough version components
- HDR_VER="${2}.0.0"
- 
-@@ -10,15 +10,6 @@ HDR_m="${HDR_V%%.*}"
- 
- EXEC="$(mktemp --tmpdir check-headers.XXXXXX)"
- 
--# By the time we get here, we do not always have the staging-dir
--# already populated (think external toolchain), so we can not use
--# it.
--# So we just ask the cross compiler what its default sysroot is.
--# For multilib-aware toolchains where we should use a non-default
--# sysroot, it's not really a problem since the version of the kernel
--# headers is the same for all sysroots.
--SYSROOT=$(${CC} -print-sysroot)
--
- # We do not want to account for the patch-level, since headers are
- # not supposed to change for different patchlevels, so we mask it out.
- # This only applies to kernels >= 3.0, but those are the only one
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 6875916..9595196 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -166,7 +166,7 @@ copy_toolchain_sysroot = \
- # Check the specified kernel headers version actually matches the
- # version in the toolchain.
- #
--# $1: cross-gcc path
-+# $1: sysroot directory
- # $2: kernel version string, in the form: X.Y
- #
- check_kernel_headers_version = \
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 547d55d..1424c23 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -431,7 +431,7 @@ define TOOLCHAIN_EXTERNAL_CONFIGURE_CMDS
- 	fi ; \
- 	if [ "$(BR2_TOOLCHAIN_EXTERNAL_CUSTOM)" = "y" ]; then \
- 		$(call check_kernel_headers_version,\
--			"$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS)",\
-+			$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS)),\
- 			$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST))); \
- 	fi ; \
- 	if test "$(BR2_arm)" = "y" ; then \
+-- 
+Samuel
