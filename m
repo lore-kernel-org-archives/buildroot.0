@@ -1,145 +1,83 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 9 Apr 2014 19:09:17 +0200
-Subject: [Buildroot] [PATCH 2/5] fs/custom: generate complete,
- partition-based device images
-In-Reply-To: <53454B15.7060409@andin.de>
-References: <cover.1388768519.git.yann.morin.1998@free.fr>
- <cfbdbd2e5437db8f56cf1db9944cc072897fbe1a.1388768519.git.yann.morin.1998@free.fr>
- <53454B15.7060409@andin.de>
-Message-ID: <20140409170917.GA3444@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed,  9 Apr 2014 15:09:59 -0300
+Subject: [Buildroot] [PATCH] ulogd: bump to version 2.0.4
+Message-ID: <1397066999-7497-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Andreas, All,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/ulogd/ulogd-01-pthread-conditional.patch | 45 ------------------------
+ package/ulogd/ulogd.mk                           |  2 +-
+ 2 files changed, 1 insertion(+), 46 deletions(-)
+ delete mode 100644 package/ulogd/ulogd-01-pthread-conditional.patch
 
-On 2014-04-09 15:28 +0200, Andreas Naumann spake thusly:
-> Hi Yann,
-> 
-> >From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> >
-> >Contrary to the existing fs/ schemes, which each generate only a single
-> >filesystem image for the root filesystem, this new scheme allows the
-> >user to generate more complex images.
-> 
-> if found this an interesting idea, but apparently it has not found its way
-> into master yet. What is the current state?
-
-This has been somewhat refused: we do not want to add new tools in
-Buildroot, and this 'genimages' stuff is seen as a new tool, rather than
-as infrastructure.
-
-However, it has been suggested that we:
-
-  - transform this genimages into a separate project which provides a
-    new filesystem generator, and which Buildroot could use like it is
-    currently using the other filesystem generators;
-
-  - look at Pengutronix' genimage  (without a trailing 's') to see if it
-    would fit our needs.
-
-I haven't had time to properly look at Pengutronix' genimage, but last I
-looked, it seemd a bit different than my genimages. I am not too fond of
-genimage, but that's mostly a personal feeling, and is not really
-founded on technical merits. I prefer my genimages implementation, which
-I know how to deal with.
-
-As for my genimages: I am still working on it, and it so far fits all my
-personal needs. I still have some feature that are missing for now, that
-are really needed before it can be widely deployed:
-
-  - mixed filesystem hierarchies split between an initramfs and partitions
-    on a real device;
-
-  - partitions to be mounted that are not to be written (eg. when you
-    upgrade, you do not want to overwrite a config partition, but you
-    still want to have an fstab entry for it).
-
-That's being hamerred out, but it takes a bit of time...
-
-> >The basis behind this is a .ini-like description of the layout of the
-> >final target storage:
-> >   - the list of device(s)
-> >   - per-device, the list of partition(s)
-> >   - per-partition, the content
-> >
-> >It is possible to create MBR- or GPT-based partitoining schemes. Adding
-> >new ones should be relatively easy (but would need adequate host tools).
-> >
-> >For now, the only content possible for partitions is a filesystem. It
-> >should be pretty easy to add new types (eg. un-formated, or raw blob).
-> >
-> >Also, only two filesystems are supported: ext{2,3,4} and vfat. Adding
-> >more will be relatively easy, provided we have the necessary host
-> >packages to deal with those filesystems.
-> 
-> However, I'not sure if it actually is what I am looking for. Which is
-> dividing the target content into multiple partitions, which are then mounted
-> into the rootfs (like /data, /etc/somespecialconfig, /var/log).?
-
-Yes, that's exactly what genimages is supposed to cover: a filesystem
-hierarchy made of more than the / mountpoint.
-
-> Are there other ways to do that?
-
-Depends what you mean. I am using a 'wrapper' project arounf Buildroot,
-which genimages originates from. In this project, I'm using genimages as
-a post-image script that just extract the rootfs.tar and works from
-there to generate the multiple filesystem images for the different
-partitions.
-
-But it is not really usable outside of my project, since it is tightly
-coupled with the post-build script.
-
-Basically, if all you have are filesystem on reald decives (flash,
-HDD...), then genimages could world stand-alone.
-
-But if your setup involves an initramfs for the rootfs, plus one or more
-partitions on a real device, you have to fill entries for those
-partitions in etc/fstab, but doing so in post-image is too late, because
-the etc/fstab is in the initramfs, which is in the kernel image, which
-is assembled during the image phase. So we can't fill-in etc/fstab from
-a post-image script in this case. [*]
-
-However, it is always possible to fill-in etc/fstab from a post-build
-(aka pre-image) script, whether your rootfs is on a real device or an
-initramfs. And that's what my post-build script does (among many other
-things).
-
-So my genimages is tightly coupled to my rootfs-fixup post-build script,
-and I currently do not see a clean way to provide genimages as just
-another filesystem generator. If we wanted to truly have genimages in
-Buildroot, we'd need more than hooking after the rootfs.tar generator.
-
-
-[*] Well, it could be possible to call back to Buildroot to regenerate
-the kernel image with the initramfs once we tweaked etc/fstab, but
-that's pretty ugly, and prone to errors.)
-
-
-If you want to have a look, here's my "buildroot.config' project:
-    http://ymorin.is-a-geek.org/git/buildroot.config/
-
-There's currently pretty much no documentation, besides the one I wrote
-for inclusion in Buildroot (available in this thread). That's something
-I should really write... The README is a bit out-dated, so not completely
-accurate, but the idea is there.
-
-I have a tutorial on how to use it to build an XBMC for the RPi:
-    http://ymorin.is-a-geek.org/projects/rpi-xbmc
-
-Any suggestion/idea on how to progress on Buildroot is welcome, of
-course! ;-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/ulogd/ulogd-01-pthread-conditional.patch b/package/ulogd/ulogd-01-pthread-conditional.patch
+deleted file mode 100644
+index b33e0bc..0000000
+--- a/package/ulogd/ulogd-01-pthread-conditional.patch
++++ /dev/null
+@@ -1,45 +0,0 @@
+-From 389bade377e6e7335304636ea1ebd0a81b0c235e Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Tue, 10 Dec 2013 09:11:00 -0300
+-Subject: [PATCH ulogd] ulogd: use AC_SEARCH_LIBS for libpthread
+-
+-Some uClibc-based toolchains lack threading support, so use
+-AC_SEARCH_LIB instead of AC_CHECK_LIB to check for libpthread
+-availability and link conditionally if found since it's only used for
+-the database backends.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+- configure.ac    | 3 ++-
+- src/Makefile.am | 4 ++--
+- 2 files changed, 4 insertions(+), 3 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 7f5ffa9..5e45aaa 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -39,7 +39,8 @@ AC_CHECK_FUNCS(socket strerror)
+- regular_CFLAGS="-Wall -Wextra -Wno-unused-parameter"
+- AC_SUBST([regular_CFLAGS])
+- 
+--AC_CHECK_LIB(pthread, pthread_create)
+-+AC_SEARCH_LIBS([pthread_create], [pthread], [libpthread_LIBS="$LIBS"; LIBS=""])
+-+AC_SUBST([libpthread_LIBS])
+- 
+- dnl Check for the right nfnetlink version
+- PKG_CHECK_MODULES([LIBNFNETLINK], [libnfnetlink >= 1.0.1])
+-diff --git a/src/Makefile.am b/src/Makefile.am
+-index 1097468..998e776 100644
+---- a/src/Makefile.am
+-+++ b/src/Makefile.am
+-@@ -7,5 +7,5 @@ AM_CFLAGS = ${regular_CFLAGS}
+- sbin_PROGRAMS = ulogd
+- 
+- ulogd_SOURCES = ulogd.c select.c timer.c rbtree.c conffile.c hash.c addr.c
+--ulogd_LDADD   = ${libdl_LIBS}
+--ulogd_LDFLAGS = -export-dynamic -lpthread
+-+ulogd_LDADD   = ${libdl_LIBS} ${libpthread_LIBS}
+-+ulogd_LDFLAGS = -export-dynamic
+--- 
+-1.8.3.2
+-
+diff --git a/package/ulogd/ulogd.mk b/package/ulogd/ulogd.mk
+index b51da21..28ada96 100644
+--- a/package/ulogd/ulogd.mk
++++ b/package/ulogd/ulogd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ULOGD_VERSION = 2.0.3
++ULOGD_VERSION = 2.0.4
+ ULOGD_SOURCE = ulogd-$(ULOGD_VERSION).tar.bz2
+ ULOGD_SITE = http://www.netfilter.org/projects/ulogd/files
+ ULOGD_CONF_OPT = --with-dbi=no --with-pgsql=no
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.3.2
