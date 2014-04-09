@@ -1,51 +1,41 @@
-From: Andreas Naumann <dev@andin.de>
-Date: Wed, 09 Apr 2014 15:28:53 +0200
-Subject: [Buildroot] [PATCH 2/5] fs/custom: generate complete,
- partition-based device images
-In-Reply-To: <cfbdbd2e5437db8f56cf1db9944cc072897fbe1a.1388768519.git.yann.morin.1998@free.fr>
-References: <cover.1388768519.git.yann.morin.1998@free.fr>
- <cfbdbd2e5437db8f56cf1db9944cc072897fbe1a.1388768519.git.yann.morin.1998@free.fr>
-Message-ID: <53454B15.7060409@andin.de>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 9 Apr 2014 14:40:55 +0100
+Subject: [Buildroot] [PATCH] luajit: Disable for MIPS architecture with
+	soft-float
+Message-ID: <1397050855-5843-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Currently luajit is not supported on MIPS soft-float userlands. Upstream
+plans to support it in the future:
 
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
->
-> Contrary to the existing fs/ schemes, which each generate only a single
-> filesystem image for the root filesystem, this new scheme allows the
-> user to generate more complex images.
+   http://wiki.luajit.org/Open-Sponsorships#MIPS-Soft-Float-and-Dual-Number-Port
 
+Fixes:
 
-if found this an interesting idea, but apparently it has not found its 
-way into master yet. What is the current state?
+   http://autobuild.buildroot.net/results/d52/d5232a215e9e9aeb40b2e4e353329a27603c79ab/
 
->
-> The basis behind this is a .ini-like description of the layout of the
-> final target storage:
->    - the list of device(s)
->    - per-device, the list of partition(s)
->    - per-partition, the content
->
-> It is possible to create MBR- or GPT-based partitoining schemes. Adding
-> new ones should be relatively easy (but would need adequate host tools).
->
-> For now, the only content possible for partitions is a filesystem. It
-> should be pretty easy to add new types (eg. un-formated, or raw blob).
->
-> Also, only two filesystems are supported: ext{2,3,4} and vfat. Adding
-> more will be relatively easy, provided we have the necessary host
-> packages to deal with those filesystems.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/luajit/Config.in |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-However, I'not sure if it actually is what I am looking for. Which is 
-dividing the target content into multiple partitions, which are then 
-mounted into the rootfs (like /data, /etc/somespecialconfig, /var/log).?
-
-Are there other ways to do that?
-
-cheers,
-Andi
+diff --git a/package/luajit/Config.in b/package/luajit/Config.in
+index 58b1653..5176cb8 100644
+--- a/package/luajit/Config.in
++++ b/package/luajit/Config.in
+@@ -3,7 +3,8 @@ config BR2_PACKAGE_LUAJIT
+ 	select BR2_PACKAGE_HAS_LUAINTERPRETER
+ 	# Luajit is only available for some target architectures, and
+ 	# has some complexity wrt 32/64. See luajit.mk for details.
+-	depends on BR2_i386 || (BR2_x86_64 && BR2_HOSTARCH='x86_64') || BR2_powerpc || BR2_arm || BR2_armeb || BR2_mips || BR2_mipsel
++	depends on BR2_i386 || (BR2_x86_64 && BR2_HOSTARCH='x86_64') || BR2_powerpc || BR2_arm || BR2_armeb \
++		   || ((BR2_mips || BR2_mipsel) && !BR2_MIPS_SOFT_FLOAT)
+ 	help
+ 	  LuaJIT implements the full set of language features defined
+ 	  by Lua 5.1. The virtual machine (VM) is API- and
+-- 
+1.7.1
