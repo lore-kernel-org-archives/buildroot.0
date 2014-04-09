@@ -1,39 +1,513 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  9 Apr 2014 04:28:27 -0300
-Subject: [Buildroot] [PATCH] linux-headers: bump 3.{2,12}.x series
-Message-ID: <1397028507-2662-1-git-send-email-gustavo@zacarias.com.ar>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Wed, 9 Apr 2014 11:21:52 +0200
+Subject: [Buildroot] [PATCH 3/6] Makefile: fix coding style
+In-Reply-To: <532012FD.9000608@mind.be>
+References: <1394540278-28740-1-git-send-email-fabio.porcedda@gmail.com>
+ <1394540278-28740-4-git-send-email-fabio.porcedda@gmail.com>
+ <532012FD.9000608@mind.be>
+Message-ID: <CAHkwnC-CmLRknUOX0K6xD7w98-_8KTUyAQu6n-YFot+9=Wp3Bg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Wed, Mar 12, 2014 at 8:55 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 03/11/14 13:17, Fabio Porcedda wrote:
+>> As stated in the buildroot user manual add just a single space before
+>> and after a '=' sign.
+>>
+>> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+>
+> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>
+>  Reviewing this patch leads to a few more opportunities, though. So these
+> are commented below.
+>
+>> ---
+>>  Makefile | 188 +++++++++++++++++++++++++++++++--------------------------------
+>>  1 file changed, 94 insertions(+), 94 deletions(-)
+>>
+>> diff --git a/Makefile b/Makefile
+>> index 30d56d0..0420364 100644
+>> --- a/Makefile
+>> +++ b/Makefile
+>> @@ -25,10 +25,10 @@
+>>  #--------------------------------------------------------------
+>>
+>>  # Set and export the version string
+>> -export BR2_VERSION:=2014.05-git
+>> +export BR2_VERSION := 2014.05-git
+>
+>  No reason for := here.
+>
+>>
+>>  # Check for minimal make version (note: this check will break at make 10.x)
+>> -MIN_MAKE_VERSION=3.81
+>> +MIN_MAKE_VERSION = 3.81
+>>  ifneq ($(firstword $(sort $(MAKE_VERSION) $(MIN_MAKE_VERSION))),$(MIN_MAKE_VERSION))
+>>  $(error You have make '$(MAKE_VERSION)' installed. GNU make >= $(MIN_MAKE_VERSION) is required)
+>>  endif
+>> @@ -59,33 +59,33 @@ export HOSTARCH := $(shell uname -m | \
+>>  #    make BR2_JLEVEL= -j$((`getconf _NPROCESSORS_ONLN`+1))
+>>
+>>  # absolute path
+>> -TOPDIR:=$(shell pwd)
+>> -CONFIG_CONFIG_IN=Config.in
+>> -CONFIG=support/kconfig
+>> -DATE:=$(shell date +%Y%m%d)
+>> +TOPDIR := $(shell pwd)
+>> +CONFIG_CONFIG_IN = Config.in
+>> +CONFIG = support/kconfig
+>
+>  Actually, this is used in just one place so perhaps it can be removed.
+>
+>> +DATE := $(shell date +%Y%m%d)
+>
+>  Same here.
+>
+>>
+>>  # Compute the full local version string so packages can use it as-is
+>>  # Need to export it, so it can be got from environment in children (eg. mconf)
+>> -export BR2_VERSION_FULL:=$(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setlocalversion)
+>> +export BR2_VERSION_FULL := $(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setlocalversion)
+>>
+>> -noconfig_targets:=menuconfig nconfig gconfig xconfig config oldconfig randconfig \
+>> +noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconfig \
+>>       defconfig %_defconfig allyesconfig allnoconfig silentoldconfig release \
+>>       randpackageconfig allyespackageconfig allnopackageconfig \
+>>       source-check print-version olddefconfig
+>>
+>>  # Strip quotes and then whitespaces
+>> -qstrip=$(strip $(subst ",,$(1)))
+>> +qstrip = $(strip $(subst ",,$(1)))
+>>  #"))
+>>
+>>  # Variables for use in Make constructs
+>> -comma:=,
+>> -empty:=
+>> -space:=$(empty) $(empty)
+>> +comma := ,
+>> +empty :=
+>> +space := $(empty) $(empty)
+>>
+>>  ifneq ("$(origin O)", "command line")
+>> -O:=output
+>> -CONFIG_DIR:=$(TOPDIR)
+>> -NEED_WRAPPER=
+>> +O := output
+>> +CONFIG_DIR := $(TOPDIR)
+>> +NEED_WRAPPER =
+>
+>  No need to define NEED_WRAPPER to empty.
+>
+>>  else
+>>  # other packages might also support Linux-style out of tree builds
+>>  # with the O=<dir> syntax (E.G. Busybox does). As make automatically
+>> @@ -97,18 +97,18 @@ MAKEOVERRIDES =
+>>  # of the origin function (command line -> environment).
+>>  # Unfortunately some packages don't look at origin (E.G. uClibc 0.9.31+)
+>>  # To really make O go away, we have to override it.
+>> -override O:=$(O)
+>> -CONFIG_DIR:=$(O)
+>> +override O := $(O)
+>> +CONFIG_DIR := $(O)
+>>  # we need to pass O= everywhere we call back into the toplevel makefile
+>>  EXTRAMAKEARGS = O=$(O)
+>> -NEED_WRAPPER=y
+>> +NEED_WRAPPER = y
+>>  endif
+>>
+>>  # bash prints the name of the directory on 'cd <dir>' if CDPATH is
+>>  # set, so unset it here to not cause problems. Notice that the export
+>>  # line doesn't affect the environment of $(shell ..) calls, so
+>>  # explictly throw away any output from 'cd' here.
+>> -export CDPATH:=
+>> +export CDPATH :=
+>>  BASE_DIR := $(shell mkdir -p $(O) && cd $(O) >/dev/null && pwd)
+>>  $(if $(BASE_DIR),, $(error output directory "$(O)" does not exist))
+>>
+>> @@ -150,27 +150,27 @@ endif
+>>  # Avoids doing the $(or...) everytime
+>>  _BR2_GRAPH_OUT := $(or $(BR2_GRAPH_OUT),pdf)
+>>
+>> -BUILD_DIR:=$(BASE_DIR)/build
+>> -STAMP_DIR:=$(BASE_DIR)/stamps
+>> -BINARIES_DIR:=$(BASE_DIR)/images
+>> -TARGET_DIR:=$(BASE_DIR)/target
+>> +BUILD_DIR := $(BASE_DIR)/build
+>> +STAMP_DIR := $(BASE_DIR)/stamps
+>> +BINARIES_DIR := $(BASE_DIR)/images
+>> +TARGET_DIR := $(BASE_DIR)/target
+>
+>  All these don't need :=
+>
+>>  # initial definition so that 'make clean' works for most users, even without
+>>  # .config. HOST_DIR will be overwritten later when .config is included.
+>> -HOST_DIR:=$(BASE_DIR)/host
+>> -
+>> -LEGAL_INFO_DIR=$(BASE_DIR)/legal-info
+>> -REDIST_SOURCES_DIR_TARGET=$(LEGAL_INFO_DIR)/sources
+>> -REDIST_SOURCES_DIR_HOST=$(LEGAL_INFO_DIR)/host-sources
+>> -LICENSE_FILES_DIR_TARGET=$(LEGAL_INFO_DIR)/licenses
+>> -LICENSE_FILES_DIR_HOST=$(LEGAL_INFO_DIR)/host-licenses
+>> -LEGAL_MANIFEST_CSV_TARGET=$(LEGAL_INFO_DIR)/manifest.csv
+>> -LEGAL_MANIFEST_CSV_HOST=$(LEGAL_INFO_DIR)/host-manifest.csv
+>> -LEGAL_LICENSES_TXT_TARGET=$(LEGAL_INFO_DIR)/licenses.txt
+>> -LEGAL_LICENSES_TXT_HOST=$(LEGAL_INFO_DIR)/host-licenses.txt
+>> -LEGAL_WARNINGS=$(LEGAL_INFO_DIR)/.warnings
+>> -LEGAL_REPORT=$(LEGAL_INFO_DIR)/README
+>> -
+>> -BR2_CONFIG=$(CONFIG_DIR)/.config
+>> +HOST_DIR := $(BASE_DIR)/host
+>
+>  Neither does this one.
+>
+>> +
+>> +LEGAL_INFO_DIR = $(BASE_DIR)/legal-info
+>> +REDIST_SOURCES_DIR_TARGET = $(LEGAL_INFO_DIR)/sources
+>> +REDIST_SOURCES_DIR_HOST = $(LEGAL_INFO_DIR)/host-sources
+>> +LICENSE_FILES_DIR_TARGET = $(LEGAL_INFO_DIR)/licenses
+>> +LICENSE_FILES_DIR_HOST = $(LEGAL_INFO_DIR)/host-licenses
+>> +LEGAL_MANIFEST_CSV_TARGET = $(LEGAL_INFO_DIR)/manifest.csv
+>> +LEGAL_MANIFEST_CSV_HOST = $(LEGAL_INFO_DIR)/host-manifest.csv
+>> +LEGAL_LICENSES_TXT_TARGET = $(LEGAL_INFO_DIR)/licenses.txt
+>> +LEGAL_LICENSES_TXT_HOST = $(LEGAL_INFO_DIR)/host-licenses.txt
+>> +LEGAL_WARNINGS = $(LEGAL_INFO_DIR)/.warnings
+>> +LEGAL_REPORT = $(LEGAL_INFO_DIR)/README
+>> +
+>> +BR2_CONFIG = $(CONFIG_DIR)/.config
+>>
+>>  # Pull in the user's configuration file
+>>  ifeq ($(filter $(noconfig_targets),$(MAKECMDGOALS)),)
+>> @@ -181,22 +181,22 @@ endif
+>>  # Use 'make V=1' to see the full commands
+>>  ifdef V
+>>    ifeq ("$(origin V)", "command line")
+>> -    KBUILD_VERBOSE=$(V)
+>> +    KBUILD_VERBOSE = $(V)
+>>    endif
+>>  endif
+>>  ifndef KBUILD_VERBOSE
+>> -  KBUILD_VERBOSE=0
+>> +  KBUILD_VERBOSE = 0
+>>  endif
+>>
+>>  ifeq ($(KBUILD_VERBOSE),1)
+>> -  quiet=
+>> -  Q=
+>> +  quiet =
+>> +  Q =
+>
+>  These are not needed.
+>
+>>  ifndef VERBOSE
+>> -  VERBOSE=1
+>> +  VERBOSE = 1
+>>  endif
+>>  else
+>> -  quiet=quiet_
+>> -  Q=@
+>> +  quiet = quiet_
+>
+>  quiet is not used. It is exported though, which is probably a bad idea
+> anyway.
+>
+>> +  Q = @
+>>  endif
+>>
+>>  # we want bash as shell
+>> @@ -205,56 +205,56 @@ SHELL:=$(shell if [ -x "$$BASH" ]; then echo $$BASH; \
+>>       else echo sh; fi; fi)
+>>
+>>  # kconfig uses CONFIG_SHELL
+>> -CONFIG_SHELL:=$(SHELL)
+>> +CONFIG_SHELL := $(SHELL)
+>>
+>>  export SHELL CONFIG_SHELL quiet Q KBUILD_VERBOSE VERBOSE
+>
+>  CONFIG_SHELL should be passed with the rest of the kconfig environment,
+> not exported.
+>
+>>
+>>  ifndef HOSTAR
+>> -HOSTAR:=ar
+>> +HOSTAR := ar
+>
+>  No := needed.
+>
+>>  endif
+>>  ifndef HOSTAS
+>>  HOSTAS:=as
+>
+>  Same here.
+>
+>>  endif
+>>  ifndef HOSTCC
+>> -HOSTCC:=gcc
+>> -HOSTCC:=$(shell which $(HOSTCC) || type -p $(HOSTCC) || echo gcc)
+>> +HOSTCC := gcc
+>> +HOSTCC := $(shell which $(HOSTCC) || type -p $(HOSTCC) || echo gcc)
+>>  endif
+>>  HOSTCC_NOCCACHE:=$(HOSTCC)
+>>  ifndef HOSTCXX
+>> -HOSTCXX:=g++
+>> -HOSTCXX:=$(shell which $(HOSTCXX) || type -p $(HOSTCXX) || echo g++)
+>> +HOSTCXX := g++
+>> +HOSTCXX := $(shell which $(HOSTCXX) || type -p $(HOSTCXX) || echo g++)
+>>  endif
+>> -HOSTCXX_NOCCACHE:=$(HOSTCXX)
+>> +HOSTCXX_NOCCACHE := $(HOSTCXX)
+>
+>  Here := is needed!
+>
+>>  ifndef HOSTFC
+>> -HOSTFC:=gfortran
+>> +HOSTFC := gfortran
+>
+>  No :=
+>
+>>  endif
+>>  ifndef HOSTCPP
+>>  HOSTCPP:=cpp
+>
+>  Idem.
+>
+>>  endif
+>>  ifndef HOSTLD
+>> -HOSTLD:=ld
+>> +HOSTLD := ld
+>
+>  Idem. Etc. etc.
+>
+>>  endif
+>>  ifndef HOSTLN
+>> -HOSTLN:=ln
+>> +HOSTLN := ln
+>>  endif
+>>  ifndef HOSTNM
+>> -HOSTNM:=nm
+>> +HOSTNM := nm
+>>  endif
+>>  ifndef HOSTOBJCOPY
+>> -HOSTOBJCOPY:=objcopy
+>> +HOSTOBJCOPY := objcopy
+>>  endif
+>>  ifndef HOSTRANLIB
+>> -HOSTRANLIB:=ranlib
+>> -endif
+>> -HOSTAR:=$(shell which $(HOSTAR) || type -p $(HOSTAR) || echo ar)
+>> -HOSTAS:=$(shell which $(HOSTAS) || type -p $(HOSTAS) || echo as)
+>> -HOSTFC:=$(shell which $(HOSTLD) || type -p $(HOSTLD) || echo || which g77 || type -p g77 || echo gfortran)
+>> -HOSTCPP:=$(shell which $(HOSTCPP) || type -p $(HOSTCPP) || echo cpp)
+>> -HOSTLD:=$(shell which $(HOSTLD) || type -p $(HOSTLD) || echo ld)
+>> -HOSTLN:=$(shell which $(HOSTLN) || type -p $(HOSTLN) || echo ln)
+>> -HOSTNM:=$(shell which $(HOSTNM) || type -p $(HOSTNM) || echo nm)
+>> -HOSTOBJCOPY:=$(shell which $(HOSTOBJCOPY) || type -p $(HOSTOBJCOPY) || echo objcopy)
+>> -HOSTRANLIB:=$(shell which $(HOSTRANLIB) || type -p $(HOSTRANLIB) || echo ranlib)
+>> +HOSTRANLIB := ranlib
+>> +endif
+>> +HOSTAR := $(shell which $(HOSTAR) || type -p $(HOSTAR) || echo ar)
+>> +HOSTAS := $(shell which $(HOSTAS) || type -p $(HOSTAS) || echo as)
+>> +HOSTFC := $(shell which $(HOSTLD) || type -p $(HOSTLD) || echo || which g77 || type -p g77 || echo gfortran)
+>> +HOSTCPP := $(shell which $(HOSTCPP) || type -p $(HOSTCPP) || echo cpp)
+>> +HOSTLD := $(shell which $(HOSTLD) || type -p $(HOSTLD) || echo ld)
+>> +HOSTLN := $(shell which $(HOSTLN) || type -p $(HOSTLN) || echo ln)
+>> +HOSTNM := $(shell which $(HOSTNM) || type -p $(HOSTNM) || echo nm)
+>> +HOSTOBJCOPY := $(shell which $(HOSTOBJCOPY) || type -p $(HOSTOBJCOPY) || echo objcopy)
+>> +HOSTRANLIB := $(shell which $(HOSTRANLIB) || type -p $(HOSTRANLIB) || echo ranlib)
+>>
+>>  export HOSTAR HOSTAS HOSTCC HOSTCXX HOSTFC HOSTLD
+>>  export HOSTCC_NOCCACHE HOSTCXX_NOCCACHE
+>> @@ -291,7 +291,7 @@ unexport CONFIG_SITE
+>>  unexport QMAKESPEC
+>>  unexport TERMINFO
+>>
+>> -GNU_HOST_NAME:=$(shell support/gnuconfig/config.guess)
+>> +GNU_HOST_NAME := $(shell support/gnuconfig/config.guess)
+>>
+>>  ################################################################################
+>>  #
+>> @@ -300,15 +300,15 @@ GNU_HOST_NAME:=$(shell support/gnuconfig/config.guess)
+>>  #
+>>  ################################################################################
+>>
+>> -TARGETS:= toolchain
+>> +TARGETS := toolchain
+>
+>  Since TARGETS is only updated with +=, no := is needed here either.
+>
+>>
+>>  # silent mode requested?
+>> -QUIET:=$(if $(findstring s,$(MAKEFLAGS)),-q)
+>> +QUIET := $(if $(findstring s,$(MAKEFLAGS)),-q)
+>>
+>>  # Strip off the annoying quoting
+>
+>  This comment is redundant.
+>
+>> -ARCH:=$(call qstrip,$(BR2_ARCH))
+>> +ARCH := $(call qstrip,$(BR2_ARCH))
+>
+>  No :=
+>
+>>
+>> -KERNEL_ARCH:=$(shell echo "$(ARCH)" | sed -e "s/-.*//" \
+>> +KERNEL_ARCH := $(shell echo "$(ARCH)" | sed -e "s/-.*//" \
+>>       -e s/i.86/i386/ -e s/sun4u/sparc64/ \
+>>       -e s/arcle/arc/ \
+>>       -e s/arceb/arc/ \
+>> @@ -320,28 +320,28 @@ KERNEL_ARCH:=$(shell echo "$(ARCH)" | sed -e "s/-.*//" \
+>>       -e s/ppc.*/powerpc/ -e s/mips.*/mips/ \
+>>       -e s/sh.*/sh/)
+>>
+>> -ZCAT:=$(call qstrip,$(BR2_ZCAT))
+>> -BZCAT:=$(call qstrip,$(BR2_BZCAT))
+>> -XZCAT:=$(call qstrip,$(BR2_XZCAT))
+>> -TAR_OPTIONS=$(call qstrip,$(BR2_TAR_OPTIONS)) -xf
+>> +ZCAT := $(call qstrip,$(BR2_ZCAT))
+>> +BZCAT := $(call qstrip,$(BR2_BZCAT))
+>> +XZCAT := $(call qstrip,$(BR2_XZCAT))
+>
+>  Dito.
+>
+>> +TAR_OPTIONS = $(call qstrip,$(BR2_TAR_OPTIONS)) -xf
+>>
+>>  # packages compiled for the host go here
+>> -HOST_DIR:=$(call qstrip,$(BR2_HOST_DIR))
+>> +HOST_DIR := $(call qstrip,$(BR2_HOST_DIR))
+>
+>  Dito
+>
+>>
+>>  # locales to generate
+>> -GENERATE_LOCALE=$(call qstrip,$(BR2_GENERATE_LOCALE))
+>> +GENERATE_LOCALE = $(call qstrip,$(BR2_GENERATE_LOCALE))
+>>
+>> -TARGET_SKELETON=$(TOPDIR)/system/skeleton
+>> +TARGET_SKELETON = $(TOPDIR)/system/skeleton
+>>
+>>  # Location of a file giving a big fat warning that output/target
+>>  # should not be used as the root filesystem.
+>> -TARGET_DIR_WARNING_FILE=$(TARGET_DIR)/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
+>> +TARGET_DIR_WARNING_FILE = $(TARGET_DIR)/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
+>>
+>>  ifeq ($(BR2_CCACHE),y)
+>> -CCACHE:=$(HOST_DIR)/usr/bin/ccache
+>> +CCACHE := $(HOST_DIR)/usr/bin/ccache
+>>  BR_CACHE_DIR = $(call qstrip,$(BR2_CCACHE_DIR))
+>>  export BR_CACHE_DIR
+>> -HOSTCC  := $(CCACHE) $(HOSTCC)
+>> +HOSTCC := $(CCACHE) $(HOSTCC)
+>>  HOSTCXX := $(CCACHE) $(HOSTCXX)
+>>  endif
+>>
+>> @@ -394,23 +394,23 @@ include system/system.mk
+>>  include $(BR2_EXTERNAL)/external.mk
+>>
+>>  ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
+>> -TARGETS+=target-purgelocales
+>> +TARGETS += target-purgelocales
+>>  endif
+>>
+>>  ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
+>>  ifneq ($(GENERATE_LOCALE),)
+>> -TARGETS+=target-generatelocales
+>> +TARGETS += target-generatelocales
+>>  endif
+>>  endif
+>>
+>>  ifeq ($(BR2_ECLIPSE_REGISTER),y)
+>> -TARGETS+=toolchain-eclipse-register
+>> +TARGETS += toolchain-eclipse-register
+>>  endif
+>>
+>>  include fs/common.mk
+>>
+>> -TARGETS_SOURCE:=$(patsubst %,%-source,$(TARGETS))
+>> -TARGETS_DIRCLEAN:=$(patsubst %,%-dirclean,$(TARGETS))
+>> +TARGETS_SOURCE := $(patsubst %,%-source,$(TARGETS))
+>> +TARGETS_DIRCLEAN := $(patsubst %,%-dirclean,$(TARGETS))
+>
+>  No need for :=
+>
+>>
+>>  # host-* dependencies have to be handled specially, as those aren't
+>>  # visible in Kconfig and hence not added to a variable like TARGETS.
+>> @@ -430,7 +430,7 @@ HOST_DEPS = $(sort $(foreach dep,\
+>>               $($(dep))))
+>>  HOST_SOURCE += $(addsuffix -source,$(sort $(TARGETS_HOST_DEPS) $(HOST_DEPS)))
+>>
+>> -TARGETS_LEGAL_INFO:=$(patsubst %,%-legal-info,\
+>> +TARGETS_LEGAL_INFO := $(patsubst %,%-legal-info,\
+>>               $(TARGETS) $(TARGETS_HOST_DEPS) $(HOST_DEPS))))
+>
+>  Dito.
+>
+>>
+>>  dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
+>> @@ -483,7 +483,7 @@ $(STAGING_DIR):
+>>       @ln -snf $(STAGING_DIR) $(BASE_DIR)/staging
+>>
+>>  ifeq ($(BR2_ROOTFS_SKELETON_CUSTOM),y)
+>> -TARGET_SKELETON=$(BR2_ROOTFS_SKELETON_CUSTOM_PATH)
+>> +TARGET_SKELETON = $(BR2_ROOTFS_SKELETON_CUSTOM_PATH)
+>
+>  Missing qstrip.
+>
+>
+>
+>  Regards,
+>  Arnout
+>
+>
+>>  endif
+>>
+>>  RSYNC_VCS_EXCLUSIONS = \
+>> @@ -577,8 +577,8 @@ endif
+>>               $(USER_HOOKS_EXTRA_ENV) $(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+>>
+>>  ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
+>> -LOCALE_WHITELIST=$(BUILD_DIR)/locales.nopurge
+>> -LOCALE_NOPURGE=$(call qstrip,$(BR2_ENABLE_LOCALE_WHITELIST))
+>> +LOCALE_WHITELIST = $(BUILD_DIR)/locales.nopurge
+>> +LOCALE_NOPURGE = $(call qstrip,$(BR2_ENABLE_LOCALE_WHITELIST))
+>>
+>>  target-purgelocales:
+>>       rm -f $(LOCALE_WHITELIST)
+>> @@ -682,7 +682,7 @@ endif # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
+>>  # configuration
+>>  # ---------------------------------------------------------------------------
+>>
+>> -HOSTCFLAGS=$(CFLAGS_FOR_BUILD)
+>> +HOSTCFLAGS = $(CFLAGS_FOR_BUILD)
+>>  export HOSTCFLAGS
+>>
+>>  $(BUILD_DIR)/buildroot-config/%onf:
+>> @@ -911,7 +911,7 @@ endif
+>>       @echo 'See docs/README, or generate the Buildroot manual for further details'
+>>       @echo
+>>
+>> -release: OUT=buildroot-$(BR2_VERSION)
+>> +release: OUT = buildroot-$(BR2_VERSION)
+>>
+>>  # Create release tarballs. We need to fiddle a bit to add the generated
+>>  # documentation to the git output
+>>
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 0919415..005ad1e 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -158,7 +158,7 @@ endchoice
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
--	default "3.2.56"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.57"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.86"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
- 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
-@@ -166,7 +166,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
- 	default "3.10.36"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
--	default "3.12.16"	if BR2_KERNEL_HEADERS_3_12
-+	default "3.12.17"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.13.9"	if BR2_KERNEL_HEADERS_3_13
- 	default "3.14"		if BR2_KERNEL_HEADERS_3_14
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+Hi Arnout,
+thanks for reviewing.
+I will work on your suggestions after this patch is merged because if
+possible i want to avoid the pain to rebase endless other patches over
+this one.
+
+Hi Peter,
+any chance for this patch to being merged?
+it's already acked and it's one month old.
+
+The rebased patch is:
+http://patchwork.ozlabs.org/patch/337436/
+
+Thanks and best regards
 -- 
-1.8.3.2
+Fabio Porcedda
