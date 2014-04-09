@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 10 Apr 2014 00:20:04 +0200
-Subject: [Buildroot] [PATCH 2/3] manual: add gettextize explanations in the
-	manual
+Date: Thu, 10 Apr 2014 00:20:05 +0200
+Subject: [Buildroot] [PATCH 3/3] package/wget: use the new gettextize infra
 In-Reply-To: <cover.1397081821.git.yann.morin.1998@free.fr>
 References: <cover.1397081821.git.yann.morin.1998@free.fr>
-Message-ID: <88da7a58ab8bfb49816b875d6da17e4d0edf7e7c.1397081821.git.yann.morin.1998@free.fr>
+Message-ID: <f318a05b46d762c07c435c133b0a6e836600c6d6.1397081821.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,36 +12,45 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Baruch Siach <baruch@tkos.co.il>
----
- docs/manual/adding-packages-autotools.txt | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+Currently, the gettextization of wget works by chance:
+  - host-gettext is added as a dependency to wget;
+  - gettextize is run as a post-patch hook.
 
-diff --git a/docs/manual/adding-packages-autotools.txt b/docs/manual/adding-packages-autotools.txt
-index cc668b5..9181fb8 100644
---- a/docs/manual/adding-packages-autotools.txt
-+++ b/docs/manual/adding-packages-autotools.txt
-@@ -128,6 +128,18 @@ cases, typical packages will therefore only use a few of them.
-   passed to the 'autoreconf' program if
-   +LIBFOO_AUTORECONF=YES+. By default, empty.
+But the dependencies are only guaranteed to be built and installed
+for the configure step, not the patch step. Becasue post-patch hooks
+are part of the patch step, we have no guarantee that the dependency
+to host-gettext is done by the time we gettextize wget.
+
+This happens to work by chance, since wget sorts alphabetically after
+gettext, so we indeed have host-gettext built and installed by the
+time we need to gettextize wget.
+
+This is prone to fail in the parallel build case, sicne we can no
+longer rely on alphabetical order in that case.
+
+Instead, use the new gettextize infra we just added.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/wget/wget.mk | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/package/wget/wget.mk b/package/wget/wget.mk
+index f3a5274..031a8ea 100644
+--- a/package/wget/wget.mk
++++ b/package/wget/wget.mk
+@@ -15,11 +15,7 @@ WGET_AUTORECONF = YES
  
-+* +LIBFOO_GETTEXTIZE+, tells whether the package should be
-+  gettextized or not (i.e. if the pacakge uses an different gettext
-+  version than Buildroot provides, and it is needed to run
-+  'gettextize'.) Valid values are +YES+ and   +NO+. The default
-+  is +NO+.
-+
-+* +LIBFOO_GETTEXTIZE_OPT+, to specify additional options passed to
-+  the 'gettextize' program, if +LIBFOO_GETTEXTIZE=YES+. You may
-+  use that if, for example, the +.po+ files are not located in the
-+  standard place (i.e. in +po/+ at the root of the package.) By
-+  default, '-f'.
-+
- * +LIBFOO_LIBTOOL_PATCH+ tells whether the Buildroot
-   patch to fix libtool cross-compilation issues should be applied or
-   not. Valid values are +YES+ and +NO+. By
+ # Ugly kludge to fix autoreconf with old gettext infra
+ # We need to gettextize before autoreconf to upgrade
+-WGET_DEPENDENCIES += host-gettext
+-define WGET_GETTEXTIZE
+-	cd $(@D) ; $(HOST_DIR)/usr/bin/gettextize -f
+-endef
+-WGET_POST_PATCH_HOOKS += WGET_GETTEXTIZE
++WGET_GETTEXTIZE = YES
+ 
+ # Prefer full-blown wget over busybox
+ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
 -- 
 1.8.3.2
