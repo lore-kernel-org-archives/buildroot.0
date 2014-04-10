@@ -1,38 +1,54 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 10 Apr 2014 23:18:12 +0200
-Subject: [Buildroot] [PATCH 1/2] systemd: Build legacy pc files when
-	liblogging is
-In-Reply-To: <20140410175032.GA24213@pc-eric> (Eric Le Bihan's message of
- "Thu, 10 Apr 2014 19:50:34 +0200")
-References: <1397145566-11243-1-git-send-email-Vincent.Riera@imgtec.com>
- <20140410175032.GA24213@pc-eric>
-Message-ID: <87lhvc6fzf.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 10 Apr 2014 23:19:19 +0200
+Subject: [Buildroot] [PATCH 0/3] [RFC] pkg-autotools: introduce infra to
+ gettextize packages (branch yem/gettextize)
+In-Reply-To: <cover.1397081821.git.yann.morin.1998@free.fr>
+References: <cover.1397081821.git.yann.morin.1998@free.fr>
+Message-ID: <20140410231919.2538fac1@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Eric" == Eric Le Bihan <eric.le.bihan.dev@free.fr> writes:
+Dear Yann E. MORIN,
 
-Hi,
+On Thu, 10 Apr 2014 00:20:00 +0200, Yann E. MORIN wrote:
 
- > Maybe some other packages depend on these compatibility libraries, so instead
- > of referring to BR2_PACKAGE_LIBLOGGING in systemd.mk, it would be best to add
- > a generic configuration option to systemd, as done for berkeleydb with
- > BR2_PACKAGE_BERKELEYDB_COMPAT185. It could be named BR2_PACKAGE_SYSTEMD_COMPAT.
+> This small series introduces the gettextize of a package as an optional
+> sequence in the autotools package infra.
+> 
+>     WARNING! Completely untested, only an RFC!
+> 
+> Currently, wget is the sole user, and the way it is done for wget is
+> just working by chance (see commit log of path 3 for the complete
+> explanations.)
+> 
+> So, move the gettextization to the pkg-autotools infra, so we have a
+> chance to do it correctly and consistently across packages.
 
- > Then, in package/liblogging/Config.in, we would have:
+I haven't looked at the details. But to me, when only one package needs
+something, it is *way* too early to make changes to the common
+infrastructure. Especially when there is a solution that allows to
+solve the problem by making changes to the package .mk file itself.
 
- >   select BR2_PACKAGE_SYSTEMD_COMPAT if BR2_INIT_SYSTEMD
+I believe changes to the package infrastructure should only be made
+when:
 
- > And this would be removed when liblogging is fixed upstream.
+ * There is really no solution to solve the particular problem at the
+   package .mk file level;
 
-Yes, I agree.
+ * There are a sufficient (say 5 or 10 maybe) packages that have a
+   similar problem, and therefore factorization would make sense.
 
- > What do think of this?
+So far, I don't really see a compelling reason to complexity the
+package infrastructure just for the need of one particular package.
+Need that may very well be transient, because a future bump of wget
+will most likely remove the need for the gnulib patch, therefore for
+the autoreconf.
 
-Care to send an updated patch series doing that?
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
