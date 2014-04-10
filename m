@@ -1,37 +1,29 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 10 Apr 2014 23:07:57 +0200
-Subject: [Buildroot] [PATCH 1/5] python-pygame: Remove wildcards in
-	macros
-In-Reply-To: <1396979109-10691-1-git-send-email-paul@crapouillou.net> (Paul
- Cercueil's message of "Tue, 8 Apr 2014 19:45:05 +0200")
-References: <1396979109-10691-1-git-send-email-paul@crapouillou.net>
-Message-ID: <87txa06ggi.fsf@dell.be.48ers.dk>
+Date: Thu, 10 Apr 2014 23:17:32 +0200
+Subject: [Buildroot] [PATCH 2/2] liblogging: Depend on systemd
+In-Reply-To: <1397145566-11243-2-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Thu, 10 Apr 2014 16:59:26 +0100")
+References: <1397145566-11243-1-git-send-email-Vincent.Riera@imgtec.com>
+ <1397145566-11243-2-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <87ppko6g0j.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Paul" == Paul Cercueil <paul@crapouillou.net> writes:
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
- > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
- > ---
- >  package/python-pygame/python-pygame.mk | 4 ++--
- >  1 file changed, 2 insertions(+), 2 deletions(-)
+ > This package depends on systemd because in the configure phase it
+ > searches for a file installed by systemd. We add systemd to it's
+ > dependencies to ensure that is built before this package.
 
- > diff --git a/package/python-pygame/python-pygame.mk b/package/python-pygame/python-pygame.mk
- > index d9219b9..b6381a3 100644
- > --- a/package/python-pygame/python-pygame.mk
- > +++ b/package/python-pygame/python-pygame.mk
- > @@ -83,13 +83,13 @@ define PYTHON_PYGAME_CONFIGURE_CMDS
- >  endef
- 
- >  define PYTHON_PYGAME_REMOVE_DOC
- > -	rm -rf $(TARGET_DIR)/usr/lib/python*/site-packages/pygame/docs
- > +	rm -rf $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/pygame/docs
+ > Fixes:
+ >    http://autobuild.buildroot.net/results/32c/32c636020600aa3f378d326c84fac82eb1fb2871/
 
-What's the advantage of this? If pygame starts supporting python3.x then
-this breaks.
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
