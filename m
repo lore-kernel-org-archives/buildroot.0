@@ -1,27 +1,54 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Thu, 10 Apr 2014 14:55:29 +0400
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-04-09
-In-Reply-To: <20140410063009.66D5F100F84@stock.ovh.net>
-References: <20140410063009.66D5F100F84@stock.ovh.net>
-Message-ID: <CAMo8BfJZhmw6VQTMJ1x-mcz6MYnSXj86oDabbxMPNp3Z6+awVQ@mail.gmail.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Thu, 10 Apr 2014 17:08:43 +0400
+Subject: [Buildroot] [PATCH] xserver: remove patch for aarch64
+Message-ID: <1397135323-22584-1-git-send-email-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Apr 10, 2014 at 10:30 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Build statistics for 2014-04-09
-> ===============================
-[...]
->     xtensa |                     php-5.5.11 | NOK | http://autobuild.buildroot.net/results/5fa185bbaaeef79f1c9102116f3b7e5f037f7dc3/
+xorg-server-1.15.0.tar.gz already has full support of aarch64.
+It was added with this commit http://patchwork.freedesktop.org/patch/14361/
 
-Once again couldn't reproduce, this time no changes to the config at all.
-Thomas, is it be possible to store the complete build log for failed builds
-(maybe compressed, or maybe only for a day or so)?
+Even though the patch in question doesn't break patching or building of xserver
+it duplicates aarch64 entries in "include/servermd.h".
 
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../xserver_xorg-server-01-aarch64-support.patch   | 23 ----------------------
+ 1 file changed, 23 deletions(-)
+ delete mode 100644 package/x11r7/xserver_xorg-server/xserver_xorg-server-01-aarch64-support.patch
+
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server-01-aarch64-support.patch b/package/x11r7/xserver_xorg-server/xserver_xorg-server-01-aarch64-support.patch
+deleted file mode 100644
+index ec497c8..0000000
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server-01-aarch64-support.patch
++++ /dev/null
+@@ -1,23 +0,0 @@
+-Add necessary definitions for AArch64
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Index: xserver_xorg-server-1.9.4/include/servermd.h
+-===================================================================
+---- xserver_xorg-server-1.9.4.orig/include/servermd.h	2009-11-04 20:31:46.000000000 +0100
+-+++ xserver_xorg-server-1.9.4/include/servermd.h	2012-12-28 18:16:55.000000000 +0100
+-@@ -68,6 +68,14 @@
+-  * GLYPHPADBYTES is used.
+-  */
+- 
+-+#ifdef __aarch64__
+-+
+-+# define IMAGE_BYTE_ORDER	LSBFirst
+-+# define BITMAP_BIT_ORDER       LSBFirst
+-+# define GLYPHPADBYTES		4
+-+
+-+#endif
+-+
+- #ifdef __avr32__
+- 
+- #define IMAGE_BYTE_ORDER        MSBFirst
 -- 
-Thanks.
--- Max
+1.9.0
