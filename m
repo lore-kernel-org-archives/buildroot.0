@@ -1,47 +1,61 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 10 Apr 2014 11:16:12 +0300
-Subject: [Buildroot] [PATCH v2] openpgm: needs host python2
-Message-ID: <783d7d9db0c782c2317fcfc6160b6802b095164d.1397117772.git.baruch@tkos.co.il>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 10 Apr 2014 10:34:30 +0200
+Subject: [Buildroot] [PATCH 2/3] manual: add gettextize explanations in
+ the manual
+In-Reply-To: <88da7a58ab8bfb49816b875d6da17e4d0edf7e7c.1397081821.git.yann.morin.1998@free.fr>
+References: <cover.1397081821.git.yann.morin.1998@free.fr>
+ <88da7a58ab8bfb49816b875d6da17e4d0edf7e7c.1397081821.git.yann.morin.1998@free.fr>
+Message-ID: <CAAXf6LW=JhJdra=RuYWqsTF=VpVi37_Qvsyx=4NktU6NjJRSeg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When BR2_PACKAGE_PYTHON3=y host python symlinks to python3. This breaks the
-version_generator.py script. Make sure we use the right host python version.
+Hi Yann,
 
-We can't use the host installed python for ac_cv_path_PYTHON, but host python
-might default to python3 in the not so distant future.
+On Thu, Apr 10, 2014 at 12:20 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  docs/manual/adding-packages-autotools.txt | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+>
+> diff --git a/docs/manual/adding-packages-autotools.txt b/docs/manual/adding-packages-autotools.txt
+> index cc668b5..9181fb8 100644
+> --- a/docs/manual/adding-packages-autotools.txt
+> +++ b/docs/manual/adding-packages-autotools.txt
+> @@ -128,6 +128,18 @@ cases, typical packages will therefore only use a few of them.
+>    passed to the 'autoreconf' program if
+>    +LIBFOO_AUTORECONF=YES+. By default, empty.
+>
+> +* +LIBFOO_GETTEXTIZE+, tells whether the package should be
+> +  gettextized or not (i.e. if the pacakge uses an different gettext
 
-Fixes:
-http://autobuild.buildroot.net/results/01f/01f886a073439c0639ed93e596b68bcadf1a5824/
+package
+a different
 
-Cc: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
-Changes v1 -> v2:
-	* Depend on host-python unconditionally (Samuel Martin)
-	* Explain in the commit log why not to use the host python
----
- package/openpgm/openpgm.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+> +  version than Buildroot provides, and it is needed to run
+> +  'gettextize'.) Valid values are +YES+ and   +NO+. The default
 
-diff --git a/package/openpgm/openpgm.mk b/package/openpgm/openpgm.mk
-index 3ec5c77e28c4..a108afea903b 100644
---- a/package/openpgm/openpgm.mk
-+++ b/package/openpgm/openpgm.mk
-@@ -12,7 +12,10 @@ OPENPGM_LICENSE_FILES = openpgm/pgm/LICENSE
- OPENPGM_INSTALL_STAGING = YES
- OPENPGM_AUTORECONF = YES
- OPENPGM_SUBDIR = openpgm/pgm/
-+# version_generator.py needs python2
-+OPENPGM_DEPENDENCIES = host-python
- OPENPGM_CONF_ENV = ac_cv_file__proc_cpuinfo=yes ac_cv_file__dev_rtc=no \
--                   ac_cv_file__dev_hpet=no
-+		ac_cv_file__dev_hpet=no \
-+		ac_cv_path_PYTHON=$(HOST_DIR)/usr/bin/python2
- 
- $(eval $(autotools-package))
--- 
-1.9.1
+There seem to be extra spaces between 'and' and +NO+.
+
+> +  is +NO+.
+> +
+> +* +LIBFOO_GETTEXTIZE_OPT+, to specify additional options passed to
+> +  the 'gettextize' program, if +LIBFOO_GETTEXTIZE=YES+. You may
+> +  use that if, for example, the +.po+ files are not located in the
+> +  standard place (i.e. in +po/+ at the root of the package.) By
+> +  default, '-f'.
+> +
+>  * +LIBFOO_LIBTOOL_PATCH+ tells whether the Buildroot
+>    patch to fix libtool cross-compilation issues should be applied or
+>    not. Valid values are +YES+ and +NO+. By
+
+
+Best regards,
+Thomas
