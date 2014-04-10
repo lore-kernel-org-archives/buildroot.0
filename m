@@ -1,84 +1,57 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Thu, 10 Apr 2014 18:46:36 +0400
-Subject: [Buildroot] [PATCH] libglib2: fix compilation for aarch64 and arc
-Message-ID: <1397141196-1316-1-git-send-email-abrodkin@synopsys.com>
+From: Matt Weber <mlweber1@rockwellcollins.com>
+Date: Thu, 10 Apr 2014 10:54:55 -0500
+Subject: [Buildroot] [PATCH v4] pyrex: new package
+Message-ID: <1397145295-35472-1-git-send-email-mlweber1@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Copied from here - https://github.com/openembedded/oe-core/blob/master/meta/recipes-core/glib-2.0/glib-2.0/0001-gio-Fix-Werror-format-string-errors-from-mismatched-.patch
+Pyrex is a language that allows you to mix python and C code in a
+single .pyx description file.  This file is then rendered into C
+code by the pyrexc host tool.  That C file then can be used within
+an application build or as part of the normal distutils build
+process used to build a Python extension module.
 
-Initially posted here - http://lists.openembedded.org/pipermail/openembedded-core/2013-October/085174.html
-
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
 ---
- ...ror-format-string-errors-from-mismatched-.patch | 56 ++++++++++++++++++++++
- 1 file changed, 56 insertions(+)
- create mode 100644 package/libglib2/0001-gio-Fix-Werror-format-string-errors-from-mismatched-.patch
+Changes v3 -> v4:
+   - Removed ability to menu select pyrex since it's a tool to
+     generate code and would be solely a dependency. (Suggested by Thomas P)
+Changes v2 -> v3:
+   - Moved menu entry under host utilities menu (Suggested by Yann)
+   - Updated description and included a description above (Suggested by Yann)
 
-diff --git a/package/libglib2/0001-gio-Fix-Werror-format-string-errors-from-mismatched-.patch b/package/libglib2/0001-gio-Fix-Werror-format-string-errors-from-mismatched-.patch
+Changes v1 -> v2:
+   - Converted to a host only pkg as this pkg provides generated
+     C code that an application would use from a sysroot
+     (not on target).  (Suggested by Thomas)
+
+ package/python-pyrex/python-pyrex.mk | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+ create mode 100644 package/python-pyrex/python-pyrex.mk
+
+diff --git a/package/python-pyrex/python-pyrex.mk b/package/python-pyrex/python-pyrex.mk
 new file mode 100644
-index 0000000..9b87d9d
+index 0000000..73cb163
 --- /dev/null
-+++ b/package/libglib2/0001-gio-Fix-Werror-format-string-errors-from-mismatched-.patch
-@@ -0,0 +1,56 @@
-+From 0167c3340d8201dca8e9031b61703bbc5ed6ce33 Mon Sep 17 00:00:00 2001
-+From: Jan Schmidt <thaytan@noraisin.net>
-+Date: Wed, 25 Sep 2013 19:22:26 +1000
-+Subject: [PATCH] gio: Fix -Werror format string errors from mismatched ints.
++++ b/package/python-pyrex/python-pyrex.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# python-pyrex
++#
++################################################################################
 +
-+Upstream-Status: Backport
++PYTHON_PYREX_VERSION = 0.9.9
++PYTHON_PYREX_SOURCE = Pyrex-$(PYTHON_PYREX_VERSION).tar.gz
++PYTHON_PYREX_SITE = http://www.cosc.canterbury.ac.nz/greg.ewing/python/Pyrex/
++PYTHON_PYREX_DEPENDENCIES = host-python
++PYTHON_PYREX_LICENSE = Apache-v2
++PYTHON_PYREX_LICENSE_FILES = LICENSE.txt
++PYTHON_PYREX_SETUP_TYPE = distutils
 +
-+---
-+ gio/gdbusmessage.c | 8 ++++----
-+ gio/gdbusprivate.c | 4 ++--
-+ 2 files changed, 6 insertions(+), 6 deletions(-)
-+
-+diff --git a/gio/gdbusmessage.c b/gio/gdbusmessage.c
-+index ac233a3..ad77aa6 100644
-+--- a/gio/gdbusmessage.c
-++++ b/gio/gdbusmessage.c
-+@@ -3468,10 +3468,10 @@ g_dbus_message_print (GDBusMessage *message,
-+                                           statbuf.st_mode);
-+                   g_string_append_printf (fs, "%s" "ino=%" G_GUINT64_FORMAT, fs->len > 0 ? "," : "",
-+                                           (guint64) statbuf.st_ino);
-+-                  g_string_append_printf (fs, "%s" "uid=%d", fs->len > 0 ? "," : "",
-+-                                          statbuf.st_uid);
-+-                  g_string_append_printf (fs, "%s" "gid=%d", fs->len > 0 ? "," : "",
-+-                                          statbuf.st_gid);
-++                  g_string_append_printf (fs, "%s" "uid=%u", fs->len > 0 ? "," : "",
-++                                          (guint) statbuf.st_uid);
-++                  g_string_append_printf (fs, "%s" "gid=%u", fs->len > 0 ? "," : "",
-++                                          (guint) statbuf.st_gid);
-+                   g_string_append_printf (fs, "%s" "rdev=%d:%d", fs->len > 0 ? "," : "",
-+                                           major (statbuf.st_rdev), minor (statbuf.st_rdev));
-+                   g_string_append_printf (fs, "%s" "size=%" G_GUINT64_FORMAT, fs->len > 0 ? "," : "",
-+diff --git a/gio/gdbusprivate.c b/gio/gdbusprivate.c
-+index 0e5bef2..785a0c0 100644
-+--- a/gio/gdbusprivate.c
-++++ b/gio/gdbusprivate.c
-+@@ -2155,7 +2155,7 @@ write_message_print_transport_debug (gssize bytes_written,
-+   _g_dbus_debug_print_lock ();
-+   g_print ("========================================================================\n"
-+            "GDBus-debug:Transport:\n"
-+-           "  >>>> WROTE %" G_GSIZE_FORMAT " bytes of message with serial %d and\n"
-++           "  >>>> WROTE %" G_GSSIZE_FORMAT " bytes of message with serial %d and\n"
-+            "       size %" G_GSIZE_FORMAT " from offset %" G_GSIZE_FORMAT " on a %s\n",
-+            bytes_written,
-+            g_dbus_message_get_serial (data->message),
-+@@ -2206,7 +2206,7 @@ read_message_print_transport_debug (gssize bytes_read,
-+     _g_dbus_debug_print_lock ();
-+   g_print ("========================================================================\n"
-+            "GDBus-debug:Transport:\n"
-+-           "  <<<< READ %" G_GSIZE_FORMAT " bytes of message with serial %d and\n"
-++           "  <<<< READ %" G_GSSIZE_FORMAT " bytes of message with serial %d and\n"
-+            "       size %d to offset %" G_GSIZE_FORMAT " from a %s\n",
-+            bytes_read,
-+            serial,
-+-- 
-+1.8.3.1
-+
++$(eval $(host-python-package))
 -- 
 1.9.0
