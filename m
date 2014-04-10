@@ -1,54 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 10 Apr 2014 23:19:19 +0200
-Subject: [Buildroot] [PATCH 0/3] [RFC] pkg-autotools: introduce infra to
- gettextize packages (branch yem/gettextize)
-In-Reply-To: <cover.1397081821.git.yann.morin.1998@free.fr>
-References: <cover.1397081821.git.yann.morin.1998@free.fr>
-Message-ID: <20140410231919.2538fac1@skate>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 10 Apr 2014 23:17:28 +0200
+Subject: [Buildroot] [git commit] liblogging: Depend on systemd
+Message-ID: <20140410212227.E3D1C9C672@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+commit: http://git.buildroot.net/buildroot/commit/?id=bdd2075ea3ebbee9794406529563b068137bd517
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 10 Apr 2014 00:20:00 +0200, Yann E. MORIN wrote:
+This package depends on systemd because in the configure phase it
+searches for a file installed by systemd. We add systemd to it's
+dependencies to ensure that is built before this package.
 
-> This small series introduces the gettextize of a package as an optional
-> sequence in the autotools package infra.
-> 
->     WARNING! Completely untested, only an RFC!
-> 
-> Currently, wget is the sole user, and the way it is done for wget is
-> just working by chance (see commit log of path 3 for the complete
-> explanations.)
-> 
-> So, move the gettextization to the pkg-autotools infra, so we have a
-> chance to do it correctly and consistently across packages.
+Fixes:
+   http://autobuild.buildroot.net/results/32c/32c636020600aa3f378d326c84fac82eb1fb2871/
 
-I haven't looked at the details. But to me, when only one package needs
-something, it is *way* too early to make changes to the common
-infrastructure. Especially when there is a solution that allows to
-solve the problem by making changes to the package .mk file itself.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/liblogging/liblogging.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-I believe changes to the package infrastructure should only be made
-when:
-
- * There is really no solution to solve the particular problem at the
-   package .mk file level;
-
- * There are a sufficient (say 5 or 10 maybe) packages that have a
-   similar problem, and therefore factorization would make sense.
-
-So far, I don't really see a compelling reason to complexity the
-package infrastructure just for the need of one particular package.
-Need that may very well be transient, because a future bump of wget
-will most likely remove the need for the gnulib patch, therefore for
-the autoreconf.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/liblogging/liblogging.mk b/package/liblogging/liblogging.mk
+index fa181fb..3608c40 100644
+--- a/package/liblogging/liblogging.mk
++++ b/package/liblogging/liblogging.mk
+@@ -13,6 +13,7 @@ LIBLOGGING_CONF_OPT = --enable-cached-man-pages
+ 
+ ifeq ($(BR2_INIT_SYSTEMD),y)
+ LIBLOGGING_CONF_OPT += --enable-journal
++LIBLOGGING_DEPENDENCIES += systemd
+ else
+ LIBLOGGING_CONF_OPT += --disable-journal
+ endif
