@@ -1,36 +1,25 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 10 Apr 2014 09:38:17 +0300
-Subject: [Buildroot] [PATCH] ne10: bump version to 1.0.0
-In-Reply-To: <20140408235152.66df3162@skate>
-References: <99baf8d8d8d05b5f2de390deef6546acab0199dd.1396965306.git.baruch@tkos.co.il>
- <20140408235152.66df3162@skate>
-Message-ID: <20140410063817.GU4096@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 10 Apr 2014 10:14:25 +0200
+Subject: [Buildroot] [PATCH] ext-toolchain-wrapper: fix typo
+In-Reply-To: <b68a795fb9acbe7d8696cf9b6f09f798e39f636c.1397108785.git.baruch@tkos.co.il>
+References: <b68a795fb9acbe7d8696cf9b6f09f798e39f636c.1397108785.git.baruch@tkos.co.il>
+Message-ID: <20140410101425.0e711a02@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Dear Baruch Siach,
 
-On Tue, Apr 08, 2014 at 11:51:52PM +0200, Thomas Petazzoni wrote:
-> On Tue,  8 Apr 2014 16:55:06 +0300, Baruch Siach wrote:
-> 
-> > +-    set(CMAKE_C_FLAGS "-O2 -mthumb-interwork -mthumb -march=armv7-a -mfpu=vfp3")
-> > ++    set(CMAKE_C_FLAGS "-O2 -mthumb-interwork -mthumb -march=armv7-a -mfloat-abi=softfp -mfpu=neon")
-> 
-> This will not work on hardfp toolchains.
+On Thu, 10 Apr 2014 08:46:25 +0300, Baruch Siach wrote:
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  toolchain/toolchain-external/ext-toolchain-wrapper.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-So would depending on BR2_ARM_FPU_NEON || BR2_ARM_FPU_NEON_VFPV4 be 
-sufficient? The toolchain wrappers handles -mfloat-abi/-mfpu, so this patch is 
-not needed actually.
-
-BTW, what is BR2_ARM_ENABLE_NEON used for? I couldn't find any reference to 
-this configuration symbol in the code.
-
-baruch
-
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
