@@ -1,38 +1,51 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 10 Apr 2014 16:59:26 +0100
-Subject: [Buildroot] [PATCH 2/2] liblogging: Depend on systemd
-In-Reply-To: <1397145566-11243-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1397145566-11243-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1397145566-11243-2-git-send-email-Vincent.Riera@imgtec.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 10 Apr 2014 18:37:55 +0200
+Subject: [Buildroot] [PATCH 1/1] pypcap: new package
+In-Reply-To: <1397145313-35723-1-git-send-email-mlweber1@rockwellcollins.com>
+References: <1397145313-35723-1-git-send-email-mlweber1@rockwellcollins.com>
+Message-ID: <2f8d6b8f-0cbe-4f65-b381-dc84457e3e33@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package depends on systemd because in the configure phase it
-searches for a file installed by systemd. We add systemd to it's
-dependencies to ensure that is built before this package.
+Matt Weber <mlweber1@rockwellcollins.com> schreef:
+>Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
+>---
+> package/Config.in                      |  1 +
+> package/python-pypcap/Config.in        |  9 +++++++++
+> package/python-pypcap/python-pypcap.mk | 22 ++++++++++++++++++++++
+> 3 files changed, 32 insertions(+)
+> create mode 100644 package/python-pypcap/Config.in
+> create mode 100644 package/python-pypcap/python-pypcap.mk
+>
+>diff --git a/package/Config.in b/package/Config.in
+>index 46c4ba4..69ff49d 100644
+>--- a/package/Config.in
+>+++ b/package/Config.in
+>@@ -418,6 +418,7 @@ source "package/python-pyasn/Config.in"
+> source "package/python-pycrypto/Config.in"
+> source "package/python-pygame/Config.in"
+> source "package/python-pyparsing/Config.in"
+>+source "package/python-pypcap/Config.in"
+> source "package/python-pyro/Config.in"
+> source "package/python-pysnmp/Config.in"
+> source "package/python-pysnmp-apps/Config.in"
+>diff --git a/package/python-pypcap/Config.in b/package/python-pypcap/Config.in
+>new file mode 100644
+>index 0000000..a1ec7de
+>--- /dev/null
+>+++ b/package/python-pypcap/Config.in
+>@@ -0,0 +1,9 @@
+>+config BR2_PACKAGE_PYTHON_PYPCAP
+>+	bool "python-pypcap"
+>+	depends on BR2_PACKAGE_PYTHON
+>+	select BR2_PACKAGE_LIBPCAP
+>+	help
+>+	  The pypcap module is a object-oriented wrapper of the C libpcap library.
 
-Fixes:
-   http://autobuild.buildroot.net/results/32c/32c636020600aa3f378d326c84fac82eb1fb2871/
+an object-oriented
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/liblogging/liblogging.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
-
-diff --git a/package/liblogging/liblogging.mk b/package/liblogging/liblogging.mk
-index fa181fb..3608c40 100644
---- a/package/liblogging/liblogging.mk
-+++ b/package/liblogging/liblogging.mk
-@@ -13,6 +13,7 @@ LIBLOGGING_CONF_OPT = --enable-cached-man-pages
- 
- ifeq ($(BR2_INIT_SYSTEMD),y)
- LIBLOGGING_CONF_OPT += --enable-journal
-+LIBLOGGING_DEPENDENCIES += systemd
- else
- LIBLOGGING_CONF_OPT += --disable-journal
- endif
--- 
-1.7.1
+Best regards,
+Thomas
