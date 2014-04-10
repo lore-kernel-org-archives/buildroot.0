@@ -1,51 +1,38 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 10 Apr 2014 18:37:55 +0200
-Subject: [Buildroot] [PATCH 1/1] pypcap: new package
-In-Reply-To: <1397145313-35723-1-git-send-email-mlweber1@rockwellcollins.com>
-References: <1397145313-35723-1-git-send-email-mlweber1@rockwellcollins.com>
-Message-ID: <2f8d6b8f-0cbe-4f65-b381-dc84457e3e33@email.android.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Thu, 10 Apr 2014 19:50:34 +0200
+Subject: [Buildroot] [PATCH 1/2] systemd: Build legacy pc files when
+ liblogging is
+In-Reply-To: <1397145566-11243-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1397145566-11243-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20140410175032.GA24213@pc-eric>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Matt Weber <mlweber1@rockwellcollins.com> schreef:
->Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
->---
-> package/Config.in                      |  1 +
-> package/python-pypcap/Config.in        |  9 +++++++++
-> package/python-pypcap/python-pypcap.mk | 22 ++++++++++++++++++++++
-> 3 files changed, 32 insertions(+)
-> create mode 100644 package/python-pypcap/Config.in
-> create mode 100644 package/python-pypcap/python-pypcap.mk
->
->diff --git a/package/Config.in b/package/Config.in
->index 46c4ba4..69ff49d 100644
->--- a/package/Config.in
->+++ b/package/Config.in
->@@ -418,6 +418,7 @@ source "package/python-pyasn/Config.in"
-> source "package/python-pycrypto/Config.in"
-> source "package/python-pygame/Config.in"
-> source "package/python-pyparsing/Config.in"
->+source "package/python-pypcap/Config.in"
-> source "package/python-pyro/Config.in"
-> source "package/python-pysnmp/Config.in"
-> source "package/python-pysnmp-apps/Config.in"
->diff --git a/package/python-pypcap/Config.in b/package/python-pypcap/Config.in
->new file mode 100644
->index 0000000..a1ec7de
->--- /dev/null
->+++ b/package/python-pypcap/Config.in
->@@ -0,0 +1,9 @@
->+config BR2_PACKAGE_PYTHON_PYPCAP
->+	bool "python-pypcap"
->+	depends on BR2_PACKAGE_PYTHON
->+	select BR2_PACKAGE_LIBPCAP
->+	help
->+	  The pypcap module is a object-oriented wrapper of the C libpcap library.
+Hi!
 
-an object-oriented
+On Thu, Apr 10, 2014 at 04:59:25PM +0100, Vicente Olivert Riera wrote:
+[...]
+> Passing the "--enable-compat-libs" option to the systemd configure
+> script will install the separate libraries and ".pc" files, so we add
+> that option just in case the liblogging package had been selected.  We
+> can revert this change when liblogging upstream fixes it's configure
+> script to check for "libsystemd.pc" instead of "libsystemd-journal.pc".
+
+Maybe some other packages depend on these compatibility libraries, so instead
+of referring to BR2_PACKAGE_LIBLOGGING in systemd.mk, it would be best to add
+a generic configuration option to systemd, as done for berkeleydb with
+BR2_PACKAGE_BERKELEYDB_COMPAT185. It could be named BR2_PACKAGE_SYSTEMD_COMPAT.
+
+Then, in package/liblogging/Config.in, we would have:
+
+  select BR2_PACKAGE_SYSTEMD_COMPAT if BR2_INIT_SYSTEMD
+
+And this would be removed when liblogging is fixed upstream.
+
+What do think of this?
 
 Best regards,
-Thomas
+ELB
