@@ -1,76 +1,62 @@
-From: Matt Weber <mlweber1@rockwellcollins.com>
-Date: Thu, 10 Apr 2014 10:55:13 -0500
-Subject: [Buildroot] [PATCH 1/1] pypcap: new package
-Message-ID: <1397145313-35723-1-git-send-email-mlweber1@rockwellcollins.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 10 Apr 2014 16:59:25 +0100
+Subject: [Buildroot] [PATCH 1/2] systemd: Build legacy pc files when
+	liblogging is
+Message-ID: <1397145566-11243-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
----
- package/Config.in                      |  1 +
- package/python-pypcap/Config.in        |  9 +++++++++
- package/python-pypcap/python-pypcap.mk | 22 ++++++++++++++++++++++
- 3 files changed, 32 insertions(+)
- create mode 100644 package/python-pypcap/Config.in
- create mode 100644 package/python-pypcap/python-pypcap.mk
+The liblogging package stills searching for "libsystemd-journal.pc" in
+the configure phase. The default behaviour from systemd-209 and later
+versions is to merge the libraries and ".pc" files into single
+libsystemd{.pc} files, so the old "libsystemd-*{.pc}" files don't exist
+anymore and liblogging fails at configure phase with a message like this
+one:
 
-diff --git a/package/Config.in b/package/Config.in
-index 46c4ba4..69ff49d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -418,6 +418,7 @@ source "package/python-pyasn/Config.in"
- source "package/python-pycrypto/Config.in"
- source "package/python-pygame/Config.in"
- source "package/python-pyparsing/Config.in"
-+source "package/python-pypcap/Config.in"
- source "package/python-pyro/Config.in"
- source "package/python-pysnmp/Config.in"
- source "package/python-pysnmp-apps/Config.in"
-diff --git a/package/python-pypcap/Config.in b/package/python-pypcap/Config.in
-new file mode 100644
-index 0000000..a1ec7de
---- /dev/null
-+++ b/package/python-pypcap/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_PYPCAP
-+	bool "python-pypcap"
-+	depends on BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_LIBPCAP
-+	help
-+	  The pypcap module is a object-oriented wrapper of the C libpcap library.
+........................................................................
+checking for LIBSYSTEMD_JOURNAL... no
+configure: error: Package requirements (libsystemd-journal >= 197) were
+not met:
+
+Package libsystemd-journal was not found in the pkg-config search path.
+Perhaps you should add the directory containing `libsystemd-journal.pc'
+to the PKG_CONFIG_PATH environment variable
+No package 'libsystemd-journal' found
+........................................................................
+
+Passing the "--enable-compat-libs" option to the systemd configure
+script will install the separate libraries and ".pc" files, so we add
+that option just in case the liblogging package had been selected.  We
+can revert this change when liblogging upstream fixes it's configure
+script to check for "libsystemd.pc" instead of "libsystemd-journal.pc".
+
+Fixes:
+   http://autobuild.buildroot.net/results/32c/32c636020600aa3f378d326c84fac82eb1fb2871/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/systemd/systemd.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
+
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index ecedfce..3d7f42e 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -46,6 +46,12 @@ SYSTEMD_CONF_OPT += \
+ 	--disable-dbus \
+ 	--without-python
+ 
++# liblogging still needs the old-style libsystemd-*.pc files
++# remove this block when liblogging upstream fix it
++ifeq ($(BR2_PACKAGE_LIBLOGGING),y)
++SYSTEMD_CONF_OPT += --enable-compat-libs
++endif
 +
-+	  https://code.google.com/p/pypcap/
-+
-diff --git a/package/python-pypcap/python-pypcap.mk b/package/python-pypcap/python-pypcap.mk
-new file mode 100644
-index 0000000..89f2dc1
---- /dev/null
-+++ b/package/python-pypcap/python-pypcap.mk
-@@ -0,0 +1,22 @@
-+################################################################################
-+#
-+# python-pypcap
-+#
-+################################################################################
-+
-+PYTHON_PYPCAP_VERSION = 102
-+PYTHON_PYPCAP_SITE = https://pypcap.googlecode.com/svn/trunk
-+PYTHON_PYPCAP_SITE_METHOD = svn
-+PYTHON_PYPCAP_LICENSE = BSD-3c
-+PYTHON_PYPCAP_LICENSE_FILES = LICENSE
-+PYTHON_PYPCAP_SETUP_TYPE = distutils
-+PYTHON_PYPCAP_DEPENDENCIES = host-python-pyrex libpcap
-+
-+define PYTHON_PYPCAP_CONFIGURE_CMDS
-+	$(HOST_DIR)/usr/bin/pyrexc $(@D)/pcap.pyx
-+	(cd $(@D); \
-+		$(HOST_DIR)/usr/bin/python setup.py \
-+		config --with-pcap=$(STAGING_DIR)/usr)
-+endef
-+
-+$(eval $(python-package))
+ ifeq ($(BR2_PACKAGE_ACL),y)
+ SYSTEMD_CONF_OPT += --enable-acl
+ SYSTEMD_DEPENDENCIES += acl
 -- 
-1.9.0
+1.7.1
