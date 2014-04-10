@@ -1,37 +1,29 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 10 Apr 2014 22:43:17 +0200
-Subject: [Buildroot] [PATCH 1/1] erlang: bump version to 17.0
-In-Reply-To: <1397140525-15130-1-git-send-email-fhunleth@troodon-software.com>
- (Frank Hunleth's message of "Thu, 10 Apr 2014 10:35:25 -0400")
-References: <1397140525-15130-1-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <877g6w7w62.fsf@dell.be.48ers.dk>
+Date: Thu, 10 Apr 2014 22:44:34 +0200
+Subject: [Buildroot] [PATCH] luajit: Disable for MIPS architecture with
+	soft-float
+In-Reply-To: <1397050855-5843-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Wed, 9 Apr 2014 14:40:55 +0100")
+References: <1397050855-5843-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <8738hk7w3x.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Frank" == Frank Hunleth <fhunleth@troodon-software.com> writes:
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
- > Erlang/OTP 17.0 is a new major release with new features, characteristics
- > improvements, as well as some minor incompatibilities.
+ > Currently luajit is not supported on MIPS soft-float userlands. Upstream
+ > plans to support it in the future:
 
- > Some highlights of the release are:
- >   - Erlang/OTP has been ported to the realtime operating system OSE.
- >   - Maps, a new dictionary data type (experimental)
- >   - A more natural mapping from ASN.1 OCTET STRING and BIT STRING to Erlang
- >     types, and other ASN.1 improvements and optimizations
- >   - The {active, N} socket option for TCP, UDP, and SCTP
- >   - A new (optional) scheduler utilization balancing mechanism
- >   - Migration of memory carriers has been enabled by default on all ERTS
- >     internal memory allocators
- >   - Increased garbage collection tenure rate
- >   - Experimental "dirty schedulers" functionality
- >   - Funs can now be given names
- >   - Miscellaneous unicode support enhancements
- >   - A new version scheme for OTP its applications has been introduced
+ >    http://wiki.luajit.org/Open-Sponsorships#MIPS-Soft-Float-and-Dual-Number-Port
 
- > Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+ > Fixes:
+
+ >    http://autobuild.buildroot.net/results/d52/d5232a215e9e9aeb40b2e4e353329a27603c79ab/
+
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
 Committed, thanks.
 
