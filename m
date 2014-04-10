@@ -1,29 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 10 Apr 2014 10:15:13 +0200
-Subject: [Buildroot] [PATCH v2] expect: new package 5.45
-In-Reply-To: <5b136bda-caa5-47d1-9940-23d54caa06f8@email.android.com>
-References: <1397051636-22272-1-git-send-email-andrew.ruder@elecsyscorp.com>
- <5b136bda-caa5-47d1-9940-23d54caa06f8@email.android.com>
-Message-ID: <20140410101513.6354299c@skate>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 10 Apr 2014 11:16:12 +0300
+Subject: [Buildroot] [PATCH v2] openpgm: needs host python2
+Message-ID: <783d7d9db0c782c2317fcfc6160b6802b095164d.1397117772.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+When BR2_PACKAGE_PYTHON3=y host python symlinks to python3. This breaks the
+version_generator.py script. Make sure we use the right host python version.
 
-On Wed, 09 Apr 2014 21:47:01 +0200, Thomas De Schampheleire wrote:
+We can't use the host installed python for ac_cv_path_PYTHON, but host python
+might default to python3 in the not so distant future.
 
-> >+EXPECT_SITE = http://downloads.sourceforge.net/project/expect/Expect/$(EXPECT_VERSION)
-> 
-> I don't have the sources available right now, but don't we have a variable that points to sourceforge? BR2_SOURCEFORGE_MIRROR I thought...
+Fixes:
+http://autobuild.buildroot.net/results/01f/01f886a073439c0639ed93e596b68bcadf1a5824/
 
-No, we removed it. This is because downloads.sourceforge.net already
-does the balancing across the mirrors.
+Cc: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+Changes v1 -> v2:
+	* Depend on host-python unconditionally (Samuel Martin)
+	* Explain in the commit log why not to use the host python
+---
+ package/openpgm/openpgm.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Thomas
+diff --git a/package/openpgm/openpgm.mk b/package/openpgm/openpgm.mk
+index 3ec5c77e28c4..a108afea903b 100644
+--- a/package/openpgm/openpgm.mk
++++ b/package/openpgm/openpgm.mk
+@@ -12,7 +12,10 @@ OPENPGM_LICENSE_FILES = openpgm/pgm/LICENSE
+ OPENPGM_INSTALL_STAGING = YES
+ OPENPGM_AUTORECONF = YES
+ OPENPGM_SUBDIR = openpgm/pgm/
++# version_generator.py needs python2
++OPENPGM_DEPENDENCIES = host-python
+ OPENPGM_CONF_ENV = ac_cv_file__proc_cpuinfo=yes ac_cv_file__dev_rtc=no \
+-                   ac_cv_file__dev_hpet=no
++		ac_cv_file__dev_hpet=no \
++		ac_cv_path_PYTHON=$(HOST_DIR)/usr/bin/python2
+ 
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
