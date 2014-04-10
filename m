@@ -1,38 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Apr 2014 22:27:20 +0200
-Subject: [Buildroot] [git commit] gd: fix static build with threads
-Message-ID: <20140410204504.2F7F29C483@busybox.osuosl.org>
+Date: Thu, 10 Apr 2014 22:44:14 +0200
+Subject: [Buildroot] [git commit] luajit: Disable for MIPS architecture with
+	soft-float
+Message-ID: <20140410204504.49F389C483@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1c53dd65b2309eedf1302146492f9af7f6a3295f
+commit: http://git.buildroot.net/buildroot/commit/?id=34b4d09d718b0466127d70bb6dedcbd0b5aa288b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/4b4/4b4272876385cc21dd06ee946d658b8f9e225d78/
+Currently luajit is not supported on MIPS soft-float userlands. Upstream
+plans to support it in the future:
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+   http://wiki.luajit.org/Open-Sponsorships#MIPS-Soft-Float-and-Dual-Number-Port
+
+Fixes:
+
+   http://autobuild.buildroot.net/results/d52/d5232a215e9e9aeb40b2e4e353329a27603c79ab/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gd/gd.mk |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ package/luajit/Config.in |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/gd/gd.mk b/package/gd/gd.mk
-index 60c1c51..146ad6f 100644
---- a/package/gd/gd.mk
-+++ b/package/gd/gd.mk
-@@ -16,6 +16,11 @@ GD_LICENSE_FILES = COPYING
- GD_CONFIG_SCRIPTS = gdlib-config
- GD_CONF_OPT = --without-x --disable-rpath
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS)$(BR2_PREFER_STATIC_LIB),yy)
-+# add -pthread when linking executables statically
-+GD_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -pthread"
-+endif
-+
- ifeq ($(BR2_PACKAGE_FONTCONFIG),y)
- GD_DEPENDENCIES += fontconfig
- GD_CONF_OPT += --with-fontconfig
+diff --git a/package/luajit/Config.in b/package/luajit/Config.in
+index 58b1653..5176cb8 100644
+--- a/package/luajit/Config.in
++++ b/package/luajit/Config.in
+@@ -3,7 +3,8 @@ config BR2_PACKAGE_LUAJIT
+ 	select BR2_PACKAGE_HAS_LUAINTERPRETER
+ 	# Luajit is only available for some target architectures, and
+ 	# has some complexity wrt 32/64. See luajit.mk for details.
+-	depends on BR2_i386 || (BR2_x86_64 && BR2_HOSTARCH='x86_64') || BR2_powerpc || BR2_arm || BR2_armeb || BR2_mips || BR2_mipsel
++	depends on BR2_i386 || (BR2_x86_64 && BR2_HOSTARCH='x86_64') || BR2_powerpc || BR2_arm || BR2_armeb \
++		   || ((BR2_mips || BR2_mipsel) && !BR2_MIPS_SOFT_FLOAT)
+ 	help
+ 	  LuaJIT implements the full set of language features defined
+ 	  by Lua 5.1. The virtual machine (VM) is API- and
