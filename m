@@ -1,49 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Apr 2014 22:21:31 +0200
-Subject: [Buildroot] [git commit] mtd: Add ubiblock tool
-Message-ID: <20140410204503.E06FB9C483@busybox.osuosl.org>
+Date: Thu, 10 Apr 2014 22:27:20 +0200
+Subject: [Buildroot] [git commit] gd: fix static build with threads
+Message-ID: <20140410204504.2F7F29C483@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4750552e3eb87235b6a512bd6ca911e4bfb1bb26
+commit: http://git.buildroot.net/buildroot/commit/?id=1c53dd65b2309eedf1302146492f9af7f6a3295f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The new release adds a new userspace tool called ubiblock. This is
-used to control UBI's new block device feature which will be added
-in Linux v3.15.
+Fixes:
+http://autobuild.buildroot.net/results/4b4/4b4272876385cc21dd06ee946d658b8f9e225d78/
 
-Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mtd/Config.in |    4 ++++
- package/mtd/mtd.mk    |    1 +
- 2 files changed, 5 insertions(+), 0 deletions(-)
+ package/gd/gd.mk |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-diff --git a/package/mtd/Config.in b/package/mtd/Config.in
-index 26f59ed..dd090a0 100644
---- a/package/mtd/Config.in
-+++ b/package/mtd/Config.in
-@@ -157,4 +157,8 @@ config BR2_PACKAGE_MTD_UBIUPDATEVOL
- 	bool "ubiupdatevol"
- 	default y
+diff --git a/package/gd/gd.mk b/package/gd/gd.mk
+index 60c1c51..146ad6f 100644
+--- a/package/gd/gd.mk
++++ b/package/gd/gd.mk
+@@ -16,6 +16,11 @@ GD_LICENSE_FILES = COPYING
+ GD_CONFIG_SCRIPTS = gdlib-config
+ GD_CONF_OPT = --without-x --disable-rpath
  
-+config BR2_PACKAGE_MTD_UBIBLOCK
-+	bool "ubiblock"
-+	default y
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS)$(BR2_PREFER_STATIC_LIB),yy)
++# add -pthread when linking executables statically
++GD_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -pthread"
++endif
 +
- endif
-diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-index 9dde40a..14e8174 100644
---- a/package/mtd/mtd.mk
-+++ b/package/mtd/mtd.mk
-@@ -74,6 +74,7 @@ MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIRENAME)	+= ubirename
- MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIRMVOL)	+= ubirmvol
- MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIRSVOL)	+= ubirsvol
- MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIUPDATEVOL)	+= ubiupdatevol
-+MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIBLOCK)	+= ubiblock
- 
- MTD_TARGETS_y += $(addprefix ubi-utils/,$(MTD_TARGETS_UBI_y))
- MTD_TARGETS_$(BR2_PACKAGE_MTD_MKFSUBIFS) += mkfs.ubifs/mkfs.ubifs
+ ifeq ($(BR2_PACKAGE_FONTCONFIG),y)
+ GD_DEPENDENCIES += fontconfig
+ GD_CONF_OPT += --with-fontconfig
