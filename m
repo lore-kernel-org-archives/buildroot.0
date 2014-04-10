@@ -1,57 +1,76 @@
 From: Matt Weber <mlweber1@rockwellcollins.com>
-Date: Thu, 10 Apr 2014 10:54:55 -0500
-Subject: [Buildroot] [PATCH v4] pyrex: new package
-Message-ID: <1397145295-35472-1-git-send-email-mlweber1@rockwellcollins.com>
+Date: Thu, 10 Apr 2014 10:55:13 -0500
+Subject: [Buildroot] [PATCH 1/1] pypcap: new package
+Message-ID: <1397145313-35723-1-git-send-email-mlweber1@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pyrex is a language that allows you to mix python and C code in a
-single .pyx description file.  This file is then rendered into C
-code by the pyrexc host tool.  That C file then can be used within
-an application build or as part of the normal distutils build
-process used to build a Python extension module.
-
 Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
 ---
-Changes v3 -> v4:
-   - Removed ability to menu select pyrex since it's a tool to
-     generate code and would be solely a dependency. (Suggested by Thomas P)
-Changes v2 -> v3:
-   - Moved menu entry under host utilities menu (Suggested by Yann)
-   - Updated description and included a description above (Suggested by Yann)
+ package/Config.in                      |  1 +
+ package/python-pypcap/Config.in        |  9 +++++++++
+ package/python-pypcap/python-pypcap.mk | 22 ++++++++++++++++++++++
+ 3 files changed, 32 insertions(+)
+ create mode 100644 package/python-pypcap/Config.in
+ create mode 100644 package/python-pypcap/python-pypcap.mk
 
-Changes v1 -> v2:
-   - Converted to a host only pkg as this pkg provides generated
-     C code that an application would use from a sysroot
-     (not on target).  (Suggested by Thomas)
-
- package/python-pyrex/python-pyrex.mk | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
- create mode 100644 package/python-pyrex/python-pyrex.mk
-
-diff --git a/package/python-pyrex/python-pyrex.mk b/package/python-pyrex/python-pyrex.mk
+diff --git a/package/Config.in b/package/Config.in
+index 46c4ba4..69ff49d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -418,6 +418,7 @@ source "package/python-pyasn/Config.in"
+ source "package/python-pycrypto/Config.in"
+ source "package/python-pygame/Config.in"
+ source "package/python-pyparsing/Config.in"
++source "package/python-pypcap/Config.in"
+ source "package/python-pyro/Config.in"
+ source "package/python-pysnmp/Config.in"
+ source "package/python-pysnmp-apps/Config.in"
+diff --git a/package/python-pypcap/Config.in b/package/python-pypcap/Config.in
 new file mode 100644
-index 0000000..73cb163
+index 0000000..a1ec7de
 --- /dev/null
-+++ b/package/python-pyrex/python-pyrex.mk
-@@ -0,0 +1,15 @@
++++ b/package/python-pypcap/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_PYPCAP
++	bool "python-pypcap"
++	depends on BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_LIBPCAP
++	help
++	  The pypcap module is a object-oriented wrapper of the C libpcap library.
++
++	  https://code.google.com/p/pypcap/
++
+diff --git a/package/python-pypcap/python-pypcap.mk b/package/python-pypcap/python-pypcap.mk
+new file mode 100644
+index 0000000..89f2dc1
+--- /dev/null
++++ b/package/python-pypcap/python-pypcap.mk
+@@ -0,0 +1,22 @@
 +################################################################################
 +#
-+# python-pyrex
++# python-pypcap
 +#
 +################################################################################
 +
-+PYTHON_PYREX_VERSION = 0.9.9
-+PYTHON_PYREX_SOURCE = Pyrex-$(PYTHON_PYREX_VERSION).tar.gz
-+PYTHON_PYREX_SITE = http://www.cosc.canterbury.ac.nz/greg.ewing/python/Pyrex/
-+PYTHON_PYREX_DEPENDENCIES = host-python
-+PYTHON_PYREX_LICENSE = Apache-v2
-+PYTHON_PYREX_LICENSE_FILES = LICENSE.txt
-+PYTHON_PYREX_SETUP_TYPE = distutils
++PYTHON_PYPCAP_VERSION = 102
++PYTHON_PYPCAP_SITE = https://pypcap.googlecode.com/svn/trunk
++PYTHON_PYPCAP_SITE_METHOD = svn
++PYTHON_PYPCAP_LICENSE = BSD-3c
++PYTHON_PYPCAP_LICENSE_FILES = LICENSE
++PYTHON_PYPCAP_SETUP_TYPE = distutils
++PYTHON_PYPCAP_DEPENDENCIES = host-python-pyrex libpcap
 +
-+$(eval $(host-python-package))
++define PYTHON_PYPCAP_CONFIGURE_CMDS
++	$(HOST_DIR)/usr/bin/pyrexc $(@D)/pcap.pyx
++	(cd $(@D); \
++		$(HOST_DIR)/usr/bin/python setup.py \
++		config --with-pcap=$(STAGING_DIR)/usr)
++endef
++
++$(eval $(python-package))
 -- 
 1.9.0
