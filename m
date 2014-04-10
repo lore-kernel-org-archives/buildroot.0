@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 10 Apr 2014 22:20:56 +0200
-Subject: [Buildroot] [PATCH] ulogd: bump to version 2.0.4
-In-Reply-To: <1397066999-7497-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 9 Apr 2014 15:09:59 -0300")
-References: <1397066999-7497-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87wqex6imv.fsf@dell.be.48ers.dk>
+Date: Thu, 10 Apr 2014 22:21:09 +0200
+Subject: [Buildroot] [PATCH] libyaml: security bump to version 0.1.6
+In-Reply-To: <1397067106-13952-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 9 Apr 2014 15:11:46 -0300")
+References: <1397067106-13952-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87sipl6imi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,6 +13,7 @@ To: buildroot@busybox.net
 
 >>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
+ > Fixes CVE-2014-2525.
  > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
 Committed, thanks.
