@@ -1,31 +1,31 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 10 Apr 2014 22:44:34 +0200
-Subject: [Buildroot] [PATCH] luajit: Disable for MIPS architecture with
-	soft-float
-In-Reply-To: <1397050855-5843-1-git-send-email-Vincent.Riera@imgtec.com>
- (Vicente Olivert Riera's message of "Wed, 9 Apr 2014 14:40:55 +0100")
-References: <1397050855-5843-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <8738hk7w3x.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 10 Apr 2014 16:13:40 +0200
+Subject: [Buildroot] [git commit] jpeg-turbo: bump version
+Message-ID: <20140410204503.BD1B79C550@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=0450235a2fa20dce29d8b199edcec431cba05ec0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Currently luajit is not supported on MIPS soft-float userlands. Upstream
- > plans to support it in the future:
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/jpeg-turbo/jpeg-turbo.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- >    http://wiki.luajit.org/Open-Sponsorships#MIPS-Soft-Float-and-Dual-Number-Port
-
- > Fixes:
-
- >    http://autobuild.buildroot.net/results/d52/d5232a215e9e9aeb40b2e4e353329a27603c79ab/
-
- > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
+index 785ef57..4d7cc0d 100644
+--- a/package/jpeg-turbo/jpeg-turbo.mk
++++ b/package/jpeg-turbo/jpeg-turbo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-JPEG_TURBO_VERSION = 1.3.0
++JPEG_TURBO_VERSION = 1.3.1
+ JPEG_TURBO_SOURCE = libjpeg-turbo-$(JPEG_TURBO_VERSION).tar.gz
+ JPEG_TURBO_SITE = http://downloads.sourceforge.net/project/libjpeg-turbo/$(JPEG_TURBO_VERSION)
+ JPEG_TURBO_INSTALL_STAGING = YES
