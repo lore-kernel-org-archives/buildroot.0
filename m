@@ -1,72 +1,79 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 10 Apr 2014 23:41:14 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-04-07
-In-Reply-To: <CAMo8BfLKSdQnr2+a-WDCj9zJAPgXyitcM42fMDYhvDkzPfeR2Q@mail.gmail.com>
-References: <20140408063009.EA284100CF4@stock.ovh.net>
- <CAMo8BfL7qvw6HgUtB62XJne2i_irrgWCwB4wtkGBvpP-X1M72w@mail.gmail.com>
- <20140408234145.4ed87c17@skate>
- <CAMo8BfLKSdQnr2+a-WDCj9zJAPgXyitcM42fMDYhvDkzPfeR2Q@mail.gmail.com>
-Message-ID: <20140410234114.6c1c72cd@skate>
+From: Matt Weber <mlweber1@rockwellcollins.com>
+Date: Thu, 10 Apr 2014 22:39:54 -0500
+Subject: [Buildroot] [PATCH v2] pypcap: new package
+Message-ID: <1397187594-58449-1-git-send-email-mlweber1@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Max Filippov,
+Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
+---
+Changes v1 -> v2:
+   - Fixed "a" to "an" in Config.in description (Suggested by Thomas S)
 
-On Wed, 9 Apr 2014 01:51:08 +0400, Max Filippov wrote:
+ package/Config.in                      |  1 +
+ package/python-pypcap/Config.in        |  9 +++++++++
+ package/python-pypcap/python-pypcap.mk | 22 ++++++++++++++++++++++
+ 3 files changed, 32 insertions(+)
+ create mode 100644 package/python-pypcap/Config.in
+ create mode 100644 package/python-pypcap/python-pypcap.mk
 
-> >> >     xtensa |                     php-5.5.11 | NOK | http://autobuild.buildroot.net/results/959b77fa2c1f13b1958b234803437e09734e882e/
-> >>
-> >> Couldn't reproduce. But I had to disable BR2_PACKAGE_HOST_SAM_BA,
-> >> otherwise it refused to build with the following message:
-> >>
-> >> Your Buildroot configuration uses pre-built tools for the x86 architecture,
-> >> but your build machine uses the x86-64 architecture without the 32
-> >> bits compatibility library.
-> >
-> > I think we can safely assume that the problem is not due to
-> > BR2_PACKAGE_HOST_SAM_BA. I'll try to reproduce the same build failure
-> > on the autobuilder, and gather the config.log file of php. I'll let you
-> > know.
-> 
-> The tail of the failing build log:
-> 
-> ...
-> checking for MySQL support... yes
-> checking for specified location of the MySQL UNIX socket... no
-> checking for mysql_close in -lmysqlclient... no
-> checking for mysql_error in -lmysqlclient... no
-> configure: error: mysql configure failed. Please check config.log for
-> more information.
-> make: *** [/home/test/test/2/output/build/php-5.5.11/.stamp_configured] Error 1
-
-Ok, I reproduced the problem. The config.log of php contains the
-following problem:
-
-configure:58794: result: no
-configure:59004: checking for mysql_error in -lmysqlclient
-configure:59029: /home/test/outputs/959b77fa2c1f13b1958b234803437e09734e882e/output/host/usr/bin/xtensa-buildroot-linux-uclibc-gcc -o conftest -I/include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURC
-E -D_FILE_OFFSET_BITS=64 -mlongcalls -mtext-section-literals -pipe -Os  -fvisibility=hidden -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -L/home/test/outputs/959b77fa2c1f13b1
-958b234803437e09734e882e/output/host/usr/xtensa-buildroot-linux-uclibc/sysroot/usr/lib/mysql -L/home/test/outputs/959b77fa2c1f13b1958b234803437e09734e882e/output/host/usr/xtensa-buildroot-linux-
-uclibc/sysroot/usr/lib -L/lib  -L/home/test/outputs/959b77fa2c1f13b1958b234803437e09734e882e/output/host/usr/xtensa-buildroot-linux-uclibc/sysroot/usr/lib -L/home/test/outputs/959b77fa2c1f13b195
-8b234803437e09734e882e/output/host/usr/xtensa-buildroot-linux-uclibc/sysroot/usr conftest.c -lmysqlclient  -lz -lintl -lcrypto -lssl -lcrypto -lcurl -lz -lcrypto -lssl -lcrypto -lm  -lxml2 -lz -
-lm -ldl -lcurl >&5
-/lib/libgcc_s.so.1: file not recognized: File format not recognized
-collect2: error: ld returned 1 exit status
-
-The problem is due to the compilation command line containing -L/lib,
-which is wrong when cross-compiling.
-
-See also
-https://gist.github.com/anonymous/10425853#file-gistfile1-txt-L8083 for
-the full config.log file. I'm keeping the build output directory
-around, in case additional informations are needed.
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index 46c4ba4..69ff49d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -418,6 +418,7 @@ source "package/python-pyasn/Config.in"
+ source "package/python-pycrypto/Config.in"
+ source "package/python-pygame/Config.in"
+ source "package/python-pyparsing/Config.in"
++source "package/python-pypcap/Config.in"
+ source "package/python-pyro/Config.in"
+ source "package/python-pysnmp/Config.in"
+ source "package/python-pysnmp-apps/Config.in"
+diff --git a/package/python-pypcap/Config.in b/package/python-pypcap/Config.in
+new file mode 100644
+index 0000000..d3a88bb
+--- /dev/null
++++ b/package/python-pypcap/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_PYPCAP
++	bool "python-pypcap"
++	depends on BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_LIBPCAP
++	help
++	  The pypcap module is an object-oriented wrapper of the C libpcap library.
++
++	  https://code.google.com/p/pypcap/
++
+diff --git a/package/python-pypcap/python-pypcap.mk b/package/python-pypcap/python-pypcap.mk
+new file mode 100644
+index 0000000..89f2dc1
+--- /dev/null
++++ b/package/python-pypcap/python-pypcap.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# python-pypcap
++#
++################################################################################
++
++PYTHON_PYPCAP_VERSION = 102
++PYTHON_PYPCAP_SITE = https://pypcap.googlecode.com/svn/trunk
++PYTHON_PYPCAP_SITE_METHOD = svn
++PYTHON_PYPCAP_LICENSE = BSD-3c
++PYTHON_PYPCAP_LICENSE_FILES = LICENSE
++PYTHON_PYPCAP_SETUP_TYPE = distutils
++PYTHON_PYPCAP_DEPENDENCIES = host-python-pyrex libpcap
++
++define PYTHON_PYPCAP_CONFIGURE_CMDS
++	$(HOST_DIR)/usr/bin/pyrexc $(@D)/pcap.pyx
++	(cd $(@D); \
++		$(HOST_DIR)/usr/bin/python setup.py \
++		config --with-pcap=$(STAGING_DIR)/usr)
++endef
++
++$(eval $(python-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.0
