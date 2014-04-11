@@ -1,7 +1,11 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 11 Apr 2014 17:32:18 +0200
-Subject: [Buildroot] [PATCH 1/1] libdrm: version bump 2.4.53
-Message-ID: <1397230338-19025-1-git-send-email-bernd.kuhls@t-online.de>
+From: Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>
+Date: Fri, 11 Apr 2014 16:39:04 +0100
+Subject: [Buildroot] [PATCH 3/3] package/zile: add Zile is Lossy Emacs
+	editor
+In-Reply-To: <1397225156-23112-4-git-send-email-alex.bennee@linaro.org>
+References: <1397225156-23112-1-git-send-email-alex.bennee@linaro.org>
+ <1397225156-23112-4-git-send-email-alex.bennee@linaro.org>
+Message-ID: <87sipj510n.fsf@linaro.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,23 +13,15 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libdrm/libdrm.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Alex Benn?e <alex.bennee@linaro.org> writes:
 
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index 881ff03..bee1e77 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBDRM_VERSION = 2.4.52
-+LIBDRM_VERSION = 2.4.53
- LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
- LIBDRM_SITE = http://dri.freedesktop.org/libdrm/
- LIBDRM_LICENSE = MIT
+> This is a lightweight Emacs clone useful for embedded systems. I nabbed
+> the help2man disable patch from OpenEmbedded.
+
+I forgot to mention the disable patch was never sent upstream as their
+policy is not to submit tweaks to the configure scripts. The alternative
+is to submit a patch upstream that enables the disabling of document
+generation.
+
 -- 
-1.7.10.4
+Alex Benn?e
