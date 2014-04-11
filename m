@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 11 Apr 2014 22:00:58 +0200
-Subject: [Buildroot] [PATCH v4] pyrex: new package
-In-Reply-To: <1397145295-35472-1-git-send-email-mlweber1@rockwellcollins.com>
- (Matt Weber's message of "Thu, 10 Apr 2014 10:54:55 -0500")
-References: <1397145295-35472-1-git-send-email-mlweber1@rockwellcollins.com>
-Message-ID: <87a9br4ow5.fsf@dell.be.48ers.dk>
+Date: Fri, 11 Apr 2014 22:01:29 +0200
+Subject: [Buildroot] [PATCH v2] pypcap: new package
+In-Reply-To: <1397187594-58449-1-git-send-email-mlweber1@rockwellcollins.com>
+ (Matt Weber's message of "Thu, 10 Apr 2014 22:39:54 -0500")
+References: <1397187594-58449-1-git-send-email-mlweber1@rockwellcollins.com>
+Message-ID: <8761mf4ova.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,15 +13,11 @@ To: buildroot@busybox.net
 
 >>>>> "Matt" == Matt Weber <mlweber1@rockwellcollins.com> writes:
 
- > Pyrex is a language that allows you to mix python and C code in a
- > single .pyx description file.  This file is then rendered into C
- > code by the pyrexc host tool.  That C file then can be used within
- > an application build or as part of the normal distutils build
- > process used to build a Python extension module.
-
  > Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
+ > ---
+ > Changes v1 -> v2:
+ >    - Fixed "a" to "an" in Config.in description (Suggested by Thomas S)
 
-Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
