@@ -1,118 +1,75 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Fri, 11 Apr 2014 10:01:07 +0400
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-04-07
-In-Reply-To: <20140410234114.6c1c72cd@skate>
-References: <20140408063009.EA284100CF4@stock.ovh.net>
- <CAMo8BfL7qvw6HgUtB62XJne2i_irrgWCwB4wtkGBvpP-X1M72w@mail.gmail.com>
- <20140408234145.4ed87c17@skate>
- <CAMo8BfLKSdQnr2+a-WDCj9zJAPgXyitcM42fMDYhvDkzPfeR2Q@mail.gmail.com>
- <20140410234114.6c1c72cd@skate>
-Message-ID: <CAMo8BfJrBZ4Z6M5D_F8vS3EL5g4KM8YTHCByC4qQkyFyZuLg4A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 11 Apr 2014 08:30:08 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-04-10
+Message-ID: <20140411063008.70B85100F1F@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Build statistics for 2014-04-10
+===============================
 
-On Fri, Apr 11, 2014 at 1:41 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Max Filippov,
->
-> On Wed, 9 Apr 2014 01:51:08 +0400, Max Filippov wrote:
->
->> >> >     xtensa |                     php-5.5.11 | NOK | http://autobuild.buildroot.net/results/959b77fa2c1f13b1958b234803437e09734e882e/
->> >>
->> >> Couldn't reproduce. But I had to disable BR2_PACKAGE_HOST_SAM_BA,
->> >> otherwise it refused to build with the following message:
->> >>
->> >> Your Buildroot configuration uses pre-built tools for the x86 architecture,
->> >> but your build machine uses the x86-64 architecture without the 32
->> >> bits compatibility library.
->> >
->> > I think we can safely assume that the problem is not due to
->> > BR2_PACKAGE_HOST_SAM_BA. I'll try to reproduce the same build failure
->> > on the autobuilder, and gather the config.log file of php. I'll let you
->> > know.
->>
->> The tail of the failing build log:
->>
->> ...
->> checking for MySQL support... yes
->> checking for specified location of the MySQL UNIX socket... no
->> checking for mysql_close in -lmysqlclient... no
->> checking for mysql_error in -lmysqlclient... no
->> configure: error: mysql configure failed. Please check config.log for
->> more information.
->> make: *** [/home/test/test/2/output/build/php-5.5.11/.stamp_configured] Error 1
->
-> Ok, I reproduced the problem. The config.log of php contains the
-> following problem:
->
-> configure:58794: result: no
-> configure:59004: checking for mysql_error in -lmysqlclient
-> configure:59029: /home/test/outputs/959b77fa2c1f13b1958b234803437e09734e882e/output/host/usr/bin/xtensa-buildroot-linux-uclibc-gcc -o conftest -I/include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURC
-> E -D_FILE_OFFSET_BITS=64 -mlongcalls -mtext-section-literals -pipe -Os  -fvisibility=hidden -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -L/home/test/outputs/959b77fa2c1f13b1
-> 958b234803437e09734e882e/output/host/usr/xtensa-buildroot-linux-uclibc/sysroot/usr/lib/mysql -L/home/test/outputs/959b77fa2c1f13b1958b234803437e09734e882e/output/host/usr/xtensa-buildroot-linux-
-> uclibc/sysroot/usr/lib -L/lib  -L/home/test/outputs/959b77fa2c1f13b1958b234803437e09734e882e/output/host/usr/xtensa-buildroot-linux-uclibc/sysroot/usr/lib -L/home/test/outputs/959b77fa2c1f13b195
-> 8b234803437e09734e882e/output/host/usr/xtensa-buildroot-linux-uclibc/sysroot/usr conftest.c -lmysqlclient  -lz -lintl -lcrypto -lssl -lcrypto -lcurl -lz -lcrypto -lssl -lcrypto -lm  -lxml2 -lz -
-> lm -ldl -lcurl >&5
-> /lib/libgcc_s.so.1: file not recognized: File format not recognized
-> collect2: error: ld returned 1 exit status
->
-> The problem is due to the compilation command line containing -L/lib,
-> which is wrong when cross-compiling.
+        success : 56 
+       failures : 27 
+       timeouts : 1  
+          TOTAL : 84 
 
-Thanks for the information. I don't have /lib/libgcc_s.so.1 on my build system,
-so it doesn't break here.
-Apparently this happens when
+Classification of failures by reason
+====================================
 
-BR2_PACKAGE_PHP_EXT_ICONV = y and
-BR2_PACKAGE_LIBICONV is unset.
+                  avahi-0.6.31 | 6 
+             lttng-tools-2.4.0 | 3 
+                 mesa3d-10.0.4 | 2 
+                    php-5.5.11 | 2 
+                  cppcms-1.0.4 | 2 
+                  zeromq-3.2.4 | 1 
+jack2-37976441044d69b91d61d... | 1 
+                libcurl-7.36.0 | 1 
+czmq-b5730c5f8290a611fd3b92... | 1 
+libwebsockets-v1.22-chrome2... | 1 
+                 cairo-1.12.10 | 1 
+                  dhcpcd-6.1.0 | 1 
+                     gd-2.0.35 | 1 
+          openpgm-5.1.118~dfsg | 1 
+                  python-2.7.6 | 1 
+           GEN    timB18-ISO88 | 1 
+                     vlc-2.1.2 | 1 
+            lttng-libust-2.4.0 | 1 
 
-In this case buildroot calls
+Detail of failures
+===================
 
-configure --with-iconv
+    xtensa |            GEN    timB18-ISO88 | TIM | http://autobuild.buildroot.net/results/6769c2bb05713d97f96455627a7380e4dd2195bf/
+       arm |                   avahi-0.6.31 | NOK | http://autobuild.buildroot.net/results/e54a3ff5542a11197f3aa6e543350f097647cb02/
+   powerpc |                   avahi-0.6.31 | NOK | http://autobuild.buildroot.net/results/d67269598335db792c0134de76af2db3445cca62/
+       arm |                   avahi-0.6.31 | NOK | http://autobuild.buildroot.net/results/678cae8ba5deadf599ae541468aedc9e52ce0942/
+      sh4a |                   avahi-0.6.31 | NOK | http://autobuild.buildroot.net/results/e86b40a3f8b8c8f97923bd3f263984dfecb5a032/
+       arm |                   avahi-0.6.31 | NOK | http://autobuild.buildroot.net/results/33ab1c8f1af73cb73022ae2c0652bbbc82d856c4/
+    x86_64 |                   avahi-0.6.31 | NOK | http://autobuild.buildroot.net/results/71698d593b63dd7817bcd6583a4f75d9adf85e2f/
+    x86_64 |                  cairo-1.12.10 | NOK | http://autobuild.buildroot.net/results/ef6df790cd98b29b1f5df95fc923f7b8a62caa34/
+   powerpc |                   cppcms-1.0.4 | NOK | http://autobuild.buildroot.net/results/6e8a0b0d19b4b79e34e256265d6310094954b52c/
+       arm |                   cppcms-1.0.4 | NOK | http://autobuild.buildroot.net/results/d530be6e49a5f223955d14e3d2f5bd9fd23632cb/
+      bfin | czmq-b5730c5f8290a611fd3b92... | NOK | http://autobuild.buildroot.net/results/f6f8eee52099afbe5fea75ffdac2074b19096c3c/
+     nios2 |                   dhcpcd-6.1.0 | NOK | http://autobuild.buildroot.net/results/9b8002f99ea10cede106b2f1cf0e36eeddff017a/
+       arm |                      gd-2.0.35 | NOK | http://autobuild.buildroot.net/results/4b4272876385cc21dd06ee946d658b8f9e225d78/
+       arm | jack2-37976441044d69b91d61d... | NOK | http://autobuild.buildroot.net/results/2ec7893cac7dcd22518196f0e435215297363544/
+   powerpc |                 libcurl-7.36.0 | NOK | http://autobuild.buildroot.net/results/12d63e7c06547716179f40ecbb8c4f266c05201f/
+      bfin | libwebsockets-v1.22-chrome2... | NOK | http://autobuild.buildroot.net/results/b7f7d9218d9b3f22687e04986117db7b8585e539/
+       arm |             lttng-libust-2.4.0 | NOK | http://autobuild.buildroot.net/results/4bcbc168cc3cd6a5813ac4842ca98f21ad3750fa/
+       arm |              lttng-tools-2.4.0 | NOK | http://autobuild.buildroot.net/results/f6a3099f1a050060397f887fdfbf55df6ba66fdb/
+       arm |              lttng-tools-2.4.0 | NOK | http://autobuild.buildroot.net/results/4bc0723938b50e089576ad38627038de866b2217/
+       arm |              lttng-tools-2.4.0 | NOK | http://autobuild.buildroot.net/results/2359dd80c5b0171ddb29fc8590ef094b09bf5ccd/
+       arm |                  mesa3d-10.0.4 | NOK | http://autobuild.buildroot.net/results/ce64164d76972f82acab277afc9c95a876c6433e/
+      mips |                  mesa3d-10.0.4 | NOK | http://autobuild.buildroot.net/results/843dc89f6ac4dd3ac80a32db86e4546fa079bfd6/
+   powerpc |           openpgm-5.1.118~dfsg | NOK | http://autobuild.buildroot.net/results/dcc68ada4d8b82b089cbe28263fb2264d8a446ab/
+       arc |                     php-5.5.11 | NOK | http://autobuild.buildroot.net/results/9480f76a1db384d27fbc2f19742fd0c39ae63297/
+       arm |                     php-5.5.11 | NOK | http://autobuild.buildroot.net/results/827d545e665672798a8fd11c2b1df8b38c98f346/
+     avr32 |                   python-2.7.6 | NOK | http://autobuild.buildroot.net/results/a4c1fba538c9576a18d5c21807ef508fdde8f328/
+      sh4a |                      vlc-2.1.2 | NOK | http://autobuild.buildroot.net/results/74d516edc26dedd5622afa3a499b4b234904090b/
+       arc |                   zeromq-3.2.4 | NOK | http://autobuild.buildroot.net/results/a098b850eb5c40cd4e9525caaa4e2107b9f4a89d/
 
-for php, omitting LIBICONV dir, and php adds system dirs to -I and -L
-(though I'm not sure it does that correctly).
-
-Looks like we need to always select BR2_PACKAGE_LIBICONV when
-BR2_PACKAGE_PHP_EXT_ICONV is selected, i.e.:
-
-diff --git a/package/php/Config.ext b/package/php/Config.ext
-index abf4993..1a46061 100644
---- a/package/php/Config.ext
-+++ b/package/php/Config.ext
-@@ -152,7 +152,7 @@ comment "Gettext support needs a toolchain w/ wchar"
-
- config BR2_PACKAGE_PHP_EXT_ICONV
-        bool "iconv"
--       select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
-+       select BR2_PACKAGE_LIBICONV
-        help
-          iconv character set conversion support
-
-diff --git a/package/php/php.mk b/package/php/php.mk
-index ba1200b..8a147c5 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -108,12 +108,8 @@ ifeq ($(BR2_PACKAGE_PHP_EXT_GETTEXT),y)
- endif
-
- ifeq ($(BR2_PACKAGE_PHP_EXT_ICONV),y)
--ifeq ($(BR2_PACKAGE_LIBICONV),y)
-        PHP_CONF_OPT += --with-iconv=$(STAGING_DIR)/usr
-        PHP_DEPENDENCIES += libiconv
--else
--       PHP_CONF_OPT += --with-iconv
--endif
- endif
-
- ifeq ($(BR2_PACKAGE_PHP_EXT_INTL),y)
 
 -- 
-Thanks.
--- Max
+http://autobuild.buildroot.net
