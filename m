@@ -1,54 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Apr 2014 00:24:23 +0200
-Subject: [Buildroot] [PATCH 3/3] package/zile: add Zile is Lossy Emacs
- editor
-In-Reply-To: <1397225156-23112-4-git-send-email-alex.bennee@linaro.org>
-References: <1397225156-23112-1-git-send-email-alex.bennee@linaro.org>
- <1397225156-23112-4-git-send-email-alex.bennee@linaro.org>
-Message-ID: <20140412002423.3e6bcd0c@skate>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 12 Apr 2014 00:38:49 +0200
+Subject: [Buildroot] [git commit] gst-fsl-plugins: fix typo in comment
+Message-ID: <20140411223911.C56ED9C6D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alex Benn?e,
+commit: http://git.buildroot.net/buildroot/commit/?id=231d1ec17ebeebb101950ef23f35a9076c8719b3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 11 Apr 2014 15:05:56 +0100, Alex Benn?e wrote:
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gstreamer/gst-fsl-plugins/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-> diff --git a/package/zile/remove-help2man.patch b/package/zile/remove-help2man.patch
-> new file mode 100644
-> index 0000000..d397543
-> --- /dev/null
-> +++ b/package/zile/remove-help2man.patch
-> @@ -0,0 +1,30 @@
-> +Upstream-Status: Inappropriate [configuration]
-> +
-> +Signed-off-by: Alex Benn?e <alex.bennee@linaro.org>
-> +
-> +diff --git a/Makefile.am b/Makefile.am
-
-You're patching Makefile.am here...
-
-
-> +ZILE_VERSION = 2.4.11
-> +ZILE_SITE = http://ftp.gnu.org/gnu/zile/
-> +ZILE_LICENSE = GPLv1+
-> +ZILE_LICENSE_FILES = COPYING
-> +ZILE_CONF_OPT += --without-help2man
-> +ZILE_DEPENDANCIES += libgc
-
-but you never mark zile as requiring autoreconf using ZILE_AUTORECONF =
-YES. How can this work?
-
-Also, use '=' instead of '+=' above.
-
-And use $(BR2_GNU_MIRROR) for the download URL.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/gstreamer/gst-fsl-plugins/Config.in b/package/gstreamer/gst-fsl-plugins/Config.in
+index afedd95..19fa0da 100644
+--- a/package/gstreamer/gst-fsl-plugins/Config.in
++++ b/package/gstreamer/gst-fsl-plugins/Config.in
+@@ -1,7 +1,7 @@
+ comment "gst-fsl-plugins needs an imx-specific Linux kernel to be built"
+ 	depends on BR2_arm && !BR2_LINUX_KERNEL
+ 
+-comment "gst-fsl-plugines needs an (e)glibc toolchain"
++comment "gst-fsl-plugins needs an (e)glibc toolchain"
+ 	depends on BR2_arm
+ 	depends on !BR2_TOOLCHAIN_USES_GLIBC
+ 
