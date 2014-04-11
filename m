@@ -1,30 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Apr 2014 00:22:55 +0200
-Subject: [Buildroot] [PATCH 2/3] package/libgc: add Boehm-Demers-Weiser
- gc	library
-In-Reply-To: <d8bb9829-7b7b-4114-b950-979ebd55a3d1@email.android.com>
+Date: Sat, 12 Apr 2014 00:24:23 +0200
+Subject: [Buildroot] [PATCH 3/3] package/zile: add Zile is Lossy Emacs
+ editor
+In-Reply-To: <1397225156-23112-4-git-send-email-alex.bennee@linaro.org>
 References: <1397225156-23112-1-git-send-email-alex.bennee@linaro.org>
- <1397225156-23112-3-git-send-email-alex.bennee@linaro.org>
- <d8bb9829-7b7b-4114-b950-979ebd55a3d1@email.android.com>
-Message-ID: <20140412002255.770112ba@skate>
+ <1397225156-23112-4-git-send-email-alex.bennee@linaro.org>
+Message-ID: <20140412002423.3e6bcd0c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Dear Alex Benn?e,
 
-On Fri, 11 Apr 2014 22:03:23 +0200, Thomas De Schampheleire wrote:
+On Fri, 11 Apr 2014 15:05:56 +0100, Alex Benn?e wrote:
 
-> >+LIBGC_VERSION = 7.4.0
-> >+LIBGC_SOURCE = gc-${LIBGC_VERSION}.tar.gz
-> >+LIBGC_SITE = http://www.hboehm.info/gc/gc_source/
-> >+LIBGC_DEPENDANCIES += libatomic_ops
-> 
-> This should be: ..._DEPENDENCIES with E.
+> diff --git a/package/zile/remove-help2man.patch b/package/zile/remove-help2man.patch
+> new file mode 100644
+> index 0000000..d397543
+> --- /dev/null
+> +++ b/package/zile/remove-help2man.patch
+> @@ -0,0 +1,30 @@
+> +Upstream-Status: Inappropriate [configuration]
+> +
+> +Signed-off-by: Alex Benn?e <alex.bennee@linaro.org>
+> +
+> +diff --git a/Makefile.am b/Makefile.am
 
-And the += is not needed, a simple = is sufficient here.
+You're patching Makefile.am here...
+
+
+> +ZILE_VERSION = 2.4.11
+> +ZILE_SITE = http://ftp.gnu.org/gnu/zile/
+> +ZILE_LICENSE = GPLv1+
+> +ZILE_LICENSE_FILES = COPYING
+> +ZILE_CONF_OPT += --without-help2man
+> +ZILE_DEPENDANCIES += libgc
+
+but you never mark zile as requiring autoreconf using ZILE_AUTORECONF =
+YES. How can this work?
+
+Also, use '=' instead of '+=' above.
+
+And use $(BR2_GNU_MIRROR) for the download URL.
+
+Thanks!
 
 Thomas
 -- 
