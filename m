@@ -1,116 +1,60 @@
-From: =?UTF-8?q?Alex=20Benn=C3=A9e?= <alex.bennee@linaro.org>
-Date: Fri, 11 Apr 2014 15:05:56 +0100
-Subject: [Buildroot] [PATCH 3/3] package/zile: add Zile is Lossy Emacs editor
-In-Reply-To: <1397225156-23112-1-git-send-email-alex.bennee@linaro.org>
-References: <1397225156-23112-1-git-send-email-alex.bennee@linaro.org>
-Message-ID: <1397225156-23112-4-git-send-email-alex.bennee@linaro.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 11 Apr 2014 17:11:43 +0200
+Subject: [Buildroot] [git commit] libfslcodec: needs a (e)glibc based
+	toolchain
+Message-ID: <20140411151239.48F3A9C717@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is a lightweight Emacs clone useful for embedded systems. I nabbed
-the help2man disable patch from OpenEmbedded.
+commit: http://git.buildroot.net/buildroot/commit/?id=35df2e155cc641c4a0e2f464563c2e1a5feb3e9e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Alex Benn?e <alex.bennee@linaro.org>
+The package contains prebuilt binaries linked against glibc.
 
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-v2 - review comments
-* fixup dependancies
-* add s-o-b tag to patch
-* fix whitespace
+ package/gstreamer/gst-fsl-plugins/Config.in |    5 +++++
+ package/libfslcodec/Config.in               |    5 +++++
+ 2 files changed, 10 insertions(+), 0 deletions(-)
 
- create mode 100644 package/zile/Config.in
- create mode 100644 package/zile/remove-help2man.patch
- create mode 100644 package/zile/zile.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index 0e7e246..ad1f4c1 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1119,6 +1119,7 @@ source "package/uemacs/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/vim/Config.in"
- endif
-+source "package/zile/Config.in"
- endmenu
+diff --git a/package/gstreamer/gst-fsl-plugins/Config.in b/package/gstreamer/gst-fsl-plugins/Config.in
+index 4e2bbe4..afedd95 100644
+--- a/package/gstreamer/gst-fsl-plugins/Config.in
++++ b/package/gstreamer/gst-fsl-plugins/Config.in
+@@ -1,10 +1,15 @@
+ comment "gst-fsl-plugins needs an imx-specific Linux kernel to be built"
+ 	depends on BR2_arm && !BR2_LINUX_KERNEL
  
- endmenu
-diff --git a/package/zile/Config.in b/package/zile/Config.in
-new file mode 100644
-index 0000000..163b44d
---- /dev/null
-+++ b/package/zile/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_ZILE
-+	bool "zile"
-+	select BR2_PACKAGE_LIBGC
-+	depends on BR2_USE_MMU # fork()
-+	help
-+	  Zile is Lossy Emacs
++comment "gst-fsl-plugines needs an (e)glibc toolchain"
++	depends on BR2_arm
++	depends on !BR2_TOOLCHAIN_USES_GLIBC
 +
-+	  GNU Zile (Zile Is Lossy Emacs) is a lightweight Emacs clone. Every
-+	  Emacs user should feel at home with Zile. Zile is aimed at small
-+	  footprint systems (a typical binary is about 100Kb) and quick editing
-+	  sessions (it starts up and shuts down instantly).
+ config BR2_PACKAGE_GST_FSL_PLUGINS
+ 	bool "gst-fsl-plugins"
+ 	depends on BR2_LINUX_KERNEL
+ 	depends on BR2_arm # Only relevant for i.MX
++	depends on BR2_TOOLCHAIN_USES_GLIBC # libfslcodec
+ 	select BR2_PACKAGE_GST_PLUGINS_BASE
+ 	select BR2_PACKAGE_LIBFSLVPUWRAP
+ 	select BR2_PACKAGE_IMX_LIB
+diff --git a/package/libfslcodec/Config.in b/package/libfslcodec/Config.in
+index 7b31b7a..be79352 100644
+--- a/package/libfslcodec/Config.in
++++ b/package/libfslcodec/Config.in
+@@ -1,8 +1,13 @@
+ config BR2_PACKAGE_LIBFSLCODEC
+ 	bool "libfslcodec"
+ 	depends on BR2_arm # Only relevant for i.MX
++	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	help
+ 	  Binary codec libraries for the Freescale i.MX SoCs.
+ 
+ 	  This library is provided by Freescale as-is and doesn't have
+ 	  an upstream.
 +
-+	  http://www.gnu.org/software/zile/
-diff --git a/package/zile/remove-help2man.patch b/package/zile/remove-help2man.patch
-new file mode 100644
-index 0000000..d397543
---- /dev/null
-+++ b/package/zile/remove-help2man.patch
-@@ -0,0 +1,30 @@
-+Upstream-Status: Inappropriate [configuration]
-+
-+Signed-off-by: Alex Benn?e <alex.bennee@linaro.org>
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index 54bc59f..46c2650 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -36,7 +36,6 @@ PERL_BUILDTIME =					\
-+ 
-+ EXTRA_DIST =						\
-+ 	FAQ						\
-+-	build-aux/zile-help2man-wrapper			\
-+ 	$(PERL_BUILDTIME)
-+ 
-+ doc_DATA = AUTHORS FAQ NEWS
-+diff --git a/doc/Makefile.am b/doc/Makefile.am
-+index 639f59c..8c5123e 100644
-+--- a/doc/Makefile.am
-++++ b/doc/Makefile.am
-+@@ -33,9 +33,3 @@ doc/zile.1: $(srcdir)/doc/zile.1.in doc/Makefile.am config.status
-+ 	$(edit) $(abs_srcdir)/doc/zile.1.in >$@.tmp
-+ 	mv $@.tmp $@
-+ 
-+-$(srcdir)/doc/zile.1.in: doc/man-extras build-aux/zile-help2man-wrapper configure.ac $(builddir)/src/zile$(EXEEXT)
-+-	@test -d doc || mkdir doc
-+-## Exit gracefully if zile.1.in is not writeable, such as during distcheck!
-+-	$(AM_V_GEN)if ( touch $@.w && rm -f $@.w; ) >/dev/null 2>&1; then \
-+-	  $(srcdir)/build-aux/missing --run $(HELP2MAN) --output=$@ --no-info --name="Zile Is Lossy Emacs" --include $(srcdir)/doc/man-extras $(srcdir)/build-aux/zile-help2man-wrapper; \
-+-	fi
-diff --git a/package/zile/zile.mk b/package/zile/zile.mk
-new file mode 100644
-index 0000000..b641fe6
---- /dev/null
-+++ b/package/zile/zile.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# Zile
-+#
-+################################################################################
-+
-+ZILE_VERSION = 2.4.11
-+ZILE_SITE = http://ftp.gnu.org/gnu/zile/
-+ZILE_LICENSE = GPLv1+
-+ZILE_LICENSE_FILES = COPYING
-+ZILE_CONF_OPT += --without-help2man
-+ZILE_DEPENDANCIES += libgc
-+
-+$(eval $(autotools-package))
--- 
-1.9.2
++comment "libfslcodec needs an (e)glibc toolchain"
++	depends on BR2_arm
++	depends on !BR2_TOOLCHAIN_USES_GLIBC
